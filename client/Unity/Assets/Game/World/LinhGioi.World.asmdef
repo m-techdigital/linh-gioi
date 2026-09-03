@@ -2,6 +2,8 @@
   "name": "LinhGioi.World",
   "rootNamespace": "LinhGioi.World",
   "references": [
+    "LinhGioi.Account",
+    "LinhGioi.Art",
     "LinhGioi.Foundation",
     "LinhGioi.GameData"
   ],

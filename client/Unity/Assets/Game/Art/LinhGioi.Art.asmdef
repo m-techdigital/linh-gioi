@@ -1,0 +1,8 @@
+{
+  "name": "LinhGioi.Art",
+  "rootNamespace": "LinhGioi.Art",
+  "references": [
+    "LinhGioi.Foundation"
+  ],
+  "autoReferenced": true
+}

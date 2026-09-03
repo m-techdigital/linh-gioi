@@ -1,12 +1,12 @@
 # START HERE — Linh Giới Online Current Source
 
-**Current milestone:** `M3-B Unity Account / Character Integration`.
+**Current milestone:** `M4-1 Visual Identity + Runtime Art Placeholder Foundation`.
 
-**Current status:** `M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_CLOSED_LOCAL`.
+**Current status:** `M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY`.
 
 **Accepted base:** `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 
-**Current source successor:** `linh-gioi-m2-runtime-candidate-v0.6.2-full-source.zip`.
+**Current source successor:** `linh-gioi-m4-visual-placeholder-foundation-v0.10.0`.
 
 ## 1. Read order
 
@@ -86,9 +86,9 @@ M2 runtime is not closed until Unity and Java are exercised together. Runtime cl
 
 The smoke must prove handshake accepted, one movement intent sent, `PlayerTransformSnapshot` received, acknowledged sequence `1`, entity `1001`, and position `x≈0.4`.
 
-## 6. Next milestone
+## 6. Current M4-0 validation
 
-M3-B Unity Account / Character Integration is the active owner-approved follow-up to the M3 server/API persistence closure. M4 stays locked until this M3-B slice is accepted.
+M4-0 is the active playable client vertical slice foundation. It is source-ready until the macOS Unity player build and runtime smokes are rerun on a host with the pinned protobuf toolchain and Unity editor configured.
 
 ## M3 Account / Character Persistence v0.7.0
 
@@ -151,3 +151,43 @@ client/Unity/Assets/Game/Protocol/Generated
 ```
 
 M3-B is locally closed only when `M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_SMOKE_PASS` is observed on the current source. This does not claim all M0 runtime closed and does not open M4.
+
+## M4-0 Playable Client Vertical Slice v0.9.0
+
+Use this command for M4 source validation after local toolchain setup:
+
+```bash
+./tools/validate_m4_source.sh
+```
+
+Use this command for M4 runtime verification after building a current macOS player:
+
+```bash
+./tools/run_m4_playable_vertical_slice_once.sh --unity-player "$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity"
+```
+
+The M4 smoke marker is:
+
+```text
+M4_PLAYABLE_VERTICAL_SLICE_RUNTIME_SMOKE_PASS
+```
+
+## M4-1 Visual Placeholder Foundation v0.10.0
+
+Read:
+
+- `docs/art/LGO-VISUAL-IDENTITY-GUIDE-v0.10.0.md`
+- `docs/art/LGO-RUNTIME-ART-MANIFEST-v0.10.0.md`
+- `client/Unity/Assets/Game/Art/README.md`
+
+Validate:
+
+```bash
+python3.12 tools/validate_m4_visual_foundation.py
+```
+
+Runtime smoke after building a current macOS player:
+
+```bash
+./tools/run_m4_visual_foundation_once.sh --unity-player "$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity"
+```

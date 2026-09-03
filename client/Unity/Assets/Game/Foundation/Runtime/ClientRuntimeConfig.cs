@@ -13,7 +13,7 @@ namespace LinhGioi.Foundation
         public string realtimeHost = "127.0.0.1";
         public int realtimePort = 7777;
         public uint protocolVersion = 1;
-        public string clientVersion = "0.2.0-m2";
+        public string clientVersion = "0.4.0-m4";
         public uint gamedataVersion = 1;
         public string platform = "unity";
         public string locale = "vi-VN";

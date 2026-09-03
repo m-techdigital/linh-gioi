@@ -113,8 +113,9 @@ def main() -> int:
             errors.append('linhgioi-client.json must include default apiBaseUrl http://127.0.0.1:18083')
         if streaming_json.get('apiTimeoutSeconds') != 10:
             errors.append('linhgioi-client.json must include default apiTimeoutSeconds 10')
-        if 'm3b' not in streaming_json.get('clientVersion', ''):
-            errors.append('linhgioi-client.json clientVersion must identify M3B source')
+        client_version = streaming_json.get('clientVersion', '')
+        if 'm3b' not in client_version and 'm4' not in client_version:
+            errors.append('linhgioi-client.json clientVersion must identify M3B source or M4 successor source')
 
     models = read('client/Unity/Assets/Game/Account/Runtime/AccountModels.cs')
     for cls in ['DevLoginRequest', 'CreateCharacterRequest', 'SaveCharacterPositionRequest', 'AccountResponse', 'CharacterResponse', 'DevLoginResponse', 'CharacterListResponse']:

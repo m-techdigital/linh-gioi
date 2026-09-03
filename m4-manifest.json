@@ -1,0 +1,31 @@
+{
+  "taskId": "M4-0 / v0.9.0",
+  "project": "linh-gioi-online",
+  "sourcePackageVersion": "0.9.0",
+  "baseline": {
+    "status": "M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_CLOSED_LOCAL",
+    "manifest": "m3b-manifest.json"
+  },
+  "status": "M4_PLAYABLE_VERTICAL_SLICE_FOUNDATION_SOURCE_READY",
+  "scope": [
+    "Unity playable dev login UI",
+    "Account/profile display",
+    "Character lobby list/create/select flow",
+    "Simple world marker/avatar placeholder",
+    "Local WASD/arrow movement and Q/E rotation",
+    "Position save to existing M3 API",
+    "Restart-aware Unity player smoke helper"
+  ],
+  "runtimeSmoke": {
+    "command": "./tools/run_m4_playable_vertical_slice_once.sh --unity-player \"$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity\"",
+    "unityPlayerArg": "--lgo-m4-playable-vertical-slice-smoke",
+    "expectedMarker": "M4_PLAYABLE_VERTICAL_SLICE_RUNTIME_SMOKE_PASS"
+  },
+  "nonClaims": [
+    "production authentication",
+    "database persistence",
+    "server authoritative movement",
+    "multiplayer synchronization",
+    "combat, guild, economy, shop, PvP ranking"
+  ]
+}

@@ -9,8 +9,8 @@ Three runtime compatibility versions are intentionally separate:
 Current source package identity:
 
 ```text
-source_package_version = 0.8.0
-milestone = M3-B Unity Account / Character Integration
+source_package_version = 0.10.0
+milestone = M4-1 Visual Identity + Runtime Art Placeholder Foundation
 m0_status = M0_RUNTIME_CLOSED
 m1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED
 m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
@@ -19,7 +19,7 @@ m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
 Current runtime placeholders:
 
 ```text
-client_version = 0.3.1-m3b
+client_version = 0.4.0-m4
 protocol_version = 1
 gamedata_version = 1
 ```
@@ -64,3 +64,23 @@ M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY
 Runtime closure requires `M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_SMOKE_PASS` from a current player built from this source.
 
 M3-B hotfix v0.8.1: Unity local compile support adds UnityWebRequest module dependency and generated protocol asmdef reference to Google.Protobuf.dll. No frozen protocol/schema changes.
+
+## M4-0 Playable Client Vertical Slice v0.9.0
+
+Current M4 source status:
+
+```text
+M4_PLAYABLE_VERTICAL_SLICE_FOUNDATION_SOURCE_READY
+```
+
+M4 consumes the existing M3-B account/character API client and persistence endpoints. It does not change protocol or GameData versions.
+
+## M4-1 Visual Placeholder Foundation v0.10.0
+
+Current M4 visual source status:
+
+```text
+M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY
+```
+
+M4-1 adds original placeholder art source assets and runtime catalog references. It does not change protocol, GameData, production authentication, database persistence, or MMO networking versions.

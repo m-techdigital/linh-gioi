@@ -1,6 +1,6 @@
-# LINH GIỚI ONLINE — M3-B Unity Account / Character Integration Local Runtime Closed
+# LINH GIỚI ONLINE — M4 Visual Placeholder Foundation
 
-**Current status:** `M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_CLOSED_LOCAL` on source successor `linh-gioi-m3b-unity-account-character-integration-v0.8.5-full-source.zip`. Previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
+**Current status:** `M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY` on top of M4-0 playable vertical slice source with runtime still environment-unverified in this sandbox. Previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
 
 The accepted foundation remains `M0_RUNTIME_CLOSED`. The accepted base is `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`. M2 opens the first online session scaffold: Unity can keep a realtime connection after the accepted handshake, send a movement intent, and receive an authoritative server transform snapshot from Java Netty using existing protobuf messages.
 
@@ -112,7 +112,7 @@ No sandbox may casually edit another owner surface. Protocol/schema/design contr
 
 ## Current next step
 
-Allowed next verification step: targeted M3 server persistence verification. M2 runtime evidence remains pending; do not claim `M2_ONLINE_SESSION_RUNTIME_CLOSED` from this M3 source work.
+Allowed next verification step: M4-0 playable vertical slice runtime verification on a host with pinned Protobuf `3.13.0` tooling and Unity `6000.3.2f1`. M2 runtime evidence remains pending; do not claim `M2_ONLINE_SESSION_RUNTIME_CLOSED` from this M4 source work.
 
 ## M3 Account / Character Persistence v0.7.0
 
@@ -143,9 +143,9 @@ M3 server/API persistence is accepted as `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTI
 
 Runtime closure still requires a current Unity player built from this exact source and executed through `./tools/run_m3b_unity_account_character_once.sh --unity-player "$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity"`. Missing Unity player/editor is `UNVERIFIED_ENVIRONMENT`, not PASS.
 
-## Current next step
+## Current M4-0 gate
 
-Allowed next step: targeted VERIFY for `LG-M3B-UNITY-ACCOUNT-CHARACTER-INTEGRATION-v0.8.0`. Do not start M4 until M3-B is accepted by the owner/control tower.
+M3-B is locally closed and M4-0 source work is present. Runtime closure still requires a current macOS Unity player and the `M4_PLAYABLE_VERTICAL_SLICE_RUNTIME_SMOKE_PASS` marker.
 
 M3-B hotfix v0.8.1: Unity local compile support adds UnityWebRequest module dependency and generated protocol asmdef reference to Google.Protobuf.dll. No frozen protocol/schema changes.
 
@@ -173,3 +173,43 @@ M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_SMOKE_PASS
 ```
 
 Do not infer broader M0 runtime closure or M4 readiness from this slice.
+
+## M4-0 Playable Client Vertical Slice v0.9.0
+
+M4-0 adds a Unity playable shell that reuses the M3-B `AccountApiClient`:
+
+- dev login UI with default local dev key
+- account/profile status display
+- character lobby list/create/select flow
+- world entry with a placeholder player marker at persisted position
+- WASD/arrow movement, Q/E rotation
+- save position to the existing API
+- restart-aware Unity player smoke marker: `M4_PLAYABLE_VERTICAL_SLICE_RUNTIME_SMOKE_PASS`
+
+Source validation:
+
+```bash
+./tools/validate_m4_source.sh
+```
+
+Runtime smoke after building a current macOS player:
+
+```bash
+./tools/run_m4_playable_vertical_slice_once.sh --unity-player "$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity"
+```
+
+## M4-1 Visual Placeholder Foundation v0.10.0
+
+M4-1 adds original placeholder art sources under `client/Unity/Assets/Game/Art/**`, a concise visual identity guide in `docs/art/`, and a runtime art catalog used by the playable UI/world shell.
+
+Validation:
+
+```bash
+python3.12 tools/validate_m4_visual_foundation.py
+```
+
+Runtime visual smoke after building a current macOS player:
+
+```bash
+./tools/run_m4_visual_foundation_once.sh --unity-player "$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity"
+```

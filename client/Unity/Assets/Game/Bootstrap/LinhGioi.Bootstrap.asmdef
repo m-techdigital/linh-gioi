@@ -6,7 +6,10 @@
     "LinhGioi.Foundation",
     "LinhGioi.Networking",
     "LinhGioi.Protocol",
-    "LinhGioi.Combat"
+    "LinhGioi.Combat",
+    "LinhGioi.Art",
+    "LinhGioi.UI",
+    "LinhGioi.World"
   ],
   "autoReferenced": true
 }

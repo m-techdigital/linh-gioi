@@ -1,9 +1,12 @@
 using System;
 using System.Threading;
+using LinhGioi.Art;
 using LinhGioi.Combat;
 using LinhGioi.Account;
 using LinhGioi.Foundation;
 using LinhGioi.Networking;
+using LinhGioi.UI;
+using LinhGioi.World;
 using UnityEngine;
 
 namespace LinhGioi.Bootstrap
@@ -18,6 +21,18 @@ namespace LinhGioi.Bootstrap
             _shutdown = new CancellationTokenSource();
             try
             {
+                if (M4VisualFoundationSmokeRunner.ShouldRun())
+                {
+                    M4VisualFoundationSmokeRunner.RunFromCommandLine();
+                    return;
+                }
+
+                if (M4PlayableVerticalSliceSmokeRunner.ShouldRun())
+                {
+                    await M4PlayableVerticalSliceSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);
+                    return;
+                }
+
                 if (M3BAccountCharacterSmokeRunner.ShouldRun())
                 {
                     await M3BAccountCharacterSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);
@@ -44,6 +59,7 @@ namespace LinhGioi.Bootstrap
 
                 var config = ClientRuntimeConfig.LoadStreamingAssets();
                 Debug.Log($"[LinhGioi] Bootstrap environment={config.environment} protocol={config.protocolVersion} gamedata={config.gamedataVersion}");
+                M4PlayableClientController.Attach(gameObject);
                 if (!config.connectOnStart) return;
                 _realtimeClient = new TcpRealtimeClient();
                 _realtimeClient.StateChanged += OnConnectionStateChanged;
