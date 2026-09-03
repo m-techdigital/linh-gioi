@@ -1,12 +1,12 @@
 # START HERE — Linh Giới Online Current Source
 
-**Current milestone:** `M4-2/M4-3 Playable UI And Art Quality Pass`.
+**Current milestone:** `M4 Playable Slice Stabilization`.
 
-**Current status:** `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`.
+**Current status:** `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`.
 
 **Accepted base:** `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 
-**Current source successor:** `linh-gioi-m4-playable-ui-art-quality-v0.12.0`.
+**Current source successor:** `linh-gioi-m4-playable-slice-stabilization-v0.13.0`.
 
 ## 1. Read order
 
@@ -42,17 +42,15 @@ Recommended local macOS setup:
 Direct validation on a prepared environment:
 
 ```bash
-./tools/validate_m3_source.sh
+./tools/lgo_m4_closure_check.sh --source-only
 ```
 
 Expected classification:
 
 ```text
-M0 SOURCE VALIDATION PASS
-M1 OFFLINE COMBAT STATIC VALIDATION PASS
-M2 ONLINE SESSION STATIC VALIDATION PASS
 PROJECT STATE VALIDATION PASS
-M2 SOURCE VALIDATION PASS
+M4 SOURCE VALIDATION PASS
+LGO_M4_CLOSURE_SOURCE_GATES_PASS
 ```
 
 ## 4. Unity preparation
@@ -202,3 +200,19 @@ Validate:
 python3.12 tools/validate_m4_2_playable_ui.py
 python3.12 tools/validate_m4_visual_foundation.py
 ```
+
+## M4 Playable Slice Stabilization v0.13.0
+
+Use one command for current M4 source gates:
+
+```bash
+./tools/lgo_m4_closure_check.sh --source-only
+```
+
+Use this before packaging source handoff artifacts:
+
+```bash
+./tools/lgo_m4_closure_check.sh --package-ready
+```
+
+Runtime closure still requires Unity `6000.3.2f1`, Java `25`, Maven `3.9.16`, and observed M3-B/M4 smoke markers on the current source.

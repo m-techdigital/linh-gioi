@@ -18,6 +18,8 @@ PINNED_VERSION = (ROOT / "tools" / "protobuf" / "VERSION").read_text(encoding="u
 EXPECTED_VERSION_TEXT = f"libprotoc {PINNED_VERSION}"
 BUNDLED_LINUX_X86_64 = ROOT / "tools" / "protobuf" / "linux-x86_64" / "protoc"
 BUNDLED_SHA_FILE = ROOT / "tools" / "protobuf" / "linux-x86_64" / "SHA256"
+BUNDLED_DARWIN_ARM64 = ROOT / "tools" / "protobuf" / "darwin-arm64" / "protoc"
+BUNDLED_DARWIN_ARM64_SHA_FILE = ROOT / "tools" / "protobuf" / "darwin-arm64" / "SHA256"
 DEFAULT_OUTPUT_ROOT = ROOT / "build" / "generated" / "protocol"
 NEGATIVE_FIXTURE = ROOT / "tests" / "protocol" / "invalid" / "invalid_syntax.proto"
 SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
@@ -42,12 +44,12 @@ def validate_sha256(value: str, *, source: str) -> str:
     return normalized
 
 
-def expected_bundled_sha256() -> str:
+def expected_bundled_sha256(sha_file: Path) -> str:
     try:
-        first = BUNDLED_SHA_FILE.read_text(encoding="utf-8").strip().split()[0]
+        first = sha_file.read_text(encoding="utf-8").strip().split()[0]
     except (OSError, IndexError) as exc:
-        raise ProtocolToolError(f"cannot read bundled SHA256 declaration: {BUNDLED_SHA_FILE}: {exc}") from exc
-    return validate_sha256(first, source=str(BUNDLED_SHA_FILE))
+        raise ProtocolToolError(f"cannot read bundled SHA256 declaration: {sha_file}: {exc}") from exc
+    return validate_sha256(first, source=str(sha_file))
 
 
 def verify_binary_checksum(candidate: Path, expected: str, *, source: str) -> str:
@@ -78,8 +80,11 @@ def resolve_protoc() -> tuple[Path, str]:
             is_bundled = False
 
         if is_bundled:
-            expected = expected_bundled_sha256()
+            expected = expected_bundled_sha256(BUNDLED_SHA_FILE)
             checksum_source = str(BUNDLED_SHA_FILE)
+        elif BUNDLED_DARWIN_ARM64.is_file() and candidate.samefile(BUNDLED_DARWIN_ARM64):
+            expected = expected_bundled_sha256(BUNDLED_DARWIN_ARM64_SHA_FILE)
+            checksum_source = str(BUNDLED_DARWIN_ARM64_SHA_FILE)
         else:
             declared = os.environ.get("PROTOC_SHA256")
             if not declared:
@@ -97,9 +102,15 @@ def resolve_protoc() -> tuple[Path, str]:
     if system == "linux" and machine in {"x86_64", "amd64"} and BUNDLED_LINUX_X86_64.is_file():
         if not os.access(BUNDLED_LINUX_X86_64, os.X_OK):
             raise ProtocolToolError(f"bundled protoc is not executable: {BUNDLED_LINUX_X86_64}")
-        expected = expected_bundled_sha256()
+        expected = expected_bundled_sha256(BUNDLED_SHA_FILE)
         actual = verify_binary_checksum(BUNDLED_LINUX_X86_64, expected, source=str(BUNDLED_SHA_FILE))
         return BUNDLED_LINUX_X86_64, actual
+    if system == "darwin" and BUNDLED_DARWIN_ARM64.is_file():
+        if not os.access(BUNDLED_DARWIN_ARM64, os.X_OK):
+            raise ProtocolToolError(f"bundled protoc is not executable: {BUNDLED_DARWIN_ARM64}")
+        expected = expected_bundled_sha256(BUNDLED_DARWIN_ARM64_SHA_FILE)
+        actual = verify_binary_checksum(BUNDLED_DARWIN_ARM64, expected, source=str(BUNDLED_DARWIN_ARM64_SHA_FILE))
+        return BUNDLED_DARWIN_ARM64, actual
 
     raise ProtocolToolError(
         "no checksum-pinned bundled protoc is available for this host. "

@@ -4,11 +4,11 @@ Last updated: `2026-09-04`
 
 ## Current milestone
 
-`M4-2/M4-3 Playable UI And Art Quality Pass`
+`M4 Playable Slice Stabilization`
 
 ## Current decision
 
-`M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`
+`M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`
 
 M0 final decision: `M0_RUNTIME_CLOSED`.
 
@@ -18,7 +18,7 @@ M2 has source-level implementation for the first online session scaffold. Runtim
 
 ## Authoritative source baseline
 
-`linh-gioi-m4-playable-ui-art-quality-v0.12.0`
+`linh-gioi-m4-playable-slice-stabilization-v0.13.0`
 
 Baseline ancestry:
 
@@ -29,11 +29,12 @@ Baseline ancestry:
 - M4-0 playable vertical slice foundation;
 - M4-1 visual placeholder foundation;
 - M4-2 playable UI redesign;
-- M4-3 placeholder art quality pass.
+- M4-3 placeholder art quality pass;
+- M4 closure automation and stabilization validation.
 
 ## Current source successor
 
-`linh-gioi-m4-playable-ui-art-quality-v0.12.0`
+`linh-gioi-m4-playable-slice-stabilization-v0.13.0`
 
 This source includes:
 
@@ -42,9 +43,11 @@ This source includes:
 - M3-B Unity account/character client integration source;
 - M4 source status `M4_PLAYABLE_VERTICAL_SLICE_FOUNDATION_SOURCE_READY`;
 - M4 visual status `M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY`;
+- M4 UI/art quality status `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`;
+- M4-2/M4-3 Playable UI And Art Quality Pass v0.12.0;
 - M4 playable UI shell, runtime art catalog, and in-world HUD shell;
 - upgraded original placeholder SVGs under `client/Unity/Assets/Game/Art/**`;
-- M4 source validators, runtime smoke command, handoff, report, and manifest.
+- M4 source validators, runtime smoke command, closure automation, handoff, report, and manifest.
 
 ## Closed M0 gates
 

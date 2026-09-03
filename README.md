@@ -1,6 +1,6 @@
-# LINH GIỚI ONLINE — M4 Playable UI And Art Quality Pass
+# LINH GIỚI ONLINE — M4 Playable Slice Stabilization
 
-**Current status:** `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY` after M4-2 playable UI redesign and M4-3 placeholder art quality pass. Previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
+**Current status:** `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY` after M4 closure automation and source-gate stabilization. Previous M4 UI/art status is `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`; previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
 
 The accepted foundation remains `M0_RUNTIME_CLOSED`. The accepted base is `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`. M2 opens the first online session scaffold: Unity can keep a realtime connection after the accepted handshake, send a movement intent, and receive an authoritative server transform snapshot from Java Netty using existing protobuf messages.
 
@@ -29,15 +29,16 @@ This is intentionally still a prototype. M3-B connects Unity to the closed M3 de
 or, on a prepared environment:
 
 ```bash
-./tools/validate_m3b_source.sh
+./tools/lgo_m4_closure_check.sh --source-only
 ```
 
 Expected classification includes:
 
 ```text
-M3 SOURCE VALIDATION PASS
-M3B UNITY ACCOUNT CHARACTER STATIC VALIDATION PASS
-M3B SOURCE VALIDATION PASS
+PROJECT STATE VALIDATION PASS
+M4 STABILIZATION VALIDATION PASS
+M4 SOURCE VALIDATION PASS
+LGO_M4_CLOSURE_SOURCE_GATES_PASS
 ```
 
 ## Server online-session smoke
@@ -223,4 +224,21 @@ Validation:
 ```bash
 python3.12 tools/validate_m4_2_playable_ui.py
 python3.12 tools/validate_m4_visual_foundation.py
+```
+
+## M4 Playable Slice Stabilization v0.13.0
+
+M4 v0.13.0 adds a one-command closure workflow and stabilization validator for the current playable slice. It also bundles checksum-pinned macOS `protoc` `3.13.0` so inherited source validation can run on this host without changing protocol files.
+
+Source/package gates:
+
+```bash
+./tools/lgo_m4_closure_check.sh --source-only
+./tools/lgo_m4_closure_check.sh --package-ready
+```
+
+Runtime gate, only when Unity `6000.3.2f1` is configured:
+
+```bash
+./tools/lgo_m4_closure_check.sh --runtime
 ```

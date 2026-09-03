@@ -166,8 +166,8 @@ class ProtocolCodegenToolingTests(unittest.TestCase):
         old_system = module.platform.system
         old_machine = module.platform.machine
         try:
-            module.platform.system = lambda: "Darwin"
-            module.platform.machine = lambda: "arm64"
+            module.platform.system = lambda: "FreeBSD"
+            module.platform.machine = lambda: "riscv64"
             with self.assertRaises(module.ProtocolToolError) as ctx:
                 module.resolve_protoc()
             self.assertIn("no checksum-pinned bundled protoc", str(ctx.exception))

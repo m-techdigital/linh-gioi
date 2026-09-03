@@ -23,6 +23,23 @@ run_step gamedata_tests python3 -m unittest -v tests.gamedata.test_gamedata_pipe
 run_step handshake_smoke_tool_tests python3 -m unittest -v tests.server.test_handshake_smoke
 run_step gamedata_compiled_check python3 tools/validate_gamedata.py --check
 run_step server_source python3 tools/validate_server_source.py
+python3 - <<'PY'
+from pathlib import Path
+import shutil
+
+root = Path.cwd()
+for rel in [
+    'client/Unity/Assets/Game/Generated',
+    'client/Unity/Assets/Game/Generated.meta',
+    'client/Unity/Assets/Game/Protocol/Generated',
+    'client/Unity/Assets/Game/Protocol/Generated.meta',
+]:
+    path = root / rel
+    if path.is_dir():
+        shutil.rmtree(path)
+    elif path.exists():
+        path.unlink()
+PY
 run_step unity_source python3 tools/validate_unity_foundation.py
 
 for script in \

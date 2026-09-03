@@ -9,8 +9,8 @@ Three runtime compatibility versions are intentionally separate:
 Current source package identity:
 
 ```text
-source_package_version = 0.12.0
-milestone = M4-2/M4-3 Playable UI And Art Quality Pass
+source_package_version = 0.13.0
+milestone = M4 Playable Slice Stabilization
 m0_status = M0_RUNTIME_CLOSED
 m1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED
 m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
@@ -19,7 +19,7 @@ m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
 Current runtime placeholders:
 
 ```text
-client_version = 0.4.0-m4
+client_version = 0.4.1-m4
 protocol_version = 1
 gamedata_version = 1
 ```
@@ -94,3 +94,13 @@ M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY
 ```
 
 M4-2 improves the playable UI shell from the accepted design lock. M4-3 upgrades committed placeholder SVG quality in place while preserving runtime catalog paths. This does not change protocol, GameData, production authentication, database persistence, final production art status, or MMO networking versions.
+
+## M4 Playable Slice Stabilization v0.13.0
+
+Current source status:
+
+```text
+M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY
+```
+
+M4 v0.13.0 adds checksum-pinned macOS protobuf tooling, a one-command M4 closure check, and a stabilization validator. It does not change protocol, GameData, production authentication, database persistence, combat, economy, final production art, or MMO gameplay scope.
