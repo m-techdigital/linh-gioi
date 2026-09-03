@@ -1,12 +1,12 @@
 {
   "taskId": "M4-1 Visual Identity + Runtime Art Placeholder Foundation",
   "project": "linh-gioi-online",
-  "sourcePackageVersion": "0.13.0",
+  "sourcePackageVersion": "0.14.0",
   "baseline": {
     "status": "M4_PLAYABLE_VERTICAL_SLICE_SOURCE_CLOSED_RUNTIME_UNVERIFIED_ENVIRONMENT",
     "acceptedByUserWithLimitations": true
   },
-  "status": "M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY",
+  "status": "M4_VISIBLE_UI_USABILITY_SOURCE_READY",
   "scope": [
     "Runtime art directory foundation",
     "Original SVG placeholder assets",
@@ -25,7 +25,9 @@
   "stabilization": [
     "M4 closure automation added",
     "M4 stabilization validator added",
-    "checksum-pinned macOS protoc 3.13.0 bundled for inherited source gates"
+    "checksum-pinned macOS protoc 3.13.0 bundled for inherited source gates",
+    "visible UI review harness added",
+    "visible UI usability validator added"
   ],
   "placeholderAssets": [
     "client/Unity/Assets/Game/Art/Characters/lgo_character_hero_sword_placeholder.svg",

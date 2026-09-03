@@ -28,7 +28,16 @@ while [[ $# -gt 0 ]]; do
 done
 
 cd "$ROOT"
-source "$ROOT/.lgo-local-env" 2>/dev/null || true
+if [[ -f "$ROOT/.lgo-local-env" ]]; then
+  source "$ROOT/.lgo-local-env"
+fi
+
+PROJECT_PROTOC="$ROOT/tools/protobuf/darwin-arm64/protoc"
+PROJECT_PROTOC_SHA="$ROOT/tools/protobuf/darwin-arm64/SHA256"
+if [[ -z "${PROTOC_BIN:-}" && -x "$PROJECT_PROTOC" && -f "$PROJECT_PROTOC_SHA" ]]; then
+  PROTOC_BIN="$PROJECT_PROTOC"
+  PROTOC_SHA256="$(awk '{print $1}' "$PROJECT_PROTOC_SHA")"
+fi
 
 echo "== Ensure Unity manifest dependencies =="
 python3 - "$PROJECT/Packages/manifest.json" <<'PYMANIFEST'

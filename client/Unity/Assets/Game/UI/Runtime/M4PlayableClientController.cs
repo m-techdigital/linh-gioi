@@ -39,6 +39,7 @@ namespace LinhGioi.UI
         private Button _enterWorldButton;
         private Button _savePositionButton;
         private Button _backButton;
+        private Button _quitButton;
         private AccountResponse _accountState;
         private CharacterResponse[] _characters = Array.Empty<CharacterResponse>();
         private CharacterResponse _selectedCharacter;
@@ -61,6 +62,7 @@ namespace LinhGioi.UI
 
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Escape)) QuitPlayer();
             if (_world != null && _position != null) _position.text = _world.FormatPosition();
         }
 
@@ -82,14 +84,17 @@ namespace LinhGioi.UI
             _root.style.paddingRight = 18;
             _root.style.paddingTop = 16;
             _root.style.paddingBottom = 16;
+            _root.style.alignItems = Align.Center;
 
             BuildHeader();
 
             _mainShell = new VisualElement();
             _mainShell.style.flexDirection = FlexDirection.Row;
             _mainShell.style.flexWrap = Wrap.Wrap;
-            _mainShell.style.flexGrow = 1;
+            _mainShell.style.width = Length.Percent(100);
+            _mainShell.style.maxWidth = 960;
             _mainShell.style.alignContent = Align.FlexStart;
+            _mainShell.style.justifyContent = Justify.Center;
             _mainShell.style.marginTop = 12;
             _root.Add(_mainShell);
 
@@ -106,6 +111,8 @@ namespace LinhGioi.UI
             header.style.justifyContent = Justify.SpaceBetween;
             header.style.alignItems = Align.Center;
             header.style.flexWrap = Wrap.Wrap;
+            header.style.width = Length.Percent(100);
+            header.style.maxWidth = 960;
             _root.Add(header);
 
             var brand = new VisualElement();
@@ -127,15 +134,24 @@ namespace LinhGioi.UI
             _status.style.color = RuntimeArtCatalog.Muted;
             _status.style.unityTextAlign = TextAnchor.MiddleRight;
             _status.style.marginTop = 6;
-            header.Add(_status);
+
+            var right = new VisualElement();
+            right.style.flexDirection = FlexDirection.Row;
+            right.style.alignItems = Align.Center;
+            right.style.flexWrap = Wrap.Wrap;
+            right.Add(_status);
+            _quitButton = NewQuietButton("Quit", QuitPlayer);
+            _quitButton.tooltip = "Exit visible player review";
+            right.Add(_quitButton);
+            header.Add(right);
         }
 
         private void BuildAuthPanel()
         {
-            _authPanel = NewPanel(360);
+            _authPanel = NewPanel(520);
             _mainShell.Add(_authPanel);
             _authPanel.Add(NewSectionTitle("Auth / Gate Entry"));
-            _authPanel.Add(NewMutedLabel("Local dev access for the current M4 slice."));
+            _authPanel.Add(NewMutedLabel("API status: " + _config.apiBaseUrl));
             _devKey = NewTextField("Dev key", DefaultDevKey);
             _authPanel.Add(_devKey);
             _loginButton = NewPrimaryButton("Open Gate", () => RunAsync(LoginAsync));
@@ -147,13 +163,14 @@ namespace LinhGioi.UI
 
         private void BuildLobbyPanel()
         {
-            _lobbyPanel = NewPanel(560);
+            _lobbyPanel = NewPanel(840);
             _mainShell.Add(_lobbyPanel);
             _lobbyPanel.Add(NewSectionTitle("Character Hall"));
 
             var content = new VisualElement();
             content.style.flexDirection = FlexDirection.Row;
             content.style.flexWrap = Wrap.Wrap;
+            content.style.justifyContent = Justify.SpaceBetween;
             _lobbyPanel.Add(content);
 
             _characterList = new VisualElement();
@@ -191,7 +208,7 @@ namespace LinhGioi.UI
 
         private void BuildWorldHud()
         {
-            _worldHud = NewPanel(620);
+            _worldHud = NewPanel(760);
             _mainShell.Add(_worldHud);
             _worldHud.Add(NewSectionTitle("World HUD"));
 
@@ -216,11 +233,16 @@ namespace LinhGioi.UI
 
             _position = NewMutedLabel("x=0.00 y=0.00 z=0.00 yaw=0.0");
             _position.style.marginTop = 8;
+            _position.style.backgroundColor = RuntimeArtCatalog.Background;
+            _position.style.paddingLeft = 10;
+            _position.style.paddingRight = 10;
+            _position.style.paddingTop = 6;
+            _position.style.paddingBottom = 6;
             _worldHud.Add(_position);
 
             _savePositionButton = NewPrimaryButton("Save Position", () => RunAsync(SavePositionAsync));
             _backButton = NewSecondaryButton("Back to Lobby", BackToLobby);
-            _worldHud.Add(NewButtonRow(_savePositionButton, _backButton));
+            _worldHud.Add(NewButtonRow(_savePositionButton, _backButton, NewQuietButton("Quit", QuitPlayer)));
         }
 
         private async Task LoginAsync()
@@ -338,7 +360,7 @@ namespace LinhGioi.UI
 
         private void ShowLobbyMode()
         {
-            _authPanel.style.display = DisplayStyle.Flex;
+            _authPanel.style.display = DisplayStyle.None;
             _lobbyPanel.style.display = DisplayStyle.Flex;
             _worldHud.style.display = DisplayStyle.None;
             SetLobbyControls(true);
@@ -397,8 +419,8 @@ namespace LinhGioi.UI
             var panel = new VisualElement();
             panel.style.maxWidth = maxWidth;
             panel.style.minWidth = 300;
-            panel.style.flexGrow = 1;
-            panel.style.marginRight = 12;
+            panel.style.width = Length.Percent(100);
+            panel.style.marginRight = 0;
             panel.style.marginBottom = 12;
             panel.style.paddingLeft = 16;
             panel.style.paddingRight = 16;
@@ -410,7 +432,9 @@ namespace LinhGioi.UI
             panel.style.borderBottomLeftRadius = 8;
             panel.style.borderBottomRightRadius = 8;
             panel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            panel.style.borderLeftWidth = 3;
+            panel.style.borderLeftWidth = 2;
+            panel.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
+            panel.style.borderTopWidth = 1;
             return panel;
         }
 
@@ -471,12 +495,26 @@ namespace LinhGioi.UI
             return button;
         }
 
+        private static Button NewQuietButton(string label, Action action)
+        {
+            var button = NewButton(label, action);
+            button.style.minWidth = 88;
+            button.style.backgroundColor = RuntimeArtCatalog.Background;
+            button.style.color = RuntimeArtCatalog.Muted;
+            return button;
+        }
+
         private static Button NewSecondaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
             button.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
             button.style.color = RuntimeArtCatalog.Text;
             return button;
+        }
+
+        private static void QuitPlayer()
+        {
+            Application.Quit();
         }
 
         private static Button NewButton(string label, Action action)

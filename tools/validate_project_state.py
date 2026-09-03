@@ -9,7 +9,8 @@ ERRORS: list[str] = []
 
 REQUIRED_MARKERS = {
     'README.md': [
-        'M4 Playable Slice Stabilization',
+        'M4 Visible UI Usability',
+        'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
         'M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY',
         'M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY',
         'M4_PLAYABLE_VERTICAL_SLICE_RUNTIME_SMOKE_PASS',
@@ -19,18 +20,19 @@ REQUIRED_MARKERS = {
         'M0_RUNTIME_CLOSED',
     ],
     'START-HERE.md': [
-        'M4 Playable Slice Stabilization',
-        'M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY',
+        'M4 Visible UI Usability',
+        'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
         './tools/lgo_m4_closure_check.sh --source-only',
         './tools/lgo_m4_closure_check.sh --package-ready',
     ],
     'VERSIONING.md': [
-        'source_package_version = 0.13.0',
-        'client_version = 0.4.1-m4',
+        'source_package_version = 0.14.0',
+        'client_version = 0.4.2-m4',
         'm1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED',
         'm2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE',
         'm3_status = M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED',
         'm3b_status = M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY',
+        'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
         'M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY',
         'M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY',
     ],
@@ -50,7 +52,8 @@ REQUIRED_MARKERS = {
         'players-v1.json',
     ],
     'docs/execution/PROJECT-STATE.md': [
-        'M4 Playable Slice Stabilization',
+        'M4 Visible UI Usability',
+        'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
         'M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY',
         'M4_PLAYABLE_VERTICAL_SLICE_FOUNDATION_SOURCE_READY',
         'M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY',
@@ -63,11 +66,11 @@ REQUIRED_MARKERS = {
         'M0_RUNTIME_CLOSED',
     ],
     'docs/execution/06-PROJECT-GOVERNANCE-INDEX.md': [
-        'Current milestone: `M4 Playable Slice Stabilization`',
-        'Current safe implementation state: `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`',
+        'Current milestone: `M4 Visible UI Usability`',
+        'Current safe implementation state: `M4_VISIBLE_UI_USABILITY_SOURCE_READY`',
     ],
     'docs/execution/07-PHASE-GATES.md': [
-        'Current state: `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`',
+        'Current state: `M4_VISIBLE_UI_USABILITY_SOURCE_READY`',
         'M1 final state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`',
     ],
     'docs/execution/M2-RUNTIME-EVIDENCE.md': [
@@ -116,16 +119,19 @@ OUTDATED_CURRENT_TRUTH = [
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current milestone: `M3 Account / Character Persistence`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current milestone: `M3-B Unity Account / Character Integration`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current milestone: `M4-2/M4-3 Playable UI And Art Quality Pass`'),
+    ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current milestone: `M4 Playable Slice Stabilization`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current safe implementation state: `M0_SERVER_RUNTIME_CLOSED_UNITY_ENV_LIMITED`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current safe implementation state: `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current safe implementation state: `M3_ACCOUNT_CHARACTER_PERSISTENCE_SOURCE_READY`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current safe implementation state: `M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current safe implementation state: `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`'),
+    ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current safe implementation state: `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`'),
     ('docs/execution/07-PHASE-GATES.md', r'Current state: `M0_SERVER_RUNTIME_CLOSED_UNITY_ENV_LIMITED`'),
     ('docs/execution/07-PHASE-GATES.md', r'Current state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`'),
     ('docs/execution/07-PHASE-GATES.md', r'Current state: `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE`'),
     ('docs/execution/07-PHASE-GATES.md', r'Current state: `M3_ACCOUNT_CHARACTER_PERSISTENCE_SOURCE_READY`'),
     ('docs/execution/07-PHASE-GATES.md', r'Current state: `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`'),
+    ('docs/execution/07-PHASE-GATES.md', r'Current state: `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`'),
 ]
 
 

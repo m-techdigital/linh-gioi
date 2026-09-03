@@ -85,7 +85,7 @@ M1 final accepted state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
 ## M2 — Online Session Prototype
 
-Current state: `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`.
+Current state: `M4_VISIBLE_UI_USABILITY_SOURCE_READY`.
 
 M1 final state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
@@ -140,9 +140,9 @@ Previous M2 source-only marker: `M2_ONLINE_SESSION_SOURCE_READY` (superseded by 
 
 ## M4 — Progression, Economy Skeleton, and Inventory Foundation
 
-Current state: `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`.
+Current state: `M4_VISIBLE_UI_USABILITY_SOURCE_READY`.
 
-The current M4 source is limited to playable vertical slice presentation work, visual placeholder foundation, playable UI redesign, placeholder art quality pass, closure automation, and source-gate stabilization. It does not open progression, economy, inventory, social, production auth, protocol, or GameData schema scope.
+The current M4 source is limited to playable vertical slice presentation work, visual placeholder foundation, playable UI redesign, placeholder art quality pass, closure automation, source-gate stabilization, visible UI usability, and manual review harness support. It does not open progression, economy, inventory, social, production auth, protocol, or GameData schema scope.
 
 ### Entry gate
 

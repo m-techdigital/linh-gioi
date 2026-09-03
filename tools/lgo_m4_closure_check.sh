@@ -161,6 +161,7 @@ source_only() {
   run_phase m4_visual python3.12 tools/validate_m4_visual_foundation.py
   run_phase m4_2_ui python3.12 tools/validate_m4_2_playable_ui.py
   run_phase m4_stabilization python3.12 tools/validate_m4_stabilization.py
+  run_phase m4_visible_ui python3.12 tools/validate_m4_visible_ui.py
   run_phase m4_source ./tools/validate_m4_source.sh
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
@@ -168,6 +169,7 @@ source_only() {
     tools/validate_m4_visual_foundation.py \
     tools/validate_m4_2_playable_ui.py \
     tools/validate_m4_stabilization.py \
+    tools/validate_m4_visible_ui.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py
   log "LGO_M4_CLOSURE_SOURCE_GATES_PASS"
@@ -182,6 +184,18 @@ load_local_env() {
     log "LGO_M4_CLOSURE_ENV loaded .lgo-local-env"
   else
     log "LGO_M4_CLOSURE_ENV .lgo-local-env not present"
+  fi
+  if [[ -z "${UNITY_EDITOR:-}" ]]; then
+    for candidate in \
+      "/Applications/Unity/Hub/Editor/6000.3.2f1/Unity.app/Contents/MacOS/Unity" \
+      "$HOME/Applications/Unity/Hub/Editor/6000.3.2f1/Unity.app/Contents/MacOS/Unity"; do
+      if [[ -x "$candidate" ]]; then
+        UNITY_EDITOR="$candidate"
+        export UNITY_EDITOR
+        log "LGO_M4_CLOSURE_ENV detected UNITY_EDITOR=$UNITY_EDITOR"
+        break
+      fi
+    done
   fi
 }
 

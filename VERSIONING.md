@@ -9,8 +9,8 @@ Three runtime compatibility versions are intentionally separate:
 Current source package identity:
 
 ```text
-source_package_version = 0.13.0
-milestone = M4 Playable Slice Stabilization
+source_package_version = 0.14.0
+milestone = M4 Visible UI Usability
 m0_status = M0_RUNTIME_CLOSED
 m1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED
 m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
@@ -19,7 +19,7 @@ m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
 Current runtime placeholders:
 
 ```text
-client_version = 0.4.1-m4
+client_version = 0.4.2-m4
 protocol_version = 1
 gamedata_version = 1
 ```
@@ -104,3 +104,13 @@ M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY
 ```
 
 M4 v0.13.0 adds checksum-pinned macOS protobuf tooling, a one-command M4 closure check, and a stabilization validator. It does not change protocol, GameData, production authentication, database persistence, combat, economy, final production art, or MMO gameplay scope.
+
+## M4 Visible UI Usability v0.14.0
+
+Current source status:
+
+```text
+M4_VISIBLE_UI_USABILITY_SOURCE_READY
+```
+
+M4 v0.14.0 makes the visible 1280x720 playable UI reviewable, adds a manual visible review harness, and hardens source validation for visible UI affordances. It does not change protocol, GameData, production authentication, database persistence, combat, economy, final production art, or MMO gameplay scope.

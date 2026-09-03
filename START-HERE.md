@@ -1,12 +1,12 @@
 # START HERE — Linh Giới Online Current Source
 
-**Current milestone:** `M4 Playable Slice Stabilization`.
+**Current milestone:** `M4 Visible UI Usability`.
 
-**Current status:** `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`.
+**Current status:** `M4_VISIBLE_UI_USABILITY_SOURCE_READY`.
 
 **Accepted base:** `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 
-**Current source successor:** `linh-gioi-m4-playable-slice-stabilization-v0.13.0`.
+**Current source successor:** `linh-gioi-m4-visible-ui-usability-v0.14.0`.
 
 ## 1. Read order
 
@@ -216,3 +216,23 @@ Use this before packaging source handoff artifacts:
 ```
 
 Runtime closure still requires Unity `6000.3.2f1`, Java `25`, Maven `3.9.16`, and observed M3-B/M4 smoke markers on the current source.
+
+## M4 Visible UI Usability v0.14.0
+
+Manual visible review command:
+
+```bash
+./tools/run_m4_visible_ui_review.sh --rebuild
+```
+
+Open an existing built player:
+
+```bash
+./tools/run_m4_visible_ui_review.sh --open-existing
+```
+
+Stop the local review API/player:
+
+```bash
+./tools/run_m4_visible_ui_review.sh --stop
+```

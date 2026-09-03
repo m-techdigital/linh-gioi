@@ -16,7 +16,9 @@ REQUIRED_DOCS = [
     'VERSIONING.md',
     'docs/execution/PROJECT-STATE.md',
     'docs/execution/M4-CLOSURE-COMMAND-v0.13.0.md',
+    'docs/execution/M4-VISIBLE-UI-REVIEW-COMMAND-v0.14.0.md',
     'docs/tasks/M4-PLAYABLE-SLICE-STABILIZATION-v0.13.0.md',
+    'docs/tasks/M4-VISIBLE-UI-USABILITY-AND-REVIEW-HARNESS-v0.14.0.md',
     'docs/design/LGO-DESIGN-DIRECTION-LOCK-v0.11.0.md',
     'docs/design/LGO-PLAYABLE-UI-WIREFRAME-SPEC-v0.11.0.md',
     'docs/art/LGO-VISUAL-IDENTITY-GUIDE-v0.10.0.md',
@@ -25,11 +27,13 @@ REQUIRED_DOCS = [
 
 REQUIRED_TOOLS = [
     'tools/lgo_m4_closure_check.sh',
+    'tools/run_m4_visible_ui_review.sh',
     'tools/validate_project_state.py',
     'tools/validate_m4_playable_source.py',
     'tools/validate_m4_visual_foundation.py',
     'tools/validate_m4_2_playable_ui.py',
     'tools/validate_m4_stabilization.py',
+    'tools/validate_m4_visible_ui.py',
     'tools/run_m4_playable_vertical_slice_once.sh',
     'tools/run_m4_visual_foundation_once.sh',
     'tools/m4_playable_vertical_slice_runtime.py',
@@ -162,6 +166,7 @@ def main() -> int:
         'LGO_M4_CLOSURE_RUNTIME_GATES_PASS',
         'LGO_M4_CLOSURE_RUNTIME_UNVERIFIED_ENVIRONMENT',
         'LGO_M4_CLOSURE_PACKAGE_READY',
+        'validate_m4_visible_ui.py',
         'latest-summary.json',
     )
     require(
@@ -197,8 +202,9 @@ def main() -> int:
     )
     require(
         'VERSIONING.md',
-        'source_package_version = 0.13.0',
-        'client_version = 0.4.1-m4',
+        'source_package_version = 0.14.0',
+        'client_version = 0.4.2-m4',
+        'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
     )
     validate_manifest_coverage()
 

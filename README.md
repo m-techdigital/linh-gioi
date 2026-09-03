@@ -1,6 +1,6 @@
-# LINH GIỚI ONLINE — M4 Playable Slice Stabilization
+# LINH GIỚI ONLINE — M4 Visible UI Usability
 
-**Current status:** `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY` after M4 closure automation and source-gate stabilization. Previous M4 UI/art status is `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`; previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
+**Current status:** `M4_VISIBLE_UI_USABILITY_SOURCE_READY` after visible UI usability fixes and manual review harness support. Previous M4 closure automation status is `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`; previous M4 UI/art status is `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`; previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
 
 The accepted foundation remains `M0_RUNTIME_CLOSED`. The accepted base is `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`. M2 opens the first online session scaffold: Unity can keep a realtime connection after the accepted handshake, send a movement intent, and receive an authoritative server transform snapshot from Java Netty using existing protobuf messages.
 
@@ -241,4 +241,23 @@ Runtime gate, only when Unity `6000.3.2f1` is configured:
 
 ```bash
 ./tools/lgo_m4_closure_check.sh --runtime
+```
+
+## M4 Visible UI Usability v0.14.0
+
+M4 v0.14.0 targets the visible macOS player usability gap found during manual review. The playable shell keeps the existing account/character/world behavior but uses a narrower state-focused layout, clearer API/status text, visible Save/Back actions, and a Quit/Escape exit affordance.
+
+Manual visible review harness:
+
+```bash
+./tools/run_m4_visible_ui_review.sh --rebuild
+./tools/run_m4_visible_ui_review.sh --open-existing
+./tools/run_m4_visible_ui_review.sh --stop
+```
+
+Source validation includes:
+
+```bash
+python3.12 tools/validate_m4_visible_ui.py
+./tools/lgo_m4_closure_check.sh --source-only
 ```

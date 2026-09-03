@@ -4,11 +4,11 @@ Last updated: `2026-09-04`
 
 ## Current milestone
 
-`M4 Playable Slice Stabilization`
+`M4 Visible UI Usability`
 
 ## Current decision
 
-`M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`
+`M4_VISIBLE_UI_USABILITY_SOURCE_READY`
 
 M0 final decision: `M0_RUNTIME_CLOSED`.
 
@@ -18,7 +18,7 @@ M2 has source-level implementation for the first online session scaffold. Runtim
 
 ## Authoritative source baseline
 
-`linh-gioi-m4-playable-slice-stabilization-v0.13.0`
+`linh-gioi-m4-visible-ui-usability-v0.14.0`
 
 Baseline ancestry:
 
@@ -30,11 +30,12 @@ Baseline ancestry:
 - M4-1 visual placeholder foundation;
 - M4-2 playable UI redesign;
 - M4-3 placeholder art quality pass;
-- M4 closure automation and stabilization validation.
+- M4 closure automation and stabilization validation;
+- M4 visible UI usability and manual review harness.
 
 ## Current source successor
 
-`linh-gioi-m4-playable-slice-stabilization-v0.13.0`
+`linh-gioi-m4-visible-ui-usability-v0.14.0`
 
 This source includes:
 
@@ -45,9 +46,11 @@ This source includes:
 - M4 visual status `M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY`;
 - M4 UI/art quality status `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`;
 - M4-2/M4-3 Playable UI And Art Quality Pass v0.12.0;
+- M4 stabilization status `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`;
 - M4 playable UI shell, runtime art catalog, and in-world HUD shell;
 - upgraded original placeholder SVGs under `client/Unity/Assets/Game/Art/**`;
 - M4 source validators, runtime smoke command, closure automation, handoff, report, and manifest.
+- M4 visible UI review harness and usability validator.
 
 ## Closed M0 gates
 
