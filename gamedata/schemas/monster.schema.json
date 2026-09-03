@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://linhgioi.local/schema/monster.schema.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "level",
+    "max_hp",
+    "move_speed",
+    "archetype"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^(monster|boss)\\.[a-z0-9_]+(?:\\.[a-z0-9_]+)+$"
+    },
+    "level": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 999
+    },
+    "max_hp": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "move_speed": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 50
+    },
+    "archetype": {
+      "enum": [
+        "melee",
+        "ranged",
+        "charger",
+        "support",
+        "boss"
+      ]
+    }
+  }
+}

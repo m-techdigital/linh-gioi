@@ -1,0 +1,14 @@
+gamedata_version: 1
+schema_version: 1
+classes:
+  - class.sword
+  - class.martial
+maps:
+  - map.city.linh_thanh
+  - map.field.mist_forest
+  - map.field.spirit_river
+  - map.dungeon.shadow_gate
+spirits:
+  - spirit.fox.ember
+  - spirit.turtle.jade
+  - spirit.bird.storm

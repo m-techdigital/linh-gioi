@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Core Gameplay Loop</title>
+  <desc id="desc">Prepared M1 offline combat loop reference</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121829"/>
+      <stop offset="55%" stop-color="#18263b"/>
+      <stop offset="100%" stop-color="#10251f"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+    <style>
+      .title { font: 800 44px Inter, Arial, sans-serif; fill: #f7fafc; }
+      .subtitle { font: 500 20px Inter, Arial, sans-serif; fill: #b8c7d9; }
+      .label { font: 700 20px Inter, Arial, sans-serif; fill: #f7fafc; }
+      .small { font: 500 15px Inter, Arial, sans-serif; fill: #d8e2ed; }
+      .tiny { font: 500 13px Inter, Arial, sans-serif; fill: #aebed0; }
+      .card { fill: #20324d; stroke: #4fd1c5; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .card2 { fill: #26344f; stroke: #f6ad55; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .card3 { fill: #1f3a32; stroke: #68d391; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .muted { fill: #1a2539; stroke: #6b7280; stroke-width: 1.5; rx: 18; }
+      .line { stroke: #94a3b8; stroke-width: 4; stroke-linecap: round; }
+      .dash { stroke: #f6ad55; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 10; }
+      .accent { fill: #4fd1c5; }
+      .warn { fill: #f6ad55; }
+      .ok { fill: #68d391; }
+    </style>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <text x="72" y="86" class="title">Core Gameplay Loop</text>
+  <text x="72" y="124" class="subtitle">Prepared M1 offline combat loop reference</text>
+
+  <circle cx="720" cy="440" r="250" fill="none" stroke="#4fd1c5" stroke-width="8" stroke-dasharray="18 16"/>
+  <rect x="600" y="160" width="240" height="92" class="card"/><text x="650" y="215" class="label">Explore</text>
+  <rect x="950" y="360" width="240" height="92" class="card2"/><text x="1015" y="415" class="label">Encounter</text>
+  <rect x="600" y="630" width="240" height="92" class="card3"/><text x="657" y="685" class="label">Reward</text>
+  <rect x="250" y="360" width="240" height="92" class="card"/><text x="305" y="415" class="label">Recover</text>
+  <text x="565" y="410" class="small">attack</text><text x="826" y="410" class="small">resolve</text><text x="620" y="552" class="small">loot/xp placeholder</text><text x="430" y="410" class="small">safe state</text>
+  <path d="M810 245 C930 270 1000 315 1040 360" fill="none" class="line"/>
+  <path d="M1030 452 C990 560 910 625 830 655" fill="none" class="line"/>
+  <path d="M610 675 C500 635 420 555 380 452" fill="none" class="line"/>
+  <path d="M380 360 C420 260 515 205 600 195" fill="none" class="line"/>
+  <rect x="425" y="360" width="590" height="128" class="muted"/>
+  <text x="482" y="410" class="label">M1 target</text><text x="482" y="445" class="small">One deterministic offline encounter with visible combat state and no persistence.</text>
+
+  <text x="72" y="854" class="tiny">Linh Giới Online — planning/reference SVG, non-production art, generated for execution governance.</text>
+</svg>

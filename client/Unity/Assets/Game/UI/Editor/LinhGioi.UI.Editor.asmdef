@@ -1,0 +1,13 @@
+{
+  "name": "LinhGioi.UI.Editor",
+  "rootNamespace": "LinhGioi.UI.Editor",
+  "references": [
+    "LinhGioi.UI",
+    "LinhGioi.Foundation",
+    "UnityEngine.UIElementsModule"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

@@ -1,0 +1,8 @@
+{
+  "name": "LinhGioi.Social",
+  "rootNamespace": "LinhGioi.Social",
+  "references": [
+    "LinhGioi.Foundation"
+  ],
+  "autoReferenced": true
+}

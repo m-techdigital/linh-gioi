@@ -1,0 +1,6 @@
+schema_version: 1
+id: monster.shadow.slime
+level: 1
+max_hp: 120
+move_speed: 2.5
+archetype: melee

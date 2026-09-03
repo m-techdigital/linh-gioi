@@ -1,0 +1,23 @@
+# M3 Persistence Closure Checklist
+
+- [ ] Current source SHA verified.
+- [ ] Project-owner override from M2 runtime candidate recorded, if M2 runtime is not closed.
+- [ ] `protocol/**` unchanged.
+- [ ] `gamedata/schemas/**` unchanged.
+- [ ] `docs/adr/**` unchanged.
+- [ ] UI design tokens unchanged.
+- [ ] Account dev-login path implemented.
+- [ ] Raw dev key not persisted.
+- [ ] Character create/list/load implemented.
+- [ ] Character position save/load implemented.
+- [ ] Persistence schema version guard implemented.
+- [ ] Unsupported future schema rejected.
+- [ ] Atomic/replace write discipline implemented.
+- [ ] Source validation PASS.
+- [ ] Server build PASS.
+- [ ] Server tests PASS with executed count greater than zero.
+- [ ] API runtime smoke PASS.
+- [ ] API restart reload smoke PASS.
+- [ ] Bad request / missing entity path tested.
+- [ ] No cache/temp/build artifact in delta.
+- [ ] Handoff includes non-claims for M2/M3 runtime if not closed.

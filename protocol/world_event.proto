@@ -1,0 +1,20 @@
+syntax = "proto3";
+package linhgioi.v1;
+
+option csharp_namespace = "LinhGioi.Protocol.V1";
+option java_package = "com.linhgioi.protocol.v1";
+option java_multiple_files = true;
+
+message WorldEventState {
+  string event_id = 1;
+  string phase = 2;
+  int64 phase_ends_at_unix_ms = 3;
+  uint32 objective_current = 4;
+  uint32 objective_target = 5;
+}
+
+message WorldEventContribution {
+  string event_id = 1;
+  uint64 character_id = 2;
+  uint64 contribution_points = 3;
+}

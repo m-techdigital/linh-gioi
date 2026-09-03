@@ -1,0 +1,12 @@
+{
+  "name": "LinhGioi.Bootstrap",
+  "rootNamespace": "LinhGioi.Bootstrap",
+  "references": [
+    "LinhGioi.Account",
+    "LinhGioi.Foundation",
+    "LinhGioi.Networking",
+    "LinhGioi.Protocol",
+    "LinhGioi.Combat"
+  ],
+  "autoReferenced": true
+}

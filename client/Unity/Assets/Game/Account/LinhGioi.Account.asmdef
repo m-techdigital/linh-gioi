@@ -1,0 +1,9 @@
+{
+  "name": "LinhGioi.Account",
+  "rootNamespace": "LinhGioi.Account",
+  "references": [
+    "LinhGioi.Foundation",
+    "UnityEngine.UnityWebRequestModule"
+  ],
+  "autoReferenced": true
+}

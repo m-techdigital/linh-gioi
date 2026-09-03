@@ -1,0 +1,27 @@
+{
+  "name": "LinhGioi.Tests.EditMode",
+  "rootNamespace": "LinhGioi.Tests",
+  "references": [
+    "LinhGioi.Account",
+    "LinhGioi.Foundation",
+    "LinhGioi.Networking",
+    "LinhGioi.Bootstrap",
+    "LinhGioi.UI",
+    "LinhGioi.Protocol",
+    "UnityEngine.UIElementsModule",
+    "LinhGioi.Combat",
+    "LinhGioi.CombatUI",
+    "LinhGioi.GameData"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": false,
+  "precompiledReferences": [
+    "Google.Protobuf.dll"
+  ],
+  "overrideReferences": true
+}

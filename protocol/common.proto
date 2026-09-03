@@ -1,0 +1,28 @@
+syntax = "proto3";
+package linhgioi.v1;
+
+option csharp_namespace = "LinhGioi.Protocol.V1";
+option java_package = "com.linhgioi.protocol.v1";
+option java_multiple_files = true;
+
+message Vec2 {
+  float x = 1;
+  float y = 2;
+}
+
+message Vec3 {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+}
+
+message EntityRef {
+  uint64 entity_id = 1;
+  string content_id = 2;
+}
+
+message ErrorInfo {
+  string code = 1;
+  string message = 2;
+  bool retryable = 3;
+}

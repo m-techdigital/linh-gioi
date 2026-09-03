@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Milestone Roadmap Flow</title>
+  <desc id="desc">M0 runtime closure to alpha readiness with hard gates</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121829"/>
+      <stop offset="55%" stop-color="#18263b"/>
+      <stop offset="100%" stop-color="#10251f"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+    <style>
+      .title { font: 800 44px Inter, Arial, sans-serif; fill: #f7fafc; }
+      .subtitle { font: 500 20px Inter, Arial, sans-serif; fill: #b8c7d9; }
+      .label { font: 700 20px Inter, Arial, sans-serif; fill: #f7fafc; }
+      .small { font: 500 15px Inter, Arial, sans-serif; fill: #d8e2ed; }
+      .tiny { font: 500 13px Inter, Arial, sans-serif; fill: #aebed0; }
+      .card { fill: #20324d; stroke: #4fd1c5; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .card2 { fill: #26344f; stroke: #f6ad55; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .card3 { fill: #1f3a32; stroke: #68d391; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .muted { fill: #1a2539; stroke: #6b7280; stroke-width: 1.5; rx: 18; }
+      .line { stroke: #94a3b8; stroke-width: 4; stroke-linecap: round; }
+      .dash { stroke: #f6ad55; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 10; }
+      .accent { fill: #4fd1c5; }
+      .warn { fill: #f6ad55; }
+      .ok { fill: #68d391; }
+    </style>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <text x="72" y="86" class="title">Milestone Roadmap Flow</text>
+  <text x="72" y="124" class="subtitle">M0 runtime closure to alpha readiness with hard gates</text>
+
+  <rect x="72" y="190" width="190" height="128" class="card"/>
+  <text x="104" y="240" class="label">M0 Foundation</text><text x="104" y="270" class="small">runtime gates</text><circle cx="230" cy="288" r="12" class="warn"/>
+  <line x1="262" y1="254" x2="330" y2="254" class="dash"/>
+  <rect x="330" y="190" width="190" height="128" class="card2"/>
+  <text x="362" y="240" class="label">M1 Offline</text><text x="362" y="270" class="small">combat loop</text>
+  <line x1="520" y1="254" x2="588" y2="254" class="line"/>
+  <rect x="588" y="190" width="190" height="128" class="card"/>
+  <text x="620" y="240" class="label">M2 Online</text><text x="620" y="270" class="small">session smoke</text>
+  <line x1="778" y1="254" x2="846" y2="254" class="line"/>
+  <rect x="846" y="190" width="190" height="128" class="card"/>
+  <text x="878" y="240" class="label">M3 Account</text><text x="878" y="270" class="small">character data</text>
+  <line x1="1036" y1="254" x2="1104" y2="254" class="line"/>
+  <rect x="1104" y="190" width="220" height="128" class="card"/>
+  <text x="1136" y="240" class="label">M4 Progress</text><text x="1136" y="270" class="small">inventory economy</text>
+  <rect x="330" y="430" width="190" height="128" class="card"/>
+  <text x="362" y="480" class="label">M5 Social</text><text x="362" y="510" class="small">party guild</text>
+  <rect x="588" y="430" width="190" height="128" class="card"/>
+  <text x="620" y="480" class="label">M6 Content</text><text x="620" y="510" class="small">liveops prep</text>
+  <rect x="846" y="430" width="190" height="128" class="card3"/>
+  <text x="878" y="480" class="label">M7 Alpha</text><text x="878" y="510" class="small">ops readiness</text>
+  <path d="M1214 318 C1214 380 425 366 425 430" fill="none" class="line"/>
+  <line x1="520" y1="494" x2="588" y2="494" class="line"/>
+  <line x1="778" y1="494" x2="846" y2="494" class="line"/>
+  <rect x="112" y="660" width="1180" height="98" class="muted"/>
+  <text x="150" y="705" class="label">Rule</text><text x="230" y="705" class="small">Each milestone requires entry gate, real evidence, handoff, owner acceptance, and rollback point.</text>
+  <text x="230" y="735" class="small">M1 stays locked until M0 Unity/runtime evidence is accepted or owner override is recorded.</text>
+
+  <text x="72" y="854" class="tiny">Linh Giới Online — planning/reference SVG, non-production art, generated for execution governance.</text>
+</svg>

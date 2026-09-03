@@ -1,0 +1,13 @@
+{
+  "environment": "local",
+  "realtimeHost": "127.0.0.1",
+  "realtimePort": 7777,
+  "protocolVersion": 1,
+  "clientVersion": "0.3.1-m3b",
+  "gamedataVersion": 1,
+  "platform": "unity",
+  "locale": "vi-VN",
+  "connectOnStart": false,
+  "apiBaseUrl": "http://127.0.0.1:18083",
+  "apiTimeoutSeconds": 10
+}

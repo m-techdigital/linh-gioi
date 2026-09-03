@@ -1,0 +1,6 @@
+syntax = "proto3";
+package linhgioi.v1;
+
+message InvalidSyntaxFixture {
+  string broken_field = ;
+}

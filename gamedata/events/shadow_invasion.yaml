@@ -1,0 +1,14 @@
+schema_version: 1
+id: event.world.shadow_invasion
+map_id: map.city.linh_thanh
+phases:
+  - id: warning
+    duration_seconds: 60
+  - id: invasion_open
+    duration_seconds: 30
+  - id: wave_defense
+    duration_seconds: 300
+  - id: boss
+    duration_seconds: 600
+  - id: restoration
+    duration_seconds: 60

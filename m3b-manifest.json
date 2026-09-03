@@ -1,0 +1,65 @@
+{
+  "taskId": "LG-M3B-UNITY-ACCOUNT-CHARACTER-INTEGRATION-v0.8.0",
+  "sourcePackageVersion": "0.8.5",
+  "baseline": {
+    "artifact": "linh-gioi-m3-account-character-persistence-v0.7.0-full-source.zip",
+    "sha256": "6110c4d1043eae7650df72b8386b9784bf91f1fd9523490ddd26f5c0308ab968",
+    "acceptedDecision": "M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED"
+  },
+  "status": "M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_CLOSED_LOCAL",
+  "scope": [
+    "Unity AccountApiClient for M3 HTTP persistence API",
+    "Unity command-line smoke runner for dev login, character list/create/load, and save position",
+    "Restart-aware smoke path using --lgo-m3b-expect-existing",
+    "M3-B source and runtime validation tooling"
+  ],
+  "nonClaims": [
+    "M2_ONLINE_SESSION_RUNTIME_CLOSED",
+    "M4 social/party/guild/economy systems",
+    "production authentication",
+    "PostgreSQL/Redis production persistence",
+    "Unity runtime PASS without a current player built from this source"
+  ],
+  "frozenSurfaces": [
+    "protocol/**",
+    "docs/adr/**",
+    "gamedata/schemas/**",
+    "docs/01-PRODUCT-CONSTITUTION.md",
+    "docs/02-GDD.md",
+    "docs/03-TDD.md",
+    "docs/04-NETWORK-CONTRACT.md",
+    "docs/05-GAMEDATA-CONTRACT.md",
+    "docs/06-UI-DESIGN-SYSTEM.md",
+    "client/Unity/Assets/Game/UI/design-tokens.json"
+  ],
+  "hotfixVersion": "v0.8.5",
+  "hotfixScope": [
+    "Move generated protocol C# into stable LinhGioi.Protocol asmdef assembly path",
+    "Keep generated protocol C# disposable under Assets/Game/Protocol/Generated",
+    "Preserve Google.Protobuf.dll precompiled reference on stable protocol asmdef",
+    "Update local asset prep and packaging hygiene validators"
+  ],
+  "statusHistory": [
+    "M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY",
+    "M3B_UNITY_PROTOCOL_ASMDEF_HOTFIX_READY_FOR_LOCAL_VERIFY",
+    "M3B_UNITY_HOST_PLAYER_HOTFIX_READY_FOR_LOCAL_VERIFY",
+    "M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_CLOSED_LOCAL"
+  ],
+  "operationalGuidance": {
+    "commandBase": "Commands should be provided from repo root LinhGioiOnline.",
+    "avoid": [
+      "placeholder executable paths",
+      "ellipsis in commands",
+      "|| true in gates",
+      "unnecessary heredoc blocks"
+    ],
+    "macOSPlayerExecutable": "build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity",
+    "unityProtocolGeneratedPath": "client/Unity/Assets/Game/Protocol/Generated",
+    "handoffDefaults": [
+      "full source ZIP",
+      "root-unzip delta ZIP",
+      "SHA256 for final ZIPs",
+      "final handoff/report/evidence only for final closure handoff"
+    ]
+  }
+}

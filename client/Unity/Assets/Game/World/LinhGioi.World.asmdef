@@ -1,0 +1,9 @@
+{
+  "name": "LinhGioi.World",
+  "rootNamespace": "LinhGioi.World",
+  "references": [
+    "LinhGioi.Foundation",
+    "LinhGioi.GameData"
+  ],
+  "autoReferenced": true
+}

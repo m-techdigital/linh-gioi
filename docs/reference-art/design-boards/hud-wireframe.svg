@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">Mobile HUD Wireframe</title>
+  <desc id="desc">Thumb-first combat HUD planning reference</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121829"/>
+      <stop offset="55%" stop-color="#18263b"/>
+      <stop offset="100%" stop-color="#10251f"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+    <style>
+      .title { font: 800 44px Inter, Arial, sans-serif; fill: #f7fafc; }
+      .subtitle { font: 500 20px Inter, Arial, sans-serif; fill: #b8c7d9; }
+      .label { font: 700 20px Inter, Arial, sans-serif; fill: #f7fafc; }
+      .small { font: 500 15px Inter, Arial, sans-serif; fill: #d8e2ed; }
+      .tiny { font: 500 13px Inter, Arial, sans-serif; fill: #aebed0; }
+      .card { fill: #20324d; stroke: #4fd1c5; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .card2 { fill: #26344f; stroke: #f6ad55; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .card3 { fill: #1f3a32; stroke: #68d391; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .muted { fill: #1a2539; stroke: #6b7280; stroke-width: 1.5; rx: 18; }
+      .line { stroke: #94a3b8; stroke-width: 4; stroke-linecap: round; }
+      .dash { stroke: #f6ad55; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 10; }
+      .accent { fill: #4fd1c5; }
+      .warn { fill: #f6ad55; }
+      .ok { fill: #68d391; }
+    </style>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <text x="72" y="86" class="title">Mobile HUD Wireframe</text>
+  <text x="72" y="124" class="subtitle">Thumb-first combat HUD planning reference</text>
+
+  <rect x="310" y="150" width="820" height="560" rx="38" fill="#0b1220" stroke="#e2e8f0" stroke-width="6"/>
+  <rect x="350" y="190" width="310" height="72" class="muted"/><text x="380" y="235" class="small">Player HP / resource</text>
+  <rect x="780" y="190" width="310" height="72" class="muted"/><text x="810" y="235" class="small">Enemy HP / status</text>
+  <rect x="390" y="300" width="660" height="250" rx="20" fill="#132033" stroke="#4fd1c5" stroke-width="2"/><text x="610" y="430" class="label">Combat View</text>
+  <circle cx="470" cy="620" r="58" class="card"/><text x="444" y="628" class="small">Move</text>
+  <circle cx="930" cy="612" r="52" class="card2"/><text x="905" y="620" class="small">Skill</text>
+  <circle cx="1030" cy="600" r="68" class="card3"/><text x="1000" y="608" class="small">Attack</text>
+  <rect x="610" y="585" width="220" height="64" class="muted"/><text x="644" y="625" class="small">Cooldown bar</text>
+  <rect x="360" y="735" width="720" height="72" class="muted"/><text x="398" y="780" class="small">Rule: wireframe only; production UI must consume design tokens and pass Unity runtime.</text>
+
+  <text x="72" y="854" class="tiny">Linh Giới Online — planning/reference SVG, non-production art, generated for execution governance.</text>
+</svg>

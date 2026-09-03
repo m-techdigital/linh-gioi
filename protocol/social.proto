@@ -1,0 +1,27 @@
+syntax = "proto3";
+package linhgioi.v1;
+
+option csharp_namespace = "LinhGioi.Protocol.V1";
+option java_package = "com.linhgioi.protocol.v1";
+option java_multiple_files = true;
+
+message ChatSendIntent {
+  string channel = 1;
+  string message = 2;
+}
+
+message ChatMessageEvent {
+  string channel = 1;
+  uint64 sender_character_id = 2;
+  string sender_display_name = 3;
+  string message = 4;
+  int64 server_time_unix_ms = 5;
+}
+
+message FriendRequestIntent {
+  uint64 target_character_id = 1;
+}
+
+message PartyInviteIntent {
+  uint64 target_character_id = 1;
+}

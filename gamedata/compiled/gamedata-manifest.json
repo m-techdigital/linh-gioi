@@ -1,0 +1,86 @@
+{
+  "content_count": 4,
+  "content_sha256": "06319ae68d92c8345401eb21e9aad93729e000c5f5d7444865539e06f6315a6e",
+  "documents": [
+    {
+      "data": {
+        "id": "event.world.shadow_invasion",
+        "map_id": "map.city.linh_thanh",
+        "phases": [
+          {
+            "duration_seconds": 60,
+            "id": "warning"
+          },
+          {
+            "duration_seconds": 30,
+            "id": "invasion_open"
+          },
+          {
+            "duration_seconds": 300,
+            "id": "wave_defense"
+          },
+          {
+            "duration_seconds": 600,
+            "id": "boss"
+          },
+          {
+            "duration_seconds": 60,
+            "id": "restoration"
+          }
+        ],
+        "schema_version": 1
+      },
+      "kind": "events",
+      "source": "gamedata/events/shadow_invasion.yaml"
+    },
+    {
+      "data": {
+        "category": "weapon",
+        "id": "item.weapon.sword.iron_01",
+        "rarity": "common",
+        "schema_version": 1,
+        "stack_limit": 1
+      },
+      "kind": "items",
+      "source": "gamedata/items/iron_sword.yaml"
+    },
+    {
+      "data": {
+        "archetype": "melee",
+        "id": "monster.shadow.slime",
+        "level": 1,
+        "max_hp": 120,
+        "move_speed": 2.5,
+        "schema_version": 1
+      },
+      "kind": "monsters",
+      "source": "gamedata/monsters/shadow_slime.yaml"
+    },
+    {
+      "data": {
+        "class_id": "class.sword",
+        "cooldown_ms": 6000,
+        "damage": {
+          "coefficient": 1.35
+        },
+        "id": "skill.sword.wind_slash",
+        "range_m": 4.5,
+        "schema_version": 1,
+        "tags": [
+          "sword",
+          "wind",
+          "melee"
+        ]
+      },
+      "kind": "skills",
+      "source": "gamedata/skills/wind_slash.yaml"
+    }
+  ],
+  "gamedata_version": 1,
+  "ids": [
+    "event.world.shadow_invasion",
+    "item.weapon.sword.iron_01",
+    "monster.shadow.slime",
+    "skill.sword.wind_slash"
+  ]
+}

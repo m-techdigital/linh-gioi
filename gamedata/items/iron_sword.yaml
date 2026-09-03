@@ -1,0 +1,5 @@
+schema_version: 1
+id: item.weapon.sword.iron_01
+category: weapon
+rarity: common
+stack_limit: 1

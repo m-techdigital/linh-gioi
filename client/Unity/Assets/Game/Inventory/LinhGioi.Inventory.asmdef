@@ -1,0 +1,9 @@
+{
+  "name": "LinhGioi.Inventory",
+  "rootNamespace": "LinhGioi.Inventory",
+  "references": [
+    "LinhGioi.Foundation",
+    "LinhGioi.GameData"
+  ],
+  "autoReferenced": true
+}

@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "colors": {
+    "bg": "#0B1324",
+    "surface": "#111D32",
+    "surfaceRaised": "#182741",
+    "spirit": "#28D7C7",
+    "shadow": "#9B5CFF",
+    "gold": "#E6B85C",
+    "danger": "#E35D6A",
+    "text": "#F5F2EA",
+    "muted": "#9BA7BC"
+  },
+  "spacing": [
+    4,
+    8,
+    12,
+    16,
+    24,
+    32,
+    48,
+    64
+  ],
+  "minimumTouchTarget": 44
+}

@@ -1,0 +1,10 @@
+{
+  "name": "LinhGioi.Protocol",
+  "rootNamespace": "LinhGioi.Protocol.V1",
+  "references": [],
+  "autoReferenced": true,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "Google.Protobuf.dll"
+  ]
+}

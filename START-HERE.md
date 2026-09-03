@@ -1,0 +1,153 @@
+# START HERE — Linh Giới Online Current Source
+
+**Current milestone:** `M3-B Unity Account / Character Integration`.
+
+**Current status:** `M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_CLOSED_LOCAL`.
+
+**Accepted base:** `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
+
+**Current source successor:** `linh-gioi-m2-runtime-candidate-v0.6.2-full-source.zip`.
+
+## 1. Read order
+
+1. `README.md`
+2. `docs/execution/LOCAL-SANDBOX-COMMAND-DISCIPLINE.md`
+3. `docs/execution/PROJECT-STATE.md`
+4. `docs/execution/MILESTONE-ROADMAP.md`
+5. `docs/execution/07-PHASE-GATES.md`
+6. `docs/tasks/M2-ONLINE-SESSION-PROTOTYPE.md`
+7. `docs/execution/M2-RUNTIME-EVIDENCE.md`
+8. `docs/execution/checklists/M2-RUNTIME-CLOSURE-CHECKLIST.md`
+9. `docs/execution/03-HANDOFF-CONTRACT.md`
+
+## 2. Environment
+
+Authoritative targets:
+
+- Unity `6000.3.2f1`
+- URP `17.3.0`
+- Java `25`
+- Maven `3.9.16`
+- Protobuf compiler/runtime `3.13.0`
+- GameData compiled manifest version `1`
+
+## 3. Source validation
+
+Recommended local macOS setup:
+
+```bash
+./tools/local_macos_setup.sh
+```
+
+Direct validation on a prepared environment:
+
+```bash
+./tools/validate_m3_source.sh
+```
+
+Expected classification:
+
+```text
+M0 SOURCE VALIDATION PASS
+M1 OFFLINE COMBAT STATIC VALIDATION PASS
+M2 ONLINE SESSION STATIC VALIDATION PASS
+PROJECT STATE VALIDATION PASS
+M2 SOURCE VALIDATION PASS
+```
+
+## 4. Unity preparation
+
+Before opening Unity manually on a fresh checkout:
+
+```bash
+./tools/local_macos_setup.sh
+./tools/prepare_unity_local_assets.sh
+```
+
+Then open `client/Unity` with Unity `6000.3.2f1`. Generated Unity assets belong under `client/Unity/Assets/Game/Generated/**` and must not be packaged into source deltas.
+
+## 4A. One-command M2 runtime candidate
+
+When ready to produce the final local evidence batch for sandbox replay:
+
+```bash
+./tools/run_m3_api_persistence_once.sh
+```
+
+Wait for `M2_LOCAL_RUNTIME_CANDIDATE_READY`, then upload the files listed in `build/m2-local-runtime-candidate/UPLOAD-THESE-FILES-M2-RUNTIME-CANDIDATE.txt`.
+
+## 5. M2 runtime evidence
+
+M2 runtime is not closed until Unity and Java are exercised together. Runtime closure must run a real Java realtime server and a Unity-built Linux player with:
+
+```text
+--lgo-m2-online-session-smoke
+```
+
+The smoke must prove handshake accepted, one movement intent sent, `PlayerTransformSnapshot` received, acknowledged sequence `1`, entity `1001`, and position `x≈0.4`.
+
+## 6. Next milestone
+
+M3-B Unity Account / Character Integration is the active owner-approved follow-up to the M3 server/API persistence closure. M4 stays locked until this M3-B slice is accepted.
+
+## M3 Account / Character Persistence v0.7.0
+
+Current M3 source candidate: `M3_ACCOUNT_CHARACTER_PERSISTENCE_SOURCE_READY`. This was opened by explicit project-owner override from the M2 runtime candidate state; it does not claim `M2_ONLINE_SESSION_RUNTIME_CLOSED`.
+
+Key commands:
+
+```bash
+./tools/validate_m3_source.sh
+./server/build.sh
+./server/test.sh
+./tools/run_m3_api_persistence_once.sh
+```
+
+Main persistence artifact at runtime: `players-v1.json` under `LG_API_PERSISTENCE_DIR`. Raw dev keys must not be persisted.
+
+
+M2 runtime evidence remains pending local Unity execution; this M3 source work is an owner override, not an M2 runtime closure.
+
+
+## M3-B Unity Account / Character Integration v0.8.0
+
+Use this command for source validation:
+
+```bash
+./tools/validate_m3b_source.sh
+```
+
+Use this command for runtime closure only after building or providing a current Linux player from this exact source:
+
+```bash
+./tools/run_m3b_unity_account_character_once.sh --unity-player "$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity"
+```
+
+The Unity smoke path is:
+
+```text
+--lgo-m3b-account-character-smoke
+```
+
+It must login, list/create/load character, save/load position, restart API, and rerun with `--lgo-m3b-expect-existing`.
+
+M3-B hotfix v0.8.1: Unity local compile support adds UnityWebRequest module dependency and generated protocol asmdef reference to Google.Protobuf.dll. No frozen protocol/schema changes.
+
+
+## Local sandbox command discipline v0.8.5
+
+Before giving or running local commands, read `docs/execution/LOCAL-SANDBOX-COMMAND-DISCIPLINE.md`. Commands are expected to be issued from repo root `LinhGioiOnline`, without placeholder executable paths, without `...`, and without `|| true` on gates.
+
+For macOS Unity player smoke, the executable path is:
+
+```text
+build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity
+```
+
+For Unity protocol compile/build gates, generate C# protocol files into:
+
+```text
+client/Unity/Assets/Game/Protocol/Generated
+```
+
+M3-B is locally closed only when `M3B_UNITY_ACCOUNT_CHARACTER_RUNTIME_SMOKE_PASS` is observed on the current source. This does not claim all M0 runtime closed and does not open M4.

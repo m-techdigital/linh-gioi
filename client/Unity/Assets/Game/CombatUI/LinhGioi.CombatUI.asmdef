@@ -1,0 +1,11 @@
+{
+  "name": "LinhGioi.CombatUI",
+  "rootNamespace": "LinhGioi.CombatUI",
+  "references": [
+    "LinhGioi.Foundation",
+    "LinhGioi.Combat",
+    "LinhGioi.UI",
+    "UnityEngine.UIElementsModule"
+  ],
+  "autoReferenced": true
+}

@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900" role="img" aria-labelledby="title desc">
+  <title id="title">M0 → M1 Gate</title>
+  <desc id="desc">Runtime closure conditions before combat implementation</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#121829"/>
+      <stop offset="55%" stop-color="#18263b"/>
+      <stop offset="100%" stop-color="#10251f"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#000000" flood-opacity="0.28"/>
+    </filter>
+    <style>
+      .title { font: 800 44px Inter, Arial, sans-serif; fill: #f7fafc; }
+      .subtitle { font: 500 20px Inter, Arial, sans-serif; fill: #b8c7d9; }
+      .label { font: 700 20px Inter, Arial, sans-serif; fill: #f7fafc; }
+      .small { font: 500 15px Inter, Arial, sans-serif; fill: #d8e2ed; }
+      .tiny { font: 500 13px Inter, Arial, sans-serif; fill: #aebed0; }
+      .card { fill: #20324d; stroke: #4fd1c5; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .card2 { fill: #26344f; stroke: #f6ad55; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .card3 { fill: #1f3a32; stroke: #68d391; stroke-width: 2; rx: 24; filter: url(#shadow); }
+      .muted { fill: #1a2539; stroke: #6b7280; stroke-width: 1.5; rx: 18; }
+      .line { stroke: #94a3b8; stroke-width: 4; stroke-linecap: round; }
+      .dash { stroke: #f6ad55; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 10 10; }
+      .accent { fill: #4fd1c5; }
+      .warn { fill: #f6ad55; }
+      .ok { fill: #68d391; }
+    </style>
+  </defs>
+  <rect width="1440" height="900" fill="url(#bg)"/>
+  <text x="72" y="86" class="title">M0 → M1 Gate</text>
+  <text x="72" y="124" class="subtitle">Runtime closure conditions before combat implementation</text>
+
+  <rect x="86" y="190" width="380" height="470" class="card"/>
+  <text x="124" y="245" class="label">M0 accepted rows</text>
+  <text x="124" y="292" class="small">✓ Protocol generation/tests</text>
+  <text x="124" y="332" class="small">✓ GameData validator/tests</text>
+  <text x="124" y="372" class="small">✓ Java 25 + Maven runtime</text>
+  <text x="124" y="412" class="small">✓ API /health + Netty TCP</text>
+  <text x="124" y="452" class="small">✓ ClientHello → ServerHello</text>
+  <text x="124" y="492" class="small">✓ Bad-client survival</text>
+  <text x="124" y="552" class="small">Pending: Unity player evidence replay</text>
+  <rect x="548" y="270" width="320" height="230" class="card2"/>
+  <text x="610" y="350" class="label">Gate decision</text>
+  <text x="592" y="392" class="small">ACCEPT M0_RUNTIME_CLOSED</text>
+  <text x="592" y="430" class="small">or record owner override</text>
+  <line x1="466" y1="425" x2="548" y2="385" class="dash"/>
+  <line x1="868" y1="385" x2="960" y2="425" class="dash"/>
+  <rect x="960" y="190" width="380" height="470" class="card3"/>
+  <text x="998" y="245" class="label">M1 may start only if</text>
+  <text x="998" y="302" class="small">✓ gate accepted</text>
+  <text x="998" y="342" class="small">✓ baseline SHA selected</text>
+  <text x="998" y="382" class="small">✓ no frozen contract drift</text>
+  <text x="998" y="422" class="small">✓ rollback point recorded</text>
+  <text x="998" y="482" class="small">Scope: offline combat only</text>
+  <text x="998" y="522" class="small">No online MMO systems yet</text>
+
+  <text x="72" y="854" class="tiny">Linh Giới Online — planning/reference SVG, non-production art, generated for execution governance.</text>
+</svg>

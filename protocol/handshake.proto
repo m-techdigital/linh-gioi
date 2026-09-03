@@ -1,0 +1,24 @@
+syntax = "proto3";
+package linhgioi.v1;
+
+option csharp_namespace = "LinhGioi.Protocol.V1";
+option java_package = "com.linhgioi.protocol.v1";
+option java_multiple_files = true;
+
+import "common.proto";
+
+message ClientHello {
+  uint32 protocol_version = 1;
+  string client_version = 2;
+  uint32 gamedata_version = 3;
+  string platform = 4;
+  string locale = 5;
+}
+
+message ServerHello {
+  bool accepted = 1;
+  uint32 protocol_version = 2;
+  uint32 required_gamedata_version = 3;
+  int64 server_time_unix_ms = 4;
+  ErrorInfo error = 5;
+}

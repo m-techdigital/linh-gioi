@@ -1,0 +1,18 @@
+{
+  "name": "LinhGioi.Foundation.Editor",
+  "rootNamespace": "LinhGioi.Foundation.Editor",
+  "references": [
+    "LinhGioi.Foundation",
+    "LinhGioi.Bootstrap",
+    "LinhGioi.UI",
+    "Unity.RenderPipelines.Universal.Runtime",
+    "LinhGioi.UI.Editor",
+    "UnityEngine.UIElementsModule",
+    "LinhGioi.Combat",
+    "LinhGioi.CombatUI"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

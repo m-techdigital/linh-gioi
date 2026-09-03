@@ -1,0 +1,9 @@
+{
+  "name": "LinhGioi.UI",
+  "rootNamespace": "LinhGioi.UI",
+  "references": [
+    "LinhGioi.Foundation",
+    "UnityEngine.UIElementsModule"
+  ],
+  "autoReferenced": true
+}

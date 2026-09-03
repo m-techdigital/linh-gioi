@@ -1,0 +1,22 @@
+syntax = "proto3";
+package linhgioi.v1;
+
+option csharp_namespace = "LinhGioi.Protocol.V1";
+option java_package = "com.linhgioi.protocol.v1";
+option java_multiple_files = true;
+
+import "common.proto";
+
+message MoveIntent {
+  uint32 sequence = 1;
+  Vec2 move_axis = 2;
+  float client_delta_seconds = 3;
+}
+
+message PlayerTransformSnapshot {
+  uint64 entity_id = 1;
+  uint32 acknowledged_sequence = 2;
+  Vec3 position = 3;
+  float yaw_degrees = 4;
+  int64 server_time_unix_ms = 5;
+}

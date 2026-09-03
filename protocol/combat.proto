@@ -1,0 +1,30 @@
+syntax = "proto3";
+package linhgioi.v1;
+
+option csharp_namespace = "LinhGioi.Protocol.V1";
+option java_package = "com.linhgioi.protocol.v1";
+option java_multiple_files = true;
+
+import "common.proto";
+
+message BasicAttackIntent {
+  uint32 sequence = 1;
+  uint64 target_entity_id = 2;
+}
+
+message SkillIntent {
+  uint32 sequence = 1;
+  string skill_id = 2;
+  uint64 target_entity_id = 3;
+  Vec3 target_position = 4;
+}
+
+message CombatResultEvent {
+  uint64 source_entity_id = 1;
+  uint64 target_entity_id = 2;
+  string source_action_id = 3;
+  int32 damage = 4;
+  int32 target_hp_after = 5;
+  bool critical = 6;
+  int64 server_time_unix_ms = 7;
+}

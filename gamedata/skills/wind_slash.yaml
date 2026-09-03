@@ -1,0 +1,11 @@
+schema_version: 1
+id: skill.sword.wind_slash
+class_id: class.sword
+cooldown_ms: 6000
+damage:
+  coefficient: 1.35
+range_m: 4.5
+tags:
+  - sword
+  - wind
+  - melee

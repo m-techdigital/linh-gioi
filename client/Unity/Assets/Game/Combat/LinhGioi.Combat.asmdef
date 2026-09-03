@@ -1,0 +1,9 @@
+{
+  "name": "LinhGioi.Combat",
+  "rootNamespace": "LinhGioi.Combat",
+  "references": [
+    "LinhGioi.Foundation",
+    "LinhGioi.GameData"
+  ],
+  "autoReferenced": true
+}

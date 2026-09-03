@@ -1,0 +1,9 @@
+schema_version: 1
+id: skill.sword.invalid_overpowered
+class_id: class.unknown
+cooldown_ms: -1
+damage:
+  coefficient: 999
+range_m: 500
+tags:
+  - sword
