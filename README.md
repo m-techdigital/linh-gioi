@@ -1,6 +1,6 @@
-# LINH GIỚI ONLINE — M4 Visual Placeholder Foundation
+# LINH GIỚI ONLINE — M4 Playable UI And Art Quality Pass
 
-**Current status:** `M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY` on top of M4-0 playable vertical slice source with runtime still environment-unverified in this sandbox. Previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
+**Current status:** `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY` after M4-2 playable UI redesign and M4-3 placeholder art quality pass. Previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
 
 The accepted foundation remains `M0_RUNTIME_CLOSED`. The accepted base is `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`. M2 opens the first online session scaffold: Unity can keep a realtime connection after the accepted handshake, send a movement intent, and receive an authoritative server transform snapshot from Java Netty using existing protobuf messages.
 
@@ -212,4 +212,15 @@ Runtime visual smoke after building a current macOS player:
 
 ```bash
 ./tools/run_m4_visual_foundation_once.sh --unity-player "$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity"
+```
+
+## M4-2/M4-3 Playable UI And Art Quality Pass v0.12.0
+
+M4-2 turns the playable UI into a clearer game shell with Auth / Gate Entry, Character Hall, selected character preview, and World HUD panels. M4-3 upgrades the original placeholder SVGs in place while preserving their paths and `.meta` files.
+
+Validation:
+
+```bash
+python3.12 tools/validate_m4_2_playable_ui.py
+python3.12 tools/validate_m4_visual_foundation.py
 ```

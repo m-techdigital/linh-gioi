@@ -1,12 +1,12 @@
 # START HERE — Linh Giới Online Current Source
 
-**Current milestone:** `M4-1 Visual Identity + Runtime Art Placeholder Foundation`.
+**Current milestone:** `M4-2/M4-3 Playable UI And Art Quality Pass`.
 
-**Current status:** `M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY`.
+**Current status:** `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`.
 
 **Accepted base:** `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 
-**Current source successor:** `linh-gioi-m4-visual-placeholder-foundation-v0.10.0`.
+**Current source successor:** `linh-gioi-m4-playable-ui-art-quality-v0.12.0`.
 
 ## 1. Read order
 
@@ -190,4 +190,15 @@ Runtime smoke after building a current macOS player:
 
 ```bash
 ./tools/run_m4_visual_foundation_once.sh --unity-player "$PWD/build/unity-player-macos/LinhGioiOnline.app/Contents/MacOS/Unity"
+```
+
+## M4-2/M4-3 Playable UI And Art Quality Pass v0.12.0
+
+M4-2 upgrades the playable UI shell from the accepted v0.11.0 design lock. M4-3 improves the committed placeholder SVGs in place while keeping them source-controlled placeholders, not final production art.
+
+Validate:
+
+```bash
+python3.12 tools/validate_m4_2_playable_ui.py
+python3.12 tools/validate_m4_visual_foundation.py
 ```

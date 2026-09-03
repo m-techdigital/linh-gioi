@@ -9,8 +9,8 @@ Three runtime compatibility versions are intentionally separate:
 Current source package identity:
 
 ```text
-source_package_version = 0.10.0
-milestone = M4-1 Visual Identity + Runtime Art Placeholder Foundation
+source_package_version = 0.12.0
+milestone = M4-2/M4-3 Playable UI And Art Quality Pass
 m0_status = M0_RUNTIME_CLOSED
 m1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED
 m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
@@ -84,3 +84,13 @@ M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY
 ```
 
 M4-1 adds original placeholder art source assets and runtime catalog references. It does not change protocol, GameData, production authentication, database persistence, or MMO networking versions.
+
+## M4-2/M4-3 Playable UI And Art Quality Pass v0.12.0
+
+Current source status:
+
+```text
+M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY
+```
+
+M4-2 improves the playable UI shell from the accepted design lock. M4-3 upgrades committed placeholder SVG quality in place while preserving runtime catalog paths. This does not change protocol, GameData, production authentication, database persistence, final production art status, or MMO networking versions.

@@ -1,14 +1,14 @@
 # Linh Giới Online — Project State
 
-Last updated: `2026-09-03`
+Last updated: `2026-09-04`
 
 ## Current milestone
 
-`M3-B Unity Account / Character Integration`
+`M4-2/M4-3 Playable UI And Art Quality Pass`
 
 ## Current decision
 
-`M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY`
+`M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`
 
 M0 final decision: `M0_RUNTIME_CLOSED`.
 
@@ -18,32 +18,33 @@ M2 has source-level implementation for the first online session scaffold. Runtim
 
 ## Authoritative source baseline
 
-`linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`
+`linh-gioi-m4-playable-ui-art-quality-v0.12.0`
 
-SHA256:
+Baseline ancestry:
 
-```text
-9260c75e4f17259c1252f820629e32412e95a0a448f431a554ae27a820848234
-```
+- accepted M0 runtime closure;
+- accepted M1 offline combat runtime closure;
+- M3 server/API persistence runtime closure;
+- M3-B Unity account/character source integration;
+- M4-0 playable vertical slice foundation;
+- M4-1 visual placeholder foundation;
+- M4-2 playable UI redesign;
+- M4-3 placeholder art quality pass.
 
 ## Current source successor
 
-`linh-gioi-m2-runtime-candidate-v0.6.2-full-source.zip`
+`linh-gioi-m4-playable-ui-art-quality-v0.12.0`
 
 This source includes:
 
-- accepted M0 runtime closure v0.4.1;
-- accepted M1 offline combat runtime closure v0.5.3;
-- Java realtime `OnlineSession` movement scaffold;
-- Java Netty `OnlineSessionHandler` installed after accepted `ClientHello`;
-- server-side authoritative `MoveIntent -> PlayerTransformSnapshot` loop;
-- sequence acknowledgement with duplicate/late sequence idempotence;
-- invalid movement failure path that closes only the offending session;
-- reconnect/survival integration tests;
-- Python TCP `online-session-smoke.py` for runtime server smoke;
-- Unity `TcpRealtimeClient.SendMoveIntentAsync(...)`;
-- Unity `OnlineSessionSmokeRunner` with `--lgo-m2-online-session-smoke`;
-- M2 source validator, runtime evidence plan, checklist, prompt, and manifest.
+- existing M2 online session runtime candidate tooling;
+- closed M3 server/API persistence;
+- M3-B Unity account/character client integration source;
+- M4 source status `M4_PLAYABLE_VERTICAL_SLICE_FOUNDATION_SOURCE_READY`;
+- M4 visual status `M4_VISUAL_PLACEHOLDER_FOUNDATION_SOURCE_READY`;
+- M4 playable UI shell, runtime art catalog, and in-world HUD shell;
+- upgraded original placeholder SVGs under `client/Unity/Assets/Game/Art/**`;
+- M4 source validators, runtime smoke command, handoff, report, and manifest.
 
 ## Closed M0 gates
 
@@ -99,11 +100,11 @@ This source includes:
 
 ## Next allowed step
 
-Run targeted VERIFY for `LG-M3B-UNITY-ACCOUNT-CHARACTER-INTEGRATION-v0.8.0`. M2 runtime closure remains pending local Unity evidence. M4 remains forbidden until M3-B is accepted.
+Run targeted M4 playable vertical slice verification on the current source. M2 runtime closure remains pending local Unity evidence and must not be inferred from M4 work.
 
 ## Forbidden next step
 
-Do not start M4 social/guild, payment, marketplace, PvP ranking, production auth, production DB infra, or broad content expansion. Do not mutate `protocol/**`, `gamedata/schemas/**`, ADR, or design tokens without an S0 contract-change task.
+Do not start M5, social/guild, payment, marketplace, PvP ranking, production auth, production DB infra, progression/economy expansion, inventory expansion, or broad content expansion. Do not mutate `protocol/**`, `gamedata/schemas/**`, ADR, or design tokens without an S0 contract-change task.
 
 
 ## M3 owner override note

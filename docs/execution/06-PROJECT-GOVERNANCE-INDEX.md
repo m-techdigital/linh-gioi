@@ -6,12 +6,12 @@ This file is the navigation hub for all planning, progress, gate, and handoff do
 
 ## Current truth
 
-- Current milestone: `M3-B Unity Account / Character Integration`.
-- Current safe implementation state: `M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY`.
+- Current milestone: `M4-2/M4-3 Playable UI And Art Quality Pass`.
+- Current safe implementation state: `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`.
 - Current accepted foundation: `M0_RUNTIME_CLOSED` from `linh-gioi-m0-runtime-closed-v0.4.1-full-source.zip`.
 - Current accepted gameplay baseline: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
-- Current active runtime follow-up: `LG-M2-ONLINE-SESSION-RUNTIME-CLOSURE` using Java Netty + Unity `6000.3.2f1` Linux player online session smoke.
-- M3 server/API persistence is closed as `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; M3-B is an owner-approved Unity client integration follow-up. M4 remains locked until M3-B acceptance.
+- Current active runtime follow-up: M4 playable vertical slice verification using Java Netty + Unity `6000.3.2f1` player smoke.
+- M3 server/API persistence is closed as `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; M3-B remains covered by its dedicated runtime smoke evidence.
 
 ## Read order for every new sandbox
 
@@ -55,8 +55,11 @@ This file is the navigation hub for all planning, progress, gate, and handoff do
 These are planning/reference assets. They are not production art, UI prefabs, scenes, or gameplay implementation.
 
 
-## Active M3-B documents
+## Active M4 documents
 
+- `docs/tasks/M4-PLAYABLE-VERTICAL-SLICE.md`
+- `docs/tasks/M4-PLAYABLE-UI-AND-ART-QUALITY-PASS-v0.12.0.md`
+- `docs/execution/prompts/M4-2-PLAYABLE-UI-REDESIGN-FROM-DESIGN-LOCK.md`
 - `docs/tasks/M3B-UNITY-ACCOUNT-CHARACTER-INTEGRATION.md`
 - `docs/execution/prompts/P11-M3B-UNITY-ACCOUNT-CHARACTER-INTEGRATION.md`
 - `docs/execution/M3B-UNITY-ACCOUNT-CHARACTER-EVIDENCE.md`

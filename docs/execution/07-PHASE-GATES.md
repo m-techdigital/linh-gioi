@@ -85,7 +85,7 @@ M1 final accepted state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
 ## M2 — Online Session Prototype
 
-Current state: `M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY`.
+Current state: `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`.
 
 M1 final state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
@@ -139,6 +139,10 @@ Previous M2 source-only marker: `M2_ONLINE_SESSION_SOURCE_READY` (superseded by 
 - No secret/config leakage.
 
 ## M4 — Progression, Economy Skeleton, and Inventory Foundation
+
+Current state: `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`.
+
+The current M4 source is limited to playable vertical slice presentation work, visual placeholder foundation, playable UI redesign, and placeholder art quality pass. It does not open progression, economy, inventory, social, production auth, protocol, or GameData schema scope.
 
 ### Entry gate
 
@@ -208,7 +212,7 @@ Any sandbox that believes a gate is wrong must create a gate-change request inst
 
 ## M3-B — Unity Account / Character Integration
 
-Current state: `M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY`.
+Current state: `M3B_UNITY_ACCOUNT_CHARACTER_SOURCE_READY_FOR_VERIFY` for the historical M3-B source gate.
 
 ### Entry gate
 
