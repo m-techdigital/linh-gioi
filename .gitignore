@@ -5,6 +5,7 @@ build/
 dist/
 out/
 target/
+server/**/target/
 client/Unity/Library/
 client/Unity/Temp/
 client/Unity/Logs/
@@ -24,4 +25,3 @@ client/Unity/Assets/Game/Protocol/Generated.meta
 *.svd
 *.pdb
 *.mdb
-server/**/target/
