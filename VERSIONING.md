@@ -9,8 +9,8 @@ Three runtime compatibility versions are intentionally separate:
 Current source package identity:
 
 ```text
-source_package_version = 0.15.0
-milestone = M5 First Playable Loop Foundation
+source_package_version = 0.16.0
+milestone = M5 Visual Evidence UX Acceptance
 m0_status = M0_RUNTIME_CLOSED
 m1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED
 m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
@@ -19,7 +19,7 @@ m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
 Current runtime placeholders:
 
 ```text
-client_version = 0.5.0-m5
+client_version = 0.5.1-m5
 protocol_version = 1
 gamedata_version = 1
 ```
@@ -124,3 +124,13 @@ M5_FIRST_PLAYABLE_LOOP_SOURCE_READY
 ```
 
 M5 v0.15.0 adds a controlled local-only first playable loop foundation inside the existing playable world shell: enter world, approach the Gate Keeper or Training Stone, trigger a concise F/Space interaction, receive objective feedback, and keep Save Position / Back to Lobby behavior. It does not change protocol, GameData, production authentication, database persistence, combat, inventory, economy, guild, chat, market, party, live ops, final production art, or MMO-scale gameplay scope.
+
+## M5 Visual Evidence UX Acceptance v0.16.0
+
+Current source status:
+
+```text
+M5_VISUAL_EVIDENCE_UX_REVIEW_READY
+```
+
+M5 v0.16.0 adds a Unity-side visual evidence review path for Gate Entry, Character Hall, World HUD, and First Playable Loop Feedback screenshots plus summary metadata. It does not add gameplay, combat, inventory, quests, economy, guild, chat, market, party, live ops, production auth, database persistence, protocol changes, GameData schema changes, final production UI, or final production art.

@@ -85,7 +85,7 @@ M1 final accepted state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
 ## M2 — Online Session Prototype
 
-Current state: `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
+Current state: `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`.
 
 M1 final state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
@@ -156,6 +156,18 @@ Runtime closure requires the inherited M3-B/M4 runtime smoke markers plus:
 
 ```text
 M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS
+```
+
+## M5-1 — Visual Evidence UX Acceptance
+
+Current state: `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`.
+
+This review gate adds deterministic Unity-side visual evidence for Gate Entry, Character Hall, World HUD, and First Playable Loop Feedback. Human visual acceptance remains separate from file generation unless explicitly accepted by the owner.
+
+Runtime/review evidence requires:
+
+```text
+LGO_PLAYABLE_VISUAL_EVIDENCE_READY
 ```
 
 ### Entry gate

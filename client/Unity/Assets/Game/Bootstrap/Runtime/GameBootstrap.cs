@@ -27,6 +27,12 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (M5VisualEvidenceRunner.ShouldRun())
+                {
+                    M5VisualEvidenceRunner.Attach(gameObject);
+                    return;
+                }
+
                 if (M5FirstPlayableLoopSmokeRunner.ShouldRun())
                 {
                     await M5FirstPlayableLoopSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);

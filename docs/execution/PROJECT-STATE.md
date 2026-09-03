@@ -4,11 +4,11 @@ Last updated: `2026-09-04`
 
 ## Current milestone
 
-`M5 First Playable Loop Foundation`
+`M5 Visual Evidence UX Acceptance`
 
 ## Current decision
 
-`M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`
+`M5_VISUAL_EVIDENCE_UX_REVIEW_READY`
 
 M0 final decision: `M0_RUNTIME_CLOSED`.
 
@@ -18,7 +18,7 @@ M2 has source-level implementation for the first online session scaffold. Runtim
 
 ## Authoritative source baseline
 
-`linh-gioi-m5-first-playable-loop-v0.15.0`
+`linh-gioi-m5-visual-evidence-ux-v0.16.0`
 
 Baseline ancestry:
 
@@ -32,11 +32,12 @@ Baseline ancestry:
 - M4-3 placeholder art quality pass;
 - M4 closure automation and stabilization validation;
 - M4 visible UI usability and manual review harness;
-- M5 first playable loop foundation with local-only interaction feedback.
+- M5 first playable loop foundation with local-only interaction feedback;
+- M5 visual evidence UX review path.
 
 ## Current source successor
 
-`linh-gioi-m5-first-playable-loop-v0.15.0`
+`linh-gioi-m5-visual-evidence-ux-v0.16.0`
 
 This source includes:
 
@@ -55,6 +56,8 @@ This source includes:
 - M4 visible UI review harness and usability validator.
 - M5 first playable loop source status `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
 - M5 local-only interaction loop with Gate Keeper, Training Stone, non-combat Shadow Slime marker, proximity prompt, F/Space acknowledgement, and existing save/back flow preserved.
+- M5 visual evidence source status `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`.
+- Unity-side visual evidence runner for Gate Entry, Character Hall, World HUD, and First Playable Loop Feedback.
 
 ## Closed M0 gates
 
@@ -129,6 +132,19 @@ This owner-approved foundation adds only a lightweight local interaction loop to
 - preserve Save Position and Back to Lobby.
 
 It does not claim full M5 social scope, full combat, economy, guild, chat, market, party, live ops, production auth, DB persistence, final production art, protocol changes, or GameData schema changes.
+
+## M5 Visual Evidence UX Acceptance v0.16.0
+
+Current source status: `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`.
+
+This review path adds Unity-side screenshot capture and deterministic metadata for:
+
+- Gate Entry;
+- Character Hall;
+- World HUD;
+- First Playable Loop Feedback.
+
+It writes `build/visual-evidence/visual-evidence-summary.json` and `build/visual-evidence/visual-evidence-summary.txt`. Visual evidence remains review-ready and does not by itself claim explicit human visual acceptance.
 
 
 ## M3 owner override note

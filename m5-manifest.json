@@ -1,19 +1,23 @@
 {
   "name": "Linh Gioi Online",
-  "milestone": "M5 First Playable Loop Foundation",
-  "sourcePackageVersion": "0.15.0",
-  "status": "M5_FIRST_PLAYABLE_LOOP_SOURCE_READY",
-  "baselineTag": "lgo-m4-visible-ui-usability-source-closed-v0.14.0",
-  "clientVersion": "0.5.0-m5",
+  "milestone": "M5 Visual Evidence UX Acceptance",
+  "sourcePackageVersion": "0.16.0",
+  "status": "M5_VISUAL_EVIDENCE_UX_REVIEW_READY",
+  "baselineTag": "lgo-m5-first-playable-loop-closed-local-v0.15.0",
+  "previousStatus": "M5_FIRST_PLAYABLE_LOOP_SOURCE_READY",
+  "clientVersion": "0.5.1-m5",
   "protocolVersion": 1,
   "gamedataVersion": 1,
   "runtimeSmokeMarker": "M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS",
+  "visualEvidenceMarker": "LGO_PLAYABLE_VISUAL_EVIDENCE_READY",
   "scope": [
     "local-only Gate Keeper and Training Stone interactions",
     "non-combat Shadow Slime visual marker",
     "world HUD objective and interaction feedback",
     "deterministic first playable loop runtime smoke",
-    "playable closure wrapper"
+    "playable closure wrapper",
+    "Unity-side visual evidence screenshots",
+    "visual evidence summary JSON and text"
   ],
   "nonClaims": [
     "full combat",

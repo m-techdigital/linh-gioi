@@ -1,6 +1,6 @@
-# LINH GIỚI ONLINE — M5 First Playable Loop Foundation
+# LINH GIỚI ONLINE — M5 Visual Evidence UX Acceptance
 
-**Current status:** `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY` after adding a controlled local-only first playable loop foundation and broader playable closure gate support. Previous M4 visible UI status is `M4_VISIBLE_UI_USABILITY_SOURCE_READY`; previous M4 closure automation status is `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`; previous M4 UI/art status is `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`; previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
+**Current status:** `M5_VISUAL_EVIDENCE_UX_REVIEW_READY` after adding Unity-side visual evidence capture and review metadata for the current playable shell. Previous M5 first playable loop status is `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`; previous M4 visible UI status is `M4_VISIBLE_UI_USABILITY_SOURCE_READY`; previous M4 closure automation status is `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`; previous M4 UI/art status is `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`; previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
 
 The accepted foundation remains `M0_RUNTIME_CLOSED`. The accepted base is `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`. M2 opens the first online session scaffold: Unity can keep a realtime connection after the accepted handshake, send a movement intent, and receive an authoritative server transform snapshot from Java Netty using existing protobuf messages.
 
@@ -243,6 +243,28 @@ M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS
 ```
 
 This does not implement combat, damage, loot, inventory, economy, guild, chat, market, party, live ops, production auth, database persistence, protocol changes, GameData schema changes, or final production art.
+
+## M5 Visual Evidence UX Acceptance v0.16.0
+
+Visual evidence review:
+
+```bash
+./tools/lgo_playable_closure_check.sh --visual-evidence
+./tools/run_m5_visual_evidence_review.sh --rebuild
+```
+
+Expected output:
+
+```text
+build/visual-evidence/gate-entry.png
+build/visual-evidence/character-hall.png
+build/visual-evidence/world-hud.png
+build/visual-evidence/first-playable-loop-feedback.png
+build/visual-evidence/visual-evidence-summary.json
+build/visual-evidence/visual-evidence-summary.txt
+```
+
+Visual evidence does not equal human visual acceptance by itself.
 
 Validation:
 

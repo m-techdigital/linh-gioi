@@ -13,6 +13,7 @@ Usage:
   ./tools/lgo_playable_closure_check.sh --source-only
   ./tools/lgo_playable_closure_check.sh --runtime
   ./tools/lgo_playable_closure_check.sh --package-ready
+  ./tools/lgo_playable_closure_check.sh --visual-evidence
 USAGE
 }
 
@@ -22,7 +23,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 case "$1" in
-  --source-only|--runtime|--package-ready) MODE="$1" ;;
+  --source-only|--runtime|--package-ready|--visual-evidence) MODE="$1" ;;
   --help|-h) usage; exit 0 ;;
   *) echo "ERROR: unknown mode: $1" >&2; usage >&2; exit 2 ;;
 esac
@@ -95,6 +96,7 @@ source_only() {
     tools/validate_m4_stabilization.py \
     tools/validate_m4_visible_ui.py \
     tools/validate_m5_first_playable_loop.py \
+    tools/validate_m5_visual_evidence.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
     tools/m5_first_playable_loop_runtime.py
@@ -165,8 +167,21 @@ package_ready() {
   write_json "PASS" "package gates pass"
 }
 
+visual_evidence() {
+  check_repo_root
+  log "LGO_PLAYABLE_CLOSURE_MODE visual-evidence"
+  run_phase m5_visual_evidence_source python3.12 tools/validate_m5_visual_evidence.py
+  run_phase visual_evidence_review ./tools/run_m5_visual_evidence_review.sh --rebuild
+  if grep -q "VISUAL_EVIDENCE_SCREENSHOT_UNAVAILABLE" "$ROOT/build/visual-evidence/visual-evidence-summary.json"; then
+    log "LGO_PLAYABLE_VISUAL_EVIDENCE_SCREENSHOT_UNAVAILABLE"
+  fi
+  log "LGO_PLAYABLE_VISUAL_EVIDENCE_READY"
+  write_json "PASS" "visual evidence ready"
+}
+
 case "$MODE" in
   --source-only) source_only ;;
   --runtime) runtime_mode ;;
   --package-ready) package_ready ;;
+  --visual-evidence) visual_evidence ;;
 esac
