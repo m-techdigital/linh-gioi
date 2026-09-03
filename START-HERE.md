@@ -1,12 +1,12 @@
 # START HERE — Linh Giới Online Current Source
 
-**Current milestone:** `M4 Visible UI Usability`.
+**Current milestone:** `M5 First Playable Loop Foundation`.
 
-**Current status:** `M4_VISIBLE_UI_USABILITY_SOURCE_READY`.
+**Current status:** `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
 
 **Accepted base:** `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 
-**Current source successor:** `linh-gioi-m4-visible-ui-usability-v0.14.0`.
+**Current source successor:** `linh-gioi-m5-first-playable-loop-v0.15.0`.
 
 ## 1. Read order
 
@@ -218,6 +218,29 @@ Use this before packaging source handoff artifacts:
 Runtime closure still requires Unity `6000.3.2f1`, Java `25`, Maven `3.9.16`, and observed M3-B/M4 smoke markers on the current source.
 
 ## M4 Visible UI Usability v0.14.0
+
+Visible UI review uses:
+
+```bash
+./tools/run_m4_visible_ui_review.sh --rebuild
+```
+
+## M5 First Playable Loop Foundation v0.15.0
+
+M5 v0.15.0 keeps the existing account, character, world entry, movement, save position, and back-to-lobby semantics, then adds a local-only first interaction loop: approach the Gate Keeper or Training Stone, press F or Space, and receive objective/interaction feedback.
+
+Validate source/package readiness:
+
+```bash
+./tools/lgo_playable_closure_check.sh --source-only
+./tools/lgo_playable_closure_check.sh --package-ready
+```
+
+Runtime smoke after building a current macOS player:
+
+```bash
+./tools/lgo_playable_closure_check.sh --runtime
+```
 
 Manual visible review command:
 

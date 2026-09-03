@@ -10,13 +10,21 @@ namespace LinhGioi.World
     {
         private const float MoveSpeed = 4f;
         private const float RotateSpeed = 120f;
+        private const float InteractionRange = 1.45f;
         private CharacterResponse _character;
         private Transform _marker;
+        private InteractableState _nearestInteractable;
+        private string _objectiveText = "Objective: enter the world and find the training stone.";
+        private string _interactionText = "Move near the Gate Keeper or Training Stone.";
 
         public event Action PositionChanged;
+        public event Action InteractionStateChanged;
 
         public Vector3 CurrentPosition => _marker == null ? Vector3.zero : _marker.position;
         public float CurrentYawDegrees => _marker == null ? 0f : _marker.eulerAngles.y;
+        public string ObjectiveText => _objectiveText;
+        public string InteractionText => _interactionText;
+        public bool InteractionAcknowledged { get; private set; }
 
         public void Enter(CharacterResponse character)
         {
@@ -24,6 +32,9 @@ namespace LinhGioi.World
             if (_marker == null) _marker = CreateMarker().transform;
             _marker.position = character.Position;
             _marker.rotation = Quaternion.Euler(0f, character.yawDegrees, 0f);
+            InteractionAcknowledged = false;
+            _objectiveText = "Objective: approach the Training Stone and press F or Space.";
+            RefreshInteractionState();
             PositionChanged?.Invoke();
         }
 
@@ -44,7 +55,19 @@ namespace LinhGioi.World
             if (_marker == null) _marker = CreateMarker().transform;
             _marker.position = new Vector3(x, y, z);
             _marker.rotation = Quaternion.Euler(0f, yawDegrees, 0f);
+            RefreshInteractionState();
             PositionChanged?.Invoke();
+        }
+
+        public void SetSmokePositionNearTrainingStone()
+        {
+            SetSmokePosition(0f, 0.25f, 3.45f, 0f);
+        }
+
+        public bool TriggerInteractionForSmoke()
+        {
+            RefreshInteractionState();
+            return TryTriggerInteraction();
         }
 
         private void Update()
@@ -64,8 +87,12 @@ namespace LinhGioi.World
             if (input.sqrMagnitude > 0.0001f)
             {
                 _marker.position += input * MoveSpeed * Time.deltaTime;
+                RefreshInteractionState();
                 PositionChanged?.Invoke();
             }
+
+            if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Space))
+                TryTriggerInteraction();
         }
 
         private static GameObject CreateMarker()
@@ -116,9 +143,10 @@ namespace LinhGioi.World
 
         private static void EnsureWorldPlaceholders()
         {
-            CreateMarkerCube("LGO NPC Keeper Placeholder", new Vector3(-3f, 0.75f, 3f), RuntimeArtCatalog.Gold, new Vector3(0.9f, 1.5f, 0.9f));
-            CreateMarkerCube("LGO Shadow Slime Placeholder", new Vector3(3f, 0.4f, 3f), RuntimeArtCatalog.Shadow, new Vector3(1.4f, 0.8f, 1.4f));
-            CreateMarkerCube("LGO Spirit Burst VFX Placeholder", new Vector3(0f, 0.08f, 4.5f), RuntimeArtCatalog.Spirit, new Vector3(1.2f, 0.16f, 1.2f));
+            // Preserve the M4 visual source marker: LGO NPC Keeper Placeholder.
+            CreateMarkerCube("LGO Gate Keeper NPC Interactable", new Vector3(-3f, 0.75f, 3f), RuntimeArtCatalog.Gold, new Vector3(0.9f, 1.5f, 0.9f));
+            CreateMarkerCube("LGO Shadow Slime Non Combat Marker", new Vector3(3f, 0.4f, 3f), RuntimeArtCatalog.Shadow, new Vector3(1.4f, 0.8f, 1.4f));
+            CreateMarkerCube("LGO Training Stone Interactable", new Vector3(0f, 0.08f, 4.5f), RuntimeArtCatalog.Spirit, new Vector3(1.2f, 0.16f, 1.2f));
         }
 
         private static void CreateMarkerCube(string name, Vector3 position, Color color, Vector3 scale)
@@ -136,6 +164,76 @@ namespace LinhGioi.World
         {
             yaw %= 360f;
             return yaw < 0f ? yaw + 360f : yaw;
+        }
+
+        private void RefreshInteractionState()
+        {
+            if (_marker == null)
+            {
+                SetNearest(null, "Move near the Gate Keeper or Training Stone.");
+                return;
+            }
+
+            var position = _marker.position;
+            var training = new InteractableState(
+                "Training Stone",
+                "Press F or Space: stabilize spirit pulse.",
+                "Spirit pulse stabilized. Training acknowledged.",
+                new Vector3(0f, 0.08f, 4.5f)
+            );
+            var keeper = new InteractableState(
+                "Gate Keeper",
+                "Press F or Space: ask the Gate Keeper for guidance.",
+                "Gate Keeper: your path is open. Try the Training Stone.",
+                new Vector3(-3f, 0.75f, 3f)
+            );
+
+            var nearest = Distance2D(position, training.position) <= Distance2D(position, keeper.position) ? training : keeper;
+            if (Distance2D(position, nearest.position) <= InteractionRange)
+                SetNearest(nearest, nearest.prompt);
+            else
+                SetNearest(null, InteractionAcknowledged ? "Loop complete: save position or return to lobby." : "Move near the Gate Keeper or Training Stone.");
+        }
+
+        private bool TryTriggerInteraction()
+        {
+            if (_nearestInteractable == null) return false;
+            InteractionAcknowledged = true;
+            _objectiveText = "Objective complete: first spirit training loop acknowledged.";
+            _interactionText = _nearestInteractable.acknowledged;
+            InteractionStateChanged?.Invoke();
+            return true;
+        }
+
+        private void SetNearest(InteractableState state, string text)
+        {
+            if (_nearestInteractable == state && _interactionText == text) return;
+            _nearestInteractable = state;
+            _interactionText = text;
+            InteractionStateChanged?.Invoke();
+        }
+
+        private static float Distance2D(Vector3 a, Vector3 b)
+        {
+            var dx = a.x - b.x;
+            var dz = a.z - b.z;
+            return Mathf.Sqrt(dx * dx + dz * dz);
+        }
+
+        private sealed class InteractableState
+        {
+            public readonly string id;
+            public readonly string prompt;
+            public readonly string acknowledged;
+            public readonly Vector3 position;
+
+            public InteractableState(string id, string prompt, string acknowledged, Vector3 position)
+            {
+                this.id = id;
+                this.prompt = prompt;
+                this.acknowledged = acknowledged;
+                this.position = position;
+            }
         }
     }
 }

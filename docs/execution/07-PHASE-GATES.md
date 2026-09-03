@@ -85,7 +85,7 @@ M1 final accepted state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
 ## M2 — Online Session Prototype
 
-Current state: `M4_VISIBLE_UI_USABILITY_SOURCE_READY`.
+Current state: `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
 
 M1 final state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
@@ -140,9 +140,23 @@ Previous M2 source-only marker: `M2_ONLINE_SESSION_SOURCE_READY` (superseded by 
 
 ## M4 — Progression, Economy Skeleton, and Inventory Foundation
 
-Current state: `M4_VISIBLE_UI_USABILITY_SOURCE_READY`.
+Current state: `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
 
 The current M4 source is limited to playable vertical slice presentation work, visual placeholder foundation, playable UI redesign, placeholder art quality pass, closure automation, source-gate stabilization, visible UI usability, and manual review harness support. It does not open progression, economy, inventory, social, production auth, protocol, or GameData schema scope.
+
+## M5-0 — First Playable Loop Foundation
+
+Current state: `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
+
+This owner-approved M5-0 foundation is intentionally narrower than the full M5 social roadmap. It adds local-only interaction feedback inside the playable world shell: Gate Keeper, Training Stone, non-combat Shadow Slime marker, proximity prompt, F/Space acknowledgement, objective completion text, and existing Save Position / Back to Lobby preservation.
+
+Forbidden work remains full combat, damage, HP balancing, loot, inventory, economy, guild, chat, market, party, live ops, production auth, database persistence, protocol mutation, GameData schema mutation, final production art, and MMO-scale gameplay.
+
+Runtime closure requires the inherited M3-B/M4 runtime smoke markers plus:
+
+```text
+M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS
+```
 
 ### Entry gate
 

@@ -80,6 +80,11 @@ def main() -> int:
         '-screen-width 1280',
         '-screen-height 720',
         'M4_VISIBLE_UI_MANUAL_CHECKLIST',
+        'visible-ui-review-summary.json',
+        'VISIBLE_UI_SCREENSHOT_UNAVAILABLE',
+        'VISIBLE_UI_SCREENSHOT_CAPTURED',
+        'reviewStates',
+        'mainPanelMaxWidth',
     )
     script = ROOT / 'tools/run_m4_visible_ui_review.sh'
     if script.exists() and not os.access(script, os.X_OK):

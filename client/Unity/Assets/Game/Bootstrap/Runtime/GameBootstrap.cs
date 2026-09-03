@@ -27,6 +27,12 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (M5FirstPlayableLoopSmokeRunner.ShouldRun())
+                {
+                    await M5FirstPlayableLoopSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);
+                    return;
+                }
+
                 if (M4PlayableVerticalSliceSmokeRunner.ShouldRun())
                 {
                     await M4PlayableVerticalSliceSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);

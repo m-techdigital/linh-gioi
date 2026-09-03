@@ -6,8 +6,8 @@ This file is the navigation hub for all planning, progress, gate, and handoff do
 
 ## Current truth
 
-- Current milestone: `M4 Visible UI Usability`.
-- Current safe implementation state: `M4_VISIBLE_UI_USABILITY_SOURCE_READY`.
+- Current milestone: `M5 First Playable Loop Foundation`.
+- Current safe implementation state: `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
 - Current accepted foundation: `M0_RUNTIME_CLOSED` from `linh-gioi-m0-runtime-closed-v0.4.1-full-source.zip`.
 - Current accepted gameplay baseline: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 - Current active runtime follow-up: M4 playable vertical slice verification using Java Netty + Unity `6000.3.2f1` player smoke.
@@ -63,6 +63,8 @@ These are planning/reference assets. They are not production art, UI prefabs, sc
 - `docs/execution/M4-CLOSURE-COMMAND-v0.13.0.md`
 - `docs/tasks/M4-VISIBLE-UI-USABILITY-AND-REVIEW-HARNESS-v0.14.0.md`
 - `docs/execution/M4-VISIBLE-UI-REVIEW-COMMAND-v0.14.0.md`
+- `docs/tasks/M5-FIRST-PLAYABLE-LOOP-FOUNDATION-v0.15.0.md`
+- `docs/execution/LGO-PLAYABLE-CLOSURE-COMMAND-v0.15.0.md`
 - `docs/execution/prompts/M4-2-PLAYABLE-UI-REDESIGN-FROM-DESIGN-LOCK.md`
 - `docs/tasks/M3B-UNITY-ACCOUNT-CHARACTER-INTEGRATION.md`
 - `docs/execution/prompts/P11-M3B-UNITY-ACCOUNT-CHARACTER-INTEGRATION.md`

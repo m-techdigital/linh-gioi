@@ -33,6 +33,8 @@ namespace LinhGioi.UI
         private Label _selectedMeta;
         private Label _worldName;
         private Label _worldMeta;
+        private Label _worldObjective;
+        private Label _interactionHint;
         private Label _position;
         private Button _loginButton;
         private Button _createButton;
@@ -231,6 +233,12 @@ namespace LinhGioi.UI
             _worldMeta = NewMutedLabel("Select a character in the lobby.");
             _worldHud.Add(_worldMeta);
 
+            _worldObjective = NewStatusLabel("Objective: enter the world and find the training stone.", RuntimeArtCatalog.Gold);
+            _worldHud.Add(_worldObjective);
+
+            _interactionHint = NewStatusLabel("Move near the Gate Keeper or Training Stone.", RuntimeArtCatalog.Spirit);
+            _worldHud.Add(_interactionHint);
+
             _position = NewMutedLabel("x=0.00 y=0.00 z=0.00 yaw=0.0");
             _position.style.marginTop = 8;
             _position.style.backgroundColor = RuntimeArtCatalog.Background;
@@ -301,8 +309,10 @@ namespace LinhGioi.UI
             {
                 _world = gameObject.AddComponent<PlayableWorldController>();
                 _world.PositionChanged += () => _position.text = _world.FormatPosition();
+                _world.InteractionStateChanged += RefreshWorldLoopLabels;
             }
             _world.Enter(loaded);
+            RefreshWorldLoopLabels();
             UpdateSelectedPreview(loaded);
             ShowWorldMode();
             SetBusy(false, "World ready: " + Abbrev(loaded.characterId));
@@ -340,6 +350,8 @@ namespace LinhGioi.UI
                 _selectedMeta.text = "Create a cultivator to enter the world.";
                 _worldName.text = "No character selected";
                 _worldMeta.text = "Select a character in the lobby.";
+                if (_worldObjective != null) _worldObjective.text = "Objective: enter the world and find the training stone.";
+                if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper or Training Stone.";
                 _position.text = "x=0.00 y=0.00 z=0.00 yaw=0.0";
                 return;
             }
@@ -348,6 +360,13 @@ namespace LinhGioi.UI
             _worldName.text = character.name;
             _worldMeta.text = "Class " + character.classId + " / " + Abbrev(character.characterId);
             _position.text = character.ToString();
+        }
+
+        private void RefreshWorldLoopLabels()
+        {
+            if (_world == null) return;
+            if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
+            if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
         }
 
         private void ShowAuthMode()
@@ -474,6 +493,20 @@ namespace LinhGioi.UI
             var label = new Label(text);
             label.style.color = RuntimeArtCatalog.Muted;
             label.style.whiteSpace = WhiteSpace.Normal;
+            return label;
+        }
+
+        private static Label NewStatusLabel(string text, Color color)
+        {
+            var label = new Label(text);
+            label.style.color = color;
+            label.style.whiteSpace = WhiteSpace.Normal;
+            label.style.marginTop = 8;
+            label.style.paddingLeft = 10;
+            label.style.paddingRight = 10;
+            label.style.paddingTop = 6;
+            label.style.paddingBottom = 6;
+            label.style.backgroundColor = RuntimeArtCatalog.Background;
             return label;
         }
 

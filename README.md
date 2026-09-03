@@ -1,6 +1,6 @@
-# LINH GIỚI ONLINE — M4 Visible UI Usability
+# LINH GIỚI ONLINE — M5 First Playable Loop Foundation
 
-**Current status:** `M4_VISIBLE_UI_USABILITY_SOURCE_READY` after visible UI usability fixes and manual review harness support. Previous M4 closure automation status is `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`; previous M4 UI/art status is `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`; previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
+**Current status:** `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY` after adding a controlled local-only first playable loop foundation and broader playable closure gate support. Previous M4 visible UI status is `M4_VISIBLE_UI_USABILITY_SOURCE_READY`; previous M4 closure automation status is `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`; previous M4 UI/art status is `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`; previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
 
 The accepted foundation remains `M0_RUNTIME_CLOSED`. The accepted base is `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`. M2 opens the first online session scaffold: Unity can keep a realtime connection after the accepted handshake, send a movement intent, and receive an authoritative server transform snapshot from Java Netty using existing protobuf messages.
 
@@ -30,6 +30,13 @@ or, on a prepared environment:
 
 ```bash
 ./tools/lgo_m4_closure_check.sh --source-only
+```
+
+For the current broader playable source/package gates, use:
+
+```bash
+./tools/lgo_playable_closure_check.sh --source-only
+./tools/lgo_playable_closure_check.sh --package-ready
 ```
 
 Expected classification includes:
@@ -218,6 +225,24 @@ Runtime visual smoke after building a current macOS player:
 ## M4-2/M4-3 Playable UI And Art Quality Pass v0.12.0
 
 M4-2 turns the playable UI into a clearer game shell with Auth / Gate Entry, Character Hall, selected character preview, and World HUD panels. M4-3 upgrades the original placeholder SVGs in place while preserving their paths and `.meta` files.
+
+## M5 First Playable Loop Foundation v0.15.0
+
+M5 v0.15.0 adds a first local-only playable loop foundation to the existing world shell:
+
+- enter world through the existing account/character flow;
+- see player, Gate Keeper, Training Stone, and non-combat Shadow Slime markers;
+- move near an interactable;
+- press F or Space to receive objective and interaction feedback;
+- keep Save Position and Back to Lobby available.
+
+Runtime marker:
+
+```text
+M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS
+```
+
+This does not implement combat, damage, loot, inventory, economy, guild, chat, market, party, live ops, production auth, database persistence, protocol changes, GameData schema changes, or final production art.
 
 Validation:
 

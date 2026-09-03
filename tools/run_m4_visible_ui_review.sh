@@ -8,6 +8,7 @@ OUT_DIR="$ROOT/build/manual-ui"
 PLAYER_APP="$ROOT/build/unity-player-macos/LinhGioiOnline.app"
 PLAYER_EXE="$PLAYER_APP/Contents/MacOS/Unity"
 API_PID_FILE="$OUT_DIR/api.pid"
+SUMMARY_JSON="$OUT_DIR/visible-ui-review-summary.json"
 
 usage() {
   cat <<'USAGE'
@@ -36,6 +37,64 @@ if [[ "$(basename "$PWD")" != "LinhGioiOnline" ]]; then
 fi
 
 mkdir -p "$OUT_DIR"
+
+write_summary() {
+  local status="$1"
+  local screenshot_status="$2"
+  local screenshot_reason="$3"
+  python3.12 - "$SUMMARY_JSON" "$status" "$screenshot_status" "$screenshot_reason" "$PLAYER_EXE" "$PORT" <<'PY'
+from __future__ import annotations
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+path = Path(sys.argv[1])
+payload = {
+    "project": "linh-gioi-online",
+    "task": "M4 visible UI review",
+    "version": "0.14.0",
+    "reviewWindow": {"width": 1280, "height": 720, "fullscreen": False},
+    "reviewStates": ["login/gate entry", "character hall after login", "world HUD after enter world"],
+    "layoutSanity": {
+        "rootBoundsTarget": "1280x720",
+        "mainPanelMaxWidth": 960,
+        "criticalActions": ["Open Gate", "Create", "Enter World", "Save Position", "Back to Lobby", "Quit"],
+        "exitAffordances": ["Quit button", "Escape key"],
+    },
+    "status": sys.argv[2],
+    "screenshotStatus": sys.argv[3],
+    "screenshotReason": sys.argv[4],
+    "playerExecutable": sys.argv[5],
+    "apiPort": sys.argv[6],
+    "timestampUtc": datetime.now(timezone.utc).isoformat(),
+}
+path.parent.mkdir(parents=True, exist_ok=True)
+path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+PY
+}
+
+attempt_screenshot() {
+  local screenshot="$OUT_DIR/m4-visible-ui-login.png"
+  if ! command -v screencapture >/dev/null 2>&1; then
+    echo "VISIBLE_UI_SCREENSHOT_UNAVAILABLE reason=screencapture command not available"
+    write_summary "REVIEW_WINDOW_OPENED" "VISIBLE_UI_SCREENSHOT_UNAVAILABLE" "screencapture command not available"
+    return
+  fi
+  set +e
+  screencapture -x "$screenshot" > "$OUT_DIR/screencapture.log" 2>&1
+  local rc=$?
+  set -e
+  if [[ "$rc" -eq 0 && -s "$screenshot" ]]; then
+    echo "VISIBLE_UI_SCREENSHOT_CAPTURED path=$screenshot"
+    write_summary "REVIEW_WINDOW_OPENED" "VISIBLE_UI_SCREENSHOT_CAPTURED" "$screenshot"
+  else
+    local reason
+    reason="$(tr '\n' ' ' < "$OUT_DIR/screencapture.log" | sed 's/[[:space:]]\\+/ /g')"
+    echo "VISIBLE_UI_SCREENSHOT_UNAVAILABLE reason=$reason"
+    write_summary "REVIEW_WINDOW_OPENED" "VISIBLE_UI_SCREENSHOT_UNAVAILABLE" "$reason"
+  fi
+}
 
 stop_running() {
   if [[ -f "$API_PID_FILE" ]]; then
@@ -130,6 +189,8 @@ echo "M4_VISIBLE_UI_REVIEW_OPEN_WINDOWED 1280x720"
   > "$OUT_DIR/player.log" 2>&1 &
 
 echo "$!" > "$OUT_DIR/player.pid"
+sleep 5
+attempt_screenshot
 cat <<'CHECKLIST'
 M4_VISIBLE_UI_MANUAL_CHECKLIST
 1. Login screen: title, API status, dev key field, Open Gate button, error/loading text are readable.

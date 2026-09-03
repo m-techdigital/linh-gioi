@@ -4,11 +4,11 @@ Last updated: `2026-09-04`
 
 ## Current milestone
 
-`M4 Visible UI Usability`
+`M5 First Playable Loop Foundation`
 
 ## Current decision
 
-`M4_VISIBLE_UI_USABILITY_SOURCE_READY`
+`M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`
 
 M0 final decision: `M0_RUNTIME_CLOSED`.
 
@@ -18,7 +18,7 @@ M2 has source-level implementation for the first online session scaffold. Runtim
 
 ## Authoritative source baseline
 
-`linh-gioi-m4-visible-ui-usability-v0.14.0`
+`linh-gioi-m5-first-playable-loop-v0.15.0`
 
 Baseline ancestry:
 
@@ -31,11 +31,12 @@ Baseline ancestry:
 - M4-2 playable UI redesign;
 - M4-3 placeholder art quality pass;
 - M4 closure automation and stabilization validation;
-- M4 visible UI usability and manual review harness.
+- M4 visible UI usability and manual review harness;
+- M5 first playable loop foundation with local-only interaction feedback.
 
 ## Current source successor
 
-`linh-gioi-m4-visible-ui-usability-v0.14.0`
+`linh-gioi-m5-first-playable-loop-v0.15.0`
 
 This source includes:
 
@@ -47,10 +48,13 @@ This source includes:
 - M4 UI/art quality status `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`;
 - M4-2/M4-3 Playable UI And Art Quality Pass v0.12.0;
 - M4 stabilization status `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`;
+- M4 visible UI status `M4_VISIBLE_UI_USABILITY_SOURCE_READY`;
 - M4 playable UI shell, runtime art catalog, and in-world HUD shell;
 - upgraded original placeholder SVGs under `client/Unity/Assets/Game/Art/**`;
 - M4 source validators, runtime smoke command, closure automation, handoff, report, and manifest.
 - M4 visible UI review harness and usability validator.
+- M5 first playable loop source status `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
+- M5 local-only interaction loop with Gate Keeper, Training Stone, non-combat Shadow Slime marker, proximity prompt, F/Space acknowledgement, and existing save/back flow preserved.
 
 ## Closed M0 gates
 
@@ -106,11 +110,25 @@ This source includes:
 
 ## Next allowed step
 
-Run targeted M4 playable vertical slice verification on the current source. M2 runtime closure remains pending local Unity evidence and must not be inferred from M4 work.
+Run targeted playable closure verification on the current source. M2 runtime closure remains pending local Unity evidence and must not be inferred from M4/M5 work.
 
 ## Forbidden next step
 
-Do not start M5, social/guild, payment, marketplace, PvP ranking, production auth, production DB infra, progression/economy expansion, inventory expansion, or broad content expansion. Do not mutate `protocol/**`, `gamedata/schemas/**`, ADR, or design tokens without an S0 contract-change task.
+Do not start full M5 social/guild, payment, marketplace, PvP ranking, production auth, production DB infra, progression/economy expansion, inventory expansion, combat expansion, or broad content expansion. Do not mutate `protocol/**`, `gamedata/schemas/**`, ADR, or design tokens without an S0 contract-change task.
+
+## M5 First Playable Loop Foundation v0.15.0
+
+Current M5 source status: `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`.
+
+This owner-approved foundation adds only a lightweight local interaction loop to the existing M4 playable shell:
+
+- enter world through the existing account/character flow;
+- see player, Gate Keeper, Training Stone, and non-combat Shadow Slime markers;
+- approach an interactable and press F or Space;
+- receive concise objective/interaction feedback;
+- preserve Save Position and Back to Lobby.
+
+It does not claim full M5 social scope, full combat, economy, guild, chat, market, party, live ops, production auth, DB persistence, final production art, protocol changes, or GameData schema changes.
 
 
 ## M3 owner override note

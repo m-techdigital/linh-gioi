@@ -9,8 +9,8 @@ Three runtime compatibility versions are intentionally separate:
 Current source package identity:
 
 ```text
-source_package_version = 0.14.0
-milestone = M4 Visible UI Usability
+source_package_version = 0.15.0
+milestone = M5 First Playable Loop Foundation
 m0_status = M0_RUNTIME_CLOSED
 m1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED
 m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
@@ -19,7 +19,7 @@ m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
 Current runtime placeholders:
 
 ```text
-client_version = 0.4.2-m4
+client_version = 0.5.0-m5
 protocol_version = 1
 gamedata_version = 1
 ```
@@ -114,3 +114,13 @@ M4_VISIBLE_UI_USABILITY_SOURCE_READY
 ```
 
 M4 v0.14.0 makes the visible 1280x720 playable UI reviewable, adds a manual visible review harness, and hardens source validation for visible UI affordances. It does not change protocol, GameData, production authentication, database persistence, combat, economy, final production art, or MMO gameplay scope.
+
+## M5 First Playable Loop Foundation v0.15.0
+
+Current source status:
+
+```text
+M5_FIRST_PLAYABLE_LOOP_SOURCE_READY
+```
+
+M5 v0.15.0 adds a controlled local-only first playable loop foundation inside the existing playable world shell: enter world, approach the Gate Keeper or Training Stone, trigger a concise F/Space interaction, receive objective feedback, and keep Save Position / Back to Lobby behavior. It does not change protocol, GameData, production authentication, database persistence, combat, inventory, economy, guild, chat, market, party, live ops, final production art, or MMO-scale gameplay scope.
