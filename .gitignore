@@ -1,12 +1,10 @@
 .DS_Store
 *.log
 *.tmp
-
 build/
 dist/
 out/
 target/
-
 client/Unity/Library/
 client/Unity/Temp/
 client/Unity/Logs/
@@ -14,12 +12,10 @@ client/Unity/UserSettings/
 client/Unity/obj/
 client/Unity/Build/
 client/Unity/Builds/
-
 client/Unity/Assets/Game/Generated/
 client/Unity/Assets/Game/Generated.meta
 client/Unity/Assets/Game/Protocol/Generated/
 client/Unity/Assets/Game/Protocol/Generated.meta
-
 *.csproj
 *.sln
 *.user
@@ -28,5 +24,4 @@ client/Unity/Assets/Game/Protocol/Generated.meta
 *.svd
 *.pdb
 *.mdb
-
 server/**/target/
