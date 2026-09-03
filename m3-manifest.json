@@ -1,0 +1,25 @@
+{
+  "milestone": "M3 Account / Character Persistence",
+  "version": "0.7.0",
+  "status": "M3_ACCOUNT_CHARACTER_PERSISTENCE_SOURCE_READY",
+  "entry_note": "M2 owner override: M3 source work started from M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE without claiming M2_ONLINE_SESSION_RUNTIME_CLOSED.",
+  "baseline": "linh-gioi-m2-runtime-candidate-v0.6.2-full-source.zip",
+  "persistence_schema": {
+    "version": 1,
+    "file": "players-v1.json",
+    "store": "server/api/src/main/java/com/linhgioi/server/api/persistence/JsonFilePlayerProfileStore.java"
+  },
+  "api_endpoints": [
+    "POST /dev/auth/login",
+    "GET /accounts/{accountId}/characters",
+    "POST /accounts/{accountId}/characters",
+    "GET /characters/{characterId}",
+    "POST /characters/{characterId}/position"
+  ],
+  "non_claims": [
+    "M2_ONLINE_SESSION_RUNTIME_CLOSED",
+    "M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_CLOSED",
+    "production authentication",
+    "production database migration"
+  ]
+}

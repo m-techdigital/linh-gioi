@@ -1,0 +1,43 @@
+{
+  "project": "linh-gioi-online",
+  "milestone": "M0",
+  "foundation_version": "0.4.1-runtime-closed",
+  "client": {
+    "engine": "Unity",
+    "track": "6.3 LTS",
+    "language": "C#",
+    "editor_version": "6000.3.2f1",
+    "urp": "17.3.0"
+  },
+  "server": {
+    "language": "Java",
+    "java_lts": 25,
+    "api": "Spring Boot 4.x",
+    "realtime": "Netty",
+    "spring_boot": "4.1.1",
+    "netty": "4.2.17.Final",
+    "maven": "3.9.16"
+  },
+  "protocol": {
+    "format": "Protocol Buffers",
+    "version": 1,
+    "protoc": "3.13.0"
+  },
+  "gamedata": {
+    "version": 1
+  },
+  "runtime_exit_gate_verified": true,
+  "runtime_final_decision": "M0_RUNTIME_CLOSED",
+  "verified_gates": {
+    "source_validation": "PASS",
+    "server_build_test": "PASS",
+    "server_runtime_smoke": "PASS",
+    "unity_editor_evidence": "PASS",
+    "unity_editmode": "PASS",
+    "unity_linux_player_build": "PASS",
+    "unity_player_to_java_handshake": "PASS"
+  },
+  "next_allowed_milestone": "M1_OFFLINE_COMBAT_PROTOTYPE",
+  "execution_mode": "runtime-closed-foundation",
+  "status": "M0_RUNTIME_CLOSED"
+}

@@ -1,0 +1,91 @@
+{
+  "baseline": {
+    "artifact": "linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip",
+    "decision": "M1_OFFLINE_COMBAT_RUNTIME_CLOSED",
+    "sha256": "9260c75e4f17259c1252f820629e32412e95a0a448f431a554ae27a820848234"
+  },
+  "client": {
+    "editor_version": "6000.3.2f1",
+    "engine": "Unity",
+    "online_session_smoke_arg": "--lgo-m2-online-session-smoke",
+    "urp": "17.3.0",
+    "online_session_smoke_assertions": [
+      "accepted handshake",
+      "first MoveIntent sequence 1 advances to x=0.4",
+      "duplicate sequence 1 is idempotent and does not move again",
+      "second MoveIntent sequence 2 advances to z=0.2"
+    ]
+  },
+  "current_status": "M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE",
+  "local_runtime_candidate": {
+    "macos_linux_player_note": "The Unity-built Linux player is produced on macOS but replayed in a Linux sandbox for final closure.",
+    "one_command": "./tools/run_m2_local_runtime_once.sh",
+    "upload_manifest": "build/m2-local-runtime-candidate/UPLOAD-THESE-FILES-M2-RUNTIME-CANDIDATE.txt",
+    "no_false_ready_rule": "M2_LOCAL_RUNTIME_CANDIDATE_READY is emitted only when server smoke and Unity evidence both run and required artifacts exist; skipped lanes produce PARTIAL."
+  },
+  "milestone": "M2",
+  "next_allowed_milestone": "M2 Online Session Runtime Closure",
+  "project": "linh-gioi-online",
+  "protocol_messages_consumed": [
+    "ClientHello",
+    "ServerHello",
+    "MoveIntent",
+    "PlayerTransformSnapshot"
+  ],
+  "runtime_closure_status": "PENDING_LOCAL_UNITY_EVIDENCE",
+  "runtime_evidence": {
+    "expected_snapshot": {
+      "acknowledgedSequence": 1,
+      "entityId": 1001,
+      "x": 0.4
+    },
+    "target_decision": "M2_ONLINE_SESSION_RUNTIME_CLOSED",
+    "unity_player_arg": "--lgo-m2-online-session-smoke",
+    "expected_second_snapshot": {
+      "acknowledgedSequence": 2,
+      "entityId": 1001,
+      "x": 0.4,
+      "z": 0.2
+    }
+  },
+  "runtime_versions": {
+    "client_version": "0.2.0-m2",
+    "gamedata_version": 1,
+    "java": 25,
+    "maven": "3.9.16",
+    "protoc": "3.13.0",
+    "protocol_version": 1
+  },
+  "scope": {
+    "accounts": false,
+    "economy": false,
+    "guild": false,
+    "marketplace": false,
+    "movement_snapshot": true,
+    "online_combat_authority": false,
+    "persistence": false,
+    "pvp_ranking": false,
+    "single_online_session": true
+  },
+  "server": {
+    "runtime": "Java 25",
+    "session_smoke": "./server/scripts/online-session-smoke.py",
+    "transport": "Netty TCP length-prefixed protobuf",
+    "movement_guards": [
+      "positive sequence",
+      "finite delta <= 0.25s",
+      "finite axis components",
+      "axis components in [-1,1]",
+      "axis vector magnitude <= 1"
+    ]
+  },
+  "source_package_version": "0.6.2",
+  "source_validation": {
+    "command": "./tools/validate_m2_source.sh",
+    "dependency_fallback": "tools/validate_gamedata.py supports stdlib fallback when PyYAML/jsonschema are unavailable",
+    "requires_m0_source_regression": true,
+    "requires_m1_static_validation": true,
+    "requires_m2_static_validation": true,
+    "requires_project_state_validation": true
+  }
+}

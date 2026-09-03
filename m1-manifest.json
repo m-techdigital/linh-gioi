@@ -1,0 +1,53 @@
+{
+  "project": "linh-gioi-online",
+  "milestone": "M1",
+  "source_package_version": "0.5.3",
+  "baseline": {
+    "artifact": "linh-gioi-m0-runtime-closed-v0.4.1-full-source.zip",
+    "sha256": "382fa31fd358812eddc64ddf21bd958d2f941e4ba027e9d13dbfcec785e19283",
+    "decision": "M0_RUNTIME_CLOSED"
+  },
+  "current_status": "M1_OFFLINE_COMBAT_RUNTIME_CLOSED",
+  "runtime_closure_status": "CLOSED",
+  "scope": {
+    "offline_combat": true,
+    "online_session": false,
+    "persistence": false,
+    "economy": false,
+    "guild": false,
+    "marketplace": false,
+    "pvp_ranking": false
+  },
+  "client": {
+    "engine": "Unity",
+    "editor_version": "6000.3.2f1",
+    "urp": "17.3.0",
+    "offline_smoke_arg": "--lgo-m1-offline-combat-smoke"
+  },
+  "runtime_versions": {
+    "client_version": "0.1.0-m0",
+    "protocol_version": 1,
+    "gamedata_version": 1,
+    "protoc": "3.13.0",
+    "java": 25,
+    "maven": "3.9.16"
+  },
+  "source_validation": {
+    "command": "./tools/validate_m1_source.sh",
+    "requires_m0_source_regression": true,
+    "requires_m1_static_validation": true,
+    "requires_project_state_validation": true
+  },
+  "runtime_evidence": {
+    "local_builder": "./tools/m1_offline_combat_evidence/build_m1_offline_combat_evidence.sh",
+    "bundle_verifier": "./tools/m1_offline_combat_evidence/verify_m1_evidence_bundle.py",
+    "sandbox_player_smoke": "./tools/m1_offline_combat_evidence/run_m1_offline_combat_smoke.sh",
+    "target_decision": "M1_OFFLINE_COMBAT_RUNTIME_CLOSED",
+    "accepted_batch": "20260903T144411Z",
+    "editor_evidence_zip": "lgo-unity-editor-evidence-6000.3.2f1-20260903T144411Z.zip",
+    "player_archive": "lgo-unity-player-smoke-linux-6000.3.2f1-20260903T144411Z.tar.gz",
+    "sandbox_smoke_result": "PASS",
+    "final_decision": "M1_OFFLINE_COMBAT_RUNTIME_CLOSED"
+  },
+  "next_allowed_milestone": "M2 Online Session Prototype"
+}

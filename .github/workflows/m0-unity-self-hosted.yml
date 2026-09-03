@@ -1,0 +1,17 @@
+name: M0 Unity Runtime (Self-hosted)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unity-editmode:
+    runs-on: [self-hosted, unity-6000.3.2f1]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Prepare canonical C# protobuf source
+        run: python3 tools/prepare_unity_protocol.py
+      - name: Unity EditMode tests
+        run: ./tools/unity_batch_test.sh

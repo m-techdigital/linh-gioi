@@ -1,0 +1,29 @@
+name: M0 Foundation
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  source-and-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r tools/requirements.txt
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+          cache: maven
+      - name: Source validation
+        run: ./tools/validate_m0_source.sh
+      - name: Java build and tests
+        run: |
+          ./server/build.sh
+          ./server/test.sh
+      - name: API + realtime + handshake runtime smoke
+        run: ./server/scripts/runtime-smoke.sh
