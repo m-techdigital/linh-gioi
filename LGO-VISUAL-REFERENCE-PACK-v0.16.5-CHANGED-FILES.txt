@@ -1,0 +1,13 @@
+docs/reference-art/v0.16.5/README.md
+docs/reference-art/v0.16.5/lgo-visual-reference-overview-v0165.png
+docs/reference-art/v0.16.5/lgo-key-visual-moodboard-v0165.png
+docs/reference-art/v0.16.5/lgo-world-hub-2d5-v0165.png
+docs/reference-art/v0.16.5/lgo-gate-character-ui-v0165.png
+docs/reference-art/v0.16.5/lgo-playable-hud-mockup-v0165.png
+docs/reference-art/v0.16.5/lgo-character-npc-monster-style-v0165.png
+docs/reference-art/v0.16.5/lgo-item-skill-vfx-icons-v0165.png
+docs/art/LGO-VISUAL-REFERENCE-PACK-v0.16.5.md
+tools/validate_visual_reference_pack.py
+HANDOFF-LG-VISUAL-REFERENCE-PACK-v0.16.5.md
+LGO-VISUAL-REFERENCE-PACK-v0.16.5-CHANGED-FILES.txt
+LGO-VISUAL-REFERENCE-PACK-v0.16.5-DELETIONS.txt
