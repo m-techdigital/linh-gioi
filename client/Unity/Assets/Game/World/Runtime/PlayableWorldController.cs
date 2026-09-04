@@ -42,6 +42,7 @@ namespace LinhGioi.World
         private TextMesh _trainingStoneWorldLabel;
         private TextMesh _targetDummyWorldLabel;
         private TextMesh _spiritGateWorldLabel;
+        private TextMesh _shadowSlimeWorldLabel;
         private SpriteRenderer _targetDummySprite;
         private SpriteRenderer _targetDummyFocusSprite;
         private SpriteRenderer _targetDummyCooldownSprite;
@@ -834,6 +835,8 @@ namespace LinhGioi.World
                 _targetDummyWorldLabel = CreateWorldLabel("LGO Target Dummy World Label", "Bia luyện", ReadabilityDummyPosition + new Vector3(0f, 1.55f, 0f), RuntimeArtCatalog.Gold);
             if (_spiritGateWorldLabel == null)
                 _spiritGateWorldLabel = CreateWorldLabel("LGO Spirit Gate World Label", "Linh Môn", new Vector3(0f, 2.15f, -4.5f), RuntimeArtCatalog.Spirit);
+            if (_shadowSlimeWorldLabel == null)
+                _shadowSlimeWorldLabel = CreateWorldLabel("LGO Shadow Slime World Label", "Cảnh báo", ShadowSlimePosition + new Vector3(0f, 1.1f, 0f), RuntimeArtCatalog.Danger);
         }
 
         private static void EnsureWorldSetDressing()
@@ -876,14 +879,35 @@ namespace LinhGioi.World
             holder.transform.rotation = Quaternion.Euler(55f, 0f, 0f);
             var label = holder.GetComponent<TextMesh>() ?? holder.AddComponent<TextMesh>();
             label.text = text;
-            label.fontSize = 42;
-            label.characterSize = 0.045f;
+            label.fontSize = 48;
+            label.characterSize = 0.048f;
             label.anchor = TextAnchor.MiddleCenter;
             label.alignment = TextAlignment.Center;
             label.color = color;
             var renderer = holder.GetComponent<MeshRenderer>();
             if (renderer != null) renderer.sortingOrder = 9;
+            EnsureWorldLabelShadow(holder.transform, text);
             return label;
+        }
+
+        private static void EnsureWorldLabelShadow(Transform parent, string text)
+        {
+            var shadowName = parent.name + " Shadow";
+            var existing = parent.Find(shadowName);
+            var holder = existing != null ? existing.gameObject : new GameObject(shadowName);
+            holder.transform.SetParent(parent, false);
+            holder.transform.localPosition = new Vector3(0.025f, -0.025f, 0.01f);
+            holder.transform.localRotation = Quaternion.identity;
+            holder.transform.localScale = Vector3.one;
+            var shadow = holder.GetComponent<TextMesh>() ?? holder.AddComponent<TextMesh>();
+            shadow.text = text;
+            shadow.fontSize = 48;
+            shadow.characterSize = 0.048f;
+            shadow.anchor = TextAnchor.MiddleCenter;
+            shadow.alignment = TextAlignment.Center;
+            shadow.color = new Color(0f, 0f, 0f, 0.72f);
+            var renderer = holder.GetComponent<MeshRenderer>();
+            if (renderer != null) renderer.sortingOrder = 8;
         }
 
         private void TriggerLocalPosePulse(Color color)
