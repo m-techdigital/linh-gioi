@@ -4,15 +4,15 @@ Last updated: `2026-09-05`
 
 ## Current focus
 
-Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, and status chips now read correctly in runtime screenshots. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
+Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, and the session menu/settings shell is responsive without tablet/mobile clipping. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-SESSION-MENU-SETTINGS-MICRO-UX-PASS-v1.0`
+`LGO-WORLD-INTERACTION-AFFORDANCE-PASS-v1.0`
 
-Review the in-world Session Menu and local settings shell. Reduce the basic panel feel, improve grouping, affordance, and copy, and keep all behavior local/prototype-safe without adding new systems.
+Review and polish in-world interaction affordance: NPC proximity, target dummy readiness, prompt clarity, and active target feedback. Keep current mechanics and contracts unchanged.
 
 ## Current blocker
 
@@ -30,7 +30,7 @@ Evidence:
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: polish the session menu/settings presentation after the login-character micro-UX pass. The visual evidence harness records explicit review checklist categories for every checkpoint while still refusing to claim visual PASS from capture/build alone.
+Next allowed action: polish in-world interaction affordance after the session menu/settings pass. The visual evidence harness records explicit review checklist categories for every checkpoint while still refusing to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -105,6 +105,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-LOGIN-CHARACTER-FLOW-MICRO-UX-PASS-v1.0` is closed. Continue with `LGO-SESSION-MENU-SETTINGS-MICRO-UX-PASS-v1.0`.
+`LGO-SESSION-MENU-SETTINGS-MICRO-UX-PASS-v1.0` is closed. Continue with `LGO-WORLD-INTERACTION-AFFORDANCE-PASS-v1.0`.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

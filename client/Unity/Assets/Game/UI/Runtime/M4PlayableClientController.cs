@@ -674,15 +674,16 @@ namespace LinhGioi.UI
             _sessionMenuPanel = NewPreviewPanel("PHIÊN", "Tạm dừng cục bộ");
             _sessionMenuPanel.name = "LGO Session Menu Overlay";
             _sessionMenuPanel.style.position = Position.Absolute;
-            _sessionMenuPanel.style.left = 84;
+            _sessionMenuPanel.style.left = 420;
             _sessionMenuPanel.style.right = 84;
-            _sessionMenuPanel.style.top = 158;
+            _sessionMenuPanel.style.top = 132;
             _sessionMenuPanel.style.marginTop = 0;
-            _sessionMenuPanel.style.paddingLeft = 18;
-            _sessionMenuPanel.style.paddingRight = 18;
-            _sessionMenuPanel.style.paddingTop = 16;
-            _sessionMenuPanel.style.paddingBottom = 18;
-            _sessionMenuPanel.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 1f);
+            _sessionMenuPanel.style.maxWidth = 960;
+            _sessionMenuPanel.style.paddingLeft = 22;
+            _sessionMenuPanel.style.paddingRight = 22;
+            _sessionMenuPanel.style.paddingTop = 18;
+            _sessionMenuPanel.style.paddingBottom = 20;
+            _sessionMenuPanel.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 0.96f);
             _sessionMenuPanel.style.borderLeftColor = RuntimeArtCatalog.Gold;
             _sessionMenuPanel.style.borderLeftWidth = 2;
             _sessionMenuPanel.style.borderTopColor = RuntimeArtCatalog.Gold;
@@ -694,7 +695,10 @@ namespace LinhGioi.UI
             _sessionMenuPanel.Add(NewSectionTitle("Menu phiên"));
             _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
             _sessionMenuStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
+            _sessionMenuStatus.style.marginBottom = 10;
             _sessionMenuPanel.Add(_sessionMenuStatus);
+            _sessionMenuPanel.Add(NewReadabilityRow("Vị trí", "Sân Luyện An Toàn / gần Linh Môn", RuntimeArtCatalog.Spirit));
+            _sessionMenuPanel.Add(NewReadabilityRow("Mục tiêu", "Tiếp tục luyện tập, lưu dấu ấn, hoặc quay về Điện Nhân Vật.", RuntimeArtCatalog.Gold));
             _resumeButton = NewCompactPrimaryButton("Tiếp tục", HideSessionMenu);
             _sessionSaveButton = NewCompactSecondaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
             _sessionBackButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
@@ -770,13 +774,18 @@ namespace LinhGioi.UI
         {
             _settingsPanel = NewPreviewPanel();
             _settingsPanel.name = "LGO Local Settings Foundation";
-            _settingsPanel.style.marginTop = 8;
-            _settingsPanel.style.paddingBottom = 12;
-            _settingsPanel.style.minHeight = 92;
-            _settingsPanel.Add(NewSectionTitle("Cài đặt cục bộ"));
-            _showPositionToggle = NewLocalSettingToggle("Hiện tọa độ", false, ApplyLocalSettings);
-            _showHintsToggle = NewLocalSettingToggle("Hiện chỉ dẫn", true, ApplyLocalSettings);
-            _focusModeToggle = NewLocalSettingToggle("Chế độ HUD gọn", true, ApplyLocalSettings);
+            _settingsPanel.style.marginTop = 12;
+            _settingsPanel.style.paddingLeft = 14;
+            _settingsPanel.style.paddingRight = 14;
+            _settingsPanel.style.paddingTop = 12;
+            _settingsPanel.style.paddingBottom = 14;
+            _settingsPanel.style.minHeight = 108;
+            _settingsPanel.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+            _settingsPanel.Add(NewSectionTitle("Tùy chỉnh hiển thị"));
+            _settingsPanel.Add(NewMutedLabel("Các lựa chọn này chỉ đổi cách xem trong phiên hiện tại."));
+            _showPositionToggle = NewLocalSettingToggle("Tọa độ", false, ApplyLocalSettings);
+            _showHintsToggle = NewLocalSettingToggle("Chỉ dẫn", true, ApplyLocalSettings);
+            _focusModeToggle = NewLocalSettingToggle("HUD gọn", true, ApplyLocalSettings);
             _settingsPanel.Add(_showPositionToggle);
             _settingsPanel.Add(_showHintsToggle);
             _settingsPanel.Add(_focusModeToggle);
@@ -1492,18 +1501,24 @@ namespace LinhGioi.UI
             _worldHud.style.paddingBottom = mobile ? 8 : 12;
             if (_sessionMenuPanel != null)
             {
-                _sessionMenuPanel.style.left = mobile ? Mathf.RoundToInt(width * 0.25f) : tablet ? 42 : 84;
-                _sessionMenuPanel.style.right = mobile ? 18 : tablet ? 42 : 84;
-                _sessionMenuPanel.style.top = mobile ? 52 : tablet ? 136 : 158;
-                _sessionMenuPanel.style.maxHeight = mobile ? Mathf.Max(240f, height - 76f) : tablet ? 470 : 540;
-                _sessionMenuPanel.style.paddingLeft = mobile ? 12 : 18;
-                _sessionMenuPanel.style.paddingRight = mobile ? 12 : 18;
-                _sessionMenuPanel.style.paddingTop = mobile ? 10 : 16;
-                _sessionMenuPanel.style.paddingBottom = mobile ? 10 : 18;
+                var sessionWidth = mobile
+                    ? Mathf.Clamp(width * 0.70f, 440f, width - 36f)
+                    : tablet
+                        ? Mathf.Clamp(width * 0.62f, 620f, 820f)
+                        : Mathf.Clamp(width * 0.50f, 760f, 960f);
+                var sessionRight = mobile ? 18f : tablet ? 36f : Mathf.Max(72f, width * 0.08f);
+                _sessionMenuPanel.style.left = Mathf.Max(18f, width - sessionWidth - sessionRight);
+                _sessionMenuPanel.style.right = sessionRight;
+                _sessionMenuPanel.style.top = mobile ? 46 : tablet ? 118 : 120;
+                _sessionMenuPanel.style.maxHeight = mobile ? Mathf.Max(240f, height - 70f) : tablet ? 430 : 500;
+                _sessionMenuPanel.style.paddingLeft = mobile ? 12 : tablet ? 16 : 22;
+                _sessionMenuPanel.style.paddingRight = mobile ? 12 : tablet ? 16 : 22;
+                _sessionMenuPanel.style.paddingTop = mobile ? 10 : tablet ? 14 : 18;
+                _sessionMenuPanel.style.paddingBottom = mobile ? 10 : tablet ? 14 : 20;
             }
             if (_settingsPanel != null)
             {
-                _settingsPanel.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+                _settingsPanel.style.display = mobile || tablet ? DisplayStyle.None : DisplayStyle.Flex;
             }
             if (_layoutProfileLabel != null)
             {
@@ -1669,13 +1684,26 @@ namespace LinhGioi.UI
         private static Toggle NewLocalSettingToggle(string label, bool value, Action changed)
         {
             var toggle = new Toggle(label) { value = value };
-            toggle.style.minHeight = 28;
-            toggle.style.marginTop = 4;
-            toggle.style.marginBottom = 4;
-            toggle.style.paddingLeft = 4;
-            toggle.style.paddingRight = 4;
+            toggle.style.minHeight = 34;
+            toggle.style.marginTop = 6;
+            toggle.style.marginBottom = 0;
+            toggle.style.paddingLeft = 10;
+            toggle.style.paddingRight = 10;
+            toggle.style.paddingTop = 5;
+            toggle.style.paddingBottom = 5;
+            toggle.style.backgroundColor = RuntimeArtCatalog.Background;
+            toggle.style.borderLeftColor = value ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted;
+            toggle.style.borderLeftWidth = 2;
+            toggle.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
+            toggle.style.borderTopWidth = 1;
+            toggle.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
+            toggle.style.borderBottomWidth = 1;
             toggle.style.color = RuntimeArtCatalog.Text;
-            toggle.RegisterValueChangedCallback(_ => changed());
+            toggle.RegisterValueChangedCallback(evt =>
+            {
+                toggle.style.borderLeftColor = evt.newValue ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted;
+                changed();
+            });
             return toggle;
         }
 
