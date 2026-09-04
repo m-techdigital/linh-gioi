@@ -9,6 +9,8 @@ namespace LinhGioi.World
 {
     public static class M6MinimalLocalCombatSmokeRunner
     {
+        private const string V049SmokeMarker = "M6_LOCAL_COMBAT_PROTOTYPE_SMOKE_PASS_v0.49.0";
+
         public static bool ShouldRun()
         {
             var args = Environment.GetCommandLineArgs();
@@ -43,28 +45,59 @@ namespace LinhGioi.World
                     z = 0f,
                     yawDegrees = 0f
                 });
+                var baseTimeMs = 1700000000000L;
+                result.executedChecks = 0;
+                var noTarget = world.TryLocalCombatPrototypeWithoutTargetForSmoke(baseTimeMs);
+                result.rejectedNoTarget = !noTarget.Accepted && noTarget.RejectedReason == "NO_TARGET";
+                result.rejectedNoTargetReason = noTarget.RejectedReason;
+                result.executedChecks++;
+
+                world.SetSmokePosition(0f, 0.25f, -4f, 0f);
+                var outOfRange = world.TryLocalCombatPrototypeAt(baseTimeMs + 1000);
+                result.rejectedOutOfRange = !outOfRange && world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.RejectedReason == "OUT_OF_RANGE";
+                result.rejectedOutOfRangeReason = world.LastLocalCombatOutcome != null ? world.LastLocalCombatOutcome.RejectedReason : "";
+                result.executedChecks++;
+
                 world.SetSmokePositionNearTargetDummy();
-                result.attackTriggered = world.TriggerLocalCombatForSmoke();
+                result.attackTriggered = world.TryLocalCombatPrototypeAt(baseTimeMs + 2000);
                 result.targetDummyHitAcknowledged = world.TargetDummyHitAcknowledged;
                 result.combatFeedbackText = world.CombatFeedbackText;
                 result.targetDummyStatusText = world.TargetDummyStatusText;
                 result.cooldownText = world.CombatCooldownText;
-                result.cooldownBlockedAfterRepeatedInput = !world.TriggerLocalCombatForSmoke() && world.LocalCombatCoolingDown;
+                result.acceptedEffectAmount = world.LastLocalCombatOutcome != null ? world.LastLocalCombatOutcome.EffectAmount : 0;
+                result.acceptedTargetHpAfter = world.LastLocalCombatOutcome != null ? world.LastLocalCombatOutcome.TargetHpAfter : 0;
+                result.acceptedTargetState = world.LocalCombatTargetStateName;
+                result.executedChecks++;
+
+                result.cooldownBlockedAfterRepeatedInput = !world.TryLocalCombatPrototypeAt(baseTimeMs + 2500);
                 result.cooldownBlockedFeedbackText = world.CombatFeedbackText;
+                result.rejectedCooldownReason = world.LastLocalCombatOutcome != null ? world.LastLocalCombatOutcome.RejectedReason : "";
+                result.executedChecks++;
+
                 world.RecoverLocalCombatCooldownForSmoke();
                 result.cooldownRecoveredText = world.CombatCooldownText;
-                result.attackAfterCooldownRecovered = world.TriggerLocalCombatForSmoke();
+                result.attackAfterCooldownRecovered = world.TryLocalCombatPrototypeAt(baseTimeMs + 9000);
                 result.feedbackAfterCooldownRecovered = world.CombatFeedbackText;
+                result.executedChecks++;
+
+                result.nonClaims = "local-only prototype; not production combat; not production art; no loot/reward/economy/db/auth/social/liveops";
+                if (result.executedChecks < 5)
+                    throw new InvalidOperationException("local combat smoke executed zero or insufficient checks");
+                if (!result.rejectedNoTarget || !result.rejectedOutOfRange)
+                    throw new InvalidOperationException("local combat rejected path coverage missing");
                 if (!result.attackTriggered || !result.targetDummyHitAcknowledged)
                     throw new InvalidOperationException("local combat target dummy hit was not acknowledged");
+                if (result.acceptedEffectAmount != LocalCombatPrototypeState.WindSlashPlaceholderAmount || result.acceptedTargetHpAfter != LocalCombatPrototypeState.TargetDummyMaxHp - LocalCombatPrototypeState.WindSlashPlaceholderAmount)
+                    throw new InvalidOperationException("accepted local combat result did not use current GameData placeholder values");
                 if (!result.combatFeedbackText.Contains("Trúng mục tiêu") || !result.combatFeedbackText.Contains("Chỉ là mô phỏng cục bộ"))
                     throw new InvalidOperationException("Vietnamese local combat feedback marker missing");
-                if (!result.cooldownBlockedAfterRepeatedInput || !result.cooldownBlockedFeedbackText.Contains("Chưa thể tấn công") || !result.cooldownBlockedFeedbackText.Contains("Đang hồi chiêu"))
+                if (!result.cooldownBlockedAfterRepeatedInput || result.rejectedCooldownReason != "COOLDOWN_ACTIVE" || !result.cooldownBlockedFeedbackText.Contains("Chưa thể tấn công") || !result.cooldownBlockedFeedbackText.Contains("Đang hồi chiêu"))
                     throw new InvalidOperationException("repeated attack did not produce deterministic cooldown block feedback");
                 if (!result.cooldownRecoveredText.Contains("Sẵn sàng") || !result.attackAfterCooldownRecovered || !result.feedbackAfterCooldownRecovered.Contains("Trúng mục tiêu"))
                     throw new InvalidOperationException("cooldown recovery did not restore deterministic local attack feedback");
                 result.status = "PASS";
-                result.marker = "M6_MINIMAL_LOCAL_COMBAT_RUNTIME_SMOKE_PASS";
+                result.marker = V049SmokeMarker;
+                result.legacyMarker = "M6_MINIMAL_LOCAL_COMBAT_RUNTIME_SMOKE_PASS";
                 exitCode = 0;
             }
             catch (Exception exception)
@@ -115,16 +148,27 @@ namespace LinhGioi.World
             public string marker;
             public string resultPath;
             public string unityVersion;
+            public int executedChecks;
+            public bool rejectedNoTarget;
+            public string rejectedNoTargetReason;
+            public bool rejectedOutOfRange;
+            public string rejectedOutOfRangeReason;
             public bool attackTriggered;
             public bool targetDummyHitAcknowledged;
+            public int acceptedEffectAmount;
+            public int acceptedTargetHpAfter;
+            public string acceptedTargetState;
             public string combatFeedbackText;
             public string targetDummyStatusText;
             public string cooldownText;
             public bool cooldownBlockedAfterRepeatedInput;
+            public string rejectedCooldownReason;
             public string cooldownBlockedFeedbackText;
             public string cooldownRecoveredText;
             public bool attackAfterCooldownRecovered;
             public string feedbackAfterCooldownRecovered;
+            public string legacyMarker;
+            public string nonClaims;
             public string exceptionType;
             public string exceptionMessage;
             public int exitCode;

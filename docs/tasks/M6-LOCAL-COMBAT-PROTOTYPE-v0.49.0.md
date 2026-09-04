@@ -1,10 +1,20 @@
 # M6 Local Combat Prototype v0.49.0
 
-This is the next allowed task after v0.48 acceptance.
+Status: `M6_LOCAL_COMBAT_PROTOTYPE_CLOSED_LOCAL_v0.49.0`.
+
+This task implements the next allowed local-only prototype after v0.48 acceptance.
 
 ## Goal
 
 Turn the current local-only target dummy feedback into a deterministic local combat prototype using existing `CombatIntent`, `CombatAccepted`, `CombatRejected`, `CombatResult`, `CombatStateSnapshot`, and current GameData skill/monster schema fields.
+
+## Implementation Outcome
+
+- Added `LocalCombatPrototypeState` as the deterministic local state owner.
+- Covered accepted Wind Slash intent using existing placeholder amount `12`, range `4.5m`, cooldown `6000ms`, and target dummy max HP `120`.
+- Covered rejected no-target, out-of-range, and cooldown-active paths.
+- Runtime smoke writes `M6_LOCAL_COMBAT_PROTOTYPE_SMOKE_PASS_v0.49.0` only when nonzero checks pass.
+- Legacy local combat marker remains available for inherited closure gates.
 
 ## Allowed Scope
 

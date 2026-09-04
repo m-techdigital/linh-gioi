@@ -12,13 +12,8 @@ namespace LinhGioi.World
         private const float MoveSpeed = 3.6f;
         private const float RotateSpeed = 105f;
         private const float InteractionRange = 1.45f;
-        private const float LocalCombatRange = 2.2f;
-        private const float LocalCombatCooldownSeconds = 1.5f;
-        private const int LocalDummyMaxReadiness = 3;
+        private const float LocalCombatTargetSelectionRange = 10f;
         private const uint CombatProtocolVersion = 1;
-        private const ulong LocalActorEntityId = 1001UL;
-        private const ulong TargetDummyEntityId = 2001UL;
-        private const string DefaultCombatSkillId = "skill.sword.wind_slash";
         private static readonly Vector3 CameraFollowOffset = new Vector3(0f, 7.5f, -8.5f);
         private static readonly string[] GateKeeperDialogueLines =
         {
@@ -59,8 +54,8 @@ namespace LinhGioi.World
         private PlaceholderVfxFeedbackState _vfxFeedbackState = PlaceholderVfxFeedbackState.Quiet;
         private float _posePulseUntil;
         private float _vfxPreviewUntil;
-        private float _localCombatCooldownUntil;
-        private int _targetDummyReadiness = LocalDummyMaxReadiness;
+        private readonly LocalCombatPrototypeState _localCombat = new LocalCombatPrototypeState();
+        private LocalCombatPrototypeOutcome _lastLocalCombatOutcome;
         private bool _targetDummyHitAcknowledged;
         private int _dialogueLineIndex;
 
@@ -79,13 +74,15 @@ namespace LinhGioi.World
         public string GateKeeperPoseStateName => _gateKeeperState.ToString();
         public string ShadowSlimeStateName => _shadowSlimeState.ToString();
         public string VfxFeedbackStateName => _vfxFeedbackState.ToString();
-        public string TargetDummyStatusText => "Mục tiêu luyện tập: sức bền mô phỏng " + _targetDummyReadiness + "/" + LocalDummyMaxReadiness + " - Chỉ là mô phỏng cục bộ.";
+        public string TargetDummyStatusText => "Mục tiêu luyện tập: sức bền mô phỏng " + _localCombat.TargetHp + "/" + LocalCombatPrototypeState.TargetDummyMaxHp + " - Chỉ là mô phỏng cục bộ.";
         public string TargetDummyVisualStateText => DescribeTargetDummyVisualState();
         public string CombatFeedbackText { get; private set; } = "Chưa phải chiến đấu thật: hãy đứng gần mục tiêu luyện tập để thử phản hồi.";
-        public string CombatCooldownText => Time.time >= _localCombatCooldownUntil ? "Hồi chiêu: Sẵn sàng" : "Hồi chiêu: Đang hồi chiêu mô phỏng.";
+        public string CombatCooldownText => _localCombat.CooldownActive(NowMs()) ? "Hồi chiêu: Đang hồi chiêu mô phỏng." : "Hồi chiêu: Sẵn sàng";
         public string CombatAuthorityText { get; private set; } = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
-        public bool LocalCombatCoolingDown => Time.time < _localCombatCooldownUntil;
+        public bool LocalCombatCoolingDown => _localCombat.CooldownActive(NowMs());
         public bool TargetDummyHitAcknowledged => _targetDummyHitAcknowledged;
+        public LocalCombatPrototypeOutcome LastLocalCombatOutcome => _lastLocalCombatOutcome;
+        public string LocalCombatTargetStateName => _localCombat.TargetState.ToString();
         public bool DialogueActive { get; private set; }
         public bool DialogueCompleted { get; private set; }
         public string DialogueSpeaker => "Gate Keeper";
@@ -106,11 +103,10 @@ namespace LinhGioi.World
             DialogueActive = false;
             DialogueCompleted = false;
             _dialogueLineIndex = 0;
-            _targetDummyReadiness = LocalDummyMaxReadiness;
+            _localCombat.Reset();
             _targetDummyHitAcknowledged = false;
             CombatFeedbackText = "Chưa phải chiến đấu thật: mục tiêu luyện tập chỉ nhận phản hồi cục bộ.";
             CombatAuthorityText = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
-            _localCombatCooldownUntil = 0f;
             _guidedStep = GuidedTrainingStep.FindGateKeeper;
             SetPlayerPose(PlaceholderPoseState.Idle);
             SetGateKeeperState(PlaceholderNpcState.Idle);
@@ -176,9 +172,9 @@ namespace LinhGioi.World
                 ProtocolVersion = CombatProtocolVersion,
                 Sequence = sequence,
                 IntentId = string.IsNullOrWhiteSpace(intentId) ? "unity-local-intent-" + sequence : intentId,
-                ActorEntityId = LocalActorEntityId,
-                TargetEntityId = TargetDummyEntityId,
-                SkillId = DefaultCombatSkillId,
+                ActorEntityId = LocalCombatPrototypeState.ActorEntityId,
+                TargetEntityId = LocalCombatPrototypeState.TargetDummyEntityId,
+                SkillId = LocalCombatPrototypeState.WindSlashSkillId,
                 TargetPosition = new LinhGioi.Protocol.V1.Vec3 { X = position.x, Y = position.y, Z = position.z },
                 ClientTimeUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
                 LocalPreviewOnly = true
@@ -206,7 +202,7 @@ namespace LinhGioi.World
 
         public void RecoverLocalCombatCooldownForSmoke()
         {
-            _localCombatCooldownUntil = 0f;
+            _localCombat.ForceCooldownReady();
             CombatFeedbackText = "Hồi chiêu: Sẵn sàng - Mô phỏng cục bộ đã hồi phục.";
             RefreshVfxFeedbackMarkers();
             InteractionStateChanged?.Invoke();
@@ -214,34 +210,64 @@ namespace LinhGioi.World
 
         public bool TryLocalCombatPrototype()
         {
+            return TryLocalCombatPrototypeAt(NowMs());
+        }
+
+        public bool TryLocalCombatPrototypeAt(long nowMs)
+        {
             if (_marker == null)
             {
                 CombatFeedbackText = "Chưa phải chiến đấu thật: chưa vào sân luyện tập.";
-                InteractionStateChanged?.Invoke();
-                return false;
-            }
-            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) > LocalCombatRange)
-            {
-                CombatFeedbackText = "Mục tiêu luyện tập ở phía đông. Lại gần vòng sáng vàng để Tấn công thử.";
-                InteractionStateChanged?.Invoke();
-                return false;
-            }
-            if (Time.time < _localCombatCooldownUntil)
-            {
-                CombatFeedbackText = "Chưa thể tấn công: Đang hồi chiêu mô phỏng cục bộ.";
+                _localCombat.SetTargetSelected(false);
+                var missingIntent = BuildCombatIntentForLocalPreview(0, "unity-local-no-target");
+                missingIntent.TargetEntityId = 0;
+                missingIntent.ClientTimeUnixMs = nowMs;
+                _lastLocalCombatOutcome = _localCombat.TryWindSlash(missingIntent, float.PositiveInfinity, nowMs);
                 InteractionStateChanged?.Invoke();
                 return false;
             }
 
-            _targetDummyReadiness = Mathf.Max(0, _targetDummyReadiness - 1);
+            var distance = Distance2D(CurrentPosition, ReadabilityDummyPosition);
+            var targetSelected = distance <= LocalCombatTargetSelectionRange;
+            _localCombat.SetTargetSelected(targetSelected);
+            var nextSequence = (uint)Mathf.Max(1, (int)_localCombat.LastAcceptedSequence + 1);
+            var intent = BuildCombatIntentForLocalPreview(nextSequence, "unity-local-preview-" + nextSequence);
+            intent.ClientTimeUnixMs = nowMs;
+            _lastLocalCombatOutcome = _localCombat.TryWindSlash(intent, distance, nowMs);
+            if (!_lastLocalCombatOutcome.Accepted)
+            {
+                if (_lastLocalCombatOutcome.RejectedReason == "OUT_OF_RANGE")
+                    CombatFeedbackText = "Mục tiêu luyện tập ở phía đông. Lại gần vòng sáng vàng để Tấn công thử.";
+                else if (_lastLocalCombatOutcome.RejectedReason == "COOLDOWN_ACTIVE")
+                    CombatFeedbackText = "Chưa thể tấn công: Đang hồi chiêu mô phỏng cục bộ.";
+                else
+                    CombatFeedbackText = "Chưa phải chiến đấu thật: chưa chọn mục tiêu luyện tập.";
+                CombatAuthorityText = "Từ chối cục bộ: " + _lastLocalCombatOutcome.RejectedReason + " - không có kết quả chiến đấu thật.";
+                InteractionStateChanged?.Invoke();
+                return false;
+            }
+
             _targetDummyHitAcknowledged = true;
-            _localCombatCooldownUntil = Time.time + LocalCombatCooldownSeconds;
-            CombatFeedbackText = "Trúng mục tiêu - Chỉ là mô phỏng cục bộ, chưa phải chiến đấu thật.";
+            CombatAuthorityText = "Chấp nhận cục bộ: " + _lastLocalCombatOutcome.Intent.IntentId + " - tạo kết quả nguyên mẫu từ hợp đồng hiện có.";
+            CombatFeedbackText = "Trúng mục tiêu: Wind Slash gây " + _lastLocalCombatOutcome.EffectAmount + " điểm mô phỏng. Chỉ là mô phỏng cục bộ, chưa phải chiến đấu thật.";
             SetPlayerPose(PlaceholderPoseState.Interact);
             SetVfxFeedback(PlaceholderVfxFeedbackState.TargetDummyHitFlash, 1.25f);
             TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
             InteractionStateChanged?.Invoke();
             return true;
+        }
+
+        public LocalCombatPrototypeOutcome TryLocalCombatPrototypeWithoutTargetForSmoke(long nowMs)
+        {
+            _localCombat.SetTargetSelected(false);
+            var intent = BuildCombatIntentForLocalPreview(1, "unity-local-no-target");
+            intent.TargetEntityId = 0;
+            intent.ClientTimeUnixMs = nowMs;
+            _lastLocalCombatOutcome = _localCombat.TryWindSlash(intent, float.PositiveInfinity, nowMs);
+            CombatFeedbackText = "Chưa phải chiến đấu thật: chưa chọn mục tiêu luyện tập.";
+            CombatAuthorityText = "Từ chối cục bộ: " + _lastLocalCombatOutcome.RejectedReason + " - không có kết quả chiến đấu thật.";
+            InteractionStateChanged?.Invoke();
+            return _lastLocalCombatOutcome;
         }
 
         public void PreviewSkillFeedback(string previewName)
@@ -521,7 +547,7 @@ namespace LinhGioi.World
         private string DescribeCurrentArea()
         {
             if (_nearestInteractable != null) return _nearestInteractable.id;
-            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= 1.8f)
+            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM)
                 return "Sân luyện an toàn / Mục tiêu luyện tập";
             if (Distance2D(CurrentPosition, ShadowSlimePosition) <= 2.25f)
             {
@@ -547,6 +573,11 @@ namespace LinhGioi.World
             var dx = a.x - b.x;
             var dz = a.z - b.z;
             return Mathf.Sqrt(dx * dx + dz * dz);
+        }
+
+        private static long NowMs()
+        {
+            return DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
         private void SetPlayerPose(PlaceholderPoseState state)
@@ -707,8 +738,8 @@ namespace LinhGioi.World
 
         private void RefreshTargetDummyReadabilityMarkers(bool vfxActive)
         {
-            var nearTarget = _marker != null && Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatRange;
-            var coolingDown = Time.time < _localCombatCooldownUntil;
+            var nearTarget = _marker != null && Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM;
+            var coolingDown = _localCombat.CooldownActive(NowMs());
             if (_targetDummyFocusRing != null)
                 _targetDummyFocusRing.gameObject.SetActive(nearTarget && !coolingDown);
             if (_targetDummyCooldownRing != null)
@@ -723,7 +754,7 @@ namespace LinhGioi.World
             if (_targetDummySprite != null)
             {
                 if (coolingDown)
-                    _targetDummySprite.sprite = _targetDummyHitAcknowledged ? CombatPlaceholderAssets.TargetDummyRecover : CombatPlaceholderAssets.TargetDummySelected;
+                    _targetDummySprite.sprite = _localCombat.TargetState == LocalCombatTargetState.Hit ? CombatPlaceholderAssets.TargetDummyHit : CombatPlaceholderAssets.TargetDummyRecover;
                 else
                     _targetDummySprite.sprite = nearTarget ? CombatPlaceholderAssets.TargetDummySelected : CombatPlaceholderAssets.TargetDummyIdle;
             }
@@ -732,8 +763,8 @@ namespace LinhGioi.World
         private string DescribeTargetDummyVisualState()
         {
             if (_marker == null) return "Dấu hiệu mục tiêu: Chưa vào sân luyện.";
-            if (Time.time < _localCombatCooldownUntil) return "Dấu hiệu mục tiêu: Đang hồi chiêu mô phỏng, vòng sáng lam giữ nhịp đọc rõ.";
-            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatRange) return "Dấu hiệu mục tiêu: Sẵn sàng, vòng sáng vàng đã chọn mục tiêu.";
+            if (_localCombat.CooldownActive(NowMs())) return "Dấu hiệu mục tiêu: Đang hồi chiêu mô phỏng, vòng sáng lam giữ nhịp đọc rõ.";
+            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM) return "Dấu hiệu mục tiêu: Sẵn sàng, vòng sáng vàng đã chọn mục tiêu.";
             return "Dấu hiệu mục tiêu: Chưa chọn, đi về phía đông tới vòng sáng vàng.";
         }
 

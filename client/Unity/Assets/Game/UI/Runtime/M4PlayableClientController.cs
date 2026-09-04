@@ -827,15 +827,6 @@ namespace LinhGioi.UI
             var intent = _world.BuildCombatIntentForLocalPreview(1, "unity-local-preview-1");
             _world.MarkCombatIntentPending(intent);
             _world.TryLocalCombatPrototype();
-            _world.MarkCombatIntentAccepted(new CombatAccepted
-            {
-                Sequence = intent.Sequence,
-                IntentId = intent.IntentId,
-                ActorEntityId = intent.ActorEntityId,
-                SkillId = intent.SkillId,
-                CooldownMs = 1500,
-                ServerTimeUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
-            });
             RefreshWorldLoopLabels();
             SetToast(_world.CombatFeedbackText, RuntimeArtCatalog.Gold);
             RefreshCombatAssetUiState();

@@ -80,7 +80,6 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "Gửi ý định chiến đấu",
         "MarkCombatIntentPending",
-        "MarkCombatIntentAccepted",
         "CombatAuthorityText",
     )
     require(

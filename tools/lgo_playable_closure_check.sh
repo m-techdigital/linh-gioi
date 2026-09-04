@@ -133,7 +133,7 @@ source_only() {
     run_phase m6_combat_readiness_spec python3.12 tools/validate_m6_combat_readiness_spec.py
   fi
   if [[ -f tools/validate_m6_contract_review.py || -f tools/validate_m6_minimal_local_combat.py ]]; then
-    run_phase clean_pycache_before_m6_combat git clean -f tools/__pycache__
+    run_phase clean_pycache_before_m6_combat find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
   fi
   if [[ -f tools/validate_m6_contract_review.py ]]; then
     run_phase m6_contract_review python3.12 tools/validate_m6_contract_review.py
@@ -180,8 +180,11 @@ source_only() {
   if [[ -f tools/validate_m6_unity_combat_placeholder_asset_import.py ]]; then
     run_phase m6_unity_combat_placeholder_asset_import python3.12 tools/validate_m6_unity_combat_placeholder_asset_import.py
   fi
+  if [[ -f tools/validate_m6_local_combat_prototype.py ]]; then
+    run_phase m6_local_combat_prototype python3.12 tools/validate_m6_local_combat_prototype.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
-    run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
+    run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
     run_phase code_governance python3.12 tools/validate_code_governance.py
   fi
   run_phase python_compile python3.12 -m py_compile \
@@ -220,13 +223,14 @@ source_only() {
     tools/validate_m6_unity_combat_intent_client.py \
     tools/validate_m6_unity_java_combat_smoke.py \
     tools/validate_m6_server_authoritative_combat_closure.py \
+    tools/validate_m6_local_combat_prototype.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
     tools/m5_first_playable_loop_runtime.py \
     tools/m5_guided_training_loop_runtime.py \
     tools/m5_lightweight_dialogue_runtime.py
-  run_phase clean_pycache_after_python_compile git clean -f tools/__pycache__
+  run_phase clean_pycache_after_python_compile find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
   log "LGO_PLAYABLE_CLOSURE_SOURCE_GATES_PASS"
   write_json "PASS" "source gates pass"
 }
@@ -409,6 +413,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_m6_server_authoritative_combat_closure.py ]]; then
     run_phase m6_server_authoritative_combat_closure python3.12 tools/validate_m6_server_authoritative_combat_closure.py
+  fi
+  if [[ -f tools/validate_m6_local_combat_prototype.py ]]; then
+    run_phase m6_local_combat_prototype python3.12 tools/validate_m6_local_combat_prototype.py
   fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
