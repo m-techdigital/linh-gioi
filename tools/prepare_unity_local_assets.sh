@@ -7,11 +7,12 @@ NUPKG="$OUT_DIR/Google.Protobuf.3.13.0.nupkg"
 PROJECT="$ROOT/client/Unity"
 PLUGINS_DIR="$PROJECT/Assets/Plugins/Google.Protobuf"
 DLL="$PLUGINS_DIR/Google.Protobuf.dll"
+CLEAR_UNITY_CACHE="${LGO_UNITY_LOCAL_ASSETS_CLEAR_CACHE:-1}"
 
 usage() {
   cat <<'USAGE'
 Usage:
-  ./tools/prepare_unity_local_assets.sh [--output-dir DIR]
+  ./tools/prepare_unity_local_assets.sh [--output-dir DIR] [--preserve-unity-cache]
 
 Prepares disposable local Unity assets required before opening the project on a
 fresh machine: Google.Protobuf.dll and generated C# protocol files. It does not
@@ -22,6 +23,7 @@ USAGE
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --output-dir) OUT_DIR="$2"; NUPKG="$OUT_DIR/Google.Protobuf.3.13.0.nupkg"; shift 2 ;;
+    --preserve-unity-cache) CLEAR_UNITY_CACHE=0; shift ;;
     --help|-h) usage; exit 0 ;;
     *) echo "ERROR: unknown argument: $1" >&2; usage >&2; exit 2 ;;
   esac
@@ -93,9 +95,13 @@ PROTOC_BIN="$PROTOC_BIN" PROTOC_SHA256="$PROTOC_SHA256" python3 tools/prepare_un
 echo "== Check generated protocol =="
 find client/Unity/Assets/Game/Protocol -maxdepth 2 -type f -print | sort
 
-echo "== Clear partial Unity compile cache =="
-rm -rf client/Unity/Library/Bee
-rm -rf client/Unity/Library/ScriptAssemblies
-rm -rf client/Unity/Temp
+if [[ "$CLEAR_UNITY_CACHE" == "1" ]]; then
+  echo "== Clear partial Unity compile cache =="
+  rm -rf client/Unity/Library/Bee
+  rm -rf client/Unity/Library/ScriptAssemblies
+  rm -rf client/Unity/Temp
+else
+  echo "== Preserve Unity compile cache for fast visual iteration =="
+fi
 
 echo "UNITY_LOCAL_ASSETS_READY"

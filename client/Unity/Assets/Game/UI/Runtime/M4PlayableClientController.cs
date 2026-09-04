@@ -20,19 +20,31 @@ namespace LinhGioi.UI
         private CancellationTokenSource _shutdown;
         private UIDocument _document;
         private VisualElement _root;
+        private VisualElement _screenScrim;
+        private VisualElement _header;
         private VisualElement _mainShell;
         private VisualElement _authPanel;
         private VisualElement _lobbyPanel;
         private VisualElement _worldHud;
+        private VisualElement _worldDebugStrip;
         private VisualElement _dialoguePanel;
         private VisualElement _sessionMenuPanel;
         private VisualElement _settingsPanel;
         private VisualElement _skillPreviewPanel;
         private VisualElement _localCombatPanel;
+        private VisualElement _worldFooterActions;
         private VisualElement _characterList;
+        private VisualElement _lobbyContent;
+        private VisualElement _selectedPreview;
+        private VisualElement _createPanel;
         private VisualElement _loginStage;
+        private VisualElement _loginControlColumn;
+        private VisualElement _loginGateKeeper;
+        private VisualElement _loginLogo;
         private VisualElement _loginCard;
+        private VisualElement _loginServerRow;
         private VisualElement _serverStatusIcon;
+        private Label _loginServerText;
         private TextField _devKey;
         private TextField _characterName;
         private TextField _classId;
@@ -40,6 +52,9 @@ namespace LinhGioi.UI
         private Label _account;
         private Label _selectedName;
         private Label _selectedMeta;
+        private Label _selectedStatus;
+        private Label _selectedObjective;
+        private Label _selectedClassSummary;
         private Label _worldName;
         private Label _worldMeta;
         private Label _worldArea;
@@ -60,11 +75,15 @@ namespace LinhGioi.UI
         private Label _interactionHint;
         private Label _position;
         private Label _toast;
+        private Label _layoutProfileLabel;
         private Label _dialogueSpeaker;
         private Label _dialogueLine;
         private Label _dialogueProgress;
         private Label _sessionMenuStatus;
+        private Label _loginHeroTitle;
+        private Label _loginHeroCopy;
         private Button _loginButton;
+        private Button _serverSwitchButton;
         private Button _createButton;
         private Button _enterWorldButton;
         private Button _savePositionButton;
@@ -87,6 +106,9 @@ namespace LinhGioi.UI
         private CharacterResponse[] _characters = Array.Empty<CharacterResponse>();
         private CharacterResponse _selectedCharacter;
         private PlayableWorldController _world;
+        private string _lastLayoutProfile;
+        private string _forcedLayoutProfile;
+        private bool _isMobileProfile;
 
         public static M4PlayableClientController Attach(GameObject host)
         {
@@ -98,6 +120,7 @@ namespace LinhGioi.UI
             _shutdown = new CancellationTokenSource();
             _config = ClientRuntimeConfig.LoadStreamingAssets();
             _client = new AccountApiClient(_config);
+            _forcedLayoutProfile = NormalizeLayoutProfile(GetArg("--lgo-device-profile"));
             _document = gameObject.AddComponent<UIDocument>();
             _document.panelSettings = ResolvePanelSettings();
             BuildUi();
@@ -113,6 +136,7 @@ namespace LinhGioi.UI
                     QuitPlayer();
             }
             if (_world != null && _position != null) _position.text = _world.FormatPosition();
+            ApplyResponsiveLayoutProfile(false);
         }
 
         private void OnDestroy()
@@ -131,16 +155,14 @@ namespace LinhGioi.UI
             _root.style.color = RuntimeArtCatalog.Text;
             _root.style.paddingLeft = 28;
             _root.style.paddingRight = 28;
-            _root.style.paddingTop = 18;
+            _root.style.paddingTop = 16;
             _root.style.paddingBottom = 18;
             _root.style.alignItems = Align.Center;
+            _root.style.justifyContent = Justify.SpaceBetween;
             _root.style.unityBackgroundImageTintColor = Color.white;
-            var gateBackground = LgoFinalLoginAssetRegistry.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV3BA.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV2.LoginBackgroundSpiritGate;
-            if (gateBackground != null)
-            {
-                _root.style.backgroundImage = new StyleBackground(gateBackground);
-                _root.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
-            }
+            var runtimeFont = LoadRuntimeFont();
+            if (runtimeFont != null) _root.style.unityFont = runtimeFont;
+            ApplyLoginBackdrop(true);
             AddScreenScrim();
 
             BuildHeader();
@@ -151,87 +173,110 @@ namespace LinhGioi.UI
             _mainShell.style.width = Length.Percent(100);
             _mainShell.style.maxWidth = 1180;
             _mainShell.style.alignContent = Align.FlexStart;
+            _mainShell.style.alignItems = Align.FlexStart;
             _mainShell.style.justifyContent = Justify.Center;
-            _mainShell.style.marginTop = 10;
+            _mainShell.style.flexGrow = 1;
+            _mainShell.style.marginTop = 0;
             _root.Add(_mainShell);
 
             BuildAuthPanel();
             BuildLobbyPanel();
             BuildWorldHud();
+            ApplyResponsiveLayoutProfile(true);
             ShowAuthMode();
         }
 
         private void BuildHeader()
         {
             var header = new VisualElement();
+            _header = header;
             header.style.flexDirection = FlexDirection.Row;
             header.style.justifyContent = Justify.SpaceBetween;
             header.style.alignItems = Align.Center;
-            header.style.flexWrap = Wrap.Wrap;
             header.style.width = Length.Percent(100);
             header.style.maxWidth = 1180;
+            header.style.minHeight = 76;
             _root.Add(header);
 
             var brand = new VisualElement();
             brand.style.flexDirection = FlexDirection.Column;
+            brand.style.alignItems = Align.FlexStart;
+            brand.style.width = 300;
+            brand.style.height = 42;
             header.Add(brand);
 
-            var logo = new VisualElement();
-            logo.name = "LGO Login Gate Entry Logo V3BA";
-            logo.style.width = 320;
-            logo.style.height = 118;
-            logo.style.marginBottom = 2;
-            logo.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            var logoTexture = LgoFinalLoginAssetRegistry.LogoLinhGioiOnline ?? LgoVisualAssetRegistryV3BA.LogoLinhGioiOnline ?? LgoVisualAssetRegistryV2.LogoLinhGioiOnline;
-            if (logoTexture != null)
-            {
-                logo.style.backgroundImage = new StyleBackground(logoTexture);
-            }
-            brand.Add(logo);
-
-            var title = new Label("Linh Giới Online");
-            title.style.fontSize = 24;
-            title.style.unityFontStyleAndWeight = FontStyle.Bold;
-            title.style.color = RuntimeArtCatalog.Gold;
-            if (logoTexture != null) title.style.display = DisplayStyle.None;
-            brand.Add(title);
-
-            var subtitle = new Label("Cổng Linh Giới - phiên bản thử nghiệm");
-            subtitle.style.color = RuntimeArtCatalog.Spirit;
-            subtitle.style.fontSize = 13;
-            brand.Add(subtitle);
-
-            _status = new Label("API: " + _config.apiBaseUrl);
+            _status = new Label("S1 - Linh Giới / Ổn định");
+            _status.tooltip = "Kết nối nội bộ: " + _config.apiBaseUrl;
             _status.style.color = RuntimeArtCatalog.Muted;
             _status.style.unityTextAlign = TextAnchor.MiddleRight;
             _status.style.marginTop = 6;
+            _status.style.display = DisplayStyle.None;
             ApplyStatusChip(_status, RuntimeArtCatalog.Muted);
 
             var right = new VisualElement();
             right.style.flexDirection = FlexDirection.Row;
             right.style.alignItems = Align.Center;
-            right.style.flexWrap = Wrap.Wrap;
             right.Add(_status);
             _quitButton = NewQuietButton("Thoát", QuitPlayer);
             _quitButton.tooltip = "Esc mở menu phiên trong thế giới; Thoát đóng bản chơi thử.";
+            _quitButton.style.marginTop = 0;
+            _quitButton.style.display = DisplayStyle.None;
             right.Add(_quitButton);
             header.Add(right);
         }
 
         private void AddScreenScrim()
         {
-            var scrim = new VisualElement();
-            scrim.name = "LGO Login Gate Entry Readability Scrim";
-            scrim.pickingMode = PickingMode.Ignore;
-            scrim.style.position = Position.Absolute;
-            scrim.style.left = 0;
-            scrim.style.right = 0;
-            scrim.style.top = 0;
-            scrim.style.bottom = 0;
-            scrim.style.backgroundColor = new Color(0.03f, 0.05f, 0.09f, 0.48f);
-            _root.Add(scrim);
-            scrim.style.backgroundColor = new Color(0.02f, 0.05f, 0.10f, 0.22f);
-            _root.Add(scrim);
+            _screenScrim = new VisualElement();
+            _screenScrim.name = "LGO Login Gate Entry Readability Scrim";
+            _screenScrim.pickingMode = PickingMode.Ignore;
+            _screenScrim.style.position = Position.Absolute;
+            _screenScrim.style.left = 0;
+            _screenScrim.style.right = 0;
+            _screenScrim.style.top = 0;
+            _screenScrim.style.bottom = 0;
+            _screenScrim.style.backgroundColor = new Color(0.02f, 0.05f, 0.10f, 0.18f);
+            _root.Add(_screenScrim);
+        }
+
+        private void ApplyLoginBackdrop(bool enabled)
+        {
+            if (enabled)
+            {
+                _root.style.backgroundColor = RuntimeArtCatalog.Background;
+                var gateBackground = LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV2.LoginBackgroundSpiritGate;
+                if (gateBackground != null)
+                {
+                    _root.style.backgroundImage = new StyleBackground(gateBackground);
+                    _root.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
+                }
+                if (_screenScrim != null)
+                    _screenScrim.style.backgroundColor = new Color(0.02f, 0.05f, 0.10f, 0.18f);
+                return;
+            }
+
+            _root.style.backgroundImage = StyleKeyword.None;
+            _root.style.backgroundColor = new Color(0f, 0f, 0f, 0f);
+            if (_screenScrim != null)
+                _screenScrim.style.backgroundColor = new Color(0.01f, 0.03f, 0.07f, 0.08f);
+        }
+
+        private static Font LoadRuntimeFont()
+        {
+            var builtInFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            if (builtInFont != null) return builtInFont;
+            try
+            {
+                var font = Font.CreateDynamicFontFromOSFont(
+                    new[] { "Helvetica Neue", "Arial", "DejaVu Sans", "Noto Sans" },
+                    18);
+                if (font != null) return font;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning("[LinhGioi] Runtime UI font fallback unavailable: " + exception.Message);
+            }
+            return null;
         }
 
         private void BuildAuthPanel()
@@ -240,108 +285,176 @@ namespace LinhGioi.UI
             _authPanel.name = "LGO Login Gate Entry Final Shell";
             _authPanel.style.width = Length.Percent(100);
             _authPanel.style.maxWidth = 1180;
-            _authPanel.style.minHeight = 520;
+            _authPanel.style.flexGrow = 1;
+            _authPanel.style.minHeight = 460;
             _authPanel.style.flexDirection = FlexDirection.Row;
-            _authPanel.style.flexWrap = Wrap.Wrap;
             _authPanel.style.justifyContent = Justify.SpaceBetween;
-            _authPanel.style.alignItems = Align.FlexEnd;
+            _authPanel.style.alignItems = Align.Center;
             _authPanel.style.marginTop = 4;
             _authPanel.style.paddingTop = 8;
+            _authPanel.style.paddingBottom = 8;
             _mainShell.Add(_authPanel);
 
             _loginStage = new VisualElement();
             _loginStage.name = "LGO Login Gate Entry Hero Stage";
-            _loginStage.style.flexGrow = 1;
-            _loginStage.style.minWidth = 360;
-            _loginStage.style.maxWidth = 620;
-            _loginStage.style.minHeight = 430;
+            _loginStage.style.width = 330;
+            _loginStage.style.minHeight = 470;
+            _loginStage.style.alignItems = Align.Center;
             _loginStage.style.justifyContent = Justify.FlexEnd;
-            _loginStage.style.paddingBottom = 6;
+            _loginStage.style.marginRight = 12;
             _authPanel.Add(_loginStage);
 
-            var heroTitle = new Label("Bước qua Linh Môn");
-            heroTitle.style.fontSize = 32;
-            heroTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
-            heroTitle.style.color = RuntimeArtCatalog.Text;
-            heroTitle.style.unityTextAlign = TextAnchor.MiddleLeft;
-            _loginStage.Add(heroTitle);
-
-            var heroCopy = NewMutedLabel("Chọn máy chủ thử nghiệm, mở tài khoản dev và vào sân luyện an toàn.");
-            heroCopy.style.fontSize = 15;
-            heroCopy.style.maxWidth = 420;
-            heroCopy.style.color = RuntimeArtCatalog.Text;
-            _loginStage.Add(heroCopy);
-
             var gateKeeper = new VisualElement();
-            gateKeeper.name = "LGO Login Gate Keeper NPC V3BA";
-            gateKeeper.style.width = 250;
-            gateKeeper.style.height = 374;
-            gateKeeper.style.marginTop = 14;
-            gateKeeper.style.marginLeft = 36;
+            _loginGateKeeper = gateKeeper;
+            gateKeeper.name = "LGO Login Gate Keeper NPC V3B";
+            gateKeeper.pickingMode = PickingMode.Ignore;
+            gateKeeper.style.width = 300;
+            gateKeeper.style.height = 450;
             gateKeeper.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            var gateKeeperTexture = LgoVisualAssetRegistryV3BA.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
+            var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
             if (gateKeeperTexture != null) gateKeeper.style.backgroundImage = new StyleBackground(gateKeeperTexture);
             _loginStage.Add(gateKeeper);
 
-            _loginCard = NewPanel(500);
-            _loginCard.name = "LGO Login Gate Entry Control Panel V3BA";
-            _loginCard.style.minWidth = 340;
-            _loginCard.style.maxWidth = 500;
-            _loginCard.style.paddingLeft = 24;
-            _loginCard.style.paddingRight = 24;
-            _loginCard.style.paddingTop = 22;
-            _loginCard.style.paddingBottom = 20;
-            ApplyV2PanelSkin(_loginCard);
-            _authPanel.Add(_loginCard);
-            _loginCard.Add(NewSectionTitle("Linh Môn"));
-            _loginCard.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
+            var controlColumn = new VisualElement();
+            _loginControlColumn = controlColumn;
+            controlColumn.name = "LGO Login Gate Entry Control Column V3B";
+            controlColumn.style.width = Length.Percent(100);
+            controlColumn.style.maxWidth = 660;
+            controlColumn.style.flexShrink = 1;
+            controlColumn.style.alignItems = Align.Center;
+            controlColumn.style.justifyContent = Justify.Center;
+            controlColumn.style.paddingBottom = 18;
+            _authPanel.Add(controlColumn);
+
+            var logoLockup = new VisualElement();
+            _loginLogo = logoLockup;
+            logoLockup.name = "LGO Login Gate Entry V3B Final Logo";
+            logoLockup.style.width = 520;
+            logoLockup.style.height = 292;
+            logoLockup.style.alignItems = Align.Center;
+            logoLockup.style.justifyContent = Justify.Center;
+            logoLockup.style.marginBottom = -34;
+            logoLockup.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            if (LgoVisualAssetRegistryV3B.LogoLinhGioiOnline != null)
+                logoLockup.style.backgroundImage = new StyleBackground(LgoVisualAssetRegistryV3B.LogoLinhGioiOnline);
+            controlColumn.Add(logoLockup);
+
+            _loginHeroTitle = new Label("Bước qua Linh Môn");
+            _loginHeroTitle.name = "LGO Login Gate Entry Hero Title";
+            _loginHeroTitle.style.fontSize = 25;
+            _loginHeroTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
+            _loginHeroTitle.style.color = RuntimeArtCatalog.Text;
+            _loginHeroTitle.style.unityTextAlign = TextAnchor.MiddleCenter;
+            _loginHeroTitle.style.marginBottom = 4;
+            controlColumn.Add(_loginHeroTitle);
+
+            _loginHeroCopy = NewMutedLabel("\"Tu tiên không chỉ là sức mạnh, mà là hành trình trở về chính mình.\"");
+            _loginHeroCopy.name = "LGO Login Gate Entry Hero Copy";
+            _loginHeroCopy.style.fontSize = 15;
+            _loginHeroCopy.style.maxWidth = 560;
+            _loginHeroCopy.style.color = RuntimeArtCatalog.Text;
+            _loginHeroCopy.style.unityTextAlign = TextAnchor.MiddleCenter;
+            _loginHeroCopy.style.marginBottom = 12;
+            controlColumn.Add(_loginHeroCopy);
+
+            _loginCard = new VisualElement();
+            _loginCard.name = "LGO Login Gate Entry Bottom CTA v3";
+            _loginCard.style.width = Length.Percent(100);
+            _loginCard.style.maxWidth = 560;
+            _loginCard.style.minHeight = 216;
+            _loginCard.style.alignItems = Align.Center;
+            _loginCard.style.justifyContent = Justify.Center;
+            _loginCard.style.paddingLeft = 34;
+            _loginCard.style.paddingRight = 34;
+            _loginCard.style.paddingTop = 30;
+            _loginCard.style.paddingBottom = 34;
+            _loginCard.style.marginBottom = 10;
+            _loginCard.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
+            if (LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture != null)
+            {
+                _loginCard.style.backgroundImage = new StyleBackground(LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture);
+            }
+            else
+            {
+                _loginCard.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.80f);
+            }
+            controlColumn.Add(_loginCard);
 
             var serverRow = new VisualElement();
-            serverRow.name = "LGO Login Server Selector V3BA";
+            _loginServerRow = serverRow;
+            serverRow.name = "LGO Login Server Selector V3B";
             serverRow.style.flexDirection = FlexDirection.Row;
             serverRow.style.alignItems = Align.Center;
             serverRow.style.justifyContent = Justify.SpaceBetween;
-            serverRow.style.marginBottom = 8;
-            serverRow.style.minHeight = 64;
-            serverRow.style.paddingLeft = 18;
-            serverRow.style.paddingRight = 18;
+            serverRow.style.width = Length.Percent(100);
+            serverRow.style.maxWidth = 520;
+            serverRow.style.minHeight = 54;
+            serverRow.style.paddingLeft = 22;
+            serverRow.style.paddingRight = 22;
             serverRow.style.paddingTop = 10;
             serverRow.style.paddingBottom = 10;
+            serverRow.style.backgroundColor = new Color(0.02f, 0.08f, 0.16f, 0.74f);
+            serverRow.style.borderTopLeftRadius = 8;
+            serverRow.style.borderTopRightRadius = 8;
+            serverRow.style.borderBottomLeftRadius = 8;
+            serverRow.style.borderBottomRightRadius = 8;
+            serverRow.style.borderTopColor = RuntimeArtCatalog.Gold;
+            serverRow.style.borderTopWidth = 1;
+            serverRow.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            serverRow.style.borderBottomWidth = 1;
             serverRow.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            var serverPanel = LgoVisualAssetRegistryV3BA.ServerSelectorPanelTexture ?? LgoVisualAssetRegistryV2.ServerSelectorPanelTexture;
-            if (serverPanel != null) serverRow.style.backgroundImage = new StyleBackground(serverPanel);
-            serverRow.Add(NewIcon(LgoVisualAssetRegistryV2.IconServerTexture, "Máy chủ"));
             var serverText = new Label("S1 - Linh Giới");
+            _loginServerText = serverText;
             serverText.style.flexGrow = 1;
             serverText.style.fontSize = 20;
             serverText.style.unityFontStyleAndWeight = FontStyle.Bold;
             serverText.style.color = RuntimeArtCatalog.Text;
-            serverText.style.unityTextAlign = TextAnchor.MiddleLeft;
+            serverText.style.unityTextAlign = TextAnchor.MiddleCenter;
             serverRow.Add(serverText);
-            _serverStatusIcon = NewIcon(LgoVisualAssetRegistryV3BA.ServerOnlineTexture ?? LgoVisualAssetRegistryV2.ServerOnlineTexture, "Đang mở");
+            _serverStatusIcon = new VisualElement();
+            _serverStatusIcon.name = "LGO Login Server Online Dot";
+            _serverStatusIcon.style.width = 16;
+            _serverStatusIcon.style.height = 16;
+            _serverStatusIcon.style.borderTopLeftRadius = 8;
+            _serverStatusIcon.style.borderTopRightRadius = 8;
+            _serverStatusIcon.style.borderBottomLeftRadius = 8;
+            _serverStatusIcon.style.borderBottomRightRadius = 8;
+            _serverStatusIcon.style.backgroundColor = RuntimeArtCatalog.Spirit;
+            _serverStatusIcon.tooltip = "Đang mở";
             serverRow.Add(_serverStatusIcon);
             _loginCard.Add(serverRow);
 
             var apiLabel = NewMutedLabel("Kết nối nội bộ: " + _config.apiBaseUrl);
             apiLabel.style.fontSize = 12;
+            apiLabel.style.display = DisplayStyle.None;
             _loginCard.Add(apiLabel);
             _devKey = NewTextField("Khóa thử nghiệm", DefaultDevKey);
+            _devKey.style.display = DisplayStyle.None;
             _loginCard.Add(_devKey);
             _loginButton = NewPrimaryButton("Vào Thế Giới", () => RunAsync(LoginAsync));
-            _loginButton.name = "LGO Login Enter World CTA V3BA";
+            _loginButton.name = "LGO Login Enter World CTA Final v2";
             _loginButton.style.width = Length.Percent(100);
-            _loginButton.style.minHeight = 76;
+            _loginButton.style.maxWidth = 560;
+            _loginButton.style.minHeight = 68;
             _loginButton.style.fontSize = 24;
+            _loginButton.style.marginTop = 10;
+            _loginButton.style.marginRight = 0;
+            _loginButton.style.color = new Color(0.12f, 0.06f, 0.01f, 1f);
+            _loginButton.style.backgroundColor = Color.clear;
             _loginButton.tooltip = "Mở tài khoản thử nghiệm và đi tới Điện Nhân Vật.";
             _loginCard.Add(_loginButton);
-            var utilities = NewButtonRow(
-                NewIconButton("Tin", LgoVisualAssetRegistryV3BA.IconNoticeTexture ?? LgoVisualAssetRegistryV2.IconNoticeTexture, () => SetToast("Thông báo: bản thử nghiệm nội bộ.", RuntimeArtCatalog.Spirit)),
-                NewIconButton("Tài khoản", LgoVisualAssetRegistryV3BA.IconAccountTexture ?? LgoVisualAssetRegistryV2.IconAccountTexture, () => SetToast("Tài khoản dev sẽ được mở bằng khóa hiện tại.", RuntimeArtCatalog.Muted)),
-                NewIconButton("Cài đặt", LgoVisualAssetRegistryV3BA.IconSettingsTexture ?? LgoVisualAssetRegistryV2.IconSettingsTexture, () => SetToast("Cài đặt nhanh có trong menu phiên.", RuntimeArtCatalog.Muted))
-            );
-            _loginCard.Add(utilities);
+            _serverSwitchButton = NewQuietButton("Chọn Máy Chủ", () => SetToast("S1 - Linh Giới đang mở ổn định.", RuntimeArtCatalog.Spirit));
+            _serverSwitchButton.name = "LGO Login Server Switch Secondary";
+            _serverSwitchButton.style.minWidth = 160;
+            _serverSwitchButton.style.minHeight = 34;
+            _serverSwitchButton.style.marginTop = 4;
+            _serverSwitchButton.style.marginRight = 0;
+            _loginCard.Add(_serverSwitchButton);
             _account = NewMutedLabel("Tài khoản: chưa kết nối");
             _account.style.marginTop = 10;
+            _account.style.unityTextAlign = TextAnchor.MiddleCenter;
+            _account.style.fontSize = 13;
+            _account.style.display = DisplayStyle.None;
             _loginCard.Add(_account);
         }
 
@@ -349,68 +462,127 @@ namespace LinhGioi.UI
         {
             _lobbyPanel = NewPanel(840);
             ApplyV2PanelSkin(_lobbyPanel);
+            _lobbyPanel.style.maxWidth = 860;
+            _lobbyPanel.style.minHeight = 480;
+            _lobbyPanel.style.paddingLeft = 20;
+            _lobbyPanel.style.paddingRight = 20;
+            _lobbyPanel.style.paddingTop = 18;
+            _lobbyPanel.style.paddingBottom = 20;
+            _lobbyPanel.style.alignSelf = Align.FlexStart;
             _mainShell.Add(_lobbyPanel);
             _lobbyPanel.Add(NewSectionTitle("Điện Nhân Vật"));
             _lobbyPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
+            var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ dùng API nội bộ cho bản chơi thử.");
+            lobbyIntro.style.marginBottom = 10;
+            _lobbyPanel.Add(lobbyIntro);
 
-            var content = new VisualElement();
-            content.style.flexDirection = FlexDirection.Row;
-            content.style.flexWrap = Wrap.Wrap;
-            content.style.justifyContent = Justify.SpaceBetween;
-            _lobbyPanel.Add(content);
+            _lobbyContent = new VisualElement();
+            _lobbyContent.style.flexDirection = FlexDirection.Row;
+            _lobbyContent.style.flexWrap = Wrap.Wrap;
+            _lobbyContent.style.justifyContent = Justify.SpaceBetween;
+            _lobbyContent.style.marginTop = 4;
+            _lobbyContent.style.marginBottom = 14;
+            _lobbyPanel.Add(_lobbyContent);
 
             _characterList = new VisualElement();
-            _characterList.style.minWidth = 220;
+            _characterList.style.minWidth = 280;
             _characterList.style.flexGrow = 1;
-            _characterList.style.marginRight = 14;
-            content.Add(_characterList);
+            _characterList.style.marginRight = 18;
+            _characterList.style.marginBottom = 12;
+            _characterList.style.paddingLeft = 14;
+            _characterList.style.paddingRight = 14;
+            _characterList.style.paddingTop = 12;
+            _characterList.style.paddingBottom = 12;
+            _characterList.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.82f);
+            _characterList.style.borderTopColor = RuntimeArtCatalog.Spirit;
+            _characterList.style.borderTopWidth = 1;
+            _characterList.style.borderLeftColor = RuntimeArtCatalog.Gold;
+            _characterList.style.borderLeftWidth = 2;
+            _lobbyContent.Add(_characterList);
 
-            var preview = NewPreviewPanel();
+            _selectedPreview = NewPreviewPanel("LINH MÔN", "Hồ sơ đang chọn");
+            _selectedPreview.style.maxWidth = 360;
+            var profileHero = new VisualElement();
+            profileHero.style.flexDirection = FlexDirection.Row;
+            profileHero.style.alignItems = Align.Center;
+            profileHero.style.marginBottom = 8;
+            profileHero.Add(NewRuntimeIcon(LgoVisualAssetRegistryV2.IconAccountTexture, 58, "Hồ sơ tu sĩ"));
+            var profileCopy = new VisualElement();
+            profileCopy.style.flexGrow = 1;
+            profileCopy.style.marginLeft = 12;
             _selectedName = new Label("Chưa chọn nhân vật");
-            _selectedName.style.fontSize = 19;
+            _selectedName.style.fontSize = 21;
             _selectedName.style.unityFontStyleAndWeight = FontStyle.Bold;
             _selectedName.style.color = RuntimeArtCatalog.Gold;
-            preview.Add(_selectedName);
+            profileCopy.Add(_selectedName);
             _selectedMeta = NewMutedLabel("Tạo một tu sĩ để bước vào Linh Giới.");
-            preview.Add(_selectedMeta);
-            content.Add(preview);
+            profileCopy.Add(_selectedMeta);
+            profileHero.Add(profileCopy);
+            _selectedPreview.Add(profileHero);
+            _selectedStatus = NewStatusLabel("Trạng thái: Chọn tu sĩ trước khi vào sân luyện.", RuntimeArtCatalog.Spirit);
+            _selectedObjective = NewStatusLabel("Mục tiêu: Bước qua Linh Môn, kiểm tra HUD, rồi lưu vị trí.", RuntimeArtCatalog.Gold);
+            _selectedClassSummary = NewStatusLabel("Mạch tu luyện: Kiếm tu sơ nhập / vai trò cân bằng.", RuntimeArtCatalog.Muted);
+            _selectedPreview.Add(_selectedStatus);
+            _selectedPreview.Add(_selectedObjective);
+            _selectedPreview.Add(_selectedClassSummary);
+            _lobbyContent.Add(_selectedPreview);
 
-            var create = new VisualElement();
-            create.style.marginTop = 14;
-            create.style.paddingTop = 12;
-            create.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
-            create.style.borderTopWidth = 1;
-            _lobbyPanel.Add(create);
+            _createPanel = new VisualElement();
+            _createPanel.style.marginTop = 14;
+            _createPanel.style.paddingLeft = 16;
+            _createPanel.style.paddingRight = 16;
+            _createPanel.style.paddingTop = 14;
+            _createPanel.style.paddingBottom = 16;
+            _createPanel.style.minHeight = 132;
+            _createPanel.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.78f);
+            _createPanel.style.borderTopColor = RuntimeArtCatalog.Gold;
+            _createPanel.style.borderTopWidth = 1;
+            _createPanel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            _createPanel.style.borderLeftWidth = 2;
+            _lobbyPanel.Add(_createPanel);
 
-            create.Add(NewSectionTitle("Tạo Tu Sĩ"));
+            _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
+            _createPanel.Add(NewStatusLabel("Mạch mặc định: Kiếm tu sơ nhập. Có thể đổi contract sau khi mở hệ class chính thức.", RuntimeArtCatalog.Muted));
             _characterName = NewTextField("Tên nhân vật", "LinhGioiHero");
+            _characterName.style.maxWidth = 360;
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
-            _createButton = NewSecondaryButton("Tạo", () => RunAsync(CreateCharacterAsync));
-            _enterWorldButton = NewPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
-            create.Add(_characterName);
-            create.Add(_classId);
-            create.Add(NewButtonRow(_createButton, _enterWorldButton));
+            _classId.style.display = DisplayStyle.None;
+            _createButton = NewCompactSecondaryButton("Tạo", () => RunAsync(CreateCharacterAsync));
+            _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
+            _createPanel.Add(_characterName);
+            _createPanel.Add(_classId);
+            _createPanel.Add(NewButtonRow(_createButton, _enterWorldButton));
         }
 
         private void BuildWorldHud()
         {
-            _worldHud = NewPanel(760);
+            _worldHud = NewPanel(430);
+            _worldHud.style.maxWidth = 440;
+            _worldHud.style.alignSelf = Align.FlexStart;
+            _worldHud.style.paddingLeft = 14;
+            _worldHud.style.paddingRight = 14;
+            _worldHud.style.paddingTop = 12;
+            _worldHud.style.paddingBottom = 12;
             _mainShell.Add(_worldHud);
             _worldHud.Add(NewSectionTitle("Sân Luyện An Toàn"));
             _worldHud.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
 
-            var topStrip = new VisualElement();
-            topStrip.style.flexDirection = FlexDirection.Row;
-            topStrip.style.flexWrap = Wrap.Wrap;
-            topStrip.style.marginBottom = 10;
-            _worldHud.Add(topStrip);
+            _worldDebugStrip = new VisualElement();
+            _worldDebugStrip.style.flexDirection = FlexDirection.Row;
+            _worldDebugStrip.style.flexWrap = Wrap.Wrap;
+            _worldDebugStrip.style.marginBottom = 10;
+            _worldDebugStrip.style.display = DisplayStyle.None;
+            _worldHud.Add(_worldDebugStrip);
 
-            topStrip.Add(NewBadge("Tài khoản", "đã kết nối"));
-            topStrip.Add(NewBadge("Lưu vị trí", "API nội bộ"));
-            topStrip.Add(NewBadge("Di chuyển", "WASD hoặc phím mũi tên"));
-            topStrip.Add(NewBadge("Xoay", "Q / E"));
-            topStrip.Add(NewBadge("Tương tác", "F hoặc Space"));
-            topStrip.Add(NewBadge("Menu", "Esc"));
+            _worldDebugStrip.Add(NewBadge("Tài khoản", "đã kết nối"));
+            _worldDebugStrip.Add(NewBadge("Lưu vị trí", "API nội bộ"));
+            _worldDebugStrip.Add(NewBadge("Di chuyển", "WASD hoặc phím mũi tên"));
+            _worldDebugStrip.Add(NewBadge("Xoay", "Q / E"));
+            _worldDebugStrip.Add(NewBadge("Tương tác", "F hoặc Space"));
+            _worldDebugStrip.Add(NewBadge("Menu", "Esc"));
+
+            _layoutProfileLabel = NewStatusLabel("Bố cục: desktop / HUD đầy đủ.", RuntimeArtCatalog.Muted);
+            _worldHud.Add(_layoutProfileLabel);
 
             _worldName = new Label("Chưa chọn nhân vật");
             _worldName.style.fontSize = 19;
@@ -419,6 +591,7 @@ namespace LinhGioi.UI
             _worldHud.Add(_worldName);
 
             _worldMeta = NewMutedLabel("Chọn nhân vật tại điện nhân vật.");
+            _worldMeta.style.fontSize = 13;
             _worldHud.Add(_worldMeta);
 
             _worldArea = NewStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted);
@@ -431,12 +604,15 @@ namespace LinhGioi.UI
             _worldHud.Add(_worldDirection);
 
             _worldPoseState = NewStatusLabel("Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.", RuntimeArtCatalog.Muted);
+            _worldPoseState.style.display = DisplayStyle.None;
             _worldHud.Add(_worldPoseState);
 
             _worldVfxState = NewStatusLabel("Hiệu ứng: yên tĩnh / cổng, mạch linh khí, chém gió, cảnh báo bóng đều chỉ là hình ảnh.", RuntimeArtCatalog.Spirit);
+            _worldVfxState.style.display = DisplayStyle.None;
             _worldHud.Add(_worldVfxState);
 
             _skinSource = NewStatusLabel("Nguồn giao diện: asset runtime tối ưu, chưa phải art final.", RuntimeArtCatalog.Spirit);
+            _skinSource.style.display = DisplayStyle.None;
             _worldHud.Add(_skinSource);
 
             _worldObjective = NewStatusLabel("Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.", RuntimeArtCatalog.Gold);
@@ -452,10 +628,12 @@ namespace LinhGioi.UI
             _position.style.paddingRight = 10;
             _position.style.paddingTop = 6;
             _position.style.paddingBottom = 6;
+            _position.style.display = DisplayStyle.None;
             _worldHud.Add(_position);
 
             _worldLandmarks = NewMutedLabel("Mốc sân luyện: Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông.");
             _worldLandmarks.style.marginTop = 8;
+            _worldLandmarks.style.display = DisplayStyle.None;
             _worldHud.Add(_worldLandmarks);
 
             _toast = NewToast("Linh Môn đã sẵn sàng.");
@@ -465,15 +643,16 @@ namespace LinhGioi.UI
             BuildSkillPreviewPanel();
             BuildLocalCombatPanel();
 
-            _dialoguePanel = NewPreviewPanel();
+            _dialoguePanel = NewPreviewPanel("ĐỐI THOẠI", "Người Giữ Cổng");
             _dialoguePanel.style.marginTop = 10;
             _dialogueSpeaker = new Label("Người Giữ Cổng");
             _dialogueSpeaker.style.fontSize = 17;
             _dialogueSpeaker.style.unityFontStyleAndWeight = FontStyle.Bold;
             _dialogueSpeaker.style.color = RuntimeArtCatalog.Gold;
             _dialogueLine = NewMutedLabel("Đối thoại đã đóng.");
+            _dialogueLine.style.fontSize = 16;
             _dialogueProgress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
-            _dialogueContinueButton = NewSecondaryButton("Tiếp tục", ContinueDialogue);
+            _dialogueContinueButton = NewCompactSecondaryButton("Tiếp tục", ContinueDialogue);
             _dialogueCloseButton = NewQuietButton("Đóng", CloseDialogue);
             _dialoguePanel.Add(_dialogueSpeaker);
             _dialoguePanel.Add(_dialogueLine);
@@ -482,37 +661,56 @@ namespace LinhGioi.UI
             _worldHud.Add(_dialoguePanel);
             SetDialogueVisible(false);
 
-            _savePositionButton = NewPrimaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
+            _savePositionButton = NewCompactPrimaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
             _savePositionButton.tooltip = "Ghi vị trí hiện tại vào API nội bộ.";
-            _backButton = NewSecondaryButton("Về điện nhân vật", BackToLobby);
+            _backButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
             _backButton.tooltip = "Quay lại quản lý nhân vật mà không đóng bản chơi thử.";
-            _worldHud.Add(NewButtonRow(_savePositionButton, _backButton, NewQuietButton("Thoát", QuitPlayer)));
+            _worldFooterActions = NewButtonRow(_savePositionButton, _backButton, NewQuietButton("Thoát", QuitPlayer));
+            _worldHud.Add(_worldFooterActions);
         }
 
         private void BuildSessionMenuPanel()
         {
-            _sessionMenuPanel = NewPreviewPanel();
+            _sessionMenuPanel = NewPreviewPanel("PHIÊN", "Tạm dừng cục bộ");
             _sessionMenuPanel.name = "LGO Session Menu Overlay";
-            _sessionMenuPanel.style.marginTop = 10;
-            _sessionMenuPanel.style.backgroundColor = RuntimeArtCatalog.Background;
+            _sessionMenuPanel.style.position = Position.Absolute;
+            _sessionMenuPanel.style.left = 84;
+            _sessionMenuPanel.style.right = 84;
+            _sessionMenuPanel.style.top = 158;
+            _sessionMenuPanel.style.marginTop = 0;
+            _sessionMenuPanel.style.paddingLeft = 18;
+            _sessionMenuPanel.style.paddingRight = 18;
+            _sessionMenuPanel.style.paddingTop = 16;
+            _sessionMenuPanel.style.paddingBottom = 18;
+            _sessionMenuPanel.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 1f);
             _sessionMenuPanel.style.borderLeftColor = RuntimeArtCatalog.Gold;
             _sessionMenuPanel.style.borderLeftWidth = 2;
+            _sessionMenuPanel.style.borderTopColor = RuntimeArtCatalog.Gold;
+            _sessionMenuPanel.style.borderTopWidth = 1;
+            _sessionMenuPanel.style.borderRightColor = RuntimeArtCatalog.Spirit;
+            _sessionMenuPanel.style.borderRightWidth = 1;
+            _sessionMenuPanel.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            _sessionMenuPanel.style.borderBottomWidth = 1;
             _sessionMenuPanel.Add(NewSectionTitle("Menu phiên"));
             _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
+            _sessionMenuStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
             _sessionMenuPanel.Add(_sessionMenuStatus);
-            _resumeButton = NewPrimaryButton("Tiếp tục", HideSessionMenu);
-            _sessionSaveButton = NewSecondaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
-            _sessionBackButton = NewSecondaryButton("Về điện nhân vật", BackToLobby);
+            _resumeButton = NewCompactPrimaryButton("Tiếp tục", HideSessionMenu);
+            _sessionSaveButton = NewCompactSecondaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
+            _sessionBackButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
             _sessionQuitButton = NewQuietButton("Thoát", QuitPlayer);
-            _sessionMenuPanel.Add(NewButtonRow(_resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton));
+            var sessionActions = NewButtonRow(_resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
+            sessionActions.style.justifyContent = Justify.Center;
+            sessionActions.style.marginBottom = 12;
+            _sessionMenuPanel.Add(sessionActions);
             BuildLocalSettingsPanel();
-            _worldHud.Add(_sessionMenuPanel);
+            _root.Add(_sessionMenuPanel);
             SetSessionMenuVisible(false);
         }
 
         private void BuildSkillPreviewPanel()
         {
-            _skillPreviewPanel = NewPreviewPanel();
+            _skillPreviewPanel = NewPreviewPanel("KỸ NĂNG", "Diễn tập hình ảnh");
             _skillPreviewPanel.name = "LGO Skill Preview Sandbox";
             _skillPreviewPanel.style.marginTop = 10;
             _skillPreviewPanel.Add(NewSectionTitle("Xem thử kỹ năng"));
@@ -526,12 +724,18 @@ namespace LinhGioi.UI
 
         private void BuildLocalCombatPanel()
         {
-            _localCombatPanel = NewPreviewPanel();
+            _localCombatPanel = NewPreviewPanel("LUYỆN TẬP", "Mục tiêu cục bộ");
             _localCombatPanel.name = "LGO M6 Minimal Local Combat";
             _localCombatPanel.style.marginTop = 10;
+            _localCombatPanel.style.paddingLeft = 14;
+            _localCombatPanel.style.paddingRight = 14;
+            _localCombatPanel.style.paddingTop = 12;
+            _localCombatPanel.style.paddingBottom = 12;
             ApplyCombatPanelSkin(_localCombatPanel);
-            _localCombatPanel.Add(NewSectionTitle("Luyện mục tiêu cục bộ"));
-            _localCombatPanel.Add(NewMutedLabel("Nhãn nguyên mẫu cục bộ: Tấn công thử chỉ kiểm tra khả năng đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương thật, phần thưởng, kinh nghiệm, hay chiến đấu máy chủ."));
+            _localCombatPanel.Add(NewSectionTitle("Bia luyện cục bộ"));
+            var combatNote = NewMutedLabel("Nhãn nguyên mẫu cục bộ: đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương, phần thưởng hay chiến đấu máy chủ.");
+            combatNote.style.display = DisplayStyle.None;
+            _localCombatPanel.Add(combatNote);
             _combatCooldownIcon = NewCombatCooldownIcon();
             _combatTargetStatus = NewStatusLabel("Mục tiêu luyện tập: chưa vào sân.", RuntimeArtCatalog.Gold);
             _combatRangeStatus = NewStatusLabel("Tầm đánh: chưa vào sân.", RuntimeArtCatalog.Muted);
@@ -539,16 +743,25 @@ namespace LinhGioi.UI
             _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
             _combatCooldown = NewStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
             _combatAuthority = NewStatusLabel("Mô phỏng cục bộ: chưa gửi ý định chiến đấu.", RuntimeArtCatalog.Spirit);
-            _localCombatButton = NewSecondaryButton("Gửi ý định chiến đấu", TriggerLocalCombat);
+            _localCombatButton = NewCompactSecondaryButton("Gửi ý định chiến đấu", TriggerLocalCombat);
             _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ. Đánh thử cục bộ: xem vòng chọn mục tiêu, hit flash và nhịp hồi chiêu; không phải chiến đấu thật";
             ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonNormalTexture);
-            _localCombatPanel.Add(_combatCooldownIcon);
-            _localCombatPanel.Add(_combatTargetStatus);
-            _localCombatPanel.Add(_combatRangeStatus);
-            _localCombatPanel.Add(_combatVisualState);
+            var combatRow = new VisualElement();
+            combatRow.style.flexDirection = FlexDirection.Row;
+            combatRow.style.alignItems = Align.Center;
+            combatRow.style.marginBottom = 4;
+            combatRow.Add(_combatCooldownIcon);
+            var combatStatusColumn = new VisualElement();
+            combatStatusColumn.style.flexGrow = 1;
+            combatStatusColumn.style.marginLeft = 10;
+            combatStatusColumn.Add(_combatTargetStatus);
+            combatStatusColumn.Add(_combatRangeStatus);
+            combatRow.Add(combatStatusColumn);
+            _localCombatPanel.Add(combatRow);
             _localCombatPanel.Add(_combatFeedback);
-            _localCombatPanel.Add(_combatCooldown);
-            _localCombatPanel.Add(_combatAuthority);
+            _combatVisualState.style.display = DisplayStyle.None;
+            _combatCooldown.style.display = DisplayStyle.None;
+            _combatAuthority.style.display = DisplayStyle.None;
             _localCombatPanel.Add(NewButtonRow(_localCombatButton));
             _worldHud.Add(_localCombatPanel);
         }
@@ -558,10 +771,12 @@ namespace LinhGioi.UI
             _settingsPanel = NewPreviewPanel();
             _settingsPanel.name = "LGO Local Settings Foundation";
             _settingsPanel.style.marginTop = 8;
+            _settingsPanel.style.paddingBottom = 12;
+            _settingsPanel.style.minHeight = 92;
             _settingsPanel.Add(NewSectionTitle("Cài đặt cục bộ"));
-            _showPositionToggle = NewLocalSettingToggle("Hiện tọa độ", true, ApplyLocalSettings);
+            _showPositionToggle = NewLocalSettingToggle("Hiện tọa độ", false, ApplyLocalSettings);
             _showHintsToggle = NewLocalSettingToggle("Hiện chỉ dẫn", true, ApplyLocalSettings);
-            _focusModeToggle = NewLocalSettingToggle("Chế độ HUD gọn", false, ApplyLocalSettings);
+            _focusModeToggle = NewLocalSettingToggle("Chế độ HUD gọn", true, ApplyLocalSettings);
             _settingsPanel.Add(_showPositionToggle);
             _settingsPanel.Add(_showHintsToggle);
             _settingsPanel.Add(_focusModeToggle);
@@ -584,9 +799,25 @@ namespace LinhGioi.UI
         {
             _characters = await _client.ListCharactersAsync(_accountState.accountId, _shutdown.Token);
             _characterList.Clear();
-            _characterList.Add(NewMutedLabel(_characters.Length == 0 ? "Chưa có nhân vật." : "Chọn nhân vật."));
+            _characterList.Add(NewStatusLabel(_characters.Length == 0 ? "Chưa có nhân vật. Tạo tu sĩ đầu tiên." : "Danh sách tu sĩ", RuntimeArtCatalog.Spirit));
             if (_characters.Length == 0)
             {
+                var emptyCard = new VisualElement();
+                emptyCard.style.marginTop = 10;
+                emptyCard.style.paddingLeft = 14;
+                emptyCard.style.paddingRight = 14;
+                emptyCard.style.paddingTop = 14;
+                emptyCard.style.paddingBottom = 14;
+                emptyCard.style.backgroundColor = new Color(0.01f, 0.04f, 0.10f, 0.76f);
+                emptyCard.style.borderTopColor = RuntimeArtCatalog.Gold;
+                emptyCard.style.borderTopWidth = 1;
+                emptyCard.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+                emptyCard.style.borderLeftWidth = 2;
+                emptyCard.Add(NewStatusLabel("Tạo tu sĩ đầu tiên", RuntimeArtCatalog.Gold));
+                var empty = NewMutedLabel("Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.");
+                empty.style.marginTop = 6;
+                emptyCard.Add(empty);
+                _characterList.Add(emptyCard);
                 SelectCharacter(null);
                 return;
             }
@@ -670,6 +901,9 @@ namespace LinhGioi.UI
             {
                 _selectedName.text = "Chưa chọn nhân vật";
                 _selectedMeta.text = "Tạo tu sĩ để bước vào Linh Giới.";
+                if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Đang chờ hồ sơ tu sĩ.";
+                if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Tạo tu sĩ, chọn hồ sơ, rồi vào sân luyện.";
+                if (_selectedClassSummary != null) _selectedClassSummary.text = "Mạch tu luyện: Kiếm tu sơ nhập sẽ được dùng cho bản chơi thử.";
                 _worldName.text = "Chưa chọn nhân vật";
                 _worldMeta.text = "Chọn nhân vật tại điện nhân vật.";
                 if (_worldArea != null) _worldArea.text = "Khu vực: xem trước tại sảnh";
@@ -685,9 +919,12 @@ namespace LinhGioi.UI
                 return;
             }
             _selectedName.text = character.name;
-            _selectedMeta.text = "Lớp " + character.classId + " / " + Abbrev(character.characterId);
+            _selectedMeta.text = "Hồ sơ " + Abbrev(character.characterId);
+            if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Sẵn sàng bước qua Linh Môn.";
+            if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Vào sân luyện, gặp Người Giữ Cổng, rồi lưu vị trí.";
+            if (_selectedClassSummary != null) _selectedClassSummary.text = "Mạch tu luyện: Kiếm tu sơ nhập / vai trò cân bằng.";
             _worldName.text = character.name;
-            _worldMeta.text = "Lớp " + character.classId + " / " + Abbrev(character.characterId);
+            _worldMeta.text = "Kiếm tu sơ nhập / hồ sơ " + Abbrev(character.characterId);
             _position.text = character.ToString();
         }
 
@@ -720,6 +957,10 @@ namespace LinhGioi.UI
             _authPanel.style.display = DisplayStyle.Flex;
             _lobbyPanel.style.display = DisplayStyle.None;
             _worldHud.style.display = DisplayStyle.None;
+            _status.style.display = DisplayStyle.None;
+            _quitButton.style.display = DisplayStyle.None;
+            _mainShell.style.justifyContent = Justify.Center;
+            ApplyLoginBackdrop(true);
             SetLobbyControls(false);
         }
 
@@ -728,7 +969,12 @@ namespace LinhGioi.UI
             _authPanel.style.display = DisplayStyle.None;
             _lobbyPanel.style.display = DisplayStyle.Flex;
             _worldHud.style.display = DisplayStyle.None;
+            _status.style.display = DisplayStyle.Flex;
+            _quitButton.style.display = DisplayStyle.Flex;
             SetLobbyControls(true);
+            ApplyResponsiveLayoutProfile(true);
+            _mainShell.style.justifyContent = Justify.Center;
+            ApplyLoginBackdrop(true);
         }
 
         private void ShowWorldMode()
@@ -736,9 +982,14 @@ namespace LinhGioi.UI
             _authPanel.style.display = DisplayStyle.None;
             _lobbyPanel.style.display = DisplayStyle.None;
             _worldHud.style.display = DisplayStyle.Flex;
+            _status.style.display = DisplayStyle.Flex;
+            _quitButton.style.display = DisplayStyle.Flex;
             SetSessionMenuVisible(false);
             _savePositionButton.SetEnabled(true);
             _backButton.SetEnabled(true);
+            ApplyResponsiveLayoutProfile(true);
+            _mainShell.style.justifyContent = Justify.FlexStart;
+            ApplyLoginBackdrop(false);
         }
 
         private void SetLobbyControls(bool enabled)
@@ -753,11 +1004,10 @@ namespace LinhGioi.UI
         {
             _status.text = message;
             ApplyStatusChip(_status, busy ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Muted);
-            ApplyLoginButtonState(busy ? LgoVisualAssetRegistryV3BA.ButtonDisabledTexture : LgoFinalLoginAssetRegistry.ButtonEnterWorldTexture ?? LgoVisualAssetRegistryV3BA.ButtonEnterWorldNormalTexture);
+            ApplyLoginButtonState(busy ? LgoVisualAssetRegistryV2.ButtonDisabledTexture : LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture);
             if (_serverStatusIcon != null)
             {
-                var texture = busy ? LgoVisualAssetRegistryV3BA.ServerBusyTexture : LgoVisualAssetRegistryV3BA.ServerOnlineTexture;
-                if (texture != null) _serverStatusIcon.style.backgroundImage = new StyleBackground(texture);
+                _serverStatusIcon.style.backgroundColor = busy ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
             }
             _loginButton.SetEnabled(!busy);
             if (_accountState != null)
@@ -826,7 +1076,7 @@ namespace LinhGioi.UI
             return panel;
         }
 
-        private static VisualElement NewPreviewPanel()
+        private static VisualElement NewPreviewPanel(string sigilText = "LINH MÔN", string headingText = null)
         {
             var preview = new VisualElement();
             preview.style.minWidth = 220;
@@ -844,11 +1094,51 @@ namespace LinhGioi.UI
             preview.style.borderLeftWidth = 2;
             preview.style.borderTopColor = RuntimeArtCatalog.Spirit;
             preview.style.borderTopWidth = 1;
-            var sigil = new Label("LINH MÔN");
+            var sigil = new Label(sigilText);
             sigil.style.color = RuntimeArtCatalog.Spirit;
             sigil.style.unityFontStyleAndWeight = FontStyle.Bold;
+            sigil.style.fontSize = 11;
             preview.Add(sigil);
+            if (!string.IsNullOrWhiteSpace(headingText))
+            {
+                var heading = new Label(headingText);
+                heading.style.color = RuntimeArtCatalog.Text;
+                heading.style.unityFontStyleAndWeight = FontStyle.Bold;
+                heading.style.fontSize = 15;
+                heading.style.marginTop = 2;
+                heading.style.marginBottom = 6;
+                preview.Add(heading);
+            }
             return preview;
+        }
+
+        private static VisualElement NewReadabilityRow(string title, string value, Color accent)
+        {
+            var row = new VisualElement();
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.flexWrap = Wrap.Wrap;
+            row.style.marginTop = 8;
+            row.style.paddingLeft = 10;
+            row.style.paddingRight = 10;
+            row.style.paddingTop = 7;
+            row.style.paddingBottom = 7;
+            row.style.backgroundColor = RuntimeArtCatalog.Background;
+            row.style.borderLeftColor = accent;
+            row.style.borderLeftWidth = 2;
+            row.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
+            row.style.borderTopWidth = 1;
+            var titleLabel = new Label(title);
+            titleLabel.style.minWidth = 86;
+            titleLabel.style.marginRight = 8;
+            titleLabel.style.color = accent;
+            titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            var valueLabel = new Label(value);
+            valueLabel.style.flexGrow = 1;
+            valueLabel.style.color = RuntimeArtCatalog.Text;
+            valueLabel.style.whiteSpace = WhiteSpace.Normal;
+            row.Add(titleLabel);
+            row.Add(valueLabel);
+            return row;
         }
 
         private static Label NewSectionTitle(string text)
@@ -908,8 +1198,33 @@ namespace LinhGioi.UI
             button.style.minHeight = 58;
             button.style.fontSize = 16;
             button.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            var texture = LgoFinalLoginAssetRegistry.ButtonEnterWorldTexture ?? LgoVisualAssetRegistryV3BA.ButtonEnterWorldNormalTexture ?? LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
-            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
+            var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
+            if (texture != null)
+            {
+                button.style.backgroundColor = Color.clear;
+                button.style.backgroundImage = new StyleBackground(texture);
+            }
+            return button;
+        }
+
+        private static Button NewCompactPrimaryButton(string label, Action action)
+        {
+            var button = NewButton(label, action);
+            button.style.minWidth = 144;
+            button.style.minHeight = 44;
+            button.style.backgroundImage = new StyleBackground();
+            button.style.backgroundColor = new Color(0.03f, 0.22f, 0.34f, 0.92f);
+            button.style.color = RuntimeArtCatalog.Text;
+            button.style.unityFontStyleAndWeight = FontStyle.Bold;
+            button.style.fontSize = 14;
+            button.style.borderTopColor = RuntimeArtCatalog.Gold;
+            button.style.borderTopWidth = 1;
+            button.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            button.style.borderLeftWidth = 2;
+            button.style.borderRightColor = RuntimeArtCatalog.Gold;
+            button.style.borderRightWidth = 1;
+            button.style.borderBottomColor = RuntimeArtCatalog.Spirit;
+            button.style.borderBottomWidth = 1;
             return button;
         }
 
@@ -930,6 +1245,38 @@ namespace LinhGioi.UI
             var texture = LgoVisualAssetRegistryV2.ButtonSecondaryTexture;
             if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
             return button;
+        }
+
+        private static Button NewCompactSecondaryButton(string label, Action action)
+        {
+            var button = NewButton(label, action);
+            button.style.minWidth = 132;
+            button.style.minHeight = 42;
+            button.style.backgroundImage = new StyleBackground();
+            button.style.backgroundColor = new Color(0.04f, 0.13f, 0.22f, 0.92f);
+            button.style.color = RuntimeArtCatalog.Text;
+            button.style.fontSize = 14;
+            button.style.borderTopColor = RuntimeArtCatalog.Spirit;
+            button.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            button.style.borderRightColor = RuntimeArtCatalog.SurfaceRaised;
+            button.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            return button;
+        }
+
+        private static string NormalizeLayoutProfile(string value)
+        {
+            if (string.Equals(value, "mobile", StringComparison.OrdinalIgnoreCase)) return "mobile";
+            if (string.Equals(value, "tablet", StringComparison.OrdinalIgnoreCase)) return "tablet";
+            if (string.Equals(value, "desktop", StringComparison.OrdinalIgnoreCase)) return "desktop";
+            return null;
+        }
+
+        private static string GetArg(string key)
+        {
+            var args = Environment.GetCommandLineArgs();
+            for (var i = 0; i < args.Length - 1; i++)
+                if (args[i] == key) return args[i + 1];
+            return null;
         }
 
         private static VisualElement NewIcon(Texture2D texture, string tooltip)
@@ -981,6 +1328,7 @@ namespace LinhGioi.UI
         {
             if (_sessionMenuPanel == null) return;
             _sessionMenuPanel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (visible) _sessionMenuPanel.BringToFront();
             if (_sessionMenuStatus != null)
                 _sessionMenuStatus.text = visible ? "Đang tạm dừng trong sân luyện. Có thể tiếp tục, lưu vị trí, quay lại hoặc thoát." : "Phiên chơi đang hoạt động.";
             ApplyLocalSettings();
@@ -991,15 +1339,183 @@ namespace LinhGioi.UI
             var showPosition = _showPositionToggle == null || _showPositionToggle.value;
             var showHints = _showHintsToggle == null || _showHintsToggle.value;
             var focusMode = _focusModeToggle != null && _focusModeToggle.value;
+            var sessionVisible = _sessionMenuPanel != null && _sessionMenuPanel.style.display == DisplayStyle.Flex;
+            var dialogueVisible = _dialoguePanel != null && _dialoguePanel.style.display == DisplayStyle.Flex;
+            var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible;
+            var gameplayPanelVisible = !sessionVisible && !dialogueVisible && !_isMobileProfile;
+            var compactWorld = _isMobileProfile || focusMode;
+            if (_layoutProfileLabel != null) _layoutProfileLabel.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_worldFooterActions != null) _worldFooterActions.style.display = sessionVisible || _isMobileProfile ? DisplayStyle.None : DisplayStyle.Flex;
             if (_position != null) _position.style.display = showPosition && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_worldDebugStrip != null) _worldDebugStrip.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_worldMeta != null) _worldMeta.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_worldArea != null) _worldArea.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_worldStep != null) _worldStep.style.display = showHints && !compactWorld ? DisplayStyle.Flex : DisplayStyle.None;
             if (_worldDirection != null) _worldDirection.style.display = showHints ? DisplayStyle.Flex : DisplayStyle.None;
             if (_interactionHint != null) _interactionHint.style.display = showHints ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_worldLandmarks != null) _worldLandmarks.style.display = showHints && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_worldPoseState != null) _worldPoseState.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_worldVfxState != null) _worldVfxState.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_skinSource != null) _skinSource.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_skillPreviewPanel != null) _skillPreviewPanel.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_localCombatPanel != null) _localCombatPanel.style.display = DisplayStyle.Flex;
+            if (_worldLandmarks != null) _worldLandmarks.style.display = showHints && !compactWorld ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_worldPoseState != null) _worldPoseState.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_worldVfxState != null) _worldVfxState.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_skinSource != null) _skinSource.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_skillPreviewPanel != null) _skillPreviewPanel.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_localCombatPanel != null) _localCombatPanel.style.display = gameplayPanelVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_toast != null) _toast.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_combatVisualState != null) _combatVisualState.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_combatCooldown != null) _combatCooldown.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_combatAuthority != null) _combatAuthority.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void ApplyResponsiveLayoutProfile(bool force)
+        {
+            var width = Screen.width > 0 ? Screen.width : 1280;
+            var height = Screen.height > 0 ? Screen.height : 720;
+            var profile = _forcedLayoutProfile ?? (width <= 760 || height <= 520 ? "mobile" : width <= 1100 ? "tablet" : "desktop");
+            if (!force && string.Equals(_lastLayoutProfile, profile, StringComparison.Ordinal)) return;
+            _lastLayoutProfile = profile;
+
+            var mobile = profile == "mobile";
+            var tablet = profile == "tablet";
+            var worldVisible = _worldHud != null && _worldHud.style.display == DisplayStyle.Flex;
+            var authVisible = _authPanel != null && _authPanel.style.display == DisplayStyle.Flex;
+            var shortSide = Mathf.Min(width, height);
+            var mobileScale = mobile ? Mathf.Clamp(shortSide / 520f, 0.62f, 0.86f) : 1f;
+            var loginLogoWidth = mobile ? Mathf.Clamp(width * 0.38f, 260f, 340f) : tablet ? 470f : 520f;
+            var loginLogoHeight = mobile ? loginLogoWidth * 0.44f : tablet ? 252f : 292f;
+            var loginCardWidth = mobile ? Mathf.Clamp(width * 0.46f, 320f, 390f) : tablet ? 540f : 560f;
+            var loginCardPadding = mobile ? Mathf.RoundToInt(14f * mobileScale) : 34;
+            var loginButtonHeight = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.11f, 40f, 48f)) : 68;
+            var loginButtonFont = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.047f, 17f, 21f)) : 24;
+            _isMobileProfile = mobile;
+            _root.style.paddingLeft = mobile ? 12 : tablet ? 18 : 28;
+            _root.style.paddingRight = mobile ? 12 : tablet ? 18 : 28;
+            _root.style.paddingTop = mobile ? 10 : 16;
+            _root.style.paddingBottom = mobile ? 12 : 18;
+
+            _mainShell.style.maxWidth = worldVisible ? Length.Percent(100) : mobile ? 720 : tablet ? 980 : 1180;
+            _mainShell.style.justifyContent = worldVisible || mobile ? Justify.FlexStart : Justify.Center;
+
+            if (_header != null)
+                _header.style.minHeight = authVisible && mobile ? 8 : 76;
+            if (_authPanel != null)
+            {
+                _authPanel.style.minHeight = mobile ? 0 : 460;
+                _authPanel.style.flexDirection = mobile ? FlexDirection.Column : FlexDirection.Row;
+                _authPanel.style.justifyContent = mobile ? Justify.FlexStart : Justify.SpaceBetween;
+                _authPanel.style.alignItems = Align.Center;
+                _authPanel.style.marginTop = mobile ? 0 : 4;
+                _authPanel.style.paddingTop = mobile ? 0 : 8;
+            }
+            if (_loginStage != null)
+            {
+                _loginStage.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+                _loginStage.style.width = tablet ? 280 : 330;
+                _loginStage.style.minHeight = tablet ? 410 : 470;
+            }
+            if (_loginGateKeeper != null)
+            {
+                _loginGateKeeper.style.width = tablet ? 260 : 300;
+                _loginGateKeeper.style.height = tablet ? 390 : 450;
+            }
+            if (_loginControlColumn != null)
+            {
+                _loginControlColumn.style.maxWidth = mobile ? 520 : tablet ? 600 : 660;
+                _loginControlColumn.style.paddingBottom = mobile ? 0 : 18;
+            }
+            if (_loginLogo != null)
+            {
+                _loginLogo.style.width = loginLogoWidth;
+                _loginLogo.style.height = loginLogoHeight;
+                _loginLogo.style.marginBottom = mobile ? Mathf.RoundToInt(-18f * mobileScale) : -34;
+            }
+            if (_loginHeroTitle != null)
+            {
+                _loginHeroTitle.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+                _loginHeroTitle.style.fontSize = tablet ? 23 : 25;
+            }
+            if (_loginHeroCopy != null)
+                _loginHeroCopy.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_loginCard != null)
+            {
+                _loginCard.style.maxWidth = loginCardWidth;
+                _loginCard.style.minHeight = mobile ? Mathf.RoundToInt(116f * mobileScale) : 216;
+                _loginCard.style.paddingLeft = loginCardPadding;
+                _loginCard.style.paddingRight = loginCardPadding;
+                _loginCard.style.paddingTop = mobile ? Mathf.RoundToInt(12f * mobileScale) : 30;
+                _loginCard.style.paddingBottom = mobile ? Mathf.RoundToInt(12f * mobileScale) : 34;
+                _loginCard.style.marginBottom = mobile ? 0 : 10;
+            }
+            if (_loginServerRow != null)
+            {
+                _loginServerRow.style.maxWidth = mobile ? Length.Percent(100) : 520;
+                _loginServerRow.style.minHeight = mobile ? Mathf.RoundToInt(42f * mobileScale) : 54;
+                _loginServerRow.style.paddingLeft = mobile ? 14 : 22;
+                _loginServerRow.style.paddingRight = mobile ? 14 : 22;
+                _loginServerRow.style.paddingTop = mobile ? 6 : 10;
+                _loginServerRow.style.paddingBottom = mobile ? 6 : 10;
+            }
+            if (_loginServerText != null)
+                _loginServerText.style.fontSize = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.042f, 16f, 19f)) : 20;
+            if (_loginButton != null)
+            {
+                _loginButton.style.minHeight = loginButtonHeight;
+                _loginButton.style.fontSize = loginButtonFont;
+                _loginButton.style.marginTop = mobile ? Mathf.RoundToInt(4f * mobileScale) : 10;
+            }
+            if (_serverSwitchButton != null)
+            {
+                _serverSwitchButton.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+                _serverSwitchButton.style.minHeight = tablet ? 32 : 34;
+            }
+
+            _lobbyPanel.style.maxWidth = mobile ? 720 : tablet ? 840 : 860;
+            _lobbyPanel.style.minHeight = mobile ? 420 : 430;
+            _lobbyPanel.style.paddingLeft = mobile ? 14 : 20;
+            _lobbyPanel.style.paddingRight = mobile ? 14 : 20;
+            _characterList.style.minWidth = mobile ? 240 : 280;
+            _characterList.style.marginRight = mobile ? 0 : 18;
+            if (_lobbyContent != null)
+                _lobbyContent.style.flexDirection = mobile ? FlexDirection.Column : FlexDirection.Row;
+            if (_selectedPreview != null)
+                _selectedPreview.style.maxWidth = mobile ? 720 : 360;
+            if (_createPanel != null)
+            {
+                _createPanel.style.paddingLeft = mobile ? 12 : 16;
+                _createPanel.style.paddingRight = mobile ? 12 : 16;
+            }
+
+            _worldHud.style.minWidth = mobile ? 280 : 300;
+            _worldHud.style.maxWidth = mobile ? Mathf.Clamp(width * 0.36f, 280f, 320f) : tablet ? 520 : 440;
+            _worldHud.style.paddingLeft = mobile ? 10 : 14;
+            _worldHud.style.paddingRight = mobile ? 10 : 14;
+            _worldHud.style.paddingTop = mobile ? 8 : 12;
+            _worldHud.style.paddingBottom = mobile ? 8 : 12;
+            if (_sessionMenuPanel != null)
+            {
+                _sessionMenuPanel.style.left = mobile ? Mathf.RoundToInt(width * 0.25f) : tablet ? 42 : 84;
+                _sessionMenuPanel.style.right = mobile ? 18 : tablet ? 42 : 84;
+                _sessionMenuPanel.style.top = mobile ? 52 : tablet ? 136 : 158;
+                _sessionMenuPanel.style.maxHeight = mobile ? Mathf.Max(240f, height - 76f) : tablet ? 470 : 540;
+                _sessionMenuPanel.style.paddingLeft = mobile ? 12 : 18;
+                _sessionMenuPanel.style.paddingRight = mobile ? 12 : 18;
+                _sessionMenuPanel.style.paddingTop = mobile ? 10 : 16;
+                _sessionMenuPanel.style.paddingBottom = mobile ? 10 : 18;
+            }
+            if (_settingsPanel != null)
+            {
+                _settingsPanel.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+            }
+            if (_layoutProfileLabel != null)
+            {
+                _layoutProfileLabel.text = mobile
+                    ? "Bố cục: mobile / HUD gọn, ưu tiên mục tiêu và nút chính."
+                    : tablet
+                        ? "Bố cục: tablet / HUD cân bằng, giữ chỉ dẫn chính."
+                        : "Bố cục: desktop / HUD đầy đủ.";
+            }
+
+            if (_focusModeToggle != null && mobile && !_focusModeToggle.value)
+                _focusModeToggle.value = true;
+            ApplyLocalSettings();
         }
 
         private void TriggerLocalCombat()
@@ -1083,6 +1599,46 @@ namespace LinhGioi.UI
         private void SetDialogueVisible(bool visible)
         {
             if (_dialoguePanel != null) _dialoguePanel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_localCombatPanel != null) _localCombatPanel.style.display = visible ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
+        internal async Task CaptureEvidenceLoginAsync()
+        {
+            await LoginAsync();
+        }
+
+        internal async Task CaptureEvidenceCreateCharacterIfNeededAsync(string characterName)
+        {
+            if (_selectedCharacter != null) return;
+            _characterName.value = Required(characterName, "EvidenceHero");
+            _classId.value = DefaultClassId;
+            await CreateCharacterAsync();
+        }
+
+        internal async Task CaptureEvidenceEnterWorldAsync()
+        {
+            await EnterWorldAsync();
+        }
+
+        internal void CaptureEvidenceOpenDialogue()
+        {
+            if (_world == null) return;
+            _world.TriggerInteractionForSmoke();
+            RefreshWorldLoopLabels();
+        }
+
+        internal void CaptureEvidenceTargetDummyState()
+        {
+            if (_world == null) return;
+            _world.SetSmokePositionNearTargetDummy();
+            _world.TriggerLocalCombatForSmoke();
+            RefreshWorldLoopLabels();
+            RefreshCombatAssetUiState();
+        }
+
+        internal void CaptureEvidenceOpenSessionMenu()
+        {
+            SetSessionMenuVisible(true);
         }
 
         private static Button NewButton(string label, Action action)
@@ -1111,7 +1667,11 @@ namespace LinhGioi.UI
         private static Toggle NewLocalSettingToggle(string label, bool value, Action changed)
         {
             var toggle = new Toggle(label) { value = value };
-            toggle.style.marginTop = 6;
+            toggle.style.minHeight = 28;
+            toggle.style.marginTop = 4;
+            toggle.style.marginBottom = 4;
+            toggle.style.paddingLeft = 4;
+            toggle.style.paddingRight = 4;
             toggle.style.color = RuntimeArtCatalog.Text;
             toggle.RegisterValueChangedCallback(_ => changed());
             return toggle;
@@ -1119,11 +1679,44 @@ namespace LinhGioi.UI
 
         private static Button NewListButton(string name, string classId, Action action)
         {
-            var button = NewSecondaryButton(name + "\n" + classId, action);
-            button.style.minWidth = 210;
+            var button = NewSecondaryButton(name + "\nKiếm tu sơ nhập", action);
+            button.style.minWidth = 230;
+            button.style.minHeight = 58;
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
+            button.style.paddingLeft = 14;
+            button.style.backgroundImage = new StyleBackground();
+            button.style.backgroundColor = new Color(0.03f, 0.15f, 0.25f, 0.88f);
+            button.style.borderTopColor = RuntimeArtCatalog.Spirit;
+            button.style.borderLeftColor = RuntimeArtCatalog.Gold;
+            button.style.borderRightColor = RuntimeArtCatalog.Spirit;
+            button.style.borderBottomColor = RuntimeArtCatalog.Gold;
             button.tooltip = "Chọn nhân vật tu luyện";
             return button;
+        }
+
+        private static VisualElement NewRuntimeIcon(Texture2D texture, int size, string tooltip)
+        {
+            var icon = new VisualElement();
+            icon.style.width = size;
+            icon.style.height = size;
+            icon.style.minWidth = size;
+            icon.style.minHeight = size;
+            icon.style.backgroundColor = new Color(0.02f, 0.08f, 0.16f, 0.82f);
+            icon.style.borderTopColor = RuntimeArtCatalog.Gold;
+            icon.style.borderTopWidth = 1;
+            icon.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            icon.style.borderLeftWidth = 1;
+            icon.style.borderRightColor = RuntimeArtCatalog.Spirit;
+            icon.style.borderRightWidth = 1;
+            icon.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            icon.style.borderBottomWidth = 1;
+            icon.style.borderTopLeftRadius = 8;
+            icon.style.borderTopRightRadius = 8;
+            icon.style.borderBottomLeftRadius = 8;
+            icon.style.borderBottomRightRadius = 8;
+            if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
+            icon.tooltip = tooltip;
+            return icon;
         }
 
         private static VisualElement NewButtonRow(params Button[] buttons)
@@ -1140,9 +1733,9 @@ namespace LinhGioi.UI
         {
             var icon = new VisualElement();
             icon.name = "LGO M6 Combat Cooldown Runtime Icon v0.46";
-            icon.style.width = 44;
-            icon.style.height = 44;
-            icon.style.marginBottom = 8;
+            icon.style.width = 52;
+            icon.style.height = 52;
+            icon.style.marginBottom = 0;
             icon.style.backgroundColor = RuntimeArtCatalog.Surface;
             icon.style.borderTopWidth = 2;
             icon.style.borderLeftWidth = 2;
@@ -1156,17 +1749,30 @@ namespace LinhGioi.UI
 
         private static void ApplyCombatPanelSkin(VisualElement panel)
         {
-            var texture = CombatPlaceholderAssets.CombatPanelTexture;
-            if (texture == null) return;
-            panel.style.backgroundImage = new StyleBackground(texture);
+            panel.style.backgroundImage = new StyleBackground();
+            panel.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.86f);
+            panel.style.borderTopColor = RuntimeArtCatalog.Spirit;
+            panel.style.borderTopWidth = 1;
+            panel.style.borderLeftColor = RuntimeArtCatalog.Gold;
+            panel.style.borderLeftWidth = 2;
+            panel.style.borderRightColor = RuntimeArtCatalog.Spirit;
+            panel.style.borderRightWidth = 1;
+            panel.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            panel.style.borderBottomWidth = 1;
         }
 
         private static void ApplyV2PanelSkin(VisualElement panel)
         {
-            var texture = LgoVisualAssetRegistryV3BA.PanelMainTexture ?? LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture ?? LgoVisualAssetRegistryV2.PanelMainLargeTexture;
-            if (texture == null) return;
-            panel.style.backgroundImage = new StyleBackground(texture);
-            panel.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
+            panel.style.backgroundImage = new StyleBackground();
+            panel.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.90f);
+            panel.style.borderTopColor = RuntimeArtCatalog.Gold;
+            panel.style.borderTopWidth = 1;
+            panel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            panel.style.borderLeftWidth = 2;
+            panel.style.borderRightColor = RuntimeArtCatalog.Spirit;
+            panel.style.borderRightWidth = 1;
+            panel.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            panel.style.borderBottomWidth = 1;
         }
 
         private void ApplyLoginButtonState(Texture2D texture)

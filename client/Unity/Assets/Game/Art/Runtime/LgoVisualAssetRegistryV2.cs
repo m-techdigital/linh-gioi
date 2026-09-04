@@ -31,9 +31,17 @@ namespace LinhGioi.Art
         public static Sprite DummySelected => LoadSprite("World/dummy/dummy_selected_512x768");
         public static Sprite DummyHit => LoadSprite("World/dummy/dummy_hit_512x768");
         public static Sprite ShadowSlimeAlt => LoadSprite("World/dummy/shadow_slime_alt_512x512");
+        public static Sprite PlayerMaleCultivator => LoadSprite("World/characters/player_male_cultivator_512x768");
+        public static Sprite PlayerFemaleCultivator => LoadSprite("World/characters/player_female_cultivator_512x768");
         public static Sprite GateKeeperNpc => LoadSprite("World/npc/gate_keeper_npc_512x768");
         public static Sprite SpiritGate => LoadSprite("World/gate/spirit_gate_1024x1024");
         public static Sprite TrainingStone => LoadSprite("World/training-stone/training_stone_512x1024");
+        public static Sprite BannerCultivation => LoadSprite("World/props/banner_cultivation_256x512");
+        public static Sprite BridgeWood => LoadSprite("World/props/bridge_wood_1024x512");
+        public static Sprite LanternProp => LoadSprite("World/props/lantern_prop_256x512");
+        public static Sprite RockMoss => LoadSprite("World/props/rock_moss_512x512");
+        public static Sprite TreeCherry => LoadSprite("World/props/tree_cherry_512x512");
+        public static Sprite TreePine => LoadSprite("World/props/tree_pine_512x512");
 
         public static Sprite TargetSelectedBlue => LoadSprite("Combat/target-warning/target_selected_blue_256x256");
         public static Sprite WarningTelegraphRed => LoadSprite("Combat/target-warning/warning_telegraph_red_512x512");

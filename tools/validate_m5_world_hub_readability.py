@@ -34,6 +34,12 @@ def require(path: str, *markers: str) -> None:
             errors.append(f'{path} missing marker: {marker}')
 
 
+def require_any(path: str, label: str, *markers: str) -> None:
+    content = read(path)
+    if not any(marker in content for marker in markers):
+        errors.append(f'{path} missing {label}: expected one of {", ".join(markers)}')
+
+
 def require_file(path: str, executable: bool = False) -> None:
     target = ROOT / path
     if not target.is_file():
@@ -56,12 +62,23 @@ def main() -> int:
         'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
         'LGO Spirit Gate Landmark South',
         'LGO Safe Training Circle Center',
-        'LGO Gate Keeper Gold Readability Pillar',
         'LGO Training Stone Cyan Beacon',
         'LGO Shadow Slime Warning Plinth',
         'ObjectiveDirectionHint',
         'WorldLandmarkSummary',
         'Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông',
+    )
+    require_any(
+        'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
+        'Gate Keeper readability marker',
+        'LGO Gate Keeper Gold Readability Pillar',
+        'LGO Gate Keeper Ground Halo',
+    )
+    require_any(
+        'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
+        'world-space landmark labels',
+        'CreateWorldLabel',
+        'LGO Gate Keeper World Label',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',

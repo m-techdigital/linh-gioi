@@ -82,7 +82,7 @@ def main() -> int:
         'Sân Luyện An Toàn',
         'Lưu vị trí',
         'Về điện nhân vật',
-        'API:',
+        'Kết nối nội bộ',
         'Thoát',
         'KeyCode.Escape',
         'Application.Quit',

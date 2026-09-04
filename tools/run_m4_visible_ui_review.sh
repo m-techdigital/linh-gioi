@@ -108,6 +108,17 @@ stop_running() {
     fi
     rm -f "$API_PID_FILE"
   fi
+  local listen_pids
+  set +e
+  listen_pids="$(lsof -tiTCP:"$PORT" -sTCP:LISTEN 2>/dev/null)"
+  set -e
+  while IFS= read -r pid; do
+    if [[ "$pid" =~ ^[0-9]+$ ]] && kill -0 "$pid" 2>/dev/null; then
+      set +e
+      kill "$pid" 2>/dev/null
+      set -e
+    fi
+  done <<< "$listen_pids"
 }
 
 if [[ "$MODE" == "--stop" ]]; then
@@ -193,7 +204,7 @@ sleep 5
 attempt_screenshot
 cat <<'CHECKLIST'
 M4_VISIBLE_UI_MANUAL_CHECKLIST
-1. Login screen: title, API status, dev key field, Open Gate button, error/loading text are readable.
+1. Login screen: compact logo, server selector, Vào Thế Giới button, and account status are readable.
 2. Character Hall: empty/list/create/select state, selected preview, and Enter World action are visible.
 3. World HUD: top status strip, position/debug panel, Save Position, Back to Lobby, movement hint are visible.
 4. Exit: Quit button and Escape key can close the player safely.

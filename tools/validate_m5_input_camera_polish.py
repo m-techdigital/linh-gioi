@@ -51,7 +51,9 @@ def main() -> int:
         'RefreshCameraFrame',
         'Vector3.Lerp',
         'Mathf.Clamp01(Time.deltaTime * 7f)',
-        'Quaternion.Euler(38f, 0f, 0f)',
+        'Quaternion.Euler(43f, 0f, 0f)',
+        'camera.orthographic = true',
+        'camera.orthographicSize = 7.0f',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',

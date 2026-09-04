@@ -1,0 +1,50 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "LGO: Continue Dev Loop",
+      "type": "shell",
+      "command": "./tools/lgo_continue_dev_loop.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "LGO: Visual Runtime Review",
+      "type": "shell",
+      "command": "./tools/lgo_visual_runtime_review.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "LGO: Visual Runtime Profiles",
+      "type": "shell",
+      "command": "./tools/lgo_visual_runtime_review_profiles.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "LGO: AV Runtime Review if available",
+      "type": "shell",
+      "command": "if [ -x ./tools/lgo_av_runtime_review.sh ]; then ./tools/lgo_av_runtime_review.sh; else echo VIDEO_CAPTURE_BLOCKED_ENV; exit 0; fi",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "LGO: Codex Autopilot",
+      "type": "shell",
+      "command": "./tools/lgo_codex_autopilot.sh",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

@@ -27,6 +27,12 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (VisualRuntimeEvidenceRunner.ShouldRun())
+                {
+                    VisualRuntimeEvidenceRunner.Attach(gameObject);
+                    return;
+                }
+
                 if (M5VisualEvidenceRunner.ShouldRun())
                 {
                     M5VisualEvidenceRunner.Attach(gameObject);

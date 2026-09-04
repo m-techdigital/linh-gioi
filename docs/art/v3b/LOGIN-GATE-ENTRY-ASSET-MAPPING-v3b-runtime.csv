@@ -1,0 +1,6 @@
+role,unity_path,usage,boundary
+login_background,client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B/Login/login_background_spirit_gate_1920x1080_v3b_candidate.jpg,fullscreen login/gate entry background,V3B runtime candidate not production final
+login_logo,client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B/Login/logo_linh_gioi_online_v3b_light_runtime_candidate.png,transparent Linh Gioi Online logo with baked intended title text and reduced blue backdrop mass,V3B runtime candidate not production final
+login_panel,client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B/Login/panel_main_dark_gold_v3b_candidate.png,login server and CTA frame,V3B runtime candidate not production final
+enter_world_button,client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B/Login/button_enter_world_gold_v3b_candidate.png,primary Vao The Gioi CTA frame with Vietnamese text rendered by UI,V3B runtime candidate not production final
+gate_keeper_npc_login,client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B/Login/gate_keeper_npc_login_v3b_candidate.png,login guide character,V3B runtime candidate not production final

@@ -8,11 +8,12 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv"
-FINAL_LOGIN_DIR = ROOT / "client/Unity/Assets/Game/Art/Runtime/FinalLogin/Resources/LGOFinalLogin"
+JSON_MANIFEST = ROOT / "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.json"
 ERRORS: list[str] = []
 
 ROLE_LIMITS = {
     "login_background": 512 * 1024,
+    "login_logo": 300 * 1024,
     "login_panel": 200 * 1024,
     "enter_world_button": 120 * 1024,
     "gate_keeper_npc_login": 220 * 1024,
@@ -23,14 +24,18 @@ ROLE_LIMITS = {
     "combat_cooldown_ready": 45 * 1024,
     "combat_cooldown_active": 45 * 1024,
     "combat_target_dummy_idle": 180 * 1024,
+    "combat_target_dummy_selected": 150 * 1024,
+    "combat_target_dummy_hit": 150 * 1024,
+    "combat_target_dummy_recover": 150 * 1024,
+    "world_player_male_cultivator": 180 * 1024,
+    "world_tree_cherry": 90 * 1024,
+    "world_tree_pine": 90 * 1024,
+    "world_lantern_prop": 60 * 1024,
+    "world_rock_moss": 55 * 1024,
+    "world_bridge_wood": 90 * 1024,
+    "world_banner_cultivation": 55 * 1024,
+    "world_shadow_slime": 45 * 1024,
 }
-
-FINAL_LOGIN_LIMITS = {
-    "login_background_spirit_gate_final_1920x1080.jpg": 520 * 1024,
-    "logo_linh_gioi_online_final_420.png": 220 * 1024,
-    "button_enter_world_final_384.png": 130 * 1024,
-}
-
 
 def read(rel: str) -> str:
     path = ROOT / rel
@@ -53,6 +58,7 @@ def check_manifest() -> None:
         return
     with MANIFEST.open("r", encoding="utf-8", newline="") as handle:
         rows = list(csv.DictReader(handle))
+    check_manifest_json_consistency(rows)
     for role, limit in ROLE_LIMITS.items():
         matches = [row for row in rows if row.get("role") == role]
         if not matches:
@@ -72,31 +78,47 @@ def check_manifest() -> None:
             ERRORS.append(f"transparent runtime sprite should remain PNG: {row['unity_path']}")
 
 
+def check_manifest_json_consistency(csv_rows: list[dict[str, str]]) -> None:
+    if not JSON_MANIFEST.is_file():
+        ERRORS.append("missing V3B runtime JSON manifest")
+        return
+    try:
+        import json
+
+        json_rows = json.loads(JSON_MANIFEST.read_text(encoding="utf-8"))
+    except Exception as exception:  # pragma: no cover - validation diagnostics only
+        ERRORS.append(f"invalid V3B runtime JSON manifest: {exception}")
+        return
+    csv_by_role = {row.get("role", ""): row for row in csv_rows}
+    json_by_role = {row.get("role", ""): row for row in json_rows if isinstance(row, dict)}
+    for role in ROLE_LIMITS:
+        if role not in json_by_role:
+            ERRORS.append(f"JSON manifest missing role: {role}")
+            continue
+        csv_row = csv_by_role.get(role)
+        json_row = json_by_role[role]
+        if csv_row and csv_row.get("unity_path") != json_row.get("unity_path"):
+            ERRORS.append(f"manifest path mismatch for {role}: CSV and JSON disagree")
+        if csv_row and csv_row.get("unity_sha256") != json_row.get("unity_sha256"):
+            ERRORS.append(f"manifest sha mismatch for {role}: CSV and JSON disagree")
+
+
 def check_no_large_root_full_source_zips() -> None:
     for path in ROOT.glob("*full-source*.zip"):
         if path.is_file() and path.stat().st_size > 1024 * 1024:
             ERRORS.append(f"large full-source ZIP should be outside repo root: {path.name}")
 
 
-def check_final_login_assets() -> None:
-    if not FINAL_LOGIN_DIR.is_dir():
-        ERRORS.append("missing FinalLogin runtime directory")
-        return
-    for path in FINAL_LOGIN_DIR.iterdir():
-        if not path.is_file() or path.suffix == ".meta":
-            continue
-        if path.name not in FINAL_LOGIN_LIMITS:
-            ERRORS.append(f"unexpected FinalLogin runtime asset: {path.relative_to(ROOT)}")
-            continue
-        limit = FINAL_LOGIN_LIMITS[path.name]
-        size = path.stat().st_size
-        if size > limit:
-            ERRORS.append(f"{path.relative_to(ROOT)} exceeds FinalLogin budget: {size} > {limit}")
-        if not path.with_name(path.name + ".meta").is_file():
-            ERRORS.append(f"missing Unity meta: {path.relative_to(ROOT)}.meta")
-    for name in FINAL_LOGIN_LIMITS:
-        if not (FINAL_LOGIN_DIR / name).is_file():
-            ERRORS.append(f"missing FinalLogin runtime asset: {(FINAL_LOGIN_DIR / name).relative_to(ROOT)}")
+def check_removed_login_candidates() -> None:
+    forbidden_paths = [
+        ROOT / "client/Unity/Assets/Game/Art/Runtime/V3BA",
+        ROOT / "client/Unity/Assets/Game/Art/Runtime/FinalLogin",
+        ROOT / "client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV3BA.cs",
+        ROOT / "client/Unity/Assets/Game/Art/Runtime/LgoFinalLoginAssetRegistry.cs",
+    ]
+    for path in forbidden_paths:
+        if path.exists():
+            ERRORS.append(f"removed login candidate still present in Unity runtime assets: {path.relative_to(ROOT)}")
 
 
 def check_frozen() -> None:
@@ -130,7 +152,7 @@ def main() -> int:
     )
     require("tools/lgo_playable_closure_check.sh", "validate_lgo_runtime_asset_weight.py")
     check_manifest()
-    check_final_login_assets()
+    check_removed_login_candidates()
     check_no_large_root_full_source_zips()
     check_frozen()
     if ERRORS:

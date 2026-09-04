@@ -13,6 +13,7 @@ Allowed:
 - keep transparent sprites as PNG;
 - move large handoff full-source ZIPs outside repo root;
 - add validation for runtime asset file size budgets.
+- define device delivery profiles for mobile/tablet/PC before large art expansion.
 
 Not allowed:
 

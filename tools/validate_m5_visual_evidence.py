@@ -63,6 +63,32 @@ def git_lines(*args: str) -> list[str]:
 
 def main() -> int:
     require(
+        'client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs',
+        '--lgo-visual-runtime-review',
+        'M4PlayableClientController.Attach',
+        'CaptureEvidenceLoginAsync',
+        'CaptureEvidenceCreateCharacterIfNeededAsync',
+        'CaptureEvidenceEnterWorldAsync',
+        'CaptureEvidenceTargetDummyState',
+        'CaptureEvidenceOpenDialogue',
+        'CaptureEvidenceOpenSessionMenu',
+        'ReadPixels',
+        'RuntimePngWriter.WriteRgbTexture',
+        'login.png',
+        'character-lobby.png',
+        'character-select.png',
+        'enter-world.png',
+        'world-hub.png',
+        'target-dummy-state.png',
+        'npc-dialogue.png',
+        'session-menu.png',
+        'visual-runtime-evidence-manifest.json',
+        'visual-runtime-evidence-review.md',
+        'VISUAL_RUNTIME_PASS',
+        '1920',
+        '1080',
+    )
+    require(
         'client/Unity/Assets/Game/UI/Runtime/M5VisualEvidenceRunner.cs',
         '--lgo-m5-visual-evidence-review',
         'CaptureFrameToPng',
@@ -93,6 +119,21 @@ def main() -> int:
         ('Vào Thế Giới', 'Vào sân luyện'),
     )
     require('client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs', 'M5VisualEvidenceRunner.ShouldRun()')
+    require('client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs', 'VisualRuntimeEvidenceRunner.ShouldRun()')
+    require_file('tools/lgo_visual_runtime_review.sh', executable=True)
+    require(
+        'tools/lgo_visual_runtime_review.sh',
+        'LGO_VISUAL_RUNTIME_REVIEW_PHASE',
+        '--lgo-visual-runtime-review',
+        '--lgo-visual-runtime-evidence-dir',
+        'build/visual-evidence/latest',
+        '"-screen-width", screen_width',
+        '"-screen-height", screen_height',
+        'SCREEN_WIDTH="${LGO_VISUAL_RUNTIME_WIDTH:-1920}"',
+        'SCREEN_HEIGHT="${LGO_VISUAL_RUNTIME_HEIGHT:-1080}"',
+        'LGO_VISUAL_RUNTIME_EVIDENCE_READY',
+        'LGO_VISUAL_RUNTIME_PASS_NOT_CLAIMED',
+    )
     require_file('tools/run_m5_visual_evidence_review.sh', executable=True)
     require(
         'tools/run_m5_visual_evidence_review.sh',
@@ -106,7 +147,7 @@ def main() -> int:
     )
     require('docs/tasks/M5-VISUAL-EVIDENCE-AND-UX-ACCEPTANCE-v0.16.0.md', 'M5_VISUAL_EVIDENCE_UX_REVIEW_READY_RUNTIME_CLOSED_LOCAL', 'visual evidence', 'human visual acceptance')
     require('docs/execution/LGO-VISUAL-EVIDENCE-REVIEW-COMMAND-v0.16.0.md', './tools/run_m5_visual_evidence_review.sh --rebuild', 'build/visual-evidence')
-    require('tools/lgo_playable_closure_check.sh', '--visual-evidence', 'validate_m5_visual_evidence.py', 'run_m5_visual_evidence_review.sh', 'LGO_PLAYABLE_VISUAL_EVIDENCE_READY')
+    require('tools/lgo_playable_closure_check.sh', '--visual-evidence', 'validate_m5_visual_evidence.py', 'lgo_visual_runtime_review.sh', 'LGO_PLAYABLE_VISUAL_RUNTIME_EVIDENCE_READY')
     require('README.md', 'M5_VISUAL_EVIDENCE_UX_REVIEW_READY')
     require('START-HERE.md', 'M5 Visual Evidence UX Acceptance')
     require('VERSIONING.md', 'source_package_version = m6-combat-foundation-v0.55.0', 'client_version = 0.6.0-m6-combat-foundation', 'm6_governance_baseline = M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0', 'M5_VISUAL_EVIDENCE_UX_REVIEW_READY')

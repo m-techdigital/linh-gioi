@@ -4,12 +4,12 @@ Marker: `LGO_LOGIN_GATE_ENTRY_VISUAL_CLOSED_v1`
 
 ## Scope
 
-Upgrade the playable login screen to a polished gate-entry presentation using separated runtime-candidate assets from V3B-A.
+Upgrade the playable login screen to a polished gate-entry presentation using V3B runtime-candidate assets only.
 
 ## Allowed
 
-- `client/Unity/Assets/Game/Art/Runtime/V3BA/**`
-- `client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV3BA.cs`
+- `client/Unity/Assets/Game/Art/Runtime/V3B/**`
+- `client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV3B.cs`
 - `client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs`
 - docs and validators directly related to login visual integration
 
@@ -26,6 +26,7 @@ Upgrade the playable login screen to a polished gate-entry presentation using se
 ## Acceptance
 
 - Login opens as a final-looking gate-entry shell.
-- Runtime-ready assets are mapped and loaded through a registry.
+- Runtime-ready V3B assets are mapped and loaded through a registry.
+- V3BA and FinalLogin runtime candidate folders are not used by the login runtime.
 - Reference-only images are not imported.
 - Validation and runtime smoke pass locally when Unity is available.

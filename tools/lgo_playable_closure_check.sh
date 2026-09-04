@@ -265,6 +265,9 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_asset_weight.py ]]; then
     run_phase runtime_asset_weight python3.12 tools/validate_lgo_runtime_asset_weight.py
   fi
+  if [[ -f tools/validate_lgo_device_profile_ui_budgets.py ]]; then
+    run_phase device_profile_ui_budgets python3.12 tools/validate_lgo_device_profile_ui_budgets.py
+  fi
   if [[ -f tools/validate_lgo_telemetry_schema_plan.py ]]; then
     run_phase telemetry_schema_plan python3.12 tools/validate_lgo_telemetry_schema_plan.py
   fi
@@ -340,6 +343,7 @@ source_only() {
     tools/validate_lgo_sprite_import_plan.py \
     tools/validate_lgo_animation_direction.py \
     tools/validate_lgo_runtime_asset_weight.py \
+    tools/validate_lgo_device_profile_ui_budgets.py \
     tools/validate_lgo_telemetry_schema_plan.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
@@ -637,12 +641,12 @@ visual_evidence() {
   check_repo_root
   log "LGO_PLAYABLE_CLOSURE_MODE visual-evidence"
   run_phase m5_visual_evidence_source python3.12 tools/validate_m5_visual_evidence.py
-  run_phase visual_evidence_review ./tools/run_m5_visual_evidence_review.sh --rebuild
-  if grep -q "VISUAL_EVIDENCE_SCREENSHOT_UNAVAILABLE" "$ROOT/build/visual-evidence/visual-evidence-summary.json"; then
-    log "LGO_PLAYABLE_VISUAL_EVIDENCE_SCREENSHOT_UNAVAILABLE"
+  run_phase visual_runtime_review ./tools/lgo_visual_runtime_review.sh
+  if grep -q "VISUAL_RUNTIME_SCREENSHOT_UNAVAILABLE" "$ROOT/build/visual-evidence/latest/visual-runtime-evidence-manifest.json"; then
+    log "LGO_PLAYABLE_VISUAL_RUNTIME_SCREENSHOT_UNAVAILABLE"
   fi
-  log "LGO_PLAYABLE_VISUAL_EVIDENCE_READY"
-  write_json "PASS" "visual evidence ready"
+  log "LGO_PLAYABLE_VISUAL_RUNTIME_EVIDENCE_READY"
+  write_json "PASS" "visual runtime evidence ready"
 }
 
 case "$MODE" in

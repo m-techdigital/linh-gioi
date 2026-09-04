@@ -1,6 +1,28 @@
 # Linh Giới Online — Project State
 
-Last updated: `2026-09-04`
+Last updated: `2026-09-05`
+
+## Continuous workflow status
+
+Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
+
+Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
+
+Current visual/runtime evidence harness command:
+
+```bash
+./tools/lgo_visual_runtime_review.sh
+```
+
+This harness must classify failures honestly as `FIX_REQUIRED`, `VISUAL_CAPTURE_TIMEOUT`, `VIDEO_CAPTURE_BLOCKED_ENV`, or `RUNTIME_BLOCKED_ENV`; it must not claim `VISUAL_RUNTIME_PASS` from build/capture alone.
+
+Current Codex autopilot supervisor command:
+
+```bash
+./tools/lgo_codex_autopilot.sh
+```
+
+Autopilot status is written to `build/codex-autopilot/status.json`. If a valid next task remains in `docs/execution/NEXT-ACTION.md`, the status must be `CONTINUE`, not `DONE`.
 
 ## Current milestone
 

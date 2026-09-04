@@ -24,11 +24,21 @@ REQUIRED_CODE_MARKERS = (
     "ButtonEnterWorldGoldTexture",
     "SpiritGate",
     "TrainingStone",
+    "TreeCherry",
+    "TreePine",
+    "LanternProp",
+    "RockMoss",
+    "BannerCultivation",
+    "BridgeWood",
+    "ShadowSlime",
     "WindSlashFrame01",
     "ImpactSpark",
     "CooldownReady",
     "CooldownActive",
     "TargetDummyIdle",
+    "TargetDummySelected",
+    "TargetDummyHit",
+    "TargetDummyRecover",
 )
 
 
@@ -79,7 +89,8 @@ def check_manifest() -> None:
                 fail(f"manifest row missing {key}: {row}")
         if row["classification"] != "LGO_ART_V3B_RUNTIME_CANDIDATE_NOT_PRODUCTION_FINAL":
             fail(f"wrong classification: {row}")
-        if int(row["width"]) < 1024 or int(row["height"]) < 256:
+        min_width = 512 if row["role"] == "login_logo" or row["role"].startswith("combat_target_dummy_") or row["role"].startswith("world_tree_") or row["role"] in ("world_lantern_prop", "world_rock_moss", "world_bridge_wood", "world_banner_cultivation", "world_shadow_slime") else 1024
+        if int(row["width"]) < min_width or int(row["height"]) < 256:
             fail(f"candidate below minimum visual target size: {row}")
         runtime_max = int(row["runtime_max_texture_size"])
         runtime_source_size = int(row["runtime_source_size"])
@@ -87,7 +98,7 @@ def check_manifest() -> None:
         runtime_height = int(row["runtime_height"])
         if runtime_max not in (128, 256, 512, 1024, 2048):
             fail(f"unsupported runtime texture budget: {row}")
-        if runtime_source_size not in (128, 192, 256, 384, 512, 768, 1024, 1920):
+        if runtime_source_size not in (128, 192, 224, 256, 288, 384, 480, 512, 768, 1024, 1920):
             fail(f"unsupported runtime source size: {row}")
         if max(runtime_width, runtime_height) > runtime_source_size:
             fail(f"Unity runtime source exceeds role size: {row}")

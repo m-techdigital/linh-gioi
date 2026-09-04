@@ -55,6 +55,12 @@ def require(path: str, *markers: str) -> None:
             errors.append(f'{path} missing marker: {marker}')
 
 
+def require_any(path: str, label: str, *markers: str) -> None:
+    content = read(path)
+    if not any(marker in content for marker in markers):
+        errors.append(f'{path} missing {label}: expected one of {", ".join(markers)}')
+
+
 def require_file(path: str, executable: bool = False) -> None:
     target = ROOT / path
     if not target.is_file():
@@ -108,12 +114,17 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Luyện mục tiêu cục bộ',
         'Nhãn nguyên mẫu cục bộ',
         'Đánh thử cục bộ',
         'Tấn công thử',
         'không phải chiến đấu thật',
         'TargetDummyVisualStateText',
+    )
+    require_any(
+        'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
+        'local combat practice panel title',
+        'Luyện mục tiêu cục bộ',
+        'Bia luyện cục bộ',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

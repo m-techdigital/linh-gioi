@@ -74,6 +74,7 @@ M6_ALLOWED_AFTER_CONTRACT_FILES = {
     'tools/validate_m6_server_authoritative_combat_pilot.py',
 }
 RUNTIME_ASSET_WEIGHT_HYGIENE_PREFIXES = (
+    'client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV2.cs',
     'client/Unity/Assets/Game/Art/Runtime/V3B/',
     'docs/reference-art/v3b/metadata/',
     'docs/art/v3/',
@@ -83,6 +84,42 @@ RUNTIME_ASSET_WEIGHT_HYGIENE_PREFIXES = (
     'tools/validate_lgo_art_v3b_candidates.py',
     'tools/validate_lgo_runtime_asset_weight.py',
 )
+LOGIN_V3B_RUNTIME_ONLY_FILES = {
+    'client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV3B.cs',
+    'client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B/Login/logo_linh_gioi_online_v3b_light_runtime_candidate.png',
+    'client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B/Login/logo_linh_gioi_online_v3b_light_runtime_candidate.png.meta',
+    'client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs',
+    'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimePngWriter.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimePngWriter.cs.meta',
+    'client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs',
+    'client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs.meta',
+    'docs/art/v3b/LOGIN-GATE-ENTRY-ASSET-PACK-v3b-runtime.md',
+    'docs/art/v3b/LOGIN-GATE-ENTRY-ASSET-MAPPING-v3b-runtime.csv',
+    'docs/execution/LGO-VISUAL-RUNTIME-EVIDENCE-HARNESS.md',
+    'docs/execution/checklists/LOGIN-GATE-ENTRY-VISUAL-CHECKLIST-v1.md',
+    'docs/tasks/LOGIN-GATE-ENTRY-VISUAL-v1.md',
+    'tools/lgo_visual_runtime_review.sh',
+    'tools/run_m4_visible_ui_review.sh',
+    'tools/validate_lgo_login_gate_entry_visual_v1.py',
+    'tools/validate_lgo_runtime_asset_weight.py',
+    'tools/validate_m4_visible_ui.py',
+    'tools/validate_m5_visual_evidence.py',
+}
+LOGIN_V3B_REMOVED_PREFIXES = (
+    'client/Unity/Assets/Game/Art/Runtime/V3BA',
+    'client/Unity/Assets/Game/Art/Runtime/FinalLogin',
+)
+LOGIN_V3B_REMOVED_FILES = {
+    'client/Unity/Assets/Game/Art/Runtime/V3BA.meta',
+    'client/Unity/Assets/Game/Art/Runtime/FinalLogin.meta',
+    'client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV3BA.cs',
+    'client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV3BA.cs.meta',
+    'client/Unity/Assets/Game/Art/Runtime/LgoFinalLoginAssetRegistry.cs',
+    'client/Unity/Assets/Game/Art/Runtime/LgoFinalLoginAssetRegistry.cs.meta',
+    'docs/art/v3b/LOGIN-GATE-ENTRY-ASSET-PACK-v3b-a.md',
+    'docs/art/v3b/LOGIN-GATE-ENTRY-ASSET-MAPPING-v3b-a.csv',
+}
 V040_CONTRACT_FILES = {
     'protocol/combat.proto',
     'gamedata/schemas/skill.schema.json',
@@ -145,6 +182,17 @@ def runtime_asset_weight_hygiene_is_active() -> bool:
         'LGO_RUNTIME_ASSET_WEIGHT_HYGIENE_READY'
         in read('docs/tasks/LGO-RUNTIME-ASSET-WEIGHT-HYGIENE-v1.0.md')
         and 'validate_lgo_runtime_asset_weight.py' in read('tools/lgo_playable_closure_check.sh')
+    )
+
+
+def login_v3b_runtime_only_is_active() -> bool:
+    return (
+        'LGO_LOGIN_GATE_ENTRY_V3B_RUNTIME_ONLY'
+        in read('docs/art/v3b/LOGIN-GATE-ENTRY-ASSET-PACK-v3b-runtime.md')
+        and 'LGO_VISUAL_RUNTIME_EVIDENCE_HARNESS_READY'
+        in read('docs/execution/LGO-VISUAL-RUNTIME-EVIDENCE-HARNESS.md')
+        and 'check_no_v3ba_runtime'
+        in read('tools/validate_lgo_login_gate_entry_visual_v1.py')
     )
 
 
@@ -247,7 +295,15 @@ def main() -> int:
             runtime_asset_weight_hygiene_is_active()
             and any(path == prefix or path.startswith(prefix) for prefix in RUNTIME_ASSET_WEIGHT_HYGIENE_PREFIXES)
         )
-        if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed:
+        login_v3b_allowed = (
+            login_v3b_runtime_only_is_active()
+            and (
+                path in LOGIN_V3B_RUNTIME_ONLY_FILES
+                or path in LOGIN_V3B_REMOVED_FILES
+                or any(path == prefix or path.startswith(prefix + '/') for prefix in LOGIN_V3B_REMOVED_PREFIXES)
+            )
+        )
+        if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed and not login_v3b_allowed:
             for prefix in FORBIDDEN_CODE_PREFIXES:
                 if path.startswith(prefix):
                     errors.append(f'v0.32 docs-only spec changed implementation path: {path}')

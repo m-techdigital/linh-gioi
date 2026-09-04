@@ -14,13 +14,25 @@ The playable game should stay light while the source grows. Reference art can be
 - Transparent UI, character, world, combat, and VFX assets remain PNG.
 - Small UI/icons/VFX should normally be a few KB to a few dozen KB.
 - Large backgrounds can be hundreds of KB, but should not casually become multi-MB runtime textures.
+- One-off hero UI assets, such as a login logo, may be larger than tiny icons but must still have a role budget and max texture size.
 - Full-source ZIP handoff archives should live outside repo root, with only SHA/provenance retained in source when needed.
+
+## Device Delivery Profiles
+
+| Profile | Target class | Default max texture | Notes |
+|---|---|---:|---|
+| mobile-light | phones / low-memory devices | 512 px for UI sprites, 1024 px for key backgrounds | Prefer JPEG/WebP-equivalent import compression for opaque backgrounds, tight PNG alpha for UI. |
+| tablet-standard | tablets / high-density mid screens | 768-1024 px for hero UI, 1536 px for key backgrounds | Keep readable at 2x scale without shipping original source art. |
+| pc-standard | desktop 1080p | 1024 px for hero UI, 1920 px for login/background | Use only when the asset is actually visible large on screen. |
+
+Current Unity source stores the shared runtime candidate copy. Future platform builds should derive profile-specific bundles or import overrides from the same provenance manifest instead of adding duplicate ad hoc folders.
 
 ## V3B Runtime Copy Budget
 
 | Role | Runtime copy target | Max file size |
 |---|---:|---:|
 | login background JPEG | 1920x1080 | 512 KB |
+| login logo PNG | 512 px major axis | 300 KB |
 | login panel PNG | 384-512 px major axis | 200 KB |
 | enter world button PNG | 384-512 px major axis | 120 KB |
 | login NPC PNG | 384-512 px major axis | 220 KB |
