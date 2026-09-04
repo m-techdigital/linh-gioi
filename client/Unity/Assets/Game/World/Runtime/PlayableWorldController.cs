@@ -21,7 +21,7 @@ namespace LinhGioi.World
             "Người Giữ Cổng: Đi theo mạch sáng lam về phía bắc; Đá Luyện sẽ đáp lại khi con tập trung.",
             "Người Giữ Cổng: Sân này an toàn. Bóng ở phía đông chỉ là dấu cảnh báo."
         };
-        private static readonly Vector3 GateKeeperPosition = new Vector3(-3f, 0.75f, 3f);
+        private static readonly Vector3 GateKeeperPosition = new Vector3(-2.25f, 0.75f, 2.85f);
         private static readonly Vector3 TrainingStonePosition = new Vector3(0f, 0.08f, 4.5f);
         private static readonly Vector3 ShadowSlimePosition = new Vector3(3f, 0.4f, 3f);
         private static readonly Vector3 ReadabilityDummyPosition = new Vector3(2.6f, 0.65f, 0.5f);

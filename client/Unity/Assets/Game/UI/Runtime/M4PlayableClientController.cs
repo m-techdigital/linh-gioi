@@ -1341,9 +1341,10 @@ namespace LinhGioi.UI
             var focusMode = _focusModeToggle != null && _focusModeToggle.value;
             var sessionVisible = _sessionMenuPanel != null && _sessionMenuPanel.style.display == DisplayStyle.Flex;
             var dialogueVisible = _dialoguePanel != null && _dialoguePanel.style.display == DisplayStyle.Flex;
-            var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible;
-            var gameplayPanelVisible = !sessionVisible && !dialogueVisible && !_isMobileProfile;
-            var compactWorld = _isMobileProfile || focusMode;
+            var compactViewport = _isMobileProfile || string.Equals(_lastLayoutProfile, "tablet", StringComparison.Ordinal);
+            var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible && !compactViewport;
+            var gameplayPanelVisible = !sessionVisible && !dialogueVisible && !compactViewport;
+            var compactWorld = compactViewport || focusMode;
             if (_layoutProfileLabel != null) _layoutProfileLabel.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldFooterActions != null) _worldFooterActions.style.display = sessionVisible || _isMobileProfile ? DisplayStyle.None : DisplayStyle.Flex;
             if (_position != null) _position.style.display = showPosition && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
@@ -1484,7 +1485,7 @@ namespace LinhGioi.UI
             }
 
             _worldHud.style.minWidth = mobile ? 280 : 300;
-            _worldHud.style.maxWidth = mobile ? Mathf.Clamp(width * 0.36f, 280f, 320f) : tablet ? 520 : 440;
+            _worldHud.style.maxWidth = mobile ? Mathf.Clamp(width * 0.36f, 280f, 320f) : tablet ? Mathf.Clamp(width * 0.34f, 420f, 480f) : 440;
             _worldHud.style.paddingLeft = mobile ? 10 : 14;
             _worldHud.style.paddingRight = mobile ? 10 : 14;
             _worldHud.style.paddingTop = mobile ? 8 : 12;
@@ -1509,7 +1510,7 @@ namespace LinhGioi.UI
                 _layoutProfileLabel.text = mobile
                     ? "Bố cục: mobile / HUD gọn, ưu tiên mục tiêu và nút chính."
                     : tablet
-                        ? "Bố cục: tablet / HUD cân bằng, giữ chỉ dẫn chính."
+                        ? "Bố cục: tablet / HUD gọn, ưu tiên chỉ dẫn và cảnh quan."
                         : "Bố cục: desktop / HUD đầy đủ.";
             }
 

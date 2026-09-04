@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-WORLD-RESPONSIVE-HUD-VIEWPORT-POLISH-v1.0`
+`LGO-WORLD-HUB-STAGING-DENSITY-PASS-v1.0`
 
-Review desktop/tablet/mobile world screenshots after the V3B world and NPC staging passes. Polish HUD density, safe margins, and non-overlap rules where the same UI must remain readable across PC, tablet, and mobile. Preserve gameplay semantics and current art boundaries.
+Continue improving the world hub visual composition without adding gameplay: tune spacing, landmark clustering, label legibility, and lightweight scene dressing so the hub reads less sparse while keeping asset weight low.
 
 ## Current blocker
 
@@ -30,7 +30,7 @@ Evidence:
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: run the profile visual evidence matrix and tune responsive world HUD margins if screenshots show crowding. The scene depth follow-up was pulled forward because runtime review showed the world floor was still too flat; it now uses a lightweight procedural training-ground texture instead of any large image import. The Gate Keeper dialogue checkpoint is now repaired and staged with an offset player position.
+Next allowed action: tune world hub staging density and label legibility if screenshots still read sparse. The scene depth follow-up was pulled forward because runtime review showed the world floor was still too flat; it now uses a lightweight procedural training-ground texture instead of any large image import. The Gate Keeper dialogue checkpoint is repaired and staged with an offset player position. Responsive profile evidence now keeps tablet/mobile HUD compact enough to leave more scene visible.
 
 ## Allowed paths
 
@@ -105,6 +105,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-SCENE-DEPTH-AND-GROUNDING-PASS-v1.0` and `LGO-WORLD-V3B-NPC-IN-WORLD-QUALITY-PASS-v1.0` are closed. Continue with `LGO-WORLD-RESPONSIVE-HUD-VIEWPORT-POLISH-v1.0`.
+`LGO-WORLD-SCENE-DEPTH-AND-GROUNDING-PASS-v1.0`, `LGO-WORLD-V3B-NPC-IN-WORLD-QUALITY-PASS-v1.0`, and `LGO-WORLD-RESPONSIVE-HUD-VIEWPORT-POLISH-v1.0` are closed. Continue with `LGO-WORLD-HUB-STAGING-DENSITY-PASS-v1.0`.
 
-The completed scene-depth pass added procedural ground texture cues without new runtime image weight or gameplay changes. The completed NPC pass fixed dialogue evidence staging and reduced player/NPC overlap.
+The completed scene-depth pass added procedural ground texture cues without new runtime image weight or gameplay changes. The completed NPC pass fixed dialogue evidence staging and reduced player/NPC overlap. The responsive HUD pass compacted tablet/mobile world HUD behavior and moved the Gate Keeper inward for narrower viewports.
