@@ -124,8 +124,14 @@ def main() -> int:
             'tools/validate_m6_combat_protocol_gamedata_contract.py',
             'server/realtime/src/main/java/com/linhgioi/server/realtime/combat/CombatValidationService.java',
             'server/realtime/src/test/java/com/linhgioi/server/realtime/combat/CombatValidationServiceTest.java',
+            'server/realtime/src/main/java/com/linhgioi/server/realtime/combat/CombatSmokeServer.java',
+            'client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs',
+            'client/Unity/Assets/Game/World/Runtime/M6UnityJavaCombatE2ERunner.cs',
+            'client/Unity/Assets/Game/World/Runtime/M6UnityJavaCombatE2ERunner.cs.meta',
             'tools/run_m6_server_authoritative_combat_pilot.sh',
             'tools/validate_m6_server_authoritative_combat_pilot.py',
+            'tools/run_m6_unity_java_combat_e2e.sh',
+            'tools/validate_m6_unity_java_combat_e2e.py',
         }:
             continue
         if path.startswith('docs/tasks/') or path.startswith('docs/design/') or path.startswith('docs/execution/prompts/') or path.startswith('HANDOFF') or path.startswith('M6') or path.startswith('LGO') or path.startswith('CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md'):

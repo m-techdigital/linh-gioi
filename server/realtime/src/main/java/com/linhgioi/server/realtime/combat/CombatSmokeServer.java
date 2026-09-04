@@ -4,6 +4,8 @@ import com.google.protobuf.Message;
 import com.linhgioi.protocol.v1.CombatAccepted;
 import com.linhgioi.protocol.v1.CombatIntent;
 import com.linhgioi.protocol.v1.CombatRejected;
+import com.linhgioi.protocol.v1.CombatResult;
+import com.linhgioi.protocol.v1.CombatStateSnapshot;
 import com.linhgioi.server.realtime.session.OnlineSession;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -16,6 +18,8 @@ public final class CombatSmokeServer {
     private static final byte RESPONSE_ACCEPTED = 1;
     private static final byte RESPONSE_REJECTED = 2;
     private static final byte RESPONSE_MALFORMED = 3;
+    private static final byte RESPONSE_RESULT = 4;
+    private static final byte RESPONSE_SNAPSHOT = 5;
 
     private CombatSmokeServer() {
     }
@@ -44,13 +48,21 @@ public final class CombatSmokeServer {
         byte[] payload = input.readNBytes(length);
         try {
             CombatIntent intent = CombatIntent.parseFrom(payload);
-            Message response = service.validate(intent, OnlineSession.DEFAULT_PLAYER_ENTITY_ID);
-            if (response instanceof CombatAccepted accepted) {
-                write(output, RESPONSE_ACCEPTED, accepted.toByteArray());
-            } else if (response instanceof CombatRejected rejected) {
-                write(output, RESPONSE_REJECTED, rejected.toByteArray());
-            } else {
-                write(output, RESPONSE_MALFORMED, new byte[0]);
+            for (Message response : service.validatePilot(intent, OnlineSession.DEFAULT_PLAYER_ENTITY_ID)) {
+                if (response instanceof CombatAccepted accepted) {
+                    write(output, RESPONSE_ACCEPTED, accepted.toByteArray());
+                } else if (response instanceof CombatRejected rejected) {
+                    write(output, RESPONSE_REJECTED, rejected.toByteArray());
+                } else if (response instanceof CombatResult result) {
+                    write(output, RESPONSE_RESULT, result.toByteArray());
+                } else if (response instanceof CombatStateSnapshot snapshot) {
+                    write(output, RESPONSE_SNAPSHOT, snapshot.toByteArray());
+                } else {
+                    write(output, RESPONSE_MALFORMED, new byte[0]);
+                }
+                if (intent.getLocalPreviewOnly()) {
+                    break;
+                }
             }
         } catch (Exception exception) {
             write(output, RESPONSE_MALFORMED, new byte[0]);

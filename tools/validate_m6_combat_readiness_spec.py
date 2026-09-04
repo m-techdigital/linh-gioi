@@ -43,6 +43,11 @@ M6_ALLOWED_AFTER_CONTRACT_FILES = {
     'tools/validate_m6_combat_input_feedback_stability.py',
     'server/realtime/src/main/java/com/linhgioi/server/realtime/combat/CombatValidationService.java',
     'server/realtime/src/test/java/com/linhgioi/server/realtime/combat/CombatValidationServiceTest.java',
+    'server/realtime/src/main/java/com/linhgioi/server/realtime/combat/CombatSmokeServer.java',
+    'client/Unity/Assets/Game/World/Runtime/M6UnityJavaCombatE2ERunner.cs',
+    'client/Unity/Assets/Game/World/Runtime/M6UnityJavaCombatE2ERunner.cs.meta',
+    'tools/run_m6_unity_java_combat_e2e.sh',
+    'tools/validate_m6_unity_java_combat_e2e.py',
     'tools/run_m6_server_authoritative_combat_pilot.sh',
     'tools/validate_m6_server_authoritative_combat_pilot.py',
 }

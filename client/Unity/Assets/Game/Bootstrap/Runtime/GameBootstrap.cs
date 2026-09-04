@@ -57,6 +57,12 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (M6UnityJavaCombatE2ERunner.ShouldRun())
+                {
+                    await M6UnityJavaCombatE2ERunner.RunFromCommandLineAsync(_shutdown.Token);
+                    return;
+                }
+
                 if (M5LightweightDialogueSmokeRunner.ShouldRun())
                 {
                     await M5LightweightDialogueSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);
