@@ -32,7 +32,7 @@ Open a contract-change request instead of implementation for:
 - protocol message changes;
 - GameData schema changes;
 - ADR changes;
-- production auth/session/DB implementation;
+- auth/session/DB work while the current owner instruction keeps those areas closed;
 - economy, rewards, inventory, guild, chat, market, party, or live ops;
 - production-final art acceptance;
 - any design-token mutation.

@@ -241,6 +241,12 @@ source_only() {
   if [[ -f tools/validate_lgo_ui_atlas_plan.py ]]; then
     run_phase ui_atlas_plan python3.12 tools/validate_lgo_ui_atlas_plan.py
   fi
+  if [[ -f tools/validate_lgo_content_taxonomy.py ]]; then
+    run_phase content_taxonomy python3.12 tools/validate_lgo_content_taxonomy.py
+  fi
+  if [[ -f tools/validate_lgo_zone_model.py ]]; then
+    run_phase zone_model python3.12 tools/validate_lgo_zone_model.py
+  fi
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
     tools/validate_m4_playable_source.py \
@@ -305,6 +311,8 @@ source_only() {
     tools/validate_lgo_release_checklist.py \
     tools/validate_lgo_asset_provenance.py \
     tools/validate_lgo_ui_atlas_plan.py \
+    tools/validate_lgo_content_taxonomy.py \
+    tools/validate_lgo_zone_model.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
@@ -564,6 +572,12 @@ package_ready() {
   fi
   if [[ -f tools/validate_lgo_ui_atlas_plan.py ]]; then
     run_phase ui_atlas_plan python3.12 tools/validate_lgo_ui_atlas_plan.py
+  fi
+  if [[ -f tools/validate_lgo_content_taxonomy.py ]]; then
+    run_phase content_taxonomy python3.12 tools/validate_lgo_content_taxonomy.py
+  fi
+  if [[ -f tools/validate_lgo_zone_model.py ]]; then
+    run_phase zone_model python3.12 tools/validate_lgo_zone_model.py
   fi
   run_phase package_hygiene python3.12 tools/validate_package_hygiene.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"

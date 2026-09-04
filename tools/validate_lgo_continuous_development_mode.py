@@ -81,6 +81,7 @@ def main() -> int:
         "Selection Priority",
         "Dirty Worktree Rule",
         "Internet Research Rule",
+        "auth/session/DB work",
     )
     require(
         "docs/art/RUNTIME-ASSET-SIZE-BUDGET.md",
