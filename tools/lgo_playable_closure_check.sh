@@ -186,6 +186,9 @@ source_only() {
   if [[ -f tools/validate_m6_local_combat_runtime_closure.py ]]; then
     run_phase m6_local_combat_runtime_closure python3.12 tools/validate_m6_local_combat_runtime_closure.py
   fi
+  if [[ -f tools/validate_m6_server_authoritative_combat_pilot.py ]]; then
+    run_phase m6_server_authoritative_combat_pilot python3.12 tools/validate_m6_server_authoritative_combat_pilot.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
     run_phase code_governance python3.12 tools/validate_code_governance.py
@@ -228,6 +231,7 @@ source_only() {
     tools/validate_m6_server_authoritative_combat_closure.py \
     tools/validate_m6_local_combat_prototype.py \
     tools/validate_m6_local_combat_runtime_closure.py \
+    tools/validate_m6_server_authoritative_combat_pilot.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
@@ -331,6 +335,9 @@ runtime_mode() {
   if [[ -f tools/validate_m6_local_combat_runtime_closure.py ]]; then
     log "M6_LOCAL_COMBAT_RUNTIME_CLOSURE_PASS_v0.50.0"
   fi
+  if [[ -f tools/run_m6_server_authoritative_combat_pilot.sh ]]; then
+    run_phase m6_server_authoritative_combat_pilot_runtime ./tools/run_m6_server_authoritative_combat_pilot.sh
+  fi
   log "LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS"
   write_json "PASS" "runtime gates pass"
 }
@@ -426,6 +433,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_m6_local_combat_runtime_closure.py ]]; then
     run_phase m6_local_combat_runtime_closure python3.12 tools/validate_m6_local_combat_runtime_closure.py
+  fi
+  if [[ -f tools/validate_m6_server_authoritative_combat_pilot.py ]]; then
+    run_phase m6_server_authoritative_combat_pilot python3.12 tools/validate_m6_server_authoritative_combat_pilot.py
   fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +

@@ -41,6 +41,10 @@ M6_ALLOWED_AFTER_CONTRACT_FILES = {
     'tools/validate_m6_combat_visual_reference_pack.py',
     'tools/validate_m6_combat_visual_readability.py',
     'tools/validate_m6_combat_input_feedback_stability.py',
+    'server/realtime/src/main/java/com/linhgioi/server/realtime/combat/CombatValidationService.java',
+    'server/realtime/src/test/java/com/linhgioi/server/realtime/combat/CombatValidationServiceTest.java',
+    'tools/run_m6_server_authoritative_combat_pilot.sh',
+    'tools/validate_m6_server_authoritative_combat_pilot.py',
 }
 V040_CONTRACT_FILES = {
     'protocol/combat.proto',
