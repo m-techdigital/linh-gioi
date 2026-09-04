@@ -1,0 +1,16 @@
+docs/reference-art/v0.20.0/README.md
+docs/reference-art/v0.20.0/lgo-art-direction-overview-v0200.png
+docs/reference-art/v0.20.0/lgo-playable-hero-pose-sheet-v0200.png
+docs/reference-art/v0.20.0/lgo-npc-direction-sheet-v0200.png
+docs/reference-art/v0.20.0/lgo-monster-direction-sheet-v0200.png
+docs/reference-art/v0.20.0/lgo-shadow-slime-monster-direction-v0200.png
+docs/reference-art/v0.20.0/lgo-ui-component-skin-sheet-v0200.png
+docs/reference-art/v0.20.0/lgo-window-popup-sheet-v0200.png
+docs/reference-art/v0.20.0/lgo-item-skill-vfx-sheet-v0200.png
+docs/reference-art/v0.20.0/lgo-environment-prop-sheet-v0200.png
+docs/art/LGO-ART-DIRECTION-PACK-v0.20.0.md
+tools/validate_art_direction_pack_v020.py
+HANDOFF-LG-ART-DIRECTION-PACK-v0.20.0.md
+LGO-ART-DIRECTION-PACK-v0.20.0-CHANGED-FILES.txt
+LGO-ART-DIRECTION-PACK-v0.20.0-DELETIONS.txt
+LGO-ART-DIRECTION-PACK-v0.20.0-ARTIFACTS.sha256
