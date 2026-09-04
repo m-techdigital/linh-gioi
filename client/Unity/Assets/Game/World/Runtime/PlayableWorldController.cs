@@ -14,7 +14,7 @@ namespace LinhGioi.World
         private static readonly string[] GateKeeperDialogueLines =
         {
             "Gate Keeper: Welcome to the Spirit Gate. Keep your breath steady.",
-            "Gate Keeper: Follow the cyan pulse north; the Training Stone will answer.",
+            "Gate Keeper: Follow the cyan pulse north; the Training Stone will answer when you focus.",
             "Gate Keeper: This yard is safe. The eastern shadow is only a warning marker."
         };
         private static readonly Vector3 GateKeeperPosition = new Vector3(-3f, 0.75f, 3f);
@@ -82,7 +82,7 @@ namespace LinhGioi.World
             SetGateKeeperState(PlaceholderNpcState.Idle);
             SetShadowSlimeState(PlaceholderSlimeState.Idle);
             SetVfxFeedback(PlaceholderVfxFeedbackState.PortalGatePulse, 1.35f);
-            _objectiveText = "Objective: talk to the Gate Keeper.";
+            _objectiveText = "Objective 1/2: talk to the Gate Keeper.";
             RefreshInteractionState();
             PositionChanged?.Invoke();
         }
@@ -329,8 +329,8 @@ namespace LinhGioi.World
             DialogueCompleted = true;
             _guidedStep = GuidedTrainingStep.FindTrainingStone;
             SetGateKeeperState(PlaceholderNpcState.Idle);
-            _objectiveText = "Objective: stabilize the Training Stone.";
-            _interactionText = "Gate Keeper: your path is open. Follow the cyan spirit pulse.";
+            _objectiveText = "Objective 2/2: stabilize the Training Stone.";
+            _interactionText = "Gate Keeper: your path is open. Follow the cyan spirit pulse north.";
             RefreshInteractionState();
             InteractionStateChanged?.Invoke();
             return true;
@@ -341,21 +341,21 @@ namespace LinhGioi.World
             DialogueActive = true;
             DialogueCompleted = false;
             _dialogueLineIndex = 0;
-            _objectiveText = "Objective: listen to the Gate Keeper.";
+            _objectiveText = "Objective 1/2: listen to the Gate Keeper.";
             _interactionText = DialogueLine;
         }
 
         private string NextMovementHint()
         {
-            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Move toward the gold Gate Keeper at the northwest side of the yard.";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Move toward the cyan Training Stone at the north center of the yard.";
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Step 1: move toward the gold Gate Keeper at the northwest side of the yard.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Step 2: follow the cyan pulse to the Training Stone at the north center.";
             return "Loop complete: save position or return to lobby.";
         }
 
         private string DescribeObjectiveDirection()
         {
-            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "face northwest for the gold Gate Keeper pillar.";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "face north for the cyan Training Stone beacon.";
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "face northwest for Step 1 / Gate Keeper guidance.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "face north for Step 2 / Training Stone focus.";
             return "training complete; use Save Position or return to Character Hall.";
         }
 

@@ -70,7 +70,8 @@ def main() -> int:
         'Safe yard / path to Gate Keeper',
         'Safe yard / path to Training Stone',
         'gold Gate Keeper',
-        'cyan Training Stone',
+        'cyan pulse',
+        'Training Stone',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

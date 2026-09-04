@@ -70,7 +70,7 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Objective: talk to the Gate Keeper.',
+        'Objective 1/2: talk to the Gate Keeper.',
         'Move near the Gate Keeper.',
         'RefreshWorldLoopLabels',
         'InteractionStateChanged',

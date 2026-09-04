@@ -1,0 +1,9 @@
+client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs
+client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+tools/validate_m5_training_objective_ux.py
+docs/tasks/M5-TRAINING-OBJECTIVE-UX-v0.25.0.md
+HANDOFF-LG-M5-TRAINING-OBJECTIVE-UX-v0.25.0.md
+M5-TRAINING-OBJECTIVE-UX-FINAL-REPORT-v0.25.0.md
+LGO-M5-TRAINING-OBJECTIVE-UX-v0.25.0-CHANGED-FILES.txt
+LGO-M5-TRAINING-OBJECTIVE-UX-v0.25.0-DELETIONS.txt
+LGO-M5-TRAINING-OBJECTIVE-UX-v0.25.0-ARTIFACTS.sha256

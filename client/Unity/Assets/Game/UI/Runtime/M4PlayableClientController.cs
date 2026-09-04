@@ -257,7 +257,7 @@ namespace LinhGioi.UI
             _worldArea = NewStatusLabel("Area: Lobby preview", RuntimeArtCatalog.Muted);
             _worldHud.Add(_worldArea);
 
-            _worldStep = NewStatusLabel("Guided loop: waiting for character entry.", RuntimeArtCatalog.Spirit);
+            _worldStep = NewStatusLabel("Guided loop: Step 1 Gate Keeper / Step 2 Training Stone.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_worldStep);
 
             _worldDirection = NewStatusLabel("Direction: enter the world to reveal yard landmarks.", RuntimeArtCatalog.Gold);
@@ -272,7 +272,7 @@ namespace LinhGioi.UI
             _skinSource = NewStatusLabel("UI skin source: v0.20 component sheet / window popup sheet.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_skinSource);
 
-            _worldObjective = NewStatusLabel("Objective: talk to the Gate Keeper.", RuntimeArtCatalog.Gold);
+            _worldObjective = NewStatusLabel("Objective 1/2: talk to the Gate Keeper.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldObjective);
 
             _interactionHint = NewStatusLabel("Move near the Gate Keeper.", RuntimeArtCatalog.Spirit);
@@ -382,8 +382,8 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
             UpdateSelectedPreview(loaded);
             ShowWorldMode();
-            SetBusy(false, "Training yard ready: follow the highlighted guidance.");
-            SetToast("Spirit Gate opened into the safe yard.", RuntimeArtCatalog.Spirit);
+            SetBusy(false, "Training yard ready: follow Step 1 then Step 2.");
+            SetToast("Spirit Gate opened. Step 1: talk to the Gate Keeper.", RuntimeArtCatalog.Spirit);
         }
 
         private async Task SavePositionAsync()
@@ -422,13 +422,13 @@ namespace LinhGioi.UI
                 _worldName.text = "No character selected";
                 _worldMeta.text = "Select a character in the lobby.";
                 if (_worldArea != null) _worldArea.text = "Area: Lobby preview";
-                if (_worldStep != null) _worldStep.text = "Guided loop: waiting for character entry.";
-                if (_worldDirection != null) _worldDirection.text = "Direction: enter the world to reveal yard landmarks.";
+                if (_worldStep != null) _worldStep.text = "Guided loop: Step 1 Gate Keeper / Step 2 Training Stone.";
+                if (_worldDirection != null) _worldDirection.text = "Direction: enter the world to reveal Step 1 guidance.";
                 if (_worldLandmarks != null) _worldLandmarks.text = "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
                 if (_worldPoseState != null) _worldPoseState.text = "Pose: player idle / Gate Keeper idle / Shadow Slime idle.";
                 if (_worldVfxState != null) _worldVfxState.text = "VFX: Quiet / portal, spirit pulse, wind slash preview, shadow bind warning are visual-only.";
                 if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
-                if (_worldObjective != null) _worldObjective.text = "Objective: talk to the Gate Keeper.";
+                if (_worldObjective != null) _worldObjective.text = "Objective 1/2: talk to the Gate Keeper.";
                 if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper.";
                 _position.text = "x=0.00 y=0.00 z=0.00 yaw=0.0";
                 return;
@@ -452,7 +452,7 @@ namespace LinhGioi.UI
             if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
-            SetToast(_world.InteractionText, RuntimeArtCatalog.Spirit);
+            SetToast(_world.InteractionAcknowledged ? "Training complete. Save position or return to Character Hall." : _world.InteractionText, RuntimeArtCatalog.Spirit);
             RefreshDialoguePanel();
         }
 
