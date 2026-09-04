@@ -16,10 +16,19 @@ namespace LinhGioi.World
         private static readonly Vector3 ShadowSlimePosition = new Vector3(3f, 0.4f, 3f);
         private CharacterResponse _character;
         private Transform _marker;
+        private Renderer _markerRenderer;
+        private Transform _posePulse;
+        private Transform _gateKeeperGuidePulse;
+        private Transform _trainingSpiritPulse;
+        private Transform _shadowWarningPulse;
         private InteractableState _nearestInteractable;
         private string _objectiveText = "Objective: enter the world and find the training stone.";
         private string _interactionText = "Move near the Gate Keeper or Training Stone.";
         private GuidedTrainingStep _guidedStep = GuidedTrainingStep.FindGateKeeper;
+        private PlaceholderPoseState _playerPoseState = PlaceholderPoseState.Idle;
+        private PlaceholderNpcState _gateKeeperState = PlaceholderNpcState.Idle;
+        private PlaceholderSlimeState _shadowSlimeState = PlaceholderSlimeState.Idle;
+        private float _posePulseUntil;
 
         public event Action PositionChanged;
         public event Action InteractionStateChanged;
@@ -32,16 +41,24 @@ namespace LinhGioi.World
         public string CurrentAreaLabel => DescribeCurrentArea();
         public string ObjectiveDirectionHint => DescribeObjectiveDirection();
         public string WorldLandmarkSummary => "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
+        public string PlayerPoseStateName => _playerPoseState.ToString();
+        public string GateKeeperPoseStateName => _gateKeeperState.ToString();
+        public string ShadowSlimeStateName => _shadowSlimeState.ToString();
         public bool InteractionAcknowledged { get; private set; }
 
         public void Enter(CharacterResponse character)
         {
             _character = character ?? throw new ArgumentNullException(nameof(character));
             if (_marker == null) _marker = CreateMarker().transform;
+            _markerRenderer = _marker.GetComponent<Renderer>();
+            EnsurePoseFeedbackMarkers();
             _marker.position = character.Position;
             _marker.rotation = Quaternion.Euler(0f, character.yawDegrees, 0f);
             InteractionAcknowledged = false;
             _guidedStep = GuidedTrainingStep.FindGateKeeper;
+            SetPlayerPose(PlaceholderPoseState.Idle);
+            SetGateKeeperState(PlaceholderNpcState.Idle);
+            SetShadowSlimeState(PlaceholderSlimeState.Idle);
             _objectiveText = "Objective: talk to the Gate Keeper.";
             RefreshInteractionState();
             PositionChanged?.Invoke();
@@ -101,12 +118,19 @@ namespace LinhGioi.World
             if (input.sqrMagnitude > 0.0001f)
             {
                 _marker.position += input * MoveSpeed * Time.deltaTime;
+                SetPlayerPose(PlaceholderPoseState.WalkMove);
                 RefreshInteractionState();
                 PositionChanged?.Invoke();
+            }
+            else if (_playerPoseState == PlaceholderPoseState.WalkMove)
+            {
+                SetPlayerPose(PlaceholderPoseState.Idle);
             }
 
             if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Space))
                 TryTriggerInteraction();
+
+            RefreshPoseFeedbackMarkers();
         }
 
         private static GameObject CreateMarker()
@@ -168,15 +192,17 @@ namespace LinhGioi.World
             CreateMarkerCube("LGO Safe Training Circle Center", new Vector3(0f, 0.04f, 0f), RuntimeArtCatalog.Gold, new Vector3(3.2f, 0.08f, 3.2f));
         }
 
-        private static void CreateMarkerCube(string name, Vector3 position, Color color, Vector3 scale)
+        private static GameObject CreateMarkerCube(string name, Vector3 position, Color color, Vector3 scale)
         {
-            if (GameObject.Find(name) != null) return;
+            var existing = GameObject.Find(name);
+            if (existing != null) return existing;
             var marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
             marker.name = name;
             marker.transform.position = position;
             marker.transform.localScale = scale;
             var renderer = marker.GetComponent<Renderer>();
             if (renderer != null) renderer.material = RuntimeArtCatalog.CreateMaterial(name + " Material", color);
+            return marker;
         }
 
         private static float NormalizeYaw(float yaw)
@@ -220,6 +246,9 @@ namespace LinhGioi.World
             if (_guidedStep == GuidedTrainingStep.FindGateKeeper && _nearestInteractable.id == "Gate Keeper")
             {
                 _guidedStep = GuidedTrainingStep.FindTrainingStone;
+                SetPlayerPose(PlaceholderPoseState.Interact);
+                SetGateKeeperState(PlaceholderNpcState.TalkGuide);
+                TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
                 _objectiveText = "Objective: stabilize the Training Stone.";
                 _interactionText = "Gate Keeper: your path is open. Follow the cyan spirit pulse.";
             }
@@ -227,6 +256,10 @@ namespace LinhGioi.World
             {
                 _guidedStep = GuidedTrainingStep.Complete;
                 InteractionAcknowledged = true;
+                SetPlayerPose(PlaceholderPoseState.SpiritChannel);
+                SetGateKeeperState(PlaceholderNpcState.Idle);
+                SetShadowSlimeState(PlaceholderSlimeState.DissolveQuiet);
+                TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
                 _objectiveText = "Objective complete: spirit pulse stabilized.";
                 _interactionText = "Spirit pulse stabilized. Training acknowledged.";
             }
@@ -257,6 +290,11 @@ namespace LinhGioi.World
         private string DescribeCurrentArea()
         {
             if (_nearestInteractable != null) return _nearestInteractable.id;
+            if (Distance2D(CurrentPosition, ShadowSlimePosition) <= 2.25f)
+            {
+                SetShadowSlimeState(PlaceholderSlimeState.AlertWarning);
+                return "Safe yard / east shadow warning";
+            }
             if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Safe yard / path to Gate Keeper";
             if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Safe yard / path to Training Stone";
             return "Safe yard / training complete";
@@ -275,6 +313,79 @@ namespace LinhGioi.World
             var dx = a.x - b.x;
             var dz = a.z - b.z;
             return Mathf.Sqrt(dx * dx + dz * dz);
+        }
+
+        private void SetPlayerPose(PlaceholderPoseState state)
+        {
+            if (_playerPoseState == state) return;
+            _playerPoseState = state;
+            if (_markerRenderer != null)
+            {
+                var color = state == PlaceholderPoseState.SpiritChannel ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
+                _markerRenderer.material = RuntimeArtCatalog.CreateMaterial("LGO Hero " + state + " Placeholder", color);
+            }
+            InteractionStateChanged?.Invoke();
+        }
+
+        private void SetGateKeeperState(PlaceholderNpcState state)
+        {
+            if (_gateKeeperState == state) return;
+            _gateKeeperState = state;
+            InteractionStateChanged?.Invoke();
+        }
+
+        private void SetShadowSlimeState(PlaceholderSlimeState state)
+        {
+            if (_shadowSlimeState == state) return;
+            _shadowSlimeState = state;
+            InteractionStateChanged?.Invoke();
+        }
+
+        private void EnsurePoseFeedbackMarkers()
+        {
+            if (_posePulse == null)
+            {
+                _posePulse = CreateMarkerCube("LGO Player Pose Pulse Placeholder", CurrentPosition + Vector3.up * 0.2f, RuntimeArtCatalog.Spirit, new Vector3(1.4f, 0.08f, 1.4f)).transform;
+            }
+            if (_gateKeeperGuidePulse == null)
+            {
+                _gateKeeperGuidePulse = CreateMarkerCube("LGO Gate Keeper Talk Guide Pulse", GateKeeperPosition + Vector3.up * 0.9f, RuntimeArtCatalog.Gold, new Vector3(1.35f, 0.08f, 1.35f)).transform;
+            }
+            if (_trainingSpiritPulse == null)
+            {
+                _trainingSpiritPulse = CreateMarkerCube("LGO Training Stone Spirit Channel Pulse", TrainingStonePosition + Vector3.up * 0.12f, RuntimeArtCatalog.Spirit, new Vector3(1.8f, 0.08f, 1.8f)).transform;
+            }
+            if (_shadowWarningPulse == null)
+            {
+                _shadowWarningPulse = CreateMarkerCube("LGO Shadow Slime Alert Warning Pulse", ShadowSlimePosition + Vector3.up * 0.18f, RuntimeArtCatalog.Danger, new Vector3(2f, 0.08f, 2f)).transform;
+            }
+            RefreshPoseFeedbackMarkers();
+        }
+
+        private void RefreshPoseFeedbackMarkers()
+        {
+            if (_posePulse != null)
+            {
+                _posePulse.position = CurrentPosition + Vector3.up * 0.08f;
+                _posePulse.gameObject.SetActive(Time.time < _posePulseUntil || _playerPoseState == PlaceholderPoseState.SpiritChannel);
+            }
+            if (_gateKeeperGuidePulse != null)
+                _gateKeeperGuidePulse.gameObject.SetActive(_gateKeeperState == PlaceholderNpcState.TalkGuide);
+            if (_trainingSpiritPulse != null)
+                _trainingSpiritPulse.gameObject.SetActive(_playerPoseState == PlaceholderPoseState.SpiritChannel);
+            if (_shadowWarningPulse != null)
+                _shadowWarningPulse.gameObject.SetActive(_shadowSlimeState == PlaceholderSlimeState.AlertWarning);
+        }
+
+        private void TriggerLocalPosePulse(Color color)
+        {
+            _posePulseUntil = Time.time + 1.15f;
+            if (_posePulse != null)
+            {
+                var renderer = _posePulse.GetComponent<Renderer>();
+                if (renderer != null) renderer.material = RuntimeArtCatalog.CreateMaterial("LGO Local Pose Pulse", color);
+            }
+            RefreshPoseFeedbackMarkers();
         }
 
         private sealed class InteractableState
@@ -298,6 +409,27 @@ namespace LinhGioi.World
             FindGateKeeper,
             FindTrainingStone,
             Complete
+        }
+
+        private enum PlaceholderPoseState
+        {
+            Idle,
+            WalkMove,
+            Interact,
+            SpiritChannel
+        }
+
+        private enum PlaceholderNpcState
+        {
+            Idle,
+            TalkGuide
+        }
+
+        private enum PlaceholderSlimeState
+        {
+            Idle,
+            AlertWarning,
+            DissolveQuiet
         }
     }
 }

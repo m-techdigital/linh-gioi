@@ -37,6 +37,7 @@ namespace LinhGioi.UI
         private Label _worldStep;
         private Label _worldDirection;
         private Label _worldLandmarks;
+        private Label _worldPoseState;
         private Label _worldObjective;
         private Label _interactionHint;
         private Label _position;
@@ -248,6 +249,9 @@ namespace LinhGioi.UI
             _worldDirection = NewStatusLabel("Direction: enter the world to reveal yard landmarks.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldDirection);
 
+            _worldPoseState = NewStatusLabel("Pose: player idle / Gate Keeper idle / Shadow Slime idle.", RuntimeArtCatalog.Muted);
+            _worldHud.Add(_worldPoseState);
+
             _worldObjective = NewStatusLabel("Objective: talk to the Gate Keeper.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldObjective);
 
@@ -375,6 +379,7 @@ namespace LinhGioi.UI
                 if (_worldStep != null) _worldStep.text = "Guided loop: waiting for character entry.";
                 if (_worldDirection != null) _worldDirection.text = "Direction: enter the world to reveal yard landmarks.";
                 if (_worldLandmarks != null) _worldLandmarks.text = "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
+                if (_worldPoseState != null) _worldPoseState.text = "Pose: player idle / Gate Keeper idle / Shadow Slime idle.";
                 if (_worldObjective != null) _worldObjective.text = "Objective: talk to the Gate Keeper.";
                 if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper.";
                 _position.text = "x=0.00 y=0.00 z=0.00 yaw=0.0";
@@ -394,6 +399,7 @@ namespace LinhGioi.UI
             if (_worldStep != null) _worldStep.text = "Guided loop: " + _world.GuidedTrainingStepName;
             if (_worldDirection != null) _worldDirection.text = "Direction: " + _world.ObjectiveDirectionHint;
             if (_worldLandmarks != null) _worldLandmarks.text = _world.WorldLandmarkSummary;
+            if (_worldPoseState != null) _worldPoseState.text = "Pose: player " + _world.PlayerPoseStateName + " / Gate Keeper " + _world.GateKeeperPoseStateName + " / Shadow Slime " + _world.ShadowSlimeStateName + ".";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
         }
