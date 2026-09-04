@@ -26,6 +26,7 @@ namespace LinhGioi.World
         public string ObjectiveText => _objectiveText;
         public string InteractionText => _interactionText;
         public string GuidedTrainingStepName => _guidedStep.ToString();
+        public string CurrentAreaLabel => DescribeCurrentArea();
         public bool InteractionAcknowledged { get; private set; }
 
         public void Enter(CharacterResponse character)
@@ -231,9 +232,17 @@ namespace LinhGioi.World
 
         private string NextMovementHint()
         {
-            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Move near the Gate Keeper.";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Move near the Training Stone.";
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Move toward the gold Gate Keeper at the northwest side of the yard.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Move toward the cyan Training Stone at the north center of the yard.";
             return "Loop complete: save position or return to lobby.";
+        }
+
+        private string DescribeCurrentArea()
+        {
+            if (_nearestInteractable != null) return _nearestInteractable.id;
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Safe yard / path to Gate Keeper";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Safe yard / path to Training Stone";
+            return "Safe yard / training complete";
         }
 
         private void SetNearest(InteractableState state, string text)

@@ -33,6 +33,8 @@ namespace LinhGioi.UI
         private Label _selectedMeta;
         private Label _worldName;
         private Label _worldMeta;
+        private Label _worldArea;
+        private Label _worldStep;
         private Label _worldObjective;
         private Label _interactionHint;
         private Label _position;
@@ -143,7 +145,7 @@ namespace LinhGioi.UI
             right.style.flexWrap = Wrap.Wrap;
             right.Add(_status);
             _quitButton = NewQuietButton("Quit", QuitPlayer);
-            _quitButton.tooltip = "Exit visible player review";
+            _quitButton.tooltip = "Esc / Quit visible player review";
             right.Add(_quitButton);
             header.Add(right);
         }
@@ -212,7 +214,7 @@ namespace LinhGioi.UI
         {
             _worldHud = NewPanel(760);
             _mainShell.Add(_worldHud);
-            _worldHud.Add(NewSectionTitle("World HUD"));
+            _worldHud.Add(NewSectionTitle("World HUD / Safe Training Yard"));
 
             var topStrip = new VisualElement();
             topStrip.style.flexDirection = FlexDirection.Row;
@@ -221,8 +223,10 @@ namespace LinhGioi.UI
             _worldHud.Add(topStrip);
 
             topStrip.Add(NewBadge("Account", "profile loaded"));
-            topStrip.Add(NewBadge("API", "local persistence"));
+            topStrip.Add(NewBadge("Persistence", "local dev API"));
             topStrip.Add(NewBadge("Move", "WASD/arrows + Q/E"));
+            topStrip.Add(NewBadge("Act", "F or Space"));
+            topStrip.Add(NewBadge("Exit", "Esc / Quit"));
 
             _worldName = new Label("No character selected");
             _worldName.style.fontSize = 19;
@@ -232,6 +236,12 @@ namespace LinhGioi.UI
 
             _worldMeta = NewMutedLabel("Select a character in the lobby.");
             _worldHud.Add(_worldMeta);
+
+            _worldArea = NewStatusLabel("Area: Lobby preview", RuntimeArtCatalog.Muted);
+            _worldHud.Add(_worldArea);
+
+            _worldStep = NewStatusLabel("Guided loop: waiting for character entry.", RuntimeArtCatalog.Spirit);
+            _worldHud.Add(_worldStep);
 
             _worldObjective = NewStatusLabel("Objective: talk to the Gate Keeper.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldObjective);
@@ -249,7 +259,9 @@ namespace LinhGioi.UI
             _worldHud.Add(_position);
 
             _savePositionButton = NewPrimaryButton("Save Position", () => RunAsync(SavePositionAsync));
-            _backButton = NewSecondaryButton("Back to Lobby", BackToLobby);
+            _savePositionButton.tooltip = "Persist this character position to the local dev API";
+            _backButton = NewSecondaryButton("Back to Character Hall", BackToLobby);
+            _backButton.tooltip = "Back to Lobby / return to character management without leaving the player";
             _worldHud.Add(NewButtonRow(_savePositionButton, _backButton, NewQuietButton("Quit", QuitPlayer)));
         }
 
@@ -302,7 +314,7 @@ namespace LinhGioi.UI
         private async Task EnterWorldAsync()
         {
             if (_selectedCharacter == null) return;
-            SetBusy(true, "Entering world...");
+            SetBusy(true, "Entering Spirit Gate training yard...");
             var loaded = await _client.LoadCharacterAsync(_selectedCharacter.characterId, _shutdown.Token);
             _selectedCharacter = loaded;
             if (_world == null)
@@ -315,23 +327,23 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
             UpdateSelectedPreview(loaded);
             ShowWorldMode();
-            SetBusy(false, "World ready: " + Abbrev(loaded.characterId));
+            SetBusy(false, "Training yard ready: follow the highlighted guidance.");
         }
 
         private async Task SavePositionAsync()
         {
             if (_selectedCharacter == null || _world == null) return;
-            SetBusy(true, "Saving position...");
+            SetBusy(true, "Saving position to local dev API...");
             var save = _world.BuildSaveRequest();
             _selectedCharacter = await _client.SaveCharacterPositionAsync(_selectedCharacter.characterId, save.x, save.y, save.z, save.yawDegrees, _shutdown.Token);
             UpdateSelectedPreview(_selectedCharacter);
-            SetBusy(false, "Position saved");
+            SetBusy(false, "Position saved near " + _world.CurrentAreaLabel + ".");
         }
 
         private void BackToLobby()
         {
             ShowLobbyMode();
-            SetBusy(false, "Lobby ready");
+            SetBusy(false, "Returned to Character Hall.");
         }
 
         private void SelectCharacter(CharacterResponse character)
@@ -350,6 +362,8 @@ namespace LinhGioi.UI
                 _selectedMeta.text = "Create a cultivator to enter the world.";
                 _worldName.text = "No character selected";
                 _worldMeta.text = "Select a character in the lobby.";
+                if (_worldArea != null) _worldArea.text = "Area: Lobby preview";
+                if (_worldStep != null) _worldStep.text = "Guided loop: waiting for character entry.";
                 if (_worldObjective != null) _worldObjective.text = "Objective: talk to the Gate Keeper.";
                 if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper.";
                 _position.text = "x=0.00 y=0.00 z=0.00 yaw=0.0";
@@ -365,6 +379,8 @@ namespace LinhGioi.UI
         private void RefreshWorldLoopLabels()
         {
             if (_world == null) return;
+            if (_worldArea != null) _worldArea.text = "Area: " + _world.CurrentAreaLabel;
+            if (_worldStep != null) _worldStep.text = "Guided loop: " + _world.GuidedTrainingStepName;
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
         }
@@ -429,7 +445,7 @@ namespace LinhGioi.UI
             catch (OperationCanceledException) { }
             catch (Exception exception)
             {
-                SetBusy(false, "Error: " + exception.Message);
+                SetBusy(false, "Action blocked: " + exception.Message);
             }
         }
 

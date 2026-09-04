@@ -1,0 +1,10 @@
+client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs
+docs/tasks/M5-PLAYABLE-SESSION-FEEDBACK-v0.18.0.md
+HANDOFF-LG-M5-PLAYABLE-SESSION-FEEDBACK-v0.18.0.md
+M5-PLAYABLE-SESSION-FEEDBACK-FINAL-REPORT-v0.18.0.md
+LGO-M5-PLAYABLE-SESSION-FEEDBACK-v0.18.0-CHANGED-FILES.txt
+LGO-M5-PLAYABLE-SESSION-FEEDBACK-v0.18.0-DELETIONS.txt
+LGO-M5-PLAYABLE-SESSION-FEEDBACK-v0.18.0-ARTIFACTS.sha256
+tools/validate_m5_playable_session_feedback.py
+tools/lgo_playable_closure_check.sh
