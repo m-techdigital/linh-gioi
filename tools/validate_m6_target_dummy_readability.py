@@ -50,7 +50,7 @@ def main() -> int:
         'ReadabilityDummyPosition',
         'LGO Target Dummy Readability Marker',
         'LGO Target Dummy Non Combat Base',
-        'Safe yard / target dummy readability marker',
+        'Sân luyện an toàn / Mục tiêu luyện tập',
         'Readability Dummy east',
     )
     require(

@@ -161,7 +161,7 @@ namespace LinhGioi.World
             }
             if (Distance2D(CurrentPosition, ReadabilityDummyPosition) > LocalCombatRange)
             {
-                CombatFeedbackText = "Mục tiêu luyện tập ở phía đông. Lại gần hơn để Tấn công thử.";
+                CombatFeedbackText = "Mục tiêu luyện tập ở phía đông. Lại gần vòng sáng để Tấn công thử.";
                 InteractionStateChanged?.Invoke();
                 return false;
             }
@@ -461,7 +461,7 @@ namespace LinhGioi.World
         {
             if (_nearestInteractable != null) return _nearestInteractable.id;
             if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= 1.8f)
-                return "Safe yard / target dummy readability marker";
+                return "Sân luyện an toàn / Mục tiêu luyện tập";
             if (Distance2D(CurrentPosition, ShadowSlimePosition) <= 2.25f)
             {
                 SetShadowSlimeState(PlaceholderSlimeState.AlertWarning);

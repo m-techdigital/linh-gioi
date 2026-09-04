@@ -37,6 +37,7 @@ M6_ALLOWED_AFTER_CONTRACT_FILES = {
     'tools/validate_m5_vfx_feedback_placeholder.py',
     'tools/validate_m6_skill_preview_sandbox.py',
     'tools/validate_m6_target_dummy_readability.py',
+    'tools/validate_m6_combat_ux_feedback.py',
 }
 
 

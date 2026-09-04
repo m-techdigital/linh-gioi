@@ -394,6 +394,7 @@ namespace LinhGioi.UI
             _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
             _combatCooldown = NewStatusLabel("Hồi chiêu: sẵn sàng", RuntimeArtCatalog.Muted);
             _localCombatButton = NewSecondaryButton("Tấn công thử", TriggerLocalCombat);
+            _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ lên mục tiêu luyện tập";
             _localCombatPanel.Add(_combatTargetStatus);
             _localCombatPanel.Add(_combatFeedback);
             _localCombatPanel.Add(_combatCooldown);
