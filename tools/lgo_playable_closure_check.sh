@@ -152,6 +152,9 @@ source_only() {
   if [[ -f tools/validate_m6_combat_input_feedback_stability.py ]]; then
     run_phase m6_combat_input_feedback_stability python3.12 tools/validate_m6_combat_input_feedback_stability.py
   fi
+  if [[ -f tools/validate_m6_server_combat_contract_spec.py ]]; then
+    run_phase m6_server_combat_contract_spec python3.12 tools/validate_m6_server_combat_contract_spec.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
     run_phase code_governance python3.12 tools/validate_code_governance.py
@@ -186,6 +189,7 @@ source_only() {
     tools/validate_m6_combat_visual_reference_pack.py \
     tools/validate_m6_combat_visual_readability.py \
     tools/validate_m6_combat_input_feedback_stability.py \
+    tools/validate_m6_server_combat_contract_spec.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
@@ -340,6 +344,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_m6_combat_input_feedback_stability.py ]]; then
     run_phase m6_combat_input_feedback_stability python3.12 tools/validate_m6_combat_input_feedback_stability.py
+  fi
+  if [[ -f tools/validate_m6_server_combat_contract_spec.py ]]; then
+    run_phase m6_server_combat_contract_spec python3.12 tools/validate_m6_server_combat_contract_spec.py
   fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
