@@ -36,6 +36,7 @@ REQUIRED_MARKERS = {
         "TargetDummyIdle",
         "CombatButtonCooldownTexture",
         "Version = \"0.46.0\"",
+        "LoadSprite(\"target-dummy-idle-v0450\")",
     ],
     "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs": [
         "CreateBillboardSprite",

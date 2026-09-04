@@ -132,6 +132,12 @@ namespace LinhGioi.UI
             _root.style.paddingBottom = 16;
             _root.style.alignItems = Align.Center;
             _root.style.unityBackgroundImageTintColor = RuntimeArtCatalog.Background;
+            var gateBackground = LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV2.LoginBackgroundSpiritGate;
+            if (gateBackground != null)
+            {
+                _root.style.backgroundImage = new StyleBackground(gateBackground);
+                _root.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
+            }
 
             BuildHeader();
 
@@ -166,13 +172,22 @@ namespace LinhGioi.UI
             brand.style.flexDirection = FlexDirection.Column;
             header.Add(brand);
 
-            var title = new Label("Linh Gioi Online");
+            var logo = new VisualElement();
+            logo.name = "LGO Login Gate Entry Logo V2";
+            logo.style.width = 260;
+            logo.style.height = 96;
+            logo.style.marginBottom = 2;
+            var logoTexture = LgoVisualAssetRegistryV2.LogoLinhGioiOnline;
+            if (logoTexture != null) logo.style.backgroundImage = new StyleBackground(logoTexture);
+            brand.Add(logo);
+
+            var title = new Label("Linh Giới Online");
             title.style.fontSize = 30;
             title.style.unityFontStyleAndWeight = FontStyle.Bold;
             title.style.color = RuntimeArtCatalog.Gold;
             brand.Add(title);
 
-            var subtitle = new Label("Spirit Gate Playable Shell");
+            var subtitle = new Label("Cổng Linh Giới - bản chơi thử nội bộ");
             subtitle.style.color = RuntimeArtCatalog.Spirit;
             subtitle.style.fontSize = 13;
             brand.Add(subtitle);
@@ -188,7 +203,7 @@ namespace LinhGioi.UI
             right.style.alignItems = Align.Center;
             right.style.flexWrap = Wrap.Wrap;
             right.Add(_status);
-            _quitButton = NewQuietButton("Quit", QuitPlayer);
+            _quitButton = NewQuietButton("Thoát", QuitPlayer);
             _quitButton.tooltip = "Esc opens the session menu in world; Quit closes the player review";
             right.Add(_quitButton);
             header.Add(right);
@@ -197,15 +212,48 @@ namespace LinhGioi.UI
         private void BuildAuthPanel()
         {
             _authPanel = NewPanel(520);
+            ApplyV2PanelSkin(_authPanel);
             _mainShell.Add(_authPanel);
-            _authPanel.Add(NewSectionTitle("Auth / Gate Entry"));
+            _authPanel.Add(NewSectionTitle("Cổng Đăng Nhập"));
             _authPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
-            _authPanel.Add(NewMutedLabel("API status: " + _config.apiBaseUrl));
-            _devKey = NewTextField("Dev key", DefaultDevKey);
+            var gateKeeper = new VisualElement();
+            gateKeeper.name = "LGO Login Gate Keeper NPC V2";
+            gateKeeper.style.width = 132;
+            gateKeeper.style.height = 198;
+            gateKeeper.style.alignSelf = Align.Center;
+            gateKeeper.style.marginBottom = 8;
+            var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
+            if (gateKeeperTexture != null) gateKeeper.style.backgroundImage = new StyleBackground(gateKeeperTexture);
+            _authPanel.Add(gateKeeper);
+
+            var serverRow = new VisualElement();
+            serverRow.name = "LGO Login Server Selector V2";
+            serverRow.style.flexDirection = FlexDirection.Row;
+            serverRow.style.alignItems = Align.Center;
+            serverRow.style.marginBottom = 8;
+            serverRow.style.paddingLeft = 10;
+            serverRow.style.paddingRight = 10;
+            serverRow.style.paddingTop = 8;
+            serverRow.style.paddingBottom = 8;
+            var serverPanel = LgoVisualAssetRegistryV2.ServerSelectorPanelTexture;
+            if (serverPanel != null) serverRow.style.backgroundImage = new StyleBackground(serverPanel);
+            serverRow.Add(NewIcon(LgoVisualAssetRegistryV2.IconServerTexture, "Máy chủ"));
+            serverRow.Add(NewMutedLabel("Máy chủ thử nghiệm: Linh Môn 01"));
+            serverRow.Add(NewIcon(LgoVisualAssetRegistryV2.ServerOnlineTexture, "Đang mở"));
+            _authPanel.Add(serverRow);
+
+            _authPanel.Add(NewMutedLabel("API: " + _config.apiBaseUrl));
+            _devKey = NewTextField("Khóa dev", DefaultDevKey);
             _authPanel.Add(_devKey);
-            _loginButton = NewPrimaryButton("Open Gate", () => RunAsync(LoginAsync));
+            _loginButton = NewPrimaryButton("Vào Thế Giới", () => RunAsync(LoginAsync));
             _authPanel.Add(_loginButton);
-            _account = NewMutedLabel("Account: not connected");
+            var utilities = NewButtonRow(
+                NewIconButton("Thông báo", LgoVisualAssetRegistryV2.IconNoticeTexture, () => SetToast("Thông báo: bản thử nghiệm nội bộ.", RuntimeArtCatalog.Spirit)),
+                NewIconButton("Tài khoản", LgoVisualAssetRegistryV2.IconAccountTexture, () => SetToast("Tài khoản dev sẽ được mở bằng khóa hiện tại.", RuntimeArtCatalog.Muted)),
+                NewIconButton("Cài đặt", LgoVisualAssetRegistryV2.IconSettingsTexture, () => SetToast("Cài đặt nhanh có trong menu phiên.", RuntimeArtCatalog.Muted))
+            );
+            _authPanel.Add(utilities);
+            _account = NewMutedLabel("Tài khoản: chưa kết nối");
             _account.style.marginTop = 10;
             _authPanel.Add(_account);
         }
@@ -213,8 +261,9 @@ namespace LinhGioi.UI
         private void BuildLobbyPanel()
         {
             _lobbyPanel = NewPanel(840);
+            ApplyV2PanelSkin(_lobbyPanel);
             _mainShell.Add(_lobbyPanel);
-            _lobbyPanel.Add(NewSectionTitle("Character Hall"));
+            _lobbyPanel.Add(NewSectionTitle("Điện Nhân Vật"));
             _lobbyPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
 
             var content = new VisualElement();
@@ -230,12 +279,12 @@ namespace LinhGioi.UI
             content.Add(_characterList);
 
             var preview = NewPreviewPanel();
-            _selectedName = new Label("No character selected");
+            _selectedName = new Label("Chưa chọn nhân vật");
             _selectedName.style.fontSize = 19;
             _selectedName.style.unityFontStyleAndWeight = FontStyle.Bold;
             _selectedName.style.color = RuntimeArtCatalog.Gold;
             preview.Add(_selectedName);
-            _selectedMeta = NewMutedLabel("Create a cultivator to enter the world.");
+            _selectedMeta = NewMutedLabel("Tạo một tu sĩ để bước vào Linh Giới.");
             preview.Add(_selectedMeta);
             content.Add(preview);
 
@@ -246,11 +295,11 @@ namespace LinhGioi.UI
             create.style.borderTopWidth = 1;
             _lobbyPanel.Add(create);
 
-            create.Add(NewSectionTitle("Create Cultivator"));
-            _characterName = NewTextField("Character name", "LinhGioiHero");
+            create.Add(NewSectionTitle("Tạo Tu Sĩ"));
+            _characterName = NewTextField("Tên nhân vật", "LinhGioiHero");
             _classId = NewTextField("Class ID", DefaultClassId);
-            _createButton = NewSecondaryButton("Create", () => RunAsync(CreateCharacterAsync));
-            _enterWorldButton = NewPrimaryButton("Enter World", () => RunAsync(EnterWorldAsync));
+            _createButton = NewSecondaryButton("Tạo", () => RunAsync(CreateCharacterAsync));
+            _enterWorldButton = NewPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
             create.Add(_characterName);
             create.Add(_classId);
             create.Add(NewButtonRow(_createButton, _enterWorldButton));
@@ -762,6 +811,8 @@ namespace LinhGioi.UI
             button.style.backgroundColor = RuntimeArtCatalog.Spirit;
             button.style.color = RuntimeArtCatalog.Background;
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
+            var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
+            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
             return button;
         }
 
@@ -779,6 +830,34 @@ namespace LinhGioi.UI
             var button = NewButton(label, action);
             button.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
             button.style.color = RuntimeArtCatalog.Text;
+            var texture = LgoVisualAssetRegistryV2.ButtonSecondaryTexture;
+            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
+            return button;
+        }
+
+        private static VisualElement NewIcon(Texture2D texture, string tooltip)
+        {
+            var icon = new VisualElement();
+            icon.style.width = 28;
+            icon.style.height = 28;
+            icon.style.marginRight = 8;
+            icon.style.marginLeft = 4;
+            if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
+            icon.tooltip = tooltip;
+            return icon;
+        }
+
+        private static Button NewIconButton(string label, Texture2D texture, Action action)
+        {
+            var button = NewSecondaryButton(string.Empty, action);
+            button.style.minWidth = 118;
+            button.style.flexDirection = FlexDirection.Row;
+            button.style.alignItems = Align.Center;
+            button.Add(NewIcon(texture, label));
+            var text = new Label(label);
+            text.style.color = RuntimeArtCatalog.Text;
+            text.style.unityFontStyleAndWeight = FontStyle.Bold;
+            button.Add(text);
             return button;
         }
 
@@ -978,6 +1057,13 @@ namespace LinhGioi.UI
         private static void ApplyCombatPanelSkin(VisualElement panel)
         {
             var texture = CombatPlaceholderAssets.CombatPanelTexture;
+            if (texture == null) return;
+            panel.style.backgroundImage = new StyleBackground(texture);
+        }
+
+        private static void ApplyV2PanelSkin(VisualElement panel)
+        {
+            var texture = LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture ?? LgoVisualAssetRegistryV2.PanelMainLargeTexture;
             if (texture == null) return;
             panel.style.backgroundImage = new StyleBackground(texture);
         }

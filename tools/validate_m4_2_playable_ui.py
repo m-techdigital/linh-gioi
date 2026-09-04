@@ -44,12 +44,12 @@ def main() -> int:
     require('docs/design/LGO-PLAYABLE-UI-WIREFRAME-SPEC-v0.11.0.md', 'Login / Dev Entry', 'Character Select / Create', 'World HUD')
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Auth / Gate Entry',
-        'Character Hall',
+        'Cổng Đăng Nhập',
+        'Điện Nhân Vật',
         'World HUD',
-        'Open Gate',
-        'Create Cultivator',
-        'Enter World',
+        'Vào Thế Giới',
+        'Tạo Tu Sĩ',
+        'Vào sân luyện',
         'Save Position',
         'Back to Lobby',
         'WASD or arrows',

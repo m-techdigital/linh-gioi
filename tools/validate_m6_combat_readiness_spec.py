@@ -58,6 +58,8 @@ M6_ALLOWED_AFTER_CONTRACT_FILES = {
     'LGO-M6-COMBAT-UX-READABILITY-POLISH-v0.53.0-CHANGED-FILES.txt',
     'LGO-M6-COMBAT-UX-READABILITY-POLISH-v0.53.0-DELETIONS.txt',
     'tools/validate_m6_combat_gamedata_balance.py',
+    'tools/validate_lgo_art_pack_v1.py',
+    'client/Unity/Assets/Game/Art/Runtime/CombatPlaceholderAssets.cs',
     'docs/tasks/M6-COMBAT-GAMEDATA-BALANCE-ADVERSARIAL-v0.54.0.md',
     'docs/design/M6-COMBAT-GAMEDATA-BALANCE-NOTES-v0.54.0.md',
     'docs/execution/checklists/M6-COMBAT-GAMEDATA-BALANCE-CHECKLIST-v0.54.0.md',

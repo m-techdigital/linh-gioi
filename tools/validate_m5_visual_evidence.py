@@ -35,6 +35,15 @@ def require(path: str, *markers: str) -> None:
             errors.append(f'{path} missing marker: {marker}')
 
 
+def require_any(path: str, *marker_groups: tuple[str, ...]) -> None:
+    content = read(path)
+    for marker_group in marker_groups:
+        if all(marker in content for marker in marker_group):
+            return
+    expected = ' OR '.join(' + '.join(group) for group in marker_groups)
+    errors.append(f'{path} missing marker group: {expected}')
+
+
 def require_file(path: str, executable: bool = False) -> None:
     target = ROOT / path
     if not target.is_file():
@@ -67,11 +76,9 @@ def main() -> int:
         'visual-evidence-summary.json',
         'visual-evidence-summary.txt',
         'humanVisualAcceptancePending',
-        'Open Gate',
         'API status',
         'Character Hall',
         'Create Character',
-        'Enter World',
         'World HUD',
         'Save Position',
         'Back to Lobby',
@@ -79,6 +86,11 @@ def main() -> int:
         'Interact prompt',
         'Quit',
         'Escape',
+    )
+    require_any(
+        'client/Unity/Assets/Game/UI/Runtime/M5VisualEvidenceRunner.cs',
+        ('Open Gate', 'Enter World'),
+        ('Vào Thế Giới', 'Vào sân luyện'),
     )
     require('client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs', 'M5VisualEvidenceRunner.ShouldRun()')
     require_file('tools/run_m5_visual_evidence_review.sh', executable=True)

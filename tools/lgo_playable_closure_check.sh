@@ -201,9 +201,27 @@ source_only() {
   if [[ -f tools/validate_m6_combat_foundation_closure.py ]]; then
     run_phase m6_combat_foundation_closure python3.12 tools/validate_m6_combat_foundation_closure.py
   fi
+  if [[ -f tools/validate_m6_combat_hardening_continuation.py ]]; then
+    run_phase m6_combat_hardening_continuation python3.12 tools/validate_m6_combat_hardening_continuation.py
+  fi
+  if [[ -f tools/validate_lgo_art_pack_v1.py ]]; then
+    run_phase lgo_art_pack_v1 python3.12 tools/validate_lgo_art_pack_v1.py
+  fi
+  if [[ -f tools/validate_lgo_art_v2_separated_assets.py ]]; then
+    run_phase lgo_art_v2_separated_assets python3.12 tools/validate_lgo_art_v2_separated_assets.py
+  fi
+  if [[ -f tools/validate_lgo_art_v3_course_correction.py ]]; then
+    run_phase lgo_art_v3_course_correction python3.12 tools/validate_lgo_art_v3_course_correction.py
+  fi
+  if [[ -f tools/validate_lgo_art_v3b_candidates.py ]]; then
+    run_phase lgo_art_v3b_candidates python3.12 tools/validate_lgo_art_v3b_candidates.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
     run_phase code_governance python3.12 tools/validate_code_governance.py
+  fi
+  if [[ -f tools/validate_lgo_continuous_development_mode.py ]]; then
+    run_phase continuous_development_mode python3.12 tools/validate_lgo_continuous_development_mode.py
   fi
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
@@ -248,6 +266,18 @@ source_only() {
     tools/validate_m6_combat_ux_readability_polish.py \
     tools/validate_m6_combat_gamedata_balance.py \
     tools/validate_m6_combat_foundation_closure.py \
+    tools/validate_m6_combat_hardening_continuation.py \
+    tools/validate_lgo_art_pack_v1.py \
+    tools/slice_lgo_art_pack_v1.py \
+    tools/validate_lgo_art_v2_separated_assets.py \
+    tools/ingest_lgo_art_v2_assets.py \
+    tools/validate_lgo_art_v3_course_correction.py \
+    tools/prepare_lgo_art_v3b_candidates.py \
+    tools/validate_lgo_art_v3b_candidates.py \
+    tools/lgo_continuous_cycle.py \
+    tools/lgo_next_task.py \
+    tools/lgo_worktree_audit.py \
+    tools/validate_lgo_continuous_development_mode.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
@@ -468,9 +498,27 @@ package_ready() {
   if [[ -f tools/validate_m6_combat_foundation_closure.py ]]; then
     run_phase m6_combat_foundation_closure python3.12 tools/validate_m6_combat_foundation_closure.py
   fi
+  if [[ -f tools/validate_m6_combat_hardening_continuation.py ]]; then
+    run_phase m6_combat_hardening_continuation python3.12 tools/validate_m6_combat_hardening_continuation.py
+  fi
+  if [[ -f tools/validate_lgo_art_pack_v1.py ]]; then
+    run_phase lgo_art_pack_v1 python3.12 tools/validate_lgo_art_pack_v1.py
+  fi
+  if [[ -f tools/validate_lgo_art_v2_separated_assets.py ]]; then
+    run_phase lgo_art_v2_separated_assets python3.12 tools/validate_lgo_art_v2_separated_assets.py
+  fi
+  if [[ -f tools/validate_lgo_art_v3_course_correction.py ]]; then
+    run_phase lgo_art_v3_course_correction python3.12 tools/validate_lgo_art_v3_course_correction.py
+  fi
+  if [[ -f tools/validate_lgo_art_v3b_candidates.py ]]; then
+    run_phase lgo_art_v3b_candidates python3.12 tools/validate_lgo_art_v3b_candidates.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
     run_phase code_governance python3.12 tools/validate_code_governance.py
+  fi
+  if [[ -f tools/validate_lgo_continuous_development_mode.py ]]; then
+    run_phase continuous_development_mode python3.12 tools/validate_lgo_continuous_development_mode.py
   fi
   run_phase package_hygiene python3.12 tools/validate_package_hygiene.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"

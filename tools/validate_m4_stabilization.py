@@ -187,11 +187,11 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Auth / Gate Entry',
+        'Cổng Đăng Nhập',
         'Character Hall',
         'World HUD',
-        'Open Gate',
-        'Enter World',
+        'Vào Thế Giới',
+        'Vào sân luyện',
         'Save Position',
         'Back to Lobby',
     )

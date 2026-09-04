@@ -1,23 +1,51 @@
 # 05 — What To Do Now
 
-Current decision: `M0_RUNTIME_CLOSED`.
+Current decision: `M6_COMBAT_HARDENING_CONTINUATION_CLOSED_LOCAL_v0.56.0`.
 
-Use `linh-gioi-m0-runtime-closed-v0.4.1-full-source.zip` as the next authoritative baseline.
+Use the current repository source as the authoritative working baseline. Do not go back to old milestone ZIPs unless a review task explicitly asks for SHA/provenance comparison.
 
-## Immediate next step
+## Immediate Next Step
 
-Start `M1 Offline Combat Prototype` only from the v0.4.1 source successor.
+Run the continuous cycle before opening new work:
 
-## M1 must remain narrow
+```bash
+./tools/lgo_continuous_cycle.py --phase source
+```
 
-M1 is an offline combat prototype. It may use the existing Unity, protocol, GameData, and UI foundation, but must not introduce online persistence, account systems, guilds, marketplace, large content expansion, monetization, or protocol/schema drift without a contract-change request.
+If Unity runtime evidence is required and the local Unity/player environment is available:
 
-## Before opening M1
+```bash
+./tools/lgo_continuous_cycle.py --phase runtime
+```
 
-Read:
+## Current Development Direction
 
-- `docs/execution/PROJECT-STATE.md`
-- `docs/execution/MILESTONE-ROADMAP.md`
-- `docs/tasks/planned/M1-OFFLINE-COMBAT-PROTOTYPE-PLAN.md`
-- `docs/execution/09-EVIDENCE-AND-QUALITY-STANDARD.md`
-- `docs/execution/templates/FINAL-HANDOFF-TEMPLATE.md`
+Continue with roadmap-valid work that improves:
+
+- playable runtime stability;
+- UI/UX clarity;
+- combat evidence and rejection-path diagnostics;
+- source/package automation;
+- asset pipeline size budgeting and import hygiene.
+
+Do not generate or import new image assets during code-focused tasks. Future runtime art must follow `docs/art/RUNTIME-ASSET-SIZE-BUDGET.md`.
+
+## Do Not Open Without Explicit Contract Review
+
+- `protocol/**`
+- `gamedata/schemas/**`
+- `docs/adr/**`
+- `client/Unity/Assets/Game/UI/design-tokens.json`
+- production auth;
+- DB implementation;
+- economy, inventory rewards, social, guild, party, market, live ops;
+- production-final art claims.
+
+## Required Reading Before New Work
+
+- `docs/execution/CONTINUOUS-DEVELOPMENT-OPERATING-MODE.md`
+- `docs/execution/CODE-GOVERNANCE-CONTRACT.md`
+- `docs/execution/LGO-MASTER-ROADMAP-v1.0.md`
+- `docs/execution/LGO-NEXT-50-TASKS-BACKLOG-v1.0.md`
+- `docs/execution/TASK-LEDGER.md`
+- `docs/art/RUNTIME-ASSET-SIZE-BUDGET.md`

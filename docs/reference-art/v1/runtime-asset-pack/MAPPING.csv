@@ -1,0 +1,42 @@
+source_sheet,crop_box,output_file,intended_usage,unity_path,notes,sha256
+03-LGO-ui-asset-sheet-v1.png,35 110 380 330,ui/panels/panel_large_main.png,UI panel,,9-slice candidate,190fa8ff8501bdf21521dd82ecd4c473111940fc7b790d4af1e4016f887d3af7
+03-LGO-ui-asset-sheet-v1.png,410 125 710 320,ui/panels/panel_medium.png,UI panel,,9-slice candidate,61dd8b73dd90fb149dea8f673d829e277879fba3d96f6e215ea172e3de59bca3
+03-LGO-ui-asset-sheet-v1.png,720 105 1065 170,ui/panels/label_bar_long.png,UI label,,sprite single,7e87c1e6eadf114f89a6829bc49210871f37a1372587f12a7842ea470af466df
+03-LGO-ui-asset-sheet-v1.png,1130 80 1430 160,ui/buttons/button_blue_normal.png,UI button,,text on sheet is ignored by runtime,4a1815137fc2ea389be75e964c99351727d00a08668c3dd42c78aa41131191bc
+03-LGO-ui-asset-sheet-v1.png,1130 170 1430 255,ui/buttons/button_gold_pressed.png,UI button,,text on sheet is ignored by runtime,654517846a69c7d6becde3e4af8154fc6c6268eb6d88c243b920ea65d72db935
+03-LGO-ui-asset-sheet-v1.png,1130 270 1430 355,ui/buttons/button_disabled.png,UI button,,text on sheet is ignored by runtime,dd3e4703c975a0feba741a12488d0c628a34bfc519ab95ee1a33ccf09733598c
+03-LGO-ui-asset-sheet-v1.png,45 360 250 585,ui/skill-icons/icon_skill_wind_slash.png,Skill icon,,placeholder,6c62b008039c99397722ba6cc0b5530d205e7e4c7b612b02540020bd68ee5661
+03-LGO-ui-asset-sheet-v1.png,265 360 475 585,ui/skill-icons/icon_skill_shadow_bind.png,Skill icon,,placeholder,90a446c99a46aaf646ee5197522974672cc5a90cf1779dfc0b0154820472fe58
+03-LGO-ui-asset-sheet-v1.png,500 360 710 585,ui/skill-icons/icon_skill_spirit_guard.png,Skill icon,,placeholder,df5ecc7d5152d961a17a43c443cd8995dd6dd68199d0e85540674248d802c252
+03-LGO-ui-asset-sheet-v1.png,780 365 925 555,ui/cooldown/cooldown_ring_ready.png,Cooldown,,ready,b439dd563489e9836d5846ec67986b17e0b2471490329370378279aa6bc3afa3
+03-LGO-ui-asset-sheet-v1.png,965 365 1110 555,ui/cooldown/cooldown_ring_half.png,Cooldown,,half,b3f136408dd877249d013ab922d8631c2e15421fb61f6b7c194a136b80eaa462
+03-LGO-ui-asset-sheet-v1.png,1185 365 1335 555,ui/cooldown/cooldown_ring_full.png,Cooldown,,full,810dfcfa3191d2a8712a3b3f308be74980f5f432b9fc29ccef844b70763b6e6a
+03-LGO-ui-asset-sheet-v1.png,35 595 205 735,ui/feedback/feedback_damage.png,Feedback,,damage,a68dffaa9fcd71ce19cf33dbf861b35b817ed7c2eddfdbdeac978258e081e281
+03-LGO-ui-asset-sheet-v1.png,220 590 395 735,ui/feedback/feedback_critical.png,Feedback,,critical,2ed93def0f550c47550d83f1e088544fee6a8119244d14c81f764da14e21d0d7
+03-LGO-ui-asset-sheet-v1.png,425 600 575 735,ui/feedback/feedback_block.png,Feedback,,block,73f54e68e4f69883df37ea82b04c0ca1ea015e0dc2f80ba4cf43fa1974cc19e2
+03-LGO-ui-asset-sheet-v1.png,615 600 775 735,ui/feedback/feedback_heal.png,Feedback,,heal,44fcf65606566676eff7b2134bf6801583394ef1a15602465e1af3066d9380c6
+03-LGO-ui-asset-sheet-v1.png,795 590 960 790,ui/markers/target_marker_red.png,Target marker,,warning/hostile,c6cec024b1a4469370558dfab7e4140e3d17af0991d730a4e1530e0a94f6a85f
+03-LGO-ui-asset-sheet-v1.png,990 585 1165 790,ui/markers/target_selected_blue.png,Target marker,,selected,6c1328c6ee8d910c7e6edab2b4c0237dbf010eda711eb95686eb517cb67ded92
+03-LGO-ui-asset-sheet-v1.png,1195 590 1500 790,ui/markers/warning_telegraph_red.png,Warning telegraph,,ground warning,ae86695da40f16a840f34a957cc81e8187d70489f1706a834cb3fd9aae20ca03
+03-LGO-ui-asset-sheet-v1.png,50 800 625 955,ui/hud/quest_hint_panel.png,Quest hint,,contains reference English text; runtime copy remains Vietnamese,c8a25a223c187a544d9af9a8c20d1f37517f461f83e2c93800f71f17b4990788
+03-LGO-ui-asset-sheet-v1.png,660 805 770 935,ui/hud/hud_avatar_frame.png,HUD avatar,,placeholder,a4851aeeda50fc7cd2bd16471da83108f12db7bd8ea0866911ddfa3e29419de2
+03-LGO-ui-asset-sheet-v1.png,740 815 1120 930,ui/hud/hud_hp_mp_bar.png,HUD bars,,placeholder,5c657cc075c47e068780ad39bb75cc7aeb85e5664bf5cddd853a524b87ed7b23
+04-LGO-world-combat-asset-sheet-v1.png,25 105 245 535,world/character/character_reference_full.png,World character,,reference-quality placeholder,de8c882b0fbca7846516a169ccea03ba337c97bd8640054ff1d2cfca2b871672
+04-LGO-world-combat-asset-sheet-v1.png,265 65 590 550,world/npc/gate_keeper_npc_full.png,World NPC,,placeholder,aabbd546b18bea9155e9889909ab4fafdd4f57fbd498613b61014e55b733c303
+04-LGO-world-combat-asset-sheet-v1.png,610 80 1000 550,world/gate/spirit_gate_full.png,World gate,,placeholder landmark,f407fab285046a05d657762683cc9a1fea619ce38c5e31465a58ecaceb2d4c61
+04-LGO-world-combat-asset-sheet-v1.png,1030 120 1285 550,world/training-stone/training_stone_full.png,World training stone,,placeholder landmark,20b9ee90a1d6196e0e5c6c399e32cdfbb32e0839476daab176993298c33f6382
+04-LGO-world-combat-asset-sheet-v1.png,35 580 225 895,world/dummy/dummy_idle.png,Combat dummy,,idle,91f0631022297d4077f55bae64712849fb44dcac3ee234558ba3d2e14f1f1e45
+04-LGO-world-combat-asset-sheet-v1.png,250 545 515 900,world/dummy/dummy_selected.png,Combat dummy,,selected,90386da83ec2cef4e13848e8868a4c8c387081f35aa15f8fdfaafde0f1420933
+04-LGO-world-combat-asset-sheet-v1.png,535 570 760 900,world/dummy/dummy_hit.png,Combat dummy,,hit,9ba3f3c37a85744f3742d2c9e3a82ddd494f43a5d3e90c7119790a92cfe16dd0
+04-LGO-world-combat-asset-sheet-v1.png,1300 425 1515 590,world/monsters/shadow_slime_alt.png,Monster marker,,visual-only,ad3a71a76b8e076e00aec516bc1a394590e01b0cbf1bece8c38bb714193da2dc
+04-LGO-world-combat-asset-sheet-v1.png,775 585 1280 875,world/vfx/wind_slash_large.png,VFX,,large slash,4c20f314badf4440e0614a4783333014101abad6ffc76043aff7ce94046ca27e
+04-LGO-world-combat-asset-sheet-v1.png,0 930 170 1105,world/vfx/wind_slash_frame_01.png,VFX frame,,sequence 1,860e19a2b731f3991f8d127326b5cfdf02cb893d43cb9cd8cb7a3cae323a59fc
+04-LGO-world-combat-asset-sheet-v1.png,185 930 365 1110,world/vfx/wind_slash_frame_02.png,VFX frame,,sequence 2,1cb65bb6a8defe479d7984378857ce9de6c7a389d6f5f5acc88efc9c7a148cb2
+04-LGO-world-combat-asset-sheet-v1.png,380 930 565 1110,world/vfx/wind_slash_frame_03.png,VFX frame,,sequence 3,c910919fbd4aa8b779a4b31de98bb6681d1d2eecf3bdf043d05a6d32d7014621
+04-LGO-world-combat-asset-sheet-v1.png,580 930 795 1110,world/vfx/wind_slash_frame_04.png,VFX frame,,sequence 4,19c58c6bfdb128017ed602d1646a7a062243545d0edf4a8eb3e17f199d0e20f0
+04-LGO-world-combat-asset-sheet-v1.png,1290 605 1600 905,world/vfx/impact_spark_large.png,VFX,,impact,66b588f1c14122c7909e57e412bf05faec1df781d1e4f3555415a1c9fdb773e1
+04-LGO-world-combat-asset-sheet-v1.png,805 955 965 1125,world/props/spirit_orb.png,Prop,,spirit orb,ceba2c6a7bd58ee2620b681cff4bb3883b13f845585113bfd06b696e049766b4
+04-LGO-world-combat-asset-sheet-v1.png,970 970 1115 1125,world/props/spirit_orb_variant.png,Prop,,orb variant,0f38ff10e715e9d27b5f3b2fd4755d9e6bcaf32126d3ae3b37700f24f6cc669f
+04-LGO-world-combat-asset-sheet-v1.png,1080 930 1260 1125,world/markers/selector_ring_blue.png,Selector ring,,blue,89e00d8e503b411373af9aa920aa3d89051004f7877cad3cd402d6a3cc89260c
+04-LGO-world-combat-asset-sheet-v1.png,250 545 515 900,world/markers/selector_ring_gold.png,Selector ring,,gold with dummy context,90386da83ec2cef4e13848e8868a4c8c387081f35aa15f8fdfaafde0f1420933
+04-LGO-world-combat-asset-sheet-v1.png,1280 890 1510 1150,world/props/lantern_prop.png,Prop,,lantern,f295ab8ef9f11b29f57deb80cb6b3b105de0e6008a76fee0b6b24f6d8e67e094

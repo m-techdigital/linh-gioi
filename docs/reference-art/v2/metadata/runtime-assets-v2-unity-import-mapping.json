@@ -1,0 +1,652 @@
+[
+  {
+    "source_path": "images/runtime-ready/combat/cooldown/cooldown_full_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/cooldown/cooldown_full_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/cooldown/cooldown_full_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "89834c22ee1e48a9534b383723228ce2d89b129291fe8ede5cd20c9c0f003039",
+    "usage": "Cooldown ring",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/cooldown/cooldown_half_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/cooldown/cooldown_half_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/cooldown/cooldown_half_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "b40d6531095ff7ea0b8c51465b420a09d0ab5cf2bcedeb2995e337b22e59ea0d",
+    "usage": "Cooldown ring",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/cooldown/cooldown_ready_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/cooldown/cooldown_ready_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/cooldown/cooldown_ready_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "0450189140cdabd8407404974e3aaf06c6493eaf79f567ad2fbd4a9b4eb71a6e",
+    "usage": "Cooldown ring",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/feedback/feedback_block_splash_512x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/feedback/feedback_block_splash_512x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/feedback/feedback_block_splash_512x256.png",
+    "width": "512",
+    "height": "256",
+    "sha256": "5f5d97c52e20f68c9c080ca92858396e4bd88778e04093bbfe3ccada70904e9c",
+    "usage": "Combat feedback background; render numbers/text in Unity",
+    "notes": "No baked text"
+  },
+  {
+    "source_path": "images/runtime-ready/combat/feedback/feedback_critical_splash_512x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/feedback/feedback_critical_splash_512x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/feedback/feedback_critical_splash_512x256.png",
+    "width": "512",
+    "height": "256",
+    "sha256": "be5a47b72757b46a0e7b877bbb01f0263495ebf497bd8dffd40c5c48a49473f5",
+    "usage": "Combat feedback background; render numbers/text in Unity",
+    "notes": "No baked text"
+  },
+  {
+    "source_path": "images/runtime-ready/combat/feedback/feedback_damage_splash_512x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/feedback/feedback_damage_splash_512x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/feedback/feedback_damage_splash_512x256.png",
+    "width": "512",
+    "height": "256",
+    "sha256": "5a2e3d5b7999abe3017e4f67ad52331c6484b3dfc2e2c780f021f038de05ad52",
+    "usage": "Combat feedback background; render numbers/text in Unity",
+    "notes": "No baked text"
+  },
+  {
+    "source_path": "images/runtime-ready/combat/feedback/feedback_heal_splash_512x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/feedback/feedback_heal_splash_512x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/feedback/feedback_heal_splash_512x256.png",
+    "width": "512",
+    "height": "256",
+    "sha256": "c156b2bfcfd189a6cf3958b733ccbcf1fe0c86a8996aeac7429374a71647fbbc",
+    "usage": "Combat feedback background; render numbers/text in Unity",
+    "notes": "No baked text"
+  },
+  {
+    "source_path": "images/runtime-ready/combat/skills/icon_skill_heal_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/skills/icon_skill_heal_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/skills/icon_skill_heal_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "c878e0316588a8d0f70c26102c58d3f6eb9a786f0c9f536ecc06ddb133eb0955",
+    "usage": "Skill icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/skills/icon_skill_shadow_bind_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/skills/icon_skill_shadow_bind_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/skills/icon_skill_shadow_bind_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "c221d87c517dbab98693c6f6918aac286651a3d036c522edfeb4538745db49b4",
+    "usage": "Skill icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/skills/icon_skill_spirit_guard_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/skills/icon_skill_spirit_guard_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/skills/icon_skill_spirit_guard_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "4159a5d4bd1abf22f916099e10d0ae502d80cbd88dc4460595fde4b8475d9cbf",
+    "usage": "Skill icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/skills/icon_skill_wind_slash_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/skills/icon_skill_wind_slash_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/skills/icon_skill_wind_slash_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "02dea4fb29abf98953b163e75ad8f69b580b81d6ec44fa0a2341e34c270e03c0",
+    "usage": "Skill icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/target-warning/target_marker_red_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/target-warning/target_marker_red_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/target-warning/target_marker_red_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "8ecd1ff20463788227c69be3f2287c49224224a90bd2b4e36c95caede2b267e3",
+    "usage": "Target marker",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/target-warning/target_selected_blue_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/target-warning/target_selected_blue_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/target-warning/target_selected_blue_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "bf494af4fb1bd733cb9e1460b4f4bc0ac716ef0989a487744b5e711fffe0009b",
+    "usage": "Selected target marker",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/combat/target-warning/warning_telegraph_red_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/combat/target-warning/warning_telegraph_red_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Combat/target-warning/warning_telegraph_red_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "46d922a3047cceb4514c0b22a4fbd65b7d2d2d50c50cd4774f6f44ee52955dc3",
+    "usage": "Warning telegraph ground decal",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/login/gate_keeper_npc_login_512x768.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/login/gate_keeper_npc_login_512x768.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Login/gate_keeper_npc_login_512x768.png",
+    "width": "512",
+    "height": "768",
+    "sha256": "c6a18e336ee34258e783eb8be71b941b9c8445a7e1315f6008205ca146919416",
+    "usage": "Login guide NPC",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/login/login_background_spirit_gate_1920x1080.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/login/login_background_spirit_gate_1920x1080.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Login/login_background_spirit_gate_1920x1080.png",
+    "width": "1920",
+    "height": "1080",
+    "sha256": "261c3cfa8330e16211187bada49adbd3b6c7531132206eda192934bf09bd0b80",
+    "usage": "Login/Gate Entry background",
+    "notes": "Opaque background, not transparent"
+  },
+  {
+    "source_path": "images/runtime-ready/login/logo_linh_gioi_online_1024x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/login/logo_linh_gioi_online_1024x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/Login/logo_linh_gioi_online_1024x512.png",
+    "width": "1024",
+    "height": "512",
+    "sha256": "bfe6ec1e8944a76fa242ba77f1abfc4ff2bc9036edcb198c092fd6c9fba2a2cf",
+    "usage": "Login title/logo",
+    "notes": "Contains title text"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/buttons/button_disabled_512x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/buttons/button_disabled_512x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/buttons/button_disabled_512x128.png",
+    "width": "512",
+    "height": "128",
+    "sha256": "d56d2e6e738eb83e4f808039b87720b9139a0bc2772a09d8c2e335d137793a7b",
+    "usage": "Button background, render text in Unity",
+    "notes": "No baked button text"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/buttons/button_primary_normal_512x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/buttons/button_primary_normal_512x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/buttons/button_primary_normal_512x128.png",
+    "width": "512",
+    "height": "128",
+    "sha256": "3eb2b5899a1143df2eb1151061bb7a115d1bbec539c58144e83953f0e572ce57",
+    "usage": "Button background, render text in Unity",
+    "notes": "No baked button text"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/buttons/button_primary_pressed_512x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/buttons/button_primary_pressed_512x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/buttons/button_primary_pressed_512x128.png",
+    "width": "512",
+    "height": "128",
+    "sha256": "bc670b3a0b182230ca423ffe49b29d3751e07aedd368c52cec67375cbf3a30fd",
+    "usage": "Button background, render text in Unity",
+    "notes": "No baked button text"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/buttons/button_secondary_512x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/buttons/button_secondary_512x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/buttons/button_secondary_512x128.png",
+    "width": "512",
+    "height": "128",
+    "sha256": "6557fac87d73eb6e1c00a99b152e97b2fb03998eb11915431a5e40574249f9af",
+    "usage": "Button background, render text in Unity",
+    "notes": "No baked button text"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/hud/avatar_frame_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/hud/avatar_frame_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/hud/avatar_frame_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "0450189140cdabd8407404974e3aaf06c6493eaf79f567ad2fbd4a9b4eb71a6e",
+    "usage": "Avatar circular frame",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/hud/hp_bar_frame_768x96.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/hud/hp_bar_frame_768x96.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/hud/hp_bar_frame_768x96.png",
+    "width": "768",
+    "height": "96",
+    "sha256": "c142b67fba2d63c1bfcf67ca090e5065c67c51b59136e9a04975eeeeb662c338",
+    "usage": "HP bar frame",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/hud/mp_bar_frame_768x96.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/hud/mp_bar_frame_768x96.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/hud/mp_bar_frame_768x96.png",
+    "width": "768",
+    "height": "96",
+    "sha256": "c40caadc110d695157bbbc74f804fcc44747b0d2c29b0d1c04f44786fa1da8f9",
+    "usage": "MP bar frame",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/hud/quest_hint_panel_768x220.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/hud/quest_hint_panel_768x220.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/hud/quest_hint_panel_768x220.png",
+    "width": "768",
+    "height": "220",
+    "sha256": "afcb6e2427d660edcb9e9dea590a8a8cfd72d546b82322831f0c68ae276bf5c4",
+    "usage": "Quest hint panel",
+    "notes": "9-slice recommended"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/icons/icon_account_128x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/icons/icon_account_128x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/icons/icon_account_128x128.png",
+    "width": "128",
+    "height": "128",
+    "sha256": "145538bac18c202f781550aa4b8c73c9f296ebc812aa1fe5f95a34545469ca3f",
+    "usage": "Small UI icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/icons/icon_mail_128x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/icons/icon_mail_128x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/icons/icon_mail_128x128.png",
+    "width": "128",
+    "height": "128",
+    "sha256": "48d1b504ff4e5b5edd358d4a60b06503f428acba60bcaaa7e30e81e580d99741",
+    "usage": "Small UI icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/icons/icon_menu_128x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/icons/icon_menu_128x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/icons/icon_menu_128x128.png",
+    "width": "128",
+    "height": "128",
+    "sha256": "ae4c75ccbbd344d30df86e8913dd3aa2f816cc0cc0e655da0668df47701e100f",
+    "usage": "Small UI icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/icons/icon_notice_128x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/icons/icon_notice_128x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/icons/icon_notice_128x128.png",
+    "width": "128",
+    "height": "128",
+    "sha256": "b62441b0813e5345f735167643629d8101e495d4fd6efcdc046eb2daf769ebc4",
+    "usage": "Small UI icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/icons/icon_plus_128x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/icons/icon_plus_128x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/icons/icon_plus_128x128.png",
+    "width": "128",
+    "height": "128",
+    "sha256": "589f6607d248126b0e89359e575c984a83bce370f7426e4517cba1e64399f089",
+    "usage": "Small UI icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/icons/icon_quest_128x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/icons/icon_quest_128x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/icons/icon_quest_128x128.png",
+    "width": "128",
+    "height": "128",
+    "sha256": "e813df0c8dbce2f228c4350d5e95c4ee1e35009c2055a2eb6de066056e806ad2",
+    "usage": "Small UI icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/icons/icon_server_128x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/icons/icon_server_128x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/icons/icon_server_128x128.png",
+    "width": "128",
+    "height": "128",
+    "sha256": "e22df475592f997cc09dd7cb03168d33ee63d75605dbb968516226d8cceaa2c5",
+    "usage": "Small UI icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/icons/icon_settings_128x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/icons/icon_settings_128x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/icons/icon_settings_128x128.png",
+    "width": "128",
+    "height": "128",
+    "sha256": "7f76ed6ed69c30761fc8a630db6838ad0bf84eb68f41c404b511cc13ca63c37e",
+    "usage": "Small UI icon",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/panels/dialogue_panel_1024x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/panels/dialogue_panel_1024x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/panels/dialogue_panel_1024x256.png",
+    "width": "1024",
+    "height": "256",
+    "sha256": "06aa4e385d24990ad9a7cd84963668763baadc36fa50e931c4f524561f4137f6",
+    "usage": "UI panel/frame",
+    "notes": "9-slice recommended"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/panels/panel_main_large_1024x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/panels/panel_main_large_1024x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/panels/panel_main_large_1024x512.png",
+    "width": "1024",
+    "height": "512",
+    "sha256": "2279169c2c743f224788512a5691288028b36f69565106439d3d9d89d4ec4b37",
+    "usage": "UI panel/frame",
+    "notes": "9-slice recommended"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/panels/panel_medium_512x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/panels/panel_medium_512x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/panels/panel_medium_512x256.png",
+    "width": "512",
+    "height": "256",
+    "sha256": "155addcb84f663f652a6ba810b0c75049c889b336aa644cfeefb9ce5ce9a1c12",
+    "usage": "UI panel/frame",
+    "notes": "9-slice recommended"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/panels/panel_small_256x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/panels/panel_small_256x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/panels/panel_small_256x128.png",
+    "width": "256",
+    "height": "128",
+    "sha256": "c228fc0a8a6bc7495bb6e7786be079fbb8d6e6ede720220687ad2ed9f481b78a",
+    "usage": "UI panel/frame",
+    "notes": "9-slice recommended"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/panels/server_selector_panel_768x128.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/panels/server_selector_panel_768x128.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/panels/server_selector_panel_768x128.png",
+    "width": "768",
+    "height": "128",
+    "sha256": "67afb6755bdece9fab561f88b07b2b5b994fbd6ec4a5dd25fc75d45d672675fc",
+    "usage": "UI panel/frame",
+    "notes": "9-slice recommended"
+  },
+  {
+    "source_path": "images/runtime-ready/ui/status/server_busy_64x64.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/status/server_busy_64x64.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/status/server_busy_64x64.png",
+    "width": "64",
+    "height": "64",
+    "sha256": "3714b1f14c28cdf42b824e1040a9d98e17969c73ca26392d3c00c1d7c7df8929",
+    "usage": "Server status dot",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/status/server_full_64x64.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/status/server_full_64x64.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/status/server_full_64x64.png",
+    "width": "64",
+    "height": "64",
+    "sha256": "cd0a5d01ed25b67dfc52b5bca88ba2463009191f825eec0e878c1b4562a246ab",
+    "usage": "Server status dot",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/status/server_maintenance_64x64.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/status/server_maintenance_64x64.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/status/server_maintenance_64x64.png",
+    "width": "64",
+    "height": "64",
+    "sha256": "d18dcf03a1366fdf817ff983779b17b04df2361d59509358cc657e57dd7ba673",
+    "usage": "Server status dot",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/ui/status/server_online_64x64.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/ui/status/server_online_64x64.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/UI/status/server_online_64x64.png",
+    "width": "64",
+    "height": "64",
+    "sha256": "3baa950a6eb7f1e40c1ef05b5002f4c816768c54b3048c5d800899173b613aa1",
+    "usage": "Server status dot",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/vfx/impact/impact_spark_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/vfx/impact/impact_spark_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/VFX/impact/impact_spark_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "f541b6d2482092d05388359e791a6d0bb687f7eecdce49db7827a8e35e107054",
+    "usage": "Impact spark VFX",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/vfx/spirit/selection_ring_blue_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/vfx/spirit/selection_ring_blue_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/VFX/spirit/selection_ring_blue_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "0450189140cdabd8407404974e3aaf06c6493eaf79f567ad2fbd4a9b4eb71a6e",
+    "usage": "Selection ring blue",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/vfx/spirit/selection_ring_gold_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/vfx/spirit/selection_ring_gold_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/VFX/spirit/selection_ring_gold_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "b40d6531095ff7ea0b8c51465b420a09d0ab5cf2bcedeb2995e337b22e59ea0d",
+    "usage": "Selection ring gold",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/vfx/spirit/spirit_orb_256x256.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/vfx/spirit/spirit_orb_256x256.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/VFX/spirit/spirit_orb_256x256.png",
+    "width": "256",
+    "height": "256",
+    "sha256": "7c893a370418998c49e7dd8f271e5dfb8d5a9bdd4161398c34e28b5eaac3afab",
+    "usage": "Spirit orb VFX",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/vfx/wind-slash/wind_slash_frame_01_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/vfx/wind-slash/wind_slash_frame_01_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/VFX/wind-slash/wind_slash_frame_01_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "d8f676b6e7045005224b0272d879b050cd298568abda2f7dfec45bd43976289b",
+    "usage": "Wind Slash VFX frame",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/vfx/wind-slash/wind_slash_frame_02_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/vfx/wind-slash/wind_slash_frame_02_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/VFX/wind-slash/wind_slash_frame_02_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "a0ed56eb454057d5eedb86db0297b8ee9154c7c4ee0dafeff7ccc85f1222dacc",
+    "usage": "Wind Slash VFX frame",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/vfx/wind-slash/wind_slash_frame_03_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/vfx/wind-slash/wind_slash_frame_03_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/VFX/wind-slash/wind_slash_frame_03_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "7d8c3e6682e69cf2a32ee0545349267aec8f83eea7a09eaffea1765cdfda1de3",
+    "usage": "Wind Slash VFX frame",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/vfx/wind-slash/wind_slash_frame_04_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/vfx/wind-slash/wind_slash_frame_04_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/VFX/wind-slash/wind_slash_frame_04_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "7bcd0e09e72a4267b202fcbb2f09ffc7147fe3a77aaa637f57d8aaf4c68416d3",
+    "usage": "Wind Slash VFX frame",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/characters/player_female_cultivator_512x768.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/characters/player_female_cultivator_512x768.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/characters/player_female_cultivator_512x768.png",
+    "width": "512",
+    "height": "768",
+    "sha256": "f7df1c881b0ff66a0daf0f06c8ae76298e50319e493431defb0f0322c91c679d",
+    "usage": "Player visual placeholder",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/characters/player_male_cultivator_512x768.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/characters/player_male_cultivator_512x768.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/characters/player_male_cultivator_512x768.png",
+    "width": "512",
+    "height": "768",
+    "sha256": "95b84c8036d941808acf471a49df2c786e2e445b0d0e297ed0319dfefd6831bf",
+    "usage": "Player visual placeholder",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/dummy/dummy_hit_512x768.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/dummy/dummy_hit_512x768.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/dummy/dummy_hit_512x768.png",
+    "width": "512",
+    "height": "768",
+    "sha256": "aab7815f416a5a18c243536f55bc78b1bb80ce6a618ee9d9e803cd58b890e0cd",
+    "usage": "Training dummy state",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/dummy/dummy_idle_512x768.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/dummy/dummy_idle_512x768.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/dummy/dummy_idle_512x768.png",
+    "width": "512",
+    "height": "768",
+    "sha256": "64167279908cc9f4334539aaf5325c730018e2e30cee2cf20e94907142759576",
+    "usage": "Training dummy state",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/dummy/dummy_selected_512x768.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/dummy/dummy_selected_512x768.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/dummy/dummy_selected_512x768.png",
+    "width": "512",
+    "height": "768",
+    "sha256": "ca19cc5a1f4a211545ee49fbb9265f59c37053b8cfbc88d6ee91570f2e334012",
+    "usage": "Training dummy state",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/dummy/shadow_slime_alt_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/dummy/shadow_slime_alt_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/dummy/shadow_slime_alt_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "cd353e35fc8f272a4a78b2c441477b2d88936a090ff488b3e23394092707cc96",
+    "usage": "Alternate shadow slime placeholder",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/gate/spirit_gate_1024x1024.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/gate/spirit_gate_1024x1024.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/gate/spirit_gate_1024x1024.png",
+    "width": "1024",
+    "height": "1024",
+    "sha256": "46cdb4c0b93333224f18643dafde5c7e919a06d8ce41bb83bf77f28d70a70847",
+    "usage": "Spirit Gate world object",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/npc/gate_keeper_npc_512x768.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/npc/gate_keeper_npc_512x768.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/npc/gate_keeper_npc_512x768.png",
+    "width": "512",
+    "height": "768",
+    "sha256": "c6a18e336ee34258e783eb8be71b941b9c8445a7e1315f6008205ca146919416",
+    "usage": "Gate Keeper NPC",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/props/banner_cultivation_256x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/props/banner_cultivation_256x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/props/banner_cultivation_256x512.png",
+    "width": "256",
+    "height": "512",
+    "sha256": "8063700f0b76710f2b2f278945af380247667e3e64c8446e071540d75a77626f",
+    "usage": "Cultivation banner",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/props/bridge_wood_1024x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/props/bridge_wood_1024x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/props/bridge_wood_1024x512.png",
+    "width": "1024",
+    "height": "512",
+    "sha256": "ade0b35535b08995598fbfb2663d1ebe48cd306afcd77ebc16a70cbfed2c2324",
+    "usage": "Bridge prop",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/props/lantern_prop_256x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/props/lantern_prop_256x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/props/lantern_prop_256x512.png",
+    "width": "256",
+    "height": "512",
+    "sha256": "c7e8b9934235e27423225b2f6e0bde6d2c024e00da19f84902232498b0e3510e",
+    "usage": "Lantern prop",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/props/rock_moss_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/props/rock_moss_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/props/rock_moss_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "0ea646a34dbb87f3f651d1fe395f99306da8ab3073d2950012351accbf3db55f",
+    "usage": "Environment rock",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/props/tree_cherry_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/props/tree_cherry_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/props/tree_cherry_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "0956afb329e95f502470f87682e0f34fae3b0d426eaf2e2f8ddf7238b87b4545",
+    "usage": "Environment prop",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/props/tree_pine_512x512.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/props/tree_pine_512x512.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/props/tree_pine_512x512.png",
+    "width": "512",
+    "height": "512",
+    "sha256": "c56a6bcb2c13c7ab2db1ce19207ed244c109a6f4f65f9d4734d7c29602130992",
+    "usage": "Environment prop",
+    "notes": ""
+  },
+  {
+    "source_path": "images/runtime-ready/world/training-stone/training_stone_512x1024.png",
+    "docs_path": "docs/reference-art/v2/runtime-ready/world/training-stone/training_stone_512x1024.png",
+    "unity_path": "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2/World/training-stone/training_stone_512x1024.png",
+    "width": "512",
+    "height": "1024",
+    "sha256": "e8730163e71faa9cfefeb30e0c400ba96fc253cab66d6ef77e59dc018af5b6c0",
+    "usage": "Training Stone world object",
+    "notes": ""
+  }
+]

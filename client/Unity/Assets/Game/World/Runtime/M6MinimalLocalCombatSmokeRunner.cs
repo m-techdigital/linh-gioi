@@ -50,12 +50,16 @@ namespace LinhGioi.World
                 var noTarget = world.TryLocalCombatPrototypeWithoutTargetForSmoke(baseTimeMs);
                 result.rejectedNoTarget = !noTarget.Accepted && noTarget.RejectedReason == "NO_TARGET";
                 result.rejectedNoTargetReason = noTarget.RejectedReason;
+                result.rejectedNoTargetRetryable = noTarget.RejectedMessage != null && noTarget.RejectedMessage.Error.Retryable;
+                result.rejectedNoTargetSnapshotTargetValid = noTarget.Snapshot != null && noTarget.Snapshot.TargetValid;
                 result.executedChecks++;
 
                 world.SetSmokePosition(0f, 0.25f, -4f, 0f);
                 var outOfRange = world.TryLocalCombatPrototypeAt(baseTimeMs + 1000);
                 result.rejectedOutOfRange = !outOfRange && world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.RejectedReason == "OUT_OF_RANGE";
                 result.rejectedOutOfRangeReason = world.LastLocalCombatOutcome != null ? world.LastLocalCombatOutcome.RejectedReason : "";
+                result.rejectedOutOfRangeRetryable = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.RejectedMessage != null && world.LastLocalCombatOutcome.RejectedMessage.Error.Retryable;
+                result.rejectedOutOfRangeSnapshotTargetValid = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.Snapshot != null && world.LastLocalCombatOutcome.Snapshot.TargetValid;
                 result.executedChecks++;
 
                 world.SetSmokePositionNearTargetDummy();
@@ -67,11 +71,19 @@ namespace LinhGioi.World
                 result.acceptedEffectAmount = world.LastLocalCombatOutcome != null ? world.LastLocalCombatOutcome.EffectAmount : 0;
                 result.acceptedTargetHpAfter = world.LastLocalCombatOutcome != null ? world.LastLocalCombatOutcome.TargetHpAfter : 0;
                 result.acceptedTargetState = world.LocalCombatTargetStateName;
+                result.acceptedIntentId = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.Intent != null ? world.LastLocalCombatOutcome.Intent.IntentId : "";
+                result.acceptedSequence = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.AcceptedMessage != null ? world.LastLocalCombatOutcome.AcceptedMessage.Sequence : 0;
+                result.acceptedCooldownMs = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.AcceptedMessage != null ? world.LastLocalCombatOutcome.AcceptedMessage.CooldownMs : 0;
+                result.acceptedOutcome = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.ResultMessage != null ? world.LastLocalCombatOutcome.ResultMessage.Outcome : "";
+                result.acceptedSnapshotTargetValid = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.Snapshot != null && world.LastLocalCombatOutcome.Snapshot.TargetValid;
                 result.executedChecks++;
 
                 result.cooldownBlockedAfterRepeatedInput = !world.TryLocalCombatPrototypeAt(baseTimeMs + 2500);
                 result.cooldownBlockedFeedbackText = world.CombatFeedbackText;
                 result.rejectedCooldownReason = world.LastLocalCombatOutcome != null ? world.LastLocalCombatOutcome.RejectedReason : "";
+                result.rejectedCooldownRetryable = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.RejectedMessage != null && world.LastLocalCombatOutcome.RejectedMessage.Error.Retryable;
+                result.rejectedCooldownRemainingMs = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.Snapshot != null ? world.LastLocalCombatOutcome.Snapshot.CooldownRemainingMs : 0;
+                result.rejectedCooldownSnapshotTargetValid = world.LastLocalCombatOutcome != null && world.LastLocalCombatOutcome.Snapshot != null && world.LastLocalCombatOutcome.Snapshot.TargetValid;
                 result.executedChecks++;
 
                 world.RecoverLocalCombatCooldownForSmoke();
@@ -93,6 +105,10 @@ namespace LinhGioi.World
                     throw new InvalidOperationException("Vietnamese local combat feedback marker missing");
                 if (!result.cooldownBlockedAfterRepeatedInput || result.rejectedCooldownReason != "COOLDOWN_ACTIVE" || !result.cooldownBlockedFeedbackText.Contains("Chưa thể tấn công") || !result.cooldownBlockedFeedbackText.Contains("Đang hồi chiêu"))
                     throw new InvalidOperationException("repeated attack did not produce deterministic cooldown block feedback");
+                if (result.acceptedSequence == 0 || result.acceptedCooldownMs != LocalCombatPrototypeState.WindSlashCooldownMs || result.acceptedOutcome != "LOCAL_PLACEHOLDER_HIT" || !result.acceptedSnapshotTargetValid)
+                    throw new InvalidOperationException("accepted local combat diagnostic evidence is incomplete");
+                if (result.rejectedNoTargetRetryable || result.rejectedOutOfRangeRetryable || !result.rejectedCooldownRetryable || result.rejectedCooldownRemainingMs == 0 || !result.rejectedCooldownSnapshotTargetValid)
+                    throw new InvalidOperationException("rejected local combat diagnostic evidence is incomplete");
                 if (!result.cooldownRecoveredText.Contains("Sẵn sàng") || !result.attackAfterCooldownRecovered || !result.feedbackAfterCooldownRecovered.Contains("Trúng mục tiêu"))
                     throw new InvalidOperationException("cooldown recovery did not restore deterministic local attack feedback");
                 result.status = "PASS";
@@ -151,10 +167,19 @@ namespace LinhGioi.World
             public int executedChecks;
             public bool rejectedNoTarget;
             public string rejectedNoTargetReason;
+            public bool rejectedNoTargetRetryable;
+            public bool rejectedNoTargetSnapshotTargetValid;
             public bool rejectedOutOfRange;
             public string rejectedOutOfRangeReason;
+            public bool rejectedOutOfRangeRetryable;
+            public bool rejectedOutOfRangeSnapshotTargetValid;
             public bool attackTriggered;
             public bool targetDummyHitAcknowledged;
+            public string acceptedIntentId;
+            public uint acceptedSequence;
+            public uint acceptedCooldownMs;
+            public string acceptedOutcome;
+            public bool acceptedSnapshotTargetValid;
             public int acceptedEffectAmount;
             public int acceptedTargetHpAfter;
             public string acceptedTargetState;
@@ -163,6 +188,9 @@ namespace LinhGioi.World
             public string cooldownText;
             public bool cooldownBlockedAfterRepeatedInput;
             public string rejectedCooldownReason;
+            public bool rejectedCooldownRetryable;
+            public uint rejectedCooldownRemainingMs;
+            public bool rejectedCooldownSnapshotTargetValid;
             public string cooldownBlockedFeedbackText;
             public string cooldownRecoveredText;
             public bool attackAfterCooldownRecovered;

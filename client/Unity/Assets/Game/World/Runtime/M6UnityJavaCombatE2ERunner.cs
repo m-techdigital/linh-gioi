@@ -46,29 +46,49 @@ namespace LinhGioi.World
                 result.accepted = accepted.IntentId == intent.IntentId && accepted.Snapshot.TargetValid;
                 result.resultObserved = combatResult.IntentId == intent.IntentId && combatResult.EffectAmount == LocalCombatPrototypeState.WindSlashPlaceholderAmount;
                 result.snapshotObserved = snapshot.ActorEntityId == LocalCombatPrototypeState.ActorEntityId && snapshot.TargetValid;
+                result.acceptedIntentId = accepted.IntentId;
+                result.acceptedSequence = accepted.Sequence;
+                result.acceptedCooldownMs = accepted.CooldownMs;
+                result.acceptedSnapshotTargetValid = accepted.Snapshot.TargetValid;
+                result.resultOutcome = combatResult.Outcome;
+                result.resultEffectAmount = combatResult.EffectAmount;
+                result.snapshotCooldownRemainingMs = snapshot.CooldownRemainingMs;
 
                 var noTarget = intent.Clone();
                 noTarget.Sequence = 102;
                 noTarget.IntentId = "unity-java-e2e-no-target";
                 noTarget.TargetEntityId = 0;
-                result.rejectedNoTarget = RejectionCode(await SendAll(host, port, noTarget.ToByteArray(), shutdownToken)).Contains("no_target");
+                var noTargetRejected = Rejection(await SendAll(host, port, noTarget.ToByteArray(), shutdownToken));
+                result.rejectedNoTargetCode = noTargetRejected.Error.Code;
+                result.rejectedNoTargetRetryable = noTargetRejected.Error.Retryable;
+                result.rejectedNoTarget = result.rejectedNoTargetCode.Contains("no_target");
 
                 var outOfRange = intent.Clone();
                 outOfRange.Sequence = 103;
                 outOfRange.IntentId = "unity-java-e2e-out-of-range";
                 outOfRange.TargetPosition = new Vec3 { X = -10f, Y = 0.25f, Z = 0.5f };
-                result.rejectedOutOfRange = RejectionCode(await SendAll(host, port, outOfRange.ToByteArray(), shutdownToken)).Contains("out_of_range");
+                var outOfRangeRejected = Rejection(await SendAll(host, port, outOfRange.ToByteArray(), shutdownToken));
+                result.rejectedOutOfRangeCode = outOfRangeRejected.Error.Code;
+                result.rejectedOutOfRangeRetryable = outOfRangeRejected.Error.Retryable;
+                result.rejectedOutOfRange = result.rejectedOutOfRangeCode.Contains("out_of_range");
 
                 var cooldown = intent.Clone();
                 cooldown.Sequence = 104;
                 cooldown.IntentId = "unity-java-e2e-cooldown";
-                result.rejectedCooldown = RejectionCode(await SendAll(host, port, cooldown.ToByteArray(), shutdownToken)).Contains("cooldown");
+                var cooldownRejected = Rejection(await SendAll(host, port, cooldown.ToByteArray(), shutdownToken));
+                result.rejectedCooldownCode = cooldownRejected.Error.Code;
+                result.rejectedCooldownRetryable = cooldownRejected.Error.Retryable;
+                result.rejectedCooldownRemainingMs = cooldownRejected.Snapshot.CooldownRemainingMs;
+                result.rejectedCooldown = result.rejectedCooldownCode.Contains("cooldown");
 
                 var invalidSkill = intent.Clone();
                 invalidSkill.Sequence = 105;
                 invalidSkill.IntentId = "unity-java-e2e-invalid-skill";
                 invalidSkill.SkillId = "skill.unknown";
-                result.rejectedInvalidSkill = RejectionCode(await SendAll(host, port, invalidSkill.ToByteArray(), shutdownToken)).Contains("skill_id");
+                var invalidSkillRejected = Rejection(await SendAll(host, port, invalidSkill.ToByteArray(), shutdownToken));
+                result.rejectedInvalidSkillCode = invalidSkillRejected.Error.Code;
+                result.rejectedInvalidSkillRetryable = invalidSkillRejected.Error.Retryable;
+                result.rejectedInvalidSkill = result.rejectedInvalidSkillCode.Contains("skill_id");
 
                 result.executedChecks = 7;
                 result.localPrototypeStillSeparate = world.CombatAuthorityText.Contains("Máy chủ chấp nhận") && world.CombatFeedbackText.Contains("Mô phỏng cục bộ");
@@ -77,6 +97,10 @@ namespace LinhGioi.World
                     throw new InvalidOperationException("accepted/result/snapshot E2E evidence missing");
                 if (!result.rejectedNoTarget || !result.rejectedOutOfRange || !result.rejectedCooldown || !result.rejectedInvalidSkill)
                     throw new InvalidOperationException("server rejection E2E matrix missing");
+                if (result.acceptedSequence == 0 || result.acceptedCooldownMs == 0 || result.resultEffectAmount != LocalCombatPrototypeState.WindSlashPlaceholderAmount || result.resultOutcome.Length == 0)
+                    throw new InvalidOperationException("server accepted diagnostic evidence missing");
+                if (result.rejectedNoTargetRetryable || !result.rejectedOutOfRangeRetryable || !result.rejectedCooldownRetryable || result.rejectedInvalidSkillRetryable || result.rejectedCooldownRemainingMs == 0)
+                    throw new InvalidOperationException("server rejection diagnostic evidence missing");
                 if (!result.localPrototypeStillSeparate)
                     throw new InvalidOperationException("Unity local preview/server authority copy separation regressed");
                 result.status = "PASS";
@@ -106,10 +130,9 @@ namespace LinhGioi.World
             throw new InvalidOperationException("missing response kind " + kind);
         }
 
-        private static string RejectionCode(List<ResponseFrame> frames)
+        private static CombatRejected Rejection(List<ResponseFrame> frames)
         {
-            var rejected = CombatRejected.Parser.ParseFrom(RequireKind(frames, 2));
-            return rejected.Error.Code;
+            return CombatRejected.Parser.ParseFrom(RequireKind(frames, 2));
         }
 
         private static async Task<List<ResponseFrame>> SendAll(string host, int port, byte[] payload, CancellationToken token)
@@ -200,10 +223,26 @@ namespace LinhGioi.World
             public bool accepted;
             public bool resultObserved;
             public bool snapshotObserved;
+            public string acceptedIntentId;
+            public uint acceptedSequence;
+            public uint acceptedCooldownMs;
+            public bool acceptedSnapshotTargetValid;
+            public string resultOutcome;
+            public int resultEffectAmount;
+            public uint snapshotCooldownRemainingMs;
             public bool rejectedNoTarget;
+            public string rejectedNoTargetCode;
+            public bool rejectedNoTargetRetryable;
             public bool rejectedOutOfRange;
+            public string rejectedOutOfRangeCode;
+            public bool rejectedOutOfRangeRetryable;
             public bool rejectedCooldown;
+            public string rejectedCooldownCode;
+            public bool rejectedCooldownRetryable;
+            public uint rejectedCooldownRemainingMs;
             public bool rejectedInvalidSkill;
+            public string rejectedInvalidSkillCode;
+            public bool rejectedInvalidSkillRetryable;
             public bool localPrototypeStillSeparate;
             public string nonClaims;
             public string exceptionType;

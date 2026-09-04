@@ -44,6 +44,10 @@ namespace LinhGioi.World
         private SpriteRenderer _targetDummyHitSprite;
         private SpriteRenderer _windSlashSprite;
         private SpriteRenderer _shadowTelegraphSprite;
+        private SpriteRenderer _gateKeeperSprite;
+        private SpriteRenderer _spiritGateSprite;
+        private SpriteRenderer _trainingStoneSprite;
+        private SpriteRenderer _shadowSlimeSprite;
         private InteractableState _nearestInteractable;
         private string _objectiveText = "Objective: enter the world and find the training stone.";
         private string _interactionText = "Move near the Gate Keeper or Training Stone.";
@@ -671,6 +675,14 @@ namespace LinhGioi.World
                 _windSlashSprite = CreateBillboardSprite("LGO Wind Slash Runtime Sprite v0.46", CombatPlaceholderAssets.WindSlashFrame01, CurrentPosition + new Vector3(0f, 0.85f, 0.9f), new Vector3(1.55f, 1.55f, 1f), 6);
             if (_shadowTelegraphSprite == null)
                 _shadowTelegraphSprite = CreateBillboardSprite("LGO Warning Telegraph Circle Sprite v0.46", CombatPlaceholderAssets.WarningTelegraphCircle, ShadowSlimePosition + Vector3.up * 0.16f, new Vector3(2.15f, 2.15f, 1f), 4);
+            if (_gateKeeperSprite == null)
+                _gateKeeperSprite = CreateBillboardSprite("LGO Gate Keeper Runtime Sprite V3B", LgoVisualAssetRegistryV3B.GateKeeperNpc ?? LgoVisualAssetRegistryV2.GateKeeperNpc, GateKeeperPosition + Vector3.up * 0.2f, new Vector3(1.35f, 1.35f, 1f), 5);
+            if (_spiritGateSprite == null)
+                _spiritGateSprite = CreateBillboardSprite("LGO Spirit Gate Runtime Sprite V3B", LgoVisualAssetRegistryV3B.SpiritGate ?? LgoVisualAssetRegistryV2.SpiritGate, new Vector3(0f, 0.45f, -4.5f), new Vector3(1.4f, 1.4f, 1f), 3);
+            if (_trainingStoneSprite == null)
+                _trainingStoneSprite = CreateBillboardSprite("LGO Training Stone Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TrainingStone ?? LgoVisualAssetRegistryV2.TrainingStone, TrainingStonePosition + Vector3.up * 0.2f, new Vector3(1.1f, 1.1f, 1f), 5);
+            if (_shadowSlimeSprite == null)
+                _shadowSlimeSprite = CreateBillboardSprite("LGO Shadow Slime Runtime Sprite V2", LgoVisualAssetRegistryV2.ShadowSlimeAlt, ShadowSlimePosition + Vector3.up * 0.25f, new Vector3(1.05f, 1.05f, 1f), 5);
         }
 
         private static SpriteRenderer CreateBillboardSprite(string name, Sprite sprite, Vector3 position, Vector3 scale, int sortingOrder)

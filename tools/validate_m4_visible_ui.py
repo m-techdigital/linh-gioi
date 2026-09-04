@@ -77,12 +77,12 @@ def main() -> int:
     check_panel_sizes(ui)
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Auth / Gate Entry',
+        'Cổng Đăng Nhập',
         'Character Hall',
         'World HUD',
         'Save Position',
         'Back to Lobby',
-        'API status',
+        'API:',
         'Quit',
         'KeyCode.Escape',
         'Application.Quit',

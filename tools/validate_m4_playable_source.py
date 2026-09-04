@@ -56,9 +56,9 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Dev key',
+        'Khóa dev',
         'No character yet',
-        'Enter World',
+        'Vào sân luyện',
         'Save Position',
         'Back to Lobby',
         'AccountApiClient',
