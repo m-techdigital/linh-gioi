@@ -125,6 +125,33 @@ namespace LinhGioi.World
             return TryTriggerInteraction();
         }
 
+        public void PreviewSkillFeedback(string previewName)
+        {
+            if (string.IsNullOrWhiteSpace(previewName)) return;
+            SetPlayerPose(PlaceholderPoseState.Interact);
+            if (previewName == "Wind Slash")
+            {
+                SetVfxFeedback(PlaceholderVfxFeedbackState.WindSlashPreview, 1.25f);
+                TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
+                _interactionText = "Preview only: Wind Slash form traces a gold arc with no opponent or result.";
+            }
+            else if (previewName == "Shadow Bind")
+            {
+                SetShadowSlimeState(PlaceholderSlimeState.AlertWarning);
+                SetVfxFeedback(PlaceholderVfxFeedbackState.ShadowBindWarning, 1.25f);
+                TriggerLocalPosePulse(RuntimeArtCatalog.Danger);
+                _interactionText = "Preview only: Shadow Bind warning ring marks readable intent in the safe yard.";
+            }
+            else
+            {
+                SetPlayerPose(PlaceholderPoseState.SpiritChannel);
+                SetVfxFeedback(PlaceholderVfxFeedbackState.SpiritPulse, 1.25f);
+                TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
+                _interactionText = "Preview only: Spirit Guard pulse shows a defensive stance rehearsal.";
+            }
+            InteractionStateChanged?.Invoke();
+        }
+
         private void Update()
         {
             if (_marker == null || _character == null) return;

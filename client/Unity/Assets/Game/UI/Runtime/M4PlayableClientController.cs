@@ -26,6 +26,7 @@ namespace LinhGioi.UI
         private VisualElement _dialoguePanel;
         private VisualElement _sessionMenuPanel;
         private VisualElement _settingsPanel;
+        private VisualElement _skillPreviewPanel;
         private VisualElement _characterList;
         private TextField _devKey;
         private TextField _characterName;
@@ -59,6 +60,9 @@ namespace LinhGioi.UI
         private Button _quitButton;
         private Button _dialogueContinueButton;
         private Button _dialogueCloseButton;
+        private Button _previewWindSlashButton;
+        private Button _previewShadowBindButton;
+        private Button _previewSpiritGuardButton;
         private Button _resumeButton;
         private Button _sessionSaveButton;
         private Button _sessionBackButton;
@@ -312,6 +316,7 @@ namespace LinhGioi.UI
             _worldHud.Add(_toast);
 
             BuildSessionMenuPanel();
+            BuildSkillPreviewPanel();
 
             _dialoguePanel = NewPreviewPanel();
             _dialoguePanel.style.marginTop = 10;
@@ -356,6 +361,20 @@ namespace LinhGioi.UI
             BuildLocalSettingsPanel();
             _worldHud.Add(_sessionMenuPanel);
             SetSessionMenuVisible(false);
+        }
+
+        private void BuildSkillPreviewPanel()
+        {
+            _skillPreviewPanel = NewPreviewPanel();
+            _skillPreviewPanel.name = "LGO Skill Preview Sandbox";
+            _skillPreviewPanel.style.marginTop = 10;
+            _skillPreviewPanel.Add(NewSectionTitle("Skill Preview Sandbox"));
+            _skillPreviewPanel.Add(NewMutedLabel("Local visual rehearsal only. No opponent, timing rule, or progression result is created."));
+            _previewWindSlashButton = NewSecondaryButton("Preview Wind Slash", () => PreviewSkill("Wind Slash"));
+            _previewShadowBindButton = NewSecondaryButton("Preview Shadow Bind", () => PreviewSkill("Shadow Bind"));
+            _previewSpiritGuardButton = NewSecondaryButton("Preview Spirit Guard", () => PreviewSkill("Spirit Guard"));
+            _skillPreviewPanel.Add(NewButtonRow(_previewWindSlashButton, _previewShadowBindButton, _previewSpiritGuardButton));
+            _worldHud.Add(_skillPreviewPanel);
         }
 
         private void BuildLocalSettingsPanel()
@@ -754,6 +773,15 @@ namespace LinhGioi.UI
             if (_worldPoseState != null) _worldPoseState.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldVfxState != null) _worldVfxState.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
             if (_skinSource != null) _skinSource.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_skillPreviewPanel != null) _skillPreviewPanel.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
+        private void PreviewSkill(string previewName)
+        {
+            if (_world == null) return;
+            _world.PreviewSkillFeedback(previewName);
+            RefreshWorldLoopLabels();
+            SetToast("Preview only: " + previewName + " feedback played in the safe yard.", RuntimeArtCatalog.Spirit);
         }
 
         private void ContinueDialogue()
