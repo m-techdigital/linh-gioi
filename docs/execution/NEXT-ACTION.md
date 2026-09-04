@@ -4,15 +4,15 @@ Last updated: `2026-09-05`
 
 ## Current focus
 
-Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, and the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
+Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile, and the world hub ground now uses a lightweight procedural cultivation-platform texture instead of a debug-like grid. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-WORLD-GROUND-VISUAL-QUALITY-PASS-v1.0`
+`LGO-LOGIN-NPC-COMPOSITING-POLISH-v1.0`
 
-Improve the world hub ground/background presentation without importing large images or adding gameplay: reduce the visible debug-grid feel, add subtle cultivation-platform depth procedurally, and verify world/NPC/dialogue screenshots.
+Improve login screen composition using existing V3B/V3B-candidate runtime assets only: reduce pasted-on feel, balance logo/NPC/server/CTA hierarchy, keep assets responsive and size-budgeted for desktop/tablet/mobile, and verify screenshots through the runtime harness. Do not import V3BA, reference posters, composite sheets, or heavy unbudgeted images.
 
 ## Current blocker
 
@@ -26,11 +26,12 @@ Evidence:
 - `docs/tasks/LGO-CHARACTER-LOBBY-VISUAL-POLISH-v1.0.md`
 - `docs/tasks/LGO-WORLD-HUD-PLAYABLE-PRESENTATION-POLISH-v1.0.md`
 - `docs/tasks/LGO-WORLD-HUB-SCENE-PRESENTATION-POLISH-v1.0.md`
+- `docs/tasks/LGO-WORLD-GROUND-VISUAL-QUALITY-PASS-v1.0.md`
 - `build/visual-evidence/latest/player.log`
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: improve world ground/background quality after the HUD density/touch pass. The visual evidence harness records explicit review checklist categories for every checkpoint while still refusing to claim visual PASS from capture/build alone.
+Next allowed action: polish login/NPC composition after the world ground visual pass. The visual evidence harness records explicit review checklist categories for every checkpoint while still refusing to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -65,6 +66,7 @@ python3.12 tools/validate_lgo_runtime_asset_weight.py
 python3.12 tools/validate_lgo_runtime_asset_import_profiles.py
 python3.12 tools/validate_lgo_device_profile_ui_budgets.py
 python3.12 tools/validate_lgo_world_hud_density_mobile_touch.py
+python3.12 tools/validate_lgo_world_ground_visual_quality.py
 python3.12 tools/validate_m4_2_playable_ui.py
 python3.12 tools/validate_m4_visible_ui.py
 python3.12 tools/validate_m6_combat_visual_readability.py
@@ -107,6 +109,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-HUD-DENSITY-AND-MOBILE-TOUCH-PASS-v1.0` is closed. Continue with `LGO-WORLD-GROUND-VISUAL-QUALITY-PASS-v1.0`.
+`LGO-WORLD-GROUND-VISUAL-QUALITY-PASS-v1.0` is closed. Continue with `LGO-LOGIN-NPC-COMPOSITING-POLISH-v1.0`.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

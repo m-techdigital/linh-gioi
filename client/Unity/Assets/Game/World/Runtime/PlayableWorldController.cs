@@ -398,7 +398,7 @@ namespace LinhGioi.World
             var renderer = ground.GetComponent<Renderer>();
             if (renderer != null)
             {
-                var material = RuntimeArtCatalog.CreateMaterial("LGO Training Ground Tile", RuntimeArtCatalog.SurfaceRaised);
+                var material = RuntimeArtCatalog.CreateMaterial("LGO Procedural Cultivation Platform Material v1", RuntimeArtCatalog.SurfaceRaised);
                 material.color = Color.white;
                 material.mainTexture = CreateTrainingGroundTexture();
                 renderer.material = material;
@@ -410,47 +410,65 @@ namespace LinhGioi.World
             const int size = 512;
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
             {
-                name = "LGO Procedural Training Ground Texture",
+                name = "LGO Procedural Cultivation Platform Texture v1",
                 wrapMode = TextureWrapMode.Clamp,
                 filterMode = FilterMode.Bilinear
             };
-            var baseColor = new Color(0.105f, 0.16f, 0.24f, 1f);
-            var stoneA = new Color(0.145f, 0.205f, 0.30f, 1f);
-            var stoneB = new Color(0.11f, 0.175f, 0.265f, 1f);
-            var line = new Color(0.16f, 0.58f, 0.82f, 1f);
-            var gold = new Color(0.78f, 0.55f, 0.22f, 1f);
-            var center = new Vector2(0.5f, 0.48f);
+            var baseColor = new Color(0.095f, 0.145f, 0.215f, 1f);
+            var stoneA = new Color(0.13f, 0.19f, 0.285f, 1f);
+            var stoneB = new Color(0.085f, 0.135f, 0.205f, 1f);
+            var mist = new Color(0.19f, 0.37f, 0.50f, 1f);
+            var line = new Color(0.11f, 0.68f, 0.86f, 1f);
+            var gold = new Color(0.78f, 0.56f, 0.25f, 1f);
+            var center = new Vector2(0.5f, 0.46f);
             for (var y = 0; y < size; y++)
             {
                 for (var x = 0; x < size; x++)
                 {
                     var uv = new Vector2((x + 0.5f) / size, (y + 0.5f) / size);
-                    var tileX = Mathf.FloorToInt(uv.x * 24f);
-                    var tileY = Mathf.FloorToInt(uv.y * 24f);
-                    var tileBlend = ((tileX + tileY) & 1) == 0 ? 0.18f : 0.06f;
-                    var color = Color.Lerp(baseColor, ((tileX + tileY) & 1) == 0 ? stoneA : stoneB, tileBlend);
-                    var grout = Mathf.Min(Frac(uv.x * 24f), Frac(uv.y * 24f));
-                    grout = Mathf.Min(grout, Mathf.Min(1f - Frac(uv.x * 24f), 1f - Frac(uv.y * 24f)));
-                    if (grout < 0.012f) color = Color.Lerp(color, Color.black, 0.18f);
+                    var noise = HashNoise(x, y);
+                    var slowNoise = HashNoise(x / 8, y / 8);
+                    var color = Color.Lerp(baseColor, stoneA, 0.10f + slowNoise * 0.12f);
+                    color = Color.Lerp(color, stoneB, noise * 0.035f);
+
+                    var tileX = Mathf.FloorToInt(uv.x * 14f);
+                    var tileY = Mathf.FloorToInt(uv.y * 14f);
+                    var grout = Mathf.Min(Frac(uv.x * 14f), Frac(uv.y * 14f));
+                    grout = Mathf.Min(grout, Mathf.Min(1f - Frac(uv.x * 14f), 1f - Frac(uv.y * 14f)));
+                    if (grout < 0.006f) color = Color.Lerp(color, Color.black, 0.055f);
+                    if (((tileX + tileY) & 1) == 0) color = Color.Lerp(color, mist, 0.018f);
 
                     var toCenter = uv - center;
                     var dist = toCenter.magnitude;
-                    var ring = Mathf.Abs(dist - 0.18f);
-                    var outerRing = Mathf.Abs(dist - 0.31f);
-                    if (ring < 0.0038f) color = Color.Lerp(color, line, 0.32f);
-                    if (outerRing < 0.0025f) color = Color.Lerp(color, gold, 0.24f);
-                    if (Mathf.Abs(toCenter.x) < 0.0018f && dist < 0.33f) color = Color.Lerp(color, line, 0.14f);
-                    if (Mathf.Abs(toCenter.y) < 0.0018f && dist < 0.33f) color = Color.Lerp(color, line, 0.14f);
+                    var innerRing = SmoothBand(dist, 0.145f, 0.0075f);
+                    var midRing = SmoothBand(dist, 0.245f, 0.0065f);
+                    var outerRing = SmoothBand(dist, 0.355f, 0.009f);
+                    color = Color.Lerp(color, line, innerRing * 0.20f);
+                    color = Color.Lerp(color, line, midRing * 0.14f);
+                    color = Color.Lerp(color, gold, outerRing * 0.13f);
+                    var diagonalA = Mathf.Abs(toCenter.x - toCenter.y);
+                    var diagonalB = Mathf.Abs(toCenter.x + toCenter.y);
+                    if (dist < 0.34f)
+                    {
+                        color = Color.Lerp(color, line, SmoothBand(diagonalA, 0f, 0.006f) * 0.055f);
+                        color = Color.Lerp(color, line, SmoothBand(diagonalB, 0f, 0.006f) * 0.055f);
+                    }
+                    if (dist < 0.36f)
+                    {
+                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.x), 0f, 0.005f) * 0.06f);
+                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.y), 0f, 0.005f) * 0.06f);
+                    }
 
-                    var pathToGate = DistanceToSegment(uv, new Vector2(0.50f, 0.30f), new Vector2(0.50f, 0.07f));
-                    var pathToStone = DistanceToSegment(uv, new Vector2(0.50f, 0.50f), new Vector2(0.50f, 0.78f));
-                    var pathToKeeper = DistanceToSegment(uv, new Vector2(0.50f, 0.50f), new Vector2(0.31f, 0.70f));
+                    var pathToGate = DistanceToSegment(uv, new Vector2(0.50f, 0.28f), new Vector2(0.50f, 0.08f));
+                    var pathToStone = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.50f, 0.78f));
+                    var pathToKeeper = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.31f, 0.70f));
                     var guide = Mathf.Min(pathToGate, Mathf.Min(pathToStone, pathToKeeper));
-                    if (guide < 0.0032f) color = Color.Lerp(color, line, 0.26f);
-                    else if (guide < 0.011f) color = Color.Lerp(color, line, 0.08f);
+                    color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.010f) * 0.11f);
 
-                    var vignette = Mathf.Clamp01((dist - 0.15f) / 0.55f);
-                    color = Color.Lerp(color, Color.black, vignette * 0.12f);
+                    var platformGlow = Mathf.Clamp01(1f - dist / 0.44f);
+                    color = Color.Lerp(color, mist, platformGlow * 0.045f);
+                    var vignette = Mathf.Clamp01((dist - 0.18f) / 0.58f);
+                    color = Color.Lerp(color, Color.black, vignette * 0.10f);
                     texture.SetPixel(x, y, color);
                 }
             }
@@ -470,6 +488,21 @@ namespace LinhGioi.World
             if (lengthSq <= 0.0001f) return Vector2.Distance(point, start);
             var t = Mathf.Clamp01(Vector2.Dot(point - start, segment) / lengthSq);
             return Vector2.Distance(point, start + segment * t);
+        }
+
+        private static float SmoothBand(float value, float target, float halfWidth)
+        {
+            return Mathf.Clamp01(1f - Mathf.Abs(value - target) / Mathf.Max(halfWidth, 0.0001f));
+        }
+
+        private static float HashNoise(int x, int y)
+        {
+            unchecked
+            {
+                var n = x * 374761393 + y * 668265263;
+                n = (n ^ (n >> 13)) * 1274126177;
+                return ((n ^ (n >> 16)) & 0xffff) / 65535f;
+            }
         }
 
         private static void EnsureWorldPlaceholders()
