@@ -268,6 +268,9 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_asset_size_inventory.py ]]; then
     run_phase runtime_asset_size_inventory python3.12 tools/validate_lgo_runtime_asset_size_inventory.py
   fi
+  if [[ -f tools/validate_lgo_runtime_asset_import_profiles.py ]]; then
+    run_phase runtime_asset_import_profiles python3.12 tools/validate_lgo_runtime_asset_import_profiles.py
+  fi
   if [[ -f tools/validate_lgo_device_profile_ui_budgets.py ]]; then
     run_phase device_profile_ui_budgets python3.12 tools/validate_lgo_device_profile_ui_budgets.py
   fi
@@ -347,6 +350,7 @@ source_only() {
     tools/validate_lgo_animation_direction.py \
     tools/validate_lgo_runtime_asset_weight.py \
     tools/validate_lgo_runtime_asset_size_inventory.py \
+    tools/validate_lgo_runtime_asset_import_profiles.py \
     tools/validate_lgo_device_profile_ui_budgets.py \
     tools/validate_lgo_telemetry_schema_plan.py \
     tools/validate_code_governance.py \
@@ -635,6 +639,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_lgo_runtime_asset_size_inventory.py ]]; then
     run_phase runtime_asset_size_inventory python3.12 tools/validate_lgo_runtime_asset_size_inventory.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_asset_import_profiles.py ]]; then
+    run_phase runtime_asset_import_profiles python3.12 tools/validate_lgo_runtime_asset_import_profiles.py
   fi
   if [[ -f tools/validate_lgo_telemetry_schema_plan.py ]]; then
     run_phase telemetry_schema_plan python3.12 tools/validate_lgo_telemetry_schema_plan.py

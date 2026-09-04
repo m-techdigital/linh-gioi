@@ -222,7 +222,81 @@ def guid_for(rel: str) -> str:
     return uuid.uuid5(uuid.NAMESPACE_URL, "linhgioi-art-v3b:" + rel).hex
 
 
-def write_unity_meta(path: Path, unity_rel: str, max_texture_size: int) -> None:
+def role_mobile_max(role: str, default_max: int) -> int:
+    if role == "login_background":
+        return min(default_max, 1024)
+    if role.startswith("vfx_"):
+        return min(default_max, 256)
+    if role.startswith("combat_cooldown_"):
+        return min(default_max, 128)
+    return min(default_max, 512)
+
+
+def role_ios_max(role: str, default_max: int) -> int:
+    if role == "login_background":
+        return min(default_max, 1536)
+    if role.startswith("vfx_"):
+        return min(default_max, 256)
+    if role.startswith("combat_cooldown_"):
+        return min(default_max, 128)
+    return min(default_max, 768)
+
+
+def platform_settings(role: str, default_max: int) -> str:
+    android_max = role_mobile_max(role, default_max)
+    iphone_max = role_ios_max(role, default_max)
+    return f"""  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: {default_max}
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 80
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: {default_max}
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 80
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: {android_max}
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 70
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: {iphone_max}
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 75
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 1
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0"""
+
+
+def write_unity_meta(path: Path, unity_rel: str, role: str, max_texture_size: int) -> None:
     meta = path.with_suffix(path.suffix + ".meta")
     meta.write_text(
         f"""fileFormatVersion: 2
@@ -292,7 +366,7 @@ TextureImporter:
   applyGammaDecoding: 0
   swizzle: 50462976
   cookieLightType: 0
-  platformSettings: []
+{platform_settings(role, max_texture_size)}
   spriteSheet:
     serializedVersion: 2
     sprites: []
@@ -359,7 +433,7 @@ def main() -> int:
             if UNITY_ROOT.parent in parent.parents or parent == UNITY_ROOT.parent:
                 write_folder_meta(parent)
         max_texture_size = int(candidate["runtime_max_texture_size"])
-        write_unity_meta(unity_path, candidate["unity"], max_texture_size)
+        write_unity_meta(unity_path, candidate["unity"], candidate["role"], max_texture_size)
         rows.append(
             {
                 "role": candidate["role"],
