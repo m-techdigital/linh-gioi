@@ -61,7 +61,9 @@ namespace LinhGioi.World
                     world.Enter(loaded);
                     result.enteredWorld = true;
                     result.initialObjective = world.ObjectiveText;
+                    result.initialVfxFeedbackState = world.VfxFeedbackStateName;
                     Require(result.initialObjective.Contains("Gate Keeper"), "initial objective did not point to Gate Keeper");
+                    Require(result.initialVfxFeedbackState == "PortalGatePulse", "initial portal VFX feedback did not appear");
 
                     world.SetSmokePositionNearGateKeeper();
                     result.gateKeeperPrompt = world.InteractionText;
@@ -70,8 +72,10 @@ namespace LinhGioi.World
                     Require(result.gateKeeperInteractionTriggered, "Gate Keeper interaction did not trigger");
                     result.afterGateKeeperObjective = world.ObjectiveText;
                     result.afterGateKeeperFeedback = world.InteractionText;
+                    result.afterGateKeeperVfxFeedbackState = world.VfxFeedbackStateName;
                     Require(result.afterGateKeeperObjective.Contains("Training Stone"), "objective did not advance to Training Stone");
                     Require(world.GuidedTrainingStepName == "FindTrainingStone", "guided step did not advance after Gate Keeper");
+                    Require(result.afterGateKeeperVfxFeedbackState == "WindSlashPreview", "Gate Keeper interaction did not trigger wind slash preview");
 
                     world.SetSmokePositionNearTrainingStone();
                     result.trainingStonePrompt = world.InteractionText;
@@ -81,8 +85,10 @@ namespace LinhGioi.World
                     Require(world.InteractionAcknowledged, "final acknowledgement flag missing");
                     result.finalObjective = world.ObjectiveText;
                     result.finalFeedback = world.InteractionText;
+                    result.finalVfxFeedbackState = world.VfxFeedbackStateName;
                     Require(result.finalObjective.Contains("Objective complete"), "objective did not complete");
                     Require(result.finalFeedback.Contains("Spirit pulse stabilized"), "final feedback did not show spirit pulse stabilization");
+                    Require(result.finalVfxFeedbackState == "SpiritPulse", "Training Stone interaction did not trigger spirit pulse VFX feedback");
 
                     var save = world.BuildSaveRequest();
                     var saved = await client.SaveCharacterPositionAsync(loaded.characterId, save.x, save.y, save.z, save.yawDegrees, token);
@@ -193,14 +199,17 @@ namespace LinhGioi.World
             public string classId;
             public bool enteredWorld;
             public string initialObjective;
+            public string initialVfxFeedbackState;
             public string gateKeeperPrompt;
             public bool gateKeeperInteractionTriggered;
             public string afterGateKeeperObjective;
             public string afterGateKeeperFeedback;
+            public string afterGateKeeperVfxFeedbackState;
             public string trainingStonePrompt;
             public bool trainingStoneInteractionTriggered;
             public string finalObjective;
             public string finalFeedback;
+            public string finalVfxFeedbackState;
             public bool savePositionStillWorks;
             public float savedX;
             public float savedY;

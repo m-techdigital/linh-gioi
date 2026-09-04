@@ -1,0 +1,11 @@
+client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs
+client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+client/Unity/Assets/Game/World/Runtime/M5GuidedTrainingLoopSmokeRunner.cs
+tools/validate_m5_vfx_feedback_placeholder.py
+tools/lgo_playable_closure_check.sh
+docs/tasks/M5-VFX-FEEDBACK-PLACEHOLDER-v0.23.0.md
+HANDOFF-LG-M5-VFX-FEEDBACK-PLACEHOLDER-v0.23.0.md
+M5-VFX-FEEDBACK-PLACEHOLDER-FINAL-REPORT-v0.23.0.md
+LGO-M5-VFX-FEEDBACK-PLACEHOLDER-v0.23.0-CHANGED-FILES.txt
+LGO-M5-VFX-FEEDBACK-PLACEHOLDER-v0.23.0-DELETIONS.txt
+LGO-M5-VFX-FEEDBACK-PLACEHOLDER-v0.23.0-ARTIFACTS.sha256

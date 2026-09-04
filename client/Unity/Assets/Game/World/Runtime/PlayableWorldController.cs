@@ -21,6 +21,9 @@ namespace LinhGioi.World
         private Transform _gateKeeperGuidePulse;
         private Transform _trainingSpiritPulse;
         private Transform _shadowWarningPulse;
+        private Transform _portalGatePulse;
+        private Transform _windSlashPreview;
+        private Transform _shadowBindWarning;
         private InteractableState _nearestInteractable;
         private string _objectiveText = "Objective: enter the world and find the training stone.";
         private string _interactionText = "Move near the Gate Keeper or Training Stone.";
@@ -28,7 +31,9 @@ namespace LinhGioi.World
         private PlaceholderPoseState _playerPoseState = PlaceholderPoseState.Idle;
         private PlaceholderNpcState _gateKeeperState = PlaceholderNpcState.Idle;
         private PlaceholderSlimeState _shadowSlimeState = PlaceholderSlimeState.Idle;
+        private PlaceholderVfxFeedbackState _vfxFeedbackState = PlaceholderVfxFeedbackState.Quiet;
         private float _posePulseUntil;
+        private float _vfxPreviewUntil;
 
         public event Action PositionChanged;
         public event Action InteractionStateChanged;
@@ -44,6 +49,7 @@ namespace LinhGioi.World
         public string PlayerPoseStateName => _playerPoseState.ToString();
         public string GateKeeperPoseStateName => _gateKeeperState.ToString();
         public string ShadowSlimeStateName => _shadowSlimeState.ToString();
+        public string VfxFeedbackStateName => _vfxFeedbackState.ToString();
         public bool InteractionAcknowledged { get; private set; }
 
         public void Enter(CharacterResponse character)
@@ -59,6 +65,7 @@ namespace LinhGioi.World
             SetPlayerPose(PlaceholderPoseState.Idle);
             SetGateKeeperState(PlaceholderNpcState.Idle);
             SetShadowSlimeState(PlaceholderSlimeState.Idle);
+            SetVfxFeedback(PlaceholderVfxFeedbackState.PortalGatePulse, 1.35f);
             _objectiveText = "Objective: talk to the Gate Keeper.";
             RefreshInteractionState();
             PositionChanged?.Invoke();
@@ -131,6 +138,7 @@ namespace LinhGioi.World
                 TryTriggerInteraction();
 
             RefreshPoseFeedbackMarkers();
+            RefreshVfxFeedbackMarkers();
         }
 
         private static GameObject CreateMarker()
@@ -248,6 +256,7 @@ namespace LinhGioi.World
                 _guidedStep = GuidedTrainingStep.FindTrainingStone;
                 SetPlayerPose(PlaceholderPoseState.Interact);
                 SetGateKeeperState(PlaceholderNpcState.TalkGuide);
+                SetVfxFeedback(PlaceholderVfxFeedbackState.WindSlashPreview, 1.1f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
                 _objectiveText = "Objective: stabilize the Training Stone.";
                 _interactionText = "Gate Keeper: your path is open. Follow the cyan spirit pulse.";
@@ -259,6 +268,7 @@ namespace LinhGioi.World
                 SetPlayerPose(PlaceholderPoseState.SpiritChannel);
                 SetGateKeeperState(PlaceholderNpcState.Idle);
                 SetShadowSlimeState(PlaceholderSlimeState.DissolveQuiet);
+                SetVfxFeedback(PlaceholderVfxFeedbackState.SpiritPulse, 1.5f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
                 _objectiveText = "Objective complete: spirit pulse stabilized.";
                 _interactionText = "Spirit pulse stabilized. Training acknowledged.";
@@ -293,6 +303,7 @@ namespace LinhGioi.World
             if (Distance2D(CurrentPosition, ShadowSlimePosition) <= 2.25f)
             {
                 SetShadowSlimeState(PlaceholderSlimeState.AlertWarning);
+                SetVfxFeedback(PlaceholderVfxFeedbackState.ShadowBindWarning, 1.2f);
                 return "Safe yard / east shadow warning";
             }
             if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Safe yard / path to Gate Keeper";
@@ -375,6 +386,13 @@ namespace LinhGioi.World
                 _trainingSpiritPulse.gameObject.SetActive(_playerPoseState == PlaceholderPoseState.SpiritChannel);
             if (_shadowWarningPulse != null)
                 _shadowWarningPulse.gameObject.SetActive(_shadowSlimeState == PlaceholderSlimeState.AlertWarning);
+            if (_portalGatePulse == null)
+                _portalGatePulse = CreateMarkerCube("LGO Portal Gate Pulse Placeholder", new Vector3(0f, 0.18f, -4.5f), RuntimeArtCatalog.Spirit, new Vector3(3.2f, 0.08f, 0.55f)).transform;
+            if (_windSlashPreview == null)
+                _windSlashPreview = CreateMarkerCube("LGO Wind Slash Preview Placeholder", CurrentPosition + new Vector3(0f, 0.7f, 0.9f), RuntimeArtCatalog.Gold, new Vector3(1.8f, 0.12f, 0.22f)).transform;
+            if (_shadowBindWarning == null)
+                _shadowBindWarning = CreateMarkerCube("LGO Shadow Bind Warning Placeholder", ShadowSlimePosition + Vector3.up * 0.55f, RuntimeArtCatalog.Shadow, new Vector3(1.9f, 0.1f, 1.9f)).transform;
+            RefreshVfxFeedbackMarkers();
         }
 
         private void TriggerLocalPosePulse(Color color)
@@ -386,6 +404,31 @@ namespace LinhGioi.World
                 if (renderer != null) renderer.material = RuntimeArtCatalog.CreateMaterial("LGO Local Pose Pulse", color);
             }
             RefreshPoseFeedbackMarkers();
+        }
+
+        private void SetVfxFeedback(PlaceholderVfxFeedbackState state, float durationSeconds)
+        {
+            _vfxFeedbackState = state;
+            _vfxPreviewUntil = Mathf.Max(_vfxPreviewUntil, Time.time + durationSeconds);
+            RefreshVfxFeedbackMarkers();
+            InteractionStateChanged?.Invoke();
+        }
+
+        private void RefreshVfxFeedbackMarkers()
+        {
+            var active = Time.time < _vfxPreviewUntil;
+            if (!active && _vfxFeedbackState != PlaceholderVfxFeedbackState.Quiet)
+                _vfxFeedbackState = PlaceholderVfxFeedbackState.Quiet;
+            if (_portalGatePulse != null)
+                _portalGatePulse.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.PortalGatePulse);
+            if (_windSlashPreview != null)
+            {
+                _windSlashPreview.position = CurrentPosition + _marker.forward * 0.9f + Vector3.up * 0.7f;
+                _windSlashPreview.rotation = _marker.rotation;
+                _windSlashPreview.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.WindSlashPreview);
+            }
+            if (_shadowBindWarning != null)
+                _shadowBindWarning.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.ShadowBindWarning);
         }
 
         private sealed class InteractableState
@@ -430,6 +473,15 @@ namespace LinhGioi.World
             Idle,
             AlertWarning,
             DissolveQuiet
+        }
+
+        private enum PlaceholderVfxFeedbackState
+        {
+            Quiet,
+            PortalGatePulse,
+            WindSlashPreview,
+            SpiritPulse,
+            ShadowBindWarning
         }
     }
 }

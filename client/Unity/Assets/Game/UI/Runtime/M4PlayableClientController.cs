@@ -38,6 +38,7 @@ namespace LinhGioi.UI
         private Label _worldDirection;
         private Label _worldLandmarks;
         private Label _worldPoseState;
+        private Label _worldVfxState;
         private Label _skinSource;
         private Label _worldObjective;
         private Label _interactionHint;
@@ -259,6 +260,9 @@ namespace LinhGioi.UI
             _worldPoseState = NewStatusLabel("Pose: player idle / Gate Keeper idle / Shadow Slime idle.", RuntimeArtCatalog.Muted);
             _worldHud.Add(_worldPoseState);
 
+            _worldVfxState = NewStatusLabel("VFX: Quiet / portal, spirit pulse, wind slash preview, shadow bind warning are visual-only.", RuntimeArtCatalog.Spirit);
+            _worldHud.Add(_worldVfxState);
+
             _skinSource = NewStatusLabel("UI skin source: v0.20 component sheet / window popup sheet.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_skinSource);
 
@@ -399,6 +403,7 @@ namespace LinhGioi.UI
                 if (_worldDirection != null) _worldDirection.text = "Direction: enter the world to reveal yard landmarks.";
                 if (_worldLandmarks != null) _worldLandmarks.text = "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
                 if (_worldPoseState != null) _worldPoseState.text = "Pose: player idle / Gate Keeper idle / Shadow Slime idle.";
+                if (_worldVfxState != null) _worldVfxState.text = "VFX: Quiet / portal, spirit pulse, wind slash preview, shadow bind warning are visual-only.";
                 if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
                 if (_worldObjective != null) _worldObjective.text = "Objective: talk to the Gate Keeper.";
                 if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper.";
@@ -420,6 +425,7 @@ namespace LinhGioi.UI
             if (_worldDirection != null) _worldDirection.text = "Direction: " + _world.ObjectiveDirectionHint;
             if (_worldLandmarks != null) _worldLandmarks.text = _world.WorldLandmarkSummary;
             if (_worldPoseState != null) _worldPoseState.text = "Pose: player " + _world.PlayerPoseStateName + " / Gate Keeper " + _world.GateKeeperPoseStateName + " / Shadow Slime " + _world.ShadowSlimeStateName + ".";
+            if (_worldVfxState != null) _worldVfxState.text = "VFX: " + _world.VfxFeedbackStateName + " / visual-only local feedback.";
             if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
