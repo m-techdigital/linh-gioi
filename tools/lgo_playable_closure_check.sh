@@ -173,6 +173,9 @@ source_only() {
   if [[ -f tools/validate_m6_package_hygiene_hotfix.py ]]; then
     run_phase m6_package_hygiene_hotfix python3.12 tools/validate_m6_package_hygiene_hotfix.py
   fi
+  if [[ -f tools/validate_m6_runtime_usable_combat_asset_pack.py ]]; then
+    run_phase m6_runtime_usable_combat_asset_pack python3.12 tools/validate_m6_runtime_usable_combat_asset_pack.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
     run_phase code_governance python3.12 tools/validate_code_governance.py

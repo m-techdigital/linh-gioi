@@ -1,0 +1,35 @@
+{
+  "pack": "LGO M6 Runtime-Usable Combat Asset Pack",
+  "version": "v0.45.0",
+  "type": "runtime-usable-placeholder-assets",
+  "status": "reference/import-ready; not production art",
+  "intended_next_prompt": "M6 Runtime-Usable Combat Asset Ingest + Import Rules v0.45.0",
+  "runtime_usage": "Use as placeholder PNG assets for Unity import in a controlled follow-up task. Do not claim production art.",
+  "files": [
+    "docs/reference-art/v0.45.0/preview/lgo-m6-runtime-combat-assets-preview-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/combat-button-cooldown-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/combat-button-normal-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/combat-button-pressed-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/combat-panel-9slice-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/cooldown-ring-cooldown-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/cooldown-ring-ready-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/skill-impact-spark-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/skill-wind-slash-frame-01-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/skill-wind-slash-frame-02-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/skill-wind-slash-frame-03-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/skill-wind-slash-frame-04-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/target-dummy-hit-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/target-dummy-idle-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/target-dummy-recover-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/target-dummy-selected-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/target-marker-selected-v0450.png",
+    "docs/reference-art/v0.45.0/runtime-assets/warning-telegraph-circle-v0450.png"
+  ],
+  "rules": [
+    "Player-facing UI text must remain Vietnamese and should not be baked into these sprites.",
+    "These are transparent placeholder assets, not final production art.",
+    "Do not add new combat mechanics because an asset exists.",
+    "Do not change protocol, GameData schema, ADR, or design tokens when ingesting these assets.",
+    "Import settings and ownership must be documented before replacing runtime placeholders."
+  ]
+}
