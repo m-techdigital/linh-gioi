@@ -155,7 +155,7 @@ namespace LinhGioi.World
 
         public void SetSmokePositionNearGateKeeper()
         {
-            SetSmokePosition(-3f, 0.25f, 3f, 0f);
+            SetSmokePosition(GateKeeperPosition.x + 1.25f, 0.25f, GateKeeperPosition.z - 0.65f, 300f);
         }
 
         public bool TriggerInteractionForSmoke()

@@ -1623,6 +1623,7 @@ namespace LinhGioi.UI
         internal void CaptureEvidenceOpenDialogue()
         {
             if (_world == null) return;
+            _world.SetSmokePositionNearGateKeeper();
             _world.TriggerInteractionForSmoke();
             RefreshWorldLoopLabels();
         }
