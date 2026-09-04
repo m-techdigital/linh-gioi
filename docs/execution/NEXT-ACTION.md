@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-EVIDENCE-REVIEW-SCORING-v1.0`
+`LGO-LOGIN-CHARACTER-FLOW-MICRO-UX-PASS-v1.0`
 
-Improve the visual evidence harness review output so future runs record explicit review categories for layout, scale, spacing, sharpness, asset quality, hierarchy, readability, and reference similarity. Keep it honest: capture/build is not visual PASS.
+Review login to character-lobby transition and reduce any remaining basic/dev feel in labels, spacing, and button affordance without changing account/character semantics.
 
 ## Current blocker
 
@@ -30,7 +30,7 @@ Evidence:
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: improve evidence review scoring so future visual work is easier to audit while continuing gameplay-safe polish. The scene depth follow-up was pulled forward because runtime review showed the world floor was still too flat; it now uses a lightweight procedural training-ground texture instead of any large image import. The Gate Keeper dialogue checkpoint is repaired and staged with an offset player position. Responsive profile evidence now keeps tablet/mobile HUD compact enough to leave more scene visible. World hub staging now reuses existing V3B props for a denser, lighter scene. World labels now have lightweight shadow layers and a shadow-warning label.
+Next allowed action: review and polish the login to character-lobby flow micro-UX. The visual evidence harness now records explicit review checklist categories for every checkpoint while still refusing to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -105,6 +105,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-SCENE-DEPTH-AND-GROUNDING-PASS-v1.0`, `LGO-WORLD-V3B-NPC-IN-WORLD-QUALITY-PASS-v1.0`, `LGO-WORLD-RESPONSIVE-HUD-VIEWPORT-POLISH-v1.0`, `LGO-WORLD-HUB-STAGING-DENSITY-PASS-v1.0`, and `LGO-WORLD-LABEL-READABILITY-PASS-v1.0` are closed. Continue with `LGO-RUNTIME-EVIDENCE-REVIEW-SCORING-v1.0`.
+`LGO-RUNTIME-EVIDENCE-REVIEW-SCORING-v1.0` is closed. Continue with `LGO-LOGIN-CHARACTER-FLOW-MICRO-UX-PASS-v1.0`.
 
-The completed scene-depth pass added procedural ground texture cues without new runtime image weight or gameplay changes. The completed NPC pass fixed dialogue evidence staging and reduced player/NPC overlap. The responsive HUD pass compacted tablet/mobile world HUD behavior and moved the Gate Keeper inward for narrower viewports. The staging density pass reused existing props only, adding no new image files. The label pass made world-space labels more readable without adding assets.
+Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

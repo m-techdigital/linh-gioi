@@ -85,6 +85,8 @@ def main() -> int:
         'visual-runtime-evidence-manifest.json',
         'visual-runtime-evidence-review.md',
         'VISUAL_RUNTIME_PASS',
+        'reviewChecklist',
+        'pass_claim=false',
         '1920',
         '1080',
     )

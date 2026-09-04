@@ -163,6 +163,7 @@ namespace LinhGioi.UI
             CaptureFrame(path, evidence);
             Debug.Log("[LinhGioi] Visual runtime capture finished: " + id + " status=" + evidence.status + " bytes=" + evidence.bytes);
             evidence.review = BuildAutomatedReview(evidence, _reviewWidth, _reviewHeight);
+            evidence.reviewChecklist = BuildReviewChecklist(evidence);
             _checkpoints.Add(evidence);
         }
 
@@ -189,7 +190,13 @@ namespace LinhGioi.UI
             if (evidence.status != "CAPTURED") return "Capture failed; visual review blocked.";
             if (evidence.width < reviewWidth || evidence.height < reviewHeight) return "Captured below target resolution; review requires rerun at requested profile size.";
             if (evidence.bytes < 64 * 1024) return "Suspiciously small screenshot; likely blank or missing visual content.";
-            return "Captured at target resolution. Requires Codex/human visual inspection for layout, scale, spacing, sharpness, hierarchy, readability, and reference similarity.";
+            return "Captured at target resolution. Review categories are recorded, but this is not a VISUAL_RUNTIME_PASS claim.";
+        }
+
+        private static string BuildReviewChecklist(VisualCheckpointEvidence evidence)
+        {
+            if (evidence.status != "CAPTURED") return "blocked: screenshot capture failed.";
+            return "layout=review; scale=review; spacing=review; sharpness=review; asset_quality=review; hierarchy=review; readability=review; reference_similarity=review; pass_claim=false";
         }
 
         private void WriteManifest()
@@ -223,6 +230,7 @@ namespace LinhGioi.UI
                     writer.WriteLine("- Expectation: " + checkpoint.expectation);
                     writer.WriteLine("- Status: `" + checkpoint.status + "`");
                     writer.WriteLine("- Automated review: " + checkpoint.review);
+                    writer.WriteLine("- Review checklist: " + checkpoint.reviewChecklist);
                     writer.WriteLine();
                 }
             }
@@ -280,6 +288,7 @@ namespace LinhGioi.UI
             public string status;
             public string reason;
             public string review;
+            public string reviewChecklist;
         }
     }
 }
