@@ -6,8 +6,9 @@ This file is the navigation hub for all planning, progress, gate, and handoff do
 
 ## Current truth
 
-- Current milestone: `M6 Combat Readiness Spec / Governance Baseline`.
-- Current safe implementation state: `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
+- Current milestone: `M6 combat foundation v0.55.0`.
+- Current safe implementation state: `M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0`.
+- Historical governance baseline: `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
 - Current accepted foundation: `M0_RUNTIME_CLOSED` from `linh-gioi-m0-runtime-closed-v0.4.1-full-source.zip`.
 - Current accepted gameplay baseline: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 - Current active runtime follow-up: none opened by governance; next implementation requires roadmap/queue selection.

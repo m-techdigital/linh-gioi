@@ -10,6 +10,7 @@ ERRORS: list[str] = []
 REQUIRED_MARKERS = {
     'README.md': [
         'Governance Baseline v1.0',
+        'M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0',
         'M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
         'CODE-GOVERNANCE-CONTRACT.md',
         'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
@@ -26,7 +27,8 @@ REQUIRED_MARKERS = {
         'M0_RUNTIME_CLOSED',
     ],
     'START-HERE.md': [
-        'M6 Combat Readiness Spec / Governance Baseline',
+        'M6 combat foundation v0.55.0',
+        'M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0',
         'M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
         'CODE-GOVERNANCE-CONTRACT.md',
         'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
@@ -39,9 +41,10 @@ REQUIRED_MARKERS = {
         './tools/lgo_playable_closure_check.sh --package-ready',
     ],
     'VERSIONING.md': [
-        'source_package_version = governance-v1.0',
-        'client_version = 0.6.0-governance',
-        'm6_status = M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
+        'source_package_version = m6-combat-foundation-v0.55.0',
+        'client_version = 0.6.0-m6-combat-foundation',
+        'm6_status = M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0',
+        'm6_governance_baseline = M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
         'governance_status = LGO_CODE_GOVERNANCE_CONTRACT_ACCEPTED_v1.0',
         'm1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED',
         'm2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE',
@@ -71,7 +74,8 @@ REQUIRED_MARKERS = {
         'players-v1.json',
     ],
     'docs/execution/PROJECT-STATE.md': [
-        'M6 Combat Readiness Spec / Governance Baseline',
+        'M6 combat foundation v0.55.0',
+        'M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0',
         'M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
         'Code governance baseline v1.0',
         'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
@@ -91,8 +95,9 @@ REQUIRED_MARKERS = {
         'M0_RUNTIME_CLOSED',
     ],
     'docs/execution/06-PROJECT-GOVERNANCE-INDEX.md': [
-        'Current milestone: `M6 Combat Readiness Spec / Governance Baseline`',
-        'Current safe implementation state: `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`',
+        'Current milestone: `M6 combat foundation v0.55.0`',
+        'Current safe implementation state: `M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0`',
+        'Historical governance baseline: `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`',
         'CODE-GOVERNANCE-CONTRACT.md',
     ],
     'docs/execution/07-PHASE-GATES.md': [

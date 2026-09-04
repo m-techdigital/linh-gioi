@@ -4,11 +4,11 @@ Last updated: `2026-09-04`
 
 ## Current milestone
 
-`M6 Combat Readiness Spec / Governance Baseline`
+`M6 combat foundation v0.55.0`
 
 ## Current decision
 
-`M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`
+`M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0`
 
 M0 final decision: `M0_RUNTIME_CLOSED`.
 
@@ -38,6 +38,7 @@ Baseline ancestry:
 - M5 guided training loop source hardening.
 - M6 skill preview sandbox and target dummy readability closed locally.
 - M6 combat readiness spec closed as docs-only at `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
+- M6 combat foundation v0.55.0 closed locally through local prototype, runtime closure, server-authoritative pilot, Unity-to-Java E2E, UX/readability polish, visual evidence, and GameData adversarial validation.
 - Code governance baseline v1.0 adds maintainability, ownership, duplication, validator, and handoff rules.
 
 ## Current source successor

@@ -1,8 +1,10 @@
 # START HERE — Linh Giới Online Current Source
 
-**Current milestone:** `M6 Combat Readiness Spec / Governance Baseline`.
+**Current milestone:** `M6 combat foundation v0.55.0`.
 
-**Current status:** `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
+**Current status:** `M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0`.
+
+**Historical governance baseline:** `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
 
 **Accepted visual reference:** `LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5`.
 

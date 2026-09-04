@@ -127,7 +127,7 @@ def main() -> int:
     require('docs/execution/LGO-PLAYABLE-CLOSURE-COMMAND-v0.15.0.md', './tools/lgo_playable_closure_check.sh --source-only', './tools/run_m4_visible_ui_review.sh --rebuild')
     require('README.md', 'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY')
     require('START-HERE.md', 'M5 First Playable Loop Foundation')
-    require('VERSIONING.md', 'source_package_version = governance-v1.0', 'client_version = 0.6.0-governance', 'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY')
+    require('VERSIONING.md', 'source_package_version = m6-combat-foundation-v0.55.0', 'client_version = 0.6.0-m6-combat-foundation', 'm6_governance_baseline = M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0', 'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY')
     require('docs/execution/PROJECT-STATE.md', 'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY')
 
     for path in git_lines('diff', '--name-only'):

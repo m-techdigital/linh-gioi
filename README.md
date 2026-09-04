@@ -1,6 +1,8 @@
 # LINH GIỚI ONLINE — Governance Baseline v1.0
 
-**Current status:** `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0` with governance work in progress.
+**Current status:** `M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0`.
+
+Historical governance baseline: `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
 
 **Code governance:** read `docs/execution/CODE-GOVERNANCE-CONTRACT.md`, `docs/execution/CODE-OWNERSHIP-MAP.md`, and `docs/execution/CODE-QUALITY-GATES.md` before future implementation handoff.
 

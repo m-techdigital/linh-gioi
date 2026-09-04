@@ -1,0 +1,22 @@
+# LGO M6 Combat Foundation v0.55.0 Changed Files
+
+- docs/execution/PROJECT-STATE.md
+- docs/execution/TASK-LEDGER.md
+- README.md
+- START-HERE.md
+- VERSIONING.md
+- docs/execution/06-PROJECT-GOVERNANCE-INDEX.md
+- docs/execution/checklists/M6-COMBAT-FOUNDATION-CLOSURE-CHECKLIST-v0.55.0.md
+- docs/execution/prompts/M6-COMBAT-HARDENING-CONTINUATION-v0.56.0.md
+- tools/validate_project_state.py
+- tools/validate_m4_stabilization.py
+- tools/validate_m5_first_playable_loop.py
+- tools/validate_m5_visual_evidence.py
+- tools/validate_m6_combat_foundation_closure.py
+- tools/lgo_playable_closure_check.sh
+- tools/validate_m6_combat_ux_readability_polish.py
+- tools/package_source.py
+- M6-COMBAT-FOUNDATION-FINAL-REPORT-v0.55.0.md
+- HANDOFF-LG-M6-COMBAT-FOUNDATION-v0.55.0.md
+- LGO-M6-COMBAT-FOUNDATION-v0.55.0-CHANGED-FILES.txt
+- LGO-M6-COMBAT-FOUNDATION-v0.55.0-DELETIONS.txt

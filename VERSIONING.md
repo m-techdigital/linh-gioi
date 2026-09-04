@@ -9,19 +9,20 @@ Three runtime compatibility versions are intentionally separate:
 Current source package identity:
 
 ```text
-source_package_version = governance-v1.0
-milestone = Governance Roadmap Queue
+source_package_version = m6-combat-foundation-v0.55.0
+milestone = M6 combat foundation v0.55.0
 m0_status = M0_RUNTIME_CLOSED
 m1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED
 m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
-m6_status = M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0
+m6_status = M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0
+m6_governance_baseline = M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0
 governance_status = LGO_CODE_GOVERNANCE_CONTRACT_ACCEPTED_v1.0
 ```
 
 Current runtime placeholders:
 
 ```text
-client_version = 0.6.0-governance
+client_version = 0.6.0-m6-combat-foundation
 protocol_version = 1
 gamedata_version = 1
 ```

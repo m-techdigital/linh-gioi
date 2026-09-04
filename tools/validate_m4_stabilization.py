@@ -218,8 +218,9 @@ def main() -> int:
     )
     require(
         'VERSIONING.md',
-        'source_package_version = governance-v1.0',
-        'client_version = 0.6.0-governance',
+        'source_package_version = m6-combat-foundation-v0.55.0',
+        'client_version = 0.6.0-m6-combat-foundation',
+        'm6_governance_baseline = M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
         'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
         'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',

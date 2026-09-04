@@ -68,6 +68,8 @@ def write_delta(zip_path: Path, changed_files: Path) -> None:
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as archive:
         for raw in changed_files.read_text(encoding='utf-8').splitlines():
             rel = raw.strip()
+            if rel.startswith('- '):
+                rel = rel[2:].strip()
             if not rel or is_excluded(rel) or rel.endswith('ARTIFACTS.sha256'):
                 continue
             path = ROOT / rel
