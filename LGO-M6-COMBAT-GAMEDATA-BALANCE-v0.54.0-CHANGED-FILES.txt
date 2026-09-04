@@ -1,0 +1,16 @@
+# LGO M6 Combat GameData Balance v0.54.0 Changed Files
+
+- tools/validate_m6_combat_gamedata_balance.py
+- tools/lgo_playable_closure_check.sh
+- tools/validate_m6_combat_protocol_gamedata_contract.py
+- tools/validate_m6_combat_readiness_spec.py
+- tools/validate_m6_combat_ux_readability_polish.py
+- tools/validate_m6_server_combat_contract_spec.py
+- docs/tasks/M6-COMBAT-GAMEDATA-BALANCE-ADVERSARIAL-v0.54.0.md
+- docs/design/M6-COMBAT-GAMEDATA-BALANCE-NOTES-v0.54.0.md
+- docs/execution/checklists/M6-COMBAT-GAMEDATA-BALANCE-CHECKLIST-v0.54.0.md
+- M6-COMBAT-GAMEDATA-BALANCE-FINAL-REPORT-v0.54.0.md
+- HANDOFF-LG-M6-COMBAT-GAMEDATA-BALANCE-v0.54.0.md
+- LGO-M6-COMBAT-GAMEDATA-BALANCE-v0.54.0-CHANGED-FILES.txt
+- LGO-M6-COMBAT-GAMEDATA-BALANCE-v0.54.0-DELETIONS.txt
+

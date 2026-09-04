@@ -1,0 +1,4 @@
+# LGO M6 Combat GameData Balance v0.54.0 Deletions
+
+DELETED / none
+

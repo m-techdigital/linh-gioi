@@ -141,6 +141,14 @@ def main() -> int:
             'HANDOFF-LG-M6-COMBAT-UX-READABILITY-POLISH-v0.53.0.md',
             'LGO-M6-COMBAT-UX-READABILITY-POLISH-v0.53.0-CHANGED-FILES.txt',
             'LGO-M6-COMBAT-UX-READABILITY-POLISH-v0.53.0-DELETIONS.txt',
+            'tools/validate_m6_combat_gamedata_balance.py',
+            'docs/tasks/M6-COMBAT-GAMEDATA-BALANCE-ADVERSARIAL-v0.54.0.md',
+            'docs/design/M6-COMBAT-GAMEDATA-BALANCE-NOTES-v0.54.0.md',
+            'docs/execution/checklists/M6-COMBAT-GAMEDATA-BALANCE-CHECKLIST-v0.54.0.md',
+            'M6-COMBAT-GAMEDATA-BALANCE-FINAL-REPORT-v0.54.0.md',
+            'HANDOFF-LG-M6-COMBAT-GAMEDATA-BALANCE-v0.54.0.md',
+            'LGO-M6-COMBAT-GAMEDATA-BALANCE-v0.54.0-CHANGED-FILES.txt',
+            'LGO-M6-COMBAT-GAMEDATA-BALANCE-v0.54.0-DELETIONS.txt',
         }:
             continue
         if path.startswith('docs/tasks/') or path.startswith('docs/design/') or path.startswith('docs/execution/prompts/') or path.startswith('HANDOFF') or path.startswith('M6') or path.startswith('LGO') or path.startswith('CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md'):
