@@ -392,7 +392,7 @@ namespace LinhGioi.UI
             _localCombatPanel.name = "LGO M6 Minimal Local Combat";
             _localCombatPanel.style.marginTop = 10;
             _localCombatPanel.Add(NewSectionTitle("Luyện mục tiêu cục bộ"));
-            _localCombatPanel.Add(NewMutedLabel("Nhãn nguyên mẫu cục bộ: chỉ kiểm tra khả năng đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương thật, phần thưởng, kinh nghiệm, hay chiến đấu máy chủ."));
+            _localCombatPanel.Add(NewMutedLabel("Nhãn nguyên mẫu cục bộ: Tấn công thử chỉ kiểm tra khả năng đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương thật, phần thưởng, kinh nghiệm, hay chiến đấu máy chủ."));
             _combatTargetStatus = NewStatusLabel("Mục tiêu luyện tập: chưa vào sân.", RuntimeArtCatalog.Gold);
             _combatVisualState = NewStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
             _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
