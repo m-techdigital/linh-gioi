@@ -219,6 +219,9 @@ source_only() {
   if [[ -f tools/validate_lgo_login_gate_entry_visual_v1.py ]]; then
     run_phase login_gate_entry_visual python3.12 tools/validate_lgo_login_gate_entry_visual_v1.py
   fi
+  if [[ -f tools/validate_lgo_login_npc_compositing_polish.py ]]; then
+    run_phase login_npc_compositing_polish python3.12 tools/validate_lgo_login_npc_compositing_polish.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
     run_phase code_governance python3.12 tools/validate_code_governance.py
@@ -335,6 +338,7 @@ source_only() {
     tools/prepare_lgo_art_v3b_candidates.py \
     tools/validate_lgo_art_v3b_candidates.py \
     tools/validate_lgo_login_gate_entry_visual_v1.py \
+    tools/validate_lgo_login_npc_compositing_polish.py \
     tools/lgo_continuous_cycle.py \
     tools/lgo_next_task.py \
     tools/lgo_worktree_audit.py \
@@ -598,6 +602,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_lgo_login_gate_entry_visual_v1.py ]]; then
     run_phase login_gate_entry_visual python3.12 tools/validate_lgo_login_gate_entry_visual_v1.py
+  fi
+  if [[ -f tools/validate_lgo_login_npc_compositing_polish.py ]]; then
+    run_phase login_npc_compositing_polish python3.12 tools/validate_lgo_login_npc_compositing_polish.py
   fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
