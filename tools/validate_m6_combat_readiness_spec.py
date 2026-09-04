@@ -128,6 +128,58 @@ def main() -> int:
         'docs-only',
         'Real combat was not implemented',
     )
+    require(
+        'docs/design/M6-COMBAT-READINESS-SPEC-v0.48.0.md',
+        'NO_CONTRACT_CHANGE_REQUIRED_FOR_M6_V0_49_LOCAL_PROTOTYPE',
+        'Combat Ownership Model',
+        'Required Runtime Gates For Actual Combat',
+        'Entry Criteria For M6 v0.49',
+        'Forbidden Scope For v0.49',
+        'Decision Tree',
+    )
+    require(
+        'docs/design/M6-COMBAT-CONTRACT-IMPACT-REVIEW-v0.48.0.md',
+        'NO_CONTRACT_CHANGE_REQUIRED',
+        'No protobuf mutation is required',
+        'No schema mutation is required',
+        'No `CONTRACT_CHANGE_REQUEST-M6-COMBAT-v0.48.0.md` is created',
+    )
+    require(
+        'docs/tasks/M6-LOCAL-COMBAT-PROTOTYPE-v0.49.0.md',
+        'existing `CombatIntent`',
+        'No protocol changes',
+        'No GameData schema changes',
+        'No private DTO/schema workaround',
+    )
+    require(
+        'docs/execution/checklists/M6-COMBAT-ENTRY-CHECKLIST-v0.48.0.md',
+        'NO_CONTRACT_CHANGE_REQUIRED',
+        'CONTRACT_CHANGE_REQUIRED',
+        'BLOCKED_CONTRACT',
+        'FIX_REQUIRED',
+    )
+    require(
+        'HANDOFF-LG-M6-COMBAT-READINESS-v0.48.0.md',
+        'M6_COMBAT_READINESS_ACCEPTED_v0.48.0',
+        'Contract change required: no',
+        'No real combat',
+    )
+    require(
+        'M6-COMBAT-READINESS-FINAL-REPORT-v0.48.0.md',
+        'M6_COMBAT_READINESS_ACCEPTED_v0.48.0',
+        'Contract change required: no',
+        'No gameplay implementation',
+    )
+    require(
+        'LGO-M6-COMBAT-READINESS-v0.48.0-CHANGED-FILES.txt',
+        'docs/design/M6-COMBAT-READINESS-SPEC-v0.48.0.md',
+        'tools/validate_m6_combat_readiness_spec.py',
+    )
+    require(
+        'LGO-M6-COMBAT-READINESS-v0.48.0-DELETIONS.txt',
+        'DELETED',
+        'none',
+    )
     require_file('tools/validate_m6_combat_readiness_spec.py', executable=True)
 
     v040_active = v040_contract_is_active()
