@@ -1,0 +1,11 @@
+ADDED docs/tasks/M6-COMBAT-VISUAL-READABILITY-POLISH-v0.37.0.md
+ADDED tools/validate_m6_combat_visual_readability.py
+ADDED HANDOFF-LG-M6-COMBAT-VISUAL-READABILITY-POLISH-v0.37.0.md
+ADDED M6-COMBAT-VISUAL-READABILITY-POLISH-FINAL-REPORT-v0.37.0.md
+ADDED LGO-M6-COMBAT-VISUAL-READABILITY-POLISH-v0.37.0-CHANGED-FILES.txt
+ADDED LGO-M6-COMBAT-VISUAL-READABILITY-POLISH-v0.37.0-DELETIONS.txt
+MODIFIED client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs
+MODIFIED client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+MODIFIED tools/lgo_playable_closure_check.sh
+MODIFIED tools/validate_master_roadmap.py
+MODIFIED tools/validate_m6_combat_readiness_spec.py

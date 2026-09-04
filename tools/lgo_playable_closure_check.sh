@@ -146,6 +146,9 @@ source_only() {
   if [[ -f tools/validate_m6_combat_visual_reference_pack.py ]]; then
     run_phase m6_combat_visual_reference_pack python3.12 tools/validate_m6_combat_visual_reference_pack.py
   fi
+  if [[ -f tools/validate_m6_combat_visual_readability.py ]]; then
+    run_phase m6_combat_visual_readability python3.12 tools/validate_m6_combat_visual_readability.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
     run_phase code_governance python3.12 tools/validate_code_governance.py
@@ -178,6 +181,7 @@ source_only() {
     tools/validate_m6_minimal_local_combat.py \
     tools/validate_m6_combat_ux_feedback.py \
     tools/validate_m6_combat_visual_reference_pack.py \
+    tools/validate_m6_combat_visual_readability.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
@@ -326,6 +330,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_m6_combat_visual_reference_pack.py ]]; then
     run_phase m6_combat_visual_reference_pack python3.12 tools/validate_m6_combat_visual_reference_pack.py
+  fi
+  if [[ -f tools/validate_m6_combat_visual_readability.py ]]; then
+    run_phase m6_combat_visual_readability python3.12 tools/validate_m6_combat_visual_readability.py
   fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__

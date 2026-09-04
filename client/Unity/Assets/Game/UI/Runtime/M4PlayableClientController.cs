@@ -45,6 +45,7 @@ namespace LinhGioi.UI
         private Label _worldPoseState;
         private Label _worldVfxState;
         private Label _combatTargetStatus;
+        private Label _combatVisualState;
         private Label _combatFeedback;
         private Label _combatCooldown;
         private Label _skinSource;
@@ -389,13 +390,15 @@ namespace LinhGioi.UI
             _localCombatPanel.name = "LGO M6 Minimal Local Combat";
             _localCombatPanel.style.marginTop = 10;
             _localCombatPanel.Add(NewSectionTitle("Luyện mục tiêu cục bộ"));
-            _localCombatPanel.Add(NewMutedLabel("Chỉ là mô phỏng cục bộ. Không có sát thương thật, phần thưởng, kinh nghiệm, hay chiến đấu máy chủ."));
+            _localCombatPanel.Add(NewMutedLabel("Nhãn nguyên mẫu cục bộ: chỉ kiểm tra khả năng đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương thật, phần thưởng, kinh nghiệm, hay chiến đấu máy chủ."));
             _combatTargetStatus = NewStatusLabel("Mục tiêu luyện tập: chưa vào sân.", RuntimeArtCatalog.Gold);
+            _combatVisualState = NewStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
             _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
-            _combatCooldown = NewStatusLabel("Hồi chiêu: sẵn sàng", RuntimeArtCatalog.Muted);
+            _combatCooldown = NewStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
             _localCombatButton = NewSecondaryButton("Tấn công thử", TriggerLocalCombat);
-            _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ lên mục tiêu luyện tập";
+            _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ. Đánh thử cục bộ: xem vòng chọn mục tiêu, hit flash và nhịp hồi chiêu; không phải chiến đấu thật";
             _localCombatPanel.Add(_combatTargetStatus);
+            _localCombatPanel.Add(_combatVisualState);
             _localCombatPanel.Add(_combatFeedback);
             _localCombatPanel.Add(_combatCooldown);
             _localCombatPanel.Add(NewButtonRow(_localCombatButton));
@@ -550,6 +553,7 @@ namespace LinhGioi.UI
             if (_worldPoseState != null) _worldPoseState.text = "Pose: player " + _world.PlayerPoseStateName + " / Gate Keeper " + _world.GateKeeperPoseStateName + " / Shadow Slime " + _world.ShadowSlimeStateName + ".";
             if (_worldVfxState != null) _worldVfxState.text = "VFX: " + _world.VfxFeedbackStateName + " / visual-only local feedback.";
             if (_combatTargetStatus != null) _combatTargetStatus.text = _world.TargetDummyStatusText;
+            if (_combatVisualState != null) _combatVisualState.text = _world.TargetDummyVisualStateText;
             if (_combatFeedback != null) _combatFeedback.text = _world.CombatFeedbackText;
             if (_combatCooldown != null) _combatCooldown.text = _world.CombatCooldownText;
             if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";

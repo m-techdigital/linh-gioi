@@ -33,6 +33,8 @@ M6_ALLOWED_SOURCE_FILES = {
     'tools/run_m6_minimal_local_combat_once.sh',
     'tools/validate_m6_minimal_local_combat.py',
     'tools/validate_m6_combat_ux_feedback.py',
+    'tools/validate_m6_combat_visual_reference_pack.py',
+    'tools/validate_m6_combat_visual_readability.py',
 }
 
 
