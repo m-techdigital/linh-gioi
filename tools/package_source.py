@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import os
+import subprocess
 import zipfile
 from pathlib import Path
 
@@ -11,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 EXCLUDED_DIR_NAMES = {'.git', 'build', 'Library', 'Temp', 'Logs', 'target', 'obj', '__pycache__', '__MACOSX'}
 EXCLUDED_FILE_NAMES = {'.DS_Store'}
-EXCLUDED_SUFFIXES = ('.zip', '.tar.gz', '.sha256')
+EXCLUDED_SUFFIXES = ('.zip', '.tar.gz', '.sha256', '.pyc')
 EXCLUDED_PREFIXES = (
     'build/',
     'client/Unity/Library/',
@@ -32,6 +33,8 @@ def is_excluded(rel: str) -> bool:
     path = Path(rel)
     if path.name in EXCLUDED_FILE_NAMES:
         return True
+    if path.name.endswith('ARTIFACTS.sha256') or path.name.endswith('ARTIFACTS-SHA256.txt'):
+        return True
     if rel in EXCLUDED_EXACT:
         return True
     if rel.endswith(EXCLUDED_SUFFIXES):
@@ -47,6 +50,20 @@ def sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def git_tracked_files() -> list[str]:
+    result = subprocess.run(
+        ['git', '--no-pager', 'ls-files', '--cached'],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise RuntimeError('git ls-files failed: ' + result.stderr.strip())
+    return [line for line in result.stdout.splitlines() if line.strip()]
+
+
 def write_delta(zip_path: Path, changed_files: Path) -> None:
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as archive:
         for raw in changed_files.read_text(encoding='utf-8').splitlines():
@@ -60,18 +77,11 @@ def write_delta(zip_path: Path, changed_files: Path) -> None:
 
 def write_full(zip_path: Path) -> None:
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as archive:
-        for dirpath, dirnames, filenames in os.walk(ROOT):
-            current = Path(dirpath)
-            rel_dir = current.relative_to(ROOT).as_posix()
-            dirnames[:] = [
-                name for name in dirnames
-                if name not in EXCLUDED_DIR_NAMES and not is_excluded(((rel_dir + '/') if rel_dir != '.' else '') + name + '/')
-            ]
-            for filename in filenames:
-                path = current / filename
-                rel = path.relative_to(ROOT).as_posix()
-                if is_excluded(rel) or rel == zip_path.name:
-                    continue
+        for rel in git_tracked_files():
+            if is_excluded(rel) or rel == zip_path.name:
+                continue
+            path = ROOT / rel
+            if path.is_file():
                 archive.write(path, rel)
 
 

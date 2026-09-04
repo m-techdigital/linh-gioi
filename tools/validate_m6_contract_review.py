@@ -99,6 +99,9 @@ def main() -> int:
             if path == prefix or path.startswith(prefix):
                 errors.append(f'frozen surface modified: {path}')
     for line in git_lines('status', '--short', '--untracked-files=all'):
+        status = line[:2]
+        if 'D' in status:
+            continue
         path = line[3:] if len(line) >= 4 else line
         for prefix in FORBIDDEN_OUTPUT_PREFIXES:
             if path.startswith(prefix):

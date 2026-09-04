@@ -170,6 +170,9 @@ source_only() {
   if [[ -f tools/validate_m6_server_authoritative_combat_closure.py ]]; then
     run_phase m6_server_authoritative_combat_closure python3.12 tools/validate_m6_server_authoritative_combat_closure.py
   fi
+  if [[ -f tools/validate_m6_package_hygiene_hotfix.py ]]; then
+    run_phase m6_package_hygiene_hotfix python3.12 tools/validate_m6_package_hygiene_hotfix.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
     run_phase code_governance python3.12 tools/validate_code_governance.py
@@ -216,6 +219,7 @@ source_only() {
     tools/m5_first_playable_loop_runtime.py \
     tools/m5_guided_training_loop_runtime.py \
     tools/m5_lightweight_dialogue_runtime.py
+  run_phase clean_pycache_after_python_compile git clean -f tools/__pycache__
   log "LGO_PLAYABLE_CLOSURE_SOURCE_GATES_PASS"
   write_json "PASS" "source gates pass"
 }

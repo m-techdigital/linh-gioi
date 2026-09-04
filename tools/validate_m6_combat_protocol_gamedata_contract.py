@@ -161,9 +161,9 @@ def main() -> int:
                 errors.append(f"unexpected protocol/GameData path modified in v0.40: {path}")
     for line in git_lines("status", "--short", "--untracked-files=all"):
         status = line[:2]
-        path = line[3:] if len(line) >= 4 else line
-        if status.strip() == "D" and path == "tests/gamedata/__pycache__/test_gamedata_pipeline.cpython-312.pyc":
+        if "D" in status:
             continue
+        path = line[3:] if len(line) >= 4 else line
         for prefix in FORBIDDEN_OUTPUT_PREFIXES:
             if path.startswith(prefix):
                 errors.append(f"generated/cache/build output under source status: {path}")

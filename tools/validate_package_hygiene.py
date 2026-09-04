@@ -11,6 +11,8 @@ errors: list[str] = []
 
 FORBIDDEN_ENTRIES = (
     '.DS_Store',
+    '__pycache__/',
+    '.pyc',
     '__MACOSX/',
     'build/',
     'client/Unity/Library/',
@@ -37,9 +39,14 @@ def check_zip(path: Path) -> None:
         for name in archive.namelist():
             if name.startswith('.git/') or name == '.git':
                 errors.append(f'{path.name} contains forbidden entry: {name}')
+            if '/__pycache__/' in name or name.startswith('__pycache__/') or name.endswith('.pyc'):
+                errors.append(f'{path.name} contains forbidden Python cache entry: {name}')
             for forbidden in FORBIDDEN_ENTRIES:
                 if forbidden == '.DS_Store':
                     if name.endswith('/.DS_Store') or name == '.DS_Store':
+                        errors.append(f'{path.name} contains forbidden entry: {name}')
+                elif forbidden == '.pyc':
+                    if name.endswith('.pyc'):
                         errors.append(f'{path.name} contains forbidden entry: {name}')
                 elif name == forbidden.rstrip('/') or name.startswith(forbidden):
                     errors.append(f'{path.name} contains forbidden entry: {name}')
@@ -51,7 +58,7 @@ def main() -> int:
         errors.append('missing package tool: tools/package_source.py')
     else:
         content = package_tool.read_text(encoding='utf-8', errors='replace')
-        for marker in ['.DS_Store', '__MACOSX', 'client/Unity/Assets/Game/Generated/', 'client/Unity/Assets/Game/Protocol/Generated/', '.git', 'build/']:
+        for marker in ['.DS_Store', '__pycache__', '.pyc', '__MACOSX', 'client/Unity/Assets/Game/Generated/', 'client/Unity/Assets/Game/Protocol/Generated/', '.git', 'build/']:
             if marker not in content:
                 errors.append(f'tools/package_source.py missing exclusion marker: {marker}')
 
@@ -63,15 +70,21 @@ def main() -> int:
                 errors.append(f'frozen surface modified: {path}')
 
     for line in git_lines('status', '--short', '--untracked-files=all'):
+        status = line[:2]
+        if 'D' in status:
+            continue
         path = line[3:] if len(line) >= 4 else line
         for forbidden in FORBIDDEN_ENTRIES:
             if forbidden == '.DS_Store':
                 if path.endswith('/.DS_Store') or path == '.DS_Store':
                     errors.append(f'forbidden source artifact present: {path}')
+            elif forbidden == '.pyc':
+                if path.endswith('.pyc'):
+                    errors.append(f'forbidden source artifact present: {path}')
             elif path == forbidden.rstrip('/') or path.startswith(forbidden):
                 errors.append(f'forbidden source artifact present: {path}')
 
-    for path in sorted(ROOT.glob('*v0.17.1*.zip')) + sorted(ROOT.glob('*v0.18.0*.zip')) + sorted(ROOT.glob('*v0.19.0*.zip')):
+    for path in sorted(ROOT.glob('*.zip')):
         check_zip(path)
 
     if errors:
