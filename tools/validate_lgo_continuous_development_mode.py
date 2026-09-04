@@ -104,6 +104,8 @@ def main() -> int:
         "LGO_NEXT_TASK_ADVISOR_READY",
         "LGO_NEXT_TASK_ADVISOR_DIRTY_WORKTREE_REVIEW_REQUIRED",
         "LGO_NEXT_TASK_ADVISOR_NO_SAFE_AUTONOMOUS_TASK",
+        "closure_already_satisfied",
+        "M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0",
     )
     require(
         "tools/lgo_worktree_audit.py",

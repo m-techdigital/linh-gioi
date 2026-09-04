@@ -56,6 +56,14 @@ def dirty_worktree_is_ambiguous() -> bool:
     return len(lines) > 250
 
 
+def closure_already_satisfied(task: Task, text: str) -> bool:
+    if task.closure in text:
+        return True
+    if task.ident in {"LGO-TASK-001", "LGO-TASK-002", "LGO-TASK-003", "LGO-TASK-004", "LGO-TASK-005", "LGO-TASK-006", "LGO-TASK-007"}:
+        return "M6_COMBAT_FOUNDATION_CLOSED_LOCAL_v0.55.0" in text or "M6_COMBAT_HARDENING_CONTINUATION_CLOSED_LOCAL_v0.56.0" in text
+    return False
+
+
 def is_safe_without_owner(task: Task, text: str) -> bool:
     unsafe_words = (
         "protocol change request",
@@ -71,6 +79,7 @@ def is_safe_without_owner(task: Task, text: str) -> bool:
         "Party",
         "Guild",
         "Admin-prod",
+        "Auth/DB",
     )
     if any(word.lower() in task.purpose.lower() for word in unsafe_words):
         return False
@@ -79,6 +88,21 @@ def is_safe_without_owner(task: Task, text: str) -> bool:
     if "docs" not in task.allowed and "tools" not in task.allowed and "approved paths only" not in task.allowed:
         return False
     return True
+
+
+def priority(task: Task) -> int:
+    preferred = {
+        "LGO-TASK-047": 1,
+        "LGO-TASK-048": 2,
+        "LGO-TASK-049": 3,
+        "LGO-TASK-050": 4,
+        "LGO-TASK-042": 5,
+        "LGO-TASK-045": 6,
+    }
+    if task.ident in preferred:
+        return preferred[task.ident]
+    match = re.search(r"LGO-TASK-(\d+)", task.ident)
+    return 100 + (int(match.group(1)) if match else 999)
 
 
 def main() -> int:
@@ -91,11 +115,11 @@ def main() -> int:
         print("LGO_NEXT_TASK_ADVISOR_DIRTY_WORKTREE_REVIEW_REQUIRED")
         print("Recommended: finish/commit/review current untracked asset/doc inventory before broad new implementation.")
         return 0
-    candidates = [task for task in tasks if task.closure not in text and is_safe_without_owner(task, text)]
+    candidates = [task for task in tasks if not closure_already_satisfied(task, text) and is_safe_without_owner(task, text)]
     if not candidates:
         print("LGO_NEXT_TASK_ADVISOR_NO_SAFE_AUTONOMOUS_TASK")
         return 0
-    task = candidates[0]
+    task = sorted(candidates, key=priority)[0]
     print("LGO_NEXT_TASK_ADVISOR_READY")
     print(f"id={task.ident}")
     print(f"purpose={task.purpose}")

@@ -223,6 +223,24 @@ source_only() {
   if [[ -f tools/validate_lgo_continuous_development_mode.py ]]; then
     run_phase continuous_development_mode python3.12 tools/validate_lgo_continuous_development_mode.py
   fi
+  if [[ -f tools/validate_lgo_runtime_smoke_matrix.py ]]; then
+    run_phase runtime_smoke_matrix python3.12 tools/validate_lgo_runtime_smoke_matrix.py
+  fi
+  if [[ -f tools/validate_lgo_visual_evidence_matrix.py ]]; then
+    run_phase visual_evidence_matrix python3.12 tools/validate_lgo_visual_evidence_matrix.py
+  fi
+  if [[ -f tools/validate_lgo_crash_error_reporting_plan.py ]]; then
+    run_phase crash_error_reporting_plan python3.12 tools/validate_lgo_crash_error_reporting_plan.py
+  fi
+  if [[ -f tools/validate_lgo_release_checklist.py ]]; then
+    run_phase release_checklist python3.12 tools/validate_lgo_release_checklist.py
+  fi
+  if [[ -f tools/validate_lgo_asset_provenance.py ]]; then
+    run_phase asset_provenance python3.12 tools/validate_lgo_asset_provenance.py
+  fi
+  if [[ -f tools/validate_lgo_ui_atlas_plan.py ]]; then
+    run_phase ui_atlas_plan python3.12 tools/validate_lgo_ui_atlas_plan.py
+  fi
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
     tools/validate_m4_playable_source.py \
@@ -278,6 +296,15 @@ source_only() {
     tools/lgo_next_task.py \
     tools/lgo_worktree_audit.py \
     tools/validate_lgo_continuous_development_mode.py \
+    tools/lgo_runtime_smoke_matrix.py \
+    tools/validate_lgo_runtime_smoke_matrix.py \
+    tools/lgo_visual_evidence_matrix.py \
+    tools/validate_lgo_visual_evidence_matrix.py \
+    tools/lgo_error_report_summary.py \
+    tools/validate_lgo_crash_error_reporting_plan.py \
+    tools/validate_lgo_release_checklist.py \
+    tools/validate_lgo_asset_provenance.py \
+    tools/validate_lgo_ui_atlas_plan.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
@@ -519,6 +546,24 @@ package_ready() {
   fi
   if [[ -f tools/validate_lgo_continuous_development_mode.py ]]; then
     run_phase continuous_development_mode python3.12 tools/validate_lgo_continuous_development_mode.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_smoke_matrix.py ]]; then
+    run_phase runtime_smoke_matrix python3.12 tools/validate_lgo_runtime_smoke_matrix.py
+  fi
+  if [[ -f tools/validate_lgo_visual_evidence_matrix.py ]]; then
+    run_phase visual_evidence_matrix python3.12 tools/validate_lgo_visual_evidence_matrix.py
+  fi
+  if [[ -f tools/validate_lgo_crash_error_reporting_plan.py ]]; then
+    run_phase crash_error_reporting_plan python3.12 tools/validate_lgo_crash_error_reporting_plan.py
+  fi
+  if [[ -f tools/validate_lgo_release_checklist.py ]]; then
+    run_phase release_checklist python3.12 tools/validate_lgo_release_checklist.py
+  fi
+  if [[ -f tools/validate_lgo_asset_provenance.py ]]; then
+    run_phase asset_provenance python3.12 tools/validate_lgo_asset_provenance.py
+  fi
+  if [[ -f tools/validate_lgo_ui_atlas_plan.py ]]; then
+    run_phase ui_atlas_plan python3.12 tools/validate_lgo_ui_atlas_plan.py
   fi
   run_phase package_hygiene python3.12 tools/validate_package_hygiene.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"
