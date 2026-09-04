@@ -34,15 +34,6 @@ def require(path: str, *markers: str) -> None:
             errors.append(f'{path} missing marker: {marker}')
 
 
-def require_file(path: str, executable: bool = False) -> None:
-    target = ROOT / path
-    if not target.is_file():
-        errors.append(f'missing file: {path}')
-        return
-    if executable and not os.access(target, os.X_OK):
-        errors.append(f'file is not executable: {path}')
-
-
 def git_lines(*args: str) -> list[str]:
     result = subprocess.run(['git', '--no-pager', *args], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     if result.returncode != 0:
@@ -53,34 +44,36 @@ def git_lines(*args: str) -> list[str]:
 
 def main() -> int:
     require(
-        'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'World HUD / Safe Training Yard',
-        'Saving position to local dev API...',
-        'Position saved near ',
-        'Returned to Character Hall.',
-        'Action blocked: ',
-        'Esc opens the session menu in world; Quit closes the player review',
-        'Guided loop: ',
-        'Area: ',
-        'Back to Character Hall',
+        'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
+        'private const float MoveSpeed = 3.6f;',
+        'private const float RotateSpeed = 105f;',
+        'CameraFollowOffset',
+        'RefreshCameraFrame',
+        'Vector3.Lerp',
+        'Mathf.Clamp01(Time.deltaTime * 7f)',
+        'Quaternion.Euler(38f, 0f, 0f)',
     )
     require(
-        'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
-        'CurrentAreaLabel',
-        'Safe yard / path to Gate Keeper',
-        'Safe yard / path to Training Stone',
-        'gold Gate Keeper',
-        'cyan pulse',
-        'Training Stone',
+        'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
+        'NewBadge("Move", "WASD or arrows")',
+        'NewBadge("Turn", "Q / E")',
+        'NewBadge("Interact", "F or Space")',
+        'NewBadge("Menu", "Esc")',
+        'Esc opens the session menu in world; Quit closes the player review',
+        'World HUD / Safe Training Yard',
     )
     require(
         'tools/lgo_playable_closure_check.sh',
-        'validate_m5_playable_session_feedback.py',
-        'm5_playable_session_feedback',
+        'validate_m5_input_camera_polish.py',
+        'm5_input_camera_polish',
     )
-    require('docs/tasks/M5-PLAYABLE-SESSION-FEEDBACK-v0.18.0.md', 'M5_PLAYABLE_SESSION_FEEDBACK_SOURCE_READY_v0.18.0', 'No combat')
-    require_file('tools/package_source.py', executable=True)
-    require_file('tools/validate_package_hygiene.py', executable=True)
+    require('docs/tasks/M5-INPUT-CAMERA-POLISH-v0.26.0.md', 'M5_INPUT_CAMERA_POLISH_RUNTIME_CLOSED_LOCAL_v0.26.0', 'No combat')
+
+    world = read('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs')
+    forbidden_world_markers = ['NavMesh', 'Pathfinding', 'InputAction', 'Cinemachine', 'TargetLock']
+    for marker in forbidden_world_markers:
+        if marker in world:
+            errors.append(f'out-of-scope camera/input marker present: {marker}')
 
     for path in git_lines('diff', '--name-only'):
         if path == 'client/Unity/Assets/Game/UI/design-tokens.json':
@@ -95,11 +88,11 @@ def main() -> int:
                 errors.append(f'generated/cache/build output under source status: {path}')
 
     if errors:
-        print('M5 PLAYABLE SESSION FEEDBACK VALIDATION FAILED', file=sys.stderr)
+        print('M5 INPUT CAMERA POLISH VALIDATION FAILED', file=sys.stderr)
         for error in errors:
             print(' - ' + error, file=sys.stderr)
         return 1
-    print('M5 PLAYABLE SESSION FEEDBACK VALIDATION PASS')
+    print('M5 INPUT CAMERA POLISH VALIDATION PASS')
     return 0
 
 

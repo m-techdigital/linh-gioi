@@ -8,9 +8,10 @@ namespace LinhGioi.World
 {
     public sealed class PlayableWorldController : MonoBehaviour
     {
-        private const float MoveSpeed = 4f;
-        private const float RotateSpeed = 120f;
+        private const float MoveSpeed = 3.6f;
+        private const float RotateSpeed = 105f;
         private const float InteractionRange = 1.45f;
+        private static readonly Vector3 CameraFollowOffset = new Vector3(0f, 7.5f, -8.5f);
         private static readonly string[] GateKeeperDialogueLines =
         {
             "Gate Keeper: Welcome to the Spirit Gate. Keep your breath steady.",
@@ -155,6 +156,7 @@ namespace LinhGioi.World
 
             RefreshPoseFeedbackMarkers();
             RefreshVfxFeedbackMarkers();
+            RefreshCameraFrame();
         }
 
         private static GameObject CreateMarker()
@@ -179,7 +181,7 @@ namespace LinhGioi.World
             var cameraObject = new GameObject("LGO Playable Camera");
             var camera = cameraObject.AddComponent<Camera>();
             camera.tag = "MainCamera";
-            camera.transform.position = target.position + new Vector3(0f, 7f, -9f);
+            camera.transform.position = target.position + CameraFollowOffset;
             camera.transform.rotation = Quaternion.Euler(38f, 0f, 0f);
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = RuntimeArtCatalog.Background;
@@ -188,6 +190,15 @@ namespace LinhGioi.World
             light.type = LightType.Directional;
             light.intensity = 1.1f;
             light.transform.rotation = Quaternion.Euler(50f, -35f, 0f);
+        }
+
+        private void RefreshCameraFrame()
+        {
+            var camera = Camera.main;
+            if (camera == null || _marker == null) return;
+            var desired = _marker.position + CameraFollowOffset;
+            camera.transform.position = Vector3.Lerp(camera.transform.position, desired, Mathf.Clamp01(Time.deltaTime * 7f));
+            camera.transform.rotation = Quaternion.Euler(38f, 0f, 0f);
         }
 
         private static void EnsureGround()

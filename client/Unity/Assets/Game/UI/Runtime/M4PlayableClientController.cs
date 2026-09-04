@@ -159,7 +159,7 @@ namespace LinhGioi.UI
             right.style.flexWrap = Wrap.Wrap;
             right.Add(_status);
             _quitButton = NewQuietButton("Quit", QuitPlayer);
-            _quitButton.tooltip = "Esc / Quit visible player review";
+            _quitButton.tooltip = "Esc opens the session menu in world; Quit closes the player review";
             right.Add(_quitButton);
             header.Add(right);
         }
@@ -241,9 +241,10 @@ namespace LinhGioi.UI
 
             topStrip.Add(NewBadge("Account", "profile loaded"));
             topStrip.Add(NewBadge("Persistence", "local dev API"));
-            topStrip.Add(NewBadge("Move", "WASD/arrows + Q/E"));
-            topStrip.Add(NewBadge("Act", "F or Space"));
-            topStrip.Add(NewBadge("Exit", "Esc / Quit"));
+            topStrip.Add(NewBadge("Move", "WASD or arrows"));
+            topStrip.Add(NewBadge("Turn", "Q / E"));
+            topStrip.Add(NewBadge("Interact", "F or Space"));
+            topStrip.Add(NewBadge("Menu", "Esc"));
 
             _worldName = new Label("No character selected");
             _worldName.style.fontSize = 19;
