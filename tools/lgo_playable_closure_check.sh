@@ -173,6 +173,7 @@ package_ready() {
   run_phase inherited_m4_package_ready ./tools/lgo_m4_closure_check.sh --package-ready
   run_phase m5_first_playable_loop python3.12 tools/validate_m5_first_playable_loop.py
   run_phase m5_guided_training_loop python3.12 tools/validate_m5_guided_training_loop.py
+  run_phase package_hygiene python3.12 tools/validate_package_hygiene.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"
   write_json "PASS" "package gates pass"
 }
