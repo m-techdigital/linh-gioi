@@ -36,9 +36,9 @@ def main() -> int:
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
         'SetApiError',
-        'API bị chặn khi ',
-        'API nội bộ chưa sẵn sàng hoặc từ chối yêu cầu. Kiểm tra server rồi thử lại.',
-        'Lỗi API: kiểm tra server nội bộ rồi thử lại.',
+        'Phiên hiện tại bị chặn khi ',
+        'Phiên hiện tại chưa sẵn sàng hoặc từ chối yêu cầu. Kiểm tra kết nối rồi thử lại.',
+        'Phiên bị gián đoạn: kiểm tra kết nối rồi thử lại.',
         'RunSafelyAsync',
     )
     require('tools/lgo_playable_closure_check.sh', 'validate_m5_api_error_resilience.py', 'm5_api_error_resilience')

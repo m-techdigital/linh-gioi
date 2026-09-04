@@ -61,7 +61,7 @@ def main() -> int:
         'NewBadge("Xoay", "Q / E")',
         'NewBadge("Tương tác", "F hoặc Space")',
         'NewBadge("Menu", "Esc")',
-        'Esc mở menu phiên trong thế giới; Thoát đóng bản chơi thử.',
+        'Esc mở menu phiên trong thế giới; Thoát đóng phiên hiện tại.',
         'Sân Luyện An Toàn',
     )
     require(

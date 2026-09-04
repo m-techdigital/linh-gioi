@@ -206,7 +206,7 @@ namespace LinhGioi.UI
             header.Add(brand);
 
             _status = new Label("S1 - Linh Giới / Ổn định");
-            _status.tooltip = "Kết nối nội bộ: " + _config.apiBaseUrl;
+            _status.tooltip = "Cổng phiên hiện tại: " + _config.apiBaseUrl;
             _status.style.color = RuntimeArtCatalog.Muted;
             _status.style.unityTextAlign = TextAnchor.MiddleRight;
             _status.style.marginTop = 6;
@@ -218,7 +218,7 @@ namespace LinhGioi.UI
             right.style.alignItems = Align.Center;
             right.Add(_status);
             _quitButton = NewQuietButton("Thoát", QuitPlayer);
-            _quitButton.tooltip = "Esc mở menu phiên trong thế giới; Thoát đóng bản chơi thử.";
+            _quitButton.tooltip = "Esc mở menu phiên trong thế giới; Thoát đóng phiên hiện tại.";
             _quitButton.style.marginTop = 0;
             _quitButton.style.display = DisplayStyle.None;
             right.Add(_quitButton);
@@ -424,7 +424,7 @@ namespace LinhGioi.UI
             serverRow.Add(_serverStatusIcon);
             _loginCard.Add(serverRow);
 
-            var apiLabel = NewMutedLabel("Kết nối nội bộ: " + _config.apiBaseUrl);
+            var apiLabel = NewMutedLabel("Cổng phiên hiện tại: " + _config.apiBaseUrl);
             apiLabel.style.fontSize = 12;
             apiLabel.style.display = DisplayStyle.None;
             _loginCard.Add(apiLabel);
@@ -472,7 +472,7 @@ namespace LinhGioi.UI
             _mainShell.Add(_lobbyPanel);
             _lobbyPanel.Add(NewSectionTitle("Điện Nhân Vật"));
             _lobbyPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
-            var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ dùng API nội bộ cho bản chơi thử.");
+            var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.");
             lobbyIntro.style.marginBottom = 10;
             _lobbyPanel.Add(lobbyIntro);
 
@@ -542,7 +542,7 @@ namespace LinhGioi.UI
             _lobbyPanel.Add(_createPanel);
 
             _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
-            _createPanel.Add(NewStatusLabel("Mạch mặc định: Kiếm tu sơ nhập. Có thể đổi contract sau khi mở hệ class chính thức.", RuntimeArtCatalog.Muted));
+            _createPanel.Add(NewStatusLabel("Mạch mặc định: Kiếm tu sơ nhập. Hệ môn phái chi tiết sẽ mở ở giai đoạn sau.", RuntimeArtCatalog.Muted));
             _characterName = NewTextField("Tên nhân vật", "LinhGioiHero");
             _characterName.style.maxWidth = 360;
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
@@ -575,7 +575,7 @@ namespace LinhGioi.UI
             _worldHud.Add(_worldDebugStrip);
 
             _worldDebugStrip.Add(NewBadge("Tài khoản", "đã kết nối"));
-            _worldDebugStrip.Add(NewBadge("Lưu vị trí", "API nội bộ"));
+            _worldDebugStrip.Add(NewBadge("Lưu vị trí", "phiên hiện tại"));
             _worldDebugStrip.Add(NewBadge("Di chuyển", "WASD hoặc phím mũi tên"));
             _worldDebugStrip.Add(NewBadge("Xoay", "Q / E"));
             _worldDebugStrip.Add(NewBadge("Tương tác", "F hoặc Space"));
@@ -662,9 +662,9 @@ namespace LinhGioi.UI
             SetDialogueVisible(false);
 
             _savePositionButton = NewCompactPrimaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
-            _savePositionButton.tooltip = "Ghi vị trí hiện tại vào API nội bộ.";
+            _savePositionButton.tooltip = "Ghi vị trí hiện tại cho phiên thử nghiệm.";
             _backButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
-            _backButton.tooltip = "Quay lại quản lý nhân vật mà không đóng bản chơi thử.";
+            _backButton.tooltip = "Quay lại quản lý nhân vật mà không đóng phiên hiện tại.";
             _worldFooterActions = NewButtonRow(_savePositionButton, _backButton, NewQuietButton("Thoát", QuitPlayer));
             _worldHud.Add(_worldFooterActions);
         }
@@ -824,7 +824,7 @@ namespace LinhGioi.UI
             foreach (var character in _characters)
             {
                 var captured = character;
-                _characterList.Add(NewListButton(character.name, character.classId, () => SelectCharacter(captured)));
+                _characterList.Add(NewListButton(character.name, "Kiếm tu sơ nhập", () => SelectCharacter(captured)));
             }
             SelectCharacter(_characters[0]);
         }
@@ -870,7 +870,7 @@ namespace LinhGioi.UI
         private async Task SavePositionAsync()
         {
             if (_selectedCharacter == null || _world == null) return;
-            SetBusy(true, "Đang lưu vị trí vào API nội bộ...");
+            SetBusy(true, "Đang lưu vị trí phiên hiện tại...");
             var save = _world.BuildSaveRequest();
             _selectedCharacter = await _client.SaveCharacterPositionAsync(_selectedCharacter.characterId, save.x, save.y, save.z, save.yawDegrees, _shutdown.Token);
             UpdateSelectedPreview(_selectedCharacter);
@@ -903,7 +903,7 @@ namespace LinhGioi.UI
                 _selectedMeta.text = "Tạo tu sĩ để bước vào Linh Giới.";
                 if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Đang chờ hồ sơ tu sĩ.";
                 if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Tạo tu sĩ, chọn hồ sơ, rồi vào sân luyện.";
-                if (_selectedClassSummary != null) _selectedClassSummary.text = "Mạch tu luyện: Kiếm tu sơ nhập sẽ được dùng cho bản chơi thử.";
+                if (_selectedClassSummary != null) _selectedClassSummary.text = "Mạch tu luyện: Kiếm tu sơ nhập đã sẵn sàng cho phiên hiện tại.";
                 _worldName.text = "Chưa chọn nhân vật";
                 _worldMeta.text = "Chọn nhân vật tại điện nhân vật.";
                 if (_worldArea != null) _worldArea.text = "Khu vực: xem trước tại sảnh";
@@ -919,12 +919,12 @@ namespace LinhGioi.UI
                 return;
             }
             _selectedName.text = character.name;
-            _selectedMeta.text = "Hồ sơ " + Abbrev(character.characterId);
+            _selectedMeta.text = "Sẵn sàng qua Linh Môn";
             if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Sẵn sàng bước qua Linh Môn.";
             if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Vào sân luyện, gặp Người Giữ Cổng, rồi lưu vị trí.";
             if (_selectedClassSummary != null) _selectedClassSummary.text = "Mạch tu luyện: Kiếm tu sơ nhập / vai trò cân bằng.";
             _worldName.text = character.name;
-            _worldMeta.text = "Kiếm tu sơ nhập / hồ sơ " + Abbrev(character.characterId);
+            _worldMeta.text = "Kiếm tu sơ nhập / phiên hiện tại";
             _position.text = character.ToString();
         }
 
@@ -1035,17 +1035,17 @@ namespace LinhGioi.UI
             catch (OperationCanceledException) { }
             catch (Exception exception)
             {
-                SetApiError("gửi yêu cầu API", exception);
+                SetApiError("mở phiên", exception);
             }
         }
 
         private void SetApiError(string action, Exception exception)
         {
-            var message = "API bị chặn khi " + action + ": " + exception.Message;
+            var message = "Phiên hiện tại bị chặn khi " + action + ": " + exception.Message;
             SetBusy(false, message);
-            SetToast("API nội bộ chưa sẵn sàng hoặc từ chối yêu cầu. Kiểm tra server rồi thử lại.", RuntimeArtCatalog.Danger);
+            SetToast("Phiên hiện tại chưa sẵn sàng hoặc từ chối yêu cầu. Kiểm tra kết nối rồi thử lại.", RuntimeArtCatalog.Danger);
             if (_sessionMenuStatus != null)
-                _sessionMenuStatus.text = "Lỗi API: kiểm tra server nội bộ rồi thử lại.";
+                _sessionMenuStatus.text = "Phiên bị gián đoạn: kiểm tra kết nối rồi thử lại.";
         }
 
         private static VisualElement NewPanel(float maxWidth)
@@ -1857,17 +1857,23 @@ namespace LinhGioi.UI
 
         private static void ApplyStatusChip(Label label, Color accent)
         {
-            label.style.paddingLeft = 10;
-            label.style.paddingRight = 10;
+            label.style.paddingLeft = 14;
+            label.style.paddingRight = 14;
             label.style.paddingTop = 6;
             label.style.paddingBottom = 6;
-            label.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+            label.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.84f);
             label.style.borderTopLeftRadius = 8;
             label.style.borderTopRightRadius = 8;
             label.style.borderBottomLeftRadius = 8;
             label.style.borderBottomRightRadius = 8;
+            label.style.borderTopColor = accent;
+            label.style.borderTopWidth = 1;
+            label.style.borderRightColor = accent;
+            label.style.borderRightWidth = 1;
+            label.style.borderBottomColor = accent;
+            label.style.borderBottomWidth = 1;
             label.style.borderLeftColor = accent;
-            label.style.borderLeftWidth = 2;
+            label.style.borderLeftWidth = 1;
         }
 
         private void SetToast(string text, Color accent)
