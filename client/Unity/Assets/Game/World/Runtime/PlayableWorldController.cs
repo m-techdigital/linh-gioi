@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using LinhGioi.Account;
 using LinhGioi.Art;
+using LinhGioi.Protocol.V1;
 using UnityEngine;
 
 namespace LinhGioi.World
@@ -14,6 +15,10 @@ namespace LinhGioi.World
         private const float LocalCombatRange = 2.2f;
         private const float LocalCombatCooldownSeconds = 1.5f;
         private const int LocalDummyMaxReadiness = 3;
+        private const uint CombatProtocolVersion = 1;
+        private const ulong LocalActorEntityId = 1001UL;
+        private const ulong TargetDummyEntityId = 2001UL;
+        private const string DefaultCombatSkillId = "skill.sword.wind_slash";
         private static readonly Vector3 CameraFollowOffset = new Vector3(0f, 7.5f, -8.5f);
         private static readonly string[] GateKeeperDialogueLines =
         {
@@ -72,6 +77,7 @@ namespace LinhGioi.World
         public string TargetDummyVisualStateText => DescribeTargetDummyVisualState();
         public string CombatFeedbackText { get; private set; } = "Chưa phải chiến đấu thật: hãy đứng gần mục tiêu luyện tập để thử phản hồi.";
         public string CombatCooldownText => Time.time >= _localCombatCooldownUntil ? "Hồi chiêu: Sẵn sàng" : "Hồi chiêu: Đang hồi chiêu mô phỏng.";
+        public string CombatAuthorityText { get; private set; } = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
         public bool LocalCombatCoolingDown => Time.time < _localCombatCooldownUntil;
         public bool TargetDummyHitAcknowledged => _targetDummyHitAcknowledged;
         public bool DialogueActive { get; private set; }
@@ -97,6 +103,7 @@ namespace LinhGioi.World
             _targetDummyReadiness = LocalDummyMaxReadiness;
             _targetDummyHitAcknowledged = false;
             CombatFeedbackText = "Chưa phải chiến đấu thật: mục tiêu luyện tập chỉ nhận phản hồi cục bộ.";
+            CombatAuthorityText = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
             _localCombatCooldownUntil = 0f;
             _guidedStep = GuidedTrainingStep.FindGateKeeper;
             SetPlayerPose(PlaceholderPoseState.Idle);
@@ -153,6 +160,42 @@ namespace LinhGioi.World
         public bool TriggerLocalCombatForSmoke()
         {
             return TryLocalCombatPrototype();
+        }
+
+        public CombatIntent BuildCombatIntentForLocalPreview(uint sequence, string intentId)
+        {
+            var position = CurrentPosition;
+            return new CombatIntent
+            {
+                ProtocolVersion = CombatProtocolVersion,
+                Sequence = sequence,
+                IntentId = string.IsNullOrWhiteSpace(intentId) ? "unity-local-intent-" + sequence : intentId,
+                ActorEntityId = LocalActorEntityId,
+                TargetEntityId = TargetDummyEntityId,
+                SkillId = DefaultCombatSkillId,
+                TargetPosition = new LinhGioi.Protocol.V1.Vec3 { X = position.x, Y = position.y, Z = position.z },
+                ClientTimeUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds(),
+                LocalPreviewOnly = true
+            };
+        }
+
+        public void MarkCombatIntentPending(CombatIntent intent)
+        {
+            CombatAuthorityText = "Gửi ý định chiến đấu: " + intent.IntentId + " - Đang xác thực - Mô phỏng cục bộ tách riêng kết quả máy chủ.";
+            CombatFeedbackText = "Mô phỏng cục bộ: đang hiển thị phản hồi trước khi có Kết quả máy chủ.";
+            InteractionStateChanged?.Invoke();
+        }
+
+        public void MarkCombatIntentAccepted(CombatAccepted accepted)
+        {
+            CombatAuthorityText = "Máy chủ chấp nhận: " + accepted.IntentId + " - Kết quả máy chủ đang chờ mô phỏng.";
+            InteractionStateChanged?.Invoke();
+        }
+
+        public void MarkCombatIntentRejected(CombatRejected rejected)
+        {
+            CombatAuthorityText = "Máy chủ từ chối: " + rejected.Error.Code + " - giữ nguyên Mô phỏng cục bộ.";
+            InteractionStateChanged?.Invoke();
         }
 
         public void RecoverLocalCombatCooldownForSmoke()

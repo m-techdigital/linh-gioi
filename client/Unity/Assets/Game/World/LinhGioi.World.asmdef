@@ -5,7 +5,8 @@
     "LinhGioi.Account",
     "LinhGioi.Art",
     "LinhGioi.Foundation",
-    "LinhGioi.GameData"
+    "LinhGioi.GameData",
+    "LinhGioi.Protocol"
   ],
   "autoReferenced": true
 }

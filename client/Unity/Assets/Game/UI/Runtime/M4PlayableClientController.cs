@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using LinhGioi.Account;
 using LinhGioi.Art;
 using LinhGioi.Foundation;
+using LinhGioi.Protocol.V1;
 using LinhGioi.World;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -48,6 +49,7 @@ namespace LinhGioi.UI
         private Label _combatVisualState;
         private Label _combatFeedback;
         private Label _combatCooldown;
+        private Label _combatAuthority;
         private Label _skinSource;
         private Label _worldObjective;
         private Label _interactionHint;
@@ -395,12 +397,14 @@ namespace LinhGioi.UI
             _combatVisualState = NewStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
             _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
             _combatCooldown = NewStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
-            _localCombatButton = NewSecondaryButton("Tấn công thử", TriggerLocalCombat);
+            _combatAuthority = NewStatusLabel("Mô phỏng cục bộ: chưa gửi ý định chiến đấu.", RuntimeArtCatalog.Spirit);
+            _localCombatButton = NewSecondaryButton("Gửi ý định chiến đấu", TriggerLocalCombat);
             _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ. Đánh thử cục bộ: xem vòng chọn mục tiêu, hit flash và nhịp hồi chiêu; không phải chiến đấu thật";
             _localCombatPanel.Add(_combatTargetStatus);
             _localCombatPanel.Add(_combatVisualState);
             _localCombatPanel.Add(_combatFeedback);
             _localCombatPanel.Add(_combatCooldown);
+            _localCombatPanel.Add(_combatAuthority);
             _localCombatPanel.Add(NewButtonRow(_localCombatButton));
             _worldHud.Add(_localCombatPanel);
         }
@@ -556,6 +560,7 @@ namespace LinhGioi.UI
             if (_combatVisualState != null) _combatVisualState.text = _world.TargetDummyVisualStateText;
             if (_combatFeedback != null) _combatFeedback.text = _world.CombatFeedbackText;
             if (_combatCooldown != null) _combatCooldown.text = _world.CombatCooldownText;
+            if (_combatAuthority != null) _combatAuthority.text = _world.CombatAuthorityText;
             if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
@@ -812,7 +817,18 @@ namespace LinhGioi.UI
         private void TriggerLocalCombat()
         {
             if (_world == null) return;
+            var intent = _world.BuildCombatIntentForLocalPreview(1, "unity-local-preview-1");
+            _world.MarkCombatIntentPending(intent);
             _world.TryLocalCombatPrototype();
+            _world.MarkCombatIntentAccepted(new CombatAccepted
+            {
+                Sequence = intent.Sequence,
+                IntentId = intent.IntentId,
+                ActorEntityId = intent.ActorEntityId,
+                SkillId = intent.SkillId,
+                CooldownMs = 1500,
+                ServerTimeUnixMs = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()
+            });
             RefreshWorldLoopLabels();
             SetToast(_world.CombatFeedbackText, RuntimeArtCatalog.Gold);
         }

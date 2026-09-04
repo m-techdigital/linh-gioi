@@ -5,6 +5,7 @@
     "LinhGioi.Account",
     "LinhGioi.Art",
     "LinhGioi.Foundation",
+    "LinhGioi.Protocol",
     "LinhGioi.World",
     "UnityEngine.UIElementsModule"
   ],

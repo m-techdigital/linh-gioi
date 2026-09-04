@@ -45,6 +45,12 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (M6UnityCombatIntentClientSmokeRunner.ShouldRun())
+                {
+                    await M6UnityCombatIntentClientSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);
+                    return;
+                }
+
                 if (M5LightweightDialogueSmokeRunner.ShouldRun())
                 {
                     await M5LightweightDialogueSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);
