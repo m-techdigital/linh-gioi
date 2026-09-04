@@ -128,6 +128,9 @@ source_only() {
   if [[ -f tools/validate_m6_target_dummy_readability.py ]]; then
     run_phase m6_target_dummy_readability python3.12 tools/validate_m6_target_dummy_readability.py
   fi
+  if [[ -f tools/validate_m6_combat_readiness_spec.py ]]; then
+    run_phase m6_combat_readiness_spec python3.12 tools/validate_m6_combat_readiness_spec.py
+  fi
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
     tools/validate_m4_playable_source.py \
@@ -151,6 +154,7 @@ source_only() {
     tools/validate_m5_api_error_resilience.py \
     tools/validate_m6_skill_preview_sandbox.py \
     tools/validate_m6_target_dummy_readability.py \
+    tools/validate_m6_combat_readiness_spec.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
     tools/m5_first_playable_loop_runtime.py \
@@ -272,6 +276,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_m6_target_dummy_readability.py ]]; then
     run_phase m6_target_dummy_readability python3.12 tools/validate_m6_target_dummy_readability.py
+  fi
+  if [[ -f tools/validate_m6_combat_readiness_spec.py ]]; then
+    run_phase m6_combat_readiness_spec python3.12 tools/validate_m6_combat_readiness_spec.py
   fi
   run_phase package_hygiene python3.12 tools/validate_package_hygiene.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"
