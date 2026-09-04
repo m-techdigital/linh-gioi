@@ -1,0 +1,9 @@
+M6-SOURCE-GATE-CONSISTENCY-HOTFIX-FINAL-REPORT-v0.46.1.md
+HANDOFF-LG-M6-SOURCE-GATE-CONSISTENCY-HOTFIX-v0.46.1.md
+LGO-M6-SOURCE-GATE-CONSISTENCY-HOTFIX-v0.46.1-CHANGED-FILES.txt
+LGO-M6-SOURCE-GATE-CONSISTENCY-HOTFIX-v0.46.1-DELETIONS.txt
+M2-RUNTIME-CANDIDATE-LOCAL-COMMANDS-v0.6.2.md
+tools/lgo_playable_closure_check.sh
+tools/validate_m6_package_hygiene_hotfix.py
+tools/validate_m6_server_authoritative_combat_closure.py
+tools/validate_package_hygiene.py

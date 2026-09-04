@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import subprocess
 import sys
 import zipfile
@@ -21,7 +22,7 @@ FORBIDDEN_PREFIXES = (
 )
 
 FORBIDDEN_DIFF_PREFIXES = ("protocol/", "gamedata/schemas/", "docs/adr/")
-REQUIRED_ZIPS = (
+DEFAULT_ARTIFACT_ZIPS = (
     "linh-gioi-m6-server-authoritative-combat-foundation-v0.44.1-full-source.zip",
     "linh-gioi-m6-server-authoritative-combat-foundation-v0.44.1-delta.zip",
 )
@@ -83,10 +84,19 @@ def require_file(path: str, *markers: str) -> None:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Validate M6 package hygiene source rules and optional release artifacts.")
+    parser.add_argument(
+        "--artifact-mode",
+        action="store_true",
+        help="Require and validate the v0.44.1 release ZIP artifacts. Fresh source validation leaves this off.",
+    )
+    args = parser.parse_args()
+
     require_file("tools/package_source.py", "__pycache__", ".pyc", "client/Unity/Library/", "client/Unity/Assets/Game/Protocol/Generated/")
     require_file("tools/validate_package_hygiene.py", "__pycache__", ".pyc", "PACKAGE HYGIENE VALIDATION PASS")
     require_file("LGO-M6-PACKAGE-HYGIENE-HOTFIX-v0.44.1-DELETIONS.txt", "DELETED")
-    require_file("LGO-M6-PACKAGE-HYGIENE-HOTFIX-v0.44.1-ARTIFACTS-SHA256.txt", "v0.44.1-full-source.zip", "v0.44.1-delta.zip")
+    if args.artifact_mode:
+        require_file("LGO-M6-PACKAGE-HYGIENE-HOTFIX-v0.44.1-ARTIFACTS-SHA256.txt", "v0.44.1-full-source.zip", "v0.44.1-delta.zip")
 
     deletions = ROOT / "LGO-M6-PACKAGE-HYGIENE-HOTFIX-v0.44.1-DELETIONS.txt"
     if deletions.is_file() and deletions.read_text(encoding="utf-8", errors="replace").splitlines()[0:1] != ["DELETED"]:
@@ -107,13 +117,14 @@ def main() -> int:
             if path.startswith(prefix):
                 errors.append(f"frozen surface modified: {path}")
 
-    for name in REQUIRED_ZIPS:
-        check_zip(ROOT / name)
-        sha = ROOT / f"{name}.sha256"
-        if not sha.is_file():
-            errors.append(f"missing package sha: {sha.name}")
-        elif name not in sha.read_text(encoding="utf-8", errors="replace"):
-            errors.append(f"{sha.name} does not reference {name}")
+    if args.artifact_mode:
+        for name in DEFAULT_ARTIFACT_ZIPS:
+            check_zip(ROOT / name)
+            sha = ROOT / f"{name}.sha256"
+            if not sha.is_file():
+                errors.append(f"missing package sha: {sha.name}")
+            elif name not in sha.read_text(encoding="utf-8", errors="replace"):
+                errors.append(f"{sha.name} does not reference {name}")
 
     if errors:
         print("M6 PACKAGE HYGIENE HOTFIX VALIDATION FAILED", file=sys.stderr)

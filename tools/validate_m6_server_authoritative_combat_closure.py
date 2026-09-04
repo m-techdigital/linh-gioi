@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import os
+import argparse
 import subprocess
 import sys
 from pathlib import Path
@@ -43,12 +44,21 @@ def git_lines(*args: str) -> list[str]:
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Validate M6 server-authoritative combat closure source rules.")
+    parser.add_argument(
+        "--artifact-mode",
+        action="store_true",
+        help="Require historical v0.44.0 package artifact checksum manifest.",
+    )
+    args = parser.parse_args()
+
     require_file("tools/validate_m6_server_authoritative_combat_closure.py", executable=True)
     require("M6-SERVER-AUTHORITATIVE-COMBAT-CLOSURE-FINAL-REPORT-v0.44.0.md", "M6_SERVER_AUTHORITATIVE_COMBAT_FOUNDATION_RUNTIME_CLOSED_LOCAL_v0.44.0", "M6_UNITY_JAVA_COMBAT_SMOKE_PASS", "No full MMO runtime closure")
     require("HANDOFF-LG-M6-SERVER-AUTHORITATIVE-COMBAT-FOUNDATION-v0.44.0.md", "Stage Decisions", "Frozen Surface Audit", "Package Artifacts")
     require("LGO-M6-SERVER-AUTHORITATIVE-COMBAT-FOUNDATION-v0.44.0-CHANGED-FILES.txt", "protocol/combat.proto", "CombatValidationService.java", "M6UnityJavaCombatSmokeRunner.cs")
     require("LGO-M6-SERVER-AUTHORITATIVE-COMBAT-FOUNDATION-v0.44.0-DELETIONS.txt", "DELETED")
-    require("LGO-M6-SERVER-AUTHORITATIVE-COMBAT-FOUNDATION-v0.44.0-ARTIFACTS-SHA256.txt", "linh-gioi-m6-server-authoritative-combat-foundation-v0.44.0-full-source.zip", "linh-gioi-m6-server-authoritative-combat-foundation-v0.44.0-delta.zip")
+    if args.artifact_mode:
+        require("LGO-M6-SERVER-AUTHORITATIVE-COMBAT-FOUNDATION-v0.44.0-ARTIFACTS-SHA256.txt", "linh-gioi-m6-server-authoritative-combat-foundation-v0.44.0-full-source.zip", "linh-gioi-m6-server-authoritative-combat-foundation-v0.44.0-delta.zip")
     require("tools/lgo_playable_closure_check.sh", "m6_unity_combat_intent_client_runtime", "m6_unity_java_combat_runtime")
     for path in git_lines("diff", "--name-only"):
         if path.startswith(("protocol/", "gamedata/schemas/", "docs/adr/")):

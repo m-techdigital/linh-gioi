@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import subprocess
 import sys
 import zipfile
@@ -52,7 +53,30 @@ def check_zip(path: Path) -> None:
                     errors.append(f'{path.name} contains forbidden entry: {name}')
 
 
+def check_artifact_paths(paths: list[str]) -> None:
+    for raw in paths:
+        path = Path(raw)
+        if not path.is_absolute():
+            path = ROOT / path
+        if not path.is_file():
+            errors.append(f'missing artifact package: {raw}')
+            continue
+        check_zip(path)
+        sha = Path(str(path) + '.sha256')
+        if sha.is_file() and path.name not in sha.read_text(encoding='utf-8', errors='replace'):
+            errors.append(f'{sha.name} does not reference {path.name}')
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description='Validate source/package hygiene without requiring historical release ZIPs.')
+    parser.add_argument(
+        '--artifact-zip',
+        action='append',
+        default=[],
+        help='Optional release ZIP to validate explicitly. Source validation does not require historical ZIPs.',
+    )
+    args = parser.parse_args()
+
     package_tool = ROOT / 'tools/package_source.py'
     if not package_tool.is_file():
         errors.append('missing package tool: tools/package_source.py')
@@ -84,8 +108,15 @@ def main() -> int:
             elif path == forbidden.rstrip('/') or path.startswith(forbidden):
                 errors.append(f'forbidden source artifact present: {path}')
 
-    for path in sorted(ROOT.glob('*.zip')):
+    root_zips = sorted(ROOT.glob('*.zip'))
+    explicit_artifacts = {str((ROOT / raw).resolve() if not Path(raw).is_absolute() else Path(raw).resolve()) for raw in args.artifact_zip}
+    for path in root_zips:
         check_zip(path)
+    check_artifact_paths(args.artifact_zip)
+
+    if not root_zips and not explicit_artifacts:
+        # Fresh full-source packages intentionally do not contain release ZIPs.
+        pass
 
     if errors:
         print('PACKAGE HYGIENE VALIDATION FAILED', file=sys.stderr)
