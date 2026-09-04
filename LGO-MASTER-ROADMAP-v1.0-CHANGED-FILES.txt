@@ -1,0 +1,12 @@
+docs/execution/LGO-MASTER-ROADMAP-v1.0.md
+docs/execution/LGO-MILESTONE-DEPENDENCY-MAP-v1.0.md
+docs/execution/LGO-PRODUCTION-READINESS-ROADMAP-v1.0.md
+docs/execution/LGO-AUTH-DB-COMBAT-ROADMAP-v1.0.md
+docs/execution/LGO-WEB-ADMIN-PLAYER-PORTAL-ROADMAP-v1.0.md
+docs/execution/LGO-ASSET-ANIMATION-PIPELINE-ROADMAP-v1.0.md
+docs/execution/LGO-NEXT-50-TASKS-BACKLOG-v1.0.md
+docs/execution/prompts/LGO-MASTER-ROADMAP-KEEPER.md
+tools/validate_master_roadmap.py
+HANDOFF-LG-MASTER-ROADMAP-v1.0.md
+LGO-MASTER-ROADMAP-v1.0-CHANGED-FILES.txt
+LGO-MASTER-ROADMAP-v1.0-DELETIONS.txt
