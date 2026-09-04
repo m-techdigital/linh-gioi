@@ -71,6 +71,7 @@ def main() -> int:
         "client/Unity/Assets/Game/World/Runtime/M6UnityJavaCombatSmokeRunner.cs",
         "--lgo-m6-unity-java-combat-smoke",
         "M6_UNITY_JAVA_COMBAT_SMOKE_PASS",
+        "Google.Protobuf",
         "CombatAccepted.Parser.ParseFrom",
         "CombatRejected.Parser.ParseFrom",
     )
