@@ -93,6 +93,10 @@ def is_safe_without_owner(task: Task, text: str) -> bool:
         "Guild",
         "Leaderboard",
         "event board",
+        "World event",
+        "boss event",
+        "event spec",
+        "live ops",
         "Auth implementation",
         "DB migration foundation",
         "Account/player/character persistence",
@@ -104,6 +108,12 @@ def is_safe_without_owner(task: Task, text: str) -> bool:
         "Party",
         "Guild",
         "Admin-prod",
+        "admin-dev",
+        "Content validation admin",
+        "Public website",
+        "website spec",
+        "Player portal",
+        "portal spec",
         "Auth/DB",
     )
     if any(word.lower() in task.purpose.lower() for word in unsafe_words):
