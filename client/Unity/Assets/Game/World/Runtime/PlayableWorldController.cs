@@ -43,6 +43,7 @@ namespace LinhGioi.World
         private TextMesh _targetDummyWorldLabel;
         private TextMesh _spiritGateWorldLabel;
         private TextMesh _shadowSlimeWorldLabel;
+        private TextMesh _interactionPromptWorldLabel;
         private SpriteRenderer _targetDummySprite;
         private SpriteRenderer _targetDummyFocusSprite;
         private SpriteRenderer _targetDummyCooldownSprite;
@@ -619,6 +620,7 @@ namespace LinhGioi.World
             SetGateKeeperState(PlaceholderNpcState.Idle);
             _objectiveText = "Mục tiêu 2/2: ổn định Đá Luyện.";
             _interactionText = "Người Giữ Cổng: đường đã mở. Hãy đi theo mạch linh khí lam về phía bắc.";
+            RefreshInteractionPromptWorldLabel();
             RefreshInteractionState();
             InteractionStateChanged?.Invoke();
             return true;
@@ -631,6 +633,7 @@ namespace LinhGioi.World
             _dialogueLineIndex = 0;
             _objectiveText = "Mục tiêu 1/2: lắng nghe Người Giữ Cổng.";
             _interactionText = DialogueLine;
+            RefreshInteractionPromptWorldLabel();
         }
 
         private string NextMovementHint()
@@ -705,7 +708,28 @@ namespace LinhGioi.World
             if (_nearestInteractable == state && _interactionText == text) return;
             _nearestInteractable = state;
             _interactionText = text;
+            RefreshInteractionPromptWorldLabel();
             InteractionStateChanged?.Invoke();
+        }
+
+        private void RefreshInteractionPromptWorldLabel()
+        {
+            if (_interactionPromptWorldLabel == null) return;
+            var active = _nearestInteractable != null && !DialogueActive;
+            _interactionPromptWorldLabel.gameObject.SetActive(active);
+            if (!active) return;
+
+            _interactionPromptWorldLabel.transform.position = _nearestInteractable.position + new Vector3(0f, 2.2f, 0f);
+            _interactionPromptWorldLabel.text = "F / Space";
+            _interactionPromptWorldLabel.color = _nearestInteractable.id == "Gate Keeper" ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
+            EnsureWorldLabelShadow(_interactionPromptWorldLabel.transform, _interactionPromptWorldLabel.text);
+        }
+
+        private static void SetWorldLabel(TextMesh label, string text, Color color)
+        {
+            label.text = text;
+            label.color = color;
+            EnsureWorldLabelShadow(label.transform, text);
         }
 
         private static float Distance2D(Vector3 a, Vector3 b)
@@ -837,6 +861,13 @@ namespace LinhGioi.World
                 _spiritGateWorldLabel = CreateWorldLabel("LGO Spirit Gate World Label", "Linh Môn", new Vector3(0f, 2.15f, -4.5f), RuntimeArtCatalog.Spirit);
             if (_shadowSlimeWorldLabel == null)
                 _shadowSlimeWorldLabel = CreateWorldLabel("LGO Shadow Slime World Label", "Cảnh báo", ShadowSlimePosition + new Vector3(0f, 1.1f, 0f), RuntimeArtCatalog.Danger);
+            if (_interactionPromptWorldLabel == null)
+            {
+                _interactionPromptWorldLabel = CreateWorldLabel("LGO Interaction Prompt World Label", "F / Space", GateKeeperPosition + new Vector3(0f, 2.35f, 0f), RuntimeArtCatalog.Spirit);
+                _interactionPromptWorldLabel.fontSize = 42;
+                _interactionPromptWorldLabel.characterSize = 0.044f;
+                _interactionPromptWorldLabel.gameObject.SetActive(false);
+            }
         }
 
         private static void EnsureWorldSetDressing()
@@ -979,6 +1010,17 @@ namespace LinhGioi.World
             if (_targetDummySprite != null)
             {
                 _targetDummySprite.sprite = ResolveTargetDummyStateSprite(nearTarget, coolingDown, vfxActive);
+            }
+            if (_targetDummyWorldLabel != null)
+            {
+                if (vfxActive && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash)
+                    SetWorldLabel(_targetDummyWorldLabel, "Trúng mục tiêu", RuntimeArtCatalog.Gold);
+                else if (coolingDown)
+                    SetWorldLabel(_targetDummyWorldLabel, "Đang hồi phục", RuntimeArtCatalog.Spirit);
+                else if (nearTarget)
+                    SetWorldLabel(_targetDummyWorldLabel, "Đã chọn", RuntimeArtCatalog.Spirit);
+                else
+                    SetWorldLabel(_targetDummyWorldLabel, "Bia luyện", RuntimeArtCatalog.Gold);
             }
         }
 

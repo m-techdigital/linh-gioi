@@ -66,6 +66,10 @@ def main() -> int:
         'LGO Shadow Slime Warning Plinth',
         'ObjectiveDirectionHint',
         'WorldLandmarkSummary',
+        'LGO Interaction Prompt World Label',
+        'SetWorldLabel',
+        'Trúng mục tiêu',
+        'Đang hồi phục',
         'Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông',
     )
     require_any(
