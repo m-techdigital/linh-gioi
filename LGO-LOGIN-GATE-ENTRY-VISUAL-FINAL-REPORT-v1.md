@@ -1,13 +1,19 @@
-# Login Gate Entry Visual Final Report v1
+# LGO Login Gate Entry Visual Final Report v1
 
-Final decision: LGO_LOGIN_GATE_ENTRY_VISUAL_CLOSED_v1
+Final decision: `LGO_LOGIN_GATE_ENTRY_VISUAL_CLOSED_v1`
 
-Quality classification: STRUCTURAL_RUNTIME_PLACEHOLDER_V2
+## Summary
 
-Changed runtime presentation only. The existing dev-key login/account flow remains intact.
+The playable login screen now uses project-generated `LGOFinalLogin` runtime candidates for the compressed full-screen background, logo, and primary enter-world button. The separated V3B-A runtime-candidate pack remains the fallback/source for the Gate Keeper NPC, server selector, disabled button state, utility icons, and panel skin. The flow remains the same dev-key login and character handoff; this is a presentation and asset-management pass only.
 
-Validation target: `tools/validate_lgo_art_v2_separated_assets.py`.
+## Non-Claims
 
-Non-claims: no production art final, no final visual-quality claim, no production auth, no DB, no economy/social/liveops, no new gameplay mechanics.
+- Not production auth.
+- Not DB/session-token implementation.
+- Not production-final art.
+- Not new gameplay.
+- Not a protocol or GameData schema change.
 
-V2 is temporary placeholder quality only. ART V3 high-resolution separated assets are required for polished runtime visuals.
+## Runtime Asset Boundary
+
+V1 remains reference/mockup only. V2 remains structural placeholder. V3/V3B reference posters remain read-only. V3B-A is used as separated fallback/runtime-candidate material for login/gate-entry visual integration. `LGOFinalLogin` is the active V3B-like login candidate set and is still not claimed as production-final art until owner acceptance.

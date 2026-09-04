@@ -30,6 +30,9 @@ namespace LinhGioi.UI
         private VisualElement _skillPreviewPanel;
         private VisualElement _localCombatPanel;
         private VisualElement _characterList;
+        private VisualElement _loginStage;
+        private VisualElement _loginCard;
+        private VisualElement _serverStatusIcon;
         private TextField _devKey;
         private TextField _characterName;
         private TextField _classId;
@@ -126,18 +129,19 @@ namespace LinhGioi.UI
             _root.style.flexGrow = 1;
             _root.style.backgroundColor = RuntimeArtCatalog.Background;
             _root.style.color = RuntimeArtCatalog.Text;
-            _root.style.paddingLeft = 18;
-            _root.style.paddingRight = 18;
-            _root.style.paddingTop = 16;
-            _root.style.paddingBottom = 16;
+            _root.style.paddingLeft = 28;
+            _root.style.paddingRight = 28;
+            _root.style.paddingTop = 18;
+            _root.style.paddingBottom = 18;
             _root.style.alignItems = Align.Center;
             _root.style.unityBackgroundImageTintColor = Color.white;
-            var gateBackground = LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV2.LoginBackgroundSpiritGate;
+            var gateBackground = LgoFinalLoginAssetRegistry.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV3BA.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV2.LoginBackgroundSpiritGate;
             if (gateBackground != null)
             {
                 _root.style.backgroundImage = new StyleBackground(gateBackground);
                 _root.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
             }
+            AddScreenScrim();
 
             BuildHeader();
 
@@ -145,10 +149,10 @@ namespace LinhGioi.UI
             _mainShell.style.flexDirection = FlexDirection.Row;
             _mainShell.style.flexWrap = Wrap.Wrap;
             _mainShell.style.width = Length.Percent(100);
-            _mainShell.style.maxWidth = 1120;
+            _mainShell.style.maxWidth = 1180;
             _mainShell.style.alignContent = Align.FlexStart;
             _mainShell.style.justifyContent = Justify.Center;
-            _mainShell.style.marginTop = 12;
+            _mainShell.style.marginTop = 10;
             _root.Add(_mainShell);
 
             BuildAuthPanel();
@@ -165,7 +169,7 @@ namespace LinhGioi.UI
             header.style.alignItems = Align.Center;
             header.style.flexWrap = Wrap.Wrap;
             header.style.width = Length.Percent(100);
-            header.style.maxWidth = 1120;
+            header.style.maxWidth = 1180;
             _root.Add(header);
 
             var brand = new VisualElement();
@@ -173,21 +177,26 @@ namespace LinhGioi.UI
             header.Add(brand);
 
             var logo = new VisualElement();
-            logo.name = "LGO Login Gate Entry Logo V2";
-            logo.style.width = 360;
-            logo.style.height = 132;
+            logo.name = "LGO Login Gate Entry Logo V3BA";
+            logo.style.width = 320;
+            logo.style.height = 118;
             logo.style.marginBottom = 2;
-            var logoTexture = LgoVisualAssetRegistryV2.LogoLinhGioiOnline;
-            if (logoTexture != null) logo.style.backgroundImage = new StyleBackground(logoTexture);
+            logo.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            var logoTexture = LgoFinalLoginAssetRegistry.LogoLinhGioiOnline ?? LgoVisualAssetRegistryV3BA.LogoLinhGioiOnline ?? LgoVisualAssetRegistryV2.LogoLinhGioiOnline;
+            if (logoTexture != null)
+            {
+                logo.style.backgroundImage = new StyleBackground(logoTexture);
+            }
             brand.Add(logo);
 
             var title = new Label("Linh Giới Online");
             title.style.fontSize = 24;
             title.style.unityFontStyleAndWeight = FontStyle.Bold;
             title.style.color = RuntimeArtCatalog.Gold;
+            if (logoTexture != null) title.style.display = DisplayStyle.None;
             brand.Add(title);
 
-            var subtitle = new Label("Cổng Linh Giới - bản thử nghiệm nội bộ");
+            var subtitle = new Label("Cổng Linh Giới - phiên bản thử nghiệm");
             subtitle.style.color = RuntimeArtCatalog.Spirit;
             subtitle.style.fontSize = 13;
             brand.Add(subtitle);
@@ -209,53 +218,131 @@ namespace LinhGioi.UI
             header.Add(right);
         }
 
+        private void AddScreenScrim()
+        {
+            var scrim = new VisualElement();
+            scrim.name = "LGO Login Gate Entry Readability Scrim";
+            scrim.pickingMode = PickingMode.Ignore;
+            scrim.style.position = Position.Absolute;
+            scrim.style.left = 0;
+            scrim.style.right = 0;
+            scrim.style.top = 0;
+            scrim.style.bottom = 0;
+            scrim.style.backgroundColor = new Color(0.03f, 0.05f, 0.09f, 0.48f);
+            _root.Add(scrim);
+            scrim.style.backgroundColor = new Color(0.02f, 0.05f, 0.10f, 0.22f);
+            _root.Add(scrim);
+        }
+
         private void BuildAuthPanel()
         {
-            _authPanel = NewPanel(620);
-            ApplyV2PanelSkin(_authPanel);
+            _authPanel = new VisualElement();
+            _authPanel.name = "LGO Login Gate Entry Final Shell";
+            _authPanel.style.width = Length.Percent(100);
+            _authPanel.style.maxWidth = 1180;
+            _authPanel.style.minHeight = 520;
+            _authPanel.style.flexDirection = FlexDirection.Row;
+            _authPanel.style.flexWrap = Wrap.Wrap;
+            _authPanel.style.justifyContent = Justify.SpaceBetween;
+            _authPanel.style.alignItems = Align.FlexEnd;
+            _authPanel.style.marginTop = 4;
+            _authPanel.style.paddingTop = 8;
             _mainShell.Add(_authPanel);
-            _authPanel.Add(NewSectionTitle("Linh Môn"));
-            _authPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
+
+            _loginStage = new VisualElement();
+            _loginStage.name = "LGO Login Gate Entry Hero Stage";
+            _loginStage.style.flexGrow = 1;
+            _loginStage.style.minWidth = 360;
+            _loginStage.style.maxWidth = 620;
+            _loginStage.style.minHeight = 430;
+            _loginStage.style.justifyContent = Justify.FlexEnd;
+            _loginStage.style.paddingBottom = 6;
+            _authPanel.Add(_loginStage);
+
+            var heroTitle = new Label("Bước qua Linh Môn");
+            heroTitle.style.fontSize = 32;
+            heroTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
+            heroTitle.style.color = RuntimeArtCatalog.Text;
+            heroTitle.style.unityTextAlign = TextAnchor.MiddleLeft;
+            _loginStage.Add(heroTitle);
+
+            var heroCopy = NewMutedLabel("Chọn máy chủ thử nghiệm, mở tài khoản dev và vào sân luyện an toàn.");
+            heroCopy.style.fontSize = 15;
+            heroCopy.style.maxWidth = 420;
+            heroCopy.style.color = RuntimeArtCatalog.Text;
+            _loginStage.Add(heroCopy);
+
             var gateKeeper = new VisualElement();
-            gateKeeper.name = "LGO Login Gate Keeper NPC V2";
-            gateKeeper.style.width = 176;
-            gateKeeper.style.height = 264;
-            gateKeeper.style.alignSelf = Align.Center;
-            gateKeeper.style.marginBottom = 8;
-            var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
+            gateKeeper.name = "LGO Login Gate Keeper NPC V3BA";
+            gateKeeper.style.width = 250;
+            gateKeeper.style.height = 374;
+            gateKeeper.style.marginTop = 14;
+            gateKeeper.style.marginLeft = 36;
+            gateKeeper.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            var gateKeeperTexture = LgoVisualAssetRegistryV3BA.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
             if (gateKeeperTexture != null) gateKeeper.style.backgroundImage = new StyleBackground(gateKeeperTexture);
-            _authPanel.Add(gateKeeper);
+            _loginStage.Add(gateKeeper);
+
+            _loginCard = NewPanel(500);
+            _loginCard.name = "LGO Login Gate Entry Control Panel V3BA";
+            _loginCard.style.minWidth = 340;
+            _loginCard.style.maxWidth = 500;
+            _loginCard.style.paddingLeft = 24;
+            _loginCard.style.paddingRight = 24;
+            _loginCard.style.paddingTop = 22;
+            _loginCard.style.paddingBottom = 20;
+            ApplyV2PanelSkin(_loginCard);
+            _authPanel.Add(_loginCard);
+            _loginCard.Add(NewSectionTitle("Linh Môn"));
+            _loginCard.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
 
             var serverRow = new VisualElement();
-            serverRow.name = "LGO Login Server Selector V2";
+            serverRow.name = "LGO Login Server Selector V3BA";
             serverRow.style.flexDirection = FlexDirection.Row;
             serverRow.style.alignItems = Align.Center;
+            serverRow.style.justifyContent = Justify.SpaceBetween;
             serverRow.style.marginBottom = 8;
-            serverRow.style.paddingLeft = 10;
-            serverRow.style.paddingRight = 10;
-            serverRow.style.paddingTop = 8;
-            serverRow.style.paddingBottom = 8;
-            var serverPanel = LgoVisualAssetRegistryV2.ServerSelectorPanelTexture;
+            serverRow.style.minHeight = 64;
+            serverRow.style.paddingLeft = 18;
+            serverRow.style.paddingRight = 18;
+            serverRow.style.paddingTop = 10;
+            serverRow.style.paddingBottom = 10;
+            serverRow.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
+            var serverPanel = LgoVisualAssetRegistryV3BA.ServerSelectorPanelTexture ?? LgoVisualAssetRegistryV2.ServerSelectorPanelTexture;
             if (serverPanel != null) serverRow.style.backgroundImage = new StyleBackground(serverPanel);
             serverRow.Add(NewIcon(LgoVisualAssetRegistryV2.IconServerTexture, "Máy chủ"));
-            serverRow.Add(NewMutedLabel("Máy chủ thử nghiệm: Linh Môn 01"));
-            serverRow.Add(NewIcon(LgoVisualAssetRegistryV2.ServerOnlineTexture, "Đang mở"));
-            _authPanel.Add(serverRow);
+            var serverText = new Label("S1 - Linh Giới");
+            serverText.style.flexGrow = 1;
+            serverText.style.fontSize = 20;
+            serverText.style.unityFontStyleAndWeight = FontStyle.Bold;
+            serverText.style.color = RuntimeArtCatalog.Text;
+            serverText.style.unityTextAlign = TextAnchor.MiddleLeft;
+            serverRow.Add(serverText);
+            _serverStatusIcon = NewIcon(LgoVisualAssetRegistryV3BA.ServerOnlineTexture ?? LgoVisualAssetRegistryV2.ServerOnlineTexture, "Đang mở");
+            serverRow.Add(_serverStatusIcon);
+            _loginCard.Add(serverRow);
 
-            _authPanel.Add(NewMutedLabel("API: " + _config.apiBaseUrl));
+            var apiLabel = NewMutedLabel("Kết nối nội bộ: " + _config.apiBaseUrl);
+            apiLabel.style.fontSize = 12;
+            _loginCard.Add(apiLabel);
             _devKey = NewTextField("Khóa thử nghiệm", DefaultDevKey);
-            _authPanel.Add(_devKey);
+            _loginCard.Add(_devKey);
             _loginButton = NewPrimaryButton("Vào Thế Giới", () => RunAsync(LoginAsync));
-            _authPanel.Add(_loginButton);
+            _loginButton.name = "LGO Login Enter World CTA V3BA";
+            _loginButton.style.width = Length.Percent(100);
+            _loginButton.style.minHeight = 76;
+            _loginButton.style.fontSize = 24;
+            _loginButton.tooltip = "Mở tài khoản thử nghiệm và đi tới Điện Nhân Vật.";
+            _loginCard.Add(_loginButton);
             var utilities = NewButtonRow(
-                NewIconButton("Tin", LgoVisualAssetRegistryV2.IconNoticeTexture, () => SetToast("Thông báo: bản thử nghiệm nội bộ.", RuntimeArtCatalog.Spirit)),
-                NewIconButton("Tài khoản", LgoVisualAssetRegistryV2.IconAccountTexture, () => SetToast("Tài khoản dev sẽ được mở bằng khóa hiện tại.", RuntimeArtCatalog.Muted)),
-                NewIconButton("Cài đặt", LgoVisualAssetRegistryV2.IconSettingsTexture, () => SetToast("Cài đặt nhanh có trong menu phiên.", RuntimeArtCatalog.Muted))
+                NewIconButton("Tin", LgoVisualAssetRegistryV3BA.IconNoticeTexture ?? LgoVisualAssetRegistryV2.IconNoticeTexture, () => SetToast("Thông báo: bản thử nghiệm nội bộ.", RuntimeArtCatalog.Spirit)),
+                NewIconButton("Tài khoản", LgoVisualAssetRegistryV3BA.IconAccountTexture ?? LgoVisualAssetRegistryV2.IconAccountTexture, () => SetToast("Tài khoản dev sẽ được mở bằng khóa hiện tại.", RuntimeArtCatalog.Muted)),
+                NewIconButton("Cài đặt", LgoVisualAssetRegistryV3BA.IconSettingsTexture ?? LgoVisualAssetRegistryV2.IconSettingsTexture, () => SetToast("Cài đặt nhanh có trong menu phiên.", RuntimeArtCatalog.Muted))
             );
-            _authPanel.Add(utilities);
+            _loginCard.Add(utilities);
             _account = NewMutedLabel("Tài khoản: chưa kết nối");
             _account.style.marginTop = 10;
-            _authPanel.Add(_account);
+            _loginCard.Add(_account);
         }
 
         private void BuildLobbyPanel()
@@ -666,6 +753,12 @@ namespace LinhGioi.UI
         {
             _status.text = message;
             ApplyStatusChip(_status, busy ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Muted);
+            ApplyLoginButtonState(busy ? LgoVisualAssetRegistryV3BA.ButtonDisabledTexture : LgoFinalLoginAssetRegistry.ButtonEnterWorldTexture ?? LgoVisualAssetRegistryV3BA.ButtonEnterWorldNormalTexture);
+            if (_serverStatusIcon != null)
+            {
+                var texture = busy ? LgoVisualAssetRegistryV3BA.ServerBusyTexture : LgoVisualAssetRegistryV3BA.ServerOnlineTexture;
+                if (texture != null) _serverStatusIcon.style.backgroundImage = new StyleBackground(texture);
+            }
             _loginButton.SetEnabled(!busy);
             if (_accountState != null)
             {
@@ -814,7 +907,8 @@ namespace LinhGioi.UI
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
             button.style.minHeight = 58;
             button.style.fontSize = 16;
-            var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
+            button.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
+            var texture = LgoFinalLoginAssetRegistry.ButtonEnterWorldTexture ?? LgoVisualAssetRegistryV3BA.ButtonEnterWorldNormalTexture ?? LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
             if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
             return button;
         }
@@ -845,6 +939,7 @@ namespace LinhGioi.UI
             icon.style.height = 28;
             icon.style.marginRight = 8;
             icon.style.marginLeft = 4;
+            icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
             icon.tooltip = tooltip;
             return icon;
@@ -853,7 +948,8 @@ namespace LinhGioi.UI
         private static Button NewIconButton(string label, Texture2D texture, Action action)
         {
             var button = NewSecondaryButton(string.Empty, action);
-            button.style.minWidth = 104;
+            button.style.minWidth = 112;
+            button.style.minHeight = 48;
             button.style.flexDirection = FlexDirection.Row;
             button.style.alignItems = Align.Center;
             button.Add(NewIcon(texture, label));
@@ -1067,9 +1163,16 @@ namespace LinhGioi.UI
 
         private static void ApplyV2PanelSkin(VisualElement panel)
         {
-            var texture = LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture ?? LgoVisualAssetRegistryV2.PanelMainLargeTexture;
+            var texture = LgoVisualAssetRegistryV3BA.PanelMainTexture ?? LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture ?? LgoVisualAssetRegistryV2.PanelMainLargeTexture;
             if (texture == null) return;
             panel.style.backgroundImage = new StyleBackground(texture);
+            panel.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
+        }
+
+        private void ApplyLoginButtonState(Texture2D texture)
+        {
+            if (_loginButton == null || texture == null) return;
+            _loginButton.style.backgroundImage = new StyleBackground(texture);
         }
 
         private static void ApplyCombatButtonSkin(Button button, Texture2D texture)

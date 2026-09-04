@@ -1,20 +1,31 @@
 # Login Gate Entry Visual v1
 
-Status: LGO_LOGIN_GATE_ENTRY_VISUAL_CLOSED_v1
+Marker: `LGO_LOGIN_GATE_ENTRY_VISUAL_CLOSED_v1`
 
-Quality classification: STRUCTURAL_RUNTIME_PLACEHOLDER_V2
+## Scope
 
-Goal: upgrade Login / Gate Entry visual using separated V2 assets without production auth, DB, or gameplay expansion.
+Upgrade the playable login screen to a polished gate-entry presentation using separated runtime-candidate assets from V3B-A.
 
-Runtime UI now uses:
+## Allowed
 
-- Spirit Gate background;
-- Linh Giới logo;
-- Gate Keeper NPC guide image;
-- server selector frame and online dot;
-- utility buttons for `Thông báo`, `Tài khoản`, `Cài đặt`;
-- primary action `Vào Thế Giới` rendered by Unity text.
+- `client/Unity/Assets/Game/Art/Runtime/V3BA/**`
+- `client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV3BA.cs`
+- `client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs`
+- docs and validators directly related to login visual integration
 
-Non-claims: no production art final, no final visual-quality claim, no production auth, no DB, no gameplay mechanic change.
+## Forbidden
 
-The V2 login assets are temporary structural placeholders. ART V3 is required for polished high-resolution Login/Gate Entry art.
+- production auth
+- DB/session persistence
+- economy/social/liveops
+- protocol changes
+- GameData schema changes
+- ADR changes
+- design-token changes
+
+## Acceptance
+
+- Login opens as a final-looking gate-entry shell.
+- Runtime-ready assets are mapped and loaded through a registry.
+- Reference-only images are not imported.
+- Validation and runtime smoke pass locally when Unity is available.

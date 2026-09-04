@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv"
+FINAL_LOGIN_DIR = ROOT / "client/Unity/Assets/Game/Art/Runtime/FinalLogin/Resources/LGOFinalLogin"
 ERRORS: list[str] = []
 
 ROLE_LIMITS = {
@@ -22,6 +23,12 @@ ROLE_LIMITS = {
     "combat_cooldown_ready": 45 * 1024,
     "combat_cooldown_active": 45 * 1024,
     "combat_target_dummy_idle": 180 * 1024,
+}
+
+FINAL_LOGIN_LIMITS = {
+    "login_background_spirit_gate_final_1920x1080.jpg": 520 * 1024,
+    "logo_linh_gioi_online_final_420.png": 220 * 1024,
+    "button_enter_world_final_384.png": 130 * 1024,
 }
 
 
@@ -71,6 +78,27 @@ def check_no_large_root_full_source_zips() -> None:
             ERRORS.append(f"large full-source ZIP should be outside repo root: {path.name}")
 
 
+def check_final_login_assets() -> None:
+    if not FINAL_LOGIN_DIR.is_dir():
+        ERRORS.append("missing FinalLogin runtime directory")
+        return
+    for path in FINAL_LOGIN_DIR.iterdir():
+        if not path.is_file() or path.suffix == ".meta":
+            continue
+        if path.name not in FINAL_LOGIN_LIMITS:
+            ERRORS.append(f"unexpected FinalLogin runtime asset: {path.relative_to(ROOT)}")
+            continue
+        limit = FINAL_LOGIN_LIMITS[path.name]
+        size = path.stat().st_size
+        if size > limit:
+            ERRORS.append(f"{path.relative_to(ROOT)} exceeds FinalLogin budget: {size} > {limit}")
+        if not path.with_name(path.name + ".meta").is_file():
+            ERRORS.append(f"missing Unity meta: {path.relative_to(ROOT)}.meta")
+    for name in FINAL_LOGIN_LIMITS:
+        if not (FINAL_LOGIN_DIR / name).is_file():
+            ERRORS.append(f"missing FinalLogin runtime asset: {(FINAL_LOGIN_DIR / name).relative_to(ROOT)}")
+
+
 def check_frozen() -> None:
     result = subprocess.run(
         ["git", "--no-pager", "diff", "--name-only", "--", "protocol", "gamedata/schemas", "docs/adr", "client/Unity/Assets/Game/UI/design-tokens.json"],
@@ -102,6 +130,7 @@ def main() -> int:
     )
     require("tools/lgo_playable_closure_check.sh", "validate_lgo_runtime_asset_weight.py")
     check_manifest()
+    check_final_login_assets()
     check_no_large_root_full_source_zips()
     check_frozen()
     if ERRORS:
