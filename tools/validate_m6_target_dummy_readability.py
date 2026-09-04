@@ -9,7 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 errors: list[str] = []
 FORBIDDEN_CHANGED_PREFIXES = ['protocol/', 'gamedata/schemas/', 'docs/adr/']
-FORBIDDEN_WORLD_MARKERS = ['HitPoints', 'Damage', 'Cooldown', 'Loot', 'Inventory', 'EnemyAttack', 'Projectile']
+FORBIDDEN_WORLD_MARKERS = ['HitPoints', 'Damage', 'Loot', 'Inventory', 'EnemyAttack', 'Projectile']
 
 
 def read(path: str) -> str:
@@ -75,6 +75,10 @@ def main() -> int:
     for marker in FORBIDDEN_WORLD_MARKERS:
         if marker in world:
             errors.append(f'target dummy readability contains forbidden gameplay marker: {marker}')
+    if 'Cooldown' in world:
+        m6_doc = read('docs/tasks/M6-MINIMAL-LOCAL-COMBAT-FOUNDATION-v0.34.0.md')
+        if 'M6_MINIMAL_LOCAL_COMBAT_FOUNDATION_SOURCE_READY_v0.34.0' not in m6_doc or 'local/non-authoritative' not in m6_doc:
+            errors.append('target dummy readability contains Cooldown without M6 local/non-authoritative approval')
     for path in git_lines('diff', '--name-only'):
         if path == 'client/Unity/Assets/Game/UI/design-tokens.json':
             errors.append(f'frozen surface modified: {path}')

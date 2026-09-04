@@ -24,6 +24,15 @@ DOCS = [
 ]
 FORBIDDEN_CHANGED_PREFIXES = ['protocol/', 'gamedata/schemas/', 'docs/adr/', 'client/Unity/Assets/Game/UI/design-tokens.json', 'client/Unity/Assets/Game/', 'server/']
 FORBIDDEN_OUTPUT_PREFIXES = ['build/', 'client/Unity/Library/', 'client/Unity/Temp/', 'client/Unity/Logs/', 'client/Unity/Assets/Game/Generated/', 'client/Unity/Assets/Game/Protocol/Generated/', 'tools/__pycache__/']
+M6_ALLOWED_SOURCE_FILES = {
+    'client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs',
+    'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
+    'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
+    'client/Unity/Assets/Game/World/Runtime/M6MinimalLocalCombatSmokeRunner.cs',
+    'client/Unity/Assets/Game/World/Runtime/M6MinimalLocalCombatSmokeRunner.cs.meta',
+    'tools/run_m6_minimal_local_combat_once.sh',
+    'tools/validate_m6_minimal_local_combat.py',
+}
 
 
 def read(path: str) -> str:
@@ -76,7 +85,7 @@ def main() -> int:
             errors.append(f'roadmap makes forbidden implementation claim: {claim}')
 
     for path in git_lines('diff', '--name-only'):
-        if path in {'tools/validate_master_roadmap.py', 'tools/lgo_playable_closure_check.sh'}:
+        if path in {'tools/validate_master_roadmap.py', 'tools/lgo_playable_closure_check.sh'} or path in M6_ALLOWED_SOURCE_FILES:
             continue
         for prefix in FORBIDDEN_CHANGED_PREFIXES:
             if path == prefix or path.startswith(prefix):

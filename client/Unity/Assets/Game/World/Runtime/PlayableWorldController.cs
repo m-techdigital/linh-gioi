@@ -11,6 +11,9 @@ namespace LinhGioi.World
         private const float MoveSpeed = 3.6f;
         private const float RotateSpeed = 105f;
         private const float InteractionRange = 1.45f;
+        private const float LocalCombatRange = 2.2f;
+        private const float LocalCombatCooldownSeconds = 1.5f;
+        private const int LocalDummyMaxReadiness = 3;
         private static readonly Vector3 CameraFollowOffset = new Vector3(0f, 7.5f, -8.5f);
         private static readonly string[] GateKeeperDialogueLines =
         {
@@ -32,6 +35,7 @@ namespace LinhGioi.World
         private Transform _portalGatePulse;
         private Transform _windSlashPreview;
         private Transform _shadowBindWarning;
+        private Transform _targetDummyHitFlash;
         private InteractableState _nearestInteractable;
         private string _objectiveText = "Objective: enter the world and find the training stone.";
         private string _interactionText = "Move near the Gate Keeper or Training Stone.";
@@ -42,6 +46,9 @@ namespace LinhGioi.World
         private PlaceholderVfxFeedbackState _vfxFeedbackState = PlaceholderVfxFeedbackState.Quiet;
         private float _posePulseUntil;
         private float _vfxPreviewUntil;
+        private float _localCombatCooldownUntil;
+        private int _targetDummyReadiness = LocalDummyMaxReadiness;
+        private bool _targetDummyHitAcknowledged;
         private int _dialogueLineIndex;
 
         public event Action PositionChanged;
@@ -59,6 +66,10 @@ namespace LinhGioi.World
         public string GateKeeperPoseStateName => _gateKeeperState.ToString();
         public string ShadowSlimeStateName => _shadowSlimeState.ToString();
         public string VfxFeedbackStateName => _vfxFeedbackState.ToString();
+        public string TargetDummyStatusText => "Mục tiêu luyện tập: sức bền mô phỏng " + _targetDummyReadiness + "/" + LocalDummyMaxReadiness + " - Chỉ là mô phỏng cục bộ.";
+        public string CombatFeedbackText { get; private set; } = "Chưa phải chiến đấu thật: hãy đứng gần mục tiêu luyện tập để thử phản hồi.";
+        public string CombatCooldownText => Time.time >= _localCombatCooldownUntil ? "Hồi chiêu: sẵn sàng" : "Hồi chiêu: đang hồi.";
+        public bool TargetDummyHitAcknowledged => _targetDummyHitAcknowledged;
         public bool DialogueActive { get; private set; }
         public bool DialogueCompleted { get; private set; }
         public string DialogueSpeaker => "Gate Keeper";
@@ -79,6 +90,10 @@ namespace LinhGioi.World
             DialogueActive = false;
             DialogueCompleted = false;
             _dialogueLineIndex = 0;
+            _targetDummyReadiness = LocalDummyMaxReadiness;
+            _targetDummyHitAcknowledged = false;
+            CombatFeedbackText = "Chưa phải chiến đấu thật: mục tiêu luyện tập chỉ nhận phản hồi cục bộ.";
+            _localCombatCooldownUntil = 0f;
             _guidedStep = GuidedTrainingStep.FindGateKeeper;
             SetPlayerPose(PlaceholderPoseState.Idle);
             SetGateKeeperState(PlaceholderNpcState.Idle);
@@ -124,6 +139,48 @@ namespace LinhGioi.World
         {
             RefreshInteractionState();
             return TryTriggerInteraction();
+        }
+
+        public void SetSmokePositionNearTargetDummy()
+        {
+            SetSmokePosition(ReadabilityDummyPosition.x - 0.9f, 0.25f, ReadabilityDummyPosition.z, 90f);
+        }
+
+        public bool TriggerLocalCombatForSmoke()
+        {
+            return TryLocalCombatPrototype();
+        }
+
+        public bool TryLocalCombatPrototype()
+        {
+            if (_marker == null)
+            {
+                CombatFeedbackText = "Chưa phải chiến đấu thật: chưa vào sân luyện tập.";
+                InteractionStateChanged?.Invoke();
+                return false;
+            }
+            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) > LocalCombatRange)
+            {
+                CombatFeedbackText = "Mục tiêu luyện tập ở phía đông. Lại gần hơn để Tấn công thử.";
+                InteractionStateChanged?.Invoke();
+                return false;
+            }
+            if (Time.time < _localCombatCooldownUntil)
+            {
+                CombatFeedbackText = "Hồi chiêu: hãy chờ nhịp mô phỏng cục bộ.";
+                InteractionStateChanged?.Invoke();
+                return false;
+            }
+
+            _targetDummyReadiness = Mathf.Max(0, _targetDummyReadiness - 1);
+            _targetDummyHitAcknowledged = true;
+            _localCombatCooldownUntil = Time.time + LocalCombatCooldownSeconds;
+            CombatFeedbackText = "Trúng mục tiêu - Chỉ là mô phỏng cục bộ, chưa phải chiến đấu thật.";
+            SetPlayerPose(PlaceholderPoseState.Interact);
+            SetVfxFeedback(PlaceholderVfxFeedbackState.TargetDummyHitFlash, 1.25f);
+            TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
+            InteractionStateChanged?.Invoke();
+            return true;
         }
 
         public void PreviewSkillFeedback(string previewName)
@@ -497,6 +554,8 @@ namespace LinhGioi.World
                 _windSlashPreview = CreateMarkerCube("LGO Wind Slash Preview Placeholder", CurrentPosition + new Vector3(0f, 0.7f, 0.9f), RuntimeArtCatalog.Gold, new Vector3(1.8f, 0.12f, 0.22f)).transform;
             if (_shadowBindWarning == null)
                 _shadowBindWarning = CreateMarkerCube("LGO Shadow Bind Warning Placeholder", ShadowSlimePosition + Vector3.up * 0.55f, RuntimeArtCatalog.Shadow, new Vector3(1.9f, 0.1f, 1.9f)).transform;
+            if (_targetDummyHitFlash == null)
+                _targetDummyHitFlash = CreateMarkerCube("LGO Target Dummy Local Hit Flash", ReadabilityDummyPosition + Vector3.up * 1.2f, RuntimeArtCatalog.Danger, new Vector3(1.05f, 0.16f, 1.05f)).transform;
             RefreshVfxFeedbackMarkers();
         }
 
@@ -534,6 +593,8 @@ namespace LinhGioi.World
             }
             if (_shadowBindWarning != null)
                 _shadowBindWarning.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.ShadowBindWarning);
+            if (_targetDummyHitFlash != null)
+                _targetDummyHitFlash.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
         }
 
         private sealed class InteractableState
@@ -586,7 +647,8 @@ namespace LinhGioi.World
             PortalGatePulse,
             WindSlashPreview,
             SpiritPulse,
-            ShadowBindWarning
+            ShadowBindWarning,
+            TargetDummyHitFlash
         }
     }
 }

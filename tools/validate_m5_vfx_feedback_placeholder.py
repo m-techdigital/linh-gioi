@@ -20,7 +20,6 @@ FORBIDDEN_OUTPUT_PREFIXES = [
 FORBIDDEN_MARKERS = [
     'HitPoints',
     'Damage',
-    'Cooldown',
     'Loot',
     'Inventory',
     'EnemyAttack',
@@ -108,6 +107,10 @@ def main() -> int:
     for marker in FORBIDDEN_MARKERS:
         if marker in world:
             errors.append(f'world VFX placeholder contains forbidden gameplay marker: {marker}')
+    if 'Cooldown' in world:
+        m6_doc = read('docs/tasks/M6-MINIMAL-LOCAL-COMBAT-FOUNDATION-v0.34.0.md')
+        if 'M6_MINIMAL_LOCAL_COMBAT_FOUNDATION_SOURCE_READY_v0.34.0' not in m6_doc or 'local/non-authoritative' not in m6_doc:
+            errors.append('world VFX placeholder contains Cooldown without M6 local/non-authoritative approval')
 
     for path in git_lines('diff', '--name-only'):
         if path == 'client/Unity/Assets/Game/UI/design-tokens.json':

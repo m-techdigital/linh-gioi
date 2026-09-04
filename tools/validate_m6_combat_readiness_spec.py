@@ -24,6 +24,20 @@ ALLOWED_CODE_FILES = {
     'tools/validate_m6_combat_readiness_spec.py',
     'tools/lgo_playable_closure_check.sh',
 }
+M6_ALLOWED_AFTER_CONTRACT_FILES = {
+    'client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs',
+    'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
+    'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
+    'client/Unity/Assets/Game/World/Runtime/M6MinimalLocalCombatSmokeRunner.cs',
+    'client/Unity/Assets/Game/World/Runtime/M6MinimalLocalCombatSmokeRunner.cs.meta',
+    'tools/run_m6_minimal_local_combat_once.sh',
+    'tools/validate_m6_contract_review.py',
+    'tools/validate_m6_minimal_local_combat.py',
+    'tools/validate_master_roadmap.py',
+    'tools/validate_m5_vfx_feedback_placeholder.py',
+    'tools/validate_m6_skill_preview_sandbox.py',
+    'tools/validate_m6_target_dummy_readability.py',
+}
 
 
 def read(path: str) -> str:
@@ -93,7 +107,12 @@ def main() -> int:
         for prefix in FORBIDDEN_CHANGED_PREFIXES:
             if path == prefix or path.startswith(prefix):
                 errors.append(f'frozen surface modified: {path}')
-        if path not in ALLOWED_CODE_FILES:
+        m6_local_allowed = (
+            path in M6_ALLOWED_AFTER_CONTRACT_FILES and
+            'M6_MINIMAL_LOCAL_COMBAT_ALLOWED_WITHOUT_CONTRACT_CHANGE_v0.33.0' in read('docs/tasks/M6-CONTRACT-REVIEW-v0.33.0.md') and
+            'M6_MINIMAL_LOCAL_COMBAT_FOUNDATION_SOURCE_READY_v0.34.0' in read('docs/tasks/M6-MINIMAL-LOCAL-COMBAT-FOUNDATION-v0.34.0.md')
+        )
+        if path not in ALLOWED_CODE_FILES and not m6_local_allowed:
             for prefix in FORBIDDEN_CODE_PREFIXES:
                 if path.startswith(prefix):
                     errors.append(f'v0.32 docs-only spec changed implementation path: {path}')

@@ -27,6 +27,7 @@ namespace LinhGioi.UI
         private VisualElement _sessionMenuPanel;
         private VisualElement _settingsPanel;
         private VisualElement _skillPreviewPanel;
+        private VisualElement _localCombatPanel;
         private VisualElement _characterList;
         private TextField _devKey;
         private TextField _characterName;
@@ -43,6 +44,9 @@ namespace LinhGioi.UI
         private Label _worldLandmarks;
         private Label _worldPoseState;
         private Label _worldVfxState;
+        private Label _combatTargetStatus;
+        private Label _combatFeedback;
+        private Label _combatCooldown;
         private Label _skinSource;
         private Label _worldObjective;
         private Label _interactionHint;
@@ -63,6 +67,7 @@ namespace LinhGioi.UI
         private Button _previewWindSlashButton;
         private Button _previewShadowBindButton;
         private Button _previewSpiritGuardButton;
+        private Button _localCombatButton;
         private Button _resumeButton;
         private Button _sessionSaveButton;
         private Button _sessionBackButton;
@@ -317,6 +322,7 @@ namespace LinhGioi.UI
 
             BuildSessionMenuPanel();
             BuildSkillPreviewPanel();
+            BuildLocalCombatPanel();
 
             _dialoguePanel = NewPreviewPanel();
             _dialoguePanel.style.marginTop = 10;
@@ -375,6 +381,24 @@ namespace LinhGioi.UI
             _previewSpiritGuardButton = NewSecondaryButton("Preview Spirit Guard", () => PreviewSkill("Spirit Guard"));
             _skillPreviewPanel.Add(NewButtonRow(_previewWindSlashButton, _previewShadowBindButton, _previewSpiritGuardButton));
             _worldHud.Add(_skillPreviewPanel);
+        }
+
+        private void BuildLocalCombatPanel()
+        {
+            _localCombatPanel = NewPreviewPanel();
+            _localCombatPanel.name = "LGO M6 Minimal Local Combat";
+            _localCombatPanel.style.marginTop = 10;
+            _localCombatPanel.Add(NewSectionTitle("Luyện mục tiêu cục bộ"));
+            _localCombatPanel.Add(NewMutedLabel("Chỉ là mô phỏng cục bộ. Không có sát thương thật, phần thưởng, kinh nghiệm, hay chiến đấu máy chủ."));
+            _combatTargetStatus = NewStatusLabel("Mục tiêu luyện tập: chưa vào sân.", RuntimeArtCatalog.Gold);
+            _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
+            _combatCooldown = NewStatusLabel("Hồi chiêu: sẵn sàng", RuntimeArtCatalog.Muted);
+            _localCombatButton = NewSecondaryButton("Tấn công thử", TriggerLocalCombat);
+            _localCombatPanel.Add(_combatTargetStatus);
+            _localCombatPanel.Add(_combatFeedback);
+            _localCombatPanel.Add(_combatCooldown);
+            _localCombatPanel.Add(NewButtonRow(_localCombatButton));
+            _worldHud.Add(_localCombatPanel);
         }
 
         private void BuildLocalSettingsPanel()
@@ -524,6 +548,9 @@ namespace LinhGioi.UI
             if (_worldLandmarks != null) _worldLandmarks.text = _world.WorldLandmarkSummary;
             if (_worldPoseState != null) _worldPoseState.text = "Pose: player " + _world.PlayerPoseStateName + " / Gate Keeper " + _world.GateKeeperPoseStateName + " / Shadow Slime " + _world.ShadowSlimeStateName + ".";
             if (_worldVfxState != null) _worldVfxState.text = "VFX: " + _world.VfxFeedbackStateName + " / visual-only local feedback.";
+            if (_combatTargetStatus != null) _combatTargetStatus.text = _world.TargetDummyStatusText;
+            if (_combatFeedback != null) _combatFeedback.text = _world.CombatFeedbackText;
+            if (_combatCooldown != null) _combatCooldown.text = _world.CombatCooldownText;
             if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
@@ -774,6 +801,15 @@ namespace LinhGioi.UI
             if (_worldVfxState != null) _worldVfxState.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
             if (_skinSource != null) _skinSource.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
             if (_skillPreviewPanel != null) _skillPreviewPanel.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_localCombatPanel != null) _localCombatPanel.style.display = DisplayStyle.Flex;
+        }
+
+        private void TriggerLocalCombat()
+        {
+            if (_world == null) return;
+            _world.TryLocalCombatPrototype();
+            RefreshWorldLoopLabels();
+            SetToast(_world.CombatFeedbackText, RuntimeArtCatalog.Gold);
         }
 
         private void PreviewSkill(string previewName)

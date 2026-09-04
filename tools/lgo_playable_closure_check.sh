@@ -131,6 +131,15 @@ source_only() {
   if [[ -f tools/validate_m6_combat_readiness_spec.py ]]; then
     run_phase m6_combat_readiness_spec python3.12 tools/validate_m6_combat_readiness_spec.py
   fi
+  if [[ -f tools/validate_m6_contract_review.py || -f tools/validate_m6_minimal_local_combat.py ]]; then
+    run_phase clean_pycache_before_m6_combat git clean -f tools/__pycache__
+  fi
+  if [[ -f tools/validate_m6_contract_review.py ]]; then
+    run_phase m6_contract_review python3.12 tools/validate_m6_contract_review.py
+  fi
+  if [[ -f tools/validate_m6_minimal_local_combat.py ]]; then
+    run_phase m6_minimal_local_combat python3.12 tools/validate_m6_minimal_local_combat.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
     run_phase code_governance python3.12 tools/validate_code_governance.py
@@ -159,6 +168,8 @@ source_only() {
     tools/validate_m6_skill_preview_sandbox.py \
     tools/validate_m6_target_dummy_readability.py \
     tools/validate_m6_combat_readiness_spec.py \
+    tools/validate_m6_contract_review.py \
+    tools/validate_m6_minimal_local_combat.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
@@ -234,6 +245,14 @@ runtime_mode() {
       exit 46
     fi
   fi
+  if [[ -f tools/run_m6_minimal_local_combat_once.sh ]]; then
+    run_phase m6_minimal_local_combat_runtime ./tools/run_m6_minimal_local_combat_once.sh --unity-player "$macos_player"
+    if ! grep -R "M6_MINIMAL_LOCAL_COMBAT_RUNTIME_SMOKE_PASS" "$ROOT/build" >/dev/null; then
+      log "LGO_PLAYABLE_CLOSURE_FIX_REQUIRED"
+      echo "ERROR: M6 minimal local combat runtime marker not observed" >&2
+      exit 47
+    fi
+  fi
   log "LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS"
   write_json "PASS" "runtime gates pass"
 }
@@ -284,6 +303,15 @@ package_ready() {
   fi
   if [[ -f tools/validate_m6_combat_readiness_spec.py ]]; then
     run_phase m6_combat_readiness_spec python3.12 tools/validate_m6_combat_readiness_spec.py
+  fi
+  if [[ -f tools/validate_m6_contract_review.py || -f tools/validate_m6_minimal_local_combat.py ]]; then
+    run_phase clean_pycache_before_m6_combat git clean -f tools/__pycache__
+  fi
+  if [[ -f tools/validate_m6_contract_review.py ]]; then
+    run_phase m6_contract_review python3.12 tools/validate_m6_contract_review.py
+  fi
+  if [[ -f tools/validate_m6_minimal_local_combat.py ]]; then
+    run_phase m6_minimal_local_combat python3.12 tools/validate_m6_minimal_local_combat.py
   fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
