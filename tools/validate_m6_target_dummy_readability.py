@@ -9,14 +9,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 errors: list[str] = []
 FORBIDDEN_CHANGED_PREFIXES = ['protocol/', 'gamedata/schemas/', 'docs/adr/']
-FORBIDDEN_OUTPUT_PREFIXES = [
-    'build/',
-    'client/Unity/Library/',
-    'client/Unity/Temp/',
-    'client/Unity/Logs/',
-    'client/Unity/Assets/Game/Generated/',
-    'client/Unity/Assets/Game/Protocol/Generated/',
-]
+FORBIDDEN_WORLD_MARKERS = ['HitPoints', 'Damage', 'Cooldown', 'Loot', 'Inventory', 'EnemyAttack', 'Projectile']
 
 
 def read(path: str) -> str:
@@ -54,48 +47,47 @@ def git_lines(*args: str) -> list[str]:
 def main() -> int:
     require(
         'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
-        'LGO Spirit Gate Landmark South',
-        'LGO Safe Training Circle Center',
-        'LGO Gate Keeper Gold Readability Pillar',
-        'LGO Training Stone Cyan Beacon',
-        'LGO Shadow Slime Warning Plinth',
-        'ObjectiveDirectionHint',
-        'WorldLandmarkSummary',
-        'Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east',
+        'ReadabilityDummyPosition',
+        'LGO Target Dummy Readability Marker',
+        'LGO Target Dummy Non Combat Base',
+        'Safe yard / target dummy readability marker',
+        'Readability Dummy east',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Direction: ',
-        'Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east.',
-        'World HUD / Safe Training Yard',
+        'Readability Dummy east',
+        'Shadow Slime far east',
     )
     require(
         'tools/lgo_playable_closure_check.sh',
-        'validate_m5_world_hub_readability.py',
-        'm5_world_hub_readability',
+        'validate_m6_target_dummy_readability.py',
+        'm6_target_dummy_readability',
     )
-    require('docs/tasks/M5-WORLD-HUB-READABILITY-v0.19.0.md', 'M5_WORLD_HUB_READABILITY_SOURCE_READY_v0.19.0', 'No minimap')
-    require_file('tools/package_source.py', executable=True)
-    require_file('tools/validate_package_hygiene.py', executable=True)
+    require(
+        'docs/tasks/M6-TARGET-DUMMY-READABILITY-v0.31.0.md',
+        'M6_TARGET_DUMMY_READABILITY_RUNTIME_CLOSED_LOCAL_v0.31.0',
+        'No combat system',
+        'readability marker',
+    )
+    require_file('tools/validate_m6_target_dummy_readability.py', executable=True)
 
+    world = read('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs')
+    for marker in FORBIDDEN_WORLD_MARKERS:
+        if marker in world:
+            errors.append(f'target dummy readability contains forbidden gameplay marker: {marker}')
     for path in git_lines('diff', '--name-only'):
         if path == 'client/Unity/Assets/Game/UI/design-tokens.json':
             errors.append(f'frozen surface modified: {path}')
         for prefix in FORBIDDEN_CHANGED_PREFIXES:
             if path.startswith(prefix):
                 errors.append(f'frozen surface modified: {path}')
-    for line in git_lines('status', '--short', '--untracked-files=all'):
-        path = line[3:] if len(line) >= 4 else line
-        for prefix in FORBIDDEN_OUTPUT_PREFIXES:
-            if path.startswith(prefix):
-                errors.append(f'generated/cache/build output under source status: {path}')
 
     if errors:
-        print('M5 WORLD HUB READABILITY VALIDATION FAILED', file=sys.stderr)
+        print('M6 TARGET DUMMY READABILITY VALIDATION FAILED', file=sys.stderr)
         for error in errors:
             print(' - ' + error, file=sys.stderr)
         return 1
-    print('M5 WORLD HUB READABILITY VALIDATION PASS')
+    print('M6 TARGET DUMMY READABILITY VALIDATION PASS')
     return 0
 
 

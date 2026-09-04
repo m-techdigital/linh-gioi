@@ -308,7 +308,7 @@ namespace LinhGioi.UI
             _position.style.paddingBottom = 6;
             _worldHud.Add(_position);
 
-            _worldLandmarks = NewMutedLabel("Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.");
+            _worldLandmarks = NewMutedLabel("Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east.");
             _worldLandmarks.style.marginTop = 8;
             _worldHud.Add(_worldLandmarks);
 
@@ -499,7 +499,7 @@ namespace LinhGioi.UI
                 if (_worldArea != null) _worldArea.text = "Area: Lobby preview";
                 if (_worldStep != null) _worldStep.text = "Guided loop: Step 1 Gate Keeper / Step 2 Training Stone.";
                 if (_worldDirection != null) _worldDirection.text = "Direction: enter the world to reveal Step 1 guidance.";
-                if (_worldLandmarks != null) _worldLandmarks.text = "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
+                if (_worldLandmarks != null) _worldLandmarks.text = "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east.";
                 if (_worldPoseState != null) _worldPoseState.text = "Pose: player idle / Gate Keeper idle / Shadow Slime idle.";
                 if (_worldVfxState != null) _worldVfxState.text = "VFX: Quiet / portal, spirit pulse, wind slash preview, shadow bind warning are visual-only.";
                 if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";

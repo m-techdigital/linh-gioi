@@ -21,6 +21,7 @@ namespace LinhGioi.World
         private static readonly Vector3 GateKeeperPosition = new Vector3(-3f, 0.75f, 3f);
         private static readonly Vector3 TrainingStonePosition = new Vector3(0f, 0.08f, 4.5f);
         private static readonly Vector3 ShadowSlimePosition = new Vector3(3f, 0.4f, 3f);
+        private static readonly Vector3 ReadabilityDummyPosition = new Vector3(2.6f, 0.65f, 0.5f);
         private CharacterResponse _character;
         private Transform _marker;
         private Renderer _markerRenderer;
@@ -53,7 +54,7 @@ namespace LinhGioi.World
         public string GuidedTrainingStepName => _guidedStep.ToString();
         public string CurrentAreaLabel => DescribeCurrentArea();
         public string ObjectiveDirectionHint => DescribeObjectiveDirection();
-        public string WorldLandmarkSummary => "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
+        public string WorldLandmarkSummary => "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east.";
         public string PlayerPoseStateName => _playerPoseState.ToString();
         public string GateKeeperPoseStateName => _gateKeeperState.ToString();
         public string ShadowSlimeStateName => _shadowSlimeState.ToString();
@@ -246,6 +247,8 @@ namespace LinhGioi.World
             // Preserve the M4 visual source marker: LGO NPC Keeper Placeholder.
             CreateMarkerCube("LGO Gate Keeper NPC Interactable", GateKeeperPosition, RuntimeArtCatalog.Gold, new Vector3(0.9f, 1.5f, 0.9f));
             CreateMarkerCube("LGO Gate Keeper Gold Readability Pillar", GateKeeperPosition + new Vector3(0f, 1.35f, 0f), RuntimeArtCatalog.Gold, new Vector3(0.25f, 1.4f, 0.25f));
+            CreateMarkerCube("LGO Target Dummy Readability Marker", ReadabilityDummyPosition, RuntimeArtCatalog.Gold, new Vector3(0.7f, 1.3f, 0.7f));
+            CreateMarkerCube("LGO Target Dummy Non Combat Base", ReadabilityDummyPosition + new Vector3(0f, -0.58f, 0f), RuntimeArtCatalog.Spirit, new Vector3(1.25f, 0.08f, 1.25f));
             CreateMarkerCube("LGO Shadow Slime Non Combat Marker", ShadowSlimePosition, RuntimeArtCatalog.Shadow, new Vector3(1.4f, 0.8f, 1.4f));
             CreateMarkerCube("LGO Shadow Slime Warning Plinth", ShadowSlimePosition + new Vector3(0f, -0.2f, 0f), RuntimeArtCatalog.Danger, new Vector3(1.8f, 0.08f, 1.8f));
             CreateMarkerCube("LGO Training Stone Interactable", TrainingStonePosition, RuntimeArtCatalog.Spirit, new Vector3(1.2f, 0.16f, 1.2f));
@@ -400,6 +403,8 @@ namespace LinhGioi.World
         private string DescribeCurrentArea()
         {
             if (_nearestInteractable != null) return _nearestInteractable.id;
+            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= 1.8f)
+                return "Safe yard / target dummy readability marker";
             if (Distance2D(CurrentPosition, ShadowSlimePosition) <= 2.25f)
             {
                 SetShadowSlimeState(PlaceholderSlimeState.AlertWarning);

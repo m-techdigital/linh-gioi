@@ -1,0 +1,12 @@
+client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs
+client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+tools/validate_m6_target_dummy_readability.py
+tools/lgo_playable_closure_check.sh
+docs/tasks/M6-TARGET-DUMMY-READABILITY-v0.31.0.md
+HANDOFF-LG-M6-TARGET-DUMMY-READABILITY-v0.31.0.md
+M6-TARGET-DUMMY-READABILITY-FINAL-REPORT-v0.31.0.md
+LGO-M6-TARGET-DUMMY-READABILITY-v0.31.0-CHANGED-FILES.txt
+LGO-M6-TARGET-DUMMY-READABILITY-v0.31.0-DELETIONS.txt
+LGO-M6-TARGET-DUMMY-READABILITY-v0.31.0-ARTIFACTS.sha256
+linh-gioi-m6-target-dummy-readability-v0.31.0-full-source.zip.sha256
+linh-gioi-m6-target-dummy-readability-delta-v0.31.0.zip.sha256
