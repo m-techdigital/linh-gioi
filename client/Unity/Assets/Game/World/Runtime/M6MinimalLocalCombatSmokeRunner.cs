@@ -49,10 +49,20 @@ namespace LinhGioi.World
                 result.combatFeedbackText = world.CombatFeedbackText;
                 result.targetDummyStatusText = world.TargetDummyStatusText;
                 result.cooldownText = world.CombatCooldownText;
+                result.cooldownBlockedAfterRepeatedInput = !world.TriggerLocalCombatForSmoke() && world.LocalCombatCoolingDown;
+                result.cooldownBlockedFeedbackText = world.CombatFeedbackText;
+                world.RecoverLocalCombatCooldownForSmoke();
+                result.cooldownRecoveredText = world.CombatCooldownText;
+                result.attackAfterCooldownRecovered = world.TriggerLocalCombatForSmoke();
+                result.feedbackAfterCooldownRecovered = world.CombatFeedbackText;
                 if (!result.attackTriggered || !result.targetDummyHitAcknowledged)
                     throw new InvalidOperationException("local combat target dummy hit was not acknowledged");
                 if (!result.combatFeedbackText.Contains("Trúng mục tiêu") || !result.combatFeedbackText.Contains("Chỉ là mô phỏng cục bộ"))
                     throw new InvalidOperationException("Vietnamese local combat feedback marker missing");
+                if (!result.cooldownBlockedAfterRepeatedInput || !result.cooldownBlockedFeedbackText.Contains("Chưa thể tấn công") || !result.cooldownBlockedFeedbackText.Contains("Đang hồi chiêu"))
+                    throw new InvalidOperationException("repeated attack did not produce deterministic cooldown block feedback");
+                if (!result.cooldownRecoveredText.Contains("Sẵn sàng") || !result.attackAfterCooldownRecovered || !result.feedbackAfterCooldownRecovered.Contains("Trúng mục tiêu"))
+                    throw new InvalidOperationException("cooldown recovery did not restore deterministic local attack feedback");
                 result.status = "PASS";
                 result.marker = "M6_MINIMAL_LOCAL_COMBAT_RUNTIME_SMOKE_PASS";
                 exitCode = 0;
@@ -110,6 +120,11 @@ namespace LinhGioi.World
             public string combatFeedbackText;
             public string targetDummyStatusText;
             public string cooldownText;
+            public bool cooldownBlockedAfterRepeatedInput;
+            public string cooldownBlockedFeedbackText;
+            public string cooldownRecoveredText;
+            public bool attackAfterCooldownRecovered;
+            public string feedbackAfterCooldownRecovered;
             public string exceptionType;
             public string exceptionMessage;
             public int exitCode;

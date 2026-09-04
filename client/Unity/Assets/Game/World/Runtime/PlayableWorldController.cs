@@ -72,6 +72,7 @@ namespace LinhGioi.World
         public string TargetDummyVisualStateText => DescribeTargetDummyVisualState();
         public string CombatFeedbackText { get; private set; } = "Chưa phải chiến đấu thật: hãy đứng gần mục tiêu luyện tập để thử phản hồi.";
         public string CombatCooldownText => Time.time >= _localCombatCooldownUntil ? "Hồi chiêu: Sẵn sàng" : "Hồi chiêu: Đang hồi chiêu mô phỏng.";
+        public bool LocalCombatCoolingDown => Time.time < _localCombatCooldownUntil;
         public bool TargetDummyHitAcknowledged => _targetDummyHitAcknowledged;
         public bool DialogueActive { get; private set; }
         public bool DialogueCompleted { get; private set; }
@@ -154,6 +155,14 @@ namespace LinhGioi.World
             return TryLocalCombatPrototype();
         }
 
+        public void RecoverLocalCombatCooldownForSmoke()
+        {
+            _localCombatCooldownUntil = 0f;
+            CombatFeedbackText = "Hồi chiêu: Sẵn sàng - Mô phỏng cục bộ đã hồi phục.";
+            RefreshVfxFeedbackMarkers();
+            InteractionStateChanged?.Invoke();
+        }
+
         public bool TryLocalCombatPrototype()
         {
             if (_marker == null)
@@ -170,7 +179,7 @@ namespace LinhGioi.World
             }
             if (Time.time < _localCombatCooldownUntil)
             {
-                CombatFeedbackText = "Hồi chiêu: hãy chờ nhịp sáng mô phỏng cục bộ.";
+                CombatFeedbackText = "Chưa thể tấn công: Đang hồi chiêu mô phỏng cục bộ.";
                 InteractionStateChanged?.Invoke();
                 return false;
             }

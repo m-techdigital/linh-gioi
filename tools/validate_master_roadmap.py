@@ -35,6 +35,7 @@ M6_ALLOWED_SOURCE_FILES = {
     'tools/validate_m6_combat_ux_feedback.py',
     'tools/validate_m6_combat_visual_reference_pack.py',
     'tools/validate_m6_combat_visual_readability.py',
+    'tools/validate_m6_combat_input_feedback_stability.py',
 }
 
 
