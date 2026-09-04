@@ -8,7 +8,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 errors: list[str] = []
-
 FORBIDDEN_CHANGED_PREFIXES = ['protocol/', 'gamedata/schemas/', 'docs/adr/']
 FORBIDDEN_OUTPUT_PREFIXES = [
     'build/',
@@ -54,81 +53,64 @@ def git_lines(*args: str) -> list[str]:
 
 def main() -> int:
     require(
+        'docs/art/LGO-VISUAL-REFERENCE-PACK-v0.16.5.md',
+        'LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5',
+        'Gate Keeper',
+        'Training Stone',
+        'cyan spirit energy',
+    )
+    require(
         'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
-        'LGO Gate Keeper NPC Interactable',
-        'LGO Training Stone Interactable',
-        'LGO Shadow Slime Non Combat Marker',
-        'InteractionRange',
-        'ObjectiveText',
-        'InteractionText',
-        'KeyCode.F',
-        'KeyCode.Space',
-        'TriggerInteractionForSmoke',
-        'SetSmokePositionNearTrainingStone',
-        'InteractionAcknowledged',
+        'GuidedTrainingStep',
+        'FindGateKeeper',
+        'FindTrainingStone',
+        'Objective: talk to the Gate Keeper.',
+        'Objective: stabilize the Training Stone.',
         'Objective complete: spirit pulse stabilized.',
+        'Gate Keeper: your path is open. Follow the cyan spirit pulse.',
+        'SetSmokePositionNearGateKeeper',
+        'SetSmokePositionNearTrainingStone',
+        'LGO Shadow Slime Non Combat Marker',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
         'Objective: talk to the Gate Keeper.',
         'Move near the Gate Keeper.',
-        'RefreshWorldLoopLabels',
-        'InteractionStateChanged',
         'Save Position',
         'Back to Lobby',
         'Quit',
     )
     require(
-        'client/Unity/Assets/Game/World/Runtime/M5FirstPlayableLoopSmokeRunner.cs',
-        '--lgo-m5-first-playable-loop-smoke',
+        'client/Unity/Assets/Game/World/Runtime/M5GuidedTrainingLoopSmokeRunner.cs',
+        '--lgo-m5-guided-training-loop-smoke',
         'LoginDevAsync',
-        'ListCharactersAsync',
-        'CreateCharacterAsync',
         'LoadCharacterAsync',
-        'TriggerInteractionForSmoke',
+        'SetSmokePositionNearGateKeeper',
+        'SetSmokePositionNearTrainingStone',
+        'gateKeeperInteractionTriggered',
+        'trainingStoneInteractionTriggered',
         'SaveCharacterPositionAsync',
-        'M5 first playable loop smoke status=',
     )
+    require('client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs', 'M5GuidedTrainingLoopSmokeRunner.ShouldRun()')
+    require_file('tools/run_m5_guided_training_loop_once.sh', executable=True)
+    require_file('tools/m5_guided_training_loop_runtime.py', executable=False)
     require(
-        'client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs',
-        'M5FirstPlayableLoopSmokeRunner.ShouldRun()',
-    )
-    require(
-        'tools/m5_first_playable_loop_runtime.py',
-        'M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS',
-        '--lgo-m5-first-playable-loop-smoke',
+        'tools/m5_guided_training_loop_runtime.py',
+        'M5_GUIDED_TRAINING_LOOP_RUNTIME_SMOKE_PASS',
+        '--lgo-m5-guided-training-loop-smoke',
+        'Gate Keeper',
+        'Training Stone',
         'Objective complete',
         'savePositionStillWorks',
     )
-    require_file('tools/run_m5_first_playable_loop_once.sh', executable=True)
-    require(
-        'tools/run_m5_first_playable_loop_once.sh',
-        'm5_first_playable_loop_runtime.py',
-        'UNVERIFIED_ENVIRONMENT',
-    )
-    require_file('tools/lgo_playable_closure_check.sh', executable=True)
     require(
         'tools/lgo_playable_closure_check.sh',
-        'LGO_PLAYABLE_CLOSURE_SOURCE_GATES_PASS',
-        'LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS',
-        'LGO_PLAYABLE_CLOSURE_RUNTIME_UNVERIFIED_ENVIRONMENT',
-        'LGO_PLAYABLE_CLOSURE_PACKAGE_READY',
-        'LGO_PLAYABLE_CLOSURE_FIX_REQUIRED',
-        'validate_m5_first_playable_loop.py',
-        'run_m5_first_playable_loop_once.sh',
+        'validate_m5_guided_training_loop.py',
+        'run_m5_guided_training_loop_once.sh',
+        'M5_GUIDED_TRAINING_LOOP_RUNTIME_SMOKE_PASS',
     )
-    require(
-        'tools/run_m4_visible_ui_review.sh',
-        'visible-ui-review-summary.json',
-        'VISIBLE_UI_SCREENSHOT_UNAVAILABLE',
-        'VISIBLE_UI_SCREENSHOT_CAPTURED',
-    )
-    require('docs/tasks/M5-FIRST-PLAYABLE-LOOP-FOUNDATION-v0.15.0.md', 'first playable loop foundation', 'not full combat', 'M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS')
-    require('docs/execution/LGO-PLAYABLE-CLOSURE-COMMAND-v0.15.0.md', './tools/lgo_playable_closure_check.sh --source-only', './tools/run_m4_visible_ui_review.sh --rebuild')
-    require('README.md', 'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY')
-    require('START-HERE.md', 'M5 First Playable Loop Foundation')
-    require('VERSIONING.md', 'source_package_version = 0.17.0', 'client_version = 0.5.2-m5', 'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY')
-    require('docs/execution/PROJECT-STATE.md', 'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY')
+    require('docs/tasks/M5-GUIDED-TRAINING-LOOP-v0.17.0.md', 'M5_GUIDED_TRAINING_LOOP_RUNTIME_CLOSED_LOCAL_v0.17.0', 'not full combat')
+    require('m5-manifest.json', 'M5 Guided Training Loop', '0.17.0', 'M5_GUIDED_TRAINING_LOOP_SOURCE_READY')
 
     for path in git_lines('diff', '--name-only'):
         if path == 'client/Unity/Assets/Game/UI/design-tokens.json':
@@ -143,11 +125,11 @@ def main() -> int:
                 errors.append(f'generated/cache/build output under source status: {path}')
 
     if errors:
-        print('M5 FIRST PLAYABLE LOOP VALIDATION FAILED', file=sys.stderr)
+        print('M5 GUIDED TRAINING LOOP VALIDATION FAILED', file=sys.stderr)
         for error in errors:
             print(' - ' + error, file=sys.stderr)
         return 1
-    print('M5 FIRST PLAYABLE LOOP VALIDATION PASS')
+    print('M5 GUIDED TRAINING LOOP VALIDATION PASS')
     return 0
 
 

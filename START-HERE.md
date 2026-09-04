@@ -1,12 +1,16 @@
 # START HERE — Linh Giới Online Current Source
 
-**Current milestone:** `M5 Visual Evidence UX Acceptance`.
+**Current milestone:** `M5 Guided Training Loop`.
 
-**Current status:** `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`.
+**Current status:** `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`.
+
+**Accepted visual reference:** `LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5`.
+
+**Previous visual evidence status:** `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`.
 
 **Accepted base:** `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 
-**Current source successor:** `linh-gioi-m5-visual-evidence-ux-v0.16.0`.
+**Current source successor:** `linh-gioi-m5-guided-training-loop-v0.17.0`.
 
 ## 1. Read order
 

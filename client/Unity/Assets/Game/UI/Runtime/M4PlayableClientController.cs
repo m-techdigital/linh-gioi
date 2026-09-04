@@ -233,10 +233,10 @@ namespace LinhGioi.UI
             _worldMeta = NewMutedLabel("Select a character in the lobby.");
             _worldHud.Add(_worldMeta);
 
-            _worldObjective = NewStatusLabel("Objective: enter the world and find the training stone.", RuntimeArtCatalog.Gold);
+            _worldObjective = NewStatusLabel("Objective: talk to the Gate Keeper.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldObjective);
 
-            _interactionHint = NewStatusLabel("Move near the Gate Keeper or Training Stone.", RuntimeArtCatalog.Spirit);
+            _interactionHint = NewStatusLabel("Move near the Gate Keeper.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_interactionHint);
 
             _position = NewMutedLabel("x=0.00 y=0.00 z=0.00 yaw=0.0");
@@ -350,8 +350,8 @@ namespace LinhGioi.UI
                 _selectedMeta.text = "Create a cultivator to enter the world.";
                 _worldName.text = "No character selected";
                 _worldMeta.text = "Select a character in the lobby.";
-                if (_worldObjective != null) _worldObjective.text = "Objective: enter the world and find the training stone.";
-                if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper or Training Stone.";
+                if (_worldObjective != null) _worldObjective.text = "Objective: talk to the Gate Keeper.";
+                if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper.";
                 _position.text = "x=0.00 y=0.00 z=0.00 yaw=0.0";
                 return;
             }

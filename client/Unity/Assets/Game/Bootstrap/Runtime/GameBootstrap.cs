@@ -33,6 +33,12 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (M5GuidedTrainingLoopSmokeRunner.ShouldRun())
+                {
+                    await M5GuidedTrainingLoopSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);
+                    return;
+                }
+
                 if (M5FirstPlayableLoopSmokeRunner.ShouldRun())
                 {
                     await M5FirstPlayableLoopSmokeRunner.RunFromCommandLineAsync(_shutdown.Token);

@@ -16,6 +16,7 @@ namespace LinhGioi.World
         private InteractableState _nearestInteractable;
         private string _objectiveText = "Objective: enter the world and find the training stone.";
         private string _interactionText = "Move near the Gate Keeper or Training Stone.";
+        private GuidedTrainingStep _guidedStep = GuidedTrainingStep.FindGateKeeper;
 
         public event Action PositionChanged;
         public event Action InteractionStateChanged;
@@ -24,6 +25,7 @@ namespace LinhGioi.World
         public float CurrentYawDegrees => _marker == null ? 0f : _marker.eulerAngles.y;
         public string ObjectiveText => _objectiveText;
         public string InteractionText => _interactionText;
+        public string GuidedTrainingStepName => _guidedStep.ToString();
         public bool InteractionAcknowledged { get; private set; }
 
         public void Enter(CharacterResponse character)
@@ -33,7 +35,8 @@ namespace LinhGioi.World
             _marker.position = character.Position;
             _marker.rotation = Quaternion.Euler(0f, character.yawDegrees, 0f);
             InteractionAcknowledged = false;
-            _objectiveText = "Objective: approach the Training Stone and press F or Space.";
+            _guidedStep = GuidedTrainingStep.FindGateKeeper;
+            _objectiveText = "Objective: talk to the Gate Keeper.";
             RefreshInteractionState();
             PositionChanged?.Invoke();
         }
@@ -62,6 +65,11 @@ namespace LinhGioi.World
         public void SetSmokePositionNearTrainingStone()
         {
             SetSmokePosition(0f, 0.25f, 3.45f, 0f);
+        }
+
+        public void SetSmokePositionNearGateKeeper()
+        {
+            SetSmokePosition(-3f, 0.25f, 3f, 0f);
         }
 
         public bool TriggerInteractionForSmoke()
@@ -188,21 +196,44 @@ namespace LinhGioi.World
                 new Vector3(-3f, 0.75f, 3f)
             );
 
-            var nearest = Distance2D(position, training.position) <= Distance2D(position, keeper.position) ? training : keeper;
+            var nearest = _guidedStep == GuidedTrainingStep.FindGateKeeper ? keeper : training;
             if (Distance2D(position, nearest.position) <= InteractionRange)
                 SetNearest(nearest, nearest.prompt);
             else
-                SetNearest(null, InteractionAcknowledged ? "Loop complete: save position or return to lobby." : "Move near the Gate Keeper or Training Stone.");
+                SetNearest(null, InteractionAcknowledged ? "Loop complete: save position or return to lobby." : NextMovementHint());
         }
 
         private bool TryTriggerInteraction()
         {
             if (_nearestInteractable == null) return false;
-            InteractionAcknowledged = true;
-            _objectiveText = "Objective complete: first spirit training loop acknowledged.";
-            _interactionText = _nearestInteractable.acknowledged;
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper && _nearestInteractable.id == "Gate Keeper")
+            {
+                _guidedStep = GuidedTrainingStep.FindTrainingStone;
+                _objectiveText = "Objective: stabilize the Training Stone.";
+                _interactionText = "Gate Keeper: your path is open. Follow the cyan spirit pulse.";
+            }
+            else if (_guidedStep == GuidedTrainingStep.FindTrainingStone && _nearestInteractable.id == "Training Stone")
+            {
+                _guidedStep = GuidedTrainingStep.Complete;
+                InteractionAcknowledged = true;
+                _objectiveText = "Objective complete: spirit pulse stabilized.";
+                _interactionText = "Spirit pulse stabilized. Training acknowledged.";
+            }
+            else
+            {
+                _interactionText = NextMovementHint();
+                InteractionStateChanged?.Invoke();
+                return false;
+            }
             InteractionStateChanged?.Invoke();
             return true;
+        }
+
+        private string NextMovementHint()
+        {
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Move near the Gate Keeper.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Move near the Training Stone.";
+            return "Loop complete: save position or return to lobby.";
         }
 
         private void SetNearest(InteractableState state, string text)
@@ -234,6 +265,13 @@ namespace LinhGioi.World
                 this.acknowledged = acknowledged;
                 this.position = position;
             }
+        }
+
+        private enum GuidedTrainingStep
+        {
+            FindGateKeeper,
+            FindTrainingStone,
+            Complete
         }
     }
 }

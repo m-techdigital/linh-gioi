@@ -88,6 +88,7 @@ source_only() {
   log "LGO_PLAYABLE_CLOSURE_MODE source-only"
   run_phase m4_source_gates ./tools/lgo_m4_closure_check.sh --source-only
   run_phase m5_first_playable_loop python3.12 tools/validate_m5_first_playable_loop.py
+  run_phase m5_guided_training_loop python3.12 tools/validate_m5_guided_training_loop.py
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
     tools/validate_m4_playable_source.py \
@@ -97,9 +98,11 @@ source_only() {
     tools/validate_m4_visible_ui.py \
     tools/validate_m5_first_playable_loop.py \
     tools/validate_m5_visual_evidence.py \
+    tools/validate_m5_guided_training_loop.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
-    tools/m5_first_playable_loop_runtime.py
+    tools/m5_first_playable_loop_runtime.py \
+    tools/m5_guided_training_loop_runtime.py
   log "LGO_PLAYABLE_CLOSURE_SOURCE_GATES_PASS"
   write_json "PASS" "source gates pass"
 }
@@ -155,6 +158,12 @@ runtime_mode() {
     echo "ERROR: M5 first playable loop runtime marker not observed" >&2
     exit 44
   fi
+  run_phase m5_guided_training_loop_runtime ./tools/run_m5_guided_training_loop_once.sh --unity-player "$macos_player"
+  if ! grep -R "M5_GUIDED_TRAINING_LOOP_RUNTIME_SMOKE_PASS" "$ROOT/build" >/dev/null; then
+    log "LGO_PLAYABLE_CLOSURE_FIX_REQUIRED"
+    echo "ERROR: M5 guided training loop runtime marker not observed" >&2
+    exit 45
+  fi
   log "LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS"
   write_json "PASS" "runtime gates pass"
 }
@@ -163,6 +172,7 @@ package_ready() {
   source_only
   run_phase inherited_m4_package_ready ./tools/lgo_m4_closure_check.sh --package-ready
   run_phase m5_first_playable_loop python3.12 tools/validate_m5_first_playable_loop.py
+  run_phase m5_guided_training_loop python3.12 tools/validate_m5_guided_training_loop.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"
   write_json "PASS" "package gates pass"
 }

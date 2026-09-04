@@ -202,11 +202,12 @@ def main() -> int:
     )
     require(
         'VERSIONING.md',
-        'source_package_version = 0.16.0',
-        'client_version = 0.5.1-m5',
+        'source_package_version = 0.17.0',
+        'client_version = 0.5.2-m5',
         'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
         'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',
+        'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
     )
     validate_manifest_coverage()
 

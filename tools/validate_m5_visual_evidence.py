@@ -97,7 +97,7 @@ def main() -> int:
     require('tools/lgo_playable_closure_check.sh', '--visual-evidence', 'validate_m5_visual_evidence.py', 'run_m5_visual_evidence_review.sh', 'LGO_PLAYABLE_VISUAL_EVIDENCE_READY')
     require('README.md', 'M5_VISUAL_EVIDENCE_UX_REVIEW_READY')
     require('START-HERE.md', 'M5 Visual Evidence UX Acceptance')
-    require('VERSIONING.md', 'source_package_version = 0.16.0', 'client_version = 0.5.1-m5')
+    require('VERSIONING.md', 'source_package_version = 0.17.0', 'client_version = 0.5.2-m5', 'M5_VISUAL_EVIDENCE_UX_REVIEW_READY')
     require('docs/execution/PROJECT-STATE.md', 'M5_VISUAL_EVIDENCE_UX_REVIEW_READY')
 
     for path in git_lines('diff', '--name-only'):

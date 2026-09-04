@@ -8,26 +8,26 @@ using UnityEngine;
 
 namespace LinhGioi.World
 {
-    public static class M5FirstPlayableLoopSmokeRunner
+    public static class M5GuidedTrainingLoopSmokeRunner
     {
         private const int DefaultTimeoutMs = 25000;
-        private const string DefaultCharacterName = "M5LoopHero";
+        private const string DefaultCharacterName = "M5GuidedHero";
         private const string DefaultClassId = "class.sword";
-        private const string DefaultDevKey = "m5-first-playable-loop-dev-key";
+        private const string DefaultDevKey = "m5-guided-training-loop-dev-key";
 
         public static bool ShouldRun()
         {
-            if (string.Equals(Environment.GetEnvironmentVariable("LGO_M5_FIRST_PLAYABLE_LOOP_SMOKE"), "1", StringComparison.Ordinal)) return true;
+            if (string.Equals(Environment.GetEnvironmentVariable("LGO_M5_GUIDED_TRAINING_LOOP_SMOKE"), "1", StringComparison.Ordinal)) return true;
             var args = Environment.GetCommandLineArgs();
             for (var i = 0; i < args.Length; i++)
-                if (args[i] == "--lgo-m5-first-playable-loop-smoke") return true;
+                if (args[i] == "--lgo-m5-guided-training-loop-smoke") return true;
             return false;
         }
 
         public static async Task RunFromCommandLineAsync(CancellationToken shutdownToken)
         {
-            var resultPath = GetArg("--lgo-m5-result") ?? Path.Combine(Application.persistentDataPath, "lgo-m5-first-playable-loop-result.json");
-            var result = new M5FirstPlayableLoopSmokeResult
+            var resultPath = GetArg("--lgo-m5-guided-result") ?? Path.Combine(Application.persistentDataPath, "lgo-m5-guided-training-loop-result.json");
+            var result = new M5GuidedTrainingLoopSmokeResult
             {
                 status = "STARTED",
                 startedAtUtc = DateTimeOffset.UtcNow.ToString("O"),
@@ -42,39 +42,47 @@ namespace LinhGioi.World
                 using (var timeout = CancellationTokenSource.CreateLinkedTokenSource(shutdownToken))
                 using (var client = new AccountApiClient(BuildConfig()))
                 {
-                    timeout.CancelAfter(GetIntArg("--lgo-m5-timeout-ms", DefaultTimeoutMs));
+                    timeout.CancelAfter(GetIntArg("--lgo-m5-guided-timeout-ms", DefaultTimeoutMs));
                     var token = timeout.Token;
 
-                    var login = await client.LoginDevAsync(GetArg("--lgo-m5-dev-key") ?? DefaultDevKey, GetArg("--lgo-m5-display-name") ?? "M5 Loop Smoke", token);
+                    var login = await client.LoginDevAsync(GetArg("--lgo-m5-guided-dev-key") ?? DefaultDevKey, "M5 Guided Training Smoke", token);
                     Require(login != null && login.account != null, "dev login returned no account");
                     result.accountId = login.account.accountId;
 
-                    var characterName = GetArg("--lgo-m5-character-name") ?? DefaultCharacterName;
+                    var characterName = GetArg("--lgo-m5-guided-character-name") ?? DefaultCharacterName;
                     var listed = await client.ListCharactersAsync(result.accountId, token);
                     var character = FindByName(listed, characterName);
                     if (character == null)
-                        character = await client.CreateCharacterAsync(result.accountId, characterName, GetArg("--lgo-m5-class-id") ?? DefaultClassId, token);
+                        character = await client.CreateCharacterAsync(result.accountId, characterName, GetArg("--lgo-m5-guided-class-id") ?? DefaultClassId, token);
                     Require(character != null, "character selection failed");
 
                     var loaded = await client.LoadCharacterAsync(character.characterId, token);
-                    var world = new GameObject("LGO M5 First Playable Loop Smoke World").AddComponent<PlayableWorldController>();
+                    var world = new GameObject("LGO M5 Guided Training Loop Smoke World").AddComponent<PlayableWorldController>();
                     world.Enter(loaded);
                     result.enteredWorld = true;
                     result.initialObjective = world.ObjectiveText;
                     Require(result.initialObjective.Contains("Gate Keeper"), "initial objective did not point to Gate Keeper");
 
                     world.SetSmokePositionNearGateKeeper();
-                    Require(world.TriggerInteractionForSmoke(), "Gate Keeper interaction did not trigger");
-                    world.SetSmokePositionNearTrainingStone();
-                    result.nearInteractablePrompt = world.InteractionText;
-                    Require(result.nearInteractablePrompt.Contains("Press F or Space"), "interaction prompt did not become available");
+                    result.gateKeeperPrompt = world.InteractionText;
+                    Require(result.gateKeeperPrompt.Contains("Gate Keeper"), "Gate Keeper prompt did not become available");
+                    result.gateKeeperInteractionTriggered = world.TriggerInteractionForSmoke();
+                    Require(result.gateKeeperInteractionTriggered, "Gate Keeper interaction did not trigger");
+                    result.afterGateKeeperObjective = world.ObjectiveText;
+                    result.afterGateKeeperFeedback = world.InteractionText;
+                    Require(result.afterGateKeeperObjective.Contains("Training Stone"), "objective did not advance to Training Stone");
+                    Require(world.GuidedTrainingStepName == "FindTrainingStone", "guided step did not advance after Gate Keeper");
 
-                    result.interactionTriggered = world.TriggerInteractionForSmoke();
-                    Require(result.interactionTriggered, "interaction did not trigger");
-                    Require(world.InteractionAcknowledged, "interaction acknowledgement flag missing");
-                    Require(world.ObjectiveText.Contains("Objective complete"), "objective did not reach completion feedback");
+                    world.SetSmokePositionNearTrainingStone();
+                    result.trainingStonePrompt = world.InteractionText;
+                    Require(result.trainingStonePrompt.Contains("Training Stone") || result.trainingStonePrompt.Contains("spirit pulse"), "Training Stone prompt did not become available");
+                    result.trainingStoneInteractionTriggered = world.TriggerInteractionForSmoke();
+                    Require(result.trainingStoneInteractionTriggered, "Training Stone interaction did not trigger");
+                    Require(world.InteractionAcknowledged, "final acknowledgement flag missing");
                     result.finalObjective = world.ObjectiveText;
                     result.finalFeedback = world.InteractionText;
+                    Require(result.finalObjective.Contains("Objective complete"), "objective did not complete");
+                    Require(result.finalFeedback.Contains("Spirit pulse stabilized"), "final feedback did not show spirit pulse stabilization");
 
                     var save = world.BuildSaveRequest();
                     var saved = await client.SaveCharacterPositionAsync(loaded.characterId, save.x, save.y, save.z, save.yawDegrees, token);
@@ -110,7 +118,7 @@ namespace LinhGioi.World
                 result.finishedAtUtc = DateTimeOffset.UtcNow.ToString("O");
                 result.exitCode = exitCode;
                 WriteResult(resultPath, result);
-                Debug.Log($"[LinhGioi] M5 first playable loop smoke status={result.status} result={resultPath}");
+                Debug.Log($"[LinhGioi] M5 guided training loop smoke status={result.status} result={resultPath}");
                 Quit(exitCode);
             }
         }
@@ -118,9 +126,9 @@ namespace LinhGioi.World
         private static ClientRuntimeConfig BuildConfig()
         {
             var config = ClientRuntimeConfig.LoadStreamingAssets();
-            var apiBaseUrl = GetArg("--lgo-m5-api-url");
+            var apiBaseUrl = GetArg("--lgo-m5-guided-api-url");
             if (!string.IsNullOrWhiteSpace(apiBaseUrl)) config.apiBaseUrl = apiBaseUrl;
-            config.apiTimeoutSeconds = GetIntArg("--lgo-m5-api-timeout-seconds", config.apiTimeoutSeconds);
+            config.apiTimeoutSeconds = GetIntArg("--lgo-m5-guided-api-timeout-seconds", config.apiTimeoutSeconds);
             config.Validate();
             return config;
         }
@@ -154,7 +162,7 @@ namespace LinhGioi.World
             if (!condition) throw new InvalidOperationException(message);
         }
 
-        private static void WriteResult(string path, M5FirstPlayableLoopSmokeResult result)
+        private static void WriteResult(string path, M5GuidedTrainingLoopSmokeResult result)
         {
             var directory = Path.GetDirectoryName(path);
             if (!string.IsNullOrWhiteSpace(directory)) Directory.CreateDirectory(directory);
@@ -171,7 +179,7 @@ namespace LinhGioi.World
         }
 
         [Serializable]
-        private sealed class M5FirstPlayableLoopSmokeResult
+        private sealed class M5GuidedTrainingLoopSmokeResult
         {
             public string status;
             public string startedAtUtc;
@@ -185,8 +193,12 @@ namespace LinhGioi.World
             public string classId;
             public bool enteredWorld;
             public string initialObjective;
-            public string nearInteractablePrompt;
-            public bool interactionTriggered;
+            public string gateKeeperPrompt;
+            public bool gateKeeperInteractionTriggered;
+            public string afterGateKeeperObjective;
+            public string afterGateKeeperFeedback;
+            public string trainingStonePrompt;
+            public bool trainingStoneInteractionTriggered;
             public string finalObjective;
             public string finalFeedback;
             public bool savePositionStillWorks;

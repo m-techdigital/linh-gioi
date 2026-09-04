@@ -85,7 +85,7 @@ M1 final accepted state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
 ## M2 — Online Session Prototype
 
-Current state: `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`.
+Current state: `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`.
 
 M1 final state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`.
 
@@ -168,6 +168,18 @@ Runtime/review evidence requires:
 
 ```text
 LGO_PLAYABLE_VISUAL_EVIDENCE_READY
+```
+
+## M5-2 — Guided Training Loop
+
+Current state: `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`.
+
+This gate uses the accepted visual reference pack `LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5` to clarify the local non-combat loop: Enter World, talk to Gate Keeper, move to Training Stone, stabilize the spirit pulse, complete objective, and preserve Save Position / Back to Lobby.
+
+Runtime evidence requires:
+
+```text
+M5_GUIDED_TRAINING_LOOP_RUNTIME_SMOKE_PASS
 ```
 
 ### Entry gate

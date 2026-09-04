@@ -4,11 +4,11 @@ Last updated: `2026-09-04`
 
 ## Current milestone
 
-`M5 Visual Evidence UX Acceptance`
+`M5 Guided Training Loop`
 
 ## Current decision
 
-`M5_VISUAL_EVIDENCE_UX_REVIEW_READY`
+`M5_GUIDED_TRAINING_LOOP_SOURCE_READY`
 
 M0 final decision: `M0_RUNTIME_CLOSED`.
 
@@ -18,7 +18,7 @@ M2 has source-level implementation for the first online session scaffold. Runtim
 
 ## Authoritative source baseline
 
-`linh-gioi-m5-visual-evidence-ux-v0.16.0`
+`linh-gioi-m5-guided-training-loop-v0.17.0`
 
 Baseline ancestry:
 
@@ -34,10 +34,12 @@ Baseline ancestry:
 - M4 visible UI usability and manual review harness;
 - M5 first playable loop foundation with local-only interaction feedback;
 - M5 visual evidence UX review path.
+- accepted visual reference pack v0.16.5.
+- M5 guided training loop source hardening.
 
 ## Current source successor
 
-`linh-gioi-m5-visual-evidence-ux-v0.16.0`
+`linh-gioi-m5-guided-training-loop-v0.17.0`
 
 This source includes:
 
@@ -58,6 +60,9 @@ This source includes:
 - M5 local-only interaction loop with Gate Keeper, Training Stone, non-combat Shadow Slime marker, proximity prompt, F/Space acknowledgement, and existing save/back flow preserved.
 - M5 visual evidence source status `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`.
 - Unity-side visual evidence runner for Gate Entry, Character Hall, World HUD, and First Playable Loop Feedback.
+- Visual reference pack status `LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5`.
+- M5 guided training loop source status `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`.
+- Guided local sequence: talk to Gate Keeper, stabilize Training Stone, preserve Save Position and Back to Lobby.
 
 ## Closed M0 gates
 

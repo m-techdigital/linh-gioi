@@ -9,8 +9,8 @@ Three runtime compatibility versions are intentionally separate:
 Current source package identity:
 
 ```text
-source_package_version = 0.16.0
-milestone = M5 Visual Evidence UX Acceptance
+source_package_version = 0.17.0
+milestone = M5 Guided Training Loop
 m0_status = M0_RUNTIME_CLOSED
 m1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED
 m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
@@ -19,7 +19,7 @@ m2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE
 Current runtime placeholders:
 
 ```text
-client_version = 0.5.1-m5
+client_version = 0.5.2-m5
 protocol_version = 1
 gamedata_version = 1
 ```
@@ -134,3 +134,23 @@ M5_VISUAL_EVIDENCE_UX_REVIEW_READY
 ```
 
 M5 v0.16.0 adds a Unity-side visual evidence review path for Gate Entry, Character Hall, World HUD, and First Playable Loop Feedback screenshots plus summary metadata. It does not add gameplay, combat, inventory, quests, economy, guild, chat, market, party, live ops, production auth, database persistence, protocol changes, GameData schema changes, final production UI, or final production art.
+
+## Visual Reference Pack v0.16.5
+
+Current reference status:
+
+```text
+LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5
+```
+
+The v0.16.5 pack records seven owner-provided visual reference PNGs and translation rules. It is reference-only and does not change client runtime, protocol, GameData, production authentication, database persistence, final production UI, or final production art status.
+
+## M5 Guided Training Loop v0.17.0
+
+Current source status:
+
+```text
+M5_GUIDED_TRAINING_LOOP_SOURCE_READY
+```
+
+M5 v0.17.0 hardens the local non-combat first playable loop into a clearer sequence: Enter World, talk to Gate Keeper, follow the cyan spirit pulse to the Training Stone, stabilize it with F/Space, complete the objective, and preserve Save Position / Back to Lobby. It does not add combat, damage, HP balancing, loot, inventory, economy, guild, chat, market, party, live ops, production auth, database persistence, protocol changes, GameData schema changes, final production UI, or final production art.

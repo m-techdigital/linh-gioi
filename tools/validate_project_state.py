@@ -9,7 +9,9 @@ ERRORS: list[str] = []
 
 REQUIRED_MARKERS = {
     'README.md': [
-        'M5 Visual Evidence UX Acceptance',
+        'M5 Guided Training Loop',
+        'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
+        'LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',
         'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY',
         'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
@@ -22,7 +24,9 @@ REQUIRED_MARKERS = {
         'M0_RUNTIME_CLOSED',
     ],
     'START-HERE.md': [
-        'M5 Visual Evidence UX Acceptance',
+        'M5 Guided Training Loop',
+        'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
+        'LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',
         'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY',
         './tools/lgo_m4_closure_check.sh --source-only',
@@ -31,8 +35,8 @@ REQUIRED_MARKERS = {
         './tools/lgo_playable_closure_check.sh --package-ready',
     ],
     'VERSIONING.md': [
-        'source_package_version = 0.16.0',
-        'client_version = 0.5.1-m5',
+        'source_package_version = 0.17.0',
+        'client_version = 0.5.2-m5',
         'm1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED',
         'm2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE',
         'm3_status = M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED',
@@ -40,6 +44,8 @@ REQUIRED_MARKERS = {
         'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
         'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',
+        'LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5',
+        'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
         'M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY',
         'M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY',
     ],
@@ -59,7 +65,9 @@ REQUIRED_MARKERS = {
         'players-v1.json',
     ],
     'docs/execution/PROJECT-STATE.md': [
-        'M5 Visual Evidence UX Acceptance',
+        'M5 Guided Training Loop',
+        'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
+        'LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',
         'M5_FIRST_PLAYABLE_LOOP_SOURCE_READY',
         'M4_VISIBLE_UI_USABILITY_SOURCE_READY',
@@ -75,14 +83,15 @@ REQUIRED_MARKERS = {
         'M0_RUNTIME_CLOSED',
     ],
     'docs/execution/06-PROJECT-GOVERNANCE-INDEX.md': [
-        'Current milestone: `M5 Visual Evidence UX Acceptance`',
-        'Current safe implementation state: `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`',
+        'Current milestone: `M5 Guided Training Loop`',
+        'Current safe implementation state: `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`',
     ],
     'docs/execution/07-PHASE-GATES.md': [
-        'Current state: `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`',
+        'Current state: `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`',
         'M1 final state: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED`',
         'M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS',
         'LGO_PLAYABLE_VISUAL_EVIDENCE_READY',
+        'M5_GUIDED_TRAINING_LOOP_RUNTIME_SMOKE_PASS',
     ],
     'docs/execution/M2-RUNTIME-EVIDENCE.md': [
         'M2_ONLINE_SESSION_RUNTIME_CLOSED',
