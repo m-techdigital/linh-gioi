@@ -25,6 +25,7 @@ namespace LinhGioi.UI
         private VisualElement _worldHud;
         private VisualElement _dialoguePanel;
         private VisualElement _sessionMenuPanel;
+        private VisualElement _settingsPanel;
         private VisualElement _characterList;
         private TextField _devKey;
         private TextField _characterName;
@@ -62,6 +63,9 @@ namespace LinhGioi.UI
         private Button _sessionSaveButton;
         private Button _sessionBackButton;
         private Button _sessionQuitButton;
+        private Toggle _showPositionToggle;
+        private Toggle _showHintsToggle;
+        private Toggle _focusModeToggle;
         private AccountResponse _accountState;
         private CharacterResponse[] _characters = Array.Empty<CharacterResponse>();
         private CharacterResponse _selectedCharacter;
@@ -349,8 +353,24 @@ namespace LinhGioi.UI
             _sessionBackButton = NewSecondaryButton("Back to Character Hall", BackToLobby);
             _sessionQuitButton = NewQuietButton("Quit", QuitPlayer);
             _sessionMenuPanel.Add(NewButtonRow(_resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton));
+            BuildLocalSettingsPanel();
             _worldHud.Add(_sessionMenuPanel);
             SetSessionMenuVisible(false);
+        }
+
+        private void BuildLocalSettingsPanel()
+        {
+            _settingsPanel = NewPreviewPanel();
+            _settingsPanel.name = "LGO Local Settings Foundation";
+            _settingsPanel.style.marginTop = 8;
+            _settingsPanel.Add(NewSectionTitle("Local Settings"));
+            _showPositionToggle = NewLocalSettingToggle("Show position readout", true, ApplyLocalSettings);
+            _showHintsToggle = NewLocalSettingToggle("Show guidance hints", true, ApplyLocalSettings);
+            _focusModeToggle = NewLocalSettingToggle("Focus HUD mode", false, ApplyLocalSettings);
+            _settingsPanel.Add(_showPositionToggle);
+            _settingsPanel.Add(_showHintsToggle);
+            _settingsPanel.Add(_focusModeToggle);
+            _sessionMenuPanel.Add(_settingsPanel);
         }
 
         private async Task LoginAsync()
@@ -490,6 +510,7 @@ namespace LinhGioi.UI
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
             SetToast(_world.InteractionAcknowledged ? "Training complete. Save position or return to Character Hall." : _world.InteractionText, RuntimeArtCatalog.Spirit);
             RefreshDialoguePanel();
+            ApplyLocalSettings();
         }
 
         private void ShowAuthMode()
@@ -709,6 +730,21 @@ namespace LinhGioi.UI
             _sessionMenuPanel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
             if (_sessionMenuStatus != null)
                 _sessionMenuStatus.text = visible ? "Paused in safe training yard. Resume, save, return, or quit." : "Session active.";
+            ApplyLocalSettings();
+        }
+
+        private void ApplyLocalSettings()
+        {
+            var showPosition = _showPositionToggle == null || _showPositionToggle.value;
+            var showHints = _showHintsToggle == null || _showHintsToggle.value;
+            var focusMode = _focusModeToggle != null && _focusModeToggle.value;
+            if (_position != null) _position.style.display = showPosition && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_worldDirection != null) _worldDirection.style.display = showHints ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_interactionHint != null) _interactionHint.style.display = showHints ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_worldLandmarks != null) _worldLandmarks.style.display = showHints && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_worldPoseState != null) _worldPoseState.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_worldVfxState != null) _worldVfxState.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_skinSource != null) _skinSource.style.display = focusMode ? DisplayStyle.None : DisplayStyle.Flex;
         }
 
         private void ContinueDialogue()
@@ -765,6 +801,15 @@ namespace LinhGioi.UI
             button.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
             button.style.borderBottomWidth = 1;
             return button;
+        }
+
+        private static Toggle NewLocalSettingToggle(string label, bool value, Action changed)
+        {
+            var toggle = new Toggle(label) { value = value };
+            toggle.style.marginTop = 6;
+            toggle.style.color = RuntimeArtCatalog.Text;
+            toggle.RegisterValueChangedCallback(_ => changed());
+            return toggle;
         }
 
         private static Button NewListButton(string name, string classId, Action action)

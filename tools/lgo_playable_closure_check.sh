@@ -116,6 +116,9 @@ source_only() {
   if [[ -f tools/validate_m5_session_menu.py ]]; then
     run_phase m5_session_menu python3.12 tools/validate_m5_session_menu.py
   fi
+  if [[ -f tools/validate_m5_local_settings.py ]]; then
+    run_phase m5_local_settings python3.12 tools/validate_m5_local_settings.py
+  fi
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
     tools/validate_m4_playable_source.py \
@@ -135,6 +138,7 @@ source_only() {
     tools/validate_m5_training_objective_ux.py \
     tools/validate_m5_input_camera_polish.py \
     tools/validate_m5_session_menu.py \
+    tools/validate_m5_local_settings.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
     tools/m5_first_playable_loop_runtime.py \
@@ -244,6 +248,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_m5_session_menu.py ]]; then
     run_phase m5_session_menu python3.12 tools/validate_m5_session_menu.py
+  fi
+  if [[ -f tools/validate_m5_local_settings.py ]]; then
+    run_phase m5_local_settings python3.12 tools/validate_m5_local_settings.py
   fi
   run_phase package_hygiene python3.12 tools/validate_package_hygiene.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"

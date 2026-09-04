@@ -1,0 +1,11 @@
+client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+tools/validate_m5_local_settings.py
+tools/lgo_playable_closure_check.sh
+docs/tasks/M5-LOCAL-SETTINGS-v0.28.0.md
+HANDOFF-LG-M5-LOCAL-SETTINGS-v0.28.0.md
+M5-LOCAL-SETTINGS-FINAL-REPORT-v0.28.0.md
+LGO-M5-LOCAL-SETTINGS-v0.28.0-CHANGED-FILES.txt
+LGO-M5-LOCAL-SETTINGS-v0.28.0-DELETIONS.txt
+LGO-M5-LOCAL-SETTINGS-v0.28.0-ARTIFACTS.sha256
+linh-gioi-m5-local-settings-v0.28.0-full-source.zip.sha256
+linh-gioi-m5-local-settings-delta-v0.28.0.zip.sha256
