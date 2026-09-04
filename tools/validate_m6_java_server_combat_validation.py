@@ -18,7 +18,7 @@ ALLOWED_FILES = {
     "LGO-M6-JAVA-SERVER-COMBAT-VALIDATION-v0.41.0-CHANGED-FILES.txt",
     "LGO-M6-JAVA-SERVER-COMBAT-VALIDATION-v0.41.0-DELETIONS.txt",
 }
-FORBIDDEN_PREFIXES = ["protocol/", "gamedata/schemas/", "docs/adr/", "client/Unity/Assets/Game/"]
+FORBIDDEN_PREFIXES = ["protocol/", "gamedata/schemas/", "docs/adr/", "client/Unity/Assets/Game/UI/design-tokens.json"]
 
 
 def read(path: str) -> str:

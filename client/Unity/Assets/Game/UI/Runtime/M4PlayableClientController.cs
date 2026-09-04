@@ -51,6 +51,7 @@ namespace LinhGioi.UI
         private Label _combatCooldown;
         private Label _combatAuthority;
         private Label _skinSource;
+        private VisualElement _combatCooldownIcon;
         private Label _worldObjective;
         private Label _interactionHint;
         private Label _position;
@@ -391,8 +392,10 @@ namespace LinhGioi.UI
             _localCombatPanel = NewPreviewPanel();
             _localCombatPanel.name = "LGO M6 Minimal Local Combat";
             _localCombatPanel.style.marginTop = 10;
+            ApplyCombatPanelSkin(_localCombatPanel);
             _localCombatPanel.Add(NewSectionTitle("Luyện mục tiêu cục bộ"));
             _localCombatPanel.Add(NewMutedLabel("Nhãn nguyên mẫu cục bộ: Tấn công thử chỉ kiểm tra khả năng đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương thật, phần thưởng, kinh nghiệm, hay chiến đấu máy chủ."));
+            _combatCooldownIcon = NewCombatCooldownIcon();
             _combatTargetStatus = NewStatusLabel("Mục tiêu luyện tập: chưa vào sân.", RuntimeArtCatalog.Gold);
             _combatVisualState = NewStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
             _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
@@ -400,6 +403,8 @@ namespace LinhGioi.UI
             _combatAuthority = NewStatusLabel("Mô phỏng cục bộ: chưa gửi ý định chiến đấu.", RuntimeArtCatalog.Spirit);
             _localCombatButton = NewSecondaryButton("Gửi ý định chiến đấu", TriggerLocalCombat);
             _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ. Đánh thử cục bộ: xem vòng chọn mục tiêu, hit flash và nhịp hồi chiêu; không phải chiến đấu thật";
+            ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonNormalTexture);
+            _localCombatPanel.Add(_combatCooldownIcon);
             _localCombatPanel.Add(_combatTargetStatus);
             _localCombatPanel.Add(_combatVisualState);
             _localCombatPanel.Add(_combatFeedback);
@@ -561,6 +566,7 @@ namespace LinhGioi.UI
             if (_combatFeedback != null) _combatFeedback.text = _world.CombatFeedbackText;
             if (_combatCooldown != null) _combatCooldown.text = _world.CombatCooldownText;
             if (_combatAuthority != null) _combatAuthority.text = _world.CombatAuthorityText;
+            RefreshCombatAssetUiState();
             if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
@@ -817,6 +823,7 @@ namespace LinhGioi.UI
         private void TriggerLocalCombat()
         {
             if (_world == null) return;
+            ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonPressedTexture);
             var intent = _world.BuildCombatIntentForLocalPreview(1, "unity-local-preview-1");
             _world.MarkCombatIntentPending(intent);
             _world.TryLocalCombatPrototype();
@@ -831,6 +838,23 @@ namespace LinhGioi.UI
             });
             RefreshWorldLoopLabels();
             SetToast(_world.CombatFeedbackText, RuntimeArtCatalog.Gold);
+            RefreshCombatAssetUiState();
+        }
+
+        private void RefreshCombatAssetUiState()
+        {
+            if (_world == null) return;
+            var coolingDown = _world.LocalCombatCoolingDown;
+            if (_combatCooldownIcon != null)
+            {
+                var texture = coolingDown ? CombatPlaceholderAssets.CooldownActiveTexture : CombatPlaceholderAssets.CooldownReadyTexture;
+                if (texture != null) _combatCooldownIcon.style.backgroundImage = new StyleBackground(texture);
+                _combatCooldownIcon.tooltip = coolingDown ? "Hồi chiêu mô phỏng đang chạy." : "Sẵn sàng tấn công thử.";
+            }
+            if (_localCombatButton != null)
+            {
+                ApplyCombatButtonSkin(_localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture);
+            }
         }
 
         private void PreviewSkill(string previewName)
@@ -923,6 +947,33 @@ namespace LinhGioi.UI
             row.style.marginTop = 6;
             foreach (var button in buttons) row.Add(button);
             return row;
+        }
+
+        private static VisualElement NewCombatCooldownIcon()
+        {
+            var icon = new VisualElement();
+            icon.name = "LGO M6 Combat Cooldown Runtime Icon v0.46";
+            icon.style.width = 44;
+            icon.style.height = 44;
+            icon.style.marginBottom = 8;
+            icon.style.backgroundColor = RuntimeArtCatalog.Surface;
+            var texture = CombatPlaceholderAssets.CooldownReadyTexture;
+            if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
+            icon.tooltip = "Sẵn sàng tấn công thử.";
+            return icon;
+        }
+
+        private static void ApplyCombatPanelSkin(VisualElement panel)
+        {
+            var texture = CombatPlaceholderAssets.CombatPanelTexture;
+            if (texture == null) return;
+            panel.style.backgroundImage = new StyleBackground(texture);
+        }
+
+        private static void ApplyCombatButtonSkin(Button button, Texture2D texture)
+        {
+            if (button == null || texture == null) return;
+            button.style.backgroundImage = new StyleBackground(texture);
         }
 
         private static VisualElement NewBadge(string title, string value)
@@ -1022,6 +1073,9 @@ namespace LinhGioi.UI
             var existingDocuments = FindObjectsByType<UIDocument>(FindObjectsSortMode.None);
             foreach (var document in existingDocuments)
                 if (document != null && document.panelSettings != null) return document.panelSettings;
+
+            var resourceSettings = Resources.Load<PanelSettings>("LGORuntimePanelSettings");
+            if (resourceSettings != null) return resourceSettings;
 
             var settings = ScriptableObject.CreateInstance<PanelSettings>();
             settings.name = "LGO Runtime Panel Settings";

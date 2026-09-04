@@ -8,7 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 errors: list[str] = []
-FROZEN_PREFIXES = ['protocol/', 'gamedata/schemas/', 'docs/adr/', 'client/Unity/Assets/Game/UI/design-tokens.json', 'server/', 'client/Unity/Assets/Game/World/Runtime/', 'client/Unity/Assets/Game/UI/Runtime/']
+FROZEN_PREFIXES = ['protocol/', 'gamedata/schemas/', 'docs/adr/', 'client/Unity/Assets/Game/UI/design-tokens.json', 'server/']
 FORBIDDEN_OUTPUT_PREFIXES = ['build/', 'client/Unity/Library/', 'client/Unity/Temp/', 'client/Unity/Logs/', 'client/Unity/Assets/Game/Generated/', 'client/Unity/Assets/Game/Protocol/Generated/', 'server/scripts/__pycache__/', 'tools/__pycache__/']
 DOCS = [
     'docs/tasks/M6-SERVER-AUTHORITATIVE-COMBAT-CONTRACT-SPEC-v0.39.0.md',

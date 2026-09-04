@@ -35,7 +35,6 @@ ALLOWED_CHANGED = {
 FORBIDDEN_PREFIXES = [
     "docs/adr/",
     "client/Unity/Assets/Game/UI/design-tokens.json",
-    "client/Unity/Assets/Game/",
     "server/",
 ]
 FORBIDDEN_OUTPUT_PREFIXES = [

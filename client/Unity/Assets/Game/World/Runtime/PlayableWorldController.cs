@@ -43,6 +43,12 @@ namespace LinhGioi.World
         private Transform _targetDummyHitFlash;
         private Transform _targetDummyFocusRing;
         private Transform _targetDummyCooldownRing;
+        private SpriteRenderer _targetDummySprite;
+        private SpriteRenderer _targetDummyFocusSprite;
+        private SpriteRenderer _targetDummyCooldownSprite;
+        private SpriteRenderer _targetDummyHitSprite;
+        private SpriteRenderer _windSlashSprite;
+        private SpriteRenderer _shadowTelegraphSprite;
         private InteractableState _nearestInteractable;
         private string _objectiveText = "Objective: enter the world and find the training stone.";
         private string _interactionText = "Move near the Gate Keeper or Training Stone.";
@@ -359,7 +365,7 @@ namespace LinhGioi.World
             // Preserve the M4 visual source marker: LGO NPC Keeper Placeholder.
             CreateMarkerCube("LGO Gate Keeper NPC Interactable", GateKeeperPosition, RuntimeArtCatalog.Gold, new Vector3(0.9f, 1.5f, 0.9f));
             CreateMarkerCube("LGO Gate Keeper Gold Readability Pillar", GateKeeperPosition + new Vector3(0f, 1.35f, 0f), RuntimeArtCatalog.Gold, new Vector3(0.25f, 1.4f, 0.25f));
-            CreateMarkerCube("LGO Target Dummy Readability Marker", ReadabilityDummyPosition, RuntimeArtCatalog.Gold, new Vector3(0.7f, 1.3f, 0.7f));
+            CreateMarkerCube("LGO Target Dummy Readability Marker Legacy Fallback", ReadabilityDummyPosition, RuntimeArtCatalog.Gold, new Vector3(0.42f, 1.15f, 0.42f));
             CreateMarkerCube("LGO Target Dummy Non Combat Base", ReadabilityDummyPosition + new Vector3(0f, -0.58f, 0f), RuntimeArtCatalog.Spirit, new Vector3(1.25f, 0.08f, 1.25f));
             CreateMarkerCube("LGO Shadow Slime Non Combat Marker", ShadowSlimePosition, RuntimeArtCatalog.Shadow, new Vector3(1.4f, 0.8f, 1.4f));
             CreateMarkerCube("LGO Shadow Slime Warning Plinth", ShadowSlimePosition + new Vector3(0f, -0.2f, 0f), RuntimeArtCatalog.Danger, new Vector3(1.8f, 0.08f, 1.8f));
@@ -615,7 +621,39 @@ namespace LinhGioi.World
                 _targetDummyFocusRing = CreateMarkerCube("LGO Target Dummy Focus Ring v0.37", ReadabilityDummyPosition + Vector3.up * 0.03f, RuntimeArtCatalog.Gold, new Vector3(1.65f, 0.06f, 1.65f)).transform;
             if (_targetDummyCooldownRing == null)
                 _targetDummyCooldownRing = CreateMarkerCube("LGO Target Dummy Cooldown Ring v0.37", ReadabilityDummyPosition + Vector3.up * 0.09f, RuntimeArtCatalog.Spirit, new Vector3(1.95f, 0.05f, 1.95f)).transform;
+            EnsureCombatPlaceholderSprites();
             RefreshVfxFeedbackMarkers();
+        }
+
+        private void EnsureCombatPlaceholderSprites()
+        {
+            if (_targetDummySprite == null)
+                _targetDummySprite = CreateBillboardSprite("LGO Target Dummy Runtime Sprite v0.46", CombatPlaceholderAssets.TargetDummyIdle, ReadabilityDummyPosition + Vector3.up * 0.15f, new Vector3(1.25f, 1.25f, 1f), 5);
+            if (_targetDummyFocusSprite == null)
+                _targetDummyFocusSprite = CreateBillboardSprite("LGO Target Marker Selected Sprite v0.46", CombatPlaceholderAssets.TargetMarkerSelected, ReadabilityDummyPosition + Vector3.up * 0.08f, new Vector3(1.7f, 1.7f, 1f), 4);
+            if (_targetDummyCooldownSprite == null)
+                _targetDummyCooldownSprite = CreateBillboardSprite("LGO Target Cooldown Ring Sprite v0.46", CombatPlaceholderAssets.CooldownActive, ReadabilityDummyPosition + Vector3.up * 0.1f, new Vector3(1.95f, 1.95f, 1f), 4);
+            if (_targetDummyHitSprite == null)
+                _targetDummyHitSprite = CreateBillboardSprite("LGO Target Impact Spark Sprite v0.46", CombatPlaceholderAssets.ImpactSpark, ReadabilityDummyPosition + Vector3.up * 1.05f, new Vector3(1.2f, 1.2f, 1f), 7);
+            if (_windSlashSprite == null)
+                _windSlashSprite = CreateBillboardSprite("LGO Wind Slash Runtime Sprite v0.46", CombatPlaceholderAssets.WindSlashFrame01, CurrentPosition + new Vector3(0f, 0.85f, 0.9f), new Vector3(1.55f, 1.55f, 1f), 6);
+            if (_shadowTelegraphSprite == null)
+                _shadowTelegraphSprite = CreateBillboardSprite("LGO Warning Telegraph Circle Sprite v0.46", CombatPlaceholderAssets.WarningTelegraphCircle, ShadowSlimePosition + Vector3.up * 0.16f, new Vector3(2.15f, 2.15f, 1f), 4);
+        }
+
+        private static SpriteRenderer CreateBillboardSprite(string name, Sprite sprite, Vector3 position, Vector3 scale, int sortingOrder)
+        {
+            if (sprite == null) return null;
+            var existing = GameObject.Find(name);
+            var holder = existing != null ? existing : new GameObject(name);
+            holder.transform.position = position;
+            holder.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            holder.transform.localScale = scale;
+            var renderer = holder.GetComponent<SpriteRenderer>() ?? holder.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.color = Color.white;
+            renderer.sortingOrder = sortingOrder;
+            return renderer;
         }
 
         private void TriggerLocalPosePulse(Color color)
@@ -650,10 +688,20 @@ namespace LinhGioi.World
                 _windSlashPreview.rotation = _marker.rotation;
                 _windSlashPreview.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.WindSlashPreview);
             }
+            if (_windSlashSprite != null)
+            {
+                _windSlashSprite.transform.position = CurrentPosition + _marker.forward * 0.9f + Vector3.up * 0.88f;
+                _windSlashSprite.transform.rotation = Quaternion.Euler(42f, _marker.eulerAngles.y, 0f);
+                _windSlashSprite.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.WindSlashPreview);
+            }
             if (_shadowBindWarning != null)
                 _shadowBindWarning.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.ShadowBindWarning);
+            if (_shadowTelegraphSprite != null)
+                _shadowTelegraphSprite.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.ShadowBindWarning);
             if (_targetDummyHitFlash != null)
                 _targetDummyHitFlash.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
+            if (_targetDummyHitSprite != null)
+                _targetDummyHitSprite.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
             RefreshTargetDummyReadabilityMarkers(active);
         }
 
@@ -665,6 +713,20 @@ namespace LinhGioi.World
                 _targetDummyFocusRing.gameObject.SetActive(nearTarget && !coolingDown);
             if (_targetDummyCooldownRing != null)
                 _targetDummyCooldownRing.gameObject.SetActive(coolingDown || (nearTarget && vfxActive && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash));
+            if (_targetDummyFocusSprite != null)
+                _targetDummyFocusSprite.gameObject.SetActive(nearTarget && !coolingDown);
+            if (_targetDummyCooldownSprite != null)
+            {
+                _targetDummyCooldownSprite.sprite = coolingDown ? CombatPlaceholderAssets.CooldownActive : CombatPlaceholderAssets.CooldownReady;
+                _targetDummyCooldownSprite.gameObject.SetActive(coolingDown || nearTarget);
+            }
+            if (_targetDummySprite != null)
+            {
+                if (coolingDown)
+                    _targetDummySprite.sprite = _targetDummyHitAcknowledged ? CombatPlaceholderAssets.TargetDummyRecover : CombatPlaceholderAssets.TargetDummySelected;
+                else
+                    _targetDummySprite.sprite = nearTarget ? CombatPlaceholderAssets.TargetDummySelected : CombatPlaceholderAssets.TargetDummyIdle;
+            }
         }
 
         private string DescribeTargetDummyVisualState()
