@@ -8,6 +8,11 @@
     "id",
     "class_id",
     "cooldown_ms",
+    "activation",
+    "cooldown",
+    "targeting",
+    "effect",
+    "telegraph",
     "damage",
     "range_m",
     "tags"
@@ -28,6 +33,122 @@
       "type": "integer",
       "minimum": 0,
       "maximum": 120000
+    },
+    "activation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "windup_ms"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "instant",
+            "cast",
+            "channel"
+          ]
+        },
+        "windup_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 60000
+        }
+      }
+    },
+    "cooldown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skill_ms",
+        "global_ms"
+      ],
+      "properties": {
+        "skill_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 120000
+        },
+        "global_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 120000
+        }
+      }
+    },
+    "targeting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule",
+        "requires_target",
+        "max_range_m"
+      ],
+      "properties": {
+        "rule": {
+          "type": "string",
+          "enum": [
+            "single_target",
+            "ground_point",
+            "self"
+          ]
+        },
+        "requires_target": {
+          "type": "boolean"
+        },
+        "max_range_m": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100
+        }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule",
+        "placeholder_amount"
+      ],
+      "properties": {
+        "rule": {
+          "type": "string",
+          "enum": [
+            "placeholder_damage",
+            "placeholder_status"
+          ]
+        },
+        "placeholder_amount": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 999999
+        }
+      }
+    },
+    "telegraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule",
+        "readability_ms"
+      ],
+      "properties": {
+        "rule": {
+          "type": "string",
+          "enum": [
+            "none",
+            "line",
+            "arc",
+            "circle"
+          ]
+        },
+        "readability_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000
+        }
+      }
     },
     "damage": {
       "type": "object",

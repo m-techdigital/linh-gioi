@@ -9,6 +9,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 errors: list[str] = []
+V040_CONTRACT_FILES = {
+    'protocol/combat.proto',
+    'gamedata/schemas/skill.schema.json',
+    'gamedata/skills/wind_slash.yaml',
+    'gamedata/compiled/gamedata-manifest.json',
+    'tests/gamedata/test_gamedata_pipeline.py',
+    'tests/gamedata/__pycache__/test_gamedata_pipeline.cpython-312.pyc',
+}
 
 REQUIRED_DOCS = [
     'README.md',
@@ -82,6 +90,14 @@ def read(path: str) -> str:
         errors.append(f'missing: {path}')
         return ''
     return target.read_text(encoding='utf-8', errors='replace')
+
+
+def v040_contract_is_active() -> bool:
+    return (
+        'M6_COMBAT_PROTOCOL_GAMEDATA_CONTRACT_ACCEPTED_v0.40.0'
+        in read('docs/tasks/M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0.md')
+        and (ROOT / 'CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md').is_file()
+    )
 
 
 def require(path: str, *markers: str) -> None:
@@ -211,7 +227,10 @@ def main() -> int:
     )
     validate_manifest_coverage()
 
+    v040_active = v040_contract_is_active()
     for path in changed_paths():
+        if v040_active and path in V040_CONTRACT_FILES:
+            continue
         if path == 'client/Unity/Assets/Game/UI/design-tokens.json':
             errors.append(f'frozen surface modified: {path}')
         for prefix in FORBIDDEN_CHANGED_PREFIXES:

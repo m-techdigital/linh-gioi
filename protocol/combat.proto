@@ -19,6 +19,57 @@ message SkillIntent {
   Vec3 target_position = 4;
 }
 
+message CombatIntent {
+  uint32 protocol_version = 1;
+  uint32 sequence = 2;
+  string intent_id = 3;
+  uint64 actor_entity_id = 4;
+  uint64 target_entity_id = 5;
+  string skill_id = 6;
+  Vec3 target_position = 7;
+  int64 client_time_unix_ms = 8;
+  bool local_preview_only = 9;
+}
+
+message CombatAccepted {
+  uint32 sequence = 1;
+  string intent_id = 2;
+  uint64 actor_entity_id = 3;
+  string skill_id = 4;
+  uint32 cooldown_ms = 5;
+  int64 server_time_unix_ms = 6;
+  CombatStateSnapshot snapshot = 7;
+}
+
+message CombatRejected {
+  uint32 sequence = 1;
+  string intent_id = 2;
+  ErrorInfo error = 3;
+  int64 server_time_unix_ms = 4;
+  CombatStateSnapshot snapshot = 5;
+}
+
+message CombatResult {
+  uint32 sequence = 1;
+  string intent_id = 2;
+  uint64 actor_entity_id = 3;
+  uint64 target_entity_id = 4;
+  string skill_id = 5;
+  int32 effect_amount = 6;
+  string outcome = 7;
+  int64 server_time_unix_ms = 8;
+  CombatStateSnapshot snapshot = 9;
+}
+
+message CombatStateSnapshot {
+  uint64 actor_entity_id = 1;
+  uint64 target_entity_id = 2;
+  string active_skill_id = 3;
+  uint32 cooldown_remaining_ms = 4;
+  bool target_valid = 5;
+  int64 server_time_unix_ms = 6;
+}
+
 message CombatResultEvent {
   uint64 source_entity_id = 1;
   uint64 target_entity_id = 2;

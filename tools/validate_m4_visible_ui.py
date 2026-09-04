@@ -9,6 +9,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 errors: list[str] = []
+V040_CONTRACT_FILES = {
+    'protocol/combat.proto',
+    'gamedata/schemas/skill.schema.json',
+    'gamedata/skills/wind_slash.yaml',
+    'gamedata/compiled/gamedata-manifest.json',
+    'tests/gamedata/test_gamedata_pipeline.py',
+    'tests/gamedata/__pycache__/test_gamedata_pipeline.cpython-312.pyc',
+}
 
 FORBIDDEN_CHANGED_PREFIXES = ['protocol/', 'gamedata/schemas/', 'docs/adr/']
 FORBIDDEN_OUTPUT_PREFIXES = [
@@ -42,6 +50,14 @@ def git_lines(*args: str) -> list[str]:
         errors.append('git command failed: git --no-pager ' + ' '.join(args) + ' ' + result.stderr.strip())
         return []
     return result.stdout.splitlines()
+
+
+def v040_contract_is_active() -> bool:
+    return (
+        'M6_COMBAT_PROTOCOL_GAMEDATA_CONTRACT_ACCEPTED_v0.40.0'
+        in read('docs/tasks/M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0.md')
+        and (ROOT / 'CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md').is_file()
+    )
 
 
 def check_panel_sizes(ui: str) -> None:
@@ -95,7 +111,10 @@ def main() -> int:
     require('client/Unity/Assets/Game/World/Runtime/M4PlayableVerticalSliceSmokeRunner.cs', '--lgo-m4-playable-vertical-slice-smoke')
     require('client/Unity/Assets/Game/Art/Runtime/M4VisualFoundationSmokeRunner.cs', '--lgo-m4-visual-foundation-smoke')
 
+    v040_active = v040_contract_is_active()
     for path in git_lines('diff', '--name-only'):
+        if v040_active and path in V040_CONTRACT_FILES:
+            continue
         if path == 'client/Unity/Assets/Game/UI/design-tokens.json':
             errors.append(f'frozen surface modified: {path}')
         for prefix in FORBIDDEN_CHANGED_PREFIXES:

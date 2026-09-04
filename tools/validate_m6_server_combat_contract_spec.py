@@ -18,6 +18,21 @@ DOCS = [
     'M6-SERVER-AUTHORITATIVE-COMBAT-CONTRACT-SPEC-FINAL-REPORT-v0.39.0.md',
     'HANDOFF-LG-M6-SERVER-AUTHORITATIVE-COMBAT-CONTRACT-SPEC-v0.39.0.md',
 ]
+V040_CONTRACT_FILES = {
+    'protocol/combat.proto',
+    'gamedata/schemas/skill.schema.json',
+    'gamedata/skills/wind_slash.yaml',
+    'gamedata/compiled/gamedata-manifest.json',
+    'tests/gamedata/test_gamedata_pipeline.py',
+    'tests/gamedata/__pycache__/test_gamedata_pipeline.cpython-312.pyc',
+    'tools/validate_m6_combat_protocol_gamedata_contract.py',
+    'docs/tasks/M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0.md',
+    'docs/design/LGO-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0.md',
+    'M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-FINAL-REPORT-v0.40.0.md',
+    'HANDOFF-LG-M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0.md',
+    'LGO-M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0-CHANGED-FILES.txt',
+    'LGO-M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0-DELETIONS.txt',
+}
 
 
 def read(path: str) -> str:
@@ -50,6 +65,15 @@ def git_lines(*args: str) -> list[str]:
         errors.append('git command failed: git --no-pager ' + ' '.join(args))
         return []
     return result.stdout.splitlines()
+
+
+def v040_contract_is_active() -> bool:
+    return (
+        'M6_COMBAT_PROTOCOL_GAMEDATA_CONTRACT_ACCEPTED_v0.40.0'
+        in read('docs/tasks/M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0.md')
+        and 'CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md'
+        and (ROOT / 'CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md').is_file()
+    )
 
 
 def main() -> int:
@@ -88,12 +112,16 @@ def main() -> int:
     require('HANDOFF-LG-M6-SERVER-AUTHORITATIVE-COMBAT-CONTRACT-SPEC-v0.39.0.md', 'Frozen Surface Audit', 'Code Governance Audit', 'Contract Change Request Summary')
     require('LGO-M6-SERVER-AUTHORITATIVE-COMBAT-CONTRACT-SPEC-v0.39.0-DELETIONS.txt', 'DELETED', 'none')
 
+    v040_active = v040_contract_is_active()
     for path in git_lines('diff', '--name-only'):
+        if v040_active and path in V040_CONTRACT_FILES:
+            continue
         if path in {
             'tools/validate_m6_server_combat_contract_spec.py',
             'tools/lgo_playable_closure_check.sh',
             'tools/validate_master_roadmap.py',
             'tools/validate_m6_combat_readiness_spec.py',
+            'tools/validate_m6_combat_protocol_gamedata_contract.py',
         }:
             continue
         if path.startswith('docs/tasks/') or path.startswith('docs/design/') or path.startswith('docs/execution/prompts/') or path.startswith('HANDOFF') or path.startswith('M6') or path.startswith('LGO') or path.startswith('CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md'):

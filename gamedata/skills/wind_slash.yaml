@@ -2,6 +2,22 @@ schema_version: 1
 id: skill.sword.wind_slash
 class_id: class.sword
 cooldown_ms: 6000
+activation:
+  mode: instant
+  windup_ms: 0
+cooldown:
+  skill_ms: 6000
+  global_ms: 600
+targeting:
+  rule: single_target
+  requires_target: true
+  max_range_m: 4.5
+effect:
+  rule: placeholder_damage
+  placeholder_amount: 12
+telegraph:
+  rule: line
+  readability_ms: 250
 damage:
   coefficient: 1.35
 range_m: 4.5

@@ -6,6 +6,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 errors: list[str] = []
+V040_CONTRACT_FILES = {
+    'protocol/combat.proto',
+    'gamedata/schemas/skill.schema.json',
+    'gamedata/skills/wind_slash.yaml',
+    'gamedata/compiled/gamedata-manifest.json',
+    'tests/gamedata/test_gamedata_pipeline.py',
+    'tests/gamedata/__pycache__/test_gamedata_pipeline.cpython-312.pyc',
+}
 
 
 def read(path: str) -> str:
@@ -21,6 +29,14 @@ def require(path: str, *markers: str) -> None:
     for marker in markers:
         if marker not in content:
             errors.append(f'{path} missing marker: {marker}')
+
+
+def v040_contract_is_active() -> bool:
+    return (
+        'M6_COMBAT_PROTOCOL_GAMEDATA_CONTRACT_ACCEPTED_v0.40.0'
+        in read('docs/tasks/M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0.md')
+        and (ROOT / 'CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md').is_file()
+    )
 
 
 def main() -> int:
@@ -61,7 +77,10 @@ def main() -> int:
         changed = subprocess.check_output(['git', 'diff', '--name-only'], cwd=ROOT, text=True).splitlines()
     except Exception:
         changed = []
+    v040_active = v040_contract_is_active()
     for path in changed:
+        if v040_active and path in V040_CONTRACT_FILES:
+            continue
         if path in forbidden or any(path.startswith(prefix) for prefix in forbidden if prefix.endswith('/')):
             errors.append(f'frozen surface modified: {path}')
 

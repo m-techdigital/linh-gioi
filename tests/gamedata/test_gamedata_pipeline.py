@@ -48,6 +48,27 @@ class GameDataPipelineTest(unittest.TestCase):
         self.assertFalse(result.valid)
         self.assertTrue(any("cooldown_ms" in item for item in result.errors), result.errors)
 
+    def test_skill_activation_rule_is_rejected(self):
+        path = self.gd / "skills" / "wind_slash.yaml"
+        path.write_text(path.read_text().replace("mode: instant", "mode: forbidden"))
+        result = self.validate()
+        self.assertFalse(result.valid)
+        self.assertTrue(any("activation.mode" in item for item in result.errors), result.errors)
+
+    def test_skill_cooldown_rule_is_rejected(self):
+        path = self.gd / "skills" / "wind_slash.yaml"
+        path.write_text(path.read_text().replace("skill_ms: 6000", "skill_ms: -1"))
+        result = self.validate()
+        self.assertFalse(result.valid)
+        self.assertTrue(any("cooldown.skill_ms" in item for item in result.errors), result.errors)
+
+    def test_skill_targeting_rule_is_rejected(self):
+        path = self.gd / "skills" / "wind_slash.yaml"
+        path.write_text(path.read_text().replace("max_range_m: 4.5", "max_range_m: 101"))
+        result = self.validate()
+        self.assertFalse(result.valid)
+        self.assertTrue(any("targeting.max_range_m" in item for item in result.errors), result.errors)
+
     def test_invalid_class_reference_is_rejected(self):
         path = self.gd / "skills" / "wind_slash.yaml"
         path.write_text(path.read_text().replace("class.sword", "class.unknown"))

@@ -1,6 +1,6 @@
 {
   "content_count": 4,
-  "content_sha256": "06319ae68d92c8345401eb21e9aad93729e000c5f5d7444865539e06f6315a6e",
+  "content_sha256": "b5a57d7a51c5a78d87aa8542c9eeff68ed9fc1c961fd58e7ab7d8617ad1a4abf",
   "documents": [
     {
       "data": {
@@ -58,10 +58,22 @@
     },
     {
       "data": {
+        "activation": {
+          "mode": "instant",
+          "windup_ms": 0
+        },
         "class_id": "class.sword",
+        "cooldown": {
+          "global_ms": 600,
+          "skill_ms": 6000
+        },
         "cooldown_ms": 6000,
         "damage": {
           "coefficient": 1.35
+        },
+        "effect": {
+          "placeholder_amount": 12,
+          "rule": "placeholder_damage"
         },
         "id": "skill.sword.wind_slash",
         "range_m": 4.5,
@@ -70,7 +82,16 @@
           "sword",
           "wind",
           "melee"
-        ]
+        ],
+        "targeting": {
+          "max_range_m": 4.5,
+          "requires_target": true,
+          "rule": "single_target"
+        },
+        "telegraph": {
+          "readability_ms": 250,
+          "rule": "line"
+        }
       },
       "kind": "skills",
       "source": "gamedata/skills/wind_slash.yaml"

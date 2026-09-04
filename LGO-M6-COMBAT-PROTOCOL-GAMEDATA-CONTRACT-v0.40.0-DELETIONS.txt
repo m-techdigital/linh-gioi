@@ -1,0 +1,2 @@
+DELETED
+tests/gamedata/__pycache__/test_gamedata_pipeline.cpython-312.pyc
