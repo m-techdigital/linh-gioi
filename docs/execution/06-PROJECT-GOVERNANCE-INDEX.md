@@ -6,22 +6,22 @@ This file is the navigation hub for all planning, progress, gate, and handoff do
 
 ## Current truth
 
-- Current milestone: `M5 Guided Training Loop`.
-- Current safe implementation state: `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`.
+- Current milestone: `M6 Combat Readiness Spec / Governance Baseline`.
+- Current safe implementation state: `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
 - Current accepted foundation: `M0_RUNTIME_CLOSED` from `linh-gioi-m0-runtime-closed-v0.4.1-full-source.zip`.
 - Current accepted gameplay baseline: `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
-- Current active runtime follow-up: M4 playable vertical slice verification using Java Netty + Unity `6000.3.2f1` player smoke.
+- Current active runtime follow-up: none opened by governance; next implementation requires roadmap/queue selection.
 - M3 server/API persistence is closed as `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; M3-B remains covered by its dedicated runtime smoke evidence.
 
 ## Read order for every new sandbox
 
 1. `START-HERE.md`
-2. `docs/execution/PROJECT-STATE.md`
-3. `docs/execution/MILESTONE-ROADMAP.md`
-4. `docs/execution/07-PHASE-GATES.md`
-5. `docs/execution/08-DELIVERY-CADENCE.md`
-6. `docs/execution/09-EVIDENCE-AND-QUALITY-STANDARD.md`
-7. `docs/execution/03-HANDOFF-CONTRACT.md`
+2. `docs/execution/CODE-GOVERNANCE-CONTRACT.md`
+3. `docs/execution/CODE-OWNERSHIP-MAP.md`
+4. `docs/execution/CODE-QUALITY-GATES.md`
+5. `docs/execution/PROJECT-STATE.md`
+6. `docs/execution/MILESTONE-ROADMAP.md`
+7. `docs/execution/07-PHASE-GATES.md`
 8. Relevant task/prompt file under `docs/tasks/` or `docs/execution/prompts/`
 
 ## Control documents
@@ -29,6 +29,9 @@ This file is the navigation hub for all planning, progress, gate, and handoff do
 | Document | Use |
 |---|---|
 | `docs/execution/PROJECT-STATE.md` | Current milestone, accepted baseline, closed/deferred gates. |
+| `docs/execution/CODE-GOVERNANCE-CONTRACT.md` | Maintainability, anti-duplication, validator, handoff, and refactor rules. |
+| `docs/execution/CODE-OWNERSHIP-MAP.md` | Canonical ownership for UI, world, art, config, protocol, GameData, server, tools, packaging, and future web/admin surfaces. |
+| `docs/execution/CODE-QUALITY-GATES.md` | Required source, ownership, duplication, package, runtime, visual, and handoff quality gates. |
 | `docs/execution/TASK-LEDGER.md` | Historical task status, accepted overlays, next allowed step. |
 | `docs/execution/MILESTONE-ROADMAP.md` | M0-M7 milestone sequence and high-level gates. |
 | `docs/execution/07-PHASE-GATES.md` | Detailed entry/exit gates, owner approvals, runtime rows. |

@@ -2,6 +2,10 @@
 
 This document defines what must be true before a milestone can start, what is allowed inside it, and what proves it is done. A sandbox may add implementation only inside the active milestone and must not promote source inspection into runtime evidence.
 
+## Code governance
+
+Every future milestone must read and obey `docs/execution/CODE-GOVERNANCE-CONTRACT.md`, `docs/execution/CODE-OWNERSHIP-MAP.md`, and `docs/execution/CODE-QUALITY-GATES.md` before final handoff. Code governance requires anti-duplication review, ownership audit, validator non-weakening, package hygiene, frozen surface audit, runtime evidence classification, and explicit technical-debt follow-up.
+
 ## Gate vocabulary
 
 | Term | Meaning |

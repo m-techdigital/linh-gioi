@@ -1,4 +1,12 @@
-# LINH GIỚI ONLINE — M5 Guided Training Loop
+# LINH GIỚI ONLINE — Governance Baseline v1.0
+
+**Current status:** `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0` with governance work in progress.
+
+**Code governance:** read `docs/execution/CODE-GOVERNANCE-CONTRACT.md`, `docs/execution/CODE-OWNERSHIP-MAP.md`, and `docs/execution/CODE-QUALITY-GATES.md` before future implementation handoff.
+
+**Non-claims:** no new gameplay, combat, production auth, DB implementation, production admin/player portal, production art, or runtime progress is claimed by governance docs.
+
+## Historical Playable Baseline
 
 **Current status:** `M5_GUIDED_TRAINING_LOOP_SOURCE_READY` after accepting the visual reference pack `LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5` and hardening the local non-combat loop into Gate Keeper -> Training Stone guidance. Previous visual evidence status is `M5_VISUAL_EVIDENCE_UX_REVIEW_READY`; previous M5 first playable loop status is `M5_FIRST_PLAYABLE_LOOP_SOURCE_READY`; previous M4 visible UI status is `M4_VISIBLE_UI_USABILITY_SOURCE_READY`; previous M4 closure automation status is `M4_PLAYABLE_SLICE_STABILIZATION_SOURCE_READY`; previous M4 UI/art status is `M4_PLAYABLE_UI_ART_QUALITY_SOURCE_READY`; previous M3 server/API status is `M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED`; previous M2 status remains `M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE` pending local Unity evidence.
 

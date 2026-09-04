@@ -4,11 +4,11 @@ Last updated: `2026-09-04`
 
 ## Current milestone
 
-`M5 Guided Training Loop`
+`M6 Combat Readiness Spec / Governance Baseline`
 
 ## Current decision
 
-`M5_GUIDED_TRAINING_LOOP_SOURCE_READY`
+`M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`
 
 M0 final decision: `M0_RUNTIME_CLOSED`.
 
@@ -18,7 +18,7 @@ M2 has source-level implementation for the first online session scaffold. Runtim
 
 ## Authoritative source baseline
 
-`linh-gioi-m5-guided-training-loop-v0.17.0`
+`linh-gioi-governance-roadmap-queue-v1.0`
 
 Baseline ancestry:
 
@@ -36,10 +36,13 @@ Baseline ancestry:
 - M5 visual evidence UX review path.
 - accepted visual reference pack v0.16.5.
 - M5 guided training loop source hardening.
+- M6 skill preview sandbox and target dummy readability closed locally.
+- M6 combat readiness spec closed as docs-only at `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
+- Code governance baseline v1.0 adds maintainability, ownership, duplication, validator, and handoff rules.
 
 ## Current source successor
 
-`linh-gioi-m5-guided-training-loop-v0.17.0`
+`linh-gioi-governance-roadmap-queue-v1.0`
 
 This source includes:
 

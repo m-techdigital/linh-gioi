@@ -9,7 +9,9 @@ ERRORS: list[str] = []
 
 REQUIRED_MARKERS = {
     'README.md': [
-        'M5 Guided Training Loop',
+        'Governance Baseline v1.0',
+        'M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
+        'CODE-GOVERNANCE-CONTRACT.md',
         'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
         'LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',
@@ -24,7 +26,9 @@ REQUIRED_MARKERS = {
         'M0_RUNTIME_CLOSED',
     ],
     'START-HERE.md': [
-        'M5 Guided Training Loop',
+        'M6 Combat Readiness Spec / Governance Baseline',
+        'M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
+        'CODE-GOVERNANCE-CONTRACT.md',
         'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
         'LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',
@@ -35,8 +39,10 @@ REQUIRED_MARKERS = {
         './tools/lgo_playable_closure_check.sh --package-ready',
     ],
     'VERSIONING.md': [
-        'source_package_version = 0.17.0',
-        'client_version = 0.5.2-m5',
+        'source_package_version = governance-v1.0',
+        'client_version = 0.6.0-governance',
+        'm6_status = M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
+        'governance_status = LGO_CODE_GOVERNANCE_CONTRACT_ACCEPTED_v1.0',
         'm1_status = M1_OFFLINE_COMBAT_RUNTIME_CLOSED',
         'm2_status = M2_RUNTIME_CANDIDATE_HARDENED_READY_FOR_LOCAL_EVIDENCE',
         'm3_status = M3_ACCOUNT_CHARACTER_PERSISTENCE_RUNTIME_SMOKE_CLOSED',
@@ -65,7 +71,9 @@ REQUIRED_MARKERS = {
         'players-v1.json',
     ],
     'docs/execution/PROJECT-STATE.md': [
-        'M5 Guided Training Loop',
+        'M6 Combat Readiness Spec / Governance Baseline',
+        'M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0',
+        'Code governance baseline v1.0',
         'M5_GUIDED_TRAINING_LOOP_SOURCE_READY',
         'LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5',
         'M5_VISUAL_EVIDENCE_UX_REVIEW_READY',
@@ -83,8 +91,9 @@ REQUIRED_MARKERS = {
         'M0_RUNTIME_CLOSED',
     ],
     'docs/execution/06-PROJECT-GOVERNANCE-INDEX.md': [
-        'Current milestone: `M5 Guided Training Loop`',
-        'Current safe implementation state: `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`',
+        'Current milestone: `M6 Combat Readiness Spec / Governance Baseline`',
+        'Current safe implementation state: `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`',
+        'CODE-GOVERNANCE-CONTRACT.md',
     ],
     'docs/execution/07-PHASE-GATES.md': [
         'Current state: `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`',
@@ -133,6 +142,8 @@ REQUIRED_MARKERS = {
 }
 
 OUTDATED_CURRENT_TRUTH = [
+    ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current milestone: `M5 Guided Training Loop`'),
+    ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current safe implementation state: `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current milestone: `M0 Foundation Runtime Closure`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current milestone: `M1 Offline Combat Prototype`'),
     ('docs/execution/06-PROJECT-GOVERNANCE-INDEX.md', r'Current milestone: `M2 Online Session Prototype`'),

@@ -46,6 +46,16 @@ GENERATED_AT: `<timestamp>`
 - Drift result:
 - Contract changes requested:
 
+## Code Quality / Duplication / Ownership Audit
+
+- Code governance contract read:
+- Code ownership map read:
+- Code quality gates read:
+- Duplication audit result:
+- Ownership audit result:
+- Validator non-weakening result:
+- Technical debt/follow-up:
+
 ## Package hygiene
 
 - Parent wrapper:

@@ -1,8 +1,8 @@
 # START HERE — Linh Giới Online Current Source
 
-**Current milestone:** `M5 Guided Training Loop`.
+**Current milestone:** `M6 Combat Readiness Spec / Governance Baseline`.
 
-**Current status:** `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`.
+**Current status:** `M6_COMBAT_READINESS_SPEC_CLOSED_v0.32.0`.
 
 **Accepted visual reference:** `LGO_VISUAL_REFERENCE_PACK_ACCEPTED_v0.16.5`.
 
@@ -10,18 +10,20 @@
 
 **Accepted base:** `M1_OFFLINE_COMBAT_RUNTIME_CLOSED` from `linh-gioi-m1-offline-combat-runtime-closed-v0.5.3-full-source.zip`.
 
-**Current source successor:** `linh-gioi-m5-guided-training-loop-v0.17.0`.
+**Current source successor:** `linh-gioi-governance-roadmap-queue-v1.0`.
+
+**Historical playable marker:** `M5_GUIDED_TRAINING_LOOP_SOURCE_READY`.
 
 ## 1. Read order
 
 1. `README.md`
-2. `docs/execution/LOCAL-SANDBOX-COMMAND-DISCIPLINE.md`
-3. `docs/execution/PROJECT-STATE.md`
-4. `docs/execution/MILESTONE-ROADMAP.md`
-5. `docs/execution/07-PHASE-GATES.md`
-6. `docs/tasks/M2-ONLINE-SESSION-PROTOTYPE.md`
-7. `docs/execution/M2-RUNTIME-EVIDENCE.md`
-8. `docs/execution/checklists/M2-RUNTIME-CLOSURE-CHECKLIST.md`
+2. `docs/execution/CODE-GOVERNANCE-CONTRACT.md`
+3. `docs/execution/CODE-OWNERSHIP-MAP.md`
+4. `docs/execution/CODE-QUALITY-GATES.md`
+5. `docs/execution/LOCAL-SANDBOX-COMMAND-DISCIPLINE.md`
+6. `docs/execution/PROJECT-STATE.md`
+7. `docs/execution/MILESTONE-ROADMAP.md`
+8. `docs/execution/07-PHASE-GATES.md`
 9. `docs/execution/03-HANDOFF-CONTRACT.md`
 
 ## 2. Environment
