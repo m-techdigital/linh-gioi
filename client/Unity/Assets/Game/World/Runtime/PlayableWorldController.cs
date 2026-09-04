@@ -75,6 +75,7 @@ namespace LinhGioi.World
         public string ShadowSlimeStateName => _shadowSlimeState.ToString();
         public string VfxFeedbackStateName => _vfxFeedbackState.ToString();
         public string TargetDummyStatusText => "Mục tiêu luyện tập: sức bền mô phỏng " + _localCombat.TargetHp + "/" + LocalCombatPrototypeState.TargetDummyMaxHp + " - Chỉ là mô phỏng cục bộ.";
+        public string TargetDummyRangeText => DescribeTargetDummyRangeState();
         public string TargetDummyVisualStateText => DescribeTargetDummyVisualState();
         public string CombatFeedbackText { get; private set; } = "Chưa phải chiến đấu thật: hãy đứng gần mục tiêu luyện tập để thử phản hồi.";
         public string CombatCooldownText => _localCombat.CooldownActive(NowMs()) ? "Hồi chiêu: Đang hồi chiêu mô phỏng." : "Hồi chiêu: Sẵn sàng";
@@ -237,19 +238,19 @@ namespace LinhGioi.World
             if (!_lastLocalCombatOutcome.Accepted)
             {
                 if (_lastLocalCombatOutcome.RejectedReason == "OUT_OF_RANGE")
-                    CombatFeedbackText = "Mục tiêu luyện tập ở phía đông. Lại gần vòng sáng vàng để Tấn công thử.";
+                    CombatFeedbackText = "Ngoài tầm: lại gần vòng chọn màu vàng quanh mục tiêu luyện tập rồi thử lại.";
                 else if (_lastLocalCombatOutcome.RejectedReason == "COOLDOWN_ACTIVE")
-                    CombatFeedbackText = "Chưa thể tấn công: Đang hồi chiêu mô phỏng cục bộ.";
+                    CombatFeedbackText = "Chưa thể tấn công: Đang hồi chiêu, chờ vòng lam chuyển về xanh sẵn sàng rồi gửi lại ý định.";
                 else
-                    CombatFeedbackText = "Chưa phải chiến đấu thật: chưa chọn mục tiêu luyện tập.";
-                CombatAuthorityText = "Từ chối cục bộ: " + _lastLocalCombatOutcome.RejectedReason + " - không có kết quả chiến đấu thật.";
+                    CombatFeedbackText = "Chưa chọn mục tiêu: đi về phía đông tới bia luyện tập có vòng đánh dấu.";
+                CombatAuthorityText = "Từ chối cục bộ: " + _lastLocalCombatOutcome.RejectedReason + " - không tạo kết quả chiến đấu thật.";
                 InteractionStateChanged?.Invoke();
                 return false;
             }
 
             _targetDummyHitAcknowledged = true;
             CombatAuthorityText = "Chấp nhận cục bộ: " + _lastLocalCombatOutcome.Intent.IntentId + " - tạo kết quả nguyên mẫu từ hợp đồng hiện có.";
-            CombatFeedbackText = "Trúng mục tiêu: Wind Slash gây " + _lastLocalCombatOutcome.EffectAmount + " điểm mô phỏng. Chỉ là mô phỏng cục bộ, chưa phải chiến đấu thật.";
+            CombatFeedbackText = "Trúng mục tiêu: Chém Gió gây " + _lastLocalCombatOutcome.EffectAmount + " điểm mô phỏng; bia chuyển đỏ rồi hồi phục. Chỉ là mô phỏng cục bộ.";
             SetPlayerPose(PlaceholderPoseState.Interact);
             SetVfxFeedback(PlaceholderVfxFeedbackState.TargetDummyHitFlash, 1.25f);
             TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
@@ -264,8 +265,8 @@ namespace LinhGioi.World
             intent.TargetEntityId = 0;
             intent.ClientTimeUnixMs = nowMs;
             _lastLocalCombatOutcome = _localCombat.TryWindSlash(intent, float.PositiveInfinity, nowMs);
-            CombatFeedbackText = "Chưa phải chiến đấu thật: chưa chọn mục tiêu luyện tập.";
-            CombatAuthorityText = "Từ chối cục bộ: " + _lastLocalCombatOutcome.RejectedReason + " - không có kết quả chiến đấu thật.";
+            CombatFeedbackText = "Chưa chọn mục tiêu: không có bia luyện tập hợp lệ trong ý định.";
+            CombatAuthorityText = "Từ chối cục bộ: " + _lastLocalCombatOutcome.RejectedReason + " - không tạo kết quả chiến đấu thật.";
             InteractionStateChanged?.Invoke();
             return _lastLocalCombatOutcome;
         }
@@ -763,9 +764,18 @@ namespace LinhGioi.World
         private string DescribeTargetDummyVisualState()
         {
             if (_marker == null) return "Dấu hiệu mục tiêu: Chưa vào sân luyện.";
-            if (_localCombat.CooldownActive(NowMs())) return "Dấu hiệu mục tiêu: Đang hồi chiêu mô phỏng, vòng sáng lam giữ nhịp đọc rõ.";
-            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM) return "Dấu hiệu mục tiêu: Sẵn sàng, vòng sáng vàng đã chọn mục tiêu.";
-            return "Dấu hiệu mục tiêu: Chưa chọn, đi về phía đông tới vòng sáng vàng.";
+            if (_localCombat.CooldownActive(NowMs())) return "Dấu hiệu mục tiêu: Bia hồi phục màu xanh xám, vòng hồi chiêu lam/vàng đang chạy.";
+            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM) return "Dấu hiệu mục tiêu: Đã chọn, vòng tâm ngắm xanh và vòng vàng đang sáng.";
+            return "Dấu hiệu mục tiêu: Chưa chọn, bia ở phía đông ngoài vòng tấn công thử.";
+        }
+
+        private string DescribeTargetDummyRangeState()
+        {
+            if (_marker == null) return "Tầm đánh: chưa vào sân.";
+            var distance = Distance2D(CurrentPosition, ReadabilityDummyPosition);
+            if (distance <= LocalCombatPrototypeState.WindSlashRangeM)
+                return "Tầm đánh: trong tầm " + distance.ToString("0.0", CultureInfo.InvariantCulture) + "m / sẵn sàng gửi ý định.";
+            return "Tầm đánh: ngoài tầm " + distance.ToString("0.0", CultureInfo.InvariantCulture) + "m / cần <= " + LocalCombatPrototypeState.WindSlashRangeM.ToString("0.0", CultureInfo.InvariantCulture) + "m.";
         }
 
         private sealed class InteractableState

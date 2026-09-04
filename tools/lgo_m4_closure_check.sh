@@ -73,19 +73,28 @@ import shutil
 import sys
 
 root = Path(sys.argv[1])
-for rel in [
+strict_paths = [
     "client/Unity/Assets/Game/Generated",
     "client/Unity/Assets/Game/Generated.meta",
     "client/Unity/Assets/Game/Protocol/Generated",
     "client/Unity/Assets/Game/Protocol/Generated.meta",
+]
+cache_paths = [
     "client/Unity/Library",
     "client/Unity/Temp",
     "client/Unity/Logs",
     "build",
-]:
+]
+for rel in strict_paths:
     path = root / rel
     if path.is_dir():
         shutil.rmtree(path)
+    elif path.exists():
+        path.unlink()
+for rel in cache_paths:
+    path = root / rel
+    if path.is_dir():
+        shutil.rmtree(path, ignore_errors=True)
     elif path.exists():
         path.unlink()
 PY

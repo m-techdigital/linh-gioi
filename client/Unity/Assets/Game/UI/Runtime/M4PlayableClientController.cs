@@ -46,6 +46,7 @@ namespace LinhGioi.UI
         private Label _worldPoseState;
         private Label _worldVfxState;
         private Label _combatTargetStatus;
+        private Label _combatRangeStatus;
         private Label _combatVisualState;
         private Label _combatFeedback;
         private Label _combatCooldown;
@@ -397,6 +398,7 @@ namespace LinhGioi.UI
             _localCombatPanel.Add(NewMutedLabel("Nhãn nguyên mẫu cục bộ: Tấn công thử chỉ kiểm tra khả năng đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương thật, phần thưởng, kinh nghiệm, hay chiến đấu máy chủ."));
             _combatCooldownIcon = NewCombatCooldownIcon();
             _combatTargetStatus = NewStatusLabel("Mục tiêu luyện tập: chưa vào sân.", RuntimeArtCatalog.Gold);
+            _combatRangeStatus = NewStatusLabel("Tầm đánh: chưa vào sân.", RuntimeArtCatalog.Muted);
             _combatVisualState = NewStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
             _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
             _combatCooldown = NewStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
@@ -406,6 +408,7 @@ namespace LinhGioi.UI
             ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonNormalTexture);
             _localCombatPanel.Add(_combatCooldownIcon);
             _localCombatPanel.Add(_combatTargetStatus);
+            _localCombatPanel.Add(_combatRangeStatus);
             _localCombatPanel.Add(_combatVisualState);
             _localCombatPanel.Add(_combatFeedback);
             _localCombatPanel.Add(_combatCooldown);
@@ -562,6 +565,7 @@ namespace LinhGioi.UI
             if (_worldPoseState != null) _worldPoseState.text = "Pose: player " + _world.PlayerPoseStateName + " / Gate Keeper " + _world.GateKeeperPoseStateName + " / Shadow Slime " + _world.ShadowSlimeStateName + ".";
             if (_worldVfxState != null) _worldVfxState.text = "VFX: " + _world.VfxFeedbackStateName + " / visual-only local feedback.";
             if (_combatTargetStatus != null) _combatTargetStatus.text = _world.TargetDummyStatusText;
+            if (_combatRangeStatus != null) _combatRangeStatus.text = _world.TargetDummyRangeText;
             if (_combatVisualState != null) _combatVisualState.text = _world.TargetDummyVisualStateText;
             if (_combatFeedback != null) _combatFeedback.text = _world.CombatFeedbackText;
             if (_combatCooldown != null) _combatCooldown.text = _world.CombatCooldownText;
@@ -841,11 +845,24 @@ namespace LinhGioi.UI
                 var texture = coolingDown ? CombatPlaceholderAssets.CooldownActiveTexture : CombatPlaceholderAssets.CooldownReadyTexture;
                 if (texture != null) _combatCooldownIcon.style.backgroundImage = new StyleBackground(texture);
                 _combatCooldownIcon.tooltip = coolingDown ? "Hồi chiêu mô phỏng đang chạy." : "Sẵn sàng tấn công thử.";
+                _combatCooldownIcon.style.borderTopColor = coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
+                _combatCooldownIcon.style.borderLeftColor = coolingDown ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit;
             }
             if (_localCombatButton != null)
             {
                 ApplyCombatButtonSkin(_localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture);
+                _localCombatButton.text = coolingDown ? "Đang hồi chiêu" : "Tấn công thử";
+                _localCombatButton.tooltip = coolingDown
+                    ? "Bấm vẫn cho phản hồi từ chối hồi chiêu; đây là nguyên mẫu cục bộ, không phải chiến đấu thật."
+                    : "Gửi ý định Chém Gió vào bia luyện tập; chỉ là phản hồi nguyên mẫu.";
             }
+            var feedback = _world.CombatFeedbackText;
+            var warning = feedback.Contains("Ngoài tầm") || feedback.Contains("Chưa chọn") || feedback.Contains("Đang hồi chiêu");
+            ApplyStatusAccent(_combatRangeStatus, _world.TargetDummyRangeText.Contains("trong tầm") ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Danger);
+            ApplyStatusAccent(_combatVisualState, coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit);
+            ApplyStatusAccent(_combatFeedback, warning ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Gold);
+            ApplyStatusAccent(_combatCooldown, coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit);
+            ApplyStatusAccent(_combatAuthority, _world.CombatAuthorityText.Contains("từ chối") || _world.CombatAuthorityText.Contains("Từ chối") ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit);
         }
 
         private void PreviewSkill(string previewName)
@@ -948,6 +965,10 @@ namespace LinhGioi.UI
             icon.style.height = 44;
             icon.style.marginBottom = 8;
             icon.style.backgroundColor = RuntimeArtCatalog.Surface;
+            icon.style.borderTopWidth = 2;
+            icon.style.borderLeftWidth = 2;
+            icon.style.borderTopColor = RuntimeArtCatalog.Spirit;
+            icon.style.borderLeftColor = RuntimeArtCatalog.Spirit;
             var texture = CombatPlaceholderAssets.CooldownReadyTexture;
             if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
             icon.tooltip = "Sẵn sàng tấn công thử.";
@@ -965,6 +986,13 @@ namespace LinhGioi.UI
         {
             if (button == null || texture == null) return;
             button.style.backgroundImage = new StyleBackground(texture);
+        }
+
+        private static void ApplyStatusAccent(Label label, Color accent)
+        {
+            if (label == null) return;
+            label.style.borderLeftColor = accent;
+            label.style.color = accent;
         }
 
         private static VisualElement NewBadge(string title, string value)

@@ -132,6 +132,15 @@ def main() -> int:
             'tools/validate_m6_server_authoritative_combat_pilot.py',
             'tools/run_m6_unity_java_combat_e2e.sh',
             'tools/validate_m6_unity_java_combat_e2e.py',
+            'tools/validate_m6_combat_ux_readability_polish.py',
+            'tools/lgo_m4_closure_check.sh',
+            'docs/tasks/M6-COMBAT-UX-READABILITY-POLISH-v0.53.0.md',
+            'docs/design/M6-COMBAT-UX-READABILITY-POLISH-v0.53.0.md',
+            'docs/execution/checklists/M6-COMBAT-UX-READABILITY-POLISH-CHECKLIST-v0.53.0.md',
+            'M6-COMBAT-UX-READABILITY-POLISH-FINAL-REPORT-v0.53.0.md',
+            'HANDOFF-LG-M6-COMBAT-UX-READABILITY-POLISH-v0.53.0.md',
+            'LGO-M6-COMBAT-UX-READABILITY-POLISH-v0.53.0-CHANGED-FILES.txt',
+            'LGO-M6-COMBAT-UX-READABILITY-POLISH-v0.53.0-DELETIONS.txt',
         }:
             continue
         if path.startswith('docs/tasks/') or path.startswith('docs/design/') or path.startswith('docs/execution/prompts/') or path.startswith('HANDOFF') or path.startswith('M6') or path.startswith('LGO') or path.startswith('CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md'):

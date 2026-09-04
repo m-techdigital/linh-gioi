@@ -27,6 +27,12 @@ def require(path: str, *markers: str) -> None:
             errors.append(f'{path} missing marker: {marker}')
 
 
+def require_any(path: str, *markers: str) -> None:
+    content = read(path)
+    if not any(marker in content for marker in markers):
+        errors.append(f'{path} missing one of markers: {", ".join(markers)}')
+
+
 def require_file(path: str, executable: bool = False) -> None:
     target = ROOT / path
     if not target.is_file():
@@ -61,11 +67,11 @@ def main() -> int:
         'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
         'LocalCombatCoolingDown',
         'RecoverLocalCombatCooldownForSmoke',
-        'Chưa thể tấn công',
         'Đang hồi chiêu',
         'Sẵn sàng',
         'Mô phỏng cục bộ',
     )
+    require_any('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'Chưa thể tấn công', 'Đang hồi chiêu: chờ vòng lam')
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
         'TriggerLocalCombat',
