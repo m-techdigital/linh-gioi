@@ -11,6 +11,9 @@ namespace LinhGioi.World
         private const float MoveSpeed = 4f;
         private const float RotateSpeed = 120f;
         private const float InteractionRange = 1.45f;
+        private static readonly Vector3 GateKeeperPosition = new Vector3(-3f, 0.75f, 3f);
+        private static readonly Vector3 TrainingStonePosition = new Vector3(0f, 0.08f, 4.5f);
+        private static readonly Vector3 ShadowSlimePosition = new Vector3(3f, 0.4f, 3f);
         private CharacterResponse _character;
         private Transform _marker;
         private InteractableState _nearestInteractable;
@@ -27,6 +30,8 @@ namespace LinhGioi.World
         public string InteractionText => _interactionText;
         public string GuidedTrainingStepName => _guidedStep.ToString();
         public string CurrentAreaLabel => DescribeCurrentArea();
+        public string ObjectiveDirectionHint => DescribeObjectiveDirection();
+        public string WorldLandmarkSummary => "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
         public bool InteractionAcknowledged { get; private set; }
 
         public void Enter(CharacterResponse character)
@@ -153,9 +158,14 @@ namespace LinhGioi.World
         private static void EnsureWorldPlaceholders()
         {
             // Preserve the M4 visual source marker: LGO NPC Keeper Placeholder.
-            CreateMarkerCube("LGO Gate Keeper NPC Interactable", new Vector3(-3f, 0.75f, 3f), RuntimeArtCatalog.Gold, new Vector3(0.9f, 1.5f, 0.9f));
-            CreateMarkerCube("LGO Shadow Slime Non Combat Marker", new Vector3(3f, 0.4f, 3f), RuntimeArtCatalog.Shadow, new Vector3(1.4f, 0.8f, 1.4f));
-            CreateMarkerCube("LGO Training Stone Interactable", new Vector3(0f, 0.08f, 4.5f), RuntimeArtCatalog.Spirit, new Vector3(1.2f, 0.16f, 1.2f));
+            CreateMarkerCube("LGO Gate Keeper NPC Interactable", GateKeeperPosition, RuntimeArtCatalog.Gold, new Vector3(0.9f, 1.5f, 0.9f));
+            CreateMarkerCube("LGO Gate Keeper Gold Readability Pillar", GateKeeperPosition + new Vector3(0f, 1.35f, 0f), RuntimeArtCatalog.Gold, new Vector3(0.25f, 1.4f, 0.25f));
+            CreateMarkerCube("LGO Shadow Slime Non Combat Marker", ShadowSlimePosition, RuntimeArtCatalog.Shadow, new Vector3(1.4f, 0.8f, 1.4f));
+            CreateMarkerCube("LGO Shadow Slime Warning Plinth", ShadowSlimePosition + new Vector3(0f, -0.2f, 0f), RuntimeArtCatalog.Danger, new Vector3(1.8f, 0.08f, 1.8f));
+            CreateMarkerCube("LGO Training Stone Interactable", TrainingStonePosition, RuntimeArtCatalog.Spirit, new Vector3(1.2f, 0.16f, 1.2f));
+            CreateMarkerCube("LGO Training Stone Cyan Beacon", TrainingStonePosition + new Vector3(0f, 0.8f, 0f), RuntimeArtCatalog.Spirit, new Vector3(0.35f, 1.2f, 0.35f));
+            CreateMarkerCube("LGO Spirit Gate Landmark South", new Vector3(0f, 1.2f, -4.5f), RuntimeArtCatalog.Spirit, new Vector3(2.8f, 2.4f, 0.25f));
+            CreateMarkerCube("LGO Safe Training Circle Center", new Vector3(0f, 0.04f, 0f), RuntimeArtCatalog.Gold, new Vector3(3.2f, 0.08f, 3.2f));
         }
 
         private static void CreateMarkerCube(string name, Vector3 position, Color color, Vector3 scale)
@@ -188,13 +198,13 @@ namespace LinhGioi.World
                 "Training Stone",
                 "Press F or Space: stabilize spirit pulse.",
                 "Spirit pulse stabilized. Training acknowledged.",
-                new Vector3(0f, 0.08f, 4.5f)
+                TrainingStonePosition
             );
             var keeper = new InteractableState(
                 "Gate Keeper",
                 "Press F or Space: ask the Gate Keeper for guidance.",
                 "Gate Keeper: your path is open. Try the Training Stone.",
-                new Vector3(-3f, 0.75f, 3f)
+                GateKeeperPosition
             );
 
             var nearest = _guidedStep == GuidedTrainingStep.FindGateKeeper ? keeper : training;
@@ -235,6 +245,13 @@ namespace LinhGioi.World
             if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Move toward the gold Gate Keeper at the northwest side of the yard.";
             if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Move toward the cyan Training Stone at the north center of the yard.";
             return "Loop complete: save position or return to lobby.";
+        }
+
+        private string DescribeObjectiveDirection()
+        {
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "face northwest for the gold Gate Keeper pillar.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "face north for the cyan Training Stone beacon.";
+            return "training complete; use Save Position or return to Character Hall.";
         }
 
         private string DescribeCurrentArea()

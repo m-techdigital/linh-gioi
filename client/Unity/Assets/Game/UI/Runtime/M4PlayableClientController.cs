@@ -35,6 +35,8 @@ namespace LinhGioi.UI
         private Label _worldMeta;
         private Label _worldArea;
         private Label _worldStep;
+        private Label _worldDirection;
+        private Label _worldLandmarks;
         private Label _worldObjective;
         private Label _interactionHint;
         private Label _position;
@@ -243,6 +245,9 @@ namespace LinhGioi.UI
             _worldStep = NewStatusLabel("Guided loop: waiting for character entry.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_worldStep);
 
+            _worldDirection = NewStatusLabel("Direction: enter the world to reveal yard landmarks.", RuntimeArtCatalog.Gold);
+            _worldHud.Add(_worldDirection);
+
             _worldObjective = NewStatusLabel("Objective: talk to the Gate Keeper.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldObjective);
 
@@ -257,6 +262,10 @@ namespace LinhGioi.UI
             _position.style.paddingTop = 6;
             _position.style.paddingBottom = 6;
             _worldHud.Add(_position);
+
+            _worldLandmarks = NewMutedLabel("Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.");
+            _worldLandmarks.style.marginTop = 8;
+            _worldHud.Add(_worldLandmarks);
 
             _savePositionButton = NewPrimaryButton("Save Position", () => RunAsync(SavePositionAsync));
             _savePositionButton.tooltip = "Persist this character position to the local dev API";
@@ -364,6 +373,8 @@ namespace LinhGioi.UI
                 _worldMeta.text = "Select a character in the lobby.";
                 if (_worldArea != null) _worldArea.text = "Area: Lobby preview";
                 if (_worldStep != null) _worldStep.text = "Guided loop: waiting for character entry.";
+                if (_worldDirection != null) _worldDirection.text = "Direction: enter the world to reveal yard landmarks.";
+                if (_worldLandmarks != null) _worldLandmarks.text = "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
                 if (_worldObjective != null) _worldObjective.text = "Objective: talk to the Gate Keeper.";
                 if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper.";
                 _position.text = "x=0.00 y=0.00 z=0.00 yaw=0.0";
@@ -381,6 +392,8 @@ namespace LinhGioi.UI
             if (_world == null) return;
             if (_worldArea != null) _worldArea.text = "Area: " + _world.CurrentAreaLabel;
             if (_worldStep != null) _worldStep.text = "Guided loop: " + _world.GuidedTrainingStepName;
+            if (_worldDirection != null) _worldDirection.text = "Direction: " + _world.ObjectiveDirectionHint;
+            if (_worldLandmarks != null) _worldLandmarks.text = _world.WorldLandmarkSummary;
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
         }

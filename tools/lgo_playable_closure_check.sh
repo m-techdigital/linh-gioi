@@ -92,6 +92,9 @@ source_only() {
   if [[ -f tools/validate_m5_playable_session_feedback.py ]]; then
     run_phase m5_playable_session_feedback python3.12 tools/validate_m5_playable_session_feedback.py
   fi
+  if [[ -f tools/validate_m5_world_hub_readability.py ]]; then
+    run_phase m5_world_hub_readability python3.12 tools/validate_m5_world_hub_readability.py
+  fi
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
     tools/validate_m4_playable_source.py \
@@ -103,6 +106,7 @@ source_only() {
     tools/validate_m5_visual_evidence.py \
     tools/validate_m5_guided_training_loop.py \
     tools/validate_m5_playable_session_feedback.py \
+    tools/validate_m5_world_hub_readability.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
     tools/m5_first_playable_loop_runtime.py \
@@ -179,6 +183,9 @@ package_ready() {
   run_phase m5_guided_training_loop python3.12 tools/validate_m5_guided_training_loop.py
   if [[ -f tools/validate_m5_playable_session_feedback.py ]]; then
     run_phase m5_playable_session_feedback python3.12 tools/validate_m5_playable_session_feedback.py
+  fi
+  if [[ -f tools/validate_m5_world_hub_readability.py ]]; then
+    run_phase m5_world_hub_readability python3.12 tools/validate_m5_world_hub_readability.py
   fi
   run_phase package_hygiene python3.12 tools/validate_package_hygiene.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"
