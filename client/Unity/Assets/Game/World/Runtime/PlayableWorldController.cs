@@ -840,10 +840,16 @@ namespace LinhGioi.World
         {
             CreateBillboardSprite("LGO World Cherry Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, new Vector3(-4.8f, 0.2f, 1.4f), new Vector3(1.12f, 1.12f, 1f), 1);
             CreateBillboardSprite("LGO World Pine Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, new Vector3(4.8f, 0.2f, 2.1f), new Vector3(1.02f, 1.02f, 1f), 1);
+            CreateBillboardSprite("LGO World Cherry Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, new Vector3(4.6f, 0.16f, -0.65f), new Vector3(0.62f, 0.62f, 1f), 0);
+            CreateBillboardSprite("LGO World Pine Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, new Vector3(-5.25f, 0.16f, 3.65f), new Vector3(0.68f, 0.68f, 1f), 0);
             CreateBillboardSprite("LGO World Lantern West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(-4.2f, 0.2f, -1.8f), new Vector3(0.68f, 0.68f, 1f), 2);
             CreateBillboardSprite("LGO World Lantern East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(4.1f, 0.2f, -1.7f), new Vector3(0.68f, 0.68f, 1f), 2);
+            CreateBillboardSprite("LGO World Lantern North Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(-0.95f, 0.15f, 5.35f), new Vector3(0.42f, 0.42f, 1f), 1);
+            CreateBillboardSprite("LGO World Lantern South Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(1.15f, 0.15f, -5.25f), new Vector3(0.42f, 0.42f, 1f), 1);
             CreateBillboardSprite("LGO World Rock Moss Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, new Vector3(-1.9f, 0.15f, -1.7f), new Vector3(0.58f, 0.58f, 1f), 1);
+            CreateBillboardSprite("LGO World Rock Moss East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, new Vector3(2.1f, 0.12f, 4.75f), new Vector3(0.34f, 0.34f, 1f), 0);
             CreateBillboardSprite("LGO World Cultivation Banner Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, new Vector3(3.8f, 0.2f, -3.6f), new Vector3(0.56f, 0.56f, 1f), 2);
+            CreateBillboardSprite("LGO World Cultivation Banner West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, new Vector3(-4.95f, 0.16f, -3.25f), new Vector3(0.42f, 0.42f, 1f), 1);
             CreateBillboardSprite("LGO World Bridge Wood Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BridgeWood ?? LgoVisualAssetRegistryV2.BridgeWood, new Vector3(-2.9f, 0.1f, -3.8f), new Vector3(0.82f, 0.82f, 1f), 1);
         }
 
