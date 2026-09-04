@@ -24,6 +24,7 @@ namespace LinhGioi.UI
         private VisualElement _lobbyPanel;
         private VisualElement _worldHud;
         private VisualElement _dialoguePanel;
+        private VisualElement _sessionMenuPanel;
         private VisualElement _characterList;
         private TextField _devKey;
         private TextField _characterName;
@@ -48,6 +49,7 @@ namespace LinhGioi.UI
         private Label _dialogueSpeaker;
         private Label _dialogueLine;
         private Label _dialogueProgress;
+        private Label _sessionMenuStatus;
         private Button _loginButton;
         private Button _createButton;
         private Button _enterWorldButton;
@@ -56,6 +58,10 @@ namespace LinhGioi.UI
         private Button _quitButton;
         private Button _dialogueContinueButton;
         private Button _dialogueCloseButton;
+        private Button _resumeButton;
+        private Button _sessionSaveButton;
+        private Button _sessionBackButton;
+        private Button _sessionQuitButton;
         private AccountResponse _accountState;
         private CharacterResponse[] _characters = Array.Empty<CharacterResponse>();
         private CharacterResponse _selectedCharacter;
@@ -78,7 +84,13 @@ namespace LinhGioi.UI
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Escape)) QuitPlayer();
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (_worldHud != null && _worldHud.style.display == DisplayStyle.Flex)
+                    ToggleSessionMenu();
+                else
+                    QuitPlayer();
+            }
             if (_world != null && _position != null) _position.text = _world.FormatPosition();
         }
 
@@ -295,6 +307,8 @@ namespace LinhGioi.UI
             _toast = NewToast("Spirit Gate shell ready.");
             _worldHud.Add(_toast);
 
+            BuildSessionMenuPanel();
+
             _dialoguePanel = NewPreviewPanel();
             _dialoguePanel.style.marginTop = 10;
             _dialogueSpeaker = new Label("Gate Keeper");
@@ -317,6 +331,26 @@ namespace LinhGioi.UI
             _backButton = NewSecondaryButton("Back to Character Hall", BackToLobby);
             _backButton.tooltip = "Back to Lobby / return to character management without leaving the player";
             _worldHud.Add(NewButtonRow(_savePositionButton, _backButton, NewQuietButton("Quit", QuitPlayer)));
+        }
+
+        private void BuildSessionMenuPanel()
+        {
+            _sessionMenuPanel = NewPreviewPanel();
+            _sessionMenuPanel.name = "LGO Session Menu Overlay";
+            _sessionMenuPanel.style.marginTop = 10;
+            _sessionMenuPanel.style.backgroundColor = RuntimeArtCatalog.Background;
+            _sessionMenuPanel.style.borderLeftColor = RuntimeArtCatalog.Gold;
+            _sessionMenuPanel.style.borderLeftWidth = 2;
+            _sessionMenuPanel.Add(NewSectionTitle("Session Menu"));
+            _sessionMenuStatus = NewMutedLabel("Paused in safe training yard.");
+            _sessionMenuPanel.Add(_sessionMenuStatus);
+            _resumeButton = NewPrimaryButton("Resume", HideSessionMenu);
+            _sessionSaveButton = NewSecondaryButton("Save Position", () => RunAsync(SavePositionAsync));
+            _sessionBackButton = NewSecondaryButton("Back to Character Hall", BackToLobby);
+            _sessionQuitButton = NewQuietButton("Quit", QuitPlayer);
+            _sessionMenuPanel.Add(NewButtonRow(_resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton));
+            _worldHud.Add(_sessionMenuPanel);
+            SetSessionMenuVisible(false);
         }
 
         private async Task LoginAsync()
@@ -400,6 +434,7 @@ namespace LinhGioi.UI
 
         private void BackToLobby()
         {
+            SetSessionMenuVisible(false);
             ShowLobbyMode();
             SetBusy(false, "Returned to Character Hall.");
             SetToast("Returned to Character Hall.", RuntimeArtCatalog.Muted);
@@ -478,6 +513,7 @@ namespace LinhGioi.UI
             _authPanel.style.display = DisplayStyle.None;
             _lobbyPanel.style.display = DisplayStyle.None;
             _worldHud.style.display = DisplayStyle.Flex;
+            SetSessionMenuVisible(false);
             _savePositionButton.SetEnabled(true);
             _backButton.SetEnabled(true);
         }
@@ -501,6 +537,8 @@ namespace LinhGioi.UI
                 _enterWorldButton.SetEnabled(!busy && _selectedCharacter != null);
                 _savePositionButton.SetEnabled(!busy);
                 _backButton.SetEnabled(!busy);
+                if (_sessionSaveButton != null) _sessionSaveButton.SetEnabled(!busy);
+                if (_sessionBackButton != null) _sessionBackButton.SetEnabled(!busy);
             }
         }
 
@@ -651,6 +689,26 @@ namespace LinhGioi.UI
         private static void QuitPlayer()
         {
             Application.Quit();
+        }
+
+        private void ToggleSessionMenu()
+        {
+            var visible = _sessionMenuPanel != null && _sessionMenuPanel.style.display == DisplayStyle.Flex;
+            SetSessionMenuVisible(!visible);
+        }
+
+        private void HideSessionMenu()
+        {
+            SetSessionMenuVisible(false);
+            SetToast("Session resumed.", RuntimeArtCatalog.Muted);
+        }
+
+        private void SetSessionMenuVisible(bool visible)
+        {
+            if (_sessionMenuPanel == null) return;
+            _sessionMenuPanel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_sessionMenuStatus != null)
+                _sessionMenuStatus.text = visible ? "Paused in safe training yard. Resume, save, return, or quit." : "Session active.";
         }
 
         private void ContinueDialogue()

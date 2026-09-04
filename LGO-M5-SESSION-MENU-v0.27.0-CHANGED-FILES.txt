@@ -1,0 +1,11 @@
+client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+tools/validate_m5_session_menu.py
+tools/lgo_playable_closure_check.sh
+docs/tasks/M5-SESSION-MENU-v0.27.0.md
+HANDOFF-LG-M5-SESSION-MENU-v0.27.0.md
+M5-SESSION-MENU-FINAL-REPORT-v0.27.0.md
+LGO-M5-SESSION-MENU-v0.27.0-CHANGED-FILES.txt
+LGO-M5-SESSION-MENU-v0.27.0-DELETIONS.txt
+LGO-M5-SESSION-MENU-v0.27.0-ARTIFACTS.sha256
+linh-gioi-m5-session-menu-v0.27.0-full-source.zip.sha256
+linh-gioi-m5-session-menu-delta-v0.27.0.zip.sha256
