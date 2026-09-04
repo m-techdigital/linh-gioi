@@ -167,6 +167,9 @@ source_only() {
   if [[ -f tools/validate_m6_unity_java_combat_smoke.py ]]; then
     run_phase m6_unity_java_combat_smoke python3.12 tools/validate_m6_unity_java_combat_smoke.py
   fi
+  if [[ -f tools/validate_m6_server_authoritative_combat_closure.py ]]; then
+    run_phase m6_server_authoritative_combat_closure python3.12 tools/validate_m6_server_authoritative_combat_closure.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__
     run_phase code_governance python3.12 tools/validate_code_governance.py
@@ -206,6 +209,7 @@ source_only() {
     tools/validate_m6_java_server_combat_validation.py \
     tools/validate_m6_unity_combat_intent_client.py \
     tools/validate_m6_unity_java_combat_smoke.py \
+    tools/validate_m6_server_authoritative_combat_closure.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
@@ -287,6 +291,22 @@ runtime_mode() {
       log "LGO_PLAYABLE_CLOSURE_FIX_REQUIRED"
       echo "ERROR: M6 minimal local combat runtime marker not observed" >&2
       exit 47
+    fi
+  fi
+  if [[ -f tools/run_m6_unity_combat_intent_client_once.sh ]]; then
+    run_phase m6_unity_combat_intent_client_runtime ./tools/run_m6_unity_combat_intent_client_once.sh --unity-player "$macos_player"
+    if ! grep -R "M6_UNITY_COMBAT_INTENT_CLIENT_RUNTIME_SMOKE_PASS" "$ROOT/build" >/dev/null; then
+      log "LGO_PLAYABLE_CLOSURE_FIX_REQUIRED"
+      echo "ERROR: M6 Unity combat intent client runtime marker not observed" >&2
+      exit 48
+    fi
+  fi
+  if [[ -f tools/run_m6_unity_java_combat_smoke.sh ]]; then
+    run_phase m6_unity_java_combat_runtime ./tools/run_m6_unity_java_combat_smoke.sh --unity-player "$macos_player" --port 17843
+    if ! grep -R "M6_UNITY_JAVA_COMBAT_SMOKE_PASS" "$ROOT/build" >/dev/null; then
+      log "LGO_PLAYABLE_CLOSURE_FIX_REQUIRED"
+      echo "ERROR: M6 Unity Java combat smoke marker not observed" >&2
+      exit 49
     fi
   fi
   log "LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS"
@@ -375,6 +395,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_m6_unity_java_combat_smoke.py ]]; then
     run_phase m6_unity_java_combat_smoke python3.12 tools/validate_m6_unity_java_combat_smoke.py
+  fi
+  if [[ -f tools/validate_m6_server_authoritative_combat_closure.py ]]; then
+    run_phase m6_server_authoritative_combat_closure python3.12 tools/validate_m6_server_authoritative_combat_closure.py
   fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance git clean -f tools/__pycache__

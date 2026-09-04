@@ -1,0 +1,19 @@
+# M6 Server-Authoritative Combat Closure Final Report v0.44.0
+
+Final decision: M6_SERVER_AUTHORITATIVE_COMBAT_FOUNDATION_RUNTIME_CLOSED_LOCAL_v0.44.0.
+
+Runtime markers observed locally:
+
+- M6_UNITY_COMBAT_INTENT_CLIENT_RUNTIME_SMOKE_PASS
+- M6_UNITY_JAVA_COMBAT_SMOKE_PASS
+- LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS
+
+Stage decisions:
+
+- v0.40.0: M6_COMBAT_PROTOCOL_GAMEDATA_CONTRACT_ACCEPTED_v0.40.0
+- v0.41.0: M6_JAVA_SERVER_COMBAT_VALIDATION_SOURCE_READY_v0.41.0
+- v0.42.0: M6_UNITY_COMBAT_INTENT_CLIENT_RUNTIME_CLOSED_LOCAL_v0.42.0
+- v0.43.0: M6_UNITY_JAVA_COMBAT_SMOKE_RUNTIME_CLOSED_LOCAL_v0.43.0
+- v0.44.0: M6_SERVER_AUTHORITATIVE_COMBAT_FOUNDATION_RUNTIME_CLOSED_LOCAL_v0.44.0
+
+No full MMO runtime closure is claimed. No production auth, DB persistence, inventory, loot, economy, guild, chat, market, party, live ops, admin, or production art is implemented.

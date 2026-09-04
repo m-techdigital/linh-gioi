@@ -1,0 +1,2 @@
+d4115c404b623a049d39cc5cbb22cd28db1f7f2be3250333149290622aed5532  linh-gioi-m6-server-authoritative-combat-foundation-v0.44.0-full-source.zip
+5bfe2f3865d041b93537577c3a74eb58b081f007b1c9de124c76b75d21cd7af6  linh-gioi-m6-server-authoritative-combat-foundation-v0.44.0-delta.zip
