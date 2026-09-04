@@ -23,6 +23,8 @@ This pack records owner-provided visual direction for Linh Gioi Online. The imag
 - Monster sheet feeds v0.21 Shadow Slime readability and non-combat warning states.
 - UI component sheet feeds v0.22 runtime UI frame, button, list, and status chip skinning.
 - Window and popup sheet feeds v0.22 dialog, confirm, toast, and popup patterns.
+- UI component skin sheet feeds v0.22 runtime UI component skinning.
+- window/popup sheet feeds v0.22 runtime toast and window frame patterns.
 - Item, skill, and VFX sheet feeds v0.23 non-damaging local skill and VFX feedback placeholders.
 - Environment prop sheet feeds v0.19-v0.23 Spirit Gate, Training Stone, lantern, ground, safe circle, and shrine prop placeholders.
 

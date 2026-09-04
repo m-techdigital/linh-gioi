@@ -1,0 +1,10 @@
+client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+docs/art/LGO-ART-DIRECTION-PACK-v0.20.0.md
+tools/validate_m5_ui_skinning.py
+tools/lgo_playable_closure_check.sh
+docs/tasks/M5-UI-COMPONENT-SKINNING-v0.22.0.md
+HANDOFF-LG-M5-UI-COMPONENT-SKINNING-v0.22.0.md
+M5-UI-COMPONENT-SKINNING-FINAL-REPORT-v0.22.0.md
+LGO-M5-UI-COMPONENT-SKINNING-v0.22.0-CHANGED-FILES.txt
+LGO-M5-UI-COMPONENT-SKINNING-v0.22.0-DELETIONS.txt
+LGO-M5-UI-COMPONENT-SKINNING-v0.22.0-ARTIFACTS.sha256

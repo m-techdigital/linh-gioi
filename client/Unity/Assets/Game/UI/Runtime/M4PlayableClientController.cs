@@ -38,9 +38,11 @@ namespace LinhGioi.UI
         private Label _worldDirection;
         private Label _worldLandmarks;
         private Label _worldPoseState;
+        private Label _skinSource;
         private Label _worldObjective;
         private Label _interactionHint;
         private Label _position;
+        private Label _toast;
         private Button _loginButton;
         private Button _createButton;
         private Button _enterWorldButton;
@@ -92,6 +94,7 @@ namespace LinhGioi.UI
             _root.style.paddingTop = 16;
             _root.style.paddingBottom = 16;
             _root.style.alignItems = Align.Center;
+            _root.style.unityBackgroundImageTintColor = RuntimeArtCatalog.Background;
 
             BuildHeader();
 
@@ -141,6 +144,7 @@ namespace LinhGioi.UI
             _status.style.color = RuntimeArtCatalog.Muted;
             _status.style.unityTextAlign = TextAnchor.MiddleRight;
             _status.style.marginTop = 6;
+            ApplyStatusChip(_status, RuntimeArtCatalog.Muted);
 
             var right = new VisualElement();
             right.style.flexDirection = FlexDirection.Row;
@@ -158,6 +162,7 @@ namespace LinhGioi.UI
             _authPanel = NewPanel(520);
             _mainShell.Add(_authPanel);
             _authPanel.Add(NewSectionTitle("Auth / Gate Entry"));
+            _authPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
             _authPanel.Add(NewMutedLabel("API status: " + _config.apiBaseUrl));
             _devKey = NewTextField("Dev key", DefaultDevKey);
             _authPanel.Add(_devKey);
@@ -173,6 +178,7 @@ namespace LinhGioi.UI
             _lobbyPanel = NewPanel(840);
             _mainShell.Add(_lobbyPanel);
             _lobbyPanel.Add(NewSectionTitle("Character Hall"));
+            _lobbyPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
 
             var content = new VisualElement();
             content.style.flexDirection = FlexDirection.Row;
@@ -218,6 +224,7 @@ namespace LinhGioi.UI
             _worldHud = NewPanel(760);
             _mainShell.Add(_worldHud);
             _worldHud.Add(NewSectionTitle("World HUD / Safe Training Yard"));
+            _worldHud.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
 
             var topStrip = new VisualElement();
             topStrip.style.flexDirection = FlexDirection.Row;
@@ -252,6 +259,9 @@ namespace LinhGioi.UI
             _worldPoseState = NewStatusLabel("Pose: player idle / Gate Keeper idle / Shadow Slime idle.", RuntimeArtCatalog.Muted);
             _worldHud.Add(_worldPoseState);
 
+            _skinSource = NewStatusLabel("UI skin source: v0.20 component sheet / window popup sheet.", RuntimeArtCatalog.Spirit);
+            _worldHud.Add(_skinSource);
+
             _worldObjective = NewStatusLabel("Objective: talk to the Gate Keeper.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldObjective);
 
@@ -271,6 +281,9 @@ namespace LinhGioi.UI
             _worldLandmarks.style.marginTop = 8;
             _worldHud.Add(_worldLandmarks);
 
+            _toast = NewToast("Spirit Gate shell ready.");
+            _worldHud.Add(_toast);
+
             _savePositionButton = NewPrimaryButton("Save Position", () => RunAsync(SavePositionAsync));
             _savePositionButton.tooltip = "Persist this character position to the local dev API";
             _backButton = NewSecondaryButton("Back to Character Hall", BackToLobby);
@@ -287,6 +300,7 @@ namespace LinhGioi.UI
             await RefreshCharactersAsync();
             ShowLobbyMode();
             SetBusy(false, "Lobby ready");
+            SetToast("Account linked. Character Hall opened.", RuntimeArtCatalog.Spirit);
         }
 
         private async Task RefreshCharactersAsync()
@@ -317,6 +331,7 @@ namespace LinhGioi.UI
                 _selectedCharacter = created;
                 await RefreshCharactersAsync();
                 SetBusy(false, "Character ready");
+                SetToast("Cultivator record prepared.", RuntimeArtCatalog.Gold);
             }
             catch (Exception exception)
             {
@@ -341,6 +356,7 @@ namespace LinhGioi.UI
             UpdateSelectedPreview(loaded);
             ShowWorldMode();
             SetBusy(false, "Training yard ready: follow the highlighted guidance.");
+            SetToast("Spirit Gate opened into the safe yard.", RuntimeArtCatalog.Spirit);
         }
 
         private async Task SavePositionAsync()
@@ -351,12 +367,14 @@ namespace LinhGioi.UI
             _selectedCharacter = await _client.SaveCharacterPositionAsync(_selectedCharacter.characterId, save.x, save.y, save.z, save.yawDegrees, _shutdown.Token);
             UpdateSelectedPreview(_selectedCharacter);
             SetBusy(false, "Position saved near " + _world.CurrentAreaLabel + ".");
+            SetToast("Position seal recorded near " + _world.CurrentAreaLabel + ".", RuntimeArtCatalog.Gold);
         }
 
         private void BackToLobby()
         {
             ShowLobbyMode();
             SetBusy(false, "Returned to Character Hall.");
+            SetToast("Returned to Character Hall.", RuntimeArtCatalog.Muted);
         }
 
         private void SelectCharacter(CharacterResponse character)
@@ -365,6 +383,7 @@ namespace LinhGioi.UI
             UpdateSelectedPreview(character);
             _enterWorldButton.SetEnabled(character != null);
             _status.text = character == null ? "Create or select a cultivator" : "Selected: " + character.name;
+            SetToast(character == null ? "Awaiting cultivator selection." : "Selected " + character.name + ".", RuntimeArtCatalog.Muted);
         }
 
         private void UpdateSelectedPreview(CharacterResponse character)
@@ -380,6 +399,7 @@ namespace LinhGioi.UI
                 if (_worldDirection != null) _worldDirection.text = "Direction: enter the world to reveal yard landmarks.";
                 if (_worldLandmarks != null) _worldLandmarks.text = "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Shadow Slime east.";
                 if (_worldPoseState != null) _worldPoseState.text = "Pose: player idle / Gate Keeper idle / Shadow Slime idle.";
+                if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
                 if (_worldObjective != null) _worldObjective.text = "Objective: talk to the Gate Keeper.";
                 if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper.";
                 _position.text = "x=0.00 y=0.00 z=0.00 yaw=0.0";
@@ -400,8 +420,10 @@ namespace LinhGioi.UI
             if (_worldDirection != null) _worldDirection.text = "Direction: " + _world.ObjectiveDirectionHint;
             if (_worldLandmarks != null) _worldLandmarks.text = _world.WorldLandmarkSummary;
             if (_worldPoseState != null) _worldPoseState.text = "Pose: player " + _world.PlayerPoseStateName + " / Gate Keeper " + _world.GateKeeperPoseStateName + " / Shadow Slime " + _world.ShadowSlimeStateName + ".";
+            if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
+            SetToast(_world.InteractionText, RuntimeArtCatalog.Spirit);
         }
 
         private void ShowAuthMode()
@@ -440,6 +462,7 @@ namespace LinhGioi.UI
         private void SetBusy(bool busy, string message)
         {
             _status.text = message;
+            ApplyStatusChip(_status, busy ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Muted);
             _loginButton.SetEnabled(!busy);
             if (_accountState != null)
             {
@@ -487,8 +510,12 @@ namespace LinhGioi.UI
             panel.style.borderBottomRightRadius = 8;
             panel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
             panel.style.borderLeftWidth = 2;
-            panel.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
+            panel.style.borderTopColor = RuntimeArtCatalog.Gold;
             panel.style.borderTopWidth = 1;
+            panel.style.borderRightColor = RuntimeArtCatalog.SurfaceRaised;
+            panel.style.borderRightWidth = 1;
+            panel.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
+            panel.style.borderBottomWidth = 1;
             return panel;
         }
 
@@ -506,6 +533,10 @@ namespace LinhGioi.UI
             preview.style.borderTopRightRadius = 8;
             preview.style.borderBottomLeftRadius = 8;
             preview.style.borderBottomRightRadius = 8;
+            preview.style.borderLeftColor = RuntimeArtCatalog.Gold;
+            preview.style.borderLeftWidth = 2;
+            preview.style.borderTopColor = RuntimeArtCatalog.Spirit;
+            preview.style.borderTopWidth = 1;
             var sigil = new Label("SPIRIT GATE");
             sigil.style.color = RuntimeArtCatalog.Spirit;
             sigil.style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -542,6 +573,12 @@ namespace LinhGioi.UI
             label.style.paddingTop = 6;
             label.style.paddingBottom = 6;
             label.style.backgroundColor = RuntimeArtCatalog.Background;
+            label.style.borderLeftColor = color;
+            label.style.borderLeftWidth = 2;
+            label.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
+            label.style.borderTopWidth = 1;
+            label.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
+            label.style.borderBottomWidth = 1;
             return label;
         }
 
@@ -596,6 +633,14 @@ namespace LinhGioi.UI
             button.style.borderTopRightRadius = 8;
             button.style.borderBottomLeftRadius = 8;
             button.style.borderBottomRightRadius = 8;
+            button.style.borderTopColor = RuntimeArtCatalog.Gold;
+            button.style.borderTopWidth = 1;
+            button.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            button.style.borderLeftWidth = 1;
+            button.style.borderRightColor = RuntimeArtCatalog.SurfaceRaised;
+            button.style.borderRightWidth = 1;
+            button.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
+            button.style.borderBottomWidth = 1;
             return button;
         }
 
@@ -604,6 +649,7 @@ namespace LinhGioi.UI
             var button = NewSecondaryButton(name + "\n" + classId, action);
             button.style.minWidth = 210;
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
+            button.tooltip = "Select cultivator";
             return button;
         }
 
@@ -631,6 +677,10 @@ namespace LinhGioi.UI
             badge.style.borderTopRightRadius = 8;
             badge.style.borderBottomLeftRadius = 8;
             badge.style.borderBottomRightRadius = 8;
+            badge.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            badge.style.borderLeftWidth = 1;
+            badge.style.borderTopColor = RuntimeArtCatalog.Gold;
+            badge.style.borderTopWidth = 1;
             var titleLabel = new Label(title);
             titleLabel.style.color = RuntimeArtCatalog.Gold;
             titleLabel.style.fontSize = 11;
@@ -640,6 +690,58 @@ namespace LinhGioi.UI
             badge.Add(titleLabel);
             badge.Add(valueLabel);
             return badge;
+        }
+
+        private static VisualElement NewOrnamentRule(Color color)
+        {
+            var rule = new VisualElement();
+            rule.style.height = 2;
+            rule.style.marginBottom = 10;
+            rule.style.backgroundColor = color;
+            rule.style.opacity = 0.8f;
+            return rule;
+        }
+
+        private static Label NewToast(string text)
+        {
+            var label = new Label(text);
+            label.style.marginTop = 10;
+            label.style.paddingLeft = 12;
+            label.style.paddingRight = 12;
+            label.style.paddingTop = 8;
+            label.style.paddingBottom = 8;
+            label.style.whiteSpace = WhiteSpace.Normal;
+            label.style.color = RuntimeArtCatalog.Text;
+            label.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+            label.style.borderTopLeftRadius = 8;
+            label.style.borderTopRightRadius = 8;
+            label.style.borderBottomLeftRadius = 8;
+            label.style.borderBottomRightRadius = 8;
+            label.style.borderLeftColor = RuntimeArtCatalog.Gold;
+            label.style.borderLeftWidth = 2;
+            return label;
+        }
+
+        private static void ApplyStatusChip(Label label, Color accent)
+        {
+            label.style.paddingLeft = 10;
+            label.style.paddingRight = 10;
+            label.style.paddingTop = 6;
+            label.style.paddingBottom = 6;
+            label.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+            label.style.borderTopLeftRadius = 8;
+            label.style.borderTopRightRadius = 8;
+            label.style.borderBottomLeftRadius = 8;
+            label.style.borderBottomRightRadius = 8;
+            label.style.borderLeftColor = accent;
+            label.style.borderLeftWidth = 2;
+        }
+
+        private void SetToast(string text, Color accent)
+        {
+            if (_toast == null) return;
+            _toast.text = text;
+            _toast.style.borderLeftColor = accent;
         }
 
         private static string Required(string value, string fallback)
