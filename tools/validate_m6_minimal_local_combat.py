@@ -53,7 +53,7 @@ def main() -> int:
     require('docs/tasks/M6-MINIMAL-LOCAL-COMBAT-FOUNDATION-v0.34.0.md', 'M6_MINIMAL_LOCAL_COMBAT_FOUNDATION_SOURCE_READY_v0.34.0', 'Chỉ là mô phỏng cục bộ', 'no loot/reward', 'Code Quality / Duplication / Ownership Audit')
     require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'TryLocalCombatPrototype', 'SetSmokePositionNearTargetDummy', 'Mục tiêu luyện tập', 'Trúng mục tiêu', 'Chỉ là mô phỏng cục bộ', 'TargetDummyHitFlash')
     require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'Tấn công thử', 'Chưa phải chiến đấu thật', 'TriggerLocalCombat')
-    require_any('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'local combat practice panel title', 'Luyện mục tiêu cục bộ', 'Bia luyện cục bộ')
+    require_any('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'local combat practice panel title', 'Luyện mục tiêu cục bộ', 'Bia luyện cục bộ', 'Bia luyện')
     require('client/Unity/Assets/Game/World/Runtime/M6MinimalLocalCombatSmokeRunner.cs', '--lgo-m6-minimal-local-combat-smoke', 'M6_MINIMAL_LOCAL_COMBAT_RUNTIME_SMOKE_PASS')
     require('client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs', 'M6MinimalLocalCombatSmokeRunner.ShouldRun')
     require('tools/lgo_playable_closure_check.sh', 'validate_m6_minimal_local_combat.py', 'run_m6_minimal_local_combat_once.sh', 'M6_MINIMAL_LOCAL_COMBAT_RUNTIME_SMOKE_PASS')

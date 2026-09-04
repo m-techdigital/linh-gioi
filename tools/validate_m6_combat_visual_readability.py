@@ -125,6 +125,7 @@ def main() -> int:
         'local combat practice panel title',
         'Luyện mục tiêu cục bộ',
         'Bia luyện cục bộ',
+        'Bia luyện',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

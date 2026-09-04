@@ -54,7 +54,7 @@ def main() -> int:
     require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'Sân luyện an toàn / Mục tiêu luyện tập', 'TargetDummyHitFlash', 'Chỉ là mô phỏng cục bộ')
     require_any('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'Lại gần vòng sáng', 'Ngoài tầm: lại gần vòng chọn màu vàng')
     require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'Tấn công thử')
-    require_any('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'Luyện mục tiêu cục bộ', 'Bia luyện cục bộ')
+    require_any('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'Luyện mục tiêu cục bộ', 'Bia luyện cục bộ', 'Bia luyện')
     require_any('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'Kích hoạt phản hồi đánh thử cục bộ', 'Gửi ý định Chém Gió vào bia luyện tập')
     require('tools/lgo_playable_closure_check.sh', 'validate_m6_combat_ux_feedback.py', 'm6_combat_ux_feedback')
     require('M6-COMBAT-UX-FEEDBACK-POLISH-FINAL-REPORT-v0.35.0.md', 'M6_COMBAT_UX_FEEDBACK_POLISH_SOURCE_READY_v0.35.0')

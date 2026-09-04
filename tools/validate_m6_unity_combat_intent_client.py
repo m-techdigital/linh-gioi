@@ -78,7 +78,8 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "Gửi ý định chiến đấu",
+        "Tấn công thử",
+        "LGO World Touch Primary Combat Button",
         "MarkCombatIntentPending",
         "CombatAuthorityText",
     )

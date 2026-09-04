@@ -60,7 +60,7 @@ def main() -> int:
         'Đã quay lại Điện Nhân Vật.',
         'Phiên hiện tại bị chặn khi ',
         'Esc mở menu phiên trong thế giới; Thoát đóng phiên hiện tại.',
-        'Vòng hướng dẫn: ',
+        'Tiến trình: ',
         'Khu vực: ',
         'Về điện nhân vật',
     )

@@ -74,7 +74,7 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.',
+        'Mục tiêu: gặp Người Giữ Cổng.',
         'Di chuyển tới gần Người Giữ Cổng.',
         'Lưu vị trí',
         'Về điện nhân vật',

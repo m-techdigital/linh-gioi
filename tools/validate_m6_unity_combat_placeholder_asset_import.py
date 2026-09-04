@@ -48,7 +48,8 @@ REQUIRED_MARKERS = {
         "ApplyCombatPanelSkin",
         "ApplyCombatButtonSkin",
         "NewCombatCooldownIcon",
-        "Gửi ý định chiến đấu",
+        "Tấn công thử",
+        "LGO World Touch Primary Combat Button",
     ],
     "docs/tasks/M6-UNITY-COMBAT-PLACEHOLDER-ASSET-IMPORT-v0.46.0.md": [
         "M6_UNITY_COMBAT_PLACEHOLDER_ASSET_IMPORT_PASS_v0.46.0",

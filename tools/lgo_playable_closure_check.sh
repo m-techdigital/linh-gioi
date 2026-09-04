@@ -274,6 +274,9 @@ source_only() {
   if [[ -f tools/validate_lgo_device_profile_ui_budgets.py ]]; then
     run_phase device_profile_ui_budgets python3.12 tools/validate_lgo_device_profile_ui_budgets.py
   fi
+  if [[ -f tools/validate_lgo_world_hud_density_mobile_touch.py ]]; then
+    run_phase world_hud_density_mobile_touch python3.12 tools/validate_lgo_world_hud_density_mobile_touch.py
+  fi
   if [[ -f tools/validate_lgo_telemetry_schema_plan.py ]]; then
     run_phase telemetry_schema_plan python3.12 tools/validate_lgo_telemetry_schema_plan.py
   fi
@@ -352,6 +355,7 @@ source_only() {
     tools/validate_lgo_runtime_asset_size_inventory.py \
     tools/validate_lgo_runtime_asset_import_profiles.py \
     tools/validate_lgo_device_profile_ui_budgets.py \
+    tools/validate_lgo_world_hud_density_mobile_touch.py \
     tools/validate_lgo_telemetry_schema_plan.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \
@@ -642,6 +646,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_lgo_runtime_asset_import_profiles.py ]]; then
     run_phase runtime_asset_import_profiles python3.12 tools/validate_lgo_runtime_asset_import_profiles.py
+  fi
+  if [[ -f tools/validate_lgo_world_hud_density_mobile_touch.py ]]; then
+    run_phase world_hud_density_mobile_touch python3.12 tools/validate_lgo_world_hud_density_mobile_touch.py
   fi
   if [[ -f tools/validate_lgo_telemetry_schema_plan.py ]]; then
     run_phase telemetry_schema_plan python3.12 tools/validate_lgo_telemetry_schema_plan.py
