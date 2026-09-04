@@ -104,6 +104,9 @@ source_only() {
   if [[ -f tools/validate_m5_vfx_feedback_placeholder.py ]]; then
     run_phase m5_vfx_feedback_placeholder python3.12 tools/validate_m5_vfx_feedback_placeholder.py
   fi
+  if [[ -f tools/validate_m5_lightweight_dialogue.py ]]; then
+    run_phase m5_lightweight_dialogue python3.12 tools/validate_m5_lightweight_dialogue.py
+  fi
   run_phase python_compile python3.12 -m py_compile \
     tools/validate_project_state.py \
     tools/validate_m4_playable_source.py \
@@ -119,10 +122,12 @@ source_only() {
     tools/validate_m5_pose_animation_placeholder.py \
     tools/validate_m5_ui_skinning.py \
     tools/validate_m5_vfx_feedback_placeholder.py \
+    tools/validate_m5_lightweight_dialogue.py \
     tools/m4_playable_vertical_slice_runtime.py \
     tools/m4_visual_foundation_runtime.py \
     tools/m5_first_playable_loop_runtime.py \
-    tools/m5_guided_training_loop_runtime.py
+    tools/m5_guided_training_loop_runtime.py \
+    tools/m5_lightweight_dialogue_runtime.py
   log "LGO_PLAYABLE_CLOSURE_SOURCE_GATES_PASS"
   write_json "PASS" "source gates pass"
 }
@@ -184,6 +189,14 @@ runtime_mode() {
     echo "ERROR: M5 guided training loop runtime marker not observed" >&2
     exit 45
   fi
+  if [[ -f tools/run_m5_lightweight_dialogue_once.sh ]]; then
+    run_phase m5_lightweight_dialogue_runtime ./tools/run_m5_lightweight_dialogue_once.sh --unity-player "$macos_player"
+    if ! grep -R "M5_LIGHTWEIGHT_NPC_DIALOGUE_RUNTIME_SMOKE_PASS" "$ROOT/build" >/dev/null; then
+      log "LGO_PLAYABLE_CLOSURE_FIX_REQUIRED"
+      echo "ERROR: M5 lightweight NPC dialogue runtime marker not observed" >&2
+      exit 46
+    fi
+  fi
   log "LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS"
   write_json "PASS" "runtime gates pass"
 }
@@ -207,6 +220,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_m5_vfx_feedback_placeholder.py ]]; then
     run_phase m5_vfx_feedback_placeholder python3.12 tools/validate_m5_vfx_feedback_placeholder.py
+  fi
+  if [[ -f tools/validate_m5_lightweight_dialogue.py ]]; then
+    run_phase m5_lightweight_dialogue python3.12 tools/validate_m5_lightweight_dialogue.py
   fi
   run_phase package_hygiene python3.12 tools/validate_package_hygiene.py
   log "LGO_PLAYABLE_CLOSURE_PACKAGE_READY"

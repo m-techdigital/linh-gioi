@@ -1,0 +1,15 @@
+client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs
+client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs
+client/Unity/Assets/Game/World/Runtime/M5GuidedTrainingLoopSmokeRunner.cs
+client/Unity/Assets/Game/World/Runtime/M5LightweightDialogueSmokeRunner.cs
+client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs
+tools/validate_m5_lightweight_dialogue.py
+tools/m5_lightweight_dialogue_runtime.py
+tools/run_m5_lightweight_dialogue_once.sh
+tools/lgo_playable_closure_check.sh
+docs/tasks/M5-LIGHTWEIGHT-NPC-DIALOGUE-v0.24.0.md
+HANDOFF-LG-M5-LIGHTWEIGHT-NPC-DIALOGUE-v0.24.0.md
+M5-LIGHTWEIGHT-NPC-DIALOGUE-FINAL-REPORT-v0.24.0.md
+LGO-M5-LIGHTWEIGHT-NPC-DIALOGUE-v0.24.0-CHANGED-FILES.txt
+LGO-M5-LIGHTWEIGHT-NPC-DIALOGUE-v0.24.0-DELETIONS.txt
+LGO-M5-LIGHTWEIGHT-NPC-DIALOGUE-v0.24.0-ARTIFACTS.sha256

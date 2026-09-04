@@ -70,6 +70,8 @@ namespace LinhGioi.World
                     Require(result.gateKeeperPrompt.Contains("Gate Keeper"), "Gate Keeper prompt did not become available");
                     result.gateKeeperInteractionTriggered = world.TriggerInteractionForSmoke();
                     Require(result.gateKeeperInteractionTriggered, "Gate Keeper interaction did not trigger");
+                    while (world.DialogueActive)
+                        world.ContinueDialogue();
                     result.afterGateKeeperObjective = world.ObjectiveText;
                     result.afterGateKeeperFeedback = world.InteractionText;
                     result.afterGateKeeperVfxFeedbackState = world.VfxFeedbackStateName;

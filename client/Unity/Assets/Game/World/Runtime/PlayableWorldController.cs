@@ -11,6 +11,12 @@ namespace LinhGioi.World
         private const float MoveSpeed = 4f;
         private const float RotateSpeed = 120f;
         private const float InteractionRange = 1.45f;
+        private static readonly string[] GateKeeperDialogueLines =
+        {
+            "Gate Keeper: Welcome to the Spirit Gate. Keep your breath steady.",
+            "Gate Keeper: Follow the cyan pulse north; the Training Stone will answer.",
+            "Gate Keeper: This yard is safe. The eastern shadow is only a warning marker."
+        };
         private static readonly Vector3 GateKeeperPosition = new Vector3(-3f, 0.75f, 3f);
         private static readonly Vector3 TrainingStonePosition = new Vector3(0f, 0.08f, 4.5f);
         private static readonly Vector3 ShadowSlimePosition = new Vector3(3f, 0.4f, 3f);
@@ -34,6 +40,7 @@ namespace LinhGioi.World
         private PlaceholderVfxFeedbackState _vfxFeedbackState = PlaceholderVfxFeedbackState.Quiet;
         private float _posePulseUntil;
         private float _vfxPreviewUntil;
+        private int _dialogueLineIndex;
 
         public event Action PositionChanged;
         public event Action InteractionStateChanged;
@@ -50,6 +57,12 @@ namespace LinhGioi.World
         public string GateKeeperPoseStateName => _gateKeeperState.ToString();
         public string ShadowSlimeStateName => _shadowSlimeState.ToString();
         public string VfxFeedbackStateName => _vfxFeedbackState.ToString();
+        public bool DialogueActive { get; private set; }
+        public bool DialogueCompleted { get; private set; }
+        public string DialogueSpeaker => "Gate Keeper";
+        public string DialogueLine => DialogueActive ? GateKeeperDialogueLines[Mathf.Clamp(_dialogueLineIndex, 0, GateKeeperDialogueLines.Length - 1)] : string.Empty;
+        public string DialogueProgress => DialogueActive ? (_dialogueLineIndex + 1) + "/" + GateKeeperDialogueLines.Length : "0/" + GateKeeperDialogueLines.Length;
+        public bool HasNextDialogueLine => DialogueActive && _dialogueLineIndex < GateKeeperDialogueLines.Length - 1;
         public bool InteractionAcknowledged { get; private set; }
 
         public void Enter(CharacterResponse character)
@@ -61,6 +74,9 @@ namespace LinhGioi.World
             _marker.position = character.Position;
             _marker.rotation = Quaternion.Euler(0f, character.yawDegrees, 0f);
             InteractionAcknowledged = false;
+            DialogueActive = false;
+            DialogueCompleted = false;
+            _dialogueLineIndex = 0;
             _guidedStep = GuidedTrainingStep.FindGateKeeper;
             SetPlayerPose(PlaceholderPoseState.Idle);
             SetGateKeeperState(PlaceholderNpcState.Idle);
@@ -244,6 +260,8 @@ namespace LinhGioi.World
             var nearest = _guidedStep == GuidedTrainingStep.FindGateKeeper ? keeper : training;
             if (Distance2D(position, nearest.position) <= InteractionRange)
                 SetNearest(nearest, nearest.prompt);
+            else if (_guidedStep == GuidedTrainingStep.FindGateKeeper && Distance2D(position, training.position) <= InteractionRange)
+                SetNearest(training, training.prompt);
             else
                 SetNearest(null, InteractionAcknowledged ? "Loop complete: save position or return to lobby." : NextMovementHint());
         }
@@ -253,25 +271,20 @@ namespace LinhGioi.World
             if (_nearestInteractable == null) return false;
             if (_guidedStep == GuidedTrainingStep.FindGateKeeper && _nearestInteractable.id == "Gate Keeper")
             {
-                _guidedStep = GuidedTrainingStep.FindTrainingStone;
                 SetPlayerPose(PlaceholderPoseState.Interact);
                 SetGateKeeperState(PlaceholderNpcState.TalkGuide);
                 SetVfxFeedback(PlaceholderVfxFeedbackState.WindSlashPreview, 1.1f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
-                _objectiveText = "Objective: stabilize the Training Stone.";
-                _interactionText = "Gate Keeper: your path is open. Follow the cyan spirit pulse.";
+                OpenGateKeeperDialogue();
             }
             else if (_guidedStep == GuidedTrainingStep.FindTrainingStone && _nearestInteractable.id == "Training Stone")
             {
-                _guidedStep = GuidedTrainingStep.Complete;
-                InteractionAcknowledged = true;
-                SetPlayerPose(PlaceholderPoseState.SpiritChannel);
-                SetGateKeeperState(PlaceholderNpcState.Idle);
-                SetShadowSlimeState(PlaceholderSlimeState.DissolveQuiet);
-                SetVfxFeedback(PlaceholderVfxFeedbackState.SpiritPulse, 1.5f);
-                TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
-                _objectiveText = "Objective complete: spirit pulse stabilized.";
-                _interactionText = "Spirit pulse stabilized. Training acknowledged.";
+                CompleteTrainingStoneInteraction();
+            }
+            else if (_guidedStep == GuidedTrainingStep.FindGateKeeper && _nearestInteractable.id == "Training Stone")
+            {
+                DialogueCompleted = true;
+                CompleteTrainingStoneInteraction();
             }
             else
             {
@@ -281,6 +294,55 @@ namespace LinhGioi.World
             }
             InteractionStateChanged?.Invoke();
             return true;
+        }
+
+        private void CompleteTrainingStoneInteraction()
+        {
+            _guidedStep = GuidedTrainingStep.Complete;
+            InteractionAcknowledged = true;
+            SetPlayerPose(PlaceholderPoseState.SpiritChannel);
+            SetGateKeeperState(PlaceholderNpcState.Idle);
+            SetShadowSlimeState(PlaceholderSlimeState.DissolveQuiet);
+            SetVfxFeedback(PlaceholderVfxFeedbackState.SpiritPulse, 1.5f);
+            TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
+            _objectiveText = "Objective complete: spirit pulse stabilized.";
+            _interactionText = "Spirit pulse stabilized. Training acknowledged.";
+        }
+
+        public bool ContinueDialogue()
+        {
+            if (!DialogueActive) return false;
+            if (_dialogueLineIndex < GateKeeperDialogueLines.Length - 1)
+            {
+                _dialogueLineIndex++;
+                _interactionText = DialogueLine;
+                InteractionStateChanged?.Invoke();
+                return true;
+            }
+            return CloseDialogue();
+        }
+
+        public bool CloseDialogue()
+        {
+            if (!DialogueActive && DialogueCompleted) return false;
+            DialogueActive = false;
+            DialogueCompleted = true;
+            _guidedStep = GuidedTrainingStep.FindTrainingStone;
+            SetGateKeeperState(PlaceholderNpcState.Idle);
+            _objectiveText = "Objective: stabilize the Training Stone.";
+            _interactionText = "Gate Keeper: your path is open. Follow the cyan spirit pulse.";
+            RefreshInteractionState();
+            InteractionStateChanged?.Invoke();
+            return true;
+        }
+
+        private void OpenGateKeeperDialogue()
+        {
+            DialogueActive = true;
+            DialogueCompleted = false;
+            _dialogueLineIndex = 0;
+            _objectiveText = "Objective: listen to the Gate Keeper.";
+            _interactionText = DialogueLine;
         }
 
         private string NextMovementHint()

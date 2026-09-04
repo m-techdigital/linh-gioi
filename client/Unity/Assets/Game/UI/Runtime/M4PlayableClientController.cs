@@ -23,6 +23,7 @@ namespace LinhGioi.UI
         private VisualElement _authPanel;
         private VisualElement _lobbyPanel;
         private VisualElement _worldHud;
+        private VisualElement _dialoguePanel;
         private VisualElement _characterList;
         private TextField _devKey;
         private TextField _characterName;
@@ -44,12 +45,17 @@ namespace LinhGioi.UI
         private Label _interactionHint;
         private Label _position;
         private Label _toast;
+        private Label _dialogueSpeaker;
+        private Label _dialogueLine;
+        private Label _dialogueProgress;
         private Button _loginButton;
         private Button _createButton;
         private Button _enterWorldButton;
         private Button _savePositionButton;
         private Button _backButton;
         private Button _quitButton;
+        private Button _dialogueContinueButton;
+        private Button _dialogueCloseButton;
         private AccountResponse _accountState;
         private CharacterResponse[] _characters = Array.Empty<CharacterResponse>();
         private CharacterResponse _selectedCharacter;
@@ -288,6 +294,23 @@ namespace LinhGioi.UI
             _toast = NewToast("Spirit Gate shell ready.");
             _worldHud.Add(_toast);
 
+            _dialoguePanel = NewPreviewPanel();
+            _dialoguePanel.style.marginTop = 10;
+            _dialogueSpeaker = new Label("Gate Keeper");
+            _dialogueSpeaker.style.fontSize = 17;
+            _dialogueSpeaker.style.unityFontStyleAndWeight = FontStyle.Bold;
+            _dialogueSpeaker.style.color = RuntimeArtCatalog.Gold;
+            _dialogueLine = NewMutedLabel("Dialogue closed.");
+            _dialogueProgress = NewStatusLabel("Dialogue: 0/3", RuntimeArtCatalog.Muted);
+            _dialogueContinueButton = NewSecondaryButton("Continue", ContinueDialogue);
+            _dialogueCloseButton = NewQuietButton("Close", CloseDialogue);
+            _dialoguePanel.Add(_dialogueSpeaker);
+            _dialoguePanel.Add(_dialogueLine);
+            _dialoguePanel.Add(_dialogueProgress);
+            _dialoguePanel.Add(NewButtonRow(_dialogueContinueButton, _dialogueCloseButton));
+            _worldHud.Add(_dialoguePanel);
+            SetDialogueVisible(false);
+
             _savePositionButton = NewPrimaryButton("Save Position", () => RunAsync(SavePositionAsync));
             _savePositionButton.tooltip = "Persist this character position to the local dev API";
             _backButton = NewSecondaryButton("Back to Character Hall", BackToLobby);
@@ -430,6 +453,7 @@ namespace LinhGioi.UI
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
             SetToast(_world.InteractionText, RuntimeArtCatalog.Spirit);
+            RefreshDialoguePanel();
         }
 
         private void ShowAuthMode()
@@ -626,6 +650,40 @@ namespace LinhGioi.UI
         private static void QuitPlayer()
         {
             Application.Quit();
+        }
+
+        private void ContinueDialogue()
+        {
+            if (_world == null) return;
+            _world.ContinueDialogue();
+            RefreshWorldLoopLabels();
+        }
+
+        private void CloseDialogue()
+        {
+            if (_world == null) return;
+            _world.CloseDialogue();
+            RefreshWorldLoopLabels();
+        }
+
+        private void RefreshDialoguePanel()
+        {
+            if (_world == null || _dialoguePanel == null)
+            {
+                SetDialogueVisible(false);
+                return;
+            }
+            SetDialogueVisible(_world.DialogueActive);
+            if (!_world.DialogueActive) return;
+            _dialogueSpeaker.text = _world.DialogueSpeaker;
+            _dialogueLine.text = _world.DialogueLine;
+            _dialogueProgress.text = "Dialogue: " + _world.DialogueProgress;
+            _dialogueContinueButton.text = _world.HasNextDialogueLine ? "Continue" : "Finish";
+        }
+
+        private void SetDialogueVisible(bool visible)
+        {
+            if (_dialoguePanel != null) _dialoguePanel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private static Button NewButton(string label, Action action)
