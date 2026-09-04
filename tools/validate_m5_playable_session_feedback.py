@@ -58,7 +58,7 @@ def main() -> int:
         'Saving position to local dev API...',
         'Position saved near ',
         'Returned to Character Hall.',
-        'Action blocked: ',
+        'API blocked during ',
         'Esc opens the session menu in world; Quit closes the player review',
         'Guided loop: ',
         'Area: ',

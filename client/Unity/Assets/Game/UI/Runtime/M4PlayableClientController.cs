@@ -417,7 +417,7 @@ namespace LinhGioi.UI
             }
             catch (Exception exception)
             {
-                SetBusy(false, "Create failed: " + exception.Message);
+                SetApiError("create character", exception);
             }
         }
 
@@ -577,8 +577,17 @@ namespace LinhGioi.UI
             catch (OperationCanceledException) { }
             catch (Exception exception)
             {
-                SetBusy(false, "Action blocked: " + exception.Message);
+                SetApiError("API request", exception);
             }
+        }
+
+        private void SetApiError(string action, Exception exception)
+        {
+            var message = "API blocked during " + action + ": " + exception.Message;
+            SetBusy(false, message);
+            SetToast("Local API unavailable or rejected the request. Check server, then retry.", RuntimeArtCatalog.Danger);
+            if (_sessionMenuStatus != null)
+                _sessionMenuStatus.text = "API error: check local server, then retry the same action.";
         }
 
         private static VisualElement NewPanel(float maxWidth)
