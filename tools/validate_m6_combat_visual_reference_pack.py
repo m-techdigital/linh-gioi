@@ -17,6 +17,17 @@ IMAGES = [
     'lgo-m6-hit-cooldown-feedback-sheet-v0360.png',
     'lgo-m6-combat-reference-composite-v0360.png',
 ]
+FUTURE_REFERENCE_IMAGES = [
+    'lgo-extra-art-direction-overview-v0360.png',
+    'lgo-extra-character-inventory-ui-v0360.png',
+    'lgo-extra-character-monster-animation-reference-v0360.png',
+    'lgo-extra-environment-concepts-v0360.png',
+    'lgo-extra-item-skill-vfx-reference-v0360.png',
+    'lgo-extra-npc-quest-shop-ui-v0360.png',
+    'lgo-extra-player-portal-admin-dashboard-v0360.png',
+    'lgo-extra-title-login-server-flow-v0360.png',
+    'lgo-extra-world-light-combat-hud-v0360.png',
+]
 FROZEN_PREFIXES = ['protocol/', 'gamedata/schemas/', 'docs/adr/', 'client/Unity/Assets/Game/UI/design-tokens.json']
 FORBIDDEN_OUTPUT_PREFIXES = ['build/', 'client/Unity/Library/', 'client/Unity/Temp/', 'client/Unity/Logs/', 'client/Unity/Assets/Game/Generated/', 'client/Unity/Assets/Game/Protocol/Generated/', 'tools/__pycache__/']
 
@@ -57,8 +68,14 @@ def main() -> int:
     require_file('tools/validate_m6_combat_visual_reference_pack.py', executable=True)
     require('docs/reference-art/v0.36.0/README.md', *IMAGES, 'visual reference pack only', 'Player-facing UI copy must be Vietnamese')
     require('docs/reference-art/v0.36.0/CODEX-USAGE.md', *IMAGES, 'Do not copy English labels', 'Player-facing runtime UI must be Vietnamese')
+    require('LGO-M6-VISUAL-REFERENCE-PACK-v0.36.0-CODEX-USAGE.md', *IMAGES, 'future-reference-v0.36.0', 'Do not use this folder to expand the v0.37 task')
+    require('README-LGO-M6-VISUAL-REFERENCE-PACK-v0.36.0.md', 'visual reference only', 'not final production art')
+    require_file('LGO-M6-VISUAL-REFERENCE-PACK-v0.36.0-MANIFEST.json')
     for image in IMAGES:
         require_file('docs/reference-art/v0.36.0/' + image)
+    require('docs/reference-art/future-reference-v0.36.0/README.md', 'Future Reference Images v0.36.0', 'not required for M6 v0.37', 'Do not ingest these as production art')
+    for image in FUTURE_REFERENCE_IMAGES:
+        require_file('docs/reference-art/future-reference-v0.36.0/' + image)
     require('docs/art/LGO-COMBAT-VISUAL-REFERENCE-PACK-v0.36.0.md', 'M6_COMBAT_VISUAL_REFERENCE_PACK_ACCEPTED_v0.36.0', 'Tấn công thử', 'Mục tiêu luyện tập', 'Trúng mục tiêu', 'Hồi chiêu', 'Mô phỏng cục bộ', 'Chưa phải chiến đấu thật', 'Do not implement a feature solely because it appears in a reference image', 'Do not claim production art', 'Do not claim server-authoritative combat')
     require('docs/design/LGO-COMBAT-READABILITY-RULES-v0.36.0.md', 'Target Highlight Rules', 'Hit Feedback Rules', 'Cooldown Feedback Rules', 'Telegraph Warning Rules', 'Maximum visual noise rule', 'Mô phỏng cục bộ')
     require('docs/tasks/M6-COMBAT-VISUAL-REFERENCE-PACK-v0.36.0.md', 'M6_COMBAT_VISUAL_REFERENCE_PACK_ACCEPTED_v0.36.0', 'Future-reference files', 'not v0.37 scope', 'Code Quality / Duplication / Ownership Audit')

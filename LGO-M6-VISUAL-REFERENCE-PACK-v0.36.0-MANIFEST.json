@@ -1,0 +1,107 @@
+[
+  {
+    "path": "LGO-M6-VISUAL-REFERENCE-PACK-v0.36.0-CODEX-USAGE.md",
+    "sha256": "d96c8b5935b647227603aeea70393854147803c2110f101ddbfde003a530c42c",
+    "bytes": 11901
+  },
+  {
+    "path": "README-LGO-M6-VISUAL-REFERENCE-PACK-v0.36.0.md",
+    "sha256": "a20e388a50438343735c8bae2f1b4b88344977dee8d4ca96bde13500bb8e36e5",
+    "bytes": 1053
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/README.md",
+    "sha256": "ceea837275bd3535c889d68554d471808a08dd8b26d82bb60291b7c835b01721",
+    "bytes": 599
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-art-direction-overview-v0360.png",
+    "sha256": "40c16853934400f61775ec0bb9c82fc6b81b3a9435825d1cf7bfc4b697210c0b",
+    "bytes": 2514836
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-character-inventory-ui-v0360.png",
+    "sha256": "0f0f9f48c7ba8c8ee63f4bf6a4b7afda90f94e2410b8fe6766cdea10f974a494",
+    "bytes": 2409812
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-character-monster-animation-reference-v0360.png",
+    "sha256": "beb22dada41bb3dd3c09748e2698a3124fcf26b89d6c456d879497aed676e683",
+    "bytes": 2443838
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-environment-concepts-v0360.png",
+    "sha256": "aa48bf9e683d159e37c93265770a0c2aec5a89e44b61e90fa3c19b8c63c9af22",
+    "bytes": 2578783
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-item-skill-vfx-reference-v0360.png",
+    "sha256": "e61d8a527330ec53b4b4e99bff6d84448ff5529848c9747871458a20256c7a68",
+    "bytes": 2300279
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-npc-quest-shop-ui-v0360.png",
+    "sha256": "e4416f447203b3ea4f7b7b6f130c2888ced260af158b45e6c85c45409237c2bf",
+    "bytes": 2234304
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-player-portal-admin-dashboard-v0360.png",
+    "sha256": "b57e5d910d0ccdc8f718fa1533587dd0ea70c7cdc47dd66ed5a35e974a5dda01",
+    "bytes": 2015632
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-title-login-server-flow-v0360.png",
+    "sha256": "cb6845fcc51b9a288ef3648386ac2489c30ecfb48f53337f670874cc5269d9dc",
+    "bytes": 2366229
+  },
+  {
+    "path": "docs/reference-art/future-reference-v0.36.0/lgo-extra-world-light-combat-hud-v0360.png",
+    "sha256": "59fa3227083f533d729a254b37fa668e8af10508fe8d450f84b108d74b4faeca",
+    "bytes": 2434740
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/CODEX-USAGE.md",
+    "sha256": "d96c8b5935b647227603aeea70393854147803c2110f101ddbfde003a530c42c",
+    "bytes": 11901
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/README.md",
+    "sha256": "726fbf2445eefa12b61541dfa23d91d483d00bb694173a5fc2e86a06af21153b",
+    "bytes": 1035
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/lgo-m6-combat-hud-mockup-v0360.png",
+    "sha256": "55a65446c26e07fb81a12ae93e529a4c62f7b85606220deadc3204580b113156",
+    "bytes": 422934
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/lgo-m6-combat-readability-board-v0360.png",
+    "sha256": "421339da3b4e5b5028ae3767cb0a58c2bea3f08e91402dea26b69901fac4b886",
+    "bytes": 429132
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/lgo-m6-combat-reference-composite-v0360.png",
+    "sha256": "fa59ca3c820d9e53a2b3ca0b0003a817f2e7496acf763c3cd8ba043034593493",
+    "bytes": 2429082
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/lgo-m6-enemy-telegraph-sheet-v0360.png",
+    "sha256": "0d67fae76e488b8373a7f0f184fa52c4d148092ee898a89a62843eccb475d784",
+    "bytes": 337601
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/lgo-m6-hit-cooldown-feedback-sheet-v0360.png",
+    "sha256": "0245a9e6432fd25c6be764fc0d1f9a3e446be15e01b0d23e514b22af0b21b709",
+    "bytes": 323075
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/lgo-m6-skill-feedback-sheet-v0360.png",
+    "sha256": "3f7e5d79404c3ac0c1a162cd8c3fc94895848cb8cdca1c74bd97f0c2a95fedbc",
+    "bytes": 345940
+  },
+  {
+    "path": "docs/reference-art/v0.36.0/lgo-m6-target-dummy-state-sheet-v0360.png",
+    "sha256": "c82e0e20e6b9a7f2e2763f276d66430fdf737c33e28e8afbaa5ba3ca3d850813",
+    "bytes": 362593
+  }
+]

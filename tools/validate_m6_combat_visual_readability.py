@@ -136,6 +136,12 @@ def main() -> int:
     require('LGO-M6-COMBAT-VISUAL-READABILITY-POLISH-v0.37.0-DELETIONS.txt', 'DELETED', 'none')
     for image in REFERENCE_IMAGES:
         require_file('docs/reference-art/v0.36.0/' + image)
+    require(
+        'docs/reference-art/future-reference-v0.36.0/README.md',
+        'Future Reference Images v0.36.0',
+        'not required for M6 v0.37',
+        'Do not ingest these as production art',
+    )
 
     combined_v037_docs = '\n'.join(read(path) for path in CHECKED_V037_DOCS)
     if 'docs/reference-art/future-reference-v0.36.0/lgo-extra-' in combined_v037_docs:
