@@ -20,7 +20,7 @@ CANDIDATES = (
     {
         "role": "login_background",
         "source": "login/login_background_spirit_gate_1920x1080_v3b_candidate.png",
-        "unity": "Login/login_background_spirit_gate_1920x1080_v3b_candidate.png",
+        "unity": "Login/login_background_spirit_gate_1920x1080_v3b_candidate.jpg",
         "min_width": 1920,
         "min_height": 1080,
         "alpha_required": "no",
@@ -35,8 +35,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 512,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 1024,
-        "runtime_source_size": 1024,
+        "runtime_max_texture_size": 512,
+        "runtime_source_size": 384,
         "usage": "Login/Gate Entry panel skin candidate; human edge QA still required.",
     },
     {
@@ -46,8 +46,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 256,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 1024,
-        "runtime_source_size": 512,
+        "runtime_max_texture_size": 512,
+        "runtime_source_size": 384,
         "usage": "Primary enter-world button skin candidate; player-facing Vietnamese text remains Unity-rendered.",
     },
     {
@@ -57,8 +57,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 1024,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 1024,
-        "runtime_source_size": 768,
+        "runtime_max_texture_size": 512,
+        "runtime_source_size": 384,
         "usage": "High-resolution login Gate Keeper NPC candidate; transparent cutout, not production-final.",
     },
     {
@@ -68,8 +68,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 1024,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 1024,
-        "runtime_source_size": 1024,
+        "runtime_max_texture_size": 512,
+        "runtime_source_size": 384,
         "usage": "High-resolution world Spirit Gate candidate; transparent prop sprite, not production-final.",
     },
     {
@@ -79,8 +79,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 1024,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 1024,
-        "runtime_source_size": 1024,
+        "runtime_max_texture_size": 512,
+        "runtime_source_size": 384,
         "usage": "High-resolution Training Stone candidate; transparent interactable prop sprite, not production-final.",
     },
     {
@@ -90,8 +90,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 1024,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 1024,
-        "runtime_source_size": 512,
+        "runtime_max_texture_size": 256,
+        "runtime_source_size": 192,
         "usage": "High-resolution Wind Slash VFX candidate; local feedback only, not production-final.",
     },
     {
@@ -101,8 +101,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 1024,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 1024,
-        "runtime_source_size": 512,
+        "runtime_max_texture_size": 256,
+        "runtime_source_size": 192,
         "usage": "High-resolution impact spark VFX candidate; local feedback only, not production-final.",
     },
     {
@@ -112,8 +112,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 1024,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 512,
-        "runtime_source_size": 512,
+        "runtime_max_texture_size": 128,
+        "runtime_source_size": 128,
         "usage": "High-resolution cooldown ready ring candidate; no baked text/numbers, not production-final.",
     },
     {
@@ -123,8 +123,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 1024,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 512,
-        "runtime_source_size": 512,
+        "runtime_max_texture_size": 128,
+        "runtime_source_size": 128,
         "usage": "High-resolution cooldown active ring candidate; no baked text/numbers, not production-final.",
     },
     {
@@ -134,8 +134,8 @@ CANDIDATES = (
         "min_width": 1024,
         "min_height": 1024,
         "alpha_required": "yes",
-        "runtime_max_texture_size": 1024,
-        "runtime_source_size": 768,
+        "runtime_max_texture_size": 512,
+        "runtime_source_size": 384,
         "usage": "High-resolution target dummy idle candidate; selected/hit/recover still require clean separated V3B state assets.",
     },
 )
@@ -159,8 +159,49 @@ def png_header(path: Path) -> tuple[int, int, int]:
     return width, height, color_type
 
 
+def jpeg_size(path: Path) -> tuple[int, int]:
+    data = path.read_bytes()
+    if data[:2] != b"\xff\xd8":
+        raise ValueError(f"not a JPEG: {path}")
+    i = 2
+    while i < len(data) - 9:
+        if data[i] != 0xFF:
+            i += 1
+            continue
+        marker = data[i + 1]
+        i += 2
+        if marker in (0xD8, 0xD9):
+            continue
+        segment_length = int.from_bytes(data[i:i + 2], "big")
+        if 0xC0 <= marker <= 0xC3:
+            height = int.from_bytes(data[i + 3:i + 5], "big")
+            width = int.from_bytes(data[i + 5:i + 7], "big")
+            return width, height
+        i += segment_length
+    raise ValueError(f"JPEG size not found: {path}")
+
+
+def image_header(path: Path) -> tuple[int, int, int]:
+    if path.suffix.lower() in {".jpg", ".jpeg"}:
+        width, height = jpeg_size(path)
+        return width, height, 2
+    return png_header(path)
+
+
 def prepare_unity_runtime_copy(source: Path, target: Path, max_side: int) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
+    if target.suffix.lower() in {".jpg", ".jpeg"}:
+        result = subprocess.run(
+            ["sips", "-s", "format", "jpeg", "-s", "formatOptions", "55", str(source), "--out", str(target)],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        if result.returncode != 0:
+            raise SystemExit(result.stderr.strip() or f"failed to create jpeg runtime asset: {target}")
+        return
     shutil.copy2(source, target)
     width, height, _ = png_header(target)
     if max(width, height) <= max_side:
@@ -311,7 +352,7 @@ def main() -> int:
         if candidate["alpha_required"] == "yes" and color_type not in (4, 6):
             raise SystemExit(f"candidate missing PNG alpha channel: {doc_path}")
         prepare_unity_runtime_copy(doc_path, unity_path, int(candidate["runtime_source_size"]))
-        runtime_width, runtime_height, runtime_color_type = png_header(unity_path)
+        runtime_width, runtime_height, runtime_color_type = image_header(unity_path)
         if candidate["alpha_required"] == "yes" and runtime_color_type not in (4, 6):
             raise SystemExit(f"Unity runtime asset missing PNG alpha channel: {unity_path}")
         for parent in reversed(unity_path.parents):
@@ -339,7 +380,7 @@ def main() -> int:
             }
         )
     with MANIFEST_CSV.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()))
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0].keys()), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
     MANIFEST_JSON.write_text(json.dumps(rows, indent=2) + "\n", encoding="utf-8")

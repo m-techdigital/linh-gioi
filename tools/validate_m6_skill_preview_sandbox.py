@@ -55,9 +55,9 @@ def main() -> int:
     require(
         'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
         'PreviewSkillFeedback',
-        'Preview only: Wind Slash form traces a gold arc',
-        'Preview only: Shadow Bind warning ring marks readable intent',
-        'Preview only: Spirit Guard pulse shows a defensive stance rehearsal.',
+        'Chỉ xem thử: Chém Gió vẽ một cung vàng',
+        'Chỉ xem thử: Trói Bóng hiển thị vòng cảnh báo dễ đọc',
+        'Chỉ xem thử: Hộ Linh tạo mạch sáng cho tư thế phòng thủ.',
         'PlaceholderVfxFeedbackState.WindSlashPreview',
         'PlaceholderVfxFeedbackState.ShadowBindWarning',
         'PlaceholderVfxFeedbackState.SpiritPulse',
@@ -65,12 +65,12 @@ def main() -> int:
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
         'LGO Skill Preview Sandbox',
-        'Skill Preview Sandbox',
-        'Local visual rehearsal only.',
-        'Preview Wind Slash',
-        'Preview Shadow Bind',
-        'Preview Spirit Guard',
-        'Preview only: " + previewName + " feedback played in the safe yard.',
+        'Xem thử kỹ năng',
+        'Chỉ diễn tập hình ảnh cục bộ.',
+        'Chém Gió',
+        'Trói Bóng',
+        'Hộ Linh',
+        'Xem thử: hiệu ứng " + displayName + " đã chạy trong sân an toàn.',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

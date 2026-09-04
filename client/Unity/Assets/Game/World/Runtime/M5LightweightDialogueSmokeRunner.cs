@@ -64,7 +64,7 @@ namespace LinhGioi.World
                 result.afterDialogueObjective = world.ObjectiveText;
                 result.afterDialogueFeedback = world.InteractionText;
                 Require(result.dialogueCompleted, "dialogue did not complete");
-                Require(result.afterDialogueObjective.Contains("Training Stone"), "dialogue close did not advance objective");
+                Require(result.afterDialogueObjective.Contains("Đá Luyện"), "dialogue close did not advance objective");
                 var save = world.BuildSaveRequest();
                 result.savePositionStillWorks = Math.Abs(save.x + 3f) < 0.001f;
                 Require(result.savePositionStillWorks, "save position request regressed");

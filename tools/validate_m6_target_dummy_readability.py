@@ -51,12 +51,12 @@ def main() -> int:
         'LGO Target Dummy Readability Marker',
         'LGO Target Dummy Non Combat Base',
         'Sân luyện an toàn / Mục tiêu luyện tập',
-        'Readability Dummy east',
+        'Bia đọc mục tiêu phía đông',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Readability Dummy east',
-        'Shadow Slime far east',
+        'Bia đọc mục tiêu phía đông',
+        'Bóng Tối xa phía đông',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

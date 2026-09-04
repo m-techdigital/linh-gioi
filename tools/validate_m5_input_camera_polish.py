@@ -55,12 +55,12 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'NewBadge("Move", "WASD or arrows")',
-        'NewBadge("Turn", "Q / E")',
-        'NewBadge("Interact", "F or Space")',
+        'NewBadge("Di chuyển", "WASD hoặc phím mũi tên")',
+        'NewBadge("Xoay", "Q / E")',
+        'NewBadge("Tương tác", "F hoặc Space")',
         'NewBadge("Menu", "Esc")',
-        'Esc opens the session menu in world; Quit closes the player review',
-        'World HUD / Safe Training Yard',
+        'Esc mở menu phiên trong thế giới; Thoát đóng bản chơi thử.',
+        'Sân Luyện An Toàn',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

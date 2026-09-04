@@ -61,18 +61,18 @@ namespace LinhGioi.World
                     world.Enter(loaded);
                     result.enteredWorld = true;
                     result.initialObjective = world.ObjectiveText;
-                    Require(result.initialObjective.Contains("Gate Keeper"), "initial objective did not point to Gate Keeper");
+                    Require(result.initialObjective.Contains("Người Giữ Cổng"), "initial objective did not point to Gate Keeper");
 
                     world.SetSmokePositionNearGateKeeper();
                     Require(world.TriggerInteractionForSmoke(), "Gate Keeper interaction did not trigger");
                     world.SetSmokePositionNearTrainingStone();
                     result.nearInteractablePrompt = world.InteractionText;
-                    Require(result.nearInteractablePrompt.Contains("Press F or Space"), "interaction prompt did not become available");
+                    Require(result.nearInteractablePrompt.Contains("Nhấn F hoặc Space"), "interaction prompt did not become available");
 
                     result.interactionTriggered = world.TriggerInteractionForSmoke();
                     Require(result.interactionTriggered, "interaction did not trigger");
                     Require(world.InteractionAcknowledged, "interaction acknowledgement flag missing");
-                    Require(world.ObjectiveText.Contains("Objective complete"), "objective did not reach completion feedback");
+                    Require(world.ObjectiveText.Contains("Mục tiêu hoàn tất"), "objective did not reach completion feedback");
                     result.finalObjective = world.ObjectiveText;
                     result.finalFeedback = world.InteractionText;
 

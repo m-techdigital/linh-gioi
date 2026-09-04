@@ -66,17 +66,17 @@ def main() -> int:
         'TriggerInteractionForSmoke',
         'SetSmokePositionNearTrainingStone',
         'InteractionAcknowledged',
-        'Objective complete: spirit pulse stabilized.',
+        'Mục tiêu hoàn tất: mạch linh khí đã ổn định.',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Objective 1/2: talk to the Gate Keeper.',
-        'Move near the Gate Keeper.',
+        'Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.',
+        'Di chuyển tới gần Người Giữ Cổng.',
         'RefreshWorldLoopLabels',
         'InteractionStateChanged',
-        'Save Position',
-        'Back to Lobby',
-        'Quit',
+        'Lưu vị trí',
+        'Về điện nhân vật',
+        'Thoát',
     )
     require(
         'client/Unity/Assets/Game/World/Runtime/M5FirstPlayableLoopSmokeRunner.cs',
@@ -97,7 +97,7 @@ def main() -> int:
         'tools/m5_first_playable_loop_runtime.py',
         'M5_FIRST_PLAYABLE_LOOP_RUNTIME_SMOKE_PASS',
         '--lgo-m5-first-playable-loop-smoke',
-        'Objective complete',
+        'Mục tiêu hoàn tất',
         'savePositionStillWorks',
     )
     require_file('tools/run_m5_first_playable_loop_once.sh', executable=True)

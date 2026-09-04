@@ -28,6 +28,9 @@ M6_ALLOWED_AFTER_CONTRACT_FILES = {
     'client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs',
     'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
     'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
+    'client/Unity/Assets/Game/World/Runtime/M5FirstPlayableLoopSmokeRunner.cs',
+    'client/Unity/Assets/Game/World/Runtime/M5GuidedTrainingLoopSmokeRunner.cs',
+    'client/Unity/Assets/Game/World/Runtime/M5LightweightDialogueSmokeRunner.cs',
     'client/Unity/Assets/Game/World/Runtime/M6MinimalLocalCombatSmokeRunner.cs',
     'client/Unity/Assets/Game/World/Runtime/M6MinimalLocalCombatSmokeRunner.cs.meta',
     'tools/run_m6_minimal_local_combat_once.sh',
@@ -70,6 +73,16 @@ M6_ALLOWED_AFTER_CONTRACT_FILES = {
     'tools/run_m6_server_authoritative_combat_pilot.sh',
     'tools/validate_m6_server_authoritative_combat_pilot.py',
 }
+RUNTIME_ASSET_WEIGHT_HYGIENE_PREFIXES = (
+    'client/Unity/Assets/Game/Art/Runtime/V3B/',
+    'docs/reference-art/v3b/metadata/',
+    'docs/art/v3/',
+    'docs/art/RUNTIME-ASSET-WEIGHT-HYGIENE.md',
+    'docs/tasks/LGO-RUNTIME-ASSET-WEIGHT-HYGIENE-v1.0.md',
+    'tools/prepare_lgo_art_v3b_candidates.py',
+    'tools/validate_lgo_art_v3b_candidates.py',
+    'tools/validate_lgo_runtime_asset_weight.py',
+)
 V040_CONTRACT_FILES = {
     'protocol/combat.proto',
     'gamedata/schemas/skill.schema.json',
@@ -124,6 +137,14 @@ def v040_contract_is_active() -> bool:
         'M6_COMBAT_PROTOCOL_GAMEDATA_CONTRACT_ACCEPTED_v0.40.0'
         in read('docs/tasks/M6-COMBAT-PROTOCOL-GAMEDATA-CONTRACT-v0.40.0.md')
         and (ROOT / 'CONTRACT_CHANGE_REQUEST-M6-SERVER-COMBAT-v0.39.0.md').is_file()
+    )
+
+
+def runtime_asset_weight_hygiene_is_active() -> bool:
+    return (
+        'LGO_RUNTIME_ASSET_WEIGHT_HYGIENE_READY'
+        in read('docs/tasks/LGO-RUNTIME-ASSET-WEIGHT-HYGIENE-v1.0.md')
+        and 'validate_lgo_runtime_asset_weight.py' in read('tools/lgo_playable_closure_check.sh')
     )
 
 
@@ -222,7 +243,11 @@ def main() -> int:
             'M6_MINIMAL_LOCAL_COMBAT_ALLOWED_WITHOUT_CONTRACT_CHANGE_v0.33.0' in read('docs/tasks/M6-CONTRACT-REVIEW-v0.33.0.md') and
             'M6_MINIMAL_LOCAL_COMBAT_FOUNDATION_SOURCE_READY_v0.34.0' in read('docs/tasks/M6-MINIMAL-LOCAL-COMBAT-FOUNDATION-v0.34.0.md')
         )
-        if path not in ALLOWED_CODE_FILES and not m6_local_allowed:
+        runtime_asset_weight_allowed = (
+            runtime_asset_weight_hygiene_is_active()
+            and any(path == prefix or path.startswith(prefix) for prefix in RUNTIME_ASSET_WEIGHT_HYGIENE_PREFIXES)
+        )
+        if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed:
             for prefix in FORBIDDEN_CODE_PREFIXES:
                 if path.startswith(prefix):
                     errors.append(f'v0.32 docs-only spec changed implementation path: {path}')

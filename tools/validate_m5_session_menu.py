@@ -36,15 +36,15 @@ def main() -> int:
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
         'LGO Session Menu Overlay',
-        'Session Menu',
-        'Paused in safe training yard.',
+        'Menu phiên',
+        'Đang tạm dừng trong sân luyện.',
         'ToggleSessionMenu',
         'HideSessionMenu',
         'SetSessionMenuVisible',
-        'Resume',
-        'Save Position',
-        'Back to Character Hall',
-        'Quit',
+        'Tiếp tục',
+        'Lưu vị trí',
+        'Về điện nhân vật',
+        'Thoát',
         'KeyCode.Escape',
     )
     require(

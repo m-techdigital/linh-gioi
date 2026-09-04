@@ -4,7 +4,7 @@ Status: LGO_ART_V3B_RUNTIME_CANDIDATE_NOT_PRODUCTION_FINAL
 
 Created runtime candidates:
 
-- `login_background_spirit_gate_1920x1080_v3b_candidate.png`
+- `login_background_spirit_gate_1920x1080_v3b_candidate.jpg` as the Unity runtime copy, derived from the PNG review source
 - `panel_main_dark_gold_v3b_candidate.png`
 - `button_enter_world_gold_v3b_candidate.png`
 - `gate_keeper_npc_login_v3b_candidate.png`
@@ -29,6 +29,7 @@ Quality improvement:
 - Wind Slash, impact spark, and cooldown ring candidates improve combat readability while preserving the current M6 local/server-authoritative behavior;
 - the target dummy idle candidate replaces the low-detail idle silhouette while selected/hit/recover continue to use existing fallback assets until clean-alpha V3B state sprites are generated;
 - Unity import settings now cap runtime texture sizes by role so high-resolution review sources do not automatically become oversized runtime textures;
+- Unity runtime copies are size-budgeted separately from larger docs/reference PNGs, with the opaque login background stored as JPEG;
 - all player-facing Vietnamese text remains rendered by Unity code, not baked into generated sprites.
 
 Current acceptance level:
@@ -55,5 +56,5 @@ Runtime weight policy:
 
 - source PNGs may remain larger for visual review and future downsampling;
 - Unity Resources should contain optimized runtime copies, not duplicate full-resolution source files for every candidate;
-- Unity import caps are part of the runtime contract: 2048 for login background, 1024 for most large UI/world sprites, 512 for cooldown rings and small indicators;
+- Unity import caps are part of the runtime contract: 2048 for login background, 512 for current V3B UI/world/NPC runtime candidates, 256 for VFX frames, and 128 for cooldown rings;
 - oversized source candidates must not be interpreted as approval to ship unbounded runtime textures.

@@ -85,9 +85,9 @@ def check_manifest() -> None:
         runtime_source_size = int(row["runtime_source_size"])
         runtime_width = int(row["runtime_width"])
         runtime_height = int(row["runtime_height"])
-        if runtime_max not in (512, 1024, 2048):
+        if runtime_max not in (128, 256, 512, 1024, 2048):
             fail(f"unsupported runtime texture budget: {row}")
-        if runtime_source_size not in (512, 768, 1024, 1920):
+        if runtime_source_size not in (128, 192, 256, 384, 512, 768, 1024, 1920):
             fail(f"unsupported runtime source size: {row}")
         if max(runtime_width, runtime_height) > runtime_source_size:
             fail(f"Unity runtime source exceeds role size: {row}")
@@ -107,7 +107,7 @@ def check_manifest() -> None:
         if not meta.is_file():
             fail(f"missing Unity meta: {meta.relative_to(ROOT)}")
         meta_text = meta.read_text(encoding="utf-8", errors="replace")
-        for marker in ("TextureImporter", "spriteMode: 1", "textureType: 8", "alphaIsTransparency: 1", f"maxTextureSize: {runtime_max}", "LGO_ART_V3B_RUNTIME_CANDIDATE_NOT_PRODUCTION_FINAL"):
+        for marker in ("TextureImporter", "spriteMode: 1", "textureType: 8", f"maxTextureSize: {runtime_max}", "LGO_ART_V3B_RUNTIME_CANDIDATE_NOT_PRODUCTION_FINAL"):
             if marker not in meta_text:
                 fail(f"meta missing marker {marker}: {meta.relative_to(ROOT)}")
 
@@ -118,7 +118,7 @@ def check_no_reference_posters() -> None:
         "02-high-res-runtime-asset-catalog-reference.png",
         "03-high-res-asset-pack-v3-reference.png",
     }
-    for path in UNITY_ROOT.rglob("*.png"):
+    for path in list(UNITY_ROOT.rglob("*.png")) + list(UNITY_ROOT.rglob("*.jpg")):
         if path.name in forbidden_names or "reference" in path.name or "contact-sheet" in path.name:
             fail(f"reference/poster imported into V3B runtime path: {path.relative_to(ROOT)}")
 

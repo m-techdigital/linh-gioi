@@ -62,12 +62,12 @@ namespace LinhGioi.World
                     result.enteredWorld = true;
                     result.initialObjective = world.ObjectiveText;
                     result.initialVfxFeedbackState = world.VfxFeedbackStateName;
-                    Require(result.initialObjective.Contains("Gate Keeper"), "initial objective did not point to Gate Keeper");
-                    Require(result.initialVfxFeedbackState == "PortalGatePulse", "initial portal VFX feedback did not appear");
+                    Require(result.initialObjective.Contains("Người Giữ Cổng"), "initial objective did not point to Gate Keeper");
+                    Require(result.initialVfxFeedbackState == "mạch sáng Linh Môn", "initial portal VFX feedback did not appear");
 
                     world.SetSmokePositionNearGateKeeper();
                     result.gateKeeperPrompt = world.InteractionText;
-                    Require(result.gateKeeperPrompt.Contains("Gate Keeper"), "Gate Keeper prompt did not become available");
+                    Require(result.gateKeeperPrompt.Contains("Người Giữ Cổng"), "Gate Keeper prompt did not become available");
                     result.gateKeeperInteractionTriggered = world.TriggerInteractionForSmoke();
                     Require(result.gateKeeperInteractionTriggered, "Gate Keeper interaction did not trigger");
                     while (world.DialogueActive)
@@ -75,22 +75,22 @@ namespace LinhGioi.World
                     result.afterGateKeeperObjective = world.ObjectiveText;
                     result.afterGateKeeperFeedback = world.InteractionText;
                     result.afterGateKeeperVfxFeedbackState = world.VfxFeedbackStateName;
-                    Require(result.afterGateKeeperObjective.Contains("Training Stone"), "objective did not advance to Training Stone");
-                    Require(world.GuidedTrainingStepName == "FindTrainingStone", "guided step did not advance after Gate Keeper");
-                    Require(result.afterGateKeeperVfxFeedbackState == "WindSlashPreview", "Gate Keeper interaction did not trigger wind slash preview");
+                    Require(result.afterGateKeeperObjective.Contains("Đá Luyện"), "objective did not advance to Training Stone");
+                    Require(world.GuidedTrainingStepName.Contains("Đá Luyện"), "guided step did not advance after Gate Keeper");
+                    Require(result.afterGateKeeperVfxFeedbackState == "Chém Gió xem thử", "Gate Keeper interaction did not trigger wind slash preview");
 
                     world.SetSmokePositionNearTrainingStone();
                     result.trainingStonePrompt = world.InteractionText;
-                    Require(result.trainingStonePrompt.Contains("Training Stone") || result.trainingStonePrompt.Contains("spirit pulse"), "Training Stone prompt did not become available");
+                    Require(result.trainingStonePrompt.Contains("Đá Luyện") || result.trainingStonePrompt.Contains("mạch linh khí"), "Training Stone prompt did not become available");
                     result.trainingStoneInteractionTriggered = world.TriggerInteractionForSmoke();
                     Require(result.trainingStoneInteractionTriggered, "Training Stone interaction did not trigger");
                     Require(world.InteractionAcknowledged, "final acknowledgement flag missing");
                     result.finalObjective = world.ObjectiveText;
                     result.finalFeedback = world.InteractionText;
                     result.finalVfxFeedbackState = world.VfxFeedbackStateName;
-                    Require(result.finalObjective.Contains("Objective complete"), "objective did not complete");
-                    Require(result.finalFeedback.Contains("Spirit pulse stabilized"), "final feedback did not show spirit pulse stabilization");
-                    Require(result.finalVfxFeedbackState == "SpiritPulse", "Training Stone interaction did not trigger spirit pulse VFX feedback");
+                    Require(result.finalObjective.Contains("Mục tiêu hoàn tất"), "objective did not complete");
+                    Require(result.finalFeedback.Contains("Mạch linh khí đã ổn định"), "final feedback did not show spirit pulse stabilization");
+                    Require(result.finalVfxFeedbackState == "mạch linh khí", "Training Stone interaction did not trigger spirit pulse VFX feedback");
 
                     var save = world.BuildSaveRequest();
                     var saved = await client.SaveCharacterPositionAsync(loaded.characterId, save.x, save.y, save.z, save.yawDegrees, token);

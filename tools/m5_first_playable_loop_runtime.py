@@ -120,7 +120,7 @@ def run_unity_smoke(root: Path, player: Path, base_url: str, result_json: Path, 
         if result.get(key) != value:
             append(log, 'UNITY_M5_RESULT_FAIL ' + json.dumps(result, sort_keys=True))
             raise SystemExit(42)
-    if 'Objective complete' not in result.get('finalObjective', ''):
+    if 'Mục tiêu hoàn tất' not in result.get('finalObjective', ''):
         append(log, 'UNITY_M5_OBJECTIVE_NOT_COMPLETE ' + json.dumps(result, sort_keys=True))
         raise SystemExit(43)
     append(log, 'UNITY_M5_FIRST_PLAYABLE_LOOP_PASS ' + json.dumps(result, sort_keys=True))

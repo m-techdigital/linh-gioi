@@ -61,13 +61,13 @@ def main() -> int:
         'LGO Shadow Slime Warning Plinth',
         'ObjectiveDirectionHint',
         'WorldLandmarkSummary',
-        'Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east',
+        'Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Direction: ',
-        'Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east.',
-        'World HUD / Safe Training Yard',
+        'Chỉ dẫn: ',
+        'Mốc sân luyện: Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông.',
+        'Sân Luyện An Toàn',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

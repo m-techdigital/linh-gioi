@@ -17,9 +17,9 @@ namespace LinhGioi.World
         private static readonly Vector3 CameraFollowOffset = new Vector3(0f, 7.5f, -8.5f);
         private static readonly string[] GateKeeperDialogueLines =
         {
-            "Gate Keeper: Welcome to the Spirit Gate. Keep your breath steady.",
-            "Gate Keeper: Follow the cyan pulse north; the Training Stone will answer when you focus.",
-            "Gate Keeper: This yard is safe. The eastern shadow is only a warning marker."
+            "Người Giữ Cổng: Chào mừng đến Linh Môn. Giữ hơi thở thật ổn định.",
+            "Người Giữ Cổng: Đi theo mạch sáng lam về phía bắc; Đá Luyện sẽ đáp lại khi con tập trung.",
+            "Người Giữ Cổng: Sân này an toàn. Bóng ở phía đông chỉ là dấu cảnh báo."
         };
         private static readonly Vector3 GateKeeperPosition = new Vector3(-3f, 0.75f, 3f);
         private static readonly Vector3 TrainingStonePosition = new Vector3(0f, 0.08f, 4.5f);
@@ -49,8 +49,8 @@ namespace LinhGioi.World
         private SpriteRenderer _trainingStoneSprite;
         private SpriteRenderer _shadowSlimeSprite;
         private InteractableState _nearestInteractable;
-        private string _objectiveText = "Objective: enter the world and find the training stone.";
-        private string _interactionText = "Move near the Gate Keeper or Training Stone.";
+        private string _objectiveText = "Mục tiêu: vào thế giới và tìm Đá Luyện.";
+        private string _interactionText = "Di chuyển tới gần Người Giữ Cổng hoặc Đá Luyện.";
         private GuidedTrainingStep _guidedStep = GuidedTrainingStep.FindGateKeeper;
         private PlaceholderPoseState _playerPoseState = PlaceholderPoseState.Idle;
         private PlaceholderNpcState _gateKeeperState = PlaceholderNpcState.Idle;
@@ -70,14 +70,14 @@ namespace LinhGioi.World
         public float CurrentYawDegrees => _marker == null ? 0f : _marker.eulerAngles.y;
         public string ObjectiveText => _objectiveText;
         public string InteractionText => _interactionText;
-        public string GuidedTrainingStepName => _guidedStep.ToString();
+        public string GuidedTrainingStepName => DescribeGuidedTrainingStep();
         public string CurrentAreaLabel => DescribeCurrentArea();
         public string ObjectiveDirectionHint => DescribeObjectiveDirection();
-        public string WorldLandmarkSummary => "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east.";
-        public string PlayerPoseStateName => _playerPoseState.ToString();
-        public string GateKeeperPoseStateName => _gateKeeperState.ToString();
-        public string ShadowSlimeStateName => _shadowSlimeState.ToString();
-        public string VfxFeedbackStateName => _vfxFeedbackState.ToString();
+        public string WorldLandmarkSummary => "Mốc sân luyện: Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông.";
+        public string PlayerPoseStateName => DescribePlayerPoseState();
+        public string GateKeeperPoseStateName => DescribeGateKeeperState();
+        public string ShadowSlimeStateName => DescribeShadowSlimeState();
+        public string VfxFeedbackStateName => DescribeVfxFeedbackState();
         public string TargetDummyStatusText => "Mục tiêu luyện tập: sức bền mô phỏng " + _localCombat.TargetHp + "/" + LocalCombatPrototypeState.TargetDummyMaxHp + " - Chỉ là mô phỏng cục bộ.";
         public string TargetDummyRangeText => DescribeTargetDummyRangeState();
         public string TargetDummyVisualStateText => DescribeTargetDummyVisualState();
@@ -90,7 +90,7 @@ namespace LinhGioi.World
         public string LocalCombatTargetStateName => _localCombat.TargetState.ToString();
         public bool DialogueActive { get; private set; }
         public bool DialogueCompleted { get; private set; }
-        public string DialogueSpeaker => "Gate Keeper";
+        public string DialogueSpeaker => "Người Giữ Cổng";
         public string DialogueLine => DialogueActive ? GateKeeperDialogueLines[Mathf.Clamp(_dialogueLineIndex, 0, GateKeeperDialogueLines.Length - 1)] : string.Empty;
         public string DialogueProgress => DialogueActive ? (_dialogueLineIndex + 1) + "/" + GateKeeperDialogueLines.Length : "0/" + GateKeeperDialogueLines.Length;
         public bool HasNextDialogueLine => DialogueActive && _dialogueLineIndex < GateKeeperDialogueLines.Length - 1;
@@ -117,7 +117,7 @@ namespace LinhGioi.World
             SetGateKeeperState(PlaceholderNpcState.Idle);
             SetShadowSlimeState(PlaceholderSlimeState.Idle);
             SetVfxFeedback(PlaceholderVfxFeedbackState.PortalGatePulse, 1.35f);
-            _objectiveText = "Objective 1/2: talk to the Gate Keeper.";
+            _objectiveText = "Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.";
             RefreshInteractionState();
             PositionChanged?.Invoke();
         }
@@ -283,21 +283,21 @@ namespace LinhGioi.World
             {
                 SetVfxFeedback(PlaceholderVfxFeedbackState.WindSlashPreview, 1.25f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
-                _interactionText = "Preview only: Wind Slash form traces a gold arc with no opponent or result.";
+                _interactionText = "Chỉ xem thử: Chém Gió vẽ một cung vàng, không có đối thủ hay kết quả thật.";
             }
             else if (previewName == "Shadow Bind")
             {
                 SetShadowSlimeState(PlaceholderSlimeState.AlertWarning);
                 SetVfxFeedback(PlaceholderVfxFeedbackState.ShadowBindWarning, 1.25f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Danger);
-                _interactionText = "Preview only: Shadow Bind warning ring marks readable intent in the safe yard.";
+                _interactionText = "Chỉ xem thử: Trói Bóng hiển thị vòng cảnh báo dễ đọc trong sân an toàn.";
             }
             else
             {
                 SetPlayerPose(PlaceholderPoseState.SpiritChannel);
                 SetVfxFeedback(PlaceholderVfxFeedbackState.SpiritPulse, 1.25f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
-                _interactionText = "Preview only: Spirit Guard pulse shows a defensive stance rehearsal.";
+                _interactionText = "Chỉ xem thử: Hộ Linh tạo mạch sáng cho tư thế phòng thủ.";
             }
             InteractionStateChanged?.Invoke();
         }
@@ -429,21 +429,21 @@ namespace LinhGioi.World
         {
             if (_marker == null)
             {
-                SetNearest(null, "Move near the Gate Keeper or Training Stone.");
+                SetNearest(null, "Di chuyển tới gần Người Giữ Cổng hoặc Đá Luyện.");
                 return;
             }
 
             var position = _marker.position;
             var training = new InteractableState(
                 "Training Stone",
-                "Press F or Space: stabilize spirit pulse.",
-                "Spirit pulse stabilized. Training acknowledged.",
+                "Nhấn F hoặc Space: ổn định mạch linh khí.",
+                "Mạch linh khí đã ổn định. Đã ghi nhận luyện tập.",
                 TrainingStonePosition
             );
             var keeper = new InteractableState(
                 "Gate Keeper",
-                "Press F or Space: ask the Gate Keeper for guidance.",
-                "Gate Keeper: your path is open. Try the Training Stone.",
+                "Nhấn F hoặc Space: xin chỉ dẫn từ Người Giữ Cổng.",
+                "Người Giữ Cổng: đường đã mở. Hãy thử Đá Luyện.",
                 GateKeeperPosition
             );
 
@@ -453,7 +453,7 @@ namespace LinhGioi.World
             else if (_guidedStep == GuidedTrainingStep.FindGateKeeper && Distance2D(position, training.position) <= InteractionRange)
                 SetNearest(training, training.prompt);
             else
-                SetNearest(null, InteractionAcknowledged ? "Loop complete: save position or return to lobby." : NextMovementHint());
+                SetNearest(null, InteractionAcknowledged ? "Vòng hướng dẫn hoàn tất: lưu vị trí hoặc quay lại sảnh." : NextMovementHint());
         }
 
         private bool TryTriggerInteraction()
@@ -495,8 +495,8 @@ namespace LinhGioi.World
             SetShadowSlimeState(PlaceholderSlimeState.DissolveQuiet);
             SetVfxFeedback(PlaceholderVfxFeedbackState.SpiritPulse, 1.5f);
             TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
-            _objectiveText = "Objective complete: spirit pulse stabilized.";
-            _interactionText = "Spirit pulse stabilized. Training acknowledged.";
+            _objectiveText = "Mục tiêu hoàn tất: mạch linh khí đã ổn định.";
+            _interactionText = "Mạch linh khí đã ổn định. Đã ghi nhận luyện tập.";
         }
 
         public bool ContinueDialogue()
@@ -519,8 +519,8 @@ namespace LinhGioi.World
             DialogueCompleted = true;
             _guidedStep = GuidedTrainingStep.FindTrainingStone;
             SetGateKeeperState(PlaceholderNpcState.Idle);
-            _objectiveText = "Objective 2/2: stabilize the Training Stone.";
-            _interactionText = "Gate Keeper: your path is open. Follow the cyan spirit pulse north.";
+            _objectiveText = "Mục tiêu 2/2: ổn định Đá Luyện.";
+            _interactionText = "Người Giữ Cổng: đường đã mở. Hãy đi theo mạch linh khí lam về phía bắc.";
             RefreshInteractionState();
             InteractionStateChanged?.Invoke();
             return true;
@@ -531,22 +531,22 @@ namespace LinhGioi.World
             DialogueActive = true;
             DialogueCompleted = false;
             _dialogueLineIndex = 0;
-            _objectiveText = "Objective 1/2: listen to the Gate Keeper.";
+            _objectiveText = "Mục tiêu 1/2: lắng nghe Người Giữ Cổng.";
             _interactionText = DialogueLine;
         }
 
         private string NextMovementHint()
         {
-            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Step 1: move toward the gold Gate Keeper at the northwest side of the yard.";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Step 2: follow the cyan pulse to the Training Stone at the north center.";
-            return "Loop complete: save position or return to lobby.";
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Bước 1: đi về phía Người Giữ Cổng màu vàng ở góc tây bắc sân luyện.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Bước 2: đi theo mạch sáng lam tới Đá Luyện ở phía bắc.";
+            return "Vòng hướng dẫn hoàn tất: lưu vị trí hoặc quay lại sảnh.";
         }
 
         private string DescribeObjectiveDirection()
         {
-            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "face northwest for Step 1 / Gate Keeper guidance.";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "face north for Step 2 / Training Stone focus.";
-            return "training complete; use Save Position or return to Character Hall.";
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "hướng tây bắc để gặp Người Giữ Cổng.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "hướng bắc để tập trung vào Đá Luyện.";
+            return "luyện tập hoàn tất; có thể lưu vị trí hoặc về Điện Nhân Vật.";
         }
 
         private string DescribeCurrentArea()
@@ -558,11 +558,48 @@ namespace LinhGioi.World
             {
                 SetShadowSlimeState(PlaceholderSlimeState.AlertWarning);
                 SetVfxFeedback(PlaceholderVfxFeedbackState.ShadowBindWarning, 1.2f);
-                return "Safe yard / east shadow warning";
+                return "Sân luyện an toàn / cảnh báo bóng phía đông";
             }
-            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Safe yard / path to Gate Keeper";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Safe yard / path to Training Stone";
-            return "Safe yard / training complete";
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Sân luyện an toàn / đường tới Người Giữ Cổng";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Sân luyện an toàn / đường tới Đá Luyện";
+            return "Sân luyện an toàn / luyện tập hoàn tất";
+        }
+
+        private string DescribeGuidedTrainingStep()
+        {
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Bước 1: tìm Người Giữ Cổng";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Bước 2: ổn định Đá Luyện";
+            return "Hoàn tất vòng hướng dẫn";
+        }
+
+        private string DescribePlayerPoseState()
+        {
+            if (_playerPoseState == PlaceholderPoseState.WalkMove) return "đang di chuyển";
+            if (_playerPoseState == PlaceholderPoseState.Interact) return "đang tương tác";
+            if (_playerPoseState == PlaceholderPoseState.SpiritChannel) return "dẫn linh khí";
+            return "đứng yên";
+        }
+
+        private string DescribeGateKeeperState()
+        {
+            return _gateKeeperState == PlaceholderNpcState.TalkGuide ? "đang chỉ dẫn" : "chờ";
+        }
+
+        private string DescribeShadowSlimeState()
+        {
+            if (_shadowSlimeState == PlaceholderSlimeState.AlertWarning) return "cảnh báo";
+            if (_shadowSlimeState == PlaceholderSlimeState.DissolveQuiet) return "tan dần";
+            return "đứng yên";
+        }
+
+        private string DescribeVfxFeedbackState()
+        {
+            if (_vfxFeedbackState == PlaceholderVfxFeedbackState.PortalGatePulse) return "mạch sáng Linh Môn";
+            if (_vfxFeedbackState == PlaceholderVfxFeedbackState.WindSlashPreview) return "Chém Gió xem thử";
+            if (_vfxFeedbackState == PlaceholderVfxFeedbackState.SpiritPulse) return "mạch linh khí";
+            if (_vfxFeedbackState == PlaceholderVfxFeedbackState.ShadowBindWarning) return "vòng cảnh báo Trói Bóng";
+            if (_vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash) return "lóe sáng trúng bia";
+            return "yên tĩnh";
         }
 
         private void SetNearest(InteractableState state, string text)

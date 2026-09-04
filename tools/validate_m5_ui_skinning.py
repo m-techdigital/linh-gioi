@@ -59,7 +59,7 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'UI skin source: v0.20 component sheet / window popup sheet.',
+        'Nguồn giao diện: asset runtime tối ưu, chưa phải art final.',
         'NewOrnamentRule',
         'NewToast',
         'ApplyStatusChip',
@@ -67,7 +67,7 @@ def main() -> int:
         'borderLeftColor = RuntimeArtCatalog.Spirit',
         'borderTopColor = RuntimeArtCatalog.Gold',
         'borderBottomColor = RuntimeArtCatalog.SurfaceRaised',
-        'tooltip = "Select cultivator"',
+        'tooltip = "Chọn nhân vật tu luyện"',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

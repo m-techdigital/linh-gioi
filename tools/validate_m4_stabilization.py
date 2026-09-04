@@ -187,13 +187,13 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Cổng Đăng Nhập',
-        'Character Hall',
-        'World HUD',
+        'Linh Môn',
+        'Điện Nhân Vật',
+        'Sân Luyện An Toàn',
         'Vào Thế Giới',
         'Vào sân luyện',
-        'Save Position',
-        'Back to Lobby',
+        'Lưu vị trí',
+        'Về điện nhân vật',
     )
     require(
         'client/Unity/Assets/Game/World/Runtime/M4PlayableVerticalSliceSmokeRunner.cs',

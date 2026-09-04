@@ -25,8 +25,8 @@ def require(path: str, *markers: str) -> None:
 
 
 def main() -> int:
-    require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'Objective 1/2', 'Objective 2/2', 'Step 1:', 'Step 2:', 'cyan pulse north', 'Safe yard / east shadow warning')
-    require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'Training complete. Save position or return to Character Hall.', 'Step 1 Gate Keeper / Step 2 Training Stone', 'Save Position', 'Back to Character Hall', 'Quit')
+    require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'Mục tiêu 1/2', 'Mục tiêu 2/2', 'Bước 1:', 'Bước 2:', 'mạch sáng lam', 'Sân luyện an toàn / cảnh báo bóng phía đông')
+    require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', 'Hoàn tất luyện tập. Hãy lưu vị trí hoặc về Điện Nhân Vật.', 'Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện', 'Lưu vị trí', 'Về điện nhân vật', 'Thoát')
     require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'DialogueActive', 'DialogueCompleted')
     require('tools/validate_m5_lightweight_dialogue.py', 'M5 LIGHTWEIGHT NPC DIALOGUE VALIDATION PASS')
     require('docs/tasks/M5-TRAINING-OBJECTIVE-UX-v0.25.0.md', 'M5_TRAINING_OBJECTIVE_UX_SOURCE_READY_v0.25.0', 'no rewards')

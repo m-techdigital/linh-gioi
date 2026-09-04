@@ -64,21 +64,21 @@ def main() -> int:
         'GuidedTrainingStep',
         'FindGateKeeper',
         'FindTrainingStone',
-        'Objective 1/2: talk to the Gate Keeper.',
-        'Objective 2/2: stabilize the Training Stone.',
-        'Objective complete: spirit pulse stabilized.',
-        'Gate Keeper: your path is open. Follow the cyan spirit pulse north.',
+        'Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.',
+        'Mục tiêu 2/2: ổn định Đá Luyện.',
+        'Mục tiêu hoàn tất: mạch linh khí đã ổn định.',
+        'Người Giữ Cổng: đường đã mở. Hãy đi theo mạch linh khí lam về phía bắc.',
         'SetSmokePositionNearGateKeeper',
         'SetSmokePositionNearTrainingStone',
         'LGO Shadow Slime Non Combat Marker',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Objective 1/2: talk to the Gate Keeper.',
-        'Move near the Gate Keeper.',
-        'Save Position',
-        'Back to Lobby',
-        'Quit',
+        'Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.',
+        'Di chuyển tới gần Người Giữ Cổng.',
+        'Lưu vị trí',
+        'Về điện nhân vật',
+        'Thoát',
     )
     require(
         'client/Unity/Assets/Game/World/Runtime/M5GuidedTrainingLoopSmokeRunner.cs',
@@ -98,9 +98,9 @@ def main() -> int:
         'tools/m5_guided_training_loop_runtime.py',
         'M5_GUIDED_TRAINING_LOOP_RUNTIME_SMOKE_PASS',
         '--lgo-m5-guided-training-loop-smoke',
-        'Gate Keeper',
-        'Training Stone',
-        'Objective complete',
+        'Người Giữ Cổng',
+        'Đá Luyện',
+        'Mục tiêu hoàn tất',
         'savePositionStillWorks',
     )
     require(

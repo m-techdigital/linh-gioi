@@ -78,18 +78,18 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'VFX:',
-        'visual-only local feedback',
-        'portal, spirit pulse, wind slash preview, shadow bind warning are visual-only',
+        'Hiệu ứng:',
+        'chỉ là phản hồi hình ảnh cục bộ',
+        'cổng, mạch linh khí, chém gió, cảnh báo bóng đều chỉ là hình ảnh',
     )
     require(
         'client/Unity/Assets/Game/World/Runtime/M5GuidedTrainingLoopSmokeRunner.cs',
         'initialVfxFeedbackState',
         'afterGateKeeperVfxFeedbackState',
         'finalVfxFeedbackState',
-        'PortalGatePulse',
-        'WindSlashPreview',
-        'SpiritPulse',
+        'mạch sáng Linh Môn',
+        'Chém Gió xem thử',
+        'mạch linh khí',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

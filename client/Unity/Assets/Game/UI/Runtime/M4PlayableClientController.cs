@@ -131,7 +131,7 @@ namespace LinhGioi.UI
             _root.style.paddingTop = 16;
             _root.style.paddingBottom = 16;
             _root.style.alignItems = Align.Center;
-            _root.style.unityBackgroundImageTintColor = RuntimeArtCatalog.Background;
+            _root.style.unityBackgroundImageTintColor = Color.white;
             var gateBackground = LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV2.LoginBackgroundSpiritGate;
             if (gateBackground != null)
             {
@@ -145,7 +145,7 @@ namespace LinhGioi.UI
             _mainShell.style.flexDirection = FlexDirection.Row;
             _mainShell.style.flexWrap = Wrap.Wrap;
             _mainShell.style.width = Length.Percent(100);
-            _mainShell.style.maxWidth = 960;
+            _mainShell.style.maxWidth = 1120;
             _mainShell.style.alignContent = Align.FlexStart;
             _mainShell.style.justifyContent = Justify.Center;
             _mainShell.style.marginTop = 12;
@@ -165,7 +165,7 @@ namespace LinhGioi.UI
             header.style.alignItems = Align.Center;
             header.style.flexWrap = Wrap.Wrap;
             header.style.width = Length.Percent(100);
-            header.style.maxWidth = 960;
+            header.style.maxWidth = 1120;
             _root.Add(header);
 
             var brand = new VisualElement();
@@ -174,20 +174,20 @@ namespace LinhGioi.UI
 
             var logo = new VisualElement();
             logo.name = "LGO Login Gate Entry Logo V2";
-            logo.style.width = 260;
-            logo.style.height = 96;
+            logo.style.width = 360;
+            logo.style.height = 132;
             logo.style.marginBottom = 2;
             var logoTexture = LgoVisualAssetRegistryV2.LogoLinhGioiOnline;
             if (logoTexture != null) logo.style.backgroundImage = new StyleBackground(logoTexture);
             brand.Add(logo);
 
             var title = new Label("Linh Giới Online");
-            title.style.fontSize = 30;
+            title.style.fontSize = 24;
             title.style.unityFontStyleAndWeight = FontStyle.Bold;
             title.style.color = RuntimeArtCatalog.Gold;
             brand.Add(title);
 
-            var subtitle = new Label("Cổng Linh Giới - bản chơi thử nội bộ");
+            var subtitle = new Label("Cổng Linh Giới - bản thử nghiệm nội bộ");
             subtitle.style.color = RuntimeArtCatalog.Spirit;
             subtitle.style.fontSize = 13;
             brand.Add(subtitle);
@@ -204,22 +204,22 @@ namespace LinhGioi.UI
             right.style.flexWrap = Wrap.Wrap;
             right.Add(_status);
             _quitButton = NewQuietButton("Thoát", QuitPlayer);
-            _quitButton.tooltip = "Esc opens the session menu in world; Quit closes the player review";
+            _quitButton.tooltip = "Esc mở menu phiên trong thế giới; Thoát đóng bản chơi thử.";
             right.Add(_quitButton);
             header.Add(right);
         }
 
         private void BuildAuthPanel()
         {
-            _authPanel = NewPanel(520);
+            _authPanel = NewPanel(620);
             ApplyV2PanelSkin(_authPanel);
             _mainShell.Add(_authPanel);
-            _authPanel.Add(NewSectionTitle("Cổng Đăng Nhập"));
+            _authPanel.Add(NewSectionTitle("Linh Môn"));
             _authPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
             var gateKeeper = new VisualElement();
             gateKeeper.name = "LGO Login Gate Keeper NPC V2";
-            gateKeeper.style.width = 132;
-            gateKeeper.style.height = 198;
+            gateKeeper.style.width = 176;
+            gateKeeper.style.height = 264;
             gateKeeper.style.alignSelf = Align.Center;
             gateKeeper.style.marginBottom = 8;
             var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
@@ -243,12 +243,12 @@ namespace LinhGioi.UI
             _authPanel.Add(serverRow);
 
             _authPanel.Add(NewMutedLabel("API: " + _config.apiBaseUrl));
-            _devKey = NewTextField("Khóa dev", DefaultDevKey);
+            _devKey = NewTextField("Khóa thử nghiệm", DefaultDevKey);
             _authPanel.Add(_devKey);
             _loginButton = NewPrimaryButton("Vào Thế Giới", () => RunAsync(LoginAsync));
             _authPanel.Add(_loginButton);
             var utilities = NewButtonRow(
-                NewIconButton("Thông báo", LgoVisualAssetRegistryV2.IconNoticeTexture, () => SetToast("Thông báo: bản thử nghiệm nội bộ.", RuntimeArtCatalog.Spirit)),
+                NewIconButton("Tin", LgoVisualAssetRegistryV2.IconNoticeTexture, () => SetToast("Thông báo: bản thử nghiệm nội bộ.", RuntimeArtCatalog.Spirit)),
                 NewIconButton("Tài khoản", LgoVisualAssetRegistryV2.IconAccountTexture, () => SetToast("Tài khoản dev sẽ được mở bằng khóa hiện tại.", RuntimeArtCatalog.Muted)),
                 NewIconButton("Cài đặt", LgoVisualAssetRegistryV2.IconSettingsTexture, () => SetToast("Cài đặt nhanh có trong menu phiên.", RuntimeArtCatalog.Muted))
             );
@@ -297,7 +297,7 @@ namespace LinhGioi.UI
 
             create.Add(NewSectionTitle("Tạo Tu Sĩ"));
             _characterName = NewTextField("Tên nhân vật", "LinhGioiHero");
-            _classId = NewTextField("Class ID", DefaultClassId);
+            _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
             _createButton = NewSecondaryButton("Tạo", () => RunAsync(CreateCharacterAsync));
             _enterWorldButton = NewPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
             create.Add(_characterName);
@@ -309,7 +309,7 @@ namespace LinhGioi.UI
         {
             _worldHud = NewPanel(760);
             _mainShell.Add(_worldHud);
-            _worldHud.Add(NewSectionTitle("World HUD / Safe Training Yard"));
+            _worldHud.Add(NewSectionTitle("Sân Luyện An Toàn"));
             _worldHud.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
 
             var topStrip = new VisualElement();
@@ -318,44 +318,44 @@ namespace LinhGioi.UI
             topStrip.style.marginBottom = 10;
             _worldHud.Add(topStrip);
 
-            topStrip.Add(NewBadge("Account", "profile loaded"));
-            topStrip.Add(NewBadge("Persistence", "local dev API"));
-            topStrip.Add(NewBadge("Move", "WASD or arrows"));
-            topStrip.Add(NewBadge("Turn", "Q / E"));
-            topStrip.Add(NewBadge("Interact", "F or Space"));
+            topStrip.Add(NewBadge("Tài khoản", "đã kết nối"));
+            topStrip.Add(NewBadge("Lưu vị trí", "API nội bộ"));
+            topStrip.Add(NewBadge("Di chuyển", "WASD hoặc phím mũi tên"));
+            topStrip.Add(NewBadge("Xoay", "Q / E"));
+            topStrip.Add(NewBadge("Tương tác", "F hoặc Space"));
             topStrip.Add(NewBadge("Menu", "Esc"));
 
-            _worldName = new Label("No character selected");
+            _worldName = new Label("Chưa chọn nhân vật");
             _worldName.style.fontSize = 19;
             _worldName.style.unityFontStyleAndWeight = FontStyle.Bold;
             _worldName.style.color = RuntimeArtCatalog.Gold;
             _worldHud.Add(_worldName);
 
-            _worldMeta = NewMutedLabel("Select a character in the lobby.");
+            _worldMeta = NewMutedLabel("Chọn nhân vật tại điện nhân vật.");
             _worldHud.Add(_worldMeta);
 
-            _worldArea = NewStatusLabel("Area: Lobby preview", RuntimeArtCatalog.Muted);
+            _worldArea = NewStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted);
             _worldHud.Add(_worldArea);
 
-            _worldStep = NewStatusLabel("Guided loop: Step 1 Gate Keeper / Step 2 Training Stone.", RuntimeArtCatalog.Spirit);
+            _worldStep = NewStatusLabel("Vòng hướng dẫn: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_worldStep);
 
-            _worldDirection = NewStatusLabel("Direction: enter the world to reveal yard landmarks.", RuntimeArtCatalog.Gold);
+            _worldDirection = NewStatusLabel("Chỉ dẫn: vào thế giới để hiện mốc sân luyện.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldDirection);
 
-            _worldPoseState = NewStatusLabel("Pose: player idle / Gate Keeper idle / Shadow Slime idle.", RuntimeArtCatalog.Muted);
+            _worldPoseState = NewStatusLabel("Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.", RuntimeArtCatalog.Muted);
             _worldHud.Add(_worldPoseState);
 
-            _worldVfxState = NewStatusLabel("VFX: Quiet / portal, spirit pulse, wind slash preview, shadow bind warning are visual-only.", RuntimeArtCatalog.Spirit);
+            _worldVfxState = NewStatusLabel("Hiệu ứng: yên tĩnh / cổng, mạch linh khí, chém gió, cảnh báo bóng đều chỉ là hình ảnh.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_worldVfxState);
 
-            _skinSource = NewStatusLabel("UI skin source: v0.20 component sheet / window popup sheet.", RuntimeArtCatalog.Spirit);
+            _skinSource = NewStatusLabel("Nguồn giao diện: asset runtime tối ưu, chưa phải art final.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_skinSource);
 
-            _worldObjective = NewStatusLabel("Objective 1/2: talk to the Gate Keeper.", RuntimeArtCatalog.Gold);
+            _worldObjective = NewStatusLabel("Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.", RuntimeArtCatalog.Gold);
             _worldHud.Add(_worldObjective);
 
-            _interactionHint = NewStatusLabel("Move near the Gate Keeper.", RuntimeArtCatalog.Spirit);
+            _interactionHint = NewStatusLabel("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_interactionHint);
 
             _position = NewMutedLabel("x=0.00 y=0.00 z=0.00 yaw=0.0");
@@ -367,11 +367,11 @@ namespace LinhGioi.UI
             _position.style.paddingBottom = 6;
             _worldHud.Add(_position);
 
-            _worldLandmarks = NewMutedLabel("Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east.");
+            _worldLandmarks = NewMutedLabel("Mốc sân luyện: Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông.");
             _worldLandmarks.style.marginTop = 8;
             _worldHud.Add(_worldLandmarks);
 
-            _toast = NewToast("Spirit Gate shell ready.");
+            _toast = NewToast("Linh Môn đã sẵn sàng.");
             _worldHud.Add(_toast);
 
             BuildSessionMenuPanel();
@@ -380,14 +380,14 @@ namespace LinhGioi.UI
 
             _dialoguePanel = NewPreviewPanel();
             _dialoguePanel.style.marginTop = 10;
-            _dialogueSpeaker = new Label("Gate Keeper");
+            _dialogueSpeaker = new Label("Người Giữ Cổng");
             _dialogueSpeaker.style.fontSize = 17;
             _dialogueSpeaker.style.unityFontStyleAndWeight = FontStyle.Bold;
             _dialogueSpeaker.style.color = RuntimeArtCatalog.Gold;
-            _dialogueLine = NewMutedLabel("Dialogue closed.");
-            _dialogueProgress = NewStatusLabel("Dialogue: 0/3", RuntimeArtCatalog.Muted);
-            _dialogueContinueButton = NewSecondaryButton("Continue", ContinueDialogue);
-            _dialogueCloseButton = NewQuietButton("Close", CloseDialogue);
+            _dialogueLine = NewMutedLabel("Đối thoại đã đóng.");
+            _dialogueProgress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
+            _dialogueContinueButton = NewSecondaryButton("Tiếp tục", ContinueDialogue);
+            _dialogueCloseButton = NewQuietButton("Đóng", CloseDialogue);
             _dialoguePanel.Add(_dialogueSpeaker);
             _dialoguePanel.Add(_dialogueLine);
             _dialoguePanel.Add(_dialogueProgress);
@@ -395,11 +395,11 @@ namespace LinhGioi.UI
             _worldHud.Add(_dialoguePanel);
             SetDialogueVisible(false);
 
-            _savePositionButton = NewPrimaryButton("Save Position", () => RunAsync(SavePositionAsync));
-            _savePositionButton.tooltip = "Persist this character position to the local dev API";
-            _backButton = NewSecondaryButton("Back to Character Hall", BackToLobby);
-            _backButton.tooltip = "Back to Lobby / return to character management without leaving the player";
-            _worldHud.Add(NewButtonRow(_savePositionButton, _backButton, NewQuietButton("Quit", QuitPlayer)));
+            _savePositionButton = NewPrimaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
+            _savePositionButton.tooltip = "Ghi vị trí hiện tại vào API nội bộ.";
+            _backButton = NewSecondaryButton("Về điện nhân vật", BackToLobby);
+            _backButton.tooltip = "Quay lại quản lý nhân vật mà không đóng bản chơi thử.";
+            _worldHud.Add(NewButtonRow(_savePositionButton, _backButton, NewQuietButton("Thoát", QuitPlayer)));
         }
 
         private void BuildSessionMenuPanel()
@@ -410,13 +410,13 @@ namespace LinhGioi.UI
             _sessionMenuPanel.style.backgroundColor = RuntimeArtCatalog.Background;
             _sessionMenuPanel.style.borderLeftColor = RuntimeArtCatalog.Gold;
             _sessionMenuPanel.style.borderLeftWidth = 2;
-            _sessionMenuPanel.Add(NewSectionTitle("Session Menu"));
-            _sessionMenuStatus = NewMutedLabel("Paused in safe training yard.");
+            _sessionMenuPanel.Add(NewSectionTitle("Menu phiên"));
+            _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
             _sessionMenuPanel.Add(_sessionMenuStatus);
-            _resumeButton = NewPrimaryButton("Resume", HideSessionMenu);
-            _sessionSaveButton = NewSecondaryButton("Save Position", () => RunAsync(SavePositionAsync));
-            _sessionBackButton = NewSecondaryButton("Back to Character Hall", BackToLobby);
-            _sessionQuitButton = NewQuietButton("Quit", QuitPlayer);
+            _resumeButton = NewPrimaryButton("Tiếp tục", HideSessionMenu);
+            _sessionSaveButton = NewSecondaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
+            _sessionBackButton = NewSecondaryButton("Về điện nhân vật", BackToLobby);
+            _sessionQuitButton = NewQuietButton("Thoát", QuitPlayer);
             _sessionMenuPanel.Add(NewButtonRow(_resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton));
             BuildLocalSettingsPanel();
             _worldHud.Add(_sessionMenuPanel);
@@ -428,11 +428,11 @@ namespace LinhGioi.UI
             _skillPreviewPanel = NewPreviewPanel();
             _skillPreviewPanel.name = "LGO Skill Preview Sandbox";
             _skillPreviewPanel.style.marginTop = 10;
-            _skillPreviewPanel.Add(NewSectionTitle("Skill Preview Sandbox"));
-            _skillPreviewPanel.Add(NewMutedLabel("Local visual rehearsal only. No opponent, timing rule, or progression result is created."));
-            _previewWindSlashButton = NewSecondaryButton("Preview Wind Slash", () => PreviewSkill("Wind Slash"));
-            _previewShadowBindButton = NewSecondaryButton("Preview Shadow Bind", () => PreviewSkill("Shadow Bind"));
-            _previewSpiritGuardButton = NewSecondaryButton("Preview Spirit Guard", () => PreviewSkill("Spirit Guard"));
+            _skillPreviewPanel.Add(NewSectionTitle("Xem thử kỹ năng"));
+            _skillPreviewPanel.Add(NewMutedLabel("Chỉ diễn tập hình ảnh cục bộ. Không tạo đối thủ, luật thời gian, tiến trình hay kết quả thật."));
+            _previewWindSlashButton = NewSecondaryButton("Chém Gió", () => PreviewSkill("Wind Slash", "Chém Gió"));
+            _previewShadowBindButton = NewSecondaryButton("Trói Bóng", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
+            _previewSpiritGuardButton = NewSecondaryButton("Hộ Linh", () => PreviewSkill("Spirit Guard", "Hộ Linh"));
             _skillPreviewPanel.Add(NewButtonRow(_previewWindSlashButton, _previewShadowBindButton, _previewSpiritGuardButton));
             _worldHud.Add(_skillPreviewPanel);
         }
@@ -471,10 +471,10 @@ namespace LinhGioi.UI
             _settingsPanel = NewPreviewPanel();
             _settingsPanel.name = "LGO Local Settings Foundation";
             _settingsPanel.style.marginTop = 8;
-            _settingsPanel.Add(NewSectionTitle("Local Settings"));
-            _showPositionToggle = NewLocalSettingToggle("Show position readout", true, ApplyLocalSettings);
-            _showHintsToggle = NewLocalSettingToggle("Show guidance hints", true, ApplyLocalSettings);
-            _focusModeToggle = NewLocalSettingToggle("Focus HUD mode", false, ApplyLocalSettings);
+            _settingsPanel.Add(NewSectionTitle("Cài đặt cục bộ"));
+            _showPositionToggle = NewLocalSettingToggle("Hiện tọa độ", true, ApplyLocalSettings);
+            _showHintsToggle = NewLocalSettingToggle("Hiện chỉ dẫn", true, ApplyLocalSettings);
+            _focusModeToggle = NewLocalSettingToggle("Chế độ HUD gọn", false, ApplyLocalSettings);
             _settingsPanel.Add(_showPositionToggle);
             _settingsPanel.Add(_showHintsToggle);
             _settingsPanel.Add(_focusModeToggle);
@@ -483,21 +483,21 @@ namespace LinhGioi.UI
 
         private async Task LoginAsync()
         {
-            SetBusy(true, "Opening spirit gate...");
+            SetBusy(true, "Đang mở Linh Môn...");
             var login = await _client.LoginDevAsync(Required(_devKey.value, DefaultDevKey), "M4 Playable Client", _shutdown.Token);
             _accountState = login.account;
-            _account.text = "Account: " + Abbrev(_accountState.accountId) + " / " + _accountState.displayName;
+            _account.text = "Tài khoản: " + Abbrev(_accountState.accountId) + " / " + _accountState.displayName;
             await RefreshCharactersAsync();
             ShowLobbyMode();
-            SetBusy(false, "Lobby ready");
-            SetToast("Account linked. Character Hall opened.", RuntimeArtCatalog.Spirit);
+            SetBusy(false, "Điện Nhân Vật đã sẵn sàng.");
+            SetToast("Tài khoản đã kết nối. Điện Nhân Vật đã mở.", RuntimeArtCatalog.Spirit);
         }
 
         private async Task RefreshCharactersAsync()
         {
             _characters = await _client.ListCharactersAsync(_accountState.accountId, _shutdown.Token);
             _characterList.Clear();
-            _characterList.Add(NewMutedLabel(_characters.Length == 0 ? "No character yet" : "Select a character"));
+            _characterList.Add(NewMutedLabel(_characters.Length == 0 ? "Chưa có nhân vật." : "Chọn nhân vật."));
             if (_characters.Length == 0)
             {
                 SelectCharacter(null);
@@ -514,25 +514,25 @@ namespace LinhGioi.UI
         private async Task CreateCharacterAsync()
         {
             if (_accountState == null) return;
-            SetBusy(true, "Creating cultivator...");
+            SetBusy(true, "Đang tạo tu sĩ...");
             try
             {
                 var created = await _client.CreateCharacterAsync(_accountState.accountId, Required(_characterName.value, "LinhGioiHero"), Required(_classId.value, DefaultClassId), _shutdown.Token);
                 _selectedCharacter = created;
                 await RefreshCharactersAsync();
-                SetBusy(false, "Character ready");
-                SetToast("Cultivator record prepared.", RuntimeArtCatalog.Gold);
+                SetBusy(false, "Nhân vật đã sẵn sàng.");
+                SetToast("Hồ sơ tu sĩ đã được tạo.", RuntimeArtCatalog.Gold);
             }
             catch (Exception exception)
             {
-                SetApiError("create character", exception);
+                SetApiError("tạo nhân vật", exception);
             }
         }
 
         private async Task EnterWorldAsync()
         {
             if (_selectedCharacter == null) return;
-            SetBusy(true, "Entering Spirit Gate training yard...");
+            SetBusy(true, "Đang vào sân luyện Linh Môn...");
             var loaded = await _client.LoadCharacterAsync(_selectedCharacter.characterId, _shutdown.Token);
             _selectedCharacter = loaded;
             if (_world == null)
@@ -545,27 +545,27 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
             UpdateSelectedPreview(loaded);
             ShowWorldMode();
-            SetBusy(false, "Training yard ready: follow Step 1 then Step 2.");
-            SetToast("Spirit Gate opened. Step 1: talk to the Gate Keeper.", RuntimeArtCatalog.Spirit);
+            SetBusy(false, "Sân luyện đã sẵn sàng: làm theo Bước 1 rồi Bước 2.");
+            SetToast("Linh Môn đã mở. Bước 1: trò chuyện với Người Giữ Cổng.", RuntimeArtCatalog.Spirit);
         }
 
         private async Task SavePositionAsync()
         {
             if (_selectedCharacter == null || _world == null) return;
-            SetBusy(true, "Saving position to local dev API...");
+            SetBusy(true, "Đang lưu vị trí vào API nội bộ...");
             var save = _world.BuildSaveRequest();
             _selectedCharacter = await _client.SaveCharacterPositionAsync(_selectedCharacter.characterId, save.x, save.y, save.z, save.yawDegrees, _shutdown.Token);
             UpdateSelectedPreview(_selectedCharacter);
-            SetBusy(false, "Position saved near " + _world.CurrentAreaLabel + ".");
-            SetToast("Position seal recorded near " + _world.CurrentAreaLabel + ".", RuntimeArtCatalog.Gold);
+            SetBusy(false, "Đã lưu vị trí gần " + _world.CurrentAreaLabel + ".");
+            SetToast("Dấu ấn vị trí đã ghi gần " + _world.CurrentAreaLabel + ".", RuntimeArtCatalog.Gold);
         }
 
         private void BackToLobby()
         {
             SetSessionMenuVisible(false);
             ShowLobbyMode();
-            SetBusy(false, "Returned to Character Hall.");
-            SetToast("Returned to Character Hall.", RuntimeArtCatalog.Muted);
+            SetBusy(false, "Đã quay lại Điện Nhân Vật.");
+            SetToast("Đã quay lại Điện Nhân Vật.", RuntimeArtCatalog.Muted);
         }
 
         private void SelectCharacter(CharacterResponse character)
@@ -573,46 +573,46 @@ namespace LinhGioi.UI
             _selectedCharacter = character;
             UpdateSelectedPreview(character);
             _enterWorldButton.SetEnabled(character != null);
-            _status.text = character == null ? "Create or select a cultivator" : "Selected: " + character.name;
-            SetToast(character == null ? "Awaiting cultivator selection." : "Selected " + character.name + ".", RuntimeArtCatalog.Muted);
+            _status.text = character == null ? "Tạo hoặc chọn tu sĩ" : "Đã chọn: " + character.name;
+            SetToast(character == null ? "Đang chờ chọn tu sĩ." : "Đã chọn " + character.name + ".", RuntimeArtCatalog.Muted);
         }
 
         private void UpdateSelectedPreview(CharacterResponse character)
         {
             if (character == null)
             {
-                _selectedName.text = "No character selected";
-                _selectedMeta.text = "Create a cultivator to enter the world.";
-                _worldName.text = "No character selected";
-                _worldMeta.text = "Select a character in the lobby.";
-                if (_worldArea != null) _worldArea.text = "Area: Lobby preview";
-                if (_worldStep != null) _worldStep.text = "Guided loop: Step 1 Gate Keeper / Step 2 Training Stone.";
-                if (_worldDirection != null) _worldDirection.text = "Direction: enter the world to reveal Step 1 guidance.";
-                if (_worldLandmarks != null) _worldLandmarks.text = "Landmarks: Spirit Gate south / Gate Keeper northwest / Training Stone north / Readability Dummy east / Shadow Slime far east.";
-                if (_worldPoseState != null) _worldPoseState.text = "Pose: player idle / Gate Keeper idle / Shadow Slime idle.";
-                if (_worldVfxState != null) _worldVfxState.text = "VFX: Quiet / portal, spirit pulse, wind slash preview, shadow bind warning are visual-only.";
-                if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
-                if (_worldObjective != null) _worldObjective.text = "Objective 1/2: talk to the Gate Keeper.";
-                if (_interactionHint != null) _interactionHint.text = "Move near the Gate Keeper.";
+                _selectedName.text = "Chưa chọn nhân vật";
+                _selectedMeta.text = "Tạo tu sĩ để bước vào Linh Giới.";
+                _worldName.text = "Chưa chọn nhân vật";
+                _worldMeta.text = "Chọn nhân vật tại điện nhân vật.";
+                if (_worldArea != null) _worldArea.text = "Khu vực: xem trước tại sảnh";
+                if (_worldStep != null) _worldStep.text = "Vòng hướng dẫn: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.";
+                if (_worldDirection != null) _worldDirection.text = "Chỉ dẫn: vào thế giới để hiện hướng dẫn Bước 1.";
+                if (_worldLandmarks != null) _worldLandmarks.text = "Mốc sân luyện: Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông.";
+                if (_worldPoseState != null) _worldPoseState.text = "Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.";
+                if (_worldVfxState != null) _worldVfxState.text = "Hiệu ứng: yên tĩnh / cổng, mạch linh khí, chém gió, cảnh báo bóng đều chỉ là hình ảnh.";
+                if (_skinSource != null) _skinSource.text = "Nguồn giao diện: asset runtime tối ưu, chưa phải art final.";
+                if (_worldObjective != null) _worldObjective.text = "Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.";
+                if (_interactionHint != null) _interactionHint.text = "Di chuyển tới gần Người Giữ Cổng.";
                 _position.text = "x=0.00 y=0.00 z=0.00 yaw=0.0";
                 return;
             }
             _selectedName.text = character.name;
-            _selectedMeta.text = "Class " + character.classId + " / " + Abbrev(character.characterId);
+            _selectedMeta.text = "Lớp " + character.classId + " / " + Abbrev(character.characterId);
             _worldName.text = character.name;
-            _worldMeta.text = "Class " + character.classId + " / " + Abbrev(character.characterId);
+            _worldMeta.text = "Lớp " + character.classId + " / " + Abbrev(character.characterId);
             _position.text = character.ToString();
         }
 
         private void RefreshWorldLoopLabels()
         {
             if (_world == null) return;
-            if (_worldArea != null) _worldArea.text = "Area: " + _world.CurrentAreaLabel;
-            if (_worldStep != null) _worldStep.text = "Guided loop: " + _world.GuidedTrainingStepName;
-            if (_worldDirection != null) _worldDirection.text = "Direction: " + _world.ObjectiveDirectionHint;
+            if (_worldArea != null) _worldArea.text = "Khu vực: " + _world.CurrentAreaLabel;
+            if (_worldStep != null) _worldStep.text = "Vòng hướng dẫn: " + _world.GuidedTrainingStepName;
+            if (_worldDirection != null) _worldDirection.text = "Chỉ dẫn: " + _world.ObjectiveDirectionHint;
             if (_worldLandmarks != null) _worldLandmarks.text = _world.WorldLandmarkSummary;
-            if (_worldPoseState != null) _worldPoseState.text = "Pose: player " + _world.PlayerPoseStateName + " / Gate Keeper " + _world.GateKeeperPoseStateName + " / Shadow Slime " + _world.ShadowSlimeStateName + ".";
-            if (_worldVfxState != null) _worldVfxState.text = "VFX: " + _world.VfxFeedbackStateName + " / visual-only local feedback.";
+            if (_worldPoseState != null) _worldPoseState.text = "Tư thế: nhân vật " + _world.PlayerPoseStateName + " / Người Giữ Cổng " + _world.GateKeeperPoseStateName + " / Bóng Tối " + _world.ShadowSlimeStateName + ".";
+            if (_worldVfxState != null) _worldVfxState.text = "Hiệu ứng: " + _world.VfxFeedbackStateName + " / chỉ là phản hồi hình ảnh cục bộ.";
             if (_combatTargetStatus != null) _combatTargetStatus.text = _world.TargetDummyStatusText;
             if (_combatRangeStatus != null) _combatRangeStatus.text = _world.TargetDummyRangeText;
             if (_combatVisualState != null) _combatVisualState.text = _world.TargetDummyVisualStateText;
@@ -620,10 +620,10 @@ namespace LinhGioi.UI
             if (_combatCooldown != null) _combatCooldown.text = _world.CombatCooldownText;
             if (_combatAuthority != null) _combatAuthority.text = _world.CombatAuthorityText;
             RefreshCombatAssetUiState();
-            if (_skinSource != null) _skinSource.text = "UI skin source: v0.20 component sheet / window popup sheet.";
+            if (_skinSource != null) _skinSource.text = "Nguồn giao diện: asset runtime tối ưu, chưa phải art final.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
-            SetToast(_world.InteractionAcknowledged ? "Training complete. Save position or return to Character Hall." : _world.InteractionText, RuntimeArtCatalog.Spirit);
+            SetToast(_world.InteractionAcknowledged ? "Hoàn tất luyện tập. Hãy lưu vị trí hoặc về Điện Nhân Vật." : _world.InteractionText, RuntimeArtCatalog.Spirit);
             RefreshDialoguePanel();
             ApplyLocalSettings();
         }
@@ -692,17 +692,17 @@ namespace LinhGioi.UI
             catch (OperationCanceledException) { }
             catch (Exception exception)
             {
-                SetApiError("API request", exception);
+                SetApiError("gửi yêu cầu API", exception);
             }
         }
 
         private void SetApiError(string action, Exception exception)
         {
-            var message = "API blocked during " + action + ": " + exception.Message;
+            var message = "API bị chặn khi " + action + ": " + exception.Message;
             SetBusy(false, message);
-            SetToast("Local API unavailable or rejected the request. Check server, then retry.", RuntimeArtCatalog.Danger);
+            SetToast("API nội bộ chưa sẵn sàng hoặc từ chối yêu cầu. Kiểm tra server rồi thử lại.", RuntimeArtCatalog.Danger);
             if (_sessionMenuStatus != null)
-                _sessionMenuStatus.text = "API error: check local server, then retry the same action.";
+                _sessionMenuStatus.text = "Lỗi API: kiểm tra server nội bộ rồi thử lại.";
         }
 
         private static VisualElement NewPanel(float maxWidth)
@@ -751,7 +751,7 @@ namespace LinhGioi.UI
             preview.style.borderLeftWidth = 2;
             preview.style.borderTopColor = RuntimeArtCatalog.Spirit;
             preview.style.borderTopWidth = 1;
-            var sigil = new Label("SPIRIT GATE");
+            var sigil = new Label("LINH MÔN");
             sigil.style.color = RuntimeArtCatalog.Spirit;
             sigil.style.unityFontStyleAndWeight = FontStyle.Bold;
             preview.Add(sigil);
@@ -761,10 +761,11 @@ namespace LinhGioi.UI
         private static Label NewSectionTitle(string text)
         {
             var label = new Label(text);
-            label.style.fontSize = 17;
+            label.style.fontSize = 20;
             label.style.unityFontStyleAndWeight = FontStyle.Bold;
             label.style.color = RuntimeArtCatalog.Text;
             label.style.marginBottom = 8;
+            label.style.unityTextAlign = TextAnchor.MiddleCenter;
             return label;
         }
 
@@ -811,6 +812,8 @@ namespace LinhGioi.UI
             button.style.backgroundColor = RuntimeArtCatalog.Spirit;
             button.style.color = RuntimeArtCatalog.Background;
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
+            button.style.minHeight = 58;
+            button.style.fontSize = 16;
             var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
             if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
             return button;
@@ -850,7 +853,7 @@ namespace LinhGioi.UI
         private static Button NewIconButton(string label, Texture2D texture, Action action)
         {
             var button = NewSecondaryButton(string.Empty, action);
-            button.style.minWidth = 118;
+            button.style.minWidth = 104;
             button.style.flexDirection = FlexDirection.Row;
             button.style.alignItems = Align.Center;
             button.Add(NewIcon(texture, label));
@@ -875,7 +878,7 @@ namespace LinhGioi.UI
         private void HideSessionMenu()
         {
             SetSessionMenuVisible(false);
-            SetToast("Session resumed.", RuntimeArtCatalog.Muted);
+            SetToast("Đã quay lại phiên chơi.", RuntimeArtCatalog.Muted);
         }
 
         private void SetSessionMenuVisible(bool visible)
@@ -883,7 +886,7 @@ namespace LinhGioi.UI
             if (_sessionMenuPanel == null) return;
             _sessionMenuPanel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
             if (_sessionMenuStatus != null)
-                _sessionMenuStatus.text = visible ? "Paused in safe training yard. Resume, save, return, or quit." : "Session active.";
+                _sessionMenuStatus.text = visible ? "Đang tạm dừng trong sân luyện. Có thể tiếp tục, lưu vị trí, quay lại hoặc thoát." : "Phiên chơi đang hoạt động.";
             ApplyLocalSettings();
         }
 
@@ -944,12 +947,12 @@ namespace LinhGioi.UI
             ApplyStatusAccent(_combatAuthority, _world.CombatAuthorityText.Contains("từ chối") || _world.CombatAuthorityText.Contains("Từ chối") ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit);
         }
 
-        private void PreviewSkill(string previewName)
+        private void PreviewSkill(string previewName, string displayName)
         {
             if (_world == null) return;
             _world.PreviewSkillFeedback(previewName);
             RefreshWorldLoopLabels();
-            SetToast("Preview only: " + previewName + " feedback played in the safe yard.", RuntimeArtCatalog.Spirit);
+            SetToast("Xem thử: hiệu ứng " + displayName + " đã chạy trong sân an toàn.", RuntimeArtCatalog.Spirit);
         }
 
         private void ContinueDialogue()
@@ -977,8 +980,8 @@ namespace LinhGioi.UI
             if (!_world.DialogueActive) return;
             _dialogueSpeaker.text = _world.DialogueSpeaker;
             _dialogueLine.text = _world.DialogueLine;
-            _dialogueProgress.text = "Dialogue: " + _world.DialogueProgress;
-            _dialogueContinueButton.text = _world.HasNextDialogueLine ? "Continue" : "Finish";
+            _dialogueProgress.text = "Đối thoại: " + _world.DialogueProgress;
+            _dialogueContinueButton.text = _world.HasNextDialogueLine ? "Tiếp tục" : "Hoàn tất";
         }
 
         private void SetDialogueVisible(bool visible)
@@ -1005,6 +1008,7 @@ namespace LinhGioi.UI
             button.style.borderRightWidth = 1;
             button.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
             button.style.borderBottomWidth = 1;
+            button.style.unityTextAlign = TextAnchor.MiddleCenter;
             return button;
         }
 
@@ -1022,7 +1026,7 @@ namespace LinhGioi.UI
             var button = NewSecondaryButton(name + "\n" + classId, action);
             button.style.minWidth = 210;
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
-            button.tooltip = "Select cultivator";
+            button.tooltip = "Chọn nhân vật tu luyện";
             return button;
         }
 

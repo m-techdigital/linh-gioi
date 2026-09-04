@@ -72,9 +72,9 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Pose: player',
-        'Gate Keeper',
-        'Shadow Slime',
+        'Tư thế: nhân vật',
+        'Người Giữ Cổng',
+        'Bóng Tối',
     )
     require(
         'client/Unity/Assets/Game/World/Runtime/M5GuidedTrainingLoopSmokeRunner.cs',

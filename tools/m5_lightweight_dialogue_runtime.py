@@ -96,7 +96,7 @@ def main() -> int:
         if result.get(key) != value:
             append(log, 'UNITY_M5_LIGHTWEIGHT_DIALOGUE_RESULT_FAIL ' + json.dumps(result, sort_keys=True))
             return 42
-    if 'Training Stone' not in result.get('afterDialogueObjective', ''):
+    if 'Đá Luyện' not in result.get('afterDialogueObjective', ''):
         append(log, 'UNITY_M5_LIGHTWEIGHT_DIALOGUE_OBJECTIVE_FAIL ' + json.dumps(result, sort_keys=True))
         return 43
     append(log, 'UNITY_M5_LIGHTWEIGHT_DIALOGUE_PASS ' + json.dumps(result, sort_keys=True))

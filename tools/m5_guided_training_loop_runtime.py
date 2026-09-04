@@ -121,13 +121,13 @@ def run_unity_smoke(root: Path, player: Path, base_url: str, result_json: Path, 
         if result.get(key) != value:
             append(log, 'UNITY_M5_GUIDED_RESULT_FAIL ' + json.dumps(result, sort_keys=True))
             raise SystemExit(42)
-    if 'Gate Keeper' not in result.get('initialObjective', ''):
+    if 'Người Giữ Cổng' not in result.get('initialObjective', ''):
         append(log, 'UNITY_M5_GUIDED_INITIAL_OBJECTIVE_FAIL ' + json.dumps(result, sort_keys=True))
         raise SystemExit(43)
-    if 'Training Stone' not in result.get('afterGateKeeperObjective', ''):
+    if 'Đá Luyện' not in result.get('afterGateKeeperObjective', ''):
         append(log, 'UNITY_M5_GUIDED_ADVANCE_FAIL ' + json.dumps(result, sort_keys=True))
         raise SystemExit(44)
-    if 'Objective complete' not in result.get('finalObjective', ''):
+    if 'Mục tiêu hoàn tất' not in result.get('finalObjective', ''):
         append(log, 'UNITY_M5_GUIDED_OBJECTIVE_NOT_COMPLETE ' + json.dumps(result, sort_keys=True))
         raise SystemExit(45)
     append(log, 'UNITY_M5_GUIDED_TRAINING_LOOP_PASS ' + json.dumps(result, sort_keys=True))

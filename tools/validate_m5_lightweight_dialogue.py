@@ -45,7 +45,7 @@ def git_lines(*args: str) -> list[str]:
 
 
 def main() -> int:
-    require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'GateKeeperDialogueLines', 'DialogueActive', 'DialogueCompleted', 'ContinueDialogue', 'CloseDialogue', 'Objective 1/2: listen to the Gate Keeper.', 'Objective 2/2: stabilize the Training Stone.')
+    require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'GateKeeperDialogueLines', 'DialogueActive', 'DialogueCompleted', 'ContinueDialogue', 'CloseDialogue', 'Mục tiêu 1/2: lắng nghe Người Giữ Cổng.', 'Mục tiêu 2/2: ổn định Đá Luyện.')
     require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', '_dialoguePanel', '_dialogueContinueButton', '_dialogueCloseButton', 'RefreshDialoguePanel', 'SetDialogueVisible')
     require('client/Unity/Assets/Game/World/Runtime/M5LightweightDialogueSmokeRunner.cs', '--lgo-m5-lightweight-dialogue-smoke', 'openedDialogue', 'dialogueCompleted', 'savePositionStillWorks')
     require('client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs', 'M5LightweightDialogueSmokeRunner.ShouldRun()', 'M5LightweightDialogueSmokeRunner.RunFromCommandLineAsync')

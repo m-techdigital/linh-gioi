@@ -54,23 +54,23 @@ def git_lines(*args: str) -> list[str]:
 def main() -> int:
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'World HUD / Safe Training Yard',
-        'Saving position to local dev API...',
-        'Position saved near ',
-        'Returned to Character Hall.',
-        'API blocked during ',
-        'Esc opens the session menu in world; Quit closes the player review',
-        'Guided loop: ',
-        'Area: ',
-        'Back to Character Hall',
+        'Sân Luyện An Toàn',
+        'Đang lưu vị trí vào API nội bộ...',
+        'Đã lưu vị trí gần ',
+        'Đã quay lại Điện Nhân Vật.',
+        'API bị chặn khi ',
+        'Esc mở menu phiên trong thế giới; Thoát đóng bản chơi thử.',
+        'Vòng hướng dẫn: ',
+        'Khu vực: ',
+        'Về điện nhân vật',
     )
     require(
         'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
         'CurrentAreaLabel',
-        'Safe yard / path to Gate Keeper',
-        'Safe yard / path to Training Stone',
-        'gold Gate Keeper',
-        'cyan pulse',
+        'Sân luyện an toàn / đường tới Người Giữ Cổng',
+        'Sân luyện an toàn / đường tới Đá Luyện',
+        'Người Giữ Cổng màu vàng',
+        'mạch sáng lam',
         'Training Stone',
     )
     require(

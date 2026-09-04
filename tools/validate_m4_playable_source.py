@@ -56,11 +56,11 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'Khóa dev',
-        'No character yet',
+        'Khóa thử nghiệm',
+        'Chưa có nhân vật.',
         'Vào sân luyện',
-        'Save Position',
-        'Back to Lobby',
+        'Lưu vị trí',
+        'Về điện nhân vật',
         'AccountApiClient',
     )
     require('client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs', 'M4PlayableVerticalSliceSmokeRunner.ShouldRun()', 'M4PlayableClientController.Attach(gameObject)')
