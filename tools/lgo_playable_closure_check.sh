@@ -234,6 +234,12 @@ source_only() {
   if [[ -f tools/validate_lgo_login_cta_debug_dot_evidence_refresh.py ]]; then
     run_phase login_cta_debug_dot_evidence_refresh python3.12 tools/validate_lgo_login_cta_debug_dot_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_login_cta_backing_balance.py ]]; then
+    run_phase login_cta_backing_balance python3.12 tools/validate_lgo_login_cta_backing_balance.py
+  fi
+  if [[ -f tools/validate_lgo_login_cta_backing_evidence_refresh.py ]]; then
+    run_phase login_cta_backing_evidence_refresh python3.12 tools/validate_lgo_login_cta_backing_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_login_responsive_scale_cleanup.py ]]; then
     run_phase login_responsive_scale_cleanup python3.12 tools/validate_lgo_login_responsive_scale_cleanup.py
   fi
@@ -478,6 +484,8 @@ source_only() {
     tools/validate_lgo_login_cta_ornament_lightweight.py \
     tools/validate_lgo_login_cta_debug_dot_cleanup.py \
     tools/validate_lgo_login_cta_debug_dot_evidence_refresh.py \
+    tools/validate_lgo_login_cta_backing_balance.py \
+    tools/validate_lgo_login_cta_backing_evidence_refresh.py \
     tools/validate_lgo_login_responsive_scale_cleanup.py \
     tools/validate_lgo_character_hall_v3b_composition.py \
     tools/validate_lgo_character_hall_panel_density.py \

@@ -17,6 +17,7 @@ namespace LinhGioi.UI
         private const string DefaultClassId = "class.sword";
         private const bool UseLoginOrnatePanelTexture = false;
         private const string LoginResponsiveScaleCleanupMarker = "LGO Login Responsive Scale Cleanup v1";
+        private const string LoginCtaBackingBalanceMarker = "LGO Login CTA Backing Balance v1";
         private AccountApiClient _client;
         private ClientRuntimeConfig _config;
         private CancellationTokenSource _shutdown;
@@ -404,15 +405,20 @@ namespace LinhGioi.UI
             _loginCard.style.paddingBottom = 22;
             _loginCard.style.marginBottom = 18;
             _loginCard.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            _loginCard.style.backgroundColor = new Color(0.005f, 0.018f, 0.040f, 0.36f);
-            _loginCard.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.46f);
+            _loginCard.style.backgroundColor = new Color(0.005f, 0.018f, 0.040f, 0.18f);
+            _loginCard.style.borderTopLeftRadius = 18;
+            _loginCard.style.borderTopRightRadius = 18;
+            _loginCard.style.borderBottomLeftRadius = 18;
+            _loginCard.style.borderBottomRightRadius = 18;
+            _loginCard.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.20f);
             _loginCard.style.borderTopWidth = 1;
-            _loginCard.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.24f);
+            _loginCard.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.10f);
             _loginCard.style.borderLeftWidth = 1;
-            _loginCard.style.borderRightColor = new Color(0.93f, 0.73f, 0.36f, 0.30f);
+            _loginCard.style.borderRightColor = new Color(0.93f, 0.73f, 0.36f, 0.12f);
             _loginCard.style.borderRightWidth = 1;
-            _loginCard.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
+            _loginCard.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.10f);
             _loginCard.style.borderBottomWidth = 1;
+            _loginCard.tooltip = LoginCtaBackingBalanceMarker;
             if (UseLoginOrnatePanelTexture && LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture != null)
             {
                 _loginCard.style.backgroundImage = new StyleBackground(LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture);
@@ -1655,12 +1661,17 @@ namespace LinhGioi.UI
             if (_loginCard != null)
             {
                 _loginCard.style.maxWidth = loginCardWidth;
-                _loginCard.style.minHeight = mobile ? Mathf.RoundToInt(112f * mobileScale) : tablet ? 144 : 152;
+                _loginCard.style.minHeight = mobile ? Mathf.RoundToInt(100f * mobileScale) : tablet ? 128 : 136;
                 _loginCard.style.paddingLeft = loginCardPadding;
                 _loginCard.style.paddingRight = loginCardPadding;
-                _loginCard.style.paddingTop = mobile ? Mathf.RoundToInt(10f * mobileScale) : tablet ? 16 : 18;
-                _loginCard.style.paddingBottom = mobile ? Mathf.RoundToInt(10f * mobileScale) : tablet ? 18 : 20;
+                _loginCard.style.paddingTop = mobile ? Mathf.RoundToInt(6f * mobileScale) : tablet ? 12 : 14;
+                _loginCard.style.paddingBottom = mobile ? Mathf.RoundToInt(7f * mobileScale) : tablet ? 12 : 14;
                 _loginCard.style.marginBottom = mobile ? 0 : 18;
+                _loginCard.style.backgroundColor = mobile
+                    ? new Color(0.005f, 0.018f, 0.040f, 0.10f)
+                    : tablet
+                        ? new Color(0.005f, 0.018f, 0.040f, 0.14f)
+                        : new Color(0.005f, 0.018f, 0.040f, 0.16f);
             }
             if (_loginServerRow != null)
             {
