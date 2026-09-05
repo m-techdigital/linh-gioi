@@ -14,7 +14,7 @@ This task reduces controller-local label font-size assignments in login, Charact
 
 ## Result
 
-- Added named label font-size constants to `RuntimeUiSpacing`.
+- Added named label font-size constants to `RuntimeUiTypography`.
 - Routed durable label font-size assignments and initial `RuntimeUiSkin.ApplyText` calls in `M4PlayableClientController` through those constants.
 - Kept copy, state, and flow ownership in the controller.
 

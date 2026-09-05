@@ -8,18 +8,18 @@ Runtime label typography needs shared metric ownership so login, Character Hall,
 
 ## Ownership
 
-- `RuntimeUiSpacing` owns reusable runtime UI label font sizes.
+- `RuntimeUiTypography` owns reusable runtime UI label font sizes.
 - `RuntimeUiLayoutProfile` continues to own profile-specific layout dimensions and panel spacing.
 - `RuntimeUiSkin.ApplyText` remains the shared text color/alignment/style helper.
 - `M4PlayableClientController` keeps Vietnamese copy, visibility, flow state, and callbacks.
 
 ## Result
 
-- Login hero, server, API, and account status font sizes use named constants.
+- Login hero, server, API, and account status font sizes use named typography constants.
 - Character Hall intro/empty-state font sizes use named constants.
-- Character selected-name font size uses a named constant.
-- World HUD title/objective/interaction/meta compact font sizes use named constants.
-- Dialogue speaker/line/progress font sizes use named constants.
+- Character selected-name font size uses a named typography constant.
+- World HUD title/objective/interaction/meta compact font sizes use named typography constants.
+- Dialogue speaker/line/progress font sizes use named typography constants.
 
 ## Non-Claims
 

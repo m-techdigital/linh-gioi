@@ -65,7 +65,6 @@ def main() -> int:
         "HeaderActionsMobileMaxWidthFloor",
         "HeaderActionsTabletMaxWidth",
         "HeaderActionsDesktopMaxWidth",
-        "TopStatusWorldMobileFontSize",
         "TopStatusWorldMobileMinHeight",
         "TopStatusWorldMobileMaxWidthRatioPercent",
         "HeaderQuitWorldMobileMinWidth",
@@ -78,9 +77,15 @@ def main() -> int:
         "DialogueCloseDesktopMinWidth",
     )
     require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiTypography.cs",
+        "TopStatusWorldMobileFontSize",
+        "TopStatusTabletFontSize",
+        "TopStatusDefaultFontSize",
+    )
+    require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "RuntimeUiSpacing.HeaderActionsMobileViewportInset",
-        "RuntimeUiSpacing.TopStatusWorldMobileFontSize",
+        "RuntimeUiTypography.TopStatusWorldMobileFontSize",
         "RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent",
         "RuntimeUiSpacing.HeaderQuitWorldMobileMinWidth",
         "RuntimeUiSpacing.DialogueContinueMobileMinWidth",

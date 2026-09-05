@@ -60,7 +60,7 @@ def check_frozen() -> None:
 
 def main() -> int:
     require(
-        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs",
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiTypography.cs",
         "LoginApiLabelFontSize",
         "LoginAccountStatusFontSize",
         "LoginHeroTitleFontSize",
@@ -94,28 +94,28 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "RuntimeUiSpacing.LoginApiLabelFontSize",
-        "RuntimeUiSpacing.LoginAccountStatusFontSize",
-        "RuntimeUiSpacing.LoginHeroTitleFontSize",
-        "RuntimeUiSpacing.LoginHeroCopyFontSize",
-        "RuntimeUiSpacing.LoginServerTextInitialFontSize",
-        "RuntimeUiSpacing.SelectedCharacterNameFontSize",
-        "RuntimeUiSpacing.WorldMetaFontSize",
-        "RuntimeUiSpacing.WorldNameInitialFontSize",
-        "RuntimeUiSpacing.WorldAreaFontSize",
-        "RuntimeUiSpacing.WorldStepFontSize",
-        "RuntimeUiSpacing.WorldDirectionFontSize",
-        "RuntimeUiSpacing.WorldObjectiveInitialFontSize",
-        "RuntimeUiSpacing.WorldInteractionInitialFontSize",
-        "RuntimeUiSpacing.LobbyIntroMobileFontSize",
-        "RuntimeUiSpacing.EmptyCharacterHintDesktopFontSize",
-        "RuntimeUiSpacing.WorldNameMobileFontSize",
-        "RuntimeUiSpacing.WorldObjectiveDesktopFontSize",
-        "RuntimeUiSpacing.WorldInteractionDesktopFontSize",
-        "RuntimeUiSpacing.DialogueSpeakerMobileFontSize",
-        "RuntimeUiSpacing.DialogueSpeakerInitialFontSize",
-        "RuntimeUiSpacing.DialogueLineDesktopFontSize",
-        "RuntimeUiSpacing.DialogueProgressDesktopFontSize",
+        "RuntimeUiTypography.LoginApiLabelFontSize",
+        "RuntimeUiTypography.LoginAccountStatusFontSize",
+        "RuntimeUiTypography.LoginHeroTitleFontSize",
+        "RuntimeUiTypography.LoginHeroCopyFontSize",
+        "RuntimeUiTypography.LoginServerTextInitialFontSize",
+        "RuntimeUiTypography.SelectedCharacterNameFontSize",
+        "RuntimeUiTypography.WorldMetaFontSize",
+        "RuntimeUiTypography.WorldNameInitialFontSize",
+        "RuntimeUiTypography.WorldAreaFontSize",
+        "RuntimeUiTypography.WorldStepFontSize",
+        "RuntimeUiTypography.WorldDirectionFontSize",
+        "RuntimeUiTypography.WorldObjectiveInitialFontSize",
+        "RuntimeUiTypography.WorldInteractionInitialFontSize",
+        "RuntimeUiTypography.LobbyIntroMobileFontSize",
+        "RuntimeUiTypography.EmptyCharacterHintDesktopFontSize",
+        "RuntimeUiTypography.WorldNameMobileFontSize",
+        "RuntimeUiTypography.WorldObjectiveDesktopFontSize",
+        "RuntimeUiTypography.WorldInteractionDesktopFontSize",
+        "RuntimeUiTypography.DialogueSpeakerMobileFontSize",
+        "RuntimeUiTypography.DialogueSpeakerInitialFontSize",
+        "RuntimeUiTypography.DialogueLineDesktopFontSize",
+        "RuntimeUiTypography.DialogueProgressDesktopFontSize",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
@@ -144,7 +144,7 @@ def main() -> int:
     require(
         "docs/design/RUNTIME-UI-LABEL-FONT-METRICS-AUDIT-v1.0.md",
         "LGO_RUNTIME_UI_LABEL_FONT_METRICS_READY",
-        "RuntimeUiSpacing",
+        "RuntimeUiTypography",
     )
     require(
         "docs/tasks/LGO-RUNTIME-UI-LABEL-FONT-METRICS-AUDIT-v1.0.md",

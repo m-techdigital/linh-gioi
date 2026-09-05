@@ -68,11 +68,11 @@ def main() -> int:
     )
     controller = require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "RuntimeUiSkin.ApplyText(_loginHeroTitle, RuntimeArtCatalog.Text, RuntimeUiSpacing.LoginHeroTitleFontSize, true, TextAnchor.MiddleCenter);",
-        "RuntimeUiSkin.ApplyText(serverText, RuntimeArtCatalog.Text, RuntimeUiSpacing.LoginServerTextInitialFontSize, true, TextAnchor.MiddleCenter);",
-        "RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, RuntimeUiSpacing.SelectedCharacterNameFontSize, true);",
-        "RuntimeUiSkin.ApplyText(_worldName, RuntimeArtCatalog.Gold, RuntimeUiSpacing.WorldNameInitialFontSize, true);",
-        "RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiSpacing.DialogueSpeakerInitialFontSize, true);",
+        "RuntimeUiSkin.ApplyText(_loginHeroTitle, RuntimeArtCatalog.Text, RuntimeUiTypography.LoginHeroTitleFontSize, true, TextAnchor.MiddleCenter);",
+        "RuntimeUiSkin.ApplyText(serverText, RuntimeArtCatalog.Text, RuntimeUiTypography.LoginServerTextInitialFontSize, true, TextAnchor.MiddleCenter);",
+        "RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, RuntimeUiTypography.SelectedCharacterNameFontSize, true);",
+        "RuntimeUiSkin.ApplyText(_worldName, RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldNameInitialFontSize, true);",
+        "RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiTypography.DialogueSpeakerInitialFontSize, true);",
     )
     if factory.count("RuntimeUiSkin.ApplyText(") < 8:
         ERRORS.append("RuntimeUiFactory should reuse ApplyText in at least eight component label paths")

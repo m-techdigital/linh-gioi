@@ -4,7 +4,7 @@ Status: `LGO_RUNTIME_UI_LABEL_FONT_METRICS_EVIDENCE_REFRESH_READY`
 
 ## Scope
 
-This evidence refresh records runtime screenshots after login, Character Hall, world HUD, and dialogue label font-size values moved from controller-local numeric assignments to shared runtime UI constants.
+This evidence refresh records runtime screenshots after login, Character Hall, world HUD, and dialogue label font-size values moved from controller-local numeric assignments to shared runtime typography constants.
 
 ## Evidence
 
