@@ -5,12 +5,12 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT-v1.0`.
-- Current reason: World Hub visual depth/weight pass reduced oversized procedural ground rings, added lightweight runtime-generated mist veil support, and fixed the stale M6 readiness validator so current non-frozen world/UI work is validated by its active gates instead of old docs-only allowlists.
+- Active task: `LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE-v1.0`.
+- Current reason: changeset noise audit reduced stale validator code and moved visual evidence hooks out of the main playable UI controller into a partial evidence boundary; source-only and fresh visual capture remain stable.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: audit current change volume and code hotspots, then pick the smallest cleanup that reduces future churn without redesigning architecture.
+- Next implementation task after this fix: compare current login and Character Hall screenshots against V3B reference direction and pick the next high-value visible polish that does not add heavy assets.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -57,13 +57,15 @@ Current focus update: visual runtime review now re-requests player focus with bo
 
 Current focus update: World Hub oversized procedural ground rings are toned down, lightweight runtime mist support is available, and the stale M6 readiness docs-only validator no longer blocks current non-frozen implementation work under `LGO_WORLD_HUB_VISUAL_DEPTH_WEIGHT_READY`; fresh desktop screenshots were reviewed as cleaner but still not final-production world art.
 
+Current focus update: changeset noise audit removed obsolete M6 readiness allowlist code and split visual evidence hooks into `M4PlayableClientController.Evidence.cs` under `LGO_CHANGESET_NOISE_HOTSPOT_AUDIT_READY`; main UI controller is smaller, source-only passes, and visual evidence still captures all checkpoints.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT-v1.0`
+`LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE-v1.0`
 
-Continue by auditing why routine batches generate too many changed files or too much validation output. Prefer an actionable cleanup that reduces future churn, such as narrowing stale validators, shrinking noisy reports, or extracting a genuine hotspot only if it reduces repeated edits. Do not make broad refactors and do not commit until a coherent cleanup batch passes validation. Marker ready from the previous world fix: `LGO_WORLD_HUB_VISUAL_DEPTH_WEIGHT_READY`.
+Continue by reviewing the latest login and Character Hall runtime screenshots for the largest visible mismatch with V3B/reference quality. Prefer layout/scale/hierarchy and lightweight asset usage fixes before creating new images. Do not crop reference composites, do not import V3BA, and do not claim visual PASS from screenshot capture alone. Marker ready from the previous cleanup: `LGO_CHANGESET_NOISE_HOTSPOT_AUDIT_READY`.
 
 ## Current blocker
 

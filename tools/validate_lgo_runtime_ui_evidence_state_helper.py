@@ -74,9 +74,12 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "private RuntimeUiEvidenceState _evidenceState;",
+        "evidenceHidesGuidance",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",
         "RuntimeUiEvidenceState.None",
         "RuntimeUiEvidenceState.CombatPanelFocus",
-        "evidenceHidesGuidance",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

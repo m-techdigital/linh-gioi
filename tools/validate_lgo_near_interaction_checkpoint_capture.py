@@ -61,7 +61,7 @@ def main() -> int:
         "CaptureEvidenceNearTrainingStonePrompt",
     )
     require(
-        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",
         "CaptureEvidenceNearGateKeeperPrompt",
         "CaptureEvidenceNearTrainingStonePrompt",
         "SetSmokePositionNearGateKeeper",

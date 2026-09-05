@@ -76,6 +76,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "public sealed partial class M4PlayableClientController",
         "using static LinhGioi.UI.RuntimeUiFactory;",
         "private void BuildAuthPanel()",
         "private void BuildLobbyPanel()",
@@ -84,6 +85,10 @@ def main() -> int:
         "private async Task RefreshCharactersAsync()",
         "private async Task EnterWorldAsync()",
         "private void ApplyResponsiveLayoutProfile(bool force)",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",
+        "public sealed partial class M4PlayableClientController",
         "internal async Task CaptureEvidenceLoginAsync()",
     )
     require(
