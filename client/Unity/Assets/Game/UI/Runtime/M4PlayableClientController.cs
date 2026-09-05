@@ -15,6 +15,7 @@ namespace LinhGioi.UI
     {
         private const string DefaultDevKey = "m4-playable-dev-key";
         private const string DefaultClassId = "class.sword";
+        private const bool UseLoginOrnatePanelTexture = false;
         private AccountApiClient _client;
         private ClientRuntimeConfig _config;
         private CancellationTokenSource _shutdown;
@@ -299,23 +300,23 @@ namespace LinhGioi.UI
             _loginStage = new VisualElement();
             _loginStage.name = "LGO Login Gate Entry NPC Composition Stage V3B";
             _loginStage.style.position = Position.Absolute;
-            _loginStage.style.right = 22;
-            _loginStage.style.bottom = -86;
-            _loginStage.style.width = 360;
-            _loginStage.style.minHeight = 520;
+            _loginStage.style.right = 34;
+            _loginStage.style.bottom = -104;
+            _loginStage.style.width = 332;
+            _loginStage.style.minHeight = 500;
             _loginStage.style.alignItems = Align.Center;
             _loginStage.style.justifyContent = Justify.FlexEnd;
-            _loginStage.style.opacity = 0.96f;
+            _loginStage.style.opacity = 0.93f;
             _authPanel.Add(_loginStage);
 
             var npcGrounding = new VisualElement();
             npcGrounding.name = "LGO Login Gate Keeper Soft Grounding Glow V3B";
             npcGrounding.pickingMode = PickingMode.Ignore;
             npcGrounding.style.position = Position.Absolute;
-            npcGrounding.style.width = 220;
-            npcGrounding.style.height = 28;
-            npcGrounding.style.bottom = 12;
-            npcGrounding.style.backgroundColor = new Color(0.02f, 0.06f, 0.10f, 0.34f);
+            npcGrounding.style.width = 266;
+            npcGrounding.style.height = 30;
+            npcGrounding.style.bottom = 18;
+            npcGrounding.style.backgroundColor = new Color(0.005f, 0.018f, 0.035f, 0.48f);
             npcGrounding.style.borderTopLeftRadius = 110;
             npcGrounding.style.borderTopRightRadius = 110;
             npcGrounding.style.borderBottomLeftRadius = 110;
@@ -326,8 +327,8 @@ namespace LinhGioi.UI
             _loginGateKeeper = gateKeeper;
             gateKeeper.name = "LGO Login Gate Keeper NPC V3B";
             gateKeeper.pickingMode = PickingMode.Ignore;
-            gateKeeper.style.width = 342;
-            gateKeeper.style.height = 514;
+            gateKeeper.style.width = 318;
+            gateKeeper.style.height = 477;
             gateKeeper.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
             if (gateKeeperTexture != null) gateKeeper.style.backgroundImage = new StyleBackground(gateKeeperTexture);
@@ -350,12 +351,13 @@ namespace LinhGioi.UI
             var logoLockup = new VisualElement();
             _loginLogo = logoLockup;
             logoLockup.name = "LGO Login Gate Entry V3B Final Logo Text Lockup";
-            logoLockup.style.width = 560;
-            logoLockup.style.height = 280;
+            logoLockup.style.width = 528;
+            logoLockup.style.height = 264;
             logoLockup.style.alignItems = Align.Center;
             logoLockup.style.justifyContent = Justify.Center;
             logoLockup.style.marginBottom = -20;
             logoLockup.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            logoLockup.style.opacity = 0.96f;
             if (LgoVisualAssetRegistryV3B.LogoLinhGioiOnline != null)
                 logoLockup.style.backgroundImage = new StyleBackground(LgoVisualAssetRegistryV3B.LogoLinhGioiOnline);
             controlColumn.Add(logoLockup);
@@ -384,22 +386,27 @@ namespace LinhGioi.UI
             _loginCard.name = "LGO Login Gate Entry Bottom CTA v3 Final Panel V3B";
             _loginCard.style.width = Length.Percent(100);
             _loginCard.style.maxWidth = 520;
-            _loginCard.style.minHeight = 182;
+            _loginCard.style.minHeight = 168;
             _loginCard.style.alignItems = Align.Center;
             _loginCard.style.justifyContent = Justify.Center;
-            _loginCard.style.paddingLeft = 30;
-            _loginCard.style.paddingRight = 30;
-            _loginCard.style.paddingTop = 24;
-            _loginCard.style.paddingBottom = 28;
+            _loginCard.style.paddingLeft = 28;
+            _loginCard.style.paddingRight = 28;
+            _loginCard.style.paddingTop = 20;
+            _loginCard.style.paddingBottom = 22;
             _loginCard.style.marginBottom = 18;
             _loginCard.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            if (LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture != null)
+            _loginCard.style.backgroundColor = new Color(0.005f, 0.018f, 0.040f, 0.42f);
+            _loginCard.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.46f);
+            _loginCard.style.borderTopWidth = 1;
+            _loginCard.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.24f);
+            _loginCard.style.borderLeftWidth = 1;
+            _loginCard.style.borderRightColor = new Color(0.93f, 0.73f, 0.36f, 0.30f);
+            _loginCard.style.borderRightWidth = 1;
+            _loginCard.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
+            _loginCard.style.borderBottomWidth = 1;
+            if (UseLoginOrnatePanelTexture && LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture != null)
             {
                 _loginCard.style.backgroundImage = new StyleBackground(LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture);
-            }
-            else
-            {
-                _loginCard.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.80f);
             }
             controlColumn.Add(_loginCard);
 
@@ -410,38 +417,38 @@ namespace LinhGioi.UI
             serverRow.style.alignItems = Align.Center;
             serverRow.style.justifyContent = Justify.SpaceBetween;
             serverRow.style.width = Length.Percent(100);
-            serverRow.style.maxWidth = 460;
-            serverRow.style.minHeight = 46;
+            serverRow.style.maxWidth = 436;
+            serverRow.style.minHeight = 42;
             serverRow.style.paddingLeft = 22;
             serverRow.style.paddingRight = 22;
             serverRow.style.paddingTop = 7;
             serverRow.style.paddingBottom = 7;
-            serverRow.style.backgroundColor = new Color(0.015f, 0.055f, 0.12f, 0.70f);
+            serverRow.style.backgroundColor = new Color(0.0f, 0.016f, 0.040f, 0.82f);
             serverRow.style.borderTopLeftRadius = 8;
             serverRow.style.borderTopRightRadius = 8;
             serverRow.style.borderBottomLeftRadius = 8;
             serverRow.style.borderBottomRightRadius = 8;
-            serverRow.style.borderTopColor = RuntimeArtCatalog.Gold;
+            serverRow.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.48f);
             serverRow.style.borderTopWidth = 1;
-            serverRow.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            serverRow.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.24f);
             serverRow.style.borderBottomWidth = 1;
             serverRow.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             var serverText = new Label("S1 - Linh Giới");
             _loginServerText = serverText;
             serverText.style.flexGrow = 1;
-            serverText.style.fontSize = 19;
+            serverText.style.fontSize = 18;
             serverText.style.unityFontStyleAndWeight = FontStyle.Bold;
             serverText.style.color = RuntimeArtCatalog.Text;
             serverText.style.unityTextAlign = TextAnchor.MiddleCenter;
             serverRow.Add(serverText);
             _serverStatusIcon = new VisualElement();
             _serverStatusIcon.name = "LGO Login Server Online Dot";
-            _serverStatusIcon.style.width = 16;
-            _serverStatusIcon.style.height = 16;
-            _serverStatusIcon.style.borderTopLeftRadius = 8;
-            _serverStatusIcon.style.borderTopRightRadius = 8;
-            _serverStatusIcon.style.borderBottomLeftRadius = 8;
-            _serverStatusIcon.style.borderBottomRightRadius = 8;
+            _serverStatusIcon.style.width = 12;
+            _serverStatusIcon.style.height = 12;
+            _serverStatusIcon.style.borderTopLeftRadius = 6;
+            _serverStatusIcon.style.borderTopRightRadius = 6;
+            _serverStatusIcon.style.borderBottomLeftRadius = 6;
+            _serverStatusIcon.style.borderBottomRightRadius = 6;
             _serverStatusIcon.style.backgroundColor = RuntimeArtCatalog.Spirit;
             _serverStatusIcon.tooltip = "Đang mở";
             serverRow.Add(_serverStatusIcon);
@@ -457,10 +464,10 @@ namespace LinhGioi.UI
             _loginButton = NewPrimaryButton("Vào Thế Giới", () => RunAsync(LoginAsync));
             _loginButton.name = "LGO Login Enter World CTA Final v2";
             _loginButton.style.width = Length.Percent(100);
-            _loginButton.style.maxWidth = 460;
-            _loginButton.style.minHeight = 64;
-            _loginButton.style.fontSize = 23;
-            _loginButton.style.marginTop = 10;
+            _loginButton.style.maxWidth = 436;
+            _loginButton.style.minHeight = 58;
+            _loginButton.style.fontSize = 22;
+            _loginButton.style.marginTop = 12;
             _loginButton.style.marginRight = 0;
             _loginButton.style.color = new Color(0.12f, 0.06f, 0.01f, 1f);
             _loginButton.style.backgroundColor = Color.clear;
@@ -469,8 +476,8 @@ namespace LinhGioi.UI
             _serverSwitchButton = NewQuietButton("Chọn Máy Chủ", () => SetToast("S1 - Linh Giới đang mở ổn định.", RuntimeArtCatalog.Spirit));
             _serverSwitchButton.name = "LGO Login Server Switch Secondary";
             _serverSwitchButton.style.minWidth = 160;
-            _serverSwitchButton.style.minHeight = 34;
-            _serverSwitchButton.style.marginTop = 4;
+            _serverSwitchButton.style.minHeight = 32;
+            _serverSwitchButton.style.marginTop = 3;
             _serverSwitchButton.style.marginRight = 0;
             _loginCard.Add(_serverSwitchButton);
             _account = NewMutedLabel("Tài khoản: chưa kết nối");
@@ -1447,12 +1454,12 @@ namespace LinhGioi.UI
             var authVisible = _authPanel != null && _authPanel.style.display == DisplayStyle.Flex;
             var shortSide = Mathf.Min(width, height);
             var mobileScale = mobile ? Mathf.Clamp(shortSide / 520f, 0.62f, 0.86f) : 1f;
-            var loginLogoWidth = mobile ? Mathf.Clamp(width * 0.46f, 280f, 380f) : tablet ? Mathf.Clamp(width * 0.36f, 430f, 500f) : Mathf.Clamp(width * 0.30f, 520f, 580f);
+            var loginLogoWidth = mobile ? Mathf.Clamp(width * 0.46f, 280f, 380f) : tablet ? Mathf.Clamp(width * 0.34f, 408f, 476f) : Mathf.Clamp(width * 0.28f, 500f, 540f);
             var loginLogoHeight = loginLogoWidth * 0.50f;
-            var loginCardWidth = mobile ? Mathf.Clamp(width * 0.50f, 330f, 420f) : tablet ? Mathf.Clamp(width * 0.40f, 460f, 520f) : 520f;
-            var loginCardPadding = mobile ? Mathf.RoundToInt(14f * mobileScale) : tablet ? 24 : 30;
-            var loginButtonHeight = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.11f, 42f, 50f)) : tablet ? 58 : 64;
-            var loginButtonFont = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.047f, 17f, 21f)) : tablet ? 21 : 23;
+            var loginCardWidth = mobile ? Mathf.Clamp(width * 0.50f, 330f, 420f) : tablet ? Mathf.Clamp(width * 0.38f, 438f, 500f) : 500f;
+            var loginCardPadding = mobile ? Mathf.RoundToInt(14f * mobileScale) : tablet ? 22 : 28;
+            var loginButtonHeight = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.11f, 42f, 50f)) : tablet ? 54 : 58;
+            var loginButtonFont = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.047f, 17f, 21f)) : tablet ? 20 : 22;
             _isMobileProfile = mobile;
             _root.style.paddingLeft = mobile ? 12 : tablet ? 18 : 28;
             _root.style.paddingRight = mobile ? 12 : tablet ? 18 : 28;
@@ -1476,15 +1483,15 @@ namespace LinhGioi.UI
             if (_loginStage != null)
             {
                 _loginStage.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
-                _loginStage.style.width = tablet ? 300 : 360;
-                _loginStage.style.minHeight = tablet ? 440 : 520;
-                _loginStage.style.right = tablet ? 2 : 22;
-                _loginStage.style.bottom = tablet ? -42 : -86;
+                _loginStage.style.width = tablet ? 284 : 332;
+                _loginStage.style.minHeight = tablet ? 420 : 500;
+                _loginStage.style.right = tablet ? 0 : 34;
+                _loginStage.style.bottom = tablet ? -52 : -104;
             }
             if (_loginGateKeeper != null)
             {
-                _loginGateKeeper.style.width = tablet ? 286 : 342;
-                _loginGateKeeper.style.height = tablet ? 430 : 514;
+                _loginGateKeeper.style.width = tablet ? 268 : 318;
+                _loginGateKeeper.style.height = tablet ? 402 : 477;
             }
             if (_loginControlColumn != null)
             {
@@ -1499,7 +1506,7 @@ namespace LinhGioi.UI
             {
                 _loginLogo.style.width = loginLogoWidth;
                 _loginLogo.style.height = loginLogoHeight;
-                _loginLogo.style.marginBottom = mobile ? Mathf.RoundToInt(-16f * mobileScale) : tablet ? -14 : -20;
+                _loginLogo.style.marginBottom = mobile ? Mathf.RoundToInt(-16f * mobileScale) : tablet ? -12 : -16;
             }
             if (_loginHeroTitle != null)
             {
@@ -1511,17 +1518,17 @@ namespace LinhGioi.UI
             if (_loginCard != null)
             {
                 _loginCard.style.maxWidth = loginCardWidth;
-                _loginCard.style.minHeight = mobile ? Mathf.RoundToInt(118f * mobileScale) : tablet ? 166 : 182;
+                _loginCard.style.minHeight = mobile ? Mathf.RoundToInt(118f * mobileScale) : tablet ? 154 : 168;
                 _loginCard.style.paddingLeft = loginCardPadding;
                 _loginCard.style.paddingRight = loginCardPadding;
-                _loginCard.style.paddingTop = mobile ? Mathf.RoundToInt(12f * mobileScale) : tablet ? 20 : 24;
-                _loginCard.style.paddingBottom = mobile ? Mathf.RoundToInt(12f * mobileScale) : tablet ? 22 : 28;
+                _loginCard.style.paddingTop = mobile ? Mathf.RoundToInt(12f * mobileScale) : tablet ? 18 : 20;
+                _loginCard.style.paddingBottom = mobile ? Mathf.RoundToInt(12f * mobileScale) : tablet ? 20 : 22;
                 _loginCard.style.marginBottom = mobile ? 0 : 18;
             }
             if (_loginServerRow != null)
             {
-                _loginServerRow.style.maxWidth = mobile ? Length.Percent(100) : 460;
-                _loginServerRow.style.minHeight = mobile ? Mathf.RoundToInt(42f * mobileScale) : tablet ? 44 : 46;
+                _loginServerRow.style.maxWidth = mobile ? Length.Percent(100) : 436;
+                _loginServerRow.style.minHeight = mobile ? Mathf.RoundToInt(42f * mobileScale) : tablet ? 40 : 42;
                 _loginServerRow.style.paddingLeft = mobile ? 14 : 22;
                 _loginServerRow.style.paddingRight = mobile ? 14 : 22;
                 _loginServerRow.style.paddingTop = mobile ? 6 : 7;
@@ -1538,7 +1545,7 @@ namespace LinhGioi.UI
             if (_serverSwitchButton != null)
             {
                 _serverSwitchButton.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
-                _serverSwitchButton.style.minHeight = tablet ? 32 : 34;
+                _serverSwitchButton.style.minHeight = 32;
             }
 
             _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 840 : 860;
