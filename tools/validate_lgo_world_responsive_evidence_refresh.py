@@ -56,8 +56,8 @@ def main() -> int:
         "LGO Mobile World Viewport Evidence Fit v1",
         "layout.WorldHudBaseMaxWidth",
         "layout.WorldHudMinWidth",
-        "_worldObjective.style.fontSize = mobile ? 14 : 15",
-        "_interactionHint.style.fontSize = mobile ? 14 : 15",
+        "RuntimeUiSpacing.WorldObjectiveMobileFontSize",
+        "RuntimeUiSpacing.WorldInteractionMobileFontSize",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",

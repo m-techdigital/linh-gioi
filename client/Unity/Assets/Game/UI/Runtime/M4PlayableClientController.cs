@@ -373,14 +373,14 @@ namespace LinhGioi.UI
 
             _loginHeroTitle = new Label("Bước qua Linh Môn");
             _loginHeroTitle.name = "LGO Login Gate Entry Hero Title";
-            RuntimeUiSkin.ApplyText(_loginHeroTitle, RuntimeArtCatalog.Text, 25, true, TextAnchor.MiddleCenter);
+            RuntimeUiSkin.ApplyText(_loginHeroTitle, RuntimeArtCatalog.Text, RuntimeUiSpacing.LoginHeroTitleFontSize, true, TextAnchor.MiddleCenter);
             _loginHeroTitle.style.marginBottom = 4;
             _loginHeroTitle.style.display = DisplayStyle.None;
             controlColumn.Add(_loginHeroTitle);
 
             _loginHeroCopy = NewMutedLabel("\"Tu tiên không chỉ là sức mạnh, mà là hành trình trở về chính mình.\"");
             _loginHeroCopy.name = "LGO Login Gate Entry Hero Copy";
-            RuntimeUiSkin.ApplyText(_loginHeroCopy, RuntimeArtCatalog.Text, 15, false, TextAnchor.MiddleCenter);
+            RuntimeUiSkin.ApplyText(_loginHeroCopy, RuntimeArtCatalog.Text, RuntimeUiSpacing.LoginHeroCopyFontSize, false, TextAnchor.MiddleCenter);
             _loginHeroCopy.style.maxWidth = 560;
             _loginHeroCopy.style.marginBottom = 12;
             _loginHeroCopy.style.display = DisplayStyle.None;
@@ -420,7 +420,7 @@ namespace LinhGioi.UI
             var serverText = new Label("S1 - Linh Giới");
             _loginServerText = serverText;
             serverText.style.flexGrow = 1;
-            RuntimeUiSkin.ApplyText(serverText, RuntimeArtCatalog.Text, 18, true, TextAnchor.MiddleCenter);
+            RuntimeUiSkin.ApplyText(serverText, RuntimeArtCatalog.Text, RuntimeUiSpacing.LoginServerTextInitialFontSize, true, TextAnchor.MiddleCenter);
             serverRow.Add(serverText);
             _serverStatusIcon = new VisualElement();
             _serverStatusIcon.name = "LGO Login Server Online Dot";
@@ -436,7 +436,7 @@ namespace LinhGioi.UI
             _loginCard.Add(serverRow);
 
             var apiLabel = NewMutedLabel("Cổng phiên hiện tại: " + _config.apiBaseUrl);
-            apiLabel.style.fontSize = 12;
+            apiLabel.style.fontSize = RuntimeUiSpacing.LoginApiLabelFontSize;
             apiLabel.style.display = DisplayStyle.None;
             _loginCard.Add(apiLabel);
             _devKey = NewTextField("Khóa thử nghiệm", DefaultDevKey);
@@ -466,7 +466,7 @@ namespace LinhGioi.UI
             _account = NewMutedLabel("Tài khoản: chưa kết nối");
             _account.style.marginTop = 10;
             _account.style.unityTextAlign = TextAnchor.MiddleCenter;
-            _account.style.fontSize = 13;
+            _account.style.fontSize = RuntimeUiSpacing.LoginAccountStatusFontSize;
             _account.style.display = DisplayStyle.None;
             _loginCard.Add(_account);
         }
@@ -520,7 +520,7 @@ namespace LinhGioi.UI
             var profileCopy = new VisualElement();
             profileCopy.style.flexGrow = 1;
             _selectedName = new Label("Chưa chọn nhân vật");
-            RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, 21, true);
+            RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, RuntimeUiSpacing.SelectedCharacterNameFontSize, true);
             profileCopy.Add(_selectedName);
             _selectedMeta = NewMutedLabel("Tạo một tu sĩ để bước vào Linh Giới.");
             profileCopy.Add(_selectedMeta);
@@ -579,23 +579,23 @@ namespace LinhGioi.UI
             _worldHud.Add(_layoutProfileLabel);
 
             _worldName = new Label("Chưa chọn nhân vật");
-            RuntimeUiSkin.ApplyText(_worldName, RuntimeArtCatalog.Gold, 17, true);
+            RuntimeUiSkin.ApplyText(_worldName, RuntimeArtCatalog.Gold, RuntimeUiSpacing.WorldNameInitialFontSize, true);
             _worldName.style.marginTop = layout.WorldNameMarginTop;
             _worldHud.Add(_worldName);
 
             _worldMeta = NewMutedLabel("Chọn nhân vật tại điện nhân vật.");
-            _worldMeta.style.fontSize = 12;
+            _worldMeta.style.fontSize = RuntimeUiSpacing.WorldMetaFontSize;
             _worldHud.Add(_worldMeta);
 
             var guidanceCard = NewWorldHudGroup("LGO World Guidance Card V3B", RuntimeArtCatalog.Spirit);
             _worldGuidanceCard = guidanceCard;
-            _worldArea = NewCompactStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted, 12);
+            _worldArea = NewCompactStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted, RuntimeUiSpacing.WorldAreaFontSize);
             guidanceCard.Add(_worldArea);
 
-            _worldStep = NewCompactStatusLabel("Tiến trình: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Spirit, 13);
+            _worldStep = NewCompactStatusLabel("Tiến trình: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Spirit, RuntimeUiSpacing.WorldStepFontSize);
             guidanceCard.Add(_worldStep);
 
-            _worldDirection = NewCompactStatusLabel("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold, 13);
+            _worldDirection = NewCompactStatusLabel("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold, RuntimeUiSpacing.WorldDirectionFontSize);
             guidanceCard.Add(_worldDirection);
 
             _worldPoseState = NewStatusLabel("Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.", RuntimeArtCatalog.Muted);
@@ -610,11 +610,11 @@ namespace LinhGioi.UI
             _skinSource.style.display = DisplayStyle.None;
             _worldHud.Add(_skinSource);
 
-            _worldObjective = NewCompactStatusLabel("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold, 14);
+            _worldObjective = NewCompactStatusLabel("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold, RuntimeUiSpacing.WorldObjectiveInitialFontSize);
             _worldObjective.name = "LGO World Objective Touch Priority";
             guidanceCard.Add(_worldObjective);
 
-            _interactionHint = NewCompactStatusLabel("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Spirit, 13);
+            _interactionHint = NewCompactStatusLabel("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Spirit, RuntimeUiSpacing.WorldInteractionInitialFontSize);
             _interactionHint.name = "LGO World Interaction Touch Hint";
             guidanceCard.Add(_interactionHint);
             _worldHud.Add(guidanceCard);
@@ -641,9 +641,9 @@ namespace LinhGioi.UI
             _dialoguePanel = NewSectionShell("ĐỐI THOẠI", "Người Giữ Cổng", string.Empty, "LGO Dialogue Shell");
             _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
             _dialogueSpeaker = new Label("Người Giữ Cổng");
-            RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, 17, true);
+            RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiSpacing.DialogueSpeakerInitialFontSize, true);
             _dialogueLine = NewMutedLabel("Đối thoại đã đóng.");
-            _dialogueLine.style.fontSize = 16;
+            _dialogueLine.style.fontSize = RuntimeUiSpacing.DialogueLineDesktopFontSize;
             _dialogueProgress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
             _dialogueContinueButton = NewCompactSecondaryButton("Tiếp tục", ContinueDialogue);
             _dialogueCloseButton = NewQuietButton("Đóng", CloseDialogue);
@@ -1227,7 +1227,7 @@ namespace LinhGioi.UI
             {
                 // LGO Character Hall Mobile Copy Density v1: mobile keeps intent, drops prose.
                 _lobbyIntro.text = mobile ? "Chọn tu sĩ, rồi vào sân luyện." : "Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.";
-                _lobbyIntro.style.fontSize = mobile ? 13 : 14;
+                _lobbyIntro.style.fontSize = mobile ? RuntimeUiSpacing.LobbyIntroMobileFontSize : RuntimeUiSpacing.LobbyIntroDesktopFontSize;
                 _lobbyIntro.style.marginBottom = layout.LobbyIntroMarginBottom;
             }
             _characterList.style.minWidth = mobile ? 220 : 280;
@@ -1242,7 +1242,7 @@ namespace LinhGioi.UI
             if (_emptyCharacterHint != null)
             {
                 _emptyCharacterHint.text = mobile ? "Hồ sơ sẽ hiện tại đây." : "Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.";
-                _emptyCharacterHint.style.fontSize = mobile ? 13 : 14;
+                _emptyCharacterHint.style.fontSize = mobile ? RuntimeUiSpacing.EmptyCharacterHintMobileFontSize : RuntimeUiSpacing.EmptyCharacterHintDesktopFontSize;
             }
             if (_lobbyContent != null)
             {
@@ -1273,11 +1273,11 @@ namespace LinhGioi.UI
             _worldHud.style.maxWidth = layout.WorldHudBaseMaxWidth;
             RuntimeUiSkin.ApplyPadding(_worldHud, layout.WorldHudPaddingHorizontal, layout.WorldHudPaddingVertical);
             if (_worldName != null)
-                _worldName.style.fontSize = mobile ? 16 : 17;
+                _worldName.style.fontSize = mobile ? RuntimeUiSpacing.WorldNameMobileFontSize : RuntimeUiSpacing.WorldNameDesktopFontSize;
             if (_worldObjective != null)
-                _worldObjective.style.fontSize = mobile ? 14 : 15;
+                _worldObjective.style.fontSize = mobile ? RuntimeUiSpacing.WorldObjectiveMobileFontSize : RuntimeUiSpacing.WorldObjectiveDesktopFontSize;
             if (_interactionHint != null)
-                _interactionHint.style.fontSize = mobile ? 14 : 15;
+                _interactionHint.style.fontSize = mobile ? RuntimeUiSpacing.WorldInteractionMobileFontSize : RuntimeUiSpacing.WorldInteractionDesktopFontSize;
             if (_sessionMenuPanel != null)
             {
                 // LGO Session Menu Compact Focus Frame v1: compact profiles let the pause panel own the viewport.
@@ -1337,12 +1337,12 @@ namespace LinhGioi.UI
                 RuntimeUiSkin.ApplyPadding(_dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
             }
             if (_dialogueSpeaker != null)
-                _dialogueSpeaker.style.fontSize = mobile ? 15 : 17;
+                _dialogueSpeaker.style.fontSize = mobile ? RuntimeUiSpacing.DialogueSpeakerMobileFontSize : RuntimeUiSpacing.DialogueSpeakerDesktopFontSize;
             if (_dialogueLine != null)
-                _dialogueLine.style.fontSize = mobile ? 14 : 16;
+                _dialogueLine.style.fontSize = mobile ? RuntimeUiSpacing.DialogueLineMobileFontSize : RuntimeUiSpacing.DialogueLineDesktopFontSize;
             if (_dialogueProgress != null)
             {
-                _dialogueProgress.style.fontSize = mobile ? 12 : 13;
+                _dialogueProgress.style.fontSize = mobile ? RuntimeUiSpacing.DialogueProgressMobileFontSize : RuntimeUiSpacing.DialogueProgressDesktopFontSize;
                 RuntimeUiSkin.ApplyPadding(_dialogueProgress, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingVertical, layout.DialogueProgressPaddingVertical);
             }
             if (_dialogueContinueButton != null)
