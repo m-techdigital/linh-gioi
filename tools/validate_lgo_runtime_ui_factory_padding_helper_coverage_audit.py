@@ -61,7 +61,9 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.CompactStatusPaddingHorizontal, RuntimeUiSpacing.CompactStatusPaddingHorizontal, RuntimeUiSpacing.CompactStatusPaddingTop, RuntimeUiSpacing.CompactStatusPaddingBottom);",
-        "RuntimeUiSkin.ApplyPadding(row, 4, 4, 0, 0);",
+        "RuntimeUiSpacing.IconStatusRowPaddingHorizontal",
+        "RuntimeUiSpacing.IconStatusRowPaddingTop",
+        "RuntimeUiSpacing.IconStatusRowPaddingBottom",
         "RuntimeUiSkin.ApplyPadding(button, 14, 14, 0, 0);",
         "button.style.paddingLeft = RuntimeUiSpacing.ListButtonPaddingLeft;",
     )

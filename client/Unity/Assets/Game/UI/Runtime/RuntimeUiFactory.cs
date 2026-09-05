@@ -283,8 +283,13 @@ namespace LinhGioi.UI
             row.style.flexDirection = FlexDirection.Row;
             row.style.alignItems = Align.Center;
             row.style.marginTop = RuntimeUiSpacing.CompactStatusMarginTop;
-            row.style.marginBottom = 6;
-            RuntimeUiSkin.ApplyPadding(row, 4, 4, 0, 0);
+            row.style.marginBottom = RuntimeUiSpacing.IconStatusRowMarginBottom;
+            RuntimeUiSkin.ApplyPadding(
+                row,
+                RuntimeUiSpacing.IconStatusRowPaddingHorizontal,
+                RuntimeUiSpacing.IconStatusRowPaddingHorizontal,
+                RuntimeUiSpacing.IconStatusRowPaddingTop,
+                RuntimeUiSpacing.IconStatusRowPaddingBottom);
             row.Add(icon);
 
             var statusColumn = new VisualElement();
