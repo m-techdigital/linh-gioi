@@ -346,6 +346,9 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_asset_size_inventory.py ]]; then
     run_phase runtime_asset_size_inventory python3.12 tools/validate_lgo_runtime_asset_size_inventory.py
   fi
+  if [[ -f tools/validate_lgo_runtime_asset_weight_budget_refresh.py ]]; then
+    run_phase runtime_asset_weight_budget_refresh python3.12 tools/validate_lgo_runtime_asset_weight_budget_refresh.py
+  fi
   if [[ -f tools/validate_lgo_runtime_asset_import_profiles.py ]]; then
     run_phase runtime_asset_import_profiles python3.12 tools/validate_lgo_runtime_asset_import_profiles.py
   fi
@@ -492,6 +495,7 @@ source_only() {
     tools/validate_lgo_animation_direction.py \
     tools/validate_lgo_runtime_asset_weight.py \
     tools/validate_lgo_runtime_asset_size_inventory.py \
+    tools/validate_lgo_runtime_asset_weight_budget_refresh.py \
     tools/validate_lgo_runtime_asset_import_profiles.py \
     tools/validate_lgo_device_profile_ui_budgets.py \
     tools/validate_lgo_world_hud_density_mobile_touch.py \
