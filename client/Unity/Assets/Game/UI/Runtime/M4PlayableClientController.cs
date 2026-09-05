@@ -335,15 +335,11 @@ namespace LinhGioi.UI
             npcGrounding.tooltip = "LGO Login NPC Grounding Shadow Balance v1";
             _loginStage.Add(npcGrounding);
 
-            var gateKeeper = new VisualElement();
+            var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
+            var gateKeeper = NewImageLayer("LGO Login Gate Keeper NPC V3B", gateKeeperTexture, ScaleMode.ScaleToFit);
             _loginGateKeeper = gateKeeper;
-            gateKeeper.name = "LGO Login Gate Keeper NPC V3B";
-            gateKeeper.pickingMode = PickingMode.Ignore;
             gateKeeper.style.width = 292;
             gateKeeper.style.height = 438;
-            gateKeeper.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
-            if (gateKeeperTexture != null) gateKeeper.style.backgroundImage = new StyleBackground(gateKeeperTexture);
             _loginStage.Add(gateKeeper);
 
             var controlColumn = new VisualElement();
@@ -360,18 +356,14 @@ namespace LinhGioi.UI
             controlColumn.style.marginTop = 12;
             _authPanel.Add(controlColumn);
 
-            var logoLockup = new VisualElement();
+            var logoLockup = NewImageLayer("LGO Login Gate Entry V3B Final Logo Text Lockup", LgoVisualAssetRegistryV3B.LogoLinhGioiOnline, ScaleMode.ScaleToFit);
             _loginLogo = logoLockup;
-            logoLockup.name = "LGO Login Gate Entry V3B Final Logo Text Lockup";
             logoLockup.style.width = 500;
             logoLockup.style.height = 250;
             logoLockup.style.alignItems = Align.Center;
             logoLockup.style.justifyContent = Justify.Center;
             logoLockup.style.marginBottom = -12;
-            logoLockup.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             logoLockup.style.opacity = 0.96f;
-            if (LgoVisualAssetRegistryV3B.LogoLinhGioiOnline != null)
-                logoLockup.style.backgroundImage = new StyleBackground(LgoVisualAssetRegistryV3B.LogoLinhGioiOnline);
             controlColumn.Add(logoLockup);
 
             _loginHeroTitle = new Label("Bước qua Linh Môn");
@@ -539,18 +531,13 @@ namespace LinhGioi.UI
             profileHero.style.flexDirection = FlexDirection.Row;
             profileHero.style.alignItems = Align.Center;
             profileHero.style.marginBottom = 10;
-            var portrait = new VisualElement();
-            portrait.name = "LGO Character Hall V3B Cultivator Portrait";
-            portrait.pickingMode = PickingMode.Ignore;
+            var portraitTexture = LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture;
+            var portrait = NewImageLayer("LGO Character Hall V3B Cultivator Portrait", portraitTexture, ScaleMode.ScaleToFit);
             portrait.style.width = 92;
             portrait.style.height = 128;
             portrait.style.marginRight = 12;
-            portrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);
-            var portraitTexture = LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture;
-            if (portraitTexture != null)
-                portrait.style.backgroundImage = new StyleBackground(portraitTexture);
-            else
+            if (portraitTexture == null)
                 portrait.Add(NewRuntimeIcon(LgoVisualAssetRegistryV2.IconAccountTexture, 58, "Hồ sơ tu sĩ"));
             profileHero.Add(portrait);
             var profileCopy = new VisualElement();

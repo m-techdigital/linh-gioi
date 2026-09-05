@@ -315,6 +315,17 @@ namespace LinhGioi.UI
             return icon;
         }
 
+        internal static VisualElement NewImageLayer(string elementName, Texture2D texture, ScaleMode scaleMode, string tooltip = null)
+        {
+            var layer = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(elementName)) layer.name = elementName;
+            layer.pickingMode = PickingMode.Ignore;
+            layer.style.unityBackgroundScaleMode = scaleMode;
+            if (texture != null) layer.style.backgroundImage = new StyleBackground(texture);
+            if (!string.IsNullOrWhiteSpace(tooltip)) layer.tooltip = tooltip;
+            return layer;
+        }
+
         internal static VisualElement NewCombatCooldownIcon()
         {
             var icon = new VisualElement();

@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-FACTORY-COVERAGE-AUDIT-v1.0`
+`LGO-RUNTIME-UI-STYLE-DEBT-FOLLOWUP-AUDIT-v1.0`
 
-Audit remaining `M4PlayableClientController` UI construction and style application to identify the next narrow reusable factory/skin helper. Marker ready from the previous evidence pass: `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`. Prefer small, stateless reuse; do not split stateful flow or add gameplay.
+Inspect the remaining playable UI controller after `NewImageLayer` evidence refresh and choose the next narrow reuse opportunity. Marker ready from the completed runtime evidence pass: `LGO_RUNTIME_UI_IMAGE_LAYER_EVIDENCE_REFRESH_READY`. Prefer small stateless helpers, responsive metrics, or documentation that reduces future UI drift; do not split stateful screen flow or add gameplay.
 
 ## Current blocker
 
@@ -133,6 +133,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-ACTION-ROW-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_ACTION_ROW_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-APPLICATION-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_APPLICATION_AUDIT_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-FACTORY-COVERAGE-AUDIT-v1.0` / `LGO_RUNTIME_UI_FACTORY_COVERAGE_AUDIT_READY`
+- `LGO-RUNTIME-UI-IMAGE-LAYER-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_IMAGE_LAYER_EVIDENCE_REFRESH_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 
@@ -214,6 +216,8 @@ python3.12 tools/validate_lgo_runtime_ui_action_row_component_review.py
 python3.12 tools/validate_lgo_runtime_ui_action_row_evidence_refresh.py
 python3.12 tools/validate_lgo_runtime_ui_responsive_style_application_audit.py
 python3.12 tools/validate_lgo_runtime_ui_responsive_style_evidence_refresh.py
+python3.12 tools/validate_lgo_runtime_ui_factory_coverage_audit.py
+python3.12 tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py
 python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_world_mobile_camera_framing.py
 python3.12 tools/validate_lgo_world_mobile_camera_evidence_refresh.py
@@ -284,6 +288,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-HUD-STYLE-ADOPTION-PASS-v1.0` is source-ready. Continue with `LGO-RUNTIME-UI-SKIN-ADOPTION-EVIDENCE-REFRESH-v1.0`; the next useful batch is refreshing profile screenshots and reviewing visual parity after shared-skin consolidation.
+`LGO-RUNTIME-UI-IMAGE-LAYER-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-RUNTIME-UI-STYLE-DEBT-FOLLOWUP-AUDIT-v1.0`; the next useful batch is inspecting the remaining controller code for another small reuse win without changing gameplay.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.
