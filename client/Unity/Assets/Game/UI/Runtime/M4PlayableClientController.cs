@@ -159,6 +159,11 @@ namespace LinhGioi.UI
             _client?.Dispose();
         }
 
+        private RuntimeUiLayoutProfile CurrentLayoutProfile()
+        {
+            return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height);
+        }
+
         private void BuildUi()
         {
             _root = _document.rootVisualElement;
@@ -166,10 +171,8 @@ namespace LinhGioi.UI
             _root.style.flexGrow = 1;
             _root.style.backgroundColor = RuntimeArtCatalog.Background;
             _root.style.color = RuntimeArtCatalog.Text;
-            _root.style.paddingLeft = 28;
-            _root.style.paddingRight = 28;
-            _root.style.paddingTop = 16;
-            _root.style.paddingBottom = 18;
+            var initialLayout = CurrentLayoutProfile();
+            RuntimeUiSkin.ApplyPadding(_root, initialLayout.RootPaddingHorizontal, initialLayout.RootPaddingHorizontal, initialLayout.RootPaddingTop, initialLayout.RootPaddingBottom);
             _root.style.alignItems = Align.Center;
             _root.style.justifyContent = Justify.SpaceBetween;
             _root.style.unityBackgroundImageTintColor = Color.white;
@@ -295,6 +298,7 @@ namespace LinhGioi.UI
 
         private void BuildAuthPanel()
         {
+            var layout = CurrentLayoutProfile();
             _authPanel = new VisualElement();
             _authPanel.name = "LGO Login Gate Entry Final Shell";
             _authPanel.style.width = Length.Percent(100);
@@ -305,8 +309,7 @@ namespace LinhGioi.UI
             _authPanel.style.justifyContent = Justify.FlexStart;
             _authPanel.style.alignItems = Align.Center;
             _authPanel.style.marginTop = 4;
-            _authPanel.style.paddingTop = 8;
-            _authPanel.style.paddingBottom = 8;
+            RuntimeUiSkin.ApplyPadding(_authPanel, 0, 0, layout.AuthPanelPaddingTop, layout.AuthPanelPaddingBottom);
             _authPanel.style.position = Position.Relative;
             _mainShell.Add(_authPanel);
 
@@ -352,7 +355,7 @@ namespace LinhGioi.UI
             controlColumn.style.flexShrink = 1;
             controlColumn.style.alignItems = Align.Center;
             controlColumn.style.justifyContent = Justify.Center;
-            controlColumn.style.paddingBottom = 12;
+            controlColumn.style.paddingBottom = layout.LoginControlColumnPaddingBottom;
             controlColumn.style.marginLeft = 22;
             controlColumn.style.marginTop = 12;
             _authPanel.Add(controlColumn);
@@ -394,10 +397,7 @@ namespace LinhGioi.UI
             _loginCard.style.minHeight = 152;
             _loginCard.style.alignItems = Align.Center;
             _loginCard.style.justifyContent = Justify.Center;
-            _loginCard.style.paddingLeft = 28;
-            _loginCard.style.paddingRight = 28;
-            _loginCard.style.paddingTop = 20;
-            _loginCard.style.paddingBottom = 22;
+            RuntimeUiSkin.ApplyPadding(_loginCard, layout.LoginCardPadding, layout.LoginCardPadding, 20, 22);
             _loginCard.style.marginBottom = 18;
             _loginCard.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);
@@ -418,10 +418,7 @@ namespace LinhGioi.UI
             serverRow.style.width = Length.Percent(100);
             serverRow.style.maxWidth = 436;
             serverRow.style.minHeight = 42;
-            serverRow.style.paddingLeft = 22;
-            serverRow.style.paddingRight = 22;
-            serverRow.style.paddingTop = 7;
-            serverRow.style.paddingBottom = 7;
+            RuntimeUiSkin.ApplyPadding(serverRow, layout.LoginServerRowPaddingHorizontal, layout.LoginServerRowPaddingHorizontal, layout.LoginServerRowPaddingVertical, layout.LoginServerRowPaddingVertical);
             RuntimeUiSkin.ApplyServerSelectorFrame(serverRow);
             serverRow.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             var serverText = new Label("S1 - Linh Giới");
@@ -483,15 +480,13 @@ namespace LinhGioi.UI
 
         private void BuildLobbyPanel()
         {
+            var layout = CurrentLayoutProfile();
             _lobbyPanel = NewPanel(840);
             _lobbyPanel.name = "LGO Character Hall V3B Composition Panel";
             RuntimeUiSkin.ApplyCharacterHallPanelFrame(_lobbyPanel);
             _lobbyPanel.style.maxWidth = 800;
             _lobbyPanel.style.minHeight = 452;
-            _lobbyPanel.style.paddingLeft = 18;
-            _lobbyPanel.style.paddingRight = 18;
-            _lobbyPanel.style.paddingTop = 16;
-            _lobbyPanel.style.paddingBottom = 18;
+            RuntimeUiSkin.ApplyPadding(_lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
             _lobbyPanel.style.alignSelf = Align.FlexStart;
             _mainShell.Add(_lobbyPanel);
             _lobbyPanel.Add(NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold, "LGO Character Hall Header Block"));
@@ -516,10 +511,7 @@ namespace LinhGioi.UI
             _characterList.style.flexGrow = 1;
             _characterList.style.marginRight = 14;
             _characterList.style.marginBottom = 8;
-            _characterList.style.paddingLeft = 14;
-            _characterList.style.paddingRight = 14;
-            _characterList.style.paddingTop = 12;
-            _characterList.style.paddingBottom = 12;
+            RuntimeUiSkin.ApplyPadding(_characterList, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingVertical, layout.CharacterListPaddingVertical);
             RuntimeUiSkin.ApplyCharacterListFrame(_characterList);
             _lobbyContent.Add(_characterList);
 
@@ -563,10 +555,7 @@ namespace LinhGioi.UI
             _createPanel.name = "LGO Character Hall Create Cultivator Panel V3B";
             _createPanel.style.marginTop = 10;
             _createPanel.style.position = Position.Relative;
-            _createPanel.style.paddingLeft = 16;
-            _createPanel.style.paddingRight = 16;
-            _createPanel.style.paddingTop = 12;
-            _createPanel.style.paddingBottom = 14;
+            RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
             _createPanel.style.minHeight = 122;
             RuntimeUiSkin.ApplyCharacterCreateFrame(_createPanel);
             _createPanel.style.maxHeight = 210;
@@ -593,6 +582,7 @@ namespace LinhGioi.UI
 
         private void BuildWorldHud()
         {
+            var layout = CurrentLayoutProfile();
             _worldHud = NewWorldHudRoot("LGO World HUD Action Shell V3B Skin v1", 390);
             _mainShell.Add(_worldHud);
             _worldHud.Add(NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit, "LGO World HUD Header Block"));
@@ -658,10 +648,7 @@ namespace LinhGioi.UI
             _position = NewMutedLabel("x=0.00 y=0.00 z=0.00 yaw=0.0");
             _position.style.marginTop = 8;
             _position.style.backgroundColor = RuntimeArtCatalog.Background;
-            _position.style.paddingLeft = 10;
-            _position.style.paddingRight = 10;
-            _position.style.paddingTop = 6;
-            _position.style.paddingBottom = 6;
+            RuntimeUiSkin.ApplyPadding(_position, layout.PositionChipPaddingHorizontal, layout.PositionChipPaddingHorizontal, layout.PositionChipPaddingVertical, layout.PositionChipPaddingVertical);
             _position.style.display = DisplayStyle.None;
             _worldHud.Add(_position);
 
@@ -705,6 +692,7 @@ namespace LinhGioi.UI
 
         private void BuildSessionMenuPanel()
         {
+            var layout = CurrentLayoutProfile();
             _sessionMenuPanel = NewSectionShell("PHIÊN", "Tạm dừng cục bộ", "Menu phiên", "LGO Session Menu Overlay");
             _sessionMenuPanel.style.position = Position.Absolute;
             _sessionMenuPanel.style.left = 420;
@@ -712,10 +700,7 @@ namespace LinhGioi.UI
             _sessionMenuPanel.style.top = 132;
             _sessionMenuPanel.style.marginTop = 0;
             _sessionMenuPanel.style.maxWidth = 960;
-            _sessionMenuPanel.style.paddingLeft = 22;
-            _sessionMenuPanel.style.paddingRight = 22;
-            _sessionMenuPanel.style.paddingTop = 18;
-            _sessionMenuPanel.style.paddingBottom = 20;
+            RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);
             RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);
             _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
             _sessionMenuStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
@@ -748,12 +733,10 @@ namespace LinhGioi.UI
 
         private void BuildLocalCombatPanel()
         {
+            var layout = CurrentLayoutProfile();
             _localCombatPanel = NewSectionShell("LUYỆN TẬP", "Bia luyện", "Bia luyện", "LGO World Combat Action Shell V3B");
             _localCombatPanel.style.marginTop = 8;
-            _localCombatPanel.style.paddingLeft = 12;
-            _localCombatPanel.style.paddingRight = 12;
-            _localCombatPanel.style.paddingTop = 10;
-            _localCombatPanel.style.paddingBottom = 10;
+            RuntimeUiSkin.ApplyPadding(_localCombatPanel, layout.LocalCombatPanelPaddingHorizontal, layout.LocalCombatPanelPaddingHorizontal, layout.LocalCombatPanelPaddingVertical, layout.LocalCombatPanelPaddingVertical);
             ApplyCombatPanelSkin(_localCombatPanel);
             var combatNote = NewMutedLabel("Nhãn nguyên mẫu cục bộ: đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương, phần thưởng hay chiến đấu máy chủ.");
             combatNote.style.display = DisplayStyle.None;
@@ -781,13 +764,11 @@ namespace LinhGioi.UI
 
         private void BuildLocalSettingsPanel()
         {
+            var layout = CurrentLayoutProfile();
             _settingsPanel = NewPreviewPanel();
             _settingsPanel.name = "LGO Local Settings Foundation";
             _settingsPanel.style.marginTop = 12;
-            _settingsPanel.style.paddingLeft = 14;
-            _settingsPanel.style.paddingRight = 14;
-            _settingsPanel.style.paddingTop = 12;
-            _settingsPanel.style.paddingBottom = 14;
+            RuntimeUiSkin.ApplyPadding(_settingsPanel, layout.SettingsPanelPaddingHorizontal, layout.SettingsPanelPaddingHorizontal, layout.SettingsPanelPaddingTop, layout.SettingsPanelPaddingBottom);
             _settingsPanel.style.minHeight = 108;
             RuntimeUiSkin.ApplyLocalSettingsPanelFrame(_settingsPanel);
             _settingsPanel.Add(NewSectionTitle("Tùy chỉnh hiển thị"));
@@ -820,13 +801,11 @@ namespace LinhGioi.UI
             _characterList.Add(NewStatusLabel(_characters.Length == 0 ? "Chưa có nhân vật. Tạo tu sĩ đầu tiên." : "Danh sách tu sĩ", RuntimeArtCatalog.Spirit));
             if (_characters.Length == 0)
             {
+                var layout = CurrentLayoutProfile();
                 var emptyCard = new VisualElement();
                 _emptyCharacterCard = emptyCard;
                 emptyCard.style.marginTop = 10;
-                emptyCard.style.paddingLeft = 14;
-                emptyCard.style.paddingRight = 14;
-                emptyCard.style.paddingTop = 14;
-                emptyCard.style.paddingBottom = 14;
+                RuntimeUiSkin.ApplyPadding(emptyCard, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingVertical, layout.EmptyCharacterCardPaddingVertical);
                 RuntimeUiSkin.ApplyEmptyCharacterCardFrame(emptyCard);
                 emptyCard.Add(NewStatusLabel("Tạo tu sĩ đầu tiên", RuntimeArtCatalog.Gold));
                 var empty = NewMutedLabel("Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.");
@@ -1164,7 +1143,7 @@ namespace LinhGioi.UI
 
         private void ApplyResponsiveLayoutProfile(bool force)
         {
-            var layout = RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height);
+            var layout = CurrentLayoutProfile();
             var width = layout.Width;
             var height = layout.Height;
             var profile = layout.Name;
@@ -1196,7 +1175,7 @@ namespace LinhGioi.UI
                 _authPanel.style.justifyContent = Justify.FlexStart;
                 _authPanel.style.alignItems = Align.Center;
                 _authPanel.style.marginTop = layout.AuthPanelMarginTop;
-                _authPanel.style.paddingTop = layout.AuthPanelPaddingTop;
+                RuntimeUiSkin.ApplyPadding(_authPanel, 0, 0, layout.AuthPanelPaddingTop, layout.AuthPanelPaddingBottom);
             }
             if (_loginStage != null)
             {
@@ -1284,8 +1263,7 @@ namespace LinhGioi.UI
             _characterList.style.minWidth = mobile ? 220 : 280;
             _characterList.style.maxWidth = mobile ? Mathf.Clamp(width * 0.40f, 285f, 330f) : tablet ? 370 : 390;
             _characterList.style.marginRight = mobile ? 10 : 14;
-            _characterList.style.paddingTop = layout.CharacterListPaddingVertical;
-            _characterList.style.paddingBottom = layout.CharacterListPaddingVertical;
+            RuntimeUiSkin.ApplyPadding(_characterList, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingVertical, layout.CharacterListPaddingVertical);
             if (_emptyCharacterCard != null)
             {
                 _emptyCharacterCard.style.marginTop = mobile ? 8 : 10;
@@ -1381,8 +1359,7 @@ namespace LinhGioi.UI
                 // LGO World HUD Mobile Hierarchy Polish v1: normal mobile keeps only objective and interaction priority.
                 _worldGuidanceCard.style.marginTop = mobile ? 6 : 8;
                 _worldGuidanceCard.style.marginBottom = mobile ? 6 : 8;
-                _worldGuidanceCard.style.paddingTop = layout.WorldGuidanceCardPaddingVertical;
-                _worldGuidanceCard.style.paddingBottom = layout.WorldGuidanceCardPaddingVertical;
+                RuntimeUiSkin.ApplyPadding(_worldGuidanceCard, layout.WorldGuidanceCardPaddingHorizontal, layout.WorldGuidanceCardPaddingHorizontal, layout.WorldGuidanceCardPaddingVertical, layout.WorldGuidanceCardPaddingVertical);
             }
 
             if (_dialoguePanel != null)
@@ -1397,8 +1374,7 @@ namespace LinhGioi.UI
             if (_dialogueProgress != null)
             {
                 _dialogueProgress.style.fontSize = mobile ? 12 : 13;
-                _dialogueProgress.style.paddingTop = layout.DialogueProgressPaddingVertical;
-                _dialogueProgress.style.paddingBottom = layout.DialogueProgressPaddingVertical;
+                RuntimeUiSkin.ApplyPadding(_dialogueProgress, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingVertical, layout.DialogueProgressPaddingVertical);
             }
             if (_dialogueContinueButton != null)
             {
@@ -1427,8 +1403,7 @@ namespace LinhGioi.UI
             {
                 _status.style.fontSize = worldVisible && mobile ? 13 : tablet ? 13 : 14;
                 _status.style.minHeight = worldVisible && mobile ? 34 : 32;
-                _status.style.paddingLeft = layout.StatusPaddingHorizontal(worldVisible);
-                _status.style.paddingRight = layout.StatusPaddingHorizontal(worldVisible);
+                RuntimeUiSkin.ApplyPadding(_status, layout.StatusPaddingHorizontal(worldVisible), layout.StatusPaddingHorizontal(worldVisible), layout.StatusPaddingVertical, layout.StatusPaddingVertical);
                 _status.style.maxWidth = worldVisible && mobile ? Mathf.Clamp(viewportWidth * 0.28f, 180f, 260f) : tablet ? 270 : 360;
                 if (worldVisible && mobile && _status.text.StartsWith("Sẵn sàng:", StringComparison.Ordinal))
                     _status.text = "Sẵn sàng: Bước 1/2";

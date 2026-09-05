@@ -41,6 +41,7 @@ namespace LinhGioi.UI
         internal int AuthPanelMinHeight => IsMobile ? 0 : IsTablet ? 500 : 560;
         internal int AuthPanelMarginTop => IsMobile ? 0 : 4;
         internal int AuthPanelPaddingTop => IsMobile ? 0 : 8;
+        internal int AuthPanelPaddingBottom => 8;
         internal DisplayStyle LoginStageDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
         internal int LoginStageWidth => IsTablet ? 262 : 304;
         internal int LoginStageMinHeight => IsTablet ? 388 : 460;
@@ -83,6 +84,7 @@ namespace LinhGioi.UI
         internal int LobbyPanelPaddingHorizontal => IsMobile ? 12 : 18;
         internal int LobbyPanelPaddingTop => IsMobile ? 8 : 16;
         internal int LobbyPanelPaddingBottom => IsMobile ? 8 : 18;
+        internal int CharacterListPaddingHorizontal => 14;
         internal int CharacterListPaddingVertical => IsMobile ? 8 : 12;
         internal int EmptyCharacterCardPaddingHorizontal => IsMobile ? 12 : 14;
         internal int EmptyCharacterCardPaddingVertical => IsMobile ? 10 : 14;
@@ -94,11 +96,21 @@ namespace LinhGioi.UI
         internal int WorldHudPaddingVertical => IsMobile ? 6 : 10;
         internal int WorldHudDialoguePaddingHorizontal => IsMobile ? 7 : WorldHudPaddingHorizontal;
         internal int WorldHudDialoguePaddingVertical => IsMobile ? 5 : WorldHudPaddingVertical;
+        internal int WorldGuidanceCardPaddingHorizontal => 8;
         internal int WorldGuidanceCardPaddingVertical => IsMobile ? 5 : 7;
         internal int DialoguePanelPaddingHorizontal => IsMobile ? 10 : 14;
         internal int DialoguePanelPaddingVertical => IsMobile ? 9 : 12;
+        internal int DialogueProgressPaddingHorizontal => 10;
         internal int DialogueProgressPaddingVertical => IsMobile ? 4 : 5;
         internal int StatusPaddingHorizontal(bool worldVisible) => worldVisible && IsMobile ? 14 : 18;
+        internal int StatusPaddingVertical => 6;
+        internal int PositionChipPaddingHorizontal => 10;
+        internal int PositionChipPaddingVertical => 6;
+        internal int LocalCombatPanelPaddingHorizontal => 12;
+        internal int LocalCombatPanelPaddingVertical => 10;
+        internal int SettingsPanelPaddingHorizontal => 14;
+        internal int SettingsPanelPaddingTop => 12;
+        internal int SettingsPanelPaddingBottom => 14;
 
         internal float WorldHudBaseMaxWidth => IsMobile
             ? Mathf.Clamp(Width * 0.28f, 238f, 272f)

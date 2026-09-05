@@ -64,7 +64,9 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "var layout = RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height);",
+        "private RuntimeUiLayoutProfile CurrentLayoutProfile()",
+        "return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height);",
+        "var layout = CurrentLayoutProfile();",
         "var width = layout.Width;",
         "var height = layout.Height;",
         "var profile = layout.Name;",
