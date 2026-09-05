@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-SCREEN-SHELL-COMPONENT-REVIEW-v1.0`
+`LGO-RUNTIME-UI-ACTION-ROW-COMPONENT-REVIEW-v1.0`
 
-Identify the next reusable screen-shell extraction that reduces playable UI controller duplication without prematurely splitting stateful gameplay flow. Marker: `LGO_SESSION_MENU_SETTING_ROW_EVIDENCE_REFRESH_READY`. Prefer shared shell/layout helpers for repeated screen containers, headers, and action group patterns while preserving account, character, world, and combat semantics.
+Continue the runtime UI base-component pass by consolidating repeated action-row and button-row layout patterns into shared stateless helpers. Marker ready from the previous batch: `LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY`. Focus on reducing duplicate row spacing and command-button grouping in playable UI panels without moving stateful account/world/session behavior out of the controller.
 
 ## Current blocker
 
@@ -126,6 +126,9 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-FACTORY-ADOPTION-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_FACTORY_ADOPTION_EVIDENCE_REFRESH_READY`
 - `LGO-SESSION-MENU-SETTING-ROW-VISUAL-POLISH-v1.0` / `LGO_SESSION_MENU_SETTING_ROW_VISUAL_POLISH_READY`
 - `LGO-SESSION-MENU-SETTING-ROW-EVIDENCE-REFRESH-v1.0` / `LGO_SESSION_MENU_SETTING_ROW_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-SCREEN-SHELL-COMPONENT-REVIEW-v1.0` / `LGO_RUNTIME_UI_SCREEN_SHELL_COMPONENT_REVIEW_READY`
+- `LGO-WORLD-POSE-PULSE-VISUAL-CLEANUP-v1.0` / `LGO_WORLD_POSE_PULSE_VISUAL_CLEANUP_READY`
+- `LGO-RUNTIME-UI-SCREEN-SHELL-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 
@@ -200,6 +203,9 @@ python3.12 tools/validate_lgo_runtime_ui_responsive_session_shell_helper_review.
 python3.12 tools/validate_lgo_runtime_ui_factory_adoption_evidence_refresh.py
 python3.12 tools/validate_lgo_session_menu_setting_row_visual_polish.py
 python3.12 tools/validate_lgo_session_menu_setting_row_evidence_refresh.py
+python3.12 tools/validate_lgo_runtime_ui_screen_shell_component_review.py
+python3.12 tools/validate_lgo_world_pose_pulse_visual_cleanup.py
+python3.12 tools/validate_lgo_runtime_ui_screen_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_world_mobile_camera_framing.py
 python3.12 tools/validate_lgo_world_mobile_camera_evidence_refresh.py

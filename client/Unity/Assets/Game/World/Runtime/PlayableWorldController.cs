@@ -848,7 +848,11 @@ namespace LinhGioi.World
         {
             if (_posePulse == null)
             {
-                _posePulse = CreateMarkerCube("LGO Player Pose Pulse Placeholder", CurrentPosition + Vector3.up * 0.2f, RuntimeArtCatalog.Spirit, new Vector3(1.4f, 0.08f, 1.4f)).transform;
+                var posePulseSprite = LgoVisualAssetRegistryV3B.CooldownReady ?? CombatPlaceholderAssets.CooldownReady;
+                var posePulse = CreateBillboardSprite("LGO Player Pose Pulse Placeholder Sprite V3B", posePulseSprite, CurrentPosition + Vector3.up * 0.08f, new Vector3(0.62f, 0.62f, 1f), 3);
+                _posePulse = posePulse != null
+                    ? posePulse.transform
+                    : CreateMarkerCube("LGO Player Pose Pulse Placeholder", CurrentPosition + Vector3.up * 0.04f, RuntimeArtCatalog.Spirit, new Vector3(0.34f, 0.02f, 0.34f)).transform;
             }
             if (_gateKeeperGuidePulse == null)
             {
@@ -1120,7 +1124,15 @@ namespace LinhGioi.World
             if (_posePulse != null)
             {
                 var renderer = _posePulse.GetComponent<Renderer>();
-                if (renderer != null) renderer.material = RuntimeArtCatalog.CreateMaterial("LGO Local Pose Pulse", color);
+                var spriteRenderer = _posePulse.GetComponent<SpriteRenderer>();
+                if (spriteRenderer != null)
+                {
+                    spriteRenderer.color = new Color(color.r, color.g, color.b, 0.78f);
+                }
+                else if (renderer != null)
+                {
+                    renderer.material = RuntimeArtCatalog.CreateMaterial("LGO Local Pose Pulse", color);
+                }
             }
             RefreshPoseFeedbackMarkers();
         }

@@ -706,7 +706,7 @@ namespace LinhGioi.UI
             BuildSkillPreviewPanel();
             BuildLocalCombatPanel();
 
-            _dialoguePanel = NewPreviewPanel("ĐỐI THOẠI", "Người Giữ Cổng");
+            _dialoguePanel = NewSectionShell("ĐỐI THOẠI", "Người Giữ Cổng", string.Empty, "LGO Dialogue Shell");
             _dialoguePanel.style.marginTop = 10;
             _dialogueSpeaker = new Label("Người Giữ Cổng");
             _dialogueSpeaker.style.fontSize = 17;
@@ -735,8 +735,7 @@ namespace LinhGioi.UI
 
         private void BuildSessionMenuPanel()
         {
-            _sessionMenuPanel = NewPreviewPanel("PHIÊN", "Tạm dừng cục bộ");
-            _sessionMenuPanel.name = "LGO Session Menu Overlay";
+            _sessionMenuPanel = NewSectionShell("PHIÊN", "Tạm dừng cục bộ", "Menu phiên", "LGO Session Menu Overlay");
             _sessionMenuPanel.style.position = Position.Absolute;
             _sessionMenuPanel.style.left = 420;
             _sessionMenuPanel.style.right = 84;
@@ -748,7 +747,6 @@ namespace LinhGioi.UI
             _sessionMenuPanel.style.paddingTop = 18;
             _sessionMenuPanel.style.paddingBottom = 20;
             RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);
-            _sessionMenuPanel.Add(NewSectionTitle("Menu phiên"));
             _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
             _sessionMenuStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
             _sessionMenuStatus.style.marginBottom = 10;
@@ -770,10 +768,8 @@ namespace LinhGioi.UI
 
         private void BuildSkillPreviewPanel()
         {
-            _skillPreviewPanel = NewPreviewPanel("KỸ NĂNG", "Diễn tập hình ảnh");
-            _skillPreviewPanel.name = "LGO Skill Preview Sandbox";
+            _skillPreviewPanel = NewSectionShell("KỸ NĂNG", "Diễn tập hình ảnh", "Xem thử kỹ năng", "LGO Skill Preview Sandbox");
             _skillPreviewPanel.style.marginTop = 10;
-            _skillPreviewPanel.Add(NewSectionTitle("Xem thử kỹ năng"));
             _skillPreviewPanel.Add(NewMutedLabel("Chỉ diễn tập hình ảnh cục bộ. Không tạo đối thủ, luật thời gian, tiến trình hay kết quả thật."));
             _previewWindSlashButton = NewSecondaryButton("Chém Gió", () => PreviewSkill("Wind Slash", "Chém Gió"));
             _previewShadowBindButton = NewSecondaryButton("Trói Bóng", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
@@ -784,15 +780,13 @@ namespace LinhGioi.UI
 
         private void BuildLocalCombatPanel()
         {
-            _localCombatPanel = NewPreviewPanel("LUYỆN TẬP", "Bia luyện");
-            _localCombatPanel.name = "LGO World Combat Action Shell V3B";
+            _localCombatPanel = NewSectionShell("LUYỆN TẬP", "Bia luyện", "Bia luyện", "LGO World Combat Action Shell V3B");
             _localCombatPanel.style.marginTop = 8;
             _localCombatPanel.style.paddingLeft = 12;
             _localCombatPanel.style.paddingRight = 12;
             _localCombatPanel.style.paddingTop = 10;
             _localCombatPanel.style.paddingBottom = 10;
             ApplyCombatPanelSkin(_localCombatPanel);
-            _localCombatPanel.Add(NewSectionTitle("Bia luyện"));
             var combatNote = NewMutedLabel("Nhãn nguyên mẫu cục bộ: đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương, phần thưởng hay chiến đấu máy chủ.");
             combatNote.style.display = DisplayStyle.None;
             _localCombatPanel.Add(combatNote);
