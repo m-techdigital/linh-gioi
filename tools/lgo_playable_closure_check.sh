@@ -225,6 +225,9 @@ source_only() {
   if [[ -f tools/validate_lgo_character_hall_v3b_composition.py ]]; then
     run_phase character_hall_v3b_composition python3.12 tools/validate_lgo_character_hall_v3b_composition.py
   fi
+  if [[ -f tools/validate_lgo_build_size_budget.py ]]; then
+    run_phase build_size_budget python3.12 tools/validate_lgo_build_size_budget.py
+  fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
     run_phase code_governance python3.12 tools/validate_code_governance.py
@@ -343,6 +346,8 @@ source_only() {
     tools/validate_lgo_login_gate_entry_visual_v1.py \
     tools/validate_lgo_login_npc_compositing_polish.py \
     tools/validate_lgo_character_hall_v3b_composition.py \
+    tools/report_lgo_build_size_budget.py \
+    tools/validate_lgo_build_size_budget.py \
     tools/lgo_continuous_cycle.py \
     tools/lgo_next_task.py \
     tools/lgo_worktree_audit.py \
@@ -612,6 +617,9 @@ package_ready() {
   fi
   if [[ -f tools/validate_lgo_character_hall_v3b_composition.py ]]; then
     run_phase character_hall_v3b_composition python3.12 tools/validate_lgo_character_hall_v3b_composition.py
+  fi
+  if [[ -f tools/validate_lgo_build_size_budget.py ]]; then
+    run_phase build_size_budget python3.12 tools/validate_lgo_build_size_budget.py
   fi
   if [[ -f tools/validate_code_governance.py ]]; then
     run_phase clean_pycache_before_code_governance find server tests tools -type d -name __pycache__ -prune -exec rm -rf {} +
