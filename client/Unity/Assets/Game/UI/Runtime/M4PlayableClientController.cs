@@ -777,16 +777,11 @@ namespace LinhGioi.UI
             if (_characters.Length == 0)
             {
                 var layout = CurrentLayoutProfile();
-                var emptyCard = new VisualElement();
-                _emptyCharacterCard = emptyCard;
-                emptyCard.style.marginTop = layout.EmptyCharacterCardMarginTop;
-                RuntimeUiSkin.ApplyPadding(emptyCard, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingVertical, layout.EmptyCharacterCardPaddingVertical);
-                RuntimeUiSkin.ApplyEmptyCharacterCardFrame(emptyCard);
-                emptyCard.Add(NewStatusLabel("Tạo tu sĩ đầu tiên", RuntimeArtCatalog.Gold));
+                var emptyTitle = NewStatusLabel("Tạo tu sĩ đầu tiên", RuntimeArtCatalog.Gold);
                 var empty = NewMutedLabel("Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.");
+                var emptyCard = NewEmptyCharacterCard(layout, emptyTitle, empty);
+                _emptyCharacterCard = emptyCard;
                 _emptyCharacterHint = empty;
-                empty.style.marginTop = 6;
-                emptyCard.Add(empty);
                 _characterList.Add(emptyCard);
                 SelectCharacter(null);
                 return;

@@ -69,13 +69,15 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "RuntimeUiSkin.ApplyLocalSettingsPanelFrame(_settingsPanel);",
-        "RuntimeUiSkin.ApplyEmptyCharacterCardFrame(emptyCard);",
+        "var emptyCard = NewEmptyCharacterCard(layout, emptyTitle, empty);",
         "RuntimeUiSkin.ApplyCombatCooldownIconState(_combatCooldownIcon, coolingDown);",
         "_showPositionToggle = NewLocalSettingToggle",
         "_combatCooldownIcon = NewCombatCooldownIcon();",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "NewEmptyCharacterCard(RuntimeUiLayoutProfile layout, Label title, Label hint)",
+        "RuntimeUiSkin.ApplyEmptyCharacterCardFrame(card);",
         "RuntimeUiSkin.ApplySettingToggleState(toggle, evt.newValue);",
         "RuntimeUiSkin.ApplyCombatCooldownIconFrame(icon);",
     )

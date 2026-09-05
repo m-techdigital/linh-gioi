@@ -54,6 +54,11 @@ namespace LinhGioi.UI
         internal const int BaseInputPaddingHorizontal = 10;
         internal const int BaseInputPaddingVertical = 4;
 
+        internal const int EmptyCharacterHintMarginTop = 6;
+        internal const int ListButtonMinWidth = 230;
+        internal const int ListButtonMinHeight = 58;
+        internal const int ListButtonPaddingLeft = 14;
+
         internal const int RuntimeIconSmall = 28;
         internal const int IconMarginLeft = 4;
         internal const int IconMarginRight = 8;

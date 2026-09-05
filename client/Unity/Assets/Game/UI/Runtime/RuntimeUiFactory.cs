@@ -117,6 +117,18 @@ namespace LinhGioi.UI
             return panel;
         }
 
+        internal static VisualElement NewEmptyCharacterCard(RuntimeUiLayoutProfile layout, Label title, Label hint)
+        {
+            var card = new VisualElement();
+            card.style.marginTop = layout.EmptyCharacterCardMarginTop;
+            RuntimeUiSkin.ApplyPadding(card, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingVertical, layout.EmptyCharacterCardPaddingVertical);
+            RuntimeUiSkin.ApplyEmptyCharacterCardFrame(card);
+            card.Add(title);
+            hint.style.marginTop = RuntimeUiSpacing.EmptyCharacterHintMarginTop;
+            card.Add(hint);
+            return card;
+        }
+
         internal static void ApplyHudStatusCompact(Label label, int fontSize)
         {
             label.style.fontSize = fontSize;
@@ -392,10 +404,10 @@ namespace LinhGioi.UI
 
         internal static Button NewListButton(string name, string classId, Action action)
         {
-            var button = NewSecondaryButton(name + "\nKiếm tu sơ nhập", action);
-            RuntimeUiSkin.ApplyButtonMetrics(button, 230, 58);
+            var button = NewSecondaryButton(name + "\n" + classId, action);
+            RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.ListButtonMinWidth, RuntimeUiSpacing.ListButtonMinHeight);
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
-            button.style.paddingLeft = 14;
+            button.style.paddingLeft = RuntimeUiSpacing.ListButtonPaddingLeft;
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.15f, 0.25f, 0.88f), RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
             button.tooltip = "Chọn nhân vật tu luyện";
             return button;

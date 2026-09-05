@@ -63,7 +63,7 @@ def main() -> int:
         "RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.CompactStatusPaddingHorizontal, RuntimeUiSpacing.CompactStatusPaddingHorizontal, RuntimeUiSpacing.CompactStatusPaddingTop, RuntimeUiSpacing.CompactStatusPaddingBottom);",
         "RuntimeUiSkin.ApplyPadding(row, 4, 4, 0, 0);",
         "RuntimeUiSkin.ApplyPadding(button, 14, 14, 0, 0);",
-        "button.style.paddingLeft = 14;",
+        "button.style.paddingLeft = RuntimeUiSpacing.ListButtonPaddingLeft;",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
