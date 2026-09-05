@@ -20,6 +20,16 @@ namespace LinhGioi.UI
         internal async Task CaptureEvidenceEnterWorldAsync()
         {
             await EnterWorldAsync();
+            _evidenceState = RuntimeUiEvidenceState.EnterWorldTransition;
+            RefreshWorldLoopLabels();
+        }
+
+        internal void CaptureEvidenceWorldHub()
+        {
+            if (_world == null) return;
+            _evidenceState = RuntimeUiEvidenceState.None;
+            RefreshWorldLoopLabels();
+            RefreshCombatAssetUiState();
         }
 
         internal void CaptureEvidenceNearGateKeeperPrompt()

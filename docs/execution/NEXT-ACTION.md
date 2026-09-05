@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: local handoff artifact cleanup reduced generated build weight while preserving source, runtime assets, visual evidence, and dev-loop logs.
+- Current reason: enter-world evidence has a distinct Linh Mon transition checkpoint, and session menu now owns focus with centered layout plus dimmed world backing.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -68,6 +68,10 @@ Current focus update: World Hub ground texture now uses a smaller, softer proced
 Current focus update: Character Hall selected state now collapses the create form under `LGO_CHARACTER_HALL_SELECTED_CREATE_COLLAPSE_READY`; fresh runtime screenshot shows a cleaner CTA band with `Vào sân luyện` first and no always-visible create input, no visual PASS is claimed.
 
 Current focus update: local generated handoff archives were cleaned from `build/chatgpt-handoff`, reducing `build/` from 507MB to 169MB; `tools/lgo_local_artifact_cleanup.sh` now provides a dry-run/apply path under `LGO_LOCAL_ARTIFACT_CLEANUP_READY` while preserving source, evidence screenshots, and dev-loop logs.
+
+Current focus update: enter-world evidence now captures a distinct Linh Môn transition state and world-hub resets to steady objective state under `LGO_ENTER_WORLD_EVIDENCE_DISTINCT_CHECKPOINT_READY`; fresh runtime screenshots were reviewed, duplicate-frame evidence is gone, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: session menu now owns focus on every profile, centers by viewport ratio, hides HUD/header while open, and dims the world behind it under `LGO_SESSION_MENU_CENTERED_FOCUS_POLISH_READY`; fresh runtime screenshot is cleaner, no `VISUAL_RUNTIME_PASS` is claimed.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 

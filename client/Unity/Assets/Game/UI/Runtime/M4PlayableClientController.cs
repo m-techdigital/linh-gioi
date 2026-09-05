@@ -957,6 +957,13 @@ namespace LinhGioi.UI
             if (_skinSource != null) _skinSource.text = "Nguồn giao diện: asset runtime tối ưu, chưa phải art final.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionActionText;
+            if (_evidenceState.ShowEnterWorldTransition)
+            {
+                if (_worldStep != null) _worldStep.text = "Tiến trình: Linh Môn đang mở";
+                if (_worldDirection != null) _worldDirection.text = "Chỉ dẫn: ổn định linh khí trước khi vào sân luyện.";
+                if (_worldObjective != null) _worldObjective.text = "Mục tiêu: đang bước qua Linh Môn.";
+                if (_interactionHint != null) _interactionHint.text = "Đang nhập giới. Chuẩn bị nhận quyền điều khiển.";
+            }
             SetToast(_world.InteractionAcknowledged ? "Hoàn tất luyện tập. Hãy lưu vị trí hoặc về Điện Nhân Vật." : _world.InteractionText, RuntimeArtCatalog.Spirit);
             RefreshDialoguePanel();
             ApplyLocalSettings();
@@ -1033,7 +1040,8 @@ namespace LinhGioi.UI
 
         private string FormatTopStatusMessage(string message)
         {
-            if (!string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal) && message == "Sẵn sàng: Bước 1 rồi Bước 2.")
+            var worldVisible = _worldHud != null && _worldHud.style.display == DisplayStyle.Flex;
+            if ((worldVisible || !string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal)) && message == "Sẵn sàng: Bước 1 rồi Bước 2.")
                 return "Sẵn sàng: Bước 1/2";
             return message;
         }
@@ -1109,9 +1117,13 @@ namespace LinhGioi.UI
             if (visible)
             {
                 SetDisplayed(_dialoguePanel, false);
+                if (_screenScrim != null)
+                    _screenScrim.style.backgroundColor = new Color(0.01f, 0.025f, 0.055f, 0.52f);
             }
             else
             {
+                if (_screenScrim != null)
+                    _screenScrim.style.backgroundColor = new Color(0.01f, 0.03f, 0.07f, 0.08f);
                 RefreshDialoguePanel();
             }
             ApplyLocalSettings();
@@ -1129,8 +1141,8 @@ namespace LinhGioi.UI
             var gameplayPanelVisible = !sessionVisible && !dialogueVisible && (!compactViewport || _evidenceState.ForceCombatPanel);
             var compactWorld = compactViewport || focusMode;
             var evidenceHidesGuidance = _evidenceState.HideGuidanceCardOnCompact && compactViewport;
-            SetElementVisibility(_worldHud, !(sessionVisible && compactViewport));
-            SetElementVisibility(_headerActions, !(sessionVisible && compactViewport));
+            SetElementVisibility(_worldHud, !sessionVisible);
+            SetElementVisibility(_headerActions, !sessionVisible);
             SetDisplayed(_layoutProfileLabel, false);
             SetDisplayed(_worldFooterActions, !(sessionVisible || _isMobileProfile));
             SetDisplayed(_position, showPosition && !focusMode);
@@ -1348,9 +1360,7 @@ namespace LinhGioi.UI
                 _status.style.maxWidth = worldVisible && mobile
                     ? Mathf.Clamp(viewportWidth * (RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent / 100f), RuntimeUiSpacing.TopStatusWorldMobileMinWidth, RuntimeUiSpacing.TopStatusWorldMobileMaxWidth)
                     : tablet ? RuntimeUiSpacing.TopStatusTabletMaxWidth : RuntimeUiSpacing.TopStatusDesktopMaxWidth;
-                if (worldVisible && mobile && _status.text.StartsWith("Sẵn sàng:", StringComparison.Ordinal))
-                    _status.text = "Sẵn sàng: Bước 1/2";
-                else if (worldVisible && tablet && _status.text == "Sẵn sàng: Bước 1 rồi Bước 2.")
+                if (worldVisible && _status.text.StartsWith("Sẵn sàng:", StringComparison.Ordinal))
                     _status.text = "Sẵn sàng: Bước 1/2";
             }
             if (_quitButton != null)

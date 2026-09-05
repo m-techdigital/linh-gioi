@@ -97,8 +97,9 @@ namespace LinhGioi.UI
                 "enter-world",
                 "Enter World",
                 "docs/reference-art/v0.16.5/lgo-world-hub-2d5-v0165.png",
-                "World loaded, HUD visible, objective and movement affordances readable");
+                "Transition checkpoint after crossing Linh Mon; HUD must show a distinct entering-world state before steady world hub");
 
+            _controller.CaptureEvidenceWorldHub();
             yield return WaitFrames(8);
             yield return CaptureCheckpoint(
                 "world-hub",

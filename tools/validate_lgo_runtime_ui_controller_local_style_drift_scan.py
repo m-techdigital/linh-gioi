@@ -65,7 +65,7 @@ def main() -> int:
         "private static void SetElementVisibility(VisualElement element, bool visible)",
         "SetDisplayed(_authPanel, true);",
         "SetDisplayed(_sessionMenuPanel, visible);",
-        "SetElementVisibility(_worldHud, !(sessionVisible && compactViewport));",
+        "SetElementVisibility(_worldHud, !sessionVisible);",
         "SetDisplayed(_dialoguePanel, visible);",
     )
     reject(

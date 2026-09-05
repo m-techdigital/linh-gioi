@@ -67,13 +67,15 @@ def main() -> int:
     if (
         "_worldHud.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;" not in ui
         and "SetElementVisibility(_worldHud, !(sessionVisible && compactViewport));" not in ui
+        and "SetElementVisibility(_worldHud, !sessionVisible);" not in ui
     ):
-        ERRORS.append("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing world HUD compact visibility marker")
+        ERRORS.append("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing world HUD session-focus visibility marker")
     if (
         "_headerActions.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;" not in ui
         and "SetElementVisibility(_headerActions, !(sessionVisible && compactViewport));" not in ui
+        and "SetElementVisibility(_headerActions, !sessionVisible);" not in ui
     ):
-        ERRORS.append("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing header actions compact visibility marker")
+        ERRORS.append("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing header actions session-focus visibility marker")
     require(
         "docs/tasks/LGO-SESSION-MENU-FOCUS-EVIDENCE-REFRESH-v1.0.md",
         "LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY",
