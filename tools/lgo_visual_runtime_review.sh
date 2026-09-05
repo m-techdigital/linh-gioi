@@ -424,3 +424,10 @@ if errors:
 print("LGO_VISUAL_RUNTIME_EVIDENCE_READY output=" + str(out))
 print("LGO_VISUAL_RUNTIME_PASS_NOT_CLAIMED")
 PY
+
+python3.12 tools/analyze_lgo_visual_runtime_evidence.py "$OUT_DIR"
+
+if [[ ! -f "$OUT_DIR/visual-runtime-evidence-heuristics.json" ]]; then
+  echo "ERROR: visual runtime evidence heuristics missing: $OUT_DIR/visual-runtime-evidence-heuristics.json" >&2
+  exit 42
+fi
