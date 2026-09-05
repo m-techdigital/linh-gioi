@@ -83,7 +83,11 @@ cache_paths = [
     "client/Unity/Library",
     "client/Unity/Temp",
     "client/Unity/Logs",
-    "build",
+    "build/generated",
+    "build/package",
+    "build/packages",
+    "build/full-source",
+    "build/delta",
 ]
 for rel in strict_paths:
     path = root / rel
