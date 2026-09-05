@@ -31,6 +31,9 @@ namespace LinhGioi.UI
         internal const int StatusLabelMarginTop = 8;
         internal const int StatusLabelPaddingHorizontal = 10;
         internal const int StatusLabelPaddingVertical = 6;
+        internal const int StatusChipMaxWidth = 380;
+        internal const int StatusChipPaddingHorizontal = 14;
+        internal const int StatusChipPaddingVertical = 6;
 
         internal const int BadgeStripMarginBottom = 10;
         internal const int BadgeMarginBottom = 8;

@@ -64,6 +64,13 @@ namespace LinhGioi.UI
             if (bold) label.style.unityFontStyleAndWeight = FontStyle.Bold;
         }
 
+        internal static void ApplyStatusAccent(Label label, Color accent)
+        {
+            if (label == null) return;
+            label.style.borderLeftColor = accent;
+            label.style.color = accent;
+        }
+
         internal static void ApplyButtonMetrics(Button button, float minWidth = 0f, float minHeight = 0f, float fontSize = 0f, bool bold = false, WhiteSpace whiteSpace = WhiteSpace.NoWrap)
         {
             if (minWidth > 0f) button.style.minWidth = minWidth;

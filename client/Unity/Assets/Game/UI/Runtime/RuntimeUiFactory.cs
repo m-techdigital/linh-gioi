@@ -146,9 +146,7 @@ namespace LinhGioi.UI
 
         internal static void ApplyStatusAccent(Label label, Color accent)
         {
-            if (label == null) return;
-            label.style.borderLeftColor = accent;
-            label.style.color = accent;
+            RuntimeUiSkin.ApplyStatusAccent(label, accent);
         }
 
         internal static Label NewSectionTitle(string text)
@@ -209,10 +207,10 @@ namespace LinhGioi.UI
 
         internal static void ApplyStatusChip(Label label, Color accent)
         {
-            label.style.maxWidth = 380;
+            label.style.maxWidth = RuntimeUiSpacing.StatusChipMaxWidth;
             label.style.marginRight = RuntimeUiSpacing.RowGap;
             label.style.whiteSpace = WhiteSpace.Normal;
-            RuntimeUiSkin.ApplyPadding(label, 14, 6);
+            RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.StatusChipPaddingHorizontal, RuntimeUiSpacing.StatusChipPaddingVertical);
             RuntimeUiSkin.ApplyStatusChipFrame(label, accent);
         }
 
