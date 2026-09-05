@@ -372,6 +372,9 @@ source_only() {
   if [[ -f tools/validate_lgo_combat_button_mobile_responsive_evidence.py ]]; then
     run_phase combat_button_mobile_responsive_evidence python3.12 tools/validate_lgo_combat_button_mobile_responsive_evidence.py
   fi
+  if [[ -f tools/validate_lgo_world_hud_component_boundary_audit.py ]]; then
+    run_phase world_hud_component_boundary_audit python3.12 tools/validate_lgo_world_hud_component_boundary_audit.py
+  fi
   if [[ -f tools/validate_lgo_world_hud_action_shell_evidence_refresh.py ]]; then
     run_phase world_hud_action_shell_evidence_refresh python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
   fi
@@ -629,6 +632,7 @@ source_only() {
     tools/validate_lgo_combat_button_state_readability_polish.py \
     tools/validate_lgo_combat_button_state_evidence_refresh.py \
     tools/validate_lgo_combat_button_mobile_responsive_evidence.py \
+    tools/validate_lgo_world_hud_component_boundary_audit.py \
     tools/validate_lgo_world_hud_action_shell_evidence_refresh.py \
     tools/validate_lgo_world_mobile_camera_framing.py \
     tools/validate_lgo_world_mobile_camera_evidence_refresh.py \

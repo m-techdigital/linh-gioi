@@ -88,6 +88,16 @@ namespace LinhGioi.UI
             return group;
         }
 
+        internal static VisualElement NewWorldHudRoot(string name, float maxWidth)
+        {
+            var hud = NewPanel(maxWidth);
+            hud.name = name;
+            hud.style.maxWidth = maxWidth;
+            hud.style.alignSelf = Align.FlexStart;
+            RuntimeUiSkin.ApplyPadding(hud, 12, 10);
+            return hud;
+        }
+
         internal static void ApplyHudStatusCompact(Label label, int fontSize)
         {
             label.style.fontSize = fontSize;
@@ -137,6 +147,16 @@ namespace LinhGioi.UI
             row.style.marginBottom = 4;
             row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Gold));
             return row;
+        }
+
+        internal static VisualElement NewOrnamentRule(Color color)
+        {
+            var rule = new VisualElement();
+            rule.style.height = 2;
+            rule.style.marginBottom = 10;
+            rule.style.backgroundColor = color;
+            rule.style.opacity = 0.8f;
+            return rule;
         }
 
         internal static Label NewStatusLabel(string text, Color color)

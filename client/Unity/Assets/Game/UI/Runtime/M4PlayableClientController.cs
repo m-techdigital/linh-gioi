@@ -594,14 +594,7 @@ namespace LinhGioi.UI
 
         private void BuildWorldHud()
         {
-            _worldHud = NewPanel(390);
-            _worldHud.name = "LGO World HUD Action Shell V3B Skin v1";
-            _worldHud.style.maxWidth = 390;
-            _worldHud.style.alignSelf = Align.FlexStart;
-            _worldHud.style.paddingLeft = 12;
-            _worldHud.style.paddingRight = 12;
-            _worldHud.style.paddingTop = 10;
-            _worldHud.style.paddingBottom = 10;
+            _worldHud = NewWorldHudRoot("LGO World HUD Action Shell V3B Skin v1", 390);
             _mainShell.Add(_worldHud);
             _worldHud.Add(NewSectionTitle("Sân Luyện An Toàn"));
             _worldHud.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
@@ -1723,16 +1716,6 @@ namespace LinhGioi.UI
             badge.Add(titleLabel);
             badge.Add(valueLabel);
             return badge;
-        }
-
-        private static VisualElement NewOrnamentRule(Color color)
-        {
-            var rule = new VisualElement();
-            rule.style.height = 2;
-            rule.style.marginBottom = 10;
-            rule.style.backgroundColor = color;
-            rule.style.opacity = 0.8f;
-            return rule;
         }
 
         private static Label NewToast(string text)
