@@ -60,7 +60,7 @@ def main() -> int:
         "LGO Character Hall Main Selection Grid V3B",
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
-        "LGO Character Hall Create Cultivator Panel V3B",
+        "_createPanel = NewCharacterCreatePanel(layout);",
         "LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture",
         "Wrap.NoWrap",
         "mobile ? DisplayStyle.None : DisplayStyle.Flex",
@@ -72,7 +72,9 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "NewCharacterHallPanel(RuntimeUiLayoutProfile layout)",
+        "NewCharacterCreatePanel(RuntimeUiLayoutProfile layout)",
         "LGO Character Hall V3B Composition Panel",
+        "LGO Character Hall Create Cultivator Panel V3B",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0.md",

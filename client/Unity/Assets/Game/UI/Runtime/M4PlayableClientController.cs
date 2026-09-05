@@ -534,14 +534,7 @@ namespace LinhGioi.UI
             _selectedPreview.Add(_selectedClassSummary);
             _lobbyContent.Add(_selectedPreview);
 
-            _createPanel = new VisualElement();
-            _createPanel.name = "LGO Character Hall Create Cultivator Panel V3B";
-            _createPanel.style.marginTop = layout.CreatePanelMarginTop;
-            _createPanel.style.position = Position.Relative;
-            RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
-            _createPanel.style.minHeight = 122;
-            RuntimeUiSkin.ApplyCharacterCreateFrame(_createPanel);
-            _createPanel.style.maxHeight = 210;
+            _createPanel = NewCharacterCreatePanel(layout);
             _lobbyPanel.Add(_createPanel);
 
             _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
@@ -1275,7 +1268,7 @@ namespace LinhGioi.UI
                 _createPanel.style.top = mobile ? 112 : StyleKeyword.Auto;
                 RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
                 _createPanel.style.marginTop = layout.CreatePanelMarginTop;
-                _createPanel.style.maxHeight = mobile ? 174 : 210;
+                _createPanel.style.maxHeight = mobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
             }
             if (_createHint != null) _createHint.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
             ApplyCharacterHallActionHierarchy();

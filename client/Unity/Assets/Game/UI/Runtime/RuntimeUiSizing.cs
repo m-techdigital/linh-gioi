@@ -12,5 +12,8 @@ namespace LinhGioi.UI
         internal const int SkillButtonSize = 56;
         internal const int AvatarSize = 56;
         internal const int AvatarRadius = 28;
+
+        internal const int CharacterCreatePanelMinHeight = 122;
+        internal const int CharacterCreatePanelMaxHeight = 210;
     }
 }

@@ -104,6 +104,19 @@ namespace LinhGioi.UI
             return panel;
         }
 
+        internal static VisualElement NewCharacterCreatePanel(RuntimeUiLayoutProfile layout)
+        {
+            var panel = new VisualElement();
+            panel.name = "LGO Character Hall Create Cultivator Panel V3B";
+            panel.style.marginTop = layout.CreatePanelMarginTop;
+            panel.style.position = Position.Relative;
+            RuntimeUiSkin.ApplyPadding(panel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
+            panel.style.minHeight = RuntimeUiSizing.CharacterCreatePanelMinHeight;
+            panel.style.maxHeight = RuntimeUiSizing.CharacterCreatePanelMaxHeight;
+            RuntimeUiSkin.ApplyCharacterCreateFrame(panel);
+            return panel;
+        }
+
         internal static void ApplyHudStatusCompact(Label label, int fontSize)
         {
             label.style.fontSize = fontSize;
