@@ -494,8 +494,7 @@ namespace LinhGioi.UI
             _lobbyPanel.style.paddingBottom = 18;
             _lobbyPanel.style.alignSelf = Align.FlexStart;
             _mainShell.Add(_lobbyPanel);
-            _lobbyPanel.Add(NewSectionTitle("Điện Nhân Vật"));
-            _lobbyPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
+            _lobbyPanel.Add(NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold, "LGO Character Hall Header Block"));
             var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.");
             _lobbyIntro = lobbyIntro;
             lobbyIntro.style.marginBottom = 10;
@@ -596,8 +595,7 @@ namespace LinhGioi.UI
         {
             _worldHud = NewWorldHudRoot("LGO World HUD Action Shell V3B Skin v1", 390);
             _mainShell.Add(_worldHud);
-            _worldHud.Add(NewSectionTitle("Sân Luyện An Toàn"));
-            _worldHud.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));
+            _worldHud.Add(NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit, "LGO World HUD Header Block"));
 
             _worldDebugStrip = new VisualElement();
             _worldDebugStrip.style.flexDirection = FlexDirection.Row;

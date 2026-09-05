@@ -60,7 +60,7 @@ def main() -> int:
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
         'Nguồn giao diện: asset runtime tối ưu, chưa phải art final.',
-        'NewOrnamentRule',
+        'NewSectionHeaderBlock',
         'NewToast',
         'ApplyStatusChip',
         'SetToast',
@@ -69,6 +69,8 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs',
+        'NewOrnamentRule',
+        'NewSectionHeaderBlock',
         'RuntimeUiSkin.ApplyBaseButtonFrame(button);',
         'RuntimeUiSkin.ApplyRuntimeIconFrame(icon',
         'tooltip = "Chọn nhân vật tu luyện"',

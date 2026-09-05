@@ -127,6 +127,16 @@ namespace LinhGioi.UI
             return label;
         }
 
+        internal static VisualElement NewSectionHeaderBlock(string title, Color ornamentColor, string elementName = null)
+        {
+            var block = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(elementName)) block.name = elementName;
+            block.style.flexDirection = FlexDirection.Column;
+            block.Add(NewSectionTitle(title));
+            block.Add(NewOrnamentRule(ornamentColor));
+            return block;
+        }
+
         internal static Label NewMutedLabel(string text)
         {
             var label = new Label(text);

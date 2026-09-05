@@ -60,57 +60,57 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
-        "internal static VisualElement NewWorldHudRoot",
-        "hud.style.alignSelf = Align.FlexStart;",
-        "RuntimeUiSkin.ApplyPadding(hud, 12, 10);",
+        "internal static VisualElement NewSectionHeaderBlock",
+        "block.Add(NewSectionTitle(title));",
+        "block.Add(NewOrnamentRule(ornamentColor));",
         "internal static VisualElement NewOrnamentRule",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        '_worldHud = NewWorldHudRoot("LGO World HUD Action Shell V3B Skin v1", 390);',
-        'NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit',
-        'NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold',
+        'NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold, "LGO Character Hall Header Block")',
+        'NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit, "LGO World HUD Header Block")',
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "private static VisualElement NewOrnamentRule(Color color)",
-        "_worldHud = NewPanel(390);\n            _worldHud.name =",
+        '_lobbyPanel.Add(NewSectionTitle("Điện Nhân Vật"));',
+        '_lobbyPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));',
+        '_worldHud.Add(NewSectionTitle("Sân Luyện An Toàn"));',
+        '_worldHud.Add(NewOrnamentRule(RuntimeArtCatalog.Spirit));',
     )
     require(
-        "docs/design/WORLD-HUD-COMPONENT-BOUNDARY-AUDIT-v1.0.md",
-        "LGO_WORLD_HUD_COMPONENT_BOUNDARY_AUDIT_READY",
-        "RuntimeUiFactory.NewWorldHudRoot",
-        "Keep In Controller",
+        "docs/design/WORLD-HUD-HEADER-BLOCK-REVIEW-v1.0.md",
+        "LGO_WORLD_HUD_HEADER_BLOCK_READY",
+        "RuntimeUiFactory.NewSectionHeaderBlock",
+        "Header blocks are stateless visual composition only",
+    )
+    require(
+        "docs/tasks/LGO-WORLD-HUD-HEADER-BLOCK-REVIEW-v1.0.md",
+        "LGO_WORLD_HUD_HEADER_BLOCK_READY",
         "No gameplay change",
-    )
-    require(
-        "docs/tasks/LGO-WORLD-HUD-COMPONENT-BOUNDARY-AUDIT-v1.0.md",
-        "LGO_WORLD_HUD_COMPONENT_BOUNDARY_AUDIT_READY",
-        "No combat mechanic change",
         "No `VISUAL_RUNTIME_PASS` claim",
     )
     require(
         "tools/lgo_playable_closure_check.sh",
-        "world_hud_component_boundary_audit",
-        "validate_lgo_world_hud_component_boundary_audit.py",
+        "world_hud_header_block_review",
+        "validate_lgo_world_hud_header_block_review.py",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-WORLD-HUD-COMPONENT-BOUNDARY-AUDIT-v1.0",
-        "LGO_WORLD_HUD_COMPONENT_BOUNDARY_AUDIT_READY",
+        "LGO-WORLD-HUD-HEADER-BLOCK-REVIEW-v1.0",
+        "LGO_WORLD_HUD_HEADER_BLOCK_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-WORLD-HUD-COMPONENT-BOUNDARY-AUDIT v1.0",
-        "LGO_WORLD_HUD_COMPONENT_BOUNDARY_AUDIT_READY",
+        "LGO-WORLD-HUD-HEADER-BLOCK-REVIEW v1.0",
+        "LGO_WORLD_HUD_HEADER_BLOCK_READY",
     )
     check_frozen()
     if ERRORS:
-        print("LGO WORLD HUD COMPONENT BOUNDARY AUDIT VALIDATION FAILED", file=sys.stderr)
+        print("LGO WORLD HUD HEADER BLOCK REVIEW VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_WORLD_HUD_COMPONENT_BOUNDARY_AUDIT_VALIDATION_PASS")
+    print("LGO_WORLD_HUD_HEADER_BLOCK_REVIEW_VALIDATION_PASS")
     return 0
 
 
