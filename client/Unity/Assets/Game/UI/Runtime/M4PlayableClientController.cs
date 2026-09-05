@@ -2019,19 +2019,7 @@ namespace LinhGioi.UI
             button.style.minHeight = 44;
             button.style.marginTop = 8;
             button.style.marginRight = 8;
-            button.style.borderTopLeftRadius = 8;
-            button.style.borderTopRightRadius = 8;
-            button.style.borderBottomLeftRadius = 8;
-            button.style.borderBottomRightRadius = 8;
-            button.style.borderTopColor = RuntimeArtCatalog.Gold;
-            button.style.borderTopWidth = 1;
-            button.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            button.style.borderLeftWidth = 1;
-            button.style.borderRightColor = RuntimeArtCatalog.SurfaceRaised;
-            button.style.borderRightWidth = 1;
-            button.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
-            button.style.borderBottomWidth = 1;
-            button.style.unityTextAlign = TextAnchor.MiddleCenter;
+            RuntimeUiSkin.ApplyBaseButtonFrame(button);
             return button;
         }
 
@@ -2041,18 +2029,7 @@ namespace LinhGioi.UI
             toggle.style.minHeight = 34;
             toggle.style.marginTop = 6;
             toggle.style.marginBottom = 0;
-            toggle.style.paddingLeft = 10;
-            toggle.style.paddingRight = 10;
-            toggle.style.paddingTop = 5;
-            toggle.style.paddingBottom = 5;
-            toggle.style.backgroundColor = RuntimeArtCatalog.Background;
-            toggle.style.borderLeftColor = value ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted;
-            toggle.style.borderLeftWidth = 2;
-            toggle.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
-            toggle.style.borderTopWidth = 1;
-            toggle.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
-            toggle.style.borderBottomWidth = 1;
-            toggle.style.color = RuntimeArtCatalog.Text;
+            RuntimeUiSkin.ApplySettingToggleFrame(toggle, value ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted);
             toggle.RegisterValueChangedCallback(evt =>
             {
                 toggle.style.borderLeftColor = evt.newValue ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted;
@@ -2080,19 +2057,7 @@ namespace LinhGioi.UI
             icon.style.height = size;
             icon.style.minWidth = size;
             icon.style.minHeight = size;
-            icon.style.backgroundColor = new Color(0.02f, 0.08f, 0.16f, 0.82f);
-            icon.style.borderTopColor = RuntimeArtCatalog.Gold;
-            icon.style.borderTopWidth = 1;
-            icon.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            icon.style.borderLeftWidth = 1;
-            icon.style.borderRightColor = RuntimeArtCatalog.Spirit;
-            icon.style.borderRightWidth = 1;
-            icon.style.borderBottomColor = RuntimeArtCatalog.Gold;
-            icon.style.borderBottomWidth = 1;
-            icon.style.borderTopLeftRadius = 8;
-            icon.style.borderTopRightRadius = 8;
-            icon.style.borderBottomLeftRadius = 8;
-            icon.style.borderBottomRightRadius = 8;
+            RuntimeUiSkin.ApplyRuntimeIconFrame(icon, new Color(0.02f, 0.08f, 0.16f, 0.82f));
             if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
             icon.tooltip = tooltip;
             return icon;
@@ -2168,15 +2133,7 @@ namespace LinhGioi.UI
             badge.style.paddingBottom = 6;
             badge.style.marginRight = 8;
             badge.style.marginBottom = 8;
-            badge.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
-            badge.style.borderTopLeftRadius = 8;
-            badge.style.borderTopRightRadius = 8;
-            badge.style.borderBottomLeftRadius = 8;
-            badge.style.borderBottomRightRadius = 8;
-            badge.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            badge.style.borderLeftWidth = 1;
-            badge.style.borderTopColor = RuntimeArtCatalog.Gold;
-            badge.style.borderTopWidth = 1;
+            RuntimeUiSkin.ApplyBadgeFrame(badge);
             var titleLabel = new Label(title);
             titleLabel.style.color = RuntimeArtCatalog.Gold;
             titleLabel.style.fontSize = 11;
@@ -2208,13 +2165,7 @@ namespace LinhGioi.UI
             label.style.paddingBottom = 8;
             label.style.whiteSpace = WhiteSpace.Normal;
             label.style.color = RuntimeArtCatalog.Text;
-            label.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
-            label.style.borderTopLeftRadius = 8;
-            label.style.borderTopRightRadius = 8;
-            label.style.borderBottomLeftRadius = 8;
-            label.style.borderBottomRightRadius = 8;
-            label.style.borderLeftColor = RuntimeArtCatalog.Gold;
-            label.style.borderLeftWidth = 2;
+            RuntimeUiSkin.ApplyToastFrame(label, RuntimeArtCatalog.Gold);
             return label;
         }
 
@@ -2224,22 +2175,10 @@ namespace LinhGioi.UI
             label.style.paddingRight = 14;
             label.style.paddingTop = 6;
             label.style.paddingBottom = 6;
-            label.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.84f);
             label.style.maxWidth = 380;
             label.style.marginRight = 8;
             label.style.whiteSpace = WhiteSpace.Normal;
-            label.style.borderTopLeftRadius = 8;
-            label.style.borderTopRightRadius = 8;
-            label.style.borderBottomLeftRadius = 8;
-            label.style.borderBottomRightRadius = 8;
-            label.style.borderTopColor = accent;
-            label.style.borderTopWidth = 1;
-            label.style.borderRightColor = accent;
-            label.style.borderRightWidth = 1;
-            label.style.borderBottomColor = accent;
-            label.style.borderBottomWidth = 1;
-            label.style.borderLeftColor = accent;
-            label.style.borderLeftWidth = 1;
+            RuntimeUiSkin.ApplyStatusChipFrame(label, accent);
         }
 
         private void SetToast(string text, Color accent)

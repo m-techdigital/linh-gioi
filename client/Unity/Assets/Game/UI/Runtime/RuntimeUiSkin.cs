@@ -89,5 +89,51 @@ namespace LinhGioi.UI
             button.style.color = RuntimeArtCatalog.Text;
             ApplyEdgeFrame(button, left, top, right, bottom);
         }
+
+        internal static void ApplyBaseButtonFrame(Button button)
+        {
+            ApplyRadius(button, 8);
+            ApplyEdgeFrame(button, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.SurfaceRaised, 1f, 1f);
+            button.style.unityTextAlign = TextAnchor.MiddleCenter;
+        }
+
+        internal static void ApplyRuntimeIconFrame(VisualElement icon, Color background)
+        {
+            icon.style.backgroundColor = background;
+            ApplyRadius(icon, 8);
+            ApplyEdgeFrame(icon, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, 1f, 1f);
+        }
+
+        internal static void ApplySettingToggleFrame(Toggle toggle, Color accent)
+        {
+            ApplyPadding(toggle, 10, 5);
+            toggle.style.backgroundColor = RuntimeArtCatalog.Background;
+            ApplyEdgeFrame(toggle, accent, RuntimeArtCatalog.SurfaceRaised, Color.clear, RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
+            toggle.style.borderRightWidth = 0;
+            toggle.style.color = RuntimeArtCatalog.Text;
+        }
+
+        internal static void ApplyBadgeFrame(VisualElement badge)
+        {
+            badge.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+            ApplyRadius(badge, 8);
+            ApplyEdgeFrame(badge, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, Color.clear, Color.clear, 1f, 1f);
+            badge.style.borderRightWidth = 0;
+            badge.style.borderBottomWidth = 0;
+        }
+
+        internal static void ApplyToastFrame(Label label, Color accent)
+        {
+            label.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+            ApplyRadius(label, 8);
+            ApplyEdgeFrame(label, accent, Color.clear, Color.clear, Color.clear, 2f, 0f);
+        }
+
+        internal static void ApplyStatusChipFrame(Label label, Color accent)
+        {
+            label.style.backgroundColor = BlueGlass;
+            ApplyRadius(label, 8);
+            ApplyEdgeFrame(label, accent, accent, accent, accent, 1f, 1f);
+        }
     }
 }

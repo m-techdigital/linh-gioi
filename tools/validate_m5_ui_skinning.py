@@ -64,10 +64,17 @@ def main() -> int:
         'NewToast',
         'ApplyStatusChip',
         'SetToast',
-        'borderLeftColor = RuntimeArtCatalog.Spirit',
-        'borderTopColor = RuntimeArtCatalog.Gold',
-        'borderBottomColor = RuntimeArtCatalog.SurfaceRaised',
+        'RuntimeUiSkin.ApplyBaseButtonFrame(button);',
+        'RuntimeUiSkin.ApplyRuntimeIconFrame(icon',
+        'RuntimeUiSkin.ApplyStatusChipFrame(label, accent);',
         'tooltip = "Chọn nhân vật tu luyện"',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs',
+        'ApplyBaseButtonFrame(Button button)',
+        'borderLeftColor = left',
+        'borderTopColor = top',
+        'borderBottomColor = bottom',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

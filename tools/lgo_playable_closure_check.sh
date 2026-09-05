@@ -243,6 +243,9 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_skin_foundation.py ]]; then
     run_phase runtime_ui_skin_foundation python3.12 tools/validate_lgo_runtime_ui_skin_foundation.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_skin_adoption_audit.py ]]; then
+    run_phase runtime_ui_skin_adoption_audit python3.12 tools/validate_lgo_runtime_ui_skin_adoption_audit.py
+  fi
   if [[ -f tools/validate_lgo_login_npc_grounding_shadow_balance.py ]]; then
     run_phase login_npc_grounding_shadow_balance python3.12 tools/validate_lgo_login_npc_grounding_shadow_balance.py
   fi
@@ -496,6 +499,7 @@ source_only() {
     tools/validate_lgo_login_cta_backing_balance.py \
     tools/validate_lgo_login_cta_backing_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_skin_foundation.py \
+    tools/validate_lgo_runtime_ui_skin_adoption_audit.py \
     tools/validate_lgo_login_npc_grounding_shadow_balance.py \
     tools/validate_lgo_login_npc_grounding_shadow_evidence_refresh.py \
     tools/validate_lgo_login_responsive_scale_cleanup.py \

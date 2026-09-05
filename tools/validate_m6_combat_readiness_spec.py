@@ -120,6 +120,10 @@ LOGIN_V3B_REMOVED_FILES = {
     'docs/art/v3b/LOGIN-GATE-ENTRY-ASSET-PACK-v3b-a.md',
     'docs/art/v3b/LOGIN-GATE-ENTRY-ASSET-MAPPING-v3b-a.csv',
 }
+RUNTIME_UI_SKIN_ADOPTION_FILES = {
+    'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs',
+}
 V040_CONTRACT_FILES = {
     'protocol/combat.proto',
     'gamedata/schemas/skill.schema.json',
@@ -193,6 +197,15 @@ def login_v3b_runtime_only_is_active() -> bool:
         in read('docs/execution/LGO-VISUAL-RUNTIME-EVIDENCE-HARNESS.md')
         and 'check_no_v3ba_runtime'
         in read('tools/validate_lgo_login_gate_entry_visual_v1.py')
+    )
+
+
+def runtime_ui_skin_adoption_is_active() -> bool:
+    return (
+        'LGO_RUNTIME_UI_SKIN_ADOPTION_AUDIT_READY'
+        in read('docs/tasks/LGO-RUNTIME-UI-SKIN-ADOPTION-AUDIT-PASS-v1.0.md')
+        and 'validate_lgo_runtime_ui_skin_adoption_audit.py'
+        in read('tools/lgo_playable_closure_check.sh')
     )
 
 
@@ -280,6 +293,7 @@ def main() -> int:
     require_file('tools/validate_m6_combat_readiness_spec.py', executable=True)
 
     v040_active = v040_contract_is_active()
+    runtime_ui_skin_adoption_active = runtime_ui_skin_adoption_is_active()
     for path in git_lines('diff', '--name-only'):
         if v040_active and path in V040_CONTRACT_FILES:
             continue
@@ -303,7 +317,11 @@ def main() -> int:
                 or any(path == prefix or path.startswith(prefix + '/') for prefix in LOGIN_V3B_REMOVED_PREFIXES)
             )
         )
-        if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed and not login_v3b_allowed:
+        runtime_ui_skin_adoption_allowed = (
+            runtime_ui_skin_adoption_active
+            and path in RUNTIME_UI_SKIN_ADOPTION_FILES
+        )
+        if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed and not login_v3b_allowed and not runtime_ui_skin_adoption_allowed:
             for prefix in FORBIDDEN_CODE_PREFIXES:
                 if path.startswith(prefix):
                     errors.append(f'v0.32 docs-only spec changed implementation path: {path}')
