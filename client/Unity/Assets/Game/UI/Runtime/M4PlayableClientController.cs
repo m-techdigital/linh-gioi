@@ -1400,8 +1400,8 @@ namespace LinhGioi.UI
             ApplyCharacterHallActionHierarchy();
 
             // LGO Mobile World Viewport Evidence Fit v1: keep the HUD proportional so scene actors remain reviewable.
-            _worldHud.style.minWidth = mobile ? 238 : 300;
-            _worldHud.style.maxWidth = mobile ? Mathf.Clamp(width * 0.28f, 238f, 272f) : tablet ? Mathf.Clamp(width * 0.31f, 360f, 420f) : 390;
+            _worldHud.style.minWidth = layout.WorldHudMinWidth;
+            _worldHud.style.maxWidth = layout.WorldHudBaseMaxWidth;
             _worldHud.style.paddingLeft = mobile ? 8 : 12;
             _worldHud.style.paddingRight = mobile ? 8 : 12;
             _worldHud.style.paddingTop = mobile ? 6 : 10;
@@ -1415,17 +1415,11 @@ namespace LinhGioi.UI
             if (_sessionMenuPanel != null)
             {
                 // LGO Session Menu Compact Focus Frame v1: compact profiles let the pause panel own the viewport.
-                var sessionWidth = mobile
-                    ? Mathf.Clamp(width * 0.70f, 440f, width - 36f)
-                    : tablet
-                        ? Mathf.Clamp(width * 0.62f, 620f, 820f)
-                        : Mathf.Clamp(width * 0.50f, 760f, 960f);
-                var sessionRight = mobile ? 18f : tablet ? 36f : Mathf.Max(72f, width * 0.08f);
-                _sessionMenuPanel.style.left = mobile ? 18f : tablet ? 36f : Mathf.Max(18f, width - sessionWidth - sessionRight);
-                _sessionMenuPanel.style.right = sessionRight;
-                _sessionMenuPanel.style.top = mobile ? 46 : tablet ? 118 : 120;
+                _sessionMenuPanel.style.left = layout.SessionMenuLeft;
+                _sessionMenuPanel.style.right = layout.SessionMenuRight;
+                _sessionMenuPanel.style.top = layout.SessionMenuTop;
                 _sessionMenuPanel.style.maxWidth = mobile || tablet ? StyleKeyword.None : 960;
-                _sessionMenuPanel.style.maxHeight = mobile ? Mathf.Max(240f, height - 70f) : tablet ? 430 : 500;
+                _sessionMenuPanel.style.maxHeight = layout.SessionMenuMaxHeight;
                 _sessionMenuPanel.style.paddingLeft = mobile ? 12 : tablet ? 16 : 22;
                 _sessionMenuPanel.style.paddingRight = mobile ? 12 : tablet ? 16 : 22;
                 _sessionMenuPanel.style.paddingTop = mobile ? 10 : tablet ? 14 : 18;
@@ -1436,7 +1430,7 @@ namespace LinhGioi.UI
             {
                 _settingsPanel.style.display = mobile || tablet ? DisplayStyle.None : DisplayStyle.Flex;
             }
-            ApplyWorldPanelViewportPolish(mobile, tablet, worldVisible, width, height);
+            ApplyWorldPanelViewportPolish(layout, worldVisible);
             if (_layoutProfileLabel != null)
             {
                 _layoutProfileLabel.text = mobile
@@ -1452,20 +1446,16 @@ namespace LinhGioi.UI
             ApplyLocalSettings();
         }
 
-        private void ApplyWorldPanelViewportPolish(bool mobile, bool tablet, bool worldVisible, int viewportWidth, int viewportHeight)
+        private void ApplyWorldPanelViewportPolish(RuntimeUiLayoutProfile layout, bool worldVisible)
         {
             if (!worldVisible || _worldHud == null) return;
+            var mobile = layout.IsMobile;
+            var tablet = layout.IsTablet;
             var dialogueVisible = _dialoguePanel != null && _dialoguePanel.style.display == DisplayStyle.Flex;
-            var mobilePanelWidth = dialogueVisible
-                ? Mathf.Clamp(viewportWidth * 0.26f, 248f, 286f)
-                : Mathf.Clamp(viewportWidth * 0.26f, 236f, 258f);
-            var tabletPanelWidth = dialogueVisible
-                ? Mathf.Clamp(viewportWidth * 0.30f, 350f, 400f)
-                : Mathf.Clamp(viewportWidth * 0.31f, 360f, 420f);
 
             // LGO World HUD Dialogue Viewport Polish v1: mobile dialogue keeps buttons inside the visible viewport.
-            _worldHud.style.maxWidth = mobile ? mobilePanelWidth : tablet ? tabletPanelWidth : 390;
-            _worldHud.style.maxHeight = mobile ? Mathf.Max(260f, viewportHeight - 34f) : tablet ? Mathf.Max(420f, viewportHeight - 80f) : StyleKeyword.None;
+            _worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);
+            _worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;
             _worldHud.style.paddingLeft = mobile && dialogueVisible ? 7 : mobile ? 8 : 12;
             _worldHud.style.paddingRight = mobile && dialogueVisible ? 7 : mobile ? 8 : 12;
             _worldHud.style.paddingTop = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;

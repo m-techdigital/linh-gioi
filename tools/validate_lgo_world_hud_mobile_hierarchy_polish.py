@@ -55,9 +55,13 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "LGO World HUD Mobile Hierarchy Polish v1",
         "!(_isMobileProfile && !dialogueVisible)",
-        "Mathf.Clamp(viewportWidth * 0.26f, 236f, 258f)",
+        "layout.WorldHudMaxWidth(dialogueVisible)",
         "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible)",
         "_worldGuidanceCard.style.marginTop = mobile ? 6 : 8",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "Mathf.Clamp(Width * 0.26f, 236f, 258f)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",

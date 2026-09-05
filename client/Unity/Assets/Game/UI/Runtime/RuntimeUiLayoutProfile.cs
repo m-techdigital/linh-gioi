@@ -33,6 +33,44 @@ namespace LinhGioi.UI
         internal readonly int LoginButtonHeight;
         internal readonly int LoginButtonFontSize;
 
+        internal float WorldHudMinWidth => IsMobile ? 238f : 300f;
+
+        internal float WorldHudBaseMaxWidth => IsMobile
+            ? Mathf.Clamp(Width * 0.28f, 238f, 272f)
+            : IsTablet
+                ? Mathf.Clamp(Width * 0.31f, 360f, 420f)
+                : 390f;
+
+        internal float WorldHudMaxWidth(bool dialogueVisible)
+        {
+            if (IsMobile)
+                return dialogueVisible ? Mathf.Clamp(Width * 0.26f, 248f, 286f) : Mathf.Clamp(Width * 0.26f, 236f, 258f);
+            if (IsTablet)
+                return dialogueVisible ? Mathf.Clamp(Width * 0.30f, 350f, 400f) : Mathf.Clamp(Width * 0.31f, 360f, 420f);
+            return 390f;
+        }
+
+        internal float WorldHudMaxHeight(bool dialogueVisible)
+        {
+            if (IsMobile) return Mathf.Max(260f, Height - 34f);
+            if (IsTablet) return Mathf.Max(420f, Height - 80f);
+            return 0f;
+        }
+
+        internal float SessionMenuWidth => IsMobile
+            ? Mathf.Clamp(Width * 0.70f, 440f, Width - 36f)
+            : IsTablet
+                ? Mathf.Clamp(Width * 0.62f, 620f, 820f)
+                : Mathf.Clamp(Width * 0.50f, 760f, 960f);
+
+        internal float SessionMenuRight => IsMobile ? 18f : IsTablet ? 36f : Mathf.Max(72f, Width * 0.08f);
+
+        internal float SessionMenuLeft => IsMobile ? 18f : IsTablet ? 36f : Mathf.Max(18f, Width - SessionMenuWidth - SessionMenuRight);
+
+        internal float SessionMenuTop => IsMobile ? 46f : IsTablet ? 118f : 120f;
+
+        internal float SessionMenuMaxHeight => IsMobile ? Mathf.Max(240f, Height - 70f) : IsTablet ? 430f : 500f;
+
         private RuntimeUiLayoutProfile(string name, int width, int height)
         {
             Name = name;

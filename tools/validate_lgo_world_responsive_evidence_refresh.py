@@ -54,10 +54,14 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "LGO Mobile World Viewport Evidence Fit v1",
-        "Mathf.Clamp(width * 0.28f, 238f, 272f)",
-        "_worldHud.style.minWidth = mobile ? 238 : 300",
+        "layout.WorldHudBaseMaxWidth",
+        "layout.WorldHudMinWidth",
         "_worldObjective.style.fontSize = mobile ? 14 : 15",
         "_interactionHint.style.fontSize = mobile ? 14 : 15",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "Mathf.Clamp(Width * 0.28f, 238f, 272f)",
     )
     require(
         "docs/tasks/LGO-WORLD-RESPONSIVE-EVIDENCE-REFRESH-v1.0.md",

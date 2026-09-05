@@ -57,9 +57,13 @@ def main() -> int:
         "dialogueVisible && compactViewport",
         "ApplyWorldPanelViewportPolish",
         "LGO World HUD Dialogue Viewport Polish v1",
-        "Mathf.Clamp(viewportWidth * 0.26f, 248f, 286f)",
+        "layout.WorldHudMaxWidth(dialogueVisible)",
         "_dialogueContinueButton.style.minHeight = mobile ? 38 : 42",
         "_dialogueCloseButton.style.minWidth = mobile ? 90 : 104",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "Mathf.Clamp(Width * 0.26f, 248f, 286f)",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0.md",

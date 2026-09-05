@@ -61,8 +61,13 @@ def main() -> int:
         "Tầm: ",
         "Tiến trình: ",
         "Bố cục: desktop / HUD tinh gọn.",
-        "Mathf.Clamp(width * 0.28f, 238f, 272f)",
-        "Mathf.Clamp(width * 0.31f, 360f, 420f)",
+        "layout.WorldHudBaseMaxWidth",
+        "layout.WorldHudMinWidth",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "Mathf.Clamp(Width * 0.28f, 238f, 272f)",
+        "Mathf.Clamp(Width * 0.31f, 360f, 420f)",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-DENSITY-AND-MOBILE-TOUCH-PASS-v1.0.md",
