@@ -1218,24 +1218,24 @@ namespace LinhGioi.UI
 
         private void ApplyResponsiveLayoutProfile(bool force)
         {
-            var width = Screen.width > 0 ? Screen.width : 1280;
-            var height = Screen.height > 0 ? Screen.height : 720;
-            var profile = _forcedLayoutProfile ?? (width <= 760 || height <= 520 ? "mobile" : width <= 1100 ? "tablet" : "desktop");
+            var layout = RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height);
+            var width = layout.Width;
+            var height = layout.Height;
+            var profile = layout.Name;
             if (!force && string.Equals(_lastLayoutProfile, profile, StringComparison.Ordinal)) return;
             _lastLayoutProfile = profile;
 
-            var mobile = profile == "mobile";
-            var tablet = profile == "tablet";
+            var mobile = layout.IsMobile;
+            var tablet = layout.IsTablet;
             var worldVisible = _worldHud != null && _worldHud.style.display == DisplayStyle.Flex;
             var authVisible = _authPanel != null && _authPanel.style.display == DisplayStyle.Flex;
-            var shortSide = Mathf.Min(width, height);
-            var mobileScale = mobile ? Mathf.Clamp(shortSide / 520f, 0.62f, 0.86f) : 1f;
-            var loginLogoWidth = mobile ? Mathf.Clamp(width * 0.43f, 260f, 356f) : tablet ? Mathf.Clamp(width * 0.32f, 390f, 446f) : Mathf.Clamp(width * 0.26f, 470f, 504f);
-            var loginLogoHeight = loginLogoWidth * 0.50f;
-            var loginCardWidth = mobile ? Mathf.Clamp(width * 0.46f, 312f, 392f) : tablet ? Mathf.Clamp(width * 0.36f, 416f, 470f) : 468f;
-            var loginCardPadding = mobile ? Mathf.RoundToInt(14f * mobileScale) : tablet ? 22 : 28;
-            var loginButtonHeight = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.11f, 42f, 50f)) : tablet ? 54 : 58;
-            var loginButtonFont = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.047f, 17f, 21f)) : tablet ? 20 : 22;
+            var mobileScale = layout.MobileScale;
+            var loginLogoWidth = layout.LoginLogoWidth;
+            var loginLogoHeight = layout.LoginLogoHeight;
+            var loginCardWidth = layout.LoginCardWidth;
+            var loginCardPadding = layout.LoginCardPadding;
+            var loginButtonHeight = layout.LoginButtonHeight;
+            var loginButtonFont = layout.LoginButtonFontSize;
             _isMobileProfile = mobile;
             _root.style.paddingLeft = mobile ? 12 : tablet ? 18 : 28;
             _root.style.paddingRight = mobile ? 12 : tablet ? 18 : 28;

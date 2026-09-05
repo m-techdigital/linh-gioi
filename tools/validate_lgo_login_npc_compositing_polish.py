@@ -73,8 +73,11 @@ def main() -> int:
         "LgoVisualAssetRegistryV3B.LogoLinhGioiOnline",
         "LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture",
         "LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture",
-        "Mathf.Clamp(width * 0.46f",
         "mobile ? DisplayStyle.None : DisplayStyle.Flex",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "Mathf.Clamp(width * 0.46f",
     )
     require(
         "docs/tasks/LGO-LOGIN-NPC-COMPOSITING-POLISH-v1.0.md",

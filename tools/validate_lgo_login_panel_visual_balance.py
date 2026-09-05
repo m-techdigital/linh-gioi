@@ -55,9 +55,12 @@ def main() -> int:
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
         "LGO Login Gate Keeper Soft Grounding Glow V3B",
         "style.opacity = 0.93f",
+        "LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "Mathf.Clamp(width * 0.26f",
         "Mathf.Clamp(width * 0.46f",
-        "LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",

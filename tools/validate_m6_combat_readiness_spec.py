@@ -125,6 +125,8 @@ RUNTIME_UI_SKIN_ADOPTION_FILES = {
     'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs',
     'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs',
     'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs.meta',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs.meta',
 }
 V040_CONTRACT_FILES = {
     'protocol/combat.proto',
@@ -220,6 +222,18 @@ def runtime_ui_factory_adoption_is_active() -> bool:
         and 'LGO_RUNTIME_UI_BUTTON_FACTORY_ADOPTION_READY'
         in read('docs/tasks/LGO-RUNTIME-UI-BUTTON-FACTORY-ADOPTION-PASS-v1.0.md')
         and 'validate_lgo_runtime_ui_button_factory_adoption.py' in closure
+    )
+
+
+def runtime_ui_responsive_layout_helper_is_active() -> bool:
+    closure = read('tools/lgo_playable_closure_check.sh')
+    return (
+        runtime_ui_factory_adoption_is_active()
+        and 'LGO_RUNTIME_UI_CONTROLLER_RESPONSIBILITY_MAP_READY'
+        in read('docs/tasks/LGO-RUNTIME-UI-CONTROLLER-RESPONSIBILITY-MAP-v1.0.md')
+        and 'LGO_RUNTIME_UI_RESPONSIVE_LAYOUT_HELPER_REVIEW_READY'
+        in read('docs/tasks/LGO-RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0.md')
+        and 'validate_lgo_runtime_ui_responsive_layout_helper_review.py' in closure
     )
 
 
@@ -334,6 +348,8 @@ def main() -> int:
         runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_active and path in RUNTIME_UI_SKIN_ADOPTION_FILES
         if path in {'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs', 'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs.meta'}:
             runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_factory_adoption_is_active()
+        if path in {'client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs', 'client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs.meta'}:
+            runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_responsive_layout_helper_is_active()
         if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed and not login_v3b_allowed and not runtime_ui_skin_adoption_allowed:
             for prefix in FORBIDDEN_CODE_PREFIXES:
                 if path.startswith(prefix):
