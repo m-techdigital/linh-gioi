@@ -5,6 +5,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_DIR="$ROOT/build/dev-loop"
 LOG="$LOG_DIR/latest.log"
 VISUAL_TIMEOUT_SECONDS="${LGO_DEV_LOOP_VISUAL_TIMEOUT_SECONDS:-${LGO_VISUAL_RUNTIME_TIMEOUT_SECONDS:-300}}"
+GATE_PROFILE="${LGO_DEV_LOOP_GATE_PROFILE:-quick}"
 
 mkdir -p "$LOG_DIR"
 cd "$ROOT"
@@ -65,6 +66,32 @@ run_visual_review_if_available() {
   esac
 }
 
+run_source_validation_profile() {
+  case "$GATE_PROFILE" in
+    quick)
+      echo "LGO_DEV_LOOP_GATE_PROFILE quick"
+      run_logged diff_check git --no-pager diff --check
+      run_logged login_gate_entry python3.12 tools/validate_lgo_login_gate_entry_visual_v1.py
+      run_logged runtime_asset_weight python3.12 tools/validate_lgo_runtime_asset_weight.py
+      run_logged device_profile_ui_budgets python3.12 tools/validate_lgo_device_profile_ui_budgets.py
+      run_logged m4_2_ui python3.12 tools/validate_m4_2_playable_ui.py
+      run_logged m4_visible_ui python3.12 tools/validate_m4_visible_ui.py
+      run_logged m6_combat_visual_readability python3.12 tools/validate_m6_combat_visual_readability.py
+      run_logged m6_unity_combat_placeholder_asset_import python3.12 tools/validate_m6_unity_combat_placeholder_asset_import.py
+      run_logged package_hygiene python3.12 tools/validate_package_hygiene.py
+      ;;
+    full)
+      echo "LGO_DEV_LOOP_GATE_PROFILE full"
+      run_logged diff_check git --no-pager diff --check
+      run_logged playable_source_only ./tools/lgo_playable_closure_check.sh --source-only
+      ;;
+    *)
+      echo "FIX_REQUIRED unsupported LGO_DEV_LOOP_GATE_PROFILE=$GATE_PROFILE; expected quick or full"
+      exit 2
+      ;;
+  esac
+}
+
 {
   echo "LGO_CONTINUE_DEV_LOOP_START $(date -u +%Y-%m-%dT%H:%M:%SZ)"
   echo "LGO_REPO_ROOT $ROOT"
@@ -78,15 +105,7 @@ run_visual_review_if_available() {
   sed -n '1,220p' "$ROOT/docs/execution/NEXT-ACTION.md"
   echo "LGO_NEXT_ACTION_END"
 
-  run_logged diff_check git --no-pager diff --check
-  run_logged login_gate_entry python3.12 tools/validate_lgo_login_gate_entry_visual_v1.py
-  run_logged runtime_asset_weight python3.12 tools/validate_lgo_runtime_asset_weight.py
-  run_logged device_profile_ui_budgets python3.12 tools/validate_lgo_device_profile_ui_budgets.py
-  run_logged m4_2_ui python3.12 tools/validate_m4_2_playable_ui.py
-  run_logged m4_visible_ui python3.12 tools/validate_m4_visible_ui.py
-  run_logged m6_combat_visual_readability python3.12 tools/validate_m6_combat_visual_readability.py
-  run_logged m6_unity_combat_placeholder_asset_import python3.12 tools/validate_m6_unity_combat_placeholder_asset_import.py
-  run_logged package_hygiene python3.12 tools/validate_package_hygiene.py
+  run_source_validation_profile
   run_visual_review_if_available
 
   echo "LGO_CONTINUE_DEV_LOOP_RESULT PASS"

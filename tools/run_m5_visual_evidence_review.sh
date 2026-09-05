@@ -104,9 +104,10 @@ timeout = int(sys.argv[1])
 player = sys.argv[2]
 out_dir = Path(sys.argv[3])
 log_path = out_dir / 'player.log'
+unity_log_path = out_dir / 'player-unity.log'
 args = [
     player,
-    '-batchmode',
+    '-logFile', str(unity_log_path),
     '-screen-fullscreen', '0',
     '-screen-width', '1280',
     '-screen-height', '720',
@@ -140,3 +141,10 @@ if grep -q "VISUAL_EVIDENCE_SCREENSHOT_UNAVAILABLE" "$OUT_DIR/visual-evidence-su
   echo "LGO_PLAYABLE_VISUAL_EVIDENCE_SCREENSHOT_UNAVAILABLE"
 fi
 echo "LGO_PLAYABLE_VISUAL_EVIDENCE_READY output=$OUT_DIR"
+python3.12 tools/analyze_lgo_visual_runtime_evidence.py "$OUT_DIR" \
+  --expected-width 1280 \
+  --expected-height 720 \
+  --expected-file gate-entry.png \
+  --expected-file character-hall.png \
+  --expected-file world-hud.png \
+  --expected-file first-playable-loop-feedback.png

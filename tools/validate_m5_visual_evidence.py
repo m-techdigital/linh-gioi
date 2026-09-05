@@ -144,10 +144,14 @@ def main() -> int:
         'LGO_PLAYABLE_VISUAL_EVIDENCE_READY',
         'LGO_PLAYABLE_VISUAL_EVIDENCE_SCREENSHOT_UNAVAILABLE',
         'visual-evidence-summary.json',
+        'python3.12 tools/analyze_lgo_visual_runtime_evidence.py',
+        '--expected-file gate-entry.png',
         "'-screen-width', '1280'",
         "'-screen-height', '720'",
         'build/visual-evidence/m5-latest',
     )
+    if "'-batchmode'" in read('tools/run_m5_visual_evidence_review.sh'):
+        errors.append('tools/run_m5_visual_evidence_review.sh must not launch player visual capture with -batchmode')
     require('docs/tasks/M5-VISUAL-EVIDENCE-AND-UX-ACCEPTANCE-v0.16.0.md', 'M5_VISUAL_EVIDENCE_UX_REVIEW_READY_RUNTIME_CLOSED_LOCAL', 'visual evidence', 'human visual acceptance')
     require('docs/execution/LGO-VISUAL-EVIDENCE-REVIEW-COMMAND-v0.16.0.md', './tools/run_m5_visual_evidence_review.sh --rebuild', 'build/visual-evidence')
     require('tools/lgo_playable_closure_check.sh', '--visual-evidence', 'validate_m5_visual_evidence.py', 'lgo_visual_runtime_review.sh', 'LGO_PLAYABLE_VISUAL_RUNTIME_EVIDENCE_READY')

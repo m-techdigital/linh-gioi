@@ -205,10 +205,16 @@ def load_manifest(out_dir: Path) -> dict[str, Any]:
     return json.loads(manifest_path.read_text(encoding="utf-8"))
 
 
-def analyze(out_dir: Path) -> tuple[dict[str, Any], int]:
+def analyze(
+    out_dir: Path,
+    *,
+    expected_files: tuple[str, ...] = EXPECTED_SCREENSHOTS,
+    expected_width_override: int | None = None,
+    expected_height_override: int | None = None,
+) -> tuple[dict[str, Any], int]:
     manifest = load_manifest(out_dir)
-    expected_width = int(manifest.get("width", 1920))
-    expected_height = int(manifest.get("height", 1080))
+    expected_width = expected_width_override or int(manifest.get("width", 1920))
+    expected_height = expected_height_override or int(manifest.get("height", 1080))
     manifest_checkpoints = {
         checkpoint.get("file"): checkpoint
         for checkpoint in manifest.get("checkpoints", [])
@@ -218,7 +224,7 @@ def analyze(out_dir: Path) -> tuple[dict[str, Any], int]:
     sha_to_files: dict[str, list[str]] = {}
     status = "EVIDENCE_CAPTURED_FOR_REVIEW"
 
-    for file_name in EXPECTED_SCREENSHOTS:
+    for file_name in expected_files:
         path = out_dir / file_name
         checkpoint = manifest_checkpoints.get(file_name, {})
         if not path.is_file():
@@ -334,9 +340,55 @@ def write_markdown(result: dict[str, Any], path: Path) -> None:
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
+def write_vietnamese_markdown(result: dict[str, Any], path: Path) -> None:
+    status_label = {
+        "EVIDENCE_CAPTURED_FOR_REVIEW": "Đã chụp đủ evidence, cần review bằng mắt",
+        "FIX_REQUIRED": "Cần sửa evidence hoặc màn hình runtime",
+    }.get(str(result["status"]), str(result["status"]))
+    lines = [
+        "# Tóm Tắt Evidence Runtime Hình Ảnh",
+        "",
+        "Marker: `LGO_VISUAL_EVIDENCE_REVIEW_SUMMARY_VI_READY`",
+        "",
+        f"Trạng thái: `{result['status']}` - {status_label}",
+        "",
+        "Báo cáo này chỉ kiểm tra file ảnh evidence. Nó không tự claim `VISUAL_RUNTIME_PASS`.",
+        "",
+        "| Checkpoint | Trạng thái | Dung lượng | Độ phân giải | Heuristic ảnh | Nhận xét |",
+        "|---|---|---:|---|---|---|",
+    ]
+    for finding in result["findings"]:
+        size = str(finding.get("bytes", ""))
+        resolution = ""
+        if finding.get("width") and finding.get("height"):
+            resolution = f"{finding['width']}x{finding['height']}"
+        pixel_review = str(finding.get("pixel_review", ""))
+        raw_notes = str(finding.get("reason", "")).replace("|", "\\|")
+        if finding.get("status") == "REVIEW_READY":
+            notes = "Ảnh có nội dung/pixel variation đủ để review layout, scale, độ nét và độ giống reference."
+        elif "LIKELY_BLANK_OR_FLAT" in raw_notes:
+            notes = "Ảnh có nguy cơ blank/phẳng, không được dùng làm bằng chứng visual."
+        elif "LIKELY_TRANSPARENT_OR_EMPTY" in raw_notes:
+            notes = "Ảnh có nguy cơ rỗng/trong suốt, cần sửa capture hoặc render."
+        else:
+            notes = raw_notes
+        lines.append(f"| `{finding['file']}` | `{finding['status']}` | {size} | {resolution} | `{pixel_review}` | {notes} |")
+    lines.extend(
+        [
+            "",
+            "Các mục vẫn phải tự review bằng mắt: bố cục, tỉ lệ, spacing, độ nét, chất lượng asset, hierarchy, readability và độ bám reference.",
+            "",
+        ]
+    )
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Analyze LGO visual runtime screenshot evidence with lightweight PNG heuristics.")
     parser.add_argument("output_dir", type=Path, help="Visual evidence output directory.")
+    parser.add_argument("--expected-file", action="append", default=[], help="Expected screenshot filename. Repeat to override the default runtime checkpoint list.")
+    parser.add_argument("--expected-width", type=int, default=None, help="Expected screenshot width override.")
+    parser.add_argument("--expected-height", type=int, default=None, help="Expected screenshot height override.")
     parser.add_argument("--allow-review-required", action="store_true", help="Write reports and exit 0 even when heuristics classify FIX_REQUIRED.")
     args = parser.parse_args()
     out_dir = args.output_dir
@@ -344,13 +396,21 @@ def main() -> int:
         print(f"ERROR: evidence output directory does not exist: {out_dir}", file=sys.stderr)
         return 2
 
-    result, rc = analyze(out_dir)
+    expected_files = tuple(args.expected_file) if args.expected_file else EXPECTED_SCREENSHOTS
+    result, rc = analyze(
+        out_dir,
+        expected_files=expected_files,
+        expected_width_override=args.expected_width,
+        expected_height_override=args.expected_height,
+    )
     (out_dir / "visual-runtime-evidence-heuristics.json").write_text(
         json.dumps(result, ensure_ascii=False, indent=2) + "\n",
         encoding="utf-8",
     )
     write_markdown(result, out_dir / "visual-runtime-evidence-heuristics.md")
+    write_vietnamese_markdown(result, out_dir / "visual-runtime-evidence-review-vi.md")
     print(f"LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY status={result['status']} output={out_dir}")
+    print("LGO_VISUAL_EVIDENCE_REVIEW_SUMMARY_VI_READY")
     print("LGO_VISUAL_RUNTIME_PASS_NOT_CLAIMED")
     if rc and args.allow_review_required:
         return 0

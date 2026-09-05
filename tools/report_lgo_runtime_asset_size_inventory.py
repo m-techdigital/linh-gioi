@@ -33,6 +33,18 @@ ROLE_LIMITS = {
     "world_shadow_slime": 45 * 1024,
 }
 
+ROLE_ACTIONS = {
+    "login_background": "Keep JPEG source; use import profiles for mobile/tablet downscale before adding alternate backgrounds.",
+    "world_spirit_gate": "Watch first; prefer maxTextureSize tuning or audited PNG optimization before adding more large gate variants.",
+    "world_player_male_cultivator": "Require per-frame animation budget before adding walk/attack/idle frame sets.",
+    "world_tree_pine": "Do not multiply prop variants until profile evidence proves mobile build weight is stable.",
+    "world_tree_cherry": "Do not multiply prop variants until profile evidence proves mobile build weight is stable.",
+    "world_bridge_wood": "Reuse current bridge sparingly; add variants only with profile import settings.",
+    "world_rock_moss": "Keep as low-priority optimization target; avoid duplicate rock folders.",
+}
+
+DEFAULT_ACTION = "OK to reuse for current playable slice; keep one source asset per role and validate import profiles."
+
 
 def fmt(size: int) -> str:
     return f"{size / 1024:.1f} KB"
@@ -54,8 +66,8 @@ def main() -> int:
     print()
     print("Marker: `LGO_RUNTIME_ASSET_WEIGHT_BUDGET_REFRESH_READY`")
     print()
-    print("| Role | Runtime Asset | Dimensions | File Size | Budget | Margin | Status | Classification |")
-    print("|---|---:|---:|---:|---:|---:|---|---|")
+    print("| Role | Runtime Asset | Dimensions | File Size | Budget | Margin | Status | Action | Classification |")
+    print("|---|---:|---:|---:|---:|---:|---|---|---|")
     for row in sorted(rows, key=lambda item: (ROOT / item["unity_path"]).stat().st_size if (ROOT / item["unity_path"]).is_file() else 0, reverse=True):
         path = ROOT / row["unity_path"]
         size = path.stat().st_size if path.is_file() else 0
@@ -76,7 +88,13 @@ def main() -> int:
         dims = f"{row.get('runtime_width', '?')}x{row.get('runtime_height', '?')}"
         budget_text = fmt(budget) if budget else "-"
         margin_text = fmt(margin) if budget else "-"
-        print(f"| `{row['role']}` | `{row['unity_path']}` | {dims} | {fmt(size)} | {budget_text} | {margin_text} | `{status}` | `{row.get('classification', '')}` |")
+        if status == "OVER_BUDGET":
+            action = "BLOCK new usage until resized/compressed or budget exception is documented."
+        elif status == "WATCH":
+            action = ROLE_ACTIONS.get(row["role"], "Watch before adding variants; prefer import-profile downscale or audited optimization.")
+        else:
+            action = ROLE_ACTIONS.get(row["role"], DEFAULT_ACTION)
+        print(f"| `{row['role']}` | `{row['unity_path']}` | {dims} | {fmt(size)} | {budget_text} | {margin_text} | `{status}` | {action} | `{row.get('classification', '')}` |")
     print()
     print("## Summary")
     print()
@@ -86,6 +104,7 @@ def main() -> int:
     print(f"- roles in watch band >=85% budget: {near_budget}")
     print("- V3B assets remain runtime candidates, not production final art.")
     print("- Use Unity platform import profiles for mobile/tablet/desktop delivery rather than duplicating ad hoc asset folders.")
+    print("- New runtime image work must choose a role budget before import and record the optimization action for WATCH/OVER_BUDGET rows.")
     return 0
 
 

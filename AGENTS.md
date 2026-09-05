@@ -22,6 +22,7 @@ This repository uses persistent continuous-work mode. Read this file before maki
 - If runtime screenshots exist, review them visually. If the UI is ugly, overlapped, blurry, too heavy, or clearly off-reference and the fix is in scope, continue improving rather than reporting success.
 - If AI image generation is needed but unavailable in Codex CLI, write an asset request/brief and continue with asset mapping, compression, import settings, UI wiring, and validators that do not require image generation.
 - Keep git history clean during continuous work: group related changes into one coherent checkpoint commit after validation, avoid spam commits for tiny edits, and push only through the configured supervisor path.
+- Do not run validation gates in parallel when they share mutable outputs, especially visual evidence directories under `build/visual-evidence/**`; run those phases sequentially to avoid false missing-evidence failures.
 - Do not commit generated caches, Unity `Library/Temp/Logs`, pycache, local toolchains, or bulky evidence artifacts unless a task explicitly owns the artifact.
 - Prefer source/runtime evidence over assumptions. Never claim PASS from source inspection only.
 - Never mask failures with `|| true`.

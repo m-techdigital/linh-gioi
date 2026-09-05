@@ -468,6 +468,24 @@ source_only() {
   if [[ -f tools/validate_lgo_m5_visual_evidence_runner_skin_adoption_evidence.py ]]; then
     run_phase m5_visual_evidence_runner_skin_adoption_evidence python3.12 tools/validate_lgo_m5_visual_evidence_runner_skin_adoption_evidence.py
   fi
+  if [[ -f tools/validate_lgo_visual_evidence_output_isolation.py ]]; then
+    run_phase visual_evidence_output_isolation python3.12 tools/validate_lgo_visual_evidence_output_isolation.py
+  fi
+  if [[ -f tools/validate_lgo_quick_full_gate_strategy.py ]]; then
+    run_phase quick_full_gate_strategy python3.12 tools/validate_lgo_quick_full_gate_strategy.py
+  fi
+  if [[ -f tools/validate_lgo_visual_evidence_blank_screen_detection.py ]]; then
+    run_phase visual_evidence_blank_screen_detection python3.12 tools/validate_lgo_visual_evidence_blank_screen_detection.py
+  fi
+  if [[ -f tools/validate_lgo_visual_evidence_review_summary_vi.py ]]; then
+    run_phase visual_evidence_review_summary_vi python3.12 tools/validate_lgo_visual_evidence_review_summary_vi.py
+  fi
+  if [[ -f tools/validate_lgo_visual_evidence_review_summary_vi_evidence.py ]]; then
+    run_phase visual_evidence_review_summary_vi_evidence python3.12 tools/validate_lgo_visual_evidence_review_summary_vi_evidence.py
+  fi
+  if [[ -f tools/validate_lgo_evidence_gate_sequential_run_policy.py ]]; then
+    run_phase evidence_gate_sequential_run_policy python3.12 tools/validate_lgo_evidence_gate_sequential_run_policy.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_responsive_style_application_audit.py ]]; then
     run_phase runtime_ui_responsive_style_application_audit python3.12 tools/validate_lgo_runtime_ui_responsive_style_application_audit.py
   fi
@@ -679,8 +697,17 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_asset_weight_budget_refresh.py ]]; then
     run_phase runtime_asset_weight_budget_refresh python3.12 tools/validate_lgo_runtime_asset_weight_budget_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_asset_weight_actionable_budget.py ]]; then
+    run_phase runtime_asset_weight_actionable_budget python3.12 tools/validate_lgo_runtime_asset_weight_actionable_budget.py
+  fi
   if [[ -f tools/validate_lgo_runtime_asset_watch_queue_import_profile.py ]]; then
     run_phase runtime_asset_watch_queue_import_profile python3.12 tools/validate_lgo_runtime_asset_watch_queue_import_profile.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_asset_watch_queue_priority.py ]]; then
+    run_phase runtime_asset_watch_queue_priority python3.12 tools/validate_lgo_runtime_asset_watch_queue_priority.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_asset_watch_queue_evidence_refresh.py ]]; then
+    run_phase runtime_asset_watch_queue_evidence_refresh python3.12 tools/validate_lgo_runtime_asset_watch_queue_evidence_refresh.py
   fi
   if [[ -f tools/validate_lgo_runtime_asset_import_profiles.py ]]; then
     run_phase runtime_asset_import_profiles python3.12 tools/validate_lgo_runtime_asset_import_profiles.py

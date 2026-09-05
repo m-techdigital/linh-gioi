@@ -31,6 +31,8 @@ When the owner enables continuous work in this chat, Codex should keep developin
 
 Commit/push only after related changes validate together. Avoid tiny spam commits, cache artifacts, generated build folders, or changes to frozen surfaces.
 
+Do not parallelize gates that clean or rewrite the same output roots. In particular, `./tools/lgo_visual_runtime_review.sh`, `./tools/lgo_visual_runtime_review_profiles.sh`, `./tools/run_m5_visual_evidence_review.sh`, `./tools/lgo_playable_closure_check.sh --source-only`, and source-only validators that read `build/visual-evidence/**` must run sequentially.
+
 ## Failure Classification
 
 - `PASS`: all required source/runtime gates for the current task completed, and any visual evidence has been reviewed.

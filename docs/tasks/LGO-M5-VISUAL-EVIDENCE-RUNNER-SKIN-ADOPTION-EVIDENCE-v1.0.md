@@ -14,13 +14,15 @@ This task keeps the legacy M5 visual evidence runner useful without letting it d
 
 ## Evidence
 
-- `build/visual-evidence/m5-latest/visual-evidence-summary.json`
-- `build/visual-evidence/m5-latest/visual-evidence-summary.txt`
-- `build/dev-loop/m5-visual-evidence-runner-skin-adoption.log`
+Runtime-generated screenshots are not required for source-only validation.
+- `run_m5_visual_evidence_review.sh` writes runtime evidence to `build/visual-evidence/m5-latest` when the player path is available.
+- The runtime command runs PNG heuristics so blank/flat captures fail honestly instead of passing by filename alone.
 
 ## Review Boundary
 
 The legacy M5 runner is a compatibility harness. Its PNG files prove the runner and output path still work, but visual acceptance and UI quality review must use the current runtime harness under `build/visual-evidence/latest/**`.
+
+If the legacy M5 player path times out or produces blank frames, classify it as runtime/evidence debt and keep using the current visual runtime harness for actual UI/UX acceptance.
 
 ## Non-Claims
 

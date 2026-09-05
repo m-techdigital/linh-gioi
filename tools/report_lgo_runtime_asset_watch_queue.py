@@ -54,9 +54,10 @@ def main() -> int:
     print()
     print("Marker: `LGO_RUNTIME_ASSET_WATCH_QUEUE_IMPORT_PROFILE_READY`")
     print()
-    print("| Role | Size | Budget | Margin | Source Max | Standalone | Android | iPhone | Action |")
-    print("|---|---:|---:|---:|---:|---:|---:|---:|---|")
-    for row in sorted(rows, key=lambda item: (ROOT / item["unity_path"]).stat().st_size, reverse=True):
+    print("| Priority | Role | Size | Budget | Margin | Source Max | Standalone | Android | iPhone | Action |")
+    print("|---:|---|---:|---:|---:|---:|---:|---:|---:|---|")
+    prioritized_rows = sorted(rows, key=lambda item: ROLE_LIMITS[item["role"]] - (ROOT / item["unity_path"]).stat().st_size)
+    for priority, row in enumerate(prioritized_rows, start=1):
         path = ROOT / row["unity_path"]
         size = path.stat().st_size
         budget = ROLE_LIMITS[row["role"]]
@@ -71,16 +72,18 @@ def main() -> int:
         else:
             action = "keep current source; enforce platform max texture"
         print(
-            f"| `{row['role']}` | {fmt(size)} | {fmt(budget)} | {fmt(margin)} | "
+            f"| {priority} | `{row['role']}` | {fmt(size)} | {fmt(budget)} | {fmt(margin)} | "
             f"{default_max} | {default_max} | {android_max} | {iphone_max} | {action} |"
         )
     print()
     print("## Policy")
     print()
     print("- Do not recompress transparent PNGs blindly; compare runtime screenshots before replacement.")
+    print("- No runtime art replacement is performed by this report.")
     print("- Do not add animation frames for WATCH character/prop roles without a per-frame budget.")
     print("- Prefer platform import profiles before adding duplicate mobile image folders.")
     print("- V3B remains runtime candidate art, not production final art.")
+    print("- Priority is sorted by smallest budget margin first, not visual importance.")
     return 0
 
 
