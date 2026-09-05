@@ -5,8 +5,8 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS-v1.0`.
-- Current reason: Character Hall action-density/frame fix has source and runtime evidence; continue with maintainability cleanup so runtime UI work stops inflating controller code.
+- Active task: `LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION-v1.0`.
+- Current reason: World Hub procedural visual generation has been extracted from the playable world controller and refreshed runtime evidence confirms the scene remains stable; continue by reducing validation/output noise so future batches spend less time and token budget on repeated long logs.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -43,13 +43,15 @@ Current focus update: World Hub now has a more readable procedural cultivation s
 
 Current focus update: Character Hall no longer stretches the ornate V3B panel texture across the full shell under `LGO_CHARACTER_HALL_ACTION_DENSITY_FIRST_FIX_READY`; desktop/tablet/mobile screenshots are cleaner and more readable, still not production-final, and no `VISUAL_RUNTIME_PASS` is claimed.
 
+Current focus update: World procedural ground texture, actor shadows, focus glows, and path glows now live in `WorldProceduralVisuals` under `LGO_RUNTIME_UI_CONTROLLER_SIZE_REDUCTION_READY`; `PlayableWorldController` is smaller and runtime screenshot capture remains stable, with no `VISUAL_RUNTIME_PASS` claim.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS-v1.0`
+`LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION-v1.0`
 
-Continue with a focused maintainability pass that reduces repeated or bulky runtime UI/world controller code without changing gameplay, account/character flow, protocol, schemas, ADR, or design tokens. Prefer extracting reusable code that directly lowers future UI/visual iteration cost; do not create new micro-task paperwork unless a reusable gate is genuinely needed. Marker ready from the previous runtime UI fix: `LGO_CHARACTER_HALL_ACTION_DENSITY_FIRST_FIX_READY`.
+Continue with a focused workflow pass that reduces noisy validation output and avoids repeated full builds when a source-only change is already covered by fast gates. Do not weaken gates or hide failures; add concise summaries/fast profiles only where the existing scripts can still fail honestly. Marker ready from the previous runtime UI fix: `LGO_RUNTIME_UI_CONTROLLER_SIZE_REDUCTION_READY`.
 
 ## Current blocker
 

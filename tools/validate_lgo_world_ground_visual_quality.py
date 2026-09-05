@@ -53,6 +53,10 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs",
         "LGO Procedural Cultivation Platform Material v1",
+        "WorldProceduralVisuals.CreateTrainingGroundTexture()",
+    )
+    require(
+        "client/Unity/Assets/Game/World/Runtime/WorldProceduralVisuals.cs",
         "LGO Procedural Cultivation Platform Texture v1",
         "HashNoise",
         "SmoothBand",

@@ -56,9 +56,6 @@ namespace LinhGioi.World
         private SpriteRenderer _shadowSlimeSprite;
         private SpriteRenderer _playerSprite;
         private SpriteRenderer _playerGroundShadow;
-        private static Sprite _softGroundShadowSprite;
-        private static Sprite _worldPlatformGlowSprite;
-        private static Sprite _worldPathGlowSprite;
         private InteractableState _nearestInteractable;
         private string _objectiveText = "Mục tiêu: vào thế giới và tìm Đá Luyện.";
         private string _interactionText = "Di chuyển tới gần Người Giữ Cổng hoặc Đá Luyện.";
@@ -416,108 +413,8 @@ namespace LinhGioi.World
             {
                 var material = RuntimeArtCatalog.CreateMaterial("LGO Procedural Cultivation Platform Material v1", RuntimeArtCatalog.SurfaceRaised);
                 material.color = Color.white;
-                material.mainTexture = CreateTrainingGroundTexture();
+                material.mainTexture = WorldProceduralVisuals.CreateTrainingGroundTexture();
                 renderer.material = material;
-            }
-        }
-
-        private static Texture2D CreateTrainingGroundTexture()
-        {
-            const int size = 512;
-            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
-            {
-                name = "LGO Procedural Cultivation Platform Texture v1",
-                wrapMode = TextureWrapMode.Clamp,
-                filterMode = FilterMode.Bilinear
-            };
-            var baseColor = new Color(0.11f, 0.17f, 0.255f, 1f);
-            var stoneA = new Color(0.16f, 0.23f, 0.335f, 1f);
-            var stoneB = new Color(0.075f, 0.125f, 0.195f, 1f);
-            var mist = new Color(0.22f, 0.43f, 0.58f, 1f);
-            var line = new Color(0.14f, 0.80f, 1.00f, 1f);
-            var gold = new Color(0.92f, 0.68f, 0.30f, 1f);
-            var center = new Vector2(0.5f, 0.46f);
-            for (var y = 0; y < size; y++)
-            {
-                for (var x = 0; x < size; x++)
-                {
-                    var uv = new Vector2((x + 0.5f) / size, (y + 0.5f) / size);
-                    var noise = HashNoise(x, y);
-                    var slowNoise = HashNoise(x / 8, y / 8);
-                    var color = Color.Lerp(baseColor, stoneA, 0.10f + slowNoise * 0.12f);
-                    color = Color.Lerp(color, stoneB, noise * 0.035f);
-
-                    var tileX = Mathf.FloorToInt(uv.x * 14f);
-                    var tileY = Mathf.FloorToInt(uv.y * 14f);
-                    var grout = Mathf.Min(Frac(uv.x * 14f), Frac(uv.y * 14f));
-                    grout = Mathf.Min(grout, Mathf.Min(1f - Frac(uv.x * 14f), 1f - Frac(uv.y * 14f)));
-                    if (grout < 0.006f) color = Color.Lerp(color, Color.black, 0.075f);
-                    if (((tileX + tileY) & 1) == 0) color = Color.Lerp(color, mist, 0.026f);
-
-                    var toCenter = uv - center;
-                    var dist = toCenter.magnitude;
-                    var innerRing = SmoothBand(dist, 0.145f, 0.0075f);
-                    var midRing = SmoothBand(dist, 0.245f, 0.0065f);
-                    var outerRing = SmoothBand(dist, 0.355f, 0.009f);
-                    color = Color.Lerp(color, line, innerRing * 0.38f);
-                    color = Color.Lerp(color, line, midRing * 0.28f);
-                    color = Color.Lerp(color, gold, outerRing * 0.25f);
-                    var diagonalA = Mathf.Abs(toCenter.x - toCenter.y);
-                    var diagonalB = Mathf.Abs(toCenter.x + toCenter.y);
-                    if (dist < 0.34f)
-                    {
-                        color = Color.Lerp(color, line, SmoothBand(diagonalA, 0f, 0.006f) * 0.10f);
-                        color = Color.Lerp(color, line, SmoothBand(diagonalB, 0f, 0.006f) * 0.10f);
-                    }
-                    if (dist < 0.36f)
-                    {
-                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.x), 0f, 0.005f) * 0.12f);
-                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.y), 0f, 0.005f) * 0.12f);
-                    }
-
-                    var pathToGate = DistanceToSegment(uv, new Vector2(0.50f, 0.28f), new Vector2(0.50f, 0.08f));
-                    var pathToStone = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.50f, 0.78f));
-                    var pathToKeeper = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.31f, 0.70f));
-                    var guide = Mathf.Min(pathToGate, Mathf.Min(pathToStone, pathToKeeper));
-                    color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.010f) * 0.24f);
-
-                    var platformGlow = Mathf.Clamp01(1f - dist / 0.44f);
-                    color = Color.Lerp(color, mist, platformGlow * 0.090f);
-                    var vignette = Mathf.Clamp01((dist - 0.18f) / 0.58f);
-                    color = Color.Lerp(color, Color.black, vignette * 0.10f);
-                    texture.SetPixel(x, y, color);
-                }
-            }
-            texture.Apply(false, true);
-            return texture;
-        }
-
-        private static float Frac(float value)
-        {
-            return value - Mathf.Floor(value);
-        }
-
-        private static float DistanceToSegment(Vector2 point, Vector2 start, Vector2 end)
-        {
-            var segment = end - start;
-            var lengthSq = Vector2.Dot(segment, segment);
-            if (lengthSq <= 0.0001f) return Vector2.Distance(point, start);
-            var t = Mathf.Clamp01(Vector2.Dot(point - start, segment) / lengthSq);
-            return Vector2.Distance(point, start + segment * t);
-        }
-
-        private static float SmoothBand(float value, float target, float halfWidth)
-        {
-            return Mathf.Clamp01(1f - Mathf.Abs(value - target) / Mathf.Max(halfWidth, 0.0001f));
-        }
-
-        private static float HashNoise(int x, int y)
-        {
-            unchecked
-            {
-                var n = x * 374761393 + y * 668265263;
-                n = (n ^ (n >> 13)) * 1274126177;
-                return ((n ^ (n >> 16)) & 0xffff) / 65535f;
             }
         }
 
@@ -887,7 +784,7 @@ namespace LinhGioi.World
             if (_playerSprite == null)
                 _playerSprite = CreateBillboardSprite("LGO Player Cultivator Runtime Sprite V3B", LgoVisualAssetRegistryV3B.PlayerMaleCultivator ?? LgoVisualAssetRegistryV2.PlayerMaleCultivator, CurrentPosition + Vector3.up * 0.22f, new Vector3(0.64f, 0.64f, 1f), 8);
             if (_playerGroundShadow == null)
-                _playerGroundShadow = CreateGroundShadowSprite("LGO Player Grounding Shadow V3B", CurrentPosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
+                _playerGroundShadow = WorldProceduralVisuals.CreateGroundShadowSprite("LGO Player Grounding Shadow V3B", CurrentPosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
             if (_playerSprite != null)
             {
                 _playerSprite.transform.position = CurrentPosition + Vector3.up * 0.22f;
@@ -916,7 +813,7 @@ namespace LinhGioi.World
         {
             if (_targetDummySprite == null)
             {
-                CreateGroundShadowSprite("LGO Target Dummy Grounding Shadow V3B", ReadabilityDummyPosition + Vector3.up * 0.018f, new Vector3(0.84f, 0.50f, 1f), 2);
+                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Target Dummy Grounding Shadow V3B", ReadabilityDummyPosition + Vector3.up * 0.018f, new Vector3(0.84f, 0.50f, 1f), 2);
                 _targetDummySprite = CreateBillboardSprite("LGO Target Dummy Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TargetDummyIdle ?? CombatPlaceholderAssets.TargetDummyIdle, ReadabilityDummyPosition + Vector3.up * 0.15f, new Vector3(0.58f, 0.58f, 1f), 5);
             }
             if (_targetDummyFocusSprite == null)
@@ -931,22 +828,22 @@ namespace LinhGioi.World
                 _shadowTelegraphSprite = CreateBillboardSprite("LGO Warning Telegraph Circle Sprite v0.46", CombatPlaceholderAssets.WarningTelegraphCircle, ShadowSlimePosition + Vector3.up * 0.16f, new Vector3(1.08f, 1.08f, 1f), 4);
             if (_gateKeeperSprite == null)
             {
-                CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", CurrentGateKeeperVisualPosition() + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
+                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", CurrentGateKeeperVisualPosition() + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
                 _gateKeeperSprite = CreateBillboardSprite("LGO Gate Keeper Runtime Sprite V3B", LgoVisualAssetRegistryV3B.GateKeeperNpc ?? LgoVisualAssetRegistryV2.GateKeeperNpc, CurrentGateKeeperVisualPosition() + Vector3.up * 0.2f, CurrentGateKeeperVisualScale(), 5);
             }
             if (_spiritGateSprite == null)
             {
-                CreateGroundShadowSprite("LGO Spirit Gate Grounding Shadow V3B", new Vector3(0f, 0.018f, -4.5f), new Vector3(2.1f, 0.34f, 1f), 1);
+                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Spirit Gate Grounding Shadow V3B", new Vector3(0f, 0.018f, -4.5f), new Vector3(2.1f, 0.34f, 1f), 1);
                 _spiritGateSprite = CreateBillboardSprite("LGO Spirit Gate Runtime Sprite V3B", LgoVisualAssetRegistryV3B.SpiritGate ?? LgoVisualAssetRegistryV2.SpiritGate, new Vector3(0f, 0.35f, -4.5f), new Vector3(0.58f, 0.58f, 1f), 3);
             }
             if (_trainingStoneSprite == null)
             {
-                CreateGroundShadowSprite("LGO Training Stone Grounding Shadow V3B", TrainingStonePosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
+                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Training Stone Grounding Shadow V3B", TrainingStonePosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
                 _trainingStoneSprite = CreateBillboardSprite("LGO Training Stone Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TrainingStone ?? LgoVisualAssetRegistryV2.TrainingStone, TrainingStonePosition + Vector3.up * 0.2f, new Vector3(0.62f, 0.62f, 1f), 5);
             }
             if (_shadowSlimeSprite == null)
             {
-                CreateGroundShadowSprite("LGO Shadow Slime Grounding Shadow V3B", ShadowSlimePosition + Vector3.up * 0.018f, new Vector3(0.88f, 0.42f, 1f), 2);
+                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Shadow Slime Grounding Shadow V3B", ShadowSlimePosition + Vector3.up * 0.018f, new Vector3(0.88f, 0.42f, 1f), 2);
                 _shadowSlimeSprite = CreateBillboardSprite("LGO Shadow Slime Runtime Sprite V3B", LgoVisualAssetRegistryV3B.ShadowSlime ?? LgoVisualAssetRegistryV2.ShadowSlimeAlt, ShadowSlimePosition + Vector3.up * 0.25f, new Vector3(0.74f, 0.74f, 1f), 5);
             }
             EnsureWorldSetDressing();
@@ -976,44 +873,45 @@ namespace LinhGioi.World
             // LGO World Hub Visual Readability Cleanup v1: edge props scale down on narrow profiles so gameplay actors own the center.
             EnsureWorldDepthLighting();
             CreateBillboardSprite("LGO World Cherry Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, WorldHubPoint(-5.25f, 0.2f, 1.55f), WorldHubScale(1.02f, 0.88f, 0.70f), 1);
-            CreateGroundShadowSprite("LGO World Cherry Tree Depth Shadow V3B", WorldHubPoint(-5.25f, 0.018f, 1.55f), WorldHubShadowScale(1.10f, 0.46f, 0.76f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Cherry Tree Depth Shadow V3B", WorldHubPoint(-5.25f, 0.018f, 1.55f), WorldHubShadowScale(1.10f, 0.46f, 0.76f), 0);
             CreateBillboardSprite("LGO World Pine Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, WorldHubPoint(5.25f, 0.2f, 2.35f), WorldHubScale(0.94f, 0.82f, 0.66f), 1);
-            CreateGroundShadowSprite("LGO World Pine Tree Depth Shadow V3B", WorldHubPoint(5.25f, 0.018f, 2.35f), WorldHubShadowScale(1.02f, 0.42f, 0.72f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Pine Tree Depth Shadow V3B", WorldHubPoint(5.25f, 0.018f, 2.35f), WorldHubShadowScale(1.02f, 0.42f, 0.72f), 0);
             CreateBillboardSprite("LGO World Cherry Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, WorldHubPoint(5.1f, 0.16f, -0.95f), WorldHubScale(0.54f, 0.46f, 0.34f), 0);
-            CreateGroundShadowSprite("LGO World Cherry Tree Far Depth Shadow V3B", WorldHubPoint(5.1f, 0.018f, -0.95f), WorldHubShadowScale(0.62f, 0.25f, 0.48f), -1);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Cherry Tree Far Depth Shadow V3B", WorldHubPoint(5.1f, 0.018f, -0.95f), WorldHubShadowScale(0.62f, 0.25f, 0.48f), -1);
             CreateBillboardSprite("LGO World Pine Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, WorldHubPoint(-5.55f, 0.16f, 3.9f), WorldHubScale(0.58f, 0.50f, 0.38f), 0);
-            CreateGroundShadowSprite("LGO World Pine Tree Far Depth Shadow V3B", WorldHubPoint(-5.55f, 0.018f, 3.9f), WorldHubShadowScale(0.66f, 0.27f, 0.50f), -1);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Pine Tree Far Depth Shadow V3B", WorldHubPoint(-5.55f, 0.018f, 3.9f), WorldHubShadowScale(0.66f, 0.27f, 0.50f), -1);
             CreateBillboardSprite("LGO World Lantern West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(-4.55f, 0.2f, -2.05f), WorldHubScale(0.58f, 0.48f, 0.36f), 2);
-            CreateGroundShadowSprite("LGO World Lantern West Depth Shadow V3B", WorldHubPoint(-4.55f, 0.018f, -2.05f), WorldHubShadowScale(0.38f, 0.20f, 0.32f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern West Depth Shadow V3B", WorldHubPoint(-4.55f, 0.018f, -2.05f), WorldHubShadowScale(0.38f, 0.20f, 0.32f), 0);
             CreateBillboardSprite("LGO World Lantern East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(4.45f, 0.2f, -1.95f), WorldHubScale(0.58f, 0.48f, 0.36f), 2);
-            CreateGroundShadowSprite("LGO World Lantern East Depth Shadow V3B", WorldHubPoint(4.45f, 0.018f, -1.95f), WorldHubShadowScale(0.38f, 0.20f, 0.32f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern East Depth Shadow V3B", WorldHubPoint(4.45f, 0.018f, -1.95f), WorldHubShadowScale(0.38f, 0.20f, 0.32f), 0);
             CreateBillboardSprite("LGO World Lantern North Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(-1.15f, 0.15f, 5.55f), WorldHubScale(0.36f, 0.32f, 0.24f), 1);
-            CreateGroundShadowSprite("LGO World Lantern North Depth Shadow V3B", WorldHubPoint(-1.15f, 0.018f, 5.55f), WorldHubShadowScale(0.28f, 0.15f, 0.24f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern North Depth Shadow V3B", WorldHubPoint(-1.15f, 0.018f, 5.55f), WorldHubShadowScale(0.28f, 0.15f, 0.24f), 0);
             CreateBillboardSprite("LGO World Lantern South Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(1.25f, 0.15f, -5.45f), WorldHubScale(0.36f, 0.32f, 0.24f), 1);
-            CreateGroundShadowSprite("LGO World Lantern South Depth Shadow V3B", WorldHubPoint(1.25f, 0.018f, -5.45f), WorldHubShadowScale(0.28f, 0.15f, 0.24f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern South Depth Shadow V3B", WorldHubPoint(1.25f, 0.018f, -5.45f), WorldHubShadowScale(0.28f, 0.15f, 0.24f), 0);
             CreateBillboardSprite("LGO World Rock Moss Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, WorldHubPoint(-2.15f, 0.15f, -1.95f), WorldHubScale(0.48f, 0.40f, 0.30f), 1);
-            CreateGroundShadowSprite("LGO World Rock Moss Depth Shadow V3B", WorldHubPoint(-2.15f, 0.018f, -1.95f), WorldHubShadowScale(0.50f, 0.24f, 0.40f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Rock Moss Depth Shadow V3B", WorldHubPoint(-2.15f, 0.018f, -1.95f), WorldHubShadowScale(0.50f, 0.24f, 0.40f), 0);
             CreateBillboardSprite("LGO World Rock Moss East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, WorldHubPoint(2.35f, 0.12f, 4.95f), WorldHubScale(0.30f, 0.26f, 0.20f), 0);
-            CreateGroundShadowSprite("LGO World Rock Moss East Depth Shadow V3B", WorldHubPoint(2.35f, 0.018f, 4.95f), WorldHubShadowScale(0.32f, 0.15f, 0.26f), -1);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Rock Moss East Depth Shadow V3B", WorldHubPoint(2.35f, 0.018f, 4.95f), WorldHubShadowScale(0.32f, 0.15f, 0.26f), -1);
             CreateBillboardSprite("LGO World Cultivation Banner Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, WorldHubPoint(4.25f, 0.2f, -3.9f), WorldHubScale(0.46f, 0.38f, 0.28f), 2);
-            CreateGroundShadowSprite("LGO World Cultivation Banner Depth Shadow V3B", WorldHubPoint(4.25f, 0.018f, -3.9f), WorldHubShadowScale(0.34f, 0.16f, 0.28f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Cultivation Banner Depth Shadow V3B", WorldHubPoint(4.25f, 0.018f, -3.9f), WorldHubShadowScale(0.34f, 0.16f, 0.28f), 0);
             CreateBillboardSprite("LGO World Cultivation Banner West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, WorldHubPoint(-5.3f, 0.16f, -3.55f), WorldHubScale(0.34f, 0.28f, 0.22f), 1);
-            CreateGroundShadowSprite("LGO World Cultivation Banner West Depth Shadow V3B", WorldHubPoint(-5.3f, 0.018f, -3.55f), WorldHubShadowScale(0.28f, 0.13f, 0.22f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Cultivation Banner West Depth Shadow V3B", WorldHubPoint(-5.3f, 0.018f, -3.55f), WorldHubShadowScale(0.28f, 0.13f, 0.22f), 0);
             CreateBillboardSprite("LGO World Bridge Wood Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BridgeWood ?? LgoVisualAssetRegistryV2.BridgeWood, WorldHubPoint(-3.25f, 0.1f, -4.15f), WorldHubScale(0.72f, 0.58f, 0.44f), 1);
-            CreateGroundShadowSprite("LGO World Bridge Wood Depth Shadow V3B", WorldHubPoint(-3.25f, 0.018f, -4.15f), WorldHubShadowScale(0.82f, 0.24f, 0.58f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Bridge Wood Depth Shadow V3B", WorldHubPoint(-3.25f, 0.018f, -4.15f), WorldHubShadowScale(0.82f, 0.24f, 0.58f), 0);
         }
 
         private static void EnsureWorldDepthLighting()
         {
             // LGO World Hub Depth Richness v1: lightweight procedural glows give the hub a readable stage without importing heavy images.
-            CreateGroundGlowSprite("LGO World Central Cultivation Stage Glow V3B", GetWorldPlatformGlowSprite(), new Vector3(0f, 0.065f, 0.18f), WorldHubGroundGlowScale(3.05f, 2.62f, 2.05f), new Color(0.22f, 0.86f, 1f, 0.42f), -2);
-            CreateGroundGlowSprite("LGO World Spirit Gate Arrival Glow V3B", GetWorldPlatformGlowSprite(), new Vector3(0f, 0.068f, -3.95f), WorldHubGroundGlowScale(2.05f, 1.72f, 1.32f), new Color(0.20f, 0.78f, 1f, 0.36f), -1);
-            CreateGroundGlowSprite("LGO World Training Stone Focus Glow V3B", GetWorldPlatformGlowSprite(), TrainingStonePosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.52f, 1.26f, 0.96f), new Color(0.24f, 0.96f, 0.86f, 0.32f), -1);
-            CreateGroundGlowSprite("LGO World Dummy Practice Glow V3B", GetWorldPlatformGlowSprite(), ReadabilityDummyPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.58f, 1.32f, 0.98f), new Color(0.94f, 0.66f, 0.24f, 0.25f), -1);
-            CreateGroundGlowSprite("LGO World Gatekeeper Dialogue Glow V3B", GetWorldPlatformGlowSprite(), GateKeeperPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.46f, 1.20f, 0.92f), new Color(0.94f, 0.70f, 0.30f, 0.25f), -1);
-            CreatePathGlowSprite("LGO World Path Glow Center To Gate V3B", new Vector3(0f, 0.07f, -2.02f), WorldHubPathGlowScale(0.20f, 3.35f, 0.14f, 2.36f), new Color(0.20f, 0.82f, 1f, 0.23f), -1);
-            CreatePathGlowSprite("LGO World Path Glow Center To Stone V3B", new Vector3(0f, 0.07f, 2.12f), WorldHubPathGlowScale(0.18f, 2.85f, 0.13f, 2.02f), new Color(0.24f, 0.96f, 0.86f, 0.18f), -1);
-            var keeperPath = CreatePathGlowSprite("LGO World Path Glow Center To Keeper V3B", new Vector3(-1.18f, 0.07f, 1.48f), WorldHubPathGlowScale(0.15f, 2.10f, 0.10f, 1.50f), new Color(0.94f, 0.70f, 0.30f, 0.17f), -1);
+            var platformGlow = WorldProceduralVisuals.GetWorldPlatformGlowSprite();
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Central Cultivation Stage Glow V3B", platformGlow, new Vector3(0f, 0.065f, 0.18f), WorldHubGroundGlowScale(3.05f, 2.62f, 2.05f), new Color(0.22f, 0.86f, 1f, 0.42f), -2);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Spirit Gate Arrival Glow V3B", platformGlow, new Vector3(0f, 0.068f, -3.95f), WorldHubGroundGlowScale(2.05f, 1.72f, 1.32f), new Color(0.20f, 0.78f, 1f, 0.36f), -1);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Training Stone Focus Glow V3B", platformGlow, TrainingStonePosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.52f, 1.26f, 0.96f), new Color(0.24f, 0.96f, 0.86f, 0.32f), -1);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Dummy Practice Glow V3B", platformGlow, ReadabilityDummyPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.58f, 1.32f, 0.98f), new Color(0.94f, 0.66f, 0.24f, 0.25f), -1);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Gatekeeper Dialogue Glow V3B", platformGlow, GateKeeperPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.46f, 1.20f, 0.92f), new Color(0.94f, 0.70f, 0.30f, 0.25f), -1);
+            WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Gate V3B", new Vector3(0f, 0.07f, -2.02f), WorldHubPathGlowScale(0.20f, 3.35f, 0.14f, 2.36f), new Color(0.20f, 0.82f, 1f, 0.23f), -1);
+            WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Stone V3B", new Vector3(0f, 0.07f, 2.12f), WorldHubPathGlowScale(0.18f, 2.85f, 0.13f, 2.02f), new Color(0.24f, 0.96f, 0.86f, 0.18f), -1);
+            var keeperPath = WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Keeper V3B", new Vector3(-1.18f, 0.07f, 1.48f), WorldHubPathGlowScale(0.15f, 2.10f, 0.10f, 1.50f), new Color(0.94f, 0.70f, 0.30f, 0.17f), -1);
             if (keeperPath != null) keeperPath.transform.rotation = Quaternion.Euler(90f, 0f, -39f);
         }
 
@@ -1063,130 +961,6 @@ namespace LinhGioi.World
             renderer.color = Color.white;
             renderer.sortingOrder = sortingOrder;
             return renderer;
-        }
-
-        private static SpriteRenderer CreateGroundShadowSprite(string name, Vector3 position, Vector3 scale, int sortingOrder)
-        {
-            var sprite = GetSoftGroundShadowSprite();
-            if (sprite == null) return null;
-            var existing = GameObject.Find(name);
-            var holder = existing != null ? existing : new GameObject(name);
-            holder.transform.position = position;
-            holder.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            holder.transform.localScale = scale;
-            var renderer = holder.GetComponent<SpriteRenderer>() ?? holder.AddComponent<SpriteRenderer>();
-            renderer.sprite = sprite;
-            renderer.color = new Color(0.0f, 0.012f, 0.028f, 0.42f);
-            renderer.sortingOrder = sortingOrder;
-            return renderer;
-        }
-
-        private static SpriteRenderer CreateGroundGlowSprite(string name, Sprite sprite, Vector3 position, Vector3 scale, Color color, int sortingOrder)
-        {
-            if (sprite == null) return null;
-            var existing = GameObject.Find(name);
-            var holder = existing != null ? existing : new GameObject(name);
-            holder.transform.position = position;
-            holder.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
-            holder.transform.localScale = scale;
-            var renderer = holder.GetComponent<SpriteRenderer>() ?? holder.AddComponent<SpriteRenderer>();
-            renderer.sprite = sprite;
-            renderer.color = color;
-            renderer.sortingOrder = sortingOrder;
-            return renderer;
-        }
-
-        private static SpriteRenderer CreatePathGlowSprite(string name, Vector3 position, Vector3 scale, Color color, int sortingOrder)
-        {
-            return CreateGroundGlowSprite(name, GetWorldPathGlowSprite(), position, scale, color, sortingOrder);
-        }
-
-        private static Sprite GetSoftGroundShadowSprite()
-        {
-            if (_softGroundShadowSprite != null) return _softGroundShadowSprite;
-            const int size = 128;
-            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
-            {
-                name = "LGO Procedural Soft Ground Shadow Texture v1",
-                wrapMode = TextureWrapMode.Clamp,
-                filterMode = FilterMode.Bilinear
-            };
-            for (var y = 0; y < size; y++)
-            {
-                for (var x = 0; x < size; x++)
-                {
-                    var u = ((x + 0.5f) / size - 0.5f) * 2f;
-                    var v = ((y + 0.5f) / size - 0.5f) * 2f;
-                    var dist = Mathf.Sqrt(u * u + v * v);
-                    var alpha = Mathf.Clamp01(1f - dist);
-                    alpha = alpha * alpha * 0.82f;
-                    texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
-                }
-            }
-            texture.Apply(false, true);
-            _softGroundShadowSprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
-            _softGroundShadowSprite.name = "LGO Procedural Soft Ground Shadow Sprite v1";
-            return _softGroundShadowSprite;
-        }
-
-        private static Sprite GetWorldPlatformGlowSprite()
-        {
-            if (_worldPlatformGlowSprite != null) return _worldPlatformGlowSprite;
-            const int size = 192;
-            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
-            {
-                name = "LGO Procedural World Platform Glow Texture v1",
-                wrapMode = TextureWrapMode.Clamp,
-                filterMode = FilterMode.Bilinear
-            };
-            for (var y = 0; y < size; y++)
-            {
-                for (var x = 0; x < size; x++)
-                {
-                    var u = ((x + 0.5f) / size - 0.5f) * 2f;
-                    var v = ((y + 0.5f) / size - 0.5f) * 2f;
-                    var dist = Mathf.Sqrt(u * u + v * v);
-                    var ringA = SmoothBand(dist, 0.58f, 0.035f);
-                    var ringB = SmoothBand(dist, 0.82f, 0.024f);
-                    var radial = Mathf.Clamp01(1f - dist);
-                    var spokes = Mathf.Abs(Mathf.Sin(Mathf.Atan2(v, u) * 4f));
-                    var alpha = radial * radial * 0.12f + ringA * 0.38f + ringB * 0.22f;
-                    if (dist < 0.78f) alpha += Mathf.Pow(spokes, 18f) * 0.055f;
-                    texture.SetPixel(x, y, new Color(1f, 1f, 1f, Mathf.Clamp01(alpha)));
-                }
-            }
-            texture.Apply(false, true);
-            _worldPlatformGlowSprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
-            _worldPlatformGlowSprite.name = "LGO Procedural World Platform Glow Sprite v1";
-            return _worldPlatformGlowSprite;
-        }
-
-        private static Sprite GetWorldPathGlowSprite()
-        {
-            if (_worldPathGlowSprite != null) return _worldPathGlowSprite;
-            const int size = 128;
-            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
-            {
-                name = "LGO Procedural World Path Glow Texture v1",
-                wrapMode = TextureWrapMode.Clamp,
-                filterMode = FilterMode.Bilinear
-            };
-            for (var y = 0; y < size; y++)
-            {
-                for (var x = 0; x < size; x++)
-                {
-                    var u = Mathf.Abs((x + 0.5f) / size - 0.5f) * 2f;
-                    var v = Mathf.Abs((y + 0.5f) / size - 0.5f) * 2f;
-                    var widthFade = Mathf.Clamp01(1f - u);
-                    var endFade = Mathf.Clamp01(1f - Mathf.Pow(v, 3f));
-                    var alpha = widthFade * widthFade * endFade * 0.76f;
-                    texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
-                }
-            }
-            texture.Apply(false, true);
-            _worldPathGlowSprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
-            _worldPathGlowSprite.name = "LGO Procedural World Path Glow Sprite v1";
-            return _worldPathGlowSprite;
         }
 
         private static TextMesh CreateWorldLabel(string name, string text, Vector3 position, Color color)

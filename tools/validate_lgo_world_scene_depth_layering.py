@@ -54,15 +54,19 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs",
         "LGO World Scene Depth Layering",
-        "LGO Procedural Soft Ground Shadow Texture v1",
-        "LGO Procedural Soft Ground Shadow Sprite v1",
-        "CreateGroundShadowSprite",
-        "GetSoftGroundShadowSprite",
+        "WorldProceduralVisuals.CreateGroundShadowSprite",
         "LGO Player Grounding Shadow V3B",
         "LGO Gate Keeper Grounding Shadow V3B",
         "LGO Spirit Gate Grounding Shadow V3B",
         "LGO Target Dummy Grounding Shadow V3B",
         "LGO World Cherry Tree Depth Shadow V3B",
+    )
+    require(
+        "client/Unity/Assets/Game/World/Runtime/WorldProceduralVisuals.cs",
+        "LGO Procedural Soft Ground Shadow Texture v1",
+        "LGO Procedural Soft Ground Shadow Sprite v1",
+        "CreateGroundShadowSprite",
+        "GetSoftGroundShadowSprite",
         "renderer.color = new Color(0.0f, 0.012f, 0.028f, 0.42f)",
     )
     require(
