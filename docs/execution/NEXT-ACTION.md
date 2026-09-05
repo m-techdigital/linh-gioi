@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-HEADER-DIALOGUE-BUTTON-METRICS-AUDIT-v1.0`
+`LGO-RUNTIME-UI-LABEL-FONT-METRICS-AUDIT-v1.0`
 
-Audit remaining top-header and dialogue button min-width/min-height/font-size values in `M4PlayableClientController`, then route stable values through shared runtime UI spacing/sizing ownership without changing screen semantics. Marker ready from the completed responsive button evidence refresh: `LGO_RUNTIME_UI_RESPONSIVE_BUTTON_METRICS_EVIDENCE_REFRESH_READY`.
+Audit remaining controller-local responsive label font-size values in login, lobby, world, dialogue, and compact status flows, then route stable values through shared runtime UI spacing/profile ownership without changing Vietnamese copy or screen semantics. Marker ready from the completed header/dialogue evidence refresh: `LGO_RUNTIME_UI_HEADER_DIALOGUE_BUTTON_METRICS_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -149,6 +149,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-COMBAT-HUD-SPACING-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_COMBAT_HUD_SPACING_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-BUTTON-METRICS-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_BUTTON_METRICS_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-BUTTON-METRICS-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_BUTTON_METRICS_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-HEADER-DIALOGUE-BUTTON-METRICS-AUDIT-v1.0` / `LGO_RUNTIME_UI_HEADER_DIALOGUE_BUTTON_METRICS_READY`
+- `LGO-RUNTIME-UI-HEADER-DIALOGUE-BUTTON-METRICS-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_HEADER_DIALOGUE_BUTTON_METRICS_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-APPLICATION-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_APPLICATION_AUDIT_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-FACTORY-COVERAGE-AUDIT-v1.0` / `LGO_RUNTIME_UI_FACTORY_COVERAGE_AUDIT_READY`

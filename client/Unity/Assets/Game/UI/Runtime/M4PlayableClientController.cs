@@ -1347,13 +1347,17 @@ namespace LinhGioi.UI
             }
             if (_dialogueContinueButton != null)
             {
-                _dialogueContinueButton.style.minHeight = mobile ? 38 : 42;
-                _dialogueContinueButton.style.minWidth = mobile ? 116 : 132;
+                RuntimeUiSkin.ApplyButtonMetrics(
+                    _dialogueContinueButton,
+                    mobile ? RuntimeUiSpacing.DialogueContinueMobileMinWidth : RuntimeUiSpacing.DialogueContinueDesktopMinWidth,
+                    mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
             }
             if (_dialogueCloseButton != null)
             {
-                _dialogueCloseButton.style.minHeight = mobile ? 38 : 42;
-                _dialogueCloseButton.style.minWidth = mobile ? 90 : 104;
+                RuntimeUiSkin.ApplyButtonMetrics(
+                    _dialogueCloseButton,
+                    mobile ? RuntimeUiSpacing.DialogueCloseMobileMinWidth : RuntimeUiSpacing.DialogueCloseDesktopMinWidth,
+                    mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
             }
         }
 
@@ -1366,14 +1370,20 @@ namespace LinhGioi.UI
             {
                 _headerActions.style.flexShrink = 1;
                 _headerActions.style.justifyContent = Justify.FlexEnd;
-                _headerActions.style.maxWidth = worldVisible && mobile ? Mathf.Max(320f, viewportWidth - 24f) : tablet ? 430 : 520;
+                _headerActions.style.maxWidth = worldVisible && mobile
+                    ? Mathf.Max(RuntimeUiSpacing.HeaderActionsMobileMaxWidthFloor, viewportWidth - RuntimeUiSpacing.HeaderActionsMobileViewportInset)
+                    : tablet ? RuntimeUiSpacing.HeaderActionsTabletMaxWidth : RuntimeUiSpacing.HeaderActionsDesktopMaxWidth;
             }
             if (_status != null)
             {
-                _status.style.fontSize = worldVisible && mobile ? 13 : tablet ? 13 : 14;
-                _status.style.minHeight = worldVisible && mobile ? 34 : 32;
+                _status.style.fontSize = worldVisible && mobile
+                    ? RuntimeUiSpacing.TopStatusWorldMobileFontSize
+                    : tablet ? RuntimeUiSpacing.TopStatusTabletFontSize : RuntimeUiSpacing.TopStatusDefaultFontSize;
+                _status.style.minHeight = worldVisible && mobile ? RuntimeUiSpacing.TopStatusWorldMobileMinHeight : RuntimeUiSpacing.TopStatusDefaultMinHeight;
                 RuntimeUiSkin.ApplyPadding(_status, layout.StatusPaddingHorizontal(worldVisible), layout.StatusPaddingHorizontal(worldVisible), layout.StatusPaddingVertical, layout.StatusPaddingVertical);
-                _status.style.maxWidth = worldVisible && mobile ? Mathf.Clamp(viewportWidth * 0.28f, 180f, 260f) : tablet ? 270 : 360;
+                _status.style.maxWidth = worldVisible && mobile
+                    ? Mathf.Clamp(viewportWidth * (RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent / 100f), RuntimeUiSpacing.TopStatusWorldMobileMinWidth, RuntimeUiSpacing.TopStatusWorldMobileMaxWidth)
+                    : tablet ? RuntimeUiSpacing.TopStatusTabletMaxWidth : RuntimeUiSpacing.TopStatusDesktopMaxWidth;
                 if (worldVisible && mobile && _status.text.StartsWith("Sẵn sàng:", StringComparison.Ordinal))
                     _status.text = "Sẵn sàng: Bước 1/2";
                 else if (worldVisible && tablet && _status.text == "Sẵn sàng: Bước 1 rồi Bước 2.")
@@ -1381,9 +1391,11 @@ namespace LinhGioi.UI
             }
             if (_quitButton != null)
             {
-                _quitButton.style.minHeight = worldVisible && mobile ? 34 : 36;
-                _quitButton.style.minWidth = worldVisible && mobile ? 78 : 88;
-                _quitButton.style.fontSize = worldVisible && mobile ? 13 : 14;
+                RuntimeUiSkin.ApplyButtonMetrics(
+                    _quitButton,
+                    worldVisible && mobile ? RuntimeUiSpacing.HeaderQuitWorldMobileMinWidth : RuntimeUiSpacing.HeaderQuitDefaultMinWidth,
+                    worldVisible && mobile ? RuntimeUiSpacing.HeaderQuitWorldMobileMinHeight : RuntimeUiSpacing.HeaderQuitDefaultMinHeight,
+                    worldVisible && mobile ? RuntimeUiSpacing.HeaderQuitWorldMobileFontSize : RuntimeUiSpacing.HeaderQuitDefaultFontSize);
                 _quitButton.style.marginRight = 0;
             }
         }

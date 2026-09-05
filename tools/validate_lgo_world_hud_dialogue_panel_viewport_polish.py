@@ -58,8 +58,10 @@ def main() -> int:
         "ApplyWorldPanelViewportPolish",
         "LGO World HUD Dialogue Viewport Polish v1",
         "layout.WorldHudMaxWidth(dialogueVisible)",
-        "_dialogueContinueButton.style.minHeight = mobile ? 38 : 42",
-        "_dialogueCloseButton.style.minWidth = mobile ? 90 : 104",
+        "RuntimeUiSpacing.DialogueContinueMobileMinWidth",
+        "RuntimeUiSpacing.DialogueButtonMobileMinHeight",
+        "RuntimeUiSpacing.DialogueCloseMobileMinWidth",
+        "RuntimeUiSpacing.DialogueCloseDesktopMinWidth",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",

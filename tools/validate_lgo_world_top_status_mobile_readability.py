@@ -54,7 +54,9 @@ def main() -> int:
         "FormatTopStatusMessage",
         "_headerActions",
         'Sẵn sàng: Bước 1/2',
-        "Mathf.Clamp(viewportWidth * 0.28f, 180f, 260f)",
+        "RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent",
+        "RuntimeUiSpacing.TopStatusWorldMobileMinWidth",
+        "RuntimeUiSpacing.TopStatusWorldMobileMaxWidth",
     )
     require(
         "docs/tasks/LGO-WORLD-TOP-STATUS-MOBILE-READABILITY-PASS-v1.0.md",
