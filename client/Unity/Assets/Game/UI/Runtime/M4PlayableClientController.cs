@@ -1672,52 +1672,6 @@ namespace LinhGioi.UI
             _loginButton.style.backgroundImage = new StyleBackground(texture);
         }
 
-        private static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)
-        {
-            if (button == null) return;
-            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
-            button.style.minWidth = coolingDown ? 142 : 132;
-            button.style.minHeight = 44;
-            button.style.paddingLeft = 14;
-            button.style.paddingRight = 14;
-            button.style.fontSize = coolingDown ? 13 : 14;
-            button.style.unityFontStyleAndWeight = FontStyle.Bold;
-            button.style.whiteSpace = WhiteSpace.NoWrap;
-        }
-
-        private static void ApplyStatusAccent(Label label, Color accent)
-        {
-            if (label == null) return;
-            label.style.borderLeftColor = accent;
-            label.style.color = accent;
-        }
-
-        private static Label NewToast(string text)
-        {
-            var label = new Label(text);
-            label.style.marginTop = 10;
-            label.style.paddingLeft = 12;
-            label.style.paddingRight = 12;
-            label.style.paddingTop = 8;
-            label.style.paddingBottom = 8;
-            label.style.whiteSpace = WhiteSpace.Normal;
-            label.style.color = RuntimeArtCatalog.Text;
-            RuntimeUiSkin.ApplyToastFrame(label, RuntimeArtCatalog.Gold);
-            return label;
-        }
-
-        private static void ApplyStatusChip(Label label, Color accent)
-        {
-            label.style.paddingLeft = 14;
-            label.style.paddingRight = 14;
-            label.style.paddingTop = 6;
-            label.style.paddingBottom = 6;
-            label.style.maxWidth = 380;
-            label.style.marginRight = 8;
-            label.style.whiteSpace = WhiteSpace.Normal;
-            RuntimeUiSkin.ApplyStatusChipFrame(label, accent);
-        }
-
         private void SetToast(string text, Color accent)
         {
             if (_toast == null) return;

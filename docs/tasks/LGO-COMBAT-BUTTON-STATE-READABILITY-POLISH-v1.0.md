@@ -8,7 +8,7 @@ This pass improves local combat button readability during cooldown without chang
 
 ## Implementation Notes
 
-- Kept the existing local-only `ApplyCombatButtonSkin` ownership in `M4PlayableClientController`.
+- `ApplyCombatButtonSkin` is now a reusable `RuntimeUiFactory` visual helper; the controller still owns local-only combat state and copy.
 - Added state-aware min width, padding, font size, and no-wrap styling to the combat action button.
 - Shortened the visible cooldown button copy from `Đang hồi chiêu` to `Hồi chiêu` so it fits the compact HUD.
 - Kept `Đang hồi chiêu` in tooltip/explanatory copy so existing Vietnamese cooldown semantics remain clear.

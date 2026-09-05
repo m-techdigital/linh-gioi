@@ -57,7 +57,10 @@ def main() -> int:
         "CombatPlaceholderAssets.CombatButtonNormalTexture, coolingDown);",
         '_localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
         "Đang hồi chiêu: bấm vẫn cho phản hồi từ chối hồi chiêu",
-        "private static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "internal static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)",
         "button.style.minWidth = coolingDown ? 142 : 132;",
         "button.style.whiteSpace = WhiteSpace.NoWrap;",
     )

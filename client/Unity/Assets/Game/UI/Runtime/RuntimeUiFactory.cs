@@ -116,6 +116,13 @@ namespace LinhGioi.UI
             return label;
         }
 
+        internal static void ApplyStatusAccent(Label label, Color accent)
+        {
+            if (label == null) return;
+            label.style.borderLeftColor = accent;
+            label.style.color = accent;
+        }
+
         internal static Label NewSectionTitle(string text)
         {
             var label = new Label(text);
@@ -164,6 +171,26 @@ namespace LinhGioi.UI
             badge.Add(titleLabel);
             badge.Add(valueLabel);
             return badge;
+        }
+
+        internal static Label NewToast(string text)
+        {
+            var label = new Label(text);
+            label.style.marginTop = 10;
+            RuntimeUiSkin.ApplyPadding(label, 12, 8);
+            label.style.whiteSpace = WhiteSpace.Normal;
+            label.style.color = RuntimeArtCatalog.Text;
+            RuntimeUiSkin.ApplyToastFrame(label, RuntimeArtCatalog.Gold);
+            return label;
+        }
+
+        internal static void ApplyStatusChip(Label label, Color accent)
+        {
+            label.style.maxWidth = 380;
+            label.style.marginRight = 8;
+            label.style.whiteSpace = WhiteSpace.Normal;
+            RuntimeUiSkin.ApplyPadding(label, 14, 6);
+            RuntimeUiSkin.ApplyStatusChipFrame(label, accent);
         }
 
         internal static Label NewMutedLabel(string text)
@@ -246,6 +273,19 @@ namespace LinhGioi.UI
             foreach (var statusElement in statusElements) statusColumn.Add(statusElement);
             row.Add(statusColumn);
             return row;
+        }
+
+        internal static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)
+        {
+            if (button == null) return;
+            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
+            button.style.minWidth = coolingDown ? 142 : 132;
+            button.style.minHeight = 44;
+            button.style.paddingLeft = 14;
+            button.style.paddingRight = 14;
+            button.style.fontSize = coolingDown ? 13 : 14;
+            button.style.unityFontStyleAndWeight = FontStyle.Bold;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         internal static TextField NewTextField(string label, string value)
