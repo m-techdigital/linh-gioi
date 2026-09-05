@@ -61,12 +61,18 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
-        'NewBadge("Di chuyển", "WASD hoặc phím mũi tên")',
-        'NewBadge("Xoay", "Q / E")',
-        'NewBadge("Tương tác", "F hoặc Space")',
-        'NewBadge("Menu", "Esc")',
+        '_worldDebugStrip = NewBadgeStrip(',
+        '("Di chuyển", "WASD hoặc phím mũi tên")',
+        '("Xoay", "Q / E")',
+        '("Tương tác", "F hoặc Space")',
+        '("Menu", "Esc")',
         'Esc mở menu phiên trong thế giới; Thoát đóng phiên hiện tại.',
         'Sân Luyện An Toàn',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs',
+        'internal static VisualElement NewBadgeStrip',
+        'internal static VisualElement NewBadge',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

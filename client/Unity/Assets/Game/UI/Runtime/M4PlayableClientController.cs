@@ -597,19 +597,16 @@ namespace LinhGioi.UI
             _mainShell.Add(_worldHud);
             _worldHud.Add(NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit, "LGO World HUD Header Block"));
 
-            _worldDebugStrip = new VisualElement();
-            _worldDebugStrip.style.flexDirection = FlexDirection.Row;
-            _worldDebugStrip.style.flexWrap = Wrap.Wrap;
-            _worldDebugStrip.style.marginBottom = 10;
+            _worldDebugStrip = NewBadgeStrip(
+                "LGO World Debug Badge Strip",
+                ("Tài khoản", "đã kết nối"),
+                ("Lưu vị trí", "phiên hiện tại"),
+                ("Di chuyển", "WASD hoặc phím mũi tên"),
+                ("Xoay", "Q / E"),
+                ("Tương tác", "F hoặc Space"),
+                ("Menu", "Esc"));
             _worldDebugStrip.style.display = DisplayStyle.None;
             _worldHud.Add(_worldDebugStrip);
-
-            _worldDebugStrip.Add(NewBadge("Tài khoản", "đã kết nối"));
-            _worldDebugStrip.Add(NewBadge("Lưu vị trí", "phiên hiện tại"));
-            _worldDebugStrip.Add(NewBadge("Di chuyển", "WASD hoặc phím mũi tên"));
-            _worldDebugStrip.Add(NewBadge("Xoay", "Q / E"));
-            _worldDebugStrip.Add(NewBadge("Tương tác", "F hoặc Space"));
-            _worldDebugStrip.Add(NewBadge("Menu", "Esc"));
 
             _layoutProfileLabel = NewStatusLabel("Bố cục: desktop / HUD tinh gọn.", RuntimeArtCatalog.Muted);
             _layoutProfileLabel.style.display = DisplayStyle.None;
@@ -1693,27 +1690,6 @@ namespace LinhGioi.UI
             if (label == null) return;
             label.style.borderLeftColor = accent;
             label.style.color = accent;
-        }
-
-        private static VisualElement NewBadge(string title, string value)
-        {
-            var badge = new VisualElement();
-            badge.style.paddingLeft = 10;
-            badge.style.paddingRight = 10;
-            badge.style.paddingTop = 6;
-            badge.style.paddingBottom = 6;
-            badge.style.marginRight = 8;
-            badge.style.marginBottom = 8;
-            RuntimeUiSkin.ApplyBadgeFrame(badge);
-            var titleLabel = new Label(title);
-            titleLabel.style.color = RuntimeArtCatalog.Gold;
-            titleLabel.style.fontSize = 11;
-            var valueLabel = new Label(value);
-            valueLabel.style.color = RuntimeArtCatalog.Text;
-            valueLabel.style.fontSize = 12;
-            badge.Add(titleLabel);
-            badge.Add(valueLabel);
-            return badge;
         }
 
         private static Label NewToast(string text)

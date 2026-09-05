@@ -137,6 +137,35 @@ namespace LinhGioi.UI
             return block;
         }
 
+        internal static VisualElement NewBadgeStrip(string elementName, params (string title, string value)[] badges)
+        {
+            var strip = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(elementName)) strip.name = elementName;
+            strip.style.flexDirection = FlexDirection.Row;
+            strip.style.flexWrap = Wrap.Wrap;
+            strip.style.marginBottom = 10;
+            foreach (var badge in badges) strip.Add(NewBadge(badge.title, badge.value));
+            return strip;
+        }
+
+        internal static VisualElement NewBadge(string title, string value)
+        {
+            var badge = new VisualElement();
+            RuntimeUiSkin.ApplyPadding(badge, 10, 6);
+            badge.style.marginRight = 8;
+            badge.style.marginBottom = 8;
+            RuntimeUiSkin.ApplyBadgeFrame(badge);
+            var titleLabel = new Label(title);
+            titleLabel.style.color = RuntimeArtCatalog.Gold;
+            titleLabel.style.fontSize = 11;
+            var valueLabel = new Label(value);
+            valueLabel.style.color = RuntimeArtCatalog.Text;
+            valueLabel.style.fontSize = 12;
+            badge.Add(titleLabel);
+            badge.Add(valueLabel);
+            return badge;
+        }
+
         internal static Label NewMutedLabel(string text)
         {
             var label = new Label(text);
