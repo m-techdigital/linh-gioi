@@ -33,7 +33,7 @@ When the owner enables continuous work in this chat, Codex should keep developin
 
 Commit/push only after related changes validate together. Avoid tiny spam commits, cache artifacts, generated build folders, or changes to frozen surfaces. The default cadence is to finish a coherent feature/phase/tooling batch first, then checkpoint; small validator/text-only edits should usually be grouped into the next related checkpoint.
 
-Routine local loops should prefer concise output: `tools/lgo_continue_dev_loop.sh` defaults to Quick Resume plus ledger rollup. Use `LGO_DEV_LOOP_CONTEXT_MODE=full` only when diagnosing state drift or handoff confusion.
+Routine local loops should prefer concise output: `tools/lgo_continue_dev_loop.sh` defaults to Quick Resume plus ledger rollup, and `tools/lgo_state_brief.py` should stay under about 90 lines for normal resume. Use `LGO_DEV_LOOP_CONTEXT_MODE=full` only when diagnosing state drift or handoff confusion.
 
 ## Change Budget
 
