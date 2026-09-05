@@ -5,7 +5,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 ## Quick State
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Next task: `LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0`
+- Next task: `LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0`
 - Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.
 - Purpose: scan recent work quickly without deleting historical task rows or marker coverage.
 
@@ -13,8 +13,6 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 
 | Recent | Task ID | Status / Decision | Next allowed step |
 |---:|---|---|---|
-| 224 | LGO-WORLD-HUD-RUNTIME-UI-REUSE-AUDIT v1.0 | source ready / no visual pass claim; `LGO_WORLD_HUD_RUNTIME_UI_REUSE_AUDIT_READY`: World HUD hidden pose/VFX/skin-source evidence labels now reuse `RuntimeUiFactory.NewHiddenStatusLabel` instead of repeated controller-local creation/hiding | Continue with `LGO-WORLD-HUD-RUNTIME-UI-REUSE-EVIDENCE-REFRESH-v1.0` |
-| 225 | LGO-WORLD-HUD-RUNTIME-UI-REUSE-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_WORLD_HUD_RUNTIME_UI_REUSE_EVIDENCE_REFRESH_READY`: World Hub/NPC Dialogue runtime screenshots refreshed after hidden-status-label helper extraction; UI is stable/readable but still needs fantasy panel hierarchy polish | Continue with `LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH-v1.0` |
 | 226 | LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH v1.0 | source ready / no visual pass claim; `LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_READY`: World HUD root/group frames now use calmer V3B-style glass, avoid stretched decorative texture behind dense copy, and keep clearer nested hierarchy without gameplay changes | Continue with `LGO-WORLD-HUD-FANTASY-PANEL-EVIDENCE-REFRESH-v1.0` |
 | 227 | LGO-WORLD-HUD-FANTASY-PANEL-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_WORLD_HUD_FANTASY_PANEL_EVIDENCE_REFRESH_READY`: refreshed World Hub/NPC Dialogue screenshots after rejecting stretched decorative HUD texture; corrected glass/border version is stable but not final-production visual quality | Continue with `LGO-RUNTIME-UI-STATUS-COMPOSITION-CLEANUP-v1.0` |
 | 228 | LGO-RUNTIME-UI-STATUS-COMPOSITION-CLEANUP v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_STATUS_COMPOSITION_CLEANUP_READY`: hidden layout/combat status labels and prototype note now use shared hidden-label helpers instead of repeated controller-local display hiding | Continue with `LGO-RUNTIME-UI-STATUS-COMPOSITION-EVIDENCE-REFRESH-v1.0` |
@@ -31,6 +29,8 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 | 239 | LGO-CHARACTER-HALL-ACTION-DENSITY-FIRST-FIX v1.0 | source ready / evidence reviewed / no visual pass claim; `LGO_CHARACTER_HALL_ACTION_DENSITY_FIRST_FIX_READY`: Character Hall shell no longer stretches ornate panel art over the full screen; glass/code-side frame improves hierarchy and mobile readability without changing character flow | Continue with `LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS-v1.0` |
 | 240 | LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS v1.0 | source ready / evidence reviewed / no visual pass claim; `LGO_RUNTIME_UI_CONTROLLER_SIZE_REDUCTION_READY`: procedural world ground, shadows, focus glows, and path glows now live outside the playable world controller; runtime screenshot capture remains stable, no production/final visual claim | Continue with `LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION-v1.0` |
 | 241 | LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION v1.0 | source/runtime tooling ready / no visual pass claim; `LGO_WORKFLOW_FAST_GATE_NOISE_REDUCTION_READY`: routine dev-loop context now uses Quick Resume plus ledger rollup, fast server build output is logged quietly, and visual runtime review restores Unity ProjectSettings after capture | Continue with `LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0` |
+| 242 | LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_RUNTIME_CODE_HOTSPOT_REDUCTION_READY`: login responsive application moved from the main playable UI controller into a dedicated helper, reducing controller size while preserving login runtime visuals and historical validation coverage | Continue with `LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT-v1.0` |
+| 243 | LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_WORLD_CONTROLLER_INTERACTION_PRESENTATION_SPLIT_READY`: world-space label creation, shadowing, text refresh, and active toggling moved into `WorldLabelPresenter`; interaction/gameplay decisions remain in the world controller | Continue with `LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0` |
 
 ## Operating Notes
 

@@ -24,11 +24,14 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs",
         "RefreshWorldLabelPresentation",
-        "SetWorldLabelActive",
+        "WorldLabelPresenter.SetActive",
         "GuidedTrainingStep.FindGateKeeper",
         "GuidedTrainingStep.FindTrainingStone",
         "PlaceholderVfxFeedbackState.TargetDummyHitFlash",
         "LocalCombatPrototypeState.WindSlashRangeM",
+    )
+    require(
+        "client/Unity/Assets/Game/World/Runtime/WorldLabelPresenter.cs",
         "fontSize = 42",
         "characterSize = 0.042f",
     )

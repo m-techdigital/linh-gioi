@@ -5,8 +5,8 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT-v1.0`.
-- Current reason: Login responsive layout has moved out of `M4PlayableClientController` into a dedicated helper, source-only gates pass, and runtime login capture remains stable; continue with the next largest runtime hotspot in the world controller without changing gameplay.
+- Active task: `LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0`.
+- Current reason: World label creation/shadow/active presentation has moved into `WorldLabelPresenter`, source-only gates pass, and runtime world capture remains stable; continue reducing repeated visual-log output from Unity asset preparation.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -49,13 +49,15 @@ Current focus update: Dev-loop/autopilot output now defaults to compact context 
 
 Current focus update: Login responsive layout now lives in `RuntimeLoginResponsiveLayout` under `LGO_RUNTIME_CODE_HOTSPOT_REDUCTION_READY`; `M4PlayableClientController` is smaller, historical validators follow the new ownership boundary, and runtime login capture remains stable with no visual PASS claim.
 
+Current focus update: World-space label creation, text refresh, shadow, and active toggling now live in `WorldLabelPresenter` under `LGO_WORLD_CONTROLLER_INTERACTION_PRESENTATION_SPLIT_READY`; gameplay state ownership remains in `PlayableWorldController`, and world-hub runtime capture remains stable with no visual PASS claim.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT-v1.0`
+`LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0`
 
-Continue with a focused split of world-controller presentation helpers that are still bulky or repeated, prioritizing labels/interaction visual helpers over gameplay state. Preserve movement, interaction semantics, combat placeholder behavior, protocol, schemas, ADR, and design tokens. Marker ready from the previous code hotspot fix: `LGO_RUNTIME_CODE_HOTSPOT_REDUCTION_READY`.
+Continue with a focused workflow improvement that gives `prepare_unity_local_assets.sh` a quiet summary mode for routine visual/runtime loops while keeping full logs available on failure. Do not change protocol contents or generated protocol semantics. Marker ready from the previous world-controller split: `LGO_WORLD_CONTROLLER_INTERACTION_PRESENTATION_SPLIT_READY`.
 
 ## Current blocker
 

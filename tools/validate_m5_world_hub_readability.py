@@ -67,7 +67,7 @@ def main() -> int:
         'ObjectiveDirectionHint',
         'WorldLandmarkSummary',
         'LGO Interaction Prompt World Label',
-        'SetWorldLabel',
+        'WorldLabelPresenter.Set',
         'Trúng mục tiêu',
         'Đang hồi phục',
         'Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông',
@@ -81,8 +81,15 @@ def main() -> int:
     require_any(
         'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
         'world-space landmark labels',
-        'CreateWorldLabel',
+        'WorldLabelPresenter.Create',
         'LGO Gate Keeper World Label',
+    )
+    require(
+        'client/Unity/Assets/Game/World/Runtime/WorldLabelPresenter.cs',
+        'internal static class WorldLabelPresenter',
+        'internal static TextMesh Create',
+        'internal static void Set',
+        'internal static void EnsureShadow',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
