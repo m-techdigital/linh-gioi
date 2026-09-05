@@ -4,6 +4,21 @@ namespace LinhGioi.UI
 {
     internal readonly struct RuntimeUiLayoutProfile
     {
+        internal const int DefaultViewportWidth = 1280;
+        internal const int DefaultViewportHeight = 720;
+        internal const int MobileMaxWidth = 760;
+        internal const int MobileMaxHeight = 520;
+        internal const int TabletMaxWidth = 1100;
+        internal const float MobileScaleBaseline = 520f;
+        internal const float MobileScaleMin = 0.62f;
+        internal const float MobileScaleMax = 0.86f;
+        internal const float MobileLoginLogoWidthRatio = 0.43f;
+        internal const float TabletLoginLogoWidthRatio = 0.32f;
+        internal const float DesktopLoginLogoWidthRatio = 0.26f;
+        internal const float MobileLoginCardWidthRatio = 0.46f;
+        internal const float TabletLoginCardWidthRatio = 0.36f;
+        internal const float LoginLogoAspect = 0.50f;
+
         internal readonly string Name;
         internal readonly int Width;
         internal readonly int Height;
@@ -26,17 +41,17 @@ namespace LinhGioi.UI
             ShortSide = Mathf.Min(width, height);
             IsMobile = name == "mobile";
             IsTablet = name == "tablet";
-            MobileScale = IsMobile ? Mathf.Clamp(ShortSide / 520f, 0.62f, 0.86f) : 1f;
+            MobileScale = IsMobile ? Mathf.Clamp(ShortSide / MobileScaleBaseline, MobileScaleMin, MobileScaleMax) : 1f;
             LoginLogoWidth = IsMobile
-                ? Mathf.Clamp(width * 0.43f, 260f, 356f)
+                ? Mathf.Clamp(width * MobileLoginLogoWidthRatio, 260f, 356f)
                 : IsTablet
-                    ? Mathf.Clamp(width * 0.32f, 390f, 446f)
-                    : Mathf.Clamp(width * 0.26f, 470f, 504f);
-            LoginLogoHeight = LoginLogoWidth * 0.50f;
+                    ? Mathf.Clamp(width * TabletLoginLogoWidthRatio, 390f, 446f)
+                    : Mathf.Clamp(width * DesktopLoginLogoWidthRatio, 470f, 504f);
+            LoginLogoHeight = LoginLogoWidth * LoginLogoAspect;
             LoginCardWidth = IsMobile
-                ? Mathf.Clamp(width * 0.46f, 312f, 392f)
+                ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 312f, 392f)
                 : IsTablet
-                    ? Mathf.Clamp(width * 0.36f, 416f, 470f)
+                    ? Mathf.Clamp(width * TabletLoginCardWidthRatio, 416f, 470f)
                     : 468f;
             LoginCardPadding = IsMobile ? Mathf.RoundToInt(14f * MobileScale) : IsTablet ? 22 : 28;
             LoginButtonHeight = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.11f, 42f, 50f)) : IsTablet ? 54 : 58;
@@ -45,9 +60,9 @@ namespace LinhGioi.UI
 
         internal static RuntimeUiLayoutProfile FromScreen(string forcedProfile, int screenWidth, int screenHeight)
         {
-            var width = screenWidth > 0 ? screenWidth : 1280;
-            var height = screenHeight > 0 ? screenHeight : 720;
-            var name = forcedProfile ?? (width <= 760 || height <= 520 ? "mobile" : width <= 1100 ? "tablet" : "desktop");
+            var width = screenWidth > 0 ? screenWidth : DefaultViewportWidth;
+            var height = screenHeight > 0 ? screenHeight : DefaultViewportHeight;
+            var name = forcedProfile ?? (width <= MobileMaxWidth || height <= MobileMaxHeight ? "mobile" : width <= TabletMaxWidth ? "tablet" : "desktop");
             return new RuntimeUiLayoutProfile(name, width, height);
         }
     }

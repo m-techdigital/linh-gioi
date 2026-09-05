@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-RESPONSIVE-CONSTANTS-AUDIT-v1.0`
+`LGO-RUNTIME-UI-RESPONSIVE-SESSION-SHELL-HELPER-REVIEW-v1.0`
 
-Audit world HUD, session menu, and Character Hall responsive clamp values now that `RuntimeUiLayoutProfile` owns the base profile calculation. Marker: `LGO_RUNTIME_UI_RESPONSIVE_LAYOUT_HELPER_REVIEW_READY`. Extract only constants or pure helpers that reduce repeated viewport math; do not move screen state.
+Review session menu and world HUD responsive shell calculations for a small pure helper now that base profile constants are named. Marker: `LGO_RUNTIME_UI_RESPONSIVE_CONSTANTS_AUDIT_READY`. Do not move dialogue, combat, account, or character state.
 
 ## Current blocker
 
@@ -121,6 +121,7 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-BUTTON-FACTORY-ADOPTION-PASS-v1.0` / `LGO_RUNTIME_UI_BUTTON_FACTORY_ADOPTION_READY`
 - `LGO-RUNTIME-UI-CONTROLLER-RESPONSIBILITY-MAP-v1.0` / `LGO_RUNTIME_UI_CONTROLLER_RESPONSIBILITY_MAP_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_LAYOUT_HELPER_REVIEW_READY`
+- `LGO-RUNTIME-UI-RESPONSIVE-CONSTANTS-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_CONSTANTS_AUDIT_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 
@@ -190,6 +191,7 @@ python3.12 tools/validate_lgo_runtime_ui_primitive_factory.py
 python3.12 tools/validate_lgo_runtime_ui_button_factory_adoption.py
 python3.12 tools/validate_lgo_runtime_ui_controller_responsibility_map.py
 python3.12 tools/validate_lgo_runtime_ui_responsive_layout_helper_review.py
+python3.12 tools/validate_lgo_runtime_ui_responsive_constants_audit.py
 python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_world_mobile_camera_framing.py
 python3.12 tools/validate_lgo_world_mobile_camera_evidence_refresh.py

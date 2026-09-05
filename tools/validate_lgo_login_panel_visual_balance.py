@@ -59,8 +59,8 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "Mathf.Clamp(width * 0.26f",
-        "Mathf.Clamp(width * 0.46f",
+        "DesktopLoginLogoWidthRatio = 0.26f",
+        "MobileLoginCardWidthRatio = 0.46f",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",

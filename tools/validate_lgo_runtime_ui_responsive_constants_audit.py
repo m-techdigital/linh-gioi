@@ -18,12 +18,11 @@ def read(rel: str) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
-def require(rel: str, *markers: str) -> str:
+def require(rel: str, *markers: str) -> None:
     text = read(rel)
     for marker in markers:
         if marker not in text:
             ERRORS.append(f"{rel} missing marker: {marker}")
-    return text
 
 
 def check_frozen() -> None:
@@ -53,50 +52,58 @@ def check_frozen() -> None:
 
 def main() -> int:
     require(
-        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO Login Responsive Scale Cleanup v1",
-        "_loginStage.style.width = tablet ? 262 : 304",
-        "_loginGateKeeper.style.width = tablet ? 248 : 292",
-        "_loginControlColumn.style.width = mobile ? Length.Percent(100) : tablet ? Length.Percent(56) : Length.Percent(54)",
-    )
-    require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "DefaultViewportWidth = 1280",
+        "DefaultViewportHeight = 720",
+        "MobileMaxWidth = 760",
+        "MobileMaxHeight = 520",
+        "TabletMaxWidth = 1100",
+        "MobileScaleBaseline = 520f",
+        "MobileScaleMin = 0.62f",
+        "MobileScaleMax = 0.86f",
         "MobileLoginLogoWidthRatio = 0.43f",
+        "TabletLoginLogoWidthRatio = 0.32f",
         "DesktopLoginLogoWidthRatio = 0.26f",
         "MobileLoginCardWidthRatio = 0.46f",
+        "TabletLoginCardWidthRatio = 0.36f",
+        "LoginLogoAspect = 0.50f",
     )
     require(
-        "docs/tasks/LGO-LOGIN-RESPONSIVE-SCALE-CLEANUP-PASS-v1.0.md",
-        "LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_READY",
-        "desktop",
-        "tablet",
-        "mobile",
-        "No new runtime art import",
-        "No VISUAL_RUNTIME_PASS claim",
+        "docs/design/RUNTIME-UI-RESPONSIVE-CONSTANTS-AUDIT-v1.0.md",
+        "LGO_RUNTIME_UI_RESPONSIVE_CONSTANTS_AUDIT_READY",
+        "fallback viewport dimensions",
+        "mobile and tablet breakpoints",
+        "session menu viewport values remain in `M4PlayableClientController`",
+        "LGO-RUNTIME-UI-RESPONSIVE-SESSION-SHELL-HELPER-REVIEW-v1.0",
+    )
+    require(
+        "docs/tasks/LGO-RUNTIME-UI-RESPONSIVE-CONSTANTS-AUDIT-v1.0.md",
+        "LGO_RUNTIME_UI_RESPONSIVE_CONSTANTS_AUDIT_READY",
+        "Breakpoints, viewport fallbacks, mobile scale bounds, login ratios, and logo aspect are named",
+        "No gameplay change",
     )
     require(
         "tools/lgo_playable_closure_check.sh",
-        "login_responsive_scale_cleanup",
-        "validate_lgo_login_responsive_scale_cleanup.py",
+        "runtime_ui_responsive_constants_audit",
+        "validate_lgo_runtime_ui_responsive_constants_audit.py",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0",
-        "LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_READY",
-        "LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY",
+        "LGO-RUNTIME-UI-RESPONSIVE-CONSTANTS-AUDIT-v1.0",
+        "LGO_RUNTIME_UI_RESPONSIVE_CONSTANTS_AUDIT_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-LOGIN-RESPONSIVE-SCALE-CLEANUP-PASS v1.0",
-        "LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_READY",
+        "LGO-RUNTIME-UI-RESPONSIVE-CONSTANTS-AUDIT v1.0",
+        "LGO_RUNTIME_UI_RESPONSIVE_CONSTANTS_AUDIT_READY",
     )
     check_frozen()
     if ERRORS:
-        print("LGO LOGIN RESPONSIVE SCALE CLEANUP VALIDATION FAILED", file=sys.stderr)
+        print("LGO RUNTIME UI RESPONSIVE CONSTANTS AUDIT VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_VALIDATION_PASS")
+    print("LGO_RUNTIME_UI_RESPONSIVE_CONSTANTS_AUDIT_VALIDATION_PASS")
     return 0
 
 
