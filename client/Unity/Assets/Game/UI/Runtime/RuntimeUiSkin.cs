@@ -176,5 +176,45 @@ namespace LinhGioi.UI
             field.style.backgroundColor = DeepGlass;
             ApplyEdgeFrame(field, MediumSpiritBorder, MediumGoldBorder, LightSpiritBorder, new Color(0.93f, 0.73f, 0.36f, 0.28f));
         }
+
+        internal static void ApplyPreviewPanelFrame(VisualElement preview)
+        {
+            preview.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+            ApplyRadius(preview, 8);
+            ApplyEdgeFrame(preview, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, Color.clear, Color.clear, 2f, 1f);
+            preview.style.borderRightWidth = 0;
+            preview.style.borderBottomWidth = 0;
+        }
+
+        internal static void ApplyWorldHudGroupFrame(VisualElement group, Color accent)
+        {
+            group.style.backgroundColor = DeepGlass;
+            ApplyEdgeFrame(group, accent, RuntimeArtCatalog.Gold, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.SurfaceRaised);
+        }
+
+        internal static void ApplyHudStatusCompactFrame(Label label)
+        {
+            label.style.backgroundColor = new Color(0.02f, 0.055f, 0.10f, 0.58f);
+        }
+
+        internal static void ApplySessionMenuFrame(VisualElement panel)
+        {
+            panel.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 0.96f);
+            ApplyEdgeFrame(panel, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
+        }
+
+        internal static Color SessionMenuBackground(bool compactProfile)
+        {
+            return compactProfile
+                ? new Color(0.004f, 0.018f, 0.045f, 1.0f)
+                : new Color(0.01f, 0.04f, 0.09f, 0.96f);
+        }
+
+        internal static Color WorldHudBackground(bool mobile, bool tablet, bool dialogueVisible)
+        {
+            if (mobile) return new Color(0.002f, 0.014f, 0.036f, dialogueVisible ? 0.82f : 0.66f);
+            if (tablet) return new Color(0.004f, 0.018f, 0.044f, 0.78f);
+            return RuntimeArtCatalog.Surface;
+        }
     }
 }

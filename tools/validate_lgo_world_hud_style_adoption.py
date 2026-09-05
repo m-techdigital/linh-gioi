@@ -52,47 +52,52 @@ def check_frozen() -> None:
 
 def main() -> int:
     require(
-        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO World HUD Mobile Hierarchy Polish v1",
-        "!(_isMobileProfile && !dialogueVisible)",
-        "Mathf.Clamp(viewportWidth * 0.26f, 236f, 258f)",
-        "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible)",
-        "_worldGuidanceCard.style.marginTop = mobile ? 6 : 8",
-    )
-    require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
+        "ApplyPreviewPanelFrame(VisualElement preview)",
+        "ApplyWorldHudGroupFrame(VisualElement group, Color accent)",
+        "ApplyHudStatusCompactFrame(Label label)",
+        "ApplySessionMenuFrame(VisualElement panel)",
+        "SessionMenuBackground(bool compactProfile)",
         "WorldHudBackground(bool mobile, bool tablet, bool dialogueVisible)",
-        "dialogueVisible ? 0.82f : 0.66f",
     )
     require(
-        "docs/tasks/LGO-WORLD-HUD-MOBILE-HIERARCHY-POLISH-v1.0.md",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_READY",
-        "No gameplay change",
-        "No VISUAL_RUNTIME_PASS claim",
-        "LGO-WORLD-HUD-MOBILE-HIERARCHY-EVIDENCE-REFRESH-v1.0",
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "RuntimeUiSkin.ApplyPreviewPanelFrame(preview);",
+        "RuntimeUiSkin.ApplyWorldHudGroupFrame(group, accent);",
+        "RuntimeUiSkin.ApplyHudStatusCompactFrame(label);",
+        "RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);",
+        "RuntimeUiSkin.SessionMenuBackground(mobile || tablet);",
+        "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);",
+        "LGO World HUD Action Shell V3B Skin v1",
+        "LGO Session Menu Overlay",
+    )
+    require(
+        "docs/tasks/LGO-WORLD-HUD-STYLE-ADOPTION-PASS-v1.0.md",
+        "LGO_WORLD_HUD_STYLE_ADOPTION_READY",
+        "No gameplay, combat semantics, protocol, GameData, ADR, or design-token change",
     )
     require(
         "tools/lgo_playable_closure_check.sh",
-        "world_hud_mobile_hierarchy_polish",
-        "validate_lgo_world_hud_mobile_hierarchy_polish.py",
+        "world_hud_style_adoption",
+        "validate_lgo_world_hud_style_adoption.py",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-WORLD-HUD-MOBILE-HIERARCHY-EVIDENCE-REFRESH-v1.0",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_READY",
+        "LGO-WORLD-HUD-STYLE-ADOPTION-PASS-v1.0",
+        "LGO_WORLD_HUD_STYLE_ADOPTION_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-WORLD-HUD-MOBILE-HIERARCHY-POLISH v1.0",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_READY",
+        "LGO-WORLD-HUD-STYLE-ADOPTION-PASS v1.0",
+        "LGO_WORLD_HUD_STYLE_ADOPTION_READY",
     )
     check_frozen()
     if ERRORS:
-        print("LGO WORLD HUD MOBILE HIERARCHY POLISH VALIDATION FAILED", file=sys.stderr)
+        print("LGO WORLD HUD STYLE ADOPTION VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_VALIDATION_PASS")
+    print("LGO_WORLD_HUD_STYLE_ADOPTION_VALIDATION_PASS")
     return 0
 
 

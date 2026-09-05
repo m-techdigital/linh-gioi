@@ -746,15 +746,7 @@ namespace LinhGioi.UI
             _sessionMenuPanel.style.paddingRight = 22;
             _sessionMenuPanel.style.paddingTop = 18;
             _sessionMenuPanel.style.paddingBottom = 20;
-            _sessionMenuPanel.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 0.96f);
-            _sessionMenuPanel.style.borderLeftColor = RuntimeArtCatalog.Gold;
-            _sessionMenuPanel.style.borderLeftWidth = 2;
-            _sessionMenuPanel.style.borderTopColor = RuntimeArtCatalog.Gold;
-            _sessionMenuPanel.style.borderTopWidth = 1;
-            _sessionMenuPanel.style.borderRightColor = RuntimeArtCatalog.Spirit;
-            _sessionMenuPanel.style.borderRightWidth = 1;
-            _sessionMenuPanel.style.borderBottomColor = RuntimeArtCatalog.Gold;
-            _sessionMenuPanel.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);
             _sessionMenuPanel.Add(NewSectionTitle("Menu phiên"));
             _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
             _sessionMenuStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
@@ -1160,11 +1152,7 @@ namespace LinhGioi.UI
             preview.style.minWidth = 220;
             preview.style.flexGrow = 1;
             RuntimeUiSkin.ApplyPadding(preview, 14, 12);
-            preview.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
-            RuntimeUiSkin.ApplyRadius(preview, 8);
-            RuntimeUiSkin.ApplyEdgeFrame(preview, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, Color.clear, Color.clear, 2f, 1f);
-            preview.style.borderRightWidth = 0;
-            preview.style.borderBottomWidth = 0;
+            RuntimeUiSkin.ApplyPreviewPanelFrame(preview);
             var sigil = new Label(sigilText);
             sigil.style.color = RuntimeArtCatalog.Spirit;
             sigil.style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -1211,8 +1199,7 @@ namespace LinhGioi.UI
             group.style.marginTop = 8;
             group.style.marginBottom = 8;
             RuntimeUiSkin.ApplyPadding(group, 8, 7);
-            group.style.backgroundColor = RuntimeUiSkin.DeepGlass;
-            RuntimeUiSkin.ApplyEdgeFrame(group, accent, RuntimeArtCatalog.Gold, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.SurfaceRaised);
+            RuntimeUiSkin.ApplyWorldHudGroupFrame(group, accent);
             return group;
         }
 
@@ -1224,7 +1211,7 @@ namespace LinhGioi.UI
             label.style.paddingRight = 8;
             label.style.paddingTop = 5;
             label.style.paddingBottom = 5;
-            label.style.backgroundColor = new Color(0.02f, 0.055f, 0.10f, 0.58f);
+            RuntimeUiSkin.ApplyHudStatusCompactFrame(label);
         }
 
         private static Label NewSectionTitle(string text)
@@ -1686,9 +1673,7 @@ namespace LinhGioi.UI
                 _sessionMenuPanel.style.paddingRight = mobile ? 12 : tablet ? 16 : 22;
                 _sessionMenuPanel.style.paddingTop = mobile ? 10 : tablet ? 14 : 18;
                 _sessionMenuPanel.style.paddingBottom = mobile ? 10 : tablet ? 14 : 20;
-                _sessionMenuPanel.style.backgroundColor = mobile || tablet
-                    ? new Color(0.004f, 0.018f, 0.045f, 1.0f)
-                    : new Color(0.01f, 0.04f, 0.09f, 0.96f);
+                _sessionMenuPanel.style.backgroundColor = RuntimeUiSkin.SessionMenuBackground(mobile || tablet);
             }
             if (_settingsPanel != null)
             {
@@ -1728,11 +1713,7 @@ namespace LinhGioi.UI
             _worldHud.style.paddingRight = mobile && dialogueVisible ? 7 : mobile ? 8 : 12;
             _worldHud.style.paddingTop = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;
             _worldHud.style.paddingBottom = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;
-            _worldHud.style.backgroundColor = mobile
-                ? new Color(0.002f, 0.014f, 0.036f, dialogueVisible ? 0.82f : 0.66f)
-                : tablet
-                    ? new Color(0.004f, 0.018f, 0.044f, 0.78f)
-                    : RuntimeArtCatalog.Surface;
+            _worldHud.style.backgroundColor = RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);
             if (_worldGuidanceCard != null)
             {
                 // LGO World HUD Mobile Hierarchy Polish v1: normal mobile keeps only objective and interaction priority.
