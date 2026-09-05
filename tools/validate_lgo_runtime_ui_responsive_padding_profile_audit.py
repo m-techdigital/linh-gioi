@@ -81,7 +81,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "layout.LobbyPanelPaddingHorizontal",
-        "ApplyCharacterHallListDensity(_characterList, layout)",
+        "ApplyCharacterListResponsive(_characterList, layout, width)",
         "ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity)",
         "layout.CreatePanelPaddingHorizontal",
         "layout.WorldHudPaddingHorizontal",

@@ -117,6 +117,107 @@ namespace LinhGioi.UI
             return panel;
         }
 
+        internal static VisualElement NewCharacterHallContentRow(RuntimeUiLayoutProfile layout)
+        {
+            var row = new VisualElement();
+            row.name = "LGO Character Hall Main Selection Grid V3B";
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.flexWrap = Wrap.NoWrap;
+            row.style.justifyContent = Justify.SpaceBetween;
+            ApplyCharacterHallContentResponsive(row, layout);
+            return row;
+        }
+
+        internal static void ApplyCharacterHallContentResponsive(VisualElement row, RuntimeUiLayoutProfile layout)
+        {
+            if (row == null) return;
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.flexWrap = Wrap.NoWrap;
+            RuntimeUiSkin.ApplyVerticalMargin(row, layout.LobbyContentMarginTop, layout.LobbyContentMarginBottom);
+        }
+
+        internal static VisualElement NewCharacterListPanel(RuntimeUiLayoutProfile layout)
+        {
+            var list = new VisualElement();
+            list.style.minWidth = RuntimeUiSizing.CharacterListInitialMinWidth;
+            list.style.maxWidth = RuntimeUiSizing.CharacterListMaxWidth;
+            list.style.flexGrow = 1;
+            RuntimeUiSkin.ApplyMargin(list, 0, layout.CharacterListMarginRight, 0, layout.CharacterListMarginBottom);
+            ApplyCharacterListDensity(list, layout.CharacterHallDensity);
+            RuntimeUiSkin.ApplyCharacterListFrame(list);
+            return list;
+        }
+
+        internal static void ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth)
+        {
+            if (list == null) return;
+            list.style.minWidth = layout.IsMobile ? 220 : RuntimeUiSizing.CharacterListInitialMinWidth;
+            list.style.maxWidth = layout.IsMobile
+                ? Mathf.Clamp(viewportWidth * 0.40f, 285f, 330f)
+                : layout.IsTablet ? 370 : RuntimeUiSizing.CharacterListMaxWidth;
+            list.style.marginRight = layout.CharacterListMarginRight;
+            ApplyCharacterListDensity(list, layout.CharacterHallDensity);
+        }
+
+        internal static VisualElement NewSelectedCharacterPreviewPanel()
+        {
+            var preview = NewPreviewPanel("TU SĨ", "Hồ sơ đang chọn");
+            preview.name = "LGO Character Hall Selected Cultivator Card V3B";
+            preview.style.maxWidth = RuntimeUiSizing.CharacterPreviewMaxWidth;
+            RuntimeUiSkin.ApplyCharacterPreviewFrame(preview);
+            return preview;
+        }
+
+        internal static void ApplySelectedCharacterPreviewResponsive(VisualElement preview, RuntimeUiLayoutProfile layout, int viewportWidth)
+        {
+            if (preview == null) return;
+            preview.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
+            preview.style.maxWidth = layout.IsMobile
+                ? Mathf.Clamp(viewportWidth * 0.48f, 300f, 390f)
+                : layout.IsTablet ? 334 : RuntimeUiSizing.CharacterPreviewMaxWidth;
+        }
+
+        internal static VisualElement NewCharacterProfileHero(RuntimeUiLayoutProfile layout, VisualElement portrait, VisualElement copy)
+        {
+            var hero = new VisualElement();
+            hero.name = "LGO Character Hall Selected Profile Hero V3B";
+            hero.style.flexDirection = FlexDirection.Row;
+            hero.style.alignItems = Align.Center;
+            hero.style.marginBottom = layout.SelectedPreviewHeroMarginBottom;
+            hero.Add(portrait);
+            hero.Add(copy);
+            return hero;
+        }
+
+        internal static VisualElement NewCharacterPortraitFrame(RuntimeUiLayoutProfile layout, Texture2D portraitTexture, Texture2D fallbackTexture)
+        {
+            var portrait = NewImageLayer("LGO Character Hall V3B Cultivator Portrait", portraitTexture, ScaleMode.ScaleToFit);
+            portrait.style.width = RuntimeUiSizing.CharacterPortraitWidth;
+            portrait.style.height = RuntimeUiSizing.CharacterPortraitHeight;
+            portrait.style.marginRight = layout.CharacterPortraitMarginRight;
+            RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);
+            if (portraitTexture == null)
+                portrait.Add(NewRuntimeIcon(fallbackTexture, 58, "Hồ sơ tu sĩ"));
+            return portrait;
+        }
+
+        internal static Label NewCharacterHallListHeading(string text)
+        {
+            var label = new Label(text);
+            label.name = "LGO Character Hall V3B List Heading";
+            label.style.whiteSpace = WhiteSpace.Normal;
+            RuntimeUiSkin.ApplyCharacterHallListHeading(label);
+            return label;
+        }
+
+        internal static VisualElement NewFlexibleColumn(string name = null)
+        {
+            var column = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(name)) column.name = name;
+            column.style.flexGrow = 1;
+            return column;
+        }
+
         internal static VisualElement NewEmptyCharacterCard(RuntimeUiLayoutProfile layout, Label title, Label hint)
         {
             var density = layout.CharacterHallDensity;

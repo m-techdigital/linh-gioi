@@ -480,48 +480,22 @@ namespace LinhGioi.UI
             lobbyIntro.style.unityTextAlign = TextAnchor.MiddleCenter;
             _lobbyPanel.Add(lobbyIntro);
 
-            _lobbyContent = new VisualElement();
-            _lobbyContent.name = "LGO Character Hall Main Selection Grid V3B";
-            _lobbyContent.style.flexDirection = FlexDirection.Row;
-            _lobbyContent.style.flexWrap = Wrap.NoWrap;
-            _lobbyContent.style.justifyContent = Justify.SpaceBetween;
-            RuntimeUiSkin.ApplyVerticalMargin(_lobbyContent, layout.LobbyContentMarginTop, layout.LobbyContentMarginBottom);
+            _lobbyContent = NewCharacterHallContentRow(layout);
             _lobbyPanel.Add(_lobbyContent);
 
-            _characterList = new VisualElement();
-            _characterList.style.minWidth = RuntimeUiSizing.CharacterListInitialMinWidth;
-            _characterList.style.maxWidth = RuntimeUiSizing.CharacterListMaxWidth;
-            _characterList.style.flexGrow = 1;
-            RuntimeUiSkin.ApplyMargin(_characterList, 0, layout.CharacterListMarginRight, 0, layout.CharacterListMarginBottom);
-            ApplyCharacterHallListDensity(_characterList, layout);
-            RuntimeUiSkin.ApplyCharacterListFrame(_characterList);
+            _characterList = NewCharacterListPanel(layout);
             _lobbyContent.Add(_characterList);
 
-            _selectedPreview = NewPreviewPanel("TU SĨ", "Hồ sơ đang chọn");
-            _selectedPreview.name = "LGO Character Hall Selected Cultivator Card V3B";
-            _selectedPreview.style.maxWidth = RuntimeUiSizing.CharacterPreviewMaxWidth;
-            RuntimeUiSkin.ApplyCharacterPreviewFrame(_selectedPreview);
-            var profileHero = new VisualElement();
-            profileHero.style.flexDirection = FlexDirection.Row;
-            profileHero.style.alignItems = Align.Center;
-            profileHero.style.marginBottom = layout.SelectedPreviewHeroMarginBottom;
+            _selectedPreview = NewSelectedCharacterPreviewPanel();
             var portraitTexture = LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture;
-            var portrait = NewImageLayer("LGO Character Hall V3B Cultivator Portrait", portraitTexture, ScaleMode.ScaleToFit);
-            portrait.style.width = RuntimeUiSizing.CharacterPortraitWidth;
-            portrait.style.height = RuntimeUiSizing.CharacterPortraitHeight;
-            portrait.style.marginRight = layout.CharacterPortraitMarginRight;
-            RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);
-            if (portraitTexture == null)
-                portrait.Add(NewRuntimeIcon(LgoVisualAssetRegistryV2.IconAccountTexture, 58, "Hồ sơ tu sĩ"));
-            profileHero.Add(portrait);
-            var profileCopy = new VisualElement();
-            profileCopy.style.flexGrow = 1;
+            var portrait = NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture);
+            var profileCopy = NewFlexibleColumn("LGO Character Hall Selected Profile Copy V3B");
             _selectedName = new Label("Chưa chọn nhân vật");
             RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, RuntimeUiTypography.SelectedCharacterNameFontSize, true);
             profileCopy.Add(_selectedName);
             _selectedMeta = NewMutedLabel("Tạo một tu sĩ để bước vào Linh Giới.");
             profileCopy.Add(_selectedMeta);
-            profileHero.Add(profileCopy);
+            var profileHero = NewCharacterProfileHero(layout, portrait, profileCopy);
             _selectedPreview.Add(profileHero);
             _selectedStatus = NewCharacterHallStatusLabel("Trạng thái: Chọn tu sĩ trước khi vào sân luyện.", RuntimeArtCatalog.Spirit, layout);
             _selectedObjective = NewCharacterHallStatusLabel("Mục tiêu: Bước qua Linh Môn, kiểm tra HUD, rồi lưu vị trí.", RuntimeArtCatalog.Gold, layout);
@@ -772,7 +746,7 @@ namespace LinhGioi.UI
         {
             _characters = await _client.ListCharactersAsync(_accountState.accountId, _shutdown.Token);
             _characterList.Clear();
-            _characterList.Add(NewStatusLabel(_characters.Length == 0 ? "Chưa có nhân vật. Tạo tu sĩ đầu tiên." : "Danh sách tu sĩ", RuntimeArtCatalog.Spirit));
+            _characterList.Add(NewCharacterHallListHeading(_characters.Length == 0 ? "Chưa có nhân vật. Tạo tu sĩ đầu tiên." : "Danh sách tu sĩ"));
             if (_characters.Length == 0)
             {
                 var layout = CurrentLayoutProfile();
@@ -1237,10 +1211,7 @@ namespace LinhGioi.UI
                 _lobbyIntro.style.fontSize = mobile ? RuntimeUiTypography.LobbyIntroMobileFontSize : RuntimeUiTypography.LobbyIntroDesktopFontSize;
                 _lobbyIntro.style.marginBottom = layout.LobbyIntroMarginBottom;
             }
-            _characterList.style.minWidth = mobile ? 220 : 280;
-            _characterList.style.maxWidth = mobile ? Mathf.Clamp(width * 0.40f, 285f, 330f) : tablet ? 370 : 390;
-            _characterList.style.marginRight = layout.CharacterListMarginRight;
-            ApplyCharacterHallListDensity(_characterList, layout);
+            ApplyCharacterListResponsive(_characterList, layout, width);
             if (_emptyCharacterCard != null)
             {
                 ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity);
@@ -1252,14 +1223,11 @@ namespace LinhGioi.UI
             }
             if (_lobbyContent != null)
             {
-                _lobbyContent.style.flexDirection = FlexDirection.Row;
-                _lobbyContent.style.flexWrap = Wrap.NoWrap;
-                RuntimeUiSkin.ApplyVerticalMargin(_lobbyContent, layout.LobbyContentMarginTop, layout.LobbyContentMarginBottom);
+                ApplyCharacterHallContentResponsive(_lobbyContent, layout);
             }
             if (_selectedPreview != null)
             {
-                _selectedPreview.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
-                _selectedPreview.style.maxWidth = mobile ? Mathf.Clamp(width * 0.48f, 300f, 390f) : tablet ? 334 : 350;
+                ApplySelectedCharacterPreviewResponsive(_selectedPreview, layout, width);
             }
             if (_createPanel != null)
             {

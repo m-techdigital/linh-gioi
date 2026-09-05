@@ -80,10 +80,16 @@ def main() -> int:
     controller = require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "NewCharacterHallStatusLabel",
-        "ApplyCharacterHallListDensity",
+        "NewCharacterListPanel(layout)",
+        "ApplyCharacterListResponsive(_characterList, layout, width)",
         "layout.CharacterHallDensity",
     )
-    if controller.count("ApplyCharacterHallListDensity(_characterList, layout);") < 2:
+    factory = require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "NewCharacterListPanel(RuntimeUiLayoutProfile layout)",
+        "ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth)",
+    )
+    if factory.count("ApplyCharacterListDensity(list, layout.CharacterHallDensity);") < 2:
         ERRORS.append("Character Hall list density should be applied during build and responsive refresh")
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

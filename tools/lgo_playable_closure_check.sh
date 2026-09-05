@@ -300,6 +300,12 @@ source_only() {
   if [[ -f tools/validate_lgo_character_create_form_presentation.py ]]; then
     run_phase character_create_form_presentation python3.12 tools/validate_lgo_character_create_form_presentation.py
   fi
+  if [[ -f tools/validate_lgo_character_hall_v3b_visual_polish.py ]]; then
+    run_phase character_hall_v3b_visual_polish python3.12 tools/validate_lgo_character_hall_v3b_visual_polish.py
+  fi
+  if [[ -f tools/validate_lgo_character_hall_v3b_visual_polish_evidence_refresh.py ]]; then
+    run_phase character_hall_v3b_visual_polish_evidence_refresh python3.12 tools/validate_lgo_character_hall_v3b_visual_polish_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_character_hall_responsive_evidence_refresh.py ]]; then
     run_phase character_hall_responsive_evidence_refresh python3.12 tools/validate_lgo_character_hall_responsive_evidence_refresh.py
   fi
@@ -542,6 +548,12 @@ source_only() {
   fi
   if [[ -f tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py ]]; then
     run_phase runtime_ui_image_layer_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py
+  fi
+  if [[ -f tools/validate_lgo_post_login_runtime_ui_reuse_cleanup.py ]]; then
+    run_phase post_login_runtime_ui_reuse_cleanup python3.12 tools/validate_lgo_post_login_runtime_ui_reuse_cleanup.py
+  fi
+  if [[ -f tools/validate_lgo_post_login_runtime_ui_reuse_evidence_refresh.py ]]; then
+    run_phase post_login_runtime_ui_reuse_evidence_refresh python3.12 tools/validate_lgo_post_login_runtime_ui_reuse_evidence_refresh.py
   fi
   if [[ -f tools/validate_lgo_runtime_ui_style_debt_followup_audit.py ]]; then
     run_phase runtime_ui_style_debt_followup_audit python3.12 tools/validate_lgo_runtime_ui_style_debt_followup_audit.py
@@ -839,6 +851,8 @@ source_only() {
     tools/validate_lgo_character_hall_mobile_selected_cta_hierarchy.py \
     tools/validate_lgo_character_hall_mobile_selected_cta_evidence_refresh.py \
     tools/validate_lgo_character_create_form_presentation.py \
+    tools/validate_lgo_character_hall_v3b_visual_polish.py \
+    tools/validate_lgo_character_hall_v3b_visual_polish_evidence_refresh.py \
     tools/validate_lgo_character_hall_responsive_evidence_refresh.py \
     tools/validate_lgo_visual_runtime_fast_profile_reuse.py \
     tools/validate_lgo_world_hud_action_shell_v3b_skin.py \
@@ -887,6 +901,8 @@ source_only() {
     tools/validate_lgo_runtime_ui_controller_local_style_drift_scan.py \
     tools/validate_lgo_runtime_ui_controller_local_style_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py \
+    tools/validate_lgo_post_login_runtime_ui_reuse_cleanup.py \
+    tools/validate_lgo_post_login_runtime_ui_reuse_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_style_debt_followup_audit.py \
     tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py \
     tools/validate_lgo_combat_button_state_readability_polish.py \

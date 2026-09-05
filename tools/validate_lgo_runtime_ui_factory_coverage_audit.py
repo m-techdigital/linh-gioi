@@ -69,6 +69,10 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "NewImageLayer(\"LGO Login Gate Keeper NPC V3B\"",
         "NewImageLayer(\"LGO Login Gate Entry V3B Final Logo Text Lockup\"",
+        "NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture)",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "NewImageLayer(\"LGO Character Hall V3B Cultivator Portrait\"",
     )
     reject(

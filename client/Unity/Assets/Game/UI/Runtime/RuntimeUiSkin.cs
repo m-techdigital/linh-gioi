@@ -237,12 +237,22 @@ namespace LinhGioi.UI
         internal static void ApplyCharacterHallPanelFrame(VisualElement panel)
         {
             panel.style.backgroundColor = new Color(0.005f, 0.025f, 0.055f, 0.82f);
+            var texture = LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture;
+            if (texture != null)
+            {
+                panel.style.backgroundImage = new StyleBackground(texture);
+                panel.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
+            }
+            ApplyRadius(panel, 12);
             ApplyEdgeFrame(panel, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
+            panel.style.borderTopWidth = 2;
+            panel.style.borderBottomWidth = 2;
         }
 
         internal static void ApplySubtleNestedFrame(VisualElement element, Color accent, float alpha = 0.32f)
         {
-            element.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.64f);
+            element.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.68f);
+            ApplyRadius(element, 10);
             ApplyEdgeFrame(
                 element,
                 new Color(accent.r, accent.g, accent.b, alpha),
@@ -256,27 +266,43 @@ namespace LinhGioi.UI
         internal static void ApplyCharacterListFrame(VisualElement list)
         {
             ApplySubtleNestedFrame(list, RuntimeArtCatalog.Gold, 0.34f);
-            list.style.borderRightWidth = 0;
-            list.style.borderBottomWidth = 0;
+            list.style.borderTopWidth = 1;
+            list.style.borderBottomWidth = 1;
         }
 
         internal static void ApplyCharacterPreviewFrame(VisualElement preview)
         {
             ApplySubtleNestedFrame(preview, RuntimeArtCatalog.Spirit, 0.38f);
+            preview.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.74f);
+            preview.style.borderTopColor = RuntimeArtCatalog.Gold;
+            preview.style.borderBottomColor = RuntimeArtCatalog.Gold;
         }
 
         internal static void ApplyCharacterCreateFrame(VisualElement panel)
         {
             ApplySubtleNestedFrame(panel, RuntimeArtCatalog.Spirit, 0.30f);
-            panel.style.borderRightWidth = 0;
-            panel.style.borderBottomWidth = 0;
+            panel.style.backgroundColor = new Color(0.0f, 0.018f, 0.042f, 0.60f);
+            panel.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.38f);
+            panel.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.26f);
         }
 
         internal static void ApplyCharacterPortraitFrame(VisualElement portrait)
         {
             portrait.style.backgroundColor = new Color(0.0f, 0.015f, 0.035f, 0.48f);
+            ApplyRadius(portrait, 10);
             ApplyEdgeFrame(portrait, Color.clear, RuntimeArtCatalog.Gold, Color.clear, RuntimeArtCatalog.Spirit, 0f, 1f);
             portrait.style.borderRightWidth = 0;
+        }
+
+        internal static void ApplyCharacterHallListHeading(Label label)
+        {
+            ApplyText(label, RuntimeArtCatalog.Spirit, RuntimeUiTypography.BadgeValueFontSize, true);
+            ApplyPadding(label, 12, 8);
+            label.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.72f);
+            label.style.marginBottom = 8;
+            ApplyRadius(label, 8);
+            ApplyEdgeFrame(label, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, Color.clear, RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
+            label.style.borderRightWidth = 0;
         }
 
         internal static void ApplyLobbyInputFrame(TextField field)

@@ -95,7 +95,7 @@ def main() -> int:
         "RuntimeUiSizing.LoginNpcStageWidth",
         "RuntimeUiSizing.LoginGateKeeperHeight",
         "RuntimeUiSizing.LoginButtonMaxWidth",
-        "RuntimeUiSizing.CharacterPortraitHeight",
+        "NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
@@ -103,6 +103,7 @@ def main() -> int:
         "RuntimeUiTypography.SectionTitleFontSize",
         "RuntimeUiSpacing.LoginOrnamentWidthPercent",
         "RuntimeUiSpacing.PrimaryButtonMinHeight",
+        "RuntimeUiSizing.CharacterPortraitHeight",
         "RuntimeUiSizing.IconButtonMinWidth",
     )
     reject(

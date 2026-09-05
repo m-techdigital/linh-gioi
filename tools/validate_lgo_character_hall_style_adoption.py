@@ -63,19 +63,25 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_lobbyPanel = NewCharacterHallPanel(layout);",
-        "RuntimeUiSkin.ApplyCharacterListFrame(_characterList);",
-        "RuntimeUiSkin.ApplyCharacterPreviewFrame(_selectedPreview);",
-        "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
+        "_characterList = NewCharacterListPanel(layout);",
+        "_selectedPreview = NewSelectedCharacterPreviewPanel();",
+        "var portrait = NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture);",
         "_createPanel = NewCharacterCreatePanel(layout);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "NewCharacterHallPanel(RuntimeUiLayoutProfile layout)",
         "NewCharacterCreatePanel(RuntimeUiLayoutProfile layout)",
+        "NewCharacterListPanel(RuntimeUiLayoutProfile layout)",
+        "NewSelectedCharacterPreviewPanel()",
+        "NewCharacterPortraitFrame(RuntimeUiLayoutProfile layout, Texture2D portraitTexture, Texture2D fallbackTexture)",
         "LGO Character Hall V3B Composition Panel",
         "LGO Character Hall Create Cultivator Panel V3B",
         "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);",
+        "RuntimeUiSkin.ApplyCharacterListFrame(list);",
+        "RuntimeUiSkin.ApplyCharacterPreviewFrame(preview);",
         "RuntimeUiSkin.ApplyCharacterCreateFrame(panel);",
+        "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
         "RuntimeUiSkin.ApplyLobbyInputFrame(field);",
     )
     require(
