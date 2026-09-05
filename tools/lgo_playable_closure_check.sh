@@ -585,6 +585,12 @@ source_only() {
   if [[ -f tools/validate_lgo_combat_button_state_readability_polish.py ]]; then
     run_phase combat_button_state_readability_polish python3.12 tools/validate_lgo_combat_button_state_readability_polish.py
   fi
+  if [[ -f tools/validate_lgo_combat_button_cooldown_visual_lightness.py ]]; then
+    run_phase combat_button_cooldown_visual_lightness python3.12 tools/validate_lgo_combat_button_cooldown_visual_lightness.py
+  fi
+  if [[ -f tools/validate_lgo_combat_button_cooldown_visual_evidence_refresh.py ]]; then
+    run_phase combat_button_cooldown_visual_evidence_refresh python3.12 tools/validate_lgo_combat_button_cooldown_visual_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_combat_button_state_evidence_refresh.py ]]; then
     run_phase combat_button_state_evidence_refresh python3.12 tools/validate_lgo_combat_button_state_evidence_refresh.py
   fi
@@ -934,6 +940,8 @@ source_only() {
     tools/validate_lgo_runtime_ui_style_debt_followup_audit.py \
     tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py \
     tools/validate_lgo_combat_button_state_readability_polish.py \
+    tools/validate_lgo_combat_button_cooldown_visual_lightness.py \
+    tools/validate_lgo_combat_button_cooldown_visual_evidence_refresh.py \
     tools/validate_lgo_combat_button_state_evidence_refresh.py \
     tools/validate_lgo_combat_button_mobile_responsive_evidence.py \
     tools/validate_lgo_world_hud_component_boundary_audit.py \

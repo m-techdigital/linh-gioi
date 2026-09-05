@@ -443,7 +443,26 @@ namespace LinhGioi.UI
         internal static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)
         {
             if (button == null) return;
-            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
+            if (coolingDown)
+            {
+                button.style.backgroundImage = StyleKeyword.None;
+                button.style.backgroundColor = new Color(0.018f, 0.055f, 0.070f, 0.76f);
+                button.style.color = RuntimeArtCatalog.Muted;
+                RuntimeUiSkin.ApplyRadius(button, RuntimeUiSizing.BaseButtonRadius);
+                RuntimeUiSkin.ApplyEdgeFrame(
+                    button,
+                    new Color(0.93f, 0.73f, 0.36f, 0.42f),
+                    new Color(0.14f, 0.78f, 0.90f, 0.28f),
+                    new Color(0.93f, 0.73f, 0.36f, 0.16f),
+                    new Color(0.14f, 0.78f, 0.90f, 0.18f),
+                    1f,
+                    1f);
+            }
+            else
+            {
+                if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
+                button.style.color = RuntimeArtCatalog.Text;
+            }
             RuntimeUiSkin.ApplyButtonMetrics(
                 button,
                 coolingDown ? RuntimeUiSpacing.CombatButtonCooldownMinWidth : RuntimeUiSpacing.CombatButtonReadyMinWidth,
