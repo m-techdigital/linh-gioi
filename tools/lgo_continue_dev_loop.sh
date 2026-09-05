@@ -6,6 +6,7 @@ LOG_DIR="$ROOT/build/dev-loop"
 LOG="$LOG_DIR/latest.log"
 VISUAL_TIMEOUT_SECONDS="${LGO_DEV_LOOP_VISUAL_TIMEOUT_SECONDS:-${LGO_VISUAL_RUNTIME_TIMEOUT_SECONDS:-300}}"
 GATE_PROFILE="${LGO_DEV_LOOP_GATE_PROFILE:-quick}"
+CONTEXT_MODE="${LGO_DEV_LOOP_CONTEXT_MODE:-quick}"
 
 mkdir -p "$LOG_DIR"
 cd "$ROOT"
@@ -16,6 +17,53 @@ run_logged() {
   echo "LGO_DEV_LOOP_PHASE_START $label"
   "$@"
   echo "LGO_DEV_LOOP_PHASE_PASS $label"
+}
+
+print_markdown_section() {
+  local file="$1"
+  local heading="$2"
+  awk -v heading="$heading" '
+    $0 == heading { in_section = 1; print; next }
+    in_section && /^## / { exit }
+    in_section { print }
+  ' "$file"
+}
+
+print_context() {
+  case "$CONTEXT_MODE" in
+    quick)
+      echo "LGO_DEV_LOOP_CONTEXT_MODE quick"
+      echo "LGO_PROJECT_STATE_QUICK_BEGIN"
+      sed -n '1,80p' "$ROOT/docs/execution/PROJECT-STATE.md"
+      echo "LGO_PROJECT_STATE_QUICK_END"
+      echo "LGO_NEXT_ACTION_QUICK_BEGIN"
+      print_markdown_section "$ROOT/docs/execution/NEXT-ACTION.md" "## Quick Resume"
+      print_markdown_section "$ROOT/docs/execution/NEXT-ACTION.md" "## Next task"
+      print_markdown_section "$ROOT/docs/execution/NEXT-ACTION.md" "## Current blocker"
+      echo "LGO_NEXT_ACTION_QUICK_END"
+      if [[ -f "$ROOT/docs/execution/TASK-LEDGER-ROLLUP.md" ]]; then
+        echo "LGO_TASK_LEDGER_ROLLUP_BEGIN"
+        sed -n '1,140p' "$ROOT/docs/execution/TASK-LEDGER-ROLLUP.md"
+        echo "LGO_TASK_LEDGER_ROLLUP_END"
+      fi
+      ;;
+    full)
+      echo "LGO_DEV_LOOP_CONTEXT_MODE full"
+      echo "LGO_PROJECT_STATE_BEGIN"
+      sed -n '1,180p' "$ROOT/docs/execution/PROJECT-STATE.md"
+      echo "LGO_PROJECT_STATE_END"
+      echo "LGO_NEXT_ACTION_BEGIN"
+      sed -n '1,220p' "$ROOT/docs/execution/NEXT-ACTION.md"
+      echo "LGO_NEXT_ACTION_END"
+      ;;
+    none)
+      echo "LGO_DEV_LOOP_CONTEXT_MODE none"
+      ;;
+    *)
+      echo "FIX_REQUIRED unsupported LGO_DEV_LOOP_CONTEXT_MODE=$CONTEXT_MODE; expected quick, full, or none"
+      exit 2
+      ;;
+  esac
 }
 
 run_visual_review_if_available() {
@@ -97,13 +145,7 @@ run_source_validation_profile() {
   echo "LGO_REPO_ROOT $ROOT"
   test "$(basename "$PWD")" = "LinhGioiOnline"
 
-  echo "LGO_PROJECT_STATE_BEGIN"
-  sed -n '1,180p' "$ROOT/docs/execution/PROJECT-STATE.md"
-  echo "LGO_PROJECT_STATE_END"
-
-  echo "LGO_NEXT_ACTION_BEGIN"
-  sed -n '1,220p' "$ROOT/docs/execution/NEXT-ACTION.md"
-  echo "LGO_NEXT_ACTION_END"
+  print_context
 
   run_source_validation_profile
   run_visual_review_if_available

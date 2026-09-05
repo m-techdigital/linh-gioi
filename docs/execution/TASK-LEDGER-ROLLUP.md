@@ -5,7 +5,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 ## Quick State
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Next task: `LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION-v1.0`
+- Next task: `LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0`
 - Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.
 - Purpose: scan recent work quickly without deleting historical task rows or marker coverage.
 
@@ -13,7 +13,6 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 
 | Recent | Task ID | Status / Decision | Next allowed step |
 |---:|---|---|---|
-| 223 | LGO-RUNTIME-UI-FACTORY-CHARACTER-HALL-CLEANUP-FOLLOWUP v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_FACTORY_CHARACTER_HALL_CLEANUP_FOLLOWUP_READY`: removed the unused controller-local Character Hall list-density wrapper after density ownership moved to `RuntimeUiFactory` | Continue with `LGO-WORLD-HUD-RUNTIME-UI-REUSE-AUDIT-v1.0` |
 | 224 | LGO-WORLD-HUD-RUNTIME-UI-REUSE-AUDIT v1.0 | source ready / no visual pass claim; `LGO_WORLD_HUD_RUNTIME_UI_REUSE_AUDIT_READY`: World HUD hidden pose/VFX/skin-source evidence labels now reuse `RuntimeUiFactory.NewHiddenStatusLabel` instead of repeated controller-local creation/hiding | Continue with `LGO-WORLD-HUD-RUNTIME-UI-REUSE-EVIDENCE-REFRESH-v1.0` |
 | 225 | LGO-WORLD-HUD-RUNTIME-UI-REUSE-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_WORLD_HUD_RUNTIME_UI_REUSE_EVIDENCE_REFRESH_READY`: World Hub/NPC Dialogue runtime screenshots refreshed after hidden-status-label helper extraction; UI is stable/readable but still needs fantasy panel hierarchy polish | Continue with `LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH-v1.0` |
 | 226 | LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH v1.0 | source ready / no visual pass claim; `LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_READY`: World HUD root/group frames now use calmer V3B-style glass, avoid stretched decorative texture behind dense copy, and keep clearer nested hierarchy without gameplay changes | Continue with `LGO-WORLD-HUD-FANTASY-PANEL-EVIDENCE-REFRESH-v1.0` |
@@ -31,6 +30,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 | 238 | LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX v1.0 | source ready / evidence reviewed / no visual pass claim; `LGO_RUNTIME_UI_QUALITY_DEBT_FIRST_FIX_READY`: World Hub now has lightweight procedural cultivation-stage glow, directional path glows, and focus glows under key interactables; screenshots reviewed as improved but still placeholder-quality, no production/final visual claim | Continue with `LGO-CHARACTER-HALL-ACTION-DENSITY-FIRST-FIX-v1.0` |
 | 239 | LGO-CHARACTER-HALL-ACTION-DENSITY-FIRST-FIX v1.0 | source ready / evidence reviewed / no visual pass claim; `LGO_CHARACTER_HALL_ACTION_DENSITY_FIRST_FIX_READY`: Character Hall shell no longer stretches ornate panel art over the full screen; glass/code-side frame improves hierarchy and mobile readability without changing character flow | Continue with `LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS-v1.0` |
 | 240 | LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS v1.0 | source ready / evidence reviewed / no visual pass claim; `LGO_RUNTIME_UI_CONTROLLER_SIZE_REDUCTION_READY`: procedural world ground, shadows, focus glows, and path glows now live outside the playable world controller; runtime screenshot capture remains stable, no production/final visual claim | Continue with `LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION-v1.0` |
+| 241 | LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION v1.0 | source/runtime tooling ready / no visual pass claim; `LGO_WORKFLOW_FAST_GATE_NOISE_REDUCTION_READY`: routine dev-loop context now uses Quick Resume plus ledger rollup, fast server build output is logged quietly, and visual runtime review restores Unity ProjectSettings after capture | Continue with `LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0` |
 
 ## Operating Notes
 

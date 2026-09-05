@@ -16,6 +16,7 @@ SCREEN_WIDTH="${LGO_VISUAL_RUNTIME_WIDTH:-1920}"
 SCREEN_HEIGHT="${LGO_VISUAL_RUNTIME_HEIGHT:-1080}"
 PLAYER_BUILD_MODE="${LGO_VISUAL_RUNTIME_PLAYER_BUILD:-build}"
 API_PID=""
+PROJECT_SETTINGS_SNAPSHOT_DIR=""
 export PYTHONDONTWRITEBYTECODE=1
 
 cd "$ROOT"
@@ -73,7 +74,28 @@ cleanup_runtime_processes() {
   fi
 }
 
-trap cleanup_runtime_processes EXIT
+snapshot_unity_project_settings() {
+  mkdir -p "$ROOT/build"
+  PROJECT_SETTINGS_SNAPSHOT_DIR="$(mktemp -d "$ROOT/build/lgo-projectsettings-snapshot.XXXXXX")"
+  mkdir -p "$PROJECT_SETTINGS_SNAPSHOT_DIR/ProjectSettings"
+  cp "$ROOT/client/Unity/ProjectSettings/GraphicsSettings.asset" "$PROJECT_SETTINGS_SNAPSHOT_DIR/ProjectSettings/GraphicsSettings.asset"
+  cp "$ROOT/client/Unity/ProjectSettings/QualitySettings.asset" "$PROJECT_SETTINGS_SNAPSHOT_DIR/ProjectSettings/QualitySettings.asset"
+}
+
+restore_unity_project_settings() {
+  if [[ -n "$PROJECT_SETTINGS_SNAPSHOT_DIR" && -d "$PROJECT_SETTINGS_SNAPSHOT_DIR" ]]; then
+    cp "$PROJECT_SETTINGS_SNAPSHOT_DIR/ProjectSettings/GraphicsSettings.asset" "$ROOT/client/Unity/ProjectSettings/GraphicsSettings.asset"
+    cp "$PROJECT_SETTINGS_SNAPSHOT_DIR/ProjectSettings/QualitySettings.asset" "$ROOT/client/Unity/ProjectSettings/QualitySettings.asset"
+    rm -rf "$PROJECT_SETTINGS_SNAPSHOT_DIR"
+  fi
+}
+
+cleanup_all() {
+  cleanup_runtime_processes
+  restore_unity_project_settings
+}
+
+trap cleanup_all EXIT
 
 cleanup_outputs() {
   python3.12 - "$OUT_DIR" <<'PY'
@@ -150,6 +172,7 @@ prepare_server_runtime() {
       ;;
     fast)
       echo "LGO_VISUAL_RUNTIME_REVIEW_SERVER_BUILD fast"
+      set +e
       (
         cd "$ROOT/server"
         ./scripts/require-java-25.sh
@@ -159,7 +182,15 @@ prepare_server_runtime() {
           exit 3
         fi
         mvn -B -ntp -pl shared,api -am package -DskipTests
-      )
+      ) > "$OUT_DIR/server-build.log" 2>&1
+      local server_status="$?"
+      set -e
+      if [[ "$server_status" -ne 0 ]]; then
+        echo "FIX_REQUIRED server build failed; see $OUT_DIR/server-build.log" >&2
+        tail -n 80 "$OUT_DIR/server-build.log" >&2
+        exit "$server_status"
+      fi
+      echo "LGO_VISUAL_RUNTIME_REVIEW_SERVER_BUILD_READY log=$OUT_DIR/server-build.log"
       ;;
     skip)
       echo "LGO_VISUAL_RUNTIME_REVIEW_SERVER_BUILD skip"
@@ -184,6 +215,7 @@ if [[ -x "$PROJECT_PROTOC" && -f "$PROJECT_PROTOC_SHA" ]]; then
 fi
 
 cleanup_outputs
+snapshot_unity_project_settings
 stop_api_on_port
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PROFILE $PROFILE ${SCREEN_WIDTH}x${SCREEN_HEIGHT}"

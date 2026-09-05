@@ -81,12 +81,14 @@ Every round instructs Codex to read:
 
 - `AGENTS.md`
 - `docs/execution/NEXT-ACTION.md`
-- `docs/execution/TASK-LEDGER.md`
+- `docs/execution/TASK-LEDGER-ROLLUP.md`
+
+The full `docs/execution/TASK-LEDGER.md` is append-only and can be long; read it only when the rollup does not answer the current question.
 
 Then it performs one coherent batch:
 
 ```text
-analyze -> implement -> integrate -> cleanup -> validate -> update evidence/report -> update NEXT-ACTION.md -> update TASK-LEDGER.md -> write status.json
+analyze -> implement -> integrate -> cleanup -> validate -> update evidence/report -> update NEXT-ACTION.md -> append TASK-LEDGER.md for real closed batches -> regenerate TASK-LEDGER-ROLLUP.md -> write status.json
 ```
 
 The round is explicitly non-interactive. Codex must not request approval or escalation. If localhost sockets, Unity/player launch, video capture, or another runtime permission is blocked by the current sandbox, Codex must write `status.json` with the exact blocker and evidence path instead of waiting for user input.

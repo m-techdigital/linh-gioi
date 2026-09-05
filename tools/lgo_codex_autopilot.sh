@@ -62,9 +62,11 @@ Read first:
 - AGENTS.md
 - docs/execution/PROJECT-STATE.md
 - docs/execution/NEXT-ACTION.md
-- docs/execution/TASK-LEDGER.md
+- docs/execution/TASK-LEDGER-ROLLUP.md
 - docs/execution/CODEX-CONTINUOUS-WORKFLOW.md
 - docs/execution/CODEX-AUTOPILOT.md
+
+Read `docs/execution/TASK-LEDGER.md` only when the rollup is insufficient for the current task. Prefer the Quick Resume block, Next task section, and rollup to reduce noisy context and token usage.
 
 Continue Linh Giới Online development.
 
@@ -73,7 +75,7 @@ Use Vietnamese for owner-facing progress summaries, docs/status reasons, handoff
 Do not stop after one small task if a valid next task exists. Work like a senior local project agent, not like a one-command wrapper.
 
 Complete one coherent batch:
-analyze -> implement -> integrate -> cleanup -> validate -> update evidence/report -> update NEXT-ACTION.md -> update TASK-LEDGER.md -> write build/codex-autopilot/status.json.
+analyze -> implement -> integrate -> cleanup -> validate -> update evidence/report -> update NEXT-ACTION.md -> append TASK-LEDGER.md only for a real closed batch -> regenerate TASK-LEDGER-ROLLUP.md -> write build/codex-autopilot/status.json.
 
 This is a non-interactive autopilot round. Do not request approval or escalation. If a command cannot run because the sandbox blocks local sockets, Unity/player launch, video capture, or another runtime permission, classify it honestly in status.json instead of waiting for user input.
 

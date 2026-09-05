@@ -5,8 +5,8 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION-v1.0`.
-- Current reason: World Hub procedural visual generation has been extracted from the playable world controller and refreshed runtime evidence confirms the scene remains stable; continue by reducing validation/output noise so future batches spend less time and token budget on repeated long logs.
+- Active task: `LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0`.
+- Current reason: Dev-loop/autopilot context loading now uses quick resume plus ledger rollup, fast server build output is captured to a log, and visual runtime capture no longer leaves Unity ProjectSettings churn; continue by finding the next source hotspot that can be reduced without changing gameplay.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -45,13 +45,15 @@ Current focus update: Character Hall no longer stretches the ornate V3B panel te
 
 Current focus update: World procedural ground texture, actor shadows, focus glows, and path glows now live in `WorldProceduralVisuals` under `LGO_RUNTIME_UI_CONTROLLER_SIZE_REDUCTION_READY`; `PlayableWorldController` is smaller and runtime screenshot capture remains stable, with no `VISUAL_RUNTIME_PASS` claim.
 
+Current focus update: Dev-loop/autopilot output now defaults to compact context and fast visual runtime server build logs under `LGO_WORKFLOW_FAST_GATE_NOISE_REDUCTION_READY`; visual capture also snapshots/restores Unity ProjectSettings so evidence runs do not pollute source diffs.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION-v1.0`
+`LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0`
 
-Continue with a focused workflow pass that reduces noisy validation output and avoids repeated full builds when a source-only change is already covered by fast gates. Do not weaken gates or hide failures; add concise summaries/fast profiles only where the existing scripts can still fail honestly. Marker ready from the previous runtime UI fix: `LGO_RUNTIME_UI_CONTROLLER_SIZE_REDUCTION_READY`.
+Continue with a focused hotspot audit of runtime UI/world source size, duplication, and ownership drift. Prefer extracting or deleting code that clearly lowers future iteration cost while preserving gameplay/account/character flow and current visual behavior. Marker ready from the previous workflow fix: `LGO_WORKFLOW_FAST_GATE_NOISE_REDUCTION_READY`.
 
 ## Current blocker
 

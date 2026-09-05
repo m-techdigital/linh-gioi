@@ -8,7 +8,7 @@ This repository uses persistent continuous-work mode. Read this file before maki
 - In this chat, operate in full continuous-work mode within safe project boundaries: analyze, implement, integrate, clean up, validate, review evidence, update state files, commit/push safe checkpoints, then move to the next roadmap-valid task.
 - If runtime/tooling is blocked but other source-safe work remains, record the blocker and evidence path, then continue with a valid task that does not depend on that blocked gate.
 - After each task: validate the change, update report/evidence as needed, update `docs/execution/NEXT-ACTION.md`, then continue to the next valid task.
-- Use `docs/execution/PROJECT-STATE.md`, `docs/execution/NEXT-ACTION.md`, and `docs/execution/TASK-LEDGER.md` as the handoff spine for future sessions.
+- Use `docs/execution/PROJECT-STATE.md`, `docs/execution/NEXT-ACTION.md`, and `docs/execution/TASK-LEDGER-ROLLUP.md` as the fast handoff spine for future sessions; open full `TASK-LEDGER.md` only when the rollup is insufficient.
 - When running under autopilot, write `build/codex-autopilot/status.json` at the end of each coherent batch.
 - If `docs/execution/NEXT-ACTION.md` still contains a valid next task, autopilot status must be `CONTINUE`, not `DONE`.
 - Under `tools/lgo_codex_autopilot.sh`, never request approval or escalation; classify blocked local sockets, Unity/player launch, video capture, or runtime permissions in `status.json` instead of waiting for user input.
@@ -23,6 +23,7 @@ This repository uses persistent continuous-work mode. Read this file before maki
 - If AI image generation is needed but unavailable in Codex CLI, write an asset request/brief and continue with asset mapping, compression, import settings, UI wiring, and validators that do not require image generation.
 - Keep git history clean during continuous work: group related changes into one coherent checkpoint commit after validation, avoid spam commits for tiny edits, and push only through the configured supervisor path.
 - Default to fewer commits: commit only after a coherent feature/phase/tooling batch has passed validation, or when the owner explicitly requests handoff/checkpoint packaging. Do not commit merely because one small validator or text edit finished.
+- Keep long validation and state dumps concise by default. Use quick/rollup summaries for routine work, and switch to verbose logs only when diagnosing a failure.
 - Do not run validation gates in parallel when they share mutable outputs, especially visual evidence directories under `build/visual-evidence/**`; run those phases sequentially to avoid false missing-evidence failures.
 - Do not commit generated caches, Unity `Library/Temp/Logs`, pycache, local toolchains, or bulky evidence artifacts unless a task explicitly owns the artifact.
 - Prefer source/runtime evidence over assumptions. Never claim PASS from source inspection only.
