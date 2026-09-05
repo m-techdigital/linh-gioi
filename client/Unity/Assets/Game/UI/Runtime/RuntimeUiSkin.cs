@@ -87,21 +87,27 @@ namespace LinhGioi.UI
             ApplyRadius(element, 18);
             ApplyEdgeFrame(
                 element,
-                new Color(0.14f, 0.78f, 0.90f, 0.10f),
-                LightGoldBorder,
-                new Color(0.93f, 0.73f, 0.36f, 0.12f),
-                new Color(0.14f, 0.78f, 0.90f, 0.10f),
+                new Color(0.14f, 0.78f, 0.90f, 0.24f),
+                new Color(0.93f, 0.73f, 0.36f, 0.42f),
+                new Color(0.93f, 0.73f, 0.36f, 0.26f),
+                new Color(0.14f, 0.78f, 0.90f, 0.30f),
                 1f,
                 1f);
+            element.style.borderTopWidth = 2;
+            element.style.borderBottomWidth = 2;
         }
 
         internal static void ApplyServerSelectorFrame(VisualElement element)
         {
-            element.style.backgroundColor = DenseGlass;
-            ApplyRadius(element, 8);
-            element.style.borderTopColor = MediumGoldBorder;
+            element.style.backgroundColor = new Color(0.003f, 0.015f, 0.035f, 0.82f);
+            ApplyRadius(element, 10);
+            element.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.64f);
             element.style.borderTopWidth = 1;
-            element.style.borderBottomColor = LightSpiritBorder;
+            element.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
+            element.style.borderLeftWidth = 1;
+            element.style.borderRightColor = new Color(0.14f, 0.78f, 0.90f, 0.16f);
+            element.style.borderRightWidth = 1;
+            element.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.34f);
             element.style.borderBottomWidth = 1;
         }
 

@@ -51,66 +51,63 @@ def check_frozen() -> None:
 
 
 def main() -> int:
-    source = read("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs")
-    for marker in (
-        "LGO Login CTA Backing Balance v1",
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "LGO Login CTA Component Visual Polish v1",
+        "LoginCtaComponentVisualPolishMarker",
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
-        "layout.LoginCardMinHeight",
-        "layout.LoginCardPaddingTop",
-        "layout.LoginCardPaddingBottom",
-        "layout.LoginCardBackground",
-    ):
-        if marker not in source:
-            ERRORS.append(f"login CTA backing source missing marker: {marker}")
-    layout = read("client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs")
-    for marker in (
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(108f * MobileScale) : IsTablet ? 140 : 152",
         "LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(8f * MobileScale) : IsTablet ? 14 : 16",
         "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(9f * MobileScale) : IsTablet ? 14 : 16",
-        "LoginCardBackground => IsMobile",
         "new Color(0.005f, 0.018f, 0.040f, 0.18f)",
         "new Color(0.005f, 0.018f, 0.040f, 0.24f)",
         "new Color(0.005f, 0.018f, 0.040f, 0.28f)",
-    ):
-        if marker not in layout:
-            ERRORS.append(f"runtime UI layout profile missing marker: {marker}")
-    skin = read("client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs")
-    for marker in (
-        "LGO Runtime UI Skin Foundation v1",
-        "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.18f)",
-        "ApplyLoginCtaBacking(VisualElement element)",
-        "ApplyRadius(element, 18)",
-    ):
-        if marker not in skin:
-            ERRORS.append(f"runtime UI skin missing marker: {marker}")
-    require(
-        "docs/tasks/LGO-LOGIN-CTA-BACKING-BALANCE-PASS-v1.0.md",
-        "LGO_LOGIN_CTA_BACKING_BALANCE_READY",
-        "No new runtime image import",
-        "No VISUAL_RUNTIME_PASS claim",
     )
     require(
-        "tools/lgo_playable_closure_check.sh",
-        "login_cta_backing_balance",
-        "validate_lgo_login_cta_backing_balance.py",
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
+        "ApplyLoginCtaBacking(VisualElement element)",
+        "new Color(0.93f, 0.73f, 0.36f, 0.42f)",
+        "element.style.borderTopWidth = 2;",
+        "element.style.borderBottomWidth = 2;",
+        "ApplyServerSelectorFrame(VisualElement element)",
+        "new Color(0.003f, 0.015f, 0.035f, 0.82f)",
+    )
+    require(
+        "docs/design/LOGIN-CTA-COMPONENT-VISUAL-POLISH-v1.0.md",
+        "LGO_LOGIN_CTA_COMPONENT_VISUAL_POLISH_READY",
+        "does not add PNGs",
+        "No `VISUAL_RUNTIME_PASS` claim",
+    )
+    require(
+        "docs/tasks/LGO-LOGIN-CTA-COMPONENT-VISUAL-POLISH-v1.0.md",
+        "LGO_LOGIN_CTA_COMPONENT_VISUAL_POLISH_READY",
+        "LGO-LOGIN-CTA-COMPONENT-EVIDENCE-REFRESH-v1.0",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-LOGIN-CTA-BACKING-BALANCE-PASS-v1.0",
-        "LGO_LOGIN_CTA_BACKING_BALANCE_READY",
+        "LGO-LOGIN-CTA-COMPONENT-EVIDENCE-REFRESH-v1.0",
+        "LGO_LOGIN_CTA_COMPONENT_VISUAL_POLISH_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-LOGIN-CTA-BACKING-BALANCE-PASS v1.0",
-        "LGO_LOGIN_CTA_BACKING_BALANCE_READY",
+        "LGO-LOGIN-CTA-COMPONENT-VISUAL-POLISH v1.0",
+        "LGO_LOGIN_CTA_COMPONENT_VISUAL_POLISH_READY",
+    )
+    require(
+        "tools/lgo_playable_closure_check.sh",
+        "login_cta_component_visual_polish",
+        "validate_lgo_login_cta_component_visual_polish.py",
     )
     check_frozen()
     if ERRORS:
-        print("LGO LOGIN CTA BACKING BALANCE VALIDATION FAILED", file=sys.stderr)
+        print("LGO LOGIN CTA COMPONENT VISUAL POLISH VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_LOGIN_CTA_BACKING_BALANCE_VALIDATION_PASS")
+    print("LGO_LOGIN_CTA_COMPONENT_VISUAL_POLISH_VALIDATION_PASS")
     return 0
 
 

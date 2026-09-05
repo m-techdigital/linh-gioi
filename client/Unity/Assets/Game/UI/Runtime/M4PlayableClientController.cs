@@ -19,6 +19,7 @@ namespace LinhGioi.UI
         private const bool UseLoginOrnatePanelTexture = false;
         private const string LoginResponsiveScaleCleanupMarker = "LGO Login Responsive Scale Cleanup v1";
         private const string LoginCtaBackingBalanceMarker = "LGO Login CTA Backing Balance v1";
+        private const string LoginCtaComponentVisualPolishMarker = "LGO Login CTA Component Visual Polish v1";
         private AccountApiClient _client;
         private ClientRuntimeConfig _config;
         private CancellationTokenSource _shutdown;
@@ -401,7 +402,7 @@ namespace LinhGioi.UI
             _loginCard.style.marginBottom = layout.LoginCardMarginBottom;
             _loginCard.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);
-            _loginCard.tooltip = LoginCtaBackingBalanceMarker;
+            _loginCard.tooltip = LoginCtaBackingBalanceMarker + " / " + LoginCtaComponentVisualPolishMarker;
             if (UseLoginOrnatePanelTexture && LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture != null)
             {
                 _loginCard.style.backgroundImage = new StyleBackground(LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture);

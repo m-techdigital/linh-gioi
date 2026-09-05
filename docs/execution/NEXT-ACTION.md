@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-LOGIN-CTA-COMPONENT-VISUAL-POLISH-v1.0`
+`LGO-RUNTIME-UI-COMPONENT-BASE-REUSE-AUDIT-v1.0`
 
-Polish the login server/CTA stack using reusable skin/factory helpers so the first screen looks less like a thin overlay while staying lightweight, responsive, and V3B-aligned. Marker ready from the completed controller visibility evidence refresh: `LGO_RUNTIME_UI_CONTROLLER_LOCAL_STYLE_EVIDENCE_REFRESH_READY`.
+Audit repeated runtime UI component composition after the login CTA evidence refresh, then move the next safe UI shell/button/row rule into reusable base code without changing gameplay behavior. Marker ready from the completed evidence refresh: `LGO_LOGIN_CTA_COMPONENT_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -168,6 +168,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-PRIMITIVE-STYLE-BOUNDARY-GUIDE-v1.0` / `LGO_RUNTIME_UI_PRIMITIVE_STYLE_BOUNDARY_GUIDE_READY`
 - `LGO-RUNTIME-UI-CONTROLLER-LOCAL-STYLE-DRIFT-SCAN-v1.0` / `LGO_RUNTIME_UI_CONTROLLER_LOCAL_STYLE_DRIFT_SCAN_READY`
 - `LGO-RUNTIME-UI-CONTROLLER-LOCAL-STYLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_CONTROLLER_LOCAL_STYLE_EVIDENCE_REFRESH_READY`
+- `LGO-LOGIN-CTA-COMPONENT-VISUAL-POLISH-v1.0` / `LGO_LOGIN_CTA_COMPONENT_VISUAL_POLISH_READY`
+- `LGO-LOGIN-CTA-COMPONENT-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_CTA_COMPONENT_EVIDENCE_REFRESH_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 

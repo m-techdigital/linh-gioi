@@ -65,15 +65,15 @@ namespace LinhGioi.UI
         internal int LoginControlColumnMarginTop => IsMobile ? 0 : IsTablet ? 2 : 12;
         internal int LoginLogoMarginBottom => IsMobile ? Mathf.RoundToInt(-10f * MobileScale) : IsTablet ? -8 : -10;
         internal int LoginHeroTitleFontSize => IsTablet ? 23 : 25;
-        internal int LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(100f * MobileScale) : IsTablet ? 128 : 136;
-        internal int LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(6f * MobileScale) : IsTablet ? 12 : 14;
-        internal int LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(7f * MobileScale) : IsTablet ? 12 : 14;
+        internal int LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(108f * MobileScale) : IsTablet ? 140 : 152;
+        internal int LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(8f * MobileScale) : IsTablet ? 14 : 16;
+        internal int LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(9f * MobileScale) : IsTablet ? 14 : 16;
         internal int LoginCardMarginBottom => IsMobile ? 0 : 18;
         internal Color LoginCardBackground => IsMobile
-            ? new Color(0.005f, 0.018f, 0.040f, 0.10f)
+            ? new Color(0.005f, 0.018f, 0.040f, 0.18f)
             : IsTablet
-                ? new Color(0.005f, 0.018f, 0.040f, 0.14f)
-                : new Color(0.005f, 0.018f, 0.040f, 0.16f);
+                ? new Color(0.005f, 0.018f, 0.040f, 0.24f)
+                : new Color(0.005f, 0.018f, 0.040f, 0.28f);
         internal StyleLength LoginServerRowMaxWidth => IsMobile ? new StyleLength(Length.Percent(100)) : new StyleLength(436f);
         internal int LoginServerRowMinHeight => IsMobile ? Mathf.RoundToInt(42f * MobileScale) : IsTablet ? 40 : 42;
         internal int LoginServerRowPaddingHorizontal => IsMobile ? 14 : 22;
