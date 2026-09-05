@@ -16,6 +16,7 @@ namespace LinhGioi.UI
         internal static readonly Color MediumGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.48f);
         internal static readonly Color LightSpiritBorder = new Color(0.14f, 0.78f, 0.90f, 0.24f);
         internal static readonly Color MediumSpiritBorder = new Color(0.14f, 0.78f, 0.90f, 0.46f);
+        internal const string SettingToggleStatePillName = "LGO Setting Row State Pill";
 
         internal static void ApplyRadius(VisualElement element, float radius)
         {
@@ -106,16 +107,46 @@ namespace LinhGioi.UI
 
         internal static void ApplySettingToggleFrame(Toggle toggle, Color accent)
         {
-            ApplyPadding(toggle, 10, 5);
-            toggle.style.backgroundColor = RuntimeArtCatalog.Background;
-            ApplyEdgeFrame(toggle, accent, RuntimeArtCatalog.SurfaceRaised, Color.clear, RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
-            toggle.style.borderRightWidth = 0;
+            ApplyPadding(toggle, 12, 7);
+            ApplyRadius(toggle, 8);
+            toggle.style.minHeight = 42;
+            toggle.style.flexDirection = FlexDirection.Row;
+            toggle.style.alignItems = Align.Center;
+            toggle.style.justifyContent = Justify.SpaceBetween;
+            toggle.style.backgroundColor = DenseGlass;
+            ApplyEdgeFrame(toggle, accent, LightGoldBorder, LightSpiritBorder, RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
             toggle.style.color = RuntimeArtCatalog.Text;
+            toggle.style.fontSize = 13;
+            toggle.style.unityFontStyleAndWeight = FontStyle.Bold;
         }
 
         internal static void ApplySettingToggleState(Toggle toggle, bool enabled)
         {
             toggle.style.borderLeftColor = enabled ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted;
+            toggle.style.borderTopColor = enabled ? LightGoldBorder : new Color(0.42f, 0.48f, 0.56f, 0.26f);
+            toggle.style.borderRightColor = enabled ? LightSpiritBorder : new Color(0.28f, 0.34f, 0.42f, 0.26f);
+            toggle.style.backgroundColor = enabled ? new Color(0.015f, 0.055f, 0.10f, 0.82f) : new Color(0.010f, 0.024f, 0.044f, 0.72f);
+            var pill = toggle.Q<Label>(SettingToggleStatePillName);
+            if (pill != null) ApplySettingToggleStatePill(pill, enabled);
+        }
+
+        internal static void ApplySettingToggleStatePill(Label pill, bool enabled)
+        {
+            pill.name = SettingToggleStatePillName;
+            pill.text = enabled ? "Bật" : "Tắt";
+            pill.style.minWidth = 42;
+            pill.style.marginLeft = 12;
+            pill.style.paddingLeft = 9;
+            pill.style.paddingRight = 9;
+            pill.style.paddingTop = 3;
+            pill.style.paddingBottom = 4;
+            pill.style.unityTextAlign = TextAnchor.MiddleCenter;
+            pill.style.unityFontStyleAndWeight = FontStyle.Bold;
+            pill.style.fontSize = 12;
+            pill.style.backgroundColor = enabled ? new Color(0.08f, 0.34f, 0.42f, 0.86f) : new Color(0.10f, 0.12f, 0.16f, 0.78f);
+            pill.style.color = enabled ? RuntimeArtCatalog.Text : RuntimeArtCatalog.Muted;
+            ApplyRadius(pill, 12);
+            ApplyEdgeFrame(pill, enabled ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted, LightGoldBorder, Color.clear, Color.clear, 1f, 1f);
         }
 
         internal static void ApplyBadgeFrame(VisualElement badge)

@@ -237,10 +237,14 @@ namespace LinhGioi.UI
         internal static Toggle NewLocalSettingToggle(string label, bool value, Action changed)
         {
             var toggle = new Toggle(label) { value = value };
-            toggle.style.minHeight = 34;
-            toggle.style.marginTop = 6;
+            toggle.style.minHeight = 42;
+            toggle.style.marginTop = 7;
             toggle.style.marginBottom = 0;
             RuntimeUiSkin.ApplySettingToggleFrame(toggle, value ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted);
+            var statePill = new Label();
+            RuntimeUiSkin.ApplySettingToggleStatePill(statePill, value);
+            toggle.Add(statePill);
+            RuntimeUiSkin.ApplySettingToggleState(toggle, value);
             toggle.RegisterValueChangedCallback(evt =>
             {
                 RuntimeUiSkin.ApplySettingToggleState(toggle, evt.newValue);
