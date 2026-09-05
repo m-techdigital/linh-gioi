@@ -8,9 +8,9 @@ namespace LinhGioi.Art
         public const string ResourceRoot = "CombatPlaceholders/";
 
         public static Sprite TargetDummyIdle => LgoVisualAssetRegistryV3B.TargetDummyIdle ?? LgoVisualAssetRegistryV2.DummyIdle ?? LoadSprite("target-dummy-idle-v0450");
-        public static Sprite TargetDummySelected => LgoVisualAssetRegistryV2.DummySelected ?? LoadSprite("target-dummy-selected-v0450");
-        public static Sprite TargetDummyHit => LgoVisualAssetRegistryV2.DummyHit ?? LoadSprite("target-dummy-hit-v0450");
-        public static Sprite TargetDummyRecover => LoadSprite("target-dummy-recover-v0450");
+        public static Sprite TargetDummySelected => LgoVisualAssetRegistryV3B.TargetDummySelected ?? LgoVisualAssetRegistryV2.DummySelected ?? LoadSprite("target-dummy-selected-v0450");
+        public static Sprite TargetDummyHit => LgoVisualAssetRegistryV3B.TargetDummyHit ?? LgoVisualAssetRegistryV2.DummyHit ?? LoadSprite("target-dummy-hit-v0450");
+        public static Sprite TargetDummyRecover => LgoVisualAssetRegistryV3B.TargetDummyRecover ?? LoadSprite("target-dummy-recover-v0450");
         public static Sprite TargetMarkerSelected => LgoVisualAssetRegistryV2.TargetSelectedBlue ?? LoadSprite("target-marker-selected-v0450");
         public static Sprite CooldownReady => LgoVisualAssetRegistryV3B.CooldownReady ?? LgoVisualAssetRegistryV2.CooldownReady ?? LoadSprite("cooldown-ring-ready-v0450");
         public static Sprite CooldownActive => LgoVisualAssetRegistryV3B.CooldownActive ?? LgoVisualAssetRegistryV2.CooldownFull ?? LoadSprite("cooldown-ring-cooldown-v0450");

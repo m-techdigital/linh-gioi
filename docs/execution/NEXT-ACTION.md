@@ -89,6 +89,8 @@ Current focus update: compact state loading and Vietnamese visual-runtime owner 
 
 Current focus update: World Hub lightweight depth pass is ready under `LGO_WORLD_HUB_LIGHTWEIGHT_DEPTH_PASS_READY`; procedural ground now uses a smaller texture and extra runtime-generated mist/path depth without adding image payload, with desktop/tablet/mobile screenshots reviewed but no final visual PASS claim.
 
+Current focus update: combat dummy state asset priority now prefers V3B selected/hit/recover sprites under `LGO_COMBAT_DUMMY_V3B_STATE_PRIORITY_READY`; target-dummy runtime screenshot was reviewed as more consistent with V3B, still placeholder-quality, and no `VISUAL_RUNTIME_PASS` is claimed.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
