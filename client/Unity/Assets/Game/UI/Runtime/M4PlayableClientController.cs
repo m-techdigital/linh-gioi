@@ -1397,16 +1397,21 @@ namespace LinhGioi.UI
             {
                 // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state.
                 _enterWorldButton.text = "Vào sân luyện";
-                _enterWorldButton.style.minHeight = 48;
-                _enterWorldButton.style.minWidth = 154;
-                _enterWorldButton.style.fontSize = 17;
-                _enterWorldButton.style.marginTop = 8;
+                RuntimeUiSkin.ApplyButtonMetrics(
+                    _enterWorldButton,
+                    RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinWidth,
+                    RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight,
+                    RuntimeUiSpacing.CharacterSelectedPrimaryMobileFontSize,
+                    true);
+                _enterWorldButton.style.marginTop = RuntimeUiSpacing.CharacterSelectedPrimaryMobileMarginTop;
                 _enterWorldButton.style.opacity = 1f;
                 _enterWorldButton.tooltip = "Bước qua Linh Môn vào sân luyện.";
                 _createButton.text = "Tạo thêm";
-                _createButton.style.minHeight = 38;
-                _createButton.style.minWidth = 124;
-                _createButton.style.fontSize = 14;
+                RuntimeUiSkin.ApplyButtonMetrics(
+                    _createButton,
+                    RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinWidth,
+                    RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinHeight,
+                    RuntimeUiSpacing.CharacterSelectedSecondaryMobileFontSize);
                 _createButton.style.opacity = 0.82f;
                 _characterActionRow.Add(_enterWorldButton);
                 _characterActionRow.Add(_createButton);
@@ -1414,14 +1419,19 @@ namespace LinhGioi.UI
             }
 
             _createButton.text = "Tạo tu sĩ";
-            _createButton.style.minHeight = 44;
-            _createButton.style.minWidth = 132;
-            _createButton.style.fontSize = 14;
+            RuntimeUiSkin.ApplyButtonMetrics(
+                _createButton,
+                RuntimeUiSpacing.CharacterActionButtonMinWidth,
+                RuntimeUiSpacing.CharacterActionButtonMinHeight,
+                RuntimeUiSpacing.CharacterCreateButtonFontSize);
             _createButton.style.opacity = 1f;
             _enterWorldButton.text = "Vào sân luyện";
-            _enterWorldButton.style.minHeight = 44;
-            _enterWorldButton.style.minWidth = 132;
-            _enterWorldButton.style.fontSize = 15;
+            RuntimeUiSkin.ApplyButtonMetrics(
+                _enterWorldButton,
+                RuntimeUiSpacing.CharacterActionButtonMinWidth,
+                RuntimeUiSpacing.CharacterActionButtonMinHeight,
+                RuntimeUiSpacing.CharacterEnterWorldButtonFontSize,
+                true);
             _enterWorldButton.style.opacity = _selectedCharacter == null ? 0.46f : 1f;
             _enterWorldButton.tooltip = _selectedCharacter == null ? "Chọn hoặc tạo tu sĩ trước khi vào sân luyện." : "Bước qua Linh Môn vào sân luyện.";
             _characterActionRow.Add(_createButton);
