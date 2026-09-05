@@ -78,10 +78,14 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_characterList = NewCharacterListPanel(layout);",
-        "ApplyCharacterHallContentResponsive(_lobbyContent, layout);",
+        "RuntimeCharacterHallResponsiveLayout.Apply(",
         "RuntimeUiSkin.ApplyVerticalMargin(_worldGuidanceCard, layout.WorldGuidanceCardMarginVertical, layout.WorldGuidanceCardMarginVertical);",
         "_dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;",
         "_sessionMenuStatus.style.marginBottom = layout.SessionMenuStatusMarginBottom;",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",

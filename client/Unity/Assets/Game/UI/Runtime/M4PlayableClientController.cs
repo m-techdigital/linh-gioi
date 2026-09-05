@@ -1158,7 +1158,6 @@ namespace LinhGioi.UI
         {
             var layout = CurrentLayoutProfile();
             var width = layout.Width;
-            var height = layout.Height;
             var profile = layout.Name;
             if (!force && string.Equals(_lastLayoutProfile, profile, StringComparison.Ordinal)) return;
             _lastLayoutProfile = profile;
@@ -1192,44 +1191,16 @@ namespace LinhGioi.UI
             if (_header != null)
                 _header.style.minHeight = layout.HeaderMinHeight(authVisible);
 
-            _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 790 : 800;
-            _lobbyPanel.style.minHeight = mobile ? Mathf.Max(292f, height - 48f) : 410;
-            RuntimeUiSkin.ApplyPadding(_lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
-            if (_lobbyIntro != null)
-            {
-                // LGO Character Hall Mobile Copy Density v1: mobile keeps intent, drops prose.
-                _lobbyIntro.text = mobile ? "Chọn tu sĩ, rồi vào sân luyện." : "Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.";
-                _lobbyIntro.style.fontSize = mobile ? RuntimeUiTypography.LobbyIntroMobileFontSize : RuntimeUiTypography.LobbyIntroDesktopFontSize;
-                _lobbyIntro.style.marginBottom = layout.LobbyIntroMarginBottom;
-            }
-            ApplyCharacterListResponsive(_characterList, layout, width);
-            if (_emptyCharacterCard != null)
-            {
-                ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity);
-            }
-            if (_emptyCharacterHint != null)
-            {
-                _emptyCharacterHint.text = mobile ? "Hồ sơ sẽ hiện tại đây." : "Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.";
-                _emptyCharacterHint.style.fontSize = mobile ? RuntimeUiTypography.EmptyCharacterHintMobileFontSize : RuntimeUiTypography.EmptyCharacterHintDesktopFontSize;
-            }
-            if (_lobbyContent != null)
-            {
-                ApplyCharacterHallContentResponsive(_lobbyContent, layout);
-            }
-            if (_selectedPreview != null)
-            {
-                ApplySelectedCharacterPreviewResponsive(_selectedPreview, layout, width);
-            }
-            if (_createPanel != null)
-            {
-                _createPanel.style.position = mobile ? Position.Absolute : Position.Relative;
-                _createPanel.style.left = mobile ? Mathf.Clamp(width * 0.45f, 350f, 390f) : 0;
-                _createPanel.style.right = mobile ? 12 : StyleKeyword.Auto;
-                _createPanel.style.top = mobile ? 132 : StyleKeyword.Auto;
-                RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
-                _createPanel.style.marginTop = layout.CreatePanelMarginTop;
-                _createPanel.style.maxHeight = mobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
-            }
+            RuntimeCharacterHallResponsiveLayout.Apply(
+                layout,
+                _lobbyPanel,
+                _lobbyIntro,
+                _characterList,
+                _emptyCharacterCard,
+                _emptyCharacterHint,
+                _lobbyContent,
+                _selectedPreview,
+                _createPanel);
             ApplyCharacterCreateFormState();
             ApplyCharacterHallActionHierarchy();
 

@@ -68,11 +68,15 @@ def main() -> int:
         "return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height);",
         "var layout = CurrentLayoutProfile();",
         "var width = layout.Width;",
-        "var height = layout.Height;",
         "var profile = layout.Name;",
         "var mobile = layout.IsMobile;",
         "var tablet = layout.IsTablet;",
         "RuntimeLoginResponsiveLayout.Apply(",
+        "RuntimeCharacterHallResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "var height = layout.Height;",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs",

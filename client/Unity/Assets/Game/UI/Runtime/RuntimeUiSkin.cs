@@ -266,7 +266,7 @@ namespace LinhGioi.UI
         {
             // LGO Character Hall No Stretched Texture v1: keep ornate assets role-sized; the large shell uses code-side glass.
             panel.style.backgroundImage = StyleKeyword.None;
-            panel.style.backgroundColor = new Color(0.005f, 0.024f, 0.052f, 0.80f);
+            panel.style.backgroundColor = new Color(0.005f, 0.024f, 0.052f, 0.70f);
             ApplyRadius(panel, 12);
             ApplyEdgeFrame(
                 panel,
@@ -280,7 +280,7 @@ namespace LinhGioi.UI
 
         internal static void ApplySubtleNestedFrame(VisualElement element, Color accent, float alpha = 0.32f)
         {
-            element.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.68f);
+            element.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.62f);
             ApplyRadius(element, 10);
             ApplyEdgeFrame(
                 element,
@@ -302,7 +302,7 @@ namespace LinhGioi.UI
         internal static void ApplyCharacterPreviewFrame(VisualElement preview)
         {
             ApplySubtleNestedFrame(preview, RuntimeArtCatalog.Spirit, 0.38f);
-            preview.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.74f);
+            preview.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.66f);
             preview.style.borderTopColor = RuntimeArtCatalog.Gold;
             preview.style.borderBottomColor = RuntimeArtCatalog.Gold;
         }

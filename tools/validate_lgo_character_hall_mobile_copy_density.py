@@ -52,10 +52,13 @@ def check_frozen() -> None:
 
 def main() -> int:
     require(
-        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "LGO Character Hall Mobile Copy Density v1",
-        "_lobbyIntro.text = mobile ? \"Chọn tu sĩ, rồi vào sân luyện.\"",
-        "_emptyCharacterHint.text = mobile ? \"Hồ sơ sẽ hiện tại đây.\"",
+        "lobbyIntro.text = layout.IsMobile ? \"Chọn tu sĩ, rồi vào sân luyện.\"",
+        "emptyCharacterHint.text = layout.IsMobile ? \"Hồ sơ sẽ hiện tại đây.\"",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "ApplyCharacterCreateFormState()",
         "_createHint.style.display = (!_isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None",
     )

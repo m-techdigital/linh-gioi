@@ -45,10 +45,16 @@ def main() -> int:
         "_createPanel = NewCharacterCreatePanel(layout);",
         "_lobbyPanel = NewCharacterHallPanel(layout);",
         "_characterList = NewCharacterListPanel(layout);",
-        "ApplyCharacterListResponsive(_characterList, layout, width);",
-        "ApplySelectedCharacterPreviewResponsive(_selectedPreview, layout, width);",
+        "RuntimeCharacterHallResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "OwnerMarker = \"LGO Character Hall Responsive Layout Helper v1\"",
+        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);",
+        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, layout, width);",
         "Mathf.Min(width - 40f, 780f)",
-        "tablet ? 790 : 800",
+        "layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth",
+        "createPanel.style.maxHeight = layout.IsMobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
@@ -75,7 +81,7 @@ def main() -> int:
         "ApplyCharacterHallPanelFrame(VisualElement panel)",
         "LGO Character Hall No Stretched Texture v1",
         "panel.style.backgroundImage = StyleKeyword.None;",
-        "new Color(0.005f, 0.024f, 0.052f, 0.80f)",
+        "new Color(0.005f, 0.024f, 0.052f, 0.70f)",
         "ApplyCharacterListFrame(VisualElement list)",
         "ApplySubtleNestedFrame(list, RuntimeArtCatalog.Gold, 0.34f);",
     )

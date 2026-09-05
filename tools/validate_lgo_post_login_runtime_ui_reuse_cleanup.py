@@ -81,9 +81,13 @@ def main() -> int:
         "var portrait = NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture);",
         "var profileCopy = NewFlexibleColumn(\"LGO Character Hall Selected Profile Copy V3B\");",
         "var profileHero = NewCharacterProfileHero(layout, portrait, profileCopy);",
-        "ApplyCharacterListResponsive(_characterList, layout, width);",
-        "ApplyCharacterHallContentResponsive(_lobbyContent, layout);",
-        "ApplySelectedCharacterPreviewResponsive(_selectedPreview, layout, width);",
+        "RuntimeCharacterHallResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);",
+        "RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);",
+        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, layout, width);",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

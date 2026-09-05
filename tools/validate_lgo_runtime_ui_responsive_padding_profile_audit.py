@@ -80,15 +80,19 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "layout.LobbyPanelPaddingHorizontal",
-        "ApplyCharacterListResponsive(_characterList, layout, width)",
-        "ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity)",
-        "layout.CreatePanelPaddingHorizontal",
+        "RuntimeCharacterHallResponsiveLayout.Apply(",
         "layout.WorldHudPaddingHorizontal",
         "layout.WorldHudDialoguePaddingHorizontal",
         "layout.DialoguePanelPaddingHorizontal",
         "layout.StatusPaddingHorizontal(worldVisible)",
         "ApplyTopStatusResponsive(layout, worldVisible, width)",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "layout.LobbyPanelPaddingHorizontal",
+        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width)",
+        "RuntimeUiFactory.ApplyEmptyCharacterCardDensity(emptyCharacterCard, layout.CharacterHallDensity)",
+        "layout.CreatePanelPaddingHorizontal",
     )
     forbid(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

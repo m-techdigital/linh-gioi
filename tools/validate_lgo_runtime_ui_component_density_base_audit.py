@@ -81,7 +81,11 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "NewCharacterHallStatusLabel",
         "NewCharacterListPanel(layout)",
-        "ApplyCharacterListResponsive(_characterList, layout, width)",
+        "RuntimeCharacterHallResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width)",
         "layout.CharacterHallDensity",
     )
     factory = require(

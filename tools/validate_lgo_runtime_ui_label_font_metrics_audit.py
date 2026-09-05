@@ -107,8 +107,6 @@ def main() -> int:
         "RuntimeUiTypography.WorldDirectionFontSize",
         "RuntimeUiTypography.WorldObjectiveInitialFontSize",
         "RuntimeUiTypography.WorldInteractionInitialFontSize",
-        "RuntimeUiTypography.LobbyIntroMobileFontSize",
-        "RuntimeUiTypography.EmptyCharacterHintDesktopFontSize",
         "RuntimeUiTypography.WorldNameMobileFontSize",
         "RuntimeUiTypography.WorldObjectiveDesktopFontSize",
         "RuntimeUiTypography.WorldInteractionDesktopFontSize",
@@ -116,6 +114,11 @@ def main() -> int:
         "RuntimeUiTypography.DialogueSpeakerInitialFontSize",
         "RuntimeUiTypography.DialogueLineDesktopFontSize",
         "RuntimeUiTypography.DialogueProgressDesktopFontSize",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "RuntimeUiTypography.LobbyIntroMobileFontSize",
+        "RuntimeUiTypography.EmptyCharacterHintDesktopFontSize",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

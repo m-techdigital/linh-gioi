@@ -62,12 +62,16 @@ def main() -> int:
         "NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture)",
         "_createPanel = NewCharacterCreatePanel(layout);",
         "LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture",
-        "ApplyCharacterHallContentResponsive(_lobbyContent, layout);",
-        "ApplySelectedCharacterPreviewResponsive(_selectedPreview, layout, width);",
-        "Position.Absolute",
+        "RuntimeCharacterHallResponsiveLayout.Apply(",
         "Chọn tu sĩ để bước qua Linh Môn",
         "Tạo tu sĩ đầu tiên",
         "Vào sân luyện",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);",
+        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, layout, width);",
+        "Position.Absolute",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",

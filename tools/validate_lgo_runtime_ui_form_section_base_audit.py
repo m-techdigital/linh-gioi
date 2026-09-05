@@ -69,11 +69,14 @@ def main() -> int:
     controller = require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_createPanel = NewCharacterCreatePanel(layout);",
-        "_createPanel.style.maxHeight = mobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;",
         "_characterName = NewTextField(\"Danh xưng\", \"LinhGioiHero\");",
         "_createButton = NewCompactSecondaryButton(\"Tạo tu sĩ\", OnCreateCharacterAction);",
         "private void OnCreateCharacterAction()",
         "_enterWorldButton = NewCompactPrimaryButton(\"Vào sân luyện\", () => RunAsync(EnterWorldAsync));",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "createPanel.style.maxHeight = layout.IsMobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;",
     )
     if "new VisualElement();\n            _createPanel.name = \"LGO Character Hall Create Cultivator Panel V3B\"" in controller:
         ERRORS.append("M4PlayableClientController still hand-constructs the Character Hall create panel shell")

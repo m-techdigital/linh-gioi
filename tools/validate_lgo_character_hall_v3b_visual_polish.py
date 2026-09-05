@@ -66,7 +66,7 @@ def main() -> int:
         "LGO Character Hall No Stretched Texture v1",
         "panel.style.backgroundImage = StyleKeyword.None;",
         "panel.style.borderTopWidth = 2;",
-        "preview.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.74f);",
+        "preview.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.66f);",
         "panel.style.backgroundColor = new Color(0.0f, 0.018f, 0.042f, 0.60f);",
     )
     require(
