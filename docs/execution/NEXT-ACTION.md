@@ -4,15 +4,15 @@ Last updated: `2026-09-05`
 
 ## Current focus
 
-Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile, the world hub ground now uses a lightweight procedural cultivation-platform texture instead of a debug-like grid, the login first screen now uses a V3B composition with a centered text logo/CTA cluster plus right-side Gate Keeper on desktop/tablet and a compact logo/CTA layout on mobile, the Character Hall now uses a V3B cultivator portrait with a mobile-specific two-zone lobby layout, build-size budget reporting now separates Unity runtime payload from repository/reference/tooling weight, and the visual evidence loop now writes PNG heuristics for checkpoint presence, dimensions, byte size, pixel variation, and duplicate-frame detection. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
+Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile, the world hub ground now uses a lightweight procedural cultivation-platform texture instead of a debug-like grid, the login first screen now uses a V3B composition with a centered text logo/CTA cluster plus right-side Gate Keeper on desktop/tablet and a compact logo/CTA layout on mobile, the Character Hall now uses a V3B cultivator portrait with a mobile-specific two-zone lobby layout, build-size budget reporting now separates Unity runtime payload from repository/reference/tooling weight, the visual evidence loop now writes PNG heuristics for checkpoint presence/dimensions/byte size/pixel variation/duplicate-frame detection, and world-hub labels now show by guided state/proximity instead of cluttering the whole scene. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-WORLD-HUB-PROP-LABEL-RESPONSIVE-PASS-v1.0`
+`LGO-LOGIN-PANEL-VISUAL-BALANCE-PASS-v1.0`
 
-Refine world-hub prop/label layout across desktop, tablet, and mobile evidence so important interactable labels stay readable without cluttering the scene. Keep it presentation-only: no new gameplay, protocol, gamedata, ADR, or design-token changes.
+Refine the login CTA/panel/NPC compositing balance after the latest screenshot review: reduce over-bright borders, improve NPC grounding, and keep PC/tablet/mobile layouts responsive without adding heavy assets or importing reference images.
 
 ## Current blocker
 
@@ -31,11 +31,12 @@ Evidence:
 - `docs/tasks/LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0.md`
 - `docs/tasks/LGO-BUILD-SIZE-BUDGET-AND-CLEANUP-PASS-v1.0.md`
 - `docs/tasks/LGO-VISUAL-RUNTIME-REVIEW-HEURISTICS-PASS-v1.0.md`
+- `docs/tasks/LGO-WORLD-HUB-PROP-LABEL-RESPONSIVE-PASS-v1.0.md`
 - `build/visual-evidence/latest/player.log`
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: continue with world-hub prop/label responsive polish. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY` while still refusing to claim visual PASS from capture/build alone.
+Next allowed action: continue with login panel visual balance. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -75,6 +76,7 @@ python3.12 tools/validate_lgo_build_size_budget.py
 python3.12 tools/validate_lgo_world_hud_density_mobile_touch.py
 python3.12 tools/validate_lgo_world_ground_visual_quality.py
 python3.12 tools/validate_lgo_visual_runtime_review_heuristics.py
+python3.12 tools/validate_lgo_world_hub_prop_label_responsive.py
 python3.12 tools/validate_m4_2_playable_ui.py
 python3.12 tools/validate_m4_visible_ui.py
 python3.12 tools/validate_m6_combat_visual_readability.py
@@ -117,6 +119,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-VISUAL-RUNTIME-REVIEW-HEURISTICS-PASS-v1.0` is closed. Continue with `LGO-WORLD-HUB-PROP-LABEL-RESPONSIVE-PASS-v1.0`.
+`LGO-WORLD-HUB-PROP-LABEL-RESPONSIVE-PASS-v1.0` is closed. Continue with `LGO-LOGIN-PANEL-VISUAL-BALANCE-PASS-v1.0`.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

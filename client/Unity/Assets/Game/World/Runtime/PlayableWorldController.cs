@@ -340,6 +340,7 @@ namespace LinhGioi.World
 
             RefreshPoseFeedbackMarkers();
             RefreshVfxFeedbackMarkers();
+            RefreshWorldLabelPresentation();
             RefreshCameraFrame();
         }
 
@@ -897,10 +898,11 @@ namespace LinhGioi.World
             if (_interactionPromptWorldLabel == null)
             {
                 _interactionPromptWorldLabel = CreateWorldLabel("LGO Interaction Prompt World Label", "F / Space", GateKeeperPosition + new Vector3(0f, 2.35f, 0f), RuntimeArtCatalog.Spirit);
-                _interactionPromptWorldLabel.fontSize = 42;
-                _interactionPromptWorldLabel.characterSize = 0.044f;
+                _interactionPromptWorldLabel.fontSize = 38;
+                _interactionPromptWorldLabel.characterSize = 0.04f;
                 _interactionPromptWorldLabel.gameObject.SetActive(false);
             }
+            RefreshWorldLabelPresentation();
         }
 
         private static void EnsureWorldSetDressing()
@@ -943,8 +945,8 @@ namespace LinhGioi.World
             holder.transform.rotation = Quaternion.Euler(55f, 0f, 0f);
             var label = holder.GetComponent<TextMesh>() ?? holder.AddComponent<TextMesh>();
             label.text = text;
-            label.fontSize = 48;
-            label.characterSize = 0.048f;
+            label.fontSize = 42;
+            label.characterSize = 0.042f;
             label.anchor = TextAnchor.MiddleCenter;
             label.alignment = TextAlignment.Center;
             label.color = color;
@@ -965,8 +967,8 @@ namespace LinhGioi.World
             holder.transform.localScale = Vector3.one;
             var shadow = holder.GetComponent<TextMesh>() ?? holder.AddComponent<TextMesh>();
             shadow.text = text;
-            shadow.fontSize = 48;
-            shadow.characterSize = 0.048f;
+            shadow.fontSize = 42;
+            shadow.characterSize = 0.042f;
             shadow.anchor = TextAnchor.MiddleCenter;
             shadow.alignment = TextAlignment.Center;
             shadow.color = new Color(0f, 0f, 0f, 0.72f);
@@ -1021,6 +1023,38 @@ namespace LinhGioi.World
             if (_targetDummyHitSprite != null)
                 _targetDummyHitSprite.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
             RefreshTargetDummyReadabilityMarkers(active);
+            RefreshWorldLabelPresentation();
+        }
+
+        private void RefreshWorldLabelPresentation()
+        {
+            var nearGateKeeper = _marker != null && Distance2D(CurrentPosition, GateKeeperPosition) <= 3.1f;
+            var nearTrainingStone = _marker != null && Distance2D(CurrentPosition, TrainingStonePosition) <= 3.2f;
+            var nearTargetDummy = _marker != null && Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM;
+            var nearShadowSlime = _marker != null && Distance2D(CurrentPosition, ShadowSlimePosition) <= 2.7f;
+
+            SetWorldLabelActive(_gateKeeperWorldLabel, _guidedStep == GuidedTrainingStep.FindGateKeeper || nearGateKeeper || DialogueActive);
+            SetWorldLabelActive(_trainingStoneWorldLabel, _guidedStep == GuidedTrainingStep.FindTrainingStone || nearTrainingStone || InteractionAcknowledged);
+            SetWorldLabelActive(_targetDummyWorldLabel, nearTargetDummy || _localCombat.CooldownActive(NowMs()) || _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
+            SetWorldLabelActive(_shadowSlimeWorldLabel, nearShadowSlime || _shadowSlimeState == PlaceholderSlimeState.AlertWarning);
+            SetWorldLabelActive(_spiritGateWorldLabel, _guidedStep == GuidedTrainingStep.Complete);
+
+            if (_gateKeeperWorldLabel != null)
+                _gateKeeperWorldLabel.transform.position = GateKeeperPosition + new Vector3(-0.04f, 1.72f, -0.02f);
+            if (_trainingStoneWorldLabel != null)
+                _trainingStoneWorldLabel.transform.position = TrainingStonePosition + new Vector3(0.04f, 1.08f, -0.02f);
+            if (_targetDummyWorldLabel != null)
+                _targetDummyWorldLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.36f, -0.03f);
+            if (_spiritGateWorldLabel != null)
+                _spiritGateWorldLabel.transform.position = new Vector3(0f, 1.92f, -4.5f);
+            if (_shadowSlimeWorldLabel != null)
+                _shadowSlimeWorldLabel.transform.position = ShadowSlimePosition + new Vector3(0f, 0.92f, -0.02f);
+        }
+
+        private static void SetWorldLabelActive(TextMesh label, bool active)
+        {
+            if (label == null) return;
+            label.gameObject.SetActive(active);
         }
 
         private void RefreshTargetDummyReadabilityMarkers(bool vfxActive)
