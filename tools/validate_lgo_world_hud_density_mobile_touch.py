@@ -52,7 +52,7 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO World HUD Density Touch Shell v1",
+        "LGO World HUD Action Shell V3B Skin v1",
         "LGO World Objective Touch Priority",
         "LGO World Interaction Touch Hint",
         "LGO World Touch Primary Combat Button",

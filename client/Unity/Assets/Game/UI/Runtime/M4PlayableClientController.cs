@@ -624,7 +624,7 @@ namespace LinhGioi.UI
         private void BuildWorldHud()
         {
             _worldHud = NewPanel(390);
-            _worldHud.name = "LGO World HUD Density Touch Shell v1";
+            _worldHud.name = "LGO World HUD Action Shell V3B Skin v1";
             _worldHud.style.maxWidth = 390;
             _worldHud.style.alignSelf = Align.FlexStart;
             _worldHud.style.paddingLeft = 12;
@@ -664,14 +664,18 @@ namespace LinhGioi.UI
             _worldMeta.style.fontSize = 12;
             _worldHud.Add(_worldMeta);
 
+            var guidanceCard = NewWorldHudGroup("LGO World Guidance Card V3B", RuntimeArtCatalog.Spirit);
             _worldArea = NewStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted);
-            _worldHud.Add(_worldArea);
+            ApplyHudStatusCompact(_worldArea, 12);
+            guidanceCard.Add(_worldArea);
 
             _worldStep = NewStatusLabel("Tiến trình: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Spirit);
-            _worldHud.Add(_worldStep);
+            ApplyHudStatusCompact(_worldStep, 13);
+            guidanceCard.Add(_worldStep);
 
             _worldDirection = NewStatusLabel("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold);
-            _worldHud.Add(_worldDirection);
+            ApplyHudStatusCompact(_worldDirection, 13);
+            guidanceCard.Add(_worldDirection);
 
             _worldPoseState = NewStatusLabel("Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.", RuntimeArtCatalog.Muted);
             _worldPoseState.style.display = DisplayStyle.None;
@@ -687,11 +691,14 @@ namespace LinhGioi.UI
 
             _worldObjective = NewStatusLabel("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold);
             _worldObjective.name = "LGO World Objective Touch Priority";
-            _worldHud.Add(_worldObjective);
+            ApplyHudStatusCompact(_worldObjective, 14);
+            guidanceCard.Add(_worldObjective);
 
             _interactionHint = NewStatusLabel("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Spirit);
             _interactionHint.name = "LGO World Interaction Touch Hint";
-            _worldHud.Add(_interactionHint);
+            ApplyHudStatusCompact(_interactionHint, 13);
+            guidanceCard.Add(_interactionHint);
+            _worldHud.Add(guidanceCard);
 
             _position = NewMutedLabel("x=0.00 y=0.00 z=0.00 yaw=0.0");
             _position.style.marginTop = 8;
@@ -738,6 +745,7 @@ namespace LinhGioi.UI
             _backButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
             _backButton.tooltip = "Quay lại quản lý nhân vật mà không đóng phiên hiện tại.";
             _worldFooterActions = NewButtonRow(_savePositionButton, _backButton);
+            _worldFooterActions.name = "LGO World Action Footer V3B";
             _worldHud.Add(_worldFooterActions);
         }
 
@@ -801,7 +809,7 @@ namespace LinhGioi.UI
         private void BuildLocalCombatPanel()
         {
             _localCombatPanel = NewPreviewPanel("LUYỆN TẬP", "Bia luyện");
-            _localCombatPanel.name = "LGO M6 Minimal Local Combat";
+            _localCombatPanel.name = "LGO World Combat Action Shell V3B";
             _localCombatPanel.style.marginTop = 8;
             _localCombatPanel.style.paddingLeft = 12;
             _localCombatPanel.style.paddingRight = 12;
@@ -814,9 +822,12 @@ namespace LinhGioi.UI
             _localCombatPanel.Add(combatNote);
             _combatCooldownIcon = NewCombatCooldownIcon();
             _combatTargetStatus = NewStatusLabel("Bia luyện: chưa vào sân.", RuntimeArtCatalog.Gold);
+            ApplyHudStatusCompact(_combatTargetStatus, 13);
             _combatRangeStatus = NewStatusLabel("Tầm: chưa vào sân.", RuntimeArtCatalog.Muted);
+            ApplyHudStatusCompact(_combatRangeStatus, 12);
             _combatVisualState = NewStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
             _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
+            ApplyHudStatusCompact(_combatFeedback, 13);
             _combatCooldown = NewStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
             _combatAuthority = NewStatusLabel("Mô phỏng cục bộ: chưa gửi ý định chiến đấu.", RuntimeArtCatalog.Spirit);
             _localCombatButton = NewCompactSecondaryButton("Tấn công thử", TriggerLocalCombat);
@@ -824,9 +835,13 @@ namespace LinhGioi.UI
             _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ. Đánh thử cục bộ: xem vòng chọn mục tiêu, hit flash và nhịp hồi chiêu; không phải chiến đấu thật";
             ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonNormalTexture);
             var combatRow = new VisualElement();
+            combatRow.name = "LGO World Combat Readiness Row V3B";
             combatRow.style.flexDirection = FlexDirection.Row;
             combatRow.style.alignItems = Align.Center;
-            combatRow.style.marginBottom = 4;
+            combatRow.style.marginTop = 4;
+            combatRow.style.marginBottom = 6;
+            combatRow.style.paddingLeft = 4;
+            combatRow.style.paddingRight = 4;
             combatRow.Add(_combatCooldownIcon);
             var combatStatusColumn = new VisualElement();
             combatStatusColumn.style.flexGrow = 1;
@@ -1221,6 +1236,38 @@ namespace LinhGioi.UI
             row.Add(titleLabel);
             row.Add(valueLabel);
             return row;
+        }
+
+        private static VisualElement NewWorldHudGroup(string name, Color accent)
+        {
+            var group = new VisualElement { name = name };
+            group.style.marginTop = 8;
+            group.style.marginBottom = 8;
+            group.style.paddingLeft = 8;
+            group.style.paddingRight = 8;
+            group.style.paddingTop = 7;
+            group.style.paddingBottom = 7;
+            group.style.backgroundColor = new Color(0.0f, 0.014f, 0.034f, 0.70f);
+            group.style.borderTopColor = RuntimeArtCatalog.Gold;
+            group.style.borderTopWidth = 1;
+            group.style.borderLeftColor = accent;
+            group.style.borderLeftWidth = 2;
+            group.style.borderRightColor = RuntimeArtCatalog.SurfaceRaised;
+            group.style.borderRightWidth = 1;
+            group.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
+            group.style.borderBottomWidth = 1;
+            return group;
+        }
+
+        private static void ApplyHudStatusCompact(Label label, int fontSize)
+        {
+            label.style.fontSize = fontSize;
+            label.style.marginTop = 4;
+            label.style.paddingLeft = 8;
+            label.style.paddingRight = 8;
+            label.style.paddingTop = 5;
+            label.style.paddingBottom = 5;
+            label.style.backgroundColor = new Color(0.02f, 0.055f, 0.10f, 0.58f);
         }
 
         private static Label NewSectionTitle(string text)
