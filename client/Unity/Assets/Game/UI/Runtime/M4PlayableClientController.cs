@@ -409,6 +409,7 @@ namespace LinhGioi.UI
                 _loginCard.style.backgroundImage = new StyleBackground(LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture);
             }
             controlColumn.Add(_loginCard);
+            _loginCard.Add(NewLoginOrnamentRule("LGO Login CTA Lightweight Top Ornament v1"));
 
             var serverRow = new VisualElement();
             _loginServerRow = serverRow;
@@ -473,12 +474,14 @@ namespace LinhGioi.UI
             _loginButton.style.backgroundColor = Color.clear;
             _loginButton.tooltip = "Mở tài khoản thử nghiệm và đi tới Điện Nhân Vật.";
             _loginCard.Add(_loginButton);
+            _loginCard.Add(NewLoginOrnamentRule("LGO Login CTA Lightweight Bottom Ornament v1"));
             _serverSwitchButton = NewQuietButton("Chọn Máy Chủ", () => SetToast("S1 - Linh Giới đang mở ổn định.", RuntimeArtCatalog.Spirit));
             _serverSwitchButton.name = "LGO Login Server Switch Secondary";
             _serverSwitchButton.style.minWidth = 160;
             _serverSwitchButton.style.minHeight = 32;
             _serverSwitchButton.style.marginTop = 3;
             _serverSwitchButton.style.marginRight = 0;
+            _serverSwitchButton.style.display = DisplayStyle.None;
             _loginCard.Add(_serverSwitchButton);
             _account = NewMutedLabel("Tài khoản: chưa kết nối");
             _account.style.marginTop = 10;
@@ -1235,6 +1238,47 @@ namespace LinhGioi.UI
             return label;
         }
 
+        private static VisualElement NewLoginOrnamentRule(string name)
+        {
+            var row = new VisualElement { name = name };
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            row.style.justifyContent = Justify.Center;
+            row.style.width = Length.Percent(92);
+            row.style.height = 14;
+            row.style.marginTop = 2;
+            row.style.marginBottom = 4;
+
+            row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Gold));
+            var diamond = new VisualElement { name = name + " Diamond" };
+            diamond.style.width = 7;
+            diamond.style.height = 7;
+            diamond.style.marginLeft = 8;
+            diamond.style.marginRight = 8;
+            diamond.style.backgroundColor = RuntimeArtCatalog.Spirit;
+            diamond.style.borderTopColor = RuntimeArtCatalog.Gold;
+            diamond.style.borderTopWidth = 1;
+            diamond.style.borderLeftColor = RuntimeArtCatalog.Gold;
+            diamond.style.borderLeftWidth = 1;
+            diamond.style.borderRightColor = RuntimeArtCatalog.Gold;
+            diamond.style.borderRightWidth = 1;
+            diamond.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            diamond.style.borderBottomWidth = 1;
+            row.Add(diamond);
+            row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Spirit));
+            return row;
+        }
+
+        private static VisualElement NewLoginOrnamentLine(Color color)
+        {
+            var line = new VisualElement();
+            line.style.flexGrow = 1;
+            line.style.height = 1;
+            line.style.backgroundColor = color;
+            line.style.opacity = 0.64f;
+            return line;
+        }
+
         private static Label NewStatusLabel(string text, Color color)
         {
             var label = new Label(text);
@@ -1545,7 +1589,7 @@ namespace LinhGioi.UI
             }
             if (_serverSwitchButton != null)
             {
-                _serverSwitchButton.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+                _serverSwitchButton.style.display = DisplayStyle.None;
                 _serverSwitchButton.style.minHeight = 32;
             }
 

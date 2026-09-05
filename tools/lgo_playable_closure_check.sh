@@ -225,6 +225,9 @@ source_only() {
   if [[ -f tools/validate_lgo_login_panel_visual_balance.py ]]; then
     run_phase login_panel_visual_balance python3.12 tools/validate_lgo_login_panel_visual_balance.py
   fi
+  if [[ -f tools/validate_lgo_login_cta_ornament_lightweight.py ]]; then
+    run_phase login_cta_ornament_lightweight python3.12 tools/validate_lgo_login_cta_ornament_lightweight.py
+  fi
   if [[ -f tools/validate_lgo_character_hall_v3b_composition.py ]]; then
     run_phase character_hall_v3b_composition python3.12 tools/validate_lgo_character_hall_v3b_composition.py
   fi
@@ -364,6 +367,7 @@ source_only() {
     tools/validate_lgo_login_gate_entry_visual_v1.py \
     tools/validate_lgo_login_npc_compositing_polish.py \
     tools/validate_lgo_login_panel_visual_balance.py \
+    tools/validate_lgo_login_cta_ornament_lightweight.py \
     tools/validate_lgo_character_hall_v3b_composition.py \
     tools/validate_lgo_character_hall_panel_density.py \
     tools/report_lgo_build_size_budget.py \

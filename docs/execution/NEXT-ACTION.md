@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-LOGIN-CTA-ORNAMENT-LIGHTWEIGHT-PASS-v1.0`
+`LGO-CHARACTER-CREATE-FORM-PRESENTATION-PASS-v1.0`
 
-Continue improving the login first-screen polish with lightweight ornament/layout tuning only: preserve V3B logo/background/button direction, avoid V3BA and composite slicing, keep mobile/tablet budgets small, and do not import heavy art unless a right-sized runtime asset is genuinely needed.
+Polish the Character Hall create/select form so it reads less like a developer form and more like a game lobby control. Preserve account/character semantics, avoid protocol/GameData/schema changes, and keep mobile/tablet layouts stable.
 
 ## Current blocker
 
@@ -36,11 +36,12 @@ Evidence:
 - `docs/tasks/LGO-CHARACTER-HALL-PANEL-DENSITY-PASS-v1.0.md`
 - `docs/tasks/LGO-WORLD-SCENE-DEPTH-LAYERING-PASS-v1.0.md`
 - `docs/tasks/LGO-WORLD-RESPONSIVE-EVIDENCE-REFRESH-v1.0.md`
+- `docs/tasks/LGO-LOGIN-CTA-ORNAMENT-LIGHTWEIGHT-PASS-v1.0.md`
 - `build/visual-evidence/latest/player.log`
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: continue with lightweight login CTA ornament polish if responsive evidence remains readable. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: continue with Character Hall create-form presentation polish after login CTA ornament evidence is captured. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; login CTA ornament polish is tracked under `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -76,6 +77,7 @@ python3.12 tools/validate_lgo_runtime_asset_import_profiles.py
 python3.12 tools/validate_lgo_device_profile_ui_budgets.py
 python3.12 tools/validate_lgo_login_npc_compositing_polish.py
 python3.12 tools/validate_lgo_login_panel_visual_balance.py
+python3.12 tools/validate_lgo_login_cta_ornament_lightweight.py
 python3.12 tools/validate_lgo_character_hall_v3b_composition.py
 python3.12 tools/validate_lgo_character_hall_panel_density.py
 python3.12 tools/validate_lgo_build_size_budget.py
@@ -127,6 +129,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-RESPONSIVE-EVIDENCE-REFRESH-v1.0` is source-ready. Continue with lightweight login CTA ornament polish and keep runtime asset budgets small.
+`LGO-LOGIN-CTA-ORNAMENT-LIGHTWEIGHT-PASS-v1.0` is source-ready. Continue with Character Hall create/select form presentation polish and keep account semantics unchanged.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.
