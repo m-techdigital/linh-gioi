@@ -1552,7 +1552,7 @@ namespace LinhGioi.UI
             if (_worldGuidanceCard != null) _worldGuidanceCard.style.display = dialogueVisible && compactViewport ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldArea != null) _worldArea.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldStep != null) _worldStep.style.display = showHints && !compactWorld ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_worldDirection != null) _worldDirection.style.display = showHints ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_worldDirection != null) _worldDirection.style.display = showHints && !(_isMobileProfile && !dialogueVisible) ? DisplayStyle.Flex : DisplayStyle.None;
             if (_interactionHint != null) _interactionHint.style.display = showHints ? DisplayStyle.Flex : DisplayStyle.None;
             if (_worldLandmarks != null) _worldLandmarks.style.display = showHints && !compactWorld ? DisplayStyle.Flex : DisplayStyle.None;
             if (_worldPoseState != null) _worldPoseState.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
@@ -1766,7 +1766,7 @@ namespace LinhGioi.UI
             var dialogueVisible = _dialoguePanel != null && _dialoguePanel.style.display == DisplayStyle.Flex;
             var mobilePanelWidth = dialogueVisible
                 ? Mathf.Clamp(viewportWidth * 0.26f, 248f, 286f)
-                : Mathf.Clamp(viewportWidth * 0.28f, 238f, 272f);
+                : Mathf.Clamp(viewportWidth * 0.26f, 236f, 258f);
             var tabletPanelWidth = dialogueVisible
                 ? Mathf.Clamp(viewportWidth * 0.30f, 350f, 400f)
                 : Mathf.Clamp(viewportWidth * 0.31f, 360f, 420f);
@@ -1778,6 +1778,19 @@ namespace LinhGioi.UI
             _worldHud.style.paddingRight = mobile && dialogueVisible ? 7 : mobile ? 8 : 12;
             _worldHud.style.paddingTop = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;
             _worldHud.style.paddingBottom = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;
+            _worldHud.style.backgroundColor = mobile
+                ? new Color(0.002f, 0.014f, 0.036f, dialogueVisible ? 0.82f : 0.66f)
+                : tablet
+                    ? new Color(0.004f, 0.018f, 0.044f, 0.78f)
+                    : RuntimeArtCatalog.Surface;
+            if (_worldGuidanceCard != null)
+            {
+                // LGO World HUD Mobile Hierarchy Polish v1: normal mobile keeps only objective and interaction priority.
+                _worldGuidanceCard.style.marginTop = mobile ? 6 : 8;
+                _worldGuidanceCard.style.marginBottom = mobile ? 6 : 8;
+                _worldGuidanceCard.style.paddingTop = mobile ? 5 : 7;
+                _worldGuidanceCard.style.paddingBottom = mobile ? 5 : 7;
+            }
 
             if (_dialoguePanel != null)
             {

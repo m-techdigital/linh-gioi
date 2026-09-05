@@ -279,6 +279,12 @@ source_only() {
   if [[ -f tools/validate_lgo_world_hud_dialogue_panel_evidence_refresh.py ]]; then
     run_phase world_hud_dialogue_panel_evidence_refresh python3.12 tools/validate_lgo_world_hud_dialogue_panel_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_world_hud_mobile_hierarchy_polish.py ]]; then
+    run_phase world_hud_mobile_hierarchy_polish python3.12 tools/validate_lgo_world_hud_mobile_hierarchy_polish.py
+  fi
+  if [[ -f tools/validate_lgo_world_hud_mobile_hierarchy_evidence_refresh.py ]]; then
+    run_phase world_hud_mobile_hierarchy_evidence_refresh python3.12 tools/validate_lgo_world_hud_mobile_hierarchy_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_build_size_budget.py ]]; then
     run_phase build_size_budget python3.12 tools/validate_lgo_build_size_budget.py
   fi
@@ -430,6 +436,8 @@ source_only() {
     tools/validate_lgo_world_actor_hud_occlusion_evidence_refresh.py \
     tools/validate_lgo_world_hud_dialogue_panel_viewport_polish.py \
     tools/validate_lgo_world_hud_dialogue_panel_evidence_refresh.py \
+    tools/validate_lgo_world_hud_mobile_hierarchy_polish.py \
+    tools/validate_lgo_world_hud_mobile_hierarchy_evidence_refresh.py \
     tools/report_lgo_build_size_budget.py \
     tools/validate_lgo_build_size_budget.py \
     tools/lgo_continuous_cycle.py \
