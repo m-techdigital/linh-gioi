@@ -123,6 +123,7 @@ namespace LinhGioi.UI
         private string _lastLayoutProfile;
         private string _forcedLayoutProfile;
         private bool _isMobileProfile;
+        private bool _createFormExpanded = true;
         private RuntimeUiEvidenceState _evidenceState;
 
         public static M4PlayableClientController Attach(GameObject host)
@@ -536,7 +537,7 @@ namespace LinhGioi.UI
             ApplyLobbyInputStyle(_characterName);
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
             _classId.style.display = DisplayStyle.None;
-            _createButton = NewCompactSecondaryButton("Tạo tu sĩ", () => RunAsync(CreateCharacterAsync));
+            _createButton = NewCompactSecondaryButton("Tạo tu sĩ", OnCreateCharacterAction);
             _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
             _createPanel.Add(_characterName);
             _createPanel.Add(_classId);
@@ -836,6 +837,7 @@ namespace LinhGioi.UI
         private void SelectCharacter(CharacterResponse character)
         {
             _selectedCharacter = character;
+            _createFormExpanded = character == null;
             UpdateSelectedPreview(character);
             _enterWorldButton.SetEnabled(character != null);
             _status.text = character == null ? "Tạo hoặc chọn tu sĩ" : "Đã chọn: " + character.name;
@@ -856,9 +858,7 @@ namespace LinhGioi.UI
                     _selectedClassSummary.text = "Mạch: Kiếm tu sơ nhập.";
                     _selectedClassSummary.style.display = DisplayStyle.None;
                 }
-                if (_createTitle != null) _createTitle.text = "Tạo Tu Sĩ";
-                if (_createHint != null) _createHint.text = "Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.";
-                if (_createPanel != null) _createPanel.style.opacity = 1f;
+                ApplyCharacterCreateFormState();
                 _worldName.text = "Chưa chọn nhân vật";
                 _worldMeta.text = "Chọn nhân vật tại điện nhân vật.";
                 if (_worldArea != null) _worldArea.text = "Khu vực: xem trước tại sảnh";
@@ -882,12 +882,60 @@ namespace LinhGioi.UI
                 _selectedClassSummary.text = "Mạch: Kiếm tu sơ nhập.";
                 _selectedClassSummary.style.display = DisplayStyle.None;
             }
-            if (_createTitle != null) _createTitle.text = "Tạo thêm tu sĩ";
-            if (_createHint != null) _createHint.text = "Tu sĩ đang chọn đã sẵn sàng. Chỉ tạo thêm khi cần hồ sơ mới.";
-            if (_createPanel != null) _createPanel.style.opacity = _isMobileProfile ? 0.78f : 0.84f;
+            ApplyCharacterCreateFormState();
             _worldName.text = "Tu sĩ: " + character.name;
             _worldMeta.text = "Kiếm tu sơ nhập / phiên hiện tại";
             _position.text = character.ToString();
+        }
+
+        private void OnCreateCharacterAction()
+        {
+            if (_selectedCharacter != null && !_createFormExpanded)
+            {
+                // LGO Character Hall Selected Create Collapse v1: selected state protects Enter World as the primary path.
+                _createFormExpanded = true;
+                ApplyCharacterCreateFormState();
+                SetToast("Nhập danh xưng mới để tạo thêm tu sĩ.", RuntimeArtCatalog.Muted);
+                return;
+            }
+            RunAsync(CreateCharacterAsync);
+        }
+
+        private void ApplyCharacterCreateFormState()
+        {
+            var selected = _selectedCharacter != null;
+            var collapsed = selected && !_createFormExpanded;
+            if (_createTitle != null)
+            {
+                _createTitle.text = collapsed ? "Tạo thêm" : selected ? "Tạo thêm tu sĩ" : "Tạo Tu Sĩ";
+                _createTitle.style.marginBottom = collapsed ? 2 : 8;
+                _createTitle.style.unityTextAlign = collapsed && !_isMobileProfile ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
+            }
+            if (_createHint != null)
+            {
+                _createHint.text = collapsed
+                    ? "Tu sĩ đã sẵn sàng."
+                    : selected
+                        ? "Nhập danh xưng mới nếu muốn tạo thêm hồ sơ."
+                        : "Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.";
+                _createHint.style.display = (!_isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+            if (_characterName != null) _characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_classId != null) _classId.style.display = DisplayStyle.None;
+            if (_createPanel != null)
+            {
+                _createPanel.style.flexDirection = collapsed && !_isMobileProfile ? FlexDirection.Row : FlexDirection.Column;
+                _createPanel.style.alignItems = collapsed && !_isMobileProfile ? Align.Center : Align.Stretch;
+                _createPanel.style.opacity = collapsed ? 0.72f : selected ? (_isMobileProfile ? 0.82f : 0.88f) : 1f;
+                _createPanel.style.minHeight = collapsed ? (_isMobileProfile ? 76 : 96) : RuntimeUiSizing.CharacterCreatePanelMinHeight;
+                if (collapsed) _createPanel.style.maxHeight = _isMobileProfile ? 86 : 108;
+            }
+            if (_characterActionRow != null)
+            {
+                _characterActionRow.style.marginLeft = collapsed && !_isMobileProfile ? 18 : 0;
+                _characterActionRow.style.flexGrow = collapsed && !_isMobileProfile ? 1 : 0;
+            }
+            ApplyCharacterHallActionHierarchy();
         }
 
         private void RefreshWorldLoopLabels()
@@ -956,7 +1004,7 @@ namespace LinhGioi.UI
 
         private void SetLobbyControls(bool enabled)
         {
-            _characterName.SetEnabled(enabled);
+            _characterName.SetEnabled(enabled && (_selectedCharacter == null || _createFormExpanded));
             _classId.SetEnabled(enabled);
             _createButton.SetEnabled(enabled);
             _enterWorldButton.SetEnabled(enabled && _selectedCharacter != null);
@@ -1181,7 +1229,7 @@ namespace LinhGioi.UI
                 _createPanel.style.marginTop = layout.CreatePanelMarginTop;
                 _createPanel.style.maxHeight = mobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
             }
-            if (_createHint != null) _createHint.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+            ApplyCharacterCreateFormState();
             ApplyCharacterHallActionHierarchy();
 
             // LGO Mobile World Viewport Evidence Fit v1: keep the HUD proportional so scene actors remain reviewable.
@@ -1335,7 +1383,7 @@ namespace LinhGioi.UI
                 _enterWorldButton.style.marginTop = RuntimeUiSpacing.CharacterSelectedPrimaryMobileMarginTop;
                 _enterWorldButton.style.opacity = 1f;
                 _enterWorldButton.tooltip = "Bước qua Linh Môn vào sân luyện.";
-                _createButton.text = "Tạo thêm";
+                _createButton.text = _createFormExpanded ? "Tạo tu sĩ" : "Tạo thêm";
                 RuntimeUiSkin.ApplyButtonMetrics(
                     _createButton,
                     mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,

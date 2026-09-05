@@ -58,8 +58,9 @@ def main() -> int:
         "var selected = _selectedCharacter != null;",
         "var mobileSelected = _isMobileProfile && selected;",
         "if (selected)",
+        "LGO Character Hall Selected Create Collapse v1",
+        "_createButton.text = _createFormExpanded ? \"Tạo tu sĩ\" : \"Tạo thêm\";",
         "_characterActionRow.Add(_enterWorldButton);",
-        "_createButton.text = \"Tạo thêm\";",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-MOBILE-SELECTED-CTA-HIERARCHY-PASS-v1.0.md",

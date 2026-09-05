@@ -56,7 +56,8 @@ def main() -> int:
         "LGO Character Hall Mobile Copy Density v1",
         "_lobbyIntro.text = mobile ? \"Chọn tu sĩ, rồi vào sân luyện.\"",
         "_emptyCharacterHint.text = mobile ? \"Hồ sơ sẽ hiện tại đây.\"",
-        "_createHint.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex",
+        "ApplyCharacterCreateFormState()",
+        "_createHint.style.display = (!_isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0.md",

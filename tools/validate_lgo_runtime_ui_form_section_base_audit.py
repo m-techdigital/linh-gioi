@@ -71,7 +71,8 @@ def main() -> int:
         "_createPanel = NewCharacterCreatePanel(layout);",
         "_createPanel.style.maxHeight = mobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;",
         "_characterName = NewTextField(\"Danh xưng\", \"LinhGioiHero\");",
-        "_createButton = NewCompactSecondaryButton(\"Tạo tu sĩ\", () => RunAsync(CreateCharacterAsync));",
+        "_createButton = NewCompactSecondaryButton(\"Tạo tu sĩ\", OnCreateCharacterAction);",
+        "private void OnCreateCharacterAction()",
         "_enterWorldButton = NewCompactPrimaryButton(\"Vào sân luyện\", () => RunAsync(EnterWorldAsync));",
     )
     if "new VisualElement();\n            _createPanel.name = \"LGO Character Hall Create Cultivator Panel V3B\"" in controller:

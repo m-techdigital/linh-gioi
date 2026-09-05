@@ -5,12 +5,12 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-POST-LOGIN-RUNTIME-QUALITY-FOLLOWUP-v1.0`.
-- Current reason: World Hub runtime background has been softened and desktop camera tightened so post-login actors/props read larger without adding heavy image assets.
+- Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
+- Current reason: Character Hall selected state now collapses the create form until the player explicitly chooses `Tạo thêm`, keeping `Vào sân luyện` as the clear primary path.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: choose the next compact visible hotspot, likely Character Hall selected-state density or World HUD information hierarchy, and avoid adding heavy assets or one-off validators unless a real gate needs them.
+- Next implementation task after this fix: choose the next compact visible hotspot, likely World HUD information hierarchy, session menu polish, or evidence/asset-weight cleanup; avoid heavy assets and one-off validators unless a real gate needs them.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -65,13 +65,15 @@ Current focus update: continuous workflow, task selection, quick/full gate strat
 
 Current focus update: World Hub ground texture now uses a smaller, softer procedural background and the desktop camera frame is closer under `LGO_WORLD_HUB_SOFT_BACKGROUND_CAMERA_READY`; fresh runtime screenshot is cleaner and actor/prop scale reads better, no visual PASS is claimed.
 
+Current focus update: Character Hall selected state now collapses the create form under `LGO_CHARACTER_HALL_SELECTED_CREATE_COLLAPSE_READY`; fresh runtime screenshot shows a cleaner CTA band with `Vào sân luyện` first and no always-visible create input, no visual PASS is claimed.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-POST-LOGIN-RUNTIME-QUALITY-FOLLOWUP-v1.0`
+`LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`
 
-Continue with one compact post-login runtime quality follow-up. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Marker ready from the previous pass: `LGO_WORLD_HUB_SOFT_BACKGROUND_CAMERA_READY`.
+Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Marker ready from the previous pass: `LGO_CHARACTER_HALL_SELECTED_CREATE_COLLAPSE_READY`.
 
 ## Current blocker
 
