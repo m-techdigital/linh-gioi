@@ -4,15 +4,15 @@ Last updated: `2026-09-05`
 
 ## Current focus
 
-Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile, the world hub ground now uses a lightweight procedural cultivation-platform texture instead of a debug-like grid, the login first screen now uses a V3B composition with a centered text logo/CTA cluster plus right-side Gate Keeper on desktop/tablet and a compact logo/CTA layout on mobile, the Character Hall now uses a V3B cultivator portrait with a mobile-specific two-zone lobby layout and lighter panel density, build-size budget reporting now separates Unity runtime payload from repository/reference/tooling weight, the visual evidence loop now writes PNG heuristics for checkpoint presence/dimensions/byte size/pixel variation/duplicate-frame detection, world-hub labels now show by guided state/proximity instead of cluttering the whole scene, the login CTA stack now uses a lighter dark-glass panel to reduce cyan/gold glare while retaining the V3B logo/button language, and the World Hub now has lightweight procedural grounding shadows under the player, interactables, target dummy, warning slime, Spirit Gate, and key props. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
+Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile, the world hub ground now uses a lightweight procedural cultivation-platform texture instead of a debug-like grid, the login first screen now uses a V3B composition with a centered text logo/CTA cluster plus right-side Gate Keeper on desktop/tablet and a compact logo/CTA layout on mobile, the Character Hall now uses a V3B cultivator portrait with a mobile-specific two-zone lobby layout, lighter panel density, and a game-facing create form with framed `Danh xưng` input and `Tạo tu sĩ` CTA, build-size budget reporting now separates Unity runtime payload from repository/reference/tooling weight, the visual evidence loop now writes PNG heuristics for checkpoint presence/dimensions/byte size/pixel variation/duplicate-frame detection, world-hub labels now show by guided state/proximity instead of cluttering the whole scene, the login CTA stack now uses a lighter dark-glass panel to reduce cyan/gold glare while retaining the V3B logo/button language, and the World Hub now has lightweight procedural grounding shadows under the player, interactables, target dummy, warning slime, Spirit Gate, and key props. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-CHARACTER-CREATE-FORM-PRESENTATION-PASS-v1.0`
+`LGO-CHARACTER-HALL-RESPONSIVE-EVIDENCE-REFRESH-v1.0`
 
-Polish the Character Hall create/select form so it reads less like a developer form and more like a game lobby control. Preserve account/character semantics, avoid protocol/GameData/schema changes, and keep mobile/tablet layouts stable.
+Refresh Character Hall desktop/tablet/mobile evidence after the create-form polish. Review spacing, input scale, portrait balance, button hierarchy, and clipped text before moving to the next world/HUD task.
 
 ## Current blocker
 
@@ -37,11 +37,12 @@ Evidence:
 - `docs/tasks/LGO-WORLD-SCENE-DEPTH-LAYERING-PASS-v1.0.md`
 - `docs/tasks/LGO-WORLD-RESPONSIVE-EVIDENCE-REFRESH-v1.0.md`
 - `docs/tasks/LGO-LOGIN-CTA-ORNAMENT-LIGHTWEIGHT-PASS-v1.0.md`
+- `docs/tasks/LGO-CHARACTER-CREATE-FORM-PRESENTATION-PASS-v1.0.md`
 - `build/visual-evidence/latest/player.log`
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: continue with Character Hall create-form presentation polish after login CTA ornament evidence is captured. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; login CTA ornament polish is tracked under `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: refresh Character Hall responsive evidence after create-form presentation polish. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; login CTA ornament polish is tracked under `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`; Character Hall create-form presentation is tracked under `LGO_CHARACTER_CREATE_FORM_PRESENTATION_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -80,6 +81,7 @@ python3.12 tools/validate_lgo_login_panel_visual_balance.py
 python3.12 tools/validate_lgo_login_cta_ornament_lightweight.py
 python3.12 tools/validate_lgo_character_hall_v3b_composition.py
 python3.12 tools/validate_lgo_character_hall_panel_density.py
+python3.12 tools/validate_lgo_character_create_form_presentation.py
 python3.12 tools/validate_lgo_build_size_budget.py
 python3.12 tools/validate_lgo_world_hud_density_mobile_touch.py
 python3.12 tools/validate_lgo_world_ground_visual_quality.py
@@ -129,6 +131,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-LOGIN-CTA-ORNAMENT-LIGHTWEIGHT-PASS-v1.0` is source-ready. Continue with Character Hall create/select form presentation polish and keep account semantics unchanged.
+`LGO-CHARACTER-CREATE-FORM-PRESENTATION-PASS-v1.0` is source-ready. Continue with responsive Character Hall evidence refresh, then choose the next safe world/HUD/UI quality task from the roadmap.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

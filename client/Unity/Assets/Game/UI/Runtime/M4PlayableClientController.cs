@@ -605,12 +605,16 @@ namespace LinhGioi.UI
             _lobbyPanel.Add(_createPanel);
 
             _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
-            _createPanel.Add(NewStatusLabel("Mạch mặc định: Kiếm tu sơ nhập. Hệ môn phái chi tiết sẽ mở ở giai đoạn sau.", RuntimeArtCatalog.Muted));
-            _characterName = NewTextField("Tên nhân vật", "LinhGioiHero");
+            var createHint = NewStatusLabel("Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted);
+            createHint.name = "LGO Character Create Form Game Copy v1";
+            _createPanel.Add(createHint);
+            _characterName = NewTextField("Danh xưng", "LinhGioiHero");
+            _characterName.name = "LGO Character Create Form Framed Input v1";
             _characterName.style.maxWidth = 360;
+            ApplyLobbyInputStyle(_characterName);
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
             _classId.style.display = DisplayStyle.None;
-            _createButton = NewCompactSecondaryButton("Tạo", () => RunAsync(CreateCharacterAsync));
+            _createButton = NewCompactSecondaryButton("Tạo tu sĩ", () => RunAsync(CreateCharacterAsync));
             _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
             _createPanel.Add(_characterName);
             _createPanel.Add(_classId);
@@ -1306,6 +1310,24 @@ namespace LinhGioi.UI
             field.style.marginTop = 8;
             field.style.color = RuntimeArtCatalog.Text;
             return field;
+        }
+
+        private static void ApplyLobbyInputStyle(TextField field)
+        {
+            field.style.minHeight = 42;
+            field.style.paddingLeft = 10;
+            field.style.paddingRight = 10;
+            field.style.paddingTop = 4;
+            field.style.paddingBottom = 4;
+            field.style.backgroundColor = new Color(0.0f, 0.014f, 0.034f, 0.82f);
+            field.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.48f);
+            field.style.borderTopWidth = 1;
+            field.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.46f);
+            field.style.borderLeftWidth = 2;
+            field.style.borderRightColor = new Color(0.14f, 0.78f, 0.90f, 0.24f);
+            field.style.borderRightWidth = 1;
+            field.style.borderBottomColor = new Color(0.93f, 0.73f, 0.36f, 0.28f);
+            field.style.borderBottomWidth = 1;
         }
 
         private static Button NewPrimaryButton(string label, Action action)

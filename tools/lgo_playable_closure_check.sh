@@ -234,6 +234,9 @@ source_only() {
   if [[ -f tools/validate_lgo_character_hall_panel_density.py ]]; then
     run_phase character_hall_panel_density python3.12 tools/validate_lgo_character_hall_panel_density.py
   fi
+  if [[ -f tools/validate_lgo_character_create_form_presentation.py ]]; then
+    run_phase character_create_form_presentation python3.12 tools/validate_lgo_character_create_form_presentation.py
+  fi
   if [[ -f tools/validate_lgo_build_size_budget.py ]]; then
     run_phase build_size_budget python3.12 tools/validate_lgo_build_size_budget.py
   fi
@@ -370,6 +373,7 @@ source_only() {
     tools/validate_lgo_login_cta_ornament_lightweight.py \
     tools/validate_lgo_character_hall_v3b_composition.py \
     tools/validate_lgo_character_hall_panel_density.py \
+    tools/validate_lgo_character_create_form_presentation.py \
     tools/report_lgo_build_size_budget.py \
     tools/validate_lgo_build_size_budget.py \
     tools/lgo_continuous_cycle.py \
