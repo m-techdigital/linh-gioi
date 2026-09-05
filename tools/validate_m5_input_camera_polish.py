@@ -53,7 +53,11 @@ def main() -> int:
         'Mathf.Clamp01(Time.deltaTime * 7f)',
         'Quaternion.Euler(43f, 0f, 0f)',
         'camera.orthographic = true',
-        'camera.orthographicSize = 7.0f',
+        'camera.orthographicSize = CurrentCameraOrthographicSize()',
+        'private static float CurrentCameraOrthographicSize()',
+        'return 5.45f',
+        'return 6.15f',
+        'return 7.0f',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',

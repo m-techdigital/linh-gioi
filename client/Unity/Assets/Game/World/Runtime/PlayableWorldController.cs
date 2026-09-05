@@ -371,7 +371,7 @@ namespace LinhGioi.World
             camera.transform.position = target.position + CameraFollowOffset;
             camera.transform.rotation = Quaternion.Euler(43f, 0f, 0f);
             camera.orthographic = true;
-            camera.orthographicSize = 7.0f;
+            camera.orthographicSize = CurrentCameraOrthographicSize();
             camera.clearFlags = CameraClearFlags.SolidColor;
             camera.backgroundColor = RuntimeArtCatalog.Background;
             var lightObject = new GameObject("LGO Playable Light");
@@ -389,7 +389,17 @@ namespace LinhGioi.World
             camera.transform.position = Vector3.Lerp(camera.transform.position, desired, Mathf.Clamp01(Time.deltaTime * 7f));
             camera.transform.rotation = Quaternion.Euler(43f, 0f, 0f);
             camera.orthographic = true;
-            camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, 7.0f, Mathf.Clamp01(Time.deltaTime * 5f));
+            camera.orthographicSize = Mathf.Lerp(camera.orthographicSize, CurrentCameraOrthographicSize(), Mathf.Clamp01(Time.deltaTime * 5f));
+        }
+
+        private static float CurrentCameraOrthographicSize()
+        {
+            // LGO Mobile World Camera Framing v1: smaller screens need larger readable actors, not a farther fixed desktop view.
+            var width = Screen.width > 0 ? Screen.width : 1280;
+            var height = Screen.height > 0 ? Screen.height : 720;
+            if (width <= 1000 || height <= 600) return 5.45f;
+            if (width <= 1400 || height <= 1050) return 6.15f;
+            return 7.0f;
         }
 
         private static void EnsureGround()
