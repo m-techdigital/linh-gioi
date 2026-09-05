@@ -8,6 +8,7 @@ PROJECT="$ROOT/client/Unity"
 PLUGINS_DIR="$PROJECT/Assets/Plugins/Google.Protobuf"
 DLL="$PLUGINS_DIR/Google.Protobuf.dll"
 CLEAR_UNITY_CACHE="${LGO_UNITY_LOCAL_ASSETS_CLEAR_CACHE:-1}"
+QUIET="${LGO_UNITY_LOCAL_ASSETS_QUIET:-0}"
 
 usage() {
   cat <<'USAGE'
@@ -86,14 +87,21 @@ else
   echo "GOOGLE_PROTOBUF_DLL_ALREADY_PRESENT $DLL"
 fi
 
-ls -lh "$DLL"
-shasum -a 256 "$DLL" || sha256sum "$DLL"
+if [[ "$QUIET" != "1" ]]; then
+  ls -lh "$DLL"
+  shasum -a 256 "$DLL" || sha256sum "$DLL"
+fi
 
 echo "== Generate Unity C# protocol =="
 PROTOC_BIN="$PROTOC_BIN" PROTOC_SHA256="$PROTOC_SHA256" python3 tools/prepare_unity_protocol.py
 
 echo "== Check generated protocol =="
-find client/Unity/Assets/Game/Protocol -maxdepth 2 -type f -print | sort
+if [[ "$QUIET" == "1" ]]; then
+  generated_count="$(find client/Unity/Assets/Game/Protocol -maxdepth 2 -type f | wc -l | tr -d ' ')"
+  echo "UNITY_PROTOCOL_GENERATED_FILES_READY count=$generated_count"
+else
+  find client/Unity/Assets/Game/Protocol -maxdepth 2 -type f -print | sort
+fi
 
 if [[ "$CLEAR_UNITY_CACHE" == "1" ]]; then
   echo "== Clear partial Unity compile cache =="

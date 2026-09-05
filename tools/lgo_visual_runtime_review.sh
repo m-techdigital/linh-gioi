@@ -223,7 +223,7 @@ echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE source_gates"
 run_source_gates
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE prepare_assets"
-LGO_UNITY_LOCAL_ASSETS_CLEAR_CACHE="$CLEAR_UNITY_CACHE" ./tools/prepare_unity_local_assets.sh
+LGO_UNITY_LOCAL_ASSETS_CLEAR_CACHE="$CLEAR_UNITY_CACHE" LGO_UNITY_LOCAL_ASSETS_QUIET=1 ./tools/prepare_unity_local_assets.sh
 prepare_server_runtime
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE build_player"

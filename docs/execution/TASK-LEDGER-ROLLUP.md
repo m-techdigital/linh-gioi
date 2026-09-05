@@ -5,7 +5,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 ## Quick State
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Next task: `LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0`
+- Next task: `LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT-v1.0`
 - Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.
 - Purpose: scan recent work quickly without deleting historical task rows or marker coverage.
 
@@ -13,7 +13,6 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 
 | Recent | Task ID | Status / Decision | Next allowed step |
 |---:|---|---|---|
-| 226 | LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH v1.0 | source ready / no visual pass claim; `LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_READY`: World HUD root/group frames now use calmer V3B-style glass, avoid stretched decorative texture behind dense copy, and keep clearer nested hierarchy without gameplay changes | Continue with `LGO-WORLD-HUD-FANTASY-PANEL-EVIDENCE-REFRESH-v1.0` |
 | 227 | LGO-WORLD-HUD-FANTASY-PANEL-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_WORLD_HUD_FANTASY_PANEL_EVIDENCE_REFRESH_READY`: refreshed World Hub/NPC Dialogue screenshots after rejecting stretched decorative HUD texture; corrected glass/border version is stable but not final-production visual quality | Continue with `LGO-RUNTIME-UI-STATUS-COMPOSITION-CLEANUP-v1.0` |
 | 228 | LGO-RUNTIME-UI-STATUS-COMPOSITION-CLEANUP v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_STATUS_COMPOSITION_CLEANUP_READY`: hidden layout/combat status labels and prototype note now use shared hidden-label helpers instead of repeated controller-local display hiding | Continue with `LGO-RUNTIME-UI-STATUS-COMPOSITION-EVIDENCE-REFRESH-v1.0` |
 | 229 | LGO-RUNTIME-UI-STATUS-COMPOSITION-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_RUNTIME_UI_STATUS_COMPOSITION_EVIDENCE_REFRESH_READY`: target dummy/HUD screenshots refreshed after hidden status composition cleanup; hidden labels stay hidden and no visual pass is claimed | Continue with `LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-LIGHTNESS-PASS-v1.0` |
@@ -31,6 +30,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 | 241 | LGO-WORKFLOW-FAST-GATE-NOISE-REDUCTION v1.0 | source/runtime tooling ready / no visual pass claim; `LGO_WORKFLOW_FAST_GATE_NOISE_REDUCTION_READY`: routine dev-loop context now uses Quick Resume plus ledger rollup, fast server build output is logged quietly, and visual runtime review restores Unity ProjectSettings after capture | Continue with `LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0` |
 | 242 | LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_RUNTIME_CODE_HOTSPOT_REDUCTION_READY`: login responsive application moved from the main playable UI controller into a dedicated helper, reducing controller size while preserving login runtime visuals and historical validation coverage | Continue with `LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT-v1.0` |
 | 243 | LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_WORLD_CONTROLLER_INTERACTION_PRESENTATION_SPLIT_READY`: world-space label creation, shadowing, text refresh, and active toggling moved into `WorldLabelPresenter`; interaction/gameplay decisions remain in the world controller | Continue with `LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0` |
+| 244 | LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE v1.0 | tooling/runtime evidence ready / no visual pass claim; `LGO_PREPARE_UNITY_ASSETS_QUIET_PROFILE_READY`: Unity local asset preparation can now run in concise mode for routine visual evidence while still generating protocol and surfacing failure logs honestly | Continue with `LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT-v1.0` |
 
 ## Operating Notes
 

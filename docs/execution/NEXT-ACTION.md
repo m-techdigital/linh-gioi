@@ -5,8 +5,8 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0`.
-- Current reason: World label creation/shadow/active presentation has moved into `WorldLabelPresenter`, source-only gates pass, and runtime world capture remains stable; continue reducing repeated visual-log output from Unity asset preparation.
+- Active task: `LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT-v1.0`.
+- Current reason: Unity local asset preparation now has a quiet mode used by visual runtime review, reducing routine capture logs while preserving protocol generation and failure visibility; continue improving runtime capture reliability so screenshots do not depend on manual clicking.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -51,13 +51,15 @@ Current focus update: Login responsive layout now lives in `RuntimeLoginResponsi
 
 Current focus update: World-space label creation, text refresh, shadow, and active toggling now live in `WorldLabelPresenter` under `LGO_WORLD_CONTROLLER_INTERACTION_PRESENTATION_SPLIT_READY`; gameplay state ownership remains in `PlayableWorldController`, and world-hub runtime capture remains stable with no visual PASS claim.
 
+Current focus update: `prepare_unity_local_assets.sh` now supports `LGO_UNITY_LOCAL_ASSETS_QUIET=1`, and `lgo_visual_runtime_review.sh` uses it under `LGO_PREPARE_UNITY_ASSETS_QUIET_PROFILE_READY`; visual review logs are shorter while protocol generation/build/capture still fail honestly.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0`
+`LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT-v1.0`
 
-Continue with a focused workflow improvement that gives `prepare_unity_local_assets.sh` a quiet summary mode for routine visual/runtime loops while keeping full logs available on failure. Do not change protocol contents or generated protocol semantics. Marker ready from the previous world-controller split: `LGO_WORLD_CONTROLLER_INTERACTION_PRESENTATION_SPLIT_READY`.
+Continue by auditing the visual runtime evidence capture path for any dependency on player focus or manual clicks. Prefer source-safe runner/tooling improvements that make capture begin and finish automatically in desktop/tablet/mobile profiles. Do not claim visual PASS from capture alone. Marker ready from the previous workflow fix: `LGO_PREPARE_UNITY_ASSETS_QUIET_PROFILE_READY`.
 
 ## Current blocker
 
