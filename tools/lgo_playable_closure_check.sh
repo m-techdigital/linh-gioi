@@ -376,6 +376,12 @@ source_only() {
   if [[ -f tools/validate_lgo_world_hub_interaction_evidence_refresh.py ]]; then
     run_phase world_hub_interaction_evidence_refresh python3.12 tools/validate_lgo_world_hub_interaction_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_near_interaction_checkpoint_capture.py ]]; then
+    run_phase near_interaction_checkpoint_capture python3.12 tools/validate_lgo_near_interaction_checkpoint_capture.py
+  fi
+  if [[ -f tools/validate_lgo_near_interaction_evidence_refresh.py ]]; then
+    run_phase near_interaction_evidence_refresh python3.12 tools/validate_lgo_near_interaction_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_world_responsive_evidence_refresh.py ]]; then
     run_phase world_responsive_evidence_refresh python3.12 tools/validate_lgo_world_responsive_evidence_refresh.py
   fi
@@ -494,6 +500,8 @@ source_only() {
     tools/validate_lgo_world_hub_visual_readability_cleanup.py \
     tools/validate_lgo_world_hub_interaction_readability.py \
     tools/validate_lgo_world_hub_interaction_evidence_refresh.py \
+    tools/validate_lgo_near_interaction_checkpoint_capture.py \
+    tools/validate_lgo_near_interaction_evidence_refresh.py \
     tools/validate_lgo_world_responsive_evidence_refresh.py \
     tools/validate_lgo_telemetry_schema_plan.py \
     tools/validate_code_governance.py \

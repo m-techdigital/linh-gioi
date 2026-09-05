@@ -20,6 +20,8 @@ EXPECTED_SCREENSHOTS = (
     "character-select.png",
     "enter-world.png",
     "world-hub.png",
+    "near-gatekeeper-prompt.png",
+    "near-training-stone-prompt.png",
     "target-dummy-state.png",
     "npc-dialogue.png",
     "session-menu.png",

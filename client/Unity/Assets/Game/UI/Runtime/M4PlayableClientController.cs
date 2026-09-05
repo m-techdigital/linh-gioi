@@ -1968,6 +1968,22 @@ namespace LinhGioi.UI
             await EnterWorldAsync();
         }
 
+        internal void CaptureEvidenceNearGateKeeperPrompt()
+        {
+            if (_world == null) return;
+            _world.SetSmokePositionNearGateKeeper();
+            RefreshWorldLoopLabels();
+            RefreshCombatAssetUiState();
+        }
+
+        internal void CaptureEvidenceNearTrainingStonePrompt()
+        {
+            if (_world == null) return;
+            _world.SetSmokePositionNearTrainingStone();
+            RefreshWorldLoopLabels();
+            RefreshCombatAssetUiState();
+        }
+
         internal void CaptureEvidenceOpenDialogue()
         {
             if (_world == null) return;

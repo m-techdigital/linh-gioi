@@ -768,10 +768,10 @@ namespace LinhGioi.World
 
             // LGO World Hub Interaction Readability v1: world prompt is short and object-aware; full copy remains in HUD.
             var mobile = IsMobileWorldViewport();
-            _interactionPromptWorldLabel.transform.position = _nearestInteractable.position + CurrentInteractionPromptOffset();
+            _interactionPromptWorldLabel.transform.position = CurrentInteractionPromptPosition(_nearestInteractable);
             _interactionPromptWorldLabel.text = InteractionWorldPromptText();
-            _interactionPromptWorldLabel.fontSize = mobile ? 32 : IsNarrowWorldViewport() ? 34 : 38;
-            _interactionPromptWorldLabel.characterSize = mobile ? 0.034f : 0.038f;
+            _interactionPromptWorldLabel.fontSize = mobile ? 44 : IsNarrowWorldViewport() ? 46 : 48;
+            _interactionPromptWorldLabel.characterSize = mobile ? 0.060f : IsNarrowWorldViewport() ? 0.052f : 0.050f;
             _interactionPromptWorldLabel.color = _nearestInteractable.id == "Gate Keeper" ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
             EnsureWorldLabelShadow(_interactionPromptWorldLabel.transform, _interactionPromptWorldLabel.text);
         }
@@ -1212,9 +1212,24 @@ namespace LinhGioi.World
 
         private static Vector3 CurrentInteractionPromptOffset()
         {
-            if (IsMobileWorldViewport()) return new Vector3(0f, 1.86f, -0.04f);
-            if (IsNarrowWorldViewport()) return new Vector3(0f, 1.98f, -0.04f);
-            return new Vector3(0f, 2.16f, -0.04f);
+            if (IsMobileWorldViewport()) return new Vector3(0f, 2.28f, -0.06f);
+            if (IsNarrowWorldViewport()) return new Vector3(0f, 2.24f, -0.05f);
+            return new Vector3(0f, 2.20f, -0.04f);
+        }
+
+        private static Vector3 CurrentGateKeeperInteractionPromptOffset()
+        {
+            // Gate Keeper has a taller portrait plus a two-line narrow label, so the prompt needs its own air gap.
+            if (IsMobileWorldViewport()) return new Vector3(-0.10f, 2.58f, -0.08f);
+            if (IsNarrowWorldViewport()) return new Vector3(-0.18f, 2.52f, -0.07f);
+            return new Vector3(-0.12f, 2.44f, -0.06f);
+        }
+
+        private static Vector3 CurrentInteractionPromptPosition(InteractableState interactable)
+        {
+            if (interactable.id == "Gate Keeper")
+                return CurrentGateKeeperVisualPosition() + CurrentGateKeeperInteractionPromptOffset();
+            return interactable.position + CurrentInteractionPromptOffset();
         }
 
         private static Vector3 CurrentGateKeeperVisualPosition()

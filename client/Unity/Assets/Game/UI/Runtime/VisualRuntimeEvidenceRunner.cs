@@ -19,6 +19,8 @@ namespace LinhGioi.UI
             "character-select.png",
             "enter-world.png",
             "world-hub.png",
+            "near-gatekeeper-prompt.png",
+            "near-training-stone-prompt.png",
             "target-dummy-state.png",
             "npc-dialogue.png",
             "session-menu.png"
@@ -97,6 +99,22 @@ namespace LinhGioi.UI
                 "World Hub",
                 "docs/reference-art/v0.16.5/lgo-playable-hud-mockup-v0165.png",
                 "World HUD hierarchy, status blocks, local combat shell, target clarity");
+
+            _controller.CaptureEvidenceNearGateKeeperPrompt();
+            yield return WaitFrames(8);
+            yield return CaptureCheckpoint(
+                "near-gatekeeper-prompt",
+                "Near Gate Keeper Prompt",
+                "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv; docs/tasks/LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0.md",
+                "Player stands inside Gate Keeper interaction range; short Vietnamese prompt and compact HUD action are visible");
+
+            _controller.CaptureEvidenceNearTrainingStonePrompt();
+            yield return WaitFrames(8);
+            yield return CaptureCheckpoint(
+                "near-training-stone-prompt",
+                "Near Training Stone Prompt",
+                "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv; docs/tasks/LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0.md",
+                "Player stands inside Training Stone interaction range; short Vietnamese prompt and compact HUD action are visible");
 
             _controller.CaptureEvidenceTargetDummyState();
             yield return WaitFrames(8);

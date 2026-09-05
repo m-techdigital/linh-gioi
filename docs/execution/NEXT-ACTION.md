@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-NEAR-INTERACTION-CHECKPOINT-CAPTURE-PASS-v1.0`
+`LGO-POST-LOGIN-VISUAL-EVIDENCE-UPLOAD-PACKAGING-v1.0`
 
-Add or tune visual evidence checkpoints that place the player near Người Giữ Cổng and Đá Luyện so the runtime screenshots directly show object-aware prompts from `LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0`. Marker: `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`. World hub visual staging marker already ready: `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`. Continue only with presentation/evidence work unless the refreshed screenshots reveal a concrete source bug.
+Package the latest visual evidence and source handoff notes for external review without committing build/cache artifacts. Marker: `LGO_NEAR_INTERACTION_EVIDENCE_REFRESH_READY`. Continue only with presentation/evidence/packaging work unless screenshots reveal a concrete source bug.
 
 ## Current blocker
 
@@ -58,7 +58,7 @@ Evidence:
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: add near-interaction capture checkpoints so visual review can prove the short object prompts in runtime, not only source. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; world hub visual staging is tracked under `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`; world hub interaction readability is tracked under `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`; world hub interaction evidence refresh is tracked under `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: package latest runtime evidence and source handoff notes for external review while keeping generated captures out of source control. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; world hub visual staging is tracked under `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`; world hub interaction readability is tracked under `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`; world hub interaction evidence refresh is tracked under `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`; near-interaction capture coverage is tracked under `LGO_NEAR_INTERACTION_CHECKPOINT_CAPTURE_READY`; near-interaction evidence refresh is tracked under `LGO_NEAR_INTERACTION_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Ready Marker Registry
 
@@ -94,6 +94,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0` / `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`
 - `LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0` / `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`
 - `LGO-WORLD-HUB-INTERACTION-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`
+- `LGO-NEAR-INTERACTION-CHECKPOINT-CAPTURE-PASS-v1.0` / `LGO_NEAR_INTERACTION_CHECKPOINT_CAPTURE_READY`
+- `LGO-NEAR-INTERACTION-EVIDENCE-REFRESH-v1.0` / `LGO_NEAR_INTERACTION_EVIDENCE_REFRESH_READY`
 
 ## Allowed paths
 
@@ -161,6 +163,8 @@ python3.12 tools/validate_lgo_world_scene_depth_layering.py
 python3.12 tools/validate_lgo_world_hub_visual_readability_cleanup.py
 python3.12 tools/validate_lgo_world_hub_interaction_readability.py
 python3.12 tools/validate_lgo_world_hub_interaction_evidence_refresh.py
+python3.12 tools/validate_lgo_near_interaction_checkpoint_capture.py
+python3.12 tools/validate_lgo_near_interaction_evidence_refresh.py
 python3.12 tools/validate_lgo_world_responsive_evidence_refresh.py
 python3.12 tools/validate_m4_2_playable_ui.py
 python3.12 tools/validate_m4_visible_ui.py
@@ -201,6 +205,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-HUB-INTERACTION-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-NEAR-INTERACTION-CHECKPOINT-CAPTURE-PASS-v1.0` so future visual reviews can directly inspect near-object prompt states.
+`LGO-NEAR-INTERACTION-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-POST-LOGIN-VISUAL-EVIDENCE-UPLOAD-PACKAGING-v1.0`; keep build/cache/evidence artifacts out of source control and do not claim `VISUAL_RUNTIME_PASS` from capture alone.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.
