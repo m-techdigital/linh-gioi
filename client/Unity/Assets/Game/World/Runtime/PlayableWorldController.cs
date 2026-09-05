@@ -1129,7 +1129,11 @@ namespace LinhGioi.World
             SetWorldLabelActive(_spiritGateWorldLabel, _guidedStep == GuidedTrainingStep.Complete);
 
             if (_gateKeeperWorldLabel != null)
-                _gateKeeperWorldLabel.transform.position = GateKeeperPosition + new Vector3(-0.04f, 1.72f, -0.02f);
+            {
+                // LGO World Label Safe Area v1: narrow profiles keep long Vietnamese labels away from the left HUD.
+                SetWorldLabel(_gateKeeperWorldLabel, GateKeeperWorldLabelText(), RuntimeArtCatalog.Gold);
+                _gateKeeperWorldLabel.transform.position = GateKeeperPosition + CurrentGateKeeperLabelOffset();
+            }
             if (_trainingStoneWorldLabel != null)
                 _trainingStoneWorldLabel.transform.position = TrainingStonePosition + new Vector3(0.18f, 1.36f, -0.04f);
             if (_targetDummyWorldLabel != null)
@@ -1138,6 +1142,28 @@ namespace LinhGioi.World
                 _spiritGateWorldLabel.transform.position = new Vector3(0f, 1.92f, -4.5f);
             if (_shadowSlimeWorldLabel != null)
                 _shadowSlimeWorldLabel.transform.position = ShadowSlimePosition + new Vector3(0f, 0.92f, -0.02f);
+        }
+
+        private static string GateKeeperWorldLabelText()
+        {
+            return IsNarrowWorldViewport() ? "Người Giữ\nCổng" : "Người Giữ Cổng";
+        }
+
+        private static Vector3 CurrentGateKeeperLabelOffset()
+        {
+            if (IsMobileWorldViewport()) return new Vector3(0.22f, 1.82f, -0.02f);
+            if (IsNarrowWorldViewport()) return new Vector3(0.52f, 1.78f, -0.02f);
+            return new Vector3(-0.04f, 1.72f, -0.02f);
+        }
+
+        private static bool IsMobileWorldViewport()
+        {
+            return Screen.width <= 1000 || Screen.height <= 600;
+        }
+
+        private static bool IsNarrowWorldViewport()
+        {
+            return Screen.width <= 1400 || Screen.height <= 1050;
         }
 
         private static void SetWorldLabelActive(TextMesh label, bool active)

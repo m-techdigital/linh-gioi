@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-WORLD-LABEL-SAFE-AREA-PASS-v1.0`
+`LGO-WORLD-TOP-STATUS-MOBILE-READABILITY-PASS-v1.0`
 
-Keep world-space labels away from the left HUD/safe-area region on tablet/mobile, starting with the Gate Keeper label that can be partially hidden by the guidance panel.
+Improve top status/action chip readability on mobile/tablet world-hub screenshots without adding gameplay or changing combat/session semantics.
 
 ## Current blocker
 
@@ -44,11 +44,13 @@ Evidence:
 - `docs/tasks/LGO-WORLD-HUD-ACTION-SHELL-EVIDENCE-REFRESH-v1.0.md`
 - `docs/tasks/LGO-WORLD-MOBILE-CAMERA-FRAMING-PASS-v1.0.md`
 - `docs/tasks/LGO-WORLD-MOBILE-CAMERA-EVIDENCE-REFRESH-v1.0.md`
+- `docs/tasks/LGO-WORLD-LABEL-SAFE-AREA-PASS-v1.0.md`
+- `docs/tasks/LGO-WORLD-LABEL-SAFE-AREA-EVIDENCE-REFRESH-v1.0.md`
 - `build/visual-evidence/latest/player.log`
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: move world-space labels out of HUD/safe-area occlusion zones on narrower profiles. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; login CTA ornament polish is tracked under `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`; Character Hall create-form presentation is tracked under `LGO_CHARACTER_CREATE_FORM_PRESENTATION_READY`; Character Hall responsive evidence refresh is tracked under `LGO_CHARACTER_HALL_RESPONSIVE_EVIDENCE_REFRESH_READY`; fast profile reuse is tracked under `LGO_VISUAL_RUNTIME_FAST_PROFILE_REUSE_READY`; world HUD action shell skin is tracked under `LGO_WORLD_HUD_ACTION_SHELL_V3B_SKIN_READY`; world HUD evidence refresh is tracked under `LGO_WORLD_HUD_ACTION_SHELL_EVIDENCE_REFRESH_READY`; mobile world camera framing is tracked under `LGO_WORLD_MOBILE_CAMERA_FRAMING_READY`; mobile camera evidence refresh is tracked under `LGO_WORLD_MOBILE_CAMERA_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: improve top status/action chip readability on mobile/tablet world-hub screenshots. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; login CTA ornament polish is tracked under `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`; Character Hall create-form presentation is tracked under `LGO_CHARACTER_CREATE_FORM_PRESENTATION_READY`; Character Hall responsive evidence refresh is tracked under `LGO_CHARACTER_HALL_RESPONSIVE_EVIDENCE_REFRESH_READY`; fast profile reuse is tracked under `LGO_VISUAL_RUNTIME_FAST_PROFILE_REUSE_READY`; world HUD action shell skin is tracked under `LGO_WORLD_HUD_ACTION_SHELL_V3B_SKIN_READY`; world HUD evidence refresh is tracked under `LGO_WORLD_HUD_ACTION_SHELL_EVIDENCE_REFRESH_READY`; mobile world camera framing is tracked under `LGO_WORLD_MOBILE_CAMERA_FRAMING_READY`; mobile camera evidence refresh is tracked under `LGO_WORLD_MOBILE_CAMERA_EVIDENCE_REFRESH_READY`; world label safe-area is tracked under `LGO_WORLD_LABEL_SAFE_AREA_READY`; label safe-area evidence is tracked under `LGO_WORLD_LABEL_SAFE_AREA_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -94,6 +96,8 @@ python3.12 tools/validate_lgo_world_hud_action_shell_v3b_skin.py
 python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_world_mobile_camera_framing.py
 python3.12 tools/validate_lgo_world_mobile_camera_evidence_refresh.py
+python3.12 tools/validate_lgo_world_label_safe_area.py
+python3.12 tools/validate_lgo_world_label_safe_area_evidence_refresh.py
 python3.12 tools/validate_lgo_build_size_budget.py
 python3.12 tools/validate_lgo_world_hud_density_mobile_touch.py
 python3.12 tools/validate_lgo_world_ground_visual_quality.py
@@ -140,6 +144,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-MOBILE-CAMERA-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with label safe-area polish, preserving current gameplay and contract semantics.
+`LGO-WORLD-LABEL-SAFE-AREA-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with top status mobile readability polish, preserving current gameplay and contract semantics.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.
