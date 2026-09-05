@@ -363,6 +363,12 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py ]]; then
     run_phase runtime_ui_compact_status_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_combat_button_state_readability_polish.py ]]; then
+    run_phase combat_button_state_readability_polish python3.12 tools/validate_lgo_combat_button_state_readability_polish.py
+  fi
+  if [[ -f tools/validate_lgo_combat_button_state_evidence_refresh.py ]]; then
+    run_phase combat_button_state_evidence_refresh python3.12 tools/validate_lgo_combat_button_state_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_world_hud_action_shell_evidence_refresh.py ]]; then
     run_phase world_hud_action_shell_evidence_refresh python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
   fi
@@ -617,6 +623,8 @@ source_only() {
     tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_style_debt_followup_audit.py \
     tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py \
+    tools/validate_lgo_combat_button_state_readability_polish.py \
+    tools/validate_lgo_combat_button_state_evidence_refresh.py \
     tools/validate_lgo_world_hud_action_shell_evidence_refresh.py \
     tools/validate_lgo_world_mobile_camera_framing.py \
     tools/validate_lgo_world_mobile_camera_evidence_refresh.py \

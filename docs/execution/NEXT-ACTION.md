@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-COMBAT-BUTTON-STATE-READABILITY-POLISH-v1.0`
+`LGO-COMBAT-BUTTON-MOBILE-RESPONSIVE-EVIDENCE-v1.0`
 
-Improve compact combat button disabled/cooldown readability found during compact status evidence review. Marker ready from the completed runtime evidence pass: `LGO_RUNTIME_UI_COMPACT_STATUS_EVIDENCE_REFRESH_READY`. Keep combat semantics unchanged; this is only button copy, layout, and state presentation.
+Refresh mobile/tablet profile screenshots after combat button state evidence refresh. Marker ready from the completed runtime evidence pass: `LGO_COMBAT_BUTTON_STATE_EVIDENCE_REFRESH_READY`. Confirm compact combat action sizing still holds on smaller screens before moving to broader HUD polish.
 
 ## Current blocker
 
@@ -137,6 +137,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-IMAGE-LAYER-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_IMAGE_LAYER_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-STYLE-DEBT-FOLLOWUP-AUDIT-v1.0` / `LGO_RUNTIME_UI_STYLE_DEBT_FOLLOWUP_AUDIT_READY`
 - `LGO-RUNTIME-UI-COMPACT-STATUS-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_COMPACT_STATUS_EVIDENCE_REFRESH_READY`
+- `LGO-COMBAT-BUTTON-STATE-READABILITY-POLISH-v1.0` / `LGO_COMBAT_BUTTON_STATE_READABILITY_POLISH_READY`
+- `LGO-COMBAT-BUTTON-STATE-EVIDENCE-REFRESH-v1.0` / `LGO_COMBAT_BUTTON_STATE_EVIDENCE_REFRESH_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 
@@ -222,6 +224,8 @@ python3.12 tools/validate_lgo_runtime_ui_factory_coverage_audit.py
 python3.12 tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py
 python3.12 tools/validate_lgo_runtime_ui_style_debt_followup_audit.py
 python3.12 tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py
+python3.12 tools/validate_lgo_combat_button_state_readability_polish.py
+python3.12 tools/validate_lgo_combat_button_state_evidence_refresh.py
 python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_world_mobile_camera_framing.py
 python3.12 tools/validate_lgo_world_mobile_camera_evidence_refresh.py
@@ -292,6 +296,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-RUNTIME-UI-COMPACT-STATUS-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-COMBAT-BUTTON-STATE-READABILITY-POLISH-v1.0`; the next useful batch is tightening the local combat button cooldown/disabled state so short Vietnamese copy stays legible.
+`LGO-COMBAT-BUTTON-STATE-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-COMBAT-BUTTON-MOBILE-RESPONSIVE-EVIDENCE-v1.0`; the next useful batch is refreshing mobile/tablet profile evidence for the compact combat action button.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

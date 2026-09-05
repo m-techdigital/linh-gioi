@@ -779,7 +779,7 @@ namespace LinhGioi.UI
             _localCombatButton = NewCompactSecondaryButton("Tấn công thử", TriggerLocalCombat);
             _localCombatButton.name = "LGO World Touch Primary Combat Button";
             _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ. Đánh thử cục bộ: xem vòng chọn mục tiêu, hit flash và nhịp hồi chiêu; không phải chiến đấu thật";
-            ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonNormalTexture);
+            ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonNormalTexture, false);
             var combatRow = NewIconStatusRow("LGO World Combat Readiness Row V3B", _combatCooldownIcon, _combatTargetStatus, _combatRangeStatus);
             _localCombatPanel.Add(combatRow);
             _localCombatPanel.Add(_combatFeedback);
@@ -1522,7 +1522,7 @@ namespace LinhGioi.UI
         private void TriggerLocalCombat()
         {
             if (_world == null) return;
-            ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonPressedTexture);
+            ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonPressedTexture, false);
             var intent = _world.BuildCombatIntentForLocalPreview(1, "unity-local-preview-1");
             _world.MarkCombatIntentPending(intent);
             _world.TryLocalCombatPrototype();
@@ -1544,10 +1544,10 @@ namespace LinhGioi.UI
             }
             if (_localCombatButton != null)
             {
-                ApplyCombatButtonSkin(_localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture);
-                _localCombatButton.text = coolingDown ? "Đang hồi chiêu" : "Tấn công thử";
+                ApplyCombatButtonSkin(_localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture, coolingDown);
+                _localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";
                 _localCombatButton.tooltip = coolingDown
-                    ? "Bấm vẫn cho phản hồi từ chối hồi chiêu; đây là nguyên mẫu cục bộ, không phải chiến đấu thật."
+                    ? "Đang hồi chiêu: bấm vẫn cho phản hồi từ chối hồi chiêu; đây là nguyên mẫu cục bộ, không phải chiến đấu thật."
                     : "Gửi ý định Chém Gió vào bia luyện tập; chỉ là phản hồi nguyên mẫu.";
             }
             var feedback = _world.CombatFeedbackText;
@@ -1676,10 +1676,17 @@ namespace LinhGioi.UI
             _loginButton.style.backgroundImage = new StyleBackground(texture);
         }
 
-        private static void ApplyCombatButtonSkin(Button button, Texture2D texture)
+        private static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)
         {
-            if (button == null || texture == null) return;
-            button.style.backgroundImage = new StyleBackground(texture);
+            if (button == null) return;
+            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
+            button.style.minWidth = coolingDown ? 142 : 132;
+            button.style.minHeight = 44;
+            button.style.paddingLeft = 14;
+            button.style.paddingRight = 14;
+            button.style.fontSize = coolingDown ? 13 : 14;
+            button.style.unityFontStyleAndWeight = FontStyle.Bold;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         private static void ApplyStatusAccent(Label label, Color accent)
