@@ -68,7 +68,11 @@ def check_panel_sizes(ui: str) -> None:
     min_widths = [int(v) for v in re.findall(r'minWidth\s*=\s*(\d+)', ui)]
     if min_widths and max(min_widths) > 360:
         errors.append(f'fixed minWidth too large for visible review: {max(min_widths)}')
-    if 'ShowLobbyMode()' in ui and '_authPanel.style.display = DisplayStyle.None;' not in ui:
+    if (
+        'ShowLobbyMode()' in ui
+        and '_authPanel.style.display = DisplayStyle.None;' not in ui
+        and 'SetDisplayed(_authPanel, false);' not in ui
+    ):
         errors.append('lobby mode must not keep the full auth panel visible beside character hall')
 
 

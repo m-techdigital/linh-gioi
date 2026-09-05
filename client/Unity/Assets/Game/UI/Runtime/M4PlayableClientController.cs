@@ -953,11 +953,11 @@ namespace LinhGioi.UI
 
         private void ShowAuthMode()
         {
-            _authPanel.style.display = DisplayStyle.Flex;
-            _lobbyPanel.style.display = DisplayStyle.None;
-            _worldHud.style.display = DisplayStyle.None;
-            _status.style.display = DisplayStyle.None;
-            _quitButton.style.display = DisplayStyle.None;
+            SetDisplayed(_authPanel, true);
+            SetDisplayed(_lobbyPanel, false);
+            SetDisplayed(_worldHud, false);
+            SetDisplayed(_status, false);
+            SetDisplayed(_quitButton, false);
             _mainShell.style.justifyContent = Justify.Center;
             ApplyLoginBackdrop(true);
             SetLobbyControls(false);
@@ -965,11 +965,11 @@ namespace LinhGioi.UI
 
         private void ShowLobbyMode()
         {
-            _authPanel.style.display = DisplayStyle.None;
-            _lobbyPanel.style.display = DisplayStyle.Flex;
-            _worldHud.style.display = DisplayStyle.None;
-            _status.style.display = DisplayStyle.Flex;
-            _quitButton.style.display = DisplayStyle.Flex;
+            SetDisplayed(_authPanel, false);
+            SetDisplayed(_lobbyPanel, true);
+            SetDisplayed(_worldHud, false);
+            SetDisplayed(_status, true);
+            SetDisplayed(_quitButton, true);
             SetLobbyControls(true);
             ApplyResponsiveLayoutProfile(true);
             _mainShell.style.justifyContent = Justify.Center;
@@ -978,11 +978,11 @@ namespace LinhGioi.UI
 
         private void ShowWorldMode()
         {
-            _authPanel.style.display = DisplayStyle.None;
-            _lobbyPanel.style.display = DisplayStyle.None;
-            _worldHud.style.display = DisplayStyle.Flex;
-            _status.style.display = DisplayStyle.Flex;
-            _quitButton.style.display = DisplayStyle.Flex;
+            SetDisplayed(_authPanel, false);
+            SetDisplayed(_lobbyPanel, false);
+            SetDisplayed(_worldHud, true);
+            SetDisplayed(_status, true);
+            SetDisplayed(_quitButton, true);
             SetSessionMenuVisible(false);
             _savePositionButton.SetEnabled(true);
             _backButton.SetEnabled(true);
@@ -1077,7 +1077,7 @@ namespace LinhGioi.UI
 
         private void ToggleSessionMenu()
         {
-            var visible = _sessionMenuPanel != null && _sessionMenuPanel.style.display == DisplayStyle.Flex;
+            var visible = IsDisplayed(_sessionMenuPanel);
             SetSessionMenuVisible(!visible);
         }
 
@@ -1090,14 +1090,14 @@ namespace LinhGioi.UI
         private void SetSessionMenuVisible(bool visible)
         {
             if (_sessionMenuPanel == null) return;
-            _sessionMenuPanel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            SetDisplayed(_sessionMenuPanel, visible);
             if (visible) _sessionMenuPanel.BringToFront();
             if (_sessionMenuStatus != null)
                 _sessionMenuStatus.text = visible ? "Phiên đang tạm dừng. Chọn tiếp tục, lưu vị trí, quay lại hoặc thoát." : "Phiên chơi đang hoạt động.";
             // LGO Session Menu Focus Cleanup v1: pause overlay owns focus; restore dialogue state when returning.
             if (visible)
             {
-                if (_dialoguePanel != null) _dialoguePanel.style.display = DisplayStyle.None;
+                SetDisplayed(_dialoguePanel, false);
             }
             else
             {
@@ -1111,35 +1111,35 @@ namespace LinhGioi.UI
             var showPosition = _showPositionToggle == null || _showPositionToggle.value;
             var showHints = _showHintsToggle == null || _showHintsToggle.value;
             var focusMode = _focusModeToggle != null && _focusModeToggle.value;
-            var sessionVisible = _sessionMenuPanel != null && _sessionMenuPanel.style.display == DisplayStyle.Flex;
-            var dialogueVisible = _dialoguePanel != null && _dialoguePanel.style.display == DisplayStyle.Flex;
+            var sessionVisible = IsDisplayed(_sessionMenuPanel);
+            var dialogueVisible = IsDisplayed(_dialoguePanel);
             var compactViewport = _isMobileProfile || string.Equals(_lastLayoutProfile, "tablet", StringComparison.Ordinal);
             var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible && !compactViewport;
             var gameplayPanelVisible = !sessionVisible && !dialogueVisible && (!compactViewport || _evidenceState.ForceCombatPanel);
             var compactWorld = compactViewport || focusMode;
             var evidenceHidesGuidance = _evidenceState.HideGuidanceCardOnCompact && compactViewport;
-            if (_worldHud != null) _worldHud.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;
-            if (_headerActions != null) _headerActions.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;
-            if (_layoutProfileLabel != null) _layoutProfileLabel.style.display = DisplayStyle.None;
-            if (_worldFooterActions != null) _worldFooterActions.style.display = sessionVisible || _isMobileProfile ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_position != null) _position.style.display = showPosition && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_worldDebugStrip != null) _worldDebugStrip.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_worldMeta != null) _worldMeta.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_worldGuidanceCard != null) _worldGuidanceCard.style.display = (dialogueVisible && compactViewport) || evidenceHidesGuidance ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_worldArea != null) _worldArea.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_worldStep != null) _worldStep.style.display = showHints && !compactWorld ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_worldDirection != null) _worldDirection.style.display = showHints && !(_isMobileProfile && !dialogueVisible) ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_interactionHint != null) _interactionHint.style.display = showHints ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_worldLandmarks != null) _worldLandmarks.style.display = showHints && !compactWorld ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_worldPoseState != null) _worldPoseState.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_worldVfxState != null) _worldVfxState.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_skinSource != null) _skinSource.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_skillPreviewPanel != null) _skillPreviewPanel.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_localCombatPanel != null) _localCombatPanel.style.display = gameplayPanelVisible ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_toast != null) _toast.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_combatVisualState != null) _combatVisualState.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_combatCooldown != null) _combatCooldown.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_combatAuthority != null) _combatAuthority.style.display = auxiliaryVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            SetElementVisibility(_worldHud, !(sessionVisible && compactViewport));
+            SetElementVisibility(_headerActions, !(sessionVisible && compactViewport));
+            SetDisplayed(_layoutProfileLabel, false);
+            SetDisplayed(_worldFooterActions, !(sessionVisible || _isMobileProfile));
+            SetDisplayed(_position, showPosition && !focusMode);
+            SetDisplayed(_worldDebugStrip, !compactWorld);
+            SetDisplayed(_worldMeta, !compactWorld);
+            SetDisplayed(_worldGuidanceCard, !((dialogueVisible && compactViewport) || evidenceHidesGuidance));
+            SetDisplayed(_worldArea, !compactWorld);
+            SetDisplayed(_worldStep, showHints && !compactWorld);
+            SetDisplayed(_worldDirection, showHints && !(_isMobileProfile && !dialogueVisible));
+            SetDisplayed(_interactionHint, showHints);
+            SetDisplayed(_worldLandmarks, showHints && !compactWorld);
+            SetDisplayed(_worldPoseState, auxiliaryVisible);
+            SetDisplayed(_worldVfxState, auxiliaryVisible);
+            SetDisplayed(_skinSource, auxiliaryVisible);
+            SetDisplayed(_skillPreviewPanel, auxiliaryVisible);
+            SetDisplayed(_localCombatPanel, gameplayPanelVisible);
+            SetDisplayed(_toast, !compactWorld);
+            SetDisplayed(_combatVisualState, auxiliaryVisible);
+            SetDisplayed(_combatCooldown, auxiliaryVisible);
+            SetDisplayed(_combatAuthority, auxiliaryVisible);
         }
 
         private void ApplyResponsiveLayoutProfile(bool force)
@@ -1550,8 +1550,25 @@ namespace LinhGioi.UI
 
         private void SetDialogueVisible(bool visible)
         {
-            if (_dialoguePanel != null) _dialoguePanel.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_localCombatPanel != null) _localCombatPanel.style.display = visible ? DisplayStyle.None : DisplayStyle.Flex;
+            SetDisplayed(_dialoguePanel, visible);
+            SetDisplayed(_localCombatPanel, !visible);
+        }
+
+        private static bool IsDisplayed(VisualElement element)
+        {
+            return element != null && element.style.display == DisplayStyle.Flex;
+        }
+
+        private static void SetDisplayed(VisualElement element, bool visible)
+        {
+            if (element == null) return;
+            element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private static void SetElementVisibility(VisualElement element, bool visible)
+        {
+            if (element == null) return;
+            element.style.visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
 
         internal async Task CaptureEvidenceLoginAsync()

@@ -25,6 +25,14 @@ def require(rel: str, *markers: str) -> None:
             ERRORS.append(f"{rel} missing marker: {marker}")
 
 
+def require_evidence(rel: str) -> None:
+    path = ROOT / rel
+    if not path.is_file():
+        ERRORS.append(f"missing evidence: {rel}")
+    elif path.stat().st_size <= 1024:
+        ERRORS.append(f"evidence too small: {rel}")
+
+
 def check_frozen() -> None:
     result = subprocess.run(
         [
@@ -51,43 +59,42 @@ def check_frozen() -> None:
 
 
 def main() -> int:
-    ui = read("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs")
-    for marker in ("LGO Session Menu Focus Cleanup v1", "RefreshDialoguePanel();"):
-        if marker not in ui:
-            ERRORS.append(f"client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing marker: {marker}")
-    if (
-        "if (_dialoguePanel != null) _dialoguePanel.style.display = DisplayStyle.None;" not in ui
-        and "SetDisplayed(_dialoguePanel, false);" not in ui
-    ):
-        ERRORS.append("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing dialogue hide marker")
     require(
-        "docs/tasks/LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE-v1.0.md",
-        "LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY",
-        "Session Menu mobile had the strongest immediate issue",
-        "No VISUAL_RUNTIME_PASS claim",
-    )
-    require(
-        "tools/lgo_playable_closure_check.sh",
-        "world_hub_visual_debt_triage",
-        "validate_lgo_world_hub_visual_debt_triage.py",
+        "docs/tasks/LGO-RUNTIME-UI-CONTROLLER-LOCAL-STYLE-EVIDENCE-REFRESH-v1.0.md",
+        "LGO_RUNTIME_UI_CONTROLLER_LOCAL_STYLE_EVIDENCE_REFRESH_READY",
+        "No `VISUAL_RUNTIME_PASS` claim",
+        "LGO-LOGIN-CTA-COMPONENT-VISUAL-POLISH-v1.0",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE-v1.0",
-        "LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY",
+        "LGO-LOGIN-CTA-COMPONENT-VISUAL-POLISH-v1.0",
+        "LGO_RUNTIME_UI_CONTROLLER_LOCAL_STYLE_EVIDENCE_REFRESH_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE v1.0",
-        "LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY",
+        "LGO-RUNTIME-UI-CONTROLLER-LOCAL-STYLE-EVIDENCE-REFRESH v1.0",
+        "LGO_RUNTIME_UI_CONTROLLER_LOCAL_STYLE_EVIDENCE_REFRESH_READY",
     )
+    require(
+        "tools/lgo_playable_closure_check.sh",
+        "runtime_ui_controller_local_style_evidence_refresh",
+        "validate_lgo_runtime_ui_controller_local_style_evidence_refresh.py",
+    )
+    for rel in (
+        "build/visual-evidence/latest/login.png",
+        "build/visual-evidence/latest/character-select.png",
+        "build/visual-evidence/latest/world-hub.png",
+        "build/visual-evidence/latest/session-menu.png",
+        "build/visual-evidence/latest/target-dummy-state.png",
+    ):
+        require_evidence(rel)
     check_frozen()
     if ERRORS:
-        print("LGO WORLD HUB VISUAL DEBT TRIAGE VALIDATION FAILED", file=sys.stderr)
+        print("LGO RUNTIME UI CONTROLLER LOCAL STYLE EVIDENCE REFRESH VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_VALIDATION_PASS")
+    print("LGO_RUNTIME_UI_CONTROLLER_LOCAL_STYLE_EVIDENCE_REFRESH_VALIDATION_PASS")
     return 0
 
 
