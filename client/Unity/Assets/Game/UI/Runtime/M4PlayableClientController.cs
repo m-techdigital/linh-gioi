@@ -37,6 +37,7 @@ namespace LinhGioi.UI
         private VisualElement _skillPreviewPanel;
         private VisualElement _localCombatPanel;
         private VisualElement _worldFooterActions;
+        private VisualElement _characterActionRow;
         private VisualElement _characterList;
         private VisualElement _lobbyContent;
         private VisualElement _selectedPreview;
@@ -628,7 +629,8 @@ namespace LinhGioi.UI
             _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
             _createPanel.Add(_characterName);
             _createPanel.Add(_classId);
-            _createPanel.Add(NewButtonRow(_createButton, _enterWorldButton));
+            _characterActionRow = NewButtonRow(_createButton, _enterWorldButton);
+            _createPanel.Add(_characterActionRow);
         }
 
         private void BuildWorldHud()
@@ -1005,6 +1007,7 @@ namespace LinhGioi.UI
             _enterWorldButton.SetEnabled(character != null);
             _status.text = character == null ? "Tạo hoặc chọn tu sĩ" : "Đã chọn: " + character.name;
             SetToast(character == null ? "Đang chờ chọn tu sĩ." : "Đã chọn " + character.name + ".", RuntimeArtCatalog.Muted);
+            ApplyCharacterHallActionHierarchy();
         }
 
         private void UpdateSelectedPreview(CharacterResponse character)
@@ -1753,6 +1756,7 @@ namespace LinhGioi.UI
                 _createPanel.style.maxHeight = mobile ? 174 : 210;
             }
             if (_createHint != null) _createHint.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+            ApplyCharacterHallActionHierarchy();
 
             // LGO Mobile World Viewport Evidence Fit v1: keep the HUD proportional so scene actors remain reviewable.
             _worldHud.style.minWidth = mobile ? 238 : 300;
@@ -1899,6 +1903,46 @@ namespace LinhGioi.UI
                 _quitButton.style.fontSize = worldVisible && mobile ? 13 : 14;
                 _quitButton.style.marginRight = 0;
             }
+        }
+
+        private void ApplyCharacterHallActionHierarchy()
+        {
+            if (_characterActionRow == null || _createButton == null || _enterWorldButton == null) return;
+            var mobileSelected = _isMobileProfile && _selectedCharacter != null;
+            _characterActionRow.Clear();
+            if (mobileSelected)
+            {
+                // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state.
+                _enterWorldButton.text = "Vào sân luyện";
+                _enterWorldButton.style.minHeight = 48;
+                _enterWorldButton.style.minWidth = 154;
+                _enterWorldButton.style.fontSize = 17;
+                _enterWorldButton.style.marginTop = 8;
+                _enterWorldButton.style.opacity = 1f;
+                _enterWorldButton.tooltip = "Bước qua Linh Môn vào sân luyện.";
+                _createButton.text = "Tạo thêm";
+                _createButton.style.minHeight = 38;
+                _createButton.style.minWidth = 124;
+                _createButton.style.fontSize = 14;
+                _createButton.style.opacity = 0.82f;
+                _characterActionRow.Add(_enterWorldButton);
+                _characterActionRow.Add(_createButton);
+                return;
+            }
+
+            _createButton.text = "Tạo tu sĩ";
+            _createButton.style.minHeight = 44;
+            _createButton.style.minWidth = 132;
+            _createButton.style.fontSize = 14;
+            _createButton.style.opacity = 1f;
+            _enterWorldButton.text = "Vào sân luyện";
+            _enterWorldButton.style.minHeight = 44;
+            _enterWorldButton.style.minWidth = 132;
+            _enterWorldButton.style.fontSize = 15;
+            _enterWorldButton.style.opacity = _selectedCharacter == null ? 0.46f : 1f;
+            _enterWorldButton.tooltip = _selectedCharacter == null ? "Chọn hoặc tạo tu sĩ trước khi vào sân luyện." : "Bước qua Linh Môn vào sân luyện.";
+            _characterActionRow.Add(_createButton);
+            _characterActionRow.Add(_enterWorldButton);
         }
 
         private void TriggerLocalCombat()
