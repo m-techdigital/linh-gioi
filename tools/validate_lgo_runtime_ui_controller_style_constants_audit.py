@@ -32,8 +32,9 @@ def check_responsive_padding_blocks() -> None:
         ERRORS.append("missing ApplyResponsiveLayoutProfile")
         return
     helper = read("client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs")
+    session_helper = read("client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs")
     responsive = controller[responsive_start:]
-    responsive_with_helpers = responsive + "\n" + helper
+    responsive_with_helpers = responsive + "\n" + helper + "\n" + session_helper
     required = [
         "RuntimeUiSkin.ApplyPadding(root, layout.RootPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(loginCard, layout.LoginCardPadding",
@@ -42,7 +43,7 @@ def check_responsive_padding_blocks() -> None:
         "ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity)",
         "RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_worldHud, layout.WorldHudPaddingHorizontal",
-        "RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal",
+        "RuntimeUiSkin.ApplyPadding(panel, layout.SessionMenuPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_dialoguePanel, layout.DialoguePanelPaddingHorizontal",
     ]
     for marker in required:

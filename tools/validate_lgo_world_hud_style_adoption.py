@@ -64,10 +64,15 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "using static LinhGioi.UI.RuntimeUiFactory;",
         "RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);",
-        "RuntimeUiSkin.SessionMenuBackground(mobile || tablet);",
+        "RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);",
         "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);",
         "LGO World HUD Action Shell V3B Skin v1",
         "LGO Session Menu Overlay",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs",
+        "LGO Runtime Session Menu Layout Helper v1",
+        "RuntimeUiSkin.SessionMenuBackground(layout.IsMobile || layout.IsTablet);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",

@@ -67,13 +67,18 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_worldHud.style.minWidth = layout.WorldHudMinWidth;",
         "_worldHud.style.maxWidth = layout.WorldHudBaseMaxWidth;",
-        "_sessionMenuPanel.style.left = layout.SessionMenuLeft;",
-        "_sessionMenuPanel.style.right = layout.SessionMenuRight;",
-        "_sessionMenuPanel.style.top = layout.SessionMenuTop;",
-        "_sessionMenuPanel.style.maxHeight = layout.SessionMenuMaxHeight;",
+        "RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);",
         "ApplyWorldPanelViewportPolish(layout, worldVisible);",
         "_worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);",
         "_worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs",
+        "LGO Runtime Session Menu Layout Helper v1",
+        "panel.style.left = layout.SessionMenuLeft;",
+        "panel.style.right = layout.SessionMenuRight;",
+        "panel.style.top = layout.SessionMenuTop;",
+        "panel.style.maxHeight = layout.SessionMenuMaxHeight;",
     )
     require(
         "docs/design/RUNTIME-UI-RESPONSIVE-SESSION-SHELL-HELPER-REVIEW-v1.0.md",

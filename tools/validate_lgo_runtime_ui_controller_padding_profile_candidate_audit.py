@@ -81,12 +81,17 @@ def main() -> int:
         "ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity);",
         "RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);",
         "RuntimeUiSkin.ApplyPadding(_position, layout.PositionChipPaddingHorizontal, layout.PositionChipPaddingHorizontal, layout.PositionChipPaddingVertical, layout.PositionChipPaddingVertical);",
-        "RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);",
+        "RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);",
         "RuntimeUiSkin.ApplyPadding(_localCombatPanel, layout.LocalCombatPanelPaddingHorizontal, layout.LocalCombatPanelPaddingHorizontal, layout.LocalCombatPanelPaddingVertical, layout.LocalCombatPanelPaddingVertical);",
         "RuntimeUiSkin.ApplyPadding(_settingsPanel, layout.SettingsPanelPaddingHorizontal, layout.SettingsPanelPaddingHorizontal, layout.SettingsPanelPaddingTop, layout.SettingsPanelPaddingBottom);",
         "RuntimeUiSkin.ApplyPadding(_worldGuidanceCard, layout.WorldGuidanceCardPaddingHorizontal, layout.WorldGuidanceCardPaddingHorizontal, layout.WorldGuidanceCardPaddingVertical, layout.WorldGuidanceCardPaddingVertical);",
         "RuntimeUiSkin.ApplyPadding(_dialogueProgress, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingVertical, layout.DialogueProgressPaddingVertical);",
         "RuntimeUiSkin.ApplyPadding(_status, layout.StatusPaddingHorizontal(worldVisible), layout.StatusPaddingHorizontal(worldVisible), layout.StatusPaddingVertical, layout.StatusPaddingVertical);",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs",
+        "LGO Runtime Session Menu Layout Helper v1",
+        "RuntimeUiSkin.ApplyPadding(panel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

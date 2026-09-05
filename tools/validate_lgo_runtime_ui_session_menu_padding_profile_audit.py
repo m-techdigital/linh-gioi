@@ -66,7 +66,12 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom)",
+        "RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout)",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs",
+        "LGO Runtime Session Menu Layout Helper v1",
+        "RuntimeUiSkin.ApplyPadding(panel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom)",
     )
     forbid(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

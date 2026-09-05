@@ -651,15 +651,7 @@ namespace LinhGioi.UI
         {
             var layout = CurrentLayoutProfile();
             _sessionMenuPanel = NewSectionShell("PHIÊN", "Tạm dừng cục bộ", "Menu phiên", "LGO Session Menu Overlay");
-            _sessionMenuPanel.style.position = Position.Absolute;
-            _sessionMenuPanel.style.left = layout.SessionMenuLeft;
-            _sessionMenuPanel.style.right = layout.SessionMenuRight;
-            _sessionMenuPanel.style.top = layout.SessionMenuTop;
-            _sessionMenuPanel.style.marginTop = 0;
-            _sessionMenuPanel.style.width = layout.SessionMenuWidth;
-            _sessionMenuPanel.style.maxWidth = layout.SessionMenuWidth;
-            _sessionMenuPanel.style.maxHeight = layout.SessionMenuMaxHeight;
-            RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);
+            RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);
             RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);
             _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
             _sessionMenuStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
@@ -907,7 +899,7 @@ namespace LinhGioi.UI
             var collapsed = selected && !_createFormExpanded;
             if (_createTitle != null)
             {
-                _createTitle.text = collapsed ? "Tạo thêm" : selected ? "Tạo thêm tu sĩ" : "Tạo Tu Sĩ";
+                _createTitle.text = collapsed ? "Sẵn sàng" : selected ? "Tạo thêm tu sĩ" : "Tạo Tu Sĩ";
                 _createTitle.style.marginBottom = collapsed ? 2 : 8;
                 _createTitle.style.unityTextAlign = collapsed && !_isMobileProfile ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
             }
@@ -1117,13 +1109,11 @@ namespace LinhGioi.UI
             if (visible)
             {
                 SetDisplayed(_dialoguePanel, false);
-                if (_screenScrim != null)
-                    _screenScrim.style.backgroundColor = new Color(0.01f, 0.025f, 0.055f, 0.52f);
+                RuntimeSessionMenuLayout.ApplyFocusScrim(_screenScrim, true);
             }
             else
             {
-                if (_screenScrim != null)
-                    _screenScrim.style.backgroundColor = new Color(0.01f, 0.03f, 0.07f, 0.08f);
+                RuntimeSessionMenuLayout.ApplyFocusScrim(_screenScrim, false);
                 RefreshDialoguePanel();
             }
             ApplyLocalSettings();
@@ -1236,7 +1226,7 @@ namespace LinhGioi.UI
                 _createPanel.style.position = mobile ? Position.Absolute : Position.Relative;
                 _createPanel.style.left = mobile ? Mathf.Clamp(width * 0.45f, 350f, 390f) : 0;
                 _createPanel.style.right = mobile ? 12 : StyleKeyword.Auto;
-                _createPanel.style.top = mobile ? 112 : StyleKeyword.Auto;
+                _createPanel.style.top = mobile ? 132 : StyleKeyword.Auto;
                 RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
                 _createPanel.style.marginTop = layout.CreatePanelMarginTop;
                 _createPanel.style.maxHeight = mobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
@@ -1257,13 +1247,7 @@ namespace LinhGioi.UI
             if (_sessionMenuPanel != null)
             {
                 // LGO Session Menu Compact Focus Frame v1: compact profiles let the pause panel own the viewport.
-                _sessionMenuPanel.style.left = layout.SessionMenuLeft;
-                _sessionMenuPanel.style.right = layout.SessionMenuRight;
-                _sessionMenuPanel.style.top = layout.SessionMenuTop;
-                _sessionMenuPanel.style.maxWidth = mobile || tablet ? StyleKeyword.None : 960;
-                _sessionMenuPanel.style.maxHeight = layout.SessionMenuMaxHeight;
-                RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);
-                _sessionMenuPanel.style.backgroundColor = RuntimeUiSkin.SessionMenuBackground(mobile || tablet);
+                RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);
             }
             if (_settingsPanel != null)
             {

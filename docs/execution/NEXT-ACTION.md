@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: enter-world evidence has a distinct Linh Mon transition checkpoint, and session menu now owns focus with centered layout plus dimmed world backing.
+- Current reason: enter-world evidence, session menu focus/helper ownership, and mobile Character Hall selected-state copy have been tightened with runtime screenshot review.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -72,6 +72,10 @@ Current focus update: local generated handoff archives were cleaned from `build/
 Current focus update: enter-world evidence now captures a distinct Linh Môn transition state and world-hub resets to steady objective state under `LGO_ENTER_WORLD_EVIDENCE_DISTINCT_CHECKPOINT_READY`; fresh runtime screenshots were reviewed, duplicate-frame evidence is gone, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: session menu now owns focus on every profile, centers by viewport ratio, hides HUD/header while open, and dims the world behind it under `LGO_SESSION_MENU_CENTERED_FOCUS_POLISH_READY`; fresh runtime screenshot is cleaner, no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: selected mobile Character Hall now labels the action state as `Sẵn sàng` and lowers the CTA panel slightly under `LGO_MOBILE_CHARACTER_HALL_READY_COPY_POLISH_READY`; mobile screenshot was reviewed, no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: repeated session menu placement, responsive padding, background, and focus scrim rules now live in `RuntimeSessionMenuLayout` under `LGO_SESSION_MENU_LAYOUT_HELPER_READY`; source-only passes and runtime capture remained stable.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
