@@ -55,6 +55,8 @@ namespace LinhGioi.World
         private SpriteRenderer _trainingStoneSprite;
         private SpriteRenderer _shadowSlimeSprite;
         private SpriteRenderer _playerSprite;
+        private SpriteRenderer _playerGroundShadow;
+        private static Sprite _softGroundShadowSprite;
         private InteractableState _nearestInteractable;
         private string _objectiveText = "Mục tiêu: vào thế giới và tìm Đá Luyện.";
         private string _interactionText = "Di chuyển tới gần Người Giữ Cổng hoặc Đá Luyện.";
@@ -840,12 +842,16 @@ namespace LinhGioi.World
                 _shadowWarningPulse.gameObject.SetActive(_shadowSlimeState == PlaceholderSlimeState.AlertWarning);
             if (_playerSprite == null)
                 _playerSprite = CreateBillboardSprite("LGO Player Cultivator Runtime Sprite V3B", LgoVisualAssetRegistryV3B.PlayerMaleCultivator ?? LgoVisualAssetRegistryV2.PlayerMaleCultivator, CurrentPosition + Vector3.up * 0.22f, new Vector3(0.64f, 0.64f, 1f), 8);
+            if (_playerGroundShadow == null)
+                _playerGroundShadow = CreateGroundShadowSprite("LGO Player Grounding Shadow V3B", CurrentPosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
             if (_playerSprite != null)
             {
                 _playerSprite.transform.position = CurrentPosition + Vector3.up * 0.22f;
                 _playerSprite.gameObject.SetActive(true);
                 if (_markerRenderer != null) _markerRenderer.enabled = false;
             }
+            if (_playerGroundShadow != null)
+                _playerGroundShadow.transform.position = CurrentPosition + Vector3.up * 0.018f;
             if (_portalGatePulse == null)
                 _portalGatePulse = CreateMarkerCube("LGO Portal Gate Pulse Placeholder", new Vector3(0f, 0.18f, -4.5f), RuntimeArtCatalog.Spirit, new Vector3(3.2f, 0.08f, 0.55f)).transform;
             if (_windSlashPreview == null)
@@ -865,7 +871,10 @@ namespace LinhGioi.World
         private void EnsureCombatPlaceholderSprites()
         {
             if (_targetDummySprite == null)
+            {
+                CreateGroundShadowSprite("LGO Target Dummy Grounding Shadow V3B", ReadabilityDummyPosition + Vector3.up * 0.018f, new Vector3(0.84f, 0.50f, 1f), 2);
                 _targetDummySprite = CreateBillboardSprite("LGO Target Dummy Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TargetDummyIdle ?? CombatPlaceholderAssets.TargetDummyIdle, ReadabilityDummyPosition + Vector3.up * 0.15f, new Vector3(0.58f, 0.58f, 1f), 5);
+            }
             if (_targetDummyFocusSprite == null)
                 _targetDummyFocusSprite = CreateBillboardSprite("LGO Target Marker Selected Sprite v0.46", CombatPlaceholderAssets.TargetMarkerSelected, ReadabilityDummyPosition + Vector3.up * 0.08f, new Vector3(0.86f, 0.86f, 1f), 4);
             if (_targetDummyCooldownSprite == null)
@@ -877,13 +886,25 @@ namespace LinhGioi.World
             if (_shadowTelegraphSprite == null)
                 _shadowTelegraphSprite = CreateBillboardSprite("LGO Warning Telegraph Circle Sprite v0.46", CombatPlaceholderAssets.WarningTelegraphCircle, ShadowSlimePosition + Vector3.up * 0.16f, new Vector3(1.08f, 1.08f, 1f), 4);
             if (_gateKeeperSprite == null)
+            {
+                CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", GateKeeperPosition + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
                 _gateKeeperSprite = CreateBillboardSprite("LGO Gate Keeper Runtime Sprite V3B", LgoVisualAssetRegistryV3B.GateKeeperNpc ?? LgoVisualAssetRegistryV2.GateKeeperNpc, GateKeeperPosition + Vector3.up * 0.2f, new Vector3(0.72f, 0.72f, 1f), 5);
+            }
             if (_spiritGateSprite == null)
+            {
+                CreateGroundShadowSprite("LGO Spirit Gate Grounding Shadow V3B", new Vector3(0f, 0.018f, -4.5f), new Vector3(2.1f, 0.34f, 1f), 1);
                 _spiritGateSprite = CreateBillboardSprite("LGO Spirit Gate Runtime Sprite V3B", LgoVisualAssetRegistryV3B.SpiritGate ?? LgoVisualAssetRegistryV2.SpiritGate, new Vector3(0f, 0.35f, -4.5f), new Vector3(0.58f, 0.58f, 1f), 3);
+            }
             if (_trainingStoneSprite == null)
+            {
+                CreateGroundShadowSprite("LGO Training Stone Grounding Shadow V3B", TrainingStonePosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
                 _trainingStoneSprite = CreateBillboardSprite("LGO Training Stone Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TrainingStone ?? LgoVisualAssetRegistryV2.TrainingStone, TrainingStonePosition + Vector3.up * 0.2f, new Vector3(0.62f, 0.62f, 1f), 5);
+            }
             if (_shadowSlimeSprite == null)
+            {
+                CreateGroundShadowSprite("LGO Shadow Slime Grounding Shadow V3B", ShadowSlimePosition + Vector3.up * 0.018f, new Vector3(0.88f, 0.42f, 1f), 2);
                 _shadowSlimeSprite = CreateBillboardSprite("LGO Shadow Slime Runtime Sprite V3B", LgoVisualAssetRegistryV3B.ShadowSlime ?? LgoVisualAssetRegistryV2.ShadowSlimeAlt, ShadowSlimePosition + Vector3.up * 0.25f, new Vector3(0.74f, 0.74f, 1f), 5);
+            }
             EnsureWorldSetDressing();
             if (_gateKeeperWorldLabel == null)
                 _gateKeeperWorldLabel = CreateWorldLabel("LGO Gate Keeper World Label", "Người Giữ Cổng", GateKeeperPosition + new Vector3(0f, 1.95f, 0f), RuntimeArtCatalog.Gold);
@@ -907,19 +928,33 @@ namespace LinhGioi.World
 
         private static void EnsureWorldSetDressing()
         {
+            // LGO World Scene Depth Layering: every major readable prop receives a light procedural ground shadow.
             CreateBillboardSprite("LGO World Cherry Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, new Vector3(-4.8f, 0.2f, 1.4f), new Vector3(1.12f, 1.12f, 1f), 1);
+            CreateGroundShadowSprite("LGO World Cherry Tree Depth Shadow V3B", new Vector3(-4.8f, 0.018f, 1.4f), new Vector3(1.25f, 0.54f, 1f), 0);
             CreateBillboardSprite("LGO World Pine Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, new Vector3(4.8f, 0.2f, 2.1f), new Vector3(1.02f, 1.02f, 1f), 1);
+            CreateGroundShadowSprite("LGO World Pine Tree Depth Shadow V3B", new Vector3(4.8f, 0.018f, 2.1f), new Vector3(1.18f, 0.48f, 1f), 0);
             CreateBillboardSprite("LGO World Cherry Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, new Vector3(4.6f, 0.16f, -0.65f), new Vector3(0.62f, 0.62f, 1f), 0);
+            CreateGroundShadowSprite("LGO World Cherry Tree Far Depth Shadow V3B", new Vector3(4.6f, 0.018f, -0.65f), new Vector3(0.72f, 0.30f, 1f), -1);
             CreateBillboardSprite("LGO World Pine Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, new Vector3(-5.25f, 0.16f, 3.65f), new Vector3(0.68f, 0.68f, 1f), 0);
+            CreateGroundShadowSprite("LGO World Pine Tree Far Depth Shadow V3B", new Vector3(-5.25f, 0.018f, 3.65f), new Vector3(0.78f, 0.32f, 1f), -1);
             CreateBillboardSprite("LGO World Lantern West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(-4.2f, 0.2f, -1.8f), new Vector3(0.68f, 0.68f, 1f), 2);
+            CreateGroundShadowSprite("LGO World Lantern West Depth Shadow V3B", new Vector3(-4.2f, 0.018f, -1.8f), new Vector3(0.44f, 0.24f, 1f), 0);
             CreateBillboardSprite("LGO World Lantern East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(4.1f, 0.2f, -1.7f), new Vector3(0.68f, 0.68f, 1f), 2);
+            CreateGroundShadowSprite("LGO World Lantern East Depth Shadow V3B", new Vector3(4.1f, 0.018f, -1.7f), new Vector3(0.44f, 0.24f, 1f), 0);
             CreateBillboardSprite("LGO World Lantern North Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(-0.95f, 0.15f, 5.35f), new Vector3(0.42f, 0.42f, 1f), 1);
+            CreateGroundShadowSprite("LGO World Lantern North Depth Shadow V3B", new Vector3(-0.95f, 0.018f, 5.35f), new Vector3(0.32f, 0.18f, 1f), 0);
             CreateBillboardSprite("LGO World Lantern South Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(1.15f, 0.15f, -5.25f), new Vector3(0.42f, 0.42f, 1f), 1);
+            CreateGroundShadowSprite("LGO World Lantern South Depth Shadow V3B", new Vector3(1.15f, 0.018f, -5.25f), new Vector3(0.32f, 0.18f, 1f), 0);
             CreateBillboardSprite("LGO World Rock Moss Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, new Vector3(-1.9f, 0.15f, -1.7f), new Vector3(0.58f, 0.58f, 1f), 1);
+            CreateGroundShadowSprite("LGO World Rock Moss Depth Shadow V3B", new Vector3(-1.9f, 0.018f, -1.7f), new Vector3(0.62f, 0.30f, 1f), 0);
             CreateBillboardSprite("LGO World Rock Moss East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, new Vector3(2.1f, 0.12f, 4.75f), new Vector3(0.34f, 0.34f, 1f), 0);
+            CreateGroundShadowSprite("LGO World Rock Moss East Depth Shadow V3B", new Vector3(2.1f, 0.018f, 4.75f), new Vector3(0.38f, 0.18f, 1f), -1);
             CreateBillboardSprite("LGO World Cultivation Banner Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, new Vector3(3.8f, 0.2f, -3.6f), new Vector3(0.56f, 0.56f, 1f), 2);
+            CreateGroundShadowSprite("LGO World Cultivation Banner Depth Shadow V3B", new Vector3(3.8f, 0.018f, -3.6f), new Vector3(0.42f, 0.20f, 1f), 0);
             CreateBillboardSprite("LGO World Cultivation Banner West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, new Vector3(-4.95f, 0.16f, -3.25f), new Vector3(0.42f, 0.42f, 1f), 1);
+            CreateGroundShadowSprite("LGO World Cultivation Banner West Depth Shadow V3B", new Vector3(-4.95f, 0.018f, -3.25f), new Vector3(0.34f, 0.16f, 1f), 0);
             CreateBillboardSprite("LGO World Bridge Wood Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BridgeWood ?? LgoVisualAssetRegistryV2.BridgeWood, new Vector3(-2.9f, 0.1f, -3.8f), new Vector3(0.82f, 0.82f, 1f), 1);
+            CreateGroundShadowSprite("LGO World Bridge Wood Depth Shadow V3B", new Vector3(-2.9f, 0.018f, -3.8f), new Vector3(0.96f, 0.28f, 1f), 0);
         }
 
         private static SpriteRenderer CreateBillboardSprite(string name, Sprite sprite, Vector3 position, Vector3 scale, int sortingOrder)
@@ -935,6 +970,50 @@ namespace LinhGioi.World
             renderer.color = Color.white;
             renderer.sortingOrder = sortingOrder;
             return renderer;
+        }
+
+        private static SpriteRenderer CreateGroundShadowSprite(string name, Vector3 position, Vector3 scale, int sortingOrder)
+        {
+            var sprite = GetSoftGroundShadowSprite();
+            if (sprite == null) return null;
+            var existing = GameObject.Find(name);
+            var holder = existing != null ? existing : new GameObject(name);
+            holder.transform.position = position;
+            holder.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            holder.transform.localScale = scale;
+            var renderer = holder.GetComponent<SpriteRenderer>() ?? holder.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.color = new Color(0.0f, 0.012f, 0.028f, 0.42f);
+            renderer.sortingOrder = sortingOrder;
+            return renderer;
+        }
+
+        private static Sprite GetSoftGroundShadowSprite()
+        {
+            if (_softGroundShadowSprite != null) return _softGroundShadowSprite;
+            const int size = 128;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            {
+                name = "LGO Procedural Soft Ground Shadow Texture v1",
+                wrapMode = TextureWrapMode.Clamp,
+                filterMode = FilterMode.Bilinear
+            };
+            for (var y = 0; y < size; y++)
+            {
+                for (var x = 0; x < size; x++)
+                {
+                    var u = ((x + 0.5f) / size - 0.5f) * 2f;
+                    var v = ((y + 0.5f) / size - 0.5f) * 2f;
+                    var dist = Mathf.Sqrt(u * u + v * v);
+                    var alpha = Mathf.Clamp01(1f - dist);
+                    alpha = alpha * alpha * 0.82f;
+                    texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+                }
+            }
+            texture.Apply(false, true);
+            _softGroundShadowSprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
+            _softGroundShadowSprite.name = "LGO Procedural Soft Ground Shadow Sprite v1";
+            return _softGroundShadowSprite;
         }
 
         private static TextMesh CreateWorldLabel(string name, string text, Vector3 position, Color color)
@@ -1042,7 +1121,7 @@ namespace LinhGioi.World
             if (_gateKeeperWorldLabel != null)
                 _gateKeeperWorldLabel.transform.position = GateKeeperPosition + new Vector3(-0.04f, 1.72f, -0.02f);
             if (_trainingStoneWorldLabel != null)
-                _trainingStoneWorldLabel.transform.position = TrainingStonePosition + new Vector3(0.04f, 1.08f, -0.02f);
+                _trainingStoneWorldLabel.transform.position = TrainingStonePosition + new Vector3(0.18f, 1.36f, -0.04f);
             if (_targetDummyWorldLabel != null)
                 _targetDummyWorldLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.36f, -0.03f);
             if (_spiritGateWorldLabel != null)

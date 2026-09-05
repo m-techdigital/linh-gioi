@@ -938,7 +938,7 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
             UpdateSelectedPreview(loaded);
             ShowWorldMode();
-            SetBusy(false, "Sân luyện đã sẵn sàng: làm theo Bước 1 rồi Bước 2.");
+            SetBusy(false, "Sẵn sàng: Bước 1 rồi Bước 2.");
             SetToast("Linh Môn đã mở. Bước 1: trò chuyện với Người Giữ Cổng.", RuntimeArtCatalog.Spirit);
         }
 
@@ -998,7 +998,7 @@ namespace LinhGioi.UI
             if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Sẵn sàng bước qua Linh Môn.";
             if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Vào sân luyện, gặp Người Giữ Cổng, rồi lưu vị trí.";
             if (_selectedClassSummary != null) _selectedClassSummary.text = "Mạch tu luyện: Kiếm tu sơ nhập / vai trò cân bằng.";
-            _worldName.text = "Tu sĩ " + character.name;
+            _worldName.text = "Tu sĩ: " + character.name;
             _worldMeta.text = "Kiếm tu sơ nhập / phiên hiện tại";
             _position.text = character.ToString();
         }
@@ -1994,6 +1994,9 @@ namespace LinhGioi.UI
             label.style.paddingTop = 6;
             label.style.paddingBottom = 6;
             label.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.84f);
+            label.style.maxWidth = 380;
+            label.style.marginRight = 8;
+            label.style.whiteSpace = WhiteSpace.Normal;
             label.style.borderTopLeftRadius = 8;
             label.style.borderTopRightRadius = 8;
             label.style.borderBottomLeftRadius = 8;

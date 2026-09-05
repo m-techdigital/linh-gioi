@@ -301,6 +301,9 @@ source_only() {
   if [[ -f tools/validate_lgo_world_hub_prop_label_responsive.py ]]; then
     run_phase world_hub_prop_label_responsive python3.12 tools/validate_lgo_world_hub_prop_label_responsive.py
   fi
+  if [[ -f tools/validate_lgo_world_scene_depth_layering.py ]]; then
+    run_phase world_scene_depth_layering python3.12 tools/validate_lgo_world_scene_depth_layering.py
+  fi
   if [[ -f tools/validate_lgo_telemetry_schema_plan.py ]]; then
     run_phase telemetry_schema_plan python3.12 tools/validate_lgo_telemetry_schema_plan.py
   fi
@@ -390,6 +393,7 @@ source_only() {
     tools/analyze_lgo_visual_runtime_evidence.py \
     tools/validate_lgo_visual_runtime_review_heuristics.py \
     tools/validate_lgo_world_hub_prop_label_responsive.py \
+    tools/validate_lgo_world_scene_depth_layering.py \
     tools/validate_lgo_telemetry_schema_plan.py \
     tools/validate_code_governance.py \
     tools/m4_playable_vertical_slice_runtime.py \

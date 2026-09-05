@@ -56,7 +56,7 @@ def main() -> int:
         "LGO World Objective Touch Priority",
         "LGO World Interaction Touch Hint",
         "LGO World Touch Primary Combat Button",
-        "Tu sĩ ",
+        "Tu sĩ: ",
         "Bia luyện: ",
         "Tầm: ",
         "Tiến trình: ",
