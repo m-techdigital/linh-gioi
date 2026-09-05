@@ -17,7 +17,6 @@ namespace LinhGioi.UI
         private const string DefaultDevKey = "m4-playable-dev-key";
         private const string DefaultClassId = "class.sword";
         private const bool UseLoginOrnatePanelTexture = false;
-        private const string LoginResponsiveScaleCleanupMarker = "LGO Login Responsive Scale Cleanup v1";
         private const string LoginCtaBackingBalanceMarker = "LGO Login CTA Backing Balance v1";
         private const string LoginCtaComponentVisualPolishMarker = "LGO Login CTA Component Visual Polish v1";
         private AccountApiClient _client;
@@ -1111,111 +1110,30 @@ namespace LinhGioi.UI
             var tablet = layout.IsTablet;
             var worldVisible = _worldHud != null && _worldHud.style.display == DisplayStyle.Flex;
             var authVisible = _authPanel != null && _authPanel.style.display == DisplayStyle.Flex;
-            var loginLogoWidth = layout.LoginLogoWidth;
-            var loginLogoHeight = layout.LoginLogoHeight;
-            var loginCardWidth = layout.LoginCardWidth;
-            var loginCardPadding = layout.LoginCardPadding;
-            var loginButtonHeight = layout.LoginButtonHeight;
-            var loginButtonFont = layout.LoginButtonFontSize;
             _isMobileProfile = mobile;
-            RuntimeUiSkin.ApplyPadding(_root, layout.RootPaddingHorizontal, layout.RootPaddingHorizontal, layout.RootPaddingTop, layout.RootPaddingBottom);
+            RuntimeLoginResponsiveLayout.Apply(
+                layout,
+                _root,
+                _authPanel,
+                _loginStage,
+                _loginGateKeeper,
+                _loginNpcGrounding,
+                _loginNpcGroundingBloom,
+                _loginControlColumn,
+                _loginLogo,
+                _loginHeroTitle,
+                _loginHeroCopy,
+                _loginCard,
+                _loginServerRow,
+                _loginServerText,
+                _loginButton,
+                _serverSwitchButton);
 
             _mainShell.style.maxWidth = worldVisible ? Length.Percent(100) : mobile ? 720 : tablet ? 980 : 1180;
             _mainShell.style.justifyContent = worldVisible || mobile ? Justify.FlexStart : Justify.Center;
 
             if (_header != null)
                 _header.style.minHeight = layout.HeaderMinHeight(authVisible);
-            if (_authPanel != null)
-            {
-                _authPanel.style.minHeight = layout.AuthPanelMinHeight;
-                _authPanel.style.flexDirection = mobile ? FlexDirection.Column : FlexDirection.Row;
-                _authPanel.style.justifyContent = Justify.FlexStart;
-                _authPanel.style.alignItems = Align.Center;
-                _authPanel.style.marginTop = layout.AuthPanelMarginTop;
-                RuntimeUiSkin.ApplyPadding(_authPanel, 0, 0, layout.AuthPanelPaddingTop, layout.AuthPanelPaddingBottom);
-            }
-            if (_loginStage != null)
-            {
-                _loginStage.style.display = layout.LoginStageDisplay;
-                _loginStage.style.width = layout.LoginStageWidth;
-                _loginStage.style.minHeight = layout.LoginStageMinHeight;
-                _loginStage.style.right = layout.LoginStageRight;
-                _loginStage.style.bottom = layout.LoginStageBottom;
-                _loginStage.tooltip = LoginResponsiveScaleCleanupMarker;
-            }
-            if (_loginGateKeeper != null)
-            {
-                _loginGateKeeper.style.width = layout.LoginGateKeeperWidth;
-                _loginGateKeeper.style.height = layout.LoginGateKeeperHeight;
-            }
-            if (_loginNpcGrounding != null)
-            {
-                _loginNpcGrounding.style.display = layout.LoginNpcGroundingDisplay;
-                _loginNpcGrounding.style.width = layout.LoginNpcGroundingWidth;
-                _loginNpcGrounding.style.height = layout.LoginNpcGroundingHeight;
-                _loginNpcGrounding.style.bottom = layout.LoginNpcGroundingBottom;
-                _loginNpcGrounding.style.backgroundColor = layout.LoginNpcGroundingColor;
-                _loginNpcGrounding.style.opacity = layout.LoginNpcGroundingOpacity;
-            }
-            if (_loginNpcGroundingBloom != null)
-            {
-                _loginNpcGroundingBloom.style.display = layout.LoginNpcGroundingDisplay;
-                _loginNpcGroundingBloom.style.width = layout.LoginNpcGroundingBloomWidth;
-                _loginNpcGroundingBloom.style.height = layout.LoginNpcGroundingBloomHeight;
-                _loginNpcGroundingBloom.style.bottom = layout.LoginNpcGroundingBloomBottom;
-                _loginNpcGroundingBloom.style.backgroundColor = layout.LoginNpcGroundingBloomColor;
-                _loginNpcGroundingBloom.style.opacity = layout.LoginNpcGroundingBloomOpacity;
-            }
-            if (_loginControlColumn != null)
-            {
-                _loginControlColumn.style.width = layout.LoginControlColumnWidth;
-                _loginControlColumn.style.minWidth = layout.LoginControlColumnMinWidth;
-                _loginControlColumn.style.maxWidth = layout.LoginControlColumnMaxWidth;
-                _loginControlColumn.style.paddingBottom = layout.LoginControlColumnPaddingBottom;
-                _loginControlColumn.style.marginLeft = layout.LoginControlColumnMarginLeft;
-                _loginControlColumn.style.marginTop = layout.LoginControlColumnMarginTop;
-            }
-            if (_loginLogo != null)
-            {
-                _loginLogo.style.width = loginLogoWidth;
-                _loginLogo.style.height = loginLogoHeight;
-                _loginLogo.style.marginBottom = layout.LoginLogoMarginBottom;
-            }
-            if (_loginHeroTitle != null)
-            {
-                _loginHeroTitle.style.display = DisplayStyle.None;
-                _loginHeroTitle.style.fontSize = layout.LoginHeroTitleFontSize;
-            }
-            if (_loginHeroCopy != null)
-                _loginHeroCopy.style.display = DisplayStyle.None;
-            if (_loginCard != null)
-            {
-                _loginCard.style.maxWidth = loginCardWidth;
-                _loginCard.style.minHeight = layout.LoginCardMinHeight;
-                RuntimeUiSkin.ApplyPadding(_loginCard, loginCardPadding, loginCardPadding, layout.LoginCardPaddingTop, layout.LoginCardPaddingBottom);
-                _loginCard.style.marginBottom = layout.LoginCardMarginBottom;
-                _loginCard.style.backgroundColor = layout.LoginCardBackground;
-                RuntimeUiSkin.ApplyLoginCtaSceneBlend(_loginCard);
-            }
-            if (_loginServerRow != null)
-            {
-                _loginServerRow.style.maxWidth = layout.LoginServerRowMaxWidth;
-                _loginServerRow.style.minHeight = layout.LoginServerRowMinHeight;
-                RuntimeUiSkin.ApplyPadding(_loginServerRow, layout.LoginServerRowPaddingHorizontal, layout.LoginServerRowPaddingHorizontal, layout.LoginServerRowPaddingVertical, layout.LoginServerRowPaddingVertical);
-            }
-            if (_loginServerText != null)
-                _loginServerText.style.fontSize = layout.LoginServerTextFontSize;
-            if (_loginButton != null)
-            {
-                _loginButton.style.minHeight = loginButtonHeight;
-                _loginButton.style.fontSize = loginButtonFont;
-                _loginButton.style.marginTop = layout.LoginButtonMarginTop;
-            }
-            if (_serverSwitchButton != null)
-            {
-                _serverSwitchButton.style.display = DisplayStyle.None;
-                _serverSwitchButton.style.minHeight = RuntimeUiSizing.LoginServerSwitchMinHeight;
-            }
 
             _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 790 : 800;
             _lobbyPanel.style.minHeight = mobile ? Mathf.Max(292f, height - 48f) : 410;

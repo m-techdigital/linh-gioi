@@ -72,8 +72,12 @@ def main() -> int:
         "var profile = layout.Name;",
         "var mobile = layout.IsMobile;",
         "var tablet = layout.IsTablet;",
-        "var loginLogoWidth = layout.LoginLogoWidth;",
-        "var loginButtonFont = layout.LoginButtonFontSize;",
+        "RuntimeLoginResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs",
+        "loginLogo.style.width = layout.LoginLogoWidth;",
+        "loginButton.style.fontSize = layout.LoginButtonFontSize;",
     )
     require(
         "docs/design/RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0.md",

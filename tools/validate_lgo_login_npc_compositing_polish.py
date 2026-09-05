@@ -73,6 +73,9 @@ def main() -> int:
         "LgoVisualAssetRegistryV3B.LogoLinhGioiOnline",
         "LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture",
         "LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs",
         "layout.LoginStageDisplay",
     )
     require(

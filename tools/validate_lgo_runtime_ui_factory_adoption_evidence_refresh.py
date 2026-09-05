@@ -81,6 +81,10 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "RuntimeUiLayoutProfile.FromScreen",
+        "RuntimeLoginResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs",
         "layout.LoginServerTextFontSize",
     )
     require(

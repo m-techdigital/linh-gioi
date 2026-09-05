@@ -54,11 +54,15 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "RuntimeLoginResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs",
         "LGO Login Responsive Scale Cleanup v1",
-        "_loginStage.style.width = layout.LoginStageWidth",
-        "_loginGateKeeper.style.width = layout.LoginGateKeeperWidth",
-        "_loginNpcGroundingBloom.style.width = layout.LoginNpcGroundingBloomWidth",
-        "_loginControlColumn.style.width = layout.LoginControlColumnWidth",
+        "loginStage.style.width = layout.LoginStageWidth",
+        "loginGateKeeper.style.width = layout.LoginGateKeeperWidth",
+        "LoginNpcGroundingBloomWidth",
+        "loginControlColumn.style.width = layout.LoginControlColumnWidth",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",

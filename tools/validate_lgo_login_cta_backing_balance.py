@@ -51,7 +51,11 @@ def check_frozen() -> None:
 
 
 def main() -> int:
-    source = read("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs")
+    source = (
+        read("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs")
+        + "\n"
+        + read("client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs")
+    )
     for marker in (
         "LGO Login CTA Backing Balance v1",
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",

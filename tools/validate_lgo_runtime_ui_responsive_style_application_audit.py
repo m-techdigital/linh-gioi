@@ -73,8 +73,12 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "layout.RootPaddingHorizontal",
+        "RuntimeLoginResponsiveLayout.Apply(",
         "layout.HeaderMinHeight(authVisible)",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs",
+        "layout.RootPaddingHorizontal",
         "layout.LoginStageDisplay",
         "layout.LoginGateKeeperWidth",
         "layout.LoginNpcGroundingColor",

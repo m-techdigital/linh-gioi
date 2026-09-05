@@ -31,11 +31,13 @@ def check_responsive_padding_blocks() -> None:
     if responsive_start < 0:
         ERRORS.append("missing ApplyResponsiveLayoutProfile")
         return
+    helper = read("client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs")
     responsive = controller[responsive_start:]
+    responsive_with_helpers = responsive + "\n" + helper
     required = [
-        "RuntimeUiSkin.ApplyPadding(_root, layout.RootPaddingHorizontal",
-        "RuntimeUiSkin.ApplyPadding(_loginCard, loginCardPadding",
-        "RuntimeUiSkin.ApplyPadding(_loginServerRow, layout.LoginServerRowPaddingHorizontal",
+        "RuntimeUiSkin.ApplyPadding(root, layout.RootPaddingHorizontal",
+        "RuntimeUiSkin.ApplyPadding(loginCard, layout.LoginCardPadding",
+        "RuntimeUiSkin.ApplyPadding(loginServerRow, layout.LoginServerRowPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_lobbyPanel, layout.LobbyPanelPaddingHorizontal",
         "ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity)",
         "RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal",
@@ -44,7 +46,7 @@ def check_responsive_padding_blocks() -> None:
         "RuntimeUiSkin.ApplyPadding(_dialoguePanel, layout.DialoguePanelPaddingHorizontal",
     ]
     for marker in required:
-        if marker not in responsive:
+        if marker not in responsive_with_helpers:
             ERRORS.append(f"responsive layout missing shared padding call: {marker}")
     forbidden_pairs = [
         "_root.style.paddingLeft = layout.RootPaddingHorizontal;",

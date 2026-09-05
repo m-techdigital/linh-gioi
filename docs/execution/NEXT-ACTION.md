@@ -5,8 +5,8 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0`.
-- Current reason: Dev-loop/autopilot context loading now uses quick resume plus ledger rollup, fast server build output is captured to a log, and visual runtime capture no longer leaves Unity ProjectSettings churn; continue by finding the next source hotspot that can be reduced without changing gameplay.
+- Active task: `LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT-v1.0`.
+- Current reason: Login responsive layout has moved out of `M4PlayableClientController` into a dedicated helper, source-only gates pass, and runtime login capture remains stable; continue with the next largest runtime hotspot in the world controller without changing gameplay.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -47,13 +47,15 @@ Current focus update: World procedural ground texture, actor shadows, focus glow
 
 Current focus update: Dev-loop/autopilot output now defaults to compact context and fast visual runtime server build logs under `LGO_WORKFLOW_FAST_GATE_NOISE_REDUCTION_READY`; visual capture also snapshots/restores Unity ProjectSettings so evidence runs do not pollute source diffs.
 
+Current focus update: Login responsive layout now lives in `RuntimeLoginResponsiveLayout` under `LGO_RUNTIME_CODE_HOTSPOT_REDUCTION_READY`; `M4PlayableClientController` is smaller, historical validators follow the new ownership boundary, and runtime login capture remains stable with no visual PASS claim.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-RUNTIME-CODE-HOTSPOT-REDUCTION-AUDIT-v1.0`
+`LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT-v1.0`
 
-Continue with a focused hotspot audit of runtime UI/world source size, duplication, and ownership drift. Prefer extracting or deleting code that clearly lowers future iteration cost while preserving gameplay/account/character flow and current visual behavior. Marker ready from the previous workflow fix: `LGO_WORKFLOW_FAST_GATE_NOISE_REDUCTION_READY`.
+Continue with a focused split of world-controller presentation helpers that are still bulky or repeated, prioritizing labels/interaction visual helpers over gameplay state. Preserve movement, interaction semantics, combat placeholder behavior, protocol, schemas, ADR, and design tokens. Marker ready from the previous code hotspot fix: `LGO_RUNTIME_CODE_HOTSPOT_REDUCTION_READY`.
 
 ## Current blocker
 

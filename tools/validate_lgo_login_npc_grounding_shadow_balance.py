@@ -62,11 +62,15 @@ def main() -> int:
         "npcGrounding.style.height = RuntimeUiSizing.LoginNpcGroundingHeight;",
         "new Color(0.005f, 0.018f, 0.035f, 0.26f)",
         "RuntimeUiSkin.ApplyRadius(npcGrounding, RuntimeUiSizing.LoginNpcGroundingRadius);",
-        "_loginNpcGrounding.style.display = layout.LoginNpcGroundingDisplay;",
-        "_loginNpcGrounding.style.width = layout.LoginNpcGroundingWidth;",
-        "_loginNpcGrounding.style.opacity = layout.LoginNpcGroundingOpacity;",
-        "_loginNpcGroundingBloom.style.width = layout.LoginNpcGroundingBloomWidth;",
-        "_loginNpcGroundingBloom.style.opacity = layout.LoginNpcGroundingBloomOpacity;",
+        "RuntimeLoginResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs",
+        "element.style.display = layout.LoginNpcGroundingDisplay;",
+        "LoginNpcGroundingWidth",
+        "layout.LoginNpcGroundingOpacity",
+        "LoginNpcGroundingBloomWidth",
+        "layout.LoginNpcGroundingBloomOpacity",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
