@@ -102,10 +102,7 @@ namespace LinhGioi.UI
         {
             label.style.fontSize = fontSize;
             label.style.marginTop = 4;
-            label.style.paddingLeft = 8;
-            label.style.paddingRight = 8;
-            label.style.paddingTop = 5;
-            label.style.paddingBottom = 5;
+            RuntimeUiSkin.ApplyPadding(label, 8, 8, 5, 5);
             RuntimeUiSkin.ApplyHudStatusCompactFrame(label);
         }
 
@@ -263,8 +260,7 @@ namespace LinhGioi.UI
             row.style.alignItems = Align.Center;
             row.style.marginTop = 4;
             row.style.marginBottom = 6;
-            row.style.paddingLeft = 4;
-            row.style.paddingRight = 4;
+            RuntimeUiSkin.ApplyPadding(row, 4, 4, 0, 0);
             row.Add(icon);
 
             var statusColumn = new VisualElement();
@@ -281,8 +277,7 @@ namespace LinhGioi.UI
             if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
             button.style.minWidth = coolingDown ? 142 : 132;
             button.style.minHeight = 44;
-            button.style.paddingLeft = 14;
-            button.style.paddingRight = 14;
+            RuntimeUiSkin.ApplyPadding(button, 14, 14, 0, 0);
             button.style.fontSize = coolingDown ? 13 : 14;
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
             button.style.whiteSpace = WhiteSpace.NoWrap;

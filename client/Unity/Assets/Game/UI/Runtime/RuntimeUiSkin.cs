@@ -144,10 +144,7 @@ namespace LinhGioi.UI
             pill.text = enabled ? "Bật" : "Tắt";
             pill.style.minWidth = 42;
             pill.style.marginLeft = 12;
-            pill.style.paddingLeft = 9;
-            pill.style.paddingRight = 9;
-            pill.style.paddingTop = 3;
-            pill.style.paddingBottom = 4;
+            ApplyPadding(pill, 9, 9, 3, 4);
             pill.style.unityTextAlign = TextAnchor.MiddleCenter;
             pill.style.unityFontStyleAndWeight = FontStyle.Bold;
             pill.style.fontSize = 12;
