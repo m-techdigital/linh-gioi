@@ -1338,7 +1338,7 @@ namespace LinhGioi.UI
                 _sessionMenuPanel.style.top = layout.SessionMenuTop;
                 _sessionMenuPanel.style.maxWidth = mobile || tablet ? StyleKeyword.None : 960;
                 _sessionMenuPanel.style.maxHeight = layout.SessionMenuMaxHeight;
-                RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, mobile ? 12 : tablet ? 16 : 22, mobile ? 12 : tablet ? 16 : 22, mobile ? 10 : tablet ? 14 : 18, mobile ? 10 : tablet ? 14 : 20);
+                RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);
                 _sessionMenuPanel.style.backgroundColor = RuntimeUiSkin.SessionMenuBackground(mobile || tablet);
             }
             if (_settingsPanel != null)

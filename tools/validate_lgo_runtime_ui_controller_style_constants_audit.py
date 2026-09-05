@@ -40,7 +40,7 @@ def check_responsive_padding_blocks() -> None:
         "RuntimeUiSkin.ApplyPadding(_emptyCharacterCard, layout.EmptyCharacterCardPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_worldHud, layout.WorldHudPaddingHorizontal",
-        "RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, mobile ? 12 : tablet ? 16 : 22",
+        "RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_dialoguePanel, layout.DialoguePanelPaddingHorizontal",
     ]
     for marker in required:

@@ -405,6 +405,12 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_responsive_padding_profile_evidence_refresh.py ]]; then
     run_phase runtime_ui_responsive_padding_profile_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_responsive_padding_profile_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_session_menu_padding_profile_audit.py ]]; then
+    run_phase runtime_ui_session_menu_padding_profile_audit python3.12 tools/validate_lgo_runtime_ui_session_menu_padding_profile_audit.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_session_menu_padding_profile_evidence_refresh.py ]]; then
+    run_phase runtime_ui_session_menu_padding_profile_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_session_menu_padding_profile_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_world_hud_action_shell_evidence_refresh.py ]]; then
     run_phase world_hud_action_shell_evidence_refresh python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
   fi
@@ -673,6 +679,8 @@ source_only() {
     tools/validate_lgo_runtime_ui_controller_style_constants_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_responsive_padding_profile_audit.py \
     tools/validate_lgo_runtime_ui_responsive_padding_profile_evidence_refresh.py \
+    tools/validate_lgo_runtime_ui_session_menu_padding_profile_audit.py \
+    tools/validate_lgo_runtime_ui_session_menu_padding_profile_evidence_refresh.py \
     tools/validate_lgo_world_hud_action_shell_evidence_refresh.py \
     tools/validate_lgo_world_mobile_camera_framing.py \
     tools/validate_lgo_world_mobile_camera_evidence_refresh.py \
