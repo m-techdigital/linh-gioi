@@ -6,10 +6,10 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: World Hub lightweight depth pass is implemented and reviewed; continue with the next compact runtime/UI maintainability or visible-quality hotspot.
-- Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
-- Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/validate_package_hygiene.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
-- Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
+- Current reason: workflow/token-noise reduction is being hardened so compact batches spend less time in repeated Unity capture and long state dumps.
+- Current batch scope: keep quick gates source-only by default, preserve explicit visual/runtime gates for visible changes, then continue to the next focused visible/runtime or maintainability improvement.
+- Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
+- Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
 - Next implementation task after this fix: choose the next compact visible hotspot, likely World HUD information hierarchy, session menu polish, or evidence/asset-weight cleanup; avoid heavy assets and one-off validators unless a real gate needs them.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 

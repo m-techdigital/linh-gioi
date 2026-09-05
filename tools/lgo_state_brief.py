@@ -45,6 +45,18 @@ def limited_section(text: str, heading: str, limit: int) -> str:
     return first_lines(extracted, limit) if extracted else ""
 
 
+def limited_section_until(text: str, heading: str, stop_markers: tuple[str, ...], limit: int) -> str:
+    extracted = section(text, heading)
+    if not extracted:
+        return ""
+    lines: list[str] = []
+    for line in extracted.splitlines():
+        if lines and line.strip() in stop_markers:
+            break
+        lines.append(line)
+    return first_lines("\n".join(lines), limit)
+
+
 def advisor() -> str:
     result = subprocess.run(
         ["python3.12", "tools/lgo_next_task.py"],
@@ -71,7 +83,7 @@ def main() -> int:
     print()
     print(limited_section(next_action, "## Next task", 6) or "NEXT_TASK_MISSING")
     print()
-    print(limited_section(next_action, "## Current blocker", 5) or "CURRENT_BLOCKER_MISSING")
+    print(limited_section_until(next_action, "## Current blocker", ("Evidence:",), 5) or "CURRENT_BLOCKER_MISSING")
     print()
     print("## Next Task Advisor")
     print(advisor() or "ADVISOR_OUTPUT_MISSING")

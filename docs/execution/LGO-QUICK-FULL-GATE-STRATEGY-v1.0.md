@@ -18,6 +18,16 @@ Default command:
 LGO_DEV_LOOP_GATE_PROFILE=quick ./tools/lgo_continue_dev_loop.sh
 ```
 
+In quick mode, `tools/lgo_continue_dev_loop.sh` skips visual runtime capture unless explicitly requested. This keeps small code/docs/UI iterations from rebuilding or launching Unity every time.
+
+Force visual capture from the dev loop only when needed:
+
+```bash
+LGO_DEV_LOOP_GATE_PROFILE=quick \
+LGO_DEV_LOOP_VISUAL_RUNTIME=force \
+./tools/lgo_continue_dev_loop.sh
+```
+
 Quick source/runtime review may use:
 
 ```bash

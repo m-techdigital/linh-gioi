@@ -33,7 +33,7 @@ When the owner enables continuous work in this chat, Codex should keep developin
 
 Commit/push only after related changes validate together. Avoid tiny spam commits, cache artifacts, generated build folders, or changes to frozen surfaces. The default cadence is to finish a coherent feature/phase/tooling batch first, then checkpoint; small validator/text-only edits should usually be grouped into the next related checkpoint.
 
-Routine local loops should prefer concise output: `tools/lgo_continue_dev_loop.sh` defaults to Quick Resume plus ledger rollup, and `tools/lgo_state_brief.py` should stay under about 90 lines for normal resume. Use `LGO_DEV_LOOP_CONTEXT_MODE=full` only when diagnosing state drift or handoff confusion.
+Routine local loops should prefer concise output: `tools/lgo_continue_dev_loop.sh` defaults to Quick Resume plus ledger rollup, and `tools/lgo_state_brief.py` should stay under about 90 lines for normal resume. Use `LGO_DEV_LOOP_CONTEXT_MODE=full` only when diagnosing state drift or handoff confusion. The quick profile skips visual runtime capture by default; run `LGO_DEV_LOOP_VISUAL_RUNTIME=force` or a full profile when a visible runtime change needs screenshot evidence.
 
 ## Change Budget
 
@@ -41,7 +41,7 @@ Continuous work should increase player-visible quality faster than it increases 
 
 - Prefer improving existing runtime/UI/tooling owners over creating new one-off files.
 - Reuse validators and task docs for routine polish; create a new validator only for a recurring regression risk, package gate, frozen boundary, or evidence contract.
-- Use quick gates while iterating on low-risk UI/layout/source cleanup, then run full gates before a coherent checkpoint, handoff, package, or shared runtime foundation change.
+- Use quick gates while iterating on low-risk UI/layout/source cleanup, then run full gates before a coherent checkpoint, handoff, package, shared runtime foundation change, or visual acceptance review.
 - Keep `NEXT-ACTION.md` focused on the current task and only durable operating markers. Historical detail belongs in `TASK-LEDGER.md` and the rollup.
 - Commit after a feature-sized or workflow-sized batch validates, not after every tiny edit.
 

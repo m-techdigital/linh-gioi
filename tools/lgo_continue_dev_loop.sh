@@ -7,6 +7,7 @@ LOG="$LOG_DIR/latest.log"
 VISUAL_TIMEOUT_SECONDS="${LGO_DEV_LOOP_VISUAL_TIMEOUT_SECONDS:-${LGO_VISUAL_RUNTIME_TIMEOUT_SECONDS:-300}}"
 GATE_PROFILE="${LGO_DEV_LOOP_GATE_PROFILE:-quick}"
 CONTEXT_MODE="${LGO_DEV_LOOP_CONTEXT_MODE:-quick}"
+VISUAL_RUNTIME_MODE="${LGO_DEV_LOOP_VISUAL_RUNTIME:-auto}"
 
 mkdir -p "$LOG_DIR"
 cd "$ROOT"
@@ -45,6 +46,25 @@ print_context() {
 }
 
 run_visual_review_if_available() {
+  case "$VISUAL_RUNTIME_MODE" in
+    skip|0|false|off)
+      echo "SKIP visual_runtime_review mode=$VISUAL_RUNTIME_MODE"
+      return 0
+      ;;
+    force|1|true|on|auto)
+      ;;
+    *)
+      echo "FIX_REQUIRED unsupported LGO_DEV_LOOP_VISUAL_RUNTIME=$VISUAL_RUNTIME_MODE; expected auto, force, or skip"
+      exit 2
+      ;;
+  esac
+
+  if [[ "$VISUAL_RUNTIME_MODE" == "auto" && "$GATE_PROFILE" == "quick" ]]; then
+    echo "SKIP visual_runtime_review quick_profile_auto"
+    echo "LGO_OWNER_NOTE Quick gate bỏ qua visual runtime để lặp nhanh; chạy LGO_DEV_LOOP_VISUAL_RUNTIME=force hoặc GATE_PROFILE=full khi cần ảnh evidence."
+    return 0
+  fi
+
   if [[ ! -x "$ROOT/tools/lgo_visual_runtime_review.sh" ]]; then
     echo "RUNTIME_BLOCKED_ENV missing tools/lgo_visual_runtime_review.sh"
     return 0
@@ -121,7 +141,7 @@ run_source_validation_profile() {
 {
   echo "LGO_CONTINUE_DEV_LOOP_START $(date -u +%Y-%m-%dT%H:%M:%SZ)"
   echo "LGO_REPO_ROOT $ROOT"
-  echo "LGO_OWNER_NOTE Đang chạy dev loop: đọc state ngắn, chạy validation $GATE_PROFILE, sau đó chạy visual runtime nếu Unity sẵn sàng."
+  echo "LGO_OWNER_NOTE Đang chạy dev loop: đọc state ngắn, chạy validation $GATE_PROFILE, visual runtime mode=$VISUAL_RUNTIME_MODE."
   test "$(basename "$PWD")" = "LinhGioiOnline"
 
   print_context
@@ -129,6 +149,6 @@ run_source_validation_profile() {
   run_source_validation_profile
   run_visual_review_if_available
 
-  echo "LGO_OWNER_NOTE Dev loop hoàn tất: source gates sạch và visual runtime đã được phân loại theo log ở build/dev-loop/latest.log."
+  echo "LGO_OWNER_NOTE Dev loop hoàn tất: source gates sạch; visual runtime chỉ chạy khi mode/profile yêu cầu."
   echo "LGO_CONTINUE_DEV_LOOP_RESULT PASS"
 } 2>&1 | tee "$LOG"
