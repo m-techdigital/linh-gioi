@@ -119,14 +119,25 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewEmptyCharacterCard(RuntimeUiLayoutProfile layout, Label title, Label hint)
         {
+            var density = layout.CharacterHallDensity;
             var card = new VisualElement();
-            card.style.marginTop = layout.EmptyCharacterCardMarginTop;
-            RuntimeUiSkin.ApplyPadding(card, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingVertical, layout.EmptyCharacterCardPaddingVertical);
+            ApplyEmptyCharacterCardDensity(card, density);
             RuntimeUiSkin.ApplyEmptyCharacterCardFrame(card);
             card.Add(title);
             hint.style.marginTop = RuntimeUiSpacing.EmptyCharacterHintMarginTop;
             card.Add(hint);
             return card;
+        }
+
+        internal static void ApplyCharacterListDensity(VisualElement list, RuntimeUiDensityProfile density)
+        {
+            RuntimeUiSkin.ApplyPadding(list, density.ListPaddingHorizontal, density.ListPaddingHorizontal, density.ListPaddingVertical, density.ListPaddingVertical);
+        }
+
+        internal static void ApplyEmptyCharacterCardDensity(VisualElement card, RuntimeUiDensityProfile density)
+        {
+            card.style.marginTop = density.EmptyCardMarginTop;
+            RuntimeUiSkin.ApplyPadding(card, density.EmptyCardPaddingHorizontal, density.EmptyCardPaddingHorizontal, density.EmptyCardPaddingVertical, density.EmptyCardPaddingVertical);
         }
 
         internal static void ApplyHudStatusCompact(Label label, int fontSize)
@@ -248,11 +259,24 @@ namespace LinhGioi.UI
 
         internal static Label NewStatusLabel(string text, Color color)
         {
+            return NewStatusLabel(text, color, default);
+        }
+
+        internal static Label NewStatusLabel(string text, Color color, RuntimeUiDensityProfile density)
+        {
             var label = new Label(text);
             RuntimeUiSkin.ApplyText(label, color);
             label.style.whiteSpace = WhiteSpace.Normal;
-            label.style.marginTop = RuntimeUiSpacing.StatusLabelMarginTop;
-            RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.StatusLabelPaddingHorizontal, RuntimeUiSpacing.StatusLabelPaddingVertical);
+            if (density.StatusPaddingHorizontal > 0)
+            {
+                label.style.marginTop = density.StatusMarginTop;
+                RuntimeUiSkin.ApplyPadding(label, density.StatusPaddingHorizontal, density.StatusPaddingVertical);
+            }
+            else
+            {
+                label.style.marginTop = RuntimeUiSpacing.StatusLabelMarginTop;
+                RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.StatusLabelPaddingHorizontal, RuntimeUiSpacing.StatusLabelPaddingVertical);
+            }
             RuntimeUiSkin.ApplyInsetRowFrame(label, color);
             return label;
         }

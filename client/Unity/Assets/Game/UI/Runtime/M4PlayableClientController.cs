@@ -493,7 +493,7 @@ namespace LinhGioi.UI
             _characterList.style.maxWidth = RuntimeUiSizing.CharacterListMaxWidth;
             _characterList.style.flexGrow = 1;
             RuntimeUiSkin.ApplyMargin(_characterList, 0, layout.CharacterListMarginRight, 0, layout.CharacterListMarginBottom);
-            RuntimeUiSkin.ApplyPadding(_characterList, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingVertical, layout.CharacterListPaddingVertical);
+            ApplyCharacterHallListDensity(_characterList, layout);
             RuntimeUiSkin.ApplyCharacterListFrame(_characterList);
             _lobbyContent.Add(_characterList);
 
@@ -523,9 +523,9 @@ namespace LinhGioi.UI
             profileCopy.Add(_selectedMeta);
             profileHero.Add(profileCopy);
             _selectedPreview.Add(profileHero);
-            _selectedStatus = NewStatusLabel("Trạng thái: Chọn tu sĩ trước khi vào sân luyện.", RuntimeArtCatalog.Spirit);
-            _selectedObjective = NewStatusLabel("Mục tiêu: Bước qua Linh Môn, kiểm tra HUD, rồi lưu vị trí.", RuntimeArtCatalog.Gold);
-            _selectedClassSummary = NewStatusLabel("Mạch: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted);
+            _selectedStatus = NewCharacterHallStatusLabel("Trạng thái: Chọn tu sĩ trước khi vào sân luyện.", RuntimeArtCatalog.Spirit, layout);
+            _selectedObjective = NewCharacterHallStatusLabel("Mục tiêu: Bước qua Linh Môn, kiểm tra HUD, rồi lưu vị trí.", RuntimeArtCatalog.Gold, layout);
+            _selectedClassSummary = NewCharacterHallStatusLabel("Mạch: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted, layout);
             _selectedClassSummary.name = "LGO Character Hall Collapsed Class Summary v1";
             _selectedClassSummary.style.display = DisplayStyle.None;
             _selectedPreview.Add(_selectedStatus);
@@ -537,7 +537,7 @@ namespace LinhGioi.UI
             _lobbyPanel.Add(_createPanel);
 
             _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
-            var createHint = NewStatusLabel("Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted);
+            var createHint = NewCharacterHallStatusLabel("Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted, layout);
             _createHint = createHint;
             createHint.name = "LGO Character Create Form Game Copy v1";
             _createPanel.Add(createHint);
@@ -1240,11 +1240,10 @@ namespace LinhGioi.UI
             _characterList.style.minWidth = mobile ? 220 : 280;
             _characterList.style.maxWidth = mobile ? Mathf.Clamp(width * 0.40f, 285f, 330f) : tablet ? 370 : 390;
             _characterList.style.marginRight = layout.CharacterListMarginRight;
-            RuntimeUiSkin.ApplyPadding(_characterList, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingVertical, layout.CharacterListPaddingVertical);
+            ApplyCharacterHallListDensity(_characterList, layout);
             if (_emptyCharacterCard != null)
             {
-                _emptyCharacterCard.style.marginTop = layout.EmptyCharacterCardMarginTop;
-                RuntimeUiSkin.ApplyPadding(_emptyCharacterCard, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingVertical, layout.EmptyCharacterCardPaddingVertical);
+                ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity);
             }
             if (_emptyCharacterHint != null)
             {
@@ -1568,6 +1567,12 @@ namespace LinhGioi.UI
             if (element == null) return;
             element.style.visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
+
+        private static Label NewCharacterHallStatusLabel(string text, Color color, RuntimeUiLayoutProfile layout) =>
+            NewStatusLabel(text, color, layout.CharacterHallDensity);
+
+        private static void ApplyCharacterHallListDensity(VisualElement list, RuntimeUiLayoutProfile layout) =>
+            RuntimeUiFactory.ApplyCharacterListDensity(list, layout.CharacterHallDensity);
 
         internal async Task CaptureEvidenceLoginAsync()
         {

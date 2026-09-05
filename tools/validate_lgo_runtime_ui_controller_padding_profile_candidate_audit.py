@@ -61,7 +61,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "internal int AuthPanelPaddingBottom => 8;",
-        "internal int CharacterListPaddingHorizontal => 14;",
+        "internal RuntimeUiDensityProfile CharacterHallDensity => RuntimeUiDensityProfile.CharacterHall(this);",
         "internal int PositionChipPaddingHorizontal => 10;",
         "internal int LocalCombatPanelPaddingHorizontal => 12;",
         "internal int SettingsPanelPaddingHorizontal => 14;",
@@ -77,7 +77,8 @@ def main() -> int:
         "RuntimeUiSkin.ApplyPadding(_loginCard, layout.LoginCardPadding, layout.LoginCardPadding, layout.LoginCardPaddingTop, layout.LoginCardPaddingBottom);",
         "RuntimeUiSkin.ApplyPadding(serverRow, layout.LoginServerRowPaddingHorizontal, layout.LoginServerRowPaddingHorizontal, layout.LoginServerRowPaddingVertical, layout.LoginServerRowPaddingVertical);",
         "RuntimeUiSkin.ApplyPadding(_lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);",
-        "RuntimeUiSkin.ApplyPadding(_characterList, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingVertical, layout.CharacterListPaddingVertical);",
+        "ApplyCharacterHallListDensity(_characterList, layout);",
+        "ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity);",
         "RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);",
         "RuntimeUiSkin.ApplyPadding(_position, layout.PositionChipPaddingHorizontal, layout.PositionChipPaddingHorizontal, layout.PositionChipPaddingVertical, layout.PositionChipPaddingVertical);",
         "RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);",

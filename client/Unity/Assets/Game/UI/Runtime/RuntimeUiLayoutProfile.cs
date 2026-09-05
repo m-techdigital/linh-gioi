@@ -92,10 +92,7 @@ namespace LinhGioi.UI
         internal int LobbyPanelPaddingHorizontal => IsMobile ? 12 : 18;
         internal int LobbyPanelPaddingTop => IsMobile ? 8 : 16;
         internal int LobbyPanelPaddingBottom => IsMobile ? 8 : 18;
-        internal int CharacterListPaddingHorizontal => 14;
-        internal int CharacterListPaddingVertical => IsMobile ? 8 : 12;
-        internal int EmptyCharacterCardPaddingHorizontal => IsMobile ? 12 : 14;
-        internal int EmptyCharacterCardPaddingVertical => IsMobile ? 10 : 14;
+        internal RuntimeUiDensityProfile CharacterHallDensity => RuntimeUiDensityProfile.CharacterHall(this);
         internal int CreatePanelPaddingHorizontal => IsMobile ? 12 : 16;
         internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;
         internal int CreatePanelPaddingBottom => IsMobile ? 8 : 14;

@@ -33,6 +33,9 @@ namespace LinhGioi.UI
         internal const int StatusLabelMarginTop = 8;
         internal const int StatusLabelPaddingHorizontal = 10;
         internal const int StatusLabelPaddingVertical = 6;
+        internal const int StatusLabelMobileDensityMarginTop = 6;
+        internal const int StatusLabelMobileDensityPaddingHorizontal = 9;
+        internal const int StatusLabelMobileDensityPaddingVertical = 5;
         internal const int StatusChipMaxWidth = 380;
         internal const int StatusChipPaddingHorizontal = 14;
         internal const int StatusChipPaddingVertical = 6;
@@ -103,6 +106,15 @@ namespace LinhGioi.UI
         internal const int ListButtonMinWidth = 230;
         internal const int ListButtonMinHeight = 58;
         internal const int ListButtonPaddingLeft = 14;
+        internal const int CharacterListDensityPaddingHorizontal = 14;
+        internal const int CharacterListMobileDensityPaddingVertical = 8;
+        internal const int CharacterListDesktopDensityPaddingVertical = 12;
+        internal const int EmptyCharacterCardMobileDensityMarginTop = 8;
+        internal const int EmptyCharacterCardDesktopDensityMarginTop = 10;
+        internal const int EmptyCharacterCardMobileDensityPaddingHorizontal = 12;
+        internal const int EmptyCharacterCardDesktopDensityPaddingHorizontal = 14;
+        internal const int EmptyCharacterCardMobileDensityPaddingVertical = 10;
+        internal const int EmptyCharacterCardDesktopDensityPaddingVertical = 14;
 
         internal const int SettingToggleMinHeight = 42;
         internal const int SettingToggleMarginTop = 7;

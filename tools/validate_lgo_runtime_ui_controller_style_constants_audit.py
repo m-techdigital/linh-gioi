@@ -37,7 +37,7 @@ def check_responsive_padding_blocks() -> None:
         "RuntimeUiSkin.ApplyPadding(_loginCard, loginCardPadding",
         "RuntimeUiSkin.ApplyPadding(_loginServerRow, layout.LoginServerRowPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_lobbyPanel, layout.LobbyPanelPaddingHorizontal",
-        "RuntimeUiSkin.ApplyPadding(_emptyCharacterCard, layout.EmptyCharacterCardPaddingHorizontal",
+        "ApplyEmptyCharacterCardDensity(_emptyCharacterCard, layout.CharacterHallDensity)",
         "RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_worldHud, layout.WorldHudPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, layout.SessionMenuPaddingHorizontal",
