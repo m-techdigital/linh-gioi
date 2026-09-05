@@ -525,7 +525,9 @@ namespace LinhGioi.UI
             _selectedPreview.Add(profileHero);
             _selectedStatus = NewStatusLabel("Trạng thái: Chọn tu sĩ trước khi vào sân luyện.", RuntimeArtCatalog.Spirit);
             _selectedObjective = NewStatusLabel("Mục tiêu: Bước qua Linh Môn, kiểm tra HUD, rồi lưu vị trí.", RuntimeArtCatalog.Gold);
-            _selectedClassSummary = NewStatusLabel("Mạch tu luyện: Kiếm tu sơ nhập / vai trò cân bằng.", RuntimeArtCatalog.Muted);
+            _selectedClassSummary = NewStatusLabel("Mạch: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted);
+            _selectedClassSummary.name = "LGO Character Hall Collapsed Class Summary v1";
+            _selectedClassSummary.style.display = DisplayStyle.None;
             _selectedPreview.Add(_selectedStatus);
             _selectedPreview.Add(_selectedObjective);
             _selectedPreview.Add(_selectedClassSummary);
@@ -865,10 +867,14 @@ namespace LinhGioi.UI
             if (character == null)
             {
                 _selectedName.text = "Chưa chọn nhân vật";
-                _selectedMeta.text = "Tạo tu sĩ để bước vào Linh Giới.";
-                if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Đang chờ hồ sơ tu sĩ.";
-                if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Tạo tu sĩ, chọn hồ sơ, rồi vào sân luyện.";
-                if (_selectedClassSummary != null) _selectedClassSummary.text = "Mạch tu luyện: Kiếm tu sơ nhập đã sẵn sàng cho phiên hiện tại.";
+                _selectedMeta.text = "Kiếm tu sơ nhập / chờ tạo hồ sơ";
+                if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Chờ hồ sơ tu sĩ.";
+                if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Tạo hoặc chọn tu sĩ để vào sân luyện.";
+                if (_selectedClassSummary != null)
+                {
+                    _selectedClassSummary.text = "Mạch: Kiếm tu sơ nhập.";
+                    _selectedClassSummary.style.display = DisplayStyle.None;
+                }
                 _worldName.text = "Chưa chọn nhân vật";
                 _worldMeta.text = "Chọn nhân vật tại điện nhân vật.";
                 if (_worldArea != null) _worldArea.text = "Khu vực: xem trước tại sảnh";
@@ -884,10 +890,14 @@ namespace LinhGioi.UI
                 return;
             }
             _selectedName.text = character.name;
-            _selectedMeta.text = "Sẵn sàng qua Linh Môn";
+            _selectedMeta.text = "Kiếm tu sơ nhập / sẵn sàng qua Linh Môn";
             if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Sẵn sàng bước qua Linh Môn.";
             if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Vào sân luyện, gặp Người Giữ Cổng, rồi lưu vị trí.";
-            if (_selectedClassSummary != null) _selectedClassSummary.text = "Mạch tu luyện: Kiếm tu sơ nhập / vai trò cân bằng.";
+            if (_selectedClassSummary != null)
+            {
+                _selectedClassSummary.text = "Mạch: Kiếm tu sơ nhập.";
+                _selectedClassSummary.style.display = DisplayStyle.None;
+            }
             _worldName.text = "Tu sĩ: " + character.name;
             _worldMeta.text = "Kiếm tu sơ nhập / phiên hiện tại";
             _position.text = character.ToString();
