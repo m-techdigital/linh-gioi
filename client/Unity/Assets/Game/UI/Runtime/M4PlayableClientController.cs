@@ -1182,10 +1182,7 @@ namespace LinhGioi.UI
             var loginButtonHeight = layout.LoginButtonHeight;
             var loginButtonFont = layout.LoginButtonFontSize;
             _isMobileProfile = mobile;
-            _root.style.paddingLeft = layout.RootPaddingHorizontal;
-            _root.style.paddingRight = layout.RootPaddingHorizontal;
-            _root.style.paddingTop = layout.RootPaddingTop;
-            _root.style.paddingBottom = layout.RootPaddingBottom;
+            RuntimeUiSkin.ApplyPadding(_root, layout.RootPaddingHorizontal, layout.RootPaddingHorizontal, layout.RootPaddingTop, layout.RootPaddingBottom);
 
             _mainShell.style.maxWidth = worldVisible ? Length.Percent(100) : mobile ? 720 : tablet ? 980 : 1180;
             _mainShell.style.justifyContent = worldVisible || mobile ? Justify.FlexStart : Justify.Center;
@@ -1250,10 +1247,7 @@ namespace LinhGioi.UI
             {
                 _loginCard.style.maxWidth = loginCardWidth;
                 _loginCard.style.minHeight = layout.LoginCardMinHeight;
-                _loginCard.style.paddingLeft = loginCardPadding;
-                _loginCard.style.paddingRight = loginCardPadding;
-                _loginCard.style.paddingTop = layout.LoginCardPaddingTop;
-                _loginCard.style.paddingBottom = layout.LoginCardPaddingBottom;
+                RuntimeUiSkin.ApplyPadding(_loginCard, loginCardPadding, loginCardPadding, layout.LoginCardPaddingTop, layout.LoginCardPaddingBottom);
                 _loginCard.style.marginBottom = layout.LoginCardMarginBottom;
                 _loginCard.style.backgroundColor = layout.LoginCardBackground;
             }
@@ -1261,10 +1255,7 @@ namespace LinhGioi.UI
             {
                 _loginServerRow.style.maxWidth = layout.LoginServerRowMaxWidth;
                 _loginServerRow.style.minHeight = layout.LoginServerRowMinHeight;
-                _loginServerRow.style.paddingLeft = layout.LoginServerRowPaddingHorizontal;
-                _loginServerRow.style.paddingRight = layout.LoginServerRowPaddingHorizontal;
-                _loginServerRow.style.paddingTop = layout.LoginServerRowPaddingVertical;
-                _loginServerRow.style.paddingBottom = layout.LoginServerRowPaddingVertical;
+                RuntimeUiSkin.ApplyPadding(_loginServerRow, layout.LoginServerRowPaddingHorizontal, layout.LoginServerRowPaddingHorizontal, layout.LoginServerRowPaddingVertical, layout.LoginServerRowPaddingVertical);
             }
             if (_loginServerText != null)
                 _loginServerText.style.fontSize = layout.LoginServerTextFontSize;
@@ -1282,10 +1273,7 @@ namespace LinhGioi.UI
 
             _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 790 : 800;
             _lobbyPanel.style.minHeight = mobile ? Mathf.Max(292f, height - 48f) : 410;
-            _lobbyPanel.style.paddingLeft = mobile ? 12 : 18;
-            _lobbyPanel.style.paddingRight = mobile ? 12 : 18;
-            _lobbyPanel.style.paddingTop = mobile ? 8 : 16;
-            _lobbyPanel.style.paddingBottom = mobile ? 8 : 18;
+            RuntimeUiSkin.ApplyPadding(_lobbyPanel, mobile ? 12 : 18, mobile ? 12 : 18, mobile ? 8 : 16, mobile ? 8 : 18);
             if (_lobbyIntro != null)
             {
                 // LGO Character Hall Mobile Copy Density v1: mobile keeps intent, drops prose.
@@ -1301,10 +1289,7 @@ namespace LinhGioi.UI
             if (_emptyCharacterCard != null)
             {
                 _emptyCharacterCard.style.marginTop = mobile ? 8 : 10;
-                _emptyCharacterCard.style.paddingLeft = mobile ? 12 : 14;
-                _emptyCharacterCard.style.paddingRight = mobile ? 12 : 14;
-                _emptyCharacterCard.style.paddingTop = mobile ? 10 : 14;
-                _emptyCharacterCard.style.paddingBottom = mobile ? 10 : 14;
+                RuntimeUiSkin.ApplyPadding(_emptyCharacterCard, mobile ? 12 : 14, mobile ? 12 : 14, mobile ? 10 : 14, mobile ? 10 : 14);
             }
             if (_emptyCharacterHint != null)
             {
@@ -1328,10 +1313,7 @@ namespace LinhGioi.UI
                 _createPanel.style.left = mobile ? Mathf.Clamp(width * 0.45f, 350f, 390f) : 0;
                 _createPanel.style.right = mobile ? 12 : StyleKeyword.Auto;
                 _createPanel.style.top = mobile ? 112 : StyleKeyword.Auto;
-                _createPanel.style.paddingLeft = mobile ? 12 : 16;
-                _createPanel.style.paddingRight = mobile ? 12 : 16;
-                _createPanel.style.paddingTop = mobile ? 8 : 12;
-                _createPanel.style.paddingBottom = mobile ? 8 : 14;
+                RuntimeUiSkin.ApplyPadding(_createPanel, mobile ? 12 : 16, mobile ? 12 : 16, mobile ? 8 : 12, mobile ? 8 : 14);
                 _createPanel.style.marginTop = mobile ? 0 : 10;
                 _createPanel.style.maxHeight = mobile ? 174 : 210;
             }
@@ -1341,10 +1323,7 @@ namespace LinhGioi.UI
             // LGO Mobile World Viewport Evidence Fit v1: keep the HUD proportional so scene actors remain reviewable.
             _worldHud.style.minWidth = layout.WorldHudMinWidth;
             _worldHud.style.maxWidth = layout.WorldHudBaseMaxWidth;
-            _worldHud.style.paddingLeft = mobile ? 8 : 12;
-            _worldHud.style.paddingRight = mobile ? 8 : 12;
-            _worldHud.style.paddingTop = mobile ? 6 : 10;
-            _worldHud.style.paddingBottom = mobile ? 6 : 10;
+            RuntimeUiSkin.ApplyPadding(_worldHud, mobile ? 8 : 12, mobile ? 8 : 12, mobile ? 6 : 10, mobile ? 6 : 10);
             if (_worldName != null)
                 _worldName.style.fontSize = mobile ? 16 : 17;
             if (_worldObjective != null)
@@ -1359,10 +1338,7 @@ namespace LinhGioi.UI
                 _sessionMenuPanel.style.top = layout.SessionMenuTop;
                 _sessionMenuPanel.style.maxWidth = mobile || tablet ? StyleKeyword.None : 960;
                 _sessionMenuPanel.style.maxHeight = layout.SessionMenuMaxHeight;
-                _sessionMenuPanel.style.paddingLeft = mobile ? 12 : tablet ? 16 : 22;
-                _sessionMenuPanel.style.paddingRight = mobile ? 12 : tablet ? 16 : 22;
-                _sessionMenuPanel.style.paddingTop = mobile ? 10 : tablet ? 14 : 18;
-                _sessionMenuPanel.style.paddingBottom = mobile ? 10 : tablet ? 14 : 20;
+                RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, mobile ? 12 : tablet ? 16 : 22, mobile ? 12 : tablet ? 16 : 22, mobile ? 10 : tablet ? 14 : 18, mobile ? 10 : tablet ? 14 : 20);
                 _sessionMenuPanel.style.backgroundColor = RuntimeUiSkin.SessionMenuBackground(mobile || tablet);
             }
             if (_settingsPanel != null)
@@ -1395,10 +1371,7 @@ namespace LinhGioi.UI
             // LGO World HUD Dialogue Viewport Polish v1: mobile dialogue keeps buttons inside the visible viewport.
             _worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);
             _worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;
-            _worldHud.style.paddingLeft = mobile && dialogueVisible ? 7 : mobile ? 8 : 12;
-            _worldHud.style.paddingRight = mobile && dialogueVisible ? 7 : mobile ? 8 : 12;
-            _worldHud.style.paddingTop = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;
-            _worldHud.style.paddingBottom = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;
+            RuntimeUiSkin.ApplyPadding(_worldHud, mobile && dialogueVisible ? 7 : mobile ? 8 : 12, mobile && dialogueVisible ? 7 : mobile ? 8 : 12, mobile && dialogueVisible ? 5 : mobile ? 6 : 10, mobile && dialogueVisible ? 5 : mobile ? 6 : 10);
             _worldHud.style.backgroundColor = RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);
             if (_worldGuidanceCard != null)
             {
@@ -1412,10 +1385,7 @@ namespace LinhGioi.UI
             if (_dialoguePanel != null)
             {
                 _dialoguePanel.style.marginTop = mobile ? 6 : tablet ? 8 : 10;
-                _dialoguePanel.style.paddingLeft = mobile ? 10 : 14;
-                _dialoguePanel.style.paddingRight = mobile ? 10 : 14;
-                _dialoguePanel.style.paddingTop = mobile ? 9 : 12;
-                _dialoguePanel.style.paddingBottom = mobile ? 9 : 12;
+                RuntimeUiSkin.ApplyPadding(_dialoguePanel, mobile ? 10 : 14, mobile ? 10 : 14, mobile ? 9 : 12, mobile ? 9 : 12);
             }
             if (_dialogueSpeaker != null)
                 _dialogueSpeaker.style.fontSize = mobile ? 15 : 17;

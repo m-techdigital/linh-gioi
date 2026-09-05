@@ -34,6 +34,14 @@ namespace LinhGioi.UI
             element.style.paddingBottom = vertical;
         }
 
+        internal static void ApplyPadding(VisualElement element, float left, float right, float top, float bottom)
+        {
+            element.style.paddingLeft = left;
+            element.style.paddingRight = right;
+            element.style.paddingTop = top;
+            element.style.paddingBottom = bottom;
+        }
+
         internal static void ApplyEdgeFrame(VisualElement element, Color left, Color top, Color right, Color bottom, float leftWidth = 2f, float otherWidth = 1f)
         {
             element.style.borderLeftColor = left;
