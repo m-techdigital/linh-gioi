@@ -5,8 +5,8 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX-v1.0`.
-- Current reason: login grounding evidence has been refreshed and reviewed; continue with the next runtime UI quality fix without opening extra documentation churn.
+- Active task: `LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS-v1.0`.
+- Current reason: Character Hall action-density/frame fix has source and runtime evidence; continue with maintainability cleanup so runtime UI work stops inflating controller code.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -39,13 +39,17 @@ Current focus update: login NPC grounding and CTA panel source polish is ready u
 
 Current focus update: refreshed desktop/tablet/mobile login screenshots confirm the source polish is visible; desktop and tablet are improved but still not production-final, and no `VISUAL_RUNTIME_PASS` is claimed.
 
+Current focus update: World Hub now has a more readable procedural cultivation stage, directional path glows, and focus glows under key interactables under `LGO_RUNTIME_UI_QUALITY_DEBT_FIRST_FIX_READY`; desktop/tablet/mobile screenshots were reviewed, the scene is improved but still placeholder-quality, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: Character Hall no longer stretches the ornate V3B panel texture across the full shell under `LGO_CHARACTER_HALL_ACTION_DENSITY_FIRST_FIX_READY`; desktop/tablet/mobile screenshots are cleaner and more readable, still not production-final, and no `VISUAL_RUNTIME_PASS` is claimed.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX-v1.0`
+`LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS-v1.0`
 
-Continue with the next focused UI/runtime quality fix from current evidence without creating extra micro-task paperwork. Candidate areas: World Hub depth/ground richness, Character Hall panel density, or login NPC final-art gap if a lightweight code-side improvement remains safe. Marker ready from source polish and screenshot review: `LGO_LOGIN_NPC_GROUNDING_CTA_PANEL_POLISH_READY`.
+Continue with a focused maintainability pass that reduces repeated or bulky runtime UI/world controller code without changing gameplay, account/character flow, protocol, schemas, ADR, or design tokens. Prefer extracting reusable code that directly lowers future UI/visual iteration cost; do not create new micro-task paperwork unless a reusable gate is genuinely needed. Marker ready from the previous runtime UI fix: `LGO_CHARACTER_HALL_ACTION_DENSITY_FIRST_FIX_READY`.
 
 ## Current blocker
 

@@ -73,7 +73,9 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
         "ApplyCharacterHallPanelFrame(VisualElement panel)",
-        "new Color(0.005f, 0.025f, 0.055f, 0.82f)",
+        "LGO Character Hall No Stretched Texture v1",
+        "panel.style.backgroundImage = StyleKeyword.None;",
+        "new Color(0.005f, 0.024f, 0.052f, 0.80f)",
         "ApplyCharacterListFrame(VisualElement list)",
         "ApplySubtleNestedFrame(list, RuntimeArtCatalog.Gold, 0.34f);",
     )

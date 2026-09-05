@@ -247,15 +247,16 @@ namespace LinhGioi.UI
 
         internal static void ApplyCharacterHallPanelFrame(VisualElement panel)
         {
-            panel.style.backgroundColor = new Color(0.005f, 0.025f, 0.055f, 0.82f);
-            var texture = LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture;
-            if (texture != null)
-            {
-                panel.style.backgroundImage = new StyleBackground(texture);
-                panel.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            }
+            // LGO Character Hall No Stretched Texture v1: keep ornate assets role-sized; the large shell uses code-side glass.
+            panel.style.backgroundImage = StyleKeyword.None;
+            panel.style.backgroundColor = new Color(0.005f, 0.024f, 0.052f, 0.80f);
             ApplyRadius(panel, 12);
-            ApplyEdgeFrame(panel, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
+            ApplyEdgeFrame(
+                panel,
+                new Color(RuntimeArtCatalog.Spirit.r, RuntimeArtCatalog.Spirit.g, RuntimeArtCatalog.Spirit.b, 0.92f),
+                new Color(RuntimeArtCatalog.Gold.r, RuntimeArtCatalog.Gold.g, RuntimeArtCatalog.Gold.b, 0.78f),
+                new Color(RuntimeArtCatalog.Spirit.r, RuntimeArtCatalog.Spirit.g, RuntimeArtCatalog.Spirit.b, 0.62f),
+                new Color(RuntimeArtCatalog.Gold.r, RuntimeArtCatalog.Gold.g, RuntimeArtCatalog.Gold.b, 0.66f));
             panel.style.borderTopWidth = 2;
             panel.style.borderBottomWidth = 2;
         }

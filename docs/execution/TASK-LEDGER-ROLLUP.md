@@ -5,7 +5,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 ## Quick State
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Next task: `LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX-v1.0`
+- Next task: `LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS-v1.0`
 - Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.
 - Purpose: scan recent work quickly without deleting historical task rows or marker coverage.
 
@@ -13,8 +13,6 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 
 | Recent | Task ID | Status / Decision | Next allowed step |
 |---:|---|---|---|
-| 220 | LGO-POST-LOGIN-RUNTIME-UI-REUSE-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_POST_LOGIN_RUNTIME_UI_REUSE_EVIDENCE_REFRESH_READY`: Character Hall and World Hub screenshots refreshed after shared Character Hall composition helper adoption; layout remains stable but Character Hall still needs visual polish toward V3B reference quality | Continue with `LGO-CHARACTER-HALL-V3B-VISUAL-POLISH-v1.0` |
-| 221 | LGO-CHARACTER-HALL-V3B-VISUAL-POLISH v1.0 | source ready / no visual pass claim; `LGO_CHARACTER_HALL_V3B_VISUAL_POLISH_READY`: Character Hall list heading now uses a dedicated V3B component and the hall/list/preview/create/portrait frames are softer and more readable without new assets or character-flow changes | Continue with `LGO-CHARACTER-HALL-V3B-VISUAL-POLISH-EVIDENCE-REFRESH-v1.0` |
 | 222 | LGO-CHARACTER-HALL-V3B-VISUAL-POLISH-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_CHARACTER_HALL_V3B_VISUAL_POLISH_EVIDENCE_REFRESH_READY`: Character Hall screenshots refreshed after V3B frame/list-heading polish; readable but not claimed final-production visual quality | Continue with `LGO-RUNTIME-UI-FACTORY-CHARACTER-HALL-CLEANUP-FOLLOWUP-v1.0` |
 | 223 | LGO-RUNTIME-UI-FACTORY-CHARACTER-HALL-CLEANUP-FOLLOWUP v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_FACTORY_CHARACTER_HALL_CLEANUP_FOLLOWUP_READY`: removed the unused controller-local Character Hall list-density wrapper after density ownership moved to `RuntimeUiFactory` | Continue with `LGO-WORLD-HUD-RUNTIME-UI-REUSE-AUDIT-v1.0` |
 | 224 | LGO-WORLD-HUD-RUNTIME-UI-REUSE-AUDIT v1.0 | source ready / no visual pass claim; `LGO_WORLD_HUD_RUNTIME_UI_REUSE_AUDIT_READY`: World HUD hidden pose/VFX/skin-source evidence labels now reuse `RuntimeUiFactory.NewHiddenStatusLabel` instead of repeated controller-local creation/hiding | Continue with `LGO-WORLD-HUD-RUNTIME-UI-REUSE-EVIDENCE-REFRESH-v1.0` |
@@ -31,6 +29,8 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 | 235 | LGO-RUNTIME-UI-QUALITY-DEBT-TRIAGE v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_QUALITY_DEBT_TRIAGE_READY`: visual/source debt triage selected login NPC grounding and CTA panel polish as the next highest-value safe fix | Continue with `LGO-LOGIN-NPC-GROUNDING-AND-CTA-PANEL-POLISH-v1.0` |
 | 236 | LGO-LOGIN-NPC-GROUNDING-AND-CTA-PANEL-POLISH v1.0 | source ready / runtime evidence pending; `LGO_LOGIN_NPC_GROUNDING_CTA_PANEL_POLISH_READY`: login Gate Keeper stage is lowered/anchored with a lightweight foot bloom and CTA backing is less boxy without adding image payload or changing flow | Continue with `LGO-LOGIN-NPC-GROUNDING-EVIDENCE-REFRESH-v1.0` |
 | 237 | LGO-LOGIN-NPC-GROUNDING-EVIDENCE-REFRESH v1.0 | evidence reviewed / no visual pass claim; login desktop/tablet/mobile screenshots refreshed and reviewed; NPC grounding and CTA panel are improved, still not production-final, and no `VISUAL_RUNTIME_PASS` is claimed | Continue with `LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX-v1.0` |
+| 238 | LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX v1.0 | source ready / evidence reviewed / no visual pass claim; `LGO_RUNTIME_UI_QUALITY_DEBT_FIRST_FIX_READY`: World Hub now has lightweight procedural cultivation-stage glow, directional path glows, and focus glows under key interactables; screenshots reviewed as improved but still placeholder-quality, no production/final visual claim | Continue with `LGO-CHARACTER-HALL-ACTION-DENSITY-FIRST-FIX-v1.0` |
+| 239 | LGO-CHARACTER-HALL-ACTION-DENSITY-FIRST-FIX v1.0 | source ready / evidence reviewed / no visual pass claim; `LGO_CHARACTER_HALL_ACTION_DENSITY_FIRST_FIX_READY`: Character Hall shell no longer stretches ornate panel art over the full screen; glass/code-side frame improves hierarchy and mobile readability without changing character flow | Continue with `LGO-RUNTIME-UI-CONTROLLER-SIZE-REDUCTION-FIRST-PASS-v1.0` |
 
 ## Operating Notes
 
