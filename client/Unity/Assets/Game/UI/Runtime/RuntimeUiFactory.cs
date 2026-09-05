@@ -264,6 +264,13 @@ namespace LinhGioi.UI
             return label;
         }
 
+        internal static Label NewHiddenMutedLabel(string text)
+        {
+            var label = NewMutedLabel(text);
+            label.style.display = DisplayStyle.None;
+            return label;
+        }
+
         internal static void ApplyStatusAccent(Label label, Color accent)
         {
             RuntimeUiSkin.ApplyStatusAccent(label, accent);

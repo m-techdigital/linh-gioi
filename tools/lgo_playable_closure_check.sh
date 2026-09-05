@@ -570,6 +570,12 @@ source_only() {
   if [[ -f tools/validate_lgo_world_hud_fantasy_panel_evidence_refresh.py ]]; then
     run_phase world_hud_fantasy_panel_evidence_refresh python3.12 tools/validate_lgo_world_hud_fantasy_panel_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_status_composition_cleanup.py ]]; then
+    run_phase runtime_ui_status_composition_cleanup python3.12 tools/validate_lgo_runtime_ui_status_composition_cleanup.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_status_composition_evidence_refresh.py ]]; then
+    run_phase runtime_ui_status_composition_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_status_composition_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_style_debt_followup_audit.py ]]; then
     run_phase runtime_ui_style_debt_followup_audit python3.12 tools/validate_lgo_runtime_ui_style_debt_followup_audit.py
   fi
@@ -923,6 +929,8 @@ source_only() {
     tools/validate_lgo_world_hud_runtime_ui_reuse_evidence_refresh.py \
     tools/validate_lgo_world_hud_fantasy_panel_hierarchy_polish.py \
     tools/validate_lgo_world_hud_fantasy_panel_evidence_refresh.py \
+    tools/validate_lgo_runtime_ui_status_composition_cleanup.py \
+    tools/validate_lgo_runtime_ui_status_composition_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_style_debt_followup_audit.py \
     tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py \
     tools/validate_lgo_combat_button_state_readability_polish.py \

@@ -8,13 +8,17 @@ Post-login visual runtime hardening plus device-profile asset governance. Login 
 
 Current focus update: refreshed screenshots confirm the corrected no-stretched-texture World HUD panel version under `LGO_WORLD_HUD_FANTASY_PANEL_EVIDENCE_REFRESH_READY`.
 
+Current focus update: hidden status/note composition now routes through reusable factory helpers under `LGO_RUNTIME_UI_STATUS_COMPOSITION_CLEANUP_READY`.
+
+Current focus update: focused runtime screenshots confirm hidden status composition remains stable under `LGO_RUNTIME_UI_STATUS_COMPOSITION_EVIDENCE_REFRESH_READY`.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-RUNTIME-UI-STATUS-COMPOSITION-CLEANUP-v1.0`
+`LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-LIGHTNESS-PASS-v1.0`
 
-Audit status/combat/dialogue row composition for remaining repeated controller-local UI patterns and extract only small stateless helpers that improve consistency without changing gameplay semantics. Marker ready from evidence refresh: `LGO_WORLD_HUD_FANTASY_PANEL_EVIDENCE_REFRESH_READY`.
+Polish the existing local combat cooldown button visual state so it reads disabled/cooling down without becoming a heavy black block, while preserving all combat semantics and runtime asset boundaries. Marker ready from evidence refresh: `LGO_RUNTIME_UI_STATUS_COMPOSITION_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -110,6 +114,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-WORLD-HUD-RUNTIME-UI-REUSE-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_HUD_RUNTIME_UI_REUSE_EVIDENCE_REFRESH_READY`
 - `LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH-v1.0` / `LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_READY`
 - `LGO-WORLD-HUD-FANTASY-PANEL-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_HUD_FANTASY_PANEL_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-STATUS-COMPOSITION-CLEANUP-v1.0` / `LGO_RUNTIME_UI_STATUS_COMPOSITION_CLEANUP_READY`
+- `LGO-RUNTIME-UI-STATUS-COMPOSITION-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_STATUS_COMPOSITION_EVIDENCE_REFRESH_READY`
 - `LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE-v1.0` / `LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY`
 - `LGO-SESSION-MENU-FOCUS-EVIDENCE-REFRESH-v1.0` / `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`
 - `LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0` / `LGO_CHARACTER_HALL_MOBILE_COPY_DENSITY_READY`
@@ -386,6 +392,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-HUD-FANTASY-PANEL-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-RUNTIME-UI-STATUS-COMPOSITION-CLEANUP-v1.0`; the next useful batch is reducing remaining repeated status/combat/dialogue row composition while preserving the runtime screenshots as the visual truth.
+`LGO-RUNTIME-UI-STATUS-COMPOSITION-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-LIGHTNESS-PASS-v1.0`; screenshot review shows the cooldown button is functional but visually too dark/heavy compared with the surrounding V3B HUD.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.
