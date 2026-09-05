@@ -32,6 +32,13 @@ namespace LinhGioi.UI
         private int _reviewHeight = DefaultReviewHeight;
         private M4PlayableClientController _controller;
 
+        private void Awake()
+        {
+            Application.runInBackground = true;
+            Application.targetFrameRate = 30;
+            QualitySettings.vSyncCount = 0;
+        }
+
         public static bool ShouldRun()
         {
             if (string.Equals(Environment.GetEnvironmentVariable("LGO_VISUAL_RUNTIME_REVIEW"), "1", StringComparison.Ordinal)) return true;
@@ -49,7 +56,6 @@ namespace LinhGioi.UI
 
         private void Start()
         {
-            Application.runInBackground = true;
             _outputDir = GetArg("--lgo-visual-runtime-evidence-dir") ?? Path.Combine(Application.persistentDataPath, DefaultOutputDirectoryName);
             Directory.CreateDirectory(_outputDir);
             _reviewWidth = GetIntArg("--lgo-visual-runtime-width", DefaultReviewWidth);

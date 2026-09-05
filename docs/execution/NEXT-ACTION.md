@@ -5,12 +5,12 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT-v1.0`.
-- Current reason: Unity local asset preparation now has a quiet mode used by visual runtime review, reducing routine capture logs while preserving protocol generation and failure visibility; continue improving runtime capture reliability so screenshots do not depend on manual clicking.
+- Active task: `LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS-v1.0`.
+- Current reason: visual runtime capture now requests foreground focus repeatedly with bounded progress logging and the Unity runner enters background-friendly capture mode in `Awake`; latest desktop capture completed 10/10 screenshots without a manual click recorded in the runner log.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
-- Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
+- Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: pick from current evidence, preferring World Hub depth or Character Hall panel density.
+- Next implementation task after this fix: reduce World Hub prototype feel with lightweight visual depth, asset sizing discipline, and no new gameplay.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -53,17 +53,19 @@ Current focus update: World-space label creation, text refresh, shadow, and acti
 
 Current focus update: `prepare_unity_local_assets.sh` now supports `LGO_UNITY_LOCAL_ASSETS_QUIET=1`, and `lgo_visual_runtime_review.sh` uses it under `LGO_PREPARE_UNITY_ASSETS_QUIET_PROFILE_READY`; visual review logs are shorter while protocol generation/build/capture still fail honestly.
 
+Current focus update: visual runtime review now re-requests player focus with bounded progress logging and the Unity evidence runner configures background capture earlier under `LGO_VISUAL_RUNTIME_CAPTURE_FOCUS_ROBUSTNESS_READY`; latest desktop evidence captured all 10 checkpoints without a manual click in the runner log, and no `VISUAL_RUNTIME_PASS` is claimed.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT-v1.0`
+`LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS-v1.0`
 
-Continue by auditing the visual runtime evidence capture path for any dependency on player focus or manual clicks. Prefer source-safe runner/tooling improvements that make capture begin and finish automatically in desktop/tablet/mobile profiles. Do not claim visual PASS from capture alone. Marker ready from the previous workflow fix: `LGO_PREPARE_UNITY_ASSETS_QUIET_PROFILE_READY`.
+Continue by improving the World Hub's visual depth and weight discipline without new gameplay or heavy assets. Prefer procedural/lightweight layering, sizing cleanup, label clarity, and reuse of existing V3B/runtime assets. Do not crop reference composites, do not add bulky image payloads, and do not claim visual PASS without fresh screenshot review. Marker ready from the previous workflow fix: `LGO_VISUAL_RUNTIME_CAPTURE_FOCUS_ROBUSTNESS_READY`.
 
 ## Current blocker
 
-No active blocker for source work. Visual runtime capture is currently available in this environment and has completed multiple consecutive rounds without manual player close.
+No active blocker for source work. Visual runtime capture is currently available in this environment and has completed multiple consecutive rounds without manual player close; latest focus-robustness run captured 10/10 checkpoints with progress telemetry.
 
 Evidence:
 

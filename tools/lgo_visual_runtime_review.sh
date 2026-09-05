@@ -368,22 +368,60 @@ def request_player_focus(pid: int) -> None:
     except Exception:
         pass
 
+def screenshot_count() -> int:
+    return sum(1 for name in expected if (out_dir / name).is_file())
+
+def maybe_request_focus(process: subprocess.Popen[bytes], *, force: bool = False) -> None:
+    if process.poll() is not None:
+        return
+    now = time.time()
+    elapsed = now - started_at
+    if force or elapsed >= maybe_request_focus.next_elapsed:
+        request_player_focus(process.pid)
+        maybe_request_focus.attempts += 1
+        print(
+            "LGO_VISUAL_RUNTIME_FOCUS_REQUEST"
+            f" attempt={maybe_request_focus.attempts}"
+            f" elapsed={elapsed:.1f}"
+            f" screenshots={screenshot_count()}",
+            file=maybe_request_focus.log,
+            flush=True,
+        )
+        maybe_request_focus.next_elapsed = elapsed + min(12.0, 2.0 + maybe_request_focus.attempts * 2.0)
+
+maybe_request_focus.attempts = 0
+maybe_request_focus.next_elapsed = 0.0
+maybe_request_focus.log = None
+
 started_at = time.time()
 with log_path.open("w", encoding="utf-8") as log:
     process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT)
+    maybe_request_focus.log = log
     print("LGO_VISUAL_RUNTIME_PLAYER_STARTED pid=" + str(process.pid), file=log, flush=True)
     print("LGO_VISUAL_RUNTIME_PLAYER_PROFILE " + profile + " " + screen_width + "x" + screen_height, file=log, flush=True)
-    request_player_focus(process.pid)
+    maybe_request_focus(process, force=True)
     returncode = None
     deadline = started_at + timeout
+    last_count = -1
     while time.time() < deadline:
         returncode = process.poll()
         if returncode is not None:
             break
+        current_count = screenshot_count()
+        if current_count != last_count:
+            print(
+                "LGO_VISUAL_RUNTIME_CAPTURE_PROGRESS"
+                f" screenshots={current_count}/{len(expected)}"
+                f" elapsed={time.time() - started_at:.1f}",
+                file=log,
+                flush=True,
+            )
+            last_count = current_count
         if capture_complete():
             print("LGO_VISUAL_RUNTIME_CAPTURE_COMPLETE terminating_player_after_manifest", file=log, flush=True)
             returncode = terminate_after_capture(process)
             break
+        maybe_request_focus(process)
         time.sleep(0.5)
     if returncode is None:
         if capture_complete():
