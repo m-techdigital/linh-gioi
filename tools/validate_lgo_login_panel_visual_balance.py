@@ -51,12 +51,12 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "UseLoginOrnatePanelTexture = false",
         "LGO Login Gate Entry Bottom CTA v3 Final Panel V3B",
-        "new Color(0.005f, 0.018f, 0.040f, 0.42f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.36f)",
         "new Color(0.93f, 0.73f, 0.36f, 0.46f)",
         "LGO Login Gate Keeper Soft Grounding Glow V3B",
         "style.opacity = 0.93f",
-        "Mathf.Clamp(width * 0.28f",
-        "Mathf.Clamp(width * 0.38f",
+        "Mathf.Clamp(width * 0.26f",
+        "Mathf.Clamp(width * 0.46f",
         "LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture",
     )
     require(
