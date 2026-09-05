@@ -99,6 +99,13 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyHudStatusCompactFrame(label);
         }
 
+        internal static Label NewCompactStatusLabel(string text, Color color, int fontSize)
+        {
+            var label = NewStatusLabel(text, color);
+            ApplyHudStatusCompact(label, fontSize);
+            return label;
+        }
+
         internal static Label NewSectionTitle(string text)
         {
             var label = new Label(text);

@@ -636,16 +636,13 @@ namespace LinhGioi.UI
 
             var guidanceCard = NewWorldHudGroup("LGO World Guidance Card V3B", RuntimeArtCatalog.Spirit);
             _worldGuidanceCard = guidanceCard;
-            _worldArea = NewStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted);
-            ApplyHudStatusCompact(_worldArea, 12);
+            _worldArea = NewCompactStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted, 12);
             guidanceCard.Add(_worldArea);
 
-            _worldStep = NewStatusLabel("Tiến trình: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Spirit);
-            ApplyHudStatusCompact(_worldStep, 13);
+            _worldStep = NewCompactStatusLabel("Tiến trình: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Spirit, 13);
             guidanceCard.Add(_worldStep);
 
-            _worldDirection = NewStatusLabel("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold);
-            ApplyHudStatusCompact(_worldDirection, 13);
+            _worldDirection = NewCompactStatusLabel("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold, 13);
             guidanceCard.Add(_worldDirection);
 
             _worldPoseState = NewStatusLabel("Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.", RuntimeArtCatalog.Muted);
@@ -660,14 +657,12 @@ namespace LinhGioi.UI
             _skinSource.style.display = DisplayStyle.None;
             _worldHud.Add(_skinSource);
 
-            _worldObjective = NewStatusLabel("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold);
+            _worldObjective = NewCompactStatusLabel("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold, 14);
             _worldObjective.name = "LGO World Objective Touch Priority";
-            ApplyHudStatusCompact(_worldObjective, 14);
             guidanceCard.Add(_worldObjective);
 
-            _interactionHint = NewStatusLabel("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Spirit);
+            _interactionHint = NewCompactStatusLabel("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Spirit, 13);
             _interactionHint.name = "LGO World Interaction Touch Hint";
-            ApplyHudStatusCompact(_interactionHint, 13);
             guidanceCard.Add(_interactionHint);
             _worldHud.Add(guidanceCard);
 
@@ -775,13 +770,10 @@ namespace LinhGioi.UI
             combatNote.style.display = DisplayStyle.None;
             _localCombatPanel.Add(combatNote);
             _combatCooldownIcon = NewCombatCooldownIcon();
-            _combatTargetStatus = NewStatusLabel("Bia luyện: chưa vào sân.", RuntimeArtCatalog.Gold);
-            ApplyHudStatusCompact(_combatTargetStatus, 13);
-            _combatRangeStatus = NewStatusLabel("Tầm: chưa vào sân.", RuntimeArtCatalog.Muted);
-            ApplyHudStatusCompact(_combatRangeStatus, 12);
+            _combatTargetStatus = NewCompactStatusLabel("Bia luyện: chưa vào sân.", RuntimeArtCatalog.Gold, 13);
+            _combatRangeStatus = NewCompactStatusLabel("Tầm: chưa vào sân.", RuntimeArtCatalog.Muted, 12);
             _combatVisualState = NewStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
-            _combatFeedback = NewStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit);
-            ApplyHudStatusCompact(_combatFeedback, 13);
+            _combatFeedback = NewCompactStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit, 13);
             _combatCooldown = NewStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
             _combatAuthority = NewStatusLabel("Mô phỏng cục bộ: chưa gửi ý định chiến đấu.", RuntimeArtCatalog.Spirit);
             _localCombatButton = NewCompactSecondaryButton("Tấn công thử", TriggerLocalCombat);

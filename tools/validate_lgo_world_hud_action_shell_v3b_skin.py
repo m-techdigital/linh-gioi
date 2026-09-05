@@ -55,7 +55,12 @@ def main() -> int:
         "LGO World Combat Readiness Row V3B",
         "LGO World Action Footer V3B",
         "NewWorldHudGroup",
+        "NewCompactStatusLabel",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "ApplyHudStatusCompact",
+        "NewCompactStatusLabel",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-ACTION-SHELL-V3B-SKIN-PASS-v1.0.md",

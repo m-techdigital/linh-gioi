@@ -66,6 +66,7 @@ def main() -> int:
         "internal static VisualElement NewReadabilityRow",
         "internal static VisualElement NewWorldHudGroup",
         "internal static void ApplyHudStatusCompact",
+        "internal static Label NewCompactStatusLabel",
         "internal static Label NewSectionTitle",
         "internal static Label NewMutedLabel",
         "internal static VisualElement NewLoginOrnamentRule",
@@ -80,7 +81,7 @@ def main() -> int:
         "using static LinhGioi.UI.RuntimeUiFactory;",
         "_lobbyPanel = NewPanel(840);",
         "_selectedPreview = NewPreviewPanel(\"TU SĨ\", \"Hồ sơ đang chọn\");",
-        "_combatTargetStatus = NewStatusLabel(\"Bia luyện: chưa vào sân.\", RuntimeArtCatalog.Gold);",
+        "_combatTargetStatus = NewCompactStatusLabel(\"Bia luyện: chưa vào sân.\", RuntimeArtCatalog.Gold, 13);",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
