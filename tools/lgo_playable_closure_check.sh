@@ -402,6 +402,12 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_icon_status_row_evidence_refresh.py ]]; then
     run_phase runtime_ui_icon_status_row_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_icon_status_row_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_combat_button_metrics_audit.py ]]; then
+    run_phase runtime_ui_combat_button_metrics_audit python3.12 tools/validate_lgo_runtime_ui_combat_button_metrics_audit.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_combat_button_metrics_evidence_refresh.py ]]; then
+    run_phase runtime_ui_combat_button_metrics_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_combat_button_metrics_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_responsive_style_application_audit.py ]]; then
     run_phase runtime_ui_responsive_style_application_audit python3.12 tools/validate_lgo_runtime_ui_responsive_style_application_audit.py
   fi

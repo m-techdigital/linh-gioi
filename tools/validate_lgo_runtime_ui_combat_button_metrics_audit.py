@@ -26,6 +26,13 @@ def require(rel: str, *markers: str) -> str:
     return text
 
 
+def reject(rel: str, *markers: str) -> None:
+    text = read(rel)
+    for marker in markers:
+        if marker in text:
+            ERRORS.append(f"{rel} still contains forbidden marker: {marker}")
+
+
 def check_frozen() -> None:
     result = subprocess.run(
         [
@@ -52,69 +59,81 @@ def check_frozen() -> None:
 
 
 def main() -> int:
-    skin = require(
-        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
-        "ApplyButtonMetrics(Button button, float minWidth = 0f, float minHeight = 0f, float fontSize = 0f, bool bold = false, WhiteSpace whiteSpace = WhiteSpace.NoWrap)",
-        "if (minWidth > 0f) button.style.minWidth = minWidth;",
-        "if (minHeight > 0f) button.style.minHeight = minHeight;",
-        "if (fontSize > 0f) button.style.fontSize = fontSize;",
-        "if (bold) button.style.unityFontStyleAndWeight = FontStyle.Bold;",
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs",
+        "CombatButtonReadyMinWidth",
+        "CombatButtonCooldownMinWidth",
+        "CombatButtonMinHeight",
+        "CombatButtonReadyFontSize",
+        "CombatButtonCooldownFontSize",
+        "CombatButtonPaddingHorizontal",
+        "CombatButtonPaddingTop",
+        "CombatButtonPaddingBottom",
     )
-    factory = require(
+    require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "internal static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)",
         "RuntimeUiSpacing.CombatButtonCooldownMinWidth",
         "RuntimeUiSpacing.CombatButtonReadyMinWidth",
         "RuntimeUiSpacing.CombatButtonMinHeight",
         "RuntimeUiSpacing.CombatButtonCooldownFontSize",
         "RuntimeUiSpacing.CombatButtonReadyFontSize",
-        "RuntimeUiSkin.ApplyButtonMetrics(button, minHeight: 58, fontSize: 16, bold: true);",
-        "RuntimeUiSkin.ApplyButtonMetrics(button, 144, 44, 14, true);",
-        "RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.BaseButtonMinWidth, RuntimeUiSpacing.CompactButtonMinHeight, RuntimeUiSpacing.CompactButtonFontSize);",
-        "RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.BaseButtonMinWidth, RuntimeUiSpacing.BaseButtonMinHeight);",
+        "RuntimeUiSpacing.CombatButtonPaddingHorizontal",
+        "RuntimeUiSpacing.CombatButtonPaddingTop",
+        "RuntimeUiSpacing.CombatButtonPaddingBottom",
     )
-    if factory.count("RuntimeUiSkin.ApplyButtonMetrics(") < 7:
-        ERRORS.append("RuntimeUiFactory should reuse ApplyButtonMetrics in at least seven button paths")
+    reject(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "RuntimeUiSkin.ApplyButtonMetrics(button, coolingDown ? 142 : 132, 44, coolingDown ? 13 : 14, true);",
+        "RuntimeUiSkin.ApplyPadding(button, 14, 14, 0, 0);",
+    )
     require(
         "tools/validate_lgo_combat_button_state_readability_polish.py",
         "RuntimeUiSpacing.CombatButtonCooldownMinWidth",
+        "RuntimeUiSpacing.CombatButtonReadyMinWidth",
+    )
+    require(
+        "tools/validate_lgo_runtime_ui_action_row_base_audit.py",
+        "RuntimeUiSpacing.CombatButtonCooldownMinWidth",
+        "RuntimeUiSpacing.CombatButtonReadyMinWidth",
     )
     require(
         "tools/validate_lgo_runtime_ui_style_ownership_drift_audit.py",
         "RuntimeUiSpacing.CombatButtonCooldownMinWidth",
+        "RuntimeUiSpacing.CombatButtonReadyMinWidth",
     )
     require(
-        "docs/design/RUNTIME-UI-ACTION-ROW-BASE-AUDIT-v1.0.md",
-        "LGO_RUNTIME_UI_ACTION_ROW_BASE_READY",
-        "RuntimeUiSkin.ApplyButtonMetrics",
+        "docs/design/RUNTIME-UI-COMBAT-BUTTON-METRICS-AUDIT-v1.0.md",
+        "LGO_RUNTIME_UI_COMBAT_BUTTON_METRICS_READY",
+        "RuntimeUiFactory.ApplyCombatButtonSkin",
     )
     require(
-        "docs/tasks/LGO-RUNTIME-UI-ACTION-ROW-BASE-AUDIT-v1.0.md",
-        "LGO_RUNTIME_UI_ACTION_ROW_BASE_READY",
-        "LGO-RUNTIME-UI-ACTION-ROW-EVIDENCE-REFRESH-v1.0",
+        "docs/tasks/LGO-RUNTIME-UI-COMBAT-BUTTON-METRICS-AUDIT-v1.0.md",
+        "LGO_RUNTIME_UI_COMBAT_BUTTON_METRICS_READY",
+        "LGO-RUNTIME-UI-COMBAT-BUTTON-METRICS-EVIDENCE-REFRESH-v1.0",
     )
     require(
         "tools/lgo_playable_closure_check.sh",
-        "runtime_ui_action_row_base_audit",
-        "validate_lgo_runtime_ui_action_row_base_audit.py",
+        "runtime_ui_combat_button_metrics_audit",
+        "validate_lgo_runtime_ui_combat_button_metrics_audit.py",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-RUNTIME-UI-ACTION-ROW-EVIDENCE-REFRESH-v1.0",
-        "LGO_RUNTIME_UI_ACTION_ROW_BASE_READY",
+        "LGO-RUNTIME-UI-COMBAT-BUTTON-METRICS-EVIDENCE-REFRESH-v1.0",
+        "LGO_RUNTIME_UI_COMBAT_BUTTON_METRICS_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-RUNTIME-UI-ACTION-ROW-BASE-AUDIT v1.0",
-        "LGO_RUNTIME_UI_ACTION_ROW_BASE_READY",
+        "LGO-RUNTIME-UI-COMBAT-BUTTON-METRICS-AUDIT v1.0",
+        "LGO_RUNTIME_UI_COMBAT_BUTTON_METRICS_READY",
     )
     check_frozen()
-    _ = skin
     if ERRORS:
-        print("LGO RUNTIME UI ACTION ROW BASE AUDIT VALIDATION FAILED", file=sys.stderr)
+        print("LGO RUNTIME UI COMBAT BUTTON METRICS AUDIT VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_RUNTIME_UI_ACTION_ROW_BASE_VALIDATION_PASS")
+    print("LGO_RUNTIME_UI_COMBAT_BUTTON_METRICS_VALIDATION_PASS")
     return 0
 
 

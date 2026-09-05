@@ -304,8 +304,18 @@ namespace LinhGioi.UI
         {
             if (button == null) return;
             if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
-            RuntimeUiSkin.ApplyButtonMetrics(button, coolingDown ? 142 : 132, 44, coolingDown ? 13 : 14, true);
-            RuntimeUiSkin.ApplyPadding(button, 14, 14, 0, 0);
+            RuntimeUiSkin.ApplyButtonMetrics(
+                button,
+                coolingDown ? RuntimeUiSpacing.CombatButtonCooldownMinWidth : RuntimeUiSpacing.CombatButtonReadyMinWidth,
+                RuntimeUiSpacing.CombatButtonMinHeight,
+                coolingDown ? RuntimeUiSpacing.CombatButtonCooldownFontSize : RuntimeUiSpacing.CombatButtonReadyFontSize,
+                true);
+            RuntimeUiSkin.ApplyPadding(
+                button,
+                RuntimeUiSpacing.CombatButtonPaddingHorizontal,
+                RuntimeUiSpacing.CombatButtonPaddingHorizontal,
+                RuntimeUiSpacing.CombatButtonPaddingTop,
+                RuntimeUiSpacing.CombatButtonPaddingBottom);
         }
 
         internal static TextField NewTextField(string label, string value)

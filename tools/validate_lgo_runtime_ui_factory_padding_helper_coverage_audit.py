@@ -64,7 +64,9 @@ def main() -> int:
         "RuntimeUiSpacing.IconStatusRowPaddingHorizontal",
         "RuntimeUiSpacing.IconStatusRowPaddingTop",
         "RuntimeUiSpacing.IconStatusRowPaddingBottom",
-        "RuntimeUiSkin.ApplyPadding(button, 14, 14, 0, 0);",
+        "RuntimeUiSpacing.CombatButtonPaddingHorizontal",
+        "RuntimeUiSpacing.CombatButtonPaddingTop",
+        "RuntimeUiSpacing.CombatButtonPaddingBottom",
         "button.style.paddingLeft = RuntimeUiSpacing.ListButtonPaddingLeft;",
     )
     reject(

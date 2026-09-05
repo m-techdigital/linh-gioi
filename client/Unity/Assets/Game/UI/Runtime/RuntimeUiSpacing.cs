@@ -83,5 +83,13 @@ namespace LinhGioi.UI
         internal const int IconMarginLeft = 4;
         internal const int IconMarginRight = 8;
         internal const int CooldownIconSize = 52;
+        internal const int CombatButtonReadyMinWidth = 132;
+        internal const int CombatButtonCooldownMinWidth = 142;
+        internal const int CombatButtonMinHeight = 44;
+        internal const int CombatButtonReadyFontSize = 14;
+        internal const int CombatButtonCooldownFontSize = 13;
+        internal const int CombatButtonPaddingHorizontal = 14;
+        internal const int CombatButtonPaddingTop = 0;
+        internal const int CombatButtonPaddingBottom = 0;
     }
 }
