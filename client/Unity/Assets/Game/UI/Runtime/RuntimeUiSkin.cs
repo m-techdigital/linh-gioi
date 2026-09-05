@@ -56,6 +56,14 @@ namespace LinhGioi.UI
             element.style.marginBottom = bottom;
         }
 
+        internal static void ApplyText(Label label, Color color, float fontSize = 0f, bool bold = false, TextAnchor alignment = TextAnchor.UpperLeft)
+        {
+            label.style.color = color;
+            label.style.unityTextAlign = alignment;
+            if (fontSize > 0f) label.style.fontSize = fontSize;
+            if (bold) label.style.unityFontStyleAndWeight = FontStyle.Bold;
+        }
+
         internal static void ApplyEdgeFrame(VisualElement element, Color left, Color top, Color right, Color bottom, float leftWidth = 2f, float otherWidth = 1f)
         {
             element.style.borderLeftColor = left;

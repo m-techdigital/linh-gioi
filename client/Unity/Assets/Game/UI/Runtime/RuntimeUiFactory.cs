@@ -31,16 +31,12 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyPadding(preview, RuntimeUiSpacing.PreviewPanelPaddingHorizontal, RuntimeUiSpacing.PreviewPanelPaddingVertical);
             RuntimeUiSkin.ApplyPreviewPanelFrame(preview);
             var sigil = new Label(sigilText);
-            sigil.style.color = RuntimeArtCatalog.Spirit;
-            sigil.style.unityFontStyleAndWeight = FontStyle.Bold;
-            sigil.style.fontSize = 11;
+            RuntimeUiSkin.ApplyText(sigil, RuntimeArtCatalog.Spirit, 11, true);
             preview.Add(sigil);
             if (!string.IsNullOrWhiteSpace(headingText))
             {
                 var heading = new Label(headingText);
-                heading.style.color = RuntimeArtCatalog.Text;
-                heading.style.unityFontStyleAndWeight = FontStyle.Bold;
-                heading.style.fontSize = 15;
+                RuntimeUiSkin.ApplyText(heading, RuntimeArtCatalog.Text, 15, true);
                 heading.style.marginTop = 2;
                 heading.style.marginBottom = 6;
                 preview.Add(heading);
@@ -67,11 +63,10 @@ namespace LinhGioi.UI
             var titleLabel = new Label(title);
             titleLabel.style.minWidth = RuntimeUiSpacing.ReadabilityTitleMinWidth;
             titleLabel.style.marginRight = RuntimeUiSpacing.RowGap;
-            titleLabel.style.color = accent;
-            titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+            RuntimeUiSkin.ApplyText(titleLabel, accent, 0, true);
             var valueLabel = new Label(value);
             valueLabel.style.flexGrow = 1;
-            valueLabel.style.color = RuntimeArtCatalog.Text;
+            RuntimeUiSkin.ApplyText(valueLabel, RuntimeArtCatalog.Text);
             valueLabel.style.whiteSpace = WhiteSpace.Normal;
             row.Add(titleLabel);
             row.Add(valueLabel);
@@ -122,11 +117,8 @@ namespace LinhGioi.UI
         internal static Label NewSectionTitle(string text)
         {
             var label = new Label(text);
-            label.style.fontSize = 20;
-            label.style.unityFontStyleAndWeight = FontStyle.Bold;
-            label.style.color = RuntimeArtCatalog.Text;
+            RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Text, 20, true, TextAnchor.MiddleCenter);
             label.style.marginBottom = 8;
-            label.style.unityTextAlign = TextAnchor.MiddleCenter;
             return label;
         }
 
@@ -159,11 +151,9 @@ namespace LinhGioi.UI
             badge.style.marginBottom = RuntimeUiSpacing.BadgeMarginBottom;
             RuntimeUiSkin.ApplyBadgeFrame(badge);
             var titleLabel = new Label(title);
-            titleLabel.style.color = RuntimeArtCatalog.Gold;
-            titleLabel.style.fontSize = 11;
+            RuntimeUiSkin.ApplyText(titleLabel, RuntimeArtCatalog.Gold, 11);
             var valueLabel = new Label(value);
-            valueLabel.style.color = RuntimeArtCatalog.Text;
-            valueLabel.style.fontSize = 12;
+            RuntimeUiSkin.ApplyText(valueLabel, RuntimeArtCatalog.Text, 12);
             badge.Add(titleLabel);
             badge.Add(valueLabel);
             return badge;
@@ -175,7 +165,7 @@ namespace LinhGioi.UI
             label.style.marginTop = RuntimeUiSpacing.ToastMarginTop;
             RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.ToastPaddingHorizontal, RuntimeUiSpacing.ToastPaddingVertical);
             label.style.whiteSpace = WhiteSpace.Normal;
-            label.style.color = RuntimeArtCatalog.Text;
+            RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Text);
             RuntimeUiSkin.ApplyToastFrame(label, RuntimeArtCatalog.Gold);
             return label;
         }
@@ -192,7 +182,7 @@ namespace LinhGioi.UI
         internal static Label NewMutedLabel(string text)
         {
             var label = new Label(text);
-            label.style.color = RuntimeArtCatalog.Muted;
+            RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Muted);
             label.style.whiteSpace = WhiteSpace.Normal;
             return label;
         }
@@ -224,7 +214,7 @@ namespace LinhGioi.UI
         internal static Label NewStatusLabel(string text, Color color)
         {
             var label = new Label(text);
-            label.style.color = color;
+            RuntimeUiSkin.ApplyText(label, color);
             label.style.whiteSpace = WhiteSpace.Normal;
             label.style.marginTop = RuntimeUiSpacing.StatusLabelMarginTop;
             RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.StatusLabelPaddingHorizontal, RuntimeUiSpacing.StatusLabelPaddingVertical);

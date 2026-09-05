@@ -373,20 +373,15 @@ namespace LinhGioi.UI
 
             _loginHeroTitle = new Label("Bước qua Linh Môn");
             _loginHeroTitle.name = "LGO Login Gate Entry Hero Title";
-            _loginHeroTitle.style.fontSize = 25;
-            _loginHeroTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
-            _loginHeroTitle.style.color = RuntimeArtCatalog.Text;
-            _loginHeroTitle.style.unityTextAlign = TextAnchor.MiddleCenter;
+            RuntimeUiSkin.ApplyText(_loginHeroTitle, RuntimeArtCatalog.Text, 25, true, TextAnchor.MiddleCenter);
             _loginHeroTitle.style.marginBottom = 4;
             _loginHeroTitle.style.display = DisplayStyle.None;
             controlColumn.Add(_loginHeroTitle);
 
             _loginHeroCopy = NewMutedLabel("\"Tu tiên không chỉ là sức mạnh, mà là hành trình trở về chính mình.\"");
             _loginHeroCopy.name = "LGO Login Gate Entry Hero Copy";
-            _loginHeroCopy.style.fontSize = 15;
+            RuntimeUiSkin.ApplyText(_loginHeroCopy, RuntimeArtCatalog.Text, 15, false, TextAnchor.MiddleCenter);
             _loginHeroCopy.style.maxWidth = 560;
-            _loginHeroCopy.style.color = RuntimeArtCatalog.Text;
-            _loginHeroCopy.style.unityTextAlign = TextAnchor.MiddleCenter;
             _loginHeroCopy.style.marginBottom = 12;
             _loginHeroCopy.style.display = DisplayStyle.None;
             controlColumn.Add(_loginHeroCopy);
@@ -425,10 +420,7 @@ namespace LinhGioi.UI
             var serverText = new Label("S1 - Linh Giới");
             _loginServerText = serverText;
             serverText.style.flexGrow = 1;
-            serverText.style.fontSize = 18;
-            serverText.style.unityFontStyleAndWeight = FontStyle.Bold;
-            serverText.style.color = RuntimeArtCatalog.Text;
-            serverText.style.unityTextAlign = TextAnchor.MiddleCenter;
+            RuntimeUiSkin.ApplyText(serverText, RuntimeArtCatalog.Text, 18, true, TextAnchor.MiddleCenter);
             serverRow.Add(serverText);
             _serverStatusIcon = new VisualElement();
             _serverStatusIcon.name = "LGO Login Server Online Dot";
@@ -534,9 +526,7 @@ namespace LinhGioi.UI
             var profileCopy = new VisualElement();
             profileCopy.style.flexGrow = 1;
             _selectedName = new Label("Chưa chọn nhân vật");
-            _selectedName.style.fontSize = 21;
-            _selectedName.style.unityFontStyleAndWeight = FontStyle.Bold;
-            _selectedName.style.color = RuntimeArtCatalog.Gold;
+            RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, 21, true);
             profileCopy.Add(_selectedName);
             _selectedMeta = NewMutedLabel("Tạo một tu sĩ để bước vào Linh Giới.");
             profileCopy.Add(_selectedMeta);
@@ -602,9 +592,7 @@ namespace LinhGioi.UI
             _worldHud.Add(_layoutProfileLabel);
 
             _worldName = new Label("Chưa chọn nhân vật");
-            _worldName.style.fontSize = 17;
-            _worldName.style.unityFontStyleAndWeight = FontStyle.Bold;
-            _worldName.style.color = RuntimeArtCatalog.Gold;
+            RuntimeUiSkin.ApplyText(_worldName, RuntimeArtCatalog.Gold, 17, true);
             _worldName.style.marginTop = layout.WorldNameMarginTop;
             _worldHud.Add(_worldName);
 
@@ -666,9 +654,7 @@ namespace LinhGioi.UI
             _dialoguePanel = NewSectionShell("ĐỐI THOẠI", "Người Giữ Cổng", string.Empty, "LGO Dialogue Shell");
             _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
             _dialogueSpeaker = new Label("Người Giữ Cổng");
-            _dialogueSpeaker.style.fontSize = 17;
-            _dialogueSpeaker.style.unityFontStyleAndWeight = FontStyle.Bold;
-            _dialogueSpeaker.style.color = RuntimeArtCatalog.Gold;
+            RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, 17, true);
             _dialogueLine = NewMutedLabel("Đối thoại đã đóng.");
             _dialogueLine.style.fontSize = 16;
             _dialogueProgress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
