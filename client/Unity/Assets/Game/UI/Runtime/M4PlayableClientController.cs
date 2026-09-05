@@ -121,6 +121,7 @@ namespace LinhGioi.UI
         private string _lastLayoutProfile;
         private string _forcedLayoutProfile;
         private bool _isMobileProfile;
+        private bool _forceCombatPanelForEvidence;
 
         public static M4PlayableClientController Attach(GameObject host)
         {
@@ -1146,8 +1147,9 @@ namespace LinhGioi.UI
             var dialogueVisible = _dialoguePanel != null && _dialoguePanel.style.display == DisplayStyle.Flex;
             var compactViewport = _isMobileProfile || string.Equals(_lastLayoutProfile, "tablet", StringComparison.Ordinal);
             var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible && !compactViewport;
-            var gameplayPanelVisible = !sessionVisible && !dialogueVisible && !compactViewport;
+            var gameplayPanelVisible = !sessionVisible && !dialogueVisible && (!compactViewport || _forceCombatPanelForEvidence);
             var compactWorld = compactViewport || focusMode;
+            var evidenceCombatFocus = _forceCombatPanelForEvidence && compactViewport;
             if (_worldHud != null) _worldHud.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;
             if (_headerActions != null) _headerActions.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;
             if (_layoutProfileLabel != null) _layoutProfileLabel.style.display = DisplayStyle.None;
@@ -1155,7 +1157,7 @@ namespace LinhGioi.UI
             if (_position != null) _position.style.display = showPosition && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
             if (_worldDebugStrip != null) _worldDebugStrip.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldMeta != null) _worldMeta.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_worldGuidanceCard != null) _worldGuidanceCard.style.display = dialogueVisible && compactViewport ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_worldGuidanceCard != null) _worldGuidanceCard.style.display = (dialogueVisible && compactViewport) || evidenceCombatFocus ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldArea != null) _worldArea.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldStep != null) _worldStep.style.display = showHints && !compactWorld ? DisplayStyle.Flex : DisplayStyle.None;
             if (_worldDirection != null) _worldDirection.style.display = showHints && !(_isMobileProfile && !dialogueVisible) ? DisplayStyle.Flex : DisplayStyle.None;
@@ -1635,6 +1637,7 @@ namespace LinhGioi.UI
         internal void CaptureEvidenceNearGateKeeperPrompt()
         {
             if (_world == null) return;
+            _forceCombatPanelForEvidence = false;
             _world.SetSmokePositionNearGateKeeper();
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
@@ -1643,6 +1646,7 @@ namespace LinhGioi.UI
         internal void CaptureEvidenceNearTrainingStonePrompt()
         {
             if (_world == null) return;
+            _forceCombatPanelForEvidence = false;
             _world.SetSmokePositionNearTrainingStone();
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
@@ -1651,6 +1655,7 @@ namespace LinhGioi.UI
         internal void CaptureEvidenceOpenDialogue()
         {
             if (_world == null) return;
+            _forceCombatPanelForEvidence = false;
             _world.SetSmokePositionNearGateKeeper();
             _world.TriggerInteractionForSmoke();
             RefreshWorldLoopLabels();
@@ -1659,6 +1664,9 @@ namespace LinhGioi.UI
         internal void CaptureEvidenceTargetDummyState()
         {
             if (_world == null) return;
+            // LGO Combat Button Mobile Responsive Evidence v1: the compact HUD normally hides combat chrome,
+            // but the target-dummy checkpoint must expose it so mobile/tablet screenshots prove button fit.
+            _forceCombatPanelForEvidence = true;
             _world.SetSmokePositionNearTargetDummy();
             _world.TriggerLocalCombatForSmoke();
             RefreshWorldLoopLabels();

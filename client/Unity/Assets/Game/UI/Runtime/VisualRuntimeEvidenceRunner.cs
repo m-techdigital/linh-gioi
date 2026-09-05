@@ -122,7 +122,7 @@ namespace LinhGioi.UI
                 "target-dummy-state",
                 "Target Dummy Local Feedback",
                 "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv",
-                "V3B target dummy selected/hit/recover state clarity, cooldown ring, and local-only combat copy");
+                "V3B target dummy selected/hit/recover state clarity, cooldown ring, combat button fit, and local-only combat copy");
 
             _controller.CaptureEvidenceOpenDialogue();
             yield return WaitFrames(8);
