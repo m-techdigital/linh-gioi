@@ -18,11 +18,12 @@ def read(rel: str) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
-def require(rel: str, *markers: str) -> None:
+def require(rel: str, *markers: str) -> str:
     text = read(rel)
     for marker in markers:
         if marker not in text:
             ERRORS.append(f"{rel} missing marker: {marker}")
+    return text
 
 
 def check_frozen() -> None:
@@ -52,38 +53,50 @@ def check_frozen() -> None:
 
 def main() -> int:
     require(
-        "docs/tasks/LGO-WORLD-HUD-MOBILE-HIERARCHY-EVIDENCE-REFRESH-v1.0.md",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_EVIDENCE_REFRESH_READY",
-        "mobile/world-hub.png",
-        "mobile/npc-dialogue.png",
-        "narrower/lighter panel",
-        "`Tiếp tục` and `Đóng` visible",
-        "No VISUAL_RUNTIME_PASS claim",
-        "LGO-SOURCE-GATE-EVIDENCE-PRESERVATION-PASS-v1.0",
+        "tools/report_lgo_visual_evidence_profile_index.py",
+        "LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY",
+        "EXPECTED_SCREENSHOTS",
+        "desktop",
+        "tablet",
+        "mobile",
+        "VISUAL_RUNTIME_PASS",
+    )
+    require(
+        "tools/lgo_visual_runtime_review_profiles.sh",
+        "report_lgo_visual_evidence_profile_index.py",
+        "LGO_VISUAL_PROFILE_INDEX_PHASE",
     )
     require(
         "tools/lgo_playable_closure_check.sh",
-        "world_hud_mobile_hierarchy_evidence_refresh",
-        "validate_lgo_world_hud_mobile_hierarchy_evidence_refresh.py",
+        "visual_evidence_profile_index",
+        "validate_lgo_visual_evidence_profile_index.py",
+        "report_lgo_visual_evidence_profile_index.py",
+    )
+    require(
+        "docs/tasks/LGO-VISUAL-EVIDENCE-PROFILE-INDEX-PASS-v1.0.md",
+        "LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY",
+        "desktop",
+        "tablet",
+        "mobile",
+        "No VISUAL_RUNTIME_PASS claim",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
         "LGO-VISUAL-EVIDENCE-PROFILE-INDEX-PASS-v1.0",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_EVIDENCE_REFRESH_READY",
-        "LGO_SOURCE_GATE_EVIDENCE_PRESERVATION_READY",
+        "LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-WORLD-HUD-MOBILE-HIERARCHY-EVIDENCE-REFRESH v1.0",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_EVIDENCE_REFRESH_READY",
+        "LGO-VISUAL-EVIDENCE-PROFILE-INDEX-PASS v1.0",
+        "LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY",
     )
     check_frozen()
     if ERRORS:
-        print("LGO WORLD HUD MOBILE HIERARCHY EVIDENCE REFRESH VALIDATION FAILED", file=sys.stderr)
+        print("LGO VISUAL EVIDENCE PROFILE INDEX VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_WORLD_HUD_MOBILE_HIERARCHY_EVIDENCE_REFRESH_VALIDATION_PASS")
+    print("LGO_VISUAL_EVIDENCE_PROFILE_INDEX_VALIDATION_PASS")
     return 0
 
 

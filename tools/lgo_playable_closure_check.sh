@@ -288,6 +288,9 @@ source_only() {
   if [[ -f tools/validate_lgo_source_gate_evidence_preservation.py ]]; then
     run_phase source_gate_evidence_preservation python3.12 tools/validate_lgo_source_gate_evidence_preservation.py
   fi
+  if [[ -f tools/validate_lgo_visual_evidence_profile_index.py ]]; then
+    run_phase visual_evidence_profile_index python3.12 tools/validate_lgo_visual_evidence_profile_index.py
+  fi
   if [[ -f tools/validate_lgo_build_size_budget.py ]]; then
     run_phase build_size_budget python3.12 tools/validate_lgo_build_size_budget.py
   fi
@@ -442,6 +445,8 @@ source_only() {
     tools/validate_lgo_world_hud_mobile_hierarchy_polish.py \
     tools/validate_lgo_world_hud_mobile_hierarchy_evidence_refresh.py \
     tools/validate_lgo_source_gate_evidence_preservation.py \
+    tools/report_lgo_visual_evidence_profile_index.py \
+    tools/validate_lgo_visual_evidence_profile_index.py \
     tools/report_lgo_build_size_budget.py \
     tools/validate_lgo_build_size_budget.py \
     tools/lgo_continuous_cycle.py \

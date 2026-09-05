@@ -45,6 +45,10 @@ run_profile() {
   run_profile tablet 1366 1024 skip skip
   run_profile mobile 960 540 skip skip
 
+  echo "LGO_VISUAL_PROFILE_INDEX_PHASE start"
+  python3.12 tools/report_lgo_visual_evidence_profile_index.py
+  echo "LGO_VISUAL_PROFILE_INDEX_PHASE pass"
+
   echo "LGO_VISUAL_PROFILE_REVIEW_RESULT EVIDENCE_CAPTURED_FOR_REVIEW"
   echo "LGO_VISUAL_RUNTIME_PASS_NOT_CLAIMED"
 } 2>&1 | tee "$LOG"
