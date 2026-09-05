@@ -321,6 +321,9 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_responsive_session_shell_helper_review.py ]]; then
     run_phase runtime_ui_responsive_session_shell_helper_review python3.12 tools/validate_lgo_runtime_ui_responsive_session_shell_helper_review.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_factory_adoption_evidence_refresh.py ]]; then
+    run_phase runtime_ui_factory_adoption_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_factory_adoption_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_world_hud_action_shell_evidence_refresh.py ]]; then
     run_phase world_hud_action_shell_evidence_refresh python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
   fi
@@ -561,6 +564,7 @@ source_only() {
     tools/validate_lgo_runtime_ui_responsive_layout_helper_review.py \
     tools/validate_lgo_runtime_ui_responsive_constants_audit.py \
     tools/validate_lgo_runtime_ui_responsive_session_shell_helper_review.py \
+    tools/validate_lgo_runtime_ui_factory_adoption_evidence_refresh.py \
     tools/validate_lgo_world_hud_action_shell_evidence_refresh.py \
     tools/validate_lgo_world_mobile_camera_framing.py \
     tools/validate_lgo_world_mobile_camera_evidence_refresh.py \

@@ -1328,7 +1328,7 @@ namespace LinhGioi.UI
                 _loginServerRow.style.paddingBottom = mobile ? 6 : 7;
             }
             if (_loginServerText != null)
-                _loginServerText.style.fontSize = mobile ? Mathf.RoundToInt(Mathf.Clamp(shortSide * 0.042f, 16f, 19f)) : tablet ? 18 : 19;
+                _loginServerText.style.fontSize = mobile ? Mathf.RoundToInt(Mathf.Clamp(layout.ShortSide * 0.042f, 16f, 19f)) : tablet ? 18 : 19;
             if (_loginButton != null)
             {
                 _loginButton.style.minHeight = loginButtonHeight;

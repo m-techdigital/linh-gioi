@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-FACTORY-ADOPTION-EVIDENCE-REFRESH-v1.0`
+`LGO-SESSION-MENU-SETTING-ROW-VISUAL-POLISH-v1.0`
 
-Refresh desktop/tablet/mobile visual evidence after the Runtime UI factory and responsive helper refactor chain. Marker: `LGO_RUNTIME_UI_RESPONSIVE_SESSION_SHELL_HELPER_REVIEW_READY`. If runtime capture is unavailable, record the environment blocker and continue with source-safe UI maintainability work instead of claiming visual PASS.
+Polish Session Menu setting rows through shared reusable runtime UI styling so the pause/settings shell reads closer to the V3B login and Character Hall language instead of plain tool rows. Marker: `LGO_RUNTIME_UI_FACTORY_ADOPTION_EVIDENCE_REFRESH_READY`. Preserve existing local setting behavior and avoid one-off duplicated style blocks.
 
 ## Current blocker
 
@@ -123,6 +123,7 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_LAYOUT_HELPER_REVIEW_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-CONSTANTS-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_CONSTANTS_AUDIT_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-SESSION-SHELL-HELPER-REVIEW-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_SESSION_SHELL_HELPER_REVIEW_READY`
+- `LGO-RUNTIME-UI-FACTORY-ADOPTION-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_FACTORY_ADOPTION_EVIDENCE_REFRESH_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 
@@ -194,6 +195,7 @@ python3.12 tools/validate_lgo_runtime_ui_controller_responsibility_map.py
 python3.12 tools/validate_lgo_runtime_ui_responsive_layout_helper_review.py
 python3.12 tools/validate_lgo_runtime_ui_responsive_constants_audit.py
 python3.12 tools/validate_lgo_runtime_ui_responsive_session_shell_helper_review.py
+python3.12 tools/validate_lgo_runtime_ui_factory_adoption_evidence_refresh.py
 python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_world_mobile_camera_framing.py
 python3.12 tools/validate_lgo_world_mobile_camera_evidence_refresh.py
