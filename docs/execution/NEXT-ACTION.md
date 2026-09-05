@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-COMBAT-HUD-SPACING-AUDIT-v1.0`
+`LGO-RUNTIME-UI-RESPONSIVE-BUTTON-METRICS-AUDIT-v1.0`
 
-Audit remaining combat HUD/action shell spacing so compact combat panel layout uses named constants and profile-driven sizing instead of controller-local visual drift. Marker ready from the completed combat button evidence refresh: `LGO_RUNTIME_UI_COMBAT_BUTTON_METRICS_EVIDENCE_REFRESH_READY`.
+Audit remaining controller-local responsive button min-width, min-height, font-size, and selected-action spacing values in Character Hall/action flows, then route durable values through shared runtime UI spacing/sizing ownership. Marker ready from the completed combat HUD spacing evidence refresh: `LGO_RUNTIME_UI_COMBAT_HUD_SPACING_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -145,6 +145,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-ICON-STATUS-ROW-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_ICON_STATUS_ROW_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-COMBAT-BUTTON-METRICS-AUDIT-v1.0` / `LGO_RUNTIME_UI_COMBAT_BUTTON_METRICS_READY`
 - `LGO-RUNTIME-UI-COMBAT-BUTTON-METRICS-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_COMBAT_BUTTON_METRICS_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-COMBAT-HUD-SPACING-AUDIT-v1.0` / `LGO_RUNTIME_UI_COMBAT_HUD_SPACING_READY`
+- `LGO-RUNTIME-UI-COMBAT-HUD-SPACING-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_COMBAT_HUD_SPACING_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-APPLICATION-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_APPLICATION_AUDIT_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-FACTORY-COVERAGE-AUDIT-v1.0` / `LGO_RUNTIME_UI_FACTORY_COVERAGE_AUDIT_READY`

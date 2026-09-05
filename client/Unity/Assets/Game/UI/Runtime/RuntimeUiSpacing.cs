@@ -91,5 +91,9 @@ namespace LinhGioi.UI
         internal const int CombatButtonPaddingHorizontal = 14;
         internal const int CombatButtonPaddingTop = 0;
         internal const int CombatButtonPaddingBottom = 0;
+        internal const int CombatStatusFontSize = 13;
+        internal const int CombatRangeStatusFontSize = 12;
+        internal const int CombatActionRowMarginTop = 6;
+        internal const int CombatActionRowMarginBottom = 0;
     }
 }

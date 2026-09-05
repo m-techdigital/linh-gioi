@@ -717,10 +717,10 @@ namespace LinhGioi.UI
             combatNote.style.display = DisplayStyle.None;
             _localCombatPanel.Add(combatNote);
             _combatCooldownIcon = NewCombatCooldownIcon();
-            _combatTargetStatus = NewCompactStatusLabel("Bia luyện: chưa vào sân.", RuntimeArtCatalog.Gold, 13);
-            _combatRangeStatus = NewCompactStatusLabel("Tầm: chưa vào sân.", RuntimeArtCatalog.Muted, 12);
+            _combatTargetStatus = NewCompactStatusLabel("Bia luyện: chưa vào sân.", RuntimeArtCatalog.Gold, RuntimeUiSpacing.CombatStatusFontSize);
+            _combatRangeStatus = NewCompactStatusLabel("Tầm: chưa vào sân.", RuntimeArtCatalog.Muted, RuntimeUiSpacing.CombatRangeStatusFontSize);
             _combatVisualState = NewStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
-            _combatFeedback = NewCompactStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit, 13);
+            _combatFeedback = NewCompactStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit, RuntimeUiSpacing.CombatStatusFontSize);
             _combatCooldown = NewStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
             _combatAuthority = NewStatusLabel("Mô phỏng cục bộ: chưa gửi ý định chiến đấu.", RuntimeArtCatalog.Spirit);
             _localCombatButton = NewCompactSecondaryButton("Tấn công thử", TriggerLocalCombat);
@@ -733,7 +733,7 @@ namespace LinhGioi.UI
             _combatVisualState.style.display = DisplayStyle.None;
             _combatCooldown.style.display = DisplayStyle.None;
             _combatAuthority.style.display = DisplayStyle.None;
-            _localCombatPanel.Add(NewActionRow("LGO Local Combat Action Row", Justify.FlexStart, 6, 0, _localCombatButton));
+            _localCombatPanel.Add(NewActionRow("LGO Local Combat Action Row", Justify.FlexStart, RuntimeUiSpacing.CombatActionRowMarginTop, RuntimeUiSpacing.CombatActionRowMarginBottom, _localCombatButton));
             _worldHud.Add(_localCombatPanel);
         }
 

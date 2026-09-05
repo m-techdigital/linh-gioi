@@ -82,7 +82,7 @@ def main() -> int:
         "using static LinhGioi.UI.RuntimeUiFactory;",
         "_lobbyPanel = NewCharacterHallPanel(layout);",
         "_selectedPreview = NewPreviewPanel(\"TU SĨ\", \"Hồ sơ đang chọn\");",
-        "_combatTargetStatus = NewCompactStatusLabel(\"Bia luyện: chưa vào sân.\", RuntimeArtCatalog.Gold, 13);",
+        "_combatTargetStatus = NewCompactStatusLabel(\"Bia luyện: chưa vào sân.\", RuntimeArtCatalog.Gold, RuntimeUiSpacing.CombatStatusFontSize);",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
