@@ -23,6 +23,7 @@ namespace LinhGioi.UI
         private VisualElement _root;
         private VisualElement _screenScrim;
         private VisualElement _header;
+        private VisualElement _headerActions;
         private VisualElement _mainShell;
         private VisualElement _authPanel;
         private VisualElement _lobbyPanel;
@@ -215,6 +216,7 @@ namespace LinhGioi.UI
             ApplyStatusChip(_status, RuntimeArtCatalog.Muted);
 
             var right = new VisualElement();
+            _headerActions = right;
             right.style.flexDirection = FlexDirection.Row;
             right.style.alignItems = Align.Center;
             right.Add(_status);
@@ -1099,7 +1101,7 @@ namespace LinhGioi.UI
 
         private void SetBusy(bool busy, string message)
         {
-            _status.text = message;
+            _status.text = FormatTopStatusMessage(message);
             ApplyStatusChip(_status, busy ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Muted);
             ApplyLoginButtonState(busy ? LgoVisualAssetRegistryV2.ButtonDisabledTexture : LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture);
             if (_serverStatusIcon != null)
@@ -1116,6 +1118,13 @@ namespace LinhGioi.UI
                 if (_sessionSaveButton != null) _sessionSaveButton.SetEnabled(!busy);
                 if (_sessionBackButton != null) _sessionBackButton.SetEnabled(!busy);
             }
+        }
+
+        private string FormatTopStatusMessage(string message)
+        {
+            if (!string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal) && message == "Sẵn sàng: Bước 1 rồi Bước 2.")
+                return "Sẵn sàng: Bước 1/2";
+            return message;
         }
 
         private void RunAsync(Func<Task> action)
@@ -1740,10 +1749,41 @@ namespace LinhGioi.UI
                         ? "Bố cục: tablet / HUD gọn, ưu tiên chỉ dẫn và cảnh quan."
                         : "Bố cục: desktop / HUD đầy đủ.";
             }
+            ApplyTopStatusResponsive(mobile, tablet, worldVisible, width);
 
             if (_focusModeToggle != null && mobile && !_focusModeToggle.value)
                 _focusModeToggle.value = true;
             ApplyLocalSettings();
+        }
+
+        private void ApplyTopStatusResponsive(bool mobile, bool tablet, bool worldVisible, int viewportWidth)
+        {
+            // LGO World Top Status Mobile Readability v1: top chips scale by profile and avoid long text on narrow world views.
+            if (_headerActions != null)
+            {
+                _headerActions.style.flexShrink = 1;
+                _headerActions.style.justifyContent = Justify.FlexEnd;
+                _headerActions.style.maxWidth = worldVisible && mobile ? Mathf.Max(320f, viewportWidth - 24f) : tablet ? 430 : 520;
+            }
+            if (_status != null)
+            {
+                _status.style.fontSize = worldVisible && mobile ? 13 : tablet ? 13 : 14;
+                _status.style.minHeight = worldVisible && mobile ? 34 : 32;
+                _status.style.paddingLeft = worldVisible && mobile ? 14 : 18;
+                _status.style.paddingRight = worldVisible && mobile ? 14 : 18;
+                _status.style.maxWidth = worldVisible && mobile ? Mathf.Clamp(viewportWidth * 0.28f, 180f, 260f) : tablet ? 270 : 360;
+                if (worldVisible && mobile && _status.text.StartsWith("Sẵn sàng:", StringComparison.Ordinal))
+                    _status.text = "Sẵn sàng: Bước 1/2";
+                else if (worldVisible && tablet && _status.text == "Sẵn sàng: Bước 1 rồi Bước 2.")
+                    _status.text = "Sẵn sàng: Bước 1/2";
+            }
+            if (_quitButton != null)
+            {
+                _quitButton.style.minHeight = worldVisible && mobile ? 34 : 36;
+                _quitButton.style.minWidth = worldVisible && mobile ? 78 : 88;
+                _quitButton.style.fontSize = worldVisible && mobile ? 13 : 14;
+                _quitButton.style.marginRight = 0;
+            }
         }
 
         private void TriggerLocalCombat()

@@ -261,6 +261,12 @@ source_only() {
   if [[ -f tools/validate_lgo_world_label_safe_area_evidence_refresh.py ]]; then
     run_phase world_label_safe_area_evidence_refresh python3.12 tools/validate_lgo_world_label_safe_area_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_world_top_status_mobile_readability.py ]]; then
+    run_phase world_top_status_mobile_readability python3.12 tools/validate_lgo_world_top_status_mobile_readability.py
+  fi
+  if [[ -f tools/validate_lgo_world_top_status_mobile_evidence_refresh.py ]]; then
+    run_phase world_top_status_mobile_evidence_refresh python3.12 tools/validate_lgo_world_top_status_mobile_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_build_size_budget.py ]]; then
     run_phase build_size_budget python3.12 tools/validate_lgo_build_size_budget.py
   fi
@@ -406,6 +412,8 @@ source_only() {
     tools/validate_lgo_world_mobile_camera_evidence_refresh.py \
     tools/validate_lgo_world_label_safe_area.py \
     tools/validate_lgo_world_label_safe_area_evidence_refresh.py \
+    tools/validate_lgo_world_top_status_mobile_readability.py \
+    tools/validate_lgo_world_top_status_mobile_evidence_refresh.py \
     tools/report_lgo_build_size_budget.py \
     tools/validate_lgo_build_size_budget.py \
     tools/lgo_continuous_cycle.py \
