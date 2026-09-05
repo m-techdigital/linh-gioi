@@ -1,0 +1,56 @@
+namespace LinhGioi.UI
+{
+    internal static class RuntimeUiSpacing
+    {
+        internal const int PanelMinWidth = 300;
+        internal const int PanelMarginBottom = 12;
+        internal const int PanelPaddingHorizontal = 16;
+        internal const int PanelPaddingVertical = 14;
+
+        internal const int PreviewPanelMinWidth = 220;
+        internal const int PreviewPanelPaddingHorizontal = 14;
+        internal const int PreviewPanelPaddingVertical = 12;
+
+        internal const int RowMarginTop = 8;
+        internal const int RowGap = 8;
+        internal const int ReadabilityRowPaddingHorizontal = 10;
+        internal const int ReadabilityRowPaddingVertical = 7;
+        internal const int ReadabilityTitleMinWidth = 86;
+
+        internal const int WorldHudGroupMarginVertical = 8;
+        internal const int WorldHudGroupPaddingHorizontal = 8;
+        internal const int WorldHudGroupPaddingVertical = 7;
+        internal const int WorldHudRootPaddingHorizontal = 12;
+        internal const int WorldHudRootPaddingVertical = 10;
+
+        internal const int CompactStatusMarginTop = 4;
+        internal const int CompactStatusPaddingHorizontal = 8;
+        internal const int CompactStatusPaddingTop = 5;
+        internal const int CompactStatusPaddingBottom = 5;
+
+        internal const int StatusLabelMarginTop = 8;
+        internal const int StatusLabelPaddingHorizontal = 10;
+        internal const int StatusLabelPaddingVertical = 6;
+
+        internal const int BadgeStripMarginBottom = 10;
+        internal const int BadgeMarginBottom = 8;
+        internal const int BadgePaddingHorizontal = 10;
+        internal const int BadgePaddingVertical = 6;
+
+        internal const int ToastMarginTop = 10;
+        internal const int ToastPaddingHorizontal = 12;
+        internal const int ToastPaddingVertical = 8;
+
+        internal const int BaseButtonMinWidth = 132;
+        internal const int BaseButtonMinHeight = 44;
+        internal const int BaseButtonMarginTop = 8;
+        internal const int BaseButtonMarginRight = 8;
+        internal const int CompactButtonMinHeight = 42;
+        internal const int CompactButtonFontSize = 14;
+
+        internal const int RuntimeIconSmall = 28;
+        internal const int IconMarginLeft = 4;
+        internal const int IconMarginRight = 8;
+        internal const int CooldownIconSize = 52;
+    }
+}

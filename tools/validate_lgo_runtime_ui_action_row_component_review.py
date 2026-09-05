@@ -64,7 +64,7 @@ def main() -> int:
         "return NewActionRow(\"LGO Runtime Action Row\", Justify.FlexStart, 6, 0, buttons);",
         "row.style.justifyContent = justifyContent;",
         "internal static VisualElement NewIconStatusRow",
-        "statusColumn.style.marginLeft = 10;",
+        "statusColumn.style.marginLeft = RuntimeUiSpacing.StatusLabelPaddingHorizontal;",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

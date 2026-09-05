@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-COMPONENT-MARGIN-TOKEN-AUDIT-v1.0`
+`LGO-RUNTIME-UI-PRIMITIVE-THEME-SPACING-BRIDGE-AUDIT-v1.0`
 
-Review component-local spacing in `RuntimeUiFactory`, `RuntimeUiSkin`, and `UIPrimitives` and extract reusable token/helper candidates only where values repeat or define a shared component rhythm. Marker ready from the completed evidence refresh: `LGO_RUNTIME_UI_ONE_EDGE_LAYOUT_EVIDENCE_REFRESH_READY`.
+Review how `ThemeTokens.spacing`, `RuntimeUiLayoutProfile`, and `RuntimeUiSpacing` should coexist so future UI work has one clear ownership model for theme-scale spacing, responsive layout metrics, and component-local spacing. Marker ready from the completed evidence refresh: `LGO_RUNTIME_UI_COMPONENT_MARGIN_TOKEN_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -159,6 +159,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-CONTROLLER-PADDING-PROFILE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_CONTROLLER_PADDING_PROFILE_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-ONE-EDGE-LAYOUT-HELPER-AUDIT-v1.0` / `LGO_RUNTIME_UI_ONE_EDGE_LAYOUT_HELPER_READY`
 - `LGO-RUNTIME-UI-ONE-EDGE-LAYOUT-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_ONE_EDGE_LAYOUT_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-COMPONENT-MARGIN-TOKEN-AUDIT-v1.0` / `LGO_RUNTIME_UI_COMPONENT_MARGIN_TOKEN_READY`
+- `LGO-RUNTIME-UI-COMPONENT-MARGIN-TOKEN-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_COMPONENT_MARGIN_TOKEN_EVIDENCE_REFRESH_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 
@@ -316,6 +318,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-RUNTIME-UI-ONE-EDGE-LAYOUT-EVIDENCE-REFRESH-v1.0` is evidence-ready without a visual PASS claim. Continue with `LGO-RUNTIME-UI-COMPONENT-MARGIN-TOKEN-AUDIT-v1.0`; the next useful batch is reducing repeated component-local spacing without flattening legitimate component-specific rhythm.
+`LGO-RUNTIME-UI-COMPONENT-MARGIN-TOKEN-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-RUNTIME-UI-PRIMITIVE-THEME-SPACING-BRIDGE-AUDIT-v1.0`; the next useful batch is clarifying reusable spacing ownership between frozen design-token values, runtime theme tokens, responsive layout profiles, and component-local runtime spacing constants.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

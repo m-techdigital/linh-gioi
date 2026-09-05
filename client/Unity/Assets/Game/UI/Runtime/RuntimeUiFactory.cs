@@ -13,11 +13,11 @@ namespace LinhGioi.UI
         {
             var panel = new VisualElement();
             panel.style.maxWidth = maxWidth;
-            panel.style.minWidth = 300;
+            panel.style.minWidth = RuntimeUiSpacing.PanelMinWidth;
             panel.style.width = Length.Percent(100);
             panel.style.marginRight = 0;
-            panel.style.marginBottom = 12;
-            RuntimeUiSkin.ApplyPadding(panel, 16, 14);
+            panel.style.marginBottom = RuntimeUiSpacing.PanelMarginBottom;
+            RuntimeUiSkin.ApplyPadding(panel, RuntimeUiSpacing.PanelPaddingHorizontal, RuntimeUiSpacing.PanelPaddingVertical);
             panel.style.backgroundColor = RuntimeArtCatalog.Surface;
             RuntimeUiSkin.ApplyPanelFrame(panel);
             return panel;
@@ -26,9 +26,9 @@ namespace LinhGioi.UI
         internal static VisualElement NewPreviewPanel(string sigilText = "LINH MÔN", string headingText = null)
         {
             var preview = new VisualElement();
-            preview.style.minWidth = 220;
+            preview.style.minWidth = RuntimeUiSpacing.PreviewPanelMinWidth;
             preview.style.flexGrow = 1;
-            RuntimeUiSkin.ApplyPadding(preview, 14, 12);
+            RuntimeUiSkin.ApplyPadding(preview, RuntimeUiSpacing.PreviewPanelPaddingHorizontal, RuntimeUiSpacing.PreviewPanelPaddingVertical);
             RuntimeUiSkin.ApplyPreviewPanelFrame(preview);
             var sigil = new Label(sigilText);
             sigil.style.color = RuntimeArtCatalog.Spirit;
@@ -61,12 +61,12 @@ namespace LinhGioi.UI
             var row = new VisualElement();
             row.style.flexDirection = FlexDirection.Row;
             row.style.flexWrap = Wrap.Wrap;
-            row.style.marginTop = 8;
-            RuntimeUiSkin.ApplyPadding(row, 10, 7);
+            row.style.marginTop = RuntimeUiSpacing.RowMarginTop;
+            RuntimeUiSkin.ApplyPadding(row, RuntimeUiSpacing.ReadabilityRowPaddingHorizontal, RuntimeUiSpacing.ReadabilityRowPaddingVertical);
             RuntimeUiSkin.ApplyInsetRowFrame(row, accent);
             var titleLabel = new Label(title);
-            titleLabel.style.minWidth = 86;
-            titleLabel.style.marginRight = 8;
+            titleLabel.style.minWidth = RuntimeUiSpacing.ReadabilityTitleMinWidth;
+            titleLabel.style.marginRight = RuntimeUiSpacing.RowGap;
             titleLabel.style.color = accent;
             titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
             var valueLabel = new Label(value);
@@ -81,9 +81,8 @@ namespace LinhGioi.UI
         internal static VisualElement NewWorldHudGroup(string name, Color accent)
         {
             var group = new VisualElement { name = name };
-            group.style.marginTop = 8;
-            group.style.marginBottom = 8;
-            RuntimeUiSkin.ApplyPadding(group, 8, 7);
+            RuntimeUiSkin.ApplyVerticalMargin(group, RuntimeUiSpacing.WorldHudGroupMarginVertical, RuntimeUiSpacing.WorldHudGroupMarginVertical);
+            RuntimeUiSkin.ApplyPadding(group, RuntimeUiSpacing.WorldHudGroupPaddingHorizontal, RuntimeUiSpacing.WorldHudGroupPaddingVertical);
             RuntimeUiSkin.ApplyWorldHudGroupFrame(group, accent);
             return group;
         }
@@ -94,15 +93,15 @@ namespace LinhGioi.UI
             hud.name = name;
             hud.style.maxWidth = maxWidth;
             hud.style.alignSelf = Align.FlexStart;
-            RuntimeUiSkin.ApplyPadding(hud, 12, 10);
+            RuntimeUiSkin.ApplyPadding(hud, RuntimeUiSpacing.WorldHudRootPaddingHorizontal, RuntimeUiSpacing.WorldHudRootPaddingVertical);
             return hud;
         }
 
         internal static void ApplyHudStatusCompact(Label label, int fontSize)
         {
             label.style.fontSize = fontSize;
-            label.style.marginTop = 4;
-            RuntimeUiSkin.ApplyPadding(label, 8, 8, 5, 5);
+            label.style.marginTop = RuntimeUiSpacing.CompactStatusMarginTop;
+            RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.CompactStatusPaddingHorizontal, RuntimeUiSpacing.CompactStatusPaddingHorizontal, RuntimeUiSpacing.CompactStatusPaddingTop, RuntimeUiSpacing.CompactStatusPaddingBottom);
             RuntimeUiSkin.ApplyHudStatusCompactFrame(label);
         }
 
@@ -147,7 +146,7 @@ namespace LinhGioi.UI
             if (!string.IsNullOrWhiteSpace(elementName)) strip.name = elementName;
             strip.style.flexDirection = FlexDirection.Row;
             strip.style.flexWrap = Wrap.Wrap;
-            strip.style.marginBottom = 10;
+            strip.style.marginBottom = RuntimeUiSpacing.BadgeStripMarginBottom;
             foreach (var badge in badges) strip.Add(NewBadge(badge.title, badge.value));
             return strip;
         }
@@ -155,9 +154,9 @@ namespace LinhGioi.UI
         internal static VisualElement NewBadge(string title, string value)
         {
             var badge = new VisualElement();
-            RuntimeUiSkin.ApplyPadding(badge, 10, 6);
-            badge.style.marginRight = 8;
-            badge.style.marginBottom = 8;
+            RuntimeUiSkin.ApplyPadding(badge, RuntimeUiSpacing.BadgePaddingHorizontal, RuntimeUiSpacing.BadgePaddingVertical);
+            badge.style.marginRight = RuntimeUiSpacing.RowGap;
+            badge.style.marginBottom = RuntimeUiSpacing.BadgeMarginBottom;
             RuntimeUiSkin.ApplyBadgeFrame(badge);
             var titleLabel = new Label(title);
             titleLabel.style.color = RuntimeArtCatalog.Gold;
@@ -173,8 +172,8 @@ namespace LinhGioi.UI
         internal static Label NewToast(string text)
         {
             var label = new Label(text);
-            label.style.marginTop = 10;
-            RuntimeUiSkin.ApplyPadding(label, 12, 8);
+            label.style.marginTop = RuntimeUiSpacing.ToastMarginTop;
+            RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.ToastPaddingHorizontal, RuntimeUiSpacing.ToastPaddingVertical);
             label.style.whiteSpace = WhiteSpace.Normal;
             label.style.color = RuntimeArtCatalog.Text;
             RuntimeUiSkin.ApplyToastFrame(label, RuntimeArtCatalog.Gold);
@@ -184,7 +183,7 @@ namespace LinhGioi.UI
         internal static void ApplyStatusChip(Label label, Color accent)
         {
             label.style.maxWidth = 380;
-            label.style.marginRight = 8;
+            label.style.marginRight = RuntimeUiSpacing.RowGap;
             label.style.whiteSpace = WhiteSpace.Normal;
             RuntimeUiSkin.ApplyPadding(label, 14, 6);
             RuntimeUiSkin.ApplyStatusChipFrame(label, accent);
@@ -227,8 +226,8 @@ namespace LinhGioi.UI
             var label = new Label(text);
             label.style.color = color;
             label.style.whiteSpace = WhiteSpace.Normal;
-            label.style.marginTop = 8;
-            RuntimeUiSkin.ApplyPadding(label, 10, 6);
+            label.style.marginTop = RuntimeUiSpacing.StatusLabelMarginTop;
+            RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.StatusLabelPaddingHorizontal, RuntimeUiSpacing.StatusLabelPaddingVertical);
             RuntimeUiSkin.ApplyInsetRowFrame(label, color);
             return label;
         }
@@ -258,14 +257,14 @@ namespace LinhGioi.UI
             if (!string.IsNullOrWhiteSpace(elementName)) row.name = elementName;
             row.style.flexDirection = FlexDirection.Row;
             row.style.alignItems = Align.Center;
-            row.style.marginTop = 4;
+            row.style.marginTop = RuntimeUiSpacing.CompactStatusMarginTop;
             row.style.marginBottom = 6;
             RuntimeUiSkin.ApplyPadding(row, 4, 4, 0, 0);
             row.Add(icon);
 
             var statusColumn = new VisualElement();
             statusColumn.style.flexGrow = 1;
-            statusColumn.style.marginLeft = 10;
+            statusColumn.style.marginLeft = RuntimeUiSpacing.StatusLabelPaddingHorizontal;
             foreach (var statusElement in statusElements) statusColumn.Add(statusElement);
             row.Add(statusColumn);
             return row;
@@ -350,9 +349,9 @@ namespace LinhGioi.UI
         internal static Button NewCompactSecondaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            button.style.minWidth = 132;
-            button.style.minHeight = 42;
-            button.style.fontSize = 14;
+            button.style.minWidth = RuntimeUiSpacing.BaseButtonMinWidth;
+            button.style.minHeight = RuntimeUiSpacing.CompactButtonMinHeight;
+            button.style.fontSize = RuntimeUiSpacing.CompactButtonFontSize;
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.04f, 0.13f, 0.22f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.Gold);
             return button;
         }
@@ -431,8 +430,8 @@ namespace LinhGioi.UI
         {
             var icon = new VisualElement();
             icon.name = "LGO M6 Combat Cooldown Runtime Icon v0.46";
-            icon.style.width = 52;
-            icon.style.height = 52;
+            icon.style.width = RuntimeUiSpacing.CooldownIconSize;
+            icon.style.height = RuntimeUiSpacing.CooldownIconSize;
             icon.style.marginBottom = 0;
             RuntimeUiSkin.ApplyCombatCooldownIconFrame(icon);
             var texture = CombatPlaceholderAssets.CooldownReadyTexture;
@@ -468,10 +467,10 @@ namespace LinhGioi.UI
         private static Button NewButton(string label, Action action)
         {
             var button = new Button(action) { text = label };
-            button.style.minWidth = 132;
-            button.style.minHeight = 44;
-            button.style.marginTop = 8;
-            button.style.marginRight = 8;
+            button.style.minWidth = RuntimeUiSpacing.BaseButtonMinWidth;
+            button.style.minHeight = RuntimeUiSpacing.BaseButtonMinHeight;
+            button.style.marginTop = RuntimeUiSpacing.BaseButtonMarginTop;
+            button.style.marginRight = RuntimeUiSpacing.BaseButtonMarginRight;
             RuntimeUiSkin.ApplyBaseButtonFrame(button);
             return button;
         }
@@ -479,10 +478,10 @@ namespace LinhGioi.UI
         private static VisualElement NewIcon(Texture2D texture, string tooltip)
         {
             var icon = new VisualElement();
-            icon.style.width = 28;
-            icon.style.height = 28;
-            icon.style.marginRight = 8;
-            icon.style.marginLeft = 4;
+            icon.style.width = RuntimeUiSpacing.RuntimeIconSmall;
+            icon.style.height = RuntimeUiSpacing.RuntimeIconSmall;
+            icon.style.marginRight = RuntimeUiSpacing.IconMarginRight;
+            icon.style.marginLeft = RuntimeUiSpacing.IconMarginLeft;
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
             icon.tooltip = tooltip;

@@ -62,7 +62,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "internal static VisualElement NewWorldHudRoot",
         "hud.style.alignSelf = Align.FlexStart;",
-        "RuntimeUiSkin.ApplyPadding(hud, 12, 10);",
+        "RuntimeUiSkin.ApplyPadding(hud, RuntimeUiSpacing.WorldHudRootPaddingHorizontal, RuntimeUiSpacing.WorldHudRootPaddingVertical);",
         "internal static VisualElement NewOrnamentRule",
     )
     require(
