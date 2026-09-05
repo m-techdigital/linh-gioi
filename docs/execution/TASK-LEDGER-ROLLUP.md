@@ -5,7 +5,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 ## Quick State
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Next task: `LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS-v1.0`
+- Next task: `LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT-v1.0`
 - Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.
 - Purpose: scan recent work quickly without deleting historical task rows or marker coverage.
 
@@ -13,7 +13,6 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 
 | Recent | Task ID | Status / Decision | Next allowed step |
 |---:|---|---|---|
-| 228 | LGO-RUNTIME-UI-STATUS-COMPOSITION-CLEANUP v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_STATUS_COMPOSITION_CLEANUP_READY`: hidden layout/combat status labels and prototype note now use shared hidden-label helpers instead of repeated controller-local display hiding | Continue with `LGO-RUNTIME-UI-STATUS-COMPOSITION-EVIDENCE-REFRESH-v1.0` |
 | 229 | LGO-RUNTIME-UI-STATUS-COMPOSITION-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_RUNTIME_UI_STATUS_COMPOSITION_EVIDENCE_REFRESH_READY`: target dummy/HUD screenshots refreshed after hidden status composition cleanup; hidden labels stay hidden and no visual pass is claimed | Continue with `LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-LIGHTNESS-PASS-v1.0` |
 | 230 | LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-LIGHTNESS-PASS v1.0 | source ready / no visual pass claim; `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_LIGHTNESS_READY`: cooldown combat button now uses a lighter code-styled glass state instead of the heavy dark texture while cooldown mechanics and icon feedback stay unchanged | Continue with `LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-EVIDENCE-REFRESH-v1.0` |
 | 231 | LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_EVIDENCE_REFRESH_READY`: target dummy screenshot refreshed after cooldown button lightness pass; cooldown reads lighter and remains placeholder-quality, no visual pass claimed | Continue with `LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT-v1.0` |
@@ -31,6 +30,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 | 243 | LGO-WORLD-CONTROLLER-INTERACTION-PRESENTATION-SPLIT v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_WORLD_CONTROLLER_INTERACTION_PRESENTATION_SPLIT_READY`: world-space label creation, shadowing, text refresh, and active toggling moved into `WorldLabelPresenter`; interaction/gameplay decisions remain in the world controller | Continue with `LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE-v1.0` |
 | 244 | LGO-PREPARE-UNITY-ASSETS-QUIET-PROFILE v1.0 | tooling/runtime evidence ready / no visual pass claim; `LGO_PREPARE_UNITY_ASSETS_QUIET_PROFILE_READY`: Unity local asset preparation can now run in concise mode for routine visual evidence while still generating protocol and surfacing failure logs honestly | Continue with `LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT-v1.0` |
 | 245 | LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT v1.0 | tooling/runtime evidence ready / no visual pass claim; `LGO_VISUAL_RUNTIME_CAPTURE_FOCUS_ROBUSTNESS_READY`: Unity evidence runner configures background-friendly capture in `Awake`, the launcher re-requests focus with bounded progress logging, and latest desktop evidence captured all 10 checkpoints without a manual click in the runner log | Continue with `LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS-v1.0` |
+| 246 | LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_WORLD_HUB_VISUAL_DEPTH_WEIGHT_READY`: oversized procedural ground rings no longer dominate the World Hub, lightweight runtime-generated mist support is available, and stale M6 readiness docs-only diff policing no longer blocks current non-frozen world/UI implementation tasks | Continue with `LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT-v1.0` |
 
 ## Operating Notes
 

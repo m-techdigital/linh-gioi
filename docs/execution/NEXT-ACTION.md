@@ -5,12 +5,12 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS-v1.0`.
-- Current reason: visual runtime capture now requests foreground focus repeatedly with bounded progress logging and the Unity runner enters background-friendly capture mode in `Awake`; latest desktop capture completed 10/10 screenshots without a manual click recorded in the runner log.
+- Active task: `LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT-v1.0`.
+- Current reason: World Hub visual depth/weight pass reduced oversized procedural ground rings, added lightweight runtime-generated mist veil support, and fixed the stale M6 readiness validator so current non-frozen world/UI work is validated by its active gates instead of old docs-only allowlists.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: reduce World Hub prototype feel with lightweight visual depth, asset sizing discipline, and no new gameplay.
+- Next implementation task after this fix: audit current change volume and code hotspots, then pick the smallest cleanup that reduces future churn without redesigning architecture.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -55,13 +55,15 @@ Current focus update: `prepare_unity_local_assets.sh` now supports `LGO_UNITY_LO
 
 Current focus update: visual runtime review now re-requests player focus with bounded progress logging and the Unity evidence runner configures background capture earlier under `LGO_VISUAL_RUNTIME_CAPTURE_FOCUS_ROBUSTNESS_READY`; latest desktop evidence captured all 10 checkpoints without a manual click in the runner log, and no `VISUAL_RUNTIME_PASS` is claimed.
 
+Current focus update: World Hub oversized procedural ground rings are toned down, lightweight runtime mist support is available, and the stale M6 readiness docs-only validator no longer blocks current non-frozen implementation work under `LGO_WORLD_HUB_VISUAL_DEPTH_WEIGHT_READY`; fresh desktop screenshots were reviewed as cleaner but still not final-production world art.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS-v1.0`
+`LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT-v1.0`
 
-Continue by improving the World Hub's visual depth and weight discipline without new gameplay or heavy assets. Prefer procedural/lightweight layering, sizing cleanup, label clarity, and reuse of existing V3B/runtime assets. Do not crop reference composites, do not add bulky image payloads, and do not claim visual PASS without fresh screenshot review. Marker ready from the previous workflow fix: `LGO_VISUAL_RUNTIME_CAPTURE_FOCUS_ROBUSTNESS_READY`.
+Continue by auditing why routine batches generate too many changed files or too much validation output. Prefer an actionable cleanup that reduces future churn, such as narrowing stale validators, shrinking noisy reports, or extracting a genuine hotspot only if it reduces repeated edits. Do not make broad refactors and do not commit until a coherent cleanup batch passes validation. Marker ready from the previous world fix: `LGO_WORLD_HUB_VISUAL_DEPTH_WEIGHT_READY`.
 
 ## Current blocker
 

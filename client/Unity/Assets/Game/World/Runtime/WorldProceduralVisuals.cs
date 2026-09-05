@@ -7,6 +7,7 @@ namespace LinhGioi.World
         private static Sprite _softGroundShadowSprite;
         private static Sprite _worldPlatformGlowSprite;
         private static Sprite _worldPathGlowSprite;
+        private static Sprite _worldMistVeilSprite;
 
         internal static Texture2D CreateTrainingGroundTexture()
         {
@@ -46,30 +47,30 @@ namespace LinhGioi.World
                     var innerRing = SmoothBand(dist, 0.145f, 0.0075f);
                     var midRing = SmoothBand(dist, 0.245f, 0.0065f);
                     var outerRing = SmoothBand(dist, 0.355f, 0.009f);
-                    color = Color.Lerp(color, line, innerRing * 0.38f);
-                    color = Color.Lerp(color, line, midRing * 0.28f);
-                    color = Color.Lerp(color, gold, outerRing * 0.25f);
+                    color = Color.Lerp(color, line, innerRing * 0.08f);
+                    color = Color.Lerp(color, line, midRing * 0.06f);
+                    color = Color.Lerp(color, gold, outerRing * 0.06f);
                     var diagonalA = Mathf.Abs(toCenter.x - toCenter.y);
                     var diagonalB = Mathf.Abs(toCenter.x + toCenter.y);
                     if (dist < 0.34f)
                     {
-                        color = Color.Lerp(color, line, SmoothBand(diagonalA, 0f, 0.006f) * 0.10f);
-                        color = Color.Lerp(color, line, SmoothBand(diagonalB, 0f, 0.006f) * 0.10f);
+                        color = Color.Lerp(color, line, SmoothBand(diagonalA, 0f, 0.006f) * 0.025f);
+                        color = Color.Lerp(color, line, SmoothBand(diagonalB, 0f, 0.006f) * 0.025f);
                     }
                     if (dist < 0.36f)
                     {
-                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.x), 0f, 0.005f) * 0.12f);
-                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.y), 0f, 0.005f) * 0.12f);
+                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.x), 0f, 0.005f) * 0.035f);
+                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.y), 0f, 0.005f) * 0.035f);
                     }
 
                     var pathToGate = DistanceToSegment(uv, new Vector2(0.50f, 0.28f), new Vector2(0.50f, 0.08f));
                     var pathToStone = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.50f, 0.78f));
                     var pathToKeeper = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.31f, 0.70f));
                     var guide = Mathf.Min(pathToGate, Mathf.Min(pathToStone, pathToKeeper));
-                    color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.010f) * 0.24f);
+                    color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.010f) * 0.065f);
 
                     var platformGlow = Mathf.Clamp01(1f - dist / 0.44f);
-                    color = Color.Lerp(color, mist, platformGlow * 0.090f);
+                    color = Color.Lerp(color, mist, platformGlow * 0.038f);
                     var vignette = Mathf.Clamp01((dist - 0.18f) / 0.58f);
                     color = Color.Lerp(color, Color.black, vignette * 0.10f);
                     texture.SetPixel(x, y, color);
@@ -113,6 +114,11 @@ namespace LinhGioi.World
         internal static SpriteRenderer CreatePathGlowSprite(string name, Vector3 position, Vector3 scale, Color color, int sortingOrder)
         {
             return CreateGroundGlowSprite(name, GetWorldPathGlowSprite(), position, scale, color, sortingOrder);
+        }
+
+        internal static SpriteRenderer CreateMistVeilSprite(string name, Vector3 position, Vector3 scale, Color color, int sortingOrder)
+        {
+            return CreateGroundGlowSprite(name, GetWorldMistVeilSprite(), position, scale, color, sortingOrder);
         }
 
         internal static Sprite GetWorldPlatformGlowSprite()
@@ -201,6 +207,35 @@ namespace LinhGioi.World
             _worldPathGlowSprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
             _worldPathGlowSprite.name = "LGO Procedural World Path Glow Sprite v1";
             return _worldPathGlowSprite;
+        }
+
+        private static Sprite GetWorldMistVeilSprite()
+        {
+            if (_worldMistVeilSprite != null) return _worldMistVeilSprite;
+            const int size = 128;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
+            {
+                name = "LGO Procedural World Mist Veil Texture v1",
+                wrapMode = TextureWrapMode.Clamp,
+                filterMode = FilterMode.Bilinear
+            };
+            for (var y = 0; y < size; y++)
+            {
+                for (var x = 0; x < size; x++)
+                {
+                    var u = ((x + 0.5f) / size - 0.5f) * 2f;
+                    var v = ((y + 0.5f) / size - 0.5f) * 2f;
+                    var dist = Mathf.Sqrt(u * u + v * v);
+                    var noise = HashNoise(x / 4, y / 4);
+                    var wave = Mathf.Abs(Mathf.Sin((u * 2.1f + v * 1.35f + noise * 0.8f) * Mathf.PI));
+                    var alpha = Mathf.Clamp01(1f - dist) * Mathf.Lerp(0.08f, 0.34f, wave);
+                    texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
+                }
+            }
+            texture.Apply(false, true);
+            _worldMistVeilSprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
+            _worldMistVeilSprite.name = "LGO Procedural World Mist Veil Sprite v1";
+            return _worldMistVeilSprite;
         }
 
         private static float Frac(float value)

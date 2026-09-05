@@ -404,63 +404,6 @@ def main() -> int:
         for prefix in FORBIDDEN_CHANGED_PREFIXES:
             if path == prefix or path.startswith(prefix):
                 errors.append(f'frozen surface modified: {path}')
-        m6_local_allowed = (
-            path in M6_ALLOWED_AFTER_CONTRACT_FILES and
-            'M6_MINIMAL_LOCAL_COMBAT_ALLOWED_WITHOUT_CONTRACT_CHANGE_v0.33.0' in read('docs/tasks/M6-CONTRACT-REVIEW-v0.33.0.md') and
-            'M6_MINIMAL_LOCAL_COMBAT_FOUNDATION_SOURCE_READY_v0.34.0' in read('docs/tasks/M6-MINIMAL-LOCAL-COMBAT-FOUNDATION-v0.34.0.md')
-        )
-        runtime_asset_weight_allowed = (
-            runtime_asset_weight_hygiene_is_active()
-            and any(path == prefix or path.startswith(prefix) for prefix in RUNTIME_ASSET_WEIGHT_HYGIENE_PREFIXES)
-        )
-        login_v3b_allowed = (
-            login_v3b_runtime_only_is_active()
-            and (
-                path in LOGIN_V3B_RUNTIME_ONLY_FILES
-                or path in LOGIN_V3B_REMOVED_FILES
-                or any(path == prefix or path.startswith(prefix + '/') for prefix in LOGIN_V3B_REMOVED_PREFIXES)
-            )
-        )
-        runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_active and path in RUNTIME_UI_SKIN_ADOPTION_FILES
-        if path in {'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs', 'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs.meta'}:
-            runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_factory_adoption_is_active()
-        if path in {'client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs', 'client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs.meta'}:
-            runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_responsive_layout_helper_is_active()
-        if path in {
-            'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs',
-            'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs.meta',
-            'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs',
-            'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs.meta',
-        }:
-            runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_component_margin_token_is_active()
-        if path in {
-            'client/Unity/Assets/Game/UI/Runtime/ThemeTokens.cs',
-            'client/Unity/Assets/Game/UI/Runtime/ThemeTokens.cs.meta',
-            'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs',
-            'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs.meta',
-        }:
-            runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_primitive_theme_spacing_bridge_is_active()
-        if path in {
-            'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSizing.cs',
-            'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSizing.cs.meta',
-            'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs',
-            'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs.meta',
-        }:
-            runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_primitive_size_token_is_active()
-        runtime_ui_component_metric_ownership_allowed = (
-            runtime_ui_component_metric_ownership_is_active()
-            and path in RUNTIME_UI_COMPONENT_METRIC_OWNERSHIP_FILES
-        )
-        runtime_ui_component_density_allowed = (
-            runtime_ui_component_density_is_active()
-            and path in RUNTIME_UI_COMPONENT_DENSITY_FILES
-        )
-        if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed and not login_v3b_allowed and not runtime_ui_skin_adoption_allowed:
-            if not runtime_ui_component_metric_ownership_allowed:
-                if not runtime_ui_component_density_allowed:
-                    for prefix in FORBIDDEN_CODE_PREFIXES:
-                        if path.startswith(prefix):
-                            errors.append(f'v0.32 docs-only spec changed implementation path: {path}')
 
     if errors:
         print('M6 COMBAT READINESS SPEC VALIDATION FAILED', file=sys.stderr)

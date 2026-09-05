@@ -897,15 +897,19 @@ namespace LinhGioi.World
         {
             // LGO World Hub Depth Richness v1: lightweight procedural glows give the hub a readable stage without importing heavy images.
             var platformGlow = WorldProceduralVisuals.GetWorldPlatformGlowSprite();
-            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Central Cultivation Stage Glow V3B", platformGlow, new Vector3(0f, 0.065f, 0.18f), WorldHubGroundGlowScale(3.05f, 2.62f, 2.05f), new Color(0.22f, 0.86f, 1f, 0.42f), -2);
-            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Spirit Gate Arrival Glow V3B", platformGlow, new Vector3(0f, 0.068f, -3.95f), WorldHubGroundGlowScale(2.05f, 1.72f, 1.32f), new Color(0.20f, 0.78f, 1f, 0.36f), -1);
-            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Training Stone Focus Glow V3B", platformGlow, TrainingStonePosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.52f, 1.26f, 0.96f), new Color(0.24f, 0.96f, 0.86f, 0.32f), -1);
-            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Dummy Practice Glow V3B", platformGlow, ReadabilityDummyPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.58f, 1.32f, 0.98f), new Color(0.94f, 0.66f, 0.24f, 0.25f), -1);
-            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Gatekeeper Dialogue Glow V3B", platformGlow, GateKeeperPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.46f, 1.20f, 0.92f), new Color(0.94f, 0.70f, 0.30f, 0.25f), -1);
+            // LGO World Hub Visual Depth And Weight v1: keep glows supportive so actor sprites own the first read.
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Central Cultivation Stage Glow V3B", platformGlow, new Vector3(0f, 0.065f, 0.18f), WorldHubGroundGlowScale(2.30f, 1.95f, 1.54f), new Color(0.22f, 0.86f, 1f, 0.25f), -2);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Spirit Gate Arrival Glow V3B", platformGlow, new Vector3(0f, 0.068f, -3.95f), WorldHubGroundGlowScale(1.62f, 1.36f, 1.04f), new Color(0.20f, 0.78f, 1f, 0.28f), -1);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Training Stone Focus Glow V3B", platformGlow, TrainingStonePosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.32f, 1.08f, 0.84f), new Color(0.24f, 0.96f, 0.86f, 0.28f), -1);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Dummy Practice Glow V3B", platformGlow, ReadabilityDummyPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.34f, 1.10f, 0.84f), new Color(0.94f, 0.66f, 0.24f, 0.22f), -1);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Gatekeeper Dialogue Glow V3B", platformGlow, GateKeeperPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.26f, 1.04f, 0.80f), new Color(0.94f, 0.70f, 0.30f, 0.22f), -1);
             WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Gate V3B", new Vector3(0f, 0.07f, -2.02f), WorldHubPathGlowScale(0.20f, 3.35f, 0.14f, 2.36f), new Color(0.20f, 0.82f, 1f, 0.23f), -1);
             WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Stone V3B", new Vector3(0f, 0.07f, 2.12f), WorldHubPathGlowScale(0.18f, 2.85f, 0.13f, 2.02f), new Color(0.24f, 0.96f, 0.86f, 0.18f), -1);
             var keeperPath = WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Keeper V3B", new Vector3(-1.18f, 0.07f, 1.48f), WorldHubPathGlowScale(0.15f, 2.10f, 0.10f, 1.50f), new Color(0.94f, 0.70f, 0.30f, 0.17f), -1);
             if (keeperPath != null) keeperPath.transform.rotation = Quaternion.Euler(90f, 0f, -39f);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil North V3B", new Vector3(0f, 0.052f, 5.7f), WorldHubGroundGlowScale(3.40f, 2.70f, 2.10f), new Color(0.30f, 0.66f, 0.92f, 0.12f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil West V3B", new Vector3(-5.6f, 0.052f, 0.8f), WorldHubGroundGlowScale(2.40f, 1.92f, 1.46f), new Color(0.74f, 0.58f, 0.92f, 0.10f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil East V3B", new Vector3(5.7f, 0.052f, 0.35f), WorldHubGroundGlowScale(2.60f, 2.04f, 1.54f), new Color(0.28f, 0.70f, 0.92f, 0.09f), -3);
         }
 
         private static Vector3 WorldHubPoint(float x, float y, float z)
