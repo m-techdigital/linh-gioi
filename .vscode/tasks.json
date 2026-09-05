@@ -45,6 +45,15 @@
         "cwd": "${workspaceFolder}"
       },
       "problemMatcher": []
+    },
+    {
+      "label": "LGO: Local Artifact Cleanup Dry Run",
+      "type": "shell",
+      "command": "./tools/lgo_local_artifact_cleanup.sh --dry-run",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
     }
   ]
 }

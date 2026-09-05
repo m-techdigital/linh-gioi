@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: Character Hall selected state now collapses the create form until the player explicitly chooses `Tạo thêm`, keeping `Vào sân luyện` as the clear primary path.
+- Current reason: local handoff artifact cleanup reduced generated build weight while preserving source, runtime assets, visual evidence, and dev-loop logs.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -67,13 +67,15 @@ Current focus update: World Hub ground texture now uses a smaller, softer proced
 
 Current focus update: Character Hall selected state now collapses the create form under `LGO_CHARACTER_HALL_SELECTED_CREATE_COLLAPSE_READY`; fresh runtime screenshot shows a cleaner CTA band with `Vào sân luyện` first and no always-visible create input, no visual PASS is claimed.
 
+Current focus update: local generated handoff archives were cleaned from `build/chatgpt-handoff`, reducing `build/` from 507MB to 169MB; `tools/lgo_local_artifact_cleanup.sh` now provides a dry-run/apply path under `LGO_LOCAL_ARTIFACT_CLEANUP_READY` while preserving source, evidence screenshots, and dev-loop logs.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
 `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`
 
-Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Marker ready from the previous pass: `LGO_CHARACTER_HALL_SELECTED_CREATE_COLLAPSE_READY`.
+Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Marker ready from the previous pass: `LGO_LOCAL_ARTIFACT_CLEANUP_READY`.
 
 ## Current blocker
 
