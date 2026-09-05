@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-WORLD-ACTOR-HUD-OCCLUSION-PASS-v1.0`
+`LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0`
 
-Keep left-side actors and NPC staging clear of the HUD panel on narrower world-hub profiles without moving gameplay interaction targets.
+Reduce mobile/tablet world panel dominance and improve dialogue/action panel placement while preserving current gameplay and contract semantics.
 
 ## Current blocker
 
@@ -48,11 +48,13 @@ Evidence:
 - `docs/tasks/LGO-WORLD-LABEL-SAFE-AREA-EVIDENCE-REFRESH-v1.0.md`
 - `docs/tasks/LGO-WORLD-TOP-STATUS-MOBILE-READABILITY-PASS-v1.0.md`
 - `docs/tasks/LGO-WORLD-TOP-STATUS-MOBILE-EVIDENCE-REFRESH-v1.0.md`
+- `docs/tasks/LGO-WORLD-ACTOR-HUD-OCCLUSION-PASS-v1.0.md`
+- `docs/tasks/LGO-WORLD-ACTOR-HUD-OCCLUSION-EVIDENCE-REFRESH-v1.0.md`
 - `build/visual-evidence/latest/player.log`
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: keep left-side actors and NPC staging clear of the HUD panel on narrower profiles. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; login CTA ornament polish is tracked under `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`; Character Hall create-form presentation is tracked under `LGO_CHARACTER_CREATE_FORM_PRESENTATION_READY`; Character Hall responsive evidence refresh is tracked under `LGO_CHARACTER_HALL_RESPONSIVE_EVIDENCE_REFRESH_READY`; fast profile reuse is tracked under `LGO_VISUAL_RUNTIME_FAST_PROFILE_REUSE_READY`; world HUD action shell skin is tracked under `LGO_WORLD_HUD_ACTION_SHELL_V3B_SKIN_READY`; world HUD evidence refresh is tracked under `LGO_WORLD_HUD_ACTION_SHELL_EVIDENCE_REFRESH_READY`; mobile world camera framing is tracked under `LGO_WORLD_MOBILE_CAMERA_FRAMING_READY`; mobile camera evidence refresh is tracked under `LGO_WORLD_MOBILE_CAMERA_EVIDENCE_REFRESH_READY`; world label safe-area is tracked under `LGO_WORLD_LABEL_SAFE_AREA_READY`; label safe-area evidence is tracked under `LGO_WORLD_LABEL_SAFE_AREA_EVIDENCE_REFRESH_READY`; world top status mobile readability is tracked under `LGO_WORLD_TOP_STATUS_MOBILE_READABILITY_READY`; top status evidence is tracked under `LGO_WORLD_TOP_STATUS_MOBILE_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: polish world HUD/dialogue panel viewport balance on mobile/tablet after actor/HUD occlusion evidence refresh. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; login CTA ornament polish is tracked under `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`; Character Hall create-form presentation is tracked under `LGO_CHARACTER_CREATE_FORM_PRESENTATION_READY`; Character Hall responsive evidence refresh is tracked under `LGO_CHARACTER_HALL_RESPONSIVE_EVIDENCE_REFRESH_READY`; fast profile reuse is tracked under `LGO_VISUAL_RUNTIME_FAST_PROFILE_REUSE_READY`; world HUD action shell skin is tracked under `LGO_WORLD_HUD_ACTION_SHELL_V3B_SKIN_READY`; world HUD evidence refresh is tracked under `LGO_WORLD_HUD_ACTION_SHELL_EVIDENCE_REFRESH_READY`; mobile world camera framing is tracked under `LGO_WORLD_MOBILE_CAMERA_FRAMING_READY`; mobile camera evidence refresh is tracked under `LGO_WORLD_MOBILE_CAMERA_EVIDENCE_REFRESH_READY`; world label safe-area is tracked under `LGO_WORLD_LABEL_SAFE_AREA_READY`; label safe-area evidence is tracked under `LGO_WORLD_LABEL_SAFE_AREA_EVIDENCE_REFRESH_READY`; world top status mobile readability is tracked under `LGO_WORLD_TOP_STATUS_MOBILE_READABILITY_READY`; top status evidence is tracked under `LGO_WORLD_TOP_STATUS_MOBILE_EVIDENCE_REFRESH_READY`; actor/HUD occlusion polish is tracked under `LGO_WORLD_ACTOR_HUD_OCCLUSION_READY`; actor/HUD evidence refresh is tracked under `LGO_WORLD_ACTOR_HUD_OCCLUSION_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -102,6 +104,8 @@ python3.12 tools/validate_lgo_world_label_safe_area.py
 python3.12 tools/validate_lgo_world_label_safe_area_evidence_refresh.py
 python3.12 tools/validate_lgo_world_top_status_mobile_readability.py
 python3.12 tools/validate_lgo_world_top_status_mobile_evidence_refresh.py
+python3.12 tools/validate_lgo_world_actor_hud_occlusion.py
+python3.12 tools/validate_lgo_world_actor_hud_occlusion_evidence_refresh.py
 python3.12 tools/validate_lgo_build_size_budget.py
 python3.12 tools/validate_lgo_world_hud_density_mobile_touch.py
 python3.12 tools/validate_lgo_world_ground_visual_quality.py
@@ -148,6 +152,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-TOP-STATUS-MOBILE-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with actor/HUD occlusion polish, preserving current gameplay and contract semantics.
+`LGO-WORLD-ACTOR-HUD-OCCLUSION-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0`, preserving current gameplay and contract semantics.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

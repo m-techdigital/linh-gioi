@@ -897,8 +897,8 @@ namespace LinhGioi.World
                 _shadowTelegraphSprite = CreateBillboardSprite("LGO Warning Telegraph Circle Sprite v0.46", CombatPlaceholderAssets.WarningTelegraphCircle, ShadowSlimePosition + Vector3.up * 0.16f, new Vector3(1.08f, 1.08f, 1f), 4);
             if (_gateKeeperSprite == null)
             {
-                CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", GateKeeperPosition + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
-                _gateKeeperSprite = CreateBillboardSprite("LGO Gate Keeper Runtime Sprite V3B", LgoVisualAssetRegistryV3B.GateKeeperNpc ?? LgoVisualAssetRegistryV2.GateKeeperNpc, GateKeeperPosition + Vector3.up * 0.2f, new Vector3(0.72f, 0.72f, 1f), 5);
+                CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", CurrentGateKeeperVisualPosition() + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
+                _gateKeeperSprite = CreateBillboardSprite("LGO Gate Keeper Runtime Sprite V3B", LgoVisualAssetRegistryV3B.GateKeeperNpc ?? LgoVisualAssetRegistryV2.GateKeeperNpc, CurrentGateKeeperVisualPosition() + Vector3.up * 0.2f, CurrentGateKeeperVisualScale(), 5);
             }
             if (_spiritGateSprite == null)
             {
@@ -1128,11 +1128,16 @@ namespace LinhGioi.World
             SetWorldLabelActive(_shadowSlimeWorldLabel, nearShadowSlime || _shadowSlimeState == PlaceholderSlimeState.AlertWarning);
             SetWorldLabelActive(_spiritGateWorldLabel, _guidedStep == GuidedTrainingStep.Complete);
 
+            if (_gateKeeperSprite != null)
+            {
+                _gateKeeperSprite.transform.position = CurrentGateKeeperVisualPosition() + Vector3.up * 0.2f;
+                _gateKeeperSprite.transform.localScale = CurrentGateKeeperVisualScale();
+            }
             if (_gateKeeperWorldLabel != null)
             {
                 // LGO World Label Safe Area v1: narrow profiles keep long Vietnamese labels away from the left HUD.
                 SetWorldLabel(_gateKeeperWorldLabel, GateKeeperWorldLabelText(), RuntimeArtCatalog.Gold);
-                _gateKeeperWorldLabel.transform.position = GateKeeperPosition + CurrentGateKeeperLabelOffset();
+                _gateKeeperWorldLabel.transform.position = CurrentGateKeeperVisualPosition() + CurrentGateKeeperLabelOffset();
             }
             if (_trainingStoneWorldLabel != null)
                 _trainingStoneWorldLabel.transform.position = TrainingStonePosition + new Vector3(0.18f, 1.36f, -0.04f);
@@ -1151,9 +1156,24 @@ namespace LinhGioi.World
 
         private static Vector3 CurrentGateKeeperLabelOffset()
         {
-            if (IsMobileWorldViewport()) return new Vector3(0.22f, 1.82f, -0.02f);
-            if (IsNarrowWorldViewport()) return new Vector3(0.52f, 1.78f, -0.02f);
+            if (IsMobileWorldViewport()) return new Vector3(0.06f, 1.82f, -0.02f);
+            if (IsNarrowWorldViewport()) return new Vector3(0.10f, 1.78f, -0.02f);
             return new Vector3(-0.04f, 1.72f, -0.02f);
+        }
+
+        private static Vector3 CurrentGateKeeperVisualPosition()
+        {
+            // LGO World Actor HUD Occlusion v1: presentation-only staging offset; interaction target stays at GateKeeperPosition.
+            if (IsMobileWorldViewport()) return GateKeeperPosition + new Vector3(0.36f, 0f, 0f);
+            if (IsNarrowWorldViewport()) return GateKeeperPosition + new Vector3(0.48f, 0f, 0f);
+            return GateKeeperPosition;
+        }
+
+        private static Vector3 CurrentGateKeeperVisualScale()
+        {
+            if (IsMobileWorldViewport()) return new Vector3(0.68f, 0.68f, 1f);
+            if (IsNarrowWorldViewport()) return new Vector3(0.70f, 0.70f, 1f);
+            return new Vector3(0.72f, 0.72f, 1f);
         }
 
         private static bool IsMobileWorldViewport()

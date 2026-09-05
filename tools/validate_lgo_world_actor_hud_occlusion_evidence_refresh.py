@@ -48,43 +48,38 @@ def check_frozen() -> None:
 
 def main() -> int:
     require(
-        "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs",
-        "LGO World Label Safe Area v1",
-        "GateKeeperWorldLabelText",
-        '"Người Giữ\\nCổng"',
-        "CurrentGateKeeperLabelOffset",
-        "IsMobileWorldViewport",
-        "IsNarrowWorldViewport",
-        "new Vector3(0.10f, 1.78f, -0.02f)",
-    )
-    require(
-        "docs/tasks/LGO-WORLD-LABEL-SAFE-AREA-PASS-v1.0.md",
-        "LGO_WORLD_LABEL_SAFE_AREA_READY",
-        "No gameplay change",
+        "docs/tasks/LGO-WORLD-ACTOR-HUD-OCCLUSION-EVIDENCE-REFRESH-v1.0.md",
+        "LGO_WORLD_ACTOR_HUD_OCCLUSION_EVIDENCE_REFRESH_READY",
+        "desktop",
+        "tablet",
+        "mobile",
+        "Gate Keeper",
         "No VISUAL_RUNTIME_PASS claim",
+        "No gameplay change",
+        "LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0",
     )
     require(
         "tools/lgo_playable_closure_check.sh",
-        "world_label_safe_area",
-        "validate_lgo_world_label_safe_area.py",
+        "world_actor_hud_occlusion_evidence_refresh",
+        "validate_lgo_world_actor_hud_occlusion_evidence_refresh.py",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-WORLD-LABEL-SAFE-AREA-PASS-v1.0",
-        "LGO_WORLD_LABEL_SAFE_AREA_READY",
+        "LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0",
+        "LGO_WORLD_ACTOR_HUD_OCCLUSION_EVIDENCE_REFRESH_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-WORLD-LABEL-SAFE-AREA-PASS v1.0",
-        "LGO_WORLD_LABEL_SAFE_AREA_READY",
+        "LGO-WORLD-ACTOR-HUD-OCCLUSION-EVIDENCE-REFRESH v1.0",
+        "LGO_WORLD_ACTOR_HUD_OCCLUSION_EVIDENCE_REFRESH_READY",
     )
     check_frozen()
     if ERRORS:
-        print("LGO WORLD LABEL SAFE AREA VALIDATION FAILED", file=sys.stderr)
+        print("LGO WORLD ACTOR HUD OCCLUSION EVIDENCE REFRESH VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(f" - {error}", file=sys.stderr)
         return 1
-    print("LGO_WORLD_LABEL_SAFE_AREA_VALIDATION_PASS")
+    print("LGO_WORLD_ACTOR_HUD_OCCLUSION_EVIDENCE_REFRESH_VALIDATION_PASS")
     return 0
 
 
