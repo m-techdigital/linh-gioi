@@ -36,12 +36,12 @@ def check_responsive_padding_blocks() -> None:
         "RuntimeUiSkin.ApplyPadding(_root, layout.RootPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_loginCard, loginCardPadding",
         "RuntimeUiSkin.ApplyPadding(_loginServerRow, layout.LoginServerRowPaddingHorizontal",
-        "RuntimeUiSkin.ApplyPadding(_lobbyPanel, mobile ? 12 : 18",
-        "RuntimeUiSkin.ApplyPadding(_emptyCharacterCard, mobile ? 12 : 14",
-        "RuntimeUiSkin.ApplyPadding(_createPanel, mobile ? 12 : 16",
-        "RuntimeUiSkin.ApplyPadding(_worldHud, mobile ? 8 : 12",
+        "RuntimeUiSkin.ApplyPadding(_lobbyPanel, layout.LobbyPanelPaddingHorizontal",
+        "RuntimeUiSkin.ApplyPadding(_emptyCharacterCard, layout.EmptyCharacterCardPaddingHorizontal",
+        "RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal",
+        "RuntimeUiSkin.ApplyPadding(_worldHud, layout.WorldHudPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(_sessionMenuPanel, mobile ? 12 : tablet ? 16 : 22",
-        "RuntimeUiSkin.ApplyPadding(_dialoguePanel, mobile ? 10 : 14",
+        "RuntimeUiSkin.ApplyPadding(_dialoguePanel, layout.DialoguePanelPaddingHorizontal",
     ]
     for marker in required:
         if marker not in responsive:
@@ -52,6 +52,7 @@ def check_responsive_padding_blocks() -> None:
         "_loginServerRow.style.paddingLeft = layout.LoginServerRowPaddingHorizontal;",
         "_lobbyPanel.style.paddingLeft = mobile ? 12 : 18;",
         "_createPanel.style.paddingLeft = mobile ? 12 : 16;",
+        "_worldHud.style.paddingLeft = mobile ? 8 : 12;",
         "_sessionMenuPanel.style.paddingLeft = mobile ? 12 : tablet ? 16 : 22;",
         "_dialoguePanel.style.paddingLeft = mobile ? 10 : 14;",
     ]

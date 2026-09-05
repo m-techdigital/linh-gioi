@@ -80,7 +80,25 @@ namespace LinhGioi.UI
         internal int LoginServerTextFontSize => IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.042f, 16f, 19f)) : IsTablet ? 18 : 19;
         internal int LoginButtonMarginTop => IsMobile ? Mathf.RoundToInt(4f * MobileScale) : 10;
 
+        internal int LobbyPanelPaddingHorizontal => IsMobile ? 12 : 18;
+        internal int LobbyPanelPaddingTop => IsMobile ? 8 : 16;
+        internal int LobbyPanelPaddingBottom => IsMobile ? 8 : 18;
+        internal int CharacterListPaddingVertical => IsMobile ? 8 : 12;
+        internal int EmptyCharacterCardPaddingHorizontal => IsMobile ? 12 : 14;
+        internal int EmptyCharacterCardPaddingVertical => IsMobile ? 10 : 14;
+        internal int CreatePanelPaddingHorizontal => IsMobile ? 12 : 16;
+        internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;
+        internal int CreatePanelPaddingBottom => IsMobile ? 8 : 14;
         internal float WorldHudMinWidth => IsMobile ? 238f : 300f;
+        internal int WorldHudPaddingHorizontal => IsMobile ? 8 : 12;
+        internal int WorldHudPaddingVertical => IsMobile ? 6 : 10;
+        internal int WorldHudDialoguePaddingHorizontal => IsMobile ? 7 : WorldHudPaddingHorizontal;
+        internal int WorldHudDialoguePaddingVertical => IsMobile ? 5 : WorldHudPaddingVertical;
+        internal int WorldGuidanceCardPaddingVertical => IsMobile ? 5 : 7;
+        internal int DialoguePanelPaddingHorizontal => IsMobile ? 10 : 14;
+        internal int DialoguePanelPaddingVertical => IsMobile ? 9 : 12;
+        internal int DialogueProgressPaddingVertical => IsMobile ? 4 : 5;
+        internal int StatusPaddingHorizontal(bool worldVisible) => worldVisible && IsMobile ? 14 : 18;
 
         internal float WorldHudBaseMaxWidth => IsMobile
             ? Mathf.Clamp(Width * 0.28f, 238f, 272f)

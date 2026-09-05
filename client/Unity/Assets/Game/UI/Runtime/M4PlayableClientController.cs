@@ -1273,7 +1273,7 @@ namespace LinhGioi.UI
 
             _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 790 : 800;
             _lobbyPanel.style.minHeight = mobile ? Mathf.Max(292f, height - 48f) : 410;
-            RuntimeUiSkin.ApplyPadding(_lobbyPanel, mobile ? 12 : 18, mobile ? 12 : 18, mobile ? 8 : 16, mobile ? 8 : 18);
+            RuntimeUiSkin.ApplyPadding(_lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
             if (_lobbyIntro != null)
             {
                 // LGO Character Hall Mobile Copy Density v1: mobile keeps intent, drops prose.
@@ -1284,12 +1284,12 @@ namespace LinhGioi.UI
             _characterList.style.minWidth = mobile ? 220 : 280;
             _characterList.style.maxWidth = mobile ? Mathf.Clamp(width * 0.40f, 285f, 330f) : tablet ? 370 : 390;
             _characterList.style.marginRight = mobile ? 10 : 14;
-            _characterList.style.paddingTop = mobile ? 8 : 12;
-            _characterList.style.paddingBottom = mobile ? 8 : 12;
+            _characterList.style.paddingTop = layout.CharacterListPaddingVertical;
+            _characterList.style.paddingBottom = layout.CharacterListPaddingVertical;
             if (_emptyCharacterCard != null)
             {
                 _emptyCharacterCard.style.marginTop = mobile ? 8 : 10;
-                RuntimeUiSkin.ApplyPadding(_emptyCharacterCard, mobile ? 12 : 14, mobile ? 12 : 14, mobile ? 10 : 14, mobile ? 10 : 14);
+                RuntimeUiSkin.ApplyPadding(_emptyCharacterCard, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingHorizontal, layout.EmptyCharacterCardPaddingVertical, layout.EmptyCharacterCardPaddingVertical);
             }
             if (_emptyCharacterHint != null)
             {
@@ -1313,7 +1313,7 @@ namespace LinhGioi.UI
                 _createPanel.style.left = mobile ? Mathf.Clamp(width * 0.45f, 350f, 390f) : 0;
                 _createPanel.style.right = mobile ? 12 : StyleKeyword.Auto;
                 _createPanel.style.top = mobile ? 112 : StyleKeyword.Auto;
-                RuntimeUiSkin.ApplyPadding(_createPanel, mobile ? 12 : 16, mobile ? 12 : 16, mobile ? 8 : 12, mobile ? 8 : 14);
+                RuntimeUiSkin.ApplyPadding(_createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
                 _createPanel.style.marginTop = mobile ? 0 : 10;
                 _createPanel.style.maxHeight = mobile ? 174 : 210;
             }
@@ -1323,7 +1323,7 @@ namespace LinhGioi.UI
             // LGO Mobile World Viewport Evidence Fit v1: keep the HUD proportional so scene actors remain reviewable.
             _worldHud.style.minWidth = layout.WorldHudMinWidth;
             _worldHud.style.maxWidth = layout.WorldHudBaseMaxWidth;
-            RuntimeUiSkin.ApplyPadding(_worldHud, mobile ? 8 : 12, mobile ? 8 : 12, mobile ? 6 : 10, mobile ? 6 : 10);
+            RuntimeUiSkin.ApplyPadding(_worldHud, layout.WorldHudPaddingHorizontal, layout.WorldHudPaddingVertical);
             if (_worldName != null)
                 _worldName.style.fontSize = mobile ? 16 : 17;
             if (_worldObjective != null)
@@ -1354,7 +1354,7 @@ namespace LinhGioi.UI
                         ? "Bố cục: tablet / HUD gọn, ưu tiên chỉ dẫn và cảnh quan."
                         : "Bố cục: desktop / HUD đầy đủ.";
             }
-            ApplyTopStatusResponsive(mobile, tablet, worldVisible, width);
+            ApplyTopStatusResponsive(layout, worldVisible, width);
 
             if (_focusModeToggle != null && mobile && !_focusModeToggle.value)
                 _focusModeToggle.value = true;
@@ -1371,21 +1371,24 @@ namespace LinhGioi.UI
             // LGO World HUD Dialogue Viewport Polish v1: mobile dialogue keeps buttons inside the visible viewport.
             _worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);
             _worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;
-            RuntimeUiSkin.ApplyPadding(_worldHud, mobile && dialogueVisible ? 7 : mobile ? 8 : 12, mobile && dialogueVisible ? 7 : mobile ? 8 : 12, mobile && dialogueVisible ? 5 : mobile ? 6 : 10, mobile && dialogueVisible ? 5 : mobile ? 6 : 10);
+            RuntimeUiSkin.ApplyPadding(
+                _worldHud,
+                dialogueVisible ? layout.WorldHudDialoguePaddingHorizontal : layout.WorldHudPaddingHorizontal,
+                dialogueVisible ? layout.WorldHudDialoguePaddingVertical : layout.WorldHudPaddingVertical);
             _worldHud.style.backgroundColor = RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);
             if (_worldGuidanceCard != null)
             {
                 // LGO World HUD Mobile Hierarchy Polish v1: normal mobile keeps only objective and interaction priority.
                 _worldGuidanceCard.style.marginTop = mobile ? 6 : 8;
                 _worldGuidanceCard.style.marginBottom = mobile ? 6 : 8;
-                _worldGuidanceCard.style.paddingTop = mobile ? 5 : 7;
-                _worldGuidanceCard.style.paddingBottom = mobile ? 5 : 7;
+                _worldGuidanceCard.style.paddingTop = layout.WorldGuidanceCardPaddingVertical;
+                _worldGuidanceCard.style.paddingBottom = layout.WorldGuidanceCardPaddingVertical;
             }
 
             if (_dialoguePanel != null)
             {
                 _dialoguePanel.style.marginTop = mobile ? 6 : tablet ? 8 : 10;
-                RuntimeUiSkin.ApplyPadding(_dialoguePanel, mobile ? 10 : 14, mobile ? 10 : 14, mobile ? 9 : 12, mobile ? 9 : 12);
+                RuntimeUiSkin.ApplyPadding(_dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
             }
             if (_dialogueSpeaker != null)
                 _dialogueSpeaker.style.fontSize = mobile ? 15 : 17;
@@ -1394,8 +1397,8 @@ namespace LinhGioi.UI
             if (_dialogueProgress != null)
             {
                 _dialogueProgress.style.fontSize = mobile ? 12 : 13;
-                _dialogueProgress.style.paddingTop = mobile ? 4 : 5;
-                _dialogueProgress.style.paddingBottom = mobile ? 4 : 5;
+                _dialogueProgress.style.paddingTop = layout.DialogueProgressPaddingVertical;
+                _dialogueProgress.style.paddingBottom = layout.DialogueProgressPaddingVertical;
             }
             if (_dialogueContinueButton != null)
             {
@@ -1409,8 +1412,10 @@ namespace LinhGioi.UI
             }
         }
 
-        private void ApplyTopStatusResponsive(bool mobile, bool tablet, bool worldVisible, int viewportWidth)
+        private void ApplyTopStatusResponsive(RuntimeUiLayoutProfile layout, bool worldVisible, int viewportWidth)
         {
+            var mobile = layout.IsMobile;
+            var tablet = layout.IsTablet;
             // LGO World Top Status Mobile Readability v1: top chips scale by profile and avoid long text on narrow world views.
             if (_headerActions != null)
             {
@@ -1422,8 +1427,8 @@ namespace LinhGioi.UI
             {
                 _status.style.fontSize = worldVisible && mobile ? 13 : tablet ? 13 : 14;
                 _status.style.minHeight = worldVisible && mobile ? 34 : 32;
-                _status.style.paddingLeft = worldVisible && mobile ? 14 : 18;
-                _status.style.paddingRight = worldVisible && mobile ? 14 : 18;
+                _status.style.paddingLeft = layout.StatusPaddingHorizontal(worldVisible);
+                _status.style.paddingRight = layout.StatusPaddingHorizontal(worldVisible);
                 _status.style.maxWidth = worldVisible && mobile ? Mathf.Clamp(viewportWidth * 0.28f, 180f, 260f) : tablet ? 270 : 360;
                 if (worldVisible && mobile && _status.text.StartsWith("Sẵn sàng:", StringComparison.Ordinal))
                     _status.text = "Sẵn sàng: Bước 1/2";
