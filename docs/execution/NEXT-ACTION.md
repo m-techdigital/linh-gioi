@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-PRIMITIVE-SIZE-TOKEN-AUDIT-v1.0`
+`LGO-RUNTIME-UI-PRIMITIVE-STYLE-BOUNDARY-GUIDE-v1.0`
 
-Review remaining primitive-local fixed sizes such as progress bars, skill buttons, avatar circles, modal widths, and radii for reusable size tokens without changing visible behavior. Marker ready from the completed evidence refresh: `LGO_RUNTIME_UI_PRIMITIVE_THEME_SPACING_BRIDGE_EVIDENCE_REFRESH_READY`.
+Document the reusable runtime UI ownership boundary between `ThemeTokens`, `RuntimeUiSpacing`, `RuntimeUiSizing`, `RuntimeUiLayoutProfile`, `RuntimeUiSkin`, `RuntimeUiFactory`, and screen controllers so future UI work does not duplicate local size/spacing/style logic. Marker ready from the completed evidence refresh: `LGO_RUNTIME_UI_PRIMITIVE_SIZE_TOKEN_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -163,6 +163,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-COMPONENT-MARGIN-TOKEN-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_COMPONENT_MARGIN_TOKEN_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-PRIMITIVE-THEME-SPACING-BRIDGE-AUDIT-v1.0` / `LGO_RUNTIME_UI_PRIMITIVE_THEME_SPACING_BRIDGE_READY`
 - `LGO-RUNTIME-UI-PRIMITIVE-THEME-SPACING-BRIDGE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_PRIMITIVE_THEME_SPACING_BRIDGE_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-PRIMITIVE-SIZE-TOKEN-AUDIT-v1.0` / `LGO_RUNTIME_UI_PRIMITIVE_SIZE_TOKEN_READY`
+- `LGO-RUNTIME-UI-PRIMITIVE-SIZE-TOKEN-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_PRIMITIVE_SIZE_TOKEN_EVIDENCE_REFRESH_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 
@@ -320,6 +322,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-RUNTIME-UI-PRIMITIVE-THEME-SPACING-BRIDGE-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-RUNTIME-UI-PRIMITIVE-SIZE-TOKEN-AUDIT-v1.0`; the next useful batch is moving remaining primitive-local fixed sizes into named reusable constants where the value is component-owned rather than responsive profile-owned.
+`LGO-RUNTIME-UI-PRIMITIVE-SIZE-TOKEN-AUDIT-v1.0` is source-ready. Continue with `LGO-RUNTIME-UI-PRIMITIVE-SIZE-TOKEN-EVIDENCE-REFRESH-v1.0`; the next useful batch is refreshing runtime screenshots to confirm primitive sizing extraction did not affect visible layout or readability.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

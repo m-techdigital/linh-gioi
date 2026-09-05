@@ -15,10 +15,10 @@ namespace LinhGioi.UI
             style.backgroundColor = theme.spirit;
             style.color = theme.text;
             style.unityFontStyleAndWeight = FontStyle.Bold;
-            style.borderTopLeftRadius = 10;
-            style.borderTopRightRadius = 10;
-            style.borderBottomLeftRadius = 10;
-            style.borderBottomRightRadius = 10;
+            style.borderTopLeftRadius = RuntimeUiSizing.BaseButtonRadius;
+            style.borderTopRightRadius = RuntimeUiSizing.BaseButtonRadius;
+            style.borderBottomLeftRadius = RuntimeUiSizing.BaseButtonRadius;
+            style.borderBottomRightRadius = RuntimeUiSizing.BaseButtonRadius;
         }
     }
 
@@ -38,10 +38,10 @@ namespace LinhGioi.UI
         {
             style.backgroundColor = theme.surface;
             RuntimeUiSkin.ApplyPadding(this, theme.SpaceL, theme.SpaceL);
-            style.borderTopLeftRadius = 14;
-            style.borderTopRightRadius = 14;
-            style.borderBottomLeftRadius = 14;
-            style.borderBottomRightRadius = 14;
+            style.borderTopLeftRadius = RuntimeUiSizing.BasePanelRadius;
+            style.borderTopRightRadius = RuntimeUiSizing.BasePanelRadius;
+            style.borderBottomLeftRadius = RuntimeUiSizing.BasePanelRadius;
+            style.borderBottomRightRadius = RuntimeUiSizing.BasePanelRadius;
         }
     }
 
@@ -50,7 +50,7 @@ namespace LinhGioi.UI
         public ModalPanel(ThemeTokens theme) : base(theme)
         {
             style.backgroundColor = theme.surfaceRaised;
-            style.maxWidth = 560;
+            style.maxWidth = RuntimeUiSizing.ModalMaxWidth;
         }
     }
 
@@ -62,22 +62,22 @@ namespace LinhGioi.UI
 
         public ProgressBar(ThemeTokens theme, Color fillColor)
         {
-            style.height = 22;
+            style.height = RuntimeUiSizing.ProgressBarHeight;
             style.backgroundColor = theme.bg;
-            style.borderTopLeftRadius = 11;
-            style.borderTopRightRadius = 11;
-            style.borderBottomLeftRadius = 11;
-            style.borderBottomRightRadius = 11;
+            style.borderTopLeftRadius = RuntimeUiSizing.ProgressBarRadius;
+            style.borderTopRightRadius = RuntimeUiSizing.ProgressBarRadius;
+            style.borderBottomLeftRadius = RuntimeUiSizing.ProgressBarRadius;
+            style.borderBottomRightRadius = RuntimeUiSizing.ProgressBarRadius;
             _fill = new VisualElement();
             _fill.style.position = Position.Absolute;
             _fill.style.left = 0;
             _fill.style.top = 0;
             _fill.style.bottom = 0;
             _fill.style.backgroundColor = fillColor;
-            _fill.style.borderTopLeftRadius = 11;
-            _fill.style.borderTopRightRadius = 11;
-            _fill.style.borderBottomLeftRadius = 11;
-            _fill.style.borderBottomRightRadius = 11;
+            _fill.style.borderTopLeftRadius = RuntimeUiSizing.ProgressBarRadius;
+            _fill.style.borderTopRightRadius = RuntimeUiSizing.ProgressBarRadius;
+            _fill.style.borderBottomLeftRadius = RuntimeUiSizing.ProgressBarRadius;
+            _fill.style.borderBottomRightRadius = RuntimeUiSizing.ProgressBarRadius;
             _label = new Label();
             _label.style.unityTextAlign = TextAnchor.MiddleCenter;
             _label.style.color = theme.text;
@@ -114,8 +114,8 @@ namespace LinhGioi.UI
         public SkillButton(ThemeTokens theme, string label = "Skill") : base(theme)
         {
             text = label;
-            style.minWidth = 56;
-            style.minHeight = 56;
+            style.minWidth = RuntimeUiSizing.SkillButtonSize;
+            style.minHeight = RuntimeUiSizing.SkillButtonSize;
             style.backgroundColor = theme.shadow;
         }
     }
@@ -125,12 +125,12 @@ namespace LinhGioi.UI
         private readonly Label _initials;
         public AvatarView(ThemeTokens theme, string initials = "LG")
         {
-            style.width = 56;
-            style.height = 56;
-            style.borderTopLeftRadius = 28;
-            style.borderTopRightRadius = 28;
-            style.borderBottomLeftRadius = 28;
-            style.borderBottomRightRadius = 28;
+            style.width = RuntimeUiSizing.AvatarSize;
+            style.height = RuntimeUiSizing.AvatarSize;
+            style.borderTopLeftRadius = RuntimeUiSizing.AvatarRadius;
+            style.borderTopRightRadius = RuntimeUiSizing.AvatarRadius;
+            style.borderBottomLeftRadius = RuntimeUiSizing.AvatarRadius;
+            style.borderBottomRightRadius = RuntimeUiSizing.AvatarRadius;
             style.backgroundColor = theme.surfaceRaised;
             _initials = new Label(initials);
             _initials.style.color = theme.gold;
