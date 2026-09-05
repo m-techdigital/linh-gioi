@@ -4,15 +4,15 @@ Last updated: `2026-09-05`
 
 ## Current focus
 
-Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile, the world hub ground now uses a lightweight procedural cultivation-platform texture instead of a debug-like grid, and the login first screen now uses a V3B composition with a centered text logo/CTA cluster plus right-side Gate Keeper on desktop/tablet and a compact logo/CTA layout on mobile. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
+Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile, the world hub ground now uses a lightweight procedural cultivation-platform texture instead of a debug-like grid, the login first screen now uses a V3B composition with a centered text logo/CTA cluster plus right-side Gate Keeper on desktop/tablet and a compact logo/CTA layout on mobile, and the Character Hall now uses a V3B cultivator portrait with a mobile-specific two-zone lobby layout. The visual review script supports quick iteration modes so UI/world changes do not need to rerun every full source/server gate after a nearby full pass.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0`
+`LGO-BUILD-SIZE-BUDGET-AND-CLEANUP-PASS-v1.0`
 
-Improve the Character Hall / lobby presentation after login: reduce form-like panel density, strengthen selected-character visual hierarchy, keep player-facing copy Vietnamese, preserve account/character semantics, and verify desktop/tablet/mobile screenshots. Do not add auth/DB/gameplay systems or import heavy/reference-only images.
+Audit build/source weight after the visual passes, document PC/tablet/mobile budget targets, identify removable generated/cache/build artifacts, and add a lightweight report/validator for asset and build payload growth. Do not delete dependency-bearing assets without verification and do not change gameplay.
 
 ## Current blocker
 
@@ -28,11 +28,12 @@ Evidence:
 - `docs/tasks/LGO-WORLD-HUB-SCENE-PRESENTATION-POLISH-v1.0.md`
 - `docs/tasks/LGO-WORLD-GROUND-VISUAL-QUALITY-PASS-v1.0.md`
 - `docs/tasks/LGO-LOGIN-NPC-COMPOSITING-POLISH-v1.0.md`
+- `docs/tasks/LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0.md`
 - `build/visual-evidence/latest/player.log`
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: polish the Character Hall/lobby composition after the login V3B composition pass. The visual evidence harness records explicit review checklist categories for every checkpoint while still refusing to claim visual PASS from capture/build alone.
+Next allowed action: run a build-size budget and cleanup pass after the Character Hall composition pass. The visual evidence harness records explicit review checklist categories for every checkpoint while still refusing to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -67,6 +68,7 @@ python3.12 tools/validate_lgo_runtime_asset_weight.py
 python3.12 tools/validate_lgo_runtime_asset_import_profiles.py
 python3.12 tools/validate_lgo_device_profile_ui_budgets.py
 python3.12 tools/validate_lgo_login_npc_compositing_polish.py
+python3.12 tools/validate_lgo_character_hall_v3b_composition.py
 python3.12 tools/validate_lgo_world_hud_density_mobile_touch.py
 python3.12 tools/validate_lgo_world_ground_visual_quality.py
 python3.12 tools/validate_m4_2_playable_ui.py
@@ -111,6 +113,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-LOGIN-NPC-COMPOSITING-POLISH-v1.0` is closed. Continue with `LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0`.
+`LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0` is closed. Continue with `LGO-BUILD-SIZE-BUDGET-AND-CLEANUP-PASS-v1.0`.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

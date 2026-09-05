@@ -484,6 +484,7 @@ namespace LinhGioi.UI
         private void BuildLobbyPanel()
         {
             _lobbyPanel = NewPanel(840);
+            _lobbyPanel.name = "LGO Character Hall V3B Composition Panel";
             ApplyV2PanelSkin(_lobbyPanel);
             _lobbyPanel.style.maxWidth = 860;
             _lobbyPanel.style.minHeight = 480;
@@ -497,11 +498,13 @@ namespace LinhGioi.UI
             _lobbyPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
             var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.");
             lobbyIntro.style.marginBottom = 10;
+            lobbyIntro.style.unityTextAlign = TextAnchor.MiddleCenter;
             _lobbyPanel.Add(lobbyIntro);
 
             _lobbyContent = new VisualElement();
+            _lobbyContent.name = "LGO Character Hall Main Selection Grid V3B";
             _lobbyContent.style.flexDirection = FlexDirection.Row;
-            _lobbyContent.style.flexWrap = Wrap.Wrap;
+            _lobbyContent.style.flexWrap = Wrap.NoWrap;
             _lobbyContent.style.justifyContent = Justify.SpaceBetween;
             _lobbyContent.style.marginTop = 4;
             _lobbyContent.style.marginBottom = 14;
@@ -509,6 +512,7 @@ namespace LinhGioi.UI
 
             _characterList = new VisualElement();
             _characterList.style.minWidth = 280;
+            _characterList.style.maxWidth = 460;
             _characterList.style.flexGrow = 1;
             _characterList.style.marginRight = 18;
             _characterList.style.marginBottom = 12;
@@ -523,16 +527,38 @@ namespace LinhGioi.UI
             _characterList.style.borderLeftWidth = 2;
             _lobbyContent.Add(_characterList);
 
-            _selectedPreview = NewPreviewPanel("LINH MÔN", "Hồ sơ đang chọn");
-            _selectedPreview.style.maxWidth = 360;
+            _selectedPreview = NewPreviewPanel("TU SĨ", "Hồ sơ đang chọn");
+            _selectedPreview.name = "LGO Character Hall Selected Cultivator Card V3B";
+            _selectedPreview.style.maxWidth = 380;
+            _selectedPreview.style.backgroundColor = new Color(0.015f, 0.055f, 0.12f, 0.90f);
+            _selectedPreview.style.borderTopColor = RuntimeArtCatalog.Gold;
+            _selectedPreview.style.borderTopWidth = 1;
+            _selectedPreview.style.borderRightColor = RuntimeArtCatalog.Spirit;
+            _selectedPreview.style.borderRightWidth = 1;
             var profileHero = new VisualElement();
             profileHero.style.flexDirection = FlexDirection.Row;
             profileHero.style.alignItems = Align.Center;
-            profileHero.style.marginBottom = 8;
-            profileHero.Add(NewRuntimeIcon(LgoVisualAssetRegistryV2.IconAccountTexture, 58, "Hồ sơ tu sĩ"));
+            profileHero.style.marginBottom = 10;
+            var portrait = new VisualElement();
+            portrait.name = "LGO Character Hall V3B Cultivator Portrait";
+            portrait.pickingMode = PickingMode.Ignore;
+            portrait.style.width = 84;
+            portrait.style.height = 118;
+            portrait.style.marginRight = 12;
+            portrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            portrait.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 0.72f);
+            portrait.style.borderTopColor = RuntimeArtCatalog.Gold;
+            portrait.style.borderTopWidth = 1;
+            portrait.style.borderBottomColor = RuntimeArtCatalog.Spirit;
+            portrait.style.borderBottomWidth = 1;
+            var portraitTexture = LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture;
+            if (portraitTexture != null)
+                portrait.style.backgroundImage = new StyleBackground(portraitTexture);
+            else
+                portrait.Add(NewRuntimeIcon(LgoVisualAssetRegistryV2.IconAccountTexture, 58, "Hồ sơ tu sĩ"));
+            profileHero.Add(portrait);
             var profileCopy = new VisualElement();
             profileCopy.style.flexGrow = 1;
-            profileCopy.style.marginLeft = 12;
             _selectedName = new Label("Chưa chọn nhân vật");
             _selectedName.style.fontSize = 21;
             _selectedName.style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -551,7 +577,9 @@ namespace LinhGioi.UI
             _lobbyContent.Add(_selectedPreview);
 
             _createPanel = new VisualElement();
+            _createPanel.name = "LGO Character Hall Create Cultivator Panel V3B";
             _createPanel.style.marginTop = 14;
+            _createPanel.style.position = Position.Relative;
             _createPanel.style.paddingLeft = 16;
             _createPanel.style.paddingRight = 16;
             _createPanel.style.paddingTop = 14;
@@ -562,6 +590,7 @@ namespace LinhGioi.UI
             _createPanel.style.borderTopWidth = 1;
             _createPanel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
             _createPanel.style.borderLeftWidth = 2;
+            _createPanel.style.maxHeight = 230;
             _lobbyPanel.Add(_createPanel);
 
             _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
@@ -1434,7 +1463,7 @@ namespace LinhGioi.UI
             _mainShell.style.justifyContent = worldVisible || mobile ? Justify.FlexStart : Justify.Center;
 
             if (_header != null)
-                _header.style.minHeight = authVisible && mobile ? 8 : 76;
+                _header.style.minHeight = authVisible && mobile ? 8 : mobile ? 34 : 76;
             if (_authPanel != null)
             {
                 _authPanel.style.minHeight = mobile ? 0 : tablet ? 500 : 560;
@@ -1460,7 +1489,7 @@ namespace LinhGioi.UI
             if (_loginControlColumn != null)
             {
                 _loginControlColumn.style.width = mobile ? Length.Percent(100) : tablet ? Length.Percent(58) : Length.Percent(58);
-                _loginControlColumn.style.minWidth = mobile ? 0 : tablet ? 450 : 520;
+                _loginControlColumn.style.minWidth = mobile ? 0 : 300;
                 _loginControlColumn.style.maxWidth = mobile ? 520 : tablet ? 560 : 640;
                 _loginControlColumn.style.paddingBottom = mobile ? 0 : 12;
                 _loginControlColumn.style.marginLeft = mobile ? 0 : tablet ? 10 : 30;
@@ -1512,20 +1541,40 @@ namespace LinhGioi.UI
                 _serverSwitchButton.style.minHeight = tablet ? 32 : 34;
             }
 
-            _lobbyPanel.style.maxWidth = mobile ? 720 : tablet ? 840 : 860;
-            _lobbyPanel.style.minHeight = mobile ? 420 : 430;
-            _lobbyPanel.style.paddingLeft = mobile ? 14 : 20;
-            _lobbyPanel.style.paddingRight = mobile ? 14 : 20;
-            _characterList.style.minWidth = mobile ? 240 : 280;
-            _characterList.style.marginRight = mobile ? 0 : 18;
+            _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 840 : 860;
+            _lobbyPanel.style.minHeight = mobile ? Mathf.Max(292f, height - 48f) : 430;
+            _lobbyPanel.style.paddingLeft = mobile ? 12 : 20;
+            _lobbyPanel.style.paddingRight = mobile ? 12 : 20;
+            _lobbyPanel.style.paddingTop = mobile ? 8 : 18;
+            _lobbyPanel.style.paddingBottom = mobile ? 8 : 20;
+            _characterList.style.minWidth = mobile ? 220 : 280;
+            _characterList.style.maxWidth = mobile ? Mathf.Clamp(width * 0.40f, 285f, 330f) : 460;
+            _characterList.style.marginRight = mobile ? 10 : 18;
+            _characterList.style.paddingTop = mobile ? 8 : 12;
+            _characterList.style.paddingBottom = mobile ? 8 : 12;
             if (_lobbyContent != null)
-                _lobbyContent.style.flexDirection = mobile ? FlexDirection.Column : FlexDirection.Row;
+            {
+                _lobbyContent.style.flexDirection = FlexDirection.Row;
+                _lobbyContent.style.flexWrap = Wrap.NoWrap;
+                _lobbyContent.style.marginBottom = mobile ? 8 : 14;
+            }
             if (_selectedPreview != null)
-                _selectedPreview.style.maxWidth = mobile ? 720 : 360;
+            {
+                _selectedPreview.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+                _selectedPreview.style.maxWidth = mobile ? Mathf.Clamp(width * 0.48f, 300f, 390f) : 380;
+            }
             if (_createPanel != null)
             {
+                _createPanel.style.position = mobile ? Position.Absolute : Position.Relative;
+                _createPanel.style.left = mobile ? Mathf.Clamp(width * 0.45f, 350f, 390f) : 0;
+                _createPanel.style.right = mobile ? 12 : StyleKeyword.Auto;
+                _createPanel.style.top = mobile ? 112 : StyleKeyword.Auto;
                 _createPanel.style.paddingLeft = mobile ? 12 : 16;
                 _createPanel.style.paddingRight = mobile ? 12 : 16;
+                _createPanel.style.paddingTop = mobile ? 8 : 14;
+                _createPanel.style.paddingBottom = mobile ? 8 : 16;
+                _createPanel.style.marginTop = mobile ? 0 : 14;
+                _createPanel.style.maxHeight = mobile ? 174 : 230;
             }
 
             _worldHud.style.minWidth = mobile ? 260 : 300;

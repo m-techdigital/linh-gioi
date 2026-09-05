@@ -13,6 +13,7 @@ namespace LinhGioi.Art
         public static Texture2D ButtonEnterWorldGoldTexture => LoadTexture("Login/button_enter_world_gold_v3b_candidate");
         public static Texture2D GateKeeperNpcLoginTexture => LoadTexture("Login/gate_keeper_npc_login_v3b_candidate");
         public static Sprite GateKeeperNpc => LoadSprite("Login/gate_keeper_npc_login_v3b_candidate");
+        public static Texture2D PlayerMaleCultivatorTexture => LoadTexture("World/characters/player_male_cultivator_idle_v3b_candidate");
         public static Sprite PlayerMaleCultivator => LoadSprite("World/characters/player_male_cultivator_idle_v3b_candidate");
         public static Sprite SpiritGate => LoadSprite("World/gate/spirit_gate_v3b_candidate");
         public static Sprite TrainingStone => LoadSprite("World/training-stone/training_stone_v3b_candidate");
