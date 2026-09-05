@@ -291,6 +291,9 @@ source_only() {
   if [[ -f tools/validate_lgo_world_hud_style_adoption.py ]]; then
     run_phase world_hud_style_adoption python3.12 tools/validate_lgo_world_hud_style_adoption.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_skin_adoption_evidence_refresh.py ]]; then
+    run_phase runtime_ui_skin_adoption_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_skin_adoption_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_world_hud_action_shell_evidence_refresh.py ]]; then
     run_phase world_hud_action_shell_evidence_refresh python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
   fi
@@ -521,6 +524,7 @@ source_only() {
     tools/validate_lgo_visual_runtime_fast_profile_reuse.py \
     tools/validate_lgo_world_hud_action_shell_v3b_skin.py \
     tools/validate_lgo_world_hud_style_adoption.py \
+    tools/validate_lgo_runtime_ui_skin_adoption_evidence_refresh.py \
     tools/validate_lgo_world_hud_action_shell_evidence_refresh.py \
     tools/validate_lgo_world_mobile_camera_framing.py \
     tools/validate_lgo_world_mobile_camera_evidence_refresh.py \
