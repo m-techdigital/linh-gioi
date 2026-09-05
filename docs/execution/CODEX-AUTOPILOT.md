@@ -107,6 +107,9 @@ The round prompt tells Codex to behave like a continuous local project agent:
 - prioritize real playable progress, UI/UX, runtime presentation, asset pipeline, performance/weight, maintainability, QA/evidence tooling, and debugging ergonomics;
 - create asset requests/briefs when AI image generation is needed but unavailable in CLI, while continuing with code, compression, import settings, mapping, and validators.
 - group related source/docs/tooling changes into coherent checkpoint commits after validation, and let the supervisor push only when explicitly configured.
+- keep change volume under control: do not create a new task doc, validator, report, or marker for every small UI tweak unless it protects a real regression gate or handoff need.
+- prefer short Vietnamese progress summaries and compact logs; write verbose diagnostics only when a gate fails or a screenshot/runtime issue needs investigation.
+- if a batch is producing many files without visible player value, stop expanding that batch, consolidate the useful changes, validate, and select a higher-impact task.
 
 ## Boundaries
 

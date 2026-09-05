@@ -5,7 +5,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 ## Quick State
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Next task: `LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0`
+- Next task: `LGO-POST-LOGIN-RUNTIME-QUALITY-NEXT-BATCH-v1.0`
 - Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.
 - Purpose: scan recent work quickly without deleting historical task rows or marker coverage.
 
@@ -13,7 +13,6 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 
 | Recent | Task ID | Status / Decision | Next allowed step |
 |---:|---|---|---|
-| 231 | LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_EVIDENCE_REFRESH_READY`: target dummy screenshot refreshed after cooldown button lightness pass; cooldown reads lighter and remains placeholder-quality, no visual pass claimed | Continue with `LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT-v1.0` |
 | 232 | LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_STATE_DOC_COMPACTION_AUDIT_READY`: `NEXT-ACTION.md` now has a concise Quick Resume block while preserving historical marker registry compatibility | Continue with `LGO-EXECUTION-LEDGER-ROLLUP-VIEW-v1.0` |
 | 233 | LGO-EXECUTION-LEDGER-ROLLUP-VIEW v1.0 | source ready / no visual pass claim; `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`: append-only task history now has a compact generated rollup with stale-output validation | Continue with `LGO-COMMIT-CADENCE-POLICY-HARDENING-v1.0` |
 | 234 | LGO-COMMIT-CADENCE-POLICY-HARDENING v1.0 | source ready / no visual pass claim; `LGO_COMMIT_CADENCE_POLICY_HARDENING_READY`: autopilot now defaults to no auto-commit, with checkpoint commits and push both explicitly opt-in for cleaner history | Continue with `LGO-RUNTIME-UI-QUALITY-DEBT-TRIAGE-v1.0` |
@@ -31,6 +30,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 | 246 | LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_WORLD_HUB_VISUAL_DEPTH_WEIGHT_READY`: oversized procedural ground rings no longer dominate the World Hub, lightweight runtime-generated mist support is available, and stale M6 readiness docs-only diff policing no longer blocks current non-frozen world/UI implementation tasks | Continue with `LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT-v1.0` |
 | 247 | LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_CHANGESET_NOISE_HOTSPOT_AUDIT_READY`: obsolete M6 readiness allowlist code was removed and visual evidence hooks moved into a partial evidence boundary so the main playable UI controller is smaller without changing runtime flow | Continue with `LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE-v1.0` |
 | 248 | LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_CHARACTER_HALL_SELECTED_CTA_PRIORITY_READY`: selected Character Hall state now makes `Vào sân luyện` the first CTA on every profile, demotes `Tạo thêm`, and reduces create-panel emphasis without changing character flow | Continue with `LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0` |
+| 249 | LGO-CONTINUOUS-WORKFLOW-CHANGE-BUDGET-PASS v1.0 | source/tooling policy ready / no runtime pass claim; `LGO_CONTINUOUS_WORKFLOW_CHANGE_BUDGET_READY`: continuous/autopilot workflow now prioritizes player-visible value and recurring maintenance savings over one-off marker/docs/validator churn, with quick/full gate and commit cadence guidance kept explicit | Continue with `LGO-POST-LOGIN-RUNTIME-QUALITY-NEXT-BATCH-v1.0` |
 
 ## Operating Notes
 

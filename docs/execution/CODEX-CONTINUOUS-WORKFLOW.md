@@ -35,6 +35,16 @@ Commit/push only after related changes validate together. Avoid tiny spam commit
 
 Routine local loops should prefer concise output: `tools/lgo_continue_dev_loop.sh` defaults to Quick Resume plus ledger rollup. Use `LGO_DEV_LOOP_CONTEXT_MODE=full` only when diagnosing state drift or handoff confusion.
 
+## Change Budget
+
+Continuous work should increase player-visible quality faster than it increases repository noise.
+
+- Prefer improving existing runtime/UI/tooling owners over creating new one-off files.
+- Reuse validators and task docs for routine polish; create a new validator only for a recurring regression risk, package gate, frozen boundary, or evidence contract.
+- Use quick gates while iterating on low-risk UI/layout/source cleanup, then run full gates before a coherent checkpoint, handoff, package, or shared runtime foundation change.
+- Keep `NEXT-ACTION.md` focused on the current task and only durable operating markers. Historical detail belongs in `TASK-LEDGER.md` and the rollup.
+- Commit after a feature-sized or workflow-sized batch validates, not after every tiny edit.
+
 Do not parallelize gates that clean or rewrite the same output roots. In particular, `./tools/lgo_visual_runtime_review.sh`, `./tools/lgo_visual_runtime_review_profiles.sh`, `./tools/run_m5_visual_evidence_review.sh`, `./tools/lgo_playable_closure_check.sh --source-only`, and source-only validators that read `build/visual-evidence/**` must run sequentially.
 
 ## Failure Classification

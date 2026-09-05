@@ -24,6 +24,9 @@ This repository uses persistent continuous-work mode. Read this file before maki
 - Keep git history clean during continuous work: group related changes into one coherent checkpoint commit after validation, avoid spam commits for tiny edits, and push only through the configured supervisor path.
 - Default to fewer commits: commit only after a coherent feature/phase/tooling batch has passed validation, or when the owner explicitly requests handoff/checkpoint packaging. Do not commit merely because one small validator or text edit finished.
 - Keep long validation and state dumps concise by default. Use quick/rollup summaries for routine work, and switch to verbose logs only when diagnosing a failure.
+- Keep change volume proportional to player value. Prefer one coherent improvement that touches existing source over many new task docs, marker-only validators, or repeated status churn.
+- Add a new validator only when it protects a recurring failure mode, frozen boundary, package gate, or runtime evidence contract. Routine UI polish should reuse existing validators whenever possible.
+- Add or update task/report docs only when they help future operation, handoff, roadmap movement, or evidence review. Do not create documentation just to prove that a tiny edit happened.
 - Do not run validation gates in parallel when they share mutable outputs, especially visual evidence directories under `build/visual-evidence/**`; run those phases sequentially to avoid false missing-evidence failures.
 - Do not commit generated caches, Unity `Library/Temp/Logs`, pycache, local toolchains, or bulky evidence artifacts unless a task explicitly owns the artifact.
 - Prefer source/runtime evidence over assumptions. Never claim PASS from source inspection only.

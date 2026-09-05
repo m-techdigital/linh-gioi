@@ -15,6 +15,15 @@ These rules let Codex continue development without waiting for a new external pr
 5. Improve asset import hygiene and size budgets without creating new art during code tasks.
 6. Write docs/specs for future work when implementation would require frozen contract approval.
 
+## Change Budget
+
+- Choose tasks that produce visible gameplay/runtime value or reduce recurring maintenance cost.
+- Prefer modifying established owners over adding new files.
+- Avoid creating a new task doc, marker, and validator for every small polish pass; reuse existing gates unless a new recurring failure mode needs protection.
+- If a change touches more than roughly 8 source/docs/tooling files without closing a feature-sized batch, pause expansion, consolidate, and validate.
+- If a task is mainly documentation/status churn, combine it with the next related implementation batch unless it is needed for owner handoff, contract review, or safety.
+- Use quick gates for tight iteration; reserve full gates, package checks, and checkpoint commits for coherent milestones or shared-foundation changes.
+
 ## Safe Task Classes
 
 - validator fixes that do not weaken gates;

@@ -5,12 +5,12 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0`.
-- Current reason: Character Hall selected state now gives `Vào sân luyện` first-priority CTA treatment on every profile, reduces create-panel visual weight after selection, and keeps `Tạo thêm` as secondary copy.
+- Active task: `LGO-POST-LOGIN-RUNTIME-QUALITY-NEXT-BATCH-v1.0`.
+- Current reason: continuous workflow now has explicit change-budget rules so future work favors player-visible/runtime value and recurring maintenance savings over marker/docs/validator churn.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: pick the next source-safe hotspot from latest evidence, preferring visual quality fixes that reuse existing assets and avoid large image payloads.
+- Next implementation task after this fix: continue with a focused post-login runtime quality batch, choosing one visible hotspot from Character Hall, World Hub, HUD, or visual evidence quality before adding more process files.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -61,13 +61,15 @@ Current focus update: changeset noise audit removed obsolete M6 readiness allowl
 
 Current focus update: Character Hall selected CTA hierarchy now prioritizes `Vào sân luyện` before `Tạo thêm` on desktop/tablet/mobile under `LGO_CHARACTER_HALL_SELECTED_CTA_PRIORITY_READY`; fresh desktop screenshot is cleaner, no visual PASS is claimed.
 
+Current focus update: continuous workflow, task selection, quick/full gate strategy, and autopilot prompt now include change-budget rules under `LGO_CONTINUOUS_WORKFLOW_CHANGE_BUDGET_READY`; future batches should avoid new one-off docs/validators/markers unless they protect a real gate or handoff need.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0`
+`LGO-POST-LOGIN-RUNTIME-QUALITY-NEXT-BATCH-v1.0`
 
-Continue by selecting the next highest-value visible/runtime or maintainability hotspot from current evidence. Prefer source-safe improvements to login polish, Character Hall density, World Hub depth, HUD readability, or validation speed/noise. Do not make broad refactors and do not add heavy assets without a clear runtime budget. Marker ready from the previous polish: `LGO_CHARACTER_HALL_SELECTED_CTA_PRIORITY_READY`.
+Continue with one coherent post-login runtime quality batch. Select a single high-value hotspot from latest screenshots and source hotspots, prefer existing runtime assets/helpers, keep file count proportional to impact, run quick gates during iteration, and run full source/visual evidence only before checkpointing a feature-sized result. Marker ready from the previous workflow pass: `LGO_CONTINUOUS_WORKFLOW_CHANGE_BUDGET_READY`.
 
 ## Current blocker
 

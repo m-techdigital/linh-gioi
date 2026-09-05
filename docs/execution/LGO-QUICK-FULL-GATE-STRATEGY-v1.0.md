@@ -10,6 +10,8 @@ This strategy keeps continuous development fast without weakening validation. Qu
 
 Use quick gates for docs/tooling-only changes, narrowly scoped UI copy/layout tweaks, validator additions, and follow-up changes where the previous full gate is still relevant.
 
+Quick gates are the default while iterating. They keep Codex from spending more time rebuilding evidence than improving the game, but they do not replace the full gate before a feature-sized checkpoint.
+
 Default command:
 
 ```bash
@@ -30,6 +32,8 @@ Quick gates may not be used to claim release readiness, package readiness, or hu
 ## Full Gate
 
 Run full gates before any checkpoint commit that closes a feature-sized batch, before package/handoff, after shared UI foundation changes, after asset import/settings changes, after server/runtime code changes, and whenever quick evidence looks suspicious.
+
+Do not run full gates reflexively after every tiny polish edit when the previous full gate is still relevant and the touched files are low-risk. Batch related changes, then run full validation once before committing or handing off.
 
 Required baseline:
 
@@ -57,6 +61,8 @@ Run profile evidence when responsive layout or asset sizing changes:
 ## Commit Policy
 
 Commit only after a coherent feature/tooling/quality batch validates. Do not commit every tiny edit. Do not push unless the remote path is configured and the checkpoint is intentionally ready to share.
+
+Prefer no more than one checkpoint commit per coherent feature/tooling batch. If several tiny commits would describe the same player-facing improvement, continue locally and commit them together after validation.
 
 ## Failure Rules
 

@@ -77,6 +77,8 @@ Do not stop after one small task if a valid next task exists. Work like a senior
 Complete one coherent batch:
 analyze -> implement -> integrate -> cleanup -> validate -> update evidence/report -> update NEXT-ACTION.md -> append TASK-LEDGER.md only for a real closed batch -> regenerate TASK-LEDGER-ROLLUP.md -> write build/codex-autopilot/status.json.
 
+Keep the batch efficient. Prioritize visible player value or recurring maintenance savings over marker churn. Reuse existing docs/validators when possible; add new task docs, validators, reports, or markers only when they protect a real regression gate, package/evidence contract, owner handoff, or roadmap transition. If the batch starts touching many files without a clear feature-sized outcome, consolidate the useful changes, validate, and choose a higher-impact next task.
+
 This is a non-interactive autopilot round. Do not request approval or escalation. If a command cannot run because the sandbox blocks local sockets, Unity/player launch, video capture, or another runtime permission, classify it honestly in status.json instead of waiting for user input.
 
 Within the round, keep going through this inner loop while it remains safe and in scope:
@@ -105,6 +107,7 @@ Autonomous project scope:
 Git hygiene:
 
 - Keep changes grouped by coherent batch, not by tiny edit.
+- Prefer no more than one checkpoint commit per coherent feature/tooling batch when checkpoint commits are enabled.
 - Before finishing a successful batch, remove generated caches and avoid staging Unity Library/Temp/Logs, build caches, pycache, toolchain archives, or evidence blobs unless a task explicitly owns them.
 - Do not create many small commits for the same logical task.
 - Do not push manually from inside the round; the supervisor handles push only when `LGO_AUTOPILOT_PUSH=1`.
