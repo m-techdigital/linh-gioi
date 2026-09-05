@@ -57,7 +57,7 @@ def main() -> int:
         "!(_isMobileProfile && !dialogueVisible)",
         "layout.WorldHudMaxWidth(dialogueVisible)",
         "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible)",
-        "_worldGuidanceCard.style.marginTop = mobile ? 6 : 8",
+        "RuntimeUiSkin.ApplyVerticalMargin(_worldGuidanceCard, layout.WorldGuidanceCardMarginVertical, layout.WorldGuidanceCardMarginVertical)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",

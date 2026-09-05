@@ -81,6 +81,14 @@ namespace LinhGioi.UI
         internal int LoginServerTextFontSize => IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.042f, 16f, 19f)) : IsTablet ? 18 : 19;
         internal int LoginButtonMarginTop => IsMobile ? Mathf.RoundToInt(4f * MobileScale) : 10;
 
+        internal int LobbyIntroMarginBottom => IsMobile ? 6 : 10;
+        internal int LobbyContentMarginTop => 4;
+        internal int LobbyContentMarginBottom => IsMobile ? 8 : 10;
+        internal int CharacterListMarginRight => IsMobile ? 10 : 14;
+        internal int CharacterListMarginBottom => 8;
+        internal int EmptyCharacterCardMarginTop => IsMobile ? 8 : 10;
+        internal int SelectedPreviewHeroMarginBottom => 10;
+        internal int CharacterPortraitMarginRight => 12;
         internal int LobbyPanelPaddingHorizontal => IsMobile ? 12 : 18;
         internal int LobbyPanelPaddingTop => IsMobile ? 8 : 16;
         internal int LobbyPanelPaddingBottom => IsMobile ? 8 : 18;
@@ -91,15 +99,24 @@ namespace LinhGioi.UI
         internal int CreatePanelPaddingHorizontal => IsMobile ? 12 : 16;
         internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;
         internal int CreatePanelPaddingBottom => IsMobile ? 8 : 14;
+        internal int CreatePanelMarginTop => IsMobile ? 0 : 10;
         internal float WorldHudMinWidth => IsMobile ? 238f : 300f;
         internal int WorldHudPaddingHorizontal => IsMobile ? 8 : 12;
         internal int WorldHudPaddingVertical => IsMobile ? 6 : 10;
         internal int WorldHudDialoguePaddingHorizontal => IsMobile ? 7 : WorldHudPaddingHorizontal;
         internal int WorldHudDialoguePaddingVertical => IsMobile ? 5 : WorldHudPaddingVertical;
+        internal int WorldNameMarginTop => 6;
+        internal int PositionChipMarginTop => 8;
+        internal int WorldLandmarksMarginTop => 8;
+        internal int SkillPreviewPanelMarginTop => 10;
+        internal int LocalCombatPanelMarginTop => 8;
+        internal int SettingsPanelMarginTop => 12;
         internal int WorldGuidanceCardPaddingHorizontal => 8;
+        internal int WorldGuidanceCardMarginVertical => IsMobile ? 6 : 8;
         internal int WorldGuidanceCardPaddingVertical => IsMobile ? 5 : 7;
         internal int DialoguePanelPaddingHorizontal => IsMobile ? 10 : 14;
         internal int DialoguePanelPaddingVertical => IsMobile ? 9 : 12;
+        internal int DialoguePanelMarginTop => IsMobile ? 6 : IsTablet ? 8 : 10;
         internal int DialogueProgressPaddingHorizontal => 10;
         internal int DialogueProgressPaddingVertical => IsMobile ? 4 : 5;
         internal int StatusPaddingHorizontal(bool worldVisible) => worldVisible && IsMobile ? 14 : 18;
@@ -147,6 +164,7 @@ namespace LinhGioi.UI
         internal float SessionMenuTop => IsMobile ? 46f : IsTablet ? 118f : 120f;
 
         internal float SessionMenuMaxHeight => IsMobile ? Mathf.Max(240f, Height - 70f) : IsTablet ? 430f : 500f;
+        internal int SessionMenuStatusMarginBottom => 10;
         internal int SessionMenuPaddingHorizontal => IsMobile ? 12 : IsTablet ? 16 : 22;
         internal int SessionMenuPaddingTop => IsMobile ? 10 : IsTablet ? 14 : 18;
         internal int SessionMenuPaddingBottom => IsMobile ? 10 : IsTablet ? 14 : 20;

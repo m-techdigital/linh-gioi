@@ -42,6 +42,20 @@ namespace LinhGioi.UI
             element.style.paddingBottom = bottom;
         }
 
+        internal static void ApplyMargin(VisualElement element, float left, float right, float top, float bottom)
+        {
+            element.style.marginLeft = left;
+            element.style.marginRight = right;
+            element.style.marginTop = top;
+            element.style.marginBottom = bottom;
+        }
+
+        internal static void ApplyVerticalMargin(VisualElement element, float top, float bottom)
+        {
+            element.style.marginTop = top;
+            element.style.marginBottom = bottom;
+        }
+
         internal static void ApplyEdgeFrame(VisualElement element, Color left, Color top, Color right, Color bottom, float leftWidth = 2f, float otherWidth = 1f)
         {
             element.style.borderLeftColor = left;
