@@ -5,12 +5,12 @@ Last updated: `2026-09-06`
 ## Quick Resume
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Active task: `LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE-v1.0`.
-- Current reason: changeset noise audit reduced stale validator code and moved visual evidence hooks out of the main playable UI controller into a partial evidence boundary; source-only and fresh visual capture remain stable.
+- Active task: `LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0`.
+- Current reason: Character Hall selected state now gives `Vào sân luyện` first-priority CTA treatment on every profile, reduces create-panel visual weight after selection, and keeps `Tạo thêm` as secondary copy.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_m5_world_hub_readability.py`; `python3.12 tools/validate_lgo_runtime_asset_weight.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: compare current login and Character Hall screenshots against V3B reference direction and pick the next high-value visible polish that does not add heavy assets.
+- Next implementation task after this fix: pick the next source-safe hotspot from latest evidence, preferring visual quality fixes that reuse existing assets and avoid large image payloads.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -59,13 +59,15 @@ Current focus update: World Hub oversized procedural ground rings are toned down
 
 Current focus update: changeset noise audit removed obsolete M6 readiness allowlist code and split visual evidence hooks into `M4PlayableClientController.Evidence.cs` under `LGO_CHANGESET_NOISE_HOTSPOT_AUDIT_READY`; main UI controller is smaller, source-only passes, and visual evidence still captures all checkpoints.
 
+Current focus update: Character Hall selected CTA hierarchy now prioritizes `Vào sân luyện` before `Tạo thêm` on desktop/tablet/mobile under `LGO_CHARACTER_HALL_SELECTED_CTA_PRIORITY_READY`; fresh desktop screenshot is cleaner, no visual PASS is claimed.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE-v1.0`
+`LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0`
 
-Continue by reviewing the latest login and Character Hall runtime screenshots for the largest visible mismatch with V3B/reference quality. Prefer layout/scale/hierarchy and lightweight asset usage fixes before creating new images. Do not crop reference composites, do not import V3BA, and do not claim visual PASS from screenshot capture alone. Marker ready from the previous cleanup: `LGO_CHANGESET_NOISE_HOTSPOT_AUDIT_READY`.
+Continue by selecting the next highest-value visible/runtime or maintainability hotspot from current evidence. Prefer source-safe improvements to login polish, Character Hall density, World Hub depth, HUD readability, or validation speed/noise. Do not make broad refactors and do not add heavy assets without a clear runtime budget. Marker ready from the previous polish: `LGO_CHARACTER_HALL_SELECTED_CTA_PRIORITY_READY`.
 
 ## Current blocker
 

@@ -55,7 +55,9 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "LGO Character Hall Mobile Selected CTA Hierarchy v1",
         "private void ApplyCharacterHallActionHierarchy()",
-        "var mobileSelected = _isMobileProfile && _selectedCharacter != null;",
+        "var selected = _selectedCharacter != null;",
+        "var mobileSelected = _isMobileProfile && selected;",
+        "if (selected)",
         "_characterActionRow.Add(_enterWorldButton);",
         "_createButton.text = \"Tạo thêm\";",
     )

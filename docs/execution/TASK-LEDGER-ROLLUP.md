@@ -5,7 +5,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 ## Quick State
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Next task: `LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE-v1.0`
+- Next task: `LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0`
 - Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.
 - Purpose: scan recent work quickly without deleting historical task rows or marker coverage.
 
@@ -13,7 +13,6 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 
 | Recent | Task ID | Status / Decision | Next allowed step |
 |---:|---|---|---|
-| 230 | LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-LIGHTNESS-PASS v1.0 | source ready / no visual pass claim; `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_LIGHTNESS_READY`: cooldown combat button now uses a lighter code-styled glass state instead of the heavy dark texture while cooldown mechanics and icon feedback stay unchanged | Continue with `LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-EVIDENCE-REFRESH-v1.0` |
 | 231 | LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-EVIDENCE-REFRESH v1.0 | evidence ready / no visual pass claim; `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_EVIDENCE_REFRESH_READY`: target dummy screenshot refreshed after cooldown button lightness pass; cooldown reads lighter and remains placeholder-quality, no visual pass claimed | Continue with `LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT-v1.0` |
 | 232 | LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_STATE_DOC_COMPACTION_AUDIT_READY`: `NEXT-ACTION.md` now has a concise Quick Resume block while preserving historical marker registry compatibility | Continue with `LGO-EXECUTION-LEDGER-ROLLUP-VIEW-v1.0` |
 | 233 | LGO-EXECUTION-LEDGER-ROLLUP-VIEW v1.0 | source ready / no visual pass claim; `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`: append-only task history now has a compact generated rollup with stale-output validation | Continue with `LGO-COMMIT-CADENCE-POLICY-HARDENING-v1.0` |
@@ -31,6 +30,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 | 245 | LGO-VISUAL-RUNTIME-CAPTURE-FOCUS-ROBUSTNESS-AUDIT v1.0 | tooling/runtime evidence ready / no visual pass claim; `LGO_VISUAL_RUNTIME_CAPTURE_FOCUS_ROBUSTNESS_READY`: Unity evidence runner configures background-friendly capture in `Awake`, the launcher re-requests focus with bounded progress logging, and latest desktop evidence captured all 10 checkpoints without a manual click in the runner log | Continue with `LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS-v1.0` |
 | 246 | LGO-WORLD-HUB-VISUAL-DEPTH-AND-WEIGHT-PASS v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_WORLD_HUB_VISUAL_DEPTH_WEIGHT_READY`: oversized procedural ground rings no longer dominate the World Hub, lightweight runtime-generated mist support is available, and stale M6 readiness docs-only diff policing no longer blocks current non-frozen world/UI implementation tasks | Continue with `LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT-v1.0` |
 | 247 | LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_CHANGESET_NOISE_HOTSPOT_AUDIT_READY`: obsolete M6 readiness allowlist code was removed and visual evidence hooks moved into a partial evidence boundary so the main playable UI controller is smaller without changing runtime flow | Continue with `LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE-v1.0` |
+| 248 | LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_CHARACTER_HALL_SELECTED_CTA_PRIORITY_READY`: selected Character Hall state now makes `Vào sân luyện` the first CTA on every profile, demotes `Tạo thêm`, and reduces create-panel emphasis without changing character flow | Continue with `LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0` |
 
 ## Operating Notes
 

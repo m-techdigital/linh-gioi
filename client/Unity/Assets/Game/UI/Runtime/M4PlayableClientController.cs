@@ -95,6 +95,7 @@ namespace LinhGioi.UI
         private Label _sessionMenuStatus;
         private Label _loginHeroTitle;
         private Label _loginHeroCopy;
+        private Label _createTitle;
         private Button _loginButton;
         private Button _serverSwitchButton;
         private Button _createButton;
@@ -523,7 +524,8 @@ namespace LinhGioi.UI
             _createPanel = NewCharacterCreatePanel(layout);
             _lobbyPanel.Add(_createPanel);
 
-            _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
+            _createTitle = NewSectionTitle("Tạo Tu Sĩ");
+            _createPanel.Add(_createTitle);
             var createHint = NewCharacterHallStatusLabel("Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted, layout);
             _createHint = createHint;
             createHint.name = "LGO Character Create Form Game Copy v1";
@@ -854,6 +856,9 @@ namespace LinhGioi.UI
                     _selectedClassSummary.text = "Mạch: Kiếm tu sơ nhập.";
                     _selectedClassSummary.style.display = DisplayStyle.None;
                 }
+                if (_createTitle != null) _createTitle.text = "Tạo Tu Sĩ";
+                if (_createHint != null) _createHint.text = "Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.";
+                if (_createPanel != null) _createPanel.style.opacity = 1f;
                 _worldName.text = "Chưa chọn nhân vật";
                 _worldMeta.text = "Chọn nhân vật tại điện nhân vật.";
                 if (_worldArea != null) _worldArea.text = "Khu vực: xem trước tại sảnh";
@@ -877,6 +882,9 @@ namespace LinhGioi.UI
                 _selectedClassSummary.text = "Mạch: Kiếm tu sơ nhập.";
                 _selectedClassSummary.style.display = DisplayStyle.None;
             }
+            if (_createTitle != null) _createTitle.text = "Tạo thêm tu sĩ";
+            if (_createHint != null) _createHint.text = "Tu sĩ đang chọn đã sẵn sàng. Chỉ tạo thêm khi cần hồ sơ mới.";
+            if (_createPanel != null) _createPanel.style.opacity = _isMobileProfile ? 0.78f : 0.84f;
             _worldName.text = "Tu sĩ: " + character.name;
             _worldMeta.text = "Kiếm tu sơ nhập / phiên hiện tại";
             _position.text = character.ToString();
@@ -1311,17 +1319,18 @@ namespace LinhGioi.UI
         private void ApplyCharacterHallActionHierarchy()
         {
             if (_characterActionRow == null || _createButton == null || _enterWorldButton == null) return;
-            var mobileSelected = _isMobileProfile && _selectedCharacter != null;
+            var selected = _selectedCharacter != null;
+            var mobileSelected = _isMobileProfile && selected;
             _characterActionRow.Clear();
-            if (mobileSelected)
+            if (selected)
             {
-                // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state.
+                // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state on every profile.
                 _enterWorldButton.text = "Vào sân luyện";
                 RuntimeUiSkin.ApplyButtonMetrics(
                     _enterWorldButton,
-                    RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinWidth,
-                    RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight,
-                    RuntimeUiSpacing.CharacterSelectedPrimaryMobileFontSize,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight : RuntimeUiSpacing.CharacterActionButtonMinHeight,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileFontSize : RuntimeUiSpacing.CharacterEnterWorldButtonFontSize,
                     true);
                 _enterWorldButton.style.marginTop = RuntimeUiSpacing.CharacterSelectedPrimaryMobileMarginTop;
                 _enterWorldButton.style.opacity = 1f;
@@ -1329,9 +1338,9 @@ namespace LinhGioi.UI
                 _createButton.text = "Tạo thêm";
                 RuntimeUiSkin.ApplyButtonMetrics(
                     _createButton,
-                    RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinWidth,
-                    RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinHeight,
-                    RuntimeUiSpacing.CharacterSelectedSecondaryMobileFontSize);
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinHeight : RuntimeUiSpacing.CharacterActionButtonMinHeight,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileFontSize : RuntimeUiSpacing.CharacterCreateButtonFontSize);
                 _createButton.style.opacity = 0.82f;
                 _characterActionRow.Add(_enterWorldButton);
                 _characterActionRow.Add(_createButton);
