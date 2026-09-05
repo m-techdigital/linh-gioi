@@ -69,9 +69,9 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
         "ApplyLoginCtaBacking(VisualElement element)",
-        "new Color(0.93f, 0.73f, 0.36f, 0.42f)",
-        "element.style.borderTopWidth = 2;",
-        "element.style.borderBottomWidth = 2;",
+        "new Color(0.93f, 0.73f, 0.36f, 0.28f)",
+        "element.style.borderTopWidth = 1;",
+        "element.style.borderBottomWidth = 1;",
         "ApplyServerSelectorFrame(VisualElement element)",
         "new Color(0.003f, 0.015f, 0.035f, 0.82f)",
     )

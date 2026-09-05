@@ -444,6 +444,12 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_component_metric_ownership_evidence_refresh.py ]]; then
     run_phase runtime_ui_component_metric_ownership_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_component_metric_ownership_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_panel_hierarchy_simplification.py ]]; then
+    run_phase runtime_ui_panel_hierarchy_simplification python3.12 tools/validate_lgo_runtime_ui_panel_hierarchy_simplification.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_panel_hierarchy_evidence_refresh.py ]]; then
+    run_phase runtime_ui_panel_hierarchy_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_panel_hierarchy_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_responsive_style_application_audit.py ]]; then
     run_phase runtime_ui_responsive_style_application_audit python3.12 tools/validate_lgo_runtime_ui_responsive_style_application_audit.py
   fi

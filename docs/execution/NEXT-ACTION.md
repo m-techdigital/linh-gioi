@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-PANEL-HIERARCHY-SIMPLIFICATION-PASS-v1.0`
+`LGO-RUNTIME-UI-CHARACTER-HALL-CONTENT-DENSITY-POLISH-v1.0`
 
-Reduce visible nested-frame noise in login and Character Hall by reusing existing shell/frame helpers rather than adding one-off controller styling. Keep account/character flow semantics unchanged and preserve V3B asset usage. Marker ready from the completed evidence refresh: `LGO_RUNTIME_UI_COMPONENT_METRIC_OWNERSHIP_EVIDENCE_REFRESH_READY`.
+Simplify Character Hall text density and repeated status rows while preserving all existing character creation/selection behavior. Prefer shared labels/cards/helpers over one-off controller styling. Marker ready from the completed evidence refresh: `LGO_RUNTIME_UI_PANEL_HIERARCHY_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -157,6 +157,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-TYPOGRAPHY-OWNERSHIP-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_TYPOGRAPHY_OWNERSHIP_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-COMPONENT-METRIC-OWNERSHIP-DRIFT-SCAN-v1.0` / `LGO_RUNTIME_UI_COMPONENT_METRIC_OWNERSHIP_DRIFT_SCAN_READY`
 - `LGO-RUNTIME-UI-COMPONENT-METRIC-OWNERSHIP-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_COMPONENT_METRIC_OWNERSHIP_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-PANEL-HIERARCHY-SIMPLIFICATION-PASS-v1.0` / `LGO_RUNTIME_UI_PANEL_HIERARCHY_SIMPLIFICATION_READY`
+- `LGO-RUNTIME-UI-PANEL-HIERARCHY-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_PANEL_HIERARCHY_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-APPLICATION-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_APPLICATION_AUDIT_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-FACTORY-COVERAGE-AUDIT-v1.0` / `LGO_RUNTIME_UI_FACTORY_COVERAGE_AUDIT_READY`

@@ -65,7 +65,7 @@ def main() -> int:
         "ApplyCharacterHallPanelFrame(VisualElement panel)",
         "new Color(0.005f, 0.025f, 0.055f, 0.82f)",
         "ApplyCharacterListFrame(VisualElement list)",
-        "new Color(0.0f, 0.018f, 0.045f, 0.70f)",
+        "ApplySubtleNestedFrame(list, RuntimeArtCatalog.Gold, 0.34f);",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-PANEL-DENSITY-PASS-v1.0.md",

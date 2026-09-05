@@ -119,14 +119,14 @@ namespace LinhGioi.UI
             ApplyRadius(element, 18);
             ApplyEdgeFrame(
                 element,
-                new Color(0.14f, 0.78f, 0.90f, 0.24f),
-                new Color(0.93f, 0.73f, 0.36f, 0.42f),
-                new Color(0.93f, 0.73f, 0.36f, 0.26f),
-                new Color(0.14f, 0.78f, 0.90f, 0.30f),
+                new Color(0.14f, 0.78f, 0.90f, 0.16f),
+                new Color(0.93f, 0.73f, 0.36f, 0.28f),
+                new Color(0.93f, 0.73f, 0.36f, 0.16f),
+                new Color(0.14f, 0.78f, 0.90f, 0.20f),
                 1f,
                 1f);
-            element.style.borderTopWidth = 2;
-            element.style.borderBottomWidth = 2;
+            element.style.borderTopWidth = 1;
+            element.style.borderBottomWidth = 1;
         }
 
         internal static void ApplyServerSelectorFrame(VisualElement element)
@@ -240,24 +240,34 @@ namespace LinhGioi.UI
             ApplyEdgeFrame(panel, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
         }
 
+        internal static void ApplySubtleNestedFrame(VisualElement element, Color accent, float alpha = 0.32f)
+        {
+            element.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.64f);
+            ApplyEdgeFrame(
+                element,
+                new Color(accent.r, accent.g, accent.b, alpha),
+                new Color(0.93f, 0.73f, 0.36f, alpha * 0.70f),
+                new Color(0.14f, 0.78f, 0.90f, alpha * 0.45f),
+                new Color(0.93f, 0.73f, 0.36f, alpha * 0.36f),
+                1f,
+                1f);
+        }
+
         internal static void ApplyCharacterListFrame(VisualElement list)
         {
-            list.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.70f);
-            ApplyEdgeFrame(list, new Color(0.93f, 0.73f, 0.36f, 0.70f), new Color(0.14f, 0.78f, 0.90f, 0.42f), Color.clear, Color.clear, 2f, 1f);
+            ApplySubtleNestedFrame(list, RuntimeArtCatalog.Gold, 0.34f);
             list.style.borderRightWidth = 0;
             list.style.borderBottomWidth = 0;
         }
 
         internal static void ApplyCharacterPreviewFrame(VisualElement preview)
         {
-            preview.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.76f);
-            ApplyEdgeFrame(preview, RuntimeArtCatalog.Spirit, new Color(0.93f, 0.73f, 0.36f, 0.68f), new Color(0.14f, 0.78f, 0.90f, 0.38f), RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
+            ApplySubtleNestedFrame(preview, RuntimeArtCatalog.Spirit, 0.38f);
         }
 
         internal static void ApplyCharacterCreateFrame(VisualElement panel)
         {
-            panel.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.66f);
-            ApplyEdgeFrame(panel, new Color(0.14f, 0.78f, 0.90f, 0.42f), new Color(0.93f, 0.73f, 0.36f, 0.54f), Color.clear, Color.clear, 2f, 1f);
+            ApplySubtleNestedFrame(panel, RuntimeArtCatalog.Spirit, 0.30f);
             panel.style.borderRightWidth = 0;
             panel.style.borderBottomWidth = 0;
         }
@@ -277,8 +287,7 @@ namespace LinhGioi.UI
 
         internal static void ApplyEmptyCharacterCardFrame(VisualElement card)
         {
-            card.style.backgroundColor = new Color(0.01f, 0.04f, 0.10f, 0.76f);
-            ApplyEdgeFrame(card, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, Color.clear, Color.clear, 2f, 1f);
+            ApplySubtleNestedFrame(card, RuntimeArtCatalog.Spirit, 0.30f);
             card.style.borderRightWidth = 0;
             card.style.borderBottomWidth = 0;
         }
