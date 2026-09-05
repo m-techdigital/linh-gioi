@@ -47,6 +47,7 @@ namespace LinhGioi.UI
         private VisualElement _loginStage;
         private VisualElement _loginControlColumn;
         private VisualElement _loginGateKeeper;
+        private VisualElement _loginNpcGrounding;
         private VisualElement _loginLogo;
         private VisualElement _loginCard;
         private VisualElement _loginServerRow;
@@ -320,17 +321,17 @@ namespace LinhGioi.UI
             _authPanel.Add(_loginStage);
 
             var npcGrounding = new VisualElement();
+            _loginNpcGrounding = npcGrounding;
             npcGrounding.name = "LGO Login Gate Keeper Soft Grounding Glow V3B";
             npcGrounding.pickingMode = PickingMode.Ignore;
             npcGrounding.style.position = Position.Absolute;
-            npcGrounding.style.width = 266;
-            npcGrounding.style.height = 30;
-            npcGrounding.style.bottom = 18;
-            npcGrounding.style.backgroundColor = new Color(0.005f, 0.018f, 0.035f, 0.48f);
-            npcGrounding.style.borderTopLeftRadius = 110;
-            npcGrounding.style.borderTopRightRadius = 110;
-            npcGrounding.style.borderBottomLeftRadius = 110;
-            npcGrounding.style.borderBottomRightRadius = 110;
+            npcGrounding.style.width = 232;
+            npcGrounding.style.height = 20;
+            npcGrounding.style.bottom = 24;
+            npcGrounding.style.backgroundColor = new Color(0.005f, 0.018f, 0.035f, 0.26f);
+            npcGrounding.style.opacity = 0.78f;
+            RuntimeUiSkin.ApplyRadius(npcGrounding, 110);
+            npcGrounding.tooltip = "LGO Login NPC Grounding Shadow Balance v1";
             _loginStage.Add(npcGrounding);
 
             var gateKeeper = new VisualElement();
@@ -1542,6 +1543,17 @@ namespace LinhGioi.UI
             {
                 _loginGateKeeper.style.width = tablet ? 248 : 292;
                 _loginGateKeeper.style.height = tablet ? 372 : 438;
+            }
+            if (_loginNpcGrounding != null)
+            {
+                _loginNpcGrounding.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
+                _loginNpcGrounding.style.width = tablet ? 202 : 232;
+                _loginNpcGrounding.style.height = tablet ? 18 : 20;
+                _loginNpcGrounding.style.bottom = tablet ? 28 : 24;
+                _loginNpcGrounding.style.backgroundColor = tablet
+                    ? new Color(0.005f, 0.018f, 0.035f, 0.20f)
+                    : new Color(0.005f, 0.018f, 0.035f, 0.24f);
+                _loginNpcGrounding.style.opacity = tablet ? 0.70f : 0.76f;
             }
             if (_loginControlColumn != null)
             {
