@@ -45,6 +45,48 @@ fi
 
 git --no-pager diff --check
 
+stage_checkpoint_paths() {
+  local staged_count=0
+  while IFS= read -r path; do
+    [[ -z "$path" ]] && continue
+    case "$path" in
+      protocol/*|gamedata/schemas/*|docs/adr/*|client/Unity/Assets/Game/UI/design-tokens.json)
+        echo "LGO_GIT_CHECKPOINT_BLOCKED frozen path in checkpoint candidate: $path" >&2
+        return 3
+        ;;
+      build/*|client/Unity/Library/*|client/Unity/Temp/*|client/Unity/Logs/*|client/Unity/UserSettings/*|client/Unity/obj/*|client/Unity/Build/*|client/Unity/Builds/*)
+        echo "LGO_GIT_CHECKPOINT_SKIP generated_or_local $path"
+        continue
+        ;;
+      *.zip|*.tar.gz|*.sha256|*.pyc|*__pycache__*|*.log|*.tmp|*.csproj|*.sln|*.user)
+        echo "LGO_GIT_CHECKPOINT_SKIP generated_or_local $path"
+        continue
+        ;;
+      AGENTS.md|README.md|START-HERE.md|VERSIONING.md|.gitignore|.vscode/*|client/*|server/*|tools/*|docs/*)
+        git add -- "$path"
+        staged_count=$((staged_count + 1))
+        ;;
+      *)
+        echo "LGO_GIT_CHECKPOINT_SKIP outside_allowlist $path"
+        ;;
+    esac
+  done < <(git ls-files -m -o -d --exclude-standard)
+
+  if [[ "$staged_count" -eq 0 ]]; then
+    echo "LGO_GIT_CHECKPOINT_SKIP no_allowlisted_changes"
+    exit 0
+  fi
+
+  local staged_frozen
+  staged_frozen="$(git --no-pager diff --cached --name-only -- protocol gamedata/schemas docs/adr client/Unity/Assets/Game/UI/design-tokens.json)"
+  if [[ -n "$staged_frozen" ]]; then
+    echo "LGO_GIT_CHECKPOINT_BLOCKED staged frozen surfaces:" >&2
+    echo "$staged_frozen" >&2
+    git restore --staged -- protocol gamedata/schemas docs/adr client/Unity/Assets/Game/UI/design-tokens.json
+    exit 3
+  fi
+}
+
 subject="$(python3.12 - "$STATUS_FILE" "$ROUND" <<'PY'
 import json
 import re
@@ -79,7 +121,7 @@ if validations:
 PY
 )"
 
-git add -A
+stage_checkpoint_paths
 git commit -m "$subject" -m "$body"
 echo "LGO_GIT_CHECKPOINT_COMMITTED $subject"
 

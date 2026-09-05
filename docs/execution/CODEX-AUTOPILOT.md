@@ -70,6 +70,7 @@ The checkpoint:
 - skips commit when the worktree is clean;
 - blocks commit if frozen surfaces changed;
 - runs `git --no-pager diff --check`;
+- stages only allowlisted source/docs/tooling paths and skips local build/cache/evidence archives;
 - creates one coherent checkpoint commit for the round;
 - does not push unless `LGO_AUTOPILOT_PUSH=1`.
 

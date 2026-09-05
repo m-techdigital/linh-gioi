@@ -42,22 +42,6 @@ LGO-*-ARTIFACTS.sha256
 *.tar.gz
 *.sha256
 
-# Local handoff / generated closure artifacts
-HANDOFF-LG-*.md
-M0-*-REPORT-*.md
-M1-*-REPORT-*.md
-M2-*-REPORT-*.md
-M3-*-REPORT-*.md
-M3B-*-REPORT-*.md
-LGO-*-CHANGED-FILES.txt
-LGO-*-DELETIONS.txt
-LGO-*-ARTIFACTS.sha256
-*-FINAL-CLOSURE-REPORT-*.md
-*-FINAL-HANDOFF-*.md
-*.zip
-*.tar.gz
-*.sha256
-
 # Root local handoff/report artifacts
 LGO-PROJECT-GOVERNANCE-REPORT-v*.md
 M*-RUNTIME-*-LOCAL-COMMANDS-v*.md
