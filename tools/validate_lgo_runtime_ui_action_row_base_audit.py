@@ -67,8 +67,8 @@ def main() -> int:
         "RuntimeUiSpacing.CombatButtonMinHeight",
         "RuntimeUiSpacing.CombatButtonCooldownFontSize",
         "RuntimeUiSpacing.CombatButtonReadyFontSize",
-        "RuntimeUiSkin.ApplyButtonMetrics(button, minHeight: 58, fontSize: 16, bold: true);",
-        "RuntimeUiSkin.ApplyButtonMetrics(button, 144, 44, 14, true);",
+        "RuntimeUiSkin.ApplyButtonMetrics(button, minHeight: RuntimeUiSpacing.PrimaryButtonMinHeight, fontSize: RuntimeUiTypography.PrimaryButtonFontSize, bold: true);",
+        "RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.CompactPrimaryButtonMinWidth, RuntimeUiSpacing.BaseButtonMinHeight, RuntimeUiSpacing.CompactButtonFontSize, true);",
         "RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.BaseButtonMinWidth, RuntimeUiSpacing.CompactButtonMinHeight, RuntimeUiSpacing.CompactButtonFontSize);",
         "RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.BaseButtonMinWidth, RuntimeUiSpacing.BaseButtonMinHeight);",
     )

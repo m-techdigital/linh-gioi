@@ -7,6 +7,11 @@ namespace LinhGioi.UI
         internal const int LoginHeroTitleFontSize = 25;
         internal const int LoginHeroCopyFontSize = 15;
         internal const int LoginServerTextInitialFontSize = 18;
+        internal const int SectionSigilFontSize = 11;
+        internal const int SectionHeadingFontSize = 15;
+        internal const int SectionTitleFontSize = 20;
+        internal const int BadgeTitleFontSize = 11;
+        internal const int BadgeValueFontSize = 12;
 
         internal const int TopStatusWorldMobileFontSize = 13;
         internal const int TopStatusTabletFontSize = 13;
@@ -17,6 +22,7 @@ namespace LinhGioi.UI
         internal const int EmptyCharacterHintMobileFontSize = 13;
         internal const int EmptyCharacterHintDesktopFontSize = 14;
         internal const int SelectedCharacterNameFontSize = 21;
+        internal const int PrimaryButtonFontSize = 16;
 
         internal const int WorldMetaFontSize = 12;
         internal const int WorldNameInitialFontSize = 17;

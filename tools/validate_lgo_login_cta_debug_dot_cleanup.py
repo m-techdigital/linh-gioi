@@ -59,7 +59,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
-        "row.style.width = Length.Percent(86);",
+        "row.style.width = Length.Percent(RuntimeUiSpacing.LoginOrnamentWidthPercent);",
         "row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Gold));",
     )
     source = read("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs")

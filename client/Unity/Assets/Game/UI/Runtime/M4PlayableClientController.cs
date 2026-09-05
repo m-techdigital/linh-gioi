@@ -188,7 +188,7 @@ namespace LinhGioi.UI
             _mainShell.style.flexDirection = FlexDirection.Row;
             _mainShell.style.flexWrap = Wrap.Wrap;
             _mainShell.style.width = Length.Percent(100);
-            _mainShell.style.maxWidth = 1180;
+            _mainShell.style.maxWidth = RuntimeUiSizing.MainShellMaxWidth;
             _mainShell.style.alignContent = Align.FlexStart;
             _mainShell.style.alignItems = Align.FlexStart;
             _mainShell.style.justifyContent = Justify.Center;
@@ -211,15 +211,15 @@ namespace LinhGioi.UI
             header.style.justifyContent = Justify.SpaceBetween;
             header.style.alignItems = Align.Center;
             header.style.width = Length.Percent(100);
-            header.style.maxWidth = 1180;
-            header.style.minHeight = 76;
+            header.style.maxWidth = RuntimeUiSizing.MainShellMaxWidth;
+            header.style.minHeight = RuntimeUiSizing.HeaderMinHeight;
             _root.Add(header);
 
             var brand = new VisualElement();
             brand.style.flexDirection = FlexDirection.Column;
             brand.style.alignItems = Align.FlexStart;
-            brand.style.width = 300;
-            brand.style.height = 42;
+            brand.style.width = RuntimeUiSizing.HeaderBrandWidth;
+            brand.style.height = RuntimeUiSizing.HeaderBrandHeight;
             header.Add(brand);
 
             _status = new Label("S1 - Linh Giới / Ổn định");
@@ -303,9 +303,9 @@ namespace LinhGioi.UI
             _authPanel = new VisualElement();
             _authPanel.name = "LGO Login Gate Entry Final Shell";
             _authPanel.style.width = Length.Percent(100);
-            _authPanel.style.maxWidth = 1180;
+            _authPanel.style.maxWidth = RuntimeUiSizing.MainShellMaxWidth;
             _authPanel.style.flexGrow = 1;
-            _authPanel.style.minHeight = 560;
+            _authPanel.style.minHeight = RuntimeUiSizing.LoginAuthPanelMinHeight;
             _authPanel.style.flexDirection = FlexDirection.Row;
             _authPanel.style.justifyContent = Justify.FlexStart;
             _authPanel.style.alignItems = Align.Center;
@@ -319,8 +319,8 @@ namespace LinhGioi.UI
             _loginStage.style.position = Position.Absolute;
             _loginStage.style.right = 64;
             _loginStage.style.bottom = -88;
-            _loginStage.style.width = 304;
-            _loginStage.style.minHeight = 460;
+            _loginStage.style.width = RuntimeUiSizing.LoginNpcStageWidth;
+            _loginStage.style.minHeight = RuntimeUiSizing.LoginNpcStageMinHeight;
             _loginStage.style.alignItems = Align.Center;
             _loginStage.style.justifyContent = Justify.FlexEnd;
             _loginStage.style.opacity = 0.93f;
@@ -331,28 +331,28 @@ namespace LinhGioi.UI
             npcGrounding.name = "LGO Login Gate Keeper Soft Grounding Glow V3B";
             npcGrounding.pickingMode = PickingMode.Ignore;
             npcGrounding.style.position = Position.Absolute;
-            npcGrounding.style.width = 232;
-            npcGrounding.style.height = 20;
+            npcGrounding.style.width = RuntimeUiSizing.LoginNpcGroundingWidth;
+            npcGrounding.style.height = RuntimeUiSizing.LoginNpcGroundingHeight;
             npcGrounding.style.bottom = 24;
             npcGrounding.style.backgroundColor = new Color(0.005f, 0.018f, 0.035f, 0.26f);
             npcGrounding.style.opacity = 0.78f;
-            RuntimeUiSkin.ApplyRadius(npcGrounding, 110);
+            RuntimeUiSkin.ApplyRadius(npcGrounding, RuntimeUiSizing.LoginNpcGroundingRadius);
             npcGrounding.tooltip = "LGO Login NPC Grounding Shadow Balance v1";
             _loginStage.Add(npcGrounding);
 
             var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
             var gateKeeper = NewImageLayer("LGO Login Gate Keeper NPC V3B", gateKeeperTexture, ScaleMode.ScaleToFit);
             _loginGateKeeper = gateKeeper;
-            gateKeeper.style.width = 292;
-            gateKeeper.style.height = 438;
+            gateKeeper.style.width = RuntimeUiSizing.LoginGateKeeperWidth;
+            gateKeeper.style.height = RuntimeUiSizing.LoginGateKeeperHeight;
             _loginStage.Add(gateKeeper);
 
             var controlColumn = new VisualElement();
             _loginControlColumn = controlColumn;
             controlColumn.name = "LGO Login Gate Entry Control Column V3B Final";
             controlColumn.style.width = Length.Percent(58);
-            controlColumn.style.maxWidth = 600;
-            controlColumn.style.minWidth = 300;
+            controlColumn.style.maxWidth = RuntimeUiSizing.LoginControlColumnMaxWidth;
+            controlColumn.style.minWidth = RuntimeUiSizing.LoginControlColumnMinWidth;
             controlColumn.style.flexShrink = 1;
             controlColumn.style.alignItems = Align.Center;
             controlColumn.style.justifyContent = Justify.Center;
@@ -374,15 +374,15 @@ namespace LinhGioi.UI
             _loginHeroTitle = new Label("Bước qua Linh Môn");
             _loginHeroTitle.name = "LGO Login Gate Entry Hero Title";
             RuntimeUiSkin.ApplyText(_loginHeroTitle, RuntimeArtCatalog.Text, RuntimeUiTypography.LoginHeroTitleFontSize, true, TextAnchor.MiddleCenter);
-            _loginHeroTitle.style.marginBottom = 4;
+            _loginHeroTitle.style.marginBottom = RuntimeUiSpacing.LoginOrnamentMarginBottom;
             _loginHeroTitle.style.display = DisplayStyle.None;
             controlColumn.Add(_loginHeroTitle);
 
             _loginHeroCopy = NewMutedLabel("\"Tu tiên không chỉ là sức mạnh, mà là hành trình trở về chính mình.\"");
             _loginHeroCopy.name = "LGO Login Gate Entry Hero Copy";
             RuntimeUiSkin.ApplyText(_loginHeroCopy, RuntimeArtCatalog.Text, RuntimeUiTypography.LoginHeroCopyFontSize, false, TextAnchor.MiddleCenter);
-            _loginHeroCopy.style.maxWidth = 560;
-            _loginHeroCopy.style.marginBottom = 12;
+            _loginHeroCopy.style.maxWidth = RuntimeUiSizing.LoginControlColumnMaxWidth - 40;
+            _loginHeroCopy.style.marginBottom = RuntimeUiSpacing.PanelMarginBottom;
             _loginHeroCopy.style.display = DisplayStyle.None;
             controlColumn.Add(_loginHeroCopy);
 
@@ -424,12 +424,9 @@ namespace LinhGioi.UI
             serverRow.Add(serverText);
             _serverStatusIcon = new VisualElement();
             _serverStatusIcon.name = "LGO Login Server Online Dot";
-            _serverStatusIcon.style.width = 12;
-            _serverStatusIcon.style.height = 12;
-            _serverStatusIcon.style.borderTopLeftRadius = 6;
-            _serverStatusIcon.style.borderTopRightRadius = 6;
-            _serverStatusIcon.style.borderBottomLeftRadius = 6;
-            _serverStatusIcon.style.borderBottomRightRadius = 6;
+            _serverStatusIcon.style.width = RuntimeUiSizing.LoginServerStatusDotSize;
+            _serverStatusIcon.style.height = RuntimeUiSizing.LoginServerStatusDotSize;
+            RuntimeUiSkin.ApplyRadius(_serverStatusIcon, RuntimeUiSizing.LoginServerStatusDotRadius);
             _serverStatusIcon.style.backgroundColor = RuntimeArtCatalog.Spirit;
             _serverStatusIcon.tooltip = "Đang mở";
             serverRow.Add(_serverStatusIcon);
@@ -445,7 +442,7 @@ namespace LinhGioi.UI
             _loginButton = NewPrimaryButton("Vào Thế Giới", () => RunAsync(LoginAsync));
             _loginButton.name = "LGO Login Enter World CTA Final v2";
             _loginButton.style.width = Length.Percent(100);
-            _loginButton.style.maxWidth = 436;
+            _loginButton.style.maxWidth = RuntimeUiSizing.LoginButtonMaxWidth;
             _loginButton.style.minHeight = layout.LoginButtonHeight;
             _loginButton.style.fontSize = layout.LoginButtonFontSize;
             _loginButton.style.marginTop = layout.LoginButtonMarginTop;
@@ -457,8 +454,8 @@ namespace LinhGioi.UI
             _loginCard.Add(NewLoginOrnamentRule("LGO Login CTA Lightweight Bottom Ornament v1"));
             _serverSwitchButton = NewQuietButton("Chọn Máy Chủ", () => SetToast("S1 - Linh Giới đang mở ổn định.", RuntimeArtCatalog.Spirit));
             _serverSwitchButton.name = "LGO Login Server Switch Secondary";
-            _serverSwitchButton.style.minWidth = 160;
-            _serverSwitchButton.style.minHeight = 32;
+            _serverSwitchButton.style.minWidth = RuntimeUiSizing.LoginServerSwitchMinWidth;
+            _serverSwitchButton.style.minHeight = RuntimeUiSizing.LoginServerSwitchMinHeight;
             _serverSwitchButton.style.marginTop = 3;
             _serverSwitchButton.style.marginRight = 0;
             _serverSwitchButton.style.display = DisplayStyle.None;
@@ -492,8 +489,8 @@ namespace LinhGioi.UI
             _lobbyPanel.Add(_lobbyContent);
 
             _characterList = new VisualElement();
-            _characterList.style.minWidth = 280;
-            _characterList.style.maxWidth = 390;
+            _characterList.style.minWidth = RuntimeUiSizing.CharacterListInitialMinWidth;
+            _characterList.style.maxWidth = RuntimeUiSizing.CharacterListMaxWidth;
             _characterList.style.flexGrow = 1;
             RuntimeUiSkin.ApplyMargin(_characterList, 0, layout.CharacterListMarginRight, 0, layout.CharacterListMarginBottom);
             RuntimeUiSkin.ApplyPadding(_characterList, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingHorizontal, layout.CharacterListPaddingVertical, layout.CharacterListPaddingVertical);
@@ -502,7 +499,7 @@ namespace LinhGioi.UI
 
             _selectedPreview = NewPreviewPanel("TU SĨ", "Hồ sơ đang chọn");
             _selectedPreview.name = "LGO Character Hall Selected Cultivator Card V3B";
-            _selectedPreview.style.maxWidth = 350;
+            _selectedPreview.style.maxWidth = RuntimeUiSizing.CharacterPreviewMaxWidth;
             RuntimeUiSkin.ApplyCharacterPreviewFrame(_selectedPreview);
             var profileHero = new VisualElement();
             profileHero.style.flexDirection = FlexDirection.Row;
@@ -510,8 +507,8 @@ namespace LinhGioi.UI
             profileHero.style.marginBottom = layout.SelectedPreviewHeroMarginBottom;
             var portraitTexture = LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture;
             var portrait = NewImageLayer("LGO Character Hall V3B Cultivator Portrait", portraitTexture, ScaleMode.ScaleToFit);
-            portrait.style.width = 92;
-            portrait.style.height = 128;
+            portrait.style.width = RuntimeUiSizing.CharacterPortraitWidth;
+            portrait.style.height = RuntimeUiSizing.CharacterPortraitHeight;
             portrait.style.marginRight = layout.CharacterPortraitMarginRight;
             RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);
             if (portraitTexture == null)
@@ -544,7 +541,7 @@ namespace LinhGioi.UI
             _createPanel.Add(createHint);
             _characterName = NewTextField("Danh xưng", "LinhGioiHero");
             _characterName.name = "LGO Character Create Form Framed Input v1";
-            _characterName.style.maxWidth = 360;
+            _characterName.style.maxWidth = RuntimeUiSizing.CharacterNameFieldMaxWidth;
             ApplyLobbyInputStyle(_characterName);
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
             _classId.style.display = DisplayStyle.None;
@@ -1217,7 +1214,7 @@ namespace LinhGioi.UI
             if (_serverSwitchButton != null)
             {
                 _serverSwitchButton.style.display = DisplayStyle.None;
-                _serverSwitchButton.style.minHeight = 32;
+                _serverSwitchButton.style.minHeight = RuntimeUiSizing.LoginServerSwitchMinHeight;
             }
 
             _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 790 : 800;

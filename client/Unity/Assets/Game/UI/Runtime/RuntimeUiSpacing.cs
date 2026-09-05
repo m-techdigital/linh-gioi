@@ -10,6 +10,8 @@ namespace LinhGioi.UI
         internal const int PreviewPanelMinWidth = 220;
         internal const int PreviewPanelPaddingHorizontal = 14;
         internal const int PreviewPanelPaddingVertical = 12;
+        internal const int PreviewPanelHeadingMarginTop = 2;
+        internal const int PreviewPanelHeadingMarginBottom = 6;
 
         internal const int RowMarginTop = 8;
         internal const int RowGap = 8;
@@ -67,6 +69,9 @@ namespace LinhGioi.UI
 
         internal const int BaseButtonMinWidth = 132;
         internal const int BaseButtonMinHeight = 44;
+        internal const int PrimaryButtonMinHeight = 58;
+        internal const int CompactPrimaryButtonMinWidth = 144;
+        internal const int IconButtonTextGap = 8;
         internal const int BaseButtonMarginTop = 8;
         internal const int BaseButtonMarginRight = 8;
         internal const int CompactButtonMinHeight = 42;
@@ -128,5 +133,14 @@ namespace LinhGioi.UI
         internal const int CombatRangeStatusFontSize = 12;
         internal const int CombatActionRowMarginTop = 6;
         internal const int CombatActionRowMarginBottom = 0;
+
+        internal const int SectionTitleMarginBottom = 8;
+        internal const int OrnamentRuleHeight = 2;
+        internal const int OrnamentRuleMarginBottom = 10;
+        internal const int LoginOrnamentWidthPercent = 86;
+        internal const int LoginOrnamentHeight = 8;
+        internal const int LoginOrnamentMarginTop = 1;
+        internal const int LoginOrnamentMarginBottom = 4;
+        internal const int HairlineHeight = 1;
     }
 }

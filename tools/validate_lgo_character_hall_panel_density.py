@@ -45,7 +45,7 @@ def main() -> int:
         "_createPanel = NewCharacterCreatePanel(layout);",
         "_lobbyPanel = NewCharacterHallPanel(layout);",
         "RuntimeUiSkin.ApplyCharacterListFrame(_characterList);",
-        "portrait.style.width = 92",
+        "portrait.style.width = RuntimeUiSizing.CharacterPortraitWidth",
         "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
         "Mathf.Min(width - 40f, 780f)",
         "tablet ? 790 : 800",

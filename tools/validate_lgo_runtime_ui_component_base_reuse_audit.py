@@ -60,10 +60,10 @@ def main() -> int:
     )
     factory = require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
-        "RuntimeUiSkin.ApplyText(sigil, RuntimeArtCatalog.Spirit, 11, true);",
-        "RuntimeUiSkin.ApplyText(heading, RuntimeArtCatalog.Text, 15, true);",
-        "RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Text, 20, true, TextAnchor.MiddleCenter);",
-        "RuntimeUiSkin.ApplyText(titleLabel, RuntimeArtCatalog.Gold, 11);",
+        "RuntimeUiSkin.ApplyText(sigil, RuntimeArtCatalog.Spirit, RuntimeUiTypography.SectionSigilFontSize, true);",
+        "RuntimeUiSkin.ApplyText(heading, RuntimeArtCatalog.Text, RuntimeUiTypography.SectionHeadingFontSize, true);",
+        "RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Text, RuntimeUiTypography.SectionTitleFontSize, true, TextAnchor.MiddleCenter);",
+        "RuntimeUiSkin.ApplyText(titleLabel, RuntimeArtCatalog.Gold, RuntimeUiTypography.BadgeTitleFontSize);",
         "RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Muted);",
     )
     controller = require(

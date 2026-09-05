@@ -31,14 +31,14 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyPadding(preview, RuntimeUiSpacing.PreviewPanelPaddingHorizontal, RuntimeUiSpacing.PreviewPanelPaddingVertical);
             RuntimeUiSkin.ApplyPreviewPanelFrame(preview);
             var sigil = new Label(sigilText);
-            RuntimeUiSkin.ApplyText(sigil, RuntimeArtCatalog.Spirit, 11, true);
+            RuntimeUiSkin.ApplyText(sigil, RuntimeArtCatalog.Spirit, RuntimeUiTypography.SectionSigilFontSize, true);
             preview.Add(sigil);
             if (!string.IsNullOrWhiteSpace(headingText))
             {
                 var heading = new Label(headingText);
-                RuntimeUiSkin.ApplyText(heading, RuntimeArtCatalog.Text, 15, true);
-                heading.style.marginTop = 2;
-                heading.style.marginBottom = 6;
+                RuntimeUiSkin.ApplyText(heading, RuntimeArtCatalog.Text, RuntimeUiTypography.SectionHeadingFontSize, true);
+                heading.style.marginTop = RuntimeUiSpacing.PreviewPanelHeadingMarginTop;
+                heading.style.marginBottom = RuntimeUiSpacing.PreviewPanelHeadingMarginBottom;
                 preview.Add(heading);
             }
             return preview;
@@ -94,11 +94,11 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewCharacterHallPanel(RuntimeUiLayoutProfile layout)
         {
-            var panel = NewPanel(840);
+            var panel = NewPanel(RuntimeUiSizing.MainShellMaxWidth);
             panel.name = "LGO Character Hall V3B Composition Panel";
             RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);
-            panel.style.maxWidth = 800;
-            panel.style.minHeight = 452;
+            panel.style.maxWidth = RuntimeUiSizing.CharacterHallPanelMaxWidth;
+            panel.style.minHeight = RuntimeUiSizing.CharacterHallPanelMinHeight;
             RuntimeUiSkin.ApplyPadding(panel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
             panel.style.alignSelf = Align.FlexStart;
             return panel;
@@ -152,8 +152,8 @@ namespace LinhGioi.UI
         internal static Label NewSectionTitle(string text)
         {
             var label = new Label(text);
-            RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Text, 20, true, TextAnchor.MiddleCenter);
-            label.style.marginBottom = 8;
+            RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Text, RuntimeUiTypography.SectionTitleFontSize, true, TextAnchor.MiddleCenter);
+            label.style.marginBottom = RuntimeUiSpacing.SectionTitleMarginBottom;
             return label;
         }
 
@@ -186,9 +186,9 @@ namespace LinhGioi.UI
             badge.style.marginBottom = RuntimeUiSpacing.BadgeMarginBottom;
             RuntimeUiSkin.ApplyBadgeFrame(badge);
             var titleLabel = new Label(title);
-            RuntimeUiSkin.ApplyText(titleLabel, RuntimeArtCatalog.Gold, 11);
+            RuntimeUiSkin.ApplyText(titleLabel, RuntimeArtCatalog.Gold, RuntimeUiTypography.BadgeTitleFontSize);
             var valueLabel = new Label(value);
-            RuntimeUiSkin.ApplyText(valueLabel, RuntimeArtCatalog.Text, 12);
+            RuntimeUiSkin.ApplyText(valueLabel, RuntimeArtCatalog.Text, RuntimeUiTypography.BadgeValueFontSize);
             badge.Add(titleLabel);
             badge.Add(valueLabel);
             return badge;
@@ -228,10 +228,10 @@ namespace LinhGioi.UI
             row.style.flexDirection = FlexDirection.Row;
             row.style.alignItems = Align.Center;
             row.style.justifyContent = Justify.Center;
-            row.style.width = Length.Percent(86);
-            row.style.height = 8;
-            row.style.marginTop = 1;
-            row.style.marginBottom = 4;
+            row.style.width = Length.Percent(RuntimeUiSpacing.LoginOrnamentWidthPercent);
+            row.style.height = RuntimeUiSpacing.LoginOrnamentHeight;
+            row.style.marginTop = RuntimeUiSpacing.LoginOrnamentMarginTop;
+            row.style.marginBottom = RuntimeUiSpacing.LoginOrnamentMarginBottom;
             row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Gold));
             return row;
         }
@@ -239,8 +239,8 @@ namespace LinhGioi.UI
         internal static VisualElement NewOrnamentRule(Color color)
         {
             var rule = new VisualElement();
-            rule.style.height = 2;
-            rule.style.marginBottom = 10;
+            rule.style.height = RuntimeUiSpacing.OrnamentRuleHeight;
+            rule.style.marginBottom = RuntimeUiSpacing.OrnamentRuleMarginBottom;
             rule.style.backgroundColor = color;
             rule.style.opacity = 0.8f;
             return rule;
@@ -337,7 +337,7 @@ namespace LinhGioi.UI
             var button = NewButton(label, action);
             button.style.backgroundColor = RuntimeArtCatalog.Spirit;
             button.style.color = RuntimeArtCatalog.Background;
-            RuntimeUiSkin.ApplyButtonMetrics(button, minHeight: 58, fontSize: 16, bold: true);
+            RuntimeUiSkin.ApplyButtonMetrics(button, minHeight: RuntimeUiSpacing.PrimaryButtonMinHeight, fontSize: RuntimeUiTypography.PrimaryButtonFontSize, bold: true);
             button.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
             if (texture != null)
@@ -351,7 +351,7 @@ namespace LinhGioi.UI
         internal static Button NewCompactPrimaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            RuntimeUiSkin.ApplyButtonMetrics(button, 144, 44, 14, true);
+            RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.CompactPrimaryButtonMinWidth, RuntimeUiSpacing.BaseButtonMinHeight, RuntimeUiSpacing.CompactButtonFontSize, true);
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.22f, 0.34f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit);
             return button;
         }
@@ -386,11 +386,12 @@ namespace LinhGioi.UI
         internal static Button NewIconButton(string label, Texture2D texture, Action action)
         {
             var button = NewSecondaryButton(string.Empty, action);
-            RuntimeUiSkin.ApplyButtonMetrics(button, 112, 48);
+            RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSizing.IconButtonMinWidth, RuntimeUiSizing.IconButtonMinHeight);
             button.style.flexDirection = FlexDirection.Row;
             button.style.alignItems = Align.Center;
             button.Add(NewIcon(texture, label));
             var text = new Label(label);
+            text.style.marginLeft = RuntimeUiSpacing.IconButtonTextGap;
             RuntimeUiSkin.ApplyText(text, RuntimeArtCatalog.Text, bold: true);
             button.Add(text);
             return button;
@@ -482,7 +483,7 @@ namespace LinhGioi.UI
         {
             var line = new VisualElement();
             line.style.flexGrow = 1;
-            line.style.height = 1;
+            line.style.height = RuntimeUiSpacing.HairlineHeight;
             line.style.backgroundColor = color;
             line.style.opacity = 0.64f;
             return line;
