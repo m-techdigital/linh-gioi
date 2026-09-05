@@ -3,7 +3,7 @@ set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 MODE=""
-OUT_DIR="$ROOT/build/visual-evidence"
+OUT_DIR="$ROOT/build/visual-evidence/m5-latest"
 PLAYER_APP="$ROOT/build/unity-player-macos/LinhGioiOnline.app"
 PLAYER_EXE="$PLAYER_APP/Contents/MacOS/Unity"
 PLAYER_TIMEOUT_SECONDS="${LGO_VISUAL_EVIDENCE_TIMEOUT_SECONDS:-45}"

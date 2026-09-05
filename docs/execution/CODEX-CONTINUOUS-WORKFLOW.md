@@ -25,6 +25,12 @@ This workflow prevents Linh Giới Online development from stopping after a tiny
 8. Update `TASK-LEDGER.md`, evidence docs, and `NEXT-ACTION.md`.
 9. Continue to the follow-up task when no stop condition applies.
 
+## Full In-Chat Continuous Mode
+
+When the owner enables continuous work in this chat, Codex should keep developing in coherent batches instead of waiting for a new prompt after each checkpoint. If a runtime gate is unavailable, Codex should write the blocker/evidence into project state and continue with another roadmap-valid source, tooling, UI/UX, asset-pipeline, cleanup, or validation task that remains safe.
+
+Commit/push only after related changes validate together. Avoid tiny spam commits, cache artifacts, generated build folders, or changes to frozen surfaces.
+
 ## Failure Classification
 
 - `PASS`: all required source/runtime gates for the current task completed, and any visual evidence has been reviewed.
@@ -39,4 +45,3 @@ This workflow prevents Linh Giới Online development from stopping after a tiny
 - Unity build success is not visual PASS.
 - Screenshot capture is not human acceptance.
 - Placeholder or candidate art is not production-final art unless explicitly accepted as such.
-

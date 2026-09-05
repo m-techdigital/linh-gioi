@@ -154,5 +154,13 @@ namespace LinhGioi.UI
         internal const int LoginOrnamentMarginTop = 1;
         internal const int LoginOrnamentMarginBottom = 4;
         internal const int HairlineHeight = 1;
+
+        internal const int EvidenceRootPaddingHorizontal = 24;
+        internal const int EvidenceRootPaddingVertical = 22;
+        internal const int EvidencePanelMarginTop = 18;
+        internal const int EvidencePanelPaddingHorizontal = 18;
+        internal const int EvidencePanelPaddingVertical = 16;
+        internal const int EvidenceLineMarginTop = 10;
+        internal const int EvidenceFooterMarginTop = 18;
     }
 }

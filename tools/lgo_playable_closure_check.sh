@@ -462,6 +462,12 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_component_density_evidence_refresh.py ]]; then
     run_phase runtime_ui_component_density_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_component_density_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_density_adoption_scan.py ]]; then
+    run_phase runtime_ui_density_adoption_scan python3.12 tools/validate_lgo_runtime_ui_density_adoption_scan.py
+  fi
+  if [[ -f tools/validate_lgo_m5_visual_evidence_runner_skin_adoption_evidence.py ]]; then
+    run_phase m5_visual_evidence_runner_skin_adoption_evidence python3.12 tools/validate_lgo_m5_visual_evidence_runner_skin_adoption_evidence.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_responsive_style_application_audit.py ]]; then
     run_phase runtime_ui_responsive_style_application_audit python3.12 tools/validate_lgo_runtime_ui_responsive_style_application_audit.py
   fi

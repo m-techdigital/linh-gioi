@@ -5,6 +5,8 @@ This repository uses persistent continuous-work mode. Read this file before maki
 ## Operating Loop
 
 - Do not stop after one small task when a valid next task exists.
+- In this chat, operate in full continuous-work mode within safe project boundaries: analyze, implement, integrate, clean up, validate, review evidence, update state files, commit/push safe checkpoints, then move to the next roadmap-valid task.
+- If runtime/tooling is blocked but other source-safe work remains, record the blocker and evidence path, then continue with a valid task that does not depend on that blocked gate.
 - After each task: validate the change, update report/evidence as needed, update `docs/execution/NEXT-ACTION.md`, then continue to the next valid task.
 - Use `docs/execution/PROJECT-STATE.md`, `docs/execution/NEXT-ACTION.md`, and `docs/execution/TASK-LEDGER.md` as the handoff spine for future sessions.
 - When running under autopilot, write `build/codex-autopilot/status.json` at the end of each coherent batch.
@@ -29,6 +31,8 @@ This repository uses persistent continuous-work mode. Read this file before maki
 ## Stop Conditions
 
 Stop only for a real blocker, required frozen contract change, required owner/product decision, unavailable runtime/tooling, unsafe destructive operation, or no valid next action.
+
+Do not stop merely because a task, phase, evidence refresh, or commit just completed. Continue to the next valid action unless every remaining action is blocked or unsafe.
 
 When stopping, update `docs/execution/NEXT-ACTION.md` with the blocker, exact gate, evidence path, and the next allowed action.
 

@@ -146,6 +146,7 @@ def main() -> int:
         'visual-evidence-summary.json',
         "'-screen-width', '1280'",
         "'-screen-height', '720'",
+        'build/visual-evidence/m5-latest',
     )
     require('docs/tasks/M5-VISUAL-EVIDENCE-AND-UX-ACCEPTANCE-v0.16.0.md', 'M5_VISUAL_EVIDENCE_UX_REVIEW_READY_RUNTIME_CLOSED_LOCAL', 'visual evidence', 'human visual acceptance')
     require('docs/execution/LGO-VISUAL-EVIDENCE-REVIEW-COMMAND-v0.16.0.md', './tools/run_m5_visual_evidence_review.sh --rebuild', 'build/visual-evidence')

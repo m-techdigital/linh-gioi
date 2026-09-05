@@ -236,48 +236,33 @@ namespace LinhGioi.UI
             _root.Clear();
             _root.style.flexGrow = 1;
             _root.style.backgroundColor = RuntimeArtCatalog.Background;
-            _root.style.paddingLeft = 24;
-            _root.style.paddingRight = 24;
-            _root.style.paddingTop = 22;
-            _root.style.paddingBottom = 22;
+            RuntimeUiSkin.ApplyPadding(_root, RuntimeUiSpacing.EvidenceRootPaddingHorizontal, RuntimeUiSpacing.EvidenceRootPaddingVertical);
 
             var header = new Label("Linh Gioi Online");
-            header.style.fontSize = 32;
-            header.style.unityFontStyleAndWeight = FontStyle.Bold;
-            header.style.color = RuntimeArtCatalog.Gold;
+            RuntimeUiSkin.ApplyText(header, RuntimeArtCatalog.Gold, 32, true);
             _root.Add(header);
 
-            var panel = new VisualElement();
-            panel.style.maxWidth = 860;
-            panel.style.width = Length.Percent(100);
-            panel.style.marginTop = 18;
-            panel.style.paddingLeft = 18;
-            panel.style.paddingRight = 18;
-            panel.style.paddingTop = 16;
-            panel.style.paddingBottom = 16;
-            panel.style.backgroundColor = RuntimeArtCatalog.Surface;
-            panel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            panel.style.borderLeftWidth = 3;
+            var panel = RuntimeUiFactory.NewPanel(860);
+            panel.name = "LGO M5 Visual Evidence Reusable Runtime Panel v1";
+            panel.style.marginTop = RuntimeUiSpacing.EvidencePanelMarginTop;
+            RuntimeUiSkin.ApplyPadding(panel, RuntimeUiSpacing.EvidencePanelPaddingHorizontal, RuntimeUiSpacing.EvidencePanelPaddingVertical);
             _root.Add(panel);
 
             var titleLabel = new Label(title);
-            titleLabel.style.fontSize = 24;
-            titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-            titleLabel.style.color = RuntimeArtCatalog.Text;
+            RuntimeUiSkin.ApplyText(titleLabel, RuntimeArtCatalog.Text, 24, true);
             panel.Add(titleLabel);
 
             foreach (var line in lines)
             {
                 var label = new Label(line);
-                label.style.marginTop = 10;
-                label.style.fontSize = 18;
-                label.style.color = line.Contains("Objective") || line.Contains("Spirit") ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
+                label.style.marginTop = RuntimeUiSpacing.EvidenceLineMarginTop;
+                RuntimeUiSkin.ApplyText(label, line.Contains("Objective") || line.Contains("Spirit") ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit, 18);
                 panel.Add(label);
             }
 
             var footer = new Label("Review window target: 1280x720. Placeholder UI/art only.");
-            footer.style.marginTop = 18;
-            footer.style.color = RuntimeArtCatalog.Muted;
+            footer.style.marginTop = RuntimeUiSpacing.EvidenceFooterMarginTop;
+            RuntimeUiSkin.ApplyText(footer, RuntimeArtCatalog.Muted);
             panel.Add(footer);
         }
 

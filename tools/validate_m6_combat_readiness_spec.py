@@ -144,6 +144,15 @@ RUNTIME_UI_COMPONENT_METRIC_OWNERSHIP_FILES = {
     'client/Unity/Assets/Game/UI/Runtime/RuntimeUiTypography.cs',
     'client/Unity/Assets/Game/UI/Runtime/RuntimeUiTypography.cs.meta',
 }
+RUNTIME_UI_COMPONENT_DENSITY_FILES = {
+    'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiDensityProfile.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiDensityProfile.cs.meta',
+    'client/Unity/Assets/Game/UI/Runtime/M5VisualEvidenceRunner.cs',
+}
 V040_CONTRACT_FILES = {
     'protocol/combat.proto',
     'gamedata/schemas/skill.schema.json',
@@ -292,6 +301,18 @@ def runtime_ui_component_metric_ownership_is_active() -> bool:
     )
 
 
+def runtime_ui_component_density_is_active() -> bool:
+    closure = read('tools/lgo_playable_closure_check.sh')
+    return (
+        'LGO_RUNTIME_UI_COMPONENT_DENSITY_BASE_READY'
+        in read('docs/tasks/LGO-RUNTIME-UI-COMPONENT-DENSITY-BASE-AUDIT-v1.0.md')
+        and 'validate_lgo_runtime_ui_component_density_base_audit.py' in closure
+        and 'LGO_RUNTIME_UI_DENSITY_ADOPTION_SCAN_READY'
+        in read('docs/tasks/LGO-RUNTIME-UI-DENSITY-ADOPTION-SCAN-v1.0.md')
+        and 'validate_lgo_runtime_ui_density_adoption_scan.py' in closure
+    )
+
+
 def main() -> int:
     require(
         'docs/tasks/M6-COMBAT-READINESS-SPEC-v0.32.0.md',
@@ -430,11 +451,16 @@ def main() -> int:
             runtime_ui_component_metric_ownership_is_active()
             and path in RUNTIME_UI_COMPONENT_METRIC_OWNERSHIP_FILES
         )
+        runtime_ui_component_density_allowed = (
+            runtime_ui_component_density_is_active()
+            and path in RUNTIME_UI_COMPONENT_DENSITY_FILES
+        )
         if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed and not login_v3b_allowed and not runtime_ui_skin_adoption_allowed:
             if not runtime_ui_component_metric_ownership_allowed:
-                for prefix in FORBIDDEN_CODE_PREFIXES:
-                    if path.startswith(prefix):
-                        errors.append(f'v0.32 docs-only spec changed implementation path: {path}')
+                if not runtime_ui_component_density_allowed:
+                    for prefix in FORBIDDEN_CODE_PREFIXES:
+                        if path.startswith(prefix):
+                            errors.append(f'v0.32 docs-only spec changed implementation path: {path}')
 
     if errors:
         print('M6 COMBAT READINESS SPEC VALIDATION FAILED', file=sys.stderr)
