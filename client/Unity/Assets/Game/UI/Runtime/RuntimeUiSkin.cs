@@ -167,16 +167,16 @@ namespace LinhGioi.UI
 
         internal static void ApplySettingToggleFrame(Toggle toggle, Color accent)
         {
-            ApplyPadding(toggle, 12, 7);
+            ApplyPadding(toggle, RuntimeUiSpacing.SettingTogglePaddingHorizontal, RuntimeUiSpacing.SettingTogglePaddingVertical);
             ApplyRadius(toggle, 8);
-            toggle.style.minHeight = 42;
+            toggle.style.minHeight = RuntimeUiSpacing.SettingToggleMinHeight;
             toggle.style.flexDirection = FlexDirection.Row;
             toggle.style.alignItems = Align.Center;
             toggle.style.justifyContent = Justify.SpaceBetween;
             toggle.style.backgroundColor = DenseGlass;
             ApplyEdgeFrame(toggle, accent, LightGoldBorder, LightSpiritBorder, RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
             toggle.style.color = RuntimeArtCatalog.Text;
-            toggle.style.fontSize = 13;
+            toggle.style.fontSize = RuntimeUiSpacing.SettingToggleFontSize;
             toggle.style.unityFontStyleAndWeight = FontStyle.Bold;
         }
 
@@ -194,15 +194,20 @@ namespace LinhGioi.UI
         {
             pill.name = SettingToggleStatePillName;
             pill.text = enabled ? "Bật" : "Tắt";
-            pill.style.minWidth = 42;
-            pill.style.marginLeft = 12;
-            ApplyPadding(pill, 9, 9, 3, 4);
+            pill.style.minWidth = RuntimeUiSpacing.SettingTogglePillMinWidth;
+            pill.style.marginLeft = RuntimeUiSpacing.SettingTogglePillMarginLeft;
+            ApplyPadding(
+                pill,
+                RuntimeUiSpacing.SettingTogglePillPaddingHorizontal,
+                RuntimeUiSpacing.SettingTogglePillPaddingHorizontal,
+                RuntimeUiSpacing.SettingTogglePillPaddingTop,
+                RuntimeUiSpacing.SettingTogglePillPaddingBottom);
             pill.style.unityTextAlign = TextAnchor.MiddleCenter;
             pill.style.unityFontStyleAndWeight = FontStyle.Bold;
-            pill.style.fontSize = 12;
+            pill.style.fontSize = RuntimeUiSpacing.SettingTogglePillFontSize;
             pill.style.backgroundColor = enabled ? new Color(0.08f, 0.34f, 0.42f, 0.86f) : new Color(0.10f, 0.12f, 0.16f, 0.78f);
             pill.style.color = enabled ? RuntimeArtCatalog.Text : RuntimeArtCatalog.Muted;
-            ApplyRadius(pill, 12);
+            ApplyRadius(pill, RuntimeUiSpacing.SettingTogglePillRadius);
             ApplyEdgeFrame(pill, enabled ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted, LightGoldBorder, Color.clear, Color.clear, 1f, 1f);
         }
 

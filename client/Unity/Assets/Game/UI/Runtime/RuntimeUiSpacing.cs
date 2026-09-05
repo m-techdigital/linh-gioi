@@ -62,6 +62,19 @@ namespace LinhGioi.UI
         internal const int ListButtonMinHeight = 58;
         internal const int ListButtonPaddingLeft = 14;
 
+        internal const int SettingToggleMinHeight = 42;
+        internal const int SettingToggleMarginTop = 7;
+        internal const int SettingTogglePaddingHorizontal = 12;
+        internal const int SettingTogglePaddingVertical = 7;
+        internal const int SettingToggleFontSize = 13;
+        internal const int SettingTogglePillMinWidth = 42;
+        internal const int SettingTogglePillMarginLeft = 12;
+        internal const int SettingTogglePillPaddingHorizontal = 9;
+        internal const int SettingTogglePillPaddingTop = 3;
+        internal const int SettingTogglePillPaddingBottom = 4;
+        internal const int SettingTogglePillFontSize = 12;
+        internal const int SettingTogglePillRadius = 12;
+
         internal const int RuntimeIconSmall = 28;
         internal const int IconMarginLeft = 4;
         internal const int IconMarginRight = 8;

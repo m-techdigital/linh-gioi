@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-TOGGLE-BASE-AUDIT-v1.0`
+`LGO-RUNTIME-UI-ICON-STATUS-ROW-BASE-AUDIT-v1.0`
 
-Audit local settings toggle metrics and state pills so future settings rows reuse one shared base instead of repeating sizes, padding, and font choices. Marker ready from the completed status-chip evidence refresh: `LGO_RUNTIME_UI_STATUS_CHIP_EVIDENCE_REFRESH_READY`.
+Audit icon/status row spacing so rows combining icons, cooldown rings, and compact labels use named layout constants instead of local literals. Marker ready from the completed toggle evidence refresh: `LGO_RUNTIME_UI_TOGGLE_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -139,6 +139,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-LIST-CARD-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_LIST_CARD_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-STATUS-CHIP-BASE-AUDIT-v1.0` / `LGO_RUNTIME_UI_STATUS_CHIP_BASE_READY`
 - `LGO-RUNTIME-UI-STATUS-CHIP-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_STATUS_CHIP_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-TOGGLE-BASE-AUDIT-v1.0` / `LGO_RUNTIME_UI_TOGGLE_BASE_READY`
+- `LGO-RUNTIME-UI-TOGGLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_TOGGLE_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-APPLICATION-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_APPLICATION_AUDIT_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-FACTORY-COVERAGE-AUDIT-v1.0` / `LGO_RUNTIME_UI_FACTORY_COVERAGE_AUDIT_READY`

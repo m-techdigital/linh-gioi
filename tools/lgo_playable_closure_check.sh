@@ -390,6 +390,12 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_status_chip_evidence_refresh.py ]]; then
     run_phase runtime_ui_status_chip_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_status_chip_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_toggle_base_audit.py ]]; then
+    run_phase runtime_ui_toggle_base_audit python3.12 tools/validate_lgo_runtime_ui_toggle_base_audit.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_toggle_evidence_refresh.py ]]; then
+    run_phase runtime_ui_toggle_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_toggle_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_responsive_style_application_audit.py ]]; then
     run_phase runtime_ui_responsive_style_application_audit python3.12 tools/validate_lgo_runtime_ui_responsive_style_application_audit.py
   fi

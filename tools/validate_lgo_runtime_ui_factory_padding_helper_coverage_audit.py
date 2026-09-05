@@ -77,7 +77,9 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
-        "ApplyPadding(pill, 9, 9, 3, 4);",
+        "RuntimeUiSpacing.SettingTogglePillPaddingHorizontal",
+        "RuntimeUiSpacing.SettingTogglePillPaddingTop",
+        "RuntimeUiSpacing.SettingTogglePillPaddingBottom",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
