@@ -376,6 +376,12 @@ source_only() {
   if [[ -f tools/validate_lgo_world_hub_visual_readability_cleanup.py ]]; then
     run_phase world_hub_visual_readability_cleanup python3.12 tools/validate_lgo_world_hub_visual_readability_cleanup.py
   fi
+  if [[ -f tools/validate_lgo_world_hub_visual_debt_triage.py ]]; then
+    run_phase world_hub_visual_debt_triage python3.12 tools/validate_lgo_world_hub_visual_debt_triage.py
+  fi
+  if [[ -f tools/validate_lgo_session_menu_focus_evidence_refresh.py ]]; then
+    run_phase session_menu_focus_evidence_refresh python3.12 tools/validate_lgo_session_menu_focus_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_world_hub_interaction_readability.py ]]; then
     run_phase world_hub_interaction_readability python3.12 tools/validate_lgo_world_hub_interaction_readability.py
   fi
@@ -510,6 +516,8 @@ source_only() {
     tools/validate_lgo_world_hub_prop_label_responsive.py \
     tools/validate_lgo_world_scene_depth_layering.py \
     tools/validate_lgo_world_hub_visual_readability_cleanup.py \
+    tools/validate_lgo_world_hub_visual_debt_triage.py \
+    tools/validate_lgo_session_menu_focus_evidence_refresh.py \
     tools/validate_lgo_world_hub_interaction_readability.py \
     tools/validate_lgo_world_hub_interaction_evidence_refresh.py \
     tools/validate_lgo_near_interaction_checkpoint_capture.py \

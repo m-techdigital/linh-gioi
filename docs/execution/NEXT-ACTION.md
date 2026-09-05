@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE-v1.0`
+`LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0`
 
-Review latest desktop/tablet/mobile runtime screenshots and classify the remaining post-login visual debt into fix-now, asset-needed, or defer buckets. Marker: `LGO_RUNTIME_ASSET_WATCH_QUEUE_IMPORT_PROFILE_READY`. Continue with presentation/tooling/docs fixes that do not require new production assets or frozen contract changes.
+Reduce dense mobile Character Hall copy and spacing while preserving the account/character flow semantics. Marker: `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`. Continue with presentation-only UI fixes and profile evidence refresh; do not add gameplay or new art payload.
 
 ## Current blocker
 
@@ -58,7 +58,7 @@ Evidence:
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: triage remaining visual debt from the latest runtime screenshots while keeping generated captures and package artifacts out of source control. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; world hub visual staging is tracked under `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`; world hub interaction readability is tracked under `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`; world hub interaction evidence refresh is tracked under `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`; near-interaction capture coverage is tracked under `LGO_NEAR_INTERACTION_CHECKPOINT_CAPTURE_READY`; near-interaction evidence refresh is tracked under `LGO_NEAR_INTERACTION_EVIDENCE_REFRESH_READY`; visual evidence upload packaging is tracked under `LGO_POST_LOGIN_VISUAL_EVIDENCE_UPLOAD_READY`; runtime asset budget refresh is tracked under `LGO_RUNTIME_ASSET_WEIGHT_BUDGET_REFRESH_READY`; runtime asset watch queue/profile polish is tracked under `LGO_RUNTIME_ASSET_WATCH_QUEUE_IMPORT_PROFILE_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: compact dense Character Hall mobile copy after the session-menu focus refresh while keeping generated captures and package artifacts out of source control. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; world hub visual staging is tracked under `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`; world hub interaction readability is tracked under `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`; world hub interaction evidence refresh is tracked under `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`; near-interaction capture coverage is tracked under `LGO_NEAR_INTERACTION_CHECKPOINT_CAPTURE_READY`; near-interaction evidence refresh is tracked under `LGO_NEAR_INTERACTION_EVIDENCE_REFRESH_READY`; visual evidence upload packaging is tracked under `LGO_POST_LOGIN_VISUAL_EVIDENCE_UPLOAD_READY`; runtime asset budget refresh is tracked under `LGO_RUNTIME_ASSET_WEIGHT_BUDGET_REFRESH_READY`; runtime asset watch queue/profile polish is tracked under `LGO_RUNTIME_ASSET_WATCH_QUEUE_IMPORT_PROFILE_READY`; visual debt triage is tracked under `LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY`; session-menu focus evidence is tracked under `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Ready Marker Registry
 
@@ -99,6 +99,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-POST-LOGIN-VISUAL-EVIDENCE-UPLOAD-PACKAGING-v1.0` / `LGO_POST_LOGIN_VISUAL_EVIDENCE_UPLOAD_READY`
 - `LGO-RUNTIME-ASSET-WEIGHT-BUDGET-REFRESH-v1.0` / `LGO_RUNTIME_ASSET_WEIGHT_BUDGET_REFRESH_READY`
 - `LGO-RUNTIME-ASSET-WATCH-QUEUE-IMPORT-PROFILE-POLISH-v1.0` / `LGO_RUNTIME_ASSET_WATCH_QUEUE_IMPORT_PROFILE_READY`
+- `LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE-v1.0` / `LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY`
+- `LGO-SESSION-MENU-FOCUS-EVIDENCE-REFRESH-v1.0` / `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`
 
 ## Allowed paths
 
@@ -166,6 +168,8 @@ python3.12 tools/validate_lgo_visual_runtime_review_heuristics.py
 python3.12 tools/validate_lgo_world_hub_prop_label_responsive.py
 python3.12 tools/validate_lgo_world_scene_depth_layering.py
 python3.12 tools/validate_lgo_world_hub_visual_readability_cleanup.py
+python3.12 tools/validate_lgo_world_hub_visual_debt_triage.py
+python3.12 tools/validate_lgo_session_menu_focus_evidence_refresh.py
 python3.12 tools/validate_lgo_world_hub_interaction_readability.py
 python3.12 tools/validate_lgo_world_hub_interaction_evidence_refresh.py
 python3.12 tools/validate_lgo_near_interaction_checkpoint_capture.py
@@ -212,6 +216,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-RUNTIME-ASSET-WATCH-QUEUE-IMPORT-PROFILE-POLISH-v1.0` is source-ready. Continue with `LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE-v1.0`; use latest screenshots to choose the next in-scope visual polish without adding avoidable image weight.
+`LGO-SESSION-MENU-FOCUS-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0`; inspect mobile `character-lobby.png` before patching.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

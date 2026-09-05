@@ -1531,6 +1531,15 @@ namespace LinhGioi.UI
             if (visible) _sessionMenuPanel.BringToFront();
             if (_sessionMenuStatus != null)
                 _sessionMenuStatus.text = visible ? "Phiên đang tạm dừng. Chọn tiếp tục, lưu vị trí, quay lại hoặc thoát." : "Phiên chơi đang hoạt động.";
+            // LGO Session Menu Focus Cleanup v1: pause overlay owns focus; restore dialogue state when returning.
+            if (visible)
+            {
+                if (_dialoguePanel != null) _dialoguePanel.style.display = DisplayStyle.None;
+            }
+            else
+            {
+                RefreshDialoguePanel();
+            }
             ApplyLocalSettings();
         }
 
@@ -1545,6 +1554,8 @@ namespace LinhGioi.UI
             var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible && !compactViewport;
             var gameplayPanelVisible = !sessionVisible && !dialogueVisible && !compactViewport;
             var compactWorld = compactViewport || focusMode;
+            if (_worldHud != null) _worldHud.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;
+            if (_headerActions != null) _headerActions.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;
             if (_layoutProfileLabel != null) _layoutProfileLabel.style.display = DisplayStyle.None;
             if (_worldFooterActions != null) _worldFooterActions.style.display = sessionVisible || _isMobileProfile ? DisplayStyle.None : DisplayStyle.Flex;
             if (_position != null) _position.style.display = showPosition && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
@@ -1727,20 +1738,25 @@ namespace LinhGioi.UI
                 _interactionHint.style.fontSize = mobile ? 14 : 15;
             if (_sessionMenuPanel != null)
             {
+                // LGO Session Menu Compact Focus Frame v1: compact profiles let the pause panel own the viewport.
                 var sessionWidth = mobile
                     ? Mathf.Clamp(width * 0.70f, 440f, width - 36f)
                     : tablet
                         ? Mathf.Clamp(width * 0.62f, 620f, 820f)
                         : Mathf.Clamp(width * 0.50f, 760f, 960f);
                 var sessionRight = mobile ? 18f : tablet ? 36f : Mathf.Max(72f, width * 0.08f);
-                _sessionMenuPanel.style.left = Mathf.Max(18f, width - sessionWidth - sessionRight);
+                _sessionMenuPanel.style.left = mobile ? 18f : tablet ? 36f : Mathf.Max(18f, width - sessionWidth - sessionRight);
                 _sessionMenuPanel.style.right = sessionRight;
                 _sessionMenuPanel.style.top = mobile ? 46 : tablet ? 118 : 120;
+                _sessionMenuPanel.style.maxWidth = mobile || tablet ? StyleKeyword.None : 960;
                 _sessionMenuPanel.style.maxHeight = mobile ? Mathf.Max(240f, height - 70f) : tablet ? 430 : 500;
                 _sessionMenuPanel.style.paddingLeft = mobile ? 12 : tablet ? 16 : 22;
                 _sessionMenuPanel.style.paddingRight = mobile ? 12 : tablet ? 16 : 22;
                 _sessionMenuPanel.style.paddingTop = mobile ? 10 : tablet ? 14 : 18;
                 _sessionMenuPanel.style.paddingBottom = mobile ? 10 : tablet ? 14 : 20;
+                _sessionMenuPanel.style.backgroundColor = mobile || tablet
+                    ? new Color(0.004f, 0.018f, 0.045f, 1.0f)
+                    : new Color(0.01f, 0.04f, 0.09f, 0.96f);
             }
             if (_settingsPanel != null)
             {
