@@ -493,12 +493,13 @@ namespace LinhGioi.UI
             _lobbyPanel = NewPanel(840);
             _lobbyPanel.name = "LGO Character Hall V3B Composition Panel";
             ApplyV2PanelSkin(_lobbyPanel);
-            _lobbyPanel.style.maxWidth = 860;
-            _lobbyPanel.style.minHeight = 480;
-            _lobbyPanel.style.paddingLeft = 20;
-            _lobbyPanel.style.paddingRight = 20;
-            _lobbyPanel.style.paddingTop = 18;
-            _lobbyPanel.style.paddingBottom = 20;
+            _lobbyPanel.style.maxWidth = 800;
+            _lobbyPanel.style.minHeight = 452;
+            _lobbyPanel.style.paddingLeft = 18;
+            _lobbyPanel.style.paddingRight = 18;
+            _lobbyPanel.style.paddingTop = 16;
+            _lobbyPanel.style.paddingBottom = 18;
+            _lobbyPanel.style.backgroundColor = new Color(0.005f, 0.025f, 0.055f, 0.82f);
             _lobbyPanel.style.alignSelf = Align.FlexStart;
             _mainShell.Add(_lobbyPanel);
             _lobbyPanel.Add(NewSectionTitle("Điện Nhân Vật"));
@@ -514,33 +515,33 @@ namespace LinhGioi.UI
             _lobbyContent.style.flexWrap = Wrap.NoWrap;
             _lobbyContent.style.justifyContent = Justify.SpaceBetween;
             _lobbyContent.style.marginTop = 4;
-            _lobbyContent.style.marginBottom = 14;
+            _lobbyContent.style.marginBottom = 10;
             _lobbyPanel.Add(_lobbyContent);
 
             _characterList = new VisualElement();
             _characterList.style.minWidth = 280;
-            _characterList.style.maxWidth = 460;
+            _characterList.style.maxWidth = 390;
             _characterList.style.flexGrow = 1;
-            _characterList.style.marginRight = 18;
-            _characterList.style.marginBottom = 12;
+            _characterList.style.marginRight = 14;
+            _characterList.style.marginBottom = 8;
             _characterList.style.paddingLeft = 14;
             _characterList.style.paddingRight = 14;
             _characterList.style.paddingTop = 12;
             _characterList.style.paddingBottom = 12;
-            _characterList.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.82f);
-            _characterList.style.borderTopColor = RuntimeArtCatalog.Spirit;
+            _characterList.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.70f);
+            _characterList.style.borderTopColor = new Color(0.14f, 0.78f, 0.90f, 0.42f);
             _characterList.style.borderTopWidth = 1;
-            _characterList.style.borderLeftColor = RuntimeArtCatalog.Gold;
+            _characterList.style.borderLeftColor = new Color(0.93f, 0.73f, 0.36f, 0.70f);
             _characterList.style.borderLeftWidth = 2;
             _lobbyContent.Add(_characterList);
 
             _selectedPreview = NewPreviewPanel("TU SĨ", "Hồ sơ đang chọn");
             _selectedPreview.name = "LGO Character Hall Selected Cultivator Card V3B";
-            _selectedPreview.style.maxWidth = 380;
-            _selectedPreview.style.backgroundColor = new Color(0.015f, 0.055f, 0.12f, 0.90f);
-            _selectedPreview.style.borderTopColor = RuntimeArtCatalog.Gold;
+            _selectedPreview.style.maxWidth = 350;
+            _selectedPreview.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.76f);
+            _selectedPreview.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.68f);
             _selectedPreview.style.borderTopWidth = 1;
-            _selectedPreview.style.borderRightColor = RuntimeArtCatalog.Spirit;
+            _selectedPreview.style.borderRightColor = new Color(0.14f, 0.78f, 0.90f, 0.38f);
             _selectedPreview.style.borderRightWidth = 1;
             var profileHero = new VisualElement();
             profileHero.style.flexDirection = FlexDirection.Row;
@@ -549,11 +550,11 @@ namespace LinhGioi.UI
             var portrait = new VisualElement();
             portrait.name = "LGO Character Hall V3B Cultivator Portrait";
             portrait.pickingMode = PickingMode.Ignore;
-            portrait.style.width = 84;
-            portrait.style.height = 118;
+            portrait.style.width = 92;
+            portrait.style.height = 128;
             portrait.style.marginRight = 12;
             portrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            portrait.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 0.72f);
+            portrait.style.backgroundColor = new Color(0.0f, 0.015f, 0.035f, 0.48f);
             portrait.style.borderTopColor = RuntimeArtCatalog.Gold;
             portrait.style.borderTopWidth = 1;
             portrait.style.borderBottomColor = RuntimeArtCatalog.Spirit;
@@ -585,19 +586,19 @@ namespace LinhGioi.UI
 
             _createPanel = new VisualElement();
             _createPanel.name = "LGO Character Hall Create Cultivator Panel V3B";
-            _createPanel.style.marginTop = 14;
+            _createPanel.style.marginTop = 10;
             _createPanel.style.position = Position.Relative;
             _createPanel.style.paddingLeft = 16;
             _createPanel.style.paddingRight = 16;
-            _createPanel.style.paddingTop = 14;
-            _createPanel.style.paddingBottom = 16;
-            _createPanel.style.minHeight = 132;
-            _createPanel.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.78f);
-            _createPanel.style.borderTopColor = RuntimeArtCatalog.Gold;
+            _createPanel.style.paddingTop = 12;
+            _createPanel.style.paddingBottom = 14;
+            _createPanel.style.minHeight = 122;
+            _createPanel.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.66f);
+            _createPanel.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.54f);
             _createPanel.style.borderTopWidth = 1;
-            _createPanel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            _createPanel.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.42f);
             _createPanel.style.borderLeftWidth = 2;
-            _createPanel.style.maxHeight = 230;
+            _createPanel.style.maxHeight = 210;
             _lobbyPanel.Add(_createPanel);
 
             _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
@@ -1548,27 +1549,27 @@ namespace LinhGioi.UI
                 _serverSwitchButton.style.minHeight = 32;
             }
 
-            _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 840 : 860;
-            _lobbyPanel.style.minHeight = mobile ? Mathf.Max(292f, height - 48f) : 430;
-            _lobbyPanel.style.paddingLeft = mobile ? 12 : 20;
-            _lobbyPanel.style.paddingRight = mobile ? 12 : 20;
-            _lobbyPanel.style.paddingTop = mobile ? 8 : 18;
-            _lobbyPanel.style.paddingBottom = mobile ? 8 : 20;
+            _lobbyPanel.style.maxWidth = mobile ? Mathf.Min(width - 40f, 780f) : tablet ? 790 : 800;
+            _lobbyPanel.style.minHeight = mobile ? Mathf.Max(292f, height - 48f) : 410;
+            _lobbyPanel.style.paddingLeft = mobile ? 12 : 18;
+            _lobbyPanel.style.paddingRight = mobile ? 12 : 18;
+            _lobbyPanel.style.paddingTop = mobile ? 8 : 16;
+            _lobbyPanel.style.paddingBottom = mobile ? 8 : 18;
             _characterList.style.minWidth = mobile ? 220 : 280;
-            _characterList.style.maxWidth = mobile ? Mathf.Clamp(width * 0.40f, 285f, 330f) : 460;
-            _characterList.style.marginRight = mobile ? 10 : 18;
+            _characterList.style.maxWidth = mobile ? Mathf.Clamp(width * 0.40f, 285f, 330f) : tablet ? 370 : 390;
+            _characterList.style.marginRight = mobile ? 10 : 14;
             _characterList.style.paddingTop = mobile ? 8 : 12;
             _characterList.style.paddingBottom = mobile ? 8 : 12;
             if (_lobbyContent != null)
             {
                 _lobbyContent.style.flexDirection = FlexDirection.Row;
                 _lobbyContent.style.flexWrap = Wrap.NoWrap;
-                _lobbyContent.style.marginBottom = mobile ? 8 : 14;
+                _lobbyContent.style.marginBottom = mobile ? 8 : 10;
             }
             if (_selectedPreview != null)
             {
                 _selectedPreview.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
-                _selectedPreview.style.maxWidth = mobile ? Mathf.Clamp(width * 0.48f, 300f, 390f) : 380;
+                _selectedPreview.style.maxWidth = mobile ? Mathf.Clamp(width * 0.48f, 300f, 390f) : tablet ? 334 : 350;
             }
             if (_createPanel != null)
             {
@@ -1578,10 +1579,10 @@ namespace LinhGioi.UI
                 _createPanel.style.top = mobile ? 112 : StyleKeyword.Auto;
                 _createPanel.style.paddingLeft = mobile ? 12 : 16;
                 _createPanel.style.paddingRight = mobile ? 12 : 16;
-                _createPanel.style.paddingTop = mobile ? 8 : 14;
-                _createPanel.style.paddingBottom = mobile ? 8 : 16;
-                _createPanel.style.marginTop = mobile ? 0 : 14;
-                _createPanel.style.maxHeight = mobile ? 174 : 230;
+                _createPanel.style.paddingTop = mobile ? 8 : 12;
+                _createPanel.style.paddingBottom = mobile ? 8 : 14;
+                _createPanel.style.marginTop = mobile ? 0 : 10;
+                _createPanel.style.maxHeight = mobile ? 174 : 210;
             }
 
             _worldHud.style.minWidth = mobile ? 260 : 300;

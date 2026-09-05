@@ -228,6 +228,9 @@ source_only() {
   if [[ -f tools/validate_lgo_character_hall_v3b_composition.py ]]; then
     run_phase character_hall_v3b_composition python3.12 tools/validate_lgo_character_hall_v3b_composition.py
   fi
+  if [[ -f tools/validate_lgo_character_hall_panel_density.py ]]; then
+    run_phase character_hall_panel_density python3.12 tools/validate_lgo_character_hall_panel_density.py
+  fi
   if [[ -f tools/validate_lgo_build_size_budget.py ]]; then
     run_phase build_size_budget python3.12 tools/validate_lgo_build_size_budget.py
   fi
@@ -356,6 +359,7 @@ source_only() {
     tools/validate_lgo_login_npc_compositing_polish.py \
     tools/validate_lgo_login_panel_visual_balance.py \
     tools/validate_lgo_character_hall_v3b_composition.py \
+    tools/validate_lgo_character_hall_panel_density.py \
     tools/report_lgo_build_size_budget.py \
     tools/validate_lgo_build_size_budget.py \
     tools/lgo_continuous_cycle.py \
