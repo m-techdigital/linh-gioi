@@ -462,8 +462,7 @@ namespace LinhGioi.UI
             _loginButton.style.fontSize = layout.LoginButtonFontSize;
             _loginButton.style.marginTop = layout.LoginButtonMarginTop;
             _loginButton.style.marginRight = 0;
-            _loginButton.style.color = new Color(0.12f, 0.06f, 0.01f, 1f);
-            _loginButton.style.backgroundColor = Color.clear;
+            RuntimeUiSkin.ApplyLoginEnterButtonFrame(_loginButton);
             _loginButton.tooltip = "Mở tài khoản thử nghiệm và đi tới Điện Nhân Vật.";
             _loginCard.Add(_loginButton);
             _loginCard.Add(NewLoginOrnamentRule("LGO Login CTA Lightweight Bottom Ornament v1"));
@@ -1528,6 +1527,7 @@ namespace LinhGioi.UI
         {
             if (_loginButton == null || texture == null) return;
             _loginButton.style.backgroundImage = new StyleBackground(texture);
+            RuntimeUiSkin.ApplyLoginEnterButtonFrame(_loginButton);
         }
 
         private void SetToast(string text, Color accent)

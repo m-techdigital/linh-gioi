@@ -33,7 +33,7 @@ namespace LinhGioi.UI
         internal const int LoginControlColumnMinWidth = 300;
         internal const int LoginServerStatusDotSize = 12;
         internal const int LoginServerStatusDotRadius = 6;
-        internal const int LoginButtonMaxWidth = 436;
+        internal const int LoginButtonMaxWidth = 392;
         internal const int LoginServerSwitchMinWidth = 160;
         internal const int LoginServerSwitchMinHeight = 32;
 

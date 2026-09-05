@@ -56,6 +56,7 @@ def main() -> int:
         "LGO Login CTA Component Visual Polish v1",
         "LoginCtaComponentVisualPolishMarker",
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
+        "RuntimeUiSkin.ApplyLoginEnterButtonFrame(_loginButton);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
@@ -74,7 +75,8 @@ def main() -> int:
         "element.style.borderTopWidth = 1;",
         "element.style.borderBottomWidth = 1;",
         "ApplyServerSelectorFrame(VisualElement element)",
-        "new Color(0.003f, 0.015f, 0.035f, 0.82f)",
+        "new Color(0.003f, 0.015f, 0.035f, 0.70f)",
+        "ApplyLoginEnterButtonFrame(Button button)",
     )
     require(
         "docs/design/LOGIN-CTA-COMPONENT-VISUAL-POLISH-v1.0.md",

@@ -80,7 +80,8 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "MobileLoginCardWidthRatio = 0.46f",
+        "MobileLoginCardWidthRatio = 0.43f",
+        "TabletLoginCardWidthRatio = 0.34f",
         "LoginStageDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex",
     )
     require(

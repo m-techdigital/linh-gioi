@@ -64,8 +64,8 @@ def main() -> int:
         "MobileLoginLogoWidthRatio = 0.43f",
         "TabletLoginLogoWidthRatio = 0.32f",
         "DesktopLoginLogoWidthRatio = 0.26f",
-        "MobileLoginCardWidthRatio = 0.46f",
-        "TabletLoginCardWidthRatio = 0.36f",
+        "MobileLoginCardWidthRatio = 0.43f",
+        "TabletLoginCardWidthRatio = 0.34f",
         "LoginLogoAspect = 0.50f",
     )
     require(

@@ -142,16 +142,33 @@ namespace LinhGioi.UI
 
         internal static void ApplyServerSelectorFrame(VisualElement element)
         {
-            element.style.backgroundColor = new Color(0.003f, 0.015f, 0.035f, 0.82f);
+            element.style.backgroundColor = new Color(0.003f, 0.015f, 0.035f, 0.70f);
             ApplyRadius(element, 10);
-            element.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.64f);
+            element.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.46f);
             element.style.borderTopWidth = 1;
             element.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
             element.style.borderLeftWidth = 1;
             element.style.borderRightColor = new Color(0.14f, 0.78f, 0.90f, 0.16f);
             element.style.borderRightWidth = 1;
-            element.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.34f);
+            element.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.26f);
             element.style.borderBottomWidth = 1;
+        }
+
+        internal static void ApplyLoginEnterButtonFrame(Button button)
+        {
+            button.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
+            button.style.unityBackgroundImageTintColor = new Color(1f, 1f, 1f, 0.88f);
+            button.style.backgroundColor = new Color(0.07f, 0.035f, 0.006f, 0.16f);
+            button.style.color = new Color(0.09f, 0.045f, 0.006f, 1f);
+            ApplyRadius(button, 12);
+            ApplyEdgeFrame(
+                button,
+                new Color(0.14f, 0.78f, 0.90f, 0.26f),
+                new Color(1.0f, 0.80f, 0.40f, 0.58f),
+                new Color(0.14f, 0.78f, 0.90f, 0.20f),
+                new Color(1.0f, 0.80f, 0.40f, 0.46f),
+                1f,
+                1f);
         }
 
         internal static void ApplyCompactActionFrame(Button button, Color background, Color left, Color top, Color right, Color bottom)

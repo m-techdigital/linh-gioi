@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: autopilot checkpoint staging is now allowlisted so continuous work can avoid cache/build/frozen-surface noise while keeping commits opt-in.
+- Current reason: login CTA/server row now use smaller role-fit profile sizing and lighter skin so PC/tablet/mobile stay sharper and less heavy-looking without adding image payload.
 - Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/validate_package_hygiene.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
 - Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -78,6 +78,8 @@ Current focus update: selected mobile Character Hall now labels the action state
 Current focus update: repeated session menu placement, responsive padding, background, and focus scrim rules now live in `RuntimeSessionMenuLayout` under `LGO_SESSION_MENU_LAYOUT_HELPER_READY`; source-only passes and runtime capture remained stable.
 
 Current focus update: autopilot checkpoint staging now uses an allowlist and skips generated/cache/build artifacts under `LGO_AUTOPILOT_SAFE_CHECKPOINT_STAGING_READY`; commit/push remains opt-in and frozen surfaces remain blocked.
+
+Current focus update: login CTA and server row sizing/tint were reduced under `LGO_LOGIN_CTA_FIT_FOR_PURPOSE_READY`; fresh desktop/tablet/mobile screenshots were reviewed as calmer and still readable, with no `VISUAL_RUNTIME_PASS` claim.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 

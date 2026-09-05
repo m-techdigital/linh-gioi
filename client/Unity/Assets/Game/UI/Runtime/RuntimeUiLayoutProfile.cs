@@ -16,8 +16,8 @@ namespace LinhGioi.UI
         internal const float MobileLoginLogoWidthRatio = 0.43f;
         internal const float TabletLoginLogoWidthRatio = 0.32f;
         internal const float DesktopLoginLogoWidthRatio = 0.26f;
-        internal const float MobileLoginCardWidthRatio = 0.46f;
-        internal const float TabletLoginCardWidthRatio = 0.36f;
+        internal const float MobileLoginCardWidthRatio = 0.43f;
+        internal const float TabletLoginCardWidthRatio = 0.34f;
         internal const float LoginLogoAspect = 0.50f;
 
         internal readonly string Name;
@@ -86,7 +86,7 @@ namespace LinhGioi.UI
         internal int LoginServerRowPaddingHorizontal => IsMobile ? 14 : 22;
         internal int LoginServerRowPaddingVertical => IsMobile ? 6 : 7;
         internal int LoginServerTextFontSize => IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.042f, 16f, 19f)) : IsTablet ? 18 : 19;
-        internal int LoginButtonMarginTop => IsMobile ? Mathf.RoundToInt(4f * MobileScale) : 10;
+        internal int LoginButtonMarginTop => IsMobile ? Mathf.RoundToInt(5f * MobileScale) : 8;
 
         internal int LobbyIntroMarginBottom => IsMobile ? 6 : 10;
         internal int LobbyContentMarginTop => 4;
@@ -189,13 +189,13 @@ namespace LinhGioi.UI
                     : Mathf.Clamp(width * DesktopLoginLogoWidthRatio, 470f, 504f);
             LoginLogoHeight = LoginLogoWidth * LoginLogoAspect;
             LoginCardWidth = IsMobile
-                ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 312f, 392f)
+                ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 300f, 360f)
                 : IsTablet
-                    ? Mathf.Clamp(width * TabletLoginCardWidthRatio, 416f, 470f)
-                    : 468f;
-            LoginCardPadding = IsMobile ? Mathf.RoundToInt(14f * MobileScale) : IsTablet ? 22 : 28;
-            LoginButtonHeight = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.11f, 42f, 50f)) : IsTablet ? 54 : 58;
-            LoginButtonFontSize = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.047f, 17f, 21f)) : IsTablet ? 20 : 22;
+                    ? Mathf.Clamp(width * TabletLoginCardWidthRatio, 390f, 438f)
+                    : 424f;
+            LoginCardPadding = IsMobile ? Mathf.RoundToInt(13f * MobileScale) : IsTablet ? 20 : 24;
+            LoginButtonHeight = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.10f, 40f, 48f)) : IsTablet ? 50 : 52;
+            LoginButtonFontSize = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.044f, 16f, 20f)) : IsTablet ? 19 : 20;
         }
 
         internal static RuntimeUiLayoutProfile FromScreen(string forcedProfile, int screenWidth, int screenHeight)

@@ -59,6 +59,7 @@ def main() -> int:
     for marker in (
         "LGO Login CTA Backing Balance v1",
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
+        "RuntimeUiSkin.ApplyLoginEnterButtonFrame(_loginButton);",
         "layout.LoginCardMinHeight",
         "layout.LoginCardPaddingTop",
         "layout.LoginCardPaddingBottom",
@@ -84,6 +85,7 @@ def main() -> int:
         "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.18f)",
         "ApplyLoginCtaBacking(VisualElement element)",
         "ApplyLoginCtaSceneBlend(VisualElement element)",
+        "ApplyLoginEnterButtonFrame(Button button)",
         "ApplyRadius(element, 18)",
     ):
         if marker not in skin:
