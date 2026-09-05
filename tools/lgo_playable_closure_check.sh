@@ -258,6 +258,9 @@ source_only() {
   if [[ -f tools/validate_lgo_character_hall_v3b_composition.py ]]; then
     run_phase character_hall_v3b_composition python3.12 tools/validate_lgo_character_hall_v3b_composition.py
   fi
+  if [[ -f tools/validate_lgo_character_hall_style_adoption.py ]]; then
+    run_phase character_hall_style_adoption python3.12 tools/validate_lgo_character_hall_style_adoption.py
+  fi
   if [[ -f tools/validate_lgo_character_hall_panel_density.py ]]; then
     run_phase character_hall_panel_density python3.12 tools/validate_lgo_character_hall_panel_density.py
   fi
@@ -504,6 +507,7 @@ source_only() {
     tools/validate_lgo_login_npc_grounding_shadow_evidence_refresh.py \
     tools/validate_lgo_login_responsive_scale_cleanup.py \
     tools/validate_lgo_character_hall_v3b_composition.py \
+    tools/validate_lgo_character_hall_style_adoption.py \
     tools/validate_lgo_character_hall_panel_density.py \
     tools/validate_lgo_character_hall_mobile_copy_density.py \
     tools/validate_lgo_character_hall_mobile_copy_evidence_refresh.py \

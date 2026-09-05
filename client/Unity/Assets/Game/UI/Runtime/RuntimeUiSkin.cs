@@ -135,5 +135,46 @@ namespace LinhGioi.UI
             ApplyRadius(label, 8);
             ApplyEdgeFrame(label, accent, accent, accent, accent, 1f, 1f);
         }
+
+        internal static void ApplyCharacterHallPanelFrame(VisualElement panel)
+        {
+            panel.style.backgroundColor = new Color(0.005f, 0.025f, 0.055f, 0.82f);
+            ApplyEdgeFrame(panel, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
+        }
+
+        internal static void ApplyCharacterListFrame(VisualElement list)
+        {
+            list.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.70f);
+            ApplyEdgeFrame(list, new Color(0.93f, 0.73f, 0.36f, 0.70f), new Color(0.14f, 0.78f, 0.90f, 0.42f), Color.clear, Color.clear, 2f, 1f);
+            list.style.borderRightWidth = 0;
+            list.style.borderBottomWidth = 0;
+        }
+
+        internal static void ApplyCharacterPreviewFrame(VisualElement preview)
+        {
+            preview.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.76f);
+            ApplyEdgeFrame(preview, RuntimeArtCatalog.Spirit, new Color(0.93f, 0.73f, 0.36f, 0.68f), new Color(0.14f, 0.78f, 0.90f, 0.38f), RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
+        }
+
+        internal static void ApplyCharacterCreateFrame(VisualElement panel)
+        {
+            panel.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.66f);
+            ApplyEdgeFrame(panel, new Color(0.14f, 0.78f, 0.90f, 0.42f), new Color(0.93f, 0.73f, 0.36f, 0.54f), Color.clear, Color.clear, 2f, 1f);
+            panel.style.borderRightWidth = 0;
+            panel.style.borderBottomWidth = 0;
+        }
+
+        internal static void ApplyCharacterPortraitFrame(VisualElement portrait)
+        {
+            portrait.style.backgroundColor = new Color(0.0f, 0.015f, 0.035f, 0.48f);
+            ApplyEdgeFrame(portrait, Color.clear, RuntimeArtCatalog.Gold, Color.clear, RuntimeArtCatalog.Spirit, 0f, 1f);
+            portrait.style.borderRightWidth = 0;
+        }
+
+        internal static void ApplyLobbyInputFrame(TextField field)
+        {
+            field.style.backgroundColor = DeepGlass;
+            ApplyEdgeFrame(field, MediumSpiritBorder, MediumGoldBorder, LightSpiritBorder, new Color(0.93f, 0.73f, 0.36f, 0.28f));
+        }
     }
 }

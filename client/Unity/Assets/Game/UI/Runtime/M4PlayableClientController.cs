@@ -491,14 +491,13 @@ namespace LinhGioi.UI
         {
             _lobbyPanel = NewPanel(840);
             _lobbyPanel.name = "LGO Character Hall V3B Composition Panel";
-            ApplyV2PanelSkin(_lobbyPanel);
+            RuntimeUiSkin.ApplyCharacterHallPanelFrame(_lobbyPanel);
             _lobbyPanel.style.maxWidth = 800;
             _lobbyPanel.style.minHeight = 452;
             _lobbyPanel.style.paddingLeft = 18;
             _lobbyPanel.style.paddingRight = 18;
             _lobbyPanel.style.paddingTop = 16;
             _lobbyPanel.style.paddingBottom = 18;
-            _lobbyPanel.style.backgroundColor = new Color(0.005f, 0.025f, 0.055f, 0.82f);
             _lobbyPanel.style.alignSelf = Align.FlexStart;
             _mainShell.Add(_lobbyPanel);
             _lobbyPanel.Add(NewSectionTitle("Điện Nhân Vật"));
@@ -528,21 +527,13 @@ namespace LinhGioi.UI
             _characterList.style.paddingRight = 14;
             _characterList.style.paddingTop = 12;
             _characterList.style.paddingBottom = 12;
-            _characterList.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.70f);
-            _characterList.style.borderTopColor = new Color(0.14f, 0.78f, 0.90f, 0.42f);
-            _characterList.style.borderTopWidth = 1;
-            _characterList.style.borderLeftColor = new Color(0.93f, 0.73f, 0.36f, 0.70f);
-            _characterList.style.borderLeftWidth = 2;
+            RuntimeUiSkin.ApplyCharacterListFrame(_characterList);
             _lobbyContent.Add(_characterList);
 
             _selectedPreview = NewPreviewPanel("TU SĨ", "Hồ sơ đang chọn");
             _selectedPreview.name = "LGO Character Hall Selected Cultivator Card V3B";
             _selectedPreview.style.maxWidth = 350;
-            _selectedPreview.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.76f);
-            _selectedPreview.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.68f);
-            _selectedPreview.style.borderTopWidth = 1;
-            _selectedPreview.style.borderRightColor = new Color(0.14f, 0.78f, 0.90f, 0.38f);
-            _selectedPreview.style.borderRightWidth = 1;
+            RuntimeUiSkin.ApplyCharacterPreviewFrame(_selectedPreview);
             var profileHero = new VisualElement();
             profileHero.style.flexDirection = FlexDirection.Row;
             profileHero.style.alignItems = Align.Center;
@@ -554,11 +545,7 @@ namespace LinhGioi.UI
             portrait.style.height = 128;
             portrait.style.marginRight = 12;
             portrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            portrait.style.backgroundColor = new Color(0.0f, 0.015f, 0.035f, 0.48f);
-            portrait.style.borderTopColor = RuntimeArtCatalog.Gold;
-            portrait.style.borderTopWidth = 1;
-            portrait.style.borderBottomColor = RuntimeArtCatalog.Spirit;
-            portrait.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);
             var portraitTexture = LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture;
             if (portraitTexture != null)
                 portrait.style.backgroundImage = new StyleBackground(portraitTexture);
@@ -593,11 +580,7 @@ namespace LinhGioi.UI
             _createPanel.style.paddingTop = 12;
             _createPanel.style.paddingBottom = 14;
             _createPanel.style.minHeight = 122;
-            _createPanel.style.backgroundColor = new Color(0.0f, 0.018f, 0.045f, 0.66f);
-            _createPanel.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.54f);
-            _createPanel.style.borderTopWidth = 1;
-            _createPanel.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.42f);
-            _createPanel.style.borderLeftWidth = 2;
+            RuntimeUiSkin.ApplyCharacterCreateFrame(_createPanel);
             _createPanel.style.maxHeight = 210;
             _lobbyPanel.Add(_createPanel);
 
@@ -1313,8 +1296,7 @@ namespace LinhGioi.UI
         {
             field.style.minHeight = 42;
             RuntimeUiSkin.ApplyPadding(field, 10, 4);
-            field.style.backgroundColor = new Color(0.0f, 0.014f, 0.034f, 0.82f);
-            RuntimeUiSkin.ApplyEdgeFrame(field, RuntimeUiSkin.MediumSpiritBorder, RuntimeUiSkin.MediumGoldBorder, RuntimeUiSkin.LightSpiritBorder, new Color(0.93f, 0.73f, 0.36f, 0.28f));
+            RuntimeUiSkin.ApplyLobbyInputFrame(field);
         }
 
         private static Button NewPrimaryButton(string label, Action action)

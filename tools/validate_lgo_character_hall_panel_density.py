@@ -44,12 +44,20 @@ def main() -> int:
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
         "LGO Character Hall Create Cultivator Panel V3B",
-        "new Color(0.005f, 0.025f, 0.055f, 0.82f)",
-        "new Color(0.0f, 0.018f, 0.045f, 0.70f)",
+        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(_lobbyPanel);",
+        "RuntimeUiSkin.ApplyCharacterListFrame(_characterList);",
         "portrait.style.width = 92",
+        "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
         "Mathf.Min(width - 40f, 780f)",
         "tablet ? 790 : 800",
         "tablet ? 334 : 350",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
+        "ApplyCharacterHallPanelFrame(VisualElement panel)",
+        "new Color(0.005f, 0.025f, 0.055f, 0.82f)",
+        "ApplyCharacterListFrame(VisualElement list)",
+        "new Color(0.0f, 0.018f, 0.045f, 0.70f)",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-PANEL-DENSITY-PASS-v1.0.md",
