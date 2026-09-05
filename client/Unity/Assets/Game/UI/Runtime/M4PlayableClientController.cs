@@ -405,19 +405,7 @@ namespace LinhGioi.UI
             _loginCard.style.paddingBottom = 22;
             _loginCard.style.marginBottom = 18;
             _loginCard.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            _loginCard.style.backgroundColor = new Color(0.005f, 0.018f, 0.040f, 0.18f);
-            _loginCard.style.borderTopLeftRadius = 18;
-            _loginCard.style.borderTopRightRadius = 18;
-            _loginCard.style.borderBottomLeftRadius = 18;
-            _loginCard.style.borderBottomRightRadius = 18;
-            _loginCard.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.20f);
-            _loginCard.style.borderTopWidth = 1;
-            _loginCard.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.10f);
-            _loginCard.style.borderLeftWidth = 1;
-            _loginCard.style.borderRightColor = new Color(0.93f, 0.73f, 0.36f, 0.12f);
-            _loginCard.style.borderRightWidth = 1;
-            _loginCard.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.10f);
-            _loginCard.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);
             _loginCard.tooltip = LoginCtaBackingBalanceMarker;
             if (UseLoginOrnatePanelTexture && LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture != null)
             {
@@ -439,15 +427,7 @@ namespace LinhGioi.UI
             serverRow.style.paddingRight = 22;
             serverRow.style.paddingTop = 7;
             serverRow.style.paddingBottom = 7;
-            serverRow.style.backgroundColor = new Color(0.0f, 0.016f, 0.040f, 0.82f);
-            serverRow.style.borderTopLeftRadius = 8;
-            serverRow.style.borderTopRightRadius = 8;
-            serverRow.style.borderBottomLeftRadius = 8;
-            serverRow.style.borderBottomRightRadius = 8;
-            serverRow.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.48f);
-            serverRow.style.borderTopWidth = 1;
-            serverRow.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.24f);
-            serverRow.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyServerSelectorFrame(serverRow);
             serverRow.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             var serverText = new Label("S1 - Linh Giới");
             _loginServerText = serverText;
@@ -1184,23 +1164,9 @@ namespace LinhGioi.UI
             panel.style.width = Length.Percent(100);
             panel.style.marginRight = 0;
             panel.style.marginBottom = 12;
-            panel.style.paddingLeft = 16;
-            panel.style.paddingRight = 16;
-            panel.style.paddingTop = 14;
-            panel.style.paddingBottom = 14;
+            RuntimeUiSkin.ApplyPadding(panel, 16, 14);
             panel.style.backgroundColor = RuntimeArtCatalog.Surface;
-            panel.style.borderTopLeftRadius = 8;
-            panel.style.borderTopRightRadius = 8;
-            panel.style.borderBottomLeftRadius = 8;
-            panel.style.borderBottomRightRadius = 8;
-            panel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            panel.style.borderLeftWidth = 2;
-            panel.style.borderTopColor = RuntimeArtCatalog.Gold;
-            panel.style.borderTopWidth = 1;
-            panel.style.borderRightColor = RuntimeArtCatalog.SurfaceRaised;
-            panel.style.borderRightWidth = 1;
-            panel.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
-            panel.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyPanelFrame(panel);
             return panel;
         }
 
@@ -1209,19 +1175,12 @@ namespace LinhGioi.UI
             var preview = new VisualElement();
             preview.style.minWidth = 220;
             preview.style.flexGrow = 1;
-            preview.style.paddingLeft = 14;
-            preview.style.paddingRight = 14;
-            preview.style.paddingTop = 12;
-            preview.style.paddingBottom = 12;
+            RuntimeUiSkin.ApplyPadding(preview, 14, 12);
             preview.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
-            preview.style.borderTopLeftRadius = 8;
-            preview.style.borderTopRightRadius = 8;
-            preview.style.borderBottomLeftRadius = 8;
-            preview.style.borderBottomRightRadius = 8;
-            preview.style.borderLeftColor = RuntimeArtCatalog.Gold;
-            preview.style.borderLeftWidth = 2;
-            preview.style.borderTopColor = RuntimeArtCatalog.Spirit;
-            preview.style.borderTopWidth = 1;
+            RuntimeUiSkin.ApplyRadius(preview, 8);
+            RuntimeUiSkin.ApplyEdgeFrame(preview, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, Color.clear, Color.clear, 2f, 1f);
+            preview.style.borderRightWidth = 0;
+            preview.style.borderBottomWidth = 0;
             var sigil = new Label(sigilText);
             sigil.style.color = RuntimeArtCatalog.Spirit;
             sigil.style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -1246,15 +1205,8 @@ namespace LinhGioi.UI
             row.style.flexDirection = FlexDirection.Row;
             row.style.flexWrap = Wrap.Wrap;
             row.style.marginTop = 8;
-            row.style.paddingLeft = 10;
-            row.style.paddingRight = 10;
-            row.style.paddingTop = 7;
-            row.style.paddingBottom = 7;
-            row.style.backgroundColor = RuntimeArtCatalog.Background;
-            row.style.borderLeftColor = accent;
-            row.style.borderLeftWidth = 2;
-            row.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
-            row.style.borderTopWidth = 1;
+            RuntimeUiSkin.ApplyPadding(row, 10, 7);
+            RuntimeUiSkin.ApplyInsetRowFrame(row, accent);
             var titleLabel = new Label(title);
             titleLabel.style.minWidth = 86;
             titleLabel.style.marginRight = 8;
@@ -1274,19 +1226,9 @@ namespace LinhGioi.UI
             var group = new VisualElement { name = name };
             group.style.marginTop = 8;
             group.style.marginBottom = 8;
-            group.style.paddingLeft = 8;
-            group.style.paddingRight = 8;
-            group.style.paddingTop = 7;
-            group.style.paddingBottom = 7;
-            group.style.backgroundColor = new Color(0.0f, 0.014f, 0.034f, 0.70f);
-            group.style.borderTopColor = RuntimeArtCatalog.Gold;
-            group.style.borderTopWidth = 1;
-            group.style.borderLeftColor = accent;
-            group.style.borderLeftWidth = 2;
-            group.style.borderRightColor = RuntimeArtCatalog.SurfaceRaised;
-            group.style.borderRightWidth = 1;
-            group.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
-            group.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyPadding(group, 8, 7);
+            group.style.backgroundColor = RuntimeUiSkin.DeepGlass;
+            RuntimeUiSkin.ApplyEdgeFrame(group, accent, RuntimeArtCatalog.Gold, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.SurfaceRaised);
             return group;
         }
 
@@ -1352,17 +1294,8 @@ namespace LinhGioi.UI
             label.style.color = color;
             label.style.whiteSpace = WhiteSpace.Normal;
             label.style.marginTop = 8;
-            label.style.paddingLeft = 10;
-            label.style.paddingRight = 10;
-            label.style.paddingTop = 6;
-            label.style.paddingBottom = 6;
-            label.style.backgroundColor = RuntimeArtCatalog.Background;
-            label.style.borderLeftColor = color;
-            label.style.borderLeftWidth = 2;
-            label.style.borderTopColor = RuntimeArtCatalog.SurfaceRaised;
-            label.style.borderTopWidth = 1;
-            label.style.borderBottomColor = RuntimeArtCatalog.SurfaceRaised;
-            label.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyPadding(label, 10, 6);
+            RuntimeUiSkin.ApplyInsetRowFrame(label, color);
             return label;
         }
 
@@ -1378,19 +1311,9 @@ namespace LinhGioi.UI
         private static void ApplyLobbyInputStyle(TextField field)
         {
             field.style.minHeight = 42;
-            field.style.paddingLeft = 10;
-            field.style.paddingRight = 10;
-            field.style.paddingTop = 4;
-            field.style.paddingBottom = 4;
+            RuntimeUiSkin.ApplyPadding(field, 10, 4);
             field.style.backgroundColor = new Color(0.0f, 0.014f, 0.034f, 0.82f);
-            field.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.48f);
-            field.style.borderTopWidth = 1;
-            field.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.46f);
-            field.style.borderLeftWidth = 2;
-            field.style.borderRightColor = new Color(0.14f, 0.78f, 0.90f, 0.24f);
-            field.style.borderRightWidth = 1;
-            field.style.borderBottomColor = new Color(0.93f, 0.73f, 0.36f, 0.28f);
-            field.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyEdgeFrame(field, RuntimeUiSkin.MediumSpiritBorder, RuntimeUiSkin.MediumGoldBorder, RuntimeUiSkin.LightSpiritBorder, new Color(0.93f, 0.73f, 0.36f, 0.28f));
         }
 
         private static Button NewPrimaryButton(string label, Action action)
@@ -1416,19 +1339,9 @@ namespace LinhGioi.UI
             var button = NewButton(label, action);
             button.style.minWidth = 144;
             button.style.minHeight = 44;
-            button.style.backgroundImage = new StyleBackground();
-            button.style.backgroundColor = new Color(0.03f, 0.22f, 0.34f, 0.92f);
-            button.style.color = RuntimeArtCatalog.Text;
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
             button.style.fontSize = 14;
-            button.style.borderTopColor = RuntimeArtCatalog.Gold;
-            button.style.borderTopWidth = 1;
-            button.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            button.style.borderLeftWidth = 2;
-            button.style.borderRightColor = RuntimeArtCatalog.Gold;
-            button.style.borderRightWidth = 1;
-            button.style.borderBottomColor = RuntimeArtCatalog.Spirit;
-            button.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.22f, 0.34f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit);
             return button;
         }
 
@@ -1456,14 +1369,8 @@ namespace LinhGioi.UI
             var button = NewButton(label, action);
             button.style.minWidth = 132;
             button.style.minHeight = 42;
-            button.style.backgroundImage = new StyleBackground();
-            button.style.backgroundColor = new Color(0.04f, 0.13f, 0.22f, 0.92f);
-            button.style.color = RuntimeArtCatalog.Text;
             button.style.fontSize = 14;
-            button.style.borderTopColor = RuntimeArtCatalog.Spirit;
-            button.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            button.style.borderRightColor = RuntimeArtCatalog.SurfaceRaised;
-            button.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.04f, 0.13f, 0.22f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.Gold);
             return button;
         }
 
@@ -2149,12 +2056,7 @@ namespace LinhGioi.UI
             button.style.minHeight = 58;
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
             button.style.paddingLeft = 14;
-            button.style.backgroundImage = new StyleBackground();
-            button.style.backgroundColor = new Color(0.03f, 0.15f, 0.25f, 0.88f);
-            button.style.borderTopColor = RuntimeArtCatalog.Spirit;
-            button.style.borderLeftColor = RuntimeArtCatalog.Gold;
-            button.style.borderRightColor = RuntimeArtCatalog.Spirit;
-            button.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.15f, 0.25f, 0.88f), RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
             button.tooltip = "Chọn nhân vật tu luyện";
             return button;
         }
@@ -2215,29 +2117,15 @@ namespace LinhGioi.UI
         private static void ApplyCombatPanelSkin(VisualElement panel)
         {
             panel.style.backgroundImage = new StyleBackground();
-            panel.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.86f);
-            panel.style.borderTopColor = RuntimeArtCatalog.Spirit;
-            panel.style.borderTopWidth = 1;
-            panel.style.borderLeftColor = RuntimeArtCatalog.Gold;
-            panel.style.borderLeftWidth = 2;
-            panel.style.borderRightColor = RuntimeArtCatalog.Spirit;
-            panel.style.borderRightWidth = 1;
-            panel.style.borderBottomColor = RuntimeArtCatalog.Gold;
-            panel.style.borderBottomWidth = 1;
+            panel.style.backgroundColor = RuntimeUiSkin.BlueGlass;
+            RuntimeUiSkin.ApplyEdgeFrame(panel, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
         }
 
         private static void ApplyV2PanelSkin(VisualElement panel)
         {
             panel.style.backgroundImage = new StyleBackground();
             panel.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.90f);
-            panel.style.borderTopColor = RuntimeArtCatalog.Gold;
-            panel.style.borderTopWidth = 1;
-            panel.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-            panel.style.borderLeftWidth = 2;
-            panel.style.borderRightColor = RuntimeArtCatalog.Spirit;
-            panel.style.borderRightWidth = 1;
-            panel.style.borderBottomColor = RuntimeArtCatalog.Gold;
-            panel.style.borderBottomWidth = 1;
+            RuntimeUiSkin.ApplyEdgeFrame(panel, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
         }
 
         private void ApplyLoginButtonState(Texture2D texture)

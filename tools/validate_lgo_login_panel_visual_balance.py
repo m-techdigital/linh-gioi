@@ -52,13 +52,18 @@ def main() -> int:
         "UseLoginOrnatePanelTexture = false",
         "LGO Login Gate Entry Bottom CTA v3 Final Panel V3B",
         "LGO Login CTA Backing Balance v1",
-        "new Color(0.005f, 0.018f, 0.040f, 0.18f)",
-        "new Color(0.93f, 0.73f, 0.36f, 0.20f)",
+        "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
         "LGO Login Gate Keeper Soft Grounding Glow V3B",
         "style.opacity = 0.93f",
         "Mathf.Clamp(width * 0.26f",
         "Mathf.Clamp(width * 0.46f",
         "LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
+        "LGO Runtime UI Skin Foundation v1",
+        "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.18f)",
+        "LightGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.20f)",
     )
     require(
         "docs/tasks/LGO-LOGIN-PANEL-VISUAL-BALANCE-PASS-v1.0.md",

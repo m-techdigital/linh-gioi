@@ -51,55 +51,53 @@ def check_frozen() -> None:
 
 
 def main() -> int:
-    source = read("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs")
-    for marker in (
-        "LGO Login CTA Backing Balance v1",
-        "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
-        "new Color(0.005f, 0.018f, 0.040f, 0.10f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.14f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.16f)",
-        "Mathf.RoundToInt(100f * mobileScale)",
-        "tablet ? 128 : 136",
-    ):
-        if marker not in source:
-            ERRORS.append(f"login CTA backing source missing marker: {marker}")
-    skin = read("client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs")
-    for marker in (
-        "LGO Runtime UI Skin Foundation v1",
-        "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.18f)",
-        "ApplyLoginCtaBacking(VisualElement element)",
-        "ApplyRadius(element, 18)",
-    ):
-        if marker not in skin:
-            ERRORS.append(f"runtime UI skin missing marker: {marker}")
     require(
-        "docs/tasks/LGO-LOGIN-CTA-BACKING-BALANCE-PASS-v1.0.md",
-        "LGO_LOGIN_CTA_BACKING_BALANCE_READY",
-        "No new runtime image import",
-        "No VISUAL_RUNTIME_PASS claim",
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
+        "LGO Runtime UI Skin Foundation v1",
+        "ApplyRadius(VisualElement element, float radius)",
+        "ApplyPadding(VisualElement element, float horizontal, float vertical)",
+        "ApplyEdgeFrame(VisualElement element, Color left, Color top, Color right, Color bottom",
+        "ApplyPanelFrame(VisualElement element)",
+        "ApplyInsetRowFrame(VisualElement element, Color accent)",
+        "ApplyLoginCtaBacking(VisualElement element)",
+        "ApplyServerSelectorFrame(VisualElement element)",
+        "ApplyCompactActionFrame(Button button",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "RuntimeUiSkin.ApplyPanelFrame(panel);",
+        "RuntimeUiSkin.ApplyInsetRowFrame(row, accent);",
+        "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
+        "RuntimeUiSkin.ApplyServerSelectorFrame(serverRow);",
+        "RuntimeUiSkin.ApplyCompactActionFrame(button",
+    )
+    require(
+        "docs/tasks/LGO-RUNTIME-UI-SKIN-FOUNDATION-PASS-v1.0.md",
+        "LGO_RUNTIME_UI_SKIN_FOUNDATION_READY",
+        "No new runtime image payload",
     )
     require(
         "tools/lgo_playable_closure_check.sh",
-        "login_cta_backing_balance",
-        "validate_lgo_login_cta_backing_balance.py",
+        "runtime_ui_skin_foundation",
+        "validate_lgo_runtime_ui_skin_foundation.py",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-LOGIN-CTA-BACKING-BALANCE-PASS-v1.0",
-        "LGO_LOGIN_CTA_BACKING_BALANCE_READY",
+        "LGO-RUNTIME-UI-SKIN-FOUNDATION-PASS-v1.0",
+        "LGO_RUNTIME_UI_SKIN_FOUNDATION_READY",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-LOGIN-CTA-BACKING-BALANCE-PASS v1.0",
-        "LGO_LOGIN_CTA_BACKING_BALANCE_READY",
+        "LGO-RUNTIME-UI-SKIN-FOUNDATION-PASS v1.0",
+        "LGO_RUNTIME_UI_SKIN_FOUNDATION_READY",
     )
     check_frozen()
     if ERRORS:
-        print("LGO LOGIN CTA BACKING BALANCE VALIDATION FAILED", file=sys.stderr)
+        print("LGO RUNTIME UI SKIN FOUNDATION VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_LOGIN_CTA_BACKING_BALANCE_VALIDATION_PASS")
+    print("LGO_RUNTIME_UI_SKIN_FOUNDATION_VALIDATION_PASS")
     return 0
 
 
