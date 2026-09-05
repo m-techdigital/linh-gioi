@@ -29,6 +29,7 @@ namespace LinhGioi.UI
         private VisualElement _lobbyPanel;
         private VisualElement _worldHud;
         private VisualElement _worldDebugStrip;
+        private VisualElement _worldGuidanceCard;
         private VisualElement _dialoguePanel;
         private VisualElement _sessionMenuPanel;
         private VisualElement _settingsPanel;
@@ -667,6 +668,7 @@ namespace LinhGioi.UI
             _worldHud.Add(_worldMeta);
 
             var guidanceCard = NewWorldHudGroup("LGO World Guidance Card V3B", RuntimeArtCatalog.Spirit);
+            _worldGuidanceCard = guidanceCard;
             _worldArea = NewStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted);
             ApplyHudStatusCompact(_worldArea, 12);
             guidanceCard.Add(_worldArea);
@@ -1547,6 +1549,7 @@ namespace LinhGioi.UI
             if (_position != null) _position.style.display = showPosition && !focusMode ? DisplayStyle.Flex : DisplayStyle.None;
             if (_worldDebugStrip != null) _worldDebugStrip.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldMeta != null) _worldMeta.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_worldGuidanceCard != null) _worldGuidanceCard.style.display = dialogueVisible && compactViewport ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldArea != null) _worldArea.style.display = compactWorld ? DisplayStyle.None : DisplayStyle.Flex;
             if (_worldStep != null) _worldStep.style.display = showHints && !compactWorld ? DisplayStyle.Flex : DisplayStyle.None;
             if (_worldDirection != null) _worldDirection.style.display = showHints ? DisplayStyle.Flex : DisplayStyle.None;
@@ -1741,6 +1744,7 @@ namespace LinhGioi.UI
             {
                 _settingsPanel.style.display = mobile || tablet ? DisplayStyle.None : DisplayStyle.Flex;
             }
+            ApplyWorldPanelViewportPolish(mobile, tablet, worldVisible, width, height);
             if (_layoutProfileLabel != null)
             {
                 _layoutProfileLabel.text = mobile
@@ -1754,6 +1758,55 @@ namespace LinhGioi.UI
             if (_focusModeToggle != null && mobile && !_focusModeToggle.value)
                 _focusModeToggle.value = true;
             ApplyLocalSettings();
+        }
+
+        private void ApplyWorldPanelViewportPolish(bool mobile, bool tablet, bool worldVisible, int viewportWidth, int viewportHeight)
+        {
+            if (!worldVisible || _worldHud == null) return;
+            var dialogueVisible = _dialoguePanel != null && _dialoguePanel.style.display == DisplayStyle.Flex;
+            var mobilePanelWidth = dialogueVisible
+                ? Mathf.Clamp(viewportWidth * 0.26f, 248f, 286f)
+                : Mathf.Clamp(viewportWidth * 0.28f, 238f, 272f);
+            var tabletPanelWidth = dialogueVisible
+                ? Mathf.Clamp(viewportWidth * 0.30f, 350f, 400f)
+                : Mathf.Clamp(viewportWidth * 0.31f, 360f, 420f);
+
+            // LGO World HUD Dialogue Viewport Polish v1: mobile dialogue keeps buttons inside the visible viewport.
+            _worldHud.style.maxWidth = mobile ? mobilePanelWidth : tablet ? tabletPanelWidth : 390;
+            _worldHud.style.maxHeight = mobile ? Mathf.Max(260f, viewportHeight - 34f) : tablet ? Mathf.Max(420f, viewportHeight - 80f) : StyleKeyword.None;
+            _worldHud.style.paddingLeft = mobile && dialogueVisible ? 7 : mobile ? 8 : 12;
+            _worldHud.style.paddingRight = mobile && dialogueVisible ? 7 : mobile ? 8 : 12;
+            _worldHud.style.paddingTop = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;
+            _worldHud.style.paddingBottom = mobile && dialogueVisible ? 5 : mobile ? 6 : 10;
+
+            if (_dialoguePanel != null)
+            {
+                _dialoguePanel.style.marginTop = mobile ? 6 : tablet ? 8 : 10;
+                _dialoguePanel.style.paddingLeft = mobile ? 10 : 14;
+                _dialoguePanel.style.paddingRight = mobile ? 10 : 14;
+                _dialoguePanel.style.paddingTop = mobile ? 9 : 12;
+                _dialoguePanel.style.paddingBottom = mobile ? 9 : 12;
+            }
+            if (_dialogueSpeaker != null)
+                _dialogueSpeaker.style.fontSize = mobile ? 15 : 17;
+            if (_dialogueLine != null)
+                _dialogueLine.style.fontSize = mobile ? 14 : 16;
+            if (_dialogueProgress != null)
+            {
+                _dialogueProgress.style.fontSize = mobile ? 12 : 13;
+                _dialogueProgress.style.paddingTop = mobile ? 4 : 5;
+                _dialogueProgress.style.paddingBottom = mobile ? 4 : 5;
+            }
+            if (_dialogueContinueButton != null)
+            {
+                _dialogueContinueButton.style.minHeight = mobile ? 38 : 42;
+                _dialogueContinueButton.style.minWidth = mobile ? 116 : 132;
+            }
+            if (_dialogueCloseButton != null)
+            {
+                _dialogueCloseButton.style.minHeight = mobile ? 38 : 42;
+                _dialogueCloseButton.style.minWidth = mobile ? 90 : 104;
+            }
         }
 
         private void ApplyTopStatusResponsive(bool mobile, bool tablet, bool worldVisible, int viewportWidth)
