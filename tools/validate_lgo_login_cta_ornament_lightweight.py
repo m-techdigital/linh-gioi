@@ -56,9 +56,12 @@ def main() -> int:
         "LGO Login CTA Lightweight Top Ornament v1",
         "LGO Login CTA Lightweight Bottom Ornament v1",
         "NewLoginOrnamentRule",
+        "RuntimeArtCatalog.Spirit",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "NewLoginOrnamentLine",
         "RuntimeArtCatalog.Gold",
-        "RuntimeArtCatalog.Spirit",
     )
     require(
         "docs/tasks/LGO-LOGIN-CTA-ORNAMENT-LIGHTWEIGHT-PASS-v1.0.md",

@@ -65,11 +65,15 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "RuntimeUiSkin.ApplyPanelFrame(panel);",
-        "RuntimeUiSkin.ApplyInsetRowFrame(row, accent);",
+        "using static LinhGioi.UI.RuntimeUiFactory;",
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
         "RuntimeUiSkin.ApplyServerSelectorFrame(serverRow);",
         "RuntimeUiSkin.ApplyCompactActionFrame(button",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "RuntimeUiSkin.ApplyPanelFrame(panel);",
+        "RuntimeUiSkin.ApplyInsetRowFrame(row, accent);",
     )
     require(
         "docs/tasks/LGO-RUNTIME-UI-SKIN-FOUNDATION-PASS-v1.0.md",

@@ -8,6 +8,7 @@ using LinhGioi.Protocol.V1;
 using LinhGioi.World;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static LinhGioi.UI.RuntimeUiFactory;
 
 namespace LinhGioi.UI
 {
@@ -1128,144 +1129,6 @@ namespace LinhGioi.UI
                 _sessionMenuStatus.text = "Phiên bị gián đoạn: kiểm tra kết nối rồi thử lại.";
         }
 
-        private static VisualElement NewPanel(float maxWidth)
-        {
-            var panel = new VisualElement();
-            panel.style.maxWidth = maxWidth;
-            panel.style.minWidth = 300;
-            panel.style.width = Length.Percent(100);
-            panel.style.marginRight = 0;
-            panel.style.marginBottom = 12;
-            RuntimeUiSkin.ApplyPadding(panel, 16, 14);
-            panel.style.backgroundColor = RuntimeArtCatalog.Surface;
-            RuntimeUiSkin.ApplyPanelFrame(panel);
-            return panel;
-        }
-
-        private static VisualElement NewPreviewPanel(string sigilText = "LINH MÔN", string headingText = null)
-        {
-            var preview = new VisualElement();
-            preview.style.minWidth = 220;
-            preview.style.flexGrow = 1;
-            RuntimeUiSkin.ApplyPadding(preview, 14, 12);
-            RuntimeUiSkin.ApplyPreviewPanelFrame(preview);
-            var sigil = new Label(sigilText);
-            sigil.style.color = RuntimeArtCatalog.Spirit;
-            sigil.style.unityFontStyleAndWeight = FontStyle.Bold;
-            sigil.style.fontSize = 11;
-            preview.Add(sigil);
-            if (!string.IsNullOrWhiteSpace(headingText))
-            {
-                var heading = new Label(headingText);
-                heading.style.color = RuntimeArtCatalog.Text;
-                heading.style.unityFontStyleAndWeight = FontStyle.Bold;
-                heading.style.fontSize = 15;
-                heading.style.marginTop = 2;
-                heading.style.marginBottom = 6;
-                preview.Add(heading);
-            }
-            return preview;
-        }
-
-        private static VisualElement NewReadabilityRow(string title, string value, Color accent)
-        {
-            var row = new VisualElement();
-            row.style.flexDirection = FlexDirection.Row;
-            row.style.flexWrap = Wrap.Wrap;
-            row.style.marginTop = 8;
-            RuntimeUiSkin.ApplyPadding(row, 10, 7);
-            RuntimeUiSkin.ApplyInsetRowFrame(row, accent);
-            var titleLabel = new Label(title);
-            titleLabel.style.minWidth = 86;
-            titleLabel.style.marginRight = 8;
-            titleLabel.style.color = accent;
-            titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
-            var valueLabel = new Label(value);
-            valueLabel.style.flexGrow = 1;
-            valueLabel.style.color = RuntimeArtCatalog.Text;
-            valueLabel.style.whiteSpace = WhiteSpace.Normal;
-            row.Add(titleLabel);
-            row.Add(valueLabel);
-            return row;
-        }
-
-        private static VisualElement NewWorldHudGroup(string name, Color accent)
-        {
-            var group = new VisualElement { name = name };
-            group.style.marginTop = 8;
-            group.style.marginBottom = 8;
-            RuntimeUiSkin.ApplyPadding(group, 8, 7);
-            RuntimeUiSkin.ApplyWorldHudGroupFrame(group, accent);
-            return group;
-        }
-
-        private static void ApplyHudStatusCompact(Label label, int fontSize)
-        {
-            label.style.fontSize = fontSize;
-            label.style.marginTop = 4;
-            label.style.paddingLeft = 8;
-            label.style.paddingRight = 8;
-            label.style.paddingTop = 5;
-            label.style.paddingBottom = 5;
-            RuntimeUiSkin.ApplyHudStatusCompactFrame(label);
-        }
-
-        private static Label NewSectionTitle(string text)
-        {
-            var label = new Label(text);
-            label.style.fontSize = 20;
-            label.style.unityFontStyleAndWeight = FontStyle.Bold;
-            label.style.color = RuntimeArtCatalog.Text;
-            label.style.marginBottom = 8;
-            label.style.unityTextAlign = TextAnchor.MiddleCenter;
-            return label;
-        }
-
-        private static Label NewMutedLabel(string text)
-        {
-            var label = new Label(text);
-            label.style.color = RuntimeArtCatalog.Muted;
-            label.style.whiteSpace = WhiteSpace.Normal;
-            return label;
-        }
-
-        private static VisualElement NewLoginOrnamentRule(string name)
-        {
-            var row = new VisualElement { name = name };
-            row.style.flexDirection = FlexDirection.Row;
-            row.style.alignItems = Align.Center;
-            row.style.justifyContent = Justify.Center;
-            row.style.width = Length.Percent(86);
-            row.style.height = 8;
-            row.style.marginTop = 1;
-            row.style.marginBottom = 4;
-
-            // LGO Login CTA Debug Dot Cleanup v1: keep a quiet V3B accent without editor-like cyan handles.
-            row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Gold));
-            return row;
-        }
-
-        private static VisualElement NewLoginOrnamentLine(Color color)
-        {
-            var line = new VisualElement();
-            line.style.flexGrow = 1;
-            line.style.height = 1;
-            line.style.backgroundColor = color;
-            line.style.opacity = 0.64f;
-            return line;
-        }
-
-        private static Label NewStatusLabel(string text, Color color)
-        {
-            var label = new Label(text);
-            label.style.color = color;
-            label.style.whiteSpace = WhiteSpace.Normal;
-            label.style.marginTop = 8;
-            RuntimeUiSkin.ApplyPadding(label, 10, 6);
-            RuntimeUiSkin.ApplyInsetRowFrame(label, color);
-            return label;
-        }
-
         private static TextField NewTextField(string label, string value)
         {
             var field = new TextField(label) { value = value };
@@ -2019,16 +1882,6 @@ namespace LinhGioi.UI
             if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
             icon.tooltip = tooltip;
             return icon;
-        }
-
-        private static VisualElement NewButtonRow(params Button[] buttons)
-        {
-            var row = new VisualElement();
-            row.style.flexDirection = FlexDirection.Row;
-            row.style.flexWrap = Wrap.Wrap;
-            row.style.marginTop = 6;
-            foreach (var button in buttons) row.Add(button);
-            return row;
         }
 
         private static VisualElement NewCombatCooldownIcon()

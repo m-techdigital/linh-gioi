@@ -53,7 +53,12 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO Login CTA Debug Dot Cleanup v1",
+        "LGO Login CTA Lightweight Top Ornament v1",
+        "LGO Login CTA Lightweight Bottom Ornament v1",
+        "NewLoginOrnamentRule",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "row.style.width = Length.Percent(86);",
         "row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Gold));",
     )

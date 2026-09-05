@@ -62,14 +62,18 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "RuntimeUiSkin.ApplyPreviewPanelFrame(preview);",
-        "RuntimeUiSkin.ApplyWorldHudGroupFrame(group, accent);",
-        "RuntimeUiSkin.ApplyHudStatusCompactFrame(label);",
+        "using static LinhGioi.UI.RuntimeUiFactory;",
         "RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);",
         "RuntimeUiSkin.SessionMenuBackground(mobile || tablet);",
         "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);",
         "LGO World HUD Action Shell V3B Skin v1",
         "LGO Session Menu Overlay",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "RuntimeUiSkin.ApplyPreviewPanelFrame(preview);",
+        "RuntimeUiSkin.ApplyWorldHudGroupFrame(group, accent);",
+        "RuntimeUiSkin.ApplyHudStatusCompactFrame(label);",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-STYLE-ADOPTION-PASS-v1.0.md",
