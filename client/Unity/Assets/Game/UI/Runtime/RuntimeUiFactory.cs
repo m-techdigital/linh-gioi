@@ -92,6 +92,18 @@ namespace LinhGioi.UI
             return hud;
         }
 
+        internal static VisualElement NewCharacterHallPanel(RuntimeUiLayoutProfile layout)
+        {
+            var panel = NewPanel(840);
+            panel.name = "LGO Character Hall V3B Composition Panel";
+            RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);
+            panel.style.maxWidth = 800;
+            panel.style.minHeight = 452;
+            RuntimeUiSkin.ApplyPadding(panel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
+            panel.style.alignSelf = Align.FlexStart;
+            return panel;
+        }
+
         internal static void ApplyHudStatusCompact(Label label, int fontSize)
         {
             label.style.fontSize = fontSize;

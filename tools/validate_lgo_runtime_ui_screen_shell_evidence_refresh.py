@@ -25,6 +25,15 @@ def require(rel: str, *markers: str) -> None:
             ERRORS.append(f"{rel} missing marker: {marker}")
 
 
+def require_png(rel: str, min_size: int = 24_000) -> None:
+    path = ROOT / rel
+    if not path.is_file():
+        ERRORS.append(f"missing screenshot: {rel}")
+        return
+    if path.stat().st_size < min_size:
+        ERRORS.append(f"screenshot too small: {rel} size={path.stat().st_size}")
+
+
 def check_frozen() -> None:
     result = subprocess.run(
         [
@@ -54,21 +63,19 @@ def main() -> int:
     require(
         "docs/tasks/LGO-RUNTIME-UI-SCREEN-SHELL-EVIDENCE-REFRESH-v1.0.md",
         "LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY",
-        "build/visual-evidence/latest/session-menu.png",
-        "build/visual-evidence/latest/npc-dialogue.png",
-        "build/visual-evidence/latest/world-hub.png",
-        "build/visual-evidence/latest/target-dummy-state.png",
-        "NewSectionShell",
-        "square-looking player pulse artifact is no longer visible",
-        "VISUAL_RUNTIME_PASS",
-        "not claimed",
-        "LGO-RUNTIME-UI-ACTION-ROW-COMPONENT-REVIEW-v1.0",
+        "build/visual-evidence/latest/character-lobby.png",
+        "build/visual-evidence/latest/character-select.png",
+        "No `VISUAL_RUNTIME_PASS` claim",
+    )
+    require(
+        "tools/lgo_playable_closure_check.sh",
+        "runtime_ui_screen_shell_evidence_refresh",
+        "validate_lgo_runtime_ui_screen_shell_evidence_refresh.py",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-RUNTIME-UI-SCREEN-SHELL-EVIDENCE-REFRESH-v1.0",
+        "LGO-RUNTIME-UI-ACTION-ROW-BASE-AUDIT-v1.0",
         "LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY",
-        "LGO-RUNTIME-UI-ACTION-ROW-COMPONENT-REVIEW-v1.0",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
@@ -76,10 +83,16 @@ def main() -> int:
         "LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY",
     )
     require(
-        "tools/lgo_playable_closure_check.sh",
-        "runtime_ui_screen_shell_evidence_refresh",
-        "validate_lgo_runtime_ui_screen_shell_evidence_refresh.py",
+        "build/visual-evidence/latest/visual-runtime-evidence-review.md",
+        "character-lobby.png",
+        "character-select.png",
+        "login.png",
     )
+    require_png("build/visual-evidence/latest/login.png")
+    require_png("build/visual-evidence/latest/character-lobby.png")
+    require_png("build/visual-evidence/latest/character-select.png")
+    require_png("build/visual-evidence/latest/world-hub.png")
+    require_png("build/visual-evidence/latest/session-menu.png")
     check_frozen()
     if ERRORS:
         print("LGO RUNTIME UI SCREEN SHELL EVIDENCE REFRESH VALIDATION FAILED", file=sys.stderr)

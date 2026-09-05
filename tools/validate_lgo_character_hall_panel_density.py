@@ -39,18 +39,23 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO Character Hall V3B Composition Panel",
         "LGO Character Hall Main Selection Grid V3B",
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
         "LGO Character Hall Create Cultivator Panel V3B",
-        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(_lobbyPanel);",
+        "_lobbyPanel = NewCharacterHallPanel(layout);",
         "RuntimeUiSkin.ApplyCharacterListFrame(_characterList);",
         "portrait.style.width = 92",
         "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
         "Mathf.Min(width - 40f, 780f)",
         "tablet ? 790 : 800",
         "tablet ? 334 : 350",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "NewCharacterHallPanel(RuntimeUiLayoutProfile layout)",
+        "LGO Character Hall V3B Composition Panel",
+        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",

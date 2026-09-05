@@ -474,13 +474,7 @@ namespace LinhGioi.UI
         private void BuildLobbyPanel()
         {
             var layout = CurrentLayoutProfile();
-            _lobbyPanel = NewPanel(840);
-            _lobbyPanel.name = "LGO Character Hall V3B Composition Panel";
-            RuntimeUiSkin.ApplyCharacterHallPanelFrame(_lobbyPanel);
-            _lobbyPanel.style.maxWidth = 800;
-            _lobbyPanel.style.minHeight = 452;
-            RuntimeUiSkin.ApplyPadding(_lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
-            _lobbyPanel.style.alignSelf = Align.FlexStart;
+            _lobbyPanel = NewCharacterHallPanel(layout);
             _mainShell.Add(_lobbyPanel);
             _lobbyPanel.Add(NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold, "LGO Character Hall Header Block"));
             var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.");

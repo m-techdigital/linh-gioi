@@ -62,16 +62,18 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(_lobbyPanel);",
+        "_lobbyPanel = NewCharacterHallPanel(layout);",
         "RuntimeUiSkin.ApplyCharacterListFrame(_characterList);",
         "RuntimeUiSkin.ApplyCharacterPreviewFrame(_selectedPreview);",
         "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
         "RuntimeUiSkin.ApplyCharacterCreateFrame(_createPanel);",
-        "LGO Character Hall V3B Composition Panel",
         "LGO Character Hall Create Cultivator Panel V3B",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "NewCharacterHallPanel(RuntimeUiLayoutProfile layout)",
+        "LGO Character Hall V3B Composition Panel",
+        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);",
         "RuntimeUiSkin.ApplyLobbyInputFrame(field);",
     )
     require(

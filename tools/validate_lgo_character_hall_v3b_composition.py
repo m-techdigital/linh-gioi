@@ -57,7 +57,6 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO Character Hall V3B Composition Panel",
         "LGO Character Hall Main Selection Grid V3B",
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
@@ -69,6 +68,11 @@ def main() -> int:
         "Chọn tu sĩ để bước qua Linh Môn",
         "Tạo tu sĩ đầu tiên",
         "Vào sân luyện",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "NewCharacterHallPanel(RuntimeUiLayoutProfile layout)",
+        "LGO Character Hall V3B Composition Panel",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0.md",

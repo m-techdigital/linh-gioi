@@ -65,6 +65,7 @@ def main() -> int:
         "internal static VisualElement NewPreviewPanel",
         "internal static VisualElement NewReadabilityRow",
         "internal static VisualElement NewWorldHudGroup",
+        "internal static VisualElement NewCharacterHallPanel",
         "internal static void ApplyHudStatusCompact",
         "internal static Label NewCompactStatusLabel",
         "internal static Label NewSectionTitle",
@@ -79,7 +80,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "using static LinhGioi.UI.RuntimeUiFactory;",
-        "_lobbyPanel = NewPanel(840);",
+        "_lobbyPanel = NewCharacterHallPanel(layout);",
         "_selectedPreview = NewPreviewPanel(\"TU SĨ\", \"Hồ sơ đang chọn\");",
         "_combatTargetStatus = NewCompactStatusLabel(\"Bia luyện: chưa vào sân.\", RuntimeArtCatalog.Gold, 13);",
     )
