@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-ACTION-ROW-EVIDENCE-REFRESH-v1.0`
+`LGO-RUNTIME-UI-FORM-SECTION-BASE-AUDIT-v1.0`
 
-Refresh runtime screenshots after button metrics helper consolidation, then review Login CTA, Character Hall actions, World HUD actions, session menu actions, and combat button readability before continuing deeper UI base cleanup. Marker ready from the completed source audit: `LGO_RUNTIME_UI_ACTION_ROW_BASE_READY`.
+Audit repeated form/section composition around character creation and future account flows, extracting only reusable shell helpers that do not change player flow. Marker ready from the completed evidence refresh: `LGO_RUNTIME_UI_INPUT_FIELD_EVIDENCE_REFRESH_READY`.
 
 ## Current blocker
 
@@ -131,6 +131,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-SCREEN-SHELL-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-ACTION-ROW-COMPONENT-REVIEW-v1.0` / `LGO_RUNTIME_UI_ACTION_ROW_COMPONENT_REVIEW_READY`
 - `LGO-RUNTIME-UI-ACTION-ROW-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_ACTION_ROW_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-INPUT-FIELD-BASE-AUDIT-v1.0` / `LGO_RUNTIME_UI_INPUT_FIELD_BASE_READY`
+- `LGO-RUNTIME-UI-INPUT-FIELD-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_INPUT_FIELD_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-APPLICATION-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_APPLICATION_AUDIT_READY`
 - `LGO-RUNTIME-UI-RESPONSIVE-STYLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-FACTORY-COVERAGE-AUDIT-v1.0` / `LGO_RUNTIME_UI_FACTORY_COVERAGE_AUDIT_READY`

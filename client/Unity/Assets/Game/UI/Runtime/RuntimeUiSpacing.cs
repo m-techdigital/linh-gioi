@@ -48,6 +48,12 @@ namespace LinhGioi.UI
         internal const int CompactButtonMinHeight = 42;
         internal const int CompactButtonFontSize = 14;
 
+        internal const int BaseInputMaxWidth = 420;
+        internal const int BaseInputMinHeight = 42;
+        internal const int BaseInputMarginTop = 8;
+        internal const int BaseInputPaddingHorizontal = 10;
+        internal const int BaseInputPaddingVertical = 4;
+
         internal const int RuntimeIconSmall = 28;
         internal const int IconMarginLeft = 4;
         internal const int IconMarginRight = 8;

@@ -73,6 +73,14 @@ namespace LinhGioi.UI
             button.style.whiteSpace = whiteSpace;
         }
 
+        internal static void ApplyInputMetrics(TextField field, float maxWidth = 0f, float minHeight = 0f, float marginTop = 0f)
+        {
+            if (maxWidth > 0f) field.style.maxWidth = maxWidth;
+            if (minHeight > 0f) field.style.minHeight = minHeight;
+            if (marginTop > 0f) field.style.marginTop = marginTop;
+            field.style.color = RuntimeArtCatalog.Text;
+        }
+
         internal static void ApplyEdgeFrame(VisualElement element, Color left, Color top, Color right, Color bottom, float leftWidth = 2f, float otherWidth = 1f)
         {
             element.style.borderLeftColor = left;

@@ -283,16 +283,14 @@ namespace LinhGioi.UI
         internal static TextField NewTextField(string label, string value)
         {
             var field = new TextField(label) { value = value };
-            field.style.maxWidth = 420;
-            field.style.marginTop = 8;
-            field.style.color = RuntimeArtCatalog.Text;
+            RuntimeUiSkin.ApplyInputMetrics(field, RuntimeUiSpacing.BaseInputMaxWidth, marginTop: RuntimeUiSpacing.BaseInputMarginTop);
             return field;
         }
 
         internal static void ApplyLobbyInputStyle(TextField field)
         {
-            field.style.minHeight = 42;
-            RuntimeUiSkin.ApplyPadding(field, 10, 4);
+            RuntimeUiSkin.ApplyInputMetrics(field, minHeight: RuntimeUiSpacing.BaseInputMinHeight);
+            RuntimeUiSkin.ApplyPadding(field, RuntimeUiSpacing.BaseInputPaddingHorizontal, RuntimeUiSpacing.BaseInputPaddingVertical);
             RuntimeUiSkin.ApplyLobbyInputFrame(field);
         }
 

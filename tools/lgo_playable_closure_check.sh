@@ -366,6 +366,12 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_action_row_evidence_refresh.py ]]; then
     run_phase runtime_ui_action_row_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_action_row_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_input_field_base_audit.py ]]; then
+    run_phase runtime_ui_input_field_base_audit python3.12 tools/validate_lgo_runtime_ui_input_field_base_audit.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_input_field_evidence_refresh.py ]]; then
+    run_phase runtime_ui_input_field_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_input_field_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_responsive_style_application_audit.py ]]; then
     run_phase runtime_ui_responsive_style_application_audit python3.12 tools/validate_lgo_runtime_ui_responsive_style_application_audit.py
   fi
@@ -732,6 +738,8 @@ source_only() {
     tools/validate_lgo_runtime_ui_screen_shell_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_action_row_component_review.py \
     tools/validate_lgo_runtime_ui_action_row_evidence_refresh.py \
+    tools/validate_lgo_runtime_ui_input_field_base_audit.py \
+    tools/validate_lgo_runtime_ui_input_field_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_responsive_style_application_audit.py \
     tools/validate_lgo_runtime_ui_responsive_style_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_factory_coverage_audit.py \
