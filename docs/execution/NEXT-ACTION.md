@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0`
+`LGO-CHARACTER-HALL-MOBILE-SELECTED-CTA-HIERARCHY-PASS-v1.0`
 
-Reduce dense mobile Character Hall copy and spacing while preserving the account/character flow semantics. Marker: `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`. Continue with presentation-only UI fixes and profile evidence refresh; do not add gameplay or new art payload.
+Improve the selected-character mobile state so `Vào sân luyện` reads as the primary action while preserving the ability to create another character. Marker: `LGO_CHARACTER_HALL_MOBILE_COPY_EVIDENCE_REFRESH_READY`. Keep this presentation-only and do not change account/character semantics.
 
 ## Current blocker
 
@@ -58,7 +58,7 @@ Evidence:
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: compact dense Character Hall mobile copy after the session-menu focus refresh while keeping generated captures and package artifacts out of source control. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; world hub visual staging is tracked under `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`; world hub interaction readability is tracked under `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`; world hub interaction evidence refresh is tracked under `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`; near-interaction capture coverage is tracked under `LGO_NEAR_INTERACTION_CHECKPOINT_CAPTURE_READY`; near-interaction evidence refresh is tracked under `LGO_NEAR_INTERACTION_EVIDENCE_REFRESH_READY`; visual evidence upload packaging is tracked under `LGO_POST_LOGIN_VISUAL_EVIDENCE_UPLOAD_READY`; runtime asset budget refresh is tracked under `LGO_RUNTIME_ASSET_WEIGHT_BUDGET_REFRESH_READY`; runtime asset watch queue/profile polish is tracked under `LGO_RUNTIME_ASSET_WATCH_QUEUE_IMPORT_PROFILE_READY`; visual debt triage is tracked under `LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY`; session-menu focus evidence is tracked under `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: improve selected-character mobile CTA hierarchy after mobile copy evidence refresh while keeping generated captures and package artifacts out of source control. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; world hub visual staging is tracked under `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`; world hub interaction readability is tracked under `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`; world hub interaction evidence refresh is tracked under `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`; near-interaction capture coverage is tracked under `LGO_NEAR_INTERACTION_CHECKPOINT_CAPTURE_READY`; near-interaction evidence refresh is tracked under `LGO_NEAR_INTERACTION_EVIDENCE_REFRESH_READY`; visual evidence upload packaging is tracked under `LGO_POST_LOGIN_VISUAL_EVIDENCE_UPLOAD_READY`; runtime asset budget refresh is tracked under `LGO_RUNTIME_ASSET_WEIGHT_BUDGET_REFRESH_READY`; runtime asset watch queue/profile polish is tracked under `LGO_RUNTIME_ASSET_WATCH_QUEUE_IMPORT_PROFILE_READY`; visual debt triage is tracked under `LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY`; session-menu focus evidence is tracked under `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`; Character Hall mobile density is tracked under `LGO_CHARACTER_HALL_MOBILE_COPY_DENSITY_READY`; Character Hall mobile evidence is tracked under `LGO_CHARACTER_HALL_MOBILE_COPY_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Ready Marker Registry
 
@@ -101,6 +101,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-ASSET-WATCH-QUEUE-IMPORT-PROFILE-POLISH-v1.0` / `LGO_RUNTIME_ASSET_WATCH_QUEUE_IMPORT_PROFILE_READY`
 - `LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE-v1.0` / `LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY`
 - `LGO-SESSION-MENU-FOCUS-EVIDENCE-REFRESH-v1.0` / `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`
+- `LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0` / `LGO_CHARACTER_HALL_MOBILE_COPY_DENSITY_READY`
+- `LGO-CHARACTER-HALL-MOBILE-COPY-EVIDENCE-REFRESH-v1.0` / `LGO_CHARACTER_HALL_MOBILE_COPY_EVIDENCE_REFRESH_READY`
 
 ## Allowed paths
 
@@ -142,6 +144,8 @@ python3.12 tools/validate_lgo_login_cta_ornament_lightweight.py
 python3.12 tools/validate_lgo_login_responsive_scale_cleanup.py
 python3.12 tools/validate_lgo_character_hall_v3b_composition.py
 python3.12 tools/validate_lgo_character_hall_panel_density.py
+python3.12 tools/validate_lgo_character_hall_mobile_copy_density.py
+python3.12 tools/validate_lgo_character_hall_mobile_copy_evidence_refresh.py
 python3.12 tools/validate_lgo_character_create_form_presentation.py
 python3.12 tools/validate_lgo_character_hall_responsive_evidence_refresh.py
 python3.12 tools/validate_lgo_visual_runtime_fast_profile_reuse.py
@@ -216,6 +220,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-SESSION-MENU-FOCUS-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0`; inspect mobile `character-lobby.png` before patching.
+`LGO-CHARACTER-HALL-MOBILE-COPY-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-CHARACTER-HALL-MOBILE-SELECTED-CTA-HIERARCHY-PASS-v1.0`; mobile selected-character state still makes the create form compete with the primary enter-world CTA.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

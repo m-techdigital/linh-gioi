@@ -41,6 +41,7 @@ namespace LinhGioi.UI
         private VisualElement _lobbyContent;
         private VisualElement _selectedPreview;
         private VisualElement _createPanel;
+        private VisualElement _emptyCharacterCard;
         private VisualElement _loginStage;
         private VisualElement _loginControlColumn;
         private VisualElement _loginGateKeeper;
@@ -49,6 +50,9 @@ namespace LinhGioi.UI
         private VisualElement _loginServerRow;
         private VisualElement _serverStatusIcon;
         private Label _loginServerText;
+        private Label _lobbyIntro;
+        private Label _createHint;
+        private Label _emptyCharacterHint;
         private TextField _devKey;
         private TextField _characterName;
         private TextField _classId;
@@ -512,6 +516,7 @@ namespace LinhGioi.UI
             _lobbyPanel.Add(NewSectionTitle("Điện Nhân Vật"));
             _lobbyPanel.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
             var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.");
+            _lobbyIntro = lobbyIntro;
             lobbyIntro.style.marginBottom = 10;
             lobbyIntro.style.unityTextAlign = TextAnchor.MiddleCenter;
             _lobbyPanel.Add(lobbyIntro);
@@ -610,6 +615,7 @@ namespace LinhGioi.UI
 
             _createPanel.Add(NewSectionTitle("Tạo Tu Sĩ"));
             var createHint = NewStatusLabel("Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted);
+            _createHint = createHint;
             createHint.name = "LGO Character Create Form Game Copy v1";
             _createPanel.Add(createHint);
             _characterName = NewTextField("Danh xưng", "LinhGioiHero");
@@ -905,6 +911,7 @@ namespace LinhGioi.UI
             if (_characters.Length == 0)
             {
                 var emptyCard = new VisualElement();
+                _emptyCharacterCard = emptyCard;
                 emptyCard.style.marginTop = 10;
                 emptyCard.style.paddingLeft = 14;
                 emptyCard.style.paddingRight = 14;
@@ -917,12 +924,15 @@ namespace LinhGioi.UI
                 emptyCard.style.borderLeftWidth = 2;
                 emptyCard.Add(NewStatusLabel("Tạo tu sĩ đầu tiên", RuntimeArtCatalog.Gold));
                 var empty = NewMutedLabel("Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.");
+                _emptyCharacterHint = empty;
                 empty.style.marginTop = 6;
                 emptyCard.Add(empty);
                 _characterList.Add(emptyCard);
                 SelectCharacter(null);
                 return;
             }
+            _emptyCharacterCard = null;
+            _emptyCharacterHint = null;
             foreach (var character in _characters)
             {
                 var captured = character;
@@ -1693,11 +1703,31 @@ namespace LinhGioi.UI
             _lobbyPanel.style.paddingRight = mobile ? 12 : 18;
             _lobbyPanel.style.paddingTop = mobile ? 8 : 16;
             _lobbyPanel.style.paddingBottom = mobile ? 8 : 18;
+            if (_lobbyIntro != null)
+            {
+                // LGO Character Hall Mobile Copy Density v1: mobile keeps intent, drops prose.
+                _lobbyIntro.text = mobile ? "Chọn tu sĩ, rồi vào sân luyện." : "Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.";
+                _lobbyIntro.style.fontSize = mobile ? 13 : 14;
+                _lobbyIntro.style.marginBottom = mobile ? 6 : 10;
+            }
             _characterList.style.minWidth = mobile ? 220 : 280;
             _characterList.style.maxWidth = mobile ? Mathf.Clamp(width * 0.40f, 285f, 330f) : tablet ? 370 : 390;
             _characterList.style.marginRight = mobile ? 10 : 14;
             _characterList.style.paddingTop = mobile ? 8 : 12;
             _characterList.style.paddingBottom = mobile ? 8 : 12;
+            if (_emptyCharacterCard != null)
+            {
+                _emptyCharacterCard.style.marginTop = mobile ? 8 : 10;
+                _emptyCharacterCard.style.paddingLeft = mobile ? 12 : 14;
+                _emptyCharacterCard.style.paddingRight = mobile ? 12 : 14;
+                _emptyCharacterCard.style.paddingTop = mobile ? 10 : 14;
+                _emptyCharacterCard.style.paddingBottom = mobile ? 10 : 14;
+            }
+            if (_emptyCharacterHint != null)
+            {
+                _emptyCharacterHint.text = mobile ? "Hồ sơ sẽ hiện tại đây." : "Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.";
+                _emptyCharacterHint.style.fontSize = mobile ? 13 : 14;
+            }
             if (_lobbyContent != null)
             {
                 _lobbyContent.style.flexDirection = FlexDirection.Row;
@@ -1722,6 +1752,7 @@ namespace LinhGioi.UI
                 _createPanel.style.marginTop = mobile ? 0 : 10;
                 _createPanel.style.maxHeight = mobile ? 174 : 210;
             }
+            if (_createHint != null) _createHint.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;
 
             // LGO Mobile World Viewport Evidence Fit v1: keep the HUD proportional so scene actors remain reviewable.
             _worldHud.style.minWidth = mobile ? 238 : 300;

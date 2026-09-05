@@ -237,6 +237,12 @@ source_only() {
   if [[ -f tools/validate_lgo_character_hall_panel_density.py ]]; then
     run_phase character_hall_panel_density python3.12 tools/validate_lgo_character_hall_panel_density.py
   fi
+  if [[ -f tools/validate_lgo_character_hall_mobile_copy_density.py ]]; then
+    run_phase character_hall_mobile_copy_density python3.12 tools/validate_lgo_character_hall_mobile_copy_density.py
+  fi
+  if [[ -f tools/validate_lgo_character_hall_mobile_copy_evidence_refresh.py ]]; then
+    run_phase character_hall_mobile_copy_evidence_refresh python3.12 tools/validate_lgo_character_hall_mobile_copy_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_character_create_form_presentation.py ]]; then
     run_phase character_create_form_presentation python3.12 tools/validate_lgo_character_create_form_presentation.py
   fi
@@ -461,6 +467,8 @@ source_only() {
     tools/validate_lgo_login_responsive_scale_cleanup.py \
     tools/validate_lgo_character_hall_v3b_composition.py \
     tools/validate_lgo_character_hall_panel_density.py \
+    tools/validate_lgo_character_hall_mobile_copy_density.py \
+    tools/validate_lgo_character_hall_mobile_copy_evidence_refresh.py \
     tools/validate_lgo_character_create_form_presentation.py \
     tools/validate_lgo_character_hall_responsive_evidence_refresh.py \
     tools/validate_lgo_visual_runtime_fast_profile_reuse.py \
