@@ -390,6 +390,9 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_primitive_size_token_evidence_refresh.py ]]; then
     run_phase runtime_ui_primitive_size_token_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_primitive_size_token_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_primitive_style_boundary_guide.py ]]; then
+    run_phase runtime_ui_primitive_style_boundary_guide python3.12 tools/validate_lgo_runtime_ui_primitive_style_boundary_guide.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py ]]; then
     run_phase runtime_ui_image_layer_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py
   fi
@@ -710,6 +713,7 @@ source_only() {
     tools/validate_lgo_runtime_ui_primitive_theme_spacing_bridge_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_primitive_size_token_audit.py \
     tools/validate_lgo_runtime_ui_primitive_size_token_evidence_refresh.py \
+    tools/validate_lgo_runtime_ui_primitive_style_boundary_guide.py \
     tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_style_debt_followup_audit.py \
     tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py \
