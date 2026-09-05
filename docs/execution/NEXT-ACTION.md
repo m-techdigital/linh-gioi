@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0`
+`LGO-NEAR-INTERACTION-CHECKPOINT-CAPTURE-PASS-v1.0`
 
-Use the indexed profile screenshots from `LGO-VISUAL-EVIDENCE-PROFILE-INDEX-PASS-v1.0` after `LGO-LOGIN-RESPONSIVE-SCALE-CLEANUP-PASS-v1.0` to improve world hub readability, scene hierarchy, actor/prop staging, and HUD balance without adding gameplay mechanics or importing heavy new art. Marker: `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`. Login marker already ready: `LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_READY`. Profile index marker already ready: `LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY`.
+Add or tune visual evidence checkpoints that place the player near Người Giữ Cổng and Đá Luyện so the runtime screenshots directly show object-aware prompts from `LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0`. Marker: `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`. World hub visual staging marker already ready: `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`. Continue only with presentation/evidence work unless the refreshed screenshots reveal a concrete source bug.
 
 ## Current blocker
 
@@ -58,7 +58,42 @@ Evidence:
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: improve world hub visual readability using the indexed profile evidence under `LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY`. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; login responsive scale cleanup is tracked under `LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; login CTA ornament polish is tracked under `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`; Character Hall create-form presentation is tracked under `LGO_CHARACTER_CREATE_FORM_PRESENTATION_READY`; Character Hall responsive evidence refresh is tracked under `LGO_CHARACTER_HALL_RESPONSIVE_EVIDENCE_REFRESH_READY`; fast profile reuse is tracked under `LGO_VISUAL_RUNTIME_FAST_PROFILE_REUSE_READY`; world HUD action shell skin is tracked under `LGO_WORLD_HUD_ACTION_SHELL_V3B_SKIN_READY`; world HUD evidence refresh is tracked under `LGO_WORLD_HUD_ACTION_SHELL_EVIDENCE_REFRESH_READY`; mobile world camera framing is tracked under `LGO_WORLD_MOBILE_CAMERA_FRAMING_READY`; mobile camera evidence refresh is tracked under `LGO_WORLD_MOBILE_CAMERA_EVIDENCE_REFRESH_READY`; world label safe-area is tracked under `LGO_WORLD_LABEL_SAFE_AREA_READY`; label safe-area evidence is tracked under `LGO_WORLD_LABEL_SAFE_AREA_EVIDENCE_REFRESH_READY`; world top status mobile readability is tracked under `LGO_WORLD_TOP_STATUS_MOBILE_READABILITY_READY`; top status evidence is tracked under `LGO_WORLD_TOP_STATUS_MOBILE_EVIDENCE_REFRESH_READY`; actor/HUD occlusion polish is tracked under `LGO_WORLD_ACTOR_HUD_OCCLUSION_READY`; actor/HUD evidence refresh is tracked under `LGO_WORLD_ACTOR_HUD_OCCLUSION_EVIDENCE_REFRESH_READY`; dialogue panel viewport polish is tracked under `LGO_WORLD_HUD_DIALOGUE_PANEL_VIEWPORT_POLISH_READY`; dialogue evidence refresh is tracked under `LGO_WORLD_HUD_DIALOGUE_PANEL_EVIDENCE_REFRESH_READY`; mobile HUD hierarchy polish is tracked under `LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_READY`; mobile hierarchy evidence refresh is tracked under `LGO_WORLD_HUD_MOBILE_HIERARCHY_EVIDENCE_REFRESH_READY`; source gate evidence preservation is tracked under `LGO_SOURCE_GATE_EVIDENCE_PRESERVATION_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: add near-interaction capture checkpoints so visual review can prove the short object prompts in runtime, not only source. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; world hub visual staging is tracked under `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`; world hub interaction readability is tracked under `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`; world hub interaction evidence refresh is tracked under `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
+
+## Ready Marker Registry
+
+This registry keeps historical source gates discoverable while `Next task` points only at the current task.
+
+- `LGO-LOGIN-PANEL-VISUAL-BALANCE-PASS-v1.0` / `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`
+- `LGO-LOGIN-CTA-ORNAMENT-LIGHTWEIGHT-PASS-v1.0` / `LGO_LOGIN_CTA_ORNAMENT_LIGHTWEIGHT_READY`
+- `LGO-LOGIN-RESPONSIVE-SCALE-CLEANUP-PASS-v1.0` / `LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_READY`
+- `LGO-CHARACTER-HALL-PANEL-DENSITY-PASS-v1.0` / `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`
+- `LGO-CHARACTER-CREATE-FORM-PRESENTATION-PASS-v1.0` / `LGO_CHARACTER_CREATE_FORM_PRESENTATION_READY`
+- `LGO-CHARACTER-HALL-RESPONSIVE-EVIDENCE-REFRESH-v1.0` / `LGO_CHARACTER_HALL_RESPONSIVE_EVIDENCE_REFRESH_READY`
+- `LGO-VISUAL-RUNTIME-FAST-PROFILE-REUSE-PASS-v1.0` / `LGO_VISUAL_RUNTIME_FAST_PROFILE_REUSE_READY`
+- `LGO-WORLD-HUD-ACTION-SHELL-V3B-SKIN-PASS-v1.0` / `LGO_WORLD_HUD_ACTION_SHELL_V3B_SKIN_READY`
+- `LGO-WORLD-HUD-ACTION-SHELL-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_HUD_ACTION_SHELL_EVIDENCE_REFRESH_READY`
+- `LGO-WORLD-MOBILE-CAMERA-FRAMING-PASS-v1.0` / `LGO_WORLD_MOBILE_CAMERA_FRAMING_READY`
+- `LGO-WORLD-MOBILE-CAMERA-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_MOBILE_CAMERA_EVIDENCE_REFRESH_READY`
+- `LGO-WORLD-LABEL-SAFE-AREA-PASS-v1.0` / `LGO_WORLD_LABEL_SAFE_AREA_READY`
+- `LGO-WORLD-LABEL-SAFE-AREA-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_LABEL_SAFE_AREA_EVIDENCE_REFRESH_READY`
+- `LGO-WORLD-TOP-STATUS-MOBILE-READABILITY-PASS-v1.0` / `LGO_WORLD_TOP_STATUS_MOBILE_READABILITY_READY`
+- `LGO-WORLD-TOP-STATUS-MOBILE-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_TOP_STATUS_MOBILE_EVIDENCE_REFRESH_READY`
+- `LGO-WORLD-ACTOR-HUD-OCCLUSION-PASS-v1.0` / `LGO_WORLD_ACTOR_HUD_OCCLUSION_READY`
+- `LGO-WORLD-ACTOR-HUD-OCCLUSION-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_ACTOR_HUD_OCCLUSION_EVIDENCE_REFRESH_READY`
+- `LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0` / `LGO_WORLD_HUD_DIALOGUE_PANEL_VIEWPORT_POLISH_READY`
+- `LGO-WORLD-HUD-DIALOGUE-PANEL-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_HUD_DIALOGUE_PANEL_EVIDENCE_REFRESH_READY`
+- `LGO-WORLD-HUD-MOBILE-HIERARCHY-POLISH-v1.0` / `LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_READY`
+- `LGO-WORLD-HUD-MOBILE-HIERARCHY-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_HUD_MOBILE_HIERARCHY_EVIDENCE_REFRESH_READY`
+- `LGO-SOURCE-GATE-EVIDENCE-PRESERVATION-PASS-v1.0` / `LGO_SOURCE_GATE_EVIDENCE_PRESERVATION_READY`
+- `LGO-VISUAL-EVIDENCE-PROFILE-INDEX-PASS-v1.0` / `LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY`
+- `LGO-VISUAL-RUNTIME-REVIEW-HEURISTICS-PASS-v1.0` / `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`
+- `LGO-WORLD-HUB-PROP-LABEL-RESPONSIVE-PASS-v1.0` / `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`
+- `LGO-WORLD-SCENE-DEPTH-LAYERING-PASS-v1.0` / `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`
+- `LGO-WORLD-RESPONSIVE-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`
+- `LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0` / `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`
+- `LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0` / `LGO_WORLD_HUB_INTERACTION_READABILITY_READY`
+- `LGO-WORLD-HUB-INTERACTION-EVIDENCE-REFRESH-v1.0` / `LGO_WORLD_HUB_INTERACTION_EVIDENCE_REFRESH_READY`
 
 ## Allowed paths
 
@@ -124,6 +159,8 @@ python3.12 tools/validate_lgo_visual_runtime_review_heuristics.py
 python3.12 tools/validate_lgo_world_hub_prop_label_responsive.py
 python3.12 tools/validate_lgo_world_scene_depth_layering.py
 python3.12 tools/validate_lgo_world_hub_visual_readability_cleanup.py
+python3.12 tools/validate_lgo_world_hub_interaction_readability.py
+python3.12 tools/validate_lgo_world_hub_interaction_evidence_refresh.py
 python3.12 tools/validate_lgo_world_responsive_evidence_refresh.py
 python3.12 tools/validate_m4_2_playable_ui.py
 python3.12 tools/validate_m4_visible_ui.py
@@ -164,6 +201,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0` is source-ready. After profile evidence refresh, continue with `LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0`.
+`LGO-WORLD-HUB-INTERACTION-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-NEAR-INTERACTION-CHECKPOINT-CAPTURE-PASS-v1.0` so future visual reviews can directly inspect near-object prompt states.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

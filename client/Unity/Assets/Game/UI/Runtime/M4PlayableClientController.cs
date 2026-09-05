@@ -1048,7 +1048,7 @@ namespace LinhGioi.UI
             RefreshCombatAssetUiState();
             if (_skinSource != null) _skinSource.text = "Nguồn giao diện: asset runtime tối ưu, chưa phải art final.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
-            if (_interactionHint != null) _interactionHint.text = _world.InteractionText;
+            if (_interactionHint != null) _interactionHint.text = _world.InteractionActionText;
             SetToast(_world.InteractionAcknowledged ? "Hoàn tất luyện tập. Hãy lưu vị trí hoặc về Điện Nhân Vật." : _world.InteractionText, RuntimeArtCatalog.Spirit);
             RefreshDialoguePanel();
             ApplyLocalSettings();

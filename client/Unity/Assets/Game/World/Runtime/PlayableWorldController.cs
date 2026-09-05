@@ -79,6 +79,7 @@ namespace LinhGioi.World
         public float CurrentYawDegrees => _marker == null ? 0f : _marker.eulerAngles.y;
         public string ObjectiveText => _objectiveText;
         public string InteractionText => _interactionText;
+        public string InteractionActionText => DescribeInteractionActionText();
         public string GuidedTrainingStepName => DescribeGuidedTrainingStep();
         public string CurrentAreaLabel => DescribeCurrentArea();
         public string ObjectiveDirectionHint => DescribeObjectiveDirection();
@@ -765,10 +766,37 @@ namespace LinhGioi.World
             _interactionPromptWorldLabel.gameObject.SetActive(active);
             if (!active) return;
 
-            _interactionPromptWorldLabel.transform.position = _nearestInteractable.position + new Vector3(0f, 2.2f, 0f);
-            _interactionPromptWorldLabel.text = "F / Space";
+            // LGO World Hub Interaction Readability v1: world prompt is short and object-aware; full copy remains in HUD.
+            var mobile = IsMobileWorldViewport();
+            _interactionPromptWorldLabel.transform.position = _nearestInteractable.position + CurrentInteractionPromptOffset();
+            _interactionPromptWorldLabel.text = InteractionWorldPromptText();
+            _interactionPromptWorldLabel.fontSize = mobile ? 32 : IsNarrowWorldViewport() ? 34 : 38;
+            _interactionPromptWorldLabel.characterSize = mobile ? 0.034f : 0.038f;
             _interactionPromptWorldLabel.color = _nearestInteractable.id == "Gate Keeper" ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
             EnsureWorldLabelShadow(_interactionPromptWorldLabel.transform, _interactionPromptWorldLabel.text);
+        }
+
+        private string InteractionWorldPromptText()
+        {
+            if (_nearestInteractable == null) return string.Empty;
+            if (_nearestInteractable.id == "Gate Keeper") return IsMobileWorldViewport() ? "F Gặp" : "F / Space  Gặp";
+            if (_nearestInteractable.id == "Training Stone") return IsMobileWorldViewport() ? "F Luyện" : "F / Space  Luyện";
+            return IsMobileWorldViewport() ? "F" : "F / Space";
+        }
+
+        private string DescribeInteractionActionText()
+        {
+            if (DialogueActive) return "Đang đối thoại: đọc lời chỉ dẫn rồi chọn Tiếp tục.";
+            if (_nearestInteractable != null)
+            {
+                if (_nearestInteractable.id == "Gate Keeper") return "Sẵn sàng: nhấn F để gặp Người Giữ Cổng.";
+                if (_nearestInteractable.id == "Training Stone") return "Sẵn sàng: nhấn F để ổn định Đá Luyện.";
+                return "Sẵn sàng: nhấn F để tương tác.";
+            }
+            if (InteractionAcknowledged) return "Hoàn tất: lưu vị trí hoặc về Điện Nhân Vật.";
+            if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Tới vòng vàng cạnh Người Giữ Cổng.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Đi theo mạch lam tới Đá Luyện.";
+            return "Di chuyển tới mốc đang sáng để tiếp tục.";
         }
 
         private static void SetWorldLabel(TextMesh label, string text, Color color)
@@ -1180,6 +1208,13 @@ namespace LinhGioi.World
             if (IsMobileWorldViewport()) return new Vector3(0.06f, 1.82f, -0.02f);
             if (IsNarrowWorldViewport()) return new Vector3(0.10f, 1.78f, -0.02f);
             return new Vector3(-0.04f, 1.72f, -0.02f);
+        }
+
+        private static Vector3 CurrentInteractionPromptOffset()
+        {
+            if (IsMobileWorldViewport()) return new Vector3(0f, 1.86f, -0.04f);
+            if (IsNarrowWorldViewport()) return new Vector3(0f, 1.98f, -0.04f);
+            return new Vector3(0f, 2.16f, -0.04f);
         }
 
         private static Vector3 CurrentGateKeeperVisualPosition()
