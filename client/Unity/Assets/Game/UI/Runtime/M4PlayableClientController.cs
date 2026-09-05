@@ -600,7 +600,7 @@ namespace LinhGioi.UI
             _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
             _createPanel.Add(_characterName);
             _createPanel.Add(_classId);
-            _characterActionRow = NewButtonRow(_createButton, _enterWorldButton);
+            _characterActionRow = NewActionRow("LGO Character Hall Action Row", Justify.FlexStart, 6, 0, _createButton, _enterWorldButton);
             _createPanel.Add(_characterActionRow);
         }
 
@@ -720,7 +720,7 @@ namespace LinhGioi.UI
             _dialoguePanel.Add(_dialogueSpeaker);
             _dialoguePanel.Add(_dialogueLine);
             _dialoguePanel.Add(_dialogueProgress);
-            _dialoguePanel.Add(NewButtonRow(_dialogueContinueButton, _dialogueCloseButton));
+            _dialoguePanel.Add(NewActionRow("LGO Dialogue Action Row", Justify.FlexStart, 6, 0, _dialogueContinueButton, _dialogueCloseButton));
             _worldHud.Add(_dialoguePanel);
             SetDialogueVisible(false);
 
@@ -728,8 +728,7 @@ namespace LinhGioi.UI
             _savePositionButton.tooltip = "Ghi vị trí hiện tại cho phiên thử nghiệm.";
             _backButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
             _backButton.tooltip = "Quay lại quản lý nhân vật mà không đóng phiên hiện tại.";
-            _worldFooterActions = NewButtonRow(_savePositionButton, _backButton);
-            _worldFooterActions.name = "LGO World Action Footer V3B";
+            _worldFooterActions = NewActionRow("LGO World Action Footer V3B", Justify.FlexStart, 6, 0, _savePositionButton, _backButton);
             _worldHud.Add(_worldFooterActions);
         }
 
@@ -757,9 +756,7 @@ namespace LinhGioi.UI
             _sessionSaveButton = NewCompactSecondaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
             _sessionBackButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
             _sessionQuitButton = NewQuietButton("Thoát", QuitPlayer);
-            var sessionActions = NewButtonRow(_resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
-            sessionActions.style.justifyContent = Justify.Center;
-            sessionActions.style.marginBottom = 12;
+            var sessionActions = NewActionRow("LGO Session Menu Action Row", Justify.Center, 6, 12, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
             _sessionMenuPanel.Add(sessionActions);
             BuildLocalSettingsPanel();
             _root.Add(_sessionMenuPanel);
@@ -774,7 +771,7 @@ namespace LinhGioi.UI
             _previewWindSlashButton = NewSecondaryButton("Chém Gió", () => PreviewSkill("Wind Slash", "Chém Gió"));
             _previewShadowBindButton = NewSecondaryButton("Trói Bóng", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
             _previewSpiritGuardButton = NewSecondaryButton("Hộ Linh", () => PreviewSkill("Spirit Guard", "Hộ Linh"));
-            _skillPreviewPanel.Add(NewButtonRow(_previewWindSlashButton, _previewShadowBindButton, _previewSpiritGuardButton));
+            _skillPreviewPanel.Add(NewActionRow("LGO Skill Preview Action Row", Justify.FlexStart, 6, 0, _previewWindSlashButton, _previewShadowBindButton, _previewSpiritGuardButton));
             _worldHud.Add(_skillPreviewPanel);
         }
 
@@ -804,27 +801,13 @@ namespace LinhGioi.UI
             _localCombatButton.name = "LGO World Touch Primary Combat Button";
             _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ. Đánh thử cục bộ: xem vòng chọn mục tiêu, hit flash và nhịp hồi chiêu; không phải chiến đấu thật";
             ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonNormalTexture);
-            var combatRow = new VisualElement();
-            combatRow.name = "LGO World Combat Readiness Row V3B";
-            combatRow.style.flexDirection = FlexDirection.Row;
-            combatRow.style.alignItems = Align.Center;
-            combatRow.style.marginTop = 4;
-            combatRow.style.marginBottom = 6;
-            combatRow.style.paddingLeft = 4;
-            combatRow.style.paddingRight = 4;
-            combatRow.Add(_combatCooldownIcon);
-            var combatStatusColumn = new VisualElement();
-            combatStatusColumn.style.flexGrow = 1;
-            combatStatusColumn.style.marginLeft = 10;
-            combatStatusColumn.Add(_combatTargetStatus);
-            combatStatusColumn.Add(_combatRangeStatus);
-            combatRow.Add(combatStatusColumn);
+            var combatRow = NewIconStatusRow("LGO World Combat Readiness Row V3B", _combatCooldownIcon, _combatTargetStatus, _combatRangeStatus);
             _localCombatPanel.Add(combatRow);
             _localCombatPanel.Add(_combatFeedback);
             _combatVisualState.style.display = DisplayStyle.None;
             _combatCooldown.style.display = DisplayStyle.None;
             _combatAuthority.style.display = DisplayStyle.None;
-            _localCombatPanel.Add(NewButtonRow(_localCombatButton));
+            _localCombatPanel.Add(NewActionRow("LGO Local Combat Action Row", Justify.FlexStart, 6, 0, _localCombatButton));
             _worldHud.Add(_localCombatPanel);
         }
 

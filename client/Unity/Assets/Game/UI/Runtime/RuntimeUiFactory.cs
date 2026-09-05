@@ -145,11 +145,40 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewButtonRow(params Button[] buttons)
         {
+            return NewActionRow("LGO Runtime Action Row", Justify.FlexStart, 6, 0, buttons);
+        }
+
+        internal static VisualElement NewActionRow(string elementName, Justify justifyContent, float marginTop, float marginBottom, params Button[] buttons)
+        {
             var row = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(elementName)) row.name = elementName;
             row.style.flexDirection = FlexDirection.Row;
             row.style.flexWrap = Wrap.Wrap;
-            row.style.marginTop = 6;
+            row.style.alignItems = Align.Center;
+            row.style.justifyContent = justifyContent;
+            row.style.marginTop = marginTop;
+            row.style.marginBottom = marginBottom;
             foreach (var button in buttons) row.Add(button);
+            return row;
+        }
+
+        internal static VisualElement NewIconStatusRow(string elementName, VisualElement icon, params VisualElement[] statusElements)
+        {
+            var row = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(elementName)) row.name = elementName;
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            row.style.marginTop = 4;
+            row.style.marginBottom = 6;
+            row.style.paddingLeft = 4;
+            row.style.paddingRight = 4;
+            row.Add(icon);
+
+            var statusColumn = new VisualElement();
+            statusColumn.style.flexGrow = 1;
+            statusColumn.style.marginLeft = 10;
+            foreach (var statusElement in statusElements) statusColumn.Add(statusElement);
+            row.Add(statusColumn);
             return row;
         }
 
