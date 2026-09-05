@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-ACTION-ROW-BASE-AUDIT-v1.0`
+`LGO-RUNTIME-UI-ACTION-ROW-EVIDENCE-REFRESH-v1.0`
 
-Audit repeated button/action row sizing and move the next safe reusable rule into factory/skin helpers without changing button semantics, gameplay, account flow, or combat behavior. Marker ready from the completed evidence refresh: `LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY`.
+Refresh runtime screenshots after button metrics helper consolidation, then review Login CTA, Character Hall actions, World HUD actions, session menu actions, and combat button readability before continuing deeper UI base cleanup. Marker ready from the completed source audit: `LGO_RUNTIME_UI_ACTION_ROW_BASE_READY`.
 
 ## Current blocker
 
@@ -174,6 +174,7 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-COMPONENT-BASE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_COMPONENT_BASE_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-SCREEN-SHELL-BASE-AUDIT-v1.0` / `LGO_RUNTIME_UI_SCREEN_SHELL_BASE_READY`
 - `LGO-RUNTIME-UI-SCREEN-SHELL-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-ACTION-ROW-BASE-AUDIT-v1.0` / `LGO_RUNTIME_UI_ACTION_ROW_BASE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 

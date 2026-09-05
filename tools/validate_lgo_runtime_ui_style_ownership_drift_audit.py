@@ -66,7 +66,7 @@ def main() -> int:
         "internal static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)",
         "RuntimeUiSkin.ApplyToastFrame(label, RuntimeArtCatalog.Gold);",
         "RuntimeUiSkin.ApplyStatusChipFrame(label, accent);",
-        "button.style.minWidth = coolingDown ? 142 : 132;",
+        "RuntimeUiSkin.ApplyButtonMetrics(button, coolingDown ? 142 : 132, 44, coolingDown ? 13 : 14, true);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

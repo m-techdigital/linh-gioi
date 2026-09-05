@@ -61,8 +61,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "internal static void ApplyCombatButtonSkin(Button button, Texture2D texture, bool coolingDown)",
-        "button.style.minWidth = coolingDown ? 142 : 132;",
-        "button.style.whiteSpace = WhiteSpace.NoWrap;",
+        "RuntimeUiSkin.ApplyButtonMetrics(button, coolingDown ? 142 : 132, 44, coolingDown ? 13 : 14, true);",
     )
     require(
         "docs/tasks/LGO-COMBAT-BUTTON-STATE-READABILITY-POLISH-v1.0.md",

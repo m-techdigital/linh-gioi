@@ -276,12 +276,8 @@ namespace LinhGioi.UI
         {
             if (button == null) return;
             if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
-            button.style.minWidth = coolingDown ? 142 : 132;
-            button.style.minHeight = 44;
+            RuntimeUiSkin.ApplyButtonMetrics(button, coolingDown ? 142 : 132, 44, coolingDown ? 13 : 14, true);
             RuntimeUiSkin.ApplyPadding(button, 14, 14, 0, 0);
-            button.style.fontSize = coolingDown ? 13 : 14;
-            button.style.unityFontStyleAndWeight = FontStyle.Bold;
-            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         internal static TextField NewTextField(string label, string value)
@@ -305,9 +301,7 @@ namespace LinhGioi.UI
             var button = NewButton(label, action);
             button.style.backgroundColor = RuntimeArtCatalog.Spirit;
             button.style.color = RuntimeArtCatalog.Background;
-            button.style.unityFontStyleAndWeight = FontStyle.Bold;
-            button.style.minHeight = 58;
-            button.style.fontSize = 16;
+            RuntimeUiSkin.ApplyButtonMetrics(button, minHeight: 58, fontSize: 16, bold: true);
             button.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
             if (texture != null)
@@ -321,10 +315,7 @@ namespace LinhGioi.UI
         internal static Button NewCompactPrimaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            button.style.minWidth = 144;
-            button.style.minHeight = 44;
-            button.style.unityFontStyleAndWeight = FontStyle.Bold;
-            button.style.fontSize = 14;
+            RuntimeUiSkin.ApplyButtonMetrics(button, 144, 44, 14, true);
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.22f, 0.34f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit);
             return button;
         }
@@ -332,7 +323,7 @@ namespace LinhGioi.UI
         internal static Button NewQuietButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            button.style.minWidth = 88;
+            RuntimeUiSkin.ApplyButtonMetrics(button, minWidth: 88);
             button.style.backgroundColor = RuntimeArtCatalog.Background;
             button.style.color = RuntimeArtCatalog.Muted;
             return button;
@@ -351,9 +342,7 @@ namespace LinhGioi.UI
         internal static Button NewCompactSecondaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            button.style.minWidth = RuntimeUiSpacing.BaseButtonMinWidth;
-            button.style.minHeight = RuntimeUiSpacing.CompactButtonMinHeight;
-            button.style.fontSize = RuntimeUiSpacing.CompactButtonFontSize;
+            RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.BaseButtonMinWidth, RuntimeUiSpacing.CompactButtonMinHeight, RuntimeUiSpacing.CompactButtonFontSize);
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.04f, 0.13f, 0.22f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.Gold);
             return button;
         }
@@ -361,14 +350,12 @@ namespace LinhGioi.UI
         internal static Button NewIconButton(string label, Texture2D texture, Action action)
         {
             var button = NewSecondaryButton(string.Empty, action);
-            button.style.minWidth = 112;
-            button.style.minHeight = 48;
+            RuntimeUiSkin.ApplyButtonMetrics(button, 112, 48);
             button.style.flexDirection = FlexDirection.Row;
             button.style.alignItems = Align.Center;
             button.Add(NewIcon(texture, label));
             var text = new Label(label);
-            text.style.color = RuntimeArtCatalog.Text;
-            text.style.unityFontStyleAndWeight = FontStyle.Bold;
+            RuntimeUiSkin.ApplyText(text, RuntimeArtCatalog.Text, bold: true);
             button.Add(text);
             return button;
         }
@@ -395,8 +382,7 @@ namespace LinhGioi.UI
         internal static Button NewListButton(string name, string classId, Action action)
         {
             var button = NewSecondaryButton(name + "\nKiếm tu sơ nhập", action);
-            button.style.minWidth = 230;
-            button.style.minHeight = 58;
+            RuntimeUiSkin.ApplyButtonMetrics(button, 230, 58);
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
             button.style.paddingLeft = 14;
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.15f, 0.25f, 0.88f), RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
@@ -469,8 +455,7 @@ namespace LinhGioi.UI
         private static Button NewButton(string label, Action action)
         {
             var button = new Button(action) { text = label };
-            button.style.minWidth = RuntimeUiSpacing.BaseButtonMinWidth;
-            button.style.minHeight = RuntimeUiSpacing.BaseButtonMinHeight;
+            RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.BaseButtonMinWidth, RuntimeUiSpacing.BaseButtonMinHeight);
             button.style.marginTop = RuntimeUiSpacing.BaseButtonMarginTop;
             button.style.marginRight = RuntimeUiSpacing.BaseButtonMarginRight;
             RuntimeUiSkin.ApplyBaseButtonFrame(button);

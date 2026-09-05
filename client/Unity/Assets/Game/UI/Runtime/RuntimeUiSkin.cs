@@ -64,6 +64,15 @@ namespace LinhGioi.UI
             if (bold) label.style.unityFontStyleAndWeight = FontStyle.Bold;
         }
 
+        internal static void ApplyButtonMetrics(Button button, float minWidth = 0f, float minHeight = 0f, float fontSize = 0f, bool bold = false, WhiteSpace whiteSpace = WhiteSpace.NoWrap)
+        {
+            if (minWidth > 0f) button.style.minWidth = minWidth;
+            if (minHeight > 0f) button.style.minHeight = minHeight;
+            if (fontSize > 0f) button.style.fontSize = fontSize;
+            if (bold) button.style.unityFontStyleAndWeight = FontStyle.Bold;
+            button.style.whiteSpace = whiteSpace;
+        }
+
         internal static void ApplyEdgeFrame(VisualElement element, Color left, Color top, Color right, Color bottom, float leftWidth = 2f, float otherWidth = 1f)
         {
             element.style.borderLeftColor = left;

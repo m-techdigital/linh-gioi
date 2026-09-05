@@ -255,6 +255,9 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_screen_shell_evidence_refresh.py ]]; then
     run_phase runtime_ui_screen_shell_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_screen_shell_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_action_row_base_audit.py ]]; then
+    run_phase runtime_ui_action_row_base_audit python3.12 tools/validate_lgo_runtime_ui_action_row_base_audit.py
+  fi
   if [[ -f tools/validate_lgo_login_cta_backing_evidence_refresh.py ]]; then
     run_phase login_cta_backing_evidence_refresh python3.12 tools/validate_lgo_login_cta_backing_evidence_refresh.py
   fi
@@ -692,6 +695,7 @@ source_only() {
     tools/validate_lgo_runtime_ui_component_base_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_screen_shell_base_audit.py \
     tools/validate_lgo_runtime_ui_screen_shell_evidence_refresh.py \
+    tools/validate_lgo_runtime_ui_action_row_base_audit.py \
     tools/validate_lgo_login_cta_backing_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_skin_foundation.py \
     tools/validate_lgo_runtime_ui_skin_adoption_audit.py \
