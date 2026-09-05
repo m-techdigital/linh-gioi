@@ -329,8 +329,31 @@ namespace LinhGioi.UI
 
         internal static void ApplyWorldHudGroupFrame(VisualElement group, Color accent)
         {
-            group.style.backgroundColor = DeepGlass;
-            ApplyEdgeFrame(group, accent, RuntimeArtCatalog.Gold, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.SurfaceRaised);
+            group.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.64f);
+            ApplyRadius(group, 9);
+            ApplyEdgeFrame(
+                group,
+                new Color(accent.r, accent.g, accent.b, 0.68f),
+                new Color(0.93f, 0.73f, 0.36f, 0.42f),
+                new Color(0.14f, 0.78f, 0.90f, 0.18f),
+                new Color(0.93f, 0.73f, 0.36f, 0.22f),
+                2f,
+                1f);
+        }
+
+        internal static void ApplyWorldHudRootFrame(VisualElement hud)
+        {
+            hud.style.backgroundColor = new Color(0.002f, 0.014f, 0.036f, 0.74f);
+            hud.style.backgroundImage = StyleKeyword.None;
+            ApplyRadius(hud, 12);
+            ApplyEdgeFrame(
+                hud,
+                new Color(0.14f, 0.78f, 0.90f, 0.78f),
+                new Color(0.93f, 0.73f, 0.36f, 0.72f),
+                new Color(0.14f, 0.78f, 0.90f, 0.18f),
+                new Color(0.93f, 0.73f, 0.36f, 0.24f),
+                2f,
+                1f);
         }
 
         internal static void ApplyHudStatusCompactFrame(Label label)
@@ -372,9 +395,9 @@ namespace LinhGioi.UI
 
         internal static Color WorldHudBackground(bool mobile, bool tablet, bool dialogueVisible)
         {
-            if (mobile) return new Color(0.002f, 0.014f, 0.036f, dialogueVisible ? 0.82f : 0.66f);
-            if (tablet) return new Color(0.004f, 0.018f, 0.044f, 0.78f);
-            return RuntimeArtCatalog.Surface;
+            if (mobile) return new Color(0.002f, 0.014f, 0.036f, dialogueVisible ? 0.80f : 0.60f);
+            if (tablet) return new Color(0.004f, 0.018f, 0.044f, 0.72f);
+            return new Color(0.004f, 0.020f, 0.048f, 0.68f);
         }
     }
 }

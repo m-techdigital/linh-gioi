@@ -571,16 +571,13 @@ namespace LinhGioi.UI
             _worldDirection = NewCompactStatusLabel("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldDirectionFontSize);
             guidanceCard.Add(_worldDirection);
 
-            _worldPoseState = NewStatusLabel("Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.", RuntimeArtCatalog.Muted);
-            _worldPoseState.style.display = DisplayStyle.None;
+            _worldPoseState = NewHiddenStatusLabel("Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.", RuntimeArtCatalog.Muted);
             _worldHud.Add(_worldPoseState);
 
-            _worldVfxState = NewStatusLabel("Hiệu ứng: yên tĩnh / cổng, mạch linh khí, chém gió, cảnh báo bóng đều chỉ là hình ảnh.", RuntimeArtCatalog.Spirit);
-            _worldVfxState.style.display = DisplayStyle.None;
+            _worldVfxState = NewHiddenStatusLabel("Hiệu ứng: yên tĩnh / cổng, mạch linh khí, chém gió, cảnh báo bóng đều chỉ là hình ảnh.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_worldVfxState);
 
-            _skinSource = NewStatusLabel("Nguồn giao diện: asset runtime tối ưu, chưa phải art final.", RuntimeArtCatalog.Spirit);
-            _skinSource.style.display = DisplayStyle.None;
+            _skinSource = NewHiddenStatusLabel("Nguồn giao diện: asset runtime tối ưu, chưa phải art final.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_skinSource);
 
             _worldObjective = NewCompactStatusLabel("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldObjectiveInitialFontSize);
@@ -1538,9 +1535,6 @@ namespace LinhGioi.UI
 
         private static Label NewCharacterHallStatusLabel(string text, Color color, RuntimeUiLayoutProfile layout) =>
             NewStatusLabel(text, color, layout.CharacterHallDensity);
-
-        private static void ApplyCharacterHallListDensity(VisualElement list, RuntimeUiLayoutProfile layout) =>
-            RuntimeUiFactory.ApplyCharacterListDensity(list, layout.CharacterHallDensity);
 
         internal async Task CaptureEvidenceLoginAsync()
         {

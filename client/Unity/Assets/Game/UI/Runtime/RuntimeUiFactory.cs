@@ -89,6 +89,7 @@ namespace LinhGioi.UI
             hud.style.maxWidth = maxWidth;
             hud.style.alignSelf = Align.FlexStart;
             RuntimeUiSkin.ApplyPadding(hud, RuntimeUiSpacing.WorldHudRootPaddingHorizontal, RuntimeUiSpacing.WorldHudRootPaddingVertical);
+            RuntimeUiSkin.ApplyWorldHudRootFrame(hud);
             return hud;
         }
 
@@ -253,6 +254,13 @@ namespace LinhGioi.UI
         {
             var label = NewStatusLabel(text, color);
             ApplyHudStatusCompact(label, fontSize);
+            return label;
+        }
+
+        internal static Label NewHiddenStatusLabel(string text, Color color)
+        {
+            var label = NewStatusLabel(text, color);
+            label.style.display = DisplayStyle.None;
             return label;
         }
 

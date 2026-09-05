@@ -18,11 +18,12 @@ def read(rel: str) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
-def require(rel: str, *markers: str) -> None:
+def require(rel: str, *markers: str) -> str:
     text = read(rel)
     for marker in markers:
         if marker not in text:
             ERRORS.append(f"{rel} missing marker: {marker}")
+    return text
 
 
 def check_frozen() -> None:
@@ -52,52 +53,48 @@ def check_frozen() -> None:
 
 def main() -> int:
     require(
-        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO World HUD Mobile Hierarchy Polish v1",
-        "!(_isMobileProfile && !dialogueVisible)",
-        "layout.WorldHudMaxWidth(dialogueVisible)",
-        "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible)",
-        "RuntimeUiSkin.ApplyVerticalMargin(_worldGuidanceCard, layout.WorldGuidanceCardMarginVertical, layout.WorldGuidanceCardMarginVertical)",
-    )
-    require(
-        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "Mathf.Clamp(Width * 0.26f, 236f, 258f)",
-    )
-    require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
-        "WorldHudBackground(bool mobile, bool tablet, bool dialogueVisible)",
-        "dialogueVisible ? 0.80f : 0.60f",
-        "ApplyWorldHudRootFrame(VisualElement hud)",
+        "internal static void ApplyWorldHudRootFrame(VisualElement hud)",
+        "hud.style.backgroundImage = StyleKeyword.None;",
+        "new Color(0.004f, 0.020f, 0.048f, 0.68f)",
+        "ApplyWorldHudGroupFrame(VisualElement group, Color accent)",
+        "new Color(0.0f, 0.020f, 0.050f, 0.64f)",
     )
     require(
-        "docs/tasks/LGO-WORLD-HUD-MOBILE-HIERARCHY-POLISH-v1.0.md",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_READY",
-        "No gameplay change",
-        "No VISUAL_RUNTIME_PASS claim",
-        "LGO-WORLD-HUD-MOBILE-HIERARCHY-EVIDENCE-REFRESH-v1.0",
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "RuntimeUiSkin.ApplyWorldHudRootFrame(hud);",
+        "RuntimeUiSkin.ApplyWorldHudGroupFrame(group, accent);",
+    )
+    require(
+        "docs/tasks/LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH-v1.0.md",
+        "LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_READY",
+        "No gameplay",
+        "No new image assets",
+        "No `VISUAL_RUNTIME_PASS` claim",
     )
     require(
         "tools/lgo_playable_closure_check.sh",
-        "world_hud_mobile_hierarchy_polish",
-        "validate_lgo_world_hud_mobile_hierarchy_polish.py",
+        "world_hud_fantasy_panel_hierarchy_polish",
+        "validate_lgo_world_hud_fantasy_panel_hierarchy_polish.py",
     )
     require(
         "docs/execution/NEXT-ACTION.md",
-        "LGO-WORLD-HUD-MOBILE-HIERARCHY-EVIDENCE-REFRESH-v1.0",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_READY",
+        "LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH-v1.0",
+        "LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_READY",
+        "LGO-WORLD-HUD-FANTASY-PANEL-EVIDENCE-REFRESH-v1.0",
     )
     require(
         "docs/execution/TASK-LEDGER.md",
-        "LGO-WORLD-HUD-MOBILE-HIERARCHY-POLISH v1.0",
-        "LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_READY",
+        "LGO-WORLD-HUD-FANTASY-PANEL-HIERARCHY-POLISH v1.0",
+        "LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_READY",
     )
     check_frozen()
     if ERRORS:
-        print("LGO WORLD HUD MOBILE HIERARCHY POLISH VALIDATION FAILED", file=sys.stderr)
+        print("LGO WORLD HUD FANTASY PANEL HIERARCHY POLISH VALIDATION FAILED", file=sys.stderr)
         for error in ERRORS:
             print(" - " + error, file=sys.stderr)
         return 1
-    print("LGO_WORLD_HUD_MOBILE_HIERARCHY_POLISH_VALIDATION_PASS")
+    print("LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_VALIDATION_PASS")
     return 0
 
 
