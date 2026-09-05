@@ -55,14 +55,25 @@ def main() -> int:
     for marker in (
         "LGO Login CTA Backing Balance v1",
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
-        "new Color(0.005f, 0.018f, 0.040f, 0.10f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.14f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.16f)",
-        "Mathf.RoundToInt(100f * mobileScale)",
-        "tablet ? 128 : 136",
+        "layout.LoginCardMinHeight",
+        "layout.LoginCardPaddingTop",
+        "layout.LoginCardPaddingBottom",
+        "layout.LoginCardBackground",
     ):
         if marker not in source:
             ERRORS.append(f"login CTA backing source missing marker: {marker}")
+    layout = read("client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs")
+    for marker in (
+        "LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(100f * MobileScale) : IsTablet ? 128 : 136",
+        "LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(6f * MobileScale) : IsTablet ? 12 : 14",
+        "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(7f * MobileScale) : IsTablet ? 12 : 14",
+        "LoginCardBackground => IsMobile",
+        "new Color(0.005f, 0.018f, 0.040f, 0.10f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.14f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.16f)",
+    ):
+        if marker not in layout:
+            ERRORS.append(f"runtime UI layout profile missing marker: {marker}")
     skin = read("client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs")
     for marker in (
         "LGO Runtime UI Skin Foundation v1",

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace LinhGioi.UI
 {
@@ -32,6 +33,52 @@ namespace LinhGioi.UI
         internal readonly int LoginCardPadding;
         internal readonly int LoginButtonHeight;
         internal readonly int LoginButtonFontSize;
+
+        internal int RootPaddingHorizontal => IsMobile ? 12 : IsTablet ? 18 : 28;
+        internal int RootPaddingTop => IsMobile ? 10 : 16;
+        internal int RootPaddingBottom => IsMobile ? 12 : 18;
+        internal int HeaderMinHeight(bool authVisible) => authVisible && IsMobile ? 8 : IsMobile ? 34 : 76;
+        internal int AuthPanelMinHeight => IsMobile ? 0 : IsTablet ? 500 : 560;
+        internal int AuthPanelMarginTop => IsMobile ? 0 : 4;
+        internal int AuthPanelPaddingTop => IsMobile ? 0 : 8;
+        internal DisplayStyle LoginStageDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
+        internal int LoginStageWidth => IsTablet ? 262 : 304;
+        internal int LoginStageMinHeight => IsTablet ? 388 : 460;
+        internal int LoginStageRight => IsTablet ? 12 : 64;
+        internal int LoginStageBottom => IsTablet ? -38 : -88;
+        internal int LoginGateKeeperWidth => IsTablet ? 248 : 292;
+        internal int LoginGateKeeperHeight => IsTablet ? 372 : 438;
+        internal DisplayStyle LoginNpcGroundingDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
+        internal int LoginNpcGroundingWidth => IsTablet ? 202 : 232;
+        internal int LoginNpcGroundingHeight => IsTablet ? 18 : 20;
+        internal int LoginNpcGroundingBottom => IsTablet ? 28 : 24;
+        internal Color LoginNpcGroundingColor => IsTablet
+            ? new Color(0.005f, 0.018f, 0.035f, 0.20f)
+            : new Color(0.005f, 0.018f, 0.035f, 0.24f);
+        internal float LoginNpcGroundingOpacity => IsTablet ? 0.70f : 0.76f;
+        internal Length LoginControlColumnWidth => IsMobile ? Length.Percent(100) : IsTablet ? Length.Percent(56) : Length.Percent(54);
+        internal int LoginControlColumnMinWidth => IsMobile ? 0 : 300;
+        internal int LoginControlColumnMaxWidth => IsMobile ? 500 : IsTablet ? 540 : 600;
+        internal int LoginControlColumnPaddingBottom => IsMobile ? 0 : 12;
+        internal int LoginControlColumnMarginLeft => IsMobile ? 0 : IsTablet ? 8 : 22;
+        internal int LoginControlColumnMarginTop => IsMobile ? 0 : IsTablet ? 2 : 12;
+        internal int LoginLogoMarginBottom => IsMobile ? Mathf.RoundToInt(-10f * MobileScale) : IsTablet ? -8 : -10;
+        internal int LoginHeroTitleFontSize => IsTablet ? 23 : 25;
+        internal int LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(100f * MobileScale) : IsTablet ? 128 : 136;
+        internal int LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(6f * MobileScale) : IsTablet ? 12 : 14;
+        internal int LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(7f * MobileScale) : IsTablet ? 12 : 14;
+        internal int LoginCardMarginBottom => IsMobile ? 0 : 18;
+        internal Color LoginCardBackground => IsMobile
+            ? new Color(0.005f, 0.018f, 0.040f, 0.10f)
+            : IsTablet
+                ? new Color(0.005f, 0.018f, 0.040f, 0.14f)
+                : new Color(0.005f, 0.018f, 0.040f, 0.16f);
+        internal StyleLength LoginServerRowMaxWidth => IsMobile ? new StyleLength(Length.Percent(100)) : new StyleLength(436f);
+        internal int LoginServerRowMinHeight => IsMobile ? Mathf.RoundToInt(42f * MobileScale) : IsTablet ? 40 : 42;
+        internal int LoginServerRowPaddingHorizontal => IsMobile ? 14 : 22;
+        internal int LoginServerRowPaddingVertical => IsMobile ? 6 : 7;
+        internal int LoginServerTextFontSize => IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.042f, 16f, 19f)) : IsTablet ? 18 : 19;
+        internal int LoginButtonMarginTop => IsMobile ? Mathf.RoundToInt(4f * MobileScale) : 10;
 
         internal float WorldHudMinWidth => IsMobile ? 238f : 300f;
 

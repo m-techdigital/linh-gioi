@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-RUNTIME-UI-RESPONSIVE-STYLE-APPLICATION-AUDIT-v1.0`
+`LGO-RUNTIME-UI-FACTORY-COVERAGE-AUDIT-v1.0`
 
-Audit remaining viewport/profile-specific style application in `M4PlayableClientController` and move only clearly stateless, reusable styling into helper boundaries. Marker ready from the previous evidence pass: `LGO_RUNTIME_UI_ACTION_ROW_EVIDENCE_REFRESH_READY`. Keep account, character, world, dialogue, session, and combat stateful behavior in the controller.
+Audit remaining `M4PlayableClientController` UI construction and style application to identify the next narrow reusable factory/skin helper. Marker ready from the previous evidence pass: `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`. Prefer small, stateless reuse; do not split stateful flow or add gameplay.
 
 ## Current blocker
 
@@ -131,6 +131,8 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-SCREEN-SHELL-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_SCREEN_SHELL_EVIDENCE_REFRESH_READY`
 - `LGO-RUNTIME-UI-ACTION-ROW-COMPONENT-REVIEW-v1.0` / `LGO_RUNTIME_UI_ACTION_ROW_COMPONENT_REVIEW_READY`
 - `LGO-RUNTIME-UI-ACTION-ROW-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_ACTION_ROW_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-RESPONSIVE-STYLE-APPLICATION-AUDIT-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_APPLICATION_AUDIT_READY`
+- `LGO-RUNTIME-UI-RESPONSIVE-STYLE-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_RESPONSIVE_STYLE_EVIDENCE_REFRESH_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_BALANCE_READY`
 - `LGO-LOGIN-NPC-GROUNDING-SHADOW-EVIDENCE-REFRESH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_SHADOW_EVIDENCE_REFRESH_READY`
 
@@ -210,6 +212,8 @@ python3.12 tools/validate_lgo_world_pose_pulse_visual_cleanup.py
 python3.12 tools/validate_lgo_runtime_ui_screen_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_runtime_ui_action_row_component_review.py
 python3.12 tools/validate_lgo_runtime_ui_action_row_evidence_refresh.py
+python3.12 tools/validate_lgo_runtime_ui_responsive_style_application_audit.py
+python3.12 tools/validate_lgo_runtime_ui_responsive_style_evidence_refresh.py
 python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
 python3.12 tools/validate_lgo_world_mobile_camera_framing.py
 python3.12 tools/validate_lgo_world_mobile_camera_evidence_refresh.py

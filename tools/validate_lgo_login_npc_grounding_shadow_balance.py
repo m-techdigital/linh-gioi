@@ -59,9 +59,16 @@ def main() -> int:
         "npcGrounding.style.height = 20;",
         "new Color(0.005f, 0.018f, 0.035f, 0.26f)",
         "RuntimeUiSkin.ApplyRadius(npcGrounding, 110);",
-        "_loginNpcGrounding.style.display = mobile ? DisplayStyle.None : DisplayStyle.Flex;",
-        "_loginNpcGrounding.style.width = tablet ? 202 : 232;",
-        "_loginNpcGrounding.style.opacity = tablet ? 0.70f : 0.76f;",
+        "_loginNpcGrounding.style.display = layout.LoginNpcGroundingDisplay;",
+        "_loginNpcGrounding.style.width = layout.LoginNpcGroundingWidth;",
+        "_loginNpcGrounding.style.opacity = layout.LoginNpcGroundingOpacity;",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "LoginNpcGroundingDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex",
+        "LoginNpcGroundingWidth => IsTablet ? 202 : 232",
+        "LoginNpcGroundingOpacity => IsTablet ? 0.70f : 0.76f",
+        "LoginNpcGroundingColor => IsTablet",
     )
     require(
         "docs/tasks/LGO-LOGIN-NPC-GROUNDING-SHADOW-BALANCE-PASS-v1.0.md",

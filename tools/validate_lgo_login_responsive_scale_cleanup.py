@@ -55,15 +55,18 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "LGO Login Responsive Scale Cleanup v1",
-        "_loginStage.style.width = tablet ? 262 : 304",
-        "_loginGateKeeper.style.width = tablet ? 248 : 292",
-        "_loginControlColumn.style.width = mobile ? Length.Percent(100) : tablet ? Length.Percent(56) : Length.Percent(54)",
+        "_loginStage.style.width = layout.LoginStageWidth",
+        "_loginGateKeeper.style.width = layout.LoginGateKeeperWidth",
+        "_loginControlColumn.style.width = layout.LoginControlColumnWidth",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "MobileLoginLogoWidthRatio = 0.43f",
         "DesktopLoginLogoWidthRatio = 0.26f",
         "MobileLoginCardWidthRatio = 0.46f",
+        "LoginStageWidth => IsTablet ? 262 : 304",
+        "LoginGateKeeperWidth => IsTablet ? 248 : 292",
+        "LoginControlColumnWidth => IsMobile ? Length.Percent(100) : IsTablet ? Length.Percent(56) : Length.Percent(54)",
     )
     require(
         "docs/tasks/LGO-LOGIN-RESPONSIVE-SCALE-CLEANUP-PASS-v1.0.md",
