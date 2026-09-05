@@ -246,6 +246,9 @@ source_only() {
   if [[ -f tools/validate_lgo_world_hud_action_shell_v3b_skin.py ]]; then
     run_phase world_hud_action_shell_v3b_skin python3.12 tools/validate_lgo_world_hud_action_shell_v3b_skin.py
   fi
+  if [[ -f tools/validate_lgo_world_hud_action_shell_evidence_refresh.py ]]; then
+    run_phase world_hud_action_shell_evidence_refresh python3.12 tools/validate_lgo_world_hud_action_shell_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_build_size_budget.py ]]; then
     run_phase build_size_budget python3.12 tools/validate_lgo_build_size_budget.py
   fi
@@ -386,6 +389,7 @@ source_only() {
     tools/validate_lgo_character_hall_responsive_evidence_refresh.py \
     tools/validate_lgo_visual_runtime_fast_profile_reuse.py \
     tools/validate_lgo_world_hud_action_shell_v3b_skin.py \
+    tools/validate_lgo_world_hud_action_shell_evidence_refresh.py \
     tools/report_lgo_build_size_budget.py \
     tools/validate_lgo_build_size_budget.py \
     tools/lgo_continuous_cycle.py \
