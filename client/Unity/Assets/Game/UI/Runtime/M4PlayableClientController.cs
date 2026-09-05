@@ -1320,28 +1320,13 @@ namespace LinhGioi.UI
             row.style.flexDirection = FlexDirection.Row;
             row.style.alignItems = Align.Center;
             row.style.justifyContent = Justify.Center;
-            row.style.width = Length.Percent(92);
-            row.style.height = 14;
-            row.style.marginTop = 2;
+            row.style.width = Length.Percent(86);
+            row.style.height = 8;
+            row.style.marginTop = 1;
             row.style.marginBottom = 4;
 
+            // LGO Login CTA Debug Dot Cleanup v1: keep a quiet V3B accent without editor-like cyan handles.
             row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Gold));
-            var diamond = new VisualElement { name = name + " Diamond" };
-            diamond.style.width = 7;
-            diamond.style.height = 7;
-            diamond.style.marginLeft = 8;
-            diamond.style.marginRight = 8;
-            diamond.style.backgroundColor = RuntimeArtCatalog.Spirit;
-            diamond.style.borderTopColor = RuntimeArtCatalog.Gold;
-            diamond.style.borderTopWidth = 1;
-            diamond.style.borderLeftColor = RuntimeArtCatalog.Gold;
-            diamond.style.borderLeftWidth = 1;
-            diamond.style.borderRightColor = RuntimeArtCatalog.Gold;
-            diamond.style.borderRightWidth = 1;
-            diamond.style.borderBottomColor = RuntimeArtCatalog.Gold;
-            diamond.style.borderBottomWidth = 1;
-            row.Add(diamond);
-            row.Add(NewLoginOrnamentLine(RuntimeArtCatalog.Spirit));
             return row;
         }
 
