@@ -68,12 +68,12 @@ def main() -> int:
         "using static LinhGioi.UI.RuntimeUiFactory;",
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
         "RuntimeUiSkin.ApplyServerSelectorFrame(serverRow);",
-        "RuntimeUiSkin.ApplyCompactActionFrame(button",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "RuntimeUiSkin.ApplyPanelFrame(panel);",
         "RuntimeUiSkin.ApplyInsetRowFrame(row, accent);",
+        "RuntimeUiSkin.ApplyCompactActionFrame(button",
     )
     require(
         "docs/tasks/LGO-RUNTIME-UI-SKIN-FOUNDATION-PASS-v1.0.md",

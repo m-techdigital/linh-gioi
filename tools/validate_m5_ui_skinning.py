@@ -64,9 +64,13 @@ def main() -> int:
         'NewToast',
         'ApplyStatusChip',
         'SetToast',
+        'using static LinhGioi.UI.RuntimeUiFactory;',
+        'RuntimeUiSkin.ApplyStatusChipFrame(label, accent);',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs',
         'RuntimeUiSkin.ApplyBaseButtonFrame(button);',
         'RuntimeUiSkin.ApplyRuntimeIconFrame(icon',
-        'RuntimeUiSkin.ApplyStatusChipFrame(label, accent);',
         'tooltip = "Chọn nhân vật tu luyện"',
     )
     require(

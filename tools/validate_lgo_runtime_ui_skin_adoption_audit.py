@@ -62,12 +62,16 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "RuntimeUiSkin.ApplyBaseButtonFrame(button);",
-        "RuntimeUiSkin.ApplyRuntimeIconFrame(icon, new Color(0.02f, 0.08f, 0.16f, 0.82f));",
-        "RuntimeUiSkin.ApplySettingToggleFrame(toggle, value ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted);",
+        "using static LinhGioi.UI.RuntimeUiFactory;",
         "RuntimeUiSkin.ApplyBadgeFrame(badge);",
         "RuntimeUiSkin.ApplyToastFrame(label, RuntimeArtCatalog.Gold);",
         "RuntimeUiSkin.ApplyStatusChipFrame(label, accent);",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "RuntimeUiSkin.ApplyBaseButtonFrame(button);",
+        "RuntimeUiSkin.ApplyRuntimeIconFrame(icon, new Color(0.02f, 0.08f, 0.16f, 0.82f));",
+        "RuntimeUiSkin.ApplySettingToggleFrame(toggle, value ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted);",
     )
     require(
         "docs/tasks/LGO-RUNTIME-UI-SKIN-ADOPTION-AUDIT-PASS-v1.0.md",

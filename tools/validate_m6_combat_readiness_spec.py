@@ -123,6 +123,8 @@ LOGIN_V3B_REMOVED_FILES = {
 RUNTIME_UI_SKIN_ADOPTION_FILES = {
     'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
     'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs',
+    'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs.meta',
 }
 V040_CONTRACT_FILES = {
     'protocol/combat.proto',
@@ -206,6 +208,18 @@ def runtime_ui_skin_adoption_is_active() -> bool:
         in read('docs/tasks/LGO-RUNTIME-UI-SKIN-ADOPTION-AUDIT-PASS-v1.0.md')
         and 'validate_lgo_runtime_ui_skin_adoption_audit.py'
         in read('tools/lgo_playable_closure_check.sh')
+    )
+
+
+def runtime_ui_factory_adoption_is_active() -> bool:
+    closure = read('tools/lgo_playable_closure_check.sh')
+    return (
+        'LGO_RUNTIME_UI_PRIMITIVE_FACTORY_READY'
+        in read('docs/tasks/LGO-RUNTIME-UI-PRIMITIVE-FACTORY-PASS-v1.0.md')
+        and 'validate_lgo_runtime_ui_primitive_factory.py' in closure
+        and 'LGO_RUNTIME_UI_BUTTON_FACTORY_ADOPTION_READY'
+        in read('docs/tasks/LGO-RUNTIME-UI-BUTTON-FACTORY-ADOPTION-PASS-v1.0.md')
+        and 'validate_lgo_runtime_ui_button_factory_adoption.py' in closure
     )
 
 
@@ -317,10 +331,9 @@ def main() -> int:
                 or any(path == prefix or path.startswith(prefix + '/') for prefix in LOGIN_V3B_REMOVED_PREFIXES)
             )
         )
-        runtime_ui_skin_adoption_allowed = (
-            runtime_ui_skin_adoption_active
-            and path in RUNTIME_UI_SKIN_ADOPTION_FILES
-        )
+        runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_active and path in RUNTIME_UI_SKIN_ADOPTION_FILES
+        if path in {'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs', 'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs.meta'}:
+            runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_factory_adoption_is_active()
         if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed and not login_v3b_allowed and not runtime_ui_skin_adoption_allowed:
             for prefix in FORBIDDEN_CODE_PREFIXES:
                 if path.startswith(prefix):

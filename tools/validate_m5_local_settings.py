@@ -42,6 +42,9 @@ def main() -> int:
         'HUD gọn',
         'ApplyLocalSettings',
         'NewLocalSettingToggle',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs',
         'RegisterValueChangedCallback',
     )
     require('tools/lgo_playable_closure_check.sh', 'validate_m5_local_settings.py', 'm5_local_settings')

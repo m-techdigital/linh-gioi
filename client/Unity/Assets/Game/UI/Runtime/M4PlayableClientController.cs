@@ -1129,80 +1129,6 @@ namespace LinhGioi.UI
                 _sessionMenuStatus.text = "Phiên bị gián đoạn: kiểm tra kết nối rồi thử lại.";
         }
 
-        private static TextField NewTextField(string label, string value)
-        {
-            var field = new TextField(label) { value = value };
-            field.style.maxWidth = 420;
-            field.style.marginTop = 8;
-            field.style.color = RuntimeArtCatalog.Text;
-            return field;
-        }
-
-        private static void ApplyLobbyInputStyle(TextField field)
-        {
-            field.style.minHeight = 42;
-            RuntimeUiSkin.ApplyPadding(field, 10, 4);
-            RuntimeUiSkin.ApplyLobbyInputFrame(field);
-        }
-
-        private static Button NewPrimaryButton(string label, Action action)
-        {
-            var button = NewButton(label, action);
-            button.style.backgroundColor = RuntimeArtCatalog.Spirit;
-            button.style.color = RuntimeArtCatalog.Background;
-            button.style.unityFontStyleAndWeight = FontStyle.Bold;
-            button.style.minHeight = 58;
-            button.style.fontSize = 16;
-            button.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
-            if (texture != null)
-            {
-                button.style.backgroundColor = Color.clear;
-                button.style.backgroundImage = new StyleBackground(texture);
-            }
-            return button;
-        }
-
-        private static Button NewCompactPrimaryButton(string label, Action action)
-        {
-            var button = NewButton(label, action);
-            button.style.minWidth = 144;
-            button.style.minHeight = 44;
-            button.style.unityFontStyleAndWeight = FontStyle.Bold;
-            button.style.fontSize = 14;
-            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.22f, 0.34f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit);
-            return button;
-        }
-
-        private static Button NewQuietButton(string label, Action action)
-        {
-            var button = NewButton(label, action);
-            button.style.minWidth = 88;
-            button.style.backgroundColor = RuntimeArtCatalog.Background;
-            button.style.color = RuntimeArtCatalog.Muted;
-            return button;
-        }
-
-        private static Button NewSecondaryButton(string label, Action action)
-        {
-            var button = NewButton(label, action);
-            button.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
-            button.style.color = RuntimeArtCatalog.Text;
-            var texture = LgoVisualAssetRegistryV2.ButtonSecondaryTexture;
-            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
-            return button;
-        }
-
-        private static Button NewCompactSecondaryButton(string label, Action action)
-        {
-            var button = NewButton(label, action);
-            button.style.minWidth = 132;
-            button.style.minHeight = 42;
-            button.style.fontSize = 14;
-            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.04f, 0.13f, 0.22f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.Gold);
-            return button;
-        }
-
         private static string NormalizeLayoutProfile(string value)
         {
             if (string.Equals(value, "mobile", StringComparison.OrdinalIgnoreCase)) return "mobile";
@@ -1217,34 +1143,6 @@ namespace LinhGioi.UI
             for (var i = 0; i < args.Length - 1; i++)
                 if (args[i] == key) return args[i + 1];
             return null;
-        }
-
-        private static VisualElement NewIcon(Texture2D texture, string tooltip)
-        {
-            var icon = new VisualElement();
-            icon.style.width = 28;
-            icon.style.height = 28;
-            icon.style.marginRight = 8;
-            icon.style.marginLeft = 4;
-            icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
-            icon.tooltip = tooltip;
-            return icon;
-        }
-
-        private static Button NewIconButton(string label, Texture2D texture, Action action)
-        {
-            var button = NewSecondaryButton(string.Empty, action);
-            button.style.minWidth = 112;
-            button.style.minHeight = 48;
-            button.style.flexDirection = FlexDirection.Row;
-            button.style.alignItems = Align.Center;
-            button.Add(NewIcon(texture, label));
-            var text = new Label(label);
-            text.style.color = RuntimeArtCatalog.Text;
-            text.style.unityFontStyleAndWeight = FontStyle.Bold;
-            button.Add(text);
-            return button;
         }
 
         private static void QuitPlayer()
@@ -1831,85 +1729,6 @@ namespace LinhGioi.UI
         internal void CaptureEvidenceOpenSessionMenu()
         {
             SetSessionMenuVisible(true);
-        }
-
-        private static Button NewButton(string label, Action action)
-        {
-            var button = new Button(action) { text = label };
-            button.style.minWidth = 132;
-            button.style.minHeight = 44;
-            button.style.marginTop = 8;
-            button.style.marginRight = 8;
-            RuntimeUiSkin.ApplyBaseButtonFrame(button);
-            return button;
-        }
-
-        private static Toggle NewLocalSettingToggle(string label, bool value, Action changed)
-        {
-            var toggle = new Toggle(label) { value = value };
-            toggle.style.minHeight = 34;
-            toggle.style.marginTop = 6;
-            toggle.style.marginBottom = 0;
-            RuntimeUiSkin.ApplySettingToggleFrame(toggle, value ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted);
-            toggle.RegisterValueChangedCallback(evt =>
-            {
-                RuntimeUiSkin.ApplySettingToggleState(toggle, evt.newValue);
-                changed();
-            });
-            return toggle;
-        }
-
-        private static Button NewListButton(string name, string classId, Action action)
-        {
-            var button = NewSecondaryButton(name + "\nKiếm tu sơ nhập", action);
-            button.style.minWidth = 230;
-            button.style.minHeight = 58;
-            button.style.unityTextAlign = TextAnchor.MiddleLeft;
-            button.style.paddingLeft = 14;
-            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.15f, 0.25f, 0.88f), RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
-            button.tooltip = "Chọn nhân vật tu luyện";
-            return button;
-        }
-
-        private static VisualElement NewRuntimeIcon(Texture2D texture, int size, string tooltip)
-        {
-            var icon = new VisualElement();
-            icon.style.width = size;
-            icon.style.height = size;
-            icon.style.minWidth = size;
-            icon.style.minHeight = size;
-            RuntimeUiSkin.ApplyRuntimeIconFrame(icon, new Color(0.02f, 0.08f, 0.16f, 0.82f));
-            if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
-            icon.tooltip = tooltip;
-            return icon;
-        }
-
-        private static VisualElement NewCombatCooldownIcon()
-        {
-            var icon = new VisualElement();
-            icon.name = "LGO M6 Combat Cooldown Runtime Icon v0.46";
-            icon.style.width = 52;
-            icon.style.height = 52;
-            icon.style.marginBottom = 0;
-            RuntimeUiSkin.ApplyCombatCooldownIconFrame(icon);
-            var texture = CombatPlaceholderAssets.CooldownReadyTexture;
-            if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
-            icon.tooltip = "Sẵn sàng tấn công thử.";
-            return icon;
-        }
-
-        private static void ApplyCombatPanelSkin(VisualElement panel)
-        {
-            panel.style.backgroundImage = new StyleBackground();
-            panel.style.backgroundColor = RuntimeUiSkin.BlueGlass;
-            RuntimeUiSkin.ApplyEdgeFrame(panel, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
-        }
-
-        private static void ApplyV2PanelSkin(VisualElement panel)
-        {
-            panel.style.backgroundImage = new StyleBackground();
-            panel.style.backgroundColor = new Color(0.02f, 0.07f, 0.14f, 0.90f);
-            RuntimeUiSkin.ApplyEdgeFrame(panel, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
         }
 
         private void ApplyLoginButtonState(Texture2D texture)

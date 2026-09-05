@@ -67,9 +67,12 @@ def main() -> int:
         "RuntimeUiSkin.ApplyCharacterPreviewFrame(_selectedPreview);",
         "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
         "RuntimeUiSkin.ApplyCharacterCreateFrame(_createPanel);",
-        "RuntimeUiSkin.ApplyLobbyInputFrame(field);",
         "LGO Character Hall V3B Composition Panel",
         "LGO Character Hall Create Cultivator Panel V3B",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "RuntimeUiSkin.ApplyLobbyInputFrame(field);",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-STYLE-ADOPTION-PASS-v1.0.md",
