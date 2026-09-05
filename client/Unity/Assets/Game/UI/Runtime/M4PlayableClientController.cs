@@ -1585,12 +1585,19 @@ namespace LinhGioi.UI
                 _createPanel.style.maxHeight = mobile ? 174 : 210;
             }
 
-            _worldHud.style.minWidth = mobile ? 260 : 300;
-            _worldHud.style.maxWidth = mobile ? Mathf.Clamp(width * 0.34f, 260f, 300f) : tablet ? Mathf.Clamp(width * 0.31f, 360f, 420f) : 390;
-            _worldHud.style.paddingLeft = mobile ? 9 : 12;
-            _worldHud.style.paddingRight = mobile ? 9 : 12;
-            _worldHud.style.paddingTop = mobile ? 7 : 10;
-            _worldHud.style.paddingBottom = mobile ? 7 : 10;
+            // LGO Mobile World Viewport Evidence Fit v1: keep the HUD proportional so scene actors remain reviewable.
+            _worldHud.style.minWidth = mobile ? 238 : 300;
+            _worldHud.style.maxWidth = mobile ? Mathf.Clamp(width * 0.28f, 238f, 272f) : tablet ? Mathf.Clamp(width * 0.31f, 360f, 420f) : 390;
+            _worldHud.style.paddingLeft = mobile ? 8 : 12;
+            _worldHud.style.paddingRight = mobile ? 8 : 12;
+            _worldHud.style.paddingTop = mobile ? 6 : 10;
+            _worldHud.style.paddingBottom = mobile ? 6 : 10;
+            if (_worldName != null)
+                _worldName.style.fontSize = mobile ? 16 : 17;
+            if (_worldObjective != null)
+                _worldObjective.style.fontSize = mobile ? 14 : 15;
+            if (_interactionHint != null)
+                _interactionHint.style.fontSize = mobile ? 14 : 15;
             if (_sessionMenuPanel != null)
             {
                 var sessionWidth = mobile

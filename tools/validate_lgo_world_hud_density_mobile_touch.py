@@ -61,7 +61,7 @@ def main() -> int:
         "Tầm: ",
         "Tiến trình: ",
         "Bố cục: desktop / HUD tinh gọn.",
-        "Mathf.Clamp(width * 0.34f, 260f, 300f)",
+        "Mathf.Clamp(width * 0.28f, 238f, 272f)",
         "Mathf.Clamp(width * 0.31f, 360f, 420f)",
     )
     require(

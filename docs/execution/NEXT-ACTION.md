@@ -10,9 +10,9 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 ## Next task
 
-`LGO-WORLD-RESPONSIVE-EVIDENCE-REFRESH-v1.0`
+`LGO-LOGIN-CTA-ORNAMENT-LIGHTWEIGHT-PASS-v1.0`
 
-Refresh desktop/tablet/mobile visual evidence after the World Hub depth pass, then tune responsive layout only if screenshots show clipping, overlarge UI, or weak hierarchy. Do not import heavy art or add gameplay.
+Continue improving the login first-screen polish with lightweight ornament/layout tuning only: preserve V3B logo/background/button direction, avoid V3BA and composite slicing, keep mobile/tablet budgets small, and do not import heavy art unless a right-sized runtime asset is genuinely needed.
 
 ## Current blocker
 
@@ -35,11 +35,12 @@ Evidence:
 - `docs/tasks/LGO-LOGIN-PANEL-VISUAL-BALANCE-PASS-v1.0.md`
 - `docs/tasks/LGO-CHARACTER-HALL-PANEL-DENSITY-PASS-v1.0.md`
 - `docs/tasks/LGO-WORLD-SCENE-DEPTH-LAYERING-PASS-v1.0.md`
+- `docs/tasks/LGO-WORLD-RESPONSIVE-EVIDENCE-REFRESH-v1.0.md`
 - `build/visual-evidence/latest/player.log`
 - `build/visual-evidence/latest/unity-build.log`
 - `build/codex-autopilot/status.json`
 
-Next allowed action: refresh responsive visual evidence and tune only visible layout issues. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; the project still refuses to claim visual PASS from capture/build alone.
+Next allowed action: continue with lightweight login CTA ornament polish if responsive evidence remains readable. The visual evidence harness records explicit review checklist categories and machine-readable heuristics for every checkpoint under marker `LGO_VISUAL_RUNTIME_REVIEW_HEURISTICS_READY`; world-hub label responsiveness is tracked under `LGO_WORLD_HUB_PROP_LABEL_RESPONSIVE_READY`; login visual balance is tracked under `LGO_LOGIN_PANEL_VISUAL_BALANCE_READY`; Character Hall density is tracked under `LGO_CHARACTER_HALL_PANEL_DENSITY_READY`; World Hub depth layering is tracked under `LGO_WORLD_SCENE_DEPTH_LAYERING_READY`; responsive evidence refresh is tracked under `LGO_WORLD_RESPONSIVE_EVIDENCE_REFRESH_READY`; the project still refuses to claim visual PASS from capture/build alone.
 
 ## Allowed paths
 
@@ -83,6 +84,7 @@ python3.12 tools/validate_lgo_world_ground_visual_quality.py
 python3.12 tools/validate_lgo_visual_runtime_review_heuristics.py
 python3.12 tools/validate_lgo_world_hub_prop_label_responsive.py
 python3.12 tools/validate_lgo_world_scene_depth_layering.py
+python3.12 tools/validate_lgo_world_responsive_evidence_refresh.py
 python3.12 tools/validate_m4_2_playable_ui.py
 python3.12 tools/validate_m4_visible_ui.py
 python3.12 tools/validate_m6_combat_visual_readability.py
@@ -125,6 +127,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-WORLD-SCENE-DEPTH-LAYERING-PASS-v1.0` is source-ready. Continue with responsive evidence refresh and fix any visible UI/world composition issue found by screenshots.
+`LGO-WORLD-RESPONSIVE-EVIDENCE-REFRESH-v1.0` is source-ready. Continue with lightweight login CTA ornament polish and keep runtime asset budgets small.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.
