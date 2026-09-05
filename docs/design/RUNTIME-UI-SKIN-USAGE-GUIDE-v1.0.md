@@ -24,6 +24,7 @@ Generic runtime roles:
 - `ApplyCompactActionFrame`: dense action button shell with explicit state colors.
 - `ApplyRuntimeIconFrame`: square icon frame.
 - `ApplySettingToggleFrame`: local settings toggle row.
+- `ApplySettingToggleState`: local settings toggle state accent.
 - `ApplyBadgeFrame`: small non-interactive badge.
 - `ApplyToastFrame`: transient message shell.
 - `ApplyStatusChipFrame`: status chip shell.
@@ -41,6 +42,7 @@ Character Hall roles:
 - `ApplyCharacterCreateFrame`: create-character form surface.
 - `ApplyCharacterPortraitFrame`: portrait stage frame.
 - `ApplyLobbyInputFrame`: lobby text input shell.
+- `ApplyEmptyCharacterCardFrame`: empty-character guidance card.
 
 World/HUD roles:
 
@@ -48,6 +50,9 @@ World/HUD roles:
 - `ApplyWorldHudGroupFrame`: grouped HUD/action/status block.
 - `ApplyHudStatusCompactFrame`: compact HUD status label.
 - `ApplySessionMenuFrame`: session menu surface.
+- `ApplyLocalSettingsPanelFrame`: local display settings panel.
+- `ApplyCombatCooldownIconFrame`: combat cooldown icon shell.
+- `ApplyCombatCooldownIconState`: combat cooldown state accent.
 - `SessionMenuBackground`: responsive session menu background color.
 - `WorldHudBackground`: responsive world HUD background color.
 

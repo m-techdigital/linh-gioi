@@ -843,7 +843,7 @@ namespace LinhGioi.UI
             _settingsPanel.style.paddingTop = 12;
             _settingsPanel.style.paddingBottom = 14;
             _settingsPanel.style.minHeight = 108;
-            _settingsPanel.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+            RuntimeUiSkin.ApplyLocalSettingsPanelFrame(_settingsPanel);
             _settingsPanel.Add(NewSectionTitle("Tùy chỉnh hiển thị"));
             _settingsPanel.Add(NewMutedLabel("Các lựa chọn này chỉ đổi cách xem trong phiên hiện tại."));
             _showPositionToggle = NewLocalSettingToggle("Tọa độ", false, ApplyLocalSettings);
@@ -881,11 +881,7 @@ namespace LinhGioi.UI
                 emptyCard.style.paddingRight = 14;
                 emptyCard.style.paddingTop = 14;
                 emptyCard.style.paddingBottom = 14;
-                emptyCard.style.backgroundColor = new Color(0.01f, 0.04f, 0.10f, 0.76f);
-                emptyCard.style.borderTopColor = RuntimeArtCatalog.Gold;
-                emptyCard.style.borderTopWidth = 1;
-                emptyCard.style.borderLeftColor = RuntimeArtCatalog.Spirit;
-                emptyCard.style.borderLeftWidth = 2;
+                RuntimeUiSkin.ApplyEmptyCharacterCardFrame(emptyCard);
                 emptyCard.Add(NewStatusLabel("Tạo tu sĩ đầu tiên", RuntimeArtCatalog.Gold));
                 var empty = NewMutedLabel("Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.");
                 _emptyCharacterHint = empty;
@@ -1844,8 +1840,7 @@ namespace LinhGioi.UI
                 var texture = coolingDown ? CombatPlaceholderAssets.CooldownActiveTexture : CombatPlaceholderAssets.CooldownReadyTexture;
                 if (texture != null) _combatCooldownIcon.style.backgroundImage = new StyleBackground(texture);
                 _combatCooldownIcon.tooltip = coolingDown ? "Hồi chiêu mô phỏng đang chạy." : "Sẵn sàng tấn công thử.";
-                _combatCooldownIcon.style.borderTopColor = coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
-                _combatCooldownIcon.style.borderLeftColor = coolingDown ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit;
+                RuntimeUiSkin.ApplyCombatCooldownIconState(_combatCooldownIcon, coolingDown);
             }
             if (_localCombatButton != null)
             {
@@ -1995,7 +1990,7 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplySettingToggleFrame(toggle, value ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted);
             toggle.RegisterValueChangedCallback(evt =>
             {
-                toggle.style.borderLeftColor = evt.newValue ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted;
+                RuntimeUiSkin.ApplySettingToggleState(toggle, evt.newValue);
                 changed();
             });
             return toggle;
@@ -2043,11 +2038,7 @@ namespace LinhGioi.UI
             icon.style.width = 52;
             icon.style.height = 52;
             icon.style.marginBottom = 0;
-            icon.style.backgroundColor = RuntimeArtCatalog.Surface;
-            icon.style.borderTopWidth = 2;
-            icon.style.borderLeftWidth = 2;
-            icon.style.borderTopColor = RuntimeArtCatalog.Spirit;
-            icon.style.borderLeftColor = RuntimeArtCatalog.Spirit;
+            RuntimeUiSkin.ApplyCombatCooldownIconFrame(icon);
             var texture = CombatPlaceholderAssets.CooldownReadyTexture;
             if (texture != null) icon.style.backgroundImage = new StyleBackground(texture);
             icon.tooltip = "Sẵn sàng tấn công thử.";

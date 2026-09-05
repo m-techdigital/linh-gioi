@@ -113,6 +113,11 @@ namespace LinhGioi.UI
             toggle.style.color = RuntimeArtCatalog.Text;
         }
 
+        internal static void ApplySettingToggleState(Toggle toggle, bool enabled)
+        {
+            toggle.style.borderLeftColor = enabled ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted;
+        }
+
         internal static void ApplyBadgeFrame(VisualElement badge)
         {
             badge.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
@@ -177,6 +182,14 @@ namespace LinhGioi.UI
             ApplyEdgeFrame(field, MediumSpiritBorder, MediumGoldBorder, LightSpiritBorder, new Color(0.93f, 0.73f, 0.36f, 0.28f));
         }
 
+        internal static void ApplyEmptyCharacterCardFrame(VisualElement card)
+        {
+            card.style.backgroundColor = new Color(0.01f, 0.04f, 0.10f, 0.76f);
+            ApplyEdgeFrame(card, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, Color.clear, Color.clear, 2f, 1f);
+            card.style.borderRightWidth = 0;
+            card.style.borderBottomWidth = 0;
+        }
+
         internal static void ApplyPreviewPanelFrame(VisualElement preview)
         {
             preview.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
@@ -201,6 +214,25 @@ namespace LinhGioi.UI
         {
             panel.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 0.96f);
             ApplyEdgeFrame(panel, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
+        }
+
+        internal static void ApplyLocalSettingsPanelFrame(VisualElement panel)
+        {
+            panel.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
+        }
+
+        internal static void ApplyCombatCooldownIconFrame(VisualElement icon)
+        {
+            icon.style.backgroundColor = RuntimeArtCatalog.Surface;
+            icon.style.borderTopWidth = 2;
+            icon.style.borderLeftWidth = 2;
+            ApplyCombatCooldownIconState(icon, false);
+        }
+
+        internal static void ApplyCombatCooldownIconState(VisualElement icon, bool coolingDown)
+        {
+            icon.style.borderTopColor = coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
+            icon.style.borderLeftColor = coolingDown ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit;
         }
 
         internal static Color SessionMenuBackground(bool compactProfile)
