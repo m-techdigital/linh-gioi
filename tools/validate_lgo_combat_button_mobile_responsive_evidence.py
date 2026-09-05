@@ -91,11 +91,19 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "_forceCombatPanelForEvidence",
-        "evidenceCombatFocus",
+        "RuntimeUiEvidenceState.CombatPanelFocus",
+        "RuntimeUiEvidenceState.None",
+        "evidenceHidesGuidance",
         "LGO Combat Button Mobile Responsive Evidence v1",
-        "(!compactViewport || _forceCombatPanelForEvidence)",
+        "(!compactViewport || _evidenceState.ForceCombatPanel)",
         '_localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiEvidenceState.cs",
+        "internal readonly struct RuntimeUiEvidenceState",
+        "CombatPanelFocus",
+        "ForceCombatPanel",
+        "HideGuidanceCardOnCompact",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs",
