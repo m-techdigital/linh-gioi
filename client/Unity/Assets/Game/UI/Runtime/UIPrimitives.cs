@@ -10,8 +10,8 @@ namespace LinhGioi.UI
         public BaseButton(ThemeTokens theme)
         {
             style.minHeight = theme.minimumTouchTarget;
-            style.paddingLeft = RuntimeUiSpacing.PanelPaddingHorizontal;
-            style.paddingRight = RuntimeUiSpacing.PanelPaddingHorizontal;
+            style.paddingLeft = theme.SpaceL;
+            style.paddingRight = theme.SpaceL;
             style.backgroundColor = theme.spirit;
             style.color = theme.text;
             style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -27,8 +27,8 @@ namespace LinhGioi.UI
         public IconButton(ThemeTokens theme) : base(theme)
         {
             style.minWidth = theme.minimumTouchTarget;
-            style.paddingLeft = RuntimeUiSpacing.WorldHudGroupPaddingHorizontal;
-            style.paddingRight = RuntimeUiSpacing.WorldHudGroupPaddingHorizontal;
+            style.paddingLeft = theme.SpaceS;
+            style.paddingRight = theme.SpaceS;
         }
     }
 
@@ -37,7 +37,7 @@ namespace LinhGioi.UI
         public BasePanel(ThemeTokens theme)
         {
             style.backgroundColor = theme.surface;
-            RuntimeUiSkin.ApplyPadding(this, RuntimeUiSpacing.PanelPaddingHorizontal, RuntimeUiSpacing.PanelPaddingHorizontal);
+            RuntimeUiSkin.ApplyPadding(this, theme.SpaceL, theme.SpaceL);
             style.borderTopLeftRadius = 14;
             style.borderTopRightRadius = 14;
             style.borderBottomLeftRadius = 14;
@@ -170,8 +170,8 @@ namespace LinhGioi.UI
         {
             var button = new BaseButton(_theme) { text = label };
             if (action != null) button.clicked += action;
-            button.style.marginRight = RuntimeUiSpacing.RowGap;
-            button.style.marginBottom = RuntimeUiSpacing.RowGap;
+            button.style.marginRight = _theme.SpaceS;
+            button.style.marginBottom = _theme.SpaceS;
             Add(button);
             return button;
         }

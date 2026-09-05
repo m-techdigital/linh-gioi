@@ -378,6 +378,12 @@ source_only() {
   if [[ -f tools/validate_lgo_runtime_ui_component_margin_token_evidence_refresh.py ]]; then
     run_phase runtime_ui_component_margin_token_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_component_margin_token_evidence_refresh.py
   fi
+  if [[ -f tools/validate_lgo_runtime_ui_primitive_theme_spacing_bridge_audit.py ]]; then
+    run_phase runtime_ui_primitive_theme_spacing_bridge_audit python3.12 tools/validate_lgo_runtime_ui_primitive_theme_spacing_bridge_audit.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_primitive_theme_spacing_bridge_evidence_refresh.py ]]; then
+    run_phase runtime_ui_primitive_theme_spacing_bridge_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_primitive_theme_spacing_bridge_evidence_refresh.py
+  fi
   if [[ -f tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py ]]; then
     run_phase runtime_ui_image_layer_evidence_refresh python3.12 tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py
   fi
@@ -694,6 +700,8 @@ source_only() {
     tools/validate_lgo_runtime_ui_one_edge_layout_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_component_margin_token_audit.py \
     tools/validate_lgo_runtime_ui_component_margin_token_evidence_refresh.py \
+    tools/validate_lgo_runtime_ui_primitive_theme_spacing_bridge_audit.py \
+    tools/validate_lgo_runtime_ui_primitive_theme_spacing_bridge_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_image_layer_evidence_refresh.py \
     tools/validate_lgo_runtime_ui_style_debt_followup_audit.py \
     tools/validate_lgo_runtime_ui_compact_status_evidence_refresh.py \

@@ -82,10 +82,10 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs",
-        "RuntimeUiSpacing.PanelPaddingHorizontal",
-        "RuntimeUiSpacing.WorldHudGroupPaddingHorizontal",
-        "RuntimeUiSkin.ApplyPadding(this, RuntimeUiSpacing.PanelPaddingHorizontal, RuntimeUiSpacing.PanelPaddingHorizontal)",
-        "RuntimeUiSpacing.RowGap",
+        "style.paddingLeft = theme.SpaceL;",
+        "style.paddingLeft = theme.SpaceS;",
+        "RuntimeUiSkin.ApplyPadding(this, theme.SpaceL, theme.SpaceL)",
+        "button.style.marginRight = _theme.SpaceS;",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",

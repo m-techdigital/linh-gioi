@@ -20,6 +20,15 @@ namespace LinhGioi.UI
         public int minimumTouchTarget = 44;
         public string sourceSha256;
 
+        public int SpaceXs => SpacingAt(0, 4);
+        public int SpaceS => SpacingAt(1, 8);
+        public int SpaceM => SpacingAt(2, 12);
+        public int SpaceL => SpacingAt(3, 16);
+        public int SpaceXl => SpacingAt(4, 24);
+        public int Space2Xl => SpacingAt(5, 32);
+        public int Space3Xl => SpacingAt(6, 48);
+        public int Space4Xl => SpacingAt(7, 64);
+
         [Serializable]
         private sealed class TokenDocument
         {
@@ -69,6 +78,11 @@ namespace LinhGioi.UI
             if (!ColorUtility.TryParseHtmlString(value, out var color))
                 throw new InvalidOperationException($"Invalid color token {token}: {value}");
             return color;
+        }
+
+        private int SpacingAt(int index, int fallback)
+        {
+            return spacing != null && spacing.Length > index ? spacing[index] : fallback;
         }
     }
 }

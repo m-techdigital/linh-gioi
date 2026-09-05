@@ -131,6 +131,8 @@ RUNTIME_UI_SKIN_ADOPTION_FILES = {
     'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs.meta',
     'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs',
     'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs.meta',
+    'client/Unity/Assets/Game/UI/Runtime/ThemeTokens.cs',
+    'client/Unity/Assets/Game/UI/Runtime/ThemeTokens.cs.meta',
 }
 V040_CONTRACT_FILES = {
     'protocol/combat.proto',
@@ -248,6 +250,16 @@ def runtime_ui_component_margin_token_is_active() -> bool:
         and 'LGO_RUNTIME_UI_COMPONENT_MARGIN_TOKEN_READY'
         in read('docs/tasks/LGO-RUNTIME-UI-COMPONENT-MARGIN-TOKEN-AUDIT-v1.0.md')
         and 'validate_lgo_runtime_ui_component_margin_token_audit.py' in closure
+    )
+
+
+def runtime_ui_primitive_theme_spacing_bridge_is_active() -> bool:
+    closure = read('tools/lgo_playable_closure_check.sh')
+    return (
+        runtime_ui_component_margin_token_is_active()
+        and 'LGO_RUNTIME_UI_PRIMITIVE_THEME_SPACING_BRIDGE_READY'
+        in read('docs/tasks/LGO-RUNTIME-UI-PRIMITIVE-THEME-SPACING-BRIDGE-AUDIT-v1.0.md')
+        and 'validate_lgo_runtime_ui_primitive_theme_spacing_bridge_audit.py' in closure
     )
 
 
@@ -371,6 +383,13 @@ def main() -> int:
             'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs.meta',
         }:
             runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_component_margin_token_is_active()
+        if path in {
+            'client/Unity/Assets/Game/UI/Runtime/ThemeTokens.cs',
+            'client/Unity/Assets/Game/UI/Runtime/ThemeTokens.cs.meta',
+            'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs',
+            'client/Unity/Assets/Game/UI/Runtime/UIPrimitives.cs.meta',
+        }:
+            runtime_ui_skin_adoption_allowed = runtime_ui_skin_adoption_allowed and runtime_ui_primitive_theme_spacing_bridge_is_active()
         if path not in ALLOWED_CODE_FILES and not m6_local_allowed and not runtime_asset_weight_allowed and not login_v3b_allowed and not runtime_ui_skin_adoption_allowed:
             for prefix in FORBIDDEN_CODE_PREFIXES:
                 if path.startswith(prefix):
