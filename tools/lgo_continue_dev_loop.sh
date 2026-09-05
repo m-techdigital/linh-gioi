@@ -19,33 +19,11 @@ run_logged() {
   echo "LGO_DEV_LOOP_PHASE_PASS $label"
 }
 
-print_markdown_section() {
-  local file="$1"
-  local heading="$2"
-  awk -v heading="$heading" '
-    $0 == heading { in_section = 1; print; next }
-    in_section && /^## / { exit }
-    in_section { print }
-  ' "$file"
-}
-
 print_context() {
   case "$CONTEXT_MODE" in
     quick)
       echo "LGO_DEV_LOOP_CONTEXT_MODE quick"
-      echo "LGO_PROJECT_STATE_QUICK_BEGIN"
-      sed -n '1,80p' "$ROOT/docs/execution/PROJECT-STATE.md"
-      echo "LGO_PROJECT_STATE_QUICK_END"
-      echo "LGO_NEXT_ACTION_QUICK_BEGIN"
-      print_markdown_section "$ROOT/docs/execution/NEXT-ACTION.md" "## Quick Resume"
-      print_markdown_section "$ROOT/docs/execution/NEXT-ACTION.md" "## Next task"
-      print_markdown_section "$ROOT/docs/execution/NEXT-ACTION.md" "## Current blocker"
-      echo "LGO_NEXT_ACTION_QUICK_END"
-      if [[ -f "$ROOT/docs/execution/TASK-LEDGER-ROLLUP.md" ]]; then
-        echo "LGO_TASK_LEDGER_ROLLUP_BEGIN"
-        sed -n '1,140p' "$ROOT/docs/execution/TASK-LEDGER-ROLLUP.md"
-        echo "LGO_TASK_LEDGER_ROLLUP_END"
-      fi
+      python3.12 "$ROOT/tools/lgo_state_brief.py"
       ;;
     full)
       echo "LGO_DEV_LOOP_CONTEXT_MODE full"
@@ -143,6 +121,7 @@ run_source_validation_profile() {
 {
   echo "LGO_CONTINUE_DEV_LOOP_START $(date -u +%Y-%m-%dT%H:%M:%SZ)"
   echo "LGO_REPO_ROOT $ROOT"
+  echo "LGO_OWNER_NOTE Đang chạy dev loop: đọc state ngắn, chạy validation $GATE_PROFILE, sau đó chạy visual runtime nếu Unity sẵn sàng."
   test "$(basename "$PWD")" = "LinhGioiOnline"
 
   print_context
@@ -150,5 +129,6 @@ run_source_validation_profile() {
   run_source_validation_profile
   run_visual_review_if_available
 
+  echo "LGO_OWNER_NOTE Dev loop hoàn tất: source gates sạch và visual runtime đã được phân loại theo log ở build/dev-loop/latest.log."
   echo "LGO_CONTINUE_DEV_LOOP_RESULT PASS"
 } 2>&1 | tee "$LOG"

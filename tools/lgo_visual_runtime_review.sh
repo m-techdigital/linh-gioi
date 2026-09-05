@@ -220,13 +220,16 @@ stop_api_on_port
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PROFILE $PROFILE ${SCREEN_WIDTH}x${SCREEN_HEIGHT}"
 echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE source_gates"
+echo "LGO_OWNER_NOTE Đang chạy kiểm tra nguồn nhanh trước khi dựng player thật."
 run_source_gates
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE prepare_assets"
+echo "LGO_OWNER_NOTE Đang chuẩn bị asset/protocol local cho Unity, không import ảnh reference."
 LGO_UNITY_LOCAL_ASSETS_CLEAR_CACHE="$CLEAR_UNITY_CACHE" LGO_UNITY_LOCAL_ASSETS_QUIET=1 ./tools/prepare_unity_local_assets.sh
 prepare_server_runtime
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE build_player"
+echo "LGO_OWNER_NOTE Đang build Unity Player thật ở ${SCREEN_WIDTH}x${SCREEN_HEIGHT}; bước này có thể mất vài phút."
 mkdir -p "$ROOT/build/unity-player-macos"
 case "$PLAYER_BUILD_MODE" in
   build)
@@ -285,12 +288,14 @@ if [[ ! -x "$PLAYER_EXE" ]]; then
 fi
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE start_api"
+echo "LGO_OWNER_NOTE Đang mở API local cho flow đăng nhập/nhân vật/sân luyện."
 LG_API_HOST="127.0.0.1" LG_API_PORT="$PORT" LG_API_PERSISTENCE_DIR="$OUT_DIR/api-store" ./server/run-api.sh > "$OUT_DIR/api.log" 2>&1 &
 API_PID="$!"
 echo "$API_PID" > "$OUT_DIR/api.pid"
 wait_for_api
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE capture_player"
+echo "LGO_OWNER_NOTE Đang launch player và tự chụp các checkpoint UI/gameplay; không dùng nographics cho visual gate."
 python3.12 - "$TIMEOUT_SECONDS" "$PLAYER_EXE" "$OUT_DIR" "$PORT" "$SCREEN_WIDTH" "$SCREEN_HEIGHT" "$PROFILE" <<'PY'
 from __future__ import annotations
 import json
@@ -463,6 +468,7 @@ if [[ ! -f "$OUT_DIR/visual-runtime-evidence-manifest.json" ]]; then
   exit 40
 fi
 
+echo "LGO_OWNER_NOTE Đang xác minh screenshot PNG và resolution trong manifest."
 python3.12 - "$OUT_DIR" <<'PY'
 from __future__ import annotations
 import json
@@ -497,6 +503,7 @@ print("LGO_VISUAL_RUNTIME_EVIDENCE_READY output=" + str(out))
 print("LGO_VISUAL_RUNTIME_PASS_NOT_CLAIMED")
 PY
 
+echo "LGO_OWNER_NOTE Đang phân tích heuristic ảnh: blank/duplicate/kích thước/độ biến thiên pixel."
 python3.12 tools/analyze_lgo_visual_runtime_evidence.py "$OUT_DIR"
 
 if [[ ! -f "$OUT_DIR/visual-runtime-evidence-heuristics.json" ]]; then

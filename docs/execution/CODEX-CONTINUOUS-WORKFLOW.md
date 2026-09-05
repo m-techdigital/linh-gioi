@@ -17,8 +17,8 @@ This workflow prevents Linh Giới Online development from stopping after a tiny
 ## Loop
 
 1. Read `AGENTS.md`.
-2. Read `docs/execution/PROJECT-STATE.md`.
-3. Read `docs/execution/NEXT-ACTION.md`.
+2. Run `python3.12 tools/lgo_state_brief.py` for the compact project state.
+3. Open `docs/execution/PROJECT-STATE.md`, `docs/execution/NEXT-ACTION.md`, or full `TASK-LEDGER.md` only when the compact brief is insufficient.
 4. Read `docs/execution/TASK-LEDGER-ROLLUP.md`; open full `TASK-LEDGER.md` only when needed.
 5. Implement the next task within allowed paths.
 6. Run the validation commands listed in `NEXT-ACTION.md`.

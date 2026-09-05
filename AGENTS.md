@@ -9,6 +9,7 @@ This repository uses persistent continuous-work mode. Read this file before maki
 - If runtime/tooling is blocked but other source-safe work remains, record the blocker and evidence path, then continue with a valid task that does not depend on that blocked gate.
 - After each task: validate the change, update report/evidence as needed, update `docs/execution/NEXT-ACTION.md`, then continue to the next valid task.
 - Use `docs/execution/PROJECT-STATE.md`, `docs/execution/NEXT-ACTION.md`, and `docs/execution/TASK-LEDGER-ROLLUP.md` as the fast handoff spine for future sessions; open full `TASK-LEDGER.md` only when the rollup is insufficient.
+- Prefer `python3.12 tools/lgo_state_brief.py` for routine resume/context loading so long marker history does not dominate token usage.
 - When running under autopilot, write `build/codex-autopilot/status.json` at the end of each coherent batch.
 - If `docs/execution/NEXT-ACTION.md` still contains a valid next task, autopilot status must be `CONTINUE`, not `DONE`.
 - Under `tools/lgo_codex_autopilot.sh`, never request approval or escalation; classify blocked local sockets, Unity/player launch, video capture, or runtime permissions in `status.json` instead of waiting for user input.

@@ -60,13 +60,14 @@ write_prompt() {
 Read first:
 
 - AGENTS.md
-- docs/execution/PROJECT-STATE.md
-- docs/execution/NEXT-ACTION.md
+- Run `python3.12 tools/lgo_state_brief.py` for compact Vietnamese project state.
+- docs/execution/PROJECT-STATE.md only when the compact brief is insufficient.
+- docs/execution/NEXT-ACTION.md only when the compact brief is insufficient.
 - docs/execution/TASK-LEDGER-ROLLUP.md
 - docs/execution/CODEX-CONTINUOUS-WORKFLOW.md
 - docs/execution/CODEX-AUTOPILOT.md
 
-Read `docs/execution/TASK-LEDGER.md` only when the rollup is insufficient for the current task. Prefer the Quick Resume block, Next task section, and rollup to reduce noisy context and token usage.
+Read `docs/execution/TASK-LEDGER.md` only when the rollup is insufficient for the current task. Prefer `tools/lgo_state_brief.py`, the Quick Resume block, Next task section, and rollup to reduce noisy context and token usage.
 
 Continue Linh Giới Online development.
 
