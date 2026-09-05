@@ -399,7 +399,7 @@ namespace LinhGioi.World
             var height = Screen.height > 0 ? Screen.height : 720;
             if (width <= 1000 || height <= 600) return 5.45f;
             if (width <= 1400 || height <= 1050) return 6.15f;
-            return 7.0f;
+            return 6.35f;
         }
 
         private static void EnsureGround()

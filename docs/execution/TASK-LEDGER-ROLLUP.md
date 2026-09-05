@@ -5,7 +5,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 ## Quick State
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
-- Next task: `LGO-POST-LOGIN-RUNTIME-QUALITY-NEXT-BATCH-v1.0`
+- Next task: `LGO-POST-LOGIN-RUNTIME-QUALITY-FOLLOWUP-v1.0`
 - Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.
 - Purpose: scan recent work quickly without deleting historical task rows or marker coverage.
 
@@ -13,7 +13,6 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 
 | Recent | Task ID | Status / Decision | Next allowed step |
 |---:|---|---|---|
-| 232 | LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_STATE_DOC_COMPACTION_AUDIT_READY`: `NEXT-ACTION.md` now has a concise Quick Resume block while preserving historical marker registry compatibility | Continue with `LGO-EXECUTION-LEDGER-ROLLUP-VIEW-v1.0` |
 | 233 | LGO-EXECUTION-LEDGER-ROLLUP-VIEW v1.0 | source ready / no visual pass claim; `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`: append-only task history now has a compact generated rollup with stale-output validation | Continue with `LGO-COMMIT-CADENCE-POLICY-HARDENING-v1.0` |
 | 234 | LGO-COMMIT-CADENCE-POLICY-HARDENING v1.0 | source ready / no visual pass claim; `LGO_COMMIT_CADENCE_POLICY_HARDENING_READY`: autopilot now defaults to no auto-commit, with checkpoint commits and push both explicitly opt-in for cleaner history | Continue with `LGO-RUNTIME-UI-QUALITY-DEBT-TRIAGE-v1.0` |
 | 235 | LGO-RUNTIME-UI-QUALITY-DEBT-TRIAGE v1.0 | source ready / no visual pass claim; `LGO_RUNTIME_UI_QUALITY_DEBT_TRIAGE_READY`: visual/source debt triage selected login NPC grounding and CTA panel polish as the next highest-value safe fix | Continue with `LGO-LOGIN-NPC-GROUNDING-AND-CTA-PANEL-POLISH-v1.0` |
@@ -31,6 +30,7 @@ Marker: `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
 | 247 | LGO-CHANGESET-NOISE-AND-HOTSPOT-AUDIT v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_CHANGESET_NOISE_HOTSPOT_AUDIT_READY`: obsolete M6 readiness allowlist code was removed and visual evidence hooks moved into a partial evidence boundary so the main playable UI controller is smaller without changing runtime flow | Continue with `LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE-v1.0` |
 | 248 | LGO-LOGIN-AND-CHARACTER-HALL-VISUAL-QUALITY-TRIAGE v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_CHARACTER_HALL_SELECTED_CTA_PRIORITY_READY`: selected Character Hall state now makes `Vào sân luyện` the first CTA on every profile, demotes `Tạo thêm`, and reduces create-panel emphasis without changing character flow | Continue with `LGO-RUNTIME-UI-NEXT-HOTSPOT-SELECTION-v1.0` |
 | 249 | LGO-CONTINUOUS-WORKFLOW-CHANGE-BUDGET-PASS v1.0 | source/tooling policy ready / no runtime pass claim; `LGO_CONTINUOUS_WORKFLOW_CHANGE_BUDGET_READY`: continuous/autopilot workflow now prioritizes player-visible value and recurring maintenance savings over one-off marker/docs/validator churn, with quick/full gate and commit cadence guidance kept explicit | Continue with `LGO-POST-LOGIN-RUNTIME-QUALITY-NEXT-BATCH-v1.0` |
+| 250 | LGO-WORLD-HUB-SOFT-BACKGROUND-CAMERA-PASS v1.0 | source ready / runtime evidence reviewed / no visual pass claim; `LGO_WORLD_HUB_SOFT_BACKGROUND_CAMERA_READY`: world ground no longer shows a debug-like tile pattern, uses a smaller procedural texture, and desktop camera framing is closer so actors/props read better without adding heavy assets | Continue with `LGO-POST-LOGIN-RUNTIME-QUALITY-FOLLOWUP-v1.0` |
 
 ## Operating Notes
 

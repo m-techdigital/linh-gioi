@@ -54,7 +54,7 @@ def main() -> int:
         "width <= 1000 || height <= 600",
         "return 5.45f",
         "return 6.15f",
-        "return 7.0f",
+        "return 6.35f",
     )
     require(
         "docs/tasks/LGO-WORLD-MOBILE-CAMERA-FRAMING-PASS-v1.0.md",

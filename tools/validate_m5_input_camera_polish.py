@@ -57,7 +57,7 @@ def main() -> int:
         'private static float CurrentCameraOrthographicSize()',
         'return 5.45f',
         'return 6.15f',
-        'return 7.0f',
+        'return 6.35f',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
