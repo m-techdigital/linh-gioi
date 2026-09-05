@@ -12,7 +12,7 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 `LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0`
 
-Use the indexed profile screenshots from `LGO-VISUAL-EVIDENCE-PROFILE-INDEX-PASS-v1.0` after `LGO-LOGIN-RESPONSIVE-SCALE-CLEANUP-PASS-v1.0` to improve world hub readability, scene hierarchy, actor/prop staging, and HUD balance without adding gameplay mechanics or importing heavy new art. Marker already ready: `LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_READY`. Profile index marker already ready: `LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY`.
+Use the indexed profile screenshots from `LGO-VISUAL-EVIDENCE-PROFILE-INDEX-PASS-v1.0` after `LGO-LOGIN-RESPONSIVE-SCALE-CLEANUP-PASS-v1.0` to improve world hub readability, scene hierarchy, actor/prop staging, and HUD balance without adding gameplay mechanics or importing heavy new art. Marker: `LGO_WORLD_HUB_VISUAL_READABILITY_CLEANUP_READY`. Login marker already ready: `LGO_LOGIN_RESPONSIVE_SCALE_CLEANUP_READY`. Profile index marker already ready: `LGO_VISUAL_EVIDENCE_PROFILE_INDEX_READY`.
 
 ## Current blocker
 
@@ -123,6 +123,7 @@ python3.12 tools/validate_lgo_world_ground_visual_quality.py
 python3.12 tools/validate_lgo_visual_runtime_review_heuristics.py
 python3.12 tools/validate_lgo_world_hub_prop_label_responsive.py
 python3.12 tools/validate_lgo_world_scene_depth_layering.py
+python3.12 tools/validate_lgo_world_hub_visual_readability_cleanup.py
 python3.12 tools/validate_lgo_world_responsive_evidence_refresh.py
 python3.12 tools/validate_m4_2_playable_ui.py
 python3.12 tools/validate_m4_visible_ui.py
@@ -163,6 +164,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-LOGIN-RESPONSIVE-SCALE-CLEANUP-PASS-v1.0` is profile-evidence-ready. Continue with `LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0`.
+`LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0` is source-ready. After profile evidence refresh, continue with `LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0`.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

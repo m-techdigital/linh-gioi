@@ -939,32 +939,53 @@ namespace LinhGioi.World
         private static void EnsureWorldSetDressing()
         {
             // LGO World Scene Depth Layering: every major readable prop receives a light procedural ground shadow.
-            CreateBillboardSprite("LGO World Cherry Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, new Vector3(-4.8f, 0.2f, 1.4f), new Vector3(1.12f, 1.12f, 1f), 1);
-            CreateGroundShadowSprite("LGO World Cherry Tree Depth Shadow V3B", new Vector3(-4.8f, 0.018f, 1.4f), new Vector3(1.25f, 0.54f, 1f), 0);
-            CreateBillboardSprite("LGO World Pine Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, new Vector3(4.8f, 0.2f, 2.1f), new Vector3(1.02f, 1.02f, 1f), 1);
-            CreateGroundShadowSprite("LGO World Pine Tree Depth Shadow V3B", new Vector3(4.8f, 0.018f, 2.1f), new Vector3(1.18f, 0.48f, 1f), 0);
-            CreateBillboardSprite("LGO World Cherry Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, new Vector3(4.6f, 0.16f, -0.65f), new Vector3(0.62f, 0.62f, 1f), 0);
-            CreateGroundShadowSprite("LGO World Cherry Tree Far Depth Shadow V3B", new Vector3(4.6f, 0.018f, -0.65f), new Vector3(0.72f, 0.30f, 1f), -1);
-            CreateBillboardSprite("LGO World Pine Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, new Vector3(-5.25f, 0.16f, 3.65f), new Vector3(0.68f, 0.68f, 1f), 0);
-            CreateGroundShadowSprite("LGO World Pine Tree Far Depth Shadow V3B", new Vector3(-5.25f, 0.018f, 3.65f), new Vector3(0.78f, 0.32f, 1f), -1);
-            CreateBillboardSprite("LGO World Lantern West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(-4.2f, 0.2f, -1.8f), new Vector3(0.68f, 0.68f, 1f), 2);
-            CreateGroundShadowSprite("LGO World Lantern West Depth Shadow V3B", new Vector3(-4.2f, 0.018f, -1.8f), new Vector3(0.44f, 0.24f, 1f), 0);
-            CreateBillboardSprite("LGO World Lantern East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(4.1f, 0.2f, -1.7f), new Vector3(0.68f, 0.68f, 1f), 2);
-            CreateGroundShadowSprite("LGO World Lantern East Depth Shadow V3B", new Vector3(4.1f, 0.018f, -1.7f), new Vector3(0.44f, 0.24f, 1f), 0);
-            CreateBillboardSprite("LGO World Lantern North Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(-0.95f, 0.15f, 5.35f), new Vector3(0.42f, 0.42f, 1f), 1);
-            CreateGroundShadowSprite("LGO World Lantern North Depth Shadow V3B", new Vector3(-0.95f, 0.018f, 5.35f), new Vector3(0.32f, 0.18f, 1f), 0);
-            CreateBillboardSprite("LGO World Lantern South Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, new Vector3(1.15f, 0.15f, -5.25f), new Vector3(0.42f, 0.42f, 1f), 1);
-            CreateGroundShadowSprite("LGO World Lantern South Depth Shadow V3B", new Vector3(1.15f, 0.018f, -5.25f), new Vector3(0.32f, 0.18f, 1f), 0);
-            CreateBillboardSprite("LGO World Rock Moss Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, new Vector3(-1.9f, 0.15f, -1.7f), new Vector3(0.58f, 0.58f, 1f), 1);
-            CreateGroundShadowSprite("LGO World Rock Moss Depth Shadow V3B", new Vector3(-1.9f, 0.018f, -1.7f), new Vector3(0.62f, 0.30f, 1f), 0);
-            CreateBillboardSprite("LGO World Rock Moss East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, new Vector3(2.1f, 0.12f, 4.75f), new Vector3(0.34f, 0.34f, 1f), 0);
-            CreateGroundShadowSprite("LGO World Rock Moss East Depth Shadow V3B", new Vector3(2.1f, 0.018f, 4.75f), new Vector3(0.38f, 0.18f, 1f), -1);
-            CreateBillboardSprite("LGO World Cultivation Banner Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, new Vector3(3.8f, 0.2f, -3.6f), new Vector3(0.56f, 0.56f, 1f), 2);
-            CreateGroundShadowSprite("LGO World Cultivation Banner Depth Shadow V3B", new Vector3(3.8f, 0.018f, -3.6f), new Vector3(0.42f, 0.20f, 1f), 0);
-            CreateBillboardSprite("LGO World Cultivation Banner West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, new Vector3(-4.95f, 0.16f, -3.25f), new Vector3(0.42f, 0.42f, 1f), 1);
-            CreateGroundShadowSprite("LGO World Cultivation Banner West Depth Shadow V3B", new Vector3(-4.95f, 0.018f, -3.25f), new Vector3(0.34f, 0.16f, 1f), 0);
-            CreateBillboardSprite("LGO World Bridge Wood Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BridgeWood ?? LgoVisualAssetRegistryV2.BridgeWood, new Vector3(-2.9f, 0.1f, -3.8f), new Vector3(0.82f, 0.82f, 1f), 1);
-            CreateGroundShadowSprite("LGO World Bridge Wood Depth Shadow V3B", new Vector3(-2.9f, 0.018f, -3.8f), new Vector3(0.96f, 0.28f, 1f), 0);
+            // LGO World Hub Visual Readability Cleanup v1: edge props scale down on narrow profiles so gameplay actors own the center.
+            CreateBillboardSprite("LGO World Cherry Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, WorldHubPoint(-5.25f, 0.2f, 1.55f), WorldHubScale(1.02f, 0.88f, 0.70f), 1);
+            CreateGroundShadowSprite("LGO World Cherry Tree Depth Shadow V3B", WorldHubPoint(-5.25f, 0.018f, 1.55f), WorldHubShadowScale(1.10f, 0.46f, 0.76f), 0);
+            CreateBillboardSprite("LGO World Pine Tree Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, WorldHubPoint(5.25f, 0.2f, 2.35f), WorldHubScale(0.94f, 0.82f, 0.66f), 1);
+            CreateGroundShadowSprite("LGO World Pine Tree Depth Shadow V3B", WorldHubPoint(5.25f, 0.018f, 2.35f), WorldHubShadowScale(1.02f, 0.42f, 0.72f), 0);
+            CreateBillboardSprite("LGO World Cherry Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, WorldHubPoint(5.1f, 0.16f, -0.95f), WorldHubScale(0.54f, 0.46f, 0.34f), 0);
+            CreateGroundShadowSprite("LGO World Cherry Tree Far Depth Shadow V3B", WorldHubPoint(5.1f, 0.018f, -0.95f), WorldHubShadowScale(0.62f, 0.25f, 0.48f), -1);
+            CreateBillboardSprite("LGO World Pine Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, WorldHubPoint(-5.55f, 0.16f, 3.9f), WorldHubScale(0.58f, 0.50f, 0.38f), 0);
+            CreateGroundShadowSprite("LGO World Pine Tree Far Depth Shadow V3B", WorldHubPoint(-5.55f, 0.018f, 3.9f), WorldHubShadowScale(0.66f, 0.27f, 0.50f), -1);
+            CreateBillboardSprite("LGO World Lantern West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(-4.55f, 0.2f, -2.05f), WorldHubScale(0.58f, 0.48f, 0.36f), 2);
+            CreateGroundShadowSprite("LGO World Lantern West Depth Shadow V3B", WorldHubPoint(-4.55f, 0.018f, -2.05f), WorldHubShadowScale(0.38f, 0.20f, 0.32f), 0);
+            CreateBillboardSprite("LGO World Lantern East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(4.45f, 0.2f, -1.95f), WorldHubScale(0.58f, 0.48f, 0.36f), 2);
+            CreateGroundShadowSprite("LGO World Lantern East Depth Shadow V3B", WorldHubPoint(4.45f, 0.018f, -1.95f), WorldHubShadowScale(0.38f, 0.20f, 0.32f), 0);
+            CreateBillboardSprite("LGO World Lantern North Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(-1.15f, 0.15f, 5.55f), WorldHubScale(0.36f, 0.32f, 0.24f), 1);
+            CreateGroundShadowSprite("LGO World Lantern North Depth Shadow V3B", WorldHubPoint(-1.15f, 0.018f, 5.55f), WorldHubShadowScale(0.28f, 0.15f, 0.24f), 0);
+            CreateBillboardSprite("LGO World Lantern South Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(1.25f, 0.15f, -5.45f), WorldHubScale(0.36f, 0.32f, 0.24f), 1);
+            CreateGroundShadowSprite("LGO World Lantern South Depth Shadow V3B", WorldHubPoint(1.25f, 0.018f, -5.45f), WorldHubShadowScale(0.28f, 0.15f, 0.24f), 0);
+            CreateBillboardSprite("LGO World Rock Moss Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, WorldHubPoint(-2.15f, 0.15f, -1.95f), WorldHubScale(0.48f, 0.40f, 0.30f), 1);
+            CreateGroundShadowSprite("LGO World Rock Moss Depth Shadow V3B", WorldHubPoint(-2.15f, 0.018f, -1.95f), WorldHubShadowScale(0.50f, 0.24f, 0.40f), 0);
+            CreateBillboardSprite("LGO World Rock Moss East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, WorldHubPoint(2.35f, 0.12f, 4.95f), WorldHubScale(0.30f, 0.26f, 0.20f), 0);
+            CreateGroundShadowSprite("LGO World Rock Moss East Depth Shadow V3B", WorldHubPoint(2.35f, 0.018f, 4.95f), WorldHubShadowScale(0.32f, 0.15f, 0.26f), -1);
+            CreateBillboardSprite("LGO World Cultivation Banner Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, WorldHubPoint(4.25f, 0.2f, -3.9f), WorldHubScale(0.46f, 0.38f, 0.28f), 2);
+            CreateGroundShadowSprite("LGO World Cultivation Banner Depth Shadow V3B", WorldHubPoint(4.25f, 0.018f, -3.9f), WorldHubShadowScale(0.34f, 0.16f, 0.28f), 0);
+            CreateBillboardSprite("LGO World Cultivation Banner West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, WorldHubPoint(-5.3f, 0.16f, -3.55f), WorldHubScale(0.34f, 0.28f, 0.22f), 1);
+            CreateGroundShadowSprite("LGO World Cultivation Banner West Depth Shadow V3B", WorldHubPoint(-5.3f, 0.018f, -3.55f), WorldHubShadowScale(0.28f, 0.13f, 0.22f), 0);
+            CreateBillboardSprite("LGO World Bridge Wood Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BridgeWood ?? LgoVisualAssetRegistryV2.BridgeWood, WorldHubPoint(-3.25f, 0.1f, -4.15f), WorldHubScale(0.72f, 0.58f, 0.44f), 1);
+            CreateGroundShadowSprite("LGO World Bridge Wood Depth Shadow V3B", WorldHubPoint(-3.25f, 0.018f, -4.15f), WorldHubShadowScale(0.82f, 0.24f, 0.58f), 0);
+        }
+
+        private static Vector3 WorldHubPoint(float x, float y, float z)
+        {
+            if (IsMobileWorldViewport()) return new Vector3(x * 1.04f, y, z * 1.04f);
+            if (IsNarrowWorldViewport()) return new Vector3(x * 1.02f, y, z * 1.02f);
+            return new Vector3(x, y, z);
+        }
+
+        private static Vector3 WorldHubScale(float desktop, float tablet, float mobile)
+        {
+            var value = IsMobileWorldViewport() ? mobile : IsNarrowWorldViewport() ? tablet : desktop;
+            return new Vector3(value, value, 1f);
+        }
+
+        private static Vector3 WorldHubShadowScale(float width, float height, float mobileWidth)
+        {
+            if (IsMobileWorldViewport()) return new Vector3(mobileWidth, height * 0.72f, 1f);
+            if (IsNarrowWorldViewport()) return new Vector3(width * 0.84f, height * 0.86f, 1f);
+            return new Vector3(width, height, 1f);
         }
 
         private static SpriteRenderer CreateBillboardSprite(string name, Sprite sprite, Vector3 position, Vector3 scale, int sortingOrder)
