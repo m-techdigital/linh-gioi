@@ -11,17 +11,17 @@ namespace LinhGioi.World
 
         internal static Texture2D CreateTrainingGroundTexture()
         {
-            const int size = 384;
+            const int size = 256;
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
             {
                 name = "LGO Procedural Cultivation Platform Texture v1",
                 wrapMode = TextureWrapMode.Clamp,
                 filterMode = FilterMode.Bilinear
             };
-            var deepA = new Color(0.105f, 0.165f, 0.235f, 1f);
-            var deepB = new Color(0.175f, 0.255f, 0.36f, 1f);
-            var stone = new Color(0.25f, 0.33f, 0.43f, 1f);
-            var mist = new Color(0.34f, 0.62f, 0.76f, 1f);
+            var deepA = new Color(0.090f, 0.150f, 0.220f, 1f);
+            var deepB = new Color(0.185f, 0.275f, 0.385f, 1f);
+            var stone = new Color(0.31f, 0.39f, 0.49f, 1f);
+            var mist = new Color(0.39f, 0.70f, 0.84f, 1f);
             var line = new Color(0.14f, 0.80f, 1.00f, 1f);
             var gold = new Color(0.92f, 0.68f, 0.30f, 1f);
             var center = new Vector2(0.5f, 0.46f);
@@ -34,7 +34,7 @@ namespace LinhGioi.World
                     var slowNoise = HashNoise(x / 12, y / 12);
                     var horizon = Mathf.Clamp01(uv.y);
                     var color = Color.Lerp(deepA, deepB, horizon * 0.48f + slowNoise * 0.08f);
-                    color = Color.Lerp(color, stone, noise * 0.030f);
+                    color = Color.Lerp(color, stone, noise * 0.045f);
 
                     var toCenter = uv - center;
                     var dist = toCenter.magnitude;
@@ -64,9 +64,9 @@ namespace LinhGioi.World
                     color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.020f) * 0.065f);
 
                     var platformGlow = Mathf.Clamp01(1f - dist / 0.44f);
-                    color = Color.Lerp(color, mist, platformGlow * 0.085f);
+                    color = Color.Lerp(color, mist, platformGlow * 0.105f);
                     var cloudBand = Mathf.Sin((uv.x * 1.9f + uv.y * 1.15f + slowNoise * 0.6f) * Mathf.PI);
-                    color = Color.Lerp(color, mist, Mathf.Clamp01(cloudBand) * 0.038f);
+                    color = Color.Lerp(color, mist, Mathf.Clamp01(cloudBand) * 0.052f);
                     var vignette = Mathf.Clamp01((dist - 0.18f) / 0.58f);
                     color = Color.Lerp(color, Color.black, vignette * 0.10f);
                     texture.SetPixel(x, y, color);

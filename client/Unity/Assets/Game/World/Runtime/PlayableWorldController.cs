@@ -907,9 +907,14 @@ namespace LinhGioi.World
             WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Stone V3B", new Vector3(0f, 0.07f, 2.12f), WorldHubPathGlowScale(0.18f, 2.85f, 0.13f, 2.02f), new Color(0.24f, 0.96f, 0.86f, 0.18f), -1);
             var keeperPath = WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Keeper V3B", new Vector3(-1.18f, 0.07f, 1.48f), WorldHubPathGlowScale(0.15f, 2.10f, 0.10f, 1.50f), new Color(0.94f, 0.70f, 0.30f, 0.17f), -1);
             if (keeperPath != null) keeperPath.transform.rotation = Quaternion.Euler(90f, 0f, -39f);
-            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil North V3B", new Vector3(0f, 0.052f, 5.7f), WorldHubGroundGlowScale(3.40f, 2.70f, 2.10f), new Color(0.30f, 0.66f, 0.92f, 0.12f), -3);
-            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil West V3B", new Vector3(-5.6f, 0.052f, 0.8f), WorldHubGroundGlowScale(2.40f, 1.92f, 1.46f), new Color(0.74f, 0.58f, 0.92f, 0.10f), -3);
-            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil East V3B", new Vector3(5.7f, 0.052f, 0.35f), WorldHubGroundGlowScale(2.60f, 2.04f, 1.54f), new Color(0.28f, 0.70f, 0.92f, 0.09f), -3);
+            var dummyPath = WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Center To Dummy V3B", new Vector3(1.42f, 0.07f, 0.48f), WorldHubPathGlowScale(0.13f, 1.85f, 0.09f, 1.32f), new Color(0.96f, 0.72f, 0.24f, 0.14f), -1);
+            if (dummyPath != null) dummyPath.transform.rotation = Quaternion.Euler(90f, 0f, 66f);
+            var shadowPath = WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Warning Edge V3B", new Vector3(2.85f, 0.07f, 1.65f), WorldHubPathGlowScale(0.11f, 1.90f, 0.08f, 1.30f), new Color(0.58f, 0.36f, 0.92f, 0.11f), -2);
+            if (shadowPath != null) shadowPath.transform.rotation = Quaternion.Euler(90f, 0f, 74f);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil North V3B", new Vector3(0f, 0.052f, 5.7f), WorldHubMistScale(5.20f, 1.80f, 3.40f, 1.20f), new Color(0.30f, 0.66f, 0.92f, 0.18f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil West V3B", new Vector3(-5.6f, 0.052f, 0.8f), WorldHubMistScale(3.10f, 1.50f, 2.00f, 0.92f), new Color(0.74f, 0.58f, 0.92f, 0.14f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil East V3B", new Vector3(5.7f, 0.052f, 0.35f), WorldHubMistScale(3.35f, 1.55f, 2.10f, 0.94f), new Color(0.28f, 0.70f, 0.92f, 0.13f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Practice Field V3B", new Vector3(2.85f, 0.054f, -0.15f), WorldHubMistScale(2.45f, 1.10f, 1.54f, 0.72f), new Color(0.36f, 0.78f, 0.92f, 0.10f), -2);
         }
 
         private static Vector3 WorldHubPoint(float x, float y, float z)
@@ -936,6 +941,13 @@ namespace LinhGioi.World
         {
             var value = IsMobileWorldViewport() ? mobile : IsNarrowWorldViewport() ? tablet : desktop;
             return new Vector3(value, value, 1f);
+        }
+
+        private static Vector3 WorldHubMistScale(float desktopWidth, float desktopHeight, float mobileWidth, float mobileHeight)
+        {
+            if (IsMobileWorldViewport()) return new Vector3(mobileWidth, mobileHeight, 1f);
+            if (IsNarrowWorldViewport()) return new Vector3(desktopWidth * 0.78f, desktopHeight * 0.78f, 1f);
+            return new Vector3(desktopWidth, desktopHeight, 1f);
         }
 
         private static Vector3 WorldHubPathGlowScale(float width, float length, float mobileWidth, float mobileLength)
