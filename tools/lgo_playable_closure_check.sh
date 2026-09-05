@@ -942,6 +942,12 @@ source_only() {
     tools/validate_lgo_combat_button_state_readability_polish.py \
     tools/validate_lgo_combat_button_cooldown_visual_lightness.py \
     tools/validate_lgo_combat_button_cooldown_visual_evidence_refresh.py \
+    tools/validate_lgo_runtime_ui_state_doc_compaction_audit.py \
+    tools/report_lgo_task_ledger_rollup.py \
+    tools/validate_lgo_execution_ledger_rollup_view.py \
+    tools/validate_lgo_commit_cadence_policy_hardening.py \
+    tools/validate_lgo_runtime_ui_quality_debt_triage.py \
+    tools/validate_lgo_login_npc_grounding_cta_panel_polish.py \
     tools/validate_lgo_combat_button_state_evidence_refresh.py \
     tools/validate_lgo_combat_button_mobile_responsive_evidence.py \
     tools/validate_lgo_world_hud_component_boundary_audit.py \
@@ -1271,6 +1277,21 @@ package_ready() {
   fi
   if [[ -f tools/validate_lgo_continuous_development_mode.py ]]; then
     run_phase continuous_development_mode python3.12 tools/validate_lgo_continuous_development_mode.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_state_doc_compaction_audit.py ]]; then
+    run_phase runtime_ui_state_doc_compaction_audit python3.12 tools/validate_lgo_runtime_ui_state_doc_compaction_audit.py
+  fi
+  if [[ -f tools/validate_lgo_execution_ledger_rollup_view.py ]]; then
+    run_phase execution_ledger_rollup_view python3.12 tools/validate_lgo_execution_ledger_rollup_view.py
+  fi
+  if [[ -f tools/validate_lgo_commit_cadence_policy_hardening.py ]]; then
+    run_phase commit_cadence_policy_hardening python3.12 tools/validate_lgo_commit_cadence_policy_hardening.py
+  fi
+  if [[ -f tools/validate_lgo_runtime_ui_quality_debt_triage.py ]]; then
+    run_phase runtime_ui_quality_debt_triage python3.12 tools/validate_lgo_runtime_ui_quality_debt_triage.py
+  fi
+  if [[ -f tools/validate_lgo_login_npc_grounding_cta_panel_polish.py ]]; then
+    run_phase login_npc_grounding_cta_panel_polish python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py
   fi
   if [[ -f tools/validate_lgo_runtime_smoke_matrix.py ]]; then
     run_phase runtime_smoke_matrix python3.12 tools/validate_lgo_runtime_smoke_matrix.py

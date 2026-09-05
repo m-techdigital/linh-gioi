@@ -29,7 +29,7 @@ This workflow prevents Linh Giới Online development from stopping after a tiny
 
 When the owner enables continuous work in this chat, Codex should keep developing in coherent batches instead of waiting for a new prompt after each checkpoint. If a runtime gate is unavailable, Codex should write the blocker/evidence into project state and continue with another roadmap-valid source, tooling, UI/UX, asset-pipeline, cleanup, or validation task that remains safe.
 
-Commit/push only after related changes validate together. Avoid tiny spam commits, cache artifacts, generated build folders, or changes to frozen surfaces.
+Commit/push only after related changes validate together. Avoid tiny spam commits, cache artifacts, generated build folders, or changes to frozen surfaces. The default cadence is to finish a coherent feature/phase/tooling batch first, then checkpoint; small validator/text-only edits should usually be grouped into the next related checkpoint.
 
 Do not parallelize gates that clean or rewrite the same output roots. In particular, `./tools/lgo_visual_runtime_review.sh`, `./tools/lgo_visual_runtime_review_profiles.sh`, `./tools/run_m5_visual_evidence_review.sh`, `./tools/lgo_playable_closure_check.sh --source-only`, and source-only validators that read `build/visual-evidence/**` must run sequentially.
 

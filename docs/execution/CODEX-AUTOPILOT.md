@@ -16,6 +16,7 @@ MAX_ROUNDS=1 ./tools/lgo_codex_autopilot.sh
 CODEX_SANDBOX=danger-full-access ./tools/lgo_codex_autopilot.sh
 CODEX_BYPASS_APPROVALS_AND_SANDBOX=0 CODEX_SANDBOX=workspace-write ./tools/lgo_codex_autopilot.sh
 CODEX_RESUME_LAST=1 MAX_ROUNDS=20 ./tools/lgo_codex_autopilot.sh
+LGO_AUTOPILOT_COMMIT=1 MAX_ROUNDS=20 ./tools/lgo_codex_autopilot.sh
 LGO_AUTOPILOT_PUSH=1 MAX_ROUNDS=20 ./tools/lgo_codex_autopilot.sh
 ./tools/lgo_codex_autopilot.sh --dry-run
 ```
@@ -52,13 +53,13 @@ For each bounded round, `tools/lgo_codex_autopilot.sh`:
 7. continues only when status is `CONTINUE`;
 8. stops for `BLOCKED`, `NEED_OWNER_DECISION`, `NEED_HUMAN_VISUAL_REVIEW`, `FIX_REQUIRED`, or `DONE`.
 
-The supervisor is bounded by `MAX_ROUNDS` and `MAX_SECONDS`. It must not run forever, and must not delete large data outside the workspace. It commits successful rounds by default and pushes only when `LGO_AUTOPILOT_PUSH=1`.
+The supervisor is bounded by `MAX_ROUNDS` and `MAX_SECONDS`. It must not run forever, and must not delete large data outside the workspace. It does not commit by default; set `LGO_AUTOPILOT_COMMIT=1` only when you want checkpoint commits after successful coherent rounds. It pushes only when `LGO_AUTOPILOT_PUSH=1`.
 
 The bypass flag is the default for this local supervisor because Linh Giới Online validation uses localhost sockets and Unity player capture, and `workspace-write` blocks those gates in some Codex CLI hosts. Use `CODEX_BYPASS_APPROVALS_AND_SANDBOX=0 CODEX_SANDBOX=workspace-write` only for source-only batches that do not need runtime/socket gates.
 
 ## Git Checkpoints
 
-After each successful round with status `CONTINUE`, `DONE`, or `NEED_HUMAN_VISUAL_REVIEW`, the supervisor runs:
+When `LGO_AUTOPILOT_COMMIT=1`, after each successful round with status `CONTINUE`, `DONE`, or `NEED_HUMAN_VISUAL_REVIEW`, the supervisor runs:
 
 ```bash
 ./tools/lgo_codex_git_checkpoint.sh round-N
@@ -72,7 +73,7 @@ The checkpoint:
 - creates one coherent checkpoint commit for the round;
 - does not push unless `LGO_AUTOPILOT_PUSH=1`.
 
-This keeps long autopilot runs from accumulating noisy dirty state while avoiding spam commits for every tiny edit.
+The default `LGO_AUTOPILOT_COMMIT=0` keeps long local work sessions from producing noisy commit history. Use `LGO_AUTOPILOT_COMMIT=1` for deliberate checkpoint rounds after a feature/phase/tooling batch is ready, and use `LGO_AUTOPILOT_PUSH=1` only when remote handoff is intentionally desired.
 
 ## Prompt Contract
 

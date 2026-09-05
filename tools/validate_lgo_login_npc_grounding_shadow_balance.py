@@ -54,6 +54,9 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_loginNpcGrounding",
+        "_loginNpcGroundingBloom",
+        "LGO Login Gate Keeper Anchored Grounding Shadow V3B",
+        "LGO Login Gate Keeper Foot Bloom V3B",
         "LGO Login NPC Grounding Shadow Balance v1",
         "npcGrounding.style.width = RuntimeUiSizing.LoginNpcGroundingWidth;",
         "npcGrounding.style.height = RuntimeUiSizing.LoginNpcGroundingHeight;",
@@ -62,12 +65,16 @@ def main() -> int:
         "_loginNpcGrounding.style.display = layout.LoginNpcGroundingDisplay;",
         "_loginNpcGrounding.style.width = layout.LoginNpcGroundingWidth;",
         "_loginNpcGrounding.style.opacity = layout.LoginNpcGroundingOpacity;",
+        "_loginNpcGroundingBloom.style.width = layout.LoginNpcGroundingBloomWidth;",
+        "_loginNpcGroundingBloom.style.opacity = layout.LoginNpcGroundingBloomOpacity;",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "LoginNpcGroundingDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex",
-        "LoginNpcGroundingWidth => IsTablet ? 202 : 232",
-        "LoginNpcGroundingOpacity => IsTablet ? 0.70f : 0.76f",
+        "LoginNpcGroundingWidth => IsTablet ? 218 : 256",
+        "LoginNpcGroundingBloomWidth => IsTablet ? 154 : 180",
+        "LoginNpcGroundingOpacity => IsTablet ? 0.78f : 0.84f",
+        "LoginNpcGroundingBloomOpacity => IsTablet ? 0.66f : 0.72f",
         "LoginNpcGroundingColor => IsTablet",
     )
     require(

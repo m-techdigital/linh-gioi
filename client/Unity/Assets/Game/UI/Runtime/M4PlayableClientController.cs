@@ -50,6 +50,7 @@ namespace LinhGioi.UI
         private VisualElement _loginControlColumn;
         private VisualElement _loginGateKeeper;
         private VisualElement _loginNpcGrounding;
+        private VisualElement _loginNpcGroundingBloom;
         private VisualElement _loginLogo;
         private VisualElement _loginCard;
         private VisualElement _loginServerRow;
@@ -328,7 +329,7 @@ namespace LinhGioi.UI
 
             var npcGrounding = new VisualElement();
             _loginNpcGrounding = npcGrounding;
-            npcGrounding.name = "LGO Login Gate Keeper Soft Grounding Glow V3B";
+            npcGrounding.name = "LGO Login Gate Keeper Anchored Grounding Shadow V3B";
             npcGrounding.pickingMode = PickingMode.Ignore;
             npcGrounding.style.position = Position.Absolute;
             npcGrounding.style.width = RuntimeUiSizing.LoginNpcGroundingWidth;
@@ -339,6 +340,18 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyRadius(npcGrounding, RuntimeUiSizing.LoginNpcGroundingRadius);
             npcGrounding.tooltip = "LGO Login NPC Grounding Shadow Balance v1";
             _loginStage.Add(npcGrounding);
+
+            var npcGroundingBloom = new VisualElement();
+            _loginNpcGroundingBloom = npcGroundingBloom;
+            npcGroundingBloom.name = "LGO Login Gate Keeper Foot Bloom V3B";
+            npcGroundingBloom.pickingMode = PickingMode.Ignore;
+            npcGroundingBloom.style.position = Position.Absolute;
+            npcGroundingBloom.style.width = RuntimeUiSizing.LoginNpcGroundingWidth;
+            npcGroundingBloom.style.height = 8;
+            npcGroundingBloom.style.bottom = 34;
+            npcGroundingBloom.style.backgroundColor = new Color(0.10f, 0.72f, 0.95f, 0.26f);
+            RuntimeUiSkin.ApplyRadius(npcGroundingBloom, RuntimeUiSizing.LoginNpcGroundingRadius);
+            _loginStage.Add(npcGroundingBloom);
 
             var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
             var gateKeeper = NewImageLayer("LGO Login Gate Keeper NPC V3B", gateKeeperTexture, ScaleMode.ScaleToFit);
@@ -397,6 +410,7 @@ namespace LinhGioi.UI
             _loginCard.style.marginBottom = layout.LoginCardMarginBottom;
             _loginCard.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);
+            RuntimeUiSkin.ApplyLoginCtaSceneBlend(_loginCard);
             _loginCard.tooltip = LoginCtaBackingBalanceMarker + " / " + LoginCtaComponentVisualPolishMarker;
             if (UseLoginOrnatePanelTexture && LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture != null)
             {
@@ -1143,6 +1157,15 @@ namespace LinhGioi.UI
                 _loginNpcGrounding.style.backgroundColor = layout.LoginNpcGroundingColor;
                 _loginNpcGrounding.style.opacity = layout.LoginNpcGroundingOpacity;
             }
+            if (_loginNpcGroundingBloom != null)
+            {
+                _loginNpcGroundingBloom.style.display = layout.LoginNpcGroundingDisplay;
+                _loginNpcGroundingBloom.style.width = layout.LoginNpcGroundingBloomWidth;
+                _loginNpcGroundingBloom.style.height = layout.LoginNpcGroundingBloomHeight;
+                _loginNpcGroundingBloom.style.bottom = layout.LoginNpcGroundingBloomBottom;
+                _loginNpcGroundingBloom.style.backgroundColor = layout.LoginNpcGroundingBloomColor;
+                _loginNpcGroundingBloom.style.opacity = layout.LoginNpcGroundingBloomOpacity;
+            }
             if (_loginControlColumn != null)
             {
                 _loginControlColumn.style.width = layout.LoginControlColumnWidth;
@@ -1172,6 +1195,7 @@ namespace LinhGioi.UI
                 RuntimeUiSkin.ApplyPadding(_loginCard, loginCardPadding, loginCardPadding, layout.LoginCardPaddingTop, layout.LoginCardPaddingBottom);
                 _loginCard.style.marginBottom = layout.LoginCardMarginBottom;
                 _loginCard.style.backgroundColor = layout.LoginCardBackground;
+                RuntimeUiSkin.ApplyLoginCtaSceneBlend(_loginCard);
             }
             if (_loginServerRow != null)
             {

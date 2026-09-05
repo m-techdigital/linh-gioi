@@ -2,6 +2,17 @@
 
 Last updated: `2026-09-06`
 
+## Quick Resume
+
+- Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
+- Active task: `LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX-v1.0`.
+- Current reason: login grounding evidence has been refreshed and reviewed; continue with the next runtime UI quality fix without opening extra documentation churn.
+- Current batch scope: choose and implement the next focused visible/runtime or maintainability improvement with existing assets and validators.
+- Fast validation: `git --no-pager diff --check`; `python3.12 tools/validate_lgo_login_npc_grounding_cta_panel_polish.py`; `./tools/lgo_playable_closure_check.sh --source-only`.
+- Runtime validation: run visual review only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
+- Next implementation task after this fix: pick from current evidence, preferring World Hub depth or Character Hall panel density.
+- Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
+
 ## Current focus
 
 Post-login visual runtime hardening plus device-profile asset governance. Login has been upgraded to V3B-aligned runtime presentation, source-level post-login readability polish is implemented, and mobile/tablet/PC runtime asset profile budgets are now documented and validated. The standalone visual evidence harness now captures all seven screenshots, can continue in background, and auto-finishes the Unity Player after manifest completion so the operator should not need to click or close the player by hand. Character lobby usability, in-world HUD presentation, world hub scene readability, and desktop/tablet/mobile responsive evidence are now verified with fresh runtime screenshots. Login-to-character copy has been cleaned of player-facing dev wording, status chips now read correctly in runtime screenshots, the session menu/settings shell is responsive without tablet/mobile clipping, in-world interaction affordance now has stateful target labels, runtime asset size inventory is documented/validated, V3B runtime candidates now carry platform-specific Unity import profiles for Standalone/Android/iPhone, the in-world HUD is more compact/touch-oriented across desktop/tablet/mobile and now groups world guidance/action content into V3B-styled shell cards, the world hub camera now uses viewport-aware orthographic framing so mobile/tablet actors read larger than the fixed desktop view, and refreshed profile screenshots confirm mobile actor scale is improved without harmful cropping. The world hub ground now uses a lightweight procedural cultivation-platform texture instead of a debug-like grid, the login first screen now uses a V3B composition with a centered text logo/CTA cluster plus right-side Gate Keeper on desktop/tablet and a compact logo/CTA layout on mobile, the Character Hall now uses a V3B cultivator portrait with a mobile-specific two-zone lobby layout, lighter panel density, a game-facing create form with framed `Danh xưng` input and `Tạo tu sĩ` CTA, and refreshed desktop/tablet/mobile runtime screenshots, build-size budget reporting now separates Unity runtime payload from repository/reference/tooling weight, the visual evidence loop now writes PNG heuristics for checkpoint presence/dimensions/byte size/pixel variation/duplicate-frame detection, world-hub labels now show by guided state/proximity instead of cluttering the whole scene, the login CTA stack now uses a lighter dark-glass panel to reduce cyan/gold glare while retaining the V3B logo/button language, and shared runtime UI styling now lives in `RuntimeUiSkin` so repeated glass panel, framed row, compact button, and login backing rules can be reused instead of copy-written per screen. The World Hub now has lightweight procedural grounding shadows under the player, interactables, target dummy, warning slime, Spirit Gate, and key props. The visual review script now has a build-once/reuse-player profile wrapper for desktop/tablet/mobile screenshot refreshes. Source-only gates now preserve runtime evidence directories under `LGO_SOURCE_GATE_EVIDENCE_PRESERVATION_READY`. Character Hall post-login composition now routes list, preview, profile hero, portrait, and responsive row setup through `RuntimeUiFactory` under `LGO_POST_LOGIN_RUNTIME_UI_REUSE_CLEANUP_READY`, and fresh runtime screenshots confirm the helper extraction did not break post-login layout under `LGO_POST_LOGIN_RUNTIME_UI_REUSE_EVIDENCE_REFRESH_READY`. Character Hall V3B polish and evidence refresh are tracked under `LGO_CHARACTER_HALL_V3B_VISUAL_POLISH_READY` and `LGO_CHARACTER_HALL_V3B_VISUAL_POLISH_EVIDENCE_REFRESH_READY`. The unused controller-local Character Hall list-density wrapper has been removed under `LGO_RUNTIME_UI_FACTORY_CHARACTER_HALL_CLEANUP_FOLLOWUP_READY`. World HUD hidden pose/VFX/skin-source evidence labels now route through `RuntimeUiFactory.NewHiddenStatusLabel` under `LGO_WORLD_HUD_RUNTIME_UI_REUSE_AUDIT_READY`, fresh runtime evidence confirms World Hub/NPC Dialogue remain stable under `LGO_WORLD_HUD_RUNTIME_UI_REUSE_EVIDENCE_REFRESH_READY`, and the World HUD root/group frames now use a calmer V3B/fantasy panel hierarchy under `LGO_WORLD_HUD_FANTASY_PANEL_HIERARCHY_POLISH_READY`.
@@ -16,13 +27,25 @@ Current focus update: local combat cooldown button now uses a lighter code-style
 
 Current focus update: target-dummy runtime evidence confirms the lighter cooldown button state under `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_EVIDENCE_REFRESH_READY`.
 
+Current focus update: execution state now has a Quick Resume block under `LGO_RUNTIME_UI_STATE_DOC_COMPACTION_AUDIT_READY` so future continuous sessions can identify the active task without losing historical marker coverage.
+
+Current focus update: append-only task history now has a compact rollup view at `docs/execution/TASK-LEDGER-ROLLUP.md` under `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY` so future sessions can scan recent closures without reading the full ledger.
+
+Current focus update: autopilot commit cadence now defaults to no auto-commit under `LGO_COMMIT_CADENCE_POLICY_HARDENING_READY`; coherent checkpoint commits remain opt-in with `LGO_AUTOPILOT_COMMIT=1`, and push remains opt-in with `LGO_AUTOPILOT_PUSH=1`.
+
+Current focus update: visual debt triage selected Login NPC grounding plus CTA panel polish under `LGO_RUNTIME_UI_QUALITY_DEBT_TRIAGE_READY`; no visual PASS is claimed from the triage alone.
+
+Current focus update: login NPC grounding and CTA panel source polish is ready under `LGO_LOGIN_NPC_GROUNDING_CTA_PANEL_POLISH_READY`; runtime screenshot refresh is required before any visual claim.
+
+Current focus update: refreshed desktop/tablet/mobile login screenshots confirm the source polish is visible; desktop and tablet are improved but still not production-final, and no `VISUAL_RUNTIME_PASS` is claimed.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
-`LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT-v1.0`
+`LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX-v1.0`
 
-Compact and normalize execution state docs so future continuous sessions can identify the active task quickly without losing historical marker coverage. Do not change gameplay/UI behavior. Marker ready from cooldown evidence refresh: `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_EVIDENCE_REFRESH_READY`.
+Continue with the next focused UI/runtime quality fix from current evidence without creating extra micro-task paperwork. Candidate areas: World Hub depth/ground richness, Character Hall panel density, or login NPC final-art gap if a lightweight code-side improvement remains safe. Marker ready from source polish and screenshot review: `LGO_LOGIN_NPC_GROUNDING_CTA_PANEL_POLISH_READY`.
 
 ## Current blocker
 
@@ -122,6 +145,11 @@ This registry keeps historical source gates discoverable while `Next task` point
 - `LGO-RUNTIME-UI-STATUS-COMPOSITION-EVIDENCE-REFRESH-v1.0` / `LGO_RUNTIME_UI_STATUS_COMPOSITION_EVIDENCE_REFRESH_READY`
 - `LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-LIGHTNESS-PASS-v1.0` / `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_LIGHTNESS_READY`
 - `LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-EVIDENCE-REFRESH-v1.0` / `LGO_COMBAT_BUTTON_COOLDOWN_VISUAL_EVIDENCE_REFRESH_READY`
+- `LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT-v1.0` / `LGO_RUNTIME_UI_STATE_DOC_COMPACTION_AUDIT_READY`
+- `LGO-EXECUTION-LEDGER-ROLLUP-VIEW-v1.0` / `LGO_EXECUTION_LEDGER_ROLLUP_VIEW_READY`
+- `LGO-COMMIT-CADENCE-POLICY-HARDENING-v1.0` / `LGO_COMMIT_CADENCE_POLICY_HARDENING_READY`
+- `LGO-RUNTIME-UI-QUALITY-DEBT-TRIAGE-v1.0` / `LGO_RUNTIME_UI_QUALITY_DEBT_TRIAGE_READY`
+- `LGO-LOGIN-NPC-GROUNDING-AND-CTA-PANEL-POLISH-v1.0` / `LGO_LOGIN_NPC_GROUNDING_CTA_PANEL_POLISH_READY`
 - `LGO-WORLD-HUB-VISUAL-DEBT-TRIAGE-v1.0` / `LGO_WORLD_HUB_VISUAL_DEBT_TRIAGE_READY`
 - `LGO-SESSION-MENU-FOCUS-EVIDENCE-REFRESH-v1.0` / `LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY`
 - `LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0` / `LGO_CHARACTER_HALL_MOBILE_COPY_DENSITY_READY`
@@ -398,6 +426,6 @@ Expected classifications:
 
 ## Follow-up task after current task
 
-`LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-EVIDENCE-REFRESH-v1.0` is evidence-ready. Continue with `LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT-v1.0`; `NEXT-ACTION.md` is now too long for fast human/Codex scanning and should be normalized without deleting historical task evidence.
+`LGO-LOGIN-NPC-GROUNDING-AND-CTA-PANEL-POLISH-v1.0` has refreshed visual evidence and manual review notes in this session. Continue with `LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX-v1.0`, using existing validators and avoiding new micro-task docs unless a reusable gate is genuinely needed.
 
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.

@@ -64,11 +64,12 @@ def main() -> int:
         "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(9f * MobileScale) : IsTablet ? 14 : 16",
         "new Color(0.005f, 0.018f, 0.040f, 0.18f)",
         "new Color(0.005f, 0.018f, 0.040f, 0.24f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.28f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.20f)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
         "ApplyLoginCtaBacking(VisualElement element)",
+        "ApplyLoginCtaSceneBlend(VisualElement element)",
         "new Color(0.93f, 0.73f, 0.36f, 0.28f)",
         "element.style.borderTopWidth = 1;",
         "element.style.borderBottomWidth = 1;",

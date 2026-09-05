@@ -63,7 +63,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "LGO Login Gate Entry NPC Composition Stage V3B",
-        "LGO Login Gate Keeper Soft Grounding Glow V3B",
+        "LGO Login Gate Keeper Anchored Grounding Shadow V3B",
         "LGO Login Gate Entry Control Column V3B Final",
         "LGO Login Gate Entry V3B Final Logo Text Lockup",
         "LGO Login Gate Entry Bottom CTA v3 Final Panel V3B",
@@ -73,11 +73,12 @@ def main() -> int:
         "LgoVisualAssetRegistryV3B.LogoLinhGioiOnline",
         "LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture",
         "LgoVisualAssetRegistryV3B.PanelMainDarkGoldTexture",
-        "mobile ? DisplayStyle.None : DisplayStyle.Flex",
+        "layout.LoginStageDisplay",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "MobileLoginCardWidthRatio = 0.46f",
+        "LoginStageDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex",
     )
     require(
         "docs/tasks/LGO-LOGIN-NPC-COMPOSITING-POLISH-v1.0.md",

@@ -53,7 +53,7 @@ def main() -> int:
         "LGO Login Gate Entry Bottom CTA v3 Final Panel V3B",
         "LGO Login CTA Backing Balance v1",
         "RuntimeUiSkin.ApplyLoginCtaBacking(_loginCard);",
-        "LGO Login Gate Keeper Soft Grounding Glow V3B",
+        "LGO Login Gate Keeper Anchored Grounding Shadow V3B",
         "style.opacity = 0.93f",
         "LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture",
     )

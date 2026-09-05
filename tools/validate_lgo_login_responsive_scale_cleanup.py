@@ -57,6 +57,7 @@ def main() -> int:
         "LGO Login Responsive Scale Cleanup v1",
         "_loginStage.style.width = layout.LoginStageWidth",
         "_loginGateKeeper.style.width = layout.LoginGateKeeperWidth",
+        "_loginNpcGroundingBloom.style.width = layout.LoginNpcGroundingBloomWidth",
         "_loginControlColumn.style.width = layout.LoginControlColumnWidth",
     )
     require(
@@ -65,7 +66,8 @@ def main() -> int:
         "DesktopLoginLogoWidthRatio = 0.26f",
         "MobileLoginCardWidthRatio = 0.46f",
         "LoginStageWidth => IsTablet ? 262 : 304",
-        "LoginGateKeeperWidth => IsTablet ? 248 : 292",
+        "LoginGateKeeperWidth => IsTablet ? 240 : 282",
+        "LoginNpcGroundingBloomWidth => IsTablet ? 154 : 180",
         "LoginControlColumnWidth => IsMobile ? Length.Percent(100) : IsTablet ? Length.Percent(56) : Length.Percent(54)",
     )
     require(

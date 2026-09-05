@@ -70,7 +70,7 @@ def main() -> int:
         "LoginCardBackground => IsMobile",
         "new Color(0.005f, 0.018f, 0.040f, 0.18f)",
         "new Color(0.005f, 0.018f, 0.040f, 0.24f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.28f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.20f)",
     ):
         if marker not in layout:
             ERRORS.append(f"runtime UI layout profile missing marker: {marker}")
@@ -79,6 +79,7 @@ def main() -> int:
         "LGO Runtime UI Skin Foundation v1",
         "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.18f)",
         "ApplyLoginCtaBacking(VisualElement element)",
+        "ApplyLoginCtaSceneBlend(VisualElement element)",
         "ApplyRadius(element, 18)",
     ):
         if marker not in skin:
