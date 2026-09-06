@@ -95,17 +95,6 @@ namespace LinhGioi.UI
         internal const int BaseButtonMarginRight = 8;
         internal const int CompactButtonMinHeight = 42;
         internal const int CompactButtonFontSize = 14;
-        internal const int CharacterActionButtonMinWidth = 132;
-        internal const int CharacterActionButtonMinHeight = 44;
-        internal const int CharacterCreateButtonFontSize = 14;
-        internal const int CharacterEnterWorldButtonFontSize = 15;
-        internal const int CharacterSelectedPrimaryMobileMinWidth = 154;
-        internal const int CharacterSelectedPrimaryMobileMinHeight = 48;
-        internal const int CharacterSelectedPrimaryMobileFontSize = 17;
-        internal const int CharacterSelectedPrimaryMobileMarginTop = 8;
-        internal const int CharacterSelectedSecondaryMobileMinWidth = 124;
-        internal const int CharacterSelectedSecondaryMobileMinHeight = 38;
-        internal const int CharacterSelectedSecondaryMobileFontSize = 14;
         internal const int DialogueButtonMobileMinHeight = 38;
         internal const int DialogueButtonDesktopMinHeight = 42;
         internal const int DialogueContinueMobileMinWidth = 108;

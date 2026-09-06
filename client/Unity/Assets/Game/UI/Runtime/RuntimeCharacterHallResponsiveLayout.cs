@@ -135,21 +135,12 @@ namespace LinhGioi.UI
                 enterWorldButton.style.display = DisplayStyle.Flex;
                 createButton.style.display = DisplayStyle.Flex;
                 enterWorldButton.text = "Vào sân luyện";
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    enterWorldButton,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight : RuntimeUiSpacing.CharacterActionButtonMinHeight,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileFontSize : RuntimeUiSpacing.CharacterEnterWorldButtonFontSize,
-                    true);
-                enterWorldButton.style.marginTop = RuntimeUiSpacing.CharacterSelectedPrimaryMobileMarginTop;
+                RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Primary);
+                enterWorldButton.style.marginTop = mobileSelected ? RuntimeUiSpacing.BaseButtonMarginTop : 0;
                 enterWorldButton.style.opacity = 1f;
                 enterWorldButton.tooltip = "Bước qua Linh Môn vào sân luyện.";
                 createButton.text = createFormExpanded ? "Tạo tu sĩ" : "Tạo thêm";
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    createButton,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinHeight : RuntimeUiSpacing.CharacterActionButtonMinHeight,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileFontSize : RuntimeUiSpacing.CharacterCreateButtonFontSize);
+                RuntimeUiSkin.ApplyButtonTier(createButton, mobileSelected ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
                 createButton.style.opacity = 0.82f;
                 characterActionRow.Add(enterWorldButton);
                 characterActionRow.Add(createButton);
@@ -158,20 +149,11 @@ namespace LinhGioi.UI
 
             createButton.text = "Tạo tu sĩ";
             createButton.style.display = DisplayStyle.Flex;
-            RuntimeUiSkin.ApplyButtonMetrics(
-                createButton,
-                RuntimeUiSpacing.CharacterActionButtonMinWidth,
-                RuntimeUiSpacing.CharacterActionButtonMinHeight,
-                RuntimeUiSpacing.CharacterCreateButtonFontSize);
+            RuntimeUiSkin.ApplyButtonTier(createButton, RuntimeUiButtonTier.Standard);
             createButton.style.opacity = 1f;
             enterWorldButton.text = "Vào sân luyện";
             enterWorldButton.style.display = DisplayStyle.None;
-            RuntimeUiSkin.ApplyButtonMetrics(
-                enterWorldButton,
-                RuntimeUiSpacing.CharacterActionButtonMinWidth,
-                RuntimeUiSpacing.CharacterActionButtonMinHeight,
-                RuntimeUiSpacing.CharacterEnterWorldButtonFontSize,
-                true);
+            RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Primary);
             enterWorldButton.style.opacity = 0.46f;
             enterWorldButton.tooltip = "Chọn hoặc tạo tu sĩ trước khi vào sân luyện.";
             characterActionRow.Add(createButton);

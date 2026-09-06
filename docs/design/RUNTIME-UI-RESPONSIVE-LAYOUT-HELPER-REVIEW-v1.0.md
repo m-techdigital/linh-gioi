@@ -72,6 +72,8 @@ Overlay owner: `RuntimeUiOverflowGuard.ApplyViewportOverlaySurface` is the share
 
 Vertical overlay placement also uses shared semantic anchors: `Top`, `Center`, `Bottom`, and `Stretch`. Character Hall mobile create/dock overlays, World dialogue, and Session Menu must route through this helper instead of applying one-off `top/right/bottom` coordinates in screen-specific code.
 
+Character Hall action buttons must use `RuntimeUiButtonTier` instead of selected-state-only numeric button constants. Visual priority comes from tier choice, opacity, and action order; it should not come from one screen inventing a larger font/height for the same kind of action.
+
 ## Target Case Matrix
 
 This matrix is the current visual target contract. Demo coverage is being expanded from the north-star sheet into profile-specific target sheets; runtime work must still follow this matrix immediately.

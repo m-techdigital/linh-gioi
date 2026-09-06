@@ -61,17 +61,9 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs",
-        "CharacterActionButtonMinWidth",
-        "CharacterActionButtonMinHeight",
-        "CharacterCreateButtonFontSize",
-        "CharacterEnterWorldButtonFontSize",
-        "CharacterSelectedPrimaryMobileMinWidth",
-        "CharacterSelectedPrimaryMobileMinHeight",
-        "CharacterSelectedPrimaryMobileFontSize",
-        "CharacterSelectedPrimaryMobileMarginTop",
-        "CharacterSelectedSecondaryMobileMinWidth",
-        "CharacterSelectedSecondaryMobileMinHeight",
-        "CharacterSelectedSecondaryMobileFontSize",
+        "ButtonTierCompactMinHeight",
+        "ButtonTierStandardMinHeight",
+        "ButtonTierPrimaryMinHeight",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
@@ -79,18 +71,18 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
-        "RuntimeUiSkin.ApplyButtonMetrics(",
+        "RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Primary)",
+        "RuntimeUiSkin.ApplyButtonTier(createButton, mobileSelected ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard)",
+        "RuntimeUiSkin.ApplyButtonTier(createButton, RuntimeUiButtonTier.Standard)",
+    )
+    reject(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinWidth",
         "RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight",
         "RuntimeUiSpacing.CharacterSelectedPrimaryMobileFontSize",
-        "RuntimeUiSpacing.CharacterSelectedPrimaryMobileMarginTop",
         "RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinWidth",
-        "RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinHeight",
-        "RuntimeUiSpacing.CharacterSelectedSecondaryMobileFontSize",
         "RuntimeUiSpacing.CharacterActionButtonMinWidth",
         "RuntimeUiSpacing.CharacterActionButtonMinHeight",
-        "RuntimeUiSpacing.CharacterCreateButtonFontSize",
-        "RuntimeUiSpacing.CharacterEnterWorldButtonFontSize",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

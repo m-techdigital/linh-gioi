@@ -66,6 +66,8 @@ def main() -> int:
         "RuntimeUiOverlayVerticalPlacement.Top",
         "layout.CharacterHallSelectedDockWidth",
         "layout.CharacterHallCreateOverlayWidth",
+        "RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Primary)",
+        "RuntimeUiSkin.ApplyButtonTier(createButton, mobileSelected ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard)",
         "var mobileSelected = isMobileProfile && hasSelectedCharacter;",
         "if (hasSelectedCharacter)",
         "createButton.text = createFormExpanded ? \"Tạo tu sĩ\" : \"Tạo thêm\";",
