@@ -62,7 +62,7 @@ namespace LinhGioi.UI
             {
                 characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
                 characterName.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
-                characterName.style.width = !hasSelectedCharacter && !isMobileProfile ? Length.Percent(64) : Length.Percent(100);
+                characterName.style.width = Length.Percent(100);
             }
             if (classId != null) classId.style.display = DisplayStyle.None;
             if (createPanel != null)
@@ -70,7 +70,7 @@ namespace LinhGioi.UI
                 createPanel.style.flexDirection = collapsed && !isMobileProfile ? FlexDirection.Row : FlexDirection.Column;
                 createPanel.style.alignItems = collapsed && !isMobileProfile ? Align.Center : Align.Stretch;
                 createPanel.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
-                createPanel.style.width = !hasSelectedCharacter && !isMobileProfile ? Length.Percent(82) : Length.Percent(100);
+                createPanel.style.width = !hasSelectedCharacter && !isMobileProfile ? Length.Percent(RuntimeUiSizing.CharacterCreateStandalonePanelWidthPercent) : Length.Percent(100);
                 createPanel.style.opacity = collapsed ? 0.72f : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
                 createPanel.style.minHeight = collapsed ? (isMobileProfile ? 76 : 96) : RuntimeUiSizing.CharacterCreatePanelMinHeight;
                 createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 86 : 108) : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
@@ -79,6 +79,7 @@ namespace LinhGioi.UI
             {
                 characterActionRow.style.marginLeft = collapsed && !isMobileProfile ? 18 : 0;
                 characterActionRow.style.flexGrow = collapsed && !isMobileProfile ? 1 : 0;
+                characterActionRow.style.justifyContent = !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;
             }
         }
 

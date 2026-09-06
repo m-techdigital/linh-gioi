@@ -51,10 +51,19 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "LGO Character Create Form Game Copy v1",
         "LGO Character Create Form Framed Input v1",
-        "ApplyLobbyInputStyle",
-        '"Danh xưng"',
         '"Tạo tu sĩ"',
-        "Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.",
+        "Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.",
+        "_characterName = NewLobbyTextField(\"\", \"LinhGioiHero\", \"Nhập danh xưng tu sĩ.\");",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
+        "NewLobbyTextField(string label, string value, string tooltip)",
+        "ApplyLobbyInputStyle(field);",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "CharacterCreateStandalonePanelWidthPercent",
+        "characterActionRow.style.justifyContent = !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;",
     )
     require(
         "docs/tasks/LGO-CHARACTER-CREATE-FORM-PRESENTATION-PASS-v1.0.md",

@@ -45,7 +45,8 @@ namespace LinhGioi.UI
         internal const int CharacterPreviewMaxWidth = 520;
         internal const int CharacterPortraitWidth = 138;
         internal const int CharacterPortraitHeight = 188;
-        internal const int CharacterNameFieldMaxWidth = 360;
+        internal const int CharacterNameFieldMaxWidth = 420;
+        internal const int CharacterCreateStandalonePanelWidthPercent = 68;
 
         internal const int IconButtonMinWidth = 112;
         internal const int IconButtonMinHeight = 48;
