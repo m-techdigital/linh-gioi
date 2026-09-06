@@ -118,11 +118,26 @@ namespace LinhGioi.UI
                 loginControlColumn.style.paddingBottom = layout.LoginControlColumnPaddingBottom;
                 loginControlColumn.style.marginLeft = layout.LoginControlColumnMarginLeft;
                 loginControlColumn.style.marginTop = layout.LoginControlColumnMarginTop;
-                loginControlColumn.style.justifyContent = layout.IsMobile ? Justify.FlexStart : Justify.Center;
-                loginControlColumn.style.position = layout.IsMobile ? Position.Absolute : Position.Relative;
-                loginControlColumn.style.top = layout.IsMobile ? 0 : StyleKeyword.Auto;
-                loginControlColumn.style.left = layout.IsMobile ? 0 : StyleKeyword.Auto;
-                loginControlColumn.style.right = layout.IsMobile ? 0 : StyleKeyword.Auto;
+                loginControlColumn.style.justifyContent = Justify.Center;
+                if (layout.IsMobile)
+                {
+                    // LGO Login Mobile Centered Control Overlay v1: mobile login controls share the viewport overlay base instead of a left/top absolute branch.
+                    RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
+                        loginControlColumn,
+                        RuntimeUiOverlayPlacement.Center,
+                        RuntimeUiOverlayVerticalPlacement.Top,
+                        layout.LoginMobileControlColumnWidth,
+                        layout.LoginMobileControlColumnMaxHeight,
+                        layout.LoginMobileControlColumnInsetHorizontal,
+                        layout.LoginMobileControlColumnTop);
+                }
+                else
+                {
+                    loginControlColumn.style.position = Position.Relative;
+                    loginControlColumn.style.top = StyleKeyword.Auto;
+                    loginControlColumn.style.left = StyleKeyword.Auto;
+                    loginControlColumn.style.right = StyleKeyword.Auto;
+                }
             }
             if (loginLogo != null)
             {

@@ -81,7 +81,11 @@ namespace LinhGioi.UI
             : new Color(0.10f, 0.72f, 0.95f, 0.30f);
         internal float LoginNpcGroundingOpacity => IsTablet ? 0.86f : 0.92f;
         internal float LoginNpcGroundingBloomOpacity => IsTablet ? 0.72f : 0.80f;
-        internal Length LoginControlColumnWidth => IsMobile ? Length.Percent(100) : IsTablet ? Length.Percent(56) : Length.Percent(54);
+        internal float LoginMobileControlColumnWidth => Mathf.Clamp(Width * 0.42f, 310f, 380f);
+        internal float LoginMobileControlColumnInsetHorizontal => Mathf.Max(RootPaddingHorizontal, (Width - LoginMobileControlColumnWidth) * 0.5f);
+        internal float LoginMobileControlColumnTop => Mathf.Clamp(Height * 0.08f, 28f, 48f);
+        internal float LoginMobileControlColumnMaxHeight => Mathf.Clamp(Height * 0.44f, 210f, 280f);
+        internal Length LoginControlColumnWidth => IsMobile ? new Length(LoginMobileControlColumnWidth) : IsTablet ? Length.Percent(56) : Length.Percent(54);
         internal int LoginControlColumnMinWidth => IsMobile ? 0 : 300;
         internal int LoginControlColumnMaxWidth => IsMobile ? 500 : IsTablet ? 540 : 600;
         internal int LoginControlColumnPaddingBottom => IsMobile ? 0 : 12;
@@ -255,13 +259,13 @@ namespace LinhGioi.UI
             InputClass = inputClass ?? (IsMobile || IsTablet ? "touch" : "pointer");
             MobileScale = IsMobile ? Mathf.Clamp(ShortSide / MobileScaleBaseline, MobileScaleMin, MobileScaleMax) : 1f;
             LoginLogoWidth = IsMobile
-                ? Mathf.Clamp(Mathf.Min(width * MobileLoginLogoWidthRatio, height * 0.65f), 115f, 180f)
+                ? Mathf.Clamp(Mathf.Min(width * MobileLoginLogoWidthRatio, height * 0.65f), 170f, 260f)
                 : IsTablet
                     ? Mathf.Clamp(Mathf.Min(width * TabletLoginLogoWidthRatio, height * 0.78f), 220f, 320f)
                     : Mathf.Clamp(Mathf.Min(width * DesktopLoginLogoWidthRatio, height * 0.70f), 260f, 360f);
             LoginLogoHeight = LoginLogoWidth * LoginLogoAspect;
             LoginCardWidth = IsMobile
-                ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 190f, 270f)
+                ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 300f, 360f)
                 : IsTablet
                     ? Mathf.Clamp(width * TabletLoginCardWidthRatio, 330f, 420f)
                     : 424f;
