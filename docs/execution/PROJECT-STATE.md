@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SKILL_PREVIEW_FOCUS_GUIDANCE_HIDE_READY` hides the guidance card while active skill preview is open so the skill sandbox panel fits the desktop/tablet viewport without clipping its buttons. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_DIALOGUE_FOCUS_FOOTER_HIDE_READY` hides the World HUD footer while Gate Keeper dialogue is active so dialogue panels no longer reveal clipped save/back controls near the bottom edge. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: responsive viewport work now has a canonical UI `RuntimeViewportMetrics` owner, World labels/prompts use one World viewport profile, mobile dialogue actions fit in one readable row, first-time desktop Character Hall keeps the create action visible inside the viewport, steady desktop World Hub HUD footprint is smaller, mobile Gate Keeper prompt spacing is cleaner, and active skill preview no longer keeps the guidance card above it; screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
+- Current reason: responsive viewport work now has a canonical UI `RuntimeViewportMetrics` owner, World labels/prompts use one World viewport profile, mobile dialogue actions fit in one readable row, first-time desktop Character Hall keeps the create action visible inside the viewport, steady desktop World Hub HUD footprint is smaller, active skill preview no longer keeps the guidance card above it, and active dialogue now hides footer controls; screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -126,6 +126,8 @@ Current focus update: steady World Hub HUD footprint is smaller on desktop under
 Current focus update: mobile Gate Keeper prompt spacing is cleaner under `LGO_MOBILE_GATEKEEPER_PROMPT_AIR_GAP_READY`; the near-NPC label/prompt now sits higher with more air above sprites, interaction logic is unchanged, desktop remains readable, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: active skill preview now hides the guidance card under `LGO_SKILL_PREVIEW_FOCUS_GUIDANCE_HIDE_READY`; desktop/tablet skill preview screenshots show the skill panel and buttons fitting without bottom clipping, target-dummy guidance/combat state is unchanged, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: active Gate Keeper dialogue now hides the World HUD footer under `LGO_DIALOGUE_FOCUS_FOOTER_HIDE_READY`; desktop/tablet/mobile dialogue screenshots no longer show clipped save/back footer controls, dialogue flow is unchanged, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: World-space label/profile metrics are ready under `LGO_WORLD_VIEWPORT_LABEL_METRICS_READY`; camera sizing, narrow/mobile checks, prompt sizing, and landmark label typography now route through a single World viewport profile, while `WorldLabelPresenter.ApplyStyle` keeps TextMesh shadows synced. Fresh desktop/tablet/mobile screenshots were reviewed as more readable, with no `VISUAL_RUNTIME_PASS` claim.
 
