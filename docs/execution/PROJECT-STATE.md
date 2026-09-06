@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_GATEKEEPER_PROMPT_AIR_GAP_READY` raises the mobile Gate Keeper world label and interaction prompt slightly so the near-NPC prompt has more readable air above the sprites without changing interaction logic. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_SKILL_PREVIEW_FOCUS_GUIDANCE_HIDE_READY` hides the guidance card while active skill preview is open so the skill sandbox panel fits the desktop/tablet viewport without clipping its buttons. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

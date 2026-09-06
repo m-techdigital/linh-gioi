@@ -191,7 +191,7 @@ namespace LinhGioi.UI
             SetDisplayed(position, showPosition && !focusMode);
             SetDisplayed(worldDebugStrip, !compactWorld);
             SetDisplayed(worldMeta, !compactWorld);
-            SetDisplayed(worldGuidanceCard, !((dialogueVisible && compactViewport) || evidenceHidesGuidance));
+            SetDisplayed(worldGuidanceCard, !((dialogueVisible && compactViewport) || skillPreviewActive || evidenceHidesGuidance));
             SetDisplayed(worldArea, !compactWorld);
             SetDisplayed(worldStep, showHints && !compactWorld);
             SetDisplayed(worldDirection, showHints && !(mobileProfile && !dialogueVisible));
