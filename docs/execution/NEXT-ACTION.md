@@ -99,7 +99,7 @@ Current focus update: Character Hall responsive layout now lives in `RuntimeChar
 
 Current focus update: World HUD responsive panel/top-status/dialogue layout now lives in `RuntimeWorldHudResponsiveLayout` under `LGO_WORLD_HUD_RESPONSIVE_LAYOUT_HELPER_READY`; source-only and runtime screenshot evidence remain stable, and quick dev loop now skips visual capture by default unless forced.
 
-Current focus update: World Hub now has a slightly stronger procedural platform, back-ridge prop layer, and mist depth under `LGO_WORLD_HUB_LIGHTWEIGHT_BACK_RIDGE_DEPTH_READY`; screenshot evidence is improved but still below final reference quality, with no `VISUAL_RUNTIME_PASS` claim.
+Current focus update: World Hub now has a slightly stronger procedural platform, back-ridge prop layer, and mist depth under `LGO_WORLD_HUB_LIGHTWEIGHT_BACK_RIDGE_DEPTH_READY`; screenshot evidence is improved but still below final reference quality, and local cleanup can now dry-run/remove rebuilt Unity player builds without touching source/evidence, with no `VISUAL_RUNTIME_PASS` claim.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
