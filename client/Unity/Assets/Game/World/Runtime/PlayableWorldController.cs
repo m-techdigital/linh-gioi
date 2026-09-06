@@ -873,6 +873,10 @@ namespace LinhGioi.World
             WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Cherry Tree Far Depth Shadow V3B", WorldHubPoint(5.1f, 0.018f, -0.95f), WorldHubShadowScale(0.62f, 0.25f, 0.48f), -1);
             CreateBillboardSprite("LGO World Pine Tree Far Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, WorldHubPoint(-5.55f, 0.16f, 3.9f), WorldHubScale(0.58f, 0.50f, 0.38f), 0);
             WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Pine Tree Far Depth Shadow V3B", WorldHubPoint(-5.55f, 0.018f, 3.9f), WorldHubShadowScale(0.66f, 0.27f, 0.50f), -1);
+            CreateBillboardSprite("LGO World Cherry Tree Back Ridge Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry ?? LgoVisualAssetRegistryV2.TreeCherry, WorldHubPoint(-6.15f, 0.12f, 5.35f), WorldHubScale(0.42f, 0.36f, 0.26f), -1);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Cherry Tree Back Ridge Shadow V3B", WorldHubPoint(-6.15f, 0.018f, 5.35f), WorldHubShadowScale(0.45f, 0.18f, 0.34f), -2);
+            CreateBillboardSprite("LGO World Pine Tree Back Ridge Sprite V3B", LgoVisualAssetRegistryV3B.TreePine ?? LgoVisualAssetRegistryV2.TreePine, WorldHubPoint(6.05f, 0.12f, 5.05f), WorldHubScale(0.44f, 0.38f, 0.28f), -1);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Pine Tree Back Ridge Shadow V3B", WorldHubPoint(6.05f, 0.018f, 5.05f), WorldHubShadowScale(0.46f, 0.18f, 0.34f), -2);
             CreateBillboardSprite("LGO World Lantern West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(-4.55f, 0.2f, -2.05f), WorldHubScale(0.58f, 0.48f, 0.36f), 2);
             WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern West Depth Shadow V3B", WorldHubPoint(-4.55f, 0.018f, -2.05f), WorldHubShadowScale(0.38f, 0.20f, 0.32f), 0);
             CreateBillboardSprite("LGO World Lantern East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(4.45f, 0.2f, -1.95f), WorldHubScale(0.58f, 0.48f, 0.36f), 2);
@@ -881,10 +885,16 @@ namespace LinhGioi.World
             WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern North Depth Shadow V3B", WorldHubPoint(-1.15f, 0.018f, 5.55f), WorldHubShadowScale(0.28f, 0.15f, 0.24f), 0);
             CreateBillboardSprite("LGO World Lantern South Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(1.25f, 0.15f, -5.45f), WorldHubScale(0.36f, 0.32f, 0.24f), 1);
             WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern South Depth Shadow V3B", WorldHubPoint(1.25f, 0.018f, -5.45f), WorldHubShadowScale(0.28f, 0.15f, 0.24f), 0);
+            CreateBillboardSprite("LGO World Lantern Back West Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(-3.65f, 0.12f, 5.65f), WorldHubScale(0.30f, 0.26f, 0.20f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern Back West Shadow V3B", WorldHubPoint(-3.65f, 0.018f, 5.65f), WorldHubShadowScale(0.22f, 0.12f, 0.18f), -1);
+            CreateBillboardSprite("LGO World Lantern Back East Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp ?? LgoVisualAssetRegistryV2.LanternProp, WorldHubPoint(3.70f, 0.12f, 5.45f), WorldHubScale(0.30f, 0.26f, 0.20f), 0);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Lantern Back East Shadow V3B", WorldHubPoint(3.70f, 0.018f, 5.45f), WorldHubShadowScale(0.22f, 0.12f, 0.18f), -1);
             CreateBillboardSprite("LGO World Rock Moss Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, WorldHubPoint(-2.15f, 0.15f, -1.95f), WorldHubScale(0.48f, 0.40f, 0.30f), 1);
             WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Rock Moss Depth Shadow V3B", WorldHubPoint(-2.15f, 0.018f, -1.95f), WorldHubShadowScale(0.50f, 0.24f, 0.40f), 0);
             CreateBillboardSprite("LGO World Rock Moss East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, WorldHubPoint(2.35f, 0.12f, 4.95f), WorldHubScale(0.30f, 0.26f, 0.20f), 0);
             WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Rock Moss East Depth Shadow V3B", WorldHubPoint(2.35f, 0.018f, 4.95f), WorldHubShadowScale(0.32f, 0.15f, 0.26f), -1);
+            CreateBillboardSprite("LGO World Rock Moss Back West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss ?? LgoVisualAssetRegistryV2.RockMoss, WorldHubPoint(-4.25f, 0.10f, 4.75f), WorldHubScale(0.24f, 0.20f, 0.16f), -1);
+            WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Rock Moss Back West Shadow V3B", WorldHubPoint(-4.25f, 0.018f, 4.75f), WorldHubShadowScale(0.24f, 0.11f, 0.18f), -2);
             CreateBillboardSprite("LGO World Cultivation Banner Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, WorldHubPoint(4.25f, 0.2f, -3.9f), WorldHubScale(0.46f, 0.38f, 0.28f), 2);
             WorldProceduralVisuals.CreateGroundShadowSprite("LGO World Cultivation Banner Depth Shadow V3B", WorldHubPoint(4.25f, 0.018f, -3.9f), WorldHubShadowScale(0.34f, 0.16f, 0.28f), 0);
             CreateBillboardSprite("LGO World Cultivation Banner West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.BannerCultivation ?? LgoVisualAssetRegistryV2.BannerCultivation, WorldHubPoint(-5.3f, 0.16f, -3.55f), WorldHubScale(0.34f, 0.28f, 0.22f), 1);
@@ -898,8 +908,8 @@ namespace LinhGioi.World
             // LGO World Hub Depth Richness v1: lightweight procedural glows give the hub a readable stage without importing heavy images.
             var platformGlow = WorldProceduralVisuals.GetWorldPlatformGlowSprite();
             // LGO World Hub Visual Depth And Weight v1: keep glows supportive so actor sprites own the first read.
-            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Central Cultivation Stage Glow V3B", platformGlow, new Vector3(0f, 0.065f, 0.18f), WorldHubGroundGlowScale(2.30f, 1.95f, 1.54f), new Color(0.22f, 0.86f, 1f, 0.25f), -2);
-            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Spirit Gate Arrival Glow V3B", platformGlow, new Vector3(0f, 0.068f, -3.95f), WorldHubGroundGlowScale(1.62f, 1.36f, 1.04f), new Color(0.20f, 0.78f, 1f, 0.28f), -1);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Central Cultivation Stage Glow V3B", platformGlow, new Vector3(0f, 0.065f, 0.18f), WorldHubGroundGlowScale(2.45f, 2.06f, 1.58f), new Color(0.22f, 0.86f, 1f, 0.32f), -2);
+            WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Spirit Gate Arrival Glow V3B", platformGlow, new Vector3(0f, 0.068f, -3.95f), WorldHubGroundGlowScale(1.72f, 1.42f, 1.06f), new Color(0.20f, 0.78f, 1f, 0.34f), -1);
             WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Training Stone Focus Glow V3B", platformGlow, TrainingStonePosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.32f, 1.08f, 0.84f), new Color(0.24f, 0.96f, 0.86f, 0.28f), -1);
             WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Dummy Practice Glow V3B", platformGlow, ReadabilityDummyPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.34f, 1.10f, 0.84f), new Color(0.94f, 0.66f, 0.24f, 0.22f), -1);
             WorldProceduralVisuals.CreateGroundGlowSprite("LGO World Gatekeeper Dialogue Glow V3B", platformGlow, GateKeeperPosition + Vector3.up * 0.065f, WorldHubGroundGlowScale(1.26f, 1.04f, 0.80f), new Color(0.94f, 0.70f, 0.30f, 0.22f), -1);
@@ -911,10 +921,12 @@ namespace LinhGioi.World
             if (dummyPath != null) dummyPath.transform.rotation = Quaternion.Euler(90f, 0f, 66f);
             var shadowPath = WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow Warning Edge V3B", new Vector3(2.85f, 0.07f, 1.65f), WorldHubPathGlowScale(0.11f, 1.90f, 0.08f, 1.30f), new Color(0.58f, 0.36f, 0.92f, 0.11f), -2);
             if (shadowPath != null) shadowPath.transform.rotation = Quaternion.Euler(90f, 0f, 74f);
-            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil North V3B", new Vector3(0f, 0.052f, 5.7f), WorldHubMistScale(5.20f, 1.80f, 3.40f, 1.20f), new Color(0.30f, 0.66f, 0.92f, 0.18f), -3);
-            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil West V3B", new Vector3(-5.6f, 0.052f, 0.8f), WorldHubMistScale(3.10f, 1.50f, 2.00f, 0.92f), new Color(0.74f, 0.58f, 0.92f, 0.14f), -3);
-            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil East V3B", new Vector3(5.7f, 0.052f, 0.35f), WorldHubMistScale(3.35f, 1.55f, 2.10f, 0.94f), new Color(0.28f, 0.70f, 0.92f, 0.13f), -3);
-            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Practice Field V3B", new Vector3(2.85f, 0.054f, -0.15f), WorldHubMistScale(2.45f, 1.10f, 1.54f, 0.72f), new Color(0.36f, 0.78f, 0.92f, 0.10f), -2);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil North V3B", new Vector3(0f, 0.052f, 5.7f), WorldHubMistScale(5.45f, 1.86f, 3.48f, 1.22f), new Color(0.30f, 0.66f, 0.92f, 0.24f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil West V3B", new Vector3(-5.6f, 0.052f, 0.8f), WorldHubMistScale(3.25f, 1.58f, 2.04f, 0.94f), new Color(0.74f, 0.58f, 0.92f, 0.18f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil East V3B", new Vector3(5.7f, 0.052f, 0.35f), WorldHubMistScale(3.50f, 1.62f, 2.16f, 0.96f), new Color(0.28f, 0.70f, 0.92f, 0.17f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Practice Field V3B", new Vector3(2.85f, 0.054f, -0.15f), WorldHubMistScale(2.60f, 1.14f, 1.62f, 0.74f), new Color(0.36f, 0.78f, 0.92f, 0.14f), -2);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Back Ridge V3B", new Vector3(0f, 0.050f, 4.75f), WorldHubMistScale(7.20f, 1.50f, 4.40f, 0.86f), new Color(0.62f, 0.82f, 1.00f, 0.24f), -4);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Gate Approach V3B", new Vector3(0f, 0.053f, -3.35f), WorldHubMistScale(4.00f, 1.00f, 2.60f, 0.60f), new Color(0.24f, 0.88f, 1.00f, 0.16f), -3);
         }
 
         private static Vector3 WorldHubPoint(float x, float y, float z)

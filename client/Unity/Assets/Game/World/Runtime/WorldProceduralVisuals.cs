@@ -18,8 +18,8 @@ namespace LinhGioi.World
                 wrapMode = TextureWrapMode.Clamp,
                 filterMode = FilterMode.Bilinear
             };
-            var deepA = new Color(0.090f, 0.150f, 0.220f, 1f);
-            var deepB = new Color(0.185f, 0.275f, 0.385f, 1f);
+            var deepA = new Color(0.100f, 0.165f, 0.238f, 1f);
+            var deepB = new Color(0.215f, 0.315f, 0.430f, 1f);
             var stone = new Color(0.31f, 0.39f, 0.49f, 1f);
             var mist = new Color(0.39f, 0.70f, 0.84f, 1f);
             var line = new Color(0.14f, 0.80f, 1.00f, 1f);
@@ -41,9 +41,9 @@ namespace LinhGioi.World
                     var innerRing = SmoothBand(dist, 0.145f, 0.0075f);
                     var midRing = SmoothBand(dist, 0.245f, 0.0065f);
                     var outerRing = SmoothBand(dist, 0.355f, 0.009f);
-                    color = Color.Lerp(color, line, innerRing * 0.070f);
-                    color = Color.Lerp(color, line, midRing * 0.055f);
-                    color = Color.Lerp(color, gold, outerRing * 0.052f);
+                    color = Color.Lerp(color, line, innerRing * 0.105f);
+                    color = Color.Lerp(color, line, midRing * 0.082f);
+                    color = Color.Lerp(color, gold, outerRing * 0.074f);
                     var diagonalA = Mathf.Abs(toCenter.x - toCenter.y);
                     var diagonalB = Mathf.Abs(toCenter.x + toCenter.y);
                     if (dist < 0.34f)
@@ -61,12 +61,12 @@ namespace LinhGioi.World
                     var pathToStone = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.50f, 0.78f));
                     var pathToKeeper = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.31f, 0.70f));
                     var guide = Mathf.Min(pathToGate, Mathf.Min(pathToStone, pathToKeeper));
-                    color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.020f) * 0.065f);
+                    color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.024f) * 0.092f);
 
                     var platformGlow = Mathf.Clamp01(1f - dist / 0.44f);
-                    color = Color.Lerp(color, mist, platformGlow * 0.105f);
+                    color = Color.Lerp(color, mist, platformGlow * 0.138f);
                     var cloudBand = Mathf.Sin((uv.x * 1.9f + uv.y * 1.15f + slowNoise * 0.6f) * Mathf.PI);
-                    color = Color.Lerp(color, mist, Mathf.Clamp01(cloudBand) * 0.052f);
+                    color = Color.Lerp(color, mist, Mathf.Clamp01(cloudBand) * 0.072f);
                     var vignette = Mathf.Clamp01((dist - 0.18f) / 0.58f);
                     color = Color.Lerp(color, Color.black, vignette * 0.10f);
                     texture.SetPixel(x, y, color);
@@ -224,7 +224,7 @@ namespace LinhGioi.World
                     var dist = Mathf.Sqrt(u * u + v * v);
                     var noise = HashNoise(x / 4, y / 4);
                     var wave = Mathf.Abs(Mathf.Sin((u * 2.1f + v * 1.35f + noise * 0.8f) * Mathf.PI));
-                    var alpha = Mathf.Clamp01(1f - dist) * Mathf.Lerp(0.08f, 0.34f, wave);
+                    var alpha = Mathf.Clamp01(1f - dist) * Mathf.Lerp(0.12f, 0.46f, wave);
                     texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
                 }
             }
