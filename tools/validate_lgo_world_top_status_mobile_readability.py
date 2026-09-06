@@ -64,6 +64,13 @@ def main() -> int:
         "RuntimeUiSpacing.TopStatusWorldMobileMaxWidth",
     )
     require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        'if (_isMobileProfile)',
+        'Replace("Bước 1: tìm Người Giữ Cổng", "Bước 1/2")',
+        'Replace("Bước 2: ổn định Đá Luyện", "Bước 2/2")',
+        '"Hoàn tất"',
+    )
+    require(
         "docs/tasks/LGO-WORLD-TOP-STATUS-MOBILE-READABILITY-PASS-v1.0.md",
         "LGO_WORLD_TOP_STATUS_MOBILE_READABILITY_READY",
         "No gameplay change",

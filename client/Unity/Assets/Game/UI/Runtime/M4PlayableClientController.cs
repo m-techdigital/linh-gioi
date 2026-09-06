@@ -1034,6 +1034,8 @@ namespace LinhGioi.UI
         private string WorldTopStatusText()
         {
             if (_world == null) return "Sẵn sàng";
+            if (_isMobileProfile)
+                return _world.InteractionAcknowledged ? "Hoàn tất" : _world.GuidedTrainingStepName.Replace("Bước 1: tìm Người Giữ Cổng", "Bước 1/2").Replace("Bước 2: ổn định Đá Luyện", "Bước 2/2");
             return _world.InteractionAcknowledged ? "Hoàn tất hướng dẫn" : "Sẵn sàng: " + _world.GuidedTrainingStepName;
         }
 

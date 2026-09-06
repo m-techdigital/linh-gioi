@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_GUIDED_LABEL_COMPACT_READY` shortens mobile guided object labels to the object name while preserving full objective labels on desktop/tablet, reducing label clutter around interactables.
+Latest player-visible batch: `LGO_MOBILE_TOP_STATUS_COMPACT_READY` shortens the mobile World Hub top status chip to `Bước 1/2`, `Bước 2/2`, or `Hoàn tất` while the left HUD keeps the full objective copy, reducing upper-right mobile clutter.
 
 Current visual/runtime evidence harness command:
 
