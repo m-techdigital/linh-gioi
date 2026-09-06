@@ -81,6 +81,7 @@ namespace LinhGioi.World
             if (label == null || subject == null || camera == null || !label.gameObject.activeInHierarchy) return;
             var renderer = label.GetComponent<Renderer>();
             if (renderer == null) return;
+            label.transform.rotation = camera.transform.rotation;
             // Anchor at the subject depth before measuring, so repeated updates cannot drift in depth.
             label.transform.position = subject.bounds.center;
             var subjectRect = ProjectBounds(camera, subject.bounds);

@@ -21,6 +21,12 @@ namespace LinhGioi.Bootstrap
             _shutdown = new CancellationTokenSource();
             try
             {
+                if (OnboardingBlockoutPreview.ShouldRun(Environment.GetCommandLineArgs(), Debug.isDebugBuild || Application.isEditor))
+                {
+                    gameObject.AddComponent<OnboardingBlockoutPreview>();
+                    return;
+                }
+
                 if (M4VisualFoundationSmokeRunner.ShouldRun())
                 {
                     M4VisualFoundationSmokeRunner.RunFromCommandLine();

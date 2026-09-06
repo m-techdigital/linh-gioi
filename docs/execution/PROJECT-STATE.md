@@ -8,6 +8,10 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Blockout development nhập môn đã có tuyến đi bằng CharacterController và chín ảnh ba profile; không account/save hoặc scene main mới. Shared material URP Lit sửa fallback sprite do thiếu shader reference trong Player; main flow ba profile và quick qua. `docs/design/LINH-THANH-ONBOARDING-DESIGN.md` ghi evidence/cách mở/non-claims; bước tiếp là reuse hội thoại hiện có cho cảnh mới, không nhân đôi UI/state.
+
+Demo một cảnh nhập môn đã có tại `docs/reference-ui/lgo-linh-mon-arrival-composition-draft-v1.jpg` (404279 byte); design hiện có bổ sung mặt bằng, camera và điểm tiếp cận từ bên. DRAFT, chưa blockout hoặc thay scene chính; mục đích nối prototype về kịch bản Linh Thành, không mở shop/social/event từ tranh.
+
 2026-09-07 world presentation: sprite actor/đạo cụ đứng trên sân phẳng qua helper chung; nhãn/prompt theo bounds chiếu camera, không còn ghi đè vị trí NPC trong label refresh. Runtime ba profile `build/dev-loop/world-standing-props-final.log`, quick `world-standing-props-quick.log` hoàn tất, ảnh đã xem. Không thêm texture; vẫn prototype 2.5D, chưa city/visual PASS. Thiết kế NPC/Lộ/skill/đồ vẫn theo `docs/design/LGO-GAME-SYSTEMS-NARRATIVE-DESIGN.md`; bước tiếp cần mặt bằng/camera và điểm đứng nhập môn từ storyboard trước thay cảnh lớn.
 
 2026-09-07 nhập môn: chỉ đường đá và tên nút Gặp/Luyện khớp HUD; nút ngữ cảnh giữ mục đích khi ngoài tầm, không tự chuyển sang đánh. `build/dev-loop/guided-action-purpose.log` hoàn tất ba profile; ảnh mobile ngoài/gần Đá Luyện đã xem. Nút Chém riêng không đổi; chưa claim visual PASS hoặc city theo demo hoàn chỉnh.

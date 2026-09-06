@@ -48,7 +48,8 @@ namespace LinhGioi.Foundation.Editor
                 scenes = scenes,
                 locationPathName = outputPath,
                 target = target,
-                options = BuildOptions.None
+                options = Environment.GetEnvironmentVariable("LGO_PLAYER_DEVELOPMENT") == "1"
+                    ? BuildOptions.Development : BuildOptions.None
             };
 
             var report = BuildPipeline.BuildPlayer(options);

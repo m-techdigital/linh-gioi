@@ -10,6 +10,18 @@ namespace LinhGioi.Tests
 {
     public sealed class UIFoundationTests
     {
+        [Test]
+        public void OnboardingBlockoutRequiresExplicitDevelopmentOptIn()
+        {
+            var type = typeof(M4PlayableClientController).Assembly.GetType("LinhGioi.UI.OnboardingBlockoutPreview");
+            Assert.IsNotNull(type, "Isolated onboarding preview is not implemented.");
+            var shouldRun = type.GetMethod("ShouldRun");
+            Assert.IsNotNull(shouldRun);
+            Assert.AreEqual(false, shouldRun.Invoke(null, new object[] { new string[0], true }));
+            Assert.AreEqual(false, shouldRun.Invoke(null, new object[] { new[] { "--lgo-onboarding-blockout" }, false }));
+            Assert.AreEqual(true, shouldRun.Invoke(null, new object[] { new[] { "--lgo-onboarding-blockout" }, true }));
+        }
+
         [UnityTest]
         public IEnumerator TouchPadPointerReleaseAndCaptureLossClearMovement()
         {

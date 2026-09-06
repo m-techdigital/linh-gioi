@@ -24,6 +24,10 @@ namespace LinhGioi.Art
 
         public static Material CreateMaterial(string name, Color color)
         {
+            // A serialized reference keeps the lit shader in Player builds; Shader.Find alone can be stripped.
+            var prototype = Resources.Load<Material>("LGOSharedLitSurface");
+            if (prototype != null)
+                return new Material(prototype) { name = name, color = color };
             var shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
             var material = shader == null ? new Material(Shader.Find("Sprites/Default")) : new Material(shader);
             material.name = name;
