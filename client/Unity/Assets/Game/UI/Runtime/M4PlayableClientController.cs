@@ -1329,6 +1329,8 @@ namespace LinhGioi.UI
                 _worldHud,
                 _worldHudHeaderTitle,
                 _worldGuidanceCard,
+                _skillPreviewPanel,
+                _localCombatPanel,
                 _dialoguePanel,
                 _dialogueSpeaker,
                 _dialogueLine,

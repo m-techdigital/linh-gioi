@@ -17,6 +17,8 @@ namespace LinhGioi.UI
             VisualElement worldHud,
             Label worldHudHeaderTitle,
             VisualElement worldGuidanceCard,
+            VisualElement skillPreviewPanel,
+            VisualElement localCombatPanel,
             VisualElement dialoguePanel,
             Label dialogueSpeaker,
             Label dialogueLine,
@@ -51,12 +53,16 @@ namespace LinhGioi.UI
 
             if (worldGuidanceCard != null)
             {
+                ApplyMobileHudChildConstraint(layout, worldGuidanceCard);
                 RuntimeUiSkin.ApplyVerticalMargin(worldGuidanceCard, layout.WorldGuidanceCardMarginVertical, layout.WorldGuidanceCardMarginVertical);
                 RuntimeUiSkin.ApplyPadding(worldGuidanceCard, layout.WorldGuidanceCardPaddingHorizontal, layout.WorldGuidanceCardPaddingHorizontal, layout.WorldGuidanceCardPaddingVertical, layout.WorldGuidanceCardPaddingVertical);
             }
+            ApplyMobileHudChildConstraint(layout, skillPreviewPanel);
+            ApplyMobileHudChildConstraint(layout, localCombatPanel);
 
             if (dialoguePanel != null)
             {
+                ApplyMobileHudChildConstraint(layout, dialoguePanel);
                 dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
                 RuntimeUiSkin.ApplyPadding(dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
             }
@@ -199,6 +205,15 @@ namespace LinhGioi.UI
         {
             if (element == null) return;
             element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private static void ApplyMobileHudChildConstraint(RuntimeUiLayoutProfile layout, VisualElement element)
+        {
+            if (!layout.IsMobile || element == null) return;
+            element.style.minWidth = 0;
+            element.style.width = Length.Percent(100);
+            element.style.maxWidth = Length.Percent(100);
+            element.style.flexShrink = 1;
         }
 
         private static void SetElementVisibility(VisualElement element, bool visible)
