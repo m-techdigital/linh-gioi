@@ -10,6 +10,14 @@ namespace LinhGioi.UI
         Right
     }
 
+    internal enum RuntimeUiOverlayVerticalPlacement
+    {
+        Top,
+        Center,
+        Bottom,
+        Stretch
+    }
+
     internal static class RuntimeUiOverflowGuard
     {
         internal const string Marker = "LGO Runtime UI Overflow Guard v1";
@@ -72,11 +80,11 @@ namespace LinhGioi.UI
         internal static void ApplyViewportOverlaySurface(
             VisualElement surface,
             RuntimeUiOverlayPlacement placement,
+            RuntimeUiOverlayVerticalPlacement verticalPlacement,
             float width,
             float maxHeight,
             float horizontalInset,
-            float verticalInset,
-            bool lockVerticalInsets)
+            float verticalInset)
         {
             if (surface == null) return;
             surface.style.position = Position.Absolute;
@@ -106,9 +114,17 @@ namespace LinhGioi.UI
                 surface.style.right = horizontalInset;
             }
 
-            surface.style.top = verticalInset;
-            surface.style.bottom = lockVerticalInsets ? verticalInset : StyleKeyword.Auto;
-            surface.style.height = lockVerticalInsets ? maxHeight : StyleKeyword.Auto;
+            if (verticalPlacement == RuntimeUiOverlayVerticalPlacement.Bottom)
+            {
+                surface.style.top = StyleKeyword.Auto;
+                surface.style.bottom = verticalInset;
+            }
+            else
+            {
+                surface.style.top = verticalInset;
+                surface.style.bottom = verticalPlacement == RuntimeUiOverlayVerticalPlacement.Stretch ? verticalInset : StyleKeyword.Auto;
+            }
+            surface.style.height = verticalPlacement == RuntimeUiOverlayVerticalPlacement.Stretch ? maxHeight : StyleKeyword.Auto;
         }
     }
 }

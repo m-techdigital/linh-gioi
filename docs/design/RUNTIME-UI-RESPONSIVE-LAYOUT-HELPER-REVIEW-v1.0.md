@@ -70,6 +70,8 @@ Runtime owner: `RuntimeUiOverflowGuard` centralizes bounded action rows, bounded
 
 Overlay owner: `RuntimeUiOverflowGuard.ApplyViewportOverlaySurface` is the shared base for center/left/right overlay placement. New modal/dialog surfaces should select `RuntimeUiOverlayPlacement.Center`, `Left`, or `Right` and pass viewport-derived width, max-height, and insets instead of setting absolute coordinates by hand.
 
+Vertical overlay placement also uses shared semantic anchors: `Top`, `Center`, `Bottom`, and `Stretch`. Character Hall mobile create/dock overlays, World dialogue, and Session Menu must route through this helper instead of applying one-off `top/right/bottom` coordinates in screen-specific code.
+
 ## Target Case Matrix
 
 This matrix is the current visual target contract. Demo coverage is being expanded from the north-star sheet into profile-specific target sheets; runtime work must still follow this matrix immediately.

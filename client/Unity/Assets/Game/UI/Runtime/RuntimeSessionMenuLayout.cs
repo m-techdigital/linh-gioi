@@ -13,11 +13,11 @@ namespace LinhGioi.UI
             RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
                 panel,
                 RuntimeUiOverlayPlacement.Center,
+                RuntimeUiOverlayVerticalPlacement.Top,
                 layout.SessionMenuWidth,
                 layout.SessionMenuMaxHeight,
                 layout.SessionMenuInsetHorizontal,
-                layout.SessionMenuInsetVertical,
-                false);
+                layout.SessionMenuInsetVertical);
             panel.style.height = layout.SessionMenuShowsSettings ? layout.SessionMenuMaxHeight : StyleKeyword.Auto;
             RuntimeUiSkin.ApplyPadding(panel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);
             panel.style.backgroundColor = RuntimeUiSkin.SessionMenuBackground(layout.IsMobile || layout.IsTablet);

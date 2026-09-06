@@ -91,11 +91,14 @@ namespace LinhGioi.UI
                 if (layout.IsMobile && collapsed)
                 {
                     // LGO Character Hall Selected Action Anchor v1: selected state becomes a stable action dock instead of a floating mid-screen card.
-                    createPanel.style.position = Position.Absolute;
-                    createPanel.style.left = StyleKeyword.Auto;
-                    createPanel.style.right = 14;
-                    createPanel.style.top = StyleKeyword.Auto;
-                    createPanel.style.bottom = 28;
+                    RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
+                        createPanel,
+                        RuntimeUiOverlayPlacement.Right,
+                        RuntimeUiOverlayVerticalPlacement.Bottom,
+                        layout.CharacterHallSelectedDockWidth,
+                        72,
+                        layout.CharacterHallSelectedDockRight,
+                        layout.CharacterHallSelectedDockBottom);
                 }
                 else if (!layout.IsMobile)
                 {
@@ -203,10 +206,23 @@ namespace LinhGioi.UI
         private static void ApplyCreatePanel(RuntimeUiLayoutProfile layout, int width, VisualElement createPanel)
         {
             if (createPanel == null) return;
-            createPanel.style.position = layout.IsMobile ? Position.Absolute : Position.Relative;
-            createPanel.style.left = layout.IsMobile ? Mathf.Clamp(width * 0.45f, 350f, 390f) : 0;
-            createPanel.style.right = layout.IsMobile ? 12 : StyleKeyword.Auto;
-            createPanel.style.top = layout.IsMobile ? 132 : StyleKeyword.Auto;
+            if (layout.IsMobile)
+                RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
+                    createPanel,
+                    RuntimeUiOverlayPlacement.Right,
+                    RuntimeUiOverlayVerticalPlacement.Top,
+                    layout.CharacterHallCreateOverlayWidth,
+                    174,
+                    layout.CharacterHallCreateOverlayRight,
+                    layout.CharacterHallCreateOverlayTop);
+            else
+            {
+                createPanel.style.position = Position.Relative;
+                createPanel.style.left = 0;
+                createPanel.style.right = StyleKeyword.Auto;
+                createPanel.style.top = StyleKeyword.Auto;
+                createPanel.style.bottom = StyleKeyword.Auto;
+            }
             RuntimeUiSkin.ApplyPadding(createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
             createPanel.style.marginTop = layout.CreatePanelMarginTop;
             createPanel.style.maxHeight = layout.IsMobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;

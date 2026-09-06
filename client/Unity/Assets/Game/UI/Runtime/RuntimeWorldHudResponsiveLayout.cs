@@ -265,11 +265,11 @@ namespace LinhGioi.UI
             RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
                 dialoguePanel,
                 RuntimeUiOverlayPlacement.Center,
+                RuntimeUiOverlayVerticalPlacement.Stretch,
                 layout.DialogueOverlayWidth,
                 layout.DialoguePanelMaxHeight,
                 layout.DialogueOverlayInsetHorizontal,
-                layout.DialogueOverlayInsetVertical,
-                true);
+                layout.DialogueOverlayInsetVertical);
         }
 
         private static void SetElementVisibility(VisualElement element, bool visible)

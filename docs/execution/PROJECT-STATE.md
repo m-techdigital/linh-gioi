@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_RUNTIME_UI_OVERLAY_BASELINE_READY` adds a shared overlay placement base for center/left/right modal surfaces, moves Gate Keeper dialogue out of the HUD column into a viewport-centered overlay with equal top/bottom insets, centers the mobile session menu through the same base, and routes session/dialogue actions through shared button tiers. Fresh desktop/tablet/mobile screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_CHARACTER_HALL_OVERLAY_PLACEMENT_BASE_READY` extends the shared overlay placement base with vertical anchors, then routes Character Hall mobile create form and selected action dock through viewport-derived top/right/bottom formulas instead of screen-specific absolute constants. Fresh desktop/tablet/mobile screenshots were reviewed for Character Hall, dialogue, and session menu stability, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

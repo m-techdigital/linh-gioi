@@ -60,6 +60,7 @@ def main() -> int:
         'internal static void ApplyDetails',
         'RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(',
         'RuntimeUiOverlayPlacement.Center',
+        'RuntimeUiOverlayVerticalPlacement.Top',
         'layout.SessionMenuInsetHorizontal',
         'layout.SessionMenuInsetVertical',
         'status.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex',

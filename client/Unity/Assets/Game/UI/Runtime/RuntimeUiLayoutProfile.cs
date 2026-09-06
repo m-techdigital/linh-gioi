@@ -117,6 +117,12 @@ namespace LinhGioi.UI
         internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;
         internal int CreatePanelPaddingBottom => IsMobile ? 8 : 14;
         internal int CreatePanelMarginTop => IsMobile ? 0 : 10;
+        internal float CharacterHallCreateOverlayWidth => Mathf.Clamp(Width * 0.36f, 320f, 360f);
+        internal float CharacterHallCreateOverlayRight => Mathf.Clamp(Width * 0.08f, 12f, 28f);
+        internal float CharacterHallCreateOverlayTop => Mathf.Clamp(Height * 0.24f, 112f, 140f);
+        internal float CharacterHallSelectedDockWidth => Mathf.Clamp(Width * 0.34f, 300f, 336f);
+        internal float CharacterHallSelectedDockRight => Mathf.Clamp(Width * 0.06f, 14f, 28f);
+        internal float CharacterHallSelectedDockBottom => Mathf.Clamp(Height * 0.05f, 24f, 34f);
         internal float WorldHudMinWidth => WorldHudMinWidthFor(false);
 
         internal float WorldHudMinWidthFor(bool dialogueVisible)

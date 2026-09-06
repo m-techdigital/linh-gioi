@@ -60,6 +60,12 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "LGO Character Hall Mobile Selected CTA Hierarchy v1",
+        "RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(",
+        "RuntimeUiOverlayPlacement.Right",
+        "RuntimeUiOverlayVerticalPlacement.Bottom",
+        "RuntimeUiOverlayVerticalPlacement.Top",
+        "layout.CharacterHallSelectedDockWidth",
+        "layout.CharacterHallCreateOverlayWidth",
         "var mobileSelected = isMobileProfile && hasSelectedCharacter;",
         "if (hasSelectedCharacter)",
         "createButton.text = createFormExpanded ? \"Tạo tu sĩ\" : \"Tạo thêm\";",
