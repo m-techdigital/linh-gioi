@@ -509,7 +509,7 @@ namespace LinhGioi.UI
             button.style.color = RuntimeArtCatalog.Background;
             RuntimeUiSkin.ApplyButtonMetrics(button, minHeight: RuntimeUiSpacing.PrimaryButtonMinHeight, fontSize: RuntimeUiTypography.PrimaryButtonFontSize, bold: true);
             button.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture;
+            var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture;
             if (texture != null)
             {
                 button.style.backgroundColor = Color.clear;

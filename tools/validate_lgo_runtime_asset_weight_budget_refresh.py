@@ -108,7 +108,7 @@ def main() -> int:
         "roles in watch band >=85% budget: 7",
         "V2 fallback Resources payload: 2389.7 KB across 65 images",
         "V2 Fallback Resources Payload",
-        "referenced V2 fallback-only properties: 12",
+        "referenced V2 fallback-only properties: 10",
         "`login_background`",
         "`world_spirit_gate`",
         "`world_player_male_cultivator`",

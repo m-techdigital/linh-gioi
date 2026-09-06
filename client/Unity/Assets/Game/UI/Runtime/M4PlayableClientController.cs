@@ -989,7 +989,7 @@ namespace LinhGioi.UI
         {
             _status.text = FormatTopStatusMessage(message);
             ApplyStatusChip(_status, busy ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Muted);
-            ApplyLoginButtonState(busy ? LgoVisualAssetRegistryV2.ButtonDisabledTexture : LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture ?? LgoVisualAssetRegistryV2.ButtonPrimaryNormalTexture);
+            ApplyLoginButtonState(busy ? null : LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture);
             if (_serverStatusIcon != null)
             {
                 _serverStatusIcon.style.backgroundColor = busy ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
