@@ -69,6 +69,22 @@ def advisor() -> str:
     return result.stdout.strip()
 
 
+def change_budget() -> str:
+    result = subprocess.run(
+        ["python3.12", "tools/report_lgo_change_budget.py"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    lines = []
+    for line in result.stdout.splitlines():
+        if line.startswith(("LGO_CHANGE_BUDGET_STATUS", "LGO_CHANGE_BUDGET_FILES", "LGO_CHANGE_BUDGET_CHANGED_LINES", "LGO_CHANGE_BUDGET_WARN")):
+            lines.append(line)
+    return "\n".join(lines[:8]).strip()
+
+
 def main() -> int:
     next_action = read(NEXT_ACTION)
     project_state = read(PROJECT_STATE)
@@ -87,6 +103,9 @@ def main() -> int:
     print()
     print("## Next Task Advisor")
     print(advisor() or "ADVISOR_OUTPUT_MISSING")
+    print()
+    print("## Change Budget")
+    print(change_budget() or "CHANGE_BUDGET_UNAVAILABLE")
     print()
     print("## Task Ledger Rollup")
     print(first_lines(rollup, 22) or "TASK_LEDGER_ROLLUP_MISSING")

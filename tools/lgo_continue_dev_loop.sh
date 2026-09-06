@@ -117,6 +117,7 @@ run_source_validation_profile() {
     quick)
       echo "LGO_DEV_LOOP_GATE_PROFILE quick"
       run_logged diff_check git --no-pager diff --check
+      run_logged change_budget python3.12 tools/report_lgo_change_budget.py
       run_logged login_gate_entry python3.12 tools/validate_lgo_login_gate_entry_visual_v1.py
       run_logged runtime_asset_weight python3.12 tools/validate_lgo_runtime_asset_weight.py
       run_logged device_profile_ui_budgets python3.12 tools/validate_lgo_device_profile_ui_budgets.py
@@ -129,6 +130,7 @@ run_source_validation_profile() {
     full)
       echo "LGO_DEV_LOOP_GATE_PROFILE full"
       run_logged diff_check git --no-pager diff --check
+      run_logged change_budget python3.12 tools/report_lgo_change_budget.py
       run_logged playable_source_only ./tools/lgo_playable_closure_check.sh --source-only
       ;;
     *)

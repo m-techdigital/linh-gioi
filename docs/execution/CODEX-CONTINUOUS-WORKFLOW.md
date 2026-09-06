@@ -35,6 +35,10 @@ Commit/push only after related changes validate together. Avoid tiny spam commit
 
 Routine local loops should prefer concise output: `tools/lgo_continue_dev_loop.sh` defaults to Quick Resume plus ledger rollup, and `tools/lgo_state_brief.py` should stay under about 90 lines for normal resume. Use `LGO_DEV_LOOP_CONTEXT_MODE=full` only when diagnosing state drift or handoff confusion. The quick profile skips visual runtime capture by default; run `LGO_DEV_LOOP_VISUAL_RUNTIME=force` or a full profile when a visible runtime change needs screenshot evidence.
 
+Routine batches should also check local change size with `python3.12 tools/report_lgo_change_budget.py`. The report is warning-only by default so small work is not blocked by bookkeeping, but `--enforce` is appropriate before handoff, package, or checkpoint commits when an unexpectedly broad diff should be split or cleaned up first.
+
+When validating Python syntax manually, route bytecode out of source with `PYTHONPYCACHEPREFIX=build/pycache python3.12 -m py_compile ...`. Source package gates should remain free of `__pycache__` and `.pyc` files.
+
 ## Change Budget
 
 Continuous work should increase player-visible quality faster than it increases repository noise.
