@@ -18,8 +18,32 @@ namespace LinhGioi.UI
             panel.style.width = layout.SessionMenuWidth;
             panel.style.maxWidth = layout.IsMobile ? layout.SessionMenuWidth : StyleKeyword.None;
             panel.style.maxHeight = layout.SessionMenuMaxHeight;
+            panel.style.height = layout.SessionMenuShowsSettings ? layout.SessionMenuMaxHeight : StyleKeyword.Auto;
+            panel.style.overflow = Overflow.Hidden;
             RuntimeUiSkin.ApplyPadding(panel, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingHorizontal, layout.SessionMenuPaddingTop, layout.SessionMenuPaddingBottom);
             panel.style.backgroundColor = RuntimeUiSkin.SessionMenuBackground(layout.IsMobile || layout.IsTablet);
+        }
+
+        internal static ScrollView NewContentScroll(RuntimeUiLayoutProfile layout)
+        {
+            var scroll = new ScrollView(ScrollViewMode.Vertical);
+            scroll.name = "LGO Session Menu Viewport Content";
+            scroll.verticalScrollerVisibility = ScrollerVisibility.Auto;
+            scroll.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+            ApplyContentScroll(scroll, layout);
+            return scroll;
+        }
+
+        internal static void ApplyContentScroll(ScrollView scroll, RuntimeUiLayoutProfile layout)
+        {
+            if (scroll == null) return;
+            scroll.style.flexGrow = 1;
+            scroll.style.minHeight = 0;
+            scroll.style.marginTop = layout.IsMobile ? 6 : 10;
+            scroll.style.marginBottom = 0;
+            scroll.style.overflow = Overflow.Hidden;
+            scroll.contentContainer.style.flexGrow = 1;
+            scroll.contentContainer.style.minHeight = 0;
         }
 
         internal static void ApplyActions(

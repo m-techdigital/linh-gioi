@@ -35,6 +35,7 @@ namespace LinhGioi.UI
         private VisualElement _worldGuidanceCard;
         private VisualElement _dialoguePanel;
         private VisualElement _sessionMenuPanel;
+        private ScrollView _sessionMenuContent;
         private VisualElement _settingsPanel;
         private VisualElement _skillPreviewPanel;
         private VisualElement _localCombatPanel;
@@ -701,23 +702,25 @@ namespace LinhGioi.UI
             _sessionMenuPanel = NewSectionShell("PHIÊN", "Tạm dừng cục bộ", layout.IsMobile ? string.Empty : "Menu phiên", "LGO Session Menu Overlay");
             RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);
             RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);
+            _sessionMenuContent = RuntimeSessionMenuLayout.NewContentScroll(layout);
             _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
             _sessionMenuStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
             _sessionMenuStatus.style.marginBottom = layout.SessionMenuStatusMarginBottom;
             RuntimeSessionMenuLayout.ApplyStatus(_sessionMenuStatus, layout);
-            _sessionMenuPanel.Add(_sessionMenuStatus);
+            _sessionMenuContent.Add(_sessionMenuStatus);
             _sessionLocationRow = NewReadabilityRow("Vị trí", "Sân Luyện An Toàn / gần Linh Môn", RuntimeArtCatalog.Spirit);
             _sessionObjectiveRow = NewReadabilityRow("Mục tiêu", "Tiếp tục luyện tập, lưu dấu ấn, hoặc quay về Điện Nhân Vật.", RuntimeArtCatalog.Gold);
             RuntimeSessionMenuLayout.ApplyDetails(_sessionLocationRow, _sessionObjectiveRow, layout);
-            _sessionMenuPanel.Add(_sessionLocationRow);
-            _sessionMenuPanel.Add(_sessionObjectiveRow);
+            _sessionMenuContent.Add(_sessionLocationRow);
+            _sessionMenuContent.Add(_sessionObjectiveRow);
             _resumeButton = NewCompactPrimaryButton("Tiếp tục", HideSessionMenu);
             _sessionSaveButton = NewCompactSecondaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
             _sessionBackButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
             _sessionQuitButton = NewQuietButton("Thoát", QuitPlayer);
             _sessionActions = NewActionRow("LGO Session Menu Action Row", Justify.Center, 6, 12, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
             RuntimeSessionMenuLayout.ApplyActions(_sessionActions, layout, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
-            _sessionMenuPanel.Add(_sessionActions);
+            _sessionMenuContent.Add(_sessionActions);
+            _sessionMenuPanel.Add(_sessionMenuContent);
             BuildLocalSettingsPanel();
             _root.Add(_sessionMenuPanel);
             SetSessionMenuVisible(false);
@@ -777,6 +780,7 @@ namespace LinhGioi.UI
             _settingsPanel.style.marginTop = layout.SettingsPanelMarginTop;
             RuntimeUiSkin.ApplyPadding(_settingsPanel, layout.SettingsPanelPaddingHorizontal, layout.SettingsPanelPaddingHorizontal, layout.SettingsPanelPaddingTop, layout.SettingsPanelPaddingBottom);
             _settingsPanel.style.minHeight = 108;
+            _settingsPanel.style.display = layout.SessionMenuShowsSettings ? DisplayStyle.Flex : DisplayStyle.None;
             RuntimeUiSkin.ApplyLocalSettingsPanelFrame(_settingsPanel);
             _settingsPanel.Add(NewSectionTitle("Tùy chỉnh hiển thị"));
             _settingsPanel.Add(NewMutedLabel("Các lựa chọn này chỉ đổi cách xem trong phiên hiện tại."));
@@ -786,7 +790,7 @@ namespace LinhGioi.UI
             _settingsPanel.Add(_showPositionToggle);
             _settingsPanel.Add(_showHintsToggle);
             _settingsPanel.Add(_focusModeToggle);
-            _sessionMenuPanel.Add(_settingsPanel);
+            (_sessionMenuContent ?? _sessionMenuPanel).Add(_settingsPanel);
         }
 
         private async Task LoginAsync()
@@ -1329,10 +1333,11 @@ namespace LinhGioi.UI
                 RuntimeSessionMenuLayout.ApplyStatus(_sessionMenuStatus, layout);
                 RuntimeSessionMenuLayout.ApplyDetails(_sessionLocationRow, _sessionObjectiveRow, layout);
                 RuntimeSessionMenuLayout.ApplyActions(_sessionActions, layout, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
+                RuntimeSessionMenuLayout.ApplyContentScroll(_sessionMenuContent, layout);
             }
             if (_settingsPanel != null)
             {
-                _settingsPanel.style.display = mobile || tablet ? DisplayStyle.None : DisplayStyle.Flex;
+                _settingsPanel.style.display = layout.SessionMenuShowsSettings ? DisplayStyle.Flex : DisplayStyle.None;
             }
             RuntimeWorldHudResponsiveLayout.ApplyHudPanel(
                 layout,

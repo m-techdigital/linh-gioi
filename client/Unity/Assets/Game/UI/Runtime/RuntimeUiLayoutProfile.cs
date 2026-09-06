@@ -181,6 +181,7 @@ namespace LinhGioi.UI
         internal float SessionMenuTop => IsMobile ? Mathf.Max(8f, Height * 0.06f) : IsTablet ? 118f : 120f;
 
         internal float SessionMenuMaxHeight => IsMobile ? Mathf.Max(240f, Height - 70f) : IsTablet ? 430f : 500f;
+        internal bool SessionMenuShowsSettings => !IsMobile && !IsTablet && Height >= 1180;
         internal int SessionMenuStatusMarginBottom => 10;
         internal int SessionMenuPaddingHorizontal => IsMobile ? 12 : IsTablet ? 16 : 22;
         internal int SessionMenuPaddingTop => IsMobile ? 10 : IsTablet ? 14 : 18;

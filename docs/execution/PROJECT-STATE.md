@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_DIALOGUE_FOCUS_FOOTER_HIDE_READY` hides the World HUD footer while Gate Keeper dialogue is active so dialogue panels no longer reveal clipped save/back controls near the bottom edge. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_SESSION_MENU_VIEWPORT_PRIORITY_READY` makes the pause/session menu prioritize core actions across desktop/tablet/mobile viewport profiles. The menu body now lives inside a panel-bounded content viewport, desktop display settings are withheld on common-height profiles instead of clipping, and fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 
