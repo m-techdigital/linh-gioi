@@ -11,6 +11,12 @@ namespace LinhGioi.UI
         internal const int MobileMaxLongSide = 1050;
         internal const int TabletMaxShortSide = 900;
         internal const int TabletMaxLongSide = 1450;
+        internal const int CompactMaxShortSide = 600;
+        internal const int ShortHeightMax = 620;
+        internal const int NarrowMaxShortSide = 760;
+        internal const int NarrowMaxLongSide = 1180;
+        internal const int RegularMaxShortSide = 980;
+        internal const int RegularMaxLongSide = 1500;
         internal const float MobileScaleBaseline = 520f;
         internal const float MobileScaleMin = 0.50f;
         internal const float MobileScaleMax = 0.86f;
@@ -27,6 +33,8 @@ namespace LinhGioi.UI
         internal readonly int ShortSide;
         internal readonly bool IsMobile;
         internal readonly bool IsTablet;
+        internal readonly string LayoutClass;
+        internal readonly string InputClass;
         internal readonly float MobileScale;
         internal readonly float LoginLogoWidth;
         internal readonly float LoginLogoHeight;
@@ -109,11 +117,11 @@ namespace LinhGioi.UI
         internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;
         internal int CreatePanelPaddingBottom => IsMobile ? 8 : 14;
         internal int CreatePanelMarginTop => IsMobile ? 0 : 10;
-        internal float WorldHudMinWidth => IsMobile ? 238f : 300f;
-        internal int WorldHudPaddingHorizontal => IsMobile ? 8 : 12;
-        internal int WorldHudPaddingVertical => IsMobile ? 6 : 10;
-        internal int WorldHudDialoguePaddingHorizontal => IsMobile ? 7 : WorldHudPaddingHorizontal;
-        internal int WorldHudDialoguePaddingVertical => IsMobile ? 5 : WorldHudPaddingVertical;
+        internal float WorldHudMinWidth => IsMobile ? 180f : 300f;
+        internal int WorldHudPaddingHorizontal => IsMobile ? 6 : 12;
+        internal int WorldHudPaddingVertical => IsMobile ? 4 : 10;
+        internal int WorldHudDialoguePaddingHorizontal => IsMobile ? 6 : WorldHudPaddingHorizontal;
+        internal int WorldHudDialoguePaddingVertical => IsMobile ? 4 : WorldHudPaddingVertical;
         internal int WorldNameMarginTop => 6;
         internal int PositionChipMarginTop => 8;
         internal int WorldLandmarksMarginTop => 8;
@@ -121,8 +129,8 @@ namespace LinhGioi.UI
         internal int LocalCombatPanelMarginTop => 8;
         internal int SettingsPanelMarginTop => 12;
         internal int WorldGuidanceCardPaddingHorizontal => 8;
-        internal int WorldGuidanceCardMarginVertical => IsMobile ? 6 : 8;
-        internal int WorldGuidanceCardPaddingVertical => IsMobile ? 5 : 7;
+        internal int WorldGuidanceCardMarginVertical => IsMobile ? 4 : 8;
+        internal int WorldGuidanceCardPaddingVertical => IsMobile ? 4 : 7;
         internal int DialoguePanelPaddingHorizontal => IsMobile ? 10 : 14;
         internal int DialoguePanelPaddingVertical => IsMobile ? 9 : 12;
         internal int DialoguePanelMarginTop => IsMobile ? 6 : IsTablet ? 8 : 10;
@@ -139,7 +147,7 @@ namespace LinhGioi.UI
         internal int SettingsPanelPaddingBottom => 14;
 
         internal float WorldHudBaseMaxWidth => IsMobile
-            ? Mathf.Clamp(Width * 0.28f, 238f, 272f)
+            ? Mathf.Clamp(Width * 0.54f, 180f, 214f)
             : IsTablet
                 ? Mathf.Clamp(Width * 0.31f, 360f, 420f)
                 : 390f;
@@ -147,7 +155,7 @@ namespace LinhGioi.UI
         internal float WorldHudMaxWidth(bool dialogueVisible)
         {
             if (IsMobile)
-                return dialogueVisible ? Mathf.Clamp(Width * 0.26f, 248f, 286f) : Mathf.Clamp(Width * 0.26f, 236f, 258f);
+                return dialogueVisible ? Mathf.Clamp(Width * 0.58f, 190f, 224f) : Mathf.Clamp(Width * 0.54f, 180f, 214f);
             if (IsTablet)
                 return dialogueVisible ? Mathf.Clamp(Width * 0.30f, 350f, 400f) : Mathf.Clamp(Width * 0.31f, 360f, 420f);
             return 390f;
@@ -178,7 +186,7 @@ namespace LinhGioi.UI
         internal int SessionMenuPaddingTop => IsMobile ? 10 : IsTablet ? 14 : 18;
         internal int SessionMenuPaddingBottom => IsMobile ? 10 : IsTablet ? 14 : 20;
 
-        private RuntimeUiLayoutProfile(string name, int width, int height)
+        private RuntimeUiLayoutProfile(string name, int width, int height, string layoutClass = null, string inputClass = null)
         {
             Name = name;
             Width = width;
@@ -186,6 +194,8 @@ namespace LinhGioi.UI
             ShortSide = Mathf.Min(width, height);
             IsMobile = name == "mobile";
             IsTablet = name == "tablet";
+            LayoutClass = layoutClass ?? name;
+            InputClass = inputClass ?? (IsMobile || IsTablet ? "touch" : "pointer");
             MobileScale = IsMobile ? Mathf.Clamp(ShortSide / MobileScaleBaseline, MobileScaleMin, MobileScaleMax) : 1f;
             LoginLogoWidth = IsMobile
                 ? Mathf.Clamp(Mathf.Min(width * MobileLoginLogoWidthRatio, height * 0.65f), 115f, 180f)
@@ -215,6 +225,21 @@ namespace LinhGioi.UI
                 ? "mobile"
                 : screenShortSide <= TabletMaxShortSide && screenLongSide <= TabletMaxLongSide ? "tablet" : "desktop");
             return new RuntimeUiLayoutProfile(name, width, height);
+        }
+
+        internal static RuntimeUiLayoutProfile FromViewport(RuntimeViewportMetrics viewport)
+        {
+            var name = viewport.LayoutClass == "compact" || viewport.LayoutClass == "narrow"
+                ? "mobile"
+                : viewport.LayoutClass == "regular" ? "tablet" : "desktop";
+            if (viewport.LayoutClass == "mobile" || viewport.LayoutClass == "tablet" || viewport.LayoutClass == "desktop")
+                name = viewport.LayoutClass;
+            return new RuntimeUiLayoutProfile(
+                name,
+                Mathf.Max(1, Mathf.RoundToInt(viewport.SafePanelRect.width)),
+                Mathf.Max(1, Mathf.RoundToInt(viewport.SafePanelRect.height)),
+                viewport.LayoutClass,
+                viewport.InputClass);
         }
     }
 }

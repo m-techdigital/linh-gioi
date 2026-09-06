@@ -29,7 +29,7 @@ namespace LinhGioi.UI
 
             var safeRoot = new SafeAreaRoot();
             safeRoot.style.flexGrow = 1;
-            safeRoot.ApplySafeArea(Screen.safeArea, new Vector2(Screen.width, Screen.height));
+            safeRoot.ApplyViewportMetrics(RuntimeViewportMetrics.FromRoot(root));
             root.Add(safeRoot);
 
             var title = new Label("LINH GIỚI — UI FOUNDATION");

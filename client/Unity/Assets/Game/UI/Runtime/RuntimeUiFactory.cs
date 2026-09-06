@@ -294,7 +294,9 @@ namespace LinhGioi.UI
             var block = new VisualElement();
             if (!string.IsNullOrWhiteSpace(elementName)) block.name = elementName;
             block.style.flexDirection = FlexDirection.Column;
-            block.Add(NewSectionTitle(title));
+            var titleLabel = NewSectionTitle(title);
+            if (!string.IsNullOrWhiteSpace(elementName)) titleLabel.name = elementName + " Title";
+            block.Add(titleLabel);
             block.Add(NewOrnamentRule(ornamentColor));
             return block;
         }

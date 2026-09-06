@@ -205,6 +205,15 @@ namespace LinhGioi.UI
 
     public sealed class SafeAreaRoot : VisualElement
     {
+        internal void ApplyViewportMetrics(RuntimeViewportMetrics viewport)
+        {
+            var safe = viewport.SafePanelRect;
+            style.paddingLeft = safe.xMin;
+            style.paddingRight = Mathf.Max(0f, viewport.PanelWidth - safe.xMax);
+            style.paddingTop = safe.yMin;
+            style.paddingBottom = Mathf.Max(0f, viewport.PanelHeight - safe.yMax);
+        }
+
         public void ApplySafeArea(Rect safeArea, Vector2 screenSize)
         {
             if (screenSize.x <= 0 || screenSize.y <= 0) return;

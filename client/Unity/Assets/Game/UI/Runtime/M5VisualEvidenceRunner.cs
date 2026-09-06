@@ -45,7 +45,7 @@ namespace LinhGioi.UI
             Directory.CreateDirectory(_outputDir);
             Debug.Log("[LinhGioi] M5 visual evidence output=" + _outputDir);
             _document = gameObject.AddComponent<UIDocument>();
-            _document.panelSettings = ScriptableObject.CreateInstance<PanelSettings>();
+            _document.panelSettings = RuntimePanelSettingsProvider.LoadOrCreate();
             _root = _document.rootVisualElement;
             StartCoroutine(CaptureStates());
         }

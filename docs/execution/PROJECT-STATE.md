@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_LOGIN_PANEL_SPACE_FIRST_SCREEN_FIT_READY` keeps the login logo, server row, and `Vào Thế Giới` CTA visible in desktop/tablet/mobile profile screenshots after the UI Toolkit panel-space scale fix; responsive layout now re-applies when the resolved viewport size changes, not only when the profile name changes.
+Latest player-visible batch: `LGO_RUNTIME_VIEWPORT_METRICS_ROOT_CAUSE_READY` replaces resolution-specific UI tuning with a canonical runtime viewport model: `RuntimeViewportMetrics` owns screen pixels, UI Toolkit panel viewport, safe-area-to-panel conversion, layout/input class, and evidence telemetry; runtime/evidence now share one PanelSettings provider and latest desktop/tablet/mobile manifests confirm `ScaleWithScreenSize` panel metrics. Screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

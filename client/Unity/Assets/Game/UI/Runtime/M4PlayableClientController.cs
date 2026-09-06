@@ -89,6 +89,7 @@ namespace LinhGioi.UI
         private Label _skinSource;
         private VisualElement _combatCooldownIcon;
         private Label _worldObjective;
+        private Label _worldHudHeaderTitle;
         private Label _interactionHint;
         private Label _position;
         private Label _toast;
@@ -124,6 +125,7 @@ namespace LinhGioi.UI
         private CharacterResponse[] _characters = Array.Empty<CharacterResponse>();
         private CharacterResponse _selectedCharacter;
         private PlayableWorldController _world;
+        private RuntimeViewportMetrics _viewportMetrics;
         private string _lastLayoutProfile;
         private int _lastLayoutWidth;
         private int _lastLayoutHeight;
@@ -170,16 +172,14 @@ namespace LinhGioi.UI
 
         private RuntimeUiLayoutProfile CurrentLayoutProfile()
         {
-            return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height, LayoutViewportWidth, LayoutViewportHeight);
+            return RuntimeUiLayoutProfile.FromViewport(CurrentViewportMetrics());
         }
 
         internal int LayoutViewportWidth
         {
             get
             {
-                if (_root == null) return Screen.width;
-                var resolvedWidth = _root.resolvedStyle.width;
-                return !float.IsNaN(resolvedWidth) && resolvedWidth > 0f ? Mathf.RoundToInt(resolvedWidth) : Screen.width;
+                return CurrentViewportMetrics().PanelWidth;
             }
         }
 
@@ -187,10 +187,24 @@ namespace LinhGioi.UI
         {
             get
             {
-                if (_root == null) return Screen.height;
-                var resolvedHeight = _root.resolvedStyle.height;
-                return !float.IsNaN(resolvedHeight) && resolvedHeight > 0f ? Mathf.RoundToInt(resolvedHeight) : Screen.height;
+                return CurrentViewportMetrics().PanelHeight;
             }
+        }
+
+        internal RuntimeViewportMetrics ViewportMetrics => CurrentViewportMetrics();
+
+        internal string PanelSettingsSummary
+        {
+            get
+            {
+                var settings = _document != null ? _document.panelSettings : null;
+                return RuntimePanelSettingsProvider.Describe(settings);
+            }
+        }
+
+        private RuntimeViewportMetrics CurrentViewportMetrics()
+        {
+            return RuntimeViewportMetrics.FromRoot(_root, _forcedLayoutProfile);
         }
 
         private void BuildUi()
@@ -200,6 +214,7 @@ namespace LinhGioi.UI
             _root.style.flexGrow = 1;
             _root.style.backgroundColor = RuntimeArtCatalog.Background;
             _root.style.color = RuntimeArtCatalog.Text;
+            _root.RegisterCallback<GeometryChangedEvent>(OnRootGeometryChanged);
             var initialLayout = CurrentLayoutProfile();
             RuntimeUiSkin.ApplyPadding(_root, initialLayout.RootPaddingHorizontal, initialLayout.RootPaddingHorizontal, initialLayout.RootPaddingTop, initialLayout.RootPaddingBottom);
             _root.style.alignItems = Align.Center;
@@ -578,7 +593,9 @@ namespace LinhGioi.UI
             var layout = CurrentLayoutProfile();
             _worldHud = NewWorldHudRoot("LGO World HUD Action Shell V3B Skin v1", 390);
             _mainShell.Add(_worldHud);
-            _worldHud.Add(NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit, "LGO World HUD Header Block"));
+            var worldHeaderBlock = NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit, "LGO World HUD Header Block");
+            _worldHudHeaderTitle = worldHeaderBlock.Q<Label>("LGO World HUD Header Block Title");
+            _worldHud.Add(worldHeaderBlock);
 
             _worldDebugStrip = NewBadgeStrip(
                 "LGO World Debug Badge Strip",
@@ -1227,14 +1244,16 @@ namespace LinhGioi.UI
 
         private void ApplyResponsiveLayoutProfile(bool force)
         {
-            var layout = CurrentLayoutProfile();
+            var viewport = CurrentViewportMetrics();
+            var layout = RuntimeUiLayoutProfile.FromViewport(viewport);
             var width = layout.Width;
             var height = layout.Height;
             var profile = layout.Name;
-            if (!force && string.Equals(_lastLayoutProfile, profile, StringComparison.Ordinal) && _lastLayoutWidth == width && _lastLayoutHeight == height) return;
+            if (!force && string.Equals(_lastLayoutProfile, profile, StringComparison.Ordinal) && _lastLayoutWidth == width && _lastLayoutHeight == height && _viewportMetrics.LayoutEquals(viewport)) return;
             _lastLayoutProfile = profile;
             _lastLayoutWidth = width;
             _lastLayoutHeight = height;
+            _viewportMetrics = viewport;
 
             var mobile = layout.IsMobile;
             var tablet = layout.IsTablet;
@@ -1243,6 +1262,7 @@ namespace LinhGioi.UI
             _isMobileProfile = mobile;
             RuntimeLoginResponsiveLayout.Apply(
                 layout,
+                viewport,
                 _root,
                 _authPanel,
                 _loginStage,
@@ -1305,6 +1325,7 @@ namespace LinhGioi.UI
                 layout,
                 worldVisible,
                 _worldHud,
+                _worldHudHeaderTitle,
                 _worldGuidanceCard,
                 _dialoguePanel,
                 _dialogueSpeaker,
@@ -1325,6 +1346,11 @@ namespace LinhGioi.UI
             if (_focusModeToggle != null && mobile && !_focusModeToggle.value)
                 _focusModeToggle.value = true;
             ApplyLocalSettings();
+        }
+
+        private void OnRootGeometryChanged(GeometryChangedEvent evt)
+        {
+            ApplyResponsiveLayoutProfile(false);
         }
 
         private void ApplyCharacterHallActionHierarchy()
@@ -1474,20 +1500,7 @@ namespace LinhGioi.UI
 
         private static PanelSettings ResolvePanelSettings()
         {
-            var existingDocuments = FindObjectsByType<UIDocument>(FindObjectsSortMode.None);
-            foreach (var document in existingDocuments)
-                if (document != null && document.panelSettings != null) return document.panelSettings;
-
-            var resourceSettings = Resources.Load<PanelSettings>("LGORuntimePanelSettings");
-            if (resourceSettings != null) return resourceSettings;
-
-            var settings = ScriptableObject.CreateInstance<PanelSettings>();
-            settings.name = "LGO Runtime Panel Settings";
-            settings.scaleMode = PanelScaleMode.ScaleWithScreenSize;
-            settings.referenceResolution = new Vector2Int(1200, 800);
-            settings.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
-            settings.match = 0f;
-            return settings;
+            return RuntimePanelSettingsProvider.LoadOrCreate();
         }
     }
 }

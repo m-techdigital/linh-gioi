@@ -190,6 +190,7 @@ namespace LinhGioi.UI
             yield return new WaitForEndOfFrame();
             var fileName = id + ".png";
             var path = Path.Combine(_outputDir, fileName);
+            var viewport = _controller != null ? _controller.ViewportMetrics : RuntimeViewportMetrics.FromRoot(null);
             var evidence = new VisualCheckpointEvidence
             {
                 id = id,
@@ -200,8 +201,20 @@ namespace LinhGioi.UI
                 expectation = expectation,
                 width = Screen.width,
                 height = Screen.height,
-                uiViewportWidth = _controller != null ? _controller.LayoutViewportWidth : Screen.width,
-                uiViewportHeight = _controller != null ? _controller.LayoutViewportHeight : Screen.height,
+                requestedWidth = _reviewWidth,
+                requestedHeight = _reviewHeight,
+                screenPixelWidth = viewport.ScreenPixelWidth,
+                screenPixelHeight = viewport.ScreenPixelHeight,
+                uiViewportWidth = viewport.PanelWidth,
+                uiViewportHeight = viewport.PanelHeight,
+                safeAreaPixels = RectSummary(viewport.SafeAreaPixels),
+                safePanelRect = RectSummary(viewport.SafePanelRect),
+                aspectRatio = viewport.AspectRatio.ToString("0.###"),
+                orientation = viewport.Orientation,
+                layoutClass = viewport.LayoutClass,
+                inputClass = viewport.InputClass,
+                panelSettings = _controller != null ? _controller.PanelSettingsSummary : "none",
+                viewportMetrics = viewport.DebugSummary(),
                 status = "STARTED"
             };
             Debug.Log("[LinhGioi] Visual runtime capture started: " + id);
@@ -278,6 +291,8 @@ namespace LinhGioi.UI
                     writer.WriteLine("- Reference mapping: `" + checkpoint.reference + "`");
                     writer.WriteLine("- Expectation: " + checkpoint.expectation);
                     writer.WriteLine("- Status: `" + checkpoint.status + "`");
+                    writer.WriteLine("- Viewport metrics: `" + checkpoint.viewportMetrics + "`");
+                    writer.WriteLine("- Panel settings: `" + checkpoint.panelSettings + "`");
                     writer.WriteLine("- Automated review: " + checkpoint.review);
                     writer.WriteLine("- Review checklist: " + checkpoint.reviewChecklist);
                     writer.WriteLine();
@@ -298,6 +313,12 @@ namespace LinhGioi.UI
             var raw = GetArg(key);
             int parsed;
             return int.TryParse(raw, out parsed) && parsed > 0 ? parsed : fallback;
+        }
+
+        private static string RectSummary(Rect rect)
+        {
+            return Mathf.RoundToInt(rect.x) + "," + Mathf.RoundToInt(rect.y) + " "
+                + Mathf.RoundToInt(rect.width) + "x" + Mathf.RoundToInt(rect.height);
         }
 
         private static void Quit(int exitCode)
@@ -333,8 +354,20 @@ namespace LinhGioi.UI
             public string expectation;
             public int width;
             public int height;
+            public int requestedWidth;
+            public int requestedHeight;
+            public int screenPixelWidth;
+            public int screenPixelHeight;
             public int uiViewportWidth;
             public int uiViewportHeight;
+            public string safeAreaPixels;
+            public string safePanelRect;
+            public string aspectRatio;
+            public string orientation;
+            public string layoutClass;
+            public string inputClass;
+            public string panelSettings;
+            public string viewportMetrics;
             public int bytes;
             public string status;
             public string reason;

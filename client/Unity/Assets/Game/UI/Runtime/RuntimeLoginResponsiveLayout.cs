@@ -7,6 +7,7 @@ namespace LinhGioi.UI
     {
         internal static void Apply(
             RuntimeUiLayoutProfile layout,
+            RuntimeViewportMetrics viewport,
             VisualElement root,
             VisualElement authPanel,
             VisualElement loginStage,
@@ -23,10 +24,26 @@ namespace LinhGioi.UI
             Button loginButton,
             Button serverSwitchButton)
         {
-            RuntimeUiSkin.ApplyPadding(root, layout.RootPaddingHorizontal, layout.RootPaddingHorizontal, layout.RootPaddingTop, layout.RootPaddingBottom);
+            ApplySafeRootPadding(layout, viewport, root);
             ApplyPanel(layout, authPanel);
             ApplyStage(layout, loginStage, loginGateKeeper, loginNpcGrounding, loginNpcGroundingBloom);
             ApplyControls(layout, loginControlColumn, loginLogo, loginHeroTitle, loginHeroCopy, loginCard, loginServerRow, loginServerText, loginButton, serverSwitchButton);
+        }
+
+        private static void ApplySafeRootPadding(RuntimeUiLayoutProfile layout, RuntimeViewportMetrics viewport, VisualElement root)
+        {
+            if (root == null) return;
+            var safe = viewport.SafePanelRect;
+            var leftInset = Mathf.Max(0f, safe.xMin);
+            var topInset = Mathf.Max(0f, safe.yMin);
+            var rightInset = Mathf.Max(0f, viewport.PanelWidth - safe.xMax);
+            var bottomInset = Mathf.Max(0f, viewport.PanelHeight - safe.yMax);
+            RuntimeUiSkin.ApplyPadding(
+                root,
+                Mathf.RoundToInt(leftInset) + layout.RootPaddingHorizontal,
+                Mathf.RoundToInt(rightInset) + layout.RootPaddingHorizontal,
+                Mathf.RoundToInt(topInset) + layout.RootPaddingTop,
+                Mathf.RoundToInt(bottomInset) + layout.RootPaddingBottom);
         }
 
         private static void ApplyPanel(RuntimeUiLayoutProfile layout, VisualElement authPanel)

@@ -66,7 +66,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "Mathf.Clamp(Width * 0.28f, 238f, 272f)",
+        "Mathf.Clamp(Width * 0.54f, 180f, 214f)",
         "Mathf.Clamp(Width * 0.31f, 360f, 420f)",
     )
     require(

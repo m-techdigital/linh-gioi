@@ -15,6 +15,7 @@ namespace LinhGioi.UI
             RuntimeUiLayoutProfile layout,
             bool worldVisible,
             VisualElement worldHud,
+            Label worldHudHeaderTitle,
             VisualElement worldGuidanceCard,
             VisualElement dialoguePanel,
             Label dialogueSpeaker,
@@ -35,6 +36,18 @@ namespace LinhGioi.UI
                 dialogueVisible ? layout.WorldHudDialoguePaddingHorizontal : layout.WorldHudPaddingHorizontal,
                 dialogueVisible ? layout.WorldHudDialoguePaddingVertical : layout.WorldHudPaddingVertical);
             worldHud.style.backgroundColor = RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);
+
+            if (worldHudHeaderTitle != null)
+            {
+                worldHudHeaderTitle.style.fontSize = mobile
+                    ? RuntimeUiTypography.SectionTitleMobileFontSize
+                    : RuntimeUiTypography.SectionTitleFontSize;
+                worldHudHeaderTitle.style.maxWidth = Length.Percent(100);
+                worldHudHeaderTitle.style.minWidth = 0;
+                worldHudHeaderTitle.style.flexShrink = 1;
+                worldHudHeaderTitle.style.whiteSpace = mobile ? WhiteSpace.Normal : WhiteSpace.NoWrap;
+                worldHudHeaderTitle.style.unityTextAlign = TextAnchor.MiddleCenter;
+            }
 
             if (worldGuidanceCard != null)
             {

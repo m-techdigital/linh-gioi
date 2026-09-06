@@ -77,7 +77,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "Mathf.Clamp(Width * 0.26f, 248f, 286f)",
+        "Mathf.Clamp(Width * 0.58f, 190f, 224f)",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0.md",

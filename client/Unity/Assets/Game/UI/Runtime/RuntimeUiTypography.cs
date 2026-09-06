@@ -10,6 +10,7 @@ namespace LinhGioi.UI
         internal const int SectionSigilFontSize = 11;
         internal const int SectionHeadingFontSize = 15;
         internal const int SectionTitleFontSize = 20;
+        internal const int SectionTitleMobileFontSize = 12;
         internal const int BadgeTitleFontSize = 11;
         internal const int BadgeValueFontSize = 12;
 
@@ -32,11 +33,11 @@ namespace LinhGioi.UI
         internal const int WorldDirectionFontSize = 13;
         internal const int WorldObjectiveInitialFontSize = 14;
         internal const int WorldInteractionInitialFontSize = 13;
-        internal const int WorldNameMobileFontSize = 16;
+        internal const int WorldNameMobileFontSize = 13;
         internal const int WorldNameDesktopFontSize = 17;
-        internal const int WorldObjectiveMobileFontSize = 14;
+        internal const int WorldObjectiveMobileFontSize = 11;
         internal const int WorldObjectiveDesktopFontSize = 15;
-        internal const int WorldInteractionMobileFontSize = 14;
+        internal const int WorldInteractionMobileFontSize = 11;
         internal const int WorldInteractionDesktopFontSize = 15;
 
         internal const int DialogueSpeakerInitialFontSize = 17;
