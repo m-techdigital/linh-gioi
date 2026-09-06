@@ -1053,7 +1053,7 @@ namespace LinhGioi.World
 
         private static Vector3 CurrentGateKeeperLabelOffset()
         {
-            if (IsMobileWorldViewport()) return new Vector3(0.06f, 1.82f, -0.02f);
+            if (IsMobileWorldViewport()) return new Vector3(0.04f, 2.02f, -0.03f);
             if (IsNarrowWorldViewport()) return new Vector3(0.10f, 1.78f, -0.02f);
             return new Vector3(-0.04f, 1.72f, -0.02f);
         }
@@ -1068,7 +1068,7 @@ namespace LinhGioi.World
         private static Vector3 CurrentGateKeeperInteractionPromptOffset()
         {
             // Gate Keeper has a taller portrait plus a two-line narrow label, so the prompt needs its own air gap.
-            if (IsMobileWorldViewport()) return new Vector3(-0.10f, 2.72f, -0.08f);
+            if (IsMobileWorldViewport()) return new Vector3(-0.12f, 2.98f, -0.09f);
             if (IsNarrowWorldViewport()) return new Vector3(-0.18f, 2.52f, -0.07f);
             return new Vector3(-0.12f, 2.44f, -0.06f);
         }

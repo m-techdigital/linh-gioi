@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_WORLD_HUD_DESKTOP_FOOTPRINT_TUNE_READY` reduces the steady World Hub HUD footprint on desktop while keeping tablet/mobile HUDs readable and preserving dialogue/combat semantics. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_MOBILE_GATEKEEPER_PROMPT_AIR_GAP_READY` raises the mobile Gate Keeper world label and interaction prompt slightly so the near-NPC prompt has more readable air above the sprites without changing interaction logic. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 
