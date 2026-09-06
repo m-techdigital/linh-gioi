@@ -984,12 +984,13 @@ namespace LinhGioi.World
         {
             var nearGateKeeper = _marker != null && Distance2D(CurrentPosition, GateKeeperPosition) <= 3.1f;
             var nearTrainingStone = _marker != null && Distance2D(CurrentPosition, TrainingStonePosition) <= 3.2f;
-            var nearTargetDummy = _marker != null && Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM;
+            var nearTargetDummy = _marker != null && Distance2D(CurrentPosition, ReadabilityDummyPosition) <= 2.0f;
+            var targetDummyCombatFocus = TargetDummyCombatFocusActive();
             var nearShadowSlime = _marker != null && Distance2D(CurrentPosition, ShadowSlimePosition) <= 2.7f;
 
             WorldLabelPresenter.SetActive(_gateKeeperWorldLabel, _guidedStep == GuidedTrainingStep.FindGateKeeper || nearGateKeeper || DialogueActive);
             WorldLabelPresenter.SetActive(_trainingStoneWorldLabel, _guidedStep == GuidedTrainingStep.FindTrainingStone || nearTrainingStone || InteractionAcknowledged);
-            WorldLabelPresenter.SetActive(_targetDummyWorldLabel, nearTargetDummy || _localCombat.CooldownActive(NowMs()) || _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
+            WorldLabelPresenter.SetActive(_targetDummyWorldLabel, nearTargetDummy || targetDummyCombatFocus || _localCombat.CooldownActive(NowMs()) || _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
             WorldLabelPresenter.SetActive(_shadowSlimeWorldLabel, nearShadowSlime || _shadowSlimeState == PlaceholderSlimeState.AlertWarning || _shadowSlimeState == PlaceholderSlimeState.DissolveQuiet);
             WorldLabelPresenter.SetActive(_spiritGateWorldLabel, _guidedStep == GuidedTrainingStep.Complete);
             ApplyWorldLabelStyles();
@@ -1186,7 +1187,7 @@ namespace LinhGioi.World
 
         private void RefreshTargetDummyReadabilityMarkers(bool vfxActive)
         {
-            var nearTarget = _marker != null && Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM;
+            var nearTarget = TargetDummyCombatFocusActive();
             var coolingDown = _localCombat.CooldownActive(NowMs());
             if (_targetDummyFocusRing != null)
                 _targetDummyFocusRing.gameObject.SetActive(_targetDummyFocusSprite == null && nearTarget && !coolingDown);
@@ -1238,8 +1239,15 @@ namespace LinhGioi.World
         {
             if (_marker == null) return "Dấu hiệu mục tiêu: Chưa vào sân luyện.";
             if (_localCombat.CooldownActive(NowMs())) return "Dấu hiệu mục tiêu: Bia hồi phục màu xanh xám, vòng hồi chiêu lam/vàng đang chạy.";
-            if (Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM) return "Dấu hiệu mục tiêu: Đã chọn, vòng tâm ngắm xanh và vòng vàng đang sáng.";
+            if (TargetDummyCombatFocusActive()) return "Dấu hiệu mục tiêu: Đã chọn, vòng tâm ngắm xanh và vòng vàng đang sáng.";
             return "Dấu hiệu mục tiêu: Chưa chọn, bia ở phía đông ngoài vòng tấn công thử.";
+        }
+
+        private bool TargetDummyCombatFocusActive()
+        {
+            if (_marker == null) return false;
+            if (_guidedStep != GuidedTrainingStep.Complete && !_localCombat.TargetSelected) return false;
+            return Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM;
         }
 
         private string DescribeTargetDummyRangeState()

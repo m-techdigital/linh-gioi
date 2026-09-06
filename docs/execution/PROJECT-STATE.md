@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SESSION_MENU_VIEWPORT_PRIORITY_READY` makes the pause/session menu prioritize core actions across desktop/tablet/mobile viewport profiles. The menu body now lives inside a panel-bounded content viewport, desktop display settings are withheld on common-height profiles instead of clipping, and fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_WORLD_OBJECTIVE_TARGET_SIGNAL_PRIORITY_READY` keeps the world objective signal clean during the first guided step. The target dummy no longer shows selected/focus markers during the Gate Keeper objective unless combat focus is actually active, while target-dummy combat evidence still shows hit feedback; fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 
