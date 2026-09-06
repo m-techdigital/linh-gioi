@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SKILL_PREVIEW_BUTTON_ROW_COMPACT_READY` gives skill preview buttons their own compact metrics, so Wind Slash/Shadow Bind/Spirit Guard fit as one readable row in the World HUD.
+Latest player-visible batch: `LGO_SKILL_PREVIEW_COMBAT_CTA_CONTEXT_READY` changes the local combat CTA to `Thử bia luyện` while a skill preview is active, making preview mode feel distinct from real combat intent while preserving local-only semantics.
 
 Current visual/runtime evidence harness command:
 

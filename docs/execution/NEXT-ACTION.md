@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: skill preview buttons now use compact skill-specific metrics so all three preview actions fit as one readable row in the World HUD; runtime screenshot evidence was reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: combat CTA copy now switches to `Thử bia luyện` during skill preview mode, so the World HUD distinguishes preview feedback from a direct combat intent; runtime screenshot evidence was reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -167,7 +167,7 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`
 
-Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Latest closed marker: `LGO_SKILL_PREVIEW_BUTTON_ROW_COMPACT_READY`.
+Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Latest closed marker: `LGO_SKILL_PREVIEW_COMBAT_CTA_CONTEXT_READY`.
 
 ## Current blocker
 

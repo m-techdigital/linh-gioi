@@ -60,7 +60,8 @@ def main() -> int:
         "LGO Runtime Combat HUD Presentation Helper v1",
         "ApplyCombatButtonSkin(localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture",
         "CombatPlaceholderAssets.CombatButtonNormalTexture, coolingDown);",
-        'localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
+        'localCombatButton.text = coolingDown ? "Hồi chiêu" : previewingSkill ? "Thử bia luyện" : "Tấn công thử";',
+        'var previewingSkill = ContainsAny(feedbackText, "Đang xem");',
         "Đang hồi chiêu: bấm vẫn cho phản hồi từ chối hồi chiêu",
     )
     require(

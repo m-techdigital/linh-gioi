@@ -31,10 +31,13 @@ namespace LinhGioi.UI
             if (localCombatButton != null)
             {
                 ApplyCombatButtonSkin(localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture, coolingDown);
-                localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";
+                var previewingSkill = ContainsAny(feedbackText, "Đang xem");
+                localCombatButton.text = coolingDown ? "Hồi chiêu" : previewingSkill ? "Thử bia luyện" : "Tấn công thử";
                 localCombatButton.tooltip = coolingDown
                     ? "Đang hồi chiêu: bấm vẫn cho phản hồi từ chối hồi chiêu; đây là nguyên mẫu cục bộ, không phải chiến đấu thật."
-                    : "Gửi ý định Chém Gió vào bia luyện tập; chỉ là phản hồi nguyên mẫu.";
+                    : previewingSkill
+                        ? "Rời xem thử kỹ năng để gửi ý định Chém Gió vào bia luyện tập; chỉ là phản hồi nguyên mẫu."
+                        : "Gửi ý định Chém Gió vào bia luyện tập; chỉ là phản hồi nguyên mẫu.";
             }
 
             var warning = ContainsAny(feedbackText, "Ngoài tầm", "Chưa chọn", "Đang hồi chiêu");

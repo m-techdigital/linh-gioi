@@ -103,7 +103,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
-        'localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
+        'localCombatButton.text = coolingDown ? "Hồi chiêu" : previewingSkill ? "Thử bia luyện" : "Tấn công thử";',
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",
