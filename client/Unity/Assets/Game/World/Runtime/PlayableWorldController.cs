@@ -435,7 +435,7 @@ namespace LinhGioi.World
                 CreateMarkerCube("LGO Target Dummy Non Combat Base", ReadabilityDummyPosition + new Vector3(0f, -0.58f, 0f), RuntimeArtCatalog.Spirit, new Vector3(1.25f, 0.045f, 1.25f));
             }
 
-            if (LgoVisualAssetRegistryV2.ShadowSlimeAlt == null)
+            if (LgoVisualAssetRegistryV3B.ShadowSlime == null)
             {
                 CreateMarkerCube("LGO Shadow Slime Non Combat Marker", ShadowSlimePosition, RuntimeArtCatalog.Shadow, new Vector3(1.4f, 0.8f, 1.4f));
                 CreateMarkerCube("LGO Shadow Slime Warning Plinth", ShadowSlimePosition + new Vector3(0f, -0.2f, 0f), RuntimeArtCatalog.Danger, new Vector3(1.8f, 0.045f, 1.8f));
@@ -837,7 +837,7 @@ namespace LinhGioi.World
             if (_shadowSlimeSprite == null)
             {
                 WorldProceduralVisuals.CreateGroundShadowSprite("LGO Shadow Slime Grounding Shadow V3B", ShadowSlimePosition + Vector3.up * 0.018f, new Vector3(0.88f, 0.42f, 1f), 2);
-                _shadowSlimeSprite = CreateBillboardSprite("LGO Shadow Slime Runtime Sprite V3B", LgoVisualAssetRegistryV3B.ShadowSlime ?? LgoVisualAssetRegistryV2.ShadowSlimeAlt, ShadowSlimePosition + Vector3.up * 0.25f, new Vector3(0.74f, 0.74f, 1f), 5);
+                _shadowSlimeSprite = CreateBillboardSprite("LGO Shadow Slime Runtime Sprite V3B", LgoVisualAssetRegistryV3B.ShadowSlime, ShadowSlimePosition + Vector3.up * 0.25f, new Vector3(0.74f, 0.74f, 1f), 5);
             }
             EnsureWorldSetDressing();
             if (_gateKeeperWorldLabel == null)

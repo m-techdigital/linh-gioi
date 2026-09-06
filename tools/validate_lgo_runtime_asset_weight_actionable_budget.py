@@ -108,8 +108,8 @@ def main() -> int:
         "Require per-frame animation budget",
         "roles in watch band >=85% budget: 7",
         "V2 fallback Resources payload: 2389.7 KB across 65 images",
-        "referenced V2 registry properties: 20",
-        "`ShadowSlimeAlt`",
+        "referenced V2 registry properties: 19",
+        "`TargetSelectedBlue`",
     ):
         if marker not in report:
             ERRORS.append(f"runtime asset report missing marker: {marker}")
