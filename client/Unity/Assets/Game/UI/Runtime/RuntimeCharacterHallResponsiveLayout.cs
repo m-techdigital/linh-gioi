@@ -28,7 +28,6 @@ namespace LinhGioi.UI
             // LGO Character Hall Selected Compact Header Contract v1: selected mobile follows the target sheet by prioritizing roster/hero/actions over repeated screen prose.
             SetDisplayed(lobbyHeaderBlock, !(layout.IsMobile && hasSelectedCharacter));
             ApplyIntro(layout, lobbyIntro, hasSelectedCharacter);
-            ApplyCreatePanelOrder(layout, lobbyPanel, lobbyContent, createPanel, hasSelectedCharacter);
             RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter);
             if (emptyCharacterCard != null)
                 RuntimeUiFactory.ApplyEmptyCharacterCardDensity(emptyCharacterCard, layout.CharacterHallDensity);
@@ -36,7 +35,6 @@ namespace LinhGioi.UI
             RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);
             RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width, hasSelectedCharacter);
             RuntimeUiFactory.ApplyCharacterSelectionStage(lobbyContent, characterList, selectedPreview, layout, hasSelectedCharacter);
-            ApplyCreatePanel(layout, width, createPanel);
         }
 
         internal static void ApplyCreateFormState(
@@ -56,159 +54,47 @@ namespace LinhGioi.UI
             Button enterWorldButton)
         {
             var collapsed = hasSelectedCharacter && !createFormExpanded;
-            var compactStandaloneCreate = !hasSelectedCharacter && !isMobileProfile;
-            var desktopStandaloneCreate = compactStandaloneCreate && !layout.IsTablet;
-            if (createTitle != null)
-            {
-                createTitle.text = collapsed ? "Sẵn sàng" : hasSelectedCharacter ? "Tạo thêm tu sĩ" : "Khai mở tu sĩ";
-                createTitle.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
-                createTitle.style.marginBottom = collapsed ? 2 : compactStandaloneCreate ? 4 : 8;
-                createTitle.style.marginRight = desktopStandaloneCreate ? 18 : 0;
-                createTitle.style.unityTextAlign = collapsed && !isMobileProfile ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
-                createTitle.style.width = compactStandaloneCreate && !desktopStandaloneCreate ? Length.Percent(100) : StyleKeyword.Auto;
-            }
-            if (createHint != null)
-            {
-                createHint.text = collapsed
-                    ? "Tu sĩ đã sẵn sàng."
-                    : hasSelectedCharacter
-                        ? "Nhập danh xưng mới nếu muốn tạo thêm hồ sơ."
-                        : "Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.";
-                createHint.style.display = DisplayStyle.None;
-            }
-            if (characterName != null)
-            {
-                characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
-                characterName.style.alignSelf = !isMobileProfile ? Align.Center : Align.Stretch;
-                characterName.style.width = Length.Percent(100);
-                characterName.style.minWidth = 0;
-            }
-            if (classId != null) classId.style.display = DisplayStyle.None;
-            if (createPanel != null)
-            {
-                // LGO Character Hall Standalone Create Viewport Fit v1: desktop/tablet empty-state form shares one compact row so it stays inside the safe panel height.
-                createPanel.style.flexDirection = collapsed && !isMobileProfile || compactStandaloneCreate ? FlexDirection.Row : FlexDirection.Column;
-                createPanel.style.flexWrap = compactStandaloneCreate && !desktopStandaloneCreate ? Wrap.Wrap : Wrap.NoWrap;
-                createPanel.style.alignItems = collapsed && !isMobileProfile || compactStandaloneCreate ? Align.Center : Align.Stretch;
-                createPanel.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
-                if (collapsed)
-                    RuntimeUiSkin.ApplyFloatingActionBarFrame(createPanel);
-                else
-                    RuntimeUiSkin.ApplyCharacterCreateFrame(createPanel);
-                createPanel.style.width = layout.IsMobile
-                    ? collapsed ? Mathf.Clamp(layout.Width * 0.34f, 300f, 336f) : Mathf.Clamp(layout.Width * 0.36f, 320f, 360f)
-                    : !hasSelectedCharacter && !isMobileProfile ? Length.Percent(RuntimeUiSizing.CharacterCreateStandalonePanelWidthPercent) : Length.Percent(100);
-                createPanel.style.opacity = collapsed ? (isMobileProfile ? 0.72f : 0.82f) : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
-                createPanel.style.minHeight = collapsed ? (isMobileProfile ? 62 : 66) : desktopStandaloneCreate ? 100 : compactStandaloneCreate ? 104 : RuntimeUiSizing.CharacterCreatePanelMinHeight;
-                createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 72 : 78) : desktopStandaloneCreate ? 118 : compactStandaloneCreate ? 126 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
-                if (layout.IsMobile && hasSelectedCharacter)
-                {
-                    // LGO Character Hall Selected Action Anchor v1: selected state becomes a stable action dock instead of a floating mid-screen card.
-                    RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface(
-                        createPanel,
-                        RuntimeUiOverlayPlacement.Right,
-                        collapsed ? layout.CharacterHallSelectedDockWidth : layout.CharacterHallCreateOverlayWidth,
-                        collapsed ? 72 : RuntimeUiSizing.CharacterCreatePanelMaxHeight,
-                        layout.CharacterHallSelectedDockRight,
-                        layout.CharacterHallSelectedDockBottom);
-                }
-                else if (collapsed && !layout.IsTablet)
-                {
-                    // LGO Character Hall Selected NonMobile Dock Base v1: selected actions overlay the panel bottom instead of stretching the shell flow.
-                    RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface(
-                        createPanel,
-                        RuntimeUiOverlayPlacement.Center,
-                        layout.CharacterHallSelectedActionDockWidth,
-                        layout.CharacterHallSelectedActionDockMaxHeight,
-                        layout.CharacterHallSelectedActionDockInsetHorizontal,
-                        layout.CharacterHallSelectedActionDockBottom);
-                    // The dock is a child of the hall, so its available width is the parent content box.
-                    createPanel.style.left = layout.LobbyPanelPaddingHorizontal;
-                    createPanel.style.right = layout.LobbyPanelPaddingHorizontal;
-                    createPanel.style.width = StyleKeyword.Auto;
-                    createPanel.style.maxWidth = Length.Percent(100);
-                }
-                else if (!layout.IsMobile)
-                {
-                    createPanel.style.position = Position.Relative;
-                    createPanel.style.left = 0;
-                    createPanel.style.right = StyleKeyword.Auto;
-                    createPanel.style.top = StyleKeyword.Auto;
-                    createPanel.style.bottom = StyleKeyword.Auto;
-                }
-            }
+            SetDisplayed(createTitle, !collapsed);
+            SetDisplayed(createHint, false);
+            SetDisplayed(characterName, !collapsed);
+            SetDisplayed(classId, false);
+            createTitle.text = hasSelectedCharacter ? "Tạo thêm tu sĩ" : "Tạo nhân vật";
+            createTitle.style.fontSize = RuntimeUiTypography.SectionTitleMobileFontSize;
+            createTitle.style.whiteSpace = WhiteSpace.Normal;
+            createTitle.style.marginBottom = 8;
+            createPanel.style.position = Position.Relative;
+            createPanel.style.left = StyleKeyword.Auto;
+            createPanel.style.right = StyleKeyword.Auto;
+            createPanel.style.top = StyleKeyword.Auto;
+            createPanel.style.bottom = StyleKeyword.Auto;
+            createPanel.style.width = Length.Percent(100);
+            createPanel.style.minWidth = 0;
+            createPanel.style.minHeight = 0;
+            createPanel.style.maxHeight = StyleKeyword.None;
+            createPanel.style.flexDirection = FlexDirection.Column;
+            createPanel.style.flexWrap = Wrap.NoWrap;
+            createPanel.style.flexGrow = 1;
+            createPanel.style.flexShrink = 1;
+            createPanel.style.alignItems = Align.Stretch;
+            createPanel.style.alignSelf = Align.Stretch;
+            createPanel.style.opacity = 1;
+            createPanel.style.marginTop = 0;
+            RuntimeUiSkin.ApplyPadding(createPanel, 0, 0);
+            RuntimeUiSkin.ApplyFloatingActionBarFrame(createPanel);
             RuntimeUiOverflowGuard.ApplyModalBody(createBody);
-            RuntimeUiOverflowGuard.ApplyModalFooter(createFooter, compactStandaloneCreate ? 0 : 6);
-            if (createBody != null)
-            {
-                createBody.style.flexDirection = FlexDirection.Column;
-                createBody.style.alignItems = compactStandaloneCreate ? Align.Center : Align.Stretch;
-                createBody.style.minWidth = 0;
-                // A horizontal form reserves the footer first; the body receives the remaining width.
-                createBody.style.width = compactStandaloneCreate ? StyleKeyword.Auto : Length.Percent(100);
-                createBody.style.flexBasis = compactStandaloneCreate ? 0 : StyleKeyword.Auto;
-                if (!collapsed)
-                {
-                    createBody.style.flexGrow = compactStandaloneCreate ? 1 : 0;
-                    createBody.style.flexShrink = compactStandaloneCreate ? 1 : 0;
-                }
-            }
-            if (createFooter != null)
-            {
-                createFooter.style.width = compactStandaloneCreate ? 180 : Length.Percent(100);
-                createFooter.style.maxWidth = compactStandaloneCreate ? 180 : Length.Percent(100);
-                createFooter.style.marginLeft = compactStandaloneCreate ? 12 : 0;
-                if (collapsed && !layout.IsMobile && !layout.IsTablet)
-                {
-                    createFooter.style.maxWidth = layout.CharacterHallSelectedActionDockWidth;
-                    createFooter.style.alignSelf = Align.Center;
-                }
-            }
-            if (characterActionRow != null)
-            {
-                characterActionRow.style.marginLeft = collapsed && !isMobileProfile ? 0 : compactStandaloneCreate ? 12 : 0;
-                characterActionRow.style.marginTop = collapsed && isMobileProfile ? 0 : compactStandaloneCreate ? 0 : 6;
-                characterActionRow.style.flexGrow = collapsed && !isMobileProfile || compactStandaloneCreate ? 1 : 0;
-                characterActionRow.style.justifyContent = collapsed && !isMobileProfile || !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;
-                if (hasSelectedCharacter)
-                {
-                    if (createFormExpanded)
-                        ApplySelectedActionRatio(layout, characterActionRow, enterWorldButton, createButton);
-                    else
-                        ApplySelectedActionRatio(layout, characterActionRow, createButton, enterWorldButton);
-                }
-                else
-                    RuntimeUiOverflowGuard.ApplyResponsiveColumns(characterActionRow, 1, compactStandaloneCreate ? 0 : 6, createButton, enterWorldButton);
-            }
-        }
-
-        private static void ApplySelectedActionRatio(RuntimeUiLayoutProfile layout, VisualElement characterActionRow, Button createButton, Button enterWorldButton)
-        {
-            // LGO Character Hall Selected CTA Ratio Base v1: selected state gives the primary enter CTA visual ownership while keeping secondary create inside the same bounded row.
-            if (characterActionRow == null || createButton == null || enterWorldButton == null) return;
-            RuntimeUiOverflowGuard.ApplyBoundedActionRow(characterActionRow);
-            characterActionRow.style.flexDirection = FlexDirection.Row;
-            characterActionRow.style.flexWrap = Wrap.NoWrap;
-            characterActionRow.style.alignItems = Align.Center;
-            characterActionRow.style.justifyContent = Justify.Center;
-
-            ApplySelectedActionButton(enterWorldButton, layout.IsMobile ? 64f : 66f, 0f, layout.IsMobile ? RuntimeUiButtonTier.Primary : RuntimeUiButtonTier.Primary);
-            ApplySelectedActionButton(createButton, layout.IsMobile ? 32f : 30f, 6f, layout.IsMobile ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
-        }
-
-        private static void ApplySelectedActionButton(Button button, float widthPercent, float marginLeft, RuntimeUiButtonTier tier)
-        {
-            RuntimeUiSkin.ApplyButtonTier(button, tier);
-            RuntimeUiOverflowGuard.ApplyButton(button);
-            button.style.width = Length.Percent(widthPercent);
-            button.style.maxWidth = Length.Percent(widthPercent);
-            button.style.minWidth = 0;
-            button.style.flexBasis = 0;
-            button.style.flexGrow = 0;
-            button.style.flexShrink = 1;
-            button.style.marginLeft = marginLeft;
-            button.style.marginRight = 0;
-            button.style.whiteSpace = WhiteSpace.NoWrap;
+            createBody.style.flexDirection = FlexDirection.Column;
+            createBody.style.minWidth = 0;
+            createBody.style.flexGrow = 1;
+            createBody.style.width = Length.Percent(100);
+            characterName.style.width = Length.Percent(100);
+            characterName.style.minWidth = 0;
+            RuntimeUiSkin.ApplyMargin(characterName, 0, 0, 0, 0);
+            RuntimeUiOverflowGuard.ApplyModalFooter(createFooter, 8);
+            createFooter.style.width = Length.Percent(100);
+            createFooter.style.maxWidth = Length.Percent(100);
+            createFooter.style.marginLeft = 0;
+            createFooter.style.marginTop = StyleKeyword.Auto;
+            RuntimeUiOverflowGuard.ApplyResponsiveColumns(characterActionRow, 2, 6, createButton, enterWorldButton);
         }
 
         internal static void ApplyActionHierarchy(
@@ -220,55 +106,31 @@ namespace LinhGioi.UI
             Button enterWorldButton)
         {
             if (characterActionRow == null || createButton == null || enterWorldButton == null) return;
-            var mobileSelected = isMobileProfile && hasSelectedCharacter;
-            characterActionRow.Clear();
-            if (hasSelectedCharacter)
-            {
-                RuntimeUiFactory.ApplyCompactButtonPriority(enterWorldButton, !createFormExpanded);
-                RuntimeUiFactory.ApplyCompactButtonPriority(createButton, createFormExpanded);
-                // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state on every profile.
-                enterWorldButton.style.display = DisplayStyle.Flex;
-                createButton.style.display = DisplayStyle.Flex;
-                enterWorldButton.text = "Vào sân luyện";
-                RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Primary);
-                enterWorldButton.style.marginTop = mobileSelected ? RuntimeUiSpacing.BaseButtonMarginTop : 0;
-                enterWorldButton.style.opacity = 1f;
-                enterWorldButton.tooltip = "Bước qua Linh Môn vào sân luyện.";
-                createButton.text = createFormExpanded ? "Tạo tu sĩ" : "Tạo thêm";
-                RuntimeUiSkin.ApplyButtonTier(createButton, mobileSelected ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
-                createButton.style.opacity = 0.82f;
-                if (createFormExpanded)
-                {
-                    enterWorldButton.text = "Hủy";
-                    enterWorldButton.tooltip = "Đóng form và giữ nhân vật đang chọn.";
-                    RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Standard);
-                    RuntimeUiSkin.ApplyButtonTier(createButton, RuntimeUiButtonTier.Primary);
-                    createButton.style.opacity = 1f;
-                    characterActionRow.Add(createButton);
-                    characterActionRow.Add(enterWorldButton);
-                    return;
-                }
-                characterActionRow.Add(enterWorldButton);
-                characterActionRow.Add(createButton);
-                return;
-            }
-
-            createButton.text = "Tạo tu sĩ";
+            var cancelling = hasSelectedCharacter && createFormExpanded;
+            var entering = hasSelectedCharacter && !createFormExpanded;
+            createButton.text = entering ? "Tạo thêm" : "Tạo tu sĩ";
+            enterWorldButton.text = cancelling ? "Hủy" : "Vào sân luyện";
+            enterWorldButton.tooltip = cancelling ? "Đóng form và giữ nhân vật đang chọn."
+                : hasSelectedCharacter ? "Bước qua Linh Môn vào sân luyện." : "Chọn hoặc tạo tu sĩ trước khi vào sân luyện.";
             createButton.style.display = DisplayStyle.Flex;
-            RuntimeUiSkin.ApplyButtonTier(createButton, RuntimeUiButtonTier.Standard);
-            createButton.style.opacity = 1f;
-            enterWorldButton.text = "Vào sân luyện";
-            enterWorldButton.style.display = DisplayStyle.None;
-            RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Primary);
-            enterWorldButton.style.opacity = 0.46f;
-            enterWorldButton.tooltip = "Chọn hoặc tạo tu sĩ trước khi vào sân luyện.";
-            characterActionRow.Add(createButton);
+            enterWorldButton.style.display = DisplayStyle.Flex;
+            createButton.style.opacity = 1;
+            enterWorldButton.style.opacity = hasSelectedCharacter ? 1 : 0.46f;
+            RuntimeUiFactory.ApplyCompactButtonPriority(createButton, !entering);
+            RuntimeUiFactory.ApplyCompactButtonPriority(enterWorldButton, entering);
+            RuntimeUiSkin.ApplyButtonTier(createButton, RuntimeUiButtonTier.Compact);
+            RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Compact);
+            characterActionRow.Clear();
+            characterActionRow.Add(entering ? enterWorldButton : createButton);
+            characterActionRow.Add(entering ? createButton : enterWorldButton);
+            RuntimeUiOverflowGuard.ApplyResponsiveColumns(characterActionRow, 2, 6,
+                entering ? enterWorldButton : createButton, entering ? createButton : enterWorldButton);
         }
 
         internal static void ApplySelectedDetails(RuntimeUiLayoutProfile layout, bool hasSelectedCharacter, Label selectedStatus, Label selectedObjective)
         {
-            // LGO Character Hall Selected Detail Collapse Base v1: non-mobile selected demo prioritizes hero plus CTA dock over duplicate status rows.
-            var showDetails = !hasSelectedCharacter || layout.IsMobile;
+            // The form or selected profile owns this column; do not repeat onboarding prose above it.
+            var showDetails = false;
             if (selectedStatus != null) selectedStatus.style.display = showDetails ? DisplayStyle.Flex : DisplayStyle.None;
             if (selectedObjective != null) selectedObjective.style.display = showDetails ? DisplayStyle.Flex : DisplayStyle.None;
         }
@@ -276,7 +138,10 @@ namespace LinhGioi.UI
         internal static void ApplyCreatePreviewVisibility(VisualElement preview, bool editingInPreviewColumn)
         {
             if (preview != null)
-                preview.style.visibility = editingInPreviewColumn ? Visibility.Hidden : Visibility.Visible;
+            {
+                preview.style.visibility = Visibility.Visible;
+                SetDisplayed(preview.Q<VisualElement>("LGO Character Hall Selected Profile Hero V3B"), !editingInPreviewColumn);
+            }
         }
 
         internal static void ApplyCreateValidationFeedback(Label title, Label hint, string error)
@@ -327,58 +192,5 @@ namespace LinhGioi.UI
             emptyCharacterHint.style.fontSize = layout.IsMobile ? RuntimeUiTypography.EmptyCharacterHintMobileFontSize : RuntimeUiTypography.EmptyCharacterHintDesktopFontSize;
         }
 
-        private static void ApplyCreatePanel(RuntimeUiLayoutProfile layout, int width, VisualElement createPanel)
-        {
-            if (createPanel == null) return;
-            if (layout.IsMobile)
-                RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
-                    createPanel,
-                    RuntimeUiOverlayPlacement.Right,
-                    RuntimeUiOverlayVerticalPlacement.Top,
-                    layout.CharacterHallCreateOverlayWidth,
-                    174,
-                    layout.CharacterHallCreateOverlayRight,
-                    layout.CharacterHallCreateOverlayTop);
-            else
-            {
-                createPanel.style.position = Position.Relative;
-                createPanel.style.left = 0;
-                createPanel.style.right = StyleKeyword.Auto;
-                createPanel.style.top = StyleKeyword.Auto;
-                createPanel.style.bottom = StyleKeyword.Auto;
-            }
-            RuntimeUiSkin.ApplyPadding(createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
-            createPanel.style.marginTop = layout.CreatePanelMarginTop;
-            createPanel.style.maxHeight = layout.IsMobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
-        }
-
-        private static void ApplyCreatePanelOrder(
-            RuntimeUiLayoutProfile layout,
-            VisualElement lobbyPanel,
-            VisualElement lobbyContent,
-            VisualElement createPanel,
-            bool hasSelectedCharacter)
-        {
-            if (layout.IsMobile || lobbyPanel == null || lobbyContent == null || createPanel == null) return;
-            if (lobbyContent.parent != lobbyPanel || createPanel.parent != lobbyPanel) return;
-
-            var createFirst = !hasSelectedCharacter;
-            var contentIndex = lobbyPanel.IndexOf(lobbyContent);
-            var createIndex = lobbyPanel.IndexOf(createPanel);
-            if (contentIndex < 0 || createIndex < 0) return;
-            if (createFirst && createIndex < contentIndex) return;
-            if (!createFirst && createIndex > contentIndex) return;
-
-            createPanel.RemoveFromHierarchy();
-            contentIndex = lobbyPanel.IndexOf(lobbyContent);
-            if (contentIndex < 0)
-            {
-                lobbyPanel.Add(createPanel);
-                return;
-            }
-
-            var targetIndex = createFirst ? contentIndex : Mathf.Min(contentIndex + 1, lobbyPanel.childCount);
-            lobbyPanel.Insert(targetIndex, createPanel);
-        }
     }
 }

@@ -61,7 +61,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
         "LGO Runtime World HUD Responsive Layout Helper v1",
         "LGO World HUD Dialogue Viewport Polish v1",
-        "!(dialogueVisible || skillPreviewActive || evidenceHidesGuidance)",
+        "!(dialogueVisible || skillPreviewActive || combatPanelVisible || evidenceHidesGuidance)",
         "layout.WorldHudMaxWidth(false)",
         "ApplyMobileHudChildConstraint(layout, worldGuidanceCard)",
         "ApplyMobileHudChildConstraint(layout, skillPreviewPanel)",

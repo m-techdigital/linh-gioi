@@ -347,7 +347,7 @@ namespace LinhGioi.UI
             SetDisplayed(position, showPosition && !focusMode);
             SetDisplayed(worldDebugStrip, !compactWorld);
             SetDisplayed(worldMeta, !compactWorld);
-            SetDisplayed(worldGuidanceCard, !(dialogueVisible || skillPreviewActive || evidenceHidesGuidance));
+            SetDisplayed(worldGuidanceCard, !(dialogueVisible || skillPreviewActive || combatPanelVisible || evidenceHidesGuidance));
             SetDisplayed(worldArea, !compactWorld);
             SetDisplayed(worldStep, showHints && !compactWorld);
             SetDisplayed(worldDirection, showHints && !(mobileProfile && !dialogueVisible));

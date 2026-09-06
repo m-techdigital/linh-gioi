@@ -22,6 +22,22 @@ class JsonFilePlayerProfileStoreTest {
     Path tempDir;
 
     @Test
+    void limitsEachAccountToThreeCharactersAcrossReload() {
+        JsonFilePlayerProfileStore store = new JsonFilePlayerProfileStore(tempDir, clock);
+        String account = store.loginDev("three-slots", "Slots").account().accountId();
+        for (int slot = 1; slot <= 3; slot++) {
+            store.createCharacter(new CreateCharacterCommand(account, "Hero" + slot, "class.sword"));
+        }
+        JsonFilePlayerProfileStore reloaded = new JsonFilePlayerProfileStore(tempDir, clock);
+        assertThrows(IllegalArgumentException.class,
+                () -> reloaded.createCharacter(new CreateCharacterCommand(account, "FourthHero", "class.sword")));
+        assertEquals(3, new JsonFilePlayerProfileStore(tempDir, clock).listCharacters(account).size());
+        String other = reloaded.loginDev("other-slots", "Other").account().accountId();
+        reloaded.createCharacter(new CreateCharacterCommand(other, "OtherHero", "class.sword"));
+        assertEquals(1, reloaded.listCharacters(other).size());
+    }
+
+    @Test
     void devLoginCreatesStableAccountWithoutPersistingRawDevKey() throws Exception {
         JsonFilePlayerProfileStore store = new JsonFilePlayerProfileStore(tempDir, clock);
 

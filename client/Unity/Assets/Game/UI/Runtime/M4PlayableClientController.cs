@@ -592,7 +592,7 @@ namespace LinhGioi.UI
             _lobbyContent.Add(_selectedPreview);
 
             _createPanel = NewCharacterCreatePanel(layout);
-            _lobbyPanel.Add(_createPanel);
+            _selectedPreview.Add(_createPanel);
 
             _createTitle = NewSectionTitle("Tạo Tu Sĩ");
             _createPanel.Add(_createTitle);
@@ -753,13 +753,13 @@ namespace LinhGioi.UI
             _worldTouchActionCluster = NewWorldTouchActionCluster();
             _worldTouchPrimaryActionButton = NewWorldTouchActionButton("Đánh", TriggerWorldTouchPrimaryAction);
             _worldTouchPrimaryActionButton.name = "LGO World Touch Primary Combat Button";
-            _worldTouchWindSlashButton = NewWorldTouchActionButton("Chém", () => PreviewSkill("Wind Slash", "Chém Gió"));
+            _worldTouchWindSlashButton = NewWorldTouchActionButton("Chém", TriggerLocalCombat);
             _worldTouchShadowBindButton = NewWorldTouchActionButton("Trói", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
             _worldTouchMenuButton = NewWorldTouchActionButton("Menu", ToggleSessionMenu);
             _worldTouchSpiritGuardButton = NewWorldTouchActionButton("Hộ Linh", () => PreviewSkill("Spirit Guard", "Hộ Linh"));
             _worldTouchSpiritGuardButton.tooltip = "Xem thử kỹ năng Hộ Linh.";
             _worldTouchPrimaryActionButton.tooltip = "Tấn công thử bia luyện cục bộ.";
-            _worldTouchWindSlashButton.tooltip = "Xem thử kỹ năng Chém Gió.";
+            _worldTouchWindSlashButton.tooltip = "Thi triển Chém Gió lên bia luyện cục bộ; cần trong tầm và hết hồi chiêu.";
             _worldTouchShadowBindButton.tooltip = "Xem thử kỹ năng Trói Bóng.";
             _worldTouchMenuButton.tooltip = "Mở menu phiên.";
             _worldTouchActionCluster.Add(_worldTouchWindSlashButton);
@@ -886,29 +886,21 @@ namespace LinhGioi.UI
         {
             _characters = await _client.ListCharactersAsync(_accountState.accountId, _shutdown.Token);
             _characterList.Clear();
-            _characterList.Add(NewCharacterHallListHeading(_characters.Length == 0 ? "Chưa có nhân vật. Tạo tu sĩ đầu tiên." : "Danh sách tu sĩ"));
-            if (_characters.Length == 0)
-            {
-                var layout = CurrentLayoutProfile();
-                var emptyTitle = NewStatusLabel("Tạo tu sĩ đầu tiên", RuntimeArtCatalog.Gold);
-                var empty = NewMutedLabel("Sau khi tạo, hồ sơ sẽ xuất hiện tại đây để chọn và vào sân luyện.");
-                var emptyCard = NewEmptyCharacterCard(layout, emptyTitle, empty);
-                _emptyCharacterCard = emptyCard;
-                _emptyCharacterHint = empty;
-                _characterList.Add(emptyCard);
-                SelectCharacter(null);
-                return;
-            }
             _emptyCharacterCard = null;
             _emptyCharacterHint = null;
-            foreach (var character in _characters)
+            for (var slot = 0; slot < 3; slot++)
             {
-                var captured = character;
-                var button = NewListButton(character.name, "Kiếm tu sơ nhập", () => SelectCharacter(captured));
-                button.userData = character.characterId;
+                var captured = slot < _characters.Length ? _characters[slot] : null;
+                var button = NewListButton(captured?.name ?? "Ô nhân vật " + (slot + 1),
+                    captured == null ? "Chưa tạo nhân vật" : "Kiếm tu sơ nhập", () => SelectCharacter(captured));
+                button.userData = captured?.characterId ?? "empty-slot-" + slot;
+                button.AddToClassList("lgo-character-slot");
+                button.style.flexGrow = 1;
+                button.style.flexBasis = 0;
                 _characterList.Add(button);
             }
-            SelectCharacter(Array.Find(_characters, character => character.characterId == _selectedCharacter?.characterId) ?? _characters[0]);
+            SelectCharacter(Array.Find(_characters, character => character.characterId == _selectedCharacter?.characterId)
+                ?? (_characters.Length > 0 ? _characters[0] : null));
         }
 
         private async Task CreateCharacterAsync()
@@ -992,6 +984,12 @@ namespace LinhGioi.UI
 
         private void UpdateSelectedPreview(CharacterResponse character)
         {
+            var portrait = _root.Q<VisualElement>("LGO Character Hall V3B Cultivator Portrait");
+            if (portrait != null)
+            {
+                portrait.style.unityBackgroundImageTintColor = character == null ? Color.black : Color.white;
+                portrait.style.opacity = character == null ? 0.45f : 1f;
+            }
             if (character == null)
             {
                 _selectedName.text = "Chưa chọn nhân vật";
@@ -1043,6 +1041,7 @@ namespace LinhGioi.UI
 
         private void OnCreateCharacterAction()
         {
+            if (_characters.Length >= 3) return;
             if (_selectedCharacter != null && !_createFormExpanded)
             {
                 // LGO Character Hall Selected Create Collapse v1: selected state protects Enter World as the primary path.
@@ -1090,7 +1089,7 @@ namespace LinhGioi.UI
                 _createButton,
                 _enterWorldButton);
             ApplyCharacterHallActionHierarchy();
-            RuntimeCharacterHallResponsiveLayout.ApplyCreatePreviewVisibility(_selectedPreview, _isMobileProfile && _createFormExpanded);
+            RuntimeCharacterHallResponsiveLayout.ApplyCreatePreviewVisibility(_selectedPreview, _createFormExpanded);
             RuntimeCharacterHallResponsiveLayout.ApplyCreateValidationFeedback(_createTitle, _createHint, _characterNameError);
         }
 
@@ -1176,7 +1175,7 @@ namespace LinhGioi.UI
         {
             _characterName.SetEnabled(enabled && (_selectedCharacter == null || _createFormExpanded));
             _classId.SetEnabled(enabled);
-            _createButton.SetEnabled(enabled);
+            _createButton.SetEnabled(enabled && _characters.Length < 3);
             _enterWorldButton.SetEnabled(enabled && _selectedCharacter != null);
         }
 
@@ -1192,7 +1191,7 @@ namespace LinhGioi.UI
             _loginButton.SetEnabled(!busy);
             if (_accountState != null)
             {
-                _createButton.SetEnabled(!busy);
+                _createButton.SetEnabled(!busy && _characters.Length < 3);
                 _enterWorldButton.SetEnabled(!busy && _selectedCharacter != null);
                 _savePositionButton.SetEnabled(!busy);
                 _backButton.SetEnabled(!busy);

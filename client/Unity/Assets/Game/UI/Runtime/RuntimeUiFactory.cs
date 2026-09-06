@@ -30,9 +30,12 @@ namespace LinhGioi.UI
             preview.style.flexGrow = 1;
             RuntimeUiSkin.ApplyPadding(preview, RuntimeUiSpacing.PreviewPanelPaddingHorizontal, RuntimeUiSpacing.PreviewPanelPaddingVertical);
             RuntimeUiSkin.ApplyPreviewPanelFrame(preview);
-            var sigil = new Label(sigilText);
-            RuntimeUiSkin.ApplyText(sigil, RuntimeArtCatalog.Spirit, RuntimeUiTypography.SectionSigilFontSize, true);
-            preview.Add(sigil);
+            if (!string.IsNullOrWhiteSpace(sigilText))
+            {
+                var sigil = new Label(sigilText);
+                RuntimeUiSkin.ApplyText(sigil, RuntimeArtCatalog.Gold, RuntimeUiTypography.SectionSigilFontSize, true);
+                preview.Add(sigil);
+            }
             if (!string.IsNullOrWhiteSpace(headingText))
             {
                 var heading = new Label(headingText);
@@ -62,6 +65,7 @@ namespace LinhGioi.UI
             topRule.style.marginBottom = 8;
             shell.Add(topRule);
             var titleLabel = NewSectionTitle(title);
+            titleLabel.style.color = RuntimeArtCatalog.Gold;
             titleLabel.name = "LGO Session Menu Title";
             titleLabel.style.marginBottom = 8;
             shell.Add(titleLabel);
@@ -214,7 +218,7 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewSelectedCharacterPreviewPanel()
         {
-            var preview = NewPreviewPanel("TU SĨ");
+            var preview = NewPreviewPanel(null);
             preview.name = "LGO Character Hall Selected Cultivator Card V3B";
             RuntimeUiSkin.ApplyCharacterPreviewFrame(preview);
             return preview;
@@ -223,7 +227,7 @@ namespace LinhGioi.UI
         internal static void ApplySelectedCharacterPreviewResponsive(VisualElement preview, Label selectedName, RuntimeUiLayoutProfile layout, int viewportWidth, bool hasSelectedCharacter = true)
         {
             if (preview == null) return;
-            preview.style.display = !hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex;
+            preview.style.display = DisplayStyle.Flex;
             preview.style.width = hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;
             preview.style.maxWidth = layout.CharacterSelectedPreviewMaxWidth;
             preview.style.minWidth = layout.IsMobile ? 0 : RuntimeUiSpacing.PreviewPanelMinWidth;
@@ -265,15 +269,14 @@ namespace LinhGioi.UI
                 portrait.RemoveFromHierarchy();
                 row.Insert(row.IndexOf(preview), portrait);
             }
-            portrait.style.display = selected ? DisplayStyle.Flex : DisplayStyle.None;
-            if (!selected) return;
+            portrait.style.display = DisplayStyle.Flex;
 
             row.style.height = layout.Height * (layout.IsMobile ? 0.58f : 0.48f);
             row.style.minWidth = 0;
             row.style.alignItems = Align.Stretch;
-            ApplySelectionStageColumn(roster, 28);
+            ApplySelectionStageColumn(roster, 32);
             ApplySelectionStageColumn(portrait, 34);
-            ApplySelectionStageColumn(preview, 34);
+            ApplySelectionStageColumn(preview, 32);
             portrait.style.height = Length.Percent(100);
             portrait.style.backgroundColor = Color.clear;
             portrait.style.borderTopWidth = 0;
@@ -281,8 +284,11 @@ namespace LinhGioi.UI
             portrait.style.borderLeftWidth = 0;
             portrait.style.borderRightWidth = 0;
             portrait.pickingMode = PickingMode.Ignore;
-            preview.style.height = StyleKeyword.Auto;
-            preview.style.alignSelf = Align.Center;
+            roster.style.height = Length.Percent(100);
+            roster.style.maxHeight = Length.Percent(100);
+            if (roster is ScrollView slots) slots.contentContainer.style.flexGrow = 1;
+            preview.style.height = Length.Percent(100);
+            preview.style.alignSelf = Align.Stretch;
             preview.style.maxHeight = Length.Percent(100);
             preview.style.overflow = Overflow.Hidden;
         }
@@ -391,7 +397,7 @@ namespace LinhGioi.UI
         internal static Label NewSectionTitle(string text)
         {
             var label = new Label(text);
-            RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Text, RuntimeUiTypography.SectionTitleFontSize, true, TextAnchor.MiddleCenter);
+            RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Gold, RuntimeUiTypography.SectionTitleFontSize, true, TextAnchor.MiddleCenter);
             label.style.marginBottom = RuntimeUiSpacing.SectionTitleMarginBottom;
             return label;
         }
@@ -666,14 +672,7 @@ namespace LinhGioi.UI
         internal static Button NewSecondaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            button.style.color = RuntimeArtCatalog.Text;
-            RuntimeUiSkin.ApplyCompactActionFrame(
-                button,
-                new Color(0.03f, 0.10f, 0.18f, 0.90f),
-                RuntimeArtCatalog.Spirit,
-                RuntimeArtCatalog.SurfaceRaised,
-                RuntimeArtCatalog.SurfaceRaised,
-                RuntimeArtCatalog.Gold);
+            ApplyCompactButtonPriority(button, false);
             return button;
         }
 
@@ -689,9 +688,9 @@ namespace LinhGioi.UI
         {
             button.style.unityFontStyleAndWeight = primary ? FontStyle.Bold : FontStyle.Normal;
             if (primary)
-                RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.22f, 0.34f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit);
+                RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.08f, 0.12f, 0.16f, 0.96f), RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold);
             else
-                RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.04f, 0.13f, 0.22f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.Gold);
+                RuntimeUiSkin.ApplyCompactActionFrame(button, RuntimeUiSkin.BlueGlass, RuntimeUiSkin.MediumGoldBorder, RuntimeUiSkin.MediumGoldBorder, RuntimeUiSkin.MediumGoldBorder, RuntimeUiSkin.MediumGoldBorder);
         }
 
         internal static Button NewIconButton(string label, Texture2D texture, Action action)
@@ -746,7 +745,7 @@ namespace LinhGioi.UI
             button.EnableInClassList("lgo-list-selected", selected);
             var border = selected ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.SurfaceRaised;
             RuntimeUiSkin.ApplyCompactActionFrame(button,
-                selected ? new Color(0.03f, 0.15f, 0.25f, 0.88f) : new Color(0.02f, 0.05f, 0.08f, 0.72f),
+                selected ? new Color(0.08f, 0.09f, 0.11f, 0.92f) : RuntimeUiSkin.DeepGlass,
                 border, border, border, border);
             button.tooltip = selected ? "Nhân vật đang chọn" : "Chọn nhân vật tu luyện";
             if (selected)

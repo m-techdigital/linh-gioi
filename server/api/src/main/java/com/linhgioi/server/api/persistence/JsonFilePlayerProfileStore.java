@@ -74,6 +74,9 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     public synchronized CharacterProfile createCharacter(CreateCharacterCommand command) {
         Objects.requireNonNull(command, "command");
         requireAccount(command.accountId());
+        if (listCharacters(command.accountId()).size() >= 3) {
+            throw new IllegalArgumentException("account character limit reached (3)");
+        }
         String name = normalizeCharacterName(command.name());
         String classId = normalizeClassId(command.classId());
         boolean duplicateName = snapshot.getCharactersById().values().stream()

@@ -1,8 +1,12 @@
 # Linh Giới Online — Next Action
 
-Last updated: `2026-09-06`
+Last updated: `2026-09-07`
 
 ## Quick Resume
+
+- Tiến độ 2026-09-07: ba slot, silhouette giữa, form/footer thực sự thuộc cột phải; bỏ nhánh dock cũ và hai nút dùng cùng tier/chiều rộng qua base. Skin chung bắt đầu chuyển nền trung tính/viền vàng theo demo mới owner duyệt. `build/dev-loop/three-slots-neutral-gold.log` hoàn tất 23 checkpoint/profile, ảnh empty ba profile, selected PC/mobile và menu tablet đã xem; bounds resize pass. Quick gate `three-slots-new-skin-quick.log` và validator panel-density pass. Chưa giống demo hoàn chỉnh: thiếu thumbnail/selection ô trống, giới tính, font serif, nền đúng hướng; mobile selected còn khoảng trống lớn vì ẩn header. Tiếp tục các phần này và chuyển các skin cũ còn cyan, không claim visual PASS.
+
+- Account cap: API từ chối nhân vật thứ tư, test reload/độc lập account pass (`build/dev-loop/three-character-limit-green.log`, 15 tests). UI khóa tạo khi đủ 3, harness tạo tối đa 3; không xóa hồ sơ legacy. Cần xử lý minh bạch account legacy >3 và assertion trạng thái ô trống. Nút Chém đã gọi combat local thật đang có, evidence đi qua nút và kiểm tra cooldown; hướng dẫn ẩn khi combat để không che controls. Không claim server-authoritative combat hoặc production auth/DB.
 
 - HUD theo reference gốc `docs/reference-art/linh-gioi-world-event-ui.png`: movement và skill dùng chung base trên PC/tablet/mobile; Menu tách khỏi combat, thêm nút preview Hộ Linh đang có. Red bắt khóa desktop và Menu chiếm slot combat; lượt cuối 23 checkpoint/profile, pointer mô phỏng di chuyển/thả/menu pass, ảnh world-hub ba profile đã xem (`build/dev-loop/navigation-skill-separation.log`); quick gate pass (`build/dev-loop/shared-controls-quick.log`). Roster 8 hồ sơ cũng qua scroll/resize/selection. Tiếp theo: thu gọn panel nhiệm vụ tablet đang che NPC, tách trạng thái nhân vật khỏi nhiệm vụ và tạo icon riêng đúng kích thước theo reference gốc. Chưa claim visual PASS, thiết bị cảm ứng thật, hoặc đủ kịch bản game. Năm class theo concept/GDD, không thu thiết kế tổng thể về Kiếm tu; auth/DB production chưa mở.
 

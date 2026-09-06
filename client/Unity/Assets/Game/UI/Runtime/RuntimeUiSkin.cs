@@ -17,9 +17,9 @@ namespace LinhGioi.UI
     {
         internal const string FoundationMarker = "LGO Runtime UI Skin Foundation v1";
 
-        internal static readonly Color DeepGlass = new Color(0.0f, 0.014f, 0.034f, 0.70f);
-        internal static readonly Color DenseGlass = new Color(0.0f, 0.016f, 0.040f, 0.82f);
-        internal static readonly Color BlueGlass = new Color(0.02f, 0.07f, 0.14f, 0.86f);
+        internal static readonly Color DeepGlass = new Color(0.035f, 0.040f, 0.046f, 0.82f);
+        internal static readonly Color DenseGlass = new Color(0.035f, 0.040f, 0.046f, 0.92f);
+        internal static readonly Color BlueGlass = new Color(0.055f, 0.063f, 0.074f, 0.90f);
         internal static readonly Color SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.36f);
         internal static readonly Color LightGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.20f);
         internal static readonly Color MediumGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.48f);
@@ -130,7 +130,7 @@ namespace LinhGioi.UI
         internal static void ApplyPanelFrame(VisualElement element)
         {
             ApplyRadius(element, 8);
-            ApplyEdgeFrame(element, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.SurfaceRaised);
+            ApplyEdgeFrame(element, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f);
         }
 
         internal static void ApplyInsetRowFrame(VisualElement element, Color accent)
@@ -205,13 +205,13 @@ namespace LinhGioi.UI
             button.style.backgroundImage = new StyleBackground();
             button.style.backgroundColor = background;
             button.style.color = RuntimeArtCatalog.Text;
-            ApplyEdgeFrame(button, left, top, right, bottom);
+            ApplyEdgeFrame(button, left, top, right, bottom, 1f, 1f);
         }
 
         internal static void ApplyBaseButtonFrame(Button button)
         {
             ApplyRadius(button, 8);
-            ApplyEdgeFrame(button, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.SurfaceRaised, 1f, 1f);
+            ApplyEdgeFrame(button, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f);
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
         }
 
@@ -296,16 +296,11 @@ namespace LinhGioi.UI
             // LGO Character Hall No Stretched Texture v1: keep ornate assets role-sized; the large shell uses code-side glass.
             panel.style.backgroundImage = StyleKeyword.None;
             // LGO Character Hall Mobile Light Shell v1: compact screens keep the reference art visible behind the bounded shell.
-            panel.style.backgroundColor = lightProfile ? new Color(0.005f, 0.024f, 0.052f, 0.56f) : new Color(0.005f, 0.024f, 0.052f, 0.70f);
-            ApplyRadius(panel, 12);
+            panel.style.backgroundColor = DenseGlass;
+            ApplyRadius(panel, 4);
             ApplyEdgeFrame(
                 panel,
-                new Color(RuntimeArtCatalog.Spirit.r, RuntimeArtCatalog.Spirit.g, RuntimeArtCatalog.Spirit.b, 0.92f),
-                new Color(RuntimeArtCatalog.Gold.r, RuntimeArtCatalog.Gold.g, RuntimeArtCatalog.Gold.b, 0.78f),
-                new Color(RuntimeArtCatalog.Spirit.r, RuntimeArtCatalog.Spirit.g, RuntimeArtCatalog.Spirit.b, 0.62f),
-                new Color(RuntimeArtCatalog.Gold.r, RuntimeArtCatalog.Gold.g, RuntimeArtCatalog.Gold.b, 0.66f));
-            panel.style.borderTopWidth = 2;
-            panel.style.borderBottomWidth = 2;
+                MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f);
         }
 
         internal static void ApplySubtleNestedFrame(VisualElement element, Color accent, float alpha = 0.32f)
@@ -324,23 +319,12 @@ namespace LinhGioi.UI
 
         internal static void ApplyCharacterListFrame(VisualElement list)
         {
-            ApplySubtleNestedFrame(list, RuntimeArtCatalog.Gold, 0.34f);
-            list.style.borderTopWidth = 1;
-            list.style.borderBottomWidth = 1;
+            ApplyFloatingActionBarFrame(list);
         }
 
         internal static void ApplyCharacterPreviewFrame(VisualElement preview, bool lightProfile = false)
         {
-            ApplySubtleNestedFrame(preview, RuntimeArtCatalog.Spirit, 0.38f);
-            // LGO Character Hall Selected Hero Light Frame v1: compact selected-state hero should read closer to the target sheet, not as another heavy modal card.
-            preview.style.backgroundColor = lightProfile ? new Color(0.0f, 0.020f, 0.050f, 0.42f) : new Color(0.0f, 0.020f, 0.050f, 0.66f);
-            preview.style.borderTopColor = RuntimeArtCatalog.Gold;
-            preview.style.borderBottomColor = RuntimeArtCatalog.Gold;
-            if (lightProfile)
-            {
-                preview.style.borderLeftColor = new Color(RuntimeArtCatalog.Spirit.r, RuntimeArtCatalog.Spirit.g, RuntimeArtCatalog.Spirit.b, 0.28f);
-                preview.style.borderRightColor = new Color(RuntimeArtCatalog.Spirit.r, RuntimeArtCatalog.Spirit.g, RuntimeArtCatalog.Spirit.b, 0.22f);
-            }
+            ApplyFloatingActionBarFrame(preview);
         }
 
         internal static void ApplyCharacterCreateFrame(VisualElement panel)
@@ -384,7 +368,8 @@ namespace LinhGioi.UI
         internal static void ApplyLobbyInputFrame(TextField field)
         {
             field.style.backgroundColor = DeepGlass;
-            ApplyEdgeFrame(field, MediumSpiritBorder, MediumGoldBorder, LightSpiritBorder, new Color(0.93f, 0.73f, 0.36f, 0.28f));
+            ApplyRadius(field, 4);
+            ApplyEdgeFrame(field, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f);
             field.labelElement.style.color = RuntimeArtCatalog.Gold;
             field.labelElement.style.fontSize = RuntimeUiTypography.BadgeValueFontSize;
             field.labelElement.style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -400,9 +385,9 @@ namespace LinhGioi.UI
                 ?? field.Q(className: "unity-text-field__input")
                 ?? field.Q("unity-text-input");
             if (input == null) return;
-            input.style.backgroundColor = new Color(0.004f, 0.018f, 0.042f, 0.92f);
+            input.style.backgroundColor = BlueGlass;
             input.style.color = RuntimeArtCatalog.Text;
-            input.style.unityFontStyleAndWeight = FontStyle.Bold;
+            input.style.unityFontStyleAndWeight = FontStyle.Normal;
             input.style.borderTopWidth = 0;
             input.style.borderRightWidth = 0;
             input.style.borderBottomWidth = 0;

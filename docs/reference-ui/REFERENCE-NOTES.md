@@ -2,6 +2,8 @@
 
 ## Nguồn và phạm vi
 
+- `lgo-character-three-slots-draft-v1.jpg`: owner duyệt làm hướng visual mới ngày 2026-09-07, gồm nền tối trung tính, viền vàng mảnh, chữ ngà/vàng, tiêu đề serif; chuyển skin cũ qua base dùng chung. Luôn 3 slot, silhouette giữa, form/hai nút cột phải. Ảnh sinh ngày 2026-09-06 còn lệch đáy hai cột: runtime phải căn đáy bằng layout constraints, không sao chép tọa độ lỗi. Đây là design reference, không phải evidence hay asset runtime. JPEG quality 82, không crop.
+
 - Reference HUD chính theo owner: `../reference-art/linh-gioi-world-event-ui.png`. Phân nhóm movement trái, combat phải, điều hướng hệ thống đáy, nhiệm vụ trái và trạng thái nhân vật riêng. Prototype chỉ triển khai hành vi thật đang được phép; không lấy sân luyện làm đích thay thế vòng chơi GDD. Bản HUD sinh bổ sung không thay nguồn này.
 
 - `../reference-art/linh-gioi-concept-board.png`: năm hướng Võ, Kiếm, Pháp, Cơ, Linh. Không thay thiết kế tổng thể bằng class đang có trong prototype.

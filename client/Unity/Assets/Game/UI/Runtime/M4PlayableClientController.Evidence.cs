@@ -137,7 +137,7 @@ namespace LinhGioi.UI
 
         internal async Task CaptureEvidenceLongRosterAsync()
         {
-            for (var index = 3; index <= 8; index++)
+            for (var index = 3; index <= 3; index++)
             {
                 OnCreateCharacterAction();
                 _characterName.value = "Evidence" + index.ToString("D2");
@@ -157,9 +157,9 @@ namespace LinhGioi.UI
             var row = selected.worldBound;
             if (row.yMin < viewport.yMin - 1 || row.yMax > viewport.yMax + 1 || row.xMin < viewport.xMin - 1 || row.xMax > viewport.xMax + 1)
                 throw new InvalidOperationException("Selected roster row is outside its scroll viewport: row=" + row + " viewport=" + viewport);
-            if (scroll.verticalScroller.highValue <= 0)
-                throw new InvalidOperationException("Long roster must overflow inside the scroll view, not expand the hall.");
-            if (scroll.verticalScroller.resolvedStyle.display != DisplayStyle.Flex)
+            if (_characterList.Query<Button>(className: "lgo-character-slot").ToList().Count != 3)
+                throw new InvalidOperationException("Character Hall must always have exactly three slots.");
+            if (scroll.verticalScroller.highValue > 0 && scroll.verticalScroller.resolvedStyle.display != DisplayStyle.Flex)
                 throw new InvalidOperationException("Overflowing roster must expose the shared scrollbar.");
             var scroller = scroll.verticalScroller;
             var pixelTolerance = Mathf.Abs(RuntimePanelUtils.ScreenToPanel(scroll.panel, Vector2.right).x
@@ -175,7 +175,13 @@ namespace LinhGioi.UI
         {
             var scroll = (ScrollView)_characterList;
             scroll.verticalScroller.value = 0;
-            for (var frame = 0; frame < 12; frame++) yield return null;
+            for (var frame = 0; frame < 12; frame++)
+            {
+                Debug.Log("LGO_ROSTER_SCROLL_TRACE frame=" + frame + " offset=" + scroll.scrollOffset.y
+                    + " slider=" + scroll.verticalScroller.value + " viewport=" + scroll.contentViewport.layout
+                    + " content=" + scroll.contentContainer.layout);
+                yield return null;
+            }
             if (scroll.scrollOffset.y > 1)
                 throw new InvalidOperationException("Roster selection must not undo manual scrolling.");
             Debug.Log("LGO_ROSTER_MANUAL_SCROLL_PASS input=scroller-value");
@@ -332,7 +338,13 @@ namespace LinhGioi.UI
             _evidenceState = RuntimeUiEvidenceState.CombatPanelFocus;
             _skillPreviewActive = false;
             _world.SetSmokePositionNearTargetDummy();
-            _world.TriggerLocalCombatForSmoke();
+            using (var submit = NavigationSubmitEvent.GetPooled())
+            {
+                submit.target = _worldTouchWindSlashButton;
+                _worldTouchWindSlashButton.SendEvent(submit);
+            }
+            if (!_world.LocalCombatCoolingDown)
+                throw new InvalidOperationException("World Wind Slash action must execute combat, not only preview VFX.");
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
         }

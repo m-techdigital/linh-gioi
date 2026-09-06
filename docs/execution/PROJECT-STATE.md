@@ -1,12 +1,14 @@
 # Linh Giới Online — Project State
 
-Last updated: `2026-09-06`
+Last updated: `2026-09-07`
 
 ## Continuous workflow status
 
 Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
+
+Batch 2026-09-07: chuyển Character Hall sang ba slot và form/footer trong cột phải, bỏ dock cũ, hai nút cùng base/tier; API cap 3 với test reload. Demo `docs/reference-ui/lgo-character-three-slots-draft-v1.jpg` là hướng visual mới owner duyệt; skin bắt đầu chuyển neutral/gold. Capture 23 checkpoint/profile (`build/dev-loop/three-slots-neutral-gold.log`), ảnh đã xem, quick/focused gate pass. Chưa visual PASS: thiếu thumbnail, giới tính, font serif và nền mới; các màn cũ chưa chuyển hết. Chém dùng combat local/cooldown hiện có, không phải combat server-authoritative.
 
 Batch 2026-09-06: roster dài có scroll chọn hàng/resize; movement và skill dùng chung base trên ba profile, Menu ngoài cụm combat, preview Hộ Linh được đưa vào cụm. Runtime 23 checkpoint/profile và smoke movement pass; quick gate pass, ảnh đã xem. Reference chính là concept board gốc và `linh-gioi-world-event-ui.png`, không phải demo sân luyện mới. Tablet còn panel che NPC; icon/presentation chưa đạt reference. Không claim visual PASS hoặc production auth/DB. Năm hướng Võ/Kiếm/Pháp/Cơ/Linh vẫn là đích thiết kế; phạm vi triển khai theo GDD/roadmap.
 
