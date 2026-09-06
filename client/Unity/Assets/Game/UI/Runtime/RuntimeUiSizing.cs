@@ -37,14 +37,14 @@ namespace LinhGioi.UI
         internal const int LoginServerSwitchMinWidth = 160;
         internal const int LoginServerSwitchMinHeight = 32;
 
-        internal const int CharacterHallPanelMaxWidth = 900;
-        internal const int CharacterHallTabletPanelMaxWidth = 790;
+        internal const int CharacterHallPanelMaxWidth = 1080;
+        internal const int CharacterHallTabletPanelMaxWidth = 860;
         internal const int CharacterHallPanelMinHeight = 452;
-        internal const int CharacterListInitialMinWidth = 280;
-        internal const int CharacterListMaxWidth = 390;
-        internal const int CharacterPreviewMaxWidth = 420;
-        internal const int CharacterPortraitWidth = 104;
-        internal const int CharacterPortraitHeight = 142;
+        internal const int CharacterListInitialMinWidth = 260;
+        internal const int CharacterListMaxWidth = 340;
+        internal const int CharacterPreviewMaxWidth = 520;
+        internal const int CharacterPortraitWidth = 138;
+        internal const int CharacterPortraitHeight = 188;
         internal const int CharacterNameFieldMaxWidth = 360;
 
         internal const int IconButtonMinWidth = 112;
