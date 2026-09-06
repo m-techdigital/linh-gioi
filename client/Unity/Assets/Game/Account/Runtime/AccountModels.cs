@@ -1,9 +1,16 @@
 using System;
 using System.Globalization;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace LinhGioi.Account
 {
+    public static class CharacterNameRules
+    {
+        public static bool IsValid(string name) => name != null && name.Length >= 3 && name.Length <= 16
+            && Regex.IsMatch(name, "\\A[A-Za-z0-9_]+\\z");
+    }
+
     [Serializable]
     public sealed class DevLoginRequest
     {

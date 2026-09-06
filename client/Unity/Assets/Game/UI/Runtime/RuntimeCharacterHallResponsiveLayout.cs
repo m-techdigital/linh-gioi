@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using LinhGioi.Art;
 
 namespace LinhGioi.UI
 {
@@ -79,7 +80,8 @@ namespace LinhGioi.UI
             {
                 characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
                 characterName.style.alignSelf = !isMobileProfile ? Align.Center : Align.Stretch;
-                characterName.style.width = compactStandaloneCreate ? Mathf.Clamp(layout.Width * 0.32f, 280f, RuntimeUiSizing.CharacterNameFieldMaxWidth) : Length.Percent(100);
+                characterName.style.width = Length.Percent(100);
+                characterName.style.minWidth = 0;
             }
             if (classId != null) classId.style.display = DisplayStyle.None;
             if (createPanel != null)
@@ -139,13 +141,16 @@ namespace LinhGioi.UI
             RuntimeUiOverflowGuard.ApplyModalFooter(createFooter, compactStandaloneCreate ? 0 : 6);
             if (createBody != null)
             {
-                createBody.style.flexDirection = compactStandaloneCreate ? FlexDirection.Row : FlexDirection.Column;
+                createBody.style.flexDirection = FlexDirection.Column;
                 createBody.style.alignItems = compactStandaloneCreate ? Align.Center : Align.Stretch;
                 createBody.style.minWidth = 0;
+                // A horizontal form reserves the footer first; the body receives the remaining width.
+                createBody.style.width = compactStandaloneCreate ? StyleKeyword.Auto : Length.Percent(100);
+                createBody.style.flexBasis = compactStandaloneCreate ? 0 : StyleKeyword.Auto;
                 if (!collapsed)
                 {
-                    createBody.style.flexGrow = 0;
-                    createBody.style.flexShrink = 0;
+                    createBody.style.flexGrow = compactStandaloneCreate ? 1 : 0;
+                    createBody.style.flexShrink = compactStandaloneCreate ? 1 : 0;
                 }
             }
             if (createFooter != null)
@@ -272,6 +277,19 @@ namespace LinhGioi.UI
         {
             if (preview != null)
                 preview.style.visibility = editingInPreviewColumn ? Visibility.Hidden : Visibility.Visible;
+        }
+
+        internal static void ApplyCreateValidationFeedback(Label title, Label hint, string error)
+        {
+            if (hint == null) return;
+            hint.style.color = error == null ? RuntimeArtCatalog.Muted : RuntimeArtCatalog.Danger;
+            if (error == null) return;
+            if (title != null) title.style.display = DisplayStyle.None;
+            hint.text = error;
+            hint.style.minWidth = 0;
+            hint.style.maxWidth = Length.Percent(100);
+            hint.style.whiteSpace = WhiteSpace.Normal;
+            hint.style.display = DisplayStyle.Flex;
         }
 
         private static void ApplyPanel(RuntimeUiLayoutProfile layout, int width, int height, VisualElement lobbyPanel)

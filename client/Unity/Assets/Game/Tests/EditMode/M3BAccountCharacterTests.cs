@@ -7,6 +7,22 @@ namespace LinhGioi.Tests
 {
     public sealed class M3BAccountCharacterTests
     {
+        [TestCase(null, false)]
+        [TestCase("", false)]
+        [TestCase("ab", false)]
+        [TestCase("Ab_", true)]
+        [TestCase("Hero_123", true)]
+        [TestCase("WWWWWWWWWWWWWWWW", true)]
+        [TestCase("WWWWWWWWWWWWWWWWW", false)]
+        [TestCase("Hero Name", false)]
+        [TestCase("Hero!", false)]
+        [TestCase("Hero\n", false)]
+        [TestCase("H\u00e9ro", false)]
+        public void CharacterNameMatchesExistingServerRules(string name, bool valid)
+        {
+            Assert.AreEqual(valid, CharacterNameRules.IsValid(name));
+        }
+
         [Test]
         public void ClientRuntimeConfigCarriesApiEndpointForM3B()
         {

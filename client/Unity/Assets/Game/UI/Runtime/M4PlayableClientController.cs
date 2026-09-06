@@ -149,6 +149,7 @@ namespace LinhGioi.UI
         private string _forcedLayoutProfile;
         private bool _isMobileProfile;
         private bool _createFormExpanded = true;
+        private string _characterNameError;
         private bool _skillPreviewActive;
         private RuntimeUiEvidenceState _evidenceState;
 
@@ -606,6 +607,12 @@ namespace LinhGioi.UI
             _createBody.Add(createHint);
             _characterName = NewLobbyTextField("", "LinhGioiHero", "Nhập danh xưng tu sĩ.");
             _characterName.name = "LGO Character Create Form Framed Input v1";
+            _characterName.RegisterValueChangedCallback(evt =>
+            {
+                if (_characterNameError == null) return;
+                _characterNameError = CharacterNameRules.IsValid(evt.newValue?.Trim()) ? null : "Dùng 3-16 ký tự A-Z, a-z, 0-9 hoặc _.";
+                ApplyCharacterCreateFormState();
+            });
             _characterName.style.maxWidth = RuntimeUiSizing.CharacterNameFieldMaxWidth;
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
             _classId.style.display = DisplayStyle.None;
@@ -902,10 +909,18 @@ namespace LinhGioi.UI
         private async Task CreateCharacterAsync()
         {
             if (_accountState == null) return;
+            var characterName = _characterName.value?.Trim();
+            if (!CharacterNameRules.IsValid(characterName))
+            {
+                _characterNameError = "Dùng 3-16 ký tự A-Z, a-z, 0-9 hoặc _.";
+                ApplyCharacterCreateFormState();
+                _characterName.Focus();
+                return;
+            }
             SetBusy(true, "Đang tạo tu sĩ...");
             try
             {
-                var created = await _client.CreateCharacterAsync(_accountState.accountId, Required(_characterName.value, "LinhGioiHero"), Required(_classId.value, DefaultClassId), _shutdown.Token);
+                var created = await _client.CreateCharacterAsync(_accountState.accountId, characterName, Required(_classId.value, DefaultClassId), _shutdown.Token);
                 _selectedCharacter = created;
                 await RefreshCharactersAsync();
                 SetBusy(false, "Nhân vật đã sẵn sàng.");
@@ -958,6 +973,7 @@ namespace LinhGioi.UI
 
         private void SelectCharacter(CharacterResponse character)
         {
+            _characterNameError = null;
             _selectedCharacter = character;
             _createFormExpanded = character == null;
             UpdateSelectedPreview(character);
@@ -1025,6 +1041,7 @@ namespace LinhGioi.UI
             {
                 // LGO Character Hall Selected Create Collapse v1: selected state protects Enter World as the primary path.
                 _createFormExpanded = true;
+                _characterNameError = null;
                 ApplyCharacterCreateFormState();
                 _characterName.Focus();
                 _characterName.SelectAll();
@@ -1040,6 +1057,7 @@ namespace LinhGioi.UI
             if (_selectedCharacter != null && _createFormExpanded)
             {
                 _createFormExpanded = false;
+                _characterNameError = null;
                 _characterName.value = _selectedCharacter.name;
                 ApplyCharacterCreateFormState();
                 _enterWorldButton.Focus();
@@ -1067,6 +1085,7 @@ namespace LinhGioi.UI
                 _enterWorldButton);
             ApplyCharacterHallActionHierarchy();
             RuntimeCharacterHallResponsiveLayout.ApplyCreatePreviewVisibility(_selectedPreview, _isMobileProfile && _createFormExpanded);
+            RuntimeCharacterHallResponsiveLayout.ApplyCreateValidationFeedback(_createTitle, _createHint, _characterNameError);
         }
 
         private void RefreshWorldLoopLabels()

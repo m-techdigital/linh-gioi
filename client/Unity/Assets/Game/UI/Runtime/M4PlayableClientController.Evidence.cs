@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using System;
 using System.Collections;
+using LinhGioi.Account;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,7 +14,7 @@ namespace LinhGioi.UI
             if (!_isMobileProfile) yield break;
             var pad = _worldTouchMovementPad as RuntimeTouchMovementPad;
             if (pad == null || _world == null || !Application.isFocused)
-                throw new InvalidOperationException("Touch movement evidence requires the focused mobile world and movement pad.");
+                throw new InvalidOperationException("Touch movement prerequisites: pad=" + (pad != null) + " world=" + (_world != null) + " focused=" + Application.isFocused);
             var start = _world.CurrentPosition;
             var yaw = _world.CurrentYawDegrees;
             var point = pad.worldBound.center + Vector2.right * pad.contentRect.width * 0.35f;
@@ -65,8 +66,37 @@ namespace LinhGioi.UI
         {
             if (_selectedCharacter != null) return;
             _characterName.value = Required(characterName, "EvidenceHero");
+            if (_characterNameError != null)
+                throw new InvalidOperationException("A valid name must clear the inline error before submission.");
             _classId.value = DefaultClassId;
             await CreateCharacterAsync();
+        }
+
+        internal async Task CaptureEvidenceInvalidCharacterNameAsync()
+        {
+            var selected = _selectedCharacter;
+            var count = _characters.Length;
+            _characterName.value = "A!";
+            await CreateCharacterAsync();
+            if (_characterNameError == null || _selectedCharacter != selected || _characters.Length != count)
+                throw new InvalidOperationException("Invalid name must remain in the form without creating a character.");
+            _characterName.Blur();
+            Debug.Log("LGO_CHARACTER_NAME_REJECTED_LOCALLY_PASS");
+        }
+
+        internal void AssertInvalidCharacterNameForEvidence()
+        {
+            if (_characterNameError == null || _createHint.text != _characterNameError
+                || _createHint.resolvedStyle.display != DisplayStyle.Flex || CharacterNameRules.IsValid(_characterName.value))
+                throw new InvalidOperationException("Invalid-name capture state changed before screenshot.");
+            AssertCharacterFormBoundsForEvidence();
+        }
+
+        internal void CaptureEvidenceCorrectCharacterName()
+        {
+            _characterName.value = "EvidenceHero";
+            if (_characterNameError != null)
+                throw new InvalidOperationException("Editing a valid name did not clear the inline error.");
         }
 
         internal async Task CaptureEvidenceEnterWorldAsync()
@@ -104,8 +134,9 @@ namespace LinhGioi.UI
         {
             var viewport = _root.worldBound;
             var form = _createPanel.worldBound;
-            foreach (var element in new VisualElement[] { _createPanel, _characterName, _createButton, _enterWorldButton })
+            foreach (var element in new VisualElement[] { _createPanel, _characterName, _createHint, _createButton, _enterWorldButton })
             {
+                if (element.resolvedStyle.display == DisplayStyle.None) continue;
                 var bounds = element.worldBound;
                 var container = element == _createPanel ? viewport : form;
                 if (bounds.width <= 0 || bounds.height <= 0 || bounds.xMin < container.xMin - 1 || bounds.xMax > container.xMax + 1

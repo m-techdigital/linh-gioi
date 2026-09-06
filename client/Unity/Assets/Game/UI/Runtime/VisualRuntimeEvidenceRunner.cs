@@ -16,9 +16,11 @@ namespace LinhGioi.UI
         {
             "login.png",
             "character-lobby.png",
+            "character-name-invalid.png",
             "character-select.png",
             "character-select-long-name.png",
             "character-create-expanded.png",
+            "character-create-invalid.png",
             "character-create-reflow.png",
             "character-create-cancelled.png",
             "enter-world.png",
@@ -90,6 +92,15 @@ namespace LinhGioi.UI
                 "docs/design/LGO-PLAYABLE-UI-WIREFRAME-SPEC-v0.11.0.md",
                 "Account connected, character list or empty/create state, enter-world action");
 
+            yield return WaitForTask(_controller.CaptureEvidenceInvalidCharacterNameAsync());
+            yield return WaitFrames(6);
+            _controller.AssertInvalidCharacterNameForEvidence();
+            yield return CaptureCheckpoint(
+                "character-name-invalid",
+                "Character Name Validation",
+                "server/api/src/main/java/com/linhgioi/server/api/persistence/CharacterProfile.java",
+                "Invalid name remains editable with inline feedback; no character is created");
+            _controller.AssertCharacterFormBoundsForEvidence();
             yield return WaitForTask(_controller.CaptureEvidenceCreateCharacterIfNeededAsync("EvidenceHero"));
             yield return WaitFrames(6);
             yield return CaptureCheckpoint(
@@ -113,6 +124,15 @@ namespace LinhGioi.UI
                 "Character Create Expanded",
                 "docs/design/RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0.md",
                 "Expanded character form after selected action dock; name field and actions remain inside the hall");
+            yield return WaitForTask(_controller.CaptureEvidenceInvalidCharacterNameAsync());
+            yield return WaitFrames(6);
+            _controller.AssertInvalidCharacterNameForEvidence();
+            yield return CaptureCheckpoint(
+                "character-create-invalid",
+                "Additional Character Name Validation",
+                "server/api/src/main/java/com/linhgioi/server/api/persistence/CharacterProfile.java",
+                "Inline error and create/cancel actions remain bounded without changing the selected hero");
+            _controller.CaptureEvidenceCorrectCharacterName();
             var probeWidth = Mathf.Max(640, 2 * Mathf.RoundToInt(_reviewWidth * 0.72f / 2));
             var probeHeight = Mathf.Max(360, 2 * Mathf.RoundToInt(_reviewHeight * 0.9f / 2));
             Screen.SetResolution(probeWidth, probeHeight, false);
