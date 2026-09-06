@@ -366,10 +366,10 @@ namespace LinhGioi.UI
             _loginStage = new VisualElement();
             _loginStage.name = "LGO Login Gate Entry NPC Composition Stage V3B";
             _loginStage.style.position = Position.Absolute;
-            _loginStage.style.right = 64;
-            _loginStage.style.bottom = -88;
-            _loginStage.style.width = RuntimeUiSizing.LoginNpcStageWidth;
-            _loginStage.style.minHeight = RuntimeUiSizing.LoginNpcStageMinHeight;
+            _loginStage.style.right = layout.LoginStageRight;
+            _loginStage.style.bottom = layout.LoginStageBottom;
+            _loginStage.style.width = layout.LoginStageWidth;
+            _loginStage.style.minHeight = layout.LoginStageMinHeight;
             _loginStage.style.alignItems = Align.Center;
             _loginStage.style.justifyContent = Justify.FlexEnd;
             _loginStage.style.opacity = 0.93f;

@@ -67,10 +67,15 @@ namespace LinhGioi.UI
             if (loginStage != null)
             {
                 loginStage.style.display = layout.LoginStageDisplay;
-                loginStage.style.width = layout.LoginStageWidth;
+                RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
+                    loginStage,
+                    RuntimeUiOverlayPlacement.Right,
+                    RuntimeUiOverlayVerticalPlacement.Bottom,
+                    layout.LoginStageWidth,
+                    layout.LoginStageMinHeight,
+                    layout.LoginStageRight,
+                    layout.LoginStageBottom);
                 loginStage.style.minHeight = layout.LoginStageMinHeight;
-                loginStage.style.right = layout.LoginStageRight;
-                loginStage.style.bottom = layout.LoginStageBottom;
                 loginStage.tooltip = "LGO Login Responsive Scale Cleanup v1";
             }
             if (loginGateKeeper != null)

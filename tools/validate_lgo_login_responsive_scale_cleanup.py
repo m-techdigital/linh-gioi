@@ -59,7 +59,11 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs",
         "LGO Login Responsive Scale Cleanup v1",
-        "loginStage.style.width = layout.LoginStageWidth",
+        "RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(",
+        "RuntimeUiOverlayPlacement.Right",
+        "RuntimeUiOverlayVerticalPlacement.Bottom",
+        "layout.LoginStageWidth",
+        "layout.LoginStageBottom",
         "loginGateKeeper.style.width = layout.LoginGateKeeperWidth",
         "LoginNpcGroundingBloomWidth",
         "loginControlColumn.style.width = layout.LoginControlColumnWidth",
