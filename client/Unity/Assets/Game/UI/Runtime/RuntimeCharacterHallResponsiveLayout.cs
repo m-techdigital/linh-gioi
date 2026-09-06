@@ -110,6 +110,17 @@ namespace LinhGioi.UI
                         layout.CharacterHallSelectedDockRight,
                         layout.CharacterHallSelectedDockBottom);
                 }
+                else if (collapsed && !layout.IsTablet)
+                {
+                    // LGO Character Hall Selected NonMobile Dock Base v1: selected actions overlay the panel bottom instead of stretching the shell flow.
+                    RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface(
+                        createPanel,
+                        RuntimeUiOverlayPlacement.Center,
+                        layout.CharacterHallSelectedActionDockWidth,
+                        layout.CharacterHallSelectedActionDockMaxHeight,
+                        layout.CharacterHallSelectedActionDockInsetHorizontal,
+                        layout.CharacterHallSelectedActionDockBottom);
+                }
                 else if (!layout.IsMobile)
                 {
                     createPanel.style.position = Position.Relative;
@@ -182,6 +193,14 @@ namespace LinhGioi.UI
             enterWorldButton.style.opacity = 0.46f;
             enterWorldButton.tooltip = "Chọn hoặc tạo tu sĩ trước khi vào sân luyện.";
             characterActionRow.Add(createButton);
+        }
+
+        internal static void ApplySelectedDetails(RuntimeUiLayoutProfile layout, bool hasSelectedCharacter, Label selectedStatus, Label selectedObjective)
+        {
+            // LGO Character Hall Selected Detail Collapse Base v1: non-mobile selected demo prioritizes hero plus CTA dock over duplicate status rows.
+            var showDetails = !hasSelectedCharacter || layout.IsMobile;
+            if (selectedStatus != null) selectedStatus.style.display = showDetails ? DisplayStyle.Flex : DisplayStyle.None;
+            if (selectedObjective != null) selectedObjective.style.display = showDetails ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private static void ApplyPanel(RuntimeUiLayoutProfile layout, int width, int height, VisualElement lobbyPanel)

@@ -145,6 +145,10 @@ namespace LinhGioi.UI
         internal float CharacterHallCreateOverlayTop => Mathf.Clamp(Height * 0.24f, 112f, 140f);
         internal float CharacterHallSelectedDockWidth => Mathf.Clamp(Width * 0.34f, 300f, 336f);
         internal float CharacterHallSelectedDockRight => Mathf.Clamp(Width * 0.06f, 14f, 28f);
+        internal float CharacterHallSelectedActionDockWidth => IsMobile ? CharacterHallSelectedDockWidth : IsTablet ? 520f : 560f;
+        internal float CharacterHallSelectedActionDockInsetHorizontal => Mathf.Max(RootPaddingHorizontal, (Width - CharacterHallSelectedActionDockWidth) * 0.5f);
+        internal float CharacterHallSelectedActionDockBottom => IsMobile ? OverlayBottomInset : Mathf.Clamp(Height * 0.045f, 24f, 38f);
+        internal float CharacterHallSelectedActionDockMaxHeight => IsMobile ? 72f : 78f;
         internal float OverlayBottomInset => IsMobile ? Mathf.Clamp(Height * 0.085f, 36f, 52f) : Mathf.Clamp(Height * 0.06f, 34f, 64f);
         internal float CharacterHallSelectedDockBottom => OverlayBottomInset;
         internal float WorldHudMinWidth => WorldHudMinWidthFor(false);

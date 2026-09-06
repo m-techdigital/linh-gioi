@@ -60,6 +60,7 @@ def main() -> int:
         "_lobbyPanel = NewCharacterHallPanel(layout);",
         "_characterList = NewCharacterListPanel(layout);",
         "RuntimeCharacterHallResponsiveLayout.Apply(",
+        "RuntimeCharacterHallResponsiveLayout.ApplySelectedDetails(layout, _selectedCharacter != null, _selectedStatus, _selectedObjective);",
     )
     forbid(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
@@ -82,6 +83,14 @@ def main() -> int:
         "lobbyPanel.style.maxWidth = layout.IsMobile ? Length.Percent(100)",
         "layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth",
         "createPanel.style.maxHeight = layout.IsMobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;",
+        "LGO Character Hall Selected NonMobile Dock Base v1",
+        "else if (collapsed && !layout.IsTablet)",
+        "LGO Character Hall Selected Detail Collapse Base v1",
+        "ApplySelectedDetails(RuntimeUiLayoutProfile layout, bool hasSelectedCharacter, Label selectedStatus, Label selectedObjective)",
+        "layout.CharacterHallSelectedActionDockWidth",
+        "layout.CharacterHallSelectedActionDockMaxHeight",
+        "layout.CharacterHallSelectedActionDockInsetHorizontal",
+        "layout.CharacterHallSelectedActionDockBottom",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
@@ -119,6 +128,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "CharacterListMaxHeight(bool hasSelectedCharacter)",
+        "CharacterHallSelectedActionDockWidth",
         "Mathf.Clamp(Height * 0.34f, 270f, 330f)",
     )
     require(

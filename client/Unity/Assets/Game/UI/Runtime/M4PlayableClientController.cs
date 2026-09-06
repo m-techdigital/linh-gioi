@@ -1343,6 +1343,7 @@ namespace LinhGioi.UI
                 _selectedName,
                 _createPanel,
                 _selectedCharacter != null);
+            RuntimeCharacterHallResponsiveLayout.ApplySelectedDetails(layout, _selectedCharacter != null, _selectedStatus, _selectedObjective);
             ApplyCharacterCreateFormState();
             ApplyCharacterHallActionHierarchy();
 
