@@ -108,7 +108,7 @@ def main() -> int:
         "Require per-frame animation budget",
         "roles in watch band >=85% budget: 7",
         "V2 fallback Resources payload: 2389.7 KB across 65 images",
-        "referenced V2 registry properties: 16",
+        "referenced V2 registry properties: 12",
         "`GateKeeperNpcLoginTexture`",
     ):
         if marker not in report:
