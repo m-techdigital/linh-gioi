@@ -114,6 +114,8 @@ def main() -> int:
         "LGO Runtime Combat HUD Presentation Helper v1",
         'Replace("Mục tiêu luyện tập: sức bền mô phỏng ", "Sức bền: ")',
         'Replace(" - Chỉ là mô phỏng cục bộ.", " mô phỏng.")',
+        'Replace("Tầm đánh: trong tầm ", "Tầm: ")',
+        'Replace(" / sẵn sàng gửi ý định.", " / sẵn sàng.")',
         "CompactFeedbackStatus",
         'Trúng mục tiêu: +1 Tinh khí diễn tập.',
         "Đang xem Trói Bóng: vòng cảnh báo an toàn.",

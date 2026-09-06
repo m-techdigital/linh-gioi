@@ -61,7 +61,11 @@ namespace LinhGioi.UI
         internal static string CompactRangeStatus(string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return "Tầm: chưa rõ";
-            return value.Replace("Tầm đánh", "Tầm");
+            return value
+                .Replace("Tầm đánh: trong tầm ", "Tầm: ")
+                .Replace(" / sẵn sàng gửi ý định.", " / sẵn sàng.")
+                .Replace("Tầm đánh: ngoài tầm ", "Tầm: ngoài ")
+                .Replace("Tầm đánh", "Tầm");
         }
 
         internal static string CompactFeedbackStatus(string value)

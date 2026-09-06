@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_COMBAT_TARGET_STAMINA_STATUS_COMPACT_READY` shortens combat target status to `Sức bền: 108/120 mô phỏng.`, reducing repeated `Bia luyện` copy in the combat HUD while preserving target state.
+Latest player-visible batch: `LGO_COMBAT_RANGE_STATUS_COMPACT_READY` shortens combat range status to `Tầm: 2.6m / sẵn sàng.`, improving mobile combat HUD scanability while preserving local combat range state.
 
 Current visual/runtime evidence harness command:
 
