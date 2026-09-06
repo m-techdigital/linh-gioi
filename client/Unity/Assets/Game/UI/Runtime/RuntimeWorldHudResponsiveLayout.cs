@@ -168,7 +168,7 @@ namespace LinhGioi.UI
             SetDisplayed(worldPoseState, auxiliaryVisible);
             SetDisplayed(worldVfxState, auxiliaryVisible);
             SetDisplayed(skinSource, auxiliaryVisible);
-            SetDisplayed(skillPreviewPanel, gameplayPanelVisible);
+            SetDisplayed(skillPreviewPanel, gameplayPanelVisible && !mobileProfile);
             SetDisplayed(localCombatPanel, gameplayPanelVisible);
             SetDisplayed(toast, !compactWorld);
             SetDisplayed(combatVisualState, auxiliaryVisible);

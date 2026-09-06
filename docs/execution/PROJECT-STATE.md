@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SKILL_PREVIEW_COMBAT_CTA_CONTEXT_READY` changes the local combat CTA to `Thử bia luyện` while a skill preview is active, making preview mode feel distinct from real combat intent while preserving local-only semantics.
+Latest player-visible batch: `LGO_MOBILE_COMBAT_FEEDBACK_DENSITY_READY` compacts combat feedback copy and hides the skill preview panel in mobile combat-focus evidence, keeping the target-dummy HUD readable on small screens.
 
 Current visual/runtime evidence harness command:
 

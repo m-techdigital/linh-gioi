@@ -43,6 +43,7 @@ namespace LinhGioi.UI
             var warning = ContainsAny(feedbackText, "Ngoài tầm", "Chưa chọn", "Đang hồi chiêu");
             ApplyStatusAccent(rangeStatus, ContainsAny(targetRangeText, "trong tầm") ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Danger);
             ApplyStatusAccent(visualState, coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit);
+            if (feedbackStatus != null) feedbackStatus.text = CompactFeedbackStatus(feedbackText);
             ApplyStatusAccent(feedbackStatus, warning ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Gold);
             ApplyStatusAccent(cooldownStatus, coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit);
             ApplyStatusAccent(authorityStatus, ContainsAny(authorityText, "từ chối", "Từ chối") ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit);
@@ -58,6 +59,16 @@ namespace LinhGioi.UI
         {
             if (string.IsNullOrWhiteSpace(value)) return "Tầm: chưa rõ";
             return value.Replace("Tầm đánh", "Tầm");
+        }
+
+        internal static string CompactFeedbackStatus(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return "Diễn tập an toàn.";
+            if (value.Contains("Trúng mục tiêu")) return "Trúng mục tiêu: +1 Tinh khí diễn tập.";
+            if (value.Contains("Đang xem Trói Bóng")) return "Đang xem Trói Bóng: vòng cảnh báo an toàn.";
+            if (value.Contains("Đang xem Chém Gió")) return "Đang xem Chém Gió: cung vàng đã hiện.";
+            if (value.Contains("Đang xem Hộ Linh")) return "Đang xem Hộ Linh: mạch sáng bảo hộ.";
+            return value.Replace("Mô phỏng cục bộ", "Cục bộ");
         }
 
         private static bool ContainsAny(string value, params string[] needles)

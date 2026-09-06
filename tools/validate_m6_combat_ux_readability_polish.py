@@ -112,6 +112,9 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
         "LGO Runtime Combat HUD Presentation Helper v1",
+        "CompactFeedbackStatus",
+        'Trúng mục tiêu: +1 Tinh khí diễn tập.',
+        "Đang xem Trói Bóng: vòng cảnh báo an toàn.",
         "ApplyStatusAccent",
         "Tấn công thử",
         "Đang hồi chiêu",

@@ -95,7 +95,7 @@ def main() -> int:
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs',
-        'SetDisplayed(skillPreviewPanel, gameplayPanelVisible);',
+        'SetDisplayed(skillPreviewPanel, gameplayPanelVisible && !mobileProfile);',
         'SetDisplayed(localCombatPanel, gameplayPanelVisible);',
     )
     require(
