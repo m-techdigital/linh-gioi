@@ -538,10 +538,14 @@ namespace LinhGioi.UI
         internal static Button NewSecondaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            button.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
             button.style.color = RuntimeArtCatalog.Text;
-            var texture = LgoVisualAssetRegistryV2.ButtonSecondaryTexture;
-            if (texture != null) button.style.backgroundImage = new StyleBackground(texture);
+            RuntimeUiSkin.ApplyCompactActionFrame(
+                button,
+                new Color(0.03f, 0.10f, 0.18f, 0.90f),
+                RuntimeArtCatalog.Spirit,
+                RuntimeArtCatalog.SurfaceRaised,
+                RuntimeArtCatalog.SurfaceRaised,
+                RuntimeArtCatalog.Gold);
             return button;
         }
 

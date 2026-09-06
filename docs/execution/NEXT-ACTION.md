@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: Character Hall first-time create form now uses a narrower metric-owned panel and centered input/CTA cluster; refreshed screenshots were reviewed as cleaner, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: shared secondary buttons now use code-side framing instead of the V2 secondary texture fallback, reducing V2 registry references to 28 and fallback-only references to 12; refreshed screenshots were reviewed as readable, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -132,6 +132,8 @@ Current focus update: runtime asset inventory now reports V2 fallback `Resources
 Current focus update: runtime asset inventory now reports referenced V2 registry dependencies under `LGO_RUNTIME_ASSET_V2_DEPENDENCY_SNAPSHOT_READY`; current source references 29 V2 registry properties, 13 of them fallback-only by exact V3B property-name coverage.
 
 Current focus update: Character Hall first-time create form width balance is ready under `LGO_CHARACTER_HALL_CREATE_FORM_WIDTH_BALANCE_READY`; the form panel is narrower, input/CTA cluster is centered, validator ownership follows the current factory/helper split, and refreshed screenshots were reviewed without claiming final visual pass.
+
+Current focus update: secondary button V2 dependency cleanup is ready under `LGO_RUNTIME_UI_SECONDARY_BUTTON_V2_DEPENDENCY_CLEANUP_READY`; `RuntimeUiFactory.NewSecondaryButton` now uses code-side V3B-style framing instead of V2 `ButtonSecondaryTexture`, and runtime screenshots remain readable.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
