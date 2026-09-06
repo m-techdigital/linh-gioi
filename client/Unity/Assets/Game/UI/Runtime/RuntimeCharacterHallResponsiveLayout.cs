@@ -45,7 +45,7 @@ namespace LinhGioi.UI
             var collapsed = hasSelectedCharacter && !createFormExpanded;
             if (createTitle != null)
             {
-                createTitle.text = collapsed ? "Sẵn sàng" : hasSelectedCharacter ? "Tạo thêm tu sĩ" : "Tạo Tu Sĩ";
+                createTitle.text = collapsed ? "Sẵn sàng" : hasSelectedCharacter ? "Tạo thêm tu sĩ" : "Khai mở tu sĩ";
                 createTitle.style.marginBottom = collapsed ? 2 : 8;
                 createTitle.style.unityTextAlign = collapsed && !isMobileProfile ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
             }
@@ -55,7 +55,7 @@ namespace LinhGioi.UI
                     ? "Tu sĩ đã sẵn sàng."
                     : hasSelectedCharacter
                         ? "Nhập danh xưng mới nếu muốn tạo thêm hồ sơ."
-                        : "Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.";
+                        : "Đặt danh xưng, chọn mạch khởi đầu, rồi bước qua Linh Môn.";
                 createHint.style.display = (!isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None;
             }
             if (characterName != null) characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
@@ -64,6 +64,8 @@ namespace LinhGioi.UI
             {
                 createPanel.style.flexDirection = collapsed && !isMobileProfile ? FlexDirection.Row : FlexDirection.Column;
                 createPanel.style.alignItems = collapsed && !isMobileProfile ? Align.Center : Align.Stretch;
+                createPanel.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
+                createPanel.style.width = !hasSelectedCharacter && !isMobileProfile ? Length.Percent(82) : Length.Percent(100);
                 createPanel.style.opacity = collapsed ? 0.72f : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
                 createPanel.style.minHeight = collapsed ? (isMobileProfile ? 76 : 96) : RuntimeUiSizing.CharacterCreatePanelMinHeight;
                 createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 86 : 108) : RuntimeUiSizing.CharacterCreatePanelMaxHeight;

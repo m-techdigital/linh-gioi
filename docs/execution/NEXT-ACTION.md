@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: Local artifact cleanup now reports Unity Library cache size and exposes an explicit Unity-cache cleanup mode; source gates are stable, and no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: Character Hall first-time create state now uses a narrower centered form and warmer game copy; source gates and desktop visual evidence are stable, and no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: prefer player-visible layout/quality fixes or hotspot extraction that reduces controller churn without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -114,6 +114,8 @@ Current focus update: compact state brief now suppresses long `PROJECT-STATE.md`
 Current focus update: Character Hall selected-state proportions now use a wider shell, narrower list, and larger cultivator preview under `LGO_CHARACTER_HALL_SELECTED_HERO_PROPORTION_READY`; refreshed desktop screenshots are less admin-like while still below final reference-quality UI, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: local artifact cleanup now reports `client/Unity/Library` size and adds explicit `--apply-unity-cache` under `LGO_LOCAL_UNITY_CACHE_CLEANUP_MODE_READY`; dry-run confirms the large workspace weight is local Unity cache/player build rather than runtime art source.
+
+Current focus update: Character Hall first-time create state now centers a narrower form and uses `Khai mở tu sĩ` copy under `LGO_CHARACTER_HALL_CREATE_STATE_FORM_POLISH_READY`; refreshed desktop screenshot is cleaner, but the TextField chrome still needs a future reusable form-component pass.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
