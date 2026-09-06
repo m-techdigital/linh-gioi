@@ -58,7 +58,12 @@ namespace LinhGioi.UI
                         : "Đặt danh xưng, chọn mạch khởi đầu, rồi bước qua Linh Môn.";
                 createHint.style.display = (!isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None;
             }
-            if (characterName != null) characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
+            if (characterName != null)
+            {
+                characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
+                characterName.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
+                characterName.style.width = !hasSelectedCharacter && !isMobileProfile ? Length.Percent(64) : Length.Percent(100);
+            }
             if (classId != null) classId.style.display = DisplayStyle.None;
             if (createPanel != null)
             {

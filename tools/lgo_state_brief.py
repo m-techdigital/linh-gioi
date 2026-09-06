@@ -32,10 +32,10 @@ def section(text: str, heading: str) -> str:
     return "\n".join(out).strip()
 
 
-def first_lines(text: str, limit: int) -> str:
+def first_lines(text: str, limit: int, *, show_truncation: bool = True) -> str:
     lines = text.splitlines()
     trimmed = lines[:limit]
-    if len(lines) > limit:
+    if show_truncation and len(lines) > limit:
         trimmed.append(f"... truncated {len(lines) - limit} lines; open source file only if needed.")
     return "\n".join(trimmed).strip()
 
@@ -43,6 +43,11 @@ def first_lines(text: str, limit: int) -> str:
 def limited_section(text: str, heading: str, limit: int) -> str:
     extracted = section(text, heading)
     return first_lines(extracted, limit) if extracted else ""
+
+
+def quiet_limited_section(text: str, heading: str, limit: int) -> str:
+    extracted = section(text, heading)
+    return first_lines(extracted, limit, show_truncation=False) if extracted else ""
 
 
 def limited_section_until(text: str, heading: str, stop_markers: tuple[str, ...], limit: int) -> str:
@@ -93,9 +98,9 @@ def main() -> int:
     print("owner_note=Đây là bản state ngắn để giảm token: chỉ gồm resume, task tiếp theo, blocker và ledger gần nhất.")
     print()
     print("## Project State")
-    print(limited_section(project_state, "## Continuous workflow status", 6) or first_lines(project_state, 8) or "PROJECT_STATE_MISSING")
+    print(quiet_limited_section(project_state, "## Continuous workflow status", 6) or first_lines(project_state, 8, show_truncation=False) or "PROJECT_STATE_MISSING")
     print()
-    print(limited_section(next_action, "## Quick Resume", 8) or "QUICK_RESUME_MISSING")
+    print(quiet_limited_section(next_action, "## Quick Resume", 12) or "QUICK_RESUME_MISSING")
     print()
     print(limited_section(next_action, "## Next task", 6) or "NEXT_TASK_MISSING")
     print()
