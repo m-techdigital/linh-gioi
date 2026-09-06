@@ -34,6 +34,7 @@ def main() -> int:
             "EXPECTED_SCREENSHOTS",
             "sample_png_pixels",
             "duplicate screenshot bytes",
+            "info.bytes_size < 64 * 1024 and (info.sample_unique < 128 or info.luminance_range < 32)",
         ],
     )
     require_file(

@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_RUNTIME_UI_PANEL_VIEWPORT_SIZING_READY` makes responsive layout use the resolved UI Toolkit root viewport instead of raw `Screen.width/height`, records panel viewport telemetry in visual evidence, and keeps the mobile session menu action grid visible inside the actual panel-space viewport.
+Latest player-visible batch: `LGO_RUNTIME_UI_PANEL_SCALE_MODEL_READY` aligns runtime UI sizing with Unity UI Toolkit panel-space behavior: responsive profile selection now uses screen short/long-side bands, layout sizing uses the resolved root viewport, runtime now loads a configured `LGORuntimePanelSettings` resource instead of a blank fallback, and visual evidence records both screenshot pixels and UI viewport units.
 
 Current visual/runtime evidence harness command:
 

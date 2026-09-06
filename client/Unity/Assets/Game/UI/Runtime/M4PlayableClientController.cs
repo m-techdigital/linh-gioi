@@ -168,7 +168,7 @@ namespace LinhGioi.UI
 
         private RuntimeUiLayoutProfile CurrentLayoutProfile()
         {
-            return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, LayoutViewportWidth, LayoutViewportHeight);
+            return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height, LayoutViewportWidth, LayoutViewportHeight);
         }
 
         internal int LayoutViewportWidth
@@ -1478,6 +1478,10 @@ namespace LinhGioi.UI
 
             var settings = ScriptableObject.CreateInstance<PanelSettings>();
             settings.name = "LGO Runtime Panel Settings";
+            settings.scaleMode = PanelScaleMode.ScaleWithScreenSize;
+            settings.referenceResolution = new Vector2Int(1200, 800);
+            settings.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
+            settings.match = 0f;
             return settings;
         }
     }

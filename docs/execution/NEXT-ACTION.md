@@ -6,11 +6,11 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: responsive layout now uses the resolved UI Toolkit root viewport instead of raw screenshot pixels, visual evidence records both screen and UI viewport dimensions, and the mobile session menu action grid fits inside the actual panel-space viewport; refreshed profile screenshots were reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: responsive layout now separates screen form-factor classification from UI Toolkit panel-space sizing, runtime loads `LGORuntimePanelSettings` from `Resources` instead of creating a blank fallback panel, visual evidence records both screen and UI viewport dimensions, and mobile session menu screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: continue from panel-space aware responsive layout; prefer fixes that reduce oversized mobile/tablet HUD/menu composition using UI viewport telemetry, then move back to gameplay/combat/world readability slices.
+- Next implementation task after this fix: continue from a panel-space responsive model; test more viewport/aspect bands before changing layout constants, then prefer visible fixes that reduce mobile/tablet HUD/menu footprint or improve gameplay/world readability.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -152,6 +152,8 @@ Current focus update: World Hub procedural ground contrast is tuned under `LGO_W
 Current focus update: runtime asset inventory now reports V2 fallback `Resources` payload separately under `LGO_RUNTIME_ASSET_V2_FALLBACK_PAYLOAD_INVENTORY_READY`; current V2 fallback weight is 2389.7 KB across 65 images, kept only while registry/code dependencies still need fallback coverage.
 
 Current focus update: runtime asset inventory now reports referenced V2 registry dependencies under `LGO_RUNTIME_ASSET_V2_DEPENDENCY_SNAPSHOT_READY`; current source references 29 V2 registry properties, 13 of them fallback-only by exact V3B property-name coverage.
+
+Current focus update: responsive UI now follows Unity UI Toolkit panel-space instead of raw pixel tuning under `LGO_RUNTIME_UI_PANEL_SCALE_MODEL_READY`; runtime loads a real `LGORuntimePanelSettings` resource, profile selection uses screen short/long-side bands while component sizing uses resolved root viewport units, visual evidence records both coordinate systems, mobile session menu evidence was reviewed, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: Character Hall first-time create form width balance is ready under `LGO_CHARACTER_HALL_CREATE_FORM_WIDTH_BALANCE_READY`; the form panel is narrower, input/CTA cluster is centered, validator ownership follows the current factory/helper split, and refreshed screenshots were reviewed without claiming final visual pass.
 

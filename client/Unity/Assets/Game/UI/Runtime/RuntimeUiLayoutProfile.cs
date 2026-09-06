@@ -7,9 +7,10 @@ namespace LinhGioi.UI
     {
         internal const int DefaultViewportWidth = 1280;
         internal const int DefaultViewportHeight = 720;
-        internal const int MobileMaxWidth = 760;
-        internal const int MobileMaxHeight = 520;
-        internal const int TabletMaxWidth = 1100;
+        internal const int MobileMaxShortSide = 600;
+        internal const int MobileMaxLongSide = 1050;
+        internal const int TabletMaxShortSide = 900;
+        internal const int TabletMaxLongSide = 1450;
         internal const float MobileScaleBaseline = 520f;
         internal const float MobileScaleMin = 0.62f;
         internal const float MobileScaleMax = 0.86f;
@@ -198,11 +199,17 @@ namespace LinhGioi.UI
             LoginButtonFontSize = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.044f, 16f, 20f)) : IsTablet ? 19 : 20;
         }
 
-        internal static RuntimeUiLayoutProfile FromScreen(string forcedProfile, int screenWidth, int screenHeight)
+        internal static RuntimeUiLayoutProfile FromScreen(string forcedProfile, int screenWidth, int screenHeight, int layoutWidth = 0, int layoutHeight = 0)
         {
-            var width = screenWidth > 0 ? screenWidth : DefaultViewportWidth;
-            var height = screenHeight > 0 ? screenHeight : DefaultViewportHeight;
-            var name = forcedProfile ?? (width <= MobileMaxWidth || height <= MobileMaxHeight ? "mobile" : width <= TabletMaxWidth ? "tablet" : "desktop");
+            var screenTargetWidth = screenWidth > 0 ? screenWidth : DefaultViewportWidth;
+            var screenTargetHeight = screenHeight > 0 ? screenHeight : DefaultViewportHeight;
+            var width = layoutWidth > 0 ? layoutWidth : screenTargetWidth;
+            var height = layoutHeight > 0 ? layoutHeight : screenTargetHeight;
+            var screenShortSide = Mathf.Min(screenTargetWidth, screenTargetHeight);
+            var screenLongSide = Mathf.Max(screenTargetWidth, screenTargetHeight);
+            var name = forcedProfile ?? (screenShortSide <= MobileMaxShortSide && screenLongSide <= MobileMaxLongSide
+                ? "mobile"
+                : screenShortSide <= TabletMaxShortSide && screenLongSide <= TabletMaxLongSide ? "tablet" : "desktop");
             return new RuntimeUiLayoutProfile(name, width, height);
         }
     }

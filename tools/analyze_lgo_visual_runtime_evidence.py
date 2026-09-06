@@ -260,7 +260,7 @@ def analyze(
         if (info.width, info.height) != (expected_width, expected_height):
             item_status = "FIX_REQUIRED"
             reasons.append(f"unexpected resolution {info.width}x{info.height}; expected {expected_width}x{expected_height}")
-        if info.bytes_size < 64 * 1024:
+        if info.bytes_size < 64 * 1024 and (info.sample_unique < 128 or info.luminance_range < 32):
             item_status = "FIX_REQUIRED"
             reasons.append(f"suspiciously small file size {info.bytes_size} bytes")
         if info.pixel_review in {"LIKELY_BLANK_OR_FLAT", "LIKELY_TRANSPARENT_OR_EMPTY"}:
