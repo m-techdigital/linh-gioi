@@ -99,6 +99,8 @@ def main() -> int:
         "Đang hồi chiêu",
         "Chưa chọn mục tiêu",
         "Chém Gió",
+        "LGO Local Reward Placeholder World Label",
+        "Tinh khí +1",
         "không tạo kết quả chiến đấu thật",
     )
     require(

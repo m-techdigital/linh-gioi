@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_WORLD_HUB_GUIDED_OBJECTIVE_LABEL_READY` makes the current guided objective easier to spot in the world by labeling the active NPC/stone target directly in-scene; refreshed screenshots were reviewed with no final visual pass claim.
+Latest player-visible batch: `LGO_LOCAL_COMBAT_REWARD_PLACEHOLDER_FEEDBACK_READY` adds a short visible `Tinh khí +1` local reward popup during target dummy hit feedback; no economy/inventory/server reward semantics were opened.
 
 Current visual/runtime evidence harness command:
 

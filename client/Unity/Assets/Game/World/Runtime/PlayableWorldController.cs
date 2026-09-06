@@ -41,6 +41,7 @@ namespace LinhGioi.World
         private TextMesh _gateKeeperWorldLabel;
         private TextMesh _trainingStoneWorldLabel;
         private TextMesh _targetDummyWorldLabel;
+        private TextMesh _targetDummyRewardLabel;
         private TextMesh _spiritGateWorldLabel;
         private TextMesh _shadowSlimeWorldLabel;
         private TextMesh _interactionPromptWorldLabel;
@@ -846,6 +847,13 @@ namespace LinhGioi.World
                 _trainingStoneWorldLabel = WorldLabelPresenter.Create("LGO Training Stone World Label", "Đá Luyện", TrainingStonePosition + new Vector3(0f, 1.25f, 0f), RuntimeArtCatalog.Spirit);
             if (_targetDummyWorldLabel == null)
                 _targetDummyWorldLabel = WorldLabelPresenter.Create("LGO Target Dummy World Label", "Bia luyện", ReadabilityDummyPosition + new Vector3(0f, 1.55f, 0f), RuntimeArtCatalog.Gold);
+            if (_targetDummyRewardLabel == null)
+            {
+                _targetDummyRewardLabel = WorldLabelPresenter.Create("LGO Local Reward Placeholder World Label", "Tinh khí +1", ReadabilityDummyPosition + new Vector3(0f, 1.95f, -0.05f), RuntimeArtCatalog.Gold);
+                _targetDummyRewardLabel.fontSize = 48;
+                _targetDummyRewardLabel.characterSize = 0.044f;
+                _targetDummyRewardLabel.gameObject.SetActive(false);
+            }
             if (_spiritGateWorldLabel == null)
                 _spiritGateWorldLabel = WorldLabelPresenter.Create("LGO Spirit Gate World Label", "Linh Môn", new Vector3(0f, 2.15f, -4.5f), RuntimeArtCatalog.Spirit);
             if (_shadowSlimeWorldLabel == null)
@@ -976,6 +984,8 @@ namespace LinhGioi.World
             }
             if (_targetDummyWorldLabel != null)
                 _targetDummyWorldLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.36f, -0.03f);
+            if (_targetDummyRewardLabel != null)
+                _targetDummyRewardLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.88f, -0.05f);
             if (_spiritGateWorldLabel != null)
                 _spiritGateWorldLabel.transform.position = new Vector3(0f, 1.92f, -4.5f);
             if (_shadowSlimeWorldLabel != null)
@@ -1074,6 +1084,7 @@ namespace LinhGioi.World
                 else
                     WorldLabelPresenter.Set(_targetDummyWorldLabel, "Bia luyện", RuntimeArtCatalog.Gold);
             }
+            WorldLabelPresenter.SetActive(_targetDummyRewardLabel, vfxActive && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
         }
 
         private Sprite ResolveTargetDummyStateSprite(bool nearTarget, bool coolingDown, bool vfxActive)
