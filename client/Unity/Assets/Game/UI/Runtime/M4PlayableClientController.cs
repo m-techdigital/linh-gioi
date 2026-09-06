@@ -1026,6 +1026,9 @@ namespace LinhGioi.UI
         private string FormatTopStatusMessage(string message)
         {
             var worldVisible = _worldHud != null && _worldHud.style.display == DisplayStyle.Flex;
+            var compactProfile = !string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal);
+            if (compactProfile && (message == "Điện Nhân Vật đã sẵn sàng." || message == "Nhân vật đã sẵn sàng."))
+                return "Sẵn sàng";
             if ((worldVisible || !string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal)) && message == "Sẵn sàng: Bước 1 rồi Bước 2.")
                 return "Sẵn sàng: Bước 1/2";
             return message;

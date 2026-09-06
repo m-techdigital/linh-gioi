@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_SKILL_PREVIEW_TOP_STATUS_READY` makes the mobile World Hub top status chip show skill preview context such as `Xem Trói Bóng`, connecting the compact HUD to the visible world telegraph without showing the heavier desktop skill panel.
+Latest player-visible batch: `LGO_CHARACTER_HALL_MOBILE_TOP_STATUS_COMPACT_READY` shortens mobile/tablet Character Hall ready status chips to `Sẵn sàng`, reducing duplicated header copy while the screen title and action cards keep context.
 
 Current visual/runtime evidence harness command:
 

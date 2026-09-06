@@ -57,12 +57,15 @@ def main() -> int:
         "lobbyIntro.text = layout.IsMobile ? \"Chọn tu sĩ, rồi vào sân luyện.\"",
         "emptyCharacterHint.text = layout.IsMobile ? \"Hồ sơ sẽ hiện tại đây.\"",
         "ApplyCreateFormState(",
-        "createHint.style.display = (!isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None",
+        "var showDesktopHint = !isMobileProfile && !layout.IsTablet && !collapsed;",
+        "createHint.style.display = showDesktopHint ? DisplayStyle.Flex : DisplayStyle.None",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "ApplyCharacterCreateFormState()",
         "RuntimeCharacterHallResponsiveLayout.ApplyCreateFormState(",
+        'message == "Điện Nhân Vật đã sẵn sàng." || message == "Nhân vật đã sẵn sàng."',
+        'return "Sẵn sàng";',
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-MOBILE-COPY-DENSITY-PASS-v1.0.md",
