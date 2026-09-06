@@ -60,9 +60,9 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(108f * MobileScale) : IsTablet ? 140 : 152",
-        "LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(8f * MobileScale) : IsTablet ? 14 : 16",
-        "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(9f * MobileScale) : IsTablet ? 14 : 16",
+        "LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(84f * MobileScale) : IsTablet ? 132 : 140",
+        "LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(5f * MobileScale) : IsTablet ? 14 : 16",
+        "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(5f * MobileScale) : IsTablet ? 14 : 16",
         "new Color(0.005f, 0.018f, 0.040f, 0.18f)",
         "new Color(0.005f, 0.018f, 0.040f, 0.36f)",
         "new Color(0.005f, 0.018f, 0.040f, 0.42f)",

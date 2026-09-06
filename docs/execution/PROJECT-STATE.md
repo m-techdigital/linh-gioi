@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_RUNTIME_UI_PANEL_SCALE_MODEL_READY` aligns runtime UI sizing with Unity UI Toolkit panel-space behavior: responsive profile selection now uses screen short/long-side bands, layout sizing uses the resolved root viewport, runtime now loads a configured `LGORuntimePanelSettings` resource instead of a blank fallback, and visual evidence records both screenshot pixels and UI viewport units.
+Latest player-visible batch: `LGO_LOGIN_PANEL_SPACE_FIRST_SCREEN_FIT_READY` keeps the login logo, server row, and `Vào Thế Giới` CTA visible in desktop/tablet/mobile profile screenshots after the UI Toolkit panel-space scale fix; responsive layout now re-applies when the resolved viewport size changes, not only when the profile name changes.
 
 Current visual/runtime evidence harness command:
 

@@ -89,7 +89,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "LoginServerTextFontSize => IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.042f, 16f, 19f)) : IsTablet ? 18 : 19",
+        "LoginServerTextFontSize => IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.055f, 11f, 15f)) : IsTablet ? 18 : 19",
     )
     check_frozen()
     if ERRORS:

@@ -60,9 +60,9 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "DesktopLoginLogoWidthRatio = 0.26f",
-        "MobileLoginCardWidthRatio = 0.43f",
-        "TabletLoginCardWidthRatio = 0.34f",
+        "DesktopLoginLogoWidthRatio = 0.54f",
+        "MobileLoginCardWidthRatio = 0.70f",
+        "TabletLoginCardWidthRatio = 0.74f",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",

@@ -125,6 +125,8 @@ namespace LinhGioi.UI
         private CharacterResponse _selectedCharacter;
         private PlayableWorldController _world;
         private string _lastLayoutProfile;
+        private int _lastLayoutWidth;
+        private int _lastLayoutHeight;
         private string _forcedLayoutProfile;
         private bool _isMobileProfile;
         private bool _createFormExpanded = true;
@@ -1227,9 +1229,12 @@ namespace LinhGioi.UI
         {
             var layout = CurrentLayoutProfile();
             var width = layout.Width;
+            var height = layout.Height;
             var profile = layout.Name;
-            if (!force && string.Equals(_lastLayoutProfile, profile, StringComparison.Ordinal)) return;
+            if (!force && string.Equals(_lastLayoutProfile, profile, StringComparison.Ordinal) && _lastLayoutWidth == width && _lastLayoutHeight == height) return;
             _lastLayoutProfile = profile;
+            _lastLayoutWidth = width;
+            _lastLayoutHeight = height;
 
             var mobile = layout.IsMobile;
             var tablet = layout.IsTablet;

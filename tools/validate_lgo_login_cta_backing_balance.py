@@ -69,9 +69,9 @@ def main() -> int:
             ERRORS.append(f"login CTA backing source missing marker: {marker}")
     layout = read("client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs")
     for marker in (
-        "LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(108f * MobileScale) : IsTablet ? 140 : 152",
-        "LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(8f * MobileScale) : IsTablet ? 14 : 16",
-        "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(9f * MobileScale) : IsTablet ? 14 : 16",
+        "LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(84f * MobileScale) : IsTablet ? 132 : 140",
+        "LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(5f * MobileScale) : IsTablet ? 14 : 16",
+        "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(5f * MobileScale) : IsTablet ? 14 : 16",
         "LoginCardBackground => IsMobile",
         "new Color(0.005f, 0.018f, 0.040f, 0.18f)",
         "new Color(0.005f, 0.018f, 0.040f, 0.36f)",

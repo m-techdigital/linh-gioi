@@ -96,6 +96,11 @@ namespace LinhGioi.UI
                 loginControlColumn.style.paddingBottom = layout.LoginControlColumnPaddingBottom;
                 loginControlColumn.style.marginLeft = layout.LoginControlColumnMarginLeft;
                 loginControlColumn.style.marginTop = layout.LoginControlColumnMarginTop;
+                loginControlColumn.style.justifyContent = layout.IsMobile ? Justify.FlexStart : Justify.Center;
+                loginControlColumn.style.position = layout.IsMobile ? Position.Absolute : Position.Relative;
+                loginControlColumn.style.top = layout.IsMobile ? 0 : StyleKeyword.Auto;
+                loginControlColumn.style.left = layout.IsMobile ? 0 : StyleKeyword.Auto;
+                loginControlColumn.style.right = layout.IsMobile ? 0 : StyleKeyword.Auto;
             }
             if (loginLogo != null)
             {
