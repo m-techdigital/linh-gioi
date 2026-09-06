@@ -74,15 +74,15 @@ def main() -> int:
         "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(9f * MobileScale) : IsTablet ? 14 : 16",
         "LoginCardBackground => IsMobile",
         "new Color(0.005f, 0.018f, 0.040f, 0.18f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.24f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.20f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.36f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.42f)",
     ):
         if marker not in layout:
             ERRORS.append(f"runtime UI layout profile missing marker: {marker}")
     skin = read("client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs")
     for marker in (
         "LGO Runtime UI Skin Foundation v1",
-        "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.18f)",
+        "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.36f)",
         "ApplyLoginCtaBacking(VisualElement element)",
         "ApplyLoginCtaSceneBlend(VisualElement element)",
         "ApplyLoginEnterButtonFrame(Button button)",

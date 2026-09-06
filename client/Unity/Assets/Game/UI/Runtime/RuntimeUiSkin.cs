@@ -11,7 +11,7 @@ namespace LinhGioi.UI
         internal static readonly Color DeepGlass = new Color(0.0f, 0.014f, 0.034f, 0.70f);
         internal static readonly Color DenseGlass = new Color(0.0f, 0.016f, 0.040f, 0.82f);
         internal static readonly Color BlueGlass = new Color(0.02f, 0.07f, 0.14f, 0.86f);
-        internal static readonly Color SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.18f);
+        internal static readonly Color SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.36f);
         internal static readonly Color LightGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.20f);
         internal static readonly Color MediumGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.48f);
         internal static readonly Color LightSpiritBorder = new Color(0.14f, 0.78f, 0.90f, 0.24f);
@@ -131,18 +131,20 @@ namespace LinhGioi.UI
 
         internal static void ApplyLoginCtaSceneBlend(VisualElement element)
         {
-            element.style.backgroundColor = new Color(0.005f, 0.018f, 0.040f, 0.20f);
-            element.style.borderLeftWidth = 0;
-            element.style.borderRightWidth = 0;
-            element.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.24f);
-            element.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.16f);
+            element.style.backgroundColor = new Color(0.005f, 0.018f, 0.040f, 0.42f);
+            element.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
+            element.style.borderLeftWidth = 1;
+            element.style.borderRightColor = new Color(0.93f, 0.73f, 0.36f, 0.20f);
+            element.style.borderRightWidth = 1;
+            element.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.46f);
+            element.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.32f);
             element.style.borderTopWidth = 1;
             element.style.borderBottomWidth = 1;
         }
 
         internal static void ApplyServerSelectorFrame(VisualElement element)
         {
-            element.style.backgroundColor = new Color(0.003f, 0.015f, 0.035f, 0.70f);
+            element.style.backgroundColor = new Color(0.003f, 0.015f, 0.035f, 0.86f);
             ApplyRadius(element, 10);
             element.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.46f);
             element.style.borderTopWidth = 1;

@@ -67,7 +67,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
         "LGO Runtime UI Skin Foundation v1",
-        "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.18f)",
+        "SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.36f)",
         "LightGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.20f)",
         "ApplyLoginEnterButtonFrame(Button button)",
     )

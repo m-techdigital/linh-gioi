@@ -73,7 +73,7 @@ def main() -> int:
         "Mathf.Clamp(width * MobileLoginCardWidthRatio, 300f, 360f)",
         "LoginStageWidth => IsTablet ? 262 : 304",
         "LoginGateKeeperWidth => IsTablet ? 240 : 282",
-        "LoginNpcGroundingBloomWidth => IsTablet ? 154 : 180",
+        "LoginNpcGroundingBloomWidth => IsTablet ? 166 : 196",
         "LoginControlColumnWidth => IsMobile ? Length.Percent(100) : IsTablet ? Length.Percent(56) : Length.Percent(54)",
     )
     require(

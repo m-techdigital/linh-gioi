@@ -64,8 +64,8 @@ def main() -> int:
         "LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(8f * MobileScale) : IsTablet ? 14 : 16",
         "LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(9f * MobileScale) : IsTablet ? 14 : 16",
         "new Color(0.005f, 0.018f, 0.040f, 0.18f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.24f)",
-        "new Color(0.005f, 0.018f, 0.040f, 0.20f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.36f)",
+        "new Color(0.005f, 0.018f, 0.040f, 0.42f)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
@@ -75,7 +75,7 @@ def main() -> int:
         "element.style.borderTopWidth = 1;",
         "element.style.borderBottomWidth = 1;",
         "ApplyServerSelectorFrame(VisualElement element)",
-        "new Color(0.003f, 0.015f, 0.035f, 0.70f)",
+        "new Color(0.003f, 0.015f, 0.035f, 0.86f)",
         "ApplyLoginEnterButtonFrame(Button button)",
     )
     require(

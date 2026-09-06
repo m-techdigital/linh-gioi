@@ -50,20 +50,20 @@ namespace LinhGioi.UI
         internal int LoginGateKeeperWidth => IsTablet ? 240 : 282;
         internal int LoginGateKeeperHeight => IsTablet ? 360 : 423;
         internal DisplayStyle LoginNpcGroundingDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
-        internal int LoginNpcGroundingWidth => IsTablet ? 218 : 256;
-        internal int LoginNpcGroundingHeight => IsTablet ? 24 : 30;
-        internal int LoginNpcGroundingBottom => IsTablet ? 42 : 46;
-        internal int LoginNpcGroundingBloomWidth => IsTablet ? 154 : 180;
-        internal int LoginNpcGroundingBloomHeight => IsTablet ? 7 : 9;
-        internal int LoginNpcGroundingBloomBottom => IsTablet ? 52 : 59;
+        internal int LoginNpcGroundingWidth => IsTablet ? 232 : 272;
+        internal int LoginNpcGroundingHeight => IsTablet ? 26 : 32;
+        internal int LoginNpcGroundingBottom => IsTablet ? 38 : 42;
+        internal int LoginNpcGroundingBloomWidth => IsTablet ? 166 : 196;
+        internal int LoginNpcGroundingBloomHeight => IsTablet ? 8 : 10;
+        internal int LoginNpcGroundingBloomBottom => IsTablet ? 48 : 55;
         internal Color LoginNpcGroundingColor => IsTablet
-            ? new Color(0.005f, 0.018f, 0.035f, 0.26f)
-            : new Color(0.005f, 0.018f, 0.035f, 0.32f);
+            ? new Color(0.005f, 0.018f, 0.035f, 0.34f)
+            : new Color(0.005f, 0.018f, 0.035f, 0.40f);
         internal Color LoginNpcGroundingBloomColor => IsTablet
-            ? new Color(0.10f, 0.72f, 0.95f, 0.20f)
-            : new Color(0.10f, 0.72f, 0.95f, 0.24f);
-        internal float LoginNpcGroundingOpacity => IsTablet ? 0.78f : 0.84f;
-        internal float LoginNpcGroundingBloomOpacity => IsTablet ? 0.66f : 0.72f;
+            ? new Color(0.10f, 0.72f, 0.95f, 0.24f)
+            : new Color(0.10f, 0.72f, 0.95f, 0.30f);
+        internal float LoginNpcGroundingOpacity => IsTablet ? 0.86f : 0.92f;
+        internal float LoginNpcGroundingBloomOpacity => IsTablet ? 0.72f : 0.80f;
         internal Length LoginControlColumnWidth => IsMobile ? Length.Percent(100) : IsTablet ? Length.Percent(56) : Length.Percent(54);
         internal int LoginControlColumnMinWidth => IsMobile ? 0 : 300;
         internal int LoginControlColumnMaxWidth => IsMobile ? 500 : IsTablet ? 540 : 600;
@@ -79,8 +79,8 @@ namespace LinhGioi.UI
         internal Color LoginCardBackground => IsMobile
             ? new Color(0.005f, 0.018f, 0.040f, 0.18f)
             : IsTablet
-                ? new Color(0.005f, 0.018f, 0.040f, 0.24f)
-                : new Color(0.005f, 0.018f, 0.040f, 0.20f);
+                ? new Color(0.005f, 0.018f, 0.040f, 0.36f)
+                : new Color(0.005f, 0.018f, 0.040f, 0.42f);
         internal StyleLength LoginServerRowMaxWidth => IsMobile ? new StyleLength(Length.Percent(100)) : new StyleLength(436f);
         internal int LoginServerRowMinHeight => IsMobile ? Mathf.RoundToInt(42f * MobileScale) : IsTablet ? 40 : 42;
         internal int LoginServerRowPaddingHorizontal => IsMobile ? 14 : 22;

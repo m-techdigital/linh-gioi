@@ -75,10 +75,10 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "LoginNpcGroundingDisplay => IsMobile ? DisplayStyle.None : DisplayStyle.Flex",
-        "LoginNpcGroundingWidth => IsTablet ? 218 : 256",
-        "LoginNpcGroundingBloomWidth => IsTablet ? 154 : 180",
-        "LoginNpcGroundingOpacity => IsTablet ? 0.78f : 0.84f",
-        "LoginNpcGroundingBloomOpacity => IsTablet ? 0.66f : 0.72f",
+        "LoginNpcGroundingWidth => IsTablet ? 232 : 272",
+        "LoginNpcGroundingBloomWidth => IsTablet ? 166 : 196",
+        "LoginNpcGroundingOpacity => IsTablet ? 0.86f : 0.92f",
+        "LoginNpcGroundingBloomOpacity => IsTablet ? 0.72f : 0.80f",
         "LoginNpcGroundingColor => IsTablet",
     )
     require(
