@@ -59,6 +59,7 @@ def main() -> int:
         "DescribeInteractionActionText",
         "InteractionWorldPromptText",
         "CurrentInteractionPromptOffset",
+        "Gặp Người Giữ Cổng trước khi ổn định Đá Luyện.",
         '"F/Space - Gặp"',
         '"F/Space - Luyện"',
         '"F Gặp"',

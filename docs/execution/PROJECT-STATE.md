@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_CHARACTER_HALL_SELECTED_READY_GUIDANCE_READY` adds a concise ready-state row under the selected character list so the chosen profile and enter-world action read as one flow.
+Latest player-visible batch: `LGO_GUIDED_INTERACTION_STEP_LOCK_READY` keeps Đá Luyện inactive during guided step 1, so standing near it no longer shows a contradictory `F/Space - Luyện` prompt before meeting the Gate Keeper.
 
 Current visual/runtime evidence harness command:
 

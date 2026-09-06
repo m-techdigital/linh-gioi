@@ -515,7 +515,7 @@ namespace LinhGioi.World
             if (Distance2D(position, nearest.position) <= InteractionRange)
                 SetNearest(nearest, nearest.prompt);
             else if (_guidedStep == GuidedTrainingStep.FindGateKeeper && Distance2D(position, training.position) <= InteractionRange)
-                SetNearest(training, training.prompt);
+                SetNearest(null, "Gặp Người Giữ Cổng trước khi ổn định Đá Luyện.");
             else
                 SetNearest(null, InteractionAcknowledged ? "Vòng hướng dẫn hoàn tất: lưu vị trí hoặc quay lại sảnh." : NextMovementHint());
         }
