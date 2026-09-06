@@ -55,17 +55,22 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs",
         "near-gatekeeper-prompt.png",
         "near-training-stone-prompt.png",
+        "training-complete.png",
         "Near Gate Keeper Prompt",
         "Near Training Stone Prompt",
+        "Training Stone Complete",
         "CaptureEvidenceNearGateKeeperPrompt",
         "CaptureEvidenceNearTrainingStonePrompt",
+        "CaptureEvidenceTrainingComplete",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",
         "CaptureEvidenceNearGateKeeperPrompt",
         "CaptureEvidenceNearTrainingStonePrompt",
+        "CaptureEvidenceTrainingComplete",
         "SetSmokePositionNearGateKeeper",
         "SetSmokePositionNearTrainingStone",
+        "TriggerInteractionForSmoke",
     )
     require(
         "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs",
@@ -79,16 +84,19 @@ def main() -> int:
         "tools/lgo_visual_runtime_review.sh",
         "near-gatekeeper-prompt.png",
         "near-training-stone-prompt.png",
+        "training-complete.png",
     )
     require(
         "tools/analyze_lgo_visual_runtime_evidence.py",
         "near-gatekeeper-prompt.png",
         "near-training-stone-prompt.png",
+        "training-complete.png",
     )
     require(
         "tools/report_lgo_visual_evidence_profile_index.py",
         "near-gatekeeper-prompt.png",
         "near-training-stone-prompt.png",
+        "training-complete.png",
     )
     require(
         "docs/tasks/LGO-NEAR-INTERACTION-CHECKPOINT-CAPTURE-PASS-v1.0.md",

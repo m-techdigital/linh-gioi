@@ -930,12 +930,14 @@ namespace LinhGioi.UI
             if (_skinSource != null) _skinSource.text = "Nguồn giao diện: asset runtime tối ưu, chưa phải art final.";
             if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
             if (_interactionHint != null) _interactionHint.text = _world.InteractionActionText;
+            if (_status != null) _status.text = WorldTopStatusText();
             if (_evidenceState.ShowEnterWorldTransition)
             {
                 if (_worldStep != null) _worldStep.text = "Tiến trình: Linh Môn đang mở";
                 if (_worldDirection != null) _worldDirection.text = "Chỉ dẫn: ổn định linh khí trước khi vào sân luyện.";
                 if (_worldObjective != null) _worldObjective.text = "Mục tiêu: đang bước qua Linh Môn.";
                 if (_interactionHint != null) _interactionHint.text = "Đang nhập giới. Chuẩn bị nhận quyền điều khiển.";
+                if (_status != null) _status.text = "Đang vào Linh Môn";
             }
             SetToast(_world.InteractionAcknowledged ? "Hoàn tất luyện tập. Hãy lưu vị trí hoặc về Điện Nhân Vật." : _world.InteractionText, RuntimeArtCatalog.Spirit);
             RefreshDialoguePanel();
@@ -1017,6 +1019,12 @@ namespace LinhGioi.UI
             if ((worldVisible || !string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal)) && message == "Sẵn sàng: Bước 1 rồi Bước 2.")
                 return "Sẵn sàng: Bước 1/2";
             return message;
+        }
+
+        private string WorldTopStatusText()
+        {
+            if (_world == null) return "Sẵn sàng";
+            return _world.InteractionAcknowledged ? "Hoàn tất hướng dẫn" : "Sẵn sàng: " + _world.GuidedTrainingStepName;
         }
 
         private void RunAsync(Func<Task> action)

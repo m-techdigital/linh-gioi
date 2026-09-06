@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_WORLD_INTERACTION_PROMPT_COPY_POLISH_READY` makes near-object world prompts read as compact game-facing `F/Space - ...` labels instead of debug-like spaced control text; input behavior and gameplay semantics are unchanged.
+Latest player-visible batch: `LGO_TRAINING_STONE_COMPLETION_FEEDBACK_READY` adds a true `training-complete.png` runtime checkpoint and makes completion clear in the top chip, HUD action, and Đá Luyện world label while clearing the stale interaction prompt.
 
 Current visual/runtime evidence harness command:
 

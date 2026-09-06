@@ -58,6 +58,8 @@ def main() -> int:
         "IsMobileWorldViewport()",
         "IsNarrowWorldViewport()",
         "GateKeeperWorldLabelText(_guidedStep == GuidedTrainingStep.FindGateKeeper)",
+        "TrainingStoneWorldLabelText()",
+        "Hoàn tất\\nĐá Luyện",
         "Mục tiêu\\nĐá Luyện",
         "Mục tiêu\\nNgười Giữ Cổng",
     )

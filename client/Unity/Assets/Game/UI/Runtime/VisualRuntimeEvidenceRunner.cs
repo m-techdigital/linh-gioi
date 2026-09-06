@@ -21,6 +21,7 @@ namespace LinhGioi.UI
             "world-hub.png",
             "near-gatekeeper-prompt.png",
             "near-training-stone-prompt.png",
+            "training-complete.png",
             "target-dummy-state.png",
             "npc-dialogue.png",
             "session-menu.png"
@@ -122,6 +123,14 @@ namespace LinhGioi.UI
                 "Near Training Stone Prompt",
                 "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv; docs/tasks/LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0.md",
                 "Player stands inside Training Stone interaction range; short Vietnamese prompt and compact HUD action are visible");
+
+            _controller.CaptureEvidenceTrainingComplete();
+            yield return WaitFrames(8);
+            yield return CaptureCheckpoint(
+                "training-complete",
+                "Training Stone Complete",
+                "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv; docs/tasks/LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0.md",
+                "Player has stabilized the Training Stone; completion feedback is visible in HUD and world label");
 
             _controller.CaptureEvidenceTargetDummyState();
             yield return WaitFrames(8);

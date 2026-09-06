@@ -478,6 +478,11 @@ namespace LinhGioi.World
                 SetNearest(null, "Di chuyển tới gần Người Giữ Cổng hoặc Đá Luyện.");
                 return;
             }
+            if (_guidedStep == GuidedTrainingStep.Complete || InteractionAcknowledged)
+            {
+                SetNearest(null, "Vòng hướng dẫn hoàn tất: lưu vị trí hoặc quay lại sảnh.");
+                return;
+            }
 
             var position = _marker.position;
             var training = new InteractableState(
@@ -543,6 +548,8 @@ namespace LinhGioi.World
             TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
             _objectiveText = "Mục tiêu hoàn tất: mạch linh khí đã ổn định.";
             _interactionText = "Mạch linh khí đã ổn định. Đã ghi nhận luyện tập.";
+            _nearestInteractable = null;
+            RefreshInteractionPromptWorldLabel();
         }
 
         public bool ContinueDialogue()
@@ -979,7 +986,7 @@ namespace LinhGioi.World
             }
             if (_trainingStoneWorldLabel != null)
             {
-                WorldLabelPresenter.Set(_trainingStoneWorldLabel, _guidedStep == GuidedTrainingStep.FindTrainingStone ? "Mục tiêu\nĐá Luyện" : "Đá Luyện", RuntimeArtCatalog.Spirit);
+                WorldLabelPresenter.Set(_trainingStoneWorldLabel, TrainingStoneWorldLabelText(), RuntimeArtCatalog.Spirit);
                 _trainingStoneWorldLabel.transform.position = TrainingStonePosition + new Vector3(0.18f, 1.36f, -0.04f);
             }
             if (_targetDummyWorldLabel != null)
@@ -996,6 +1003,13 @@ namespace LinhGioi.World
         {
             if (!objectiveTarget) return IsNarrowWorldViewport() ? "Người Giữ\nCổng" : "Người Giữ Cổng";
             return IsNarrowWorldViewport() ? "Mục tiêu\nNgười Giữ\nCổng" : "Mục tiêu\nNgười Giữ Cổng";
+        }
+
+        private string TrainingStoneWorldLabelText()
+        {
+            if (InteractionAcknowledged || _guidedStep == GuidedTrainingStep.Complete) return "Hoàn tất\nĐá Luyện";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Mục tiêu\nĐá Luyện";
+            return "Đá Luyện";
         }
 
         private static Vector3 CurrentGateKeeperLabelOffset()

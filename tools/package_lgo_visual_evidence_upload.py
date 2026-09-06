@@ -23,6 +23,7 @@ SCREENSHOTS = (
     "world-hub.png",
     "near-gatekeeper-prompt.png",
     "near-training-stone-prompt.png",
+    "training-complete.png",
     "npc-dialogue.png",
     "session-menu.png",
     "target-dummy-state.png",

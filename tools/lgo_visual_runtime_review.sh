@@ -323,6 +323,7 @@ expected = [
     "world-hub.png",
     "near-gatekeeper-prompt.png",
     "near-training-stone-prompt.png",
+    "training-complete.png",
     "target-dummy-state.png",
     "npc-dialogue.png",
     "session-menu.png",

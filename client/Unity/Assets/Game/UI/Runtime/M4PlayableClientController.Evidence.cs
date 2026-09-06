@@ -50,6 +50,16 @@ namespace LinhGioi.UI
             RefreshCombatAssetUiState();
         }
 
+        internal void CaptureEvidenceTrainingComplete()
+        {
+            if (_world == null) return;
+            _evidenceState = RuntimeUiEvidenceState.None;
+            _world.SetSmokePositionNearTrainingStone();
+            _world.TriggerInteractionForSmoke();
+            RefreshWorldLoopLabels();
+            RefreshCombatAssetUiState();
+        }
+
         internal void CaptureEvidenceOpenDialogue()
         {
             if (_world == null) return;
