@@ -1,5 +1,7 @@
 # Linh Giới Online — Task Ledger
 
+Batch 2026-09-07, NPC shared flow: `NpcDialogueSession` + `RuntimeNpcDialogueView` được main và blockout reuse; bỏ nhánh bypass thoại khi chạm đá, giữ body-scroll/footer/base layout. EditMode 3/3; `npc-shared-view-baseline.log`, `npc-shared-flow-quick.log`, `blockout-npc-font-{desktop,tablet,mobile}.log` qua; ảnh thoại PC/mobile và hoàn tất tablet đã xem. Không texture mới, không quest/reward/production hoặc visual PASS. Tiếp: focus/feedback tại đá theo storyboard. Hai validator cũ cập nhật theo owner view mới và combat header đã gỡ từ batch trước, không thêm validator.
+
 Batch 2026-09-07, tiếp `LGO-THREE-SLOTS-NEUTRAL-GOLD`: base overlay căn giữa thực có red/green; font serif/body đóng gói, avatar 128x128, nền Linh Thành riêng 422 KiB; Login/preview/HUD neutral-gold. `build/dev-loop/night-city-budgeted-theme.log`: 23 checkpoint/profile, ảnh PC/tablet/mobile đã xem; quick cùng tên, skin/font/panel-density/asset inventory validators pass. Chưa visual PASS; còn selection ô trống, hoa văn và giới tính. Không thêm validator mới, không claim build nhẹ hơn vì fallback còn trong Resources.
 
 | Task ID | Phase | Status | Source baseline | Delta artifact | Evidence artifact | Owner/sandbox | Started at | Closed at | Final decision | Next allowed step |

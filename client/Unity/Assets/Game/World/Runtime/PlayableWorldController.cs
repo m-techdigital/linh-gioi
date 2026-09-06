@@ -70,7 +70,7 @@ namespace LinhGioi.World
         private readonly LocalCombatPrototypeState _localCombat = new LocalCombatPrototypeState();
         private LocalCombatPrototypeOutcome _lastLocalCombatOutcome;
         private bool _targetDummyHitAcknowledged;
-        private int _dialogueLineIndex;
+        public NpcDialogueSession Dialogue { get; } = new NpcDialogueSession("Người Giữ Cổng", GateKeeperDialogueLines);
 
         public event Action PositionChanged;
         public event Action InteractionStateChanged;
@@ -100,12 +100,12 @@ namespace LinhGioi.World
         public bool TargetDummyHitAcknowledged => _targetDummyHitAcknowledged;
         public LocalCombatPrototypeOutcome LastLocalCombatOutcome => _lastLocalCombatOutcome;
         public string LocalCombatTargetStateName => _localCombat.TargetState.ToString();
-        public bool DialogueActive { get; private set; }
-        public bool DialogueCompleted { get; private set; }
-        public string DialogueSpeaker => "Người Giữ Cổng";
-        public string DialogueLine => DialogueActive ? GateKeeperDialogueLines[Mathf.Clamp(_dialogueLineIndex, 0, GateKeeperDialogueLines.Length - 1)] : string.Empty;
-        public string DialogueProgress => DialogueActive ? (_dialogueLineIndex + 1) + "/" + GateKeeperDialogueLines.Length : "0/" + GateKeeperDialogueLines.Length;
-        public bool HasNextDialogueLine => DialogueActive && _dialogueLineIndex < GateKeeperDialogueLines.Length - 1;
+        public bool DialogueActive => Dialogue.Active;
+        public bool DialogueCompleted => Dialogue.Completed;
+        public string DialogueSpeaker => Dialogue.Speaker;
+        public string DialogueLine => Dialogue.Line;
+        public string DialogueProgress => Dialogue.Progress;
+        public bool HasNextDialogueLine => Dialogue.HasNext;
         public bool InteractionAcknowledged { get; private set; }
 
         public void Enter(CharacterResponse character)
@@ -117,9 +117,7 @@ namespace LinhGioi.World
             _marker.position = character.Position;
             _marker.rotation = Quaternion.Euler(0f, character.yawDegrees, 0f);
             InteractionAcknowledged = false;
-            DialogueActive = false;
-            DialogueCompleted = false;
-            _dialogueLineIndex = 0;
+            Dialogue.Reset();
             _localCombat.Reset();
             _targetDummyHitAcknowledged = false;
             CombatFeedbackText = "Diễn tập an toàn: bia luyện chỉ nhận phản hồi cục bộ.";
@@ -581,11 +579,6 @@ namespace LinhGioi.World
             {
                 CompleteTrainingStoneInteraction();
             }
-            else if (_guidedStep == GuidedTrainingStep.FindGateKeeper && _nearestInteractable.id == "Training Stone")
-            {
-                DialogueCompleted = true;
-                CompleteTrainingStoneInteraction();
-            }
             else
             {
                 _interactionText = NextMovementHint();
@@ -613,10 +606,9 @@ namespace LinhGioi.World
 
         public bool ContinueDialogue()
         {
-            if (!DialogueActive) return false;
-            if (_dialogueLineIndex < GateKeeperDialogueLines.Length - 1)
+            if (!Dialogue.Advance()) return false;
+            if (DialogueActive)
             {
-                _dialogueLineIndex++;
                 _interactionText = DialogueLine;
                 InteractionStateChanged?.Invoke();
                 return true;
@@ -626,9 +618,7 @@ namespace LinhGioi.World
 
         public bool CloseDialogue()
         {
-            if (!DialogueActive) return false;
-            DialogueActive = false;
-            _dialogueLineIndex = 0;
+            if (!Dialogue.Close()) return false;
             SetGateKeeperState(PlaceholderNpcState.Idle);
             _objectiveText = "Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.";
             RefreshInteractionState();
@@ -639,9 +629,7 @@ namespace LinhGioi.World
 
         private bool CompleteGateKeeperDialogue()
         {
-            if (!DialogueActive) return false;
-            DialogueActive = false;
-            DialogueCompleted = true;
+            if (!DialogueCompleted) return false;
             _guidedStep = GuidedTrainingStep.FindTrainingStone;
             SetGateKeeperState(PlaceholderNpcState.Idle);
             _objectiveText = "Mục tiêu 2/2: ổn định Đá Luyện.";
@@ -654,9 +642,7 @@ namespace LinhGioi.World
 
         private void OpenGateKeeperDialogue()
         {
-            DialogueActive = true;
-            DialogueCompleted = false;
-            _dialogueLineIndex = 0;
+            if (!Dialogue.Open()) return;
             _objectiveText = "Mục tiêu 1/2: lắng nghe Người Giữ Cổng.";
             _interactionText = DialogueLine;
             RefreshInteractionPromptWorldLabel();

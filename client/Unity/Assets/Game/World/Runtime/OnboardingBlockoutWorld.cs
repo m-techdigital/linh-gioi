@@ -82,15 +82,19 @@ namespace LinhGioi.World
 
         private void Update()
         {
-            var input = Application.isFocused ? Movement + new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) : Vector2.zero;
+            var input = Application.isFocused && !DialogueVisible ? Movement + new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) : Vector2.zero;
             input = Vector2.ClampMagnitude(input, 1f);
             _player.SimpleMove(new Vector3(input.x, 0f, input.y) * 3.6f);
         }
+
+        public bool DialogueVisible { get; set; }
 
         private void LateUpdate()
         {
             _camera.transform.position = Position + new Vector3(0f, 3.1f, -6.8f);
             _camera.transform.LookAt(Position + new Vector3(0f, 1.1f, 1.3f));
+            _keeperLabel.gameObject.SetActive(!DialogueVisible);
+            _stoneLabel.gameObject.SetActive(!DialogueVisible);
             WorldLabelPresenter.PlaceAbove(_keeperLabel, _keeper);
             WorldLabelPresenter.PlaceAbove(_stoneLabel, _stone);
         }

@@ -85,6 +85,14 @@ Provenance demo một cảnh: imagegen trong chat, tham chiếu world-event gố
 - Probe `blockout-shader-probe.log` xác nhận material cũ fallback `Sprites/Default` trong Player. `LGOSharedLitSurface.mat` giữ reference URP Lit cho `RuntimeArtCatalog` chung; log mới xác nhận Lit và ảnh có shading/bóng. Build development tăng từ 340542518 lên 340585406 byte (+42888 byte cho lượt thay đổi), không thêm texture; không suy ra release budget từ số này. Căn cứ stripping: [Unity Shader.Find](https://docs.unity3d.com/ScriptReference/Shader.Find.html).
 - Flow chính ba profile vẫn qua `shared-lit-surface-baseline.log`, ảnh mobile world đã xem; quick `onboarding-blockout-quick.log` pass. Blockout còn hình hộp, bóng răng cưa, label xa nhỏ, player proxy và không có phố phía xa; không visual PASS hoặc giống demo final. Bước tiếp: reuse state/UI hội thoại nhập môn cho cảnh mới, không sao chép flow hoặc đổi hồ sơ đang lưu.
 
+## Cập nhật blockout: vòng NPC dùng chung
+
+- Main world và blockout dùng `NpcDialogueSession` cho mở/đọc/hủy/hoàn tất; cùng `RuntimeNpcDialogueView` dựng shell/header/body-scroll/footer qua factory và responsive layout đang có. Nội dung blockout riêng theo đường phía phải, không nhắc bóng/slime của scene cũ. Đây là thoại draft local, không quest hoặc canon mới.
+- Gặp chỉ hoạt động trong 1.45m; đóng không mở bước đá, mở lại từ dòng đầu; đọc hết ba dòng và xác nhận mới có Luyện. Đang thoại chặn keyboard/vector movement và ẩn nhãn world. Đá chỉ hoàn tất trong tầm; chưa có pulse/focus trong blockout, mới đổi nút thành Đã xong, nên cần tiếp presentation theo cảnh 3.
+- Unit `build/dev-loop/npc-session-green.xml`: 3 executed/3 passed; red trước đó là thiếu type gây compile failure, không phải ba NUnit test đã chạy fail. Main flow ba profile `npc-shared-view-baseline.log` và quick `npc-shared-flow-quick.log` qua sau extraction; chưa rerun main sau thay đổi chỉ trong preview font/bounds fixture.
+- Blockout mới: `build/dev-loop/blockout-npc-font-{desktop,tablet,mobile}.log`, cả ba exit 0 và có route/NPC flow marker. Fixture dùng movement vector qua CharacterController, submit event vào nút thật, thử ngoài tầm, hủy/mở lại, input-lock và bounds căn giữa. Không chứng minh gesture/phím thiết bị thật hoặc resize liên tục.
+- 15 ảnh tại `build/visual-evidence/onboarding-blockout/npc-font-{desktop,tablet,mobile}/`: arrival, keeper-side, dialogue, stone-side, complete. Đã xem thoại desktop/mobile và complete tablet; body/footer trong shell, top/bottom cân bằng; player proxy/geometry/bóng chưa đạt demo final. Không thêm ảnh runtime hoặc claim visual PASS. Các log/ảnh blockout đời đầu ở phần trên là lịch sử trước khi nối thoại.
+
 ## Provenance storyboard và dialogue
 
 Imagegen trong chat, tham chiếu world-event và Character Hall đã duyệt; nguồn ngoài repo `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-69276ad5-037e-449c-8a6f-e671b1473e0d.png`. JPEG quality78 bằng sips, không crop. Demo mới chưa owner duyệt.

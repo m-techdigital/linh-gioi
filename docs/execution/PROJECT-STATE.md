@@ -8,6 +8,8 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+NPC blockout đã nối vòng thoại -> đá bằng session/view chung với màn chính, không clone modal. EditMode 3/3, main ba profile và quick qua; blockout ba profile `npc-font-*` có kiểm tra tầm/hủy/mở lại/input/bounds và ảnh đã xem. Đây vẫn là development prototype local; bước tiếp là focus/feedback đá theo storyboard, chưa city final, quest persistence hoặc visual PASS.
+
 Blockout development nhập môn đã có tuyến đi bằng CharacterController và chín ảnh ba profile; không account/save hoặc scene main mới. Shared material URP Lit sửa fallback sprite do thiếu shader reference trong Player; main flow ba profile và quick qua. `docs/design/LINH-THANH-ONBOARDING-DESIGN.md` ghi evidence/cách mở/non-claims; bước tiếp là reuse hội thoại hiện có cho cảnh mới, không nhân đôi UI/state.
 
 Demo một cảnh nhập môn đã có tại `docs/reference-ui/lgo-linh-mon-arrival-composition-draft-v1.jpg` (404279 byte); design hiện có bổ sung mặt bằng, camera và điểm tiếp cận từ bên. DRAFT, chưa blockout hoặc thay scene chính; mục đích nối prototype về kịch bản Linh Thành, không mở shop/social/event từ tranh.

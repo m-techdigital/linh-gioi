@@ -707,33 +707,19 @@ namespace LinhGioi.UI
             BuildLocalCombatPanel();
             BuildWorldTouchAffordances();
 
-            _dialoguePanel = NewSectionShell(string.Empty, string.Empty, string.Empty, "LGO Dialogue Shell");
-            _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
-            _dialogueSpeakerHeader = new VisualElement { name = "LGO Dialogue Speaker Header" };
-            _dialogueSpeakerPortrait = NewRuntimeIcon(LgoVisualAssetRegistryV3B.GateKeeperPortrait, layout.DialogueSpeakerPortraitSize, "Người Giữ Cổng");
-            _dialogueSpeakerPortrait.name = "LGO Dialogue Speaker Portrait V3B";
-            _dialogueSpeaker = new Label("Người Giữ Cổng");
-            RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiTypography.DialogueSpeakerInitialFontSize, true);
-            _dialogueBody = NewModalBody("LGO Dialogue Body");
-            _dialogueFooter = NewModalFooter("LGO Dialogue Footer");
-            _dialogueLineScroll = new ScrollView(ScrollViewMode.Vertical);
-            _dialogueLineScroll.name = "LGO Dialogue Line Scroll";
-            RuntimeUiOverflowGuard.ApplyBoundedScroll(_dialogueLineScroll, layout.DialogueLineScrollMaxHeight, layout.DialogueLineScrollMinHeight);
-            _dialogueLine = NewMutedLabel("Đối thoại đã đóng.");
-            _dialogueLine.style.fontSize = RuntimeUiTypography.DialogueLineDesktopFontSize;
-            _dialogueProgress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
-            _dialogueContinueButton = NewCompactSecondaryButton("Tiếp tục", ContinueDialogue);
-            _dialogueCloseButton = NewQuietButton("Đóng", CloseDialogue);
-            _dialogueSpeakerHeader.Add(_dialogueSpeakerPortrait);
-            _dialogueSpeakerHeader.Add(_dialogueSpeaker);
-            _dialoguePanel.Add(_dialogueSpeakerHeader);
-            _dialogueLineScroll.Add(_dialogueLine);
-            _dialogueBody.Add(_dialogueLineScroll);
-            _dialoguePanel.Add(_dialogueBody);
-            _dialogueFooter.Add(_dialogueProgress);
-            _dialogueActionRow = NewActionRow("LGO Dialogue Action Row", Justify.FlexStart, 6, 0, _dialogueContinueButton, _dialogueCloseButton);
-            _dialogueFooter.Add(_dialogueActionRow);
-            _dialoguePanel.Add(_dialogueFooter);
+            _dialogueView = new RuntimeNpcDialogueView(layout, ContinueDialogue, CloseDialogue);
+            _dialoguePanel = _dialogueView.Panel;
+            _dialogueSpeakerHeader = _dialogueView.SpeakerHeader;
+            _dialogueSpeakerPortrait = _dialogueView.Portrait;
+            _dialogueSpeaker = _dialogueView.Speaker;
+            _dialogueBody = _dialogueView.Body;
+            _dialogueFooter = _dialogueView.Footer;
+            _dialogueLineScroll = _dialogueView.Scroll;
+            _dialogueLine = _dialogueView.Line;
+            _dialogueProgress = _dialogueView.Progress;
+            _dialogueContinueButton = _dialogueView.ContinueButton;
+            _dialogueCloseButton = _dialogueView.CloseButton;
+            _dialogueActionRow = _dialogueView.ActionRow;
             _root.Add(_dialoguePanel);
             SetDialogueVisible(false);
 
@@ -1652,6 +1638,8 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
         }
 
+        private RuntimeNpcDialogueView _dialogueView;
+
         private void RefreshDialoguePanel()
         {
             if (_world == null || _dialoguePanel == null)
@@ -1659,14 +1647,8 @@ namespace LinhGioi.UI
                 SetDialogueVisible(false);
                 return;
             }
-            var resetReadingPosition = !IsDisplayed(_dialoguePanel) || _dialogueLine.text != _world.DialogueLine;
+            _dialogueView.Refresh(_world.Dialogue);
             SetDialogueVisible(_world.DialogueActive);
-            if (!_world.DialogueActive) return;
-            _dialogueSpeaker.text = _world.DialogueSpeaker;
-            _dialogueLine.text = _world.DialogueLine;
-            if (resetReadingPosition) _dialogueLineScroll.scrollOffset = Vector2.zero;
-            _dialogueProgress.text = "Đối thoại: " + _world.DialogueProgress;
-            _dialogueContinueButton.text = _world.HasNextDialogueLine ? "Tiếp tục" : "Hoàn tất";
         }
 
         private void SetDialogueVisible(bool visible)

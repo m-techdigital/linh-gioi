@@ -147,16 +147,17 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO Dialogue Body",
-        "LGO Dialogue Footer",
-        "LGO Dialogue Speaker Header",
-        "LGO Dialogue Speaker Portrait V3B",
         "LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture",
-        "_dialogueBody.Add(_dialogueLineScroll)",
-        "_dialogueFooter.Add(_dialogueProgress)",
-        "_dialogueFooter.Add(_dialogueActionRow)",
+        "new RuntimeNpcDialogueView(layout, ContinueDialogue, CloseDialogue)",
         "_root.Add(_dialoguePanel)",
         "_dialoguePanel.BringToFront()",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeNpcDialogueView.cs",
+        "LGO Dialogue Body", "LGO Dialogue Footer", "LGO Dialogue Speaker Header",
+        "LGO Dialogue Speaker Portrait V3B", "Body.Add(Scroll)",
+        "Footer.Add(Progress)", "Footer.Add(ActionRow)",
+        "RuntimeWorldHudResponsiveLayout.ApplyDialogue(layout",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0.md",

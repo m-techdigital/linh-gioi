@@ -66,6 +66,18 @@ namespace LinhGioi.UI
             ApplyMobileHudChildConstraint(layout, skillPreviewPanel);
             ApplyMobileHudChildConstraint(layout, localCombatPanel);
 
+            ApplyDialogue(layout, dialoguePanel, dialogueSpeakerHeader, dialogueSpeakerPortrait, dialogueSpeaker,
+                dialogueBody, dialogueLineScroll, dialogueFooter, dialogueLine, dialogueProgress,
+                dialogueActionRow, dialogueContinueButton, dialogueCloseButton);
+        }
+
+        internal static void ApplyDialogue(RuntimeUiLayoutProfile layout, VisualElement dialoguePanel,
+            VisualElement dialogueSpeakerHeader, VisualElement dialogueSpeakerPortrait, Label dialogueSpeaker,
+            VisualElement dialogueBody, ScrollView dialogueLineScroll, VisualElement dialogueFooter,
+            Label dialogueLine, Label dialogueProgress, VisualElement dialogueActionRow,
+            Button dialogueContinueButton, Button dialogueCloseButton)
+        {
+            var mobile = layout.IsMobile;
             if (dialoguePanel != null)
             {
                 ApplyDialogueOverlay(layout, dialoguePanel);
