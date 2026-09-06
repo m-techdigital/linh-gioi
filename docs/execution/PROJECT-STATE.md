@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SKILL_PREVIEW_VISIBLE_STATE_READY` makes skill preview feedback persist in the visible combat panel and highlights the selected preview button, so `skill-shadow-bind-preview.png` connects the HUD text to the world telegraph.
+Latest player-visible batch: `LGO_LOCAL_COMBAT_REWARD_READABILITY_READY` keeps target-dummy hit reward feedback inside the readable combat panel while the world label stays focused on the hit result, avoiding overlapping floating text near the hit spark.
 
 Current visual/runtime evidence harness command:
 

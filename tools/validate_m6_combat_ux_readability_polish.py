@@ -100,7 +100,7 @@ def main() -> int:
         "Chưa chọn mục tiêu",
         "Chém Gió",
         "LGO Local Reward Placeholder World Label",
-        "Tinh khí +1",
+        "+1 Tinh khí",
         "Diễn tập an toàn",
         "không tạo kết quả chiến đấu thật",
     )

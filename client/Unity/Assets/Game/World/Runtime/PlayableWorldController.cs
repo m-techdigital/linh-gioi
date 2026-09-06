@@ -274,7 +274,7 @@ namespace LinhGioi.World
 
             _targetDummyHitAcknowledged = true;
             CombatAuthorityText = "Chấp nhận cục bộ: " + _lastLocalCombatOutcome.Intent.IntentId + " - tạo kết quả nguyên mẫu từ hợp đồng hiện có.";
-            CombatFeedbackText = "Trúng mục tiêu: Chém Gió gây " + _lastLocalCombatOutcome.EffectAmount + " điểm mô phỏng; bia chuyển đỏ rồi hồi phục trong diễn tập an toàn.";
+            CombatFeedbackText = "Trúng mục tiêu: Chém Gió gây " + _lastLocalCombatOutcome.EffectAmount + " điểm mô phỏng; +1 Tinh khí diễn tập.";
             SetPlayerPose(PlaceholderPoseState.Interact);
             SetVfxFeedback(PlaceholderVfxFeedbackState.TargetDummyHitFlash, 1.25f);
             TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
@@ -869,9 +869,9 @@ namespace LinhGioi.World
                 _targetDummyWorldLabel = WorldLabelPresenter.Create("LGO Target Dummy World Label", "Bia luyện", ReadabilityDummyPosition + new Vector3(0f, 1.55f, 0f), RuntimeArtCatalog.Gold);
             if (_targetDummyRewardLabel == null)
             {
-                _targetDummyRewardLabel = WorldLabelPresenter.Create("LGO Local Reward Placeholder World Label", "Tinh khí +1", ReadabilityDummyPosition + new Vector3(0f, 1.95f, -0.05f), RuntimeArtCatalog.Gold);
-                _targetDummyRewardLabel.fontSize = 48;
-                _targetDummyRewardLabel.characterSize = 0.044f;
+                _targetDummyRewardLabel = WorldLabelPresenter.Create("LGO Local Reward Placeholder World Label", "+1 Tinh khí", ReadabilityDummyPosition + new Vector3(0f, 1.62f, -0.18f), RuntimeArtCatalog.Gold);
+                _targetDummyRewardLabel.fontSize = 44;
+                _targetDummyRewardLabel.characterSize = 0.040f;
                 _targetDummyRewardLabel.gameObject.SetActive(false);
             }
             if (_spiritGateWorldLabel == null)
@@ -1005,7 +1005,7 @@ namespace LinhGioi.World
             if (_targetDummyWorldLabel != null)
                 _targetDummyWorldLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.36f, -0.03f);
             if (_targetDummyRewardLabel != null)
-                _targetDummyRewardLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.88f, -0.05f);
+                _targetDummyRewardLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.62f, -0.18f);
             if (_spiritGateWorldLabel != null)
                 _spiritGateWorldLabel.transform.position = new Vector3(0f, 1.92f, -4.5f);
             if (_shadowSlimeWorldLabel != null)
@@ -1113,7 +1113,10 @@ namespace LinhGioi.World
             if (_targetDummyWorldLabel != null)
             {
                 if (vfxActive && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash)
+                {
                     WorldLabelPresenter.Set(_targetDummyWorldLabel, "Trúng mục tiêu", RuntimeArtCatalog.Gold);
+                    _targetDummyWorldLabel.transform.position = ReadabilityDummyPosition + new Vector3(-0.44f, 1.42f, -0.26f);
+                }
                 else if (coolingDown)
                     WorldLabelPresenter.Set(_targetDummyWorldLabel, "Đang hồi phục", RuntimeArtCatalog.Spirit);
                 else if (nearTarget)
@@ -1121,7 +1124,7 @@ namespace LinhGioi.World
                 else
                     WorldLabelPresenter.Set(_targetDummyWorldLabel, "Bia luyện", RuntimeArtCatalog.Gold);
             }
-            WorldLabelPresenter.SetActive(_targetDummyRewardLabel, vfxActive && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
+            WorldLabelPresenter.SetActive(_targetDummyRewardLabel, false);
         }
 
         private Sprite ResolveTargetDummyStateSprite(bool nearTarget, bool coolingDown, bool vfxActive)
