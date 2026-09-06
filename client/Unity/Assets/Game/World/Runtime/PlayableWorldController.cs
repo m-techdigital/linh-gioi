@@ -774,8 +774,8 @@ namespace LinhGioi.World
             if (_gateKeeperGuidePulse == null)
             {
                 var gateGuideSprite = LgoVisualAssetRegistryV3B.CooldownReady ?? CombatPlaceholderAssets.CooldownReady;
-                var gateGuidePulse = CreateBillboardSprite("LGO Gate Keeper Objective Pulse Sprite V3B", gateGuideSprite, GateKeeperPosition + Vector3.up * 0.1f, new Vector3(0.82f, 0.82f, 1f), 4);
-                if (gateGuidePulse != null) gateGuidePulse.color = new Color(RuntimeArtCatalog.Gold.r, RuntimeArtCatalog.Gold.g, RuntimeArtCatalog.Gold.b, 0.82f);
+                var gateGuidePulse = CreateBillboardSprite("LGO Gate Keeper Objective Pulse Sprite V3B", gateGuideSprite, GateKeeperPosition + Vector3.up * 0.1f, new Vector3(1.08f, 1.08f, 1f), 4);
+                if (gateGuidePulse != null) gateGuidePulse.color = new Color(RuntimeArtCatalog.Gold.r, RuntimeArtCatalog.Gold.g, RuntimeArtCatalog.Gold.b, 0.90f);
                 _gateKeeperGuidePulse = gateGuidePulse != null
                     ? gateGuidePulse.transform
                     : CreateMarkerCube("LGO Gate Keeper Talk Guide Pulse", GateKeeperPosition + Vector3.up * 0.12f, RuntimeArtCatalog.Gold, new Vector3(1.9f, 0.06f, 1.9f)).transform;

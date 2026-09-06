@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_CHARACTER_HALL_MOBILE_LIGHT_SHELL_READY` adds a shared mobile-light Character Hall shell variant in `RuntimeUiSkin`, applied through `RuntimeUiFactory` from the layout profile so mobile keeps more background art visible without per-screen card/button overrides. Fresh mobile Character Hall screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_WORLD_OBJECTIVE_PULSE_READABILITY_READY` makes the Gate Keeper objective pulse larger and clearer so the first guided target reads better in mobile World Hub and near-NPC evidence without changing interaction rules. Fresh mobile World Hub/near-object screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

@@ -129,6 +129,8 @@ Current focus update: mobile Character Hall selected hero readability is ready u
 
 Current focus update: mobile Character Hall light shell is ready under `LGO_CHARACTER_HALL_MOBILE_LIGHT_SHELL_READY`; `RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel, layout.IsMobile)` now owns the lighter mobile shell alpha so runtime art reads through the panel without screen-specific card/button styling.
 
+Current focus update: World objective pulse readability is ready under `LGO_WORLD_OBJECTIVE_PULSE_READABILITY_READY`; the Gate Keeper objective pulse is larger/brighter in the guided first step, and mobile `world-hub`/near-object screenshots were reviewed without changing interaction semantics or claiming `VISUAL_RUNTIME_PASS`.
+
 Current focus update: first-time Character Hall create flow now stays visible in the desktop safe viewport under `LGO_CHARACTER_HALL_CREATE_VIEWPORT_FLOW_READY`; desktop uses a horizontal create row before the selection grid, tablet/mobile evidence remains readable, duplicate empty-state objective copy is hidden, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: steady World Hub HUD footprint is smaller on desktop under `LGO_WORLD_HUD_DESKTOP_FOOTPRINT_TUNE_READY`; desktop/tablet/mobile profile screenshots were reviewed as readable, gameplay/dialogue/combat semantics are unchanged, and no `VISUAL_RUNTIME_PASS` is claimed.
