@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: shared primary/secondary buttons, Login background/NPC, combat cooldown active/ready art, combat VFX placeholders, Character Hall portrait fallback, target dummy state art, Shadow Slime art, target marker, and warning telegraph now avoid V2 texture dependencies; exact V2 registry scanning now reports 10 remaining V2 references and 0 fallback-only references; refreshed screenshots were reviewed as readable, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: runtime UI/world/combat source now avoids V2 registry fallback dependencies; exact V2 registry scanning reports 0 remaining V2 references and 0 fallback-only references while V2 `Resources` payload remains structural cleanup debt; refreshed screenshots were reviewed as readable, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -94,6 +94,8 @@ Current focus update: V2 dependency snapshot now uses exact property-name matchi
 Current focus update: combat ready cooldown, wind slash, and impact spark now prefer V3B then lightweight `CombatPlaceholders` instead of V2 fallbacks under `LGO_RUNTIME_COMBAT_VFX_V2_FALLBACK_CLEANUP_READY`; source validators pass and report shows 12 remaining V2 references with 0 fallback-only properties.
 
 Current focus update: Login background and Gate Keeper NPC texture now use V3B directly instead of V2 texture fallbacks under `LGO_LOGIN_V2_FALLBACK_CLEANUP_READY`; fresh login screenshot still renders background/logo/CTA/NPC clearly, report shows 10 remaining V2 references with 0 fallback-only properties, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: World actors and set dressing now use V3B registry assets directly instead of V2 fallbacks under `LGO_RUNTIME_WORLD_V2_FALLBACK_CLEANUP_READY`; refreshed world-hub and target-dummy screenshots still render key actors/props clearly, and exact V2 dependency scan now reports 0 V2 registry references with 0 fallback-only properties.
 
 Current focus update: login CTA and server row sizing/tint were reduced under `LGO_LOGIN_CTA_FIT_FOR_PURPOSE_READY`; fresh desktop/tablet/mobile screenshots were reviewed as calmer and still readable, with no `VISUAL_RUNTIME_PASS` claim.
 

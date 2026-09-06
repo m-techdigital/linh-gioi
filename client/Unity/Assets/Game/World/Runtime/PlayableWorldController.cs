@@ -423,7 +423,7 @@ namespace LinhGioi.World
             // Preserve the M4 visual source marker: LGO NPC Keeper Placeholder.
             // Readability marker names retained for source validators while runtime prefers sprites over legacy cubes:
             // LGO Gate Keeper Ground Halo / LGO Target Dummy Non Combat Base / LGO Training Stone Cyan Beacon / LGO Safe Training Circle Center.
-            if ((LgoVisualAssetRegistryV3B.GateKeeperNpc ?? LgoVisualAssetRegistryV2.GateKeeperNpc) == null)
+            if (LgoVisualAssetRegistryV3B.GateKeeperNpc == null)
             {
                 CreateMarkerCube("LGO Gate Keeper NPC Interactable", GateKeeperPosition, RuntimeArtCatalog.Gold, new Vector3(0.9f, 1.5f, 0.9f));
                 CreateMarkerCube("LGO Gate Keeper Ground Halo", GateKeeperPosition + new Vector3(0f, -0.03f, 0f), RuntimeArtCatalog.Gold, new Vector3(1.15f, 0.035f, 1.15f));
@@ -441,13 +441,13 @@ namespace LinhGioi.World
                 CreateMarkerCube("LGO Shadow Slime Warning Plinth", ShadowSlimePosition + new Vector3(0f, -0.2f, 0f), RuntimeArtCatalog.Danger, new Vector3(1.8f, 0.045f, 1.8f));
             }
 
-            if ((LgoVisualAssetRegistryV3B.TrainingStone ?? LgoVisualAssetRegistryV2.TrainingStone) == null)
+            if (LgoVisualAssetRegistryV3B.TrainingStone == null)
             {
                 CreateMarkerCube("LGO Training Stone Interactable", TrainingStonePosition, RuntimeArtCatalog.Spirit, new Vector3(1.2f, 0.16f, 1.2f));
                 CreateMarkerCube("LGO Training Stone Cyan Beacon", TrainingStonePosition + new Vector3(0f, 0.08f, 0f), RuntimeArtCatalog.Spirit, new Vector3(1.45f, 0.045f, 1.45f));
             }
 
-            if ((LgoVisualAssetRegistryV3B.SpiritGate ?? LgoVisualAssetRegistryV2.SpiritGate) == null)
+            if (LgoVisualAssetRegistryV3B.SpiritGate == null)
                 CreateMarkerCube("LGO Spirit Gate Landmark South", new Vector3(0f, 1.2f, -4.5f), RuntimeArtCatalog.Spirit, new Vector3(2.8f, 2.4f, 0.25f));
         }
 
@@ -775,7 +775,7 @@ namespace LinhGioi.World
             if (_shadowWarningPulse != null)
                 _shadowWarningPulse.gameObject.SetActive(_shadowSlimeState == PlaceholderSlimeState.AlertWarning);
             if (_playerSprite == null)
-                _playerSprite = CreateBillboardSprite("LGO Player Cultivator Runtime Sprite V3B", LgoVisualAssetRegistryV3B.PlayerMaleCultivator ?? LgoVisualAssetRegistryV2.PlayerMaleCultivator, CurrentPosition + Vector3.up * 0.22f, new Vector3(0.64f, 0.64f, 1f), 8);
+                _playerSprite = CreateBillboardSprite("LGO Player Cultivator Runtime Sprite V3B", LgoVisualAssetRegistryV3B.PlayerMaleCultivator, CurrentPosition + Vector3.up * 0.22f, new Vector3(0.64f, 0.64f, 1f), 8);
             if (_playerGroundShadow == null)
                 _playerGroundShadow = WorldProceduralVisuals.CreateGroundShadowSprite("LGO Player Grounding Shadow V3B", CurrentPosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
             if (_playerSprite != null)
@@ -822,17 +822,17 @@ namespace LinhGioi.World
             if (_gateKeeperSprite == null)
             {
                 WorldProceduralVisuals.CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", CurrentGateKeeperVisualPosition() + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
-                _gateKeeperSprite = CreateBillboardSprite("LGO Gate Keeper Runtime Sprite V3B", LgoVisualAssetRegistryV3B.GateKeeperNpc ?? LgoVisualAssetRegistryV2.GateKeeperNpc, CurrentGateKeeperVisualPosition() + Vector3.up * 0.2f, CurrentGateKeeperVisualScale(), 5);
+                _gateKeeperSprite = CreateBillboardSprite("LGO Gate Keeper Runtime Sprite V3B", LgoVisualAssetRegistryV3B.GateKeeperNpc, CurrentGateKeeperVisualPosition() + Vector3.up * 0.2f, CurrentGateKeeperVisualScale(), 5);
             }
             if (_spiritGateSprite == null)
             {
                 WorldProceduralVisuals.CreateGroundShadowSprite("LGO Spirit Gate Grounding Shadow V3B", new Vector3(0f, 0.018f, -4.5f), new Vector3(2.1f, 0.34f, 1f), 1);
-                _spiritGateSprite = CreateBillboardSprite("LGO Spirit Gate Runtime Sprite V3B", LgoVisualAssetRegistryV3B.SpiritGate ?? LgoVisualAssetRegistryV2.SpiritGate, new Vector3(0f, 0.35f, -4.5f), new Vector3(0.58f, 0.58f, 1f), 3);
+                _spiritGateSprite = CreateBillboardSprite("LGO Spirit Gate Runtime Sprite V3B", LgoVisualAssetRegistryV3B.SpiritGate, new Vector3(0f, 0.35f, -4.5f), new Vector3(0.58f, 0.58f, 1f), 3);
             }
             if (_trainingStoneSprite == null)
             {
                 WorldProceduralVisuals.CreateGroundShadowSprite("LGO Training Stone Grounding Shadow V3B", TrainingStonePosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
-                _trainingStoneSprite = CreateBillboardSprite("LGO Training Stone Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TrainingStone ?? LgoVisualAssetRegistryV2.TrainingStone, TrainingStonePosition + Vector3.up * 0.2f, new Vector3(0.62f, 0.62f, 1f), 5);
+                _trainingStoneSprite = CreateBillboardSprite("LGO Training Stone Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TrainingStone, TrainingStonePosition + Vector3.up * 0.2f, new Vector3(0.62f, 0.62f, 1f), 5);
             }
             if (_shadowSlimeSprite == null)
             {
