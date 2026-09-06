@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SKILL_PREVIEW_PANEL_VISIBILITY_READY` keeps the skill preview sandbox visible with gameplay panels, so Shadow Bind/Wind Slash/Spirit Guard buttons and selected-preview feedback are readable in the World HUD during runtime evidence.
+Latest player-visible batch: `LGO_COMBAT_CTA_WIDTH_READABILITY_READY` widens the local combat CTA metrics so `Tấn công thử` / `Hồi chiêu` read cleanly in the World HUD without changing combat semantics or adding asset payload.
 
 Current visual/runtime evidence harness command:
 

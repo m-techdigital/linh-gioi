@@ -61,8 +61,8 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs",
-        "CombatButtonReadyMinWidth",
-        "CombatButtonCooldownMinWidth",
+        "CombatButtonReadyMinWidth = 148",
+        "CombatButtonCooldownMinWidth = 154",
         "CombatButtonMinHeight",
         "CombatButtonReadyFontSize",
         "CombatButtonCooldownFontSize",
