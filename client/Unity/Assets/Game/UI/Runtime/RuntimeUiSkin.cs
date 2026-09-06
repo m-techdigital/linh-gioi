@@ -329,12 +329,18 @@ namespace LinhGioi.UI
             list.style.borderBottomWidth = 1;
         }
 
-        internal static void ApplyCharacterPreviewFrame(VisualElement preview)
+        internal static void ApplyCharacterPreviewFrame(VisualElement preview, bool lightProfile = false)
         {
             ApplySubtleNestedFrame(preview, RuntimeArtCatalog.Spirit, 0.38f);
-            preview.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.66f);
+            // LGO Character Hall Selected Hero Light Frame v1: compact selected-state hero should read closer to the target sheet, not as another heavy modal card.
+            preview.style.backgroundColor = lightProfile ? new Color(0.0f, 0.020f, 0.050f, 0.42f) : new Color(0.0f, 0.020f, 0.050f, 0.66f);
             preview.style.borderTopColor = RuntimeArtCatalog.Gold;
             preview.style.borderBottomColor = RuntimeArtCatalog.Gold;
+            if (lightProfile)
+            {
+                preview.style.borderLeftColor = new Color(RuntimeArtCatalog.Spirit.r, RuntimeArtCatalog.Spirit.g, RuntimeArtCatalog.Spirit.b, 0.28f);
+                preview.style.borderRightColor = new Color(RuntimeArtCatalog.Spirit.r, RuntimeArtCatalog.Spirit.g, RuntimeArtCatalog.Spirit.b, 0.22f);
+            }
         }
 
         internal static void ApplyCharacterCreateFrame(VisualElement panel)

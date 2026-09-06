@@ -87,7 +87,7 @@ def main() -> int:
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
         "Wrap.NoWrap",
-        "preview.style.display = layout.IsMobile && !hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex",
+        "preview.style.display = !hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0.md",

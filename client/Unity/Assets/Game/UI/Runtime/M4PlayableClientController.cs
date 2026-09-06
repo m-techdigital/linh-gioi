@@ -48,6 +48,8 @@ namespace LinhGioi.UI
         private VisualElement _lobbyContent;
         private VisualElement _selectedPreview;
         private VisualElement _createPanel;
+        private VisualElement _createBody;
+        private VisualElement _createFooter;
         private VisualElement _emptyCharacterCard;
         private VisualElement _loginStage;
         private VisualElement _loginControlColumn;
@@ -58,6 +60,7 @@ namespace LinhGioi.UI
         private VisualElement _loginCard;
         private VisualElement _loginServerRow;
         private VisualElement _serverStatusIcon;
+        private VisualElement _lobbyHeaderBlock;
         private Label _loginServerText;
         private Label _lobbyIntro;
         private Label _createHint;
@@ -536,7 +539,8 @@ namespace LinhGioi.UI
             var layout = CurrentLayoutProfile();
             _lobbyPanel = NewCharacterHallPanel(layout);
             _mainShell.Add(_lobbyPanel);
-            _lobbyPanel.Add(NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold, "LGO Character Hall Header Block"));
+            _lobbyHeaderBlock = NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold, "LGO Character Hall Header Block");
+            _lobbyPanel.Add(_lobbyHeaderBlock);
             var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.");
             _lobbyIntro = lobbyIntro;
             lobbyIntro.style.marginBottom = layout.LobbyIntroMarginBottom;
@@ -582,7 +586,9 @@ namespace LinhGioi.UI
             createHint.style.alignSelf = Align.Center;
             createHint.style.unityTextAlign = TextAnchor.MiddleCenter;
             createHint.style.marginBottom = 6;
-            _createPanel.Add(createHint);
+            _createBody = NewModalBody("LGO Character Create Modal Body");
+            _createFooter = NewModalFooter("LGO Character Create Modal Footer");
+            _createBody.Add(createHint);
             _characterName = NewLobbyTextField("", "LinhGioiHero", "Nhập danh xưng tu sĩ.");
             _characterName.name = "LGO Character Create Form Framed Input v1";
             _characterName.style.maxWidth = RuntimeUiSizing.CharacterNameFieldMaxWidth;
@@ -590,10 +596,12 @@ namespace LinhGioi.UI
             _classId.style.display = DisplayStyle.None;
             _createButton = NewCompactSecondaryButton("Tạo tu sĩ", OnCreateCharacterAction);
             _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
-            _createPanel.Add(_characterName);
-            _createPanel.Add(_classId);
+            _createBody.Add(_characterName);
+            _createBody.Add(_classId);
             _characterActionRow = NewActionRow("LGO Character Hall Action Row", Justify.FlexStart, 6, 0, _createButton, _enterWorldButton);
-            _createPanel.Add(_characterActionRow);
+            _createFooter.Add(_characterActionRow);
+            _createPanel.Add(_createBody);
+            _createPanel.Add(_createFooter);
         }
 
         private void BuildWorldHud()
@@ -998,7 +1006,11 @@ namespace LinhGioi.UI
                 _characterName,
                 _classId,
                 _createPanel,
-                _characterActionRow);
+                _createBody,
+                _createFooter,
+                _characterActionRow,
+                _createButton,
+                _enterWorldButton);
             ApplyCharacterHallActionHierarchy();
         }
 
@@ -1323,6 +1335,7 @@ namespace LinhGioi.UI
             RuntimeCharacterHallResponsiveLayout.Apply(
                 layout,
                 _lobbyPanel,
+                _lobbyHeaderBlock,
                 _lobbyIntro,
                 _characterList,
                 _emptyCharacterCard,

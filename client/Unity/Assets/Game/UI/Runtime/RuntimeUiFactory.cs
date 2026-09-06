@@ -177,8 +177,8 @@ namespace LinhGioi.UI
         internal static void ApplySelectedCharacterPreviewResponsive(VisualElement preview, Label selectedName, RuntimeUiLayoutProfile layout, int viewportWidth, bool hasSelectedCharacter = true)
         {
             if (preview == null) return;
-            preview.style.display = layout.IsMobile && !hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex;
-            preview.style.width = layout.IsMobile && hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;
+            preview.style.display = !hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex;
+            preview.style.width = hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;
             preview.style.maxWidth = layout.CharacterSelectedPreviewMaxWidth;
             preview.style.minWidth = layout.IsMobile ? 0 : RuntimeUiSpacing.PreviewPanelMinWidth;
             preview.style.flexGrow = layout.IsMobile ? 0 : 1;
@@ -186,6 +186,7 @@ namespace LinhGioi.UI
             preview.style.height = layout.IsMobile || layout.IsTablet
                 ? StyleKeyword.Auto
                 : layout.CharacterSelectedPreviewHeight;
+            RuntimeUiSkin.ApplyCharacterPreviewFrame(preview, layout.IsMobile && hasSelectedCharacter);
             if (selectedName != null)
                 selectedName.style.fontSize = layout.SelectedCharacterNameFontSize;
         }

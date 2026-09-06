@@ -10,6 +10,7 @@ namespace LinhGioi.UI
         internal static void Apply(
             RuntimeUiLayoutProfile layout,
             VisualElement lobbyPanel,
+            VisualElement lobbyHeaderBlock,
             Label lobbyIntro,
             VisualElement characterList,
             VisualElement emptyCharacterCard,
@@ -23,7 +24,9 @@ namespace LinhGioi.UI
             var width = layout.Width;
             var height = layout.Height;
             ApplyPanel(layout, width, height, lobbyPanel);
-            ApplyIntro(layout, lobbyIntro);
+            // LGO Character Hall Selected Compact Header Contract v1: selected mobile follows the target sheet by prioritizing roster/hero/actions over repeated screen prose.
+            SetDisplayed(lobbyHeaderBlock, !(layout.IsMobile && hasSelectedCharacter));
+            ApplyIntro(layout, lobbyIntro, hasSelectedCharacter);
             ApplyCreatePanelOrder(layout, lobbyPanel, lobbyContent, createPanel, hasSelectedCharacter);
             RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter);
             if (emptyCharacterCard != null)
@@ -44,7 +47,11 @@ namespace LinhGioi.UI
             TextField characterName,
             TextField classId,
             VisualElement createPanel,
-            VisualElement characterActionRow)
+            VisualElement createBody,
+            VisualElement createFooter,
+            VisualElement characterActionRow,
+            Button createButton,
+            Button enterWorldButton)
         {
             var collapsed = hasSelectedCharacter && !createFormExpanded;
             var compactStandaloneCreate = !hasSelectedCharacter && !isMobileProfile;
@@ -112,12 +119,27 @@ namespace LinhGioi.UI
                     createPanel.style.bottom = StyleKeyword.Auto;
                 }
             }
+            RuntimeUiOverflowGuard.ApplyModalBody(createBody);
+            RuntimeUiOverflowGuard.ApplyModalFooter(createFooter, compactStandaloneCreate ? 0 : 6);
+            if (createBody != null)
+            {
+                createBody.style.flexDirection = compactStandaloneCreate ? FlexDirection.Row : FlexDirection.Column;
+                createBody.style.alignItems = compactStandaloneCreate ? Align.Center : Align.Stretch;
+                createBody.style.minWidth = 0;
+            }
+            if (createFooter != null)
+            {
+                createFooter.style.width = compactStandaloneCreate ? 180 : Length.Percent(100);
+                createFooter.style.maxWidth = compactStandaloneCreate ? 180 : Length.Percent(100);
+                createFooter.style.marginLeft = compactStandaloneCreate ? 12 : 0;
+            }
             if (characterActionRow != null)
             {
                 characterActionRow.style.marginLeft = collapsed && !isMobileProfile ? 0 : compactStandaloneCreate ? 12 : 0;
                 characterActionRow.style.marginTop = collapsed && isMobileProfile ? 0 : compactStandaloneCreate ? 0 : 6;
                 characterActionRow.style.flexGrow = collapsed && !isMobileProfile || compactStandaloneCreate ? 1 : 0;
                 characterActionRow.style.justifyContent = collapsed && !isMobileProfile || !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;
+                RuntimeUiOverflowGuard.ApplyResponsiveColumns(characterActionRow, compactStandaloneCreate ? 1 : hasSelectedCharacter ? 2 : 1, compactStandaloneCreate ? 0 : 6, createButton, enterWorldButton);
             }
         }
 
@@ -165,21 +187,28 @@ namespace LinhGioi.UI
         private static void ApplyPanel(RuntimeUiLayoutProfile layout, int width, int height, VisualElement lobbyPanel)
         {
             if (lobbyPanel == null) return;
-            lobbyPanel.style.maxWidth = layout.IsMobile
-                ? Mathf.Min(width - 40f, 780f)
+            // LGO Character Hall Mobile Full Safe Shell v1: mobile landscape follows the demo container bounds instead of a narrow fixed panel-space clamp.
+            lobbyPanel.style.width = layout.IsMobile ? Length.Percent(100) : StyleKeyword.Auto;
+            lobbyPanel.style.maxWidth = layout.IsMobile ? Length.Percent(100)
                 : layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth;
             lobbyPanel.style.minHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : 410;
             lobbyPanel.style.maxHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : StyleKeyword.None;
             RuntimeUiSkin.ApplyPadding(lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
         }
 
-        private static void ApplyIntro(RuntimeUiLayoutProfile layout, Label lobbyIntro)
+        private static void ApplyIntro(RuntimeUiLayoutProfile layout, Label lobbyIntro, bool hasSelectedCharacter)
         {
             if (lobbyIntro == null) return;
             // LGO Character Hall Mobile Copy Density v1: mobile keeps intent, drops prose.
             lobbyIntro.text = layout.IsMobile ? "Chọn tu sĩ, rồi vào sân luyện." : "Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.";
+            lobbyIntro.style.display = layout.IsMobile && hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex;
             lobbyIntro.style.fontSize = layout.IsMobile ? RuntimeUiTypography.LobbyIntroMobileFontSize : RuntimeUiTypography.LobbyIntroDesktopFontSize;
             lobbyIntro.style.marginBottom = layout.LobbyIntroMarginBottom;
+        }
+
+        private static void SetDisplayed(VisualElement element, bool visible)
+        {
+            if (element != null) element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private static void ApplyEmptyHint(RuntimeUiLayoutProfile layout, Label emptyCharacterHint)

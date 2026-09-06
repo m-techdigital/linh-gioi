@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_DIALOGUE_SPEAKER_CONTEXT_BASE_READY` adds a shared responsive speaker header with the V3B Gate Keeper portrait to World dialogue. Fresh mobile normal/long dialogue screenshots were reviewed; the panel keeps body-only scroll and visible footer actions without claiming `VISUAL_RUNTIME_PASS`.
+Latest player-visible batch: `LGO_CHARACTER_HALL_DEMO_BASE_ALIGNMENT_READY` moves Character Hall closer to the demo target by using a full-safe mobile shell, state-aware selected header/prose visibility, and shared modal body/footer plus responsive action columns for the create form. Fresh desktop and mobile Character Hall screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 
 Current visual/runtime evidence harness command:
 
