@@ -354,7 +354,7 @@ namespace LinhGioi.UI
         internal static void ApplyFloatingActionBarFrame(VisualElement panel)
         {
             panel.style.backgroundImage = StyleKeyword.None;
-            panel.style.backgroundColor = new Color(0.0f, 0.014f, 0.034f, 0.28f);
+            panel.style.backgroundColor = Color.clear;
             ApplyRadius(panel, 8);
             panel.style.borderLeftWidth = 0;
             panel.style.borderRightWidth = 0;

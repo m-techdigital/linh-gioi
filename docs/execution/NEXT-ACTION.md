@@ -4,6 +4,8 @@ Last updated: `2026-09-06`
 
 ## Quick Resume
 
+- Character Hall central stage: nhân vật V3B đã ra cột giữa qua factory/layout chung; roster và thông tin ở hai bên. Base list button bỏ min-width cứng, dock PC giới hạn theo parent, shell PC/tablet có max-height theo phần viewport còn lại. Đã xem selected cả ba profile và empty PC; quick gate pass (`build/dev-loop/character-central-stage.log`, `build/dev-loop/character-central-stage-quick.log`). Tiếp theo: resize trong cùng phiên, tên dài và form Tạo thêm; chưa claim visual PASS hoặc giống demo 100%.
+
 - Batch 2026-09-06: pad mobile đã nối movement cục bộ qua base `RuntimeTouchMovementPad`. 5/5 UI tests có graphics pass; quick gate pass. Player smoke thực hiện pointer mô phỏng: đi 1,441 đơn vị, thả/menu đều dừng (`build/visual-evidence/touch-movement/player-unity.log`). Đã xem world-hub sau smoke. Chưa test thiết bị cảm ứng thật hoặc claim visual PASS. Tiếp theo: bố cục hero Character Hall theo demo, dùng base chung và kiểm tra cả resize giữa các profile.
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.

@@ -80,7 +80,7 @@ def main() -> int:
         "ApplySelectedActionRatio(layout, characterActionRow, createButton, enterWorldButton);",
         "LGO Character Hall Selected CTA Ratio Base v1",
         "LGO Character Hall Mobile Full Safe Shell v1",
-        "lobbyPanel.style.width = layout.IsMobile ? Length.Percent(100) : StyleKeyword.Auto;",
+        "lobbyPanel.style.width = Length.Percent(100);",
         "lobbyPanel.style.maxWidth = layout.IsMobile ? Length.Percent(100)",
         "layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth",
         "createPanel.style.maxHeight = layout.IsMobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;",

@@ -149,6 +149,8 @@ namespace LinhGioi.UI
         internal static void ApplyCharacterHallContentResponsive(VisualElement row, RuntimeUiLayoutProfile layout)
         {
             if (row == null) return;
+            row.style.minHeight = 0;
+            row.style.flexShrink = 1;
             row.style.flexDirection = FlexDirection.Row;
             row.style.flexWrap = Wrap.NoWrap;
             row.style.height = layout.IsMobile || layout.IsTablet
@@ -237,6 +239,51 @@ namespace LinhGioi.UI
             hero.Add(portrait);
             hero.Add(copy);
             return hero;
+        }
+
+        internal static void ApplyCharacterSelectionStage(VisualElement row, VisualElement roster, VisualElement preview, RuntimeUiLayoutProfile layout, bool selected)
+        {
+            if (row == null || roster == null || preview == null) return;
+            var portrait = row.Q<VisualElement>("LGO Character Hall V3B Cultivator Portrait");
+            if (portrait == null) return;
+            // One retained image becomes the central stage; the profile card owns only text.
+            if (portrait.parent != row)
+            {
+                portrait.RemoveFromHierarchy();
+                row.Insert(row.IndexOf(preview), portrait);
+            }
+            portrait.style.display = selected ? DisplayStyle.Flex : DisplayStyle.None;
+            if (!selected) return;
+
+            row.style.height = layout.Height * (layout.IsMobile ? 0.58f : 0.48f);
+            row.style.minWidth = 0;
+            row.style.alignItems = Align.Stretch;
+            ApplySelectionStageColumn(roster, 28);
+            ApplySelectionStageColumn(portrait, 34);
+            ApplySelectionStageColumn(preview, 34);
+            portrait.style.height = Length.Percent(100);
+            portrait.style.backgroundColor = Color.clear;
+            portrait.style.borderTopWidth = 0;
+            portrait.style.borderBottomWidth = 0;
+            portrait.style.borderLeftWidth = 0;
+            portrait.style.borderRightWidth = 0;
+            portrait.pickingMode = PickingMode.Ignore;
+            preview.style.height = StyleKeyword.Auto;
+            preview.style.alignSelf = Align.Center;
+            preview.style.maxHeight = Length.Percent(100);
+            preview.style.overflow = Overflow.Hidden;
+        }
+
+        private static void ApplySelectionStageColumn(VisualElement element, float widthPercent)
+        {
+            element.style.width = Length.Percent(widthPercent);
+            element.style.maxWidth = Length.Percent(widthPercent);
+            element.style.minWidth = 0;
+            element.style.flexGrow = 0;
+            element.style.flexShrink = 1;
+            element.style.flexBasis = StyleKeyword.Auto;
+            element.style.marginLeft = 0;
+            element.style.marginRight = 0;
         }
 
         internal static VisualElement NewCharacterPortraitFrame(RuntimeUiLayoutProfile layout, Texture2D portraitTexture, Texture2D fallbackTexture)
@@ -662,6 +709,9 @@ namespace LinhGioi.UI
         {
             var button = NewSecondaryButton(name + "\n" + classId, action);
             RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.ListButtonMinWidth, RuntimeUiSpacing.ListButtonMinHeight);
+            RuntimeUiOverflowGuard.ApplyButton(button);
+            button.style.minWidth = 0;
+            button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
             button.style.paddingLeft = RuntimeUiSpacing.ListButtonPaddingLeft;
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.15f, 0.25f, 0.88f), RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);

@@ -8,6 +8,8 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Character Hall central stage: dùng lại ảnh V3B ở giữa bố cục ba cột chung; sửa min-width nút roster, ràng buộc dock theo parent và max-height shell PC/tablet. Đã xem ảnh selected PC/tablet/mobile và empty PC; quick gate pass. Còn cần evidence resize liên tục, tên dài và form Tạo thêm; không claim visual PASS.
+
 Batch 2026-09-06: pad mobile nhận pointer và nối movement hiện có; 5/5 UI tests có graphics pass. Player smoke xác minh di chuyển 1,441 đơn vị rồi dừng khi thả/mở menu; log `build/visual-evidence/touch-movement/player-unity.log`. Quick gate pass; đã xem world-hub. Chưa test cảm ứng trên thiết bị thật, chưa claim giống demo 100%.
 
 Latest player-visible batch: `LGO_CHARACTER_HALL_SELECTED_CTA_RATIO_READY` gives selected Character Hall actions a shared responsive ratio so the primary enter-world CTA owns the row and the secondary create action no longer looks equally dominant. Fresh desktop/tablet/mobile Character Hall screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.

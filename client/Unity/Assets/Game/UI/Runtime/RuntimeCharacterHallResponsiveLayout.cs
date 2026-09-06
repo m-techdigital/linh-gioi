@@ -34,6 +34,7 @@ namespace LinhGioi.UI
             ApplyEmptyHint(layout, emptyCharacterHint);
             RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);
             RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width, hasSelectedCharacter);
+            RuntimeUiFactory.ApplyCharacterSelectionStage(lobbyContent, characterList, selectedPreview, layout, hasSelectedCharacter);
             ApplyCreatePanel(layout, width, createPanel);
         }
 
@@ -120,6 +121,11 @@ namespace LinhGioi.UI
                         layout.CharacterHallSelectedActionDockMaxHeight,
                         layout.CharacterHallSelectedActionDockInsetHorizontal,
                         layout.CharacterHallSelectedActionDockBottom);
+                    // The dock is a child of the hall, so its available width is the parent content box.
+                    createPanel.style.left = layout.LobbyPanelPaddingHorizontal;
+                    createPanel.style.right = layout.LobbyPanelPaddingHorizontal;
+                    createPanel.style.width = StyleKeyword.Auto;
+                    createPanel.style.maxWidth = Length.Percent(100);
                 }
                 else if (!layout.IsMobile)
                 {
@@ -143,6 +149,11 @@ namespace LinhGioi.UI
                 createFooter.style.width = compactStandaloneCreate ? 180 : Length.Percent(100);
                 createFooter.style.maxWidth = compactStandaloneCreate ? 180 : Length.Percent(100);
                 createFooter.style.marginLeft = compactStandaloneCreate ? 12 : 0;
+                if (collapsed && !layout.IsMobile && !layout.IsTablet)
+                {
+                    createFooter.style.maxWidth = layout.CharacterHallSelectedActionDockWidth;
+                    createFooter.style.alignSelf = Align.Center;
+                }
             }
             if (characterActionRow != null)
             {
@@ -239,11 +250,12 @@ namespace LinhGioi.UI
         {
             if (lobbyPanel == null) return;
             // LGO Character Hall Mobile Full Safe Shell v1: mobile landscape follows the demo container bounds instead of a narrow fixed panel-space clamp.
-            lobbyPanel.style.width = layout.IsMobile ? Length.Percent(100) : StyleKeyword.Auto;
+            lobbyPanel.style.width = Length.Percent(100);
             lobbyPanel.style.maxWidth = layout.IsMobile ? Length.Percent(100)
                 : layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth;
-            lobbyPanel.style.minHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : 410;
-            lobbyPanel.style.maxHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : StyleKeyword.None;
+            lobbyPanel.style.minHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : 0;
+            lobbyPanel.style.maxHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight
+                : Mathf.Max(0, height - 2 * (layout.RootPaddingTop + layout.HeaderMinHeight(false)));
             RuntimeUiSkin.ApplyPadding(lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
         }
 
