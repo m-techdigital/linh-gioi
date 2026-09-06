@@ -70,7 +70,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);",
-        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width);",
+        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width, hasSelectedCharacter);",
         "RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(",
     )
     require(
@@ -86,7 +86,7 @@ def main() -> int:
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
         "Wrap.NoWrap",
-        "layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex",
+        "preview.style.display = layout.IsMobile && !hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-V3B-COMPOSITION-POLISH-v1.0.md",

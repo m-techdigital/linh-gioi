@@ -85,13 +85,13 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
-        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width)",
+        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter)",
         "layout.CharacterHallDensity",
     )
     factory = require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "NewCharacterListPanel(RuntimeUiLayoutProfile layout)",
-        "ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth)",
+        "ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth, bool hasSelectedCharacter = false)",
     )
     if factory.count("ApplyCharacterListDensity(list, layout.CharacterHallDensity);") < 2:
         ERRORS.append("Character Hall list density should be applied during build and responsive refresh")

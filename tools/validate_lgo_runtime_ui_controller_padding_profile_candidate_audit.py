@@ -93,7 +93,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "LGO Character Hall Responsive Layout Helper v1",
         "RuntimeUiSkin.ApplyPadding(lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);",
-        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);",
+        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter);",
         "RuntimeUiFactory.ApplyEmptyCharacterCardDensity(emptyCharacterCard, layout.CharacterHallDensity);",
         "RuntimeUiSkin.ApplyPadding(createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);",
     )

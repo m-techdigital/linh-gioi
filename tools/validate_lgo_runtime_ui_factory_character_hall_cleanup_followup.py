@@ -67,7 +67,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
-        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);",
+        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter);",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
@@ -77,7 +77,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "NewCharacterListPanel(RuntimeUiLayoutProfile layout)",
-        "ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth)",
+        "ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth, bool hasSelectedCharacter = false)",
         "ApplyCharacterListDensity(list, layout.CharacterHallDensity);",
     )
     require(

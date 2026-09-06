@@ -110,12 +110,13 @@ namespace LinhGioi.UI
         internal int SelectedPreviewHeroMarginBottom => 10;
         internal int CharacterPortraitMarginRight => 12;
         internal float CharacterSelectedPreviewMaxWidth => IsMobile
-            ? Mathf.Clamp(Width * 0.48f, 300f, 390f)
+            ? Mathf.Clamp(Width * 0.30f, 240f, 282f)
             : IsTablet ? Mathf.Clamp(Width * 0.34f, 390f, 430f) : Mathf.Clamp(Width * 0.30f, 520f, 580f);
         internal float CharacterSelectedPreviewHeight => IsMobile || IsTablet ? 0f : Mathf.Clamp(Height * 0.42f, 390f, 460f);
-        internal int CharacterPortraitWidth => IsTablet ? 156 : 178;
-        internal int CharacterPortraitHeight => IsTablet ? 214 : 244;
-        internal int SelectedCharacterNameFontSize => IsTablet ? RuntimeUiTypography.SelectedCharacterNameTabletFontSize : 23;
+        internal float CharacterSelectedListMaxWidth => IsMobile ? Mathf.Clamp(Width * 0.30f, 236f, 270f) : IsTablet ? 340 : RuntimeUiSizing.CharacterListMaxWidth;
+        internal int CharacterPortraitWidth => IsMobile ? 108 : IsTablet ? 156 : 178;
+        internal int CharacterPortraitHeight => IsMobile ? 148 : IsTablet ? 214 : 244;
+        internal int SelectedCharacterNameFontSize => IsMobile ? 16 : IsTablet ? RuntimeUiTypography.SelectedCharacterNameTabletFontSize : 23;
         internal int LobbyPanelPaddingHorizontal => IsMobile ? 12 : 18;
         internal int LobbyPanelPaddingTop => IsMobile ? 8 : 16;
         internal int LobbyPanelPaddingBottom => IsMobile ? 8 : 18;

@@ -152,13 +152,13 @@ namespace LinhGioi.UI
             return list;
         }
 
-        internal static void ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth)
+        internal static void ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth, bool hasSelectedCharacter = false)
         {
             if (list == null) return;
-            list.style.minWidth = layout.IsMobile ? 220 : RuntimeUiSizing.CharacterListInitialMinWidth;
+            list.style.minWidth = layout.IsMobile && hasSelectedCharacter ? 206 : layout.IsMobile ? 220 : RuntimeUiSizing.CharacterListInitialMinWidth;
             list.style.maxWidth = layout.IsMobile
-                ? Mathf.Clamp(viewportWidth * 0.40f, 285f, 330f)
-                : layout.IsTablet ? 340 : RuntimeUiSizing.CharacterListMaxWidth;
+                ? hasSelectedCharacter ? layout.CharacterSelectedListMaxWidth : Mathf.Clamp(viewportWidth * 0.40f, 285f, 330f)
+                : layout.CharacterSelectedListMaxWidth;
             list.style.height = layout.IsMobile || layout.IsTablet
                 ? StyleKeyword.Auto
                 : Mathf.Clamp(layout.Height * 0.42f, 390f, 460f);
@@ -174,11 +174,13 @@ namespace LinhGioi.UI
             return preview;
         }
 
-        internal static void ApplySelectedCharacterPreviewResponsive(VisualElement preview, Label selectedName, RuntimeUiLayoutProfile layout, int viewportWidth)
+        internal static void ApplySelectedCharacterPreviewResponsive(VisualElement preview, Label selectedName, RuntimeUiLayoutProfile layout, int viewportWidth, bool hasSelectedCharacter = true)
         {
             if (preview == null) return;
-            preview.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
+            preview.style.display = layout.IsMobile && !hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex;
             preview.style.maxWidth = layout.CharacterSelectedPreviewMaxWidth;
+            preview.style.minWidth = layout.IsMobile ? 0 : RuntimeUiSpacing.PreviewPanelMinWidth;
+            preview.style.flexGrow = layout.IsMobile ? 0 : 1;
             preview.style.height = layout.IsMobile || layout.IsTablet
                 ? StyleKeyword.Auto
                 : layout.CharacterSelectedPreviewHeight;

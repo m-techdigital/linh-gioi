@@ -25,12 +25,12 @@ namespace LinhGioi.UI
             ApplyPanel(layout, width, height, lobbyPanel);
             ApplyIntro(layout, lobbyIntro);
             ApplyCreatePanelOrder(layout, lobbyPanel, lobbyContent, createPanel, hasSelectedCharacter);
-            RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);
+            RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter);
             if (emptyCharacterCard != null)
                 RuntimeUiFactory.ApplyEmptyCharacterCardDensity(emptyCharacterCard, layout.CharacterHallDensity);
             ApplyEmptyHint(layout, emptyCharacterHint);
             RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);
-            RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width);
+            RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width, hasSelectedCharacter);
             ApplyCreatePanel(layout, width, createPanel);
         }
 

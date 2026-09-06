@@ -223,6 +223,8 @@ Current focus update: shared modal/action structure is ready under `LGO_RUNTIME_
 
 Current focus update: Character Hall selected hero metrics are ready under `LGO_CHARACTER_HALL_SELECTED_HERO_PROFILE_METRICS_READY`; selected preview width, portrait size, and selected-name typography now come from `RuntimeUiLayoutProfile`, desktop/tablet portrait reads larger, and the redundant selected-card heading was removed after screenshot review showed it overlapping the portrait. Fresh profile screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
+Current focus update: mobile Character Hall selected hero is ready under `LGO_MOBILE_CHARACTER_HALL_SELECTED_HERO_READY`; selected-state mobile now keeps a compact roster and shows the V3B cultivator hero/profile beside it using profile-owned list/preview metrics instead of hiding the selected preview. Fresh mobile/tablet/desktop screenshots were reviewed; mobile is closer to the target sheet but still not final production UI, and no `VISUAL_RUNTIME_PASS` is claimed.
+
 Current focus update: scroll body chrome baseline is ready under `LGO_SCROLL_BODY_CHROME_BASE_READY`; `RuntimeUiOverflowGuard.ApplyBoundedScroll` now skins runtime scrollbars and hides default arrow buttons so long dialogue no longer exposes platform-default white scroller controls. Fresh desktop/tablet/mobile long-dialogue screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.

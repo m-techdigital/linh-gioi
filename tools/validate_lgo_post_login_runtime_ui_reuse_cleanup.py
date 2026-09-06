@@ -64,9 +64,9 @@ def main() -> int:
         "NewCharacterHallContentRow(RuntimeUiLayoutProfile layout)",
         "ApplyCharacterHallContentResponsive(VisualElement row, RuntimeUiLayoutProfile layout)",
         "NewCharacterListPanel(RuntimeUiLayoutProfile layout)",
-        "ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth)",
+        "ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth, bool hasSelectedCharacter = false)",
         "NewSelectedCharacterPreviewPanel()",
-        "ApplySelectedCharacterPreviewResponsive(VisualElement preview, Label selectedName, RuntimeUiLayoutProfile layout, int viewportWidth)",
+        "ApplySelectedCharacterPreviewResponsive(VisualElement preview, Label selectedName, RuntimeUiLayoutProfile layout, int viewportWidth, bool hasSelectedCharacter = true)",
         "NewCharacterProfileHero(RuntimeUiLayoutProfile layout, VisualElement portrait, VisualElement copy)",
         "NewCharacterPortraitFrame(RuntimeUiLayoutProfile layout, Texture2D portraitTexture, Texture2D fallbackTexture)",
         "NewFlexibleColumn(string name = null)",
@@ -85,9 +85,9 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
-        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);",
+        "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter);",
         "RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);",
-        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width);",
+        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width, hasSelectedCharacter);",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
