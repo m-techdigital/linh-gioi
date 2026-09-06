@@ -140,6 +140,7 @@ namespace LinhGioi.UI
             bool tabletProfile,
             bool forceCombatPanel,
             bool hideGuidanceCardOnCompact,
+            bool skillPreviewActive,
             VisualElement worldHud,
             VisualElement headerActions,
             Label layoutProfileLabel,
@@ -165,7 +166,9 @@ namespace LinhGioi.UI
         {
             var compactViewport = mobileProfile || tabletProfile;
             var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible && !compactViewport;
-            var gameplayPanelVisible = !sessionVisible && !dialogueVisible && (!compactViewport || forceCombatPanel);
+            var defaultGameplayPanelVisible = !sessionVisible && !dialogueVisible && !compactViewport && !focusMode;
+            var combatPanelVisible = !sessionVisible && !dialogueVisible && (forceCombatPanel || defaultGameplayPanelVisible);
+            var skillPreviewPanelVisible = !sessionVisible && !dialogueVisible && !mobileProfile && (skillPreviewActive || defaultGameplayPanelVisible);
             var compactWorld = compactViewport || focusMode;
             var evidenceHidesGuidance = hideGuidanceCardOnCompact && compactViewport;
             SetElementVisibility(worldHud, !sessionVisible);
@@ -184,8 +187,8 @@ namespace LinhGioi.UI
             SetDisplayed(worldPoseState, auxiliaryVisible);
             SetDisplayed(worldVfxState, auxiliaryVisible);
             SetDisplayed(skinSource, auxiliaryVisible);
-            SetDisplayed(skillPreviewPanel, gameplayPanelVisible && !mobileProfile);
-            SetDisplayed(localCombatPanel, gameplayPanelVisible);
+            SetDisplayed(skillPreviewPanel, skillPreviewPanelVisible);
+            SetDisplayed(localCombatPanel, combatPanelVisible);
             SetDisplayed(toast, !compactWorld);
             SetDisplayed(combatVisualState, auxiliaryVisible);
             SetDisplayed(combatCooldown, auxiliaryVisible);

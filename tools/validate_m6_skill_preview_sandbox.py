@@ -74,6 +74,8 @@ def main() -> int:
         'Chọn kỹ năng để thấy tư thế',
         'Đang xem: chưa chọn kỹ năng.',
         'Đang xem: " + displayName',
+        'private bool _skillPreviewActive;',
+        '_skillPreviewActive = true;',
         'ApplySkillPreviewButtonState',
         'RuntimeUiSpacing.SkillPreviewButtonMinWidth',
         'RuntimeUiSpacing.SkillPreviewButtonFontSize',
@@ -94,13 +96,16 @@ def main() -> int:
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs',
         'CaptureEvidenceShadowBindPreview',
+        '_skillPreviewActive = false;',
         'ResetLocalCombatPreviewStateForSmoke',
         'PreviewSkill("Shadow Bind", "Trói Bóng")',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs',
-        'SetDisplayed(skillPreviewPanel, gameplayPanelVisible && !mobileProfile);',
-        'SetDisplayed(localCombatPanel, gameplayPanelVisible);',
+        'bool skillPreviewActive,',
+        'var skillPreviewPanelVisible = !sessionVisible && !dialogueVisible && !mobileProfile && (skillPreviewActive || defaultGameplayPanelVisible);',
+        'SetDisplayed(skillPreviewPanel, skillPreviewPanelVisible);',
+        'SetDisplayed(localCombatPanel, combatPanelVisible);',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs',

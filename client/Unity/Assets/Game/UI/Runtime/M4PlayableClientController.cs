@@ -132,6 +132,7 @@ namespace LinhGioi.UI
         private string _forcedLayoutProfile;
         private bool _isMobileProfile;
         private bool _createFormExpanded = true;
+        private bool _skillPreviewActive;
         private RuntimeUiEvidenceState _evidenceState;
 
         public static M4PlayableClientController Attach(GameObject host)
@@ -1218,6 +1219,7 @@ namespace LinhGioi.UI
                 string.Equals(_lastLayoutProfile, "tablet", StringComparison.Ordinal),
                 _evidenceState.ForceCombatPanel,
                 _evidenceState.HideGuidanceCardOnCompact,
+                _skillPreviewActive,
                 _worldHud,
                 _headerActions,
                 _layoutProfileLabel,
@@ -1397,6 +1399,7 @@ namespace LinhGioi.UI
         {
             if (_world == null) return;
             _world.PreviewSkillFeedback(previewName);
+            _skillPreviewActive = true;
             RefreshWorldLoopLabels();
             ApplySkillPreviewButtonState(previewName);
             if (_skillPreviewStatus != null)

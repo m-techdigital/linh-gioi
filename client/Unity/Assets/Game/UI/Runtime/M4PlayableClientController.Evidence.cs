@@ -28,6 +28,7 @@ namespace LinhGioi.UI
         {
             if (_world == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
+            _skillPreviewActive = false;
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
         }
@@ -36,6 +37,7 @@ namespace LinhGioi.UI
         {
             if (_world == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
+            _skillPreviewActive = false;
             _world.SetSmokePositionNearGateKeeper();
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
@@ -45,6 +47,7 @@ namespace LinhGioi.UI
         {
             if (_world == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
+            _skillPreviewActive = false;
             _world.SetSmokePositionNearGateKeeper();
             _world.TriggerInteractionForSmoke();
             while (_world.DialogueActive)
@@ -58,6 +61,7 @@ namespace LinhGioi.UI
         {
             if (_world == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
+            _skillPreviewActive = false;
             _world.SetSmokePositionNearTrainingStone();
             _world.TriggerInteractionForSmoke();
             RefreshWorldLoopLabels();
@@ -68,6 +72,7 @@ namespace LinhGioi.UI
         {
             if (_world == null || _selectedCharacter == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
+            _skillPreviewActive = false;
             _world.Enter(_selectedCharacter);
             _world.SetSmokePositionNearGateKeeper();
             _world.TriggerInteractionForSmoke();
@@ -80,6 +85,7 @@ namespace LinhGioi.UI
             // LGO Combat Button Mobile Responsive Evidence v1: the compact HUD normally hides combat chrome,
             // but the target-dummy checkpoint must expose it so mobile/tablet screenshots prove button fit.
             _evidenceState = RuntimeUiEvidenceState.CombatPanelFocus;
+            _skillPreviewActive = false;
             _world.SetSmokePositionNearTargetDummy();
             _world.TriggerLocalCombatForSmoke();
             RefreshWorldLoopLabels();

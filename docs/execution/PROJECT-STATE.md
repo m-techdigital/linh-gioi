@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_RUNTIME_VIEWPORT_METRICS_ROOT_CAUSE_READY` replaces resolution-specific UI tuning with a canonical runtime viewport model: `RuntimeViewportMetrics` owns screen pixels, UI Toolkit panel viewport, safe-area-to-panel conversion, layout/input class, and evidence telemetry; runtime/evidence now share one PanelSettings provider and latest desktop/tablet/mobile manifests confirm `ScaleWithScreenSize` panel metrics. Screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_WORLD_HUD_FOCUS_MODE_STEADY_FOOTPRINT_READY` reduces steady World Hub HUD height in focus mode by hiding skill-preview and combat panels until their active preview/combat-focus states need them. This sits on the new `LGO_RUNTIME_VIEWPORT_METRICS_ROOT_CAUSE_READY` model, where `RuntimeViewportMetrics` owns screen pixels, UI Toolkit panel viewport, safe-area-to-panel conversion, layout/input class, and evidence telemetry. Desktop/tablet/mobile screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 
