@@ -1024,6 +1024,8 @@ namespace LinhGioi.UI
                 // LGO Character Hall Selected Create Collapse v1: selected state protects Enter World as the primary path.
                 _createFormExpanded = true;
                 ApplyCharacterCreateFormState();
+                _characterName.Focus();
+                _characterName.SelectAll();
                 SetToast("Nhập danh xưng mới để tạo thêm tu sĩ.", RuntimeArtCatalog.Muted);
                 return;
             }
@@ -1048,6 +1050,7 @@ namespace LinhGioi.UI
                 _createButton,
                 _enterWorldButton);
             ApplyCharacterHallActionHierarchy();
+            RuntimeCharacterHallResponsiveLayout.ApplyCreatePreviewVisibility(_selectedPreview, _isMobileProfile && _createFormExpanded);
         }
 
         private void RefreshWorldLoopLabels()

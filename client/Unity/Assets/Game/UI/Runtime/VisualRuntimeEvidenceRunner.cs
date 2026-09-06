@@ -17,6 +17,9 @@ namespace LinhGioi.UI
             "login.png",
             "character-lobby.png",
             "character-select.png",
+            "character-select-long-name.png",
+            "character-create-expanded.png",
+            "character-create-reflow.png",
             "enter-world.png",
             "world-hub.png",
             "near-gatekeeper-prompt.png",
@@ -94,6 +97,50 @@ namespace LinhGioi.UI
                 "docs/design/LGO-PLAYABLE-UI-WIREFRAME-SPEC-v0.11.0.md",
                 "Selected character preview and enter-world CTA readability");
 
+            _controller.CaptureEvidenceLongCharacterName(false);
+            yield return WaitFrames(6);
+            yield return CaptureCheckpoint(
+                "character-select-long-name",
+                "Character Name At Maximum Length",
+                "server/api/src/main/java/com/linhgioi/server/api/persistence/CharacterProfile.java",
+                "Sixteen wide ASCII glyphs fit inside the selected profile without displacing the stage");
+            _controller.CaptureEvidenceLongCharacterName(true);
+            _controller.CaptureEvidenceExpandCharacterForm();
+            yield return WaitFrames(6);
+            yield return CaptureCheckpoint(
+                "character-create-expanded",
+                "Character Create Expanded",
+                "docs/design/RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0.md",
+                "Expanded character form after selected action dock; name field and actions remain inside the hall");
+            var probeWidth = Mathf.Max(640, 2 * Mathf.RoundToInt(_reviewWidth * 0.72f / 2));
+            var probeHeight = Mathf.Max(360, 2 * Mathf.RoundToInt(_reviewHeight * 0.9f / 2));
+            Screen.SetResolution(probeWidth, probeHeight, false);
+            for (var frame = 0; frame < 90 && (Screen.width != probeWidth || Screen.height != probeHeight); frame++)
+                yield return null;
+            if (Screen.width != probeWidth || Screen.height != probeHeight)
+                throw new InvalidOperationException("Resize requested=" + probeWidth + "x" + probeHeight + " actual=" + Screen.width + "x" + Screen.height);
+            yield return WaitFrames(8);
+            _controller.AssertCharacterFormBoundsForEvidence();
+            yield return new WaitForEndOfFrame();
+            var resizeProbe = new VisualCheckpointEvidence();
+            CaptureFrame(Path.Combine(_outputDir, "character-create-resize-probe.png"), resizeProbe);
+            if (resizeProbe.status != "CAPTURED")
+                throw new InvalidOperationException("Resize probe capture failed: " + resizeProbe.reason);
+            yield return WaitFrames(6);
+            Screen.SetResolution(_reviewWidth, _reviewHeight, false);
+            for (var frame = 0; frame < 90 && (Screen.width != _reviewWidth || Screen.height != _reviewHeight); frame++)
+                yield return null;
+            if (Screen.width != _reviewWidth || Screen.height != _reviewHeight)
+                throw new InvalidOperationException("Player did not restore the original viewport.");
+            _controller.CaptureEvidenceReapplyCharacterLayout();
+            yield return WaitFrames(6);
+            _controller.AssertCharacterFormBoundsForEvidence();
+            yield return CaptureCheckpoint(
+                "character-create-reflow",
+                "Character Create After Layout",
+                "docs/design/RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0.md",
+                "Reapplying viewport layout must preserve the expanded form position and visibility");
+            _controller.CaptureEvidenceCloseCharacterForm();
             yield return WaitForTask(_controller.CaptureEvidenceEnterWorldAsync());
             yield return WaitFrames(10);
             yield return CaptureCheckpoint(

@@ -68,18 +68,17 @@ namespace LinhGioi.UI
             }
             if (createHint != null)
             {
-                var showDesktopHint = !isMobileProfile && !layout.IsTablet && !collapsed && !compactStandaloneCreate;
                 createHint.text = collapsed
                     ? "Tu sĩ đã sẵn sàng."
                     : hasSelectedCharacter
                         ? "Nhập danh xưng mới nếu muốn tạo thêm hồ sơ."
                         : "Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.";
-                createHint.style.display = showDesktopHint ? DisplayStyle.Flex : DisplayStyle.None;
+                createHint.style.display = DisplayStyle.None;
             }
             if (characterName != null)
             {
                 characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
-                characterName.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
+                characterName.style.alignSelf = !isMobileProfile ? Align.Center : Align.Stretch;
                 characterName.style.width = compactStandaloneCreate ? Mathf.Clamp(layout.Width * 0.32f, 280f, RuntimeUiSizing.CharacterNameFieldMaxWidth) : Length.Percent(100);
             }
             if (classId != null) classId.style.display = DisplayStyle.None;
@@ -100,14 +99,14 @@ namespace LinhGioi.UI
                 createPanel.style.opacity = collapsed ? (isMobileProfile ? 0.72f : 0.82f) : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
                 createPanel.style.minHeight = collapsed ? (isMobileProfile ? 62 : 66) : desktopStandaloneCreate ? 100 : compactStandaloneCreate ? 104 : RuntimeUiSizing.CharacterCreatePanelMinHeight;
                 createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 72 : 78) : desktopStandaloneCreate ? 118 : compactStandaloneCreate ? 126 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
-                if (layout.IsMobile && collapsed)
+                if (layout.IsMobile && hasSelectedCharacter)
                 {
                     // LGO Character Hall Selected Action Anchor v1: selected state becomes a stable action dock instead of a floating mid-screen card.
                     RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface(
                         createPanel,
                         RuntimeUiOverlayPlacement.Right,
-                        layout.CharacterHallSelectedDockWidth,
-                        72,
+                        collapsed ? layout.CharacterHallSelectedDockWidth : layout.CharacterHallCreateOverlayWidth,
+                        collapsed ? 72 : RuntimeUiSizing.CharacterCreatePanelMaxHeight,
                         layout.CharacterHallSelectedDockRight,
                         layout.CharacterHallSelectedDockBottom);
                 }
@@ -143,6 +142,11 @@ namespace LinhGioi.UI
                 createBody.style.flexDirection = compactStandaloneCreate ? FlexDirection.Row : FlexDirection.Column;
                 createBody.style.alignItems = compactStandaloneCreate ? Align.Center : Align.Stretch;
                 createBody.style.minWidth = 0;
+                if (!collapsed)
+                {
+                    createBody.style.flexGrow = 0;
+                    createBody.style.flexShrink = 0;
+                }
             }
             if (createFooter != null)
             {
@@ -244,6 +248,12 @@ namespace LinhGioi.UI
             var showDetails = !hasSelectedCharacter || layout.IsMobile;
             if (selectedStatus != null) selectedStatus.style.display = showDetails ? DisplayStyle.Flex : DisplayStyle.None;
             if (selectedObjective != null) selectedObjective.style.display = showDetails ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        internal static void ApplyCreatePreviewVisibility(VisualElement preview, bool editingInPreviewColumn)
+        {
+            if (preview != null)
+                preview.style.visibility = editingInPreviewColumn ? Visibility.Hidden : Visibility.Visible;
         }
 
         private static void ApplyPanel(RuntimeUiLayoutProfile layout, int width, int height, VisualElement lobbyPanel)

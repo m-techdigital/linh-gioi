@@ -76,6 +76,41 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
         }
 
+        internal void CaptureEvidenceExpandCharacterForm()
+        {
+            OnCreateCharacterAction();
+        }
+
+        internal void CaptureEvidenceLongCharacterName(bool restore)
+        {
+            _selectedName.text = restore ? _selectedCharacter.name : new string('W', 16);
+        }
+
+        internal void CaptureEvidenceCloseCharacterForm()
+        {
+            SelectCharacter(_selectedCharacter);
+        }
+
+        internal void CaptureEvidenceReapplyCharacterLayout()
+        {
+            ApplyResponsiveLayoutProfile(true);
+        }
+
+        internal void AssertCharacterFormBoundsForEvidence()
+        {
+            var viewport = _root.worldBound;
+            var form = _createPanel.worldBound;
+            foreach (var element in new VisualElement[] { _createPanel, _characterName, _createButton, _enterWorldButton })
+            {
+                var bounds = element.worldBound;
+                var container = element == _createPanel ? viewport : form;
+                if (bounds.width <= 0 || bounds.height <= 0 || bounds.xMin < container.xMin - 1 || bounds.xMax > container.xMax + 1
+                    || bounds.yMin < container.yMin - 1 || bounds.yMax > container.yMax + 1)
+                    throw new InvalidOperationException("Character form resize overflow: " + element.name + " bounds=" + bounds + " container=" + container);
+            }
+            Debug.Log("LGO_CHARACTER_FORM_RESIZE_BOUNDS_PASS screen=" + Screen.width + "x" + Screen.height + " form=" + form);
+        }
+
         internal void CaptureEvidenceWorldHub()
         {
             if (_world == null) return;

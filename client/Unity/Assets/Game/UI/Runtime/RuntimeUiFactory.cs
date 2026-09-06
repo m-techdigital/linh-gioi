@@ -226,7 +226,12 @@ namespace LinhGioi.UI
                 : layout.CharacterSelectedPreviewHeight;
             RuntimeUiSkin.ApplyCharacterPreviewFrame(preview, layout.IsMobile && hasSelectedCharacter);
             if (selectedName != null)
+            {
                 selectedName.style.fontSize = layout.SelectedCharacterNameFontSize;
+                selectedName.style.whiteSpace = WhiteSpace.Normal;
+                selectedName.style.minWidth = 0;
+                selectedName.style.maxWidth = Length.Percent(100);
+            }
         }
 
         internal static VisualElement NewCharacterProfileHero(RuntimeUiLayoutProfile layout, VisualElement portrait, VisualElement copy)

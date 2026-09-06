@@ -8,6 +8,8 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Form Tạo thêm và tên dài: anchor/visibility ổn định, input không co cắt; tên 16 ký tự rộng wrap trong base preview. Player resize thật và khôi phục pass trên ba profile (1382x972, 984x922, 692x486); ảnh probe/long-name đã xem, quick gate pass. Tiếp theo hoàn thiện hủy/quay lại form; chưa claim toàn bộ kích thước hoặc visual PASS.
+
 Character Hall central stage: dùng lại ảnh V3B ở giữa bố cục ba cột chung; sửa min-width nút roster, ràng buộc dock theo parent và max-height shell PC/tablet. Đã xem ảnh selected PC/tablet/mobile và empty PC; quick gate pass. Còn cần evidence resize liên tục, tên dài và form Tạo thêm; không claim visual PASS.
 
 Batch 2026-09-06: pad mobile nhận pointer và nối movement hiện có; 5/5 UI tests có graphics pass. Player smoke xác minh di chuyển 1,441 đơn vị rồi dừng khi thả/mở menu; log `build/visual-evidence/touch-movement/player-unity.log`. Quick gate pass; đã xem world-hub. Chưa test cảm ứng trên thiết bị thật, chưa claim giống demo 100%.

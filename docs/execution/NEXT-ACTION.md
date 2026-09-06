@@ -4,6 +4,8 @@ Last updated: `2026-09-06`
 
 ## Quick Resume
 
+- Batch form/resize/tên dài đã validate: Player resize 1382x972, 984x922, 692x486 và khôi phục đều qua bounds form/input/nút; tên tối đa 16 ký tự rộng xuống dòng ở PC/tablet, không cắt chữ. Đã xem screenshot probe và long-name cả ba profile; quick gate pass (`build/dev-loop/character-create-name-final.log`, `build/dev-loop/character-create-name-quick.log`). Tiếp theo: thao tác hủy/quay lại form Tạo thêm qua base hiện có. Chưa kiểm tra toàn bộ kích thước, thiết bị cảm ứng thật hoặc claim visual PASS.
+
 - Character Hall central stage: nhân vật V3B đã ra cột giữa qua factory/layout chung; roster và thông tin ở hai bên. Base list button bỏ min-width cứng, dock PC giới hạn theo parent, shell PC/tablet có max-height theo phần viewport còn lại. Đã xem selected cả ba profile và empty PC; quick gate pass (`build/dev-loop/character-central-stage.log`, `build/dev-loop/character-central-stage-quick.log`). Tiếp theo: resize trong cùng phiên, tên dài và form Tạo thêm; chưa claim visual PASS hoặc giống demo 100%.
 
 - Batch 2026-09-06: pad mobile đã nối movement cục bộ qua base `RuntimeTouchMovementPad`. 5/5 UI tests có graphics pass; quick gate pass. Player smoke thực hiện pointer mô phỏng: đi 1,441 đơn vị, thả/menu đều dừng (`build/visual-evidence/touch-movement/player-unity.log`). Đã xem world-hub sau smoke. Chưa test thiết bị cảm ứng thật hoặc claim visual PASS. Tiếp theo: bố cục hero Character Hall theo demo, dùng base chung và kiểm tra cả resize giữa các profile.
