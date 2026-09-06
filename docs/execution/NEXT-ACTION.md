@@ -6,11 +6,11 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: mobile dialogue actions now fit on one row (`Tiếp tục` + `Đóng`) with compact button metrics, reducing panel height during Gate Keeper dialogue; refreshed profile screenshots were reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: mobile session menu actions now use a 2x2 touch grid, keeping `Tiếp tục`, `Lưu vị trí`, `Về điện nhân vật`, and `Thoát` readable on mobile; refreshed profile screenshots were reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: choose the next compact player-visible slice from latest screenshots, likely HUD density/readability, interaction feedback, or another screenshot-proven UI/UX issue; avoid heavy assets and one-off validators unless a real gate needs them.
+- Next implementation task after this fix: choose the next compact player-visible slice from latest screenshots, likely HUD density/readability, interaction feedback, session flow clarity, or another screenshot-proven UI/UX issue; avoid heavy assets and one-off validators unless a real gate needs them.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -118,6 +118,8 @@ Current focus update: Character Hall responsive layout now lives in `RuntimeChar
 Current focus update: World HUD responsive panel/top-status/dialogue layout now lives in `RuntimeWorldHudResponsiveLayout` under `LGO_WORLD_HUD_RESPONSIVE_LAYOUT_HELPER_READY`; source-only and runtime screenshot evidence remain stable, and quick dev loop now skips visual capture by default unless forced.
 
 Current focus update: World Hub now has a slightly stronger procedural platform, back-ridge prop layer, and mist depth under `LGO_WORLD_HUB_LIGHTWEIGHT_BACK_RIDGE_DEPTH_READY`; screenshot evidence is improved but still below final reference quality, and local cleanup can now dry-run/remove rebuilt Unity player builds without touching source/evidence, with no `VISUAL_RUNTIME_PASS` claim.
+
+Current focus update: mobile session menu actions now route responsive sizing through `RuntimeSessionMenuLayout.ApplyActions` under `LGO_MOBILE_SESSION_MENU_ACTION_GRID_READY`; profile screenshot shows a readable 2x2 action grid with no final visual PASS claim.
 
 Current focus update: World Hub set-dressing and depth-lighting placement now live in `WorldHubSetDressing` under `LGO_WORLD_HUB_SET_DRESSING_HELPER_READY`; `PlayableWorldController` now only owns the gameplay hook and shared billboard creation, while fresh runtime screenshots confirm World Hub/NPC Dialogue/Session Menu/Login remain stable. No `VISUAL_RUNTIME_PASS` is claimed because World Hub art is still below final reference quality.
 

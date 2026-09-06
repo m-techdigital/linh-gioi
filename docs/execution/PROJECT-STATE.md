@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_DIALOGUE_ACTION_ROW_COMPACT_READY` compacts mobile dialogue button metrics so `Tiếp tục` and `Đóng` fit on one row, reducing dialogue panel height while preserving touch targets.
+Latest player-visible batch: `LGO_MOBILE_SESSION_MENU_ACTION_GRID_READY` makes the mobile session menu actions a 2x2 touch grid, so resume/save/back/quit remain readable without squeezing four actions into one row.
 
 Current visual/runtime evidence harness command:
 

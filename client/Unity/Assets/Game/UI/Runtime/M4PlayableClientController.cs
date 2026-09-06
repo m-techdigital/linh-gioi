@@ -40,6 +40,7 @@ namespace LinhGioi.UI
         private VisualElement _localCombatPanel;
         private VisualElement _worldFooterActions;
         private VisualElement _characterActionRow;
+        private VisualElement _sessionActions;
         private VisualElement _characterList;
         private VisualElement _lobbyContent;
         private VisualElement _selectedPreview;
@@ -666,8 +667,9 @@ namespace LinhGioi.UI
             _sessionSaveButton = NewCompactSecondaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
             _sessionBackButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
             _sessionQuitButton = NewQuietButton("Thoát", QuitPlayer);
-            var sessionActions = NewActionRow("LGO Session Menu Action Row", Justify.Center, 6, 12, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
-            _sessionMenuPanel.Add(sessionActions);
+            _sessionActions = NewActionRow("LGO Session Menu Action Row", Justify.Center, 6, 12, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
+            RuntimeSessionMenuLayout.ApplyActions(_sessionActions, layout, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
+            _sessionMenuPanel.Add(_sessionActions);
             BuildLocalSettingsPanel();
             _root.Add(_sessionMenuPanel);
             SetSessionMenuVisible(false);
@@ -1260,6 +1262,7 @@ namespace LinhGioi.UI
             {
                 // LGO Session Menu Compact Focus Frame v1: compact profiles let the pause panel own the viewport.
                 RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);
+                RuntimeSessionMenuLayout.ApplyActions(_sessionActions, layout, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
             }
             if (_settingsPanel != null)
             {

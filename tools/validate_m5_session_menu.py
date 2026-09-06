@@ -46,6 +46,14 @@ def main() -> int:
         'Về điện nhân vật',
         'Thoát',
         'KeyCode.Escape',
+        '_sessionActions',
+        'RuntimeSessionMenuLayout.ApplyActions(_sessionActions',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs',
+        'internal static void ApplyActions',
+        'actions.style.justifyContent = layout.IsMobile ? Justify.SpaceBetween : Justify.Center',
+        'button.style.width = layout.IsMobile ? Length.Percent(48) : StyleKeyword.Auto',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

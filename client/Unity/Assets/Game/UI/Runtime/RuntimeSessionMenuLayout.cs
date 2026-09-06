@@ -22,6 +22,22 @@ namespace LinhGioi.UI
             panel.style.backgroundColor = RuntimeUiSkin.SessionMenuBackground(layout.IsMobile || layout.IsTablet);
         }
 
+        internal static void ApplyActions(
+            VisualElement actions,
+            RuntimeUiLayoutProfile layout,
+            params Button[] buttons)
+        {
+            if (actions == null) return;
+            actions.style.justifyContent = layout.IsMobile ? Justify.SpaceBetween : Justify.Center;
+            foreach (var button in buttons)
+            {
+                if (button == null) continue;
+                button.style.marginRight = layout.IsMobile ? 0 : RuntimeUiSpacing.BaseButtonMarginRight;
+                button.style.width = layout.IsMobile ? Length.Percent(48) : StyleKeyword.Auto;
+                RuntimeUiSkin.ApplyButtonMetrics(button, 0, layout.IsMobile ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight : RuntimeUiSpacing.CompactButtonMinHeight);
+            }
+        }
+
         internal static void ApplyFocusScrim(VisualElement scrim, bool visible)
         {
             if (scrim == null) return;
