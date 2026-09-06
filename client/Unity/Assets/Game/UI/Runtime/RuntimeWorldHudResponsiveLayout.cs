@@ -23,6 +23,7 @@ namespace LinhGioi.UI
             Label dialogueSpeaker,
             Label dialogueLine,
             Label dialogueProgress,
+            VisualElement dialogueActionRow,
             Button dialogueContinueButton,
             Button dialogueCloseButton)
         {
@@ -75,13 +76,19 @@ namespace LinhGioi.UI
                 dialogueProgress.style.fontSize = mobile ? RuntimeUiTypography.DialogueProgressMobileFontSize : RuntimeUiTypography.DialogueProgressDesktopFontSize;
                 RuntimeUiSkin.ApplyPadding(dialogueProgress, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingVertical, layout.DialogueProgressPaddingVertical);
             }
+            if (dialogueActionRow != null)
+            {
+                dialogueActionRow.style.flexWrap = mobile ? Wrap.NoWrap : Wrap.Wrap;
+                dialogueActionRow.style.width = mobile ? Length.Percent(100) : StyleKeyword.Auto;
+                dialogueActionRow.style.maxWidth = mobile ? Length.Percent(100) : StyleKeyword.None;
+            }
             if (dialogueContinueButton != null)
             {
                 RuntimeUiSkin.ApplyButtonMetrics(
                     dialogueContinueButton,
                     mobile ? RuntimeUiSpacing.DialogueContinueMobileMinWidth : RuntimeUiSpacing.DialogueContinueDesktopMinWidth,
                     mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
-                if (mobile) dialogueContinueButton.style.marginRight = 4;
+                if (mobile) ApplyMobileDialogueActionButton(dialogueContinueButton, 4);
             }
             if (dialogueCloseButton != null)
             {
@@ -89,7 +96,7 @@ namespace LinhGioi.UI
                     dialogueCloseButton,
                     mobile ? RuntimeUiSpacing.DialogueCloseMobileMinWidth : RuntimeUiSpacing.DialogueCloseDesktopMinWidth,
                     mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
-                if (mobile) dialogueCloseButton.style.marginRight = 0;
+                if (mobile) ApplyMobileDialogueActionButton(dialogueCloseButton, 0);
             }
         }
 
@@ -214,6 +221,17 @@ namespace LinhGioi.UI
             element.style.width = Length.Percent(100);
             element.style.maxWidth = Length.Percent(100);
             element.style.flexShrink = 1;
+        }
+
+        private static void ApplyMobileDialogueActionButton(Button button, int marginRight)
+        {
+            // LGO Mobile Dialogue Action Row Fit v1: two dialogue actions stay in one touchable row inside the HUD parent.
+            button.style.width = StyleKeyword.Auto;
+            button.style.maxWidth = StyleKeyword.None;
+            button.style.flexBasis = StyleKeyword.Auto;
+            button.style.flexGrow = 1;
+            button.style.flexShrink = 1;
+            button.style.marginRight = marginRight;
         }
 
         private static void SetElementVisibility(VisualElement element, bool visible)

@@ -74,8 +74,11 @@ def main() -> int:
         "RuntimeUiSpacing.DialogueButtonMobileMinHeight",
         "RuntimeUiSpacing.DialogueCloseMobileMinWidth",
         "RuntimeUiSpacing.DialogueCloseDesktopMinWidth",
-        "dialogueContinueButton.style.marginRight = 4",
-        "dialogueCloseButton.style.marginRight = 0",
+        "LGO Mobile Dialogue Action Row Fit v1",
+        "dialogueActionRow.style.flexWrap = mobile ? Wrap.NoWrap : Wrap.Wrap",
+        "ApplyMobileDialogueActionButton(dialogueContinueButton, 4)",
+        "ApplyMobileDialogueActionButton(dialogueCloseButton, 0)",
+        "button.style.flexBasis = StyleKeyword.Auto",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs",
@@ -84,7 +87,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
-        "Mathf.Clamp(Width * 0.58f, 190f, 224f)",
+        "Mathf.Clamp(Width * 0.68f, 260f, 320f)",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0.md",

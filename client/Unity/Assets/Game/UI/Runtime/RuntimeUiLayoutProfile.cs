@@ -155,7 +155,7 @@ namespace LinhGioi.UI
         internal float WorldHudMaxWidth(bool dialogueVisible)
         {
             if (IsMobile)
-                return dialogueVisible ? Mathf.Clamp(Width * 0.58f, 190f, 224f) : Mathf.Clamp(Width * 0.54f, 180f, 214f);
+                return dialogueVisible ? Mathf.Clamp(Width * 0.68f, 260f, 320f) : Mathf.Clamp(Width * 0.54f, 180f, 214f);
             if (IsTablet)
                 return dialogueVisible ? Mathf.Clamp(Width * 0.30f, 350f, 400f) : Mathf.Clamp(Width * 0.31f, 360f, 420f);
             return 390f;

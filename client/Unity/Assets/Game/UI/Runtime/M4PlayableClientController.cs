@@ -97,6 +97,7 @@ namespace LinhGioi.UI
         private Label _dialogueSpeaker;
         private Label _dialogueLine;
         private Label _dialogueProgress;
+        private VisualElement _dialogueActionRow;
         private Label _sessionMenuStatus;
         private Label _loginHeroTitle;
         private Label _loginHeroCopy;
@@ -681,7 +682,8 @@ namespace LinhGioi.UI
             _dialoguePanel.Add(_dialogueSpeaker);
             _dialoguePanel.Add(_dialogueLine);
             _dialoguePanel.Add(_dialogueProgress);
-            _dialoguePanel.Add(NewActionRow("LGO Dialogue Action Row", Justify.FlexStart, 6, 0, _dialogueContinueButton, _dialogueCloseButton));
+            _dialogueActionRow = NewActionRow("LGO Dialogue Action Row", Justify.FlexStart, 6, 0, _dialogueContinueButton, _dialogueCloseButton);
+            _dialoguePanel.Add(_dialogueActionRow);
             _worldHud.Add(_dialoguePanel);
             SetDialogueVisible(false);
 
@@ -1335,6 +1337,7 @@ namespace LinhGioi.UI
                 _dialogueSpeaker,
                 _dialogueLine,
                 _dialogueProgress,
+                _dialogueActionRow,
                 _dialogueContinueButton,
                 _dialogueCloseButton);
             if (_layoutProfileLabel != null)
