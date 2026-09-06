@@ -81,11 +81,15 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "RuntimeCharacterHallResponsiveLayout.Apply(",
+        "RuntimeWorldHudResponsiveLayout.ApplyHudPanel(",
+        "RuntimeWorldHudResponsiveLayout.ApplyTopStatus(layout, worldVisible, width, _headerActions, _status, _quitButton)",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
         "layout.WorldHudPaddingHorizontal",
         "layout.WorldHudDialoguePaddingHorizontal",
         "layout.DialoguePanelPaddingHorizontal",
         "layout.StatusPaddingHorizontal(worldVisible)",
-        "ApplyTopStatusResponsive(layout, worldVisible, width)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",

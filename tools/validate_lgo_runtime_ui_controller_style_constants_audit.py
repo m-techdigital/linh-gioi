@@ -34,8 +34,9 @@ def check_responsive_padding_blocks() -> None:
     helper = read("client/Unity/Assets/Game/UI/Runtime/RuntimeLoginResponsiveLayout.cs")
     character_helper = read("client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs")
     session_helper = read("client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs")
+    world_hud_helper = read("client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs")
     responsive = controller[responsive_start:]
-    responsive_with_helpers = responsive + "\n" + helper + "\n" + character_helper + "\n" + session_helper
+    responsive_with_helpers = responsive + "\n" + helper + "\n" + character_helper + "\n" + session_helper + "\n" + world_hud_helper
     required = [
         "RuntimeUiSkin.ApplyPadding(root, layout.RootPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(loginCard, layout.LoginCardPadding",
@@ -43,9 +44,9 @@ def check_responsive_padding_blocks() -> None:
         "RuntimeUiSkin.ApplyPadding(lobbyPanel, layout.LobbyPanelPaddingHorizontal",
         "ApplyEmptyCharacterCardDensity(emptyCharacterCard, layout.CharacterHallDensity)",
         "RuntimeUiSkin.ApplyPadding(createPanel, layout.CreatePanelPaddingHorizontal",
-        "RuntimeUiSkin.ApplyPadding(_worldHud, layout.WorldHudPaddingHorizontal",
+        "dialogueVisible ? layout.WorldHudDialoguePaddingHorizontal : layout.WorldHudPaddingHorizontal",
         "RuntimeUiSkin.ApplyPadding(panel, layout.SessionMenuPaddingHorizontal",
-        "RuntimeUiSkin.ApplyPadding(_dialoguePanel, layout.DialoguePanelPaddingHorizontal",
+        "RuntimeUiSkin.ApplyPadding(dialoguePanel, layout.DialoguePanelPaddingHorizontal",
     ]
     for marker in required:
         if marker not in responsive_with_helpers:

@@ -65,9 +65,14 @@ def main() -> int:
         "using static LinhGioi.UI.RuntimeUiFactory;",
         "RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);",
         "RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);",
-        "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);",
+        "RuntimeWorldHudResponsiveLayout.ApplyHudPanel(",
         "LGO World HUD Action Shell V3B Skin v1",
         "LGO Session Menu Overlay",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "LGO Runtime World HUD Responsive Layout Helper v1",
+        "worldHud.style.backgroundColor = RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs",

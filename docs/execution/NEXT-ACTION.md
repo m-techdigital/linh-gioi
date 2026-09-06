@@ -6,11 +6,11 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: workflow/token-noise reduction is being hardened so compact batches spend less time in repeated Unity capture and long state dumps.
-- Current batch scope: keep quick gates source-only by default, preserve explicit visual/runtime gates for visible changes, then continue to the next focused visible/runtime or maintainability improvement.
+- Current reason: World HUD responsive layout ownership has been split out of the main playable UI controller; continue with the next compact visible/runtime or maintainability hotspot.
+- Current batch scope: prefer player-visible layout/quality fixes or hotspot extraction that reduces controller churn without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: choose the next compact visible hotspot, likely World HUD information hierarchy, session menu polish, or evidence/asset-weight cleanup; avoid heavy assets and one-off validators unless a real gate needs them.
+- Next implementation task after this fix: choose the next compact visible hotspot, likely World Hub empty-space richness, Character Hall final-art parity, or session menu fantasy skin polish; avoid heavy assets and one-off validators unless a real gate needs them.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -96,6 +96,8 @@ Current focus update: compact state brief now stays under the routine 90-line bu
 Current focus update: Character Hall desktop/tablet hierarchy now uses wider metric-owned shell sizing and lighter glass under `LGO_CHARACTER_HALL_WIDER_GLASS_BALANCE_READY`; desktop/tablet/mobile screenshots were reviewed as cleaner and still not production-final, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current focus update: Character Hall responsive layout now lives in `RuntimeCharacterHallResponsiveLayout` under `LGO_CHARACTER_HALL_RESPONSIVE_LAYOUT_HELPER_READY`; the main playable UI controller is smaller while character flow and reviewed runtime screenshots remain stable.
+
+Current focus update: World HUD responsive panel/top-status/dialogue layout now lives in `RuntimeWorldHudResponsiveLayout` under `LGO_WORLD_HUD_RESPONSIVE_LAYOUT_HELPER_READY`; source-only and runtime screenshot evidence remain stable, and quick dev loop now skips visual capture by default unless forced.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 

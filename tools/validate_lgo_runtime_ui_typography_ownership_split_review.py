@@ -71,8 +71,12 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "RuntimeUiTypography.LoginHeroTitleFontSize",
-        "RuntimeUiTypography.TopStatusWorldMobileFontSize",
         "RuntimeUiTypography.WorldNameMobileFontSize",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "LGO Runtime World HUD Responsive Layout Helper v1",
+        "RuntimeUiTypography.TopStatusWorldMobileFontSize",
         "RuntimeUiTypography.DialogueProgressDesktopFontSize",
     )
     reject(

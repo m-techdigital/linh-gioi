@@ -110,9 +110,16 @@ def main() -> int:
         "RuntimeUiTypography.WorldNameMobileFontSize",
         "RuntimeUiTypography.WorldObjectiveDesktopFontSize",
         "RuntimeUiTypography.WorldInteractionDesktopFontSize",
-        "RuntimeUiTypography.DialogueSpeakerMobileFontSize",
         "RuntimeUiTypography.DialogueSpeakerInitialFontSize",
         "RuntimeUiTypography.DialogueLineDesktopFontSize",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "RuntimeUiTypography.DialogueSpeakerMobileFontSize",
+        "RuntimeUiTypography.DialogueSpeakerDesktopFontSize",
+        "RuntimeUiTypography.DialogueLineMobileFontSize",
+        "RuntimeUiTypography.DialogueLineDesktopFontSize",
+        "RuntimeUiTypography.DialogueProgressMobileFontSize",
         "RuntimeUiTypography.DialogueProgressDesktopFontSize",
     )
     require(

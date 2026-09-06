@@ -49,10 +49,15 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO World Top Status Mobile Readability v1",
-        "ApplyTopStatusResponsive",
+        "RuntimeWorldHudResponsiveLayout.ApplyTopStatus(layout, worldVisible, width, _headerActions, _status, _quitButton)",
         "FormatTopStatusMessage",
-        "_headerActions",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "LGO Runtime World HUD Responsive Layout Helper v1",
+        "LGO World Top Status Mobile Readability v1",
+        "ApplyTopStatus",
+        "headerActions",
         'Sẵn sàng: Bước 1/2',
         "RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent",
         "RuntimeUiSpacing.TopStatusWorldMobileMinWidth",

@@ -1223,7 +1223,17 @@ namespace LinhGioi.UI
             {
                 _settingsPanel.style.display = mobile || tablet ? DisplayStyle.None : DisplayStyle.Flex;
             }
-            ApplyWorldPanelViewportPolish(layout, worldVisible);
+            RuntimeWorldHudResponsiveLayout.ApplyHudPanel(
+                layout,
+                worldVisible,
+                _worldHud,
+                _worldGuidanceCard,
+                _dialoguePanel,
+                _dialogueSpeaker,
+                _dialogueLine,
+                _dialogueProgress,
+                _dialogueContinueButton,
+                _dialogueCloseButton);
             if (_layoutProfileLabel != null)
             {
                 _layoutProfileLabel.text = mobile
@@ -1232,100 +1242,11 @@ namespace LinhGioi.UI
                         ? "Bố cục: tablet / HUD gọn, ưu tiên chỉ dẫn và cảnh quan."
                         : "Bố cục: desktop / HUD đầy đủ.";
             }
-            ApplyTopStatusResponsive(layout, worldVisible, width);
+            RuntimeWorldHudResponsiveLayout.ApplyTopStatus(layout, worldVisible, width, _headerActions, _status, _quitButton);
 
             if (_focusModeToggle != null && mobile && !_focusModeToggle.value)
                 _focusModeToggle.value = true;
             ApplyLocalSettings();
-        }
-
-        private void ApplyWorldPanelViewportPolish(RuntimeUiLayoutProfile layout, bool worldVisible)
-        {
-            if (!worldVisible || _worldHud == null) return;
-            var mobile = layout.IsMobile;
-            var tablet = layout.IsTablet;
-            var dialogueVisible = _dialoguePanel != null && _dialoguePanel.style.display == DisplayStyle.Flex;
-
-            // LGO World HUD Dialogue Viewport Polish v1: mobile dialogue keeps buttons inside the visible viewport.
-            _worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);
-            _worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;
-            RuntimeUiSkin.ApplyPadding(
-                _worldHud,
-                dialogueVisible ? layout.WorldHudDialoguePaddingHorizontal : layout.WorldHudPaddingHorizontal,
-                dialogueVisible ? layout.WorldHudDialoguePaddingVertical : layout.WorldHudPaddingVertical);
-            _worldHud.style.backgroundColor = RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible);
-            if (_worldGuidanceCard != null)
-            {
-                // LGO World HUD Mobile Hierarchy Polish v1: normal mobile keeps only objective and interaction priority.
-                RuntimeUiSkin.ApplyVerticalMargin(_worldGuidanceCard, layout.WorldGuidanceCardMarginVertical, layout.WorldGuidanceCardMarginVertical);
-                RuntimeUiSkin.ApplyPadding(_worldGuidanceCard, layout.WorldGuidanceCardPaddingHorizontal, layout.WorldGuidanceCardPaddingHorizontal, layout.WorldGuidanceCardPaddingVertical, layout.WorldGuidanceCardPaddingVertical);
-            }
-
-            if (_dialoguePanel != null)
-            {
-                _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
-                RuntimeUiSkin.ApplyPadding(_dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
-            }
-            if (_dialogueSpeaker != null)
-                _dialogueSpeaker.style.fontSize = mobile ? RuntimeUiTypography.DialogueSpeakerMobileFontSize : RuntimeUiTypography.DialogueSpeakerDesktopFontSize;
-            if (_dialogueLine != null)
-                _dialogueLine.style.fontSize = mobile ? RuntimeUiTypography.DialogueLineMobileFontSize : RuntimeUiTypography.DialogueLineDesktopFontSize;
-            if (_dialogueProgress != null)
-            {
-                _dialogueProgress.style.fontSize = mobile ? RuntimeUiTypography.DialogueProgressMobileFontSize : RuntimeUiTypography.DialogueProgressDesktopFontSize;
-                RuntimeUiSkin.ApplyPadding(_dialogueProgress, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingVertical, layout.DialogueProgressPaddingVertical);
-            }
-            if (_dialogueContinueButton != null)
-            {
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    _dialogueContinueButton,
-                    mobile ? RuntimeUiSpacing.DialogueContinueMobileMinWidth : RuntimeUiSpacing.DialogueContinueDesktopMinWidth,
-                    mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
-            }
-            if (_dialogueCloseButton != null)
-            {
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    _dialogueCloseButton,
-                    mobile ? RuntimeUiSpacing.DialogueCloseMobileMinWidth : RuntimeUiSpacing.DialogueCloseDesktopMinWidth,
-                    mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
-            }
-        }
-
-        private void ApplyTopStatusResponsive(RuntimeUiLayoutProfile layout, bool worldVisible, int viewportWidth)
-        {
-            var mobile = layout.IsMobile;
-            var tablet = layout.IsTablet;
-            // LGO World Top Status Mobile Readability v1: top chips scale by profile and avoid long text on narrow world views.
-            if (_headerActions != null)
-            {
-                _headerActions.style.flexShrink = 1;
-                _headerActions.style.justifyContent = Justify.FlexEnd;
-                _headerActions.style.maxWidth = worldVisible && mobile
-                    ? Mathf.Max(RuntimeUiSpacing.HeaderActionsMobileMaxWidthFloor, viewportWidth - RuntimeUiSpacing.HeaderActionsMobileViewportInset)
-                    : tablet ? RuntimeUiSpacing.HeaderActionsTabletMaxWidth : RuntimeUiSpacing.HeaderActionsDesktopMaxWidth;
-            }
-            if (_status != null)
-            {
-                _status.style.fontSize = worldVisible && mobile
-                    ? RuntimeUiTypography.TopStatusWorldMobileFontSize
-                    : tablet ? RuntimeUiTypography.TopStatusTabletFontSize : RuntimeUiTypography.TopStatusDefaultFontSize;
-                _status.style.minHeight = worldVisible && mobile ? RuntimeUiSpacing.TopStatusWorldMobileMinHeight : RuntimeUiSpacing.TopStatusDefaultMinHeight;
-                RuntimeUiSkin.ApplyPadding(_status, layout.StatusPaddingHorizontal(worldVisible), layout.StatusPaddingHorizontal(worldVisible), layout.StatusPaddingVertical, layout.StatusPaddingVertical);
-                _status.style.maxWidth = worldVisible && mobile
-                    ? Mathf.Clamp(viewportWidth * (RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent / 100f), RuntimeUiSpacing.TopStatusWorldMobileMinWidth, RuntimeUiSpacing.TopStatusWorldMobileMaxWidth)
-                    : tablet ? RuntimeUiSpacing.TopStatusTabletMaxWidth : RuntimeUiSpacing.TopStatusDesktopMaxWidth;
-                if (worldVisible && _status.text.StartsWith("Sẵn sàng:", StringComparison.Ordinal))
-                    _status.text = "Sẵn sàng: Bước 1/2";
-            }
-            if (_quitButton != null)
-            {
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    _quitButton,
-                    worldVisible && mobile ? RuntimeUiSpacing.HeaderQuitWorldMobileMinWidth : RuntimeUiSpacing.HeaderQuitDefaultMinWidth,
-                    worldVisible && mobile ? RuntimeUiSpacing.HeaderQuitWorldMobileMinHeight : RuntimeUiSpacing.HeaderQuitDefaultMinHeight,
-                    worldVisible && mobile ? RuntimeUiSpacing.HeaderQuitWorldMobileFontSize : RuntimeUiSpacing.HeaderQuitDefaultFontSize);
-                _quitButton.style.marginRight = 0;
-            }
         }
 
         private void ApplyCharacterHallActionHierarchy()

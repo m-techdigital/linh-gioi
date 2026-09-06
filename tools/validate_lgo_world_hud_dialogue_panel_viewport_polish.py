@@ -55,7 +55,11 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_worldGuidanceCard",
         "dialogueVisible && compactViewport",
-        "ApplyWorldPanelViewportPolish",
+        "RuntimeWorldHudResponsiveLayout.ApplyHudPanel(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "LGO Runtime World HUD Responsive Layout Helper v1",
         "LGO World HUD Dialogue Viewport Polish v1",
         "layout.WorldHudMaxWidth(dialogueVisible)",
         "RuntimeUiSpacing.DialogueContinueMobileMinWidth",

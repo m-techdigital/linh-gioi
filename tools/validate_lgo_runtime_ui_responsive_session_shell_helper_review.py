@@ -68,9 +68,13 @@ def main() -> int:
         "_worldHud.style.minWidth = layout.WorldHudMinWidth;",
         "_worldHud.style.maxWidth = layout.WorldHudBaseMaxWidth;",
         "RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);",
-        "ApplyWorldPanelViewportPolish(layout, worldVisible);",
-        "_worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);",
-        "_worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;",
+        "RuntimeWorldHudResponsiveLayout.ApplyHudPanel(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "LGO Runtime World HUD Responsive Layout Helper v1",
+        "worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);",
+        "worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs",

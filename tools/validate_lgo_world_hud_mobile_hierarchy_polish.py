@@ -53,11 +53,15 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO World HUD Mobile Hierarchy Polish v1",
         "!(_isMobileProfile && !dialogueVisible)",
+        "RuntimeWorldHudResponsiveLayout.ApplyHudPanel(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "LGO World HUD Mobile Hierarchy Polish v1",
         "layout.WorldHudMaxWidth(dialogueVisible)",
         "RuntimeUiSkin.WorldHudBackground(mobile, tablet, dialogueVisible)",
-        "RuntimeUiSkin.ApplyVerticalMargin(_worldGuidanceCard, layout.WorldGuidanceCardMarginVertical, layout.WorldGuidanceCardMarginVertical)",
+        "RuntimeUiSkin.ApplyVerticalMargin(worldGuidanceCard, layout.WorldGuidanceCardMarginVertical, layout.WorldGuidanceCardMarginVertical)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",

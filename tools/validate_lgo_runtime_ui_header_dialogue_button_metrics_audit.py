@@ -83,7 +83,8 @@ def main() -> int:
         "TopStatusDefaultFontSize",
     )
     require(
-        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "LGO Runtime World HUD Responsive Layout Helper v1",
         "RuntimeUiSpacing.HeaderActionsMobileViewportInset",
         "RuntimeUiTypography.TopStatusWorldMobileFontSize",
         "RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent",
