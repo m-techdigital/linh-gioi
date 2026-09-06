@@ -87,6 +87,11 @@ def main() -> int:
         'PreviewSkillFeedback("Shadow Bind")',
     )
     require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs',
+        'SetDisplayed(skillPreviewPanel, gameplayPanelVisible);',
+        'SetDisplayed(localCombatPanel, gameplayPanelVisible);',
+    )
+    require(
         'client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs',
         'skill-shadow-bind-preview.png',
         'Skill Preview / Shadow Bind',

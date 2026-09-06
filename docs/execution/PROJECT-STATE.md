@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOVEMENT_AUTO_FACE_DIRECTION_READY` rotates the world marker toward movement input, so WASD/move direction better matches player-facing and skill preview direction while keeping Q/E rotation available when idle.
+Latest player-visible batch: `LGO_SKILL_PREVIEW_PANEL_VISIBILITY_READY` keeps the skill preview sandbox visible with gameplay panels, so Shadow Bind/Wind Slash/Spirit Guard buttons and selected-preview feedback are readable in the World HUD during runtime evidence.
 
 Current visual/runtime evidence harness command:
 
