@@ -682,6 +682,84 @@ namespace LinhGioi.UI
             return icon;
         }
 
+        internal static VisualElement NewWorldTouchControlsOverlay()
+        {
+            var overlay = new VisualElement { name = "LGO World Touch Controls Overlay" };
+            overlay.pickingMode = PickingMode.Ignore;
+            overlay.style.position = Position.Absolute;
+            overlay.style.left = 0;
+            overlay.style.right = 0;
+            overlay.style.top = 0;
+            overlay.style.bottom = 0;
+            overlay.style.overflow = Overflow.Hidden;
+            return overlay;
+        }
+
+        internal static VisualElement NewWorldTouchPad()
+        {
+            var pad = new VisualElement { name = "LGO World Touch Movement Pad" };
+            pad.pickingMode = PickingMode.Ignore;
+            pad.style.position = Position.Absolute;
+            pad.style.alignItems = Align.Center;
+            pad.style.justifyContent = Justify.Center;
+            pad.style.backgroundColor = new Color(0.003f, 0.018f, 0.040f, 0.46f);
+            RuntimeUiSkin.ApplyEdgeFrame(
+                pad,
+                new Color(0.14f, 0.78f, 0.90f, 0.46f),
+                new Color(0.93f, 0.73f, 0.36f, 0.24f),
+                new Color(0.14f, 0.78f, 0.90f, 0.20f),
+                new Color(0.93f, 0.73f, 0.36f, 0.18f),
+                2f,
+                1f);
+
+            var label = new Label("Di chuyển");
+            label.name = "LGO World Touch Movement Label";
+            RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Muted, 12f, true, TextAnchor.MiddleCenter);
+            label.style.whiteSpace = WhiteSpace.NoWrap;
+            label.pickingMode = PickingMode.Ignore;
+
+            var nub = new VisualElement { name = "LGO World Touch Movement Nub" };
+            nub.pickingMode = PickingMode.Ignore;
+            nub.style.position = Position.Absolute;
+            nub.style.backgroundColor = new Color(0.14f, 0.78f, 0.90f, 0.30f);
+            RuntimeUiSkin.ApplyEdgeFrame(nub, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, 1f, 1f);
+            pad.Add(label);
+            pad.Add(nub);
+            return pad;
+        }
+
+        internal static VisualElement NewWorldTouchActionCluster()
+        {
+            var cluster = new VisualElement { name = "LGO World Touch Action Cluster" };
+            cluster.style.position = Position.Absolute;
+            cluster.style.flexDirection = FlexDirection.Row;
+            cluster.style.flexWrap = Wrap.Wrap;
+            cluster.style.alignItems = Align.FlexEnd;
+            cluster.style.justifyContent = Justify.FlexEnd;
+            cluster.style.overflow = Overflow.Hidden;
+            return cluster;
+        }
+
+        internal static Button NewWorldTouchActionButton(string label, Action action)
+        {
+            var button = NewButton(label, action);
+            button.name = "LGO World Touch Action Button " + label;
+            button.style.marginTop = 0;
+            button.style.backgroundColor = new Color(0.015f, 0.060f, 0.105f, 0.82f);
+            button.style.color = RuntimeArtCatalog.Text;
+            button.style.unityTextAlign = TextAnchor.MiddleCenter;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+            RuntimeUiSkin.ApplyEdgeFrame(
+                button,
+                RuntimeArtCatalog.Spirit,
+                RuntimeArtCatalog.Gold,
+                new Color(0.14f, 0.78f, 0.90f, 0.26f),
+                new Color(0.93f, 0.73f, 0.36f, 0.32f),
+                1f,
+                1f);
+            return button;
+        }
+
         internal static VisualElement NewImageLayer(string elementName, Texture2D texture, ScaleMode scaleMode, string tooltip = null)
         {
             var layer = new VisualElement();

@@ -207,6 +207,14 @@ namespace LinhGioi.UI
         internal int PositionChipPaddingVertical => 6;
         internal int LocalCombatPanelPaddingHorizontal => 12;
         internal int LocalCombatPanelPaddingVertical => 10;
+        internal float WorldTouchControlsBottomInset => Mathf.Clamp(Height * 0.075f, 34f, 52f);
+        internal float WorldTouchControlsHorizontalInset => Mathf.Clamp(Width * 0.040f, 16f, 30f);
+        internal float WorldTouchPadSize => Mathf.Clamp(ShortSide * 0.22f, 86f, 116f);
+        internal float WorldTouchActionClusterWidth => Mathf.Clamp(Width * 0.32f, 176f, 224f);
+        internal float WorldTouchActionButtonSize => Mathf.Clamp(ShortSide * 0.118f, 50f, 60f);
+        internal float WorldTouchActionGap => Mathf.Clamp(ShortSide * 0.018f, 7f, 10f);
+        internal float WorldTouchActionClusterMaxHeight => Mathf.Clamp(WorldTouchActionButtonSize * 2f + WorldTouchActionGap * 3f + 10f, 132f, 158f);
+        internal float WorldTouchActionFontSize => Mathf.Clamp(ShortSide * 0.027f, 11f, 13f);
         internal int SettingsPanelPaddingHorizontal => 14;
         internal int SettingsPanelPaddingTop => 12;
         internal int SettingsPanelPaddingBottom => 14;

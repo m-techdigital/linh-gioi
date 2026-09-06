@@ -84,6 +84,30 @@ def main() -> int:
         "RuntimeUiSkin.ApplyPreviewPanelFrame(preview);",
         "RuntimeUiSkin.ApplyWorldHudGroupFrame(group, accent);",
         "RuntimeUiSkin.ApplyHudStatusCompactFrame(label);",
+        "NewWorldTouchControlsOverlay",
+        "NewWorldTouchPad",
+        "NewWorldTouchActionButton",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "WorldTouchControlsBottomInset",
+        "WorldTouchPadSize",
+        "WorldTouchActionButtonSize",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "LGO World HUD Mobile Touch Affordance Base v1",
+        "ApplyTouchAffordances(",
+        "RuntimeUiOverlayPlacement.Left",
+        "RuntimeUiOverlayPlacement.Right",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "BuildWorldTouchAffordances();",
+        "RuntimeWorldHudResponsiveLayout.ApplyTouchAffordances(",
+        "worldVisibleForTouchControls",
+        "_worldTouchControlsOverlay",
+        "_worldTouchPrimaryActionButton",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-STYLE-ADOPTION-PASS-v1.0.md",

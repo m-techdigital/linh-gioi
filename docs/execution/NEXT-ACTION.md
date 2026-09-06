@@ -642,4 +642,6 @@ Expected classifications:
 
 `LGO-LOGIN-NPC-GROUNDING-AND-CTA-PANEL-POLISH-v1.0` has refreshed visual evidence and manual review notes in this session. Continue with `LGO-RUNTIME-UI-QUALITY-DEBT-FIRST-FIX-v1.0`, using existing validators and avoiding new micro-task docs unless a reusable gate is genuinely needed.
 
-Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, and evidence review scoring without new gameplay or frozen-surface changes.
+Latest closed batch: `LGO_WORLD_HUD_MOBILE_TOUCH_AFFORDANCE_READY` adds shared mobile World Hub touch affordances through factory/profile/layout bases, with reviewed desktop/tablet/mobile profile screenshots and no `VISUAL_RUNTIME_PASS` claim.
+
+Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, mobile touch affordances, and evidence review scoring without new gameplay or frozen-surface changes.

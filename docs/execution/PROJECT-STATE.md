@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_CHARACTER_HALL_SELECTED_DOCK_CLEARANCE_READY` moves selected Character Hall desktop actions into a bottom-safe dock, collapses duplicate selected status rows on non-mobile so CTA controls no longer overlap profile text, and keeps tablet/mobile selected states readable. Fresh desktop/tablet/mobile Character Hall screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
+Latest player-visible batch: `LGO_WORLD_HUD_MOBILE_TOUCH_AFFORDANCE_READY` adds shared mobile World Hub touch affordances: a bottom-safe movement pad on the left and a responsive action cluster on the right wired to existing local combat, skill preview, and session menu actions. Fresh desktop/tablet/mobile profile screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 
 Current visual/runtime evidence harness command:
 

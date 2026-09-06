@@ -10,6 +10,7 @@ namespace LinhGioi.UI
         internal const string DialogueViewportMarker = "LGO World HUD Dialogue Viewport Polish v1";
         internal const string MobileHierarchyMarker = "LGO World HUD Mobile Hierarchy Polish v1";
         internal const string TopStatusMobileMarker = "LGO World Top Status Mobile Readability v1";
+        internal const string MobileTouchAffordanceMarker = "LGO World HUD Mobile Touch Affordance Base v1";
 
         internal static void ApplyHudPanel(
             RuntimeUiLayoutProfile layout,
@@ -137,6 +138,115 @@ namespace LinhGioi.UI
             }
             if (dialogueActionRow != null)
                 RuntimeUiOverflowGuard.ApplyResponsiveColumns(dialogueActionRow, 2, mobile ? 4 : 6, dialogueContinueButton, dialogueCloseButton);
+        }
+
+        internal static void ApplyTouchAffordances(
+            RuntimeUiLayoutProfile layout,
+            bool worldVisible,
+            bool sessionVisible,
+            bool dialogueVisible,
+            VisualElement controlsOverlay,
+            VisualElement movementPad,
+            VisualElement actionCluster,
+            Button primaryActionButton,
+            Button windSlashButton,
+            Button shadowBindButton,
+            Button menuButton)
+        {
+            var showControls = worldVisible && layout.IsMobile && !sessionVisible && !dialogueVisible;
+            SetDisplayed(controlsOverlay, showControls);
+            if (!showControls) return;
+
+            controlsOverlay.style.position = Position.Absolute;
+            controlsOverlay.style.left = 0;
+            controlsOverlay.style.right = 0;
+            controlsOverlay.style.top = 0;
+            controlsOverlay.style.bottom = 0;
+            controlsOverlay.style.overflow = Overflow.Hidden;
+            controlsOverlay.pickingMode = PickingMode.Ignore;
+            controlsOverlay.BringToFront();
+
+            ApplyMovementPad(layout, movementPad);
+            ApplyActionCluster(layout, actionCluster, primaryActionButton, windSlashButton, shadowBindButton, menuButton);
+        }
+
+        private static void ApplyMovementPad(RuntimeUiLayoutProfile layout, VisualElement movementPad)
+        {
+            if (movementPad == null) return;
+            var size = layout.WorldTouchPadSize;
+            RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface(
+                movementPad,
+                RuntimeUiOverlayPlacement.Left,
+                size,
+                size,
+                layout.WorldTouchControlsHorizontalInset,
+                layout.WorldTouchControlsBottomInset);
+            movementPad.style.height = size;
+            RuntimeUiSkin.ApplyRadius(movementPad, size * 0.5f);
+
+            var nub = movementPad.Q<VisualElement>("LGO World Touch Movement Nub");
+            if (nub != null)
+            {
+                var nubSize = Mathf.Max(26f, size * 0.36f);
+                nub.style.width = nubSize;
+                nub.style.height = nubSize;
+                nub.style.left = (size - nubSize) * 0.5f;
+                nub.style.top = (size - nubSize) * 0.5f;
+                RuntimeUiSkin.ApplyRadius(nub, nubSize * 0.5f);
+            }
+
+            var label = movementPad.Q<Label>("LGO World Touch Movement Label");
+            if (label != null)
+            {
+                label.style.fontSize = layout.WorldTouchActionFontSize - 1f;
+                label.style.marginTop = size * 0.62f;
+            }
+        }
+
+        private static void ApplyActionCluster(
+            RuntimeUiLayoutProfile layout,
+            VisualElement actionCluster,
+            Button primaryActionButton,
+            Button windSlashButton,
+            Button shadowBindButton,
+            Button menuButton)
+        {
+            if (actionCluster == null) return;
+            RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface(
+                actionCluster,
+                RuntimeUiOverlayPlacement.Right,
+                layout.WorldTouchActionClusterWidth,
+                layout.WorldTouchActionClusterMaxHeight,
+                layout.WorldTouchControlsHorizontalInset,
+                layout.WorldTouchControlsBottomInset);
+            actionCluster.style.height = layout.WorldTouchActionClusterMaxHeight;
+            actionCluster.style.paddingTop = 0;
+            actionCluster.style.paddingBottom = 0;
+            actionCluster.style.paddingLeft = 0;
+            actionCluster.style.paddingRight = 0;
+
+            ApplyTouchActionButton(layout, primaryActionButton, true);
+            ApplyTouchActionButton(layout, windSlashButton, false);
+            ApplyTouchActionButton(layout, shadowBindButton, false);
+            ApplyTouchActionButton(layout, menuButton, false);
+        }
+
+        private static void ApplyTouchActionButton(RuntimeUiLayoutProfile layout, Button button, bool primary)
+        {
+            if (button == null) return;
+            var size = primary ? layout.WorldTouchActionButtonSize + 10f : layout.WorldTouchActionButtonSize;
+            button.style.width = size;
+            button.style.height = size;
+            button.style.minWidth = size;
+            button.style.minHeight = size;
+            button.style.maxWidth = size;
+            button.style.maxHeight = size;
+            button.style.marginLeft = layout.WorldTouchActionGap;
+            button.style.marginTop = layout.WorldTouchActionGap;
+            button.style.fontSize = layout.WorldTouchActionFontSize;
+            button.style.flexGrow = 0;
+            button.style.flexShrink = 0;
+            RuntimeUiSkin.ApplyRadius(button, size * 0.5f);
         }
 
         internal static void ApplyTopStatus(

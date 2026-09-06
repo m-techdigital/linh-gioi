@@ -40,6 +40,9 @@ namespace LinhGioi.UI
         private VisualElement _skillPreviewPanel;
         private VisualElement _localCombatPanel;
         private VisualElement _worldFooterActions;
+        private VisualElement _worldTouchControlsOverlay;
+        private VisualElement _worldTouchMovementPad;
+        private VisualElement _worldTouchActionCluster;
         private VisualElement _characterActionRow;
         private VisualElement _sessionActions;
         private VisualElement _sessionLocationRow;
@@ -124,6 +127,10 @@ namespace LinhGioi.UI
         private Button _previewShadowBindButton;
         private Button _previewSpiritGuardButton;
         private Button _localCombatButton;
+        private Button _worldTouchPrimaryActionButton;
+        private Button _worldTouchWindSlashButton;
+        private Button _worldTouchShadowBindButton;
+        private Button _worldTouchMenuButton;
         private Button _resumeButton;
         private Button _sessionSaveButton;
         private Button _sessionBackButton;
@@ -683,6 +690,7 @@ namespace LinhGioi.UI
             BuildSessionMenuPanel();
             BuildSkillPreviewPanel();
             BuildLocalCombatPanel();
+            BuildWorldTouchAffordances();
 
             _dialoguePanel = NewSectionShell("ĐỐI THOẠI", "NPC tương tác", string.Empty, "LGO Dialogue Shell");
             _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
@@ -720,6 +728,30 @@ namespace LinhGioi.UI
             _backButton.tooltip = "Quay lại quản lý nhân vật mà không đóng phiên hiện tại.";
             _worldFooterActions = NewActionRow("LGO World Action Footer V3B", Justify.FlexStart, 6, 0, _savePositionButton, _backButton);
             _worldHud.Add(_worldFooterActions);
+        }
+
+        private void BuildWorldTouchAffordances()
+        {
+            _worldTouchControlsOverlay = NewWorldTouchControlsOverlay();
+            _worldTouchMovementPad = NewWorldTouchPad();
+            _worldTouchActionCluster = NewWorldTouchActionCluster();
+            _worldTouchPrimaryActionButton = NewWorldTouchActionButton("Đánh", TriggerLocalCombat);
+            _worldTouchPrimaryActionButton.name = "LGO World Touch Primary Combat Button";
+            _worldTouchWindSlashButton = NewWorldTouchActionButton("Chém", () => PreviewSkill("Wind Slash", "Chém Gió"));
+            _worldTouchShadowBindButton = NewWorldTouchActionButton("Trói", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
+            _worldTouchMenuButton = NewWorldTouchActionButton("Menu", ToggleSessionMenu);
+            _worldTouchPrimaryActionButton.tooltip = "Tấn công thử bia luyện cục bộ.";
+            _worldTouchWindSlashButton.tooltip = "Xem thử kỹ năng Chém Gió.";
+            _worldTouchShadowBindButton.tooltip = "Xem thử kỹ năng Trói Bóng.";
+            _worldTouchMenuButton.tooltip = "Mở menu phiên.";
+            _worldTouchActionCluster.Add(_worldTouchWindSlashButton);
+            _worldTouchActionCluster.Add(_worldTouchShadowBindButton);
+            _worldTouchActionCluster.Add(_worldTouchMenuButton);
+            _worldTouchActionCluster.Add(_worldTouchPrimaryActionButton);
+            _worldTouchControlsOverlay.Add(_worldTouchMovementPad);
+            _worldTouchControlsOverlay.Add(_worldTouchActionCluster);
+            _root.Add(_worldTouchControlsOverlay);
+            SetDisplayed(_worldTouchControlsOverlay, false);
         }
 
         private void BuildSessionMenuPanel()
@@ -1247,11 +1279,13 @@ namespace LinhGioi.UI
 
         private void ApplyLocalSettings()
         {
+            var layout = CurrentLayoutProfile();
             var showPosition = _showPositionToggle == null || _showPositionToggle.value;
             var showHints = _showHintsToggle == null || _showHintsToggle.value;
             var focusMode = _focusModeToggle != null && _focusModeToggle.value;
             var sessionVisible = IsDisplayed(_sessionMenuPanel);
             var dialogueVisible = IsDisplayed(_dialoguePanel);
+            var worldVisibleForTouchControls = IsDisplayed(_worldHud);
             RuntimeWorldHudResponsiveLayout.ApplyLocalVisibility(
                 showPosition,
                 showHints,
@@ -1259,7 +1293,7 @@ namespace LinhGioi.UI
                 sessionVisible,
                 dialogueVisible,
                 _isMobileProfile,
-                string.Equals(_lastLayoutProfile, "tablet", StringComparison.Ordinal),
+                layout.IsTablet,
                 _evidenceState.ForceCombatPanel,
                 _evidenceState.HideGuidanceCardOnCompact,
                 _skillPreviewActive,
@@ -1285,6 +1319,18 @@ namespace LinhGioi.UI
                 _combatVisualState,
                 _combatCooldown,
                 _combatAuthority);
+            RuntimeWorldHudResponsiveLayout.ApplyTouchAffordances(
+                layout,
+                worldVisibleForTouchControls,
+                sessionVisible,
+                dialogueVisible,
+                _worldTouchControlsOverlay,
+                _worldTouchMovementPad,
+                _worldTouchActionCluster,
+                _worldTouchPrimaryActionButton,
+                _worldTouchWindSlashButton,
+                _worldTouchShadowBindButton,
+                _worldTouchMenuButton);
         }
 
         private void ApplyResponsiveLayoutProfile(bool force)
@@ -1390,6 +1436,18 @@ namespace LinhGioi.UI
                 _dialogueActionRow,
                 _dialogueContinueButton,
                 _dialogueCloseButton);
+            RuntimeWorldHudResponsiveLayout.ApplyTouchAffordances(
+                layout,
+                worldVisible,
+                IsDisplayed(_sessionMenuPanel),
+                IsDisplayed(_dialoguePanel),
+                _worldTouchControlsOverlay,
+                _worldTouchMovementPad,
+                _worldTouchActionCluster,
+                _worldTouchPrimaryActionButton,
+                _worldTouchWindSlashButton,
+                _worldTouchShadowBindButton,
+                _worldTouchMenuButton);
             if (_layoutProfileLabel != null)
             {
                 _layoutProfileLabel.text = mobile
