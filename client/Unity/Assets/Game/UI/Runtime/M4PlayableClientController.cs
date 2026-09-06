@@ -179,6 +179,12 @@ namespace LinhGioi.UI
             }
             if (_world != null && _position != null) _position.text = _world.FormatPosition();
             ApplyResponsiveLayoutProfile(false);
+            if (_worldTouchMovementPad is RuntimeTouchMovementPad movementPad)
+            {
+                if (!Application.isFocused || !_isMobileProfile || !IsDisplayed(_worldHud) || IsDisplayed(_sessionMenuPanel) || (_world != null && _world.DialogueActive))
+                    movementPad.ResetInput();
+                if (_world != null) _world.TouchMovement = movementPad.Value;
+            }
         }
 
         private void OnDestroy()

@@ -697,8 +697,8 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewWorldTouchPad()
         {
-            var pad = new VisualElement { name = "LGO World Touch Movement Pad" };
-            pad.pickingMode = PickingMode.Ignore;
+            var pad = new RuntimeTouchMovementPad { name = "LGO World Touch Movement Pad" };
+            pad.pickingMode = PickingMode.Position;
             pad.style.position = Position.Absolute;
             pad.style.alignItems = Align.Center;
             pad.style.justifyContent = Justify.Center;

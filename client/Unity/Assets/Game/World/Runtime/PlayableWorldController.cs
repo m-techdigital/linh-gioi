@@ -325,11 +325,13 @@ namespace LinhGioi.World
             InteractionStateChanged?.Invoke();
         }
 
+        public Vector2 TouchMovement { get; set; }
+
         private void Update()
         {
             if (_marker == null || _character == null) return;
-            var horizontal = Input.GetAxisRaw("Horizontal");
-            var vertical = Input.GetAxisRaw("Vertical");
+            var horizontal = Input.GetAxisRaw("Horizontal") + TouchMovement.x;
+            var vertical = Input.GetAxisRaw("Vertical") + TouchMovement.y;
             var rotate = 0f;
             if (Input.GetKey(KeyCode.Q)) rotate -= 1f;
             if (Input.GetKey(KeyCode.E)) rotate += 1f;

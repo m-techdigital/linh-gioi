@@ -104,6 +104,8 @@ namespace LinhGioi.UI
 
             _controller.CaptureEvidenceWorldHub();
             yield return WaitFrames(8);
+            yield return _controller.CaptureEvidenceTouchMovement();
+            yield return WaitFrames(2);
             yield return CaptureCheckpoint(
                 "world-hub",
                 "World Hub",

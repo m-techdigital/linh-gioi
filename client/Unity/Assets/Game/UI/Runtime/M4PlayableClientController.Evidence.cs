@@ -1,9 +1,61 @@
 using System.Threading.Tasks;
+using System;
+using System.Collections;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace LinhGioi.UI
 {
     public sealed partial class M4PlayableClientController
     {
+        internal IEnumerator CaptureEvidenceTouchMovement()
+        {
+            if (!_isMobileProfile) yield break;
+            var pad = _worldTouchMovementPad as RuntimeTouchMovementPad;
+            if (pad == null || _world == null || !Application.isFocused)
+                throw new InvalidOperationException("Touch movement evidence requires the focused mobile world and movement pad.");
+            var start = _world.CurrentPosition;
+            var yaw = _world.CurrentYawDegrees;
+            var point = pad.worldBound.center + Vector2.right * pad.contentRect.width * 0.35f;
+            try
+            {
+                using (var down = PointerDownEvent.GetPooled(new Event { type = EventType.MouseDown, button = 0, mousePosition = point }))
+                    pad.SendEvent(down);
+                for (var i = 0; i < 12; i++) yield return null;
+                var distance = Vector3.Distance(start, _world.CurrentPosition);
+                if (distance < 0.1f || pad.Value.x <= 0f)
+                    throw new InvalidOperationException("Touch movement evidence failed: pointer did not move the player.");
+
+                using (var up = PointerUpEvent.GetPooled(new Event { type = EventType.MouseUp, button = 0, mousePosition = point }))
+                    pad.SendEvent(up);
+                yield return null;
+                yield return null;
+                var released = _world.CurrentPosition;
+                for (var i = 0; i < 4; i++) yield return null;
+                if (pad.Value != Vector2.zero || Vector3.Distance(released, _world.CurrentPosition) > 0.001f)
+                    throw new InvalidOperationException("Touch movement evidence failed: movement continued after release.");
+
+                using (var down = PointerDownEvent.GetPooled(new Event { type = EventType.MouseDown, button = 0, mousePosition = point }))
+                    pad.SendEvent(down);
+                yield return null;
+                SetSessionMenuVisible(true);
+                yield return null;
+                yield return null;
+                var paused = _world.CurrentPosition;
+                for (var i = 0; i < 4; i++) yield return null;
+                if (pad.Value != Vector2.zero || Vector3.Distance(paused, _world.CurrentPosition) > 0.001f)
+                    throw new InvalidOperationException("Touch movement evidence failed: movement continued in menu.");
+                Debug.Log("LGO_TOUCH_MOVEMENT_PLAYER_PASS pointer=simulated moved=" + distance.ToString("F3", System.Globalization.CultureInfo.InvariantCulture) + " release=stopped menu=stopped");
+            }
+            finally
+            {
+                pad.ResetInput();
+                _world.TouchMovement = Vector2.zero;
+                SetSessionMenuVisible(false);
+                _world.SetSmokePosition(start.x, start.y, start.z, yaw);
+            }
+        }
+
         internal async Task CaptureEvidenceLoginAsync()
         {
             await LoginAsync();
