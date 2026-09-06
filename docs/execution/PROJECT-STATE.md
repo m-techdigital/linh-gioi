@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_TRAINING_STONE_LABEL_READABILITY_READY` gives the Đá Luyện world label a responsive offset so step-2 prompt evidence reads cleaner around the player and VFX.
+Latest player-visible batch: `LGO_MOVEMENT_AUTO_FACE_DIRECTION_READY` rotates the world marker toward movement input, so WASD/move direction better matches player-facing and skill preview direction while keeping Q/E rotation available when idle.
 
 Current visual/runtime evidence harness command:
 

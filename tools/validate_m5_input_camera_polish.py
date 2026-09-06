@@ -50,6 +50,8 @@ def main() -> int:
         'CameraFollowOffset',
         'RefreshCameraFrame',
         'Vector3.Lerp',
+        'Quaternion.RotateTowards',
+        'Mathf.Atan2(input.x, input.z)',
         'Mathf.Clamp01(Time.deltaTime * 7f)',
         'Quaternion.Euler(43f, 0f, 0f)',
         'camera.orthographic = true',

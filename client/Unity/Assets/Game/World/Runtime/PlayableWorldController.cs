@@ -341,6 +341,8 @@ namespace LinhGioi.World
             if (input.sqrMagnitude > 1f) input.Normalize();
             if (input.sqrMagnitude > 0.0001f)
             {
+                var targetYaw = Mathf.Atan2(input.x, input.z) * Mathf.Rad2Deg;
+                _marker.rotation = Quaternion.RotateTowards(_marker.rotation, Quaternion.Euler(0f, targetYaw, 0f), RotateSpeed * Time.deltaTime * 1.35f);
                 _marker.position += input * MoveSpeed * Time.deltaTime;
                 SetPlayerPose(PlaceholderPoseState.WalkMove);
                 RefreshInteractionState();
