@@ -150,8 +150,40 @@ namespace LinhGioi.UI
                 characterActionRow.style.marginTop = collapsed && isMobileProfile ? 0 : compactStandaloneCreate ? 0 : 6;
                 characterActionRow.style.flexGrow = collapsed && !isMobileProfile || compactStandaloneCreate ? 1 : 0;
                 characterActionRow.style.justifyContent = collapsed && !isMobileProfile || !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;
-                RuntimeUiOverflowGuard.ApplyResponsiveColumns(characterActionRow, compactStandaloneCreate ? 1 : hasSelectedCharacter ? 2 : 1, compactStandaloneCreate ? 0 : 6, createButton, enterWorldButton);
+                if (hasSelectedCharacter)
+                    ApplySelectedActionRatio(layout, characterActionRow, createButton, enterWorldButton);
+                else
+                    RuntimeUiOverflowGuard.ApplyResponsiveColumns(characterActionRow, 1, compactStandaloneCreate ? 0 : 6, createButton, enterWorldButton);
             }
+        }
+
+        private static void ApplySelectedActionRatio(RuntimeUiLayoutProfile layout, VisualElement characterActionRow, Button createButton, Button enterWorldButton)
+        {
+            // LGO Character Hall Selected CTA Ratio Base v1: selected state gives the primary enter CTA visual ownership while keeping secondary create inside the same bounded row.
+            if (characterActionRow == null || createButton == null || enterWorldButton == null) return;
+            RuntimeUiOverflowGuard.ApplyBoundedActionRow(characterActionRow);
+            characterActionRow.style.flexDirection = FlexDirection.Row;
+            characterActionRow.style.flexWrap = Wrap.NoWrap;
+            characterActionRow.style.alignItems = Align.Center;
+            characterActionRow.style.justifyContent = Justify.Center;
+
+            ApplySelectedActionButton(enterWorldButton, layout.IsMobile ? 64f : 66f, 0f, layout.IsMobile ? RuntimeUiButtonTier.Primary : RuntimeUiButtonTier.Primary);
+            ApplySelectedActionButton(createButton, layout.IsMobile ? 32f : 30f, 6f, layout.IsMobile ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
+        }
+
+        private static void ApplySelectedActionButton(Button button, float widthPercent, float marginLeft, RuntimeUiButtonTier tier)
+        {
+            RuntimeUiSkin.ApplyButtonTier(button, tier);
+            RuntimeUiOverflowGuard.ApplyButton(button);
+            button.style.width = Length.Percent(widthPercent);
+            button.style.maxWidth = Length.Percent(widthPercent);
+            button.style.minWidth = 0;
+            button.style.flexBasis = 0;
+            button.style.flexGrow = 0;
+            button.style.flexShrink = 1;
+            button.style.marginLeft = marginLeft;
+            button.style.marginRight = 0;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         internal static void ApplyActionHierarchy(

@@ -644,4 +644,6 @@ Expected classifications:
 
 Latest closed batch: `LGO_WORLD_HUD_MOBILE_TOUCH_AFFORDANCE_READY` adds shared mobile World Hub touch affordances through factory/profile/layout bases, with reviewed desktop/tablet/mobile profile screenshots and no `VISUAL_RUNTIME_PASS` claim.
 
+Latest closed UI ratio batch: `LGO_CHARACTER_HALL_SELECTED_CTA_RATIO_READY` moves selected Character Hall action sizing into a shared responsive ratio so the enter-world CTA is visually primary and the create action is secondary across desktop/tablet/mobile evidence.
+
 Recent visual passes improved scene depth, NPC staging, responsive HUD behavior, world staging density, label readability, mobile touch affordances, and evidence review scoring without new gameplay or frozen-surface changes.
