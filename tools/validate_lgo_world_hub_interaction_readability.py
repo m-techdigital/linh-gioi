@@ -59,8 +59,10 @@ def main() -> int:
         "DescribeInteractionActionText",
         "InteractionWorldPromptText",
         "CurrentInteractionPromptOffset",
-        "_interactionPromptWorldLabel.fontSize = mobile ? 50",
-        "_interactionPromptWorldLabel.characterSize = mobile ? 0.066f",
+        "WorldLabelPresenter.ApplyStyle(",
+        "mobile ? 50",
+        "mobile ? 0.066f",
+        "LGO World Viewport Label Metrics v1",
         "WorldLabelPresenter.EnsureShadow(_interactionPromptWorldLabel)",
         "Gặp Người Giữ Cổng trước khi ổn định Đá Luyện.",
         '"F/Space - Gặp"',
@@ -70,6 +72,7 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/World/Runtime/WorldLabelPresenter.cs",
+        "internal static void ApplyStyle(TextMesh label, int fontSize, float characterSize)",
         "internal static void EnsureShadow(TextMesh label)",
         "shadow.fontSize = label.fontSize;",
         "shadow.characterSize = label.characterSize;",

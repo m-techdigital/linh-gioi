@@ -6,11 +6,11 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: responsive viewport work now has a canonical `RuntimeViewportMetrics` owner, World HUD panels use parent-relative constraints, and latest mobile interaction prompts are larger with synced text shadows so `F Gặp` / `F Luyện` read more clearly above targets; desktop/tablet/mobile screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
+- Current reason: responsive viewport work now has a canonical UI `RuntimeViewportMetrics` owner, World HUD panels use parent-relative constraints, and World-space labels/prompts now use one World viewport profile with synced TextMesh/shadow metrics so mobile/tablet landmark and target feedback read more clearly; desktop/tablet/mobile screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: continue from the viewport-metrics model; next visible target should improve tablet/desktop HUD hierarchy or moment-to-moment world feedback using container/flex constraints, not raw `Screen.width/height` tuning.
+- Next implementation task after this fix: continue from the viewport/profile model; next visible target should improve tablet/desktop HUD hierarchy or moment-to-moment world feedback using owner-level layout/profile helpers, not one-off raw `Screen.width/height` tuning.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -118,6 +118,8 @@ Current focus update: World Hub lightweight depth pass is ready under `LGO_WORLD
 Current focus update: combat dummy state asset priority now prefers V3B selected/hit/recover sprites under `LGO_COMBAT_DUMMY_V3B_STATE_PRIORITY_READY`; target-dummy runtime screenshot was reviewed as more consistent with V3B, still placeholder-quality, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: compact state brief now stays under the routine 90-line budget under `LGO_STATE_BRIEF_TOKEN_BUDGET_READY`; routine resume should use this before opening long state/ledger files.
+
+Current focus update: World-space label/profile metrics are ready under `LGO_WORLD_VIEWPORT_LABEL_METRICS_READY`; camera sizing, narrow/mobile checks, prompt sizing, and landmark label typography now route through a single World viewport profile, while `WorldLabelPresenter.ApplyStyle` keeps TextMesh shadows synced. Fresh desktop/tablet/mobile screenshots were reviewed as more readable, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current focus update: Character Hall desktop/tablet hierarchy now uses wider metric-owned shell sizing and lighter glass under `LGO_CHARACTER_HALL_WIDER_GLASS_BALANCE_READY`; desktop/tablet/mobile screenshots were reviewed as cleaner and still not production-final, with no `VISUAL_RUNTIME_PASS` claim.
 

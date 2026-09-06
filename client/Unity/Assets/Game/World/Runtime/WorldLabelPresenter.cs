@@ -32,6 +32,14 @@ namespace LinhGioi.World
             EnsureShadow(label);
         }
 
+        internal static void ApplyStyle(TextMesh label, int fontSize, float characterSize)
+        {
+            if (label == null) return;
+            label.fontSize = fontSize;
+            label.characterSize = characterSize;
+            EnsureShadow(label);
+        }
+
         internal static void EnsureShadow(TextMesh label)
         {
             if (label == null) return;

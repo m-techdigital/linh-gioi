@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_INTERACTION_PROMPT_READABILITY_READY` makes mobile `F Gặp` / `F Luyện` world prompts larger, raises them away from object labels, and syncs prompt text shadows to the TextMesh size for clearer target interaction feedback. This sits on the new `LGO_RUNTIME_VIEWPORT_METRICS_ROOT_CAUSE_READY` model, where `RuntimeViewportMetrics` owns screen pixels, UI Toolkit panel viewport, safe-area-to-panel conversion, layout/input class, and evidence telemetry. Desktop/tablet/mobile screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_WORLD_VIEWPORT_LABEL_METRICS_READY` moves world-space camera/label/prompt sizing behind a single World viewport profile instead of scattered raw `Screen.width/height` branches, and gives mobile/tablet landmark/state labels larger synced TextMesh/shadow metrics. Desktop/tablet/mobile screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

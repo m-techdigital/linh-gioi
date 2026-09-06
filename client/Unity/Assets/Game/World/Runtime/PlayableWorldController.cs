@@ -411,10 +411,9 @@ namespace LinhGioi.World
         private static float CurrentCameraOrthographicSize()
         {
             // LGO Mobile World Camera Framing v1: smaller screens need larger readable actors, not a farther fixed desktop view.
-            var width = Screen.width > 0 ? Screen.width : 1280;
-            var height = Screen.height > 0 ? Screen.height : 720;
-            if (width <= 1000 || height <= 600) return 5.45f;
-            if (width <= 1400 || height <= 1050) return 6.15f;
+            var layout = CurrentWorldLayoutProfile();
+            if (layout.IsMobile) return 5.45f;
+            if (layout.IsTablet) return 6.15f;
             return 6.35f;
         }
 
@@ -690,10 +689,13 @@ namespace LinhGioi.World
 
             // LGO World Hub Interaction Readability v1: world prompt is short and object-aware; full copy remains in HUD.
             var mobile = IsMobileWorldViewport();
+            var tablet = IsNarrowWorldViewport() && !mobile;
             _interactionPromptWorldLabel.transform.position = CurrentInteractionPromptPosition(_nearestInteractable);
             _interactionPromptWorldLabel.text = InteractionWorldPromptText();
-            _interactionPromptWorldLabel.fontSize = mobile ? 50 : IsNarrowWorldViewport() ? 46 : 48;
-            _interactionPromptWorldLabel.characterSize = mobile ? 0.066f : IsNarrowWorldViewport() ? 0.052f : 0.050f;
+            WorldLabelPresenter.ApplyStyle(
+                _interactionPromptWorldLabel,
+                mobile ? 50 : tablet ? 48 : 48,
+                mobile ? 0.066f : tablet ? 0.056f : 0.050f);
             _interactionPromptWorldLabel.color = _nearestInteractable.id == "Gate Keeper" ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
             WorldLabelPresenter.EnsureShadow(_interactionPromptWorldLabel);
         }
@@ -877,8 +879,7 @@ namespace LinhGioi.World
             if (_targetDummyRewardLabel == null)
             {
                 _targetDummyRewardLabel = WorldLabelPresenter.Create("LGO Local Reward Placeholder World Label", "+1 Tinh khí", ReadabilityDummyPosition + new Vector3(0f, 1.62f, -0.18f), RuntimeArtCatalog.Gold);
-                _targetDummyRewardLabel.fontSize = 44;
-                _targetDummyRewardLabel.characterSize = 0.040f;
+                WorldLabelPresenter.ApplyStyle(_targetDummyRewardLabel, 44, 0.040f);
                 _targetDummyRewardLabel.gameObject.SetActive(false);
             }
             if (_spiritGateWorldLabel == null)
@@ -888,8 +889,7 @@ namespace LinhGioi.World
             if (_interactionPromptWorldLabel == null)
             {
                 _interactionPromptWorldLabel = WorldLabelPresenter.Create("LGO Interaction Prompt World Label", "F / Space", GateKeeperPosition + new Vector3(0f, 2.35f, 0f), RuntimeArtCatalog.Spirit);
-                _interactionPromptWorldLabel.fontSize = 38;
-                _interactionPromptWorldLabel.characterSize = 0.04f;
+                WorldLabelPresenter.ApplyStyle(_interactionPromptWorldLabel, 38, 0.04f);
                 _interactionPromptWorldLabel.gameObject.SetActive(false);
             }
             RefreshWorldLabelPresentation();
@@ -992,6 +992,7 @@ namespace LinhGioi.World
             WorldLabelPresenter.SetActive(_targetDummyWorldLabel, nearTargetDummy || _localCombat.CooldownActive(NowMs()) || _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
             WorldLabelPresenter.SetActive(_shadowSlimeWorldLabel, nearShadowSlime || _shadowSlimeState == PlaceholderSlimeState.AlertWarning || _shadowSlimeState == PlaceholderSlimeState.DissolveQuiet);
             WorldLabelPresenter.SetActive(_spiritGateWorldLabel, _guidedStep == GuidedTrainingStep.Complete);
+            ApplyWorldLabelStyles();
 
             if (_gateKeeperSprite != null)
             {
@@ -1094,14 +1095,93 @@ namespace LinhGioi.World
             return new Vector3(0.72f, 0.72f, 1f);
         }
 
+        private static WorldLayoutProfile CurrentWorldLayoutProfile()
+        {
+            var forcedProfile = NormalizeWorldLayoutProfile(GetArg("--lgo-device-profile"));
+            return WorldLayoutProfile.FromScreen(forcedProfile, Screen.width, Screen.height);
+        }
+
         private static bool IsMobileWorldViewport()
         {
-            return Screen.width <= 1000 || Screen.height <= 600;
+            return CurrentWorldLayoutProfile().IsMobile;
         }
 
         private static bool IsNarrowWorldViewport()
         {
-            return Screen.width <= 1400 || Screen.height <= 1050;
+            var layout = CurrentWorldLayoutProfile();
+            return layout.IsMobile || layout.IsTablet;
+        }
+
+        private static string NormalizeWorldLayoutProfile(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return null;
+            var normalized = value.Trim().ToLowerInvariant();
+            return normalized == "mobile" || normalized == "tablet" || normalized == "desktop" ? normalized : null;
+        }
+
+        private static string GetArg(string key)
+        {
+            var args = Environment.GetCommandLineArgs();
+            for (var i = 0; i < args.Length - 1; i++)
+            {
+                if (string.Equals(args[i], key, StringComparison.Ordinal))
+                    return args[i + 1];
+            }
+            return null;
+        }
+
+        private void ApplyWorldLabelStyles()
+        {
+            // LGO World Viewport Label Metrics v1: world feedback follows one viewport class instead of scattered pixel branches.
+            var layout = CurrentWorldLayoutProfile();
+            var labelFontSize = layout.IsMobile ? 48 : layout.IsTablet ? 46 : 42;
+            var labelCharacterSize = layout.IsMobile ? 0.052f : layout.IsTablet ? 0.048f : 0.042f;
+            WorldLabelPresenter.ApplyStyle(_gateKeeperWorldLabel, labelFontSize, labelCharacterSize);
+            WorldLabelPresenter.ApplyStyle(_trainingStoneWorldLabel, labelFontSize, labelCharacterSize);
+            WorldLabelPresenter.ApplyStyle(_targetDummyWorldLabel, labelFontSize, labelCharacterSize);
+            WorldLabelPresenter.ApplyStyle(_spiritGateWorldLabel, labelFontSize, labelCharacterSize);
+            WorldLabelPresenter.ApplyStyle(_shadowSlimeWorldLabel, labelFontSize, labelCharacterSize);
+            WorldLabelPresenter.ApplyStyle(
+                _targetDummyRewardLabel,
+                layout.IsMobile ? 50 : layout.IsTablet ? 48 : 44,
+                layout.IsMobile ? 0.050f : layout.IsTablet ? 0.046f : 0.040f);
+        }
+
+        private readonly struct WorldLayoutProfile
+        {
+            private const int MobileMaxShortSide = 600;
+            private const int MobileMaxLongSide = 1050;
+            private const int TabletMaxShortSide = 900;
+            private const int TabletMaxLongSide = 1450;
+
+            internal readonly bool IsMobile;
+            internal readonly bool IsTablet;
+
+            private WorldLayoutProfile(bool isMobile, bool isTablet)
+            {
+                IsMobile = isMobile;
+                IsTablet = isTablet;
+            }
+
+            internal static WorldLayoutProfile FromScreen(string forcedProfile, int screenWidth, int screenHeight)
+            {
+                if (string.Equals(forcedProfile, "mobile", StringComparison.Ordinal))
+                    return new WorldLayoutProfile(true, false);
+                if (string.Equals(forcedProfile, "tablet", StringComparison.Ordinal))
+                    return new WorldLayoutProfile(false, true);
+                if (string.Equals(forcedProfile, "desktop", StringComparison.Ordinal))
+                    return new WorldLayoutProfile(false, false);
+
+                var width = screenWidth > 0 ? screenWidth : 1280;
+                var height = screenHeight > 0 ? screenHeight : 720;
+                var shortSide = Mathf.Min(width, height);
+                var longSide = Mathf.Max(width, height);
+                if (shortSide <= MobileMaxShortSide && longSide <= MobileMaxLongSide)
+                    return new WorldLayoutProfile(true, false);
+                if (shortSide <= TabletMaxShortSide && longSide <= TabletMaxLongSide)
+                    return new WorldLayoutProfile(false, true);
+                return new WorldLayoutProfile(false, false);
+            }
         }
 
         private void RefreshTargetDummyReadabilityMarkers(bool vfxActive)
