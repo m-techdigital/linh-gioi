@@ -25,6 +25,8 @@ namespace LinhGioi.UI
             "character-create-cancelled.png",
             "character-roster-selected.png",
             "character-roster-reselected.png",
+            "character-roster-long.png",
+            "character-roster-scroll-start.png",
             "enter-world.png",
             "world-hub.png",
             "near-gatekeeper-prompt.png",
@@ -137,24 +139,11 @@ namespace LinhGioi.UI
             _controller.CaptureEvidenceCorrectCharacterName();
             var probeWidth = Mathf.Max(640, 2 * Mathf.RoundToInt(_reviewWidth * 0.72f / 2));
             var probeHeight = Mathf.Max(360, 2 * Mathf.RoundToInt(_reviewHeight * 0.9f / 2));
-            Screen.SetResolution(probeWidth, probeHeight, false);
-            for (var frame = 0; frame < 90 && (Screen.width != probeWidth || Screen.height != probeHeight); frame++)
-                yield return null;
-            if (Screen.width != probeWidth || Screen.height != probeHeight)
-                throw new InvalidOperationException("Resize requested=" + probeWidth + "x" + probeHeight + " actual=" + Screen.width + "x" + Screen.height);
-            yield return WaitFrames(8);
+            yield return ResizePlayerViewport(probeWidth, probeHeight);
             _controller.AssertCharacterFormBoundsForEvidence();
-            yield return new WaitForEndOfFrame();
-            var resizeProbe = new VisualCheckpointEvidence();
-            CaptureFrame(Path.Combine(_outputDir, "character-create-resize-probe.png"), resizeProbe);
-            if (resizeProbe.status != "CAPTURED")
-                throw new InvalidOperationException("Resize probe capture failed: " + resizeProbe.reason);
+            yield return CaptureResizeProbe("character-create-resize-probe.png");
             yield return WaitFrames(6);
-            Screen.SetResolution(_reviewWidth, _reviewHeight, false);
-            for (var frame = 0; frame < 90 && (Screen.width != _reviewWidth || Screen.height != _reviewHeight); frame++)
-                yield return null;
-            if (Screen.width != _reviewWidth || Screen.height != _reviewHeight)
-                throw new InvalidOperationException("Player did not restore the original viewport.");
+            yield return ResizePlayerViewport(_reviewWidth, _reviewHeight);
             _controller.CaptureEvidenceReapplyCharacterLayout();
             yield return WaitFrames(6);
             _controller.AssertCharacterFormBoundsForEvidence();
@@ -185,6 +174,25 @@ namespace LinhGioi.UI
                 "Roster Selection Changed",
                 "docs/reference-ui/lgo-runtime-ui-north-star-v1.png",
                 "Submitting another roster row changes both the highlight and hero preview");
+            yield return WaitForTask(_controller.CaptureEvidenceLongRosterAsync());
+            yield return WaitFrames(8);
+            yield return CaptureCheckpoint(
+                "character-roster-long",
+                "Long Roster Selection",
+                "docs/reference-ui/lgo-runtime-ui-north-star-v1.png",
+                "The eighth character remains visible inside a bounded scrolling roster");
+            _controller.AssertSelectedRosterVisibleForEvidence();
+            yield return ResizePlayerViewport(probeWidth, probeHeight);
+            _controller.AssertSelectedRosterVisibleForEvidence();
+            yield return CaptureResizeProbe("character-roster-resize-probe.png");
+            yield return ResizePlayerViewport(_reviewWidth, _reviewHeight);
+            _controller.AssertSelectedRosterVisibleForEvidence();
+            yield return _controller.CaptureEvidenceScrollRosterToStart();
+            yield return CaptureCheckpoint(
+                "character-roster-scroll-start",
+                "Long Roster At Start",
+                "docs/reference-ui/lgo-runtime-ui-north-star-v1.png",
+                "Manual scroll is retained; selecting the first row updates the bounded roster and preview");
             yield return WaitForTask(_controller.CaptureEvidenceEnterWorldAsync());
             yield return WaitFrames(10);
             yield return CaptureCheckpoint(
@@ -270,6 +278,25 @@ namespace LinhGioi.UI
             WriteManifest();
             Debug.Log("[LinhGioi] Visual runtime evidence flow completed. checkpoints=" + _checkpoints.Count);
             Quit(0);
+        }
+
+        private static IEnumerator ResizePlayerViewport(int width, int height)
+        {
+            Screen.SetResolution(width, height, false);
+            for (var frame = 0; frame < 90 && (Screen.width != width || Screen.height != height); frame++)
+                yield return null;
+            if (Screen.width != width || Screen.height != height)
+                throw new InvalidOperationException("Resize requested=" + width + "x" + height + " actual=" + Screen.width + "x" + Screen.height);
+            yield return WaitFrames(8);
+        }
+
+        private IEnumerator CaptureResizeProbe(string filename)
+        {
+            yield return new WaitForEndOfFrame();
+            var evidence = new VisualCheckpointEvidence();
+            CaptureFrame(Path.Combine(_outputDir, filename), evidence);
+            if (evidence.status != "CAPTURED")
+                throw new InvalidOperationException("Resize probe capture failed: " + evidence.reason);
         }
 
         private static IEnumerator WaitFrames(int frameCount)

@@ -151,9 +151,10 @@ namespace LinhGioi.UI
             Button primaryActionButton,
             Button windSlashButton,
             Button shadowBindButton,
+            Button spiritGuardButton,
             Button menuButton)
         {
-            var showControls = worldVisible && layout.IsMobile && !sessionVisible && !dialogueVisible;
+            var showControls = worldVisible && !sessionVisible && !dialogueVisible;
             SetDisplayed(controlsOverlay, showControls);
             if (!showControls) return;
 
@@ -167,7 +168,13 @@ namespace LinhGioi.UI
             controlsOverlay.BringToFront();
 
             ApplyMovementPad(layout, movementPad);
-            ApplyActionCluster(layout, actionCluster, primaryActionButton, windSlashButton, shadowBindButton, menuButton);
+            ApplyActionCluster(layout, actionCluster, primaryActionButton, windSlashButton, shadowBindButton, spiritGuardButton);
+            ApplyTouchActionButton(layout, menuButton, false);
+            menuButton.style.position = Position.Absolute;
+            menuButton.style.left = Length.Percent(50);
+            menuButton.style.marginLeft = -layout.WorldTouchActionButtonSize * 0.5f;
+            menuButton.style.marginTop = 0;
+            menuButton.style.bottom = layout.WorldTouchControlsBottomInset;
         }
 
         private static void ApplyMovementPad(RuntimeUiLayoutProfile layout, VisualElement movementPad)

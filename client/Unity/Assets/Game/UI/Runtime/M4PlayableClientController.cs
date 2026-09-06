@@ -131,6 +131,7 @@ namespace LinhGioi.UI
         private Button _worldTouchWindSlashButton;
         private Button _worldTouchShadowBindButton;
         private Button _worldTouchMenuButton;
+        private Button _worldTouchSpiritGuardButton;
         private Button _resumeButton;
         private Button _sessionSaveButton;
         private Button _sessionBackButton;
@@ -184,7 +185,7 @@ namespace LinhGioi.UI
             ApplyResponsiveLayoutProfile(false);
             if (_worldTouchMovementPad is RuntimeTouchMovementPad movementPad)
             {
-                if (!Application.isFocused || !_isMobileProfile || !IsDisplayed(_worldHud) || IsDisplayed(_sessionMenuPanel) || (_world != null && _world.DialogueActive))
+                if (!Application.isFocused || !IsDisplayed(_worldTouchControlsOverlay) || !IsDisplayed(_worldHud) || IsDisplayed(_sessionMenuPanel) || (_world != null && _world.DialogueActive))
                     movementPad.ResetInput();
                 if (_world != null) _world.TouchMovement = movementPad.Value;
             }
@@ -755,16 +756,19 @@ namespace LinhGioi.UI
             _worldTouchWindSlashButton = NewWorldTouchActionButton("Chém", () => PreviewSkill("Wind Slash", "Chém Gió"));
             _worldTouchShadowBindButton = NewWorldTouchActionButton("Trói", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
             _worldTouchMenuButton = NewWorldTouchActionButton("Menu", ToggleSessionMenu);
+            _worldTouchSpiritGuardButton = NewWorldTouchActionButton("Hộ Linh", () => PreviewSkill("Spirit Guard", "Hộ Linh"));
+            _worldTouchSpiritGuardButton.tooltip = "Xem thử kỹ năng Hộ Linh.";
             _worldTouchPrimaryActionButton.tooltip = "Tấn công thử bia luyện cục bộ.";
             _worldTouchWindSlashButton.tooltip = "Xem thử kỹ năng Chém Gió.";
             _worldTouchShadowBindButton.tooltip = "Xem thử kỹ năng Trói Bóng.";
             _worldTouchMenuButton.tooltip = "Mở menu phiên.";
             _worldTouchActionCluster.Add(_worldTouchWindSlashButton);
             _worldTouchActionCluster.Add(_worldTouchShadowBindButton);
-            _worldTouchActionCluster.Add(_worldTouchMenuButton);
+            _worldTouchActionCluster.Add(_worldTouchSpiritGuardButton);
             _worldTouchActionCluster.Add(_worldTouchPrimaryActionButton);
             _worldTouchControlsOverlay.Add(_worldTouchMovementPad);
             _worldTouchControlsOverlay.Add(_worldTouchActionCluster);
+            _worldTouchControlsOverlay.Add(_worldTouchMenuButton);
             _root.Add(_worldTouchControlsOverlay);
             SetDisplayed(_worldTouchControlsOverlay, false);
         }
@@ -1381,6 +1385,7 @@ namespace LinhGioi.UI
                 _worldTouchPrimaryActionButton,
                 _worldTouchWindSlashButton,
                 _worldTouchShadowBindButton,
+                _worldTouchSpiritGuardButton,
                 _worldTouchMenuButton);
         }
 
@@ -1498,6 +1503,7 @@ namespace LinhGioi.UI
                 _worldTouchPrimaryActionButton,
                 _worldTouchWindSlashButton,
                 _worldTouchShadowBindButton,
+                _worldTouchSpiritGuardButton,
                 _worldTouchMenuButton);
             if (_layoutProfileLabel != null)
             {

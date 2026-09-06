@@ -111,7 +111,7 @@ def main() -> int:
         "RuntimeUiOverflowGuard.ApplyBoundedScroll(scroll, listMaxHeight, 0f);",
         "list.style.width = listMaxWidth;",
         "list.style.flexGrow = hasSelectedCharacter ? 1 : 0;",
-        "scroll.verticalScrollerVisibility = ScrollerVisibility.Hidden;",
+        "scroll.verticalScrollerVisibility = ScrollerVisibility.Auto;",
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
         "layout.CharacterPortraitWidth",

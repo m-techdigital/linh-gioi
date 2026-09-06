@@ -87,14 +87,38 @@ namespace LinhGioi.UI
         {
             if (scroller == null) return;
             scroller.style.width = 8;
+            scroller.style.minWidth = 0;
+            scroller.style.maxWidth = 8;
+            scroller.style.backgroundImage = StyleKeyword.None;
             scroller.style.backgroundColor = new Color(0.01f, 0.03f, 0.07f, 0.22f);
             if (scroller.lowButton != null) scroller.lowButton.style.display = DisplayStyle.None;
             if (scroller.highButton != null) scroller.highButton.style.display = DisplayStyle.None;
             if (scroller.slider != null)
             {
-                scroller.slider.style.minWidth = 6;
-                scroller.slider.style.backgroundColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
+                var slider = scroller.slider;
+                ApplyCompactScrollerPart(slider, Color.clear);
+                ApplyCompactScrollerPart(slider.Q<VisualElement>(className: Slider.dragContainerUssClassName), Color.clear);
+                ApplyCompactScrollerPart(slider.Q<VisualElement>(className: Slider.trackerUssClassName), new Color(0.14f, 0.78f, 0.90f, 0.20f));
+                ApplyCompactScrollerPart(slider.Q<VisualElement>(className: Slider.draggerUssClassName), new Color(0.14f, 0.78f, 0.90f, 0.80f));
+                ApplyCompactScrollerPart(slider.Q<VisualElement>("unity-dragger-border"), Color.clear);
             }
+        }
+
+        private static void ApplyCompactScrollerPart(VisualElement part, Color background)
+        {
+            if (part == null) return;
+            // Only constrain the cross-axis; Unity owns vertical thumb size and scroll position.
+            part.style.width = Length.Percent(100);
+            part.style.minWidth = 0;
+            part.style.maxWidth = Length.Percent(100);
+            part.style.left = 0;
+            part.style.right = 0;
+            part.style.marginLeft = 0;
+            part.style.marginRight = 0;
+            part.style.backgroundImage = StyleKeyword.None;
+            part.style.backgroundColor = background;
+            RuntimeUiSkin.ApplyEdgeFrame(part, Color.clear, Color.clear, Color.clear, Color.clear, 0, 0);
+            RuntimeUiSkin.ApplyRadius(part, 3);
         }
 
         internal static void ApplyResponsiveColumns(VisualElement row, int columns, float gap, params Button[] buttons)

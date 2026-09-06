@@ -12,8 +12,14 @@ namespace LinhGioi.UI
     {
         internal IEnumerator CaptureEvidenceTouchMovement()
         {
-            if (!_isMobileProfile) yield break;
+            var focusDeadline = Time.realtimeSinceStartup + 15f;
+            while (!Application.isFocused && Time.realtimeSinceStartup < focusDeadline)
+                yield return null;
             var pad = _worldTouchMovementPad as RuntimeTouchMovementPad;
+            if (_worldTouchControlsOverlay.resolvedStyle.display != DisplayStyle.Flex)
+                throw new InvalidOperationException("World controls must be visible on " + _lastLayoutProfile);
+            if (_worldTouchMenuButton.parent == _worldTouchActionCluster)
+                throw new InvalidOperationException("Session navigation must not occupy a combat action slot.");
             if (pad == null || _world == null || !Application.isFocused)
                 throw new InvalidOperationException("Touch movement prerequisites: pad=" + (pad != null) + " world=" + (_world != null) + " focused=" + Application.isFocused);
             var start = _world.CurrentPosition;
@@ -127,6 +133,55 @@ namespace LinhGioi.UI
             }
             if (selectedCount != 1 || _selectedName.text != _selectedCharacter.name)
                 throw new InvalidOperationException("Roster and character preview must agree on one selection.");
+        }
+
+        internal async Task CaptureEvidenceLongRosterAsync()
+        {
+            for (var index = 3; index <= 8; index++)
+            {
+                OnCreateCharacterAction();
+                _characterName.value = "Evidence" + index.ToString("D2");
+                await CreateCharacterAsync();
+                if (_characters.Length != index)
+                    throw new InvalidOperationException("Long roster fixture could not create character " + index);
+            }
+        }
+
+        internal void AssertSelectedRosterVisibleForEvidence()
+        {
+            AssertSelectedRosterForEvidence();
+            var scroll = _characterList as ScrollView;
+            var selected = _characterList.Q<Button>(className: "lgo-list-selected");
+            if (scroll == null || selected == null) throw new InvalidOperationException("Roster scroll or selection missing.");
+            var viewport = scroll.contentViewport.worldBound;
+            var row = selected.worldBound;
+            if (row.yMin < viewport.yMin - 1 || row.yMax > viewport.yMax + 1 || row.xMin < viewport.xMin - 1 || row.xMax > viewport.xMax + 1)
+                throw new InvalidOperationException("Selected roster row is outside its scroll viewport: row=" + row + " viewport=" + viewport);
+            if (scroll.verticalScroller.highValue <= 0)
+                throw new InvalidOperationException("Long roster must overflow inside the scroll view, not expand the hall.");
+            if (scroll.verticalScroller.resolvedStyle.display != DisplayStyle.Flex)
+                throw new InvalidOperationException("Overflowing roster must expose the shared scrollbar.");
+            var scroller = scroll.verticalScroller;
+            var pixelTolerance = Mathf.Abs(RuntimePanelUtils.ScreenToPanel(scroll.panel, Vector2.right).x
+                - RuntimePanelUtils.ScreenToPanel(scroll.panel, Vector2.zero).x);
+            Debug.Log("LGO_ROSTER_SCROLLER_METRICS width=" + scroller.resolvedStyle.width + " minWidth=" + scroller.resolvedStyle.minWidth
+                + " slider=" + scroller.slider.worldBound);
+            if (scroller.resolvedStyle.width > 8 + pixelTolerance || scroller.slider.worldBound.xMax > scroller.worldBound.xMax + pixelTolerance)
+                throw new InvalidOperationException("Shared compact scrollbar exceeds its width budget.");
+            Debug.Log("LGO_ROSTER_SELECTED_VISIBLE_PASS count=" + _characters.Length + " offset=" + scroll.scrollOffset.y);
+        }
+
+        internal IEnumerator CaptureEvidenceScrollRosterToStart()
+        {
+            var scroll = (ScrollView)_characterList;
+            scroll.verticalScroller.value = 0;
+            for (var frame = 0; frame < 12; frame++) yield return null;
+            if (scroll.scrollOffset.y > 1)
+                throw new InvalidOperationException("Roster selection must not undo manual scrolling.");
+            Debug.Log("LGO_ROSTER_MANUAL_SCROLL_PASS input=scroller-value");
+            yield return CaptureEvidenceReselectFirstCharacter();
+            for (var frame = 0; frame < 6; frame++) yield return null;
+            AssertSelectedRosterVisibleForEvidence();
         }
 
         internal IEnumerator CaptureEvidenceReselectFirstCharacter()

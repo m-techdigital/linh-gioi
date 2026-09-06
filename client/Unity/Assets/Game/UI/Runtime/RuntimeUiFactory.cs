@@ -174,6 +174,14 @@ namespace LinhGioi.UI
             ApplyCharacterListDensity(list, layout.CharacterHallDensity);
             RuntimeUiSkin.ApplyCharacterListFrame(list);
             RuntimeUiOverflowGuard.ApplyBoundedScroll(list, layout.CharacterListMaxHeight(false), 0f);
+            list.contentViewport.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                if (evt.newRect.size != evt.oldRect.size) RevealSelectedListItem(list);
+            });
+            list.contentContainer.RegisterCallback<GeometryChangedEvent>(evt =>
+            {
+                if (evt.newRect.size != evt.oldRect.size) RevealSelectedListItem(list);
+            });
             return list;
         }
 
@@ -196,7 +204,7 @@ namespace LinhGioi.UI
             if (list is ScrollView scroll)
             {
                 RuntimeUiOverflowGuard.ApplyBoundedScroll(scroll, listMaxHeight, 0f);
-                scroll.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+                scroll.verticalScrollerVisibility = ScrollerVisibility.Auto;
                 scroll.contentContainer.style.width = Length.Percent(100);
             }
             list.style.width = listMaxWidth;
@@ -741,6 +749,16 @@ namespace LinhGioi.UI
                 selected ? new Color(0.03f, 0.15f, 0.25f, 0.88f) : new Color(0.02f, 0.05f, 0.08f, 0.72f),
                 border, border, border, border);
             button.tooltip = selected ? "Nhân vật đang chọn" : "Chọn nhân vật tu luyện";
+            if (selected)
+                button.schedule.Execute(() => RevealSelectedListItem(button.GetFirstAncestorOfType<ScrollView>()));
+        }
+
+        private static void RevealSelectedListItem(ScrollView list)
+        {
+            if (list == null || list.panel == null) return;
+            var selected = list.Q<Button>(className: "lgo-list-selected");
+            if (selected != null && selected.resolvedStyle.height > 0)
+                list.ScrollTo(selected);
         }
 
         internal static VisualElement NewRuntimeIcon(Texture2D texture, int size, string tooltip)

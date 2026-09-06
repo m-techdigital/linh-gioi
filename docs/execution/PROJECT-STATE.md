@@ -8,6 +8,8 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Batch 2026-09-06: roster dài có scroll chọn hàng/resize; movement và skill dùng chung base trên ba profile, Menu ngoài cụm combat, preview Hộ Linh được đưa vào cụm. Runtime 23 checkpoint/profile và smoke movement pass; quick gate pass, ảnh đã xem. Reference chính là concept board gốc và `linh-gioi-world-event-ui.png`, không phải demo sân luyện mới. Tablet còn panel che NPC; icon/presentation chưa đạt reference. Không claim visual PASS hoặc production auth/DB. Năm hướng Võ/Kiếm/Pháp/Cơ/Linh vẫn là đích thiết kế; phạm vi triển khai theo GDD/roadmap.
+
 Roster selection đã sửa: tạo mới/refresh giữ đúng ID, hàng chọn có viền vàng qua base chung, preview đồng bộ khi đổi hàng. Runtime ba profile và quick gate pass, screenshot đã xem (`build/dev-loop/roster-selection-final.log`). Next: danh sách dài phải cuộn có giới hạn và giữ lựa chọn trong viewport của roster; không claim visual PASS.
 
 Batch danh xưng: validation tại form theo rule server, lỗi không đẩy footer ra ngoài; 15/15 tests, quick gate và capture ba profile hoàn tất, ảnh lỗi đã xem (`build/dev-loop/name-feedback-final.log`). Tiếp theo: giữ đúng nhân vật vừa tạo và phân biệt selection trong roster qua base chung. Chưa claim visual PASS hoặc mọi viewport.
