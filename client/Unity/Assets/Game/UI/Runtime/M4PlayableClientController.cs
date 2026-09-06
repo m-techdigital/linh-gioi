@@ -698,7 +698,7 @@ namespace LinhGioi.UI
             _combatTargetStatus = NewCompactStatusLabel("Bia luyện: chưa vào sân.", RuntimeArtCatalog.Gold, RuntimeUiSpacing.CombatStatusFontSize);
             _combatRangeStatus = NewCompactStatusLabel("Tầm: chưa vào sân.", RuntimeArtCatalog.Muted, RuntimeUiSpacing.CombatRangeStatusFontSize);
             _combatVisualState = NewHiddenStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
-            _combatFeedback = NewCompactStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit, RuntimeUiSpacing.CombatStatusFontSize);
+            _combatFeedback = NewCompactStatusLabel("Diễn tập an toàn.", RuntimeArtCatalog.Spirit, RuntimeUiSpacing.CombatStatusFontSize);
             _combatCooldown = NewHiddenStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
             _combatAuthority = NewHiddenStatusLabel("Mô phỏng cục bộ: chưa gửi ý định chiến đấu.", RuntimeArtCatalog.Spirit);
             _localCombatButton = NewCompactSecondaryButton("Tấn công thử", TriggerLocalCombat);

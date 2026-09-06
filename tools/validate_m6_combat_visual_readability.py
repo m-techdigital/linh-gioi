@@ -109,7 +109,7 @@ def main() -> int:
         'Dấu hiệu mục tiêu',
         'Sẵn sàng',
         'Đang hồi chiêu',
-        'Chưa phải chiến đấu thật',
+        'Diễn tập an toàn',
         'mô phỏng cục bộ',
     )
     require(

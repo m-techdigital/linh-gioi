@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SHADOW_SLIME_SAFE_RESOLUTION_LABEL_READY` makes the post-training Bóng Tối state visible with a calm `Đã yên / Bóng Tối lùi` world label, preserving non-combat safe-loop semantics.
+Latest player-visible batch: `LGO_LOCAL_COMBAT_SAFE_TRAINING_COPY_READY` makes target-dummy feedback read as `Diễn tập an toàn` training feedback instead of leading with a technical non-combat disclaimer.
 
 Current visual/runtime evidence harness command:
 

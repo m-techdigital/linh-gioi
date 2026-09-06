@@ -73,7 +73,7 @@ def main() -> int:
         '_interactionHint = NewCompactStatusLabel("Di chuyển tới gần Người Giữ Cổng."',
         '_combatTargetStatus = NewCompactStatusLabel("Bia luyện: chưa vào sân."',
         '_combatRangeStatus = NewCompactStatusLabel("Tầm: chưa vào sân."',
-        '_combatFeedback = NewCompactStatusLabel("Chưa phải chiến đấu thật."',
+        '_combatFeedback = NewCompactStatusLabel("Diễn tập an toàn."',
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

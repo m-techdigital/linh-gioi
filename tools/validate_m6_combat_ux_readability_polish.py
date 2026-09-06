@@ -101,6 +101,7 @@ def main() -> int:
         "Chém Gió",
         "LGO Local Reward Placeholder World Label",
         "Tinh khí +1",
+        "Diễn tập an toàn",
         "không tạo kết quả chiến đấu thật",
     )
     require(

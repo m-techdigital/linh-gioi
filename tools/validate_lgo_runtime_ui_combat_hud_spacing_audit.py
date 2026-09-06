@@ -77,7 +77,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         'NewCompactStatusLabel("Bia luyện: chưa vào sân.", RuntimeArtCatalog.Gold, 13);',
         'NewCompactStatusLabel("Tầm: chưa vào sân.", RuntimeArtCatalog.Muted, 12);',
-        'NewCompactStatusLabel("Chưa phải chiến đấu thật.", RuntimeArtCatalog.Spirit, 13);',
+        'NewCompactStatusLabel("Diễn tập an toàn.", RuntimeArtCatalog.Spirit, 13);',
         'NewActionRow("LGO Local Combat Action Row", Justify.FlexStart, 6, 0, _localCombatButton)',
     )
     require(

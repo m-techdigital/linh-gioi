@@ -91,7 +91,7 @@ namespace LinhGioi.World
         public string TargetDummyStatusText => "Mục tiêu luyện tập: sức bền mô phỏng " + _localCombat.TargetHp + "/" + LocalCombatPrototypeState.TargetDummyMaxHp + " - Chỉ là mô phỏng cục bộ.";
         public string TargetDummyRangeText => DescribeTargetDummyRangeState();
         public string TargetDummyVisualStateText => DescribeTargetDummyVisualState();
-        public string CombatFeedbackText { get; private set; } = "Chưa phải chiến đấu thật: hãy đứng gần mục tiêu luyện tập để thử phản hồi.";
+        public string CombatFeedbackText { get; private set; } = "Diễn tập an toàn: đứng gần bia luyện để thử phản hồi.";
         public string CombatCooldownText => _localCombat.CooldownActive(NowMs()) ? "Hồi chiêu: Đang hồi chiêu mô phỏng." : "Hồi chiêu: Sẵn sàng";
         public string CombatAuthorityText { get; private set; } = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
         public bool LocalCombatCoolingDown => _localCombat.CooldownActive(NowMs());
@@ -120,7 +120,7 @@ namespace LinhGioi.World
             _dialogueLineIndex = 0;
             _localCombat.Reset();
             _targetDummyHitAcknowledged = false;
-            CombatFeedbackText = "Chưa phải chiến đấu thật: mục tiêu luyện tập chỉ nhận phản hồi cục bộ.";
+            CombatFeedbackText = "Diễn tập an toàn: bia luyện chỉ nhận phản hồi cục bộ.";
             CombatAuthorityText = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
             _guidedStep = GuidedTrainingStep.FindGateKeeper;
             SetPlayerPose(PlaceholderPoseState.Idle);
@@ -232,7 +232,7 @@ namespace LinhGioi.World
         {
             if (_marker == null)
             {
-                CombatFeedbackText = "Chưa phải chiến đấu thật: chưa vào sân luyện tập.";
+                CombatFeedbackText = "Diễn tập an toàn: chưa vào sân luyện tập.";
                 _localCombat.SetTargetSelected(false);
                 var missingIntent = BuildCombatIntentForLocalPreview(0, "unity-local-no-target");
                 missingIntent.TargetEntityId = 0;
@@ -264,7 +264,7 @@ namespace LinhGioi.World
 
             _targetDummyHitAcknowledged = true;
             CombatAuthorityText = "Chấp nhận cục bộ: " + _lastLocalCombatOutcome.Intent.IntentId + " - tạo kết quả nguyên mẫu từ hợp đồng hiện có.";
-            CombatFeedbackText = "Trúng mục tiêu: Chém Gió gây " + _lastLocalCombatOutcome.EffectAmount + " điểm mô phỏng; bia chuyển đỏ rồi hồi phục. Chỉ là mô phỏng cục bộ.";
+            CombatFeedbackText = "Trúng mục tiêu: Chém Gió gây " + _lastLocalCombatOutcome.EffectAmount + " điểm mô phỏng; bia chuyển đỏ rồi hồi phục trong diễn tập an toàn.";
             SetPlayerPose(PlaceholderPoseState.Interact);
             SetVfxFeedback(PlaceholderVfxFeedbackState.TargetDummyHitFlash, 1.25f);
             TriggerLocalPosePulse(RuntimeArtCatalog.Gold);

@@ -6,11 +6,11 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: Bóng Tối now shows a clear `Đã yên / Bóng Tối lùi` world label after Training Stone completion, making the safe-loop resolution easier to read without opening enemy combat; screenshot evidence was reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: local combat feedback now uses game-facing `Diễn tập an toàn` copy instead of leading with `Chưa phải chiến đấu thật`, so target-dummy hit feedback reads like a safe training result while keeping local-only semantics; screenshot evidence was reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: choose the next compact player-visible slice, likely skill feedback timing, local combat button/result clarity, World Hub empty-space richness, or Character Hall final-art parity; avoid heavy assets and one-off validators unless a real gate needs them.
+- Next implementation task after this fix: choose the next compact player-visible slice, likely skill preview feedback clarity, World Hub empty-space richness, local combat timing polish, or Character Hall final-art parity; avoid heavy assets and one-off validators unless a real gate needs them.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
