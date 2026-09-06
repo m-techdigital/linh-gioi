@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_GUIDED_INTERACTION_STEP_LOCK_READY` keeps Đá Luyện inactive during guided step 1, so standing near it no longer shows a contradictory `F/Space - Luyện` prompt before meeting the Gate Keeper.
+Latest player-visible batch: `LGO_TRAINING_STONE_PROMPT_EVIDENCE_FLOW_READY` makes the near-Training-Stone evidence advance through Gate Keeper dialogue first, so the runtime screenshot now shows the Đá Luyện prompt only during guided step 2.
 
 Current visual/runtime evidence harness command:
 

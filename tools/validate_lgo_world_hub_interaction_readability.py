@@ -71,6 +71,11 @@ def main() -> int:
         "LGO World Interaction Touch Hint",
     )
     require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",
+        "CaptureEvidenceNearTrainingStonePrompt",
+        "while (_world.DialogueActive)",
+    )
+    require(
         "docs/tasks/LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0.md",
         "LGO_WORLD_HUB_INTERACTION_READABILITY_READY",
         "No gameplay mechanic change",

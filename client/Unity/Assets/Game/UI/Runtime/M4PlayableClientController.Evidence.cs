@@ -45,6 +45,10 @@ namespace LinhGioi.UI
         {
             if (_world == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
+            _world.SetSmokePositionNearGateKeeper();
+            _world.TriggerInteractionForSmoke();
+            while (_world.DialogueActive)
+                _world.ContinueDialogue();
             _world.SetSmokePositionNearTrainingStone();
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
