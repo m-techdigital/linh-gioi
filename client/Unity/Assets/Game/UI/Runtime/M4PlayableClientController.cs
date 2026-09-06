@@ -94,7 +94,6 @@ namespace LinhGioi.UI
         private Label _combatAuthority;
         private Label _skillPreviewStatus;
         private Label _skinSource;
-        private VisualElement _combatCooldownIcon;
         private Label _worldObjective;
         private Label _worldHudHeaderTitle;
         private Label _interactionHint;
@@ -126,8 +125,9 @@ namespace LinhGioi.UI
         private Button _previewWindSlashButton;
         private Button _previewShadowBindButton;
         private Button _previewSpiritGuardButton;
-        private Button _localCombatButton;
         private Button _worldTouchPrimaryActionButton;
+        private int _lastCombatCooldownTenths = -1;
+        private bool _lastCombatTargetInRange;
         private Button _worldTouchWindSlashButton;
         private Button _worldTouchShadowBindButton;
         private Button _worldTouchMenuButton;
@@ -142,6 +142,7 @@ namespace LinhGioi.UI
         private AccountResponse _accountState;
         private CharacterResponse[] _characters = Array.Empty<CharacterResponse>();
         private CharacterResponse _selectedCharacter;
+        private int _selectedSlot = 1;
         private PlayableWorldController _world;
         private RuntimeViewportMetrics _viewportMetrics;
         private string _lastLayoutProfile;
@@ -183,6 +184,16 @@ namespace LinhGioi.UI
             }
             if (_world != null && _position != null) _position.text = _world.FormatPosition();
             ApplyResponsiveLayoutProfile(false);
+            if (_world != null && IsDisplayed(_worldHud))
+            {
+                var cooldownTenths = Mathf.CeilToInt(_world.LocalCombatCooldownRemainingSeconds * 10f);
+                if (cooldownTenths != _lastCombatCooldownTenths || _lastCombatTargetInRange != _world.LocalCombatTargetInRange)
+                {
+                    _lastCombatCooldownTenths = cooldownTenths;
+                    _lastCombatTargetInRange = _world.LocalCombatTargetInRange;
+                    RefreshCombatAssetUiState();
+                }
+            }
             if (_worldTouchMovementPad is RuntimeTouchMovementPad movementPad)
             {
                 if (!Application.isFocused || !IsDisplayed(_worldTouchControlsOverlay) || !IsDisplayed(_worldHud) || IsDisplayed(_sessionMenuPanel) || (_world != null && _world.DialogueActive))
@@ -196,6 +207,12 @@ namespace LinhGioi.UI
             _shutdown?.Cancel();
             _shutdown?.Dispose();
             _client?.Dispose();
+        }
+
+        private void OnApplicationFocus(bool focused)
+        {
+            if (_worldTouchMovementPad is RuntimeTouchMovementPad movementPad) movementPad.ResetInput();
+            if (_world != null) _world.TouchMovement = Vector2.zero;
         }
 
         private RuntimeUiLayoutProfile CurrentLayoutProfile()
@@ -614,7 +631,7 @@ namespace LinhGioi.UI
             var layout = CurrentLayoutProfile();
             _worldHud = NewWorldHudRoot("LGO World HUD Action Shell V3B Skin v1", 390);
             _mainShell.Add(_worldHud);
-            var worldHeaderBlock = NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit, "LGO World HUD Header Block");
+            var worldHeaderBlock = NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Gold, "LGO World HUD Header Block", compact: true);
             _worldHudHeaderTitle = worldHeaderBlock.Q<Label>("LGO World HUD Header Block Title");
             _worldHud.Add(worldHeaderBlock);
 
@@ -690,10 +707,10 @@ namespace LinhGioi.UI
             BuildLocalCombatPanel();
             BuildWorldTouchAffordances();
 
-            _dialoguePanel = NewSectionShell("ĐỐI THOẠI", "NPC tương tác", string.Empty, "LGO Dialogue Shell");
+            _dialoguePanel = NewSectionShell(string.Empty, string.Empty, string.Empty, "LGO Dialogue Shell");
             _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
             _dialogueSpeakerHeader = new VisualElement { name = "LGO Dialogue Speaker Header" };
-            _dialogueSpeakerPortrait = NewRuntimeIcon(LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture, layout.DialogueSpeakerPortraitSize, "Người Giữ Cổng");
+            _dialogueSpeakerPortrait = NewRuntimeIcon(LgoVisualAssetRegistryV3B.GateKeeperPortrait, layout.DialogueSpeakerPortraitSize, "Người Giữ Cổng");
             _dialogueSpeakerPortrait.name = "LGO Dialogue Speaker Portrait V3B";
             _dialogueSpeaker = new Label("Người Giữ Cổng");
             RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiTypography.DialogueSpeakerInitialFontSize, true);
@@ -733,14 +750,14 @@ namespace LinhGioi.UI
             _worldTouchControlsOverlay = NewWorldTouchControlsOverlay();
             _worldTouchMovementPad = NewWorldTouchPad();
             _worldTouchActionCluster = NewWorldTouchActionCluster();
-            _worldTouchPrimaryActionButton = NewWorldTouchActionButton("Đánh", TriggerWorldTouchPrimaryAction);
+            _worldTouchPrimaryActionButton = NewWorldTouchActionButton("Gặp", TriggerWorldTouchPrimaryAction);
             _worldTouchPrimaryActionButton.name = "LGO World Touch Primary Combat Button";
             _worldTouchWindSlashButton = NewWorldTouchActionButton("Chém", TriggerLocalCombat);
             _worldTouchShadowBindButton = NewWorldTouchActionButton("Trói", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
             _worldTouchMenuButton = NewWorldTouchActionButton("Menu", ToggleSessionMenu);
             _worldTouchSpiritGuardButton = NewWorldTouchActionButton("Hộ Linh", () => PreviewSkill("Spirit Guard", "Hộ Linh"));
             _worldTouchSpiritGuardButton.tooltip = "Xem thử kỹ năng Hộ Linh.";
-            _worldTouchPrimaryActionButton.tooltip = "Tấn công thử bia luyện cục bộ.";
+            _worldTouchPrimaryActionButton.tooltip = "Tương tác với mục tiêu hướng dẫn ở gần.";
             _worldTouchWindSlashButton.tooltip = "Thi triển Chém Gió lên bia luyện cục bộ; cần trong tầm và hết hồi chiêu.";
             _worldTouchShadowBindButton.tooltip = "Xem thử kỹ năng Trói Bóng.";
             _worldTouchMenuButton.tooltip = "Mở menu phiên.";
@@ -807,27 +824,21 @@ namespace LinhGioi.UI
         private void BuildLocalCombatPanel()
         {
             var layout = CurrentLayoutProfile();
-            _localCombatPanel = NewSectionShell("LUYỆN TẬP", "Bia luyện", "Bia luyện", "LGO World Combat Action Shell V3B");
+            _localCombatPanel = NewSectionShell(string.Empty, "Bia luyện", string.Empty, "LGO World Combat Action Shell V3B");
             _localCombatPanel.style.marginTop = layout.LocalCombatPanelMarginTop;
             RuntimeUiSkin.ApplyPadding(_localCombatPanel, layout.LocalCombatPanelPaddingHorizontal, layout.LocalCombatPanelPaddingHorizontal, layout.LocalCombatPanelPaddingVertical, layout.LocalCombatPanelPaddingVertical);
             ApplyCombatPanelSkin(_localCombatPanel);
             var combatNote = NewHiddenMutedLabel("Nhãn nguyên mẫu cục bộ: đọc mục tiêu, hit flash và hồi chiêu. Không có sát thương, phần thưởng hay chiến đấu máy chủ.");
             _localCombatPanel.Add(combatNote);
-            _combatCooldownIcon = NewCombatCooldownIcon();
             _combatTargetStatus = NewCompactStatusLabel("Bia luyện: chưa vào sân.", RuntimeArtCatalog.Gold, RuntimeUiSpacing.CombatStatusFontSize);
             _combatRangeStatus = NewCompactStatusLabel("Tầm: chưa vào sân.", RuntimeArtCatalog.Muted, RuntimeUiSpacing.CombatRangeStatusFontSize);
             _combatVisualState = NewHiddenStatusLabel("Dấu hiệu mục tiêu: chưa chọn.", RuntimeArtCatalog.Gold);
             _combatFeedback = NewCompactStatusLabel("Diễn tập an toàn.", RuntimeArtCatalog.Spirit, RuntimeUiSpacing.CombatStatusFontSize);
             _combatCooldown = NewHiddenStatusLabel("Hồi chiêu: Sẵn sàng", RuntimeArtCatalog.Muted);
             _combatAuthority = NewHiddenStatusLabel("Mô phỏng cục bộ: chưa gửi ý định chiến đấu.", RuntimeArtCatalog.Spirit);
-            _localCombatButton = NewCompactSecondaryButton("Tấn công thử", TriggerLocalCombat);
-            _localCombatButton.name = "LGO World Touch Primary Combat Button";
-            _localCombatButton.tooltip = "Kích hoạt phản hồi đánh thử cục bộ. Đánh thử cục bộ: xem vòng chọn mục tiêu, hit flash và nhịp hồi chiêu; không phải chiến đấu thật";
-            ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonNormalTexture, false);
-            var combatRow = NewIconStatusRow("LGO World Combat Readiness Row V3B", _combatCooldownIcon, _combatTargetStatus, _combatRangeStatus);
-            _localCombatPanel.Add(combatRow);
+            _localCombatPanel.Add(_combatTargetStatus);
+            _localCombatPanel.Add(_combatRangeStatus);
             _localCombatPanel.Add(_combatFeedback);
-            _localCombatPanel.Add(NewActionRow("LGO Local Combat Action Row", Justify.FlexStart, RuntimeUiSpacing.CombatActionRowMarginTop, RuntimeUiSpacing.CombatActionRowMarginBottom, _localCombatButton));
             _worldHud.Add(_localCombatPanel);
         }
 
@@ -872,9 +883,10 @@ namespace LinhGioi.UI
             _emptyCharacterHint = null;
             for (var slot = 0; slot < 3; slot++)
             {
-                var captured = slot < _characters.Length ? _characters[slot] : null;
+                var slotNumber = slot + 1;
+                var captured = Array.Find(_characters, character => character.slot == slotNumber);
                 var button = NewCharacterSlotButton(captured?.name ?? "Ô nhân vật " + (slot + 1),
-                    "Kiếm tu sơ nhập", captured == null, () => SelectCharacter(captured));
+                    "Kiếm tu sơ nhập", captured == null, () => SelectCharacter(captured, slotNumber));
                 button.userData = captured?.characterId ?? "empty-slot-" + slot;
                 _characterList.Add(button);
             }
@@ -896,7 +908,7 @@ namespace LinhGioi.UI
             SetBusy(true, "Đang tạo tu sĩ...");
             try
             {
-                var created = await _client.CreateCharacterAsync(_accountState.accountId, characterName, Required(_classId.value, DefaultClassId), _shutdown.Token);
+                var created = await _client.CreateCharacterAsync(_accountState.accountId, characterName, Required(_classId.value, DefaultClassId), _selectedSlot, _shutdown.Token);
                 _selectedCharacter = created;
                 await RefreshCharactersAsync();
                 SetBusy(false, "Nhân vật đã sẵn sàng.");
@@ -933,7 +945,22 @@ namespace LinhGioi.UI
             if (_selectedCharacter == null || _world == null) return;
             SetBusy(true, "Đang lưu vị trí phiên hiện tại...");
             var save = _world.BuildSaveRequest();
-            _selectedCharacter = await _client.SaveCharacterPositionAsync(_selectedCharacter.characterId, save.x, save.y, save.z, save.yawDegrees, _shutdown.Token);
+            _sessionSaveButton.text = "Đang lưu...";
+            _sessionSaveButton.tooltip = "Đang gửi vị trí hiện tại lên máy chủ.";
+            try
+            {
+                _selectedCharacter = await _client.SaveCharacterPositionAsync(_selectedCharacter.characterId, save.x, save.y, save.z, save.yawDegrees, _shutdown.Token);
+                _sessionSaveButton.text = "Đã lưu vị trí";
+                _sessionSaveButton.tooltip = "Vị trí đã được lưu trên máy chủ.";
+            }
+            catch (OperationCanceledException) { throw; }
+            catch (Exception exception)
+            {
+                _sessionSaveButton.text = "Thử lưu lại";
+                _sessionSaveButton.tooltip = "Chưa lưu được vị trí. Kiểm tra kết nối rồi thử lại.";
+                SetApiError("lưu vị trí", exception);
+                return;
+            }
             UpdateSelectedPreview(_selectedCharacter);
             SetBusy(false, "Đã lưu vị trí gần " + _world.CurrentAreaLabel + ".");
             SetToast("Dấu ấn vị trí đã ghi gần " + _world.CurrentAreaLabel + ".", RuntimeArtCatalog.Gold);
@@ -947,12 +974,13 @@ namespace LinhGioi.UI
             SetToast("Đã quay lại Điện Nhân Vật.", RuntimeArtCatalog.Muted);
         }
 
-        private void SelectCharacter(CharacterResponse character)
+        private void SelectCharacter(CharacterResponse character, int slot = 0)
         {
             _characterNameError = null;
             _selectedCharacter = character;
             _createFormExpanded = character == null;
-            _characterList.Query<Button>(className: "lgo-list-item").ForEach(button => ApplyListButtonSelection(button, Equals(button.userData, character?.characterId)));
+            _selectedSlot = character?.slot ?? (slot > 0 ? slot : FirstEmptyCharacterSlot());
+            ApplyRosterSelection();
             UpdateSelectedPreview(character);
             _enterWorldButton.SetEnabled(character != null);
             _status.text = character == null ? "Tạo hoặc chọn tu sĩ" : "Đã chọn: " + character.name;
@@ -961,14 +989,22 @@ namespace LinhGioi.UI
             ApplyCharacterHallActionHierarchy();
         }
 
+        private int FirstEmptyCharacterSlot()
+        {
+            for (var slot = 1; slot <= 3; slot++)
+                if (!Array.Exists(_characters, character => character.slot == slot)) return slot;
+            return 0;
+        }
+
+        private void ApplyRosterSelection()
+        {
+            object selected = _createFormExpanded ? "empty-slot-" + (_selectedSlot - 1) : _selectedCharacter?.characterId;
+            _characterList.Query<Button>(className: "lgo-list-item")
+                .ForEach(button => ApplyListButtonSelection(button, Equals(button.userData, selected)));
+        }
+
         private void UpdateSelectedPreview(CharacterResponse character)
         {
-            var portrait = _root.Q<VisualElement>("LGO Character Hall V3B Cultivator Portrait");
-            if (portrait != null)
-            {
-                portrait.style.unityBackgroundImageTintColor = character == null ? Color.black : Color.white;
-                portrait.style.opacity = character == null ? 0.45f : 1f;
-            }
             if (character == null)
             {
                 _selectedName.text = "Chưa chọn nhân vật";
@@ -1027,6 +1063,8 @@ namespace LinhGioi.UI
                 _createFormExpanded = true;
                 _characterNameError = null;
                 _characterName.value = string.Empty;
+                _selectedSlot = FirstEmptyCharacterSlot();
+                ApplyRosterSelection();
                 ApplyCharacterCreateFormState();
                 _characterName.Focus();
                 _characterName.SelectAll();
@@ -1043,6 +1081,8 @@ namespace LinhGioi.UI
             {
                 _createFormExpanded = false;
                 _characterNameError = null;
+                _selectedSlot = _selectedCharacter.slot;
+                ApplyRosterSelection();
                 _characterName.value = _selectedCharacter.name;
                 ApplyCharacterCreateFormState();
                 _enterWorldButton.Focus();
@@ -1069,7 +1109,8 @@ namespace LinhGioi.UI
                 _createButton,
                 _enterWorldButton);
             ApplyCharacterHallActionHierarchy();
-            RuntimeCharacterHallResponsiveLayout.ApplyCreatePreviewVisibility(_selectedPreview, _createFormExpanded);
+            RuntimeCharacterHallResponsiveLayout.ApplyCreatePreviewVisibility(_selectedPreview, _createFormExpanded,
+                _root.Q<VisualElement>("LGO Character Hall V3B Cultivator Portrait"));
             RuntimeCharacterHallResponsiveLayout.ApplyCreateValidationFeedback(_createTitle, _createHint, _characterNameError);
         }
 
@@ -1094,8 +1135,12 @@ namespace LinhGioi.UI
             if (_interactionHint != null) _interactionHint.text = FormatWorldInteractionHint(_world.InteractionActionText);
             if (_worldTouchPrimaryActionButton != null)
             {
-                _worldTouchPrimaryActionButton.text = _world.CanInteract ? _world.PrimaryInteractionLabel : "Đánh";
-                _worldTouchPrimaryActionButton.tooltip = _world.CanInteract ? "Tương tác với mục tiêu ở gần." : "Tấn công bia luyện cục bộ.";
+                var guiding = !_world.InteractionAcknowledged;
+                _worldTouchPrimaryActionButton.text = guiding ? _world.PrimaryInteractionLabel : "Đã xong";
+                _worldTouchPrimaryActionButton.SetEnabled(guiding && _world.CanInteract);
+                _worldTouchPrimaryActionButton.tooltip = guiding
+                    ? (_world.CanInteract ? "Tương tác với mục tiêu ở gần." : "Đến gần mục tiêu hướng dẫn để tương tác.")
+                    : "Đã hoàn tất hướng dẫn trong phiên này.";
             }
             if (_status != null) _status.text = WorldTopStatusText();
             if (_evidenceState.ShowEnterWorldTransition)
@@ -1106,7 +1151,7 @@ namespace LinhGioi.UI
                 if (_interactionHint != null) _interactionHint.text = "Đang nhập giới. Chuẩn bị nhận quyền điều khiển.";
                 if (_status != null) _status.text = "Đang vào Linh Môn";
             }
-            SetToast(_world.InteractionAcknowledged ? "Hoàn tất luyện tập. Hãy lưu vị trí hoặc về Điện Nhân Vật." : _world.InteractionText, RuntimeArtCatalog.Spirit);
+            SetToast(_world.InteractionAcknowledged ? "Hoàn tất hướng dẫn. Mở Menu để lưu vị trí hoặc về điện nhân vật." : _world.InteractionText, RuntimeArtCatalog.Spirit);
             RefreshDialoguePanel();
             ApplyLocalSettings();
         }
@@ -1214,10 +1259,13 @@ namespace LinhGioi.UI
 
         private string FormatWorldInteractionHint(string value)
         {
+            var desktop = !_isMobileProfile && string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal);
+            if (value == "Sẵn sàng: nhấn F để gặp Người Giữ Cổng.")
+                return desktop ? "Chọn Gặp hoặc nhấn F để trò chuyện." : "Chọn Gặp để trò chuyện.";
+            if (value == "Sẵn sàng: nhấn F để ổn định Đá Luyện.")
+                return desktop ? "Chọn Luyện hoặc nhấn F để ổn định Đá Luyện." : "Chọn Luyện để ổn định Đá Luyện.";
             if (!_isMobileProfile && string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal)) return value;
             if (value == "Tới vòng vàng cạnh Người Giữ Cổng.") return "Tới vòng vàng: Người Giữ Cổng.";
-            if (value == "Sẵn sàng: nhấn F để gặp Người Giữ Cổng.") return "Gặp Người Giữ Cổng.";
-            if (value == "Sẵn sàng: nhấn F để ổn định Đá Luyện.") return "Ổn định Đá Luyện.";
             return value;
         }
 
@@ -1295,6 +1343,11 @@ namespace LinhGioi.UI
             if (_sessionMenuPanel == null) return;
             SetDisplayed(_sessionMenuPanel, visible);
             if (visible) _sessionMenuPanel.BringToFront();
+            if (visible && _sessionSaveButton != null && _sessionSaveButton.enabledSelf)
+            {
+                _sessionSaveButton.text = "Lưu vị trí";
+                _sessionSaveButton.tooltip = "Lưu vị trí hiện tại của nhân vật.";
+            }
             if (_sessionMenuStatus != null)
                 _sessionMenuStatus.text = visible ? "Phiên đang tạm dừng. Chọn tiếp tục, lưu vị trí, quay lại hoặc thoát." : "Phiên chơi đang hoạt động.";
             // LGO Session Menu Focus Cleanup v1: pause overlay owns focus; restore dialogue state when returning.
@@ -1320,6 +1373,7 @@ namespace LinhGioi.UI
             var sessionVisible = IsDisplayed(_sessionMenuPanel);
             var dialogueVisible = IsDisplayed(_dialoguePanel);
             var worldVisibleForTouchControls = IsDisplayed(_worldHud);
+            _world?.SetOverlayFocus(sessionVisible || dialogueVisible || !worldVisibleForTouchControls);
             RuntimeWorldHudResponsiveLayout.ApplyLocalVisibility(
                 showPosition,
                 showHints,
@@ -1517,8 +1571,7 @@ namespace LinhGioi.UI
 
         private void TriggerLocalCombat()
         {
-            if (_world == null) return;
-            ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonPressedTexture, false);
+            if (_world == null || !IsDisplayed(_worldHud) || IsDisplayed(_sessionMenuPanel) || _world.DialogueActive) return;
             var intent = _world.BuildCombatIntentForLocalPreview(1, "unity-local-preview-1");
             _world.MarkCombatIntentPending(intent);
             _world.TryLocalCombatPrototype();
@@ -1532,16 +1585,13 @@ namespace LinhGioi.UI
             if (_world == null || IsDisplayed(_sessionMenuPanel) || _world.DialogueActive) return;
             if (_world.CanInteract)
                 _world.TryTriggerInteraction();
-            else
-                TriggerLocalCombat();
         }
 
         private void RefreshCombatAssetUiState()
         {
             if (_world == null) return;
+            RuntimeCombatHudPresentation.ApplySkillReadiness(_worldTouchWindSlashButton, "Chém", _world.LocalCombatCooldownRemainingSeconds, _world.LocalCombatTargetInRange);
             RuntimeCombatHudPresentation.ApplyAssetState(
-                _combatCooldownIcon,
-                _localCombatButton,
                 _combatRangeStatus,
                 _combatVisualState,
                 _combatFeedback,
@@ -1550,7 +1600,6 @@ namespace LinhGioi.UI
                 _world.LocalCombatCoolingDown,
                 _world.TargetDummyRangeText,
                 _world.CombatFeedbackText,
-                _world.CombatCooldownText,
                 _world.CombatAuthorityText);
         }
 
@@ -1610,10 +1659,12 @@ namespace LinhGioi.UI
                 SetDialogueVisible(false);
                 return;
             }
+            var resetReadingPosition = !IsDisplayed(_dialoguePanel) || _dialogueLine.text != _world.DialogueLine;
             SetDialogueVisible(_world.DialogueActive);
             if (!_world.DialogueActive) return;
             _dialogueSpeaker.text = _world.DialogueSpeaker;
             _dialogueLine.text = _world.DialogueLine;
+            if (resetReadingPosition) _dialogueLineScroll.scrollOffset = Vector2.zero;
             _dialogueProgress.text = "Đối thoại: " + _world.DialogueProgress;
             _dialogueContinueButton.text = _world.HasNextDialogueLine ? "Tiếp tục" : "Hoàn tất";
         }

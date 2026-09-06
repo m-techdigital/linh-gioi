@@ -50,7 +50,7 @@ public class AccountCharacterController {
     @ResponseStatus(HttpStatus.CREATED)
     public CharacterResponse createCharacter(@PathVariable String accountId, @RequestBody CreateCharacterRequest request) {
         try {
-            return CharacterResponse.from(store.createCharacter(new CreateCharacterCommand(accountId, request.name(), request.classId())));
+            return CharacterResponse.from(store.createCharacter(new CreateCharacterCommand(accountId, request.name(), request.classId(), request.slot())));
         } catch (IllegalArgumentException exception) {
             throw badRequest(exception);
         } catch (NoSuchElementException exception) {

@@ -135,8 +135,13 @@ namespace LinhGioi.UI
             if (selectedObjective != null) selectedObjective.style.display = showDetails ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        internal static void ApplyCreatePreviewVisibility(VisualElement preview, bool editingInPreviewColumn)
+        internal static void ApplyCreatePreviewVisibility(VisualElement preview, bool editingInPreviewColumn, VisualElement portrait)
         {
+            if (portrait != null)
+            {
+                portrait.style.unityBackgroundImageTintColor = editingInPreviewColumn ? Color.black : Color.white;
+                portrait.style.opacity = editingInPreviewColumn ? 0.45f : 1f;
+            }
             if (preview != null)
             {
                 preview.style.visibility = Visibility.Visible;

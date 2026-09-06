@@ -49,14 +49,12 @@ namespace LinhGioi.UI
 
             if (worldHudHeaderTitle != null)
             {
-                worldHudHeaderTitle.style.fontSize = mobile
-                    ? RuntimeUiTypography.SectionTitleMobileFontSize
-                    : tablet ? RuntimeUiTypography.SectionTitleFontSize : 18;
+                worldHudHeaderTitle.style.fontSize = RuntimeUiTypography.SectionTitleMobileFontSize;
                 worldHudHeaderTitle.style.maxWidth = Length.Percent(100);
                 worldHudHeaderTitle.style.minWidth = 0;
                 worldHudHeaderTitle.style.flexShrink = 1;
-                worldHudHeaderTitle.style.whiteSpace = mobile ? WhiteSpace.Normal : WhiteSpace.NoWrap;
-                worldHudHeaderTitle.style.unityTextAlign = TextAnchor.MiddleCenter;
+                worldHudHeaderTitle.style.whiteSpace = WhiteSpace.Normal;
+                worldHudHeaderTitle.style.unityTextAlign = TextAnchor.MiddleLeft;
             }
 
             if (worldGuidanceCard != null)
@@ -72,7 +70,7 @@ namespace LinhGioi.UI
             {
                 ApplyDialogueOverlay(layout, dialoguePanel);
                 dialoguePanel.style.maxHeight = layout.DialoguePanelMaxHeight;
-                dialoguePanel.style.height = layout.DialoguePanelMaxHeight;
+                dialoguePanel.style.height = StyleKeyword.Auto;
                 dialoguePanel.style.overflow = Overflow.Hidden;
                 RuntimeUiSkin.ApplyPadding(dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
             }
@@ -343,14 +341,15 @@ namespace LinhGioi.UI
             SetElementVisibility(worldHud, !sessionVisible);
             SetElementVisibility(headerActions, !sessionVisible);
             SetDisplayed(layoutProfileLabel, false);
-            SetDisplayed(worldFooterActions, !(sessionVisible || mobileProfile || dialogueVisible || skillPreviewActive || forceCombatPanel));
+            // Session navigation has one visible owner: the shared pause menu on every profile.
+            SetDisplayed(worldFooterActions, false);
             SetDisplayed(position, showPosition && !focusMode);
             SetDisplayed(worldDebugStrip, !compactWorld);
             SetDisplayed(worldMeta, !compactWorld);
             SetDisplayed(worldGuidanceCard, !(dialogueVisible || skillPreviewActive || combatPanelVisible || evidenceHidesGuidance));
             SetDisplayed(worldArea, !compactWorld);
             SetDisplayed(worldStep, showHints && !compactWorld);
-            SetDisplayed(worldDirection, showHints && !(mobileProfile && !dialogueVisible));
+            SetDisplayed(worldDirection, false);
             SetDisplayed(interactionHint, showHints);
             SetDisplayed(worldLandmarks, showHints && !compactWorld);
             SetDisplayed(worldPoseState, auxiliaryVisible);
@@ -391,7 +390,7 @@ namespace LinhGioi.UI
             RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
                 dialoguePanel,
                 RuntimeUiOverlayPlacement.Center,
-                RuntimeUiOverlayVerticalPlacement.Stretch,
+                RuntimeUiOverlayVerticalPlacement.Center,
                 layout.DialogueOverlayWidth,
                 layout.DialoguePanelMaxHeight,
                 layout.DialogueOverlayInsetHorizontal,

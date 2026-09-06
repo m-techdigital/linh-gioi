@@ -13,7 +13,8 @@ public record CharacterResponse(
         float z,
         float yawDegrees,
         long createdAtUnixMs,
-        long updatedAtUnixMs) {
+        long updatedAtUnixMs,
+        int slot) {
     static CharacterResponse from(CharacterProfile character) {
         return new CharacterResponse(
                 character.characterId(),
@@ -26,6 +27,7 @@ public record CharacterResponse(
                 character.positionZ(),
                 character.yawDegrees(),
                 character.createdAtUnixMs(),
-                character.updatedAtUnixMs());
+                character.updatedAtUnixMs(),
+                character.slot());
     }
 }

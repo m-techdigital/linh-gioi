@@ -67,6 +67,11 @@ Do not change these without explicit approval and a contract-change task:
 
 ## Runtime / Visual Rules
 
+- Design-first, theo yêu cầu owner 2026-09-07: trước khi triển khai màn/UI/layout, nhân vật, skill, hành trang, vật phẩm hoặc map, phải chỉ ra design/demo cụ thể cùng kịch bản, trạng thái và tương tác cần hỗ trợ. Có mẫu phù hợp thì reuse; thiếu mẫu thì tạo design/demo trước, không tự xây theo cảm giác.
+- Bám kịch bản gốc và `docs/02-GDD.md`: Linh Thành là trung tâm, social city và Âm Giới Xâm Lăng là hướng dài hạn. Không biến sân luyện kỹ thuật thành đích sản phẩm hoặc tự mở hệ thống ngoài roadmap.
+- Demo mới phải phân biệt rõ draft/đã duyệt và phần runtime hiện có/đề xuất; không tự coi concept là gameplay đã triển khai. Các màn cùng loại dùng base chung; chỉ tạo ngoại lệ khi có design và evidence cụ thể.
+- Khi Player đang capture input/ảnh, hoàn tất capture rồi mới mở ảnh review; mất focus giữa smoke phải giữ log thất bại, không nới assertion để claim pass.
+
 - `./tools/lgo_visual_runtime_review.sh` is the visual evidence command.
 - Do not use `-nographics` for player visual evidence.
 - Build/capture success is not `VISUAL_RUNTIME_PASS`; screenshots must be reviewed.

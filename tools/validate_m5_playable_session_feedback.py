@@ -70,7 +70,7 @@ def main() -> int:
         'Sân luyện an toàn / đường tới Người Giữ Cổng',
         'Sân luyện an toàn / đường tới Đá Luyện',
         'Người Giữ Cổng màu vàng',
-        'mạch sáng lam',
+        'đường đá',
         'Training Stone',
     )
     require(

@@ -46,9 +46,9 @@ REQUIRED_MARKERS = {
     ],
     "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs": [
         "ApplyCombatPanelSkin",
-        "ApplyCombatButtonSkin",
-        "NewCombatCooldownIcon",
-        "Tấn công thử",
+        "RuntimeCombatHudPresentation.ApplySkillReadiness",
+        "_world.LocalCombatCooldownRemainingSeconds",
+        'NewWorldTouchActionButton("Chém", TriggerLocalCombat)',
         "LGO World Touch Primary Combat Button",
     ],
     "docs/tasks/M6-UNITY-COMBAT-PLACEHOLDER-ASSET-IMPORT-v0.46.0.md": [

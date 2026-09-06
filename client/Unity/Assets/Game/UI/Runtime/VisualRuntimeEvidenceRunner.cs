@@ -31,8 +31,10 @@ namespace LinhGioi.UI
             "world-hub.png",
             "near-gatekeeper-prompt.png",
             "near-training-stone-prompt.png",
+            "training-stone-approach.png",
             "training-complete.png",
             "target-dummy-state.png",
+            "combat-out-of-range.png",
             "skill-shadow-bind-preview.png",
             "npc-dialogue.png",
             "npc-dialogue-long.png",
@@ -219,6 +221,14 @@ namespace LinhGioi.UI
                 "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv; docs/tasks/LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0.md",
                 "Player stands inside Gate Keeper interaction range; short Vietnamese prompt and compact HUD action are visible");
 
+            _controller.CaptureEvidenceNearTrainingStonePrompt(approaching: true);
+            yield return WaitFrames(8);
+            yield return CaptureCheckpoint(
+                "training-stone-approach",
+                "Training Stone Approach",
+                "docs/design/LINH-THANH-ONBOARDING-DESIGN.md",
+                "After dialogue, outside stone range: route guidance visible and interaction unavailable");
+
             _controller.CaptureEvidenceNearTrainingStonePrompt();
             yield return WaitFrames(8);
             yield return CaptureCheckpoint(
@@ -235,6 +245,14 @@ namespace LinhGioi.UI
                 "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv; docs/tasks/LGO-WORLD-HUB-INTERACTION-READABILITY-PASS-v1.0.md",
                 "Player has stabilized the Training Stone; completion feedback is visible in HUD and world label");
 
+            _controller.CaptureEvidenceCombatOutOfRange();
+            yield return WaitFrames(8);
+            _controller.AssertCombatPanelClearsMovementPad();
+            yield return CaptureCheckpoint(
+                "combat-out-of-range",
+                "Combat Out Of Range",
+                "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv",
+                "Button and HUD explain rejected range; no damage or cooldown before approaching target");
             _controller.CaptureEvidenceTargetDummyState();
             yield return WaitFrames(8);
             yield return CaptureCheckpoint(
@@ -243,6 +261,7 @@ namespace LinhGioi.UI
                 "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv",
                 "V3B target dummy selected/hit/recover state clarity, cooldown ring, combat button fit, and local-only combat copy");
 
+            yield return _controller.CaptureEvidenceCooldownRecoversAtRest();
             _controller.CaptureEvidenceShadowBindPreview();
             yield return WaitFrames(8);
             yield return CaptureCheckpoint(
@@ -267,7 +286,9 @@ namespace LinhGioi.UI
                 "docs/reference-ui/lgo-runtime-ui-mobile-tablet-targets-v1.png",
                 "Long Vietnamese dialogue stays inside a bounded vertical scroll region while progress and action buttons remain visible");
 
-            _controller.CaptureEvidenceOpenSessionMenu();
+            yield return _controller.CaptureEvidenceDialogueScrollAndReopen();
+            yield return _controller.CaptureEvidenceOpenSessionMenu();
+            yield return WaitForTask(_controller.CaptureEvidenceSaveFromMenuAsync());
             yield return WaitFrames(8);
             yield return CaptureCheckpoint(
                 "session-menu",

@@ -416,8 +416,10 @@ namespace LinhGioi.UI
 
         internal static void ApplyWorldHudGroupFrame(VisualElement group, Color accent)
         {
-            group.style.backgroundColor = DeepGlass;
-            ApplyPanelFrame(group);
+            group.style.backgroundColor = Color.clear;
+            group.style.backgroundImage = StyleKeyword.None;
+            ApplyEdgeFrame(group, Color.clear, Color.clear, Color.clear, Color.clear, 0f, 0f);
+            ApplyRadius(group, 0);
         }
 
         internal static void ApplyWorldHudRootFrame(VisualElement hud)

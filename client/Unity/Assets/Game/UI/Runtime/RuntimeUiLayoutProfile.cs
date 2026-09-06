@@ -188,11 +188,7 @@ namespace LinhGioi.UI
         internal float DialogueOverlayInsetHorizontal => Mathf.Max(12f, (Width - DialogueOverlayWidth) * 0.5f);
         internal float DialogueOverlayInsetVertical => Mathf.Max(DialoguePanelMarginVertical, (Height - DialoguePanelMaxHeight) * 0.5f);
         internal int DialogueContentGap => IsMobile ? 6 : IsTablet ? 8 : 10;
-        internal float DialogueLineScrollMinHeight => IsMobile
-            ? Mathf.Clamp(Height * 0.08f, 38f, 46f)
-            : IsTablet
-                ? Mathf.Clamp(Height * 0.10f, 78f, 104f)
-                : Mathf.Clamp(Height * 0.10f, 92f, 128f);
+        internal float DialogueLineScrollMinHeight => 0f;
         internal float DialogueLineScrollMaxHeight => IsMobile
             ? Mathf.Clamp(Height * 0.12f, 50f, 64f)
             : IsTablet

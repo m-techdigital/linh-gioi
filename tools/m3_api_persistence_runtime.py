@@ -112,7 +112,7 @@ def main() -> int:
     if log.read_text(encoding='utf-8', errors='replace').count('M3_PERSISTENCE_SMOKE_PASS') != 2:
         append(log, 'ERROR: M3 smoke did not record both first-pass and restart-pass markers.')
         return 42
-    store_file = store_dir / 'players-v1.json'
+    store_file = store_dir / 'players-v2.json'
     if not store_file.exists():
         append(log, f'ERROR: persistence file missing: {store_file}')
         return 43

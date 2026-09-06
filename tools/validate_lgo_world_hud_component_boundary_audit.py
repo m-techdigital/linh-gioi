@@ -68,7 +68,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         '_worldHud = NewWorldHudRoot("LGO World HUD Action Shell V3B Skin v1", 390);',
-        'NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit',
+        'NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Gold',
         'NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold',
     )
     reject(

@@ -2,6 +2,11 @@
 
 ## Nguồn và phạm vi
 
+- Portrait Người Giữ Cổng candidate 2026-09-07: `client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B/Login/gate_keeper_portrait_v1.jpg`, 128x128 JPEG quality85, 8156 byte, không crop; texture không mip/readable/alpha, max128. Imagegen vẽ mới theo standalone V3B NPC đang dùng trong world (tóc đen, áo ngà/teal, phụ kiện vàng), không cắt ảnh composite. Nguồn ngoài repo: `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-a78fffba-6d40-4165-b68f-6fb1b68cd019.png`. Dùng cho ô thoại 34-42 UI units; không thay world sprite, không claim giống mặt tuyệt đối hoặc art final. Demo dialogue ông lão trước đó chỉ còn giá trị bố cục, không là diện mạo canon. Source JPEG nhẹ không chứng minh RAM/build giảm; thêm payload mới, fallback cũ giữ nguyên.
+
+- Design-first bắt buộc cho UI, nhân vật, skill, hành trang/vật phẩm, map và interaction. Không có mẫu/trạng thái phù hợp thì tạo design trước, không tự code. `docs/design/LINH-THANH-ONBOARDING-DESIGN.md` cùng `lgo-linh-thanh-onboarding-storyboard-draft-v1.jpg` là đề xuất nối vòng kỹ thuật vào Linh Thành, chưa duyệt, không phải gameplay hiện có.
+- Coverage hiện tại: Character Hall có demo skin/layout; năm class có concept tạo hình nhưng chưa đủ thiết kế skill/progression; HUD có reference tổng quan nhưng chưa đủ từng state; hành trang/vật phẩm/map cần kiểm tra brief/demo riêng trước mỗi slice, không coi concept tổng quan là thiết kế đầy đủ của mọi hệ thống.
+
 - `lgo-character-three-slots-draft-v1.jpg`: owner duyệt làm hướng visual mới ngày 2026-09-07, gồm nền tối trung tính, viền vàng mảnh, chữ ngà/vàng, tiêu đề serif; chuyển skin cũ qua base dùng chung. Luôn 3 slot, silhouette giữa, form/hai nút cột phải. Ảnh sinh ngày 2026-09-06 còn lệch đáy hai cột: runtime phải căn đáy bằng layout constraints, không sao chép tọa độ lỗi. Đây là design reference, không phải evidence hay asset runtime. JPEG quality 82, không crop.
 
 - Reference HUD chính theo owner: `../reference-art/linh-gioi-world-event-ui.png`. Phân nhóm movement trái, combat phải, điều hướng hệ thống đáy, nhiệm vụ trái và trạng thái nhân vật riêng. Prototype chỉ triển khai hành vi thật đang được phép; không lấy sân luyện làm đích thay thế vòng chơi GDD. Bản HUD sinh bổ sung không thay nguồn này.

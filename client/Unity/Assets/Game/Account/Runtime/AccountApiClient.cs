@@ -43,6 +43,13 @@ namespace LinhGioi.Account
             return SendJsonAsync<CharacterResponse>("POST", "/accounts/" + EscapePath(accountId) + "/characters", new CreateCharacterRequest(name, classId), 201, cancellationToken);
         }
 
+        public Task<CharacterResponse> CreateCharacterAsync(string accountId, string name, string classId, int slot, CancellationToken cancellationToken)
+        {
+            if (slot < 1 || slot > 3) throw new ArgumentOutOfRangeException(nameof(slot));
+            return SendJsonAsync<CharacterResponse>("POST", "/accounts/" + EscapePath(accountId) + "/characters",
+                new CreateCharacterInSlotRequest(name, classId, slot), 201, cancellationToken);
+        }
+
         public Task<CharacterResponse> LoadCharacterAsync(string characterId, CancellationToken cancellationToken)
         {
             return SendJsonAsync<CharacterResponse>("GET", "/characters/" + EscapePath(characterId), null, 200, cancellationToken);

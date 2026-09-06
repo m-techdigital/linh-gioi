@@ -17,6 +17,7 @@ run_profile() {
   local height="$3"
   local build_mode="$4"
   local source_gates="$5"
+  local server_build="$6"
   local out_dir="$LOG_DIR/$profile"
 
   echo "LGO_VISUAL_PROFILE_REVIEW_PHASE_START $profile ${width}x${height} build=$build_mode source_gates=$source_gates"
@@ -26,7 +27,7 @@ run_profile() {
   LGO_VISUAL_RUNTIME_HEIGHT="$height" \
   LGO_VISUAL_RUNTIME_OUT_DIR="$out_dir" \
   LGO_VISUAL_RUNTIME_SOURCE_GATES="$source_gates" \
-  LGO_VISUAL_RUNTIME_SERVER_BUILD=skip \
+  LGO_VISUAL_RUNTIME_SERVER_BUILD="$server_build" \
   LGO_VISUAL_RUNTIME_CLEAR_UNITY_CACHE=0 \
   LGO_VISUAL_RUNTIME_PLAYER_BUILD="$build_mode" \
   LGO_VISUAL_RUNTIME_TIMEOUT_SECONDS="$PROFILE_TIMEOUT_SECONDS" \
@@ -41,9 +42,9 @@ run_profile() {
   echo "LGO_VISUAL_PROFILE_REVIEW_POLICY build_once_reuse_player"
   echo "LGO_VISUAL_PROFILE_REVIEW_TIMEOUTS capture=$PROFILE_TIMEOUT_SECONDS build=$BUILD_TIMEOUT_SECONDS"
 
-  run_profile desktop 1920 1080 build fast
-  run_profile tablet 1366 1024 skip skip
-  run_profile mobile 960 540 skip skip
+  run_profile desktop 1920 1080 build fast "${LGO_VISUAL_RUNTIME_SERVER_BUILD:-fast}"
+  run_profile tablet 1366 1024 skip skip skip
+  run_profile mobile 960 540 skip skip skip
 
   echo "LGO_VISUAL_PROFILE_INDEX_PHASE start"
   python3.12 tools/report_lgo_visual_evidence_profile_index.py

@@ -54,7 +54,8 @@ def main() -> int:
 
     store = read('server/api/src/main/java/com/linhgioi/server/api/persistence/JsonFilePlayerProfileStore.java')
     for marker in [
-        'SCHEMA_VERSION = 1',
+        'SCHEMA_VERSION = 2',
+        'players-v2.json',
         'players-v1.json',
         'StandardCopyOption.ATOMIC_MOVE',
         'loginDev',

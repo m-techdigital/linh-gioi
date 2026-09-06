@@ -404,7 +404,7 @@ namespace LinhGioi.UI
             return label;
         }
 
-        internal static VisualElement NewSectionHeaderBlock(string title, Color ornamentColor, string elementName = null)
+        internal static VisualElement NewSectionHeaderBlock(string title, Color ornamentColor, string elementName = null, bool compact = false)
         {
             var block = new VisualElement();
             if (!string.IsNullOrWhiteSpace(elementName)) block.name = elementName;
@@ -412,7 +412,13 @@ namespace LinhGioi.UI
             var titleLabel = NewSectionTitle(title);
             if (!string.IsNullOrWhiteSpace(elementName)) titleLabel.name = elementName + " Title";
             block.Add(titleLabel);
-            block.Add(NewOrnamentRule(ornamentColor));
+            if (compact)
+            {
+                titleLabel.style.marginTop = 0;
+                titleLabel.style.marginBottom = 0;
+                block.style.flexShrink = 0;
+            }
+            else block.Add(NewOrnamentRule(ornamentColor));
             return block;
         }
 

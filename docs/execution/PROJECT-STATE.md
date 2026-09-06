@@ -8,6 +8,14 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+2026-09-07 nhập môn: chỉ đường đá và tên nút Gặp/Luyện khớp HUD; nút ngữ cảnh giữ mục đích khi ngoài tầm, không tự chuyển sang đánh. `build/dev-loop/guided-action-purpose.log` hoàn tất ba profile; ảnh mobile ngoài/gần Đá Luyện đã xem. Nút Chém riêng không đổi; chưa claim visual PASS hoặc city theo demo hoàn chỉnh.
+
+2026-09-07 cập nhật hiện tại: thiết kế hệ thống trong `docs/design/LGO-GAME-SYSTEMS-NARRATIVE-DESIGN.md` đã nối NPC/Lộ/skill/trang bị/trang phục thành các chặng có điều kiện mở, không thay GDD hoặc mở production. Save rejection/retry hoàn tất ba profile (`build/dev-loop/menu-save-rejection-retry.log`), đã xem ảnh mobile menu sau re-entry; chưa kiểm tra mất mạng/timeout hoặc claim visual PASS. Task tiếp theo ở đầu NEXT-ACTION; các đoạn dưới là lịch sử batch, không phải toàn bộ lỗi còn tồn tại.
+
+Dialogue sizing mới nhất: `build/dev-loop/dialogue-natural-body.log` hoàn tất ba profile; ảnh PC/tablet ngắn và mobile dài đã xem. Overlay Center + height Auto + bỏ sàn vùng đọc thay cấu hình kéo đầy trần. Chưa visual PASS: portrait toàn thân thu nhỏ, body lặp tên NPC và scroller cyan còn cần xử lý theo demo.
+
+2026-09-07: dialogue chỉ còn speaker header qua shell chung; `build/dev-loop/dialogue-single-speaker.log` hoàn tất ba profile, ảnh PC ngắn/mobile dài đã xem, không visual PASS. Root cause tiếp theo: dialogue ép height bằng maxHeight nên thoại ngắn vẫn quá cao. Design nhập môn/hệ thống mới là DRAFT, không mở production hoặc thay canon.
+
 Demo tiếp theo: placeholder thật và draft tên trống khi Tạo thêm; khung hoa văn chung bằng vector cho shell/menu, preview nền đậm hơn. Runtime red/green tên, PC/tablet khung và mobile retry 23 checkpoint; ảnh đã xem, quick gate pass (`build/dev-loop/shared-shell-reading-contrast.log`). Có một lượt mobile mất focus được giữ nguyên evidence thất bại; chưa visual PASS hoặc đủ slot/gender theo demo.
 
 Typography/skin: font heading/body ~193 KiB source qua `unityFontDefinition`, avatar trống 128x128 ~14 KB, nền Linh Thành riêng ~422 KiB; Login/preview/HUD dùng base neutral/gold. Shared column bỏ margin gây cắt nút; shared overlay căn giữa chiều cao thực, Character Hall cùng root viewport và max-height 85%. Bounds red/green, 23 checkpoint/profile (`build/dev-loop/night-city-budgeted-theme.log`), ảnh đã xem, quick/focused pass. Chưa visual PASS hoặc giống demo hoàn chỉnh: còn hoa văn, selection ô trống và giới tính. Nền cũ còn fallback Resources; không claim giảm tổng build.

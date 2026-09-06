@@ -9,7 +9,13 @@ namespace LinhGioi.World
         private static Sprite _worldPathGlowSprite;
         private static Sprite _worldMistVeilSprite;
 
-        internal static Texture2D CreateTrainingGroundTexture()
+        internal static Vector2 GroundUv(Vector3 worldPosition)
+        {
+            const float courtyardSize = 18f;
+            return new Vector2(worldPosition.x / courtyardSize + 0.5f, worldPosition.z / courtyardSize + 0.5f);
+        }
+
+        internal static Texture2D CreateTrainingGroundTexture(Vector3 gatePosition, Vector3 keeperPosition, Vector3 stonePosition)
         {
             const int size = 256;
             var texture = new Texture2D(size, size, TextureFormat.RGBA32, false)
@@ -24,7 +30,10 @@ namespace LinhGioi.World
             var mist = new Color(0.39f, 0.70f, 0.84f, 1f);
             var line = new Color(0.14f, 0.80f, 1.00f, 1f);
             var gold = new Color(0.92f, 0.68f, 0.30f, 1f);
-            var center = new Vector2(0.5f, 0.46f);
+            var center = GroundUv(Vector3.zero);
+            var gateUv = GroundUv(gatePosition);
+            var keeperUv = GroundUv(keeperPosition);
+            var stoneUv = GroundUv(stonePosition);
             for (var y = 0; y < size; y++)
             {
                 for (var x = 0; x < size; x++)
@@ -61,9 +70,9 @@ namespace LinhGioi.World
                         color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.y), 0f, 0.005f) * 0.064f);
                     }
 
-                    var pathToGate = DistanceToSegment(uv, new Vector2(0.50f, 0.28f), new Vector2(0.50f, 0.08f));
-                    var pathToStone = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.50f, 0.78f));
-                    var pathToKeeper = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.31f, 0.70f));
+                    var pathToGate = DistanceToSegment(uv, center, gateUv);
+                    var pathToStone = DistanceToSegment(uv, keeperUv, stoneUv);
+                    var pathToKeeper = DistanceToSegment(uv, center, keeperUv);
                     var guide = Mathf.Min(pathToGate, Mathf.Min(pathToStone, pathToKeeper));
                     color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.038f) * 0.30f);
 
@@ -77,6 +86,18 @@ namespace LinhGioi.World
                     color = Color.Lerp(color, Color.black, vignette * 0.10f);
                     var edgeFade = Mathf.Clamp01((Mathf.Abs(uv.x - 0.5f) - 0.36f) / 0.18f);
                     color = Color.Lerp(color, new Color(0.055f, 0.095f, 0.145f, 1f), edgeFade * 0.12f);
+                    // Lay stone after atmospheric shading so the route remains readable under the actors.
+                    var pavingMask = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.025f, 0.032f, guide));
+                    var pavingRow = Mathf.FloorToInt(uv.y * 36f);
+                    var pavingU = Mathf.Repeat(uv.x * 24f + (pavingRow % 2) * 0.5f, 1f);
+                    var pavingV = Mathf.Repeat(uv.y * 36f, 1f);
+                    var seamDistance = Mathf.Min(
+                        Mathf.Min(pavingU, 1f - pavingU) * size / 24f,
+                        Mathf.Min(pavingV, 1f - pavingV) * size / 36f);
+                    var mortarCoverage = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.2f, 0.9f, seamDistance));
+                    var paving = Color.Lerp(new Color(0.32f, 0.34f, 0.35f, 1f), new Color(0.46f, 0.47f, 0.46f, 1f), noise * 0.45f);
+                    paving = Color.Lerp(paving, new Color(0.20f, 0.22f, 0.23f, 1f), mortarCoverage);
+                    color = Color.Lerp(color, paving, pavingMask);
                     texture.SetPixel(x, y, color);
                 }
             }

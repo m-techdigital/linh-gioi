@@ -13,8 +13,12 @@ public record CharacterProfile(
         float positionZ,
         float yawDegrees,
         long createdAtUnixMs,
-        long updatedAtUnixMs) {
+        long updatedAtUnixMs,
+        Integer slot) {
     public CharacterProfile {
+        if (slot != null && (slot < 1 || slot > 3)) {
+            throw new IllegalArgumentException("slot must be between 1 and 3");
+        }
         requireIdentifier(characterId, "characterId");
         requireIdentifier(accountId, "accountId");
         if (name == null || name.isBlank()) {
@@ -44,7 +48,12 @@ public record CharacterProfile(
     }
 
     public CharacterProfile withPosition(float x, float y, float z, float yawDegrees, long updatedAtUnixMs) {
-        return new CharacterProfile(characterId, accountId, name, classId, entityId, x, y, z, yawDegrees, createdAtUnixMs, updatedAtUnixMs);
+        return new CharacterProfile(characterId, accountId, name, classId, entityId, x, y, z, yawDegrees, createdAtUnixMs, updatedAtUnixMs, slot);
+    }
+
+    public CharacterProfile withSlot(int value) {
+        return new CharacterProfile(characterId, accountId, name, classId, entityId, positionX, positionY, positionZ,
+                yawDegrees, createdAtUnixMs, updatedAtUnixMs, value);
     }
 
     private static void requireIdentifier(String value, String label) {

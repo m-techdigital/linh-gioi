@@ -22,6 +22,44 @@ class JsonFilePlayerProfileStoreTest {
     Path tempDir;
 
     @Test
+    void persistsChosenSlotAndRejectsOccupiedSlots() {
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+        String account = store.loginDev("slot-choice", "Slots").account().accountId();
+        var third = store.createCharacter(new CreateCharacterCommand(account, "ThirdHero", "class.sword", 3));
+        assertEquals(3, third.slot());
+        assertThrows(IllegalArgumentException.class,
+                () -> store.createCharacter(new CreateCharacterCommand(account, "Collision", "class.sword", 3)));
+        assertThrows(IllegalArgumentException.class,
+                () -> store.createCharacter(new CreateCharacterCommand(account, "InvalidSlot", "class.sword", 4)));
+        var first = store.createCharacter(new CreateCharacterCommand(account, "FirstHero", "class.sword"));
+        assertEquals(1, first.slot());
+        store.saveCharacterPosition(new SaveCharacterPositionCommand(third.characterId(), 1, 0, 2, 90));
+        var reloaded = new JsonFilePlayerProfileStore(tempDir, clock);
+        assertEquals(3, reloaded.findCharacter(third.characterId()).orElseThrow().slot());
+        assertEquals(first.characterId(), reloaded.listCharacters(account).getFirst().characterId());
+    }
+
+    @Test
+    void migratesLegacySlotsWithoutChangingLegacyFile() throws Exception {
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+        String account = store.loginDev("legacy-slots", "Legacy").account().accountId();
+        store.createCharacter(new CreateCharacterCommand(account, "OldHero", "class.sword"));
+        var mapper = tools.jackson.databind.json.JsonMapper.builder().build();
+        var currentFile = tempDir.resolve(JsonFilePlayerProfileStore.STORE_FILE_NAME);
+        var legacy = (tools.jackson.databind.node.ObjectNode) mapper.readTree(currentFile.toFile());
+        legacy.put("schemaVersion", 1);
+        legacy.path("charactersById").forEach(node -> ((tools.jackson.databind.node.ObjectNode) node).remove("slot"));
+        String original = mapper.writeValueAsString(legacy);
+        Files.writeString(tempDir.resolve("players-v1.json"), original);
+        Files.delete(currentFile);
+        var migrated = new JsonFilePlayerProfileStore(tempDir, clock);
+        assertEquals(1, migrated.listCharacters(account).getFirst().slot());
+        migrated.createCharacter(new CreateCharacterCommand(account, "NewHero", "class.sword", 3));
+        assertEquals(original, Files.readString(tempDir.resolve("players-v1.json")));
+        assertEquals(2, new JsonFilePlayerProfileStore(tempDir, clock).listCharacters(account).size());
+    }
+
+    @Test
     void limitsEachAccountToThreeCharactersAcrossReload() {
         JsonFilePlayerProfileStore store = new JsonFilePlayerProfileStore(tempDir, clock);
         String account = store.loginDev("three-slots", "Slots").account().accountId();
@@ -35,6 +73,35 @@ class JsonFilePlayerProfileStoreTest {
         String other = reloaded.loginDev("other-slots", "Other").account().accountId();
         reloaded.createCharacter(new CreateCharacterCommand(other, "OtherHero", "class.sword"));
         assertEquals(1, reloaded.listCharacters(other).size());
+    }
+
+    @Test
+    void preservesOverLimitLegacyDataWithoutCreatingV2File() throws Exception {
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+        String account = store.loginDev("legacy-overflow", "Legacy").account().accountId();
+        var character = store.createCharacter(new CreateCharacterCommand(account, "LegacyOne", "class.sword"));
+        var mapper = tools.jackson.databind.json.JsonMapper.builder().build();
+        var currentFile = tempDir.resolve(JsonFilePlayerProfileStore.STORE_FILE_NAME);
+        var legacy = (tools.jackson.databind.node.ObjectNode) mapper.readTree(currentFile.toFile());
+        legacy.put("schemaVersion", 1);
+        legacy.put("nextEntityId", 1005);
+        var characters = (tools.jackson.databind.node.ObjectNode) legacy.path("charactersById");
+        var original = (tools.jackson.databind.node.ObjectNode) characters.path(character.characterId());
+        original.remove("slot");
+        for (int index = 2; index <= 4; index++) {
+            var copy = original.deepCopy();
+            copy.put("characterId", "character.legacy" + index);
+            copy.put("name", "Legacy" + index);
+            copy.put("entityId", 1000 + index);
+            characters.set("character.legacy" + index, copy);
+        }
+        String bytes = mapper.writeValueAsString(legacy);
+        Files.writeString(tempDir.resolve("players-v1.json"), bytes);
+        Files.delete(currentFile);
+        var failure = assertThrows(IllegalStateException.class, () -> new JsonFilePlayerProfileStore(tempDir, clock));
+        assertTrue(failure.getMessage().contains("owner resolution required"));
+        assertEquals(bytes, Files.readString(tempDir.resolve("players-v1.json")));
+        assertFalse(Files.exists(currentFile));
     }
 
     @Test

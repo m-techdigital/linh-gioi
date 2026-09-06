@@ -90,7 +90,7 @@ namespace LinhGioi.UI
             scroller.style.minWidth = 0;
             scroller.style.maxWidth = 8;
             scroller.style.backgroundImage = StyleKeyword.None;
-            scroller.style.backgroundColor = new Color(0.01f, 0.03f, 0.07f, 0.22f);
+            scroller.style.backgroundColor = RuntimeUiSkin.DeepGlass;
             if (scroller.lowButton != null) scroller.lowButton.style.display = DisplayStyle.None;
             if (scroller.highButton != null) scroller.highButton.style.display = DisplayStyle.None;
             if (scroller.slider != null)
@@ -98,8 +98,8 @@ namespace LinhGioi.UI
                 var slider = scroller.slider;
                 ApplyCompactScrollerPart(slider, Color.clear);
                 ApplyCompactScrollerPart(slider.Q<VisualElement>(className: Slider.dragContainerUssClassName), Color.clear);
-                ApplyCompactScrollerPart(slider.Q<VisualElement>(className: Slider.trackerUssClassName), new Color(0.14f, 0.78f, 0.90f, 0.20f));
-                ApplyCompactScrollerPart(slider.Q<VisualElement>(className: Slider.draggerUssClassName), new Color(0.14f, 0.78f, 0.90f, 0.80f));
+                ApplyCompactScrollerPart(slider.Q<VisualElement>(className: Slider.trackerUssClassName), RuntimeUiSkin.LightGoldBorder);
+                ApplyCompactScrollerPart(slider.Q<VisualElement>(className: Slider.draggerUssClassName), LinhGioi.Art.RuntimeArtCatalog.Gold);
                 ApplyCompactScrollerPart(slider.Q<VisualElement>("unity-dragger-border"), Color.clear);
             }
         }

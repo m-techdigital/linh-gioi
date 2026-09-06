@@ -20,9 +20,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
-    // Persistence hygiene: raw dev key values are never written to players-v1.json.
-    public static final int SCHEMA_VERSION = 1;
-    public static final String STORE_FILE_NAME = "players-v1.json";
+    // v1 remains untouched as a rollback baseline; v2 owns persistent character slots.
+    // Persistence hygiene: raw dev key values are never written to disk.
+    public static final int SCHEMA_VERSION = 2;
+    public static final String STORE_FILE_NAME = "players-v2.json";
     private static final long INITIAL_ENTITY_ID = 1001L;
 
     private final Path storeFile;
@@ -66,7 +67,7 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
         requireAccount(accountId);
         return snapshot.getCharactersById().values().stream()
                 .filter(character -> accountId.equals(character.accountId()))
-                .sorted(Comparator.comparingLong(CharacterProfile::createdAtUnixMs))
+                .sorted(Comparator.comparingInt(CharacterProfile::slot))
                 .toList();
     }
 
@@ -76,6 +77,13 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
         requireAccount(command.accountId());
         if (listCharacters(command.accountId()).size() >= 3) {
             throw new IllegalArgumentException("account character limit reached (3)");
+        }
+        var occupied = listCharacters(command.accountId()).stream().map(CharacterProfile::slot).toList();
+        int slot = command.slot() == null
+                ? java.util.stream.IntStream.rangeClosed(1, 3).filter(value -> !occupied.contains(value)).findFirst().orElseThrow()
+                : command.slot();
+        if (slot < 1 || slot > 3 || occupied.contains(slot)) {
+            throw new IllegalArgumentException("character slot must be free and between 1 and 3");
         }
         String name = normalizeCharacterName(command.name());
         String classId = normalizeClassId(command.classId());
@@ -100,7 +108,8 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
                 0.0f,
                 0.0f,
                 now,
-                now);
+                now,
+                slot);
         snapshot.getCharactersById().put(character.characterId(), character);
         persist();
         return character;
@@ -132,6 +141,8 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
         try {
             Files.createDirectories(storeFile.getParent());
             if (!Files.exists(storeFile)) {
+                Path legacyFile = storeFile.resolveSibling("players-v1.json");
+                if (Files.exists(legacyFile)) return migrateLegacy(legacyFile);
                 PlayerPersistenceSnapshot created = new PlayerPersistenceSnapshot();
                 created.setNextEntityId(INITIAL_ENTITY_ID);
                 return created;
@@ -142,6 +153,27 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
         } catch (IOException exception) {
             throw new UncheckedIOException("failed to load player persistence store: " + storeFile, exception);
         }
+    }
+
+    private PlayerPersistenceSnapshot migrateLegacy(Path legacyFile) throws IOException {
+        PlayerPersistenceSnapshot legacy = mapper.readValue(legacyFile.toFile(), PlayerPersistenceSnapshot.class);
+        if (legacy.getSchemaVersion() != 1) throw new IllegalStateException("unsupported legacy player schema");
+        for (String accountId : legacy.getAccountsById().keySet()) {
+            var characters = legacy.getCharactersById().values().stream()
+                    .filter(character -> character.accountId().equals(accountId))
+                    .sorted(Comparator.comparingLong(CharacterProfile::createdAtUnixMs).thenComparingLong(CharacterProfile::entityId))
+                    .toList();
+            if (characters.size() > 3) {
+                throw new IllegalStateException("legacy account exceeds three slots; owner resolution required; v1 file preserved: " + accountId);
+            }
+            for (int index = 0; index < characters.size(); index++) {
+                var character = characters.get(index);
+                legacy.getCharactersById().put(character.characterId(), character.withSlot(index + 1));
+            }
+        }
+        legacy.setSchemaVersion(SCHEMA_VERSION);
+        validateSnapshot(legacy);
+        return legacy;
     }
 
     private void validateSnapshot(PlayerPersistenceSnapshot loaded) {
@@ -161,10 +193,18 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
             }
         });
         loaded.getCharactersById().values().forEach(character -> {
+            if (character.slot() == null) throw new IllegalStateException("v2 character is missing slot");
             if (!loaded.getAccountsById().containsKey(character.accountId())) {
                 throw new IllegalStateException("character references missing account: " + character.characterId());
             }
         });
+        for (String accountId : loaded.getAccountsById().keySet()) {
+            var slots = loaded.getCharactersById().values().stream()
+                    .filter(character -> character.accountId().equals(accountId)).map(CharacterProfile::slot).toList();
+            if (slots.size() > 3 || slots.stream().distinct().count() != slots.size()) {
+                throw new IllegalStateException("duplicate or excessive character slots: " + accountId);
+            }
+        }
     }
 
     private void persist() {

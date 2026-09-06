@@ -38,6 +38,21 @@ namespace LinhGioi.Account
     }
 
     [Serializable]
+    public sealed class CreateCharacterInSlotRequest
+    {
+        public string name;
+        public string classId;
+        public int slot;
+
+        public CreateCharacterInSlotRequest(string name, string classId, int slot)
+        {
+            this.name = name;
+            this.classId = classId;
+            this.slot = slot;
+        }
+    }
+
+    [Serializable]
     public sealed class SaveCharacterPositionRequest
     {
         public float x;
@@ -66,6 +81,7 @@ namespace LinhGioi.Account
     [Serializable]
     public sealed class CharacterResponse
     {
+        public int slot;
         public string characterId;
         public string accountId;
         public string name;

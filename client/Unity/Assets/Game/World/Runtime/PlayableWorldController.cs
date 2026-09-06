@@ -17,9 +17,9 @@ namespace LinhGioi.World
         private static readonly Vector3 CameraFollowOffset = new Vector3(0f, 8.25f, -8.75f);
         private static readonly string[] GateKeeperDialogueLines =
         {
-            "Người Giữ Cổng: Chào mừng đến Linh Môn. Giữ hơi thở thật ổn định.",
-            "Người Giữ Cổng: Đi theo mạch sáng lam về phía bắc; Đá Luyện sẽ đáp lại khi con tập trung.",
-            "Người Giữ Cổng: Sân này an toàn. Bóng ở phía đông chỉ là dấu cảnh báo."
+            "Chào mừng đến Linh Môn. Giữ hơi thở thật ổn định.",
+            "Theo đường đá tới Đá Luyện ở cuối sân; đến gần rồi tập trung linh khí.",
+            "Sân này an toàn. Bóng ở phía đông chỉ là dấu cảnh báo."
         };
         private static readonly Vector3 GateKeeperPosition = new Vector3(-2.25f, 0.75f, 2.85f);
         private static readonly Vector3 TrainingStonePosition = new Vector3(0f, 0.08f, 4.5f);
@@ -95,6 +95,8 @@ namespace LinhGioi.World
         public string CombatCooldownText => _localCombat.CooldownActive(NowMs()) ? "Hồi chiêu: Đang hồi chiêu, còn " + CooldownRemainingSecondsText() + "s." : "Hồi chiêu: Sẵn sàng";
         public string CombatAuthorityText { get; private set; } = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
         public bool LocalCombatCoolingDown => _localCombat.CooldownActive(NowMs());
+        public float LocalCombatCooldownRemainingSeconds => _localCombat.CooldownRemainingMs(NowMs()) / 1000f;
+        public bool LocalCombatTargetInRange => _marker != null && Distance2D(CurrentPosition, ReadabilityDummyPosition) <= LocalCombatPrototypeState.WindSlashRangeM;
         public bool TargetDummyHitAcknowledged => _targetDummyHitAcknowledged;
         public LocalCombatPrototypeOutcome LastLocalCombatOutcome => _lastLocalCombatOutcome;
         public string LocalCombatTargetStateName => _localCombat.TargetState.ToString();
@@ -262,7 +264,7 @@ namespace LinhGioi.World
             if (!_lastLocalCombatOutcome.Accepted)
             {
                 if (_lastLocalCombatOutcome.RejectedReason == "OUT_OF_RANGE")
-                    CombatFeedbackText = "Ngoài tầm: lại gần vòng chọn màu vàng quanh mục tiêu luyện tập rồi thử lại.";
+                    CombatFeedbackText = "Ngoài tầm Chém Gió. Đến gần bia luyện rồi thử lại.";
                 else if (_lastLocalCombatOutcome.RejectedReason == "COOLDOWN_ACTIVE")
                     CombatFeedbackText = "Chưa thể tấn công: Đang hồi chiêu, chờ vòng lam chuyển về xanh sẵn sàng rồi gửi lại ý định.";
                 else
@@ -327,9 +329,42 @@ namespace LinhGioi.World
 
         public Vector2 TouchMovement { get; set; }
 
+        private bool _overlayHasFocus;
+        private int _inputResumeFrame;
+
+        public void SetOverlayFocus(bool focused)
+        {
+            if (_overlayHasFocus == focused) return;
+            _overlayHasFocus = focused;
+            ResetMovementInput();
+            RefreshWorldLabelPresentation();
+            RefreshInteractionPromptWorldLabel();
+        }
+
+        private void OnApplicationFocus(bool focused)
+        {
+            ResetMovementInput();
+        }
+
+        private void ResetMovementInput()
+        {
+            TouchMovement = Vector2.zero;
+            _inputResumeFrame = Time.frameCount + 1;
+            if (_playerPoseState == PlaceholderPoseState.WalkMove) SetPlayerPose(PlaceholderPoseState.Idle);
+        }
+
         private void Update()
         {
             if (_marker == null || _character == null) return;
+            if (!_overlayHasFocus && Application.isFocused && Time.frameCount >= _inputResumeFrame) UpdatePlayerInput();
+            RefreshPoseFeedbackMarkers();
+            RefreshVfxFeedbackMarkers();
+            RefreshWorldLabelPresentation();
+            RefreshCameraFrame();
+        }
+
+        private void UpdatePlayerInput()
+        {
             var horizontal = Input.GetAxisRaw("Horizontal") + TouchMovement.x;
             var vertical = Input.GetAxisRaw("Vertical") + TouchMovement.y;
             var rotate = 0f;
@@ -357,11 +392,6 @@ namespace LinhGioi.World
 
             if (Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Space))
                 TryTriggerInteraction();
-
-            RefreshPoseFeedbackMarkers();
-            RefreshVfxFeedbackMarkers();
-            RefreshWorldLabelPresentation();
-            RefreshCameraFrame();
         }
 
         private static GameObject CreateMarker()
@@ -425,12 +455,22 @@ namespace LinhGioi.World
             var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
             ground.name = "LGO World Ground";
             ground.transform.localScale = new Vector3(8f, 1f, 8f);
+            // Keep the collision plane broad; map the authored courtyard to playable world units.
+            var groundMesh = ground.GetComponent<MeshFilter>().mesh;
+            var vertices = groundMesh.vertices;
+            var courtyardUv = new Vector2[vertices.Length];
+            for (var i = 0; i < vertices.Length; i++)
+            {
+                var worldPoint = ground.transform.TransformPoint(vertices[i]);
+                courtyardUv[i] = WorldProceduralVisuals.GroundUv(worldPoint);
+            }
+            groundMesh.uv = courtyardUv;
             var renderer = ground.GetComponent<Renderer>();
             if (renderer != null)
             {
                 var material = RuntimeArtCatalog.CreateMaterial("LGO Procedural Cultivation Platform Material v1", RuntimeArtCatalog.SurfaceRaised);
                 material.color = Color.white;
-                material.mainTexture = WorldProceduralVisuals.CreateTrainingGroundTexture();
+                material.mainTexture = WorldProceduralVisuals.CreateTrainingGroundTexture(new Vector3(0f, 0f, -4.5f), GateKeeperPosition, TrainingStonePosition);
                 renderer.material = material;
             }
         }
@@ -496,7 +536,7 @@ namespace LinhGioi.World
             }
             if (_guidedStep == GuidedTrainingStep.Complete || InteractionAcknowledged)
             {
-                SetNearest(null, "Vòng hướng dẫn hoàn tất: lưu vị trí hoặc quay lại sảnh.");
+                SetNearest(null, "Đã hoàn tất hướng dẫn. Mở Menu để lưu vị trí hoặc về điện nhân vật.");
                 return;
             }
 
@@ -504,7 +544,7 @@ namespace LinhGioi.World
             var training = new InteractableState(
                 "Training Stone",
                 "Nhấn F hoặc Space: ổn định mạch linh khí.",
-                "Mạch linh khí đã ổn định. Đã ghi nhận luyện tập.",
+                "Mạch linh khí đã ổn định. Đã hoàn tất hướng dẫn trong phiên này.",
                 TrainingStonePosition
             );
             var keeper = new InteractableState(
@@ -524,7 +564,7 @@ namespace LinhGioi.World
         }
 
         public bool CanInteract => _nearestInteractable != null && !DialogueActive;
-        public string PrimaryInteractionLabel => _nearestInteractable?.id == "Gate Keeper" ? "Gặp" : "Luyện";
+        public string PrimaryInteractionLabel => DialogueCompleted ? "Luyện" : "Gặp";
 
         public bool TryTriggerInteraction()
         {
@@ -566,7 +606,7 @@ namespace LinhGioi.World
             SetVfxFeedback(PlaceholderVfxFeedbackState.SpiritPulse, 1.5f);
             TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
             _objectiveText = "Mục tiêu hoàn tất: mạch linh khí đã ổn định.";
-            _interactionText = "Mạch linh khí đã ổn định. Đã ghi nhận luyện tập.";
+            _interactionText = "Mạch linh khí đã ổn định. Đã hoàn tất hướng dẫn trong phiên này.";
             _nearestInteractable = null;
             RefreshInteractionPromptWorldLabel();
         }
@@ -581,18 +621,31 @@ namespace LinhGioi.World
                 InteractionStateChanged?.Invoke();
                 return true;
             }
-            return CloseDialogue();
+            return CompleteGateKeeperDialogue();
         }
 
         public bool CloseDialogue()
         {
-            if (!DialogueActive && DialogueCompleted) return false;
+            if (!DialogueActive) return false;
+            DialogueActive = false;
+            _dialogueLineIndex = 0;
+            SetGateKeeperState(PlaceholderNpcState.Idle);
+            _objectiveText = "Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.";
+            RefreshInteractionState();
+            RefreshInteractionPromptWorldLabel();
+            InteractionStateChanged?.Invoke();
+            return true;
+        }
+
+        private bool CompleteGateKeeperDialogue()
+        {
+            if (!DialogueActive) return false;
             DialogueActive = false;
             DialogueCompleted = true;
             _guidedStep = GuidedTrainingStep.FindTrainingStone;
             SetGateKeeperState(PlaceholderNpcState.Idle);
             _objectiveText = "Mục tiêu 2/2: ổn định Đá Luyện.";
-            _interactionText = "Người Giữ Cổng: đường đã mở. Hãy đi theo mạch linh khí lam về phía bắc.";
+            _interactionText = "Người Giữ Cổng: hãy theo đường đá tới Đá Luyện ở cuối sân.";
             RefreshInteractionPromptWorldLabel();
             RefreshInteractionState();
             InteractionStateChanged?.Invoke();
@@ -612,7 +665,7 @@ namespace LinhGioi.World
         private string NextMovementHint()
         {
             if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Bước 1: đi về phía Người Giữ Cổng màu vàng ở góc tây bắc sân luyện.";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Bước 2: đi theo mạch sáng lam tới Đá Luyện ở phía bắc.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Bước 2: theo đường đá tới Đá Luyện ở cuối sân.";
             return "Vòng hướng dẫn hoàn tất: lưu vị trí hoặc quay lại sảnh.";
         }
 
@@ -688,7 +741,7 @@ namespace LinhGioi.World
         private void RefreshInteractionPromptWorldLabel()
         {
             if (_interactionPromptWorldLabel == null) return;
-            var active = _nearestInteractable != null && !DialogueActive;
+            var active = _nearestInteractable != null && !DialogueActive && !_overlayHasFocus;
             _interactionPromptWorldLabel.gameObject.SetActive(active);
             if (!active) return;
 
@@ -722,9 +775,9 @@ namespace LinhGioi.World
                 if (_nearestInteractable.id == "Training Stone") return "Sẵn sàng: nhấn F để ổn định Đá Luyện.";
                 return "Sẵn sàng: nhấn F để tương tác.";
             }
-            if (InteractionAcknowledged) return "Hoàn tất: lưu vị trí hoặc về Điện Nhân Vật.";
+            if (InteractionAcknowledged) return "Hoàn tất. Mở Menu để lưu vị trí hoặc về điện nhân vật.";
             if (_guidedStep == GuidedTrainingStep.FindGateKeeper) return "Tới vòng vàng cạnh Người Giữ Cổng.";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Đi theo mạch lam tới Đá Luyện.";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Theo đường đá tới Đá Luyện ở cuối sân.";
             return "Di chuyển tới mốc đang sáng để tiếp tục.";
         }
 
@@ -987,6 +1040,17 @@ namespace LinhGioi.World
 
         private void RefreshWorldLabelPresentation()
         {
+            if (_overlayHasFocus)
+            {
+                WorldLabelPresenter.SetActive(_gateKeeperWorldLabel, false);
+                WorldLabelPresenter.SetActive(_trainingStoneWorldLabel, false);
+                WorldLabelPresenter.SetActive(_targetDummyWorldLabel, false);
+                WorldLabelPresenter.SetActive(_targetDummyRewardLabel, false);
+                WorldLabelPresenter.SetActive(_shadowSlimeWorldLabel, false);
+                WorldLabelPresenter.SetActive(_spiritGateWorldLabel, false);
+                WorldLabelPresenter.SetActive(_interactionPromptWorldLabel, false);
+                return;
+            }
             var nearGateKeeper = _marker != null && Distance2D(CurrentPosition, GateKeeperPosition) <= 3.1f;
             var nearTrainingStone = _marker != null && Distance2D(CurrentPosition, TrainingStonePosition) <= 3.2f;
             var nearTargetDummy = _marker != null && Distance2D(CurrentPosition, ReadabilityDummyPosition) <= 2.0f;

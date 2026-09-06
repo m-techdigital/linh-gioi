@@ -101,11 +101,26 @@ namespace LinhGioi.UI
         internal async Task CaptureEvidenceCreateCharacterIfNeededAsync(string characterName)
         {
             if (_selectedCharacter != null) return;
+            var emptySlot = _characterList.Query<Button>(className: "lgo-list-item").ToList()
+                .Find(button => Equals(button.userData, "empty-slot-2"));
+            if (emptySlot == null) throw new InvalidOperationException("Third empty character slot is missing.");
+            using (var submit = NavigationSubmitEvent.GetPooled())
+            {
+                submit.target = emptySlot;
+                emptySlot.SendEvent(submit);
+            }
+            if (_selectedSlot != 3 || !emptySlot.ClassListContains("lgo-list-selected"))
+                throw new InvalidOperationException("Selecting an empty slot must select its creation destination.");
             _characterName.value = Required(characterName, "EvidenceHero");
             if (_characterNameError != null)
                 throw new InvalidOperationException("A valid name must clear the inline error before submission.");
             _classId.value = DefaultClassId;
             await CreateCharacterAsync();
+            if (_selectedCharacter?.slot != 3) throw new InvalidOperationException("Creation ignored the chosen character slot.");
+            var createdId = _selectedCharacter.characterId;
+            await RefreshCharactersAsync();
+            if (_selectedCharacter?.characterId != createdId || _selectedCharacter.slot != 3)
+                throw new InvalidOperationException("Roster refresh must preserve the chosen slot and character.");
         }
 
         internal async Task CaptureEvidenceInvalidCharacterNameAsync()
@@ -248,6 +263,8 @@ namespace LinhGioi.UI
         internal void CaptureEvidenceExpandCharacterForm()
         {
             OnCreateCharacterAction();
+            if (_root.Q<VisualElement>("LGO Character Hall V3B Cultivator Portrait").style.unityBackgroundImageTintColor.value != Color.black)
+                throw new InvalidOperationException("An empty creation slot must show the unassigned silhouette.");
         }
 
         internal void CaptureEvidenceLongCharacterName(bool restore)
@@ -261,6 +278,9 @@ namespace LinhGioi.UI
             OnEnterWorldOrCancelCreateAction();
             if (_createFormExpanded || _selectedCharacter != selected || IsDisplayed(_worldHud))
                 throw new InvalidOperationException("Cancel character form must preserve selection without entering the world.");
+            if (_selectedSlot != selected.slot
+                || _root.Q<VisualElement>("LGO Character Hall V3B Cultivator Portrait").style.unityBackgroundImageTintColor.value != Color.white)
+                throw new InvalidOperationException("Cancelling must restore the occupied slot and its portrait.");
             Debug.Log("LGO_CHARACTER_CREATE_CANCEL_PASS selection=preserved world=not-entered");
         }
 
@@ -340,23 +360,54 @@ namespace LinhGioi.UI
             RefreshCombatAssetUiState();
         }
 
-        internal void CaptureEvidenceNearTrainingStonePrompt()
+        internal void CaptureEvidenceNearTrainingStonePrompt(bool approaching = false)
         {
             if (_world == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
             _skillPreviewActive = false;
             _world.SetSmokePositionNearGateKeeper();
-            if (_isMobileProfile)
+            if (!_world.DialogueCompleted)
             {
-                TriggerWorldTouchPrimaryAction();
-                if (!_world.DialogueActive) throw new InvalidOperationException("Mobile primary action did not open Gate Keeper dialogue.");
+                RefreshWorldLoopLabels();
+                using (var submit = NavigationSubmitEvent.GetPooled())
+                {
+                    submit.target = _worldTouchPrimaryActionButton;
+                    _worldTouchPrimaryActionButton.SendEvent(submit);
+                }
+                if (!_world.DialogueActive) throw new InvalidOperationException("Primary button did not open Gate Keeper dialogue.");
             }
-            else _world.TriggerInteractionForSmoke();
-            while (_world.DialogueActive)
-                _world.ContinueDialogue();
-            _world.SetSmokePositionNearTrainingStone();
+            for (var line = 0; line < 3 && _world.DialogueActive; line++)
+            {
+                _dialogueLineScroll.scrollOffset = new Vector2(0f, 20f);
+                using (var submit = NavigationSubmitEvent.GetPooled())
+                {
+                    submit.target = _dialogueContinueButton;
+                    _dialogueContinueButton.SendEvent(submit);
+                }
+                if (_world.DialogueActive && _dialogueLineScroll.scrollOffset.y != 0f)
+                    throw new InvalidOperationException("Next dialogue line must reset reading position.");
+            }
+            if (!_world.DialogueCompleted || _world.DialogueActive)
+                throw new InvalidOperationException("Dialogue buttons must complete all three lines.");
+            if (approaching) _world.SetSmokePosition(-1.1f, 0.25f, 2.3f, 0f);
+            else _world.SetSmokePositionNearTrainingStone();
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
+            if (approaching && (_world.CanInteract || !_interactionHint.text.Contains("đường đá")))
+                throw new InvalidOperationException("Approach must show the stone route before interaction becomes available.");
+            if (approaching)
+            {
+                if (_worldTouchPrimaryActionButton.enabledSelf || _worldTouchPrimaryActionButton.text != "Luyện")
+                    throw new InvalidOperationException("Guided action must retain its purpose and disable outside interaction range.");
+                var targetStatus = _world.TargetDummyStatusText;
+                TriggerWorldTouchPrimaryAction();
+                if (_world.TargetDummyStatusText != targetStatus || _world.InteractionAcknowledged)
+                    throw new InvalidOperationException("Out-of-range guided action must not attack or complete the objective.");
+            }
+            if (!approaching && (!_world.CanInteract || !_interactionHint.text.Contains("Chọn Luyện")))
+                throw new InvalidOperationException("Near stone guidance must name the available on-screen action.");
+            if (!approaching && !_worldTouchPrimaryActionButton.enabledSelf)
+                throw new InvalidOperationException("Guided action must re-enable inside interaction range.");
         }
 
         internal void CaptureEvidenceTrainingComplete()
@@ -365,15 +416,78 @@ namespace LinhGioi.UI
             _evidenceState = RuntimeUiEvidenceState.None;
             _skillPreviewActive = false;
             _world.SetSmokePositionNearTrainingStone();
-            if (_isMobileProfile)
-            {
-                TriggerWorldTouchPrimaryAction();
-                if (!_world.InteractionAcknowledged) throw new InvalidOperationException("Mobile primary action did not complete training.");
-                Debug.Log("LGO_MOBILE_GUIDED_ACTIONS_PASS keeper=dialogue stone=completed");
-            }
-            else _world.TriggerInteractionForSmoke();
             RefreshWorldLoopLabels();
+            using (var submit = NavigationSubmitEvent.GetPooled())
+            {
+                submit.target = _worldTouchPrimaryActionButton;
+                _worldTouchPrimaryActionButton.SendEvent(submit);
+            }
+            if (!_world.InteractionAcknowledged) throw new InvalidOperationException("Primary button did not complete training.");
+            if (_isMobileProfile) Debug.Log("LGO_MOBILE_GUIDED_ACTIONS_PASS keeper=dialogue stone=completed");
+            RefreshWorldLoopLabels();
+            if (!_world.DialogueCompleted || !_world.InteractionAcknowledged)
+                throw new InvalidOperationException("Training completion requires finished dialogue and acknowledged stone.");
+            var completedObjective = _world.ObjectiveText;
+            if (_worldTouchPrimaryActionButton.enabledSelf || _worldTouchPrimaryActionButton.text != "Đã xong")
+                throw new InvalidOperationException("Completed interaction must not turn into a duplicate combat action.");
+            var combatBefore = _world.LastLocalCombatOutcome;
+            TriggerWorldTouchPrimaryAction();
+            if (!Equals(combatBefore, _world.LastLocalCombatOutcome))
+                throw new InvalidOperationException("Completed interaction callback must not issue a combat attempt.");
+            if (_world.TriggerInteractionForSmoke() || _world.ContinueDialogue() || _world.CloseDialogue() ||
+                _world.ObjectiveText != completedObjective || !_world.InteractionAcknowledged)
+                throw new InvalidOperationException("Repeated interaction must not restart completed guidance.");
             RefreshCombatAssetUiState();
+        }
+
+        internal async Task CaptureEvidenceSaveFromMenuAsync()
+        {
+            var savedPosition = _world.CurrentPosition;
+            var characterId = _selectedCharacter.characterId;
+            try
+            {
+                _selectedCharacter.characterId = "evidence-missing-character";
+                using (var failedSave = NavigationSubmitEvent.GetPooled())
+                {
+                    failedSave.target = _sessionSaveButton;
+                    _sessionSaveButton.SendEvent(failedSave);
+                }
+                for (var attempt = 0; attempt < 200 && !_sessionSaveButton.enabledSelf; attempt++)
+                    await Task.Delay(50);
+                if (!_sessionSaveButton.enabledSelf || _sessionSaveButton.text != "Thử lưu lại" ||
+                    !_sessionBackButton.enabledSelf || !_status.text.Contains("lưu vị trí"))
+                    throw new InvalidOperationException("Rejected save must show retry and restore menu controls.");
+            }
+            finally
+            {
+                _selectedCharacter.characterId = characterId;
+            }
+            SetSessionMenuVisible(false);
+            SetSessionMenuVisible(true);
+            if (_sessionSaveButton.text != "Lưu vị trí" || _sessionSaveButton.tooltip != "Lưu vị trí hiện tại của nhân vật.")
+                throw new InvalidOperationException("Reopened menu must clear stale save rejection feedback.");
+            using (var submit = NavigationSubmitEvent.GetPooled())
+            {
+                submit.target = _sessionSaveButton;
+                _sessionSaveButton.SendEvent(submit);
+            }
+            for (var attempt = 0; attempt < 200 && !_sessionSaveButton.enabledSelf; attempt++)
+                await Task.Delay(50);
+            if (!_sessionSaveButton.enabledSelf || _sessionSaveButton.text != "Đã lưu vị trí")
+                throw new InvalidOperationException("Menu save must finish with visible success feedback.");
+            using (var back = NavigationSubmitEvent.GetPooled())
+            {
+                back.target = _sessionBackButton;
+                _sessionBackButton.SendEvent(back);
+            }
+            if (_worldHud.style.display != DisplayStyle.None)
+                throw new InvalidOperationException("Menu back action did not return to character hall.");
+            await EnterWorldAsync();
+            if (Vector3.Distance(savedPosition, _world.CurrentPosition) > 0.01f)
+                throw new InvalidOperationException("Re-entry did not restore the saved server position.");
+            SetSessionMenuVisible(true);
+            if (_sessionSaveButton.text != "Lưu vị trí" || _sessionSaveButton.tooltip != "Lưu vị trí hiện tại của nhân vật.")
+                throw new InvalidOperationException("New menu visit must not retain previous save success feedback.");
         }
 
         internal void CaptureEvidenceOpenDialogue()
@@ -385,6 +499,23 @@ namespace LinhGioi.UI
             _world.SetSmokePositionNearGateKeeper();
             _world.TriggerInteractionForSmoke();
             RefreshWorldLoopLabels();
+            using (var close = NavigationSubmitEvent.GetPooled())
+            {
+                close.target = _dialogueCloseButton;
+                _dialogueCloseButton.SendEvent(close);
+            }
+            if (_world.DialogueActive || _world.DialogueCompleted)
+                throw new InvalidOperationException("Closing early must dismiss dialogue without completing the objective.");
+            _world.SetSmokePositionNearTrainingStone();
+            if (_world.TriggerInteractionForSmoke())
+                throw new InvalidOperationException("Training stone unlocked after cancelling dialogue.");
+            _world.SetSmokePositionNearGateKeeper();
+            if (!_world.TriggerInteractionForSmoke() || !_world.DialogueActive || _world.DialogueProgress != "1/3")
+                throw new InvalidOperationException("Cancelled dialogue must reopen at its first line.");
+            RefreshWorldLoopLabels();
+            if (_dialoguePanel.childCount != 3 || _dialoguePanel[0] != _dialogueSpeakerHeader ||
+                _dialoguePanel[1] != _dialogueBody || _dialoguePanel[2] != _dialogueFooter)
+                throw new InvalidOperationException("Dialogue must contain one speaker header, body and footer without duplicate shell titles.");
         }
 
         internal void CaptureEvidenceOpenLongDialogue()
@@ -392,9 +523,71 @@ namespace LinhGioi.UI
             CaptureEvidenceOpenDialogue();
             if (_dialogueLine == null || _dialogueProgress == null) return;
             _dialogueLine.text =
-                "Người Giữ Cổng: Linh Môn mở ra không chỉ để con bước qua, mà để thử xem tâm thức có giữ được nhịp thở giữa gió mạnh hay không. " +
+                "Linh Môn mở ra không chỉ để con bước qua, mà để thử xem tâm thức có giữ được nhịp thở giữa gió mạnh hay không. " +
                 "Khi lời dẫn kéo dài, khung thoại phải giữ nguyên hình dáng, phần chữ tự cuộn trong vùng đọc, còn tiến trình và nút hành động vẫn nằm đúng vị trí để người chơi không bị mất điều khiển.";
             _dialogueProgress.text = "Đối thoại dài: kiểm tra cuộn";
+        }
+
+        internal IEnumerator CaptureEvidenceDialogueScrollAndReopen()
+        {
+            var paragraph = _dialogueLine.text;
+            _dialogueLine.text = paragraph + "\n\n" + paragraph + "\n\n" + paragraph;
+            yield return null;
+            yield return null;
+            var scroll = _dialogueLineScroll;
+            if (scroll.verticalScroller.highValue <= 1f)
+                throw new InvalidOperationException("Long dialogue must exceed its reading viewport for this scroll test.");
+            scroll.verticalScroller.value = scroll.verticalScroller.highValue;
+            yield return null;
+            if (scroll.scrollOffset.y <= 1f)
+                throw new InvalidOperationException("Dialogue scrollbar must move actual reading content.");
+            if (_dialogueFooter.worldBound.yMax > _dialoguePanel.worldBound.yMax + 1f)
+                throw new InvalidOperationException("Dialogue footer escaped its shell while reading long content.");
+            using (var close = NavigationSubmitEvent.GetPooled())
+            {
+                close.target = _dialogueCloseButton;
+                _dialogueCloseButton.SendEvent(close);
+            }
+            RefreshWorldLoopLabels();
+            using (var open = NavigationSubmitEvent.GetPooled())
+            {
+                open.target = _worldTouchPrimaryActionButton;
+                _worldTouchPrimaryActionButton.SendEvent(open);
+            }
+            yield return null;
+            if (!_world.DialogueActive || scroll.scrollOffset.y > 0.5f || _world.DialogueProgress != "1/3")
+                throw new InvalidOperationException("Reopened dialogue must start at its first line and reading origin.");
+            Debug.Log("LGO_DIALOGUE_SCROLL_REOPEN_PASS input=scrollbar-programmatic reopen=button");
+        }
+
+        internal void AssertCombatPanelClearsMovementPad()
+        {
+            if (_localCombatPanel.worldBound.yMax + 4f > _worldTouchMovementPad.worldBound.yMin)
+                throw new InvalidOperationException("Combat feedback must leave a gap above movement controls.");
+            if (_localCombatPanel.Q<Button>() != null)
+                throw new InvalidOperationException("Combat HUD must not expose a duplicate cast button.");
+        }
+
+        internal void CaptureEvidenceCombatOutOfRange()
+        {
+            _evidenceState = RuntimeUiEvidenceState.CombatPanelFocus;
+            _skillPreviewActive = false;
+            _world.SetSmokePosition(-4f, 0.25f, -2f, 0f);
+            RefreshWorldLoopLabels();
+            var hpBefore = _world.TargetDummyStatusText;
+            if (_world.LocalCombatTargetInRange || _world.LocalCombatCoolingDown || !_worldTouchWindSlashButton.enabledSelf)
+                throw new InvalidOperationException("Out-of-range fixture must be ready but too far from its target.");
+            using (var submit = NavigationSubmitEvent.GetPooled())
+            {
+                submit.target = _worldTouchWindSlashButton;
+                _worldTouchWindSlashButton.SendEvent(submit);
+            }
+            var outcome = _world.LastLocalCombatOutcome;
+            if (outcome == null || outcome.Accepted || outcome.RejectedReason != "OUT_OF_RANGE" ||
+                hpBefore != _world.TargetDummyStatusText || _world.LocalCombatCoolingDown)
+                throw new InvalidOperationException("Out-of-range cast must reject without damage or cooldown.");
+            if (!_worldTouchWindSlashButton.text.Contains("Lại gần") || !_combatFeedback.text.Contains("Ngoài tầm"))
+                throw new InvalidOperationException("Out-of-range feedback must explain the next action on button and HUD.");
         }
 
         internal void CaptureEvidenceTargetDummyState()
@@ -414,6 +607,31 @@ namespace LinhGioi.UI
                 throw new InvalidOperationException("World Wind Slash action must execute combat, not only preview VFX.");
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
+            if (_worldTouchWindSlashButton.enabledSelf || !_worldTouchWindSlashButton.text.Contains("\n"))
+                throw new InvalidOperationException("Wind Slash button must show cooldown and disable after casting.");
+        }
+
+        internal IEnumerator CaptureEvidenceCooldownRecoversAtRest()
+        {
+            var position = _world.CurrentPosition;
+            var first = _world.LastLocalCombatOutcome;
+            var deadline = Time.realtimeSinceStartup + 10f;
+            while (_world.LocalCombatCoolingDown && Time.realtimeSinceStartup < deadline)
+                yield return null;
+            yield return null;
+            if (_world.LocalCombatCoolingDown || !_worldTouchWindSlashButton.enabledSelf || _worldTouchWindSlashButton.text != "Chém")
+                throw new InvalidOperationException("Wind Slash must become ready without movement or forced cooldown reset.");
+            if (Vector3.Distance(position, _world.CurrentPosition) > 0.01f)
+                throw new InvalidOperationException("Cooldown recovery fixture must remain stationary.");
+            using (var submit = NavigationSubmitEvent.GetPooled())
+            {
+                submit.target = _worldTouchWindSlashButton;
+                _worldTouchWindSlashButton.SendEvent(submit);
+            }
+            var second = _world.LastLocalCombatOutcome;
+            if (second == null || !second.Accepted || Equals(first, second) || !_world.LocalCombatCoolingDown)
+                throw new InvalidOperationException("Ready button must execute another accepted cast.");
+            Debug.Log("LGO_WIND_SLASH_RECOVERY_PASS idle=true time=natural second_cast=accepted");
         }
 
         internal void CaptureEvidenceShadowBindPreview()
@@ -425,9 +643,52 @@ namespace LinhGioi.UI
             RefreshCombatAssetUiState();
         }
 
-        internal void CaptureEvidenceOpenSessionMenu()
+        internal IEnumerator CaptureEvidenceOpenSessionMenu()
         {
+            if (_world.DialogueActive) CloseDialogue();
             SetSessionMenuVisible(true);
+            var position = _world.CurrentPosition;
+            var yaw = _world.BuildSaveRequest().yawDegrees;
+            // SendMessage would also tick the UI controller on this GameObject and overwrite injected input.
+            var worldTick = _world.GetType().GetMethod("Update", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            var outcome = _world.LastLocalCombatOutcome;
+            _world.TouchMovement = Vector2.one;
+            worldTick.Invoke(_world, null);
+            TriggerLocalCombat();
+            if (Vector3.Distance(position, _world.CurrentPosition) > 0.001f || !Equals(outcome, _world.LastLocalCombatOutcome))
+                throw new InvalidOperationException("Menu focus must block movement and combat callbacks.");
+            SetSessionMenuVisible(false);
+            if (_world.TouchMovement != Vector2.zero)
+                throw new InvalidOperationException("Closing menu must discard stale movement.");
+            _world.TouchMovement = Vector2.right;
+            worldTick.Invoke(_world, null);
+            if (Vector3.Distance(position, _world.CurrentPosition) > 0.001f)
+                throw new InvalidOperationException("Closing frame must not leak input into the world.");
+            _world.TouchMovement = Vector2.zero;
+            yield return null;
+            yield return null;
+            _world.TouchMovement = Vector2.right;
+            worldTick.Invoke(_world, null);
+            _world.TouchMovement = Vector2.zero;
+            if (Vector3.Distance(position, _world.CurrentPosition) <= 0.001f)
+                throw new InvalidOperationException("Fresh movement must resume after closing menu.");
+            _world.SetSmokePosition(position.x, position.y, position.z, yaw);
+            SetSessionMenuVisible(true);
+            Debug.Log("LGO_MENU_INPUT_FOCUS_PASS movement=injected combat=callback");
+            Debug.Log("LGO_MENU_INPUT_RESUME_PASS stale=cleared closing_frame=blocked fresh_input=moved");
+            var focusCallback = _world.GetType().GetMethod("OnApplicationFocus", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            foreach (var focused in new[] { false, true })
+            {
+                _world.TouchMovement = Vector2.one;
+                focusCallback.Invoke(_world, new object[] { focused });
+                if (_world.TouchMovement != Vector2.zero)
+                    throw new InvalidOperationException("World focus callback must clear movement without waiting for Update.");
+                _world.TouchMovement = Vector2.one;
+                OnApplicationFocus(focused);
+                if (_world.TouchMovement != Vector2.zero)
+                    throw new InvalidOperationException("UI focus callback must clear pending movement without waiting for Update.");
+            }
+            Debug.Log("LGO_APPLICATION_FOCUS_RESET_PASS callback=simulated loss=cleared gain=cleared");
         }
     }
 }

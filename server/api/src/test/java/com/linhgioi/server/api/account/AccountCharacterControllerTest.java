@@ -31,6 +31,13 @@ class AccountCharacterControllerTest {
                 login.account().accountId(), new CreateCharacterRequest("KiemTu", "class.sword"));
         assertEquals(1001L, created.entityId());
         assertEquals("KiemTu", created.name());
+        assertEquals(1, created.slot());
+        CharacterResponse third = controller.createCharacter(login.account().accountId(),
+                new CreateCharacterRequest("ThirdHero", "class.sword", 3));
+        assertEquals(3, third.slot());
+        assertEquals(3, controller.getCharacter(third.characterId()).slot());
+        assertThrows(ResponseStatusException.class, () -> controller.createCharacter(login.account().accountId(),
+                new CreateCharacterRequest("Occupied", "class.sword", 3)));
 
         CharacterResponse moved = controller.savePosition(
                 created.characterId(), new SaveCharacterPositionRequest(1.25f, 0.0f, -2.5f, 180.0f));

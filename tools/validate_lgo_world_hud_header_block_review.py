@@ -61,14 +61,15 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
         "internal static VisualElement NewSectionHeaderBlock",
-        "block.Add(NewSectionTitle(title));",
+        "var titleLabel = NewSectionTitle(title);",
+        "block.Add(titleLabel);",
         "block.Add(NewOrnamentRule(ornamentColor));",
         "internal static VisualElement NewOrnamentRule",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         'NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold, "LGO Character Hall Header Block")',
-        'NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Spirit, "LGO World HUD Header Block")',
+        'NewSectionHeaderBlock("Sân Luyện An Toàn", RuntimeArtCatalog.Gold, "LGO World HUD Header Block", compact: true)',
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

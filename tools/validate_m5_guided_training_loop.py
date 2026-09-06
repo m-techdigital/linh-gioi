@@ -67,7 +67,7 @@ def main() -> int:
         'Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.',
         'Mục tiêu 2/2: ổn định Đá Luyện.',
         'Mục tiêu hoàn tất: mạch linh khí đã ổn định.',
-        'Người Giữ Cổng: đường đã mở. Hãy đi theo mạch linh khí lam về phía bắc.',
+        'Người Giữ Cổng: hãy theo đường đá tới Đá Luyện ở cuối sân.',
         'SetSmokePositionNearGateKeeper',
         'SetSmokePositionNearTrainingStone',
         'LGO Shadow Slime Non Combat Marker',

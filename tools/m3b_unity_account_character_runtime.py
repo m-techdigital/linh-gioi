@@ -185,7 +185,7 @@ def main() -> int:
     run_api_pass(root, base_url, args.port, store_dir, output_dir / 'api-first.log', log, player, False, output_dir / 'unity-first.json')
     run_api_pass(root, base_url, args.port, store_dir, output_dir / 'api-restart.log', log, player, True, output_dir / 'unity-restart.json')
 
-    store_file = store_dir / 'players-v1.json'
+    store_file = store_dir / 'players-v2.json'
     if not store_file.exists():
         append(log, f'ERROR: persistence file missing: {store_file}')
         return 45

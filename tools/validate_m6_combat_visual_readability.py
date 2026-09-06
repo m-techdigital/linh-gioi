@@ -115,9 +115,9 @@ def main() -> int:
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
         'Nhãn nguyên mẫu cục bộ',
-        'Đánh thử cục bộ',
-        'Tấn công thử',
-        'không phải chiến đấu thật',
+        'NewWorldTouchActionButton("Chém", TriggerLocalCombat)',
+        'Thi triển Chém Gió lên bia luyện cục bộ',
+        'Không có sát thương, phần thưởng hay chiến đấu máy chủ.',
         'TargetDummyVisualStateText',
     )
     require_any(

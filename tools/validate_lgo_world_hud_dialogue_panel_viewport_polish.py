@@ -84,7 +84,7 @@ def main() -> int:
         "dialogueActionRow.style.flexWrap = Wrap.NoWrap",
         "RuntimeUiOverflowGuard.ApplyResponsiveColumns(dialogueActionRow, 2, mobile ? 4 : 6, dialogueContinueButton, dialogueCloseButton)",
         "dialoguePanel.style.maxHeight = layout.DialoguePanelMaxHeight",
-        "dialoguePanel.style.height = layout.DialoguePanelMaxHeight",
+        "dialoguePanel.style.height = StyleKeyword.Auto",
         "dialoguePanel.style.overflow = Overflow.Hidden",
         "RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight, layout.DialogueLineScrollMinHeight)",
         "RuntimeUiOverflowGuard.ApplyModalBody(dialogueBody)",
