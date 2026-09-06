@@ -1020,13 +1020,14 @@ namespace LinhGioi.World
         private static string GateKeeperWorldLabelText(bool objectiveTarget)
         {
             if (!objectiveTarget) return IsNarrowWorldViewport() ? "Người Giữ\nCổng" : "Người Giữ Cổng";
+            if (IsMobileWorldViewport()) return "Người Giữ\nCổng";
             return IsNarrowWorldViewport() ? "Mục tiêu\nNgười Giữ\nCổng" : "Mục tiêu\nNgười Giữ Cổng";
         }
 
         private string TrainingStoneWorldLabelText()
         {
             if (InteractionAcknowledged || _guidedStep == GuidedTrainingStep.Complete) return "Hoàn tất\nĐá Luyện";
-            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Mục tiêu\nĐá Luyện";
+            if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return IsMobileWorldViewport() ? "Đá Luyện" : "Mục tiêu\nĐá Luyện";
             return "Đá Luyện";
         }
 

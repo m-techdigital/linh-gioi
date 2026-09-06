@@ -63,7 +63,7 @@ def main() -> int:
         "ShadowSlimeWorldLabelText()",
         "Hoàn tất\\nĐá Luyện",
         "Đã yên\\nBóng Tối lùi",
-        "Mục tiêu\\nĐá Luyện",
+        'IsMobileWorldViewport() ? "Đá Luyện" : "Mục tiêu\\nĐá Luyện"',
         "Mục tiêu\\nNgười Giữ Cổng",
     )
     require(

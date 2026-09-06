@@ -52,6 +52,7 @@ def main() -> int:
         "LGO World Label Safe Area v1",
         "GateKeeperWorldLabelText",
         '"Người Giữ\\nCổng"',
+        'if (IsMobileWorldViewport()) return "Người Giữ\\nCổng";',
         "CurrentGateKeeperLabelOffset",
         "IsMobileWorldViewport",
         "IsNarrowWorldViewport",

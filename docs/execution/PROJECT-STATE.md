@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_COMBAT_TARGET_STATUS_COMPACT_READY` shortens the target-dummy status line to `Bia luyện: 108/120 sức bền mô phỏng.`, improving combat HUD scanability across desktop/tablet/mobile.
+Latest player-visible batch: `LGO_MOBILE_GUIDED_LABEL_COMPACT_READY` shortens mobile guided object labels to the object name while preserving full objective labels on desktop/tablet, reducing label clutter around interactables.
 
 Current visual/runtime evidence harness command:
 
