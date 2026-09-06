@@ -675,9 +675,9 @@ namespace LinhGioi.UI
         private void BuildSkillPreviewPanel()
         {
             var layout = CurrentLayoutProfile();
-            _skillPreviewPanel = NewSectionShell("KỸ NĂNG", "Diễn tập hình ảnh", "Xem thử kỹ năng", "LGO Skill Preview Sandbox");
+            _skillPreviewPanel = NewSectionShell("KỸ NĂNG", "Diễn tập an toàn", "Xem thử kỹ năng", "LGO Skill Preview Sandbox");
             _skillPreviewPanel.style.marginTop = layout.SkillPreviewPanelMarginTop;
-            _skillPreviewPanel.Add(NewMutedLabel("Chỉ diễn tập hình ảnh cục bộ. Không tạo đối thủ, luật thời gian, tiến trình hay kết quả thật."));
+            _skillPreviewPanel.Add(NewMutedLabel("Chọn kỹ năng để thấy tư thế, vòng cảnh báo và mạch linh khí ngay trong sân luyện."));
             _previewWindSlashButton = NewSecondaryButton("Chém Gió", () => PreviewSkill("Wind Slash", "Chém Gió"));
             _previewShadowBindButton = NewSecondaryButton("Trói Bóng", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
             _previewSpiritGuardButton = NewSecondaryButton("Hộ Linh", () => PreviewSkill("Spirit Guard", "Hộ Linh"));
@@ -1290,7 +1290,7 @@ namespace LinhGioi.UI
             if (_world == null) return;
             _world.PreviewSkillFeedback(previewName);
             RefreshWorldLoopLabels();
-            SetToast("Xem thử: hiệu ứng " + displayName + " đã chạy trong sân an toàn.", RuntimeArtCatalog.Spirit);
+            SetToast("Diễn tập " + displayName + ": hiệu ứng đã hiện trong sân an toàn.", RuntimeArtCatalog.Spirit);
         }
 
         private void ContinueDialogue()

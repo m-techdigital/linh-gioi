@@ -223,6 +223,16 @@ namespace LinhGioi.World
             InteractionStateChanged?.Invoke();
         }
 
+        public void ResetLocalCombatPreviewStateForSmoke()
+        {
+            _localCombat.Reset();
+            _targetDummyHitAcknowledged = false;
+            CombatFeedbackText = "Diễn tập an toàn: chọn kỹ năng để xem phản hồi trong sân luyện.";
+            CombatAuthorityText = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
+            RefreshVfxFeedbackMarkers();
+            InteractionStateChanged?.Invoke();
+        }
+
         public bool TryLocalCombatPrototype()
         {
             return TryLocalCombatPrototypeAt(NowMs());
@@ -300,7 +310,7 @@ namespace LinhGioi.World
                 SetShadowSlimeState(PlaceholderSlimeState.AlertWarning);
                 SetVfxFeedback(PlaceholderVfxFeedbackState.ShadowBindWarning, 1.25f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Danger);
-                _interactionText = "Chỉ xem thử: Trói Bóng hiển thị vòng cảnh báo dễ đọc trong sân an toàn.";
+                _interactionText = "Diễn tập Trói Bóng: vòng cảnh báo hiện rõ quanh Bóng Tối trong sân an toàn.";
             }
             else
             {

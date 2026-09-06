@@ -81,6 +81,16 @@ namespace LinhGioi.UI
             RefreshCombatAssetUiState();
         }
 
+        internal void CaptureEvidenceShadowBindPreview()
+        {
+            if (_world == null) return;
+            _evidenceState = RuntimeUiEvidenceState.None;
+            _world.ResetLocalCombatPreviewStateForSmoke();
+            _world.PreviewSkillFeedback("Shadow Bind");
+            RefreshWorldLoopLabels();
+            RefreshCombatAssetUiState();
+        }
+
         internal void CaptureEvidenceOpenSessionMenu()
         {
             SetSessionMenuVisible(true);

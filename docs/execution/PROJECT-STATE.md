@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_LOCAL_COMBAT_SAFE_TRAINING_COPY_READY` makes target-dummy feedback read as `Diễn tập an toàn` training feedback instead of leading with a technical non-combat disclaimer.
+Latest player-visible batch: `LGO_SKILL_SHADOW_BIND_PREVIEW_EVIDENCE_READY` adds a dedicated Shadow Bind preview screenshot and cleaner safe-training copy so skill telegraph evidence is no longer mixed with stale target-dummy hit state.
 
 Current visual/runtime evidence harness command:
 

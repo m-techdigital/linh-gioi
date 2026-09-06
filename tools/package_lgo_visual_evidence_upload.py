@@ -27,6 +27,7 @@ SCREENSHOTS = (
     "npc-dialogue.png",
     "session-menu.png",
     "target-dummy-state.png",
+    "skill-shadow-bind-preview.png",
 )
 TEXT_EVIDENCE = (
     "visual-runtime-evidence-manifest.json",

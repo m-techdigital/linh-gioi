@@ -23,6 +23,7 @@ EXPECTED_SCREENSHOTS = (
     "near-training-stone-prompt.png",
     "training-complete.png",
     "target-dummy-state.png",
+    "skill-shadow-bind-preview.png",
     "npc-dialogue.png",
     "session-menu.png",
 )

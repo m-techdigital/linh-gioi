@@ -58,6 +58,7 @@ def main() -> int:
         "near-gatekeeper-prompt.png",
         "near-training-stone-prompt.png",
         "training-complete.png",
+        "skill-shadow-bind-preview.png",
         "No VISUAL_RUNTIME_PASS claim",
         "No Unity Library/Temp/cache/player binary included",
         "--verify-only",

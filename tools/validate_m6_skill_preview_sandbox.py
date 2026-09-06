@@ -56,8 +56,9 @@ def main() -> int:
         'client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs',
         'PreviewSkillFeedback',
         'Chỉ xem thử: Chém Gió vẽ một cung vàng',
-        'Chỉ xem thử: Trói Bóng hiển thị vòng cảnh báo dễ đọc',
+        'Diễn tập Trói Bóng: vòng cảnh báo hiện rõ quanh Bóng Tối',
         'Chỉ xem thử: Hộ Linh tạo mạch sáng cho tư thế phòng thủ.',
+        'ResetLocalCombatPreviewStateForSmoke',
         'PlaceholderVfxFeedbackState.WindSlashPreview',
         'PlaceholderVfxFeedbackState.ShadowBindWarning',
         'PlaceholderVfxFeedbackState.SpiritPulse',
@@ -66,11 +67,23 @@ def main() -> int:
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',
         'LGO Skill Preview Sandbox',
         'Xem thử kỹ năng',
-        'Chỉ diễn tập hình ảnh cục bộ.',
+        'Diễn tập an toàn',
+        'Chọn kỹ năng để thấy tư thế',
         'Chém Gió',
         'Trói Bóng',
         'Hộ Linh',
-        'Xem thử: hiệu ứng " + displayName + " đã chạy trong sân an toàn.',
+        'Diễn tập " + displayName + ": hiệu ứng đã hiện trong sân an toàn.',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs',
+        'CaptureEvidenceShadowBindPreview',
+        'ResetLocalCombatPreviewStateForSmoke',
+        'PreviewSkillFeedback("Shadow Bind")',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs',
+        'skill-shadow-bind-preview.png',
+        'Skill Preview / Shadow Bind',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

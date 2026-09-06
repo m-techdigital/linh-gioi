@@ -23,6 +23,7 @@ namespace LinhGioi.UI
             "near-training-stone-prompt.png",
             "training-complete.png",
             "target-dummy-state.png",
+            "skill-shadow-bind-preview.png",
             "npc-dialogue.png",
             "session-menu.png"
         };
@@ -139,6 +140,14 @@ namespace LinhGioi.UI
                 "Target Dummy Local Feedback",
                 "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv",
                 "V3B target dummy selected/hit/recover state clarity, cooldown ring, combat button fit, and local-only combat copy");
+
+            _controller.CaptureEvidenceShadowBindPreview();
+            yield return WaitFrames(8);
+            yield return CaptureCheckpoint(
+                "skill-shadow-bind-preview",
+                "Skill Preview / Shadow Bind",
+                "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv",
+                "Skill preview panel and world telegraph make Shadow Bind readable without opening real combat");
 
             _controller.CaptureEvidenceOpenDialogue();
             yield return WaitFrames(8);
