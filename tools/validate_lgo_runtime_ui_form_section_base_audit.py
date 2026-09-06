@@ -69,7 +69,7 @@ def main() -> int:
     controller = require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_createPanel = NewCharacterCreatePanel(layout);",
-        "_characterName = NewTextField(\"Danh xưng\", \"LinhGioiHero\");",
+        "_characterName = NewLobbyTextField(\"\", \"LinhGioiHero\", \"Nhập danh xưng tu sĩ.\");",
         "_createButton = NewCompactSecondaryButton(\"Tạo tu sĩ\", OnCreateCharacterAction);",
         "private void OnCreateCharacterAction()",
         "_enterWorldButton = NewCompactPrimaryButton(\"Vào sân luyện\", () => RunAsync(EnterWorldAsync));",

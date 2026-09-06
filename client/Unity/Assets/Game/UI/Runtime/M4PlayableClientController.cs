@@ -526,14 +526,13 @@ namespace LinhGioi.UI
 
             _createTitle = NewSectionTitle("Tạo Tu Sĩ");
             _createPanel.Add(_createTitle);
-            var createHint = NewCharacterHallStatusLabel("Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted, layout);
+            var createHint = NewCharacterHallStatusLabel("Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted, layout);
             _createHint = createHint;
             createHint.name = "LGO Character Create Form Game Copy v1";
             _createPanel.Add(createHint);
-            _characterName = NewTextField("Danh xưng", "LinhGioiHero");
+            _characterName = NewLobbyTextField("", "LinhGioiHero", "Nhập danh xưng tu sĩ.");
             _characterName.name = "LGO Character Create Form Framed Input v1";
             _characterName.style.maxWidth = RuntimeUiSizing.CharacterNameFieldMaxWidth;
-            ApplyLobbyInputStyle(_characterName);
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
             _classId.style.display = DisplayStyle.None;
             _createButton = NewCompactSecondaryButton("Tạo tu sĩ", OnCreateCharacterAction);
@@ -1325,9 +1324,6 @@ namespace LinhGioi.UI
             if (element == null) return;
             element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
-
-        private static Label NewCharacterHallStatusLabel(string text, Color color, RuntimeUiLayoutProfile layout) =>
-            NewStatusLabel(text, color, layout.CharacterHallDensity);
 
         private void ApplyLoginButtonState(Texture2D texture)
         {

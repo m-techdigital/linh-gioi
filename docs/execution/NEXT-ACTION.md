@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: Workflow self-review reduced state brief noise and Character Hall first-time field alignment was polished; source gates and desktop visual evidence are stable, and no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: Workflow self-review reduced state brief noise, Character Hall first-time field alignment/input label chrome was polished, and screenshot evidence confirms the form is cleaner but still below final reference quality; no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: prefer player-visible layout/quality fixes or hotspot extraction that reduces controller churn without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -118,6 +118,12 @@ Current focus update: local artifact cleanup now reports `client/Unity/Library` 
 Current focus update: Character Hall first-time create state now centers a narrower form and uses `Khai mở tu sĩ` copy under `LGO_CHARACTER_HALL_CREATE_STATE_FORM_POLISH_READY`; refreshed desktop screenshot is cleaner, but the TextField chrome still needs a future reusable form-component pass.
 
 Current focus update: workflow self-review is applied under `LGO_WORKFLOW_SELF_REVIEW_COMPACT_PROGRESS_READY`; state brief no longer prints truncation noise for the core state, commit cadence should group related small batches, and Character Hall first-time `Danh xưng` field alignment is centered while deeper TextField chrome remains a focused future form-component task.
+
+Current focus update: Character Hall first-time input label chrome is cleaned under `LGO_CHARACTER_HALL_INPUT_LABEL_CHROME_CLEANUP_READY`; `Danh xưng` now uses game copy above the field and a label-free input, shared skin label styling stays API-compatible, runtime screenshot evidence was reviewed, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: lobby text field creation now routes through `RuntimeUiFactory.NewLobbyTextField` under `LGO_RUNTIME_UI_LOBBY_TEXT_FIELD_FACTORY_READY`; the playable controller no longer owns the create-form input skin/tooltip details, source gates pass, and visual evidence from the preceding UI change remains current.
+
+Current focus update: Character Hall density-aware status label creation now lives in `RuntimeUiFactory.NewCharacterHallStatusLabel` under `LGO_CHARACTER_HALL_STATUS_LABEL_FACTORY_READY`; the playable controller owns less reusable UI construction while Character Hall validators and quick dev loop remain clean.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 

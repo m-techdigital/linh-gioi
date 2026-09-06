@@ -264,6 +264,9 @@ namespace LinhGioi.UI
             return label;
         }
 
+        internal static Label NewCharacterHallStatusLabel(string text, Color color, RuntimeUiLayoutProfile layout) =>
+            NewStatusLabel(text, color, layout.CharacterHallDensity);
+
         internal static Label NewHiddenMutedLabel(string text)
         {
             var label = NewMutedLabel(text);
@@ -481,6 +484,14 @@ namespace LinhGioi.UI
         {
             var field = new TextField(label) { value = value };
             RuntimeUiSkin.ApplyInputMetrics(field, RuntimeUiSpacing.BaseInputMaxWidth, marginTop: RuntimeUiSpacing.BaseInputMarginTop);
+            return field;
+        }
+
+        internal static TextField NewLobbyTextField(string label, string value, string tooltip)
+        {
+            var field = NewTextField(label, value);
+            ApplyLobbyInputStyle(field);
+            if (!string.IsNullOrWhiteSpace(tooltip)) field.tooltip = tooltip;
             return field;
         }
 

@@ -340,6 +340,9 @@ namespace LinhGioi.UI
         {
             field.style.backgroundColor = DeepGlass;
             ApplyEdgeFrame(field, MediumSpiritBorder, MediumGoldBorder, LightSpiritBorder, new Color(0.93f, 0.73f, 0.36f, 0.28f));
+            field.labelElement.style.color = RuntimeArtCatalog.Gold;
+            field.labelElement.style.fontSize = RuntimeUiTypography.BadgeValueFontSize;
+            field.labelElement.style.unityFontStyleAndWeight = FontStyle.Bold;
         }
 
         internal static void ApplyEmptyCharacterCardFrame(VisualElement card)
