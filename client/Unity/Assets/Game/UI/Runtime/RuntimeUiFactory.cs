@@ -197,7 +197,7 @@ namespace LinhGioi.UI
             portrait.style.height = RuntimeUiSizing.CharacterPortraitHeight;
             portrait.style.marginRight = layout.CharacterPortraitMarginRight;
             RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);
-            if (portraitTexture == null)
+            if (portraitTexture == null && fallbackTexture != null)
                 portrait.Add(NewRuntimeIcon(fallbackTexture, 58, "Hồ sơ tu sĩ"));
             return portrait;
         }

@@ -95,7 +95,7 @@ def main() -> int:
         "RuntimeUiSizing.LoginNpcStageWidth",
         "RuntimeUiSizing.LoginGateKeeperHeight",
         "RuntimeUiSizing.LoginButtonMaxWidth",
-        "NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture)",
+        "NewCharacterPortraitFrame(layout, portraitTexture, null)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",

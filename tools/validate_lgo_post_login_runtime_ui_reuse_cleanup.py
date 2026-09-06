@@ -78,7 +78,7 @@ def main() -> int:
         "_lobbyContent = NewCharacterHallContentRow(layout);",
         "_characterList = NewCharacterListPanel(layout);",
         "_selectedPreview = NewSelectedCharacterPreviewPanel();",
-        "var portrait = NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture);",
+        "var portrait = NewCharacterPortraitFrame(layout, portraitTexture, null);",
         "var profileCopy = NewFlexibleColumn(\"LGO Character Hall Selected Profile Copy V3B\");",
         "var profileHero = NewCharacterProfileHero(layout, portrait, profileCopy);",
         "RuntimeCharacterHallResponsiveLayout.Apply(",

@@ -28,7 +28,7 @@ Latest snapshot from `python3.12 tools/report_lgo_runtime_asset_size_inventory.p
 - roles over budget: 0;
 - roles in watch band >=85% budget: 7;
 - V2 fallback Resources payload: 2389.7 KB across 65 images;
-- referenced V2 registry properties: 24, including 8 fallback-only by exact V3B property-name coverage.
+- referenced V2 registry properties: 23, including 7 fallback-only by exact V3B property-name coverage.
 
 | Role | Runtime Path | Current Size | Budget | Status | Current Decision |
 |---|---:|---:|---:|---|---|
@@ -47,7 +47,7 @@ Latest snapshot from `python3.12 tools/report_lgo_runtime_asset_size_inventory.p
 2. `login_background`: add profile variants only when build pipeline supports device-specific bundles.
 3. `world_player_male_cultivator`: require animation-frame budget before adding idle/walk/attack frame sets.
 4. `world_tree_pine`, `world_tree_cherry`, `world_bridge_wood`, and `world_rock_moss`: keep as-is while used sparingly; do not multiply prop variants before adding quantization/import-profile evidence.
-5. V2 fallback assets: current `Resources` payload is 2389.7 KB across 65 images; 24 V2 registry properties are still referenced and 8 are fallback-only by exact V3B property-name coverage, so retire only after dependency checks prove V3B/newer coverage is complete.
+5. V2 fallback assets: current `Resources` payload is 2389.7 KB across 65 images; 23 V2 registry properties are still referenced and 7 are fallback-only by exact V3B property-name coverage, so retire only after dependency checks prove V3B/newer coverage is complete.
 
 ## Optimization Pass v1
 

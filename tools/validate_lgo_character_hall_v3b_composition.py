@@ -59,7 +59,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_lobbyContent = NewCharacterHallContentRow(layout);",
         "_selectedPreview = NewSelectedCharacterPreviewPanel();",
-        "NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture)",
+        "NewCharacterPortraitFrame(layout, portraitTexture, null)",
         "_createPanel = NewCharacterCreatePanel(layout);",
         "LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture",
         "RuntimeCharacterHallResponsiveLayout.Apply(",

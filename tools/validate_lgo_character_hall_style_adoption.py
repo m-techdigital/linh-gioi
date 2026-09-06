@@ -65,7 +65,7 @@ def main() -> int:
         "_lobbyPanel = NewCharacterHallPanel(layout);",
         "_characterList = NewCharacterListPanel(layout);",
         "_selectedPreview = NewSelectedCharacterPreviewPanel();",
-        "var portrait = NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture);",
+        "var portrait = NewCharacterPortraitFrame(layout, portraitTexture, null);",
         "_createPanel = NewCharacterCreatePanel(layout);",
     )
     require(

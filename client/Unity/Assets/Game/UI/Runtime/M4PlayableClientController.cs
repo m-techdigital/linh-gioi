@@ -502,7 +502,7 @@ namespace LinhGioi.UI
 
             _selectedPreview = NewSelectedCharacterPreviewPanel();
             var portraitTexture = LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture;
-            var portrait = NewCharacterPortraitFrame(layout, portraitTexture, LgoVisualAssetRegistryV2.IconAccountTexture);
+            var portrait = NewCharacterPortraitFrame(layout, portraitTexture, null);
             var profileCopy = NewFlexibleColumn("LGO Character Hall Selected Profile Copy V3B");
             _selectedName = new Label("Chưa chọn nhân vật");
             RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, RuntimeUiTypography.SelectedCharacterNameFontSize, true);

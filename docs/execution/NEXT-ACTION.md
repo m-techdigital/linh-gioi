@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: shared primary/secondary buttons and combat cooldown active art now avoid their V2 texture fallbacks, reducing V2 registry references to 24 and fallback-only references to 8; refreshed screenshots were reviewed as readable, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: shared primary/secondary buttons, combat cooldown active art, and Character Hall portrait fallback now avoid V2 texture dependencies, reducing V2 registry references to 23 and fallback-only references to 7; refreshed screenshots were reviewed as readable, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -80,6 +80,8 @@ Current focus update: repeated session menu placement, responsive padding, backg
 Current focus update: autopilot checkpoint staging now uses an allowlist and skips generated/cache/build artifacts under `LGO_AUTOPILOT_SAFE_CHECKPOINT_STAGING_READY`; commit/push remains opt-in and frozen surfaces remain blocked.
 
 Current focus update: combat cooldown active sprite/texture now prefer V3B then lightweight `CombatPlaceholders` instead of V2 `CooldownFull` fallbacks under `LGO_RUNTIME_COMBAT_COOLDOWN_V2_DEPENDENCY_CLEANUP_READY`; target-dummy screenshot was reviewed as readable, V2 registry references are down to 24 and fallback-only properties to 8, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: Character Hall portrait fallback no longer references V2 `IconAccountTexture` under `LGO_CHARACTER_HALL_PORTRAIT_V2_FALLBACK_CLEANUP_READY`; fresh Character Hall screenshots still show the V3B cultivator portrait, V2 registry references are down to 23 and fallback-only properties to 7, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: login CTA and server row sizing/tint were reduced under `LGO_LOGIN_CTA_FIT_FOR_PURPOSE_READY`; fresh desktop/tablet/mobile screenshots were reviewed as calmer and still readable, with no `VISUAL_RUNTIME_PASS` claim.
 
