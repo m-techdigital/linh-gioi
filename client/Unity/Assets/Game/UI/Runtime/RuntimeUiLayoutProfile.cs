@@ -187,6 +187,7 @@ namespace LinhGioi.UI
                 : Mathf.Clamp(Height * 0.16f, 124f, 176f);
         internal int DialogueProgressPaddingHorizontal => 10;
         internal int DialogueProgressPaddingVertical => IsMobile ? 4 : 5;
+        internal int DialogueSpeakerPortraitSize => IsMobile ? 34 : IsTablet ? 38 : 42;
         internal int StatusPaddingHorizontal(bool worldVisible) => worldVisible && IsMobile ? 14 : 18;
         internal int StatusPaddingVertical => 6;
         internal int PositionChipPaddingHorizontal => 10;

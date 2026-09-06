@@ -95,6 +95,8 @@ namespace LinhGioi.UI
         private Label _position;
         private Label _toast;
         private Label _layoutProfileLabel;
+        private VisualElement _dialogueSpeakerHeader;
+        private VisualElement _dialogueSpeakerPortrait;
         private Label _dialogueSpeaker;
         private VisualElement _dialogueBody;
         private ScrollView _dialogueLineScroll;
@@ -674,8 +676,11 @@ namespace LinhGioi.UI
             BuildSkillPreviewPanel();
             BuildLocalCombatPanel();
 
-            _dialoguePanel = NewSectionShell("ĐỐI THOẠI", "Người Giữ Cổng", string.Empty, "LGO Dialogue Shell");
+            _dialoguePanel = NewSectionShell("ĐỐI THOẠI", "NPC tương tác", string.Empty, "LGO Dialogue Shell");
             _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
+            _dialogueSpeakerHeader = new VisualElement { name = "LGO Dialogue Speaker Header" };
+            _dialogueSpeakerPortrait = NewRuntimeIcon(LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture, layout.DialogueSpeakerPortraitSize, "Người Giữ Cổng");
+            _dialogueSpeakerPortrait.name = "LGO Dialogue Speaker Portrait V3B";
             _dialogueSpeaker = new Label("Người Giữ Cổng");
             RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiTypography.DialogueSpeakerInitialFontSize, true);
             _dialogueBody = NewModalBody("LGO Dialogue Body");
@@ -688,7 +693,9 @@ namespace LinhGioi.UI
             _dialogueProgress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
             _dialogueContinueButton = NewCompactSecondaryButton("Tiếp tục", ContinueDialogue);
             _dialogueCloseButton = NewQuietButton("Đóng", CloseDialogue);
-            _dialoguePanel.Add(_dialogueSpeaker);
+            _dialogueSpeakerHeader.Add(_dialogueSpeakerPortrait);
+            _dialogueSpeakerHeader.Add(_dialogueSpeaker);
+            _dialoguePanel.Add(_dialogueSpeakerHeader);
             _dialogueLineScroll.Add(_dialogueLine);
             _dialogueBody.Add(_dialogueLineScroll);
             _dialoguePanel.Add(_dialogueBody);
@@ -1360,6 +1367,8 @@ namespace LinhGioi.UI
                 _skillPreviewPanel,
                 _localCombatPanel,
                 _dialoguePanel,
+                _dialogueSpeakerHeader,
+                _dialogueSpeakerPortrait,
                 _dialogueSpeaker,
                 _dialogueBody,
                 _dialogueLineScroll,

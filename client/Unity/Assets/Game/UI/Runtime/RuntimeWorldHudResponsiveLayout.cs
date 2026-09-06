@@ -20,6 +20,8 @@ namespace LinhGioi.UI
             VisualElement skillPreviewPanel,
             VisualElement localCombatPanel,
             VisualElement dialoguePanel,
+            VisualElement dialogueSpeakerHeader,
+            VisualElement dialogueSpeakerPortrait,
             Label dialogueSpeaker,
             VisualElement dialogueBody,
             ScrollView dialogueLineScroll,
@@ -76,10 +78,29 @@ namespace LinhGioi.UI
             RuntimeUiOverflowGuard.ApplyModalBody(dialogueBody);
             RuntimeUiOverflowGuard.ApplyModalFooter(dialogueFooter, layout.DialogueContentGap);
             RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight, layout.DialogueLineScrollMinHeight);
+            if (dialogueSpeakerHeader != null)
+            {
+                dialogueSpeakerHeader.style.flexDirection = FlexDirection.Row;
+                dialogueSpeakerHeader.style.alignItems = Align.Center;
+                dialogueSpeakerHeader.style.marginBottom = layout.DialogueContentGap;
+                RuntimeUiOverflowGuard.ApplyBoundedActionRow(dialogueSpeakerHeader);
+            }
+            if (dialogueSpeakerPortrait != null)
+            {
+                dialogueSpeakerPortrait.style.width = layout.DialogueSpeakerPortraitSize;
+                dialogueSpeakerPortrait.style.height = layout.DialogueSpeakerPortraitSize;
+                dialogueSpeakerPortrait.style.minWidth = layout.DialogueSpeakerPortraitSize;
+                dialogueSpeakerPortrait.style.minHeight = layout.DialogueSpeakerPortraitSize;
+                dialogueSpeakerPortrait.style.marginRight = layout.DialogueContentGap;
+                dialogueSpeakerPortrait.style.flexShrink = 0;
+            }
             if (dialogueSpeaker != null)
             {
                 dialogueSpeaker.style.fontSize = mobile ? RuntimeUiTypography.DialogueSpeakerMobileFontSize : RuntimeUiTypography.DialogueSpeakerDesktopFontSize;
-                dialogueSpeaker.style.marginBottom = layout.DialogueContentGap;
+                dialogueSpeaker.style.marginBottom = 0;
+                dialogueSpeaker.style.minWidth = 0;
+                dialogueSpeaker.style.flexShrink = 1;
+                dialogueSpeaker.style.whiteSpace = WhiteSpace.Normal;
             }
             if (dialogueLine != null)
             {
