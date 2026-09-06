@@ -59,7 +59,9 @@ def main() -> int:
         "IsNarrowWorldViewport()",
         "GateKeeperWorldLabelText(_guidedStep == GuidedTrainingStep.FindGateKeeper)",
         "TrainingStoneWorldLabelText()",
+        "ShadowSlimeWorldLabelText()",
         "Hoàn tất\\nĐá Luyện",
+        "Đã yên\\nBóng Tối lùi",
         "Mục tiêu\\nĐá Luyện",
         "Mục tiêu\\nNgười Giữ Cổng",
     )

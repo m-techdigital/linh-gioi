@@ -970,7 +970,7 @@ namespace LinhGioi.World
             WorldLabelPresenter.SetActive(_gateKeeperWorldLabel, _guidedStep == GuidedTrainingStep.FindGateKeeper || nearGateKeeper || DialogueActive);
             WorldLabelPresenter.SetActive(_trainingStoneWorldLabel, _guidedStep == GuidedTrainingStep.FindTrainingStone || nearTrainingStone || InteractionAcknowledged);
             WorldLabelPresenter.SetActive(_targetDummyWorldLabel, nearTargetDummy || _localCombat.CooldownActive(NowMs()) || _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
-            WorldLabelPresenter.SetActive(_shadowSlimeWorldLabel, nearShadowSlime || _shadowSlimeState == PlaceholderSlimeState.AlertWarning);
+            WorldLabelPresenter.SetActive(_shadowSlimeWorldLabel, nearShadowSlime || _shadowSlimeState == PlaceholderSlimeState.AlertWarning || _shadowSlimeState == PlaceholderSlimeState.DissolveQuiet);
             WorldLabelPresenter.SetActive(_spiritGateWorldLabel, _guidedStep == GuidedTrainingStep.Complete);
 
             if (_gateKeeperSprite != null)
@@ -996,7 +996,10 @@ namespace LinhGioi.World
             if (_spiritGateWorldLabel != null)
                 _spiritGateWorldLabel.transform.position = new Vector3(0f, 1.92f, -4.5f);
             if (_shadowSlimeWorldLabel != null)
+            {
+                WorldLabelPresenter.Set(_shadowSlimeWorldLabel, ShadowSlimeWorldLabelText(), _shadowSlimeState == PlaceholderSlimeState.AlertWarning ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit);
                 _shadowSlimeWorldLabel.transform.position = ShadowSlimePosition + new Vector3(0f, 0.92f, -0.02f);
+            }
         }
 
         private static string GateKeeperWorldLabelText(bool objectiveTarget)
@@ -1010,6 +1013,13 @@ namespace LinhGioi.World
             if (InteractionAcknowledged || _guidedStep == GuidedTrainingStep.Complete) return "Hoàn tất\nĐá Luyện";
             if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Mục tiêu\nĐá Luyện";
             return "Đá Luyện";
+        }
+
+        private string ShadowSlimeWorldLabelText()
+        {
+            if (_shadowSlimeState == PlaceholderSlimeState.AlertWarning) return "Cảnh báo\nBóng Tối";
+            if (_shadowSlimeState == PlaceholderSlimeState.DissolveQuiet) return "Đã yên\nBóng Tối lùi";
+            return "Bóng Tối";
         }
 
         private static Vector3 CurrentGateKeeperLabelOffset()

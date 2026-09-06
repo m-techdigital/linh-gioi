@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_TRAINING_STONE_COMPLETION_FEEDBACK_READY` adds a true `training-complete.png` runtime checkpoint and makes completion clear in the top chip, HUD action, and Đá Luyện world label while clearing the stale interaction prompt.
+Latest player-visible batch: `LGO_SHADOW_SLIME_SAFE_RESOLUTION_LABEL_READY` makes the post-training Bóng Tối state visible with a calm `Đã yên / Bóng Tối lùi` world label, preserving non-combat safe-loop semantics.
 
 Current visual/runtime evidence harness command:
 
