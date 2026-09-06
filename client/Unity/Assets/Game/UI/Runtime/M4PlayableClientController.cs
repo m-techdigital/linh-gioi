@@ -1035,8 +1035,21 @@ namespace LinhGioi.UI
         {
             if (_world == null) return "Sẵn sàng";
             if (_isMobileProfile)
+            {
+                var mobileSkillPreview = MobileSkillPreviewTopStatusText(_world.CombatFeedbackText);
+                if (mobileSkillPreview != null) return mobileSkillPreview;
                 return _world.InteractionAcknowledged ? "Hoàn tất" : _world.GuidedTrainingStepName.Replace("Bước 1: tìm Người Giữ Cổng", "Bước 1/2").Replace("Bước 2: ổn định Đá Luyện", "Bước 2/2");
+            }
             return _world.InteractionAcknowledged ? "Hoàn tất hướng dẫn" : "Sẵn sàng: " + _world.GuidedTrainingStepName;
+        }
+
+        private static string MobileSkillPreviewTopStatusText(string feedbackText)
+        {
+            if (string.IsNullOrWhiteSpace(feedbackText)) return null;
+            if (feedbackText.Contains("Đang xem Trói Bóng")) return "Xem Trói Bóng";
+            if (feedbackText.Contains("Đang xem Chém Gió")) return "Xem Chém Gió";
+            if (feedbackText.Contains("Đang xem Hộ Linh")) return "Xem Hộ Linh";
+            return null;
         }
 
         private void RunAsync(Func<Task> action)

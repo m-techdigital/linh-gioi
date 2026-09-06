@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: mobile World Hub top status now uses compact step copy (`Bước 1/2`, `Bước 2/2`, `Hoàn tất`) while the left HUD keeps full objective text; runtime profile screenshots were reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: mobile skill preview evidence now shows `Xem Trói Bóng` in the upper-right status chip while the Shadow Bind warning telegraph is visible in-world, giving compact mobile HUD context without reintroducing the heavier skill preview panel; runtime profile screenshots were reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -163,13 +163,15 @@ Current focus update: local combat hit feedback now includes a visible reward pl
 
 Current focus update: mobile World Hub top status copy is compact under `LGO_MOBILE_TOP_STATUS_COMPACT_READY`; profile screenshots show `Bước 1/2`, `Bước 2/2`, and `Hoàn tất` in the upper-right chip while the left HUD keeps full guided objective text, with no final visual pass claim.
 
+Current focus update: mobile skill preview top status is ready under `LGO_MOBILE_SKILL_PREVIEW_TOP_STATUS_READY`; `skill-shadow-bind-preview.png` now shows `Xem Trói Bóng` in the mobile top chip while the world telegraph remains visible, with no final visual pass claim.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task
 
 `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`
 
-Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Latest closed marker: `LGO_MOBILE_TOP_STATUS_COMPACT_READY`.
+Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Latest closed marker: `LGO_MOBILE_SKILL_PREVIEW_TOP_STATUS_READY`.
 
 ## Current blocker
 

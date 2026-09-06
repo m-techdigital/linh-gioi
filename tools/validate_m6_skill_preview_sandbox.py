@@ -81,6 +81,10 @@ def main() -> int:
         'Trói Bóng',
         'Hộ Linh',
         'Diễn tập " + displayName + ": hiệu ứng đã hiện trong sân an toàn.',
+        'MobileSkillPreviewTopStatusText',
+        'Xem Trói Bóng',
+        'Xem Chém Gió',
+        'Xem Hộ Linh',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs',

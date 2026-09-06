@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_TOP_STATUS_COMPACT_READY` shortens the mobile World Hub top status chip to `Bước 1/2`, `Bước 2/2`, or `Hoàn tất` while the left HUD keeps the full objective copy, reducing upper-right mobile clutter.
+Latest player-visible batch: `LGO_MOBILE_SKILL_PREVIEW_TOP_STATUS_READY` makes the mobile World Hub top status chip show skill preview context such as `Xem Trói Bóng`, connecting the compact HUD to the visible world telegraph without showing the heavier desktop skill panel.
 
 Current visual/runtime evidence harness command:
 
