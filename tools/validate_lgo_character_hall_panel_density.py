@@ -51,7 +51,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "OwnerMarker = \"LGO Character Hall Responsive Layout Helper v1\"",
         "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);",
-        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, layout, width);",
+        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width);",
         "Mathf.Min(width - 40f, 780f)",
         "layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth",
         "createPanel.style.maxHeight = layout.IsMobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;",

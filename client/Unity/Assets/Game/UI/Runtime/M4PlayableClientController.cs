@@ -774,6 +774,7 @@ namespace LinhGioi.UI
                 var captured = character;
                 _characterList.Add(NewListButton(character.name, "Kiếm tu sơ nhập", () => SelectCharacter(captured)));
             }
+            _characterList.Add(NewReadabilityRow("Sẵn sàng", "Chọn hồ sơ rồi bước qua Linh Môn.", RuntimeArtCatalog.Spirit));
             SelectCharacter(_characters[0]);
         }
 

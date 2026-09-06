@@ -66,7 +66,7 @@ def main() -> int:
         "NewCharacterListPanel(RuntimeUiLayoutProfile layout)",
         "ApplyCharacterListResponsive(VisualElement list, RuntimeUiLayoutProfile layout, int viewportWidth)",
         "NewSelectedCharacterPreviewPanel()",
-        "ApplySelectedCharacterPreviewResponsive(VisualElement preview, RuntimeUiLayoutProfile layout, int viewportWidth)",
+        "ApplySelectedCharacterPreviewResponsive(VisualElement preview, Label selectedName, RuntimeUiLayoutProfile layout, int viewportWidth)",
         "NewCharacterProfileHero(RuntimeUiLayoutProfile layout, VisualElement portrait, VisualElement copy)",
         "NewCharacterPortraitFrame(RuntimeUiLayoutProfile layout, Texture2D portraitTexture, Texture2D fallbackTexture)",
         "NewFlexibleColumn(string name = null)",
@@ -87,7 +87,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);",
         "RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);",
-        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, layout, width);",
+        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width);",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
