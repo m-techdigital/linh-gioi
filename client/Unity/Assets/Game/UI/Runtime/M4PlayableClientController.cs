@@ -264,7 +264,7 @@ namespace LinhGioi.UI
             if (enabled)
             {
                 _root.style.backgroundColor = RuntimeArtCatalog.Background;
-                var gateBackground = LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate ?? LgoVisualAssetRegistryV2.LoginBackgroundSpiritGate;
+                var gateBackground = LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate;
                 if (gateBackground != null)
                 {
                     _root.style.backgroundImage = new StyleBackground(gateBackground);
@@ -354,7 +354,7 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyRadius(npcGroundingBloom, RuntimeUiSizing.LoginNpcGroundingRadius);
             _loginStage.Add(npcGroundingBloom);
 
-            var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture ?? LgoVisualAssetRegistryV2.GateKeeperNpcLoginTexture;
+            var gateKeeperTexture = LgoVisualAssetRegistryV3B.GateKeeperNpcLoginTexture;
             var gateKeeper = NewImageLayer("LGO Login Gate Keeper NPC V3B", gateKeeperTexture, ScaleMode.ScaleToFit);
             _loginGateKeeper = gateKeeper;
             gateKeeper.style.width = RuntimeUiSizing.LoginGateKeeperWidth;
