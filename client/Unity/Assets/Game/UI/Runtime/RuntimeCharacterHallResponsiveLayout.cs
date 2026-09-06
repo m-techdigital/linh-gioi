@@ -16,6 +16,7 @@ namespace LinhGioi.UI
             Label emptyCharacterHint,
             VisualElement lobbyContent,
             VisualElement selectedPreview,
+            Label selectedName,
             VisualElement createPanel)
         {
             var width = layout.Width;
@@ -27,11 +28,12 @@ namespace LinhGioi.UI
                 RuntimeUiFactory.ApplyEmptyCharacterCardDensity(emptyCharacterCard, layout.CharacterHallDensity);
             ApplyEmptyHint(layout, emptyCharacterHint);
             RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);
-            RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, layout, width);
+            RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width);
             ApplyCreatePanel(layout, width, createPanel);
         }
 
         internal static void ApplyCreateFormState(
+            RuntimeUiLayoutProfile layout,
             bool isMobileProfile,
             bool hasSelectedCharacter,
             bool createFormExpanded,
@@ -51,12 +53,13 @@ namespace LinhGioi.UI
             }
             if (createHint != null)
             {
+                var showDesktopHint = !isMobileProfile && !layout.IsTablet && !collapsed;
                 createHint.text = collapsed
                     ? "Tu sĩ đã sẵn sàng."
                     : hasSelectedCharacter
                         ? "Nhập danh xưng mới nếu muốn tạo thêm hồ sơ."
-                        : "Đặt danh xưng, chọn mạch khởi đầu, rồi bước qua Linh Môn.";
-                createHint.style.display = (!isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None;
+                        : "Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.";
+                createHint.style.display = showDesktopHint ? DisplayStyle.Flex : DisplayStyle.None;
             }
             if (characterName != null)
             {
@@ -70,7 +73,9 @@ namespace LinhGioi.UI
                 createPanel.style.flexDirection = collapsed && !isMobileProfile ? FlexDirection.Row : FlexDirection.Column;
                 createPanel.style.alignItems = collapsed && !isMobileProfile ? Align.Center : Align.Stretch;
                 createPanel.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
-                createPanel.style.width = !hasSelectedCharacter && !isMobileProfile ? Length.Percent(RuntimeUiSizing.CharacterCreateStandalonePanelWidthPercent) : Length.Percent(100);
+                createPanel.style.width = layout.IsMobile
+                    ? Mathf.Clamp(layout.Width * 0.36f, 320f, 360f)
+                    : !hasSelectedCharacter && !isMobileProfile ? Length.Percent(RuntimeUiSizing.CharacterCreateStandalonePanelWidthPercent) : Length.Percent(100);
                 createPanel.style.opacity = collapsed ? 0.72f : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
                 createPanel.style.minHeight = collapsed ? (isMobileProfile ? 76 : 96) : RuntimeUiSizing.CharacterCreatePanelMinHeight;
                 createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 86 : 108) : RuntimeUiSizing.CharacterCreatePanelMaxHeight;

@@ -169,13 +169,15 @@ namespace LinhGioi.UI
             return preview;
         }
 
-        internal static void ApplySelectedCharacterPreviewResponsive(VisualElement preview, RuntimeUiLayoutProfile layout, int viewportWidth)
+        internal static void ApplySelectedCharacterPreviewResponsive(VisualElement preview, Label selectedName, RuntimeUiLayoutProfile layout, int viewportWidth)
         {
             if (preview == null) return;
             preview.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
             preview.style.maxWidth = layout.IsMobile
                 ? Mathf.Clamp(viewportWidth * 0.48f, 300f, 390f)
                 : layout.IsTablet ? 374 : RuntimeUiSizing.CharacterPreviewMaxWidth;
+            if (selectedName != null)
+                selectedName.style.fontSize = layout.IsTablet ? RuntimeUiTypography.SelectedCharacterNameTabletFontSize : RuntimeUiTypography.SelectedCharacterNameFontSize;
         }
 
         internal static VisualElement NewCharacterProfileHero(RuntimeUiLayoutProfile layout, VisualElement portrait, VisualElement copy)

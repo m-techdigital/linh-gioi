@@ -1,12 +1,14 @@
 # Linh Giới Online — Project State
 
-Last updated: `2026-09-05`
+Last updated: `2026-09-06`
 
 ## Continuous workflow status
 
 Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
+
+Latest player-visible batch: `LGO_CHARACTER_HALL_CREATE_HINT_RESPONSIVE_POLISH_READY` keeps the first-time Character Hall create form cleaner across desktop/tablet/mobile, with refreshed screenshot evidence and no final visual pass claim.
 
 Current visual/runtime evidence harness command:
 

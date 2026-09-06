@@ -70,7 +70,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);",
-        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, layout, width);",
+        "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width);",
         "Position.Absolute",
     )
     require(

@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: runtime UI/world/combat source now avoids V2 registry fallback dependencies; exact V2 registry scanning reports 0 remaining V2 references and 0 fallback-only references while V2 `Resources` payload remains structural cleanup debt; refreshed screenshots were reviewed as readable, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: Character Hall first-time create form now uses muted game copy instead of a framed hint row, hides that helper copy on tablet/mobile, and clamps the mobile create panel so it no longer overflows the viewport; desktop/tablet/mobile screenshots were reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -154,6 +154,8 @@ Current focus update: Character Hall first-time create form width balance is rea
 Current focus update: secondary button V2 dependency cleanup is ready under `LGO_RUNTIME_UI_SECONDARY_BUTTON_V2_DEPENDENCY_CLEANUP_READY`; `RuntimeUiFactory.NewSecondaryButton` now uses code-side V3B-style framing instead of V2 `ButtonSecondaryTexture`, and runtime screenshots remain readable.
 
 Current focus update: primary button V2 dependency cleanup is ready under `LGO_RUNTIME_UI_PRIMARY_BUTTON_V2_DEPENDENCY_CLEANUP_READY`; primary login buttons use V3B gold texture when available and code-side fallback framing instead of V2 primary/disabled textures.
+
+Current focus update: Character Hall first-time create form readability is polished under `LGO_CHARACTER_HALL_CREATE_HINT_RESPONSIVE_POLISH_READY`; desktop uses a muted cultivation hint instead of a second framed row, tablet/mobile keep the form compact, and refreshed screenshots were reviewed without claiming final visual pass.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 

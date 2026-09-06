@@ -526,9 +526,13 @@ namespace LinhGioi.UI
 
             _createTitle = NewSectionTitle("Tạo Tu Sĩ");
             _createPanel.Add(_createTitle);
-            var createHint = NewCharacterHallStatusLabel("Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.", RuntimeArtCatalog.Muted, layout);
+            var createHint = NewMutedLabel("Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.");
             _createHint = createHint;
-            createHint.name = "LGO Character Create Form Game Copy v1";
+            createHint.name = "LGO Character Create Form Muted Game Copy v2";
+            createHint.style.maxWidth = RuntimeUiSizing.CharacterNameFieldMaxWidth;
+            createHint.style.alignSelf = Align.Center;
+            createHint.style.unityTextAlign = TextAnchor.MiddleCenter;
+            createHint.style.marginBottom = 6;
             _createPanel.Add(createHint);
             _characterName = NewLobbyTextField("", "LinhGioiHero", "Nhập danh xưng tu sĩ.");
             _characterName.name = "LGO Character Create Form Framed Input v1";
@@ -894,6 +898,7 @@ namespace LinhGioi.UI
         private void ApplyCharacterCreateFormState()
         {
             RuntimeCharacterHallResponsiveLayout.ApplyCreateFormState(
+                CurrentLayoutProfile(),
                 _isMobileProfile,
                 _selectedCharacter != null,
                 _createFormExpanded,
@@ -1182,6 +1187,7 @@ namespace LinhGioi.UI
                 _emptyCharacterHint,
                 _lobbyContent,
                 _selectedPreview,
+                _selectedName,
                 _createPanel);
             ApplyCharacterCreateFormState();
             ApplyCharacterHallActionHierarchy();

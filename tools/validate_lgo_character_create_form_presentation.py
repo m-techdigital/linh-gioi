@@ -49,10 +49,12 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO Character Create Form Game Copy v1",
+        "LGO Character Create Form Muted Game Copy v2",
         "LGO Character Create Form Framed Input v1",
         '"Tạo tu sĩ"',
         "Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.",
+        "var createHint = NewMutedLabel(\"Danh xưng tu sĩ - Mạch khởi đầu: Kiếm tu sơ nhập.\");",
+        "createHint.style.alignSelf = Align.Center;",
         "_characterName = NewLobbyTextField(\"\", \"LinhGioiHero\", \"Nhập danh xưng tu sĩ.\");",
     )
     require(
@@ -63,6 +65,10 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "CharacterCreateStandalonePanelWidthPercent",
+        "var showDesktopHint = !isMobileProfile && !layout.IsTablet && !collapsed;",
+        "createHint.style.display = showDesktopHint ? DisplayStyle.Flex : DisplayStyle.None;",
+        "createPanel.style.width = layout.IsMobile",
+        "Mathf.Clamp(layout.Width * 0.36f, 320f, 360f)",
         "characterActionRow.style.justifyContent = !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;",
     )
     require(

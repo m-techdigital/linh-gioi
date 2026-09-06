@@ -22,6 +22,7 @@ namespace LinhGioi.UI
         internal const int EmptyCharacterHintMobileFontSize = 13;
         internal const int EmptyCharacterHintDesktopFontSize = 14;
         internal const int SelectedCharacterNameFontSize = 21;
+        internal const int SelectedCharacterNameTabletFontSize = 18;
         internal const int PrimaryButtonFontSize = 16;
 
         internal const int WorldMetaFontSize = 12;
