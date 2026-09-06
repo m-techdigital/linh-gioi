@@ -10,17 +10,20 @@ Usage:
   ./tools/lgo_local_artifact_cleanup.sh --dry-run
   ./tools/lgo_local_artifact_cleanup.sh --apply
   ./tools/lgo_local_artifact_cleanup.sh --apply-player-build
+  ./tools/lgo_local_artifact_cleanup.sh --apply-unity-cache
   ./tools/lgo_local_artifact_cleanup.sh --apply-all
 
-Reports or removes local generated handoff archives under build/ only.
+Reports or removes local generated handoff archives under build/ and optional Unity local caches.
 It never touches source assets, reference art, protocol, gamedata, ADR, or design tokens.
 It keeps visual evidence and dev-loop logs because task ledgers may point at them.
 Use --apply-player-build only when you want to delete the local Unity Player build; it can be rebuilt by the visual runtime harness.
+Use --apply-unity-cache only when you want to delete client/Unity/Library; Unity can rebuild it, but the next Editor/build run may be slow.
+--apply-all intentionally excludes client/Unity/Library so broad cleanup does not trigger an expensive Unity reimport by accident.
 USAGE
 }
 
 case "$MODE" in
-  --dry-run|--apply|--apply-player-build|--apply-all) ;;
+  --dry-run|--apply|--apply-player-build|--apply-unity-cache|--apply-all) ;;
   --help|-h) usage; exit 0 ;;
   *) usage >&2; exit 2 ;;
 esac
@@ -38,7 +41,7 @@ if [[ ! -d build ]]; then
 fi
 
 echo "LGO_LOCAL_ARTIFACT_CLEANUP_SIZE_BEFORE"
-for dir in build build/unity-player-macos build/chatgpt-handoff build/visual-evidence build/dev-loop; do
+for dir in build build/unity-player-macos build/chatgpt-handoff build/visual-evidence build/dev-loop client/Unity/Library; do
   if [[ -d "$dir" ]]; then
     du -sh "$dir"
   fi
@@ -51,6 +54,11 @@ done
   if [[ "$MODE" == "--dry-run" || "$MODE" == "--apply-player-build" || "$MODE" == "--apply-all" ]]; then
     if [[ -d build/unity-player-macos ]]; then
       printf '%s\n' "build/unity-player-macos"
+    fi
+  fi
+  if [[ "$MODE" == "--dry-run" || "$MODE" == "--apply-unity-cache" ]]; then
+    if [[ -d client/Unity/Library ]]; then
+      printf '%s\n' "client/Unity/Library"
     fi
   fi
 } > "$TARGET_LIST"
@@ -76,6 +84,13 @@ while IFS= read -r target; do
     build/unity-player-macos)
       rm -rf "$target"
       ;;
+    client/Unity/Library)
+      if [[ "$MODE" != "--apply-unity-cache" ]]; then
+        echo "FIX_REQUIRED refusing Unity cache removal outside --apply-unity-cache: $target" >&2
+        exit 3
+      fi
+      rm -rf "$target"
+      ;;
     *)
       echo "FIX_REQUIRED refusing to remove unexpected path: $target" >&2
       exit 3
@@ -84,7 +99,7 @@ while IFS= read -r target; do
 done < "$TARGET_LIST"
 
 echo "LGO_LOCAL_ARTIFACT_CLEANUP_SIZE_AFTER"
-for dir in build build/unity-player-macos build/chatgpt-handoff build/visual-evidence build/dev-loop; do
+for dir in build build/unity-player-macos build/chatgpt-handoff build/visual-evidence build/dev-loop client/Unity/Library; do
   if [[ -d "$dir" ]]; then
     du -sh "$dir"
   fi
