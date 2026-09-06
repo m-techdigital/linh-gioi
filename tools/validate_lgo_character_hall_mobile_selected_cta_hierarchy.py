@@ -53,14 +53,17 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "LGO Character Hall Mobile Selected CTA Hierarchy v1",
         "private void ApplyCharacterHallActionHierarchy()",
-        "var selected = _selectedCharacter != null;",
-        "var mobileSelected = _isMobileProfile && selected;",
-        "if (selected)",
+        "RuntimeCharacterHallResponsiveLayout.ApplyActionHierarchy(",
         "LGO Character Hall Selected Create Collapse v1",
-        "_createButton.text = _createFormExpanded ? \"Tạo tu sĩ\" : \"Tạo thêm\";",
-        "_characterActionRow.Add(_enterWorldButton);",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
+        "LGO Character Hall Mobile Selected CTA Hierarchy v1",
+        "var mobileSelected = isMobileProfile && hasSelectedCharacter;",
+        "if (hasSelectedCharacter)",
+        "createButton.text = createFormExpanded ? \"Tạo tu sĩ\" : \"Tạo thêm\";",
+        "characterActionRow.Add(enterWorldButton);",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-MOBILE-SELECTED-CTA-HIERARCHY-PASS-v1.0.md",

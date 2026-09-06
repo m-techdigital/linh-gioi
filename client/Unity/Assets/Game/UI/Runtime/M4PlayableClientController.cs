@@ -894,38 +894,16 @@ namespace LinhGioi.UI
 
         private void ApplyCharacterCreateFormState()
         {
-            var selected = _selectedCharacter != null;
-            var collapsed = selected && !_createFormExpanded;
-            if (_createTitle != null)
-            {
-                _createTitle.text = collapsed ? "Sẵn sàng" : selected ? "Tạo thêm tu sĩ" : "Tạo Tu Sĩ";
-                _createTitle.style.marginBottom = collapsed ? 2 : 8;
-                _createTitle.style.unityTextAlign = collapsed && !_isMobileProfile ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
-            }
-            if (_createHint != null)
-            {
-                _createHint.text = collapsed
-                    ? "Tu sĩ đã sẵn sàng."
-                    : selected
-                        ? "Nhập danh xưng mới nếu muốn tạo thêm hồ sơ."
-                        : "Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.";
-                _createHint.style.display = (!_isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None;
-            }
-            if (_characterName != null) _characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_classId != null) _classId.style.display = DisplayStyle.None;
-            if (_createPanel != null)
-            {
-                _createPanel.style.flexDirection = collapsed && !_isMobileProfile ? FlexDirection.Row : FlexDirection.Column;
-                _createPanel.style.alignItems = collapsed && !_isMobileProfile ? Align.Center : Align.Stretch;
-                _createPanel.style.opacity = collapsed ? 0.72f : selected ? (_isMobileProfile ? 0.82f : 0.88f) : 1f;
-                _createPanel.style.minHeight = collapsed ? (_isMobileProfile ? 76 : 96) : RuntimeUiSizing.CharacterCreatePanelMinHeight;
-                if (collapsed) _createPanel.style.maxHeight = _isMobileProfile ? 86 : 108;
-            }
-            if (_characterActionRow != null)
-            {
-                _characterActionRow.style.marginLeft = collapsed && !_isMobileProfile ? 18 : 0;
-                _characterActionRow.style.flexGrow = collapsed && !_isMobileProfile ? 1 : 0;
-            }
+            RuntimeCharacterHallResponsiveLayout.ApplyCreateFormState(
+                _isMobileProfile,
+                _selectedCharacter != null,
+                _createFormExpanded,
+                _createTitle,
+                _createHint,
+                _characterName,
+                _classId,
+                _createPanel,
+                _characterActionRow);
             ApplyCharacterHallActionHierarchy();
         }
 
@@ -1251,53 +1229,13 @@ namespace LinhGioi.UI
 
         private void ApplyCharacterHallActionHierarchy()
         {
-            if (_characterActionRow == null || _createButton == null || _enterWorldButton == null) return;
-            var selected = _selectedCharacter != null;
-            var mobileSelected = _isMobileProfile && selected;
-            _characterActionRow.Clear();
-            if (selected)
-            {
-                // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state on every profile.
-                _enterWorldButton.text = "Vào sân luyện";
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    _enterWorldButton,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight : RuntimeUiSpacing.CharacterActionButtonMinHeight,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileFontSize : RuntimeUiSpacing.CharacterEnterWorldButtonFontSize,
-                    true);
-                _enterWorldButton.style.marginTop = RuntimeUiSpacing.CharacterSelectedPrimaryMobileMarginTop;
-                _enterWorldButton.style.opacity = 1f;
-                _enterWorldButton.tooltip = "Bước qua Linh Môn vào sân luyện.";
-                _createButton.text = _createFormExpanded ? "Tạo tu sĩ" : "Tạo thêm";
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    _createButton,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinHeight : RuntimeUiSpacing.CharacterActionButtonMinHeight,
-                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileFontSize : RuntimeUiSpacing.CharacterCreateButtonFontSize);
-                _createButton.style.opacity = 0.82f;
-                _characterActionRow.Add(_enterWorldButton);
-                _characterActionRow.Add(_createButton);
-                return;
-            }
-
-            _createButton.text = "Tạo tu sĩ";
-            RuntimeUiSkin.ApplyButtonMetrics(
+            RuntimeCharacterHallResponsiveLayout.ApplyActionHierarchy(
+                _isMobileProfile,
+                _selectedCharacter != null,
+                _createFormExpanded,
+                _characterActionRow,
                 _createButton,
-                RuntimeUiSpacing.CharacterActionButtonMinWidth,
-                RuntimeUiSpacing.CharacterActionButtonMinHeight,
-                RuntimeUiSpacing.CharacterCreateButtonFontSize);
-            _createButton.style.opacity = 1f;
-            _enterWorldButton.text = "Vào sân luyện";
-            RuntimeUiSkin.ApplyButtonMetrics(
-                _enterWorldButton,
-                RuntimeUiSpacing.CharacterActionButtonMinWidth,
-                RuntimeUiSpacing.CharacterActionButtonMinHeight,
-                RuntimeUiSpacing.CharacterEnterWorldButtonFontSize,
-                true);
-            _enterWorldButton.style.opacity = _selectedCharacter == null ? 0.46f : 1f;
-            _enterWorldButton.tooltip = _selectedCharacter == null ? "Chọn hoặc tạo tu sĩ trước khi vào sân luyện." : "Bước qua Linh Môn vào sân luyện.";
-            _characterActionRow.Add(_createButton);
-            _characterActionRow.Add(_enterWorldButton);
+                _enterWorldButton);
         }
 
         private void TriggerLocalCombat()

@@ -31,6 +31,106 @@ namespace LinhGioi.UI
             ApplyCreatePanel(layout, width, createPanel);
         }
 
+        internal static void ApplyCreateFormState(
+            bool isMobileProfile,
+            bool hasSelectedCharacter,
+            bool createFormExpanded,
+            Label createTitle,
+            Label createHint,
+            TextField characterName,
+            TextField classId,
+            VisualElement createPanel,
+            VisualElement characterActionRow)
+        {
+            var collapsed = hasSelectedCharacter && !createFormExpanded;
+            if (createTitle != null)
+            {
+                createTitle.text = collapsed ? "Sẵn sàng" : hasSelectedCharacter ? "Tạo thêm tu sĩ" : "Tạo Tu Sĩ";
+                createTitle.style.marginBottom = collapsed ? 2 : 8;
+                createTitle.style.unityTextAlign = collapsed && !isMobileProfile ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
+            }
+            if (createHint != null)
+            {
+                createHint.text = collapsed
+                    ? "Tu sĩ đã sẵn sàng."
+                    : hasSelectedCharacter
+                        ? "Nhập danh xưng mới nếu muốn tạo thêm hồ sơ."
+                        : "Mạch tu luyện khởi đầu: Kiếm tu sơ nhập.";
+                createHint.style.display = (!isMobileProfile && !collapsed) ? DisplayStyle.Flex : DisplayStyle.None;
+            }
+            if (characterName != null) characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
+            if (classId != null) classId.style.display = DisplayStyle.None;
+            if (createPanel != null)
+            {
+                createPanel.style.flexDirection = collapsed && !isMobileProfile ? FlexDirection.Row : FlexDirection.Column;
+                createPanel.style.alignItems = collapsed && !isMobileProfile ? Align.Center : Align.Stretch;
+                createPanel.style.opacity = collapsed ? 0.72f : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
+                createPanel.style.minHeight = collapsed ? (isMobileProfile ? 76 : 96) : RuntimeUiSizing.CharacterCreatePanelMinHeight;
+                createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 86 : 108) : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
+            }
+            if (characterActionRow != null)
+            {
+                characterActionRow.style.marginLeft = collapsed && !isMobileProfile ? 18 : 0;
+                characterActionRow.style.flexGrow = collapsed && !isMobileProfile ? 1 : 0;
+            }
+        }
+
+        internal static void ApplyActionHierarchy(
+            bool isMobileProfile,
+            bool hasSelectedCharacter,
+            bool createFormExpanded,
+            VisualElement characterActionRow,
+            Button createButton,
+            Button enterWorldButton)
+        {
+            if (characterActionRow == null || createButton == null || enterWorldButton == null) return;
+            var mobileSelected = isMobileProfile && hasSelectedCharacter;
+            characterActionRow.Clear();
+            if (hasSelectedCharacter)
+            {
+                // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state on every profile.
+                enterWorldButton.text = "Vào sân luyện";
+                RuntimeUiSkin.ApplyButtonMetrics(
+                    enterWorldButton,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight : RuntimeUiSpacing.CharacterActionButtonMinHeight,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedPrimaryMobileFontSize : RuntimeUiSpacing.CharacterEnterWorldButtonFontSize,
+                    true);
+                enterWorldButton.style.marginTop = RuntimeUiSpacing.CharacterSelectedPrimaryMobileMarginTop;
+                enterWorldButton.style.opacity = 1f;
+                enterWorldButton.tooltip = "Bước qua Linh Môn vào sân luyện.";
+                createButton.text = createFormExpanded ? "Tạo tu sĩ" : "Tạo thêm";
+                RuntimeUiSkin.ApplyButtonMetrics(
+                    createButton,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinWidth : RuntimeUiSpacing.CharacterActionButtonMinWidth,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileMinHeight : RuntimeUiSpacing.CharacterActionButtonMinHeight,
+                    mobileSelected ? RuntimeUiSpacing.CharacterSelectedSecondaryMobileFontSize : RuntimeUiSpacing.CharacterCreateButtonFontSize);
+                createButton.style.opacity = 0.82f;
+                characterActionRow.Add(enterWorldButton);
+                characterActionRow.Add(createButton);
+                return;
+            }
+
+            createButton.text = "Tạo tu sĩ";
+            RuntimeUiSkin.ApplyButtonMetrics(
+                createButton,
+                RuntimeUiSpacing.CharacterActionButtonMinWidth,
+                RuntimeUiSpacing.CharacterActionButtonMinHeight,
+                RuntimeUiSpacing.CharacterCreateButtonFontSize);
+            createButton.style.opacity = 1f;
+            enterWorldButton.text = "Vào sân luyện";
+            RuntimeUiSkin.ApplyButtonMetrics(
+                enterWorldButton,
+                RuntimeUiSpacing.CharacterActionButtonMinWidth,
+                RuntimeUiSpacing.CharacterActionButtonMinHeight,
+                RuntimeUiSpacing.CharacterEnterWorldButtonFontSize,
+                true);
+            enterWorldButton.style.opacity = 0.46f;
+            enterWorldButton.tooltip = "Chọn hoặc tạo tu sĩ trước khi vào sân luyện.";
+            characterActionRow.Add(createButton);
+            characterActionRow.Add(enterWorldButton);
+        }
+
         private static void ApplyPanel(RuntimeUiLayoutProfile layout, int width, int height, VisualElement lobbyPanel)
         {
             if (lobbyPanel == null) return;

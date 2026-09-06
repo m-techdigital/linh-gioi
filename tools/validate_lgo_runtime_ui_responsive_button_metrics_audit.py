@@ -75,6 +75,10 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "RuntimeCharacterHallResponsiveLayout.ApplyActionHierarchy(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "RuntimeUiSkin.ApplyButtonMetrics(",
         "RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinWidth",
         "RuntimeUiSpacing.CharacterSelectedPrimaryMobileMinHeight",

@@ -62,9 +62,13 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "RuntimeCharacterHallResponsiveLayout.ApplyActionHierarchy(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "LGO Character Hall Mobile Selected CTA Hierarchy v1",
-        "_enterWorldButton.style.opacity = _selectedCharacter == null ? 0.46f : 1f;",
-        "_enterWorldButton.tooltip = _selectedCharacter == null ? \"Chọn hoặc tạo tu sĩ trước khi vào sân luyện.\"",
+        "enterWorldButton.style.opacity = 0.46f;",
+        "enterWorldButton.tooltip = \"Chọn hoặc tạo tu sĩ trước khi vào sân luyện.\"",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-MOBILE-SELECTED-CTA-EVIDENCE-REFRESH-v1.0.md",
