@@ -900,10 +900,11 @@ namespace LinhGioi.UI
             foreach (var character in _characters)
             {
                 var captured = character;
-                _characterList.Add(NewListButton(character.name, "Kiếm tu sơ nhập", () => SelectCharacter(captured)));
+                var button = NewListButton(character.name, "Kiếm tu sơ nhập", () => SelectCharacter(captured));
+                button.userData = character.characterId;
+                _characterList.Add(button);
             }
-            _characterList.Add(NewReadabilityRow("Sẵn sàng", "Chọn hồ sơ rồi bước qua Linh Môn.", RuntimeArtCatalog.Spirit));
-            SelectCharacter(_characters[0]);
+            SelectCharacter(Array.Find(_characters, character => character.characterId == _selectedCharacter?.characterId) ?? _characters[0]);
         }
 
         private async Task CreateCharacterAsync()
@@ -976,6 +977,7 @@ namespace LinhGioi.UI
             _characterNameError = null;
             _selectedCharacter = character;
             _createFormExpanded = character == null;
+            _characterList.Query<Button>(className: "lgo-list-item").ForEach(button => ApplyListButtonSelection(button, Equals(button.userData, character?.characterId)));
             UpdateSelectedPreview(character);
             _enterWorldButton.SetEnabled(character != null);
             _status.text = character == null ? "Tạo hoặc chọn tu sĩ" : "Đã chọn: " + character.name;

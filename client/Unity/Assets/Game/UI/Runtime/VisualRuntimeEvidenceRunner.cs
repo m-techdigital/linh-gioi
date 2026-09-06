@@ -23,6 +23,8 @@ namespace LinhGioi.UI
             "character-create-invalid.png",
             "character-create-reflow.png",
             "character-create-cancelled.png",
+            "character-roster-selected.png",
+            "character-roster-reselected.png",
             "enter-world.png",
             "world-hub.png",
             "near-gatekeeper-prompt.png",
@@ -168,6 +170,21 @@ namespace LinhGioi.UI
                 "Character Create Cancelled",
                 "docs/design/RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0.md",
                 "Cancel returns to the selected hero and enter-world action without navigation or character mutation");
+            yield return WaitForTask(_controller.CaptureEvidenceSecondCharacterAsync());
+            yield return WaitFrames(6);
+            _controller.AssertSelectedRosterForEvidence();
+            yield return CaptureCheckpoint(
+                "character-roster-selected",
+                "New Character Selected",
+                "docs/reference-ui/lgo-runtime-ui-north-star-v1.png",
+                "The newly created hero is selected and exactly one roster row is highlighted");
+            yield return _controller.CaptureEvidenceReselectFirstCharacter();
+            yield return WaitFrames(6);
+            yield return CaptureCheckpoint(
+                "character-roster-reselected",
+                "Roster Selection Changed",
+                "docs/reference-ui/lgo-runtime-ui-north-star-v1.png",
+                "Submitting another roster row changes both the highlight and hero preview");
             yield return WaitForTask(_controller.CaptureEvidenceEnterWorldAsync());
             yield return WaitFrames(10);
             yield return CaptureCheckpoint(

@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using System;
 using System.Collections;
 using LinhGioi.Account;
+using LinhGioi.Art;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -97,6 +98,52 @@ namespace LinhGioi.UI
             _characterName.value = "EvidenceHero";
             if (_characterNameError != null)
                 throw new InvalidOperationException("Editing a valid name did not clear the inline error.");
+        }
+
+        internal async Task CaptureEvidenceSecondCharacterAsync()
+        {
+            OnCreateCharacterAction();
+            _characterName.value = "EvidenceTwin";
+            await CreateCharacterAsync();
+            if (_characters.Length != 2 || _selectedCharacter == null || _selectedCharacter.name != "EvidenceTwin")
+                throw new InvalidOperationException("Creating the second character must select it: actual=" + _selectedCharacter?.name);
+            var createdId = _selectedCharacter.characterId;
+            await RefreshCharactersAsync();
+            if (_selectedCharacter?.characterId != createdId)
+                throw new InvalidOperationException("Refreshing the roster lost the selected character.");
+            Debug.Log("LGO_SECOND_CHARACTER_SELECTED_PASS");
+        }
+
+        internal void AssertSelectedRosterForEvidence()
+        {
+            var selectedCount = 0;
+            foreach (var button in _characterList.Query<Button>(className: "lgo-list-item").ToList())
+            {
+                var expected = Equals(button.userData, _selectedCharacter.characterId);
+                if (button.ClassListContains("lgo-list-selected") != expected
+                    || (button.resolvedStyle.borderTopColor == RuntimeArtCatalog.Gold) != expected)
+                    throw new InvalidOperationException("Roster highlight does not match the selected character.");
+                if (expected) selectedCount++;
+            }
+            if (selectedCount != 1 || _selectedName.text != _selectedCharacter.name)
+                throw new InvalidOperationException("Roster and character preview must agree on one selection.");
+        }
+
+        internal IEnumerator CaptureEvidenceReselectFirstCharacter()
+        {
+            var firstId = _characters[0].characterId;
+            var button = _characterList.Query<Button>(className: "lgo-list-item").ToList().Find(row => Equals(row.userData, firstId));
+            if (button == null) throw new InvalidOperationException("First character row is missing.");
+            using (var submit = NavigationSubmitEvent.GetPooled())
+            {
+                submit.target = button;
+                button.SendEvent(submit);
+            }
+            yield return null;
+            if (_selectedCharacter.characterId != firstId)
+                throw new InvalidOperationException("Submitting the roster row did not select the first character.");
+            AssertSelectedRosterForEvidence();
+            Debug.Log("LGO_ROSTER_SELECTION_SWITCH_PASS input=navigation-submit");
         }
 
         internal async Task CaptureEvidenceEnterWorldAsync()

@@ -722,15 +722,25 @@ namespace LinhGioi.UI
         internal static Button NewListButton(string name, string classId, Action action)
         {
             var button = NewSecondaryButton(name + "\n" + classId, action);
+            button.AddToClassList("lgo-list-item");
             RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.ListButtonMinWidth, RuntimeUiSpacing.ListButtonMinHeight);
             RuntimeUiOverflowGuard.ApplyButton(button);
             button.style.minWidth = 0;
             button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleLeft;
             button.style.paddingLeft = RuntimeUiSpacing.ListButtonPaddingLeft;
-            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.15f, 0.25f, 0.88f), RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
-            button.tooltip = "Chọn nhân vật tu luyện";
+            ApplyListButtonSelection(button, false);
             return button;
+        }
+
+        internal static void ApplyListButtonSelection(Button button, bool selected)
+        {
+            button.EnableInClassList("lgo-list-selected", selected);
+            var border = selected ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.SurfaceRaised;
+            RuntimeUiSkin.ApplyCompactActionFrame(button,
+                selected ? new Color(0.03f, 0.15f, 0.25f, 0.88f) : new Color(0.02f, 0.05f, 0.08f, 0.72f),
+                border, border, border, border);
+            button.tooltip = selected ? "Nhân vật đang chọn" : "Chọn nhân vật tu luyện";
         }
 
         internal static VisualElement NewRuntimeIcon(Texture2D texture, int size, string tooltip)

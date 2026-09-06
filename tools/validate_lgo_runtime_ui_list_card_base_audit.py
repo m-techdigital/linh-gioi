@@ -71,7 +71,8 @@ def main() -> int:
     controller = require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "var emptyCard = NewEmptyCharacterCard(layout, emptyTitle, empty);",
-        "_characterList.Add(NewListButton(character.name, \"Kiếm tu sơ nhập\", () => SelectCharacter(captured)));",
+        "var button = NewListButton(character.name, \"Kiếm tu sơ nhập\", () => SelectCharacter(captured));",
+        "ApplyListButtonSelection(button, Equals(button.userData, character?.characterId))",
     )
     if "RuntimeUiSkin.ApplyEmptyCharacterCardFrame(emptyCard);" in controller:
         ERRORS.append("M4PlayableClientController still owns empty character card frame setup")
