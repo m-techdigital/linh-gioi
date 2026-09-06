@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_WORLD_HUB_PERIMETER_DEPTH_READY` adds sparse V3B far-edge props plus lightweight procedural mist/path cues so the World Hub reads less empty on desktop without adding image payload or changing gameplay.
+Latest player-visible batch: `LGO_SKILL_PREVIEW_VISIBLE_STATE_READY` makes skill preview feedback persist in the visible combat panel and highlights the selected preview button, so `skill-shadow-bind-preview.png` connects the HUD text to the world telegraph.
 
 Current visual/runtime evidence harness command:
 

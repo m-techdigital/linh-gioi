@@ -82,6 +82,7 @@ namespace LinhGioi.UI
         private Label _combatFeedback;
         private Label _combatCooldown;
         private Label _combatAuthority;
+        private Label _skillPreviewStatus;
         private Label _skinSource;
         private VisualElement _combatCooldownIcon;
         private Label _worldObjective;
@@ -678,10 +679,13 @@ namespace LinhGioi.UI
             _skillPreviewPanel = NewSectionShell("KỸ NĂNG", "Diễn tập an toàn", "Xem thử kỹ năng", "LGO Skill Preview Sandbox");
             _skillPreviewPanel.style.marginTop = layout.SkillPreviewPanelMarginTop;
             _skillPreviewPanel.Add(NewMutedLabel("Chọn kỹ năng để thấy tư thế, vòng cảnh báo và mạch linh khí ngay trong sân luyện."));
+            _skillPreviewStatus = NewCompactStatusLabel("Đang xem: chưa chọn kỹ năng.", RuntimeArtCatalog.Muted, RuntimeUiSpacing.CombatRangeStatusFontSize);
+            _skillPreviewPanel.Add(_skillPreviewStatus);
             _previewWindSlashButton = NewSecondaryButton("Chém Gió", () => PreviewSkill("Wind Slash", "Chém Gió"));
             _previewShadowBindButton = NewSecondaryButton("Trói Bóng", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
             _previewSpiritGuardButton = NewSecondaryButton("Hộ Linh", () => PreviewSkill("Spirit Guard", "Hộ Linh"));
             _skillPreviewPanel.Add(NewActionRow("LGO Skill Preview Action Row", Justify.FlexStart, 6, 0, _previewWindSlashButton, _previewShadowBindButton, _previewSpiritGuardButton));
+            ApplySkillPreviewButtonState(null);
             _worldHud.Add(_skillPreviewPanel);
         }
 
@@ -1290,7 +1294,33 @@ namespace LinhGioi.UI
             if (_world == null) return;
             _world.PreviewSkillFeedback(previewName);
             RefreshWorldLoopLabels();
+            ApplySkillPreviewButtonState(previewName);
+            if (_skillPreviewStatus != null)
+            {
+                _skillPreviewStatus.text = "Đang xem: " + displayName;
+                _skillPreviewStatus.style.color = RuntimeArtCatalog.Spirit;
+            }
             SetToast("Diễn tập " + displayName + ": hiệu ứng đã hiện trong sân an toàn.", RuntimeArtCatalog.Spirit);
+        }
+
+        private void ApplySkillPreviewButtonState(string activePreviewName)
+        {
+            ApplySkillPreviewButtonState(_previewWindSlashButton, activePreviewName == "Wind Slash");
+            ApplySkillPreviewButtonState(_previewShadowBindButton, activePreviewName == "Shadow Bind");
+            ApplySkillPreviewButtonState(_previewSpiritGuardButton, activePreviewName == "Spirit Guard");
+        }
+
+        private static void ApplySkillPreviewButtonState(Button button, bool active)
+        {
+            if (button == null) return;
+            RuntimeUiSkin.ApplyCompactActionFrame(
+                button,
+                active ? new Color(0.02f, 0.25f, 0.30f, 0.94f) : new Color(0.03f, 0.10f, 0.18f, 0.90f),
+                RuntimeArtCatalog.Spirit,
+                active ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.SurfaceRaised,
+                active ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.SurfaceRaised,
+                active ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Gold);
+            button.style.color = active ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Text;
         }
 
         private void ContinueDialogue()

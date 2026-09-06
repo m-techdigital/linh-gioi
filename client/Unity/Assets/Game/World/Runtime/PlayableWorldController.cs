@@ -304,6 +304,7 @@ namespace LinhGioi.World
                 SetVfxFeedback(PlaceholderVfxFeedbackState.WindSlashPreview, 1.25f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Gold);
                 _interactionText = "Chỉ xem thử: Chém Gió vẽ một cung vàng, không có đối thủ hay kết quả thật.";
+                CombatFeedbackText = "Đang xem Chém Gió: cung vàng hiện quanh người chơi trong sân luyện.";
             }
             else if (previewName == "Shadow Bind")
             {
@@ -311,6 +312,7 @@ namespace LinhGioi.World
                 SetVfxFeedback(PlaceholderVfxFeedbackState.ShadowBindWarning, 1.25f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Danger);
                 _interactionText = "Diễn tập Trói Bóng: vòng cảnh báo hiện rõ quanh Bóng Tối trong sân an toàn.";
+                CombatFeedbackText = "Đang xem Trói Bóng: vòng cảnh báo đỏ khoanh Bóng Tối trong sân an toàn.";
             }
             else
             {
@@ -318,6 +320,7 @@ namespace LinhGioi.World
                 SetVfxFeedback(PlaceholderVfxFeedbackState.SpiritPulse, 1.25f);
                 TriggerLocalPosePulse(RuntimeArtCatalog.Spirit);
                 _interactionText = "Chỉ xem thử: Hộ Linh tạo mạch sáng cho tư thế phòng thủ.";
+                CombatFeedbackText = "Đang xem Hộ Linh: mạch sáng bảo hộ hiện quanh tư thế phòng thủ.";
             }
             InteractionStateChanged?.Invoke();
         }
