@@ -84,7 +84,7 @@ def main() -> int:
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs',
         'CaptureEvidenceShadowBindPreview',
         'ResetLocalCombatPreviewStateForSmoke',
-        'PreviewSkillFeedback("Shadow Bind")',
+        'PreviewSkill("Shadow Bind", "Trói Bóng")',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs',

@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_COMBAT_CTA_WIDTH_READABILITY_READY` widens the local combat CTA metrics so `Tấn công thử` / `Hồi chiêu` read cleanly in the World HUD without changing combat semantics or adding asset payload.
+Latest player-visible batch: `LGO_SKILL_PREVIEW_EVIDENCE_UI_STATE_READY` routes the Shadow Bind evidence checkpoint through the same preview path as player clicks, so HUD status/button state now matches the in-world warning telegraph.
 
 Current visual/runtime evidence harness command:
 

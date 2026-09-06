@@ -90,8 +90,7 @@ namespace LinhGioi.UI
             if (_world == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
             _world.ResetLocalCombatPreviewStateForSmoke();
-            _world.PreviewSkillFeedback("Shadow Bind");
-            RefreshWorldLoopLabels();
+            PreviewSkill("Shadow Bind", "Trói Bóng");
             RefreshCombatAssetUiState();
         }
 
