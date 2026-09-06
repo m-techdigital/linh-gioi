@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_WORLD_OBJECTIVE_PULSE_READABILITY_READY` makes the Gate Keeper objective pulse larger and clearer so the first guided target reads better in mobile World Hub and near-NPC evidence without changing interaction rules. Fresh mobile World Hub/near-object screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_COMBAT_COOLDOWN_BUTTON_COUNTDOWN_READY` adds a visible cooldown countdown to the combat button itself, so mobile target-dummy feedback shows `Hồi 6.0s` instead of a vague disabled `Hồi chiêu` state. Fresh mobile target-dummy screenshot was reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

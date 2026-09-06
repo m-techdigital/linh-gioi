@@ -92,7 +92,7 @@ namespace LinhGioi.World
         public string TargetDummyRangeText => DescribeTargetDummyRangeState();
         public string TargetDummyVisualStateText => DescribeTargetDummyVisualState();
         public string CombatFeedbackText { get; private set; } = "Diễn tập an toàn: đứng gần bia luyện để thử phản hồi.";
-        public string CombatCooldownText => _localCombat.CooldownActive(NowMs()) ? "Hồi chiêu: Đang hồi chiêu mô phỏng." : "Hồi chiêu: Sẵn sàng";
+        public string CombatCooldownText => _localCombat.CooldownActive(NowMs()) ? "Hồi chiêu: Đang hồi chiêu, còn " + CooldownRemainingSecondsText() + "s." : "Hồi chiêu: Sẵn sàng";
         public string CombatAuthorityText { get; private set; } = "Mô phỏng cục bộ: chưa gửi ý định chiến đấu.";
         public bool LocalCombatCoolingDown => _localCombat.CooldownActive(NowMs());
         public bool TargetDummyHitAcknowledged => _targetDummyHitAcknowledged;
@@ -1257,6 +1257,11 @@ namespace LinhGioi.World
             if (distance <= LocalCombatPrototypeState.WindSlashRangeM)
                 return "Tầm đánh: trong tầm " + distance.ToString("0.0", CultureInfo.InvariantCulture) + "m / sẵn sàng gửi ý định.";
             return "Tầm đánh: ngoài tầm " + distance.ToString("0.0", CultureInfo.InvariantCulture) + "m / cần <= " + LocalCombatPrototypeState.WindSlashRangeM.ToString("0.0", CultureInfo.InvariantCulture) + "m.";
+        }
+
+        private string CooldownRemainingSecondsText()
+        {
+            return (_localCombat.CooldownRemainingMs(NowMs()) / 1000f).ToString("0.0", CultureInfo.InvariantCulture);
         }
 
         private sealed class InteractableState

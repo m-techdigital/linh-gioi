@@ -19,6 +19,7 @@ namespace LinhGioi.UI
             bool coolingDown,
             string targetRangeText,
             string feedbackText,
+            string cooldownText,
             string authorityText)
         {
             if (cooldownIcon != null)
@@ -32,7 +33,7 @@ namespace LinhGioi.UI
             {
                 ApplyCombatButtonSkin(localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture, coolingDown);
                 var previewingSkill = ContainsAny(feedbackText, "Đang xem");
-                localCombatButton.text = coolingDown ? "Hồi chiêu" : previewingSkill ? "Thử bia luyện" : "Tấn công thử";
+                localCombatButton.text = coolingDown ? CompactCooldownButtonText(cooldownText) : previewingSkill ? "Thử bia luyện" : "Tấn công thử";
                 localCombatButton.tooltip = coolingDown
                     ? "Đang hồi chiêu: bấm vẫn cho phản hồi từ chối hồi chiêu; đây là nguyên mẫu cục bộ, không phải chiến đấu thật."
                     : previewingSkill
@@ -47,6 +48,14 @@ namespace LinhGioi.UI
             ApplyStatusAccent(feedbackStatus, warning ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Gold);
             ApplyStatusAccent(cooldownStatus, coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit);
             ApplyStatusAccent(authorityStatus, ContainsAny(authorityText, "từ chối", "Từ chối") ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit);
+        }
+
+        private static string CompactCooldownButtonText(string cooldownText)
+        {
+            if (string.IsNullOrWhiteSpace(cooldownText)) return "Hồi chiêu";
+            var marker = "còn ";
+            var index = cooldownText.IndexOf(marker, System.StringComparison.Ordinal);
+            return index < 0 ? "Hồi chiêu" : "Hồi " + cooldownText.Substring(index + marker.Length).TrimEnd('.');
         }
 
         internal static string CompactTargetStatus(string value)

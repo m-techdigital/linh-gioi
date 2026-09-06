@@ -1426,6 +1426,7 @@ namespace LinhGioi.UI
                 _world.LocalCombatCoolingDown,
                 _world.TargetDummyRangeText,
                 _world.CombatFeedbackText,
+                _world.CombatCooldownText,
                 _world.CombatAuthorityText);
         }
 
