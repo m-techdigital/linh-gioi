@@ -4,6 +4,15 @@ using LinhGioi.Art;
 
 namespace LinhGioi.UI
 {
+    internal enum RuntimeUiButtonTier
+    {
+        Small,
+        Compact,
+        Standard,
+        Primary,
+        Hero
+    }
+
     internal static class RuntimeUiSkin
     {
         internal const string FoundationMarker = "LGO Runtime UI Skin Foundation v1";
@@ -79,6 +88,23 @@ namespace LinhGioi.UI
             if (bold) button.style.unityFontStyleAndWeight = FontStyle.Bold;
             button.style.whiteSpace = whiteSpace;
             RuntimeUiOverflowGuard.ApplyButton(button);
+        }
+
+        internal static void ApplyButtonTier(Button button, RuntimeUiButtonTier tier, bool bold = false)
+        {
+            var minWidth = tier == RuntimeUiButtonTier.Small ? RuntimeUiSpacing.ButtonTierSmallMinWidth :
+                tier == RuntimeUiButtonTier.Compact ? RuntimeUiSpacing.ButtonTierCompactMinWidth :
+                tier == RuntimeUiButtonTier.Standard ? RuntimeUiSpacing.ButtonTierStandardMinWidth :
+                tier == RuntimeUiButtonTier.Primary ? RuntimeUiSpacing.ButtonTierPrimaryMinWidth : 0;
+            var minHeight = tier == RuntimeUiButtonTier.Small ? RuntimeUiSpacing.ButtonTierSmallMinHeight :
+                tier == RuntimeUiButtonTier.Compact ? RuntimeUiSpacing.ButtonTierCompactMinHeight :
+                tier == RuntimeUiButtonTier.Standard ? RuntimeUiSpacing.ButtonTierStandardMinHeight :
+                tier == RuntimeUiButtonTier.Primary ? RuntimeUiSpacing.ButtonTierPrimaryMinHeight : RuntimeUiSpacing.ButtonTierHeroMinHeight;
+            var fontSize = tier == RuntimeUiButtonTier.Small ? RuntimeUiSpacing.ButtonTierSmallFontSize :
+                tier == RuntimeUiButtonTier.Compact ? RuntimeUiSpacing.ButtonTierCompactFontSize :
+                tier == RuntimeUiButtonTier.Standard ? RuntimeUiSpacing.ButtonTierStandardFontSize :
+                tier == RuntimeUiButtonTier.Primary ? RuntimeUiSpacing.ButtonTierPrimaryFontSize : RuntimeUiSpacing.ButtonTierHeroFontSize;
+            ApplyButtonMetrics(button, minWidth, minHeight, fontSize, bold || tier == RuntimeUiButtonTier.Primary || tier == RuntimeUiButtonTier.Hero);
         }
 
         internal static void ApplyInputMetrics(TextField field, float maxWidth = 0f, float minHeight = 0f, float marginTop = 0f)

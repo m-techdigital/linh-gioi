@@ -521,7 +521,7 @@ namespace LinhGioi.UI
             var button = NewButton(label, action);
             button.style.backgroundColor = RuntimeArtCatalog.Spirit;
             button.style.color = RuntimeArtCatalog.Background;
-            RuntimeUiSkin.ApplyButtonMetrics(button, minHeight: RuntimeUiSpacing.PrimaryButtonMinHeight, fontSize: RuntimeUiTypography.PrimaryButtonFontSize, bold: true);
+            RuntimeUiSkin.ApplyButtonTier(button, RuntimeUiButtonTier.Hero);
             button.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
             var texture = LgoVisualAssetRegistryV3B.ButtonEnterWorldGoldTexture;
             if (texture != null)
@@ -535,7 +535,7 @@ namespace LinhGioi.UI
         internal static Button NewCompactPrimaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.CompactPrimaryButtonMinWidth, RuntimeUiSpacing.BaseButtonMinHeight, RuntimeUiSpacing.CompactButtonFontSize, true);
+            RuntimeUiSkin.ApplyButtonTier(button, RuntimeUiButtonTier.Primary);
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.22f, 0.34f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit);
             return button;
         }
@@ -543,7 +543,7 @@ namespace LinhGioi.UI
         internal static Button NewQuietButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            RuntimeUiSkin.ApplyButtonMetrics(button, minWidth: 88);
+            RuntimeUiSkin.ApplyButtonTier(button, RuntimeUiButtonTier.Small);
             button.style.backgroundColor = RuntimeArtCatalog.Background;
             button.style.color = RuntimeArtCatalog.Muted;
             return button;
@@ -566,7 +566,7 @@ namespace LinhGioi.UI
         internal static Button NewCompactSecondaryButton(string label, Action action)
         {
             var button = NewButton(label, action);
-            RuntimeUiSkin.ApplyButtonMetrics(button, RuntimeUiSpacing.BaseButtonMinWidth, RuntimeUiSpacing.CompactButtonMinHeight, RuntimeUiSpacing.CompactButtonFontSize);
+            RuntimeUiSkin.ApplyButtonTier(button, RuntimeUiButtonTier.Standard);
             RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.04f, 0.13f, 0.22f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.Gold);
             return button;
         }

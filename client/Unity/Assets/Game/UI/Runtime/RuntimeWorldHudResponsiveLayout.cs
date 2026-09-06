@@ -35,9 +35,9 @@ namespace LinhGioi.UI
             var tablet = layout.IsTablet;
             var dialogueVisible = dialoguePanel != null && dialoguePanel.style.display == DisplayStyle.Flex;
 
-            worldHud.style.minWidth = layout.WorldHudMinWidthFor(dialogueVisible);
-            worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);
-            worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;
+            worldHud.style.minWidth = layout.WorldHudMinWidthFor(false);
+            worldHud.style.maxWidth = layout.WorldHudMaxWidth(false);
+            worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(false) : StyleKeyword.None;
             RuntimeUiSkin.ApplyPadding(
                 worldHud,
                 dialogueVisible ? layout.WorldHudDialoguePaddingHorizontal : layout.WorldHudPaddingHorizontal,
@@ -67,10 +67,9 @@ namespace LinhGioi.UI
 
             if (dialoguePanel != null)
             {
-                ApplyMobileHudChildConstraint(layout, dialoguePanel);
-                dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
-                dialoguePanel.style.marginBottom = layout.DialoguePanelMarginVertical;
+                ApplyDialogueOverlay(layout, dialoguePanel);
                 dialoguePanel.style.maxHeight = layout.DialoguePanelMaxHeight;
+                dialoguePanel.style.height = layout.DialoguePanelMaxHeight;
                 dialoguePanel.style.overflow = Overflow.Hidden;
                 RuntimeUiSkin.ApplyPadding(dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
             }
@@ -107,18 +106,12 @@ namespace LinhGioi.UI
             }
             if (dialogueContinueButton != null)
             {
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    dialogueContinueButton,
-                    mobile ? RuntimeUiSpacing.DialogueContinueMobileMinWidth : RuntimeUiSpacing.DialogueContinueDesktopMinWidth,
-                    mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
+                RuntimeUiSkin.ApplyButtonTier(dialogueContinueButton, mobile ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
                 ApplyDialogueActionButton(dialogueContinueButton);
             }
             if (dialogueCloseButton != null)
             {
-                RuntimeUiSkin.ApplyButtonMetrics(
-                    dialogueCloseButton,
-                    mobile ? RuntimeUiSpacing.DialogueCloseMobileMinWidth : RuntimeUiSpacing.DialogueCloseDesktopMinWidth,
-                    mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
+                RuntimeUiSkin.ApplyButtonTier(dialogueCloseButton, mobile ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
                 ApplyDialogueActionButton(dialogueCloseButton);
             }
             if (dialogueActionRow != null)
@@ -264,6 +257,19 @@ namespace LinhGioi.UI
         {
             // LGO Dialogue Action Sizing Contract v1: action columns own width; labels never force overflow.
             button.style.marginRight = 0;
+        }
+
+        private static void ApplyDialogueOverlay(RuntimeUiLayoutProfile layout, VisualElement dialoguePanel)
+        {
+            // LGO Dialogue Viewport Overlay Contract v1: center within safe viewport; equal top/bottom insets prevent bottom pinning.
+            RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
+                dialoguePanel,
+                RuntimeUiOverlayPlacement.Center,
+                layout.DialogueOverlayWidth,
+                layout.DialoguePanelMaxHeight,
+                layout.DialogueOverlayInsetHorizontal,
+                layout.DialogueOverlayInsetVertical,
+                true);
         }
 
         private static void SetElementVisibility(VisualElement element, bool visible)

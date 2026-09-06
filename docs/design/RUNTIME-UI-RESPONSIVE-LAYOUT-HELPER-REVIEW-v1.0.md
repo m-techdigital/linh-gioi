@@ -46,6 +46,9 @@ If `contentMaxHeight` is smaller than the content's natural height, the content 
 Dialogue current ratios:
 
 - Total dialogue panel max height: mobile `50vh`, tablet `48vh`, desktop `52vh` in UI Toolkit panel-space units.
+- Dialogue is an overlay sibling of the HUD, not a child of the HUD column.
+- Dialogue overlay uses equal top/bottom insets: `(safeHeight - dialogueMaxHeight) / 2`, clamped above the profile margin floor.
+- Dialogue width is clamped from safe viewport width, then left/right insets are computed symmetrically.
 - Dialogue line scroll max height: mobile `12vh`, tablet/desktop `16vh`.
 - Dialogue line scroll min height: mobile `8vh`, tablet/desktop `10vh`.
 - Dialogue panel vertical margin uses one shared top/bottom value per profile, so bottom margin may not be smaller than top margin.
@@ -58,11 +61,14 @@ Every runtime panel must follow these rules:
 - Long narrative/status content is bounded in a content viewport or `ScrollView`; it is never allowed to push actions out of the screen.
 - Primary actions stay visible without scrolling. Secondary content can collapse, hide, or scroll by profile priority.
 - Button metrics come from the profile/system constants for the screen state; button text does not decide container width.
+- Button sizing uses shared semantic tiers from `RuntimeUiButtonTier`: `Small`, `Compact`, `Standard`, `Primary`, and `Hero`. Screen-level code should select a tier by action priority instead of passing one-off height/font values.
 - Horizontal action rows use a column formula. Dialogue actions use two equal columns when both actions must remain visible in a compact HUD.
 - Margin top/bottom is profile-ratio based or shared spacing, not a one-off fixed correction from a single screenshot. Dialogue panels must use symmetrical vertical margins so text length cannot visually pin the panel to the bottom edge.
-- Dialog/modal structure must be explicit: header stays fixed, body owns scrollable content, footer owns progress/actions and does not scroll. Do not add long labels directly under the shell beside action rows.
+- Dialog/modal structure must be explicit: shell/header stays fixed, body owns scrollable content, footer owns progress/actions and does not scroll. Dialog overlays must be siblings of HUD panels, not nested inside HUD flow.
 
 Runtime owner: `RuntimeUiOverflowGuard` centralizes bounded action rows, bounded scroll regions, and responsive action columns.
+
+Overlay owner: `RuntimeUiOverflowGuard.ApplyViewportOverlaySurface` is the shared base for center/left/right overlay placement. New modal/dialog surfaces should select `RuntimeUiOverlayPlacement.Center`, `Left`, or `Right` and pass viewport-derived width, max-height, and insets instead of setting absolute coordinates by hand.
 
 ## Target Case Matrix
 

@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_DIALOGUE_HEADER_BODY_FOOTER_SCROLL_READY` gives Gate Keeper dialogue an explicit header/body/footer structure: header stays fixed, body owns a bounded vertical `ScrollView`, and footer keeps progress/actions visible. A new `npc-dialogue-long.png` evidence checkpoint verifies long text on desktop/tablet/mobile, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_RUNTIME_UI_OVERLAY_BASELINE_READY` adds a shared overlay placement base for center/left/right modal surfaces, moves Gate Keeper dialogue out of the HUD column into a viewport-centered overlay with equal top/bottom insets, centers the mobile session menu through the same base, and routes session/dialogue actions through shared button tiers. Fresh desktop/tablet/mobile screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

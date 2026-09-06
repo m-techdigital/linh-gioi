@@ -58,12 +58,26 @@ def main() -> int:
         'internal static void ApplyActions',
         'internal static void ApplyStatus',
         'internal static void ApplyDetails',
+        'RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(',
+        'RuntimeUiOverlayPlacement.Center',
+        'layout.SessionMenuInsetHorizontal',
+        'layout.SessionMenuInsetVertical',
         'status.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex',
         'objectiveRow.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex',
         'actions.style.justifyContent = layout.IsMobile ? Justify.SpaceBetween : Justify.Center',
         'button.style.width = layout.IsMobile ? Length.Percent(48) : StyleKeyword.Auto',
-        'RuntimeUiSpacing.SessionActionMobileMinHeight',
-        'RuntimeUiSpacing.SessionActionMobileFontSize',
+        'RuntimeUiSkin.ApplyButtonTier(button, layout.IsMobile ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard)',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs',
+        'SessionMenuInsetHorizontal',
+        'SessionMenuInsetVertical',
+        'Height - SessionMenuInsetVertical * 2f',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs',
+        'internal enum RuntimeUiButtonTier',
+        'ApplyButtonTier(Button button, RuntimeUiButtonTier tier',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

@@ -3,9 +3,17 @@ using UnityEngine.UIElements;
 
 namespace LinhGioi.UI
 {
+    internal enum RuntimeUiOverlayPlacement
+    {
+        Left,
+        Center,
+        Right
+    }
+
     internal static class RuntimeUiOverflowGuard
     {
         internal const string Marker = "LGO Runtime UI Overflow Guard v1";
+        internal const string OverlayPlacementMarker = "LGO Runtime UI Overlay Placement Base v1";
 
         internal static void ApplyBoundedActionRow(VisualElement row)
         {
@@ -59,6 +67,48 @@ namespace LinhGioi.UI
                 button.style.marginRight = columns == 1 || i % columns == columns - 1 ? 0 : gap;
                 button.style.marginTop = columns == 1 && i > 0 ? gap : 0;
             }
+        }
+
+        internal static void ApplyViewportOverlaySurface(
+            VisualElement surface,
+            RuntimeUiOverlayPlacement placement,
+            float width,
+            float maxHeight,
+            float horizontalInset,
+            float verticalInset,
+            bool lockVerticalInsets)
+        {
+            if (surface == null) return;
+            surface.style.position = Position.Absolute;
+            surface.style.width = width;
+            surface.style.minWidth = 0;
+            surface.style.maxWidth = width;
+            surface.style.maxHeight = maxHeight;
+            surface.style.overflow = Overflow.Hidden;
+            surface.style.marginTop = 0;
+            surface.style.marginBottom = 0;
+            surface.style.alignSelf = Align.Center;
+            surface.style.flexShrink = 0;
+
+            if (placement == RuntimeUiOverlayPlacement.Center)
+            {
+                surface.style.left = horizontalInset;
+                surface.style.right = horizontalInset;
+            }
+            else if (placement == RuntimeUiOverlayPlacement.Left)
+            {
+                surface.style.left = horizontalInset;
+                surface.style.right = StyleKeyword.Auto;
+            }
+            else
+            {
+                surface.style.left = StyleKeyword.Auto;
+                surface.style.right = horizontalInset;
+            }
+
+            surface.style.top = verticalInset;
+            surface.style.bottom = lockVerticalInsets ? verticalInset : StyleKeyword.Auto;
+            surface.style.height = lockVerticalInsets ? maxHeight : StyleKeyword.Auto;
         }
     }
 }

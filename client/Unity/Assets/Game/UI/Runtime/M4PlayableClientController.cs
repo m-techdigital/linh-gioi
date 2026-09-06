@@ -696,7 +696,7 @@ namespace LinhGioi.UI
             _dialogueActionRow = NewActionRow("LGO Dialogue Action Row", Justify.FlexStart, 6, 0, _dialogueContinueButton, _dialogueCloseButton);
             _dialogueFooter.Add(_dialogueActionRow);
             _dialoguePanel.Add(_dialogueFooter);
-            _worldHud.Add(_dialoguePanel);
+            _root.Add(_dialoguePanel);
             SetDialogueVisible(false);
 
             _savePositionButton = NewCompactPrimaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
@@ -1495,6 +1495,7 @@ namespace LinhGioi.UI
         private void SetDialogueVisible(bool visible)
         {
             SetDisplayed(_dialoguePanel, visible);
+            if (visible) _dialoguePanel.BringToFront();
             SetDisplayed(_localCombatPanel, !visible);
         }
 

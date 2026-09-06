@@ -141,11 +141,18 @@ namespace LinhGioi.UI
         internal int DialoguePanelPaddingVertical => IsMobile ? 9 : 12;
         internal int DialoguePanelMarginVertical => Mathf.RoundToInt(Mathf.Clamp(Height * (IsMobile ? 0.012f : 0.014f), IsMobile ? 6f : 10f, IsMobile ? 10f : 16f));
         internal int DialoguePanelMarginTop => DialoguePanelMarginVertical;
+        internal float DialogueOverlayWidth => IsMobile
+            ? Mathf.Clamp(Width * 0.42f, 330f, 430f)
+            : IsTablet
+                ? Mathf.Clamp(Width * 0.46f, 500f, 680f)
+                : Mathf.Clamp(Width * 0.34f, 420f, 560f);
         internal float DialoguePanelMaxHeight => IsMobile
             ? Mathf.Clamp(Height * 0.50f, 210f, 270f)
             : IsTablet
                 ? Mathf.Clamp(Height * 0.48f, 300f, 390f)
                 : Mathf.Clamp(Height * 0.52f, 360f, 520f);
+        internal float DialogueOverlayInsetHorizontal => Mathf.Max(12f, (Width - DialogueOverlayWidth) * 0.5f);
+        internal float DialogueOverlayInsetVertical => Mathf.Max(DialoguePanelMarginVertical, (Height - DialoguePanelMaxHeight) * 0.5f);
         internal int DialogueContentGap => IsMobile ? 6 : IsTablet ? 8 : 10;
         internal float DialogueLineScrollMinHeight => IsMobile
             ? Mathf.Clamp(Height * 0.08f, 38f, 46f)
@@ -197,13 +204,17 @@ namespace LinhGioi.UI
                 ? Mathf.Clamp(Width * 0.62f, 620f, 820f)
                 : Mathf.Clamp(Width * 0.50f, 760f, 960f);
 
-        internal float SessionMenuRight => IsMobile ? 18f : Mathf.Max(24f, (Width - SessionMenuWidth) * 0.5f);
+        internal float SessionMenuInsetHorizontal => Mathf.Max(IsMobile ? 12f : 24f, (Width - SessionMenuWidth) * 0.5f);
 
-        internal float SessionMenuLeft => IsMobile ? 18f : Mathf.Max(24f, (Width - SessionMenuWidth) * 0.5f);
+        internal float SessionMenuRight => SessionMenuInsetHorizontal;
 
-        internal float SessionMenuTop => IsMobile ? Mathf.Max(8f, Height * 0.06f) : IsTablet ? 118f : 120f;
+        internal float SessionMenuLeft => SessionMenuInsetHorizontal;
 
-        internal float SessionMenuMaxHeight => IsMobile ? Mathf.Max(240f, Height - 70f) : IsTablet ? 430f : 500f;
+        internal float SessionMenuInsetVertical => IsMobile ? Mathf.Clamp(Height * 0.06f, 24f, 42f) : IsTablet ? 118f : 120f;
+
+        internal float SessionMenuTop => SessionMenuInsetVertical;
+
+        internal float SessionMenuMaxHeight => IsMobile ? Mathf.Max(240f, Height - SessionMenuInsetVertical * 2f) : IsTablet ? 430f : 500f;
         internal bool SessionMenuShowsSettings => !IsMobile && !IsTablet && Height >= 1180;
         internal int SessionMenuStatusMarginBottom => 10;
         internal int SessionMenuPaddingHorizontal => IsMobile ? 12 : IsTablet ? 16 : 22;
