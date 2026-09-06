@@ -69,6 +69,11 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_world.InteractionActionText",
         "LGO World Interaction Touch Hint",
+        "FormatWorldObjectiveText",
+        "FormatWorldInteractionHint",
+        "Tới vòng vàng: Người Giữ Cổng.",
+        "Gặp Người Giữ Cổng.",
+        "Ổn định Đá Luyện.",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",

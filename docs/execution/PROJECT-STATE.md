@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_COMBAT_RANGE_STATUS_COMPACT_READY` shortens combat range status to `Tầm: 2.6m / sẵn sàng.`, improving mobile combat HUD scanability while preserving local combat range state.
+Latest player-visible batch: `LGO_MOBILE_WORLD_GUIDANCE_COPY_COMPACT_READY` shortens mobile/tablet guided objective and interaction panel copy while keeping world-space `F Gặp`/`F Luyện` prompts, making the first training steps easier to scan.
 
 Current visual/runtime evidence harness command:
 

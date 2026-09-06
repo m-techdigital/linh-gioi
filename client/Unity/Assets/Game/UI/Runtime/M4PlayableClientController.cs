@@ -938,8 +938,8 @@ namespace LinhGioi.UI
             if (_combatAuthority != null) _combatAuthority.text = _world.CombatAuthorityText;
             RefreshCombatAssetUiState();
             if (_skinSource != null) _skinSource.text = "Nguồn giao diện: asset runtime tối ưu, chưa phải art final.";
-            if (_worldObjective != null) _worldObjective.text = _world.ObjectiveText;
-            if (_interactionHint != null) _interactionHint.text = _world.InteractionActionText;
+            if (_worldObjective != null) _worldObjective.text = FormatWorldObjectiveText(_world.ObjectiveText);
+            if (_interactionHint != null) _interactionHint.text = FormatWorldInteractionHint(_world.InteractionActionText);
             if (_status != null) _status.text = WorldTopStatusText();
             if (_evidenceState.ShowEnterWorldTransition)
             {
@@ -1044,6 +1044,24 @@ namespace LinhGioi.UI
                 return _world.InteractionAcknowledged ? "Hoàn tất" : _world.GuidedTrainingStepName.Replace("Bước 1: tìm Người Giữ Cổng", "Bước 1/2").Replace("Bước 2: ổn định Đá Luyện", "Bước 2/2");
             }
             return _world.InteractionAcknowledged ? "Hoàn tất hướng dẫn" : "Sẵn sàng: " + _world.GuidedTrainingStepName;
+        }
+
+        private string FormatWorldObjectiveText(string value)
+        {
+            if (!_isMobileProfile && string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal)) return value;
+            if (value == "Mục tiêu 1/2: trò chuyện với Người Giữ Cổng.") return "Mục tiêu 1/2: gặp Người Giữ Cổng.";
+            if (value == "Mục tiêu 1/2: lắng nghe Người Giữ Cổng.") return "Mục tiêu 1/2: nghe Người Giữ Cổng.";
+            if (value == "Mục tiêu 2/2: ổn định Đá Luyện.") return "Mục tiêu 2/2: ổn định Đá Luyện.";
+            return value;
+        }
+
+        private string FormatWorldInteractionHint(string value)
+        {
+            if (!_isMobileProfile && string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal)) return value;
+            if (value == "Tới vòng vàng cạnh Người Giữ Cổng.") return "Tới vòng vàng: Người Giữ Cổng.";
+            if (value == "Sẵn sàng: nhấn F để gặp Người Giữ Cổng.") return "Gặp Người Giữ Cổng.";
+            if (value == "Sẵn sàng: nhấn F để ổn định Đá Luyện.") return "Ổn định Đá Luyện.";
+            return value;
         }
 
         private static string MobileSkillPreviewTopStatusText(string feedbackText)
