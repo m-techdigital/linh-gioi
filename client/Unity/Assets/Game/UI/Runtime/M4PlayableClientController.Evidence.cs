@@ -66,8 +66,9 @@ namespace LinhGioi.UI
 
         internal void CaptureEvidenceOpenDialogue()
         {
-            if (_world == null) return;
+            if (_world == null || _selectedCharacter == null) return;
             _evidenceState = RuntimeUiEvidenceState.None;
+            _world.Enter(_selectedCharacter);
             _world.SetSmokePositionNearGateKeeper();
             _world.TriggerInteractionForSmoke();
             RefreshWorldLoopLabels();

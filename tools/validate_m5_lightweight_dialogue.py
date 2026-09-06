@@ -47,6 +47,7 @@ def git_lines(*args: str) -> list[str]:
 def main() -> int:
     require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'GateKeeperDialogueLines', 'DialogueActive', 'DialogueCompleted', 'ContinueDialogue', 'CloseDialogue', 'Mục tiêu 1/2: lắng nghe Người Giữ Cổng.', 'Mục tiêu 2/2: ổn định Đá Luyện.')
     require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', '_dialoguePanel', '_dialogueContinueButton', '_dialogueCloseButton', 'RefreshDialoguePanel', 'SetDialogueVisible')
+    require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs', 'CaptureEvidenceOpenDialogue', '_world.Enter(_selectedCharacter)', '_world.TriggerInteractionForSmoke()')
     require('client/Unity/Assets/Game/World/Runtime/M5LightweightDialogueSmokeRunner.cs', '--lgo-m5-lightweight-dialogue-smoke', 'openedDialogue', 'dialogueCompleted', 'savePositionStillWorks')
     require('client/Unity/Assets/Game/Bootstrap/Runtime/GameBootstrap.cs', 'M5LightweightDialogueSmokeRunner.ShouldRun()', 'M5LightweightDialogueSmokeRunner.RunFromCommandLineAsync')
     require('tools/m5_lightweight_dialogue_runtime.py', 'M5_LIGHTWEIGHT_NPC_DIALOGUE_RUNTIME_SMOKE_PASS', 'UNITY_M5_LIGHTWEIGHT_DIALOGUE_PASS')

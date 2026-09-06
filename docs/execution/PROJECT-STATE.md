@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_GUIDED_OBJECTIVE_PULSE_CUES_READY` keeps a lightweight objective pulse active on the current guided target, making Người Giữ Cổng and Đá Luyện easier to identify in runtime screenshots without adding asset payload.
+Latest player-visible batch: `LGO_NPC_DIALOGUE_EVIDENCE_FLOW_RESET_READY` resets the world state before the dialogue checkpoint, so `npc-dialogue.png` now captures the actual Gate Keeper dialogue panel instead of stale skill-preview state.
 
 Current visual/runtime evidence harness command:
 
