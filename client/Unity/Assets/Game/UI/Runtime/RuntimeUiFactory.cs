@@ -168,9 +168,8 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewSelectedCharacterPreviewPanel()
         {
-            var preview = NewPreviewPanel("TU SĨ", "Hồ sơ đang chọn");
+            var preview = NewPreviewPanel("TU SĨ");
             preview.name = "LGO Character Hall Selected Cultivator Card V3B";
-            preview.style.maxWidth = RuntimeUiSizing.CharacterPreviewMaxWidth;
             RuntimeUiSkin.ApplyCharacterPreviewFrame(preview);
             return preview;
         }
@@ -179,14 +178,12 @@ namespace LinhGioi.UI
         {
             if (preview == null) return;
             preview.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
-            preview.style.maxWidth = layout.IsMobile
-                ? Mathf.Clamp(viewportWidth * 0.48f, 300f, 390f)
-                : layout.IsTablet ? 374 : RuntimeUiSizing.CharacterPreviewMaxWidth;
+            preview.style.maxWidth = layout.CharacterSelectedPreviewMaxWidth;
             preview.style.height = layout.IsMobile || layout.IsTablet
                 ? StyleKeyword.Auto
-                : Mathf.Clamp(layout.Height * 0.42f, 390f, 460f);
+                : layout.CharacterSelectedPreviewHeight;
             if (selectedName != null)
-                selectedName.style.fontSize = layout.IsTablet ? RuntimeUiTypography.SelectedCharacterNameTabletFontSize : RuntimeUiTypography.SelectedCharacterNameFontSize;
+                selectedName.style.fontSize = layout.SelectedCharacterNameFontSize;
         }
 
         internal static VisualElement NewCharacterProfileHero(RuntimeUiLayoutProfile layout, VisualElement portrait, VisualElement copy)
@@ -204,8 +201,8 @@ namespace LinhGioi.UI
         internal static VisualElement NewCharacterPortraitFrame(RuntimeUiLayoutProfile layout, Texture2D portraitTexture, Texture2D fallbackTexture)
         {
             var portrait = NewImageLayer("LGO Character Hall V3B Cultivator Portrait", portraitTexture, ScaleMode.ScaleToFit);
-            portrait.style.width = RuntimeUiSizing.CharacterPortraitWidth;
-            portrait.style.height = RuntimeUiSizing.CharacterPortraitHeight;
+            portrait.style.width = layout.CharacterPortraitWidth;
+            portrait.style.height = layout.CharacterPortraitHeight;
             portrait.style.marginRight = layout.CharacterPortraitMarginRight;
             RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);
             if (portraitTexture == null && fallbackTexture != null)

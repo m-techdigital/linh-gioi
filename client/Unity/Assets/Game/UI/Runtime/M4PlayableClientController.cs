@@ -552,7 +552,7 @@ namespace LinhGioi.UI
             var portrait = NewCharacterPortraitFrame(layout, portraitTexture, null);
             var profileCopy = NewFlexibleColumn("LGO Character Hall Selected Profile Copy V3B");
             _selectedName = new Label("Chưa chọn nhân vật");
-            RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, RuntimeUiTypography.SelectedCharacterNameFontSize, true);
+            RuntimeUiSkin.ApplyText(_selectedName, RuntimeArtCatalog.Gold, layout.SelectedCharacterNameFontSize, true);
             profileCopy.Add(_selectedName);
             _selectedMeta = NewMutedLabel("Tạo một tu sĩ để bước vào Linh Giới.");
             profileCopy.Add(_selectedMeta);
