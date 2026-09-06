@@ -966,11 +966,14 @@ namespace LinhGioi.World
             if (_gateKeeperWorldLabel != null)
             {
                 // LGO World Label Safe Area v1: narrow profiles keep long Vietnamese labels away from the left HUD.
-                WorldLabelPresenter.Set(_gateKeeperWorldLabel, GateKeeperWorldLabelText(), RuntimeArtCatalog.Gold);
+                WorldLabelPresenter.Set(_gateKeeperWorldLabel, GateKeeperWorldLabelText(_guidedStep == GuidedTrainingStep.FindGateKeeper), RuntimeArtCatalog.Gold);
                 _gateKeeperWorldLabel.transform.position = CurrentGateKeeperVisualPosition() + CurrentGateKeeperLabelOffset();
             }
             if (_trainingStoneWorldLabel != null)
+            {
+                WorldLabelPresenter.Set(_trainingStoneWorldLabel, _guidedStep == GuidedTrainingStep.FindTrainingStone ? "Mục tiêu\nĐá Luyện" : "Đá Luyện", RuntimeArtCatalog.Spirit);
                 _trainingStoneWorldLabel.transform.position = TrainingStonePosition + new Vector3(0.18f, 1.36f, -0.04f);
+            }
             if (_targetDummyWorldLabel != null)
                 _targetDummyWorldLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.36f, -0.03f);
             if (_spiritGateWorldLabel != null)
@@ -979,9 +982,10 @@ namespace LinhGioi.World
                 _shadowSlimeWorldLabel.transform.position = ShadowSlimePosition + new Vector3(0f, 0.92f, -0.02f);
         }
 
-        private static string GateKeeperWorldLabelText()
+        private static string GateKeeperWorldLabelText(bool objectiveTarget)
         {
-            return IsNarrowWorldViewport() ? "Người Giữ\nCổng" : "Người Giữ Cổng";
+            if (!objectiveTarget) return IsNarrowWorldViewport() ? "Người Giữ\nCổng" : "Người Giữ Cổng";
+            return IsNarrowWorldViewport() ? "Mục tiêu\nNgười Giữ\nCổng" : "Mục tiêu\nNgười Giữ Cổng";
         }
 
         private static Vector3 CurrentGateKeeperLabelOffset()

@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_CHARACTER_HALL_CREATE_HINT_RESPONSIVE_POLISH_READY` keeps the first-time Character Hall create form cleaner across desktop/tablet/mobile, with refreshed screenshot evidence and no final visual pass claim.
+Latest player-visible batch: `LGO_WORLD_HUB_GUIDED_OBJECTIVE_LABEL_READY` makes the current guided objective easier to spot in the world by labeling the active NPC/stone target directly in-scene; refreshed screenshots were reviewed with no final visual pass claim.
 
 Current visual/runtime evidence harness command:
 

@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: Character Hall first-time create form now uses muted game copy instead of a framed hint row, hides that helper copy on tablet/mobile, and clamps the mobile create panel so it no longer overflows the viewport; desktop/tablet/mobile screenshots were reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: World Hub now makes the active guided objective more visible in-scene by prefixing the current NPC/stone world label with `Mục tiêu`, so the player can connect the left-panel objective to the object in the world; desktop/tablet screenshots were reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -156,6 +156,8 @@ Current focus update: secondary button V2 dependency cleanup is ready under `LGO
 Current focus update: primary button V2 dependency cleanup is ready under `LGO_RUNTIME_UI_PRIMARY_BUTTON_V2_DEPENDENCY_CLEANUP_READY`; primary login buttons use V3B gold texture when available and code-side fallback framing instead of V2 primary/disabled textures.
 
 Current focus update: Character Hall first-time create form readability is polished under `LGO_CHARACTER_HALL_CREATE_HINT_RESPONSIVE_POLISH_READY`; desktop uses a muted cultivation hint instead of a second framed row, tablet/mobile keep the form compact, and refreshed screenshots were reviewed without claiming final visual pass.
+
+Current focus update: World Hub guided-objective readability is improved under `LGO_WORLD_HUB_GUIDED_OBJECTIVE_LABEL_READY`; the current objective object is labeled directly in the scene while existing panel objectives remain unchanged, with refreshed desktop/tablet evidence and no final visual pass claim.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 

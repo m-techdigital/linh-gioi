@@ -57,6 +57,9 @@ def main() -> int:
         "WorldHubSetDressing.Ensure(",
         "IsMobileWorldViewport()",
         "IsNarrowWorldViewport()",
+        "GateKeeperWorldLabelText(_guidedStep == GuidedTrainingStep.FindGateKeeper)",
+        "Mục tiêu\\nĐá Luyện",
+        "Mục tiêu\\nNgười Giữ Cổng",
     )
     require(
         "client/Unity/Assets/Game/World/Runtime/WorldHubSetDressing.cs",
