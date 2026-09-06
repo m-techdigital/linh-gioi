@@ -20,6 +20,7 @@ namespace LinhGioi.UI
             "character-select-long-name.png",
             "character-create-expanded.png",
             "character-create-reflow.png",
+            "character-create-cancelled.png",
             "enter-world.png",
             "world-hub.png",
             "near-gatekeeper-prompt.png",
@@ -141,6 +142,12 @@ namespace LinhGioi.UI
                 "docs/design/RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0.md",
                 "Reapplying viewport layout must preserve the expanded form position and visibility");
             _controller.CaptureEvidenceCloseCharacterForm();
+            yield return WaitFrames(6);
+            yield return CaptureCheckpoint(
+                "character-create-cancelled",
+                "Character Create Cancelled",
+                "docs/design/RUNTIME-UI-RESPONSIVE-LAYOUT-HELPER-REVIEW-v1.0.md",
+                "Cancel returns to the selected hero and enter-world action without navigation or character mutation");
             yield return WaitForTask(_controller.CaptureEvidenceEnterWorldAsync());
             yield return WaitFrames(10);
             yield return CaptureCheckpoint(

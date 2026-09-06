@@ -166,7 +166,12 @@ namespace LinhGioi.UI
                 characterActionRow.style.flexGrow = collapsed && !isMobileProfile || compactStandaloneCreate ? 1 : 0;
                 characterActionRow.style.justifyContent = collapsed && !isMobileProfile || !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;
                 if (hasSelectedCharacter)
-                    ApplySelectedActionRatio(layout, characterActionRow, createButton, enterWorldButton);
+                {
+                    if (createFormExpanded)
+                        ApplySelectedActionRatio(layout, characterActionRow, enterWorldButton, createButton);
+                    else
+                        ApplySelectedActionRatio(layout, characterActionRow, createButton, enterWorldButton);
+                }
                 else
                     RuntimeUiOverflowGuard.ApplyResponsiveColumns(characterActionRow, 1, compactStandaloneCreate ? 0 : 6, createButton, enterWorldButton);
             }
@@ -214,6 +219,8 @@ namespace LinhGioi.UI
             characterActionRow.Clear();
             if (hasSelectedCharacter)
             {
+                RuntimeUiFactory.ApplyCompactButtonPriority(enterWorldButton, !createFormExpanded);
+                RuntimeUiFactory.ApplyCompactButtonPriority(createButton, createFormExpanded);
                 // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state on every profile.
                 enterWorldButton.style.display = DisplayStyle.Flex;
                 createButton.style.display = DisplayStyle.Flex;
@@ -225,6 +232,17 @@ namespace LinhGioi.UI
                 createButton.text = createFormExpanded ? "Tạo tu sĩ" : "Tạo thêm";
                 RuntimeUiSkin.ApplyButtonTier(createButton, mobileSelected ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
                 createButton.style.opacity = 0.82f;
+                if (createFormExpanded)
+                {
+                    enterWorldButton.text = "Hủy";
+                    enterWorldButton.tooltip = "Đóng form và giữ nhân vật đang chọn.";
+                    RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Standard);
+                    RuntimeUiSkin.ApplyButtonTier(createButton, RuntimeUiButtonTier.Primary);
+                    createButton.style.opacity = 1f;
+                    characterActionRow.Add(createButton);
+                    characterActionRow.Add(enterWorldButton);
+                    return;
+                }
                 characterActionRow.Add(enterWorldButton);
                 characterActionRow.Add(createButton);
                 return;

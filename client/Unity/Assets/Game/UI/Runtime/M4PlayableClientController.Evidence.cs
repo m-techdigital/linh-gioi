@@ -88,7 +88,11 @@ namespace LinhGioi.UI
 
         internal void CaptureEvidenceCloseCharacterForm()
         {
-            SelectCharacter(_selectedCharacter);
+            var selected = _selectedCharacter;
+            OnEnterWorldOrCancelCreateAction();
+            if (_createFormExpanded || _selectedCharacter != selected || IsDisplayed(_worldHud))
+                throw new InvalidOperationException("Cancel character form must preserve selection without entering the world.");
+            Debug.Log("LGO_CHARACTER_CREATE_CANCEL_PASS selection=preserved world=not-entered");
         }
 
         internal void CaptureEvidenceReapplyCharacterLayout()
@@ -136,7 +140,12 @@ namespace LinhGioi.UI
             _evidenceState = RuntimeUiEvidenceState.None;
             _skillPreviewActive = false;
             _world.SetSmokePositionNearGateKeeper();
-            _world.TriggerInteractionForSmoke();
+            if (_isMobileProfile)
+            {
+                TriggerWorldTouchPrimaryAction();
+                if (!_world.DialogueActive) throw new InvalidOperationException("Mobile primary action did not open Gate Keeper dialogue.");
+            }
+            else _world.TriggerInteractionForSmoke();
             while (_world.DialogueActive)
                 _world.ContinueDialogue();
             _world.SetSmokePositionNearTrainingStone();
@@ -150,7 +159,13 @@ namespace LinhGioi.UI
             _evidenceState = RuntimeUiEvidenceState.None;
             _skillPreviewActive = false;
             _world.SetSmokePositionNearTrainingStone();
-            _world.TriggerInteractionForSmoke();
+            if (_isMobileProfile)
+            {
+                TriggerWorldTouchPrimaryAction();
+                if (!_world.InteractionAcknowledged) throw new InvalidOperationException("Mobile primary action did not complete training.");
+                Debug.Log("LGO_MOBILE_GUIDED_ACTIONS_PASS keeper=dialogue stone=completed");
+            }
+            else _world.TriggerInteractionForSmoke();
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
         }

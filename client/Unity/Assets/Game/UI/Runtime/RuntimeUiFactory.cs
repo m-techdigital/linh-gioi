@@ -642,7 +642,7 @@ namespace LinhGioi.UI
         {
             var button = NewButton(label, action);
             RuntimeUiSkin.ApplyButtonTier(button, RuntimeUiButtonTier.Primary);
-            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.22f, 0.34f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit);
+            ApplyCompactButtonPriority(button, true);
             return button;
         }
 
@@ -673,8 +673,17 @@ namespace LinhGioi.UI
         {
             var button = NewButton(label, action);
             RuntimeUiSkin.ApplyButtonTier(button, RuntimeUiButtonTier.Standard);
-            RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.04f, 0.13f, 0.22f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.Gold);
+            ApplyCompactButtonPriority(button, false);
             return button;
+        }
+
+        internal static void ApplyCompactButtonPriority(Button button, bool primary)
+        {
+            button.style.unityFontStyleAndWeight = primary ? FontStyle.Bold : FontStyle.Normal;
+            if (primary)
+                RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.03f, 0.22f, 0.34f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit);
+            else
+                RuntimeUiSkin.ApplyCompactActionFrame(button, new Color(0.04f, 0.13f, 0.22f, 0.92f), RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.SurfaceRaised, RuntimeArtCatalog.Gold);
         }
 
         internal static Button NewIconButton(string label, Texture2D texture, Action action)

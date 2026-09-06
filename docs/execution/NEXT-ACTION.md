@@ -4,6 +4,8 @@ Last updated: `2026-09-06`
 
 ## Quick Resume
 
+- Batch hủy form + mobile guided actions: Tạo thêm có Tạo tu sĩ/Hủy, Escape dùng chung handler và không hủy lúc nút bị khóa; hủy giữ selection. Nút mobile đổi Đánh/Gặp/Luyện theo world state, dùng interaction hiện có; smoke đi qua NPC và Đá Luyện. Evidence cuối: `build/visual-evidence/mobile-guided-actions/player-unity.log`, ảnh near-gatekeeper/near-training-stone đã xem; quick gate pass. Một lượt smoke movement trước đó fail, hai lượt sau pass; chưa kết luận nguyên nhân transient. Tiếp theo: phản hồi danh xưng không hợp lệ trong form theo rule server hiện có (3-16 ASCII chữ/số/gạch dưới), không đổi contract.
+
 - Batch form/resize/tên dài đã validate: Player resize 1382x972, 984x922, 692x486 và khôi phục đều qua bounds form/input/nút; tên tối đa 16 ký tự rộng xuống dòng ở PC/tablet, không cắt chữ. Đã xem screenshot probe và long-name cả ba profile; quick gate pass (`build/dev-loop/character-create-name-final.log`, `build/dev-loop/character-create-name-quick.log`). Tiếp theo: thao tác hủy/quay lại form Tạo thêm qua base hiện có. Chưa kiểm tra toàn bộ kích thước, thiết bị cảm ứng thật hoặc claim visual PASS.
 
 - Character Hall central stage: nhân vật V3B đã ra cột giữa qua factory/layout chung; roster và thông tin ở hai bên. Base list button bỏ min-width cứng, dock PC giới hạn theo parent, shell PC/tablet có max-height theo phần viewport còn lại. Đã xem selected cả ba profile và empty PC; quick gate pass (`build/dev-loop/character-central-stage.log`, `build/dev-loop/character-central-stage-quick.log`). Tiếp theo: resize trong cùng phiên, tên dài và form Tạo thêm; chưa claim visual PASS hoặc giống demo 100%.

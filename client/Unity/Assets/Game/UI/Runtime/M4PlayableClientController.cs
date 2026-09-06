@@ -172,7 +172,9 @@ namespace LinhGioi.UI
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                if (_worldHud != null && _worldHud.style.display == DisplayStyle.Flex)
+                if (IsDisplayed(_lobbyPanel) && _selectedCharacter != null && _createFormExpanded)
+                    OnEnterWorldOrCancelCreateAction();
+                else if (_worldHud != null && _worldHud.style.display == DisplayStyle.Flex)
                     ToggleSessionMenu();
                 else
                     QuitPlayer();
@@ -608,7 +610,7 @@ namespace LinhGioi.UI
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
             _classId.style.display = DisplayStyle.None;
             _createButton = NewCompactSecondaryButton("Tạo tu sĩ", OnCreateCharacterAction);
-            _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", () => RunAsync(EnterWorldAsync));
+            _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", OnEnterWorldOrCancelCreateAction);
             _createBody.Add(_characterName);
             _createBody.Add(_classId);
             _characterActionRow = NewActionRow("LGO Character Hall Action Row", Justify.FlexStart, 6, 0, _createButton, _enterWorldButton);
@@ -741,7 +743,7 @@ namespace LinhGioi.UI
             _worldTouchControlsOverlay = NewWorldTouchControlsOverlay();
             _worldTouchMovementPad = NewWorldTouchPad();
             _worldTouchActionCluster = NewWorldTouchActionCluster();
-            _worldTouchPrimaryActionButton = NewWorldTouchActionButton("Đánh", TriggerLocalCombat);
+            _worldTouchPrimaryActionButton = NewWorldTouchActionButton("Đánh", TriggerWorldTouchPrimaryAction);
             _worldTouchPrimaryActionButton.name = "LGO World Touch Primary Combat Button";
             _worldTouchWindSlashButton = NewWorldTouchActionButton("Chém", () => PreviewSkill("Wind Slash", "Chém Gió"));
             _worldTouchShadowBindButton = NewWorldTouchActionButton("Trói", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
@@ -1032,6 +1034,20 @@ namespace LinhGioi.UI
             RunAsync(CreateCharacterAsync);
         }
 
+        private void OnEnterWorldOrCancelCreateAction()
+        {
+            if (!_enterWorldButton.enabledInHierarchy) return;
+            if (_selectedCharacter != null && _createFormExpanded)
+            {
+                _createFormExpanded = false;
+                _characterName.value = _selectedCharacter.name;
+                ApplyCharacterCreateFormState();
+                _enterWorldButton.Focus();
+                return;
+            }
+            RunAsync(EnterWorldAsync);
+        }
+
         private void ApplyCharacterCreateFormState()
         {
             RuntimeCharacterHallResponsiveLayout.ApplyCreateFormState(
@@ -1072,6 +1088,11 @@ namespace LinhGioi.UI
             if (_skinSource != null) _skinSource.text = "Nguồn giao diện: asset runtime tối ưu, chưa phải art final.";
             if (_worldObjective != null) _worldObjective.text = FormatWorldObjectiveText(_world.ObjectiveText);
             if (_interactionHint != null) _interactionHint.text = FormatWorldInteractionHint(_world.InteractionActionText);
+            if (_worldTouchPrimaryActionButton != null)
+            {
+                _worldTouchPrimaryActionButton.text = _world.CanInteract ? _world.PrimaryInteractionLabel : "Đánh";
+                _worldTouchPrimaryActionButton.tooltip = _world.CanInteract ? "Tương tác với mục tiêu ở gần." : "Tấn công bia luyện cục bộ.";
+            }
             if (_status != null) _status.text = WorldTopStatusText();
             if (_evidenceState.ShowEnterWorldTransition)
             {
@@ -1498,6 +1519,15 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
             SetToast(_world.CombatFeedbackText, RuntimeArtCatalog.Gold);
             RefreshCombatAssetUiState();
+        }
+
+        private void TriggerWorldTouchPrimaryAction()
+        {
+            if (_world == null || IsDisplayed(_sessionMenuPanel) || _world.DialogueActive) return;
+            if (_world.CanInteract)
+                _world.TryTriggerInteraction();
+            else
+                TriggerLocalCombat();
         }
 
         private void RefreshCombatAssetUiState()

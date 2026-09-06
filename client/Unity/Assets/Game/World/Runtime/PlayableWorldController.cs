@@ -523,7 +523,10 @@ namespace LinhGioi.World
                 SetNearest(null, InteractionAcknowledged ? "Vòng hướng dẫn hoàn tất: lưu vị trí hoặc quay lại sảnh." : NextMovementHint());
         }
 
-        private bool TryTriggerInteraction()
+        public bool CanInteract => _nearestInteractable != null && !DialogueActive;
+        public string PrimaryInteractionLabel => _nearestInteractable?.id == "Gate Keeper" ? "Gặp" : "Luyện";
+
+        public bool TryTriggerInteraction()
         {
             if (_nearestInteractable == null) return false;
             if (_guidedStep == GuidedTrainingStep.FindGateKeeper && _nearestInteractable.id == "Gate Keeper")
@@ -705,8 +708,8 @@ namespace LinhGioi.World
         private string InteractionWorldPromptText()
         {
             if (_nearestInteractable == null) return string.Empty;
-            if (_nearestInteractable.id == "Gate Keeper") return IsMobileWorldViewport() ? "F Gặp" : "F/Space - Gặp";
-            if (_nearestInteractable.id == "Training Stone") return IsMobileWorldViewport() ? "F Luyện" : "F/Space - Luyện";
+            if (_nearestInteractable.id == "Gate Keeper") return IsMobileWorldViewport() ? "Gặp" : "F/Space - Gặp";
+            if (_nearestInteractable.id == "Training Stone") return IsMobileWorldViewport() ? "Luyện" : "F/Space - Luyện";
             return IsMobileWorldViewport() ? "F" : "F/Space";
         }
 
