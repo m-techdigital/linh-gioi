@@ -135,6 +135,50 @@ namespace LinhGioi.UI
             ApplyEdgeFrame(element, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f);
         }
 
+        internal static void ApplyOrnamentedShellFrame(VisualElement element)
+        {
+            ApplyPanelFrame(element);
+            ApplyRadius(element, 4);
+            const string ornamentClass = "lgo-ornamented-shell";
+            if (element.ClassListContains(ornamentClass)) return;
+            element.AddToClassList(ornamentClass);
+            // Draw inside the shell padding; no extra layout children or input interception.
+            element.generateVisualContent += context =>
+            {
+                var width = element.resolvedStyle.width;
+                var height = element.resolvedStyle.height;
+                if (float.IsNaN(width) || float.IsNaN(height) || width < 48 || height < 48) return;
+                var painter = context.painter2D;
+                painter.lineWidth = 1;
+                painter.strokeColor = RuntimeArtCatalog.Gold;
+                DrawShellCorner(painter, new Vector2(3, 3), 1, 1);
+                DrawShellCorner(painter, new Vector2(width - 3, 3), -1, 1);
+                DrawShellCorner(painter, new Vector2(3, height - 3), 1, -1);
+                DrawShellCorner(painter, new Vector2(width - 3, height - 3), -1, -1);
+            };
+        }
+
+        private static void DrawShellCorner(Painter2D painter, Vector2 origin, float x, float y)
+        {
+            Vector2 Point(float a, float b) => origin + new Vector2(a * x, b * y);
+            painter.BeginPath();
+            painter.MoveTo(Point(0, 18));
+            painter.LineTo(Point(0, 7));
+            painter.LineTo(Point(7, 0));
+            painter.LineTo(Point(18, 0));
+            painter.MoveTo(Point(4, 22));
+            painter.LineTo(Point(4, 11));
+            painter.LineTo(Point(11, 4));
+            painter.LineTo(Point(22, 4));
+            painter.Stroke();
+            painter.BeginPath();
+            painter.MoveTo(Point(3, 3));
+            painter.LineTo(Point(10, 6));
+            painter.LineTo(Point(6, 10));
+            painter.ClosePath();
+            painter.Stroke();
+        }
+
         internal static void ApplyInsetRowFrame(VisualElement element, Color accent)
         {
             element.style.backgroundColor = DeepGlass;
@@ -263,10 +307,7 @@ namespace LinhGioi.UI
             panel.style.backgroundImage = StyleKeyword.None;
             // LGO Character Hall Mobile Light Shell v1: compact screens keep the reference art visible behind the bounded shell.
             panel.style.backgroundColor = DenseGlass;
-            ApplyRadius(panel, 4);
-            ApplyEdgeFrame(
-                panel,
-                MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f);
+            ApplyOrnamentedShellFrame(panel);
         }
 
         internal static void ApplySubtleNestedFrame(VisualElement element, Color accent, float alpha = 0.32f)
@@ -369,7 +410,7 @@ namespace LinhGioi.UI
 
         internal static void ApplyPreviewPanelFrame(VisualElement preview)
         {
-            preview.style.backgroundColor = DeepGlass;
+            preview.style.backgroundColor = DenseGlass;
             ApplyPanelFrame(preview);
         }
 
@@ -394,7 +435,7 @@ namespace LinhGioi.UI
         internal static void ApplySessionMenuFrame(VisualElement panel)
         {
             panel.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 0.96f);
-            ApplyEdgeFrame(panel, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold);
+            ApplyOrnamentedShellFrame(panel);
         }
 
         internal static void ApplyLocalSettingsPanelFrame(VisualElement panel)

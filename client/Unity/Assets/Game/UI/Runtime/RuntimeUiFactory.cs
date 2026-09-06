@@ -50,6 +50,7 @@ namespace LinhGioi.UI
         internal static VisualElement NewSectionShell(string sigilText, string headingText, string sectionTitle, string elementName)
         {
             var shell = NewPreviewPanel(sigilText, headingText);
+            RuntimeUiSkin.ApplyOrnamentedShellFrame(shell);
             if (!string.IsNullOrWhiteSpace(elementName)) shell.name = elementName;
             if (!string.IsNullOrWhiteSpace(sectionTitle)) shell.Add(NewSectionTitle(sectionTitle));
             return shell;
@@ -623,10 +624,11 @@ namespace LinhGioi.UI
             return field;
         }
 
-        internal static TextField NewLobbyTextField(string label, string value, string tooltip)
+        internal static TextField NewLobbyTextField(string label, string value, string tooltip, string placeholder = null)
         {
             var field = NewTextField(label, value);
             ApplyLobbyInputStyle(field);
+            if (!string.IsNullOrWhiteSpace(placeholder)) field.textEdition.placeholder = placeholder;
             if (!string.IsNullOrWhiteSpace(tooltip)) field.tooltip = tooltip;
             return field;
         }

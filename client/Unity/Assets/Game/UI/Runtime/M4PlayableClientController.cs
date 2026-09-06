@@ -588,7 +588,7 @@ namespace LinhGioi.UI
             _createBody = NewModalBody("LGO Character Create Modal Body");
             _createFooter = NewModalFooter("LGO Character Create Modal Footer");
             _createBody.Add(createHint);
-            _characterName = NewLobbyTextField("", "LinhGioiHero", "Nhập danh xưng tu sĩ.");
+            _characterName = NewLobbyTextField("", "", "Nhập danh xưng tu sĩ.", "Danh xưng");
             _characterName.name = "LGO Character Create Form Framed Input v1";
             _characterName.RegisterValueChangedCallback(evt =>
             {
@@ -1026,6 +1026,7 @@ namespace LinhGioi.UI
                 // LGO Character Hall Selected Create Collapse v1: selected state protects Enter World as the primary path.
                 _createFormExpanded = true;
                 _characterNameError = null;
+                _characterName.value = string.Empty;
                 ApplyCharacterCreateFormState();
                 _characterName.Focus();
                 _characterName.SelectAll();

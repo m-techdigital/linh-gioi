@@ -93,6 +93,9 @@ namespace LinhGioi.UI
         internal async Task CaptureEvidenceLoginAsync()
         {
             await LoginAsync();
+            if (_characters.Length == 0 && (!string.IsNullOrEmpty(_characterName.value)
+                || _characterName.textEdition.placeholder != "Danh xưng"))
+                throw new InvalidOperationException("An empty account must show the name placeholder, not a prefilled character name.");
         }
 
         internal async Task CaptureEvidenceCreateCharacterIfNeededAsync(string characterName)
@@ -135,6 +138,8 @@ namespace LinhGioi.UI
         internal async Task CaptureEvidenceSecondCharacterAsync()
         {
             OnCreateCharacterAction();
+            if (!string.IsNullOrEmpty(_characterName.value))
+                throw new InvalidOperationException("Create another character must open a blank name draft.");
             _characterName.value = "EvidenceTwin";
             await CreateCharacterAsync();
             if (_characters.Length != 2 || _selectedCharacter == null || _selectedCharacter.name != "EvidenceTwin")

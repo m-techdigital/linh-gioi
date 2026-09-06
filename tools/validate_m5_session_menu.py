@@ -95,7 +95,9 @@ def main() -> int:
         'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs',
         'internal enum RuntimeUiButtonTier',
         'ApplyButtonTier(Button button, RuntimeUiButtonTier tier',
-        'ApplyEdgeFrame(panel, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold)',
+        'ApplyOrnamentedShellFrame(panel)',
+        'painter.strokeColor = RuntimeArtCatalog.Gold',
+        'ApplyEdgeFrame(element, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f)',
     )
     require(
         'tools/lgo_playable_closure_check.sh',
