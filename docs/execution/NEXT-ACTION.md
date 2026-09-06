@@ -6,11 +6,11 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: local target-dummy reward feedback now stays in the readable combat panel while the world label remains `Trúng mục tiêu`, avoiding overlapping floating reward text near the hit spark; screenshot evidence was reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: first-time Character Hall now shows concise `Bước 1` / `Bước 2` guidance in the empty character list, making the create-character flow clearer and balancing the left panel; screenshot evidence was reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: choose the next compact player-visible slice, likely Character Hall final-art parity, movement/input feel, or another screenshot-proven UI/UX issue; avoid heavy assets and one-off validators unless a real gate needs them.
+- Next implementation task after this fix: choose the next compact player-visible slice, likely movement/input feel, selected Character Hall state polish, or another screenshot-proven UI/UX issue; avoid heavy assets and one-off validators unless a real gate needs them.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus

@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_LOCAL_COMBAT_REWARD_READABILITY_READY` keeps target-dummy hit reward feedback inside the readable combat panel while the world label stays focused on the hit result, avoiding overlapping floating text near the hit spark.
+Latest player-visible batch: `LGO_CHARACTER_HALL_FIRST_CREATE_GUIDANCE_READY` adds concise first-time steps to the empty Character Hall list so the create-character flow reads clearly and the left panel no longer feels hollow.
 
 Current visual/runtime evidence harness command:
 
