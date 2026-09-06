@@ -53,8 +53,8 @@ namespace LinhGioi.UI
         {
             if (string.IsNullOrWhiteSpace(value)) return "Bia luyện: chưa rõ";
             return value
-                .Replace("Mục tiêu luyện tập: sức bền mô phỏng ", "Bia luyện: ")
-                .Replace(" - Chỉ là mô phỏng cục bộ.", " sức bền mô phỏng.")
+                .Replace("Mục tiêu luyện tập: sức bền mô phỏng ", "Sức bền: ")
+                .Replace(" - Chỉ là mô phỏng cục bộ.", " mô phỏng.")
                 .Replace("Mục tiêu luyện tập", "Bia luyện");
         }
 

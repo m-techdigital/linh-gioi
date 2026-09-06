@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_CHARACTER_HALL_MOBILE_TOP_STATUS_COMPACT_READY` shortens mobile/tablet Character Hall ready status chips to `Sẵn sàng`, reducing duplicated header copy while the screen title and action cards keep context.
+Latest player-visible batch: `LGO_COMBAT_TARGET_STAMINA_STATUS_COMPACT_READY` shortens combat target status to `Sức bền: 108/120 mô phỏng.`, reducing repeated `Bia luyện` copy in the combat HUD while preserving target state.
 
 Current visual/runtime evidence harness command:
 

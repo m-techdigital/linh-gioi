@@ -112,7 +112,8 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
         "LGO Runtime Combat HUD Presentation Helper v1",
-        'Replace("Mục tiêu luyện tập: sức bền mô phỏng ", "Bia luyện: ")',
+        'Replace("Mục tiêu luyện tập: sức bền mô phỏng ", "Sức bền: ")',
+        'Replace(" - Chỉ là mô phỏng cục bộ.", " mô phỏng.")',
         "CompactFeedbackStatus",
         'Trúng mục tiêu: +1 Tinh khí diễn tập.',
         "Đang xem Trói Bóng: vòng cảnh báo an toàn.",
