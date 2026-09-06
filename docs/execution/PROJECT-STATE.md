@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_DIALOGUE_ACTION_ROW_FIT_READY` keeps the Gate Keeper dialogue actions on one readable mobile row by letting the dialogue HUD use a wider profile-owned max width and giving the row/buttons no-wrap/flex behavior inside the parent. Fresh desktop/tablet/mobile screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_WORLD_HUD_FOCUS_FOOTER_OVERFLOW_READY` hides the World HUD save/back footer while skill preview or combat focus is active, so desktop/tablet skill-preview evidence no longer pushes footer actions against the bottom edge. Fresh desktop/tablet/mobile screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

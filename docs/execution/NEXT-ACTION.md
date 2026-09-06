@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: responsive viewport work now has a canonical UI `RuntimeViewportMetrics` owner, World labels/prompts use one World viewport profile, and the mobile Gate Keeper dialogue action row now keeps `Tiếp tục`/`Đóng` on one readable no-wrap row with profile-owned dialogue HUD width; desktop/tablet/mobile screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
+- Current reason: responsive viewport work now has a canonical UI `RuntimeViewportMetrics` owner, World labels/prompts use one World viewport profile, mobile dialogue actions fit in one readable row, and active skill/combat focus now hides the World HUD save/back footer to avoid desktop/tablet bottom-edge overflow; screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -122,6 +122,8 @@ Current focus update: compact state brief now stays under the routine 90-line bu
 Current focus update: World-space label/profile metrics are ready under `LGO_WORLD_VIEWPORT_LABEL_METRICS_READY`; camera sizing, narrow/mobile checks, prompt sizing, and landmark label typography now route through a single World viewport profile, while `WorldLabelPresenter.ApplyStyle` keeps TextMesh shadows synced. Fresh desktop/tablet/mobile screenshots were reviewed as more readable, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current focus update: mobile dialogue action row fit is ready under `LGO_MOBILE_DIALOGUE_ACTION_ROW_FIT_READY`; dialogue-visible mobile HUD width now uses a wider profile-owned clamp, and the dialogue action row/buttons use no-wrap/flex sizing so `Tiếp tục` and `Đóng` remain in one readable touch row. Fresh mobile/tablet screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+
+Current focus update: active World HUD focus footer overflow is fixed under `LGO_WORLD_HUD_FOCUS_FOOTER_OVERFLOW_READY`; skill-preview/combat-focus HUD states now hide the save/back footer, leaving the active gameplay panel visible without bottom-edge clipping in desktop/tablet evidence. No gameplay semantics changed and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: Character Hall desktop/tablet hierarchy now uses wider metric-owned shell sizing and lighter glass under `LGO_CHARACTER_HALL_WIDER_GLASS_BALANCE_READY`; desktop/tablet/mobile screenshots were reviewed as cleaner and still not production-final, with no `VISUAL_RUNTIME_PASS` claim.
 

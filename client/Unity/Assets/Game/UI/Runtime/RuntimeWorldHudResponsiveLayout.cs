@@ -187,7 +187,7 @@ namespace LinhGioi.UI
             SetElementVisibility(worldHud, !sessionVisible);
             SetElementVisibility(headerActions, !sessionVisible);
             SetDisplayed(layoutProfileLabel, false);
-            SetDisplayed(worldFooterActions, !(sessionVisible || mobileProfile));
+            SetDisplayed(worldFooterActions, !(sessionVisible || mobileProfile || skillPreviewActive || forceCombatPanel));
             SetDisplayed(position, showPosition && !focusMode);
             SetDisplayed(worldDebugStrip, !compactWorld);
             SetDisplayed(worldMeta, !compactWorld);
