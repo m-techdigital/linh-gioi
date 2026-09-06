@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: runtime asset inventory now separates V2 fallback `Resources` payload from V3B candidate payload, so build-weight triage can see both the 2600.3 KB V3B candidate set and the 2389.7 KB V2 fallback set; no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: runtime asset inventory now separates V2 fallback `Resources` payload and reports source dependency coverage, so build-weight triage can see the 2600.3 KB V3B candidate set, the 2389.7 KB V2 fallback set, and 29 referenced V2 registry properties with 13 fallback-only entries; no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -128,6 +128,8 @@ Current focus update: Character Hall density-aware status label creation now liv
 Current focus update: World Hub procedural ground contrast is tuned under `LGO_WORLD_GROUND_CONTRAST_READABILITY_TUNE_READY`; the 256x256 runtime-generated texture now gives tile seams, rings, and guide paths more readable contrast without adding image payload, refreshed screenshots were reviewed, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: runtime asset inventory now reports V2 fallback `Resources` payload separately under `LGO_RUNTIME_ASSET_V2_FALLBACK_PAYLOAD_INVENTORY_READY`; current V2 fallback weight is 2389.7 KB across 65 images, kept only while registry/code dependencies still need fallback coverage.
+
+Current focus update: runtime asset inventory now reports referenced V2 registry dependencies under `LGO_RUNTIME_ASSET_V2_DEPENDENCY_SNAPSHOT_READY`; current source references 29 V2 registry properties, 13 of them fallback-only by exact V3B property-name coverage.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 

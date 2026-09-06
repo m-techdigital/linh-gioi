@@ -55,6 +55,8 @@ def main() -> int:
         "runtime-candidates-v3b-manifest.csv",
         "V2 fallback Resources payload",
         "V2 Fallback Resources Payload",
+        "V2 Registry Dependency Snapshot",
+        "count_property_references",
     )
     require("tools/lgo_playable_closure_check.sh", "validate_lgo_runtime_asset_size_inventory.py")
 

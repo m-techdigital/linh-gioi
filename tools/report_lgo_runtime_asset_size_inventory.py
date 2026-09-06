@@ -2,11 +2,19 @@
 from __future__ import annotations
 
 import csv
+import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv"
 V2_RESOURCE_ROOT = ROOT / "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2"
+V2_REGISTRY = ROOT / "client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV2.cs"
+V3B_REGISTRY = ROOT / "client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV3B.cs"
+SOURCE_ROOTS = [
+    ROOT / "client/Unity/Assets/Game/UI/Runtime",
+    ROOT / "client/Unity/Assets/Game/World/Runtime",
+    ROOT / "client/Unity/Assets/Game/Art/Runtime",
+]
 
 ROLE_LIMITS = {
     "login_background": 512 * 1024,
@@ -59,6 +67,26 @@ def iter_images(root: Path) -> list[Path]:
         for path in root.rglob("*")
         if path.is_file() and path.suffix.lower() in {".png", ".jpg", ".jpeg"}
     )
+
+
+def registry_properties(path: Path) -> set[str]:
+    if not path.is_file():
+        return set()
+    text = path.read_text(encoding="utf-8", errors="replace")
+    return set(re.findall(r"public static (?:Texture2D|Sprite) ([A-Za-z0-9_]+) =>", text))
+
+
+def count_property_references(property_name: str) -> int:
+    needle = "LgoVisualAssetRegistryV2." + property_name
+    count = 0
+    for root in SOURCE_ROOTS:
+        if not root.is_dir():
+            continue
+        for path in root.rglob("*.cs"):
+            if path == V2_REGISTRY:
+                continue
+            count += path.read_text(encoding="utf-8", errors="replace").count(needle)
+    return count
 
 
 def main() -> int:
@@ -129,6 +157,24 @@ def main() -> int:
         print("|---|---:|")
         for path in sorted(v2_images, key=lambda item: item.stat().st_size, reverse=True)[:12]:
             print(f"| `{path.relative_to(ROOT)}` | {fmt(path.stat().st_size)} |")
+    v2_properties = registry_properties(V2_REGISTRY)
+    v3b_properties = registry_properties(V3B_REGISTRY)
+    referenced = [
+        (name, count_property_references(name), "V3B_COVERED" if name in v3b_properties else "FALLBACK_ONLY")
+        for name in sorted(v2_properties)
+    ]
+    referenced = [item for item in referenced if item[1] > 0]
+    fallback_only = sum(1 for _, _, status in referenced if status == "FALLBACK_ONLY")
+    print()
+    print("## V2 Registry Dependency Snapshot")
+    print()
+    print(f"- referenced V2 registry properties: {len(referenced)}")
+    print(f"- referenced V2 fallback-only properties: {fallback_only}")
+    print()
+    print("| V2 Registry Property | Source References | Coverage |")
+    print("|---|---:|---|")
+    for name, count, status in referenced:
+        print(f"| `{name}` | {count} | `{status}` |")
     return 0
 
 
