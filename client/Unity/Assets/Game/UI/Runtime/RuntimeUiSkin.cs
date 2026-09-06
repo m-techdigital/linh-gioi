@@ -462,7 +462,7 @@ namespace LinhGioi.UI
         internal static void ApplySessionMenuFrame(VisualElement panel)
         {
             panel.style.backgroundColor = new Color(0.01f, 0.04f, 0.09f, 0.96f);
-            ApplyEdgeFrame(panel, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold);
+            ApplyEdgeFrame(panel, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold);
         }
 
         internal static void ApplyLocalSettingsPanelFrame(VisualElement panel)

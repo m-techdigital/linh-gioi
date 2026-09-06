@@ -725,7 +725,7 @@ namespace LinhGioi.UI
         private void BuildSessionMenuPanel()
         {
             var layout = CurrentLayoutProfile();
-            _sessionMenuPanel = NewSectionShell("PHIÊN", "Tạm dừng cục bộ", layout.IsMobile ? string.Empty : "Menu phiên", "LGO Session Menu Overlay");
+            _sessionMenuPanel = RuntimeUiFactory.NewSessionMenuShell("Menu phiên", "LGO Session Menu Overlay");
             RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);
             RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);
             _sessionMenuContent = RuntimeSessionMenuLayout.NewContentScroll(layout);

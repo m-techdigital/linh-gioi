@@ -52,6 +52,23 @@ namespace LinhGioi.UI
             return shell;
         }
 
+        internal static VisualElement NewSessionMenuShell(string title, string elementName)
+        {
+            var shell = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(elementName)) shell.name = elementName;
+            shell.style.flexDirection = FlexDirection.Column;
+            shell.style.alignItems = Align.Stretch;
+            var topRule = NewOrnamentRule(RuntimeArtCatalog.Gold);
+            topRule.style.marginBottom = 8;
+            shell.Add(topRule);
+            var titleLabel = NewSectionTitle(title);
+            titleLabel.name = "LGO Session Menu Title";
+            titleLabel.style.marginBottom = 8;
+            shell.Add(titleLabel);
+            shell.Add(NewOrnamentRule(RuntimeArtCatalog.Gold));
+            return shell;
+        }
+
         internal static VisualElement NewReadabilityRow(string title, string value, Color accent)
         {
             var row = new VisualElement();

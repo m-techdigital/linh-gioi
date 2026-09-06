@@ -13,7 +13,7 @@ namespace LinhGioi.UI
             RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
                 panel,
                 RuntimeUiOverlayPlacement.Center,
-                RuntimeUiOverlayVerticalPlacement.Top,
+                RuntimeUiOverlayVerticalPlacement.Center,
                 layout.SessionMenuWidth,
                 layout.SessionMenuMaxHeight,
                 layout.SessionMenuInsetHorizontal,
@@ -36,6 +36,8 @@ namespace LinhGioi.UI
         internal static void ApplyContentScroll(ScrollView scroll, RuntimeUiLayoutProfile layout)
         {
             if (scroll == null) return;
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(scroll, layout.SessionMenuContentMaxHeight, 0f);
+            scroll.verticalScrollerVisibility = ScrollerVisibility.Hidden;
             scroll.style.flexGrow = 1;
             scroll.style.minHeight = 0;
             scroll.style.marginTop = layout.IsMobile ? 6 : 10;
@@ -43,6 +45,7 @@ namespace LinhGioi.UI
             scroll.style.overflow = Overflow.Hidden;
             scroll.contentContainer.style.flexGrow = 1;
             scroll.contentContainer.style.minHeight = 0;
+            scroll.contentContainer.style.justifyContent = Justify.Center;
         }
 
         internal static void ApplyActions(
@@ -51,31 +54,34 @@ namespace LinhGioi.UI
             params Button[] buttons)
         {
             if (actions == null) return;
-            actions.style.justifyContent = layout.IsMobile ? Justify.SpaceBetween : Justify.Center;
+            // LGO Session Menu Demo Vertical Actions v1: pause modal actions follow one vertical base instead of per-profile grids/rows.
+            actions.style.justifyContent = Justify.Center;
             if (layout.IsMobile)
             {
                 actions.style.marginTop = 4;
                 actions.style.marginBottom = 0;
             }
+            RuntimeUiOverflowGuard.ApplyResponsiveColumns(actions, 1, layout.SessionMenuActionGap, buttons);
+            actions.style.alignSelf = Align.Center;
+            actions.style.maxWidth = layout.SessionMenuActionMaxWidth;
             foreach (var button in buttons)
             {
                 if (button == null) continue;
-                button.style.marginRight = layout.IsMobile ? 0 : RuntimeUiSpacing.BaseButtonMarginRight;
-                button.style.width = layout.IsMobile ? Length.Percent(48) : StyleKeyword.Auto;
                 RuntimeUiSkin.ApplyButtonTier(button, layout.IsMobile ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
+                button.style.flexGrow = 0;
             }
         }
 
         internal static void ApplyStatus(Label status, RuntimeUiLayoutProfile layout)
         {
             if (status == null) return;
-            status.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
+            status.style.display = DisplayStyle.None;
         }
 
         internal static void ApplyDetails(VisualElement locationRow, VisualElement objectiveRow, RuntimeUiLayoutProfile layout)
         {
-            if (locationRow != null) locationRow.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
-            if (objectiveRow != null) objectiveRow.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
+            if (locationRow != null) locationRow.style.display = DisplayStyle.None;
+            if (objectiveRow != null) objectiveRow.style.display = DisplayStyle.None;
         }
 
         internal static void ApplyFocusScrim(VisualElement scrim, bool visible)

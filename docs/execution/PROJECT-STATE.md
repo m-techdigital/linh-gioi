@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_LOGIN_MOBILE_CENTERED_CONTROL_BASE_READY` moves the mobile login CTA cluster from a tiny left-anchored branch to the shared centered/top overlay base with larger readable logo/card clamps. Fresh mobile login screenshot was reviewed without claiming `VISUAL_RUNTIME_PASS`.
+Latest player-visible batch: `LGO_SESSION_MENU_DEMO_SHELL_BASE_READY` moves Session Menu off the generic section shell into a title-only pause modal shell, centers it vertically through the shared overlay base, keeps actions in one bounded vertical column, hides action-only scroll chrome, and uses gold-only modal framing to match the north-star demo direction. Fresh desktop/tablet/mobile session-menu screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 
 Current visual/runtime evidence harness command:
 

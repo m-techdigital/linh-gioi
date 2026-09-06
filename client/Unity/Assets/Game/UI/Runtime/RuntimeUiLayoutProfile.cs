@@ -225,10 +225,10 @@ namespace LinhGioi.UI
         }
 
         internal float SessionMenuWidth => IsMobile
-            ? Mathf.Min(Mathf.Max(Width - 36f, 260f), 440f)
+            ? Mathf.Clamp(Width * 0.40f, 330f, 380f)
             : IsTablet
-                ? Mathf.Clamp(Width * 0.62f, 620f, 820f)
-                : Mathf.Clamp(Width * 0.50f, 760f, 960f);
+                ? Mathf.Clamp(Width * 0.34f, 400f, 460f)
+                : Mathf.Clamp(Width * 0.30f, 340f, 380f);
 
         internal float SessionMenuInsetHorizontal => Mathf.Max(IsMobile ? 12f : 24f, (Width - SessionMenuWidth) * 0.5f);
 
@@ -236,16 +236,23 @@ namespace LinhGioi.UI
 
         internal float SessionMenuLeft => SessionMenuInsetHorizontal;
 
-        internal float SessionMenuInsetVertical => IsMobile ? Mathf.Clamp(Height * 0.06f, 24f, 42f) : IsTablet ? 118f : 120f;
+        internal float SessionMenuInsetVertical => Mathf.Max(IsMobile ? 24f : 36f, (Height - SessionMenuMaxHeight) * 0.5f);
 
         internal float SessionMenuTop => SessionMenuInsetVertical;
 
-        internal float SessionMenuMaxHeight => IsMobile ? Mathf.Max(240f, Height - SessionMenuInsetVertical * 2f) : IsTablet ? 430f : 500f;
+        internal float SessionMenuMaxHeight => IsMobile
+            ? Mathf.Clamp(Height * 0.54f, 250f, 300f)
+            : IsTablet
+                ? Mathf.Clamp(Height * 0.46f, 310f, 360f)
+                : Mathf.Clamp(Height * 0.40f, 340f, 420f);
         internal bool SessionMenuShowsSettings => !IsMobile && !IsTablet && Height >= 1180;
         internal int SessionMenuStatusMarginBottom => 10;
         internal int SessionMenuPaddingHorizontal => IsMobile ? 12 : IsTablet ? 16 : 22;
         internal int SessionMenuPaddingTop => IsMobile ? 10 : IsTablet ? 14 : 18;
         internal int SessionMenuPaddingBottom => IsMobile ? 10 : IsTablet ? 14 : 20;
+        internal int SessionMenuActionGap => IsMobile ? 8 : IsTablet ? 10 : 12;
+        internal float SessionMenuActionMaxWidth => Mathf.Max(260f, SessionMenuWidth - SessionMenuPaddingHorizontal * 2f - 16f);
+        internal float SessionMenuContentMaxHeight => Mathf.Max(130f, SessionMenuMaxHeight - SessionMenuPaddingTop - SessionMenuPaddingBottom - 18f);
 
         private RuntimeUiLayoutProfile(string name, int width, int height, string layoutClass = null, string inputClass = null)
         {
