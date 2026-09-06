@@ -70,6 +70,10 @@ def main() -> int:
         'WorldLabelPresenter.Set',
         'Trúng mục tiêu',
         'Đang hồi phục',
+        'LGO Gate Keeper Objective Pulse Sprite V3B',
+        'gateGuidePulse.color = new Color(RuntimeArtCatalog.Gold.r, RuntimeArtCatalog.Gold.g, RuntimeArtCatalog.Gold.b, 0.82f)',
+        '_guidedStep == GuidedTrainingStep.FindGateKeeper || _gateKeeperState == PlaceholderNpcState.TalkGuide',
+        '_guidedStep == GuidedTrainingStep.FindTrainingStone || _playerPoseState == PlaceholderPoseState.SpiritChannel',
         'Linh Môn phía nam / Người Giữ Cổng tây bắc / Đá Luyện phía bắc / Bia đọc mục tiêu phía đông / Bóng Tối xa phía đông',
     )
     require_any(

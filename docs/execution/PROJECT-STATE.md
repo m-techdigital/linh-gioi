@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_WORLD_GUIDANCE_COPY_COMPACT_READY` shortens mobile/tablet guided objective and interaction panel copy while keeping world-space `F Gặp`/`F Luyện` prompts, making the first training steps easier to scan.
+Latest player-visible batch: `LGO_GUIDED_OBJECTIVE_PULSE_CUES_READY` keeps a lightweight objective pulse active on the current guided target, making Người Giữ Cổng and Đá Luyện easier to identify in runtime screenshots without adding asset payload.
 
 Current visual/runtime evidence harness command:
 

@@ -771,7 +771,12 @@ namespace LinhGioi.World
             }
             if (_gateKeeperGuidePulse == null)
             {
-                _gateKeeperGuidePulse = CreateMarkerCube("LGO Gate Keeper Talk Guide Pulse", GateKeeperPosition + Vector3.up * 0.9f, RuntimeArtCatalog.Gold, new Vector3(1.35f, 0.08f, 1.35f)).transform;
+                var gateGuideSprite = LgoVisualAssetRegistryV3B.CooldownReady ?? CombatPlaceholderAssets.CooldownReady;
+                var gateGuidePulse = CreateBillboardSprite("LGO Gate Keeper Objective Pulse Sprite V3B", gateGuideSprite, GateKeeperPosition + Vector3.up * 0.1f, new Vector3(0.82f, 0.82f, 1f), 4);
+                if (gateGuidePulse != null) gateGuidePulse.color = new Color(RuntimeArtCatalog.Gold.r, RuntimeArtCatalog.Gold.g, RuntimeArtCatalog.Gold.b, 0.82f);
+                _gateKeeperGuidePulse = gateGuidePulse != null
+                    ? gateGuidePulse.transform
+                    : CreateMarkerCube("LGO Gate Keeper Talk Guide Pulse", GateKeeperPosition + Vector3.up * 0.12f, RuntimeArtCatalog.Gold, new Vector3(1.9f, 0.06f, 1.9f)).transform;
             }
             if (_trainingSpiritPulse == null)
             {
@@ -792,9 +797,9 @@ namespace LinhGioi.World
                 _posePulse.gameObject.SetActive(Time.time < _posePulseUntil || _playerPoseState == PlaceholderPoseState.SpiritChannel);
             }
             if (_gateKeeperGuidePulse != null)
-                _gateKeeperGuidePulse.gameObject.SetActive(_gateKeeperState == PlaceholderNpcState.TalkGuide);
+                _gateKeeperGuidePulse.gameObject.SetActive(_guidedStep == GuidedTrainingStep.FindGateKeeper || _gateKeeperState == PlaceholderNpcState.TalkGuide);
             if (_trainingSpiritPulse != null)
-                _trainingSpiritPulse.gameObject.SetActive(_playerPoseState == PlaceholderPoseState.SpiritChannel);
+                _trainingSpiritPulse.gameObject.SetActive(_guidedStep == GuidedTrainingStep.FindTrainingStone || _playerPoseState == PlaceholderPoseState.SpiritChannel);
             if (_shadowWarningPulse != null)
                 _shadowWarningPulse.gameObject.SetActive(_shadowSlimeState == PlaceholderSlimeState.AlertWarning);
             if (_playerSprite == null)
