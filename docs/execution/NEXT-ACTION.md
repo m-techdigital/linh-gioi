@@ -6,11 +6,11 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: responsive viewport work now has a canonical `RuntimeViewportMetrics` owner, focus-mode HUD visibility keeps steady World Hub compact, and latest mobile HUD child-panel constraints prevent dialogue/combat subpanels from keeping the old `NewPreviewPanel` min-width larger than the mobile HUD parent; desktop/tablet/mobile screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
+- Current reason: responsive viewport work now has a canonical `RuntimeViewportMetrics` owner, World HUD panels use parent-relative constraints, and latest mobile interaction prompts are larger with synced text shadows so `F Gặp` / `F Luyện` read more clearly above targets; desktop/tablet/mobile screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: continue from the viewport-metrics model; next visible target should improve world interaction readability or tablet/desktop HUD hierarchy using container/flex constraints, not raw `Screen.width/height` tuning.
+- Next implementation task after this fix: continue from the viewport-metrics model; next visible target should improve tablet/desktop HUD hierarchy or moment-to-moment world feedback using container/flex constraints, not raw `Screen.width/height` tuning.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus
@@ -84,6 +84,8 @@ Current focus update: responsive root-cause fix is ready under `LGO_RUNTIME_VIEW
 Current focus update: focus-mode World HUD visibility is ready under `LGO_WORLD_HUD_FOCUS_MODE_STEADY_FOOTPRINT_READY`; steady desktop/tablet world-hub screenshots now hide the skill preview and combat panels while active Shadow Bind preview and mobile target-dummy combat-focus evidence still show the relevant panels. No gameplay/combat semantics changed and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: mobile World HUD child-panel constraints are ready under `LGO_MOBILE_WORLD_HUD_CHILD_PANEL_CONSTRAINT_READY`; dialogue, skill preview, combat, and guidance children now collapse their minimum width to the HUD parent on mobile instead of inheriting `NewPreviewPanel`'s wider min-width. Latest mobile `target-dummy-state.png` and `npc-dialogue.png` show the panels no longer protrude beyond the HUD edge; no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: mobile interaction prompt readability is ready under `LGO_MOBILE_INTERACTION_PROMPT_READABILITY_READY`; `F Gặp` and `F Luyện` prompts are slightly larger, raised away from object labels, and text shadows now sync to the prompt TextMesh size. Latest mobile near-gatekeeper and near-training-stone screenshots were reviewed; no gameplay logic changed and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: combat cooldown active sprite/texture now prefer V3B then lightweight `CombatPlaceholders` instead of V2 `CooldownFull` fallbacks under `LGO_RUNTIME_COMBAT_COOLDOWN_V2_DEPENDENCY_CLEANUP_READY`; target-dummy screenshot was reviewed as readable, V2 registry references are down to 24 and fallback-only properties to 8, and no `VISUAL_RUNTIME_PASS` is claimed.
 
@@ -199,7 +201,7 @@ Autopilot operating rule: when a task or phase is truly closed by its required g
 
 `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`
 
-Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Latest closed marker: `LGO_MOBILE_WORLD_HUD_CHILD_PANEL_CONSTRAINT_READY`.
+Continue with one compact runtime quality batch. Pick the next visible issue from latest evidence, prefer layout/scale/hierarchy fixes over new assets, keep file count proportional to player value, and run visual evidence only when the change affects runtime presentation. Latest closed marker: `LGO_MOBILE_INTERACTION_PROMPT_READABILITY_READY`.
 
 ## Current blocker
 

@@ -20,7 +20,7 @@ namespace LinhGioi.World
             label.color = color;
             var renderer = holder.GetComponent<MeshRenderer>();
             if (renderer != null) renderer.sortingOrder = 9;
-            EnsureShadow(holder.transform, text);
+            EnsureShadow(label);
             return label;
         }
 
@@ -29,10 +29,18 @@ namespace LinhGioi.World
             if (label == null) return;
             label.text = text;
             label.color = color;
-            EnsureShadow(label.transform, text);
+            EnsureShadow(label);
         }
 
-        internal static void EnsureShadow(Transform parent, string text)
+        internal static void EnsureShadow(TextMesh label)
+        {
+            if (label == null) return;
+            var shadow = EnsureShadow(label.transform, label.text);
+            shadow.fontSize = label.fontSize;
+            shadow.characterSize = label.characterSize;
+        }
+
+        internal static TextMesh EnsureShadow(Transform parent, string text)
         {
             var shadowName = parent.name + " Shadow";
             var existing = parent.Find(shadowName);
@@ -50,6 +58,7 @@ namespace LinhGioi.World
             shadow.color = new Color(0f, 0f, 0f, 0.72f);
             var renderer = holder.GetComponent<MeshRenderer>();
             if (renderer != null) renderer.sortingOrder = 8;
+            return shadow;
         }
 
         internal static void SetActive(TextMesh label, bool active)

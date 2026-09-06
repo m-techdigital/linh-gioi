@@ -59,11 +59,20 @@ def main() -> int:
         "DescribeInteractionActionText",
         "InteractionWorldPromptText",
         "CurrentInteractionPromptOffset",
+        "_interactionPromptWorldLabel.fontSize = mobile ? 50",
+        "_interactionPromptWorldLabel.characterSize = mobile ? 0.066f",
+        "WorldLabelPresenter.EnsureShadow(_interactionPromptWorldLabel)",
         "Gặp Người Giữ Cổng trước khi ổn định Đá Luyện.",
         '"F/Space - Gặp"',
         '"F/Space - Luyện"',
         '"F Gặp"',
         '"F Luyện"',
+    )
+    require(
+        "client/Unity/Assets/Game/World/Runtime/WorldLabelPresenter.cs",
+        "internal static void EnsureShadow(TextMesh label)",
+        "shadow.fontSize = label.fontSize;",
+        "shadow.characterSize = label.characterSize;",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

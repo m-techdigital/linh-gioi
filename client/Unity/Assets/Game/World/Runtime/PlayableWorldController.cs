@@ -692,10 +692,10 @@ namespace LinhGioi.World
             var mobile = IsMobileWorldViewport();
             _interactionPromptWorldLabel.transform.position = CurrentInteractionPromptPosition(_nearestInteractable);
             _interactionPromptWorldLabel.text = InteractionWorldPromptText();
-            _interactionPromptWorldLabel.fontSize = mobile ? 44 : IsNarrowWorldViewport() ? 46 : 48;
-            _interactionPromptWorldLabel.characterSize = mobile ? 0.060f : IsNarrowWorldViewport() ? 0.052f : 0.050f;
+            _interactionPromptWorldLabel.fontSize = mobile ? 50 : IsNarrowWorldViewport() ? 46 : 48;
+            _interactionPromptWorldLabel.characterSize = mobile ? 0.066f : IsNarrowWorldViewport() ? 0.052f : 0.050f;
             _interactionPromptWorldLabel.color = _nearestInteractable.id == "Gate Keeper" ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
-            WorldLabelPresenter.EnsureShadow(_interactionPromptWorldLabel.transform, _interactionPromptWorldLabel.text);
+            WorldLabelPresenter.EnsureShadow(_interactionPromptWorldLabel);
         }
 
         private string InteractionWorldPromptText()
@@ -1059,7 +1059,7 @@ namespace LinhGioi.World
 
         private static Vector3 CurrentInteractionPromptOffset()
         {
-            if (IsMobileWorldViewport()) return new Vector3(0f, 2.28f, -0.06f);
+            if (IsMobileWorldViewport()) return new Vector3(0f, 2.42f, -0.06f);
             if (IsNarrowWorldViewport()) return new Vector3(0f, 2.24f, -0.05f);
             return new Vector3(0f, 2.20f, -0.04f);
         }
@@ -1067,7 +1067,7 @@ namespace LinhGioi.World
         private static Vector3 CurrentGateKeeperInteractionPromptOffset()
         {
             // Gate Keeper has a taller portrait plus a two-line narrow label, so the prompt needs its own air gap.
-            if (IsMobileWorldViewport()) return new Vector3(-0.10f, 2.58f, -0.08f);
+            if (IsMobileWorldViewport()) return new Vector3(-0.10f, 2.72f, -0.08f);
             if (IsNarrowWorldViewport()) return new Vector3(-0.18f, 2.52f, -0.07f);
             return new Vector3(-0.12f, 2.44f, -0.06f);
         }
