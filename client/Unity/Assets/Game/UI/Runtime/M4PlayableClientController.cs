@@ -96,7 +96,9 @@ namespace LinhGioi.UI
         private Label _toast;
         private Label _layoutProfileLabel;
         private Label _dialogueSpeaker;
+        private VisualElement _dialogueBody;
         private ScrollView _dialogueLineScroll;
+        private VisualElement _dialogueFooter;
         private Label _dialogueLine;
         private Label _dialogueProgress;
         private VisualElement _dialogueActionRow;
@@ -676,9 +678,11 @@ namespace LinhGioi.UI
             _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
             _dialogueSpeaker = new Label("Người Giữ Cổng");
             RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiTypography.DialogueSpeakerInitialFontSize, true);
+            _dialogueBody = new VisualElement { name = "LGO Dialogue Body" };
+            _dialogueFooter = new VisualElement { name = "LGO Dialogue Footer" };
             _dialogueLineScroll = new ScrollView(ScrollViewMode.Vertical);
             _dialogueLineScroll.name = "LGO Dialogue Line Scroll";
-            RuntimeUiOverflowGuard.ApplyBoundedScroll(_dialogueLineScroll, layout.DialogueLineScrollMaxHeight);
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(_dialogueLineScroll, layout.DialogueLineScrollMaxHeight, layout.DialogueLineScrollMinHeight);
             _dialogueLine = NewMutedLabel("Đối thoại đã đóng.");
             _dialogueLine.style.fontSize = RuntimeUiTypography.DialogueLineDesktopFontSize;
             _dialogueProgress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
@@ -686,10 +690,12 @@ namespace LinhGioi.UI
             _dialogueCloseButton = NewQuietButton("Đóng", CloseDialogue);
             _dialoguePanel.Add(_dialogueSpeaker);
             _dialogueLineScroll.Add(_dialogueLine);
-            _dialoguePanel.Add(_dialogueLineScroll);
-            _dialoguePanel.Add(_dialogueProgress);
+            _dialogueBody.Add(_dialogueLineScroll);
+            _dialoguePanel.Add(_dialogueBody);
+            _dialogueFooter.Add(_dialogueProgress);
             _dialogueActionRow = NewActionRow("LGO Dialogue Action Row", Justify.FlexStart, 6, 0, _dialogueContinueButton, _dialogueCloseButton);
-            _dialoguePanel.Add(_dialogueActionRow);
+            _dialogueFooter.Add(_dialogueActionRow);
+            _dialoguePanel.Add(_dialogueFooter);
             _worldHud.Add(_dialoguePanel);
             SetDialogueVisible(false);
 
@@ -1354,7 +1360,9 @@ namespace LinhGioi.UI
                 _localCombatPanel,
                 _dialoguePanel,
                 _dialogueSpeaker,
+                _dialogueBody,
                 _dialogueLineScroll,
+                _dialogueFooter,
                 _dialogueLine,
                 _dialogueProgress,
                 _dialogueActionRow,

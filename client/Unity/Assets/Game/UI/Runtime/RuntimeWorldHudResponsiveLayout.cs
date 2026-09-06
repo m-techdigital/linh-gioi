@@ -21,7 +21,9 @@ namespace LinhGioi.UI
             VisualElement localCombatPanel,
             VisualElement dialoguePanel,
             Label dialogueSpeaker,
+            VisualElement dialogueBody,
             ScrollView dialogueLineScroll,
+            VisualElement dialogueFooter,
             Label dialogueLine,
             Label dialogueProgress,
             VisualElement dialogueActionRow,
@@ -67,11 +69,19 @@ namespace LinhGioi.UI
             {
                 ApplyMobileHudChildConstraint(layout, dialoguePanel);
                 dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
+                dialoguePanel.style.marginBottom = layout.DialoguePanelMarginVertical;
+                dialoguePanel.style.maxHeight = layout.DialoguePanelMaxHeight;
+                dialoguePanel.style.overflow = Overflow.Hidden;
                 RuntimeUiSkin.ApplyPadding(dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
             }
-            RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight);
+            ApplyDialogueRegion(dialogueBody, layout, true);
+            ApplyDialogueRegion(dialogueFooter, layout, false);
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight, layout.DialogueLineScrollMinHeight);
             if (dialogueSpeaker != null)
+            {
                 dialogueSpeaker.style.fontSize = mobile ? RuntimeUiTypography.DialogueSpeakerMobileFontSize : RuntimeUiTypography.DialogueSpeakerDesktopFontSize;
+                dialogueSpeaker.style.marginBottom = layout.DialogueContentGap;
+            }
             if (dialogueLine != null)
             {
                 dialogueLine.style.fontSize = mobile ? RuntimeUiTypography.DialogueLineMobileFontSize : RuntimeUiTypography.DialogueLineDesktopFontSize;
@@ -83,6 +93,8 @@ namespace LinhGioi.UI
             if (dialogueProgress != null)
             {
                 dialogueProgress.style.fontSize = mobile ? RuntimeUiTypography.DialogueProgressMobileFontSize : RuntimeUiTypography.DialogueProgressDesktopFontSize;
+                dialogueProgress.style.marginTop = layout.DialogueContentGap;
+                dialogueProgress.style.marginBottom = layout.DialogueContentGap;
                 RuntimeUiSkin.ApplyPadding(dialogueProgress, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingHorizontal, layout.DialogueProgressPaddingVertical, layout.DialogueProgressPaddingVertical);
             }
             if (dialogueActionRow != null)
@@ -90,6 +102,8 @@ namespace LinhGioi.UI
                 dialogueActionRow.style.flexWrap = Wrap.NoWrap;
                 dialogueActionRow.style.width = Length.Percent(100);
                 dialogueActionRow.style.maxWidth = Length.Percent(100);
+                dialogueActionRow.style.marginTop = 0;
+                dialogueActionRow.style.marginBottom = 0;
             }
             if (dialogueContinueButton != null)
             {
@@ -108,7 +122,7 @@ namespace LinhGioi.UI
                 ApplyDialogueActionButton(dialogueCloseButton);
             }
             if (dialogueActionRow != null)
-                RuntimeUiOverflowGuard.ApplyResponsiveColumns(dialogueActionRow, mobile ? 1 : 2, mobile ? 4 : 6, dialogueContinueButton, dialogueCloseButton);
+                RuntimeUiOverflowGuard.ApplyResponsiveColumns(dialogueActionRow, 2, mobile ? 4 : 6, dialogueContinueButton, dialogueCloseButton);
         }
 
         internal static void ApplyTopStatus(
@@ -202,7 +216,7 @@ namespace LinhGioi.UI
             SetDisplayed(position, showPosition && !focusMode);
             SetDisplayed(worldDebugStrip, !compactWorld);
             SetDisplayed(worldMeta, !compactWorld);
-            SetDisplayed(worldGuidanceCard, !((dialogueVisible && compactViewport) || skillPreviewActive || evidenceHidesGuidance));
+            SetDisplayed(worldGuidanceCard, !(dialogueVisible || skillPreviewActive || evidenceHidesGuidance));
             SetDisplayed(worldArea, !compactWorld);
             SetDisplayed(worldStep, showHints && !compactWorld);
             SetDisplayed(worldDirection, showHints && !(mobileProfile && !dialogueVisible));
@@ -232,6 +246,18 @@ namespace LinhGioi.UI
             element.style.width = Length.Percent(100);
             element.style.maxWidth = Length.Percent(100);
             element.style.flexShrink = 1;
+        }
+
+        private static void ApplyDialogueRegion(VisualElement element, RuntimeUiLayoutProfile layout, bool body)
+        {
+            if (element == null) return;
+            element.style.width = Length.Percent(100);
+            element.style.maxWidth = Length.Percent(100);
+            element.style.minWidth = 0;
+            element.style.flexShrink = body ? 1 : 0;
+            element.style.overflow = body ? Overflow.Hidden : StyleKeyword.None;
+            element.style.marginTop = body ? 0 : layout.DialogueContentGap;
+            element.style.marginBottom = 0;
         }
 
         private static void ApplyDialogueActionButton(Button button)

@@ -24,7 +24,7 @@ namespace LinhGioi.UI
             button.style.overflow = Overflow.Hidden;
         }
 
-        internal static void ApplyBoundedScroll(ScrollView scroll, float maxHeight)
+        internal static void ApplyBoundedScroll(ScrollView scroll, float maxHeight, float minHeight = 0f)
         {
             if (scroll == null) return;
             scroll.verticalScrollerVisibility = ScrollerVisibility.Auto;
@@ -32,7 +32,7 @@ namespace LinhGioi.UI
             scroll.style.width = Length.Percent(100);
             scroll.style.maxWidth = Length.Percent(100);
             scroll.style.maxHeight = maxHeight;
-            scroll.style.minHeight = 0;
+            scroll.style.minHeight = minHeight > 0f ? minHeight : 0;
             scroll.style.flexShrink = 1;
             scroll.style.overflow = Overflow.Hidden;
             scroll.contentContainer.style.minWidth = 0;

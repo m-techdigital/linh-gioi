@@ -43,6 +43,13 @@ Do not tune a visible UI element from raw screenshot size alone. Compute layout 
 
 If `contentMaxHeight` is smaller than the content's natural height, the content area must become a vertical `ScrollView`. It must not increase panel height beyond `panelMaxHeight`. If `columnWidth` cannot preserve readable tap targets, the row must reduce columns or move secondary actions below the primary action.
 
+Dialogue current ratios:
+
+- Total dialogue panel max height: mobile `50vh`, tablet `48vh`, desktop `52vh` in UI Toolkit panel-space units.
+- Dialogue line scroll max height: mobile `12vh`, tablet/desktop `16vh`.
+- Dialogue line scroll min height: mobile `8vh`, tablet/desktop `10vh`.
+- Dialogue panel vertical margin uses one shared top/bottom value per profile, so bottom margin may not be smaller than top margin.
+
 ## Anti-Overflow Contract
 
 Every runtime panel must follow these rules:
@@ -51,8 +58,9 @@ Every runtime panel must follow these rules:
 - Long narrative/status content is bounded in a content viewport or `ScrollView`; it is never allowed to push actions out of the screen.
 - Primary actions stay visible without scrolling. Secondary content can collapse, hide, or scroll by profile priority.
 - Button metrics come from the profile/system constants for the screen state; button text does not decide container width.
-- Horizontal action rows use a column formula. Mobile dialogue uses one column; desktop/tablet dialogue uses two equal columns.
-- Margin top/bottom is profile-ratio based or shared spacing, not a one-off fixed correction from a single screenshot.
+- Horizontal action rows use a column formula. Dialogue actions use two equal columns when both actions must remain visible in a compact HUD.
+- Margin top/bottom is profile-ratio based or shared spacing, not a one-off fixed correction from a single screenshot. Dialogue panels must use symmetrical vertical margins so text length cannot visually pin the panel to the bottom edge.
+- Dialog/modal structure must be explicit: header stays fixed, body owns scrollable content, footer owns progress/actions and does not scroll. Do not add long labels directly under the shell beside action rows.
 
 Runtime owner: `RuntimeUiOverflowGuard` centralizes bounded action rows, bounded scroll regions, and responsive action columns.
 
@@ -68,6 +76,7 @@ This matrix is the current visual target contract. Demo coverage is being expand
 | Character Hall create | name input and create/cancel actions | form stays bounded; input uses max width; actions never exceed parent | target sheet pending |
 | World Hub steady | current objective, nearest interaction, top quit/status | auxiliary debug/meta hides on compact profiles | `docs/reference-ui/lgo-runtime-ui-north-star-v1.png` |
 | World dialogue | speaker, dialogue line, progress, continue/close | line scrolls vertically; actions remain visible; mobile stacks actions | latest `npc-dialogue.png` evidence |
+| World long dialogue | speaker, long dialogue body, progress, continue/close | body scrolls within max-height; footer stays visible and inside panel | latest `npc-dialogue-long.png` evidence |
 | World target dummy/combat | combat focus and actionable feedback | objective signal has priority over unrelated target label | latest target-dummy evidence |
 | Skill preview | selected skill, cooldown/telegraph action | compact profiles hide footer/guidance clutter | latest skill-preview evidence |
 | Session menu | resume/save/back/quit | details/settings collapse or scroll; action grid remains visible | `docs/reference-ui/lgo-runtime-ui-north-star-v1.png` and latest session-menu evidence |

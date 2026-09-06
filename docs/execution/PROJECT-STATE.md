@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_RUNTIME_UI_OVERFLOW_CONTRACT_READY` adds lightweight north-star/mobile-tablet UI target references, a bounded runtime overflow guard for action rows/scroll content, and a dialogue layout contract that keeps long text inside a vertical `ScrollView` while action buttons remain visible. Fresh desktop/tablet/mobile screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_DIALOGUE_HEADER_BODY_FOOTER_SCROLL_READY` gives Gate Keeper dialogue an explicit header/body/footer structure: header stays fixed, body owns a bounded vertical `ScrollView`, and footer keeps progress/actions visible. A new `npc-dialogue-long.png` evidence checkpoint verifies long text on desktop/tablet/mobile, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

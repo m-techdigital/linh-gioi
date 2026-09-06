@@ -129,6 +129,8 @@ namespace LinhGioi.UI
             if (hasSelectedCharacter)
             {
                 // LGO Character Hall Mobile Selected CTA Hierarchy v1: enter-world owns the selected state on every profile.
+                enterWorldButton.style.display = DisplayStyle.Flex;
+                createButton.style.display = DisplayStyle.Flex;
                 enterWorldButton.text = "Vào sân luyện";
                 RuntimeUiSkin.ApplyButtonMetrics(
                     enterWorldButton,
@@ -152,6 +154,7 @@ namespace LinhGioi.UI
             }
 
             createButton.text = "Tạo tu sĩ";
+            createButton.style.display = DisplayStyle.Flex;
             RuntimeUiSkin.ApplyButtonMetrics(
                 createButton,
                 RuntimeUiSpacing.CharacterActionButtonMinWidth,
@@ -159,6 +162,7 @@ namespace LinhGioi.UI
                 RuntimeUiSpacing.CharacterCreateButtonFontSize);
             createButton.style.opacity = 1f;
             enterWorldButton.text = "Vào sân luyện";
+            enterWorldButton.style.display = DisplayStyle.None;
             RuntimeUiSkin.ApplyButtonMetrics(
                 enterWorldButton,
                 RuntimeUiSpacing.CharacterActionButtonMinWidth,
@@ -168,7 +172,6 @@ namespace LinhGioi.UI
             enterWorldButton.style.opacity = 0.46f;
             enterWorldButton.tooltip = "Chọn hoặc tạo tu sĩ trước khi vào sân luyện.";
             characterActionRow.Add(createButton);
-            characterActionRow.Add(enterWorldButton);
         }
 
         private static void ApplyPanel(RuntimeUiLayoutProfile layout, int width, int height, VisualElement lobbyPanel)
@@ -219,7 +222,7 @@ namespace LinhGioi.UI
             if (layout.IsMobile || lobbyPanel == null || lobbyContent == null || createPanel == null) return;
             if (lobbyContent.parent != lobbyPanel || createPanel.parent != lobbyPanel) return;
 
-            var createFirst = !hasSelectedCharacter && !layout.IsTablet;
+            var createFirst = !hasSelectedCharacter;
             var contentIndex = lobbyPanel.IndexOf(lobbyContent);
             var createIndex = lobbyPanel.IndexOf(createPanel);
             if (contentIndex < 0 || createIndex < 0) return;

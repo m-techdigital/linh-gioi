@@ -25,6 +25,7 @@ namespace LinhGioi.UI
             "target-dummy-state.png",
             "skill-shadow-bind-preview.png",
             "npc-dialogue.png",
+            "npc-dialogue-long.png",
             "session-menu.png"
         };
 
@@ -156,6 +157,14 @@ namespace LinhGioi.UI
                 "NPC Dialogue",
                 "docs/reference-art/v0.16.5/lgo-gate-character-ui-v0165.png",
                 "Vietnamese dialogue panel, speaker, progress, action buttons");
+
+            _controller.CaptureEvidenceOpenLongDialogue();
+            yield return WaitFrames(8);
+            yield return CaptureCheckpoint(
+                "npc-dialogue-long",
+                "NPC Dialogue Long Text",
+                "docs/reference-ui/lgo-runtime-ui-mobile-tablet-targets-v1.png",
+                "Long Vietnamese dialogue stays inside a bounded vertical scroll region while progress and action buttons remain visible");
 
             _controller.CaptureEvidenceOpenSessionMenu();
             yield return WaitFrames(8);

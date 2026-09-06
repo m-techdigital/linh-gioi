@@ -79,6 +79,16 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
         }
 
+        internal void CaptureEvidenceOpenLongDialogue()
+        {
+            CaptureEvidenceOpenDialogue();
+            if (_dialogueLine == null || _dialogueProgress == null) return;
+            _dialogueLine.text =
+                "Người Giữ Cổng: Linh Môn mở ra không chỉ để con bước qua, mà để thử xem tâm thức có giữ được nhịp thở giữa gió mạnh hay không. " +
+                "Khi lời dẫn kéo dài, khung thoại phải giữ nguyên hình dáng, phần chữ tự cuộn trong vùng đọc, còn tiến trình và nút hành động vẫn nằm đúng vị trí để người chơi không bị mất điều khiển.";
+            _dialogueProgress.text = "Đối thoại dài: kiểm tra cuộn";
+        }
+
         internal void CaptureEvidenceTargetDummyState()
         {
             if (_world == null) return;

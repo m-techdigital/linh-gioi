@@ -139,12 +139,24 @@ namespace LinhGioi.UI
         internal int WorldGuidanceCardPaddingVertical => IsMobile ? 4 : 7;
         internal int DialoguePanelPaddingHorizontal => IsMobile ? 10 : 14;
         internal int DialoguePanelPaddingVertical => IsMobile ? 9 : 12;
-        internal int DialoguePanelMarginTop => Mathf.RoundToInt(Mathf.Clamp(Height * (IsMobile ? 0.010f : 0.012f), IsMobile ? 4f : 8f, IsMobile ? 8f : 12f));
-        internal float DialogueLineScrollMaxHeight => IsMobile
-            ? Mathf.Clamp(Height * 0.17f, 62f, 98f)
+        internal int DialoguePanelMarginVertical => Mathf.RoundToInt(Mathf.Clamp(Height * (IsMobile ? 0.012f : 0.014f), IsMobile ? 6f : 10f, IsMobile ? 10f : 16f));
+        internal int DialoguePanelMarginTop => DialoguePanelMarginVertical;
+        internal float DialoguePanelMaxHeight => IsMobile
+            ? Mathf.Clamp(Height * 0.50f, 210f, 270f)
             : IsTablet
-                ? Mathf.Clamp(Height * 0.18f, 96f, 132f)
-                : Mathf.Clamp(Height * 0.18f, 116f, 172f);
+                ? Mathf.Clamp(Height * 0.48f, 300f, 390f)
+                : Mathf.Clamp(Height * 0.52f, 360f, 520f);
+        internal int DialogueContentGap => IsMobile ? 6 : IsTablet ? 8 : 10;
+        internal float DialogueLineScrollMinHeight => IsMobile
+            ? Mathf.Clamp(Height * 0.08f, 38f, 46f)
+            : IsTablet
+                ? Mathf.Clamp(Height * 0.10f, 78f, 104f)
+                : Mathf.Clamp(Height * 0.10f, 92f, 128f);
+        internal float DialogueLineScrollMaxHeight => IsMobile
+            ? Mathf.Clamp(Height * 0.12f, 50f, 64f)
+            : IsTablet
+                ? Mathf.Clamp(Height * 0.16f, 108f, 148f)
+                : Mathf.Clamp(Height * 0.16f, 124f, 176f);
         internal int DialogueProgressPaddingHorizontal => 10;
         internal int DialogueProgressPaddingVertical => IsMobile ? 4 : 5;
         internal int StatusPaddingHorizontal(bool worldVisible) => worldVisible && IsMobile ? 14 : 18;

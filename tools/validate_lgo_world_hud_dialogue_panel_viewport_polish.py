@@ -61,7 +61,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
         "LGO Runtime World HUD Responsive Layout Helper v1",
         "LGO World HUD Dialogue Viewport Polish v1",
-        "dialogueVisible && compactViewport",
+        "!(dialogueVisible || skillPreviewActive || evidenceHidesGuidance)",
         "layout.WorldHudMaxWidth(dialogueVisible)",
         "ApplyMobileHudChildConstraint(layout, worldGuidanceCard)",
         "ApplyMobileHudChildConstraint(layout, skillPreviewPanel)",
@@ -77,15 +77,23 @@ def main() -> int:
         "LGO Dialogue Action Sizing Contract v1",
         "worldHud.style.minWidth = layout.WorldHudMinWidthFor(dialogueVisible);",
         "dialogueActionRow.style.flexWrap = Wrap.NoWrap",
-        "RuntimeUiOverflowGuard.ApplyResponsiveColumns(dialogueActionRow, mobile ? 1 : 2, mobile ? 4 : 6, dialogueContinueButton, dialogueCloseButton)",
-        "RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight)",
+        "RuntimeUiOverflowGuard.ApplyResponsiveColumns(dialogueActionRow, 2, mobile ? 4 : 6, dialogueContinueButton, dialogueCloseButton)",
+        "dialoguePanel.style.marginBottom = layout.DialoguePanelMarginVertical",
+        "dialoguePanel.style.maxHeight = layout.DialoguePanelMaxHeight",
+        "dialoguePanel.style.overflow = Overflow.Hidden",
+        "RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight, layout.DialogueLineScrollMinHeight)",
+        "ApplyDialogueRegion(dialogueBody, layout, true)",
+        "ApplyDialogueRegion(dialogueFooter, layout, false)",
+        "element.style.flexShrink = body ? 1 : 0",
+        "dialogueSpeaker.style.marginBottom = layout.DialogueContentGap",
+        "dialogueProgress.style.marginTop = layout.DialogueContentGap",
         "dialogueLine.style.whiteSpace = WhiteSpace.Normal",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiOverflowGuard.cs",
         "LGO Runtime UI Overflow Guard v1",
         "ApplyBoundedActionRow(VisualElement row)",
-        "ApplyBoundedScroll(ScrollView scroll, float maxHeight)",
+        "ApplyBoundedScroll(ScrollView scroll, float maxHeight, float minHeight = 0f)",
         "ApplyResponsiveColumns(VisualElement row, int columns, float gap, params Button[] buttons)",
         "row.style.flexDirection = columns == 1 ? FlexDirection.Column : FlexDirection.Row",
         "button.style.minWidth = 0",
@@ -99,7 +107,28 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "Mathf.Clamp(Width * 0.68f, 260f, 320f)",
+        "DialoguePanelMarginVertical",
+        "DialoguePanelMaxHeight",
+        "DialogueLineScrollMinHeight",
         "DialogueLineScrollMaxHeight",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs",
+        "npc-dialogue-long.png",
+        "CaptureEvidenceOpenLongDialogue",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",
+        "CaptureEvidenceOpenLongDialogue",
+        "Đối thoại dài: kiểm tra cuộn",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        "LGO Dialogue Body",
+        "LGO Dialogue Footer",
+        "_dialogueBody.Add(_dialogueLineScroll)",
+        "_dialogueFooter.Add(_dialogueProgress)",
+        "_dialogueFooter.Add(_dialogueActionRow)",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0.md",
