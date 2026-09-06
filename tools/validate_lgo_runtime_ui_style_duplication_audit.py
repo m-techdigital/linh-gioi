@@ -70,9 +70,14 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "RuntimeUiSkin.ApplyLocalSettingsPanelFrame(_settingsPanel);",
         "var emptyCard = NewEmptyCharacterCard(layout, emptyTitle, empty);",
-        "RuntimeUiSkin.ApplyCombatCooldownIconState(_combatCooldownIcon, coolingDown);",
+        "RuntimeCombatHudPresentation.ApplyAssetState(",
         "_showPositionToggle = NewLocalSettingToggle",
         "_combatCooldownIcon = NewCombatCooldownIcon();",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
+        "LGO Runtime Combat HUD Presentation Helper v1",
+        "RuntimeUiSkin.ApplyCombatCooldownIconState(cooldownIcon, coolingDown);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",

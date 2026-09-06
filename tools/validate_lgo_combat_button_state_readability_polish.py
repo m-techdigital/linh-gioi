@@ -53,9 +53,14 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "ApplyCombatButtonSkin(_localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture",
+        "RuntimeCombatHudPresentation.ApplyAssetState(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
+        "LGO Runtime Combat HUD Presentation Helper v1",
+        "ApplyCombatButtonSkin(localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture",
         "CombatPlaceholderAssets.CombatButtonNormalTexture, coolingDown);",
-        '_localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
+        'localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
         "Đang hồi chiêu: bấm vẫn cho phản hồi từ chối hồi chiêu",
     )
     require(

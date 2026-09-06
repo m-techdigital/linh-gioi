@@ -91,6 +91,11 @@ def main() -> int:
         "TryLocalCombatPrototype",
         "Tấn công thử",
         "LGO World Touch Primary Combat Button",
+        "RuntimeCombatHudPresentation.ApplyAssetState(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
+        "LGO Runtime Combat HUD Presentation Helper v1",
         "Hồi chiêu mô phỏng",
     )
     require(

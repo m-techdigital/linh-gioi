@@ -93,7 +93,11 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "evidenceHidesGuidance",
         "(!compactViewport || _evidenceState.ForceCombatPanel)",
-        '_localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
+        "RuntimeCombatHudPresentation.ApplyAssetState(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
+        'localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",

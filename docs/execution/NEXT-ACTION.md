@@ -105,6 +105,8 @@ Current focus update: World Hub set-dressing and depth-lighting placement now li
 
 Current focus update: Character Hall create-form collapse/expand state and selected-action CTA hierarchy now live in `RuntimeCharacterHallResponsiveLayout` under `LGO_CHARACTER_HALL_STATE_ACTION_HELPER_READY`; `M4PlayableClientController` keeps only flow decisions and delegates reusable presentation state. Source-only gates pass; no visual PASS is claimed from this source-only ownership cleanup.
 
+Current focus update: Local combat HUD cooldown/icon/button/accent presentation now lives in `RuntimeCombatHudPresentation` under `LGO_RUNTIME_COMBAT_HUD_PRESENTATION_HELPER_READY`; `M4PlayableClientController` keeps local combat flow calls while the helper owns text, texture, tooltip, compact status, and accent state. Source-only and refreshed target-dummy runtime evidence pass, with no `VISUAL_RUNTIME_PASS` claim.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task

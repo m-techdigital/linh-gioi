@@ -104,6 +104,11 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "_combatRangeStatus",
+        "RuntimeCombatHudPresentation.ApplyAssetState(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
+        "LGO Runtime Combat HUD Presentation Helper v1",
         "ApplyStatusAccent",
         "Tấn công thử",
         "Đang hồi chiêu",

@@ -76,7 +76,13 @@ def main() -> int:
         '_toast = NewToast("Linh Môn đã sẵn sàng.");',
         "ApplyStatusChip(_status, busy ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Muted);",
         "ApplyCombatButtonSkin(_localCombatButton, CombatPlaceholderAssets.CombatButtonPressedTexture, false);",
-        "ApplyStatusAccent(_combatRangeStatus",
+        "RuntimeCombatHudPresentation.ApplyAssetState(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
+        "LGO Runtime Combat HUD Presentation Helper v1",
+        "ApplyStatusAccent(rangeStatus",
+        "ApplyStatusAccent(feedbackStatus",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

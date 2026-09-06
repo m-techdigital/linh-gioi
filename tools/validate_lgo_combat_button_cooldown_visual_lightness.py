@@ -63,9 +63,13 @@ def main() -> int:
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture",
-        '_localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
+        "RuntimeCombatHudPresentation.ApplyAssetState(",
         "LocalCombatCoolingDown",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",
+        "coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture",
+        'localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";',
     )
     require(
         "docs/tasks/LGO-COMBAT-BUTTON-COOLDOWN-VISUAL-LIGHTNESS-PASS-v1.0.md",

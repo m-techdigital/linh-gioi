@@ -916,8 +916,8 @@ namespace LinhGioi.UI
             if (_worldLandmarks != null) _worldLandmarks.text = _world.WorldLandmarkSummary;
             if (_worldPoseState != null) _worldPoseState.text = "Tư thế: nhân vật " + _world.PlayerPoseStateName + " / Người Giữ Cổng " + _world.GateKeeperPoseStateName + " / Bóng Tối " + _world.ShadowSlimeStateName + ".";
             if (_worldVfxState != null) _worldVfxState.text = "Hiệu ứng: " + _world.VfxFeedbackStateName + " / chỉ là phản hồi hình ảnh cục bộ.";
-            if (_combatTargetStatus != null) _combatTargetStatus.text = CompactCombatTargetStatus(_world.TargetDummyStatusText);
-            if (_combatRangeStatus != null) _combatRangeStatus.text = CompactCombatRangeStatus(_world.TargetDummyRangeText);
+            if (_combatTargetStatus != null) _combatTargetStatus.text = RuntimeCombatHudPresentation.CompactTargetStatus(_world.TargetDummyStatusText);
+            if (_combatRangeStatus != null) _combatRangeStatus.text = RuntimeCombatHudPresentation.CompactRangeStatus(_world.TargetDummyRangeText);
             if (_combatVisualState != null) _combatVisualState.text = _world.TargetDummyVisualStateText;
             if (_combatFeedback != null) _combatFeedback.text = _world.CombatFeedbackText;
             if (_combatCooldown != null) _combatCooldown.text = _world.CombatCooldownText;
@@ -1253,41 +1253,18 @@ namespace LinhGioi.UI
         private void RefreshCombatAssetUiState()
         {
             if (_world == null) return;
-            var coolingDown = _world.LocalCombatCoolingDown;
-            if (_combatCooldownIcon != null)
-            {
-                var texture = coolingDown ? CombatPlaceholderAssets.CooldownActiveTexture : CombatPlaceholderAssets.CooldownReadyTexture;
-                if (texture != null) _combatCooldownIcon.style.backgroundImage = new StyleBackground(texture);
-                _combatCooldownIcon.tooltip = coolingDown ? "Hồi chiêu mô phỏng đang chạy." : "Sẵn sàng tấn công thử.";
-                RuntimeUiSkin.ApplyCombatCooldownIconState(_combatCooldownIcon, coolingDown);
-            }
-            if (_localCombatButton != null)
-            {
-                ApplyCombatButtonSkin(_localCombatButton, coolingDown ? CombatPlaceholderAssets.CombatButtonCooldownTexture : CombatPlaceholderAssets.CombatButtonNormalTexture, coolingDown);
-                _localCombatButton.text = coolingDown ? "Hồi chiêu" : "Tấn công thử";
-                _localCombatButton.tooltip = coolingDown
-                    ? "Đang hồi chiêu: bấm vẫn cho phản hồi từ chối hồi chiêu; đây là nguyên mẫu cục bộ, không phải chiến đấu thật."
-                    : "Gửi ý định Chém Gió vào bia luyện tập; chỉ là phản hồi nguyên mẫu.";
-            }
-            var feedback = _world.CombatFeedbackText;
-            var warning = feedback.Contains("Ngoài tầm") || feedback.Contains("Chưa chọn") || feedback.Contains("Đang hồi chiêu");
-            ApplyStatusAccent(_combatRangeStatus, _world.TargetDummyRangeText.Contains("trong tầm") ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Danger);
-            ApplyStatusAccent(_combatVisualState, coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit);
-            ApplyStatusAccent(_combatFeedback, warning ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Gold);
-            ApplyStatusAccent(_combatCooldown, coolingDown ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit);
-            ApplyStatusAccent(_combatAuthority, _world.CombatAuthorityText.Contains("từ chối") || _world.CombatAuthorityText.Contains("Từ chối") ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit);
-        }
-
-        private static string CompactCombatTargetStatus(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value)) return "Bia luyện: chưa rõ";
-            return value.Replace("Mục tiêu luyện tập", "Bia luyện");
-        }
-
-        private static string CompactCombatRangeStatus(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value)) return "Tầm: chưa rõ";
-            return value.Replace("Tầm đánh", "Tầm");
+            RuntimeCombatHudPresentation.ApplyAssetState(
+                _combatCooldownIcon,
+                _localCombatButton,
+                _combatRangeStatus,
+                _combatVisualState,
+                _combatFeedback,
+                _combatCooldown,
+                _combatAuthority,
+                _world.LocalCombatCoolingDown,
+                _world.TargetDummyRangeText,
+                _world.CombatFeedbackText,
+                _world.CombatAuthorityText);
         }
 
         private void PreviewSkill(string previewName, string displayName)
