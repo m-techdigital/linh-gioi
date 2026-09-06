@@ -678,8 +678,8 @@ namespace LinhGioi.UI
             _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
             _dialogueSpeaker = new Label("Người Giữ Cổng");
             RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiTypography.DialogueSpeakerInitialFontSize, true);
-            _dialogueBody = new VisualElement { name = "LGO Dialogue Body" };
-            _dialogueFooter = new VisualElement { name = "LGO Dialogue Footer" };
+            _dialogueBody = NewModalBody("LGO Dialogue Body");
+            _dialogueFooter = NewModalFooter("LGO Dialogue Footer");
             _dialogueLineScroll = new ScrollView(ScrollViewMode.Vertical);
             _dialogueLineScroll.name = "LGO Dialogue Line Scroll";
             RuntimeUiOverflowGuard.ApplyBoundedScroll(_dialogueLineScroll, layout.DialogueLineScrollMaxHeight, layout.DialogueLineScrollMinHeight);

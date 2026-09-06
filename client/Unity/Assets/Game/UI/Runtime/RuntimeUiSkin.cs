@@ -344,6 +344,17 @@ namespace LinhGioi.UI
             panel.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.26f);
         }
 
+        internal static void ApplyFloatingActionBarFrame(VisualElement panel)
+        {
+            panel.style.backgroundImage = StyleKeyword.None;
+            panel.style.backgroundColor = new Color(0.0f, 0.014f, 0.034f, 0.28f);
+            ApplyRadius(panel, 8);
+            panel.style.borderLeftWidth = 0;
+            panel.style.borderRightWidth = 0;
+            panel.style.borderTopWidth = 0;
+            panel.style.borderBottomWidth = 0;
+        }
+
         internal static void ApplyCharacterPortraitFrame(VisualElement portrait)
         {
             portrait.style.backgroundColor = new Color(0.0f, 0.015f, 0.035f, 0.48f);

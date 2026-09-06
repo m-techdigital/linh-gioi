@@ -71,7 +71,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "RuntimeUiFactory.ApplyCharacterHallContentResponsive(lobbyContent, layout);",
         "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width);",
-        "Position.Absolute",
+        "RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",

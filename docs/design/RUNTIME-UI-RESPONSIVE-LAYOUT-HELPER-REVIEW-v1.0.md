@@ -72,9 +72,15 @@ Overlay owner: `RuntimeUiOverflowGuard.ApplyViewportOverlaySurface` is the share
 
 Vertical overlay placement also uses shared semantic anchors: `Top`, `Center`, `Bottom`, and `Stretch`. Character Hall mobile create/dock overlays, World dialogue, and Session Menu must route through this helper instead of applying one-off `top/right/bottom` coordinates in screen-specific code.
 
+Modal/body/footer owner: `RuntimeUiOverflowGuard.ApplyModalBody` and `ApplyModalFooter` are the shared base for fixed-footer modal/dialog structure. Controller code should create modal regions through `RuntimeUiFactory.NewModalBody` and `NewModalFooter` instead of raw `VisualElement` containers when the panel has scrollable text plus persistent actions.
+
 Character Hall action buttons must use `RuntimeUiButtonTier` instead of selected-state-only numeric button constants. Visual priority comes from tier choice, opacity, and action order; it should not come from one screen inventing a larger font/height for the same kind of action.
 
+Collapsed Character Hall actions are an action bar, not a create-form card. The selected-state container must use `RuntimeUiSkin.ApplyFloatingActionBarFrame`; the full `ApplyCharacterCreateFrame` is only for the expanded/empty create form.
+
 Scrollable body chrome must be styled by the same owner that bounds the scroll region. `RuntimeUiOverflowGuard.ApplyBoundedScroll` hides default arrow buttons and applies compact dark/spirit scroller styling so long dialogue or future modal bodies do not expose platform-default white controls.
+
+External baseline notes: Unity UI Toolkit runtime layout should be treated as flex/Yoga-driven retained UI in panel-space, while `PanelSettings` handles the screen-scale policy. Component code still must clamp by safe panel viewport and move overflow into scroll regions; raw screenshot pixels or one fixed top margin are not acceptable layout inputs.
 
 ## Target Case Matrix
 

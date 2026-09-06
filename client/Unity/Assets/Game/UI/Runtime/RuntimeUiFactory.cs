@@ -418,6 +418,22 @@ namespace LinhGioi.UI
             return NewActionRow("LGO Runtime Action Row", Justify.FlexStart, 6, 0, buttons);
         }
 
+        internal static VisualElement NewModalBody(string elementName)
+        {
+            var body = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(elementName)) body.name = elementName;
+            RuntimeUiOverflowGuard.ApplyModalBody(body);
+            return body;
+        }
+
+        internal static VisualElement NewModalFooter(string elementName)
+        {
+            var footer = new VisualElement();
+            if (!string.IsNullOrWhiteSpace(elementName)) footer.name = elementName;
+            RuntimeUiOverflowGuard.ApplyModalFooter(footer, 0);
+            return footer;
+        }
+
         internal static VisualElement NewActionRow(string elementName, Justify justifyContent, float marginTop, float marginBottom, params Button[] buttons)
         {
             var row = new VisualElement();

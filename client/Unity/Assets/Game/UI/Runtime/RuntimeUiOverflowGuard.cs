@@ -22,6 +22,7 @@ namespace LinhGioi.UI
     {
         internal const string Marker = "LGO Runtime UI Overflow Guard v1";
         internal const string OverlayPlacementMarker = "LGO Runtime UI Overlay Placement Base v1";
+        internal const string ModalShellMarker = "LGO Runtime UI Modal Shell Base v1";
 
         internal static void ApplyBoundedActionRow(VisualElement row)
         {
@@ -38,6 +39,32 @@ namespace LinhGioi.UI
             button.style.flexShrink = 1;
             button.style.maxWidth = Length.Percent(100);
             button.style.overflow = Overflow.Hidden;
+        }
+
+        internal static void ApplyModalBody(VisualElement body)
+        {
+            if (body == null) return;
+            body.style.width = Length.Percent(100);
+            body.style.maxWidth = Length.Percent(100);
+            body.style.minHeight = 0;
+            body.style.flexGrow = 1;
+            body.style.flexShrink = 1;
+            body.style.marginTop = 0;
+            body.style.marginBottom = 0;
+            body.style.overflow = Overflow.Hidden;
+        }
+
+        internal static void ApplyModalFooter(VisualElement footer, float marginTop)
+        {
+            if (footer == null) return;
+            footer.style.width = Length.Percent(100);
+            footer.style.maxWidth = Length.Percent(100);
+            footer.style.minHeight = 0;
+            footer.style.flexGrow = 0;
+            footer.style.flexShrink = 0;
+            footer.style.marginTop = marginTop;
+            footer.style.marginBottom = 0;
+            footer.style.overflow = Overflow.Hidden;
         }
 
         internal static void ApplyBoundedScroll(ScrollView scroll, float maxHeight, float minHeight = 0f)

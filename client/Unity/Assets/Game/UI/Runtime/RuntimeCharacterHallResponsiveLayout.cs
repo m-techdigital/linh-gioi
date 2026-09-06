@@ -52,7 +52,7 @@ namespace LinhGioi.UI
             if (createTitle != null)
             {
                 createTitle.text = collapsed ? "Sẵn sàng" : hasSelectedCharacter ? "Tạo thêm tu sĩ" : "Khai mở tu sĩ";
-                createTitle.style.display = collapsed && isMobileProfile ? DisplayStyle.None : DisplayStyle.Flex;
+                createTitle.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
                 createTitle.style.marginBottom = collapsed ? 2 : compactStandaloneCreate ? 4 : 8;
                 createTitle.style.marginRight = desktopStandaloneCreate ? 18 : 0;
                 createTitle.style.unityTextAlign = collapsed && !isMobileProfile ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
@@ -82,12 +82,16 @@ namespace LinhGioi.UI
                 createPanel.style.flexWrap = compactStandaloneCreate && !desktopStandaloneCreate ? Wrap.Wrap : Wrap.NoWrap;
                 createPanel.style.alignItems = collapsed && !isMobileProfile || compactStandaloneCreate ? Align.Center : Align.Stretch;
                 createPanel.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
+                if (collapsed)
+                    RuntimeUiSkin.ApplyFloatingActionBarFrame(createPanel);
+                else
+                    RuntimeUiSkin.ApplyCharacterCreateFrame(createPanel);
                 createPanel.style.width = layout.IsMobile
                     ? collapsed ? Mathf.Clamp(layout.Width * 0.34f, 300f, 336f) : Mathf.Clamp(layout.Width * 0.36f, 320f, 360f)
                     : !hasSelectedCharacter && !isMobileProfile ? Length.Percent(RuntimeUiSizing.CharacterCreateStandalonePanelWidthPercent) : Length.Percent(100);
-                createPanel.style.opacity = collapsed ? 0.72f : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
-                createPanel.style.minHeight = collapsed ? (isMobileProfile ? 62 : 96) : desktopStandaloneCreate ? 100 : compactStandaloneCreate ? 104 : RuntimeUiSizing.CharacterCreatePanelMinHeight;
-                createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 72 : 108) : desktopStandaloneCreate ? 118 : compactStandaloneCreate ? 126 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
+                createPanel.style.opacity = collapsed ? (isMobileProfile ? 0.72f : 0.82f) : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
+                createPanel.style.minHeight = collapsed ? (isMobileProfile ? 62 : 66) : desktopStandaloneCreate ? 100 : compactStandaloneCreate ? 104 : RuntimeUiSizing.CharacterCreatePanelMinHeight;
+                createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 72 : 78) : desktopStandaloneCreate ? 118 : compactStandaloneCreate ? 126 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
                 if (layout.IsMobile && collapsed)
                 {
                     // LGO Character Hall Selected Action Anchor v1: selected state becomes a stable action dock instead of a floating mid-screen card.
@@ -111,10 +115,10 @@ namespace LinhGioi.UI
             }
             if (characterActionRow != null)
             {
-                characterActionRow.style.marginLeft = collapsed && !isMobileProfile ? 18 : compactStandaloneCreate ? 12 : 0;
+                characterActionRow.style.marginLeft = collapsed && !isMobileProfile ? 0 : compactStandaloneCreate ? 12 : 0;
                 characterActionRow.style.marginTop = collapsed && isMobileProfile ? 0 : compactStandaloneCreate ? 0 : 6;
                 characterActionRow.style.flexGrow = collapsed && !isMobileProfile || compactStandaloneCreate ? 1 : 0;
-                characterActionRow.style.justifyContent = !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;
+                characterActionRow.style.justifyContent = collapsed && !isMobileProfile || !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;
             }
         }
 

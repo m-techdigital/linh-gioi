@@ -73,8 +73,8 @@ namespace LinhGioi.UI
                 dialoguePanel.style.overflow = Overflow.Hidden;
                 RuntimeUiSkin.ApplyPadding(dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
             }
-            ApplyDialogueRegion(dialogueBody, layout, true);
-            ApplyDialogueRegion(dialogueFooter, layout, false);
+            RuntimeUiOverflowGuard.ApplyModalBody(dialogueBody);
+            RuntimeUiOverflowGuard.ApplyModalFooter(dialogueFooter, layout.DialogueContentGap);
             RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight, layout.DialogueLineScrollMinHeight);
             if (dialogueSpeaker != null)
             {
@@ -239,18 +239,6 @@ namespace LinhGioi.UI
             element.style.width = Length.Percent(100);
             element.style.maxWidth = Length.Percent(100);
             element.style.flexShrink = 1;
-        }
-
-        private static void ApplyDialogueRegion(VisualElement element, RuntimeUiLayoutProfile layout, bool body)
-        {
-            if (element == null) return;
-            element.style.width = Length.Percent(100);
-            element.style.maxWidth = Length.Percent(100);
-            element.style.minWidth = 0;
-            element.style.flexShrink = body ? 1 : 0;
-            element.style.overflow = body ? Overflow.Hidden : StyleKeyword.None;
-            element.style.marginTop = body ? 0 : layout.DialogueContentGap;
-            element.style.marginBottom = 0;
         }
 
         private static void ApplyDialogueActionButton(Button button)
