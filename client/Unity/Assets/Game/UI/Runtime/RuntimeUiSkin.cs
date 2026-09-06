@@ -343,6 +343,25 @@ namespace LinhGioi.UI
             field.labelElement.style.color = RuntimeArtCatalog.Gold;
             field.labelElement.style.fontSize = RuntimeUiTypography.BadgeValueFontSize;
             field.labelElement.style.unityFontStyleAndWeight = FontStyle.Bold;
+            ApplyLobbyInputInnerFrame(field);
+            field.RegisterCallback<AttachToPanelEvent>(_ => ApplyLobbyInputInnerFrame(field));
+        }
+
+        internal static void ApplyLobbyInputInnerFrame(TextField field)
+        {
+            if (field == null) return;
+            // LGO Character Hall Lobby Text Field Inner Skin v1: style TextField's actual input child, not only the root frame.
+            var input = field.Q(className: "unity-base-text-field__input")
+                ?? field.Q(className: "unity-text-field__input")
+                ?? field.Q("unity-text-input");
+            if (input == null) return;
+            input.style.backgroundColor = new Color(0.004f, 0.018f, 0.042f, 0.92f);
+            input.style.color = RuntimeArtCatalog.Text;
+            input.style.unityFontStyleAndWeight = FontStyle.Bold;
+            input.style.borderTopWidth = 0;
+            input.style.borderRightWidth = 0;
+            input.style.borderBottomWidth = 0;
+            input.style.borderLeftWidth = 0;
         }
 
         internal static void ApplyEmptyCharacterCardFrame(VisualElement card)

@@ -67,6 +67,10 @@ def main() -> int:
         "if (minHeight > 0f) field.style.minHeight = minHeight;",
         "if (marginTop > 0f) field.style.marginTop = marginTop;",
         "field.style.color = RuntimeArtCatalog.Text;",
+        "LGO Character Hall Lobby Text Field Inner Skin v1",
+        "ApplyLobbyInputInnerFrame(TextField field)",
+        "unity-base-text-field__input",
+        "unity-text-field__input",
     )
     factory = require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiFactory.cs",
