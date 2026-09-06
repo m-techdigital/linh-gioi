@@ -398,6 +398,7 @@ namespace LinhGioi.UI
         {
             var label = new Label(text);
             RuntimeUiSkin.ApplyText(label, RuntimeArtCatalog.Gold, RuntimeUiTypography.SectionTitleFontSize, true, TextAnchor.MiddleCenter);
+            RuntimeUiTypography.ApplyHeadingFont(label);
             label.style.marginBottom = RuntimeUiSpacing.SectionTitleMarginBottom;
             return label;
         }
@@ -488,7 +489,7 @@ namespace LinhGioi.UI
             var rule = new VisualElement();
             rule.style.height = RuntimeUiSpacing.OrnamentRuleHeight;
             rule.style.marginBottom = RuntimeUiSpacing.OrnamentRuleMarginBottom;
-            rule.style.backgroundColor = color;
+            rule.style.backgroundColor = color == RuntimeArtCatalog.Spirit ? RuntimeArtCatalog.Gold : color;
             rule.style.opacity = 0.8f;
             return rule;
         }
@@ -514,6 +515,7 @@ namespace LinhGioi.UI
                 RuntimeUiSkin.ApplyPadding(label, RuntimeUiSpacing.StatusLabelPaddingHorizontal, RuntimeUiSpacing.StatusLabelPaddingVertical);
             }
             RuntimeUiSkin.ApplyInsetRowFrame(label, color);
+            RuntimeUiSkin.ApplyStatusAccent(label, color);
             return label;
         }
 
@@ -740,6 +742,45 @@ namespace LinhGioi.UI
             return button;
         }
 
+        internal static Button NewCharacterSlotButton(string name, string classId, bool empty, Action action)
+        {
+            var button = NewListButton(name, classId, action);
+            button.text = string.Empty;
+            button.AddToClassList("lgo-character-slot");
+            button.style.flexGrow = 1;
+            button.style.flexBasis = 0;
+            button.style.flexDirection = FlexDirection.Row;
+            button.style.alignItems = Align.Center;
+            var texture = empty ? Resources.Load<Texture2D>("LGOUI/EmptyCharacterAvatar")
+                : LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture;
+            var avatar = NewImageLayer("LGO Character Slot Avatar", texture, ScaleMode.ScaleToFit);
+            avatar.style.width = 48;
+            avatar.style.height = 48;
+            avatar.style.flexShrink = 0;
+            avatar.style.marginRight = 12;
+            avatar.style.backgroundColor = RuntimeUiSkin.BlueGlass;
+            RuntimeUiSkin.ApplyRadius(avatar, 24);
+            var copy = NewFlexibleColumn("LGO Character Slot Copy");
+            copy.pickingMode = PickingMode.Ignore;
+            copy.style.minWidth = 0;
+            var title = new Label(name) { pickingMode = PickingMode.Ignore, tooltip = name };
+            RuntimeUiSkin.ApplyText(title, RuntimeUiSkin.IvoryText, RuntimeUiTypography.BadgeValueFontSize);
+            title.style.whiteSpace = WhiteSpace.NoWrap;
+            title.style.overflow = Overflow.Hidden;
+            title.style.textOverflow = TextOverflow.Ellipsis;
+            copy.Add(title);
+            if (!empty)
+            {
+                var detail = NewMutedLabel(classId);
+                detail.pickingMode = PickingMode.Ignore;
+                detail.style.fontSize = RuntimeUiTypography.BadgeValueFontSize;
+                copy.Add(detail);
+            }
+            button.Add(avatar);
+            button.Add(copy);
+            return button;
+        }
+
         internal static void ApplyListButtonSelection(Button button, bool selected)
         {
             button.EnableInClassList("lgo-list-selected", selected);
@@ -793,15 +834,8 @@ namespace LinhGioi.UI
             pad.style.position = Position.Absolute;
             pad.style.alignItems = Align.Center;
             pad.style.justifyContent = Justify.Center;
-            pad.style.backgroundColor = new Color(0.003f, 0.018f, 0.040f, 0.46f);
-            RuntimeUiSkin.ApplyEdgeFrame(
-                pad,
-                new Color(0.14f, 0.78f, 0.90f, 0.46f),
-                new Color(0.93f, 0.73f, 0.36f, 0.24f),
-                new Color(0.14f, 0.78f, 0.90f, 0.20f),
-                new Color(0.93f, 0.73f, 0.36f, 0.18f),
-                2f,
-                1f);
+            pad.style.backgroundColor = RuntimeUiSkin.DeepGlass;
+            RuntimeUiSkin.ApplyPanelFrame(pad);
 
             var label = new Label("Di chuyển");
             label.name = "LGO World Touch Movement Label";
@@ -812,8 +846,8 @@ namespace LinhGioi.UI
             var nub = new VisualElement { name = "LGO World Touch Movement Nub" };
             nub.pickingMode = PickingMode.Ignore;
             nub.style.position = Position.Absolute;
-            nub.style.backgroundColor = new Color(0.14f, 0.78f, 0.90f, 0.30f);
-            RuntimeUiSkin.ApplyEdgeFrame(nub, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, 1f, 1f);
+            nub.style.backgroundColor = RuntimeUiSkin.BlueGlass;
+            RuntimeUiSkin.ApplyPanelFrame(nub);
             pad.Add(label);
             pad.Add(nub);
             return pad;
@@ -833,21 +867,11 @@ namespace LinhGioi.UI
 
         internal static Button NewWorldTouchActionButton(string label, Action action)
         {
-            var button = NewButton(label, action);
+            var button = NewSecondaryButton(label, action);
             button.name = "LGO World Touch Action Button " + label;
             button.style.marginTop = 0;
-            button.style.backgroundColor = new Color(0.015f, 0.060f, 0.105f, 0.82f);
-            button.style.color = RuntimeArtCatalog.Text;
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
             button.style.whiteSpace = WhiteSpace.NoWrap;
-            RuntimeUiSkin.ApplyEdgeFrame(
-                button,
-                RuntimeArtCatalog.Spirit,
-                RuntimeArtCatalog.Gold,
-                new Color(0.14f, 0.78f, 0.90f, 0.26f),
-                new Color(0.93f, 0.73f, 0.36f, 0.32f),
-                1f,
-                1f);
             return button;
         }
 

@@ -138,6 +138,8 @@ namespace LinhGioi.UI
                 button.style.width = Length.Percent(widthPercent);
                 button.style.flexBasis = 0;
                 button.style.flexGrow = 1;
+                // Column width already consumes the available space; Unity's default left margin would overflow it.
+                button.style.marginLeft = 0;
                 button.style.marginRight = columns == 1 || i % columns == columns - 1 ? 0 : gap;
                 button.style.marginTop = columns == 1 && i > 0 ? gap : 0;
             }
@@ -163,11 +165,14 @@ namespace LinhGioi.UI
             surface.style.marginBottom = 0;
             surface.style.alignSelf = Align.Center;
             surface.style.flexShrink = 0;
+            surface.style.translate = new Translate(
+                placement == RuntimeUiOverlayPlacement.Center ? Length.Percent(-50) : new Length(0),
+                verticalPlacement == RuntimeUiOverlayVerticalPlacement.Center ? Length.Percent(-50) : new Length(0));
 
             if (placement == RuntimeUiOverlayPlacement.Center)
             {
-                surface.style.left = horizontalInset;
-                surface.style.right = horizontalInset;
+                surface.style.left = Length.Percent(50);
+                surface.style.right = StyleKeyword.Auto;
             }
             else if (placement == RuntimeUiOverlayPlacement.Left)
             {
@@ -180,7 +185,12 @@ namespace LinhGioi.UI
                 surface.style.right = horizontalInset;
             }
 
-            if (verticalPlacement == RuntimeUiOverlayVerticalPlacement.Bottom)
+            if (verticalPlacement == RuntimeUiOverlayVerticalPlacement.Center)
+            {
+                surface.style.top = Length.Percent(50);
+                surface.style.bottom = StyleKeyword.Auto;
+            }
+            else if (verticalPlacement == RuntimeUiOverlayVerticalPlacement.Bottom)
             {
                 surface.style.top = StyleKeyword.Auto;
                 surface.style.bottom = verticalInset;

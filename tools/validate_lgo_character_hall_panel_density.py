@@ -59,6 +59,7 @@ def main() -> int:
         "_createBody = NewModalBody(\"LGO Character Create Modal Body\");",
         "_createFooter = NewModalFooter(\"LGO Character Create Modal Footer\");",
         "_lobbyPanel = NewCharacterHallPanel(layout);",
+        "_root.Add(_lobbyPanel);",
         "_characterList = NewCharacterListPanel(layout);",
         "RuntimeCharacterHallResponsiveLayout.Apply(",
         "RuntimeCharacterHallResponsiveLayout.ApplySelectedDetails(layout, _selectedCharacter != null, _selectedStatus, _selectedObjective);",
@@ -71,9 +72,8 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "OwnerMarker = \"LGO Character Hall Responsive Layout Helper v1\"",
-        "LGO Character Hall Selected Compact Header Contract v1",
-        "SetDisplayed(lobbyHeaderBlock, !(layout.IsMobile && hasSelectedCharacter));",
-        "lobbyIntro.style.display = layout.IsMobile && hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex;",
+        "SetDisplayed(lobbyHeaderBlock, true);",
+        "lobbyIntro.style.display = DisplayStyle.None;",
         "RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter);",
         "RuntimeUiFactory.ApplySelectedCharacterPreviewResponsive(selectedPreview, selectedName, layout, width, hasSelectedCharacter);",
         "RuntimeUiOverflowGuard.ApplyModalBody(createBody);",
@@ -82,9 +82,9 @@ def main() -> int:
         "RuntimeUiOverflowGuard.ApplyResponsiveColumns(characterActionRow, 2, 6,",
         "RuntimeUiSkin.ApplyButtonTier(createButton, RuntimeUiButtonTier.Compact);",
         "RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Compact);",
-        "LGO Character Hall Mobile Full Safe Shell v1",
-        "lobbyPanel.style.width = Length.Percent(100);",
-        "lobbyPanel.style.maxWidth = layout.IsMobile ? Length.Percent(100)",
+        "RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(lobbyPanel,",
+        "RuntimeUiOverlayPlacement.Center, RuntimeUiOverlayVerticalPlacement.Center,",
+        "panelWidth, height * 0.85f",
         "layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth",
         "createPanel.style.position = Position.Relative;",
         "createPanel.style.width = Length.Percent(100);",
@@ -92,7 +92,7 @@ def main() -> int:
     )
     forbid(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
-        "ApplyViewportOverlaySurface(",
+        "ApplyViewportOverlaySurface(createPanel",
         "CharacterHallSelectedActionDock",
         "ApplySelectedActionRatio(",
     )

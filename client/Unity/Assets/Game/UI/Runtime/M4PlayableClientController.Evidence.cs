@@ -28,23 +28,41 @@ namespace LinhGioi.UI
             try
             {
                 using (var down = PointerDownEvent.GetPooled(new Event { type = EventType.MouseDown, button = 0, mousePosition = point }))
+                {
+                    down.target = pad;
                     pad.SendEvent(down);
+                }
+                var initialInput = pad.Value;
+                var initialBounds = pad.worldBound;
+                var startedAt = Time.realtimeSinceStartup;
                 for (var i = 0; i < 12; i++) yield return null;
                 var distance = Vector3.Distance(start, _world.CurrentPosition);
                 if (distance < 0.1f || pad.Value.x <= 0f)
-                    throw new InvalidOperationException("Touch movement evidence failed: pointer did not move the player.");
+                    throw new InvalidOperationException("Touch movement evidence failed: distance=" + distance
+                        + " initialInput=" + initialInput + " finalInput=" + pad.Value
+                        + " focused=" + Application.isFocused + " elapsed=" + (Time.realtimeSinceStartup - startedAt)
+                        + " initialBounds=" + initialBounds + " finalBounds=" + pad.worldBound);
 
                 using (var up = PointerUpEvent.GetPooled(new Event { type = EventType.MouseUp, button = 0, mousePosition = point }))
+                {
+                    up.target = pad;
                     pad.SendEvent(up);
+                }
                 yield return null;
                 yield return null;
                 var released = _world.CurrentPosition;
                 for (var i = 0; i < 4; i++) yield return null;
                 if (pad.Value != Vector2.zero || Vector3.Distance(released, _world.CurrentPosition) > 0.001f)
-                    throw new InvalidOperationException("Touch movement evidence failed: movement continued after release.");
+                    throw new InvalidOperationException("Touch movement evidence failed after release: pad=" + pad.Value
+                        + " worldInput=" + _world.TouchMovement + " distance=" + Vector3.Distance(released, _world.CurrentPosition)
+                        + " keyboard=" + Input.GetAxisRaw("Horizontal") + "," + Input.GetAxisRaw("Vertical")
+                        + " focused=" + Application.isFocused);
 
                 using (var down = PointerDownEvent.GetPooled(new Event { type = EventType.MouseDown, button = 0, mousePosition = point }))
+                {
+                    down.target = pad;
                     pad.SendEvent(down);
+                }
                 yield return null;
                 SetSessionMenuVisible(true);
                 yield return null;
@@ -53,6 +71,14 @@ namespace LinhGioi.UI
                 for (var i = 0; i < 4; i++) yield return null;
                 if (pad.Value != Vector2.zero || Vector3.Distance(paused, _world.CurrentPosition) > 0.001f)
                     throw new InvalidOperationException("Touch movement evidence failed: movement continued in menu.");
+                AssertCenteredSurfaceForEvidence(_sessionMenuPanel);
+                foreach (var button in _sessionActions.Query<Button>().ToList())
+                {
+                    var bounds = button.worldBound;
+                    var container = _sessionActions.worldBound;
+                    if (bounds.xMin < container.xMin - 1 || bounds.xMax > container.xMax + 1)
+                        throw new InvalidOperationException("Session action exceeds shared column: button=" + bounds + " column=" + container);
+                }
                 Debug.Log("LGO_TOUCH_MOVEMENT_PLAYER_PASS pointer=simulated moved=" + distance.ToString("F3", System.Globalization.CultureInfo.InvariantCulture) + " release=stopped menu=stopped");
             }
             finally
@@ -240,6 +266,30 @@ namespace LinhGioi.UI
 
         internal void AssertCharacterFormBoundsForEvidence()
         {
+            AssertCenteredSurfaceForEvidence(_lobbyPanel);
+            var backdrop = LinhGioi.Art.LgoVisualAssetRegistryV3B.LinhThanhNightBackground;
+            if (backdrop == null || _root.resolvedStyle.backgroundImage.texture != backdrop)
+                throw new InvalidOperationException("Character Hall must load the approved night-city background, not silently use the old fallback.");
+            var headingFont = Resources.Load<Font>("LGOUI/HeadingSerif");
+            var heading = _lobbyHeaderBlock.Q<Label>();
+            if (headingFont == null || heading == null || heading.resolvedStyle.unityFontDefinition.font != headingFont)
+                throw new InvalidOperationException("Character Hall title must use the shared bundled heading font.");
+            if (_lobbyHeaderBlock.resolvedStyle.display != DisplayStyle.Flex)
+                throw new InvalidOperationException("Character selection must preserve its shared shell header.");
+            var slots = _characterList.Query<Button>(className: "lgo-character-slot").ToList();
+            if (slots.Count != 3) throw new InvalidOperationException("Character Hall must always show three slots.");
+            foreach (var slot in slots)
+            {
+                var avatar = slot.Q<VisualElement>("LGO Character Slot Avatar");
+                if (avatar == null || avatar.resolvedStyle.backgroundImage.texture == null)
+                    throw new InvalidOperationException("Every character slot must have a loaded portrait or empty silhouette.");
+                if (avatar.worldBound.xMin < slot.worldBound.xMin - 1 || avatar.worldBound.xMax > slot.worldBound.xMax + 1
+                    || avatar.worldBound.yMin < slot.worldBound.yMin - 1 || avatar.worldBound.yMax > slot.worldBound.yMax + 1)
+                    throw new InvalidOperationException("Character slot avatar exceeds its button bounds.");
+            }
+            var bodyFont = Resources.Load<Font>("LGOUI/BodySans");
+            if (bodyFont == null || _root.resolvedStyle.unityFontDefinition.font != bodyFont)
+                throw new InvalidOperationException("Runtime UI must use its bundled body font, not an OS font.");
             var viewport = _root.worldBound;
             var form = _createPanel.worldBound;
             foreach (var element in new VisualElement[] { _createPanel, _characterName, _createHint, _createButton, _enterWorldButton })
@@ -252,6 +302,18 @@ namespace LinhGioi.UI
                     throw new InvalidOperationException("Character form resize overflow: " + element.name + " bounds=" + bounds + " container=" + container);
             }
             Debug.Log("LGO_CHARACTER_FORM_RESIZE_BOUNDS_PASS screen=" + Screen.width + "x" + Screen.height + " form=" + form);
+        }
+
+        private void AssertCenteredSurfaceForEvidence(VisualElement surface)
+        {
+            var bounds = surface.worldBound;
+            var viewport = _root.worldBound;
+            if (Mathf.Abs(bounds.center.x - viewport.center.x) > 1 || Mathf.Abs(bounds.center.y - viewport.center.y) > 1)
+                throw new InvalidOperationException("Shared centered surface is off-center: " + surface.name
+                    + " bounds=" + bounds + " viewport=" + viewport);
+            if (bounds.xMin < viewport.xMin || bounds.xMax > viewport.xMax
+                || bounds.yMin < viewport.yMin || bounds.yMax > viewport.yMax)
+                throw new InvalidOperationException("Centered surface exceeds its viewport: " + surface.name);
         }
 
         internal void CaptureEvidenceWorldHub()

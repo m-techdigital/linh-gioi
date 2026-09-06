@@ -25,8 +25,8 @@ namespace LinhGioi.UI
             var width = layout.Width;
             var height = layout.Height;
             ApplyPanel(layout, width, height, lobbyPanel);
-            // LGO Character Hall Selected Compact Header Contract v1: selected mobile follows the target sheet by prioritizing roster/hero/actions over repeated screen prose.
-            SetDisplayed(lobbyHeaderBlock, !(layout.IsMobile && hasSelectedCharacter));
+            // Keep the same shell structure when selection changes, including on mobile.
+            SetDisplayed(lobbyHeaderBlock, true);
             ApplyIntro(layout, lobbyIntro, hasSelectedCharacter);
             RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width, hasSelectedCharacter);
             if (emptyCharacterCard != null)
@@ -59,7 +59,7 @@ namespace LinhGioi.UI
             SetDisplayed(characterName, !collapsed);
             SetDisplayed(classId, false);
             createTitle.text = hasSelectedCharacter ? "Tạo thêm tu sĩ" : "Tạo nhân vật";
-            createTitle.style.fontSize = RuntimeUiTypography.SectionTitleMobileFontSize;
+            createTitle.style.fontSize = RuntimeUiTypography.SectionHeadingFontSize;
             createTitle.style.whiteSpace = WhiteSpace.Normal;
             createTitle.style.marginBottom = 8;
             createPanel.style.position = Position.Relative;
@@ -108,8 +108,8 @@ namespace LinhGioi.UI
             if (characterActionRow == null || createButton == null || enterWorldButton == null) return;
             var cancelling = hasSelectedCharacter && createFormExpanded;
             var entering = hasSelectedCharacter && !createFormExpanded;
-            createButton.text = entering ? "Tạo thêm" : "Tạo tu sĩ";
-            enterWorldButton.text = cancelling ? "Hủy" : "Vào sân luyện";
+            createButton.text = entering ? "Tạo thêm" : "Tạo nhân vật";
+            enterWorldButton.text = cancelling ? "Hủy" : "Vào game";
             enterWorldButton.tooltip = cancelling ? "Đóng form và giữ nhân vật đang chọn."
                 : hasSelectedCharacter ? "Bước qua Linh Môn vào sân luyện." : "Chọn hoặc tạo tu sĩ trước khi vào sân luyện.";
             createButton.style.display = DisplayStyle.Flex;
@@ -160,13 +160,13 @@ namespace LinhGioi.UI
         private static void ApplyPanel(RuntimeUiLayoutProfile layout, int width, int height, VisualElement lobbyPanel)
         {
             if (lobbyPanel == null) return;
-            // LGO Character Hall Mobile Full Safe Shell v1: mobile landscape follows the demo container bounds instead of a narrow fixed panel-space clamp.
-            lobbyPanel.style.width = Length.Percent(100);
-            lobbyPanel.style.maxWidth = layout.IsMobile ? Length.Percent(100)
-                : layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth;
-            lobbyPanel.style.minHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : 0;
-            lobbyPanel.style.maxHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight
-                : Mathf.Max(0, height - 2 * (layout.RootPaddingTop + layout.HeaderMinHeight(false)));
+            var availableWidth = Mathf.Max(0, width - 2 * layout.RootPaddingHorizontal);
+            var panelWidth = layout.IsMobile ? availableWidth : Mathf.Min(availableWidth,
+                layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth);
+            RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(lobbyPanel,
+                RuntimeUiOverlayPlacement.Center, RuntimeUiOverlayVerticalPlacement.Center,
+                panelWidth, height * 0.85f, (width - panelWidth) * 0.5f, height * 0.075f);
+            lobbyPanel.style.minHeight = 0;
             RuntimeUiSkin.ApplyPadding(lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
         }
 
@@ -175,7 +175,7 @@ namespace LinhGioi.UI
             if (lobbyIntro == null) return;
             // LGO Character Hall Mobile Copy Density v1: mobile keeps intent, drops prose.
             lobbyIntro.text = layout.IsMobile ? "Chọn tu sĩ, rồi vào sân luyện." : "Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.";
-            lobbyIntro.style.display = layout.IsMobile && hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex;
+            lobbyIntro.style.display = DisplayStyle.None;
             lobbyIntro.style.fontSize = layout.IsMobile ? RuntimeUiTypography.LobbyIntroMobileFontSize : RuntimeUiTypography.LobbyIntroDesktopFontSize;
             lobbyIntro.style.marginBottom = layout.LobbyIntroMarginBottom;
         }

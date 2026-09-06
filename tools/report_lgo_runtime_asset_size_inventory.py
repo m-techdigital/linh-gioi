@@ -141,6 +141,12 @@ def main() -> int:
     print(f"- configured role budget total: {fmt(total_budget)}")
     print(f"- roles over budget: {over_budget}")
     print(f"- roles in watch band >=85% budget: {near_budget}")
+    manifest_paths = {(ROOT / row["unity_path"]).resolve() for row in rows}
+    v3b_images = iter_images(ROOT / "client/Unity/Assets/Game/Art/Runtime/V3B/Resources/LGOArtV3B")
+    additional_images = [path for path in v3b_images if path.resolve() not in manifest_paths]
+    print(f"- complete V3B Resources image payload: {fmt(sum(path.stat().st_size for path in v3b_images))}")
+    for path in additional_images:
+        print(f"- outside legacy manifest: `{path.relative_to(ROOT)}`: {fmt(path.stat().st_size)}; consult reference provenance/import budget.")
     print("- V3B assets remain runtime candidates, not production final art.")
     print("- Use Unity platform import profiles for mobile/tablet/desktop delivery rather than duplicating ad hoc asset folders.")
     print("- New runtime image work must choose a role budget before import and record the optimization action for WATCH/OVER_BUDGET rows.")

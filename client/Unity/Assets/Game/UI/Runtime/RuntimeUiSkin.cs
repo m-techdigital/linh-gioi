@@ -20,6 +20,7 @@ namespace LinhGioi.UI
         internal static readonly Color DeepGlass = new Color(0.035f, 0.040f, 0.046f, 0.82f);
         internal static readonly Color DenseGlass = new Color(0.035f, 0.040f, 0.046f, 0.92f);
         internal static readonly Color BlueGlass = new Color(0.055f, 0.063f, 0.074f, 0.90f);
+        internal static readonly Color IvoryText = new Color(0.89f, 0.87f, 0.82f, 1f);
         internal static readonly Color SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.36f);
         internal static readonly Color LightGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.20f);
         internal static readonly Color MediumGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.48f);
@@ -76,6 +77,7 @@ namespace LinhGioi.UI
         internal static void ApplyStatusAccent(Label label, Color accent)
         {
             if (label == null) return;
+            if (accent == RuntimeArtCatalog.Spirit) accent = IvoryText;
             label.style.borderLeftColor = accent;
             label.style.color = accent;
         }
@@ -135,7 +137,7 @@ namespace LinhGioi.UI
 
         internal static void ApplyInsetRowFrame(VisualElement element, Color accent)
         {
-            element.style.backgroundColor = RuntimeArtCatalog.Background;
+            element.style.backgroundColor = DeepGlass;
             ApplyEdgeFrame(element, accent, RuntimeArtCatalog.SurfaceRaised, Color.clear, RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
             element.style.borderRightWidth = 0;
         }
@@ -143,61 +145,26 @@ namespace LinhGioi.UI
         internal static void ApplyLoginCtaBacking(VisualElement element)
         {
             element.style.backgroundColor = SoftLoginGlass;
-            ApplyRadius(element, 18);
-            ApplyEdgeFrame(
-                element,
-                new Color(0.14f, 0.78f, 0.90f, 0.16f),
-                new Color(0.93f, 0.73f, 0.36f, 0.28f),
-                new Color(0.93f, 0.73f, 0.36f, 0.16f),
-                new Color(0.14f, 0.78f, 0.90f, 0.20f),
-                1f,
-                1f);
-            element.style.borderTopWidth = 1;
-            element.style.borderBottomWidth = 1;
+            ApplyPanelFrame(element);
         }
 
         internal static void ApplyLoginCtaSceneBlend(VisualElement element)
         {
-            element.style.backgroundColor = new Color(0.005f, 0.018f, 0.040f, 0.42f);
-            element.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
-            element.style.borderLeftWidth = 1;
-            element.style.borderRightColor = new Color(0.93f, 0.73f, 0.36f, 0.20f);
-            element.style.borderRightWidth = 1;
-            element.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.46f);
-            element.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.32f);
-            element.style.borderTopWidth = 1;
-            element.style.borderBottomWidth = 1;
+            element.style.backgroundColor = DeepGlass;
+            ApplyPanelFrame(element);
         }
 
         internal static void ApplyServerSelectorFrame(VisualElement element)
         {
-            element.style.backgroundColor = new Color(0.003f, 0.015f, 0.035f, 0.86f);
-            ApplyRadius(element, 10);
-            element.style.borderTopColor = new Color(0.93f, 0.73f, 0.36f, 0.46f);
-            element.style.borderTopWidth = 1;
-            element.style.borderLeftColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
-            element.style.borderLeftWidth = 1;
-            element.style.borderRightColor = new Color(0.14f, 0.78f, 0.90f, 0.16f);
-            element.style.borderRightWidth = 1;
-            element.style.borderBottomColor = new Color(0.14f, 0.78f, 0.90f, 0.26f);
-            element.style.borderBottomWidth = 1;
+            element.style.backgroundColor = DenseGlass;
+            ApplyPanelFrame(element);
         }
 
         internal static void ApplyLoginEnterButtonFrame(Button button)
         {
-            button.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
-            button.style.unityBackgroundImageTintColor = new Color(1f, 1f, 1f, 0.88f);
-            button.style.backgroundColor = new Color(0.07f, 0.035f, 0.006f, 0.16f);
-            button.style.color = new Color(0.09f, 0.045f, 0.006f, 1f);
-            ApplyRadius(button, 12);
-            ApplyEdgeFrame(
-                button,
-                new Color(0.14f, 0.78f, 0.90f, 0.26f),
-                new Color(1.0f, 0.80f, 0.40f, 0.58f),
-                new Color(0.14f, 0.78f, 0.90f, 0.20f),
-                new Color(1.0f, 0.80f, 0.40f, 0.46f),
-                1f,
-                1f);
+            ApplyBaseButtonFrame(button);
+            ApplyCompactActionFrame(button, BlueGlass, RuntimeArtCatalog.Gold,
+                RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Gold);
         }
 
         internal static void ApplyCompactActionFrame(Button button, Color background, Color left, Color top, Color right, Color bottom)
@@ -219,7 +186,7 @@ namespace LinhGioi.UI
         {
             icon.style.backgroundColor = background;
             ApplyRadius(icon, 8);
-            ApplyEdgeFrame(icon, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, RuntimeArtCatalog.Gold, 1f, 1f);
+            ApplyEdgeFrame(icon, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f);
         }
 
         internal static void ApplySettingToggleFrame(Toggle toggle, Color accent)
@@ -231,7 +198,7 @@ namespace LinhGioi.UI
             toggle.style.alignItems = Align.Center;
             toggle.style.justifyContent = Justify.SpaceBetween;
             toggle.style.backgroundColor = DenseGlass;
-            ApplyEdgeFrame(toggle, accent, LightGoldBorder, LightSpiritBorder, RuntimeArtCatalog.SurfaceRaised, 2f, 1f);
+            ApplyEdgeFrame(toggle, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, MediumGoldBorder, 1f, 1f);
             toggle.style.color = RuntimeArtCatalog.Text;
             toggle.style.fontSize = RuntimeUiSpacing.SettingToggleFontSize;
             toggle.style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -239,10 +206,9 @@ namespace LinhGioi.UI
 
         internal static void ApplySettingToggleState(Toggle toggle, bool enabled)
         {
-            toggle.style.borderLeftColor = enabled ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted;
-            toggle.style.borderTopColor = enabled ? LightGoldBorder : new Color(0.42f, 0.48f, 0.56f, 0.26f);
-            toggle.style.borderRightColor = enabled ? LightSpiritBorder : new Color(0.28f, 0.34f, 0.42f, 0.26f);
-            toggle.style.backgroundColor = enabled ? new Color(0.015f, 0.055f, 0.10f, 0.82f) : new Color(0.010f, 0.024f, 0.044f, 0.72f);
+            var border = enabled ? MediumGoldBorder : LightGoldBorder;
+            ApplyEdgeFrame(toggle, border, border, border, border, 1f, 1f);
+            toggle.style.backgroundColor = enabled ? BlueGlass : DeepGlass;
             var pill = toggle.Q<Label>(SettingToggleStatePillName);
             if (pill != null) ApplySettingToggleStatePill(pill, enabled);
         }
@@ -262,10 +228,10 @@ namespace LinhGioi.UI
             pill.style.unityTextAlign = TextAnchor.MiddleCenter;
             pill.style.unityFontStyleAndWeight = FontStyle.Bold;
             pill.style.fontSize = RuntimeUiSpacing.SettingTogglePillFontSize;
-            pill.style.backgroundColor = enabled ? new Color(0.08f, 0.34f, 0.42f, 0.86f) : new Color(0.10f, 0.12f, 0.16f, 0.78f);
-            pill.style.color = enabled ? RuntimeArtCatalog.Text : RuntimeArtCatalog.Muted;
+            pill.style.backgroundColor = enabled ? BlueGlass : DeepGlass;
+            pill.style.color = enabled ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Muted;
             ApplyRadius(pill, RuntimeUiSpacing.SettingTogglePillRadius);
-            ApplyEdgeFrame(pill, enabled ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Muted, LightGoldBorder, Color.clear, Color.clear, 1f, 1f);
+            ApplyEdgeFrame(pill, enabled ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Muted, LightGoldBorder, Color.clear, Color.clear, 1f, 1f);
         }
 
         internal static void ApplyBadgeFrame(VisualElement badge)
@@ -403,40 +369,21 @@ namespace LinhGioi.UI
 
         internal static void ApplyPreviewPanelFrame(VisualElement preview)
         {
-            preview.style.backgroundColor = RuntimeArtCatalog.SurfaceRaised;
-            ApplyRadius(preview, 8);
-            ApplyEdgeFrame(preview, RuntimeArtCatalog.Gold, RuntimeArtCatalog.Spirit, Color.clear, Color.clear, 2f, 1f);
-            preview.style.borderRightWidth = 0;
-            preview.style.borderBottomWidth = 0;
+            preview.style.backgroundColor = DeepGlass;
+            ApplyPanelFrame(preview);
         }
 
         internal static void ApplyWorldHudGroupFrame(VisualElement group, Color accent)
         {
-            group.style.backgroundColor = new Color(0.0f, 0.020f, 0.050f, 0.64f);
-            ApplyRadius(group, 9);
-            ApplyEdgeFrame(
-                group,
-                new Color(accent.r, accent.g, accent.b, 0.68f),
-                new Color(0.93f, 0.73f, 0.36f, 0.42f),
-                new Color(0.14f, 0.78f, 0.90f, 0.18f),
-                new Color(0.93f, 0.73f, 0.36f, 0.22f),
-                2f,
-                1f);
+            group.style.backgroundColor = DeepGlass;
+            ApplyPanelFrame(group);
         }
 
         internal static void ApplyWorldHudRootFrame(VisualElement hud)
         {
-            hud.style.backgroundColor = new Color(0.002f, 0.014f, 0.036f, 0.74f);
+            hud.style.backgroundColor = DeepGlass;
             hud.style.backgroundImage = StyleKeyword.None;
-            ApplyRadius(hud, 12);
-            ApplyEdgeFrame(
-                hud,
-                new Color(0.14f, 0.78f, 0.90f, 0.78f),
-                new Color(0.93f, 0.73f, 0.36f, 0.72f),
-                new Color(0.14f, 0.78f, 0.90f, 0.18f),
-                new Color(0.93f, 0.73f, 0.36f, 0.24f),
-                2f,
-                1f);
+            ApplyPanelFrame(hud);
         }
 
         internal static void ApplyHudStatusCompactFrame(Label label)
@@ -472,15 +419,14 @@ namespace LinhGioi.UI
         internal static Color SessionMenuBackground(bool compactProfile)
         {
             return compactProfile
-                ? new Color(0.004f, 0.018f, 0.045f, 1.0f)
-                : new Color(0.01f, 0.04f, 0.09f, 0.96f);
+                ? new Color(DenseGlass.r, DenseGlass.g, DenseGlass.b, 1.0f)
+                : new Color(DenseGlass.r, DenseGlass.g, DenseGlass.b, 0.96f);
         }
 
         internal static Color WorldHudBackground(bool mobile, bool tablet, bool dialogueVisible)
         {
-            if (mobile) return new Color(0.002f, 0.014f, 0.036f, dialogueVisible ? 0.80f : 0.60f);
-            if (tablet) return new Color(0.004f, 0.018f, 0.044f, 0.72f);
-            return new Color(0.004f, 0.020f, 0.048f, 0.68f);
+            var alpha = mobile ? (dialogueVisible ? 0.80f : 0.60f) : tablet ? 0.72f : 0.68f;
+            return new Color(DeepGlass.r, DeepGlass.g, DeepGlass.b, alpha);
         }
     }
 }

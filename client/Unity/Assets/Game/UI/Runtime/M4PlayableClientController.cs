@@ -248,8 +248,7 @@ namespace LinhGioi.UI
             _root.style.alignItems = Align.Center;
             _root.style.justifyContent = Justify.SpaceBetween;
             _root.style.unityBackgroundImageTintColor = Color.white;
-            var runtimeFont = LoadRuntimeFont();
-            if (runtimeFont != null) _root.style.unityFont = runtimeFont;
+            RuntimeUiTypography.ApplyBodyFont(_root);
             ApplyLoginBackdrop(true);
             AddScreenScrim();
 
@@ -333,7 +332,8 @@ namespace LinhGioi.UI
             if (enabled)
             {
                 _root.style.backgroundColor = RuntimeArtCatalog.Background;
-                var gateBackground = LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate;
+                var gateBackground = LgoVisualAssetRegistryV3B.LinhThanhNightBackground
+                    ?? LgoVisualAssetRegistryV3B.LoginBackgroundSpiritGate;
                 if (gateBackground != null)
                 {
                     _root.style.backgroundImage = new StyleBackground(gateBackground);
@@ -348,24 +348,6 @@ namespace LinhGioi.UI
             _root.style.backgroundColor = new Color(0f, 0f, 0f, 0f);
             if (_screenScrim != null)
                 _screenScrim.style.backgroundColor = new Color(0.01f, 0.03f, 0.07f, 0.08f);
-        }
-
-        private static Font LoadRuntimeFont()
-        {
-            var builtInFont = Resources.GetBuiltinResource<Font>("Arial.ttf");
-            if (builtInFont != null) return builtInFont;
-            try
-            {
-                var font = Font.CreateDynamicFontFromOSFont(
-                    new[] { "Helvetica Neue", "Arial", "DejaVu Sans", "Noto Sans" },
-                    18);
-                if (font != null) return font;
-            }
-            catch (Exception exception)
-            {
-                Debug.LogWarning("[LinhGioi] Runtime UI font fallback unavailable: " + exception.Message);
-            }
-            return null;
         }
 
         private void BuildAuthPanel()
@@ -555,7 +537,7 @@ namespace LinhGioi.UI
         {
             var layout = CurrentLayoutProfile();
             _lobbyPanel = NewCharacterHallPanel(layout);
-            _mainShell.Add(_lobbyPanel);
+            _root.Add(_lobbyPanel);
             _lobbyHeaderBlock = NewSectionHeaderBlock("Điện Nhân Vật", RuntimeArtCatalog.Gold, "LGO Character Hall Header Block");
             _lobbyPanel.Add(_lobbyHeaderBlock);
             var lobbyIntro = NewMutedLabel("Chọn tu sĩ để bước qua Linh Môn. Hồ sơ sẽ được chuẩn bị cho phiên hiện tại.");
@@ -617,8 +599,8 @@ namespace LinhGioi.UI
             _characterName.style.maxWidth = RuntimeUiSizing.CharacterNameFieldMaxWidth;
             _classId = NewTextField("Mã lớp tu luyện", DefaultClassId);
             _classId.style.display = DisplayStyle.None;
-            _createButton = NewCompactSecondaryButton("Tạo tu sĩ", OnCreateCharacterAction);
-            _enterWorldButton = NewCompactPrimaryButton("Vào sân luyện", OnEnterWorldOrCancelCreateAction);
+            _createButton = NewCompactSecondaryButton("Tạo nhân vật", OnCreateCharacterAction);
+            _enterWorldButton = NewCompactPrimaryButton("Vào game", OnEnterWorldOrCancelCreateAction);
             _createBody.Add(_characterName);
             _createBody.Add(_classId);
             _characterActionRow = NewActionRow("LGO Character Hall Action Row", Justify.FlexStart, 6, 0, _createButton, _enterWorldButton);
@@ -891,12 +873,9 @@ namespace LinhGioi.UI
             for (var slot = 0; slot < 3; slot++)
             {
                 var captured = slot < _characters.Length ? _characters[slot] : null;
-                var button = NewListButton(captured?.name ?? "Ô nhân vật " + (slot + 1),
-                    captured == null ? "Chưa tạo nhân vật" : "Kiếm tu sơ nhập", () => SelectCharacter(captured));
+                var button = NewCharacterSlotButton(captured?.name ?? "Ô nhân vật " + (slot + 1),
+                    "Kiếm tu sơ nhập", captured == null, () => SelectCharacter(captured));
                 button.userData = captured?.characterId ?? "empty-slot-" + slot;
-                button.AddToClassList("lgo-character-slot");
-                button.style.flexGrow = 1;
-                button.style.flexBasis = 0;
                 _characterList.Add(button);
             }
             SelectCharacter(Array.Find(_characters, character => character.characterId == _selectedCharacter?.characterId)
@@ -905,7 +884,7 @@ namespace LinhGioi.UI
 
         private async Task CreateCharacterAsync()
         {
-            if (_accountState == null) return;
+            if (_accountState == null || _characters.Length >= 3) return;
             var characterName = _characterName.value?.Trim();
             if (!CharacterNameRules.IsValid(characterName))
             {

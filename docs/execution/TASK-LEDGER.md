@@ -1,5 +1,7 @@
 # Linh Giới Online — Task Ledger
 
+Batch 2026-09-07, tiếp `LGO-THREE-SLOTS-NEUTRAL-GOLD`: base overlay căn giữa thực có red/green; font serif/body đóng gói, avatar 128x128, nền Linh Thành riêng 422 KiB; Login/preview/HUD neutral-gold. `build/dev-loop/night-city-budgeted-theme.log`: 23 checkpoint/profile, ảnh PC/tablet/mobile đã xem; quick cùng tên, skin/font/panel-density/asset inventory validators pass. Chưa visual PASS; còn selection ô trống, hoa văn và giới tính. Không thêm validator mới, không claim build nhẹ hơn vì fallback còn trong Resources.
+
 | Task ID | Phase | Status | Source baseline | Delta artifact | Evidence artifact | Owner/sandbox | Started at | Closed at | Final decision | Next allowed step |
 |---|---|---|---|---|---|---|---|---|---|---|
 | LG-M0-UNIFIED-FOUNDATION | DONE | READY_FOR_USE_AS_AUTHORITATIVE_SOURCE_WITH_RUNTIME_ENVIRONMENT_LIMITATION | M0 sequential + accepted S5-A/S2-A | linh-gioi-m0-unified-foundation-delta-v0.2.zip | M0-UNIFIED-FINAL-CLOSURE-EVIDENCE.txt | prior sandbox | prior | prior | UNIFIED_SOURCE_READY / RUNTIME_ENVIRONMENT_LIMITED | Runtime closure |

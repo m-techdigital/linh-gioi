@@ -1,7 +1,29 @@
+using UnityEngine;
+using UnityEngine.UIElements;
+
 namespace LinhGioi.UI
 {
     internal static class RuntimeUiTypography
     {
+        private static Font _headingFont;
+        private static Font _bodyFont;
+
+        internal static void ApplyBodyFont(VisualElement root)
+        {
+            if (_bodyFont == null) _bodyFont = Resources.Load<Font>("LGOUI/BodySans");
+            if (_bodyFont == null) return;
+            root.style.unityFontDefinition = FontDefinition.FromFont(_bodyFont);
+        }
+
+        internal static void ApplyHeadingFont(Label label)
+        {
+            if (_headingFont == null) _headingFont = Resources.Load<Font>("LGOUI/HeadingSerif");
+            if (_headingFont == null) return;
+            label.style.unityFontDefinition = FontDefinition.FromFont(_headingFont);
+            // The source is already Bold; avoid synthetic double emboldening.
+            label.style.unityFontStyleAndWeight = FontStyle.Normal;
+        }
+
         internal const int LoginApiLabelFontSize = 12;
         internal const int LoginAccountStatusFontSize = 13;
         internal const int LoginHeroTitleFontSize = 25;

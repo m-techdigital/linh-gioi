@@ -18,7 +18,24 @@ Các JPG là reference ngoài Unity Assets/Resources, không tăng payload runti
 
 Dung lượng JPG/PNG trên đĩa không thay cho số đo texture memory hoặc build size. Chọn compression theo nền tảng và kiểm tra alpha/viền icon ở kích thước thật. Không mặc định mọi icon cần 512 hoặc 1024.
 
+### Font runtime theo demo mới
+
+- Base typography dùng Noto Serif Bold cho heading, Noto Sans Regular cho body; `unityFontDefinition` qua `FontDefinition.FromFont`, không dựa vào font OS. Nguồn [Noto fonts](https://github.com/notofonts/noto-fonts), thư mục `hinted/ttf/NotoSerif/NotoSerif-Bold.ttf` và `hinted/ttf/NotoSans/NotoSans-Regular.ttf`; license OFL giữ cạnh font trong `UI/Resources/LGOUI`.
+- SHA256 nguồn lần lượt `3b2086a869bcded2aeb4416fc281ceec9d6ce3c06756cda19f8f763636204e7d` và `b85c38ecea8a7cfb39c24e395a4007474fa5a4fc864f6ee33309eb4948d232d5`. FontTools 4.64.0, subset `U+0020-024F,U+0300-036F,U+1E00-1EFF,U+2000-206F,U+20AB`, body thêm `U+2190-21FF`, `--no-hinting --name-IDs='*' --name-languages='*'`.
+- `HeadingSerif.ttf` 104556 byte, `BodySans.ttf` 92908 byte: tổng source 197464 byte, không phải tổng memory atlas hoặc build delta. Đã kiểm tra glyph heading tiếng Việt cả NFC/NFD. Không coi tên font trong style là bằng chứng đã render: kiểm tra `unityFontDefinition` và ảnh Player.
+
+### Avatar ô trống
+
+- `UI/Resources/LGOUI/EmptyCharacterAvatar.png`: sinh riêng trong chat 2026-09-07, silhouette đầu/vai trung tính nền alpha; không crop/slice composite. Nguồn ngoài repo: `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-a8cbda0e-52fe-4f7b-ac94-28a9398cff7c.png`.
+- Resize bằng `sips -z 128 128`; PNG 14254 byte, vùng UI 48 logical unit; import max128, không mipmap/readable. Dung lượng source không phải GPU memory/build delta. Avatar hồ sơ hiện vẫn dùng full-body V3B nhỏ, chưa portrait riêng theo demo.
+
 ## Nguồn nghiên cứu điều khiển
+
+### Nền Linh Thành mới
+
+- `Art/Runtime/V3B/Resources/LGOArtV3B/Login/linh_thanh_night_v1.jpg`: sinh riêng bằng imagegen 2026-09-07, theo hướng cảnh đêm của `lgo-character-three-slots-draft-v1.jpg`, không crop/slice hoặc xóa UI từ composite. Nguồn ngoài repo: `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-2c5015b0-417f-4d01-91d3-b1942f3901e4.png`.
+- 1672x941 nguyên bản, JPEG quality60 bằng sips, 431721 byte (budget login background 512 KiB). Không upscale. Import texture không alpha/mipmap/readable; desktop/iOS max2048, Android max1024. Chưa đo memory/build trên thiết bị Android/iOS thật.
+- Registry dùng chung Login/Character Hall, nền cũ chỉ fallback và vẫn nằm trong Resources; không claim đã giảm tổng build. Asset mới ngoài manifest lịch sử, report inventory hiện liệt kê riêng và tính trong tổng V3B thật. Chưa production-final art.
 
 - [Blizzard: Making Diablo Immortal for PC](https://news.blizzard.com/en-us/article/23797159/making-diablo-immortal-for-pc): PC chuyển tương tác sang chuột/bàn phím, bổ sung WASD; không phải sao chép nguyên input mobile.
 - [Blizzard: Controller support](https://news.blizzard.com/en-us/article/23814052/diablo-immortal-cut-down-demons-with-a-controller): nhận diện phương thức nhập và hỗ trợ controller trên mobile/PC.

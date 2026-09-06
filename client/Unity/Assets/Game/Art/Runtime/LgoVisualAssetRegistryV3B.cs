@@ -8,6 +8,7 @@ namespace LinhGioi.Art
         public const string ResourceRoot = "LGOArtV3B/";
 
         public static Texture2D LoginBackgroundSpiritGate => LoadTexture("Login/login_background_spirit_gate_1920x1080_v3b_candidate");
+        public static Texture2D LinhThanhNightBackground => LoadTexture("Login/linh_thanh_night_v1");
         public static Texture2D LogoLinhGioiOnline => LoadTexture("Login/logo_linh_gioi_online_v3b_light_runtime_candidate");
         public static Texture2D PanelMainDarkGoldTexture => LoadTexture("Login/panel_main_dark_gold_v3b_candidate");
         public static Texture2D ButtonEnterWorldGoldTexture => LoadTexture("Login/button_enter_world_gold_v3b_candidate");
