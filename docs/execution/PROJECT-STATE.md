@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_COMBAT_FEEDBACK_DENSITY_READY` compacts combat feedback copy and hides the skill preview panel in mobile combat-focus evidence, keeping the target-dummy HUD readable on small screens.
+Latest player-visible batch: `LGO_COMBAT_TARGET_STATUS_COMPACT_READY` shortens the target-dummy status line to `Bia luyện: 108/120 sức bền mô phỏng.`, improving combat HUD scanability across desktop/tablet/mobile.
 
 Current visual/runtime evidence harness command:
 

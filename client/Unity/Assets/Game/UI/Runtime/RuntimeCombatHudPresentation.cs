@@ -52,7 +52,10 @@ namespace LinhGioi.UI
         internal static string CompactTargetStatus(string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return "Bia luyện: chưa rõ";
-            return value.Replace("Mục tiêu luyện tập", "Bia luyện");
+            return value
+                .Replace("Mục tiêu luyện tập: sức bền mô phỏng ", "Bia luyện: ")
+                .Replace(" - Chỉ là mô phỏng cục bộ.", " sức bền mô phỏng.")
+                .Replace("Mục tiêu luyện tập", "Bia luyện");
         }
 
         internal static string CompactRangeStatus(string value)
