@@ -29,8 +29,9 @@ def check_rollup() -> None:
     require(text, "Source of truth: `docs/execution/TASK-LEDGER.md` remains append-only.", "TASK-LEDGER-ROLLUP")
     require(text, "Regenerate this file with `python3.12 tools/report_lgo_task_ledger_rollup.py`", "TASK-LEDGER-ROLLUP")
     require(text, "This report does not claim runtime or visual PASS.", "TASK-LEDGER-ROLLUP")
-    require(text, "LGO-RUNTIME-UI-STATE-DOC-COMPACTION-AUDIT", "TASK-LEDGER-ROLLUP recent row")
-    require(text, "LGO-EXECUTION-LEDGER-ROLLUP-VIEW-v1.0", "TASK-LEDGER-ROLLUP next task")
+    require(text, "## Recent Tasks", "TASK-LEDGER-ROLLUP recent section")
+    require(text, "| Recent | Task ID | Status / Decision | Next allowed step |", "TASK-LEDGER-ROLLUP recent table")
+    require(text, "LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0", "TASK-LEDGER-ROLLUP current next task")
 
 
 def check_next_action() -> None:

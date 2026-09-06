@@ -54,13 +54,20 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs",
+        "WorldHubSetDressing.Ensure(",
+        "IsMobileWorldViewport()",
+        "IsNarrowWorldViewport()",
+    )
+    require(
+        "client/Unity/Assets/Game/World/Runtime/WorldHubSetDressing.cs",
+        "LGO World Hub Set Dressing Helper v1",
         "LGO World Hub Visual Readability Cleanup v1",
-        "WorldHubPoint",
-        "WorldHubScale",
-        "WorldHubShadowScale",
+        "Point(",
+        "Scale(",
+        "ShadowScale(",
         "edge props scale down on narrow profiles",
-        "WorldHubScale(1.02f, 0.88f, 0.70f)",
-        "WorldHubScale(0.36f, 0.32f, 0.24f)",
+        "Scale(1.02f, 0.88f, 0.70f",
+        "Scale(0.36f, 0.32f, 0.24f",
     )
     require(
         "docs/tasks/LGO-WORLD-HUB-VISUAL-READABILITY-CLEANUP-PASS-v1.0.md",

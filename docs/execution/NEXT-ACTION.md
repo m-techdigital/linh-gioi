@@ -101,6 +101,8 @@ Current focus update: World HUD responsive panel/top-status/dialogue layout now 
 
 Current focus update: World Hub now has a slightly stronger procedural platform, back-ridge prop layer, and mist depth under `LGO_WORLD_HUB_LIGHTWEIGHT_BACK_RIDGE_DEPTH_READY`; screenshot evidence is improved but still below final reference quality, and local cleanup can now dry-run/remove rebuilt Unity player builds without touching source/evidence, with no `VISUAL_RUNTIME_PASS` claim.
 
+Current focus update: World Hub set-dressing and depth-lighting placement now live in `WorldHubSetDressing` under `LGO_WORLD_HUB_SET_DRESSING_HELPER_READY`; `PlayableWorldController` now only owns the gameplay hook and shared billboard creation, while fresh runtime screenshots confirm World Hub/NPC Dialogue/Session Menu/Login remain stable. No `VISUAL_RUNTIME_PASS` is claimed because World Hub art is still below final reference quality.
+
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
 ## Next task

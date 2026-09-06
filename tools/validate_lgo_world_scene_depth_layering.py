@@ -53,12 +53,17 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs",
-        "LGO World Scene Depth Layering",
-        "WorldProceduralVisuals.CreateGroundShadowSprite",
+        "WorldHubSetDressing.Ensure(",
         "LGO Player Grounding Shadow V3B",
         "LGO Gate Keeper Grounding Shadow V3B",
         "LGO Spirit Gate Grounding Shadow V3B",
         "LGO Target Dummy Grounding Shadow V3B",
+    )
+    require(
+        "client/Unity/Assets/Game/World/Runtime/WorldHubSetDressing.cs",
+        "LGO World Hub Set Dressing Helper v1",
+        "LGO World Scene Depth Layering",
+        "WorldProceduralVisuals.CreateGroundShadowSprite",
         "LGO World Cherry Tree Depth Shadow V3B",
     )
     require(
