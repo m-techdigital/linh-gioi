@@ -6,11 +6,11 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: near-Training-Stone evidence now advances through Gate Keeper dialogue first, so the screenshot shows `F/Space - Luyện` only in guided step 2 instead of masking a step-order bug; screenshot evidence was reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: Đá Luyện world label now uses a responsive offset so the step-2 prompt screenshot reads cleaner around the player and spirit VFX; screenshot evidence was reviewed, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
-- Next implementation task after this fix: choose the next compact player-visible slice, likely movement/input feel, Training Stone label/VFX readability, or another screenshot-proven UI/UX issue; avoid heavy assets and one-off validators unless a real gate needs them.
+- Next implementation task after this fix: choose the next compact player-visible slice, likely movement/input feel, World Hub label spacing, or another screenshot-proven UI/UX issue; avoid heavy assets and one-off validators unless a real gate needs them.
 - Historical marker registry stays in this file for validator compatibility until a dedicated registry migration is implemented and validated.
 
 ## Current focus

@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_TRAINING_STONE_PROMPT_EVIDENCE_FLOW_READY` makes the near-Training-Stone evidence advance through Gate Keeper dialogue first, so the runtime screenshot now shows the Đá Luyện prompt only during guided step 2.
+Latest player-visible batch: `LGO_TRAINING_STONE_LABEL_READABILITY_READY` gives the Đá Luyện world label a responsive offset so step-2 prompt evidence reads cleaner around the player and VFX.
 
 Current visual/runtime evidence harness command:
 

@@ -1000,7 +1000,7 @@ namespace LinhGioi.World
             if (_trainingStoneWorldLabel != null)
             {
                 WorldLabelPresenter.Set(_trainingStoneWorldLabel, TrainingStoneWorldLabelText(), RuntimeArtCatalog.Spirit);
-                _trainingStoneWorldLabel.transform.position = TrainingStonePosition + new Vector3(0.18f, 1.36f, -0.04f);
+                _trainingStoneWorldLabel.transform.position = TrainingStonePosition + CurrentTrainingStoneLabelOffset();
             }
             if (_targetDummyWorldLabel != null)
                 _targetDummyWorldLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.36f, -0.03f);
@@ -1026,6 +1026,13 @@ namespace LinhGioi.World
             if (InteractionAcknowledged || _guidedStep == GuidedTrainingStep.Complete) return "Hoàn tất\nĐá Luyện";
             if (_guidedStep == GuidedTrainingStep.FindTrainingStone) return "Mục tiêu\nĐá Luyện";
             return "Đá Luyện";
+        }
+
+        private static Vector3 CurrentTrainingStoneLabelOffset()
+        {
+            if (IsMobileWorldViewport()) return new Vector3(0.18f, 1.58f, -0.08f);
+            if (IsNarrowWorldViewport()) return new Vector3(0.22f, 1.52f, -0.06f);
+            return new Vector3(0.28f, 1.50f, -0.08f);
         }
 
         private string ShadowSlimeWorldLabelText()
