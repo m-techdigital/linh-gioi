@@ -106,6 +106,8 @@ def main() -> int:
     for marker in (
         "roles over budget: 0",
         "roles in watch band >=85% budget: 7",
+        "V2 fallback Resources payload: 2389.7 KB across 65 images",
+        "V2 Fallback Resources Payload",
         "`login_background`",
         "`world_spirit_gate`",
         "`world_player_male_cultivator`",

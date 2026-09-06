@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv"
+V2_RESOURCE_ROOT = ROOT / "client/Unity/Assets/Game/Art/Runtime/V2/Resources/LGOArtV2"
 
 ROLE_LIMITS = {
     "login_background": 512 * 1024,
@@ -48,6 +49,16 @@ DEFAULT_ACTION = "OK to reuse for current playable slice; keep one source asset 
 
 def fmt(size: int) -> str:
     return f"{size / 1024:.1f} KB"
+
+
+def iter_images(root: Path) -> list[Path]:
+    if not root.is_dir():
+        return []
+    return sorted(
+        path
+        for path in root.rglob("*")
+        if path.is_file() and path.suffix.lower() in {".png", ".jpg", ".jpeg"}
+    )
 
 
 def main() -> int:
@@ -105,6 +116,19 @@ def main() -> int:
     print("- V3B assets remain runtime candidates, not production final art.")
     print("- Use Unity platform import profiles for mobile/tablet/desktop delivery rather than duplicating ad hoc asset folders.")
     print("- New runtime image work must choose a role budget before import and record the optimization action for WATCH/OVER_BUDGET rows.")
+    v2_images = iter_images(V2_RESOURCE_ROOT)
+    v2_total = sum(path.stat().st_size for path in v2_images)
+    print("- V2 fallback Resources payload: " + fmt(v2_total) + f" across {len(v2_images)} images; keep only while code still references V2 fallback roles.")
+    if v2_images:
+        print()
+        print("## V2 Fallback Resources Payload")
+        print()
+        print("These files remain structural placeholders/fallbacks, not final visual quality. Because they live under `Resources`, retire them only after registry dependency checks prove V3B or a newer pack covers the same roles.")
+        print()
+        print("| Runtime Fallback Asset | File Size |")
+        print("|---|---:|")
+        for path in sorted(v2_images, key=lambda item: item.stat().st_size, reverse=True)[:12]:
+            print(f"| `{path.relative_to(ROOT)}` | {fmt(path.stat().st_size)} |")
     return 0
 
 

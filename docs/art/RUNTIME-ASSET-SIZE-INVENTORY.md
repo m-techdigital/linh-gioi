@@ -26,7 +26,8 @@ Latest snapshot from `python3.12 tools/report_lgo_runtime_asset_size_inventory.p
 - runtime candidate image payload: 2600.3 KB;
 - configured role budget total: 3417.0 KB;
 - roles over budget: 0;
-- roles in watch band >=85% budget: 7.
+- roles in watch band >=85% budget: 7;
+- V2 fallback Resources payload: 2389.7 KB across 65 images.
 
 | Role | Runtime Path | Current Size | Budget | Status | Current Decision |
 |---|---:|---:|---:|---|---|
@@ -45,7 +46,7 @@ Latest snapshot from `python3.12 tools/report_lgo_runtime_asset_size_inventory.p
 2. `login_background`: add profile variants only when build pipeline supports device-specific bundles.
 3. `world_player_male_cultivator`: require animation-frame budget before adding idle/walk/attack frame sets.
 4. `world_tree_pine`, `world_tree_cherry`, `world_bridge_wood`, and `world_rock_moss`: keep as-is while used sparingly; do not multiply prop variants before adding quantization/import-profile evidence.
-5. V2 fallback assets: keep while referenced, but retire only after dependency checks prove V3B coverage is complete.
+5. V2 fallback assets: current `Resources` payload is 2389.7 KB across 65 images; keep while referenced, but retire only after dependency checks prove V3B coverage is complete.
 
 ## Optimization Pass v1
 

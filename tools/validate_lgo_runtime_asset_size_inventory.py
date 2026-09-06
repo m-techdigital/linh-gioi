@@ -50,7 +50,12 @@ def main() -> int:
         "No production art claim",
         "No gameplay change",
     )
-    require("tools/report_lgo_runtime_asset_size_inventory.py", "runtime-candidates-v3b-manifest.csv")
+    require(
+        "tools/report_lgo_runtime_asset_size_inventory.py",
+        "runtime-candidates-v3b-manifest.csv",
+        "V2 fallback Resources payload",
+        "V2 Fallback Resources Payload",
+    )
     require("tools/lgo_playable_closure_check.sh", "validate_lgo_runtime_asset_size_inventory.py")
 
     for path in git_lines("diff", "--name-only"):

@@ -107,6 +107,7 @@ def main() -> int:
         "Watch first; prefer maxTextureSize tuning",
         "Require per-frame animation budget",
         "roles in watch band >=85% budget: 7",
+        "V2 fallback Resources payload: 2389.7 KB across 65 images",
     ):
         if marker not in report:
             ERRORS.append(f"runtime asset report missing marker: {marker}")
