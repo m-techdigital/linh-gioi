@@ -118,8 +118,8 @@ namespace LinhGioi.UI
         internal int CreatePanelPaddingBottom => IsMobile ? 8 : 14;
         internal int CreatePanelMarginTop => IsMobile ? 0 : 10;
         internal float WorldHudMinWidth => IsMobile ? 180f : 300f;
-        internal int WorldHudPaddingHorizontal => IsMobile ? 6 : 12;
-        internal int WorldHudPaddingVertical => IsMobile ? 4 : 10;
+        internal int WorldHudPaddingHorizontal => IsMobile ? 6 : IsTablet ? 12 : 10;
+        internal int WorldHudPaddingVertical => IsMobile ? 4 : IsTablet ? 10 : 8;
         internal int WorldHudDialoguePaddingHorizontal => IsMobile ? 6 : WorldHudPaddingHorizontal;
         internal int WorldHudDialoguePaddingVertical => IsMobile ? 4 : WorldHudPaddingVertical;
         internal int WorldNameMarginTop => 6;
@@ -150,7 +150,7 @@ namespace LinhGioi.UI
             ? Mathf.Clamp(Width * 0.54f, 180f, 214f)
             : IsTablet
                 ? Mathf.Clamp(Width * 0.31f, 360f, 420f)
-                : 390f;
+                : 342f;
 
         internal float WorldHudMaxWidth(bool dialogueVisible)
         {
@@ -158,7 +158,7 @@ namespace LinhGioi.UI
                 return dialogueVisible ? Mathf.Clamp(Width * 0.68f, 260f, 320f) : Mathf.Clamp(Width * 0.54f, 180f, 214f);
             if (IsTablet)
                 return dialogueVisible ? Mathf.Clamp(Width * 0.30f, 350f, 400f) : Mathf.Clamp(Width * 0.31f, 360f, 420f);
-            return 390f;
+            return dialogueVisible ? 390f : 342f;
         }
 
         internal float WorldHudMaxHeight(bool dialogueVisible)

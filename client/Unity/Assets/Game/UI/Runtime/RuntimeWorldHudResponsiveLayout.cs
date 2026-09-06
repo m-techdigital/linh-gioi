@@ -44,7 +44,7 @@ namespace LinhGioi.UI
             {
                 worldHudHeaderTitle.style.fontSize = mobile
                     ? RuntimeUiTypography.SectionTitleMobileFontSize
-                    : RuntimeUiTypography.SectionTitleFontSize;
+                    : tablet ? RuntimeUiTypography.SectionTitleFontSize : 18;
                 worldHudHeaderTitle.style.maxWidth = Length.Percent(100);
                 worldHudHeaderTitle.style.minWidth = 0;
                 worldHudHeaderTitle.style.flexShrink = 1;

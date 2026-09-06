@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: responsive viewport work now has a canonical UI `RuntimeViewportMetrics` owner, World labels/prompts use one World viewport profile, mobile dialogue actions fit in one readable row, active skill/combat focus hides the World HUD footer overflow, Character Hall create input now styles the actual TextField inner input, and first-time desktop Character Hall keeps the create action visible inside the viewport; screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
+- Current reason: responsive viewport work now has a canonical UI `RuntimeViewportMetrics` owner, World labels/prompts use one World viewport profile, mobile dialogue actions fit in one readable row, active skill/combat focus hides the World HUD footer overflow, first-time desktop Character Hall keeps the create action visible inside the viewport, and steady desktop World Hub HUD footprint is smaller; screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -120,6 +120,8 @@ Current focus update: combat dummy state asset priority now prefers V3B selected
 Current focus update: compact state brief now stays under the routine 90-line budget under `LGO_STATE_BRIEF_TOKEN_BUDGET_READY`; routine resume should use this before opening long state/ledger files.
 
 Current focus update: first-time Character Hall create flow now stays visible in the desktop safe viewport under `LGO_CHARACTER_HALL_CREATE_VIEWPORT_FLOW_READY`; desktop uses a horizontal create row before the selection grid, tablet/mobile evidence remains readable, duplicate empty-state objective copy is hidden, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: steady World Hub HUD footprint is smaller on desktop under `LGO_WORLD_HUD_DESKTOP_FOOTPRINT_TUNE_READY`; desktop/tablet/mobile profile screenshots were reviewed as readable, gameplay/dialogue/combat semantics are unchanged, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: World-space label/profile metrics are ready under `LGO_WORLD_VIEWPORT_LABEL_METRICS_READY`; camera sizing, narrow/mobile checks, prompt sizing, and landmark label typography now route through a single World viewport profile, while `WorldLabelPresenter.ApplyStyle` keeps TextMesh shadows synced. Fresh desktop/tablet/mobile screenshots were reviewed as more readable, with no `VISUAL_RUNTIME_PASS` claim.
 

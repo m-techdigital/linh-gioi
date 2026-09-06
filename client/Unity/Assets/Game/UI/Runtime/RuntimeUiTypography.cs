@@ -34,11 +34,11 @@ namespace LinhGioi.UI
         internal const int WorldObjectiveInitialFontSize = 14;
         internal const int WorldInteractionInitialFontSize = 13;
         internal const int WorldNameMobileFontSize = 13;
-        internal const int WorldNameDesktopFontSize = 17;
+        internal const int WorldNameDesktopFontSize = 16;
         internal const int WorldObjectiveMobileFontSize = 11;
-        internal const int WorldObjectiveDesktopFontSize = 15;
+        internal const int WorldObjectiveDesktopFontSize = 14;
         internal const int WorldInteractionMobileFontSize = 11;
-        internal const int WorldInteractionDesktopFontSize = 15;
+        internal const int WorldInteractionDesktopFontSize = 14;
 
         internal const int DialogueSpeakerInitialFontSize = 17;
         internal const int DialogueSpeakerMobileFontSize = 15;
