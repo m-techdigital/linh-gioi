@@ -61,6 +61,7 @@ def check_frozen() -> None:
 
 def main() -> int:
     ui = read("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs")
+    layout = read("client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs")
     for marker in ("LGO Session Menu Focus Cleanup v1", "LGO Session Menu Compact Focus Frame v1"):
         if marker not in ui:
             ERRORS.append(f"client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing marker: {marker}")
@@ -68,14 +69,16 @@ def main() -> int:
         "_worldHud.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;" not in ui
         and "SetElementVisibility(_worldHud, !(sessionVisible && compactViewport));" not in ui
         and "SetElementVisibility(_worldHud, !sessionVisible);" not in ui
+        and "SetElementVisibility(worldHud, !sessionVisible);" not in layout
     ):
-        ERRORS.append("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing world HUD session-focus visibility marker")
+        ERRORS.append("missing world HUD session-focus visibility marker")
     if (
         "_headerActions.style.visibility = sessionVisible && compactViewport ? Visibility.Hidden : Visibility.Visible;" not in ui
         and "SetElementVisibility(_headerActions, !(sessionVisible && compactViewport));" not in ui
         and "SetElementVisibility(_headerActions, !sessionVisible);" not in ui
+        and "SetElementVisibility(headerActions, !sessionVisible);" not in layout
     ):
-        ERRORS.append("client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs missing header actions session-focus visibility marker")
+        ERRORS.append("missing header actions session-focus visibility marker")
     require(
         "docs/tasks/LGO-SESSION-MENU-FOCUS-EVIDENCE-REFRESH-v1.0.md",
         "LGO_SESSION_MENU_FOCUS_EVIDENCE_REFRESH_READY",

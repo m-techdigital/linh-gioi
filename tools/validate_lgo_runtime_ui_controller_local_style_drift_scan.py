@@ -62,11 +62,16 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "private static bool IsDisplayed(VisualElement element)",
         "private static void SetDisplayed(VisualElement element, bool visible)",
-        "private static void SetElementVisibility(VisualElement element, bool visible)",
         "SetDisplayed(_authPanel, true);",
         "SetDisplayed(_sessionMenuPanel, visible);",
-        "SetElementVisibility(_worldHud, !sessionVisible);",
+        "RuntimeWorldHudResponsiveLayout.ApplyLocalVisibility(",
         "SetDisplayed(_dialoguePanel, visible);",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "ApplyLocalVisibility(",
+        "SetElementVisibility(worldHud, !sessionVisible);",
+        "SetDisplayed(localCombatPanel, gameplayPanelVisible);",
     )
     reject(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

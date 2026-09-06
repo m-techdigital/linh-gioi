@@ -91,9 +91,15 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
-        "evidenceHidesGuidance",
-        "(!compactViewport || _evidenceState.ForceCombatPanel)",
+        "RuntimeWorldHudResponsiveLayout.ApplyLocalVisibility(",
+        "_evidenceState.ForceCombatPanel",
+        "_evidenceState.HideGuidanceCardOnCompact",
         "RuntimeCombatHudPresentation.ApplyAssetState(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "var evidenceHidesGuidance = hideGuidanceCardOnCompact && compactViewport;",
+        "(!compactViewport || forceCombatPanel)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCombatHudPresentation.cs",

@@ -1103,33 +1103,38 @@ namespace LinhGioi.UI
             var focusMode = _focusModeToggle != null && _focusModeToggle.value;
             var sessionVisible = IsDisplayed(_sessionMenuPanel);
             var dialogueVisible = IsDisplayed(_dialoguePanel);
-            var compactViewport = _isMobileProfile || string.Equals(_lastLayoutProfile, "tablet", StringComparison.Ordinal);
-            var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible && !compactViewport;
-            var gameplayPanelVisible = !sessionVisible && !dialogueVisible && (!compactViewport || _evidenceState.ForceCombatPanel);
-            var compactWorld = compactViewport || focusMode;
-            var evidenceHidesGuidance = _evidenceState.HideGuidanceCardOnCompact && compactViewport;
-            SetElementVisibility(_worldHud, !sessionVisible);
-            SetElementVisibility(_headerActions, !sessionVisible);
-            SetDisplayed(_layoutProfileLabel, false);
-            SetDisplayed(_worldFooterActions, !(sessionVisible || _isMobileProfile));
-            SetDisplayed(_position, showPosition && !focusMode);
-            SetDisplayed(_worldDebugStrip, !compactWorld);
-            SetDisplayed(_worldMeta, !compactWorld);
-            SetDisplayed(_worldGuidanceCard, !((dialogueVisible && compactViewport) || evidenceHidesGuidance));
-            SetDisplayed(_worldArea, !compactWorld);
-            SetDisplayed(_worldStep, showHints && !compactWorld);
-            SetDisplayed(_worldDirection, showHints && !(_isMobileProfile && !dialogueVisible));
-            SetDisplayed(_interactionHint, showHints);
-            SetDisplayed(_worldLandmarks, showHints && !compactWorld);
-            SetDisplayed(_worldPoseState, auxiliaryVisible);
-            SetDisplayed(_worldVfxState, auxiliaryVisible);
-            SetDisplayed(_skinSource, auxiliaryVisible);
-            SetDisplayed(_skillPreviewPanel, auxiliaryVisible);
-            SetDisplayed(_localCombatPanel, gameplayPanelVisible);
-            SetDisplayed(_toast, !compactWorld);
-            SetDisplayed(_combatVisualState, auxiliaryVisible);
-            SetDisplayed(_combatCooldown, auxiliaryVisible);
-            SetDisplayed(_combatAuthority, auxiliaryVisible);
+            RuntimeWorldHudResponsiveLayout.ApplyLocalVisibility(
+                showPosition,
+                showHints,
+                focusMode,
+                sessionVisible,
+                dialogueVisible,
+                _isMobileProfile,
+                string.Equals(_lastLayoutProfile, "tablet", StringComparison.Ordinal),
+                _evidenceState.ForceCombatPanel,
+                _evidenceState.HideGuidanceCardOnCompact,
+                _worldHud,
+                _headerActions,
+                _layoutProfileLabel,
+                _worldFooterActions,
+                _position,
+                _worldDebugStrip,
+                _worldMeta,
+                _worldGuidanceCard,
+                _worldArea,
+                _worldStep,
+                _worldDirection,
+                _interactionHint,
+                _worldLandmarks,
+                _worldPoseState,
+                _worldVfxState,
+                _skinSource,
+                _skillPreviewPanel,
+                _localCombatPanel,
+                _toast,
+                _combatVisualState,
+                _combatCooldown,
+                _combatAuthority);
         }
 
         private void ApplyResponsiveLayoutProfile(bool force)
@@ -1319,12 +1324,6 @@ namespace LinhGioi.UI
         {
             if (element == null) return;
             element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
-        }
-
-        private static void SetElementVisibility(VisualElement element, bool visible)
-        {
-            if (element == null) return;
-            element.style.visibility = visible ? Visibility.Visible : Visibility.Hidden;
         }
 
         private static Label NewCharacterHallStatusLabel(string text, Color color, RuntimeUiLayoutProfile layout) =>

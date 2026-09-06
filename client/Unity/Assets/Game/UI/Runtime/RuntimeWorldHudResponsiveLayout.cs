@@ -113,5 +113,79 @@ namespace LinhGioi.UI
                 quitButton.style.marginRight = 0;
             }
         }
+
+        internal static void ApplyLocalVisibility(
+            bool showPosition,
+            bool showHints,
+            bool focusMode,
+            bool sessionVisible,
+            bool dialogueVisible,
+            bool mobileProfile,
+            bool tabletProfile,
+            bool forceCombatPanel,
+            bool hideGuidanceCardOnCompact,
+            VisualElement worldHud,
+            VisualElement headerActions,
+            Label layoutProfileLabel,
+            VisualElement worldFooterActions,
+            Label position,
+            VisualElement worldDebugStrip,
+            Label worldMeta,
+            VisualElement worldGuidanceCard,
+            Label worldArea,
+            Label worldStep,
+            Label worldDirection,
+            Label interactionHint,
+            Label worldLandmarks,
+            Label worldPoseState,
+            Label worldVfxState,
+            Label skinSource,
+            VisualElement skillPreviewPanel,
+            VisualElement localCombatPanel,
+            Label toast,
+            Label combatVisualState,
+            Label combatCooldown,
+            Label combatAuthority)
+        {
+            var compactViewport = mobileProfile || tabletProfile;
+            var auxiliaryVisible = !focusMode && !sessionVisible && !dialogueVisible && !compactViewport;
+            var gameplayPanelVisible = !sessionVisible && !dialogueVisible && (!compactViewport || forceCombatPanel);
+            var compactWorld = compactViewport || focusMode;
+            var evidenceHidesGuidance = hideGuidanceCardOnCompact && compactViewport;
+            SetElementVisibility(worldHud, !sessionVisible);
+            SetElementVisibility(headerActions, !sessionVisible);
+            SetDisplayed(layoutProfileLabel, false);
+            SetDisplayed(worldFooterActions, !(sessionVisible || mobileProfile));
+            SetDisplayed(position, showPosition && !focusMode);
+            SetDisplayed(worldDebugStrip, !compactWorld);
+            SetDisplayed(worldMeta, !compactWorld);
+            SetDisplayed(worldGuidanceCard, !((dialogueVisible && compactViewport) || evidenceHidesGuidance));
+            SetDisplayed(worldArea, !compactWorld);
+            SetDisplayed(worldStep, showHints && !compactWorld);
+            SetDisplayed(worldDirection, showHints && !(mobileProfile && !dialogueVisible));
+            SetDisplayed(interactionHint, showHints);
+            SetDisplayed(worldLandmarks, showHints && !compactWorld);
+            SetDisplayed(worldPoseState, auxiliaryVisible);
+            SetDisplayed(worldVfxState, auxiliaryVisible);
+            SetDisplayed(skinSource, auxiliaryVisible);
+            SetDisplayed(skillPreviewPanel, auxiliaryVisible);
+            SetDisplayed(localCombatPanel, gameplayPanelVisible);
+            SetDisplayed(toast, !compactWorld);
+            SetDisplayed(combatVisualState, auxiliaryVisible);
+            SetDisplayed(combatCooldown, auxiliaryVisible);
+            SetDisplayed(combatAuthority, auxiliaryVisible);
+        }
+
+        private static void SetDisplayed(VisualElement element, bool visible)
+        {
+            if (element == null) return;
+            element.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private static void SetElementVisibility(VisualElement element, bool visible)
+        {
+            if (element == null) return;
+            element.style.visibility = visible ? Visibility.Visible : Visibility.Hidden;
+        }
     }
 }

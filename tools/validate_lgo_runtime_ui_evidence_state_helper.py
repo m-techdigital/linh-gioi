@@ -74,7 +74,11 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "private RuntimeUiEvidenceState _evidenceState;",
-        "evidenceHidesGuidance",
+        "RuntimeWorldHudResponsiveLayout.ApplyLocalVisibility(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldHudResponsiveLayout.cs",
+        "var evidenceHidesGuidance = hideGuidanceCardOnCompact && compactViewport;",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs",
