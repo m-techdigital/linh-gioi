@@ -122,6 +122,11 @@ namespace LinhGioi.UI
             : IsTablet ? Mathf.Clamp(Width * 0.34f, 390f, 430f) : Mathf.Clamp(Width * 0.30f, 520f, 580f);
         internal float CharacterSelectedPreviewHeight => IsMobile || IsTablet ? 0f : Mathf.Clamp(Height * 0.42f, 390f, 460f);
         internal float CharacterSelectedListMaxWidth => IsMobile ? Mathf.Clamp(Width * 0.30f, 236f, 270f) : IsTablet ? 340 : RuntimeUiSizing.CharacterListMaxWidth;
+        internal float CharacterListMaxHeight(bool hasSelectedCharacter) => IsMobile
+            ? hasSelectedCharacter ? Mathf.Clamp(Height * 0.36f, 210f, 260f) : Mathf.Clamp(Height * 0.42f, 230f, 300f)
+            : IsTablet
+                ? Mathf.Clamp(Height * 0.44f, 360f, 450f)
+                : hasSelectedCharacter ? Mathf.Clamp(Height * 0.42f, 390f, 460f) : Mathf.Clamp(Height * 0.34f, 270f, 330f);
         internal int CharacterPortraitWidth => IsMobile ? 128 : IsTablet ? 156 : 178;
         internal int CharacterPortraitHeight => IsMobile ? 172 : IsTablet ? 214 : 244;
         internal int SelectedCharacterNameFontSize => IsMobile ? 17 : IsTablet ? RuntimeUiTypography.SelectedCharacterNameTabletFontSize : 23;

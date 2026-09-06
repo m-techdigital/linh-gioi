@@ -21,6 +21,17 @@ def require(path: str, *markers: str) -> None:
             ERRORS.append(f"{path} missing marker: {marker}")
 
 
+def forbid(path: str, *markers: str) -> None:
+    file_path = ROOT / path
+    if not file_path.is_file():
+        ERRORS.append(f"missing file: {path}")
+        return
+    text = file_path.read_text(encoding="utf-8", errors="replace")
+    for marker in markers:
+        if marker in text:
+            ERRORS.append(f"{path} forbidden marker still present: {marker}")
+
+
 def check_frozen() -> None:
     result = subprocess.run(
         ["git", "--no-pager", "diff", "--name-only", "--", "protocol", "gamedata/schemas", "docs/adr", "client/Unity/Assets/Game/UI/design-tokens.json"],
@@ -50,6 +61,11 @@ def main() -> int:
         "_characterList = NewCharacterListPanel(layout);",
         "RuntimeCharacterHallResponsiveLayout.Apply(",
     )
+    forbid(
+        "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
+        '_characterList.Add(NewReadabilityRow("Bước 1", "Đặt danh xưng tu sĩ bên dưới.", RuntimeArtCatalog.Spirit));',
+        '_characterList.Add(NewReadabilityRow("Bước 2", "Tạo hồ sơ rồi vào sân luyện.", RuntimeArtCatalog.Gold));',
+    )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "OwnerMarker = \"LGO Character Hall Responsive Layout Helper v1\"",
@@ -78,6 +94,14 @@ def main() -> int:
         "LGO Character Hall V3B Composition Panel",
         "LGO Character Hall Create Cultivator Panel V3B",
         "LGO Character Hall Main Selection Grid V3B",
+        "LGO Character Hall Bounded List Scroll Base v1",
+        "LGO Character Hall Bounded List Scroll",
+        "new ScrollView(ScrollViewMode.Vertical)",
+        "RuntimeUiOverflowGuard.ApplyBoundedScroll(list, layout.CharacterListMaxHeight(false), 0f);",
+        "RuntimeUiOverflowGuard.ApplyBoundedScroll(scroll, listMaxHeight, 0f);",
+        "list.style.width = listMaxWidth;",
+        "list.style.flexGrow = hasSelectedCharacter ? 1 : 0;",
+        "scroll.verticalScrollerVisibility = ScrollerVisibility.Hidden;",
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
         "layout.CharacterPortraitWidth",
@@ -91,6 +115,11 @@ def main() -> int:
         "RuntimeUiSkin.ApplyCharacterPreviewFrame(preview, layout.IsMobile && hasSelectedCharacter);",
         "RuntimeUiSkin.ApplyCharacterCreateFrame(panel);",
         "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "CharacterListMaxHeight(bool hasSelectedCharacter)",
+        "Mathf.Clamp(Height * 0.34f, 270f, 330f)",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",

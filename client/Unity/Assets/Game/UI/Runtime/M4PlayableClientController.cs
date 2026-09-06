@@ -845,8 +845,6 @@ namespace LinhGioi.UI
                 _emptyCharacterCard = emptyCard;
                 _emptyCharacterHint = empty;
                 _characterList.Add(emptyCard);
-                _characterList.Add(NewReadabilityRow("Bước 1", "Đặt danh xưng tu sĩ bên dưới.", RuntimeArtCatalog.Spirit));
-                _characterList.Add(NewReadabilityRow("Bước 2", "Tạo hồ sơ rồi vào sân luyện.", RuntimeArtCatalog.Gold));
                 SelectCharacter(null);
                 return;
             }

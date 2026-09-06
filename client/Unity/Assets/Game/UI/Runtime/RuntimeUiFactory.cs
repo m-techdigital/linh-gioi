@@ -159,13 +159,19 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewCharacterListPanel(RuntimeUiLayoutProfile layout)
         {
-            var list = new VisualElement();
+            // LGO Character Hall Bounded List Scroll Base v1: list/detail overflow belongs to a scroll body, not the screen shell.
+            var list = new ScrollView(ScrollViewMode.Vertical);
+            list.name = "LGO Character Hall Bounded List Scroll";
+            list.verticalScrollerVisibility = ScrollerVisibility.Auto;
+            list.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
             list.style.minWidth = RuntimeUiSizing.CharacterListInitialMinWidth;
             list.style.maxWidth = RuntimeUiSizing.CharacterListMaxWidth;
-            list.style.flexGrow = 1;
+            list.style.flexGrow = 0;
+            list.style.minHeight = 0;
             RuntimeUiSkin.ApplyMargin(list, 0, layout.CharacterListMarginRight, 0, layout.CharacterListMarginBottom);
             ApplyCharacterListDensity(list, layout.CharacterHallDensity);
             RuntimeUiSkin.ApplyCharacterListFrame(list);
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(list, layout.CharacterListMaxHeight(false), 0f);
             return list;
         }
 
@@ -173,14 +179,27 @@ namespace LinhGioi.UI
         {
             if (list == null) return;
             list.style.minWidth = layout.IsMobile && hasSelectedCharacter ? 206 : layout.IsMobile ? 220 : RuntimeUiSizing.CharacterListInitialMinWidth;
-            list.style.maxWidth = layout.IsMobile
+            var listMaxWidth = layout.IsMobile
                 ? hasSelectedCharacter ? layout.CharacterSelectedListMaxWidth : Mathf.Clamp(viewportWidth * 0.40f, 285f, 330f)
                 : layout.CharacterSelectedListMaxWidth;
-            list.style.height = layout.IsMobile || layout.IsTablet
-                ? StyleKeyword.Auto
-                : Mathf.Clamp(layout.Height * 0.42f, 390f, 460f);
+            list.style.width = listMaxWidth;
+            list.style.maxWidth = listMaxWidth;
+            list.style.flexGrow = hasSelectedCharacter ? 1 : 0;
+            var listMaxHeight = layout.CharacterListMaxHeight(hasSelectedCharacter);
+            list.style.height = StyleKeyword.Auto;
+            list.style.maxHeight = listMaxHeight;
+            list.style.overflow = Overflow.Hidden;
             list.style.marginRight = layout.CharacterListMarginRight;
             ApplyCharacterListDensity(list, layout.CharacterHallDensity);
+            if (list is ScrollView scroll)
+            {
+                RuntimeUiOverflowGuard.ApplyBoundedScroll(scroll, listMaxHeight, 0f);
+                scroll.verticalScrollerVisibility = ScrollerVisibility.Hidden;
+                scroll.contentContainer.style.width = Length.Percent(100);
+            }
+            list.style.width = listMaxWidth;
+            list.style.maxWidth = listMaxWidth;
+            list.style.flexGrow = hasSelectedCharacter ? 1 : 0;
         }
 
         internal static VisualElement NewSelectedCharacterPreviewPanel()
