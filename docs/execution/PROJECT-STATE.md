@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_LOGIN_STAGE_OVERLAY_BASE_READY` routes the login NPC composition stage through the shared overlay placement base instead of direct stage `right/bottom` placement in the responsive helper. Fresh desktop/tablet/mobile login screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_CHARACTER_HALL_MOBILE_SHELL_REFLOW_READY` moves main-shell max-width/justification into `RuntimeUiLayoutProfile`, lets mobile non-world screens use the safe viewport width instead of a hard `720` shell, and forces Character Hall layout reflow when selection state changes so the selected cultivator hero appears. Fresh mobile Character Hall/login screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

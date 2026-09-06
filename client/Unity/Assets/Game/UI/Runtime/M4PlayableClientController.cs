@@ -911,6 +911,7 @@ namespace LinhGioi.UI
             _enterWorldButton.SetEnabled(character != null);
             _status.text = character == null ? "Tạo hoặc chọn tu sĩ" : "Đã chọn: " + character.name;
             SetToast(character == null ? "Đang chờ chọn tu sĩ." : "Đã chọn " + character.name + ".", RuntimeArtCatalog.Muted);
+            ApplyResponsiveLayoutProfile(true);
             ApplyCharacterHallActionHierarchy();
         }
 
@@ -1306,8 +1307,8 @@ namespace LinhGioi.UI
                 _loginButton,
                 _serverSwitchButton);
 
-            _mainShell.style.maxWidth = worldVisible ? Length.Percent(100) : mobile ? 720 : tablet ? 980 : 1180;
-            _mainShell.style.justifyContent = worldVisible || mobile ? Justify.FlexStart : Justify.Center;
+            _mainShell.style.maxWidth = layout.MainShellMaxWidth(worldVisible);
+            _mainShell.style.justifyContent = layout.MainShellJustifyContent(worldVisible);
 
             if (_header != null)
                 _header.style.minHeight = layout.HeaderMinHeight(authVisible);

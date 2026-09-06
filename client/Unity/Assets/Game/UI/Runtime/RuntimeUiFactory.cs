@@ -178,9 +178,11 @@ namespace LinhGioi.UI
         {
             if (preview == null) return;
             preview.style.display = layout.IsMobile && !hasSelectedCharacter ? DisplayStyle.None : DisplayStyle.Flex;
+            preview.style.width = layout.IsMobile && hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;
             preview.style.maxWidth = layout.CharacterSelectedPreviewMaxWidth;
             preview.style.minWidth = layout.IsMobile ? 0 : RuntimeUiSpacing.PreviewPanelMinWidth;
             preview.style.flexGrow = layout.IsMobile ? 0 : 1;
+            preview.style.flexBasis = layout.IsMobile && hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;
             preview.style.height = layout.IsMobile || layout.IsTablet
                 ? StyleKeyword.Auto
                 : layout.CharacterSelectedPreviewHeight;

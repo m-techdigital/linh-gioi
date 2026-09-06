@@ -46,6 +46,10 @@ namespace LinhGioi.UI
         internal int RootPaddingHorizontal => IsMobile ? 12 : IsTablet ? 18 : 28;
         internal int RootPaddingTop => IsMobile ? 10 : 16;
         internal int RootPaddingBottom => IsMobile ? 12 : 18;
+        internal StyleLength MainShellMaxWidth(bool worldVisible) => worldVisible || IsMobile
+            ? new StyleLength(Length.Percent(100))
+            : new StyleLength(IsTablet ? 980f : RuntimeUiSizing.MainShellMaxWidth);
+        internal Justify MainShellJustifyContent(bool worldVisible) => worldVisible || IsMobile ? Justify.FlexStart : Justify.Center;
         internal int HeaderMinHeight(bool authVisible) => authVisible && IsMobile ? 8 : IsMobile ? 34 : 76;
         internal int AuthPanelMinHeight => IsMobile
             ? Mathf.Max(0, Height - 18)

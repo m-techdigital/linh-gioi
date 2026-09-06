@@ -63,6 +63,7 @@ def main() -> int:
         "_createPanel = NewCharacterCreatePanel(layout);",
         "LgoVisualAssetRegistryV3B.PlayerMaleCultivatorTexture",
         "RuntimeCharacterHallResponsiveLayout.Apply(",
+        "ApplyResponsiveLayoutProfile(true);",
         "Chọn tu sĩ để bước qua Linh Môn",
         "Tạo tu sĩ đầu tiên",
         "Vào sân luyện",

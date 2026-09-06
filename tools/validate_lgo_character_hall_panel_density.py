@@ -71,6 +71,8 @@ def main() -> int:
         "LGO Character Hall V3B Cultivator Portrait",
         "layout.CharacterPortraitWidth",
         "layout.CharacterSelectedPreviewMaxWidth",
+        "preview.style.width = layout.IsMobile && hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;",
+        "preview.style.flexBasis = layout.IsMobile && hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;",
         "layout.CharacterSelectedPreviewHeight",
         "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);",
         "RuntimeUiSkin.ApplyCharacterListFrame(list);",

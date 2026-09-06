@@ -62,6 +62,8 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "using UnityEngine.UIElements;",
         "RootPaddingHorizontal",
+        "MainShellMaxWidth(bool worldVisible)",
+        "MainShellJustifyContent(bool worldVisible)",
         "HeaderMinHeight(bool authVisible)",
         "LoginStageDisplay",
         "LoginGateKeeperWidth",
@@ -74,6 +76,8 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "RuntimeLoginResponsiveLayout.Apply(",
+        "layout.MainShellMaxWidth(worldVisible)",
+        "layout.MainShellJustifyContent(worldVisible)",
         "layout.HeaderMinHeight(authVisible)",
     )
     require(
