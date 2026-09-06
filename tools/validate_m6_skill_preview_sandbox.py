@@ -75,10 +75,17 @@ def main() -> int:
         'Đang xem: chưa chọn kỹ năng.',
         'Đang xem: " + displayName',
         'ApplySkillPreviewButtonState',
+        'RuntimeUiSpacing.SkillPreviewButtonMinWidth',
+        'RuntimeUiSpacing.SkillPreviewButtonFontSize',
         'Chém Gió',
         'Trói Bóng',
         'Hộ Linh',
         'Diễn tập " + displayName + ": hiệu ứng đã hiện trong sân an toàn.',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs',
+        'SkillPreviewButtonMinWidth = 96',
+        'SkillPreviewButtonFontSize = 13',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs',

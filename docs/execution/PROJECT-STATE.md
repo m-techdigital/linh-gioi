@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SKILL_PREVIEW_EVIDENCE_UI_STATE_READY` routes the Shadow Bind evidence checkpoint through the same preview path as player clicks, so HUD status/button state now matches the in-world warning telegraph.
+Latest player-visible batch: `LGO_SKILL_PREVIEW_BUTTON_ROW_COMPACT_READY` gives skill preview buttons their own compact metrics, so Wind Slash/Shadow Bind/Spirit Guard fit as one readable row in the World HUD.
 
 Current visual/runtime evidence harness command:
 

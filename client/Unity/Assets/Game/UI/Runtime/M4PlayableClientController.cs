@@ -684,6 +684,9 @@ namespace LinhGioi.UI
             _previewWindSlashButton = NewSecondaryButton("Chém Gió", () => PreviewSkill("Wind Slash", "Chém Gió"));
             _previewShadowBindButton = NewSecondaryButton("Trói Bóng", () => PreviewSkill("Shadow Bind", "Trói Bóng"));
             _previewSpiritGuardButton = NewSecondaryButton("Hộ Linh", () => PreviewSkill("Spirit Guard", "Hộ Linh"));
+            RuntimeUiSkin.ApplyButtonMetrics(_previewWindSlashButton, RuntimeUiSpacing.SkillPreviewButtonMinWidth, RuntimeUiSpacing.CompactButtonMinHeight, RuntimeUiSpacing.SkillPreviewButtonFontSize);
+            RuntimeUiSkin.ApplyButtonMetrics(_previewShadowBindButton, RuntimeUiSpacing.SkillPreviewButtonMinWidth, RuntimeUiSpacing.CompactButtonMinHeight, RuntimeUiSpacing.SkillPreviewButtonFontSize);
+            RuntimeUiSkin.ApplyButtonMetrics(_previewSpiritGuardButton, RuntimeUiSpacing.SkillPreviewButtonMinWidth, RuntimeUiSpacing.CompactButtonMinHeight, RuntimeUiSpacing.SkillPreviewButtonFontSize);
             _skillPreviewPanel.Add(NewActionRow("LGO Skill Preview Action Row", Justify.FlexStart, 6, 0, _previewWindSlashButton, _previewShadowBindButton, _previewSpiritGuardButton));
             ApplySkillPreviewButtonState(null);
             _worldHud.Add(_skillPreviewPanel);

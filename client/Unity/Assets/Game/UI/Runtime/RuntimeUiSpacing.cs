@@ -145,6 +145,8 @@ namespace LinhGioi.UI
         internal const int CombatRangeStatusFontSize = 12;
         internal const int CombatActionRowMarginTop = 6;
         internal const int CombatActionRowMarginBottom = 0;
+        internal const int SkillPreviewButtonMinWidth = 96;
+        internal const int SkillPreviewButtonFontSize = 13;
 
         internal const int SectionTitleMarginBottom = 8;
         internal const int OrnamentRuleHeight = 2;
