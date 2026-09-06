@@ -8,6 +8,8 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+2026-09-07 world presentation: sprite actor/đạo cụ đứng trên sân phẳng qua helper chung; nhãn/prompt theo bounds chiếu camera, không còn ghi đè vị trí NPC trong label refresh. Runtime ba profile `build/dev-loop/world-standing-props-final.log`, quick `world-standing-props-quick.log` hoàn tất, ảnh đã xem. Không thêm texture; vẫn prototype 2.5D, chưa city/visual PASS. Thiết kế NPC/Lộ/skill/đồ vẫn theo `docs/design/LGO-GAME-SYSTEMS-NARRATIVE-DESIGN.md`; bước tiếp cần mặt bằng/camera và điểm đứng nhập môn từ storyboard trước thay cảnh lớn.
+
 2026-09-07 nhập môn: chỉ đường đá và tên nút Gặp/Luyện khớp HUD; nút ngữ cảnh giữ mục đích khi ngoài tầm, không tự chuyển sang đánh. `build/dev-loop/guided-action-purpose.log` hoàn tất ba profile; ảnh mobile ngoài/gần Đá Luyện đã xem. Nút Chém riêng không đổi; chưa claim visual PASS hoặc city theo demo hoàn chỉnh.
 
 2026-09-07 cập nhật hiện tại: thiết kế hệ thống trong `docs/design/LGO-GAME-SYSTEMS-NARRATIVE-DESIGN.md` đã nối NPC/Lộ/skill/trang bị/trang phục thành các chặng có điều kiện mở, không thay GDD hoặc mở production. Save rejection/retry hoàn tất ba profile (`build/dev-loop/menu-save-rejection-retry.log`), đã xem ảnh mobile menu sau re-entry; chưa kiểm tra mất mạng/timeout hoặc claim visual PASS. Task tiếp theo ở đầu NEXT-ACTION; các đoạn dưới là lịch sử batch, không phải toàn bộ lỗi còn tồn tại.

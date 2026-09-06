@@ -350,6 +350,54 @@ namespace LinhGioi.UI
             RefreshCombatAssetUiState();
         }
 
+        private static void AssertStandingActorGrounding()
+        {
+            foreach (var name in new[] {
+                "LGO Player Cultivator Runtime Sprite V3B", "LGO Gate Keeper Runtime Sprite V3B",
+                "LGO Training Stone Runtime Sprite V3B", "LGO Target Dummy Runtime Sprite V3B",
+                "LGO Spirit Gate Runtime Sprite V3B", "LGO Shadow Slime Runtime Sprite V3B",
+                "LGO World Cherry Tree Runtime Sprite V3B", "LGO World Pine Tree Runtime Sprite V3B",
+                "LGO World Lantern West Runtime Sprite V3B", "LGO World Cultivation Banner Runtime Sprite V3B",
+                "LGO World Rock Moss Runtime Sprite V3B", "LGO World Bridge Wood Runtime Sprite V3B" })
+            {
+                var actor = GameObject.Find(name)?.GetComponent<SpriteRenderer>();
+                if (actor == null || Vector3.Dot(actor.transform.up, Vector3.up) < 0.999f
+                    || Mathf.Abs(actor.bounds.min.y - 0.025f) > 0.01f)
+                    throw new InvalidOperationException("Standing actor must remain upright and grounded after label refresh: " + name
+                        + " bottom=" + (actor == null ? "missing" : actor.bounds.min.y.ToString("F3")));
+            }
+            Debug.Log("LGO_STANDING_ACTOR_GROUNDING_PASS");
+        }
+
+        internal void CaptureEvidenceAssertWorldLabels()
+        {
+            AssertWorldLabelAbove("LGO Training Stone World Label", "LGO Training Stone Runtime Sprite V3B");
+        }
+
+        private static void AssertWorldLabelAbove(string labelName, string actorName)
+        {
+            var label = GameObject.Find(labelName)?.GetComponent<Renderer>();
+            var actor = GameObject.Find(actorName)?.GetComponent<Renderer>();
+            var camera = Camera.main;
+            if (label == null || actor == null || camera == null)
+                throw new InvalidOperationException("Missing world label fixture: " + labelName);
+            var labelBottom = float.PositiveInfinity;
+            var actorTop = float.NegativeInfinity;
+            for (var x = -1; x <= 1; x += 2)
+            for (var y = -1; y <= 1; y += 2)
+            for (var z = -1; z <= 1; z += 2)
+            {
+                var corner = new Vector3(x, y, z);
+                labelBottom = Mathf.Min(labelBottom, camera.WorldToScreenPoint(label.bounds.center
+                    + Vector3.Scale(label.bounds.extents, corner)).y);
+                actorTop = Mathf.Max(actorTop, camera.WorldToScreenPoint(actor.bounds.center
+                    + Vector3.Scale(actor.bounds.extents, corner)).y);
+            }
+            if (labelBottom < actorTop + 2f)
+                throw new InvalidOperationException("World label overlaps its subject: " + labelName
+                    + " gap=" + (labelBottom - actorTop).ToString("F2"));
+        }
+
         internal void CaptureEvidenceNearGateKeeperPrompt()
         {
             if (_world == null) return;
@@ -358,6 +406,7 @@ namespace LinhGioi.UI
             _world.SetSmokePositionNearGateKeeper();
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
+            AssertStandingActorGrounding();
         }
 
         internal void CaptureEvidenceNearTrainingStonePrompt(bool approaching = false)

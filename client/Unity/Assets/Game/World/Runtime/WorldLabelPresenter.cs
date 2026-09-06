@@ -74,5 +74,37 @@ namespace LinhGioi.World
             if (label == null) return;
             label.gameObject.SetActive(active);
         }
+
+        internal static void PlaceAbove(TextMesh label, Renderer subject)
+        {
+            var camera = Camera.main;
+            if (label == null || subject == null || camera == null || !label.gameObject.activeInHierarchy) return;
+            var renderer = label.GetComponent<Renderer>();
+            if (renderer == null) return;
+            // Anchor at the subject depth before measuring, so repeated updates cannot drift in depth.
+            label.transform.position = subject.bounds.center;
+            var subjectRect = ProjectBounds(camera, subject.bounds);
+            var labelRect = ProjectBounds(camera, renderer.bounds);
+            var anchor = camera.WorldToScreenPoint(label.transform.position);
+            if (anchor.z <= camera.nearClipPlane) return;
+            anchor.x += subjectRect.center.x - labelRect.center.x;
+            anchor.y += subjectRect.yMax + Mathf.Max(4f, camera.pixelHeight * 0.007f) - labelRect.yMin;
+            label.transform.position = camera.ScreenToWorldPoint(anchor);
+        }
+
+        private static Rect ProjectBounds(Camera camera, Bounds bounds)
+        {
+            var min = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
+            var max = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
+            for (var x = -1; x <= 1; x += 2)
+            for (var y = -1; y <= 1; y += 2)
+            for (var z = -1; z <= 1; z += 2)
+            {
+                var point = camera.WorldToScreenPoint(bounds.center + Vector3.Scale(bounds.extents, new Vector3(x, y, z)));
+                min = Vector2.Min(min, point);
+                max = Vector2.Max(max, point);
+            }
+            return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+        }
     }
 }

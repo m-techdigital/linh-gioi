@@ -58,7 +58,7 @@ def main() -> int:
         "InteractionActionText",
         "DescribeInteractionActionText",
         "InteractionWorldPromptText",
-        "CurrentInteractionPromptOffset",
+        "WorldLabelPresenter.PlaceAbove(_interactionPromptWorldLabel",
         "WorldLabelPresenter.ApplyStyle(",
         "mobile ? 50",
         "mobile ? 0.066f",

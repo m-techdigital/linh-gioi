@@ -76,8 +76,8 @@ def main() -> int:
         "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs",
         "LGO World Hub Interaction Readability v1",
         "characterSize = mobile ? 0.060f",
-        "CurrentInteractionPromptOffset",
-        "CurrentInteractionPromptPosition",
+        "WorldLabelPresenter.PlaceAbove(_interactionPromptWorldLabel",
+        "RefreshInteractionPromptWorldLabel()",
         "CurrentGateKeeperVisualPosition()",
     )
     require(

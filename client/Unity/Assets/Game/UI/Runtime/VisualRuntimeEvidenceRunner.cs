@@ -215,6 +215,7 @@ namespace LinhGioi.UI
 
             _controller.CaptureEvidenceNearGateKeeperPrompt();
             yield return WaitFrames(8);
+            _controller.CaptureEvidenceAssertWorldLabels();
             yield return CaptureCheckpoint(
                 "near-gatekeeper-prompt",
                 "Near Gate Keeper Prompt",

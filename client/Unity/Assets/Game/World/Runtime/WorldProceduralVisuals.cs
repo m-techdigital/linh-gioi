@@ -15,6 +15,19 @@ namespace LinhGioi.World
             return new Vector2(worldPosition.x / courtyardSize + 0.5f, worldPosition.z / courtyardSize + 0.5f);
         }
 
+        internal static void PlaceStandingSprite(SpriteRenderer renderer, Vector3 groundAnchor)
+        {
+            if (renderer == null || renderer.sprite == null) return;
+            renderer.transform.rotation = Quaternion.identity;
+            var bounds = renderer.sprite.bounds;
+            var scale = renderer.transform.localScale;
+            // Current courtyard is flat at y=0; actor anchors include legacy marker center heights.
+            renderer.transform.position = new Vector3(
+                groundAnchor.x - bounds.center.x * scale.x,
+                0.025f - bounds.min.y * scale.y,
+                groundAnchor.z);
+        }
+
         internal static Texture2D CreateTrainingGroundTexture(Vector3 gatePosition, Vector3 keeperPosition, Vector3 stonePosition)
         {
             const int size = 256;

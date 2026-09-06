@@ -53,10 +53,15 @@ def main() -> int:
         "GateKeeperWorldLabelText",
         '"Người Giữ\\nCổng"',
         'if (IsMobileWorldViewport()) return "Người Giữ\\nCổng";',
-        "CurrentGateKeeperLabelOffset",
+        "WorldLabelPresenter.PlaceAbove(_gateKeeperWorldLabel, _gateKeeperSprite)",
         "IsMobileWorldViewport",
         "IsNarrowWorldViewport",
-        "new Vector3(0.10f, 1.78f, -0.02f)",
+    )
+    require(
+        "client/Unity/Assets/Game/World/Runtime/WorldLabelPresenter.cs",
+        "ProjectBounds(camera, subject.bounds)",
+        "camera.WorldToScreenPoint",
+        "camera.ScreenToWorldPoint(anchor)",
     )
     require(
         "docs/tasks/LGO-WORLD-LABEL-SAFE-AREA-PASS-v1.0.md",
