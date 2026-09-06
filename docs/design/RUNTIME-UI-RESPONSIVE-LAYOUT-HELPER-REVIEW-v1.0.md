@@ -72,6 +72,8 @@ Overlay owner: `RuntimeUiOverflowGuard.ApplyViewportOverlaySurface` is the share
 
 Vertical overlay placement also uses shared semantic anchors: `Top`, `Center`, `Bottom`, and `Stretch`. Character Hall mobile create/dock overlays, World dialogue, and Session Menu must route through this helper instead of applying one-off `top/right/bottom` coordinates in screen-specific code.
 
+Bottom-docked overlays must use `RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface` plus `RuntimeUiLayoutProfile.OverlayBottomInset`. Screen code should not pass raw bottom margins derived from one screenshot. The minimum bottom air is profile-derived, and any panel that can grow vertically must pair that inset with a max-height computed from the same safe viewport so top/bottom spacing remains balanced.
+
 Modal/body/footer owner: `RuntimeUiOverflowGuard.ApplyModalBody` and `ApplyModalFooter` are the shared base for fixed-footer modal/dialog structure. Controller code should create modal regions through `RuntimeUiFactory.NewModalBody` and `NewModalFooter` instead of raw `VisualElement` containers when the panel has scrollable text plus persistent actions.
 
 Character Hall action buttons must use `RuntimeUiButtonTier` instead of selected-state-only numeric button constants. Visual priority comes from tier choice, opacity, and action order; it should not come from one screen inventing a larger font/height for the same kind of action.

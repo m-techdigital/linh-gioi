@@ -120,6 +120,8 @@ namespace LinhGioi.UI
         internal int LobbyPanelPaddingHorizontal => IsMobile ? 12 : 18;
         internal int LobbyPanelPaddingTop => IsMobile ? 8 : 16;
         internal int LobbyPanelPaddingBottom => IsMobile ? 8 : 18;
+        internal float CharacterHallPanelVerticalInset => IsMobile ? OverlayBottomInset : Mathf.Clamp(Height * 0.04f, 34f, 58f);
+        internal float CharacterHallPanelMaxHeight => IsMobile ? Mathf.Max(360f, Height - CharacterHallPanelVerticalInset * 2f) : 0f;
         internal RuntimeUiDensityProfile CharacterHallDensity => RuntimeUiDensityProfile.CharacterHall(this);
         internal int CreatePanelPaddingHorizontal => IsMobile ? 12 : 16;
         internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;
@@ -130,7 +132,8 @@ namespace LinhGioi.UI
         internal float CharacterHallCreateOverlayTop => Mathf.Clamp(Height * 0.24f, 112f, 140f);
         internal float CharacterHallSelectedDockWidth => Mathf.Clamp(Width * 0.34f, 300f, 336f);
         internal float CharacterHallSelectedDockRight => Mathf.Clamp(Width * 0.06f, 14f, 28f);
-        internal float CharacterHallSelectedDockBottom => Mathf.Clamp(Height * 0.05f, 24f, 34f);
+        internal float OverlayBottomInset => IsMobile ? Mathf.Clamp(Height * 0.085f, 36f, 52f) : Mathf.Clamp(Height * 0.06f, 34f, 64f);
+        internal float CharacterHallSelectedDockBottom => OverlayBottomInset;
         internal float WorldHudMinWidth => WorldHudMinWidthFor(false);
 
         internal float WorldHudMinWidthFor(bool dialogueVisible)

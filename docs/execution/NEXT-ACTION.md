@@ -119,6 +119,8 @@ Current focus update: combat dummy state asset priority now prefers V3B selected
 
 Current focus update: compact state brief now stays under the routine 90-line budget under `LGO_STATE_BRIEF_TOKEN_BUDGET_READY`; routine resume should use this before opening long state/ledger files.
 
+Current focus update: mobile Character Hall bottom-safe overlay handling is ready under `LGO_MOBILE_CHARACTER_HALL_BOTTOM_SAFE_OVERLAY_READY`; selected action overlays now route through `RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface`, panel height is bounded from a profile-derived top/bottom inset, and fresh mobile screenshots were reviewed without claiming `VISUAL_RUNTIME_PASS`.
+
 Current focus update: first-time Character Hall create flow now stays visible in the desktop safe viewport under `LGO_CHARACTER_HALL_CREATE_VIEWPORT_FLOW_READY`; desktop uses a horizontal create row before the selection grid, tablet/mobile evidence remains readable, duplicate empty-state objective copy is hidden, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: steady World Hub HUD footprint is smaller on desktop under `LGO_WORLD_HUD_DESKTOP_FOOTPRINT_TUNE_READY`; desktop/tablet/mobile profile screenshots were reviewed as readable, gameplay/dialogue/combat semantics are unchanged, and no `VISUAL_RUNTIME_PASS` is claimed.

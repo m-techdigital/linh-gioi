@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SCROLL_BODY_CHROME_BASE_READY` styles bounded runtime scroll regions through `RuntimeUiOverflowGuard`, removing platform-default white arrow buttons from long dialogue and applying compact dark/spirit scroller chrome. Fresh desktop/tablet/mobile long-dialogue screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_MOBILE_CHARACTER_HALL_BOTTOM_SAFE_OVERLAY_READY` adds a shared bottom-safe overlay helper and viewport-derived Character Hall mobile panel max-height so selected/create action surfaces keep bottom air instead of drifting into the screen edge. Fresh mobile Character Hall/dialogue/menu screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

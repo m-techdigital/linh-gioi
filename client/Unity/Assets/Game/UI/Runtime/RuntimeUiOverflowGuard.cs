@@ -168,5 +168,24 @@ namespace LinhGioi.UI
             }
             surface.style.height = verticalPlacement == RuntimeUiOverlayVerticalPlacement.Stretch ? maxHeight : StyleKeyword.Auto;
         }
+
+        internal static void ApplyViewportBottomSafeOverlaySurface(
+            VisualElement surface,
+            RuntimeUiOverlayPlacement placement,
+            float width,
+            float maxHeight,
+            float horizontalInset,
+            float bottomInset)
+        {
+            // LGO Runtime UI Bottom Safe Overlay Base v1: bottom-docked surfaces share one safe inset path instead of per-screen bottom constants.
+            ApplyViewportOverlaySurface(
+                surface,
+                placement,
+                RuntimeUiOverlayVerticalPlacement.Bottom,
+                width,
+                maxHeight,
+                horizontalInset,
+                bottomInset);
+        }
     }
 }

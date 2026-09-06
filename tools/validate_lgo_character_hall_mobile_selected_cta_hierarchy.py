@@ -60,11 +60,13 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "LGO Character Hall Mobile Selected CTA Hierarchy v1",
-        "RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(",
+        "RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface(",
         "RuntimeUiOverlayPlacement.Right",
-        "RuntimeUiOverlayVerticalPlacement.Bottom",
         "RuntimeUiOverlayVerticalPlacement.Top",
+        "lobbyPanel.style.minHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : 410;",
+        "lobbyPanel.style.maxHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : StyleKeyword.None;",
         "layout.CharacterHallSelectedDockWidth",
+        "layout.CharacterHallSelectedDockBottom",
         "layout.CharacterHallCreateOverlayWidth",
         "RuntimeUiSkin.ApplyButtonTier(enterWorldButton, RuntimeUiButtonTier.Primary)",
         "RuntimeUiSkin.ApplyButtonTier(createButton, mobileSelected ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard)",
@@ -72,6 +74,19 @@ def main() -> int:
         "if (hasSelectedCharacter)",
         "createButton.text = createFormExpanded ? \"Tạo tu sĩ\" : \"Tạo thêm\";",
         "characterActionRow.Add(enterWorldButton);",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
+        "OverlayBottomInset => IsMobile ? Mathf.Clamp(Height * 0.085f, 36f, 52f)",
+        "CharacterHallSelectedDockBottom => OverlayBottomInset",
+        "CharacterHallPanelVerticalInset => IsMobile ? OverlayBottomInset",
+        "CharacterHallPanelMaxHeight => IsMobile ? Mathf.Max(360f, Height - CharacterHallPanelVerticalInset * 2f)",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiOverflowGuard.cs",
+        "LGO Runtime UI Bottom Safe Overlay Base v1",
+        "ApplyViewportBottomSafeOverlaySurface(",
+        "RuntimeUiOverlayVerticalPlacement.Bottom",
     )
     require(
         "docs/tasks/LGO-CHARACTER-HALL-MOBILE-SELECTED-CTA-HIERARCHY-PASS-v1.0.md",

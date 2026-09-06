@@ -95,10 +95,9 @@ namespace LinhGioi.UI
                 if (layout.IsMobile && collapsed)
                 {
                     // LGO Character Hall Selected Action Anchor v1: selected state becomes a stable action dock instead of a floating mid-screen card.
-                    RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(
+                    RuntimeUiOverflowGuard.ApplyViewportBottomSafeOverlaySurface(
                         createPanel,
                         RuntimeUiOverlayPlacement.Right,
-                        RuntimeUiOverlayVerticalPlacement.Bottom,
                         layout.CharacterHallSelectedDockWidth,
                         72,
                         layout.CharacterHallSelectedDockRight,
@@ -169,7 +168,8 @@ namespace LinhGioi.UI
             lobbyPanel.style.maxWidth = layout.IsMobile
                 ? Mathf.Min(width - 40f, 780f)
                 : layout.IsTablet ? RuntimeUiSizing.CharacterHallTabletPanelMaxWidth : RuntimeUiSizing.CharacterHallPanelMaxWidth;
-            lobbyPanel.style.minHeight = layout.IsMobile ? Mathf.Max(292f, height - 48f) : 410;
+            lobbyPanel.style.minHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : 410;
+            lobbyPanel.style.maxHeight = layout.IsMobile ? layout.CharacterHallPanelMaxHeight : StyleKeyword.None;
             RuntimeUiSkin.ApplyPadding(lobbyPanel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);
         }
 
