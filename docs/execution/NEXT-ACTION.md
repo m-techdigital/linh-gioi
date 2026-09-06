@@ -125,6 +125,8 @@ Current focus update: login NPC composition stage placement is ready under `LGO_
 
 Current focus update: mobile Character Hall shell/reflow is ready under `LGO_CHARACTER_HALL_MOBILE_SHELL_REFLOW_READY`; `_mainShell` sizing now comes from `RuntimeUiLayoutProfile`, mobile non-world screens use safe viewport width instead of a fixed `720` cap, and selected-character state forces responsive reflow so the cultivator hero is visible in mobile evidence.
 
+Current focus update: mobile Character Hall selected hero readability is ready under `LGO_CHARACTER_HALL_MOBILE_HERO_READABILITY_READY`; selected preview width, portrait size, and selected-name size use profile metrics so the V3B cultivator/profile read clearer on mobile without moving buttons into a one-off layout.
+
 Current focus update: first-time Character Hall create flow now stays visible in the desktop safe viewport under `LGO_CHARACTER_HALL_CREATE_VIEWPORT_FLOW_READY`; desktop uses a horizontal create row before the selection grid, tablet/mobile evidence remains readable, duplicate empty-state objective copy is hidden, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: steady World Hub HUD footprint is smaller on desktop under `LGO_WORLD_HUD_DESKTOP_FOOTPRINT_TUNE_READY`; desktop/tablet/mobile profile screenshots were reviewed as readable, gameplay/dialogue/combat semantics are unchanged, and no `VISUAL_RUNTIME_PASS` is claimed.
