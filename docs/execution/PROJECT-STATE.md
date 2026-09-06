@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_SKILL_SHADOW_BIND_PREVIEW_EVIDENCE_READY` adds a dedicated Shadow Bind preview screenshot and cleaner safe-training copy so skill telegraph evidence is no longer mixed with stale target-dummy hit state.
+Latest player-visible batch: `LGO_WORLD_HUB_PERIMETER_DEPTH_READY` adds sparse V3B far-edge props plus lightweight procedural mist/path cues so the World Hub reads less empty on desktop without adding image payload or changing gameplay.
 
 Current visual/runtime evidence harness command:
 

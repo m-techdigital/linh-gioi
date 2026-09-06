@@ -11,6 +11,7 @@ namespace LinhGioi.World
         internal const string ReadabilityMarker = "LGO World Hub Visual Readability Cleanup v1";
         internal const string DepthRichnessMarker = "LGO World Hub Depth Richness v1";
         internal const string VisualWeightMarker = "LGO World Hub Visual Depth And Weight v1";
+        internal const string PerimeterDepthMarker = "LGO World Hub Perimeter Depth v1";
 
         internal static void Ensure(
             Func<string, Sprite, Vector3, Vector3, int, SpriteRenderer> createBillboard,
@@ -37,6 +38,13 @@ namespace LinhGioi.World
             Shadow("LGO World Cherry Tree Back Ridge Shadow V3B", Point(-6.15f, 0.018f, 5.35f, mobileViewport, narrowViewport), ShadowScale(0.45f, 0.18f, 0.34f, mobileViewport, narrowViewport), -2);
             createBillboard("LGO World Pine Tree Back Ridge Sprite V3B", LgoVisualAssetRegistryV3B.TreePine, Point(6.05f, 0.12f, 5.05f, mobileViewport, narrowViewport), Scale(0.44f, 0.38f, 0.28f, mobileViewport, narrowViewport), -1);
             Shadow("LGO World Pine Tree Back Ridge Shadow V3B", Point(6.05f, 0.018f, 5.05f, mobileViewport, narrowViewport), ShadowScale(0.46f, 0.18f, 0.34f, mobileViewport, narrowViewport), -2);
+            // LGO World Hub Perimeter Depth v1: sparse far-edge props fill empty camera space while keeping interactables dominant.
+            createBillboard("LGO World Pine Tree Far East Ridge Sprite V3B", LgoVisualAssetRegistryV3B.TreePine, Point(7.35f, 0.11f, 3.35f, mobileViewport, narrowViewport), Scale(0.36f, 0.31f, 0.22f, mobileViewport, narrowViewport), -1);
+            Shadow("LGO World Pine Tree Far East Ridge Shadow V3B", Point(7.35f, 0.018f, 3.35f, mobileViewport, narrowViewport), ShadowScale(0.38f, 0.15f, 0.28f, mobileViewport, narrowViewport), -2);
+            createBillboard("LGO World Rock Moss Far East Ridge Sprite V3B", LgoVisualAssetRegistryV3B.RockMoss, Point(7.65f, 0.09f, 1.95f, mobileViewport, narrowViewport), Scale(0.22f, 0.19f, 0.14f, mobileViewport, narrowViewport), -1);
+            Shadow("LGO World Rock Moss Far East Ridge Shadow V3B", Point(7.65f, 0.018f, 1.95f, mobileViewport, narrowViewport), ShadowScale(0.22f, 0.10f, 0.16f, mobileViewport, narrowViewport), -2);
+            createBillboard("LGO World Cherry Tree Far West Ridge Sprite V3B", LgoVisualAssetRegistryV3B.TreeCherry, Point(-7.15f, 0.11f, 2.95f, mobileViewport, narrowViewport), Scale(0.34f, 0.30f, 0.22f, mobileViewport, narrowViewport), -1);
+            Shadow("LGO World Cherry Tree Far West Ridge Shadow V3B", Point(-7.15f, 0.018f, 2.95f, mobileViewport, narrowViewport), ShadowScale(0.36f, 0.14f, 0.26f, mobileViewport, narrowViewport), -2);
             createBillboard("LGO World Lantern West Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp, Point(-4.55f, 0.2f, -2.05f, mobileViewport, narrowViewport), Scale(0.58f, 0.48f, 0.36f, mobileViewport, narrowViewport), 2);
             Shadow("LGO World Lantern West Depth Shadow V3B", Point(-4.55f, 0.018f, -2.05f, mobileViewport, narrowViewport), ShadowScale(0.38f, 0.20f, 0.32f, mobileViewport, narrowViewport), 0);
             createBillboard("LGO World Lantern East Runtime Sprite V3B", LgoVisualAssetRegistryV3B.LanternProp, Point(4.45f, 0.2f, -1.95f, mobileViewport, narrowViewport), Scale(0.58f, 0.48f, 0.36f, mobileViewport, narrowViewport), 2);
@@ -85,6 +93,8 @@ namespace LinhGioi.World
             WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Practice Field V3B", new Vector3(2.85f, 0.054f, -0.15f), MistScale(2.60f, 1.14f, 1.62f, 0.74f, mobileViewport, narrowViewport), new Color(0.36f, 0.78f, 0.92f, 0.14f), -2);
             WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Back Ridge V3B", new Vector3(0f, 0.050f, 4.75f), MistScale(7.20f, 1.50f, 4.40f, 0.86f, mobileViewport, narrowViewport), new Color(0.62f, 0.82f, 1.00f, 0.24f), -4);
             WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Gate Approach V3B", new Vector3(0f, 0.053f, -3.35f), MistScale(4.00f, 1.00f, 2.60f, 0.60f, mobileViewport, narrowViewport), new Color(0.24f, 0.88f, 1.00f, 0.16f), -3);
+            WorldProceduralVisuals.CreateMistVeilSprite("LGO World Mist Veil Far East Ridge V3B", new Vector3(7.25f, 0.050f, 2.85f), MistScale(2.85f, 1.08f, 1.72f, 0.62f, mobileViewport, narrowViewport), new Color(0.48f, 0.78f, 0.96f, 0.12f), -4);
+            Rotate(WorldProceduralVisuals.CreatePathGlowSprite("LGO World Path Glow East Perimeter V3B", new Vector3(5.65f, 0.066f, 2.65f), PathGlowScale(0.08f, 2.15f, 0.06f, 1.38f, mobileViewport, narrowViewport), new Color(0.24f, 0.82f, 1f, 0.10f), -3), 56f);
         }
 
         private static Vector3 Point(float x, float y, float z, bool mobileViewport, bool narrowViewport)
