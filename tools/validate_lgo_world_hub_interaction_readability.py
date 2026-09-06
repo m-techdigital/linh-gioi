@@ -59,6 +59,8 @@ def main() -> int:
         "DescribeInteractionActionText",
         "InteractionWorldPromptText",
         "CurrentInteractionPromptOffset",
+        '"F/Space - Gặp"',
+        '"F/Space - Luyện"',
         '"F Gặp"',
         '"F Luyện"',
     )

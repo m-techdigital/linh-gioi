@@ -679,9 +679,9 @@ namespace LinhGioi.World
         private string InteractionWorldPromptText()
         {
             if (_nearestInteractable == null) return string.Empty;
-            if (_nearestInteractable.id == "Gate Keeper") return IsMobileWorldViewport() ? "F Gặp" : "F / Space  Gặp";
-            if (_nearestInteractable.id == "Training Stone") return IsMobileWorldViewport() ? "F Luyện" : "F / Space  Luyện";
-            return IsMobileWorldViewport() ? "F" : "F / Space";
+            if (_nearestInteractable.id == "Gate Keeper") return IsMobileWorldViewport() ? "F Gặp" : "F/Space - Gặp";
+            if (_nearestInteractable.id == "Training Stone") return IsMobileWorldViewport() ? "F Luyện" : "F/Space - Luyện";
+            return IsMobileWorldViewport() ? "F" : "F/Space";
         }
 
         private string DescribeInteractionActionText()

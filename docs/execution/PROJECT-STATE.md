@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_LOCAL_COMBAT_REWARD_PLACEHOLDER_FEEDBACK_READY` adds a short visible `Tinh khí +1` local reward popup during target dummy hit feedback; no economy/inventory/server reward semantics were opened.
+Latest player-visible batch: `LGO_WORLD_INTERACTION_PROMPT_COPY_POLISH_READY` makes near-object world prompts read as compact game-facing `F/Space - ...` labels instead of debug-like spaced control text; input behavior and gameplay semantics are unchanged.
 
 Current visual/runtime evidence harness command:
 
