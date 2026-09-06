@@ -77,7 +77,7 @@ def registry_properties(path: Path) -> set[str]:
 
 
 def count_property_references(property_name: str) -> int:
-    needle = "LgoVisualAssetRegistryV2." + property_name
+    pattern = re.compile(r"\bLgoVisualAssetRegistryV2\." + re.escape(property_name) + r"\b")
     count = 0
     for root in SOURCE_ROOTS:
         if not root.is_dir():
@@ -85,7 +85,7 @@ def count_property_references(property_name: str) -> int:
         for path in root.rglob("*.cs"):
             if path == V2_REGISTRY:
                 continue
-            count += path.read_text(encoding="utf-8", errors="replace").count(needle)
+            count += len(pattern.findall(path.read_text(encoding="utf-8", errors="replace")))
     return count
 
 

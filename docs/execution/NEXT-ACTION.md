@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: shared primary/secondary buttons, combat cooldown active art, Character Hall portrait fallback, target dummy state art, Shadow Slime art, target marker, and warning telegraph now avoid V2 texture dependencies, reducing V2 registry references to 17 and fallback-only references to 1; refreshed screenshots were reviewed as readable, but no `VISUAL_RUNTIME_PASS` is claimed.
+- Current reason: shared primary/secondary buttons, combat cooldown active art, Character Hall portrait fallback, target dummy state art, Shadow Slime art, target marker, and warning telegraph now avoid V2 texture dependencies; exact V2 registry scanning now reports 16 remaining V2 references and 0 fallback-only references; refreshed screenshots were reviewed as readable, but no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: continue with player-visible layout/quality fixes, controller hotspot extraction, or dependency-driven V2 fallback retirement planning without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -88,6 +88,8 @@ Current focus update: target dummy idle/selected/hit art now prefer V3B then lig
 Current focus update: Shadow Slime runtime sprite and marker fallback now use V3B/null checks instead of V2 `ShadowSlimeAlt` under `LGO_RUNTIME_SHADOW_SLIME_V2_FALLBACK_CLEANUP_READY`; world-hub and target-dummy screenshots still show the shadow slime clearly, V2 registry references are down to 19 and fallback-only properties to 3, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: combat target marker and warning telegraph now use lightweight `CombatPlaceholders` directly instead of V2 fallback sprites under `LGO_RUNTIME_COMBAT_MARKER_V2_FALLBACK_CLEANUP_READY`; target-dummy screenshot remains readable, V2 registry references are down to 17 and fallback-only properties to 1, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: V2 dependency snapshot now uses exact property-name matching instead of prefix counting under `LGO_RUNTIME_ASSET_V2_DEPENDENCY_EXACT_SCAN_READY`; report now shows 16 remaining V2 references, all V3B-covered by exact-name coverage, with 0 fallback-only properties.
 
 Current focus update: login CTA and server row sizing/tint were reduced under `LGO_LOGIN_CTA_FIT_FOR_PURPOSE_READY`; fresh desktop/tablet/mobile screenshots were reviewed as calmer and still readable, with no `VISUAL_RUNTIME_PASS` claim.
 
