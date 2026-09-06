@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_CHARACTER_HALL_LOBBY_TEXT_FIELD_INNER_SKIN_READY` styles the actual UI Toolkit TextField input child for the Character Hall create form, removing the default white field and restoring dark V3B-readable text across desktop/tablet/mobile evidence. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_CHARACTER_HALL_CREATE_VIEWPORT_FLOW_READY` makes the first-time Character Hall create form visible in the desktop safe viewport by moving the empty-state action before the selection grid, using a desktop horizontal form row, preserving tablet/mobile fit, and hiding duplicate empty-state objective copy. Fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

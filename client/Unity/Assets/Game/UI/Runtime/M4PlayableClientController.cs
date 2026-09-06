@@ -906,7 +906,11 @@ namespace LinhGioi.UI
                 _selectedName.text = "Chưa chọn nhân vật";
                 _selectedMeta.text = "Kiếm tu sơ nhập / chờ tạo hồ sơ";
                 if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Chờ hồ sơ tu sĩ.";
-                if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Tạo hoặc chọn tu sĩ để vào sân luyện.";
+                if (_selectedObjective != null)
+                {
+                    _selectedObjective.text = "Mục tiêu: Tạo hoặc chọn tu sĩ để vào sân luyện.";
+                    _selectedObjective.style.display = DisplayStyle.None;
+                }
                 if (_selectedClassSummary != null)
                 {
                     _selectedClassSummary.text = "Mạch: Kiếm tu sơ nhập.";
@@ -930,7 +934,11 @@ namespace LinhGioi.UI
             _selectedName.text = character.name;
             _selectedMeta.text = "Kiếm tu sơ nhập / sẵn sàng qua Linh Môn";
             if (_selectedStatus != null) _selectedStatus.text = "Trạng thái: Sẵn sàng bước qua Linh Môn.";
-            if (_selectedObjective != null) _selectedObjective.text = "Mục tiêu: Vào sân luyện, gặp Người Giữ Cổng, rồi lưu vị trí.";
+            if (_selectedObjective != null)
+            {
+                _selectedObjective.text = "Mục tiêu: Vào sân luyện, gặp Người Giữ Cổng, rồi lưu vị trí.";
+                _selectedObjective.style.display = DisplayStyle.Flex;
+            }
             if (_selectedClassSummary != null)
             {
                 _selectedClassSummary.text = "Mạch: Kiếm tu sơ nhập.";
@@ -1299,7 +1307,8 @@ namespace LinhGioi.UI
                 _lobbyContent,
                 _selectedPreview,
                 _selectedName,
-                _createPanel);
+                _createPanel,
+                _selectedCharacter != null);
             ApplyCharacterCreateFormState();
             ApplyCharacterHallActionHierarchy();
 

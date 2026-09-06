@@ -65,8 +65,12 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",
         "CharacterCreateStandalonePanelWidthPercent",
-        "var showDesktopHint = !isMobileProfile && !layout.IsTablet && !collapsed;",
+        "LGO Character Hall Standalone Create Viewport Fit v1",
+        "var compactStandaloneCreate = !hasSelectedCharacter && !isMobileProfile;",
+        "var desktopStandaloneCreate = compactStandaloneCreate && !layout.IsTablet;",
+        "var showDesktopHint = !isMobileProfile && !layout.IsTablet && !collapsed && !compactStandaloneCreate;",
         "createHint.style.display = showDesktopHint ? DisplayStyle.Flex : DisplayStyle.None;",
+        "createPanel.style.flexWrap = compactStandaloneCreate && !desktopStandaloneCreate ? Wrap.Wrap : Wrap.NoWrap;",
         "createPanel.style.width = layout.IsMobile",
         "Mathf.Clamp(layout.Width * 0.36f, 320f, 360f)",
         "characterActionRow.style.justifyContent = !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;",

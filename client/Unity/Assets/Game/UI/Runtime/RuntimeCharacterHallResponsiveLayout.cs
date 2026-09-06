@@ -17,12 +17,14 @@ namespace LinhGioi.UI
             VisualElement lobbyContent,
             VisualElement selectedPreview,
             Label selectedName,
-            VisualElement createPanel)
+            VisualElement createPanel,
+            bool hasSelectedCharacter)
         {
             var width = layout.Width;
             var height = layout.Height;
             ApplyPanel(layout, width, height, lobbyPanel);
             ApplyIntro(layout, lobbyIntro);
+            ApplyCreatePanelOrder(layout, lobbyPanel, lobbyContent, createPanel, hasSelectedCharacter);
             RuntimeUiFactory.ApplyCharacterListResponsive(characterList, layout, width);
             if (emptyCharacterCard != null)
                 RuntimeUiFactory.ApplyEmptyCharacterCardDensity(emptyCharacterCard, layout.CharacterHallDensity);
@@ -45,15 +47,19 @@ namespace LinhGioi.UI
             VisualElement characterActionRow)
         {
             var collapsed = hasSelectedCharacter && !createFormExpanded;
+            var compactStandaloneCreate = !hasSelectedCharacter && !isMobileProfile;
+            var desktopStandaloneCreate = compactStandaloneCreate && !layout.IsTablet;
             if (createTitle != null)
             {
                 createTitle.text = collapsed ? "Sẵn sàng" : hasSelectedCharacter ? "Tạo thêm tu sĩ" : "Khai mở tu sĩ";
-                createTitle.style.marginBottom = collapsed ? 2 : 8;
+                createTitle.style.marginBottom = collapsed ? 2 : compactStandaloneCreate ? 4 : 8;
+                createTitle.style.marginRight = desktopStandaloneCreate ? 18 : 0;
                 createTitle.style.unityTextAlign = collapsed && !isMobileProfile ? TextAnchor.MiddleLeft : TextAnchor.MiddleCenter;
+                createTitle.style.width = compactStandaloneCreate && !desktopStandaloneCreate ? Length.Percent(100) : StyleKeyword.Auto;
             }
             if (createHint != null)
             {
-                var showDesktopHint = !isMobileProfile && !layout.IsTablet && !collapsed;
+                var showDesktopHint = !isMobileProfile && !layout.IsTablet && !collapsed && !compactStandaloneCreate;
                 createHint.text = collapsed
                     ? "Tu sĩ đã sẵn sàng."
                     : hasSelectedCharacter
@@ -65,25 +71,36 @@ namespace LinhGioi.UI
             {
                 characterName.style.display = collapsed ? DisplayStyle.None : DisplayStyle.Flex;
                 characterName.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
-                characterName.style.width = Length.Percent(100);
+                characterName.style.width = compactStandaloneCreate ? Mathf.Clamp(layout.Width * 0.32f, 280f, RuntimeUiSizing.CharacterNameFieldMaxWidth) : Length.Percent(100);
             }
             if (classId != null) classId.style.display = DisplayStyle.None;
             if (createPanel != null)
             {
-                createPanel.style.flexDirection = collapsed && !isMobileProfile ? FlexDirection.Row : FlexDirection.Column;
-                createPanel.style.alignItems = collapsed && !isMobileProfile ? Align.Center : Align.Stretch;
+                // LGO Character Hall Standalone Create Viewport Fit v1: desktop/tablet empty-state form shares one compact row so it stays inside the safe panel height.
+                createPanel.style.flexDirection = collapsed && !isMobileProfile || compactStandaloneCreate ? FlexDirection.Row : FlexDirection.Column;
+                createPanel.style.flexWrap = compactStandaloneCreate && !desktopStandaloneCreate ? Wrap.Wrap : Wrap.NoWrap;
+                createPanel.style.alignItems = collapsed && !isMobileProfile || compactStandaloneCreate ? Align.Center : Align.Stretch;
                 createPanel.style.alignSelf = !hasSelectedCharacter && !isMobileProfile ? Align.Center : Align.Stretch;
                 createPanel.style.width = layout.IsMobile
                     ? Mathf.Clamp(layout.Width * 0.36f, 320f, 360f)
                     : !hasSelectedCharacter && !isMobileProfile ? Length.Percent(RuntimeUiSizing.CharacterCreateStandalonePanelWidthPercent) : Length.Percent(100);
                 createPanel.style.opacity = collapsed ? 0.72f : hasSelectedCharacter ? (isMobileProfile ? 0.82f : 0.88f) : 1f;
-                createPanel.style.minHeight = collapsed ? (isMobileProfile ? 76 : 96) : RuntimeUiSizing.CharacterCreatePanelMinHeight;
-                createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 86 : 108) : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
+                createPanel.style.minHeight = collapsed ? (isMobileProfile ? 76 : 96) : desktopStandaloneCreate ? 100 : compactStandaloneCreate ? 104 : RuntimeUiSizing.CharacterCreatePanelMinHeight;
+                createPanel.style.maxHeight = collapsed ? (isMobileProfile ? 86 : 108) : desktopStandaloneCreate ? 118 : compactStandaloneCreate ? 126 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
+                if (!layout.IsMobile)
+                {
+                    createPanel.style.position = Position.Relative;
+                    createPanel.style.left = 0;
+                    createPanel.style.right = StyleKeyword.Auto;
+                    createPanel.style.top = StyleKeyword.Auto;
+                    createPanel.style.bottom = StyleKeyword.Auto;
+                }
             }
             if (characterActionRow != null)
             {
-                characterActionRow.style.marginLeft = collapsed && !isMobileProfile ? 18 : 0;
-                characterActionRow.style.flexGrow = collapsed && !isMobileProfile ? 1 : 0;
+                characterActionRow.style.marginLeft = collapsed && !isMobileProfile ? 18 : compactStandaloneCreate ? 12 : 0;
+                characterActionRow.style.marginTop = compactStandaloneCreate ? 0 : 6;
+                characterActionRow.style.flexGrow = collapsed && !isMobileProfile || compactStandaloneCreate ? 1 : 0;
                 characterActionRow.style.justifyContent = !hasSelectedCharacter && !isMobileProfile ? Justify.Center : Justify.FlexStart;
             }
         }
@@ -180,6 +197,35 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyPadding(createPanel, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingHorizontal, layout.CreatePanelPaddingTop, layout.CreatePanelPaddingBottom);
             createPanel.style.marginTop = layout.CreatePanelMarginTop;
             createPanel.style.maxHeight = layout.IsMobile ? 174 : RuntimeUiSizing.CharacterCreatePanelMaxHeight;
+        }
+
+        private static void ApplyCreatePanelOrder(
+            RuntimeUiLayoutProfile layout,
+            VisualElement lobbyPanel,
+            VisualElement lobbyContent,
+            VisualElement createPanel,
+            bool hasSelectedCharacter)
+        {
+            if (layout.IsMobile || lobbyPanel == null || lobbyContent == null || createPanel == null) return;
+            if (lobbyContent.parent != lobbyPanel || createPanel.parent != lobbyPanel) return;
+
+            var createFirst = !hasSelectedCharacter && !layout.IsTablet;
+            var contentIndex = lobbyPanel.IndexOf(lobbyContent);
+            var createIndex = lobbyPanel.IndexOf(createPanel);
+            if (contentIndex < 0 || createIndex < 0) return;
+            if (createFirst && createIndex < contentIndex) return;
+            if (!createFirst && createIndex > contentIndex) return;
+
+            createPanel.RemoveFromHierarchy();
+            contentIndex = lobbyPanel.IndexOf(lobbyContent);
+            if (contentIndex < 0)
+            {
+                lobbyPanel.Add(createPanel);
+                return;
+            }
+
+            var targetIndex = createFirst ? contentIndex : Mathf.Min(contentIndex + 1, lobbyPanel.childCount);
+            lobbyPanel.Insert(targetIndex, createPanel);
         }
     }
 }

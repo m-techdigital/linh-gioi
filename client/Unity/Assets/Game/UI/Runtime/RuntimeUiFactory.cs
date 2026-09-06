@@ -134,6 +134,9 @@ namespace LinhGioi.UI
             if (row == null) return;
             row.style.flexDirection = FlexDirection.Row;
             row.style.flexWrap = Wrap.NoWrap;
+            row.style.height = layout.IsMobile || layout.IsTablet
+                ? StyleKeyword.Auto
+                : Mathf.Clamp(layout.Height * 0.42f, 390f, 460f);
             RuntimeUiSkin.ApplyVerticalMargin(row, layout.LobbyContentMarginTop, layout.LobbyContentMarginBottom);
         }
 
@@ -156,6 +159,9 @@ namespace LinhGioi.UI
             list.style.maxWidth = layout.IsMobile
                 ? Mathf.Clamp(viewportWidth * 0.40f, 285f, 330f)
                 : layout.IsTablet ? 340 : RuntimeUiSizing.CharacterListMaxWidth;
+            list.style.height = layout.IsMobile || layout.IsTablet
+                ? StyleKeyword.Auto
+                : Mathf.Clamp(layout.Height * 0.42f, 390f, 460f);
             list.style.marginRight = layout.CharacterListMarginRight;
             ApplyCharacterListDensity(list, layout.CharacterHallDensity);
         }
@@ -176,6 +182,9 @@ namespace LinhGioi.UI
             preview.style.maxWidth = layout.IsMobile
                 ? Mathf.Clamp(viewportWidth * 0.48f, 300f, 390f)
                 : layout.IsTablet ? 374 : RuntimeUiSizing.CharacterPreviewMaxWidth;
+            preview.style.height = layout.IsMobile || layout.IsTablet
+                ? StyleKeyword.Auto
+                : Mathf.Clamp(layout.Height * 0.42f, 390f, 460f);
             if (selectedName != null)
                 selectedName.style.fontSize = layout.IsTablet ? RuntimeUiTypography.SelectedCharacterNameTabletFontSize : RuntimeUiTypography.SelectedCharacterNameFontSize;
         }
