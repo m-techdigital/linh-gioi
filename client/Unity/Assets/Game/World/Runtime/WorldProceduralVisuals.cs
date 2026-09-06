@@ -35,40 +35,48 @@ namespace LinhGioi.World
                     var horizon = Mathf.Clamp01(uv.y);
                     var color = Color.Lerp(deepA, deepB, horizon * 0.48f + slowNoise * 0.08f);
                     color = Color.Lerp(color, stone, noise * 0.045f);
+                    var tileU = Mathf.Abs(Mathf.Repeat(uv.x * 8.0f + slowNoise * 0.025f, 1f) - 0.5f);
+                    var tileV = Mathf.Abs(Mathf.Repeat(uv.y * 6.0f + slowNoise * 0.020f, 1f) - 0.5f);
+                    var tileSeam = Mathf.Clamp01((0.018f - Mathf.Min(tileU, tileV)) / 0.018f);
+                    color = Color.Lerp(color, new Color(0.06f, 0.12f, 0.19f, 1f), tileSeam * 0.22f);
 
                     var toCenter = uv - center;
                     var dist = toCenter.magnitude;
                     var innerRing = SmoothBand(dist, 0.145f, 0.0075f);
                     var midRing = SmoothBand(dist, 0.245f, 0.0065f);
                     var outerRing = SmoothBand(dist, 0.355f, 0.009f);
-                    color = Color.Lerp(color, line, innerRing * 0.105f);
-                    color = Color.Lerp(color, line, midRing * 0.082f);
-                    color = Color.Lerp(color, gold, outerRing * 0.074f);
+                    color = Color.Lerp(color, line, innerRing * 0.24f);
+                    color = Color.Lerp(color, line, midRing * 0.19f);
+                    color = Color.Lerp(color, gold, outerRing * 0.16f);
                     var diagonalA = Mathf.Abs(toCenter.x - toCenter.y);
                     var diagonalB = Mathf.Abs(toCenter.x + toCenter.y);
                     if (dist < 0.34f)
                     {
-                        color = Color.Lerp(color, line, SmoothBand(diagonalA, 0f, 0.006f) * 0.024f);
-                        color = Color.Lerp(color, line, SmoothBand(diagonalB, 0f, 0.006f) * 0.024f);
+                        color = Color.Lerp(color, line, SmoothBand(diagonalA, 0f, 0.006f) * 0.050f);
+                        color = Color.Lerp(color, line, SmoothBand(diagonalB, 0f, 0.006f) * 0.050f);
                     }
                     if (dist < 0.36f)
                     {
-                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.x), 0f, 0.005f) * 0.030f);
-                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.y), 0f, 0.005f) * 0.030f);
+                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.x), 0f, 0.005f) * 0.064f);
+                        color = Color.Lerp(color, line, SmoothBand(Mathf.Abs(toCenter.y), 0f, 0.005f) * 0.064f);
                     }
 
                     var pathToGate = DistanceToSegment(uv, new Vector2(0.50f, 0.28f), new Vector2(0.50f, 0.08f));
                     var pathToStone = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.50f, 0.78f));
                     var pathToKeeper = DistanceToSegment(uv, new Vector2(0.50f, 0.46f), new Vector2(0.31f, 0.70f));
                     var guide = Mathf.Min(pathToGate, Mathf.Min(pathToStone, pathToKeeper));
-                    color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.024f) * 0.092f);
+                    color = Color.Lerp(color, line, SmoothBand(guide, 0f, 0.030f) * 0.20f);
 
                     var platformGlow = Mathf.Clamp01(1f - dist / 0.44f);
-                    color = Color.Lerp(color, mist, platformGlow * 0.138f);
+                    color = Color.Lerp(color, mist, platformGlow * 0.20f);
                     var cloudBand = Mathf.Sin((uv.x * 1.9f + uv.y * 1.15f + slowNoise * 0.6f) * Mathf.PI);
-                    color = Color.Lerp(color, mist, Mathf.Clamp01(cloudBand) * 0.072f);
+                    color = Color.Lerp(color, mist, Mathf.Clamp01(cloudBand) * 0.10f);
+                    var depthBand = Mathf.Clamp01(Mathf.Sin((uv.y * 5.5f + slowNoise * 0.18f) * Mathf.PI) * 0.5f + 0.5f);
+                    color = Color.Lerp(color, mist, depthBand * horizon * 0.040f);
                     var vignette = Mathf.Clamp01((dist - 0.18f) / 0.58f);
                     color = Color.Lerp(color, Color.black, vignette * 0.10f);
+                    var edgeFade = Mathf.Clamp01((Mathf.Abs(uv.x - 0.5f) - 0.36f) / 0.18f);
+                    color = Color.Lerp(color, new Color(0.055f, 0.095f, 0.145f, 1f), edgeFade * 0.12f);
                     texture.SetPixel(x, y, color);
                 }
             }

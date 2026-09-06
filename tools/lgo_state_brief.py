@@ -93,7 +93,7 @@ def main() -> int:
     print("owner_note=Đây là bản state ngắn để giảm token: chỉ gồm resume, task tiếp theo, blocker và ledger gần nhất.")
     print()
     print("## Project State")
-    print(first_lines(project_state, 18) or "PROJECT_STATE_MISSING")
+    print(limited_section(project_state, "## Continuous workflow status", 6) or first_lines(project_state, 8) or "PROJECT_STATE_MISSING")
     print()
     print(limited_section(next_action, "## Quick Resume", 8) or "QUICK_RESUME_MISSING")
     print()

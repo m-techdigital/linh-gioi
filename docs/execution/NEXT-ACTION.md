@@ -6,7 +6,7 @@ Last updated: `2026-09-06`
 
 - Current phase: runtime UI/visual quality hardening and execution workflow cleanup.
 - Active task: `LGO-RUNTIME-QUALITY-NEXT-COMPACT-BATCH-v1.0`.
-- Current reason: Character Hall list/preview balance was tuned with no new image payload; source-only and desktop visual evidence are stable, no `VISUAL_RUNTIME_PASS` claim.
+- Current reason: World Hub procedural ground cues were strengthened with no image payload; source gates and desktop visual evidence are stable, and no `VISUAL_RUNTIME_PASS` is claimed.
 - Current batch scope: prefer player-visible layout/quality fixes or hotspot extraction that reduces controller churn without opening new systems.
 - Fast validation: `git --no-pager diff --check`; `bash -n tools/lgo_codex_git_checkpoint.sh tools/lgo_codex_autopilot.sh tools/lgo_continue_dev_loop.sh`; `python3.12 tools/report_lgo_change_budget.py`; `python3.12 tools/validate_package_hygiene.py`; `LGO_DEV_LOOP_GATE_PROFILE=quick LGO_DEV_LOOP_CONTEXT_MODE=quick ./tools/lgo_continue_dev_loop.sh`.
 - Runtime validation: run `LGO_DEV_LOOP_VISUAL_RUNTIME=force ./tools/lgo_continue_dev_loop.sh` or `./tools/lgo_visual_runtime_review.sh` only when the next code change affects visible runtime UI. Do not claim `VISUAL_RUNTIME_PASS` from capture alone.
@@ -106,6 +106,10 @@ Current focus update: World Hub set-dressing and depth-lighting placement now li
 Current focus update: Character Hall create-form collapse/expand state and selected-action CTA hierarchy now live in `RuntimeCharacterHallResponsiveLayout` under `LGO_CHARACTER_HALL_STATE_ACTION_HELPER_READY`; `M4PlayableClientController` keeps only flow decisions and delegates reusable presentation state. Source-only gates pass; no visual PASS is claimed from this source-only ownership cleanup.
 
 Current focus update: Local combat HUD cooldown/icon/button/accent presentation now lives in `RuntimeCombatHudPresentation` under `LGO_RUNTIME_COMBAT_HUD_PRESENTATION_HELPER_READY`; `M4PlayableClientController` keeps local combat flow calls while the helper owns text, texture, tooltip, compact status, and accent state. Source-only and refreshed target-dummy runtime evidence pass, with no `VISUAL_RUNTIME_PASS` claim.
+
+Current focus update: World Hub procedural cultivation floor now has stronger lightweight stone seams, rings, guide paths, and platform mist under `LGO_WORLD_GROUND_LIGHTWEIGHT_DEPTH_CUES_READY`; refreshed desktop screenshot is less flat without adding image payload, still below final reference-quality world art, and no `VISUAL_RUNTIME_PASS` is claimed.
+
+Current focus update: compact state brief now suppresses long `PROJECT-STATE.md` body output under `LGO_STATE_BRIEF_PROJECT_STATE_NOISE_REDUCTION_READY`; routine resume output is back under the 90-line target, reducing token/context spend without weakening gates.
 
 Autopilot operating rule: when a task or phase is truly closed by its required gates, continue to the next roadmap-valid task/phase instead of stopping at the phase boundary. Stop only for a real blocker, unavailable runtime/tooling, required owner decision, or frozen contract/protocol/schema/ADR change.
 
