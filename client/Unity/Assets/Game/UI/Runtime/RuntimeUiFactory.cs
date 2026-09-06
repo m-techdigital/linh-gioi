@@ -155,7 +155,7 @@ namespace LinhGioi.UI
             list.style.minWidth = layout.IsMobile ? 220 : RuntimeUiSizing.CharacterListInitialMinWidth;
             list.style.maxWidth = layout.IsMobile
                 ? Mathf.Clamp(viewportWidth * 0.40f, 285f, 330f)
-                : layout.IsTablet ? 370 : RuntimeUiSizing.CharacterListMaxWidth;
+                : layout.IsTablet ? 340 : RuntimeUiSizing.CharacterListMaxWidth;
             list.style.marginRight = layout.CharacterListMarginRight;
             ApplyCharacterListDensity(list, layout.CharacterHallDensity);
         }
@@ -175,7 +175,7 @@ namespace LinhGioi.UI
             preview.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex;
             preview.style.maxWidth = layout.IsMobile
                 ? Mathf.Clamp(viewportWidth * 0.48f, 300f, 390f)
-                : layout.IsTablet ? 334 : RuntimeUiSizing.CharacterPreviewMaxWidth;
+                : layout.IsTablet ? 374 : RuntimeUiSizing.CharacterPreviewMaxWidth;
         }
 
         internal static VisualElement NewCharacterProfileHero(RuntimeUiLayoutProfile layout, VisualElement portrait, VisualElement copy)

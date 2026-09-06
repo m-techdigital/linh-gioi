@@ -70,7 +70,7 @@ def main() -> int:
         "LGO Character Hall Selected Cultivator Card V3B",
         "LGO Character Hall V3B Cultivator Portrait",
         "RuntimeUiSizing.CharacterPortraitWidth",
-        "layout.IsTablet ? 334 : RuntimeUiSizing.CharacterPreviewMaxWidth",
+        "layout.IsTablet ? 374 : RuntimeUiSizing.CharacterPreviewMaxWidth",
         "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);",
         "RuntimeUiSkin.ApplyCharacterListFrame(list);",
         "RuntimeUiSkin.ApplyCharacterCreateFrame(panel);",
