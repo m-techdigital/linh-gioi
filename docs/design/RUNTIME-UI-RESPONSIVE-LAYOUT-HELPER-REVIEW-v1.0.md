@@ -74,6 +74,8 @@ Vertical overlay placement also uses shared semantic anchors: `Top`, `Center`, `
 
 Character Hall action buttons must use `RuntimeUiButtonTier` instead of selected-state-only numeric button constants. Visual priority comes from tier choice, opacity, and action order; it should not come from one screen inventing a larger font/height for the same kind of action.
 
+Scrollable body chrome must be styled by the same owner that bounds the scroll region. `RuntimeUiOverflowGuard.ApplyBoundedScroll` hides default arrow buttons and applies compact dark/spirit scroller styling so long dialogue or future modal bodies do not expose platform-default white controls.
+
 ## Target Case Matrix
 
 This matrix is the current visual target contract. Demo coverage is being expanded from the north-star sheet into profile-specific target sheets; runtime work must still follow this matrix immediately.

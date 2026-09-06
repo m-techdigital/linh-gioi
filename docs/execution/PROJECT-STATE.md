@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_CHARACTER_HALL_ACTION_BUTTON_TIER_BASE_READY` removes Character Hall selected-state-only button metrics and routes create/enter-world actions through shared semantic button tiers. Mobile selected CTA is now less oversized and more consistent with dialogue/session actions while preserving action priority. Fresh desktop/tablet/mobile screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_SCROLL_BODY_CHROME_BASE_READY` styles bounded runtime scroll regions through `RuntimeUiOverflowGuard`, removing platform-default white arrow buttons from long dialogue and applying compact dark/spirit scroller chrome. Fresh desktop/tablet/mobile long-dialogue screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 

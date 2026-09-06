@@ -53,6 +53,21 @@ namespace LinhGioi.UI
             scroll.style.overflow = Overflow.Hidden;
             scroll.contentContainer.style.minWidth = 0;
             scroll.contentContainer.style.maxWidth = Length.Percent(100);
+            ApplyCompactScrollerSkin(scroll.verticalScroller);
+        }
+
+        private static void ApplyCompactScrollerSkin(Scroller scroller)
+        {
+            if (scroller == null) return;
+            scroller.style.width = 8;
+            scroller.style.backgroundColor = new Color(0.01f, 0.03f, 0.07f, 0.22f);
+            if (scroller.lowButton != null) scroller.lowButton.style.display = DisplayStyle.None;
+            if (scroller.highButton != null) scroller.highButton.style.display = DisplayStyle.None;
+            if (scroller.slider != null)
+            {
+                scroller.slider.style.minWidth = 6;
+                scroller.slider.style.backgroundColor = new Color(0.14f, 0.78f, 0.90f, 0.20f);
+            }
         }
 
         internal static void ApplyResponsiveColumns(VisualElement row, int columns, float gap, params Button[] buttons)
