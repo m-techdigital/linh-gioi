@@ -96,6 +96,7 @@ namespace LinhGioi.UI
         private Label _toast;
         private Label _layoutProfileLabel;
         private Label _dialogueSpeaker;
+        private ScrollView _dialogueLineScroll;
         private Label _dialogueLine;
         private Label _dialogueProgress;
         private VisualElement _dialogueActionRow;
@@ -675,13 +676,17 @@ namespace LinhGioi.UI
             _dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
             _dialogueSpeaker = new Label("Người Giữ Cổng");
             RuntimeUiSkin.ApplyText(_dialogueSpeaker, RuntimeArtCatalog.Gold, RuntimeUiTypography.DialogueSpeakerInitialFontSize, true);
+            _dialogueLineScroll = new ScrollView(ScrollViewMode.Vertical);
+            _dialogueLineScroll.name = "LGO Dialogue Line Scroll";
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(_dialogueLineScroll, layout.DialogueLineScrollMaxHeight);
             _dialogueLine = NewMutedLabel("Đối thoại đã đóng.");
             _dialogueLine.style.fontSize = RuntimeUiTypography.DialogueLineDesktopFontSize;
             _dialogueProgress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
             _dialogueContinueButton = NewCompactSecondaryButton("Tiếp tục", ContinueDialogue);
             _dialogueCloseButton = NewQuietButton("Đóng", CloseDialogue);
             _dialoguePanel.Add(_dialogueSpeaker);
-            _dialoguePanel.Add(_dialogueLine);
+            _dialogueLineScroll.Add(_dialogueLine);
+            _dialoguePanel.Add(_dialogueLineScroll);
             _dialoguePanel.Add(_dialogueProgress);
             _dialogueActionRow = NewActionRow("LGO Dialogue Action Row", Justify.FlexStart, 6, 0, _dialogueContinueButton, _dialogueCloseButton);
             _dialoguePanel.Add(_dialogueActionRow);
@@ -1349,6 +1354,7 @@ namespace LinhGioi.UI
                 _localCombatPanel,
                 _dialoguePanel,
                 _dialogueSpeaker,
+                _dialogueLineScroll,
                 _dialogueLine,
                 _dialogueProgress,
                 _dialogueActionRow,

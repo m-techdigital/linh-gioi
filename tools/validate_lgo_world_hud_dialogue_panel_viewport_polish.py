@@ -74,11 +74,22 @@ def main() -> int:
         "RuntimeUiSpacing.DialogueButtonMobileMinHeight",
         "RuntimeUiSpacing.DialogueCloseMobileMinWidth",
         "RuntimeUiSpacing.DialogueCloseDesktopMinWidth",
-        "LGO Mobile Dialogue Action Row Fit v1",
-        "dialogueActionRow.style.flexWrap = mobile ? Wrap.NoWrap : Wrap.Wrap",
-        "ApplyMobileDialogueActionButton(dialogueContinueButton, 4)",
-        "ApplyMobileDialogueActionButton(dialogueCloseButton, 0)",
-        "button.style.flexBasis = StyleKeyword.Auto",
+        "LGO Dialogue Action Sizing Contract v1",
+        "worldHud.style.minWidth = layout.WorldHudMinWidthFor(dialogueVisible);",
+        "dialogueActionRow.style.flexWrap = Wrap.NoWrap",
+        "RuntimeUiOverflowGuard.ApplyResponsiveColumns(dialogueActionRow, mobile ? 1 : 2, mobile ? 4 : 6, dialogueContinueButton, dialogueCloseButton)",
+        "RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight)",
+        "dialogueLine.style.whiteSpace = WhiteSpace.Normal",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiOverflowGuard.cs",
+        "LGO Runtime UI Overflow Guard v1",
+        "ApplyBoundedActionRow(VisualElement row)",
+        "ApplyBoundedScroll(ScrollView scroll, float maxHeight)",
+        "ApplyResponsiveColumns(VisualElement row, int columns, float gap, params Button[] buttons)",
+        "row.style.flexDirection = columns == 1 ? FlexDirection.Column : FlexDirection.Row",
+        "button.style.minWidth = 0",
+        "button.style.flexBasis = 0",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs",
@@ -88,6 +99,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
         "Mathf.Clamp(Width * 0.68f, 260f, 320f)",
+        "DialogueLineScrollMaxHeight",
     )
     require(
         "docs/tasks/LGO-WORLD-HUD-DIALOGUE-PANEL-VIEWPORT-POLISH-v1.0.md",

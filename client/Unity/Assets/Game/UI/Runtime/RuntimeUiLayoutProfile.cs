@@ -117,7 +117,13 @@ namespace LinhGioi.UI
         internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;
         internal int CreatePanelPaddingBottom => IsMobile ? 8 : 14;
         internal int CreatePanelMarginTop => IsMobile ? 0 : 10;
-        internal float WorldHudMinWidth => IsMobile ? 180f : 300f;
+        internal float WorldHudMinWidth => WorldHudMinWidthFor(false);
+
+        internal float WorldHudMinWidthFor(bool dialogueVisible)
+        {
+            if (IsMobile) return dialogueVisible ? 232f : 180f;
+            return 300f;
+        }
         internal int WorldHudPaddingHorizontal => IsMobile ? 6 : IsTablet ? 12 : 10;
         internal int WorldHudPaddingVertical => IsMobile ? 4 : IsTablet ? 10 : 8;
         internal int WorldHudDialoguePaddingHorizontal => IsMobile ? 6 : WorldHudPaddingHorizontal;
@@ -133,7 +139,12 @@ namespace LinhGioi.UI
         internal int WorldGuidanceCardPaddingVertical => IsMobile ? 4 : 7;
         internal int DialoguePanelPaddingHorizontal => IsMobile ? 10 : 14;
         internal int DialoguePanelPaddingVertical => IsMobile ? 9 : 12;
-        internal int DialoguePanelMarginTop => IsMobile ? 6 : IsTablet ? 8 : 10;
+        internal int DialoguePanelMarginTop => Mathf.RoundToInt(Mathf.Clamp(Height * (IsMobile ? 0.010f : 0.012f), IsMobile ? 4f : 8f, IsMobile ? 8f : 12f));
+        internal float DialogueLineScrollMaxHeight => IsMobile
+            ? Mathf.Clamp(Height * 0.17f, 62f, 98f)
+            : IsTablet
+                ? Mathf.Clamp(Height * 0.18f, 96f, 132f)
+                : Mathf.Clamp(Height * 0.18f, 116f, 172f);
         internal int DialogueProgressPaddingHorizontal => 10;
         internal int DialogueProgressPaddingVertical => IsMobile ? 4 : 5;
         internal int StatusPaddingHorizontal(bool worldVisible) => worldVisible && IsMobile ? 14 : 18;

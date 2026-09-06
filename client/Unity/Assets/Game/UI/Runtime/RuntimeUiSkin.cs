@@ -78,6 +78,7 @@ namespace LinhGioi.UI
             if (fontSize > 0f) button.style.fontSize = fontSize;
             if (bold) button.style.unityFontStyleAndWeight = FontStyle.Bold;
             button.style.whiteSpace = whiteSpace;
+            RuntimeUiOverflowGuard.ApplyButton(button);
         }
 
         internal static void ApplyInputMetrics(TextField field, float maxWidth = 0f, float minHeight = 0f, float marginTop = 0f)

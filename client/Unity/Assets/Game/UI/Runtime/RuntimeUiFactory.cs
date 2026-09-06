@@ -428,6 +428,7 @@ namespace LinhGioi.UI
             row.style.justifyContent = justifyContent;
             row.style.marginTop = marginTop;
             row.style.marginBottom = marginBottom;
+            RuntimeUiOverflowGuard.ApplyBoundedActionRow(row);
             foreach (var button in buttons) row.Add(button);
             return row;
         }

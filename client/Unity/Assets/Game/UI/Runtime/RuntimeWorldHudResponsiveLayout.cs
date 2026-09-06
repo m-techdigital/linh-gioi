@@ -21,6 +21,7 @@ namespace LinhGioi.UI
             VisualElement localCombatPanel,
             VisualElement dialoguePanel,
             Label dialogueSpeaker,
+            ScrollView dialogueLineScroll,
             Label dialogueLine,
             Label dialogueProgress,
             VisualElement dialogueActionRow,
@@ -32,6 +33,7 @@ namespace LinhGioi.UI
             var tablet = layout.IsTablet;
             var dialogueVisible = dialoguePanel != null && dialoguePanel.style.display == DisplayStyle.Flex;
 
+            worldHud.style.minWidth = layout.WorldHudMinWidthFor(dialogueVisible);
             worldHud.style.maxWidth = layout.WorldHudMaxWidth(dialogueVisible);
             worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(dialogueVisible) : StyleKeyword.None;
             RuntimeUiSkin.ApplyPadding(
@@ -67,10 +69,17 @@ namespace LinhGioi.UI
                 dialoguePanel.style.marginTop = layout.DialoguePanelMarginTop;
                 RuntimeUiSkin.ApplyPadding(dialoguePanel, layout.DialoguePanelPaddingHorizontal, layout.DialoguePanelPaddingVertical);
             }
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(dialogueLineScroll, layout.DialogueLineScrollMaxHeight);
             if (dialogueSpeaker != null)
                 dialogueSpeaker.style.fontSize = mobile ? RuntimeUiTypography.DialogueSpeakerMobileFontSize : RuntimeUiTypography.DialogueSpeakerDesktopFontSize;
             if (dialogueLine != null)
+            {
                 dialogueLine.style.fontSize = mobile ? RuntimeUiTypography.DialogueLineMobileFontSize : RuntimeUiTypography.DialogueLineDesktopFontSize;
+                dialogueLine.style.minWidth = 0;
+                dialogueLine.style.maxWidth = Length.Percent(100);
+                dialogueLine.style.whiteSpace = WhiteSpace.Normal;
+                dialogueLine.style.flexShrink = 1;
+            }
             if (dialogueProgress != null)
             {
                 dialogueProgress.style.fontSize = mobile ? RuntimeUiTypography.DialogueProgressMobileFontSize : RuntimeUiTypography.DialogueProgressDesktopFontSize;
@@ -78,9 +87,9 @@ namespace LinhGioi.UI
             }
             if (dialogueActionRow != null)
             {
-                dialogueActionRow.style.flexWrap = mobile ? Wrap.NoWrap : Wrap.Wrap;
-                dialogueActionRow.style.width = mobile ? Length.Percent(100) : StyleKeyword.Auto;
-                dialogueActionRow.style.maxWidth = mobile ? Length.Percent(100) : StyleKeyword.None;
+                dialogueActionRow.style.flexWrap = Wrap.NoWrap;
+                dialogueActionRow.style.width = Length.Percent(100);
+                dialogueActionRow.style.maxWidth = Length.Percent(100);
             }
             if (dialogueContinueButton != null)
             {
@@ -88,7 +97,7 @@ namespace LinhGioi.UI
                     dialogueContinueButton,
                     mobile ? RuntimeUiSpacing.DialogueContinueMobileMinWidth : RuntimeUiSpacing.DialogueContinueDesktopMinWidth,
                     mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
-                if (mobile) ApplyMobileDialogueActionButton(dialogueContinueButton, 4);
+                ApplyDialogueActionButton(dialogueContinueButton);
             }
             if (dialogueCloseButton != null)
             {
@@ -96,8 +105,10 @@ namespace LinhGioi.UI
                     dialogueCloseButton,
                     mobile ? RuntimeUiSpacing.DialogueCloseMobileMinWidth : RuntimeUiSpacing.DialogueCloseDesktopMinWidth,
                     mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
-                if (mobile) ApplyMobileDialogueActionButton(dialogueCloseButton, 0);
+                ApplyDialogueActionButton(dialogueCloseButton);
             }
+            if (dialogueActionRow != null)
+                RuntimeUiOverflowGuard.ApplyResponsiveColumns(dialogueActionRow, mobile ? 1 : 2, mobile ? 4 : 6, dialogueContinueButton, dialogueCloseButton);
         }
 
         internal static void ApplyTopStatus(
@@ -223,15 +234,10 @@ namespace LinhGioi.UI
             element.style.flexShrink = 1;
         }
 
-        private static void ApplyMobileDialogueActionButton(Button button, int marginRight)
+        private static void ApplyDialogueActionButton(Button button)
         {
-            // LGO Mobile Dialogue Action Row Fit v1: two dialogue actions stay in one touchable row inside the HUD parent.
-            button.style.width = StyleKeyword.Auto;
-            button.style.maxWidth = StyleKeyword.None;
-            button.style.flexBasis = StyleKeyword.Auto;
-            button.style.flexGrow = 1;
-            button.style.flexShrink = 1;
-            button.style.marginRight = marginRight;
+            // LGO Dialogue Action Sizing Contract v1: action columns own width; labels never force overflow.
+            button.style.marginRight = 0;
         }
 
         private static void SetElementVisibility(VisualElement element, bool visible)

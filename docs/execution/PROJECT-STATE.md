@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_WORLD_OBJECTIVE_TARGET_SIGNAL_PRIORITY_READY` keeps the world objective signal clean during the first guided step. The target dummy no longer shows selected/focus markers during the Gate Keeper objective unless combat focus is actually active, while target-dummy combat evidence still shows hit feedback; fresh screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_RUNTIME_UI_OVERFLOW_CONTRACT_READY` adds lightweight north-star/mobile-tablet UI target references, a bounded runtime overflow guard for action rows/scroll content, and a dialogue layout contract that keeps long text inside a vertical `ScrollView` while action buttons remain visible. Fresh desktop/tablet/mobile screenshots were reviewed at `build/visual-evidence/profiles`, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 
