@@ -102,6 +102,7 @@ namespace LinhGioi.UI
                 status.style.maxWidth = worldVisible && mobile
                     ? Mathf.Clamp(viewportWidth * (RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent / 100f), RuntimeUiSpacing.TopStatusWorldMobileMinWidth, RuntimeUiSpacing.TopStatusWorldMobileMaxWidth)
                     : tablet ? RuntimeUiSpacing.TopStatusTabletMaxWidth : RuntimeUiSpacing.TopStatusDesktopMaxWidth;
+                status.style.flexShrink = worldVisible && mobile ? 0 : 1;
                 if (worldVisible && string.Equals(status.text, "Sẵn sàng: Bước 1 rồi Bước 2.", StringComparison.Ordinal))
                     status.text = "Sẵn sàng: Bước 1/2";
             }

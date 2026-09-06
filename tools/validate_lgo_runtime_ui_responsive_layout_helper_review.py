@@ -65,7 +65,11 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "private RuntimeUiLayoutProfile CurrentLayoutProfile()",
-        "return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height);",
+        "internal int LayoutViewportWidth",
+        "internal int LayoutViewportHeight",
+        "_root.resolvedStyle.width",
+        "_root.resolvedStyle.height",
+        "return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, LayoutViewportWidth, LayoutViewportHeight);",
         "var layout = CurrentLayoutProfile();",
         "var width = layout.Width;",
         "var profile = layout.Name;",
@@ -73,6 +77,13 @@ def main() -> int:
         "var tablet = layout.IsTablet;",
         "RuntimeLoginResponsiveLayout.Apply(",
         "RuntimeCharacterHallResponsiveLayout.Apply(",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs",
+        "uiViewportWidth = _controller != null ? _controller.LayoutViewportWidth : Screen.width",
+        "uiViewportHeight = _controller != null ? _controller.LayoutViewportHeight : Screen.height",
+        "public int uiViewportWidth;",
+        "public int uiViewportHeight;",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeCharacterHallResponsiveLayout.cs",

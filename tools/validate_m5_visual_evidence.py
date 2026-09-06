@@ -133,8 +133,17 @@ def main() -> int:
         '"-screen-height", screen_height',
         'SCREEN_WIDTH="${LGO_VISUAL_RUNTIME_WIDTH:-1920}"',
         'SCREEN_HEIGHT="${LGO_VISUAL_RUNTIME_HEIGHT:-1080}"',
+        'summary = json.loads(manifest_path.read_text(encoding="utf-8"))',
+        'if summary.get("marker") != "LGO_VISUAL_RUNTIME_EVIDENCE_READY"',
         'LGO_VISUAL_RUNTIME_EVIDENCE_READY',
         'LGO_VISUAL_RUNTIME_PASS_NOT_CLAIMED',
+    )
+    require(
+        'client/Unity/Assets/Game/UI/Runtime/VisualRuntimeEvidenceRunner.cs',
+        'var manifestTempPath = manifestPath + ".tmp";',
+        'File.Move(manifestTempPath, manifestPath);',
+        'uiViewportWidth',
+        'uiViewportHeight',
     )
     require_file('tools/run_m5_visual_evidence_review.sh', executable=True)
     require(

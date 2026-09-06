@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_MOBILE_SESSION_MENU_ACTION_GRID_READY` makes the mobile session menu actions a 2x2 touch grid, so resume/save/back/quit remain readable without squeezing four actions into one row.
+Latest player-visible batch: `LGO_RUNTIME_UI_PANEL_VIEWPORT_SIZING_READY` makes responsive layout use the resolved UI Toolkit root viewport instead of raw `Screen.width/height`, records panel viewport telemetry in visual evidence, and keeps the mobile session menu action grid visible inside the actual panel-space viewport.
 
 Current visual/runtime evidence harness command:
 

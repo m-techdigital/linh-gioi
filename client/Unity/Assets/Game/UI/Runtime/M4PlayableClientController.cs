@@ -41,6 +41,8 @@ namespace LinhGioi.UI
         private VisualElement _worldFooterActions;
         private VisualElement _characterActionRow;
         private VisualElement _sessionActions;
+        private VisualElement _sessionLocationRow;
+        private VisualElement _sessionObjectiveRow;
         private VisualElement _characterList;
         private VisualElement _lobbyContent;
         private VisualElement _selectedPreview;
@@ -166,7 +168,27 @@ namespace LinhGioi.UI
 
         private RuntimeUiLayoutProfile CurrentLayoutProfile()
         {
-            return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, Screen.width, Screen.height);
+            return RuntimeUiLayoutProfile.FromScreen(_forcedLayoutProfile, LayoutViewportWidth, LayoutViewportHeight);
+        }
+
+        internal int LayoutViewportWidth
+        {
+            get
+            {
+                if (_root == null) return Screen.width;
+                var resolvedWidth = _root.resolvedStyle.width;
+                return !float.IsNaN(resolvedWidth) && resolvedWidth > 0f ? Mathf.RoundToInt(resolvedWidth) : Screen.width;
+            }
+        }
+
+        internal int LayoutViewportHeight
+        {
+            get
+            {
+                if (_root == null) return Screen.height;
+                var resolvedHeight = _root.resolvedStyle.height;
+                return !float.IsNaN(resolvedHeight) && resolvedHeight > 0f ? Mathf.RoundToInt(resolvedHeight) : Screen.height;
+            }
         }
 
         private void BuildUi()
@@ -654,15 +676,19 @@ namespace LinhGioi.UI
         private void BuildSessionMenuPanel()
         {
             var layout = CurrentLayoutProfile();
-            _sessionMenuPanel = NewSectionShell("PHIÊN", "Tạm dừng cục bộ", "Menu phiên", "LGO Session Menu Overlay");
+            _sessionMenuPanel = NewSectionShell("PHIÊN", "Tạm dừng cục bộ", layout.IsMobile ? string.Empty : "Menu phiên", "LGO Session Menu Overlay");
             RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);
             RuntimeUiSkin.ApplySessionMenuFrame(_sessionMenuPanel);
             _sessionMenuStatus = NewMutedLabel("Đang tạm dừng trong sân luyện.");
             _sessionMenuStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
             _sessionMenuStatus.style.marginBottom = layout.SessionMenuStatusMarginBottom;
+            RuntimeSessionMenuLayout.ApplyStatus(_sessionMenuStatus, layout);
             _sessionMenuPanel.Add(_sessionMenuStatus);
-            _sessionMenuPanel.Add(NewReadabilityRow("Vị trí", "Sân Luyện An Toàn / gần Linh Môn", RuntimeArtCatalog.Spirit));
-            _sessionMenuPanel.Add(NewReadabilityRow("Mục tiêu", "Tiếp tục luyện tập, lưu dấu ấn, hoặc quay về Điện Nhân Vật.", RuntimeArtCatalog.Gold));
+            _sessionLocationRow = NewReadabilityRow("Vị trí", "Sân Luyện An Toàn / gần Linh Môn", RuntimeArtCatalog.Spirit);
+            _sessionObjectiveRow = NewReadabilityRow("Mục tiêu", "Tiếp tục luyện tập, lưu dấu ấn, hoặc quay về Điện Nhân Vật.", RuntimeArtCatalog.Gold);
+            RuntimeSessionMenuLayout.ApplyDetails(_sessionLocationRow, _sessionObjectiveRow, layout);
+            _sessionMenuPanel.Add(_sessionLocationRow);
+            _sessionMenuPanel.Add(_sessionObjectiveRow);
             _resumeButton = NewCompactPrimaryButton("Tiếp tục", HideSessionMenu);
             _sessionSaveButton = NewCompactSecondaryButton("Lưu vị trí", () => RunAsync(SavePositionAsync));
             _sessionBackButton = NewCompactSecondaryButton("Về điện nhân vật", BackToLobby);
@@ -1262,6 +1288,8 @@ namespace LinhGioi.UI
             {
                 // LGO Session Menu Compact Focus Frame v1: compact profiles let the pause panel own the viewport.
                 RuntimeSessionMenuLayout.ApplyPanel(_sessionMenuPanel, layout);
+                RuntimeSessionMenuLayout.ApplyStatus(_sessionMenuStatus, layout);
+                RuntimeSessionMenuLayout.ApplyDetails(_sessionLocationRow, _sessionObjectiveRow, layout);
                 RuntimeSessionMenuLayout.ApplyActions(_sessionActions, layout, _resumeButton, _sessionSaveButton, _sessionBackButton, _sessionQuitButton);
             }
             if (_settingsPanel != null)

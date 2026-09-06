@@ -80,9 +80,10 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs",
         "LGO Runtime Session Menu Layout Helper v1",
         "panel.style.left = layout.SessionMenuLeft;",
-        "panel.style.right = layout.SessionMenuRight;",
+        "panel.style.right = layout.IsMobile ? StyleKeyword.Auto : layout.SessionMenuRight;",
         "panel.style.top = layout.SessionMenuTop;",
         "panel.style.maxHeight = layout.SessionMenuMaxHeight;",
+        "panel.style.maxWidth = layout.IsMobile ? layout.SessionMenuWidth : StyleKeyword.None;",
     )
     require(
         "docs/design/RUNTIME-UI-RESPONSIVE-SESSION-SHELL-HELPER-REVIEW-v1.0.md",

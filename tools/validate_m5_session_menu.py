@@ -47,13 +47,23 @@ def main() -> int:
         'Thoát',
         'KeyCode.Escape',
         '_sessionActions',
+        '_sessionLocationRow',
+        '_sessionObjectiveRow',
         'RuntimeSessionMenuLayout.ApplyActions(_sessionActions',
+        'RuntimeSessionMenuLayout.ApplyDetails(_sessionLocationRow, _sessionObjectiveRow, layout);',
+        'RuntimeSessionMenuLayout.ApplyStatus(_sessionMenuStatus, layout);',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/RuntimeSessionMenuLayout.cs',
         'internal static void ApplyActions',
+        'internal static void ApplyStatus',
+        'internal static void ApplyDetails',
+        'status.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex',
+        'objectiveRow.style.display = layout.IsMobile ? DisplayStyle.None : DisplayStyle.Flex',
         'actions.style.justifyContent = layout.IsMobile ? Justify.SpaceBetween : Justify.Center',
         'button.style.width = layout.IsMobile ? Length.Percent(48) : StyleKeyword.Auto',
+        'RuntimeUiSpacing.SessionActionMobileMinHeight',
+        'RuntimeUiSpacing.SessionActionMobileFontSize',
     )
     require(
         'tools/lgo_playable_closure_check.sh',

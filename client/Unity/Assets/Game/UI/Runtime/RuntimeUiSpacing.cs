@@ -56,6 +56,8 @@ namespace LinhGioi.UI
         internal const int HeaderQuitDefaultMinHeight = 36;
         internal const int HeaderQuitWorldMobileFontSize = 13;
         internal const int HeaderQuitDefaultFontSize = 14;
+        internal const int SessionActionMobileMinHeight = 38;
+        internal const int SessionActionMobileFontSize = 13;
         internal const int IconStatusRowMarginBottom = 6;
         internal const int IconStatusRowPaddingHorizontal = 4;
         internal const int IconStatusRowPaddingTop = 0;

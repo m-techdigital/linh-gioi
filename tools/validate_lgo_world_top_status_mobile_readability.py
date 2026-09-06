@@ -62,6 +62,7 @@ def main() -> int:
         "RuntimeUiSpacing.TopStatusWorldMobileMaxWidthRatioPercent",
         "RuntimeUiSpacing.TopStatusWorldMobileMinWidth",
         "RuntimeUiSpacing.TopStatusWorldMobileMaxWidth",
+        "status.style.flexShrink = worldVisible && mobile ? 0 : 1",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",

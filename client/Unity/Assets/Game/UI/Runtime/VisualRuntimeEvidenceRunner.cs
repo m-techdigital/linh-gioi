@@ -200,6 +200,8 @@ namespace LinhGioi.UI
                 expectation = expectation,
                 width = Screen.width,
                 height = Screen.height,
+                uiViewportWidth = _controller != null ? _controller.LayoutViewportWidth : Screen.width,
+                uiViewportHeight = _controller != null ? _controller.LayoutViewportHeight : Screen.height,
                 status = "STARTED"
             };
             Debug.Log("[LinhGioi] Visual runtime capture started: " + id);
@@ -255,7 +257,11 @@ namespace LinhGioi.UI
                 nonClaim = "Build/capture success is not VISUAL_RUNTIME_PASS; screenshots must be reviewed.",
                 checkpoints = _checkpoints.ToArray()
             };
-            File.WriteAllText(Path.Combine(_outputDir, "visual-runtime-evidence-manifest.json"), JsonUtility.ToJson(summary, true));
+            var manifestPath = Path.Combine(_outputDir, "visual-runtime-evidence-manifest.json");
+            var manifestTempPath = manifestPath + ".tmp";
+            File.WriteAllText(manifestTempPath, JsonUtility.ToJson(summary, true));
+            if (File.Exists(manifestPath)) File.Delete(manifestPath);
+            File.Move(manifestTempPath, manifestPath);
             using (var writer = new StreamWriter(Path.Combine(_outputDir, "visual-runtime-evidence-review.md")))
             {
                 writer.WriteLine("# Visual Runtime Evidence Review");
@@ -327,6 +333,8 @@ namespace LinhGioi.UI
             public string expectation;
             public int width;
             public int height;
+            public int uiViewportWidth;
+            public int uiViewportHeight;
             public int bytes;
             public string status;
             public string reason;

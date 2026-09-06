@@ -156,7 +156,7 @@ namespace LinhGioi.UI
         }
 
         internal float SessionMenuWidth => IsMobile
-            ? Mathf.Clamp(Width * 0.70f, 440f, Width - 36f)
+            ? Mathf.Min(Mathf.Max(Width - 36f, 260f), 440f)
             : IsTablet
                 ? Mathf.Clamp(Width * 0.62f, 620f, 820f)
                 : Mathf.Clamp(Width * 0.50f, 760f, 960f);
@@ -165,7 +165,7 @@ namespace LinhGioi.UI
 
         internal float SessionMenuLeft => IsMobile ? 18f : Mathf.Max(24f, (Width - SessionMenuWidth) * 0.5f);
 
-        internal float SessionMenuTop => IsMobile ? 46f : IsTablet ? 118f : 120f;
+        internal float SessionMenuTop => IsMobile ? Mathf.Max(8f, Height * 0.06f) : IsTablet ? 118f : 120f;
 
         internal float SessionMenuMaxHeight => IsMobile ? Mathf.Max(240f, Height - 70f) : IsTablet ? 430f : 500f;
         internal int SessionMenuStatusMarginBottom => 10;

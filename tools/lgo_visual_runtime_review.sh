@@ -352,6 +352,15 @@ def tail(path: Path, limit: int = 80) -> list[str]:
 def capture_complete() -> bool:
     if not manifest_path.is_file():
         return False
+    try:
+        summary = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except Exception:
+        return False
+    if summary.get("marker") != "LGO_VISUAL_RUNTIME_EVIDENCE_READY":
+        return False
+    checkpoints = summary.get("checkpoints")
+    if not isinstance(checkpoints, list) or len(checkpoints) < len(expected):
+        return False
     return all((out_dir / name).is_file() for name in expected)
 
 def terminate_after_capture(process: subprocess.Popen[bytes]) -> int:
