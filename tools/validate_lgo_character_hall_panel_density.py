@@ -74,17 +74,18 @@ def main() -> int:
         "preview.style.width = layout.IsMobile && hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;",
         "preview.style.flexBasis = layout.IsMobile && hasSelectedCharacter ? layout.CharacterSelectedPreviewMaxWidth : StyleKeyword.Auto;",
         "layout.CharacterSelectedPreviewHeight",
-        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);",
+        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel, layout.IsMobile);",
         "RuntimeUiSkin.ApplyCharacterListFrame(list);",
         "RuntimeUiSkin.ApplyCharacterCreateFrame(panel);",
         "RuntimeUiSkin.ApplyCharacterPortraitFrame(portrait);",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
-        "ApplyCharacterHallPanelFrame(VisualElement panel)",
+        "ApplyCharacterHallPanelFrame(VisualElement panel, bool lightProfile = false)",
+        "LGO Character Hall Mobile Light Shell v1",
         "LGO Character Hall No Stretched Texture v1",
         "panel.style.backgroundImage = StyleKeyword.None;",
-        "new Color(0.005f, 0.024f, 0.052f, 0.70f)",
+        "lightProfile ? new Color(0.005f, 0.024f, 0.052f, 0.56f) : new Color(0.005f, 0.024f, 0.052f, 0.70f)",
         "ApplyCharacterListFrame(VisualElement list)",
         "ApplySubtleNestedFrame(list, RuntimeArtCatalog.Gold, 0.34f);",
     )

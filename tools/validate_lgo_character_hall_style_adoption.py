@@ -53,7 +53,7 @@ def check_frozen() -> None:
 def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
-        "ApplyCharacterHallPanelFrame(VisualElement panel)",
+        "ApplyCharacterHallPanelFrame(VisualElement panel, bool lightProfile = false)",
         "ApplyCharacterListFrame(VisualElement list)",
         "ApplyCharacterPreviewFrame(VisualElement preview)",
         "ApplyCharacterCreateFrame(VisualElement panel)",
@@ -77,7 +77,7 @@ def main() -> int:
         "NewCharacterPortraitFrame(RuntimeUiLayoutProfile layout, Texture2D portraitTexture, Texture2D fallbackTexture)",
         "LGO Character Hall V3B Composition Panel",
         "LGO Character Hall Create Cultivator Panel V3B",
-        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);",
+        "RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel, layout.IsMobile);",
         "RuntimeUiSkin.ApplyCharacterListFrame(list);",
         "RuntimeUiSkin.ApplyCharacterPreviewFrame(preview);",
         "RuntimeUiSkin.ApplyCharacterCreateFrame(panel);",

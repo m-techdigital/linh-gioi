@@ -127,6 +127,8 @@ Current focus update: mobile Character Hall shell/reflow is ready under `LGO_CHA
 
 Current focus update: mobile Character Hall selected hero readability is ready under `LGO_CHARACTER_HALL_MOBILE_HERO_READABILITY_READY`; selected preview width, portrait size, and selected-name size use profile metrics so the V3B cultivator/profile read clearer on mobile without moving buttons into a one-off layout.
 
+Current focus update: mobile Character Hall light shell is ready under `LGO_CHARACTER_HALL_MOBILE_LIGHT_SHELL_READY`; `RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel, layout.IsMobile)` now owns the lighter mobile shell alpha so runtime art reads through the panel without screen-specific card/button styling.
+
 Current focus update: first-time Character Hall create flow now stays visible in the desktop safe viewport under `LGO_CHARACTER_HALL_CREATE_VIEWPORT_FLOW_READY`; desktop uses a horizontal create row before the selection grid, tablet/mobile evidence remains readable, duplicate empty-state objective copy is hidden, and no `VISUAL_RUNTIME_PASS` is claimed.
 
 Current focus update: steady World Hub HUD footprint is smaller on desktop under `LGO_WORLD_HUD_DESKTOP_FOOTPRINT_TUNE_READY`; desktop/tablet/mobile profile screenshots were reviewed as readable, gameplay/dialogue/combat semantics are unchanged, and no `VISUAL_RUNTIME_PASS` is claimed.

@@ -291,11 +291,12 @@ namespace LinhGioi.UI
             ApplyEdgeFrame(label, accent, accent, accent, accent, 1f, 1f);
         }
 
-        internal static void ApplyCharacterHallPanelFrame(VisualElement panel)
+        internal static void ApplyCharacterHallPanelFrame(VisualElement panel, bool lightProfile = false)
         {
             // LGO Character Hall No Stretched Texture v1: keep ornate assets role-sized; the large shell uses code-side glass.
             panel.style.backgroundImage = StyleKeyword.None;
-            panel.style.backgroundColor = new Color(0.005f, 0.024f, 0.052f, 0.70f);
+            // LGO Character Hall Mobile Light Shell v1: compact screens keep the reference art visible behind the bounded shell.
+            panel.style.backgroundColor = lightProfile ? new Color(0.005f, 0.024f, 0.052f, 0.56f) : new Color(0.005f, 0.024f, 0.052f, 0.70f);
             ApplyRadius(panel, 12);
             ApplyEdgeFrame(
                 panel,

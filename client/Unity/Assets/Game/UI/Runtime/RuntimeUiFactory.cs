@@ -97,7 +97,7 @@ namespace LinhGioi.UI
         {
             var panel = NewPanel(RuntimeUiSizing.MainShellMaxWidth);
             panel.name = "LGO Character Hall V3B Composition Panel";
-            RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel);
+            RuntimeUiSkin.ApplyCharacterHallPanelFrame(panel, layout.IsMobile);
             panel.style.maxWidth = RuntimeUiSizing.CharacterHallPanelMaxWidth;
             panel.style.minHeight = RuntimeUiSizing.CharacterHallPanelMinHeight;
             RuntimeUiSkin.ApplyPadding(panel, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingHorizontal, layout.LobbyPanelPaddingTop, layout.LobbyPanelPaddingBottom);

@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_CHARACTER_HALL_MOBILE_HERO_READABILITY_READY` increases mobile selected hero/card metrics through `RuntimeUiLayoutProfile` after the shell reflow fix, making the V3B cultivator and selected profile easier to read while preserving bottom action air. Fresh mobile Character Hall screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
+Latest player-visible batch: `LGO_CHARACTER_HALL_MOBILE_LIGHT_SHELL_READY` adds a shared mobile-light Character Hall shell variant in `RuntimeUiSkin`, applied through `RuntimeUiFactory` from the layout profile so mobile keeps more background art visible without per-screen card/button overrides. Fresh mobile Character Hall screenshots were reviewed, with no `VISUAL_RUNTIME_PASS` claim.
 
 Current visual/runtime evidence harness command:
 
