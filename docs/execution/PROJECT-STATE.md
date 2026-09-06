@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Latest player-visible batch: `LGO_NPC_DIALOGUE_EVIDENCE_FLOW_RESET_READY` resets the world state before the dialogue checkpoint, so `npc-dialogue.png` now captures the actual Gate Keeper dialogue panel instead of stale skill-preview state.
+Latest player-visible batch: `LGO_MOBILE_DIALOGUE_ACTION_ROW_COMPACT_READY` compacts mobile dialogue button metrics so `Tiếp tục` and `Đóng` fit on one row, reducing dialogue panel height while preserving touch targets.
 
 Current visual/runtime evidence harness command:
 

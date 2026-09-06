@@ -67,6 +67,13 @@ def main() -> int:
         "RuntimeUiSpacing.DialogueButtonMobileMinHeight",
         "RuntimeUiSpacing.DialogueCloseMobileMinWidth",
         "RuntimeUiSpacing.DialogueCloseDesktopMinWidth",
+        "dialogueContinueButton.style.marginRight = 4",
+        "dialogueCloseButton.style.marginRight = 0",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSpacing.cs",
+        "DialogueContinueMobileMinWidth = 108",
+        "DialogueCloseMobileMinWidth = 82",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",

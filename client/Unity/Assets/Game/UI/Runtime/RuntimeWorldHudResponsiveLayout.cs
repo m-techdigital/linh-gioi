@@ -62,6 +62,7 @@ namespace LinhGioi.UI
                     dialogueContinueButton,
                     mobile ? RuntimeUiSpacing.DialogueContinueMobileMinWidth : RuntimeUiSpacing.DialogueContinueDesktopMinWidth,
                     mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
+                if (mobile) dialogueContinueButton.style.marginRight = 4;
             }
             if (dialogueCloseButton != null)
             {
@@ -69,6 +70,7 @@ namespace LinhGioi.UI
                     dialogueCloseButton,
                     mobile ? RuntimeUiSpacing.DialogueCloseMobileMinWidth : RuntimeUiSpacing.DialogueCloseDesktopMinWidth,
                     mobile ? RuntimeUiSpacing.DialogueButtonMobileMinHeight : RuntimeUiSpacing.DialogueButtonDesktopMinHeight);
+                if (mobile) dialogueCloseButton.style.marginRight = 0;
             }
         }
 

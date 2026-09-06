@@ -92,9 +92,9 @@ namespace LinhGioi.UI
         internal const int CharacterSelectedSecondaryMobileFontSize = 14;
         internal const int DialogueButtonMobileMinHeight = 38;
         internal const int DialogueButtonDesktopMinHeight = 42;
-        internal const int DialogueContinueMobileMinWidth = 116;
+        internal const int DialogueContinueMobileMinWidth = 108;
         internal const int DialogueContinueDesktopMinWidth = 132;
-        internal const int DialogueCloseMobileMinWidth = 90;
+        internal const int DialogueCloseMobileMinWidth = 82;
         internal const int DialogueCloseDesktopMinWidth = 104;
         internal const int BaseInputMaxWidth = 420;
         internal const int BaseInputMinHeight = 42;
