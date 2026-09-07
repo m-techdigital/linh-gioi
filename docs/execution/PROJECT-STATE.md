@@ -8,6 +8,8 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Đá Luyện riêng blockout đã chuyển từ sprite sang mesh nhẹ theo demo thể tích; giữ collider/feedback, ánh sáng môi trường Flat giúp vùng bóng dễ đọc. Ba profile `stone-volume-final-*` và quick qua, ảnh đã xem; camera bốn mép ngõ không tái hiện che nhân vật. Tiếp model/rig có license theo turnaround nhập môn; chưa main integration/visual PASS hoặc art cuối.
+
 Camera blockout đã chuyển sang Cinemachine tránh che khuất và giữ hướng input qua đổi góc; ba profile bản cuối qua, ảnh ngõ PC/ra phố tablet đã xem. Hồi quy main hoàn tất capture ba profile, quick PASS. Demo trang phục nhập môn trước/bên/sau có trong reference-ui, chưa model; tiếp kiểm tra mép ngõ/góc nhà, không mở main camera hoặc hệ thống ngoài roadmap. Không visual PASS.
 
 Blockout có focus/feedback tại đá, pulse kết thúc và nhãn xác nhận; `blockout-stone-label-*` ba profile cùng quick qua, ảnh đã xem. Reuse glow và label base, không texture mới; source giữ để gom presentation batch tiếp. Kế tiếp cần design nhân vật nhìn từ sau/góc camera phố trước khi thay capsule, không coi sprite mặt trước là giải pháp third-person final.

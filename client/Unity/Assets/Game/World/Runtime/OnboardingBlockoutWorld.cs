@@ -24,10 +24,12 @@ namespace LinhGioi.World
         private float _stoneCompletedAt = -1f;
         private bool _screenInputHeld;
         private Vector3 _inputForward;
+        private Mesh _stoneMesh;
 
         private void Awake()
         {
-            RenderSettings.ambientLight = new Color(0.48f, 0.49f, 0.51f);
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+            RenderSettings.ambientLight = new Color(0.75f, 0.76f, 0.78f);
             var light = new GameObject("Blockout daylight").AddComponent<Light>();
             light.transform.SetParent(transform);
             light.type = LightType.Directional;
@@ -60,7 +62,7 @@ namespace LinhGioi.World
             Box("Far boundary", new Vector3(0f, 0.4f, 15f), new Vector3(14f, 0.8f, 0.2f), walls);
             Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
             _keeper = Actor("Blockout Keeper", KeeperPoint, LgoVisualAssetRegistryV3B.GateKeeperNpc, 1.8f, trim);
-            _stone = Actor("Blockout Stone", StonePoint, LgoVisualAssetRegistryV3B.TrainingStone, 1.5f, trim);
+            _stone = CreateTrainingStone();
             _keeperLabel = WorldLabelPresenter.Create("Blockout Keeper Label", "Người Giữ Cổng", KeeperPoint, RuntimeArtCatalog.Gold);
             _stoneLabel = WorldLabelPresenter.Create("Blockout Stone Label", "Đá Luyện", StonePoint, RuntimeArtCatalog.Gold);
             _stoneFocus = WorldProceduralVisuals.CreateGroundGlowSprite("Blockout Stone Focus",
@@ -196,6 +198,67 @@ namespace LinhGioi.World
             var color = completion ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Gold;
             color.a = completion ? 1f - progress : 1f;
             _stoneFocus.color = color;
+        }
+
+        private Renderer CreateTrainingStone()
+        {
+            var surface = Material(new Color(0.40f, 0.43f, 0.44f));
+            var stone = Box("Blockout Stone", StonePoint + Vector3.up * 0.75f, new Vector3(0.65f, 1.5f, 0.65f), surface);
+            stone.transform.position = StonePoint;
+            stone.transform.localScale = Vector3.one;
+            var collider = stone.GetComponent<BoxCollider>();
+            collider.center = Vector3.up * 0.75f;
+            collider.size = new Vector3(0.65f, 1.5f, 0.65f);
+            // Five octagonal rings form the plinth, shoulder and tapered body in metres.
+            var rings = new[]
+            {
+                new Vector3(0.325f, 0f, 0.225f), new Vector3(0.29f, 0.15f, 0.20f),
+                new Vector3(0.245f, 0.15f, 0.155f), new Vector3(0.255f, 0.8f, 0.165f),
+                new Vector3(0.12f, 1.3f, 0.11f)
+            };
+            var points = new Vector3[rings.Length * 8];
+            for (var ring = 0; ring < rings.Length; ring++)
+            for (var side = 0; side < 8; side++)
+            {
+                var angle = side * Mathf.PI * 0.25f;
+                points[ring * 8 + side] = new Vector3(Mathf.Cos(angle) * rings[ring].x,
+                    rings[ring].y, Mathf.Sin(angle) * rings[ring].z);
+            }
+            var vertices = new System.Collections.Generic.List<Vector3>(240);
+            void Face(Vector3 a, Vector3 b, Vector3 c)
+            {
+                vertices.Add(a); vertices.Add(b); vertices.Add(c);
+            }
+            for (var side = 0; side < 8; side++)
+            {
+                var next = (side + 1) % 8;
+                Face(Vector3.zero, points[side], points[next]);
+                for (var ring = 0; ring < rings.Length - 1; ring++)
+                {
+                    var lower = ring * 8;
+                    var upper = lower + 8;
+                    Face(points[lower + side], points[upper + side], points[upper + next]);
+                    Face(points[lower + side], points[upper + next], points[lower + next]);
+                }
+                Face(points[32 + side], new Vector3(0.07f, 1.5f, -0.01f), points[32 + next]);
+            }
+            var indices = new int[vertices.Count];
+            for (var i = 0; i < indices.Length; i++) indices[i] = i;
+            _stoneMesh = new Mesh { name = "Blockout stone volume" };
+            _stoneMesh.SetVertices(vertices);
+            _stoneMesh.triangles = indices;
+            _stoneMesh.RecalculateNormals();
+            _stoneMesh.RecalculateBounds();
+            stone.GetComponent<MeshFilter>().sharedMesh = _stoneMesh;
+            var inset = Box("Blockout stone jade inset", StonePoint + new Vector3(0f, 0.82f, -0.17f),
+                new Vector3(0.13f, 0.13f, 0.04f), Material(new Color(0.25f, 0.55f, 0.45f)), false);
+            inset.transform.rotation = Quaternion.Euler(0f, 0f, 45f);
+            return stone.GetComponent<Renderer>();
+        }
+
+        private void OnDestroy()
+        {
+            if (_stoneMesh != null) Destroy(_stoneMesh);
         }
 
         private Renderer Actor(string name, Vector3 point, Sprite sprite, float height, Material fallback)

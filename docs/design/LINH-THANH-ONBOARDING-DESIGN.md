@@ -108,7 +108,17 @@ Provenance demo một cảnh: imagegen trong chat, tham chiếu world-event gố
 - Demo `docs/reference-ui/lgo-arrival-outfit-turnaround-draft-v1.jpg`: 1280x853, 154008 byte, JPEG76, chỉ reference ngoài runtime. Mẫu trước/bên/sau/ba phần tư lấy hướng bộ TRAINING trong reference Kiếm và composition nhập môn; không chốt class/canon. Thumbnail camera trong tranh có nhân vật quá lớn, không dùng làm chuẩn framing. Chưa có model/rig tương ứng; không cắt tranh composite làm sprite/model giả.
 - Nguồn imagegen: `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-9793cbe1-ef37-4611-83b2-f69b82a6dd9b.png`; đã xem bản nén. NPC/Lộ/skill/trang bị/trang phục tiếp tục theo `LGO-GAME-SYSTEMS-NARRATIVE-DESIGN.md`, không mở hệ thống ngoài roadmap vì có concept.
 
-## Nguồn ảnh nhập môn
+## Đá Luyện có chiều dày trong blockout
+
+- Bản cuối: `build/dev-loop/stone-volume-final-{desktop,tablet,mobile}.log`, cả ba exit 0; vòng thoại/đá, mesh volume, bốn mép ngõ và giữ hướng qua camera đều đi qua. Quick `stone-volume-final-quick.log` PASS. Ảnh ở `build/visual-evidence/onboarding-blockout/stone-volume-final-*/`; đã xem mobile bên đá, desktop cạnh ngõ phải, tablet hoàn tất. Mesh có mặt bên thật, vùng bóng dễ đọc hơn; vẫn proxy và chưa visual PASS. Không rerun main vì chỉ thay preview development, tái dùng baseline `cinemachine-main-flow-baseline.log` của main không đổi.
+- Build development cuối 341623453 byte (+5348 so với checkpoint camera), không suy ra release/memory budget; ảnh V3B vẫn ở Resources, không claim đã bỏ payload. Tiếp: tìm nguồn model/rig có license rõ cho nhân vật theo turnaround nhập môn, kiểm tra silhouette/góc sau và chuyển động trước khi thay capsule; không lấy ảnh mặt trước hoặc mannequin không đúng design làm final.
+
+- Demo `docs/reference-ui/lgo-training-stone-volume-draft-v1.jpg`: 1280x853, 114704 byte, JPEG76; tham chiếu đá V3B, chỉ bản mẫu hình khối ngoài runtime. Imagegen nguồn `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-524f5b93-0974-4025-9c5d-f485c2c03222.png`; đã xem bản nén, không crop/slice. Không thay art main hoặc coi là production art.
+- Proxy cao 1.5m, bệ 0.65x0.45m, thân thu nhỏ/đỉnh lệch và dấu ngọc phía trước; mesh đá 80 tam giác, inset cube riêng, không texture mới. Dùng Lit chung và giữ collider 0.65x1.5x0.65m như trước để không đổi collision/tầm tương tác. Đây là khối giản lược theo demo, chưa sao chép chi tiết mặt đá hoặc rune V3B.
+- Red `stone-volume-red-player.log` exit 1 vì đá còn SpriteRenderer không có chiều dày mesh. `camera-edge-mobile.log` trước thay đá đã qua bốn điểm sát vách ngõ trái/phải; không đổi camera vì không tái hiện lỗi ở bốn điểm đó. Chưa kiểm chứng mọi góc nhà hoặc toàn bộ frame chuyển camera.
+- Ảnh mesh đầu (`stone-volume-green-mobile/stone-side.png`) cho thấy đá quá tối. Bootstrap có ambientMode=0; blockout trước chỉ gán ambientLight. Chuyển riêng preview sang Flat rồi tăng mức fill để đọc khối trong bóng râm; không thêm đèn từng vật thể. Căn cứ: [Unity ambientLight](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/RenderSettings-ambientLight.html). Bản Flat đầu vẫn tối, không lấy làm evidence hình ảnh cuối.
+
+## Nguồn storyboard và dialogue
 
 Imagegen trong chat, tham chiếu world-event và Character Hall đã duyệt; nguồn ngoài repo `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-69276ad5-037e-449c-8a6f-e671b1473e0d.png`. JPEG quality78 bằng sips, không crop. Demo mới chưa owner duyệt.
 

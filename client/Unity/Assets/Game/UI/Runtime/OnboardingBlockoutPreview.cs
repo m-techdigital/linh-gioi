@@ -218,6 +218,41 @@ namespace LinhGioi.UI
                 yield break;
             }
             Debug.Log("LGO_CAMERA_INPUT_PASS fresh_input_uses_new_camera=true");
+            var stoneVolume = GameObject.Find("Blockout Stone").GetComponent<MeshFilter>();
+            if (stoneVolume == null || stoneVolume.sharedMesh.bounds.size.z < 0.4f)
+            {
+                Debug.LogError("LGO_STONE_VOLUME_FAIL stone has no readable side volume");
+                Application.Quit(1);
+                yield break;
+            }
+            yield return WalkTo(new Vector3(0f, 0f, 3f));
+            foreach (var side in new[] { 1f, -1f })
+            {
+                foreach (var edge in new[] { 2.75f, 3.25f })
+                {
+                    yield return WalkTo(new Vector3(side * 3.4f, 0f, edge));
+                    yield return WalkTo(new Vector3(side * 6f, 0f, edge));
+                    var checkpoint = "camera-edge-" + (side > 0f ? "right" : "left") + "-" + (edge < 3f ? "near" : "far");
+                    yield return Capture(directory, checkpoint);
+                    foreach (var elevation in new[] { 0.2f, 1.1f, 1.7f })
+                    {
+                        var target = _world.Position + Vector3.up * elevation;
+                        var projected = Camera.main.WorldToViewportPoint(target);
+                        if (Physics.Linecast(target, Camera.main.transform.position, out var hit, ~0, QueryTriggerInteraction.Ignore) ||
+                            projected.z <= Camera.main.nearClipPlane || projected.x < 0.05f || projected.x > 0.95f ||
+                            projected.y < 0.05f || projected.y > 0.95f)
+                        {
+                            Debug.LogError("LGO_CAMERA_EDGE_FAIL " + checkpoint + " elevation=" + elevation + " viewport=" + projected
+                                + " obstruction=" + (hit.collider == null ? "none" : hit.collider.name));
+                            Application.Quit(1);
+                            yield break;
+                        }
+                    }
+                    Debug.Log("LGO_CAMERA_EDGE_PASS " + checkpoint);
+                    yield return WalkTo(new Vector3(side * 3.4f, 0f, edge));
+                    yield return WalkTo(new Vector3(0f, 0f, 3f));
+                }
+            }
             if (GetComponent<M4PlayableClientController>() != null)
                 throw new InvalidOperationException("Blockout must not create the account client UI.");
             Debug.Log("LGO_ONBOARDING_BLOCKOUT_ROUTE_PASS movement=CharacterController no_teleport=true");
