@@ -89,7 +89,7 @@ namespace LinhGioi.UI
             _guidanceScroll.Add(_guidance.Panel);
             root.Add(_guidanceScroll);
             _dialogue = new RuntimeNpcDialogueView(RuntimeUiLayoutProfile.FromScreen(null, Screen.width, Screen.height),
-                () => { Dialogue.Advance(); RefreshDialogue(); },
+                AdvanceDialogue,
                 () => { Dialogue.Close(); RefreshDialogue(); }, Resources.Load<Texture2D>("LGOGateKeeperPortrait"));
             root.Add(_dialogue.Panel);
             _applyLayout = () =>
@@ -117,6 +117,15 @@ namespace LinhGioi.UI
             }
             else _session.Open();
             RefreshDialogue();
+        }
+
+        private void AdvanceDialogue()
+        {
+            if (!Dialogue.Advance()) return;
+            RefreshDialogue();
+            // A completed return conversation points to its actual destination;
+            // closing or reading an intermediate line must never trigger this.
+            if (_stoneCompleted && _returnSession.Completed) _world.GuideToForecourt();
         }
 
         private bool _guideDirectionPresented;
@@ -350,6 +359,8 @@ namespace LinhGioi.UI
             yield return new WaitForSeconds(0.25f);
             if (!KeeperConversing(keeperAnimator) || _world.DialogueVisible)
                 throw new InvalidOperationException("Guide approach must show a brief greeting gesture before any modal covers the NPC.");
+            if (!_world.KeeperGreeting || !_guidance.Hint.text.Contains(OnboardingDialogueContent.GateKeeperWelcome))
+                throw new InvalidOperationException("Approach greeting needs synchronized welcome text in the shared guidance.");
             yield return Capture(directory, "keeper-greeting");
             var greetingOrigin = _world.Position;
             _world.Movement = Vector2.up;
@@ -366,6 +377,8 @@ namespace LinhGioi.UI
             if (keeperAnimator.GetLayerWeight(keeperAnimator.GetLayerIndex("Conversation")) > 0.001f ||
                 !keeperAnimator.GetCurrentAnimatorStateInfo(0).IsName("Locomotion") || _world.DialogueVisible)
                 throw new InvalidOperationException("Approach gesture must end while the player stays nearby, without opening a modal.");
+            if (_world.KeeperGreeting || _guidance.Hint.text.Contains(OnboardingDialogueContent.GateKeeperWelcome))
+                throw new InvalidOperationException("Welcome text must expire with the greeting gesture.");
             yield return WalkTo(new Vector3(0f, 0f, 1f));
             yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
             Debug.Log("LGO_KEEPER_GREETING_PASS visible_before_modal=true bounded=true movement_available=true");
@@ -864,6 +877,10 @@ namespace LinhGioi.UI
             if (!_interact.enabledSelf || _interact.tooltip != "Gặp")
                 throw new InvalidOperationException("Completed onboarding must allow talking to the guide again in range.");
             CheckKeeperFocus(true);
+            yield return null;
+            if (!_world.KeeperGreeting || !_guidance.Hint.text.Contains(OnboardingDialogueContent.GateKeeperWelcomeBack))
+                throw new InvalidOperationException("Returning approach needs its own welcome without resetting progress.");
+            yield return Capture(directory, "keeper-welcome-back");
             var completedFeedbackAt = _stoneFeedbackStartedAt;
             Submit(_interact);
             yield return null;
@@ -874,6 +891,8 @@ namespace LinhGioi.UI
             yield return null;
             if (_world.DialogueVisible || !_session.Completed || !_stoneCompleted)
                 throw new InvalidOperationException("Closing returning dialogue reset progress or retained input lock.");
+            if (guideAnimator.GetComponent<NpcGuideGesture>().Active)
+                throw new InvalidOperationException("Closing a return conversation must not start a destination gesture.");
             Submit(_interact);
             yield return null;
             if (_dialogue.Progress.text != "Đối thoại: 1/2")
@@ -894,11 +913,24 @@ namespace LinhGioi.UI
             if (_world.DialogueVisible || !_session.Completed || !_stoneCompleted || !_forecourtVisited ||
                 _stoneFeedbackStartedAt != completedFeedbackAt)
                 throw new InvalidOperationException("Returning guide completion replayed onboarding or retained input lock.");
+            yield return new WaitForSeconds(0.8f);
+            var returnDirection = Vector3.ProjectOnPlane(OnboardingBlockoutWorld.ForecourtPoint - guideRoot, Vector3.up);
+            var returnHand = Vector3.ProjectOnPlane(guideAnimator.GetBoneTransform(HumanBodyBones.RightHand).position
+                - guideAnimator.GetBoneTransform(HumanBodyBones.RightUpperArm).position, Vector3.up);
+            if (!guideAnimator.GetComponent<NpcGuideGesture>().Active || Vector3.Angle(returnDirection, returnHand) > 20f ||
+                returnHand.magnitude < 0.2f || Vector3.Angle(guideAnimator.transform.forward, returnDirection) > 5f ||
+                Vector3.Distance(guideRoot, guideAnimator.transform.position) > 0.001f || _world.DialogueVisible)
+                throw new InvalidOperationException("Return guide must point toward the forecourt with a raised hand and fixed root.");
+            if (!CheckGuidance("Đến sân phía trước.", true)) yield break;
+            yield return Capture(directory, "keeper-guide-forecourt");
             Submit(_interact);
             yield return null;
             if (!_world.DialogueVisible || _dialogue.Progress.text != "Đối thoại: 1/2" ||
                 !_session.Completed || !_stoneCompleted || !_forecourtVisited)
                 throw new InvalidOperationException("A completed return conversation must remain available without resetting progress.");
+            if (guideAnimator.GetComponent<NpcGuideGesture>().Active)
+                throw new InvalidOperationException("Opening dialogue must cancel the previous destination gesture.");
+            Debug.Log("LGO_GUIDE_RETURN_DIRECTION_PASS target=forecourt cancel_on_reopen=true close_no_point=true root_held=true");
             Submit(_dialogue.CloseButton);
             yield return null;
             yield return WalkTo(new Vector3(0f, 0f, 1f));
@@ -1003,6 +1035,15 @@ namespace LinhGioi.UI
                 ? OnboardingDialogueContent.StoneFeedback(Time.unscaledTime - _stoneFeedbackStartedAt) ?? "Đi tiếp theo đường đá, tới khoảng sân có cây."
                 : _session.Completed ? (InRange ? "Đá Luyện sẵn sàng nhận linh khí." : "Đá ở bên phải đường phía trước.")
                 : InRange ? "Người Giữ Cổng đang chờ." : "Theo đường đá đến Người Giữ Cổng.";
+            if (_world.KeeperGreeting && InRange && !Dialogue.Active)
+                _guidance.Hint.text = "Người Giữ Cổng: “" + (_stoneCompleted
+                    ? OnboardingDialogueContent.GateKeeperWelcomeBack : OnboardingDialogueContent.GateKeeperWelcome) + "”";
+            if (_stoneCompleted && _world.KeeperGuiding && !Dialogue.Active)
+            {
+                _guidance.Objective.text = "Đến sân phía trước.";
+                _guidance.Hint.text = "Theo đường đá, tới khoảng sân có cây.";
+                _guidanceScroll.style.display = DisplayStyle.Flex;
+            }
             RuntimeUiFactory.ApplyWorldTouchInteraction(_interact, returningToKeeper ? "Gặp" : _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp");
             _interact.SetEnabled(!Dialogue.Active && InRange);
             _world.KeeperReady = (!_session.Completed || _stoneCompleted) && InRange;

@@ -9,6 +9,8 @@ namespace LinhGioi.World
     {
         public static readonly Vector3 KeeperPoint = new Vector3(-3f, 0f, 1f);
         public static readonly Vector3 StonePoint = new Vector3(3.5f, 0f, 4f);
+        public static readonly Vector3 ForecourtPoint = new Vector3(2f, 0f, 22f);
+        private Vector3 _guideDestination = StonePoint;
         public Vector2 Movement { get; set; }
         public Vector2 ScreenMovement { get; set; }
         public Vector3 Position => _player.transform.position;
@@ -447,8 +449,29 @@ namespace LinhGioi.World
                     + " position=" + shot.transform.position);
         }
 
-        public bool DialogueVisible { get; set; }
-        public void GuideToStone() => _keeperGuide.Begin(StonePoint);
+        private bool _dialogueVisible;
+        public bool DialogueVisible
+        {
+            get => _dialogueVisible;
+            set
+            {
+                _dialogueVisible = value;
+                if (!value) return;
+                // UI callbacks can run after LateUpdate (including after capture).
+                // Cancel immediately so opening a modal cannot retain a pointing pose.
+                _keeperGreetingUntil = 0f;
+                _keeperGuide?.Cancel();
+            }
+        }
+        public void GuideToStone() => GuideTo(StonePoint);
+        public void GuideToForecourt() => GuideTo(ForecourtPoint);
+        private void GuideTo(Vector3 destination)
+        {
+            _guideDestination = destination;
+            _keeperGuide.Begin(destination);
+        }
+        public bool KeeperGuiding => _keeperGuide != null && _keeperGuide.Active;
+        public bool KeeperGreeting => KeeperReady && !DialogueVisible && Time.time < _keeperGreetingUntil;
         public bool KeeperReady { get; set; }
 
         private SpriteRenderer CreateInteractionFocus(string name, Vector3 point)
@@ -491,7 +514,7 @@ namespace LinhGioi.World
                 _keeperGuiding = guiding;
                 _keeperAnimator.Play(guiding ? GuidingState : TalkingState, _keeperConversationLayer, 0f);
             }
-            var conversing = DialogueVisible || (KeeperReady && Time.time < _keeperGreetingUntil);
+            var conversing = DialogueVisible || KeeperGreeting;
             if (_keeperTalking != conversing)
             {
                 _keeperTalking = conversing;
@@ -499,7 +522,7 @@ namespace LinhGioi.World
             }
             _keeperAnimator.SetLayerWeight(_keeperConversationLayer, Mathf.MoveTowards(
                 _keeperAnimator.GetLayerWeight(_keeperConversationLayer), _keeperTalking || guiding ? 1f : 0f, Time.deltaTime / 0.15f));
-            var keeperFacing = guiding ? Quaternion.LookRotation(Vector3.ProjectOnPlane(StonePoint - KeeperPoint, Vector3.up)) : _keeperTalking
+            var keeperFacing = guiding ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_guideDestination - KeeperPoint, Vector3.up)) : _keeperTalking
                 ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_player.transform.position - KeeperPoint, Vector3.up))
                 : KeeperRestRotation;
             _keeperAnimator.transform.rotation = Quaternion.RotateTowards(_keeperAnimator.transform.rotation, keeperFacing, 180f * Time.deltaTime);

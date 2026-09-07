@@ -3,6 +3,8 @@ namespace LinhGioi.World
     public static class OnboardingDialogueContent
     {
         public const float StoneFeedbackDuration = 9f;
+        public const string GateKeeperWelcome = "Chào mừng đến Linh Thành.";
+        public const string GateKeeperWelcomeBack = "Bạn lại ghé thăm rồi. Cần hỏi đường, cứ gặp tôi nhé.";
 
         public static string StoneFeedback(float elapsedSeconds)
         {
@@ -15,7 +17,7 @@ namespace LinhGioi.World
         public static NpcDialogueSession CreateGateKeeperSession() => new NpcDialogueSession(
             "Người Giữ Cổng", new[]
             {
-                "Chào mừng đến Linh Thành.",
+                GateKeeperWelcome,
                 "Nếu mới tới, hãy ghé Đá Luyện ở Sân Luyện.",
                 "Gần đây Âm Khí quanh cổng có dao động lạ. Đừng lo, chúng ta đang kiểm soát."
             }, "Tìm hiểu Linh Thành",
