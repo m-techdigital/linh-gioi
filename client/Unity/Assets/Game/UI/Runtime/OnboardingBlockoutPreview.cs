@@ -25,6 +25,7 @@ namespace LinhGioi.UI
         private Action _applyLayout;
         private bool _stoneCompleted;
         private bool _forecourtVisited;
+        private float _forecourtArrivalUntil;
         private bool _locomotionVerified;
         private Action _returnToHall;
         private Button _quit;
@@ -176,6 +177,18 @@ namespace LinhGioi.UI
                 lanternCount++;
             }
             if (lanternCount != 6) throw new InvalidOperationException("Expected six street lanterns, got " + lanternCount);
+            var sceneryCount = 0;
+            foreach (var house in _world.GetComponentsInChildren<Transform>())
+            {
+                if (house.name != "Street scenery house") continue;
+                sceneryCount++;
+                if (house.GetComponentsInChildren<Collider>().Length != 0)
+                    throw new InvalidOperationException("Distant scenery must not add walking collision.");
+                foreach (var renderer in house.GetComponentsInChildren<MeshRenderer>())
+                    if (renderer.bounds.min.z <= 27.1f)
+                        throw new InvalidOperationException("Distant scenery must stay outside the garden wall.");
+            }
+            if (sceneryCount != 5) throw new InvalidOperationException("Expected five distant scenery houses, got " + sceneryCount);
             var pipeline = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline;
             var softShadowProperty = pipeline == null ? null : pipeline.GetType().GetProperty("supportsSoftShadows");
             if (softShadowProperty == null)
@@ -200,8 +213,8 @@ namespace LinhGioi.UI
                 if (filter.GetComponent<Collider>() != null)
                     throw new InvalidOperationException("Facade decoration must not change the walking collision.");
             }
-            if (facadeCount != 7 || sharedFacade == null)
-                throw new InvalidOperationException("Expected seven shared house facades, got " + facadeCount);
+            if (facadeCount != 12 || sharedFacade == null)
+                throw new InvalidOperationException("Expected seven nearby and five distant shared house facades, got " + facadeCount);
             var pavingSurface = _world.transform.Find("Street paving surface");
             if (pavingSurface == null)
                 throw new InvalidOperationException("Street and forecourt need one continuous paving surface.");
@@ -215,6 +228,14 @@ namespace LinhGioi.UI
                 || Mathf.Abs((pavingMesh.uv[2].y - pavingMesh.uv[0].y) - 39f / 2f) > 0.01f)
                 throw new InvalidOperationException("Paving UVs must preserve the 3m x 2m repeat across the entire route.");
             var forecourtTree = _world.transform.Find("Forecourt pine").GetComponent<SpriteRenderer>();
+            var soil = _world.transform.Find("Garden soil");
+            var treeShadow = _world.transform.Find("Forecourt pine grounding");
+            if (soil == null || treeShadow == null)
+                throw new InvalidOperationException("Forecourt tree needs soil and a shared grounding shadow inside the bed.");
+            if (soil.GetComponent<Collider>() != null || treeShadow.GetComponent<SpriteRenderer>()?.sprite == null
+                || treeShadow.position.y <= soil.GetComponent<Renderer>().bounds.max.y
+                || treeShadow.position.y >= forecourtTree.bounds.min.y)
+                throw new InvalidOperationException("Tree contact shadow must sit above non-colliding soil and below the roots.");
             if (Mathf.Abs(forecourtTree.bounds.min.y - 0.325f) > 0.01f)
                 throw new InvalidOperationException("Forecourt tree must stand on the raised bed: bottom=" + forecourtTree.bounds.min.y);
             var keeperSprite = _world.transform.Find("Blockout Keeper").GetComponent<SpriteRenderer>();
@@ -451,13 +472,21 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(1f, 0f, 18f));
             yield return WalkTo(new Vector3(2f, 0f, 22f));
             yield return null;
-            if (!CheckGuidance("Đến sân phía trước.", false)) yield break;
+            if (!CheckGuidance("Đã tới sân.", true)) yield break;
+            yield return Capture(directory, "forecourt-arrival");
+            yield return new WaitForSecondsRealtime(3.1f);
+            if (!CheckGuidance("Đã tới sân.", false)) yield break;
             if (Mathf.Abs(_world.Position.y) > 0.1f)
                 throw new InvalidOperationException("Forecourt route left the paving surface.");
             yield return Capture(directory, "forecourt");
             yield return WalkTo(new Vector3(1f, 0f, 18f));
             yield return WalkTo(new Vector3(0f, 0f, 14f));
-            if (!CheckGuidance("Đến sân phía trước.", false)) yield break;
+            if (!CheckGuidance("Đã tới sân.", false)) yield break;
+            yield return WalkTo(new Vector3(1f, 0f, 18f));
+            yield return WalkTo(new Vector3(2f, 0f, 22f));
+            yield return null;
+            if (!CheckGuidance("Đã tới sân.", false)) yield break;
+            Debug.Log("LGO_FORECOURT_ARRIVAL_FEEDBACK_PASS timed=true replay=false shared_guidance=true");
             Debug.Log("LGO_FORECOURT_ROUTE_PASS continuous_ground=true return_route=true");
             if (GetComponent<M4PlayableClientController>() != null)
                 throw new InvalidOperationException("Blockout must not create the account client UI.");
@@ -526,11 +555,15 @@ namespace LinhGioi.UI
 
         private void Update()
         {
-            if (_stoneCompleted && Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z), new Vector2(2f, 22f)) <= 2f)
+            if (!_forecourtVisited && _stoneCompleted && Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z), new Vector2(2f, 22f)) <= 2f)
+            {
                 _forecourtVisited = true;
-            _guidanceScroll.style.display = _session.Active || _forecourtVisited ? DisplayStyle.None : DisplayStyle.Flex;
-            _guidance.Objective.text = _stoneCompleted ? "Đến sân phía trước." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
-            _guidance.Hint.text = _stoneCompleted ? "Đi tiếp theo đường đá, tới khoảng sân có cây."
+                _forecourtArrivalUntil = Time.unscaledTime + 3f;
+            }
+            _guidanceScroll.style.display = _session.Active || (_forecourtVisited && Time.unscaledTime >= _forecourtArrivalUntil)
+                ? DisplayStyle.None : DisplayStyle.Flex;
+            _guidance.Objective.text = _forecourtVisited ? "Đã tới sân." : _stoneCompleted ? "Đến sân phía trước." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
+            _guidance.Hint.text = _forecourtVisited ? "Nhịp linh khí đã ổn định." : _stoneCompleted ? "Đi tiếp theo đường đá, tới khoảng sân có cây."
                 : _session.Completed ? (InRange ? "Chọn Luyện để tập trung linh khí." : "Đá ở bên phải đường phía trước.")
                 : InRange ? "Chọn Gặp để trò chuyện." : "Theo đường đá đến Người Giữ Cổng.";
             _interact.text = _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp";

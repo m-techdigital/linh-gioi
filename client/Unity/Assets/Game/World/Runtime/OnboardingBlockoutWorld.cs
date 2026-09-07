@@ -68,6 +68,11 @@ namespace LinhGioi.World
                 Box("Boundary", new Vector3(side * 7f, 0.6f, 1.5f), new Vector3(0.2f, 1.2f, 27f), walls);
             }
             CreateForecourt(paving, walls, roof, trim);
+            CreateStreetHouse(new Vector3(-10f, 0f, 42f), 3.2f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(-5f, 0f, 40f), 3.8f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(1f, 0f, 46f), 4f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(7f, 0f, 42f), 3.2f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(12f, 0f, 48f), 3.6f, walls, roof, trim, scenery: true);
             CreateStreetLanterns(trim);
             CreateStreetPaving(paving);
             Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
@@ -188,12 +193,16 @@ namespace LinhGioi.World
             }
         }
 
-        private void CreateStreetHouse(Vector3 centre, float height, Material walls, Material roof, Material trim)
+        private void CreateStreetHouse(Vector3 centre, float height, Material walls, Material roof, Material trim, bool scenery = false)
         {
-            var body = Box("Street module", centre + Vector3.up * height * 0.5f, new Vector3(3f, height, 4.8f), walls);
-            CreateRoof(centre + Vector3.up * (height + 0.1f), roof);
-            Box("Stone plinth", centre + Vector3.up * 0.15f, new Vector3(3.04f, 0.3f, 4.84f), roof, false);
-            Box("Timber eave band", centre + Vector3.up * (height - 0.08f), new Vector3(3.05f, 0.16f, 4.85f), trim, false);
+            var house = new GameObject(scenery ? "Street scenery house" : "Street house").transform;
+            house.SetParent(transform);
+            house.position = centre;
+            var body = Box("Street module", centre + Vector3.up * height * 0.5f,
+                new Vector3(3f, height, 4.8f), walls, !scenery, house);
+            CreateRoof(centre + Vector3.up * (height + 0.1f), roof, !scenery, house);
+            Box("Stone plinth", centre + Vector3.up * 0.15f, new Vector3(3.04f, 0.3f, 4.84f), roof, false, house);
+            Box("Timber eave band", centre + Vector3.up * (height - 0.08f), new Vector3(3.05f, 0.16f, 4.85f), trim, false, house);
             if (_houseFacadeMesh == null)
             {
                 var cube = body.GetComponent<MeshFilter>().sharedMesh;
@@ -224,20 +233,21 @@ namespace LinhGioi.World
                 _houseFacadeMesh.CombineMeshes(parts.ToArray(), true, true);
             }
             var facade = new GameObject("House facade");
-            facade.transform.SetParent(transform);
+            facade.transform.SetParent(house);
             facade.transform.position = centre + Vector3.right * (centre.x < 0f ? 1.505f : -1.505f);
             facade.transform.rotation = Quaternion.Euler(0f, centre.x < 0f ? 0f : 180f, 0f);
             facade.AddComponent<MeshFilter>().sharedMesh = _houseFacadeMesh;
             facade.AddComponent<MeshRenderer>().sharedMaterial = trim;
+            if (scenery) house.rotation = Quaternion.Euler(0f, centre.x < 0f ? 90f : -90f, 0f);
         }
 
-        private void CreateRoof(Vector3 eave, Material roof)
+        private void CreateRoof(Vector3 eave, Material roof, bool collision = true, Transform parent = null)
         {
-            Box("Roof eave", eave, new Vector3(3.6f, 0.25f, 5.4f), roof);
+            Box("Roof eave", eave, new Vector3(3.6f, 0.25f, 5.4f), roof, collision, parent);
             for (var slope = -1; slope <= 1; slope += 2)
             {
                 var panel = Box("Roof slope", eave + new Vector3(slope * 0.8f, 0.5f, 0f),
-                    new Vector3(1.9f, 0.16f, 5.2f), roof);
+                    new Vector3(1.9f, 0.16f, 5.2f), roof, collision, parent);
                 panel.transform.rotation = Quaternion.Euler(0f, 0f, -slope * 25f);
             }
         }
@@ -257,7 +267,12 @@ namespace LinhGioi.World
                     new Vector3(0.18f, 2.7f, 0.18f), trim);
             Box("Pavilion bench", new Vector3(6f, 0.3f, 23f), new Vector3(0.45f, 0.6f, 3.6f), roof);
             Box("Garden bed", new Vector3(-1f, 0.15f, 25.5f), new Vector3(5f, 0.3f, 2.6f), walls);
+            Box("Garden soil", new Vector3(-1f, 0.305f, 25.5f), new Vector3(4.7f, 0.01f, 2.3f),
+                Material(new Color(0.19f, 0.22f, 0.14f)), false);
             Actor("Forecourt pine", new Vector3(-1f, 0.3f, 25.5f), LgoVisualAssetRegistryV3B.TreePine, 4.6f, trim);
+            var treeShadow = WorldProceduralVisuals.CreateGroundShadowSprite("Forecourt pine grounding",
+                new Vector3(-1f, 0.315f, 25.5f), new Vector3(0.8f, 0.5f, 1f), 2);
+            if (treeShadow != null) treeShadow.transform.SetParent(transform);
         }
 
         private void CreateCameraShot(Transform parent, Transform tracking, Vector3 offset, int priority)
@@ -457,11 +472,11 @@ namespace LinhGioi.World
             return renderer;
         }
 
-        private GameObject Box(string name, Vector3 position, Vector3 size, Material material, bool collision = true)
+        private GameObject Box(string name, Vector3 position, Vector3 size, Material material, bool collision = true, Transform parent = null)
         {
             var box = GameObject.CreatePrimitive(PrimitiveType.Cube);
             box.name = name;
-            box.transform.SetParent(transform);
+            box.transform.SetParent(parent != null ? parent : transform);
             box.transform.position = position;
             box.transform.localScale = size;
             box.GetComponent<Renderer>().sharedMaterial = material;
