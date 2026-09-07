@@ -1,8 +1,10 @@
 # Linh Giới Online — Next Action
 
-Last updated: `2026-09-07`
+Last updated: `2026-09-08`
 
 ## Quick Resume
+
+- Checkpoint macro REMAKE keeper v4: đã thay toàn thân, đầu/mặt/tóc, nón, giáp, robe/cape và portrait bằng mesh 3D mới bám sheet; source `client/art-source/gate-keeper/KeeperReconstruction.blend`, 24.898 triangles, 65 bones, 2 atlas. Import/build `keeper-clothed-*`, 19/19 tests guide/dialogue `keeper-reconstruction-tests.xml`, quick gate và toàn tuyến runtime 960x540 `keeper-clothed-mobile.log` qua; ảnh keeper-side/dialogue/keeper-guide-direction đã xem. CHƯA VISUAL PASS: cape vẫn tạo tam giác khi IK chỉ đường (P1), hoa văn/nón/mép vải chưa sắc như design. NEXT: tách và gắn xương cape theo cấu trúc trang phục thực, giữ model remake; xử lý cả vùng biến dạng trong một macro pass rồi capture pose IK thật. Không quay lại primitive, không coi tool là blocker, không đổi frozen surfaces. Evidence tại `build/visual-evidence/onboarding-blockout/keeper-clothed-mobile/`; capture timeout cũ được giữ nguyên.
 
 - Người Giữ Cổng chào bằng lời trong guidance chung cùng nhịp cử chỉ; lần quay lại có lời chào riêng. Hoàn tất “Khám phá tiếp” thì bàn tay/thân chỉ về sân nghỉ và guidance cùng đích; đóng giữa chừng không chỉ, mở lại hủy ngay. Runtime red `guide-social-cues-mobile.log` bắt lỗi hủy muộn sau LateUpdate; setter trạng thái thoại nay hủy đồng bộ, giữ assertion. `guide-social-tests.xml`19/19; build/quick `guide-social-final-*` và `build/dev-loop/guide-social-final-mobile.log` toàn tuyến/greeting hết hạn/movement/return hướng sân/cancel/revisit qua. Ảnh greeting/welcome-back/guide-forecourt960x540 đã xem tại `build/visual-evidence/onboarding-blockout/guide-social-final-mobile/`. Không bubble mới, quest/reward hoặc art final. NEXT: kiểm tra fit/pose trang phục tại góc chơi/animation thật theo v4; chọn sửa lỗi hình thể hoặc flow có evidence, không lặp trang trí nhỏ hoặc báo cáo-only.
 

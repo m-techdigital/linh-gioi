@@ -302,8 +302,16 @@ namespace LinhGioi.UI
             ulong keeperTriangles = 0;
             for (var submesh = 0; submesh < keeperMesh.sharedMesh.subMeshCount; submesh++)
                 keeperTriangles += keeperMesh.sharedMesh.GetIndexCount(submesh) / 3;
-            if (keeperTriangles == 0 || keeperTriangles > 25000 || keeperMesh.sharedMaterials.Length != 6)
+            if (keeperTriangles == 0 || keeperTriangles > 25000 || keeperMesh.sharedMaterials.Length != 2)
                 throw new InvalidOperationException("Gate Keeper exceeds the candidate geometry/material budget.");
+            for (var section = 0; section < keeperMesh.sharedMaterials.Length; section++)
+            {
+                var atlas = keeperMesh.sharedMaterials[section].GetTexture("_BaseMap");
+                var limit = section == 0 ? 2048 : 512;
+                if (atlas == null || atlas.width > limit || atlas.height > limit)
+                    throw new InvalidOperationException("Gate Keeper is missing its bounded body/face atlas: " + section);
+            }
+            Debug.Log("LGO_KEEPER_RECONSTRUCTION_BUDGET_PASS triangles=" + keeperTriangles + " materials=2 body_max=2048 face_max=512");
             var keeperSnapshot = new Mesh();
             var keeperGround = float.PositiveInfinity;
             try

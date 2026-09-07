@@ -128,7 +128,17 @@ namespace LinhGioi.Foundation.Editor
         {
             var path = Directory + "GateKeeper.fbx";
             ConfigureHumanoid(path, false);
-            ValidateModel(path);
+            ValidateModel(path, 2);
+            foreach (var name in new[] { "KeeperReconstructionAlbedo", "KeeperReconstructionFace" })
+            {
+                var settings = (TextureImporter)AssetImporter.GetAtPath(Directory + name + ".png");
+                if (settings == null) throw new InvalidOperationException("Missing keeper atlas: " + name);
+                settings.maxTextureSize = name.EndsWith("Face", StringComparison.Ordinal) ? 512 : 2048;
+                settings.mipmapEnabled = true;
+                settings.isReadable = false;
+                settings.textureCompression = TextureImporterCompression.CompressedHQ;
+                settings.SaveAndReimport();
+            }
             var portrait = (TextureImporter)AssetImporter.GetAtPath(Directory + "Resources/LGOGateKeeperPortrait.png");
             portrait.textureType = TextureImporterType.Default;
             portrait.maxTextureSize = 128;
@@ -138,7 +148,7 @@ namespace LinhGioi.Foundation.Editor
             portrait.textureCompression = TextureImporterCompression.CompressedHQ;
             portrait.SaveAndReimport();
             SaveCandidatePrefab(path, Directory + "Resources/LGOGateKeeperCandidate.prefab");
-            Debug.Log("LGO_KEEPER_PREFAB_READY shared_textures=true shared_controller=true");
+            Debug.Log("LGO_KEEPER_PREFAB_READY atlases=2 shared_controller=true");
         }
 
         private static void SaveCandidatePrefab(string modelPath, string prefabPath)
@@ -156,7 +166,7 @@ namespace LinhGioi.Foundation.Editor
                 AssetDatabase.SaveAssets();
                 if (renderer.sharedMaterials.Any(m => m == null || m.shader.name != "Universal Render Pipeline/Lit"))
                     throw new InvalidOperationException("Arrival outfit has an unsupported material.");
-                Debug.Log("LGO_ARRIVAL_PREFAB_READY materials=6 skin=512 eyes=128 root_motion=false");
+                Debug.Log("LGO_ARRIVAL_PREFAB_READY materials=" + renderer.sharedMaterials.Length + " root_motion=false");
             }
             finally { UnityEngine.Object.DestroyImmediate(instance); }
         }
@@ -328,6 +338,8 @@ namespace LinhGioi.Foundation.Editor
             string texture = null;
             if (name == "Base skin") texture = "Skin";
             else if (name == "Base eyes") texture = "Eyes";
+            else if (name == "Keeper Reconstruction") texture = "KeeperReconstructionAlbedo";
+            else if (name == "Keeper Reconstruction Face") texture = "KeeperReconstructionFace";
             else if (name == "Arrival unbleached cloth") color = new Color(0.65f, 0.63f, 0.57f);
             else if (name == "Arrival muted blue sash") color = new Color(0.09f, 0.15f, 0.19f);
             else if (name == "Arrival charcoal trousers") color = new Color(0.06f, 0.065f, 0.06f);
@@ -361,7 +373,7 @@ namespace LinhGioi.Foundation.Editor
             ValidateModel(ModelPath);
         }
 
-        private static void ValidateModel(string modelPath)
+        private static void ValidateModel(string modelPath, int materialSections = 6)
         {
             AssetDatabase.ImportAsset(modelPath, ImportAssetOptions.ForceSynchronousImport);
             var avatar = AssetDatabase.LoadAllAssetsAtPath(modelPath).OfType<Avatar>().FirstOrDefault();
@@ -369,8 +381,8 @@ namespace LinhGioi.Foundation.Editor
                 throw new InvalidOperationException("Arrival outfit requires a valid Humanoid Avatar.");
             var model = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
             var renderers = model.GetComponentsInChildren<SkinnedMeshRenderer>();
-            if (renderers.Length != 1 || renderers[0].sharedMesh.subMeshCount != 6)
-                throw new InvalidOperationException("Arrival outfit must retain one skinned mesh and six material sections.");
+            if (renderers.Length != 1 || renderers[0].sharedMesh.subMeshCount != materialSections)
+                throw new InvalidOperationException("Character must retain one skinned mesh and " + materialSections + " material sections.");
             var baked = new Mesh();
             Bounds bounds;
             try
@@ -385,7 +397,7 @@ namespace LinhGioi.Foundation.Editor
             finally { UnityEngine.Object.DestroyImmediate(baked); }
             if (bounds.size.y < 1.7f || bounds.size.y > 1.95f)
                 throw new InvalidOperationException("Arrival outfit scale mismatch: " + bounds);
-            Debug.Log("LGO_ARRIVAL_IMPORT_PASS humanoid=true renderers=1 submeshes=6 bounds=" + bounds);
+            Debug.Log("LGO_ARRIVAL_IMPORT_PASS humanoid=true renderers=1 submeshes=" + materialSections + " bounds=" + bounds);
         }
     }
 }

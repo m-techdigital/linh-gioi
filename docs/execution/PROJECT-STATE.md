@@ -1,12 +1,14 @@
 # Linh Giới Online — Project State
 
-Last updated: `2026-09-07`
+Last updated: `2026-09-08`
 
 ## Continuous workflow status
 
 Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
+
+- Checkpoint macro REMAKE keeper v4: đã thay toàn thân, đầu/mặt/tóc, nón, giáp, robe/cape và portrait bằng mesh 3D mới bám sheet; source `client/art-source/gate-keeper/KeeperReconstruction.blend`, 24.898 triangles, 65 bones, 2 atlas. Import/build `keeper-clothed-*`, 19/19 tests guide/dialogue `keeper-reconstruction-tests.xml`, quick gate và toàn tuyến runtime 960x540 `keeper-clothed-mobile.log` qua; ảnh keeper-side/dialogue/keeper-guide-direction đã xem. CHƯA VISUAL PASS: cape vẫn tạo tam giác khi IK chỉ đường (P1), hoa văn/nón/mép vải chưa sắc như design. NEXT: tách và gắn xương cape theo cấu trúc trang phục thực, giữ model remake; xử lý cả vùng biến dạng trong một macro pass rồi capture pose IK thật. Không quay lại primitive, không coi tool là blocker, không đổi frozen surfaces. Evidence tại `build/visual-evidence/onboarding-blockout/keeper-clothed-mobile/`; capture timeout cũ được giữ nguyên.
 
 Sân nghỉ nay có ghế gỗ rõ mặt ngồi/chân/tựa; build/full-route960x540/quick `pavilion-rest-final-*` qua, ảnh đã xem. Một mesh nhỏ thay khối đặc; chưa chức năng ngồi hoặc art final. Tiếp kiến trúc đình/phố theo demo.
 
