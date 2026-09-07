@@ -812,7 +812,12 @@ namespace LinhGioi.UI
                     yield return WalkTo(new Vector3(0f, 0f, 3f));
                 }
             }
+            // Retain the wide-name stress case through all camera edges, then
+            // use a representative identity for the garden presentation captures.
+            CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
+            _world.SetPlayerName("Minh An");
             yield return WalkTo(new Vector3(0f, 0f, 14f));
+            CheckPlayerIdentity("Minh An", true);
             yield return Capture(directory, "street-outlook");
             yield return WalkTo(new Vector3(1f, 0f, 18f));
             yield return WalkTo(new Vector3(2f, 0f, 22f));
@@ -823,6 +828,7 @@ namespace LinhGioi.UI
             if (!CheckGuidance("Đã tới sân.", false)) yield break;
             if (Mathf.Abs(_world.Position.y) > 0.1f)
                 throw new InvalidOperationException("Forecourt route left the paving surface.");
+            CheckPlayerIdentity("Minh An", true);
             yield return Capture(directory, "forecourt");
             yield return WalkTo(new Vector3(1f, 0f, 18f));
             yield return WalkTo(new Vector3(0f, 0f, 14f));

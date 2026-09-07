@@ -52,6 +52,7 @@ namespace LinhGioi.World
         private Texture2D _pavingTexture;
         private Mesh _houseFacadeMesh;
         private Mesh _lanternFrameMesh;
+        private Mesh _pavilionBenchMesh;
         private readonly List<Material> _materials = new List<Material>();
         private Camera[] _previousCameras;
         private Color _previousAmbient;
@@ -286,7 +287,7 @@ namespace LinhGioi.World
             for (var z = -1; z <= 1; z += 2)
                 Box("Pavilion post", new Vector3(5f + x * 1.3f, 1.35f, 23f + z * 2f),
                     new Vector3(0.18f, 2.7f, 0.18f), trim);
-            Box("Pavilion bench", new Vector3(6f, 0.3f, 23f), new Vector3(0.45f, 0.6f, 3.6f), roof);
+            CreatePavilionBench();
             Box("Garden bed", new Vector3(-1f, 0.15f, 25.5f), new Vector3(5f, 0.3f, 2.6f), walls);
             Box("Garden soil", new Vector3(-1f, 0.305f, 25.5f), new Vector3(4.7f, 0.01f, 2.3f),
                 Material(new Color(0.19f, 0.22f, 0.14f)), false);
@@ -294,6 +295,36 @@ namespace LinhGioi.World
             var treeShadow = WorldProceduralVisuals.CreateGroundShadowSprite("Forecourt pine grounding",
                 new Vector3(-1f, 0.315f, 25.5f), new Vector3(0.8f, 0.5f, 1f), 2);
             if (treeShadow != null) treeShadow.transform.SetParent(transform);
+        }
+
+        private void CreatePavilionBench()
+        {
+            // Forecourt draft: an open resting pavilion after SCN-002. The bench
+            // faces the garden; all timber shares one renderer and the old footprint.
+            var bench = Box("Pavilion bench", new Vector3(6f, 0f, 23f), Vector3.one,
+                Material(new Color(0.38f, 0.25f, 0.15f)));
+            var collider = bench.GetComponent<BoxCollider>();
+            collider.center = new Vector3(0f, 0.44f, 0f);
+            collider.size = new Vector3(0.45f, 0.88f, 3.6f);
+            var cube = bench.GetComponent<MeshFilter>().sharedMesh;
+            var parts = new List<CombineInstance>();
+            void Timber(Vector3 centre, Vector3 size)
+            {
+                parts.Add(new CombineInstance { mesh = cube, transform = Matrix4x4.TRS(centre, Quaternion.identity, size) });
+            }
+            for (var slat = -1; slat <= 1; slat++)
+                Timber(new Vector3(slat * 0.1575f, 0.43f, 0f), new Vector3(0.135f, 0.08f, 3.6f));
+            for (var end = -1; end <= 1; end += 2)
+            {
+                for (var side = -1; side <= 1; side += 2)
+                    Timber(new Vector3(side * 0.14f, 0.195f, end * 1.5f), new Vector3(0.1f, 0.39f, 0.14f));
+                Timber(new Vector3(0f, 0.345f, end * 1.5f), new Vector3(0.45f, 0.09f, 0.14f));
+                Timber(new Vector3(0.185f, 0.66f, end * 1.5f), new Vector3(0.08f, 0.44f, 0.1f));
+            }
+            Timber(new Vector3(0.19f, 0.78f, 0f), new Vector3(0.07f, 0.16f, 3.6f));
+            _pavilionBenchMesh = new Mesh { name = "Forecourt timber bench" };
+            _pavilionBenchMesh.CombineMeshes(parts.ToArray(), true, true);
+            bench.GetComponent<MeshFilter>().sharedMesh = _pavilionBenchMesh;
         }
 
         private void CreateCameraShot(Transform parent, Transform tracking, Vector3 offset, int priority)
@@ -587,6 +618,7 @@ namespace LinhGioi.World
                 if (material != null) Destroy(material);
             if (_houseFacadeMesh != null) Destroy(_houseFacadeMesh);
             if (_lanternFrameMesh != null) Destroy(_lanternFrameMesh);
+            if (_pavilionBenchMesh != null) Destroy(_pavilionBenchMesh);
         }
 
         private Animator CreateHumanoid(string resource, Transform parent, Vector3 localPosition)

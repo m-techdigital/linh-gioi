@@ -8,6 +8,8 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Sân nghỉ nay có ghế gỗ rõ mặt ngồi/chân/tựa; build/full-route960x540/quick `pavilion-rest-final-*` qua, ảnh đã xem. Một mesh nhỏ thay khối đặc; chưa chức năng ngồi hoặc art final. Tiếp kiến trúc đình/phố theo demo.
+
 - Đá Luyện có bề mặt xanh xám sáng hơn và dấu xoắn cộng hưởng theo reference SCN-002; nét dày hơn sau review960x540, căn giữa/rộng20cm trên hai mặt. Một mesh128tri dùng chung và material pulse cũ, không texture/đèn/collider mới; giữ đá1.1m và completion/revisit. `build/dev-loop/stone-inlay-readable-mobile.log` toàn tuyến/mesh hướng ngoài/bounds/pulse/phục hồi/đi sân/quay lại NPC qua; ảnh stone-side/complete/complete-settled đã xem trong `build/visual-evidence/onboarding-blockout/stone-inlay-readable-mobile/`. Build `stone-inlay-readable-build.log`, quick `stone-inlay-readable-quick.log` qua. Chưa art final, thiết bị thật, mọi viewport hoặc VISUAL_RUNTIME_PASS. NEXT: tiếp phố/sân và flow khám phá theo storyboard/design sẵn có; không dừng ở polish biểu tượng hoặc validator, giữ base chung và frozen surfaces.
 
 - Checkpoint Người Giữ Cổng trẻ v4 candidate: model/portrait cùng identity nón/tóc đen/áo xanh-ngà đã vào runtime; garment tách vạt trước/tà bên/cape, tay áo liên tục, sửa mặt bị cull và chuyển màu Blender→Unity. Reuse rig/controller/thoại/IK chỉ đá, không đổi gameplay contract. Hai FBX arrival/keeper có65 xương/rest matrix khớp tuyệt đối; keeper13.074 vertices/24.764 triangles sau round-trip,1renderer/6material, dùng lại Skin512/Eyes128. Chưa phải final art/modular assembler, chưa body occlusion/LOD/áo choàng chạy hoặc GPU/mobile-device proof.
