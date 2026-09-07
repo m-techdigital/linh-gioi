@@ -83,6 +83,7 @@ namespace LinhGioi.World
             var trim = Material(new Color(0.32f, 0.18f, 0.10f));
             _city = gameObject.AddComponent<CityArchitectureVisuals>();
             _city.Initialize();
+            walls.mainTexture = _city.PlasterTexture;
             Box("Courtyard", new Vector3(0f, -0.1f, 1.5f), new Vector3(14f, 0.2f, 27f), paving).GetComponent<Renderer>().enabled = false;
             for (var side = -1; side <= 1; side += 2)
             {

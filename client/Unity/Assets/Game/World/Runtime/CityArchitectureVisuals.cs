@@ -16,7 +16,8 @@ namespace LinhGioi.World
         internal void BeginModule(Vector3 centre, Quaternion rotation) => _module = Matrix4x4.TRS(centre, rotation, Vector3.one) * Matrix4x4.Translate(-centre);
         internal void EndModule() => _module = Matrix4x4.identity;
         private Material _gold, _wood, _navy, _ivory, _window, _teal, _leaf, _pink;
-        private Texture2D _woodTexture;
+        private Texture2D _woodTexture, _plasterTexture, _tileTexture;
+        internal Texture2D PlasterTexture => _plasterTexture;
 
         internal void Initialize()
         {
@@ -36,6 +37,10 @@ namespace LinhGioi.World
                 pixels[y*64+x]=new Color(grain,grain,grain);
             }
             _woodTexture.SetPixels(pixels); _woodTexture.Apply(true,true); _wood.mainTexture=_woodTexture;
+            _plasterTexture = SurfaceTexture(false);
+            _tileTexture = SurfaceTexture(true);
+            _ivory.mainTexture = _plasterTexture;
+            _navy.mainTexture = _tileTexture;
             _cube = Primitive(PrimitiveType.Cube);
             _sphere = FoliageMesh(); _meshes.Add(_sphere);
             _roof = RoofMesh(); _meshes.Add(_roof);
@@ -72,24 +77,13 @@ namespace LinhGioi.World
             Part(_roof,_navy,eave,scale,Quaternion.identity);
             // Four swept eave edges, ridge and sparse ceramic ribs preserve the curved silhouette.
             for(var edge=0;edge<4;edge++)
-            for(var step=0;step<12;step++)
+            for(var step=0;step<8;step++)
             {
-                var a=EavePoint(edge,step/12f); var b=EavePoint(edge,(step+1)/12f);
+                var a=EavePoint(edge,step/8f); var b=EavePoint(edge,(step+1)/8f);
                 Beam(_gold,eave+Vector3.Scale(a,scale),eave+Vector3.Scale(b,scale),.045f*scale.y);
             }
             Beam(_gold,eave+Vector3.Scale(new Vector3(0,1.1f,-.52f),scale),eave+Vector3.Scale(new Vector3(0,1.1f,.52f),scale),.065f*scale.y);
-            for(var side=-1;side<=1;side+=2)
-            for(var z=-5;z<=5;z++)
-            {
-                Vector3 previous=default;
-                for(var step=0;step<=6;step++)
-                {
-                    var t=step/6f;
-                    var p=eave+Vector3.Scale(new Vector3(side*t,RoofHeight(t)-.22f*Mathf.Pow(t,6)+.22f*Mathf.Pow(Mathf.Abs(z/5f),4)*Mathf.Pow(t,6)+.014f,z/5f*(.52f+.48f*t)),scale);
-                    if(step>0) Beam(_navy,previous,p,.025f*scale.y);
-                    previous=p;
-                }
-            }
+            // Ceramic rows are a small repeated surface texture, not hundreds of cube ribs.
             for(var x=-1;x<=1;x+=2) for(var z=-1;z<=1;z+=2)
             {
                 var corner=eave+Vector3.Scale(new Vector3(x,.34f,z),scale);
@@ -108,7 +102,7 @@ namespace LinhGioi.World
             void Quad(Vector3 a,Vector3 b,Vector3 c,Vector3 d)
             {var n=vertices.Count; vertices.AddRange(new[]{a,b,c,d});indices.AddRange(new[]{n,n+1,n+2,n,n+2,n+3});}
             // Rings collapse onto a ridge at the top, producing a hipped swept roof.
-            for(var ring=0;ring<8;ring++) for(var edge=0;edge<4;edge++) for(var section=0;section<12;section++)
+            for(var ring=0;ring<5;ring++) for(var edge=0;edge<4;edge++) for(var section=0;section<8;section++)
             {
                 Vector3 P(float t,float u)
                 {
@@ -116,12 +110,15 @@ namespace LinhGioi.World
                     var cornerLift=.22f*Mathf.Pow(Mathf.Abs(e.x*e.z),4)*Mathf.Pow(t,6);
                     return new Vector3(x,RoofHeight(t)-.22f*Mathf.Pow(t,6)+cornerLift,z);
                 }
-                var t0=ring/8f;var t1=(ring+1)/8f;var u0=section/12f;var u1=(section+1)/12f;
+                var t0=ring/5f;var t1=(ring+1)/5f;var u0=section/8f;var u1=(section+1)/8f;
                 var a=P(t0,u0);var b=P(t1,u0);var c=P(t1,u1);var d=P(t0,u1);
                 if(Vector3.Cross(b-a,c-a).y<0) { Quad(d,c,b,a); Quad(a-Vector3.up*.07f,b-Vector3.up*.07f,c-Vector3.up*.07f,d-Vector3.up*.07f); }
                 else { Quad(a,b,c,d); Quad(d-Vector3.up*.07f,c-Vector3.up*.07f,b-Vector3.up*.07f,a-Vector3.up*.07f); }
             }
             var mesh=new Mesh {name="Shared swept hip roof",vertices=vertices.ToArray(),triangles=indices.ToArray()};
+            var uv = new Vector2[vertices.Count];
+            for (var i=0;i<uv.Length;i++) uv[i] = new Vector2(vertices[i].x*3f, vertices[i].z*4f);
+            mesh.uv=uv;
             mesh.RecalculateNormals();mesh.RecalculateBounds();return mesh;
         }
         private static Mesh ArchMesh(float thickness)
@@ -140,20 +137,55 @@ namespace LinhGioi.World
             var mesh=new Mesh{name="Shared city arch",vertices=v.ToArray(),triangles=t.ToArray()};mesh.RecalculateNormals();mesh.RecalculateBounds();return mesh;
         }
 
+        private static Texture2D SurfaceTexture(bool tiles)
+        {
+            const int size=128;
+            var texture=new Texture2D(size,size,TextureFormat.RGBA32,true)
+            { name=tiles ? "Shared ceramic rows 128" : "Shared aged lime plaster 128",wrapMode=TextureWrapMode.Repeat,filterMode=FilterMode.Trilinear,anisoLevel=2 };
+            var pixels=new Color[size*size];
+            for(var y=0;y<size;y++)for(var x=0;x<size;x++)
+            {
+                var grain=Mathf.PerlinNoise(x*.18f,y*.18f);
+                var mottling=Mathf.PerlinNoise(x*.045f,y*.045f);
+                float shade;
+                if(tiles)
+                {
+                    var row=y/16;var column=(x+(row%2)*8)%16;
+                    var ridge=.82f+.18f*Mathf.Sin(column/16f*Mathf.PI);
+                    shade=(y%16<2 ? .63f : ridge)*(.92f+.08f*grain);
+                }
+                else shade=.79f+.14f*mottling+.07f*grain;
+                pixels[y*size+x]=new Color(shade,shade,shade);
+            }
+            texture.SetPixels(pixels);texture.Apply(true,true);return texture;
+        }
+
         private static Mesh FoliageMesh()
         {
-            const int rings=6, segments=10;
-            var v=new List<Vector3>();var t=new List<int>();
-            for(var y=0;y<=rings;y++) for(var x=0;x<=segments;x++)
+            // Sparse double-sided folded leaves make real gaps in the canopy silhouette.
+            // A single cluster is reused by every branch, with no alpha sorting or billboard.
+            var vertices=new List<Vector3>();var indices=new List<int>();
+            for(var leaf=0;leaf<48;leaf++)
             {
-                var latitude=y*Mathf.PI/rings;var longitude=x*Mathf.PI*2/segments;
-                var radius=.43f+.10f*Mathf.Sin(longitude*3+latitude*5)+.045f*Mathf.Cos(longitude*7-latitude*3);
-                v.Add(new Vector3(Mathf.Sin(latitude)*Mathf.Cos(longitude),Mathf.Cos(latitude),Mathf.Sin(latitude)*Mathf.Sin(longitude))*radius);
+                var angle=leaf*2.399963f;
+                var height=(leaf+.5f)/48f*2f-1f;
+                var ring=Mathf.Sqrt(1-height*height);
+                var center=new Vector3(Mathf.Cos(angle)*ring,height*.65f,Mathf.Sin(angle)*ring)*(.31f+.055f*Mathf.Sin(leaf*3.1f));
+                var rotation=Quaternion.Euler(leaf*41f,leaf*137.5f,leaf*23f);
+                var length=.14f+.045f*Mathf.Sin(leaf*1.8f);
+                var n=vertices.Count;
+                vertices.Add(center+rotation*new Vector3(0,0,-length));
+                vertices.Add(center+rotation*new Vector3(-length*.52f,.025f,0));
+                vertices.Add(center+rotation*new Vector3(0,0,length));
+                vertices.Add(center+rotation*new Vector3(length*.52f,-.015f,0));
+                indices.AddRange(new[]{n,n+1,n+2,n,n+2,n+3,n+2,n+1,n,n+3,n+2,n});
             }
-            for(var y=0;y<rings;y++)for(var x=0;x<segments;x++)
-            {var a=y*(segments+1)+x;var b=a+segments+1;t.AddRange(new[]{a,a+1,b,b,a+1,b+1});}
-            var mesh=new Mesh{name="Shared low polygon canopy cluster",vertices=v.ToArray(),triangles=t.ToArray()};
-            mesh.RecalculateNormals();mesh.RecalculateBounds();return mesh;
+            var mesh=new Mesh{name="Shared open canopy leaves",vertices=vertices.ToArray(),triangles=indices.ToArray()};
+            // Backfaces share the front normal to avoid cancellation when recalculating double-sided faces.
+            var normals=new Vector3[vertices.Count];
+            for(var i=0;i<vertices.Count;i+=4)
+            {var normal=Vector3.Cross(vertices[i+1]-vertices[i],vertices[i+2]-vertices[i]).normalized;for(var j=0;j<4;j++)normals[i+j]=normal;}
+            mesh.normals=normals;mesh.RecalculateBounds();return mesh;
         }
 
         internal void House(Vector3 centre,float height)
@@ -264,7 +296,7 @@ namespace LinhGioi.World
                 go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=pair.Key;
                 mesh.UploadMeshData(true);
             }
-            Debug.Log("LGO_CITY_KIT materials="+_batches.Count+" triangles="+triangles+" unique_texture=64x64 collision=existing_route");
+            Debug.Log("LGO_CITY_KIT materials="+_batches.Count+" triangles="+triangles+" textures=64x64+2x128x128 collision=existing_route");
             _batches.Clear();
         }
         private void OnDestroy()
@@ -272,6 +304,8 @@ namespace LinhGioi.World
             foreach(var mesh in _meshes)if(mesh!=null)Destroy(mesh);
             foreach(var material in _materials)if(material!=null)Destroy(material);
             if(_woodTexture!=null)Destroy(_woodTexture);
+            if(_plasterTexture!=null)Destroy(_plasterTexture);
+            if(_tileTexture!=null)Destroy(_tileTexture);
         }
     }
 }
