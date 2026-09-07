@@ -550,6 +550,11 @@ namespace LinhGioi.UI
                 frontSeal.GetComponent<Renderer>().sharedMaterial != sideSeal.GetComponent<Renderer>().sharedMaterial ||
                 sideSeal.position.x >= OnboardingBlockoutWorld.StonePoint.x - 0.2f)
                 throw new InvalidOperationException("Stone needs shared seal geometry/material on its arrival and road faces without extra collision.");
+            var inlayMesh = frontSeal.GetComponent<MeshFilter>().sharedMesh;
+            if (Mathf.Abs(inlayMesh.bounds.size.x - 0.20f) > 0.001f || inlayMesh.bounds.center.sqrMagnitude > 0.000001f ||
+                inlayMesh.triangles.Length / 3 > 160 || Array.Exists(inlayMesh.normals, normal => normal.z < 0.99f))
+                throw new InvalidOperationException("Stone resonance inlay must face outward and remain compact within the shared mesh budget.");
+            Debug.Log("LGO_STONE_INLAY_PASS shared_mesh=true outward=true compact=true");
             Debug.Log("LGO_STONE_SILHOUETTE_PASS low_volume=true collider_unchanged=true shared_seals=true");
             var sealMaterial = frontSeal.GetComponent<Renderer>().sharedMaterial;
             var sealRestColor = sealMaterial.color;

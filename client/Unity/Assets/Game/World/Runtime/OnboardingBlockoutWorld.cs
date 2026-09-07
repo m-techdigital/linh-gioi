@@ -47,6 +47,7 @@ namespace LinhGioi.World
         private bool _screenInputHeld;
         private Vector3 _inputForward;
         private Mesh _stoneMesh;
+        private Mesh _stoneSealMesh;
         private Mesh _pavingMesh;
         private Texture2D _pavingTexture;
         private Mesh _houseFacadeMesh;
@@ -455,7 +456,7 @@ namespace LinhGioi.World
 
         private Renderer CreateTrainingStone()
         {
-            var surface = Material(new Color(0.27f, 0.29f, 0.28f));
+            var surface = Material(new Color(0.40f, 0.49f, 0.51f));
             var stone = Box("Blockout Stone", StonePoint + Vector3.up * 0.75f, new Vector3(0.65f, 1.5f, 0.65f), surface);
             stone.transform.position = StonePoint;
             stone.transform.localScale = Vector3.one;
@@ -504,6 +505,7 @@ namespace LinhGioi.World
             _stoneMesh.RecalculateBounds();
             stone.GetComponent<MeshFilter>().sharedMesh = _stoneMesh;
             _stoneSealMaterial = Material(RuntimeArtCatalog.Gold);
+            _stoneSealMesh = CreateStoneSealMesh();
             void Seal(string name, bool roadFace)
             {
                 const float height = 0.62f;
@@ -516,12 +518,53 @@ namespace LinhGioi.World
                 var normal = (roadFace ? new Vector3(-1f, slope, 0f) : new Vector3(0f, slope, -1f)).normalized;
                 var center = roadFace ? new Vector3(-radius, height, 0f) : new Vector3(0f, height, -radius);
                 var seal = Box(name, StonePoint + center + normal * 0.009f,
-                    new Vector3(0.14f, 0.14f, 0.016f), _stoneSealMaterial, false);
-                seal.transform.rotation = Quaternion.LookRotation(normal) * Quaternion.Euler(0f, 0f, 45f);
+                    Vector3.one, _stoneSealMaterial, false);
+                seal.GetComponent<MeshFilter>().sharedMesh = _stoneSealMesh;
+                seal.transform.rotation = Quaternion.LookRotation(normal);
             }
             Seal("Blockout stone seal front", false);
             Seal("Blockout stone seal side", true);
             return stone.GetComponent<Renderer>();
+        }
+
+        private static Mesh CreateStoneSealMesh()
+        {
+            // SCN-002 reference: a small resonance spiral, fitted to the low stone.
+            // One ribbon mesh is shared by both faces; the existing material owns its pulse.
+            const int segments = 64;
+            var vertices = new Vector3[(segments + 1) * 2];
+            var indices = new int[segments * 6];
+            for (var i = 0; i <= segments; i++)
+            {
+                var t = i / (float)segments;
+                var angle = t * Mathf.PI * 2.8f - Mathf.PI * 0.5f;
+                var radius = Mathf.Lerp(0.155f, 0.015f, t);
+                var halfWidth = Mathf.Lerp(0.018f, 0.012f, t);
+                var radial = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+                vertices[i * 2] = radial * (radius - halfWidth);
+                vertices[i * 2 + 1] = radial * (radius + halfWidth);
+                if (i == segments) continue;
+                var vertex = i * 2;
+                var index = i * 6;
+                indices[index] = vertex;
+                indices[index + 1] = vertex + 1;
+                indices[index + 2] = vertex + 3;
+                indices[index + 3] = vertex;
+                indices[index + 4] = vertex + 3;
+                indices[index + 5] = vertex + 2;
+            }
+            // The winding spiral is asymmetric; center its bounds before fitting it
+            // inside the narrower octagonal side face (rather than around its origin).
+            var bounds = new Bounds(vertices[0], Vector3.zero);
+            foreach (var vertex in vertices) bounds.Encapsulate(vertex);
+            var fit = 0.20f / bounds.size.x;
+            for (var i = 0; i < vertices.Length; i++) vertices[i] = (vertices[i] - bounds.center) * fit;
+            var mesh = new Mesh { name = "Training stone resonance inlay" };
+            mesh.vertices = vertices;
+            mesh.triangles = indices;
+            mesh.RecalculateNormals();
+            mesh.RecalculateBounds();
+            return mesh;
         }
 
         private void OnDisable()
@@ -537,6 +580,7 @@ namespace LinhGioi.World
         private void OnDestroy()
         {
             if (_stoneMesh != null) Destroy(_stoneMesh);
+            if (_stoneSealMesh != null) Destroy(_stoneSealMesh);
             if (_pavingMesh != null) Destroy(_pavingMesh);
             if (_pavingTexture != null) Destroy(_pavingTexture);
             foreach (var material in _materials)
