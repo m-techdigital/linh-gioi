@@ -38,7 +38,7 @@ namespace LinhGioi.UI
             development && Array.IndexOf(args, "--lgo-onboarding-blockout") >= 0;
 
         public static bool ShouldEnterFromHall(string[] args, bool development) =>
-            development && Array.IndexOf(args, "--lgo-onboarding-from-lobby") >= 0;
+            development && Array.IndexOf(args, "--lgo-technical-yard") < 0;
 
         internal void ConfigureHallReturn(string characterName, Action returnToHall)
         {

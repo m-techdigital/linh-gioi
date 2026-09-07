@@ -146,6 +146,7 @@ namespace LinhGioi.UI
         private int _selectedSlot = 1;
         private PlayableWorldController _world;
         private OnboardingBlockoutPreview _onboarding;
+        private bool _enterWorldInFlight;
         private int _ignoreInputThroughFrame = -1;
         private RuntimeViewportMetrics _viewportMetrics;
         private string _lastLayoutProfile;
@@ -902,11 +903,24 @@ namespace LinhGioi.UI
 
         private async Task EnterWorldAsync()
         {
-            if (_selectedCharacter == null) return;
-            SetBusy(true, "Đang vào sân luyện Linh Môn...");
-            var loaded = await _client.LoadCharacterAsync(_selectedCharacter.characterId, _shutdown.Token);
+            if (_selectedCharacter == null || _enterWorldInFlight || _onboarding != null) return;
+            _enterWorldInFlight = true;
+            _characterList.SetEnabled(false);
+            try { await EnterSelectedWorldAsync(_selectedCharacter.characterId); }
+            finally
+            {
+                _enterWorldInFlight = false;
+                _characterList.SetEnabled(true);
+            }
+        }
+
+        private async Task EnterSelectedWorldAsync(string characterId)
+        {
+            var enterOnboarding = OnboardingBlockoutPreview.ShouldEnterFromHall(Environment.GetCommandLineArgs(), Debug.isDebugBuild || Application.isEditor);
+            SetBusy(true, enterOnboarding ? "Đang bước qua Linh Môn..." : "Đang vào sân luyện Linh Môn...");
+            var loaded = await _client.LoadCharacterAsync(characterId, _shutdown.Token);
             _selectedCharacter = loaded;
-            if (OnboardingBlockoutPreview.ShouldEnterFromHall(Environment.GetCommandLineArgs(), Debug.isDebugBuild || Application.isEditor))
+            if (enterOnboarding)
             {
                 UpdateSelectedPreview(loaded);
                 SetBusy(false, "Đang bước qua Linh Môn.");
@@ -980,6 +994,7 @@ namespace LinhGioi.UI
 
         private void SelectCharacter(CharacterResponse character, int slot = 0)
         {
+            if (_enterWorldInFlight) return;
             _characterNameError = null;
             _selectedCharacter = character;
             _createFormExpanded = character == null;

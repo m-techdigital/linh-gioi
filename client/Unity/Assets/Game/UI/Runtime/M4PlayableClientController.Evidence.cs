@@ -22,14 +22,48 @@ namespace LinhGioi.UI
             var ambientMode = RenderSettings.ambientMode;
             var skybox = RenderSettings.skybox;
             var materialCount = Array.FindAll(Resources.FindObjectsOfTypeAll<Material>(), material => material.name == "Blockout surface").Length;
+            var selected = _selectedCharacter;
+            _selectedCharacter = JsonUtility.FromJson<CharacterResponse>(profile);
+            _selectedCharacter.characterId = "00000000-0000-0000-0000-000000000000";
+            var rejectedEntry = RunSafelyAsync(EnterWorldAsync);
+            while (!rejectedEntry.IsCompleted) yield return null;
+            if (rejectedEntry.IsFaulted || _onboarding != null || _enterWorldInFlight ||
+                !_characterList.enabledInHierarchy || !_enterWorldButton.enabledInHierarchy || !_status.text.Contains("Phiên"))
+                throw new InvalidOperationException("Rejected entry must keep the hall usable and release its request lock.");
+            SelectCharacter(selected);
+            Debug.Log("LGO_ENTRY_FAILURE_RECOVERY_PASS rejected_profile=true roster_unlocked=true");
             for (var visit = 0; visit < 2; visit++)
             {
-                var enter = EnterWorldAsync();
-                while (!enter.IsCompleted) yield return null;
-                if (enter.IsFaulted) throw enter.Exception.GetBaseException();
+                if (!_enterWorldButton.enabledInHierarchy || _enterWorldButton.text != "Vào game")
+                    throw new InvalidOperationException("Selected character must expose the enter-game action.");
+                for (var attempt = 0; attempt < 2; attempt++)
+                {
+                    using (var submit = NavigationSubmitEvent.GetPooled())
+                    {
+                        submit.target = _enterWorldButton;
+                        _enterWorldButton.SendEvent(submit);
+                    }
+                    if (attempt == 0)
+                    {
+                        var selectedSlot = _characterList.Query<Button>(className: "lgo-list-item").ToList()
+                            .Find(button => Equals(button.userData, _selectedCharacter.characterId));
+                        if (selectedSlot == null) throw new InvalidOperationException("Selected roster slot disappeared before entry.");
+                        using (var reselect = NavigationSubmitEvent.GetPooled())
+                        {
+                            reselect.target = selectedSlot;
+                            selectedSlot.SendEvent(reselect);
+                        }
+                        if (_enterWorldButton.enabledInHierarchy)
+                            throw new InvalidOperationException("Roster reselection re-enabled entry while its request was pending.");
+                    }
+                }
+                var entryDeadline = Time.realtimeSinceStartup + 15f;
+                while (_onboarding == null && Time.realtimeSinceStartup < entryDeadline) yield return null;
+                if (_onboarding == null) throw new InvalidOperationException("Enter-game action did not open onboarding: " + _status.text);
                 yield return new WaitForSeconds(1f);
                 var preview = FindFirstObjectByType<OnboardingBlockoutPreview>();
-                if (preview == null || enabled || _root.resolvedStyle.display != DisplayStyle.None)
+                if (preview == null || FindObjectsByType<OnboardingBlockoutPreview>(FindObjectsSortMode.None).Length != 1 ||
+                    enabled || _root.resolvedStyle.display != DisplayStyle.None)
                     throw new InvalidOperationException("Entering from Character Hall must hand input and UI ownership to onboarding.");
                 var back = preview.GetComponent<UIDocument>().rootVisualElement.Query<Button>().ToList()
                     .Find(button => button.text == "Về sảnh");
@@ -100,7 +134,7 @@ namespace LinhGioi.UI
                     throw new InvalidOperationException("Preview must preserve server profile, account, client and selected slot.");
                 yield return capture("onboarding-return-" + visit);
             }
-            Debug.Log("LGO_ONBOARDING_HALL_ROUNDTRIP_PASS visits=2 movement=true profile_unchanged=true ownership_restored=true escape=handler_or_explicit_real_probe");
+            Debug.Log("LGO_ONBOARDING_HALL_ROUNDTRIP_PASS visits=2 entry=button_submit pending_reselect_guard=true movement=true profile_unchanged=true ownership_restored=true escape=handler_or_explicit_real_probe");
         }
 
         internal IEnumerator CaptureEvidenceTouchMovement()

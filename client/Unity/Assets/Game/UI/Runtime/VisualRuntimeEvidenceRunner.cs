@@ -115,7 +115,7 @@ namespace LinhGioi.UI
                 "docs/design/LGO-PLAYABLE-UI-WIREFRAME-SPEC-v0.11.0.md",
                 "Selected character preview and enter-world CTA readability");
 
-            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-onboarding-from-lobby") >= 0)
+            if (OnboardingBlockoutPreview.ShouldEnterFromHall(Environment.GetCommandLineArgs(), Debug.isDebugBuild || Application.isEditor))
             {
                 yield return _controller.CaptureEvidenceOnboardingRoundTrip(id => CaptureCheckpoint(id,
                     "Character Hall / onboarding round trip", "docs/design/LINH-THANH-ONBOARDING-DESIGN.md",

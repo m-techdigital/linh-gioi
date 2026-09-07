@@ -295,6 +295,7 @@ echo "$API_PID" > "$OUT_DIR/api.pid"
 wait_for_api
 
 echo "LGO_VISUAL_RUNTIME_REVIEW_PHASE capture_player"
+echo "LGO_VISUAL_RUNTIME_ROUTE technical_yard_regression"
 echo "LGO_OWNER_NOTE Đang launch player và tự chụp các checkpoint UI/gameplay; không dùng nographics cho visual gate."
 python3.12 - "$TIMEOUT_SECONDS" "$PLAYER_EXE" "$OUT_DIR" "$PORT" "$SCREEN_WIDTH" "$SCREEN_HEIGHT" "$PROFILE" <<'PY'
 from __future__ import annotations
@@ -338,6 +339,7 @@ command = [
     "--lgo-m4-api-url", f"http://127.0.0.1:{port}",
     "--lgo-device-profile", profile,
     "--lgo-visual-runtime-review",
+    "--lgo-technical-yard",
     "--lgo-visual-runtime-width", screen_width,
     "--lgo-visual-runtime-height", screen_height,
     "--lgo-visual-runtime-evidence-dir", str(out_dir),

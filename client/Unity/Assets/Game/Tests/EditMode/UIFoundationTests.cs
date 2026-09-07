@@ -10,6 +10,22 @@ namespace LinhGioi.Tests
 {
     public sealed class UIFoundationTests
     {
+        [TestCase(true, false, false, true)]
+        [TestCase(true, false, true, true)]
+        [TestCase(true, true, false, false)]
+        [TestCase(true, true, true, false)]
+        [TestCase(false, false, false, false)]
+        [TestCase(false, false, true, false)]
+        [TestCase(false, true, false, false)]
+        [TestCase(false, true, true, false)]
+        public void OnboardingHallRouteRespectsBuildAndTechnicalOverride(bool development, bool technical, bool explicitOnboarding, bool expected)
+        {
+            var args = new System.Collections.Generic.List<string>();
+            if (technical) args.Add("--lgo-technical-yard");
+            if (explicitOnboarding) args.Add("--lgo-onboarding-from-lobby");
+            Assert.AreEqual(expected, OnboardingBlockoutPreview.ShouldEnterFromHall(args.ToArray(), development));
+        }
+
         [Test]
         public void OnboardingBlockoutRequiresExplicitDevelopmentOptIn()
         {
