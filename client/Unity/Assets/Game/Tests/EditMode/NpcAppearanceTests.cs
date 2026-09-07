@@ -10,7 +10,7 @@ namespace LinhGioi.Tests
     public sealed class NpcAppearanceTests
     {
         [TestCase("LGOGateKeeperCandidate", 2)]
-        [TestCase("LGOArrivalOutfitCandidate", 3)]
+        [TestCase("LGOArrivalOutfitCandidate", 2)]
         public void SharedAppearanceDoesNotCloneMeshOrMaterialsAcrossNpcInstances(string resource, int materials)
         {
             var prefab = Resources.Load<GameObject>(resource);
@@ -40,14 +40,15 @@ namespace LinhGioi.Tests
             finally { UnityEngine.Object.DestroyImmediate(first); UnityEngine.Object.DestroyImmediate(second); }
         }
 
-        [Test]
-        public void SemanticModulesContainExactlyTheirTaggedSourceGeometry()
+        [TestCase("GateKeeper", "Keeper")]
+        [TestCase("ArrivalScene", "Arrival")]
+        public void SemanticModulesContainExactlyTheirTaggedSourceGeometry(string model, string stem)
         {
             const string root = "Assets/Game/Art/OnboardingCandidate/";
-            var source = AssetDatabase.LoadAssetAtPath<GameObject>(root + "GateKeeper.fbx").GetComponentInChildren<SkinnedMeshRenderer>();
-            var recipe = AssetDatabase.LoadAssetAtPath<LinhGioi.Foundation.Editor.NpcAppearanceRecipe>(root + "Editor/KeeperParts/KeeperRecipe.asset");
+            var source = AssetDatabase.LoadAssetAtPath<GameObject>(root + model + ".fbx").GetComponentInChildren<SkinnedMeshRenderer>();
+            var recipe = AssetDatabase.LoadAssetAtPath<LinhGioi.Foundation.Editor.NpcAppearanceRecipe>(root + "Editor/" + stem + "Parts/" + stem + "Recipe.asset");
             Assert.That(recipe.Slots, Does.Contain("UpperBody"));
-            Assert.That(recipe.Slots, Does.Contain("Cape"));
+            Assert.That(recipe.Slots, Does.Contain("LowerBody"));
             Assert.That(recipe.Slots.Distinct().Count(), Is.EqualTo(recipe.Parts.Length));
             var vertices = source.sharedMesh.vertices;
             uint count = 0;

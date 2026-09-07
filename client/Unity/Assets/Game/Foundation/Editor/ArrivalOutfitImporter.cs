@@ -67,12 +67,12 @@ namespace LinhGioi.Foundation.Editor
         private static void ConfigureHumanoid(string path, bool animations)
         {
             var importer = (ModelImporter)AssetImporter.GetAtPath(path);
-            if (path == Directory + "GateKeeper.fbx")
+            if (path == Directory + "GateKeeper.fbx" || path == ModelPath)
             {
                 // Appearance geometry must not make Unity infer a different spine/neck reference pose.
                 var shared = AssetDatabase.LoadAssetAtPath<Avatar>(Directory + "SharedHumanoidAvatar.asset");
                 if (shared == null || !shared.isValid || !shared.isHuman)
-                    throw new InvalidOperationException("Keeper requires the verified shared Humanoid Avatar.");
+                    throw new InvalidOperationException("Appearance requires the verified shared Humanoid Avatar.");
                 importer.animationType = ModelImporterAnimationType.Human;
                 importer.avatarSetup = ModelImporterAvatarSetup.CopyFromOther;
                 importer.sourceAvatar = shared;
@@ -126,11 +126,6 @@ namespace LinhGioi.Foundation.Editor
             }
             ConfigureHumanoid(ModelPath, false);
             Validate();
-            var palette = (TextureImporter)AssetImporter.GetAtPath(Directory + "ArrivalPalette.png");
-            palette.maxTextureSize = 64; palette.mipmapEnabled = false;
-            palette.filterMode = FilterMode.Point; palette.wrapMode = TextureWrapMode.Clamp;
-            palette.isReadable = false; palette.textureCompression = TextureImporterCompression.Uncompressed;
-            palette.SaveAndReimport();
             NpcAppearanceBaker.BakePlayer(ModelPath, PrefabPath);
         }
 
@@ -385,7 +380,7 @@ namespace LinhGioi.Foundation.Editor
 
         public static void Validate()
         {
-            ValidateModel(ModelPath, 3);
+            ValidateModel(ModelPath, 0);
         }
 
         private static void ValidateModel(string modelPath, int materialSections = 6)

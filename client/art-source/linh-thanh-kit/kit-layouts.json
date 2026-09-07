@@ -1,0 +1,866 @@
+{
+  "format": "lgo_authoring_layout_v1",
+  "status": "DRAFT_AUTHORING_NOT_RUNTIME",
+  "units": "meters",
+  "axes": "Unity x-right y-up z-forward; Blender adapter x-right y-depth z-up",
+  "grid_m": 0.5,
+  "major_grid_m": 2,
+  "rotation_snap_degrees": 90,
+  "references": [
+    "docs/reference-art/v0.16.5/lgo-world-hub-2d5-v0165.png",
+    "docs/reference-art/v0.20.0/lgo-environment-prop-sheet-v0200.png",
+    "docs/reference-art/linh-gioi-concept-board.png",
+    "docs/reference-art/linh-gioi-key-art.png",
+    "docs/reference-art/linh-gioi-world-event-ui.png"
+  ],
+  "materials": {
+    "stone": [
+      0.45,
+      0.47,
+      0.44,
+      1
+    ],
+    "ivory": [
+      0.72,
+      0.66,
+      0.53,
+      1
+    ],
+    "wood": [
+      0.23,
+      0.105,
+      0.045,
+      1
+    ],
+    "navy": [
+      0.045,
+      0.115,
+      0.18,
+      1
+    ],
+    "gold": [
+      0.62,
+      0.37,
+      0.13,
+      1
+    ],
+    "teal": [
+      0.04,
+      0.28,
+      0.3,
+      1
+    ],
+    "amber": [
+      1,
+      0.55,
+      0.15,
+      1
+    ],
+    "pink": [
+      0.63,
+      0.23,
+      0.35,
+      1
+    ],
+    "green": [
+      0.18,
+      0.32,
+      0.11,
+      1
+    ]
+  },
+  "modules": {
+    "house": {
+      "size_m": [
+        4,
+        5,
+        4
+      ],
+      "runtime_source": "CityArchitectureVisuals.House + Roof; preview adapter, dimensions normalized",
+      "status": "existing_family_recomposed",
+      "pivot": "ground_center",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -2.0,
+          0,
+          0
+        ],
+        "right": [
+          2.0,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -2.0
+        ],
+        "back": [
+          0,
+          0,
+          2.0
+        ],
+        "top": [
+          0,
+          5,
+          0
+        ]
+      }
+    },
+    "gate": {
+      "size_m": [
+        12,
+        8,
+        3
+      ],
+      "runtime_source": "CityArchitectureVisuals.Landmarks; preview adapter",
+      "status": "existing_family_recomposed",
+      "pivot": "ground_center",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -6.0,
+          0,
+          0
+        ],
+        "right": [
+          6.0,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -1.5
+        ],
+        "back": [
+          0,
+          0,
+          1.5
+        ],
+        "top": [
+          0,
+          8,
+          0
+        ]
+      }
+    },
+    "lantern": {
+      "size_m": [
+        0.7,
+        3,
+        0.7
+      ],
+      "runtime_source": "OnboardingBlockoutWorld.CreateStreetLanterns; preview adapter",
+      "status": "existing_family_recomposed",
+      "pivot": "ground_center",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -0.35,
+          0,
+          0
+        ],
+        "right": [
+          0.35,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -0.35
+        ],
+        "back": [
+          0,
+          0,
+          0.35
+        ],
+        "top": [
+          0,
+          3,
+          0
+        ]
+      }
+    },
+    "bench": {
+      "size_m": [
+        2,
+        1,
+        0.7
+      ],
+      "runtime_source": "OnboardingBlockoutWorld.CreatePavilionFrame/bench; preview adapter",
+      "status": "existing_family_recomposed",
+      "pivot": "ground_center",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -1.0,
+          0,
+          0
+        ],
+        "right": [
+          1.0,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -0.35
+        ],
+        "back": [
+          0,
+          0,
+          0.35
+        ],
+        "top": [
+          0,
+          1,
+          0
+        ]
+      }
+    },
+    "blossom": {
+      "size_m": [
+        3,
+        4,
+        3
+      ],
+      "runtime_source": "CityArchitectureVisuals.Tree; preview adapter",
+      "status": "existing_family_recomposed",
+      "pivot": "ground_center",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -1.5,
+          0,
+          0
+        ],
+        "right": [
+          1.5,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -1.5
+        ],
+        "back": [
+          0,
+          0,
+          1.5
+        ],
+        "top": [
+          0,
+          4,
+          0
+        ]
+      }
+    },
+    "stall": {
+      "size_m": [
+        3,
+        3,
+        2
+      ],
+      "runtime_source": null,
+      "status": "new_authoring_design",
+      "pivot": "ground_center",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -1.5,
+          0,
+          0
+        ],
+        "right": [
+          1.5,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -1.0
+        ],
+        "back": [
+          0,
+          0,
+          1.0
+        ],
+        "top": [
+          0,
+          3,
+          0
+        ]
+      }
+    },
+    "plaza_medallion": {
+      "size_m": [
+        8,
+        0.04,
+        8
+      ],
+      "runtime_source": null,
+      "status": "new_authoring_design",
+      "pivot": "ground_center",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -4.0,
+          0,
+          0
+        ],
+        "right": [
+          4.0,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -4.0
+        ],
+        "back": [
+          0,
+          0,
+          4.0
+        ],
+        "top": [
+          0,
+          0.04,
+          0
+        ]
+      }
+    },
+    "cafe": {
+      "size_m": [
+        6,
+        5.4,
+        8
+      ],
+      "runtime_source": null,
+      "status": "new_authoring_design",
+      "pivot": "ground_center; cafe center follows building, terrace extends 4 m to front",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -3.0,
+          0,
+          0
+        ],
+        "right": [
+          3.0,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -4.0
+        ],
+        "back": [
+          0,
+          0,
+          4.0
+        ],
+        "top": [
+          0,
+          5.4,
+          0
+        ]
+      }
+    },
+    "modern_lodge": {
+      "size_m": [
+        4,
+        7,
+        4
+      ],
+      "runtime_source": null,
+      "status": "new_authoring_design",
+      "pivot": "ground_center; cafe center follows building, terrace extends 4 m to front",
+      "front": [
+        0,
+        0,
+        -1
+      ],
+      "sockets": {
+        "left": [
+          -2.0,
+          0,
+          0
+        ],
+        "right": [
+          2.0,
+          0,
+          0
+        ],
+        "front": [
+          0,
+          0,
+          -2.0
+        ],
+        "back": [
+          0,
+          0,
+          2.0
+        ],
+        "top": [
+          0,
+          7,
+          0
+        ]
+      }
+    }
+  },
+  "layouts": {
+    "gate": {
+      "purpose_vi": "Arrival SCN-001: cổng đọc rõ từ đường vào, lối giữa rộng 6 m; NPC/Đá Luyện do runtime sở hữu",
+      "extent_m": [
+        24,
+        26
+      ],
+      "instances": [
+        {
+          "module": "gate",
+          "position_m": [
+            0,
+            0,
+            8
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "house",
+          "position_m": [
+            -8,
+            0,
+            -4
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "modern_lodge",
+          "position_m": [
+            -8,
+            0,
+            3
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "house",
+          "position_m": [
+            8,
+            0,
+            -4
+          ],
+          "yaw_degrees": 90
+        },
+        {
+          "module": "house",
+          "position_m": [
+            8,
+            0,
+            3
+          ],
+          "yaw_degrees": 90
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            -4,
+            0,
+            -6
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            -4,
+            0,
+            1
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            -4,
+            0,
+            6
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            4,
+            0,
+            -6
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            4,
+            0,
+            1
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            4,
+            0,
+            6
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "blossom",
+          "position_m": [
+            -7,
+            0,
+            10
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "blossom",
+          "position_m": [
+            7,
+            0,
+            10
+          ],
+          "yaw_degrees": 0
+        }
+      ]
+    },
+    "plaza": {
+      "purpose_vi": "Quảng trường xã hội Linh Thành: café, ghế, cây quanh rìa; tâm sân và đường tới cổng trống. World-event anchor chỉ giữ chỗ, chưa event mới.",
+      "extent_m": [
+        26,
+        28
+      ],
+      "instances": [
+        {
+          "module": "plaza_medallion",
+          "position_m": [
+            0,
+            0,
+            0
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "gate",
+          "position_m": [
+            0,
+            0,
+            10
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "house",
+          "position_m": [
+            -9,
+            0,
+            -5
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "modern_lodge",
+          "position_m": [
+            -9,
+            0,
+            3
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "cafe",
+          "position_m": [
+            9,
+            0,
+            -5
+          ],
+          "yaw_degrees": 90
+        },
+        {
+          "module": "modern_lodge",
+          "position_m": [
+            9,
+            0,
+            3
+          ],
+          "yaw_degrees": 90
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            -5,
+            0,
+            -5
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            5,
+            0,
+            -5
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            -5,
+            0,
+            5
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            5,
+            0,
+            5
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "blossom",
+          "position_m": [
+            -7,
+            0,
+            7
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "bench",
+          "position_m": [
+            -7,
+            0,
+            0
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "blossom",
+          "position_m": [
+            7,
+            0,
+            7
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "bench",
+          "position_m": [
+            7,
+            0,
+            0
+          ],
+          "yaw_degrees": 90
+        }
+      ],
+      "reserved_areas": [
+        {
+          "id": "future_world_event_anchor",
+          "position_m": [
+            0,
+            0,
+            6
+          ],
+          "size_m": [
+            6,
+            0,
+            4
+          ],
+          "status": "reserved_not_runtime_event"
+        }
+      ]
+    },
+    "market": {
+      "purpose_vi": "Phố sinh hoạt với café, bàn ghế ngoài trời, sạp hàng và nhà cao tầng xen mái Á Đông; chưa shop/economy.",
+      "extent_m": [
+        26,
+        30
+      ],
+      "instances": [
+        {
+          "module": "plaza_medallion",
+          "position_m": [
+            0,
+            0,
+            1
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "house",
+          "position_m": [
+            -8,
+            0,
+            -5
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "house",
+          "position_m": [
+            -8,
+            0,
+            2
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "modern_lodge",
+          "position_m": [
+            -8,
+            0,
+            9
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "cafe",
+          "position_m": [
+            8,
+            0,
+            -5
+          ],
+          "yaw_degrees": 90
+        },
+        {
+          "module": "house",
+          "position_m": [
+            8,
+            0,
+            2
+          ],
+          "yaw_degrees": 90
+        },
+        {
+          "module": "modern_lodge",
+          "position_m": [
+            8,
+            0,
+            9
+          ],
+          "yaw_degrees": 90
+        },
+        {
+          "module": "stall",
+          "position_m": [
+            -4,
+            0,
+            -4
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "stall",
+          "position_m": [
+            -4,
+            0,
+            4
+          ],
+          "yaw_degrees": -90
+        },
+        {
+          "module": "stall",
+          "position_m": [
+            4,
+            0,
+            4
+          ],
+          "yaw_degrees": 90
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            -4,
+            0,
+            -9
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "blossom",
+          "position_m": [
+            -4,
+            0,
+            11
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "lantern",
+          "position_m": [
+            4,
+            0,
+            -9
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "module": "blossom",
+          "position_m": [
+            4,
+            0,
+            11
+          ],
+          "yaw_degrees": 0
+        }
+      ]
+    }
+  }
+}

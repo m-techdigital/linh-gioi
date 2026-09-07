@@ -147,6 +147,48 @@ namespace LinhGioi.UI
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            var playerQualityIndex = Array.IndexOf(args, "--lgo-player-quality-review");
+            if (playerQualityIndex >= 0 && playerQualityIndex + 1 < args.Length)
+            {
+                _capturing = true;
+                yield return new WaitForSeconds(1f);
+                var playerQualityDirectory = Path.GetFullPath(args[playerQualityIndex + 1]);
+                Directory.CreateDirectory(playerQualityDirectory);
+                GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                var actor = GameObject.Find("Blockout player proxy").GetComponentInChildren<Animator>();
+                var cameraReview = gameObject.AddComponent<CharacterQualityReviewCamera>();
+                cameraReview.Configure(Camera.main, actor);
+                foreach (var angle in new[] { 0f, 90f, 180f })
+                {
+                    cameraReview.Angle = angle;
+                    yield return new WaitForSeconds(0.2f);
+                    yield return Capture(playerQualityDirectory, "player-idle-" + angle);
+                }
+                var leg = actor.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
+                var initialLeg = leg.localRotation;
+                var initialPosition = _world.Position;
+                _world.Movement = Vector2.up;
+                cameraReview.Angle = 0f;
+                yield return new WaitForSeconds(0.5f);
+                if (actor.GetFloat("Speed") < 0.2f || Vector3.Distance(initialPosition, _world.Position) < 0.1f ||
+                    Quaternion.Angle(initialLeg, leg.localRotation) < 2f)
+                    throw new InvalidOperationException("Player quality capture requires actual moving locomotion.");
+                yield return Capture(playerQualityDirectory, "player-walk-front");
+                cameraReview.Angle = 180f;
+                yield return new WaitForSeconds(0.2f);
+                yield return Capture(playerQualityDirectory, "player-walk-back");
+                _world.Movement = Vector2.right;
+                cameraReview.Angle = 90f;
+                yield return new WaitForSeconds(0.3f);
+                yield return Capture(playerQualityDirectory, "player-turn-side");
+                _world.Movement = Vector2.zero;
+                yield return new WaitForSeconds(0.5f);
+                cameraReview.Angle = 0f;
+                yield return Capture(playerQualityDirectory, "player-return-front");
+                Debug.Log("LGO_PLAYER_QUALITY_CAPTURE_COMPLETE frames=7 runtime=true locomotion=true gameplay_camera=false");
+                Application.Quit(0);
+                yield break;
+            }
             var qualityIndex = Array.IndexOf(args, "--lgo-character-quality-review");
             if (qualityIndex >= 0 && qualityIndex + 1 < args.Length)
             {

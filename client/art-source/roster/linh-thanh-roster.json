@@ -1,0 +1,369 @@
+{
+  "version": 1,
+  "purpose": "Chuẩn bị asset, không định nghĩa class/gameplay/server ID.",
+  "references": {
+    "hero_pose": "docs/reference-art/v0.20.0/lgo-playable-hero-pose-sheet-v0200.png",
+    "npc_roles": "docs/reference-art/v0.20.0/lgo-npc-direction-sheet-v0200.png",
+    "style": "docs/reference-art/v0.16.5/lgo-character-npc-monster-style-v0165.png",
+    "five_paths": "docs/reference-ui/lgo-five-paths-character-reference-v1.jpg",
+    "original_concept": "docs/reference-art/linh-gioi-concept-board.png",
+    "original_key_art": "docs/reference-art/linh-gioi-key-art.png",
+    "world_event": "docs/reference-art/linh-gioi-world-event-ui.png"
+  },
+  "canonical_rig": "client/Unity/Assets/Game/Art/OnboardingCandidate/SharedHumanoidAvatar.asset",
+  "slot_catalog": "client/art-source/appearance-slots.json",
+  "runtime_ready_presets": {
+    "keeper_modular": "client/Unity/Assets/Game/Art/OnboardingCandidate/Resources/LGOGateKeeperCandidate.prefab",
+    "arrival_modular": "client/Unity/Assets/Game/Art/OnboardingCandidate/Resources/LGOArrivalOutfitCandidate.prefab"
+  },
+  "rules": {
+    "units": "meters",
+    "body_families": "Khác tỷ lệ phải fit; cùng tên bone chưa chứng minh quần áo tương thích.",
+    "hidden_body": "Mỗi món khai báo vùng che và vùng da lộ trước bake; không xóa theo height/bone threshold. Chưa có runtime mask.",
+    "seams": "Cổ áo/cổ tay/đai/cổ giày; hở eo hoặc cổ tay là lỗi art.",
+    "textures": "Atlas theo họ chất liệu/độ nét cần thiết; không dồn mọi nhân vật vào một atlas khổng lồ.",
+    "runtime": "Authoring theo slot; bake preset đã chọn, chia sẻ mesh/material, bones riêng từng actor.",
+    "attachments": "Vũ khí/vật cầm thiết kế socket tay cùng grip pose; cần dựng socket importer sau, chưa giả định đã hỗ trợ.",
+    "approval": "Design draft, không tự đổi frozen contract hoặc mở gameplay mới.",
+    "classes": "Đủ5 hướng Võ/Kiếm/Pháp/Cơ/Linh trong thiết kế; Founder Alpha implementation hiện2 hướng Võ/Kiếm. Không sửa registry hoặc mở balance từ catalog.",
+    "gender": "Class không khóa giới tính; body family là yêu cầu fit asset, không phải class rule."
+  },
+  "roster": [
+    {
+      "id": "martial",
+      "label": "Võ",
+      "canonical_class_id": "class.martial",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "phase": "FOUNDER_ALPHA_TARGET",
+      "body_family": "adult_fit_per_body_not_class",
+      "reference": "five_paths",
+      "reference_panel_zero_based": 0,
+      "design": "Áo vàng đất gọn, tay/cẳng tay đọc rõ, quần tối rộng cho đá chân; bracer/quyền, không áo choàng dài mặc định.",
+      "slots": {
+        "UpperBody": "martial_short_tunic",
+        "LowerBody": "martial_loose_trousers",
+        "Gloves": "martial_bracers",
+        "Boots": "martial_boots",
+        "Accessories": "martial_sash",
+        "Head": "martial_head",
+        "Hair": "martial_hair"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "turn",
+        "interact",
+        "class_signature_pose"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ]
+    },
+    {
+      "id": "sword",
+      "label": "Kiếm",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "body_family": "adult_male_65",
+      "reference": "five_paths",
+      "reference_panel_zero_based": 1,
+      "design": "Xanh-trắng, kiếm dài, dáng linh hoạt, lớp áo/tà thoáng chân; nhiều hình thể và giới tính đều có bản fit.",
+      "slots": {
+        "Head": "sword_head",
+        "Hair": "sword_hair",
+        "UpperBody": "sword_split_coat",
+        "LowerBody": "sword_lowerbody",
+        "Gloves": "sword_gloves",
+        "Boots": "sword_boots",
+        "Shoulders": "sword_jade_guard",
+        "MainHand": "spirit_sword",
+        "Accessories": "sword_waist_charm"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "turn",
+        "interact",
+        "weapon_hold"
+      ],
+      "reusable_baseline": "arrival_modular",
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ],
+      "canonical_class_id": "class.sword",
+      "phase": "FOUNDER_ALPHA_TARGET"
+    },
+    {
+      "id": "arcane",
+      "label": "Pháp",
+      "canonical_class_id": "class.arcane",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "phase": "FUTURE_DESIGN_ONLY",
+      "body_family": "adult_fit_per_body_not_class",
+      "reference": "five_paths",
+      "reference_panel_zero_based": 2,
+      "design": "Áo khoác đen/jade có khối rõ, pháp trận hình học/cyan quanh tay; khác Linh ở silhouette sắc và ngôn ngữ pháp trận.",
+      "slots": {
+        "UpperBody": "arcane_structured_coat",
+        "LowerBody": "arcane_trousers",
+        "Gloves": "arcane_gloves",
+        "Boots": "arcane_boots",
+        "Accessories": "arcane_focus",
+        "Head": "arcane_head",
+        "Hair": "arcane_hair"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "turn",
+        "interact",
+        "class_signature_pose"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ]
+    },
+    {
+      "id": "tech",
+      "label": "Cơ",
+      "canonical_class_id": "class.tech",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "phase": "FUTURE_DESIGN_ONLY",
+      "body_family": "adult_fit_per_body_not_class",
+      "reference": "five_paths",
+      "reference_panel_zero_based": 3,
+      "design": "Đồ thực dụng da/đồng và vải olive, kính cơ khí, ủng chắc, thiết bị hoặc pháo cơ khí; fantasy kỹ nghệ Á Đông hiện đại.",
+      "slots": {
+        "UpperBody": "tech_work_jacket",
+        "LowerBody": "tech_work_bottom",
+        "Headwear": "tech_goggles",
+        "Gloves": "tech_work_gloves",
+        "Boots": "tech_mechanical_boots",
+        "Accessories": "tech_tool_belt",
+        "MainHand": "tech_cannon",
+        "Head": "tech_head",
+        "Hair": "tech_hair"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "turn",
+        "interact",
+        "class_signature_pose"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ]
+    },
+    {
+      "id": "spirit",
+      "label": "Linh",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "body_family": "adult_female_fit_pending",
+      "reference": "five_paths",
+      "reference_panel_zero_based": 4,
+      "design": "Tím lavender/ngà, linh phù và dải vải mềm, trang sức nhỏ; không đồng nhất với pháp trận jade của Pháp. Màu class không thay ngữ nghĩa cảnh báo Âm Giới.",
+      "slots": {
+        "Head": "spirit_head",
+        "Hair": "spirit_hair",
+        "UpperBody": "spirit_lavender_dress",
+        "LowerBody": "spirit_inner_trousers",
+        "Gloves": "spirit_gloves",
+        "Boots": "spirit_boots",
+        "Cape": "spirit_ribbon_mantle",
+        "Headwear": "spirit_circlet",
+        "MainHand": "spirit_talisman"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "turn",
+        "interact",
+        "talisman_hold"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ],
+      "canonical_class_id": "class.spirit",
+      "phase": "FUTURE_DESIGN_ONLY"
+    },
+    {
+      "id": "courier",
+      "label": "Người đưa tin",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "body_family": "adult_male_65_fit_young",
+      "reference": "npc_roles",
+      "reference_panel_zero_based": 4,
+      "design": "Áo khoác ngà/jade ngắn, quần navy và ủng, tóc ngắn buộc; túi chéo và thư, dáng nhanh nhẹn.",
+      "slots": {
+        "Head": "courier_head",
+        "Hair": "courier_hair",
+        "UpperBody": "courier_short_jacket",
+        "LowerBody": "courier_trousers",
+        "Gloves": "courier_gloves",
+        "Boots": "courier_boots",
+        "Accessories": "courier_satchel",
+        "OffHand": "courier_letter"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "jog",
+        "turn",
+        "offer"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ]
+    },
+    {
+      "id": "guild",
+      "label": "Tiếp đón hội quán",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "body_family": "adult_female_fit_pending",
+      "reference": "npc_roles",
+      "reference_panel_zero_based": 1,
+      "design": "Áo gilê jade ôm gọn trên tay áo ngà, quần/váy navy thực dụng, tóc búi; sổ tiếp đón.",
+      "slots": {
+        "Head": "guild_head",
+        "Hair": "guild_hair",
+        "UpperBody": "guild_waistcoat",
+        "LowerBody": "guild_bottom",
+        "Gloves": "guild_gloves",
+        "Boots": "guild_boots",
+        "Accessories": "guild_badge",
+        "OffHand": "guild_ledger"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "greet",
+        "point",
+        "ledger_hold"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ]
+    },
+    {
+      "id": "market",
+      "label": "Người bán hàng",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "body_family": "adult_male_broad_fit_pending",
+      "reference": "npc_roles",
+      "reference_panel_zero_based": 2,
+      "design": "Gilê jade, tay áo ngà xắn; quần rộng, tóc buộc ngắn, túi tiền và bàn tính; không giáp vai.",
+      "slots": {
+        "Head": "market_head",
+        "Hair": "market_hair",
+        "UpperBody": "market_rolled_sleeve_vest",
+        "LowerBody": "market_loose_trousers",
+        "Gloves": "market_gloves",
+        "Boots": "market_boots",
+        "Accessories": "market_pouch",
+        "OffHand": "market_abacus"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "greet",
+        "offer",
+        "counter_reach"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "broad_body_fit",
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ]
+    },
+    {
+      "id": "mentor",
+      "label": "Người dẫn đường lớn tuổi",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "body_family": "adult_male_65",
+      "reference": "npc_roles",
+      "reference_panel_zero_based": 3,
+      "design": "Tóc bạc buộc, râu thành khối liền; áo dài ngà/navy, gậy và cuộn giấy, nét mặt gần gũi.",
+      "slots": {
+        "Head": "mentor_head",
+        "Hair": "mentor_hair",
+        "UpperBody": "mentor_long_coat",
+        "LowerBody": "mentor_lowerbody",
+        "Gloves": "mentor_gloves",
+        "Boots": "mentor_boots",
+        "Cape": "mentor_mantle",
+        "FacialHair": "mentor_beard",
+        "MainHand": "mentor_staff",
+        "Accessories": "mentor_scroll"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "point",
+        "staff_hold"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ]
+    },
+    {
+      "id": "shrine",
+      "label": "Người trông điện",
+      "status": "DESIGNED_NOT_RUNTIME",
+      "body_family": "adult_female_fit_pending",
+      "reference": "npc_roles",
+      "reference_panel_zero_based": 0,
+      "design": "Áo ngà dài, khoác nghi lễ jade, tóc buộc gọn và đèn linh cyan nhỏ; dáng điềm đạm.",
+      "slots": {
+        "Head": "shrine_head",
+        "Hair": "shrine_hair",
+        "UpperBody": "shrine_tunic",
+        "LowerBody": "spirit_inner_trousers",
+        "Gloves": "shrine_gloves",
+        "Boots": "shrine_boots",
+        "Cape": "shrine_mantle",
+        "Headwear": "shrine_hairpin",
+        "MainHand": "shrine_lantern_staff"
+      },
+      "pose_review": [
+        "idle",
+        "walk",
+        "greet",
+        "point",
+        "staff_hold"
+      ],
+      "reusable_baseline": null,
+      "blocked_by": [
+        "dedicated_costume_and_face_authoring",
+        "fit_and_skin_review",
+        "runtime_pose_review"
+      ]
+    }
+  ],
+  "concept_board": "docs/art/preproduction/linh-thanh-roster-draft.png",
+  "concept_board_scope": "Bản nghiên cứu7 bộ trước đối chiếu đầy đủ5 Lộ; chỉ dùng tham khảo NPC/món đồ, không khóa thiết kế class. Hai hình đầu không thay five_paths/original_key_art."
+}

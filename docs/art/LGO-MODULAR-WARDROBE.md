@@ -30,6 +30,8 @@ Không chia riêng từng viền, nếp gấp, hoa văn hoặc mỗi tam giác. 
 
 Keeper hiện có 9 slot hình học: Headwear, Head, Hair, UpperBody, LowerBody, Cape, Gloves, Boots và Shoulders. Bội/đai hiện là chi tiết texture thuộc áo; chỉ tách Accessories khi có món cần thay độc lập.
 
+Player nhập môn dùng cùng baker và Avatar, có 7 slot (không mũ/cape), 2 material và cùng hai atlas; không thêm texture. `tools/art/wardrobe_sections.py` truyền slot cho cả hai exporter. Source đầu phải đủ sọ/gáy dù thay kiểu tóc; không dựa vào cape/tóc dài che bề mặt bị thiếu. Tạo hình player vẫn candidate, chưa phải bộ class Kiếm final.
+
 Cơ chế hiện tại ghép **bộ đã chọn sẵn trong Editor**. Chọn đồ động, cache theo tổ hợp, che cơ thể theo trang bị và vũ khí gắn socket là bước triển khai sau; danh mục slot không đồng nghĩa các gameplay đó đã tồn tại.
 
 ## Tham khảo và áp dụng
