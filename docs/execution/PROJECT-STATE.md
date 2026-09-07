@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Preview đã nối phố vào sân nhỏ Z15..27 theo demo `lgo-street-forecourt-draft-v1.jpg`: đi thật tới sân và quay lại; sau đá hướng dẫn tới sân rồi ẩn khi đến nơi. Reuse mái/cây V3B/guidance, không texture runtime mới. Route/guidance ba profile `forecourt-verified-*` qua, PNG đúng kích thước; cao độ cây qua `forecourt-grounded-mobile.log`, ảnh đã xem. Shared sprite helper có groundHeight mặc định0, giữ caller main. Quick qua; chưa city hub/main integration/final art/visual PASS. Next: mặt đường đá theo demo, bỏ cảm giác các vạch ngang trên nền phẳng, giữ tuyến đi/collision và không thêm texture nặng.
+Batch paving/mặt tiền đã có runtime: surface liên tục14x39m/texture256 mipmaps, bảy nhà chung mesh cửa/lưới/nẹp và module body/mái; tường trung tính, trim than tối, giữ collider/camera. `facade-green-{desktop,tablet}.log` và `street-architecture-final-mobile.log` full route qua, PNG đúng kích thước, ảnh đã xem; quick cuối qua. Review phát hiện assertion bỏ sót mesh null đầu tiên, đã sửa kiểm tra từng facade và xác nhận mobile. Gom checkpoint cùng paving. Next: bóng răng cưa dưới mái/khung cửa, kiểm tra cấu hình URP thực trong Player trước thay thông số; không tăng shadow budget mò. Chưa final art/main integration/visual PASS.
 
 Sau dcda6a3, preview quay model về NPC khi thoại; red62.5572° -> green0°, full route/quick qua và ảnh dialogue đã xem. Không đổi vị trí/camera/UI/luật thoại, chưa commit để gom interaction. Kiểm tra mapping ngón đã đủ nên không sửa importer. Tiếp hướng nhìn/tư thế khi tương tác đá theo storyboard; chưa final art/main integration.
 

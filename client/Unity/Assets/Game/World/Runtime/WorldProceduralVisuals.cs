@@ -28,6 +28,37 @@ namespace LinhGioi.World
                 groundAnchor.z);
         }
 
+        internal static Texture2D CreateStreetPavingTexture()
+        {
+            const int size = 256;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, true)
+            {
+                name = "LGO Street Stone Paving 3x2m",
+                wrapMode = TextureWrapMode.Repeat,
+                filterMode = FilterMode.Trilinear,
+                anisoLevel = 4
+            };
+            var pixels = new Color32[size * size];
+            for (var y = 0; y < size; y++)
+            for (var x = 0; x < size; x++)
+            {
+                var row = y / 64;
+                var shiftedX = x + (row % 2) * 32;
+                var column = shiftedX / 64 % 4;
+                var localX = shiftedX % 64;
+                var localY = y % 64;
+                var edge = Mathf.Min(Mathf.Min(localX, 63 - localX), Mathf.Min(localY, 63 - localY));
+                var variation = (HashNoise(column, row) - 0.5f) * 0.05f;
+                var grain = (HashNoise(x, y) - 0.5f) * 0.015f;
+                var stone = new Color(0.43f + variation + grain, 0.44f + variation + grain, 0.43f + variation + grain);
+                var mortar = new Color(0.29f, 0.30f, 0.30f);
+                pixels[y * size + x] = Color.Lerp(mortar, stone, Mathf.SmoothStep(0f, 1f, edge / 2f));
+            }
+            texture.SetPixels32(pixels);
+            texture.Apply(true, true);
+            return texture;
+        }
+
         internal static Texture2D CreateTrainingGroundTexture(Vector3 gatePosition, Vector3 keeperPosition, Vector3 stonePosition)
         {
             const int size = 256;

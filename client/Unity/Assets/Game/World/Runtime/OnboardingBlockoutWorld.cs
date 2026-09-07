@@ -30,6 +30,10 @@ namespace LinhGioi.World
         private bool _screenInputHeld;
         private Vector3 _inputForward;
         private Mesh _stoneMesh;
+        private Mesh _pavingMesh;
+        private Texture2D _pavingTexture;
+        private Material _pavingMaterial;
+        private Mesh _houseFacadeMesh;
 
         private void Awake()
         {
@@ -42,24 +46,19 @@ namespace LinhGioi.World
             light.transform.rotation = Quaternion.Euler(50f, -35f, 0f);
             light.shadows = LightShadows.Soft;
             var paving = Material(new Color(0.39f, 0.40f, 0.39f));
-            var walls = Material(new Color(0.52f, 0.52f, 0.46f));
+            var walls = Material(new Color(0.58f, 0.59f, 0.56f));
             var roof = Material(new Color(0.19f, 0.23f, 0.24f));
-            var trim = Material(new Color(0.68f, 0.55f, 0.32f));
-            Box("Courtyard", new Vector3(0f, -0.1f, 1.5f), new Vector3(14f, 0.2f, 27f), paving);
-            for (var z = -4; z < 15; z++)
-                Box("Paving joint", new Vector3(0f, 0.002f, z), new Vector3(8f, 0.004f, 0.025f), roof, false);
+            var trim = Material(new Color(0.18f, 0.19f, 0.18f));
+            Box("Courtyard", new Vector3(0f, -0.1f, 1.5f), new Vector3(14f, 0.2f, 27f), paving).GetComponent<Renderer>().enabled = false;
             for (var side = -1; side <= 1; side += 2)
             {
                 for (var z = 0; z <= 12; z += 6)
-                {
-                    Box("Street module", new Vector3(side * 5.5f, 1.6f, z), new Vector3(3f, 3.2f, 4.8f), walls);
-                    CreateRoof(new Vector3(side * 5.5f, 3.3f, z), roof);
-                    Box("Door", new Vector3(side * 3.985f, 1f, z), new Vector3(0.04f, 2f, 1.1f), trim, false);
-                }
+                    CreateStreetHouse(new Vector3(side * 5.5f, 0f, z), 3.2f, walls, roof, trim);
                 Box("Gate post", new Vector3(side * 5.2f, 2.3f, -4f), new Vector3(0.8f, 4.6f, 0.8f), walls);
                 Box("Boundary", new Vector3(side * 7f, 0.6f, 1.5f), new Vector3(0.2f, 1.2f, 27f), walls);
             }
             CreateForecourt(paving, walls, roof, trim);
+            CreateStreetPaving(paving);
             Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
             _keeper = Actor("Blockout Keeper", KeeperPoint, LgoVisualAssetRegistryV3B.GateKeeperNpc, 1.8f, trim);
             _stone = CreateTrainingStone();
@@ -117,6 +116,73 @@ namespace LinhGioi.World
             CreateCameraShot(shots.transform, tracking, new Vector3(6.8f, 2f, 0f), 10);
         }
 
+        private void CreateStreetPaving(Material paving)
+        {
+            _pavingTexture = WorldProceduralVisuals.CreateStreetPavingTexture();
+            _pavingMaterial = paving;
+            paving.color = Color.white;
+            paving.mainTexture = _pavingTexture;
+            var corners = new[]
+            {
+                new Vector3(-7f, 0.002f, -12f), new Vector3(7f, 0.002f, -12f),
+                new Vector3(-7f, 0.002f, 27f), new Vector3(7f, 0.002f, 27f)
+            };
+            var uv = new Vector2[corners.Length];
+            for (var i = 0; i < corners.Length; i++)
+                uv[i] = new Vector2(corners[i].x / 3f, corners[i].z / 2f);
+            _pavingMesh = new Mesh { name = "Continuous street paving", vertices = corners, uv = uv,
+                triangles = new[] { 0, 2, 1, 1, 2, 3 } };
+            _pavingMesh.RecalculateNormals();
+            _pavingMesh.RecalculateBounds();
+            var surface = new GameObject("Street paving surface");
+            surface.transform.SetParent(transform);
+            surface.AddComponent<MeshFilter>().sharedMesh = _pavingMesh;
+            surface.AddComponent<MeshRenderer>().sharedMaterial = paving;
+        }
+
+        private void CreateStreetHouse(Vector3 centre, float height, Material walls, Material roof, Material trim)
+        {
+            var body = Box("Street module", centre + Vector3.up * height * 0.5f, new Vector3(3f, height, 4.8f), walls);
+            CreateRoof(centre + Vector3.up * (height + 0.1f), roof);
+            Box("Stone plinth", centre + Vector3.up * 0.15f, new Vector3(3.04f, 0.3f, 4.84f), roof, false);
+            Box("Timber eave band", centre + Vector3.up * (height - 0.08f), new Vector3(3.05f, 0.16f, 4.85f), trim, false);
+            if (_houseFacadeMesh == null)
+            {
+                var cube = body.GetComponent<MeshFilter>().sharedMesh;
+                var parts = new System.Collections.Generic.List<CombineInstance>();
+                void Beam(Vector3 position, Vector3 size)
+                {
+                    parts.Add(new CombineInstance { mesh = cube, transform = Matrix4x4.TRS(position, Quaternion.identity, size) });
+                }
+                Beam(new Vector3(0.02f, 1f, 0f), new Vector3(0.04f, 2f, 1.1f));
+                for (var side = -1; side <= 1; side += 2)
+                    Beam(new Vector3(0.055f, 1.05f, side * 0.6f), new Vector3(0.11f, 2.1f, 0.1f));
+                Beam(new Vector3(0.055f, 2.05f, 0f), new Vector3(0.11f, 0.1f, 1.3f));
+                Beam(new Vector3(0.065f, 1f, 0f), new Vector3(0.09f, 1.95f, 0.04f));
+                for (var rail = 0; rail < 2; rail++)
+                    Beam(new Vector3(0.065f, 0.65f + rail * 0.7f, 0f), new Vector3(0.09f, 0.04f, 1.1f));
+                for (var side = -1; side <= 1; side += 2)
+                {
+                    var windowZ = side * 1.65f;
+                    for (var edge = -1; edge <= 1; edge += 2)
+                    {
+                        Beam(new Vector3(0.045f, 1.5f + edge * 0.4f, windowZ), new Vector3(0.09f, 0.07f, 0.8f));
+                        Beam(new Vector3(0.045f, 1.5f, windowZ + edge * 0.365f), new Vector3(0.09f, 0.8f, 0.07f));
+                        Beam(new Vector3(0.035f, 1.5f, windowZ + edge * 0.12f), new Vector3(0.07f, 0.8f, 0.025f));
+                    }
+                    Beam(new Vector3(0.035f, 1.5f, windowZ), new Vector3(0.07f, 0.025f, 0.8f));
+                }
+                _houseFacadeMesh = new Mesh { name = "Shared street house facade" };
+                _houseFacadeMesh.CombineMeshes(parts.ToArray(), true, true);
+            }
+            var facade = new GameObject("House facade");
+            facade.transform.SetParent(transform);
+            facade.transform.position = centre + Vector3.right * (centre.x < 0f ? 1.505f : -1.505f);
+            facade.transform.rotation = Quaternion.Euler(0f, centre.x < 0f ? 0f : 180f, 0f);
+            facade.AddComponent<MeshFilter>().sharedMesh = _houseFacadeMesh;
+            facade.AddComponent<MeshRenderer>().sharedMaterial = trim;
+        }
+
         private void CreateRoof(Vector3 eave, Material roof)
         {
             Box("Roof eave", eave, new Vector3(3.6f, 0.25f, 5.4f), roof);
@@ -131,15 +197,11 @@ namespace LinhGioi.World
         private void CreateForecourt(Material paving, Material walls, Material roof, Material trim)
         {
             // Same-height local extension: no map transition or invisible gate across the street.
-            Box("Forecourt paving", new Vector3(0f, -0.1f, 21f), new Vector3(14f, 0.2f, 12f), paving);
-            for (var z = 15; z < 27; z++)
-                Box("Paving joint", new Vector3(0f, 0.002f, z), new Vector3(13.8f, 0.004f, 0.025f), roof, false);
+            Box("Forecourt paving", new Vector3(0f, -0.1f, 21f), new Vector3(14f, 0.2f, 12f), paving).GetComponent<Renderer>().enabled = false;
             for (var side = -1; side <= 1; side += 2)
                 Box("Forecourt garden wall", new Vector3(side * 7f, 0.6f, 21f), new Vector3(0.2f, 1.2f, 12f), walls);
             Box("Garden rear wall", new Vector3(0f, 0.9f, 27f), new Vector3(14f, 1.8f, 0.2f), walls);
-            Box("Forecourt house", new Vector3(-5f, 1.3f, 20f), new Vector3(3f, 2.6f, 4.8f), walls);
-            CreateRoof(new Vector3(-5f, 2.7f, 20f), roof);
-            Box("Door", new Vector3(-3.485f, 1f, 20f), new Vector3(0.04f, 2f, 1.1f), trim, false);
+            CreateStreetHouse(new Vector3(-5f, 0f, 20f), 2.6f, walls, roof, trim);
             CreateRoof(new Vector3(5f, 2.7f, 23f), roof);
             for (var x = -1; x <= 1; x += 2)
             for (var z = -1; z <= 1; z += 2)
@@ -316,6 +378,10 @@ namespace LinhGioi.World
         private void OnDestroy()
         {
             if (_stoneMesh != null) Destroy(_stoneMesh);
+            if (_pavingMesh != null) Destroy(_pavingMesh);
+            if (_pavingTexture != null) Destroy(_pavingTexture);
+            if (_pavingMaterial != null) Destroy(_pavingMaterial);
+            if (_houseFacadeMesh != null) Destroy(_houseFacadeMesh);
         }
 
         private Renderer Actor(string name, Vector3 point, Sprite sprite, float height, Material fallback)

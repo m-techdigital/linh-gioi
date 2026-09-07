@@ -130,6 +130,34 @@ namespace LinhGioi.UI
             Directory.CreateDirectory(directory);
             yield return new WaitForSeconds(1f);
             yield return Capture(directory, "arrival");
+            Mesh sharedFacade = null;
+            var facadeCount = 0;
+            foreach (var filter in _world.GetComponentsInChildren<MeshFilter>())
+            {
+                if (filter.name != "House facade") continue;
+                facadeCount++;
+                if (filter.sharedMesh == null || filter.sharedMesh.vertexCount == 0)
+                    throw new InvalidOperationException("Every house facade needs visible mesh geometry.");
+                if (sharedFacade != null && sharedFacade != filter.sharedMesh)
+                    throw new InvalidOperationException("Street houses must reuse the same facade mesh.");
+                sharedFacade = filter.sharedMesh;
+                if (filter.GetComponent<Collider>() != null)
+                    throw new InvalidOperationException("Facade decoration must not change the walking collision.");
+            }
+            if (facadeCount != 7 || sharedFacade == null)
+                throw new InvalidOperationException("Expected seven shared house facades, got " + facadeCount);
+            var pavingSurface = _world.transform.Find("Street paving surface");
+            if (pavingSurface == null)
+                throw new InvalidOperationException("Street and forecourt need one continuous paving surface.");
+            var pavingTexture = pavingSurface.GetComponent<Renderer>().sharedMaterial.mainTexture as Texture2D;
+            if (pavingTexture == null || pavingTexture.width != 256 || pavingTexture.height != 256
+                || pavingTexture.mipmapCount < 2 || pavingTexture.wrapMode != TextureWrapMode.Repeat)
+                throw new InvalidOperationException("Paving must use a small repeating texture with mipmaps.");
+            var pavingMesh = pavingSurface.GetComponent<MeshFilter>().sharedMesh;
+            if (Mathf.Abs(pavingMesh.bounds.size.x - 14f) > 0.01f || Mathf.Abs(pavingMesh.bounds.size.z - 39f) > 0.01f
+                || Mathf.Abs((pavingMesh.uv[1].x - pavingMesh.uv[0].x) - 14f / 3f) > 0.01f
+                || Mathf.Abs((pavingMesh.uv[2].y - pavingMesh.uv[0].y) - 39f / 2f) > 0.01f)
+                throw new InvalidOperationException("Paving UVs must preserve the 3m x 2m repeat across the entire route.");
             var forecourtTree = _world.transform.Find("Forecourt pine").GetComponent<SpriteRenderer>();
             if (Mathf.Abs(forecourtTree.bounds.min.y - 0.325f) > 0.01f)
                 throw new InvalidOperationException("Forecourt tree must stand on the raised bed: bottom=" + forecourtTree.bounds.min.y);
