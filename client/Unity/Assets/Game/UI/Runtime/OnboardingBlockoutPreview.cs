@@ -24,6 +24,7 @@ namespace LinhGioi.UI
         private Button _interact;
         private Action _applyLayout;
         private bool _stoneCompleted;
+        private bool _locomotionVerified;
 
         private bool InRange => Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z),
             _session.Completed ? new Vector2(OnboardingBlockoutWorld.StonePoint.x, OnboardingBlockoutWorld.StonePoint.z)
@@ -95,6 +96,26 @@ namespace LinhGioi.UI
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            var videoIndex = Array.IndexOf(args, "--lgo-blockout-motion-video");
+            if (videoIndex >= 0 && videoIndex + 1 < args.Length)
+            {
+                _capturing = true;
+                yield return new WaitForSeconds(1f);
+                var frames = Path.GetFullPath(args[videoIndex + 1]);
+                Directory.CreateDirectory(frames);
+                var previousRate = Time.captureFramerate;
+                Time.captureFramerate = 24;
+                for (var frame = 0; frame < 192; frame++)
+                {
+                    _world.Movement = frame >= 24 && frame < 168 ? Vector2.up : Vector2.zero;
+                    yield return Capture(frames, frame.ToString("D4"));
+                }
+                Time.captureFramerate = previousRate;
+                _world.Movement = Vector2.zero;
+                Debug.Log("LGO_MOTION_VIDEO_FRAMES_COMPLETE frames=192 fps=24 movement_seconds=6");
+                Application.Quit(0);
+                yield break;
+            }
             var index = Array.IndexOf(args, "--lgo-blockout-evidence-dir");
             if (index < 0 || index + 1 >= args.Length) yield break;
             _capturing = true;
@@ -108,6 +129,9 @@ namespace LinhGioi.UI
             Directory.CreateDirectory(directory);
             yield return new WaitForSeconds(1f);
             yield return Capture(directory, "arrival");
+            var character = _world.GetComponentInChildren<Animator>();
+            if (character == null || !character.isHuman || character.runtimeAnimatorController == null || character.applyRootMotion)
+                throw new InvalidOperationException("Blockout requires a Humanoid character with in-place locomotion.");
             _world.LogCameraShots();
             if (Vector3.Dot(Camera.main.transform.forward, Vector3.forward) < 0.9f)
             {
@@ -328,15 +352,26 @@ namespace LinhGioi.UI
         private IEnumerator WalkTo(Vector3 point)
         {
             var deadline = Time.realtimeSinceStartup + 10f;
+            var character = _world.GetComponentInChildren<Animator>();
+            var leg = character.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
+            var initialRotation = leg.localRotation;
+            var started = Time.time;
             while (Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z), new Vector2(point.x, point.z)) > 0.08f)
             {
                 if (Time.realtimeSinceStartup > deadline)
                     throw new InvalidOperationException("Blockout route blocked or unfocused before " + point);
                 var direction = point - _world.Position;
                 _world.Movement = Vector2.ClampMagnitude(new Vector2(direction.x, direction.z) * 2f, 1f);
+                if (!_locomotionVerified && Time.time - started > 0.2f && character.GetFloat("Speed") > 0.2f
+                    && Quaternion.Angle(initialRotation, leg.localRotation) > 2f)
+                {
+                    _locomotionVerified = true;
+                    Debug.Log("LGO_ARRIVAL_CHARACTER_MOTION_PASS humanoid=true leg_animated=true speed_from_controller=true");
+                }
                 yield return null;
             }
             _world.Movement = Vector2.zero;
+            if (!_locomotionVerified) throw new InvalidOperationException("Arrival character locomotion did not animate during route.");
         }
 
         private static IEnumerator Capture(string directory, string name)

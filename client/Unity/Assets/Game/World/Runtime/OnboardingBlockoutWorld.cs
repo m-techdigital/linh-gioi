@@ -12,6 +12,9 @@ namespace LinhGioi.World
         public Vector2 ScreenMovement { get; set; }
         public Vector3 Position => _player.transform.position;
         private CharacterController _player;
+        private Animator _characterAnimator;
+        private Transform _characterVisual;
+        private static readonly int SpeedParameter = Animator.StringToHash("Speed");
         private Camera _camera;
         private CinemachineBrain _cameraBrain;
         private BoxCollider _cameraVolume;
@@ -80,12 +83,14 @@ namespace LinhGioi.World
             _player.radius = 0.3f;
             _player.center = Vector3.up * 0.9f;
             _player.stepOffset = 0.2f;
-            var body = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-            body.transform.SetParent(player.transform, false);
-            body.transform.localPosition = Vector3.up * 0.9f;
-            body.transform.localScale = new Vector3(0.6f, 0.9f, 0.6f);
-            Destroy(body.GetComponent<Collider>());
-            body.GetComponent<Renderer>().sharedMaterial = Material(new Color(0.82f, 0.81f, 0.76f));
+            var prefab = Resources.Load<GameObject>("LGOArrivalOutfitCandidate");
+            if (prefab == null) throw new System.InvalidOperationException("Arrival outfit candidate prefab missing.");
+            _characterVisual = Instantiate(prefab, player.transform, false).transform;
+            _characterVisual.localPosition = Vector3.up * 0.025f;
+            _characterAnimator = _characterVisual.GetComponent<Animator>();
+            if (_characterAnimator == null || !_characterAnimator.isHuman || _characterAnimator.runtimeAnimatorController == null)
+                throw new System.InvalidOperationException("Arrival candidate has no Humanoid locomotion.");
+            _characterAnimator.applyRootMotion = false;
             foreach (var camera in Camera.allCameras) camera.enabled = false;
             _camera = new GameObject("Blockout perspective camera").AddComponent<Camera>();
             _camera.transform.SetParent(transform);
@@ -165,6 +170,11 @@ namespace LinhGioi.World
             }
             else _screenInputHeld = false;
             _player.SimpleMove(Vector3.ClampMagnitude(direction, 1f) * 3.6f);
+            var velocity = Vector3.ProjectOnPlane(_player.velocity, Vector3.up);
+            _characterAnimator.SetFloat(SpeedParameter, velocity.magnitude, 0.1f, Time.deltaTime);
+            if (velocity.sqrMagnitude > 0.0025f)
+                _characterVisual.rotation = Quaternion.RotateTowards(_characterVisual.rotation,
+                    Quaternion.LookRotation(velocity, Vector3.up), 720f * Time.deltaTime);
         }
 
         public void ResetMovementInput()

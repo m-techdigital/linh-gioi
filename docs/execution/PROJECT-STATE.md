@@ -8,6 +8,10 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Checkpoint motion đã có quick pass, ảnh preview ba profile và main screenshot review. Main lượt đầu fail menu input; lượt telemetry hoàn tất flow, `arrival-motion-main-diagnostic.log` exit0, không thay assertion. Nguyên nhân fail trước chưa xác định, giữ log/trace. Next: biến dạng vạt/tỷ lệ nhân vật và dáng chạy theo turnaround trước main integration; chưa final art/visual PASS.
+
+Candidate nhập môn có idle/walk/jog trong preview opt-in, prefab Resources góp payload build. Lỗi giơ tay đã có regression red/green, dùng T-pose chuẩn hóa Unity thay cho transform FBX thô. Route ba profile `arrival-canonical-*` exit0, ảnh mobile đã xem. Hai video 8s trước/sau tại `build/visual-evidence/motion-comparison/`; bản trước tái hiện lỗi, asset/source đã trả về bản chuẩn (`arrival-video-restored-canonical.log` exit0). Chưa final art/visual PASS/main integration; tiếp review PC/tablet và quick/main regression trước checkpoint.
+
 Checkpoint mới nhất camera/pulse: `held-clock-{desktop,tablet,mobile}.log` cả ba exit 0 và quick `camera-pulse-checkpoint-quick.log` qua, không đổi movement/deadline; đã xem desktop arrival/tablet camera-exit. Main pulse ba profile đã được review, không đổi main từ evidence đó. Cold start 3 red -> 3 green; lỗi held travel 2.4m cũ chưa xác định nguyên nhân, không gộp thành lỗi môi trường. Tiếp model/rig nhập môn theo turnaround có sẵn, không mở hệ thống ngoài roadmap. Chưa art cuối/visual PASS/CPU benchmark. Các đoạn dưới ghi diễn biến trước checkpoint.
 
 Camera cold start: 3/3 red tại 2 FPS -> 3/3 green bằng cập nhật standby mỗi frame, ảnh đúng trục phố đã xem; quick qua. Chưa full-route pass: giữ input thiếu quãng đường ở lượt PC, lần chẩn đoán sau bị foreground cản và process đã kết thúc. Không gộp lỗi chưa đủ dữ liệu thành môi trường, không commit/visual PASS; tiếp phân biệt timing/focus/input trước chốt batch camera + pulse.

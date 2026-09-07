@@ -723,6 +723,10 @@ namespace LinhGioi.UI
             yield return null;
             yield return null;
             _world.TouchMovement = Vector2.right;
+            Debug.Log("LGO_MENU_RESUME_TRACE focused=" + Application.isFocused + " frame=" + Time.frameCount
+                + " dt=" + Time.deltaTime + " position=" + _world.CurrentPosition
+                + " resume_frame=" + _world.GetType().GetField("_inputResumeFrame", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(_world)
+                + " overlay=" + _world.GetType().GetField("_overlayHasFocus", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).GetValue(_world));
             worldTick.Invoke(_world, null);
             _world.TouchMovement = Vector2.zero;
             if (Vector3.Distance(position, _world.CurrentPosition) <= 0.001f)
