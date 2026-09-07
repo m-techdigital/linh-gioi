@@ -23,6 +23,8 @@ namespace LinhGioi.World
         private Renderer _stone;
         private TextMesh _keeperLabel;
         private TextMesh _stoneLabel;
+        private TextMesh _playerLabel;
+        private TextMesh[] _reservedLabels;
         private SpriteRenderer _stoneFocus;
         private SpriteRenderer _keeperFocus;
         private bool _stoneReady;
@@ -83,6 +85,7 @@ namespace LinhGioi.World
             _stoneLabel = WorldLabelPresenter.Create("Blockout Stone Label", "Đá Luyện", StonePoint, RuntimeArtCatalog.Gold);
             _keeperLabel.transform.SetParent(transform, true);
             _stoneLabel.transform.SetParent(transform, true);
+            _reservedLabels = new[] { _keeperLabel, _stoneLabel };
             _stoneFocus = CreateInteractionFocus("Blockout Stone Focus", StonePoint);
             _keeperFocus = CreateInteractionFocus("Blockout Keeper Focus", KeeperPoint);
 
@@ -103,6 +106,9 @@ namespace LinhGioi.World
             if (_characterAnimator == null || !_characterAnimator.isHuman || _characterAnimator.runtimeAnimatorController == null)
                 throw new System.InvalidOperationException("Arrival candidate has no Humanoid locomotion.");
             _characterAnimator.applyRootMotion = false;
+            _playerLabel = WorldLabelPresenter.Create("Blockout Player Label", string.Empty, player.transform.position, RuntimeArtCatalog.Text);
+            _playerLabel.transform.SetParent(transform, true);
+            WorldLabelPresenter.SetActive(_playerLabel, false);
             foreach (var camera in _previousCameras) camera.enabled = false;
             _camera = new GameObject("Blockout perspective camera").AddComponent<Camera>();
             _camera.transform.SetParent(transform);
@@ -375,6 +381,8 @@ namespace LinhGioi.World
             }
         }
 
+        public void SetPlayerName(string name) => WorldLabelPresenter.Set(_playerLabel, name, RuntimeArtCatalog.Text);
+
         private void LateUpdate()
         {
             _cameraBrain.ManualUpdate();
@@ -383,6 +391,8 @@ namespace LinhGioi.World
             _stoneLabel.gameObject.SetActive(!DialogueVisible);
             WorldLabelPresenter.PlaceAbove(_keeperLabel, _keeper);
             WorldLabelPresenter.PlaceAbove(_stoneLabel, _stone);
+            WorldLabelPresenter.SetActive(_playerLabel, !DialogueVisible && !string.IsNullOrEmpty(_playerLabel.text));
+            WorldLabelPresenter.PlaceAbove(_playerLabel, _player.bounds, _camera, _reservedLabels);
             var completion = _stoneCompletedAt >= 0f;
             var progress = completion ? Mathf.Clamp01((Time.time - _stoneCompletedAt) / StoneFeedbackDuration) : 0f;
             _stoneFocus.gameObject.SetActive(!DialogueVisible && (completion ? progress < 1f : _stoneReady));

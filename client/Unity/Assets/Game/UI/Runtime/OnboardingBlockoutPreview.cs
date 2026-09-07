@@ -44,8 +44,7 @@ namespace LinhGioi.UI
         {
             _returnToHall = returnToHall;
             _quit.text = "Về sảnh";
-            _guidance.Area.text = characterName;
-            _guidance.Area.style.display = DisplayStyle.Flex;
+            _world.SetPlayerName(characterName);
         }
 
         private void Leave()
@@ -81,7 +80,7 @@ namespace LinhGioi.UI
             overlay.Add(quit);
             root.Add(overlay);
             _guidance = new RuntimeWorldGuidanceView();
-            _guidance.Area.style.display = DisplayStyle.None;
+            _guidance.Area.text = "Linh Môn";
             _guidance.Step.style.display = DisplayStyle.None;
             _guidance.Direction.style.display = DisplayStyle.None;
             _guidanceScroll = new ScrollView(ScrollViewMode.Vertical) { name = "LGO Standalone Guidance" };
@@ -157,7 +156,9 @@ namespace LinhGioi.UI
             }
             var directory = Path.GetFullPath(args[index + 1]);
             Directory.CreateDirectory(directory);
+            ConfigureHallReturn("WWWWWWWWWWWWWWWW", null);
             yield return new WaitForSeconds(1f);
+            CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
             yield return Capture(directory, "arrival");
             var skyCamera = _world.GetComponentInChildren<Camera>();
             var sky = RenderSettings.skybox;
@@ -274,6 +275,7 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
             CheckKeeperFocus(true);
             yield return Capture(directory, "keeper-side");
+            CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
             CheckInteractionIcon("Gặp", "ActionTalk", true);
             using (var hover = MouseEnterEvent.GetPooled())
             {
@@ -298,6 +300,7 @@ namespace LinhGioi.UI
             Submit(_interact);
             if (!_session.Active) throw new InvalidOperationException("NPC action did not open shared dialogue.");
             yield return Capture(directory, "dialogue");
+            CheckPlayerIdentity("WWWWWWWWWWWWWWWW", false);
             CheckKeeperFocus(false);
             if (!CheckGuidance("Gặp Người Giữ Cổng.", false)) yield break;
             var bounds = _dialogue.Panel.worldBound;
@@ -325,6 +328,8 @@ namespace LinhGioi.UI
             yield return null;
             yield return new WaitForEndOfFrame();
             CheckKeeperFocus(true);
+            CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
+            Debug.Log("LGO_PLAYER_IDENTITY_PASS long_name=true near_keeper=true dialogue_hide_restore=true");
             Submit(_interact);
             if (_session.Progress != "1/3") throw new InvalidOperationException("Reopening did not restart dialogue.");
             Submit(_dialogue.ContinueButton);
@@ -336,11 +341,13 @@ namespace LinhGioi.UI
             yield return new WaitForEndOfFrame();
             CheckKeeperFocus(false);
             Debug.Log("LGO_KEEPER_FOCUS_PASS proximity=true dialogue=true cancel=true completed=true shared_sprite=true");
+            CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
             Interact();
             if (_stoneCompleted) throw new InvalidOperationException("Stone completed from NPC location.");
             yield return WalkTo(new Vector3(0f, 0f, 2.5f));
             yield return WalkTo(new Vector3(2.3f, 0f, 4f));
             yield return Capture(directory, "stone-side");
+            CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
             CheckInteractionIcon("Luyện", "ActionTouch", true);
             if (!CheckGuidance("Chạm Đá Luyện.", true)) yield break;
             var focus = _world.transform.Find("Blockout Stone Focus");
@@ -404,6 +411,8 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(2.3f, 0f, 3f));
             yield return WalkTo(new Vector3(6f, 0f, 3f));
             yield return Capture(directory, "camera-alley");
+            CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
+            Debug.Log("LGO_PLAYER_IDENTITY_ROUTE_PASS stone=true completed_dialogue=true camera_alley=true");
             if (Physics.Linecast(_world.Position + Vector3.up * 1.1f, Camera.main.transform.position, out var obstruction) ||
                 Physics.Linecast(_world.Position + Vector3.up * 0.2f, Camera.main.transform.position, out obstruction) ||
                 Physics.Linecast(_world.Position + Vector3.up * 1.7f, Camera.main.transform.position, out obstruction))
@@ -633,6 +642,49 @@ namespace LinhGioi.UI
                 bounds.yMin <= button.yMin || bounds.yMax >= button.yMax || icon.pickingMode != PickingMode.Ignore)
                 throw new InvalidOperationException("Interaction icon must fit inside its button without intercepting input: icon="
                     + bounds + " button=" + button + " content=" + _interact.contentRect + " picking=" + icon.pickingMode);
+        }
+
+        internal void CheckPlayerIdentity(string name, bool visible)
+        {
+            var holder = _world.transform.Find("Blockout Player Label");
+            var label = holder == null ? null : holder.GetComponent<TextMesh>();
+            if (label == null || label.text != name || label.gameObject.activeSelf != visible ||
+                _guidance.Area.text != "Linh Môn")
+                throw new InvalidOperationException("Player name must use a world label; the HUD area must identify Linh Mon.");
+            var shadow = holder.GetChild(0).GetComponent<TextMesh>();
+            if (shadow == null || shadow.text != name)
+                throw new InvalidOperationException("Player name needs the shared synchronized label shadow.");
+            if (!visible) return;
+            var camera = _world.GetComponentInChildren<Camera>();
+            var rect = IdentityScreenRect(camera, label.GetComponent<Renderer>().bounds);
+            var player = _world.GetComponentInChildren<CharacterController>();
+            var subject = IdentityScreenRect(camera, player.bounds);
+            if (rect.width <= 0f || rect.height < 8f || rect.xMin < 0f || rect.xMax > camera.pixelWidth ||
+                rect.yMin < subject.yMax || rect.yMax > camera.pixelHeight ||
+                Mathf.Abs(rect.center.x - subject.center.x) > 2f)
+                throw new InvalidOperationException("Player identity is clipped, too small or detached: " + rect + " subject=" + subject);
+            foreach (var obstacleName in new[] { "Blockout Keeper Label", "Blockout Stone Label" })
+            {
+                var obstacle = _world.transform.Find(obstacleName).GetComponent<Renderer>();
+                if (obstacle.gameObject.activeInHierarchy && camera.WorldToScreenPoint(obstacle.bounds.center).z > camera.nearClipPlane &&
+                    rect.Overlaps(IdentityScreenRect(camera, obstacle.bounds)))
+                    throw new InvalidOperationException("Player identity overlaps " + obstacleName);
+            }
+        }
+
+        private static Rect IdentityScreenRect(Camera camera, Bounds bounds)
+        {
+            var min = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
+            var max = new Vector2(float.NegativeInfinity, float.NegativeInfinity);
+            for (var x = -1; x <= 1; x += 2)
+            for (var y = -1; y <= 1; y += 2)
+            for (var z = -1; z <= 1; z += 2)
+            {
+                var screen = camera.WorldToScreenPoint(bounds.center + Vector3.Scale(bounds.extents, new Vector3(x, y, z)));
+                min = Vector2.Min(min, screen);
+                max = Vector2.Max(max, screen);
+            }
+            return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
         }
 
         private void CheckKeeperFocus(bool visible)

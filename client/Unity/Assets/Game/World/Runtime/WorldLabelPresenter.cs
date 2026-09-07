@@ -77,19 +77,40 @@ namespace LinhGioi.World
 
         internal static void PlaceAbove(TextMesh label, Renderer subject)
         {
-            var camera = Camera.main;
-            if (label == null || subject == null || camera == null || !label.gameObject.activeInHierarchy) return;
+            if (subject != null) PlaceAbove(label, subject.bounds, Camera.main);
+        }
+
+        internal static void PlaceAbove(TextMesh label, Bounds subject, Camera camera, TextMesh[] reservedLabels = null)
+        {
+            if (label == null || camera == null || !label.gameObject.activeInHierarchy) return;
             var renderer = label.GetComponent<Renderer>();
             if (renderer == null) return;
             label.transform.rotation = camera.transform.rotation;
             // Anchor at the subject depth before measuring, so repeated updates cannot drift in depth.
-            label.transform.position = subject.bounds.center;
-            var subjectRect = ProjectBounds(camera, subject.bounds);
+            label.transform.position = subject.center;
+            var subjectRect = ProjectBounds(camera, subject);
             var labelRect = ProjectBounds(camera, renderer.bounds);
             var anchor = camera.WorldToScreenPoint(label.transform.position);
             if (anchor.z <= camera.nearClipPlane) return;
+            var initialAnchor = anchor;
+            var gap = Mathf.Max(4f, camera.pixelHeight * 0.007f);
             anchor.x += subjectRect.center.x - labelRect.center.x;
-            anchor.y += subjectRect.yMax + Mathf.Max(4f, camera.pixelHeight * 0.007f) - labelRect.yMin;
+            anchor.y += subjectRect.yMax + gap - labelRect.yMin;
+            labelRect.position += new Vector2(anchor.x - initialAnchor.x, anchor.y - initialAnchor.y);
+            // Moving upward can meet another label; at most one pass per reserved label is needed.
+            for (var pass = 0; reservedLabels != null && pass < reservedLabels.Length; pass++)
+            foreach (var reserved in reservedLabels)
+            {
+                if (reserved == null || !reserved.gameObject.activeInHierarchy) continue;
+                var obstacleRenderer = reserved.GetComponent<Renderer>();
+                if (obstacleRenderer == null || camera.WorldToScreenPoint(obstacleRenderer.bounds.center).z <= camera.nearClipPlane) continue;
+                var obstacle = ProjectBounds(camera, obstacleRenderer.bounds);
+                obstacle.yMax += gap;
+                if (!labelRect.Overlaps(obstacle)) continue;
+                var shift = obstacle.yMax - labelRect.yMin;
+                labelRect.y += shift;
+                anchor.y += shift;
+            }
             label.transform.position = camera.ScreenToWorldPoint(anchor);
         }
 

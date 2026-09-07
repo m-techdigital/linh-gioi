@@ -77,6 +77,7 @@ namespace LinhGioi.UI
                 if (Vector3.Distance(world.Position, new Vector3(0f, 0f, -3f)) > 0.15f)
                     throw new InvalidOperationException("Each local onboarding visit must start at the gate.");
                 yield return capture("onboarding-entry-" + visit);
+                preview.CheckPlayerIdentity(_selectedCharacter.name, true);
                 yield return null;
                 var start = world.Position;
                 world.Movement = Vector2.up;
@@ -117,6 +118,9 @@ namespace LinhGioi.UI
                     || FindFirstObjectByType<OnboardingBlockoutPreview>() != null
                     || GameObject.Find("Blockout Keeper Label") != null || GameObject.Find("Blockout Stone Label") != null)
                     throw new InvalidOperationException("Returning must restore the hall and remove every preview owner and label.");
+                if (Array.Exists(Resources.FindObjectsOfTypeAll<TextMesh>(), label =>
+                        label.name == "Blockout Player Label" || label.name == "Blockout Player Label Shadow"))
+                    throw new InvalidOperationException("Player label or shadow leaked after returning to the hall.");
                 if (!IsDisplayed(_quitButton) || Mathf.Abs(_headerActions.resolvedStyle.marginRight) > 0.1f)
                     throw new InvalidOperationException("Returning to the hall must restore its header navigation.");
                 foreach (var camera in cameras)
