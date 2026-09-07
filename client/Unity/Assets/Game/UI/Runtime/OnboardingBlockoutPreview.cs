@@ -340,6 +340,25 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
             CheckKeeperFocus(true);
             yield return Capture(directory, "keeper-side");
+            yield return new WaitForSeconds(0.25f);
+            if (!KeeperConversing(keeperAnimator) || _world.DialogueVisible)
+                throw new InvalidOperationException("Guide approach must show a brief greeting gesture before any modal covers the NPC.");
+            yield return Capture(directory, "keeper-greeting");
+            var greetingOrigin = _world.Position;
+            _world.Movement = Vector2.up;
+            yield return new WaitForSeconds(0.12f);
+            _world.Movement = Vector2.zero;
+            if (Vector3.Distance(greetingOrigin, _world.Position) < 0.08f ||
+                !KeeperConversing(keeperAnimator) || _world.DialogueVisible)
+                throw new InvalidOperationException("Player must move while the greeting is still active, not after it expires.");
+            yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
+            yield return new WaitForSeconds(3f);
+            if (keeperAnimator.GetLayerWeight(keeperAnimator.GetLayerIndex("Conversation")) > 0.001f ||
+                !keeperAnimator.GetCurrentAnimatorStateInfo(0).IsName("Locomotion") || _world.DialogueVisible)
+                throw new InvalidOperationException("Approach gesture must end while the player stays nearby, without opening a modal.");
+            yield return WalkTo(new Vector3(0f, 0f, 1f));
+            yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
+            Debug.Log("LGO_KEEPER_GREETING_PASS visible_before_modal=true bounded=true movement_available=true");
             CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
             CheckInteractionIcon("Gặp", "ActionTalk", true);
             using (var hover = MouseEnterEvent.GetPooled())
@@ -368,6 +387,32 @@ namespace LinhGioi.UI
             if (Vector3.Angle(keeper.forward, Vector3.ProjectOnPlane(_world.Position - keeper.position, Vector3.up)) > 5f)
                 throw new InvalidOperationException("Gate Keeper must face the player during dialogue.");
             Debug.Log("LGO_KEEPER_DIALOGUE_FACING_PASS target=true");
+            if (!KeeperConversing(keeperAnimator))
+                throw new InvalidOperationException("Guide dialogue must play its conversational gesture, not remain in locomotion idle.");
+            if (character.GetLayerWeight(character.GetLayerIndex("Conversation")) > 0.001f)
+                throw new InvalidOperationException("The shared conversation layer must remain disabled on the player.");
+            var talkingHand = keeperAnimator.GetBoneTransform(HumanBodyBones.LeftHand).position;
+            var talkingLeftFoot = keeperAnimator.GetBoneTransform(HumanBodyBones.LeftFoot).position;
+            var talkingRightFoot = keeperAnimator.GetBoneTransform(HumanBodyBones.RightFoot).position;
+            yield return Capture(directory, "keeper-talking-start");
+            var talkingDuration = keeperAnimator.GetCurrentAnimatorClipInfo(keeperAnimator.GetLayerIndex("Conversation"))[0].clip.length;
+            var talkingUntil = Time.time + talkingDuration;
+            var talkingHandMoved = false;
+            var talkingSamples = 0;
+            while (Time.time < talkingUntil)
+            {
+                yield return null;
+                talkingSamples++;
+                talkingHandMoved |= Vector3.Distance(talkingHand, keeperAnimator.GetBoneTransform(HumanBodyBones.LeftHand).position) >= 0.01f;
+                if (Vector3.Distance(talkingLeftFoot, keeperAnimator.GetBoneTransform(HumanBodyBones.LeftFoot).position) > 0.02f ||
+                    Vector3.Distance(talkingRightFoot, keeperAnimator.GetBoneTransform(HumanBodyBones.RightFoot).position) > 0.02f ||
+                    Vector3.Distance(keeperStart, keeper.position) > 0.001f)
+                    throw new InvalidOperationException("Both foot bones and the guide root must remain stable throughout the talking loop.");
+            }
+            if (!talkingHandMoved || talkingSamples < 10)
+                throw new InvalidOperationException("Talking loop needs visible hand movement and sufficient observed frames.");
+            Debug.Log("LGO_KEEPER_TALKING_SAMPLES frames=" + talkingSamples + " seconds=" + talkingDuration + " foot_bones=both");
+            yield return Capture(directory, "keeper-talking-later");
             yield return Capture(directory, "dialogue");
             CheckPlayerIdentity("WWWWWWWWWWWWWWWW", false);
             CheckKeeperFocus(false);
@@ -400,6 +445,16 @@ namespace LinhGioi.UI
             if (_dialogue.Portrait.resolvedStyle.backgroundImage.texture != Resources.Load<Texture2D>("LGOGateKeeperPortrait"))
                 throw new InvalidOperationException("Dialogue must show the portrait rendered from the Keeper candidate.");
             Debug.Log("LGO_KEEPER_RETURN_PASS rest=true root_held=true matching_portrait=true");
+            if (keeperAnimator.GetLayerWeight(keeperAnimator.GetLayerIndex("Conversation")) > 0.001f ||
+                !keeperAnimator.GetCurrentAnimatorStateInfo(0).IsName("Locomotion"))
+                throw new InvalidOperationException("Closing dialogue must return the guide to idle.");
+            Debug.Log("LGO_KEEPER_TALKING_PASS animated=true feet_held=true root_held=true idle_restored=true");
+            if (Array.IndexOf(args, "--lgo-keeper-presentation-only") >= 0)
+            {
+                Debug.Log("LGO_KEEPER_PRESENTATION_PASS scope=approach_dialogue_close full_route=false");
+                Application.Quit(0);
+                yield break;
+            }
             yield return null;
             yield return new WaitForEndOfFrame();
             CheckKeeperFocus(true);
@@ -803,6 +858,14 @@ namespace LinhGioi.UI
             Debug.Log("LGO_ONBOARDING_BLOCKOUT_ROUTE_PASS movement=CharacterController no_teleport=true");
             Debug.Log("LGO_ONBOARDING_NPC_FLOW_PASS shared_session=true shared_modal=true cancel_reopen=true range=true input_lock=true");
             Application.Quit(0);
+        }
+
+        private static bool KeeperConversing(Animator animator)
+        {
+            var layer = animator.GetLayerIndex("Conversation");
+            return layer > 0 && animator.GetLayerWeight(layer) >= 0.99f &&
+                animator.GetCurrentAnimatorStateInfo(layer).IsName("Talking") &&
+                animator.GetCurrentAnimatorStateInfo(0).IsName("Locomotion");
         }
 
         private bool CheckGuidance(string objective, bool visible)

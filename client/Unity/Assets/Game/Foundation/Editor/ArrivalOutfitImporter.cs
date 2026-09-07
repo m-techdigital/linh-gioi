@@ -19,8 +19,12 @@ namespace LinhGioi.Foundation.Editor
             var animator = prefab.GetComponent<Animator>();
             if (animator.runtimeAnimatorController == null)
                 throw new InvalidOperationException("Arrival prefab has no locomotion controller.");
-            var clips = animator.runtimeAnimatorController.animationClips.Distinct().Where(c => c.isLooping).ToArray();
-            if (clips.Length != 3 || clips.Any(c => !c.humanMotion || !c.isLooping || c.length <= 0f))
+            var controller = (AnimatorController)animator.runtimeAnimatorController;
+            var tree = controller.layers[0].stateMachine.states.Single(s => s.state.name == "Locomotion").state.motion as BlendTree;
+            if (tree == null) throw new InvalidOperationException("Locomotion must retain its speed blend tree.");
+            var clips = tree.children.Select(c => c.motion as AnimationClip).ToArray();
+            if (clips.Length != 3 || clips.Any(c => c == null || !c.humanMotion || !c.isLooping || c.length <= 0f) ||
+                new[] { "Idle_Loop", "Walk_Loop", "Jog_Fwd_Loop" }.Any(name => clips.Count(c => ClipNamed(c.name, name)) != 1))
                 throw new InvalidOperationException("Arrival locomotion requires three looping Humanoid clips.");
             if (AnimationMode.InAnimationMode()) throw new InvalidOperationException("Finish the active animation preview before validating arrival motion.");
             var instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
@@ -212,10 +216,52 @@ namespace LinhGioi.Foundation.Editor
             AssetDatabase.SaveAssets();
             ValidateLocomotion();
             var clips = controller.animationClips.Distinct().ToArray();
-            if (clips.Length != 4 || !clip.humanMotion || clip.isLooping || clip.length <= 0f || clip.length > 3f ||
+            var expectedClips = controller.layers.Any(l => l.name == "Conversation") ? 5 : 4;
+            if (clips.Length != expectedClips || !clip.humanMotion || clip.isLooping || clip.length <= 0f || clip.length > 3f ||
                 AssetDatabase.GetDependencies(PrefabPath, true).Any(p => p.Contains("LGOAnimationImport_")))
                 throw new InvalidOperationException("Gesture must be a single short non-looping Humanoid clip without a source-FBX dependency.");
-            Debug.Log("LGO_ARRIVAL_GESTURE_IMPORT_PASS clips=4 human=true looping=false duration=" + clip.length);
+            Debug.Log("LGO_ARRIVAL_GESTURE_IMPORT_PASS clips=" + clips.Length + " human=true looping=false duration=" + clip.length);
+        }
+
+        public static void ImportConversation()
+        {
+            var clip = ImportNativeClips(true, "Idle_Talking_Loop").Single();
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(Directory + "ArrivalLocomotion.controller");
+            if (controller == null) throw new InvalidOperationException("Import locomotion before conversation.");
+            var baseMachine = controller.layers[0].stateMachine;
+            var fullBody = baseMachine.states.Select(s => s.state).FirstOrDefault(s => s.name == "Talking");
+            if (fullBody != null) baseMachine.RemoveState(fullBody);
+            if (!controller.layers.Any(l => l.name == "Conversation")) controller.AddLayer("Conversation");
+            var layers = controller.layers;
+            var layer = layers.Single(l => l.name == "Conversation");
+            var mask = layer.avatarMask;
+            if (mask == null)
+            {
+                mask = new AvatarMask { name = "Conversation head and arms" };
+                AssetDatabase.AddObjectToAsset(mask, controller);
+            }
+            for (var part = AvatarMaskBodyPart.Root; part < AvatarMaskBodyPart.LastBodyPart; part++)
+                mask.SetHumanoidBodyPartActive(part, part == AvatarMaskBodyPart.Head ||
+                    part == AvatarMaskBodyPart.LeftArm || part == AvatarMaskBodyPart.RightArm ||
+                    part == AvatarMaskBodyPart.LeftFingers || part == AvatarMaskBodyPart.RightFingers);
+            layer.avatarMask = mask;
+            layer.defaultWeight = 0f;
+            layer.blendingMode = AnimatorLayerBlendingMode.Override;
+            var machine = layer.stateMachine;
+            var state = machine.states.Select(s => s.state).FirstOrDefault(s => s.name == "Talking") ?? machine.AddState("Talking");
+            state.motion = clip;
+            machine.defaultState = state;
+            controller.layers = layers;
+            EditorUtility.SetDirty(mask);
+            EditorUtility.SetDirty(state);
+            EditorUtility.SetDirty(controller);
+            AssetDatabase.SaveAssets();
+            ValidateLocomotion();
+            if (controller.animationClips.Distinct().Count() != 5 || !clip.humanMotion || !clip.isLooping ||
+                clip.length <= 0f || clip.length > 4f ||
+                AssetDatabase.GetDependencies(PrefabPath, true).Any(p => p.Contains("LGOAnimationImport_")))
+                throw new InvalidOperationException("Conversation must add only one short looping Humanoid clip without a source-FBX dependency.");
+            Debug.Log("LGO_KEEPER_CONVERSATION_IMPORT_PASS clips=5 human=true looping=true head_arms_mask=true default_weight=0 duration=" + clip.length);
         }
 
         private static AnimationClip[] ImportNativeClips(bool looping, params string[] names)

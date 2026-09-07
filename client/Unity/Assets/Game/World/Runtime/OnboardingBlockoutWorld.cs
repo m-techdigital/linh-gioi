@@ -23,6 +23,11 @@ namespace LinhGioi.World
         private BoxCollider _cameraVolume;
         private Renderer _keeper;
         private Animator _keeperAnimator;
+        private bool _keeperTalking;
+        private bool _keeperWasReady;
+        private float _keeperGreetingUntil;
+        private int _keeperConversationLayer;
+        private static readonly int TalkingState = Animator.StringToHash("Conversation.Talking");
         private static readonly Quaternion KeeperRestRotation = Quaternion.LookRotation(new Vector3(3f, 0f, -4f));
         private Renderer _stone;
         private TextMesh _keeperLabel;
@@ -88,6 +93,8 @@ namespace LinhGioi.World
                 .GetComponent<Renderer>().enabled = false;
             _keeperAnimator = CreateHumanoid("LGOGateKeeperCandidate", transform, KeeperPoint + Vector3.up * 0.04f);
             _keeperAnimator.name = "Blockout Keeper";
+            _keeperConversationLayer = _keeperAnimator.GetLayerIndex("Conversation");
+            if (_keeperConversationLayer < 1) throw new System.InvalidOperationException("Guide requires the masked conversation layer.");
             _keeperAnimator.transform.rotation = KeeperRestRotation;
             _keeper = _keeperAnimator.GetComponentInChildren<SkinnedMeshRenderer>();
             _stone = CreateTrainingStone();
@@ -397,7 +404,18 @@ namespace LinhGioi.World
         private void LateUpdate()
         {
             _cameraBrain.ManualUpdate();
-            var keeperFacing = DialogueVisible
+            if (KeeperReady && !_keeperWasReady) _keeperGreetingUntil = Time.time + 2.5f;
+            _keeperWasReady = KeeperReady;
+            if (DialogueVisible) _keeperGreetingUntil = 0f;
+            var conversing = DialogueVisible || (KeeperReady && Time.time < _keeperGreetingUntil);
+            if (_keeperTalking != conversing)
+            {
+                _keeperTalking = conversing;
+                if (_keeperTalking) _keeperAnimator.Play(TalkingState, _keeperConversationLayer, 0f);
+            }
+            _keeperAnimator.SetLayerWeight(_keeperConversationLayer, Mathf.MoveTowards(
+                _keeperAnimator.GetLayerWeight(_keeperConversationLayer), _keeperTalking ? 1f : 0f, Time.deltaTime / 0.15f));
+            var keeperFacing = _keeperTalking
                 ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_player.transform.position - KeeperPoint, Vector3.up))
                 : KeeperRestRotation;
             _keeperAnimator.transform.rotation = Quaternion.RotateTowards(_keeperAnimator.transform.rotation, keeperFacing, 180f * Time.deltaTime);
