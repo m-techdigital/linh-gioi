@@ -34,6 +34,8 @@ Reuse skin của demo ba ô nhân vật: nền trung tính, vàng/ngà, nút com
 
 ### Nối sảnh vào phố trong development
 
+Người Giữ Cổng trong tầm: reuse vòng vàng/texture procedural của Đá Luyện trong storyboard, đặt dưới chân NPC; hiện khi nút Gặp hợp lệ, ẩn ngoài tầm, khi thoại mở hoặc khi đã hoàn tất thoại. Đóng thoại giữa chừng trả lại focus nếu còn trong tầm. Không thêm ảnh, panel, đổi range hoặc quest. Kiểm tra tiến/lùi qua biên, mở/đóng/hoàn tất thoại và ảnh keeper-side trên các viewport.
+
 Đến sân sau Đá Luyện: guidance base hiện “Đã tới sân.” / “Nhịp linh khí đã ổn định.” trong3 giây rồi ẩn. Kích hoạt một lần trong visit, ra/vào lại không phát lại; visit mới bắt đầu theo vòng nhập môn cũ. Không popup/toast riêng, phần thưởng, EXP hoặc quest persistence; feedback chỉ xác nhận mốc di chuyển của local prototype. Nghiệm thu hiện trong safe bounds, hết hạn ẩn, không bật lại khi quay về phố; ảnh `forecourt-arrival` và `forecourt` tách trạng thái.
 
 Bồn cây theo sân vườn trong demo: giữ viền đá5x2.6m/collider/cao độ cây hiện có, thêm mặt đất trồng4.7x2.3m màu tối ởY0.305 (dày0.01m) và bóng tiếp xúc dùng helper procedural chung ởY0.315, dưới chân spriteY0.325. Không import ảnh hoặc thêm collider; material đất thuộc lifecycle world. Nghiệm thu mặt đất nằm trong viền, gốc không chìm/nổi, bóng không vẽ lên thân cây, hai vòng về sảnh thu hồi object/material; không gọi đây là vegetation/final art.

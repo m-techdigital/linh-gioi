@@ -265,11 +265,18 @@ namespace LinhGioi.UI
             }
             Interact();
             if (_session.Active) throw new InvalidOperationException("NPC opened outside interaction range.");
+            CheckKeeperFocus(false);
             yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
+            CheckKeeperFocus(true);
+            yield return WalkTo(new Vector3(0f, 0f, 1f));
+            CheckKeeperFocus(false);
+            yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
+            CheckKeeperFocus(true);
             yield return Capture(directory, "keeper-side");
             Submit(_interact);
             if (!_session.Active) throw new InvalidOperationException("NPC action did not open shared dialogue.");
             yield return Capture(directory, "dialogue");
+            CheckKeeperFocus(false);
             if (!CheckGuidance("Gặp Người Giữ Cổng.", false)) yield break;
             var bounds = _dialogue.Panel.worldBound;
             var viewport = _dialogue.Panel.parent.worldBound;
@@ -294,6 +301,8 @@ namespace LinhGioi.UI
             Submit(_dialogue.CloseButton);
             if (_session.Active || _session.Completed) throw new InvalidOperationException("Closing dialogue advanced onboarding.");
             yield return null;
+            yield return new WaitForEndOfFrame();
+            CheckKeeperFocus(true);
             Submit(_interact);
             if (_session.Progress != "1/3") throw new InvalidOperationException("Reopening did not restart dialogue.");
             Submit(_dialogue.ContinueButton);
@@ -301,6 +310,10 @@ namespace LinhGioi.UI
             if (_session.Completed) throw new InvalidOperationException("Dialogue completed before final action.");
             Submit(_dialogue.ContinueButton);
             if (!_session.Completed || _session.Active) throw new InvalidOperationException("Dialogue did not complete.");
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            CheckKeeperFocus(false);
+            Debug.Log("LGO_KEEPER_FOCUS_PASS proximity=true dialogue=true cancel=true completed=true shared_sprite=true");
             Interact();
             if (_stoneCompleted) throw new InvalidOperationException("Stone completed from NPC location.");
             yield return WalkTo(new Vector3(0f, 0f, 2.5f));
@@ -568,10 +581,22 @@ namespace LinhGioi.UI
                 : InRange ? "Chọn Gặp để trò chuyện." : "Theo đường đá đến Người Giữ Cổng.";
             _interact.text = _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp";
             _interact.SetEnabled(!_stoneCompleted && !_session.Active && InRange);
+            _world.KeeperReady = !_session.Completed && InRange;
             _world.SetStoneFeedback(_session.Completed && !_stoneCompleted && InRange, _stoneCompleted);
             if (!_capturing) _world.ScreenMovement = Application.isFocused ? _pad.Value : Vector2.zero;
             if (Input.GetKeyDown(KeyCode.F)) Interact();
             if (Input.GetKeyDown(KeyCode.Escape)) HandleEscape();
+        }
+
+        private void CheckKeeperFocus(bool visible)
+        {
+            var focus = _world.transform.Find("Blockout Keeper Focus");
+            var stone = _world.transform.Find("Blockout Stone Focus");
+            if (focus == null || focus.gameObject.activeSelf != visible)
+                throw new InvalidOperationException("Keeper focus visibility mismatch: expected=" + visible);
+            if (focus.GetComponent<SpriteRenderer>().sprite == null ||
+                focus.GetComponent<SpriteRenderer>().sprite != stone.GetComponent<SpriteRenderer>().sprite)
+                throw new InvalidOperationException("Keeper and stone must share their focus sprite.");
         }
 
         private static void Submit(Button button)

@@ -24,6 +24,7 @@ namespace LinhGioi.World
         private TextMesh _keeperLabel;
         private TextMesh _stoneLabel;
         private SpriteRenderer _stoneFocus;
+        private SpriteRenderer _keeperFocus;
         private bool _stoneReady;
         private float _stoneCompletedAt = -1f;
         private bool _stoneFacingActive;
@@ -82,11 +83,8 @@ namespace LinhGioi.World
             _stoneLabel = WorldLabelPresenter.Create("Blockout Stone Label", "Đá Luyện", StonePoint, RuntimeArtCatalog.Gold);
             _keeperLabel.transform.SetParent(transform, true);
             _stoneLabel.transform.SetParent(transform, true);
-            _stoneFocus = WorldProceduralVisuals.CreateGroundGlowSprite("Blockout Stone Focus",
-                WorldProceduralVisuals.GetWorldPlatformGlowSprite(), StonePoint + Vector3.up * 0.025f,
-                Vector3.one * 1.6f, RuntimeArtCatalog.Gold, 4);
-            _stoneFocus.transform.SetParent(transform);
-            _stoneFocus.gameObject.SetActive(false);
+            _stoneFocus = CreateInteractionFocus("Blockout Stone Focus", StonePoint);
+            _keeperFocus = CreateInteractionFocus("Blockout Keeper Focus", KeeperPoint);
 
             var player = new GameObject("Blockout player proxy");
             player.tag = "Player";
@@ -354,6 +352,17 @@ namespace LinhGioi.World
         }
 
         public bool DialogueVisible { get; set; }
+        public bool KeeperReady { get; set; }
+
+        private SpriteRenderer CreateInteractionFocus(string name, Vector3 point)
+        {
+            var focus = WorldProceduralVisuals.CreateGroundGlowSprite(name,
+                WorldProceduralVisuals.GetWorldPlatformGlowSprite(), point + Vector3.up * 0.025f,
+                Vector3.one * 1.6f, RuntimeArtCatalog.Gold, 4);
+            focus.transform.SetParent(transform);
+            focus.gameObject.SetActive(false);
+            return focus;
+        }
 
         public void SetStoneFeedback(bool ready, bool completed)
         {
@@ -369,6 +378,7 @@ namespace LinhGioi.World
         private void LateUpdate()
         {
             _cameraBrain.ManualUpdate();
+            _keeperFocus.gameObject.SetActive(!DialogueVisible && KeeperReady);
             _keeperLabel.gameObject.SetActive(!DialogueVisible);
             _stoneLabel.gameObject.SetActive(!DialogueVisible);
             WorldLabelPresenter.PlaceAbove(_keeperLabel, _keeper);
