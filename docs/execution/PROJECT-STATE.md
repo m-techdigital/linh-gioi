@@ -8,6 +8,12 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Checkpoint mới nhất camera/pulse: `held-clock-{desktop,tablet,mobile}.log` cả ba exit 0 và quick `camera-pulse-checkpoint-quick.log` qua, không đổi movement/deadline; đã xem desktop arrival/tablet camera-exit. Main pulse ba profile đã được review, không đổi main từ evidence đó. Cold start 3 red -> 3 green; lỗi held travel 2.4m cũ chưa xác định nguyên nhân, không gộp thành lỗi môi trường. Tiếp model/rig nhập môn theo turnaround có sẵn, không mở hệ thống ngoài roadmap. Chưa art cuối/visual PASS/CPU benchmark. Các đoạn dưới ghi diễn biến trước checkpoint.
+
+Camera cold start: 3/3 red tại 2 FPS -> 3/3 green bằng cập nhật standby mỗi frame, ảnh đúng trục phố đã xem; quick qua. Chưa full-route pass: giữ input thiếu quãng đường ở lượt PC, lần chẩn đoán sau bị foreground cản và process đã kết thúc. Không gộp lỗi chưa đủ dữ liệu thành môi trường, không commit/visual PASS; tiếp phân biệt timing/focus/input trước chốt batch camera + pulse.
+
+Main gần đá không còn mảng cyan đặc: dùng ground glow chung thay cube, ba profile/quick/pose validator qua, ảnh PC/mobile đã xem. Fixture inactive đã sửa; trước đó không phải red đáng tin cho loại component. Camera arrival vẫn chưa tái hiện bằng probe, chưa thay cấu hình; tiếp khởi tạo/focus/warmup. Source đang gom, chưa commit/visual PASS.
+
 Guidance nhập môn có view chung main/blockout; chữ mobile dễ đọc hơn, mục tiêu theo tiến trình và ẩn khi thoại. Ba profile preview, main regression, quick/density validator qua; đã xem ảnh. Còn lỗi camera arrival chọn góc bên và mảng cyan sau nhân vật ở main gần đá, tiếp truy nguyên bằng evidence; chưa visual PASS/model phù hợp hoặc cuộn gesture.
 
 Đá Luyện riêng blockout đã chuyển từ sprite sang mesh nhẹ theo demo thể tích; giữ collider/feedback, ánh sáng môi trường Flat giúp vùng bóng dễ đọc. Ba profile `stone-volume-final-*` và quick qua, ảnh đã xem; camera bốn mép ngõ không tái hiện che nhân vật. Tiếp model/rig có license theo turnaround nhập môn; chưa main integration/visual PASS hoặc art cuối.

@@ -30,7 +30,7 @@ namespace LinhGioi.World
         private Renderer _markerRenderer;
         private Transform _posePulse;
         private Transform _gateKeeperGuidePulse;
-        private Transform _trainingSpiritPulse;
+        private SpriteRenderer _trainingSpiritPulse;
         private Transform _shadowWarningPulse;
         private Transform _portalGatePulse;
         private Transform _windSlashPreview;
@@ -827,7 +827,9 @@ namespace LinhGioi.World
             }
             if (_trainingSpiritPulse == null)
             {
-                _trainingSpiritPulse = CreateMarkerCube("LGO Training Stone Spirit Channel Pulse", TrainingStonePosition + Vector3.up * 0.12f, RuntimeArtCatalog.Spirit, new Vector3(1.8f, 0.08f, 1.8f)).transform;
+                _trainingSpiritPulse = WorldProceduralVisuals.CreateGroundGlowSprite("LGO Training Stone Spirit Channel Pulse",
+                    WorldProceduralVisuals.GetWorldPlatformGlowSprite(), TrainingStonePosition + Vector3.up * 0.025f,
+                    Vector3.one * 1.8f, RuntimeArtCatalog.Gold, 3);
             }
             if (_shadowWarningPulse == null)
             {
@@ -846,7 +848,10 @@ namespace LinhGioi.World
             if (_gateKeeperGuidePulse != null)
                 _gateKeeperGuidePulse.gameObject.SetActive(_guidedStep == GuidedTrainingStep.FindGateKeeper || _gateKeeperState == PlaceholderNpcState.TalkGuide);
             if (_trainingSpiritPulse != null)
+            {
+                _trainingSpiritPulse.color = _playerPoseState == PlaceholderPoseState.SpiritChannel ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Gold;
                 _trainingSpiritPulse.gameObject.SetActive(_guidedStep == GuidedTrainingStep.FindTrainingStone || _playerPoseState == PlaceholderPoseState.SpiritChannel);
+            }
             if (_shadowWarningPulse != null)
                 _shadowWarningPulse.gameObject.SetActive(_shadowSlimeState == PlaceholderSlimeState.AlertWarning);
             if (_playerSprite == null)

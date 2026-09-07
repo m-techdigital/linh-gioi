@@ -457,6 +457,12 @@ namespace LinhGioi.UI
                 throw new InvalidOperationException("Near stone guidance must name the available on-screen action.");
             if (!approaching && !_worldTouchPrimaryActionButton.enabledSelf)
                 throw new InvalidOperationException("Guided action must re-enable inside interaction range.");
+            GameObject stonePulse = null;
+            foreach (var candidate in UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+                if (candidate.name == "LGO Training Stone Spirit Channel Pulse") stonePulse = candidate.gameObject;
+            if (stonePulse == null || stonePulse.GetComponent<SpriteRenderer>() == null || stonePulse.GetComponent<Collider>() != null)
+                throw new InvalidOperationException("Training focus must be a transparent ground sprite, not an opaque collider marker: "
+                    + (stonePulse == null ? "missing" : stonePulse.GetComponent<SpriteRenderer>() == null ? "not_sprite" : "collider"));
         }
 
         internal void CaptureEvidenceTrainingComplete()

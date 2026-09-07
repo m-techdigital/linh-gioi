@@ -98,10 +98,28 @@ namespace LinhGioi.UI
             var index = Array.IndexOf(args, "--lgo-blockout-evidence-dir");
             if (index < 0 || index + 1 >= args.Length) yield break;
             _capturing = true;
+            var arrivalProbe = Array.IndexOf(args, "--lgo-arrival-probe") >= 0;
+            if (arrivalProbe)
+            {
+                QualitySettings.vSyncCount = 0;
+                Application.targetFrameRate = 2;
+            }
             var directory = Path.GetFullPath(args[index + 1]);
             Directory.CreateDirectory(directory);
             yield return new WaitForSeconds(1f);
             yield return Capture(directory, "arrival");
+            _world.LogCameraShots();
+            if (Vector3.Dot(Camera.main.transform.forward, Vector3.forward) < 0.9f)
+            {
+                Debug.LogError("LGO_ARRIVAL_CAMERA_FAIL expected street-facing composition");
+                Application.Quit(1);
+                yield break;
+            }
+            if (arrivalProbe)
+            {
+                Application.Quit(0);
+                yield break;
+            }
             var objective = GetComponent<UIDocument>().rootVisualElement.Q<Label>("LGO World Objective Touch Priority");
             if (objective == null || !objective.text.Contains("Người Giữ Cổng"))
             {
@@ -203,9 +221,14 @@ namespace LinhGioi.UI
             var movementStart = _world.Position;
             var screenForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
             _world.ScreenMovement = Vector2.down;
+            var heldStarted = Time.time;
+            var heldFrame = Time.frameCount;
             var inputDeadline = Time.realtimeSinceStartup + 3f;
             while (Vector3.Distance(_world.Position, movementStart) < 7.2f && Time.realtimeSinceStartup < inputDeadline)
                 yield return null;
+            Debug.Log("LGO_HELD_INPUT_MEASURE simulation=" + (Time.time - heldStarted) + " frames=" + (Time.frameCount - heldFrame)
+                + " real=" + (Time.realtimeSinceStartup - inputDeadline + 3f) + " input=" + _world.ScreenMovement
+                + " position=" + _world.Position + " focused=" + Application.isFocused);
             _world.ScreenMovement = Vector2.zero;
             yield return null;
             yield return Capture(directory, "camera-exit");
@@ -218,7 +241,8 @@ namespace LinhGioi.UI
             }
             if (Vector3.Dot(travel, -screenForward) < 6.5f || Vector3.Cross(travel, screenForward).magnitude > 0.2f)
             {
-                Debug.LogError("LGO_CAMERA_INPUT_FAIL held direction changed during camera switch travel=" + travel);
+                Debug.LogError("LGO_CAMERA_INPUT_FAIL held travel outside expected corridor travel=" + travel
+                    + " focused=" + Application.isFocused);
                 Application.Quit(1);
                 yield break;
             }
@@ -359,6 +383,7 @@ namespace LinhGioi.UI
 
         private void OnApplicationFocus(bool focused)
         {
+            if (_capturing) Debug.Log("LGO_BLOCKOUT_FOCUS focused=" + focused + " time=" + Time.realtimeSinceStartup);
             _pad?.ResetInput();
             if (_world != null) _world.ResetMovementInput();
         }

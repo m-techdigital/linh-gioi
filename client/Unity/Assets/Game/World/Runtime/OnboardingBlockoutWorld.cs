@@ -120,6 +120,8 @@ namespace LinhGioi.World
             var rig = new GameObject("Blockout camera shot " + offset);
             rig.transform.SetParent(parent);
             var virtualCamera = rig.AddComponent<CinemachineCamera>();
+            // ClearShot must compare current obstacle scores, including during slow startup frames.
+            virtualCamera.StandbyUpdate = CinemachineVirtualCameraBase.StandbyUpdateMode.Always;
             virtualCamera.Priority.Value = priority;
             virtualCamera.Follow = tracking;
             virtualCamera.LookAt = tracking;
@@ -170,6 +172,14 @@ namespace LinhGioi.World
             Movement = Vector2.zero;
             ScreenMovement = Vector2.zero;
             _screenInputHeld = false;
+        }
+
+        public void LogCameraShots()
+        {
+            Debug.Log("LGO_ARRIVAL_CAMERA frame=" + Time.frameCount + " forward=" + _camera.transform.forward + " focused=" + Application.isFocused);
+            foreach (var shot in GetComponentsInChildren<CinemachineCamera>())
+                Debug.Log("LGO_ARRIVAL_SHOT priority=" + shot.Priority.Value + " quality=" + shot.State.ShotQuality.ToString("R")
+                    + " position=" + shot.transform.position);
         }
 
         public bool DialogueVisible { get; set; }
