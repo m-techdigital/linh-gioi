@@ -228,7 +228,7 @@ namespace LinhGioi.World
         {
             // Gateway beyond the garden supplies the vista, never an invisible walking barrier.
             var z=44f;
-            Box(_ivory,new Vector3(0,-.16f,51f),new Vector3(34f,.2f,48f));
+            GatewayGardens();
             for(var side=-1;side<=1;side+=2)
             {
                 Box(_ivory,new Vector3(side*5.65f,3.2f,z),new Vector3(2f,6.4f,2f));
@@ -257,6 +257,44 @@ namespace LinhGioi.World
                 Box(_gold,new Vector3(side*3.77f,.008f,7),new Vector3(.035f,.008f,33));
             }
         }
+        private void GatewayGardens()
+        {
+            // Reference city courtyards: distant scenery only, beyond the existing garden boundary.
+            Box(_leaf,new Vector3(0,-.18f,51f),new Vector3(38f,.2f,48f));
+            Box(_ivory,new Vector3(0,-.07f,51f),new Vector3(10f,.12f,48f));
+            Box(_ivory,new Vector3(0,-.04f,42.5f),new Vector3(33f,.10f,4f));
+            for(var side=-1;side<=1;side+=2)
+            {
+                Box(_ivory,new Vector3(side*18f,1.1f,49f),new Vector3(.45f,2.2f,44f));
+                Box(_navy,new Vector3(side*18f,2.25f,49f),new Vector3(.72f,.16f,44f));
+                // Garden terraces break up the open plane while keeping the central gate vista clear.
+                for(var row=0;row<2;row++)
+                {
+                    var z=32f+row*6.1f;
+                    Box(_ivory,new Vector3(side*8.8f,.11f,z),new Vector3(6.3f,.22f,4.8f));
+                    Box(_leaf,new Vector3(side*8.8f,.24f,z),new Vector3(5.9f,.06f,4.4f));
+                    if(row==1) Tree(new Vector3(side*10.1f,.28f,z),4.1f,false);
+                }
+                for(var row=0;row<2;row++)
+                {
+                    var centre=new Vector3(side*14.8f,0,32.5f+row*6.1f);
+                    Box(_ivory,centre+Vector3.up*.16f,new Vector3(3.4f,.32f,6f));
+                    Roof(centre+Vector3.up*3.15f,new Vector3(1.95f,.8f,3.2f));
+                    for(var x=-1;x<=1;x+=2)for(var z=-1;z<=1;z+=2)
+                    {
+                        var post=centre+new Vector3(x*1.38f,1.73f,z*2.75f);
+                        Box(_wood,post,new Vector3(.18f,2.82f,.18f));
+                        Beam(_wood,post+Vector3.up*.85f,post+new Vector3(-x*.35f,1.35f,0),.12f);
+                    }
+                    for(var x=-1;x<=1;x+=2)
+                        Box(_wood,centre+new Vector3(x*1.38f,2.99f,0),new Vector3(.18f,.18f,5.7f));
+                    // Solid rear parapet and sparse rails ground the covered gallery at human scale.
+                    Box(_ivory,centre+new Vector3(side*1.42f,.63f,0),new Vector3(.20f,.62f,5.7f));
+                    Box(_wood,centre+new Vector3(side*1.42f,1.01f,0),new Vector3(.24f,.10f,5.8f));
+                }
+            }
+        }
+
         private void Tower(Vector3 p,float height)
         {
             const int levels=3;
