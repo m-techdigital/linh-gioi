@@ -82,6 +82,8 @@ namespace LinhGioi.Foundation.Editor
                 AssetDatabase.CreateAsset(asset, PipelinePath);
             }
 
+            // Native-resolution art review needs antialiased mesh edges in the active URP asset.
+            asset.msaaSampleCount = 4;
             EnsureUrpDefaultRenderer(asset);
             // Runtime daylight requests soft shadows; the generated asset must retain their shader support.
             var serializedAsset = new SerializedObject(asset);

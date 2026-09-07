@@ -1,0 +1,16 @@
+{
+  "1": {"key": "Headwear", "label": "Mũ"},
+  "2": {"key": "Head", "label": "Đầu và mặt"},
+  "3": {"key": "Hair", "label": "Tóc"},
+  "10": {"key": "UpperBody", "label": "Áo và tay áo"},
+  "11": {"key": "LowerBody", "label": "Quần"},
+  "12": {"key": "Cape", "label": "Áo choàng"},
+  "13": {"key": "Gloves", "label": "Găng tay"},
+  "14": {"key": "Boots", "label": "Giày hoặc ủng"},
+  "15": {"key": "Shoulders", "label": "Giáp vai"},
+  "16": {"key": "Accessories", "label": "Đai, bội và phụ kiện"},
+  "17": {"key": "MainHand", "label": "Vũ khí chính"},
+  "18": {"key": "OffHand", "label": "Vũ khí hoặc đồ tay phụ"},
+  "19": {"key": "Eyes", "label": "Mắt riêng khi cần"},
+  "20": {"key": "FacialHair", "label": "Râu khi có"}
+}

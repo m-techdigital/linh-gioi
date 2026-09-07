@@ -147,6 +147,47 @@ namespace LinhGioi.UI
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            var qualityIndex = Array.IndexOf(args, "--lgo-character-quality-review");
+            if (qualityIndex >= 0 && qualityIndex + 1 < args.Length)
+            {
+                _capturing = true;
+                yield return new WaitForSeconds(1f);
+                var qualityDirectory = Path.GetFullPath(args[qualityIndex + 1]);
+                Directory.CreateDirectory(qualityDirectory);
+                GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                var qualityKeeper = GameObject.Find("Blockout Keeper").GetComponent<Animator>();
+                var review = gameObject.AddComponent<CharacterQualityReviewCamera>();
+                review.Configure(Camera.main, qualityKeeper);
+                foreach (var angle in new[] { 0f, 90f, 180f })
+                {
+                    review.Angle = angle;
+                    yield return new WaitForSeconds(0.2f);
+                    yield return Capture(qualityDirectory, "keeper-idle-" + angle);
+                }
+                review.Angle = 0f;
+                _world.GuideToStone();
+                yield return new WaitForSeconds(0.7f);
+                if (!_world.KeeperGuiding) throw new InvalidOperationException("Keeper pointing pose was not active during quality review.");
+                yield return Capture(qualityDirectory, "keeper-point-front");
+                review.Angle = 180f;
+                yield return new WaitForSeconds(0.2f);
+                yield return Capture(qualityDirectory, "keeper-point-back");
+                yield return new WaitForSeconds(2f);
+                if (_world.KeeperGuiding) throw new InvalidOperationException("Keeper pointing pose did not finish during quality review.");
+                yield return Capture(qualityDirectory, "keeper-return-back");
+                // Arrival shares the retained half of the expanded body atlas.
+                review.Configure(Camera.main, GameObject.Find("Blockout player proxy").GetComponentInChildren<Animator>());
+                foreach (var angle in new[] { 0f, 180f })
+                {
+                    review.Angle = angle;
+                    yield return new WaitForSeconds(0.2f);
+                    yield return Capture(qualityDirectory, "player-shared-atlas-" + angle);
+                }
+                Debug.Log("LGO_CHARACTER_QUALITY_CAPTURE_COMPLETE frames=8 runtime=true gameplay_camera=false width="
+                    + Screen.width + " height=" + Screen.height);
+                Application.Quit(0);
+                yield break;
+            }
             var keeperVideoIndex = Array.IndexOf(args, "--lgo-keeper-motion-video");
             if (keeperVideoIndex >= 0 && keeperVideoIndex + 1 < args.Length)
             {
@@ -323,16 +364,17 @@ namespace LinhGioi.UI
             ulong keeperTriangles = 0;
             for (var submesh = 0; submesh < keeperMesh.sharedMesh.subMeshCount; submesh++)
                 keeperTriangles += keeperMesh.sharedMesh.GetIndexCount(submesh) / 3;
-            if (keeperTriangles == 0 || keeperTriangles > 25000 || keeperMesh.sharedMaterials.Length != 2)
-                throw new InvalidOperationException("Gate Keeper exceeds the candidate geometry/material budget.");
+            if (keeperTriangles == 0 || keeperMesh.sharedMaterials.Length != 2)
+                throw new InvalidOperationException("Gate Keeper has invalid geometry or material sections.");
             for (var section = 0; section < keeperMesh.sharedMaterials.Length; section++)
             {
                 var atlas = keeperMesh.sharedMaterials[section].GetTexture("_BaseMap");
-                var limit = section == 0 ? 512 : 256;
-                if (atlas == null || atlas.width > limit || atlas.height > limit)
-                    throw new InvalidOperationException("Gate Keeper is missing its bounded body/face atlas: " + section);
+                var atlasWidth = section == 0 ? 4096 : 1024;
+                var atlasHeight = section == 0 ? 2048 : 512;
+                if (atlas == null || atlas.width != atlasWidth || atlas.height != atlasHeight)
+                    throw new InvalidOperationException("Gate Keeper is missing its native review body/face atlas: " + section);
             }
-            Debug.Log("LGO_KEEPER_RECONSTRUCTION_BUDGET_PASS triangles=" + keeperTriangles + " materials=2 body_max=512 face_max=256");
+            Debug.Log("LGO_KEEPER_RECONSTRUCTION_BUDGET_PASS triangles=" + keeperTriangles + " materials=2 body_native=4096x2048 face_native=1024x512");
             var keeperSnapshot = new Mesh();
             var keeperGround = float.PositiveInfinity;
             try

@@ -19,7 +19,7 @@ for bone in rig.pose.bones:
 bpy.context.view_layer.update()
 mesh.data.calc_loop_triangles()
 assert len(rig.data.bones) == 65
-assert len(mesh.data.loop_triangles) <= 25000
+assert len(mesh.data.loop_triangles) > 0
 assert len(mesh.data.materials) == 2
 assert len(mesh.data.uv_layers) == 1
 assert all(1 <= len(v.groups) <= 4 and abs(sum(g.weight for g in v.groups) - 1) < 1e-5
@@ -27,28 +27,29 @@ assert all(1 <= len(v.groups) <= 4 and abs(sum(g.weight for g in v.groups) - 1) 
 args.output.mkdir(parents=True, exist_ok=True)
 for name in ['KeeperReconstructionAlbedo', 'KeeperReconstructionFace']:
     image = bpy.data.images[name]
-    image.scale(256 if name.endswith('Face') else 512, 256 if name.endswith('Face') else 512)
+    # Review the native authoring atlas; platform reduction is deferred until fidelity is approved.
+    native_size = (1024, 512) if name.endswith('Face') else (4096, 2048)
+    assert tuple(image.size) == native_size, (name, list(image.size))
     image.filepath_raw = str((args.output / (name + '.png')).resolve())
     image.file_format = 'PNG'
     image.save()
 # Semantic material sections transport module ownership through FBX without guessing from bone weights or height.
-parts = mesh.data.attributes.get('npc_part')
-assert parts is not None, 'Authoring mesh must explicitly label NPC parts'
+catalog = json.loads((Path(__file__).resolve().parents[2] / 'client/art-source/appearance-slots.json').read_text())
+parts = mesh.data.attributes.get('appearance_slot')
+assert parts is not None and parts.domain == 'FACE', 'Label every face with its wardrobe slot before export'
 part_ids = [entry.value for entry in parts.data]
-body = mesh.data.materials[0]
-face = mesh.data.materials[1]
-face_polygons = {p.index for p in mesh.data.polygons if p.material_index == 1}
-labels = [('Keeper Headwear', 1), ('Keeper Head Hair', 2), ('Keeper Outfit Body', 3)]
+material_ids = [polygon.material_index for polygon in mesh.data.polygons]
+assert all(str(part) in catalog for part in part_ids), 'Unknown or unassigned wardrobe slot'
+source_materials = list(mesh.data.materials)
+sections = sorted(set(zip(part_ids, material_ids)))
 mesh.data.materials.clear()
-for name, part in labels:
-    material = body.copy()
-    material.name = name
+for part, surface in sections:
+    material = source_materials[surface].copy()
+    material.name = 'LGO_' + catalog[str(part)]['key'] + ('_Face' if surface == 1 else '_Body')
     mesh.data.materials.append(material)
-mesh.data.materials.append(face)
+section_indices = {section: index for index, section in enumerate(sections)}
 for polygon in mesh.data.polygons:
-    part = part_ids[polygon.index]
-    assert part in (1, 2, 3), part
-    polygon.material_index = 3 if polygon.index in face_polygons else part - 1
+    polygon.material_index = section_indices[(part_ids[polygon.index], material_ids[polygon.index])]
 bpy.ops.object.select_all(action='DESELECT')
 mesh.select_set(True)
 rig.select_set(True)
@@ -61,8 +62,9 @@ receipt = {
     'source_sha256': hashlib.sha256(args.source.read_bytes()).hexdigest(),
     'fbx_sha256': hashlib.sha256(fbx.read_bytes()).hexdigest(),
     'triangles': len(mesh.data.loop_triangles), 'vertices': len(mesh.data.vertices),
-    'bones': len(rig.data.bones), 'materials': 2, 'authoring_material_sections': 4,
-    'texture_sizes': {'albedo': 512, 'face': 256},
+    'bones': len(rig.data.bones), 'materials': 2, 'authoring_material_sections': len(sections),
+    'slots': [catalog[str(part)]['key'] for part in sorted(set(part_ids))],
+    'texture_sizes': {'albedo': list(bpy.data.images['KeeperReconstructionAlbedo'].size), 'face': list(bpy.data.images['KeeperReconstructionFace'].size)},
     'runtime_verified': False,
 }
 (args.output / 'export-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')

@@ -1,5 +1,7 @@
 # Linh Giới Online — Project State
 
+- Checkpoint NPC modular 2026-09-08: remake áo/tay/găng/ủng/cape/tóc liền khối; mũ kín và dùng SharedHumanoidAvatar chuẩn để thay đồ không làm sai cổ/cột sống. 9 slot tác giả theo `client/art-source/appearance-slots.json`, ghép runtime một renderer/hai material,43.981tri/26.623vertex; chưa có chọn đồ động. Build `keeper-hair-clearance-build.log`381.649.555B/0 lỗi/0 cảnh báo; import cuối bảo toàn9 phần, pipeline4/4 tests và module1/1 trước chỉnh clearance tóc. Đã xem8 ảnh1920×1080 tại `build/visual-evidence/keeper-wardrobe-checkpoint-desktop/frames/`: không còn gai tay/giày hoặc đầu gập; tóc/cape liền hơn. Chưa art final: hoa văn nón/chất liệu tóc/mặt nghiêng/nối eo và player còn cần macro. NEXT: áp dụng công thức chung cho trang phục player theo design, dùng Avatar chuẩn, giữ chất lượng PC; không chạy lại toàn tuyến UI hoặc tối ưu mobile sớm. Công thức và nguồn Dota2/Epic: `docs/art/LGO-MODULAR-WARDROBE.md`.
+
 Last updated: `2026-09-08`
 
 ## Continuous workflow status

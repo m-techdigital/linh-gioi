@@ -10,16 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14edead7774e3485ba0262241a832dc8, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: LinhGioi.Foundation.Editor::LinhGioi.Foundation.Editor.NpcAppearanceRecipe
   Slots:
+  - Head
+  - UpperBody
+  - Boots
+  - LowerBody
+  - Gloves
+  - Cape
+  - Shoulders
   - Headwear
-  - HeadAndHair
-  - OutfitAndBody
+  - Hair
   Parts:
+  - {fileID: 4300000, guid: 1176d35c151514a4f85c551562ee7f11, type: 2}
+  - {fileID: 4300000, guid: fad9ee7843b9845c69876ec0f50538ef, type: 2}
+  - {fileID: 4300000, guid: 50efa6f966bd8457b853028b8799fd91, type: 2}
+  - {fileID: 4300000, guid: 70e9900b308d947829383679311124a5, type: 2}
+  - {fileID: 4300000, guid: e69a7b684e74849ddb32b1a4235e21e1, type: 2}
+  - {fileID: 4300000, guid: a7213801e24a8407faf3dcf1a5846fef, type: 2}
+  - {fileID: 4300000, guid: 321d1e6c6d6d94409999cb1dcff86ab9, type: 2}
   - {fileID: 4300000, guid: 39f4e3dbea3d943f3b55e58a980dd027, type: 2}
-  - {fileID: 4300000, guid: 96d93c925d5a3423387cdda45cd4a705, type: 2}
-  - {fileID: 4300000, guid: 358b767c8c472402ba766afb912818e6, type: 2}
+  - {fileID: 4300000, guid: 34c5c606d528b4bba9da60a83c0a9dc5, type: 2}
   Materials:
   - {fileID: 2100000, guid: 3ef868d46cbd24f5fb0cec70e7e420b5, type: 2}
   - {fileID: 2100000, guid: 89344bd785c034e6fa367c4a69a46d32, type: 2}
@@ -90,5 +102,5 @@ MonoBehaviour:
   - ball_r
   - ball_leaf_r
   Bounds:
-    m_Center: {x: 0.0000044619665, y: 0.00001891097, z: 0.008828088}
-    m_Extent: {x: 0.0072292024, y: 0.00557878, z: 0.009651595}
+    m_Center: {x: 0.0000000023283064, y: 0.0005829567, z: 0.009209639}
+    m_Extent: {x: 0.008000206, y: 0.0052251993, z: 0.010233528}

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f7ccb15a78cd14abf8cd7bfff831fe2e, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: LinhGioi.Foundation::LinhGioi.Foundation.NpcAppearancePreset
   Mesh: {fileID: 4300000, guid: 30bbb0cc6808748719da9cf8e548d042, type: 2}
   Materials:
@@ -83,5 +83,5 @@ MonoBehaviour:
   - ball_r
   - ball_leaf_r
   Bounds:
-    m_Center: {x: 0.0000044619665, y: 0.00001891097, z: 0.008828088}
-    m_Extent: {x: 0.0072292024, y: 0.00557878, z: 0.009651595}
+    m_Center: {x: 0.0000000023283064, y: 0.0005829567, z: 0.009209639}
+    m_Extent: {x: 0.008000206, y: 0.0052251993, z: 0.010233528}

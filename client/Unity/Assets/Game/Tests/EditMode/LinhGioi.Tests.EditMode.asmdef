@@ -12,7 +12,8 @@
     "UnityEngine.UIElementsModule",
     "LinhGioi.Combat",
     "LinhGioi.CombatUI",
-    "LinhGioi.GameData"
+    "LinhGioi.GameData",
+    "LinhGioi.Foundation.Editor"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"

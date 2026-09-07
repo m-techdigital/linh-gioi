@@ -1316,12 +1316,12 @@ Avatar:
     m_RootMotionSkeleton:
       data:
         m_Node: []
-        m_ID:
+        m_ID: 
         m_AxesArray: []
     m_RootMotionSkeletonPose:
       data:
         m_X: []
-    m_RootMotionSkeletonIndexArray:
+    m_RootMotionSkeletonIndexArray: 
   m_TOS:
     524776012: Armature/root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/index_01_l/index_02_l/index_03_l
     888203924: Armature/root/pelvis/spine_01/spine_02/spine_03/clavicle_l/upperarm_l/lowerarm_l/hand_l/ring_01_l/ring_02_l/ring_03_l/ring_04_leaf_l
@@ -1340,7 +1340,7 @@ Avatar:
     4092845597: Armature/root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r
     3307572858: Armature/root/pelvis/spine_01/spine_02/spine_03/neck_01
     2514048784: Armature/root/pelvis/spine_01/spine_02/spine_03/neck_01/Head
-    0:
+    0: 
     2678148363: Armature/root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/thumb_01_r/thumb_02_r/thumb_03_r
     2242190608: Armature/root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/pinky_01_r/pinky_02_r
     2482149206: Armature/root/pelvis/spine_01/spine_02/spine_03/clavicle_r/upperarm_r/lowerarm_r/hand_r/middle_01_r/middle_02_r
@@ -1812,7 +1812,7 @@ Avatar:
         m_Modified: 0
     m_Skeleton:
     - m_Name: ArrivalScene(Clone)
-      m_ParentName:
+      m_ParentName: 
       m_Position: {x: 0, y: 0, z: 0}
       m_Rotation: {x: 0, y: 0, z: 0, w: 1}
       m_Scale: {x: 1, y: 1, z: 1}
@@ -2159,7 +2159,7 @@ Avatar:
     m_LegStretch: 0.05
     m_FeetSpacing: 0
     m_GlobalScale: 1
-    m_RootMotionBoneName:
+    m_RootMotionBoneName: 
     m_HasTranslationDoF: 0
     m_HasExtraRoot: 0
     m_SkeletonHasParents: 0

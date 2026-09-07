@@ -67,6 +67,20 @@ namespace LinhGioi.Foundation.Editor
         private static void ConfigureHumanoid(string path, bool animations)
         {
             var importer = (ModelImporter)AssetImporter.GetAtPath(path);
+            if (path == Directory + "GateKeeper.fbx")
+            {
+                // Appearance geometry must not make Unity infer a different spine/neck reference pose.
+                var shared = AssetDatabase.LoadAssetAtPath<Avatar>(Directory + "SharedHumanoidAvatar.asset");
+                if (shared == null || !shared.isValid || !shared.isHuman)
+                    throw new InvalidOperationException("Keeper requires the verified shared Humanoid Avatar.");
+                importer.animationType = ModelImporterAnimationType.Human;
+                importer.avatarSetup = ModelImporterAvatarSetup.CopyFromOther;
+                importer.sourceAvatar = shared;
+                importer.importAnimation = false;
+                importer.isReadable = false;
+                importer.SaveAndReimport();
+                return;
+            }
             var names = new Dictionary<string, string>
             {
                 { "Hips", "pelvis" }, { "Spine", "spine_01" }, { "Chest", "spine_02" },
@@ -126,23 +140,18 @@ namespace LinhGioi.Foundation.Editor
         {
             var path = Directory + "GateKeeper.fbx";
             ConfigureHumanoid(path, false);
-            ValidateModel(path, 4);
+            ValidateModel(path, 0);
             foreach (var name in new[] { "KeeperReconstructionAlbedo", "KeeperReconstructionFace" })
             {
                 var settings = (TextureImporter)AssetImporter.GetAtPath(Directory + name + ".png");
                 if (settings == null) throw new InvalidOperationException("Missing keeper atlas: " + name);
-                settings.maxTextureSize = name.EndsWith("Face", StringComparison.Ordinal) ? 256 : 512;
+                settings.maxTextureSize = name.EndsWith("Face", StringComparison.Ordinal) ? 1024 : 4096;
                 settings.mipmapEnabled = true;
                 settings.isReadable = false;
-                settings.textureCompression = TextureImporterCompression.CompressedHQ;
+                settings.textureCompression = TextureImporterCompression.Uncompressed;
+                settings.anisoLevel = 4;
                 foreach (var platform in new[] { "Android", "iPhone" })
-                {
-                    var mobile = settings.GetPlatformTextureSettings(platform);
-                    mobile.overridden = true;
-                    mobile.maxTextureSize = settings.maxTextureSize;
-                    mobile.format = TextureImporterFormat.ASTC_6x6;
-                    settings.SetPlatformTextureSettings(mobile);
-                }
+                    settings.ClearPlatformTextureSettings(platform);
                 settings.SaveAndReimport();
             }
             var portrait = (TextureImporter)AssetImporter.GetAtPath(Directory + "Resources/LGOGateKeeperPortrait.png");
@@ -153,7 +162,7 @@ namespace LinhGioi.Foundation.Editor
             portrait.alphaIsTransparency = true;
             portrait.textureCompression = TextureImporterCompression.CompressedHQ;
             portrait.SaveAndReimport();
-            Debug.Log("LGO_KEEPER_MODEL_READY semantic_sections=4 runtime_atlases=2");
+            Debug.Log("LGO_KEEPER_MODEL_READY semantic_sections=wardrobe_slots runtime_atlases=2");
         }
 
         private static void SaveCandidatePrefab(string modelPath, string prefabPath)
@@ -382,13 +391,16 @@ namespace LinhGioi.Foundation.Editor
         private static void ValidateModel(string modelPath, int materialSections = 6)
         {
             AssetDatabase.ImportAsset(modelPath, ImportAssetOptions.ForceSynchronousImport);
-            var avatar = AssetDatabase.LoadAllAssetsAtPath(modelPath).OfType<Avatar>().FirstOrDefault();
+            var importedAnimator = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath).GetComponent<Animator>();
+            var avatar = importedAnimator != null ? importedAnimator.avatar : ((ModelImporter)AssetImporter.GetAtPath(modelPath)).sourceAvatar;
             if (avatar == null || !avatar.isValid || !avatar.isHuman)
                 throw new InvalidOperationException("Arrival outfit requires a valid Humanoid Avatar.");
             var model = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
             var renderers = model.GetComponentsInChildren<SkinnedMeshRenderer>();
-            if (renderers.Length != 1 || renderers[0].sharedMesh.subMeshCount != materialSections)
+            if (renderers.Length != 1 || (materialSections > 0 && renderers[0].sharedMesh.subMeshCount != materialSections))
                 throw new InvalidOperationException("Character must retain one skinned mesh and " + materialSections + " material sections.");
+            if (materialSections == 0)
+                foreach (var material in renderers[0].sharedMaterials) NpcAppearanceBaker.ParseSection(material.name);
             var baked = new Mesh();
             Bounds bounds;
             try
@@ -403,7 +415,7 @@ namespace LinhGioi.Foundation.Editor
             finally { UnityEngine.Object.DestroyImmediate(baked); }
             if (bounds.size.y < 1.7f || bounds.size.y > 1.95f)
                 throw new InvalidOperationException("Arrival outfit scale mismatch: " + bounds);
-            Debug.Log("LGO_ARRIVAL_IMPORT_PASS humanoid=true renderers=1 submeshes=" + materialSections + " bounds=" + bounds);
+            Debug.Log("LGO_ARRIVAL_IMPORT_PASS humanoid=true renderers=1 submeshes=" + renderers[0].sharedMesh.subMeshCount + " bounds=" + bounds);
         }
     }
 }

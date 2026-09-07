@@ -21,6 +21,14 @@ assert len(rig.data.bones) == 65
 assert len(mesh.data.loop_triangles) <= 25000
 assert {m.name for m in mesh.data.materials} == {'Arrival Scene Palette', 'Keeper Reconstruction', 'Keeper Reconstruction Face'}
 assert all(1 <= len(v.groups) <= 4 and abs(sum(g.weight for g in v.groups) - 1) < 1e-5 for v in mesh.data.vertices)
+# Keeper's original native atlas occupies the left half of its expanded body atlas.
+# Arrival authoring retains original UVs; map the shared body/hair section on export only.
+body_slot = next(i for i, material in enumerate(mesh.data.materials) if material.name == 'Keeper Reconstruction')
+uv = mesh.data.uv_layers.active.data
+for polygon in mesh.data.polygons:
+    if polygon.material_index == body_slot:
+        for loop_index in polygon.loop_indices:
+            uv[loop_index].uv.x *= 0.5
 args.output.mkdir(parents=True, exist_ok=True)
 palette = bpy.data.images['ArrivalPalette']
 palette.filepath_raw = str((args.output / 'ArrivalPalette.png').resolve())

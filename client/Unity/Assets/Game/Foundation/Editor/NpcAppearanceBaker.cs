@@ -23,23 +23,22 @@ namespace LinhGioi.Foundation.Editor
                 var renderer = instance.GetComponentInChildren<SkinnedMeshRenderer>();
                 var original = renderer.sharedMesh;
                 var recipe = ScriptableObject.CreateInstance<NpcAppearanceRecipe>();
-                recipe.Slots = new[] { "Headwear", "HeadAndHair", "OutfitAndBody" };
+                var sourceSections = renderer.sharedMaterials.Select(material => ParseSection(material.name)).ToArray();
+                recipe.Slots = sourceSections.Select(section => section.slot).Distinct().ToArray();
                 recipe.Materials = new[] { AssetDatabase.LoadAssetAtPath<Material>(Root + "Keeper_Reconstruction.mat"),
                     AssetDatabase.LoadAssetAtPath<Material>(Root + "Keeper_Reconstruction_Face.mat") };
                 recipe.BoneNames = renderer.bones.Select(b => b.name).ToArray();
                 recipe.Bounds = renderer.localBounds;
-                var selected = new List<int>[3, 2];
-                for (var slot = 0; slot < 3; slot++)
+                var selected = new List<int>[recipe.Slots.Length, 2];
+                for (var slot = 0; slot < recipe.Slots.Length; slot++)
                     for (var sub = 0; sub < 2; sub++) selected[slot, sub] = new List<int>();
-                var labels = new[] { "Keeper Headwear", "Keeper Head Hair", "Keeper Outfit Body", "Keeper Reconstruction Face" };
                 for (var sub = 0; sub < original.subMeshCount; sub++)
                 {
-                    var label = Array.IndexOf(labels, renderer.sharedMaterials[sub].name);
-                    if (label < 0) throw new InvalidOperationException("Missing semantic NPC section: " + renderer.sharedMaterials[sub].name);
-                    selected[label == 3 ? 1 : label, label == 3 ? 1 : 0].AddRange(original.GetTriangles(sub));
+                    var section = sourceSections[sub];
+                    selected[Array.IndexOf(recipe.Slots, section.slot), section.surface].AddRange(original.GetTriangles(sub));
                 }
-                recipe.Parts = new Mesh[3];
-                for (var slot = 0; slot < 3; slot++)
+                recipe.Parts = new Mesh[recipe.Slots.Length];
+                for (var slot = 0; slot < recipe.Slots.Length; slot++)
                 {
                     var sections = Enumerable.Range(0, 2).Select(sub => selected[slot, sub].ToArray()).ToArray();
                     recipe.Parts[slot] = Save(Extract(original, sections, recipe.Slots[slot]), PartsRoot + recipe.Slots[slot] + ".asset");
@@ -55,26 +54,27 @@ namespace LinhGioi.Foundation.Editor
                     throw new InvalidOperationException("NPC bake lost geometry.");
                 var preset = ScriptableObject.CreateInstance<NpcAppearancePreset>();
                 MeshUtility.Optimize(merged);
-                MeshUtility.SetMeshCompression(merged, ModelImporterMeshCompression.Medium);
+                MeshUtility.SetMeshCompression(merged, ModelImporterMeshCompression.Off);
                 preset.Mesh = Save(merged, Root + "KeeperAppearanceMesh.asset");
                 preset.Materials = recipe.Materials; preset.BoneNames = recipe.BoneNames; preset.Bounds = recipe.Bounds;
                 preset = Save(preset, Root + "KeeperAppearance.asset");
                 preset.Apply(renderer);
                 var binding = instance.GetComponent<NpcAppearanceInstance>() ?? instance.AddComponent<NpcAppearanceInstance>();
                 binding.Appearance = preset;
-                // Extract the Avatar so the runtime preset has no dependency on the authoring FBX.
+                // Reuse the canonical rig Avatar; wardrobe geometry never defines a new reference pose.
                 var animator = instance.GetComponent<Animator>();
+                if (animator == null) animator = instance.AddComponent<Animator>();
+                animator.avatar = AssetDatabase.LoadAssetAtPath<Avatar>(Root + "SharedHumanoidAvatar.asset");
                 animator.applyRootMotion = false;
                 animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(Root + "ArrivalLocomotion.controller");
                 if (animator.runtimeAnimatorController == null || !animator.isHuman)
                     throw new InvalidOperationException("NPC bake requires the shared Humanoid locomotion controller.");
-                animator.avatar = Save(UnityEngine.Object.Instantiate(animator.avatar), Root + "KeeperSharedAvatar.asset");
                 PrefabUtility.SaveAsPrefabAsset(instance, prefabPath);
                 AssetDatabase.SaveAssets();
                 var dependencies = AssetDatabase.GetDependencies(prefabPath, true);
                 if (dependencies.Any(path => path.StartsWith(PartsRoot, StringComparison.Ordinal) || path == Root + "GateKeeper.fbx"))
                     throw new InvalidOperationException("Authoring meshes leaked into runtime NPC dependencies: " + string.Join(", ", dependencies.Where(path => path.StartsWith(PartsRoot, StringComparison.Ordinal) || path == Root + "GateKeeper.fbx")));
-                Debug.Log("LGO_NPC_APPEARANCE_BAKE_PASS slots=3 runtime_renderers=1 materials=2 shared_preset=true authoring_dependencies=false vertices=" + preset.Mesh.vertexCount);
+                Debug.Log("LGO_NPC_APPEARANCE_BAKE_PASS slots=" + recipe.Slots.Length + " runtime_renderers=1 materials=2 shared_preset=true authoring_dependencies=false vertices=" + preset.Mesh.vertexCount);
                 foreach (var material in preset.Materials)
                 {
                     var texture = material.GetTexture("_BaseMap");
@@ -82,6 +82,16 @@ namespace LinhGioi.Foundation.Editor
                 }
             }
             finally { UnityEngine.Object.DestroyImmediate(instance); }
+        }
+
+        internal static (string slot, int surface) ParseSection(string name)
+        {
+            // FBX section names carry explicit ownership; bones and position cannot identify clothing.
+            var tokens = name.Split('_');
+            if (tokens.Length != 3 || tokens[0] != "LGO" || string.IsNullOrEmpty(tokens[1]) ||
+                (tokens[2] != "Body" && tokens[2] != "Face"))
+                throw new InvalidOperationException("Missing wardrobe slot on source section: " + name);
+            return (tokens[1], tokens[2] == "Face" ? 1 : 0);
         }
 
         internal static void BakePlayer(string modelPath, string prefabPath)
@@ -94,7 +104,7 @@ namespace LinhGioi.Foundation.Editor
                 var mesh = UnityEngine.Object.Instantiate(renderer.sharedMesh);
                 mesh.name = "Arrival shared appearance";
                 MeshUtility.Optimize(mesh);
-                MeshUtility.SetMeshCompression(mesh, ModelImporterMeshCompression.Medium);
+                MeshUtility.SetMeshCompression(mesh, ModelImporterMeshCompression.Off);
                 var preset = ScriptableObject.CreateInstance<NpcAppearancePreset>();
                 preset.Mesh = Save(mesh, Root + "ArrivalAppearanceMesh.asset");
                 preset.Materials = renderer.sharedMaterials.Select(ArrivalOutfitImporter.CreateMaterial).ToArray();

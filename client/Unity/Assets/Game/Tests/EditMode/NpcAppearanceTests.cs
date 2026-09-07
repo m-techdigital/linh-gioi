@@ -20,6 +20,11 @@ namespace LinhGioi.Tests
                 first = UnityEngine.Object.Instantiate(prefab); second = UnityEngine.Object.Instantiate(prefab);
                 var animator = first.GetComponent<Animator>();
                 Assert.That(animator.isHuman, Is.True);
+                var mapping = animator.avatar.humanDescription.human.ToDictionary(bone => bone.humanName, bone => bone.boneName);
+                Assert.That(mapping["Spine"], Is.EqualTo("spine_01"));
+                Assert.That(mapping["Chest"], Is.EqualTo("spine_02"));
+                Assert.That(mapping["UpperChest"], Is.EqualTo("spine_03"));
+                Assert.That(animator.GetBoneTransform(HumanBodyBones.Chest), Is.Not.Null);
                 Assert.That(animator.runtimeAnimatorController, Is.Not.Null);
                 Assert.That(animator.applyRootMotion, Is.False);
                 var binding = first.GetComponent<NpcAppearanceInstance>();
@@ -40,23 +45,24 @@ namespace LinhGioi.Tests
         {
             const string root = "Assets/Game/Art/OnboardingCandidate/";
             var source = AssetDatabase.LoadAssetAtPath<GameObject>(root + "GateKeeper.fbx").GetComponentInChildren<SkinnedMeshRenderer>();
-            var hat = AssetDatabase.LoadAssetAtPath<Mesh>(root + "Editor/KeeperParts/Headwear.asset");
-            var hair = AssetDatabase.LoadAssetAtPath<Mesh>(root + "Editor/KeeperParts/HeadAndHair.asset");
+            var recipe = AssetDatabase.LoadAssetAtPath<LinhGioi.Foundation.Editor.NpcAppearanceRecipe>(root + "Editor/KeeperParts/KeeperRecipe.asset");
+            Assert.That(recipe.Slots, Does.Contain("UpperBody"));
+            Assert.That(recipe.Slots, Does.Contain("Cape"));
+            Assert.That(recipe.Slots.Distinct().Count(), Is.EqualTo(recipe.Parts.Length));
             var vertices = source.sharedMesh.vertices;
-            foreach (var entry in new[] { (part: hat, labels: new[] { "Keeper Headwear" }),
-                (part: hair, labels: new[] { "Keeper Head Hair", "Keeper Reconstruction Face" }) })
+            uint count = 0;
+            for (var slot = 0; slot < recipe.Slots.Length; slot++)
             {
+                var part = recipe.Parts[slot];
                 var expected = Enumerable.Range(0, source.sharedMesh.subMeshCount)
-                    .Where(sub => entry.labels.Contains(source.sharedMaterials[sub].name))
+                    .Where(sub => source.sharedMaterials[sub].name.StartsWith("LGO_" + recipe.Slots[slot] + "_", StringComparison.Ordinal))
                     .SelectMany(sub => source.sharedMesh.GetTriangles(sub)).Select(i => vertices[i]).Distinct().ToArray();
                 Assert.That(expected.Length, Is.GreaterThan(0));
-                var actual = entry.part.vertices.Distinct().ToArray();
-                Assert.That(expected.Except(actual).Count(), Is.Zero, "Missing tagged vertices in " + entry.part.name);
-                Assert.That(actual.Except(expected).Count(), Is.Zero, "Foreign vertices in " + entry.part.name);
-            }
-            uint count = 0;
-            foreach (var part in new[] { hat, hair, AssetDatabase.LoadAssetAtPath<Mesh>(root + "Editor/KeeperParts/OutfitAndBody.asset") })
+                var actual = part.vertices.Distinct().ToArray();
+                Assert.That(expected.Except(actual).Count(), Is.Zero, "Missing tagged vertices in " + part.name);
+                Assert.That(actual.Except(expected).Count(), Is.Zero, "Foreign vertices in " + part.name);
                 for (var sub = 0; sub < part.subMeshCount; sub++) count += part.GetIndexCount(sub);
+            }
             uint sourceCount = 0;
             for (var sub = 0; sub < source.sharedMesh.subMeshCount; sub++) sourceCount += source.sharedMesh.GetIndexCount(sub);
             Assert.That(count, Is.EqualTo(sourceCount));
