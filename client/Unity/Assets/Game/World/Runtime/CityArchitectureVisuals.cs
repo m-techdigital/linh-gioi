@@ -18,25 +18,21 @@ namespace LinhGioi.World
         private Material _gold, _wood, _navy, _ivory, _window, _teal, _leaf, _pink;
         private Texture2D _woodTexture, _plasterTexture, _tileTexture;
         internal Texture2D PlasterTexture => _plasterTexture;
+        internal Texture2D TimberTexture => _woodTexture;
 
         internal void Initialize()
         {
             _gold = Surface("Aged bronze", new Color(.65f,.43f,.17f), .5f);
-            _wood = Surface("Warm timber", new Color(.35f,.19f,.105f));
+            _wood = Surface("Aged timber", Color.white);
             _navy = Surface("Navy ceramic roof", new Color(.075f,.15f,.23f), .2f);
             _ivory = Surface("Ivory limestone", new Color(.72f,.65f,.51f));
             _window = Surface("Amber window recess", new Color(.21f,.125f,.07f));
             _teal = Surface("City teal banners", new Color(.065f,.30f,.34f));
             _leaf = Surface("Garden foliage", new Color(.21f,.37f,.15f));
             _pink = Surface("Blossom clusters", new Color(.66f,.35f,.40f));
-            _woodTexture = new Texture2D(64,64,TextureFormat.RGBA32,true) { name="Shared timber grain",wrapMode=TextureWrapMode.Repeat };
-            var pixels = new Color[4096];
-            for (var y=0;y<64;y++) for(var x=0;x<64;x++)
-            {
-                var grain=.82f+.16f*Mathf.PerlinNoise(x*.33f,y*.026f);
-                pixels[y*64+x]=new Color(grain,grain,grain);
-            }
-            _woodTexture.SetPixels(pixels); _woodTexture.Apply(true,true); _wood.mainTexture=_woodTexture;
+            _woodTexture = Resources.Load<Texture2D>("LGOCitySurfaces/AgedTimber");
+            if (_woodTexture == null) throw new System.InvalidOperationException("Missing shared city timber albedo.");
+            _wood.mainTexture = _woodTexture;
             _plasterTexture = SurfaceTexture(false);
             _tileTexture = SurfaceTexture(true);
             _ivory.mainTexture = _plasterTexture;
@@ -436,14 +432,14 @@ namespace LinhGioi.World
                 go.AddComponent<MeshFilter>().sharedMesh=mesh;go.AddComponent<MeshRenderer>().sharedMaterial=pair.Key;
                 mesh.UploadMeshData(true);
             }
-            Debug.Log("LGO_CITY_KIT materials="+_batches.Count+" triangles="+triangles+" textures=64x64+2x128x128 collision=existing_route");
+            Debug.Log("LGO_CITY_KIT materials="+_batches.Count+" triangles="+triangles+" textures=shared_timber_1024+2x128x128 collision=existing_route");
             _batches.Clear();
         }
         private void OnDestroy()
         {
             foreach(var mesh in _meshes)if(mesh!=null)Destroy(mesh);
             foreach(var material in _materials)if(material!=null)Destroy(material);
-            if(_woodTexture!=null)Destroy(_woodTexture);
+            // Resource albedo belongs to the asset system and can be reused by the next city instance.
             if(_plasterTexture!=null)Destroy(_plasterTexture);
             if(_tileTexture!=null)Destroy(_tileTexture);
         }

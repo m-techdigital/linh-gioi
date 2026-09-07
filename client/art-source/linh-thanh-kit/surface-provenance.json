@@ -1,0 +1,36 @@
+{
+  "status": "RUNTIME_CANDIDATE_NOT_FINAL",
+  "date": "2026-09-08",
+  "references": [
+    "docs/reference-ui/lgo-linh-mon-arrival-composition-draft-v1.jpg",
+    "docs/design/LGO-DESIGN-NORTH-STAR-LOCK-v0.1.md"
+  ],
+  "method": "Generated dedicated surface swatches; no board cropped into runtime. Original PNG bytes copied unchanged. Unity importer resizes to1024 and compresses BC7 with11mips, Repeat, trilinear,aniso8,non-readable.",
+  "importer": "LinhGioi.Foundation.Editor.CitySurfaceImporter.Import",
+  "assets": [
+    {
+      "asset": "client/Unity/Assets/Game/Art/CitySurfaces/Resources/LGOCitySurfaces/AgedPaving.png",
+      "origin": "OpenAI built-in imagegen",
+      "generated_file": "exec-6b73de5d-8ebd-4a6e-a939-f25e7b2385c5.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "source_bytes": 2968500,
+      "source_sha256": "4c10b3fc18d687714ac5f34b9fc269f9faf76f1160427cd17ade26644f070893",
+      "brief": "Dedicated seamless top-down albedo, five staggered courses of aged East Asian limestone street slabs, flat neutral lighting, no scene/objects/UI."
+    },
+    {
+      "asset": "client/Unity/Assets/Game/Art/CitySurfaces/Resources/LGOCitySurfaces/AgedTimber.png",
+      "origin": "OpenAI built-in imagegen",
+      "generated_file": "exec-19e44d74-c7f6-4255-9ab2-4844e94843a6.png",
+      "source_dimensions": [
+        1254,
+        1254
+      ],
+      "source_bytes": 2312505,
+      "source_sha256": "bf6196013cb02ccb271c64b4803bff07786d8107881b93b32e3cd59266e12be1",
+      "brief": "Dedicated seamless dark walnut structural timber albedo, vertical grain, restrained weathering, no plank borders/nails/perspective/directional lighting."
+    }
+  ]
+}

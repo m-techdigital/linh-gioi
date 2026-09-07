@@ -83,6 +83,8 @@ namespace LinhGioi.World
             _city = gameObject.AddComponent<CityArchitectureVisuals>();
             _city.Initialize();
             walls.mainTexture = _city.PlasterTexture;
+            trim.mainTexture = _city.TimberTexture;
+            trim.color = Color.white;
             Box("Courtyard", new Vector3(0f, -0.1f, 1.5f), new Vector3(14f, 0.2f, 27f), paving).GetComponent<Renderer>().enabled = false;
             for (var side = -1; side <= 1; side += 2)
             {
@@ -166,7 +168,9 @@ namespace LinhGioi.World
 
         private void CreateStreetPaving(Material paving)
         {
-            _pavingTexture = WorldProceduralVisuals.CreateStreetPavingTexture();
+            _pavingTexture = Resources.Load<Texture2D>("LGOCitySurfaces/AgedPaving");
+            if (_pavingTexture == null) throw new System.InvalidOperationException("Missing shared city paving albedo.");
+            Debug.Log("LGO_CITY_PAVING albedo="+_pavingTexture.width+"x"+_pavingTexture.height+" format="+_pavingTexture.format+" mips="+_pavingTexture.mipmapCount);
             paving.color = Color.white;
             paving.mainTexture = _pavingTexture;
             var corners = new[]
@@ -176,7 +180,7 @@ namespace LinhGioi.World
             };
             var uv = new Vector2[corners.Length];
             for (var i = 0; i < corners.Length; i++)
-                uv[i] = new Vector2(corners[i].x / 3f, corners[i].z / 2f);
+                uv[i] = new Vector2(corners[i].x / 3f, corners[i].z / 3f);
             _pavingMesh = new Mesh { name = "Continuous street paving", vertices = corners, uv = uv,
                 triangles = new[] { 0, 2, 1, 1, 2, 3 } };
             _pavingMesh.RecalculateNormals();
@@ -258,7 +262,8 @@ namespace LinhGioi.World
             Box("Garden rear wall", new Vector3(0f, 0.9f, 27f), new Vector3(14f, 1.8f, 0.2f), walls);
             CreateStreetHouse(new Vector3(-5f, 0f, 20f), 2.6f, walls, roof, trim);
             CreateRoof(new Vector3(5f, 2.7f, 23f), roof);
-            var timber = Material(new Color(0.38f, 0.25f, 0.15f));
+            var timber = Material(Color.white);
+            timber.mainTexture = _city.TimberTexture;
             CreatePavilionFrame(timber);
             CreatePavilionBench(timber);
             Box("Garden bed", new Vector3(-1f, 0.15f, 25.5f), new Vector3(5f, 0.3f, 2.6f), walls);
@@ -603,7 +608,7 @@ namespace LinhGioi.World
             if (_stoneMesh != null) Destroy(_stoneMesh);
             if (_stoneSealMesh != null) Destroy(_stoneSealMesh);
             if (_pavingMesh != null) Destroy(_pavingMesh);
-            if (_pavingTexture != null) Destroy(_pavingTexture);
+            // Shared Resources albedo is not owned by this world instance.
             foreach (var material in _materials)
                 if (material != null) Destroy(material);
             if (_lanternFrameMesh != null) Destroy(_lanternFrameMesh);
