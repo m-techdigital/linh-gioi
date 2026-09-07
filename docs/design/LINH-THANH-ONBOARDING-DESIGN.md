@@ -26,6 +26,18 @@ M5 hiện là bài thử kỹ thuật: gặp Người Giữ Cổng -> tương t�
 
 ## Trạng thái cần thiết kế trước khi code tiếp
 
+### Thử nghiệm nối phố vào sân nhỏ
+
+Demo `docs/reference-ui/lgo-street-forecourt-draft-v1.jpg` là DRAFT từ imagegen, không phải runtime hoặc design đã duyệt. Lưu JPEG quality78, không crop/slice/import ảnh vào game. Phối cảnh và inset chỉ định hướng; tỷ lệ inset không dùng làm số đo code. Thử nghiệm chỉ ở preview opt-in, không đổi map/hồ sơ chính.
+
+- Mặt bằng thử: nối nền hiện có tại Z15 tới Z27, X[-7,7], cùng cao độ. Đi từ (0,14) qua (1,18) tới (2,22), quay lại được; không teleport, không popup thắng hoặc nhiệm vụ mới.
+- Nhà thấp lệch trái tại (-5,20); mái đình mở bên phải tại (5,23). Cây và bồn thấp phía cuối sân tại (-1,25) cùng tường vườn kết thúc không gian; không dựng hai hàng tháp đối xứng hoặc vẽ một đường xuyên qua collider kín.
+- Mở rộng camera volume cùng nền; ranh giới va chạm phải trùng kiến trúc nhìn thấy. Giữ NPC/đá và camera shot/input hiện có.
+- Sau khi chạm đá, bảng hướng dẫn chung chỉ tới sân có cây. Khi đã tới trong 2m quanh (2,22), ẩn hướng dẫn nhập môn; quay lại phố không bật lại. Đây là trạng thái local của preview, không quest persistence/reward; đi tới sân trước khi hoàn tất đá không bỏ qua hướng dẫn NPC.
+- Nghiệm thu: route thật đến sân và về phố, không lọt nền/biên, camera nhìn rõ toàn thân; review ảnh arrival, street-outlook và forecourt trên PC/tablet/mobile. Hình khối là blockout bố cục, chưa đạt art của demo và chưa là quảng trường/hub hoàn chỉnh.
+
+Runtime: `forecourt-verified-{desktop,tablet,mobile}.log` full route/guidance qua, PNG lần lượt1920x1080/1366x1024/960x540. Sửa tiếp cây dùng groundHeight0.3 trong helper chung (default0 giữ main): red bottom0.025, green kiểm tra cây0.325/NPC0.025 và route mobile ở `forecourt-grounded-mobile.log`; ảnh PC/mobile đã xem. Demo JPEG1536x1024/592075byte chỉ ở docs; không thêm texture runtime. Mái/tường/paving vẫn blockout, không claim khớp art demo.
+
 - Chưa vào phạm vi / trong phạm vi / rời phạm vi: không để action nhắm nhầm NPC hoặc vật thể.
 - Dialogue mở / dài / cuộn đến cuối / đóng giữa chừng / mở lại: chung base modal, body-only scroll, footer không tràn; world input bị chặn khi mở.
 - Tương tác thành công / không hợp lệ / nhấn nhiều lần: không phát nhiều reward hoặc tự tiến quest. Hiện chưa có reward.

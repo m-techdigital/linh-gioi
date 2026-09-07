@@ -24,6 +24,7 @@ namespace LinhGioi.UI
         private Button _interact;
         private Action _applyLayout;
         private bool _stoneCompleted;
+        private bool _forecourtVisited;
         private bool _locomotionVerified;
 
         private bool InRange => Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z),
@@ -129,6 +130,12 @@ namespace LinhGioi.UI
             Directory.CreateDirectory(directory);
             yield return new WaitForSeconds(1f);
             yield return Capture(directory, "arrival");
+            var forecourtTree = _world.transform.Find("Forecourt pine").GetComponent<SpriteRenderer>();
+            if (Mathf.Abs(forecourtTree.bounds.min.y - 0.325f) > 0.01f)
+                throw new InvalidOperationException("Forecourt tree must stand on the raised bed: bottom=" + forecourtTree.bounds.min.y);
+            var keeperSprite = _world.transform.Find("Blockout Keeper").GetComponent<SpriteRenderer>();
+            if (Mathf.Abs(keeperSprite.bounds.min.y - 0.025f) > 0.01f)
+                throw new InvalidOperationException("Flat-ground keeper anchor changed.");
             var character = _world.GetComponentInChildren<Animator>();
             if (character == null || !character.isHuman || character.runtimeAnimatorController == null || character.applyRootMotion)
                 throw new InvalidOperationException("Blockout requires a Humanoid character with in-place locomotion.");
@@ -211,9 +218,21 @@ namespace LinhGioi.UI
             if (stoneFacingAngle > 5f || Vector3.Distance(stoneInteractionPosition, _world.Position) > 0.01f)
                 throw new InvalidOperationException("Stone interaction must face its target without moving: angle=" + stoneFacingAngle);
             yield return Capture(directory, "complete");
+            // Leave the synchronous capture frame before measuring held input in Update frames.
+            yield return null;
+            var facingMoveFrame = Time.frameCount;
+            var facingMoveTime = 0f;
             _world.Movement = Vector2.left;
-            yield return new WaitForSeconds(0.3f);
+            while (facingMoveTime < 0.3f)
+            {
+                yield return null;
+                facingMoveTime += Time.deltaTime;
+            }
             _world.Movement = Vector2.zero;
+            Debug.Log("LGO_STONE_MOVEMENT_MEASURE angle=" + Vector3.Angle(character.transform.forward, Vector3.left)
+                + " distance=" + Vector3.Distance(stoneInteractionPosition, _world.Position)
+                + " frames=" + (Time.frameCount - facingMoveFrame) + " simulation=" + facingMoveTime
+                + " dt=" + Time.deltaTime + " focused=" + Application.isFocused);
             if (Vector3.Angle(character.transform.forward, Vector3.left) > 5f ||
                 Vector3.Distance(stoneInteractionPosition, _world.Position) < 0.5f)
                 throw new InvalidOperationException("Fresh movement must override stone facing during its pulse.");
@@ -229,7 +248,7 @@ namespace LinhGioi.UI
                 yield break;
             }
             yield return Capture(directory, "complete-settled");
-            if (!CheckGuidance("Linh khí đã ổn định.", true)) yield break;
+            if (!CheckGuidance("Đến sân phía trước.", true)) yield break;
             var stoneLabel = GameObject.Find("Blockout Stone Label").GetComponent<TextMesh>();
             var shadow = stoneLabel.transform.Find("Blockout Stone Label Shadow").GetComponent<TextMesh>();
             if (stoneLabel.text != shadow.text || !stoneLabel.text.Contains("Đã ổn định"))
@@ -343,6 +362,19 @@ namespace LinhGioi.UI
                     yield return WalkTo(new Vector3(0f, 0f, 3f));
                 }
             }
+            yield return WalkTo(new Vector3(0f, 0f, 14f));
+            yield return Capture(directory, "street-outlook");
+            yield return WalkTo(new Vector3(1f, 0f, 18f));
+            yield return WalkTo(new Vector3(2f, 0f, 22f));
+            yield return null;
+            if (!CheckGuidance("Đến sân phía trước.", false)) yield break;
+            if (Mathf.Abs(_world.Position.y) > 0.1f)
+                throw new InvalidOperationException("Forecourt route left the paving surface.");
+            yield return Capture(directory, "forecourt");
+            yield return WalkTo(new Vector3(1f, 0f, 18f));
+            yield return WalkTo(new Vector3(0f, 0f, 14f));
+            if (!CheckGuidance("Đến sân phía trước.", false)) yield break;
+            Debug.Log("LGO_FORECOURT_ROUTE_PASS continuous_ground=true return_route=true");
             if (GetComponent<M4PlayableClientController>() != null)
                 throw new InvalidOperationException("Blockout must not create the account client UI.");
             Debug.Log("LGO_ONBOARDING_BLOCKOUT_ROUTE_PASS movement=CharacterController no_teleport=true");
@@ -410,9 +442,11 @@ namespace LinhGioi.UI
 
         private void Update()
         {
-            _guidanceScroll.style.display = _session.Active ? DisplayStyle.None : DisplayStyle.Flex;
-            _guidance.Objective.text = _stoneCompleted ? "Linh khí đã ổn định." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
-            _guidance.Hint.text = _stoneCompleted ? "Đã hoàn tất bước làm quen tại Linh Môn."
+            if (_stoneCompleted && Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z), new Vector2(2f, 22f)) <= 2f)
+                _forecourtVisited = true;
+            _guidanceScroll.style.display = _session.Active || _forecourtVisited ? DisplayStyle.None : DisplayStyle.Flex;
+            _guidance.Objective.text = _stoneCompleted ? "Đến sân phía trước." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
+            _guidance.Hint.text = _stoneCompleted ? "Đi tiếp theo đường đá, tới khoảng sân có cây."
                 : _session.Completed ? (InRange ? "Chọn Luyện để tập trung linh khí." : "Đá ở bên phải đường phía trước.")
                 : InRange ? "Chọn Gặp để trò chuyện." : "Theo đường đá đến Người Giữ Cổng.";
             _interact.text = _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp";

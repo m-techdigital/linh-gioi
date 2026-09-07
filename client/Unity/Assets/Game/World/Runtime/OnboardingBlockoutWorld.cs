@@ -53,18 +53,13 @@ namespace LinhGioi.World
                 for (var z = 0; z <= 12; z += 6)
                 {
                     Box("Street module", new Vector3(side * 5.5f, 1.6f, z), new Vector3(3f, 3.2f, 4.8f), walls);
-                    Box("Roof eave", new Vector3(side * 5.5f, 3.3f, z), new Vector3(3.6f, 0.25f, 5.4f), roof);
-                    for (var slope = -1; slope <= 1; slope += 2)
-                    {
-                        var panel = Box("Roof slope", new Vector3(side * 5.5f + slope * 0.8f, 3.8f, z), new Vector3(1.9f, 0.16f, 5.2f), roof);
-                        panel.transform.rotation = Quaternion.Euler(0f, 0f, -slope * 25f);
-                    }
+                    CreateRoof(new Vector3(side * 5.5f, 3.3f, z), roof);
                     Box("Door", new Vector3(side * 3.985f, 1f, z), new Vector3(0.04f, 2f, 1.1f), trim, false);
                 }
                 Box("Gate post", new Vector3(side * 5.2f, 2.3f, -4f), new Vector3(0.8f, 4.6f, 0.8f), walls);
                 Box("Boundary", new Vector3(side * 7f, 0.6f, 1.5f), new Vector3(0.2f, 1.2f, 27f), walls);
             }
-            Box("Far boundary", new Vector3(0f, 0.4f, 15f), new Vector3(14f, 0.8f, 0.2f), walls);
+            CreateForecourt(paving, walls, roof, trim);
             Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
             _keeper = Actor("Blockout Keeper", KeeperPoint, LgoVisualAssetRegistryV3B.GateKeeperNpc, 1.8f, trim);
             _stone = CreateTrainingStone();
@@ -112,14 +107,47 @@ namespace LinhGioi.World
             var volume = new GameObject("Blockout camera volume");
             volume.transform.SetParent(transform);
             _cameraVolume = volume.AddComponent<BoxCollider>();
-            _cameraVolume.center = new Vector3(0f, 4.1f, 1.5f);
-            _cameraVolume.size = new Vector3(13.4f, 7.8f, 26.4f);
+            _cameraVolume.center = new Vector3(0f, 4.1f, 7.5f);
+            _cameraVolume.size = new Vector3(13.4f, 7.8f, 38.4f);
             _cameraVolume.isTrigger = true;
             var clearShot = shots.AddComponent<CinemachineClearShot>();
             clearShot.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
             CreateCameraShot(shots.transform, tracking, new Vector3(0f, 2f, -6.8f), 20);
             CreateCameraShot(shots.transform, tracking, new Vector3(-6.8f, 2f, 0f), 10);
             CreateCameraShot(shots.transform, tracking, new Vector3(6.8f, 2f, 0f), 10);
+        }
+
+        private void CreateRoof(Vector3 eave, Material roof)
+        {
+            Box("Roof eave", eave, new Vector3(3.6f, 0.25f, 5.4f), roof);
+            for (var slope = -1; slope <= 1; slope += 2)
+            {
+                var panel = Box("Roof slope", eave + new Vector3(slope * 0.8f, 0.5f, 0f),
+                    new Vector3(1.9f, 0.16f, 5.2f), roof);
+                panel.transform.rotation = Quaternion.Euler(0f, 0f, -slope * 25f);
+            }
+        }
+
+        private void CreateForecourt(Material paving, Material walls, Material roof, Material trim)
+        {
+            // Same-height local extension: no map transition or invisible gate across the street.
+            Box("Forecourt paving", new Vector3(0f, -0.1f, 21f), new Vector3(14f, 0.2f, 12f), paving);
+            for (var z = 15; z < 27; z++)
+                Box("Paving joint", new Vector3(0f, 0.002f, z), new Vector3(13.8f, 0.004f, 0.025f), roof, false);
+            for (var side = -1; side <= 1; side += 2)
+                Box("Forecourt garden wall", new Vector3(side * 7f, 0.6f, 21f), new Vector3(0.2f, 1.2f, 12f), walls);
+            Box("Garden rear wall", new Vector3(0f, 0.9f, 27f), new Vector3(14f, 1.8f, 0.2f), walls);
+            Box("Forecourt house", new Vector3(-5f, 1.3f, 20f), new Vector3(3f, 2.6f, 4.8f), walls);
+            CreateRoof(new Vector3(-5f, 2.7f, 20f), roof);
+            Box("Door", new Vector3(-3.485f, 1f, 20f), new Vector3(0.04f, 2f, 1.1f), trim, false);
+            CreateRoof(new Vector3(5f, 2.7f, 23f), roof);
+            for (var x = -1; x <= 1; x += 2)
+            for (var z = -1; z <= 1; z += 2)
+                Box("Pavilion post", new Vector3(5f + x * 1.3f, 1.35f, 23f + z * 2f),
+                    new Vector3(0.18f, 2.7f, 0.18f), trim);
+            Box("Pavilion bench", new Vector3(6f, 0.3f, 23f), new Vector3(0.45f, 0.6f, 3.6f), roof);
+            Box("Garden bed", new Vector3(-1f, 0.15f, 25.5f), new Vector3(5f, 0.3f, 2.6f), walls);
+            Actor("Forecourt pine", new Vector3(-1f, 0.3f, 25.5f), LgoVisualAssetRegistryV3B.TreePine, 4.6f, trim);
         }
 
         private void CreateCameraShot(Transform parent, Transform tracking, Vector3 offset, int priority)
@@ -299,7 +327,7 @@ namespace LinhGioi.World
             renderer.transform.SetParent(transform);
             renderer.sprite = sprite;
             renderer.transform.localScale = Vector3.one * (height / sprite.bounds.size.y);
-            WorldProceduralVisuals.PlaceStandingSprite(renderer, point);
+            WorldProceduralVisuals.PlaceStandingSprite(renderer, point, point.y);
             return renderer;
         }
 

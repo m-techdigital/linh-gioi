@@ -15,16 +15,16 @@ namespace LinhGioi.World
             return new Vector2(worldPosition.x / courtyardSize + 0.5f, worldPosition.z / courtyardSize + 0.5f);
         }
 
-        internal static void PlaceStandingSprite(SpriteRenderer renderer, Vector3 groundAnchor)
+        internal static void PlaceStandingSprite(SpriteRenderer renderer, Vector3 groundAnchor, float groundHeight = 0f)
         {
             if (renderer == null || renderer.sprite == null) return;
             renderer.transform.rotation = Quaternion.identity;
             var bounds = renderer.sprite.bounds;
             var scale = renderer.transform.localScale;
-            // Current courtyard is flat at y=0; actor anchors include legacy marker center heights.
+            // Ground height is explicit: legacy actor anchors can contain marker-centre heights.
             renderer.transform.position = new Vector3(
                 groundAnchor.x - bounds.center.x * scale.x,
-                0.025f - bounds.min.y * scale.y,
+                groundHeight + 0.025f - bounds.min.y * scale.y,
                 groundAnchor.z);
         }
 
