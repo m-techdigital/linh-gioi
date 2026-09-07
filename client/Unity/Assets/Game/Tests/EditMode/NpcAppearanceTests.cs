@@ -35,6 +35,17 @@ namespace LinhGioi.Tests
                 Assert.That(a.sharedMesh, Is.SameAs(b.sharedMesh));
                 Assert.That(a.sharedMaterials.Length, Is.EqualTo(materials));
                 for (var i = 0; i < a.sharedMaterials.Length; i++) Assert.That(a.sharedMaterials[i], Is.SameAs(b.sharedMaterials[i]));
+                if (resource == "LGOArrivalOutfitCandidate")
+                {
+                    var keeper = Resources.Load<GameObject>("LGOGateKeeperCandidate").GetComponentInChildren<SkinnedMeshRenderer>();
+                    Assert.That(a.sharedMaterials[0], Is.SameAs(keeper.sharedMaterials[0]), "Wardrobes still share their body atlas.");
+                    var face = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Art/OnboardingCandidate/ArrivalFace.png");
+                    Assert.That(face, Is.Not.Null);
+                    Assert.That(a.sharedMaterials[1].GetTexture("_BaseMap"), Is.SameAs(face));
+                    Assert.That(new[] { face.width, face.height }, Is.EqualTo(new[] { 1774, 887 }), "Keep native PC face detail during import.");
+                    Assert.That(a.sharedMaterials[1].GetTexture("_BaseMap"), Is.Not.SameAs(keeper.sharedMaterials[1].GetTexture("_BaseMap")),
+                        "The continuous player head must not sample the Keeper's incompatible face UV islands.");
+                }
                 Assert.That(a.bones[0], Is.Not.SameAs(b.bones[0]), "NPC poses must remain independent.");
             }
             finally { UnityEngine.Object.DestroyImmediate(first); UnityEngine.Object.DestroyImmediate(second); }
@@ -47,8 +58,9 @@ namespace LinhGioi.Tests
             const string root = "Assets/Game/Art/OnboardingCandidate/";
             var source = AssetDatabase.LoadAssetAtPath<GameObject>(root + model + ".fbx").GetComponentInChildren<SkinnedMeshRenderer>();
             var recipe = AssetDatabase.LoadAssetAtPath<LinhGioi.Foundation.Editor.NpcAppearanceRecipe>(root + "Editor/" + stem + "Parts/" + stem + "Recipe.asset");
-            Assert.That(recipe.Slots, Does.Contain("UpperBody"));
-            Assert.That(recipe.Slots, Does.Contain("LowerBody"));
+            var expectedSlots = new[] { "Head", "Hair", "UpperBody", "LowerBody", "Gloves", "Boots", "Shoulders" };
+            if (stem == "Keeper") expectedSlots = expectedSlots.Concat(new[] { "Headwear", "Cape" }).ToArray();
+            Assert.That(recipe.Slots, Is.EquivalentTo(expectedSlots), "Do not silently lose a wardrobe module during authoring/export.");
             Assert.That(recipe.Slots.Distinct().Count(), Is.EqualTo(recipe.Parts.Length));
             var vertices = source.sharedMesh.vertices;
             uint count = 0;

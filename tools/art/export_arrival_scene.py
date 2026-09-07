@@ -25,9 +25,12 @@ assert len(mesh.data.uv_layers) == 1
 assert all(1 <= len(v.groups) <= 4 and abs(sum(g.weight for g in v.groups) - 1) < 1e-5
            for v in mesh.data.vertices)
 args.output.mkdir(parents=True, exist_ok=True)
-# Both atlases are shared with Keeper; preserve native UVs and do not emit duplicate textures.
+# Keep the shared wardrobe atlas; the continuous player head owns its facial albedo.
 assert tuple(bpy.data.images['KeeperReconstructionAlbedo'].size) == (4096, 2048)
-assert tuple(bpy.data.images['KeeperReconstructionFace'].size) == (1024, 512)
+face = bpy.data.images['ArrivalFace']
+assert face.size[0] > 0 and face.size[1] > 0
+face_path = args.output / 'ArrivalFace.png'
+face.save(filepath=str(face_path.resolve()))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.dont_write_bytecode = True
 from wardrobe_sections import label_sections
@@ -46,8 +49,9 @@ receipt = {
     'triangles': len(mesh.data.loop_triangles), 'vertices': len(mesh.data.vertices),
     'bones': len(rig.data.bones), 'materials': 2, 'authoring_material_sections': len(sections),
     'slots': slots,
-    'texture_sizes': {'albedo': list(bpy.data.images['KeeperReconstructionAlbedo'].size), 'face': list(bpy.data.images['KeeperReconstructionFace'].size)},
-    'runtime_verified': False, 'new_textures': [],
+    'texture_sizes': {'albedo': list(bpy.data.images['KeeperReconstructionAlbedo'].size), 'face': list(face.size)},
+    'face_sha256': hashlib.sha256(face_path.read_bytes()).hexdigest(),
+    'runtime_verified': False, 'new_textures': ['ArrivalFace.png'],
 }
 (args.output / 'export-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
 print('LGO_ARRIVAL_SCENE_EXPORTED ' + json.dumps(receipt), flush=True)

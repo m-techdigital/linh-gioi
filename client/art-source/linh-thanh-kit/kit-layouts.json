@@ -11,7 +11,8 @@
     "docs/reference-art/v0.20.0/lgo-environment-prop-sheet-v0200.png",
     "docs/reference-art/linh-gioi-concept-board.png",
     "docs/reference-art/linh-gioi-key-art.png",
-    "docs/reference-art/linh-gioi-world-event-ui.png"
+    "docs/reference-art/linh-gioi-world-event-ui.png",
+    "docs/reference-ui/lgo-linh-mon-arrival-composition-draft-v1.jpg"
   ],
   "materials": {
     "stone": [
@@ -21,27 +22,27 @@
       1
     ],
     "ivory": [
-      0.72,
-      0.66,
-      0.53,
+      0.67,
+      0.61,
+      0.48,
       1
     ],
     "wood": [
-      0.23,
-      0.105,
-      0.045,
+      0.16,
+      0.072,
+      0.03,
       1
     ],
     "navy": [
-      0.045,
-      0.115,
-      0.18,
+      0.052,
+      0.08,
+      0.095,
       1
     ],
     "gold": [
-      0.62,
-      0.37,
-      0.13,
+      0.4,
+      0.27,
+      0.12,
       1
     ],
     "teal": [
@@ -73,7 +74,7 @@
     "house": {
       "size_m": [
         4,
-        5,
+        5.8,
         4
       ],
       "runtime_source": "CityArchitectureVisuals.House + Roof; preview adapter, dimensions normalized",
@@ -107,15 +108,16 @@
         ],
         "top": [
           0,
-          5,
+          5.8,
           0
         ]
-      }
+      },
+      "decorative_clearance_m": 0.65
     },
     "gate": {
       "size_m": [
         12,
-        8,
+        8.2,
         3
       ],
       "runtime_source": "CityArchitectureVisuals.Landmarks; preview adapter",
@@ -149,10 +151,11 @@
         ],
         "top": [
           0,
-          8,
+          8.2,
           0
         ]
-      }
+      },
+      "decorative_clearance_m": 0.65
     },
     "lantern": {
       "size_m": [
@@ -367,7 +370,7 @@
     "cafe": {
       "size_m": [
         6,
-        5.4,
+        5.9,
         8
       ],
       "runtime_source": null,
@@ -401,15 +404,16 @@
         ],
         "top": [
           0,
-          5.4,
+          5.9,
           0
         ]
-      }
+      },
+      "decorative_clearance_m": 0.65
     },
-    "modern_lodge": {
+    "townhouse": {
       "size_m": [
         4,
-        7,
+        7.6,
         4
       ],
       "runtime_source": null,
@@ -443,10 +447,11 @@
         ],
         "top": [
           0,
-          7,
+          7.6,
           0
         ]
-      }
+      },
+      "decorative_clearance_m": 0.65
     }
   },
   "layouts": {
@@ -476,7 +481,7 @@
           "yaw_degrees": -90
         },
         {
-          "module": "modern_lodge",
+          "module": "townhouse",
           "position_m": [
             -8,
             0,
@@ -611,7 +616,7 @@
           "yaw_degrees": -90
         },
         {
-          "module": "modern_lodge",
+          "module": "townhouse",
           "position_m": [
             -9,
             0,
@@ -629,7 +634,7 @@
           "yaw_degrees": 90
         },
         {
-          "module": "modern_lodge",
+          "module": "townhouse",
           "position_m": [
             9,
             0,
@@ -762,7 +767,7 @@
           "yaw_degrees": -90
         },
         {
-          "module": "modern_lodge",
+          "module": "townhouse",
           "position_m": [
             -8,
             0,
@@ -789,7 +794,7 @@
           "yaw_degrees": 90
         },
         {
-          "module": "modern_lodge",
+          "module": "townhouse",
           "position_m": [
             8,
             0,
@@ -862,5 +867,7 @@
         }
       ]
     }
-  }
+  },
+  "art_direction": "Phố cổ Á Đông hơi phong hóa: gỗ sẫm, tường trát, ngói xám xanh, song cửa, mái hiên; sinh hoạt hiện đại trong kiến trúc cổ kính. Không mặt dựng kính lớn.",
+  "architectural_pass": "reference_facade_roof_family_draft_2026_09_08"
 }

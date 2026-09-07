@@ -1,30 +1,50 @@
 {
-  "source_sha256": "521e1aebd6b7dab3b18a340106de532dbc3d88c7fa381760e59bb9e9be9a6e78",
-  "fbx_sha256": "bc11b012dbb9f7b98c99a900c55d0e0bf35af81a75d4ec84951e412b31a7d60d",
-  "triangles": 20954,
-  "vertices": 11183,
+  "source_sha256": "d6850486ff58bb81c3cb87b3c962bc0f7a150a7648dccbdc0dd29e9a1e9baeed",
+  "fbx_sha256": "b5b9f6a48d202aeb594a6cf91218156f36de1e41556a651352f22feade7f6140",
+  "triangles": 68026,
+  "vertices": 34062,
   "bones": 65,
-  "material_sections": 3,
-  "new_texture": [
-    48,
-    8
+  "materials": 2,
+  "authoring_material_sections": 7,
+  "slots": [
+    "Head",
+    "Hair",
+    "UpperBody",
+    "LowerBody",
+    "Gloves",
+    "Boots",
+    "Shoulders"
   ],
-  "shared_textures": [
-    "KeeperReconstructionAlbedo",
-    "KeeperReconstructionFace"
-  ],
+  "texture_sizes": {
+    "albedo": [
+      4096,
+      2048
+    ],
+    "face": [
+      1774,
+      887
+    ]
+  },
+  "face_sha256": "c0d47a113d881dc05e425754abee7fe3663fb10d466a25972668be7eaa9374e7",
   "runtime_verified": true,
-  "evidence": [
-    "build/dev-loop/city-macro-final-import.log",
-    "build/dev-loop/city-macro-final-tests.xml",
-    "build/dev-loop/city-macro-final-build.log",
-    "build/dev-loop/city-macro-final-mobile.log"
+  "new_textures": [
+    "ArrivalFace.png"
   ],
-  "source_origin": "Quaternius CC0 arrival study; shared Keeper head/hair source and texture provenance in ../gate-keeper/",
-  "runtime_unique_build_kb_approx": 398.2,
+  "visual_status": "REVIEWED_WITH_ART_REMAINING",
+  "unity_vertices": 38343,
+  "source_origin": "Quaternius CC0 arrival study; shared Keeper body atlas/rig provenance in ../gate-keeper/; new generated player face described in SOURCE.md and face-prompt.txt.",
+  "evidence": [
+    "build/dev-loop/player-neck-final-import.log",
+    "build/dev-loop/player-neck-final-tests.xml",
+    "build/dev-loop/player-neck-final-build.log",
+    "build/visual-evidence/player-neck-final-desktop/review.json"
+  ],
+  "authoring_regeneration": "build/asset-staging/player-neck-runtime/full-rebuild/player-receipt.json",
   "not_claimed": [
-    "final art",
-    "mobile GPU performance",
-    "all outfits under100KB"
+    "art final",
+    "VISUAL_RUNTIME_PASS toàn game",
+    "thiết bị mobile/tablet thật",
+    "GPU/FPS budget",
+    "animation tóc vật lý"
   ]
 }

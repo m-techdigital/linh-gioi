@@ -10,6 +10,20 @@ namespace LinhGioi.UI
         private Camera _camera;
         private Animator _actor;
         public float Angle { get; set; }
+        public bool FaceCloseup { get; set; }
+        private Transform _head;
+        private float _headYaw;
+        private Quaternion _diagnosticHeadRotation;
+        // Explicit deformation review, not a gameplay look/talking animation.
+        public float HeadYawDegrees
+        {
+            get => _headYaw;
+            set
+            {
+                if (_headYaw == 0f && value != 0f) _diagnosticHeadRotation = _head.rotation;
+                _headYaw = value;
+            }
+        }
 
         public void Configure(Camera camera, Animator actor)
         {
@@ -29,6 +43,7 @@ namespace LinhGioi.UI
                         + (atlas == null ? "none" : atlas.width + "x" + atlas.height));
                 }
             }
+            _head = actor.GetBoneTransform(HumanBodyBones.Head);
             actor.cullingMode = AnimatorCullingMode.AlwaysAnimate;
             _camera.clearFlags = CameraClearFlags.SolidColor;
             _camera.backgroundColor = new Color(0.24f, 0.27f, 0.30f);
@@ -38,10 +53,11 @@ namespace LinhGioi.UI
         private void LateUpdate()
         {
             if (_actor == null) return;
+            if (_headYaw != 0f) _head.rotation = Quaternion.AngleAxis(_headYaw, Vector3.up) * _diagnosticHeadRotation;
             _camera.fieldOfView = 35f;
-            var target = _actor.transform.position + Vector3.up * 0.98f;
+            var target = FaceCloseup ? _head.position : _actor.transform.position + Vector3.up * 0.98f;
             var direction = Quaternion.AngleAxis(Angle, Vector3.up) * _actor.transform.forward;
-            _camera.transform.position = target + direction * 3.65f + Vector3.up * 0.05f;
+            _camera.transform.position = target + direction * (FaceCloseup ? 0.85f : 3.65f) + Vector3.up * 0.05f;
             _camera.transform.LookAt(target);
         }
     }

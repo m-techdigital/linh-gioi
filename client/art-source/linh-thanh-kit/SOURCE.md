@@ -12,15 +12,15 @@ Mẫu đích đã xem: `docs/reference-art/linh-gioi-concept-board.png`, `linh-g
 | Ghế rộng 2 m | Family ghế sân nghỉ hiện có | Chân giữa; mặt ngồi hướng −Z; khoảng tiếp cận trước ≥1 m |
 | Cây hoa | Family `Tree`; canopy preview đơn giản | Chân gốc; tán cho phép ngoài footprint; không chặn cổng/NPC |
 | Sạp 3×2 m | Thiết kế mới, chưa runtime | Trang trí phố; ghép mái/gỗ/đèn chung, không mở economy |
-| Café 6×4 m + sân bàn ghế | Thiết kế mới, chưa runtime | Mặt mở, quầy, mái bạt sọc, biển hình tách, ban công; terrace nhô4 m phía trước |
-| Nhà phố cao tầng | Thiết kế mới, chưa runtime | Ba tầng cửa dài, nhịp slab và một mái cong trên cùng; xen nhà thấp để tránh cả phố giống đền |
+| Café 6×4 m + sân bàn ghế | Thiết kế mới, chưa runtime | Mặt mở, quầy, mái bạt màu vải tự nhiên, viền teal nhỏ, biển hình tách, ban công; terrace nhô4 m phía trước |
+| Nhà phố cao tầng | Thiết kế mới, chưa runtime | Ba tầng cửa song gỗ thụt vào, xà gỗ và tường trát và một mái cong trên cùng; xen nhà thấp để tránh cả phố giống đền |
 | Hoa văn sân Ø8 m | Thiết kế mới, chưa runtime | Nằm phẳng mặt đất; chỉ mốc bố cục, không altar/reward |
 
 Đơn vị mét; JSON dùng trục Unity Y-up, script đổi sang Blender Z-up. Lưới phụ0.5 m, lưới chính2 m, xoay90°. Pivot ở chân giữa. Socket `left/right/front/back/top` ghi trong JSON là mốc layout theo hộp danh nghĩa; phần mái/tán nhô phải được tính riêng khi duyệt clearance. Không tự nối roof qua socket top nếu chưa kiểm tra độ cao eave. Các module dùng chín family: đá, ngà, gỗ, mái navy, đồng cũ, vải teal, đèn hổ phách, hoa, lá. Không dựng texture riêng cho mỗi nhà.
 
 Ba bố cục: **gate** dẫn đường vào SCN-001 với skyline cao/thấp xen kẽ; **plaza** giữ tâm trống, café và chỗ nghỉ quanh rìa, vùng `future_world_event_anchor` chỉ giữ chỗ trong JSON; **market** có quầy café, bàn ghế ngoài trời và sạp trang trí. Hướng cửa các module quay vào đường; terrace phải được tính khi kiểm tra khoảng trống. Kịch bản/player/NPC/Đá Luyện vẫn thuộc runtime hiện có. Preview không chứa hệ thống mới hoặc giả lập nghiệm thu gameplay.
 
-Đối chiếu `docs/02-GDD.md`: kit này dành riêng **`map.city.linh_thanh`**, social hub và địa điểm world event dài hạn; không dùng nguyên xi cho `map.field.mist_forest` (field cận chiến), `map.field.spirit_river` (di chuyển/hazard/tài nguyên) hoặc `map.dungeon.shadow_gate` (dungeon4 người). Hình concept gốc có café, nhà phố hiện đại xen kiến trúc Á Đông và năm hướng Võ/Kiếm/Pháp/Cơ/Linh; thiết kế thành phố phải chứa được sự đa dạng đó, không biến tất cả thành sân/đền tu luyện. Đây là định hướng hình ảnh; quyền mở từng class/hệ thống vẫn theo GDD/roadmap, không phát sinh từ kit. Không chép VIP, currency, HUD, event timer hay economy trong board vào runtime.
+Đối chiếu `docs/02-GDD.md`: kit này dành riêng **`map.city.linh_thanh`**, social hub và địa điểm world event dài hạn; không dùng nguyên xi cho `map.field.mist_forest` (field cận chiến), `map.field.spirit_river` (di chuyển/hazard/tài nguyên) hoặc `map.dungeon.shadow_gate` (dungeon4 người). Hình concept gốc có café, sinh hoạt hiện đại trong nhà phố cổ Á Đông và năm hướng Võ/Kiếm/Pháp/Cơ/Linh; thiết kế thành phố phải chứa được sự đa dạng đó, không biến tất cả thành sân/đền tu luyện. Đây là định hướng hình ảnh; quyền mở từng class/hệ thống vẫn theo GDD/roadmap, không phát sinh từ kit. Không chép VIP, currency, HUD, event timer hay economy trong board vào runtime.
 
 Hướng học từ sản phẩm thật: Epic mô tả City Sample dùng các bộ modular asset, luật theo kiểu nhà, điểm bố trí và instance để dựng thành phố lớn trong [City Sample](https://dev.epicgames.com/documentation/en-us/unreal-engine/city-sample-project-unreal-engine-demonstration). Áp dụng ở đây là **asset family + dữ liệu bố trí + instance**, không sao chép yêu cầu Nanite/Lumen hay suy ra hiệu năng Unity/mobile từ demo Unreal. Bước tích hợp phù hợp: adapter đọc catalog, tái dùng mesh/material theo family và chia batch theo cụm phố; giữ collision/navigation tách khỏi phần trang trí. Catalog hiện tại đủ để review hình khối/bố cục; chưa phải importer hoặc thiết kế final đã duyệt.
 
@@ -31,3 +31,10 @@ build/toolchains/blender/Blender.app/Contents/MacOS/Blender --background --pytho
 ```
 
 Output: `gate.png`, `plaza.png`, `market.png`, `LinhThanhKit.blend`, `preview-receipt.json`. Render offline để xem khả năng ghép; không phải runtime PASS, draw-call/FPS/memory hay chất lượng asset final. Cần tích hợp adapter và đo Player thật trước khi công bố các số đó.
+
+Owner bổ sung 2026-09-08: nhà cửa/Linh Thành hơi cổ kính. Draft đã đổi mảng kính xanh lớn sang cửa song gỗ, bệ cửa/xà/đỡ mái, ban công gỗ, ngói xám xanh và vật liệu hơi phong hóa. Shader noise chỉ phục vụ preview Blender; chưa là vật liệu Unity đã tích hợp. Giữ phố sáng và có sinh hoạt, không biến thành phế tích.
+
+
+Pass bám façade/mái 2026-09-08: xem trực tiếp `docs/reference-ui/lgo-linh-mon-arrival-composition-draft-v1.jpg` để lấy mái có đường sống ngang, ngói xếp lớp, chiều sâu diềm/gối đỡ, cửa song gỗ, lan can đá thấp và đèn treo theo tỷ lệ người. Không lấy NPC cũ, chữ/khối Đá Luyện hoặc bối cảnh đêm làm chuẩn thắng North Star. Họ nhà/café/townhouse/cổng giữ nguyên bố trí trong catalog; mái cũ dạng chóp vuông được thay bằng mái hip có đường sống, cap ngói tròn và lớp diềm gỗ. Thêm gối đỡ dưới mái, bệ đá nhiều gờ, gallery/lan can, cửa vào/quầy có chiều sâu và đèn treo. Không đổi chín family material. `decorative_clearance_m` là khoảng nhô dự trù để kiểm tra khi tích hợp; không phải collider runtime.
+
+Preview của pass này xuất riêng vào `build/asset-staging/linh-thanh-reference-kit/`, chưa ghi đè PNG docs. Geometry vẫn là authoring draft: chưa có detail sculpt/texture trim production, canopy còn đơn giản và mật độ phố/skyline chỉ là kit sample. Blender noise không chứng minh chất lượng hoặc chi phí shader Unity; cần export/LOD/batching và đo runtime riêng.

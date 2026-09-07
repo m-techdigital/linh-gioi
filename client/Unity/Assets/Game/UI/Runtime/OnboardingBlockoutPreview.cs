@@ -164,6 +164,26 @@ namespace LinhGioi.UI
                     yield return new WaitForSeconds(0.2f);
                     yield return Capture(playerQualityDirectory, "player-idle-" + angle);
                 }
+                var reviewFace = Array.IndexOf(args, "--lgo-player-head-review") >= 0;
+                if (reviewFace)
+                {
+                    cameraReview.FaceCloseup = true;
+                    foreach (var angle in new[] { 0f, 45f, 90f, 180f })
+                    {
+                        cameraReview.Angle = angle;
+                        yield return new WaitForSeconds(0.2f);
+                        yield return Capture(playerQualityDirectory, "player-head-" + angle);
+                    }
+                    cameraReview.Angle = 0f;
+                    foreach (var yaw in new[] { -40f, 40f })
+                    {
+                        cameraReview.HeadYawDegrees = yaw;
+                        yield return new WaitForSeconds(0.2f);
+                        yield return Capture(playerQualityDirectory, "player-head-diagnostic-yaw-" + yaw);
+                    }
+                    cameraReview.HeadYawDegrees = 0f;
+                    cameraReview.FaceCloseup = false;
+                }
                 var leg = actor.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
                 var initialLeg = leg.localRotation;
                 var initialPosition = _world.Position;
@@ -185,7 +205,7 @@ namespace LinhGioi.UI
                 yield return new WaitForSeconds(0.5f);
                 cameraReview.Angle = 0f;
                 yield return Capture(playerQualityDirectory, "player-return-front");
-                Debug.Log("LGO_PLAYER_QUALITY_CAPTURE_COMPLETE frames=7 runtime=true locomotion=true gameplay_camera=false");
+                Debug.Log("LGO_PLAYER_QUALITY_CAPTURE_COMPLETE frames=" + (reviewFace ? 13 : 7) + " runtime=true locomotion=true gameplay_camera=false diagnostic_head_yaw=" + reviewFace);
                 Application.Quit(0);
                 yield break;
             }

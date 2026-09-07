@@ -126,7 +126,41 @@ namespace LinhGioi.Foundation.Editor
             }
             ConfigureHumanoid(ModelPath, false);
             Validate();
+            PreparePlayerFace();
             NpcAppearanceBaker.BakePlayer(ModelPath, PrefabPath);
+        }
+
+        private static void PreparePlayerFace()
+        {
+            var texturePath = Directory + "ArrivalFace.png";
+            var settings = AssetImporter.GetAtPath(texturePath) as TextureImporter;
+            if (settings == null) throw new InvalidOperationException("Missing dedicated player face atlas.");
+            settings.textureType = TextureImporterType.Default;
+            settings.maxTextureSize = 2048;
+            settings.npotScale = TextureImporterNPOTScale.None;
+            settings.mipmapEnabled = true;
+            settings.isReadable = false;
+            settings.textureCompression = TextureImporterCompression.Uncompressed;
+            settings.wrapMode = TextureWrapMode.Clamp;
+            settings.anisoLevel = 4;
+            foreach (var platform in new[] { "Android", "iPhone" })
+                settings.ClearPlatformTextureSettings(platform);
+            settings.SaveAndReimport();
+            var materialPath = Directory + "Arrival_Face.mat";
+            var material = AssetDatabase.LoadAssetAtPath<Material>(materialPath);
+            if (material == null)
+            {
+                var shader = Shader.Find("Universal Render Pipeline/Lit");
+                if (shader == null) throw new InvalidOperationException("Player face requires URP Lit.");
+                material = new Material(shader);
+                AssetDatabase.CreateAsset(material, materialPath);
+            }
+            material.SetTexture("_BaseMap", AssetDatabase.LoadAssetAtPath<Texture2D>(texturePath));
+            material.SetColor("_BaseColor", Color.white);
+            material.SetFloat("_Metallic", 0f);
+            material.SetFloat("_Smoothness", 0.15f);
+            EditorUtility.SetDirty(material);
+            AssetDatabase.SaveAssets();
         }
 
         public static void ImportKeeper() => NpcAppearanceBaker.BakeKeeper();

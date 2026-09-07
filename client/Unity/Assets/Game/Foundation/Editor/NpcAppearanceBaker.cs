@@ -30,7 +30,9 @@ namespace LinhGioi.Foundation.Editor
                 var sourceSections = renderer.sharedMaterials.Select(material => ParseSection(material.name)).ToArray();
                 recipe.Slots = sourceSections.Select(section => section.slot).Distinct().ToArray();
                 recipe.Materials = new[] { AssetDatabase.LoadAssetAtPath<Material>(Root + "Keeper_Reconstruction.mat"),
-                    AssetDatabase.LoadAssetAtPath<Material>(Root + "Keeper_Reconstruction_Face.mat") };
+                    AssetDatabase.LoadAssetAtPath<Material>(Root + (stem == "Arrival" ? "Arrival_Face.mat" : "Keeper_Reconstruction_Face.mat")) };
+                if (recipe.Materials.Any(material => material == null))
+                    throw new InvalidOperationException("Appearance requires both body and face materials.");
                 recipe.BoneNames = renderer.bones.Select(b => b.name).ToArray();
                 recipe.Bounds = renderer.localBounds;
                 var selected = new List<int>[recipe.Slots.Length, 2];
