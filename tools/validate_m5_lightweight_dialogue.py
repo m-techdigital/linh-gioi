@@ -45,7 +45,10 @@ def git_lines(*args: str) -> list[str]:
 
 
 def main() -> int:
-    require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'GateKeeperDialogueLines', 'DialogueActive', 'DialogueCompleted', 'ContinueDialogue', 'CloseDialogue', 'Mục tiêu 1/2: lắng nghe Người Giữ Cổng.', 'Mục tiêu 2/2: ổn định Đá Luyện.')
+    require('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs', 'OnboardingDialogueContent.CreateGateKeeperSession()', 'DialogueActive', 'DialogueCompleted', 'ContinueDialogue', 'CloseDialogue', 'Mục tiêu 1/2: lắng nghe Người Giữ Cổng.', 'Mục tiêu 2/2: ổn định Đá Luyện.')
+    require('client/Unity/Assets/Game/UI/Runtime/OnboardingBlockoutPreview.cs', 'OnboardingDialogueContent.CreateGateKeeperSession()', 'LGO_GUIDE_CITY_INFORMATION_PASS')
+    require('client/Unity/Assets/Game/World/Runtime/OnboardingDialogueContent.cs', 'Chào mừng đến Linh Thành.', 'Tìm hiểu Linh Thành', 'Đến Sân Luyện')
+    require('client/Unity/Assets/Game/World/Runtime/NpcDialogueSession.cs', 'ReadInformation', 'CanReadInformation', 'ReadingInformation = false')
     require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs', '_dialoguePanel', '_dialogueContinueButton', '_dialogueCloseButton', 'RefreshDialoguePanel', 'SetDialogueVisible')
     require('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.Evidence.cs', 'CaptureEvidenceOpenDialogue', '_world.Enter(_selectedCharacter)', '_world.TriggerInteractionForSmoke()')
     require('client/Unity/Assets/Game/World/Runtime/M5LightweightDialogueSmokeRunner.cs', '--lgo-m5-lightweight-dialogue-smoke', 'openedDialogue', 'dialogueCompleted', 'savePositionStillWorks')
@@ -58,6 +61,7 @@ def main() -> int:
     require_file('tools/m5_lightweight_dialogue_runtime.py', executable=True)
 
     joined = read('client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs') + read('client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs')
+    joined += read('client/Unity/Assets/Game/World/Runtime/OnboardingDialogueContent.cs')
     for marker in FORBIDDEN_MARKERS:
         if marker in joined:
             errors.append(f'forbidden system marker present: {marker}')

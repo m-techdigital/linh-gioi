@@ -12,7 +12,8 @@ namespace LinhGioi.UI
         internal readonly VisualElement Panel, SpeakerHeader, Portrait, Body, Footer, ActionRow;
         internal readonly Label Speaker, Line, Progress;
         internal readonly ScrollView Scroll;
-        internal readonly Button ContinueButton, CloseButton;
+        internal readonly Button ContinueButton, CloseButton, InformationButton;
+        private NpcDialogueSession _session;
 
         internal RuntimeNpcDialogueView(RuntimeUiLayoutProfile layout, Action advance, Action close, Texture2D portrait = null)
         {
@@ -29,6 +30,12 @@ namespace LinhGioi.UI
             Progress = NewStatusLabel("Đối thoại: 0/3", RuntimeArtCatalog.Muted);
             ContinueButton = NewCompactSecondaryButton("Tiếp tục", advance);
             CloseButton = NewQuietButton("Đóng", close);
+            InformationButton = NewCompactSecondaryButton(string.Empty, () =>
+            {
+                if (_session != null && _session.ReadInformation()) Refresh(_session);
+            });
+            InformationButton.name = "LGO Dialogue Information Action";
+            InformationButton.style.display = DisplayStyle.None;
             SpeakerHeader.Add(Portrait);
             SpeakerHeader.Add(Speaker);
             Panel.Add(SpeakerHeader);
@@ -36,6 +43,7 @@ namespace LinhGioi.UI
             Body.Add(Scroll);
             Panel.Add(Body);
             Footer.Add(Progress);
+            Footer.Add(InformationButton);
             ActionRow = NewActionRow("LGO Dialogue Action Row", Justify.FlexStart, 6, 0, ContinueButton, CloseButton);
             Footer.Add(ActionRow);
             Panel.Add(Footer);
@@ -43,21 +51,29 @@ namespace LinhGioi.UI
             ApplyLayout(layout);
         }
 
-        internal void ApplyLayout(RuntimeUiLayoutProfile layout) =>
+        internal void ApplyLayout(RuntimeUiLayoutProfile layout)
+        {
             RuntimeWorldHudResponsiveLayout.ApplyDialogue(layout, Panel, SpeakerHeader, Portrait, Speaker,
                 Body, Scroll, Footer, Line, Progress, ActionRow, ContinueButton, CloseButton);
+            RuntimeUiSkin.ApplyButtonTier(InformationButton, layout.IsMobile ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
+            RuntimeUiOverflowGuard.ApplyButton(InformationButton);
+            InformationButton.style.flexShrink = 0;
+        }
 
         internal void Refresh(NpcDialogueSession session)
         {
+            _session = session;
             var resetReadingPosition = Panel.style.display != DisplayStyle.Flex || Line.text != session.Line;
             Panel.style.display = session.Active ? DisplayStyle.Flex : DisplayStyle.None;
+            InformationButton.style.display = session.CanReadInformation ? DisplayStyle.Flex : DisplayStyle.None;
+            InformationButton.text = session.InformationAction ?? string.Empty;
             if (!session.Active) return;
             Panel.BringToFront();
             Speaker.text = session.Speaker;
             Line.text = session.Line;
             if (resetReadingPosition) Scroll.scrollOffset = Vector2.zero;
-            Progress.text = "Đối thoại: " + session.Progress;
-            ContinueButton.text = session.HasNext ? "Tiếp tục" : "Hoàn tất";
+            Progress.text = session.ReadingInformation ? session.InformationAction : "Đối thoại: " + session.Progress;
+            ContinueButton.text = session.ReadingInformation ? "Quay lại" : session.HasNext ? "Tiếp tục" : session.CompletionAction;
         }
     }
 }

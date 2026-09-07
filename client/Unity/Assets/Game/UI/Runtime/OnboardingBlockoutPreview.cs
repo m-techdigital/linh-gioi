@@ -12,18 +12,14 @@ namespace LinhGioi.UI
         private OnboardingBlockoutWorld _world;
         private RuntimeTouchMovementPad _pad;
         private bool _capturing;
-        private readonly NpcDialogueSession _session = new NpcDialogueSession("Người Giữ Cổng", new[]
-        {
-            "Chào mừng đến Linh Môn. Hãy dừng chân, ổn định hơi thở trước khi vào thành.",
-            "Đá Luyện ở bên phải đường phía trước. Đến gần bên đá rồi tập trung linh khí.",
-            "Đây là bước làm quen với linh khí, không phải giao chiến. Khi đã sẵn sàng, hãy thử một lần."
-        });
+        private readonly NpcDialogueSession _session = OnboardingDialogueContent.CreateGateKeeperSession();
         private RuntimeNpcDialogueView _dialogue;
         private RuntimeWorldGuidanceView _guidance;
         private ScrollView _guidanceScroll;
         private Button _interact;
         private Action _applyLayout;
         private bool _stoneCompleted;
+        private float _stoneFeedbackStartedAt = float.NegativeInfinity;
         private bool _forecourtVisited;
         private float _forecourtArrivalUntil;
         private bool _locomotionVerified;
@@ -109,7 +105,11 @@ namespace LinhGioi.UI
         private void Interact()
         {
             if (_session.Active || _stoneCompleted || !InRange) return;
-            if (_session.Completed) _stoneCompleted = true;
+            if (_session.Completed)
+            {
+                _stoneCompleted = true;
+                _stoneFeedbackStartedAt = Time.unscaledTime;
+            }
             else _session.Open();
             RefreshDialogue();
         }
@@ -405,6 +405,41 @@ namespace LinhGioi.UI
             Submit(_dialogue.ContinueButton);
             Submit(_dialogue.ContinueButton);
             if (_session.Completed) throw new InvalidOperationException("Dialogue completed before final action.");
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            if (_dialogue.InformationButton.resolvedStyle.display == DisplayStyle.None ||
+                _dialogue.InformationButton.text != "Tìm hiểu Linh Thành" || _dialogue.ContinueButton.text != "Đến Sân Luyện")
+                throw new InvalidOperationException("Guide must offer city information and a clear next destination.");
+            var informationBounds = _dialogue.InformationButton.worldBound;
+            if (_dialogue.InformationButton.parent != _dialogue.Footer || informationBounds.height <= 0f ||
+                informationBounds.yMin < _dialogue.Footer.worldBound.yMin ||
+                informationBounds.yMax > _dialogue.ActionRow.worldBound.yMin + 1f ||
+                informationBounds.xMin < _dialogue.Panel.worldBound.xMin ||
+                informationBounds.xMax > _dialogue.Panel.worldBound.xMax ||
+                _dialogue.Footer.worldBound.yMax > _dialogue.Panel.worldBound.yMax + 1f)
+                throw new InvalidOperationException("City information action must stay fully visible in the fixed shared footer, never in body scroll.");
+            yield return Capture(directory, "dialogue-choices");
+            Submit(_dialogue.InformationButton);
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            if (!_session.ReadingInformation || _session.Completed || !_world.DialogueVisible ||
+                _dialogue.ContinueButton.text != "Quay lại" || !_dialogue.Line.text.Contains("gặp gỡ"))
+                throw new InvalidOperationException("Reading about the city must not complete onboarding or unlock movement.");
+            yield return Capture(directory, "dialogue-city-information");
+            _dialogue.Line.text = string.Join("\n", new string[24]).Replace("\n", "Linh Thành chào đón bạn.\n");
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            if (_dialogue.Scroll.verticalScroller.highValue <= 0f)
+                throw new InvalidOperationException("Long information must scroll inside the shared dialogue body.");
+            _dialogue.Scroll.scrollOffset = new Vector2(0, _dialogue.Scroll.verticalScroller.highValue);
+            yield return null;
+            if (_dialogue.Scroll.scrollOffset.y <= 0f || _dialogue.Footer.worldBound.yMax > _dialogue.Panel.worldBound.yMax + 1f)
+                throw new InvalidOperationException("Information scrolling must preserve a contained, reachable footer.");
+            _dialogue.Refresh(_session);
+            Submit(_dialogue.ContinueButton);
+            if (_session.Completed || _session.ReadingInformation || !_session.CanReadInformation)
+                throw new InvalidOperationException("Returning from city information must restore the uncompleted destination choice.");
+            Debug.Log("LGO_GUIDE_CITY_INFORMATION_PASS optional=true no_completion=true scroll=true return=true");
             Submit(_dialogue.ContinueButton);
             if (!_session.Completed || _session.Active) throw new InvalidOperationException("Dialogue did not complete.");
             yield return null;
@@ -486,6 +521,9 @@ namespace LinhGioi.UI
                 frontSeal.GetComponent<Renderer>().sharedMaterial != sealMaterial || sideSeal.GetComponent<Renderer>().sharedMaterial != sealMaterial)
                 throw new InvalidOperationException("Stone confirmation needs a warm pulse and a bright seal using the original shared material.");
             yield return Capture(directory, "complete");
+            if (_guidance.Hint.text != "Đá Luyện cộng hưởng với linh lực của bạn.")
+                throw new InvalidOperationException("Stone confirmation must explain the resonance before replacing it with travel directions.");
+            CheckCompletedStoneRepeat();
             if (Array.IndexOf(args, "--lgo-gesture-finish") >= 0)
             {
                 yield return new WaitForSeconds(2.5f);
@@ -533,6 +571,38 @@ namespace LinhGioi.UI
                 yield break;
             }
             yield return Capture(directory, "complete-settled");
+            var calmObserved = false;
+            var conclusionObserved = false;
+            while (Time.unscaledTime - _stoneFeedbackStartedAt < OnboardingDialogueContent.StoneFeedbackDuration)
+            {
+                yield return null;
+                var elapsed = Time.unscaledTime - _stoneFeedbackStartedAt;
+                var expected = OnboardingDialogueContent.StoneFeedback(elapsed);
+                if (expected == null) break;
+                if (_guidance.Hint.text != expected)
+                    throw new InvalidOperationException("Stone narration does not match its current elapsed phase.");
+                if (elapsed >= 3f && elapsed < 6f && !calmObserved)
+                {
+                    calmObserved = true;
+                    if (!CheckGuidance("Đến sân phía trước.", true)) yield break;
+                    yield return Capture(directory, "stone-result-calm");
+                }
+                if (elapsed >= 6f && !conclusionObserved)
+                {
+                    conclusionObserved = true;
+                    yield return Capture(directory, "stone-result-conclusion");
+                }
+            }
+            while (Time.unscaledTime - _stoneFeedbackStartedAt < OnboardingDialogueContent.StoneFeedbackDuration + 0.2f) yield return null;
+            if (_guidance.Hint.text != "Đi tiếp theo đường đá, tới khoảng sân có cây.")
+                throw new InvalidOperationException("Stone result failed to return to exploration guidance.");
+            yield return WalkTo(stoneInteractionPosition);
+            CheckCompletedStoneRepeat();
+            // Slow captures may skip a timed phase; never label an unobserved phase as passing.
+            if (calmObserved && conclusionObserved)
+                Debug.Log("LGO_STONE_RESULT_FEEDBACK_PASS resonance=true calm=true conclusion=true repeat_in_range=true exploration_restored=true");
+            else
+                Debug.LogWarning("LGO_STONE_RESULT_OBSERVATION_INCOMPLETE calm=" + calmObserved + " conclusion=" + conclusionObserved);
             if (Vector4.Distance(sealRestColor, sealMaterial.color) > 0.01f)
                 throw new InvalidOperationException("Stone seal must return to its resting color after confirmation.");
             Debug.Log("LGO_STONE_SEAL_PULSE_PASS bright_peak=true warm_ring=true restored=true shared_material=true");
@@ -699,6 +769,16 @@ namespace LinhGioi.UI
             return false;
         }
 
+        private void CheckCompletedStoneRepeat()
+        {
+            if (!_stoneCompleted || !InRange || _session.Active || _interact.enabledSelf)
+                throw new InvalidOperationException("Repeat probe requires a completed stone while still in interaction range.");
+            var startedAt = _stoneFeedbackStartedAt;
+            Interact();
+            if (!_stoneCompleted || _stoneFeedbackStartedAt != startedAt)
+                throw new InvalidOperationException("Completed stone interaction restarted its feedback while in range.");
+        }
+
         private IEnumerator WalkTo(Vector3 point)
         {
             var deadline = Time.realtimeSinceStartup + 10f;
@@ -748,7 +828,8 @@ namespace LinhGioi.UI
             _guidanceScroll.style.display = _session.Active || (_forecourtVisited && Time.unscaledTime >= _forecourtArrivalUntil)
                 ? DisplayStyle.None : DisplayStyle.Flex;
             _guidance.Objective.text = _forecourtVisited ? "Đã tới sân." : _stoneCompleted ? "Đến sân phía trước." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
-            _guidance.Hint.text = _forecourtVisited ? "Nhịp linh khí đã ổn định." : _stoneCompleted ? "Đi tiếp theo đường đá, tới khoảng sân có cây."
+            _guidance.Hint.text = _forecourtVisited ? "Bạn có thể dừng chân ở đây." : _stoneCompleted
+                ? OnboardingDialogueContent.StoneFeedback(Time.unscaledTime - _stoneFeedbackStartedAt) ?? "Đi tiếp theo đường đá, tới khoảng sân có cây."
                 : _session.Completed ? (InRange ? "Đá Luyện sẵn sàng nhận linh khí." : "Đá ở bên phải đường phía trước.")
                 : InRange ? "Người Giữ Cổng đang chờ." : "Theo đường đá đến Người Giữ Cổng.";
             RuntimeUiFactory.ApplyWorldTouchInteraction(_interact, _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp");

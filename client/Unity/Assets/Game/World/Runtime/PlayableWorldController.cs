@@ -15,12 +15,6 @@ namespace LinhGioi.World
         private const float LocalCombatTargetSelectionRange = 10f;
         private const uint CombatProtocolVersion = 1;
         private static readonly Vector3 CameraFollowOffset = new Vector3(0f, 8.25f, -8.75f);
-        private static readonly string[] GateKeeperDialogueLines =
-        {
-            "Chào mừng đến Linh Môn. Giữ hơi thở thật ổn định.",
-            "Theo đường đá tới Đá Luyện ở cuối sân; đến gần rồi tập trung linh khí.",
-            "Sân này an toàn. Bóng ở phía đông chỉ là dấu cảnh báo."
-        };
         private static readonly Vector3 GateKeeperPosition = new Vector3(-2.25f, 0.75f, 2.85f);
         private static readonly Vector3 TrainingStonePosition = new Vector3(0f, 0.08f, 4.5f);
         private static readonly Vector3 ShadowSlimePosition = new Vector3(3f, 0.4f, 3f);
@@ -69,7 +63,7 @@ namespace LinhGioi.World
         private readonly LocalCombatPrototypeState _localCombat = new LocalCombatPrototypeState();
         private LocalCombatPrototypeOutcome _lastLocalCombatOutcome;
         private bool _targetDummyHitAcknowledged;
-        public NpcDialogueSession Dialogue { get; } = new NpcDialogueSession("Người Giữ Cổng", GateKeeperDialogueLines);
+        public NpcDialogueSession Dialogue { get; } = OnboardingDialogueContent.CreateGateKeeperSession();
 
         public event Action PositionChanged;
         public event Action InteractionStateChanged;
