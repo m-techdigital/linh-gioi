@@ -147,6 +147,41 @@ namespace LinhGioi.UI
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            var cityReviewIndex = Array.IndexOf(args, "--lgo-city-quality-review");
+            if (cityReviewIndex >= 0 && cityReviewIndex + 1 < args.Length)
+            {
+                if (!Debug.isDebugBuild) throw new InvalidOperationException("City review requires a development Player.");
+                _capturing = true;
+                var cityDirectory = Path.GetFullPath(args[cityReviewIndex + 1]);
+                Directory.CreateDirectory(cityDirectory);
+                yield return new WaitForSeconds(1f);
+                yield return Capture(cityDirectory, "arrival-gameplay");
+                yield return WalkTo(new Vector3(0f, 0f, 14f));
+                yield return Capture(cityDirectory, "street-gameplay");
+                yield return WalkTo(new Vector3(2f, 0f, 22f));
+                yield return Capture(cityDirectory, "forecourt-gameplay");
+                yield return WalkTo(new Vector3(0f, 0f, 14f));
+                yield return WalkTo(new Vector3(0f, 0f, -3f));
+                if (Mathf.Abs(_world.Position.y) > .1f) throw new InvalidOperationException("City route left paving.");
+                // Explicit inspection views of the real scene; gameplay captures above retain the normal camera and UI.
+                GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                var cityCamera = Camera.main;
+                _world.BeginArchitectureReview();
+                var positions = new[] { new Vector3(0,3,-8), new Vector3(-.6f,3,1), new Vector3(.6f,3,8), new Vector3(0,6,17) };
+                var targets = new[] { new Vector3(0,3,15), new Vector3(-5.5f,3.3f,6), new Vector3(5.5f,3.1f,12), new Vector3(0,6,44) };
+                for(var view=0;view<positions.Length;view++)
+                {
+                    cityCamera.transform.position=positions[view];
+                    cityCamera.transform.LookAt(targets[view]);
+                    yield return Capture(cityDirectory, "city-inspection-"+view);
+                    if(Vector3.Distance(cityCamera.transform.position,positions[view])>.01f
+                        || Vector3.Angle(cityCamera.transform.forward,targets[view]-positions[view])>.1f)
+                        throw new InvalidOperationException("City inspection camera was overwritten.");
+                }
+                Debug.Log("LGO_CITY_QUALITY_CAPTURE_COMPLETE frames=7 route=arrival_forecourt_return locomotion="+_locomotionVerified+" viewport="+Screen.width+"x"+Screen.height);
+                Application.Quit(0);
+                yield break;
+            }
             var playerQualityIndex = Array.IndexOf(args, "--lgo-player-quality-review");
             if (playerQualityIndex >= 0 && playerQualityIndex + 1 < args.Length)
             {

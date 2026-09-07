@@ -53,7 +53,6 @@ namespace LinhGioi.World
         private Mesh _stoneSealMesh;
         private Mesh _pavingMesh;
         private Texture2D _pavingTexture;
-        private Mesh _houseFacadeMesh;
         private Mesh _lanternFrameMesh;
         private Mesh _pavilionBenchMesh;
         private Mesh _pavilionFrameMesh;
@@ -230,46 +229,11 @@ namespace LinhGioi.World
             var house = new GameObject(scenery ? "Street scenery house" : "Street house").transform;
             house.SetParent(transform);
             house.position = centre;
-            var body = Box("Street module", centre + Vector3.up * height * 0.5f,
+            Box("Street module", centre + Vector3.up * height * 0.5f,
                 new Vector3(3f, height, 4.8f), walls, !scenery, house);
             CreateRoof(centre + Vector3.up * (height + 0.1f), roof, !scenery, house);
             Box("Stone plinth", centre + Vector3.up * 0.15f, new Vector3(3.04f, 0.3f, 4.84f), roof, false, house);
             Box("Timber eave band", centre + Vector3.up * (height - 0.08f), new Vector3(3.05f, 0.16f, 4.85f), trim, false, house);
-            if (_houseFacadeMesh == null)
-            {
-                var cube = body.GetComponent<MeshFilter>().sharedMesh;
-                var parts = new System.Collections.Generic.List<CombineInstance>();
-                void Beam(Vector3 position, Vector3 size)
-                {
-                    parts.Add(new CombineInstance { mesh = cube, transform = Matrix4x4.TRS(position, Quaternion.identity, size) });
-                }
-                Beam(new Vector3(0.02f, 1f, 0f), new Vector3(0.04f, 2f, 1.1f));
-                for (var side = -1; side <= 1; side += 2)
-                    Beam(new Vector3(0.055f, 1.05f, side * 0.6f), new Vector3(0.11f, 2.1f, 0.1f));
-                Beam(new Vector3(0.055f, 2.05f, 0f), new Vector3(0.11f, 0.1f, 1.3f));
-                Beam(new Vector3(0.065f, 1f, 0f), new Vector3(0.09f, 1.95f, 0.04f));
-                for (var rail = 0; rail < 2; rail++)
-                    Beam(new Vector3(0.065f, 0.65f + rail * 0.7f, 0f), new Vector3(0.09f, 0.04f, 1.1f));
-                for (var side = -1; side <= 1; side += 2)
-                {
-                    var windowZ = side * 1.65f;
-                    for (var edge = -1; edge <= 1; edge += 2)
-                    {
-                        Beam(new Vector3(0.045f, 1.5f + edge * 0.4f, windowZ), new Vector3(0.09f, 0.07f, 0.8f));
-                        Beam(new Vector3(0.045f, 1.5f, windowZ + edge * 0.365f), new Vector3(0.09f, 0.8f, 0.07f));
-                        Beam(new Vector3(0.035f, 1.5f, windowZ + edge * 0.12f), new Vector3(0.07f, 0.8f, 0.025f));
-                    }
-                    Beam(new Vector3(0.035f, 1.5f, windowZ), new Vector3(0.07f, 0.025f, 0.8f));
-                }
-                _houseFacadeMesh = new Mesh { name = "Shared street house facade" };
-                _houseFacadeMesh.CombineMeshes(parts.ToArray(), true, true);
-            }
-            var facade = new GameObject("House facade");
-            facade.transform.SetParent(house);
-            facade.transform.position = centre + Vector3.right * (centre.x < 0f ? 1.505f : -1.505f);
-            facade.transform.rotation = Quaternion.Euler(0f, centre.x < 0f ? 0f : 180f, 0f);
-            facade.AddComponent<MeshFilter>().sharedMesh = _houseFacadeMesh;
-            facade.AddComponent<MeshRenderer>().sharedMaterial = trim;
             _city.House(centre, height);
             if (scenery) house.rotation = Quaternion.Euler(0f, centre.x < 0f ? 90f : -90f, 0f);
             _city.EndModule();
@@ -449,6 +413,12 @@ namespace LinhGioi.World
             _screenInputHeld = false;
         }
 
+        public void BeginArchitectureReview()
+        {
+            if (!Debug.isDebugBuild) throw new System.InvalidOperationException("Architecture review requires a development Player.");
+            _camera.GetComponent<CinemachineBrain>().enabled = false;
+        }
+
         public void LogCameraShots()
         {
             Debug.Log("LGO_ARRIVAL_CAMERA frame=" + Time.frameCount + " forward=" + _camera.transform.forward + " focused=" + Application.isFocused);
@@ -508,7 +478,7 @@ namespace LinhGioi.World
 
         private void LateUpdate()
         {
-            _cameraBrain.ManualUpdate();
+            if (_cameraBrain.enabled) _cameraBrain.ManualUpdate();
             if (KeeperReady && !_keeperWasReady) _keeperGreetingUntil = Time.time + 2.5f;
             _keeperWasReady = KeeperReady;
             if (DialogueVisible)
@@ -636,7 +606,6 @@ namespace LinhGioi.World
             if (_pavingTexture != null) Destroy(_pavingTexture);
             foreach (var material in _materials)
                 if (material != null) Destroy(material);
-            if (_houseFacadeMesh != null) Destroy(_houseFacadeMesh);
             if (_lanternFrameMesh != null) Destroy(_lanternFrameMesh);
             if (_pavilionBenchMesh != null) Destroy(_pavilionBenchMesh);
             if (_pavilionFrameMesh != null) Destroy(_pavilionFrameMesh);

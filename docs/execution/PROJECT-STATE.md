@@ -10,6 +10,8 @@ Last updated: `2026-09-08`
 
 ## Continuous workflow status
 
+- Phố cổ runtime 2026-09-08: thay mặt tiền cũ bằng family cửa song/khung gỗ/đèn, lớp áp mái cao thấp và ban công; mái có diềm/gối đỡ/ngói nổi. Giữ vị trí nhà và collider tuyến đi. Review bắt khe mái–tường/tầng trên và camera inspection bị ManualUpdate ghi đè, đã sửa; evidence lỗi giữ `city-reference-family-desktop/review.json`. Build `city-reference-door-build.log` 390.270.771 B/0 lỗi/0 cảnh báo (incremental; build trước 19 cảnh báo); Player đi sân/quay lại và camera assertions qua, bảy ảnh PC1920×1080 đã xem tại `build/visual-evidence/city-reference-door-desktop/`. Kit339.536tri/8 batch material/không texture mới; chưa đo FPS. Đây là port hình khối vào family runtime hiện có, không phải JSON layout adapter/full café. Chưa final: vật liệu và mặt đường còn đơn giản, cây/skyline thưa. Mái che cửa đã tránh đèn cũ theo extent thật. NEXT: macro chất liệu đá/gỗ/ngói và family hiên/đèn, rồi cây/cảnh xa/sinh hoạt theo demo; không lặp test thoại/đá/nhân vật không đổi.
+
 Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.

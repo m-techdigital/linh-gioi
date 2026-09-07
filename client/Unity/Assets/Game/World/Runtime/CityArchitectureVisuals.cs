@@ -75,19 +75,39 @@ namespace LinhGioi.World
         internal void Roof(Vector3 eave, Vector3 scale)
         {
             Part(_roof,_navy,eave,scale,Quaternion.identity);
-            // Four swept eave edges, ridge and sparse ceramic ribs preserve the curved silhouette.
+            // Broad dark fascia and ceramic lips, as in the shared authoring roof family.
             for(var edge=0;edge<4;edge++)
             for(var step=0;step<8;step++)
             {
-                var a=EavePoint(edge,step/8f); var b=EavePoint(edge,(step+1)/8f);
-                Beam(_gold,eave+Vector3.Scale(a,scale),eave+Vector3.Scale(b,scale),.045f*scale.y);
+                var a=eave+Vector3.Scale(EavePoint(edge,step/8f),scale);
+                var b=eave+Vector3.Scale(EavePoint(edge,(step+1)/8f),scale);
+                Beam(_wood,a-Vector3.up*.07f,b-Vector3.up*.07f,.14f);
+                Beam(_navy,a+Vector3.up*.035f,b+Vector3.up*.035f,.06f);
             }
-            Beam(_gold,eave+Vector3.Scale(new Vector3(0,1.1f,-.52f),scale),eave+Vector3.Scale(new Vector3(0,1.1f,.52f),scale),.065f*scale.y);
-            // Ceramic rows are a small repeated surface texture, not hundreds of cube ribs.
+            Beam(_navy,eave+Vector3.Scale(new Vector3(0,1.12f,-.52f),scale),eave+Vector3.Scale(new Vector3(0,1.12f,.52f),scale),.15f);
+            // Physical tile ridges stay legible against the sky; the shared tile texture supplies joints.
+            var rows=Mathf.Max(8,Mathf.CeilToInt(scale.z*2f/.22f));
+            for(var row=0;row<=rows;row++) for(var side=-1;side<=1;side+=2)
+            {
+                var z=row/(float)rows*2f-1f;
+                for(var step=0;step<8;step++)
+                {
+                    Vector3 P(float t) => eave+Vector3.Scale(new Vector3(side*t,
+                        RoofHeight(t)-.22f*Mathf.Pow(t,6)+.22f*Mathf.Pow(Mathf.Abs(z),4)*Mathf.Pow(t,6)+.025f,
+                        z*(.52f+.48f*t)),scale);
+                    Beam(_navy,P(step/8f),P((step+1)/8f),.047f);
+                }
+            }
+            for(var side=-1;side<=1;side+=2) for(var bay=-2;bay<=2;bay++)
+            {
+                var p=eave+new Vector3(side*scale.x*.8f,-.17f,bay*scale.z*.38f);
+                Box(_wood,p,new Vector3(.45f,.13f,.18f));
+                Beam(_wood,p+new Vector3(-side*.25f,-.32f,0),p+new Vector3(side*.22f,.10f,0),.12f);
+            }
             for(var x=-1;x<=1;x+=2) for(var z=-1;z<=1;z+=2)
             {
                 var corner=eave+Vector3.Scale(new Vector3(x,.34f,z),scale);
-                Beam(_gold,corner,corner+new Vector3(x*.12f,.22f,z*.12f)*scale.y,.055f*scale.y);
+                Beam(_navy,corner,corner+new Vector3(x*.12f,.22f,z*.12f)*scale.y,.10f);
             }
         }
         private static float RoofHeight(float t) => 1.1f*(1-t)*(1-t)+.34f*Mathf.Pow(t,6);
@@ -188,39 +208,76 @@ namespace LinhGioi.World
             mesh.normals=normals;mesh.RecalculateBounds();return mesh;
         }
 
+        // The same timber / lattice / gallery family as linh-thanh-kit/build_preview.py.
+        // All coordinates stay inside the existing house footprint except overhead eaves.
         internal void House(Vector3 centre,float height)
         {
-            var sign=centre.x<0?1f:-1f;var face=centre.x+sign*1.535f;
-            for(var end=-1;end<=1;end+=2)
-                Box(_wood,new Vector3(face,height*.5f,centre.z+end*2.3f),new Vector3(.17f,height,.17f));
-            for(var level=0;level<2;level++)
-                Box(_wood,new Vector3(face,level==0?.45f:height-.38f,centre.z),new Vector3(.14f,.15f,4.7f));
-            for(var side=-1;side<=1;side+=2)
+            var sign=centre.x<0?1f:-1f;
+            Vector3 P(float depth,float y,float along)=>centre+new Vector3(sign*depth,y,along);
+            void B(Material m,float depth,float y,float along,float d,float h,float w)
+                =>Box(m,P(depth,y,along),new Vector3(d,h,w));
+            void Window(float depth,float y,float along,float h,float w)
             {
-                Box(_window,new Vector3(face-sign*.035f,1.5f,centre.z+side*1.65f),new Vector3(.02f,.74f,.72f));
-                // Bracket arms under the eaves frame the walkable street at human scale.
-                Beam(_wood,new Vector3(face,2.65f,centre.z+side*2.15f),new Vector3(face+sign*.32f,height-.08f,centre.z+side*2.15f),.12f);
+                B(_wood,depth,y,along,.12f,h+.18f,w+.18f);
+                B(_ivory,depth+.075f,y,along,.035f,h,w);
+                for(var slat=-2;slat<=2;slat++) B(_wood,depth+.11f,y,along+slat*w/5f,.055f,h,.038f);
+                for(var rail=-1;rail<=1;rail+=2) B(_wood,depth+.11f,y+rail*h*.27f,along,.055f,.04f,w);
+                B(_wood,depth+.10f,y-h*.5f-.11f,along,.32f,.12f,w+.3f);
             }
-            Box(_wood,new Vector3(face+sign*.12f,height-.05f,centre.z),new Vector3(.38f,.18f,4.8f));
-            if (centre.z >= 6f && centre.z <= 12f)
+            B(_wood,0,height+.09f,0,3.04f,.34f,4.84f);
+            B(_ivory,0,.12f,0,3.14f,.24f,4.94f);
+            B(_ivory,0,.32f,0,3.08f,.13f,4.88f);
+            // Continuous frame wraps the visible front and both gables.
+            foreach(var depth in new[]{-1.52f,1.52f})
             {
-                // Canvas window awnings above head height; no shop/reward interaction implied.
-                var canopy = new Vector3(face+sign*.28f,2.42f,centre.z+1.45f);
-                Part(_cube,_teal,canopy,new Vector3(.68f,.045f,1.48f),Quaternion.Euler(0,0,-sign*12f));
-                Box(_gold,canopy+new Vector3(sign*.32f,-.075f,0),new Vector3(.04f,.11f,1.5f));
-                for(var end=-1;end<=1;end+=2)
-                    Beam(_wood,new Vector3(face,2.16f,canopy.z+end*.66f),new Vector3(face+sign*.52f,2.35f,canopy.z+end*.66f),.055f);
-                // A narrow sill and paired shutters give the recessed opening depth.
-                Box(_wood,new Vector3(face+sign*.075f,1.05f,canopy.z),new Vector3(.22f,.09f,1.36f));
-                for(var side=-1;side<=1;side+=2)
-                    Part(_cube,_wood,new Vector3(face+sign*.07f,1.48f,canopy.z+side*.50f),new Vector3(.045f,.74f,.21f),Quaternion.Euler(0,side*22f,0));
+                foreach(var along in new[]{-2.3f,0f,2.3f}) B(_wood,depth,height*.5f,along,.18f,height,.18f);
+                foreach(var y in new[]{.48f,2.35f,height-.08f}) B(_wood,depth,y,0,.17f,.17f,4.7f);
             }
-            // Upper clerestory and balcony-like rails give modules a second architectural rhythm.
-            if(height>3)
+            foreach(var along in new[]{-2.41f,2.41f})
             {
-                Box(_teal,new Vector3(face+sign*.03f,height-.7f,centre.z),new Vector3(.035f,.48f,1.35f));
-                for(var slat=-3;slat<=3;slat++)
-                    Box(_gold,new Vector3(face+sign*.065f,height-.7f,centre.z+slat*.19f),new Vector3(.05f,.48f,.023f));
+                foreach(var y in new[]{.48f,2.35f,height-.08f}) B(_wood,0,y,along,3.1f,.14f,.14f);
+                foreach(var depth in new[]{-.8f,.8f}) B(_wood,depth,height*.5f,along,.12f,height,.12f);
+            }
+            foreach(var side in new[]{-1f,1f}) Window(1.55f,1.5f,side*1.52f,1.13f,1.03f);
+            B(_wood,1.57f,1.25f,0,.13f,1.95f,1.10f);
+            for(var plank=-3;plank<=3;plank++) B(_window,1.65f,1.25f,plank*.137f,.04f,1.74f,.115f);
+            foreach(var y in new[]{.61f,1.65f}) B(_wood,1.69f,y,0,.055f,.10f,1.04f);
+            foreach(var side in new[]{-1f,1f}) B(_gold,1.70f,1.21f,side*.11f,.045f,.13f,.045f);
+            // Lanterns hang above walking headroom. No protruding ground props in the route.
+            foreach(var along in new[]{-2.05f,2.05f})
+            {
+                B(_wood,1.73f,height-.20f,along,.53f,.10f,.10f);
+                B(_gold,1.91f,height-.40f,along,.025f,.28f,.025f);
+                B(_ivory,1.91f,height-.77f,along,.24f,.43f,.28f);
+                foreach(var y in new[]{height-1.01f,height-.53f}) B(_wood,1.91f,y,along,.32f,.06f,.37f);
+                foreach(var offset in new[]{-.16f,.16f}) B(_wood,2.05f,height-.77f,along+offset,.04f,.46f,.04f);
+            }
+            if(height<3f) return;
+            // A narrower upper room rises out of the lower roof, replacing the flat repeated skyline.
+            var upperHeight=centre.z>5f && centre.z<7f ? 2.3f : 1.35f;
+            var floor=height+.35f;var top=floor+upperHeight;
+            var roomBottom=height-.1f;var roomHeight=top-roomBottom;
+            B(_ivory,0,roomBottom+roomHeight*.5f,0,2.40f,roomHeight,3.4f);
+            foreach(var depth in new[]{-1.23f,1.23f})
+            {
+                foreach(var along in new[]{-1.65f,0f,1.65f}) B(_wood,depth,roomBottom+roomHeight*.5f,along,.14f,roomHeight,.14f);
+                foreach(var y in new[]{floor+.05f,top-.05f}) B(_wood,depth,y,0,.15f,.14f,3.5f);
+            }
+            foreach(var side in new[]{-1f,1f}) Window(1.24f,floor+upperHeight*.55f,side*.83f,upperHeight*.64f,1.14f);
+            B(_wood,1.42f,floor-.04f,0,.78f,.13f,3.6f);
+            foreach(var along in new[]{-1.65f,0f,1.65f})
+                Beam(_wood,P(1.2f,height-.15f,along),P(1.77f,floor-.09f,along),.15f);
+            foreach(var y in new[]{floor+.22f,floor+.65f}) B(_wood,1.79f,y,0,.075f,.075f,3.5f);
+            for(var rail=-5;rail<=5;rail++) B(_wood,1.79f,floor+.39f,rail*.33f,.055f,.53f,.055f);
+            Roof(centre+Vector3.up*(top+.04f),new Vector3(1.53f,.70f,2.04f));
+            // Door shelter: half-width 1 m leaves the existing lantern at z=10.7 outside its edge.
+            if(centre.x>0 && centre.z>11f && centre.z<13f)
+            {
+                Part(_cube,_ivory,P(1.88f,2.43f,0),new Vector3(.84f,.055f,2.0f),Quaternion.Euler(0,0,-sign*10f));
+                B(_teal,2.28f,2.28f,0,.04f,.16f,2.0f);
+                B(_wood,1.76f,2.04f,1.84f,.12f,.45f,.55f);
+                B(_ivory,1.84f,2.05f,1.8f,.025f,.18f,.18f);
+                B(_ivory,1.84f,2.05f,1.93f,.025f,.12f,.065f);
             }
         }
 
