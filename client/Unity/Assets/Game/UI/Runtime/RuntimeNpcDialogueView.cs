@@ -14,11 +14,11 @@ namespace LinhGioi.UI
         internal readonly ScrollView Scroll;
         internal readonly Button ContinueButton, CloseButton;
 
-        internal RuntimeNpcDialogueView(RuntimeUiLayoutProfile layout, Action advance, Action close)
+        internal RuntimeNpcDialogueView(RuntimeUiLayoutProfile layout, Action advance, Action close, Texture2D portrait = null)
         {
             Panel = NewSectionShell(string.Empty, string.Empty, string.Empty, "LGO Dialogue Shell");
             SpeakerHeader = new VisualElement { name = "LGO Dialogue Speaker Header" };
-            Portrait = NewRuntimeIcon(LgoVisualAssetRegistryV3B.GateKeeperPortrait, layout.DialogueSpeakerPortraitSize, "Người Giữ Cổng");
+            Portrait = NewRuntimeIcon(portrait != null ? portrait : LgoVisualAssetRegistryV3B.GateKeeperPortrait, layout.DialogueSpeakerPortraitSize, "Người Giữ Cổng");
             Portrait.name = "LGO Dialogue Speaker Portrait V3B";
             Speaker = new Label("Người Giữ Cổng");
             RuntimeUiSkin.ApplyText(Speaker, RuntimeArtCatalog.Gold, RuntimeUiTypography.DialogueSpeakerInitialFontSize, true);

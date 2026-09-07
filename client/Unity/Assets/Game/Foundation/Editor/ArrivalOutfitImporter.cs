@@ -117,7 +117,29 @@ namespace LinhGioi.Foundation.Editor
                 settings.textureCompression = TextureImporterCompression.CompressedHQ;
                 settings.SaveAndReimport();
             }
-            var model = AssetDatabase.LoadAssetAtPath<GameObject>(ModelPath);
+            SaveCandidatePrefab(ModelPath, PrefabPath);
+        }
+
+        public static void ImportKeeper()
+        {
+            var path = Directory + "GateKeeper.fbx";
+            ConfigureHumanoid(path, false);
+            ValidateModel(path);
+            var portrait = (TextureImporter)AssetImporter.GetAtPath(Directory + "Resources/LGOGateKeeperPortrait.png");
+            portrait.textureType = TextureImporterType.Default;
+            portrait.maxTextureSize = 128;
+            portrait.mipmapEnabled = false;
+            portrait.isReadable = false;
+            portrait.alphaIsTransparency = true;
+            portrait.textureCompression = TextureImporterCompression.CompressedHQ;
+            portrait.SaveAndReimport();
+            SaveCandidatePrefab(path, Directory + "Resources/LGOGateKeeperCandidate.prefab");
+            Debug.Log("LGO_KEEPER_PREFAB_READY shared_textures=true shared_controller=true");
+        }
+
+        private static void SaveCandidatePrefab(string modelPath, string prefabPath)
+        {
+            var model = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
             var instance = (GameObject)PrefabUtility.InstantiatePrefab(model);
             try
             {
@@ -126,7 +148,7 @@ namespace LinhGioi.Foundation.Editor
                 var animator = instance.GetComponent<Animator>();
                 animator.applyRootMotion = false;
                 animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(Directory + "ArrivalLocomotion.controller");
-                PrefabUtility.SaveAsPrefabAsset(instance, PrefabPath);
+                PrefabUtility.SaveAsPrefabAsset(instance, prefabPath);
                 AssetDatabase.SaveAssets();
                 if (renderer.sharedMaterials.Any(m => m == null || m.shader.name != "Universal Render Pipeline/Lit"))
                     throw new InvalidOperationException("Arrival outfit has an unsupported material.");
@@ -259,6 +281,9 @@ namespace LinhGioi.Foundation.Editor
             else if (name == "Arrival muted blue sash") color = new Color(0.09f, 0.15f, 0.19f);
             else if (name == "Arrival charcoal trousers") color = new Color(0.06f, 0.065f, 0.06f);
             else if (name == "Arrival black hair") color = new Color(0.012f, 0.014f, 0.018f);
+            else if (name == "Keeper gray robe") color = new Color(0.28f, 0.29f, 0.28f);
+            else if (name == "Keeper antique gold") color = new Color(0.42f, 0.34f, 0.19f);
+            else if (name == "Keeper silver hair") color = new Color(0.68f, 0.70f, 0.69f);
             else throw new InvalidOperationException("Unmapped arrival material: " + name);
             var path = Directory + name.Replace(' ', '_') + ".mat";
             var material = AssetDatabase.LoadAssetAtPath<Material>(path);
@@ -276,11 +301,16 @@ namespace LinhGioi.Foundation.Editor
 
         public static void Validate()
         {
-            AssetDatabase.ImportAsset(ModelPath, ImportAssetOptions.ForceSynchronousImport);
-            var avatar = AssetDatabase.LoadAllAssetsAtPath(ModelPath).OfType<Avatar>().FirstOrDefault();
+            ValidateModel(ModelPath);
+        }
+
+        private static void ValidateModel(string modelPath)
+        {
+            AssetDatabase.ImportAsset(modelPath, ImportAssetOptions.ForceSynchronousImport);
+            var avatar = AssetDatabase.LoadAllAssetsAtPath(modelPath).OfType<Avatar>().FirstOrDefault();
             if (avatar == null || !avatar.isValid || !avatar.isHuman)
                 throw new InvalidOperationException("Arrival outfit requires a valid Humanoid Avatar.");
-            var model = AssetDatabase.LoadAssetAtPath<GameObject>(ModelPath);
+            var model = AssetDatabase.LoadAssetAtPath<GameObject>(modelPath);
             var renderers = model.GetComponentsInChildren<SkinnedMeshRenderer>();
             if (renderers.Length != 1 || renderers[0].sharedMesh.subMeshCount != 6)
                 throw new InvalidOperationException("Arrival outfit must retain one skinned mesh and six material sections.");

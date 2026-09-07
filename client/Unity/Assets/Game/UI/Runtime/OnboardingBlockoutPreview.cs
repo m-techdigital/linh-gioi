@@ -90,7 +90,7 @@ namespace LinhGioi.UI
             root.Add(_guidanceScroll);
             _dialogue = new RuntimeNpcDialogueView(RuntimeUiLayoutProfile.FromScreen(null, Screen.width, Screen.height),
                 () => { _session.Advance(); RefreshDialogue(); },
-                () => { _session.Close(); RefreshDialogue(); });
+                () => { _session.Close(); RefreshDialogue(); }, Resources.Load<Texture2D>("LGOGateKeeperPortrait"));
             root.Add(_dialogue.Panel);
             _applyLayout = () =>
             {
@@ -271,10 +271,38 @@ namespace LinhGioi.UI
                 throw new InvalidOperationException("Tree contact shadow must sit above non-colliding soil and below the roots.");
             if (Mathf.Abs(forecourtTree.bounds.min.y - 0.325f) > 0.01f)
                 throw new InvalidOperationException("Forecourt tree must stand on the raised bed: bottom=" + forecourtTree.bounds.min.y);
-            var keeperSprite = _world.transform.Find("Blockout Keeper").GetComponent<SpriteRenderer>();
-            if (Mathf.Abs(keeperSprite.bounds.min.y - 0.025f) > 0.01f)
-                throw new InvalidOperationException("Flat-ground keeper anchor changed.");
-            var character = _world.GetComponentInChildren<Animator>();
+            var character = _world.transform.Find("Blockout player proxy").GetComponentInChildren<Animator>();
+            var keeper = _world.transform.Find("Blockout Keeper");
+            var keeperAnimator = keeper == null ? null : keeper.GetComponent<Animator>();
+            if (keeperAnimator == null || !keeperAnimator.isHuman || keeperAnimator.applyRootMotion ||
+                keeper.GetComponentsInChildren<SkinnedMeshRenderer>().Length != 1 || keeper.GetComponent<SpriteRenderer>() != null)
+                throw new InvalidOperationException("Gate Keeper must be a separate Humanoid actor, not a flat sprite.");
+            var keeperMesh = keeper.GetComponentInChildren<SkinnedMeshRenderer>();
+            ulong keeperTriangles = 0;
+            for (var submesh = 0; submesh < keeperMesh.sharedMesh.subMeshCount; submesh++)
+                keeperTriangles += keeperMesh.sharedMesh.GetIndexCount(submesh) / 3;
+            if (keeperTriangles == 0 || keeperTriangles > 25000 || keeperMesh.sharedMaterials.Length != 6)
+                throw new InvalidOperationException("Gate Keeper exceeds the candidate geometry/material budget.");
+            var keeperSnapshot = new Mesh();
+            var keeperGround = float.PositiveInfinity;
+            try
+            {
+                keeperMesh.BakeMesh(keeperSnapshot, true);
+                foreach (var vertex in keeperSnapshot.vertices)
+                    keeperGround = Mathf.Min(keeperGround, keeperMesh.transform.TransformPoint(vertex).y);
+            }
+            finally { Destroy(keeperSnapshot); }
+            if (keeperGround < -0.01f || keeperGround > 0.05f)
+                throw new InvalidOperationException("Gate Keeper feet must rest near the ground: " + keeperGround);
+            Debug.Log("LGO_KEEPER_GROUND baked_min=" + keeperGround + " culling_min=" + keeperMesh.bounds.min.y);
+            var keeperHead = keeperAnimator.GetBoneTransform(HumanBodyBones.Head);
+            var keeperPose = keeperHead.localRotation;
+            var keeperStart = keeper.position;
+            var keeperRest = keeper.rotation;
+            yield return new WaitForSeconds(0.7f);
+            if (Quaternion.Angle(keeperPose, keeperHead.localRotation) < 0.05f || Vector3.Distance(keeperStart, keeper.position) > 0.001f)
+                throw new InvalidOperationException("Gate Keeper idle must animate without moving its root.");
+            Debug.Log("LGO_KEEPER_HUMANOID_PASS idle=true root_held=true mesh_budget=true");
             if (character == null || !character.isHuman || character.runtimeAnimatorController == null || character.applyRootMotion)
                 throw new InvalidOperationException("Blockout requires a Humanoid character with in-place locomotion.");
             _world.LogCameraShots();
@@ -331,6 +359,10 @@ namespace LinhGioi.UI
             Debug.Log("LGO_INTERACTION_TOOLTIP_PASS hover_event=true safe_bounds=true leave=true");
             Submit(_interact);
             if (!_session.Active) throw new InvalidOperationException("NPC action did not open shared dialogue.");
+            yield return new WaitForSeconds(1f);
+            if (Vector3.Angle(keeper.forward, Vector3.ProjectOnPlane(_world.Position - keeper.position, Vector3.up)) > 5f)
+                throw new InvalidOperationException("Gate Keeper must face the player during dialogue.");
+            Debug.Log("LGO_KEEPER_DIALOGUE_FACING_PASS target=true");
             yield return Capture(directory, "dialogue");
             CheckPlayerIdentity("WWWWWWWWWWWWWWWW", false);
             CheckKeeperFocus(false);
@@ -357,6 +389,12 @@ namespace LinhGioi.UI
             Submit(_dialogue.ContinueButton);
             Submit(_dialogue.CloseButton);
             if (_session.Active || _session.Completed) throw new InvalidOperationException("Closing dialogue advanced onboarding.");
+            yield return new WaitForSeconds(1f);
+            if (Quaternion.Angle(keeperRest, keeper.rotation) > 5f || Vector3.Distance(keeperStart, keeper.position) > 0.001f)
+                throw new InvalidOperationException("Gate Keeper must resume its resting direction without root movement after dialogue.");
+            if (_dialogue.Portrait.resolvedStyle.backgroundImage.texture != Resources.Load<Texture2D>("LGOGateKeeperPortrait"))
+                throw new InvalidOperationException("Dialogue must show the portrait rendered from the Keeper candidate.");
+            Debug.Log("LGO_KEEPER_RETURN_PASS rest=true root_held=true matching_portrait=true");
             yield return null;
             yield return new WaitForEndOfFrame();
             CheckKeeperFocus(true);
@@ -393,6 +431,8 @@ namespace LinhGioi.UI
                 sideSeal.position.x >= OnboardingBlockoutWorld.StonePoint.x - 0.2f)
                 throw new InvalidOperationException("Stone needs shared seal geometry/material on its arrival and road faces without extra collision.");
             Debug.Log("LGO_STONE_SILHOUETTE_PASS low_volume=true collider_unchanged=true shared_seals=true");
+            var sealMaterial = frontSeal.GetComponent<Renderer>().sharedMaterial;
+            var sealRestColor = sealMaterial.color;
             CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
             CheckInteractionIcon("Luyện", "ActionTouch", true);
             if (!CheckGuidance("Chạm Đá Luyện.", true)) yield break;
@@ -441,6 +481,10 @@ namespace LinhGioi.UI
             if (!character.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Interact") || reach < 0.15f ||
                 character.applyRootMotion || Vector3.Distance(stoneInteractionPosition, _world.Position) > 0.01f)
                 throw new InvalidOperationException("Stone action needs a reaching Humanoid gesture without root displacement: reach=" + reach);
+            var pulseColor = focus.GetComponent<SpriteRenderer>().color;
+            if (sealMaterial.color.b < sealRestColor.b + 0.12f || pulseColor.r <= pulseColor.g ||
+                frontSeal.GetComponent<Renderer>().sharedMaterial != sealMaterial || sideSeal.GetComponent<Renderer>().sharedMaterial != sealMaterial)
+                throw new InvalidOperationException("Stone confirmation needs a warm pulse and a bright seal using the original shared material.");
             yield return Capture(directory, "complete");
             if (Array.IndexOf(args, "--lgo-gesture-finish") >= 0)
             {
@@ -489,6 +533,9 @@ namespace LinhGioi.UI
                 yield break;
             }
             yield return Capture(directory, "complete-settled");
+            if (Vector4.Distance(sealRestColor, sealMaterial.color) > 0.01f)
+                throw new InvalidOperationException("Stone seal must return to its resting color after confirmation.");
+            Debug.Log("LGO_STONE_SEAL_PULSE_PASS bright_peak=true warm_ring=true restored=true shared_material=true");
             if (!CheckGuidance("Đến sân phía trước.", true)) yield break;
             var stoneLabel = GameObject.Find("Blockout Stone Label").GetComponent<TextMesh>();
             var shadow = stoneLabel.transform.Find("Blockout Stone Label Shadow").GetComponent<TextMesh>();
@@ -655,7 +702,7 @@ namespace LinhGioi.UI
         private IEnumerator WalkTo(Vector3 point)
         {
             var deadline = Time.realtimeSinceStartup + 10f;
-            var character = _world.GetComponentInChildren<Animator>();
+            var character = _world.transform.Find("Blockout player proxy").GetComponentInChildren<Animator>();
             var leg = character.GetBoneTransform(HumanBodyBones.LeftLowerLeg);
             var initialRotation = leg.localRotation;
             var started = Time.time;

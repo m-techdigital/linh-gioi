@@ -9,8 +9,12 @@ import sys
 
 parser = argparse.ArgumentParser(description="Build the draft arrival outfit from the licensed source FBX.")
 parser.add_argument("--staging", type=Path, default=Path(__file__).resolve().parents[2] / "build/asset-staging/quaternius-base")
+parser.add_argument("--variant", choices=("arrival", "keeper"), default="arrival")
 args = parser.parse_args(sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else [])
 ROOT = args.staging.resolve()
+keeper = args.variant == "keeper"
+OUT = ROOT / "keeper" if keeper else ROOT
+OUT.mkdir(parents=True, exist_ok=True)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 bpy.ops.import_scene.fbx(filepath=str(ROOT / "Superhero_Male_FullBody.fbx"))
 rig = bpy.data.objects["Armature"]
@@ -30,10 +34,10 @@ def material(name, color, texture=None):
         mat.node_tree.links.new(node.outputs["Color"], shader.inputs["Base Color"])
     return mat
 
-cloth = material("Arrival unbleached cloth", (.65, .63, .57))
-sash = material("Arrival muted blue sash", (.09, .15, .19))
+cloth = material("Keeper gray robe" if keeper else "Arrival unbleached cloth", (.28, .29, .28) if keeper else (.65, .63, .57))
+sash = material("Keeper antique gold" if keeper else "Arrival muted blue sash", (.42, .34, .19) if keeper else (.09, .15, .19))
 pants = material("Arrival charcoal trousers", (.06, .065, .06))
-hair = material("Arrival black hair", (.012, .014, .018))
+hair = material("Keeper silver hair" if keeper else "Arrival black hair", (.68, .70, .69) if keeper else (.012, .014, .018))
 skin = material("Base skin", (.7, .5, .35), "T_Superhero_Male_Ligh.png")
 eyes = material("Base eyes", (.4, .3, .2), "T_Eye_Brown.png")
 body.data.materials.clear()
@@ -109,8 +113,9 @@ def tailored_tunic():
     bm = bmesh.new()
     bm.from_mesh(obj.data)
     # Exact plane cuts retain interpolated deform weights at the hem, neck and cuffs.
+    cuff = .67 if keeper else .495
     for point, normal in (((0,0,1.045),(0,0,-1)), ((0,0,1.555),(0,0,1)),
-                          ((.495,0,0),(1,0,0)), ((-.495,0,0),(-1,0,0))):
+                          ((cuff,0,0),(1,0,0)), ((-cuff,0,0),(-1,0,0))):
         bmesh.ops.bisect_plane(bm, geom=list(bm.verts)+list(bm.edges)+list(bm.faces),
                               plane_co=point, plane_no=normal, dist=.00001, clear_outer=True)
     for _ in range(8):
@@ -171,7 +176,7 @@ for row in range(8):
     for col in range(2):
         a=row*3+col
         faces.append((a,a+1,a+4,a+3))
-mesh("Arrival inner wrap",vertices,faces,sash,"spine_03")
+mesh("Arrival inner wrap",vertices,faces,cloth if keeper else sash,"spine_03")
 
 for side, suffix in ((1,"l"),(-1,"r")):
     wrap=body.copy()
@@ -196,11 +201,11 @@ for side, suffix in ((1,"l"),(-1,"r")):
         radial=Vector((0,face.center.y-.065,face.center.z-1.455))
         assert face.normal.dot(radial)>0, "Wrist wrap face points inward: "+suffix
 
-ring("Arrival waist sash", [(1.0,.235,.195),(1.045,.235,.195),(1.10,.235,.195)], sash)
-ring("Arrival split coat", [(1.01,.23,.185),(.85,.265,.195),(.65,.28,.20),(.46,.30,.215)], cloth,
+ring("Arrival waist sash", [(1.0,.235,.195),(1.045,.235,.195),(1.10,.235,.195)], pants if keeper else sash)
+ring("Arrival split coat", [(1.01,.23,.185),(.85,.265,.195),(.65,.28,.20),(.27 if keeper else .46,.30,.215)], cloth,
      start=.12, end=math.tau-.12)
-mesh("Arrival back sash tails", [(-.07,.232,1.02),(.06,.232,1.02),(.08,.26,.53),(-.04,.26,.51)], [(0,1,2,3)], sash)
-mesh("Arrival front sash tails", [(.11,-.18,1.02),(.18,-.15,1.02),(.23,-.22,.70),(.15,-.24,.68)], [(0,1,2,3)], sash)
+mesh("Arrival back sash tails", [(-.07,.232,1.02),(.06,.232,1.02),(.08,.26,.53),(-.04,.26,.51)], [(0,1,2,3)], pants if keeper else sash)
+mesh("Arrival front sash tails", [(.11,-.18,1.02),(.18,-.15,1.02),(.23,-.22,.70),(.15,-.24,.68)], [(0,1,2,3)], pants if keeper else sash)
 
 # Hair is a volume study, not final hair cards or a production hairstyle.
 def ellipsoid(name, location, scale, mat):
@@ -242,6 +247,13 @@ for side in (-1,1):
               [(side*.048,-.01,1.79),(side*.074,-.065,1.73),(side*.085,-.09,1.64),(side*.086,-.077,1.58)],
               [.024,.022,.014,.001])
 ellipsoid("Arrival hair tie", (0,.095,1.795), (.044,.046,.044), sash)
+if keeper:
+    ellipsoid("Keeper topknot", (0,.047,1.837), (.037,.041,.04), hair)
+    for i in range(5):
+        x = (i-2)*.011
+        hair_lock("Keeper beard " + str(i),
+                  [(x,-.083,1.625),(x*1.2,-.125,1.575),(x*.8,-.15,1.50),(x*.25,-.16,1.435+abs(x))],
+                  [.016,.018,.012,.001])
 
 for side, suffix in ((1,"l"),(-1,"r")):
     bm=bmesh.new()
@@ -312,6 +324,9 @@ for v in body.data.vertices:
 tree.balance()
 for obj in (bpy.data.objects["Arrival split coat"], bpy.data.objects["Arrival front sash tails"], bpy.data.objects["Arrival back sash tails"],
             bpy.data.objects["Arrival fitted collar l"],bpy.data.objects["Arrival fitted collar r"],bpy.data.objects["Arrival inner wrap"]):
+    # The stationary elder's long robe hangs from the hips, not each calf independently.
+    if keeper and obj.name == "Arrival split coat":
+        continue
     obj.vertex_groups.clear()
     groups = [obj.vertex_groups.new(name=g.name) for g in body.vertex_groups]
     for v in obj.data.vertices:
@@ -362,7 +377,7 @@ for v in export_mesh.data.vertices:
     for group,weight in weights:
         export_mesh.vertex_groups[group].add([v.index],weight/total,"REPLACE")
 rig.select_set(True)
-bpy.ops.export_scene.fbx(filepath=str(ROOT / "arrival-outfit-candidate.fbx"),use_selection=True,
+bpy.ops.export_scene.fbx(filepath=str(OUT / ("keeper-candidate.fbx" if keeper else "arrival-outfit-candidate.fbx")),use_selection=True,
                          object_types={"ARMATURE","MESH"},add_leaf_bones=False,bake_anim=False,
                          axis_forward="-Z",axis_up="Y",path_mode="STRIP")
 bpy.data.objects.remove(export_mesh,do_unlink=True)
@@ -371,7 +386,7 @@ for side, angle in (("l", -65), ("r", 65)):
     bone.rotation_mode = "XYZ"
     bone.rotation_euler.z = math.radians(angle)
 
-bpy.ops.wm.save_as_mainfile(filepath=str(ROOT / "arrival-outfit-study.blend"))
+bpy.ops.wm.save_as_mainfile(filepath=str(OUT / "arrival-outfit-study.blend"))
 scene = bpy.context.scene
 scene.render.engine = "CYCLES"
 scene.cycles.samples = 24
@@ -394,8 +409,21 @@ scene.camera = camera
 for name, location in (("front",(0,-4,1.4)),("rear",(0,4,1.4))):
     camera.location = location
     camera.rotation_euler = (Vector((0,0,.93))-camera.location).to_track_quat("-Z","Y").to_euler()
-    scene.render.filepath = str(ROOT / ("outfit-" + name + ".png"))
+    scene.render.filepath = str(OUT / ("outfit-" + name + ".png"))
     bpy.ops.render.render(write_still=True)
+
+if keeper:
+    scene.render.resolution_x = scene.render.resolution_y = 128
+    scene.render.film_transparent = True
+    scene.render.image_settings.color_mode = "RGBA"
+    camera.data.ortho_scale = .48
+    camera.location = (0,-4,1.66)
+    camera.rotation_euler = (Vector((0,0,1.66))-camera.location).to_track_quat("-Z","Y").to_euler()
+    scene.render.filepath = str(OUT / "keeper-portrait.png")
+    bpy.ops.render.render(write_still=True)
+    scene.render.film_transparent = False
+    scene.render.resolution_x, scene.render.resolution_y = 720, 960
+    camera.data.ortho_scale = 2.15
 
 for name, angle in (("thigh_l",-25),("thigh_r",20),("calf_l",15),("calf_r",35)):
     bone=rig.pose.bones[name]
@@ -404,7 +432,7 @@ for name, angle in (("thigh_l",-25),("thigh_r",20),("calf_l",15),("calf_r",35)):
     bone.rotation_quaternion=basis.inverted() @ Quaternion((1,0,0),math.radians(angle)) @ basis
 camera.location=(2.6,-4,1.5)
 camera.rotation_euler=(Vector((0,0,.93))-camera.location).to_track_quat("-Z","Y").to_euler()
-scene.render.filepath=str(ROOT / "outfit-stride.png")
+scene.render.filepath=str(OUT / "outfit-stride.png")
 bpy.ops.render.render(write_still=True)
 
 coat=bpy.data.objects["Arrival split coat"]
@@ -430,7 +458,7 @@ camera.location=(0,6.8,3.14)
 camera.rotation_euler=(Vector((0,0,1.14))-camera.location).to_track_quat("-Z","Y").to_euler()
 scene.render.resolution_x=960
 scene.render.resolution_y=540
-scene.render.filepath=str(ROOT / "outfit-camera-mobile.png")
+scene.render.filepath=str(OUT / "outfit-camera-mobile.png")
 bpy.ops.render.render(write_still=True)
 from bpy_extras.object_utils import world_to_camera_view
 deps=bpy.context.evaluated_depsgraph_get()

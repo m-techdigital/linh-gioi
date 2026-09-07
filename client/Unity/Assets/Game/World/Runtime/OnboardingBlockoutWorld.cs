@@ -22,12 +22,15 @@ namespace LinhGioi.World
         private CinemachineBrain _cameraBrain;
         private BoxCollider _cameraVolume;
         private Renderer _keeper;
+        private Animator _keeperAnimator;
+        private static readonly Quaternion KeeperRestRotation = Quaternion.LookRotation(new Vector3(3f, 0f, -4f));
         private Renderer _stone;
         private TextMesh _keeperLabel;
         private TextMesh _stoneLabel;
         private TextMesh _playerLabel;
         private TextMesh[] _reservedLabels;
         private SpriteRenderer _stoneFocus;
+        private Material _stoneSealMaterial;
         private SpriteRenderer _keeperFocus;
         private bool _stoneReady;
         private float _stoneCompletedAt = -1f;
@@ -81,7 +84,12 @@ namespace LinhGioi.World
             CreateStreetLanterns(trim);
             CreateStreetPaving(paving);
             Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
-            _keeper = Actor("Blockout Keeper", KeeperPoint, LgoVisualAssetRegistryV3B.GateKeeperNpc, 1.8f, trim);
+            Box("Blockout Keeper collider", KeeperPoint + Vector3.up * 0.9f, new Vector3(0.65f, 1.8f, 0.65f), trim)
+                .GetComponent<Renderer>().enabled = false;
+            _keeperAnimator = CreateHumanoid("LGOGateKeeperCandidate", transform, KeeperPoint + Vector3.up * 0.04f);
+            _keeperAnimator.name = "Blockout Keeper";
+            _keeperAnimator.transform.rotation = KeeperRestRotation;
+            _keeper = _keeperAnimator.GetComponentInChildren<SkinnedMeshRenderer>();
             _stone = CreateTrainingStone();
             _keeperLabel = WorldLabelPresenter.Create("Blockout Keeper Label", "Người Giữ Cổng", KeeperPoint, RuntimeArtCatalog.Gold);
             _stoneLabel = WorldLabelPresenter.Create("Blockout Stone Label", "Đá Luyện", StonePoint, RuntimeArtCatalog.Gold);
@@ -100,14 +108,8 @@ namespace LinhGioi.World
             _player.radius = 0.3f;
             _player.center = Vector3.up * 0.9f;
             _player.stepOffset = 0.2f;
-            var prefab = Resources.Load<GameObject>("LGOArrivalOutfitCandidate");
-            if (prefab == null) throw new System.InvalidOperationException("Arrival outfit candidate prefab missing.");
-            _characterVisual = Instantiate(prefab, player.transform, false).transform;
-            _characterVisual.localPosition = Vector3.up * 0.025f;
-            _characterAnimator = _characterVisual.GetComponent<Animator>();
-            if (_characterAnimator == null || !_characterAnimator.isHuman || _characterAnimator.runtimeAnimatorController == null)
-                throw new System.InvalidOperationException("Arrival candidate has no Humanoid locomotion.");
-            _characterAnimator.applyRootMotion = false;
+            _characterAnimator = CreateHumanoid("LGOArrivalOutfitCandidate", player.transform, Vector3.up * 0.025f);
+            _characterVisual = _characterAnimator.transform;
             _playerLabel = WorldLabelPresenter.Create("Blockout Player Label", string.Empty, player.transform.position, RuntimeArtCatalog.Text);
             _playerLabel.transform.SetParent(transform, true);
             WorldLabelPresenter.SetActive(_playerLabel, false);
@@ -395,6 +397,10 @@ namespace LinhGioi.World
         private void LateUpdate()
         {
             _cameraBrain.ManualUpdate();
+            var keeperFacing = DialogueVisible
+                ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_player.transform.position - KeeperPoint, Vector3.up))
+                : KeeperRestRotation;
+            _keeperAnimator.transform.rotation = Quaternion.RotateTowards(_keeperAnimator.transform.rotation, keeperFacing, 180f * Time.deltaTime);
             _keeperFocus.gameObject.SetActive(!DialogueVisible && KeeperReady);
             _keeperLabel.gameObject.SetActive(!DialogueVisible);
             _stoneLabel.gameObject.SetActive(!DialogueVisible);
@@ -406,7 +412,9 @@ namespace LinhGioi.World
             var progress = completion ? Mathf.Clamp01((Time.time - _stoneCompletedAt) / StoneFeedbackDuration) : 0f;
             _stoneFocus.gameObject.SetActive(!DialogueVisible && (completion ? progress < 1f : _stoneReady));
             _stoneFocus.transform.localScale = Vector3.one * (1.6f + progress * 0.8f);
-            var color = completion ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Gold;
+            var flash = completion ? Mathf.Sin(progress * Mathf.PI) : 0f;
+            _stoneSealMaterial.color = Color.Lerp(RuntimeArtCatalog.Gold, RuntimeArtCatalog.Text, flash);
+            var color = Color.Lerp(RuntimeArtCatalog.Gold, RuntimeArtCatalog.Text, flash * 0.5f);
             color.a = completion ? 1f - progress : 1f;
             _stoneFocus.color = color;
         }
@@ -461,7 +469,7 @@ namespace LinhGioi.World
             _stoneMesh.RecalculateNormals();
             _stoneMesh.RecalculateBounds();
             stone.GetComponent<MeshFilter>().sharedMesh = _stoneMesh;
-            var sealMaterial = Material(RuntimeArtCatalog.Gold);
+            _stoneSealMaterial = Material(RuntimeArtCatalog.Gold);
             void Seal(string name, bool roadFace)
             {
                 const float height = 0.62f;
@@ -474,7 +482,7 @@ namespace LinhGioi.World
                 var normal = (roadFace ? new Vector3(-1f, slope, 0f) : new Vector3(0f, slope, -1f)).normalized;
                 var center = roadFace ? new Vector3(-radius, height, 0f) : new Vector3(0f, height, -radius);
                 var seal = Box(name, StonePoint + center + normal * 0.009f,
-                    new Vector3(0.14f, 0.14f, 0.016f), sealMaterial, false);
+                    new Vector3(0.14f, 0.14f, 0.016f), _stoneSealMaterial, false);
                 seal.transform.rotation = Quaternion.LookRotation(normal) * Quaternion.Euler(0f, 0f, 45f);
             }
             Seal("Blockout stone seal front", false);
@@ -501,6 +509,19 @@ namespace LinhGioi.World
                 if (material != null) Destroy(material);
             if (_houseFacadeMesh != null) Destroy(_houseFacadeMesh);
             if (_lanternFrameMesh != null) Destroy(_lanternFrameMesh);
+        }
+
+        private Animator CreateHumanoid(string resource, Transform parent, Vector3 localPosition)
+        {
+            var prefab = Resources.Load<GameObject>(resource);
+            if (prefab == null) throw new System.InvalidOperationException("Humanoid candidate prefab missing: " + resource);
+            var instance = Instantiate(prefab, parent, false);
+            instance.transform.localPosition = localPosition;
+            var animator = instance.GetComponent<Animator>();
+            if (animator == null || !animator.isHuman || animator.runtimeAnimatorController == null)
+                throw new System.InvalidOperationException("Candidate has no Humanoid locomotion: " + resource);
+            animator.applyRootMotion = false;
+            return animator;
         }
 
         private Renderer Actor(string name, Vector3 point, Sprite sprite, float height, Material fallback)
