@@ -145,6 +145,8 @@ namespace LinhGioi.UI
         private CharacterResponse _selectedCharacter;
         private int _selectedSlot = 1;
         private PlayableWorldController _world;
+        private OnboardingBlockoutPreview _onboarding;
+        private int _ignoreInputThroughFrame = -1;
         private RuntimeViewportMetrics _viewportMetrics;
         private string _lastLayoutProfile;
         private int _lastLayoutWidth;
@@ -174,6 +176,7 @@ namespace LinhGioi.UI
 
         private void Update()
         {
+            if (Time.frameCount <= _ignoreInputThroughFrame) return;
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 if (IsDisplayed(_lobbyPanel) && _selectedCharacter != null && _createFormExpanded)
@@ -205,6 +208,7 @@ namespace LinhGioi.UI
 
         private void OnDestroy()
         {
+            if (_onboarding != null) Destroy(_onboarding.gameObject);
             _shutdown?.Cancel();
             _shutdown?.Dispose();
             _client?.Dispose();
@@ -903,6 +907,17 @@ namespace LinhGioi.UI
             SetBusy(true, "Đang vào sân luyện Linh Môn...");
             var loaded = await _client.LoadCharacterAsync(_selectedCharacter.characterId, _shutdown.Token);
             _selectedCharacter = loaded;
+            if (OnboardingBlockoutPreview.ShouldEnterFromHall(Environment.GetCommandLineArgs(), Debug.isDebugBuild || Application.isEditor))
+            {
+                UpdateSelectedPreview(loaded);
+                SetBusy(false, "Đang bước qua Linh Môn.");
+                var host = new GameObject("LGO Onboarding Visit");
+                _onboarding = host.AddComponent<OnboardingBlockoutPreview>();
+                _onboarding.ConfigureHallReturn(loaded.name, ReturnFromOnboarding);
+                SetDisplayed(_root, false);
+                enabled = false;
+                return;
+            }
             if (_world == null)
             {
                 _world = gameObject.AddComponent<PlayableWorldController>();
@@ -915,6 +930,19 @@ namespace LinhGioi.UI
             ShowWorldMode();
             SetBusy(false, "Sẵn sàng: Bước 1 rồi Bước 2.");
             SetToast("Linh Môn đã mở. Bước 1: trò chuyện với Người Giữ Cổng.", RuntimeArtCatalog.Spirit);
+        }
+
+        private void ReturnFromOnboarding()
+        {
+            if (_onboarding == null) return;
+            var host = _onboarding.gameObject;
+            _onboarding = null;
+            host.SetActive(false);
+            Destroy(host);
+            SetDisplayed(_root, true);
+            BackToLobby();
+            _ignoreInputThroughFrame = Time.frameCount;
+            enabled = true;
         }
 
         private async Task SavePositionAsync()

@@ -115,6 +115,18 @@ namespace LinhGioi.UI
                 "docs/design/LGO-PLAYABLE-UI-WIREFRAME-SPEC-v0.11.0.md",
                 "Selected character preview and enter-world CTA readability");
 
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-onboarding-from-lobby") >= 0)
+            {
+                yield return _controller.CaptureEvidenceOnboardingRoundTrip(id => CaptureCheckpoint(id,
+                    "Character Hall / onboarding round trip", "docs/design/LINH-THANH-ONBOARDING-DESIGN.md",
+                    "Shared UI, selected profile preserved, preview ownership released on return"));
+                WriteManifest();
+                if (_checkpoints.Exists(checkpoint => checkpoint.status != "CAPTURED"))
+                    throw new InvalidOperationException("Onboarding evidence includes failed captures; inspect manifest.");
+                Application.Quit(0);
+                yield break;
+            }
+
             _controller.CaptureEvidenceLongCharacterName(false);
             yield return WaitFrames(6);
             yield return CaptureCheckpoint(
@@ -341,7 +353,10 @@ namespace LinhGioi.UI
             yield return new WaitForEndOfFrame();
             var fileName = id + ".png";
             var path = Path.Combine(_outputDir, fileName);
-            var viewport = _controller != null ? _controller.ViewportMetrics : RuntimeViewportMetrics.FromRoot(null);
+            var preview = FindFirstObjectByType<OnboardingBlockoutPreview>();
+            var viewport = preview != null
+                ? RuntimeViewportMetrics.FromRoot(preview.GetComponent<UnityEngine.UIElements.UIDocument>().rootVisualElement)
+                : _controller != null ? _controller.ViewportMetrics : RuntimeViewportMetrics.FromRoot(null);
             var evidence = new VisualCheckpointEvidence
             {
                 id = id,

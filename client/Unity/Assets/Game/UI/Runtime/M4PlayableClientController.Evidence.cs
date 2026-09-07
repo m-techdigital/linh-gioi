@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using LinhGioi.Account;
 using LinhGioi.Art;
+using LinhGioi.World;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,6 +11,94 @@ namespace LinhGioi.UI
 {
     public sealed partial class M4PlayableClientController
     {
+        internal IEnumerator CaptureEvidenceOnboardingRoundTrip(Func<string, IEnumerator> capture)
+        {
+            var profile = JsonUtility.ToJson(_selectedCharacter);
+            var account = _accountState;
+            var client = _client;
+            var slot = _selectedSlot;
+            var cameras = Camera.allCameras;
+            var ambient = RenderSettings.ambientLight;
+            var ambientMode = RenderSettings.ambientMode;
+            var materialCount = Array.FindAll(Resources.FindObjectsOfTypeAll<Material>(), material => material.name == "Blockout surface").Length;
+            for (var visit = 0; visit < 2; visit++)
+            {
+                var enter = EnterWorldAsync();
+                while (!enter.IsCompleted) yield return null;
+                if (enter.IsFaulted) throw enter.Exception.GetBaseException();
+                yield return new WaitForSeconds(1f);
+                var preview = FindFirstObjectByType<OnboardingBlockoutPreview>();
+                if (preview == null || enabled || _root.resolvedStyle.display != DisplayStyle.None)
+                    throw new InvalidOperationException("Entering from Character Hall must hand input and UI ownership to onboarding.");
+                var back = preview.GetComponent<UIDocument>().rootVisualElement.Query<Button>().ToList()
+                    .Find(button => button.text == "Về sảnh");
+                if (back == null || back.worldBound.width < 1 || back.worldBound.height < 1)
+                    throw new InvalidOperationException("Onboarding needs a visible shared return-to-hall action.");
+                for (VisualElement ancestor = back; ancestor != null; ancestor = ancestor.parent)
+                    if (ancestor.resolvedStyle.display == DisplayStyle.None || ancestor.resolvedStyle.visibility == Visibility.Hidden)
+                        throw new InvalidOperationException("Onboarding HUD must not inherit hidden Character Hall ancestry.");
+                var world = preview.GetComponent<OnboardingBlockoutWorld>();
+                if (Vector3.Distance(world.Position, new Vector3(0f, 0f, -3f)) > 0.15f)
+                    throw new InvalidOperationException("Each local onboarding visit must start at the gate.");
+                yield return capture("onboarding-entry-" + visit);
+                yield return null;
+                var start = world.Position;
+                world.Movement = Vector2.up;
+                var simulationSeconds = 0f;
+                var focusedFrames = 0;
+                for (var frame = 0; frame < 15; frame++)
+                {
+                    yield return null;
+                    simulationSeconds += Time.deltaTime;
+                    if (Application.isFocused) focusedFrames++;
+                }
+                Debug.Log("LGO_HALL_MOVEMENT_MEASURE seconds=" + simulationSeconds + " focusedFrames=" + focusedFrames
+                    + " distance=" + Vector3.Distance(start, world.Position) + " input=" + world.Movement);
+                world.Movement = Vector2.zero;
+                if (Vector3.Distance(start, world.Position) < 0.5f)
+                    throw new InvalidOperationException("Selected character must be able to walk after entering onboarding.");
+                if (visit == 0)
+                {
+                    using (var submit = NavigationSubmitEvent.GetPooled())
+                    {
+                        submit.target = back;
+                        back.SendEvent(submit);
+                    }
+                    if (_ignoreInputThroughFrame != Time.frameCount)
+                        throw new InvalidOperationException("Hall input must ignore the transition frame.");
+                }
+                else if (Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-onboarding-real-escape") >= 0)
+                {
+                    Debug.Log("LGO_ONBOARDING_REQUEST_ESCAPE");
+                    var deadline = Time.realtimeSinceStartup + 15f;
+                    while (preview != null && Time.realtimeSinceStartup < deadline) yield return null;
+                    if (preview != null) throw new InvalidOperationException("Real Escape did not return to Character Hall.");
+                }
+                else preview.HandleEscape();
+                yield return null;
+                yield return null;
+                if (!enabled || !IsDisplayed(_lobbyPanel) || _root.resolvedStyle.display == DisplayStyle.None
+                    || FindFirstObjectByType<OnboardingBlockoutPreview>() != null
+                    || GameObject.Find("Blockout Keeper Label") != null || GameObject.Find("Blockout Stone Label") != null)
+                    throw new InvalidOperationException("Returning must restore the hall and remove every preview owner and label.");
+                foreach (var camera in cameras)
+                    if (camera != null && !camera.enabled) throw new InvalidOperationException("Hall camera was not restored.");
+                if (RenderSettings.ambientLight != ambient || RenderSettings.ambientMode != ambientMode)
+                    throw new InvalidOperationException("Preview lighting leaked into Character Hall.");
+                if (Array.FindAll(Resources.FindObjectsOfTypeAll<Material>(), material => material.name == "Blockout surface").Length != materialCount
+                    || Camera.allCameras.Length != cameras.Length)
+                    throw new InvalidOperationException("Preview material or camera leaked across visits.");
+                var reload = _client.LoadCharacterAsync(_selectedCharacter.characterId, _shutdown.Token);
+                while (!reload.IsCompleted) yield return null;
+                if (reload.IsFaulted) throw reload.Exception.GetBaseException();
+                if (JsonUtility.ToJson(reload.Result) != profile || JsonUtility.ToJson(_selectedCharacter) != profile
+                    || _client != client || _accountState != account || _selectedSlot != slot)
+                    throw new InvalidOperationException("Preview must preserve server profile, account, client and selected slot.");
+                yield return capture("onboarding-return-" + visit);
+            }
+            Debug.Log("LGO_ONBOARDING_HALL_ROUNDTRIP_PASS visits=2 movement=true profile_unchanged=true ownership_restored=true escape=handler_or_explicit_real_probe");
+        }
+
         internal IEnumerator CaptureEvidenceTouchMovement()
         {
             var focusDeadline = Time.realtimeSinceStartup + 15f;

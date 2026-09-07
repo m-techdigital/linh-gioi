@@ -1,4 +1,5 @@
 using LinhGioi.Art;
+using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEngine;
 
@@ -32,11 +33,19 @@ namespace LinhGioi.World
         private Mesh _stoneMesh;
         private Mesh _pavingMesh;
         private Texture2D _pavingTexture;
-        private Material _pavingMaterial;
         private Mesh _houseFacadeMesh;
+        private readonly List<Material> _materials = new List<Material>();
+        private Camera[] _previousCameras;
+        private Color _previousAmbient;
+        private UnityEngine.Rendering.AmbientMode _previousAmbientMode;
+        private bool _ownsPresentation;
 
         private void Awake()
         {
+            _previousCameras = Camera.allCameras;
+            _previousAmbient = RenderSettings.ambientLight;
+            _previousAmbientMode = RenderSettings.ambientMode;
+            _ownsPresentation = true;
             RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
             RenderSettings.ambientLight = new Color(0.75f, 0.76f, 0.78f);
             var light = new GameObject("Blockout daylight").AddComponent<Light>();
@@ -64,6 +73,8 @@ namespace LinhGioi.World
             _stone = CreateTrainingStone();
             _keeperLabel = WorldLabelPresenter.Create("Blockout Keeper Label", "Người Giữ Cổng", KeeperPoint, RuntimeArtCatalog.Gold);
             _stoneLabel = WorldLabelPresenter.Create("Blockout Stone Label", "Đá Luyện", StonePoint, RuntimeArtCatalog.Gold);
+            _keeperLabel.transform.SetParent(transform, true);
+            _stoneLabel.transform.SetParent(transform, true);
             _stoneFocus = WorldProceduralVisuals.CreateGroundGlowSprite("Blockout Stone Focus",
                 WorldProceduralVisuals.GetWorldPlatformGlowSprite(), StonePoint + Vector3.up * 0.025f,
                 Vector3.one * 1.6f, RuntimeArtCatalog.Gold, 4);
@@ -87,7 +98,7 @@ namespace LinhGioi.World
             if (_characterAnimator == null || !_characterAnimator.isHuman || _characterAnimator.runtimeAnimatorController == null)
                 throw new System.InvalidOperationException("Arrival candidate has no Humanoid locomotion.");
             _characterAnimator.applyRootMotion = false;
-            foreach (var camera in Camera.allCameras) camera.enabled = false;
+            foreach (var camera in _previousCameras) camera.enabled = false;
             _camera = new GameObject("Blockout perspective camera").AddComponent<Camera>();
             _camera.transform.SetParent(transform);
             _camera.tag = "MainCamera";
@@ -119,7 +130,6 @@ namespace LinhGioi.World
         private void CreateStreetPaving(Material paving)
         {
             _pavingTexture = WorldProceduralVisuals.CreateStreetPavingTexture();
-            _pavingMaterial = paving;
             paving.color = Color.white;
             paving.mainTexture = _pavingTexture;
             var corners = new[]
@@ -375,12 +385,23 @@ namespace LinhGioi.World
             return stone.GetComponent<Renderer>();
         }
 
+        private void OnDisable()
+        {
+            if (!_ownsPresentation) return;
+            _ownsPresentation = false;
+            foreach (var camera in _previousCameras)
+                if (camera != null) camera.enabled = true;
+            RenderSettings.ambientMode = _previousAmbientMode;
+            RenderSettings.ambientLight = _previousAmbient;
+        }
+
         private void OnDestroy()
         {
             if (_stoneMesh != null) Destroy(_stoneMesh);
             if (_pavingMesh != null) Destroy(_pavingMesh);
             if (_pavingTexture != null) Destroy(_pavingTexture);
-            if (_pavingMaterial != null) Destroy(_pavingMaterial);
+            foreach (var material in _materials)
+                if (material != null) Destroy(material);
             if (_houseFacadeMesh != null) Destroy(_houseFacadeMesh);
         }
 
@@ -409,9 +430,10 @@ namespace LinhGioi.World
             return box;
         }
 
-        private static Material Material(Color color)
+        private Material Material(Color color)
         {
             var material = RuntimeArtCatalog.CreateMaterial("Blockout surface", color);
+            _materials.Add(material);
             Debug.Log("LGO_BLOCKOUT_MATERIAL shader=" + material.shader.name);
             if (material.shader.name != "Universal Render Pipeline/Lit")
                 throw new System.InvalidOperationException("Blockout needs the shared lit shader in the Player build.");

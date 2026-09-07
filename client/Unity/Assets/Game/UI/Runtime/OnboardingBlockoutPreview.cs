@@ -26,6 +26,8 @@ namespace LinhGioi.UI
         private bool _stoneCompleted;
         private bool _forecourtVisited;
         private bool _locomotionVerified;
+        private Action _returnToHall;
+        private Button _quit;
 
         private bool InRange => Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z),
             _session.Completed ? new Vector2(OnboardingBlockoutWorld.StonePoint.x, OnboardingBlockoutWorld.StonePoint.z)
@@ -33,6 +35,31 @@ namespace LinhGioi.UI
 
         public static bool ShouldRun(string[] args, bool development) =>
             development && Array.IndexOf(args, "--lgo-onboarding-blockout") >= 0;
+
+        public static bool ShouldEnterFromHall(string[] args, bool development) =>
+            development && Array.IndexOf(args, "--lgo-onboarding-from-lobby") >= 0;
+
+        internal void ConfigureHallReturn(string characterName, Action returnToHall)
+        {
+            _returnToHall = returnToHall;
+            _quit.text = "Về sảnh";
+            _guidance.Area.text = characterName;
+            _guidance.Area.style.display = DisplayStyle.Flex;
+        }
+
+        private void Leave()
+        {
+            _world.ResetMovementInput();
+            _pad.ResetInput();
+            if (_returnToHall != null) _returnToHall();
+            else Application.Quit();
+        }
+
+        internal void HandleEscape()
+        {
+            if (_session.Active) { _session.Close(); RefreshDialogue(); }
+            else Leave();
+        }
 
         private void Awake()
         {
@@ -44,7 +71,8 @@ namespace LinhGioi.UI
             var overlay = RuntimeUiFactory.NewWorldTouchControlsOverlay();
             _pad = (RuntimeTouchMovementPad)RuntimeUiFactory.NewWorldTouchPad();
             var cluster = RuntimeUiFactory.NewWorldTouchActionCluster();
-            var quit = RuntimeUiFactory.NewWorldTouchActionButton("Thoát", () => Application.Quit());
+            var quit = RuntimeUiFactory.NewWorldTouchActionButton("Thoát", Leave);
+            _quit = quit;
             _interact = RuntimeUiFactory.NewWorldTouchActionButton("Gặp", Interact);
             cluster.Add(_interact);
             overlay.Add(_pad);
@@ -492,11 +520,7 @@ namespace LinhGioi.UI
             _world.SetStoneFeedback(_session.Completed && !_stoneCompleted && InRange, _stoneCompleted);
             if (!_capturing) _world.ScreenMovement = Application.isFocused ? _pad.Value : Vector2.zero;
             if (Input.GetKeyDown(KeyCode.F)) Interact();
-            if (Input.GetKeyDown(KeyCode.Escape))
-            {
-                if (_session.Active) { _session.Close(); RefreshDialogue(); }
-                else Application.Quit();
-            }
+            if (Input.GetKeyDown(KeyCode.Escape)) HandleEscape();
         }
 
         private static void Submit(Button button)

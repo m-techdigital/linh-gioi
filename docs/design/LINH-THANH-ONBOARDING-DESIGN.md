@@ -26,6 +26,18 @@ M5 hiện là bài thử kỹ thuật: gặp Người Giữ Cổng -> tương t�
 
 ## Trạng thái cần thiết kế trước khi code tiếp
 
+### Nối sảnh vào phố trong development
+
+Reuse demo Character Hall ba ô và storyboard nhập môn ở phần Căn cứ; không thêm màn hoặc skin riêng. Với cờ development `--lgo-onboarding-from-lobby`, nút Vào game tải hồ sơ đang chọn bằng API hiện có rồi mở phố preview. HUD giữ pad trái, action phải và nút điều hướng chung đổi thành Về sảnh; Escape đóng thoại trước, ngoài thoại thì về sảnh. Không cờ này thì giữ flow main hiện có.
+
+Sảnh giữ account/selection/client nhưng ngừng input và ẩn root khi phố hoạt động. Về sảnh phải hủy toàn bộ world/UI preview, khôi phục camera/ambient trước đó và hiện lại đúng hồ sơ. Tọa độ nhập môn và tiến trình NPC/đá là local, không gửi save hoặc đổi mapId; vào lại bắt đầu ở cổng. Tải hồ sơ lỗi thì giữ sảnh và error flow hiện có. Đây là integration development fixture, chưa đưa map vào content production. Nghiệm thu hai vòng chọn -> phố -> di chuyển -> về sảnh, API profile bất biến, không camera/nhãn/material rò, ảnh runtime của sảnh và phố ở kích thước thực.
+
+Runtime integration: `hall-onboarding-verified-{mobile,desktop,tablet}.log` exit0, hai lượt/profile; manifest có8 checkpoint, ảnh đúng960x540/1920x1080/1366x1024 đã xem. Về bằng button event và handler Escape; chặn input lobby trong frame chuyển. So hồ sơ API trước/sau, selection/client/account, camera/ambient, material count và nhãn orphan đều qua. Candidate vẫn là một model nhập môn chung, chưa mapping trang phục/giới tính theo hồ sơ hoặc lưu quest.
+
+Caveat giữ lại: `hall-onboarding-red-flow.log` bắt đúng thiếu integration; `hall-onboarding-green-mobile` bị loại về visual vì HUD nằm dưới root sảnh ẩn. Host document nay độc lập: Unity tự gắn UIDocument con vào root cha theo [UIDocument.parentUI](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/UIElements.UIDocument-parentUI.html); assertion mới kiểm tra ancestor/bounds. `hall-onboarding-hud-mobile`/`hall-onboarding-final-mobile` fail movement trước đo; các lượt đo sau đi~1.8m/0.5s với15 focused frames nhưng chưa chứng minh nguyên nhân mọi lượt cũ. Escape OS ở `hall-onboarding-key-mobile` bị System Events từ chối1002; không claim physical-key pass. Muốn probe phím thật thêm `--lgo-onboarding-real-escape` vào evidence khi quyền gửi phím khả dụng; mặc định kiểm tra handler, không bỏ qua return assertion.
+
+Chạy thử bằng Development Player với `--lgo-onboarding-from-lobby` và API local theo `StreamingAssets/linhgioi-client.json`. Evidence dùng thêm `--lgo-visual-runtime-review --lgo-visual-runtime-evidence-dir <thư mục mới>` cùng width/height như runner hiện có; dùng API store riêng trong build. Không dùng `--lgo-onboarding-blockout` cùng cờ nối sảnh vì cờ đó bỏ qua login/sảnh.
+
 ### Thử nghiệm nối phố vào sân nhỏ
 
 Demo `docs/reference-ui/lgo-street-forecourt-draft-v1.jpg` là DRAFT từ imagegen, không phải runtime hoặc design đã duyệt. Lưu JPEG quality78, không crop/slice/import ảnh vào game. Phối cảnh và inset chỉ định hướng; tỷ lệ inset không dùng làm số đo code. Thử nghiệm chỉ ở preview opt-in, không đổi map/hồ sơ chính.
