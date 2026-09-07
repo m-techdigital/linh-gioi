@@ -83,7 +83,8 @@ namespace LinhGioi.UI
             _guidance.Area.text = "Linh Môn";
             _guidance.Step.style.display = DisplayStyle.None;
             _guidance.Direction.style.display = DisplayStyle.None;
-            _guidanceScroll = new ScrollView(ScrollViewMode.Vertical) { name = "LGO Standalone Guidance" };
+            _guidanceScroll = (ScrollView)RuntimeUiFactory.NewWorldHudRoot("LGO Standalone Guidance",
+                RuntimeUiLayoutProfile.FromScreen(null, Screen.width, Screen.height).WorldHudMaxWidth(false));
             _guidanceScroll.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
             _guidanceScroll.Add(_guidance.Panel);
             root.Add(_guidanceScroll);
@@ -159,7 +160,38 @@ namespace LinhGioi.UI
             ConfigureHallReturn("WWWWWWWWWWWWWWWW", null);
             yield return new WaitForSeconds(1f);
             CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
+            foreach (var label in _guidance.Panel.Query<Label>().ToList())
+                if (label.resolvedStyle.backgroundColor.a > 0f || label.resolvedStyle.borderLeftWidth > 0f)
+                    throw new InvalidOperationException("Guidance lines must be unframed text inside the shared HUD root.");
+            if (_guidanceScroll.resolvedStyle.backgroundColor.a <= 0f)
+                throw new InvalidOperationException("Standalone guidance must use the shared readable HUD backdrop.");
+            Debug.Log("LGO_GUIDANCE_SHARED_PRESENTATION_PASS unframed_lines=true readable_root=true");
+            if (_guidanceScroll.verticalScroller.highValue > 1f)
+                throw new InvalidOperationException("Default arrival guidance must fit without scrolling in this evidence viewport.");
             yield return Capture(directory, "arrival");
+            var longGuidance = RuntimeUiFactory.NewWorldHudText(
+                string.Join("\n", new string[40]).Replace("\n", "Nội dung kiểm tra cuộn\n"),
+                LinhGioi.Art.RuntimeArtCatalog.Text, 16);
+            _guidance.Panel.Add(longGuidance);
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var guidanceSafe = RuntimeViewportMetrics.FromRoot(_guidanceScroll.panel.visualTree).SafePanelRect;
+            if (_guidanceScroll.verticalScroller.highValue <= 0f ||
+                _guidanceScroll.verticalScroller.highButton.resolvedStyle.display != DisplayStyle.None ||
+                _guidanceScroll.worldBound.height > guidanceSafe.height * 0.3f + 1f ||
+                _guidanceScroll.worldBound.yMax >= _pad.worldBound.yMin)
+                throw new InvalidOperationException("Long guidance must stay height-bounded and scroll above the movement pad.");
+            var guidanceTop = longGuidance.worldBound.yMin;
+            _guidanceScroll.scrollOffset = new Vector2(0f, _guidanceScroll.verticalScroller.highValue);
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            if (_guidanceScroll.scrollOffset.y <= 0f || longGuidance.worldBound.yMin >= guidanceTop - 1f)
+                throw new InvalidOperationException("Guidance scrollbar must move its real text content.");
+            longGuidance.RemoveFromHierarchy();
+            _guidanceScroll.scrollOffset = Vector2.zero;
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            Debug.Log("LGO_GUIDANCE_SCROLL_PASS long_text=true max_safe_height=0.3 pad_clear=true content_moves=true");
             var skyCamera = _world.GetComponentInChildren<Camera>();
             var sky = RenderSettings.skybox;
             Debug.Log("LGO_STREET_SKY_TRACE clear=" + skyCamera.clearFlags + " shader=" + (sky == null ? "none" : sky.shader.name));

@@ -370,6 +370,16 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyHudStatusCompactFrame(label);
         }
 
+        internal static Label NewWorldHudText(string text, Color color, int fontSize)
+        {
+            var label = NewMutedLabel(text);
+            RuntimeUiSkin.ApplyText(label, color, fontSize);
+            label.style.minWidth = 0f;
+            label.style.flexShrink = 0f;
+            label.style.marginTop = RuntimeUiSpacing.CompactStatusMarginTop;
+            return label;
+        }
+
         internal static Label NewCompactStatusLabel(string text, Color color, int fontSize)
         {
             var label = NewStatusLabel(text, color);

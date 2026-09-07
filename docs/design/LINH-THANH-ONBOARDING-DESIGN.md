@@ -34,6 +34,10 @@ Reuse skin của demo ba ô nhân vật: nền trung tính, vàng/ngà, nút com
 
 ### Nối sảnh vào phố trong development
 
+Guidance theo góc trái các khung 1/3/4 storyboard: một nền HUD trung tính dùng `NewWorldHudRoot`, địa điểm nhỏ, mục tiêu vàng và lời nhắc ngà; các dòng plain text không chip/viền lồng. Cả main/phố dùng `RuntimeWorldGuidanceView`, giữ thông tin và trạng thái hiện có. Phố reuse root scroll chung thay ScrollView trần; giới hạn30% safe height hiện có, không mở panel mới. Kiểm tra wrap, nội dung dài cuộn, thoại/completion ẩn/hiện và ba tỷ lệ viewport; không dùng ảnh demo như evidence runtime.
+
+Final guidance tại `guidance-group-final-{mobile,desktop,tablet}` và main PC `guidance-group-main-desktop`, ảnh đã xem. Nội dung thường vừa khung, fixture40 dòng cuộn thật và không đè pad; skin scrollbar từ overflow guard. Bản đầu còn scrollbar trắng/đệm group dư đã loại sau review, giữ log/ảnh. Không physical touch hoặc resize lúc đang cuộn/thoại, không final visual claim.
+
 Nhận diện theo `linh-gioi-world-event-ui.png`: tên hồ sơ nổi phía trên nhân vật, không dùng tên người chơi thay tên khu vực. Reuse `WorldLabelPresenter` của NPC (chữ ngà/bóng tối), HUD guidance ghi Linh Môn; không thêm avatar, cấp, thanh chỉ số hoặc khung mới. Nhãn đi theo bounds nhân vật/camera, ẩn trong thoại như nhãn NPC. Kiểm tra tên tối đa16 ký tự theo contract hiện có, đứng sát NPC không chồng nhãn, di chuyển và hai vòng về sảnh không rò nhãn. Đây là nhận diện cho development candidate, chưa mapping outfit/gender.
 
 Runtime nhận diện: mobile/PC tại `player-identity-separated-*` và tablet tại `player-identity-confirm-tablet` qua toàn tuyến, ảnh đã xem. Tablet thêm assertions đá/camera-alley/thoại hoàn tất; hai visit API tại `player-identity-hall-mobile` kiểm tra tên thật và không rò nhãn/bóng. Red thiếu nhãn và overlap giữ nguyên; helper tránh giao nhau bằng bounds chiếu lên màn hình, không đổi offset NPC. Lượt tablet thoát sớm giữ riêng, không tính full route. Main regression/quick qua; không claim mọi camera position, physical Escape, font/art final hoặc visual PASS.

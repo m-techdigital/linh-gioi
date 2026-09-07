@@ -14,13 +14,13 @@ namespace LinhGioi.UI
 
         internal RuntimeWorldGuidanceView()
         {
-            Panel = RuntimeUiFactory.NewWorldHudGroup("LGO World Guidance Card V3B", RuntimeArtCatalog.Spirit);
-            Area = RuntimeUiFactory.NewCompactStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted, RuntimeUiTypography.WorldAreaFontSize);
-            Step = RuntimeUiFactory.NewCompactStatusLabel("Tiến trình: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Spirit, RuntimeUiTypography.WorldStepFontSize);
-            Direction = RuntimeUiFactory.NewCompactStatusLabel("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldDirectionFontSize);
-            Objective = RuntimeUiFactory.NewCompactStatusLabel("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldObjectiveInitialFontSize);
+            Panel = RuntimeUiFactory.NewFlexibleColumn("LGO World Guidance Card V3B");
+            Area = RuntimeUiFactory.NewWorldHudText("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted, RuntimeUiTypography.WorldAreaFontSize);
+            Step = RuntimeUiFactory.NewWorldHudText("Tiến trình: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Text, RuntimeUiTypography.WorldStepFontSize);
+            Direction = RuntimeUiFactory.NewWorldHudText("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldDirectionFontSize);
+            Objective = RuntimeUiFactory.NewWorldHudText("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldObjectiveInitialFontSize);
             Objective.name = "LGO World Objective Touch Priority";
-            Hint = RuntimeUiFactory.NewCompactStatusLabel("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Spirit, RuntimeUiTypography.WorldInteractionInitialFontSize);
+            Hint = RuntimeUiFactory.NewWorldHudText("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Text, RuntimeUiTypography.WorldInteractionInitialFontSize);
             Hint.name = "LGO World Interaction Touch Hint";
             Panel.Add(Area);
             Panel.Add(Step);

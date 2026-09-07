@@ -15,11 +15,13 @@ namespace LinhGioi.UI
         internal static void ApplyStandaloneGuidance(RuntimeUiLayoutProfile layout, RuntimeViewportMetrics viewport, ScrollView scroll)
         {
             var safe = viewport.SafePanelRect;
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(scroll, safe.height * 0.3f);
             scroll.style.position = Position.Absolute;
             scroll.style.left = safe.xMin + layout.RootPaddingHorizontal;
             scroll.style.top = safe.yMin + safe.height * 0.18f;
             scroll.style.width = Mathf.Min(layout.WorldHudMaxWidth(false), safe.width * 0.42f);
-            scroll.style.maxHeight = safe.height * 0.3f;
+            scroll.style.maxWidth = layout.WorldHudMaxWidth(false);
+            RuntimeUiSkin.ApplyPadding(scroll, layout.WorldHudPaddingHorizontal, layout.WorldHudPaddingVertical);
             scroll.style.minWidth = 0f;
             scroll.style.flexShrink = 1f;
             scroll.contentContainer.style.minWidth = 0f;
