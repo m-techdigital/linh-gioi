@@ -830,6 +830,22 @@ namespace LinhGioi.UI
                 throw new InvalidOperationException("Forecourt route left the paving surface.");
             CheckPlayerIdentity("Minh An", true);
             yield return Capture(directory, "forecourt");
+            yield return WalkTo(new Vector3(4.8f, 0f, 23f));
+            if (Mathf.Abs(_world.Position.y) > 0.1f)
+                throw new InvalidOperationException("Pavilion entry left the paving surface.");
+            foreach (var elevation in new[] { 0.2f, 1.1f, 1.7f })
+            {
+                var target = _world.Position + Vector3.up * elevation;
+                var projected = Camera.main.WorldToViewportPoint(target);
+                if (Physics.Linecast(target, Camera.main.transform.position, out var pavilionObstruction, ~0, QueryTriggerInteraction.Ignore) ||
+                    projected.z <= Camera.main.nearClipPlane || projected.x < 0.05f || projected.x > 0.95f ||
+                    projected.y < 0.05f || projected.y > 0.95f)
+                    throw new InvalidOperationException("Pavilion camera obscures the player: elevation=" + elevation
+                        + " viewport=" + projected + " obstacle=" + (pavilionObstruction.collider == null ? "none" : pavilionObstruction.collider.name));
+            }
+            yield return Capture(directory, "pavilion-entry");
+            yield return WalkTo(new Vector3(2f, 0f, 22f));
+            Debug.Log("LGO_PAVILION_ROUTE_PASS entry=true camera_clear=true exit=true");
             yield return WalkTo(new Vector3(1f, 0f, 18f));
             yield return WalkTo(new Vector3(0f, 0f, 14f));
             if (!CheckGuidance("Đã tới sân.", false)) yield break;
