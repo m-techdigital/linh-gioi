@@ -405,17 +405,58 @@ namespace LinhGioi.UI
             }
             Submit(_interact);
             if (!_stoneCompleted) throw new InvalidOperationException("Stone action did not complete onboarding.");
+            if (Array.IndexOf(args, "--lgo-gesture-early-input") >= 0)
+            {
+                var earlyStart = _world.Position;
+                // Schedule input before Animator evaluates the newly requested crossfade.
+                _world.SetStoneFeedback(false, true);
+                Debug.Log("LGO_STONE_GESTURE_QUEUE_TRACE current=" + character.GetCurrentAnimatorStateInfo(0).fullPathHash
+                    + " next=" + character.GetNextAnimatorStateInfo(0).fullPathHash + " transition=" + character.IsInTransition(0));
+                _world.Movement = Vector2.left;
+                yield return new WaitForSeconds(0.3f);
+                _world.Movement = Vector2.zero;
+                if (!character.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Locomotion") ||
+                    Vector3.Distance(earlyStart, _world.Position) < 0.5f)
+                    throw new InvalidOperationException("Input before Animator evaluation failed: state=" + character.GetCurrentAnimatorStateInfo(0).fullPathHash
+                        + " expected=" + Animator.StringToHash("Base Layer.Locomotion") + " distance=" + Vector3.Distance(earlyStart, _world.Position)
+                        + " focused=" + Application.isFocused);
+                yield return Capture(directory, "gesture-early-input");
+                Debug.Log("LGO_STONE_GESTURE_EARLY_INPUT_PASS queued_cancel=true movement=true");
+                Application.Quit(0);
+                yield break;
+            }
             var stoneInteractionPosition = _world.Position;
             yield return new WaitForSeconds(0.3f);
             var stoneFacingAngle = Vector3.Angle(character.transform.forward,
                 Vector3.ProjectOnPlane(OnboardingBlockoutWorld.StonePoint - _world.Position, Vector3.up));
             if (stoneFacingAngle > 5f || Vector3.Distance(stoneInteractionPosition, _world.Position) > 0.01f)
                 throw new InvalidOperationException("Stone interaction must face its target without moving: angle=" + stoneFacingAngle);
+            yield return new WaitForSeconds(0.3f);
+            var reach = float.NegativeInfinity;
+            foreach (var hand in new[] { HumanBodyBones.LeftHand, HumanBodyBones.RightHand })
+            {
+                var shoulder = character.GetBoneTransform(hand == HumanBodyBones.LeftHand ? HumanBodyBones.LeftUpperArm : HumanBodyBones.RightUpperArm);
+                reach = Mathf.Max(reach, Vector3.Dot(character.GetBoneTransform(hand).position - shoulder.position, character.transform.forward));
+            }
+            if (!character.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Interact") || reach < 0.15f ||
+                character.applyRootMotion || Vector3.Distance(stoneInteractionPosition, _world.Position) > 0.01f)
+                throw new InvalidOperationException("Stone action needs a reaching Humanoid gesture without root displacement: reach=" + reach);
             yield return Capture(directory, "complete");
+            if (Array.IndexOf(args, "--lgo-gesture-finish") >= 0)
+            {
+                yield return new WaitForSeconds(2.5f);
+                if (!character.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Locomotion") ||
+                    Vector3.Distance(stoneInteractionPosition, _world.Position) > 0.01f)
+                    throw new InvalidOperationException("Gesture must finish naturally into locomotion without root motion.");
+                Debug.Log("LGO_STONE_GESTURE_FINISH_PASS natural_exit=true root_held=true");
+            }
             CheckInteractionIcon("Đã xong", "ActionComplete", false);
             Debug.Log("LGO_INTERACTION_ICON_PASS talk=true touch=true complete=true bounded=true texture64=true");
             // Leave the synchronous capture frame before measuring held input in Update frames.
             yield return null;
+            var cancelProbe = Array.IndexOf(args, "--lgo-gesture-finish") < 0;
+            if (cancelProbe && !character.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Interact"))
+                throw new InvalidOperationException("Cancellation probe needs an active gesture before movement input.");
             var facingMoveFrame = Time.frameCount;
             var facingMoveTime = 0f;
             _world.Movement = Vector2.left;
@@ -435,6 +476,10 @@ namespace LinhGioi.UI
             yield return new WaitForSeconds(0.15f);
             if (Vector3.Angle(character.transform.forward, Vector3.left) > 5f)
                 throw new InvalidOperationException("Stone facing must not resume after releasing fresh input.");
+            if (!character.GetCurrentAnimatorStateInfo(0).IsName("Base Layer.Locomotion"))
+                throw new InvalidOperationException("Fresh movement must return the gesture to locomotion.");
+            Debug.Log("LGO_STONE_GESTURE_PASS reached=true root_held=true cancel_exercised=" + cancelProbe
+                + " natural_probe=" + !cancelProbe);
             Debug.Log("LGO_STONE_FACING_PASS target=true no_drift=true movement_priority=true");
             yield return new WaitForSeconds(1.3f);
             if (focus.gameObject.activeSelf)

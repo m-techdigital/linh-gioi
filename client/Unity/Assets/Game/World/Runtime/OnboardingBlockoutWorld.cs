@@ -16,6 +16,8 @@ namespace LinhGioi.World
         private Animator _characterAnimator;
         private Transform _characterVisual;
         private static readonly int SpeedParameter = Animator.StringToHash("Speed");
+        private static readonly int InteractState = Animator.StringToHash("Base Layer.Interact");
+        private static readonly int LocomotionState = Animator.StringToHash("Base Layer.Locomotion");
         private Camera _camera;
         private CinemachineBrain _cameraBrain;
         private BoxCollider _cameraVolume;
@@ -331,7 +333,13 @@ namespace LinhGioi.World
             _player.SimpleMove(Vector3.ClampMagnitude(direction, 1f) * 3.6f);
             var velocity = Vector3.ProjectOnPlane(_player.velocity, Vector3.up);
             _characterAnimator.SetFloat(SpeedParameter, velocity.magnitude, 0.1f, Time.deltaTime);
-            if (direction.sqrMagnitude > 0.0001f) _stoneFacingActive = false;
+            if (direction.sqrMagnitude > 0.0001f)
+            {
+                // A requested crossfade may not appear in Animator state info until evaluation.
+                if (_stoneFacingActive)
+                    _characterAnimator.CrossFadeInFixedTime(LocomotionState, 0.1f, 0);
+                _stoneFacingActive = false;
+            }
             var facing = DialogueVisible
                 ? Vector3.ProjectOnPlane(KeeperPoint - _player.transform.position, Vector3.up)
                 : velocity;
@@ -377,6 +385,7 @@ namespace LinhGioi.World
             {
                 _stoneCompletedAt = Time.time;
                 _stoneFacingActive = true;
+                _characterAnimator.CrossFadeInFixedTime(InteractState, 0.1f, 0, 0f);
                 WorldLabelPresenter.Set(_stoneLabel, "Đá Luyện\nĐã ổn định", RuntimeArtCatalog.Gold);
             }
         }

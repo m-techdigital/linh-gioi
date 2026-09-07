@@ -19,7 +19,7 @@ namespace LinhGioi.Foundation.Editor
             var animator = prefab.GetComponent<Animator>();
             if (animator.runtimeAnimatorController == null)
                 throw new InvalidOperationException("Arrival prefab has no locomotion controller.");
-            var clips = animator.runtimeAnimatorController.animationClips.Distinct().ToArray();
+            var clips = animator.runtimeAnimatorController.animationClips.Distinct().Where(c => c.isLooping).ToArray();
             if (clips.Length != 3 || clips.Any(c => !c.humanMotion || !c.isLooping || c.length <= 0f))
                 throw new InvalidOperationException("Arrival locomotion requires three looping Humanoid clips.");
             if (AnimationMode.InAnimationMode()) throw new InvalidOperationException("Finish the active animation preview before validating arrival motion.");
@@ -137,7 +137,7 @@ namespace LinhGioi.Foundation.Editor
 
         public static void ImportLocomotion()
         {
-            var clips = ImportNativeClips();
+            var clips = ImportNativeClips(true, "Idle_Loop", "Walk_Loop", "Jog_Fwd_Loop");
             var controllerPath = Directory + "ArrivalLocomotion.controller";
             var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(controllerPath);
             if (controller == null) controller = AnimatorController.CreateAnimatorControllerAtPath(controllerPath);
@@ -170,7 +170,33 @@ namespace LinhGioi.Foundation.Editor
             }
         }
 
-        private static AnimationClip[] ImportNativeClips()
+        public static void ImportInteraction()
+        {
+            var clip = ImportNativeClips(false, "Interact").Single();
+            var controller = AssetDatabase.LoadAssetAtPath<AnimatorController>(Directory + "ArrivalLocomotion.controller");
+            if (controller == null) throw new InvalidOperationException("Import locomotion before the interaction gesture.");
+            var machine = controller.layers[0].stateMachine;
+            var locomotion = machine.states.Select(s => s.state).Single(s => s.name == "Locomotion");
+            var state = machine.states.Select(s => s.state).FirstOrDefault(s => s.name == "Interact") ?? machine.AddState("Interact");
+            state.motion = clip;
+            var exit = state.transitions.FirstOrDefault(t => t.destinationState == locomotion) ?? state.AddTransition(locomotion);
+            exit.hasExitTime = true;
+            exit.exitTime = 1f;
+            exit.hasFixedDuration = true;
+            exit.duration = 0.1f;
+            EditorUtility.SetDirty(state);
+            EditorUtility.SetDirty(exit);
+            EditorUtility.SetDirty(controller);
+            AssetDatabase.SaveAssets();
+            ValidateLocomotion();
+            var clips = controller.animationClips.Distinct().ToArray();
+            if (clips.Length != 4 || !clip.humanMotion || clip.isLooping || clip.length <= 0f || clip.length > 3f ||
+                AssetDatabase.GetDependencies(PrefabPath, true).Any(p => p.Contains("LGOAnimationImport_")))
+                throw new InvalidOperationException("Gesture must be a single short non-looping Humanoid clip without a source-FBX dependency.");
+            Debug.Log("LGO_ARRIVAL_GESTURE_IMPORT_PASS clips=4 human=true looping=false duration=" + clip.length);
+        }
+
+        private static AnimationClip[] ImportNativeClips(bool looping, params string[] names)
         {
             var folderName = "LGOAnimationImport_" + Guid.NewGuid().ToString("N");
             var folder = "Assets/" + folderName;
@@ -184,11 +210,10 @@ namespace LinhGioi.Foundation.Editor
                 AssetDatabase.ImportAsset(path, ImportAssetOptions.ForceSynchronousImport);
                 ConfigureHumanoid(path, true);
                 var importer = (ModelImporter)AssetImporter.GetAtPath(path);
-                var names = new[] { "Idle_Loop", "Walk_Loop", "Jog_Fwd_Loop" };
                 var settings = names.Select(name => importer.defaultClipAnimations.Single(c => ClipNamed(c.name, name))).ToArray();
                 foreach (var clip in settings)
                 {
-                    clip.loopTime = true;
+                    clip.loopTime = looping;
                     clip.lockRootRotation = true;
                     clip.lockRootHeightY = true;
                     clip.lockRootPositionXZ = true;
