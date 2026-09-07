@@ -173,21 +173,28 @@ for row in range(8):
         faces.append((a,a+1,a+4,a+3))
 mesh("Arrival inner wrap",vertices,faces,sash,"spine_03")
 
-def sleeve(name, side, levels, mat, bone):
-    verts = []
-    for x, ry, rz in levels:
-        for i in range(17):
-            a = math.tau * i / 16
-            verts.append((side*x, .065+ry*math.cos(a), 1.455+rz*math.sin(a)))
-    faces=[]
-    for row in range(len(levels)-1):
-        for i in range(16):
-            a=row*17+i
-            faces.append((a,a+1,a+18,a+17))
-    return mesh(name,verts,faces,mat,bone)
-
 for side, suffix in ((1,"l"),(-1,"r")):
-    sleeve("Arrival wrist wrap " + suffix,side,[(.51,.078,.075),(.60,.063,.065),(.69,.048,.048)],cloth,"lowerarm_"+suffix)
+    wrap=body.copy()
+    wrap.data=body.data.copy()
+    wrap.name="Arrival wrist wrap "+suffix
+    bpy.context.collection.objects.link(wrap)
+    bm=bmesh.new()
+    bm.from_mesh(wrap.data)
+    for x, normal in ((.51,-side),(.69,side)):
+        bmesh.ops.bisect_plane(bm,geom=list(bm.verts)+list(bm.edges)+list(bm.faces),
+                              plane_co=(side*x,0,0),plane_no=(normal,0,0),dist=.00001,clear_outer=True)
+    bm.normal_update()
+    for vertex in bm.verts:
+        vertex.co += vertex.normal*.012
+    bm.to_mesh(wrap.data)
+    bm.free()
+    wrap.data.materials.clear()
+    wrap.data.materials.append(cloth)
+    for face in wrap.data.polygons:
+        face.material_index=0
+        face.use_smooth=True
+        radial=Vector((0,face.center.y-.065,face.center.z-1.455))
+        assert face.normal.dot(radial)>0, "Wrist wrap face points inward: "+suffix
 
 ring("Arrival waist sash", [(1.0,.235,.195),(1.045,.235,.195),(1.10,.235,.195)], sash)
 ring("Arrival split coat", [(1.01,.23,.185),(.85,.265,.195),(.65,.28,.20),(.46,.30,.215)], cloth,
@@ -269,8 +276,33 @@ for v in waist.data.vertices:
     envelope.append(max(distances)+.012)
 for index,v in enumerate(waist.data.vertices):
     radial=Vector((v.co.x,v.co.y-.03,0)).normalized()
-    radius=max(envelope[row*33+index%33] for row in range(3))
+    # Span the tunic/coat seam instead of following bare skin through their join.
+    height=(v.co.z-1.0)/.10
+    bottom=envelope[index%33]
+    top=envelope[66+index%33]
+    radius=max(envelope[index],bottom+(top-bottom)*height)
     v.co=Vector((0,.03,v.co.z))+radial*radius
+for index, v in enumerate(waist.data.vertices):
+    distance = (v.co - Vector((0, .03, v.co.z))).length
+    assert distance >= envelope[index] - .001, "Sash penetrates its fitted surface: " + str(index)
+    if index < 33 or index >= 66:
+        assert abs(distance - envelope[index]) < .001, "Sash edge floats above garment: " + str(index)
+
+# A wrapped sash spans concave seams; the convex support envelope removes those inward notches.
+bm=bmesh.new()
+for v in waist.data.vertices:
+    bm.verts.new(v.co)
+hull=bmesh.ops.convex_hull(bm,input=list(bm.verts),use_existing_faces=False)
+bmesh.ops.delete(bm,geom=list(set(hull["geom_unused"]+hull["geom_interior"])),context="VERTS")
+caps=[face for face in bm.faces if max(v.co.z for v in face.verts)-min(v.co.z for v in face.verts)<1e-5]
+bmesh.ops.delete(bm,geom=caps,context="FACES_ONLY")
+bm.normal_update()
+for face in bm.faces:
+    face.smooth=True
+bm.to_mesh(waist.data)
+bm.free()
+waist.vertex_groups.clear()
+waist.vertex_groups.new(name="pelvis").add(list(range(len(waist.data.vertices))),1.0,"REPLACE")
 
 # Transfer leg deformation to the coat instead of leaving its entire skirt rigid on the pelvis.
 from mathutils.kdtree import KDTree
@@ -298,9 +330,15 @@ for obj in list(bpy.context.scene.objects):
 bpy.context.view_layer.objects.active = rig
 rig.select_set(True)
 bpy.ops.object.mode_set(mode="EDIT")
-for bone in rig.data.edit_bones:
-    bone.head.x *= .86
-    bone.tail.x *= .86
+# Connected endpoints update their neighbours, so never scale their live coordinates in-place.
+rest_positions = [(bone, bone.head.copy(), bone.tail.copy()) for bone in rig.data.edit_bones]
+for bone, head, tail in rest_positions:
+    head.x *= .86
+    tail.x *= .86
+    bone.head = head
+    bone.tail = tail
+for bone, head, tail in rest_positions:
+    assert (bone.head - head).length < 1e-6 and (bone.tail - tail).length < 1e-6, "Rig width transform drift: " + bone.name
 bpy.ops.object.mode_set(mode="OBJECT")
 bpy.ops.object.select_all(action="DESELECT")
 export_parts=[]

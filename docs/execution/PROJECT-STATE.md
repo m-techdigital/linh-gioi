@@ -8,6 +8,14 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Lượt băng tay sau mở màn hình đã hoàn tất (`arrival-wrist-wrap-unlocked.log`,192frames/exit0), ảnh chạy đã xem; không còn blocker capture hiện tại. Gom rig/đai/wrap thành checkpoint. Tiếp candidate theo turnaround, kiểm tra mapping/tư thế bàn tay; chưa final art/main integration. Owner không cần chủ động xuất video bàn giao hoặc đề nghị chuyển sandbox nữa.
+
+Băng tay candidate đã sửa từ mesh cẳng tay thay ống cố định/32 mặt phải đảo; Blender front/rear đã xem, Unity import/pose/build/quick qua. Video final chưa thực hiện: foreground loginwindow, Player không tạo frame; đã dừng đúng Player19412. Không visual PASS; nhóm rig/đai/wrap chưa commit. Tiếp source/asset không cần foreground, capture lại khi môi trường khả dụng.
+
+Batch trang phục đang gom: rig width đã sửa; đai dùng convex support envelope để bắc qua khe áo/vạt, không lõm theo skin. 21342tris/1158188byte, Unity import/pose/build/quick qua; Player video8s `arrival-sash-envelope/sash-envelope.mp4`, đã xem idle/chạy. Chưa final art; next băng tay hở mặt sau khi gập khuỷu theo turnaround. Worktree còn dirty sau f727735.
+
+Sau checkpoint `f727735`: sửa recipe scale rig nối xương bằng snapshot, tránh nhân tỷ lệ lặp gây tay ngắn; model/prefab đang dirty để gom cùng trang phục. Red thật ở `rig-width-red.log`; Blender, Unity pose và quick qua; video8s `arrival-rig-width/rig-width-fixed.mp4` đã xem khung idle/chạy. Không tăng texture/tam giác; next vạt/đai theo turnaround, chưa main integration/final art.
+
 Checkpoint motion đã có quick pass, ảnh preview ba profile và main screenshot review. Main lượt đầu fail menu input; lượt telemetry hoàn tất flow, `arrival-motion-main-diagnostic.log` exit0, không thay assertion. Nguyên nhân fail trước chưa xác định, giữ log/trace. Next: biến dạng vạt/tỷ lệ nhân vật và dáng chạy theo turnaround trước main integration; chưa final art/visual PASS.
 
 Candidate nhập môn có idle/walk/jog trong preview opt-in, prefab Resources góp payload build. Lỗi giơ tay đã có regression red/green, dùng T-pose chuẩn hóa Unity thay cho transform FBX thô. Route ba profile `arrival-canonical-*` exit0, ảnh mobile đã xem. Hai video 8s trước/sau tại `build/visual-evidence/motion-comparison/`; bản trước tái hiện lỗi, asset/source đã trả về bản chuẩn (`arrival-video-restored-canonical.log` exit0). Chưa final art/visual PASS/main integration; tiếp review PC/tablet và quick/main regression trước checkpoint.
