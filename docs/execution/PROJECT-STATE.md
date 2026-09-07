@@ -8,6 +8,10 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Interaction facing preview đã có NPC/đá red-green và full route/quick; input mới hủy auto-facing, nhả không bị kéo hướng lại. Ảnh dialogue/complete đã xem, không đổi camera/UI/tiến trình. Tiếp đích thị giác lối ra phố0/14 theo design; chưa city transition/final art/main integration.
+
+Sau dcda6a3, preview quay model về NPC khi thoại; red62.5572° -> green0°, full route/quick qua và ảnh dialogue đã xem. Không đổi vị trí/camera/UI/luật thoại, chưa commit để gom interaction. Kiểm tra mapping ngón đã đủ nên không sửa importer. Tiếp hướng nhìn/tư thế khi tương tác đá theo storyboard; chưa final art/main integration.
+
 Lượt băng tay sau mở màn hình đã hoàn tất (`arrival-wrist-wrap-unlocked.log`,192frames/exit0), ảnh chạy đã xem; không còn blocker capture hiện tại. Gom rig/đai/wrap thành checkpoint. Tiếp candidate theo turnaround, kiểm tra mapping/tư thế bàn tay; chưa final art/main integration. Owner không cần chủ động xuất video bàn giao hoặc đề nghị chuyển sandbox nữa.
 
 Băng tay candidate đã sửa từ mesh cẳng tay thay ống cố định/32 mặt phải đảo; Blender front/rear đã xem, Unity import/pose/build/quick qua. Video final chưa thực hiện: foreground loginwindow, Player không tạo frame; đã dừng đúng Player19412. Không visual PASS; nhóm rig/đai/wrap chưa commit. Tiếp source/asset không cần foreground, capture lại khi môi trường khả dụng.

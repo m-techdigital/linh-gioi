@@ -25,6 +25,8 @@ namespace LinhGioi.World
         private SpriteRenderer _stoneFocus;
         private bool _stoneReady;
         private float _stoneCompletedAt = -1f;
+        private bool _stoneFacingActive;
+        private const float StoneFeedbackDuration = 1.2f;
         private bool _screenInputHeld;
         private Vector3 _inputForward;
         private Mesh _stoneMesh;
@@ -172,9 +174,15 @@ namespace LinhGioi.World
             _player.SimpleMove(Vector3.ClampMagnitude(direction, 1f) * 3.6f);
             var velocity = Vector3.ProjectOnPlane(_player.velocity, Vector3.up);
             _characterAnimator.SetFloat(SpeedParameter, velocity.magnitude, 0.1f, Time.deltaTime);
-            if (velocity.sqrMagnitude > 0.0025f)
+            if (direction.sqrMagnitude > 0.0001f) _stoneFacingActive = false;
+            var facing = DialogueVisible
+                ? Vector3.ProjectOnPlane(KeeperPoint - _player.transform.position, Vector3.up)
+                : velocity;
+            if (!DialogueVisible && _stoneFacingActive && Time.time - _stoneCompletedAt < StoneFeedbackDuration)
+                facing = Vector3.ProjectOnPlane(StonePoint - _player.transform.position, Vector3.up);
+            if (facing.sqrMagnitude > 0.0025f)
                 _characterVisual.rotation = Quaternion.RotateTowards(_characterVisual.rotation,
-                    Quaternion.LookRotation(velocity, Vector3.up), 720f * Time.deltaTime);
+                    Quaternion.LookRotation(facing, Vector3.up), 720f * Time.deltaTime);
         }
 
         public void ResetMovementInput()
@@ -200,6 +208,7 @@ namespace LinhGioi.World
             if (completed && _stoneCompletedAt < 0f)
             {
                 _stoneCompletedAt = Time.time;
+                _stoneFacingActive = true;
                 WorldLabelPresenter.Set(_stoneLabel, "Đá Luyện\nĐã ổn định", RuntimeArtCatalog.Gold);
             }
         }
@@ -212,7 +221,7 @@ namespace LinhGioi.World
             WorldLabelPresenter.PlaceAbove(_keeperLabel, _keeper);
             WorldLabelPresenter.PlaceAbove(_stoneLabel, _stone);
             var completion = _stoneCompletedAt >= 0f;
-            var progress = completion ? Mathf.Clamp01((Time.time - _stoneCompletedAt) / 1.2f) : 0f;
+            var progress = completion ? Mathf.Clamp01((Time.time - _stoneCompletedAt) / StoneFeedbackDuration) : 0f;
             _stoneFocus.gameObject.SetActive(!DialogueVisible && (completion ? progress < 1f : _stoneReady));
             _stoneFocus.transform.localScale = Vector3.one * (1.6f + progress * 0.8f);
             var color = completion ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Gold;

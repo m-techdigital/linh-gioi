@@ -171,6 +171,11 @@ namespace LinhGioi.UI
             var before = _world.Position;
             _world.Movement = Vector2.one;
             yield return new WaitForSeconds(0.3f);
+            var facingKeeper = Vector3.ProjectOnPlane(OnboardingBlockoutWorld.KeeperPoint - _world.Position, Vector3.up);
+            var dialogueFacingAngle = Vector3.Angle(character.transform.forward, facingKeeper);
+            if (dialogueFacingAngle > 5f)
+                throw new InvalidOperationException("Dialogue character must face the keeper: angle=" + dialogueFacingAngle);
+            Debug.Log("LGO_DIALOGUE_FACING_PASS angle=" + dialogueFacingAngle);
             if (Vector2.Distance(new Vector2(before.x, before.z), new Vector2(_world.Position.x, _world.Position.z)) > 0.01f)
                 throw new InvalidOperationException("Dialogue failed to hold movement.");
             Submit(_dialogue.ContinueButton);
@@ -199,8 +204,23 @@ namespace LinhGioi.UI
             }
             Submit(_interact);
             if (!_stoneCompleted) throw new InvalidOperationException("Stone action did not complete onboarding.");
-            yield return null;
+            var stoneInteractionPosition = _world.Position;
+            yield return new WaitForSeconds(0.3f);
+            var stoneFacingAngle = Vector3.Angle(character.transform.forward,
+                Vector3.ProjectOnPlane(OnboardingBlockoutWorld.StonePoint - _world.Position, Vector3.up));
+            if (stoneFacingAngle > 5f || Vector3.Distance(stoneInteractionPosition, _world.Position) > 0.01f)
+                throw new InvalidOperationException("Stone interaction must face its target without moving: angle=" + stoneFacingAngle);
             yield return Capture(directory, "complete");
+            _world.Movement = Vector2.left;
+            yield return new WaitForSeconds(0.3f);
+            _world.Movement = Vector2.zero;
+            if (Vector3.Angle(character.transform.forward, Vector3.left) > 5f ||
+                Vector3.Distance(stoneInteractionPosition, _world.Position) < 0.5f)
+                throw new InvalidOperationException("Fresh movement must override stone facing during its pulse.");
+            yield return new WaitForSeconds(0.15f);
+            if (Vector3.Angle(character.transform.forward, Vector3.left) > 5f)
+                throw new InvalidOperationException("Stone facing must not resume after releasing fresh input.");
+            Debug.Log("LGO_STONE_FACING_PASS target=true no_drift=true movement_priority=true");
             yield return new WaitForSeconds(1.3f);
             if (focus.gameObject.activeSelf)
             {

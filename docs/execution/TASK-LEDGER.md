@@ -1,5 +1,9 @@
 # Linh Giới Online — Task Ledger
 
+Checkpoint interaction facing 2026-09-07: NPC/đá lần lượt red62.6°/31.4°; cùng rotation presentation cho hướng tương tác. Stone facing cùng pulse1.2s, input hủy vĩnh viễn cho lần tương tác đó; nhả không bị kéo lại. Full route `stone-facing-green.log` exit0/quick qua, ảnh dialogue/complete đã xem. Không UI riêng/texture/map transition hoặc reward; next làm rõ lối ra phố0/14 theo design.
+
+NPC facing 2026-09-07: loại giả thuyết thiếu mapping ngón bằng kiểm tra30 bones/clip curl; không giữ probe hoặc sửa importer. Preview dùng chung RotateTowards cho hướng NPC lúc thoại; red62.5572° -> green0°, input-lock/cancel-reopen/full route/quick qua, ảnh dialogue đã xem. Hai file source chưa commit; next phản hồi tương tác đá, không thêm UI riêng hoặc mở combat mới.
+
 Checkpoint rig/garment fit 2026-09-07: capture đã hoạt động lại, `arrival-wrist-wrap-unlocked.log`192frames/exit0 và ảnh chạy đã xem. Gom sửa scale xương nối, envelope đai và băng tay theo body; quick/import/pose/build có evidence đã ghi. Không final art/main integration; không thêm texture. Tiếp kiểm tra tư thế bàn tay/mapping theo turnaround, không chủ động video bàn giao hay chuyển sandbox theo yêu cầu owner mới.
 
 Băng tay 2026-09-07: red32 mặt phía phải đảo; thay ống cố định bằng mesh cẳng tay cắt plane, normals/weights theo body. Blender render front/rear đã xem, Unity pose/import/build/quick qua;21634tris/1172364byte, không texture mới. Capture final bị môi trường loginwindow chặn, zero frames; đúng Player19412 đã TERM, wrapper241. Không runtime pass hoặc commit; giữ nhóm rig/đai/wrap để review khi có foreground, tiếp task asset/source hợp lệ.
