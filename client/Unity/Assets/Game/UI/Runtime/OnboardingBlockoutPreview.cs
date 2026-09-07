@@ -73,7 +73,7 @@ namespace LinhGioi.UI
 
         private void RefreshDialogue()
         {
-            _world.Movement = Vector2.zero;
+            _world.ResetMovementInput();
             _pad.ResetInput();
             _world.DialogueVisible = _session.Active;
             _dialogue.Refresh(_session);
@@ -127,10 +127,97 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(0f, 0f, 2.5f));
             yield return WalkTo(new Vector3(2.3f, 0f, 4f));
             yield return Capture(directory, "stone-side");
+            var focus = _world.transform.Find("Blockout Stone Focus");
+            if (focus == null || !focus.gameObject.activeSelf)
+            {
+                Debug.LogError("LGO_STONE_FEEDBACK_FAIL no focus on interactable stone");
+                Application.Quit(1);
+                yield break;
+            }
             Submit(_interact);
             if (!_stoneCompleted) throw new InvalidOperationException("Stone action did not complete onboarding.");
             yield return null;
             yield return Capture(directory, "complete");
+            yield return new WaitForSeconds(1.3f);
+            if (focus.gameObject.activeSelf)
+            {
+                Debug.LogError("LGO_STONE_FEEDBACK_FAIL completion pulse did not end");
+                Application.Quit(1);
+                yield break;
+            }
+            yield return Capture(directory, "complete-settled");
+            var stoneLabel = GameObject.Find("Blockout Stone Label").GetComponent<TextMesh>();
+            var shadow = stoneLabel.transform.Find("Blockout Stone Label Shadow").GetComponent<TextMesh>();
+            if (stoneLabel.text != shadow.text || !stoneLabel.text.Contains("Đã ổn định"))
+            {
+                Debug.LogError("LGO_STONE_FEEDBACK_FAIL completion label and shadow differ");
+                Application.Quit(1);
+                yield break;
+            }
+            Debug.Log("LGO_STONE_FEEDBACK_PASS focus=true completion_pulse_finished=true");
+            yield return WalkTo(new Vector3(2.3f, 0f, 3f));
+            yield return WalkTo(new Vector3(6f, 0f, 3f));
+            yield return Capture(directory, "camera-alley");
+            if (Physics.Linecast(_world.Position + Vector3.up * 1.1f, Camera.main.transform.position, out var obstruction) ||
+                Physics.Linecast(_world.Position + Vector3.up * 0.2f, Camera.main.transform.position, out obstruction) ||
+                Physics.Linecast(_world.Position + Vector3.up * 1.7f, Camera.main.transform.position, out obstruction))
+            {
+                Debug.LogError("LGO_BLOCKOUT_CAMERA_FAIL player hidden by " + obstruction.collider.name);
+                Application.Quit(1);
+                yield break;
+            }
+            var feet = Camera.main.WorldToViewportPoint(_world.Position);
+            var head = Camera.main.WorldToViewportPoint(_world.Position + Vector3.up * 1.8f);
+            var height = head.y - feet.y;
+            if (feet.z <= Camera.main.nearClipPlane || head.z <= Camera.main.nearClipPlane ||
+                feet.x < 0.05f || feet.x > 0.95f || feet.y < 0.05f || head.y > 0.95f || height < 0.08f || height > 0.6f ||
+                Vector3.Dot(Camera.main.transform.forward, Vector3.down) > 0.65f)
+            {
+                Debug.LogError("LGO_BLOCKOUT_CAMERA_FAIL player framing feet=" + feet + " head=" + head);
+                Application.Quit(1);
+                yield break;
+            }
+            Debug.Log("LGO_BLOCKOUT_CAMERA_PASS alley_line_of_sight=true player_in_frame=true height=" + height);
+            var movementStart = _world.Position;
+            var screenForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
+            _world.ScreenMovement = Vector2.down;
+            var inputDeadline = Time.realtimeSinceStartup + 3f;
+            while (Vector3.Distance(_world.Position, movementStart) < 7.2f && Time.realtimeSinceStartup < inputDeadline)
+                yield return null;
+            _world.ScreenMovement = Vector2.zero;
+            yield return null;
+            yield return Capture(directory, "camera-exit");
+            var travel = Vector3.ProjectOnPlane(_world.Position - movementStart, Vector3.up);
+            if (Vector3.Dot(screenForward, Camera.main.transform.forward) > 0.95f)
+            {
+                Debug.LogError("LGO_CAMERA_INPUT_FAIL fixture did not cross a camera switch travel=" + travel + " camera=" + Camera.main.transform.forward);
+                Application.Quit(1);
+                yield break;
+            }
+            if (Vector3.Dot(travel, -screenForward) < 6.5f || Vector3.Cross(travel, screenForward).magnitude > 0.2f)
+            {
+                Debug.LogError("LGO_CAMERA_INPUT_FAIL held direction changed during camera switch travel=" + travel);
+                Application.Quit(1);
+                yield break;
+            }
+            Debug.Log("LGO_CAMERA_INPUT_PASS held_direction_preserved=true");
+            movementStart = _world.Position;
+            screenForward = Vector3.ProjectOnPlane(Camera.main.transform.forward, Vector3.up).normalized;
+            _world.ScreenMovement = Vector2.up;
+            inputDeadline = Time.realtimeSinceStartup + 1f;
+            while (Vector3.Distance(_world.Position, movementStart) < 0.45f && Time.realtimeSinceStartup < inputDeadline)
+                yield return null;
+            _world.ScreenMovement = Vector2.zero;
+            yield return null;
+            travel = Vector3.ProjectOnPlane(_world.Position - movementStart, Vector3.up);
+            if (Vector3.Dot(travel, screenForward) < 0.35f || Vector3.Cross(travel, screenForward).magnitude > 0.1f)
+            {
+                Debug.LogError("LGO_CAMERA_INPUT_FAIL fresh input did not use new camera basis travel=" + travel
+                    + " basis=" + screenForward + " focused=" + Application.isFocused);
+                Application.Quit(1);
+                yield break;
+            }
+            Debug.Log("LGO_CAMERA_INPUT_PASS fresh_input_uses_new_camera=true");
             if (GetComponent<M4PlayableClientController>() != null)
                 throw new InvalidOperationException("Blockout must not create the account client UI.");
             Debug.Log("LGO_ONBOARDING_BLOCKOUT_ROUTE_PASS movement=CharacterController no_teleport=true");
@@ -170,7 +257,8 @@ namespace LinhGioi.UI
         {
             _interact.text = _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp";
             _interact.SetEnabled(!_stoneCompleted && !_session.Active && InRange);
-            if (!_capturing) _world.Movement = Application.isFocused ? _pad.Value : Vector2.zero;
+            _world.SetStoneFeedback(_session.Completed && !_stoneCompleted && InRange, _stoneCompleted);
+            if (!_capturing) _world.ScreenMovement = Application.isFocused ? _pad.Value : Vector2.zero;
             if (Input.GetKeyDown(KeyCode.F)) Interact();
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -191,7 +279,7 @@ namespace LinhGioi.UI
         private void OnApplicationFocus(bool focused)
         {
             _pad?.ResetInput();
-            if (_world != null) _world.Movement = Vector2.zero;
+            if (_world != null) _world.ResetMovementInput();
         }
     }
 }

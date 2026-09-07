@@ -1,4 +1,5 @@
 using LinhGioi.Art;
+using Unity.Cinemachine;
 using UnityEngine;
 
 namespace LinhGioi.World
@@ -8,13 +9,21 @@ namespace LinhGioi.World
         public static readonly Vector3 KeeperPoint = new Vector3(-3f, 0f, 1f);
         public static readonly Vector3 StonePoint = new Vector3(3.5f, 0f, 4f);
         public Vector2 Movement { get; set; }
+        public Vector2 ScreenMovement { get; set; }
         public Vector3 Position => _player.transform.position;
         private CharacterController _player;
         private Camera _camera;
+        private CinemachineBrain _cameraBrain;
+        private BoxCollider _cameraVolume;
         private Renderer _keeper;
         private Renderer _stone;
         private TextMesh _keeperLabel;
         private TextMesh _stoneLabel;
+        private SpriteRenderer _stoneFocus;
+        private bool _stoneReady;
+        private float _stoneCompletedAt = -1f;
+        private bool _screenInputHeld;
+        private Vector3 _inputForward;
 
         private void Awake()
         {
@@ -54,8 +63,14 @@ namespace LinhGioi.World
             _stone = Actor("Blockout Stone", StonePoint, LgoVisualAssetRegistryV3B.TrainingStone, 1.5f, trim);
             _keeperLabel = WorldLabelPresenter.Create("Blockout Keeper Label", "Người Giữ Cổng", KeeperPoint, RuntimeArtCatalog.Gold);
             _stoneLabel = WorldLabelPresenter.Create("Blockout Stone Label", "Đá Luyện", StonePoint, RuntimeArtCatalog.Gold);
+            _stoneFocus = WorldProceduralVisuals.CreateGroundGlowSprite("Blockout Stone Focus",
+                WorldProceduralVisuals.GetWorldPlatformGlowSprite(), StonePoint + Vector3.up * 0.025f,
+                Vector3.one * 1.6f, RuntimeArtCatalog.Gold, 4);
+            _stoneFocus.transform.SetParent(transform);
+            _stoneFocus.gameObject.SetActive(false);
 
             var player = new GameObject("Blockout player proxy");
+            player.tag = "Player";
             player.transform.SetParent(transform);
             player.transform.position = new Vector3(0f, 0.04f, -3f);
             _player = player.AddComponent<CharacterController>();
@@ -78,25 +93,109 @@ namespace LinhGioi.World
             _camera.farClipPlane = 80f;
             _camera.clearFlags = CameraClearFlags.SolidColor;
             _camera.backgroundColor = new Color(0.46f, 0.54f, 0.57f);
+            _cameraBrain = _camera.gameObject.AddComponent<CinemachineBrain>();
+            _cameraBrain.UpdateMethod = CinemachineBrain.UpdateMethods.ManualUpdate;
+            var tracking = new GameObject("Blockout camera tracking point").transform;
+            tracking.SetParent(player.transform, false);
+            tracking.localPosition = Vector3.up * 1.1f;
+            var shots = new GameObject("Blockout camera shots");
+            shots.transform.SetParent(transform);
+            var volume = new GameObject("Blockout camera volume");
+            volume.transform.SetParent(transform);
+            _cameraVolume = volume.AddComponent<BoxCollider>();
+            _cameraVolume.center = new Vector3(0f, 4.1f, 1.5f);
+            _cameraVolume.size = new Vector3(13.4f, 7.8f, 26.4f);
+            _cameraVolume.isTrigger = true;
+            var clearShot = shots.AddComponent<CinemachineClearShot>();
+            clearShot.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
+            CreateCameraShot(shots.transform, tracking, new Vector3(0f, 2f, -6.8f), 20);
+            CreateCameraShot(shots.transform, tracking, new Vector3(-6.8f, 2f, 0f), 10);
+            CreateCameraShot(shots.transform, tracking, new Vector3(6.8f, 2f, 0f), 10);
+        }
+
+        private void CreateCameraShot(Transform parent, Transform tracking, Vector3 offset, int priority)
+        {
+            var rig = new GameObject("Blockout camera shot " + offset);
+            rig.transform.SetParent(parent);
+            var virtualCamera = rig.AddComponent<CinemachineCamera>();
+            virtualCamera.Priority.Value = priority;
+            virtualCamera.Follow = tracking;
+            virtualCamera.LookAt = tracking;
+            virtualCamera.Lens.FieldOfView = _camera.fieldOfView;
+            virtualCamera.Lens.NearClipPlane = _camera.nearClipPlane;
+            virtualCamera.Lens.FarClipPlane = _camera.farClipPlane;
+            var follow = rig.AddComponent<CinemachineFollow>();
+            follow.FollowOffset = offset;
+            follow.TrackerSettings.PositionDamping = Vector3.zero;
+            rig.AddComponent<CinemachineHardLookAt>();
+            var deoccluder = rig.AddComponent<CinemachineDeoccluder>();
+            deoccluder.IgnoreTag = "Player";
+            // Keep the initial sweep outside the walls of the 1.2 m passage.
+            deoccluder.MinimumDistanceFromTarget = 0.05f;
+            deoccluder.AvoidObstacles.Enabled = true;
+            deoccluder.AvoidObstacles.UseFollowTarget.Enabled = true;
+            deoccluder.AvoidObstacles.CameraRadius = 0.2f;
+            deoccluder.AvoidObstacles.Strategy = CinemachineDeoccluder.ObstacleAvoidance.ResolutionStrategy.PullCameraForward;
+            deoccluder.AvoidObstacles.MaximumEffort = 4;
+            deoccluder.AvoidObstacles.Damping = 0.3f;
+            deoccluder.AvoidObstacles.DampingWhenOccluded = 0f;
+            deoccluder.ShotQualityEvaluation.Enabled = true;
+            rig.AddComponent<CinemachineConfiner3D>().BoundingVolume = _cameraVolume;
         }
 
         private void Update()
         {
-            var input = Application.isFocused && !DialogueVisible ? Movement + new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")) : Vector2.zero;
-            input = Vector2.ClampMagnitude(input, 1f);
-            _player.SimpleMove(new Vector3(input.x, 0f, input.y) * 3.6f);
+            var direction = Vector3.zero;
+            if (Application.isFocused && !DialogueVisible)
+            {
+                var input = ScreenMovement + new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+                if (input.sqrMagnitude < 0.0001f) _screenInputHeld = false;
+                else if (!_screenInputHeld)
+                {
+                    _inputForward = Vector3.ProjectOnPlane(_camera.transform.forward, Vector3.up).normalized;
+                    _screenInputHeld = true;
+                }
+                // A camera cut must not steer input that the player is still holding.
+                var right = Vector3.Cross(Vector3.up, _inputForward);
+                direction = _inputForward * input.y + right * input.x + new Vector3(Movement.x, 0f, Movement.y);
+            }
+            else _screenInputHeld = false;
+            _player.SimpleMove(Vector3.ClampMagnitude(direction, 1f) * 3.6f);
+        }
+
+        public void ResetMovementInput()
+        {
+            Movement = Vector2.zero;
+            ScreenMovement = Vector2.zero;
+            _screenInputHeld = false;
         }
 
         public bool DialogueVisible { get; set; }
 
+        public void SetStoneFeedback(bool ready, bool completed)
+        {
+            _stoneReady = ready;
+            if (completed && _stoneCompletedAt < 0f)
+            {
+                _stoneCompletedAt = Time.time;
+                WorldLabelPresenter.Set(_stoneLabel, "Đá Luyện\nĐã ổn định", RuntimeArtCatalog.Gold);
+            }
+        }
+
         private void LateUpdate()
         {
-            _camera.transform.position = Position + new Vector3(0f, 3.1f, -6.8f);
-            _camera.transform.LookAt(Position + new Vector3(0f, 1.1f, 1.3f));
+            _cameraBrain.ManualUpdate();
             _keeperLabel.gameObject.SetActive(!DialogueVisible);
             _stoneLabel.gameObject.SetActive(!DialogueVisible);
             WorldLabelPresenter.PlaceAbove(_keeperLabel, _keeper);
             WorldLabelPresenter.PlaceAbove(_stoneLabel, _stone);
+            var completion = _stoneCompletedAt >= 0f;
+            var progress = completion ? Mathf.Clamp01((Time.time - _stoneCompletedAt) / 1.2f) : 0f;
+            _stoneFocus.gameObject.SetActive(!DialogueVisible && (completion ? progress < 1f : _stoneReady));
+            _stoneFocus.transform.localScale = Vector3.one * (1.6f + progress * 0.8f);
+            var color = completion ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Gold;
+            color.a = completion ? 1f - progress : 1f;
+            _stoneFocus.color = color;
         }
 
         private Renderer Actor(string name, Vector3 point, Sprite sprite, float height, Material fallback)

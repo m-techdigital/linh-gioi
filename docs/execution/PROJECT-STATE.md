@@ -8,6 +8,10 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
+Camera blockout đã chuyển sang Cinemachine tránh che khuất và giữ hướng input qua đổi góc; ba profile bản cuối qua, ảnh ngõ PC/ra phố tablet đã xem. Hồi quy main hoàn tất capture ba profile, quick PASS. Demo trang phục nhập môn trước/bên/sau có trong reference-ui, chưa model; tiếp kiểm tra mép ngõ/góc nhà, không mở main camera hoặc hệ thống ngoài roadmap. Không visual PASS.
+
+Blockout có focus/feedback tại đá, pulse kết thúc và nhãn xác nhận; `blockout-stone-label-*` ba profile cùng quick qua, ảnh đã xem. Reuse glow và label base, không texture mới; source giữ để gom presentation batch tiếp. Kế tiếp cần design nhân vật nhìn từ sau/góc camera phố trước khi thay capsule, không coi sprite mặt trước là giải pháp third-person final.
+
 NPC blockout đã nối vòng thoại -> đá bằng session/view chung với màn chính, không clone modal. EditMode 3/3, main ba profile và quick qua; blockout ba profile `npc-font-*` có kiểm tra tầm/hủy/mở lại/input/bounds và ảnh đã xem. Đây vẫn là development prototype local; bước tiếp là focus/feedback đá theo storyboard, chưa city final, quest persistence hoặc visual PASS.
 
 Blockout development nhập môn đã có tuyến đi bằng CharacterController và chín ảnh ba profile; không account/save hoặc scene main mới. Shared material URP Lit sửa fallback sprite do thiếu shader reference trong Player; main flow ba profile và quick qua. `docs/design/LINH-THANH-ONBOARDING-DESIGN.md` ghi evidence/cách mở/non-claims; bước tiếp là reuse hội thoại hiện có cho cảnh mới, không nhân đôi UI/state.

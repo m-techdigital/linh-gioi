@@ -93,7 +93,22 @@ Provenance demo một cảnh: imagegen trong chat, tham chiếu world-event gố
 - Blockout mới: `build/dev-loop/blockout-npc-font-{desktop,tablet,mobile}.log`, cả ba exit 0 và có route/NPC flow marker. Fixture dùng movement vector qua CharacterController, submit event vào nút thật, thử ngoài tầm, hủy/mở lại, input-lock và bounds căn giữa. Không chứng minh gesture/phím thiết bị thật hoặc resize liên tục.
 - 15 ảnh tại `build/visual-evidence/onboarding-blockout/npc-font-{desktop,tablet,mobile}/`: arrival, keeper-side, dialogue, stone-side, complete. Đã xem thoại desktop/mobile và complete tablet; body/footer trong shell, top/bottom cân bằng; player proxy/geometry/bóng chưa đạt demo final. Không thêm ảnh runtime hoặc claim visual PASS. Các log/ảnh blockout đời đầu ở phần trên là lịch sử trước khi nối thoại.
 
-## Provenance storyboard và dialogue
+## Feedback đá và khoảng trống nhân vật
+
+- Cảnh 3 đã thêm focus vàng khi trong tầm và đã hoàn tất thoại; tương tác một lần phát pulse linh khí nở/tắt 1.2s, nhãn Đã ổn định còn lại. Dùng `GetWorldPlatformGlowSprite` 192x192 đã có và `CreateGroundGlowSprite`, không thêm ảnh/import mới. Không chứng minh giảm build/memory; đây là texture procedural cached, không asset miễn phí về RAM.
+- Red `build/dev-loop/blockout-stone-red-player.log` exit 1 vì chưa có focus. Ba bản cuối `blockout-stone-label-{desktop,tablet,mobile}.log` exit 0; kiểm tra focus, pulse kết thúc, nhãn/shadow đồng bộ. `blockout-stone-label-quick.log` qua; ảnh `build/visual-evidence/onboarding-blockout/stone-label-*/`, đã xem mobile complete và tablet complete-settled. Lượt green trước sửa nhãn không phải evidence visual cuối: shadow còn text cũ, đã thay gán trực tiếp bằng `WorldLabelPresenter.Set`.
+- Tiếp theo cần đối chiếu reference Kiếm/trang phục và demo composition để có hình mẫu góc sau/ba phần tư phù hợp camera phố trước khi thay capsule. Candidate nam hiện là sprite nhìn trước; không dùng nó để tuyên bố có model/animation third-person. Không chốt class của Người Thức Tỉnh hoặc ngoại hình canon từ asset proxy.
+
+## Camera phố và mẫu trang phục nhập môn
+
+- Camera blockout dùng Cinemachine 3.1.7: ClearShot chọn góc sau/hai bên, Deoccluder tránh vật cản, Confiner3D giữ camera trong phạm vi phố. Một Brain cập nhật trước nhãn world; không còn hai nơi ghi transform camera. Input giữ hướng tại lúc bắt đầu nhấn, chỉ lấy hướng camera mới khi nhả/nhấn lại; đóng thoại hoặc mất focus xóa input.
+- Red thật: `blockout-camera-red-player.log` bị nhà che; `blockout-camera-hold-red.log` đổi hướng đang giữ nút. Các bản chỉ kiểm tra một tia đã từng qua nhưng ảnh vẫn sai; không dùng làm visual pass. Bản cuối `blockout-camera-final-{desktop,tablet,mobile}.log` kiểm tra đầu/thân/chân, framing, camera switch và input giữ/nhấn mới; cả ba qua. Đã xem ảnh desktop `camera-alley.png` và tablet `camera-exit.png` trong `build/visual-evidence/onboarding-blockout/camera-final-*/`.
+- Hồi quy main ba profile: `build/dev-loop/cinemachine-main-flow-baseline.log` kết thúc EVIDENCE_CAPTURED_FOR_REVIEW; quick `camera-checkpoint-quick.log` PASS. Build development cuối 341618105 byte, tăng 1020591 byte so với bản trước dependency; không quy toàn bộ delta cho thư viện hoặc coi là budget release.
+- Chưa kiểm chứng mọi vị trí sát tường/góc nhà hoặc từng frame chuyển camera; chưa orbit, model nhân vật, NPC 3D hay visual PASS. NPC/đá nhìn cạnh vẫn lộ ảnh phẳng. Bước tiếp: đi sát hai mép ngõ và vòng góc nhà để kiểm tra che khuất trước khi cân nhắc đưa camera vào main flow.
+- Demo `docs/reference-ui/lgo-arrival-outfit-turnaround-draft-v1.jpg`: 1280x853, 154008 byte, JPEG76, chỉ reference ngoài runtime. Mẫu trước/bên/sau/ba phần tư lấy hướng bộ TRAINING trong reference Kiếm và composition nhập môn; không chốt class/canon. Thumbnail camera trong tranh có nhân vật quá lớn, không dùng làm chuẩn framing. Chưa có model/rig tương ứng; không cắt tranh composite làm sprite/model giả.
+- Nguồn imagegen: `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-9793cbe1-ef37-4611-83b2-f69b82a6dd9b.png`; đã xem bản nén. NPC/Lộ/skill/trang bị/trang phục tiếp tục theo `LGO-GAME-SYSTEMS-NARRATIVE-DESIGN.md`, không mở hệ thống ngoài roadmap vì có concept.
+
+## Nguồn ảnh nhập môn
 
 Imagegen trong chat, tham chiếu world-event và Character Hall đã duyệt; nguồn ngoài repo `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-69276ad5-037e-449c-8a6f-e671b1473e0d.png`. JPEG quality78 bằng sips, không crop. Demo mới chưa owner duyệt.
 
