@@ -34,6 +34,10 @@ Reuse skin của demo ba ô nhân vật: nền trung tính, vàng/ngà, nút com
 
 ### Nối sảnh vào phố trong development
 
+Đá Luyện theo khung3 storyboard: khối đá thấp khoảng1.1m, vai rộng trong footprint0.65m, đỉnh bo nhiều mặt, màu than-xám để tách nền đường. Giữ collider0.65x1.5x0.65 và range/flow hiện tại trong fixture. Dấu hình thoi đang có đổi vàng, đặt mặt trước và mặt hướng lối đi để thấy từ vị trí đứng tương tác; không tự tạo chữ Hán/canon mới. Mesh procedural dưới300 triangle, hai dấu dùng cube mesh/material chung, không texture/light mới. Đây là bước candidate về hình khối và nhận diện, chưa đá khắc chữ/art final như demo. Test footprint/mesh, dấu hướng đường không collider, pulse/thoại/tuyến đi và cleanup.
+
+Runtime đá: `stone-silhouette-red` tái hiện thiếu silhouette; `stone-silhouette-green-{mobile,desktop,tablet}` qua toàn tuyến/mesh/seal/focus/pulse/camera, ảnh đã xem. `stone-silhouette-hall-mobile` hai visit/profile/material/nhãn qua, ảnh đã xem; quick qua. Giữ collider cao1.5m dù visual thấp1.1m trong fixture, không claim collision surface fit hoặc art final/GPU benchmark/visual PASS.
+
 Guidance theo góc trái các khung 1/3/4 storyboard: một nền HUD trung tính dùng `NewWorldHudRoot`, địa điểm nhỏ, mục tiêu vàng và lời nhắc ngà; các dòng plain text không chip/viền lồng. Cả main/phố dùng `RuntimeWorldGuidanceView`, giữ thông tin và trạng thái hiện có. Phố reuse root scroll chung thay ScrollView trần; giới hạn30% safe height hiện có, không mở panel mới. Kiểm tra wrap, nội dung dài cuộn, thoại/completion ẩn/hiện và ba tỷ lệ viewport; không dùng ảnh demo như evidence runtime.
 
 Final guidance tại `guidance-group-final-{mobile,desktop,tablet}` và main PC `guidance-group-main-desktop`, ảnh đã xem. Nội dung thường vừa khung, fixture40 dòng cuộn thật và không đè pad; skin scrollbar từ overflow guard. Bản đầu còn scrollbar trắng/đệm group dư đã loại sau review, giữ log/ảnh. Không physical touch hoặc resize lúc đang cuộn/thoại, không final visual claim.

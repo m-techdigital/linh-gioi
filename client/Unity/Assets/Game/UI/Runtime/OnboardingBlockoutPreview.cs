@@ -379,6 +379,20 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(0f, 0f, 2.5f));
             yield return WalkTo(new Vector3(2.3f, 0f, 4f));
             yield return Capture(directory, "stone-side");
+            var stoneMesh = _world.transform.Find("Blockout Stone").GetComponent<MeshFilter>().sharedMesh;
+            var stoneCollider = _world.transform.Find("Blockout Stone").GetComponent<BoxCollider>();
+            if (stoneMesh.bounds.size.y > 1.15f || stoneMesh.bounds.size.z < 0.55f ||
+                stoneMesh.triangles.Length / 3 > 300 ||
+                stoneCollider.size != new Vector3(0.65f, 1.5f, 0.65f))
+                throw new InvalidOperationException("Training stone must be a low broad volume within its unchanged collision footprint.");
+            var frontSeal = _world.transform.Find("Blockout stone seal front");
+            var sideSeal = _world.transform.Find("Blockout stone seal side");
+            if (frontSeal == null || sideSeal == null || frontSeal.GetComponent<Collider>() != null || sideSeal.GetComponent<Collider>() != null ||
+                frontSeal.GetComponent<MeshFilter>().sharedMesh != sideSeal.GetComponent<MeshFilter>().sharedMesh ||
+                frontSeal.GetComponent<Renderer>().sharedMaterial != sideSeal.GetComponent<Renderer>().sharedMaterial ||
+                sideSeal.position.x >= OnboardingBlockoutWorld.StonePoint.x - 0.2f)
+                throw new InvalidOperationException("Stone needs shared seal geometry/material on its arrival and road faces without extra collision.");
+            Debug.Log("LGO_STONE_SILHOUETTE_PASS low_volume=true collider_unchanged=true shared_seals=true");
             CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
             CheckInteractionIcon("Luyện", "ActionTouch", true);
             if (!CheckGuidance("Chạm Đá Luyện.", true)) yield break;

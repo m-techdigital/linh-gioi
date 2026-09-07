@@ -404,25 +404,25 @@ namespace LinhGioi.World
 
         private Renderer CreateTrainingStone()
         {
-            var surface = Material(new Color(0.40f, 0.43f, 0.44f));
+            var surface = Material(new Color(0.27f, 0.29f, 0.28f));
             var stone = Box("Blockout Stone", StonePoint + Vector3.up * 0.75f, new Vector3(0.65f, 1.5f, 0.65f), surface);
             stone.transform.position = StonePoint;
             stone.transform.localScale = Vector3.one;
             var collider = stone.GetComponent<BoxCollider>();
             collider.center = Vector3.up * 0.75f;
             collider.size = new Vector3(0.65f, 1.5f, 0.65f);
-            // Five octagonal rings form the plinth, shoulder and tapered body in metres.
+            // Five octagonal rings give the low stone a broad shoulder and rounded crown.
             var rings = new[]
             {
-                new Vector3(0.325f, 0f, 0.225f), new Vector3(0.29f, 0.15f, 0.20f),
-                new Vector3(0.245f, 0.15f, 0.155f), new Vector3(0.255f, 0.8f, 0.165f),
-                new Vector3(0.12f, 1.3f, 0.11f)
+                new Vector3(0.325f, 0f, 0.30f), new Vector3(0.31f, 0.12f, 0.29f),
+                new Vector3(0.325f, 0.45f, 0.30f), new Vector3(0.285f, 0.85f, 0.255f),
+                new Vector3(0.20f, 1.04f, 0.19f)
             };
             var points = new Vector3[rings.Length * 8];
             for (var ring = 0; ring < rings.Length; ring++)
             for (var side = 0; side < 8; side++)
             {
-                var angle = side * Mathf.PI * 0.25f;
+                var angle = (side + 0.5f) * Mathf.PI * 0.25f;
                 points[ring * 8 + side] = new Vector3(Mathf.Cos(angle) * rings[ring].x,
                     rings[ring].y, Mathf.Sin(angle) * rings[ring].z);
             }
@@ -442,7 +442,7 @@ namespace LinhGioi.World
                     Face(points[lower + side], points[upper + side], points[upper + next]);
                     Face(points[lower + side], points[upper + next], points[lower + next]);
                 }
-                Face(points[32 + side], new Vector3(0.07f, 1.5f, -0.01f), points[32 + next]);
+                Face(points[32 + side], new Vector3(0.04f, 1.1f, -0.01f), points[32 + next]);
             }
             var indices = new int[vertices.Count];
             for (var i = 0; i < indices.Length; i++) indices[i] = i;
@@ -452,9 +452,24 @@ namespace LinhGioi.World
             _stoneMesh.RecalculateNormals();
             _stoneMesh.RecalculateBounds();
             stone.GetComponent<MeshFilter>().sharedMesh = _stoneMesh;
-            var inset = Box("Blockout stone jade inset", StonePoint + new Vector3(0f, 0.82f, -0.17f),
-                new Vector3(0.13f, 0.13f, 0.04f), Material(new Color(0.25f, 0.55f, 0.45f)), false);
-            inset.transform.rotation = Quaternion.Euler(0f, 0f, 45f);
+            var sealMaterial = Material(RuntimeArtCatalog.Gold);
+            void Seal(string name, bool roadFace)
+            {
+                const float height = 0.62f;
+                var lower = rings[2];
+                var upper = rings[3];
+                var face = Vector3.Lerp(lower, upper, (height - lower.y) / (upper.y - lower.y));
+                var octagonFace = Mathf.Cos(Mathf.PI * 0.125f);
+                var radius = (roadFace ? face.x : face.z) * octagonFace;
+                var slope = (roadFace ? lower.x - upper.x : lower.z - upper.z) * octagonFace / (upper.y - lower.y);
+                var normal = (roadFace ? new Vector3(-1f, slope, 0f) : new Vector3(0f, slope, -1f)).normalized;
+                var center = roadFace ? new Vector3(-radius, height, 0f) : new Vector3(0f, height, -radius);
+                var seal = Box(name, StonePoint + center + normal * 0.009f,
+                    new Vector3(0.14f, 0.14f, 0.016f), sealMaterial, false);
+                seal.transform.rotation = Quaternion.LookRotation(normal) * Quaternion.Euler(0f, 0f, 45f);
+            }
+            Seal("Blockout stone seal front", false);
+            Seal("Blockout stone seal side", true);
             return stone.GetComponent<Renderer>();
         }
 
