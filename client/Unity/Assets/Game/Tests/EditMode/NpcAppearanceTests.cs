@@ -9,10 +9,11 @@ namespace LinhGioi.Tests
 {
     public sealed class NpcAppearanceTests
     {
-        [Test]
-        public void SharedAppearanceDoesNotCloneMeshOrMaterialsAcrossNpcInstances()
+        [TestCase("LGOGateKeeperCandidate", 2)]
+        [TestCase("LGOArrivalOutfitCandidate", 3)]
+        public void SharedAppearanceDoesNotCloneMeshOrMaterialsAcrossNpcInstances(string resource, int materials)
         {
-            var prefab = Resources.Load<GameObject>("LGOGateKeeperCandidate");
+            var prefab = Resources.Load<GameObject>(resource);
             GameObject first = null, second = null;
             try
             {
@@ -27,7 +28,7 @@ namespace LinhGioi.Tests
                 var b = second.GetComponentInChildren<SkinnedMeshRenderer>();
                 binding.Appearance.Apply(a); binding.Appearance.Apply(b);
                 Assert.That(a.sharedMesh, Is.SameAs(b.sharedMesh));
-                Assert.That(a.sharedMaterials.Length, Is.EqualTo(2));
+                Assert.That(a.sharedMaterials.Length, Is.EqualTo(materials));
                 for (var i = 0; i < a.sharedMaterials.Length; i++) Assert.That(a.sharedMaterials[i], Is.SameAs(b.sharedMaterials[i]));
                 Assert.That(a.bones[0], Is.Not.SameAs(b.bones[0]), "NPC poses must remain independent.");
             }

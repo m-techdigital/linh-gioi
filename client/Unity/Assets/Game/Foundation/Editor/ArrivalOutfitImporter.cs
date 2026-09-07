@@ -10,7 +10,7 @@ namespace LinhGioi.Foundation.Editor
     public static class ArrivalOutfitImporter
     {
         private const string Directory = "Assets/Game/Art/OnboardingCandidate/";
-        private const string ModelPath = Directory + "ArrivalOutfit.fbx";
+        private const string ModelPath = Directory + "ArrivalScene.fbx";
         private const string PrefabPath = Directory + "Resources/LGOArrivalOutfitCandidate.prefab";
 
         public static void ValidateLocomotion()
@@ -112,16 +112,12 @@ namespace LinhGioi.Foundation.Editor
             }
             ConfigureHumanoid(ModelPath, false);
             Validate();
-            foreach (var texture in new[] { "Skin", "Eyes" })
-            {
-                var settings = (TextureImporter)AssetImporter.GetAtPath(Directory + texture + ".png");
-                settings.maxTextureSize = texture == "Skin" ? 512 : 128;
-                settings.mipmapEnabled = true;
-                settings.isReadable = false;
-                settings.textureCompression = TextureImporterCompression.CompressedHQ;
-                settings.SaveAndReimport();
-            }
-            SaveCandidatePrefab(ModelPath, PrefabPath);
+            var palette = (TextureImporter)AssetImporter.GetAtPath(Directory + "ArrivalPalette.png");
+            palette.maxTextureSize = 64; palette.mipmapEnabled = false;
+            palette.filterMode = FilterMode.Point; palette.wrapMode = TextureWrapMode.Clamp;
+            palette.isReadable = false; palette.textureCompression = TextureImporterCompression.Uncompressed;
+            palette.SaveAndReimport();
+            NpcAppearanceBaker.BakePlayer(ModelPath, PrefabPath);
         }
 
         public static void ImportKeeper() => NpcAppearanceBaker.BakeKeeper();
@@ -339,13 +335,14 @@ namespace LinhGioi.Foundation.Editor
 
         private static bool ClipNamed(string actual, string expected) => actual == expected || actual.EndsWith("|" + expected, StringComparison.Ordinal);
 
-        private static Material CreateMaterial(Material source)
+        internal static Material CreateMaterial(Material source)
         {
             if (source == null) throw new InvalidOperationException("Missing FBX material identity.");
             var name = source.name;
             var color = Color.white;
             string texture = null;
-            if (name == "Base skin") texture = "Skin";
+            if (name == "Arrival Scene Palette") texture = "ArrivalPalette";
+            else if (name == "Base skin") texture = "Skin";
             else if (name == "Base eyes") texture = "Eyes";
             else if (name == "Keeper Reconstruction") texture = "KeeperReconstructionAlbedo";
             else if (name == "Keeper Reconstruction Face") texture = "KeeperReconstructionFace";
@@ -379,7 +376,7 @@ namespace LinhGioi.Foundation.Editor
 
         public static void Validate()
         {
-            ValidateModel(ModelPath);
+            ValidateModel(ModelPath, 3);
         }
 
         private static void ValidateModel(string modelPath, int materialSections = 6)

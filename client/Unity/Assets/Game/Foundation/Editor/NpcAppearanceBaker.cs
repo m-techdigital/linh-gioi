@@ -84,6 +84,39 @@ namespace LinhGioi.Foundation.Editor
             finally { UnityEngine.Object.DestroyImmediate(instance); }
         }
 
+        internal static void BakePlayer(string modelPath, string prefabPath)
+        {
+            var instance = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(modelPath));
+            try
+            {
+                PrefabUtility.UnpackPrefabInstance(instance, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
+                var renderer = instance.GetComponentInChildren<SkinnedMeshRenderer>();
+                var mesh = UnityEngine.Object.Instantiate(renderer.sharedMesh);
+                mesh.name = "Arrival shared appearance";
+                MeshUtility.Optimize(mesh);
+                MeshUtility.SetMeshCompression(mesh, ModelImporterMeshCompression.Medium);
+                var preset = ScriptableObject.CreateInstance<NpcAppearancePreset>();
+                preset.Mesh = Save(mesh, Root + "ArrivalAppearanceMesh.asset");
+                preset.Materials = renderer.sharedMaterials.Select(ArrivalOutfitImporter.CreateMaterial).ToArray();
+                preset.BoneNames = renderer.bones.Select(b => b.name).ToArray();
+                preset.Bounds = renderer.localBounds;
+                preset = Save(preset, Root + "ArrivalAppearance.asset");
+                preset.Apply(renderer);
+                instance.AddComponent<NpcAppearanceInstance>().Appearance = preset;
+                var animator = instance.GetComponent<Animator>();
+                animator.applyRootMotion = false;
+                animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(Root + "ArrivalLocomotion.controller");
+                animator.avatar = Save(UnityEngine.Object.Instantiate(animator.avatar), Root + "ArrivalSharedAvatar.asset");
+                if (!animator.isHuman || animator.runtimeAnimatorController == null)
+                    throw new InvalidOperationException("Player appearance requires shared Humanoid locomotion.");
+                PrefabUtility.SaveAsPrefabAsset(instance, prefabPath); AssetDatabase.SaveAssets();
+                if (AssetDatabase.GetDependencies(prefabPath, true).Contains(modelPath))
+                    throw new InvalidOperationException("Player authoring FBX leaked into runtime dependencies.");
+                Debug.Log("LGO_PLAYER_APPEARANCE_BAKE_PASS materials=3 shared_keeper_textures=true vertices=" + preset.Mesh.vertexCount);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(instance); }
+        }
+
         public static Mesh Merge(NpcAppearanceRecipe recipe)
         {
             var vertices = new List<Vector3>(); var normals = new List<Vector3>(); var tangents = new List<Vector4>();

@@ -1,0 +1,30 @@
+{
+  "source_sha256": "521e1aebd6b7dab3b18a340106de532dbc3d88c7fa381760e59bb9e9be9a6e78",
+  "fbx_sha256": "bc11b012dbb9f7b98c99a900c55d0e0bf35af81a75d4ec84951e412b31a7d60d",
+  "triangles": 20954,
+  "vertices": 11183,
+  "bones": 65,
+  "material_sections": 3,
+  "new_texture": [
+    48,
+    8
+  ],
+  "shared_textures": [
+    "KeeperReconstructionAlbedo",
+    "KeeperReconstructionFace"
+  ],
+  "runtime_verified": true,
+  "evidence": [
+    "build/dev-loop/city-macro-final-import.log",
+    "build/dev-loop/city-macro-final-tests.xml",
+    "build/dev-loop/city-macro-final-build.log",
+    "build/dev-loop/city-macro-final-mobile.log"
+  ],
+  "source_origin": "Quaternius CC0 arrival study; shared Keeper head/hair source and texture provenance in ../gate-keeper/",
+  "runtime_unique_build_kb_approx": 398.2,
+  "not_claimed": [
+    "final art",
+    "mobile GPU performance",
+    "all outfits under100KB"
+  ]
+}

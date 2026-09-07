@@ -48,6 +48,7 @@ namespace LinhGioi.World
         private const float StoneFeedbackDuration = 1.2f;
         private bool _screenInputHeld;
         private Vector3 _inputForward;
+        private CityArchitectureVisuals _city;
         private Mesh _stoneMesh;
         private Mesh _stoneSealMesh;
         private Mesh _pavingMesh;
@@ -77,9 +78,11 @@ namespace LinhGioi.World
             light.transform.rotation = Quaternion.Euler(50f, -35f, 0f);
             light.shadows = LightShadows.Soft;
             var paving = Material(new Color(0.39f, 0.40f, 0.39f));
-            var walls = Material(new Color(0.58f, 0.59f, 0.56f));
-            var roof = Material(new Color(0.19f, 0.23f, 0.24f));
-            var trim = Material(new Color(0.18f, 0.19f, 0.18f));
+            var walls = Material(new Color(0.72f, 0.67f, 0.56f));
+            var roof = Material(new Color(0.12f, 0.19f, 0.25f));
+            var trim = Material(new Color(0.32f, 0.18f, 0.10f));
+            _city = gameObject.AddComponent<CityArchitectureVisuals>();
+            _city.Initialize();
             Box("Courtyard", new Vector3(0f, -0.1f, 1.5f), new Vector3(14f, 0.2f, 27f), paving).GetComponent<Renderer>().enabled = false;
             for (var side = -1; side <= 1; side += 2)
             {
@@ -89,11 +92,13 @@ namespace LinhGioi.World
                 Box("Boundary", new Vector3(side * 7f, 0.6f, 1.5f), new Vector3(0.2f, 1.2f, 27f), walls);
             }
             CreateForecourt(paving, walls, roof, trim);
-            CreateStreetHouse(new Vector3(-10f, 0f, 42f), 3.2f, walls, roof, trim, scenery: true);
-            CreateStreetHouse(new Vector3(-5f, 0f, 40f), 3.8f, walls, roof, trim, scenery: true);
-            CreateStreetHouse(new Vector3(1f, 0f, 46f), 4f, walls, roof, trim, scenery: true);
-            CreateStreetHouse(new Vector3(7f, 0f, 42f), 3.2f, walls, roof, trim, scenery: true);
-            CreateStreetHouse(new Vector3(12f, 0f, 48f), 3.6f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(-10f, 0f, 54f), 3.2f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(-5f, 0f, 52f), 3.8f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(1f, 0f, 58f), 4f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(7f, 0f, 54f), 3.2f, walls, roof, trim, scenery: true);
+            CreateStreetHouse(new Vector3(12f, 0f, 60f), 3.6f, walls, roof, trim, scenery: true);
+            _city.Landmarks();
+            _city.Finish();
             CreateStreetLanterns(trim);
             CreateStreetPaving(paving);
             Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
@@ -220,6 +225,7 @@ namespace LinhGioi.World
 
         private void CreateStreetHouse(Vector3 centre, float height, Material walls, Material roof, Material trim, bool scenery = false)
         {
+            _city.BeginModule(centre, scenery ? Quaternion.Euler(0f, centre.x < 0f ? 90f : -90f, 0f) : Quaternion.identity);
             var house = new GameObject(scenery ? "Street scenery house" : "Street house").transform;
             house.SetParent(transform);
             house.position = centre;
@@ -263,17 +269,18 @@ namespace LinhGioi.World
             facade.transform.rotation = Quaternion.Euler(0f, centre.x < 0f ? 0f : 180f, 0f);
             facade.AddComponent<MeshFilter>().sharedMesh = _houseFacadeMesh;
             facade.AddComponent<MeshRenderer>().sharedMaterial = trim;
+            _city.House(centre, height);
             if (scenery) house.rotation = Quaternion.Euler(0f, centre.x < 0f ? 90f : -90f, 0f);
+            _city.EndModule();
         }
 
         private void CreateRoof(Vector3 eave, Material roof, bool collision = true, Transform parent = null)
         {
-            Box("Roof eave", eave, new Vector3(3.6f, 0.25f, 5.4f), roof, collision, parent);
-            for (var slope = -1; slope <= 1; slope += 2)
+            _city.Roof(eave, new Vector3(1.8f, 1f, 2.7f));
+            if (collision)
             {
-                var panel = Box("Roof slope", eave + new Vector3(slope * 0.8f, 0.5f, 0f),
-                    new Vector3(1.9f, 0.16f, 5.2f), roof, collision, parent);
-                panel.transform.rotation = Quaternion.Euler(0f, 0f, -slope * 25f);
+                var support = Box("Roof collision", eave, new Vector3(3.6f, 0.25f, 5.4f), roof, true, parent);
+                support.GetComponent<Renderer>().enabled = false;
             }
         }
 
@@ -546,67 +553,20 @@ namespace LinhGioi.World
 
         private Renderer CreateTrainingStone()
         {
-            var surface = Material(new Color(0.40f, 0.49f, 0.51f));
-            var stone = Box("Blockout Stone", StonePoint + Vector3.up * 0.75f, new Vector3(0.65f, 1.5f, 0.65f), surface);
+            var renderer = TrainingStoneVisuals.Create(transform, Material);
+            var stone = renderer.gameObject;
+            stone.name = "Blockout Stone";
             stone.transform.position = StonePoint;
-            stone.transform.localScale = Vector3.one;
-            var collider = stone.GetComponent<BoxCollider>();
+            _stoneMesh = stone.GetComponent<MeshFilter>().sharedMesh;
+            var collider = stone.AddComponent<BoxCollider>();
             collider.center = Vector3.up * 0.75f;
             collider.size = new Vector3(0.65f, 1.5f, 0.65f);
-            // Five octagonal rings give the low stone a broad shoulder and rounded crown.
-            var rings = new[]
-            {
-                new Vector3(0.325f, 0f, 0.30f), new Vector3(0.31f, 0.12f, 0.29f),
-                new Vector3(0.325f, 0.45f, 0.30f), new Vector3(0.285f, 0.85f, 0.255f),
-                new Vector3(0.20f, 1.04f, 0.19f)
-            };
-            var points = new Vector3[rings.Length * 8];
-            for (var ring = 0; ring < rings.Length; ring++)
-            for (var side = 0; side < 8; side++)
-            {
-                var angle = (side + 0.5f) * Mathf.PI * 0.25f;
-                points[ring * 8 + side] = new Vector3(Mathf.Cos(angle) * rings[ring].x,
-                    rings[ring].y, Mathf.Sin(angle) * rings[ring].z);
-            }
-            var vertices = new System.Collections.Generic.List<Vector3>(240);
-            void Face(Vector3 a, Vector3 b, Vector3 c)
-            {
-                vertices.Add(a); vertices.Add(b); vertices.Add(c);
-            }
-            for (var side = 0; side < 8; side++)
-            {
-                var next = (side + 1) % 8;
-                Face(Vector3.zero, points[side], points[next]);
-                for (var ring = 0; ring < rings.Length - 1; ring++)
-                {
-                    var lower = ring * 8;
-                    var upper = lower + 8;
-                    Face(points[lower + side], points[upper + side], points[upper + next]);
-                    Face(points[lower + side], points[upper + next], points[lower + next]);
-                }
-                Face(points[32 + side], new Vector3(0.04f, 1.1f, -0.01f), points[32 + next]);
-            }
-            var indices = new int[vertices.Count];
-            for (var i = 0; i < indices.Length; i++) indices[i] = i;
-            _stoneMesh = new Mesh { name = "Blockout stone volume" };
-            _stoneMesh.SetVertices(vertices);
-            _stoneMesh.triangles = indices;
-            _stoneMesh.RecalculateNormals();
-            _stoneMesh.RecalculateBounds();
-            stone.GetComponent<MeshFilter>().sharedMesh = _stoneMesh;
             _stoneSealMaterial = Material(RuntimeArtCatalog.Gold);
             _stoneSealMesh = CreateStoneSealMesh();
             void Seal(string name, bool roadFace)
             {
-                const float height = 0.62f;
-                var lower = rings[2];
-                var upper = rings[3];
-                var face = Vector3.Lerp(lower, upper, (height - lower.y) / (upper.y - lower.y));
-                var octagonFace = Mathf.Cos(Mathf.PI * 0.125f);
-                var radius = (roadFace ? face.x : face.z) * octagonFace;
-                var slope = (roadFace ? lower.x - upper.x : lower.z - upper.z) * octagonFace / (upper.y - lower.y);
-                var normal = (roadFace ? new Vector3(-1f, slope, 0f) : new Vector3(0f, slope, -1f)).normalized;
-                var center = roadFace ? new Vector3(-radius, height, 0f) : new Vector3(0f, height, -radius);
+                var normal = TrainingStoneVisuals.SealNormal(roadFace);
+                var center = TrainingStoneVisuals.SealCenter(roadFace);
                 var seal = Box(name, StonePoint + center + normal * 0.009f,
                     Vector3.one, _stoneSealMaterial, false);
                 seal.GetComponent<MeshFilter>().sharedMesh = _stoneSealMesh;
