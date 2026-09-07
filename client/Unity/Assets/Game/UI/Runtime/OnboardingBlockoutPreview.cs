@@ -19,6 +19,8 @@ namespace LinhGioi.UI
             "Đây là bước làm quen với linh khí, không phải giao chiến. Khi đã sẵn sàng, hãy thử một lần."
         });
         private RuntimeNpcDialogueView _dialogue;
+        private RuntimeWorldGuidanceView _guidance;
+        private ScrollView _guidanceScroll;
         private Button _interact;
         private Action _applyLayout;
         private bool _stoneCompleted;
@@ -47,6 +49,14 @@ namespace LinhGioi.UI
             overlay.Add(cluster);
             overlay.Add(quit);
             root.Add(overlay);
+            _guidance = new RuntimeWorldGuidanceView();
+            _guidance.Area.style.display = DisplayStyle.None;
+            _guidance.Step.style.display = DisplayStyle.None;
+            _guidance.Direction.style.display = DisplayStyle.None;
+            _guidanceScroll = new ScrollView(ScrollViewMode.Vertical) { name = "LGO Standalone Guidance" };
+            _guidanceScroll.horizontalScrollerVisibility = ScrollerVisibility.Hidden;
+            _guidanceScroll.Add(_guidance.Panel);
+            root.Add(_guidanceScroll);
             _dialogue = new RuntimeNpcDialogueView(RuntimeUiLayoutProfile.FromScreen(null, Screen.width, Screen.height),
                 () => { _session.Advance(); RefreshDialogue(); },
                 () => { _session.Close(); RefreshDialogue(); });
@@ -58,6 +68,8 @@ namespace LinhGioi.UI
                 RuntimeWorldHudResponsiveLayout.ApplyTouchAffordances(layout, true, false, _session.Active,
                     overlay, _pad, cluster, _interact, null, null, null, quit);
                 _dialogue.ApplyLayout(layout);
+                _guidance.ApplyTypography(layout);
+                RuntimeWorldHudResponsiveLayout.ApplyStandaloneGuidance(layout, RuntimeViewportMetrics.FromRoot(root), _guidanceScroll);
             };
             root.RegisterCallback<GeometryChangedEvent>(_ => _applyLayout());
             _applyLayout();
@@ -90,6 +102,13 @@ namespace LinhGioi.UI
             Directory.CreateDirectory(directory);
             yield return new WaitForSeconds(1f);
             yield return Capture(directory, "arrival");
+            var objective = GetComponent<UIDocument>().rootVisualElement.Q<Label>("LGO World Objective Touch Priority");
+            if (objective == null || !objective.text.Contains("Người Giữ Cổng"))
+            {
+                Debug.LogError("LGO_BLOCKOUT_GUIDANCE_FAIL missing arrival objective");
+                Application.Quit(1);
+                yield break;
+            }
             Interact();
             if (_session.Active) throw new InvalidOperationException("NPC opened outside interaction range.");
             yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
@@ -97,6 +116,7 @@ namespace LinhGioi.UI
             Submit(_interact);
             if (!_session.Active) throw new InvalidOperationException("NPC action did not open shared dialogue.");
             yield return Capture(directory, "dialogue");
+            if (!CheckGuidance("Gặp Người Giữ Cổng.", false)) yield break;
             var bounds = _dialogue.Panel.worldBound;
             var viewport = _dialogue.Panel.parent.worldBound;
             var top = bounds.yMin - viewport.yMin;
@@ -127,6 +147,7 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(0f, 0f, 2.5f));
             yield return WalkTo(new Vector3(2.3f, 0f, 4f));
             yield return Capture(directory, "stone-side");
+            if (!CheckGuidance("Chạm Đá Luyện.", true)) yield break;
             var focus = _world.transform.Find("Blockout Stone Focus");
             if (focus == null || !focus.gameObject.activeSelf)
             {
@@ -146,6 +167,7 @@ namespace LinhGioi.UI
                 yield break;
             }
             yield return Capture(directory, "complete-settled");
+            if (!CheckGuidance("Linh khí đã ổn định.", true)) yield break;
             var stoneLabel = GameObject.Find("Blockout Stone Label").GetComponent<TextMesh>();
             var shadow = stoneLabel.transform.Find("Blockout Stone Label Shadow").GetComponent<TextMesh>();
             if (stoneLabel.text != shadow.text || !stoneLabel.text.Contains("Đã ổn định"))
@@ -260,6 +282,25 @@ namespace LinhGioi.UI
             Application.Quit(0);
         }
 
+        private bool CheckGuidance(string objective, bool visible)
+        {
+            var bounds = _guidanceScroll.worldBound;
+            var root = GetComponent<UIDocument>().rootVisualElement;
+            var safe = RuntimeViewportMetrics.FromRoot(root).SafePanelRect;
+            var fits = bounds.width > 0f && bounds.height > 0f && bounds.xMin >= safe.xMin && bounds.xMax <= safe.xMax
+                && bounds.yMin >= safe.yMin && bounds.yMax <= safe.yMax && bounds.height <= safe.height * 0.3f + 1f
+                && !bounds.Overlaps(_pad.worldBound);
+            if (_guidance.Objective.text == objective && (_guidanceScroll.resolvedStyle.display != DisplayStyle.None) == visible
+                && (!visible || fits))
+            {
+                Debug.Log("LGO_BLOCKOUT_GUIDANCE_PASS " + objective + " visible=" + visible);
+                return true;
+            }
+            Debug.LogError("LGO_BLOCKOUT_GUIDANCE_FAIL state or bounds objective=" + _guidance.Objective.text + " bounds=" + bounds);
+            Application.Quit(1);
+            return false;
+        }
+
         private IEnumerator WalkTo(Vector3 point)
         {
             var deadline = Time.realtimeSinceStartup + 10f;
@@ -290,6 +331,11 @@ namespace LinhGioi.UI
 
         private void Update()
         {
+            _guidanceScroll.style.display = _session.Active ? DisplayStyle.None : DisplayStyle.Flex;
+            _guidance.Objective.text = _stoneCompleted ? "Linh khí đã ổn định." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
+            _guidance.Hint.text = _stoneCompleted ? "Đã hoàn tất bước làm quen tại Linh Môn."
+                : _session.Completed ? (InRange ? "Chọn Luyện để tập trung linh khí." : "Đá ở bên phải đường phía trước.")
+                : InRange ? "Chọn Gặp để trò chuyện." : "Theo đường đá đến Người Giữ Cổng.";
             _interact.text = _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp";
             _interact.SetEnabled(!_stoneCompleted && !_session.Active && InRange);
             _world.SetStoneFeedback(_session.Completed && !_stoneCompleted && InRange, _stoneCompleted);

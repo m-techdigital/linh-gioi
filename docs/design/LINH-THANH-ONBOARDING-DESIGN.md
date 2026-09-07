@@ -118,7 +118,17 @@ Provenance demo một cảnh: imagegen trong chat, tham chiếu world-event gố
 - Red `stone-volume-red-player.log` exit 1 vì đá còn SpriteRenderer không có chiều dày mesh. `camera-edge-mobile.log` trước thay đá đã qua bốn điểm sát vách ngõ trái/phải; không đổi camera vì không tái hiện lỗi ở bốn điểm đó. Chưa kiểm chứng mọi góc nhà hoặc toàn bộ frame chuyển camera.
 - Ảnh mesh đầu (`stone-volume-green-mobile/stone-side.png`) cho thấy đá quá tối. Bootstrap có ambientMode=0; blockout trước chỉ gán ambientLight. Chuyển riêng preview sang Flat rồi tăng mức fill để đọc khối trong bóng râm; không thêm đèn từng vật thể. Căn cứ: [Unity ambientLight](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/RenderSettings-ambientLight.html). Bản Flat đầu vẫn tối, không lấy làm evidence hình ảnh cuối.
 
-## Nguồn storyboard và dialogue
+## Guidance và khảo sát model
+
+- Bản cuối: `shared-guidance-final-{desktop,tablet,mobile}.log` exit 0; assertions mục tiêu/ẩn khi thoại/safe bounds/không đè pad qua. `shared-guidance-main-baseline.log` hoàn tất capture ba profile; quick `shared-guidance-final-quick.log` và validator density qua. Đã xem main mobile gần đá, blockout mobile arrival, tablet hoàn tất, PC thoại. Chưa thử cuộn bằng gesture/nội dung dài hoặc mọi kích thước.
+- PC có lần mất foreground, Player vẫn sống; đưa đúng process lên foreground có thời hạn rồi chạy tiếp, không restart. Ảnh `guidance-final-mobile/arrival.png` chọn góc bên sai composition; main `profiles/mobile/near-training-stone-prompt.png` lộ mảng cyan chữ nhật sau nhân vật. Hai lỗi visual này chưa được giải quyết bởi guidance; tiếp truy nguyên, không claim visual PASS hoặc camera mọi góc.
+
+- Storyboard cảnh 1/3 có mục tiêu bên trái; blockout trước chỉ có nút Gặp/Luyện nên thiếu ngữ cảnh khi mới vào. Dùng `RuntimeWorldGuidanceView` chung với main, tái sử dụng factory/typography; controller main giữ alias phục vụ refresh/evidence, không dựng label guidance riêng nữa.
+- Preview hiện Gặp Người Giữ Cổng -> Chạm Đá Luyện -> Linh khí đã ổn định; gợi ý đổi khi vào tầm, ẩn trong hội thoại. Chưa mở chặng quảng trường hoặc quest persistence. Vùng riêng theo safe viewport: bên trái, top 18%, max-height 30%, width không quá 42% hoặc giới hạn HUD hiện có; ScrollView dọc giữ nội dung dài trong vùng. Đây là guidance, không phải modal hoặc layout dialog mới.
+- Ảnh mobile đầu cho thấy cỡ chữ 11 của base quá nhỏ sau panel scale; tăng hai cỡ guidance mobile lên 18 trong typography chung, không override preview. Red thiếu mục tiêu: `blockout-guidance-red-player.log`; bản green đầu chưa là evidence typography cuối. Validator density cũ tìm marker trong controller được chuyển sang owner view, không thêm validator.
+- Khảo sát model: repo chưa có FBX/GLB/Blend; chưa có Blender trên PATH. [Quaternius Universal Base Characters](https://quaternius.com/packs/universalbasecharacters.html) công bố Humanoid rig, trung bình 13k triangles và CC0; có thể làm nền rig nhưng không phải trang phục nhập môn đã duyệt. [Modular Character Outfits Fantasy](https://quaternius.itch.io/modular-character-outfits-fantasy) có bộ đồ modular CC0, chưa xác minh một bộ khớp turnaround Neo-Asian. [Kenney Protagonists](https://kenney.nl/assets/animated-characters-protagonists) có CC0, chưa chọn vì chưa chứng minh phù hợp design. Không tải/import cả pack hoặc dùng bản mirror không rõ quyền; chưa có model thay capsule.
+
+## Nguồn ảnh storyboard
 
 Imagegen trong chat, tham chiếu world-event và Character Hall đã duyệt; nguồn ngoài repo `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-69276ad5-037e-449c-8a6f-e671b1473e0d.png`. JPEG quality78 bằng sips, không crop. Demo mới chưa owner duyệt.
 

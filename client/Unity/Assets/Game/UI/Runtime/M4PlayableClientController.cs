@@ -33,6 +33,7 @@ namespace LinhGioi.UI
         private VisualElement _worldHud;
         private VisualElement _worldDebugStrip;
         private VisualElement _worldGuidanceCard;
+        private RuntimeWorldGuidanceView _guidanceView;
         private VisualElement _dialoguePanel;
         private VisualElement _sessionMenuPanel;
         private ScrollView _sessionMenuContent;
@@ -658,16 +659,11 @@ namespace LinhGioi.UI
             _worldMeta.style.fontSize = RuntimeUiTypography.WorldMetaFontSize;
             _worldHud.Add(_worldMeta);
 
-            var guidanceCard = NewWorldHudGroup("LGO World Guidance Card V3B", RuntimeArtCatalog.Spirit);
-            _worldGuidanceCard = guidanceCard;
-            _worldArea = NewCompactStatusLabel("Khu vực: xem trước tại sảnh", RuntimeArtCatalog.Muted, RuntimeUiTypography.WorldAreaFontSize);
-            guidanceCard.Add(_worldArea);
-
-            _worldStep = NewCompactStatusLabel("Tiến trình: Bước 1 Người Giữ Cổng / Bước 2 Đá Luyện.", RuntimeArtCatalog.Spirit, RuntimeUiTypography.WorldStepFontSize);
-            guidanceCard.Add(_worldStep);
-
-            _worldDirection = NewCompactStatusLabel("Chỉ dẫn: vào sân để hiện mốc gần nhất.", RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldDirectionFontSize);
-            guidanceCard.Add(_worldDirection);
+            _guidanceView = new RuntimeWorldGuidanceView();
+            _worldGuidanceCard = _guidanceView.Panel;
+            _worldArea = _guidanceView.Area;
+            _worldStep = _guidanceView.Step;
+            _worldDirection = _guidanceView.Direction;
 
             _worldPoseState = NewHiddenStatusLabel("Tư thế: nhân vật đứng yên / Người Giữ Cổng chờ / Bóng Tối đứng yên.", RuntimeArtCatalog.Muted);
             _worldHud.Add(_worldPoseState);
@@ -678,14 +674,9 @@ namespace LinhGioi.UI
             _skinSource = NewHiddenStatusLabel("Nguồn giao diện: asset runtime tối ưu, chưa phải art final.", RuntimeArtCatalog.Spirit);
             _worldHud.Add(_skinSource);
 
-            _worldObjective = NewCompactStatusLabel("Mục tiêu: gặp Người Giữ Cổng.", RuntimeArtCatalog.Gold, RuntimeUiTypography.WorldObjectiveInitialFontSize);
-            _worldObjective.name = "LGO World Objective Touch Priority";
-            guidanceCard.Add(_worldObjective);
-
-            _interactionHint = NewCompactStatusLabel("Di chuyển tới gần Người Giữ Cổng.", RuntimeArtCatalog.Spirit, RuntimeUiTypography.WorldInteractionInitialFontSize);
-            _interactionHint.name = "LGO World Interaction Touch Hint";
-            guidanceCard.Add(_interactionHint);
-            _worldHud.Add(guidanceCard);
+            _worldObjective = _guidanceView.Objective;
+            _interactionHint = _guidanceView.Hint;
+            _worldHud.Add(_worldGuidanceCard);
 
             _position = NewMutedLabel("x=0.00 y=0.00 z=0.00 yaw=0.0");
             _position.style.marginTop = layout.PositionChipMarginTop;
@@ -1474,10 +1465,7 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyPadding(_worldHud, layout.WorldHudPaddingHorizontal, layout.WorldHudPaddingVertical);
             if (_worldName != null)
                 _worldName.style.fontSize = mobile ? RuntimeUiTypography.WorldNameMobileFontSize : RuntimeUiTypography.WorldNameDesktopFontSize;
-            if (_worldObjective != null)
-                _worldObjective.style.fontSize = mobile ? RuntimeUiTypography.WorldObjectiveMobileFontSize : RuntimeUiTypography.WorldObjectiveDesktopFontSize;
-            if (_interactionHint != null)
-                _interactionHint.style.fontSize = mobile ? RuntimeUiTypography.WorldInteractionMobileFontSize : RuntimeUiTypography.WorldInteractionDesktopFontSize;
+            _guidanceView?.ApplyTypography(layout);
             if (_sessionMenuPanel != null)
             {
                 // LGO Session Menu Compact Focus Frame v1: compact profiles let the pause panel own the viewport.

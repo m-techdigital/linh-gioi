@@ -12,6 +12,20 @@ namespace LinhGioi.UI
         internal const string TopStatusMobileMarker = "LGO World Top Status Mobile Readability v1";
         internal const string MobileTouchAffordanceMarker = "LGO World HUD Mobile Touch Affordance Base v1";
 
+        internal static void ApplyStandaloneGuidance(RuntimeUiLayoutProfile layout, RuntimeViewportMetrics viewport, ScrollView scroll)
+        {
+            var safe = viewport.SafePanelRect;
+            scroll.style.position = Position.Absolute;
+            scroll.style.left = safe.xMin + layout.RootPaddingHorizontal;
+            scroll.style.top = safe.yMin + safe.height * 0.18f;
+            scroll.style.width = Mathf.Min(layout.WorldHudMaxWidth(false), safe.width * 0.42f);
+            scroll.style.maxHeight = safe.height * 0.3f;
+            scroll.style.minWidth = 0f;
+            scroll.style.flexShrink = 1f;
+            scroll.contentContainer.style.minWidth = 0f;
+            scroll.contentContainer.style.width = Length.Percent(100);
+        }
+
         internal static void ApplyHudPanel(
             RuntimeUiLayoutProfile layout,
             bool worldVisible,

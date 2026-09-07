@@ -53,8 +53,7 @@ def main() -> int:
     require(
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "LGO World HUD Action Shell V3B Skin v1",
-        "LGO World Objective Touch Priority",
-        "LGO World Interaction Touch Hint",
+        "new RuntimeWorldGuidanceView()",
         "LGO World Touch Primary Combat Button",
         "Tu sĩ: ",
         "Bia luyện: ",
@@ -63,6 +62,11 @@ def main() -> int:
         "Bố cục: desktop / HUD tinh gọn.",
         "layout.WorldHudBaseMaxWidth",
         "layout.WorldHudMinWidth",
+    )
+    require(
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeWorldGuidanceView.cs",
+        "LGO World Objective Touch Priority",
+        "LGO World Interaction Touch Hint",
     )
     require(
         "client/Unity/Assets/Game/UI/Runtime/RuntimeUiLayoutProfile.cs",
