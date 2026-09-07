@@ -5,6 +5,31 @@ namespace LinhGioi.Tests
 {
     public sealed class NpcDialogueSessionTests
     {
+        [Test]
+        public void ReturningGuideCanCloseAndCompleteWithoutResettingIntroduction()
+        {
+            var introduction = OnboardingDialogueContent.CreateGateKeeperSession();
+            introduction.Open();
+            while (introduction.Active) introduction.Advance();
+            var returning = OnboardingDialogueContent.CreateGateKeeperReturnSession();
+            returning.Open();
+            Assert.AreEqual("1/2", returning.Progress);
+            StringAssert.Contains("Đá Luyện", returning.Line);
+            returning.Close();
+            Assert.IsTrue(introduction.Completed);
+            Assert.IsFalse(returning.Completed);
+            returning.Open();
+            returning.Advance();
+            Assert.AreEqual("2/2", returning.Progress);
+            Assert.AreEqual("Khám phá tiếp", returning.CompletionAction);
+            returning.Advance();
+            Assert.IsTrue(returning.Completed);
+            Assert.IsTrue(introduction.Completed);
+            returning.Open();
+            Assert.AreEqual("1/2", returning.Progress);
+            Assert.IsTrue(introduction.Completed);
+        }
+
         [TestCase(-1f, null)]
         [TestCase(0f, "Đá Luyện cộng hưởng với linh lực của bạn.")]
         [TestCase(2.99f, "Đá Luyện cộng hưởng với linh lực của bạn.")]

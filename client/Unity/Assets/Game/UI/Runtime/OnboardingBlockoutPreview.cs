@@ -13,6 +13,7 @@ namespace LinhGioi.UI
         private RuntimeTouchMovementPad _pad;
         private bool _capturing;
         private readonly NpcDialogueSession _session = OnboardingDialogueContent.CreateGateKeeperSession();
+        private readonly NpcDialogueSession _returnSession = OnboardingDialogueContent.CreateGateKeeperReturnSession();
         private RuntimeNpcDialogueView _dialogue;
         private RuntimeWorldGuidanceView _guidance;
         private ScrollView _guidanceScroll;
@@ -26,9 +27,12 @@ namespace LinhGioi.UI
         private Action _returnToHall;
         private Button _quit;
 
-        private bool InRange => Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z),
-            _session.Completed ? new Vector2(OnboardingBlockoutWorld.StonePoint.x, OnboardingBlockoutWorld.StonePoint.z)
-                : new Vector2(OnboardingBlockoutWorld.KeeperPoint.x, OnboardingBlockoutWorld.KeeperPoint.z)) <= 1.45f;
+        // Completed introduction remains progress; repeat conversations have their own lifecycle.
+        private NpcDialogueSession Dialogue => _stoneCompleted ? _returnSession : _session;
+        private bool InRange => IsNear(_session.Completed && !_stoneCompleted
+            ? OnboardingBlockoutWorld.StonePoint : OnboardingBlockoutWorld.KeeperPoint);
+        private bool IsNear(Vector3 point) => Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z),
+            new Vector2(point.x, point.z)) <= 1.45f;
 
         public static bool ShouldRun(string[] args, bool development) =>
             development && Array.IndexOf(args, "--lgo-onboarding-blockout") >= 0;
@@ -53,7 +57,7 @@ namespace LinhGioi.UI
 
         internal void HandleEscape()
         {
-            if (_session.Active) { _session.Close(); RefreshDialogue(); }
+            if (Dialogue.Active) { Dialogue.Close(); RefreshDialogue(); }
             else Leave();
         }
 
@@ -85,14 +89,14 @@ namespace LinhGioi.UI
             _guidanceScroll.Add(_guidance.Panel);
             root.Add(_guidanceScroll);
             _dialogue = new RuntimeNpcDialogueView(RuntimeUiLayoutProfile.FromScreen(null, Screen.width, Screen.height),
-                () => { _session.Advance(); RefreshDialogue(); },
-                () => { _session.Close(); RefreshDialogue(); }, Resources.Load<Texture2D>("LGOGateKeeperPortrait"));
+                () => { Dialogue.Advance(); RefreshDialogue(); },
+                () => { Dialogue.Close(); RefreshDialogue(); }, Resources.Load<Texture2D>("LGOGateKeeperPortrait"));
             root.Add(_dialogue.Panel);
             _applyLayout = () =>
             {
                 var layout = RuntimeUiLayoutProfile.FromScreen(null, Screen.width, Screen.height,
                     Mathf.RoundToInt(root.contentRect.width), Mathf.RoundToInt(root.contentRect.height));
-                RuntimeWorldHudResponsiveLayout.ApplyTouchAffordances(layout, true, false, _session.Active,
+                RuntimeWorldHudResponsiveLayout.ApplyTouchAffordances(layout, true, false, Dialogue.Active,
                     overlay, _pad, cluster, _interact, null, null, null, quit);
                 _dialogue.ApplyLayout(layout);
                 _guidance.ApplyTypography(layout);
@@ -104,8 +108,9 @@ namespace LinhGioi.UI
 
         private void Interact()
         {
-            if (_session.Active || _stoneCompleted || !InRange) return;
-            if (_session.Completed)
+            if (Dialogue.Active || !InRange) return;
+            if (_stoneCompleted) Dialogue.Open();
+            else if (_session.Completed)
             {
                 _stoneCompleted = true;
                 _stoneFeedbackStartedAt = Time.unscaledTime;
@@ -118,8 +123,8 @@ namespace LinhGioi.UI
         {
             _world.ResetMovementInput();
             _pad.ResetInput();
-            _world.DialogueVisible = _session.Active;
-            _dialogue.Refresh(_session);
+            _world.DialogueVisible = Dialogue.Active;
+            _dialogue.Refresh(Dialogue);
             _applyLayout();
         }
 
@@ -743,6 +748,56 @@ namespace LinhGioi.UI
             if (!CheckGuidance("Đã tới sân.", false)) yield break;
             Debug.Log("LGO_FORECOURT_ARRIVAL_FEEDBACK_PASS timed=true replay=false shared_guidance=true");
             Debug.Log("LGO_FORECOURT_ROUTE_PASS continuous_ground=true return_route=true");
+            yield return WalkTo(new Vector3(1f, 0f, 18f));
+            yield return WalkTo(new Vector3(0f, 0f, 14f));
+            yield return WalkTo(new Vector3(0f, 0f, 1f));
+            Interact();
+            if (_world.DialogueVisible) throw new InvalidOperationException("Returning guide opened outside range.");
+            yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
+            if (!_interact.enabledSelf || _interact.tooltip != "Gặp")
+                throw new InvalidOperationException("Completed onboarding must allow talking to the guide again in range.");
+            CheckKeeperFocus(true);
+            var completedFeedbackAt = _stoneFeedbackStartedAt;
+            Submit(_interact);
+            yield return null;
+            if (!_world.DialogueVisible || !_session.Completed || !_stoneCompleted || !_forecourtVisited)
+                throw new InvalidOperationException("Returning conversation must preserve all onboarding progress.");
+            yield return Capture(directory, "keeper-return-dialogue");
+            Submit(_dialogue.CloseButton);
+            yield return null;
+            if (_world.DialogueVisible || !_session.Completed || !_stoneCompleted)
+                throw new InvalidOperationException("Closing returning dialogue reset progress or retained input lock.");
+            Submit(_interact);
+            yield return null;
+            if (_dialogue.Progress.text != "Đối thoại: 1/2")
+                throw new InvalidOperationException("Returning guide must reopen its two-line conversation from the start.");
+            HandleEscape();
+            yield return null;
+            if (_world.DialogueVisible || !_session.Completed || !_stoneCompleted)
+                throw new InvalidOperationException("Escape must close returning dialogue without leaving or resetting progress.");
+            Submit(_interact);
+            yield return null;
+            Submit(_dialogue.ContinueButton);
+            yield return null;
+            if (_dialogue.ContinueButton.text != "Khám phá tiếp")
+                throw new InvalidOperationException("Returning guide must offer exploration, not repeat training.");
+            yield return Capture(directory, "keeper-return-destination");
+            Submit(_dialogue.ContinueButton);
+            yield return null;
+            if (_world.DialogueVisible || !_session.Completed || !_stoneCompleted || !_forecourtVisited ||
+                _stoneFeedbackStartedAt != completedFeedbackAt)
+                throw new InvalidOperationException("Returning guide completion replayed onboarding or retained input lock.");
+            Submit(_interact);
+            yield return null;
+            if (!_world.DialogueVisible || _dialogue.Progress.text != "Đối thoại: 1/2" ||
+                !_session.Completed || !_stoneCompleted || !_forecourtVisited)
+                throw new InvalidOperationException("A completed return conversation must remain available without resetting progress.");
+            Submit(_dialogue.CloseButton);
+            yield return null;
+            yield return WalkTo(new Vector3(0f, 0f, 1f));
+            yield return WalkTo(stoneInteractionPosition);
+            CheckCompletedStoneRepeat();
+            Debug.Log("LGO_GUIDE_REVISIT_PASS range=true close_reopen=true escape_handler=true progress_preserved=true movement_restored=true no_stone_replay=true");
             if (GetComponent<M4PlayableClientController>() != null)
                 throw new InvalidOperationException("Blockout must not create the account client UI.");
             Debug.Log("LGO_ONBOARDING_BLOCKOUT_ROUTE_PASS movement=CharacterController no_teleport=true");
@@ -771,7 +826,7 @@ namespace LinhGioi.UI
 
         private void CheckCompletedStoneRepeat()
         {
-            if (!_stoneCompleted || !InRange || _session.Active || _interact.enabledSelf)
+            if (!_stoneCompleted || !IsNear(OnboardingBlockoutWorld.StonePoint) || Dialogue.Active || _interact.enabledSelf)
                 throw new InvalidOperationException("Repeat probe requires a completed stone while still in interaction range.");
             var startedAt = _stoneFeedbackStartedAt;
             Interact();
@@ -825,16 +880,17 @@ namespace LinhGioi.UI
                 _forecourtVisited = true;
                 _forecourtArrivalUntil = Time.unscaledTime + 3f;
             }
-            _guidanceScroll.style.display = _session.Active || (_forecourtVisited && Time.unscaledTime >= _forecourtArrivalUntil)
+            var returningToKeeper = _stoneCompleted && InRange;
+            _guidanceScroll.style.display = Dialogue.Active || (_forecourtVisited && Time.unscaledTime >= _forecourtArrivalUntil && !returningToKeeper)
                 ? DisplayStyle.None : DisplayStyle.Flex;
-            _guidance.Objective.text = _forecourtVisited ? "Đã tới sân." : _stoneCompleted ? "Đến sân phía trước." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
-            _guidance.Hint.text = _forecourtVisited ? "Bạn có thể dừng chân ở đây." : _stoneCompleted
+            _guidance.Objective.text = returningToKeeper ? "Gặp Người Giữ Cổng." : _forecourtVisited ? "Đã tới sân." : _stoneCompleted ? "Đến sân phía trước." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
+            _guidance.Hint.text = returningToKeeper ? "Bạn có thể hỏi lại đường tới sân nghỉ." : _forecourtVisited ? "Bạn có thể dừng chân ở đây." : _stoneCompleted
                 ? OnboardingDialogueContent.StoneFeedback(Time.unscaledTime - _stoneFeedbackStartedAt) ?? "Đi tiếp theo đường đá, tới khoảng sân có cây."
                 : _session.Completed ? (InRange ? "Đá Luyện sẵn sàng nhận linh khí." : "Đá ở bên phải đường phía trước.")
                 : InRange ? "Người Giữ Cổng đang chờ." : "Theo đường đá đến Người Giữ Cổng.";
-            RuntimeUiFactory.ApplyWorldTouchInteraction(_interact, _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp");
-            _interact.SetEnabled(!_stoneCompleted && !_session.Active && InRange);
-            _world.KeeperReady = !_session.Completed && InRange;
+            RuntimeUiFactory.ApplyWorldTouchInteraction(_interact, returningToKeeper ? "Gặp" : _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp");
+            _interact.SetEnabled(!Dialogue.Active && InRange);
+            _world.KeeperReady = (!_session.Completed || _stoneCompleted) && InRange;
             _world.SetStoneFeedback(_session.Completed && !_stoneCompleted && InRange, _stoneCompleted);
             if (!_capturing) _world.ScreenMovement = Application.isFocused ? _pad.Value : Vector2.zero;
             if (Input.GetKeyDown(KeyCode.F)) Interact();

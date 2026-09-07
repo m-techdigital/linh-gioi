@@ -23,5 +23,12 @@ namespace LinhGioi.World
             + "Trong thành, hãy tôn trọng nhau và giữ lối đi thông thoáng. Nếu cần hướng dẫn, bạn cứ quay lại gặp tôi.\n\n"
             + "Đá Luyện ở sân gần đây sẽ giúp bạn làm quen với cách tương tác. Sau đó, bạn có thể ghé sân nghỉ và khám phá tiếp.",
             "Đến Sân Luyện");
+
+        public static NpcDialogueSession CreateGateKeeperReturnSession() => new NpcDialogueSession(
+            "Người Giữ Cổng", new[]
+            {
+                "Bạn đã làm quen với Đá Luyện rồi. Đây mới chỉ là bước khởi đầu.",
+                "Bạn cứ thong thả khám phá Linh Thành. Theo đường đá phía trước là khoảng sân có cây để nghỉ chân."
+            }, completionAction: "Khám phá tiếp");
     }
 }
