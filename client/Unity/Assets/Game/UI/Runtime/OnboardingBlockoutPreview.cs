@@ -147,6 +147,27 @@ namespace LinhGioi.UI
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            var keeperVideoIndex = Array.IndexOf(args, "--lgo-keeper-motion-video");
+            if (keeperVideoIndex >= 0 && keeperVideoIndex + 1 < args.Length)
+            {
+                _capturing = true;
+                yield return new WaitForSeconds(1f);
+                yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
+                var frames = Path.GetFullPath(args[keeperVideoIndex + 1]);
+                Directory.CreateDirectory(frames);
+                GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                var previousRate = Time.captureFramerate;
+                Time.captureFramerate = 24;
+                for (var frame = 0; frame < 192; frame++)
+                {
+                    if (frame == 96) _world.GuideToStone();
+                    yield return Capture(frames, frame.ToString("D4"));
+                }
+                Time.captureFramerate = previousRate;
+                Debug.Log("LGO_KEEPER_VIDEO_FRAMES_COMPLETE frames=192 fps=24 seconds=8 runtime=true gameplay_camera=true");
+                Application.Quit(0);
+                yield break;
+            }
             var videoIndex = Array.IndexOf(args, "--lgo-blockout-motion-video");
             if (videoIndex >= 0 && videoIndex + 1 < args.Length)
             {
@@ -307,11 +328,11 @@ namespace LinhGioi.UI
             for (var section = 0; section < keeperMesh.sharedMaterials.Length; section++)
             {
                 var atlas = keeperMesh.sharedMaterials[section].GetTexture("_BaseMap");
-                var limit = section == 0 ? 2048 : 512;
+                var limit = section == 0 ? 512 : 256;
                 if (atlas == null || atlas.width > limit || atlas.height > limit)
                     throw new InvalidOperationException("Gate Keeper is missing its bounded body/face atlas: " + section);
             }
-            Debug.Log("LGO_KEEPER_RECONSTRUCTION_BUDGET_PASS triangles=" + keeperTriangles + " materials=2 body_max=2048 face_max=512");
+            Debug.Log("LGO_KEEPER_RECONSTRUCTION_BUDGET_PASS triangles=" + keeperTriangles + " materials=2 body_max=512 face_max=256");
             var keeperSnapshot = new Mesh();
             var keeperGround = float.PositiveInfinity;
             try

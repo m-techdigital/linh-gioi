@@ -1,13 +1,13 @@
 {
-  "source_sha256": "59958e84b7b6f379d59dea49c40cd7cb1f1e7fcb5c749dd8877657eba229f4c9",
-  "fbx_sha256": "dc26fe787543fa0efbdbd0669ec680195a750c41381a765b7411f4735887b799",
-  "triangles": 24898,
-  "vertices": 12378,
+  "source_sha256": "29195346203606aa89a91075cd9a286634aa6c328958b589854e4fcfe167b5c6",
+  "fbx_sha256": "178d859d2a72b551b1541a4b590bd1180b4eda5409743944e9db615f446e477e",
+  "triangles": 24400,
+  "vertices": 12244,
   "bones": 65,
   "materials": 2,
   "texture_sizes": {
-    "albedo": 2048,
-    "face": 512
+    "albedo": 512,
+    "face": 256
   },
   "runtime_verified": true,
   "reference": "docs/reference-art/linh-gioi-story-design-reference-pack-v0.1/images/reference_only/02_gate_keeper_character_sheet.png",
@@ -21,14 +21,35 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "visual_status": "LGO_CHARACTER_FIDELITY_PROGRESS; visual gesture FIX_REQUIRED: cape tent in pointing IK",
-  "weight_transfer": "Nearest triangle barycentric interpolation from validated clothed keeper in shared A-pose, explicit head/hat/hair bindings",
+  "visual_status": "Macro candidate reviewed: main cape-to-hand tent removed in guide pose; hat rebuilt and hem narrowed; fabric edge polish remains",
+  "weight_transfer": "Shared 65 bone bind pose; anatomical sleeve envelope separates IK arm from cape; long panels attached to pelvis/torso; long hair root gradient retained",
   "runtime_scope": "macOS development Player, 960x540 mobile layout, full SCN-001/002 route",
   "evidence": [
-    "build/dev-loop/keeper-clothed-build.log",
-    "build/dev-loop/keeper-reconstruction-tests.xml",
-    "build/dev-loop/keeper-clothed-quick.log",
-    "build/dev-loop/keeper-clothed-mobile.log",
-    "build/visual-evidence/onboarding-blockout/keeper-clothed-mobile/keeper-guide-direction.png"
-  ]
+    "build/dev-loop/keeper-optimized-verified-tests.xml",
+    "build/dev-loop/keeper-optimized-verified-build.log",
+    "build/dev-loop/keeper-optimized-verified-mobile.log",
+    "build/dev-loop/keeper-optimized-quick.log",
+    "build/visual-evidence/onboarding-blockout/keeper-optimized-verified-mobile/keeper-guide-direction.png"
+  ],
+  "authoring_material_sections": 4,
+  "authoring_parts": [
+    "Headwear including slips",
+    "HeadAndHair including complete long hair islands",
+    "OutfitAndBody"
+  ],
+  "runtime_renderer_count": 1,
+  "runtime_material_count": 2,
+  "mesh_compression": "Medium",
+  "runtime_mesh_vertices": 25258,
+  "reuse": "Editor parts baked once; runtime NPC instances share preset mesh and materials, independent bones",
+  "budget": {
+    "body_face_source_png_bytes": 445342,
+    "unity_editor_texture_object_bytes": 438880,
+    "mac_build_bytes_before": 352010691,
+    "mac_build_bytes_after": 344879275,
+    "mesh_build_report": "506.0 kb",
+    "appearance_preset_build_report": "1.1 kb",
+    "all_keeper_assets_build_report_approx": "986.9 kb; excludes shared controller/code",
+    "device_fps_profiled": false
+  }
 }

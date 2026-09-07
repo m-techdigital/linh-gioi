@@ -124,19 +124,29 @@ namespace LinhGioi.Foundation.Editor
             SaveCandidatePrefab(ModelPath, PrefabPath);
         }
 
-        public static void ImportKeeper()
+        public static void ImportKeeper() => NpcAppearanceBaker.BakeKeeper();
+
+        internal static void PrepareKeeperModel()
         {
             var path = Directory + "GateKeeper.fbx";
             ConfigureHumanoid(path, false);
-            ValidateModel(path, 2);
+            ValidateModel(path, 4);
             foreach (var name in new[] { "KeeperReconstructionAlbedo", "KeeperReconstructionFace" })
             {
                 var settings = (TextureImporter)AssetImporter.GetAtPath(Directory + name + ".png");
                 if (settings == null) throw new InvalidOperationException("Missing keeper atlas: " + name);
-                settings.maxTextureSize = name.EndsWith("Face", StringComparison.Ordinal) ? 512 : 2048;
+                settings.maxTextureSize = name.EndsWith("Face", StringComparison.Ordinal) ? 256 : 512;
                 settings.mipmapEnabled = true;
                 settings.isReadable = false;
                 settings.textureCompression = TextureImporterCompression.CompressedHQ;
+                foreach (var platform in new[] { "Android", "iPhone" })
+                {
+                    var mobile = settings.GetPlatformTextureSettings(platform);
+                    mobile.overridden = true;
+                    mobile.maxTextureSize = settings.maxTextureSize;
+                    mobile.format = TextureImporterFormat.ASTC_6x6;
+                    settings.SetPlatformTextureSettings(mobile);
+                }
                 settings.SaveAndReimport();
             }
             var portrait = (TextureImporter)AssetImporter.GetAtPath(Directory + "Resources/LGOGateKeeperPortrait.png");
@@ -147,8 +157,7 @@ namespace LinhGioi.Foundation.Editor
             portrait.alphaIsTransparency = true;
             portrait.textureCompression = TextureImporterCompression.CompressedHQ;
             portrait.SaveAndReimport();
-            SaveCandidatePrefab(path, Directory + "Resources/LGOGateKeeperCandidate.prefab");
-            Debug.Log("LGO_KEEPER_PREFAB_READY atlases=2 shared_controller=true");
+            Debug.Log("LGO_KEEPER_MODEL_READY semantic_sections=4 runtime_atlases=2");
         }
 
         private static void SaveCandidatePrefab(string modelPath, string prefabPath)

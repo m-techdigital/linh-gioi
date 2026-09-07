@@ -27,9 +27,28 @@ assert all(1 <= len(v.groups) <= 4 and abs(sum(g.weight for g in v.groups) - 1) 
 args.output.mkdir(parents=True, exist_ok=True)
 for name in ['KeeperReconstructionAlbedo', 'KeeperReconstructionFace']:
     image = bpy.data.images[name]
+    image.scale(256 if name.endswith('Face') else 512, 256 if name.endswith('Face') else 512)
     image.filepath_raw = str((args.output / (name + '.png')).resolve())
     image.file_format = 'PNG'
     image.save()
+# Semantic material sections transport module ownership through FBX without guessing from bone weights or height.
+parts = mesh.data.attributes.get('npc_part')
+assert parts is not None, 'Authoring mesh must explicitly label NPC parts'
+part_ids = [entry.value for entry in parts.data]
+body = mesh.data.materials[0]
+face = mesh.data.materials[1]
+face_polygons = {p.index for p in mesh.data.polygons if p.material_index == 1}
+labels = [('Keeper Headwear', 1), ('Keeper Head Hair', 2), ('Keeper Outfit Body', 3)]
+mesh.data.materials.clear()
+for name, part in labels:
+    material = body.copy()
+    material.name = name
+    mesh.data.materials.append(material)
+mesh.data.materials.append(face)
+for polygon in mesh.data.polygons:
+    part = part_ids[polygon.index]
+    assert part in (1, 2, 3), part
+    polygon.material_index = 3 if polygon.index in face_polygons else part - 1
 bpy.ops.object.select_all(action='DESELECT')
 mesh.select_set(True)
 rig.select_set(True)
@@ -42,8 +61,8 @@ receipt = {
     'source_sha256': hashlib.sha256(args.source.read_bytes()).hexdigest(),
     'fbx_sha256': hashlib.sha256(fbx.read_bytes()).hexdigest(),
     'triangles': len(mesh.data.loop_triangles), 'vertices': len(mesh.data.vertices),
-    'bones': len(rig.data.bones), 'materials': len(mesh.data.materials),
-    'texture_sizes': {'albedo': 2048, 'face': 512},
+    'bones': len(rig.data.bones), 'materials': 2, 'authoring_material_sections': 4,
+    'texture_sizes': {'albedo': 512, 'face': 256},
     'runtime_verified': False,
 }
 (args.output / 'export-receipt.json').write_text(json.dumps(receipt, indent=2) + '\n')
