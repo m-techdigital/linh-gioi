@@ -522,6 +522,8 @@ namespace LinhGioi.UI
             RefreshWorldLoopLabels();
             RefreshCombatAssetUiState();
             AssertStandingActorGrounding();
+            if (_worldTouchPrimaryActionButton.Q<VisualElement>("LGO World Touch Action Icon")?.style.backgroundImage.value.texture?.name != "ActionTalk")
+                throw new InvalidOperationException("Keeper action must use the shared dialogue icon.");
         }
 
         internal void CaptureEvidenceNearTrainingStonePrompt(bool approaching = false)
@@ -561,15 +563,16 @@ namespace LinhGioi.UI
                 throw new InvalidOperationException("Approach must show the stone route before interaction becomes available.");
             if (approaching)
             {
-                if (_worldTouchPrimaryActionButton.enabledSelf || _worldTouchPrimaryActionButton.text != "Luyện")
+                if (_worldTouchPrimaryActionButton.enabledSelf || !_worldTouchPrimaryActionButton.tooltip.StartsWith("Luyện:") ||
+                    _worldTouchPrimaryActionButton.Q<VisualElement>("LGO World Touch Action Icon")?.style.backgroundImage.value.texture?.name != "ActionTouch")
                     throw new InvalidOperationException("Guided action must retain its purpose and disable outside interaction range.");
                 var targetStatus = _world.TargetDummyStatusText;
                 TriggerWorldTouchPrimaryAction();
                 if (_world.TargetDummyStatusText != targetStatus || _world.InteractionAcknowledged)
                     throw new InvalidOperationException("Out-of-range guided action must not attack or complete the objective.");
             }
-            if (!approaching && (!_world.CanInteract || !_interactionHint.text.Contains("Chọn Luyện")))
-                throw new InvalidOperationException("Near stone guidance must name the available on-screen action.");
+            if (!approaching && (!_world.CanInteract || !_interactionHint.text.Contains("Đá Luyện sẵn sàng")))
+                throw new InvalidOperationException("Near stone guidance must identify the ready interaction target.");
             if (!approaching && !_worldTouchPrimaryActionButton.enabledSelf)
                 throw new InvalidOperationException("Guided action must re-enable inside interaction range.");
             GameObject stonePulse = null;
@@ -598,7 +601,8 @@ namespace LinhGioi.UI
             if (!_world.DialogueCompleted || !_world.InteractionAcknowledged)
                 throw new InvalidOperationException("Training completion requires finished dialogue and acknowledged stone.");
             var completedObjective = _world.ObjectiveText;
-            if (_worldTouchPrimaryActionButton.enabledSelf || _worldTouchPrimaryActionButton.text != "Đã xong")
+            if (_worldTouchPrimaryActionButton.enabledSelf || !_worldTouchPrimaryActionButton.tooltip.StartsWith("Đã xong:") ||
+                _worldTouchPrimaryActionButton.Q<VisualElement>("LGO World Touch Action Icon")?.style.backgroundImage.value.texture?.name != "ActionComplete")
                 throw new InvalidOperationException("Completed interaction must not turn into a duplicate combat action.");
             var combatBefore = _world.LastLocalCombatOutcome;
             TriggerWorldTouchPrimaryAction();

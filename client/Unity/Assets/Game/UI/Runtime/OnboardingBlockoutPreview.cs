@@ -265,6 +265,7 @@ namespace LinhGioi.UI
             }
             Interact();
             if (_session.Active) throw new InvalidOperationException("NPC opened outside interaction range.");
+            CheckInteractionIcon("Gặp", "ActionTalk", false);
             CheckKeeperFocus(false);
             yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
             CheckKeeperFocus(true);
@@ -273,6 +274,27 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
             CheckKeeperFocus(true);
             yield return Capture(directory, "keeper-side");
+            CheckInteractionIcon("Gặp", "ActionTalk", true);
+            using (var hover = MouseEnterEvent.GetPooled())
+            {
+                hover.target = _interact;
+                _interact.SendEvent(hover);
+            }
+            yield return null;
+            yield return Capture(directory, "interaction-tooltip");
+            var tooltip = _interact.panel.visualTree.Q<Label>("LGO World Touch Tooltip");
+            var safe = RuntimeViewportMetrics.FromRoot(_interact.panel.visualTree).SafePanelRect;
+            if (tooltip == null || tooltip.text != "Gặp" || tooltip.worldBound.width <= 0f ||
+                tooltip.worldBound.xMin < safe.xMin || tooltip.worldBound.xMax > safe.xMax ||
+                tooltip.worldBound.yMin < safe.yMin || tooltip.worldBound.yMax > safe.yMax)
+                throw new InvalidOperationException("Runtime hover must show the action name inside safe bounds.");
+            using (var leave = MouseLeaveEvent.GetPooled())
+            {
+                leave.target = _interact;
+                _interact.SendEvent(leave);
+            }
+            if (tooltip.parent != null) throw new InvalidOperationException("Tooltip persisted after hover ended.");
+            Debug.Log("LGO_INTERACTION_TOOLTIP_PASS hover_event=true safe_bounds=true leave=true");
             Submit(_interact);
             if (!_session.Active) throw new InvalidOperationException("NPC action did not open shared dialogue.");
             yield return Capture(directory, "dialogue");
@@ -319,6 +341,7 @@ namespace LinhGioi.UI
             yield return WalkTo(new Vector3(0f, 0f, 2.5f));
             yield return WalkTo(new Vector3(2.3f, 0f, 4f));
             yield return Capture(directory, "stone-side");
+            CheckInteractionIcon("Luyện", "ActionTouch", true);
             if (!CheckGuidance("Chạm Đá Luyện.", true)) yield break;
             var focus = _world.transform.Find("Blockout Stone Focus");
             if (focus == null || !focus.gameObject.activeSelf)
@@ -336,6 +359,8 @@ namespace LinhGioi.UI
             if (stoneFacingAngle > 5f || Vector3.Distance(stoneInteractionPosition, _world.Position) > 0.01f)
                 throw new InvalidOperationException("Stone interaction must face its target without moving: angle=" + stoneFacingAngle);
             yield return Capture(directory, "complete");
+            CheckInteractionIcon("Đã xong", "ActionComplete", false);
+            Debug.Log("LGO_INTERACTION_ICON_PASS talk=true touch=true complete=true bounded=true texture64=true");
             // Leave the synchronous capture frame before measuring held input in Update frames.
             yield return null;
             var facingMoveFrame = Time.frameCount;
@@ -577,15 +602,37 @@ namespace LinhGioi.UI
                 ? DisplayStyle.None : DisplayStyle.Flex;
             _guidance.Objective.text = _forecourtVisited ? "Đã tới sân." : _stoneCompleted ? "Đến sân phía trước." : _session.Completed ? "Chạm Đá Luyện." : "Gặp Người Giữ Cổng.";
             _guidance.Hint.text = _forecourtVisited ? "Nhịp linh khí đã ổn định." : _stoneCompleted ? "Đi tiếp theo đường đá, tới khoảng sân có cây."
-                : _session.Completed ? (InRange ? "Chọn Luyện để tập trung linh khí." : "Đá ở bên phải đường phía trước.")
-                : InRange ? "Chọn Gặp để trò chuyện." : "Theo đường đá đến Người Giữ Cổng.";
-            _interact.text = _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp";
+                : _session.Completed ? (InRange ? "Đá Luyện sẵn sàng nhận linh khí." : "Đá ở bên phải đường phía trước.")
+                : InRange ? "Người Giữ Cổng đang chờ." : "Theo đường đá đến Người Giữ Cổng.";
+            RuntimeUiFactory.ApplyWorldTouchInteraction(_interact, _stoneCompleted ? "Đã xong" : _session.Completed ? "Luyện" : "Gặp");
             _interact.SetEnabled(!_stoneCompleted && !_session.Active && InRange);
             _world.KeeperReady = !_session.Completed && InRange;
             _world.SetStoneFeedback(_session.Completed && !_stoneCompleted && InRange, _stoneCompleted);
             if (!_capturing) _world.ScreenMovement = Application.isFocused ? _pad.Value : Vector2.zero;
             if (Input.GetKeyDown(KeyCode.F)) Interact();
             if (Input.GetKeyDown(KeyCode.Escape)) HandleEscape();
+        }
+
+        private void CheckInteractionIcon(string label, string textureName, bool enabled)
+        {
+            var icon = _interact.Q<VisualElement>("LGO World Touch Action Icon");
+            var texture = icon?.resolvedStyle.backgroundImage.texture;
+            if (texture == null || texture.name != textureName || texture.width != 64 || texture.height != 64 ||
+                _interact.text != string.Empty || _interact.tooltip != label || _interact.enabledSelf != enabled)
+                throw new InvalidOperationException("Interaction icon/state missing or incorrect: " + label);
+            var bounds = icon.worldBound;
+            var button = _interact.worldBound;
+            var viewport = RuntimeViewportMetrics.FromRoot(_interact.panel.visualTree);
+            var scaleX = viewport.ScreenPixelWidth / (float)viewport.PanelWidth;
+            var scaleY = viewport.ScreenPixelHeight / (float)viewport.PanelHeight;
+            // UI Toolkit rounds edges to physical pixels, not panel units.
+            if (bounds.width <= 0f || Mathf.Abs(bounds.width * scaleX - bounds.height * scaleY) > 1.01f ||
+                Mathf.Abs(bounds.center.x - button.center.x) * scaleX > 1.01f ||
+                Mathf.Abs(bounds.center.y - button.center.y) * scaleY > 1.01f ||
+                bounds.xMin <= button.xMin || bounds.xMax >= button.xMax ||
+                bounds.yMin <= button.yMin || bounds.yMax >= button.yMax || icon.pickingMode != PickingMode.Ignore)
+                throw new InvalidOperationException("Interaction icon must fit inside its button without intercepting input: icon="
+                    + bounds + " button=" + button + " content=" + _interact.contentRect + " picking=" + icon.pickingMode);
         }
 
         private void CheckKeeperFocus(bool visible)

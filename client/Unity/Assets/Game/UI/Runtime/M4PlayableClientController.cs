@@ -1140,11 +1140,12 @@ namespace LinhGioi.UI
             if (_worldTouchPrimaryActionButton != null)
             {
                 var guiding = !_world.InteractionAcknowledged;
-                _worldTouchPrimaryActionButton.text = guiding ? _world.PrimaryInteractionLabel : "Đã xong";
+                var actionLabel = guiding ? _world.PrimaryInteractionLabel : "Đã xong";
+                ApplyWorldTouchInteraction(_worldTouchPrimaryActionButton, actionLabel);
                 _worldTouchPrimaryActionButton.SetEnabled(guiding && _world.CanInteract);
-                _worldTouchPrimaryActionButton.tooltip = guiding
+                _worldTouchPrimaryActionButton.tooltip = actionLabel + ": " + (guiding
                     ? (_world.CanInteract ? "Tương tác với mục tiêu ở gần." : "Đến gần mục tiêu hướng dẫn để tương tác.")
-                    : "Đã hoàn tất hướng dẫn trong phiên này.";
+                    : "Đã hoàn tất hướng dẫn trong phiên này.");
             }
             if (_status != null) _status.text = WorldTopStatusText();
             if (_evidenceState.ShowEnterWorldTransition)
@@ -1263,11 +1264,10 @@ namespace LinhGioi.UI
 
         private string FormatWorldInteractionHint(string value)
         {
-            var desktop = !_isMobileProfile && string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal);
             if (value == "Sẵn sàng: nhấn F để gặp Người Giữ Cổng.")
-                return desktop ? "Chọn Gặp hoặc nhấn F để trò chuyện." : "Chọn Gặp để trò chuyện.";
+                return "Người Giữ Cổng đang chờ.";
             if (value == "Sẵn sàng: nhấn F để ổn định Đá Luyện.")
-                return desktop ? "Chọn Luyện hoặc nhấn F để ổn định Đá Luyện." : "Chọn Luyện để ổn định Đá Luyện.";
+                return "Đá Luyện sẵn sàng nhận linh khí.";
             if (!_isMobileProfile && string.Equals(_lastLayoutProfile, "desktop", StringComparison.Ordinal)) return value;
             if (value == "Tới vòng vàng cạnh Người Giữ Cổng.") return "Tới vòng vàng: Người Giữ Cổng.";
             return value;

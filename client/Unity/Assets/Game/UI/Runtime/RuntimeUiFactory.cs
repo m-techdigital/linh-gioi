@@ -887,6 +887,65 @@ namespace LinhGioi.UI
             return button;
         }
 
+        internal static void ApplyWorldTouchInteraction(Button button, string label)
+        {
+            var icon = button.Q<VisualElement>("LGO World Touch Action Icon");
+            if (icon == null)
+            {
+                icon = NewImageLayer("LGO World Touch Action Icon", null, ScaleMode.ScaleToFit);
+                icon.style.position = Position.Absolute;
+                icon.style.left = Length.Percent(27);
+                icon.style.right = Length.Percent(27);
+                icon.style.top = Length.Percent(27);
+                icon.style.bottom = Length.Percent(27);
+                icon.style.unityBackgroundImageTintColor = RuntimeArtCatalog.Text;
+                RuntimeUiSkin.ApplyPadding(button, 0, 0, 0, 0);
+                button.Add(icon);
+                AttachWorldTouchTooltip(button, icon);
+            }
+            if (Equals(icon.userData, label)) return;
+            var resource = label == "Gặp" ? "ActionTalk" : label == "Luyện" ? "ActionTouch"
+                : label == "Đã xong" ? "ActionComplete" : null;
+            var texture = resource == null ? null : Resources.Load<Texture2D>("LGOUI/" + resource);
+            icon.style.backgroundImage = texture == null ? StyleKeyword.None : new StyleBackground(texture);
+            icon.style.display = texture == null ? DisplayStyle.None : DisplayStyle.Flex;
+            icon.userData = label;
+            button.text = texture == null ? label : string.Empty;
+            button.tooltip = label;
+        }
+
+        private static void AttachWorldTouchTooltip(Button button, VisualElement icon)
+        {
+            var tip = NewMutedLabel(string.Empty);
+            tip.name = "LGO World Touch Tooltip";
+            tip.pickingMode = PickingMode.Ignore;
+            tip.style.position = Position.Absolute;
+            RuntimeUiTypography.ApplyBodyFont(tip);
+            RuntimeUiSkin.ApplyText(tip, RuntimeArtCatalog.Text, 14, alignment: TextAnchor.MiddleCenter);
+            RuntimeUiSkin.ApplyStatusChipFrame(tip, RuntimeUiSkin.MediumGoldBorder);
+            button.RegisterCallback<MouseEnterEvent>(_ =>
+            {
+                if (button.panel == null || icon.resolvedStyle.display == DisplayStyle.None) return;
+                var root = button.panel.visualTree;
+                var safe = RuntimeViewportMetrics.FromRoot(root).SafePanelRect;
+                var width = Mathf.Min(112f, safe.width);
+                var height = Mathf.Min(32f, safe.height);
+                var anchor = root.WorldToLocal(button.worldBound.position);
+                tip.text = icon.userData as string;
+                tip.style.width = width;
+                tip.style.height = height;
+                tip.style.left = Mathf.Clamp(anchor.x + button.worldBound.width * 0.5f - width * 0.5f, safe.xMin, safe.xMax - width);
+                tip.style.top = Mathf.Clamp(anchor.y - height - 8f, safe.yMin, safe.yMax - height);
+                root.Add(tip);
+                tip.BringToFront();
+            });
+            button.RegisterCallback<MouseLeaveEvent>(_ => tip.RemoveFromHierarchy());
+            button.RegisterCallback<PointerDownEvent>(_ => tip.RemoveFromHierarchy(), TrickleDown.TrickleDown);
+            button.RegisterCallback<NavigationSubmitEvent>(_ => tip.RemoveFromHierarchy(), TrickleDown.TrickleDown);
+            button.RegisterCallback<GeometryChangedEvent>(_ => tip.RemoveFromHierarchy());
+            button.RegisterCallback<DetachFromPanelEvent>(_ => tip.RemoveFromHierarchy());
+        }
+
         internal static VisualElement NewImageLayer(string elementName, Texture2D texture, ScaleMode scaleMode, string tooltip = null)
         {
             var layer = new VisualElement();
