@@ -83,6 +83,14 @@ namespace LinhGioi.Foundation.Editor
             }
 
             EnsureUrpDefaultRenderer(asset);
+            // Runtime daylight requests soft shadows; the generated asset must retain their shader support.
+            var serializedAsset = new SerializedObject(asset);
+            var softShadows = serializedAsset.FindProperty("m_SoftShadowsSupported");
+            if (softShadows == null)
+                throw new InvalidOperationException("Unable to configure URP soft-shadow support.");
+            softShadows.boolValue = true;
+            serializedAsset.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(asset);
             return asset;
         }
 

@@ -8,7 +8,7 @@ Current operating mode: `LGO_CONTINUOUS_WORKFLOW_ACTIVE`.
 
 Current active next action is tracked in `docs/execution/NEXT-ACTION.md`.
 
-Batch paving/mặt tiền đã có runtime: surface liên tục14x39m/texture256 mipmaps, bảy nhà chung mesh cửa/lưới/nẹp và module body/mái; tường trung tính, trim than tối, giữ collider/camera. `facade-green-{desktop,tablet}.log` và `street-architecture-final-mobile.log` full route qua, PNG đúng kích thước, ảnh đã xem; quick cuối qua. Review phát hiện assertion bỏ sót mesh null đầu tiên, đã sửa kiểm tra từng facade và xác nhận mobile. Gom checkpoint cùng paving. Next: bóng răng cưa dưới mái/khung cửa, kiểm tra cấu hình URP thực trong Player trước thay thông số; không tăng shadow budget mò. Chưa final art/main integration/visual PASS.
+Shadow root fix: Player red `requested=Soft supported=False`; bộ sinh URP nay bật hỗ trợ soft shadow. `shadow-support-green-{mobile,desktop}.log` full route qua, ảnh bóng mềm hơn đã xem; `shadow-support-main.log` main capture/manifest hoàn tất và ảnh world-hub đã xem, quick qua. Giữ atlas2048/distance50/cascade1/bias1/soft-quality2; tổng file Player343600085->343639988 byte (+39903), chưa benchmark GPU/mobile thật. Next: đối chiếu tọa độ/session và content gate để nối cảnh phố vào flow chọn nhân vật bằng chế độ development opt-in, không đổi default main hoặc dữ liệu lưu nếu gate chưa đủ. Chưa final art/main integration/visual PASS.
 
 Sau dcda6a3, preview quay model về NPC khi thoại; red62.5572° -> green0°, full route/quick qua và ảnh dialogue đã xem. Không đổi vị trí/camera/UI/luật thoại, chưa commit để gom interaction. Kiểm tra mapping ngón đã đủ nên không sửa importer. Tiếp hướng nhìn/tư thế khi tương tác đá theo storyboard; chưa final art/main integration.
 

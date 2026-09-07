@@ -130,6 +130,16 @@ namespace LinhGioi.UI
             Directory.CreateDirectory(directory);
             yield return new WaitForSeconds(1f);
             yield return Capture(directory, "arrival");
+            var pipeline = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline;
+            var softShadowProperty = pipeline == null ? null : pipeline.GetType().GetProperty("supportsSoftShadows");
+            if (softShadowProperty == null)
+                throw new InvalidOperationException("Player needs a pipeline exposing its shadow support.");
+            var softShadows = (bool)softShadowProperty.GetValue(pipeline);
+            var daylight = _world.transform.Find("Blockout daylight").GetComponent<Light>();
+            Debug.Log("LGO_SHADOW_CONFIGURATION pipeline=" + pipeline.name + " quality=" + QualitySettings.GetQualityLevel()
+                + " requested=" + daylight.shadows + " supported=" + softShadows);
+            if (daylight.shadows != LightShadows.Soft || !softShadows)
+                throw new InvalidOperationException("Daylight needs both a soft-shadow light and pipeline support.");
             Mesh sharedFacade = null;
             var facadeCount = 0;
             foreach (var filter in _world.GetComponentsInChildren<MeshFilter>())
