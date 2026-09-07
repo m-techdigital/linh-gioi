@@ -202,6 +202,19 @@ namespace LinhGioi.World
                 Beam(_wood,new Vector3(face,2.65f,centre.z+side*2.15f),new Vector3(face+sign*.32f,height-.08f,centre.z+side*2.15f),.12f);
             }
             Box(_wood,new Vector3(face+sign*.12f,height-.05f,centre.z),new Vector3(.38f,.18f,4.8f));
+            if (centre.z >= 6f && centre.z <= 12f)
+            {
+                // Canvas window awnings above head height; no shop/reward interaction implied.
+                var canopy = new Vector3(face+sign*.28f,2.42f,centre.z+1.45f);
+                Part(_cube,_teal,canopy,new Vector3(.68f,.045f,1.48f),Quaternion.Euler(0,0,-sign*12f));
+                Box(_gold,canopy+new Vector3(sign*.32f,-.075f,0),new Vector3(.04f,.11f,1.5f));
+                for(var end=-1;end<=1;end+=2)
+                    Beam(_wood,new Vector3(face,2.16f,canopy.z+end*.66f),new Vector3(face+sign*.52f,2.35f,canopy.z+end*.66f),.055f);
+                // A narrow sill and paired shutters give the recessed opening depth.
+                Box(_wood,new Vector3(face+sign*.075f,1.05f,canopy.z),new Vector3(.22f,.09f,1.36f));
+                for(var side=-1;side<=1;side+=2)
+                    Part(_cube,_wood,new Vector3(face+sign*.07f,1.48f,canopy.z+side*.50f),new Vector3(.045f,.74f,.21f),Quaternion.Euler(0,side*22f,0));
+            }
             // Upper clerestory and balcony-like rails give modules a second architectural rhythm.
             if(height>3)
             {
@@ -220,13 +233,14 @@ namespace LinhGioi.World
             {
                 Box(_ivory,new Vector3(side*5.65f,3.2f,z),new Vector3(2f,6.4f,2f));
                 Box(_gold,new Vector3(side*5.65f,1f,z),new Vector3(2.1f,.24f,2.1f));
-                Tower(new Vector3(side*7.3f,0,z+1.6f),side<0?11.4f:12.8f);
+                Tower(new Vector3(side*8.8f,0,z+1.6f),side<0?11.4f:12.8f);
                 Banner(new Vector3(side*5.65f,5.1f,z-1.1f),1.05f,2.7f);
             }
             Part(_arch,_ivory,new Vector3(0,5.5f,z),new Vector3(4.8f,4.8f,1.5f),Quaternion.identity);
             Part(_archTrim,_gold,new Vector3(0,5.5f,z-.81f),new Vector3(4.85f,4.85f,.12f),Quaternion.identity);
             // Circular spirit insignia above the opening.
-            Ring(new Vector3(0,10.6f,z-1f),.63f,_gold);
+            Part(_cube,_teal,new Vector3(0,10.6f,z-.94f),new Vector3(.87f,.87f,.10f),Quaternion.Euler(0,0,45));
+            Ring(new Vector3(0,10.6f,z-1.01f),.63f,_gold);
             Beam(_gold,new Vector3(0,10f,z-1f),new Vector3(0,11.2f,z-1f),.1f);
             Roof(new Vector3(0,11.25f,z),new Vector3(3.4f,1.45f,1.65f));
             Tower(new Vector3(-13,0,58),15f);Tower(new Vector3(13,0,63),17f);Tower(new Vector3(1,0,69),20f);
@@ -245,18 +259,49 @@ namespace LinhGioi.World
         }
         private void Tower(Vector3 p,float height)
         {
-            var levels=3;var step=height/3.9f;
+            const int levels=3;
+            var step=height/3.9f;
             for(var level=0;level<levels;level++)
             {
-                var width=2.8f-level*.45f;var bottom=level*step;
-                Box(_ivory,p+Vector3.up*(bottom+step*.5f),new Vector3(width,step,width));
+                var width=4.0f-level*.60f;
+                var bottom=level*step;
+                // Stone base and recessed upper chambers sit inside a visible timber frame.
+                Box(level==0?_ivory:_window,p+Vector3.up*(bottom+step*.5f),new Vector3(width*.9f,step,width*.9f));
+                Box(_ivory,p+Vector3.up*(bottom+.12f),new Vector3(width+ .2f,.24f,width+.2f));
+                Box(_wood,p+Vector3.up*(bottom+step-.12f),new Vector3(width+.12f,.22f,width+.12f));
                 for(var x=-1;x<=1;x+=2)for(var z=-1;z<=1;z+=2)
-                    Box(_wood,p+new Vector3(x*(width*.5f-.1f),bottom+step*.5f,z*(width*.5f-.1f)),new Vector3(.18f,step,.18f));
-                Box(_window,p+new Vector3(0,bottom+step*.58f,-width*.505f),new Vector3(width*.5f,step*.4f,.03f));
-                Roof(p+Vector3.up*(bottom+step),new Vector3(width*.7f,.9f,width*.7f));
+                    Box(_wood,p+new Vector3(x*(width*.5f-.06f),bottom+step*.5f,z*(width*.5f-.06f)),new Vector3(.21f,step,.21f));
+                // All four faces share the same lattice and balcony construction.
+                for(var face=0;face<4;face++)
+                {
+                    var rotation=Quaternion.Euler(0,face*90f,0);
+                    Vector3 At(float x,float y,float z)=>p+rotation*new Vector3(x,bottom+y,z);
+                    void Panel(Material material,float x,float y,float z,Vector3 size)
+                        =>Part(_cube,material,At(x,y,z),size,rotation);
+                    var front=-width*.5f-.025f;
+                    if(level==0)
+                        Panel(_window,0,step*.51f,front,new Vector3(width*.48f,step*.62f,.055f));
+                    else
+                    {
+                        Panel(_teal,0,step*.60f,front+.06f,new Vector3(width*.51f,step*.43f,.04f));
+                        Panel(_wood,0,.23f,front-.27f,new Vector3(width+.22f,.14f,.66f));
+                        Panel(_wood,0,.86f,front-.54f,new Vector3(width+.24f,.09f,.09f));
+                        Panel(_wood,0,.43f,front-.54f,new Vector3(width+.24f,.065f,.065f));
+                        for(var rail=-4;rail<=4;rail++)
+                            Panel(_wood,rail*width/8f,.64f,front-.54f,new Vector3(.055f,.44f,.055f));
+                    }
+                    for(var side=-1;side<=1;side+=2)
+                        Panel(_wood,side*width*.27f,step*.57f,front-.025f,new Vector3(.12f,step*.68f,.14f));
+                    Panel(_wood,0,step*.88f,front-.025f,new Vector3(width*.61f,.12f,.14f));
+                    for(var slat=-2;slat<=2;slat++)
+                        Panel(_gold,slat*width*.09f,step*.62f,front-.03f,new Vector3(.028f,step*.43f,.05f));
+                    for(var side=-1;side<=1;side+=2)
+                        Beam(_wood,At(side*width*.40f,step-.57f,front),At(side*width*.40f,step-.07f,front-.47f),.13f);
+                }
+                Roof(p+Vector3.up*(bottom+step),new Vector3(width*.68f,.95f,width*.68f));
             }
             var top=p+Vector3.up*(3*step+1.1f);
-            Beam(_gold,top,top+Vector3.up*.95f,.09f);
+            Beam(_gold,top,top+Vector3.up*.75f,.09f);
         }
         private void Banner(Vector3 p,float width,float height)
         {
