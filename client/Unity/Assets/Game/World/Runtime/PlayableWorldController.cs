@@ -31,7 +31,6 @@ namespace LinhGioi.World
         private Transform _posePulse;
         private Transform _gateKeeperGuidePulse;
         private SpriteRenderer _trainingSpiritPulse;
-        private Transform _shadowWarningPulse;
         private Transform _portalGatePulse;
         private Transform _windSlashPreview;
         private Transform _shadowBindWarning;
@@ -831,10 +830,6 @@ namespace LinhGioi.World
                     WorldProceduralVisuals.GetWorldPlatformGlowSprite(), TrainingStonePosition + Vector3.up * 0.025f,
                     Vector3.one * 1.8f, RuntimeArtCatalog.Gold, 3);
             }
-            if (_shadowWarningPulse == null)
-            {
-                _shadowWarningPulse = CreateMarkerCube("LGO Shadow Slime Alert Warning Pulse", ShadowSlimePosition + Vector3.up * 0.18f, RuntimeArtCatalog.Danger, new Vector3(2f, 0.08f, 2f)).transform;
-            }
             RefreshPoseFeedbackMarkers();
         }
 
@@ -852,8 +847,6 @@ namespace LinhGioi.World
                 _trainingSpiritPulse.color = _playerPoseState == PlaceholderPoseState.SpiritChannel ? RuntimeArtCatalog.Spirit : RuntimeArtCatalog.Gold;
                 _trainingSpiritPulse.gameObject.SetActive(_guidedStep == GuidedTrainingStep.FindTrainingStone || _playerPoseState == PlaceholderPoseState.SpiritChannel);
             }
-            if (_shadowWarningPulse != null)
-                _shadowWarningPulse.gameObject.SetActive(_shadowSlimeState == PlaceholderSlimeState.AlertWarning);
             if (_playerSprite == null)
                 _playerSprite = CreateBillboardSprite("LGO Player Cultivator Runtime Sprite V3B", LgoVisualAssetRegistryV3B.PlayerMaleCultivator, CurrentPosition + Vector3.up * 0.22f, new Vector3(0.64f, 0.64f, 1f), 8);
             if (_playerGroundShadow == null)
@@ -870,8 +863,6 @@ namespace LinhGioi.World
                 _portalGatePulse = CreateMarkerCube("LGO Portal Gate Pulse Placeholder", new Vector3(0f, 0.18f, -4.5f), RuntimeArtCatalog.Spirit, new Vector3(3.2f, 0.08f, 0.55f)).transform;
             if (_windSlashPreview == null)
                 _windSlashPreview = CreateMarkerCube("LGO Wind Slash Preview Placeholder", CurrentPosition + new Vector3(0f, 0.7f, 0.9f), RuntimeArtCatalog.Gold, new Vector3(1.8f, 0.12f, 0.22f)).transform;
-            if (_shadowBindWarning == null)
-                _shadowBindWarning = CreateMarkerCube("LGO Shadow Bind Warning Placeholder", ShadowSlimePosition + Vector3.up * 0.55f, RuntimeArtCatalog.Shadow, new Vector3(1.9f, 0.1f, 1.9f)).transform;
             if (_targetDummyHitFlash == null)
                 _targetDummyHitFlash = CreateMarkerCube("LGO Target Dummy Local Hit Flash", ReadabilityDummyPosition + Vector3.up * 1.2f, RuntimeArtCatalog.Danger, new Vector3(1.05f, 0.16f, 1.05f)).transform;
             if (_targetDummyFocusRing == null)
@@ -899,6 +890,8 @@ namespace LinhGioi.World
                 _windSlashSprite = CreateBillboardSprite("LGO Wind Slash Runtime Sprite v0.46", LgoVisualAssetRegistryV3B.WindSlashFrame01 ?? CombatPlaceholderAssets.WindSlashFrame01, CurrentPosition + new Vector3(0f, 0.85f, 0.9f), new Vector3(0.78f, 0.78f, 1f), 6);
             if (_shadowTelegraphSprite == null)
                 _shadowTelegraphSprite = CreateBillboardSprite("LGO Warning Telegraph Circle Sprite v0.46", CombatPlaceholderAssets.WarningTelegraphCircle, ShadowSlimePosition + Vector3.up * 0.16f, new Vector3(1.08f, 1.08f, 1f), 4);
+            if (_shadowTelegraphSprite == null && _shadowBindWarning == null)
+                _shadowBindWarning = CreateMarkerCube("LGO Shadow Bind Warning Placeholder", ShadowSlimePosition + Vector3.up * 0.55f, RuntimeArtCatalog.Shadow, new Vector3(1.9f, 0.1f, 1.9f)).transform;
             if (_gateKeeperSprite == null)
             {
                 WorldProceduralVisuals.CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", CurrentGateKeeperVisualPosition() + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
@@ -1030,10 +1023,12 @@ namespace LinhGioi.World
                 _windSlashSprite.transform.rotation = Quaternion.Euler(42f, _marker.eulerAngles.y, 0f);
                 _windSlashSprite.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.WindSlashPreview);
             }
+            var shadowWarningVisible = _shadowSlimeState == PlaceholderSlimeState.AlertWarning
+                || (active && _vfxFeedbackState == PlaceholderVfxFeedbackState.ShadowBindWarning);
             if (_shadowBindWarning != null)
-                _shadowBindWarning.gameObject.SetActive(_shadowTelegraphSprite == null && active && _vfxFeedbackState == PlaceholderVfxFeedbackState.ShadowBindWarning);
+                _shadowBindWarning.gameObject.SetActive(_shadowTelegraphSprite == null && shadowWarningVisible);
             if (_shadowTelegraphSprite != null)
-                _shadowTelegraphSprite.gameObject.SetActive(active && _vfxFeedbackState == PlaceholderVfxFeedbackState.ShadowBindWarning);
+                _shadowTelegraphSprite.gameObject.SetActive(shadowWarningVisible);
             if (_targetDummyHitFlash != null)
                 _targetDummyHitFlash.gameObject.SetActive(_targetDummyHitSprite == null && active && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
             if (_targetDummyHitSprite != null)

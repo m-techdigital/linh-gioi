@@ -28,9 +28,13 @@ M5 hiện là bài thử kỹ thuật: gặp Người Giữ Cổng -> tương t�
 
 ### Panel xem thử kỹ năng hiện có
 
+Trói Bóng dùng một vòng telegraph đỏ hiện có để biểu diễn timed preview hoặc trạng thái AlertWarning; không đặt cube hồng đặc phía trên cùng mục tiêu. AlertWarning còn hiệu lực sau preview, reset world tắt vòng như reset state cũ. Không đổi skill, damage hoặc tạo ảnh; sprite thiếu mới dùng fallback. Red Player đã xác nhận hai renderer cùng bật, không phải shader missing.
+
 Reuse skin của demo ba ô nhân vật: nền trung tính, vàng/ngà, nút compact chung. Đây vẫn là bài thử kỹ thuật, không mở progression/skill production. Trong HUD sẵn có chỉ giữ nhãn Xem thử kỹ năng, trạng thái đang chọn và một hàng ba nút đều nhau; không lồng ornate card, không lặp ba tiêu đề hoặc override cyan. Mobile giữ thao tác ở cụm skill đáy phải như hiện tại, không bật thêm panel trùng. HUD dùng scroll dọc chung; trần chiều cao lấy từ mép trên HUD đã layout tới mép trên pad, trừ khoảng cách bảo vệ trong safe-panel units. Nghiệm thu trạng thái chưa chọn/Trói Bóng, nút đồng đều, nội dung dài cuộn thật và không che pad ở PC/tablet/mobile; ảnh demo không thay thế evidence runtime.
 
 ### Nối sảnh vào phố trong development
+
+Nền trời ban ngày theo `lgo-street-forecourt-draft-v1.jpg`: reuse skybox procedural đã được serialize trong Bootstrap; camera preview đổi từ SolidColor sang Skybox, không thay RenderSettings.skybox, ambient hay hướng nắng. [Unity procedural skybox](https://docs.unity3d.com/ru/2021.1/Manual/shader-skybox-procedural.html) hỗ trợ URP và không cần texture đầu vào. Đây chỉ là nền trời nhẹ, chưa mây/skyline/ánh sáng final như demo. Nghiệm thu ảnh camera gameplay mobile/PC và hai vòng về sảnh giữ nguyên material skybox/ambient/camera.
 
 HUD điều hướng theo storyboard: một nút phiên ở góc phải trên, pad trái/skills phải giữ ở đáy; dùng `RuntimeWorldHudResponsiveLayout` chung cho main/phố. Neo trong safe area quy đổi sang panel units, khoảng lùi theo profile hiện có, không fixed pixel màn hình. Main giữ status bên trái slot điều hướng và bỏ Thoát trùng (Thoát vẫn trong menu phiên); login/sảnh không đổi header. Khi menu hoặc thoại mở, overlay điều khiển ẩn như base hiện có. Nghiệm thu nút không đè status/ra ngoài safe rect ở PC/tablet/mobile, resize và về sảnh; không vẽ thêm skin hoặc import asset.
 

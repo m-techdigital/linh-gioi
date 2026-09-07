@@ -68,7 +68,8 @@ def main() -> int:
         'LGO Player Pose Pulse Placeholder',
         'LGO Gate Keeper Talk Guide Pulse',
         'LGO Training Stone Spirit Channel Pulse',
-        'LGO Shadow Slime Alert Warning Pulse',
+        'var shadowWarningVisible = _shadowSlimeState == PlaceholderSlimeState.AlertWarning',
+        '_shadowTelegraphSprite.gameObject.SetActive(shadowWarningVisible)',
     )
     require(
         'client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs',

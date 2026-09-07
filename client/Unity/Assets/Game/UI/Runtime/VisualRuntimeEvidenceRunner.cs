@@ -277,6 +277,7 @@ namespace LinhGioi.UI
             yield return _controller.CaptureEvidenceCooldownRecoversAtRest();
             _controller.CaptureEvidenceShadowBindPreview();
             yield return WaitFrames(8);
+            _controller.AssertShadowWarningPresentation();
             _controller.AssertSkillPreviewLayout();
             yield return CaptureCheckpoint(
                 "skill-shadow-bind-preview",
@@ -285,6 +286,7 @@ namespace LinhGioi.UI
                 "Skill preview panel and world telegraph make Shadow Bind readable without opening real combat");
 
             yield return _controller.CaptureEvidenceHudOverflow();
+            yield return _controller.CaptureEvidenceShadowWarningLifecycle();
 
             _controller.CaptureEvidenceOpenDialogue();
             yield return WaitFrames(8);

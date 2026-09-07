@@ -158,6 +158,11 @@ namespace LinhGioi.UI
             Directory.CreateDirectory(directory);
             yield return new WaitForSeconds(1f);
             yield return Capture(directory, "arrival");
+            var skyCamera = _world.GetComponentInChildren<Camera>();
+            var sky = RenderSettings.skybox;
+            Debug.Log("LGO_STREET_SKY_TRACE clear=" + skyCamera.clearFlags + " shader=" + (sky == null ? "none" : sky.shader.name));
+            if (skyCamera.clearFlags != CameraClearFlags.Skybox || sky == null || !sky.shader.isSupported)
+                throw new InvalidOperationException("Street daylight must render the scene's supported skybox, not a flat clear color.");
             Mesh lanternFrame = null;
             var lanternCount = 0;
             foreach (var filter in _world.GetComponentsInChildren<MeshFilter>())

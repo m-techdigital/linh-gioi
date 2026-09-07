@@ -20,6 +20,7 @@ namespace LinhGioi.UI
             var cameras = Camera.allCameras;
             var ambient = RenderSettings.ambientLight;
             var ambientMode = RenderSettings.ambientMode;
+            var skybox = RenderSettings.skybox;
             var materialCount = Array.FindAll(Resources.FindObjectsOfTypeAll<Material>(), material => material.name == "Blockout surface").Length;
             for (var visit = 0; visit < 2; visit++)
             {
@@ -86,7 +87,7 @@ namespace LinhGioi.UI
                     throw new InvalidOperationException("Returning to the hall must restore its header navigation.");
                 foreach (var camera in cameras)
                     if (camera != null && !camera.enabled) throw new InvalidOperationException("Hall camera was not restored.");
-                if (RenderSettings.ambientLight != ambient || RenderSettings.ambientMode != ambientMode)
+                if (RenderSettings.ambientLight != ambient || RenderSettings.ambientMode != ambientMode || RenderSettings.skybox != skybox)
                     throw new InvalidOperationException("Preview lighting leaked into Character Hall.");
                 if (Array.FindAll(Resources.FindObjectsOfTypeAll<Material>(), material => material.name == "Blockout surface").Length != materialCount
                     || Camera.allCameras.Length != cameras.Length)
@@ -810,6 +811,34 @@ namespace LinhGioi.UI
             _world.ResetLocalCombatPreviewStateForSmoke();
             PreviewSkill("Shadow Bind", "Trói Bóng");
             RefreshCombatAssetUiState();
+        }
+
+        internal void AssertShadowWarningPresentation()
+        {
+            var legacyWarning = GameObject.Find("LGO Shadow Slime Alert Warning Pulse");
+            var telegraph = GameObject.Find("LGO Warning Telegraph Circle Sprite v0.46");
+            if (legacyWarning != null)
+            {
+                var renderer = legacyWarning.GetComponent<Renderer>();
+                Debug.Log("LGO_SHADOW_WARNING_OWNER_TRACE cube=" + legacyWarning.activeInHierarchy
+                    + " shader=" + renderer.sharedMaterial.shader.name + " color=" + renderer.sharedMaterial.color
+                    + " bounds=" + renderer.bounds + " telegraph=" + (telegraph != null));
+                throw new InvalidOperationException("Shadow warning must not draw a solid cube over the existing telegraph.");
+            }
+            if (telegraph == null || telegraph.GetComponent<SpriteRenderer>()?.sprite == null)
+                throw new InvalidOperationException("Shadow Bind preview must retain its visible warning ring.");
+            Debug.Log("LGO_SHADOW_WARNING_SINGLE_OWNER_PASS ring=true legacy_cube=false");
+        }
+
+        internal IEnumerator CaptureEvidenceShadowWarningLifecycle()
+        {
+            yield return new WaitForSeconds(1.5f);
+            AssertShadowWarningPresentation();
+            _world.Enter(_selectedCharacter);
+            yield return null;
+            if (GameObject.Find("LGO Warning Telegraph Circle Sprite v0.46") != null)
+                throw new InvalidOperationException("Resetting the world must hide the warning ring.");
+            Debug.Log("LGO_SHADOW_WARNING_LIFECYCLE_PASS alert_persists=true reset_hides=true");
         }
 
         internal void AssertSkillPreviewLayout()
