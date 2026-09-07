@@ -119,11 +119,18 @@ namespace LinhGioi.UI
             RefreshDialogue();
         }
 
+        private bool _guideDirectionPresented;
+
         private void RefreshDialogue()
         {
             _world.ResetMovementInput();
             _pad.ResetInput();
             _world.DialogueVisible = Dialogue.Active;
+            if (_session.Completed && !_guideDirectionPresented)
+            {
+                _guideDirectionPresented = true;
+                _world.GuideToStone();
+            }
             _dialogue.Refresh(Dialogue);
             _applyLayout();
         }
@@ -350,7 +357,10 @@ namespace LinhGioi.UI
             _world.Movement = Vector2.zero;
             if (Vector3.Distance(greetingOrigin, _world.Position) < 0.08f ||
                 !KeeperConversing(keeperAnimator) || _world.DialogueVisible)
-                throw new InvalidOperationException("Player must move while the greeting is still active, not after it expires.");
+                throw new InvalidOperationException("Player must move while the greeting is still active, not after it expires. " +
+                    "distance=" + Vector3.Distance(greetingOrigin, _world.Position).ToString("R") +
+                    " conversing=" + KeeperConversing(keeperAnimator) + " focused=" + Application.isFocused +
+                    " modal=" + _world.DialogueVisible + " frame_dt=" + Time.deltaTime.ToString("R"));
             yield return WalkTo(new Vector3(-1.8f, 0f, 1f));
             yield return new WaitForSeconds(3f);
             if (keeperAnimator.GetLayerWeight(keeperAnimator.GetLayerIndex("Conversation")) > 0.001f ||
@@ -506,6 +516,21 @@ namespace LinhGioi.UI
             yield return new WaitForEndOfFrame();
             CheckKeeperFocus(false);
             Debug.Log("LGO_KEEPER_FOCUS_PASS proximity=true dialogue=true cancel=true completed=true shared_sprite=true");
+            var guideAnimator = _world.transform.Find("Blockout Keeper").GetComponent<Animator>();
+            var guideRoot = guideAnimator.transform.position;
+            yield return new WaitForSeconds(0.8f);
+            var guideShoulder = guideAnimator.GetBoneTransform(HumanBodyBones.RightUpperArm).position;
+            var guideHand = guideAnimator.GetBoneTransform(HumanBodyBones.RightHand).position;
+            var direction = Vector3.ProjectOnPlane(OnboardingBlockoutWorld.StonePoint - guideRoot, Vector3.up);
+            var handDirection = Vector3.ProjectOnPlane(guideHand - guideShoulder, Vector3.up);
+            if (Vector3.Angle(direction, handDirection) > 20f || handDirection.magnitude < 0.2f ||
+                Vector3.Distance(guideRoot, guideAnimator.transform.position) > 0.001f || _world.DialogueVisible)
+                throw new InvalidOperationException("Guide must indicate the stone with a raised hand without root motion or a blocking modal.");
+            yield return Capture(directory, "keeper-guide-direction");
+            yield return new WaitForSeconds(1.7f);
+            if (guideAnimator.GetLayerWeight(guideAnimator.GetLayerIndex("Conversation")) > 0.01f)
+                throw new InvalidOperationException("Guide direction must finish and restore base locomotion.");
+            Debug.Log("LGO_GUIDE_DIRECTION_PASS target=stone root_motion=false modal=false completed=true");
             CheckPlayerIdentity("WWWWWWWWWWWWWWWW", true);
             Interact();
             if (_stoneCompleted) throw new InvalidOperationException("Stone completed from NPC location.");

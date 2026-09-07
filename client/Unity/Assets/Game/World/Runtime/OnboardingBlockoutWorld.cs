@@ -23,11 +23,14 @@ namespace LinhGioi.World
         private BoxCollider _cameraVolume;
         private Renderer _keeper;
         private Animator _keeperAnimator;
+        private NpcGuideGesture _keeperGuide;
+        private bool _keeperGuiding;
         private bool _keeperTalking;
         private bool _keeperWasReady;
         private float _keeperGreetingUntil;
         private int _keeperConversationLayer;
         private static readonly int TalkingState = Animator.StringToHash("Conversation.Talking");
+        private static readonly int GuidingState = Animator.StringToHash("Conversation.Guiding");
         private static readonly Quaternion KeeperRestRotation = Quaternion.LookRotation(new Vector3(3f, 0f, -4f));
         private Renderer _stone;
         private TextMesh _keeperLabel;
@@ -95,6 +98,8 @@ namespace LinhGioi.World
             _keeperAnimator.name = "Blockout Keeper";
             _keeperConversationLayer = _keeperAnimator.GetLayerIndex("Conversation");
             if (_keeperConversationLayer < 1) throw new System.InvalidOperationException("Guide requires the masked conversation layer.");
+            _keeperGuide = _keeperAnimator.gameObject.AddComponent<NpcGuideGesture>();
+            _keeperGuide.Initialize(_keeperConversationLayer);
             _keeperAnimator.transform.rotation = KeeperRestRotation;
             _keeper = _keeperAnimator.GetComponentInChildren<SkinnedMeshRenderer>();
             _stone = CreateTrainingStone();
@@ -375,6 +380,7 @@ namespace LinhGioi.World
         }
 
         public bool DialogueVisible { get; set; }
+        public void GuideToStone() => _keeperGuide.Begin(StonePoint);
         public bool KeeperReady { get; set; }
 
         private SpriteRenderer CreateInteractionFocus(string name, Vector3 point)
@@ -406,16 +412,26 @@ namespace LinhGioi.World
             _cameraBrain.ManualUpdate();
             if (KeeperReady && !_keeperWasReady) _keeperGreetingUntil = Time.time + 2.5f;
             _keeperWasReady = KeeperReady;
-            if (DialogueVisible) _keeperGreetingUntil = 0f;
+            if (DialogueVisible)
+            {
+                _keeperGreetingUntil = 0f;
+                _keeperGuide.Cancel();
+            }
+            var guiding = _keeperGuide.Active;
+            if (_keeperGuiding != guiding)
+            {
+                _keeperGuiding = guiding;
+                _keeperAnimator.Play(guiding ? GuidingState : TalkingState, _keeperConversationLayer, 0f);
+            }
             var conversing = DialogueVisible || (KeeperReady && Time.time < _keeperGreetingUntil);
             if (_keeperTalking != conversing)
             {
                 _keeperTalking = conversing;
-                if (_keeperTalking) _keeperAnimator.Play(TalkingState, _keeperConversationLayer, 0f);
+                if (_keeperTalking && !guiding) _keeperAnimator.Play(TalkingState, _keeperConversationLayer, 0f);
             }
             _keeperAnimator.SetLayerWeight(_keeperConversationLayer, Mathf.MoveTowards(
-                _keeperAnimator.GetLayerWeight(_keeperConversationLayer), _keeperTalking ? 1f : 0f, Time.deltaTime / 0.15f));
-            var keeperFacing = _keeperTalking
+                _keeperAnimator.GetLayerWeight(_keeperConversationLayer), _keeperTalking || guiding ? 1f : 0f, Time.deltaTime / 0.15f));
+            var keeperFacing = guiding ? Quaternion.LookRotation(Vector3.ProjectOnPlane(StonePoint - KeeperPoint, Vector3.up)) : _keeperTalking
                 ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_player.transform.position - KeeperPoint, Vector3.up))
                 : KeeperRestRotation;
             _keeperAnimator.transform.rotation = Quaternion.RotateTowards(_keeperAnimator.transform.rotation, keeperFacing, 180f * Time.deltaTime);

@@ -243,17 +243,22 @@ namespace LinhGioi.Foundation.Editor
             for (var part = AvatarMaskBodyPart.Root; part < AvatarMaskBodyPart.LastBodyPart; part++)
                 mask.SetHumanoidBodyPartActive(part, part == AvatarMaskBodyPart.Head ||
                     part == AvatarMaskBodyPart.LeftArm || part == AvatarMaskBodyPart.RightArm ||
-                    part == AvatarMaskBodyPart.LeftFingers || part == AvatarMaskBodyPart.RightFingers);
+                    part == AvatarMaskBodyPart.LeftFingers || part == AvatarMaskBodyPart.RightFingers ||
+                    part == AvatarMaskBodyPart.RightHandIK);
             layer.avatarMask = mask;
             layer.defaultWeight = 0f;
+            layer.iKPass = true;
             layer.blendingMode = AnimatorLayerBlendingMode.Override;
             var machine = layer.stateMachine;
             var state = machine.states.Select(s => s.state).FirstOrDefault(s => s.name == "Talking") ?? machine.AddState("Talking");
             state.motion = clip;
             machine.defaultState = state;
+            var guiding = machine.states.Select(s => s.state).FirstOrDefault(s => s.name == "Guiding") ?? machine.AddState("Guiding");
+            guiding.motion = controller.animationClips.Single(c => ClipNamed(c.name, "Idle_Loop"));
             controller.layers = layers;
             EditorUtility.SetDirty(mask);
             EditorUtility.SetDirty(state);
+            EditorUtility.SetDirty(guiding);
             EditorUtility.SetDirty(controller);
             AssetDatabase.SaveAssets();
             ValidateLocomotion();
@@ -327,6 +332,10 @@ namespace LinhGioi.Foundation.Editor
             else if (name == "Arrival muted blue sash") color = new Color(0.09f, 0.15f, 0.19f);
             else if (name == "Arrival charcoal trousers") color = new Color(0.06f, 0.065f, 0.06f);
             else if (name == "Arrival black hair") color = new Color(0.012f, 0.014f, 0.018f);
+            // Blender shader inputs are linear; Unity material color properties use sRGB.
+            else if (name == "Keeper ivory cloth") color = new Color(0.76f, 0.77f, 0.72f).gamma;
+            else if (name == "Keeper ink cloth") color = new Color(0.012f, 0.027f, 0.06f).gamma;
+            else if (name == "Keeper warm brass") color = new Color(0.52f, 0.32f, 0.10f).gamma;
             else if (name == "Keeper gray robe") color = new Color(0.28f, 0.29f, 0.28f);
             else if (name == "Keeper antique gold") color = new Color(0.42f, 0.34f, 0.19f);
             else if (name == "Keeper silver hair") color = new Color(0.68f, 0.70f, 0.69f);
@@ -339,7 +348,9 @@ namespace LinhGioi.Foundation.Editor
                 AssetDatabase.CreateAsset(material, path);
             }
             material.SetColor("_BaseColor", color);
-            material.SetFloat("_Smoothness", 0.15f);
+            var brass = name == "Keeper warm brass";
+            material.SetFloat("_Metallic", brass ? 0.65f : 0f);
+            material.SetFloat("_Smoothness", brass ? 0.5f : 0.15f);
             material.SetTexture("_BaseMap", texture == null ? null : AssetDatabase.LoadAssetAtPath<Texture2D>(Directory + texture + ".png"));
             EditorUtility.SetDirty(material);
             return material;
