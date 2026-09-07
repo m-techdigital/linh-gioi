@@ -232,9 +232,9 @@ namespace LinhGioi.UI
 
         internal float WorldHudMaxHeight(bool dialogueVisible)
         {
-            if (IsMobile) return Mathf.Max(260f, Height - 34f);
-            if (IsTablet) return Mathf.Max(420f, Height - 80f);
-            return 0f;
+            // Reserve the header and movement pad in the same safe-panel coordinate space.
+            return Mathf.Max(0f, Height - RootPaddingTop - HeaderMinHeight(false)
+                - WorldTouchControlsBottomInset - WorldTouchPadSize - RootPaddingBottom);
         }
 
         internal float SessionMenuWidth => IsMobile

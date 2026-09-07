@@ -11,7 +11,11 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewPanel(float maxWidth)
         {
-            var panel = new VisualElement();
+            return NewPanel(maxWidth, new VisualElement());
+        }
+
+        private static VisualElement NewPanel(float maxWidth, VisualElement panel)
+        {
             panel.style.maxWidth = maxWidth;
             panel.style.minWidth = RuntimeUiSpacing.PanelMinWidth;
             panel.style.width = Length.Percent(100);
@@ -106,7 +110,7 @@ namespace LinhGioi.UI
 
         internal static VisualElement NewWorldHudRoot(string name, float maxWidth)
         {
-            var hud = NewPanel(maxWidth);
+            var hud = NewPanel(maxWidth, new ScrollView(ScrollViewMode.Vertical));
             hud.name = name;
             hud.style.maxWidth = maxWidth;
             hud.style.alignSelf = Align.FlexStart;

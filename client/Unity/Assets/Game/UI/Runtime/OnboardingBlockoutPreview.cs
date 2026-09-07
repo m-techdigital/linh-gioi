@@ -158,6 +158,19 @@ namespace LinhGioi.UI
             Directory.CreateDirectory(directory);
             yield return new WaitForSeconds(1f);
             yield return Capture(directory, "arrival");
+            Mesh lanternFrame = null;
+            var lanternCount = 0;
+            foreach (var filter in _world.GetComponentsInChildren<MeshFilter>())
+            {
+                if (filter.name != "Street lantern frame") continue;
+                if (filter.sharedMesh == null || filter.sharedMesh.vertexCount == 0
+                    || (lanternFrame != null && lanternFrame != filter.sharedMesh)
+                    || filter.GetComponent<Collider>() != null)
+                    throw new InvalidOperationException("Street lanterns need one shared visible frame mesh without collision.");
+                lanternFrame = filter.sharedMesh;
+                lanternCount++;
+            }
+            if (lanternCount != 6) throw new InvalidOperationException("Expected six street lanterns, got " + lanternCount);
             var pipeline = UnityEngine.Rendering.GraphicsSettings.currentRenderPipeline;
             var softShadowProperty = pipeline == null ? null : pipeline.GetType().GetProperty("supportsSoftShadows");
             if (softShadowProperty == null)

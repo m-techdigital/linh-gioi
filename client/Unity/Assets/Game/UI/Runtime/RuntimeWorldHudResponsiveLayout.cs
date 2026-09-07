@@ -52,9 +52,21 @@ namespace LinhGioi.UI
             var tablet = layout.IsTablet;
             var dialogueVisible = dialoguePanel != null && dialoguePanel.style.display == DisplayStyle.Flex;
 
+            if (worldHud is ScrollView scroll)
+                RuntimeUiOverflowGuard.ApplyBoundedScroll(scroll, layout.WorldHudMaxHeight(false));
             worldHud.style.minWidth = layout.WorldHudMinWidthFor(false);
             worldHud.style.maxWidth = layout.WorldHudMaxWidth(false);
-            worldHud.style.maxHeight = mobile || tablet ? layout.WorldHudMaxHeight(false) : StyleKeyword.None;
+            worldHud.style.maxHeight = layout.WorldHudMaxHeight(false);
+            // Header text can exceed its minimum height. Reconcile after Yoga has positioned the HUD.
+            worldHud.schedule.Execute(() =>
+            {
+                var root = worldHud.panel?.visualTree;
+                if (root == null) return;
+                var viewport = RuntimeViewportMetrics.FromRoot(root);
+                var top = root.WorldToLocal(worldHud.worldBound.position).y;
+                var padTop = viewport.SafePanelRect.yMax - layout.WorldTouchControlsBottomInset - layout.WorldTouchPadSize;
+                worldHud.style.maxHeight = Mathf.Max(0f, padTop - layout.RootPaddingBottom - top);
+            });
             RuntimeUiSkin.ApplyPadding(
                 worldHud,
                 dialogueVisible ? layout.WorldHudDialoguePaddingHorizontal : layout.WorldHudPaddingHorizontal,
@@ -194,11 +206,15 @@ namespace LinhGioi.UI
             ApplyMovementPad(layout, movementPad);
             ApplyActionCluster(layout, actionCluster, primaryActionButton, windSlashButton, shadowBindButton, spiritGuardButton);
             ApplyTouchActionButton(layout, menuButton, false);
-            menuButton.style.position = Position.Absolute;
-            menuButton.style.left = Length.Percent(50);
-            menuButton.style.marginLeft = -layout.WorldTouchActionButtonSize * 0.5f;
-            menuButton.style.marginTop = 0;
-            menuButton.style.bottom = layout.WorldTouchControlsBottomInset;
+            var viewport = RuntimeViewportMetrics.FromRoot(controlsOverlay);
+            RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(menuButton,
+                RuntimeUiOverlayPlacement.Right, RuntimeUiOverlayVerticalPlacement.Top,
+                layout.WorldTouchActionButtonSize, layout.WorldTouchActionButtonSize,
+                viewport.PanelWidth - viewport.SafePanelRect.xMax + layout.WorldTouchControlsHorizontalInset,
+                viewport.SafePanelRect.yMin + layout.WorldTouchControlsHorizontalInset);
+            menuButton.style.height = layout.WorldTouchActionButtonSize;
+            menuButton.style.marginLeft = 0;
+            menuButton.style.marginRight = 0;
         }
 
         private static void ApplyMovementPad(RuntimeUiLayoutProfile layout, VisualElement movementPad)
@@ -294,6 +310,10 @@ namespace LinhGioi.UI
             {
                 headerActions.style.flexShrink = 1;
                 headerActions.style.justifyContent = Justify.FlexEnd;
+                var viewport = RuntimeViewportMetrics.FromRoot(headerActions.panel?.visualTree);
+                headerActions.style.marginRight = worldVisible
+                    ? viewport.PanelWidth - viewport.SafePanelRect.xMax + layout.WorldTouchControlsHorizontalInset + layout.WorldTouchActionButtonSize
+                    : 0f;
                 headerActions.style.maxWidth = worldVisible && mobile
                     ? Mathf.Max(RuntimeUiSpacing.HeaderActionsMobileMaxWidthFloor, viewportWidth - RuntimeUiSpacing.HeaderActionsMobileViewportInset)
                     : tablet ? RuntimeUiSpacing.HeaderActionsTabletMaxWidth : RuntimeUiSpacing.HeaderActionsDesktopMaxWidth;
@@ -314,6 +334,7 @@ namespace LinhGioi.UI
             }
             if (quitButton != null)
             {
+                if (worldVisible) SetDisplayed(quitButton, false);
                 RuntimeUiSkin.ApplyButtonMetrics(
                     quitButton,
                     worldVisible && mobile ? RuntimeUiSpacing.HeaderQuitWorldMobileMinWidth : RuntimeUiSpacing.HeaderQuitDefaultMinWidth,

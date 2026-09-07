@@ -277,11 +277,14 @@ namespace LinhGioi.UI
             yield return _controller.CaptureEvidenceCooldownRecoversAtRest();
             _controller.CaptureEvidenceShadowBindPreview();
             yield return WaitFrames(8);
+            _controller.AssertSkillPreviewLayout();
             yield return CaptureCheckpoint(
                 "skill-shadow-bind-preview",
                 "Skill Preview / Shadow Bind",
                 "docs/reference-art/v3b/metadata/runtime-candidates-v3b-manifest.csv",
                 "Skill preview panel and world telegraph make Shadow Bind readable without opening real combat");
+
+            yield return _controller.CaptureEvidenceHudOverflow();
 
             _controller.CaptureEvidenceOpenDialogue();
             yield return WaitFrames(8);
@@ -314,7 +317,7 @@ namespace LinhGioi.UI
             Quit(0);
         }
 
-        private static IEnumerator ResizePlayerViewport(int width, int height)
+        internal static IEnumerator ResizePlayerViewport(int width, int height)
         {
             Screen.SetResolution(width, height, false);
             for (var frame = 0; frame < 90 && (Screen.width != width || Screen.height != height); frame++)

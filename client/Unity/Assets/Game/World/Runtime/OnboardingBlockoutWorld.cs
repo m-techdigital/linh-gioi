@@ -34,6 +34,7 @@ namespace LinhGioi.World
         private Mesh _pavingMesh;
         private Texture2D _pavingTexture;
         private Mesh _houseFacadeMesh;
+        private Mesh _lanternFrameMesh;
         private readonly List<Material> _materials = new List<Material>();
         private Camera[] _previousCameras;
         private Color _previousAmbient;
@@ -67,6 +68,7 @@ namespace LinhGioi.World
                 Box("Boundary", new Vector3(side * 7f, 0.6f, 1.5f), new Vector3(0.2f, 1.2f, 27f), walls);
             }
             CreateForecourt(paving, walls, roof, trim);
+            CreateStreetLanterns(trim);
             CreateStreetPaving(paving);
             Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
             _keeper = Actor("Blockout Keeper", KeeperPoint, LgoVisualAssetRegistryV3B.GateKeeperNpc, 1.8f, trim);
@@ -148,6 +150,42 @@ namespace LinhGioi.World
             surface.transform.SetParent(transform);
             surface.AddComponent<MeshFilter>().sharedMesh = _pavingMesh;
             surface.AddComponent<MeshRenderer>().sharedMaterial = paving;
+        }
+
+        private void CreateStreetLanterns(Material timber)
+        {
+            var paper = Material(new Color(0.86f, 0.68f, 0.35f));
+            for (var side = -1; side <= 1; side += 2)
+            for (var row = 0; row < 3; row++)
+            {
+                var position = new Vector3(side * 3.65f, 2.25f, -1.3f + row * 6f);
+                var shade = Box("Street lantern paper", position, new Vector3(0.32f, 0.5f, 0.32f), paper, false);
+                if (_lanternFrameMesh == null)
+                {
+                    var cube = shade.GetComponent<MeshFilter>().sharedMesh;
+                    var parts = new List<CombineInstance>();
+                    void Beam(Vector3 centre, Vector3 size)
+                    {
+                        parts.Add(new CombineInstance { mesh = cube, transform = Matrix4x4.TRS(centre, Quaternion.identity, size) });
+                    }
+                    for (var x = -1; x <= 1; x += 2)
+                    for (var z = -1; z <= 1; z += 2)
+                        Beam(new Vector3(x * 0.16f, 0f, z * 0.16f), new Vector3(0.035f, 0.54f, 0.035f));
+                    for (var end = -1; end <= 1; end += 2)
+                        Beam(Vector3.up * (end * 0.27f), new Vector3(0.37f, 0.04f, 0.37f));
+                    Beam(new Vector3(-0.18f, 0.58f, 0f), new Vector3(0.4f, 0.05f, 0.05f));
+                    Beam(new Vector3(0f, 0.41f, 0f), new Vector3(0.025f, 0.3f, 0.025f));
+                    Beam(new Vector3(-0.36f, 0.52f, 0f), new Vector3(0.04f, 0.22f, 0.11f));
+                    _lanternFrameMesh = new Mesh { name = "Shared street lantern frame" };
+                    _lanternFrameMesh.CombineMeshes(parts.ToArray(), true, true);
+                }
+                var frame = new GameObject("Street lantern frame");
+                frame.transform.SetParent(transform);
+                frame.transform.position = position;
+                frame.transform.rotation = Quaternion.Euler(0f, side < 0 ? 0f : 180f, 0f);
+                frame.AddComponent<MeshFilter>().sharedMesh = _lanternFrameMesh;
+                frame.AddComponent<MeshRenderer>().sharedMaterial = timber;
+            }
         }
 
         private void CreateStreetHouse(Vector3 centre, float height, Material walls, Material roof, Material trim)
@@ -403,6 +441,7 @@ namespace LinhGioi.World
             foreach (var material in _materials)
                 if (material != null) Destroy(material);
             if (_houseFacadeMesh != null) Destroy(_houseFacadeMesh);
+            if (_lanternFrameMesh != null) Destroy(_lanternFrameMesh);
         }
 
         private Renderer Actor(string name, Vector3 point, Sprite sprite, float height, Material fallback)

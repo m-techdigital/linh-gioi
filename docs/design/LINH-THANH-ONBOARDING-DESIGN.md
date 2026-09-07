@@ -26,7 +26,13 @@ M5 hiện là bài thử kỹ thuật: gặp Người Giữ Cổng -> tương t�
 
 ## Trạng thái cần thiết kế trước khi code tiếp
 
+### Panel xem thử kỹ năng hiện có
+
+Reuse skin của demo ba ô nhân vật: nền trung tính, vàng/ngà, nút compact chung. Đây vẫn là bài thử kỹ thuật, không mở progression/skill production. Trong HUD sẵn có chỉ giữ nhãn Xem thử kỹ năng, trạng thái đang chọn và một hàng ba nút đều nhau; không lồng ornate card, không lặp ba tiêu đề hoặc override cyan. Mobile giữ thao tác ở cụm skill đáy phải như hiện tại, không bật thêm panel trùng. HUD dùng scroll dọc chung; trần chiều cao lấy từ mép trên HUD đã layout tới mép trên pad, trừ khoảng cách bảo vệ trong safe-panel units. Nghiệm thu trạng thái chưa chọn/Trói Bóng, nút đồng đều, nội dung dài cuộn thật và không che pad ở PC/tablet/mobile; ảnh demo không thay thế evidence runtime.
+
 ### Nối sảnh vào phố trong development
+
+HUD điều hướng theo storyboard: một nút phiên ở góc phải trên, pad trái/skills phải giữ ở đáy; dùng `RuntimeWorldHudResponsiveLayout` chung cho main/phố. Neo trong safe area quy đổi sang panel units, khoảng lùi theo profile hiện có, không fixed pixel màn hình. Main giữ status bên trái slot điều hướng và bỏ Thoát trùng (Thoát vẫn trong menu phiên); login/sảnh không đổi header. Khi menu hoặc thoại mở, overlay điều khiển ẩn như base hiện có. Nghiệm thu nút không đè status/ra ngoài safe rect ở PC/tablet/mobile, resize và về sảnh; không vẽ thêm skin hoặc import asset.
 
 Reuse demo Character Hall ba ô và storyboard nhập môn ở phần Căn cứ; không thêm màn hoặc skin riêng. Với cờ development `--lgo-onboarding-from-lobby`, nút Vào game tải hồ sơ đang chọn bằng API hiện có rồi mở phố preview. HUD giữ pad trái, action phải và nút điều hướng chung đổi thành Về sảnh; Escape đóng thoại trước, ngoài thoại thì về sảnh. Không cờ này thì giữ flow main hiện có.
 
@@ -39,6 +45,8 @@ Caveat giữ lại: `hall-onboarding-red-flow.log` bắt đúng thiếu integrat
 Chạy thử bằng Development Player với `--lgo-onboarding-from-lobby` và API local theo `StreamingAssets/linhgioi-client.json`. Evidence dùng thêm `--lgo-visual-runtime-review --lgo-visual-runtime-evidence-dir <thư mục mới>` cùng width/height như runner hiện có; dùng API store riêng trong build. Không dùng `--lgo-onboarding-blockout` cùng cờ nối sảnh vì cờ đó bỏ qua login/sảnh.
 
 ### Thử nghiệm nối phố vào sân nhỏ
+
+Mốc kiến trúc tiếp theo theo các đèn lồng trong storyboard nhập môn: sáu đèn giấy khung gỗ nhỏ dưới mái hiên, hai hàng tại X±3.65/Z-1.3,4.7,10.7, tâm cao2.25m; chừa toàn bộ đường đi/NPC/nhãn. Vị trí thử Z1.3,7.3,13.3 đã lộ chạm tên NPC trong ảnh mobile nên chuyển sang phía còn lại mặt tiền. Một mesh khung dùng lại, thân giấy dùng cube mesh có sẵn; kích thước thân0.32x0.5x0.32m, khung tối và giấy vàng nhạt, không texture mới hoặc point light. Chưa đổi toàn cảnh thành ban đêm; đây là nhận diện kiến trúc theo demo, không che chất lượng blockout bằng bóng tối. Đèn chưa có gameplay, không collision. Nghiệm thu ở camera gameplay: thấy đèn và giá treo có tỷ lệ hợp lý, không thành đốm sáng che NPC; chia sẻ mesh/material và hủy khi kết thúc visit.
 
 Demo `docs/reference-ui/lgo-street-forecourt-draft-v1.jpg` là DRAFT từ imagegen, không phải runtime hoặc design đã duyệt. Lưu JPEG quality78, không crop/slice/import ảnh vào game. Phối cảnh và inset chỉ định hướng; tỷ lệ inset không dùng làm số đo code. Thử nghiệm chỉ ở preview opt-in, không đổi map/hồ sơ chính.
 

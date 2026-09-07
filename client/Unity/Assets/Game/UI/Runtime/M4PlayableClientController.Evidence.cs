@@ -37,6 +37,7 @@ namespace LinhGioi.UI
                 for (VisualElement ancestor = back; ancestor != null; ancestor = ancestor.parent)
                     if (ancestor.resolvedStyle.display == DisplayStyle.None || ancestor.resolvedStyle.visibility == Visibility.Hidden)
                         throw new InvalidOperationException("Onboarding HUD must not inherit hidden Character Hall ancestry.");
+                AssertNavigationBoundsForEvidence(back, preview.GetComponent<UIDocument>().rootVisualElement);
                 var world = preview.GetComponent<OnboardingBlockoutWorld>();
                 if (Vector3.Distance(world.Position, new Vector3(0f, 0f, -3f)) > 0.15f)
                     throw new InvalidOperationException("Each local onboarding visit must start at the gate.");
@@ -81,6 +82,8 @@ namespace LinhGioi.UI
                     || FindFirstObjectByType<OnboardingBlockoutPreview>() != null
                     || GameObject.Find("Blockout Keeper Label") != null || GameObject.Find("Blockout Stone Label") != null)
                     throw new InvalidOperationException("Returning must restore the hall and remove every preview owner and label.");
+                if (!IsDisplayed(_quitButton) || Mathf.Abs(_headerActions.resolvedStyle.marginRight) > 0.1f)
+                    throw new InvalidOperationException("Returning to the hall must restore its header navigation.");
                 foreach (var camera in cameras)
                     if (camera != null && !camera.enabled) throw new InvalidOperationException("Hall camera was not restored.");
                 if (RenderSettings.ambientLight != ambient || RenderSettings.ambientMode != ambientMode)
@@ -101,6 +104,18 @@ namespace LinhGioi.UI
 
         internal IEnumerator CaptureEvidenceTouchMovement()
         {
+            AssertNavigationBoundsForEvidence(_worldTouchMenuButton, _root);
+            if (IsDisplayed(_quitButton) || _worldTouchMenuButton.worldBound.Overlaps(_status.worldBound))
+                throw new InvalidOperationException("World navigation must not duplicate Quit or overlap status.");
+            var width = Screen.width;
+            var height = Screen.height;
+            yield return VisualRuntimeEvidenceRunner.ResizePlayerViewport(Mathf.Max(640, width * 3 / 4), height);
+            AssertNavigationBoundsForEvidence(_worldTouchMenuButton, _root);
+            if (_worldTouchMenuButton.worldBound.Overlaps(_status.worldBound))
+                throw new InvalidOperationException("World navigation overlaps status after resize.");
+            yield return VisualRuntimeEvidenceRunner.ResizePlayerViewport(width, height);
+            AssertNavigationBoundsForEvidence(_worldTouchMenuButton, _root);
+            Debug.Log("LGO_WORLD_NAVIGATION_RESIZE_PASS restored=" + Screen.width + "x" + Screen.height);
             var focusDeadline = Time.realtimeSinceStartup + 15f;
             while (!Application.isFocused && Time.realtimeSinceStartup < focusDeadline)
                 yield return null;
@@ -177,6 +192,16 @@ namespace LinhGioi.UI
                 SetSessionMenuVisible(false);
                 _world.SetSmokePosition(start.x, start.y, start.z, yaw);
             }
+        }
+
+        private static void AssertNavigationBoundsForEvidence(Button navigation, VisualElement root)
+        {
+            var safe = RuntimeViewportMetrics.FromRoot(root).SafePanelRect;
+            var bounds = root.WorldToLocal(navigation.worldBound);
+            if (bounds.width < 1f || bounds.height < 1f || bounds.xMin < safe.xMin + 1f || bounds.yMin < safe.yMin + 1f
+                || bounds.xMax > safe.xMax - 1f || bounds.yMax > safe.yMax - 1f
+                || bounds.center.x < safe.xMin + safe.width * 0.75f || bounds.center.y > safe.yMin + safe.height * 0.25f)
+                throw new InvalidOperationException("Session navigation must stay inside the upper-right safe area: button=" + bounds + " safe=" + safe);
         }
 
         internal async Task CaptureEvidenceLoginAsync()
@@ -787,6 +812,56 @@ namespace LinhGioi.UI
             RefreshCombatAssetUiState();
         }
 
+        internal void AssertSkillPreviewLayout()
+        {
+            if (_skillPreviewPanel.resolvedStyle.display == DisplayStyle.None) return;
+            var buttons = new[] { _previewWindSlashButton, _previewShadowBindButton, _previewSpiritGuardButton };
+            var first = buttons[0].worldBound;
+            foreach (var button in buttons)
+            {
+                var bounds = button.worldBound;
+                if (Mathf.Abs(bounds.width - first.width) > 1f || Mathf.Abs(bounds.height - first.height) > 1f ||
+                    Mathf.Abs(bounds.yMin - first.yMin) > 1f)
+                    throw new InvalidOperationException("Skill preview buttons must share one equal-sized row.");
+                if (bounds.xMin < _worldHud.worldBound.xMin || bounds.xMax > _worldHud.worldBound.xMax ||
+                    bounds.yMax > _worldHud.worldBound.yMax)
+                    throw new InvalidOperationException("Skill preview buttons must fit inside the HUD.");
+                if (button.resolvedStyle.borderLeftColor == RuntimeArtCatalog.Spirit)
+                    throw new InvalidOperationException("Skill preview must not override shared buttons with legacy cyan.");
+            }
+            if (_worldHud.worldBound.yMax + 4f > _worldTouchMovementPad.worldBound.yMin)
+                throw new InvalidOperationException("Skill preview HUD must leave a gap above movement controls.");
+            if (_skillPreviewPanel.resolvedStyle.borderLeftWidth > 0f)
+                throw new InvalidOperationException("Skill preview must not nest a framed panel inside the HUD.");
+            Debug.Log("LGO_SKILL_PREVIEW_LAYOUT_PASS equal_row=true shared_skin=true pad_clear=true");
+        }
+
+        internal IEnumerator CaptureEvidenceHudOverflow()
+        {
+            var scroll = _worldHud as ScrollView;
+            if (scroll == null) throw new InvalidOperationException("World HUD must reuse a bounded vertical scroll surface.");
+            var longContent = new Label(string.Join("\n", new string[40]).Replace("\n", "Nội dung kiểm tra cuộn\n"));
+            longContent.style.flexShrink = 0;
+            _worldHud.Add(longContent);
+            yield return null;
+            yield return null;
+            yield return null;
+            if (scroll.verticalScroller.highValue <= 0f || _worldHud.worldBound.yMax + 4f > _worldTouchMovementPad.worldBound.yMin)
+                throw new InvalidOperationException("Long HUD content must scroll without covering movement controls: high=" + scroll.verticalScroller.highValue
+                    + " hud=" + _worldHud.worldBound + " pad=" + _worldTouchMovementPad.worldBound);
+            var before = longContent.worldBound.yMin;
+            scroll.scrollOffset = new Vector2(0f, scroll.verticalScroller.highValue);
+            yield return null;
+            yield return null;
+            if (scroll.scrollOffset.y <= 0f || longContent.worldBound.yMin >= before - 1f)
+                throw new InvalidOperationException("HUD scroll offset must move overflowing content.");
+            longContent.RemoveFromHierarchy();
+            scroll.scrollOffset = Vector2.zero;
+            yield return null;
+            yield return null;
+            Debug.Log("LGO_WORLD_HUD_OVERFLOW_PASS bounded=true scroll_moves=true");
+        }
+
         internal IEnumerator CaptureEvidenceOpenSessionMenu()
         {
             if (_world.DialogueActive) CloseDialogue();
@@ -811,6 +886,15 @@ namespace LinhGioi.UI
             _world.TouchMovement = Vector2.zero;
             yield return null;
             yield return null;
+            var focusDeadline = Time.realtimeSinceStartup + 15f;
+            var focusedFrames = 0;
+            while (focusedFrames < 2 && Time.realtimeSinceStartup < focusDeadline)
+            {
+                yield return null;
+                focusedFrames = Application.isFocused ? focusedFrames + 1 : 0;
+            }
+            if (focusedFrames < 2)
+                throw new InvalidOperationException("Menu resume evidence requires Player focus before fresh input.");
             _world.TouchMovement = Vector2.right;
             Debug.Log("LGO_MENU_RESUME_TRACE focused=" + Application.isFocused + " frame=" + Time.frameCount
                 + " dt=" + Time.deltaTime + " position=" + _world.CurrentPosition

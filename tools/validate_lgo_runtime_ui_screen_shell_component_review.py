@@ -69,7 +69,7 @@ def main() -> int:
         "client/Unity/Assets/Game/UI/Runtime/M4PlayableClientController.cs",
         "new RuntimeNpcDialogueView(layout, ContinueDialogue, CloseDialogue)",
         "RuntimeUiFactory.NewSessionMenuShell(\"Menu phiên\", \"LGO Session Menu Overlay\")",
-        "NewSectionShell(\"KỸ NĂNG\", \"Diễn tập an toàn\", \"Xem thử kỹ năng\", \"LGO Skill Preview Sandbox\")",
+        "RuntimeUiFactory.NewFlexibleColumn(\"LGO Skill Preview Sandbox\")",
         "NewSectionShell(string.Empty, \"Bia luyện\", string.Empty, \"LGO World Combat Action Shell V3B\")",
     )
     require(
