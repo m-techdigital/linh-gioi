@@ -10,6 +10,8 @@ Last updated: `2026-09-08`
 
 ## Continuous workflow status
 
+- Ủng2026-09-08: sửa UV cả Keeper/player, giảm mảng nền đen/trắng ở mặt bên/sau; cùng atlas, không thêm triangles. Bản đầu `boots-desktop/review.json` FIX_REQUIRED; bản sau8 ảnh PC đã xem ở `boots-center-desktop/review.json`, import hai model/build393.912.819B/0 lỗi/0 cảnh báo qua. Runtime vertex tăng447/483 do UV seams; build tăng78.240B. Chưa final: màu còn kéo ngang do dải donor hẹp. NEXT: bề mặt ủng riêng và bake atlas đúng vùng, không tiếp thử ngưỡng UV; giữSCN/frozen scope.
+
 - NPC chuyển động2026-09-08: bàn tay mở theo bind pose khi chỉ hướng, blend cùng động tác;1.408 vertices giáp vai dùng trọng số cứng theo cánh tay để giữ khối. Giữ58.421 triangles/65bones/9slots/1renderer/2materials, không thêm texture. Import/build `keeper-gesture-*` qua393.834.579B/0 lỗi/0 cảnh báo;8 ảnh cận PC đã xem ở `build/visual-evidence/keeper-gesture-desktop/review.json`. Tay mở nhìn thấy thật; vai còn tròn/lộ mặt trong, chưa art final hoặc xác nhận mọi góc/cancel. NEXT: sửa projection/UV ủng cho NPC và player dùng chung hướng trang phục; không tiếp polish nón. GiữSCN-001/frozen scope.
 
 - NPC nón2026-09-08: thay chóp đặc bằng4 cánh rỗng, dải hoa văn cuộn quanh vành, khoen và dấu phù; cùng9slots/65bones/1renderer/2materials, không thêm texture. `--headwear-only` giữ tà áo đã kiểm chứng. Import/build `keeper-ornate-*` qua;393.833.702B/0 lỗi/0 cảnh báo, tăng515.327B và11.008 triangles.8 ảnh cận PC đã xem ở `build/visual-evidence/keeper-ornate-desktop/review.json`; không claim final hoặc FPS. NEXT: macro tay/giáp vai và texture ủng theo sheet, không tiếp lặp chỉnh hoa văn nón; giữ phạm vi SCN-001 và frozen surfaces.

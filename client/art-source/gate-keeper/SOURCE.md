@@ -19,3 +19,5 @@ Evidence: `build/visual-evidence/keeper-gesture-desktop/review.json`,8 ảnh Pla
 Nguồn công cụ: [Tencent Hunyuan3D-2.1](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1), [license nguồn](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1/blob/main/LICENSE).
 
 Pass chuyển động: `refine_keeper_shoulders.py` chuyển1.408 vertices giáp vai sang trọng số cứng, bảo toàn vị trí ở pose hạ tay60°. `NpcGuideGesture` cache góc ngón từ bind matrices của model rồi blend trong IK pass; không thêm bone/animation asset. Chưa kiểm tra mọi hướng đích hoặc cancel.
+
+Ủng2026-09-08: `repair_boot_projection.py` tái ánh xạ mặt bên/sau từ dải giữa mặt trước sạch, giữ atlas/geometry/weights.8 ảnh PC tại `build/visual-evidence/boots-center-desktop/review.json` đã xem; mảng nền đen giảm nhưng còn kéo ngang màu, chưa final. Bước tiếp: bề mặt ủng riêng rồi bake vào atlas, không tiếp thử ngưỡng UV.

@@ -11,3 +11,5 @@ Bảy phần tác giả: Head, Hair, UpperBody, LowerBody, Gloves, Boots, Should
 Xuất bằng Blender với `tools/art/export_arrival_scene.py -- --output <staging>`, rồi nhập bằng `ArrivalOutfitImporter.Import`. Export chỉ phát sinh FBX và texture mặt player; không nhân đôi body atlas. Unity dùng Avatar chuẩn, giữ mesh đầy đủ và chất lượng texture PC; chưa tối ưu mobile hoặc cam kết dung lượng mỗi bộ dưới 100 KB. FBX/module Editor không thuộc dependency runtime prefab.
 
 Blender đóng gói texture để chỉnh sửa. Preview Blender không thay evidence animation/camera trong Player thật; trạng thái kiểm tra gần nhất xem `docs/execution/NEXT-ACTION.md`. Tóc/chất liệu/trang phục vẫn cần art review, không đánh dấu final chỉ vì build qua.
+
+Ủng2026-09-08: `repair_boot_projection.py` tái ánh xạ mặt bên/sau từ dải giữa mặt trước sạch, giữ atlas/geometry/weights.8 ảnh PC tại `build/visual-evidence/boots-center-desktop/review.json` đã xem; mảng nền đen giảm nhưng còn kéo ngang màu, chưa final. Bước tiếp: bề mặt ủng riêng rồi bake vào atlas, không tiếp thử ngưỡng UV.

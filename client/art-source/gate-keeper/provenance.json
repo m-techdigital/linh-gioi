@@ -10,8 +10,8 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "c78171b5a7879f34d8d950774d9ba44ffd1f29cbae0ddb895e993927e3632355",
-  "fbx_sha256": "70f5fcc759eb690828e1a6029c6f46d584b332eaf574ea25fd935e27b6fa0fa7",
+  "source_sha256": "c211e82c2f188cd07a21ac62567f880e065492ec4fb46c77412ab870282e72bb",
+  "fbx_sha256": "6f1517cb27010559a05b99f3cb7f122b6958230a77cd20f26470a34eb3bfcb72",
   "triangles": 58421,
   "vertices": 29503,
   "bones": 65,
@@ -41,24 +41,24 @@
   "runtime_verified": true,
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
   "runtime_scope": "macOS development Player1920x1080, camera cận; idle0/90/180, guide front/back, return, hai ảnh player dùng chung atlas",
-  "runtime_mesh_vertices": 33975,
+  "runtime_mesh_vertices": 34422,
   "runtime_renderer_count": 1,
   "runtime_material_count": 2,
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/keeper-gesture-desktop/review.json",
-    "build/dev-loop/keeper-gesture-import.log",
-    "build/dev-loop/keeper-gesture-build.log"
+    "build/visual-evidence/boots-center-desktop/review.json",
+    "build/dev-loop/boots-center-keeper-import.log",
+    "build/dev-loop/boots-center-build.log"
   ],
   "remaining": [
-    "Giáp vai còn tròn và lộ mặt trong khi nâng tay; tạo hình/texture chưa sát sheet.",
-    "Texture ủng có mảng đen/méo từ projection cũ; chưa sửa trong batch chuyển động.",
-    "Ảnh cận xác nhận pose chỉ hướng và hạ tay; chưa kiểm tra mọi góc đích, cancel hoặc full locomotion."
+    "Mảng đen hình khối ở mặt sau đã giảm rõ, nhưng màu còn kéo ngang do tái dùng dải texture hẹp; chưa art final.",
+    "Cần thiết kế/bake bề mặt ủng riêng vào atlas dùng chung, không tiếp thử ngưỡng UV.",
+    "Không đổi weights/collider; capture cận không thay full locomotion test."
   ],
   "budget": {
-    "mac_build_bytes": 393834579,
-    "mac_build_delta_bytes": 877,
+    "mac_build_bytes": 393912819,
+    "mac_build_delta_bytes": 78240,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
