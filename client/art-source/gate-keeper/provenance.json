@@ -10,10 +10,10 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "15f27e94adc4d1157350e3b2f9cb18f2afb18566828e31a2ba74f3c4650baa3a",
-  "fbx_sha256": "0917a6a25e7ea80d70e96f5c8e1acd3ffbe902a2c3b749c9a747acfb0d0205bd",
-  "triangles": 73815,
-  "vertices": 37863,
+  "source_sha256": "62adad4afe810096175139919e83b0fed38501721209f7de124b394562a65dc8",
+  "fbx_sha256": "a4b327efb98a70458d0bda5c3dd23fafbcf389798958fe436c9b41b9ad7dbca0",
+  "triangles": 74043,
+  "vertices": 37821,
   "bones": 65,
   "materials": 2,
   "authoring_material_sections": 10,
@@ -41,26 +41,26 @@
   },
   "runtime_verified": true,
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
-  "runtime_scope": "macOS Player: 6 ảnh NPC idle/guide/return đã xem, kích thước thực960×540; lệnh yêu cầu1920×1080. Chưa xác minh độ nét full-resolution.",
-  "runtime_mesh_vertices": 41581,
+  "runtime_scope": "macOS development Player1920×1080 actual verified viewport;6 NPC idle/guide/return frames reviewed. No gameplay camera/FPS/full locomotion proof.",
+  "runtime_mesh_vertices": 40995,
   "runtime_renderer_count": 1,
   "runtime_material_count": 2,
   "mesh_compression": "Medium",
-  "reuse": "10 semantic slots, 13 editable master parts, shared65bone rig/body atlas, 1 runtime renderer and2materials",
+  "reuse": "14 editable garment objects,10 semantic slots,65 bones,1 runtime renderer,2 shared materials; atlas unchanged",
   "evidence": [
-    "build/visual-evidence/authored-support-desktop/review.json",
-    "build/dev-loop/authored-support-keeper-unity.log",
-    "build/dev-loop/authored-support-build-unity.log"
+    "build/visual-evidence/upper-envelope-desktop/review.json",
+    "build/dev-loop/upper-envelope-keeper-unity.log",
+    "build/dev-loop/upper-envelope-build-unity.log"
   ],
   "remaining": [
-    "Vai/thân áo/cape còn thô, chưa đạt canonical final; chưa nhân rộng mẫu.",
-    "Chi tiết đai/giáp chưa high-low normal bake; chưa có thương.",
-    "Preview Blender5tư thế chỉ2ảnh chuyển động đã xem; không thay thế mọi locomotion/FPS/mobile.",
-    "Runtime capture lần này960×540; phải xác định vì sao chưa xuất đủ1920×1080 trước checkpoint độ nét PC."
+    "Cape/giáp tay còn chạm ở góc sau; mép gốc cape cứng, chưa mọi animation/cloth collision.",
+    "Phom vai/cổ/thân, tóc/tay và vật liệu chưa sát canonical final; chưa high-low normal bake.",
+    "Preview stride có va chạm giữa các lớp; chưa nhân rộng bộ này cho5class/NPC.",
+    "Chưa FPS/mobile/gameplay-camera cho batch này. Build compile đầu18 cảnh báoCS0618 cũ; incremental cuối0 cảnh báo không có nghĩa đã sửa chúng."
   ],
   "budget": {
-    "mac_build_bytes": 396063539,
-    "mac_build_delta_bytes": -107088,
+    "mac_build_bytes": 396018038,
+    "mac_build_delta_bytes": -45501,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
@@ -73,6 +73,9 @@
   "cape_root_pipeline": "refine_cape_mantle.py: widen/lift continuous root, ray-fit behind torso, blend outer roots to existing clavicles; same topology/UV/materials.",
   "robe_pipeline": "pack_robe_panels.py: migration from f5f5a2e, shared robe tile, bracer unwrap, quiet trousers and continuous bound tabard joined to UpperBody.",
   "ensemble_pipeline": "remake_ceremonial_ensemble.py: migration from bed6df9, closed layered shoulders, waist relief/cords/pendants, hip drapes; same rig/atlas, Accessories semantic slot. Procedural study, not production authoring formula.",
-  "wardrobe_master_sha256": "edf7f153b1c808dad3e84052b59b10cf2a21ee065a3c1e330f6529119931d87c",
-  "wardrobe_pipeline": "KeeperWardrobe.blend: editable semantic objects and3continuous robe panels; height-continuous pelvis/thigh support avoids inherited donor weight islands. preview_wardrobe.py before export_keeper_reconstruction.py --wardrobe-master. KeeperReconstruction.blend is joined derived copy."
+  "wardrobe_master_sha256": "62adad4afe810096175139919e83b0fed38501721209f7de124b394562a65dc8",
+  "wardrobe_pipeline": "KeeperWardrobe.blend: editable semantic objects and3continuous robe panels; height-continuous pelvis/thigh support avoids inherited donor weight islands. preview_wardrobe.py before export_keeper_reconstruction.py --wardrobe-master. KeeperReconstruction.blend is joined derived copy.",
+  "source_file": "KeeperWardrobe.blend",
+  "derived_source_sha256": "fab4bb04397f3d50bb54c8a7229f2fba63e3175d6712a86c4ddce06a1f2c8413",
+  "upper_wardrobe_pipeline": "shape_keeper_upper_wardrobe.py migration from045a7de: curved3-tier shoulders, billowed sleeves, remove retained waist flare, quad cape fitted to shirt and validated cape envelope; skirt root overlaps belt,632 occluded trouser faces removed. Export master directly; --joined-source writes the derived flat model."
 }

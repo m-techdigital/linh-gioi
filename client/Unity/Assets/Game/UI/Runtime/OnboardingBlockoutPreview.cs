@@ -250,6 +250,9 @@ namespace LinhGioi.UI
             {
                 _capturing = true;
                 yield return new WaitForSeconds(1f);
+                // Command-line window size can differ from the actual macOS drawable.
+                // Require the real review viewport before collecting fidelity evidence.
+                yield return VisualRuntimeEvidenceRunner.ResizePlayerViewport(1920, 1080);
                 var qualityDirectory = Path.GetFullPath(args[qualityIndex + 1]);
                 Directory.CreateDirectory(qualityDirectory);
                 GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;

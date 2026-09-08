@@ -10,6 +10,7 @@ import bpy
 parser = argparse.ArgumentParser()
 parser.add_argument('--source', type=Path, required=True)
 parser.add_argument('--output', type=Path, required=True)
+parser.add_argument('--joined-source', type=Path, help='Optional derived two-material blend; must differ from source')
 parser.add_argument('--wardrobe-master', action='store_true', help='Export marked garment objects from the editable wardrobe master')
 args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
 bpy.ops.wm.open_mainfile(filepath=str(args.source.resolve()))
@@ -51,6 +52,15 @@ assert len(mesh.data.materials) == 2
 assert len(mesh.data.uv_layers) == 1
 assert all(1 <= len(v.groups) <= 4 and abs(sum(g.weight for g in v.groups) - 1) < 1e-5
            for v in mesh.data.vertices)
+if args.joined_source:
+    assert args.joined_source.resolve() != args.source.resolve(), 'Never overwrite editable source'
+    args.joined_source.parent.mkdir(parents=True, exist_ok=True)
+    for obj in list(bpy.context.scene.objects):
+        if obj.type == 'MESH' and obj != mesh:
+            bpy.data.objects.remove(obj, do_unlink=True)
+    mesh.asset_clear()
+    bpy.context.preferences.filepaths.save_version = 0
+    bpy.ops.wm.save_as_mainfile(filepath=str(args.joined_source.resolve()), compress=True)
 args.output.mkdir(parents=True, exist_ok=True)
 for name in ['KeeperReconstructionAlbedo', 'KeeperReconstructionFace']:
     image = bpy.data.images[name]
