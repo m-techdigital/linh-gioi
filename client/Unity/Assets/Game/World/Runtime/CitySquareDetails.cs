@@ -76,19 +76,7 @@ namespace LinhGioi.World
             Box(_wood,centre+new Vector3(0,.27f,0),new Vector3(2.7f,.10f,.75f));
             // Wooden tool rack: physical hooks, handles and bronze heads share the existing palette.
             foreach(var y in new[]{1.3f,2.1f})Box(_wood,centre+new Vector3(0,y,1.15f),new Vector3(3f,.09f,.13f));
-            for(var tool=-2;tool<=2;tool++)
-            {
-                var p=centre+new Vector3(tool*.48f,1.65f,1.03f);
-                Beam(_wood,p-Vector3.up*.28f,p+Vector3.up*.23f,.055f);
-                Box(_gold,p+Vector3.up*.18f,new Vector3(.22f,.12f,.10f));
-                Box(_gold,p+new Vector3(0,.43f,.04f),new Vector3(.05f,.07f,.15f));
-            }
-            // Repair block, vice, crystal fittings and crates describe a craft space without a fake forge.
-            Box(_stone,centre+new Vector3(.72f,1.07f,0),new Vector3(.55f,.16f,.5f));
-            Box(_gold,centre+new Vector3(.72f,1.2f,0),new Vector3(.63f,.10f,.23f));
-            Box(_wood,centre+new Vector3(-.65f,1.07f,0),new Vector3(.65f,.08f,.47f));
-            for(var i=0;i<3;i++)
-                Part(_cube,_teal,centre+new Vector3(-.84f+i*.2f,1.16f,0),new Vector3(.11f,.18f,.12f),Quaternion.Euler(0,0,20));
+            WorkshopTools(centre);
             for(var i=0;i<2;i++)
             {
                 var crate=centre+new Vector3(-1.3f+i*.85f,.48f,.1f);
@@ -116,21 +104,6 @@ namespace LinhGioi.World
             }
         }
 
-        private Mesh TeaVessel()
-        {
-            var vertices=new List<Vector3>();var triangles=new List<int>();
-            var profile=new[]{new Vector2(0f,0f),new Vector2(.7f,.05f),new Vector2(1f,.28f),new Vector2(.94f,.68f),new Vector2(.65f,.82f),new Vector2(.72f,.90f),new Vector2(.18f,.95f),new Vector2(0f,1f)};
-            for(var ring=0;ring<profile.Length;ring++)for(var side=0;side<16;side++)
-                vertices.Add(new Vector3(Mathf.Cos(side*Mathf.PI/8)*profile[ring].x,profile[ring].y,Mathf.Sin(side*Mathf.PI/8)*profile[ring].x));
-            for(var ring=0;ring<profile.Length-1;ring++)for(var side=0;side<16;side++)
-            {
-                var a=ring*16+side;var b=(ring+1)*16+side;var c=(ring+1)*16+(side+1)%16;var d=ring*16+(side+1)%16;
-                triangles.AddRange(new[]{a,b,c,a,c,d});
-            }
-            var mesh=new Mesh{name="Shared ceramic tea vessel",vertices=vertices.ToArray(),triangles=triangles.ToArray()};
-            mesh.RecalculateNormals();mesh.RecalculateBounds();_meshes.Add(mesh);return mesh;
-        }
-
         internal void TeaPavilionDetails(Vector3 centre)
         {
             for(var x=-1;x<=1;x+=2)for(var z=-1;z<=1;z+=2)
@@ -150,19 +123,7 @@ namespace LinhGioi.World
                 for(var x=-1;x<=1;x+=2)
                     Box(_wood,centre+new Vector3(x*.98f,.24f,z*1.8f),new Vector3(.16f,.46f,.35f));
             }
-            var tray=centre+Vector3.up*.80f;
-            Box(_wood,tray,new Vector3(.9f,.04f,.55f));
-            // Small solid ceramic service shares the architecture material palette.
-            var vessel=TeaVessel();
-            Part(vessel,_ivory,tray,new Vector3(.16f,.23f,.16f),Quaternion.identity);
-            Beam(_ivory,tray+new Vector3(.09f,.1f,0),tray+new Vector3(.24f,.19f,0),.065f);
-            for(var i=0;i<8;i++)
-            {
-                Vector3 Handle(float t)=>tray+new Vector3(-.12f-Mathf.Sin(t*Mathf.PI)*.10f,.04f+t*.15f,0);
-                Beam(_wood,Handle(i/8f),Handle((i+1)/8f),.027f);
-            }
-            foreach(var x in new[]{-.27f,.27f})
-                Part(vessel,_ivory,tray+new Vector3(x,.025f,.14f),new Vector3(.055f,.07f,.055f),Quaternion.identity);
+            TeaService(centre+Vector3.up*.82f);
             var sign=centre+new Vector3(-1.98f,2.83f,0);
             Box(_wood,sign,new Vector3(.11f,.46f,1.35f));
 
