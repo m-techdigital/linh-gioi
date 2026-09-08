@@ -10,8 +10,8 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "5a9e2120770c7780fac091fbf62d78f230208a5950ce3f8771da800a76dcc839",
-  "fbx_sha256": "9e00e2a1131653ab3b140378c3a4885b3c64b1c6739e3f905a179241ada82fc2",
+  "source_sha256": "fd5a821b8931830d431a6d0f6c6ab2e8a0ea3ee42162fcd8b5afb8765a53fadb",
+  "fbx_sha256": "5cdb531449d5ec0a4523c401bfc6302da7e28cf40c435b71b167905dbe4ac699",
   "triangles": 62017,
   "vertices": 31546,
   "bones": 65,
@@ -47,18 +47,18 @@
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/cloth-cascades-desktop/review.json",
-    "build/dev-loop/cloth-envelope-back-keeper-unity.log",
-    "build/dev-loop/cloth-cascades-build-unity.log"
+    "build/visual-evidence/cape-mantle-desktop/review.json",
+    "build/dev-loop/cape-mantle-keeper-unity.log",
+    "build/dev-loop/cape-mantle-build-unity.log"
   ],
   "remaining": [
-    "Nối vai–cape vẫn lộ mảng vải trắng; cần xử lý root/độ phủ của cape theo sheet.",
-    "Đai/giáp/ngực và tà áo còn đơn giản, chưa đầy đủ relief và nếp rủ như final.",
-    "Bóng ở mép nón/tóc còn răng cưa nhẹ; chưa đo FPS hoặc profile mobile/tablet."
+    "Mép cape gần tay còn khe nhỏ ở góc sau; chưa kiểm tra mọi động tác/locomotion.",
+    "Tà áo và giáp tay còn projection hoa văn cũ, chưa có các lớp vải/giáp rõ như sheet final.",
+    "Chưa art final hoặc đo FPS/mobile."
   ],
   "budget": {
-    "mac_build_bytes": 395012307,
-    "mac_build_delta_bytes": 1280,
+    "mac_build_bytes": 395012306,
+    "mac_build_delta_bytes": -1,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
@@ -67,5 +67,6 @@
   "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV.",
   "surface_pipeline": "pack_ceremonial_armor.py → export; bake_wardrobe_surface_mask.py → WardrobeSurfaceImporter.Apply. Re-bake mask when wardrobe atlas changes.",
   "cloth_pipeline": "pack_ceremonial_cloth.py (migration from 5e86dad) → export → bake_wardrobe_surface_mask.py; two shared fabric tiles, surface-fitted belt/cuffs and clasps joined to UpperBody.",
-  "drape_pipeline": "refine_cloth_drape.py: smooth cloth, continuous back profile/ivory UV, nearest-triangle interpolated cuff weights; same geometry count/atlas/slots."
+  "drape_pipeline": "refine_cloth_drape.py: smooth cloth, continuous back profile/ivory UV, nearest-triangle interpolated cuff weights; same geometry count/atlas/slots.",
+  "cape_root_pipeline": "refine_cape_mantle.py: widen/lift continuous root, ray-fit behind torso, blend outer roots to existing clavicles; same topology/UV/materials."
 }
