@@ -10,10 +10,10 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "cd63087d22e035db423d6745d8815d33eb3021276d3d255dd9a98b5b2eba4adc",
-  "fbx_sha256": "84a8df8df25f3733eebed9f323155d5fe4d391e4520133a7703bf66a5d9e57f7",
-  "triangles": 47413,
-  "vertices": 23887,
+  "source_sha256": "7eb1afcb75fc590cbdbedda5b310dee676f42d39486a0e2cda183ad723414af5",
+  "fbx_sha256": "b24d3c01569c6c4b54cc4ba9b0a86d8bc4a620cc38dbb349414ecfdfd1871ec9",
+  "triangles": 58421,
+  "vertices": 29503,
   "bones": 65,
   "materials": 2,
   "authoring_material_sections": 9,
@@ -41,25 +41,24 @@
   "runtime_verified": true,
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
   "runtime_scope": "macOS development Player1920x1080, camera cận; idle0/90/180, guide front/back, return, hai ảnh player dùng chung atlas",
-  "runtime_mesh_vertices": 28359,
+  "runtime_mesh_vertices": 33975,
   "runtime_renderer_count": 1,
   "runtime_material_count": 2,
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/keeper-drape-clearance-desktop/review.json",
-    "build/dev-loop/keeper-drape-clearance-import.log",
-    "build/dev-loop/keeper-drape-clearance-build.log"
+    "build/visual-evidence/keeper-ornate-desktop/review.json",
+    "build/dev-loop/keeper-ornate-import.log",
+    "build/dev-loop/keeper-ornate-build.log"
   ],
   "remaining": [
-    "Chóp/hoa văn nón đơn giản hơn sheet; chưa art final.",
-    "Bàn tay vẫn nắm, giáp vai chưa mềm khi nâng tay; hint khuỷu không giải quyết mọi biến dạng.",
-    "Capture là camera kiểm tra cận trong Player; chưa xác nhận đi/chạy/xoay liên tục hoặc cloth simulation.",
-    "Mặt dưới nón tối; texture ở ủng còn méo/mảng đen từ source trước."
+    "Nón đã có bố cục hoa văn/chóp/khoen nhưng nét và chất liệu còn đơn giản hơn reference; chưa art final.",
+    "Tay nắm, giáp vai và texture ủng còn lỗi từ trước; batch nón không sửa các phần này.",
+    "Camera kiểm tra cận, không chứng minh readability ở mọi khoảng cách hoặc hiệu năng nhiều NPC."
   ],
   "budget": {
-    "mac_build_bytes": 393318375,
-    "mac_build_delta_bytes": 159980,
+    "mac_build_bytes": 393833702,
+    "mac_build_delta_bytes": 515327,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
