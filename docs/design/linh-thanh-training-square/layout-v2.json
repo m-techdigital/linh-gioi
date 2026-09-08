@@ -1,0 +1,111 @@
+{
+  "status": "DESIGN_DRAFT_NOT_RUNTIME",
+  "units": "metres",
+  "axes": {
+    "x": "east",
+    "y": "up",
+    "z": "north"
+  },
+  "parent_world": "map.city.linh_thanh",
+  "bounds": {
+    "min": [
+      -20,
+      0,
+      -24
+    ],
+    "max": [
+      20,
+      0,
+      24
+    ]
+  },
+  "landmark": {
+    "position": [
+      0,
+      0,
+      0
+    ],
+    "total_height": 6.5,
+    "dais_radius": 2.5,
+    "dais_height": 0.8
+  },
+  "interaction_zone": {
+    "outer_radius": 7,
+    "touch_height_above_local_floor": 1.1
+  },
+  "circulation": {
+    "inner_radius": 7,
+    "outer_radius": 11,
+    "obstacles_allowed": false
+  },
+  "approaches": [
+    {
+      "name": "arrival",
+      "position": [
+        0,
+        0,
+        -24
+      ],
+      "width": 12
+    },
+    {
+      "name": "market",
+      "position": [
+        -20,
+        0,
+        0
+      ],
+      "width": 8
+    },
+    {
+      "name": "city",
+      "position": [
+        0,
+        0,
+        24
+      ],
+      "width": 10
+    },
+    {
+      "name": "tea",
+      "position": [
+        20,
+        0,
+        4
+      ],
+      "width": 6
+    }
+  ],
+  "perimeter_anchors": [
+    {
+      "name": "tea_pavilion",
+      "position": [
+        15,
+        0,
+        4
+      ]
+    },
+    {
+      "name": "craft_stall",
+      "position": [
+        14,
+        0,
+        16
+      ]
+    },
+    {
+      "name": "guide_thanh_huyen",
+      "position": [
+        -5,
+        0,
+        -12
+      ]
+    }
+  ],
+  "camera_reviews": [
+    "south_arrival",
+    "touch_point",
+    "tea_to_square"
+  ],
+  "note": "Dữ liệu thiết kế local, chưa phải scene loader hoặc thay đổi schema/protocol. Không dùng collider lõi làm trigger chạm của đài lớn."
+}
