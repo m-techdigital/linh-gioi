@@ -13,23 +13,25 @@ MonoBehaviour:
   m_Name:
   m_EditorClassIdentifier: LinhGioi.Foundation.Editor::LinhGioi.Foundation.Editor.NpcAppearanceRecipe
   Slots:
-  - UpperBody
-  - Boots
-  - LowerBody
-  - Gloves
   - Head
   - Hair
-  - Shoulders
+  - UpperBody
+  - LowerBody
+  - Gloves
+  - Boots
   - Accessories
+  - Shoulders
+  - Cape
   Parts:
-  - {fileID: 4300000, guid: 9a7de4e1d4e2e4e71913bd211b7ddffc, type: 2}
-  - {fileID: 4300000, guid: 5106258fd665b4cb4a01ad2119d85907, type: 2}
-  - {fileID: 4300000, guid: d7f17f04b549046f09247264be0df0c5, type: 2}
-  - {fileID: 4300000, guid: 6f5c5166f7e404624b565afecf386de9, type: 2}
   - {fileID: 4300000, guid: b5eb20a1b8a32457f990174aa7f1da43, type: 2}
   - {fileID: 4300000, guid: 439747d45f14e4c668afd7af7b1f0db3, type: 2}
-  - {fileID: 4300000, guid: 13a8f69aebccb44c8a855b3407181a55, type: 2}
+  - {fileID: 4300000, guid: 9a7de4e1d4e2e4e71913bd211b7ddffc, type: 2}
+  - {fileID: 4300000, guid: d7f17f04b549046f09247264be0df0c5, type: 2}
+  - {fileID: 4300000, guid: 6f5c5166f7e404624b565afecf386de9, type: 2}
+  - {fileID: 4300000, guid: 5106258fd665b4cb4a01ad2119d85907, type: 2}
   - {fileID: 4300000, guid: aeed141de030747178ae435aed9da7cc, type: 2}
+  - {fileID: 4300000, guid: 13a8f69aebccb44c8a855b3407181a55, type: 2}
+  - {fileID: 4300000, guid: 7d8425e97189c4bf6a3f54c1f9caf0b6, type: 2}
   Materials:
   - {fileID: 2100000, guid: 3ef868d46cbd24f5fb0cec70e7e420b5, type: 2}
   - {fileID: 2100000, guid: d11b9199fc1394bb787627c88f94a1e7, type: 2}
@@ -89,16 +91,21 @@ MonoBehaviour:
   - thumb_02_r
   - thumb_03_r
   - thumb_04_leaf_r
+  - drape_cape_0
+  - drape_cape_1
+  - drape_cape_2
   - thigh_l
   - calf_l
   - foot_l
   - ball_l
   - ball_leaf_l
+  - drape_hem_l
   - thigh_r
   - calf_r
   - foot_r
   - ball_r
   - ball_leaf_r
+  - drape_hem_r
   Bounds:
-    m_Center: {x: 0.000000004656613, y: -0.00006246567, z: 0.008618342}
-    m_Extent: {x: 0.008000208, y: 0.0039679287, z: 0.009624155}
+    m_Center: {x: 0.000000004656613, y: 0.00020906387, z: 0.008618342}
+    m_Extent: {x: 0.008000208, y: 0.0031803697, z: 0.009624155}

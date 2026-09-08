@@ -188,6 +188,7 @@ namespace LinhGioi.UI
             {
                 _capturing = true;
                 yield return new WaitForSeconds(1f);
+                yield return VisualRuntimeEvidenceRunner.ResizePlayerViewport(1920, 1080);
                 var playerQualityDirectory = Path.GetFullPath(args[playerQualityIndex + 1]);
                 Directory.CreateDirectory(playerQualityDirectory);
                 GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;

@@ -76,6 +76,8 @@ namespace LinhGioi.Foundation.Editor
                 animator.runtimeAnimatorController = AssetDatabase.LoadAssetAtPath<RuntimeAnimatorController>(Root + "ArrivalLocomotion.controller");
                 if (animator.runtimeAnimatorController == null || !animator.isHuman)
                     throw new InvalidOperationException("NPC bake requires the shared Humanoid locomotion controller.");
+                if (recipe.BoneNames.Contains("drape_cape_0"))
+                    instance.AddComponent<WardrobeDrapeMotion>();
                 PrefabUtility.SaveAsPrefabAsset(instance, prefabPath);
                 AssetDatabase.SaveAssets();
                 var dependencies = AssetDatabase.GetDependencies(prefabPath, true);

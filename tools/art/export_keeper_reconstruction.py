@@ -18,31 +18,11 @@ rig = bpy.data.objects['Armature']
 for bone in rig.pose.bones:
     bone.matrix_basis.identity()
 bpy.context.view_layer.update()
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.dont_write_bytecode = True
+from wardrobe_master import join_master, save_joined
 if args.wardrobe_master:
-    parts = [obj for obj in bpy.context.scene.objects if obj.type == 'MESH' and obj.asset_data is not None]
-    assert parts and all(obj.data.attributes.get('appearance_slot') is not None for obj in parts)
-    for part in parts:
-        bpy.context.view_layer.objects.active = part
-        for modifier in list(part.modifiers):
-            if modifier.type != 'ARMATURE':
-                bpy.ops.object.modifier_apply(modifier=modifier.name)
-    bpy.ops.object.select_all(action='DESELECT')
-    for part in parts:
-        part.select_set(True)
-    bpy.context.view_layer.objects.active = parts[0]
-    bpy.ops.object.join()
-    mesh = bpy.context.object
-    mesh.name = 'Keeper Macro Reconstruction'
-    old_materials = list(mesh.data.materials)
-    body = bpy.data.materials['Keeper Reconstruction']
-    face = bpy.data.materials['Keeper Reconstruction Face']
-    assert all(old_materials[polygon.material_index] in (body, face) for polygon in mesh.data.polygons)
-    surface_ids = [0 if old_materials[polygon.material_index] == body else 1 for polygon in mesh.data.polygons]
-    mesh.data.materials.clear()
-    mesh.data.materials.append(body)
-    mesh.data.materials.append(face)
-    for polygon, surface in zip(mesh.data.polygons, surface_ids):
-        polygon.material_index = surface
+    mesh = join_master(rig, 'Keeper Macro Reconstruction')
 else:
     mesh = bpy.data.objects['Keeper Macro Reconstruction']
 mesh.data.calc_loop_triangles()
@@ -53,14 +33,7 @@ assert len(mesh.data.uv_layers) == 1
 assert all(1 <= len(v.groups) <= 4 and abs(sum(g.weight for g in v.groups) - 1) < 1e-5
            for v in mesh.data.vertices)
 if args.joined_source:
-    assert args.joined_source.resolve() != args.source.resolve(), 'Never overwrite editable source'
-    args.joined_source.parent.mkdir(parents=True, exist_ok=True)
-    for obj in list(bpy.context.scene.objects):
-        if obj.type == 'MESH' and obj != mesh:
-            bpy.data.objects.remove(obj, do_unlink=True)
-    mesh.asset_clear()
-    bpy.context.preferences.filepaths.save_version = 0
-    bpy.ops.wm.save_as_mainfile(filepath=str(args.joined_source.resolve()), compress=True)
+    save_joined(mesh, args.source, args.joined_source)
 args.output.mkdir(parents=True, exist_ok=True)
 for name in ['KeeperReconstructionAlbedo', 'KeeperReconstructionFace']:
     image = bpy.data.images[name]

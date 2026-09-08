@@ -72,16 +72,21 @@ MonoBehaviour:
   - thumb_02_r
   - thumb_03_r
   - thumb_04_leaf_r
+  - drape_cape_0
+  - drape_cape_1
+  - drape_cape_2
   - thigh_l
   - calf_l
   - foot_l
   - ball_l
   - ball_leaf_l
+  - drape_hem_l
   - thigh_r
   - calf_r
   - foot_r
   - ball_r
   - ball_leaf_r
+  - drape_hem_r
   Bounds:
-    m_Center: {x: 0.000000004656613, y: -0.00006246567, z: 0.008618342}
-    m_Extent: {x: 0.008000208, y: 0.0039679287, z: 0.009624155}
+    m_Center: {x: 0.000000004656613, y: 0.00020906387, z: 0.008618342}
+    m_Extent: {x: 0.008000208, y: 0.0031803697, z: 0.009624155}

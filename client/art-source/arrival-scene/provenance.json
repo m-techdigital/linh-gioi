@@ -1,16 +1,17 @@
 {
-  "source_sha256": "e790c03204484dd65447c6620169c8354268b2b9695bfecc551379f4468c2868",
-  "fbx_sha256": "6dc68f5d6fbae701e3187ad9593091b2aee035385c409c7f9895f001449da279",
-  "triangles": 81842,
-  "vertices": 41444,
-  "bones": 65,
+  "source_sha256": "bd20d7d4a840c06103375fd90315cefdda485b4607b51b6bd14c03f76986e91f",
+  "fbx_sha256": "c0a6913168663ac92e0f5a8990d86b6e1ab258b07674b8c84d948ca5b9894707",
+  "triangles": 92328,
+  "vertices": 46814,
+  "bones": 70,
   "materials": 2,
-  "authoring_material_sections": 8,
+  "authoring_material_sections": 9,
   "slots": [
     "Head",
     "Hair",
     "UpperBody",
     "LowerBody",
+    "Cape",
     "Gloves",
     "Boots",
     "Shoulders",
@@ -28,17 +29,15 @@
   },
   "face_sha256": "c0d47a113d881dc05e425754abee7fe3663fb10d466a25972668be7eaa9374e7",
   "runtime_verified": true,
-  "new_textures": [
-    "ArrivalFace.png"
-  ],
+  "new_textures": [],
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
-  "unity_vertices": 45493,
+  "unity_vertices": 50803,
   "source_origin": "Quaternius CC0 arrival study; shared Keeper body atlas/rig provenance in ../gate-keeper/; new generated player face described in SOURCE.md and face-prompt.txt.",
   "evidence": [
-    "build/visual-evidence/ensemble-solid-desktop/review.json",
-    "build/visual-evidence/ensemble-city-desktop/review.json",
-    "build/dev-loop/ensemble-solid-player-unity.log",
-    "build/dev-loop/ensemble-solid-build-unity.log"
+    "build/visual-evidence/arrival-drape-desktop/review.json",
+    "build/dev-loop/arrival-drape-import-unity.log",
+    "build/dev-loop/arrival-drape-build-unity.log",
+    "build/dev-loop/arrival-drape-desktop.log"
   ],
   "authoring_regeneration": "build/asset-staging/player-neck-runtime/full-rebuild/player-receipt.json",
   "not_claimed": [
@@ -48,11 +47,11 @@
     "GPU/FPS budget",
     "animation tóc vật lý"
   ],
-  "runtime_mesh_vertices": 45493,
+  "runtime_mesh_vertices": 50803,
   "remaining": [
-    "Giáp vai vẫn góc cạnh và phom tổng thể chưa sát demo; chưa art final.",
-    "Đai/vạt hông và phụ kiện đã rõ hơn nhưng chi tiết dùng nhiều geometry, chưa tối ưu bằng bake.",
-    "Chưa có thương theo sheet, chưa mọi động tác/FPS/mobile; không mở gameplay mới."
+    "Vạt trước còn phồng/cuộn khi nâng gối; chưa đạt chuyển động vải final.",
+    "Điểm nối choàng, cổ áo, tóc và tay vẫn cần art pass tổng thể theo storyboard.",
+    "Không có va chạm vải vật lý; không claim mọi động tác, FPS hoặc đông NPC."
   ],
   "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes.",
   "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV.",
@@ -61,10 +60,17 @@
   "drape_pipeline": "refine_cloth_drape.py: smooth cloth, continuous back profile/ivory UV, nearest-triangle interpolated cuff weights; same geometry count/atlas/slots.",
   "robe_pipeline": "pack_robe_panels.py: migration from f5f5a2e, shared robe tile, bracer unwrap, quiet trousers and continuous bound tabard joined to UpperBody.",
   "budget": {
-    "mac_build_bytes": 398825447,
-    "mac_build_delta_bytes": 2807409,
+    "mac_build_bytes": 399363499,
+    "mac_build_delta_bytes": 538052,
+    "drape_only_delta_bytes": 7848,
+    "baseline_commit": "e2f0282",
     "device_fps_profiled": false
   },
   "ensemble_pipeline": "remake_ceremonial_ensemble.py: migration from bed6df9, closed layered shoulders, waist relief/cords/pendants, hip drapes; same rig/atlas, Accessories semantic slot. Procedural study, not production authoring formula.",
-  "shared_relief_evidence": "build/visual-evidence/wardrobe-relief-desktop/review.json"
+  "shared_relief_evidence": "build/visual-evidence/wardrobe-relief-desktop/review.json",
+  "editable_source": "ArrivalWardrobe.blend",
+  "derived_source": "ArrivalScene.blend",
+  "derived_source_sha256": "7d53adc1d753261036998d182deed75ce17d7d535edde81c4b1b65201e72f703",
+  "wardrobe_pipeline": "Master14 món/9slots: author_arrival_wardrobe.py migration từ e2f0282 → rig_arrival_drapery.py trên candidate65bones. Chỉnh master; export_arrival_scene.py --wardrobe-master --joined-source tạo FBX và flat dẫn xuất. Không rerun migration trên master70bones.",
+  "secondary_motion": "WardrobeDrapeMotion:65 xương Humanoid không đổi, thêm3cape+2hem; điều khiển sau Animator, không mô phỏng va chạm vải."
 }

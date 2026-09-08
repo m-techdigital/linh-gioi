@@ -918,6 +918,54 @@ Mesh:
   - e00: 1
     e01: 0
     e02: 0
+    e03: 0
+    e10: 0
+    e11: 0.14629622
+    e12: -0.98924094
+    e13: 0.014615684
+    e20: 0
+    e21: 0.98924136
+    e22: 0.14629623
+    e23: -0.0043854034
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  - e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0.14629622
+    e12: -0.9892411
+    e13: 0.01222328
+    e20: 0
+    e21: 0.9892414
+    e22: 0.14629622
+    e23: -0.0043854043
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  - e00: 1
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0.14629626
+    e12: -0.9892411
+    e13: 0.009830873
+    e20: 0
+    e21: 0.9892414
+    e22: 0.14629628
+    e23: -0.0043854048
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  - e00: 1
+    e01: 0
+    e02: 0
     e03: 0.000983024
     e10: 0
     e11: 0.00023326276
@@ -991,6 +1039,22 @@ Mesh:
     e21: 0.0000005252231
     e22: 1
     e23: -0.00015199912
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  - e00: 1
+    e01: 0
+    e02: 0
+    e03: 0.0011999999
+    e10: 0
+    e11: 0.000000002633894
+    e12: -1
+    e13: 0.005499999
+    e20: 0
+    e21: 0.9999974
+    e22: 0.0000000026338907
+    e23: 2.848457e-10
     e30: 0
     e31: 0
     e32: 0
@@ -1075,6 +1139,22 @@ Mesh:
     e31: 0
     e32: 0
     e33: 1
+  - e00: 1
+    e01: 0
+    e02: 0
+    e03: -0.0011999999
+    e10: 0
+    e11: 0.000000002633894
+    e12: -1
+    e13: 0.005499999
+    e20: 0
+    e21: 0.9999974
+    e22: 0.0000000026338907
+    e23: 2.848457e-10
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
   m_BoneNameHashes:
   m_RootBoneNameHash: 0
   m_BonesAABB:
@@ -1092,6 +1172,16 @@ Mesh:
     m_Max: {x: 0.00071227644, y: 0.0019973796, z: -0.00097539043}
   - m_Min: {x: -0.00072350085, y: -0.0000100284815, z: -0.0016452619}
     m_Max: {x: 0.00072368584, y: 0.0021977667, z: 0.00107547}
+  - m_Min: {x: Infinity, y: Infinity, z: Infinity}
+    m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
+  - m_Min: {x: Infinity, y: Infinity, z: Infinity}
+    m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
+  - m_Min: {x: Infinity, y: Infinity, z: Infinity}
+    m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
+  - m_Min: {x: Infinity, y: Infinity, z: Infinity}
+    m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
+  - m_Min: {x: Infinity, y: Infinity, z: Infinity}
+    m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
   - m_Min: {x: Infinity, y: Infinity, z: Infinity}
     m_Max: {x: -Infinity, y: -Infinity, z: -Infinity}
   - m_Min: {x: Infinity, y: Infinity, z: Infinity}
@@ -1331,8 +1421,8 @@ Mesh:
       m_BitSize: 0
     m_UVInfo: 0
   m_LocalAABB:
-    m_Center: {x: 0.000000003259629, y: 0.00023003836, z: 0.009148418}
-    m_Extent: {x: 0.007993123, y: 0.002119962, z: 0.009068417}
+    m_Center: {x: 0.000000003259629, y: 0.0007345894, z: 0.009148418}
+    m_Extent: {x: 0.007993123, y: 0.002530308, z: 0.009068417}
   m_MeshUsageFlags: 0
   m_CookingOptions: 30
   m_BakedConvexCollisionMesh:

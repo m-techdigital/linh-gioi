@@ -9,21 +9,31 @@ import bpy
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--source', type=Path, default=Path(__file__).resolve().parents[2] / 'client/art-source/arrival-scene/ArrivalScene.blend')
+parser.add_argument('--wardrobe-master', action='store_true')
+parser.add_argument('--joined-source', type=Path)
 parser.add_argument('--output', type=Path, required=True)
 args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
 bpy.ops.wm.open_mainfile(filepath=str(args.source.resolve()))
 rig = bpy.data.objects['Armature']
-mesh = bpy.data.objects['Arrival Scene Reconstruction']
 for bone in rig.pose.bones:
     bone.matrix_basis.identity()
 bpy.context.view_layer.update()
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.dont_write_bytecode = True
+from wardrobe_master import join_master, save_joined
+mesh = join_master(rig, 'Arrival Scene Reconstruction') if args.wardrobe_master else bpy.data.objects['Arrival Scene Reconstruction']
+
 mesh.data.calc_loop_triangles()
-assert len(rig.data.bones) == 65
+garment_bones = {b.name for b in rig.data.bones if b.name.startswith('drape_')}
+assert garment_bones in (set(), {'drape_cape_0', 'drape_cape_1', 'drape_cape_2', 'drape_hem_l', 'drape_hem_r'})
+assert len(rig.data.bones) - len(garment_bones) == 65
 assert len(mesh.data.loop_triangles) > 0
 assert len(mesh.data.materials) == 2
 assert len(mesh.data.uv_layers) == 1
 assert all(1 <= len(v.groups) <= 4 and abs(sum(g.weight for g in v.groups) - 1) < 1e-5
            for v in mesh.data.vertices)
+if args.joined_source:
+    save_joined(mesh, args.source, args.joined_source)
 args.output.mkdir(parents=True, exist_ok=True)
 # Keep the shared wardrobe atlas; the continuous player head owns its facial albedo.
 assert tuple(bpy.data.images['KeeperReconstructionAlbedo'].size) == (4096, 2048)
