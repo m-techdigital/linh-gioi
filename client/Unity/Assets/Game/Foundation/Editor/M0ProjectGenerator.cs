@@ -84,6 +84,10 @@ namespace LinhGioi.Foundation.Editor
 
             // Native-resolution art review needs antialiased mesh edges in the active URP asset.
             asset.msaaSampleCount = 4;
+            // One 50m cascade undersamples the nearby actors and produces striped self-shadows.
+            // Keep the same 2048 atlas, allocating a cascade to the first few metres.
+            asset.shadowCascadeCount = 4;
+            asset.cascade4Split = new Vector3(0.067f, 0.2f, 0.467f);
             EnsureUrpDefaultRenderer(asset);
             // Runtime daylight requests soft shadows; the generated asset must retain their shader support.
             var serializedAsset = new SerializedObject(asset);

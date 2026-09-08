@@ -31,6 +31,12 @@ namespace LinhGioi.UI
             _actor = actor;
             if (!Debug.isDebugBuild || _camera == null || _actor == null || !_actor.isHuman)
                 throw new InvalidOperationException("Character review requires a development Player and actual Humanoid actor.");
+            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-character-shadow-diagnostic") >= 0)
+            {
+                foreach (var light in FindObjectsByType<Light>(FindObjectsSortMode.None))
+                    light.shadows = LightShadows.None;
+                Debug.Log("LGO_CHARACTER_SHADOW_DIAGNOSTIC light_shadows=none not_visual_pass=true");
+            }
             foreach (var renderer in FindObjectsByType<Renderer>(FindObjectsSortMode.None))
                 renderer.enabled = renderer.transform.IsChildOf(actor.transform);
             foreach (var renderer in actor.GetComponentsInChildren<SkinnedMeshRenderer>())
