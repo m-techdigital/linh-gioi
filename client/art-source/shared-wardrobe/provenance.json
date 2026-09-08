@@ -19,10 +19,10 @@
     "evidence": "build/visual-evidence/wardrobe-surface-desktop/review.json"
   },
   "surface_mask": {
-    "generator": "bake_wardrobe_surface_mask.py, metallic hue segmentation excluding face/hair and low-saturation ivory",
+    "generator": "bake_wardrobe_surface_mask.py: owned cloth smoothness0.10, gold up to0.58, unowned0.17; hue segmentation is a material approximation",
     "runtime_format": "1024x512 BC7, R metallic A smoothness",
-    "evidence": "build/visual-evidence/robe-fabric-desktop/review.json",
-    "sha256": "60fbb72859f5e83c5d8c94363fdca671adaaaf86e2506de6aed7f3d857cd3807"
+    "evidence": "build/visual-evidence/wardrobe-relief-desktop/review.json",
+    "sha256": "5492906e4d9668bc4a128b4765757e0379c235d83ef1d24d24643d1f63219efc"
   },
   "cloth": {
     "generator": "builtin imagegen",
@@ -45,5 +45,23 @@
     "pipeline": "tools/art/pack_robe_panels.py",
     "evidence": "build/visual-evidence/robe-fabric-desktop/review.json",
     "scope": "Albedo for real3D wardrobe, not a billboard; art remaining in review."
+  },
+  "relief_normal": {
+    "generator": "bake_wardrobe_relief.py: shallow gold-coverage height field, masked gradients → tangent normal; not high-poly sculpt bake",
+    "source_albedo_sha256": "f2ceb0a455c3e299041a2f0ade7c1e2d7b53103450656f80d49c1747803b8ca8",
+    "sha256": "efe23eaf17af7e3e6542412d200c8cee01b9bf5338a0d65c48f4025b4415a7c7",
+    "png_bytes": 248432,
+    "runtime_size": [
+      2048,
+      1024
+    ],
+    "runtime_format": "BC7 with mipmaps",
+    "runtime_texture_payload_estimate_bytes": 2796240,
+    "estimate_note": "128-bit4×4 blocks and complete mip chain, excludes driver/object overhead; not measured VRAM",
+    "bump_scale": 0.65,
+    "reuse": "same material/normal shared by Keeper and arrival player; no added geometry or renderer",
+    "build_delta_bytes": 2807409,
+    "evidence": "build/visual-evidence/wardrobe-relief-desktop/review.json",
+    "remaining": "Subtle relief only; does not repair silhouette, cloth intersections or baked-in lighting in albedo."
   }
 }

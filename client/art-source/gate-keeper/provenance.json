@@ -59,8 +59,8 @@
     "Chưa FPS/mobile/gameplay-camera cho batch này. Build compile đầu18 cảnh báoCS0618 cũ; incremental cuối0 cảnh báo không có nghĩa đã sửa chúng."
   ],
   "budget": {
-    "mac_build_bytes": 396018038,
-    "mac_build_delta_bytes": -45501,
+    "mac_build_bytes": 398825447,
+    "mac_build_delta_bytes": 2807409,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
@@ -77,5 +77,6 @@
   "wardrobe_pipeline": "KeeperWardrobe.blend: editable semantic objects and3continuous robe panels; height-continuous pelvis/thigh support avoids inherited donor weight islands. preview_wardrobe.py before export_keeper_reconstruction.py --wardrobe-master. KeeperReconstruction.blend is joined derived copy.",
   "source_file": "KeeperWardrobe.blend",
   "derived_source_sha256": "fab4bb04397f3d50bb54c8a7229f2fba63e3175d6712a86c4ddce06a1f2c8413",
-  "upper_wardrobe_pipeline": "shape_keeper_upper_wardrobe.py migration from045a7de: curved3-tier shoulders, billowed sleeves, remove retained waist flare, quad cape fitted to shirt and validated cape envelope; skirt root overlaps belt,632 occluded trouser faces removed. Export master directly; --joined-source writes the derived flat model."
+  "upper_wardrobe_pipeline": "shape_keeper_upper_wardrobe.py migration from045a7de: curved3-tier shoulders, billowed sleeves, remove retained waist flare, quad cape fitted to shirt and validated cape envelope; skirt root overlaps belt,632 occluded trouser faces removed. Export master directly; --joined-source writes the derived flat model.",
+  "shared_relief_evidence": "build/visual-evidence/wardrobe-relief-desktop/review.json"
 }

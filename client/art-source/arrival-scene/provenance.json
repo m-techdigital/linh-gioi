@@ -61,9 +61,10 @@
   "drape_pipeline": "refine_cloth_drape.py: smooth cloth, continuous back profile/ivory UV, nearest-triangle interpolated cuff weights; same geometry count/atlas/slots.",
   "robe_pipeline": "pack_robe_panels.py: migration from f5f5a2e, shared robe tile, bracer unwrap, quiet trousers and continuous bound tabard joined to UpperBody.",
   "budget": {
-    "mac_build_bytes": 396170627,
-    "mac_build_delta_bytes": 1169857,
+    "mac_build_bytes": 398825447,
+    "mac_build_delta_bytes": 2807409,
     "device_fps_profiled": false
   },
-  "ensemble_pipeline": "remake_ceremonial_ensemble.py: migration from bed6df9, closed layered shoulders, waist relief/cords/pendants, hip drapes; same rig/atlas, Accessories semantic slot. Procedural study, not production authoring formula."
+  "ensemble_pipeline": "remake_ceremonial_ensemble.py: migration from bed6df9, closed layered shoulders, waist relief/cords/pendants, hip drapes; same rig/atlas, Accessories semantic slot. Procedural study, not production authoring formula.",
+  "shared_relief_evidence": "build/visual-evidence/wardrobe-relief-desktop/review.json"
 }
