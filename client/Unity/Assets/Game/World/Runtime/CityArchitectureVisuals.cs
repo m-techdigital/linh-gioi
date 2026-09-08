@@ -15,7 +15,7 @@ namespace LinhGioi.World
         private Matrix4x4 _module = Matrix4x4.identity;
         internal void BeginModule(Vector3 centre, Quaternion rotation) => _module = Matrix4x4.TRS(centre, rotation, Vector3.one) * Matrix4x4.Translate(-centre);
         internal void EndModule() => _module = Matrix4x4.identity;
-        private Material _gold, _wood, _navy, _ivory, _window, _teal, _leaf, _pink, _bark, _pineLeaf;
+        private Material _gold, _wood, _navy, _ivory, _window, _teal, _leaf, _pink, _bark, _pineLeaf, _stone, _stoneLight;
         private int _treeTriangles;
         private Texture2D _woodTexture, _plasterTexture, _tileTexture;
         internal Texture2D PlasterTexture => _plasterTexture;
@@ -33,6 +33,8 @@ namespace LinhGioi.World
             _pink = Surface("Blossom petals", new Color(.48f,.23f,.31f));
             _bark = Surface("Garden bark", new Color(.70f,.73f,.67f));
             _pineLeaf = Surface("Pine needles", new Color(.07f,.16f,.105f));
+            _stone = Surface("Weathered grey masonry",new Color(.38f,.41f,.40f));
+            _stoneLight = Surface("Worn stone coping",new Color(.55f,.56f,.52f));
             _woodTexture = Resources.Load<Texture2D>("LGOCitySurfaces/AgedTimber");
             if (_woodTexture == null) throw new System.InvalidOperationException("Missing shared city timber albedo.");
             _wood.mainTexture = _woodTexture;
@@ -40,6 +42,8 @@ namespace LinhGioi.World
             _plasterTexture = SurfaceTexture(false);
             _tileTexture = SurfaceTexture(true);
             _ivory.mainTexture = _plasterTexture;
+            _stone.mainTexture = _plasterTexture;
+            _stoneLight.mainTexture = _plasterTexture;
             _navy.mainTexture = _tileTexture;
             _cube = Primitive(PrimitiveType.Cube);
             _sphere = FoliageMesh(false); _meshes.Add(_sphere);
@@ -72,6 +76,55 @@ namespace LinhGioi.World
         {
             var delta=b-a;
             Part(_cube,material,(a+b)*.5f,new Vector3(width,delta.magnitude,width),Quaternion.FromToRotation(Vector3.up,delta));
+        }
+
+        // Physical courses and projecting caps reuse the city stone albedo.
+        // These are visual shells: the world retains its original collision boxes.
+        internal void Masonry(Vector3 centre,Vector3 size,bool piers=false)
+        {
+            var alongZ=size.z>size.x;
+            var length=alongZ?size.z:size.x;
+            var depth=alongZ?size.x:size.z;
+            var rotation=alongZ?Quaternion.Euler(0,90,0):Quaternion.identity;
+            Vector3 At(float x,float y,float z)=>centre+rotation*new Vector3(x,y,z);
+            void Block(Material m,float x,float y,float z,Vector3 dimensions)
+                =>Part(_cube,m,At(x,y,z),dimensions,rotation);
+            // Inset mortar core closes the joints without flattening the stone face relief.
+            Block(_stone,0,0,0,new Vector3(length,size.y,Mathf.Max(.02f,depth-.025f)));
+            var rows=Mathf.Max(1,Mathf.CeilToInt(size.y/.3f));
+            var course=size.y/rows;
+            for(var row=0;row<rows;row++)
+            {
+                var cursor=-length*.5f;
+                while(cursor<length*.5f-.001f)
+                {
+                    var width=Mathf.Min(row%2==1 && cursor==-length*.5f?.44f:.88f,length*.5f-cursor);
+                    Block(_stone,cursor+width*.5f,-size.y*.5f+(row+.5f)*course,0,
+                        new Vector3(Mathf.Max(.01f,width-.016f),course-.012f,depth));
+                    cursor+=width;
+                }
+            }
+            var capCount=Mathf.CeilToInt(length/1.1f);var capWidth=length/capCount;
+            for(var i=0;i<capCount;i++)
+                Block(_stoneLight,-length*.5f+(i+.5f)*capWidth,size.y*.5f+.035f,0,
+                    new Vector3(capWidth-.01f,.07f,depth+.07f));
+            if(!piers)return;
+            var spans=Mathf.Max(1,Mathf.CeilToInt(length/2.8f));
+            for(var i=0;i<=spans;i++)
+            {
+                var x=-length*.5f+i*length/spans;
+                Block(_stoneLight,x,0,0,new Vector3(.29f,size.y+.09f,depth+.10f));
+                Block(_stone,x,-size.y*.5f+.09f,0,new Vector3(.38f,.18f,depth+.19f));
+                Block(_stoneLight,x,size.y*.5f+.115f,0,new Vector3(.39f,.14f,depth+.20f));
+            }
+        }
+
+        internal void StoneGatePost(Vector3 centre)
+        {
+            Masonry(centre,new Vector3(.8f,4.6f,.8f));
+            Box(_stone,centre+Vector3.down*2.03f,new Vector3(1.02f,.54f,1.02f));
+            Box(_stoneLight,centre+Vector3.down*1.73f,new Vector3(1.12f,.12f,1.12f));
+            Box(_stoneLight,centre+Vector3.up*2.18f,new Vector3(1.03f,.15f,1.03f));
         }
 
         internal void Roof(Vector3 eave, Vector3 scale)

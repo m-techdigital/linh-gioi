@@ -90,7 +90,8 @@ namespace LinhGioi.World
             {
                 for (var z = 0; z <= 12; z += 6)
                     CreateStreetHouse(new Vector3(side * 5.5f, 0f, z), 3.2f, walls, roof, trim);
-                Box("Gate post", new Vector3(side * 5.2f, 2.3f, -4f), new Vector3(0.8f, 4.6f, 0.8f), walls);
+                Box("Gate post", new Vector3(side * 5.2f, 2.3f, -4f), new Vector3(0.8f, 4.6f, 0.8f), walls).GetComponent<Renderer>().enabled=false;
+                _city.StoneGatePost(new Vector3(side*5.2f,2.3f,-4f));
                 Box("Boundary", new Vector3(side * 7f, 0.6f, 1.5f), new Vector3(0.2f, 1.2f, 27f), walls);
             }
             CreateForecourt(paving, walls, roof, trim);
@@ -236,7 +237,7 @@ namespace LinhGioi.World
             Box("Street module", centre + Vector3.up * height * 0.5f,
                 new Vector3(3f, height, 4.8f), walls, !scenery, house);
             CreateRoof(centre + Vector3.up * (height + 0.1f), roof, !scenery, house);
-            Box("Stone plinth", centre + Vector3.up * 0.15f, new Vector3(3.04f, 0.3f, 4.84f), roof, false, house);
+            _city.Masonry(centre+Vector3.up*.15f,new Vector3(3.04f,.3f,4.84f));
             Box("Timber eave band", centre + Vector3.up * (height - 0.08f), new Vector3(3.05f, 0.16f, 4.85f), trim, false, house);
             _city.House(centre, height);
             if (scenery) house.rotation = Quaternion.Euler(0f, centre.x < 0f ? 90f : -90f, 0f);
@@ -258,15 +259,24 @@ namespace LinhGioi.World
             // Same-height local extension: no map transition or invisible gate across the street.
             Box("Forecourt paving", new Vector3(0f, -0.1f, 21f), new Vector3(14f, 0.2f, 12f), paving).GetComponent<Renderer>().enabled = false;
             for (var side = -1; side <= 1; side += 2)
-                Box("Forecourt garden wall", new Vector3(side * 7f, 0.6f, 21f), new Vector3(0.2f, 1.2f, 12f), walls);
-            Box("Garden rear wall", new Vector3(0f, 0.9f, 27f), new Vector3(14f, 1.8f, 0.2f), walls);
+            {
+                Box("Forecourt garden wall", new Vector3(side * 7f, 0.6f, 21f), new Vector3(0.2f, 1.2f, 12f), walls).GetComponent<Renderer>().enabled=false;
+                _city.Masonry(new Vector3(side*7f,.6f,21f),new Vector3(.2f,1.2f,12f),true);
+            }
+            Box("Garden rear wall", new Vector3(0f, 0.9f, 27f), new Vector3(14f, 1.8f, 0.2f), walls).GetComponent<Renderer>().enabled=false;
+            _city.Masonry(new Vector3(0,.9f,27),new Vector3(14,1.8f,.2f),true);
             CreateStreetHouse(new Vector3(-5f, 0f, 20f), 2.6f, walls, roof, trim);
             CreateRoof(new Vector3(5f, 2.7f, 23f), roof);
             var timber = Material(Color.white);
             timber.mainTexture = _city.TimberTexture;
             CreatePavilionFrame(timber);
             CreatePavilionBench(timber);
-            Box("Garden bed", new Vector3(-1f, 0.15f, 25.5f), new Vector3(5f, 0.3f, 2.6f), walls);
+            Box("Garden bed", new Vector3(-1f, 0.15f, 25.5f), new Vector3(5f, 0.3f, 2.6f), walls).GetComponent<Renderer>().enabled=false;
+            for(var edge=-1;edge<=1;edge+=2)
+            {
+                _city.Masonry(new Vector3(-1,.12f,25.5f+edge*1.23f),new Vector3(5,.24f,.14f));
+                _city.Masonry(new Vector3(-1+edge*2.43f,.12f,25.5f),new Vector3(.14f,.24f,2.32f));
+            }
             Box("Garden soil", new Vector3(-1f, 0.305f, 25.5f), new Vector3(4.7f, 0.01f, 2.3f),
                 Material(new Color(0.19f, 0.22f, 0.14f)), false);
             Box("Forecourt pine collider", new Vector3(-1f,2.6f,25.5f), new Vector3(.65f,4.6f,.65f),trim)
