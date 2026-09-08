@@ -41,6 +41,7 @@ namespace LinhGioi.World
         private TextMesh[] _reservedLabels;
         private SpriteRenderer _stoneFocus;
         private Material _stoneSealMaterial;
+        private Material[] _stoneCrystalMaterials;
         private SpriteRenderer _keeperFocus;
         private bool _stoneReady;
         private float _stoneCompletedAt = -1f;
@@ -549,6 +550,9 @@ namespace LinhGioi.World
             _stoneFocus.transform.localScale = Vector3.one * (1.6f + progress * 0.8f);
             var flash = completion ? Mathf.Sin(progress * Mathf.PI) : 0f;
             _stoneSealMaterial.color = Color.Lerp(RuntimeArtCatalog.Gold, RuntimeArtCatalog.Text, flash);
+            var crystalGlow = new Color(0.025f, 0.15f, 0.27f) * (1f + flash * 3f);
+            foreach (var crystalMaterial in _stoneCrystalMaterials)
+                crystalMaterial.SetColor("_EmissionColor", crystalGlow);
             var color = Color.Lerp(RuntimeArtCatalog.Gold, RuntimeArtCatalog.Text, flash * 0.5f);
             color.a = completion ? 1f - progress : 1f;
             _stoneFocus.color = color;
@@ -561,6 +565,7 @@ namespace LinhGioi.World
             stone.name = "Blockout Stone";
             stone.transform.position = StonePoint;
             _stoneMesh = stone.GetComponent<MeshFilter>().sharedMesh;
+            _stoneCrystalMaterials = new[] { renderer.sharedMaterials[2], renderer.sharedMaterials[3] };
             var collider = stone.AddComponent<BoxCollider>();
             collider.center = Vector3.up * 0.75f;
             collider.size = new Vector3(0.65f, 1.5f, 0.65f);

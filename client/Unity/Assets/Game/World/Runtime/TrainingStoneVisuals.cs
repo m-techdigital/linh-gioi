@@ -5,13 +5,15 @@ using UnityEngine;
 namespace LinhGioi.World
 {
     /// <summary>
-    /// SCN-002 low, approachable crystal study from the v4 prop reference.
+    /// SCN-002 low crystal, carved bronze cradle and stepped antique plinth.
     /// One mesh / four shared opaque materials; no texture, particle or light allocation.
     /// The caller owns the generated mesh and materials, and may reuse them on other stones.
     /// Collider, resonance seals and interaction state remain owned by the world.
     /// </summary>
     public static class TrainingStoneVisuals
     {
+        // Whole carved assembly budget, replacing the earlier 300-triangle blockout.
+        public const int TriangleBudget = 2048;
         private const float CrystalRadius = 0.22f;
         public static Vector3 SealNormal(bool roadFace) => roadFace ? Vector3.left : Vector3.back;
         public static Vector3 SealCenter(bool roadFace) =>
@@ -32,6 +34,15 @@ namespace LinhGioi.World
                 materialFactory(new Color(0.075f, 0.43f, 0.78f)),
                 materialFactory(new Color(0.34f, 0.79f, 0.95f))
             };
+            renderer.sharedMaterials[1].SetFloat("_Metallic", 0.65f);
+            renderer.sharedMaterials[1].SetFloat("_Smoothness", 0.38f);
+            for (var i = 2; i < 4; i++)
+            {
+                var material = renderer.sharedMaterials[i];
+                material.SetFloat("_Smoothness", 0.72f);
+                material.EnableKeyword("_EMISSION");
+                material.SetColor("_EmissionColor", new Color(0.025f, 0.15f, 0.27f));
+            }
             return renderer;
         }
 
@@ -46,26 +57,29 @@ namespace LinhGioi.World
             shape.Band(0.29f, 0.19f, 0.23f, 0.21f, 0, true);
             shape.Crystal(Vector3.zero, CrystalRadius, 0.20f, 0.81f, 1.10f, 0f);
 
-            // Four sculpted bronze claws frame the blue body without covering its front seal.
+            // Continuous leaf-shaped bronze supports, broad at the shoulder and pointed above.
+            // Their diagonal placement leaves both existing seals fully exposed.
             for (var i = 0; i < 4; i++)
             {
                 var angle = (45f + i * 90f) * Mathf.Deg2Rad;
-                var radial = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
-                var foot = radial * 0.265f + Vector3.up * 0.17f;
-                var elbow = radial * 0.265f + Vector3.up * 0.32f;
-                var shoulder = radial * 0.218f + Vector3.up * 0.46f;
-                var tip = radial * 0.215f + Vector3.up * 0.54f;
-                shape.Beam(foot, elbow, 0.041f, 0.026f, 1);
-                shape.Beam(elbow, shoulder, 0.026f, 0.02f, 1);
-                shape.Beam(shoulder, tip, 0.02f, 0f, 1);
+                shape.Leaf(angle);
             }
-
-            // Attached satellites, not a huge floating ritual platform.
-            for (var i = 0; i < 3; i++)
+            // Asymmetric side shards read as part of the crystal assembly at gameplay scale.
+            for (var i = 0; i < 4; i++)
             {
-                var angle = (35f + i * 125f) * Mathf.Deg2Rad;
-                var center = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * 0.266f;
-                shape.Crystal(center, 0.047f, 0.18f, 0.34f + i * 0.035f, 0.46f + i * 0.025f, angle, 4);
+                var angle = (0f + i * 90f) * Mathf.Deg2Rad;
+                var center = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * 0.276f;
+                shape.Crystal(center, 0.048f, 0.68f, 0.82f + (i % 2) * 0.04f,
+                    0.96f + (i % 2) * 0.04f, angle, 5);
+            }
+            // Inlaid lozenges and raised molding on every face of the stone base.
+            for (var i = 0; i < 8; i++)
+            {
+                var angle = (i + 1) * Mathf.PI / 4f;
+                var normal = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
+                var across = new Vector3(-normal.z, 0f, normal.x);
+                var center = normal * 0.262f + Vector3.up * 0.135f;
+                shape.Diamond(center, across * 0.031f, Vector3.up * 0.024f, normal * 0.009f, 1);
             }
             return shape.Finish();
         }
@@ -77,6 +91,9 @@ namespace LinhGioi.World
 
             private void Triangle(Vector3 a, Vector3 b, Vector3 c, int material)
             {
+                foreach (var vertex in new[] { a, b, c })
+                    if (float.IsNaN(vertex.sqrMagnitude) || float.IsInfinity(vertex.sqrMagnitude))
+                        throw new InvalidOperationException("Training stone contains a non-finite vertex.");
                 var index = _vertices.Count;
                 _vertices.Add(a); _vertices.Add(b); _vertices.Add(c);
                 _triangles[material].Add(index);
@@ -124,10 +141,63 @@ namespace LinhGioi.World
                     var tip = center + new Vector3(radius * 0.12f, top, -radius * 0.09f);
                     var color = side == 2 || side == 5 ? 3 : 2;
                     Quad(lower, waist, waistNext, lowerNext, color);
-                    Quad(waist, upper, upperNext, waistNext, color);
+                    // A shallow ridge breaks the long flat prism into irregular mineral facets.
+                    var ridge = Vector3.Lerp(waist, upperNext, side % 2 == 0 ? 0.39f : 0.63f);
+                    var outward = Vector3.ProjectOnPlane(ridge - center, Vector3.up).normalized;
+                    ridge += outward * radius * (side % 2 == 0 ? 0.045f : 0f);
+                    Triangle(waist, upper, ridge, color);
+                    Triangle(upper, upperNext, ridge, side % 3 == 0 ? 3 : 2);
+                    Triangle(upperNext, waistNext, ridge, 2);
+                    Triangle(waistNext, waist, ridge, color);
+                    // Thin mineral seam, restricted to diagonal faces away from the spiral inlays.
+                    if (sides == 8 && side % 2 == 0)
+                    {
+                        var offset = outward * 0.0015f;
+                        Beam(waist + offset, ridge + offset, 0.0025f, 0.003f, 3);
+                        Beam(ridge + offset, upperNext + offset, 0.003f, 0.0015f, 3);
+                    }
                     Triangle(upper, tip, upperNext, side % 3 == 0 ? 3 : 2);
                     Triangle(center + Vector3.up * bottom, lower, lowerNext, 2);
                 }
+            }
+
+            public void Diamond(Vector3 center, Vector3 across, Vector3 up, Vector3 raised, int material)
+            {
+                var tip = center + raised;
+                Triangle(center - across, center + up, tip, material);
+                Triangle(center + up, center + across, tip, material);
+                Triangle(center + across, center - up, tip, material);
+                Triangle(center - up, center - across, tip, material);
+            }
+
+            public void Leaf(float angle)
+            {
+                var normal = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
+                var across = new Vector3(-normal.z, 0f, normal.x);
+                const int steps = 12;
+                Vector3 Center(float t) => normal * (0.24f + 0.045f * Mathf.Sin(t * Mathf.PI))
+                    + Vector3.up * Mathf.Lerp(0.17f, 0.67f, t);
+                float Width(float t) => 0.014f * (1f - t) + 0.076f * Mathf.Pow(Mathf.Max(0f, Mathf.Sin(t * Mathf.PI)), 1.3f);
+                for (var i = 0; i < steps; i++)
+                {
+                    var t = i / (float)steps;
+                    var next = (i + 1f) / steps;
+                    var c = Center(t); var d = Center(next);
+                    var a = c - across * Width(t); var b = c + across * Width(t);
+                    var e = d - across * Width(next); var f = d + across * Width(next);
+                    // Back, two folded front surfaces, and closed gold rim.
+                    var ridge = normal * 0.018f;
+                    Quad(a, e, d + ridge, c + ridge, 1);
+                    Quad(c + ridge, d + ridge, f, b, 1);
+                    Quad(b, f, e, a, 0);
+                    Beam(a + normal * 0.003f, e + normal * 0.003f, 0.006f, 0.005f, 1);
+                    Beam(b + normal * 0.003f, f + normal * 0.003f, 0.006f, 0.005f, 1);
+                }
+                // Dark inset with raised center jewel gives a carved, layered bronze surface.
+                Diamond(Center(0.56f) + normal * 0.02f, across * 0.045f,
+                    Vector3.up * 0.071f, normal * 0.006f, 0);
+                Diamond(Center(0.56f) + normal * 0.028f, across * 0.015f,
+                    Vector3.up * 0.035f, normal * 0.009f, 3);
             }
 
             public void Beam(Vector3 from, Vector3 to, float startWidth, float endWidth, int material)

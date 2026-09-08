@@ -147,6 +147,66 @@ namespace LinhGioi.UI
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            var stoneReviewIndex = Array.IndexOf(args, "--lgo-stone-quality-review");
+            if (stoneReviewIndex >= 0 && stoneReviewIndex + 1 < args.Length)
+            {
+                if (!Debug.isDebugBuild) throw new InvalidOperationException("Stone review requires a development Player.");
+                _capturing = true;
+                yield return VisualRuntimeEvidenceRunner.ResizePlayerViewport(1920, 1080);
+                var output = Path.GetFullPath(args[stoneReviewIndex + 1]);
+                Directory.CreateDirectory(output);
+                yield return new WaitForSeconds(1f);
+                yield return Capture(output, "arrival-gameplay");
+                // Establish the real prerequisite without rerunning unrelated dialogue layout probes.
+                _session.Open();
+                for (var step = 0; step < 3; step++) AdvanceDialogue();
+                if (!_session.Completed) throw new InvalidOperationException("Stone prerequisite incomplete.");
+                yield return WalkTo(new Vector3(0f, 0f, 2.5f));
+                yield return WalkTo(new Vector3(2.3f, 0f, 4f));
+                yield return new WaitForSeconds(.3f);
+                var stone = _world.transform.Find("Blockout Stone");
+                var mesh = stone.GetComponent<MeshFilter>().sharedMesh;
+                var materials = stone.GetComponent<Renderer>().sharedMaterials;
+                if (mesh.triangles.Length / 3 > TrainingStoneVisuals.TriangleBudget || mesh.bounds.size.y > 1.15f ||
+                    stone.GetComponent<BoxCollider>().size != new Vector3(.65f, 1.5f, .65f) || materials.Length != 4)
+                    throw new InvalidOperationException("Stone assembly exceeded its geometry, scale or collision budget.");
+                var idleEmission = materials[2].GetColor("_EmissionColor");
+                yield return Capture(output, "stone-nearby");
+                Submit(_interact);
+                // The world applies emission in LateUpdate; sample completed frames, not
+                // a coroutine resumed before that update after synchronous PNG capture.
+                var pulseDeadline = Time.realtimeSinceStartup + 3f;
+                do
+                {
+                    yield return new WaitForEndOfFrame();
+                    if (Time.realtimeSinceStartup > pulseDeadline) break;
+                } while (materials[2].GetColor("_EmissionColor").b <= idleEmission.b * 1.5f);
+                if (!_stoneCompleted || materials[2].GetColor("_EmissionColor").b <= idleEmission.b * 1.5f)
+                    throw new InvalidOperationException("Stone interaction did not pulse the crystal: completed=" + _stoneCompleted + " idle=" + idleEmission + " current=" + materials[2].GetColor("_EmissionColor"));
+                yield return Capture(output, "stone-pulse");
+                yield return new WaitForSeconds(1.4f);
+                yield return new WaitForEndOfFrame();
+                if (Vector4.Distance(materials[2].GetColor("_EmissionColor"), idleEmission) > .001f)
+                    throw new InvalidOperationException("Crystal failed to settle after completion.");
+                CheckCompletedStoneRepeat();
+                yield return Capture(output, "stone-settled");
+                yield return WalkTo(new Vector3(0f, 0f, 4f));
+                GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
+                _world.BeginArchitectureReview();
+                foreach (var label in _world.GetComponentsInChildren<TextMesh>(true))
+                    label.GetComponent<Renderer>().enabled = false;
+                for (var view = 0; view < 2; view++)
+                {
+                    var offset = view == 0 ? new Vector3(-1.1f, 1.1f, -1.5f) : new Vector3(-1.1f, 1.1f, 1.5f);
+                    Camera.main.transform.position = OnboardingBlockoutWorld.StonePoint + offset;
+                    Camera.main.transform.LookAt(OnboardingBlockoutWorld.StonePoint + Vector3.up * .53f);
+                    yield return Capture(output, "stone-inspection-" + view);
+                }
+                Debug.Log("LGO_STONE_QUALITY_CAPTURE_COMPLETE frames=6 triangles=" + mesh.triangles.Length / 3
+                    + " materials=4 pulse=true settled=true repeat_guard=true movement=true viewport=" + Screen.width + "x" + Screen.height);
+                Application.Quit(0);
+                yield break;
+            }
             var cityReviewIndex = Array.IndexOf(args, "--lgo-city-quality-review");
             if (cityReviewIndex >= 0 && cityReviewIndex + 1 < args.Length)
             {
@@ -688,7 +748,7 @@ namespace LinhGioi.UI
             var stoneMesh = _world.transform.Find("Blockout Stone").GetComponent<MeshFilter>().sharedMesh;
             var stoneCollider = _world.transform.Find("Blockout Stone").GetComponent<BoxCollider>();
             if (stoneMesh.bounds.size.y > 1.15f || stoneMesh.bounds.size.z < 0.55f ||
-                stoneMesh.triangles.Length / 3 > 300 ||
+                stoneMesh.triangles.Length / 3 > TrainingStoneVisuals.TriangleBudget ||
                 stoneCollider.size != new Vector3(0.65f, 1.5f, 0.65f))
                 throw new InvalidOperationException("Training stone must be a low broad volume within its unchanged collision footprint.");
             var frontSeal = _world.transform.Find("Blockout stone seal front");
