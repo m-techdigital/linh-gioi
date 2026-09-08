@@ -21,7 +21,19 @@
   "surface_mask": {
     "generator": "bake_wardrobe_surface_mask.py, metallic hue segmentation excluding face/hair and low-saturation ivory",
     "runtime_format": "1024x512 BC7, R metallic A smoothness",
-    "evidence": "build/visual-evidence/wardrobe-surface-desktop/review.json",
-    "sha256": "386ef41fb5cf6314070309e87dfd28c05769c601facb0f5d43fa7347ce770e50"
+    "evidence": "build/visual-evidence/cloth-envelope-desktop/review.json",
+    "sha256": "c5b59b1dd3816f8aa0f503a4a9a49f16bfdaad47b3c4e4df2200c9935aa7183d"
+  },
+  "cloth": {
+    "generator": "builtin imagegen",
+    "reference": "02_gate_keeper_character_sheet.png: ivory cloud brocade, navy/gold crossed lapel and broad belt; shared arrival palette.",
+    "assets": {
+      "ceremonial-torso-albedo.png": "b171048220d42a3d51c9191d820c39caa6588429127e3ee649ac848beb775dcb",
+      "ivory-brocade-albedo.png": "7033df2c36e245ecab2a3b7149c0d07f2ea68e24d6d755cab99b0abda6169f12"
+    },
+    "runtime_patches": "512px +32px gutter: torso x1152,y192; sleeves x0,y576; unchanged 4096x2048 shared atlas.",
+    "pipeline": "tools/art/pack_ceremonial_cloth.py",
+    "evidence": "build/visual-evidence/cloth-envelope-desktop/review.json",
+    "scope": "Albedo for 3D wardrobe, not character billboard. Art remaining listed in runtime review."
   }
 }
