@@ -68,27 +68,36 @@ namespace LinhGioi.World
             shape.Band(2.4f,.75f,2.05f,.8f,0,true);
             shape.Band(1.35f,.8f,1.35f,1.25f,0);
             shape.Band(1.35f,1.25f,1.15f,1.4f,1,true);
-            shape.Crystal(Vector3.zero,.9f,1.4f,5.1f,6.5f,0f);
+            // Landmark is a suspended tapered mineral, not the small street prism scaled up.
+            shape.LandmarkCrystal(Vector3.zero,1.04f,1.55f,6.5f,0f);
             for(var i=0;i<4;i++)
             {
                 var angle=(45f+i*90f)*Mathf.Deg2Rad;
-                shape.Leaf(angle,1.18f,.8f,3f,.34f);
-                var direction=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));
-                shape.Beam(direction*1.65f+Vector3.up*.8f,direction*1.25f+Vector3.up*1.8f,.18f,.13f,1);
+                shape.CradleArm(angle);
             }
             for(var i=0;i<6;i++)
             {
                 var angle=(i*60f+15f)*Mathf.Deg2Rad;
-                var center=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle))*1.4f;
-                var bottom=2.5f+(i%3)*.55f;
-                shape.Crystal(center,.18f,bottom,bottom+.65f,bottom+1.05f,angle,5);
+                var center=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle))*(1.64f+(i%2)*.12f);
+                var bottom=2.9f+(i%3)*.65f;
+                shape.LandmarkCrystal(center,.19f+(i%2)*.05f,bottom,bottom+1.15f,angle);
             }
             for(var i=0;i<8;i++)
             {
                 var angle=(i+1)*Mathf.PI/4f;
                 var normal=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));
-                shape.Diamond(normal*2.14f+Vector3.up*.43f,
-                    new Vector3(-normal.z,0,normal.x)*.22f,Vector3.up*.18f,normal*.05f,1);
+                var across=new Vector3(-normal.z,0,normal.x);
+                var center=normal*2.14f+Vector3.up*.43f;
+                shape.Diamond(center,across*.25f,Vector3.up*.19f,normal*.07f,1);
+                shape.Diamond(center+normal*.08f,across*.11f,Vector3.up*.09f,normal*.025f,3);
+                // Broad stone buttresses and gold borders under the cradle, leaving cardinal approaches open.
+                var foot=normal*1.55f+Vector3.up*.8f;
+                var shoulder=normal*1.22f+Vector3.up*1.65f;
+                shape.Beam(foot,shoulder,.28f,.21f,0);
+                shape.Beam(foot+across*.16f,shoulder+across*.13f,.04f,.035f,1);
+                shape.Beam(foot-across*.16f,shoulder-across*.13f,.04f,.035f,1);
+                var emblem=normal*1.44f+Vector3.up*1.23f;
+                shape.Diamond(emblem,across*.12f,Vector3.up*.21f,normal*.04f,1);
             }
             return shape.Finish();
         }
@@ -205,6 +214,65 @@ namespace LinhGioi.World
                     }
                     Triangle(upper, tip, upperNext, side % 3 == 0 ? 3 : 2);
                     Triangle(center + Vector3.up * bottom, lower, lowerNext, 2);
+                }
+            }
+
+            public void LandmarkCrystal(Vector3 center,float radius,float bottom,float top,float rotation)
+            {
+                // Offset, uneven rings create a double-ended silhouette and broad mineral facets.
+                var heights=new[]{0f,.18f,.52f,.77f,1f};
+                var radii=new[]{.10f,.66f,1f,.65f,0f};
+                var irregular=new[]{1f,.86f,1.08f,.94f,1.02f,.89f,1.06f,.92f};
+                Vector3 Point(int ring,int side)
+                {
+                    var t=heights[ring];
+                    var h=bottom+(top-bottom)*t;
+                    if(ring>0 && ring<4) h+=(top-bottom)*.035f*Mathf.Sin(side*2.3f+ring);
+                    return center+Ring(radius*radii[ring]*irregular[side%8],h,side,rotation)
+                        +new Vector3(radius*.12f*t,0,-radius*.09f*t);
+                }
+                for(var ring=0;ring<4;ring++)for(var side=0;side<8;side++)
+                {
+                    var a=Point(ring,side);var b=Point(ring+1,side);
+                    var c=Point(ring+1,(side+1)%8);var d=Point(ring,(side+1)%8);
+                    var material=side%3==0?3:2;
+                    if(ring==3) Triangle(a,b,d,material);
+                    else Quad(a,b,c,d,material);
+                }
+                for(var side=0;side<8;side++)Triangle(center+Vector3.up*bottom,Point(0,side),Point(0,(side+1)%8),2);
+            }
+
+            public void CradleArm(float angle)
+            {
+                var normal=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));
+                var across=new Vector3(-normal.z,0,normal.x);
+                Vector3 P(float r,float y,float x=0f)=>normal*r+Vector3.up*y+across*x;
+                // An articulated bronze frame: lower fork cradles the core, upper blade curls outward.
+                var centers=new[]{P(1.75f,.8f),P(1.48f,1.45f),P(.91f,1.92f),P(1.04f,2.55f),P(1.48f,3.12f),P(1.55f,3.58f),P(1.34f,3.93f)};
+                var widths=new[]{.26f,.31f,.19f,.20f,.32f,.24f,0f};
+                for(var j=0;j<centers.Length-1;j++)
+                {
+                    var a=centers[j]-across*widths[j];var b=centers[j]+across*widths[j];
+                    var c=centers[j+1]-across*widths[j+1];var d=centers[j+1]+across*widths[j+1];
+                    var depth=normal*.14f;
+                    Quad(a,c,d,b,0);Quad(b,d,d-depth,b-depth,1);
+                    Quad(a-depth,c-depth,c,a,1);Quad(b-depth,d-depth,c-depth,a-depth,0);
+                    Beam(a+normal*.025f,c+normal*.025f,.045f,.035f,1);
+                    Beam(b+normal*.025f,d+normal*.025f,.045f,.035f,1);
+                }
+                // Raised fork, scroll and set jewel belong to the same mesh/material slots.
+                Beam(P(1.48f,1.45f),P(1.32f,2.24f,.4f),.075f,.035f,1);
+                Beam(P(1.32f,2.24f,.4f),P(1.02f,2.68f,.3f),.035f,.015f,1);
+                Beam(P(1.48f,1.45f),P(1.32f,2.24f,-.4f),.075f,.035f,1);
+                Beam(P(1.32f,2.24f,-.4f),P(1.02f,2.68f,-.3f),.035f,.015f,1);
+                var jewel=P(1.53f,3.15f);
+                Diamond(jewel,across*.22f,Vector3.up*.28f,normal*.07f,1);
+                Diamond(jewel+normal*.08f,across*.11f,Vector3.up*.16f,normal*.04f,3);
+                for(var j=0;j<16;j++)
+                {
+                    Vector3 Scroll(float t)=>P(1.58f,3.46f)+across*(Mathf.Cos(t*Mathf.PI*3)*(.12f*(1-t)))
+                        +Vector3.up*(Mathf.Sin(t*Mathf.PI*3)*(.12f*(1-t)));
+                    Beam(Scroll(j/16f),Scroll((j+1)/16f),.017f,.015f,1);
                 }
             }
 

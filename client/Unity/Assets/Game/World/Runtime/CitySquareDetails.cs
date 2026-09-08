@@ -1,0 +1,107 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+namespace LinhGioi.World
+{
+    // Reusable courtyard modules; all decorative parts join the existing material batches.
+    internal sealed partial class CityArchitectureVisuals
+    {
+        internal void SquareResidence(Vector3 centre,float height)
+        {
+            Box(_ivory,centre+Vector3.up*height*.5f,new Vector3(3f,height,4.8f));
+            Masonry(centre+Vector3.up*.15f,new Vector3(3.08f,.3f,4.88f));
+            House(centre,height);Roof(centre+Vector3.up*(height+.1f),new Vector3(1.8f,1f,2.7f));
+            var sign=centre.x<0?1f:-1f;
+            Vector3 P(float depth,float y,float along)=>centre+new Vector3(sign*depth,y,along);
+            // Deep porch, stone feet, curved brackets and a low lattice balustrade.
+            Box(_stoneLight,P(2.1f,.10f,0),new Vector3(1.6f,.2f,5.2f));
+            for(var side=-1;side<=1;side+=2)
+            {
+                Box(_stone,P(2.7f,.24f,side*2.25f),new Vector3(.40f,.48f,.4f));
+                Box(_wood,P(2.7f,1.6f,side*2.25f),new Vector3(.17f,2.8f,.17f));
+                Beam(_wood,P(2.7f,2.55f,side*2.25f),P(2.2f,3f,side*2.25f),.13f);
+                Box(_wood,P(2.7f,.88f,side*1.45f),new Vector3(.10f,.09f,1.4f));
+                for(var slat=0;slat<5;slat++)
+                    Box(_wood,P(2.7f,.56f,side*(.86f+slat*.28f)),new Vector3(.06f,.6f,.055f));
+                var planter=P(2.25f,.35f,side*1.5f);
+                Box(_stone,planter,new Vector3(.45f,.5f,.75f));
+                Part(_sphere,_leaf,planter+Vector3.up*.36f,new Vector3(.7f,.65f,1.15f),Quaternion.identity);
+                Part(_flowers,_pink,planter+Vector3.up*.49f,new Vector3(.8f,.6f,1.1f),Quaternion.identity);
+            }
+            // Reuse the same curved tile family on the projecting porch canopy.
+            Roof(P(2.05f,3.05f,0),new Vector3(.95f,.45f,2.75f));
+        }
+
+        internal void GardenBed(Vector3 centre,Vector2 size,bool blossom)
+        {
+            Box(_leaf,centre+Vector3.down*.01f,new Vector3(size.x,.10f,size.y));
+            for(var side=-1;side<=1;side+=2)
+            {
+                Masonry(centre+new Vector3(side*size.x*.5f,.1f,0),new Vector3(.16f,.2f,size.y+.16f));
+                Masonry(centre+new Vector3(0,.1f,side*size.y*.5f),new Vector3(size.x,.2f,.16f));
+            }
+            var count=Mathf.CeilToInt(size.x*size.y*1.8f);
+            for(var i=0;i<count;i++)
+            {
+                var x=Mathf.Repeat(i*.618034f,1f)-.5f;var z=Mathf.Repeat(i*.414214f,1f)-.5f;
+                var p=centre+new Vector3(x*(size.x-.3f),.22f,z*(size.y-.3f));
+                var rotation=Quaternion.Euler(0,i*137.5f,0);
+                Part(_sphere,_leaf,p,new Vector3(.62f,.9f,.62f),rotation);
+                if(i%3==0)Part(_flowers,blossom?_pink:_ivory,p+Vector3.up*.13f,new Vector3(.64f,.7f,.64f),rotation);
+                if(i%7==0)Part(_cube,_stone,p+Vector3.down*.16f,new Vector3(.21f,.13f,.27f),rotation);
+            }
+        }
+
+        private Mesh TeaVessel()
+        {
+            var vertices=new List<Vector3>();var triangles=new List<int>();
+            var profile=new[]{new Vector2(0f,0f),new Vector2(.7f,.05f),new Vector2(1f,.28f),new Vector2(.94f,.68f),new Vector2(.65f,.82f),new Vector2(.72f,.90f),new Vector2(.18f,.95f),new Vector2(0f,1f)};
+            for(var ring=0;ring<profile.Length;ring++)for(var side=0;side<16;side++)
+                vertices.Add(new Vector3(Mathf.Cos(side*Mathf.PI/8)*profile[ring].x,profile[ring].y,Mathf.Sin(side*Mathf.PI/8)*profile[ring].x));
+            for(var ring=0;ring<profile.Length-1;ring++)for(var side=0;side<16;side++)
+            {
+                var a=ring*16+side;var b=(ring+1)*16+side;var c=(ring+1)*16+(side+1)%16;var d=ring*16+(side+1)%16;
+                triangles.AddRange(new[]{a,b,c,a,c,d});
+            }
+            var mesh=new Mesh{name="Shared ceramic tea vessel",vertices=vertices.ToArray(),triangles=triangles.ToArray()};
+            mesh.RecalculateNormals();mesh.RecalculateBounds();_meshes.Add(mesh);return mesh;
+        }
+
+        internal void TeaPavilionDetails(Vector3 centre)
+        {
+            for(var x=-1;x<=1;x+=2)for(var z=-1;z<=1;z+=2)
+            {
+                var p=centre+new Vector3(x*1.8f,0,z*2.4f);
+                Masonry(p+Vector3.up*.15f,new Vector3(.43f,.3f,.43f));
+                Beam(_wood,p+Vector3.up*2.8f,p+new Vector3(-x*.65f,3.28f,0),.13f);
+                Beam(_wood,p+Vector3.up*2.8f,p+new Vector3(0,3.28f,-z*.65f),.13f);
+                Box(_gold,p+Vector3.up*2.67f,new Vector3(.24f,.08f,.24f));
+            }
+            // Open west frontage faces the stone. Low rear screens shelter the seating.
+            foreach(var z in new[]{-1f,1f})
+            {
+                Box(_wood,centre+new Vector3(0,1f,z*2.35f),new Vector3(3.55f,.12f,.12f));
+                for(var i=-5;i<=5;i++)
+                    Box(_wood,centre+new Vector3(i*.31f,.69f,z*2.35f),new Vector3(.055f,.60f,.055f));
+                for(var x=-1;x<=1;x+=2)
+                    Box(_wood,centre+new Vector3(x*.98f,.24f,z*1.8f),new Vector3(.16f,.46f,.35f));
+            }
+            var tray=centre+Vector3.up*.80f;
+            Box(_wood,tray,new Vector3(.9f,.04f,.55f));
+            // Small solid ceramic service shares the architecture material palette.
+            var vessel=TeaVessel();
+            Part(vessel,_ivory,tray,new Vector3(.16f,.23f,.16f),Quaternion.identity);
+            Beam(_ivory,tray+new Vector3(.09f,.1f,0),tray+new Vector3(.24f,.19f,0),.065f);
+            for(var i=0;i<8;i++)
+            {
+                Vector3 Handle(float t)=>tray+new Vector3(-.12f-Mathf.Sin(t*Mathf.PI)*.10f,.04f+t*.15f,0);
+                Beam(_wood,Handle(i/8f),Handle((i+1)/8f),.027f);
+            }
+            foreach(var x in new[]{-.27f,.27f})
+                Part(vessel,_ivory,tray+new Vector3(x,.025f,.14f),new Vector3(.055f,.07f,.055f),Quaternion.identity);
+            var sign=centre+new Vector3(-1.98f,2.83f,0);
+            Box(_wood,sign,new Vector3(.11f,.46f,1.35f));
+            for(var i=-2;i<=2;i++)Box(_gold,sign+new Vector3(-.07f,0,i*.22f),new Vector3(.025f,.24f,.025f));
+        }
+    }
+}

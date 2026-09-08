@@ -61,3 +61,9 @@ Kịch bản và các giai đoạn cơ chế: [SCN-002 v0.2](../../story/scenari
 ## Candidate runtime ngày 2026-09-08
 
 Mở bằng `python3.12 tools/preview_training_square.py` sau build development. Sân/landmark/camera/tuyến chạm–trà đình đã chạy; candidate dùng Keeper hiện hữu hướng dẫn tạm, chưa Thanh Huyền, dân cư, đường dốc hay bốn điểm chạm. Phố cũ vẫn ở nhánh riêng. Chín ảnh thực1920×1080 được review tại `build/visual-evidence/training-square-framing-desktop/review.json`; đây là checkpoint bố cục và flow, không nghiệm thu art final hoặc toàn bộ SCN002v0.2.
+
+## Tinh chỉnh rìa sân theo owner — 2026-09-08
+
+Nhà vòng trong chuyển thành các cung bán kính khoảng26m, hiên quay về tâm và chừa đường xuyên theo bốn hướng. Vòng tương tác7m/đường đi11m giữ thông; trà đình vẫn ở mép đông. Đây là nới bố cục theo phản hồi sân hẹp, thay dãy nhà ngang của candidate đầu. Bộ dùng lại gồm nhà có hiên/lan can/bồn hoa, trà đình có chân cột/giằng/ghế/bộ trà, bồn cây có viền đá và hoa thấp; bầu trời ban ngày có mây thủ tục, không dùng ảnh demo làm nền. Chưa đồng nghĩa kiến trúc final, multiplayer, NPC sinh hoạt hay đã tối ưu FPS.
+
+Các module runtime dùng lại nằm trong `CitySquareDetails.cs`: `SquareResidence` nhận tâm/chiều cao và dùng transform module để quay hiên; `GardenBed` nhận kích thước/nhóm hoa; `TeaPavilionDetails` dùng tâm trà đình. Chúng ghép vào batch vật liệu chung trước `Finish()`. `LGOCityDaySky.shader` là nền trời thủ tục; `TrainingStoneVisuals` giữ riêng công thức landmark và đá phố cũ. Đây là bộ nguồn để phát triển tiếp, chưa phải chứng nhận tối ưu bộ nhớ/FPS hoặc bộ prefab production hoàn chỉnh.

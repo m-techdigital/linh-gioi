@@ -6,7 +6,7 @@ namespace LinhGioi.World
 {
     // A small reusable architecture kit; reference boards never enter the runtime.
     // Decorative geometry has no collision. The existing street owns navigation.
-    internal sealed class CityArchitectureVisuals : MonoBehaviour
+    internal sealed partial class CityArchitectureVisuals : MonoBehaviour
     {
         private readonly List<Mesh> _meshes = new List<Mesh>();
         private readonly List<Material> _materials = new List<Material>();

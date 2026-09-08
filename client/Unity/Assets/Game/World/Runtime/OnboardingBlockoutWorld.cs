@@ -658,6 +658,8 @@ namespace LinhGioi.World
         {
             if (_stoneMesh != null) Destroy(_stoneMesh);
             if (_stoneSealMesh != null) Destroy(_stoneSealMesh);
+            if (_landmarkSealMesh != null) Destroy(_landmarkSealMesh);
+            if (_squareSky != null) { RenderSettings.skybox=_previousSquareSky; Destroy(_squareSky); }
             if (_pavingMesh != null) Destroy(_pavingMesh);
             // Shared Resources albedo is not owned by this world instance.
             foreach (var material in _materials)
