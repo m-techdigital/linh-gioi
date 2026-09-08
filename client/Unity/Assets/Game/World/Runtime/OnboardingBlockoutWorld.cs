@@ -5,11 +5,15 @@ using UnityEngine;
 
 namespace LinhGioi.World
 {
-    public sealed class OnboardingBlockoutWorld : MonoBehaviour
+    public sealed partial class OnboardingBlockoutWorld : MonoBehaviour
     {
         public static readonly Vector3 KeeperPoint = new Vector3(-3f, 0f, 1f);
         public static readonly Vector3 StonePoint = new Vector3(3.5f, 0f, 4f);
         public static readonly Vector3 ForecourtPoint = new Vector3(2f, 0f, 22f);
+        public bool TrainingSquare { get; private set; }
+        public Vector3 KeeperLocation => TrainingSquare ? new Vector3(-5f,0f,-20f) : KeeperPoint;
+        public Vector3 StoneLocation => TrainingSquare ? new Vector3(0f,0f,-2.7f) : StonePoint;
+        public Vector3 RestLocation => TrainingSquare ? new Vector3(13f,0f,4f) : ForecourtPoint;
         private Vector3 _guideDestination = StonePoint;
         public Vector2 Movement { get; set; }
         public Vector2 ScreenMovement { get; set; }
@@ -46,7 +50,7 @@ namespace LinhGioi.World
         private bool _stoneReady;
         private float _stoneCompletedAt = -1f;
         private bool _stoneFacingActive;
-        private const float StoneFeedbackDuration = 1.2f;
+        private float StoneFeedbackDuration => TrainingSquare ? 2.4f : 1.2f;
         private bool _screenInputHeld;
         private Vector3 _inputForward;
         private CityArchitectureVisuals _city;
@@ -69,6 +73,8 @@ namespace LinhGioi.World
 
         private void Awake()
         {
+            TrainingSquare = System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "--lgo-training-square") >= 0;
+            _guideDestination = StoneLocation;
             _previousCameras = Camera.allCameras;
             _previousAmbient = RenderSettings.ambientLight;
             _previousAmbientMode = RenderSettings.ambientMode;
@@ -104,29 +110,33 @@ namespace LinhGioi.World
             walls.mainTexture = _city.PlasterTexture;
             trim.mainTexture = _city.TimberTexture;
             trim.color = Color.white;
-            Box("Courtyard", new Vector3(0f, -0.1f, 1.5f), new Vector3(14f, 0.2f, 27f), paving).GetComponent<Renderer>().enabled = false;
-            for (var side = -1; side <= 1; side += 2)
+            if (TrainingSquare) CreateTrainingSquare(paving, walls, roof, trim);
+            else
             {
-                for (var z = 0; z <= 12; z += 6)
-                    CreateStreetHouse(new Vector3(side * 5.5f, 0f, z), 3.2f, walls, roof, trim);
-                Box("Gate post", new Vector3(side * 5.2f, 2.3f, -4f), new Vector3(0.8f, 4.6f, 0.8f), walls).GetComponent<Renderer>().enabled=false;
-                _city.StoneGatePost(new Vector3(side*5.2f,2.3f,-4f));
-                Box("Boundary", new Vector3(side * 7f, 0.6f, 1.5f), new Vector3(0.2f, 1.2f, 27f), walls);
+                Box("Courtyard", new Vector3(0f, -0.1f, 1.5f), new Vector3(14f, 0.2f, 27f), paving).GetComponent<Renderer>().enabled = false;
+                for (var side = -1; side <= 1; side += 2)
+                {
+                    for (var z = 0; z <= 12; z += 6)
+                        CreateStreetHouse(new Vector3(side * 5.5f, 0f, z), 3.2f, walls, roof, trim);
+                    Box("Gate post", new Vector3(side * 5.2f, 2.3f, -4f), new Vector3(0.8f, 4.6f, 0.8f), walls).GetComponent<Renderer>().enabled=false;
+                    _city.StoneGatePost(new Vector3(side*5.2f,2.3f,-4f));
+                    Box("Boundary", new Vector3(side * 7f, 0.6f, 1.5f), new Vector3(0.2f, 1.2f, 27f), walls);
+                }
+                CreateForecourt(paving, walls, roof, trim);
+                CreateStreetHouse(new Vector3(-10f, 0f, 54f), 3.2f, walls, roof, trim, scenery: true);
+                CreateStreetHouse(new Vector3(-5f, 0f, 52f), 3.8f, walls, roof, trim, scenery: true);
+                CreateStreetHouse(new Vector3(1f, 0f, 58f), 4f, walls, roof, trim, scenery: true);
+                CreateStreetHouse(new Vector3(7f, 0f, 54f), 3.2f, walls, roof, trim, scenery: true);
+                CreateStreetHouse(new Vector3(12f, 0f, 60f), 3.6f, walls, roof, trim, scenery: true);
+                _city.Landmarks();
+                _city.Finish();
+                CreateStreetLanterns(trim);
+                CreateStreetPaving(paving);
+                Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
             }
-            CreateForecourt(paving, walls, roof, trim);
-            CreateStreetHouse(new Vector3(-10f, 0f, 54f), 3.2f, walls, roof, trim, scenery: true);
-            CreateStreetHouse(new Vector3(-5f, 0f, 52f), 3.8f, walls, roof, trim, scenery: true);
-            CreateStreetHouse(new Vector3(1f, 0f, 58f), 4f, walls, roof, trim, scenery: true);
-            CreateStreetHouse(new Vector3(7f, 0f, 54f), 3.2f, walls, roof, trim, scenery: true);
-            CreateStreetHouse(new Vector3(12f, 0f, 60f), 3.6f, walls, roof, trim, scenery: true);
-            _city.Landmarks();
-            _city.Finish();
-            CreateStreetLanterns(trim);
-            CreateStreetPaving(paving);
-            Box("Arrival boundary", new Vector3(0f, 0.4f, -12f), new Vector3(14f, 0.8f, 0.2f), walls);
-            Box("Blockout Keeper collider", KeeperPoint + Vector3.up * 0.9f, new Vector3(0.65f, 1.8f, 0.65f), trim)
+            Box("Blockout Keeper collider", KeeperLocation + Vector3.up * 0.9f, new Vector3(0.65f, 1.8f, 0.65f), trim)
                 .GetComponent<Renderer>().enabled = false;
-            _keeperAnimator = CreateHumanoid("LGOGateKeeperCandidate", transform, KeeperPoint + Vector3.up * 0.04f);
+            _keeperAnimator = CreateHumanoid("LGOGateKeeperCandidate", transform, KeeperLocation + Vector3.up * 0.04f);
             _keeperAnimator.name = "Blockout Keeper";
             _keeperConversationLayer = _keeperAnimator.GetLayerIndex("Conversation");
             if (_keeperConversationLayer < 1) throw new System.InvalidOperationException("Guide requires the masked conversation layer.");
@@ -135,18 +145,18 @@ namespace LinhGioi.World
             _keeperAnimator.transform.rotation = KeeperRestRotation;
             _keeper = _keeperAnimator.GetComponentInChildren<SkinnedMeshRenderer>();
             _stone = CreateTrainingStone();
-            _keeperLabel = WorldLabelPresenter.Create("Blockout Keeper Label", "Người Giữ Cổng", KeeperPoint, RuntimeArtCatalog.Gold);
-            _stoneLabel = WorldLabelPresenter.Create("Blockout Stone Label", "Đá Luyện", StonePoint, RuntimeArtCatalog.Gold);
+            _keeperLabel = WorldLabelPresenter.Create("Blockout Keeper Label", "Người Giữ Cổng", KeeperLocation, RuntimeArtCatalog.Gold);
+            _stoneLabel = WorldLabelPresenter.Create("Blockout Stone Label", "Đá Luyện", StoneLocation, RuntimeArtCatalog.Gold);
             _keeperLabel.transform.SetParent(transform, true);
             _stoneLabel.transform.SetParent(transform, true);
             _reservedLabels = new[] { _keeperLabel, _stoneLabel };
-            _stoneFocus = CreateInteractionFocus("Blockout Stone Focus", StonePoint);
-            _keeperFocus = CreateInteractionFocus("Blockout Keeper Focus", KeeperPoint);
+            _stoneFocus = CreateInteractionFocus("Blockout Stone Focus", StoneLocation);
+            _keeperFocus = CreateInteractionFocus("Blockout Keeper Focus", KeeperLocation);
 
             var player = new GameObject("Blockout player proxy");
             player.tag = "Player";
             player.transform.SetParent(transform);
-            player.transform.position = new Vector3(0f, 0.04f, -3f);
+            player.transform.position = TrainingSquare ? new Vector3(0f,.04f,-23f) : new Vector3(0f, 0.04f, -3f);
             _player = player.AddComponent<CharacterController>();
             _player.height = 1.8f;
             _player.radius = 0.3f;
@@ -170,18 +180,18 @@ namespace LinhGioi.World
             _cameraBrain.UpdateMethod = CinemachineBrain.UpdateMethods.ManualUpdate;
             var tracking = new GameObject("Blockout camera tracking point").transform;
             tracking.SetParent(player.transform, false);
-            tracking.localPosition = Vector3.up * 1.1f;
+            tracking.localPosition = Vector3.up * (TrainingSquare ? 2.5f : 1.1f);
             var shots = new GameObject("Blockout camera shots");
             shots.transform.SetParent(transform);
             var volume = new GameObject("Blockout camera volume");
             volume.transform.SetParent(transform);
             _cameraVolume = volume.AddComponent<BoxCollider>();
-            _cameraVolume.center = new Vector3(0f, 4.1f, 7.5f);
-            _cameraVolume.size = new Vector3(13.4f, 7.8f, 38.4f);
+            _cameraVolume.center = TrainingSquare ? new Vector3(0f,6f,0f) : new Vector3(0f, 4.1f, 7.5f);
+            _cameraVolume.size = TrainingSquare ? new Vector3(84f,16f,106f) : new Vector3(13.4f, 7.8f, 38.4f);
             _cameraVolume.isTrigger = true;
             var clearShot = shots.AddComponent<CinemachineClearShot>();
             clearShot.DefaultBlend = new CinemachineBlendDefinition(CinemachineBlendDefinition.Styles.Cut, 0f);
-            CreateCameraShot(shots.transform, tracking, new Vector3(0f, 2f, -6.8f), 20);
+            CreateCameraShot(shots.transform, tracking, new Vector3(0f, TrainingSquare ? 2.5f : 2f, TrainingSquare ? -9f : -6.8f), 20);
             CreateCameraShot(shots.transform, tracking, new Vector3(-6.8f, 2f, 0f), 10);
             CreateCameraShot(shots.transform, tracking, new Vector3(6.8f, 2f, 0f), 10);
         }
@@ -430,10 +440,10 @@ namespace LinhGioi.World
                 _stoneFacingActive = false;
             }
             var facing = DialogueVisible
-                ? Vector3.ProjectOnPlane(KeeperPoint - _player.transform.position, Vector3.up)
+                ? Vector3.ProjectOnPlane(KeeperLocation - _player.transform.position, Vector3.up)
                 : velocity;
             if (!DialogueVisible && _stoneFacingActive && Time.time - _stoneCompletedAt < StoneFeedbackDuration)
-                facing = Vector3.ProjectOnPlane(StonePoint - _player.transform.position, Vector3.up);
+                facing = Vector3.ProjectOnPlane(StoneLocation - _player.transform.position, Vector3.up);
             if (facing.sqrMagnitude > 0.0025f)
                 _characterVisual.rotation = Quaternion.RotateTowards(_characterVisual.rotation,
                     Quaternion.LookRotation(facing, Vector3.up), 720f * Time.deltaTime);
@@ -474,8 +484,8 @@ namespace LinhGioi.World
                 _keeperGuide?.Cancel();
             }
         }
-        public void GuideToStone() => GuideTo(StonePoint);
-        public void GuideToForecourt() => GuideTo(ForecourtPoint);
+        public void GuideToStone() => GuideTo(StoneLocation);
+        public void GuideToForecourt() => GuideTo(RestLocation);
         private void GuideTo(Vector3 destination)
         {
             _guideDestination = destination;
@@ -533,15 +543,17 @@ namespace LinhGioi.World
             }
             _keeperAnimator.SetLayerWeight(_keeperConversationLayer, Mathf.MoveTowards(
                 _keeperAnimator.GetLayerWeight(_keeperConversationLayer), _keeperTalking || guiding ? 1f : 0f, Time.deltaTime / 0.15f));
-            var keeperFacing = guiding ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_guideDestination - KeeperPoint, Vector3.up)) : _keeperTalking
-                ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_player.transform.position - KeeperPoint, Vector3.up))
+            var keeperFacing = guiding ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_guideDestination - KeeperLocation, Vector3.up)) : _keeperTalking
+                ? Quaternion.LookRotation(Vector3.ProjectOnPlane(_player.transform.position - KeeperLocation, Vector3.up))
                 : KeeperRestRotation;
             _keeperAnimator.transform.rotation = Quaternion.RotateTowards(_keeperAnimator.transform.rotation, keeperFacing, 180f * Time.deltaTime);
             _keeperFocus.gameObject.SetActive(!DialogueVisible && KeeperReady);
             _keeperLabel.gameObject.SetActive(!DialogueVisible);
-            _stoneLabel.gameObject.SetActive(!DialogueVisible);
+            _stoneLabel.gameObject.SetActive(!DialogueVisible && (!TrainingSquare || (Vector3.Distance(Position, StoneLocation) > 2.5f && Vector3.Distance(Position, StoneLocation) < 12f)));
             WorldLabelPresenter.PlaceAbove(_keeperLabel, _keeper);
-            WorldLabelPresenter.PlaceAbove(_stoneLabel, _stone);
+            if (TrainingSquare)
+                WorldLabelPresenter.PlaceAbove(_stoneLabel, new Bounds(StoneLocation+Vector3.up*.65f,new Vector3(.6f,1.3f,.6f)),_camera);
+            else WorldLabelPresenter.PlaceAbove(_stoneLabel, _stone);
             WorldLabelPresenter.SetActive(_playerLabel, !DialogueVisible && !string.IsNullOrEmpty(_playerLabel.text));
             WorldLabelPresenter.PlaceAbove(_playerLabel, _player.bounds, _camera, _reservedLabels);
             var completion = _stoneCompletedAt >= 0f;
@@ -549,7 +561,7 @@ namespace LinhGioi.World
             _stoneFocus.gameObject.SetActive(!DialogueVisible && (completion ? progress < 1f : _stoneReady));
             _stoneFocus.transform.localScale = Vector3.one * (1.6f + progress * 0.8f);
             var flash = completion ? Mathf.Sin(progress * Mathf.PI) : 0f;
-            _stoneSealMaterial.color = Color.Lerp(RuntimeArtCatalog.Gold, RuntimeArtCatalog.Text, flash);
+            _stoneSealMaterial.color = Color.Lerp(TrainingSquare ? new Color(.18f,.78f,1f) : RuntimeArtCatalog.Gold, RuntimeArtCatalog.Text, flash);
             var crystalGlow = new Color(0.025f, 0.15f, 0.27f) * (1f + flash * 3f);
             foreach (var crystalMaterial in _stoneCrystalMaterials)
                 crystalMaterial.SetColor("_EmissionColor", crystalGlow);
@@ -560,10 +572,11 @@ namespace LinhGioi.World
 
         private Renderer CreateTrainingStone()
         {
+            if (TrainingSquare) return CreateSquareLandmark();
             var renderer = TrainingStoneVisuals.Create(transform, Material);
             var stone = renderer.gameObject;
             stone.name = "Blockout Stone";
-            stone.transform.position = StonePoint;
+            stone.transform.position = StoneLocation;
             _stoneMesh = stone.GetComponent<MeshFilter>().sharedMesh;
             _stoneCrystalMaterials = new[] { renderer.sharedMaterials[2], renderer.sharedMaterials[3] };
             var collider = stone.AddComponent<BoxCollider>();
@@ -575,7 +588,7 @@ namespace LinhGioi.World
             {
                 var normal = TrainingStoneVisuals.SealNormal(roadFace);
                 var center = TrainingStoneVisuals.SealCenter(roadFace);
-                var seal = Box(name, StonePoint + center + normal * 0.009f,
+                var seal = Box(name, StoneLocation + center + normal * 0.009f,
                     Vector3.one, _stoneSealMaterial, false);
                 seal.GetComponent<MeshFilter>().sharedMesh = _stoneSealMesh;
                 seal.transform.rotation = Quaternion.LookRotation(normal);

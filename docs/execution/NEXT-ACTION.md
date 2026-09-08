@@ -1,5 +1,8 @@
 # Linh Giới Online — Next Action
 
+- Quảng trường runtime2026-09-08: đã dựng macro sân mở + Đá Luyện6.5m + vòng đi + trà đình + rìa thành theo v0.2; phố cũ giữ nhánh riêng. Candidate mở bằng `python3.12 tools/preview_training_square.py`, chưa mặc định. Build399.322.723B,0 lỗi/18 cảnh báo;9 ảnh1920×1080 đã xem tại `build/visual-evidence/training-square-framing-desktop/review.json`: khung toàn đá, hội thoại/chạm/pulse/hồi/không lặp/đi vòng tới trà đình qua.2 build/2 capture, giữ lượt đầu FIX_REQUIRED. Landmark1.656tri/4materials/không texture mới. Chưa final: kiến trúc lặp, lõi/giá đồng/bệ còn đơn giản; Keeper hướng dẫn tạm, chưa Thanh Huyền/dân cư/đường dốc/nhiều điểm chạm/map nối thật/FPS. NEXT: hoàn thiện tổng thể landmark và rìa sinh hoạt theo sheet03 + SCN002v0.2, chuẩn bị đúng Thanh Huyền; không quay lại đá nhỏ hoặc chuỗi chỉnh shader riêng. Ghi chú mới này thay NEXT cũ bên dưới.
+
+
 Last updated: `2026-09-08`
 
 ## Quick Resume

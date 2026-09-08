@@ -7,13 +7,13 @@ using UnityEngine.UIElements;
 
 namespace LinhGioi.UI
 {
-    public sealed class OnboardingBlockoutPreview : MonoBehaviour
+    public sealed partial class OnboardingBlockoutPreview : MonoBehaviour
     {
         private OnboardingBlockoutWorld _world;
         private RuntimeTouchMovementPad _pad;
         private bool _capturing;
-        private readonly NpcDialogueSession _session = OnboardingDialogueContent.CreateGateKeeperSession();
-        private readonly NpcDialogueSession _returnSession = OnboardingDialogueContent.CreateGateKeeperReturnSession();
+        private NpcDialogueSession _session = OnboardingDialogueContent.CreateGateKeeperSession();
+        private NpcDialogueSession _returnSession = OnboardingDialogueContent.CreateGateKeeperReturnSession();
         private RuntimeNpcDialogueView _dialogue;
         private RuntimeWorldGuidanceView _guidance;
         private ScrollView _guidanceScroll;
@@ -30,12 +30,12 @@ namespace LinhGioi.UI
         // Completed introduction remains progress; repeat conversations have their own lifecycle.
         private NpcDialogueSession Dialogue => _stoneCompleted ? _returnSession : _session;
         private bool InRange => IsNear(_session.Completed && !_stoneCompleted
-            ? OnboardingBlockoutWorld.StonePoint : OnboardingBlockoutWorld.KeeperPoint);
+            ? _world.StoneLocation : _world.KeeperLocation);
         private bool IsNear(Vector3 point) => Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z),
             new Vector2(point.x, point.z)) <= 1.45f;
 
         public static bool ShouldRun(string[] args, bool development) =>
-            development && Array.IndexOf(args, "--lgo-onboarding-blockout") >= 0;
+            development && (Array.IndexOf(args, "--lgo-onboarding-blockout") >= 0 || Array.IndexOf(args, "--lgo-training-square") >= 0);
 
         public static bool ShouldEnterFromHall(string[] args, bool development) =>
             development && Array.IndexOf(args, "--lgo-technical-yard") < 0;
@@ -64,6 +64,17 @@ namespace LinhGioi.UI
         private void Awake()
         {
             _world = gameObject.AddComponent<OnboardingBlockoutWorld>();
+            if (_world.TrainingSquare)
+            {
+                _session = new NpcDialogueSession("Người Giữ Cổng",new[]{
+                    "Chào mừng đến quảng trường Đá Luyện.",
+                    "Bạn có thể thử chạm vào dấu sáng trên bệ phía trước.",
+                    "Sau đó, cứ thong thả ghé trà đình và khám phá Linh Thành."
+                },completionAction:"Đến Đá Luyện");
+                _returnSession = new NpcDialogueSession("Người Giữ Cổng",new[]{
+                    "Bạn cứ tự nhiên khám phá quảng trường. Trà đình nằm ở bên phải Đá Luyện."
+                },completionAction:"Khám phá tiếp");
+            }
             var document = gameObject.AddComponent<UIDocument>();
             document.panelSettings = RuntimePanelSettingsProvider.LoadOrCreate();
             var root = document.rootVisualElement;
@@ -80,7 +91,7 @@ namespace LinhGioi.UI
             overlay.Add(quit);
             root.Add(overlay);
             _guidance = new RuntimeWorldGuidanceView();
-            _guidance.Area.text = "Linh Môn";
+            _guidance.Area.text = _world.TrainingSquare ? "Quảng trường Đá Luyện" : "Linh Môn";
             _guidance.Step.style.display = DisplayStyle.None;
             _guidance.Direction.style.display = DisplayStyle.None;
             _guidanceScroll = (ScrollView)RuntimeUiFactory.NewWorldHudRoot("LGO Standalone Guidance",
@@ -147,6 +158,12 @@ namespace LinhGioi.UI
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            var squareReviewIndex=Array.IndexOf(args,"--lgo-training-square-review");
+            if(squareReviewIndex>=0 && squareReviewIndex+1<args.Length)
+            {
+                yield return CaptureTrainingSquareReview(args[squareReviewIndex+1]);
+                yield break;
+            }
             var stoneReviewIndex = Array.IndexOf(args, "--lgo-stone-quality-review");
             if (stoneReviewIndex >= 0 && stoneReviewIndex + 1 < args.Length)
             {
@@ -198,8 +215,8 @@ namespace LinhGioi.UI
                 for (var view = 0; view < 2; view++)
                 {
                     var offset = view == 0 ? new Vector3(-1.1f, 1.1f, -1.5f) : new Vector3(-1.1f, 1.1f, 1.5f);
-                    Camera.main.transform.position = OnboardingBlockoutWorld.StonePoint + offset;
-                    Camera.main.transform.LookAt(OnboardingBlockoutWorld.StonePoint + Vector3.up * .53f);
+                    Camera.main.transform.position = _world.StoneLocation + offset;
+                    Camera.main.transform.LookAt(_world.StoneLocation + Vector3.up * .53f);
                     yield return Capture(output, "stone-inspection-" + view);
                 }
                 Debug.Log("LGO_STONE_QUALITY_CAPTURE_COMPLETE frames=6 triangles=" + mesh.triangles.Length / 3
@@ -647,7 +664,7 @@ namespace LinhGioi.UI
             var before = _world.Position;
             _world.Movement = Vector2.one;
             yield return new WaitForSeconds(0.3f);
-            var facingKeeper = Vector3.ProjectOnPlane(OnboardingBlockoutWorld.KeeperPoint - _world.Position, Vector3.up);
+            var facingKeeper = Vector3.ProjectOnPlane(_world.KeeperLocation - _world.Position, Vector3.up);
             var dialogueFacingAngle = Vector3.Angle(character.transform.forward, facingKeeper);
             if (dialogueFacingAngle > 5f)
                 throw new InvalidOperationException("Dialogue character must face the keeper: angle=" + dialogueFacingAngle);
@@ -729,7 +746,7 @@ namespace LinhGioi.UI
             yield return new WaitForSeconds(0.8f);
             var guideShoulder = guideAnimator.GetBoneTransform(HumanBodyBones.RightUpperArm).position;
             var guideHand = guideAnimator.GetBoneTransform(HumanBodyBones.RightHand).position;
-            var direction = Vector3.ProjectOnPlane(OnboardingBlockoutWorld.StonePoint - guideRoot, Vector3.up);
+            var direction = Vector3.ProjectOnPlane(_world.StoneLocation - guideRoot, Vector3.up);
             var handDirection = Vector3.ProjectOnPlane(guideHand - guideShoulder, Vector3.up);
             if (Vector3.Angle(direction, handDirection) > 20f || handDirection.magnitude < 0.2f ||
                 Vector3.Distance(guideRoot, guideAnimator.transform.position) > 0.001f || _world.DialogueVisible)
@@ -756,7 +773,7 @@ namespace LinhGioi.UI
             if (frontSeal == null || sideSeal == null || frontSeal.GetComponent<Collider>() != null || sideSeal.GetComponent<Collider>() != null ||
                 frontSeal.GetComponent<MeshFilter>().sharedMesh != sideSeal.GetComponent<MeshFilter>().sharedMesh ||
                 frontSeal.GetComponent<Renderer>().sharedMaterial != sideSeal.GetComponent<Renderer>().sharedMaterial ||
-                sideSeal.position.x >= OnboardingBlockoutWorld.StonePoint.x - 0.2f)
+                sideSeal.position.x >= _world.StoneLocation.x - 0.2f)
                 throw new InvalidOperationException("Stone needs shared seal geometry/material on its arrival and road faces without extra collision.");
             var inlayMesh = frontSeal.GetComponent<MeshFilter>().sharedMesh;
             if (Mathf.Abs(inlayMesh.bounds.size.x - 0.20f) > 0.001f || inlayMesh.bounds.center.sqrMagnitude > 0.000001f ||
@@ -801,7 +818,7 @@ namespace LinhGioi.UI
             var stoneInteractionPosition = _world.Position;
             yield return new WaitForSeconds(0.3f);
             var stoneFacingAngle = Vector3.Angle(character.transform.forward,
-                Vector3.ProjectOnPlane(OnboardingBlockoutWorld.StonePoint - _world.Position, Vector3.up));
+                Vector3.ProjectOnPlane(_world.StoneLocation - _world.Position, Vector3.up));
             if (stoneFacingAngle > 5f || Vector3.Distance(stoneInteractionPosition, _world.Position) > 0.01f)
                 throw new InvalidOperationException("Stone interaction must face its target without moving: angle=" + stoneFacingAngle);
             yield return new WaitForSeconds(0.3f);
@@ -1168,7 +1185,7 @@ namespace LinhGioi.UI
 
         private void CheckCompletedStoneRepeat()
         {
-            if (!_stoneCompleted || !IsNear(OnboardingBlockoutWorld.StonePoint) || Dialogue.Active || _interact.enabledSelf)
+            if (!_stoneCompleted || !IsNear(_world.StoneLocation) || Dialogue.Active || _interact.enabledSelf)
                 throw new InvalidOperationException("Repeat probe requires a completed stone while still in interaction range.");
             var startedAt = _stoneFeedbackStartedAt;
             Interact();
@@ -1263,6 +1280,7 @@ namespace LinhGioi.UI
 
         private void Update()
         {
+            if (_world.TrainingSquare) { UpdateTrainingSquare(); return; }
             if (!_forecourtVisited && _stoneCompleted && Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z), new Vector2(2f, 22f)) <= 2f)
             {
                 _forecourtVisited = true;

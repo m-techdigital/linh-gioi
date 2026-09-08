@@ -413,6 +413,13 @@ namespace LinhGioi.World
                 Box(_gold,new Vector3(side*3.77f,.008f,7),new Vector3(.035f,.008f,33));
             }
         }
+        internal void SquareBackdrop()
+        {
+            Tower(new Vector3(-15,0,31),13f);Tower(new Vector3(14,0,33),15f);
+            Tower(new Vector3(-6,0,39),18f);Tower(new Vector3(6,0,45),21f);
+            Tower(new Vector3(-24,0,18),15f);Tower(new Vector3(25,0,21),17f);
+        }
+
         private void CityBackdrop()
         {
             // Layered inhabited skyline from the arrival composition. Scenery beyond the

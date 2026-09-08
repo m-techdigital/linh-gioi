@@ -1,6 +1,6 @@
 # Quảng trường Đá Luyện — thiết kế lại v0.2
 
-Trạng thái: **draft thiết kế theo yêu cầu owner 2026-09-08; chưa triển khai runtime, chưa art final**.
+Trạng thái: **draft thiết kế theo yêu cầu owner 2026-09-08; đã có candidate macro runtime, chưa art final**.
 
 Owner xác định phố hiện tại không phù hợp để đặt Đá Luyện và yêu cầu thiết kế lại map/kịch bản theo sheet03. Hướng mới thay giả định bố cục “đá nhỏ sát nhà bên đường” trong SCN-002 v0.1. Giữ phố cũ làm tuyến nhập thành hoặc kit cho phố khác; không xóa hay phóng to đồng loạt cảnh đó. Không thay map ID, protocol, schema hoặc design tokens.
 
@@ -57,3 +57,7 @@ Giữ PC sắc nét làm mốc art. Không đặt số lượng NPC hoặc kích
 Nghiệm thu bố cục cần ảnh camera chơi thật, đi vòng không kẹt, điểm chạm trong tầm tay, người chơi không bị che khi cộng hưởng, cảnh vẫn đọc được khi có nhóm người. Đây là tiêu chí cần chạy, **chưa phải PASS**.
 
 Kịch bản và các giai đoạn cơ chế: [SCN-002 v0.2](../../story/scenarios/SCN-002-TRAINING-SQUARE-v0.2.md).
+
+## Candidate runtime ngày 2026-09-08
+
+Mở bằng `python3.12 tools/preview_training_square.py` sau build development. Sân/landmark/camera/tuyến chạm–trà đình đã chạy; candidate dùng Keeper hiện hữu hướng dẫn tạm, chưa Thanh Huyền, dân cư, đường dốc hay bốn điểm chạm. Phố cũ vẫn ở nhánh riêng. Chín ảnh thực1920×1080 được review tại `build/visual-evidence/training-square-framing-desktop/review.json`; đây là checkpoint bố cục và flow, không nghiệm thu art final hoặc toàn bộ SCN002v0.2.

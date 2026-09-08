@@ -19,13 +19,13 @@ namespace LinhGioi.World
         public static Vector3 SealCenter(bool roadFace) =>
             Vector3.up * 0.61f + SealNormal(roadFace) * (CrystalRadius * Mathf.Cos(Mathf.PI / 8f) + 0.003f);
 
-        public static MeshRenderer Create(Transform parent, Func<Color, Material> materialFactory)
+        public static MeshRenderer Create(Transform parent, Func<Color, Material> materialFactory, bool landmark = false)
         {
             if (parent == null) throw new ArgumentNullException(nameof(parent));
             if (materialFactory == null) throw new ArgumentNullException(nameof(materialFactory));
             var root = new GameObject("Training stone crystal assembly");
             root.transform.SetParent(parent, false);
-            root.AddComponent<MeshFilter>().sharedMesh = CreateMesh();
+            root.AddComponent<MeshFilter>().sharedMesh = landmark ? CreateLandmarkMesh() : CreateMesh();
             var renderer = root.AddComponent<MeshRenderer>();
             renderer.sharedMaterials = new[]
             {
@@ -34,6 +34,18 @@ namespace LinhGioi.World
                 materialFactory(new Color(0.075f, 0.43f, 0.78f)),
                 materialFactory(new Color(0.34f, 0.79f, 0.95f))
             };
+            if (landmark)
+            {
+                var shader=Resources.Load<Shader>("LGOTrainingStoneSurface");
+                if(shader==null || !shader.isSupported) throw new InvalidOperationException("Landmark surface shader unavailable.");
+                var surfaces=renderer.sharedMaterials;
+                for(var i=0;i<surfaces.Length;i++)
+                {
+                    var tint=i==0 ? new Color(.35f,.36f,.34f) : surfaces[i].GetColor("_BaseColor");surfaces[i].shader=shader;
+                    surfaces[i].SetColor("_BaseColor",tint);surfaces[i].SetFloat("_SurfaceKind",Mathf.Min(i,2));
+                    surfaces[i].SetFloat("_Metallic",0f);
+                }
+            }
             renderer.sharedMaterials[1].SetFloat("_Metallic", 0.65f);
             renderer.sharedMaterials[1].SetFloat("_Smoothness", 0.38f);
             for (var i = 2; i < 4; i++)
@@ -44,6 +56,41 @@ namespace LinhGioi.World
                 material.SetColor("_EmissionColor", new Color(0.025f, 0.15f, 0.27f));
             }
             return renderer;
+        }
+
+        public static Mesh CreateLandmarkMesh()
+        {
+            var shape = new Geometry();
+            shape.Band(2.5f,0f,2.5f,.16f,0,false,true);
+            shape.Band(2.5f,.16f,2.3f,.22f,1);
+            shape.Band(2.3f,.22f,2.3f,.65f,0);
+            shape.Band(2.3f,.65f,2.4f,.75f,1);
+            shape.Band(2.4f,.75f,2.05f,.8f,0,true);
+            shape.Band(1.35f,.8f,1.35f,1.25f,0);
+            shape.Band(1.35f,1.25f,1.15f,1.4f,1,true);
+            shape.Crystal(Vector3.zero,.9f,1.4f,5.1f,6.5f,0f);
+            for(var i=0;i<4;i++)
+            {
+                var angle=(45f+i*90f)*Mathf.Deg2Rad;
+                shape.Leaf(angle,1.18f,.8f,3f,.34f);
+                var direction=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));
+                shape.Beam(direction*1.65f+Vector3.up*.8f,direction*1.25f+Vector3.up*1.8f,.18f,.13f,1);
+            }
+            for(var i=0;i<6;i++)
+            {
+                var angle=(i*60f+15f)*Mathf.Deg2Rad;
+                var center=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle))*1.4f;
+                var bottom=2.5f+(i%3)*.55f;
+                shape.Crystal(center,.18f,bottom,bottom+.65f,bottom+1.05f,angle,5);
+            }
+            for(var i=0;i<8;i++)
+            {
+                var angle=(i+1)*Mathf.PI/4f;
+                var normal=new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle));
+                shape.Diamond(normal*2.14f+Vector3.up*.43f,
+                    new Vector3(-normal.z,0,normal.x)*.22f,Vector3.up*.18f,normal*.05f,1);
+            }
+            return shape.Finish();
         }
 
         public static Mesh CreateMesh()
@@ -170,14 +217,14 @@ namespace LinhGioi.World
                 Triangle(center - up, center - across, tip, material);
             }
 
-            public void Leaf(float angle)
+            public void Leaf(float angle, float radius = .24f, float bottom = .17f, float height = .5f, float width = .076f)
             {
                 var normal = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
                 var across = new Vector3(-normal.z, 0f, normal.x);
                 const int steps = 12;
-                Vector3 Center(float t) => normal * (0.24f + 0.045f * Mathf.Sin(t * Mathf.PI))
-                    + Vector3.up * Mathf.Lerp(0.17f, 0.67f, t);
-                float Width(float t) => 0.014f * (1f - t) + 0.076f * Mathf.Pow(Mathf.Max(0f, Mathf.Sin(t * Mathf.PI)), 1.3f);
+                Vector3 Center(float t) => normal * (radius + height * .09f * Mathf.Sin(t * Mathf.PI))
+                    + Vector3.up * (bottom + height * t);
+                float Width(float t) => width * .1842105f * (1f - t) + width * Mathf.Pow(Mathf.Max(0f, Mathf.Sin(t * Mathf.PI)), 1.3f);
                 for (var i = 0; i < steps; i++)
                 {
                     var t = i / (float)steps;
@@ -186,7 +233,7 @@ namespace LinhGioi.World
                     var a = c - across * Width(t); var b = c + across * Width(t);
                     var e = d - across * Width(next); var f = d + across * Width(next);
                     // Back, two folded front surfaces, and closed gold rim.
-                    var ridge = normal * 0.018f;
+                    var ridge = normal * (width * .237f);
                     Quad(a, e, d + ridge, c + ridge, 1);
                     Quad(c + ridge, d + ridge, f, b, 1);
                     Quad(b, f, e, a, 0);
@@ -194,10 +241,10 @@ namespace LinhGioi.World
                     Beam(b + normal * 0.003f, f + normal * 0.003f, 0.006f, 0.005f, 1);
                 }
                 // Dark inset with raised center jewel gives a carved, layered bronze surface.
-                Diamond(Center(0.56f) + normal * 0.02f, across * 0.045f,
-                    Vector3.up * 0.071f, normal * 0.006f, 0);
-                Diamond(Center(0.56f) + normal * 0.028f, across * 0.015f,
-                    Vector3.up * 0.035f, normal * 0.009f, 3);
+                Diamond(Center(0.56f) + normal * (width * (.02f/.076f)), across * (width * .592f),
+                    Vector3.up * (height * .142f), normal * 0.006f, 0);
+                Diamond(Center(0.56f) + normal * (width * (.028f/.076f)), across * (width * .197f),
+                    Vector3.up * (height * .07f), normal * 0.009f, 3);
             }
 
             public void Beam(Vector3 from, Vector3 to, float startWidth, float endWidth, int material)
