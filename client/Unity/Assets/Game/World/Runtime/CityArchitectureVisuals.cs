@@ -384,6 +384,7 @@ namespace LinhGioi.World
             // Gateway beyond the garden supplies the vista, never an invisible walking barrier.
             var z=44f;
             GatewayGardens();
+            CityBackdrop();
             for(var side=-1;side<=1;side+=2)
             {
                 Box(_ivory,new Vector3(side*5.65f,3.2f,z),new Vector3(2f,6.4f,2f));
@@ -412,6 +413,30 @@ namespace LinhGioi.World
                 Box(_gold,new Vector3(side*3.77f,.008f,7),new Vector3(.035f,.008f,33));
             }
         }
+        private void CityBackdrop()
+        {
+            // Layered inhabited skyline from the arrival composition. Scenery beyond the
+            // playable boundary shares materials and uses roof silhouettes, not near tile ribs.
+            Box(_stone,new Vector3(0,-.3f,94),new Vector3(82,.5f,65));
+            for(var row=0;row<3;row++)
+            for(var column=-4;column<=4;column++)
+            {
+                var x=column*8.8f+(row%2==0?0:3.4f);
+                var z=72f+row*17f+Mathf.Sin(column*2.1f+row)*2.4f;
+                var levels=3+row+(Mathf.Abs(column+row)%3);
+                var step=3.1f;
+                var width=5.2f+(Mathf.Abs(column)%2)*1.2f;
+                var p=new Vector3(x,row*.9f,z);
+                if(row==2 && column==0)levels=8;
+                // Each raised row rests on a stone foundation down to the shared ground.
+                Box(_stone,new Vector3(x,(p.y-.05f)*.5f,z),new Vector3(width+.3f,p.y+.05f,width+.3f));
+                _module=Matrix4x4.Translate(p)*Matrix4x4.Scale(new Vector3(width/4f,1,width/4f))*Matrix4x4.Translate(-p);
+                Tower(p,levels*step,levels,true);
+                EndModule();
+            }
+            Debug.Log("LGO_CITY_BACKDROP buildings=27 rows=3 collision=none roof=shared_silhouette");
+        }
+
         private void GatewayGardens()
         {
             // Reference city courtyards: distant scenery only, beyond the existing garden boundary.
@@ -450,13 +475,12 @@ namespace LinhGioi.World
             }
         }
 
-        private void Tower(Vector3 p,float height)
+        private void Tower(Vector3 p,float height,int levels=3,bool distant=false)
         {
-            const int levels=3;
-            var step=height/3.9f;
+            var step=height/(levels+.9f);
             for(var level=0;level<levels;level++)
             {
-                var width=4.0f-level*.60f;
+                var width=distant?Mathf.Max(2f,4f-level*.30f):4.0f-level*.60f;
                 var bottom=level*step;
                 // Stone base and recessed upper chambers sit inside a visible timber frame.
                 Box(level==0?_ivory:_window,p+Vector3.up*(bottom+step*.5f),new Vector3(width*.9f,step,width*.9f));
@@ -476,7 +500,7 @@ namespace LinhGioi.World
                         Panel(_window,0,step*.51f,front,new Vector3(width*.48f,step*.62f,.055f));
                     else
                     {
-                        Panel(_teal,0,step*.60f,front+.06f,new Vector3(width*.51f,step*.43f,.04f));
+                        Panel(distant?_window:_teal,0,step*.60f,front+.06f,new Vector3(width*.51f,step*.43f,.04f));
                         Panel(_wood,0,.23f,front-.27f,new Vector3(width+.22f,.14f,.66f));
                         Panel(_wood,0,.86f,front-.54f,new Vector3(width+.24f,.09f,.09f));
                         Panel(_wood,0,.43f,front-.54f,new Vector3(width+.24f,.065f,.065f));
@@ -491,9 +515,12 @@ namespace LinhGioi.World
                     for(var side=-1;side<=1;side+=2)
                         Beam(_wood,At(side*width*.40f,step-.57f,front),At(side*width*.40f,step-.07f,front-.47f),.13f);
                 }
-                Roof(p+Vector3.up*(bottom+step),new Vector3(width*.68f,.95f,width*.68f));
+                var roofPoint=p+Vector3.up*(bottom+step);
+                var roofScale=new Vector3(width*.68f,.95f,width*.68f);
+                if(distant) Part(_roof,_navy,roofPoint,roofScale,Quaternion.identity);
+                else Roof(roofPoint,roofScale);
             }
-            var top=p+Vector3.up*(3*step+1.1f);
+            var top=p+Vector3.up*(levels*step+1.1f);
             Beam(_gold,top,top+Vector3.up*.75f,.09f);
         }
         private void Banner(Vector3 p,float width,float height)

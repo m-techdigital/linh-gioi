@@ -144,7 +144,7 @@ namespace LinhGioi.World
             _camera.tag = "MainCamera";
             _camera.fieldOfView = 55f;
             _camera.nearClipPlane = 0.1f;
-            _camera.farClipPlane = 80f;
+            _camera.farClipPlane = 145f;
             _camera.clearFlags = CameraClearFlags.Skybox;
             _camera.backgroundColor = new Color(0.46f, 0.54f, 0.57f);
             _cameraBrain = _camera.gameObject.AddComponent<CinemachineBrain>();
