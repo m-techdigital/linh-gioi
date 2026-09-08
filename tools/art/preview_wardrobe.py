@@ -16,6 +16,7 @@ p = argparse.ArgumentParser()
 p.add_argument('--source', type=Path, required=True)
 p.add_argument('--output', type=Path, required=True)
 p.add_argument('--poses', type=Path, help='Retargeted Unity pose library from WardrobePoseExporter')
+p.add_argument('--views', type=float, nargs='+', help='Override runtime-pose viewing angles, e.g. 0 90 180')
 a = p.parse_args(sys.argv[sys.argv.index('--') + 1:])
 a.output.mkdir(parents=True, exist_ok=True)
 bpy.ops.wm.open_mainfile(filepath=str(a.source.resolve()))
@@ -79,7 +80,7 @@ if a.poses:
             for side in ['l', 'r']:
                 leg = (rig.pose.bones['calf_' + side].head - rig.pose.bones['thigh_' + side].head).normalized()
                 aim('drape_hem_' + side, Vector((0, 0, -.3)) + leg * .7)
-        for angle in ([25, 100] if pose['name'] in ['Jog_Fwd_Loop-2', 'Jog_Fwd_Loop-6'] else [25]):
+        for angle in (a.views or ([25, 100, 180] if pose['name'] in ['Idle_Loop-0', 'Jog_Fwd_Loop-2', 'Jog_Fwd_Loop-6'] else [25])):
             radians = math.radians(angle)
             lateral = Vector((-forward.y, forward.x, 0))
             camera.location = forward * (3 * math.cos(radians)) + lateral * (3 * math.sin(radians)) + Vector((0, 0, 1.15))

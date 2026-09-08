@@ -1,8 +1,8 @@
 {
-  "source_sha256": "bd20d7d4a840c06103375fd90315cefdda485b4607b51b6bd14c03f76986e91f",
-  "fbx_sha256": "c0a6913168663ac92e0f5a8990d86b6e1ab258b07674b8c84d948ca5b9894707",
-  "triangles": 92328,
-  "vertices": 46814,
+  "source_sha256": "0047c582560852f335deddaedad95c9884e117338ebe6706576c163c30ab11df",
+  "fbx_sha256": "7795bacfaebe11e12cb0259b4940236db04af0c5e4a013dc750a2bd501b6f1c7",
+  "triangles": 90528,
+  "vertices": 45914,
   "bones": 70,
   "materials": 2,
   "authoring_material_sections": 9,
@@ -31,13 +31,13 @@
   "runtime_verified": true,
   "new_textures": [],
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
-  "unity_vertices": 50803,
+  "unity_vertices": 49866,
   "source_origin": "Quaternius CC0 arrival study; shared Keeper body atlas/rig provenance in ../gate-keeper/; new generated player face described in SOURCE.md and face-prompt.txt.",
   "evidence": [
-    "build/visual-evidence/arrival-drape-desktop/review.json",
-    "build/dev-loop/arrival-drape-import-unity.log",
-    "build/dev-loop/arrival-drape-build-unity.log",
-    "build/dev-loop/arrival-drape-desktop.log"
+    "build/visual-evidence/arrival-fit-bound-desktop/review.json",
+    "build/dev-loop/arrival-fit-bound-import-unity.log",
+    "build/dev-loop/arrival-fit-bound-build-unity.log",
+    "build/dev-loop/arrival-fit-bound-desktop.log"
   ],
   "authoring_regeneration": "build/asset-staging/player-neck-runtime/full-rebuild/player-receipt.json",
   "not_claimed": [
@@ -47,11 +47,11 @@
     "GPU/FPS budget",
     "animation tóc vật lý"
   ],
-  "runtime_mesh_vertices": 50803,
+  "runtime_mesh_vertices": 49866,
   "remaining": [
-    "Vạt trước còn phồng/cuộn khi nâng gối; chưa đạt chuyển động vải final.",
-    "Điểm nối choàng, cổ áo, tóc và tay vẫn cần art pass tổng thể theo storyboard.",
-    "Không có va chạm vải vật lý; không claim mọi động tác, FPS hoặc đông NPC."
+    "Cổ/tóc/găng và mép chuyển vai vẫn cần art pass; chưa đạt fidelity final của storyboard.",
+    "Vạt còn ôm tròn ở tư thế nâng gối cao; cơ chế hiện tại không mô phỏng va chạm vải.",
+    "Chưa profile FPS/mobile/đông NPC; không claim chất lượng toàn game từ camera kiểm tra nhân vật."
   ],
   "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes.",
   "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV.",
@@ -60,17 +60,17 @@
   "drape_pipeline": "refine_cloth_drape.py: smooth cloth, continuous back profile/ivory UV, nearest-triangle interpolated cuff weights; same geometry count/atlas/slots.",
   "robe_pipeline": "pack_robe_panels.py: migration from f5f5a2e, shared robe tile, bracer unwrap, quiet trousers and continuous bound tabard joined to UpperBody.",
   "budget": {
-    "mac_build_bytes": 399363499,
-    "mac_build_delta_bytes": 538052,
-    "drape_only_delta_bytes": 7848,
-    "baseline_commit": "e2f0282",
+    "mac_build_bytes": 399270235,
+    "mac_build_delta_bytes": -93264,
+    "baseline_commit": "16846a8",
     "device_fps_profiled": false
   },
   "ensemble_pipeline": "remake_ceremonial_ensemble.py: migration from bed6df9, closed layered shoulders, waist relief/cords/pendants, hip drapes; same rig/atlas, Accessories semantic slot. Procedural study, not production authoring formula.",
   "shared_relief_evidence": "build/visual-evidence/wardrobe-relief-desktop/review.json",
   "editable_source": "ArrivalWardrobe.blend",
   "derived_source": "ArrivalScene.blend",
-  "derived_source_sha256": "7d53adc1d753261036998d182deed75ce17d7d535edde81c4b1b65201e72f703",
+  "derived_source_sha256": "8b6eebb46965078b8c8cae81486a043dc079ee1684f09f8ebceb8455f015f183",
   "wardrobe_pipeline": "Master14 món/9slots: author_arrival_wardrobe.py migration từ e2f0282 → rig_arrival_drapery.py trên candidate65bones. Chỉnh master; export_arrival_scene.py --wardrobe-master --joined-source tạo FBX và flat dẫn xuất. Không rerun migration trên master70bones.",
-  "secondary_motion": "WardrobeDrapeMotion:65 xương Humanoid không đổi, thêm3cape+2hem; điều khiển sau Animator, không mô phỏng va chạm vải."
+  "secondary_motion": "WardrobeDrapeMotion:65 xương Humanoid không đổi, thêm3cape+2hem; điều khiển sau Animator, không mô phỏng va chạm vải.",
+  "fit_pipeline": "fit_arrival_wardrobe.py: migration có SHA guard từ master16846a8; vạt theo envelope quần, lining chung mép/weights, gauntlet fit theo trục tay, cape yoke raycast bề mặt áo và nội suy weights tam giác. Chỉnh tiếp trên master, không chạy lại migration."
 }
