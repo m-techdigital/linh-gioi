@@ -155,6 +155,7 @@ namespace LinhGioi.UI
                 var cityDirectory = Path.GetFullPath(args[cityReviewIndex + 1]);
                 Directory.CreateDirectory(cityDirectory);
                 yield return new WaitForSeconds(1f);
+                VerifyCityPresentation();
                 yield return Capture(cityDirectory, "arrival-gameplay");
                 yield return WalkTo(new Vector3(0f, 0f, 14f));
                 yield return Capture(cityDirectory, "street-gameplay");
@@ -167,8 +168,8 @@ namespace LinhGioi.UI
                 GetComponent<UIDocument>().rootVisualElement.style.visibility = Visibility.Hidden;
                 var cityCamera = Camera.main;
                 _world.BeginArchitectureReview();
-                var positions = new[] { new Vector3(0,3,-8), new Vector3(-.6f,3,1), new Vector3(.6f,3,8), new Vector3(0,6,17) };
-                var targets = new[] { new Vector3(0,3,15), new Vector3(-5.5f,3.3f,6), new Vector3(5.5f,3.1f,12), new Vector3(0,6,44) };
+                var positions = new[] { new Vector3(0,3,-8), new Vector3(-.6f,3,1), new Vector3(.6f,3,8), new Vector3(0,6,17), new Vector3(3,3,21), new Vector3(-5,3,24) };
+                var targets = new[] { new Vector3(0,3,15), new Vector3(-5.5f,3.3f,6), new Vector3(5.5f,3.1f,12), new Vector3(0,6,44), new Vector3(-1,2.5f,25.5f), new Vector3(-1,2.5f,25.5f) };
                 for(var view=0;view<positions.Length;view++)
                 {
                     cityCamera.transform.position=positions[view];
@@ -178,7 +179,7 @@ namespace LinhGioi.UI
                         || Vector3.Angle(cityCamera.transform.forward,targets[view]-positions[view])>.1f)
                         throw new InvalidOperationException("City inspection camera was overwritten.");
                 }
-                Debug.Log("LGO_CITY_QUALITY_CAPTURE_COMPLETE frames=7 route=arrival_forecourt_return locomotion="+_locomotionVerified+" viewport="+Screen.width+"x"+Screen.height);
+                Debug.Log("LGO_CITY_QUALITY_CAPTURE_COMPLETE frames=9 route=arrival_forecourt_return locomotion="+_locomotionVerified+" viewport="+Screen.width+"x"+Screen.height);
                 Application.Quit(0);
                 yield break;
             }
@@ -412,45 +413,7 @@ namespace LinhGioi.UI
                 + " requested=" + daylight.shadows + " supported=" + softShadows);
             if (daylight.shadows != LightShadows.Soft || !softShadows)
                 throw new InvalidOperationException("Daylight needs both a soft-shadow light and pipeline support.");
-            Mesh sharedFacade = null;
-            var facadeCount = 0;
-            foreach (var filter in _world.GetComponentsInChildren<MeshFilter>())
-            {
-                if (filter.name != "House facade") continue;
-                facadeCount++;
-                if (filter.sharedMesh == null || filter.sharedMesh.vertexCount == 0)
-                    throw new InvalidOperationException("Every house facade needs visible mesh geometry.");
-                if (sharedFacade != null && sharedFacade != filter.sharedMesh)
-                    throw new InvalidOperationException("Street houses must reuse the same facade mesh.");
-                sharedFacade = filter.sharedMesh;
-                if (filter.GetComponent<Collider>() != null)
-                    throw new InvalidOperationException("Facade decoration must not change the walking collision.");
-            }
-            if (facadeCount != 12 || sharedFacade == null)
-                throw new InvalidOperationException("Expected seven nearby and five distant shared house facades, got " + facadeCount);
-            var pavingSurface = _world.transform.Find("Street paving surface");
-            if (pavingSurface == null)
-                throw new InvalidOperationException("Street and forecourt need one continuous paving surface.");
-            var pavingTexture = pavingSurface.GetComponent<Renderer>().sharedMaterial.mainTexture as Texture2D;
-            if (pavingTexture == null || pavingTexture.width != 256 || pavingTexture.height != 256
-                || pavingTexture.mipmapCount < 2 || pavingTexture.wrapMode != TextureWrapMode.Repeat)
-                throw new InvalidOperationException("Paving must use a small repeating texture with mipmaps.");
-            var pavingMesh = pavingSurface.GetComponent<MeshFilter>().sharedMesh;
-            if (Mathf.Abs(pavingMesh.bounds.size.x - 14f) > 0.01f || Mathf.Abs(pavingMesh.bounds.size.z - 39f) > 0.01f
-                || Mathf.Abs((pavingMesh.uv[1].x - pavingMesh.uv[0].x) - 14f / 3f) > 0.01f
-                || Mathf.Abs((pavingMesh.uv[2].y - pavingMesh.uv[0].y) - 39f / 2f) > 0.01f)
-                throw new InvalidOperationException("Paving UVs must preserve the 3m x 2m repeat across the entire route.");
-            var forecourtTree = _world.transform.Find("Forecourt pine").GetComponent<SpriteRenderer>();
-            var soil = _world.transform.Find("Garden soil");
-            var treeShadow = _world.transform.Find("Forecourt pine grounding");
-            if (soil == null || treeShadow == null)
-                throw new InvalidOperationException("Forecourt tree needs soil and a shared grounding shadow inside the bed.");
-            if (soil.GetComponent<Collider>() != null || treeShadow.GetComponent<SpriteRenderer>()?.sprite == null
-                || treeShadow.position.y <= soil.GetComponent<Renderer>().bounds.max.y
-                || treeShadow.position.y >= forecourtTree.bounds.min.y)
-                throw new InvalidOperationException("Tree contact shadow must sit above non-colliding soil and below the roots.");
-            if (Mathf.Abs(forecourtTree.bounds.min.y - 0.325f) > 0.01f)
-                throw new InvalidOperationException("Forecourt tree must stand on the raised bed: bottom=" + forecourtTree.bounds.min.y);
+            VerifyCityPresentation();
             var character = _world.transform.Find("Blockout player proxy").GetComponentInChildren<Animator>();
             var keeper = _world.transform.Find("Blockout Keeper");
             var keeperAnimator = keeper == null ? null : keeper.GetComponent<Animator>();
@@ -1147,6 +1110,52 @@ namespace LinhGioi.UI
             Interact();
             if (!_stoneCompleted || _stoneFeedbackStartedAt != startedAt)
                 throw new InvalidOperationException("Completed stone interaction restarted its feedback while in range.");
+        }
+
+        private void VerifyCityPresentation()
+        {
+            // Current city uses material batches and dedicated albedos; validate those real surfaces.
+            var batches=0;
+            foreach(var filter in _world.GetComponentsInChildren<MeshFilter>())
+            {
+                if(!filter.name.StartsWith("City kit batch ",StringComparison.Ordinal))continue;
+                batches++;
+                if(filter.sharedMesh==null || filter.sharedMesh.vertexCount==0 || filter.GetComponent<Collider>()!=null
+                    || filter.GetComponent<Renderer>().sharedMaterials.Length!=1)
+                    throw new InvalidOperationException("City batch requires visible geometry, one material and no added collision.");
+            }
+            if(batches<6) throw new InvalidOperationException("Missing city architecture material batches.");
+            var paving=_world.transform.Find("Street paving surface");
+            var texture=paving.GetComponent<Renderer>().sharedMaterial.mainTexture as Texture2D;
+            if(texture!=Resources.Load<Texture2D>("LGOCitySurfaces/AgedPaving") || texture.width!=1024
+                || texture.height!=1024 || texture.mipmapCount<2 || texture.wrapMode!=TextureWrapMode.Repeat)
+                throw new InvalidOperationException("City paving must use its shared repeating albedo and mipmaps.");
+            var mesh=paving.GetComponent<MeshFilter>().sharedMesh;
+            if(Mathf.Abs(mesh.bounds.size.x-14f)>.01f || Mathf.Abs(mesh.bounds.size.z-39f)>.01f
+                || Mathf.Abs(mesh.uv[1].x-mesh.uv[0].x-14f/3f)>.01f || Mathf.Abs(mesh.uv[2].y-mesh.uv[0].y-39f/3f)>.01f)
+                throw new InvalidOperationException("Paving must retain its continuous extent and 3m surface repeat.");
+            var tree=_world.transform.Find("Forecourt pine");
+            if(tree==null || tree.GetComponentsInChildren<SpriteRenderer>().Length!=0)
+                throw new InvalidOperationException("Forecourt pine must be a 3D tree.");
+            var renderers=tree.GetComponentsInChildren<MeshRenderer>();
+            if(renderers.Length!=2 || tree.GetComponentsInChildren<Collider>().Length!=0)
+                throw new InvalidOperationException("Pine requires trunk and foliage batches, preserving the separate collider.");
+            var bounds=renderers[0].bounds;
+            foreach(var renderer in renderers)
+            {
+                bounds.Encapsulate(renderer.bounds);
+                if(renderer.shadowCastingMode!=UnityEngine.Rendering.ShadowCastingMode.On)
+                    throw new InvalidOperationException("Tree needs real geometry shadows.");
+            }
+            var soil=_world.transform.Find("Garden soil");
+            if(soil.GetComponent<Collider>()!=null || Mathf.Abs(bounds.min.y-soil.GetComponent<Renderer>().bounds.max.y)>.06f
+                || bounds.size.y<3.5f || bounds.size.z<1.5f)
+                throw new InvalidOperationException("Tree roots must meet the bed and canopy must have real volume.");
+            var collider=_world.transform.Find("Forecourt pine collider").GetComponent<BoxCollider>();
+            if(Vector3.Distance(collider.bounds.center,new Vector3(-1,2.6f,25.5f))>.01f
+                || Vector3.Distance(collider.bounds.size,new Vector3(.65f,4.6f,.65f))>.01f)
+                throw new InvalidOperationException("Tree replacement changed its original collision.");
+            Debug.Log("LGO_CITY_PRESENTATION_PASS paving=shared_1024 tree=3D bounds="+bounds+" collision=preserved");
         }
 
         private IEnumerator WalkTo(Vector3 point)

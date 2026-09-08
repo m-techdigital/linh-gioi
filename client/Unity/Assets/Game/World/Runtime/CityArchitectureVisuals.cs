@@ -11,11 +11,12 @@ namespace LinhGioi.World
         private readonly List<Mesh> _meshes = new List<Mesh>();
         private readonly List<Material> _materials = new List<Material>();
         private readonly Dictionary<Material, List<CombineInstance>> _batches = new Dictionary<Material, List<CombineInstance>>();
-        private Mesh _cube, _roof, _arch, _sphere, _archTrim;
+        private Mesh _cube, _roof, _arch, _sphere, _archTrim, _flowers, _needles;
         private Matrix4x4 _module = Matrix4x4.identity;
         internal void BeginModule(Vector3 centre, Quaternion rotation) => _module = Matrix4x4.TRS(centre, rotation, Vector3.one) * Matrix4x4.Translate(-centre);
         internal void EndModule() => _module = Matrix4x4.identity;
-        private Material _gold, _wood, _navy, _ivory, _window, _teal, _leaf, _pink;
+        private Material _gold, _wood, _navy, _ivory, _window, _teal, _leaf, _pink, _bark, _pineLeaf;
+        private int _treeTriangles;
         private Texture2D _woodTexture, _plasterTexture, _tileTexture;
         internal Texture2D PlasterTexture => _plasterTexture;
         internal Texture2D TimberTexture => _woodTexture;
@@ -28,17 +29,22 @@ namespace LinhGioi.World
             _ivory = Surface("Ivory limestone", new Color(.72f,.65f,.51f));
             _window = Surface("Amber window recess", new Color(.21f,.125f,.07f));
             _teal = Surface("City teal banners", new Color(.065f,.30f,.34f));
-            _leaf = Surface("Garden foliage", new Color(.21f,.37f,.15f));
-            _pink = Surface("Blossom clusters", new Color(.66f,.35f,.40f));
+            _leaf = Surface("Garden foliage", new Color(.14f,.27f,.105f));
+            _pink = Surface("Blossom petals", new Color(.48f,.23f,.31f));
+            _bark = Surface("Garden bark", new Color(.70f,.73f,.67f));
+            _pineLeaf = Surface("Pine needles", new Color(.07f,.16f,.105f));
             _woodTexture = Resources.Load<Texture2D>("LGOCitySurfaces/AgedTimber");
             if (_woodTexture == null) throw new System.InvalidOperationException("Missing shared city timber albedo.");
             _wood.mainTexture = _woodTexture;
+            _bark.mainTexture = _woodTexture;
             _plasterTexture = SurfaceTexture(false);
             _tileTexture = SurfaceTexture(true);
             _ivory.mainTexture = _plasterTexture;
             _navy.mainTexture = _tileTexture;
             _cube = Primitive(PrimitiveType.Cube);
-            _sphere = FoliageMesh(); _meshes.Add(_sphere);
+            _sphere = FoliageMesh(false); _meshes.Add(_sphere);
+            _flowers = FoliageMesh(true); _meshes.Add(_flowers);
+            _needles = FoliageMesh(false,true); _meshes.Add(_needles);
             _roof = RoofMesh(); _meshes.Add(_roof);
             _arch = ArchMesh(.24f); _meshes.Add(_arch);
             _archTrim = ArchMesh(.045f); _meshes.Add(_archTrim);
@@ -176,32 +182,75 @@ namespace LinhGioi.World
             texture.SetPixels(pixels);texture.Apply(true,true);return texture;
         }
 
-        private static Mesh FoliageMesh()
+        private static Mesh FoliageMesh(bool flowers,bool needles=false)
         {
-            // Sparse double-sided folded leaves make real gaps in the canopy silhouette.
-            // A single cluster is reused by every branch, with no alpha sorting or billboard.
-            var vertices=new List<Vector3>();var indices=new List<int>();
-            for(var leaf=0;leaf<48;leaf++)
+            var vertices=new List<Vector3>();var indices=new List<int>();var normals=new List<Vector3>();
+            var count=flowers?24:(needles?192:64);
+            for(var item=0;item<count;item++)
             {
-                var angle=leaf*2.399963f;
-                var height=(leaf+.5f)/48f*2f-1f;
-                var ring=Mathf.Sqrt(1-height*height);
-                var center=new Vector3(Mathf.Cos(angle)*ring,height*.65f,Mathf.Sin(angle)*ring)*(.31f+.055f*Mathf.Sin(leaf*3.1f));
-                var rotation=Quaternion.Euler(leaf*41f,leaf*137.5f,leaf*23f);
-                var length=.14f+.045f*Mathf.Sin(leaf*1.8f);
-                var n=vertices.Count;
-                vertices.Add(center+rotation*new Vector3(0,0,-length));
-                vertices.Add(center+rotation*new Vector3(-length*.52f,.025f,0));
-                vertices.Add(center+rotation*new Vector3(0,0,length));
-                vertices.Add(center+rotation*new Vector3(length*.52f,-.015f,0));
-                indices.AddRange(new[]{n,n+1,n+2,n,n+2,n+3,n+2,n+1,n,n+3,n+2,n});
+                var angle=item*2.399963f;var y=(item+.5f)/count*2f-1f;
+                var ring=Mathf.Sqrt(1-y*y);
+                var center=new Vector3(Mathf.Cos(angle)*ring,y*.45f,Mathf.Sin(angle)*ring)*.42f;
+                var rotation=Quaternion.Euler(item*17f,item*137.5f,item*7f);
+                var petals=flowers?5:1;
+                for(var petal=0;petal<petals;petal++)
+                {
+                    var orient=rotation*Quaternion.Euler(0,petal*72f,0);
+                    var length=flowers?.075f:.14f+.035f*Mathf.Sin(item*1.8f);
+                    var width=flowers?.04f:(needles?.014f:.052f);
+                    var n=vertices.Count;
+                    var origin=center+(flowers?orient*Vector3.forward*.04f:Vector3.zero);
+                    vertices.Add(origin+orient*new Vector3(0,.025f,0));
+                    normals.Add((center.normalized+Vector3.up*1.6f).normalized);
+                    for(var edge=0;edge<6;edge++)
+                    {
+                        var theta=edge*Mathf.PI/3;
+                        vertices.Add(origin+orient*new Vector3(Mathf.Sin(theta)*width,0,Mathf.Cos(theta)*length));
+                        normals.Add((center.normalized+Vector3.up*1.6f).normalized);
+                    }
+                    for(var edge=0;edge<6;edge++)
+                    {
+                        var a=n+1+edge;var b=n+1+(edge+1)%6;
+                        indices.AddRange(new[]{n,a,b,n,b,a});
+                    }
+                }
             }
-            var mesh=new Mesh{name="Shared open canopy leaves",vertices=vertices.ToArray(),triangles=indices.ToArray()};
-            // Backfaces share the front normal to avoid cancellation when recalculating double-sided faces.
-            var normals=new Vector3[vertices.Count];
-            for(var i=0;i<vertices.Count;i+=4)
-            {var normal=Vector3.Cross(vertices[i+1]-vertices[i],vertices[i+2]-vertices[i]).normalized;for(var j=0;j<4;j++)normals[i+j]=normal;}
-            mesh.normals=normals;mesh.RecalculateBounds();return mesh;
+            var mesh=new Mesh{name=flowers?"Shared five-petal blossom spray":"Shared curved leaf spray"};
+            mesh.SetVertices(vertices);mesh.SetNormals(normals);mesh.SetTriangles(indices,0);mesh.RecalculateBounds();return mesh;
+        }
+
+        private void Branch(Vector3 start,Vector3 bend,Vector3 end,float radius,float groundY=float.NegativeInfinity)
+        {
+            const int rings=7,sides=8;
+            var vertices=new List<Vector3>();var uv=new List<Vector2>();var indices=new List<int>();
+            for(var ring=0;ring<rings;ring++)
+            {
+                var t=ring/(float)(rings-1);var point=(1-t)*(1-t)*start+2*(1-t)*t*bend+t*t*end;
+                var tangent=(2*(1-t)*(bend-start)+2*t*(end-bend)).normalized;
+                var across=Vector3.Cross(tangent,Mathf.Abs(tangent.y)>.9f?Vector3.forward:Vector3.up).normalized;
+                var other=Vector3.Cross(tangent,across).normalized;var r=radius*Mathf.Lerp(1,.16f,t);
+                for(var side=0;side<=sides;side++)
+                {
+                    var angle=side*Mathf.PI*2/sides;
+                    var vertex=point+(across*Mathf.Cos(angle)+other*Mathf.Sin(angle))*r;
+                    vertex.y=Mathf.Max(vertex.y,groundY);vertices.Add(vertex);
+                    uv.Add(new Vector2(side/(float)sides,t*Vector3.Distance(start,end)/.6f));
+                    if(ring==rings-1 || side==sides)continue;
+                    var a=ring*(sides+1)+side;var b=a+sides+1;
+                    indices.AddRange(new[]{a,a+1,b,a+1,b+1,b});
+                }
+            }
+            // Seal both tube ends; roots enter soil and branch tips never expose a hollow cut.
+            var baseCenter=vertices.Count;vertices.Add(start);uv.Add(Vector2.zero);
+            var endCenter=vertices.Count;vertices.Add(end);uv.Add(Vector2.one);
+            for(var side=0;side<sides;side++)
+            {
+                indices.AddRange(new[]{baseCenter,side+1,side});
+                var last=(rings-1)*(sides+1);indices.AddRange(new[]{endCenter,last+side,last+side+1});
+            }
+            var mesh=new Mesh{name="Tapered curved garden branch"};mesh.SetVertices(vertices);mesh.SetUVs(0,uv);mesh.SetTriangles(indices,0);
+            mesh.RecalculateNormals();mesh.RecalculateBounds();_meshes.Add(mesh);
+            Part(mesh,_bark,Vector3.zero,Vector3.one,Quaternion.identity);
         }
 
         // The same timber / lattice / gallery family as linh-thanh-kit/build_preview.py.
@@ -410,22 +459,55 @@ namespace LinhGioi.World
                 Beam(material,P(i),P(i+1),radius*.075f);
             }
         }
-        internal void Tree(Vector3 p,float height,bool blossom)
+        internal void Tree(Vector3 p,float height,bool blossom,bool pine=false,string name="Garden tree")
         {
-            var top=p+Vector3.up*height*.72f;
-            Beam(_wood,p,top+Vector3.right*.2f,height*.065f);
-            for(var i=0;i<23;i++)
+            var treeMaterials=new[]{_bark,_leaf,_pink,_pineLeaf};var starts=new int[4];
+            for(var i=0;i<4;i++) starts[i]=_batches.TryGetValue(treeMaterials[i],out var old)?old.Count:0;
+            var trunkTop=p+new Vector3(.13f,height*.89f,.025f);
+            Branch(p+Vector3.up*.025f,p+new Vector3(-height*.17f,height*.42f,.08f),trunkTop,height*.067f,p.y-.015f);
+            // Low roots meet the bed; the broad canopy starts well above human head height.
+            for(var root=0;root<5;root++)
             {
-                var angle=i*2.4f;var spread=height*(.13f+(i%4)*.055f);var branch=top+new Vector3(Mathf.Cos(angle)*spread,(i%5-2)*height*.055f,Mathf.Sin(angle)*spread);
-                Beam(_wood,p+Vector3.up*height*.46f,branch,height*.026f);
-                Part(_sphere,blossom?_pink:_leaf,branch,new Vector3(height*.24f,height*.20f,height*.23f),Quaternion.Euler(i*13,i*37,0));
+                var angle=root*Mathf.PI*2/5;var foot=p+new Vector3(Mathf.Cos(angle),0,Mathf.Sin(angle))*height*.10f;
+                Branch(p+Vector3.up*.28f,p+new Vector3(Mathf.Cos(angle)*.2f,.13f,Mathf.Sin(angle)*.2f),foot,height*.027f);
+            }
+            for(var limb=0;limb<12;limb++)
+            {
+                var tier=limb/4;var angle=limb*2.399963f;
+                var start=p+new Vector3(-height*.045f,height*(.45f+tier*.15f),0);
+                var reach=height*(.34f-tier*.065f)*(1+.13f*Mathf.Sin(limb*4.1f));
+                var tip=p+new Vector3(Mathf.Cos(angle)*reach,height*(.56f+tier*.16f+Mathf.Sin(limb*1.7f)*(pine?.028f:.09f)),Mathf.Sin(angle)*reach);
+                Branch(start,(start+tip)*.5f-Vector3.up*height*.075f,tip,height*(.024f-tier*.004f));
+                for(var twig=0;twig<3;twig++)
+                {
+                    var offset=Quaternion.Euler(0,angle*Mathf.Rad2Deg+twig*90f,0)*new Vector3(height*.11f,height*.015f,0);
+                    var end=tip+offset;
+                    Branch(Vector3.Lerp(start,tip,.70f),tip+Vector3.up*.10f,end,height*.009f);
+                    var scale=new Vector3(height*.25f,height*(pine?.14f:.22f),height*.24f);
+                    Part(blossom?_flowers:(pine?_needles:_sphere),blossom?_pink:(pine?_pineLeaf:_leaf),end,scale,Quaternion.Euler(0,limb*37+twig*71,0));
+                    if(blossom && twig==0) Part(_sphere,_leaf,end-Vector3.up*.16f,scale*.78f,Quaternion.Euler(0,limb*37,0));
+                }
+            }
+            if(pine) Part(_needles,_pineLeaf,trunkTop,new Vector3(height*.22f,height*.13f,height*.22f),Quaternion.identity);
+            // Per-tree material batches permit real bounds/shadows and targeted runtime inspection.
+            var tree=new GameObject(name);tree.transform.SetParent(transform,false);tree.transform.localPosition=p;
+            for(var i=0;i<4;i++)
+            {
+                if(!_batches.TryGetValue(treeMaterials[i],out var list) || list.Count==starts[i])continue;
+                var parts=list.GetRange(starts[i],list.Count-starts[i]);list.RemoveRange(starts[i],list.Count-starts[i]);
+                for(var j=0;j<parts.Count;j++) {var part=parts[j];part.transform=Matrix4x4.Translate(-p)*part.transform;parts[j]=part;}
+                var mesh=new Mesh{name=name+" "+treeMaterials[i].name,indexFormat=UnityEngine.Rendering.IndexFormat.UInt32};
+                mesh.CombineMeshes(parts.ToArray(),true,true);_meshes.Add(mesh);_treeTriangles+=mesh.triangles.Length/3;
+                var child=new GameObject(treeMaterials[i].name);child.transform.SetParent(tree.transform,false);
+                child.AddComponent<MeshFilter>().sharedMesh=mesh;child.AddComponent<MeshRenderer>().sharedMaterial=treeMaterials[i];mesh.UploadMeshData(true);
             }
         }
         internal void Finish()
         {
-            var triangles=0;
+            var triangles=_treeTriangles;
             foreach(var pair in _batches)
             {
+                if(pair.Value.Count==0)continue;
                 var mesh=new Mesh{name="City kit batch "+pair.Key.name,indexFormat=UnityEngine.Rendering.IndexFormat.UInt32};
                 mesh.CombineMeshes(pair.Value.ToArray(),true,true);_meshes.Add(mesh);triangles+=mesh.triangles.Length/3;
                 var go=new GameObject(mesh.name);go.transform.SetParent(transform,false);

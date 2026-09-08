@@ -269,10 +269,9 @@ namespace LinhGioi.World
             Box("Garden bed", new Vector3(-1f, 0.15f, 25.5f), new Vector3(5f, 0.3f, 2.6f), walls);
             Box("Garden soil", new Vector3(-1f, 0.305f, 25.5f), new Vector3(4.7f, 0.01f, 2.3f),
                 Material(new Color(0.19f, 0.22f, 0.14f)), false);
-            Actor("Forecourt pine", new Vector3(-1f, 0.3f, 25.5f), LgoVisualAssetRegistryV3B.TreePine, 4.6f, trim);
-            var treeShadow = WorldProceduralVisuals.CreateGroundShadowSprite("Forecourt pine grounding",
-                new Vector3(-1f, 0.315f, 25.5f), new Vector3(0.8f, 0.5f, 1f), 2);
-            if (treeShadow != null) treeShadow.transform.SetParent(transform);
+            Box("Forecourt pine collider", new Vector3(-1f,2.6f,25.5f), new Vector3(.65f,4.6f,.65f),trim)
+                .GetComponent<Renderer>().enabled=false;
+            _city.Tree(new Vector3(-1f,.325f,25.5f),4.6f,false,true,"Forecourt pine");
         }
 
         private void CreatePavilionFrame(Material timber)
