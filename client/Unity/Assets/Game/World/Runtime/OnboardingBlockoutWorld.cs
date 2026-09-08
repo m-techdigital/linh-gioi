@@ -60,6 +60,10 @@ namespace LinhGioi.World
         private Camera[] _previousCameras;
         private Color _previousAmbient;
         private UnityEngine.Rendering.AmbientMode _previousAmbientMode;
+        private Color _previousSkyAmbient, _previousEquatorAmbient, _previousGroundAmbient, _previousFogColor;
+        private bool _previousFog;
+        private FogMode _previousFogMode;
+        private float _previousFogStart, _previousFogEnd;
         private bool _ownsPresentation;
 
         private void Awake()
@@ -67,13 +71,27 @@ namespace LinhGioi.World
             _previousCameras = Camera.allCameras;
             _previousAmbient = RenderSettings.ambientLight;
             _previousAmbientMode = RenderSettings.ambientMode;
+            _previousSkyAmbient=RenderSettings.ambientSkyColor;
+            _previousEquatorAmbient=RenderSettings.ambientEquatorColor;
+            _previousGroundAmbient=RenderSettings.ambientGroundColor;
+            _previousFog=RenderSettings.fog;_previousFogMode=RenderSettings.fogMode;
+            _previousFogColor=RenderSettings.fogColor;
+            _previousFogStart=RenderSettings.fogStartDistance;_previousFogEnd=RenderSettings.fogEndDistance;
             _ownsPresentation = true;
-            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
-            RenderSettings.ambientLight = new Color(0.75f, 0.76f, 0.78f);
+            // Warm daylight with cool sky fill: preserve friendly readable faces while
+            // separating roof undersides and distant city layers from the walking street.
+            RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Trilight;
+            RenderSettings.ambientSkyColor=new Color(.64f,.72f,.80f);
+            RenderSettings.ambientEquatorColor=new Color(.40f,.43f,.47f);
+            RenderSettings.ambientGroundColor=new Color(.24f,.22f,.19f);
+            RenderSettings.fog=true;RenderSettings.fogMode=FogMode.Linear;
+            RenderSettings.fogColor=new Color(.61f,.71f,.79f);
+            RenderSettings.fogStartDistance=36f;RenderSettings.fogEndDistance=170f;
             var light = new GameObject("Blockout daylight").AddComponent<Light>();
             light.transform.SetParent(transform);
             light.type = LightType.Directional;
-            light.intensity = 1.1f;
+            light.intensity = 1.05f;
+            light.color = new Color(1f,.94f,.84f);
             light.transform.rotation = Quaternion.Euler(50f, -35f, 0f);
             light.shadows = LightShadows.Soft;
             var paving = Material(new Color(0.39f, 0.40f, 0.39f));
@@ -610,6 +628,12 @@ namespace LinhGioi.World
                 if (camera != null) camera.enabled = true;
             RenderSettings.ambientMode = _previousAmbientMode;
             RenderSettings.ambientLight = _previousAmbient;
+            RenderSettings.ambientSkyColor=_previousSkyAmbient;
+            RenderSettings.ambientEquatorColor=_previousEquatorAmbient;
+            RenderSettings.ambientGroundColor=_previousGroundAmbient;
+            RenderSettings.fog=_previousFog;RenderSettings.fogMode=_previousFogMode;
+            RenderSettings.fogColor=_previousFogColor;
+            RenderSettings.fogStartDistance=_previousFogStart;RenderSettings.fogEndDistance=_previousFogEnd;
         }
 
         private void OnDestroy()
