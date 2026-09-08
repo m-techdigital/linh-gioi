@@ -41,9 +41,15 @@ namespace LinhGioi.World
                 Mathf.Min(elapsed / 0.35f, (Duration - elapsed) / 0.35f)) : 0f;
             _animator.SetIKPositionWeight(AvatarIKGoal.RightHand, weight);
             _animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0f);
+            _animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, weight * 0.85f);
             _animator.SetLookAtWeight(weight * 0.5f, 0f, 0.6f, 0f, 0.7f);
             if (weight <= 0f) return;
             var direction = Vector3.ProjectOnPlane(_destination - transform.position, Vector3.up).normalized;
+            // Keep the elbow below and outside the shoulder, away from the cape.
+            // The hand still aims at the actual destination, not a fixed local gesture.
+            _animator.SetIKHintPosition(AvatarIKHint.RightElbow,
+                _shoulder.position + transform.right * (_reach * 0.35f)
+                - Vector3.up * (_reach * 0.55f) + direction * (_reach * 0.20f));
             _animator.SetIKPosition(AvatarIKGoal.RightHand,
                 _shoulder.position + direction * _reach - Vector3.up * (_reach * 0.15f));
             _animator.SetLookAtPosition(_destination + Vector3.up);

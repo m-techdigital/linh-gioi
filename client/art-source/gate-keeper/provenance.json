@@ -1,15 +1,4 @@
 {
-  "source_sha256": "29195346203606aa89a91075cd9a286634aa6c328958b589854e4fcfe167b5c6",
-  "fbx_sha256": "178d859d2a72b551b1541a4b590bd1180b4eda5409743944e9db615f446e477e",
-  "triangles": 24400,
-  "vertices": 12244,
-  "bones": 65,
-  "materials": 2,
-  "texture_sizes": {
-    "albedo": 512,
-    "face": 256
-  },
-  "runtime_verified": true,
   "reference": "docs/reference-art/linh-gioi-story-design-reference-pack-v0.1/images/reference_only/02_gate_keeper_character_sheet.png",
   "generator": "builtin imagegen → tencent/Hunyuan3D-2.1 → Blender macro cleanup / UV / shared rig",
   "generation": {
@@ -21,35 +10,58 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "visual_status": "Macro candidate reviewed: main cape-to-hand tent removed in guide pose; hat rebuilt and hem narrowed; fabric edge polish remains",
-  "weight_transfer": "Shared 65 bone bind pose; anatomical sleeve envelope separates IK arm from cape; long panels attached to pelvis/torso; long hair root gradient retained",
-  "runtime_scope": "macOS development Player, 960x540 mobile layout, full SCN-001/002 route",
-  "evidence": [
-    "build/dev-loop/keeper-optimized-verified-tests.xml",
-    "build/dev-loop/keeper-optimized-verified-build.log",
-    "build/dev-loop/keeper-optimized-verified-mobile.log",
-    "build/dev-loop/keeper-optimized-quick.log",
-    "build/visual-evidence/onboarding-blockout/keeper-optimized-verified-mobile/keeper-guide-direction.png"
+  "source_sha256": "cd63087d22e035db423d6745d8815d33eb3021276d3d255dd9a98b5b2eba4adc",
+  "fbx_sha256": "84a8df8df25f3733eebed9f323155d5fe4d391e4520133a7703bf66a5d9e57f7",
+  "triangles": 47413,
+  "vertices": 23887,
+  "bones": 65,
+  "materials": 2,
+  "authoring_material_sections": 9,
+  "slots": [
+    "Headwear",
+    "Head",
+    "Hair",
+    "UpperBody",
+    "LowerBody",
+    "Cape",
+    "Gloves",
+    "Boots",
+    "Shoulders"
   ],
-  "authoring_material_sections": 4,
-  "authoring_parts": [
-    "Headwear including slips",
-    "HeadAndHair including complete long hair islands",
-    "OutfitAndBody"
-  ],
+  "texture_sizes": {
+    "albedo": [
+      4096,
+      2048
+    ],
+    "face": [
+      1024,
+      512
+    ]
+  },
+  "runtime_verified": true,
+  "visual_status": "REVIEWED_WITH_ART_REMAINING",
+  "runtime_scope": "macOS development Player1920x1080, camera cận; idle0/90/180, guide front/back, return, hai ảnh player dùng chung atlas",
+  "runtime_mesh_vertices": 28359,
   "runtime_renderer_count": 1,
   "runtime_material_count": 2,
   "mesh_compression": "Medium",
-  "runtime_mesh_vertices": 25258,
-  "reuse": "Editor parts baked once; runtime NPC instances share preset mesh and materials, independent bones",
+  "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
+  "evidence": [
+    "build/visual-evidence/keeper-drape-clearance-desktop/review.json",
+    "build/dev-loop/keeper-drape-clearance-import.log",
+    "build/dev-loop/keeper-drape-clearance-build.log"
+  ],
+  "remaining": [
+    "Chóp/hoa văn nón đơn giản hơn sheet; chưa art final.",
+    "Bàn tay vẫn nắm, giáp vai chưa mềm khi nâng tay; hint khuỷu không giải quyết mọi biến dạng.",
+    "Capture là camera kiểm tra cận trong Player; chưa xác nhận đi/chạy/xoay liên tục hoặc cloth simulation.",
+    "Mặt dưới nón tối; texture ở ủng còn méo/mảng đen từ source trước."
+  ],
   "budget": {
-    "body_face_source_png_bytes": 445342,
-    "unity_editor_texture_object_bytes": 438880,
-    "mac_build_bytes_before": 352010691,
-    "mac_build_bytes_after": 344879275,
-    "mesh_build_report": "506.0 kb",
-    "appearance_preset_build_report": "1.1 kb",
-    "all_keeper_assets_build_report_approx": "986.9 kb; excludes shared controller/code",
+    "mac_build_bytes": 393318375,
+    "mac_build_delta_bytes": 159980,
+    "unity_editor_body_texture_object_bytes": 33555393,
+    "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
   }
 }

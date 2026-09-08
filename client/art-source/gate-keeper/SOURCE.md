@@ -1,19 +1,19 @@
-# Người Giữ Cổng — candidate dùng chung theo bộ phận
+# Người Giữ Cổng — source theo bộ phận
 
-SCN-001, mẫu đích: `docs/reference-art/linh-gioi-story-design-reference-pack-v0.1/images/reference_only/02_gate_keeper_character_sheet.png`. Source chỉnh sửa: `KeeperReconstruction.blend`; chưa production-final hoặc owner visual approval.
+SCN-001, mẫu đích: `docs/reference-art/linh-gioi-story-design-reference-pack-v0.1/images/reference_only/02_gate_keeper_character_sheet.png`. Source hiện tại: `KeeperReconstruction.blend`; chưa production-final hoặc owner visual approval.
 
-Nguồn: ảnh nhân vật riêng do built-in imagegen tạo từ sheet → Tencent Hunyuan3D-2.1 shape reconstruction (seed 907, 30 steps, octree 256) → Blender cleanup, nón mới, tóc và garment weights. Board không vào runtime. Source giữ texture gốc để chỉnh sửa; runtime xuất thân 512 và mặt 256. Giữ rest matrices 65 bones, tối đa 4 influences/vertex, 24.400 triangles.
+Nguồn ban đầu: ảnh riêng tạo bằng built-in imagegen → Tencent Hunyuan3D-2.1 → Blender. Các macro pass sau dựng lại anatomy, trang phục, đầu/tóc và nón trên rig dùng chung. Board không vào runtime. Source hiện có 47.413 triangles, 23.887 vertices, 65 bones, tối đa4 influences/vertex. Atlas thân4096×2048 dùng chung với player; mặt1024×512. Chưa tối ưu mobile.
 
-Thuộc tính FACE `npc_part` trong Blender: 1 = nón và tua; 2 = đầu và toàn bộ tóc dài; 3 = thân/trang phục. Exporter chuyển nhãn thành các section FBX; face atlas dùng section riêng. Không suy ngược bộ phận từ trọng số xương hoặc độ cao.
+FACE `appearance_slot` theo `client/art-source/appearance-slots.json` là nhãn sở hữu: Headwear, Head, Hair, UpperBody, LowerBody, Cape, Gloves, Boots, Shoulders. Exporter chuyển nhãn thành9 section; không suy phần trang phục từ trọng số xương hay chiều cao.
 
 ```sh
-build/toolchains/blender/Blender.app/Contents/MacOS/Blender -b --python-exit-code 1 --python tools/art/export_keeper_reconstruction.py -- --source client/art-source/gate-keeper/KeeperReconstruction.blend --output build/asset-staging/gate-keeper-v4/optimized-export
+build/toolchains/blender/Blender.app/Contents/MacOS/Blender -b --python-exit-code 1 --python tools/art/export_keeper_reconstruction.py -- --source client/art-source/gate-keeper/KeeperReconstruction.blend --output build/asset-staging/gate-keeper/export
 ```
 
-Sau khi chép FBX và 2 atlas vào `Assets/Game/Art/OnboardingCandidate/`, chạy Unity Editor `LinhGioi.Foundation.Editor.NpcAppearanceBaker.BakeKeeper` (hoặc entrypoint `ArrivalOutfitImporter.ImportKeeper`). Baker tạo module/recipe dưới `Editor/KeeperParts/`, ghép trước thành một mesh nén Medium và preset chung. `NpcAppearanceInstance` chỉ gắn shared mesh/material cùng bone mapping vào instance; không clone mesh hoặc material cho mỗi NPC. Source FBX và module Editor bị kiểm tra loại khỏi dependency của prefab runtime. `Merge(recipe)` hỗ trợ ghép lựa chọn module tương thích cùng bind pose/material layout.
+Chép FBX và atlas nếu đã thay vào `Assets/Game/Art/OnboardingCandidate/`, chạy Unity Editor `LinhGioi.Foundation.Editor.NpcAppearanceBaker.BakeKeeper`. Baker giữ module/recipe trong `Editor/KeeperParts/`, ghép thành shared mesh nén Medium và preset: một renderer, hai material,28.359 runtime vertices. Prefab không phụ thuộc source FBX hoặc module Editor. Instance có bones riêng, dùng chung mesh/material. Trang phục độc nhất vẫn phải tính geometry/texture; không claim mỗi bộ dưới100KB hay FPS cảnh đông.
 
-Hiện có ba nhóm; thân và trang phục vẫn là một module, chưa phải thư viện áo/quần/giày tách hoàn chỉnh. Preset dùng lại không phát sinh bộ texture/mesh mới; bộ trang phục độc nhất vẫn phải tính phần geometry/texture của nó. Không claim mỗi bộ dưới 100 KB hoặc FPS cho cảnh đông người.
+Pass nón/tà áo2026-09-08: nón có mặt kín, đỉnh/viền/phù rủ; giảm lõm ngang áo choàng và lùi phần dưới tránh ủng; hint khuỷu khi chỉ đường. `refine_keeper_hat_drape.py` là migration một lần từ source trước checkpoint này, không phải generator toàn nhân vật hoặc bước bắt buộc mỗi export.
 
-Đã sửa phom nón, loại mảnh thừa, thu bớt độ xòe tà và tách ảnh hưởng IK tay khỏi vùng cape. Mép vải/hoa văn còn cần art polish; chưa cloth simulation hoặc xác nhận garment đi/chạy. Video trước/sau và capture local ở `build/visual-evidence/keeper-*-optimization/` và `build/visual-evidence/onboarding-blockout/keeper-optimized-verified-mobile/`.
+Evidence: `build/visual-evidence/keeper-drape-clearance-desktop/review.json`,8 ảnh Player1920×1080 đã xem; import/build thật qua, build393.318.375B/0 lỗi/0 cảnh báo. Capture góc cận và chỉ đường/hạ tay, chưa chứng minh garment đi/chạy hay cloth simulation. Nón còn thiếu hoa văn/chóp sát sheet, bàn tay còn nắm và vai còn cần sửa; các vùng texture ủng còn méo. Hash và thông số hiện tại trong `provenance.json`; không dùng ngân sách bản mobile cũ cho bản PC này.
 
-Nguồn công cụ: [Tencent Hunyuan3D-2.1](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1), [license nguồn](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1/blob/main/LICENSE), [Unity mesh compression API](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/MeshUtility.SetMeshCompression.html). Ghi nguồn không thay cho kiểm tra license production.
+Nguồn công cụ: [Tencent Hunyuan3D-2.1](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1), [license nguồn](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1/blob/main/LICENSE).
