@@ -21,8 +21,9 @@ namespace LinhGioi.World
         internal Texture2D PlasterTexture => _plasterTexture;
         internal Texture2D TimberTexture => _woodTexture;
 
-        internal void Initialize()
+        internal void Initialize(bool squareBotany=false)
         {
+            _squareBotany=squareBotany;
             _gold = Surface("Aged bronze", new Color(.65f,.43f,.17f), .5f);
             _wood = Surface("Aged timber", Color.white);
             _navy = Surface("Navy ceramic roof", new Color(.075f,.15f,.23f), .2f);
@@ -52,6 +53,7 @@ namespace LinhGioi.World
             _roof = RoofMesh(); _meshes.Add(_roof);
             _arch = ArchMesh(.24f); _meshes.Add(_arch);
             _archTrim = ArchMesh(.045f); _meshes.Add(_archTrim);
+            if(_squareBotany)InitializeGardenBotany();
         }
 
         private Material Surface(string label, Color color, float metal = 0f)
@@ -580,8 +582,10 @@ namespace LinhGioi.World
                     var end=tip+offset;
                     Branch(Vector3.Lerp(start,tip,.70f),tip+Vector3.up*.10f,end,height*.009f);
                     var scale=new Vector3(height*.25f,height*(pine?.14f:.22f),height*.24f);
-                    Part(blossom?_flowers:(pine?_needles:_sphere),blossom?_pink:(pine?_pineLeaf:_leaf),end,scale,Quaternion.Euler(0,limb*37+twig*71,0));
-                    if(blossom && twig==0) Part(_sphere,_leaf,end-Vector3.up*.16f,scale*.78f,Quaternion.Euler(0,limb*37,0));
+                    var spray=_squareBotany && !pine ? (blossom?_canopyFlowers:_canopyLeaves) : (blossom?_flowers:(pine?_needles:_sphere));
+                    Part(spray,blossom?_pink:(pine?_pineLeaf:_leaf),end,scale*(_squareBotany?1.3f:1f),Quaternion.Euler(0,limb*37+twig*71,0));
+                    if(blossom && (twig==0 || _squareBotany))
+                        Part(_squareBotany?_canopyLeaves:_sphere,_leaf,end-Vector3.up*.16f,scale*.78f,Quaternion.Euler(0,limb*37,0));
                 }
             }
             if(pine) Part(_needles,_pineLeaf,trunkTop,new Vector3(height*.22f,height*.13f,height*.22f),Quaternion.identity);

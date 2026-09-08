@@ -25,8 +25,7 @@ namespace LinhGioi.World
                     Box(_wood,P(2.7f,.56f,side*(.86f+slat*.28f)),new Vector3(.06f,.6f,.055f));
                 var planter=P(2.25f,.35f,side*1.5f);
                 Box(_stone,planter,new Vector3(.45f,.5f,.75f));
-                Part(_sphere,_leaf,planter+Vector3.up*.36f,new Vector3(.7f,.65f,1.15f),Quaternion.identity);
-                Part(_flowers,_pink,planter+Vector3.up*.49f,new Vector3(.8f,.6f,1.1f),Quaternion.identity);
+                GardenPlant(planter+Vector3.up*.26f,0,true,.75f,Quaternion.identity);
             }
             if(style==1)
             {
@@ -106,15 +105,14 @@ namespace LinhGioi.World
                 Masonry(centre+new Vector3(side*size.x*.5f,.1f,0),new Vector3(.16f,.2f,size.y+.16f));
                 Masonry(centre+new Vector3(0,.1f,side*size.y*.5f),new Vector3(size.x,.2f,.16f));
             }
-            var count=Mathf.CeilToInt(size.x*size.y*1.8f);
+            var count=Mathf.CeilToInt(size.x*size.y*2.4f);
             for(var i=0;i<count;i++)
             {
                 var x=Mathf.Repeat(i*.618034f,1f)-.5f;var z=Mathf.Repeat(i*.414214f,1f)-.5f;
-                var p=centre+new Vector3(x*(size.x-.3f),.22f,z*(size.y-.3f));
+                var p=centre+new Vector3(x*(size.x-.55f),.10f,z*(size.y-.55f));
                 var rotation=Quaternion.Euler(0,i*137.5f,0);
-                Part(_sphere,_leaf,p,new Vector3(.62f,.9f,.62f),rotation);
-                if(i%3==0)Part(_flowers,blossom?_pink:_ivory,p+Vector3.up*.13f,new Vector3(.64f,.7f,.64f),rotation);
-                if(i%7==0)Part(_cube,_stone,p+Vector3.down*.16f,new Vector3(.21f,.13f,.27f),rotation);
+                GardenPlant(p,i,blossom,.84f+(i%3)*.09f,rotation);
+                if(i%9==0)Part(_cube,_stone,p+Vector3.down*.06f,new Vector3(.21f,.13f,.27f),rotation);
             }
         }
 

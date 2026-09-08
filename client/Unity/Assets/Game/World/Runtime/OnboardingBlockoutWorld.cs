@@ -106,7 +106,7 @@ namespace LinhGioi.World
             var roof = Material(new Color(0.12f, 0.19f, 0.25f));
             var trim = Material(new Color(0.32f, 0.18f, 0.10f));
             _city = gameObject.AddComponent<CityArchitectureVisuals>();
-            _city.Initialize();
+            _city.Initialize(TrainingSquare);
             walls.mainTexture = _city.PlasterTexture;
             trim.mainTexture = _city.TimberTexture;
             trim.color = Color.white;

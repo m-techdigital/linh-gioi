@@ -90,13 +90,13 @@ namespace LinhGioi.UI
             foreach(var label in _world.GetComponentsInChildren<TextMesh>(true))
                 if(!label.name.StartsWith("Square sign",StringComparison.Ordinal))label.GetComponent<Renderer>().enabled=false;
             _world.BeginArchitectureReview();
-            var positions=new[]{new Vector3(-14,14,-20),new Vector3(12,3,7),new Vector3(10.5f,2.2f,.2f),new Vector3(9,2.6f,10.5f)};
+            var positions=new[]{new Vector3(-14,14,-20),new Vector3(12,3,7),new Vector3(10.5f,2.2f,.2f),new Vector3(9,2.6f,10.5f),new Vector3(13.3f,1.05f,11.6f)};
             for(var view=0;view<positions.Length;view++)
             {
-                Camera.main.transform.position=positions[view];Camera.main.transform.LookAt(view==3?new Vector3(12,1.5f,16):view==2?new Vector3(15,1.65f,4):new Vector3(0,2.8f,0));
+                Camera.main.transform.position=positions[view];Camera.main.transform.LookAt(view==4?new Vector3(16.5f,.38f,14f):view==3?new Vector3(12,1.5f,16):view==2?new Vector3(15,1.65f,4):new Vector3(0,2.8f,0));
                 yield return Capture(directory,"square-inspection-"+view);
             }
-            Debug.Log("LGO_TRAINING_SQUARE_CAPTURE_COMPLETE frames=11 landmark_triangles="+mesh.triangles.Length/3+" height=6.5 guide=true touch=true pulse=true settled=true repeat_guard=true circulation=true tea=true viewport="+Screen.width+"x"+Screen.height);
+            Debug.Log("LGO_TRAINING_SQUARE_CAPTURE_COMPLETE frames=12 landmark_triangles="+mesh.triangles.Length/3+" height=6.5 guide=true touch=true pulse=true settled=true repeat_guard=true circulation=true tea=true viewport="+Screen.width+"x"+Screen.height);
             Application.Quit(0);
         }
     }

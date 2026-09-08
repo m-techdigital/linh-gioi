@@ -1,5 +1,8 @@
 # Linh Giới Online — Next Action
 
+- Bộ cây cảnh2026-09-08: CityGardenBotany có5 mesh dùng chung cho bụi lá kép/hoa/cỏ/cụm lá tán/cụm hoa tán, áp dụng bồn/chậu/4cây quảng trường; hai sắc lá và vật liệu hoa riêng. Build399.351.262B (+5.491B),0 lỗi/19 cảnh báo;12frame1920×1080 capture, đã xem6 góc cây cảnh tại `build/visual-evidence/square-canopy-desktop/review.json`, tuyến thoại/chạm/pulse/hồi/không lặp/đi vòng tới trà qua.2 build/2 capture, giữ lỗi tán phẳng lượt đầu. City kit1.400.628tri (+477.436),13batch/không texture mới; không claim tối ưu FPS/RAM/mobile. Chưa final: thiếu gân/chất liệu lá, tán còn lặp, hoa trắng sáng phẳng; chưa gió/LOD. NEXT: phát triển Thanh Huyền/đời sống sân theo SCN002v0.2 và module chung; không tiếp chuỗi hệ số lá nhỏ. Phố cũ giữ bộ cây cũ, chưa rerun legacy.
+
+
 - Rìa sân2026-09-08: ba nhóm nhà thấp/quầy hàng/hai tầng, hai tháp xa + mái công trình rộng; thêm gian nghề(12,0,16), đèn mái ngói và biển vật lý Gian nghề/Trà đình. Reuse CitySquareDetails/11batch vật liệu, không texture mới. Build399.345.771B (+4.816B),0 lỗi/10 cảnh báo;1 build/1 capture,11 ảnh1920×1080 đã xem `build/visual-evidence/square-district-desktop/review.json`, tuyến thoại/chạm/pulse/hồi/không lặp/đi vòng tới trà qua. City kit923.192tri (−115.264), chưa FPS/RAM/mobile. Chưa art final: công trình xa còn đơn giản, thiếu Thanh Huyền/dân cư/hoạt động; gian nghề chỉ cảnh quan, chưa chế tạo hoặc walk-test riêng bàn. NEXT: phát triển cụm sinh hoạt theo SCN002v0.2 và hoàn thiện chất lượng cây/cảnh quan bằng module chung, không micro-test lặp phần đã qua.
 
 
