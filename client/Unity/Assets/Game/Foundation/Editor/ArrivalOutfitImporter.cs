@@ -191,6 +191,7 @@ namespace LinhGioi.Foundation.Editor
             portrait.alphaIsTransparency = true;
             portrait.textureCompression = TextureImporterCompression.CompressedHQ;
             portrait.SaveAndReimport();
+            WardrobeSurfaceImporter.Apply();
             Debug.Log("LGO_KEEPER_MODEL_READY semantic_sections=wardrobe_slots runtime_atlases=2");
         }
 

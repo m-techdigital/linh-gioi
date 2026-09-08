@@ -10,8 +10,8 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "210ca6f3760485d56632e0817fc9cb91f7f4f273f23092b9bf3d74cf84a8f863",
-  "fbx_sha256": "0ab26fd8bb8a29c970a0f2180d13025961d461327cb5cf8a697e9f2a509ca87b",
+  "source_sha256": "008290c28b9f9b87e1301b0278f5207b93cb0510227c699ec9a5a8ce5a512f27",
+  "fbx_sha256": "f449e2b4f9e81b567aabbb000dfe0ef7d3ada0ba98e995e0f9e1bd9ae030b88b",
   "triangles": 57889,
   "vertices": 29259,
   "bones": 65,
@@ -41,28 +41,30 @@
   "runtime_verified": true,
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
   "runtime_scope": "macOS development Player1920x1080, camera cận; idle0/90/180, guide front/back, return, hai ảnh player dùng chung atlas",
-  "runtime_mesh_vertices": 33507,
+  "runtime_mesh_vertices": 33185,
   "runtime_renderer_count": 1,
   "runtime_material_count": 2,
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/upper-armor-clavicle-desktop/review.json",
-    "build/dev-loop/upper-armor-clavicle-keeper-unity.log",
-    "build/dev-loop/upper-armor-clavicle-build-unity.log"
+    "build/visual-evidence/wardrobe-surface-desktop/review.json",
+    "build/dev-loop/armor-material-keeper-unity.log",
+    "build/dev-loop/wardrobe-surface-final-import-unity.log",
+    "build/dev-loop/wardrobe-surface-final-build-unity.log"
   ],
   "remaining": [
-    "Texture giáp còn mảng đen và kéo màu ở mặt bên; ngực/cổ vẫn phụ thuộc projection ảnh, chưa sắc như final.",
-    "Nếp cổ được nâng nhẹ nhưng visual delta chính của batch là silhouette và chuyển động giáp vai.",
-    "Chưa xác nhận toàn bộ animation đi/chạy/combat hoặc mọi góc máy."
+    "Vùng áo/ngực và dưới giáp vai vẫn có bóng/hoa văn chiếu từ ảnh cũ; chưa có bề mặt vải sạch và relief thật như final.",
+    "Mask kim loại suy ra từ màu atlas, chưa phải phân vùng vật liệu được vẽ tay cho mọi item.",
+    "Chưa xác nhận mọi ánh sáng, locomotion, FPS hoặc mobile/tablet."
   ],
   "budget": {
-    "mac_build_bytes": 393749938,
-    "mac_build_delta_bytes": -1,
+    "mac_build_bytes": 394511250,
+    "mac_build_delta_bytes": 761312,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
   },
   "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes.",
-  "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV."
+  "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV.",
+  "surface_pipeline": "pack_ceremonial_armor.py → export; bake_wardrobe_surface_mask.py → WardrobeSurfaceImporter.Apply. Re-bake mask when wardrobe atlas changes."
 }

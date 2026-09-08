@@ -6,5 +6,22 @@
   "prompt_summary": "Flat opaque leather boot-shaft albedo, central V-shaped gold shin guard with restrained cloud scroll, dark seamless back edges, gold cuff, quiet leather ankle, no text/perspective/background.",
   "runtime": "Ô512x512 +32px gutter trong vùng trống576x576 của atlas4096x2048 dùng chung; không thêm material hoặc tăng atlas.",
   "pipeline": "tools/art/pack_ceremonial_boots.py",
-  "scope": "Chất liệu cho mesh 3D; không phải ảnh nhân vật/billboard. Chưa production-final."
+  "scope": "Chất liệu cho mesh 3D; không phải ảnh nhân vật/billboard. Chưa production-final.",
+  "ceremonial_armor": {
+    "asset": "ceremonial-armor-albedo.png",
+    "sha256": "c72164a35e3fb34c0f81fda0b2bf65315cc0b60b2777bd5a10163244a9008e4e",
+    "generator": "builtin imagegen",
+    "reference": "Keeper canonical sheet: navy enamel, antique gold cloud ornament",
+    "purpose": "Flat albedo for polar shoulder UVs; not a demo image or billboard",
+    "runtime_patch": "512×512 +32px gutter at atlas pixel x576,y0; same4096×2048 shared atlas",
+    "pipeline": "tools/art/pack_ceremonial_armor.py",
+    "runtime_verified": true,
+    "evidence": "build/visual-evidence/wardrobe-surface-desktop/review.json"
+  },
+  "surface_mask": {
+    "generator": "bake_wardrobe_surface_mask.py, metallic hue segmentation excluding face/hair and low-saturation ivory",
+    "runtime_format": "1024x512 BC7, R metallic A smoothness",
+    "evidence": "build/visual-evidence/wardrobe-surface-desktop/review.json",
+    "sha256": "386ef41fb5cf6314070309e87dfd28c05769c601facb0f5d43fa7347ce770e50"
+  }
 }

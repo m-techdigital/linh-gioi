@@ -1,6 +1,6 @@
 {
-  "source_sha256": "cf393da138b9f77fd3af0c4e7f2c3968ebae4ca2ebb1de7d5712f27c88fbb2c6",
-  "fbx_sha256": "5726cfa2065adfb2a3096fa5362ce5408ebb7efdf329e0261677fa5d979c0af2",
+  "source_sha256": "d2c234fef337992f449d0ed4af51d04e4412fc189c85d0dba76610e160ce2cbc",
+  "fbx_sha256": "6abd0c2fa1608f929c54719fdae28b10fdb30283b484d6abad42f99d606b6307",
   "triangles": 67494,
   "vertices": 33818,
   "bones": 65,
@@ -31,12 +31,13 @@
     "ArrivalFace.png"
   ],
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
-  "unity_vertices": 37879,
+  "unity_vertices": 37557,
   "source_origin": "Quaternius CC0 arrival study; shared Keeper body atlas/rig provenance in ../gate-keeper/; new generated player face described in SOURCE.md and face-prompt.txt.",
   "evidence": [
-    "build/visual-evidence/upper-armor-clavicle-desktop/review.json",
-    "build/dev-loop/upper-armor-clavicle-player-unity.log",
-    "build/dev-loop/upper-armor-clavicle-build-unity.log"
+    "build/visual-evidence/wardrobe-surface-desktop/review.json",
+    "build/dev-loop/armor-material-player-unity.log",
+    "build/dev-loop/wardrobe-surface-final-import-unity.log",
+    "build/dev-loop/wardrobe-surface-final-build-unity.log"
   ],
   "authoring_regeneration": "build/asset-staging/player-neck-runtime/full-rebuild/player-receipt.json",
   "not_claimed": [
@@ -46,12 +47,13 @@
     "GPU/FPS budget",
     "animation tóc vật lý"
   ],
-  "runtime_mesh_vertices": 37879,
+  "runtime_mesh_vertices": 37557,
   "remaining": [
-    "Texture giáp còn mảng đen và kéo màu ở mặt bên; ngực/cổ vẫn phụ thuộc projection ảnh, chưa sắc như final.",
-    "Nếp cổ được nâng nhẹ nhưng visual delta chính của batch là silhouette và chuyển động giáp vai.",
-    "Chưa xác nhận toàn bộ animation đi/chạy/combat hoặc mọi góc máy."
+    "Vùng áo/ngực và dưới giáp vai vẫn có bóng/hoa văn chiếu từ ảnh cũ; chưa có bề mặt vải sạch và relief thật như final.",
+    "Mask kim loại suy ra từ màu atlas, chưa phải phân vùng vật liệu được vẽ tay cho mọi item.",
+    "Chưa xác nhận mọi ánh sáng, locomotion, FPS hoặc mobile/tablet."
   ],
   "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes.",
-  "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV."
+  "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV.",
+  "surface_pipeline": "pack_ceremonial_armor.py → export; bake_wardrobe_surface_mask.py → WardrobeSurfaceImporter.Apply. Re-bake mask when wardrobe atlas changes."
 }
