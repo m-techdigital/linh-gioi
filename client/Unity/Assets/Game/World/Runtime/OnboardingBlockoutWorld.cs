@@ -15,6 +15,9 @@ namespace LinhGioi.World
         public Vector3 StoneLocation => TrainingSquare ? new Vector3(0f,0f,-2.7f) : StonePoint;
         public Vector3 RestLocation => TrainingSquare ? new Vector3(13f,0f,4f) : ForecourtPoint;
         private Vector3 _guideDestination = StonePoint;
+        public bool PlaceReadingVisible { get; set; }
+        public Vector3 PlaceLookTarget { get; set; }
+        public Vector3 PlaceViewPosition { get; set; }
         public Vector2 Movement { get; set; }
         public Vector2 ScreenMovement { get; set; }
         public Vector3 Position => _player.transform.position;
@@ -415,7 +418,7 @@ namespace LinhGioi.World
         private void Update()
         {
             var direction = Vector3.zero;
-            if (Application.isFocused && !DialogueVisible)
+            if (Application.isFocused && !DialogueVisible && !PlaceReadingVisible)
             {
                 var input = ScreenMovement + new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
                 if (input.sqrMagnitude < 0.0001f) _screenInputHeld = false;
@@ -439,10 +442,12 @@ namespace LinhGioi.World
                     _characterAnimator.CrossFadeInFixedTime(LocomotionState, 0.1f, 0);
                 _stoneFacingActive = false;
             }
-            var facing = DialogueVisible
+            var facing = PlaceReadingVisible
+                ? Vector3.ProjectOnPlane(PlaceLookTarget - _player.transform.position, Vector3.up)
+                : DialogueVisible
                 ? Vector3.ProjectOnPlane(KeeperLocation - _player.transform.position, Vector3.up)
                 : velocity;
-            if (!DialogueVisible && _stoneFacingActive && Time.time - _stoneCompletedAt < StoneFeedbackDuration)
+            if (!DialogueVisible && !PlaceReadingVisible && _stoneFacingActive && Time.time - _stoneCompletedAt < StoneFeedbackDuration)
                 facing = Vector3.ProjectOnPlane(StoneLocation - _player.transform.position, Vector3.up);
             if (facing.sqrMagnitude > 0.0025f)
                 _characterVisual.rotation = Quaternion.RotateTowards(_characterVisual.rotation,
@@ -522,6 +527,13 @@ namespace LinhGioi.World
         private void LateUpdate()
         {
             if (_cameraBrain.enabled) _cameraBrain.ManualUpdate();
+            if (PlaceReadingVisible)
+            {
+                var direction = PlaceLookTarget - PlaceViewPosition;
+                var right = Vector3.Cross(Vector3.up, direction).normalized;
+                _camera.transform.SetPositionAndRotation(PlaceViewPosition,
+                    Quaternion.LookRotation(direction - right * .75f, Vector3.up));
+            }
             if (KeeperReady && !_keeperWasReady) _keeperGreetingUntil = Time.time + 2.5f;
             _keeperWasReady = KeeperReady;
             if (DialogueVisible)

@@ -17,9 +17,18 @@ namespace LinhGioi.UI
             _guidance.Hint.text=_forecourtVisited?"Bạn có thể nghỉ chân hoặc đi dạo quanh quảng trường.":_stoneCompleted
                 ? OnboardingDialogueContent.StoneFeedback(Time.unscaledTime-_stoneFeedbackStartedAt) ?? "Theo vòng sân sang phải, tới trà đình."
                 :_session.Completed?"Tới dấu sáng trên mép bệ phía trước.":"Người Giữ Cổng ở bên trái lối vào.";
+            var place = NearbySquarePlace();
+            if (place >= 0 && !Dialogue.Active)
+            {
+                _guidance.Objective.text = place == 0 ? "Trà đình" : "Gian nghề";
+                _guidance.Hint.text = _placesRead[place]
+                    ? (place == 0 ? "Bạn có thể xem lại bộ trà; gian nghề ở phía bắc, dọc mép sân." : "Bạn có thể xem lại dụng cụ hoặc trở về quảng trường.")
+                    : (place == 0 ? "Một chỗ dừng chân dưới mái ngói. Nhấn F hoặc Xem để quan sát bộ trà." : "Bàn nghề bên quảng trường. Nhấn F hoặc Xem để quan sát dụng cụ.");
+            }
+            _world.SetSquarePlaceFocus(place, !Dialogue.Active);
             var returnGuide=_stoneCompleted && InRange;
-            RuntimeUiFactory.ApplyWorldTouchInteraction(_interact,returnGuide?"Gặp":_stoneCompleted?"Đã xong":_session.Completed?"Luyện":"Gặp");
-            _interact.SetEnabled(!Dialogue.Active && InRange && (!_stoneCompleted || returnGuide));
+            RuntimeUiFactory.ApplyWorldTouchInteraction(_interact,place>=0?"Xem":returnGuide?"Gặp":_stoneCompleted?"Đã xong":_session.Completed?"Luyện":"Gặp");
+            _interact.SetEnabled(!Dialogue.Active && (place>=0 || (InRange && (!_stoneCompleted || returnGuide))));
             _world.KeeperReady=(!_session.Completed || _stoneCompleted) && InRange;
             _world.SetStoneFeedback(_session.Completed && !_stoneCompleted && InRange,_stoneCompleted);
             if(!_capturing) _world.ScreenMovement=Application.isFocused?_pad.Value:Vector2.zero;

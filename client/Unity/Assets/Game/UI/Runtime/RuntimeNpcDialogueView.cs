@@ -14,6 +14,13 @@ namespace LinhGioi.UI
         internal readonly ScrollView Scroll;
         internal readonly Button ContinueButton, CloseButton, InformationButton;
         private NpcDialogueSession _session;
+        private bool _placePresentation;
+
+        internal void SetPlacePresentation(bool place)
+        {
+            _placePresentation = place;
+            Portrait.style.display = place ? DisplayStyle.None : DisplayStyle.Flex;
+        }
 
         internal RuntimeNpcDialogueView(RuntimeUiLayoutProfile layout, Action advance, Action close, Texture2D portrait = null)
         {
@@ -58,6 +65,11 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyButtonTier(InformationButton, layout.IsMobile ? RuntimeUiButtonTier.Compact : RuntimeUiButtonTier.Standard);
             RuntimeUiOverflowGuard.ApplyButton(InformationButton);
             InformationButton.style.flexShrink = 0;
+            if (_placePresentation && !layout.IsMobile && !layout.IsTablet)
+                RuntimeUiOverflowGuard.ApplyViewportOverlaySurface(Panel,
+                    RuntimeUiOverlayPlacement.Left, RuntimeUiOverlayVerticalPlacement.Bottom,
+                    Mathf.Min(530f, layout.DialogueOverlayWidth), layout.DialoguePanelMaxHeight,
+                    24f, 24f);
         }
 
         internal void Refresh(NpcDialogueSession session)
@@ -72,7 +84,7 @@ namespace LinhGioi.UI
             Speaker.text = session.Speaker;
             Line.text = session.Line;
             if (resetReadingPosition) Scroll.scrollOffset = Vector2.zero;
-            Progress.text = session.ReadingInformation ? session.InformationAction : "Đối thoại: " + session.Progress;
+            Progress.text = session.ReadingInformation ? session.InformationAction : (_placePresentation ? "Khám phá: " : "Đối thoại: ") + session.Progress;
             ContinueButton.text = session.ReadingInformation ? "Quay lại" : session.HasNext ? "Tiếp tục" : session.CompletionAction;
         }
     }

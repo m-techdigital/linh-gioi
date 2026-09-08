@@ -28,7 +28,7 @@ namespace LinhGioi.UI
         private Button _quit;
 
         // Completed introduction remains progress; repeat conversations have their own lifecycle.
-        private NpcDialogueSession Dialogue => _stoneCompleted ? _returnSession : _session;
+        private NpcDialogueSession Dialogue => _placeSession ?? (_stoneCompleted ? _returnSession : _session);
         private bool InRange => IsNear(_session.Completed && !_stoneCompleted
             ? _world.StoneLocation : _world.KeeperLocation);
         private bool IsNear(Vector3 point) => Vector2.Distance(new Vector2(_world.Position.x, _world.Position.z),
@@ -57,7 +57,7 @@ namespace LinhGioi.UI
 
         internal void HandleEscape()
         {
-            if (Dialogue.Active) { Dialogue.Close(); RefreshDialogue(); }
+            if (Dialogue.Active) CloseDialogue();
             else Leave();
         }
 
@@ -101,7 +101,7 @@ namespace LinhGioi.UI
             root.Add(_guidanceScroll);
             _dialogue = new RuntimeNpcDialogueView(RuntimeUiLayoutProfile.FromScreen(null, Screen.width, Screen.height),
                 AdvanceDialogue,
-                () => { Dialogue.Close(); RefreshDialogue(); }, Resources.Load<Texture2D>("LGOGateKeeperPortrait"));
+                CloseDialogue, Resources.Load<Texture2D>("LGOGateKeeperPortrait"));
             root.Add(_dialogue.Panel);
             _applyLayout = () =>
             {
@@ -119,7 +119,9 @@ namespace LinhGioi.UI
 
         private void Interact()
         {
-            if (Dialogue.Active || !InRange) return;
+            if (Dialogue.Active) return;
+            if (_world.TrainingSquare && TryOpenSquarePlace()) return;
+            if (!InRange) return;
             if (_stoneCompleted) Dialogue.Open();
             else if (_session.Completed)
             {
@@ -132,6 +134,17 @@ namespace LinhGioi.UI
 
         private void AdvanceDialogue()
         {
+            if (_placeSession != null)
+            {
+                if (!_placeSession.Advance()) return;
+                if (!_placeSession.Active)
+                {
+                    _placesRead[_readingPlace] = true;
+                    _placeSession = null;
+                }
+                RefreshDialogue();
+                return;
+            }
             if (!Dialogue.Advance()) return;
             RefreshDialogue();
             // A completed return conversation points to its actual destination;
@@ -145,8 +158,10 @@ namespace LinhGioi.UI
         {
             _world.ResetMovementInput();
             _pad.ResetInput();
-            _world.DialogueVisible = Dialogue.Active;
-            if (_session.Completed && !_guideDirectionPresented)
+            _world.DialogueVisible = Dialogue.Active && _placeSession == null;
+            _world.PlaceReadingVisible = _placeSession != null;
+            _dialogue.SetPlacePresentation(_placeSession != null);
+            if (_placeSession == null && _session.Completed && !_guideDirectionPresented)
             {
                 _guideDirectionPresented = true;
                 _world.GuideToStone();
@@ -158,6 +173,12 @@ namespace LinhGioi.UI
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            var placesReviewIndex=Array.IndexOf(args,"--lgo-square-places-review");
+            if(placesReviewIndex>=0 && placesReviewIndex+1<args.Length)
+            {
+                yield return CaptureSquarePlacesReview(args[placesReviewIndex+1]);
+                yield break;
+            }
             var squareReviewIndex=Array.IndexOf(args,"--lgo-training-square-review");
             if(squareReviewIndex>=0 && squareReviewIndex+1<args.Length)
             {

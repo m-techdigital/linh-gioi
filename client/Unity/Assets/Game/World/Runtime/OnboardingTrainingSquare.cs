@@ -6,6 +6,21 @@ namespace LinhGioi.World
     public sealed partial class OnboardingBlockoutWorld
     {
         private Mesh _landmarkSealMesh;
+        private readonly SpriteRenderer[] _placeFocus = new SpriteRenderer[2];
+
+        public static Vector3 SquarePlaceLocation(int index) => index==0
+            ? new Vector3(13,0,4) : new Vector3(12,0,14.8f);
+
+        public void SetSquarePlaceFocus(int index, bool visible)
+        {
+            if(!TrainingSquare) return;
+            for(var i=0;i<_placeFocus.Length;i++)
+            {
+                if(_placeFocus[i]==null)
+                    _placeFocus[i]=CreateInteractionFocus("Square place focus "+i,SquarePlaceLocation(i));
+                _placeFocus[i].gameObject.SetActive(visible && i==index);
+            }
+        }
 
         private void CreateTrainingSquare(Material paving, Material walls, Material roof, Material timber)
         {
