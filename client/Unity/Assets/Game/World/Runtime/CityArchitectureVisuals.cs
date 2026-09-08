@@ -308,7 +308,7 @@ namespace LinhGioi.World
 
         // The same timber / lattice / gallery family as linh-thanh-kit/build_preview.py.
         // All coordinates stay inside the existing house footprint except overhead eaves.
-        internal void House(Vector3 centre,float height)
+        internal void House(Vector3 centre,float height,bool upperStorey=true)
         {
             var sign=centre.x<0?1f:-1f;
             Vector3 P(float depth,float y,float along)=>centre+new Vector3(sign*depth,y,along);
@@ -350,7 +350,7 @@ namespace LinhGioi.World
                 foreach(var y in new[]{height-1.01f,height-.53f}) B(_wood,1.91f,y,along,.32f,.06f,.37f);
                 foreach(var offset in new[]{-.16f,.16f}) B(_wood,2.05f,height-.77f,along+offset,.04f,.46f,.04f);
             }
-            if(height<3f) return;
+            if(height<3f || !upperStorey) return;
             // A narrower upper room rises out of the lower roof, replacing the flat repeated skyline.
             var upperHeight=centre.z>5f && centre.z<7f ? 2.3f : 1.35f;
             var floor=height+.35f;var top=floor+upperHeight;
@@ -415,9 +415,18 @@ namespace LinhGioi.World
         }
         internal void SquareBackdrop()
         {
-            Tower(new Vector3(-15,0,31),13f);Tower(new Vector3(14,0,33),15f);
-            Tower(new Vector3(-6,0,39),18f);Tower(new Vector3(6,0,45),21f);
-            Tower(new Vector3(-24,0,18),15f);Tower(new Vector3(25,0,21),17f);
+            // Two distant landmarks frame a lower civic roofline; the square stone remains the focus.
+            Tower(new Vector3(-26,0,43),14f);Tower(new Vector3(25,0,47),16f);
+            var hall=new Vector3(0,0,39);
+            Masonry(hall+Vector3.up*.45f,new Vector3(12f,.9f,7f));
+            Box(_ivory,hall+Vector3.up*2.6f,new Vector3(10f,4.4f,5f));
+            for(var x=-4;x<=4;x+=2)
+            {
+                Box(_wood,hall+new Vector3(x,2.7f,-2.65f),new Vector3(.25f,4.6f,.25f));
+                Box(_window,hall+new Vector3(x,2.2f,-2.55f),new Vector3(1.3f,2.1f,.08f));
+            }
+            Roof(hall+Vector3.up*4.9f,new Vector3(6.2f,1.4f,3.6f));
+
         }
 
         private void CityBackdrop()

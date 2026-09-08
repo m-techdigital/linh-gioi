@@ -28,9 +28,10 @@ namespace LinhGioi.World
                 var inward=(-centre).normalized;
                 var initial=centre.x<0?Vector3.right:Vector3.left;
                 var rotation=Quaternion.FromToRotation(initial,inward);
-                var height=3.2f+((int)angle%4)*.35f;
+                var style=((int)(angle/18f))%3;
+                var height=style==2?3.6f:3.2f;
                 _city.BeginModule(centre,rotation);
-                _city.SquareResidence(centre,height);
+                _city.SquareResidence(centre,height,style);
                 _city.EndModule();
                 var collision=Box("Square residence collision",centre+Vector3.up*(height*.5f),new Vector3(3f,height,4.8f),walls);
                 collision.transform.rotation=rotation;collision.GetComponent<Renderer>().enabled=false;
@@ -72,6 +73,18 @@ namespace LinhGioi.World
             _city.TeaPavilionDetails(tea);
             _city.GardenBed(new Vector3(18.3f,.025f,4),new Vector2(1.5f,6.8f),true);
             _city.GardenBed(new Vector3(15,.025f,8),new Vector2(6f,1.2f),false);
+            var craft=new Vector3(12,0,16);
+            _city.CraftStall(craft);
+            Box("Craft workbench collision",craft+new Vector3(0,.48f,0),new Vector3(3.1f,.96f,.95f),timber).GetComponent<Renderer>().enabled=false;
+            foreach(var x in new[]{-2f,2f})
+                Box("Craft pillar collision",craft+new Vector3(x,1.5f,.8f),new Vector3(.2f,3f,.2f),timber).GetComponent<Renderer>().enabled=false;
+            foreach(var point in new[]{new Vector3(-12,0,-8),new Vector3(12,0,-8),new Vector3(-12,0,8),new Vector3(12,0,8)})
+            {
+                _city.SquareLantern(point);
+                Box("Square lantern collision",point+Vector3.up*1.05f,new Vector3(.36f,2.1f,.36f),walls).GetComponent<Renderer>().enabled=false;
+            }
+            SquareSign("Gian nghề",craft+new Vector3(0,2.65f,-.48f),Quaternion.identity,1.65f);
+            SquareSign("Trà đình",new Vector3(12.94f,2.83f,4),Quaternion.Euler(0,90,0),1.14f);
             _city.Finish();
             CreateSquareSky();
             // Continuous ring inlays, drawn flush with the ground and without navigation obstacles.
@@ -84,19 +97,17 @@ namespace LinhGioi.World
                     new Vector3(.045f,.012f,radius*Mathf.PI*2/64+.01f),bronze,false);
                 strip.transform.rotation=Quaternion.Euler(0,-angle*Mathf.Rad2Deg,0);
             }
-            // Lamps and benches live on the outside of the ring, leaving the central routes open.
-            var paper=Material(new Color(.95f,.74f,.35f));
-            foreach(var point in new[]{new Vector3(-12,0,-8),new Vector3(12,0,-8),new Vector3(-12,0,8),new Vector3(12,0,8)})
-            {
-                Box("Square lantern base",point+Vector3.up*.2f,new Vector3(.7f,.4f,.7f),walls);
-                Box("Square lantern post",point+Vector3.up*1f,new Vector3(.18f,1.5f,.18f),timber);
-                Box("Square lantern shade",point+Vector3.up*1.9f,new Vector3(.55f,.75f,.55f),paper,false);
-                Box("Square lantern cap",point+Vector3.up*2.3f,new Vector3(.7f,.13f,.7f),bronze,false);
-                for(var x=-1;x<=1;x+=2)for(var z=-1;z<=1;z+=2)
-                    Box("Square lantern frame",point+new Vector3(x*.29f,1.9f,z*.29f),new Vector3(.045f,.78f,.045f),timber,false);
-                Box("Square lantern lower rail",point+Vector3.up*1.51f,new Vector3(.67f,.09f,.67f),timber,false);
-            }
             Debug.Log("LGO_TRAINING_SQUARE_CREATED footprint=40x48 landmark=6.5m circulation=7to11m legacy_street=retained");
+        }
+
+        private void SquareSign(string text,Vector3 point,Quaternion rotation,float width)
+        {
+            var label=WorldLabelPresenter.Create("Square sign "+text,text,point,RuntimeArtCatalog.Gold);
+            label.transform.SetParent(transform,true);label.transform.rotation=rotation;
+            WorldLabelPresenter.ApplyStyle(label,64,.075f);
+            var bounds=label.GetComponent<Renderer>().bounds;
+            var span=rotation==Quaternion.identity?bounds.size.x:bounds.size.z;
+            if(span>.001f)label.transform.localScale=Vector3.one*(width/span);
         }
 
         private Renderer CreateSquareLandmark()

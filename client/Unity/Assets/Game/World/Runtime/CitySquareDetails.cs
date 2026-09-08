@@ -6,11 +6,11 @@ namespace LinhGioi.World
     // Reusable courtyard modules; all decorative parts join the existing material batches.
     internal sealed partial class CityArchitectureVisuals
     {
-        internal void SquareResidence(Vector3 centre,float height)
+        internal void SquareResidence(Vector3 centre,float height,int style=0)
         {
             Box(_ivory,centre+Vector3.up*height*.5f,new Vector3(3f,height,4.8f));
             Masonry(centre+Vector3.up*.15f,new Vector3(3.08f,.3f,4.88f));
-            House(centre,height);Roof(centre+Vector3.up*(height+.1f),new Vector3(1.8f,1f,2.7f));
+            House(centre,height,style==2);Roof(centre+Vector3.up*(height+.1f),new Vector3(1.8f,1f,2.7f));
             var sign=centre.x<0?1f:-1f;
             Vector3 P(float depth,float y,float along)=>centre+new Vector3(sign*depth,y,along);
             // Deep porch, stone feet, curved brackets and a low lattice balustrade.
@@ -28,8 +28,74 @@ namespace LinhGioi.World
                 Part(_sphere,_leaf,planter+Vector3.up*.36f,new Vector3(.7f,.65f,1.15f),Quaternion.identity);
                 Part(_flowers,_pink,planter+Vector3.up*.49f,new Vector3(.8f,.6f,1.1f),Quaternion.identity);
             }
+            if(style==1)
+            {
+                // Open shop counter and stacked wares distinguish commerce from quiet homes.
+                Box(_wood,P(2.22f,.76f,0),new Vector3(.75f,.13f,2.2f));
+                for(var item=-2;item<=2;item++)
+                {
+                    Box(item%2==0?_teal:_ivory,P(2.2f,.92f,item*.36f),new Vector3(.32f,.20f,.28f));
+                    Box(_gold,P(2.4f,.91f,item*.36f),new Vector3(.025f,.13f,.035f));
+                }
+                Box(_teal,P(2.74f,2.62f,0),new Vector3(.035f,.35f,2.6f));
+                for(var i=-4;i<=4;i++)Box(_ivory,P(2.765f,2.60f,i*.28f),new Vector3(.025f,.30f,.06f));
+            }
             // Reuse the same curved tile family on the projecting porch canopy.
             Roof(P(2.05f,3.05f,0),new Vector3(.95f,.45f,2.75f));
+        }
+
+        internal void SquareLantern(Vector3 point)
+        {
+            Masonry(point+Vector3.up*.20f,new Vector3(.65f,.4f,.65f));
+            Box(_wood,point+Vector3.up*1.05f,new Vector3(.18f,1.6f,.18f));
+            Box(_gold,point+Vector3.up*1.54f,new Vector3(.40f,.10f,.40f));
+            Box(_ivory,point+Vector3.up*1.98f,new Vector3(.47f,.73f,.47f));
+            for(var x=-1;x<=1;x+=2)for(var z=-1;z<=1;z+=2)
+                Box(_wood,point+new Vector3(x*.255f,1.98f,z*.255f),new Vector3(.065f,.80f,.065f));
+            foreach(var y in new[]{1.6f,2.36f})Box(_wood,point+Vector3.up*y,new Vector3(.64f,.09f,.64f));
+            for(var side=-1;side<=1;side+=2)
+            {
+                Beam(_gold,point+new Vector3(-.20f,1.68f,side*.245f),point+new Vector3(.20f,2.27f,side*.245f),.027f);
+                Beam(_gold,point+new Vector3(.20f,1.68f,side*.245f),point+new Vector3(-.20f,2.27f,side*.245f),.027f);
+            }
+            Roof(point+Vector3.up*2.4f,new Vector3(.48f,.22f,.48f));
+        }
+
+        internal void CraftStall(Vector3 centre)
+        {
+            Masonry(centre+new Vector3(0,.04f,.35f),new Vector3(4.7f,.08f,3.1f));
+            foreach(var x in new[]{-2f,2f})
+            {
+                Masonry(centre+new Vector3(x,.18f,.8f),new Vector3(.42f,.36f,.42f));
+                Box(_wood,centre+new Vector3(x,1.6f,.8f),new Vector3(.20f,3.2f,.20f));
+                Beam(_wood,centre+new Vector3(x,2.6f,.8f),centre+new Vector3(x*.7f,3.2f,.8f),.13f);
+            }
+            Roof(centre+new Vector3(0,3.2f,.45f),new Vector3(2.6f,.65f,1.8f));
+            Box(_wood,centre+new Vector3(0,2.65f,-.40f),new Vector3(2f,.48f,.12f));
+            Box(_wood,centre+new Vector3(0,.93f,0),new Vector3(3.1f,.16f,.95f));
+            foreach(var x in new[]{-1.3f,1.3f})Box(_wood,centre+new Vector3(x,.44f,0),new Vector3(.17f,.88f,.7f));
+            Box(_wood,centre+new Vector3(0,.27f,0),new Vector3(2.7f,.10f,.75f));
+            // Wooden tool rack: physical hooks, handles and bronze heads share the existing palette.
+            foreach(var y in new[]{1.3f,2.1f})Box(_wood,centre+new Vector3(0,y,1.15f),new Vector3(3f,.09f,.13f));
+            for(var tool=-2;tool<=2;tool++)
+            {
+                var p=centre+new Vector3(tool*.48f,1.65f,1.03f);
+                Beam(_wood,p-Vector3.up*.28f,p+Vector3.up*.23f,.055f);
+                Box(_gold,p+Vector3.up*.18f,new Vector3(.22f,.12f,.10f));
+                Box(_gold,p+new Vector3(0,.43f,.04f),new Vector3(.05f,.07f,.15f));
+            }
+            // Repair block, vice, crystal fittings and crates describe a craft space without a fake forge.
+            Box(_stone,centre+new Vector3(.72f,1.07f,0),new Vector3(.55f,.16f,.5f));
+            Box(_gold,centre+new Vector3(.72f,1.2f,0),new Vector3(.63f,.10f,.23f));
+            Box(_wood,centre+new Vector3(-.65f,1.07f,0),new Vector3(.65f,.08f,.47f));
+            for(var i=0;i<3;i++)
+                Part(_cube,_teal,centre+new Vector3(-.84f+i*.2f,1.16f,0),new Vector3(.11f,.18f,.12f),Quaternion.Euler(0,0,20));
+            for(var i=0;i<2;i++)
+            {
+                var crate=centre+new Vector3(-1.3f+i*.85f,.48f,.1f);
+                Box(_wood,crate,new Vector3(.65f,.48f,.5f));
+                foreach(var x in new[]{-.23f,.23f})Box(_gold,crate+new Vector3(x,0,-.255f),new Vector3(.035f,.48f,.025f));
+            }
         }
 
         internal void GardenBed(Vector3 centre,Vector2 size,bool blossom)
@@ -101,7 +167,7 @@ namespace LinhGioi.World
                 Part(vessel,_ivory,tray+new Vector3(x,.025f,.14f),new Vector3(.055f,.07f,.055f),Quaternion.identity);
             var sign=centre+new Vector3(-1.98f,2.83f,0);
             Box(_wood,sign,new Vector3(.11f,.46f,1.35f));
-            for(var i=-2;i<=2;i++)Box(_gold,sign+new Vector3(-.07f,0,i*.22f),new Vector3(.025f,.24f,.025f));
+
         }
     }
 }
