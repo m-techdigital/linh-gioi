@@ -1,6 +1,6 @@
 {
-  "source_sha256": "19d7195494398c092f6e16588f72b05060e314cba177755e6f3cbd18a98752f1",
-  "fbx_sha256": "364a100b2f653df60f5d70ed636b0d850126d6e1e6b99acacc2ccaa5f4ef972d",
+  "source_sha256": "cf393da138b9f77fd3af0c4e7f2c3968ebae4ca2ebb1de7d5712f27c88fbb2c6",
+  "fbx_sha256": "5726cfa2065adfb2a3096fa5362ce5408ebb7efdf329e0261677fa5d979c0af2",
   "triangles": 67494,
   "vertices": 33818,
   "bones": 65,
@@ -34,9 +34,9 @@
   "unity_vertices": 37879,
   "source_origin": "Quaternius CC0 arrival study; shared Keeper body atlas/rig provenance in ../gate-keeper/; new generated player face described in SOURCE.md and face-prompt.txt.",
   "evidence": [
-    "build/visual-evidence/boot-instep-desktop/review.json",
-    "build/dev-loop/boot-instep-player-unity.log",
-    "build/dev-loop/boot-instep-build-unity.log"
+    "build/visual-evidence/upper-armor-clavicle-desktop/review.json",
+    "build/dev-loop/upper-armor-clavicle-player-unity.log",
+    "build/dev-loop/upper-armor-clavicle-build-unity.log"
   ],
   "authoring_regeneration": "build/asset-staging/player-neck-runtime/full-rebuild/player-receipt.json",
   "not_claimed": [
@@ -48,9 +48,10 @@
   ],
   "runtime_mesh_vertices": 37879,
   "remaining": [
-    "Mũi/đế còn đơn giản so với hoa văn giáp chân của sheet final.",
-    "Giáp vai và vùng ngực/cổ còn khác hình khối và độ sắc nét của demo; cần macro pass riêng.",
-    "Capture này không xác nhận đi/chạy, FPS, mobile hoặc toàn game."
+    "Texture giáp còn mảng đen và kéo màu ở mặt bên; ngực/cổ vẫn phụ thuộc projection ảnh, chưa sắc như final.",
+    "Nếp cổ được nâng nhẹ nhưng visual delta chính của batch là silhouette và chuyển động giáp vai.",
+    "Chưa xác nhận toàn bộ animation đi/chạy/combat hoặc mọi góc máy."
   ],
-  "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes."
+  "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes.",
+  "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV."
 }

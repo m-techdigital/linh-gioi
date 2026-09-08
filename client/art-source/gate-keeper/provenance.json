@@ -10,8 +10,8 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "dc698fb271a492a044ad257fa3aec33df7345d3ac498925439e14154f74de843",
-  "fbx_sha256": "b83d7659321e3b8ac11750d074c35fb6d9be81d1dab31f6ec5d5ac4c2ef8d88c",
+  "source_sha256": "210ca6f3760485d56632e0817fc9cb91f7f4f273f23092b9bf3d74cf84a8f863",
+  "fbx_sha256": "0ab26fd8bb8a29c970a0f2180d13025961d461327cb5cf8a697e9f2a509ca87b",
   "triangles": 57889,
   "vertices": 29259,
   "bones": 65,
@@ -47,21 +47,22 @@
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/boot-instep-desktop/review.json",
-    "build/dev-loop/boot-instep-keeper-unity.log",
-    "build/dev-loop/boot-instep-build-unity.log"
+    "build/visual-evidence/upper-armor-clavicle-desktop/review.json",
+    "build/dev-loop/upper-armor-clavicle-keeper-unity.log",
+    "build/dev-loop/upper-armor-clavicle-build-unity.log"
   ],
   "remaining": [
-    "Mũi/đế còn đơn giản so với hoa văn giáp chân của sheet final.",
-    "Giáp vai và vùng ngực/cổ còn khác hình khối và độ sắc nét của demo; cần macro pass riêng.",
-    "Capture này không xác nhận đi/chạy, FPS, mobile hoặc toàn game."
+    "Texture giáp còn mảng đen và kéo màu ở mặt bên; ngực/cổ vẫn phụ thuộc projection ảnh, chưa sắc như final.",
+    "Nếp cổ được nâng nhẹ nhưng visual delta chính của batch là silhouette và chuyển động giáp vai.",
+    "Chưa xác nhận toàn bộ animation đi/chạy/combat hoặc mọi góc máy."
   ],
   "budget": {
-    "mac_build_bytes": 393749939,
-    "mac_build_delta_bytes": -162880,
+    "mac_build_bytes": 393749938,
+    "mac_build_delta_bytes": -1,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
   },
-  "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes."
+  "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes.",
+  "upper_armor_pipeline": "refine_upper_armor.py: swept shoulder profile, rigid existing clavicle attachment, raised V lapel; same topology/materials/UV."
 }
