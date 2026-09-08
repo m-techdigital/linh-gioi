@@ -10,13 +10,40 @@ import bpy
 parser = argparse.ArgumentParser()
 parser.add_argument('--source', type=Path, required=True)
 parser.add_argument('--output', type=Path, required=True)
+parser.add_argument('--wardrobe-master', action='store_true', help='Export marked garment objects from the editable wardrobe master')
 args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
 bpy.ops.wm.open_mainfile(filepath=str(args.source.resolve()))
 rig = bpy.data.objects['Armature']
-mesh = bpy.data.objects['Keeper Macro Reconstruction']
 for bone in rig.pose.bones:
     bone.matrix_basis.identity()
 bpy.context.view_layer.update()
+if args.wardrobe_master:
+    parts = [obj for obj in bpy.context.scene.objects if obj.type == 'MESH' and obj.asset_data is not None]
+    assert parts and all(obj.data.attributes.get('appearance_slot') is not None for obj in parts)
+    for part in parts:
+        bpy.context.view_layer.objects.active = part
+        for modifier in list(part.modifiers):
+            if modifier.type != 'ARMATURE':
+                bpy.ops.object.modifier_apply(modifier=modifier.name)
+    bpy.ops.object.select_all(action='DESELECT')
+    for part in parts:
+        part.select_set(True)
+    bpy.context.view_layer.objects.active = parts[0]
+    bpy.ops.object.join()
+    mesh = bpy.context.object
+    mesh.name = 'Keeper Macro Reconstruction'
+    old_materials = list(mesh.data.materials)
+    body = bpy.data.materials['Keeper Reconstruction']
+    face = bpy.data.materials['Keeper Reconstruction Face']
+    assert all(old_materials[polygon.material_index] in (body, face) for polygon in mesh.data.polygons)
+    surface_ids = [0 if old_materials[polygon.material_index] == body else 1 for polygon in mesh.data.polygons]
+    mesh.data.materials.clear()
+    mesh.data.materials.append(body)
+    mesh.data.materials.append(face)
+    for polygon, surface in zip(mesh.data.polygons, surface_ids):
+        polygon.material_index = surface
+else:
+    mesh = bpy.data.objects['Keeper Macro Reconstruction']
 mesh.data.calc_loop_triangles()
 assert len(rig.data.bones) == 65
 assert len(mesh.data.loop_triangles) > 0
