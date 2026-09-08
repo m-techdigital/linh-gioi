@@ -10,10 +10,10 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "fd5a821b8931830d431a6d0f6c6ab2e8a0ea3ee42162fcd8b5afb8765a53fadb",
-  "fbx_sha256": "5cdb531449d5ec0a4523c401bfc6302da7e28cf40c435b71b167905dbe4ac699",
-  "triangles": 62017,
-  "vertices": 31546,
+  "source_sha256": "d1acf02519bff72814f6e9a44368a4393b34244119e9de374372029905d19669",
+  "fbx_sha256": "9158d2593be25357ce6fe201896f833ee83901348440f9207c85119cc3c38a2c",
+  "triangles": 62401,
+  "vertices": 31771,
   "bones": 65,
   "materials": 2,
   "authoring_material_sections": 9,
@@ -41,24 +41,24 @@
   "runtime_verified": true,
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
   "runtime_scope": "macOS development Player1920x1080, camera cận; idle0/90/180, guide front/back, return, hai ảnh player dùng chung atlas",
-  "runtime_mesh_vertices": 35844,
+  "runtime_mesh_vertices": 35555,
   "runtime_renderer_count": 1,
   "runtime_material_count": 2,
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/cape-mantle-desktop/review.json",
-    "build/dev-loop/cape-mantle-keeper-unity.log",
-    "build/dev-loop/cape-mantle-build-unity.log"
+    "build/visual-evidence/robe-fabric-desktop/review.json",
+    "build/dev-loop/robe-fabric-keeper-unity.log",
+    "build/dev-loop/robe-fabric-build-unity.log"
   ],
   "remaining": [
-    "Mép cape gần tay còn khe nhỏ ở góc sau; chưa kiểm tra mọi động tác/locomotion.",
-    "Tà áo và giáp tay còn projection hoa văn cũ, chưa có các lớp vải/giáp rõ như sheet final.",
-    "Chưa art final hoặc đo FPS/mobile."
+    "Tổng thể vẫn khác đáng kể demo: giáp vai/đai quá đơn giản, thiếu lớp áo và phụ kiện đặc trưng.",
+    "Tà ivory còn quá sáng trực diện; silhouette tà dưới vẫn đơn giản.",
+    "Khe nhỏ cape gần tay và bóng mép tóc còn; chưa kiểm tra mọi locomotion, FPS hoặc mobile."
   ],
   "budget": {
-    "mac_build_bytes": 395012306,
-    "mac_build_delta_bytes": -1,
+    "mac_build_bytes": 395000770,
+    "mac_build_delta_bytes": -11536,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
@@ -68,5 +68,6 @@
   "surface_pipeline": "pack_ceremonial_armor.py → export; bake_wardrobe_surface_mask.py → WardrobeSurfaceImporter.Apply. Re-bake mask when wardrobe atlas changes.",
   "cloth_pipeline": "pack_ceremonial_cloth.py (migration from 5e86dad) → export → bake_wardrobe_surface_mask.py; two shared fabric tiles, surface-fitted belt/cuffs and clasps joined to UpperBody.",
   "drape_pipeline": "refine_cloth_drape.py: smooth cloth, continuous back profile/ivory UV, nearest-triangle interpolated cuff weights; same geometry count/atlas/slots.",
-  "cape_root_pipeline": "refine_cape_mantle.py: widen/lift continuous root, ray-fit behind torso, blend outer roots to existing clavicles; same topology/UV/materials."
+  "cape_root_pipeline": "refine_cape_mantle.py: widen/lift continuous root, ray-fit behind torso, blend outer roots to existing clavicles; same topology/UV/materials.",
+  "robe_pipeline": "pack_robe_panels.py: migration from f5f5a2e, shared robe tile, bracer unwrap, quiet trousers and continuous bound tabard joined to UpperBody."
 }
