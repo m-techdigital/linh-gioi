@@ -10,10 +10,10 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "c211e82c2f188cd07a21ac62567f880e065492ec4fb46c77412ab870282e72bb",
-  "fbx_sha256": "6f1517cb27010559a05b99f3cb7f122b6958230a77cd20f26470a34eb3bfcb72",
-  "triangles": 58421,
-  "vertices": 29503,
+  "source_sha256": "dc698fb271a492a044ad257fa3aec33df7345d3ac498925439e14154f74de843",
+  "fbx_sha256": "b83d7659321e3b8ac11750d074c35fb6d9be81d1dab31f6ec5d5ac4c2ef8d88c",
+  "triangles": 57889,
+  "vertices": 29259,
   "bones": 65,
   "materials": 2,
   "authoring_material_sections": 9,
@@ -41,26 +41,27 @@
   "runtime_verified": true,
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
   "runtime_scope": "macOS development Player1920x1080, camera cận; idle0/90/180, guide front/back, return, hai ảnh player dùng chung atlas",
-  "runtime_mesh_vertices": 34422,
+  "runtime_mesh_vertices": 33507,
   "runtime_renderer_count": 1,
   "runtime_material_count": 2,
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/boots-center-desktop/review.json",
-    "build/dev-loop/boots-center-keeper-import.log",
-    "build/dev-loop/boots-center-build.log"
+    "build/visual-evidence/boot-instep-desktop/review.json",
+    "build/dev-loop/boot-instep-keeper-unity.log",
+    "build/dev-loop/boot-instep-build-unity.log"
   ],
   "remaining": [
-    "Mảng đen hình khối ở mặt sau đã giảm rõ, nhưng màu còn kéo ngang do tái dùng dải texture hẹp; chưa art final.",
-    "Cần thiết kế/bake bề mặt ủng riêng vào atlas dùng chung, không tiếp thử ngưỡng UV.",
-    "Không đổi weights/collider; capture cận không thay full locomotion test."
+    "Mũi/đế còn đơn giản so với hoa văn giáp chân của sheet final.",
+    "Giáp vai và vùng ngực/cổ còn khác hình khối và độ sắc nét của demo; cần macro pass riêng.",
+    "Capture này không xác nhận đi/chạy, FPS, mobile hoặc toàn game."
   ],
   "budget": {
-    "mac_build_bytes": 393912819,
-    "mac_build_delta_bytes": 78240,
+    "mac_build_bytes": 393749939,
+    "mac_build_delta_bytes": -162880,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
-  }
+  },
+  "boot_pipeline": "pack_ceremonial_boots.py then finish_boot_caps.py on pre-last source; dedicated generated tile in existing shared atlas; final last replaces anatomical toes."
 }

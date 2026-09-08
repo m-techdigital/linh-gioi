@@ -1,0 +1,10 @@
+{
+  "asset": "ceremonial-boot-albedo.png",
+  "generator": "built-in imagegen",
+  "sha256": "2cd2d400656a2708da6bb0a039bdb8e534f5c6f89911759b9f9527d61eba13e7",
+  "reference": "Người Giữ Cổng canonical sheet: ủng navy tối, viền vàng cũ; dùng cùng ngôn ngữ cho player nhập môn.",
+  "prompt_summary": "Flat opaque leather boot-shaft albedo, central V-shaped gold shin guard with restrained cloud scroll, dark seamless back edges, gold cuff, quiet leather ankle, no text/perspective/background.",
+  "runtime": "Ô512x512 +32px gutter trong vùng trống576x576 của atlas4096x2048 dùng chung; không thêm material hoặc tăng atlas.",
+  "pipeline": "tools/art/pack_ceremonial_boots.py",
+  "scope": "Chất liệu cho mesh 3D; không phải ảnh nhân vật/billboard. Chưa production-final."
+}
