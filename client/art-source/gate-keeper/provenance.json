@@ -10,8 +10,8 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "7eb1afcb75fc590cbdbedda5b310dee676f42d39486a0e2cda183ad723414af5",
-  "fbx_sha256": "b24d3c01569c6c4b54cc4ba9b0a86d8bc4a620cc38dbb349414ecfdfd1871ec9",
+  "source_sha256": "c78171b5a7879f34d8d950774d9ba44ffd1f29cbae0ddb895e993927e3632355",
+  "fbx_sha256": "70f5fcc759eb690828e1a6029c6f46d584b332eaf574ea25fd935e27b6fa0fa7",
   "triangles": 58421,
   "vertices": 29503,
   "bones": 65,
@@ -47,18 +47,18 @@
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/keeper-ornate-desktop/review.json",
-    "build/dev-loop/keeper-ornate-import.log",
-    "build/dev-loop/keeper-ornate-build.log"
+    "build/visual-evidence/keeper-gesture-desktop/review.json",
+    "build/dev-loop/keeper-gesture-import.log",
+    "build/dev-loop/keeper-gesture-build.log"
   ],
   "remaining": [
-    "Nón đã có bố cục hoa văn/chóp/khoen nhưng nét và chất liệu còn đơn giản hơn reference; chưa art final.",
-    "Tay nắm, giáp vai và texture ủng còn lỗi từ trước; batch nón không sửa các phần này.",
-    "Camera kiểm tra cận, không chứng minh readability ở mọi khoảng cách hoặc hiệu năng nhiều NPC."
+    "Giáp vai còn tròn và lộ mặt trong khi nâng tay; tạo hình/texture chưa sát sheet.",
+    "Texture ủng có mảng đen/méo từ projection cũ; chưa sửa trong batch chuyển động.",
+    "Ảnh cận xác nhận pose chỉ hướng và hạ tay; chưa kiểm tra mọi góc đích, cancel hoặc full locomotion."
   ],
   "budget": {
-    "mac_build_bytes": 393833702,
-    "mac_build_delta_bytes": 515327,
+    "mac_build_bytes": 393834579,
+    "mac_build_delta_bytes": 877,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false

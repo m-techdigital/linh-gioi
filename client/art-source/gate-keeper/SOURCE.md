@@ -14,6 +14,8 @@ Chép FBX và atlas nếu đã thay vào `Assets/Game/Art/OnboardingCandidate/`,
 
 Pass nón/tà áo2026-09-08: nón có mặt kín, đỉnh/viền/phù rủ; giảm lõm ngang áo choàng và lùi phần dưới tránh ủng; hint khuỷu khi chỉ đường. `refine_keeper_hat_drape.py --headwear-only` dựng lại nón mà giữ tà áo; chạy không flag vẫn là migration tà áo một lần từ source cũ, không phải bước bắt buộc mỗi export.
 
-Evidence: `build/visual-evidence/keeper-ornate-desktop/review.json`,8 ảnh Player1920×1080 đã xem; import/build thật qua, build393.833.702B/0 lỗi/0 cảnh báo. Capture góc cận và chỉ đường/hạ tay, chưa chứng minh garment đi/chạy hay cloth simulation. Nón nay có chóp rỗng, dải hoa văn cuộn, khoen phù nhưng nét/chất liệu vẫn đơn giản hơn sheet, bàn tay còn nắm và vai còn cần sửa; các vùng texture ủng còn méo. Hash và thông số hiện tại trong `provenance.json`; không dùng ngân sách bản mobile cũ cho bản PC này.
+Evidence: `build/visual-evidence/keeper-gesture-desktop/review.json`,8 ảnh Player1920×1080 đã xem; import/build thật qua, build393.834.579B/0 lỗi/0 cảnh báo. Capture góc cận và chỉ đường/hạ tay, chưa chứng minh garment đi/chạy hay cloth simulation. Nón nay có chóp rỗng, dải hoa văn cuộn, khoen phù nhưng nét/chất liệu vẫn đơn giản hơn sheet, bàn tay mở theo bind pose khi chỉ hướng, vai dùng trọng số cứng giữ khối nhưng còn cần sửa phom; các vùng texture ủng còn méo. Hash và thông số hiện tại trong `provenance.json`; không dùng ngân sách bản mobile cũ cho bản PC này.
 
 Nguồn công cụ: [Tencent Hunyuan3D-2.1](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1), [license nguồn](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1/blob/main/LICENSE).
+
+Pass chuyển động: `refine_keeper_shoulders.py` chuyển1.408 vertices giáp vai sang trọng số cứng, bảo toàn vị trí ở pose hạ tay60°. `NpcGuideGesture` cache góc ngón từ bind matrices của model rồi blend trong IK pass; không thêm bone/animation asset. Chưa kiểm tra mọi hướng đích hoặc cancel.
