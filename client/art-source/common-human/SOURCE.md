@@ -1,0 +1,15 @@
+# Base người dùng chung — authoring, chưa phải NPC final
+
+Owner2026-09-08 yêu cầu mặt/tuổi/nam–nữ, tóc và vóc dáng tái sử dụng giữa NPC/player/trang phục. Định hướng tạo hình bám `docs/reference-art/v0.20.0/lgo-npc-direction-sheet-v0200.png`, five-paths và từng storyboard; base giải phẫu không tự thay identity, trang phục hoặc vai trò đã thiết kế. Không khóa một giới tính/vóc dáng vào một class.
+
+`HumanForms.blend` có một topology cơ thể và 18 shape keys: nam/nữ × trẻ/trung niên/lớn tuổi × gầy/cân đối/đầy đặn. Các preset adult cùng chiều cao1.79m để so form; API `HumanForm.height` hỗ trợ1.4–2.1m ở bước authoring. Tuổi trung niên là blend45% từ young tới old, không đại diện tuổi sinh học chính xác. Form cơ thể lấy delta weight so average, mặt dùng target độ đầy riêng để không chỉ đổi bụng mà giữ nguyên má. Màu trung tính trong bảng là vật liệu xem hình khối, không phải skin final.
+
+Cơ thể giữ UV gốc và `source_vertex_id`. `forms.json` chứa preset và các mốc mắt/đầu/khớp từ seed để phục vụ fit/rig tiếp. Hai object tóc độc lập `tied_long`/`swept_short` dùng cùng18 tên shape key; kiểu ngắn mặc định ẩn để không chồng tóc. Tóc lưu tam giác base + trọng số barycentric ở point attributes; delta form chuyển tới tóc, không rebuild từ số thứ tự vertex của trang phục. Chưa có mũ/hair-occlusion mask, râu, biểu cảm hoặc toàn bộ wardrobe corrective.
+
+Nguồn mesh/target CC0 MakeHuman pin tại `makehuman/source.json`, có LICENSE và SHA256; chỉ dùng asset data, không dùng mã ứng dụng. Phương pháp tham khảo chính thức: [targets chung topology](https://static.makehumancommunity.org/assets/creatingassets/maketarget/targets.html), [fit tóc/quần áo theo base](https://static.makehumancommunity.org/assets/creatingassets/makeclothes/introduction.html). Tóc xuất phát từ master Arrival đã author, không lấy ảnh nhân vật làm billboard.
+
+Dựng lại bằng Blender: `--python tools/art/build_human_forms.py -- --output <staging> --render`. Dùng `human_forms.py` để chọn form, lấy coordinates/landmarks/target chung. `author_arrival_anatomy.py` đã dùng parser/seed chung, nhưng vẫn là migration adapter có SHA guard cho bộ Arrival cũ; đó không phải API tạo mọi NPC.
+
+Bộ base chỉ nằm ngoài Assets Unity. Không tự ship18 shape keys/2tóc vào mỗi NPC. Hướng xuất là chọn form/kiểu tóc/slot, fit và sửa xuyên mesh theo pose, bake appearance dùng rig chung rồi chỉ đưa mesh/material cần thiết vào runtime. Hiện base mới chưa skin vào SharedHumanoidAvatar; chưa thể coi là chạy/nhảy/mặc mọi trang phục sẵn. Chưa đo FPS/mobile/đông NPC. Player đã tích hợp riêng có evidence tại `build/visual-evidence/arrival-anatomy-fixed-desktop/review.json`.
+
+Bước tiếp: dùng base nữ trẻ và nam lớn tuổi làm hai trường hợp tích hợp thực tế theo roster/storyboard (Thanh Huyền là identity riêng); chuẩn hóa nối cổ/rig/slot và fit tóc–trang phục trên cả hai, kiểm tra đi/chạy/quay/giơ tay trước khi mở rộng hàng loạt. Các base chưa gắn kịch bản chỉ là tài nguyên authoring, không được tự thêm NPC thưởng/nhiệm vụ hoặc thay frozen contracts.

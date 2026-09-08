@@ -1,8 +1,8 @@
 {
-  "source_sha256": "0047c582560852f335deddaedad95c9884e117338ebe6706576c163c30ab11df",
-  "fbx_sha256": "7795bacfaebe11e12cb0259b4940236db04af0c5e4a013dc750a2bd501b6f1c7",
-  "triangles": 90528,
-  "vertices": 45914,
+  "source_sha256": "d5af8f8f3258bfec7c6efb14c751f80cc544d0cb62712f7ce1d3a14d213c2946",
+  "fbx_sha256": "83d79fd205eb484f6e5f9b1ce6a8872c56a4736b550d7988217599adce7bd0b9",
+  "triangles": 105350,
+  "vertices": 53358,
   "bones": 70,
   "materials": 2,
   "authoring_material_sections": 9,
@@ -31,13 +31,13 @@
   "runtime_verified": true,
   "new_textures": [],
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
-  "unity_vertices": 49866,
-  "source_origin": "Quaternius CC0 arrival study; shared Keeper body atlas/rig provenance in ../gate-keeper/; new generated player face described in SOURCE.md and face-prompt.txt.",
+  "unity_vertices": 57808,
+  "source_origin": "Quaternius CC0 arrival study; shared Keeper body atlas/rig provenance in ../gate-keeper/; new generated player face described in SOURCE.md and face-prompt.txt. Anatomical head: CC0 MakeHuman base + asian-male-young target; pinned data in ../common-human/makehuman/source.json.",
   "evidence": [
-    "build/visual-evidence/arrival-fit-bound-desktop/review.json",
-    "build/dev-loop/arrival-fit-bound-import-unity.log",
-    "build/dev-loop/arrival-fit-bound-build-unity.log",
-    "build/dev-loop/arrival-fit-bound-desktop.log"
+    "build/visual-evidence/arrival-anatomy-fixed-desktop/review.json",
+    "build/dev-loop/arrival-anatomy-fixed-import.log",
+    "build/dev-loop/arrival-anatomy-fixed-build.log",
+    "build/asset-staging/arrival-anatomy-fixed/scope-audit.json"
   ],
   "authoring_regeneration": "build/asset-staging/player-neck-runtime/full-rebuild/player-receipt.json",
   "not_claimed": [
@@ -47,7 +47,7 @@
     "GPU/FPS budget",
     "animation tóc vật lý"
   ],
-  "runtime_mesh_vertices": 49866,
+  "runtime_mesh_vertices": 57808,
   "remaining": [
     "Cổ/tóc/găng và mép chuyển vai vẫn cần art pass; chưa đạt fidelity final của storyboard.",
     "Vạt còn ôm tròn ở tư thế nâng gối cao; cơ chế hiện tại không mô phỏng va chạm vải.",
@@ -60,17 +60,18 @@
   "drape_pipeline": "refine_cloth_drape.py: smooth cloth, continuous back profile/ivory UV, nearest-triangle interpolated cuff weights; same geometry count/atlas/slots.",
   "robe_pipeline": "pack_robe_panels.py: migration from f5f5a2e, shared robe tile, bracer unwrap, quiet trousers and continuous bound tabard joined to UpperBody.",
   "budget": {
-    "mac_build_bytes": 399270235,
-    "mac_build_delta_bytes": -93264,
-    "baseline_commit": "16846a8",
+    "mac_build_bytes": 400158863,
+    "mac_build_delta_bytes": 787824,
+    "baseline_commit": "a01b39c",
     "device_fps_profiled": false
   },
   "ensemble_pipeline": "remake_ceremonial_ensemble.py: migration from bed6df9, closed layered shoulders, waist relief/cords/pendants, hip drapes; same rig/atlas, Accessories semantic slot. Procedural study, not production authoring formula.",
   "shared_relief_evidence": "build/visual-evidence/wardrobe-relief-desktop/review.json",
   "editable_source": "ArrivalWardrobe.blend",
   "derived_source": "ArrivalScene.blend",
-  "derived_source_sha256": "8b6eebb46965078b8c8cae81486a043dc079ee1684f09f8ebceb8455f015f183",
+  "derived_source_sha256": "c202458fbd36e5ebc5ab53a8d01abfeea681c5baf557993da209728309be8327",
   "wardrobe_pipeline": "Master14 món/9slots: author_arrival_wardrobe.py migration từ e2f0282 → rig_arrival_drapery.py trên candidate65bones. Chỉnh master; export_arrival_scene.py --wardrobe-master --joined-source tạo FBX và flat dẫn xuất. Không rerun migration trên master70bones.",
   "secondary_motion": "WardrobeDrapeMotion:65 xương Humanoid không đổi, thêm3cape+2hem; điều khiển sau Animator, không mô phỏng va chạm vải.",
-  "fit_pipeline": "fit_arrival_wardrobe.py: migration có SHA guard từ master16846a8; vạt theo envelope quần, lining chung mép/weights, gauntlet fit theo trục tay, cape yoke raycast bề mặt áo và nội suy weights tam giác. Chỉnh tiếp trên master, không chạy lại migration."
+  "fit_pipeline": "fit_arrival_wardrobe.py: migration có SHA guard từ master16846a8; vạt theo envelope quần, lining chung mép/weights, gauntlet fit theo trục tay, cape yoke raycast bề mặt áo và nội suy weights tam giác. Chỉnh tiếp trên master, không chạy lại migration.",
+  "anatomy_pipeline": "author_arrival_anatomy.py: migration from a01b39c, shared human_forms data/parser, fit anatomical head/scalp, reuse face UV, spine_03/neck_01/Head weights. Preserves 12 wardrobe objects/rest70bones/pixels."
 }
