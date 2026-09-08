@@ -10,13 +10,13 @@
     "front.png": "3c54a832f40136502b92a25d051dfa1b81ef4b1e8a7b586e18b36718ee077f4f",
     "back-color.png": "3553e4756182de3198c7c23fbbeb4ead1aeb4b216fc33c3c106f74cf4bf28408"
   },
-  "source_sha256": "d1acf02519bff72814f6e9a44368a4393b34244119e9de374372029905d19669",
-  "fbx_sha256": "9158d2593be25357ce6fe201896f833ee83901348440f9207c85119cc3c38a2c",
-  "triangles": 62401,
-  "vertices": 31771,
+  "source_sha256": "ade79fdaa2080e998e98c1dd7f77f6e14919463ed66caa03c27423ec88b8e433",
+  "fbx_sha256": "118b61c9aaa08aad2878ad1c3fae3af4c4a1b237c5a24993c239a1a8dca80028",
+  "triangles": 76025,
+  "vertices": 38822,
   "bones": 65,
   "materials": 2,
-  "authoring_material_sections": 9,
+  "authoring_material_sections": 10,
   "slots": [
     "Headwear",
     "Head",
@@ -26,7 +26,8 @@
     "Cape",
     "Gloves",
     "Boots",
-    "Shoulders"
+    "Shoulders",
+    "Accessories"
   ],
   "texture_sizes": {
     "albedo": [
@@ -41,24 +42,25 @@
   "runtime_verified": true,
   "visual_status": "REVIEWED_WITH_ART_REMAINING",
   "runtime_scope": "macOS development Player1920x1080, camera cận; idle0/90/180, guide front/back, return, hai ảnh player dùng chung atlas",
-  "runtime_mesh_vertices": 35555,
+  "runtime_mesh_vertices": 42754,
   "runtime_renderer_count": 1,
   "runtime_material_count": 2,
   "mesh_compression": "Medium",
   "reuse": "9 semantic wardrobe slots baked to shared preset; 65 bones; body atlas shared with player; no new textures in hat/cape batch.",
   "evidence": [
-    "build/visual-evidence/robe-fabric-desktop/review.json",
-    "build/dev-loop/robe-fabric-keeper-unity.log",
-    "build/dev-loop/robe-fabric-build-unity.log"
+    "build/visual-evidence/ensemble-solid-desktop/review.json",
+    "build/visual-evidence/ensemble-city-desktop/review.json",
+    "build/dev-loop/ensemble-solid-keeper-unity.log",
+    "build/dev-loop/ensemble-solid-build-unity.log"
   ],
   "remaining": [
-    "Tổng thể vẫn khác đáng kể demo: giáp vai/đai quá đơn giản, thiếu lớp áo và phụ kiện đặc trưng.",
-    "Tà ivory còn quá sáng trực diện; silhouette tà dưới vẫn đơn giản.",
-    "Khe nhỏ cape gần tay và bóng mép tóc còn; chưa kiểm tra mọi locomotion, FPS hoặc mobile."
+    "Giáp vai vẫn góc cạnh và phom tổng thể chưa sát demo; chưa art final.",
+    "Đai/vạt hông và phụ kiện đã rõ hơn nhưng chi tiết dùng nhiều geometry, chưa tối ưu bằng bake.",
+    "Chưa có thương theo sheet, chưa mọi động tác/FPS/mobile; không mở gameplay mới."
   ],
   "budget": {
-    "mac_build_bytes": 395000770,
-    "mac_build_delta_bytes": -11536,
+    "mac_build_bytes": 396170627,
+    "mac_build_delta_bytes": 1169857,
     "unity_editor_body_texture_object_bytes": 33555393,
     "unity_editor_face_texture_object_bytes": 2098113,
     "device_fps_profiled": false
@@ -69,5 +71,6 @@
   "cloth_pipeline": "pack_ceremonial_cloth.py (migration from 5e86dad) → export → bake_wardrobe_surface_mask.py; two shared fabric tiles, surface-fitted belt/cuffs and clasps joined to UpperBody.",
   "drape_pipeline": "refine_cloth_drape.py: smooth cloth, continuous back profile/ivory UV, nearest-triangle interpolated cuff weights; same geometry count/atlas/slots.",
   "cape_root_pipeline": "refine_cape_mantle.py: widen/lift continuous root, ray-fit behind torso, blend outer roots to existing clavicles; same topology/UV/materials.",
-  "robe_pipeline": "pack_robe_panels.py: migration from f5f5a2e, shared robe tile, bracer unwrap, quiet trousers and continuous bound tabard joined to UpperBody."
+  "robe_pipeline": "pack_robe_panels.py: migration from f5f5a2e, shared robe tile, bracer unwrap, quiet trousers and continuous bound tabard joined to UpperBody.",
+  "ensemble_pipeline": "remake_ceremonial_ensemble.py: migration from bed6df9, closed layered shoulders, waist relief/cords/pendants, hip drapes; same rig/atlas, Accessories semantic slot. Procedural study, not production authoring formula."
 }
