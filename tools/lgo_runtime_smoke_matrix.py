@@ -67,10 +67,11 @@ TWO_D_GATES: list[dict[str, Any]] = [
         "requirements": {"status": "PASS", "finalStep": "Complete"},
         "minimums": {"screenshotCount": 14},
         "contains": {
-            "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:", "HubShell: linh-thanh", "district=plaza", "district=academy", "district=market", "PlazaShell: district=plaza", "AcademyShell: district=academy", "safe-no-trade-backend", "safe-no-skill-backend"],
+            "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:", "HubShell: linh-thanh", "district=plaza", "district=academy", "district=market", "PlazaShell: district=plaza", "AcademyShell: district=academy", "MarketShell: district=market", "safe-no-trade-backend", "safe-no-skill-backend", "safe-no-economy-backend"],
             "runtimeLinhThanhUnlockSnapshot": ["LinhThanhUnlock", "unlocked=True", "unlock=plaza", "safe-local-no-teleport"],
             "runtimeLinhThanhPlazaHubSnapshot": ["PlazaHubRuntime", "unlocked=True", "npc=gate-guide", "npc=merchant-preview", "board=event-local-preview", "interaction=npc-merchant-preview", "safe-local-no-backend", "safe-local-no-shop-backend"],
             "runtimeLinhThanhAcademyShellSnapshot": ["AcademyShell: district=academy", "skill-hall=preview-only", "class-trainer=locked", "safe-no-skill-backend", "safe-local-no-backend"],
+            "runtimeLinhThanhMarketShellSnapshot": ["MarketShell: district=market", "vendor-row=preview-only", "auction-board=locked", "safe-no-trade-backend", "safe-no-economy-backend", "safe-local-no-backend"],
             "runtimeHubTransitionSnapshot": ["HubTransition", "unlocked=True", "from=east-gate", "to=plaza", "mode=local-route-preview", "safe-local-no-teleport-backend"],
             "runtimeTilemapSnapshot": ["ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],

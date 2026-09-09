@@ -638,6 +638,38 @@ namespace LinhGioi.Tests
         }
 
 
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhMarketShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("MarketShell: district=market", map.LinhThanhMarketShellSnapshot);
+            StringAssert.Contains("vendor-row=preview-only", map.LinhThanhMarketShellSnapshot);
+            StringAssert.Contains("auction-board=locked", map.LinhThanhMarketShellSnapshot);
+            StringAssert.Contains("safe-no-trade-backend", map.LinhThanhMarketShellSnapshot);
+            StringAssert.Contains("MarketShell: district=market", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhMarketShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh market shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("MarketShell: district=market", controller.RuntimeLinhThanhMarketShellSnapshot);
+                StringAssert.Contains("safe-no-trade-backend", controller.RuntimeLinhThanhMarketShellSnapshot);
+                StringAssert.Contains("MarketShell: district=market", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
 
 
         [Test]

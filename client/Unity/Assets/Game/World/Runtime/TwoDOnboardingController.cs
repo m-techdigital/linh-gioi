@@ -71,6 +71,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhHubShellSnapshot => _mapCatalog.LinhThanhHubShellSnapshot;
         public string RuntimeLinhThanhPlazaShellSnapshot => _mapCatalog.LinhThanhPlazaShellSnapshot;
         public string RuntimeLinhThanhAcademyShellSnapshot => _mapCatalog.LinhThanhAcademyShellSnapshot;
+        public string RuntimeLinhThanhMarketShellSnapshot => _mapCatalog.LinhThanhMarketShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
@@ -168,6 +169,7 @@ namespace LinhGioi.World
             AddLinhThanhHubShellOverlay();
             AddLinhThanhPlazaShellPreview();
             AddLinhThanhAcademyShellPreview();
+            AddLinhThanhMarketShellPreview();
             AddLinhThanhPlazaHubRuntimePreview();
             AddLinhThanhHubTransitionPreview();
             AddLinhThanhUnlockPresentation();
@@ -456,6 +458,17 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Academy Skill Board", new Vector2(0.40f, 1.05f), new Vector2(0.18f, 0.20f), new Color(0.18f, 0.86f, 0.78f, 0.32f), -14);
             AddSprite("LGO 2D Academy Trainer Locked", new Vector2(0.70f, 1.05f), new Vector2(0.10f, 0.24f), new Color(0.92f, 0.72f, 0.28f, 0.34f), -14);
             AddWorldLabel("LGO 2D Academy Shell Label", "Học Viện", new Vector2(0.34f, 1.70f), 0.020f, new Color(0.73f, 0.87f, 0.88f, 0.72f), -9);
+        }
+
+
+        private void AddLinhThanhMarketShellPreview()
+        {
+            AddSceneBeat("LINH_THANH_MARKET_SHELL vendor-row/auction-board local-only no trade backend");
+            AddSprite("LGO 2D Market Awning Row", new Vector2(-2.92f, 0.86f), new Vector2(0.66f, 0.16f), new Color(0.58f, 0.36f, 0.18f, 0.46f), -15);
+            AddSprite("LGO 2D Market Stall Left", new Vector2(-3.12f, 0.66f), new Vector2(0.20f, 0.24f), new Color(0.92f, 0.72f, 0.28f, 0.34f), -14);
+            AddSprite("LGO 2D Market Stall Right", new Vector2(-2.74f, 0.66f), new Vector2(0.20f, 0.24f), new Color(0.18f, 0.86f, 0.78f, 0.26f), -14);
+            AddSprite("LGO 2D Market Auction Board Locked", new Vector2(-2.92f, 0.48f), new Vector2(0.34f, 0.08f), new Color(0.30f, 0.22f, 0.62f, 0.32f), -13);
+            AddWorldLabel("LGO 2D Market Shell Label", "Thương Phố", new Vector2(-3.26f, 1.08f), 0.019f, new Color(0.92f, 0.72f, 0.28f, 0.70f), -9);
         }
 
 
