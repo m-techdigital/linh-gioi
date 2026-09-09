@@ -39,7 +39,7 @@ namespace LinhGioi.Tests
             Assert.AreEqual(TwoDOnboardingStep.LearnClassSkill, state.Step);
             Assert.IsTrue(state.TryUseClassSkill());
             Assert.AreEqual(TwoDOnboardingStep.Complete, state.Step);
-            StringAssert.Contains("Hoàn tất nhập môn", state.ObjectiveText);
+            StringAssert.Contains("Mở Linh Thành", state.ObjectiveText);
         }
 
 
@@ -606,6 +606,32 @@ namespace LinhGioi.Tests
 
 
 
+
+        [Test]
+        public void PlazaHubBoardPreviewRequiresLinhThanhUnlock()
+        {
+            var state = new TwoDOnboardingState();
+            state.Reset();
+
+            Assert.IsFalse(state.TryInspectPlazaHubBoard());
+            Assert.IsFalse(state.PlazaHubPreviewOpen);
+
+            state.Move(TwoDOnboardingState.GateKeeperPosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseAction();
+            state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseJump();
+            state.TryUseDash();
+            state.TryUseClassSkill();
+
+            Assert.IsTrue(state.TryInspectPlazaHubBoard());
+            Assert.IsTrue(state.PlazaHubPreviewOpen);
+            Assert.AreEqual("Quảng Trường", state.AreaText);
+            StringAssert.Contains("Bảng sự kiện Quảng Trường", state.DialogueLine);
+            StringAssert.Contains("local preview", state.FeedbackText);
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsLinhThanhPlazaHubRuntime()
         {
@@ -645,7 +671,35 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("npc=gate-guide", controller.RuntimeLinhThanhPlazaHubSnapshot);
                 StringAssert.Contains("board=event-local-preview", controller.RuntimeLinhThanhPlazaHubSnapshot);
                 StringAssert.Contains("safe-local-no-backend", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                Assert.IsTrue(controller.State.TryInspectPlazaHubBoard());
+                controller.RefreshForSmoke();
+                StringAssert.Contains("interaction=board-preview-open", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("Khu vực: Quảng Trường", controller.WorldHudSnapshot);
+                StringAssert.Contains("Bảng sự kiện Quảng Trường", controller.WorldHudSnapshot);
                 StringAssert.Contains("LINH_THANH_PLAZA_HUB_RUNTIME", controller.ProductionSceneBeatSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void RuntimeInventoryPanelOnlyShowsWhenOpened()
+        {
+            var host = new GameObject("2D inventory panel visibility test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                Assert.IsFalse(controller.RuntimeInventoryPanelVisible);
+
+                controller.ToggleInventoryPanel();
+                Assert.IsTrue(controller.RuntimeInventoryPanelVisible);
+
+                controller.CancelInventoryPreview();
+                Assert.IsFalse(controller.RuntimeInventoryPanelVisible);
             }
             finally
             {

@@ -23,6 +23,7 @@ namespace LinhGioi.World
         private Transform _linhThanhUnlockBanner;
         private Transform _plazaUnlockPath;
         private Transform _plazaHubRuntimeRoot;
+        private Transform _inventoryPanelRoot;
         private Transform _focusRing;
         private SpriteRenderer _playerOuterShirtRenderer;
         private SpriteRenderer _playerWaistRenderer;
@@ -55,6 +56,7 @@ namespace LinhGioi.World
         private bool _inventoryOpen;
         private int _inventorySelectedIndex = 1;
         private string _inventoryInputState = "Closed";
+        private bool _runtimeReady;
 
         public TwoDOnboardingState State => _state;
         public string WorldHudSnapshot => _worldHudSnapshot;
@@ -71,6 +73,7 @@ namespace LinhGioi.World
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
         public string RuntimeInventoryInputSnapshot => BuildInventoryInputSnapshot();
+        public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
         public string RuntimeTerrainCollisionSnapshot => _mapCatalog.CollisionSnapshot;
         public string RuntimeTilemapSnapshot => _mapCatalog.TilemapSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
@@ -79,11 +82,20 @@ namespace LinhGioi.World
 
         public static TwoDOnboardingController Attach(GameObject host)
         {
-            return host.GetComponent<TwoDOnboardingController>() ?? host.AddComponent<TwoDOnboardingController>();
+            var controller = host.GetComponent<TwoDOnboardingController>() ?? host.AddComponent<TwoDOnboardingController>();
+            controller.EnsureRuntimeReady();
+            return controller;
         }
 
         private void Awake()
         {
+            EnsureRuntimeReady();
+        }
+
+        private void EnsureRuntimeReady()
+        {
+            if (_runtimeReady) return;
+            _runtimeReady = true;
             EnsurePlayerLoadout();
             BuildScene();
             _state.Reset();
@@ -266,7 +278,8 @@ namespace LinhGioi.World
 
         private string BuildLinhThanhPlazaHubSnapshot()
         {
-            return _mapCatalog.LinhThanhPlazaHubRuntimeSnapshot + " | unlocked=" + _state.LinhThanhUnlocked;
+            var interaction = _state.PlazaHubPreviewOpen ? "board-preview-open" : _state.LinhThanhUnlocked ? "hub-idle" : "locked-until-unlock";
+            return _mapCatalog.LinhThanhPlazaHubRuntimeSnapshot + " | unlocked=" + _state.LinhThanhUnlocked + " | interaction=" + interaction;
         }
 
         private string BuildLinhThanhUnlockSnapshot()
@@ -507,19 +520,24 @@ namespace LinhGioi.World
         private void BuildInventoryTryOnStrip()
         {
             AddSceneBeat("Inventory try-on panel - input inspect thử đồ áp dụng/hủy");
-            AddSprite("LGO 2D Inventory TryOn Panel", new Vector2(-0.20f, -1.95f), new Vector2(3.28f, 0.72f), new Color(0.03f, 0.08f, 0.13f, 0.90f), 56);
-            AddWorldLabel("LGO 2D Inventory TryOn Title", "HÀNH TRANG", new Vector2(-1.48f, -1.67f), 0.033f, RuntimeArtCatalog.Gold, 67);
-            _inventoryModeLabel = AddWorldLabel("LGO 2D Inventory Input Mode", "OPEN: Tab chọn món", new Vector2(0.12f, -1.67f), 0.026f, RuntimeArtCatalog.Text, 67);
-            AddSprite("LGO 2D Inventory Slot Vo", new Vector2(-1.34f, -2.00f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Gold, 66);
-            AddSprite("LGO 2D Inventory Slot Kiem", new Vector2(-0.88f, -2.00f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Spirit, 66);
-            AddSprite("LGO 2D Inventory Slot Sword", new Vector2(-0.42f, -2.00f), new Vector2(0.065f, 0.34f), new Color(0.77f, 0.91f, 0.95f), 67);
-            AddSprite("LGO 2D Inventory Selected Ring", new Vector2(-0.88f, -2.00f), new Vector2(0.38f, 0.38f), new Color(0.18f, 0.86f, 0.78f, 0.34f), 65);
-            _inventorySelectedLabel = AddWorldLabel("LGO 2D Inventory TryOn Preview", "THỬ: top_kiem_lv1_male", new Vector2(0.48f, -1.96f), 0.027f, RuntimeArtCatalog.Spirit, 67);
-            _inventoryHelpLabel = AddWorldLabel("LGO 2D Inventory Input Help", "T THỬ  •  Y ÁP DỤNG  •  Esc HỦY", new Vector2(0.30f, -2.18f), 0.025f, RuntimeArtCatalog.Gold, 67);
+            var root = new GameObject("LGO 2D Inventory TryOn Root");
+            root.transform.SetParent(transform, false);
+            _inventoryPanelRoot = root.transform;
+            AddSprite("LGO 2D Inventory TryOn Panel", new Vector2(-0.20f, -1.95f), new Vector2(3.28f, 0.72f), new Color(0.03f, 0.08f, 0.13f, 0.90f), 56, _inventoryPanelRoot);
+            AddWorldLabel("LGO 2D Inventory TryOn Title", "HÀNH TRANG", new Vector2(-1.48f, -1.67f), 0.033f, RuntimeArtCatalog.Gold, 67, _inventoryPanelRoot);
+            _inventoryModeLabel = AddWorldLabel("LGO 2D Inventory Input Mode", "OPEN: Tab chọn món", new Vector2(0.12f, -1.67f), 0.026f, RuntimeArtCatalog.Text, 67, _inventoryPanelRoot);
+            AddSprite("LGO 2D Inventory Slot Vo", new Vector2(-1.34f, -2.00f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Gold, 66, _inventoryPanelRoot);
+            AddSprite("LGO 2D Inventory Slot Kiem", new Vector2(-0.88f, -2.00f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Spirit, 66, _inventoryPanelRoot);
+            AddSprite("LGO 2D Inventory Slot Sword", new Vector2(-0.42f, -2.00f), new Vector2(0.065f, 0.34f), new Color(0.77f, 0.91f, 0.95f), 67, _inventoryPanelRoot);
+            AddSprite("LGO 2D Inventory Selected Ring", new Vector2(-0.88f, -2.00f), new Vector2(0.38f, 0.38f), new Color(0.18f, 0.86f, 0.78f, 0.34f), 65, _inventoryPanelRoot);
+            _inventorySelectedLabel = AddWorldLabel("LGO 2D Inventory TryOn Preview", "THỬ: top_kiem_lv1_male", new Vector2(0.48f, -1.96f), 0.027f, RuntimeArtCatalog.Spirit, 67, _inventoryPanelRoot);
+            _inventoryHelpLabel = AddWorldLabel("LGO 2D Inventory Input Help", "T THỬ  •  Y ÁP DỤNG  •  Esc HỦY", new Vector2(0.30f, -2.18f), 0.025f, RuntimeArtCatalog.Gold, 67, _inventoryPanelRoot);
+            _inventoryPanelRoot.gameObject.SetActive(false);
         }
 
         private void RefreshInventoryPanelPresentation()
         {
+            if (_inventoryPanelRoot != null) _inventoryPanelRoot.gameObject.SetActive(_inventoryOpen);
             SetHudText(_inventoryModeLabel, (_inventoryOpen ? "OPEN" : "I mở") + ": Tab chọn món");
             SetHudText(_inventorySelectedLabel, (_inventoryInputState == "Trying" ? "THỬ: " : _inventoryInputState == "Applied" ? "ĐANG MẶC: " : "Chọn: ") + _inventoryItemIds[_inventorySelectedIndex]);
             SetHudText(_inventoryHelpLabel, "T THỬ  •  Y ÁP DỤNG  •  Esc HỦY");

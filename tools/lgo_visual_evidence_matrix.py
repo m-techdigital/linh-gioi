@@ -85,6 +85,13 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "requiredManifest": ["runtimeInventoryInputSnapshot", "runtimeEquipmentSnapshot"],
         "nonClaim": "not persistent equipment save",
     },
+    {
+        "id": "two_d_plaza_board_preview",
+        "label": "2D Plaza board local preview",
+        "screenshot": "11-plaza-board-preview.bmp",
+        "requiredManifest": ["runtimeLinhThanhPlazaHubSnapshot", "hudSnapshot"],
+        "nonClaim": "not production event backend",
+    },
 ]
 
 

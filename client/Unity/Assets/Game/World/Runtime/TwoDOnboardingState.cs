@@ -46,6 +46,7 @@ namespace LinhGioi.World
         public bool ShadowSlimeVisible { get; private set; }
         public bool ShadowSlimeDefeated { get; private set; }
         public bool LinhThanhUnlocked { get; private set; }
+        public bool PlazaHubPreviewOpen { get; private set; }
         public string CurrentRouteNodeId { get; private set; } = "spawn";
 
         public void Reset()
@@ -63,6 +64,7 @@ namespace LinhGioi.World
             ShadowSlimeVisible = false;
             ShadowSlimeDefeated = false;
             LinhThanhUnlocked = false;
+            PlazaHubPreviewOpen = false;
             CurrentRouteNodeId = "spawn";
             Refresh();
         }
@@ -163,12 +165,30 @@ namespace LinhGioi.World
             return true;
         }
 
+        public bool TryInspectPlazaHubBoard()
+        {
+            Refresh();
+            if (!LinhThanhUnlocked) return false;
+
+            PlazaHubPreviewOpen = true;
+            DialogueOpen = true;
+            DialogueLine = "Bảng sự kiện Quảng Trường: nhiệm vụ cộng đồng đang ở local preview.";
+            ObjectiveText = "Xem trước Quảng Trường: NPC và bảng sự kiện đã sẵn sàng.";
+            HintText = "Preview local-only; chưa mở teleport, giao dịch hoặc bang hội.";
+            AreaText = "Quảng Trường";
+            FeedbackText = "Bảng sự kiện Quảng Trường đang ở local preview.";
+            LastAnimationIntent = "Idle";
+            AvailableAction = TwoDOnboardingAction.None;
+            CurrentRouteNodeId = "plaza";
+            return true;
+        }
+
         public void Refresh()
         {
             if (Step == TwoDOnboardingStep.Complete)
             {
                 AvailableAction = TwoDOnboardingAction.None;
-                AreaText = "Sân Luyện Khí";
+                AreaText = PlazaHubPreviewOpen ? "Quảng Trường" : "Sân Luyện Khí";
                 return;
             }
 

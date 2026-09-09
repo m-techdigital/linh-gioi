@@ -140,3 +140,6 @@ Sau khi người chơi hoàn tất flow Đông Môn và đánh tan Shadow Slime,
 ### Runtime hub preview — Quảng Trường local-only
 
 Sau unlock Đông Môn, Quảng Trường có lớp runtime preview tách khỏi shell nền: `PlazaHubRuntime: district=plaza | npc=gate-guide | npc=wandering-student | board=event-local-preview | guild-bulletin=locked | social-spawn=local-safe | safe-local-no-backend`. Scene bật cụm NPC/bảng sự kiện/khóa bang hội cùng banner “Mở Linh Thành → Quảng Trường” để người chơi thấy hướng social hub kế tiếp. Đây vẫn là preview local-only, chưa mở teleport thật, shop, giao dịch, bang hội hoặc backend xã hội.
+### Runtime interaction checkpoint — Quảng Trường board local preview
+
+Sau unlock Đông Môn, bảng sự kiện Quảng Trường có interaction local-only: `interaction=board-preview-open`. HUD phải chuyển `Khu vực: Quảng Trường`, dialogue mô tả nhiệm vụ cộng đồng ở local preview và inventory panel không được che frame board nếu người chơi chưa mở hành trang. Đây là bước chuẩn bị cho social event board sau này, chưa mở event backend, guild, shop, giao dịch hoặc teleport thật.

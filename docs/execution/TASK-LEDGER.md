@@ -260,3 +260,8 @@ LGO_LINHTHANH_PLAZA_HUB_RUNTIME_READY. Đã nâng Quảng Trường từ shell m
 ## Next after Quảng Trường hub runtime preview
 
 Map vẫn chưa production-complete. Next safe action: thêm interaction local-only cho bảng sự kiện/NPC Quảng Trường hoặc chuyển Đông Môn procedural chunk sang authored Tilemap/Tile palette khi asset sạch sẵn sàng; không mở teleport thật, shop/giao dịch/bang hội/backend khi chưa có gate riêng.
+## 2026-09-10 — Quảng Trường board interaction + truthful Unity test gate
+
+`LGO_LINHTHANH_PLAZA_BOARD_INTERACTION_READY`: sau khi hoàn tất Đông Môn/Shadow Slime và unlock Linh Thành, state runtime cho phép mở preview local-only của `Bảng sự kiện Quảng Trường`. HUD chuyển đúng sang `Khu vực: Quảng Trường`, visual manifest ghi `runtimeLinhThanhPlazaHubSnapshot` với `interaction=board-preview-open`, và visual capture có frame `11-plaza-board-preview`. Inventory panel được ẩn mặc định và chỉ hiện khi người chơi mở hành trang để board preview không bị che.
+
+Đồng thời sửa `tools/unity_batch_test.sh`: bỏ `-quit` khỏi `-runTests`, bắt buộc có XML results, `total>0`, `passed>0`, `failed=0` trước khi in `UNITY_EDITMODE_PASS`. Evidence mới: Unity EditMode thật `total=98 passed=97 failed=0`, Editor smoke PASS, macOS Player build PASS (`totalSize=114657763`), `tools/lgo_runtime_smoke_matrix.py --phase two-d` PASS và `tools/lgo_visual_evidence_matrix.py --verify-current` PASS. Scope vẫn local-only: chưa mở teleport/shop/giao dịch/bang hội/backend.
