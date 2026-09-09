@@ -33,3 +33,14 @@ Player visual capture phải cho thấy ground strip/platform/gap/dash/slime are
 - Chưa ingest ảnh/source art; branch vẫn phải pass `tools/validate_2d_branch_no_source_images.py`.
 - Chưa mở biome/map mới ngoài Đông Môn.
 - Chưa sửa frozen surfaces.
+## Chunk flow runtime
+
+Batch tiếp theo gom tile lẻ thành các chunk theo tuyến tutorial:
+
+- `chunk_gate_entry`: vùng spawn/cổng, dùng `tile_ground_grass`.
+- `chunk_training_stone`: đường đá tới Bia Luyện Khí, dùng `tile_ground_stone`.
+- `chunk_jump_bridge`: platform/cầu gỗ quanh bài học jump, dùng `tile_platform_wood`.
+- `chunk_dash_lane`: lane dash đọc rõ trước combat, dùng `tile_dash_lane`.
+- `chunk_slime_arena`: vùng chân combat cho Shadow Slime, dùng `tile_slime_arena`.
+
+Snapshot `ChunkFlow` phải bám route node, ví dụ `chunk_gate_entry@spawnx4 -> ... -> chunk_slime_arena@shadow-slimex2`. Renderer procedural dùng cùng chunk ID trong tên sprite để khi chuyển sang authored tilemap có thể map lại từng chunk mà không đổi flow gameplay.

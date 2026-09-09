@@ -501,6 +501,17 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeMapCatalogKeepsDongMonTileChunks()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            Assert.That(map.DongMonTileChunks.Length, Is.GreaterThanOrEqualTo(5));
+            StringAssert.Contains("ChunkFlow", map.TilemapSnapshot);
+            StringAssert.Contains("chunk_gate_entry", map.TilemapSnapshot);
+            StringAssert.Contains("chunk_slime_arena", map.TilemapSnapshot);
+        }
+
+        [Test]
         public void RuntimeControllerExposesTilemapSnapshotForVisualEvidence()
         {
             var host = new GameObject("2D tilemap snapshot test host");

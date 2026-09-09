@@ -12,7 +12,8 @@ namespace LinhGioi.World
             MapLayerBudget[] layerBudgets,
             MapLandmark[] dongMonLandmarks,
             MapCollisionBand[] dongMonCollisionBands,
-            MapTileDefinition[] dongMonTileDefinitions)
+            MapTileDefinition[] dongMonTileDefinitions,
+            MapTileChunkDefinition[] dongMonTileChunks)
         {
             WorldZones = worldZones;
             LinhThanhDistricts = linhThanhDistricts;
@@ -21,12 +22,13 @@ namespace LinhGioi.World
             DongMonLandmarks = dongMonLandmarks;
             DongMonCollisionBands = dongMonCollisionBands;
             DongMonTileDefinitions = dongMonTileDefinitions;
+            DongMonTileChunks = dongMonTileChunks;
             WorldSnapshot = BuildWorldSnapshot(worldZones, linhThanhDistricts);
             TutorialRouteSnapshot = BuildRouteSnapshot(dongMonRoute);
             LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
-            TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions);
+            TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions, dongMonTileChunks);
         }
 
         public MapZone[] WorldZones { get; }
@@ -36,6 +38,7 @@ namespace LinhGioi.World
         public MapLandmark[] DongMonLandmarks { get; }
         public MapCollisionBand[] DongMonCollisionBands { get; }
         public MapTileDefinition[] DongMonTileDefinitions { get; }
+        public MapTileChunkDefinition[] DongMonTileChunks { get; }
         public string WorldSnapshot { get; }
         public string TutorialRouteSnapshot { get; }
         public string LayerBudgetSnapshot { get; }
@@ -120,6 +123,14 @@ namespace LinhGioi.World
                     new MapTileDefinition("tile_gap_marker", "Jump Gap Marker", 1, "jump-gap", "empty tile span reserved for jump tutorial"),
                     new MapTileDefinition("tile_dash_lane", "Dash Lane Tile", 1, "dash-lane", "flat read lane for dash tutorial"),
                     new MapTileDefinition("tile_slime_arena", "Slime Arena Soil", 1, "slime-arena", "combat footing before outer forest")
+                },
+                new[]
+                {
+                    new MapTileChunkDefinition("chunk_gate_entry", "Gate Entry", "spawn", "tile_ground_grass", -3.70f, -2.02f, 4, "safe grass approach before NPC focus"),
+                    new MapTileChunkDefinition("chunk_training_stone", "Training Stone Path", "training-stone", "tile_ground_stone", -1.54f, -2.02f, 3, "stone path toward Bia Luyện Khí"),
+                    new MapTileChunkDefinition("chunk_jump_bridge", "Jump Bridge", "jump", "tile_platform_wood", 0.35f, -0.88f, 3, "wood platform and gap read for jump lesson"),
+                    new MapTileChunkDefinition("chunk_dash_lane", "Dash Lane", "dash", "tile_dash_lane", 1.82f, -1.02f, 4, "flat run-up lane for dash lesson"),
+                    new MapTileChunkDefinition("chunk_slime_arena", "Slime Arena", "shadow-slime", "tile_slime_arena", 3.25f, -1.36f, 2, "combat footing before outer forest")
                 });
         }
 
@@ -183,13 +194,19 @@ namespace LinhGioi.World
             return builder.ToString();
         }
 
-        private static string BuildTilemapSnapshot(MapTileDefinition[] tiles)
+        private static string BuildTilemapSnapshot(MapTileDefinition[] tiles, MapTileChunkDefinition[] chunks)
         {
             var builder = new StringBuilder("Chapter 1 Tilemap: Đông Môn | ");
             for (var i = 0; i < tiles.Length; i++)
             {
                 if (i > 0) builder.Append(" | ");
                 builder.Append(tiles[i].Id).Append('@').Append(tiles[i].CollisionBandId).Append("/L").Append(tiles[i].LayerIndex);
+            }
+            builder.Append("\nChunkFlow: ");
+            for (var i = 0; i < chunks.Length; i++)
+            {
+                if (i > 0) builder.Append(" -> ");
+                builder.Append(chunks[i].Id).Append('@').Append(chunks[i].RouteNodeId).Append('x').Append(chunks[i].TileCount);
             }
             return builder.ToString();
         }
@@ -303,6 +320,32 @@ namespace LinhGioi.World
         public string Name { get; }
         public int LayerIndex { get; }
         public string CollisionBandId { get; }
+        public string Usage { get; }
+    }
+
+
+    [Serializable]
+    public readonly struct MapTileChunkDefinition
+    {
+        public MapTileChunkDefinition(string id, string name, string routeNodeId, string primaryTileId, float originX, float originY, int tileCount, string usage)
+        {
+            Id = id;
+            Name = name;
+            RouteNodeId = routeNodeId;
+            PrimaryTileId = primaryTileId;
+            OriginX = originX;
+            OriginY = originY;
+            TileCount = tileCount;
+            Usage = usage;
+        }
+
+        public string Id { get; }
+        public string Name { get; }
+        public string RouteNodeId { get; }
+        public string PrimaryTileId { get; }
+        public float OriginX { get; }
+        public float OriginY { get; }
+        public int TileCount { get; }
         public string Usage { get; }
     }
 

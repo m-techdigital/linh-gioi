@@ -154,4 +154,4 @@ Nâng inventory từ strip preview tĩnh sang input runtime local: `I` mở pane
 
 ## Next after tilemap runtime spine
 
-Nâng Đông Môn từ procedural tile strip sang authored tilemap chunks/parallax spacing, hoặc nâng inventory inspect detail/icon grid khi có art asset sạch.
+Nâng Đông Môn bằng parallax spacing/foreground polish hoặc chuyển chunk procedural sang authored Unity Tilemap asset khi asset sạch sẵn sàng; tránh đụng luồng class/art đang chạy song song.

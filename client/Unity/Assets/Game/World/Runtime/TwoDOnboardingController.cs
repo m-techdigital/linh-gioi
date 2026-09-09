@@ -321,17 +321,23 @@ namespace LinhGioi.World
         private void AddDongMonProceduralTilemap()
         {
             AddSceneBeat("TILEMAP Tile: grass/stone/wood/gap/dash/slime procedural Đông Môn tilemap spine");
-            for (var i = 0; i < 12; i++)
-            {
-                var x = -3.70f + i * 0.54f;
-                var grass = i < 4 || i > 8;
-                AddSprite("LGO 2D Tile tile_ground_" + i, new Vector2(x, -2.02f), new Vector2(0.50f, 0.14f), grass ? new Color(0.13f, 0.32f, 0.22f) : new Color(0.24f, 0.30f, 0.31f), -7);
-                AddSprite("LGO 2D Tile lip_" + i, new Vector2(x, -1.91f), new Vector2(0.46f, 0.035f), grass ? new Color(0.25f, 0.64f, 0.42f) : RuntimeArtCatalog.Spirit, -6);
-            }
-            AddSprite("LGO 2D Tile tile_platform_wood", new Vector2(1.05f, -0.88f), new Vector2(1.42f, 0.12f), new Color(0.46f, 0.27f, 0.12f), -6);
+            AddSceneBeat("LGO 2D Tile Chunk chunk_gate_entry -> chunk_training_stone -> chunk_jump_bridge -> chunk_dash_lane -> chunk_slime_arena");
+            AddDongMonProceduralTileChunk("chunk_gate_entry", "tile_ground_grass", new Vector2(-3.70f, -2.02f), 4, new Color(0.13f, 0.32f, 0.22f), new Color(0.25f, 0.64f, 0.42f));
+            AddDongMonProceduralTileChunk("chunk_training_stone", "tile_ground_stone", new Vector2(-1.54f, -2.02f), 3, new Color(0.24f, 0.30f, 0.31f), RuntimeArtCatalog.Spirit);
+            AddDongMonProceduralTileChunk("chunk_jump_bridge", "tile_platform_wood", new Vector2(0.35f, -0.88f), 3, new Color(0.46f, 0.27f, 0.12f), new Color(0.58f, 0.34f, 0.16f));
+            AddDongMonProceduralTileChunk("chunk_dash_lane", "tile_dash_lane", new Vector2(1.82f, -1.02f), 4, new Color(0.10f, 0.48f, 0.47f, 0.70f), new Color(0.18f, 0.86f, 0.78f, 0.58f));
+            AddDongMonProceduralTileChunk("chunk_slime_arena", "tile_slime_arena", new Vector2(3.25f, -1.36f), 2, new Color(0.22f, 0.12f, 0.25f, 0.75f), new Color(0.48f, 0.20f, 0.82f, 0.38f));
             AddSprite("LGO 2D Tile tile_gap_marker", new Vector2(0.84f, -1.72f), new Vector2(0.84f, 0.06f), new Color(0.04f, 0.07f, 0.10f), -6);
-            AddSprite("LGO 2D Tile tile_dash_lane", new Vector2(2.45f, -1.02f), new Vector2(1.70f, 0.10f), new Color(0.10f, 0.48f, 0.47f, 0.70f), -6);
-            AddSprite("LGO 2D Tile tile_slime_arena", new Vector2(3.58f, -1.36f), new Vector2(1.02f, 0.14f), new Color(0.22f, 0.12f, 0.25f, 0.75f), -6);
+        }
+
+        private void AddDongMonProceduralTileChunk(string chunkId, string tileId, Vector2 origin, int count, Color bodyColor, Color lipColor)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                var x = origin.x + i * 0.54f;
+                AddSprite("LGO 2D Tile Chunk " + chunkId + " " + tileId + " body " + i, new Vector2(x, origin.y), new Vector2(0.50f, 0.14f), bodyColor, -7);
+                AddSprite("LGO 2D Tile Chunk " + chunkId + " " + tileId + " lip " + i, new Vector2(x, origin.y + 0.11f), new Vector2(0.46f, 0.035f), lipColor, -6);
+            }
         }
 
         private void AddDongMonTerrainCollisionCues()
