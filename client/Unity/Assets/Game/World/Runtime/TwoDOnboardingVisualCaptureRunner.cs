@@ -63,6 +63,8 @@ namespace LinhGioi.World
                 evidenceDir = evidenceDir,
                 finalStep = controller.State.Step.ToString(),
                 finalObjective = controller.State.ObjectiveText,
+                hudLineCount = controller.WorldHudLineCount,
+                hudSnapshot = controller.WorldHudSnapshot,
                 screenshotCount = _screenshots.Count,
                 screenshots = _screenshots.ToArray()
             };
@@ -169,6 +171,8 @@ namespace LinhGioi.World
             public string evidenceDir;
             public string finalStep;
             public string finalObjective;
+            public int hudLineCount;
+            public string hudSnapshot;
             public int screenshotCount;
             public string[] screenshots;
         }

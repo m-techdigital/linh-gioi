@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using LinhGioi.Art;
 using UnityEngine;
 
@@ -13,9 +14,20 @@ namespace LinhGioi.World
         private Transform _trainingStone;
         private Transform _pathGlow;
         private Transform _focusRing;
+        private Transform _hudDialoguePanel;
+        private TextMesh _hudTitle;
+        private TextMesh _hudArea;
+        private TextMesh _hudObjective;
+        private TextMesh _hudHint;
+        private TextMesh _hudAction;
+        private TextMesh _hudDialogue;
+        private TextMesh _hudFeedback;
         private Camera _camera;
+        private string _worldHudSnapshot = string.Empty;
 
         public TwoDOnboardingState State => _state;
+        public string WorldHudSnapshot => _worldHudSnapshot;
+        public int WorldHudLineCount { get; private set; }
 
         public static TwoDOnboardingController Attach(GameObject host)
         {
@@ -42,31 +54,6 @@ namespace LinhGioi.World
             {
                 if (_state.TryUseAction()) RefreshPresentation();
             }
-        }
-
-        private void OnGUI()
-        {
-            var box = new Rect(24f, 24f, Mathf.Min(Screen.width - 48f, 620f), _state.DialogueOpen ? 190f : 136f);
-            GUI.color = new Color(0.04f, 0.08f, 0.15f, 0.88f);
-            GUI.Box(box, GUIContent.none);
-            GUI.color = RuntimeArtCatalog.Text;
-            GUILayout.BeginArea(new Rect(box.x + 18f, box.y + 14f, box.width - 36f, box.height - 28f));
-            GUILayout.Label("Linh Giới Online — 2D nhập môn");
-            GUILayout.Label("Khu vực: " + _state.AreaText);
-            GUILayout.Label("Mục tiêu: " + _state.ObjectiveText);
-            GUILayout.Label("Gợi ý: " + _state.HintText);
-            if (_state.AvailableAction != TwoDOnboardingAction.None)
-                GUILayout.Label("Hành động: " + DescribeAction(_state.AvailableAction));
-            if (_state.DialogueOpen)
-                GUILayout.Label("Người Giữ Cổng: " + _state.DialogueLine);
-            GUILayout.EndArea();
-
-            var feedback = new Rect(24f, Screen.height - 72f, Mathf.Min(Screen.width - 48f, 760f), 48f);
-            GUI.color = new Color(0.04f, 0.08f, 0.15f, 0.78f);
-            GUI.Box(feedback, GUIContent.none);
-            GUI.color = RuntimeArtCatalog.Gold;
-            GUI.Label(new Rect(feedback.x + 16f, feedback.y + 14f, feedback.width - 32f, 24f), _state.FeedbackText);
-            GUI.color = Color.white;
         }
 
         private void BuildScene()
@@ -99,6 +86,7 @@ namespace LinhGioi.World
             _trainingStone = AddTrainingStone("LGO 2D Training Stone", TwoDOnboardingState.TrainingStonePosition, -2);
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
             _focusRing = AddSprite("LGO 2D Focus Ring", TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f, new Vector2(1.45f, 0.16f), RuntimeArtCatalog.Spirit, 1).transform;
+            BuildWorldHud();
         }
 
         private Vector2 ReadMovement()
@@ -134,8 +122,77 @@ namespace LinhGioi.World
                 var pulse = _state.Step == TwoDOnboardingStep.Complete ? 1.18f : 1f;
                 _trainingStone.localScale = new Vector3(pulse, pulse, 1f);
             }
+            RefreshWorldHud();
         }
 
+        private void BuildWorldHud()
+        {
+            AddSprite("LGO 2D HUD Panel", new Vector2(-1.82f, 2.33f), new Vector2(4.7f, 1.12f), new Color(0.03f, 0.07f, 0.12f, 0.92f), 60);
+            AddSprite("LGO 2D HUD Accent", new Vector2(-3.96f, 2.82f), new Vector2(0.18f, 0.12f), RuntimeArtCatalog.Spirit, 61);
+            _hudTitle = AddHudText("LGO 2D HUD Title", new Vector2(-3.82f, 2.80f), 0.046f, RuntimeArtCatalog.Gold, 70);
+            _hudArea = AddHudText("LGO 2D HUD Area", new Vector2(-3.82f, 2.58f), 0.030f, RuntimeArtCatalog.Text, 70);
+            _hudObjective = AddHudText("LGO 2D HUD Objective", new Vector2(-3.82f, 2.42f), 0.030f, RuntimeArtCatalog.Text, 70);
+            _hudHint = AddHudText("LGO 2D HUD Hint", new Vector2(-3.82f, 2.26f), 0.027f, new Color(0.73f, 0.87f, 0.88f), 70);
+            _hudAction = AddHudText("LGO 2D HUD Action", new Vector2(-3.82f, 2.10f), 0.027f, RuntimeArtCatalog.Spirit, 70);
+
+            _hudDialoguePanel = AddSprite("LGO 2D Dialogue Panel", new Vector2(-1.5f, 1.48f), new Vector2(5.35f, 0.46f), new Color(0.04f, 0.10f, 0.15f, 0.94f), 60).transform;
+            _hudDialogue = AddHudText("LGO 2D Dialogue Text", new Vector2(-3.92f, 1.58f), 0.026f, RuntimeArtCatalog.Gold, 70);
+            _hudFeedback = AddHudText("LGO 2D Feedback Text", new Vector2(-3.82f, -2.62f), 0.030f, RuntimeArtCatalog.Gold, 70);
+            AddSprite("LGO 2D Feedback Panel", new Vector2(-1.08f, -2.52f), new Vector2(5.9f, 0.34f), new Color(0.03f, 0.07f, 0.12f, 0.84f), 59);
+        }
+
+        private void RefreshWorldHud()
+        {
+            var lines = new List<string>
+            {
+                "Linh Giới Online — 2D nhập môn",
+                "Khu vực: " + _state.AreaText,
+                "Mục tiêu: " + _state.ObjectiveText,
+                "Gợi ý: " + _state.HintText,
+                "Hành động: " + DescribeAction(_state.AvailableAction),
+                "Cảm nhận: " + _state.FeedbackText
+            };
+            if (_state.DialogueOpen) lines.Add("Người Giữ Cổng: " + _state.DialogueLine);
+
+            SetHudText(_hudTitle, lines[0]);
+            SetHudText(_hudArea, Shorten(lines[1], 58));
+            SetHudText(_hudObjective, Shorten(lines[2], 68));
+            SetHudText(_hudHint, Shorten(lines[3], 70));
+            SetHudText(_hudAction, Shorten(lines[4], 54));
+            SetHudText(_hudFeedback, Shorten(lines[5], 74));
+            SetHudText(_hudDialogue, _state.DialogueOpen ? Shorten(lines[6], 82) : string.Empty);
+            if (_hudDialoguePanel != null) _hudDialoguePanel.gameObject.SetActive(_state.DialogueOpen);
+            if (_hudDialogue != null) _hudDialogue.gameObject.SetActive(_state.DialogueOpen);
+
+            WorldHudLineCount = lines.Count;
+            _worldHudSnapshot = string.Join("\n", lines.ToArray());
+        }
+
+        private static void SetHudText(TextMesh target, string value)
+        {
+            if (target != null) target.text = value;
+        }
+
+        private static string Shorten(string value, int maxCharacters)
+        {
+            if (string.IsNullOrEmpty(value) || value.Length <= maxCharacters) return value;
+            return value.Substring(0, Mathf.Max(0, maxCharacters - 1)) + "…";
+        }
+
+        private static TextMesh AddHudText(string name, Vector2 position, float size, Color color, int order)
+        {
+            var host = new GameObject(name);
+            host.transform.position = ToWorld(position, order * 0.01f);
+            var text = host.AddComponent<TextMesh>();
+            text.anchor = TextAnchor.UpperLeft;
+            text.alignment = TextAlignment.Left;
+            text.characterSize = size;
+            text.fontSize = 36;
+            text.color = color;
+            var renderer = host.GetComponent<MeshRenderer>();
+            renderer.sortingOrder = order;
+            return text;
+        }
 
         private static Transform AddCharacter(string name, Vector2 position, Color robe, Color accent, Color hair, int order)
         {

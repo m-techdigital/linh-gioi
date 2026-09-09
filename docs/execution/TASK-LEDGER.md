@@ -23,3 +23,26 @@ Dựng runtime 2D SCN-001/002 có thể chơi và capture thật.
 ## Next after runtime slice
 
 Nâng art/UI 2D cho SCN-001/002, ưu tiên sprite 2D đẹp hơn và HUD capture được, không mở rộng combat/reward/frozen contracts.
+
+
+## 2026-09-09 — 2D onboarding HUD capture
+
+- Thay HUD OnGUI tạm bằng HUD world-space để visual capture camera-render bắt được nội dung player-facing.
+- Thêm test `RuntimeControllerMaintainsCameraCapturedHudText`; RED đã fail vì thiếu `WorldHudSnapshot`/`WorldHudLineCount`, GREEN qua Unity compile/test sau implementation.
+- Visual manifest bổ sung `hudLineCount` và `hudSnapshot`.
+- Evidence: `build/2d-onboarding-visual/03-dialogue.png`, `build/2d-onboarding-visual/05-complete.png`, `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`.
+
+## Next after HUD capture
+
+Thay dần sprite placeholder bằng art 2D đẹp hơn cho Cổng Linh Thành, NPC, player và Bia Luyện Khí; không quay lại pipeline 3D cũ.
+
+## 2026-09-09 — Remove obsolete source images for 2D branch
+
+- Owner yêu cầu bỏ hết ảnh thiết kế/source cũ vì không còn dùng được cho hướng 2D mới.
+- Đã xoá ảnh source cũ khỏi Unity Art/UI Resources và docs/reference/design cũ; evidence runtime trong `build/` không thuộc source tree.
+- Thêm validator `tools/validate_2d_branch_no_source_images.py` để phát hiện ảnh source lẻn lại.
+- Runtime 2D onboarding vẫn dùng procedural sprites/HUD world-space nên không phụ thuộc các ảnh đã xoá.
+
+## Next after image cleanup
+
+Thiết kế lại art 2D cho SCN-001/002 theo mẫu mới được duyệt, bắt đầu từ Cổng Linh Thành, Người Giữ Cổng, player và Bia Luyện Khí.

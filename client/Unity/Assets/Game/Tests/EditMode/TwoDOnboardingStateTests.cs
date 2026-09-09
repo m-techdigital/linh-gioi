@@ -67,5 +67,29 @@ namespace LinhGioi.Tests
             state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
             Assert.AreEqual(TwoDOnboardingAction.Train, state.AvailableAction);
         }
+        [Test]
+        public void RuntimeControllerMaintainsCameraCapturedHudText()
+        {
+            var host = new GameObject("2D onboarding HUD test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+                StringAssert.Contains("Linh Giới Online", controller.WorldHudSnapshot);
+                StringAssert.Contains("Tới gặp Người Giữ Cổng", controller.WorldHudSnapshot);
+                Assert.That(controller.WorldHudLineCount, Is.GreaterThanOrEqualTo(5));
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("Người Giữ Cổng", controller.WorldHudSnapshot);
+                StringAssert.Contains("Chào mừng đến Linh Thành", controller.WorldHudSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
     }
 }
