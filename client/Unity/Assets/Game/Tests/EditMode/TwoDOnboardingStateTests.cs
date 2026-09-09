@@ -1182,6 +1182,38 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeMapCatalogKeepsDongMonAuthoredPass()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("DongMonAuthoredPass", map.DongMonAuthoredPassSnapshot);
+            StringAssert.Contains("route-segments=5", map.DongMonAuthoredPassSnapshot);
+            StringAssert.Contains("detail-density=readable", map.DongMonAuthoredPassSnapshot);
+            StringAssert.Contains("collision-boundaries=from-bands", map.DongMonAuthoredPassSnapshot);
+            StringAssert.Contains("no-random-decoration", map.DongMonAuthoredPassSnapshot);
+            StringAssert.Contains("DongMonAuthoredPass", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesDongMonAuthoredPassForVisualEvidence()
+        {
+            var host = new GameObject("2D Dong Mon authored pass snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonAuthoredPass", controller.RuntimeDongMonAuthoredPassSnapshot);
+                StringAssert.Contains("detail-density=readable", controller.RuntimeDongMonAuthoredPassSnapshot);
+                StringAssert.Contains("collision-boundaries=from-bands", controller.RuntimeDongMonAuthoredPassSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerExposesMapSnapshotForVisualEvidence()
         {
             var host = new GameObject("2D onboarding map snapshot test host");

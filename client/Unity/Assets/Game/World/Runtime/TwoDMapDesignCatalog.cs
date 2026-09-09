@@ -42,6 +42,7 @@ namespace LinhGioi.World
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
             TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions, dongMonTileChunks);
+            DongMonAuthoredPassSnapshot = BuildDongMonAuthoredPassSnapshot(dongMonCollisionBands, dongMonTileChunks);
             ParallaxDepthSnapshot = BuildParallaxDepthSnapshot(layerBudgets);
         }
 
@@ -71,8 +72,9 @@ namespace LinhGioi.World
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
         public string TilemapSnapshot { get; }
+        public string DongMonAuthoredPassSnapshot { get; }
         public string ParallaxDepthSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhMarketShellSnapshot + "\n" + LinhThanhSpiritTempleShellSnapshot + "\n" + LinhThanhResidentialShellSnapshot + "\n" + LinhThanhForgeShellSnapshot + "\n" + LinhThanhGuildShellSnapshot + "\n" + LinhThanhHarborShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
+        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhMarketShellSnapshot + "\n" + LinhThanhSpiritTempleShellSnapshot + "\n" + LinhThanhResidentialShellSnapshot + "\n" + LinhThanhForgeShellSnapshot + "\n" + LinhThanhGuildShellSnapshot + "\n" + LinhThanhHarborShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + DongMonAuthoredPassSnapshot + "\n" + ParallaxDepthSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -333,6 +335,15 @@ namespace LinhGioi.World
                 if (i > 0) builder.Append(" -> ");
                 builder.Append(chunks[i].Id).Append('@').Append(chunks[i].RouteNodeId).Append('x').Append(chunks[i].TileCount);
             }
+            return builder.ToString();
+        }
+
+        private static string BuildDongMonAuthoredPassSnapshot(MapCollisionBand[] bands, MapTileChunkDefinition[] chunks)
+        {
+            var builder = new StringBuilder("DongMonAuthoredPass: route-segments=");
+            builder.Append(chunks.Length);
+            builder.Append(" | collision-bands=").Append(bands.Length);
+            builder.Append(" | detail-density=readable | collision-boundaries=from-bands | foreground-fringe=controlled | landmark-silhouettes=anchored | no-random-decoration | safe-no-procedural-spam");
             return builder.ToString();
         }
     }

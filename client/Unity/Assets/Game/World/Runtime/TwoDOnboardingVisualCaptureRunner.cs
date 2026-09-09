@@ -131,6 +131,7 @@ namespace LinhGioi.World
                 runtimePlazaReadabilitySnapshot = controller.RuntimePlazaReadabilitySnapshot,
                 runtimeTerrainCollisionSnapshot = controller.RuntimeTerrainCollisionSnapshot,
                 runtimeTilemapSnapshot = controller.RuntimeTilemapSnapshot,
+                runtimeDongMonAuthoredPassSnapshot = controller.RuntimeDongMonAuthoredPassSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
                 runtimeCombatSnapshot = controller.RuntimeCombatSnapshot,
                 runtimeRouteProgressSnapshot = controller.RuntimeRouteProgressSnapshot,
@@ -263,6 +264,7 @@ namespace LinhGioi.World
             public string runtimePlazaReadabilitySnapshot;
             public string runtimeTerrainCollisionSnapshot;
             public string runtimeTilemapSnapshot;
+            public string runtimeDongMonAuthoredPassSnapshot;
             public string runtimeAnimationSnapshot;
             public string runtimeCombatSnapshot;
             public string runtimeRouteProgressSnapshot;

@@ -89,6 +89,7 @@ namespace LinhGioi.World
         public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
         public string RuntimeTerrainCollisionSnapshot => _mapCatalog.CollisionSnapshot;
         public string RuntimeTilemapSnapshot => _mapCatalog.TilemapSnapshot;
+        public string RuntimeDongMonAuthoredPassSnapshot => _mapCatalog.DongMonAuthoredPassSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
         public string RuntimeRouteProgressSnapshot => "RouteProgress: current=" + _state.CurrentRouteNodeId + " step=" + _state.Step + " action=" + _state.AvailableAction;
@@ -633,6 +634,18 @@ namespace LinhGioi.World
                 AddSprite("LGO 2D Tile Chunk " + chunkId + " " + tileId + " body " + i, new Vector2(x, origin.y), new Vector2(0.50f, 0.14f), bodyColor, -7);
                 AddSprite("LGO 2D Tile Chunk " + chunkId + " " + tileId + " lip " + i, new Vector2(x, origin.y + 0.11f), new Vector2(0.46f, 0.035f), lipColor, -6);
             }
+        }
+
+        private void AddDongMonAuthoredDetailPass()
+        {
+            AddSceneBeat("DONG_MON_AUTHORED_PASS readable detail density from route/collision bands no random decoration");
+            AddSprite("LGO 2D Authored Gate Moss Left", new Vector2(-3.34f, -1.83f), new Vector2(0.28f, 0.035f), new Color(0.34f, 0.72f, 0.43f, 0.62f), -4);
+            AddSprite("LGO 2D Authored Gate Moss Right", new Vector2(-2.78f, -1.83f), new Vector2(0.22f, 0.035f), new Color(0.34f, 0.72f, 0.43f, 0.54f), -4);
+            AddSprite("LGO 2D Authored Stone Step A", new Vector2(-1.08f, -1.86f), new Vector2(0.34f, 0.035f), new Color(0.52f, 0.61f, 0.60f, 0.54f), -4);
+            AddSprite("LGO 2D Authored Stone Step B", new Vector2(-0.58f, -1.86f), new Vector2(0.28f, 0.035f), new Color(0.52f, 0.61f, 0.60f, 0.46f), -4);
+            AddSprite("LGO 2D Authored Bridge Rope", new Vector2(0.58f, -0.69f), new Vector2(0.86f, 0.028f), new Color(0.72f, 0.46f, 0.22f, 0.58f), -3);
+            AddSprite("LGO 2D Authored Dash Spirit Dust", new Vector2(2.52f, -0.86f), new Vector2(0.58f, 0.035f), new Color(0.18f, 0.86f, 0.78f, 0.38f), -3);
+            AddSprite("LGO 2D Authored Slime Boundary Rune", new Vector2(3.66f, -1.47f), new Vector2(0.22f, 0.22f), new Color(0.48f, 0.20f, 0.82f, 0.26f), -3);
         }
 
         private void AddDongMonTerrainCollisionCues()
