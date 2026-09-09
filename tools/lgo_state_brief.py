@@ -40,8 +40,21 @@ def first_lines(text: str, limit: int, *, show_truncation: bool = True) -> str:
     return "\n".join(trimmed).strip()
 
 
+def first_existing_section(text: str, headings: tuple[str, ...]) -> str:
+    for heading in headings:
+        extracted = section(text, heading)
+        if extracted:
+            return extracted
+    return ""
+
+
 def limited_section(text: str, heading: str, limit: int) -> str:
     extracted = section(text, heading)
+    return first_lines(extracted, limit) if extracted else ""
+
+
+def limited_section_any(text: str, headings: tuple[str, ...], limit: int) -> str:
+    extracted = first_existing_section(text, headings)
     return first_lines(extracted, limit) if extracted else ""
 
 
@@ -50,8 +63,13 @@ def quiet_limited_section(text: str, heading: str, limit: int) -> str:
     return first_lines(extracted, limit, show_truncation=False) if extracted else ""
 
 
-def limited_section_until(text: str, heading: str, stop_markers: tuple[str, ...], limit: int) -> str:
-    extracted = section(text, heading)
+def quiet_limited_section_any(text: str, headings: tuple[str, ...], limit: int) -> str:
+    extracted = first_existing_section(text, headings)
+    return first_lines(extracted, limit, show_truncation=False) if extracted else ""
+
+
+def limited_section_until_any(text: str, headings: tuple[str, ...], stop_markers: tuple[str, ...], limit: int) -> str:
+    extracted = first_existing_section(text, headings)
     if not extracted:
         return ""
     lines: list[str] = []
@@ -100,11 +118,11 @@ def main() -> int:
     print("## Project State")
     print(quiet_limited_section(project_state, "## Continuous workflow status", 6) or first_lines(project_state, 8, show_truncation=False) or "PROJECT_STATE_MISSING")
     print()
-    print(quiet_limited_section(next_action, "## Quick Resume", 12) or "QUICK_RESUME_MISSING")
+    print(quiet_limited_section_any(next_action, ("## Quick Resume", "## Trạng thái"), 12) or "QUICK_RESUME_MISSING")
     print()
-    print(limited_section(next_action, "## Next task", 6) or "NEXT_TASK_MISSING")
+    print(limited_section_any(next_action, ("## Next task", "## Việc tiếp theo"), 6) or "NEXT_TASK_MISSING")
     print()
-    print(limited_section_until(next_action, "## Current blocker", ("Evidence:",), 5) or "CURRENT_BLOCKER_MISSING")
+    print(limited_section_until_any(next_action, ("## Current blocker", "## Blocker"), ("Evidence:",), 5) or "CURRENT_BLOCKER_MISSING")
     print()
     print("## Next Task Advisor")
     print(advisor() or "ADVISOR_OUTPUT_MISSING")
