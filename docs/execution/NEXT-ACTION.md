@@ -184,3 +184,7 @@ Không mở shop/economy, teleport thật, giao dịch, bang hội, HP/loot/serv
 ## Linh Thành district rail readability checkpoint — 2026-09-10
 
 `LGO_LINHTHANH_DISTRICT_RAIL_READABILITY_READY`: district preview rail đã polish callout để label/backplate đi theo node đang chọn, tăng size nhẹ và expose `runtimeLinhThanhDistrictReadabilitySnapshot` với `label-follows-selected=True`, `backplate=follows-selected`, `callout-size=readable`, `avoids-hud-overlap`. Evidence: Unity EditMode PASS, Editor smoke PASS, macOS Player build PASS, Player visual capture PASS 20 frame và visual review frame Khu Rèn/Bang Hội/Cảng. Map tổng thể vẫn chưa production-complete; next safe map action là polish minimap/district rail density hoặc nâng Đông Môn Tilemap/atlas sạch.
+
+## Next after minimap compact readability — 2026-09-10
+
+`LGO_MINIMAP_COMPACT_READABILITY_READY`: world/minimap overlay đã rút route text, dùng district chips ngắn `HV TP ĐL KR BH CẢ`, world links dạng ngắn và manifest bắt `runtimeMinimapReadabilitySnapshot`. Map chưa xong production A-Z; nền tảng hiện có world map/Linh Thành/Đông Môn/district preview chạy trong Player. Next map-safe action: nâng Đông Môn authored Tilemap/atlas sạch hoặc mở layout chi tiết tiếp theo cho một khu Linh Thành theo local-only gate; không mở teleport/travel/shop/guild/backend.

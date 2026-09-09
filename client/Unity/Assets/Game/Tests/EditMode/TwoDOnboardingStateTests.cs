@@ -1800,5 +1800,27 @@ namespace LinhGioi.Tests
             }
         }
 
+        [Test]
+        public void RuntimeControllerExposesCompactMinimapReadabilitySnapshot()
+        {
+            var host = new GameObject("2D compact minimap readability test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                StringAssert.Contains("MinimapReadability", controller.RuntimeMinimapReadabilitySnapshot);
+                StringAssert.Contains("mode=compact-district-route", controller.RuntimeMinimapReadabilitySnapshot);
+                StringAssert.Contains("route-text=short", controller.RuntimeMinimapReadabilitySnapshot);
+                StringAssert.Contains("district-chips=academy,market,spirit,forge,guild,harbor", controller.RuntimeMinimapReadabilitySnapshot);
+                StringAssert.Contains("world-links=icon-only", controller.RuntimeMinimapReadabilitySnapshot);
+                StringAssert.Contains("selected-node-progress", controller.RuntimeMinimapReadabilitySnapshot);
+                StringAssert.Contains("avoids-hud-overlap", controller.RuntimeMinimapReadabilitySnapshot);
+                StringAssert.Contains("safe-local-no-backend", controller.RuntimeMinimapReadabilitySnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
     }
 }

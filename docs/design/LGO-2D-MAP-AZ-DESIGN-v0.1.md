@@ -221,3 +221,7 @@ Checkpoint 2026-09-10 mở rộng capture district preview rail tới các khu s
 ### Runtime checkpoint — Linh Thành district rail readability
 
 Checkpoint 2026-09-10 cải thiện độ đọc của district preview rail: callout `Map: <khu> / local-only` và backplate giờ đi theo node đang chọn thay vì nằm cố định xa ở đáy màn. Manifest có `DistrictRailReadability: mode=selected-node-callout | label-follows-selected=True | backplate=follows-selected | callout-size=readable | avoids-hud-overlap`, giúp các frame Khu Rèn, Khu Bang Hội và Cảng Linh Thuyền đọc nhanh hơn trong Player capture. Đây chỉ là polish UX/readability cho preview local-only.
+
+### Minimap readability checkpoint — 2026-09-10
+
+Checkpoint `LGO_MINIMAP_COMPACT_READABILITY_READY`: minimap/runtime overlay chuyển sang dạng compact cho bản 2D hiện tại. Route text rút còn `Đông Môn → Linh Thành`, district chips dùng mã ngắn `HV TP ĐL KR BH CẢ`, world links chuyển về icon/label ngắn để tránh lấn HUD và callout khu đang chọn. Manifest bắt `runtimeMinimapReadabilitySnapshot` với `MinimapReadability`, `mode=compact-district-route`, `route-text=short`, `district-chips=academy,market,spirit,forge,guild,harbor`, `world-links=icon-only`, `selected-node-progress`, `safe-local-no-backend`. Đây là polish đọc map, chưa mở teleport/travel/backend.

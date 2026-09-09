@@ -337,3 +337,7 @@ Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và
 ## 2026-09-10 — Linh Thành district rail readability runtime checkpoint
 
 `LGO_LINHTHANH_DISTRICT_RAIL_READABILITY_READY`: polish district preview rail để callout/backplate đi theo node đang chọn thay vì nằm cố định ở đáy màn; thêm snapshot `DistrictRailReadability` và gate yêu cầu `label-follows-selected=True`, `backplate=follows-selected`, `callout-size=readable`, `avoids-hud-overlap`. Evidence: Unity EditMode `total=133 passed=132 failed=0 skipped=1`, Editor smoke PASS, macOS Player build PASS, Player visual capture PASS 20 frame; đã review frame Khu Rèn/Bang Hội/Cảng sau polish.
+
+## Next after minimap compact readability
+
+`LGO_MINIMAP_COMPACT_READABILITY_READY`: minimap/runtime overlay được rút gọn để dễ đọc hơn trong Player: route text ngắn, district chips `HV TP ĐL KR BH CẢ`, world links dạng ngắn, manifest có `runtimeMinimapReadabilitySnapshot`/`MinimapReadability`. Map chưa xong production toàn bộ; checkpoint này chốt readability của foundation map hiện tại. Next: authored Đông Môn Tilemap/atlas sạch hoặc mở district detail kế tiếp local-only.

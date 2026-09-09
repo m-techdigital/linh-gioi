@@ -173,3 +173,10 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 - Trạng thái: district preview callout/backplate đi theo selected node, manifest có `DistrictRailReadability` và Player visual capture 20 frame đã review frame Khu Rèn/Bang Hội/Cảng.
 - Giới hạn: polish UX cho runtime blockout local-only; chưa thay production art, chưa mở district backend.
 - Next: polish minimap/district rail density hoặc nâng Đông Môn Tilemap/atlas sạch.
+
+## 2026-09-10 — 2D minimap compact readability
+
+- Trạng thái: `LGO_MINIMAP_COMPACT_READABILITY_READY`; overlay/minimap giảm mật độ chữ, route `Đông Môn → Linh Thành`, district chips `HV TP ĐL KR BH CẢ`, world links ngắn và selected-node progress.
+- Evidence cần giữ: `runtimeMinimapReadabilitySnapshot` trong visual manifest, Player capture frame `01-initial` và `20-district-harbor-preview`, smoke/visual matrix PASS.
+- Giới hạn: local-only, chưa mở teleport/travel/backend; map chưa production-complete toàn bộ A-Z.
+- Next: Đông Môn authored Tilemap/atlas sạch hoặc mở chi tiết khu Linh Thành tiếp theo với guard local-only.

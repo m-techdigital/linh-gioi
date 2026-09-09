@@ -54,7 +54,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_initial",
         "label": "2D Đông Môn initial HUD/map read",
         "screenshot": "01-initial.bmp",
-        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
+        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeMinimapReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
         "nonClaim": "not production art",
     },
     {
@@ -196,6 +196,10 @@ def verify_current() -> dict[str, Any]:
     for token in ("DongMonReadability", "mode=route-label-rail", "world-label-density=reduced", "chips=gate,stone,jump,dash,slime", "avoids-hud-overlap", "safe-local-no-backend"):
         if token not in dong_mon_readability_snapshot:
             failures.append(f"runtimeDongMonReadabilitySnapshot missing {token!r}")
+    minimap_readability_snapshot = str(manifest.get("runtimeMinimapReadabilitySnapshot", ""))
+    for token in ("MinimapReadability", "mode=compact-district-route", "route-text=short", "district-chips=academy,market,spirit,forge,guild,harbor", "world-links=icon-only", "selected-node-progress", "avoids-hud-overlap", "safe-local-no-backend"):
+        if token not in minimap_readability_snapshot:
+            failures.append(f"runtimeMinimapReadabilitySnapshot missing {token!r}")
     district_preview_snapshot = str(manifest.get("runtimeLinhThanhDistrictPreviewSnapshot", ""))
     for token in ("DistrictPreviewRail", "unlocked=True", "selected=harbor", "label=Cảng Linh Thuyền", "route=plaza->harbor", "controls=M select-district", "safe-no-travel-backend", "safe-no-teleport-backend", "safe-no-district-backend", "safe-local-no-backend"):
         if token not in district_preview_snapshot:

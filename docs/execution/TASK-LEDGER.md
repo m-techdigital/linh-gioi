@@ -392,3 +392,7 @@ Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm `RuntimePlazaHubDeta
 ## 2026-09-10 — Linh Thành district rail readability runtime checkpoint
 
 `LGO_LINHTHANH_DISTRICT_RAIL_READABILITY_READY`: polish district preview rail để callout/backplate đi theo node đang chọn thay vì nằm cố định ở đáy màn; thêm snapshot `DistrictRailReadability` và gate yêu cầu `label-follows-selected=True`, `backplate=follows-selected`, `callout-size=readable`, `avoids-hud-overlap`. Evidence: Unity EditMode `total=133 passed=132 failed=0 skipped=1`, Editor smoke PASS, macOS Player build PASS, Player visual capture PASS 20 frame; đã review frame Khu Rèn/Bang Hội/Cảng sau polish.
+
+## Next after minimap compact readability — 2026-09-10
+
+`LGO_MINIMAP_COMPACT_READABILITY_READY`: minimap/runtime overlay được rút gọn để dễ đọc trong Player, gồm `runtimeMinimapReadabilitySnapshot`, `mode=compact-district-route`, `route-text=short`, `district-chips=academy,market,spirit,forge,guild,harbor`, `world-links=icon-only`, `selected-node-progress`, `safe-local-no-backend`. Evidence kỳ vọng: EditMode, smoke, macOS Player build/capture và visual matrix PASS; frame review chính là `01-initial` và `20-district-harbor-preview`. Map hiện là foundation/runtime preview, chưa production-complete A-Z.

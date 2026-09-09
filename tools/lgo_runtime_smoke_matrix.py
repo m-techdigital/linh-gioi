@@ -93,6 +93,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
             "runtimePlazaHubLayoutSnapshot": ["PlazaHubLayout", "anchors=5", "anchor=social-spawn@center", "anchor=event-board@upper-mid", "anchor=gate-guide@left", "anchor=merchant-preview@right", "anchor=guild-locked@far-right", "safe-local-no-backend"],
             "runtimePlazaReadabilitySnapshot": ["PlazaReadability", "mode=label-rail", "world-label-density=reduced", "target-chips=event-board,gate-guide,merchant-preview", "safe-local-no-backend"],
             "runtimeDongMonReadabilitySnapshot": ["DongMonReadability", "mode=route-label-rail", "world-label-density=reduced", "chips=gate,stone,jump,dash,slime", "avoids-hud-overlap", "safe-local-no-backend"],
+            "runtimeMinimapReadabilitySnapshot": ["MinimapReadability", "mode=compact-district-route", "route-text=short", "district-chips=academy,market,spirit,forge,guild,harbor", "world-links=icon-only", "selected-node-progress", "avoids-hud-overlap", "safe-local-no-backend"],
         },
         "marker": "LGO_RUNTIME_SMOKE_MATRIX_2D_PASS",
     },

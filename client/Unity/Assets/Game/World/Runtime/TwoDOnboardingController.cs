@@ -91,6 +91,7 @@ namespace LinhGioi.World
         public string RuntimePlazaHubLayoutSnapshot => BuildPlazaHubLayoutSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
         public string RuntimeDongMonReadabilitySnapshot => BuildDongMonReadabilitySnapshot();
+        public string RuntimeMinimapReadabilitySnapshot => BuildMinimapReadabilitySnapshot();
         public string RuntimeHubTransitionSnapshot => BuildHubTransitionSnapshot();
         public string RuntimeLinhThanhUnlockSnapshot => BuildLinhThanhUnlockSnapshot();
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
@@ -484,6 +485,17 @@ namespace LinhGioi.World
                 + " | target-chips=event-board,gate-guide,merchant-preview"
                 + " | rail=bottom-safe-zone"
                 + " | selector-label=single-active-target"
+                + " | avoids-hud-overlap"
+                + " | safe-local-no-backend";
+        }
+
+        private string BuildMinimapReadabilitySnapshot()
+        {
+            return "MinimapReadability: mode=compact-district-route"
+                + " | route-text=short"
+                + " | district-chips=academy,market,spirit,forge,guild,harbor"
+                + " | world-links=icon-only"
+                + " | selected-node-progress"
                 + " | avoids-hud-overlap"
                 + " | safe-local-no-backend";
         }
@@ -1058,15 +1070,14 @@ namespace LinhGioi.World
         private void BuildRuntimeMapOverlay()
         {
             AddSceneBeat("Minimap Đông Môn theo route A-Z");
+            AddSceneBeat(RuntimeMinimapReadabilitySnapshot);
             AddSprite("LGO 2D Mini Map Panel", new Vector2(3.05f, 2.14f), new Vector2(2.24f, 1.36f), new Color(0.03f, 0.08f, 0.13f, 0.92f), 55);
             AddWorldLabel("LGO 2D Mini Map Title", "BẢN ĐỒ", new Vector2(2.58f, 2.70f), 0.036f, RuntimeArtCatalog.Gold, 66);
             AddWorldLabel("LGO 2D Mini Map Hub", "Linh Thành", new Vector2(3.18f, 2.46f), 0.032f, RuntimeArtCatalog.Text, 66);
-            AddWorldLabel("LGO 2D Mini Map Route", "Đông Môn → Bia → Jump → Dash → Slime", new Vector2(3.18f, 2.23f), 0.026f, RuntimeArtCatalog.Spirit, 66);
-            AddWorldLabel("LGO 2D Mini Map Chapter", "Chapter 1: Vết Nứt Đông Môn", new Vector2(3.18f, 2.08f), 0.024f, RuntimeArtCatalog.Gold, 66);
+            AddWorldLabel("LGO 2D Mini Map Route", "Đông Môn → Linh Thành", new Vector2(3.18f, 2.23f), 0.027f, RuntimeArtCatalog.Spirit, 66);
+            AddWorldLabel("LGO 2D Mini Map Chapter", "Tutorial route + hub rail", new Vector2(3.18f, 2.08f), 0.023f, RuntimeArtCatalog.Gold, 66);
             _miniMapProgress = AddWorldLabel("LGO 2D Mini Map Progress", "Node: spawn", new Vector2(3.18f, 1.93f), 0.024f, RuntimeArtCatalog.Text, 66);
-            AddWorldLabel("LGO 2D Mini Map Layers", "Layers: Sky/Far/Mid/Near/Gameplay/FG", new Vector2(3.18f, 1.69f), 0.021f, new Color(0.73f, 0.87f, 0.88f), 66);
-            AddWorldLabel("LGO 2D Base Label", "Base: Male/Female layered", new Vector2(3.18f, 1.55f), 0.022f, RuntimeArtCatalog.Gold, 66);
-            AddWorldLabel("LGO 2D Equipment Label", "Gear: Võ/Kiếm Lv1 mix slots", new Vector2(3.18f, 1.42f), 0.021f, RuntimeArtCatalog.Spirit, 66);
+            AddWorldLabel("LGO 2D Mini Map District Chips", "HV  TP  ĐL  KR  BH  CẢ", new Vector2(3.18f, 1.58f), 0.024f, RuntimeArtCatalog.Spirit, 66);
             AddWorldZoneNetworkOverlay();
 
             var route = _mapCatalog.DongMonRoute;
@@ -1084,7 +1095,7 @@ namespace LinhGioi.World
         private void AddWorldZoneNetworkOverlay()
         {
             AddSceneBeat("ZONE_NETWORK_OVERLAY World Map hub Linh Thành -> Đông Vực/Âm Giới");
-            AddWorldLabel("LGO 2D World Zone Network Label", "World: LT ↔ Đông Vực / Âm Giới", new Vector2(3.18f, 1.30f), 0.019f, RuntimeArtCatalog.Gold, 66);
+            AddWorldLabel("LGO 2D World Zone Network Label", "World links", new Vector2(3.18f, 1.30f), 0.021f, RuntimeArtCatalog.Gold, 66);
             AddSprite("LGO 2D World Zone Link East", new Vector2(3.02f, 1.17f), new Vector2(0.36f, 0.025f), new Color(0.18f, 0.70f, 0.75f, 0.72f), 63);
             AddSprite("LGO 2D World Zone Link Underworld", new Vector2(3.34f, 1.17f), new Vector2(0.36f, 0.025f), new Color(0.48f, 0.20f, 0.82f, 0.58f), 63);
             AddSprite("LGO 2D World Zone Node Linh Thanh", new Vector2(3.18f, 1.17f), new Vector2(0.12f, 0.12f), RuntimeArtCatalog.Gold, 64);

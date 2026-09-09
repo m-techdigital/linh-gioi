@@ -91,3 +91,5 @@ Smoke/visual matrix 2D tăng lên 16 frame và yêu cầu `runtimeLinhThanhDistr
 ## 2026-09-10 — Linh Thành district rail readability evidence
 
 `LGO_LINHTHANH_DISTRICT_RAIL_READABILITY_READY`: visual manifest bổ sung `runtimeLinhThanhDistrictReadabilitySnapshot` và runtime smoke matrix yêu cầu `DistrictRailReadability`, `mode=selected-node-callout`, `label-follows-selected=True`, `backplate=follows-selected`, `callout-size=readable`, `avoids-hud-overlap`. Player capture 20 frame đã review các frame `18-district-forge-preview`, `19-district-guild-preview`, `20-district-harbor-preview`; callout đi theo node đang chọn để giảm việc phải dò text ở đáy màn.
+
+`LGO_MINIMAP_COMPACT_READABILITY_READY`: visual manifest bổ sung `runtimeMinimapReadabilitySnapshot`; smoke/visual matrix yêu cầu `MinimapReadability`, `mode=compact-district-route`, `route-text=short`, `district-chips=academy,market,spirit,forge,guild,harbor`, `world-links=icon-only`, `selected-node-progress`, `safe-local-no-backend`. Overlay rút text tuyến và district chips để giảm mật độ chữ trong frame initial/harbor, vẫn local-only và không mở travel/backend.
