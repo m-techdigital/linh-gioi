@@ -67,6 +67,29 @@ namespace LinhGioi.Tests
             state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
             Assert.AreEqual(TwoDOnboardingAction.Train, state.AvailableAction);
         }
+
+        [Test]
+        public void RuntimeControllerBuildsReadableProceduralSceneBeats()
+        {
+            var host = new GameObject("2D onboarding scene beat test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                Assert.That(controller.ProductionSceneBeatCount, Is.GreaterThanOrEqualTo(18));
+                StringAssert.Contains("Cổng Linh Thành", controller.ProductionSceneBeatSnapshot);
+                StringAssert.Contains("Lối ngọc", controller.ProductionSceneBeatSnapshot);
+                StringAssert.Contains("Lồng đèn", controller.ProductionSceneBeatSnapshot);
+                StringAssert.Contains("Người Giữ Cổng", controller.ProductionSceneBeatSnapshot);
+                StringAssert.Contains("Bia Luyện Khí", controller.ProductionSceneBeatSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeControllerMaintainsCameraCapturedHudText()
         {

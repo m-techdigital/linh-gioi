@@ -65,6 +65,8 @@ namespace LinhGioi.World
                 finalObjective = controller.State.ObjectiveText,
                 hudLineCount = controller.WorldHudLineCount,
                 hudSnapshot = controller.WorldHudSnapshot,
+                productionSceneBeatCount = controller.ProductionSceneBeatCount,
+                productionSceneBeatSnapshot = controller.ProductionSceneBeatSnapshot,
                 screenshotCount = _screenshots.Count,
                 screenshots = _screenshots.ToArray()
             };
@@ -173,6 +175,8 @@ namespace LinhGioi.World
             public string finalObjective;
             public int hudLineCount;
             public string hudSnapshot;
+            public int productionSceneBeatCount;
+            public string productionSceneBeatSnapshot;
             public int screenshotCount;
             public string[] screenshots;
         }

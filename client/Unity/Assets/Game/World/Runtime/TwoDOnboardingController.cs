@@ -24,10 +24,13 @@ namespace LinhGioi.World
         private TextMesh _hudFeedback;
         private Camera _camera;
         private string _worldHudSnapshot = string.Empty;
+        private readonly List<string> _productionSceneBeats = new List<string>();
 
         public TwoDOnboardingState State => _state;
         public string WorldHudSnapshot => _worldHudSnapshot;
         public int WorldHudLineCount { get; private set; }
+        public string ProductionSceneBeatSnapshot => string.Join("\n", _productionSceneBeats.ToArray());
+        public int ProductionSceneBeatCount => _productionSceneBeats.Count;
 
         public static TwoDOnboardingController Attach(GameObject host)
         {
@@ -71,21 +74,43 @@ namespace LinhGioi.World
             _camera.clearFlags = CameraClearFlags.SolidColor;
             _camera.backgroundColor = RuntimeArtCatalog.Background;
 
-            AddSprite("LGO 2D Far Spirit Sky", new Vector2(0f, 0.35f), new Vector2(9.5f, 5.45f), new Color(0.05f, 0.12f, 0.22f), -20);
-            AddSprite("LGO 2D Distant Wall", new Vector2(-1.65f, 0.45f), new Vector2(3.8f, 1.45f), new Color(0.08f, 0.19f, 0.30f), -18);
-            AddSprite("LGO 2D Linh Thanh Gate Left Pillar", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
-            AddSprite("LGO 2D Linh Thanh Gate Right Pillar", new Vector2(-0.75f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
-            AddSprite("LGO 2D Linh Thanh Gate Roof", new Vector2(-1.68f, 1.1f), new Vector2(2.25f, 0.26f), new Color(0.18f, 0.38f, 0.48f), -15);
-            AddSprite("LGO 2D Gate Inner Glow", new Vector2(-1.68f, -0.2f), new Vector2(1.42f, 1.05f), new Color(0.07f, 0.14f, 0.23f), -14);
-            AddSprite("LGO 2D Training Yard", new Vector2(0f, -1.52f), new Vector2(8.9f, 1.82f), new Color(0.10f, 0.15f, 0.18f), -12);
-            AddSprite("LGO 2D Yard Front Shade", new Vector2(0f, -2.22f), new Vector2(8.9f, 0.46f), new Color(0.06f, 0.10f, 0.15f), -11);
-            AddSprite("LGO 2D Jade Path", new Vector2(0.8f, -0.95f), new Vector2(5.9f, 0.20f), new Color(0.11f, 0.52f, 0.48f, 0.55f), -10);
-            _pathGlow = AddSprite("LGO 2D Path Glow", new Vector2(0.85f, -0.95f), new Vector2(5.7f, 0.08f), new Color(0.16f, 0.86f, 0.78f, 0.78f), -9).transform;
+            _productionSceneBeats.Clear();
+            AddSceneSprite("LGO 2D Far Spirit Sky", "Nền trời linh khí xanh đêm", new Vector2(0f, 0.35f), new Vector2(9.5f, 5.45f), new Color(0.05f, 0.12f, 0.22f), -20);
+            AddSceneSprite("LGO 2D Moon Glow", "Vầng linh nguyệt sau Linh Thành", new Vector2(2.95f, 1.55f), new Vector2(0.72f, 0.72f), new Color(0.42f, 0.74f, 0.82f, 0.28f), -19);
+            AddSceneSprite("LGO 2D Distant Wall", "Tường thành xa tạo chiều sâu", new Vector2(-1.65f, 0.45f), new Vector2(3.8f, 1.45f), new Color(0.08f, 0.19f, 0.30f), -18);
+            AddSceneSprite("LGO 2D Distant Roofline", "Mái thành nhiều lớp phía sau", new Vector2(-1.65f, 1.2f), new Vector2(4.15f, 0.18f), new Color(0.13f, 0.31f, 0.42f), -17);
 
+            AddSceneSprite("LGO 2D Linh Thanh Gate Left Pillar", "Cổng Linh Thành - trụ trái", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
+            AddSceneSprite("LGO 2D Linh Thanh Gate Right Pillar", "Cổng Linh Thành - trụ phải", new Vector2(-0.75f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
+            AddSceneSprite("LGO 2D Gate Roof", "Cổng Linh Thành - mái chính", new Vector2(-1.68f, 1.1f), new Vector2(2.25f, 0.26f), new Color(0.18f, 0.38f, 0.48f), -15);
+            AddSceneSprite("LGO 2D Gate Gold Trim", "Cổng Linh Thành - viền vàng môn phái", new Vector2(-1.68f, 1.25f), new Vector2(2.55f, 0.08f), RuntimeArtCatalog.Gold, -14);
+            AddSceneSprite("LGO 2D Gate Inner Glow", "Cổng Linh Thành - cửa linh quang", new Vector2(-1.68f, -0.2f), new Vector2(1.42f, 1.05f), new Color(0.07f, 0.14f, 0.23f), -14);
+            AddSceneSprite("LGO 2D Gate Jade Seal", "Ấn ngọc trên cổng", new Vector2(-1.68f, 0.62f), new Vector2(0.28f, 0.28f), new Color(0.14f, 0.84f, 0.76f, 0.85f), -13);
+            AddWorldLabel("LGO 2D Gate Label", "LINH THÀNH", new Vector2(-2.2f, 1.37f), 0.055f, RuntimeArtCatalog.Gold, -12);
+            AddSceneBeat("Biển tên Cổng Linh Thành");
+
+            AddSceneSprite("LGO 2D Training Yard", "Sân luyện nhập môn", new Vector2(0f, -1.52f), new Vector2(8.9f, 1.82f), new Color(0.10f, 0.15f, 0.18f), -12);
+            AddSceneSprite("LGO 2D Yard Front Shade", "Bóng nền sân luyện", new Vector2(0f, -2.22f), new Vector2(8.9f, 0.46f), new Color(0.06f, 0.10f, 0.15f), -11);
+            AddSceneSprite("LGO 2D Jade Path", "Lối ngọc dẫn tới Bia Luyện Khí", new Vector2(0.8f, -0.95f), new Vector2(5.9f, 0.20f), new Color(0.11f, 0.52f, 0.48f, 0.55f), -10);
+            _pathGlow = AddSceneSprite("LGO 2D Path Glow", "Lối ngọc phát sáng sau thoại", new Vector2(0.85f, -0.95f), new Vector2(5.7f, 0.08f), new Color(0.16f, 0.86f, 0.78f, 0.78f), -9).transform;
+            for (var i = 0; i < 7; i++)
+            {
+                var x = -2.05f + i * 0.72f;
+                AddSceneSprite("LGO 2D Yard Tile " + i, "Đường kẻ gạch sân luyện", new Vector2(x, -1.55f), new Vector2(0.035f, 1.24f), new Color(0.19f, 0.27f, 0.30f, 0.52f), -8);
+            }
+            AddLantern("LGO 2D Left Lantern", "Lồng đèn trái trước cổng", new Vector2(-3.35f, 0.52f), -7);
+            AddLantern("LGO 2D Right Lantern", "Lồng đèn phải gần bia", new Vector2(2.75f, 0.22f), -7);
+            AddSceneSprite("LGO 2D Spirit Mote A", "Đốm linh khí dẫn đường", new Vector2(-0.2f, -0.75f), new Vector2(0.10f, 0.10f), RuntimeArtCatalog.Spirit, -6);
+            AddSceneSprite("LGO 2D Spirit Mote B", "Đốm linh khí quanh bia", new Vector2(2.95f, -0.45f), new Vector2(0.08f, 0.08f), RuntimeArtCatalog.Spirit, -6);
+
+            AddSceneBeat("Người Giữ Cổng - NPC dẫn nhập");
             _gateKeeper = AddCharacter("LGO 2D Gate Keeper", TwoDOnboardingState.GateKeeperPosition, RuntimeArtCatalog.Gold, new Color(0.88f, 0.78f, 0.58f), new Color(0.12f, 0.09f, 0.07f), -2);
+            AddSceneBeat("Bia Luyện Khí - mục tiêu tương tác");
             _trainingStone = AddTrainingStone("LGO 2D Training Stone", TwoDOnboardingState.TrainingStonePosition, -2);
+            AddWorldLabel("LGO 2D Stone Label", "BIA LUYỆN KHÍ", TwoDOnboardingState.TrainingStonePosition + new Vector2(-0.64f, 0.78f), 0.038f, RuntimeArtCatalog.Spirit, 2);
+            AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
-            _focusRing = AddSprite("LGO 2D Focus Ring", TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f, new Vector2(1.45f, 0.16f), RuntimeArtCatalog.Spirit, 1).transform;
+            _focusRing = AddSceneSprite("LGO 2D Focus Ring", "Vòng chọn mục tiêu tương tác", TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f, new Vector2(1.45f, 0.16f), RuntimeArtCatalog.Spirit, 1).transform;
             BuildWorldHud();
         }
 
@@ -135,8 +160,8 @@ namespace LinhGioi.World
             _hudHint = AddHudText("LGO 2D HUD Hint", new Vector2(-3.82f, 2.26f), 0.027f, new Color(0.73f, 0.87f, 0.88f), 70);
             _hudAction = AddHudText("LGO 2D HUD Action", new Vector2(-3.82f, 2.10f), 0.027f, RuntimeArtCatalog.Spirit, 70);
 
-            _hudDialoguePanel = AddSprite("LGO 2D Dialogue Panel", new Vector2(-1.5f, 1.48f), new Vector2(5.35f, 0.46f), new Color(0.04f, 0.10f, 0.15f, 0.94f), 60).transform;
-            _hudDialogue = AddHudText("LGO 2D Dialogue Text", new Vector2(-3.92f, 1.58f), 0.026f, RuntimeArtCatalog.Gold, 70);
+            _hudDialoguePanel = AddSprite("LGO 2D Dialogue Panel", new Vector2(-1.5f, 0.86f), new Vector2(5.35f, 0.46f), new Color(0.04f, 0.10f, 0.15f, 0.94f), 60).transform;
+            _hudDialogue = AddHudText("LGO 2D Dialogue Text", new Vector2(-3.92f, 0.96f), 0.026f, RuntimeArtCatalog.Gold, 70);
             _hudFeedback = AddHudText("LGO 2D Feedback Text", new Vector2(-3.82f, -2.62f), 0.030f, RuntimeArtCatalog.Gold, 70);
             AddSprite("LGO 2D Feedback Panel", new Vector2(-1.08f, -2.52f), new Vector2(5.9f, 0.34f), new Color(0.03f, 0.07f, 0.12f, 0.84f), 59);
         }
@@ -194,17 +219,59 @@ namespace LinhGioi.World
             return text;
         }
 
+        private GameObject AddSceneSprite(string name, string beat, Vector2 position, Vector2 scale, Color color, int order)
+        {
+            AddSceneBeat(beat);
+            return AddSprite(name, position, scale, color, order);
+        }
+
+        private void AddLantern(string name, string beat, Vector2 position, int order)
+        {
+            AddSceneBeat(beat);
+            AddSprite(name + " Post", position + new Vector2(0f, -0.16f), new Vector2(0.05f, 0.54f), new Color(0.18f, 0.11f, 0.06f), order);
+            AddSprite(name + " Light", position + new Vector2(0f, 0.15f), new Vector2(0.22f, 0.26f), new Color(0.95f, 0.48f, 0.16f, 0.88f), order + 1);
+            AddSprite(name + " Glow", position + new Vector2(0f, 0.15f), new Vector2(0.40f, 0.40f), new Color(1f, 0.70f, 0.25f, 0.20f), order);
+        }
+
+        private static TextMesh AddWorldLabel(string name, string value, Vector2 position, float size, Color color, int order)
+        {
+            var host = new GameObject(name);
+            host.transform.position = ToWorld(position, order * 0.01f);
+            var text = host.AddComponent<TextMesh>();
+            text.anchor = TextAnchor.MiddleCenter;
+            text.alignment = TextAlignment.Center;
+            text.characterSize = size;
+            text.fontSize = 36;
+            text.color = color;
+            text.text = value;
+            var renderer = host.GetComponent<MeshRenderer>();
+            renderer.sortingOrder = order;
+            return text;
+        }
+
+        private void AddSceneBeat(string beat)
+        {
+            if (!string.IsNullOrEmpty(beat)) _productionSceneBeats.Add(beat);
+        }
+
         private static Transform AddCharacter(string name, Vector2 position, Color robe, Color accent, Color hair, int order)
         {
             var root = new GameObject(name);
             root.transform.position = ToWorld(position, order * 0.01f);
             AddSprite(name + " Shadow", new Vector2(0f, -0.58f), new Vector2(0.72f, 0.12f), new Color(0f, 0f, 0f, 0.25f), order - 1, root.transform);
+            AddSprite(name + " Left Leg", new Vector2(-0.11f, -0.54f), new Vector2(0.13f, 0.28f), robe * 0.72f, order - 1, root.transform);
+            AddSprite(name + " Right Leg", new Vector2(0.11f, -0.54f), new Vector2(0.13f, 0.28f), robe * 0.72f, order - 1, root.transform);
             AddSprite(name + " Robe", new Vector2(0f, -0.16f), new Vector2(0.38f, 0.66f), robe, order, root.transform);
+            AddSprite(name + " Shoulder Line", new Vector2(0f, 0.13f), new Vector2(0.50f, 0.07f), accent, order + 1, root.transform);
             AddSprite(name + " Sash", new Vector2(0f, -0.2f), new Vector2(0.46f, 0.09f), accent, order + 1, root.transform);
+            AddSprite(name + " Robe Trim", new Vector2(0f, -0.42f), new Vector2(0.34f, 0.045f), accent, order + 1, root.transform);
             AddSprite(name + " Head", new Vector2(0f, 0.34f), new Vector2(0.30f, 0.30f), new Color(0.86f, 0.70f, 0.56f), order + 2, root.transform);
             AddSprite(name + " Hair", new Vector2(0f, 0.51f), new Vector2(0.38f, 0.16f), hair, order + 3, root.transform);
+            AddSprite(name + " Hair Fringe", new Vector2(-0.05f, 0.43f), new Vector2(0.28f, 0.08f), hair, order + 4, root.transform);
             AddSprite(name + " Left Arm", new Vector2(-0.28f, -0.12f), new Vector2(0.12f, 0.46f), robe, order - 1, root.transform);
             AddSprite(name + " Right Arm", new Vector2(0.28f, -0.12f), new Vector2(0.12f, 0.46f), robe, order - 1, root.transform);
+            AddSprite(name + " Wrist Guard Left", new Vector2(-0.28f, -0.36f), new Vector2(0.16f, 0.08f), accent, order + 1, root.transform);
+            AddSprite(name + " Wrist Guard Right", new Vector2(0.28f, -0.36f), new Vector2(0.16f, 0.08f), accent, order + 1, root.transform);
             return root.transform;
         }
 

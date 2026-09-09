@@ -24,9 +24,10 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 
 - Cleanup commit: `d97a3c8 Remove 3D asset pipeline from 2D branch`.
 - Meshy/service trace cleanup commit: `6bf905e Remove obsolete 3D service traces from 2D branch`.
-- Source image cleanup WIP: xoá ảnh thiết kế/source cũ, thêm validator no-source-images.
-- Runtime evidence latest: Player smoke `build/2d-onboarding-player/player-smoke.json`; visual manifest có HUD `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`; screenshot review PNG `build/2d-onboarding-visual/03-dialogue.png` và `build/2d-onboarding-visual/05-complete.png`.
+- Source image cleanup commit: `646492e Remove legacy images and keep 2D HUD procedural`.
+- Procedural Đông Môn blockout WIP: thêm scene-beat runtime cho Cổng Linh Thành, lối ngọc, lồng đèn, NPC, Bia Luyện Khí và metadata visual manifest.
+- Runtime evidence latest: Player build `build/2d-onboarding-player/build-macos-player.log`; visual manifest có HUD + scene beats `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`; screenshot review PNG `build/2d-onboarding-visual/03-dialogue.png` và `build/2d-onboarding-visual/05-complete.png`.
 
 ## Next
 
-Nâng slice SCN-001/002 theo hướng 2D thật: thay placeholder bằng sprite/art 2D có phong cách, cải thiện layout HUD/menu và sau đó mới mở inventory/quest/tutorial nâng cấp. Không mở combat/reward/frozen contracts khi chưa có gate riêng.
+Thiết kế và triển khai lộ trình map 2D từ các board mới: world map tổng thể, Linh Thành hub, Đông Môn tutorial side-scrolling, layer map/tileset/ký hiệu/flow. Bắt đầu bằng spec A-Z text + runtime blockout tương ứng, không dùng lại ảnh cũ, không mở combat/reward/frozen contracts khi chưa có gate riêng.
