@@ -606,6 +606,38 @@ namespace LinhGioi.Tests
         }
 
 
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhAcademyShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("AcademyShell: district=academy", map.LinhThanhAcademyShellSnapshot);
+            StringAssert.Contains("skill-hall=preview-only", map.LinhThanhAcademyShellSnapshot);
+            StringAssert.Contains("class-trainer=locked", map.LinhThanhAcademyShellSnapshot);
+            StringAssert.Contains("safe-no-skill-backend", map.LinhThanhAcademyShellSnapshot);
+            StringAssert.Contains("AcademyShell: district=academy", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhAcademyShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh academy shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("AcademyShell: district=academy", controller.RuntimeLinhThanhAcademyShellSnapshot);
+                StringAssert.Contains("safe-no-skill-backend", controller.RuntimeLinhThanhAcademyShellSnapshot);
+                StringAssert.Contains("AcademyShell: district=academy", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
 
 
         [Test]

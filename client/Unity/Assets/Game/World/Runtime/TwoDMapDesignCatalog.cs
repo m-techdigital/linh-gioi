@@ -31,6 +31,7 @@ namespace LinhGioi.World
             ZoneNetworkSnapshot = BuildZoneNetworkSnapshot(worldZones, linhThanhDistricts, zoneConnections);
             LinhThanhHubShellSnapshot = BuildLinhThanhHubShellSnapshot(linhThanhDistricts);
             LinhThanhPlazaShellSnapshot = BuildLinhThanhPlazaShellSnapshot();
+            LinhThanhAcademyShellSnapshot = BuildLinhThanhAcademyShellSnapshot();
             LinhThanhPlazaHubRuntimeSnapshot = BuildLinhThanhPlazaHubRuntimeSnapshot();
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
@@ -53,12 +54,13 @@ namespace LinhGioi.World
         public string ZoneNetworkSnapshot { get; }
         public string LinhThanhHubShellSnapshot { get; }
         public string LinhThanhPlazaShellSnapshot { get; }
+        public string LinhThanhAcademyShellSnapshot { get; }
         public string LinhThanhPlazaHubRuntimeSnapshot { get; }
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
         public string TilemapSnapshot { get; }
         public string ParallaxDepthSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
+        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -207,6 +209,12 @@ namespace LinhGioi.World
         private static string BuildLinhThanhPlazaShellSnapshot()
         {
             return "PlazaShell: district=plaza | social-spawn=local-safe | event-board=preview-only | guild-bulletin-preview=locked | safe-no-trade-backend";
+        }
+
+
+        private static string BuildLinhThanhAcademyShellSnapshot()
+        {
+            return "AcademyShell: district=academy | skill-hall=preview-only | class-trainer=locked | lecture-board=local-preview | safe-no-skill-backend | safe-local-no-backend";
         }
 
 

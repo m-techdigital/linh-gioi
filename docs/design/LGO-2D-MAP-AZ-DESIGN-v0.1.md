@@ -166,6 +166,8 @@ Transition đầu tiên giữa map tutorial và hub là `east-gate -> plaza`. Ru
 
 - World/Linh Thành/Đông Môn hiện là runtime checkpoint, chưa phải production-complete toàn bộ map.
 - Đông Môn đã có route tutorial, collision band, tile chunk flow và parallax/landmark spine để kiểm movement/jump/dash/skill/Shadow Slime.
-- Linh Thành đã có hub shell, Quảng Trường shell, unlock presentation từ Đông Môn, board/NPC preview, target selector và label readability pass.
+- Linh Thành đã có hub shell, Quảng Trường shell, Học Viện shell, unlock presentation từ Đông Môn, board/NPC preview, target selector và label readability pass.
 - Quảng Trường readability dùng quy tắc `world-label-density=reduced`: trong world chỉ để chip ngắn cho mục tiêu tương tác; text chi tiết đi vào HUD/snapshot/manifest để tránh che nhân vật và platform.
 - Next production map nên đi theo từng khu: Học Viện hoặc Thương Phố shell trước, rồi mới nâng tileset/collision/detail. Không crop/dán board và không kéo Meshy/3D trở lại branch 2D.
+
+Học Viện shell dùng `skill-hall=preview-only` và `class-trainer=locked` để giữ đúng lộ trình progression: bản đồ có điểm nhận diện học kỹ năng, nhưng chưa mở skill backend, class progression hoặc UI học kỹ năng khi chưa có task/gate riêng.

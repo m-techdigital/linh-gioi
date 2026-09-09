@@ -90,7 +90,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_plaza_transition_preview",
         "label": "2D East Gate to Plaza route preview",
         "screenshot": "14-plaza-transition-preview.bmp",
-        "requiredManifest": ["runtimeHubTransitionSnapshot", "hudSnapshot"],
+        "requiredManifest": ["runtimeHubTransitionSnapshot", "runtimeLinhThanhAcademyShellSnapshot", "hudSnapshot"],
         "nonClaim": "not production teleport backend",
     },
     {

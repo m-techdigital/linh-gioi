@@ -70,6 +70,7 @@ namespace LinhGioi.World
         public string RuntimeZoneNetworkSnapshot => _mapCatalog.ZoneNetworkSnapshot;
         public string RuntimeLinhThanhHubShellSnapshot => _mapCatalog.LinhThanhHubShellSnapshot;
         public string RuntimeLinhThanhPlazaShellSnapshot => _mapCatalog.LinhThanhPlazaShellSnapshot;
+        public string RuntimeLinhThanhAcademyShellSnapshot => _mapCatalog.LinhThanhAcademyShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
@@ -166,6 +167,7 @@ namespace LinhGioi.World
             AddDongMonLandmarkSilhouettes();
             AddLinhThanhHubShellOverlay();
             AddLinhThanhPlazaShellPreview();
+            AddLinhThanhAcademyShellPreview();
             AddLinhThanhPlazaHubRuntimePreview();
             AddLinhThanhHubTransitionPreview();
             AddLinhThanhUnlockPresentation();
@@ -443,6 +445,17 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Plaza Event Board Preview", new Vector2(0.32f, 0.86f), new Vector2(0.24f, 0.30f), new Color(0.56f, 0.34f, 0.16f, 0.42f), -12);
             AddSprite("LGO 2D Plaza Guild Bulletin Preview", new Vector2(0.70f, 0.88f), new Vector2(0.18f, 0.26f), new Color(0.30f, 0.22f, 0.62f, 0.38f), -12);
             AddWorldLabel("LGO 2D Plaza Shell Label", "Quảng Trường: social spawn", new Vector2(0.42f, 1.16f), 0.021f, new Color(0.73f, 0.87f, 0.88f, 0.76f), -9);
+        }
+
+
+        private void AddLinhThanhAcademyShellPreview()
+        {
+            AddSceneBeat("LINH_THANH_ACADEMY_SHELL skill-hall/class-trainer local-only no skill backend");
+            AddSprite("LGO 2D Academy Hall Silhouette", new Vector2(0.54f, 1.24f), new Vector2(0.52f, 0.34f), new Color(0.12f, 0.28f, 0.46f, 0.48f), -16);
+            AddSprite("LGO 2D Academy Roof", new Vector2(0.54f, 1.48f), new Vector2(0.62f, 0.10f), new Color(0.20f, 0.42f, 0.58f, 0.54f), -15);
+            AddSprite("LGO 2D Academy Skill Board", new Vector2(0.40f, 1.05f), new Vector2(0.18f, 0.20f), new Color(0.18f, 0.86f, 0.78f, 0.32f), -14);
+            AddSprite("LGO 2D Academy Trainer Locked", new Vector2(0.70f, 1.05f), new Vector2(0.10f, 0.24f), new Color(0.92f, 0.72f, 0.28f, 0.34f), -14);
+            AddWorldLabel("LGO 2D Academy Shell Label", "Học Viện", new Vector2(0.34f, 1.70f), 0.020f, new Color(0.73f, 0.87f, 0.88f, 0.72f), -9);
         }
 
 
