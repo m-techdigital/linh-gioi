@@ -387,14 +387,14 @@ namespace LinhGioi.World
 
         private static GameObject CreateMarker()
         {
-            var marker = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            var marker = new GameObject("LGO Player Marker");
             marker.name = "LGO Player Marker";
             marker.transform.localScale = new Vector3(0.8f, 1.2f, 0.8f);
-            var renderer = marker.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material = RuntimeArtCatalog.CreateMaterial("LGO Hero Placeholder", RuntimeArtCatalog.Spirit);
-            }
+            var renderer = marker.AddComponent<SpriteRenderer>();
+            renderer.sprite = SolidSprite();
+            renderer.color = RuntimeArtCatalog.Spirit;
+            renderer.sortingOrder = 8;
+            renderer.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
             EnsureCamera(marker.transform);
             EnsureGround();
             EnsureWorldPlaceholders();
@@ -443,27 +443,15 @@ namespace LinhGioi.World
         private static void EnsureGround()
         {
             if (GameObject.Find("LGO World Ground") != null) return;
-            var ground = GameObject.CreatePrimitive(PrimitiveType.Plane);
+            var ground = new GameObject("LGO World Ground");
             ground.name = "LGO World Ground";
-            ground.transform.localScale = new Vector3(8f, 1f, 8f);
-            // Keep the collision plane broad; map the authored courtyard to playable world units.
-            var groundMesh = ground.GetComponent<MeshFilter>().mesh;
-            var vertices = groundMesh.vertices;
-            var courtyardUv = new Vector2[vertices.Length];
-            for (var i = 0; i < vertices.Length; i++)
-            {
-                var worldPoint = ground.transform.TransformPoint(vertices[i]);
-                courtyardUv[i] = WorldProceduralVisuals.GroundUv(worldPoint);
-            }
-            groundMesh.uv = courtyardUv;
-            var renderer = ground.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                var material = RuntimeArtCatalog.CreateMaterial("LGO Procedural Cultivation Platform Material v1", RuntimeArtCatalog.SurfaceRaised);
-                material.color = Color.white;
-                material.mainTexture = WorldProceduralVisuals.CreateTrainingGroundTexture(new Vector3(0f, 0f, -4.5f), GateKeeperPosition, TrainingStonePosition);
-                renderer.material = material;
-            }
+            ground.transform.position = new Vector3(0f, -0.04f, 0f);
+            ground.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            ground.transform.localScale = new Vector3(18f, 18f, 1f);
+            var renderer = ground.AddComponent<SpriteRenderer>();
+            renderer.sprite = SolidSprite();
+            renderer.color = RuntimeArtCatalog.SurfaceRaised;
+            renderer.sortingOrder = -20;
         }
 
         private static void EnsureWorldPlaceholders()
@@ -503,12 +491,15 @@ namespace LinhGioi.World
         {
             var existing = GameObject.Find(name);
             if (existing != null) return existing;
-            var marker = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var marker = new GameObject(name);
             marker.name = name;
             marker.transform.position = position;
             marker.transform.localScale = scale;
-            var renderer = marker.GetComponent<Renderer>();
-            if (renderer != null) renderer.material = RuntimeArtCatalog.CreateMaterial(name + " Material", color);
+            marker.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            var renderer = marker.AddComponent<SpriteRenderer>();
+            renderer.sprite = SolidSprite();
+            renderer.color = color;
+            renderer.sortingOrder = 1;
             return marker;
         }
 
@@ -728,14 +719,14 @@ namespace LinhGioi.World
             var mobile = IsMobileWorldViewport();
             var tablet = IsNarrowWorldViewport() && !mobile;
             _interactionPromptWorldLabel.text = InteractionWorldPromptText();
-            WorldLabelPresenter.ApplyStyle(
+            ApplyWorldLabelStyle(
                 _interactionPromptWorldLabel,
                 mobile ? 50 : tablet ? 48 : 48,
                 mobile ? 0.066f : tablet ? 0.056f : 0.050f);
             _interactionPromptWorldLabel.color = _nearestInteractable.id == "Gate Keeper" ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Spirit;
-            WorldLabelPresenter.EnsureShadow(_interactionPromptWorldLabel);
+            EnsureWorldLabelShadow(_interactionPromptWorldLabel);
             var subject = _nearestInteractable.id == "Gate Keeper" ? _gateKeeperWorldLabel : _trainingStoneWorldLabel;
-            WorldLabelPresenter.PlaceAbove(_interactionPromptWorldLabel, subject != null ? subject.GetComponent<Renderer>() : null);
+            PlaceWorldLabelAbove(_interactionPromptWorldLabel, subject != null ? subject.GetComponent<Renderer>() : null);
         }
 
         private string InteractionWorldPromptText()
@@ -820,9 +811,8 @@ namespace LinhGioi.World
             }
             if (_trainingSpiritPulse == null)
             {
-                _trainingSpiritPulse = WorldProceduralVisuals.CreateGroundGlowSprite("LGO Training Stone Spirit Channel Pulse",
-                    WorldProceduralVisuals.GetWorldPlatformGlowSprite(), TrainingStonePosition + Vector3.up * 0.025f,
-                    Vector3.one * 1.8f, RuntimeArtCatalog.Gold, 3);
+                _trainingSpiritPulse = CreateGroundGlowSprite("LGO Training Stone Spirit Channel Pulse",
+                    TrainingStonePosition + Vector3.up * 0.025f, Vector3.one * 1.8f, RuntimeArtCatalog.Gold, 3);
             }
             RefreshPoseFeedbackMarkers();
         }
@@ -844,10 +834,10 @@ namespace LinhGioi.World
             if (_playerSprite == null)
                 _playerSprite = CreateBillboardSprite("LGO Player Cultivator Runtime Sprite V3B", LgoVisualAssetRegistryV3B.PlayerMaleCultivator, CurrentPosition + Vector3.up * 0.22f, new Vector3(0.64f, 0.64f, 1f), 8);
             if (_playerGroundShadow == null)
-                _playerGroundShadow = WorldProceduralVisuals.CreateGroundShadowSprite("LGO Player Grounding Shadow V3B", CurrentPosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
+                _playerGroundShadow = CreateGroundShadowSprite("LGO Player Grounding Shadow V3B", CurrentPosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
             if (_playerSprite != null)
             {
-                WorldProceduralVisuals.PlaceStandingSprite(_playerSprite, CurrentPosition);
+                PlaceStandingSprite(_playerSprite, CurrentPosition);
                 _playerSprite.gameObject.SetActive(true);
                 if (_markerRenderer != null) _markerRenderer.enabled = false;
             }
@@ -871,7 +861,7 @@ namespace LinhGioi.World
         {
             if (_targetDummySprite == null)
             {
-                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Target Dummy Grounding Shadow V3B", ReadabilityDummyPosition + Vector3.up * 0.018f, new Vector3(0.84f, 0.50f, 1f), 2);
+                CreateGroundShadowSprite("LGO Target Dummy Grounding Shadow V3B", ReadabilityDummyPosition + Vector3.up * 0.018f, new Vector3(0.84f, 0.50f, 1f), 2);
                 _targetDummySprite = CreateBillboardSprite("LGO Target Dummy Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TargetDummyIdle ?? CombatPlaceholderAssets.TargetDummyIdle, ReadabilityDummyPosition + Vector3.up * 0.15f, new Vector3(0.58f, 0.58f, 1f), 5);
             }
             if (_targetDummyFocusSprite == null)
@@ -888,50 +878,50 @@ namespace LinhGioi.World
                 _shadowBindWarning = CreateMarkerCube("LGO Shadow Bind Warning Placeholder", ShadowSlimePosition + Vector3.up * 0.55f, RuntimeArtCatalog.Shadow, new Vector3(1.9f, 0.1f, 1.9f)).transform;
             if (_gateKeeperSprite == null)
             {
-                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", CurrentGateKeeperVisualPosition() + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
+                CreateGroundShadowSprite("LGO Gate Keeper Grounding Shadow V3B", CurrentGateKeeperVisualPosition() + Vector3.up * 0.018f, new Vector3(0.92f, 0.52f, 1f), 2);
                 _gateKeeperSprite = CreateBillboardSprite("LGO Gate Keeper Runtime Sprite V3B", LgoVisualAssetRegistryV3B.GateKeeperNpc, CurrentGateKeeperVisualPosition() + Vector3.up * 0.2f, CurrentGateKeeperVisualScale(), 5);
             }
             if (_spiritGateSprite == null)
             {
-                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Spirit Gate Grounding Shadow V3B", new Vector3(0f, 0.018f, -4.5f), new Vector3(2.1f, 0.34f, 1f), 1);
+                CreateGroundShadowSprite("LGO Spirit Gate Grounding Shadow V3B", new Vector3(0f, 0.018f, -4.5f), new Vector3(2.1f, 0.34f, 1f), 1);
                 _spiritGateSprite = CreateStandingSprite("LGO Spirit Gate Runtime Sprite V3B", LgoVisualAssetRegistryV3B.SpiritGate, new Vector3(0f, 0.35f, -4.5f), new Vector3(0.58f, 0.58f, 1f), 3);
             }
             if (_trainingStoneSprite == null)
             {
-                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Training Stone Grounding Shadow V3B", TrainingStonePosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
+                CreateGroundShadowSprite("LGO Training Stone Grounding Shadow V3B", TrainingStonePosition + Vector3.up * 0.018f, new Vector3(0.72f, 0.42f, 1f), 2);
                 _trainingStoneSprite = CreateBillboardSprite("LGO Training Stone Runtime Sprite V3B", LgoVisualAssetRegistryV3B.TrainingStone, TrainingStonePosition + Vector3.up * 0.2f, new Vector3(0.62f, 0.62f, 1f), 5);
             }
             if (_shadowSlimeSprite == null)
             {
-                WorldProceduralVisuals.CreateGroundShadowSprite("LGO Shadow Slime Grounding Shadow V3B", ShadowSlimePosition + Vector3.up * 0.018f, new Vector3(0.88f, 0.42f, 1f), 2);
+                CreateGroundShadowSprite("LGO Shadow Slime Grounding Shadow V3B", ShadowSlimePosition + Vector3.up * 0.018f, new Vector3(0.88f, 0.42f, 1f), 2);
                 _shadowSlimeSprite = CreateStandingSprite("LGO Shadow Slime Runtime Sprite V3B", LgoVisualAssetRegistryV3B.ShadowSlime, ShadowSlimePosition + Vector3.up * 0.25f, new Vector3(0.74f, 0.74f, 1f), 5);
             }
             EnsureWorldSetDressing();
             if (_gateKeeperSprite != null)
                 _gateKeeperSprite.transform.localScale = CurrentGateKeeperVisualScale();
-            WorldProceduralVisuals.PlaceStandingSprite(_gateKeeperSprite, CurrentGateKeeperVisualPosition());
-            WorldProceduralVisuals.PlaceStandingSprite(_trainingStoneSprite, TrainingStonePosition);
-            WorldProceduralVisuals.PlaceStandingSprite(_targetDummySprite, ReadabilityDummyPosition);
+            PlaceStandingSprite(_gateKeeperSprite, CurrentGateKeeperVisualPosition());
+            PlaceStandingSprite(_trainingStoneSprite, TrainingStonePosition);
+            PlaceStandingSprite(_targetDummySprite, ReadabilityDummyPosition);
             if (_gateKeeperWorldLabel == null)
-                _gateKeeperWorldLabel = WorldLabelPresenter.Create("LGO Gate Keeper World Label", "Người Giữ Cổng", GateKeeperPosition + new Vector3(0f, 1.95f, 0f), RuntimeArtCatalog.Gold);
+                _gateKeeperWorldLabel = CreateWorldLabel("LGO Gate Keeper World Label", "Người Giữ Cổng", GateKeeperPosition + new Vector3(0f, 1.95f, 0f), RuntimeArtCatalog.Gold);
             if (_trainingStoneWorldLabel == null)
-                _trainingStoneWorldLabel = WorldLabelPresenter.Create("LGO Training Stone World Label", "Đá Luyện", TrainingStonePosition + new Vector3(0f, 1.25f, 0f), RuntimeArtCatalog.Spirit);
+                _trainingStoneWorldLabel = CreateWorldLabel("LGO Training Stone World Label", "Đá Luyện", TrainingStonePosition + new Vector3(0f, 1.25f, 0f), RuntimeArtCatalog.Spirit);
             if (_targetDummyWorldLabel == null)
-                _targetDummyWorldLabel = WorldLabelPresenter.Create("LGO Target Dummy World Label", "Bia luyện", ReadabilityDummyPosition + new Vector3(0f, 1.55f, 0f), RuntimeArtCatalog.Gold);
+                _targetDummyWorldLabel = CreateWorldLabel("LGO Target Dummy World Label", "Bia luyện", ReadabilityDummyPosition + new Vector3(0f, 1.55f, 0f), RuntimeArtCatalog.Gold);
             if (_targetDummyRewardLabel == null)
             {
-                _targetDummyRewardLabel = WorldLabelPresenter.Create("LGO Local Reward Placeholder World Label", "+1 Tinh khí", ReadabilityDummyPosition + new Vector3(0f, 1.62f, -0.18f), RuntimeArtCatalog.Gold);
-                WorldLabelPresenter.ApplyStyle(_targetDummyRewardLabel, 44, 0.040f);
+                _targetDummyRewardLabel = CreateWorldLabel("LGO Local Reward Placeholder World Label", "+1 Tinh khí", ReadabilityDummyPosition + new Vector3(0f, 1.62f, -0.18f), RuntimeArtCatalog.Gold);
+                ApplyWorldLabelStyle(_targetDummyRewardLabel, 44, 0.040f);
                 _targetDummyRewardLabel.gameObject.SetActive(false);
             }
             if (_spiritGateWorldLabel == null)
-                _spiritGateWorldLabel = WorldLabelPresenter.Create("LGO Spirit Gate World Label", "Linh Môn", new Vector3(0f, 2.15f, -4.5f), RuntimeArtCatalog.Spirit);
+                _spiritGateWorldLabel = CreateWorldLabel("LGO Spirit Gate World Label", "Linh Môn", new Vector3(0f, 2.15f, -4.5f), RuntimeArtCatalog.Spirit);
             if (_shadowSlimeWorldLabel == null)
-                _shadowSlimeWorldLabel = WorldLabelPresenter.Create("LGO Shadow Slime World Label", "Cảnh báo", ShadowSlimePosition + new Vector3(0f, 1.1f, 0f), RuntimeArtCatalog.Danger);
+                _shadowSlimeWorldLabel = CreateWorldLabel("LGO Shadow Slime World Label", "Cảnh báo", ShadowSlimePosition + new Vector3(0f, 1.1f, 0f), RuntimeArtCatalog.Danger);
             if (_interactionPromptWorldLabel == null)
             {
-                _interactionPromptWorldLabel = WorldLabelPresenter.Create("LGO Interaction Prompt World Label", "F / Space", GateKeeperPosition + new Vector3(0f, 2.35f, 0f), RuntimeArtCatalog.Spirit);
-                WorldLabelPresenter.ApplyStyle(_interactionPromptWorldLabel, 38, 0.04f);
+                _interactionPromptWorldLabel = CreateWorldLabel("LGO Interaction Prompt World Label", "F / Space", GateKeeperPosition + new Vector3(0f, 2.35f, 0f), RuntimeArtCatalog.Spirit);
+                ApplyWorldLabelStyle(_interactionPromptWorldLabel, 38, 0.04f);
                 _interactionPromptWorldLabel.gameObject.SetActive(false);
             }
             RefreshWorldLabelPresentation();
@@ -939,20 +929,14 @@ namespace LinhGioi.World
 
         private static void EnsureWorldSetDressing()
         {
-            WorldHubSetDressing.Ensure(
-                CreateStandingSprite,
-                GateKeeperPosition,
-                TrainingStonePosition,
-                ShadowSlimePosition,
-                ReadabilityDummyPosition,
-                IsMobileWorldViewport(),
-                IsNarrowWorldViewport());
+            // The 2D branch removes the old 3D set-dressing generator. A compact
+            // sprite-only dressing pass will be added with the new 2D slice.
         }
 
         private static SpriteRenderer CreateStandingSprite(string name, Sprite sprite, Vector3 position, Vector3 scale, int sortingOrder)
         {
             var renderer = CreateBillboardSprite(name, sprite, position, scale, sortingOrder);
-            WorldProceduralVisuals.PlaceStandingSprite(renderer, position);
+            PlaceStandingSprite(renderer, position);
             return renderer;
         }
 
@@ -1035,13 +1019,13 @@ namespace LinhGioi.World
         {
             if (_overlayHasFocus)
             {
-                WorldLabelPresenter.SetActive(_gateKeeperWorldLabel, false);
-                WorldLabelPresenter.SetActive(_trainingStoneWorldLabel, false);
-                WorldLabelPresenter.SetActive(_targetDummyWorldLabel, false);
-                WorldLabelPresenter.SetActive(_targetDummyRewardLabel, false);
-                WorldLabelPresenter.SetActive(_shadowSlimeWorldLabel, false);
-                WorldLabelPresenter.SetActive(_spiritGateWorldLabel, false);
-                WorldLabelPresenter.SetActive(_interactionPromptWorldLabel, false);
+                SetWorldLabelActive(_gateKeeperWorldLabel, false);
+                SetWorldLabelActive(_trainingStoneWorldLabel, false);
+                SetWorldLabelActive(_targetDummyWorldLabel, false);
+                SetWorldLabelActive(_targetDummyRewardLabel, false);
+                SetWorldLabelActive(_shadowSlimeWorldLabel, false);
+                SetWorldLabelActive(_spiritGateWorldLabel, false);
+                SetWorldLabelActive(_interactionPromptWorldLabel, false);
                 return;
             }
             var nearGateKeeper = _marker != null && Distance2D(CurrentPosition, GateKeeperPosition) <= 3.1f;
@@ -1050,34 +1034,34 @@ namespace LinhGioi.World
             var targetDummyCombatFocus = TargetDummyCombatFocusActive();
             var nearShadowSlime = _marker != null && Distance2D(CurrentPosition, ShadowSlimePosition) <= 2.7f;
 
-            WorldLabelPresenter.SetActive(_gateKeeperWorldLabel, _guidedStep == GuidedTrainingStep.FindGateKeeper || nearGateKeeper || DialogueActive);
-            WorldLabelPresenter.SetActive(_trainingStoneWorldLabel, _guidedStep == GuidedTrainingStep.FindTrainingStone || nearTrainingStone || InteractionAcknowledged);
-            WorldLabelPresenter.SetActive(_targetDummyWorldLabel, nearTargetDummy || targetDummyCombatFocus || _localCombat.CooldownActive(NowMs()) || _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
-            WorldLabelPresenter.SetActive(_shadowSlimeWorldLabel, nearShadowSlime || _shadowSlimeState == PlaceholderSlimeState.AlertWarning || _shadowSlimeState == PlaceholderSlimeState.DissolveQuiet);
-            WorldLabelPresenter.SetActive(_spiritGateWorldLabel, _guidedStep == GuidedTrainingStep.Complete);
+            SetWorldLabelActive(_gateKeeperWorldLabel, _guidedStep == GuidedTrainingStep.FindGateKeeper || nearGateKeeper || DialogueActive);
+            SetWorldLabelActive(_trainingStoneWorldLabel, _guidedStep == GuidedTrainingStep.FindTrainingStone || nearTrainingStone || InteractionAcknowledged);
+            SetWorldLabelActive(_targetDummyWorldLabel, nearTargetDummy || targetDummyCombatFocus || _localCombat.CooldownActive(NowMs()) || _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash);
+            SetWorldLabelActive(_shadowSlimeWorldLabel, nearShadowSlime || _shadowSlimeState == PlaceholderSlimeState.AlertWarning || _shadowSlimeState == PlaceholderSlimeState.DissolveQuiet);
+            SetWorldLabelActive(_spiritGateWorldLabel, _guidedStep == GuidedTrainingStep.Complete);
             ApplyWorldLabelStyles();
 
             if (_gateKeeperWorldLabel != null)
             {
                 // LGO World Label Safe Area v1: narrow profiles keep long Vietnamese labels away from the left HUD.
-                WorldLabelPresenter.Set(_gateKeeperWorldLabel, GateKeeperWorldLabelText(_guidedStep == GuidedTrainingStep.FindGateKeeper), RuntimeArtCatalog.Gold);
-                WorldLabelPresenter.PlaceAbove(_gateKeeperWorldLabel, _gateKeeperSprite);
+                SetWorldLabel(_gateKeeperWorldLabel, GateKeeperWorldLabelText(_guidedStep == GuidedTrainingStep.FindGateKeeper), RuntimeArtCatalog.Gold);
+                PlaceWorldLabelAbove(_gateKeeperWorldLabel, _gateKeeperSprite);
             }
             if (_trainingStoneWorldLabel != null)
             {
-                WorldLabelPresenter.Set(_trainingStoneWorldLabel, TrainingStoneWorldLabelText(), RuntimeArtCatalog.Spirit);
-                WorldLabelPresenter.PlaceAbove(_trainingStoneWorldLabel, _trainingStoneSprite);
+                SetWorldLabel(_trainingStoneWorldLabel, TrainingStoneWorldLabelText(), RuntimeArtCatalog.Spirit);
+                PlaceWorldLabelAbove(_trainingStoneWorldLabel, _trainingStoneSprite);
             }
             if (_targetDummyWorldLabel != null)
-                WorldLabelPresenter.PlaceAbove(_targetDummyWorldLabel, _targetDummySprite);
+                PlaceWorldLabelAbove(_targetDummyWorldLabel, _targetDummySprite);
             if (_targetDummyRewardLabel != null)
                 _targetDummyRewardLabel.transform.position = ReadabilityDummyPosition + new Vector3(0f, 1.62f, -0.18f);
             if (_spiritGateWorldLabel != null)
-                WorldLabelPresenter.PlaceAbove(_spiritGateWorldLabel, _spiritGateSprite);
+                PlaceWorldLabelAbove(_spiritGateWorldLabel, _spiritGateSprite);
             if (_shadowSlimeWorldLabel != null)
             {
-                WorldLabelPresenter.Set(_shadowSlimeWorldLabel, ShadowSlimeWorldLabelText(), _shadowSlimeState == PlaceholderSlimeState.AlertWarning ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit);
-                WorldLabelPresenter.PlaceAbove(_shadowSlimeWorldLabel, _shadowSlimeSprite);
+                SetWorldLabel(_shadowSlimeWorldLabel, ShadowSlimeWorldLabelText(), _shadowSlimeState == PlaceholderSlimeState.AlertWarning ? RuntimeArtCatalog.Danger : RuntimeArtCatalog.Spirit);
+                PlaceWorldLabelAbove(_shadowSlimeWorldLabel, _shadowSlimeSprite);
             }
             RefreshInteractionPromptWorldLabel();
         }
@@ -1159,12 +1143,12 @@ namespace LinhGioi.World
             var layout = CurrentWorldLayoutProfile();
             var labelFontSize = layout.IsMobile ? 48 : layout.IsTablet ? 46 : 42;
             var labelCharacterSize = layout.IsMobile ? 0.052f : layout.IsTablet ? 0.048f : 0.042f;
-            WorldLabelPresenter.ApplyStyle(_gateKeeperWorldLabel, labelFontSize, labelCharacterSize);
-            WorldLabelPresenter.ApplyStyle(_trainingStoneWorldLabel, labelFontSize, labelCharacterSize);
-            WorldLabelPresenter.ApplyStyle(_targetDummyWorldLabel, labelFontSize, labelCharacterSize);
-            WorldLabelPresenter.ApplyStyle(_spiritGateWorldLabel, labelFontSize, labelCharacterSize);
-            WorldLabelPresenter.ApplyStyle(_shadowSlimeWorldLabel, labelFontSize, labelCharacterSize);
-            WorldLabelPresenter.ApplyStyle(
+            ApplyWorldLabelStyle(_gateKeeperWorldLabel, labelFontSize, labelCharacterSize);
+            ApplyWorldLabelStyle(_trainingStoneWorldLabel, labelFontSize, labelCharacterSize);
+            ApplyWorldLabelStyle(_targetDummyWorldLabel, labelFontSize, labelCharacterSize);
+            ApplyWorldLabelStyle(_spiritGateWorldLabel, labelFontSize, labelCharacterSize);
+            ApplyWorldLabelStyle(_shadowSlimeWorldLabel, labelFontSize, labelCharacterSize);
+            ApplyWorldLabelStyle(
                 _targetDummyRewardLabel,
                 layout.IsMobile ? 50 : layout.IsTablet ? 48 : 44,
                 layout.IsMobile ? 0.050f : layout.IsTablet ? 0.046f : 0.040f);
@@ -1232,17 +1216,17 @@ namespace LinhGioi.World
             {
                 if (vfxActive && _vfxFeedbackState == PlaceholderVfxFeedbackState.TargetDummyHitFlash)
                 {
-                    WorldLabelPresenter.Set(_targetDummyWorldLabel, "Trúng mục tiêu", RuntimeArtCatalog.Gold);
+                    SetWorldLabel(_targetDummyWorldLabel, "Trúng mục tiêu", RuntimeArtCatalog.Gold);
                     _targetDummyWorldLabel.transform.position = ReadabilityDummyPosition + new Vector3(-0.44f, 1.42f, -0.26f);
                 }
                 else if (coolingDown)
-                    WorldLabelPresenter.Set(_targetDummyWorldLabel, "Đang hồi phục", RuntimeArtCatalog.Spirit);
+                    SetWorldLabel(_targetDummyWorldLabel, "Đang hồi phục", RuntimeArtCatalog.Spirit);
                 else if (nearTarget)
-                    WorldLabelPresenter.Set(_targetDummyWorldLabel, "Đã chọn", RuntimeArtCatalog.Spirit);
+                    SetWorldLabel(_targetDummyWorldLabel, "Đã chọn", RuntimeArtCatalog.Spirit);
                 else
-                    WorldLabelPresenter.Set(_targetDummyWorldLabel, "Bia luyện", RuntimeArtCatalog.Gold);
+                    SetWorldLabel(_targetDummyWorldLabel, "Bia luyện", RuntimeArtCatalog.Gold);
             }
-            WorldLabelPresenter.SetActive(_targetDummyRewardLabel, false);
+            SetWorldLabelActive(_targetDummyRewardLabel, false);
         }
 
         private Sprite ResolveTargetDummyStateSprite(bool nearTarget, bool coolingDown, bool vfxActive)
@@ -1284,6 +1268,92 @@ namespace LinhGioi.World
         private string CooldownRemainingSecondsText()
         {
             return (_localCombat.CooldownRemainingMs(NowMs()) / 1000f).ToString("0.0", CultureInfo.InvariantCulture);
+        }
+
+        private static Sprite _solidSprite;
+
+        private static Sprite SolidSprite()
+        {
+            if (_solidSprite != null) return _solidSprite;
+            var texture = new Texture2D(1, 1, TextureFormat.RGBA32, false)
+            {
+                name = "LGO 2D Solid Pixel"
+            };
+            texture.SetPixel(0, 0, Color.white);
+            texture.Apply(false, true);
+            _solidSprite = Sprite.Create(texture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 1f);
+            _solidSprite.name = "LGO 2D Solid Sprite";
+            return _solidSprite;
+        }
+
+        private static SpriteRenderer CreateGroundGlowSprite(string name, Vector3 position, Vector3 scale, Color color, int sortingOrder)
+        {
+            var existing = GameObject.Find(name);
+            var holder = existing != null ? existing : new GameObject(name);
+            holder.transform.position = position;
+            holder.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+            holder.transform.localScale = scale;
+            var renderer = holder.GetComponent<SpriteRenderer>() ?? holder.AddComponent<SpriteRenderer>();
+            renderer.sprite = SolidSprite();
+            renderer.color = new Color(color.r, color.g, color.b, 0.42f);
+            renderer.sortingOrder = sortingOrder;
+            return renderer;
+        }
+
+        private static SpriteRenderer CreateGroundShadowSprite(string name, Vector3 position, Vector3 scale, int sortingOrder)
+        {
+            return CreateGroundGlowSprite(name, position, scale, new Color(0f, 0f, 0f, 0.45f), sortingOrder);
+        }
+
+        private static void PlaceStandingSprite(SpriteRenderer renderer, Vector3 groundPosition)
+        {
+            if (renderer == null) return;
+            renderer.transform.position = groundPosition + Vector3.up * 0.2f;
+            renderer.transform.rotation = Quaternion.Euler(90f, 0f, 0f);
+        }
+
+        private static TextMesh CreateWorldLabel(string name, string text, Vector3 position, Color color)
+        {
+            var existing = GameObject.Find(name);
+            var holder = existing != null ? existing : new GameObject(name);
+            holder.transform.position = position;
+            holder.transform.rotation = Quaternion.Euler(65f, 0f, 0f);
+            var label = holder.GetComponent<TextMesh>() ?? holder.AddComponent<TextMesh>();
+            SetWorldLabel(label, text, color);
+            ApplyWorldLabelStyle(label, 42, 0.045f);
+            return label;
+        }
+
+        private static void SetWorldLabel(TextMesh label, string text, Color color)
+        {
+            if (label == null) return;
+            label.text = text;
+            label.color = color;
+            label.anchor = TextAnchor.MiddleCenter;
+            label.alignment = TextAlignment.Center;
+        }
+
+        private static void SetWorldLabelActive(TextMesh label, bool active)
+        {
+            if (label != null) label.gameObject.SetActive(active);
+        }
+
+        private static void ApplyWorldLabelStyle(TextMesh label, int fontSize, float characterSize)
+        {
+            if (label == null) return;
+            label.fontSize = fontSize;
+            label.characterSize = characterSize;
+        }
+
+        private static void PlaceWorldLabelAbove(TextMesh label, Renderer subject)
+        {
+            if (label == null || subject == null) return;
+            label.transform.position = subject.bounds.center + Vector3.up * (subject.bounds.extents.y + 0.42f);
+        }
+
+        private static void EnsureWorldLabelShadow(TextMesh label)
+        {
+            // Shadow styling was part of the removed 3D label presenter; keep text readable here.
         }
 
         private sealed class InteractableState

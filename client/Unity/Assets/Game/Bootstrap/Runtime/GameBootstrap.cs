@@ -5,7 +5,6 @@ using LinhGioi.Combat;
 using LinhGioi.Account;
 using LinhGioi.Foundation;
 using LinhGioi.Networking;
-using LinhGioi.UI;
 using LinhGioi.World;
 using UnityEngine;
 
@@ -21,27 +20,9 @@ namespace LinhGioi.Bootstrap
             _shutdown = new CancellationTokenSource();
             try
             {
-                if (OnboardingBlockoutPreview.ShouldRun(Environment.GetCommandLineArgs(), Debug.isDebugBuild || Application.isEditor))
-                {
-                    gameObject.AddComponent<OnboardingBlockoutPreview>();
-                    return;
-                }
-
                 if (M4VisualFoundationSmokeRunner.ShouldRun())
                 {
                     M4VisualFoundationSmokeRunner.RunFromCommandLine();
-                    return;
-                }
-
-                if (VisualRuntimeEvidenceRunner.ShouldRun())
-                {
-                    VisualRuntimeEvidenceRunner.Attach(gameObject);
-                    return;
-                }
-
-                if (M5VisualEvidenceRunner.ShouldRun())
-                {
-                    M5VisualEvidenceRunner.Attach(gameObject);
                     return;
                 }
 
@@ -118,8 +99,7 @@ namespace LinhGioi.Bootstrap
                 }
 
                 var config = ClientRuntimeConfig.LoadStreamingAssets();
-                Debug.Log($"[LinhGioi] Bootstrap environment={config.environment} protocol={config.protocolVersion} gamedata={config.gamedataVersion}");
-                M4PlayableClientController.Attach(gameObject);
+                Debug.Log($"[LinhGioi] 2D bootstrap environment={config.environment} protocol={config.protocolVersion} gamedata={config.gamedataVersion}");
                 if (!config.connectOnStart) return;
                 _realtimeClient = new TcpRealtimeClient();
                 _realtimeClient.StateChanged += OnConnectionStateChanged;
