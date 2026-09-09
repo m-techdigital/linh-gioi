@@ -1,6 +1,16 @@
 # PROJECT STATE — Linh Giới Online 2D
 
-Ưu tiên owner mới nhất 2026-09-10: chỉ hoàn thiện map đầu Đông Môn trước, sau đó tiếp nhận công việc tab riêng để hoàn thiện 5 class, slot đồ, chuyển động và thay đồ khớp trong Player. Góc cổng hiện mới là draft, không đồng nghĩa map đầu đã xong. Không mở map thứ hai. Gate thao tác kiểm chứng nằm ở `NEXT-ACTION.md`.
+Ưu tiên owner mới nhất 2026-09-10: Codex tự quyết hướng kỹ thuật, nhưng phải phục vụ sản phẩm 2D owner có thể tự kiểm chứng trong Player. Goal hiện tại là **hoàn thiện map đầu Đông Môn trước**, sau đó mới tiếp nhận công việc tab riêng để hoàn thiện 5 class, slot đồ, chuyển động và thay đồ khớp. Góc cổng illustrated hiện mới là draft, không đồng nghĩa map đầu đã xong. Không mở map thứ hai hoặc mở rộng hub/district trước khi Đông Môn đạt gate.
+
+Quyết định kỹ thuật đang khóa:
+
+- Đông Môn chuyển dần sang authored Tilemap/Grid + Sprite Atlas/prop atlas + parallax nhiều lớp, data-driven bằng Resource JSON trong giai đoạn draft.
+- Runtime map phải chứng minh flow spawn -> Người Giữ Cổng -> Bia Luyện Khí -> jump/dash/class skill -> Shadow Slime -> complete trong macOS Player thật, có capture/manifest và review ảnh.
+- Không polish primitive/rectangle vô hạn, không crop/dán ảnh concept/reference, không Meshy/3D, không thay frozen surfaces.
+- Sau gate map đầu, 5 class đi theo base chung nam/nữ, paper-doll slots, anchor/pivot, alpha item thật, layer order, motion sync và Player verification cho chọn class/mặc/tháo đồ/chuyển động.
+- Vì có tab khác đang làm 5 class, chỉ tiếp nhận qua commit/asset đã rõ ownership; không sửa đè source dở trong main checkout hoặc worktree của tab đó.
+
+Gate thao tác kiểm chứng chi tiết nằm ở `NEXT-ACTION.md`.
 
 ## Đông Môn illustrated draft — 2026-09-10
 

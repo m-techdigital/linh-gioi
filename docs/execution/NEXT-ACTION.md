@@ -1,5 +1,26 @@
 # NEXT ACTION — Linh Giới Online 2D
 
+## Goal kỹ thuật hiện tại — 2026-09-10
+
+Owner đã giao Codex tự quyết định hướng kỹ thuật cho task này. Quyết định hiện tại: **đóng map đầu Đông Môn thành vertical slice 2D có thể kiểm chứng trong Player trước, rồi mới chuyển sang hoàn thiện 5 class**. Các checkpoint Linh Thành/Quảng Trường/district bên dưới là lịch sử runtime preview local-only; không dùng chúng làm lý do mở map thứ hai hoặc tiếp hub trước khi Đông Môn đạt gate.
+
+Hướng kỹ thuật map đầu:
+
+1. Đông Môn dùng authored Tilemap/Grid + Sprite Atlas/prop atlas/parallax layer, đọc từ Resource JSON khi còn ở giai đoạn draft. Không tiếp tục polish bằng rectangle primitive vô hạn.
+2. Scene phải phục vụ flow kiểm chứng thật: spawn -> Người Giữ Cổng/thoại -> Bia Luyện Khí -> jump/dash/class skill -> Shadow Slime -> quay lại/hoàn tất. Mỗi trạng thái có capture Player và manifest, không claim từ Editor-only.
+3. Art runtime phải là asset mới, có provenance/hash/allowlist rõ ràng. Không dùng ảnh thiết kế cũ, không crop board/reference, không Meshy/3D.
+4. NPC/props/terrain đi theo data-driven placement, atlas rect, anchor/pivot và layer order để sau này thay asset production mà không đổi state machine.
+5. Gate map đầu là owner nhìn được trong Player: hình có chiều sâu, silhouette đọc được, không chồng HUD/label/player, collision/route khớp hình, thao tác E/I/Tab/T/Y và movement không bị lệch.
+
+Hướng kỹ thuật sau gate map đầu:
+
+1. Tiếp nhận luồng 5 class từ tab riêng bằng commit/asset đã rõ ownership; không ghi đè worktree hoặc file đang dở của tab đó.
+2. Chuẩn hóa base chung nam/nữ, item slot alpha thật, anchor/pivot, sorting layer, compatibility rules và snapshot trang bị.
+3. Mỗi class Võ/Kiếm/Pháp/Cơ/Linh phải kiểm được trong Player: chọn class, mặc/tháo từng slot, phối bộ tương thích, idle/walk/run/jump và đòn/skill preview trong scope hiện có.
+4. Gate 5 class là nhìn thấy đồ/vũ khí đi theo thân khi đổi hướng/chuyển động, không hở cổ tay/chân/thân, không sai layer, không dùng ảnh source/reference làm runtime asset.
+
+Next action ngay: tiếp tục Đông Môn theo hướng authored Tilemap/atlas/parallax và hoàn tất bằng chứng Player cho map đầu. Chỉ sau khi gate này đạt mới chuyển sang tích hợp 5 class.
+
 ## Đông Môn illustrated draft — 2026-09-10
 
 Đã tạo art mới và pack skyline + atlas cổng/NPC/terrain; preview opt-in trong Player qua `--lgo-dongmon-art-preview`, không sửa controller/state/5 class hoặc frozen surfaces. `tools/capture_lgo_dongmon_art.py` capture 5 trạng thái vào thư mục riêng. EditMode 139 pass, 0 fail, 1 skipped; guard 5 test pass; smoke/build/baseline 20 frame và art 5 frame đã chạy, ảnh đã review. Art vẫn DRAFT, player còn placeholder; không claim giống hoàn toàn ảnh owner.
