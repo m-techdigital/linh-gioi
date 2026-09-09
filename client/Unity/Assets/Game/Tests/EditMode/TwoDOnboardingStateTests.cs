@@ -201,6 +201,50 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void LocomotionAnimationProfileDefinesSideScrollStates()
+        {
+            var profile = TwoDLocomotionAnimationProfile.CreateDefault();
+
+            StringAssert.Contains("locomotion=side_scroll", profile.Snapshot);
+            StringAssert.Contains("Idle", profile.Snapshot);
+            StringAssert.Contains("Walk", profile.Snapshot);
+            StringAssert.Contains("Run", profile.Snapshot);
+            StringAssert.Contains("Jump", profile.Snapshot);
+            StringAssert.Contains("Dash", profile.Snapshot);
+            StringAssert.Contains("ClassSkill", profile.Snapshot);
+            StringAssert.Contains("TrainingCompletePose", profile.Snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerUpdatesAnimationSnapshotAfterMovementAndCompletion()
+        {
+            var host = new GameObject("2D locomotion animation snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+                StringAssert.Contains("Idle", controller.RuntimeAnimationSnapshot);
+
+                controller.State.Move(new Vector2(1.2f, 0f));
+                controller.RefreshForSmoke();
+                StringAssert.Contains("Walk", controller.RuntimeAnimationSnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("TrainingCompletePose", controller.RuntimeAnimationSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsWorldHubAndDongMonRouteTogether()
         {

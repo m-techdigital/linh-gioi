@@ -10,7 +10,7 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 
 ## Current source state
 
-Đã dọn pipeline/source/asset/tool cũ liên quan hướng dựng nhân vật/cảnh 3D khỏi `feature/2d` và loại bỏ toàn bộ ảnh thiết kế/source cũ khỏi source tree để tránh kéo lại hướng art đã bỏ. Runtime 2D nhập môn hiện có một slice player-visible: di chuyển bằng WASD/phím mũi tên, focus NPC, mở thoại, nhận hướng dẫn tới Bia Luyện Khí, kích hoạt bia và hoàn tất nhập môn. Visual hiện là sprite/layer procedural gọn để kiểm flow, có HUD world-space, minimap/route overlay, snapshot base character nam/nữ và snapshot modular equipment được camera capture; chưa phải art final.
+Đã dọn pipeline/source/asset/tool cũ liên quan hướng dựng nhân vật/cảnh 3D khỏi `feature/2d` và loại bỏ toàn bộ ảnh thiết kế/source cũ khỏi source tree để tránh kéo lại hướng art đã bỏ. Runtime 2D nhập môn hiện có một slice player-visible: di chuyển bằng WASD/phím mũi tên, focus NPC, mở thoại, nhận hướng dẫn tới Bia Luyện Khí, kích hoạt bia và hoàn tất nhập môn. Visual hiện là sprite/layer procedural gọn để kiểm flow, có HUD world-space, minimap/route overlay, snapshot base character nam/nữ, modular equipment và locomotion animation được camera capture; chưa phải art final.
 
 ## Validation spine
 
@@ -29,8 +29,9 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 - Direction/map catalog checkpoint: `1fa3231 Lock 2D social action direction and map catalog`.
 - Character base checkpoint: `0d31cc8 Add 2D character base catalog`.
 - Modular equipment checkpoint: `091a2e3 Add 2D modular equipment runtime spine`.
-- Võ Lv1 seed WIP/checkpoint: 2D-03 đã thêm module seed Võ Lv1 nam/nữ và apply vào loadout sau khi hoàn tất Bia Luyện Khí; visual complete cho thấy outfit vàng/đai đỏ/găng-giày tối. Evidence runtime latest: visual manifest `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`; screenshot review PNG `build/2d-onboarding-visual/05-complete.png`.
+- Võ Lv1 seed checkpoint: `81000ed Add 2D Vo Lv1 starter outfit seed`.
+- Locomotion animation WIP/checkpoint: 2D-05 đã thêm profile Idle/Walk/Run/Jump/Dash/ClassSkill/TrainingCompletePose, runtime animation snapshot và procedural pose đổi theo movement/completion. Evidence runtime latest: visual manifest `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`; screenshot review PNG `build/2d-onboarding-visual/02-gate-focus.png` và `build/2d-onboarding-visual/05-complete.png`.
 
 ## Next
 
-Đóng gói checkpoint 2D-03 Võ Lv1 seed outfit, sau đó sang 2D-04 Kiếm Lv1 hoặc 2D-05 Animation Locomotion tùy ưu tiên runtime. Map production lớn quay lại ở 2D-09/2D-10 sau khi character modular runtime đủ spine; hiện giữ Đông Môn blockout/minimap để runtime không bị trống.
+Đóng gói checkpoint 2D-05 Animation Locomotion, sau đó sang 2D-04 Kiếm Lv1 hoặc mở bước tutorial Jump/Dash/Skill nếu muốn animation state có gameplay trigger thật. Map production lớn quay lại ở 2D-09/2D-10 sau khi character modular runtime đủ spine; hiện giữ Đông Môn blockout/minimap để runtime không bị trống.

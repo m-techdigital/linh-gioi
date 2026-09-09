@@ -12,6 +12,7 @@ namespace LinhGioi.World
         private readonly TwoDMapDesignCatalog _mapCatalog = TwoDMapDesignCatalog.CreateDefault();
         private readonly TwoDCharacterBaseCatalog _characterBaseCatalog = TwoDCharacterBaseCatalog.CreateDefault();
         private readonly TwoDCharacterModuleCatalog _moduleCatalog = TwoDCharacterModuleCatalog.CreateDefault();
+        private readonly TwoDLocomotionAnimationProfile _animationProfile = TwoDLocomotionAnimationProfile.CreateDefault();
         private TwoDCharacterLoadout _playerLoadout;
         private Transform _player;
         private Transform _gateKeeper;
@@ -22,6 +23,11 @@ namespace LinhGioi.World
         private SpriteRenderer _playerWaistRenderer;
         private SpriteRenderer _playerGlovesLeftRenderer;
         private SpriteRenderer _playerGlovesRightRenderer;
+        private Transform _playerHead;
+        private Transform _playerLeftArm;
+        private Transform _playerRightArm;
+        private Transform _playerLeftLeg;
+        private Transform _playerRightLeg;
         private Transform _hudDialoguePanel;
         private TextMesh _hudTitle;
         private TextMesh _hudArea;
@@ -32,6 +38,9 @@ namespace LinhGioi.World
         private TextMesh _hudFeedback;
         private Camera _camera;
         private string _worldHudSnapshot = string.Empty;
+        private string _runtimeAnimationSnapshot = string.Empty;
+        private Vector2 _lastPresentedPlayerPosition = TwoDOnboardingState.PlayerStart;
+        private int _presentationTick;
         private readonly List<string> _productionSceneBeats = new List<string>();
 
         public TwoDOnboardingState State => _state;
@@ -42,6 +51,7 @@ namespace LinhGioi.World
         public string RuntimeMapSnapshot => _mapCatalog.RuntimeSnapshot;
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
+        public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
 
         public static TwoDOnboardingController Attach(GameObject host)
         {
@@ -135,6 +145,11 @@ namespace LinhGioi.World
             _playerWaistRenderer = FindChildRenderer(_player, "Sash");
             _playerGlovesLeftRenderer = FindChildRenderer(_player, "Wrist Guard Left");
             _playerGlovesRightRenderer = FindChildRenderer(_player, "Wrist Guard Right");
+            _playerHead = FindChildTransform(_player, "Head");
+            _playerLeftArm = FindChildTransform(_player, "Left Arm");
+            _playerRightArm = FindChildTransform(_player, "Right Arm");
+            _playerLeftLeg = FindChildTransform(_player, "Left Leg");
+            _playerRightLeg = FindChildTransform(_player, "Right Leg");
         }
 
         private void RefreshPlayerEquipmentPresentation()
@@ -149,11 +164,41 @@ namespace LinhGioi.World
             if (_playerGlovesRightRenderer != null) _playerGlovesRightRenderer.color = voApplied ? new Color(0.08f, 0.07f, 0.06f) : RuntimeArtCatalog.Spirit;
         }
 
+        private void RefreshPlayerAnimationPresentation()
+        {
+            var delta = _state.PlayerPosition - _lastPresentedPlayerPosition;
+            var moved = delta.sqrMagnitude > 0.0001f;
+            _presentationTick++;
+            var phase = (_presentationTick % 8) / 7f;
+            var state = _state.Step == TwoDOnboardingStep.Complete ? "TrainingCompletePose" : moved ? "Walk" : "Idle";
+            var bob = state == "Walk" ? Mathf.Sin(phase * Mathf.PI * 2f) * 0.035f : state == "TrainingCompletePose" ? 0.045f : 0f;
+            var armSwing = state == "Walk" ? Mathf.Sin(phase * Mathf.PI * 2f) * 0.08f : state == "TrainingCompletePose" ? 0.12f : 0f;
+            var legSwing = state == "Walk" ? Mathf.Cos(phase * Mathf.PI * 2f) * 0.04f : 0f;
+
+            if (_player != null) _player.localScale = state == "TrainingCompletePose" ? new Vector3(1.04f, 1.04f, 1f) : Vector3.one;
+            if (_playerHead != null) _playerHead.localPosition = ToWorld(new Vector2(0f, 0.34f + bob), 0f);
+            if (_playerLeftArm != null) _playerLeftArm.localPosition = ToWorld(new Vector2(-0.28f, -0.12f + armSwing), 0f);
+            if (_playerRightArm != null) _playerRightArm.localPosition = ToWorld(new Vector2(0.28f, -0.12f - armSwing), 0f);
+            if (_playerLeftLeg != null) _playerLeftLeg.localPosition = ToWorld(new Vector2(-0.11f, -0.54f + legSwing), 0f);
+            if (_playerRightLeg != null) _playerRightLeg.localPosition = ToWorld(new Vector2(0.11f, -0.54f - legSwing), 0f);
+
+            _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "Walk" ? "stride_bob" : "breathing_idle", phase).Snapshot;
+            _lastPresentedPlayerPosition = _state.PlayerPosition;
+        }
+
         private static SpriteRenderer FindChildRenderer(Transform root, string namePart)
         {
             var renderers = root.GetComponentsInChildren<SpriteRenderer>(true);
             for (var i = 0; i < renderers.Length; i++)
                 if (renderers[i].gameObject.name.Contains(namePart)) return renderers[i];
+            return null;
+        }
+
+        private static Transform FindChildTransform(Transform root, string namePart)
+        {
+            var children = root.GetComponentsInChildren<Transform>(true);
+            for (var i = 0; i < children.Length; i++)
+                if (children[i].gameObject.name.Contains(namePart)) return children[i];
             return null;
         }
 
@@ -198,6 +243,7 @@ namespace LinhGioi.World
                 _trainingStone.localScale = new Vector3(pulse, pulse, 1f);
             }
             RefreshPlayerEquipmentPresentation();
+            RefreshPlayerAnimationPresentation();
             RefreshWorldHud();
         }
 
