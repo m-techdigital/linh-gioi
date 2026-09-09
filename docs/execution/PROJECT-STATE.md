@@ -1,5 +1,7 @@
 # PROJECT STATE — Linh Giới Online 2D
 
+Ưu tiên owner mới nhất 2026-09-10: chỉ hoàn thiện map đầu Đông Môn trước, sau đó tiếp nhận công việc tab riêng để hoàn thiện 5 class, slot đồ, chuyển động và thay đồ khớp trong Player. Góc cổng hiện mới là draft, không đồng nghĩa map đầu đã xong. Không mở map thứ hai. Gate thao tác kiểm chứng nằm ở `NEXT-ACTION.md`.
+
 ## Đông Môn illustrated draft — 2026-09-10
 
 Đã tạo art mới và pack skyline + atlas cổng/NPC/terrain; preview opt-in trong Player qua `--lgo-dongmon-art-preview`, không sửa controller/state/5 class hoặc frozen surfaces. `tools/capture_lgo_dongmon_art.py` capture 5 trạng thái vào thư mục riêng. EditMode 139 pass, 0 fail, 1 skipped; guard 5 test pass; smoke/build/baseline 20 frame và art 5 frame đã chạy, ảnh đã review. Art vẫn DRAFT, player còn placeholder; không claim giống hoàn toàn ảnh owner.

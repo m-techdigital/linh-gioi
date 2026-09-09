@@ -4,7 +4,7 @@
 
 Đã tạo art mới và pack skyline + atlas cổng/NPC/terrain; preview opt-in trong Player qua `--lgo-dongmon-art-preview`, không sửa controller/state/5 class hoặc frozen surfaces. `tools/capture_lgo_dongmon_art.py` capture 5 trạng thái vào thư mục riêng. EditMode 139 pass, 0 fail, 1 skipped; guard 5 test pass; smoke/build/baseline 20 frame và art 5 frame đã chạy, ảnh đã review. Art vẫn DRAFT, player còn placeholder; không claim giống hoàn toàn ảnh owner.
 
-Next/gate: owner xem capture `build/dongmon-art/player-final/03-dialogue.png` (bản copy bền ở `build/dongmon-art-checkpoint/`) và duyệt bố cục/palette/tỷ lệ trước khi nhân rộng. Sau duyệt mới mở thêm foreground/prop và ghép asset 5 class đã được tab riêng chuẩn hóa. Hướng/plan/evidence: `docs/design/dong-mon-illustrated/DESIGN.md`. Không tiếp polish primitive; không ghi đè checkout chính hoặc source tab 5 class. Không có blocker runtime; gate còn lại là duyệt mỹ thuật.
+Next/gate: owner xem capture `build/dongmon-art/player-final/03-dialogue.png` (bản copy bền ở `build/dongmon-art-checkpoint/`) và duyệt bố cục/palette/tỷ lệ trước khi nhân rộng. Sau duyệt chỉ hoàn thiện map đầu Đông Môn; xong gate map mới chuyển sang tích hợp và hoàn thiện 5 class từ tab riêng. Hướng/plan/evidence: `docs/design/dong-mon-illustrated/DESIGN.md`. Không tiếp polish primitive; không ghi đè checkout chính hoặc source tab 5 class. Không có blocker runtime; gate còn lại là duyệt mỹ thuật.
 
 
 ## Gate Keeper silhouette — 2026-09-10
@@ -41,9 +41,13 @@ Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới qua `docs/des
 
 ## Việc tiếp theo
 
-1. Duyệt góc Đông Môn illustrated trong capture Player `03-dialogue.png`; đây là gate mỹ thuật, không phải xin lại quyền code/test.
-2. Sau khi owner duyệt hướng: thêm foreground/props theo cùng pack và ghép art player 5 class đã đạt gate ở tab riêng. Không tự sửa/thay nguồn của tab đó.
-3. Nếu bố cục/palette/tỷ lệ chưa đạt, sửa đúng góc preview này, capture lại rồi mới nhân rộng; không quay về polish rectangle hoặc dùng ảnh concept làm runtime.
+Chỉ đạo owner mới nhất 2026-09-10: **map đầu trước → hoàn thiện 5 class sau**, ưu tiên chức năng owner tự kiểm chứng trong game. Không mở map thứ hai.
+
+1. Owner xem góc Đông Môn illustrated trong capture Player `03-dialogue.png`; bản này mới là draft góc cổng, chưa coi cả map đầu hoàn thiện.
+2. Hoàn thiện Đông Môn theo kịch bản đã có: cảnh/parallax/terrain, đường đi và tương tác không lệch hình; kiểm spawn → Người Giữ Cổng/thoại → Bia Luyện Khí → hướng dẫn hiện có. Bàn giao Player chạy được, phím điều khiển và bằng chứng trước/sau từng thao tác. Không mở hệ thống mới hoặc map tiếp theo.
+3. Sau gate map đầu, tiếp nhận commit/asset từ tab 5 class rồi triển khai theo base/slot chung: Võ, Kiếm, Pháp, Cơ, Linh; không ghi đè worktree hoặc source chưa commit của tab đó. Mỗi class có nguồn item rời alpha thật, anchor/pivot, thứ tự layer và quy tắc tương thích rõ ràng.
+4. Gate kiểm chứng 5 class trong Player: chọn class → mặc/tháo từng slot → phối các bộ tương thích → idle/walk/run/jump và đòn/skill preview trong scope đã có. Kiểm đồ đi theo chuyển động, không lệch tay/chân/vũ khí, không hở/cắt thân hoặc sai layer khi đổi hướng; snapshot trang bị phải khớp phần đang thấy. Đây là task tiếp theo, chưa phải chức năng đã hoàn thiện.
+5. Bàn giao một bản game với hướng dẫn thao tác và expected result ngắn cho từng chức năng; test/capture thực, owner nhìn và thao tác được. Không dùng ảnh concept hoặc test xanh thay bằng chứng gameplay.
 
 ## Blocker
 
