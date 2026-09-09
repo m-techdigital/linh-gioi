@@ -795,6 +795,43 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeControllerExposesEastGateToPlazaTransitionPreview()
+        {
+            var host = new GameObject("2D hub transition preview test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("HubTransition", controller.RuntimeHubTransitionSnapshot);
+                StringAssert.Contains("unlocked=False", controller.RuntimeHubTransitionSnapshot);
+                Assert.IsFalse(controller.PreviewEastGateToPlazaTransition());
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                Assert.IsTrue(controller.PreviewEastGateToPlazaTransition());
+                StringAssert.Contains("HubTransition", controller.RuntimeHubTransitionSnapshot);
+                StringAssert.Contains("from=east-gate", controller.RuntimeHubTransitionSnapshot);
+                StringAssert.Contains("to=plaza", controller.RuntimeHubTransitionSnapshot);
+                StringAssert.Contains("mode=local-route-preview", controller.RuntimeHubTransitionSnapshot);
+                StringAssert.Contains("safe-local-no-teleport-backend", controller.RuntimeHubTransitionSnapshot);
+                StringAssert.Contains("Tuyến Đông Môn → Quảng Trường", controller.WorldHudSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeInventoryPanelOnlyShowsWhenOpened()
         {
             var host = new GameObject("2D inventory panel visibility test host");

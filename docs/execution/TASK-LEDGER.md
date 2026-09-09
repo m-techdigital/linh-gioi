@@ -293,3 +293,15 @@ Tiếp map A-Z bằng một batch player-visible có giá trị: Quảng Trườ
 ## Next after Plaza social layout
 
 Tiếp map bằng hub transition local-only hoặc authored Đông Môn Tilemap/tileset sạch. Nếu làm Quảng Trường tiếp, ưu tiên giảm chồng text xa và chuẩn bị vị trí shell cho Học Viện/Thương Phố/Bang Hội mà không bật chức năng backend.
+
+## 2026-09-10 — Hub transition preview Đông Môn → Quảng Trường
+
+- Thêm state/controller cho route preview local-only sau khi Đông Môn hoàn tất: `HubTransitionPreviewOpen`, `HubTransitionPreviewId=east-gate-to-plaza`, `PreviewEastGateToPlazaTransition()`.
+- Thêm `RuntimeHubTransitionSnapshot` vào manifest visual và runtime smoke matrix để bắt `from=east-gate`, `to=plaza`, `mode=local-route-preview`, `safe-local-no-teleport-backend`.
+- Thêm visual root có hai anchor Đông Môn/Quảng Trường, route beam và guard label; capture thêm frame `14-plaza-transition-preview`.
+- TDD: test mới fail trước vì API chưa tồn tại, sau implementation Unity EditMode pass.
+- Scope giữ an toàn: không teleport thật, không streaming map, không server travel, không shop/economy/guild/backend.
+
+## Next after hub transition preview
+
+Tiếp map production spine bằng authored Đông Môn Tilemap/tileset sạch hoặc layout label pass cho Quảng Trường để giảm chữ nhỏ/chồng ở vùng xa.

@@ -252,3 +252,7 @@ Checkpoint `LGO_LINHTHANH_PLAZA_NPC_INTERACTION_READY`: Quảng Trường có NP
 ## 2026-09-10 — Quảng Trường social layout spacing
 
 `LGO_LINHTHANH_PLAZA_SOCIAL_LAYOUT_READY`: sau selector checkpoint, Quảng Trường được chỉnh spacing thành `spaced-social-triangle` để Gate Guide, Bảng Sự Kiện và Thương Nhân không dính vào nhau khi capture. TDD RED/GREEN bắt `runtimePlazaHubInputSnapshot` có layout token; Player build/capture/matrix PASS với 13 frame. Next map-safe action: nâng hub transition/local route hoặc authored Đông Môn Tilemap; vẫn không mở backend/frozen surfaces.
+
+## 2026-09-10 — Đông Môn → Quảng Trường transition shell
+
+`LGO_LINHTHANH_HUB_TRANSITION_PREVIEW_READY`: sau unlock Linh Thành, runtime có preview tuyến `east-gate -> plaza` local-only với snapshot `runtimeHubTransitionSnapshot` và frame `14-plaza-transition-preview`. Gate đã chạy: test RED compile fail vì API chưa có, GREEN Unity EditMode `102 total / 101 passed / 0 failed / 1 skipped`, Editor smoke PASS, macOS Player build PASS, visual capture 14 frame, runtime/visual matrix PASS. Next map-safe action: làm authored Đông Môn Tilemap hoặc giảm chồng label Quảng Trường; chưa mở teleport/backend.

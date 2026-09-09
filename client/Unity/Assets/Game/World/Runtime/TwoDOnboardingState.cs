@@ -47,6 +47,8 @@ namespace LinhGioi.World
         public bool ShadowSlimeVisible { get; private set; }
         public bool ShadowSlimeDefeated { get; private set; }
         public bool LinhThanhUnlocked { get; private set; }
+        public bool HubTransitionPreviewOpen { get; private set; }
+        public string HubTransitionPreviewId { get; private set; } = "locked";
         public bool PlazaHubPreviewOpen { get; private set; }
         public bool PlazaHubNpcPreviewOpen { get; private set; }
         public string PlazaHubInteractionId { get; private set; } = "locked";
@@ -70,6 +72,8 @@ namespace LinhGioi.World
             ShadowSlimeVisible = false;
             ShadowSlimeDefeated = false;
             LinhThanhUnlocked = false;
+            HubTransitionPreviewOpen = false;
+            HubTransitionPreviewId = "locked";
             PlazaHubPreviewOpen = false;
             PlazaHubNpcPreviewOpen = false;
             PlazaHubInteractionId = "locked";
@@ -174,6 +178,29 @@ namespace LinhGioi.World
             LinhThanhUnlocked = true;
             AvailableAction = TwoDOnboardingAction.None;
             CurrentRouteNodeId = "return-gate";
+            return true;
+        }
+
+
+        public bool TryPreviewEastGateToPlazaTransition()
+        {
+            Refresh();
+            if (!LinhThanhUnlocked) return false;
+
+            HubTransitionPreviewOpen = true;
+            HubTransitionPreviewId = "east-gate-to-plaza";
+            PlazaHubPreviewOpen = false;
+            PlazaHubNpcPreviewOpen = false;
+            PlazaHubInteractionId = "transition-preview-open";
+            DialogueOpen = false;
+            DialogueLine = string.Empty;
+            ObjectiveText = "Tuyến Đông Môn → Quảng Trường đã mở ở preview local.";
+            HintText = "Đây là route preview local-only; chưa gọi teleport hoặc backend chuyển map.";
+            AreaText = "Linh Thành";
+            FeedbackText = "Đường sáng nối Đông Môn với Quảng Trường trên bản đồ local.";
+            LastAnimationIntent = "Idle";
+            AvailableAction = TwoDOnboardingAction.None;
+            CurrentRouteNodeId = "transition-east-gate-plaza";
             return true;
         }
 

@@ -157,3 +157,7 @@ Quy tắc map tiếp theo: nếu thêm Thương Phố/Bang Hội/Học Viện �
 ### Plaza social triangle rule
 
 Checkpoint runtime đầu tiên cho Quảng Trường dùng layout `spaced-social-triangle`: NPC giữ cổng đặt bên trái như điểm quay lại tutorial, Bảng Sự Kiện đặt giữa/phía sau như điểm đọc thông tin cộng đồng, Thương Nhân đặt bên phải như preview trang bị local-only. Mọi target hub về sau nên đi theo cùng nguyên tắc: vị trí đọc được trên frame 640x480, có label riêng, selector ring riêng, snapshot token riêng và guard backend rõ ràng.
+
+### Hub transition shell rule
+
+Transition đầu tiên giữa map tutorial và hub là `east-gate -> plaza`. Runtime chỉ được xem là preview khi snapshot có `mode=local-route-preview` và guard `safe-local-no-teleport-backend`; chưa được coi là teleport, streaming hoặc chuyển map server-authoritative. Mọi transition map sau này phải khai báo source, destination, trạng thái unlock, visual cue và guard backend tương tự trước khi mở chức năng thật.

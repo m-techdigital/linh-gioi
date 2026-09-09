@@ -69,6 +69,11 @@ namespace LinhGioi.World
             yield return null;
             yield return Capture(evidenceDir, "08-complete");
 
+            controller.PreviewEastGateToPlazaTransition();
+            controller.RefreshForSmoke();
+            yield return null;
+            yield return Capture(evidenceDir, "14-plaza-transition-preview");
+
             controller.UseSelectedPlazaHubTarget();
             controller.RefreshForSmoke();
             yield return null;
@@ -97,7 +102,7 @@ namespace LinhGioi.World
             var resultPath = Path.Combine(evidenceDir, "twod-onboarding-visual-manifest.json");
             var result = new TwoDOnboardingVisualCaptureResult
             {
-                status = _screenshots.Count == 13 ? "PASS" : "FAIL",
+                status = _screenshots.Count == 14 ? "PASS" : "FAIL",
                 unityVersion = Application.unityVersion,
                 platform = Application.platform.ToString(),
                 evidenceDir = evidenceDir,
@@ -110,6 +115,7 @@ namespace LinhGioi.World
                 runtimeMapSnapshot = controller.RuntimeMapSnapshot,
                 runtimeLinhThanhUnlockSnapshot = controller.RuntimeLinhThanhUnlockSnapshot,
                 runtimeLinhThanhPlazaHubSnapshot = controller.RuntimeLinhThanhPlazaHubSnapshot,
+                runtimeHubTransitionSnapshot = controller.RuntimeHubTransitionSnapshot,
                 runtimeCharacterBaseSnapshot = controller.RuntimeCharacterBaseSnapshot,
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
@@ -233,6 +239,7 @@ namespace LinhGioi.World
             public string runtimeMapSnapshot;
             public string runtimeLinhThanhUnlockSnapshot;
             public string runtimeLinhThanhPlazaHubSnapshot;
+            public string runtimeHubTransitionSnapshot;
             public string runtimeCharacterBaseSnapshot;
             public string runtimeEquipmentSnapshot;
             public string runtimeInventoryTryOnSnapshot;

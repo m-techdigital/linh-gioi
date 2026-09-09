@@ -22,6 +22,7 @@ namespace LinhGioi.World
         private Transform _pathGlow;
         private Transform _linhThanhUnlockBanner;
         private Transform _plazaUnlockPath;
+        private Transform _hubTransitionPreviewRoot;
         private Transform _plazaHubRuntimeRoot;
         private Transform _plazaHubSelectorRing;
         private Transform _inventoryPanelRoot;
@@ -71,6 +72,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhPlazaShellSnapshot => _mapCatalog.LinhThanhPlazaShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
+        public string RuntimeHubTransitionSnapshot => BuildHubTransitionSnapshot();
         public string RuntimeLinhThanhUnlockSnapshot => BuildLinhThanhUnlockSnapshot();
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
@@ -118,6 +120,7 @@ namespace LinhGioi.World
             {
                 if (_state.TryUseAction() || UseSelectedPlazaHubTarget()) RefreshPresentation();
             }
+            if (Input.GetKeyDown(KeyCode.R)) PreviewEastGateToPlazaTransition();
             if (Input.GetKeyDown(KeyCode.P)) SelectNextPlazaHubTarget();
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.J))
             {
@@ -163,6 +166,7 @@ namespace LinhGioi.World
             AddLinhThanhHubShellOverlay();
             AddLinhThanhPlazaShellPreview();
             AddLinhThanhPlazaHubRuntimePreview();
+            AddLinhThanhHubTransitionPreview();
             AddLinhThanhUnlockPresentation();
 
             AddSceneSprite("LGO 2D Linh Thanh Gate Left Pillar", "Cổng Linh Thành - trụ trái", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
@@ -302,6 +306,25 @@ namespace LinhGioi.World
             return ok;
         }
 
+        public bool PreviewEastGateToPlazaTransition()
+        {
+            var ok = _state.TryPreviewEastGateToPlazaTransition();
+            if (ok) RefreshPresentation();
+            return ok;
+        }
+
+        private string BuildHubTransitionSnapshot()
+        {
+            return "HubTransition: unlocked=" + _state.LinhThanhUnlocked
+                + " | open=" + _state.HubTransitionPreviewOpen
+                + " | id=" + _state.HubTransitionPreviewId
+                + " | from=east-gate"
+                + " | to=plaza"
+                + " | mode=local-route-preview"
+                + " | controls=R preview route"
+                + " | safe-local-no-teleport-backend";
+        }
+
         private string BuildPlazaHubInputSnapshot()
         {
             return "PlazaHubInput: unlocked=" + _state.LinhThanhUnlocked
@@ -373,13 +396,14 @@ namespace LinhGioi.World
             if (_plazaUnlockPath != null) _plazaUnlockPath.gameObject.SetActive(linhThanhUnlocked);
             if (_linhThanhUnlockBanner != null) _linhThanhUnlockBanner.gameObject.SetActive(linhThanhUnlocked);
             if (_plazaHubRuntimeRoot != null) _plazaHubRuntimeRoot.gameObject.SetActive(linhThanhUnlocked);
+            if (_hubTransitionPreviewRoot != null) _hubTransitionPreviewRoot.gameObject.SetActive(linhThanhUnlocked && _state.HubTransitionPreviewOpen);
             if (_plazaHubSelectorRing != null)
             {
                 _plazaHubSelectorRing.gameObject.SetActive(linhThanhUnlocked);
                 _plazaHubSelectorRing.localPosition = ToWorld(PlazaHubTargetPosition(), 0f);
             }
             SetHudText(_plazaHubSelectedLabel, linhThanhUnlocked ? "Chọn: " + _state.SelectedPlazaHubTargetLabel + "  P đổi / E tương tác" : "Chọn hub: khóa");
-            SetHudText(_miniMapProgress, linhThanhUnlocked ? "Node: return-gate → plaza" : "Node: " + _state.CurrentRouteNodeId);
+            SetHudText(_miniMapProgress, linhThanhUnlocked ? (_state.HubTransitionPreviewOpen ? "Node: east-gate → plaza preview" : "Node: return-gate → plaza") : "Node: " + _state.CurrentRouteNodeId);
             RefreshPlayerEquipmentPresentation();
             RefreshInventoryPanelPresentation();
             RefreshPlayerAnimationPresentation();
@@ -430,6 +454,21 @@ namespace LinhGioi.World
             _plazaHubSelectorRing = AddSprite("LGO 2D Plaza Target Selector Ring", new Vector2(-0.18f, 0.64f), new Vector2(0.46f, 0.08f), new Color(0.18f, 0.86f, 0.78f, 0.72f), 7, _plazaHubRuntimeRoot).transform;
             _plazaHubSelectedLabel = AddWorldLabel("LGO 2D Plaza Selected Target Label", "Chọn: Bảng Sự Kiện", new Vector2(0.10f, 0.07f), 0.020f, RuntimeArtCatalog.Spirit, 7, _plazaHubRuntimeRoot);
             _plazaHubRuntimeRoot.gameObject.SetActive(false);
+        }
+
+
+        private void AddLinhThanhHubTransitionPreview()
+        {
+            AddSceneBeat("LINH_THANH_HUB_TRANSITION_PREVIEW east-gate->plaza local-route no teleport backend");
+            var root = new GameObject("LGO 2D Hub Transition Preview Root");
+            root.transform.SetParent(transform, false);
+            _hubTransitionPreviewRoot = root.transform;
+            AddSprite("LGO 2D Hub Transition East Gate Anchor", new Vector2(-1.46f, 0.18f), new Vector2(0.18f, 0.18f), RuntimeArtCatalog.Gold, 8, _hubTransitionPreviewRoot);
+            AddSprite("LGO 2D Hub Transition Plaza Anchor", new Vector2(-0.18f, 0.18f), new Vector2(0.18f, 0.18f), RuntimeArtCatalog.Spirit, 8, _hubTransitionPreviewRoot);
+            AddSprite("LGO 2D Hub Transition Route Beam", new Vector2(-0.82f, 0.18f), new Vector2(1.08f, 0.06f), new Color(0.18f, 0.86f, 0.78f, 0.74f), 7, _hubTransitionPreviewRoot);
+            AddWorldLabel("LGO 2D Hub Transition Label", "Tuyến Đông Môn → Quảng Trường", new Vector2(-0.78f, -0.03f), 0.023f, RuntimeArtCatalog.Spirit, 9, _hubTransitionPreviewRoot);
+            AddWorldLabel("LGO 2D Hub Transition Guard", "local route preview / no teleport backend", new Vector2(-0.78f, -0.22f), 0.016f, new Color(0.73f, 0.87f, 0.88f, 0.74f), 9, _hubTransitionPreviewRoot);
+            _hubTransitionPreviewRoot.gameObject.SetActive(false);
         }
 
         private void AddLinhThanhUnlockPresentation()
