@@ -21,6 +21,8 @@ DOCS = (
     'docs/art/LGO-CLASS-IMAGE-PROMPT-TEMPLATES-v1.0.md',
     'docs/art/LGO-ASSET-SEPARATION-CHECKLIST-v1.0.md',
     'docs/art/classes/vo/LGO-VO-2D-MODULE-SPEC-v1.0.md',
+    'docs/art/classes/vo/LGO-VO-2D-BASE-RIG-ANIMATION-SPEC-v1.0.md',
+    'docs/design/LGO-2D-VO-CHEST-PAPERDOLL-DESIGN-v0.1.md',
     'HANDOFF-LGO-CLASS-2D-MODULE-STANDARD-v1.0.md',
 )
 PAIRS = (
@@ -52,6 +54,14 @@ def validate(root: Path, asset_root: Path, require_assets: bool) -> tuple[list[s
     for phrase in phrases:
         if phrase not in standard:
             errors.append(f'Chuẩn thiếu quy tắc: {phrase}')
+    combined = '\n'.join(texts.values())
+    for phrase in (
+        'Cross-level mixing', 'idle', 'walk', 'run', 'jump_start', 'jump_air',
+        'fall', 'land', 'basic_attack', 'skill_windup', 'skill_cast',
+        'skill_recover', 'ChestCell', 'PaperDollLoadout', 'TryOnState',
+    ):
+        if phrase not in combined:
+            errors.append(f'Chuẩn thiếu contract base/rương: {phrase}')
     expected = {
         f'{gender}/equipment/{slot}/vo_{gender}_{slot}_{level}.png'
         for gender in GENDERS for slot in SLOTS for level in LEVELS

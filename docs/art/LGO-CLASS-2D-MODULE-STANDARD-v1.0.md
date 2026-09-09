@@ -46,6 +46,14 @@ Folder vật lý đi theo class/gender/equipment/slot; level nằm trong filenam
 
 **Đường dẫn là quy ước đích, chưa tạo ảnh tại đó.** Gate hiện hành `tools/validate_2d_branch_no_source_images.py` cấm source image trong branch. Giữ ảnh upload ngoài repo; không copy board vào các folder trên để giả đủ bộ. Khi có task ingest riêng phải giải quyết gate này minh bạch, không tắt validator.
 
+## Base, anchor và motion contract
+
+Base nhân vật không đổi theo level. Mọi item Võ phải khớp cùng một skeleton nam và một skeleton nữ qua `lv001` đến `lv100`; level chỉ thay trang bị, không thay chiều cao, tỉ lệ, khớp, thế đứng hoặc camera side-view. Cross-level mixing là gate bắt buộc: item cấp thấp/cao có thể dùng chéo trên cùng base mà không scale body hoặc dịch anchor.
+
+Anchor tối thiểu phải ổn định cho tóc, áo trong, áo ngoài, hạ y, đai, giáp vai/ngực, cẳng tay, quyền khí, giày và phụ kiện. Motion test tối thiểu gồm `idle`, `walk`, `run`, `jump_start`, `jump_air`, `fall`, `land`, `basic_attack`, `skill_windup`, `skill_cast`, `skill_recover`. VFX skill là layer riêng, không bake vào equipment.
+
+Chi tiết đang áp dụng cho Võ ở `docs/art/classes/vo/LGO-VO-2D-BASE-RIG-ANIMATION-SPEC-v1.0.md`. Màn rương/paper doll để thử đồ nằm ở `docs/design/LGO-2D-VO-CHEST-PAPERDOLL-DESIGN-v0.1.md`.
+
 ## Board phải có cho Võ
 
 Prefix: `assets/reference/classes/vo/boards/`.
