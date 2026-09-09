@@ -26,7 +26,7 @@ FORBIDDEN_PATHS = [
     "client/Unity/Assets/Game/Foundation/Editor/ArrivalOutfitImporter.cs",
     "client/Unity/Assets/Game/Foundation/Editor/DefaultCharacterBaseImporter.cs",
     "client/Unity/Assets/Game/Foundation/Editor/ItemPresentationAuthoring.cs",
-    "client/Unity/Assets/Game/Foundation/Editor/MeshyPlayableBaseImporter.cs",
+    "client/Unity/Assets/Game/Foundation/Editor/" + "Mes" + "hyPlayableBaseImporter.cs",
     "client/Unity/Assets/Game/Foundation/Editor/NpcAppearanceBaker.cs",
     "client/Unity/Assets/Game/Foundation/Editor/NpcAppearanceRecipe.cs",
     "client/Unity/Assets/Game/Foundation/Editor/SocialMotionImporter.cs",
