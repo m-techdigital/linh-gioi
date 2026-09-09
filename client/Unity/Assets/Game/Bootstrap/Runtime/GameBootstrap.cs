@@ -104,6 +104,12 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (DongMonIllustratedPreview.ShouldRun())
+                {
+                    DongMonIllustratedPreview.Attach(TwoDOnboardingController.Attach(gameObject));
+                    return;
+                }
+
                 if (TwoDOnboardingVisualCaptureRunner.ShouldRun())
                 {
                     TwoDOnboardingVisualCaptureRunner.Attach(gameObject);

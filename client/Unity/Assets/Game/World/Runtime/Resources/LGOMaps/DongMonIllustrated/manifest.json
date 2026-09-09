@@ -1,0 +1,127 @@
+{
+  "id": "dongmon-illustrated-draft-v1",
+  "status": "DRAFT_OWNER_REVIEW",
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/DongMonIllustrated/skyline.png",
+      "sha256": "6dc7313b27f2b00eb93c0fa8dd0a1f3793c9f7a4f406439068959664cf75ea1a",
+      "role": "far-background",
+      "generator": "image_gen",
+      "created": "2026-09-10",
+      "referenceOnly": false,
+      "width": 1536,
+      "height": 864
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/DongMonIllustrated/props-atlas.png",
+      "sha256": "cf61e9f6879936853b2cad97c0cd0e3027a7137bb9d2f315e640707c4fdff01f",
+      "role": "runtime-atlas",
+      "generator": "image_gen",
+      "created": "2026-09-10",
+      "referenceOnly": false,
+      "width": 2048,
+      "height": 2048
+    }
+  ],
+  "layers": [
+    {
+      "id": "far-city",
+      "part": "skyline",
+      "x": 0,
+      "y": 0.25,
+      "width": 12.6,
+      "height": 7.09,
+      "order": -30,
+      "parallax": 0.09
+    },
+    {
+      "id": "city-gate",
+      "part": "gate",
+      "x": -1.7,
+      "y": 0.54,
+      "width": 5,
+      "height": 3.75,
+      "order": -20,
+      "parallax": 0
+    },
+    {
+      "id": "walkway--1",
+      "part": "terrain",
+      "x": -5.4,
+      "y": -2.19,
+      "width": 5.4,
+      "height": 1.9,
+      "order": -15,
+      "parallax": 0
+    },
+    {
+      "id": "walkway-0",
+      "part": "terrain",
+      "x": 0.0,
+      "y": -2.19,
+      "width": 5.4,
+      "height": 1.9,
+      "order": -15,
+      "parallax": 0
+    },
+    {
+      "id": "walkway-1",
+      "part": "terrain",
+      "x": 5.4,
+      "y": -2.19,
+      "width": 5.4,
+      "height": 1.9,
+      "order": -15,
+      "parallax": 0
+    },
+    {
+      "id": "gate-terrace",
+      "part": "terrain",
+      "x": -1.4,
+      "y": -1.35,
+      "width": 4.6,
+      "height": 1.53,
+      "order": -14,
+      "parallax": 0
+    },
+    {
+      "id": "gate-guide",
+      "part": "guide",
+      "x": -1.35,
+      "y": -0.375,
+      "width": 1.1,
+      "height": 1.65,
+      "order": 1,
+      "parallax": 0
+    }
+  ],
+  "parts": [
+    {
+      "id": "gate",
+      "x": 8,
+      "y": 1272,
+      "w": 1024,
+      "h": 768
+    },
+    {
+      "id": "guide",
+      "x": 1056,
+      "y": 1272,
+      "w": 512,
+      "h": 768
+    },
+    {
+      "id": "terrain",
+      "x": 8,
+      "y": 571,
+      "w": 2032,
+      "h": 677
+    }
+  ],
+  "sourceHashes": {
+    "skyline.png": "db777f19dc2c9bd9a8b96086b5c5b20bc3c5a7c1f58c7b1977c5dbc373b0546f",
+    "gate.png": "53557f8d25c2129f51bdf67e674706ba4c384f887c48e2af176cc65f2cc5ba4e",
+    "terrain.png": "e336c7ad1dc8439277847807b0d618df27f8ee0d1d6c78717b9463ba26d92562",
+    "guide.png": "a70688c020d80acd984fa2228e600b2e0bf123ca8cc3c5c2383baaac3e99b45e"
+  }
+}
