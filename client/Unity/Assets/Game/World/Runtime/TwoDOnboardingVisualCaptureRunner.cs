@@ -129,6 +129,7 @@ namespace LinhGioi.World
                 runtimeInventoryInputSnapshot = controller.RuntimeInventoryInputSnapshot,
                 runtimePlazaHubInputSnapshot = controller.RuntimePlazaHubInputSnapshot,
                 runtimePlazaReadabilitySnapshot = controller.RuntimePlazaReadabilitySnapshot,
+                runtimeDongMonReadabilitySnapshot = controller.RuntimeDongMonReadabilitySnapshot,
                 runtimeTerrainCollisionSnapshot = controller.RuntimeTerrainCollisionSnapshot,
                 runtimeTilemapSnapshot = controller.RuntimeTilemapSnapshot,
                 runtimeDongMonTilePaletteSnapshot = controller.RuntimeDongMonTilePaletteSnapshot,
@@ -265,6 +266,7 @@ namespace LinhGioi.World
             public string runtimeInventoryInputSnapshot;
             public string runtimePlazaHubInputSnapshot;
             public string runtimePlazaReadabilitySnapshot;
+            public string runtimeDongMonReadabilitySnapshot;
             public string runtimeTerrainCollisionSnapshot;
             public string runtimeTilemapSnapshot;
             public string runtimeDongMonTilePaletteSnapshot;

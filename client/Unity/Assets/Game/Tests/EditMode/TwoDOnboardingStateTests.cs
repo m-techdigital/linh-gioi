@@ -1291,6 +1291,27 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeControllerExposesDongMonLabelReadabilityRailForVisualEvidence()
+        {
+            var host = new GameObject("2D Dong Mon label readability rail test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonReadability", controller.RuntimeDongMonReadabilitySnapshot);
+                StringAssert.Contains("mode=route-label-rail", controller.RuntimeDongMonReadabilitySnapshot);
+                StringAssert.Contains("world-label-density=reduced", controller.RuntimeDongMonReadabilitySnapshot);
+                StringAssert.Contains("chips=gate,stone,jump,dash,slime", controller.RuntimeDongMonReadabilitySnapshot);
+                StringAssert.Contains("avoids-hud-overlap", controller.RuntimeDongMonReadabilitySnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerExposesDongMonAuthoredPassForVisualEvidence()
         {
             var host = new GameObject("2D Dong Mon authored pass snapshot test host");

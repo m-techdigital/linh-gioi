@@ -86,6 +86,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
             "runtimePlazaHubInputSnapshot": ["PlazaHubInput", "selected=merchant-preview", "layout=spaced-social-triangle", "controls=P select, E interact", "interaction=npc-merchant-preview", "safe-local-no-shop-backend"],
             "runtimePlazaReadabilitySnapshot": ["PlazaReadability", "mode=label-rail", "world-label-density=reduced", "target-chips=event-board,gate-guide,merchant-preview", "safe-local-no-backend"],
+            "runtimeDongMonReadabilitySnapshot": ["DongMonReadability", "mode=route-label-rail", "world-label-density=reduced", "chips=gate,stone,jump,dash,slime", "avoids-hud-overlap", "safe-local-no-backend"],
         },
         "marker": "LGO_RUNTIME_SMOKE_MATRIX_2D_PASS",
     },

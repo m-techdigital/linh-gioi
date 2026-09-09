@@ -59,6 +59,11 @@ Linh Thành là hub xã hội. Runtime 2D cần map overview trước, sau đó 
 
 Prototype hiện có mới giữ chắc bước 1-4. Các bước 5-11 là next runtime slices; riêng skill/combat/reward cần gate riêng trước khi mở rộng sâu.
 
+
+## Đông Môn route label rail
+
+Đông Môn route label rail giữ các mốc tutorial chính bằng chip `01 Cổng → 05 Slime`, giảm chữ trực tiếp trên collision lane để frame runtime đọc nhanh hơn khi chưa có production art. Rail này là UI/readability aid tạm thời cho blockout, không thay thế thiết kế map final.
+
 ## Layer map 2D
 
 Mỗi map runtime dùng cùng cấu trúc layer:

@@ -80,6 +80,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
+        public string RuntimeDongMonReadabilitySnapshot => BuildDongMonReadabilitySnapshot();
         public string RuntimeHubTransitionSnapshot => BuildHubTransitionSnapshot();
         public string RuntimeLinhThanhUnlockSnapshot => BuildLinhThanhUnlockSnapshot();
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
@@ -362,6 +363,17 @@ namespace LinhGioi.World
                 + " | target-chips=event-board,gate-guide,merchant-preview"
                 + " | rail=bottom-safe-zone"
                 + " | selector-label=single-active-target"
+                + " | avoids-hud-overlap"
+                + " | safe-local-no-backend";
+        }
+
+        private string BuildDongMonReadabilitySnapshot()
+        {
+            return "DongMonReadability: mode=route-label-rail"
+                + " | world-label-density=reduced"
+                + " | chips=gate,stone,jump,dash,slime"
+                + " | rail=bottom-safe-zone"
+                + " | collision-labels=chip-only"
                 + " | avoids-hud-overlap"
                 + " | safe-local-no-backend";
         }
@@ -697,15 +709,36 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Authored Slime Boundary Rune", new Vector2(3.66f, -1.47f), new Vector2(0.22f, 0.22f), new Color(0.48f, 0.20f, 0.82f, 0.26f), -3);
         }
 
+
+        private void AddDongMonReadabilityRail()
+        {
+            AddSceneBeat("DONG_MON_READABILITY route-label-rail chips gate/stone/jump/dash/slime avoids HUD overlap");
+            AddSceneBeat(RuntimeDongMonReadabilitySnapshot);
+            AddSprite("LGO 2D Dong Mon Label Rail Backing", new Vector2(0.95f, -2.54f), new Vector2(4.40f, 0.28f), new Color(0.02f, 0.08f, 0.13f, 0.88f), 58);
+            AddWorldLabel("LGO 2D Dong Mon Label Rail Title", "ĐÔNG MÔN ROUTE", new Vector2(-0.93f, -2.51f), 0.023f, RuntimeArtCatalog.Gold, 60);
+            AddDongMonRouteChip("01", "Cổng", new Vector2(-0.20f, -2.56f), RuntimeArtCatalog.Gold);
+            AddDongMonRouteChip("02", "Bia", new Vector2(0.48f, -2.56f), RuntimeArtCatalog.Spirit);
+            AddDongMonRouteChip("03", "Jump", new Vector2(1.16f, -2.56f), RuntimeArtCatalog.Gold);
+            AddDongMonRouteChip("04", "Dash", new Vector2(1.86f, -2.56f), RuntimeArtCatalog.Spirit);
+            AddDongMonRouteChip("05", "Slime", new Vector2(2.58f, -2.56f), new Color(0.82f, 0.60f, 1f, 0.92f));
+        }
+
+        private void AddDongMonRouteChip(string index, string label, Vector2 position, Color accent)
+        {
+            AddSprite("LGO 2D Dong Mon Route Chip " + index + " Backing", position, new Vector2(0.58f, 0.15f), new Color(0.05f, 0.16f, 0.22f, 0.92f), 59);
+            AddSprite("LGO 2D Dong Mon Route Chip " + index + " Accent", position + new Vector2(-0.25f, 0f), new Vector2(0.05f, 0.15f), accent, 60);
+            AddWorldLabel("LGO 2D Dong Mon Route Chip " + index + " Label", index + " " + label, position + new Vector2(0.04f, -0.005f), 0.020f, RuntimeArtCatalog.Text, 61);
+        }
+
         private void AddDongMonTerrainCollisionCues()
         {
             AddSceneBeat("Đông Môn terrain collision cues - ground gap dash lane slime arena");
             AddSprite("LGO 2D Collision Ground Main", new Vector2(1.05f, -2.13f), new Vector2(5.90f, 0.055f), new Color(0.11f, 0.52f, 0.48f, 0.72f), -5);
             AddSprite("LGO 2D Collision Jump Gap Left Edge", new Vector2(0.35f, -1.40f), new Vector2(0.045f, 0.42f), RuntimeArtCatalog.Gold, -4);
             AddSprite("LGO 2D Collision Jump Gap Right Edge", new Vector2(1.32f, -1.40f), new Vector2(0.045f, 0.42f), RuntimeArtCatalog.Gold, -4);
-            AddWorldLabel("LGO 2D Collision Jump Gap Label", "JUMP GAP", new Vector2(0.84f, -1.18f), 0.024f, RuntimeArtCatalog.Gold, 7);
+            AddWorldLabel("LGO 2D Collision Jump Gap Label", "03", new Vector2(0.84f, -1.18f), 0.021f, RuntimeArtCatalog.Gold, 7);
             AddSprite("LGO 2D Collision Dash Lane", new Vector2(2.45f, -0.77f), new Vector2(1.78f, 0.045f), new Color(0.18f, 0.86f, 0.78f, 0.52f), -4);
-            AddWorldLabel("LGO 2D Collision Dash Lane Label", "DASH LANE", new Vector2(2.45f, -0.62f), 0.024f, RuntimeArtCatalog.Spirit, 7);
+            AddWorldLabel("LGO 2D Collision Dash Lane Label", "04", new Vector2(2.45f, -0.62f), 0.021f, RuntimeArtCatalog.Spirit, 7);
             AddSprite("LGO 2D Collision Slime Arena", new Vector2(3.60f, -1.66f), new Vector2(0.92f, 0.06f), new Color(0.48f, 0.20f, 0.82f, 0.42f), -4);
         }
 
