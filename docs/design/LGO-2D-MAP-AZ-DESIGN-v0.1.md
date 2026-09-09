@@ -165,7 +165,7 @@ Transition đầu tiên giữa map tutorial và hub là `east-gate -> plaza`. Ru
 ## Runtime map checkpoints hiện tại
 
 - World/Linh Thành/Đông Môn hiện là runtime checkpoint, chưa phải production-complete toàn bộ map.
-- Đông Môn đã có route tutorial, collision band, tile chunk flow, tile palette contract, authored runtime source asset, authored detail pass và parallax/landmark spine để kiểm movement/jump/dash/skill/Shadow Slime.
+- Đông Môn đã có route tutorial, collision band, tile chunk flow, tile palette contract, authored runtime source asset, authored chunk placement source, authored detail pass và parallax/landmark spine để kiểm movement/jump/dash/skill/Shadow Slime.
 - Linh Thành đã có hub shell, Quảng Trường shell, Học Viện shell, Thương Phố shell, Đền Linh shell, Khu Dân Cư shell, Khu Rèn shell, Khu Bang Hội shell, Cảng Linh Thuyền shell, unlock presentation từ Đông Môn, board/NPC preview, target selector và label readability pass.
 - Quảng Trường readability dùng quy tắc `world-label-density=reduced`: trong world chỉ để chip ngắn cho mục tiêu tương tác; text chi tiết đi vào HUD/snapshot/manifest để tránh che nhân vật và platform.
 - Next production map nên chuyển tile palette contract thành authored Unity Tilemap asset/palette thật hoặc gate shell local-only, rồi mới nâng tileset/detail. Không crop/dán board, không trang trí ngẫu nhiên và không kéo Meshy/3D trở lại branch 2D.
@@ -191,3 +191,5 @@ Cảng Linh Thuyền shell dùng `spirit-boat=preview-only` và `travel-board=lo
 Đông Môn tile palette contract dùng `DongMonTilePalette` để gắn mỗi tile với color role/pattern role/gameplay role: grass/stone/wood/gap/dash/slime có identity riêng, `safe-no-source-image`, và dải swatch runtime chỉ dùng để kiểm role trước khi thay bằng authored Tilemap asset thật.
 
 Đông Môn authored source asset `Resources/LGOMaps/DongMonTilePalette.json` là nguồn runtime đầu tiên cho map 2D: nó giữ palette role dưới dạng data đóng gói trong Player, không dùng ảnh source/3D, và giúp bước sau parse placement/chunk hoặc thay bằng Unity Tilemap asset thật mà không đổi contract gameplay.
+
+Đông Môn authored chunk placement source `Resources/LGOMaps/DongMonChunkPlacement.json` giữ vị trí/count/route-node của các chunk gameplay dưới dạng data đóng gói trong Player. Runtime hiện load placement này để dựng tile strip/paltform/dash/slime arena, giúp bước sau thay renderer procedural bằng Unity Tilemap hoặc sprite atlas mà không đổi route/collision contract.

@@ -54,7 +54,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_initial",
         "label": "2D Đông Môn initial HUD/map read",
         "screenshot": "01-initial.bmp",
-        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
+        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
         "nonClaim": "not production art",
     },
     {
@@ -154,6 +154,10 @@ def verify_current() -> dict[str, Any]:
     for token in ("DongMonTilePaletteSource", "resource=LGOMaps/DongMonTilePalette", "tile_dash_lane=True", "safe-no-source-image=True", "safe-runtime-resource=True"):
         if token not in source_snapshot:
             failures.append(f"runtimeDongMonTilePaletteSourceSnapshot missing {token!r}")
+    chunk_source_snapshot = str(manifest.get("runtimeDongMonChunkPlacementSourceSnapshot", ""))
+    for token in ("DongMonChunkPlacementSource", "resource=LGOMaps/DongMonChunkPlacement", "chunk_gate_entry@-3.70,-2.02x4", "chunk_dash_lane@1.82,-1.02x4", "authored-placement=True", "safe-runtime-resource=True", "safe-no-3d=True"):
+        if token not in chunk_source_snapshot:
+            failures.append(f"runtimeDongMonChunkPlacementSourceSnapshot missing {token!r}")
     authored_snapshot = str(manifest.get("runtimeDongMonAuthoredPassSnapshot", ""))
     for token in ("DongMonAuthoredPass", "route-segments=5", "detail-density=readable", "collision-boundaries=from-bands", "no-random-decoration"):
         if token not in authored_snapshot:

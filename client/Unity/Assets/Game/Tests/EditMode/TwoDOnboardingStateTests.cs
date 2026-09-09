@@ -1259,6 +1259,38 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeMapCatalogLoadsDongMonAuthoredChunkPlacementSourceAsset()
+        {
+            var sourceSnapshot = TwoDMapDesignCatalog.LoadDongMonChunkPlacementSourceSnapshot();
+
+            StringAssert.Contains("DongMonChunkPlacementSource", sourceSnapshot);
+            StringAssert.Contains("resource=LGOMaps/DongMonChunkPlacement", sourceSnapshot);
+            StringAssert.Contains("chunk_gate_entry@-3.70,-2.02x4", sourceSnapshot);
+            StringAssert.Contains("chunk_dash_lane@1.82,-1.02x4", sourceSnapshot);
+            StringAssert.Contains("authored-placement", sourceSnapshot);
+            StringAssert.Contains("safe-runtime-resource", sourceSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesDongMonAuthoredChunkPlacementForVisualEvidence()
+        {
+            var host = new GameObject("2D Dong Mon authored chunk placement source snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonChunkPlacementSource", controller.RuntimeDongMonChunkPlacementSourceSnapshot);
+                StringAssert.Contains("chunk_slime_arena@3.25,-1.36x2", controller.RuntimeDongMonChunkPlacementSourceSnapshot);
+                StringAssert.Contains("safe-no-3d", controller.RuntimeDongMonChunkPlacementSourceSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerExposesDongMonAuthoredPassForVisualEvidence()
         {
             var host = new GameObject("2D Dong Mon authored pass snapshot test host");

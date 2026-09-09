@@ -91,6 +91,7 @@ namespace LinhGioi.World
         public string RuntimeTilemapSnapshot => _mapCatalog.TilemapSnapshot;
         public string RuntimeDongMonTilePaletteSnapshot => _mapCatalog.DongMonTilePaletteSnapshot;
         public string RuntimeDongMonTilePaletteSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonTilePaletteSourceSnapshot();
+        public string RuntimeDongMonChunkPlacementSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonChunkPlacementSourceSnapshot();
         public string RuntimeDongMonAuthoredPassSnapshot => _mapCatalog.DongMonAuthoredPassSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
@@ -618,14 +619,47 @@ namespace LinhGioi.World
 
         private void AddDongMonProceduralTilemap()
         {
-            AddSceneBeat("TILEMAP Tile: grass/stone/wood/gap/dash/slime procedural Đông Môn tilemap spine");
+            AddSceneBeat("TILEMAP Tile: grass/stone/wood/gap/dash/slime authored Đông Môn chunk placement spine");
             AddSceneBeat("LGO 2D Tile Chunk chunk_gate_entry -> chunk_training_stone -> chunk_jump_bridge -> chunk_dash_lane -> chunk_slime_arena");
-            AddDongMonProceduralTileChunk("chunk_gate_entry", "tile_ground_grass", new Vector2(-3.70f, -2.02f), 4, new Color(0.13f, 0.32f, 0.22f), new Color(0.25f, 0.64f, 0.42f));
-            AddDongMonProceduralTileChunk("chunk_training_stone", "tile_ground_stone", new Vector2(-1.54f, -2.02f), 3, new Color(0.24f, 0.30f, 0.31f), RuntimeArtCatalog.Spirit);
-            AddDongMonProceduralTileChunk("chunk_jump_bridge", "tile_platform_wood", new Vector2(0.35f, -0.88f), 3, new Color(0.46f, 0.27f, 0.12f), new Color(0.58f, 0.34f, 0.16f));
-            AddDongMonProceduralTileChunk("chunk_dash_lane", "tile_dash_lane", new Vector2(1.82f, -1.02f), 4, new Color(0.10f, 0.48f, 0.47f, 0.70f), new Color(0.18f, 0.86f, 0.78f, 0.58f));
-            AddDongMonProceduralTileChunk("chunk_slime_arena", "tile_slime_arena", new Vector2(3.25f, -1.36f), 2, new Color(0.22f, 0.12f, 0.25f, 0.75f), new Color(0.48f, 0.20f, 0.82f, 0.38f));
+            AddSceneBeat(RuntimeDongMonChunkPlacementSourceSnapshot);
+            var chunks = TwoDMapDesignCatalog.LoadDongMonAuthoredChunkPlacements();
+            for (var i = 0; i < chunks.Length; i++)
+            {
+                ResolveDongMonTileColors(chunks[i].PrimaryTileId, out var bodyColor, out var lipColor);
+                AddDongMonProceduralTileChunk(chunks[i].Id, chunks[i].PrimaryTileId, new Vector2(chunks[i].OriginX, chunks[i].OriginY), chunks[i].TileCount, bodyColor, lipColor);
+            }
             AddSprite("LGO 2D Tile tile_gap_marker", new Vector2(0.84f, -1.72f), new Vector2(0.84f, 0.06f), new Color(0.04f, 0.07f, 0.10f), -6);
+        }
+
+        private static void ResolveDongMonTileColors(string tileId, out Color bodyColor, out Color lipColor)
+        {
+            switch (tileId)
+            {
+                case "tile_ground_grass":
+                    bodyColor = new Color(0.13f, 0.32f, 0.22f);
+                    lipColor = new Color(0.25f, 0.64f, 0.42f);
+                    break;
+                case "tile_ground_stone":
+                    bodyColor = new Color(0.24f, 0.30f, 0.31f);
+                    lipColor = RuntimeArtCatalog.Spirit;
+                    break;
+                case "tile_platform_wood":
+                    bodyColor = new Color(0.46f, 0.27f, 0.12f);
+                    lipColor = new Color(0.58f, 0.34f, 0.16f);
+                    break;
+                case "tile_dash_lane":
+                    bodyColor = new Color(0.10f, 0.48f, 0.47f, 0.70f);
+                    lipColor = new Color(0.18f, 0.86f, 0.78f, 0.58f);
+                    break;
+                case "tile_slime_arena":
+                    bodyColor = new Color(0.22f, 0.12f, 0.25f, 0.75f);
+                    lipColor = new Color(0.48f, 0.20f, 0.82f, 0.38f);
+                    break;
+                default:
+                    bodyColor = new Color(0.24f, 0.30f, 0.31f);
+                    lipColor = RuntimeArtCatalog.Spirit;
+                    break;
+            }
         }
 
         private void AddDongMonProceduralTileChunk(string chunkId, string tileId, Vector2 origin, int count, Color bodyColor, Color lipColor)

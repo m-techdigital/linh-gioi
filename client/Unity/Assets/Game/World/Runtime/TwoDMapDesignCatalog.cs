@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Text;
 using UnityEngine;
 
@@ -83,6 +84,7 @@ namespace LinhGioi.World
         public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhMarketShellSnapshot + "\n" + LinhThanhSpiritTempleShellSnapshot + "\n" + LinhThanhResidentialShellSnapshot + "\n" + LinhThanhForgeShellSnapshot + "\n" + LinhThanhGuildShellSnapshot + "\n" + LinhThanhHarborShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + DongMonTilePaletteSnapshot + "\n" + DongMonAuthoredPassSnapshot + "\n" + ParallaxDepthSnapshot;
 
         private const string DongMonTilePaletteResourcePath = "LGOMaps/DongMonTilePalette";
+        private const string DongMonChunkPlacementResourcePath = "LGOMaps/DongMonChunkPlacement";
 
         public static string LoadDongMonTilePaletteSourceSnapshot()
         {
@@ -102,9 +104,72 @@ namespace LinhGioi.World
                 + " | safe-runtime-resource=" + ContainsToken(text, "safe-runtime-resource");
         }
 
+        public static MapTileChunkDefinition[] LoadDongMonAuthoredChunkPlacements()
+        {
+            var source = LoadDongMonChunkPlacementSource();
+            if (source == null || source.chunks == null || source.chunks.Length == 0)
+            {
+                return CreateDefault().DongMonTileChunks;
+            }
+
+            var chunks = new MapTileChunkDefinition[source.chunks.Length];
+            for (var i = 0; i < source.chunks.Length; i++)
+            {
+                var chunk = source.chunks[i];
+                chunks[i] = new MapTileChunkDefinition(
+                    chunk.id ?? string.Empty,
+                    chunk.name ?? string.Empty,
+                    chunk.routeNodeId ?? string.Empty,
+                    chunk.primaryTileId ?? string.Empty,
+                    chunk.originX,
+                    chunk.originY,
+                    chunk.tileCount,
+                    chunk.gameplayRead ?? string.Empty);
+            }
+            return chunks;
+        }
+
+        public static string LoadDongMonChunkPlacementSourceSnapshot()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonChunkPlacementResourcePath);
+            if (asset == null)
+            {
+                return "DongMonChunkPlacementSource: resource=" + DongMonChunkPlacementResourcePath + " | missing";
+            }
+
+            var text = asset.text ?? string.Empty;
+            var chunks = LoadDongMonAuthoredChunkPlacements();
+            var builder = new StringBuilder("DongMonChunkPlacementSource: resource=");
+            builder.Append(DongMonChunkPlacementResourcePath);
+            builder.Append(" | bytes=").Append(text.Length);
+            for (var i = 0; i < chunks.Length; i++)
+            {
+                builder.Append(" | ").Append(chunks[i].Id).Append('@')
+                    .Append(FormatMapNumber(chunks[i].OriginX)).Append(',')
+                    .Append(FormatMapNumber(chunks[i].OriginY)).Append('x')
+                    .Append(chunks[i].TileCount);
+            }
+            builder.Append(" | authored-placement=").Append(ContainsToken(text, "authored-placement"));
+            builder.Append(" | safe-runtime-resource=").Append(ContainsToken(text, "safe-runtime-resource"));
+            builder.Append(" | safe-no-3d=").Append(ContainsToken(text, "safe-no-3d"));
+            return builder.ToString();
+        }
+
+        private static DongMonChunkPlacementSource LoadDongMonChunkPlacementSource()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonChunkPlacementResourcePath);
+            if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
+            return JsonUtility.FromJson<DongMonChunkPlacementSource>(asset.text);
+        }
+
         private static bool ContainsToken(string text, string token)
         {
             return text.IndexOf(token, StringComparison.Ordinal) >= 0;
+        }
+
+        private static string FormatMapNumber(float value)
+        {
+            return value.ToString("0.00", CultureInfo.InvariantCulture);
         }
 
         public static TwoDMapDesignCatalog CreateDefault()
@@ -400,6 +465,29 @@ namespace LinhGioi.World
         }
     }
 
+    [Serializable]
+    public sealed class DongMonChunkPlacementSource
+    {
+        public string id;
+        public string mapId;
+        public string chapter;
+        public string usage;
+        public string[] safety;
+        public DongMonChunkPlacementEntry[] chunks;
+    }
+
+    [Serializable]
+    public sealed class DongMonChunkPlacementEntry
+    {
+        public string id;
+        public string name;
+        public string routeNodeId;
+        public string primaryTileId;
+        public float originX;
+        public float originY;
+        public int tileCount;
+        public string gameplayRead;
+    }
 
     [Serializable]
     public readonly struct MapZone
@@ -432,7 +520,6 @@ namespace LinhGioi.World
         public string Name { get; }
         public string Role { get; }
     }
-
 
     [Serializable]
     public readonly struct MapZoneConnection

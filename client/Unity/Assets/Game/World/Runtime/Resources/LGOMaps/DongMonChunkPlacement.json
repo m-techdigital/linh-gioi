@@ -1,0 +1,14 @@
+{
+  "id": "dong-mon-chunk-placement-v0",
+  "mapId": "dong-mon",
+  "chapter": "Chapter 1: Vết Nứt Đông Môn",
+  "usage": "authored-placement",
+  "safety": ["safe-no-source-image", "safe-runtime-resource", "safe-no-3d"],
+  "chunks": [
+    {"id": "chunk_gate_entry", "name": "Gate Entry", "routeNodeId": "spawn", "primaryTileId": "tile_ground_grass", "originX": -3.70, "originY": -2.02, "tileCount": 4, "gameplayRead": "safe grass approach before NPC focus"},
+    {"id": "chunk_training_stone", "name": "Training Stone Path", "routeNodeId": "training-stone", "primaryTileId": "tile_ground_stone", "originX": -1.54, "originY": -2.02, "tileCount": 3, "gameplayRead": "stone path toward Bia Luyện Khí"},
+    {"id": "chunk_jump_bridge", "name": "Jump Bridge", "routeNodeId": "jump", "primaryTileId": "tile_platform_wood", "originX": 0.35, "originY": -0.88, "tileCount": 3, "gameplayRead": "wood platform and gap read for jump lesson"},
+    {"id": "chunk_dash_lane", "name": "Dash Lane", "routeNodeId": "dash", "primaryTileId": "tile_dash_lane", "originX": 1.82, "originY": -1.02, "tileCount": 4, "gameplayRead": "flat run-up lane for dash lesson"},
+    {"id": "chunk_slime_arena", "name": "Slime Arena", "routeNodeId": "shadow-slime", "primaryTileId": "tile_slime_arena", "originX": 3.25, "originY": -1.36, "tileCount": 2, "gameplayRead": "combat footing before outer forest"}
+  ]
+}
