@@ -89,6 +89,7 @@ namespace LinhGioi.World
         public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
         public string RuntimeTerrainCollisionSnapshot => _mapCatalog.CollisionSnapshot;
         public string RuntimeTilemapSnapshot => _mapCatalog.TilemapSnapshot;
+        public string RuntimeDongMonTilePaletteSnapshot => _mapCatalog.DongMonTilePaletteSnapshot;
         public string RuntimeDongMonAuthoredPassSnapshot => _mapCatalog.DongMonAuthoredPassSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
@@ -635,6 +636,18 @@ namespace LinhGioi.World
                 AddSprite("LGO 2D Tile Chunk " + chunkId + " " + tileId + " lip " + i, new Vector2(x, origin.y + 0.11f), new Vector2(0.46f, 0.035f), lipColor, -6);
             }
         }
+
+        private void AddDongMonTilePaletteSwatches()
+        {
+            AddSceneBeat("DONG_MON_TILE_PALETTE earth/stone/wood/gap/dash/slime swatches no source image");
+            AddSprite("LGO 2D Tile Palette Grass Swatch", new Vector2(-3.46f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.25f, 0.64f, 0.42f, 0.72f), -2);
+            AddSprite("LGO 2D Tile Palette Stone Swatch", new Vector2(-3.12f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.52f, 0.61f, 0.60f, 0.70f), -2);
+            AddSprite("LGO 2D Tile Palette Wood Swatch", new Vector2(-2.78f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.58f, 0.34f, 0.16f, 0.70f), -2);
+            AddSprite("LGO 2D Tile Palette Gap Swatch", new Vector2(-2.44f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.04f, 0.07f, 0.10f, 0.70f), -2);
+            AddSprite("LGO 2D Tile Palette Dash Swatch", new Vector2(-2.10f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.18f, 0.86f, 0.78f, 0.62f), -2);
+            AddSprite("LGO 2D Tile Palette Slime Swatch", new Vector2(-1.76f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.48f, 0.20f, 0.82f, 0.60f), -2);
+        }
+
 
         private void AddDongMonAuthoredDetailPass()
         {

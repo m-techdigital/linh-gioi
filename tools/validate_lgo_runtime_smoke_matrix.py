@@ -48,7 +48,7 @@ def check_list_output() -> None:
     for marker in ("two_d_onboarding_smoke", "two_d_player_build", "two_d_visual_capture", "runtimeMapSnapshot", "WorldMapNetwork", "LinhThanhHubRuntime", "HubShell", "district=plaza", "district=academy", "PlazaShell", "AcademyShell", "MarketShell", "SpiritTempleShell", "ResidentialShell", "ForgeShell", "GuildShell", "HarborShell", "safe-no-trade-backend", "safe-no-skill-backend", "safe-no-economy-backend", "safe-no-buff-backend", "safe-no-housing-backend", "safe-no-crafting-backend", "safe-no-guild-backend", "safe-no-travel-backend", "runtimeLinhThanhUnlockSnapshot", "LinhThanhUnlock", "unlock=plaza", "runtimeLinhThanhPlazaHubSnapshot", "PlazaHubRuntime", "runtimeLinhThanhAcademyShellSnapshot",
         "runtimeLinhThanhMarketShellSnapshot", "runtimeLinhThanhSpiritTempleShellSnapshot", "runtimeLinhThanhResidentialShellSnapshot", "runtimeLinhThanhForgeShellSnapshot", "runtimeLinhThanhGuildShellSnapshot", "runtimeLinhThanhHarborShellSnapshot", "npc=merchant-preview", "board=event-local-preview", "interaction=npc-merchant-preview", "safe-local-no-shop-backend", "runtimePlazaHubInputSnapshot", "PlazaHubInput", "layout=spaced-social-triangle",
         "runtimePlazaReadabilitySnapshot", "PlazaReadability", "mode=label-rail", "world-label-density=reduced",
-        "controls=P select, E interact", "runtimeTilemapSnapshot", "ChunkFlow", "runtimeDongMonAuthoredPassSnapshot", "DongMonAuthoredPass", "detail-density=readable"):
+        "controls=P select, E interact", "runtimeTilemapSnapshot", "ChunkFlow", "runtimeDongMonTilePaletteSnapshot", "DongMonTilePalette", "tile_dash_lane:spirit-cyan:wind-streak", "runtimeDongMonAuthoredPassSnapshot", "DongMonAuthoredPass", "detail-density=readable"):
         if marker not in two_d.stdout:
             ERRORS.append(f"two-d matrix list missing: {marker}")
 
@@ -100,6 +100,8 @@ def main() -> int:
         "safe-no-travel-backend",
         "runtimeTilemapSnapshot",
         "ChunkFlow",
+        "runtimeDongMonTilePaletteSnapshot",
+        "DongMonTilePalette",
         "runtimeDongMonAuthoredPassSnapshot",
         "DongMonAuthoredPass",
         "detail-density=readable",
@@ -148,6 +150,8 @@ def main() -> int:
         "safe-no-travel-backend",
         "runtimeTilemapSnapshot",
         "ChunkFlow",
+        "runtimeDongMonTilePaletteSnapshot",
+        "DongMonTilePalette",
         "runtimeDongMonAuthoredPassSnapshot",
         "DongMonAuthoredPass",
         "detail-density=readable",

@@ -54,7 +54,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_initial",
         "label": "2D Đông Môn initial HUD/map read",
         "screenshot": "01-initial.bmp",
-        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
+        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
         "nonClaim": "not production art",
     },
     {
@@ -146,6 +146,10 @@ def verify_current() -> dict[str, Any]:
     for token in ("Chapter 1 Tilemap", "ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"):
         if token not in tilemap_snapshot:
             failures.append(f"runtimeTilemapSnapshot missing {token!r}")
+    palette_snapshot = str(manifest.get("runtimeDongMonTilePaletteSnapshot", ""))
+    for token in ("DongMonTilePalette", "tile_ground_grass:earth-green:soft-grass-edge", "tile_dash_lane:spirit-cyan:wind-streak", "safe-no-source-image"):
+        if token not in palette_snapshot:
+            failures.append(f"runtimeDongMonTilePaletteSnapshot missing {token!r}")
     authored_snapshot = str(manifest.get("runtimeDongMonAuthoredPassSnapshot", ""))
     for token in ("DongMonAuthoredPass", "route-segments=5", "detail-density=readable", "collision-boundaries=from-bands", "no-random-decoration"):
         if token not in authored_snapshot:

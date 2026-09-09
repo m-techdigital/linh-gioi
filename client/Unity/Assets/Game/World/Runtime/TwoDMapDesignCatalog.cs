@@ -14,7 +14,8 @@ namespace LinhGioi.World
             MapLandmark[] dongMonLandmarks,
             MapCollisionBand[] dongMonCollisionBands,
             MapTileDefinition[] dongMonTileDefinitions,
-            MapTileChunkDefinition[] dongMonTileChunks)
+            MapTileChunkDefinition[] dongMonTileChunks,
+            MapTilePaletteEntry[] dongMonTilePalette)
         {
             WorldZones = worldZones;
             LinhThanhDistricts = linhThanhDistricts;
@@ -25,6 +26,7 @@ namespace LinhGioi.World
             DongMonCollisionBands = dongMonCollisionBands;
             DongMonTileDefinitions = dongMonTileDefinitions;
             DongMonTileChunks = dongMonTileChunks;
+            DongMonTilePalette = dongMonTilePalette;
             WorldSnapshot = BuildWorldSnapshot(worldZones, linhThanhDistricts);
             TutorialRouteSnapshot = BuildRouteSnapshot(dongMonRoute);
             LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
@@ -42,6 +44,7 @@ namespace LinhGioi.World
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
             TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions, dongMonTileChunks);
+            DongMonTilePaletteSnapshot = BuildDongMonTilePaletteSnapshot(dongMonTilePalette);
             DongMonAuthoredPassSnapshot = BuildDongMonAuthoredPassSnapshot(dongMonCollisionBands, dongMonTileChunks);
             ParallaxDepthSnapshot = BuildParallaxDepthSnapshot(layerBudgets);
         }
@@ -55,6 +58,7 @@ namespace LinhGioi.World
         public MapCollisionBand[] DongMonCollisionBands { get; }
         public MapTileDefinition[] DongMonTileDefinitions { get; }
         public MapTileChunkDefinition[] DongMonTileChunks { get; }
+        public MapTilePaletteEntry[] DongMonTilePalette { get; }
         public string WorldSnapshot { get; }
         public string TutorialRouteSnapshot { get; }
         public string LayerBudgetSnapshot { get; }
@@ -72,9 +76,10 @@ namespace LinhGioi.World
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
         public string TilemapSnapshot { get; }
+        public string DongMonTilePaletteSnapshot { get; }
         public string DongMonAuthoredPassSnapshot { get; }
         public string ParallaxDepthSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhMarketShellSnapshot + "\n" + LinhThanhSpiritTempleShellSnapshot + "\n" + LinhThanhResidentialShellSnapshot + "\n" + LinhThanhForgeShellSnapshot + "\n" + LinhThanhGuildShellSnapshot + "\n" + LinhThanhHarborShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + DongMonAuthoredPassSnapshot + "\n" + ParallaxDepthSnapshot;
+        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhMarketShellSnapshot + "\n" + LinhThanhSpiritTempleShellSnapshot + "\n" + LinhThanhResidentialShellSnapshot + "\n" + LinhThanhForgeShellSnapshot + "\n" + LinhThanhGuildShellSnapshot + "\n" + LinhThanhHarborShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + DongMonTilePaletteSnapshot + "\n" + DongMonAuthoredPassSnapshot + "\n" + ParallaxDepthSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -168,6 +173,15 @@ namespace LinhGioi.World
                     new MapTileChunkDefinition("chunk_jump_bridge", "Jump Bridge", "jump", "tile_platform_wood", 0.35f, -0.88f, 3, "wood platform and gap read for jump lesson"),
                     new MapTileChunkDefinition("chunk_dash_lane", "Dash Lane", "dash", "tile_dash_lane", 1.82f, -1.02f, 4, "flat run-up lane for dash lesson"),
                     new MapTileChunkDefinition("chunk_slime_arena", "Slime Arena", "shadow-slime", "tile_slime_arena", 3.25f, -1.36f, 2, "combat footing before outer forest")
+                },
+                new[]
+                {
+                    new MapTilePaletteEntry("tile_ground_grass", "earth-green", "soft-grass-edge", "walkable-ground"),
+                    new MapTilePaletteEntry("tile_ground_stone", "spirit-cyan", "stone-step-line", "walkable-ground"),
+                    new MapTilePaletteEntry("tile_platform_wood", "warm-wood", "rope-rail", "jump-platform"),
+                    new MapTilePaletteEntry("tile_gap_marker", "void-shadow", "negative-space", "jump-gap"),
+                    new MapTilePaletteEntry("tile_dash_lane", "spirit-cyan", "wind-streak", "dash-lane"),
+                    new MapTilePaletteEntry("tile_slime_arena", "violet-corruption", "rune-boundary", "combat-arena")
                 });
         }
 
@@ -338,6 +352,18 @@ namespace LinhGioi.World
             return builder.ToString();
         }
 
+        private static string BuildDongMonTilePaletteSnapshot(MapTilePaletteEntry[] palette)
+        {
+            var builder = new StringBuilder("DongMonTilePalette: ");
+            for (var i = 0; i < palette.Length; i++)
+            {
+                if (i > 0) builder.Append(" | ");
+                builder.Append(palette[i].TileId).Append(':').Append(palette[i].ColorRole).Append(':').Append(palette[i].PatternRole);
+            }
+            builder.Append(" | safe-no-source-image | safe-runtime-palette-contract");
+            return builder.ToString();
+        }
+
         private static string BuildDongMonAuthoredPassSnapshot(MapCollisionBand[] bands, MapTileChunkDefinition[] chunks)
         {
             var builder = new StringBuilder("DongMonAuthoredPass: route-segments=");
@@ -502,6 +528,24 @@ namespace LinhGioi.World
         public int TileCount { get; }
         public string Usage { get; }
     }
+
+    [Serializable]
+    public readonly struct MapTilePaletteEntry
+    {
+        public MapTilePaletteEntry(string tileId, string colorRole, string patternRole, string gameplayRole)
+        {
+            TileId = tileId;
+            ColorRole = colorRole;
+            PatternRole = patternRole;
+            GameplayRole = gameplayRole;
+        }
+
+        public string TileId { get; }
+        public string ColorRole { get; }
+        public string PatternRole { get; }
+        public string GameplayRole { get; }
+    }
+
 
     [Serializable]
     public readonly struct MapLayerBudget

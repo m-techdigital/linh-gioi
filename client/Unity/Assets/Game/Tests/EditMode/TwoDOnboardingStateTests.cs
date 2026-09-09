@@ -1195,6 +1195,40 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeMapCatalogKeepsDongMonTilePalette()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            Assert.That(map.DongMonTilePalette.Length, Is.GreaterThanOrEqualTo(6));
+            StringAssert.Contains("DongMonTilePalette", map.DongMonTilePaletteSnapshot);
+            StringAssert.Contains("tile_ground_grass:earth-green:soft-grass-edge", map.DongMonTilePaletteSnapshot);
+            StringAssert.Contains("tile_ground_stone:spirit-cyan:stone-step-line", map.DongMonTilePaletteSnapshot);
+            StringAssert.Contains("tile_platform_wood:warm-wood:rope-rail", map.DongMonTilePaletteSnapshot);
+            StringAssert.Contains("tile_slime_arena:violet-corruption:rune-boundary", map.DongMonTilePaletteSnapshot);
+            StringAssert.Contains("safe-no-source-image", map.DongMonTilePaletteSnapshot);
+            StringAssert.Contains("DongMonTilePalette", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesDongMonTilePaletteForVisualEvidence()
+        {
+            var host = new GameObject("2D Dong Mon tile palette snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonTilePalette", controller.RuntimeDongMonTilePaletteSnapshot);
+                StringAssert.Contains("tile_dash_lane:spirit-cyan:wind-streak", controller.RuntimeDongMonTilePaletteSnapshot);
+                StringAssert.Contains("safe-no-source-image", controller.RuntimeDongMonTilePaletteSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerExposesDongMonAuthoredPassForVisualEvidence()
         {
             var host = new GameObject("2D Dong Mon authored pass snapshot test host");
