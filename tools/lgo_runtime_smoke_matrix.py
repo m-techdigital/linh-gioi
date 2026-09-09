@@ -72,7 +72,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
             "runtimeLinhThanhPlazaHubSnapshot": ["PlazaHubRuntime", "unlocked=True", "npc=gate-guide", "npc=merchant-preview", "board=event-local-preview", "interaction=npc-merchant-preview", "safe-local-no-backend", "safe-local-no-shop-backend"],
             "runtimeTilemapSnapshot": ["ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
-            "runtimePlazaHubInputSnapshot": ["PlazaHubInput", "selected=merchant-preview", "controls=P select, E interact", "interaction=npc-merchant-preview", "safe-local-no-shop-backend"],
+            "runtimePlazaHubInputSnapshot": ["PlazaHubInput", "selected=merchant-preview", "layout=spaced-social-triangle", "controls=P select, E interact", "interaction=npc-merchant-preview", "safe-local-no-shop-backend"],
         },
         "marker": "LGO_RUNTIME_SMOKE_MATRIX_2D_PASS",
     },

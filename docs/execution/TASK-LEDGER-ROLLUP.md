@@ -248,3 +248,7 @@ Checkpoint `LGO_LINHTHANH_PLAZA_NPC_INTERACTION_READY`: Quảng Trường có NP
 ## 2026-09-10 — Quảng Trường target selector/input checkpoint
 
 `LGO_LINHTHANH_PLAZA_TARGET_SELECTOR_READY`: sau khi unlock Linh Thành, Quảng Trường có selector local-only cho ba mục tiêu hub: Bảng Sự Kiện, Người Giữ Cổng và Thương Nhân. Input runtime: `P` đổi mục tiêu, `E/Enter` tương tác mục tiêu đang chọn; manifest ghi `runtimePlazaHubInputSnapshot`, visual capture có frame `12-plaza-target-selector` và `13-plaza-npc-preview`. Gate đã chạy: Unity EditMode, Editor smoke, macOS Player build/capture, runtime smoke matrix và visual evidence matrix. Next map-safe action: tiếp tục A-Z map bằng Quảng Trường social layout/Đông Môn authored Tilemap hoặc hub transition shell, vẫn không mở shop/economy/teleport/bang hội/backend khi chưa có gate riêng.
+
+## 2026-09-10 — Quảng Trường social layout spacing
+
+`LGO_LINHTHANH_PLAZA_SOCIAL_LAYOUT_READY`: sau selector checkpoint, Quảng Trường được chỉnh spacing thành `spaced-social-triangle` để Gate Guide, Bảng Sự Kiện và Thương Nhân không dính vào nhau khi capture. TDD RED/GREEN bắt `runtimePlazaHubInputSnapshot` có layout token; Player build/capture/matrix PASS với 13 frame. Next map-safe action: nâng hub transition/local route hoặc authored Đông Môn Tilemap; vẫn không mở backend/frozen surfaces.

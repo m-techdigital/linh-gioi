@@ -740,6 +740,7 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("selected=merchant-preview", controller.RuntimeLinhThanhPlazaHubSnapshot);
                 StringAssert.Contains("selected=merchant-preview", controller.RuntimePlazaHubInputSnapshot);
                 StringAssert.Contains("controls=P select, E interact", controller.RuntimePlazaHubInputSnapshot);
+                StringAssert.Contains("layout=spaced-social-triangle", controller.RuntimePlazaHubInputSnapshot);
                 StringAssert.Contains("Thương Nhân: Hàng tân thủ", controller.WorldHudSnapshot);
                 StringAssert.Contains("không tạo tiền tệ", controller.WorldHudSnapshot);
                 StringAssert.Contains("LINH_THANH_PLAZA_HUB_RUNTIME", controller.ProductionSceneBeatSnapshot);

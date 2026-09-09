@@ -307,6 +307,7 @@ namespace LinhGioi.World
             return "PlazaHubInput: unlocked=" + _state.LinhThanhUnlocked
                 + " | selected=" + _state.SelectedPlazaHubTargetId
                 + " | label=" + _state.SelectedPlazaHubTargetLabel
+                + " | layout=spaced-social-triangle"
                 + " | controls=P select, E interact"
                 + " | interaction=" + (_state.LinhThanhUnlocked ? _state.PlazaHubInteractionId : "locked-until-unlock")
                 + " | safe-local-no-shop-backend";
@@ -314,9 +315,9 @@ namespace LinhGioi.World
 
         private Vector2 PlazaHubTargetPosition()
         {
-            if (_state.SelectedPlazaHubTargetId == "gate-guide") return new Vector2(-0.88f, 0.54f);
-            if (_state.SelectedPlazaHubTargetId == "merchant-preview") return new Vector2(0.28f, 0.52f);
-            return new Vector2(0.62f, 0.47f);
+            if (_state.SelectedPlazaHubTargetId == "gate-guide") return new Vector2(-0.98f, 0.50f);
+            if (_state.SelectedPlazaHubTargetId == "merchant-preview") return new Vector2(0.54f, 0.49f);
+            return new Vector2(-0.18f, 0.64f);
         }
 
         private string BuildLinhThanhUnlockSnapshot()
@@ -416,16 +417,18 @@ namespace LinhGioi.World
             var root = new GameObject("LGO 2D Plaza Hub Runtime Root");
             root.transform.SetParent(transform, false);
             _plazaHubRuntimeRoot = root.transform;
-            AddSprite("LGO 2D Plaza Gate Guide NPC", new Vector2(-0.88f, 0.82f), new Vector2(0.12f, 0.34f), new Color(0.92f, 0.72f, 0.28f, 0.72f), -2, _plazaHubRuntimeRoot);
+            AddSprite("LGO 2D Plaza Gate Guide NPC", new Vector2(-0.98f, 0.78f), new Vector2(0.12f, 0.34f), new Color(0.92f, 0.72f, 0.28f, 0.72f), -2, _plazaHubRuntimeRoot);
+            AddWorldLabel("LGO 2D Plaza Gate Guide Label", "Người Giữ Cổng", new Vector2(-0.98f, 0.33f), 0.018f, RuntimeArtCatalog.Gold, 6, _plazaHubRuntimeRoot);
             AddSprite("LGO 2D Plaza Wandering Student NPC", new Vector2(-0.02f, 0.78f), new Vector2(0.10f, 0.28f), new Color(0.54f, 0.86f, 0.92f, 0.66f), -2, _plazaHubRuntimeRoot);
-            AddSprite("LGO 2D Plaza Merchant Preview NPC", new Vector2(0.28f, 0.79f), new Vector2(0.13f, 0.30f), new Color(0.86f, 0.48f, 0.22f, 0.70f), -2, _plazaHubRuntimeRoot);
-            AddSprite("LGO 2D Plaza Merchant Pack", new Vector2(0.40f, 0.57f), new Vector2(0.18f, 0.12f), RuntimeArtCatalog.Gold, -1, _plazaHubRuntimeRoot);
-            AddSprite("LGO 2D Plaza Event Board Runtime", new Vector2(0.62f, 0.70f), new Vector2(0.34f, 0.32f), new Color(0.58f, 0.34f, 0.16f, 0.70f), -2, _plazaHubRuntimeRoot);
+            AddSprite("LGO 2D Plaza Merchant Preview NPC", new Vector2(0.54f, 0.76f), new Vector2(0.13f, 0.30f), new Color(0.86f, 0.48f, 0.22f, 0.70f), -2, _plazaHubRuntimeRoot);
+            AddSprite("LGO 2D Plaza Merchant Pack", new Vector2(0.68f, 0.56f), new Vector2(0.18f, 0.12f), RuntimeArtCatalog.Gold, -1, _plazaHubRuntimeRoot);
+            AddSprite("LGO 2D Plaza Event Board Runtime", new Vector2(-0.18f, 0.88f), new Vector2(0.38f, 0.34f), new Color(0.58f, 0.34f, 0.16f, 0.70f), -2, _plazaHubRuntimeRoot);
+            AddWorldLabel("LGO 2D Plaza Event Board Label", "Bảng Sự Kiện", new Vector2(-0.18f, 0.46f), 0.018f, RuntimeArtCatalog.Spirit, 6, _plazaHubRuntimeRoot);
             AddSprite("LGO 2D Plaza Guild Bulletin Locked Runtime", new Vector2(0.92f, 0.68f), new Vector2(0.22f, 0.28f), new Color(0.30f, 0.22f, 0.62f, 0.62f), -2, _plazaHubRuntimeRoot);
-            AddWorldLabel("LGO 2D Plaza Hub Runtime Label", "Quảng Trường: NPC + bảng sự kiện", new Vector2(0.12f, 0.42f), 0.022f, new Color(0.73f, 0.87f, 0.88f, 0.84f), 6, _plazaHubRuntimeRoot);
-            AddWorldLabel("LGO 2D Plaza Merchant Preview Label", "Thương Nhân preview", new Vector2(0.30f, 0.30f), 0.019f, RuntimeArtCatalog.Gold, 6, _plazaHubRuntimeRoot);
-            _plazaHubSelectorRing = AddSprite("LGO 2D Plaza Target Selector Ring", new Vector2(0.62f, 0.47f), new Vector2(0.42f, 0.08f), new Color(0.18f, 0.86f, 0.78f, 0.72f), 7, _plazaHubRuntimeRoot).transform;
-            _plazaHubSelectedLabel = AddWorldLabel("LGO 2D Plaza Selected Target Label", "Chọn: Bảng Sự Kiện", new Vector2(0.10f, 0.18f), 0.020f, RuntimeArtCatalog.Spirit, 7, _plazaHubRuntimeRoot);
+            AddWorldLabel("LGO 2D Plaza Hub Runtime Label", "Quảng Trường: social triangle", new Vector2(0.08f, 0.20f), 0.020f, new Color(0.73f, 0.87f, 0.88f, 0.84f), 6, _plazaHubRuntimeRoot);
+            AddWorldLabel("LGO 2D Plaza Merchant Preview Label", "Thương Nhân", new Vector2(0.56f, 0.31f), 0.018f, RuntimeArtCatalog.Gold, 6, _plazaHubRuntimeRoot);
+            _plazaHubSelectorRing = AddSprite("LGO 2D Plaza Target Selector Ring", new Vector2(-0.18f, 0.64f), new Vector2(0.46f, 0.08f), new Color(0.18f, 0.86f, 0.78f, 0.72f), 7, _plazaHubRuntimeRoot).transform;
+            _plazaHubSelectedLabel = AddWorldLabel("LGO 2D Plaza Selected Target Label", "Chọn: Bảng Sự Kiện", new Vector2(0.10f, 0.07f), 0.020f, RuntimeArtCatalog.Spirit, 7, _plazaHubRuntimeRoot);
             _plazaHubRuntimeRoot.gameObject.SetActive(false);
         }
 

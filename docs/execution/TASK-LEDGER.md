@@ -282,3 +282,14 @@ Closure `LGO_LINHTHANH_PLAZA_NPC_INTERACTION_READY`: thêm interaction local-onl
 ## Next after Plaza target selector
 
 Tiếp map A-Z bằng một batch player-visible có giá trị: Quảng Trường social layout rõ hơn, transition shell từ Đông Môn vào Linh Thành, hoặc authored Đông Môn Tilemap/tileset sạch. Giữ song song an toàn với tab class/art; chỉ chạm map/runtime/docs/tools liên quan.
+
+## 2026-09-10 — Quảng Trường social layout spacing
+
+- Chỉnh runtime plaza target presentation từ cụm sát nhau sang `spaced-social-triangle`: Gate Guide trái, Event Board giữa/phía sau, Merchant phải.
+- Thêm test trước cho `RuntimePlazaHubInputSnapshot` phải chứa `layout=spaced-social-triangle`; RED fail đúng 1 test vì token chưa có, GREEN sau implementation.
+- Cập nhật smoke validators để layout token nằm trong evidence contract.
+- Visual review frame `12-plaza-target-selector`/`13-plaza-npc-preview`: layout đọc tốt hơn, vẫn là blockout procedural chứ chưa phải art production.
+
+## Next after Plaza social layout
+
+Tiếp map bằng hub transition local-only hoặc authored Đông Môn Tilemap/tileset sạch. Nếu làm Quảng Trường tiếp, ưu tiên giảm chồng text xa và chuẩn bị vị trí shell cho Học Viện/Thương Phố/Bang Hội mà không bật chức năng backend.

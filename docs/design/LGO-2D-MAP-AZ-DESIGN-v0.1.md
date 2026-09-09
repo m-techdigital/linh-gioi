@@ -153,3 +153,7 @@ Sau khi unlock Đông Môn, Quảng Trường có Người Giữ Cổng và Thư
 Checkpoint 2026-09-10: Quảng Trường chưa phải production map hoàn chỉnh, nhưng đã có micro-flow player-visible an toàn sau Đông Môn. Ba target đầu tiên của hub là `event-board`, `gate-guide`, `merchant-preview`; input dùng `P` để đổi mục tiêu và `E/Enter` để tương tác local-only. Đây là nền để thiết kế layout social hub sau này: mỗi NPC/board/shop/guild node phải có target id, label, vị trí đọc rõ, trạng thái khóa/mở và guard backend rõ ràng trước khi bật chức năng thật.
 
 Quy tắc map tiếp theo: nếu thêm Thương Phố/Bang Hội/Học Viện ở Quảng Trường, runtime trước tiên chỉ tạo shell/preview và evidence, chưa mở shop/economy/guild/backend. Nếu chuyển Đông Môn sang authored Tilemap, vẫn giữ route node đã có: gatekeeper → training-stone → jump-gap → dash-lane → slime-arena → return-gate.
+
+### Plaza social triangle rule
+
+Checkpoint runtime đầu tiên cho Quảng Trường dùng layout `spaced-social-triangle`: NPC giữ cổng đặt bên trái như điểm quay lại tutorial, Bảng Sự Kiện đặt giữa/phía sau như điểm đọc thông tin cộng đồng, Thương Nhân đặt bên phải như preview trang bị local-only. Mọi target hub về sau nên đi theo cùng nguyên tắc: vị trí đọc được trên frame 640x480, có label riêng, selector ring riêng, snapshot token riêng và guard backend rõ ràng.
