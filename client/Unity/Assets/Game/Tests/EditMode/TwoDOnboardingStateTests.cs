@@ -670,6 +670,38 @@ namespace LinhGioi.Tests
         }
 
 
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhSpiritTempleShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("SpiritTempleShell: district=spirit-temple", map.LinhThanhSpiritTempleShellSnapshot);
+            StringAssert.Contains("blessing-altar=preview-only", map.LinhThanhSpiritTempleShellSnapshot);
+            StringAssert.Contains("story-shrine=locked", map.LinhThanhSpiritTempleShellSnapshot);
+            StringAssert.Contains("safe-no-buff-backend", map.LinhThanhSpiritTempleShellSnapshot);
+            StringAssert.Contains("SpiritTempleShell: district=spirit-temple", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhSpiritTempleShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh spirit temple shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("SpiritTempleShell: district=spirit-temple", controller.RuntimeLinhThanhSpiritTempleShellSnapshot);
+                StringAssert.Contains("safe-no-buff-backend", controller.RuntimeLinhThanhSpiritTempleShellSnapshot);
+                StringAssert.Contains("SpiritTempleShell: district=spirit-temple", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
 
 
         [Test]

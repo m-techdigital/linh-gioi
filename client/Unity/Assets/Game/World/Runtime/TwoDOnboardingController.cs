@@ -72,6 +72,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhPlazaShellSnapshot => _mapCatalog.LinhThanhPlazaShellSnapshot;
         public string RuntimeLinhThanhAcademyShellSnapshot => _mapCatalog.LinhThanhAcademyShellSnapshot;
         public string RuntimeLinhThanhMarketShellSnapshot => _mapCatalog.LinhThanhMarketShellSnapshot;
+        public string RuntimeLinhThanhSpiritTempleShellSnapshot => _mapCatalog.LinhThanhSpiritTempleShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
@@ -170,6 +171,7 @@ namespace LinhGioi.World
             AddLinhThanhPlazaShellPreview();
             AddLinhThanhAcademyShellPreview();
             AddLinhThanhMarketShellPreview();
+            AddLinhThanhSpiritTempleShellPreview();
             AddLinhThanhPlazaHubRuntimePreview();
             AddLinhThanhHubTransitionPreview();
             AddLinhThanhUnlockPresentation();
@@ -469,6 +471,17 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Market Stall Right", new Vector2(-2.74f, 0.66f), new Vector2(0.20f, 0.24f), new Color(0.18f, 0.86f, 0.78f, 0.26f), -14);
             AddSprite("LGO 2D Market Auction Board Locked", new Vector2(-2.92f, 0.48f), new Vector2(0.34f, 0.08f), new Color(0.30f, 0.22f, 0.62f, 0.32f), -13);
             AddWorldLabel("LGO 2D Market Shell Label", "Thương Phố", new Vector2(-3.26f, 1.08f), 0.019f, new Color(0.92f, 0.72f, 0.28f, 0.70f), -9);
+        }
+
+
+        private void AddLinhThanhSpiritTempleShellPreview()
+        {
+            AddSceneBeat("LINH_THANH_SPIRIT_TEMPLE_SHELL blessing-altar/story-shrine local-only no buff backend");
+            AddSprite("LGO 2D Spirit Temple Shrine Base", new Vector2(1.10f, 1.10f), new Vector2(0.42f, 0.24f), new Color(0.22f, 0.18f, 0.38f, 0.42f), -16);
+            AddSprite("LGO 2D Spirit Temple Roof", new Vector2(1.10f, 1.32f), new Vector2(0.52f, 0.09f), new Color(0.32f, 0.22f, 0.54f, 0.46f), -15);
+            AddSprite("LGO 2D Spirit Temple Altar Preview", new Vector2(0.98f, 0.92f), new Vector2(0.16f, 0.12f), new Color(0.92f, 0.72f, 0.28f, 0.32f), -14);
+            AddSprite("LGO 2D Spirit Temple Incense VFX", new Vector2(1.22f, 0.96f), new Vector2(0.06f, 0.30f), new Color(0.18f, 0.86f, 0.78f, 0.24f), -13);
+            AddWorldLabel("LGO 2D Spirit Temple Shell Label", "Đền Linh", new Vector2(0.90f, 1.52f), 0.019f, new Color(0.73f, 0.87f, 0.88f, 0.70f), -9);
         }
 
 
