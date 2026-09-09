@@ -10,6 +10,7 @@ namespace LinhGioi.World
         private static Sprite _solidSprite;
         private readonly TwoDOnboardingState _state = new TwoDOnboardingState();
         private readonly TwoDMapDesignCatalog _mapCatalog = TwoDMapDesignCatalog.CreateDefault();
+        private readonly TwoDCharacterBaseCatalog _characterBaseCatalog = TwoDCharacterBaseCatalog.CreateDefault();
         private Transform _player;
         private Transform _gateKeeper;
         private Transform _trainingStone;
@@ -33,6 +34,7 @@ namespace LinhGioi.World
         public string ProductionSceneBeatSnapshot => string.Join("\n", _productionSceneBeats.ToArray());
         public int ProductionSceneBeatCount => _productionSceneBeats.Count;
         public string RuntimeMapSnapshot => _mapCatalog.RuntimeSnapshot;
+        public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
 
         public static TwoDOnboardingController Attach(GameObject host)
         {
@@ -160,6 +162,7 @@ namespace LinhGioi.World
             AddWorldLabel("LGO 2D Mini Map Title", "BẢN ĐỒ", new Vector2(2.58f, 2.70f), 0.036f, RuntimeArtCatalog.Gold, 66);
             AddWorldLabel("LGO 2D Mini Map Hub", "Linh Thành", new Vector2(3.18f, 2.46f), 0.032f, RuntimeArtCatalog.Text, 66);
             AddWorldLabel("LGO 2D Mini Map Route", "Đông Môn → Bia → Jump → Dash → Slime", new Vector2(3.18f, 2.21f), 0.024f, RuntimeArtCatalog.Spirit, 66);
+            AddWorldLabel("LGO 2D Base Label", "Base: Male/Female layered", new Vector2(3.18f, 1.67f), 0.024f, RuntimeArtCatalog.Gold, 66);
 
             var route = _mapCatalog.DongMonRoute;
             for (var i = 0; i < route.Length && i < 6; i++)
@@ -280,7 +283,7 @@ namespace LinhGioi.World
         {
             var root = new GameObject(name);
             root.transform.position = ToWorld(position, order * 0.01f);
-            AddSprite(name + " Shadow", new Vector2(0f, -0.58f), new Vector2(0.72f, 0.12f), new Color(0f, 0f, 0f, 0.25f), order - 1, root.transform);
+            AddSprite(name + " LayeredCharacter Shadow", new Vector2(0f, -0.58f), new Vector2(0.72f, 0.12f), new Color(0f, 0f, 0f, 0.25f), order - 1, root.transform);
             AddSprite(name + " Left Leg", new Vector2(-0.11f, -0.54f), new Vector2(0.13f, 0.28f), robe * 0.72f, order - 1, root.transform);
             AddSprite(name + " Right Leg", new Vector2(0.11f, -0.54f), new Vector2(0.13f, 0.28f), robe * 0.72f, order - 1, root.transform);
             AddSprite(name + " Robe", new Vector2(0f, -0.16f), new Vector2(0.38f, 0.66f), robe, order, root.transform);

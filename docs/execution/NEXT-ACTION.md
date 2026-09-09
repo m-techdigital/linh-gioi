@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Scrolling Social Action MMORPG**, HD anime/stylized, không pixel-art, không Meshy/3D, map parallax nhiều lớp, social hub + action combat. Cleanup 3D đã commit/push ở `d97a3c8`, cleanup trace dịch vụ 3D ở `6bf905e`, xoá ảnh source cũ ở `646492e`, Đông Môn procedural blockout ở `eeaf19d`. Batch hiện tại đang cập nhật direction lock + map A-Z spec + runtime map catalog theo kịch bản mới để tránh đi lệch trước khi design/triển khai tiếp.
+Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Scrolling Social Action MMORPG**, HD anime/stylized, không pixel-art, không Meshy/3D, map parallax nhiều lớp, social hub + action combat. Cleanup 3D đã commit/push ở `d97a3c8`, cleanup trace dịch vụ 3D ở `6bf905e`, xoá ảnh source cũ ở `646492e`, Đông Môn procedural blockout ở `eeaf19d`, direction/map catalog ở `1fa3231`. Batch hiện tại đang đóng gói 2D-01 Male/Female Base Character: catalog base nam/nữ, layer order, anchor tối thiểu, default outfit và runtime manifest snapshot.
 
 ## Gate hiện tại
 
@@ -15,10 +15,10 @@ Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Sc
 
 ## Việc tiếp theo
 
-1. Commit/push batch direction lock + map catalog sau khi source validators, Unity EditMode, onboarding smoke và Player visual capture pass.
-2. Bắt đầu 2D-01: Male/Female Base Character bằng source/runtime procedural hoặc asset 2D mới được duyệt, có layer body/underwear/hair rõ và không dùng ảnh cũ.
-3. Sau 2D-01 mới sang 2D-02 Character Modular Runtime; map production lớn giữ cho 2D-09/2D-10, nhưng Đông Môn tutorial blockout vẫn được dùng làm runtime evidence.
+1. Commit/push batch 2D-01 sau khi source validators, Unity EditMode, onboarding smoke và Player visual capture pass.
+2. Bắt đầu 2D-02 Character Modular Runtime: registry slot/layer, equip/unequip runtime, preview hành trang `chọn icon → xem riêng món → thử trên người → Hủy/Áp dụng`.
+3. Sau 2D-02 mới đi 2D-03 Võ Lv1 outfit/module cơ bản; map production lớn giữ cho 2D-09/2D-10, nhưng Đông Môn tutorial blockout vẫn được dùng làm runtime evidence.
 
 ## Blocker
 
-Chưa có blocker. Visual capture hiện bắt được world stage, HUD world-space, minimap/route overlay và scene-beat metadata bằng camera render; manifest lưu `hudSnapshot`, `productionSceneBeatSnapshot`, `runtimeMapSnapshot` để kiểm copy/trạng thái. Ảnh source cũ đã bị loại khỏi source tree và có validator riêng để ngăn tái nhập nhầm.
+Chưa có blocker. Visual capture hiện bắt được world stage, HUD world-space, minimap/route overlay, scene-beat metadata và character base snapshot bằng camera render; manifest lưu `hudSnapshot`, `productionSceneBeatSnapshot`, `runtimeMapSnapshot`, `runtimeCharacterBaseSnapshot` để kiểm copy/trạng thái. Ảnh source cũ đã bị loại khỏi source tree và có validator riêng để ngăn tái nhập nhầm.

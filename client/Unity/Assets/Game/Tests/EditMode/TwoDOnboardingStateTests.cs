@@ -69,6 +69,40 @@ namespace LinhGioi.Tests
         }
 
 
+
+        [Test]
+        public void CharacterBaseCatalogDefinesMaleFemaleLayeredDefaults()
+        {
+            var catalog = TwoDCharacterBaseCatalog.CreateDefault();
+
+            Assert.That(catalog.Bases.Length, Is.EqualTo(2));
+            Assert.That(catalog.MinimumAnchorCount, Is.GreaterThanOrEqualTo(20));
+            StringAssert.Contains("male_base", catalog.Snapshot);
+            StringAssert.Contains("female_base", catalog.Snapshot);
+            StringAssert.Contains("HairFront", catalog.Snapshot);
+            StringAssert.Contains("WeaponAnchor", catalog.Snapshot);
+            StringAssert.Contains("grey shorts", catalog.Snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesCharacterBaseSnapshotForVisualEvidence()
+        {
+            var host = new GameObject("2D character base snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("male_base", controller.RuntimeCharacterBaseSnapshot);
+                StringAssert.Contains("female_base", controller.RuntimeCharacterBaseSnapshot);
+                StringAssert.Contains("LayeredCharacter", controller.RuntimeCharacterBaseSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsWorldHubAndDongMonRouteTogether()
         {

@@ -44,3 +44,11 @@ Owner cung cấp kịch bản game mới trước khi design. Đã khóa lại h
 ## Next after direction lock
 
 Sau khi checkpoint này pass/push, bắt đầu 2D-01 Male/Female Base Character; chỉ triển khai map production lớn sau khi character base/modular runtime đủ spine.
+
+## 2026-09-09 — 2D-01 Male/Female Base Character
+
+Đã bắt đầu spine base character theo kịch bản mới: `male_base` và `female_base`, default hair/innerwear xám, layer order từ Shadow đến UIAnchor, anchor tối thiểu cho body/equipment/hair/weapon/pet. Runtime controller expose `runtimeCharacterBaseSnapshot` vào visual manifest để các batch sau không tự chế slot/layer ngoài form chung. Đây vẫn là procedural/blockout base, chưa phải art final.
+
+## Next after 2D-01
+
+Sau khi commit/push checkpoint này, chuyển sang 2D-02 Character Modular Runtime: registry item/layer, equip/unequip, inventory preview flow đã được duyệt, và slot/id riêng cho tóc, mắt, trang bị, vũ khí, pet/spirit.

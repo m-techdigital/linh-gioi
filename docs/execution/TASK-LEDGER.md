@@ -62,3 +62,15 @@ Owner cung cấp kịch bản game mới trước khi design. Đã khóa lại h
 ## Next after direction lock
 
 Sau khi checkpoint này pass/push, bắt đầu 2D-01 Male/Female Base Character; chỉ triển khai map production lớn sau khi character base/modular runtime đủ spine.
+
+## 2026-09-09 — 2D-01 Male/Female Base Character
+
+- Bám kịch bản game mới: 2D Side-Scrolling Social Action MMORPG, HD anime/stylized, không Meshy/3D, class đến từ equipment/layer chứ không tách body riêng.
+- Thêm design doc `docs/design/LGO-2D-CHARACTER-BASE-DESIGN-v0.1.md` để khóa layer order, anchors và default outfit trước khi sản xuất modular gear.
+- Thêm runtime catalog `TwoDCharacterBaseCatalog` với `male_base`/`female_base`, layer order chuẩn, anchor tối thiểu và snapshot dùng trong visual manifest.
+- Runtime onboarding expose `runtimeCharacterBaseSnapshot` và minimap label Base để capture có bằng chứng base nam/nữ đang nằm trong spine runtime.
+- Evidence: Unity EditMode, onboarding smoke, Player visual capture manifest `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`, ảnh review `03-dialogue.png` và `05-complete.png`.
+
+## Next after 2D-01
+
+2D-02 Character Modular Runtime: item/layer registry, equip/unequip, preview hành trang đã duyệt, giữ tóc/mắt/trang bị/vũ khí/pet có id riêng và dùng form chung để tránh fit/chắp vá từng món.
