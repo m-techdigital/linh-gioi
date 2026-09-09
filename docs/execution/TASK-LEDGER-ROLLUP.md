@@ -349,3 +349,4 @@ Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và
 ## Next after Gate Keeper NPC sprite source
 
 `LGO_DONG_MON_GATEKEEPER_NPC_SPRITE_SOURCE_READY`: Người Giữ Cổng được dựng từ resource `DongMonNpcSprites.json` với 13 sprite parts/slot thay vì blockout generic; manifest/matrix bắt snapshot. Next: atlas sprite thật hoặc data hóa NPC/props còn lại.
+- LGO_2D_PRODUCTION_WORKFLOW_RESEARCH_READY: đã ghi `docs/execution/LGO-2D-PRODUCTION-WORKFLOW-RESEARCH-v0.1.md`; batch sau ưu tiên pipeline Tilemap/Sprite Atlas/paper-doll, dùng `tools/capture_lgo_2d_onboarding_visual.py`, không polish bằng rectangle primitive kéo dài.

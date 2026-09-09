@@ -194,3 +194,4 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 - Evidence cần giữ: `runtimeDongMonNpcSpriteSourceSnapshot` trong manifest với `role=tutorial-guide`, `silhouette=elder-robed-guardian-staff`, `safe-no-source-image`, `safe-no-3d`.
 - Giới hạn: vẫn là runtime blockout/stylized sprite parts, chưa phải final concept art/NPC animation.
 - Next: mở atlas/sprite thật cho NPC hoặc áp pattern này cho Training Stone/Shadow Slime/hub NPC.
+- LGO_2D_PRODUCTION_WORKFLOW_RESEARCH_READY: đã ghi `docs/execution/LGO-2D-PRODUCTION-WORKFLOW-RESEARCH-v0.1.md`; batch sau ưu tiên pipeline Tilemap/Sprite Atlas/paper-doll, dùng `tools/capture_lgo_2d_onboarding_visual.py`, không polish bằng rectangle primitive kéo dài.

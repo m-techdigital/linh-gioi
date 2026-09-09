@@ -197,3 +197,4 @@ Không mở shop/economy, teleport thật, giao dịch, bang hội, HP/loot/serv
 
 `LGO_DONG_MON_GATEKEEPER_NPC_SPRITE_SOURCE_READY`: Người Giữ Cổng đã có resource sprite-part riêng `DongMonNpcSprites.json` và runtime render từ slot/anchor. Next map-safe action: áp cùng pattern cho Training Stone/Shadow Slime/NPC hub hoặc thay slot bằng atlas sprite thật khi art sạch sẵn sàng; không mở backend/social/shop.
 - LGO_2D_MACOS_PLAYER_CWD_CAPTURE_LESSON: khi chạy macOS Player evidence cho 2D onboarding, dùng `tools/capture_lgo_2d_onboarding_visual.py` hoặc launch executable từ `Contents/MacOS`; chạy trực tiếp từ repo root có thể init engine rồi thoát trước khi `GameBootstrap` ghi manifest/screenshot.
+- LGO_2D_PRODUCTION_WORKFLOW_RESEARCH_READY: đã ghi `docs/execution/LGO-2D-PRODUCTION-WORKFLOW-RESEARCH-v0.1.md`; batch sau ưu tiên pipeline Tilemap/Sprite Atlas/paper-doll, dùng `tools/capture_lgo_2d_onboarding_visual.py`, không polish bằng rectangle primitive kéo dài.
