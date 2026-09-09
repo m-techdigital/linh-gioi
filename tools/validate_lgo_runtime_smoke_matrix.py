@@ -45,8 +45,8 @@ def check_list_output() -> None:
     if two_d.returncode != 0:
         ERRORS.append(two_d.stderr.strip() or "two-d matrix list failed")
         return
-    for marker in ("two_d_onboarding_smoke", "two_d_player_build", "two_d_visual_capture", "runtimeMapSnapshot", "WorldMapNetwork", "LinhThanhHubRuntime", "HubShell", "district=plaza", "district=academy", "PlazaShell", "AcademyShell", "MarketShell", "SpiritTempleShell", "ResidentialShell", "ForgeShell", "GuildShell", "safe-no-trade-backend", "safe-no-skill-backend", "safe-no-economy-backend", "safe-no-buff-backend", "safe-no-housing-backend", "safe-no-crafting-backend", "safe-no-guild-backend", "runtimeLinhThanhUnlockSnapshot", "LinhThanhUnlock", "unlock=plaza", "runtimeLinhThanhPlazaHubSnapshot", "PlazaHubRuntime", "runtimeLinhThanhAcademyShellSnapshot",
-        "runtimeLinhThanhMarketShellSnapshot", "runtimeLinhThanhSpiritTempleShellSnapshot", "runtimeLinhThanhResidentialShellSnapshot", "runtimeLinhThanhForgeShellSnapshot", "runtimeLinhThanhGuildShellSnapshot", "npc=merchant-preview", "board=event-local-preview", "interaction=npc-merchant-preview", "safe-local-no-shop-backend", "runtimePlazaHubInputSnapshot", "PlazaHubInput", "layout=spaced-social-triangle",
+    for marker in ("two_d_onboarding_smoke", "two_d_player_build", "two_d_visual_capture", "runtimeMapSnapshot", "WorldMapNetwork", "LinhThanhHubRuntime", "HubShell", "district=plaza", "district=academy", "PlazaShell", "AcademyShell", "MarketShell", "SpiritTempleShell", "ResidentialShell", "ForgeShell", "GuildShell", "HarborShell", "safe-no-trade-backend", "safe-no-skill-backend", "safe-no-economy-backend", "safe-no-buff-backend", "safe-no-housing-backend", "safe-no-crafting-backend", "safe-no-guild-backend", "safe-no-travel-backend", "runtimeLinhThanhUnlockSnapshot", "LinhThanhUnlock", "unlock=plaza", "runtimeLinhThanhPlazaHubSnapshot", "PlazaHubRuntime", "runtimeLinhThanhAcademyShellSnapshot",
+        "runtimeLinhThanhMarketShellSnapshot", "runtimeLinhThanhSpiritTempleShellSnapshot", "runtimeLinhThanhResidentialShellSnapshot", "runtimeLinhThanhForgeShellSnapshot", "runtimeLinhThanhGuildShellSnapshot", "runtimeLinhThanhHarborShellSnapshot", "npc=merchant-preview", "board=event-local-preview", "interaction=npc-merchant-preview", "safe-local-no-shop-backend", "runtimePlazaHubInputSnapshot", "PlazaHubInput", "layout=spaced-social-triangle",
         "runtimePlazaReadabilitySnapshot", "PlazaReadability", "mode=label-rail", "world-label-density=reduced",
         "controls=P select, E interact", "runtimeTilemapSnapshot", "ChunkFlow"):
         if marker not in two_d.stdout:
@@ -89,6 +89,7 @@ def main() -> int:
         "ResidentialShell",
         "ForgeShell",
         "GuildShell",
+        "HarborShell",
         "safe-no-trade-backend",
         "safe-no-skill-backend",
         "safe-no-economy-backend",
@@ -96,6 +97,7 @@ def main() -> int:
         "safe-no-housing-backend",
         "safe-no-crafting-backend",
         "safe-no-guild-backend",
+        "safe-no-travel-backend",
         "runtimeTilemapSnapshot",
         "ChunkFlow",
         "LGO_RUNTIME_SMOKE_MATRIX_2D_PASS",
@@ -132,6 +134,7 @@ def main() -> int:
         "ResidentialShell",
         "ForgeShell",
         "GuildShell",
+        "HarborShell",
         "safe-no-trade-backend",
         "safe-no-skill-backend",
         "safe-no-economy-backend",
@@ -139,6 +142,7 @@ def main() -> int:
         "safe-no-housing-backend",
         "safe-no-crafting-backend",
         "safe-no-guild-backend",
+        "safe-no-travel-backend",
         "runtimeTilemapSnapshot",
         "ChunkFlow",
     )

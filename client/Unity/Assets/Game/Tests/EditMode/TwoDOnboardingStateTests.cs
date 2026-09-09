@@ -798,6 +798,38 @@ namespace LinhGioi.Tests
         }
 
 
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhHarborShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("HarborShell: district=harbor", map.LinhThanhHarborShellSnapshot);
+            StringAssert.Contains("spirit-boat=preview-only", map.LinhThanhHarborShellSnapshot);
+            StringAssert.Contains("travel-board=locked", map.LinhThanhHarborShellSnapshot);
+            StringAssert.Contains("safe-no-travel-backend", map.LinhThanhHarborShellSnapshot);
+            StringAssert.Contains("HarborShell: district=harbor", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhHarborShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh harbor shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("HarborShell: district=harbor", controller.RuntimeLinhThanhHarborShellSnapshot);
+                StringAssert.Contains("safe-no-travel-backend", controller.RuntimeLinhThanhHarborShellSnapshot);
+                StringAssert.Contains("HarborShell: district=harbor", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
 
 
         [Test]

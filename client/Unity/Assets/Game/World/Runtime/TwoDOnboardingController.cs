@@ -76,6 +76,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhResidentialShellSnapshot => _mapCatalog.LinhThanhResidentialShellSnapshot;
         public string RuntimeLinhThanhForgeShellSnapshot => _mapCatalog.LinhThanhForgeShellSnapshot;
         public string RuntimeLinhThanhGuildShellSnapshot => _mapCatalog.LinhThanhGuildShellSnapshot;
+        public string RuntimeLinhThanhHarborShellSnapshot => _mapCatalog.LinhThanhHarborShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
@@ -178,6 +179,7 @@ namespace LinhGioi.World
             AddLinhThanhResidentialShellPreview();
             AddLinhThanhForgeShellPreview();
             AddLinhThanhGuildShellPreview();
+            AddLinhThanhHarborShellPreview();
             AddLinhThanhPlazaHubRuntimePreview();
             AddLinhThanhHubTransitionPreview();
             AddLinhThanhUnlockPresentation();
@@ -523,6 +525,18 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Guild Banner Local", new Vector2(1.38f, 0.78f), new Vector2(0.08f, 0.26f), new Color(0.92f, 0.72f, 0.28f, 0.34f), -14);
             AddSprite("LGO 2D Guild Notice Board Locked", new Vector2(1.76f, 0.78f), new Vector2(0.18f, 0.08f), new Color(0.18f, 0.86f, 0.78f, 0.26f), -13);
             AddWorldLabel("LGO 2D Guild Shell Label", "Khu Bang Hội", new Vector2(1.26f, 1.38f), 0.018f, new Color(0.73f, 0.87f, 0.88f, 0.68f), -9);
+        }
+
+
+        private void AddLinhThanhHarborShellPreview()
+        {
+            AddSceneBeat("LINH_THANH_HARBOR_SHELL spirit-boat/travel-board local-only no travel backend");
+            AddSprite("LGO 2D Harbor Dock Line", new Vector2(-0.18f, -0.74f), new Vector2(0.86f, 0.07f), new Color(0.38f, 0.21f, 0.10f, 0.42f), -12);
+            AddSprite("LGO 2D Harbor Spirit Boat Hull", new Vector2(0.08f, -0.60f), new Vector2(0.42f, 0.10f), new Color(0.18f, 0.40f, 0.62f, 0.36f), -11);
+            AddSprite("LGO 2D Harbor Spirit Boat Sail", new Vector2(0.18f, -0.42f), new Vector2(0.10f, 0.26f), new Color(0.18f, 0.86f, 0.78f, 0.26f), -10);
+            AddSprite("LGO 2D Harbor Travel Board Locked", new Vector2(-0.42f, -0.54f), new Vector2(0.18f, 0.10f), new Color(0.92f, 0.72f, 0.28f, 0.26f), -10);
+            AddSprite("LGO 2D Harbor Lantern Local", new Vector2(0.50f, -0.54f), new Vector2(0.06f, 0.18f), new Color(0.92f, 0.38f, 0.16f, 0.24f), -9);
+            AddWorldLabel("LGO 2D Harbor Shell Label", "Cảng Linh Thuyền", new Vector2(-0.58f, -0.36f), 0.017f, new Color(0.73f, 0.87f, 0.88f, 0.66f), -8);
         }
 
 

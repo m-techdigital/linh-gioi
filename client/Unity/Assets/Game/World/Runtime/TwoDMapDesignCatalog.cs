@@ -37,6 +37,7 @@ namespace LinhGioi.World
             LinhThanhResidentialShellSnapshot = BuildLinhThanhResidentialShellSnapshot();
             LinhThanhForgeShellSnapshot = BuildLinhThanhForgeShellSnapshot();
             LinhThanhGuildShellSnapshot = BuildLinhThanhGuildShellSnapshot();
+            LinhThanhHarborShellSnapshot = BuildLinhThanhHarborShellSnapshot();
             LinhThanhPlazaHubRuntimeSnapshot = BuildLinhThanhPlazaHubRuntimeSnapshot();
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
@@ -65,12 +66,13 @@ namespace LinhGioi.World
         public string LinhThanhResidentialShellSnapshot { get; }
         public string LinhThanhForgeShellSnapshot { get; }
         public string LinhThanhGuildShellSnapshot { get; }
+        public string LinhThanhHarborShellSnapshot { get; }
         public string LinhThanhPlazaHubRuntimeSnapshot { get; }
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
         public string TilemapSnapshot { get; }
         public string ParallaxDepthSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhMarketShellSnapshot + "\n" + LinhThanhSpiritTempleShellSnapshot + "\n" + LinhThanhResidentialShellSnapshot + "\n" + LinhThanhForgeShellSnapshot + "\n" + LinhThanhGuildShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
+        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhMarketShellSnapshot + "\n" + LinhThanhSpiritTempleShellSnapshot + "\n" + LinhThanhResidentialShellSnapshot + "\n" + LinhThanhForgeShellSnapshot + "\n" + LinhThanhGuildShellSnapshot + "\n" + LinhThanhHarborShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -255,6 +257,12 @@ namespace LinhGioi.World
         private static string BuildLinhThanhGuildShellSnapshot()
         {
             return "GuildShell: district=guild | guild-hall=preview-only | guild-banner=local-preview | notice-board=locked | safe-no-guild-backend | safe-no-membership-backend | safe-local-no-backend";
+        }
+
+
+        private static string BuildLinhThanhHarborShellSnapshot()
+        {
+            return "HarborShell: district=harbor | spirit-boat=preview-only | travel-board=locked | dock-lantern=local-preview | safe-no-travel-backend | safe-no-teleport-backend | safe-local-no-backend";
         }
 
 

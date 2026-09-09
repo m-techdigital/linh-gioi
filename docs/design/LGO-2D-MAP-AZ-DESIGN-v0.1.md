@@ -166,9 +166,9 @@ Transition đầu tiên giữa map tutorial và hub là `east-gate -> plaza`. Ru
 
 - World/Linh Thành/Đông Môn hiện là runtime checkpoint, chưa phải production-complete toàn bộ map.
 - Đông Môn đã có route tutorial, collision band, tile chunk flow và parallax/landmark spine để kiểm movement/jump/dash/skill/Shadow Slime.
-- Linh Thành đã có hub shell, Quảng Trường shell, Học Viện shell, Thương Phố shell, Đền Linh shell, Khu Dân Cư shell, Khu Rèn shell, Khu Bang Hội shell, unlock presentation từ Đông Môn, board/NPC preview, target selector và label readability pass.
+- Linh Thành đã có hub shell, Quảng Trường shell, Học Viện shell, Thương Phố shell, Đền Linh shell, Khu Dân Cư shell, Khu Rèn shell, Khu Bang Hội shell, Cảng Linh Thuyền shell, unlock presentation từ Đông Môn, board/NPC preview, target selector và label readability pass.
 - Quảng Trường readability dùng quy tắc `world-label-density=reduced`: trong world chỉ để chip ngắn cho mục tiêu tương tác; text chi tiết đi vào HUD/snapshot/manifest để tránh che nhân vật và platform.
-- Next production map nên đi theo từng khu: Học Viện hoặc Thương Phố shell trước, rồi mới nâng tileset/collision/detail. Không crop/dán board và không kéo Meshy/3D trở lại branch 2D.
+- Next production map nên đi authored Đông Môn Tilemap/collision polish hoặc gate shell local-only, rồi mới nâng tileset/detail. Không crop/dán board và không kéo Meshy/3D trở lại branch 2D.
 
 Học Viện shell dùng `skill-hall=preview-only` và `class-trainer=locked` để giữ đúng lộ trình progression: bản đồ có điểm nhận diện học kỹ năng, nhưng chưa mở skill backend, class progression hoặc UI học kỹ năng khi chưa có task/gate riêng.
 
@@ -181,3 +181,5 @@ Khu Dân Cư shell dùng `npc-home-row=preview-only` và `social-chat-node=locke
 Khu Rèn shell dùng `anvil-row=preview-only` và `craft-board=locked` để nhận diện crafting district trong Linh Thành mà chưa mở crafting backend, upgrade economy hoặc item mutation khi chưa có gate riêng.
 
 Khu Bang Hội shell dùng `guild-hall=preview-only`, `guild-banner=local-preview` và `notice-board=locked` để bám North Star social MMORPG ở mức map, nhưng chưa mở guild backend, membership, chat hoặc guild progression khi chưa có gate riêng.
+
+Cảng Linh Thuyền shell dùng `spirit-boat=preview-only` và `travel-board=locked` để nhận diện trục travel/event của Linh Thành mà chưa mở travel backend, teleport hoặc world-route execution khi chưa có gate riêng.
