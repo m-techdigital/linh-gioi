@@ -68,6 +68,42 @@ namespace LinhGioi.Tests
             Assert.AreEqual(TwoDOnboardingAction.Train, state.AvailableAction);
         }
 
+
+        [Test]
+        public void RuntimeMapCatalogKeepsWorldHubAndDongMonRouteTogether()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            Assert.That(map.WorldZones.Length, Is.GreaterThanOrEqualTo(10));
+            Assert.That(map.LinhThanhDistricts.Length, Is.GreaterThanOrEqualTo(8));
+            Assert.That(map.DongMonRoute.Length, Is.GreaterThanOrEqualTo(6));
+            StringAssert.Contains("Linh Thành", map.WorldSnapshot);
+            StringAssert.Contains("Đông Môn", map.WorldSnapshot);
+            StringAssert.Contains("Người Giữ Cổng", map.TutorialRouteSnapshot);
+            StringAssert.Contains("Bia Luyện Khí", map.TutorialRouteSnapshot);
+            StringAssert.Contains("Mini Boss", map.TutorialRouteSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesMapSnapshotForVisualEvidence()
+        {
+            var host = new GameObject("2D onboarding map snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("World", controller.RuntimeMapSnapshot);
+                StringAssert.Contains("Linh Thành", controller.RuntimeMapSnapshot);
+                StringAssert.Contains("Đông Môn", controller.RuntimeMapSnapshot);
+                StringAssert.Contains("Mini Boss", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeControllerBuildsReadableProceduralSceneBeats()
         {

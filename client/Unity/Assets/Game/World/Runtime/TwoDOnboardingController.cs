@@ -9,6 +9,7 @@ namespace LinhGioi.World
         private const float MoveSpeed = 2.75f;
         private static Sprite _solidSprite;
         private readonly TwoDOnboardingState _state = new TwoDOnboardingState();
+        private readonly TwoDMapDesignCatalog _mapCatalog = TwoDMapDesignCatalog.CreateDefault();
         private Transform _player;
         private Transform _gateKeeper;
         private Transform _trainingStone;
@@ -31,6 +32,7 @@ namespace LinhGioi.World
         public int WorldHudLineCount { get; private set; }
         public string ProductionSceneBeatSnapshot => string.Join("\n", _productionSceneBeats.ToArray());
         public int ProductionSceneBeatCount => _productionSceneBeats.Count;
+        public string RuntimeMapSnapshot => _mapCatalog.RuntimeSnapshot;
 
         public static TwoDOnboardingController Attach(GameObject host)
         {
@@ -108,6 +110,7 @@ namespace LinhGioi.World
             AddSceneBeat("Bia Luyện Khí - mục tiêu tương tác");
             _trainingStone = AddTrainingStone("LGO 2D Training Stone", TwoDOnboardingState.TrainingStonePosition, -2);
             AddWorldLabel("LGO 2D Stone Label", "BIA LUYỆN KHÍ", TwoDOnboardingState.TrainingStonePosition + new Vector2(-0.64f, 0.78f), 0.038f, RuntimeArtCatalog.Spirit, 2);
+            BuildRuntimeMapOverlay();
             AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
             _focusRing = AddSceneSprite("LGO 2D Focus Ring", "Vòng chọn mục tiêu tương tác", TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f, new Vector2(1.45f, 0.16f), RuntimeArtCatalog.Spirit, 1).transform;
@@ -148,6 +151,25 @@ namespace LinhGioi.World
                 _trainingStone.localScale = new Vector3(pulse, pulse, 1f);
             }
             RefreshWorldHud();
+        }
+
+        private void BuildRuntimeMapOverlay()
+        {
+            AddSceneBeat("Minimap Đông Môn theo route A-Z");
+            AddSprite("LGO 2D Mini Map Panel", new Vector2(3.18f, 2.22f), new Vector2(1.98f, 1.18f), new Color(0.03f, 0.08f, 0.13f, 0.92f), 55);
+            AddWorldLabel("LGO 2D Mini Map Title", "BẢN ĐỒ", new Vector2(2.58f, 2.70f), 0.036f, RuntimeArtCatalog.Gold, 66);
+            AddWorldLabel("LGO 2D Mini Map Hub", "Linh Thành", new Vector2(3.18f, 2.46f), 0.032f, RuntimeArtCatalog.Text, 66);
+            AddWorldLabel("LGO 2D Mini Map Route", "Đông Môn → Bia → Jump → Dash → Slime", new Vector2(3.18f, 2.21f), 0.024f, RuntimeArtCatalog.Spirit, 66);
+
+            var route = _mapCatalog.DongMonRoute;
+            for (var i = 0; i < route.Length && i < 6; i++)
+            {
+                var x = 2.35f + i * 0.31f;
+                var markerColor = i <= 2 ? RuntimeArtCatalog.Spirit : new Color(0.42f, 0.54f, 0.62f, 0.85f);
+                AddSprite("LGO 2D Mini Map Node " + route[i].Id, new Vector2(x, 1.92f), new Vector2(0.10f, 0.10f), markerColor, 64);
+                if (i > 0)
+                    AddSprite("LGO 2D Mini Map Link " + i, new Vector2(x - 0.16f, 1.92f), new Vector2(0.19f, 0.025f), new Color(0.18f, 0.70f, 0.75f, 0.72f), 63);
+            }
         }
 
         private void BuildWorldHud()
