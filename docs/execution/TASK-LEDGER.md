@@ -212,3 +212,11 @@ LGO_RELEASE_CHECKLIST_READY. Đã xác minh checklist release bằng `python3.12
 ## Next after release checklist
 
 Tiếp tục task advisor kế tiếp hoặc quay lại cải thiện runtime/player-visible 2D khi scope an toàn và không xung đột tab class.
+
+## 2026-09-09 — Đông Môn parallax/foreground polish
+
+LGO_DONGMON_PARALLAX_POLISH_READY. Đã thêm `ParallaxDepthSnapshot` vào map catalog và render polish procedural cho Đông Môn: cloud drift ở Sky/Fog, mountain silhouette ở Far Background, mist veil/cỏ foreground thấp để runtime bớt phẳng nhưng không che HUD, combat hoặc inventory. Evidence mới: Unity EditMode PASS, Editor smoke PASS, macOS Player build PASS (`totalSize=114184847`, app thực tế `109M`), Player visual capture PASS 10 frame; manifest chứa `ParallaxDepth: Layer5=Sky/Fog:cloud-drift | Layer4=Far Background:mountain-silhouette | Layer0=Foreground:grass-leaf-motes`. Unity log có bước `prepared ~36238M` nhưng output app không phình tương ứng; cần follow-up tối ưu/điều tra incremental build cache nếu build tiếp tục chậm.
+
+## Next after parallax polish
+
+Tiếp tục roadmap 2D không xung đột tab class: hoặc điều tra/tối ưu macOS Player build prepared-size, hoặc nâng inventory inspect/icon grid bằng procedural UI, hoặc chuyển Đông Môn sang authored Tilemap asset khi có asset sạch hợp lệ.

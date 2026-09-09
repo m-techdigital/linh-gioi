@@ -29,6 +29,7 @@ namespace LinhGioi.World
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
             TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions, dongMonTileChunks);
+            ParallaxDepthSnapshot = BuildParallaxDepthSnapshot(layerBudgets);
         }
 
         public MapZone[] WorldZones { get; }
@@ -45,7 +46,8 @@ namespace LinhGioi.World
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
         public string TilemapSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot;
+        public string ParallaxDepthSnapshot { get; }
+        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -192,6 +194,11 @@ namespace LinhGioi.World
                 builder.Append(bands[i].Id).Append(':').Append(bands[i].Name).Append('@').Append(bands[i].Y.ToString("0.00"));
             }
             return builder.ToString();
+        }
+
+        private static string BuildParallaxDepthSnapshot(MapLayerBudget[] layers)
+        {
+            return "ParallaxDepth: Layer5=Sky/Fog:cloud-drift | Layer4=Far Background:mountain-silhouette | Layer0=Foreground:grass-leaf-motes";
         }
 
         private static string BuildTilemapSnapshot(MapTileDefinition[] tiles, MapTileChunkDefinition[] chunks)

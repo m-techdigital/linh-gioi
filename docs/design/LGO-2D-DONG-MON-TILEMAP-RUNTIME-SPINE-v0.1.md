@@ -33,6 +33,7 @@ Player visual capture phải cho thấy ground strip/platform/gap/dash/slime are
 - Chưa ingest ảnh/source art; branch vẫn phải pass `tools/validate_2d_branch_no_source_images.py`.
 - Chưa mở biome/map mới ngoài Đông Môn.
 - Chưa sửa frozen surfaces.
+
 ## Chunk flow runtime
 
 Batch tiếp theo gom tile lẻ thành các chunk theo tuyến tutorial:
@@ -44,3 +45,13 @@ Batch tiếp theo gom tile lẻ thành các chunk theo tuyến tutorial:
 - `chunk_slime_arena`: vùng chân combat cho Shadow Slime, dùng `tile_slime_arena`.
 
 Snapshot `ChunkFlow` phải bám route node, ví dụ `chunk_gate_entry@spawnx4 -> ... -> chunk_slime_arena@shadow-slimex2`. Renderer procedural dùng cùng chunk ID trong tên sprite để khi chuyển sang authored tilemap có thể map lại từng chunk mà không đổi flow gameplay.
+
+## Parallax/foreground polish runtime
+
+Batch polish thêm lớp chiều sâu procedural cho Đông Môn mà không thay flow gameplay:
+
+- `Layer5=Sky/Fog:cloud-drift`: mảng mây xa, alpha thấp, nằm sau toàn bộ HUD/action.
+- `Layer4=Far Background:mountain-silhouette`: silhouette núi/xa cảnh để map bớt phẳng.
+- `Layer0=Foreground:grass-leaf-motes`: cỏ/đốm foreground thấp dưới chân, không che player, NPC, skill hoặc inventory panel.
+
+Catalog expose `ParallaxDepthSnapshot`; visual manifest phải chứa `ParallaxDepth` để chứng minh runtime hiện đang giữ đủ layer intent từ board 2D map A-Z. Đây vẫn là runtime prototype procedural, không phải production art và không ingest ảnh source.

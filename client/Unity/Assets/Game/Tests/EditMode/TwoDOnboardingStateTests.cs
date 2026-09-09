@@ -476,6 +476,17 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeMapCatalogKeepsDongMonParallaxPolish()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("ParallaxDepth", map.ParallaxDepthSnapshot);
+            StringAssert.Contains("cloud-drift", map.ParallaxDepthSnapshot);
+            StringAssert.Contains("mountain-silhouette", map.ParallaxDepthSnapshot);
+            StringAssert.Contains("grass-leaf-motes", map.ParallaxDepthSnapshot);
+        }
+
+        [Test]
         public void RuntimeMapCatalogKeepsTerrainCollisionBandsForDongMon()
         {
             var map = TwoDMapDesignCatalog.CreateDefault();

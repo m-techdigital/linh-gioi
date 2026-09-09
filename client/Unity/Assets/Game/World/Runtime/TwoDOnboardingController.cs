@@ -134,6 +134,7 @@ namespace LinhGioi.World
             AddSceneSprite("LGO 2D Moon Glow", "Vầng linh nguyệt sau Linh Thành", new Vector2(2.95f, 1.55f), new Vector2(0.72f, 0.72f), new Color(0.42f, 0.74f, 0.82f, 0.28f), -19);
             AddSceneSprite("LGO 2D Distant Wall", "Tường thành xa tạo chiều sâu", new Vector2(-1.65f, 0.45f), new Vector2(3.8f, 1.45f), new Color(0.08f, 0.19f, 0.30f), -18);
             AddSceneSprite("LGO 2D Distant Roofline", "Mái thành nhiều lớp phía sau", new Vector2(-1.65f, 1.2f), new Vector2(4.15f, 0.18f), new Color(0.13f, 0.31f, 0.42f), -17);
+            AddDongMonParallaxPolish();
             AddDongMonLandmarkSilhouettes();
 
             AddSceneSprite("LGO 2D Linh Thanh Gate Left Pillar", "Cổng Linh Thành - trụ trái", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
@@ -302,6 +303,18 @@ namespace LinhGioi.World
             RefreshWorldHud();
         }
 
+
+
+        private void AddDongMonParallaxPolish()
+        {
+            AddSceneBeat("PARALLAX_POLISH Đông Môn cloud-drift/mist/foreground grass-leaf-motes");
+            AddSceneSprite("LGO 2D Parallax Cloud Drift A", "Mây linh khí trôi xa layer 5", new Vector2(-3.20f, 2.25f), new Vector2(1.24f, 0.16f), new Color(0.35f, 0.66f, 0.82f, 0.18f), -19);
+            AddSceneSprite("LGO 2D Parallax Cloud Drift B", "Mây linh khí trôi xa layer 5", new Vector2(1.75f, 2.05f), new Vector2(1.62f, 0.13f), new Color(0.35f, 0.66f, 0.82f, 0.14f), -19);
+            AddSceneSprite("LGO 2D Parallax Mountain Silhouette", "Dáng núi xa phía sau Đông Môn", new Vector2(1.78f, 1.02f), new Vector2(2.15f, 0.32f), new Color(0.05f, 0.16f, 0.25f, 0.64f), -18);
+            AddSceneSprite("LGO 2D Parallax Mist Veil", "Sương mỏng tách lớp trung cảnh", new Vector2(0.45f, -0.18f), new Vector2(7.50f, 0.10f), new Color(0.48f, 0.88f, 0.92f, 0.12f), -6);
+            AddSceneSprite("LGO 2D Foreground Grass Tuft A", "Cỏ foreground không che chân người chơi", new Vector2(-3.82f, -2.18f), new Vector2(0.18f, 0.20f), new Color(0.20f, 0.54f, 0.34f, 0.60f), 5);
+            AddSceneSprite("LGO 2D Foreground Grass Tuft B", "Cỏ foreground không che combat", new Vector2(3.92f, -2.08f), new Vector2(0.22f, 0.18f), new Color(0.20f, 0.54f, 0.34f, 0.46f), 5);
+        }
 
         private void AddDongMonLandmarkSilhouettes()
         {
