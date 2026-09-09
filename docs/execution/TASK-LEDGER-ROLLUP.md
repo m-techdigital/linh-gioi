@@ -179,3 +179,11 @@ LGO_CRASH_REPORTING_PLAN_READY. Đã xác minh plan local crash/error reporting 
 ## Next after crash/error plan
 
 Tiếp tục task advisor kế tiếp trong docs/tools hoặc quay lại map/runtime 2D khi không xung đột tab class.
+
+## 2026-09-09 — Alpha/Beta/Live checklist closure
+
+LGO_RELEASE_CHECKLIST_READY. Đã xác minh checklist release bằng `python3.12 tools/validate_lgo_release_checklist.py`: PASS. Checklist giữ phân loại hiện tại là pre-alpha development, yêu cầu alpha/beta/live gate riêng và stop lines không mở production auth/DB/economy/social/live ops, không claim production art, không đổi frozen contracts. Không có implementation trong batch này.
+
+## Next after release checklist
+
+Tiếp tục task advisor kế tiếp hoặc quay lại cải thiện runtime/player-visible 2D khi scope an toàn và không xung đột tab class.
