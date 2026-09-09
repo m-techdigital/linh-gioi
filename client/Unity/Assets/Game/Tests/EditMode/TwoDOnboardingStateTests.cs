@@ -357,8 +357,14 @@ namespace LinhGioi.Tests
             Assert.That(map.DongMonRoute.Length, Is.GreaterThanOrEqualTo(6));
             StringAssert.Contains("Linh Thành", map.WorldSnapshot);
             StringAssert.Contains("Đông Môn", map.WorldSnapshot);
+            StringAssert.Contains("Chapter 1: Vết Nứt Đông Môn", map.LayerBudgetSnapshot);
+            StringAssert.Contains("Sky/Fog", map.LayerBudgetSnapshot);
+            StringAssert.Contains("Gameplay Plane", map.LayerBudgetSnapshot);
+            StringAssert.Contains("Foreground", map.LayerBudgetSnapshot);
             StringAssert.Contains("Người Giữ Cổng", map.TutorialRouteSnapshot);
             StringAssert.Contains("Bia Luyện Khí", map.TutorialRouteSnapshot);
+            StringAssert.Contains("Shadow Slime", map.TutorialRouteSnapshot);
+            StringAssert.Contains("Quay về Người Giữ Cổng", map.TutorialRouteSnapshot);
             StringAssert.Contains("Mini Boss", map.TutorialRouteSnapshot);
         }
 
@@ -374,6 +380,8 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("World", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("Linh Thành", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("Đông Môn", controller.RuntimeMapSnapshot);
+                StringAssert.Contains("LayerBudget", controller.RuntimeMapSnapshot);
+                StringAssert.Contains("Chapter 1", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("Mini Boss", controller.RuntimeMapSnapshot);
             }
             finally

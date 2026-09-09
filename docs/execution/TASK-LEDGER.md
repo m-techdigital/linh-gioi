@@ -121,3 +121,10 @@ Nối `ClassSkill` trong tutorial Đông Môn vào mục tiêu thật: Shadow Sl
 ## Next after Shadow Slime runtime checkpoint
 
 Đóng checkpoint sau validation; tiếp theo chọn 2D-04 Kiếm Lv1 hoặc map production Linh Thành/Đông Môn theo GDD mới.
+## 2026-09-09 — Map layer budget Chapter 1 runtime spine
+
+Bám kịch bản/GDD mới trước khi design map production: `TwoDMapDesignCatalog` thêm `LayerBudgetSnapshot` cho Chapter 1 `Vết Nứt Đông Môn` với Sky/Fog, Far Background, Mid Background, Near Background, Gameplay Plane và Foreground. Runtime minimap overlay thêm nhãn Chapter/Layer; visual manifest `runtimeMapSnapshot` chứa layer budget để future session không làm map mò hoặc làm phẳng.
+
+## Next after map layer budget
+
+Đóng checkpoint sau validation; tiếp theo chọn 2D-04 Kiếm Lv1 hoặc nâng map production Linh Thành/Đông Môn bằng landmark/route/parallax rõ hơn.

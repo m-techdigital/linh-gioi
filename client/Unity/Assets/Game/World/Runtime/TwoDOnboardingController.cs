@@ -283,6 +283,8 @@ namespace LinhGioi.World
             AddWorldLabel("LGO 2D Mini Map Title", "BẢN ĐỒ", new Vector2(2.58f, 2.70f), 0.036f, RuntimeArtCatalog.Gold, 66);
             AddWorldLabel("LGO 2D Mini Map Hub", "Linh Thành", new Vector2(3.18f, 2.46f), 0.032f, RuntimeArtCatalog.Text, 66);
             AddWorldLabel("LGO 2D Mini Map Route", "Đông Môn → Bia → Jump → Dash → Slime", new Vector2(3.18f, 2.21f), 0.024f, RuntimeArtCatalog.Spirit, 66);
+            AddWorldLabel("LGO 2D Mini Map Chapter", "Chapter 1: Vết Nứt Đông Môn", new Vector2(3.18f, 2.07f), 0.021f, RuntimeArtCatalog.Gold, 66);
+            AddWorldLabel("LGO 2D Mini Map Layers", "Layers: Sky/Far/Mid/Near/Gameplay/FG", new Vector2(3.18f, 1.94f), 0.019f, new Color(0.73f, 0.87f, 0.88f), 66);
             AddWorldLabel("LGO 2D Base Label", "Base: Male/Female layered", new Vector2(3.18f, 1.67f), 0.024f, RuntimeArtCatalog.Gold, 66);
             AddWorldLabel("LGO 2D Equipment Label", "Gear: slots + try-on flow", new Vector2(3.18f, 1.54f), 0.022f, RuntimeArtCatalog.Spirit, 66);
 
@@ -291,9 +293,9 @@ namespace LinhGioi.World
             {
                 var x = 2.35f + i * 0.31f;
                 var markerColor = i <= 2 ? RuntimeArtCatalog.Spirit : new Color(0.42f, 0.54f, 0.62f, 0.85f);
-                AddSprite("LGO 2D Mini Map Node " + route[i].Id, new Vector2(x, 1.92f), new Vector2(0.10f, 0.10f), markerColor, 64);
+                AddSprite("LGO 2D Mini Map Node " + route[i].Id, new Vector2(x, 1.82f), new Vector2(0.10f, 0.10f), markerColor, 64);
                 if (i > 0)
-                    AddSprite("LGO 2D Mini Map Link " + i, new Vector2(x - 0.16f, 1.92f), new Vector2(0.19f, 0.025f), new Color(0.18f, 0.70f, 0.75f, 0.72f), 63);
+                    AddSprite("LGO 2D Mini Map Link " + i, new Vector2(x - 0.16f, 1.82f), new Vector2(0.19f, 0.025f), new Color(0.18f, 0.70f, 0.75f, 0.72f), 63);
             }
         }
 

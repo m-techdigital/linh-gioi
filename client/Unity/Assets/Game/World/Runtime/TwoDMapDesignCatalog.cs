@@ -8,21 +8,26 @@ namespace LinhGioi.World
         private TwoDMapDesignCatalog(
             MapZone[] worldZones,
             MapDistrict[] linhThanhDistricts,
-            MapRouteNode[] dongMonRoute)
+            MapRouteNode[] dongMonRoute,
+            MapLayerBudget[] layerBudgets)
         {
             WorldZones = worldZones;
             LinhThanhDistricts = linhThanhDistricts;
             DongMonRoute = dongMonRoute;
+            LayerBudgets = layerBudgets;
             WorldSnapshot = BuildWorldSnapshot(worldZones, linhThanhDistricts);
             TutorialRouteSnapshot = BuildRouteSnapshot(dongMonRoute);
+            LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
         }
 
         public MapZone[] WorldZones { get; }
         public MapDistrict[] LinhThanhDistricts { get; }
         public MapRouteNode[] DongMonRoute { get; }
+        public MapLayerBudget[] LayerBudgets { get; }
         public string WorldSnapshot { get; }
         public string TutorialRouteSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot;
+        public string LayerBudgetSnapshot { get; }
+        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -65,6 +70,15 @@ namespace LinhGioi.World
                     new MapRouteNode("class-skill", "Dùng Skill Class", "skill", "đọc identity class"),
                     new MapRouteNode("shadow-slime", "Shadow Slime", "monster", "combat cơ bản"),
                     new MapRouteNode("return-gate", "Quay về Người Giữ Cổng", "main-quest", "mở Linh Thành")
+                },
+                new[]
+                {
+                    new MapLayerBudget(5, "Sky/Fog", "mây, trời, ánh sáng, sương", "parallax chậm nhất; không che gameplay"),
+                    new MapLayerBudget(4, "Far Background", "núi xa, thành phố xa", "tạo world scale của Linh Thành"),
+                    new MapLayerBudget(3, "Mid Background", "kiến trúc lớn, rừng, thác", "nhận diện zone và Chapter 1"),
+                    new MapLayerBudget(2, "Near Background", "cây, nhà, cầu, tháp", "đặt landmark/route đọc được"),
+                    new MapLayerBudget(1, "Gameplay Plane", "terrain, platform, player, NPC, monster", "collision và tương tác rõ"),
+                    new MapLayerBudget(0, "Foreground", "cỏ, đèn, lá, hạt linh khí", "che nhẹ, không che HUD/action")
                 });
         }
 
@@ -91,6 +105,17 @@ namespace LinhGioi.World
             for (var i = 1; i < nodes.Length; i++)
                 builder.Append(" -> ").Append(nodes[i].Name);
             builder.Append(" -> Mini Boss Linh Thú Biến Dị -> Linh Thành");
+            return builder.ToString();
+        }
+
+        private static string BuildLayerBudgetSnapshot(MapLayerBudget[] layers)
+        {
+            var builder = new StringBuilder("LayerBudget: Chapter 1: Vết Nứt Đông Môn | ");
+            for (var i = 0; i < layers.Length; i++)
+            {
+                if (i > 0) builder.Append(" | ");
+                builder.Append(layers[i].Index).Append(':').Append(layers[i].Name);
+            }
             return builder.ToString();
         }
     }
@@ -142,5 +167,22 @@ namespace LinhGioi.World
         public string Name { get; }
         public string Marker { get; }
         public string Purpose { get; }
+    }
+
+    [Serializable]
+    public readonly struct MapLayerBudget
+    {
+        public MapLayerBudget(int index, string name, string content, string rule)
+        {
+            Index = index;
+            Name = name;
+            Content = content;
+            Rule = rule;
+        }
+
+        public int Index { get; }
+        public string Name { get; }
+        public string Content { get; }
+        public string Rule { get; }
     }
 }

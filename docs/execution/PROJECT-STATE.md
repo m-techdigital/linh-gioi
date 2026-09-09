@@ -32,8 +32,9 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 - Võ Lv1 seed checkpoint: `81000ed Add 2D Vo Lv1 starter outfit seed`.
 - Locomotion animation checkpoint: `c04e40f Add 2D locomotion animation spine`.
 - Tutorial movement/skill checkpoint: Bia Luyện Khí mở chuỗi Jump → Dash → ClassSkill → Complete; visual capture 8 frame và manifest kiểm `screenshotCount=8`, `finalStep=Complete`, animation tokens Jump/Dash/ClassSkill/TrainingCompletePose.
-- Shadow Slime combat micro-slice WIP/checkpoint: sau Dash, Shadow Slime xuất hiện ở `LearnClassSkill`; ClassSkill đánh tan slime, manifest có `runtimeCombatSnapshot=ShadowSlimeVisible=False ShadowSlimeDefeated=True`, ảnh review `07-skill-ready.png`/`08-complete.png`.
+- Shadow Slime combat micro-slice checkpoint: sau Dash, Shadow Slime xuất hiện ở `LearnClassSkill`; ClassSkill đánh tan slime, manifest có `runtimeCombatSnapshot=ShadowSlimeVisible=False ShadowSlimeDefeated=True`, ảnh review `07-skill-ready.png`/`08-complete.png`.
+- Map layer budget checkpoint WIP: `TwoDMapDesignCatalog` expose `LayerBudget: Chapter 1: Vết Nứt Đông Môn` với Sky/Fog, Far, Mid, Near, Gameplay Plane, Foreground; minimap overlay hiển thị Chapter/Layer marker và manifest `runtimeMapSnapshot` chứa layer budget.
 
 ## Next
 
-Đóng gói checkpoint Shadow Slime combat micro-slice, sau đó tiếp tục theo roadmap 2D: class Lv1 còn lại, Linh Thành/Đông Môn production map, Gate Keeper tutorial đầy đủ và vertical slice. Map production lớn phải bám `docs/02-GDD.md`, `docs/design/LGO-2D-SOCIAL-ACTION-DIRECTION-LOCK-v0.1.md` và `docs/design/LGO-2D-MAP-AZ-DESIGN-v0.1.md`.
+Đóng gói checkpoint map layer budget/minimap Chapter 1, sau đó tiếp tục theo roadmap 2D: 2D-04 Kiếm Lv1 hoặc nâng production map Linh Thành/Đông Môn rõ hơn bằng parallax landmarks/route nodes. Map production lớn phải bám `docs/02-GDD.md`, `docs/design/LGO-2D-SOCIAL-ACTION-DIRECTION-LOCK-v0.1.md` và `docs/design/LGO-2D-MAP-AZ-DESIGN-v0.1.md`.
