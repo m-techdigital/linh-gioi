@@ -9,6 +9,7 @@ namespace LinhGioi.World
     {
         private const float MoveSpeed = 2.75f;
         private static Sprite _solidSprite;
+        private static readonly Dictionary<string, Sprite> _shapeSprites = new Dictionary<string, Sprite>();
         private readonly TwoDOnboardingState _state = new TwoDOnboardingState();
         private readonly TwoDMapDesignCatalog _mapCatalog = TwoDMapDesignCatalog.CreateDefault();
         private readonly TwoDCharacterBaseCatalog _characterBaseCatalog = TwoDCharacterBaseCatalog.CreateDefault();
@@ -1241,7 +1242,8 @@ namespace LinhGioi.World
                     new Vector2(part.w, part.h),
                     new Color(part.r, part.g, part.b, part.a),
                     order + part.sortOffset,
-                    root.transform);
+                    root.transform,
+                    part.shape);
             }
 
             return root.transform;
@@ -1314,12 +1316,17 @@ namespace LinhGioi.World
 
         private static GameObject AddSprite(string name, Vector2 position, Vector2 scale, Color color, int order, Transform parent)
         {
+            return AddSprite(name, position, scale, color, order, parent, null);
+        }
+
+        private static GameObject AddSprite(string name, Vector2 position, Vector2 scale, Color color, int order, Transform parent, string shape)
+        {
             var host = new GameObject(name);
             host.transform.SetParent(parent, false);
             host.transform.localPosition = ToWorld(position, parent == null ? order * 0.01f : 0f);
             host.transform.localScale = new Vector3(scale.x, scale.y, 1f);
             var renderer = host.AddComponent<SpriteRenderer>();
-            renderer.sprite = SolidSprite();
+            renderer.sprite = ShapeSprite(shape);
             renderer.color = color;
             renderer.sortingOrder = order;
             return host;
@@ -1339,6 +1346,44 @@ namespace LinhGioi.World
             _solidSprite = Sprite.Create(texture, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 1f);
             _solidSprite.name = "LGO 2D Solid Sprite";
             return _solidSprite;
+        }
+
+        private static Sprite ShapeSprite(string shape)
+        {
+            if (string.IsNullOrWhiteSpace(shape) || shape == "rect") return SolidSprite();
+            if (shape != "ellipse" && shape != "diamond" && shape != "tapered") return SolidSprite();
+            if (_shapeSprites.TryGetValue(shape, out var cached) && cached != null) return cached;
+
+            const int size = 32;
+            var texture = new Texture2D(size, size, TextureFormat.RGBA32, false) { name = "LGO 2D Shape " + shape, wrapMode = TextureWrapMode.Clamp };
+            for (var y = 0; y < size; y++)
+            {
+                for (var x = 0; x < size; x++)
+                {
+                    var nx = (x + 0.5f) / size * 2f - 1f;
+                    var ny = (y + 0.5f) / size * 2f - 1f;
+                    var fill = false;
+                    switch (shape)
+                    {
+                        case "ellipse":
+                            fill = nx * nx + ny * ny <= 1f;
+                            break;
+                        case "diamond":
+                            fill = Mathf.Abs(nx) + Mathf.Abs(ny) <= 1f;
+                            break;
+                        case "tapered":
+                            var halfWidth = 0.34f + (1f - ny) * 0.24f;
+                            fill = Mathf.Abs(nx) <= halfWidth && Mathf.Abs(ny) <= 1f;
+                            break;
+                    }
+                    texture.SetPixel(x, y, fill ? Color.white : Color.clear);
+                }
+            }
+            texture.Apply(false, true);
+            var sprite = Sprite.Create(texture, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size, 0, SpriteMeshType.FullRect);
+            sprite.name = "LGO 2D Shape Sprite " + shape;
+            _shapeSprites[shape] = sprite;
+            return sprite;
         }
 
         private static string DescribeAction(TwoDOnboardingAction action)

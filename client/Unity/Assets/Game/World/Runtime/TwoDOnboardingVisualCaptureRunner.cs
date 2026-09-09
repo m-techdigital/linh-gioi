@@ -33,7 +33,8 @@ namespace LinhGioi.World
             yield return null;
             yield return Capture(evidenceDir, "01-initial");
 
-            controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+            // Approach inside interaction range without standing on top of the NPC silhouette.
+            controller.State.Move(TwoDOnboardingState.GateKeeperPosition + Vector2.left * 0.85f - controller.State.PlayerPosition);
             controller.RefreshForSmoke();
             yield return null;
             yield return Capture(evidenceDir, "02-gate-focus");

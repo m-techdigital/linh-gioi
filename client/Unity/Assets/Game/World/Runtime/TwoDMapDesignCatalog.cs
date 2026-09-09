@@ -243,6 +243,7 @@ namespace LinhGioi.World
                 + " | role=tutorial-guide"
                 + " | silhouette=elder-robed-guardian-staff"
                 + " | slots=robe,cloak,hat,staff,talisman"
+                + " | style=" + LoadDongMonNpcSpriteSource()?.style
                 + " | authored-npc-sprite=" + ContainsToken(text, "authored-npc-sprite")
                 + " | safe-runtime-resource=" + ContainsToken(text, "safe-runtime-resource")
                 + " | safe-no-source-image=" + ContainsToken(text, "safe-no-source-image")
@@ -634,6 +635,7 @@ namespace LinhGioi.World
         public string mapId;
         public string chapter;
         public string usage;
+        public string style;
         public string[] safety;
         public DongMonNpcSpriteEntry[] npcs;
     }
@@ -654,6 +656,7 @@ namespace LinhGioi.World
     {
         public string id;
         public string slot;
+        public string shape;
         public float x;
         public float y;
         public float w;

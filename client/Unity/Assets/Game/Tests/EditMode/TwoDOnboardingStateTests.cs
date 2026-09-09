@@ -1375,6 +1375,8 @@ namespace LinhGioi.Tests
             StringAssert.Contains("role=tutorial-guide", sourceSnapshot);
             StringAssert.Contains("silhouette=elder-robed-guardian-staff", sourceSnapshot);
             StringAssert.Contains("slots=robe,cloak,hat,staff,talisman", sourceSnapshot);
+            StringAssert.Contains("style=primitive-shape-polish-v1", sourceSnapshot);
+            Assert.That(gateKeeper.parts[0].shape, Is.EqualTo("ellipse"));
             StringAssert.Contains("authored-npc-sprite=True", sourceSnapshot);
             StringAssert.Contains("safe-runtime-resource=True", sourceSnapshot);
             StringAssert.Contains("safe-no-source-image=True", sourceSnapshot);
@@ -1395,13 +1397,43 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("gate_keeper_parts=13", controller.RuntimeDongMonNpcSpriteSourceSnapshot);
                 StringAssert.Contains("safe-no-source-image=True", controller.RuntimeDongMonNpcSpriteSourceSnapshot);
 
+                var npc = TwoDMapDesignCatalog.LoadDongMonNpcSprite("gate_keeper");
+                foreach (var part in npc.parts)
+                {
+                    var renderer = GameObject.Find("LGO 2D Gate Keeper SpritePart " + part.id + " " + part.slot)
+                        .GetComponent<SpriteRenderer>();
+                    Assert.That(renderer.transform.localScale.x, Is.EqualTo(part.w));
+                    Assert.That(renderer.transform.localScale.y, Is.EqualTo(part.h));
+                    if (part.shape != "rect")
+                        Assert.That(renderer.sprite.name, Is.EqualTo("LGO 2D Shape Sprite " + part.shape));
+                }
                 Assert.IsNotNull(GameObject.Find("LGO 2D Gate Keeper SpritePart staff staff"));
                 Assert.IsNotNull(GameObject.Find("LGO 2D Gate Keeper SpritePart jade_talisman talisman"));
                 Assert.IsNotNull(GameObject.Find("LGO 2D Gate Keeper SpritePart hat_brim hat"));
+                StringAssert.Contains("style=primitive-shape-polish-v1", controller.RuntimeDongMonNpcSpriteSourceSnapshot);
             }
             finally
             {
                 Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void NpcShapeSpritesPreserveFallbackSizeAndReuse()
+        {
+            var method = typeof(TwoDOnboardingController).GetMethod("ShapeSprite",
+                System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+            Assert.IsNotNull(method);
+            var rectangle = (Sprite)method.Invoke(null, new object[] { "rect" });
+            foreach (var shape in new[] { null, "", "unknown-shape" })
+                Assert.AreSame(rectangle, method.Invoke(null, new object[] { shape }), "Fallback: " + shape);
+            foreach (var shape in new[] { "ellipse", "diamond", "tapered" })
+            {
+                var sprite = (Sprite)method.Invoke(null, new object[] { shape });
+                Assert.AreNotSame(rectangle, sprite);
+                Assert.That(sprite.bounds.size.x, Is.EqualTo(1f).Within(0.001f));
+                Assert.That(sprite.bounds.size.y, Is.EqualTo(1f).Within(0.001f));
+                Assert.AreSame(sprite, method.Invoke(null, new object[] { shape }));
             }
         }
 

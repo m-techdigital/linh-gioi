@@ -1,5 +1,16 @@
 # NEXT ACTION — Linh Giới Online 2D
 
+## Gate Keeper silhouette — 2026-09-10
+
+Đã kiểm Người Giữ Cổng 13 part đọc từ JSON với `rect/ellipse/diamond/tapered`; shape lạ fallback rectangle, cache dùng lại texture, snapshot đọc style từ source. Capture tiếp cận NPC ở khoảng cách 0.85 trong FocusRange 1.15 để không chồng silhouette. Không đổi gameplay 5 class hoặc frozen surfaces.
+
+Evidence trong `build/gatekeeper-polish-checkpoint/`: EditMode 138 pass, 0 fail, 1 skipped (pointer capture cần UI panel); onboarding smoke Complete; macOS build Succeeded (0 errors, 13 warning API UI cũ); Player capture 20 BMP; smoke/visual matrix, no-3D/no-source-image và frozen diff audit pass. Đã xem ảnh 01/02/03/20: mũ, áo thuôn, bóng ellipse, gậy/ngọc đọc được; player đứng riêng khi thoại. Đây chỉ là checkpoint silhouette blockout, chưa đạt chuẩn illustrated owner gửi.
+
+macOS: sau launch từ Contents/MacOS, Player có thể chờ foreground do runInBackground=0; dùng `open <đúng app vừa build>` để kích hoạt app đang chạy, không mở ảnh giữa capture. Worktree cũ được giữ vì có thay đổi đồng thời ngoài lượt này; chỉ dọn worktree riêng của batch. Tab 5 class giữ ownership source của họ.
+
+Next: design/demo draft góc Đông Môn bằng art mới theo phần hiệu chỉnh owner trong workflow research; capture Player và duyệt mỹ thuật trước khi nhân rộng. Không tiếp tục polish primitive vô hạn.
+
+
 ## Ưu tiên owner mới — 2026-09-09: chuẩn hóa art Võ
 
 Scope hiện tại chỉ Võ, docs/reference/checker; không tiếp gameplay hoặc triển khai class khác từ batch này. Đã review 23 PNG và chọn nguồn trong `docs/art/classes/vo/LGO-VO-2D-MODULE-SPEC-v1.0.md`; handoff: `HANDOFF-LGO-CLASS-2D-MODULE-STANDARD-v1.0.md`. Các mục runtime phía dưới là trạng thái trước yêu cầu này, không phải quyền mở rộng batch art.
@@ -23,9 +34,9 @@ Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới qua `docs/des
 
 ## Việc tiếp theo
 
-1. Commit/push checkpoint inventory input runtime spine sau khi source validators và visual review pass.
-2. Tiếp roadmap: tilemap authoring Đông Môn theo scenario spine hoặc nâng inventory panel sang inspect detail/icon grid khi có art asset sạch.
-3. Không mở HP bar, loot/economy/server-authoritative combat trước khi có task/gate riêng.
+1. Khép checkpoint kỹ thuật Người Giữ Cổng: primitive shape chỉ cải thiện silhouette, không phải production art.
+2. Batch mỹ thuật kế tiếp: design/demo draft một góc Đông Môn theo ảnh gameplay illustrated owner gửi 2026-09-10; sau đó tạo art mới và đưa vào Player qua background parallax + tileset/prop atlas. Đối chiếu capture về bố cục, chiều sâu, tỷ lệ và chi tiết; owner duyệt hướng trước khi nhân rộng.
+3. Không kéo dài polish rectangle; không crop ảnh tham chiếu làm runtime asset. Giữ worktree riêng, tránh source 5 class/trang bị do tab khác phụ trách. Không mở thêm combat/economy hoặc sửa frozen surfaces.
 
 ## Blocker
 

@@ -49,6 +49,21 @@ Không tiếp tục dựng art runtime bằng cách chỉnh từng khối thủ 
 - Bắt buộc qua: EditMode, 2D smoke, macOS Player build, 2D visual capture, `lgo_runtime_smoke_matrix --phase two-d`, `lgo_visual_evidence_matrix --verify-current`, no-3D/no-source-image guards.
 - Không dùng full M4 visual runtime khi chỉ thay map/NPC 2D onboarding, trừ khi thay đổi chạm login/session/combat full route. Điều này tránh build cao không cần thiết.
 
+## Hiệu chỉnh theo ảnh owner gửi ngày 2026-09-10
+
+Owner chỉ ra nguy cơ thành phẩm không đạt ảnh gameplay illustrated vừa gửi trong chat. Ảnh có thành phố tiên hiệp xanh/vàng nhiều lớp, kiến trúc xa giàu chi tiết, sàn đá side-view rõ ràng, nhân vật anime có tỷ lệ và trang phục chi tiết, foreground tối tạo chiều sâu, kiếm khí xanh và HUD chia vùng ở viền màn hình. Đây là chuẩn thị giác tham chiếu, không phải runtime asset hoặc bằng chứng các tính năng trong ảnh đã được mở gate.
+
+Runtime hiện tại vẫn là blockout. Polish shape của Người Giữ Cổng chỉ đóng checkpoint kỹ thuật; không tiếp tục thêm rectangle/primitive để tiến tới chất lượng ảnh. Tilemap/Sprite Atlas là phương tiện tổ chức/render, không thay thế công việc mỹ thuật.
+
+Batch tiếp theo: một góc Đông Môn trong Player bằng art mới, trước khi nhân rộng map.
+
+- Reuse scenario tutorial Đông Môn: đứng tại cổng → tiến gần Người Giữ Cổng → thoại. Không mở thêm combat, reward hoặc hệ thống HUD chỉ vì chúng xuất hiện trong ảnh.
+- Làm design/demo có nhãn draft trước: bố cục camera 1280×720, các lớp xa/giữa/gần/foreground, gameplay plane, khoảng trống HUD, tỷ lệ NPC và vùng tương tác. Phân biệt asset đề xuất và runtime hiện có.
+- Tạo background illustrated mới theo lớp; tileset nền và prop atlas sạch cho cổng/đèn/cờ/đá. Không crop ảnh tham chiếu hoặc dùng nguyên concept làm nền runtime. Mỗi asset cần source/provenance, kích thước, anchor, layer, import settings và budget.
+- Giữ ownership: tab 5 class phụ trách nhân vật/trang bị/class art; batch Đông Môn chỉ map/prop/NPC đã thống nhất, không ghi đè source của tab kia.
+- Gate mỹ thuật: đặt capture Player cạnh ảnh tham chiếu, đánh giá bố cục, chiều sâu, palette/ánh sáng, tỷ lệ nhân vật, độ chi tiết/coherence và khả năng đọc HUD. Test kỹ thuật pass không thay thế gate này; không ghi production-art PASS khi vẫn chỉ có blockout.
+- Khi chưa đạt, sửa art/demo của cùng góc nhìn thay vì nhân rộng tile/prop hoặc thêm feature. Chỉ nhân rộng sau khi owner duyệt hướng bằng capture thật.
+
 ## Mốc thời gian thực tế để đạt “giống ảnh”
 
 - 0.5–1 ngày: placeholder đẹp hơn, silhouette NPC/map rõ hơn, vẫn là blockout.
