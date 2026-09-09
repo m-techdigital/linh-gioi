@@ -434,6 +434,19 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeMapCatalogKeepsTerrainCollisionBandsForDongMon()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            Assert.That(map.DongMonCollisionBands.Length, Is.GreaterThanOrEqualTo(5));
+            StringAssert.Contains("Collision: Chapter 1: Vết Nứt Đông Môn", map.CollisionSnapshot);
+            StringAssert.Contains("ground-main", map.CollisionSnapshot);
+            StringAssert.Contains("jump-gap", map.CollisionSnapshot);
+            StringAssert.Contains("dash-lane", map.CollisionSnapshot);
+            StringAssert.Contains("slime-arena", map.CollisionSnapshot);
+        }
+
+        [Test]
         public void RuntimeControllerExposesMapSnapshotForVisualEvidence()
         {
             var host = new GameObject("2D onboarding map snapshot test host");
@@ -451,6 +464,26 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("Thác Nước", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("Chapter 1", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("Mini Boss", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void RuntimeControllerExposesTerrainCollisionSnapshotForVisualEvidence()
+        {
+            var host = new GameObject("2D terrain collision snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("Collision: Chapter 1", controller.RuntimeTerrainCollisionSnapshot);
+                StringAssert.Contains("jump-gap", controller.RuntimeTerrainCollisionSnapshot);
+                StringAssert.Contains("dash-lane", controller.RuntimeTerrainCollisionSnapshot);
+                StringAssert.Contains("slime-arena", controller.RuntimeTerrainCollisionSnapshot);
             }
             finally
             {

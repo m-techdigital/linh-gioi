@@ -137,3 +137,8 @@ Tiếp tục map production theo hướng tileset/terrain collision và route no
 ## Next after inventory try-on spine
 
 Tiếp tục bằng tileset/terrain collision pass cho Đông Môn hoặc nâng inventory từ strip preview sang panel inspect/try/apply/cancel có input thật.
+
+
+## 2026-09-09 — 2D scenario production spine + terrain collision checkpoint
+
+Owner cung cấp kịch bản game mới để khóa lại trước design: 2D Side-Scrolling Social Action MMORPG, HD 2D anime/illustrated, không pixel-art, Zone Network, Chapter 1 Vết Nứt Đông Môn, class identity Võ/Kiếm/Pháp/Cơ/Linh, pipeline item/map và roadmap 2D-00 → 2D-12. Đã đưa vào `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md` và cập nhật GDD/NEXT-ACTION để batch sau đọc trực tiếp. Terrain collision Đông Môn hoàn tất ở mức spine bằng `DongMonCollisionBands`, runtime cues `JUMP GAP`/`DASH LANE`, visual manifest `runtimeTerrainCollisionSnapshot` và visual review.

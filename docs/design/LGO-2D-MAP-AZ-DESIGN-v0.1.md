@@ -72,6 +72,11 @@ Mỗi map runtime dùng cùng cấu trúc layer:
 | 1 Gameplay | địa hình, platform, nhân vật | collision rõ, đọc được tương tác |
 | 0 Foreground | cỏ, hàng rào, vật cản trước | không che HUD/action |
 
+
+## Parallax/collision pipeline
+
+Map mới đi theo pipeline đã khóa trong scenario spine: Concept Map → Background Far/Mid/Near/Foreground → Collision → Spawn → Lighting → VFX → Runtime. Parallax không chỉ là trang trí; nó quyết định lớp đọc hình, còn collision band quyết định walk/run/jump/dash/combat có nền rõ. Mỗi landmark hoặc route node ở Đông Môn phải biết mình thuộc layer nào, có collision/gap/platform nào liên quan và có được đưa vào visual manifest hay chưa.
+
 ## Tileset và thành phần
 
 Các thành phần phải có id riêng để sau này thay art mà không đổi flow:

@@ -159,3 +159,11 @@ Tiếp tục map production theo hướng tileset/terrain collision và route no
 ## Next after inventory try-on spine
 
 Tiếp tục bằng tileset/terrain collision pass cho Đông Môn hoặc nâng inventory từ strip preview sang panel inspect/try/apply/cancel có input thật.
+
+
+## 2026-09-09 — 2D scenario production spine + terrain collision checkpoint
+
+- Cập nhật kịch bản game mới của owner thành source chính: `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md`.
+- Khóa các nguyên tắc: giữ thế giới/class/progression/story/backend, chỉ chuyển hiện thực sang 2D; HD 2D anime/illustrated, không pixel-art; Zone Network; Chapter 1/2/3; class identity; item/map pipeline; roadmap 2D-00 → 2D-12.
+- Bắt đầu/hoàn thiện WIP terrain collision cho Đông Môn: ground-main, training-platform, jump-gap, dash-lane, slime-arena, runtime snapshot và visual manifest.
+- Trạng thái: Unity compile, onboarding smoke, Player build/capture, source validators và visual review đã chạy cho checkpoint.

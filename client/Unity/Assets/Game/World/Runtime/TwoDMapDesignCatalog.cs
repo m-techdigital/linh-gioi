@@ -10,17 +10,20 @@ namespace LinhGioi.World
             MapDistrict[] linhThanhDistricts,
             MapRouteNode[] dongMonRoute,
             MapLayerBudget[] layerBudgets,
-            MapLandmark[] dongMonLandmarks)
+            MapLandmark[] dongMonLandmarks,
+            MapCollisionBand[] dongMonCollisionBands)
         {
             WorldZones = worldZones;
             LinhThanhDistricts = linhThanhDistricts;
             DongMonRoute = dongMonRoute;
             LayerBudgets = layerBudgets;
             DongMonLandmarks = dongMonLandmarks;
+            DongMonCollisionBands = dongMonCollisionBands;
             WorldSnapshot = BuildWorldSnapshot(worldZones, linhThanhDistricts);
             TutorialRouteSnapshot = BuildRouteSnapshot(dongMonRoute);
             LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
+            CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
         }
 
         public MapZone[] WorldZones { get; }
@@ -28,11 +31,13 @@ namespace LinhGioi.World
         public MapRouteNode[] DongMonRoute { get; }
         public MapLayerBudget[] LayerBudgets { get; }
         public MapLandmark[] DongMonLandmarks { get; }
+        public MapCollisionBand[] DongMonCollisionBands { get; }
         public string WorldSnapshot { get; }
         public string TutorialRouteSnapshot { get; }
         public string LayerBudgetSnapshot { get; }
         public string LandmarkSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot;
+        public string CollisionSnapshot { get; }
+        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -93,6 +98,14 @@ namespace LinhGioi.World
                     new MapLandmark("spirit-waterfall", "Thác Nước", 3, "dash", "mốc chuyển nhịp dash và chiều sâu"),
                     new MapLandmark("song-linh", "Sóng Linh", 0, "class-skill", "hiệu ứng foreground báo linh lực"),
                     new MapLandmark("outer-forest", "Rừng Ngoại Thành", 3, "shadow-slime", "vùng quái cơ bản ngoài cổng")
+                },
+                new[]
+                {
+                    new MapCollisionBand("ground-main", "Main Ground", -2.15f, 4.25f, -2.15f, "walk/run safe lane"),
+                    new MapCollisionBand("training-platform", "Bia Platform", 2.18f, 3.28f, -1.16f, "interaction platform around Bia Luyện Khí"),
+                    new MapCollisionBand("jump-gap", "Jump Gap", 0.35f, 1.32f, -1.58f, "gap cue for jump lesson"),
+                    new MapCollisionBand("dash-lane", "Dash Lane", 1.55f, 3.35f, -1.02f, "horizontal dash read lane"),
+                    new MapCollisionBand("slime-arena", "Shadow Slime Arena", 3.12f, 4.10f, -1.16f, "combat stop before forest edge")
                 });
         }
 
@@ -141,6 +154,17 @@ namespace LinhGioi.World
             {
                 if (i > 0) builder.Append(" | ");
                 builder.Append(landmarks[i].Id).Append(':').Append(landmarks[i].Name).Append("@L").Append(landmarks[i].LayerIndex).Append("->").Append(landmarks[i].RouteNodeId);
+            }
+            return builder.ToString();
+        }
+
+        private static string BuildCollisionSnapshot(MapCollisionBand[] bands)
+        {
+            var builder = new StringBuilder("Collision: Chapter 1: Vết Nứt Đông Môn | ");
+            for (var i = 0; i < bands.Length; i++)
+            {
+                if (i > 0) builder.Append(" | ");
+                builder.Append(bands[i].Id).Append(':').Append(bands[i].Name).Append('@').Append(bands[i].Y.ToString("0.00"));
             }
             return builder.ToString();
         }
@@ -214,6 +238,28 @@ namespace LinhGioi.World
         public int LayerIndex { get; }
         public string RouteNodeId { get; }
         public string Purpose { get; }
+    }
+
+
+    [Serializable]
+    public readonly struct MapCollisionBand
+    {
+        public MapCollisionBand(string id, string name, float minX, float maxX, float y, string rule)
+        {
+            Id = id;
+            Name = name;
+            MinX = minX;
+            MaxX = maxX;
+            Y = y;
+            Rule = rule;
+        }
+
+        public string Id { get; }
+        public string Name { get; }
+        public float MinX { get; }
+        public float MaxX { get; }
+        public float Y { get; }
+        public string Rule { get; }
     }
 
     [Serializable]

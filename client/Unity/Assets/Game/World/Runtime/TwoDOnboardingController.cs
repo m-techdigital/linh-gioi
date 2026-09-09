@@ -55,6 +55,7 @@ namespace LinhGioi.World
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
+        public string RuntimeTerrainCollisionSnapshot => _mapCatalog.CollisionSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
         public string RuntimeRouteProgressSnapshot => "RouteProgress: current=" + _state.CurrentRouteNodeId + " step=" + _state.Step + " action=" + _state.AvailableAction;
@@ -134,6 +135,7 @@ namespace LinhGioi.World
             AddSceneSprite("LGO 2D Yard Front Shade", "Bóng nền sân luyện", new Vector2(0f, -2.22f), new Vector2(8.9f, 0.46f), new Color(0.06f, 0.10f, 0.15f), -11);
             AddSceneSprite("LGO 2D Jade Path", "Lối ngọc dẫn tới Bia Luyện Khí", new Vector2(0.8f, -0.95f), new Vector2(5.9f, 0.20f), new Color(0.11f, 0.52f, 0.48f, 0.55f), -10);
             _pathGlow = AddSceneSprite("LGO 2D Path Glow", "Lối ngọc phát sáng sau thoại", new Vector2(0.85f, -0.95f), new Vector2(5.7f, 0.08f), new Color(0.16f, 0.86f, 0.78f, 0.78f), -9).transform;
+            AddDongMonTerrainCollisionCues();
             for (var i = 0; i < 7; i++)
             {
                 var x = -2.05f + i * 0.72f;
@@ -297,6 +299,19 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Song Linh Wave B", new Vector2(3.15f, -2.40f), new Vector2(0.64f, 0.035f), new Color(0.16f, 0.84f, 0.82f, 0.22f), 6);
         }
 
+
+
+        private void AddDongMonTerrainCollisionCues()
+        {
+            AddSceneBeat("Đông Môn terrain collision cues - ground gap dash lane slime arena");
+            AddSprite("LGO 2D Collision Ground Main", new Vector2(1.05f, -2.13f), new Vector2(5.90f, 0.055f), new Color(0.11f, 0.52f, 0.48f, 0.72f), -5);
+            AddSprite("LGO 2D Collision Jump Gap Left Edge", new Vector2(0.35f, -1.40f), new Vector2(0.045f, 0.42f), RuntimeArtCatalog.Gold, -4);
+            AddSprite("LGO 2D Collision Jump Gap Right Edge", new Vector2(1.32f, -1.40f), new Vector2(0.045f, 0.42f), RuntimeArtCatalog.Gold, -4);
+            AddWorldLabel("LGO 2D Collision Jump Gap Label", "JUMP GAP", new Vector2(0.84f, -1.18f), 0.024f, RuntimeArtCatalog.Gold, 7);
+            AddSprite("LGO 2D Collision Dash Lane", new Vector2(2.45f, -0.77f), new Vector2(1.78f, 0.045f), new Color(0.18f, 0.86f, 0.78f, 0.52f), -4);
+            AddWorldLabel("LGO 2D Collision Dash Lane Label", "DASH LANE", new Vector2(2.45f, -0.62f), 0.024f, RuntimeArtCatalog.Spirit, 7);
+            AddSprite("LGO 2D Collision Slime Arena", new Vector2(3.60f, -1.66f), new Vector2(0.92f, 0.06f), new Color(0.48f, 0.20f, 0.82f, 0.42f), -4);
+        }
 
         private string BuildInventoryTryOnSnapshot()
         {

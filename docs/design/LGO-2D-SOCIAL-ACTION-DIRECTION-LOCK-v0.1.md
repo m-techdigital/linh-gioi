@@ -2,6 +2,8 @@
 
 ## Quyết định hướng mới
 
+Nguồn kịch bản/pipeline chi tiết cho các batch production mới: `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md`.
+
 Linh Giới Online chuyển sang mô hình **2D Side-Scrolling Social Action MMORPG**. Game giữ thế giới, class, progression, câu chuyện, backend Java, account, character, GameData và networking; phần thay đổi lớn nằm ở Unity client, art pipeline, animation, map và combat presentation.
 
 Hướng mỹ thuật khóa: **HD 2D anime / illustrated character**, skeletal animation, sprite swapping, môi trường nhiều lớp parallax, VFX điện ảnh. Không dùng pixel-art làm đích sản phẩm và không quay lại pipeline nhân vật 3D/Meshy.

@@ -2,7 +2,7 @@
 
 ## 0. 2D scenario lock — 2026-09-09
 
-Linh Giới Online hiện khóa hướng **2D Side-Scrolling Social Action MMORPG** cho branch `feature/2d`: HD anime/stylized, không pixel-art, camera side view, map parallax nhiều lớp, combat nhanh có walk/run/jump/dash/skill, hub xã hội đông người. Đây là cách hiện thực mới của cùng thế giới Linh Giới; không làm lại backend/account/character/GameData/networking chỉ vì bỏ 3D.
+Linh Giới Online hiện khóa hướng **2D Side-Scrolling Social Action MMORPG** cho branch `feature/2d`: HD 2D anime / illustrated character, không pixel-art, camera side view, map parallax nhiều lớp, combat nhanh có walk/run/jump/dash/skill, hub xã hội đông người. Đây là cách hiện thực mới của cùng thế giới Linh Giới; không làm lại backend/account/character/GameData/networking chỉ vì bỏ 3D.
 
 Ba trụ cột sản phẩm:
 
@@ -44,6 +44,8 @@ Chapter 3 — **Âm Giới Xâm Lăng**: world event theo channel/instance, port
 Một session 20 phút mẫu: Login → Linh Thành → chat/nhận Daily → đi Linh Lâm → combat/mini boss → nhận item → về thành → đổi trang phục → gặp guild → logout. Game không được trượt thành “chỉ đánh quái”.
 
 Roadmap 2D hiện hành: 2D-00 Direction Lock → 2D-01 Male/Female Base Character → 2D-02 Character Modular Runtime → 2D-03 Võ Lv1 → 2D-04 Kiếm Lv1 → 2D-05 Pháp Lv1 → 2D-06 Cơ Lv1 → 2D-07 Linh Lv1 → 2D-08 Animation Foundation → 2D-09 Linh Thành Map → 2D-10 Gate Keeper Tutorial → 2D-11 Shadow Slime Combat → 2D-12 Vertical Slice. Vertical Slice phải đạt: Login → Character Select → Enter World → Linh Thành 2D → Walk/Run/Jump/Dash → Gate Keeper → Dialogue → Training → Use Class Skill → Shadow Slime → Reward → Return to Town.
+
+Nguồn khóa chi tiết cho kịch bản/pipeline mới: `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md`. Từ batch 2026-09-09 trở đi, mọi design mới phải đọc tài liệu này trước khi triển khai để giữ đúng nguyên tắc: không làm lại Linh Giới Online từ đầu, chỉ đổi cách hiện thực từ 3D sang 2D.
 
 ## 1. Core loop
 

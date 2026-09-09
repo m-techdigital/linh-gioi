@@ -86,6 +86,7 @@ namespace LinhGioi.World
                 runtimeCharacterBaseSnapshot = controller.RuntimeCharacterBaseSnapshot,
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
+                runtimeTerrainCollisionSnapshot = controller.RuntimeTerrainCollisionSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
                 runtimeCombatSnapshot = controller.RuntimeCombatSnapshot,
                 runtimeRouteProgressSnapshot = controller.RuntimeRouteProgressSnapshot,
@@ -203,6 +204,7 @@ namespace LinhGioi.World
             public string runtimeCharacterBaseSnapshot;
             public string runtimeEquipmentSnapshot;
             public string runtimeInventoryTryOnSnapshot;
+            public string runtimeTerrainCollisionSnapshot;
             public string runtimeAnimationSnapshot;
             public string runtimeCombatSnapshot;
             public string runtimeRouteProgressSnapshot;
