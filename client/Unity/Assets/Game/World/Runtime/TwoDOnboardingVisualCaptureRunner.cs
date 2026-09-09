@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
@@ -25,113 +24,94 @@ namespace LinhGioi.World
                 host.AddComponent<TwoDOnboardingVisualCaptureRunner>();
         }
 
-        private IEnumerator Start()
+        private void Start()
         {
             var evidenceDir = GetArg("--lgo-2d-visual-dir") ?? Path.Combine(Application.persistentDataPath, "lgo-2d-onboarding-visual");
             Directory.CreateDirectory(evidenceDir);
             Debug.Log($"[LinhGioi] 2D onboarding visual capture start evidenceDir={evidenceDir}");
             var controller = TwoDOnboardingController.Attach(new GameObject("LGO 2D Visual Capture World"));
-            yield return null;
-            yield return Capture(evidenceDir, "01-initial");
+            Debug.Log("[LinhGioi] 2D onboarding visual capture controller attached");
+            Capture(evidenceDir, "01-initial");
 
             // Approach inside interaction range without standing on top of the NPC silhouette.
             controller.State.Move(TwoDOnboardingState.GateKeeperPosition + Vector2.left * 0.85f - controller.State.PlayerPosition);
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "02-gate-focus");
+            Capture(evidenceDir, "02-gate-focus");
 
             controller.State.TryUseAction();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "03-dialogue");
+            Capture(evidenceDir, "03-dialogue");
 
             controller.State.TryUseAction();
             controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "04-stone-focus");
+            Capture(evidenceDir, "04-stone-focus");
 
             controller.State.TryUseAction();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "05-jump-ready");
+            Capture(evidenceDir, "05-jump-ready");
 
             controller.State.TryUseJump();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "06-dash-ready");
+            Capture(evidenceDir, "06-dash-ready");
 
             controller.State.TryUseDash();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "07-skill-ready");
+            Capture(evidenceDir, "07-skill-ready");
 
             controller.State.TryUseClassSkill();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "08-complete");
+            Capture(evidenceDir, "08-complete");
             var voLv1CompleteSnapshot = controller.RuntimeVoLv1ClassSliceSnapshot;
             var voLv1PaperDollCompleteSnapshot = controller.RuntimeVoLv1PaperDollAtlasSnapshot;
 
             controller.PreviewEastGateToPlazaTransition();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "14-plaza-transition-preview");
+            Capture(evidenceDir, "14-plaza-transition-preview");
 
             controller.SelectNextLinhThanhDistrictPreview();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "15-district-preview-rail");
+            Capture(evidenceDir, "15-district-preview-rail");
 
             controller.SelectNextLinhThanhDistrictPreview();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "16-district-market-preview");
+            Capture(evidenceDir, "16-district-market-preview");
 
             controller.SelectNextLinhThanhDistrictPreview();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "17-district-spirit-temple-preview");
+            Capture(evidenceDir, "17-district-spirit-temple-preview");
 
             controller.SelectNextLinhThanhDistrictPreview();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "18-district-forge-preview");
+            Capture(evidenceDir, "18-district-forge-preview");
 
             controller.SelectNextLinhThanhDistrictPreview();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "19-district-guild-preview");
+            Capture(evidenceDir, "19-district-guild-preview");
 
             controller.SelectNextLinhThanhDistrictPreview();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "20-district-harbor-preview");
+            Capture(evidenceDir, "20-district-harbor-preview");
 
             controller.UseSelectedPlazaHubTarget();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "11-plaza-board-preview");
+            Capture(evidenceDir, "11-plaza-board-preview");
 
             controller.SelectNextPlazaHubTarget();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "12-plaza-target-selector");
+            Capture(evidenceDir, "12-plaza-target-selector");
 
             controller.SelectNextPlazaHubTarget();
             controller.UseSelectedPlazaHubTarget();
             controller.RefreshForSmoke();
-            yield return null;
-            yield return Capture(evidenceDir, "13-plaza-npc-preview");
+            Capture(evidenceDir, "13-plaza-npc-preview");
 
             controller.ToggleInventoryPanel();
             controller.PreviewSelectedInventoryItem();
-            yield return null;
-            yield return Capture(evidenceDir, "09-inventory-try");
+            Capture(evidenceDir, "09-inventory-try");
 
             controller.ApplyInventoryPreview();
-            yield return null;
-            yield return Capture(evidenceDir, "10-inventory-applied");
+            Capture(evidenceDir, "10-inventory-applied");
 
             var resultPath = Path.Combine(evidenceDir, "twod-onboarding-visual-manifest.json");
             var result = new TwoDOnboardingVisualCaptureResult
@@ -194,13 +174,12 @@ namespace LinhGioi.World
             Quit(result.status == "PASS" ? 0 : 14);
         }
 
-        private IEnumerator Capture(string evidenceDir, string name)
+        private void Capture(string evidenceDir, string name)
         {
-            yield return null;
             var path = Path.Combine(evidenceDir, name + ".bmp");
             Debug.Log($"[LinhGioi] 2D onboarding visual capture frame={name} path={path}");
             var camera = Camera.main;
-            if (camera == null) yield break;
+            if (camera == null) return;
 
             var width = Mathf.Max(320, Screen.width);
             var height = Mathf.Max(180, Screen.height);
