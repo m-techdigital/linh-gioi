@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Scrolling Social Action MMORPG**, HD anime/stylized, không pixel-art, không Meshy/3D, map parallax nhiều lớp, social hub + action combat. Cleanup 3D đã commit/push ở `d97a3c8`, cleanup trace dịch vụ 3D ở `6bf905e`, xoá ảnh source cũ ở `646492e`, Đông Môn procedural blockout ở `eeaf19d`, direction/map catalog ở `1fa3231`. Batch hiện tại đang đóng gói 2D-05 Animation Locomotion: profile Idle/Walk/Run/Jump/Dash/ClassSkill/TrainingCompletePose, runtime animation snapshot và procedural pose nhìn thấy trong Player visual capture.
+Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Scrolling Social Action MMORPG**, HD anime/stylized, không pixel-art, không Meshy/3D, map parallax nhiều lớp, social hub + action combat. Cleanup 3D đã commit/push ở `d97a3c8`, cleanup trace dịch vụ 3D ở `6bf905e`, xoá ảnh source cũ ở `646492e`, Đông Môn procedural blockout ở `eeaf19d`, direction/map catalog ở `1fa3231`. Batch hiện tại đang đóng gói tutorial Jump/Dash/Skill: Bia Luyện Khí mở chuỗi LearnJump → LearnDash → LearnClassSkill → Complete, HUD/action/animation snapshot và visual capture 8 frame.
 
 ## Gate hiện tại
 
@@ -15,8 +15,8 @@ Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Sc
 
 ## Việc tiếp theo
 
-1. Commit/push batch 2D-05 sau khi source validators, Unity EditMode, onboarding smoke và Player visual capture pass.
-2. Bắt đầu bước gameplay tutorial Jump/Dash/Skill để các animation state `Jump`, `Dash`, `ClassSkill` có trigger thật, hoặc 2D-04 Kiếm Lv1 nếu cần mở thêm class module trước.
+1. Commit/push batch tutorial Jump/Dash/Skill sau khi source validators, Unity EditMode, onboarding smoke và Player visual capture pass.
+2. Bắt đầu Shadow Slime combat micro-slice để ClassSkill có mục tiêu/quái thật, hoặc 2D-04 Kiếm Lv1 nếu cần mở thêm class module trước.
 3. Map production lớn giữ cho 2D-09/2D-10, nhưng Đông Môn tutorial blockout vẫn được dùng làm runtime evidence.
 
 ## Blocker

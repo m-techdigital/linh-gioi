@@ -75,9 +75,21 @@ namespace LinhGioi.World
                 RefreshPresentation();
             }
 
-            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
             {
                 if (_state.TryUseAction()) RefreshPresentation();
+            }
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.J))
+            {
+                if (_state.TryUseJump()) RefreshPresentation();
+            }
+            if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift) || Input.GetKeyDown(KeyCode.K))
+            {
+                if (_state.TryUseDash()) RefreshPresentation();
+            }
+            if (Input.GetKeyDown(KeyCode.Q) || Input.GetKeyDown(KeyCode.L))
+            {
+                if (_state.TryUseClassSkill()) RefreshPresentation();
             }
         }
 
@@ -170,19 +182,19 @@ namespace LinhGioi.World
             var moved = delta.sqrMagnitude > 0.0001f;
             _presentationTick++;
             var phase = (_presentationTick % 8) / 7f;
-            var state = _state.Step == TwoDOnboardingStep.Complete ? "TrainingCompletePose" : moved ? "Walk" : "Idle";
-            var bob = state == "Walk" ? Mathf.Sin(phase * Mathf.PI * 2f) * 0.035f : state == "TrainingCompletePose" ? 0.045f : 0f;
-            var armSwing = state == "Walk" ? Mathf.Sin(phase * Mathf.PI * 2f) * 0.08f : state == "TrainingCompletePose" ? 0.12f : 0f;
-            var legSwing = state == "Walk" ? Mathf.Cos(phase * Mathf.PI * 2f) * 0.04f : 0f;
+            var state = _state.Step == TwoDOnboardingStep.Complete ? "TrainingCompletePose" : _state.LastAnimationIntent == "Jump" ? "Jump" : _state.LastAnimationIntent == "Dash" ? "Dash" : _state.LastAnimationIntent == "ClassSkill" ? "ClassSkill" : moved ? "Walk" : "Idle";
+            var bob = state == "Walk" ? Mathf.Sin(phase * Mathf.PI * 2f) * 0.035f : state == "Jump" ? 0.16f : state == "Dash" ? -0.025f : state == "ClassSkill" ? 0.075f : state == "TrainingCompletePose" ? 0.045f : 0f;
+            var armSwing = state == "Walk" ? Mathf.Sin(phase * Mathf.PI * 2f) * 0.08f : state == "Dash" ? -0.10f : state == "ClassSkill" ? 0.18f : state == "TrainingCompletePose" ? 0.12f : 0f;
+            var legSwing = state == "Walk" ? Mathf.Cos(phase * Mathf.PI * 2f) * 0.04f : state == "Jump" ? 0.08f : 0f;
 
-            if (_player != null) _player.localScale = state == "TrainingCompletePose" ? new Vector3(1.04f, 1.04f, 1f) : Vector3.one;
+            if (_player != null) _player.localScale = state == "TrainingCompletePose" ? new Vector3(1.04f, 1.04f, 1f) : state == "Dash" ? new Vector3(1.12f, 0.92f, 1f) : Vector3.one;
             if (_playerHead != null) _playerHead.localPosition = ToWorld(new Vector2(0f, 0.34f + bob), 0f);
             if (_playerLeftArm != null) _playerLeftArm.localPosition = ToWorld(new Vector2(-0.28f, -0.12f + armSwing), 0f);
             if (_playerRightArm != null) _playerRightArm.localPosition = ToWorld(new Vector2(0.28f, -0.12f - armSwing), 0f);
             if (_playerLeftLeg != null) _playerLeftLeg.localPosition = ToWorld(new Vector2(-0.11f, -0.54f + legSwing), 0f);
             if (_playerRightLeg != null) _playerRightLeg.localPosition = ToWorld(new Vector2(0.11f, -0.54f - legSwing), 0f);
 
-            _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "Walk" ? "stride_bob" : "breathing_idle", phase).Snapshot;
+            _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "ClassSkill" ? "vo_lv1_first_skill" : state == "Dash" ? "dash_stretch" : state == "Jump" ? "jump_lift" : state == "Walk" ? "stride_bob" : "breathing_idle", phase).Snapshot;
             _lastPresentedPlayerPosition = _state.PlayerPosition;
         }
 
@@ -447,6 +459,9 @@ namespace LinhGioi.World
                 case TwoDOnboardingAction.Talk: return "Trò chuyện";
                 case TwoDOnboardingAction.Continue: return "Tiếp tục";
                 case TwoDOnboardingAction.Train: return "Cộng hưởng Bia Luyện Khí";
+                case TwoDOnboardingAction.Jump: return "Nhảy";
+                case TwoDOnboardingAction.Dash: return "Dash";
+                case TwoDOnboardingAction.Skill: return "Kỹ năng Võ Lv1";
                 default: return "Không có";
             }
         }

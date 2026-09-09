@@ -52,12 +52,27 @@ namespace LinhGioi.World
             controller.State.TryUseAction();
             controller.RefreshForSmoke();
             yield return null;
-            yield return Capture(evidenceDir, "05-complete");
+            yield return Capture(evidenceDir, "05-jump-ready");
+
+            controller.State.TryUseJump();
+            controller.RefreshForSmoke();
+            yield return null;
+            yield return Capture(evidenceDir, "06-dash-ready");
+
+            controller.State.TryUseDash();
+            controller.RefreshForSmoke();
+            yield return null;
+            yield return Capture(evidenceDir, "07-skill-ready");
+
+            controller.State.TryUseClassSkill();
+            controller.RefreshForSmoke();
+            yield return null;
+            yield return Capture(evidenceDir, "08-complete");
 
             var resultPath = Path.Combine(evidenceDir, "twod-onboarding-visual-manifest.json");
             var result = new TwoDOnboardingVisualCaptureResult
             {
-                status = _screenshots.Count == 5 ? "PASS" : "FAIL",
+                status = _screenshots.Count == 8 ? "PASS" : "FAIL",
                 unityVersion = Application.unityVersion,
                 platform = Application.platform.ToString(),
                 evidenceDir = evidenceDir,

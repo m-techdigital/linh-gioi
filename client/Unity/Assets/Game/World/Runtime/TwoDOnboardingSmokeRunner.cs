@@ -52,6 +52,12 @@ namespace LinhGioi.World
                 state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
                 Require(state.AvailableAction == TwoDOnboardingAction.Train, "training action missing");
                 Require(state.TryUseAction(), "training action failed");
+                Require(state.Step == TwoDOnboardingStep.LearnJump, "training should unlock jump lesson");
+                Require(state.TryUseJump(), "jump lesson failed");
+                Require(state.Step == TwoDOnboardingStep.LearnDash, "jump should unlock dash lesson");
+                Require(state.TryUseDash(), "dash lesson failed");
+                Require(state.Step == TwoDOnboardingStep.LearnClassSkill, "dash should unlock class skill lesson");
+                Require(state.TryUseClassSkill(), "class skill lesson failed");
                 Require(state.Step == TwoDOnboardingStep.Complete, "2D onboarding did not complete");
                 Require(state.ObjectiveText.Contains("Hoàn tất nhập môn"), "completion copy drifted");
 

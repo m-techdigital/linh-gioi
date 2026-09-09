@@ -30,6 +30,14 @@ namespace LinhGioi.Tests
             state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
             Assert.AreEqual(TwoDOnboardingAction.Train, state.AvailableAction);
             Assert.IsTrue(state.TryUseAction());
+            Assert.AreEqual(TwoDOnboardingStep.LearnJump, state.Step);
+            StringAssert.Contains("Nhảy", state.ObjectiveText);
+
+            Assert.IsTrue(state.TryUseJump());
+            Assert.AreEqual(TwoDOnboardingStep.LearnDash, state.Step);
+            Assert.IsTrue(state.TryUseDash());
+            Assert.AreEqual(TwoDOnboardingStep.LearnClassSkill, state.Step);
+            Assert.IsTrue(state.TryUseClassSkill());
             Assert.AreEqual(TwoDOnboardingStep.Complete, state.Step);
             StringAssert.Contains("Hoàn tất nhập môn", state.ObjectiveText);
         }
@@ -189,6 +197,9 @@ namespace LinhGioi.Tests
                 controller.State.TryUseAction();
                 controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
                 controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
                 controller.RefreshForSmoke();
 
                 StringAssert.Contains("top=top_vo_lv1_male", controller.RuntimeEquipmentSnapshot);
@@ -201,6 +212,35 @@ namespace LinhGioi.Tests
             }
         }
 
+
+
+        [Test]
+        public void TrainingStoneUnlocksJumpDashAndClassSkillBeforeCompletion()
+        {
+            var state = new TwoDOnboardingState();
+            state.Reset();
+            state.Move(TwoDOnboardingState.GateKeeperPosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseAction();
+            state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
+            state.TryUseAction();
+
+            Assert.AreEqual(TwoDOnboardingStep.LearnJump, state.Step);
+            Assert.AreEqual(TwoDOnboardingAction.Jump, state.AvailableAction);
+            Assert.IsTrue(state.TryUseJump());
+            Assert.AreEqual("Jump", state.LastAnimationIntent);
+
+            Assert.AreEqual(TwoDOnboardingStep.LearnDash, state.Step);
+            Assert.AreEqual(TwoDOnboardingAction.Dash, state.AvailableAction);
+            Assert.IsTrue(state.TryUseDash());
+            Assert.AreEqual("Dash", state.LastAnimationIntent);
+
+            Assert.AreEqual(TwoDOnboardingStep.LearnClassSkill, state.Step);
+            Assert.AreEqual(TwoDOnboardingAction.Skill, state.AvailableAction);
+            Assert.IsTrue(state.TryUseClassSkill());
+            Assert.AreEqual("ClassSkill", state.LastAnimationIntent);
+            Assert.AreEqual(TwoDOnboardingStep.Complete, state.Step);
+        }
 
         [Test]
         public void LocomotionAnimationProfileDefinesSideScrollStates()
@@ -236,6 +276,18 @@ namespace LinhGioi.Tests
                 controller.State.TryUseAction();
                 controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
                 controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("ClassSkill", controller.RuntimeAnimationSnapshot);
+
+                controller.State.TryUseJump();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("Jump", controller.RuntimeAnimationSnapshot);
+
+                controller.State.TryUseDash();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("Dash", controller.RuntimeAnimationSnapshot);
+
+                controller.State.TryUseClassSkill();
                 controller.RefreshForSmoke();
                 StringAssert.Contains("TrainingCompletePose", controller.RuntimeAnimationSnapshot);
             }

@@ -9,6 +9,9 @@ namespace LinhGioi.World
         TalkToGateKeeper,
         GoToTrainingStone,
         ActivateTrainingStone,
+        LearnJump,
+        LearnDash,
+        LearnClassSkill,
         Complete
     }
 
@@ -17,7 +20,10 @@ namespace LinhGioi.World
         None,
         Talk,
         Continue,
-        Train
+        Train,
+        Jump,
+        Dash,
+        Skill
     }
 
     public sealed class TwoDOnboardingState
@@ -36,6 +42,7 @@ namespace LinhGioi.World
         public string HintText { get; private set; } = "Di chuyển bằng WASD/phím mũi tên. Lại gần NPC để trò chuyện.";
         public string AreaText { get; private set; } = "Cổng Linh Thành";
         public string FeedbackText { get; private set; } = "Bình minh xanh phủ trên cổng thành.";
+        public string LastAnimationIntent { get; private set; } = "Idle";
 
         public void Reset()
         {
@@ -48,6 +55,7 @@ namespace LinhGioi.World
             HintText = "Di chuyển bằng WASD/phím mũi tên. Lại gần NPC để trò chuyện.";
             AreaText = "Cổng Linh Thành";
             FeedbackText = "Bình minh xanh phủ trên cổng thành.";
+            LastAnimationIntent = "Idle";
             Refresh();
         }
 
@@ -55,6 +63,7 @@ namespace LinhGioi.World
         {
             if (!IsFinite(delta)) return;
             PlayerPosition = ClampToPlayableArea(PlayerPosition + delta);
+            if (delta.sqrMagnitude > 0.0001f) LastAnimationIntent = "Walk";
             Refresh();
         }
 
@@ -82,17 +91,57 @@ namespace LinhGioi.World
                     Refresh();
                     return true;
                 case TwoDOnboardingAction.Train:
-                    Step = TwoDOnboardingStep.Complete;
+                    Step = TwoDOnboardingStep.LearnJump;
                     DialogueOpen = false;
                     DialogueLine = string.Empty;
-                    ObjectiveText = "Hoàn tất nhập môn: Linh lực đã cộng hưởng.";
-                    HintText = "Bạn đã sẵn sàng bước sâu hơn vào Linh Thành.";
-                    FeedbackText = "Bia Luyện Khí sáng lên, một vòng linh quang lan dưới chân.";
-                    AvailableAction = TwoDOnboardingAction.None;
+                    ObjectiveText = "Nhảy qua vạch linh khí đầu tiên.";
+                    HintText = "Bấm Space/J để nhảy.";
+                    FeedbackText = "Bia Luyện Khí mở bài tập thân pháp: nhảy.";
+                    LastAnimationIntent = "ClassSkill";
+                    AvailableAction = TwoDOnboardingAction.Jump;
                     return true;
                 default:
                     return false;
             }
+        }
+
+        public bool TryUseJump()
+        {
+            Refresh();
+            if (AvailableAction != TwoDOnboardingAction.Jump) return false;
+            Step = TwoDOnboardingStep.LearnDash;
+            ObjectiveText = "Lướt qua khoảng trống bằng Dash.";
+            HintText = "Bấm Shift/K để lướt nhanh.";
+            FeedbackText = "Bạn bật khỏi mặt sân, linh khí nâng gót chân.";
+            LastAnimationIntent = "Jump";
+            AvailableAction = TwoDOnboardingAction.Dash;
+            return true;
+        }
+
+        public bool TryUseDash()
+        {
+            Refresh();
+            if (AvailableAction != TwoDOnboardingAction.Dash) return false;
+            Step = TwoDOnboardingStep.LearnClassSkill;
+            ObjectiveText = "Dùng kỹ năng Võ nhập môn vào mục tiêu linh khí.";
+            HintText = "Bấm Q/L để tung kỹ năng class.";
+            FeedbackText = "Một vệt ảnh xanh kéo theo cú lướt ngắn.";
+            LastAnimationIntent = "Dash";
+            AvailableAction = TwoDOnboardingAction.Skill;
+            return true;
+        }
+
+        public bool TryUseClassSkill()
+        {
+            Refresh();
+            if (AvailableAction != TwoDOnboardingAction.Skill) return false;
+            Step = TwoDOnboardingStep.Complete;
+            ObjectiveText = "Hoàn tất nhập môn: Linh lực đã cộng hưởng.";
+            HintText = "Bạn đã sẵn sàng bước sâu hơn vào Linh Thành.";
+            FeedbackText = "Kỹ năng Võ Lv1 phá tan mục tiêu linh khí; vòng sáng lan dưới chân.";
+            LastAnimationIntent = "ClassSkill";
+            AvailableAction = TwoDOnboardingAction.None;
+            return true;
         }
 
         public void Refresh()
@@ -108,6 +157,27 @@ namespace LinhGioi.World
             {
                 AvailableAction = TwoDOnboardingAction.Continue;
                 AreaText = "Cổng Linh Thành";
+                return;
+            }
+
+            if (Step == TwoDOnboardingStep.LearnJump)
+            {
+                AvailableAction = TwoDOnboardingAction.Jump;
+                AreaText = "Sân Luyện Khí";
+                return;
+            }
+
+            if (Step == TwoDOnboardingStep.LearnDash)
+            {
+                AvailableAction = TwoDOnboardingAction.Dash;
+                AreaText = "Sân Luyện Khí";
+                return;
+            }
+
+            if (Step == TwoDOnboardingStep.LearnClassSkill)
+            {
+                AvailableAction = TwoDOnboardingAction.Skill;
+                AreaText = "Sân Luyện Khí";
                 return;
             }
 
