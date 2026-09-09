@@ -69,6 +69,7 @@ namespace LinhGioi.World
             controller.RefreshForSmoke();
             yield return null;
             yield return Capture(evidenceDir, "08-complete");
+            var voLv1CompleteSnapshot = controller.RuntimeVoLv1ClassSliceSnapshot;
 
             controller.PreviewEastGateToPlazaTransition();
             controller.RefreshForSmoke();
@@ -159,6 +160,7 @@ namespace LinhGioi.World
                 runtimeHubTransitionSnapshot = controller.RuntimeHubTransitionSnapshot,
                 runtimeCharacterBaseSnapshot = controller.RuntimeCharacterBaseSnapshot,
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
+                runtimeVoLv1ClassSliceSnapshot = voLv1CompleteSnapshot,
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
                 runtimeInventoryInputSnapshot = controller.RuntimeInventoryInputSnapshot,
                 runtimePlazaHubInputSnapshot = controller.RuntimePlazaHubInputSnapshot,
@@ -307,6 +309,7 @@ namespace LinhGioi.World
             public string runtimeHubTransitionSnapshot;
             public string runtimeCharacterBaseSnapshot;
             public string runtimeEquipmentSnapshot;
+            public string runtimeVoLv1ClassSliceSnapshot;
             public string runtimeInventoryTryOnSnapshot;
             public string runtimeInventoryInputSnapshot;
             public string runtimePlazaHubInputSnapshot;

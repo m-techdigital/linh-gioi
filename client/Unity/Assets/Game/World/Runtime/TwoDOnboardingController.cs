@@ -21,6 +21,7 @@ namespace LinhGioi.World
         private Transform _trainingStone;
         private Transform _shadowSlime;
         private Transform _shadowSlimeLabel;
+        private Transform _voLv1SkillCueRoot;
         private Transform _pathGlow;
         private Transform _linhThanhUnlockBanner;
         private Transform _plazaUnlockPath;
@@ -97,6 +98,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhUnlockSnapshot => BuildLinhThanhUnlockSnapshot();
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
+        public string RuntimeVoLv1ClassSliceSnapshot => BuildVoLv1ClassSliceRuntimeSnapshot();
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
         public string RuntimeInventoryInputSnapshot => BuildInventoryInputSnapshot();
         public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
@@ -245,6 +247,7 @@ namespace LinhGioi.World
             _shadowSlime = AddShadowSlime("LGO 2D Shadow Slime", new Vector2(3.55f, -1.16f), -1);
             _shadowSlimeLabel = AddWorldLabel("LGO 2D Shadow Slime Label", "SHADOW SLIME", new Vector2(3.55f, -0.34f), 0.034f, new Color(0.82f, 0.60f, 1f), 3).transform;
             AddKiemLv1PreviewRack(new Vector2(3.35f, -2.02f), 4);
+            _voLv1SkillCueRoot = AddVoLv1SkillCue("LGO 2D Vo Lv1 Skill Runtime Cue", new Vector2(2.98f, -1.18f), 6);
             BuildInventoryTryOnStrip();
             BuildRuntimeMapOverlay();
             AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
@@ -299,6 +302,7 @@ namespace LinhGioi.World
             if (_playerRightArm != null) _playerRightArm.localPosition = ToWorld(new Vector2(0.28f, -0.12f - armSwing), 0f);
             if (_playerLeftLeg != null) _playerLeftLeg.localPosition = ToWorld(new Vector2(-0.11f, -0.54f + legSwing), 0f);
             if (_playerRightLeg != null) _playerRightLeg.localPosition = ToWorld(new Vector2(0.11f, -0.54f - legSwing), 0f);
+            if (_voLv1SkillCueRoot != null) _voLv1SkillCueRoot.gameObject.SetActive(state == "ClassSkill" || state == "TrainingCompletePose");
 
             _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "ClassSkill" ? "vo_lv1_first_skill" : state == "Dash" ? "dash_stretch" : state == "Jump" ? "jump_lift" : state == "Walk" ? "stride_bob" : "breathing_idle", phase).Snapshot;
             _lastPresentedPlayerPosition = _state.PlayerPosition;
@@ -1074,6 +1078,14 @@ namespace LinhGioi.World
                 + " | " + EnsurePlayerLoadout().Snapshot;
         }
 
+        private string BuildVoLv1ClassSliceRuntimeSnapshot()
+        {
+            return TwoDClassSliceCatalog.LoadVoLv1ClassSliceSnapshot()
+                + " | runtimeLoadout=" + EnsurePlayerLoadout().Snapshot
+                + " | runtimeAnimation=" + _runtimeAnimationSnapshot
+                + " | runtimeSkillCue=" + (_voLv1SkillCueRoot != null && _voLv1SkillCueRoot.gameObject.activeSelf);
+        }
+
         private string BuildInventoryTryOnSnapshot()
         {
             var previewLoadout = TwoDCharacterLoadout.CreateStarter("male_base", _moduleCatalog);
@@ -1086,6 +1098,21 @@ namespace LinhGioi.World
                 + " | apply=weapon_kiem_lv1_starter"
                 + " | cancel=return_to_vo_lv1"
                 + " | " + previewLoadout.Snapshot;
+        }
+
+        private Transform AddVoLv1SkillCue(string name, Vector2 position, int order)
+        {
+            AddSceneBeat("VO_LV1_CLASS_SLICE runtime paper-doll slots motion skill cue");
+            AddSceneBeat(TwoDClassSliceCatalog.LoadVoLv1ClassSliceSnapshot());
+            var root = new GameObject(name);
+            root.transform.SetParent(transform, false);
+            root.transform.localPosition = ToWorld(position, order * 0.01f);
+            AddSprite(name + " Trail Core", new Vector2(0.00f, 0.00f), new Vector2(0.96f, 0.08f), new Color(0.95f, 0.72f, 0.28f, 0.78f), order, root.transform);
+            AddSprite(name + " Trail Cyan Edge", new Vector2(0.24f, 0.10f), new Vector2(0.72f, 0.045f), new Color(0.18f, 0.86f, 0.78f, 0.56f), order + 1, root.transform);
+            AddSprite(name + " Impact Palm", new Vector2(0.58f, 0.02f), new Vector2(0.18f, 0.18f), new Color(0.95f, 0.72f, 0.28f, 0.78f), order + 2, root.transform, "diamond");
+            AddWorldLabel(name + " Label", "VÕ Q", new Vector2(0.22f, 0.26f), 0.026f, RuntimeArtCatalog.Gold, order + 3, root.transform);
+            root.SetActive(false);
+            return root.transform;
         }
 
         private void BuildInventoryTryOnStrip()

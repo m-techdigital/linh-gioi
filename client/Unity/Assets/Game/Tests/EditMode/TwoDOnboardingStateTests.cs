@@ -265,6 +265,62 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void VoLv1ClassSliceLoadsPaperDollMotionAndSkillFromRuntimeResource()
+        {
+            var source = TwoDClassSliceCatalog.LoadVoLv1ClassSlice();
+            var snapshot = TwoDClassSliceCatalog.LoadVoLv1ClassSliceSnapshot();
+
+            Assert.IsNotNull(source);
+            Assert.AreEqual("vo", source.classId);
+            Assert.That(source.slots.Length, Is.EqualTo(5));
+            Assert.That(source.motions.Length, Is.EqualTo(5));
+            Assert.AreEqual("vo_lv1_first_skill", source.skill.id);
+            Assert.AreEqual("Hand_R", source.skill.anchor);
+            StringAssert.Contains("VoLv1ClassSlice", snapshot);
+            StringAssert.Contains("resource=LGOClasses/VoLv1ClassSlice", snapshot);
+            StringAssert.Contains("classId=vo", snapshot);
+            StringAssert.Contains("OuterShirt:top_vo_lv1_male@Chest", snapshot);
+            StringAssert.Contains("Gloves:gloves_vo_lv1_unisex@Hand_L,Hand_R", snapshot);
+            StringAssert.Contains("ClassSkill:vo_lv1_first_skill", snapshot);
+            StringAssert.Contains("skillAnchor=Hand_R", snapshot);
+            StringAssert.Contains("safe-no-source-image=True", snapshot);
+            StringAssert.Contains("safe-no-3d=True", snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesVoLv1ClassSliceWithEquippedMotionAndSkillCue()
+        {
+            var host = new GameObject("2D Vo Lv1 class slice runtime test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("VoLv1ClassSlice", controller.RuntimeVoLv1ClassSliceSnapshot);
+                StringAssert.Contains("classId=vo", controller.RuntimeVoLv1ClassSliceSnapshot);
+                StringAssert.Contains("slots=5", controller.RuntimeVoLv1ClassSliceSnapshot);
+                StringAssert.Contains("top=top_vo_lv1_male", controller.RuntimeVoLv1ClassSliceSnapshot);
+                StringAssert.Contains("runtimeAnimation=animation=TrainingCompletePose", controller.RuntimeVoLv1ClassSliceSnapshot);
+                StringAssert.Contains("runtimeSkillCue=True", controller.RuntimeVoLv1ClassSliceSnapshot);
+                Assert.IsNotNull(GameObject.Find("LGO 2D Vo Lv1 Skill Runtime Cue"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Vo Lv1 Skill Runtime Cue Impact Palm"));
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void VoLv1StarterModulesCoverMaleFemaleCoreOutfitSlots()
         {

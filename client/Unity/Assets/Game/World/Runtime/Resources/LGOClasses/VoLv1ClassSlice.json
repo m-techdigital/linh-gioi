@@ -1,0 +1,30 @@
+{
+  "id": "vo-lv1-class-slice-v0",
+  "classId": "vo",
+  "displayName": "Võ Lv1",
+  "baseIds": ["male_base", "female_base"],
+  "usage": "one-class-runtime-verification-slice",
+  "safety": ["safe-no-source-image", "safe-runtime-resource", "safe-no-3d", "safe-local-no-backend"],
+  "slots": [
+    {"slot": "OuterShirt", "moduleId": "top_vo_lv1_male", "anchor": "Chest", "fitProfile": "base_male_torso", "sortBand": 2},
+    {"slot": "PantsOrSkirt", "moduleId": "pants_vo_lv1_unisex", "anchor": "Hips", "fitProfile": "base_hips_legs", "sortBand": 1},
+    {"slot": "Waist", "moduleId": "waist_vo_lv1_unisex", "anchor": "Hips", "fitProfile": "base_hips", "sortBand": 3},
+    {"slot": "Gloves", "moduleId": "gloves_vo_lv1_unisex", "anchor": "Hand_L,Hand_R", "fitProfile": "base_hands", "sortBand": 3},
+    {"slot": "Boots", "moduleId": "boots_vo_lv1_unisex", "anchor": "Foot_L,Foot_R", "fitProfile": "base_feet", "sortBand": 2}
+  ],
+  "motions": [
+    {"state": "Idle", "pose": "vo_lv1_guard_idle", "rootMotion": "hold-ground", "anchorPolicy": "feet-stay-on-ground-band"},
+    {"state": "Walk", "pose": "vo_lv1_stride", "rootMotion": "side-scroll-step", "anchorPolicy": "feet-alternate-contact"},
+    {"state": "Jump", "pose": "vo_lv1_jump_lift", "rootMotion": "vertical-lift", "anchorPolicy": "shadow-remains-on-ground"},
+    {"state": "Dash", "pose": "vo_lv1_dash_stretch", "rootMotion": "forward-burst", "anchorPolicy": "torso-stretches-feet-return"},
+    {"state": "ClassSkill", "pose": "vo_lv1_first_skill", "rootMotion": "short-lunge", "anchorPolicy": "skill-trail-from-hand-anchor"}
+  ],
+  "skill": {
+    "id": "vo_lv1_first_skill",
+    "displayName": "Quyền Phong Khai Mạch",
+    "input": "Q",
+    "anchor": "Hand_R",
+    "hitTarget": "shadow-slime",
+    "vfxCue": "gold-cyan-forward-trail"
+  }
+}
