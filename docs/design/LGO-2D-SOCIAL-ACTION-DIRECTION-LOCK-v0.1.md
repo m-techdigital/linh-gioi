@@ -248,9 +248,14 @@ Map pipeline mới: Concept Map → Background Far/Mid/Near/Foreground → Colli
 
 Vertical Slice target: Login → Character Select → Enter World → Linh Thành 2D → Walk/Run/Jump/Dash → Gate Keeper → Dialogue → Training → Use Class Skill → Shadow Slime → Reward → Return to Town.
 
+## Production interpretation
+
+Tài liệu này là khóa hướng cho mọi design mới. Khi ảnh board/concept có chi tiết đẹp, ta dùng làm reference mỹ thuật; khi chữ trong scenario/GDD quy định flow, class, zone, pipeline hoặc guardrail thì chữ thắng ảnh. Các concept class/trang phục cũ chỉ được đưa vào branch 2D qua sprite layer/module/anchor/atlas, không crop dán board trực tiếp vào runtime và không phục hồi source image cũ đã bị xoá.
+
 ## Guardrails
 
-- Không đầu tư tiếp vào sculpt, retopo, 3D outfit, PBR character material, 3D armor sockets, 3D hair, 3D cloth, 3D character LOD.
-- Không dùng lại ảnh thiết kế/source cũ đã bị loại khỏi branch.
-- Design/runtime mới phải chứng minh được bằng Unity build/test/runtime evidence.
-- Mọi map/character/item mới cần id/layer/anchor rõ để mix & match, animation và runtime test không bị làm mò.
+- Không đầu tư tiếp vào Meshy, sculpt, retopo, 3D outfit, PBR character material, 3D armor sockets, 3D hair, 3D cloth, 3D character LOD cho player character chính.
+- Không dùng lại ảnh thiết kế/source cũ đã bị loại khỏi branch; reference mới phải đi qua concept → clean sprite/module → rig/atlas → Unity runtime test.
+- Design/runtime mới phải chứng minh được bằng Unity build/test/runtime evidence; screenshot phải được xem bằng mắt khi thay đổi player-visible.
+- Mọi map/character/item mới cần id/layer/anchor/fit profile rõ để mix & match, animation và runtime test không bị làm mò.
+- Trước khi làm map production, kiểm tra `docs/02-GDD.md`, tài liệu này và `docs/design/LGO-2D-MAP-AZ-DESIGN-v0.1.md`; nếu mâu thuẫn, ưu tiên yêu cầu owner mới nhất và cập nhật spine trước khi implement.

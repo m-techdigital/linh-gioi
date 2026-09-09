@@ -2,7 +2,7 @@
 
 ## Trạng thái
 
-Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Scrolling Social Action MMORPG**, HD anime/stylized, không pixel-art, không Meshy/3D, map parallax nhiều lớp, social hub + action combat. Cleanup 3D đã commit/push ở `d97a3c8`, cleanup trace dịch vụ 3D ở `6bf905e`, xoá ảnh source cũ ở `646492e`, Đông Môn procedural blockout ở `eeaf19d`, direction/map catalog ở `1fa3231`. Batch hiện tại đang đóng gói tutorial Jump/Dash/Skill: Bia Luyện Khí mở chuỗi LearnJump → LearnDash → LearnClassSkill → Complete, HUD/action/animation snapshot và visual capture 8 frame.
+Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Scrolling Social Action MMORPG**, HD anime/stylized, không pixel-art, không Meshy/3D, side-view parallax, social hub + action combat. Kịch bản mới đã được đưa vào `docs/02-GDD.md` để làm nguồn chính trước khi design map: giữ thế giới/class/progression/story/backend, chuyển pipeline sang base sprite/cutout body, layer trang phục 2D, skeleton 2D, anchor point, sprite atlas và runtime test. Cleanup 3D đã commit/push ở `d97a3c8`, cleanup trace dịch vụ 3D ở `6bf905e`, xoá ảnh source cũ ở `646492e`, Đông Môn procedural blockout ở `eeaf19d`, direction/map catalog ở `1fa3231`. Tutorial Jump/Dash/Skill đã checkpoint ở `e330c58`; WIP tiếp theo là Shadow Slime combat micro-slice, nhưng mọi mở rộng map/design phải bám GDD mới.
 
 ## Gate hiện tại
 
@@ -15,10 +15,10 @@ Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới: **2D Side-Sc
 
 ## Việc tiếp theo
 
-1. Commit/push batch tutorial Jump/Dash/Skill sau khi source validators, Unity EditMode, onboarding smoke và Player visual capture pass.
-2. Bắt đầu Shadow Slime combat micro-slice để ClassSkill có mục tiêu/quái thật, hoặc 2D-04 Kiếm Lv1 nếu cần mở thêm class module trước.
-3. Map production lớn giữ cho 2D-09/2D-10, nhưng Đông Môn tutorial blockout vẫn được dùng làm runtime evidence.
+1. Commit/push batch khóa kịch bản 2D mới vào GDD/execution docs sau khi kiểm diff và source validators pass.
+2. Tiếp tục Shadow Slime combat micro-slice đang có test đỏ để `ClassSkill` có mục tiêu/quái thật, giữ scope tutorial Đông Môn.
+3. Sau combat micro-slice, tiếp roadmap class/map: 2D-04 Kiếm Lv1 hoặc 2D-09/2D-10 map tùy checkpoint, nhưng production map phải bám Zone Network, Chapter 1 `Vết Nứt Đông Môn`, layer parallax và item/map id rõ.
 
 ## Blocker
 
-Chưa có blocker. Visual capture hiện bắt được world stage, HUD world-space, minimap/route overlay, scene-beat metadata và character base snapshot bằng camera render; manifest lưu `hudSnapshot`, `productionSceneBeatSnapshot`, `runtimeMapSnapshot`, `runtimeCharacterBaseSnapshot`, `runtimeEquipmentSnapshot`, `runtimeAnimationSnapshot` để kiểm copy/trạng thái. Ảnh source cũ đã bị loại khỏi source tree và có validator riêng để ngăn tái nhập nhầm.
+Chưa có blocker. Visual capture hiện bắt được world stage, HUD world-space, minimap/route overlay, scene-beat metadata và character base snapshot bằng camera render; manifest lưu `hudSnapshot`, `productionSceneBeatSnapshot`, `runtimeMapSnapshot`, `runtimeCharacterBaseSnapshot`, `runtimeEquipmentSnapshot`, `runtimeAnimationSnapshot` để kiểm copy/trạng thái. Ảnh source cũ đã bị loại khỏi source tree và có validator riêng để ngăn tái nhập nhầm. Lưu ý đang có WIP test Shadow Slime trong Unity test file; batch khóa kịch bản không stage phần implementation này.
