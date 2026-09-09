@@ -38,9 +38,16 @@ def check_matrix_output() -> None:
     if result.returncode != 0:
         ERRORS.append(result.stderr.strip() or "visual matrix command failed")
         return
-    for marker in ("login_gate_entry", "world_hud", "combat_readiness_hud", "combat_placeholder_assets"):
+    for marker in ("login_gate_entry", "world_hud", "combat_readiness_hud", "combat_placeholder_assets", "two_d_initial", "two_d_inventory_try"):
         if marker not in result.stdout:
             ERRORS.append(f"visual matrix output missing {marker}")
+    current = subprocess.run(["python3.12", "tools/lgo_visual_evidence_matrix.py", "--verify-current", "--json"], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if current.returncode != 0:
+        ERRORS.append(current.stdout.strip() or current.stderr.strip() or "current 2D visual matrix verify failed")
+        return
+    for marker in ("LGO_VISUAL_EVIDENCE_MATRIX_2D_CURRENT_PASS", "two_d_initial", "two_d_inventory_try"):
+        if marker not in current.stdout:
+            ERRORS.append(f"current 2D visual matrix output missing {marker}")
 
 
 def main() -> int:
@@ -60,6 +67,10 @@ def main() -> int:
     require(
         "tools/lgo_visual_evidence_matrix.py",
         "LGO_VISUAL_EVIDENCE_MATRIX_READY",
+        "TWO_D_ONBOARDING_VIEWS",
+        "two_d_initial",
+        "two_d_inventory_try",
+        "LGO_VISUAL_EVIDENCE_MATRIX_2D_CURRENT_PASS",
         "combat_readiness_hud",
         "not production art",
     )

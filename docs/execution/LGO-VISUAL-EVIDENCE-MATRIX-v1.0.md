@@ -6,6 +6,31 @@ Marker: `LGO_VISUAL_EVIDENCE_MATRIX_READY`
 
 This matrix keeps visual acceptance focused on actual runtime screenshots and review aids, not source inspection or concept images.
 
+
+## 2D Onboarding Current Views
+
+The current `feature/2d` slice has a dedicated visual evidence subset. These screenshots prove runtime visibility only; they are not production art claims.
+
+| View ID | Screenshot | Required runtime proof | Non-claim |
+|---|---|---|---|
+| `two_d_initial` | `build/2d-onboarding-visual/01-initial.bmp` | HUD snapshot and `runtimeTilemapSnapshot` exist | not production art |
+| `two_d_gate_focus` | `build/2d-onboarding-visual/02-gate-focus.bmp` | route progress and base character snapshot exist | not production social hub |
+| `two_d_skill_ready` | `build/2d-onboarding-visual/07-skill-ready.bmp` | combat and animation snapshots exist | not production combat |
+| `two_d_inventory_try` | `build/2d-onboarding-visual/09-inventory-try.bmp` | inventory try-on/input snapshots exist | not production inventory economy |
+| `two_d_inventory_applied` | `build/2d-onboarding-visual/10-inventory-applied.bmp` | inventory input and equipment snapshots exist | not persistent equipment save |
+
+Run current verification with:
+
+```bash
+python3.12 tools/lgo_visual_evidence_matrix.py --verify-current
+```
+
+Expected marker:
+
+```text
+LGO_VISUAL_EVIDENCE_MATRIX_2D_CURRENT_PASS
+```
+
 ## Required Views
 
 | View | Evidence source | Claim |

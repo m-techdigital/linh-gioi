@@ -188,3 +188,11 @@ LGO_RUNTIME_SMOKE_MATRIX_READY. Đã nâng `tools/lgo_runtime_smoke_matrix.py` v
 ## Next after runtime smoke matrix
 
 Tiếp tục task roadmap an toàn kế tiếp từ advisor; nếu làm map/runtime player-visible thì vẫn chạy Unity compile, smoke, Player build/capture và matrix 2D sau khi sinh evidence mới.
+
+## 2026-09-09 — Visual evidence matrix 2D current views
+
+LGO_VISUAL_EVIDENCE_MATRIX_READY. Đã nâng `tools/lgo_visual_evidence_matrix.py` với `TWO_D_ONBOARDING_VIEWS` và mode `--verify-current`: kiểm manifest `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`, 5 screenshot runtime trọng yếu (`01-initial`, `02-gate-focus`, `07-skill-ready`, `09-inventory-try`, `10-inventory-applied`) và các field HUD/route/base/combat/animation/inventory. Output xác nhận `LGO_VISUAL_EVIDENCE_MATRIX_2D_CURRENT_PASS`; mọi view giữ non-claim như not production art/combat/inventory.
+
+## Next after visual evidence matrix
+
+Tiếp tục task advisor kế tiếp; nếu mở runtime/player-visible mới thì sinh lại screenshot/manifest rồi chạy smoke matrix và visual matrix tương ứng.
