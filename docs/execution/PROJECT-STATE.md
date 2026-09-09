@@ -10,7 +10,7 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 
 ## Current source state
 
-Đã dọn pipeline/source/asset/tool cũ liên quan hướng dựng nhân vật/cảnh 3D khỏi `feature/2d` và loại bỏ toàn bộ ảnh thiết kế/source cũ khỏi source tree để tránh kéo lại hướng art đã bỏ. Runtime 2D nhập môn hiện có một slice player-visible: di chuyển bằng WASD/phím mũi tên, focus NPC, mở thoại, nhận hướng dẫn tới Bia Luyện Khí, kích hoạt bia, hoàn tất chuỗi Jump/Dash/ClassSkill và hoàn tất nhập môn. Visual hiện là sprite/layer procedural gọn để kiểm flow, có HUD world-space, minimap/route overlay, snapshot base character nam/nữ, modular equipment và locomotion animation được camera capture; chưa phải art final. Kịch bản mới yêu cầu production map đi theo Zone Network và Chapter 1 `Vết Nứt Đông Môn`, không biến sân luyện thành toàn game và không triển khai map bằng cách crop/dán board.
+Đã dọn pipeline/source/asset/tool cũ liên quan hướng dựng nhân vật/cảnh 3D khỏi `feature/2d` và loại bỏ toàn bộ ảnh thiết kế/source cũ khỏi source tree để tránh kéo lại hướng art đã bỏ. Runtime 2D nhập môn hiện có một slice player-visible: di chuyển bằng WASD/phím mũi tên, focus NPC, mở thoại, nhận hướng dẫn tới Bia Luyện Khí, kích hoạt bia, hoàn tất chuỗi Jump/Dash/ClassSkill, đánh tan Shadow Slime bằng kỹ năng Võ Lv1 và hoàn tất nhập môn. Visual hiện là sprite/layer procedural gọn để kiểm flow, có HUD world-space, minimap/route overlay, snapshot base character nam/nữ, modular equipment và locomotion animation được camera capture; chưa phải art final. Kịch bản mới yêu cầu production map đi theo Zone Network và Chapter 1 `Vết Nứt Đông Môn`, không biến sân luyện thành toàn game và không triển khai map bằng cách crop/dán board.
 
 ## Validation spine
 
@@ -31,8 +31,9 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 - Modular equipment checkpoint: `091a2e3 Add 2D modular equipment runtime spine`.
 - Võ Lv1 seed checkpoint: `81000ed Add 2D Vo Lv1 starter outfit seed`.
 - Locomotion animation checkpoint: `c04e40f Add 2D locomotion animation spine`.
-- Tutorial movement/skill WIP/checkpoint: Bia Luyện Khí mở chuỗi Jump → Dash → ClassSkill → Complete; visual capture tăng lên 8 frame và manifest kiểm `screenshotCount=8`, `finalStep=Complete`, animation tokens Jump/Dash/ClassSkill/TrainingCompletePose. Evidence latest: `build/2d-onboarding-visual/05-jump-ready.png`, `06-dash-ready.png`, `07-skill-ready.png`, `08-complete.png`.
+- Tutorial movement/skill checkpoint: Bia Luyện Khí mở chuỗi Jump → Dash → ClassSkill → Complete; visual capture 8 frame và manifest kiểm `screenshotCount=8`, `finalStep=Complete`, animation tokens Jump/Dash/ClassSkill/TrainingCompletePose.
+- Shadow Slime combat micro-slice WIP/checkpoint: sau Dash, Shadow Slime xuất hiện ở `LearnClassSkill`; ClassSkill đánh tan slime, manifest có `runtimeCombatSnapshot=ShadowSlimeVisible=False ShadowSlimeDefeated=True`, ảnh review `07-skill-ready.png`/`08-complete.png`.
 
 ## Next
 
-Hoàn tất checkpoint khóa kịch bản 2D mới vào GDD/execution docs, sau đó nối `ClassSkill` vào Shadow Slime combat micro-slice đã bắt đầu bằng test đỏ, rồi tiếp tục theo roadmap 2D: class Lv1 còn lại, Linh Thành/Đông Môn production map, Gate Keeper tutorial đầy đủ và vertical slice. Map production lớn phải bám `docs/02-GDD.md`, `docs/design/LGO-2D-SOCIAL-ACTION-DIRECTION-LOCK-v0.1.md` và `docs/design/LGO-2D-MAP-AZ-DESIGN-v0.1.md`.
+Đóng gói checkpoint Shadow Slime combat micro-slice, sau đó tiếp tục theo roadmap 2D: class Lv1 còn lại, Linh Thành/Đông Môn production map, Gate Keeper tutorial đầy đủ và vertical slice. Map production lớn phải bám `docs/02-GDD.md`, `docs/design/LGO-2D-SOCIAL-ACTION-DIRECTION-LOCK-v0.1.md` và `docs/design/LGO-2D-MAP-AZ-DESIGN-v0.1.md`.

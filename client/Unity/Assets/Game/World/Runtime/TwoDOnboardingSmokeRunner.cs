@@ -57,9 +57,13 @@ namespace LinhGioi.World
                 Require(state.Step == TwoDOnboardingStep.LearnDash, "jump should unlock dash lesson");
                 Require(state.TryUseDash(), "dash lesson failed");
                 Require(state.Step == TwoDOnboardingStep.LearnClassSkill, "dash should unlock class skill lesson");
+                Require(state.ShadowSlimeVisible, "Shadow Slime should appear before class skill");
+                Require(!state.ShadowSlimeDefeated, "Shadow Slime should not be defeated before class skill");
                 Require(state.TryUseClassSkill(), "class skill lesson failed");
+                Require(state.ShadowSlimeDefeated, "Shadow Slime should be defeated by class skill");
                 Require(state.Step == TwoDOnboardingStep.Complete, "2D onboarding did not complete");
                 Require(state.ObjectiveText.Contains("Hoàn tất nhập môn"), "completion copy drifted");
+                Require(state.FeedbackText.Contains("Shadow Slime"), "completion combat feedback drifted");
 
                 result.finalStep = state.Step.ToString();
                 result.finalObjective = state.ObjectiveText;

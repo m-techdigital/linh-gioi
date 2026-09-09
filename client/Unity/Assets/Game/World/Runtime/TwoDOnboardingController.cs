@@ -17,6 +17,8 @@ namespace LinhGioi.World
         private Transform _player;
         private Transform _gateKeeper;
         private Transform _trainingStone;
+        private Transform _shadowSlime;
+        private Transform _shadowSlimeLabel;
         private Transform _pathGlow;
         private Transform _focusRing;
         private SpriteRenderer _playerOuterShirtRenderer;
@@ -52,6 +54,7 @@ namespace LinhGioi.World
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
+        public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
 
         public static TwoDOnboardingController Attach(GameObject host)
         {
@@ -142,6 +145,9 @@ namespace LinhGioi.World
             AddSceneBeat("Bia Luyện Khí - mục tiêu tương tác");
             _trainingStone = AddTrainingStone("LGO 2D Training Stone", TwoDOnboardingState.TrainingStonePosition, -2);
             AddWorldLabel("LGO 2D Stone Label", "BIA LUYỆN KHÍ", TwoDOnboardingState.TrainingStonePosition + new Vector2(-0.64f, 0.78f), 0.038f, RuntimeArtCatalog.Spirit, 2);
+            AddSceneBeat("Shadow Slime - mục tiêu combat nhập môn");
+            _shadowSlime = AddShadowSlime("LGO 2D Shadow Slime", new Vector2(3.55f, -1.16f), -1);
+            _shadowSlimeLabel = AddWorldLabel("LGO 2D Shadow Slime Label", "SHADOW SLIME", new Vector2(3.55f, -0.34f), 0.034f, new Color(0.82f, 0.60f, 1f), 3).transform;
             BuildRuntimeMapOverlay();
             AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
@@ -254,6 +260,17 @@ namespace LinhGioi.World
                 var pulse = _state.Step == TwoDOnboardingStep.Complete ? 1.18f : 1f;
                 _trainingStone.localScale = new Vector3(pulse, pulse, 1f);
             }
+            if (_shadowSlime != null)
+            {
+                var visible = _state.ShadowSlimeVisible;
+                _shadowSlime.gameObject.SetActive(visible);
+                if (visible)
+                {
+                    var pulse = 1f + Mathf.Sin(_presentationTick * 0.6f) * 0.06f;
+                    _shadowSlime.localScale = new Vector3(pulse, pulse, 1f);
+                }
+            }
+            if (_shadowSlimeLabel != null) _shadowSlimeLabel.gameObject.SetActive(_state.ShadowSlimeVisible);
             RefreshPlayerEquipmentPresentation();
             RefreshPlayerAnimationPresentation();
             RefreshWorldHud();
@@ -415,6 +432,19 @@ namespace LinhGioi.World
             AddSprite(name + " Body", new Vector2(0f, 0f), new Vector2(0.48f, 0.82f), new Color(0.90f, 0.91f, 0.84f), order, root.transform);
             AddSprite(name + " Jade Core", new Vector2(0f, 0.08f), new Vector2(0.18f, 0.44f), RuntimeArtCatalog.Spirit, order + 1, root.transform);
             AddSprite(name + " Base", new Vector2(0f, -0.48f), new Vector2(0.74f, 0.12f), new Color(0.16f, 0.36f, 0.34f), order, root.transform);
+            return root.transform;
+        }
+
+        private static Transform AddShadowSlime(string name, Vector2 position, int order)
+        {
+            var root = new GameObject(name);
+            root.transform.position = ToWorld(position, order * 0.01f);
+            AddSprite(name + " Ground Shadow", new Vector2(0f, -0.26f), new Vector2(0.70f, 0.12f), new Color(0f, 0f, 0f, 0.30f), order - 1, root.transform);
+            AddSprite(name + " Body", new Vector2(0f, -0.02f), new Vector2(0.58f, 0.44f), new Color(0.22f, 0.08f, 0.36f, 0.96f), order, root.transform);
+            AddSprite(name + " Aura", new Vector2(0f, -0.02f), new Vector2(0.76f, 0.58f), new Color(0.48f, 0.20f, 0.82f, 0.24f), order - 1, root.transform);
+            AddSprite(name + " Core", new Vector2(0.05f, 0.03f), new Vector2(0.18f, 0.14f), new Color(0.70f, 0.45f, 1f, 0.92f), order + 1, root.transform);
+            AddSprite(name + " Eye Left", new Vector2(-0.10f, 0.07f), new Vector2(0.045f, 0.035f), RuntimeArtCatalog.Text, order + 2, root.transform);
+            AddSprite(name + " Eye Right", new Vector2(0.13f, 0.07f), new Vector2(0.045f, 0.035f), RuntimeArtCatalog.Text, order + 2, root.transform);
             return root.transform;
         }
 

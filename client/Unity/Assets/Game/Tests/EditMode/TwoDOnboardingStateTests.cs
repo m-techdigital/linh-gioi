@@ -297,6 +297,56 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void ClassSkillDefeatsShadowSlimeBeforeTutorialCompletes()
+        {
+            var state = new TwoDOnboardingState();
+            state.Reset();
+            state.Move(TwoDOnboardingState.GateKeeperPosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseAction();
+            state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseJump();
+            state.TryUseDash();
+
+            Assert.AreEqual(TwoDOnboardingStep.LearnClassSkill, state.Step);
+            Assert.IsTrue(state.ShadowSlimeVisible);
+            Assert.IsFalse(state.ShadowSlimeDefeated);
+            Assert.IsTrue(state.TryUseClassSkill());
+            Assert.IsTrue(state.ShadowSlimeDefeated);
+            StringAssert.Contains("Shadow Slime", state.FeedbackText);
+            Assert.AreEqual(TwoDOnboardingStep.Complete, state.Step);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesShadowSlimeSnapshotForVisualEvidence()
+        {
+            var host = new GameObject("2D Shadow Slime snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("ShadowSlimeVisible=True", controller.RuntimeCombatSnapshot);
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("ShadowSlimeDefeated=True", controller.RuntimeCombatSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsWorldHubAndDongMonRouteTogether()
         {

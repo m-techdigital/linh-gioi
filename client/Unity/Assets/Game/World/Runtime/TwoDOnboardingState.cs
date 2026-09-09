@@ -43,6 +43,8 @@ namespace LinhGioi.World
         public string AreaText { get; private set; } = "Cổng Linh Thành";
         public string FeedbackText { get; private set; } = "Bình minh xanh phủ trên cổng thành.";
         public string LastAnimationIntent { get; private set; } = "Idle";
+        public bool ShadowSlimeVisible { get; private set; }
+        public bool ShadowSlimeDefeated { get; private set; }
 
         public void Reset()
         {
@@ -56,6 +58,8 @@ namespace LinhGioi.World
             AreaText = "Cổng Linh Thành";
             FeedbackText = "Bình minh xanh phủ trên cổng thành.";
             LastAnimationIntent = "Idle";
+            ShadowSlimeVisible = false;
+            ShadowSlimeDefeated = false;
             Refresh();
         }
 
@@ -123,10 +127,12 @@ namespace LinhGioi.World
             Refresh();
             if (AvailableAction != TwoDOnboardingAction.Dash) return false;
             Step = TwoDOnboardingStep.LearnClassSkill;
-            ObjectiveText = "Dùng kỹ năng Võ nhập môn vào mục tiêu linh khí.";
-            HintText = "Bấm Q/L để tung kỹ năng class.";
-            FeedbackText = "Một vệt ảnh xanh kéo theo cú lướt ngắn.";
+            ObjectiveText = "Dùng kỹ năng Võ nhập môn đánh Shadow Slime.";
+            HintText = "Bấm Q/L để tung kỹ năng class vào Shadow Slime.";
+            FeedbackText = "Shadow Slime tụ Âm Khí ở cuối sân; hãy thử kỹ năng Võ Lv1.";
             LastAnimationIntent = "Dash";
+            ShadowSlimeVisible = true;
+            ShadowSlimeDefeated = false;
             AvailableAction = TwoDOnboardingAction.Skill;
             return true;
         }
@@ -137,9 +143,11 @@ namespace LinhGioi.World
             if (AvailableAction != TwoDOnboardingAction.Skill) return false;
             Step = TwoDOnboardingStep.Complete;
             ObjectiveText = "Hoàn tất nhập môn: Linh lực đã cộng hưởng.";
-            HintText = "Bạn đã sẵn sàng bước sâu hơn vào Linh Thành.";
-            FeedbackText = "Kỹ năng Võ Lv1 phá tan mục tiêu linh khí; vòng sáng lan dưới chân.";
+            HintText = "Shadow Slime đã tan; quay lại Người Giữ Cổng để mở Linh Thành.";
+            FeedbackText = "Kỹ năng Võ Lv1 phá tan Shadow Slime; vòng sáng lan dưới chân.";
             LastAnimationIntent = "ClassSkill";
+            ShadowSlimeVisible = false;
+            ShadowSlimeDefeated = true;
             AvailableAction = TwoDOnboardingAction.None;
             return true;
         }
