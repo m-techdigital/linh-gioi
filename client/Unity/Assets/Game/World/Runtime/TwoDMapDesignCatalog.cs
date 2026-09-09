@@ -1,5 +1,6 @@
 using System;
 using System.Text;
+using UnityEngine;
 
 namespace LinhGioi.World
 {
@@ -80,6 +81,31 @@ namespace LinhGioi.World
         public string DongMonAuthoredPassSnapshot { get; }
         public string ParallaxDepthSnapshot { get; }
         public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\n" + LinhThanhAcademyShellSnapshot + "\n" + LinhThanhMarketShellSnapshot + "\n" + LinhThanhSpiritTempleShellSnapshot + "\n" + LinhThanhResidentialShellSnapshot + "\n" + LinhThanhForgeShellSnapshot + "\n" + LinhThanhGuildShellSnapshot + "\n" + LinhThanhHarborShellSnapshot + "\n" + LinhThanhPlazaHubRuntimeSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + DongMonTilePaletteSnapshot + "\n" + DongMonAuthoredPassSnapshot + "\n" + ParallaxDepthSnapshot;
+
+        private const string DongMonTilePaletteResourcePath = "LGOMaps/DongMonTilePalette";
+
+        public static string LoadDongMonTilePaletteSourceSnapshot()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonTilePaletteResourcePath);
+            if (asset == null)
+            {
+                return "DongMonTilePaletteSource: resource=" + DongMonTilePaletteResourcePath + " | missing";
+            }
+
+            var text = asset.text ?? string.Empty;
+            return "DongMonTilePaletteSource: resource=" + DongMonTilePaletteResourcePath
+                + " | bytes=" + text.Length
+                + " | tile_ground_grass=" + ContainsToken(text, "tile_ground_grass")
+                + " | tile_dash_lane=" + ContainsToken(text, "tile_dash_lane")
+                + " | tile_slime_arena=" + ContainsToken(text, "tile_slime_arena")
+                + " | safe-no-source-image=" + ContainsToken(text, "safe-no-source-image")
+                + " | safe-runtime-resource=" + ContainsToken(text, "safe-runtime-resource");
+        }
+
+        private static bool ContainsToken(string text, string token)
+        {
+            return text.IndexOf(token, StringComparison.Ordinal) >= 0;
+        }
 
         public static TwoDMapDesignCatalog CreateDefault()
         {

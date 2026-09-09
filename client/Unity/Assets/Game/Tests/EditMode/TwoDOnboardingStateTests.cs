@@ -1229,6 +1229,36 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeMapCatalogLoadsDongMonTilePaletteSourceAsset()
+        {
+            var sourceSnapshot = TwoDMapDesignCatalog.LoadDongMonTilePaletteSourceSnapshot();
+
+            StringAssert.Contains("DongMonTilePaletteSource", sourceSnapshot);
+            StringAssert.Contains("resource=LGOMaps/DongMonTilePalette", sourceSnapshot);
+            StringAssert.Contains("tile_dash_lane", sourceSnapshot);
+            StringAssert.Contains("safe-no-source-image", sourceSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesDongMonTilePaletteSourceForVisualEvidence()
+        {
+            var host = new GameObject("2D Dong Mon tile palette source snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonTilePaletteSource", controller.RuntimeDongMonTilePaletteSourceSnapshot);
+                StringAssert.Contains("resource=LGOMaps/DongMonTilePalette", controller.RuntimeDongMonTilePaletteSourceSnapshot);
+                StringAssert.Contains("safe-runtime-resource", controller.RuntimeDongMonTilePaletteSourceSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerExposesDongMonAuthoredPassForVisualEvidence()
         {
             var host = new GameObject("2D Dong Mon authored pass snapshot test host");

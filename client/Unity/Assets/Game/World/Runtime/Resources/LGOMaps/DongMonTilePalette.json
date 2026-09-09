@@ -1,0 +1,15 @@
+{
+  "id": "dong-mon-tile-palette-v0",
+  "mapId": "dong-mon",
+  "chapter": "Chapter 1: Vết Nứt Đông Môn",
+  "usage": "authored-runtime-source",
+  "safety": ["safe-no-source-image", "safe-runtime-resource", "safe-no-3d"],
+  "tiles": [
+    {"id": "tile_ground_grass", "colorRole": "earth-green", "patternRole": "soft-grass-edge", "gameplayRole": "walkable-ground"},
+    {"id": "tile_ground_stone", "colorRole": "spirit-cyan", "patternRole": "stone-step-line", "gameplayRole": "walkable-ground"},
+    {"id": "tile_platform_wood", "colorRole": "warm-wood", "patternRole": "rope-rail", "gameplayRole": "jump-platform"},
+    {"id": "tile_gap_marker", "colorRole": "void-shadow", "patternRole": "negative-space", "gameplayRole": "jump-gap"},
+    {"id": "tile_dash_lane", "colorRole": "spirit-cyan", "patternRole": "wind-streak", "gameplayRole": "dash-lane"},
+    {"id": "tile_slime_arena", "colorRole": "violet-corruption", "patternRole": "rune-boundary", "gameplayRole": "combat-arena"}
+  ]
+}

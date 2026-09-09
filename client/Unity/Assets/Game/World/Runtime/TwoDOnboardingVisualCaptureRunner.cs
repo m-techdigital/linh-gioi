@@ -132,6 +132,7 @@ namespace LinhGioi.World
                 runtimeTerrainCollisionSnapshot = controller.RuntimeTerrainCollisionSnapshot,
                 runtimeTilemapSnapshot = controller.RuntimeTilemapSnapshot,
                 runtimeDongMonTilePaletteSnapshot = controller.RuntimeDongMonTilePaletteSnapshot,
+                runtimeDongMonTilePaletteSourceSnapshot = controller.RuntimeDongMonTilePaletteSourceSnapshot,
                 runtimeDongMonAuthoredPassSnapshot = controller.RuntimeDongMonAuthoredPassSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
                 runtimeCombatSnapshot = controller.RuntimeCombatSnapshot,
@@ -266,6 +267,7 @@ namespace LinhGioi.World
             public string runtimeTerrainCollisionSnapshot;
             public string runtimeTilemapSnapshot;
             public string runtimeDongMonTilePaletteSnapshot;
+            public string runtimeDongMonTilePaletteSourceSnapshot;
             public string runtimeDongMonAuthoredPassSnapshot;
             public string runtimeAnimationSnapshot;
             public string runtimeCombatSnapshot;

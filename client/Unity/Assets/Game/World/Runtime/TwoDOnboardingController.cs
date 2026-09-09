@@ -90,6 +90,7 @@ namespace LinhGioi.World
         public string RuntimeTerrainCollisionSnapshot => _mapCatalog.CollisionSnapshot;
         public string RuntimeTilemapSnapshot => _mapCatalog.TilemapSnapshot;
         public string RuntimeDongMonTilePaletteSnapshot => _mapCatalog.DongMonTilePaletteSnapshot;
+        public string RuntimeDongMonTilePaletteSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonTilePaletteSourceSnapshot();
         public string RuntimeDongMonAuthoredPassSnapshot => _mapCatalog.DongMonAuthoredPassSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
@@ -640,6 +641,7 @@ namespace LinhGioi.World
         private void AddDongMonTilePaletteSwatches()
         {
             AddSceneBeat("DONG_MON_TILE_PALETTE earth/stone/wood/gap/dash/slime swatches no source image");
+            AddSceneBeat(RuntimeDongMonTilePaletteSourceSnapshot);
             AddSprite("LGO 2D Tile Palette Grass Swatch", new Vector2(-3.46f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.25f, 0.64f, 0.42f, 0.72f), -2);
             AddSprite("LGO 2D Tile Palette Stone Swatch", new Vector2(-3.12f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.52f, 0.61f, 0.60f, 0.70f), -2);
             AddSprite("LGO 2D Tile Palette Wood Swatch", new Vector2(-2.78f, -2.36f), new Vector2(0.28f, 0.045f), new Color(0.58f, 0.34f, 0.16f, 0.70f), -2);

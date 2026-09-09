@@ -80,6 +80,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
             "runtimeHubTransitionSnapshot": ["HubTransition", "unlocked=True", "from=east-gate", "to=plaza", "mode=local-route-preview", "safe-local-no-teleport-backend"],
             "runtimeTilemapSnapshot": ["ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"],
             "runtimeDongMonTilePaletteSnapshot": ["DongMonTilePalette", "tile_ground_grass:earth-green:soft-grass-edge", "tile_dash_lane:spirit-cyan:wind-streak", "tile_slime_arena:violet-corruption:rune-boundary", "safe-no-source-image"],
+            "runtimeDongMonTilePaletteSourceSnapshot": ["DongMonTilePaletteSource", "resource=LGOMaps/DongMonTilePalette", "tile_dash_lane=True", "safe-no-source-image=True", "safe-runtime-resource=True"],
             "runtimeDongMonAuthoredPassSnapshot": ["DongMonAuthoredPass", "route-segments=5", "detail-density=readable", "collision-boundaries=from-bands", "no-random-decoration"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
             "runtimePlazaHubInputSnapshot": ["PlazaHubInput", "selected=merchant-preview", "layout=spaced-social-triangle", "controls=P select, E interact", "interaction=npc-merchant-preview", "safe-local-no-shop-backend"],
