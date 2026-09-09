@@ -65,11 +65,11 @@ TWO_D_GATES: list[dict[str, Any]] = [
         "kind": "json_artifact",
         "path": "build/2d-onboarding-visual/twod-onboarding-visual-manifest.json",
         "requirements": {"status": "PASS", "finalStep": "Complete"},
-        "minimums": {"screenshotCount": 11},
+        "minimums": {"screenshotCount": 12},
         "contains": {
             "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:", "HubShell: linh-thanh", "district=plaza", "district=market", "PlazaShell: district=plaza", "safe-no-trade-backend"],
             "runtimeLinhThanhUnlockSnapshot": ["LinhThanhUnlock", "unlocked=True", "unlock=plaza", "safe-local-no-teleport"],
-            "runtimeLinhThanhPlazaHubSnapshot": ["PlazaHubRuntime", "unlocked=True", "npc=gate-guide", "board=event-local-preview", "interaction=board-preview-open", "safe-local-no-backend"],
+            "runtimeLinhThanhPlazaHubSnapshot": ["PlazaHubRuntime", "unlocked=True", "npc=gate-guide", "npc=merchant-preview", "board=event-local-preview", "interaction=npc-merchant-preview", "safe-local-no-backend", "safe-local-no-shop-backend"],
             "runtimeTilemapSnapshot": ["ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
         },

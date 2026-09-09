@@ -74,6 +74,11 @@ namespace LinhGioi.World
             yield return null;
             yield return Capture(evidenceDir, "11-plaza-board-preview");
 
+            controller.State.TryTalkPlazaMerchantPreview();
+            controller.RefreshForSmoke();
+            yield return null;
+            yield return Capture(evidenceDir, "12-plaza-npc-preview");
+
             controller.ToggleInventoryPanel();
             controller.PreviewSelectedInventoryItem();
             yield return null;
@@ -86,7 +91,7 @@ namespace LinhGioi.World
             var resultPath = Path.Combine(evidenceDir, "twod-onboarding-visual-manifest.json");
             var result = new TwoDOnboardingVisualCaptureResult
             {
-                status = _screenshots.Count == 11 ? "PASS" : "FAIL",
+                status = _screenshots.Count == 12 ? "PASS" : "FAIL",
                 unityVersion = Application.unityVersion,
                 platform = Application.platform.ToString(),
                 evidenceDir = evidenceDir,

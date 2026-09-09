@@ -38,6 +38,7 @@ namespace LinhGioi.World
         public TwoDOnboardingAction AvailableAction { get; private set; }
         public bool DialogueOpen { get; private set; }
         public string DialogueLine { get; private set; } = string.Empty;
+        public string DialogueSpeaker { get; private set; } = "Người Giữ Cổng";
         public string ObjectiveText { get; private set; } = "Tới gặp Người Giữ Cổng ở Cổng Linh Thành.";
         public string HintText { get; private set; } = "Di chuyển bằng WASD/phím mũi tên. Lại gần NPC để trò chuyện.";
         public string AreaText { get; private set; } = "Cổng Linh Thành";
@@ -47,6 +48,8 @@ namespace LinhGioi.World
         public bool ShadowSlimeDefeated { get; private set; }
         public bool LinhThanhUnlocked { get; private set; }
         public bool PlazaHubPreviewOpen { get; private set; }
+        public bool PlazaHubNpcPreviewOpen { get; private set; }
+        public string PlazaHubInteractionId { get; private set; } = "locked";
         public string CurrentRouteNodeId { get; private set; } = "spawn";
 
         public void Reset()
@@ -56,6 +59,7 @@ namespace LinhGioi.World
             AvailableAction = TwoDOnboardingAction.None;
             DialogueOpen = false;
             DialogueLine = string.Empty;
+            DialogueSpeaker = "Người Giữ Cổng";
             ObjectiveText = "Tới gặp Người Giữ Cổng ở Cổng Linh Thành.";
             HintText = "Di chuyển bằng WASD/phím mũi tên. Lại gần NPC để trò chuyện.";
             AreaText = "Cổng Linh Thành";
@@ -65,6 +69,8 @@ namespace LinhGioi.World
             ShadowSlimeDefeated = false;
             LinhThanhUnlocked = false;
             PlazaHubPreviewOpen = false;
+            PlazaHubNpcPreviewOpen = false;
+            PlazaHubInteractionId = "locked";
             CurrentRouteNodeId = "spawn";
             Refresh();
         }
@@ -85,6 +91,7 @@ namespace LinhGioi.World
                 case TwoDOnboardingAction.Talk:
                     Step = TwoDOnboardingStep.TalkToGateKeeper;
                     DialogueOpen = true;
+                    DialogueSpeaker = "Người Giữ Cổng";
                     DialogueLine = "Chào mừng đến Linh Thành. Hãy chạm vào Bia Luyện Khí để ổn định linh lực đầu tiên.";
                     ObjectiveText = "Lắng nghe Người Giữ Cổng.";
                     HintText = "Bấm E hoặc nút hành động để nhận chỉ dẫn.";
@@ -96,6 +103,7 @@ namespace LinhGioi.World
                     Step = TwoDOnboardingStep.GoToTrainingStone;
                     DialogueOpen = false;
                     DialogueLine = string.Empty;
+                    DialogueSpeaker = "Người Giữ Cổng";
                     ObjectiveText = "Tới Bia Luyện Khí trong sân phía đông.";
                     HintText = "Đi theo ánh ngọc tới bia đá.";
                     FeedbackText = "Một vệt sáng dẫn về phía Bia Luyện Khí.";
@@ -171,8 +179,11 @@ namespace LinhGioi.World
             if (!LinhThanhUnlocked) return false;
 
             PlazaHubPreviewOpen = true;
+            PlazaHubNpcPreviewOpen = false;
+            PlazaHubInteractionId = "board-preview-open";
             DialogueOpen = true;
-            DialogueLine = "Bảng sự kiện Quảng Trường: nhiệm vụ cộng đồng đang ở local preview.";
+            DialogueSpeaker = "Bảng Sự Kiện";
+            DialogueLine = "Nhiệm vụ cộng đồng đang ở local preview.";
             ObjectiveText = "Xem trước Quảng Trường: NPC và bảng sự kiện đã sẵn sàng.";
             HintText = "Preview local-only; chưa mở teleport, giao dịch hoặc bang hội.";
             AreaText = "Quảng Trường";
@@ -183,12 +194,54 @@ namespace LinhGioi.World
             return true;
         }
 
+        public bool TryTalkPlazaGateGuide()
+        {
+            Refresh();
+            if (!LinhThanhUnlocked) return false;
+
+            PlazaHubPreviewOpen = true;
+            PlazaHubNpcPreviewOpen = true;
+            PlazaHubInteractionId = "npc-gate-guide-preview";
+            DialogueOpen = true;
+            DialogueSpeaker = "Người Giữ Cổng";
+            DialogueLine = "Quảng Trường là nơi gặp người chơi khác, nhận tin sự kiện và quay về Đông Môn khi cần luyện thêm.";
+            ObjectiveText = "Làm quen Quảng Trường: ghi nhớ NPC hướng dẫn và bảng sự kiện.";
+            HintText = "Preview local-only; chưa mở teleport, shop, giao dịch hoặc bang hội.";
+            AreaText = "Quảng Trường";
+            FeedbackText = "Người Giữ Cổng đánh dấu tuyến Đông Môn ↔ Quảng Trường trên bản đồ local.";
+            LastAnimationIntent = "Idle";
+            AvailableAction = TwoDOnboardingAction.None;
+            CurrentRouteNodeId = "plaza-gate-guide";
+            return true;
+        }
+
+        public bool TryTalkPlazaMerchantPreview()
+        {
+            Refresh();
+            if (!LinhThanhUnlocked) return false;
+
+            PlazaHubPreviewOpen = true;
+            PlazaHubNpcPreviewOpen = true;
+            PlazaHubInteractionId = "npc-merchant-preview";
+            DialogueOpen = true;
+            DialogueSpeaker = "Thương Nhân";
+            DialogueLine = "Hàng tân thủ sẽ hiển thị thử đồ trước, chưa mở mua bán cho tới khi có hệ thống shop riêng.";
+            ObjectiveText = "Xem trước Thương Nhân Quảng Trường: thử đồ an toàn, chưa giao dịch.";
+            HintText = "Local preview chỉ kiểm flow social hub + equipment view; không tạo tiền tệ hoặc item backend.";
+            AreaText = "Quảng Trường";
+            FeedbackText = "Thương Nhân mở lời chào local-only, không phát sinh shop/economy.";
+            LastAnimationIntent = "Idle";
+            AvailableAction = TwoDOnboardingAction.None;
+            CurrentRouteNodeId = "plaza-merchant";
+            return true;
+        }
+
         public void Refresh()
         {
             if (Step == TwoDOnboardingStep.Complete)
             {
                 AvailableAction = TwoDOnboardingAction.None;
-                AreaText = PlazaHubPreviewOpen ? "Quảng Trường" : "Sân Luyện Khí";
+                AreaText = PlazaHubPreviewOpen || PlazaHubNpcPreviewOpen ? "Quảng Trường" : "Sân Luyện Khí";
                 return;
             }
 

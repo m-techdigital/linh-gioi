@@ -212,7 +212,7 @@ namespace LinhGioi.World
 
         private static string BuildLinhThanhPlazaHubRuntimeSnapshot()
         {
-            return "PlazaHubRuntime: district=plaza | npc=gate-guide | npc=wandering-student | board=event-local-preview | guild-bulletin=locked | social-spawn=local-safe | safe-local-no-backend";
+            return "PlazaHubRuntime: district=plaza | npc=gate-guide | npc=wandering-student | npc=merchant-preview | board=event-local-preview | guild-bulletin=locked | social-spawn=local-safe | safe-local-no-backend | safe-local-no-shop-backend";
         }
 
         private static string BuildRouteSnapshot(MapRouteNode[] nodes)

@@ -143,3 +143,7 @@ Sau unlock Đông Môn, Quảng Trường có lớp runtime preview tách khỏi
 ### Runtime interaction checkpoint — Quảng Trường board local preview
 
 Sau unlock Đông Môn, bảng sự kiện Quảng Trường có interaction local-only: `interaction=board-preview-open`. HUD phải chuyển `Khu vực: Quảng Trường`, dialogue mô tả nhiệm vụ cộng đồng ở local preview và inventory panel không được che frame board nếu người chơi chưa mở hành trang. Đây là bước chuẩn bị cho social event board sau này, chưa mở event backend, guild, shop, giao dịch hoặc teleport thật.
+
+### Runtime interaction checkpoint — Quảng Trường NPC local preview
+
+Sau khi unlock Đông Môn, Quảng Trường có Người Giữ Cổng và Thương Nhân preview theo hướng social hub: người chơi đọc chỉ dẫn hub, xem trước thử đồ an toàn và nhận rõ trạng thái chưa mở shop/economy/backend. Speaker của dialogue là dữ liệu riêng để tránh lẫn vai NPC khi mở rộng nhiều nhân vật trong hub.

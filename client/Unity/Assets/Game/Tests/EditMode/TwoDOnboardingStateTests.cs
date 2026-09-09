@@ -610,26 +610,46 @@ namespace LinhGioi.Tests
         [Test]
         public void PlazaHubBoardPreviewRequiresLinhThanhUnlock()
         {
-            var state = new TwoDOnboardingState();
-            state.Reset();
-
-            Assert.IsFalse(state.TryInspectPlazaHubBoard());
-            Assert.IsFalse(state.PlazaHubPreviewOpen);
-
-            state.Move(TwoDOnboardingState.GateKeeperPosition - state.PlayerPosition);
-            state.TryUseAction();
-            state.TryUseAction();
-            state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
-            state.TryUseAction();
-            state.TryUseJump();
-            state.TryUseDash();
-            state.TryUseClassSkill();
+            var state = CompleteDongMonFlow();
 
             Assert.IsTrue(state.TryInspectPlazaHubBoard());
             Assert.IsTrue(state.PlazaHubPreviewOpen);
+            Assert.IsFalse(state.PlazaHubNpcPreviewOpen);
+            Assert.AreEqual("board-preview-open", state.PlazaHubInteractionId);
             Assert.AreEqual("Quảng Trường", state.AreaText);
-            StringAssert.Contains("Bảng sự kiện Quảng Trường", state.DialogueLine);
+            StringAssert.Contains("Nhiệm vụ cộng đồng", state.DialogueLine);
+            Assert.AreEqual("Bảng Sự Kiện", state.DialogueSpeaker);
             StringAssert.Contains("local preview", state.FeedbackText);
+        }
+
+        [Test]
+        public void PlazaHubNpcPreviewRequiresLinhThanhUnlockAndStaysLocalOnly()
+        {
+            var locked = new TwoDOnboardingState();
+            locked.Reset();
+
+            Assert.IsFalse(locked.TryTalkPlazaGateGuide());
+            Assert.IsFalse(locked.TryTalkPlazaMerchantPreview());
+            Assert.IsFalse(locked.PlazaHubNpcPreviewOpen);
+
+            var state = CompleteDongMonFlow();
+
+            Assert.IsTrue(state.TryTalkPlazaGateGuide());
+            Assert.IsTrue(state.PlazaHubNpcPreviewOpen);
+            Assert.AreEqual("npc-gate-guide-preview", state.PlazaHubInteractionId);
+            Assert.AreEqual("plaza-gate-guide", state.CurrentRouteNodeId);
+            Assert.AreEqual("Người Giữ Cổng", state.DialogueSpeaker);
+            StringAssert.Contains("Quảng Trường", state.DialogueLine);
+            StringAssert.Contains("chưa mở teleport", state.HintText);
+
+            Assert.IsTrue(state.TryTalkPlazaMerchantPreview());
+            Assert.IsTrue(state.PlazaHubNpcPreviewOpen);
+            Assert.AreEqual("npc-merchant-preview", state.PlazaHubInteractionId);
+            Assert.AreEqual("plaza-merchant", state.CurrentRouteNodeId);
+            StringAssert.Contains("Hàng tân thủ", state.DialogueLine);
+            Assert.AreEqual("Thương Nhân", state.DialogueSpeaker);
+            StringAssert.Contains("chưa mở mua bán", state.DialogueLine);
+            StringAssert.Contains("không tạo tiền tệ", state.HintText);
         }
 
         [Test]
@@ -639,9 +659,11 @@ namespace LinhGioi.Tests
 
             StringAssert.Contains("PlazaHubRuntime", map.LinhThanhPlazaHubRuntimeSnapshot);
             StringAssert.Contains("npc=gate-guide", map.LinhThanhPlazaHubRuntimeSnapshot);
+            StringAssert.Contains("npc=merchant-preview", map.LinhThanhPlazaHubRuntimeSnapshot);
             StringAssert.Contains("board=event-local-preview", map.LinhThanhPlazaHubRuntimeSnapshot);
             StringAssert.Contains("guild-bulletin=locked", map.LinhThanhPlazaHubRuntimeSnapshot);
             StringAssert.Contains("safe-local-no-backend", map.LinhThanhPlazaHubRuntimeSnapshot);
+            StringAssert.Contains("safe-local-no-shop-backend", map.LinhThanhPlazaHubRuntimeSnapshot);
             StringAssert.Contains("PlazaHubRuntime", map.RuntimeSnapshot);
         }
 
@@ -669,13 +691,21 @@ namespace LinhGioi.Tests
 
                 StringAssert.Contains("unlocked=True", controller.RuntimeLinhThanhPlazaHubSnapshot);
                 StringAssert.Contains("npc=gate-guide", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("npc=merchant-preview", controller.RuntimeLinhThanhPlazaHubSnapshot);
                 StringAssert.Contains("board=event-local-preview", controller.RuntimeLinhThanhPlazaHubSnapshot);
                 StringAssert.Contains("safe-local-no-backend", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("safe-local-no-shop-backend", controller.RuntimeLinhThanhPlazaHubSnapshot);
                 Assert.IsTrue(controller.State.TryInspectPlazaHubBoard());
                 controller.RefreshForSmoke();
                 StringAssert.Contains("interaction=board-preview-open", controller.RuntimeLinhThanhPlazaHubSnapshot);
                 StringAssert.Contains("Khu vực: Quảng Trường", controller.WorldHudSnapshot);
-                StringAssert.Contains("Bảng sự kiện Quảng Trường", controller.WorldHudSnapshot);
+                StringAssert.Contains("Bảng Sự Kiện: Nhiệm vụ cộng đồng", controller.WorldHudSnapshot);
+
+                Assert.IsTrue(controller.State.TryTalkPlazaMerchantPreview());
+                controller.RefreshForSmoke();
+                StringAssert.Contains("interaction=npc-merchant-preview", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("Thương Nhân: Hàng tân thủ", controller.WorldHudSnapshot);
+                StringAssert.Contains("không tạo tiền tệ", controller.WorldHudSnapshot);
                 StringAssert.Contains("LINH_THANH_PLAZA_HUB_RUNTIME", controller.ProductionSceneBeatSnapshot);
             }
             finally
@@ -949,6 +979,21 @@ namespace LinhGioi.Tests
             {
                 Object.DestroyImmediate(host);
             }
+        }
+
+        private static TwoDOnboardingState CompleteDongMonFlow()
+        {
+            var state = new TwoDOnboardingState();
+            state.Reset();
+            state.Move(TwoDOnboardingState.GateKeeperPosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseAction();
+            state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseJump();
+            state.TryUseDash();
+            state.TryUseClassSkill();
+            return state;
         }
 
     }
