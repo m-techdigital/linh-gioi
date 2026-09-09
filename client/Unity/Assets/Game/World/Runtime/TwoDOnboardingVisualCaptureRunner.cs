@@ -69,10 +69,19 @@ namespace LinhGioi.World
             yield return null;
             yield return Capture(evidenceDir, "08-complete");
 
+            controller.ToggleInventoryPanel();
+            controller.PreviewSelectedInventoryItem();
+            yield return null;
+            yield return Capture(evidenceDir, "09-inventory-try");
+
+            controller.ApplyInventoryPreview();
+            yield return null;
+            yield return Capture(evidenceDir, "10-inventory-applied");
+
             var resultPath = Path.Combine(evidenceDir, "twod-onboarding-visual-manifest.json");
             var result = new TwoDOnboardingVisualCaptureResult
             {
-                status = _screenshots.Count == 8 ? "PASS" : "FAIL",
+                status = _screenshots.Count == 10 ? "PASS" : "FAIL",
                 unityVersion = Application.unityVersion,
                 platform = Application.platform.ToString(),
                 evidenceDir = evidenceDir,
@@ -86,6 +95,7 @@ namespace LinhGioi.World
                 runtimeCharacterBaseSnapshot = controller.RuntimeCharacterBaseSnapshot,
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
+                runtimeInventoryInputSnapshot = controller.RuntimeInventoryInputSnapshot,
                 runtimeTerrainCollisionSnapshot = controller.RuntimeTerrainCollisionSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
                 runtimeCombatSnapshot = controller.RuntimeCombatSnapshot,
@@ -204,6 +214,7 @@ namespace LinhGioi.World
             public string runtimeCharacterBaseSnapshot;
             public string runtimeEquipmentSnapshot;
             public string runtimeInventoryTryOnSnapshot;
+            public string runtimeInventoryInputSnapshot;
             public string runtimeTerrainCollisionSnapshot;
             public string runtimeAnimationSnapshot;
             public string runtimeCombatSnapshot;

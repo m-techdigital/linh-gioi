@@ -191,6 +191,48 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void VisualCaptureManifestIncludesInventoryInputRuntimeSnapshot()
+        {
+            var resultType = typeof(TwoDOnboardingVisualCaptureRunner).GetNestedType("TwoDOnboardingVisualCaptureResult", System.Reflection.BindingFlags.NonPublic);
+
+            Assert.IsNotNull(resultType);
+            Assert.IsNotNull(resultType.GetField("runtimeInventoryInputSnapshot"));
+        }
+
+        [Test]
+        public void RuntimeControllerSupportsInventoryInputTryApplyCancel()
+        {
+            var host = new GameObject("2D inventory input test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                controller.ToggleInventoryPanel();
+                StringAssert.Contains("InventoryInputState=Open", controller.RuntimeInventoryInputSnapshot);
+                StringAssert.Contains("selected=top_kiem_lv1_male", controller.RuntimeInventoryInputSnapshot);
+
+                Assert.IsTrue(controller.PreviewSelectedInventoryItem());
+                StringAssert.Contains("InventoryInputState=Trying", controller.RuntimeInventoryInputSnapshot);
+                StringAssert.Contains("preview=top_kiem_lv1_male", controller.RuntimeInventoryInputSnapshot);
+
+                controller.ApplyInventoryPreview();
+                StringAssert.Contains("InventoryInputState=Applied", controller.RuntimeInventoryInputSnapshot);
+                StringAssert.Contains("top=top_kiem_lv1_male", controller.RuntimeInventoryInputSnapshot);
+
+                controller.ToggleInventoryPanel();
+                controller.PreviewSelectedInventoryItem();
+                controller.CancelInventoryPreview();
+                StringAssert.Contains("InventoryInputState=Cancelled", controller.RuntimeInventoryInputSnapshot);
+                StringAssert.Contains("status=EQUIPPED", controller.RuntimeInventoryInputSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void VoLv1StarterModulesCoverMaleFemaleCoreOutfitSlots()
         {
             var modules = TwoDCharacterModuleCatalog.CreateDefault();

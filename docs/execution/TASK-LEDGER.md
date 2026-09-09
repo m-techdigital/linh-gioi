@@ -167,3 +167,8 @@ Tiếp tục bằng tileset/terrain collision pass cho Đông Môn hoặc nâng 
 - Khóa các nguyên tắc: giữ thế giới/class/progression/story/backend, chỉ chuyển hiện thực sang 2D; HD 2D anime/illustrated, không pixel-art; Zone Network; Chapter 1/2/3; class identity; item/map pipeline; roadmap 2D-00 → 2D-12.
 - Bắt đầu/hoàn thiện WIP terrain collision cho Đông Môn: ground-main, training-platform, jump-gap, dash-lane, slime-arena, runtime snapshot và visual manifest.
 - Trạng thái: Unity compile, onboarding smoke, Player build/capture, source validators và visual review đã chạy cho checkpoint.
+
+
+## 2026-09-09 — 2D inventory input runtime spine
+
+Nâng inventory từ strip preview tĩnh sang input runtime local: `I` mở panel, `Tab` chọn item, `T` thử, `Y` áp dụng, `Esc` hủy. Controller expose `RuntimeInventoryInputSnapshot`; visual capture tăng lên 10 frame với `09-inventory-try` và `10-inventory-applied`, chứng minh áo Kiếm Lv1 có thể thử/áp dụng trên base Võ Lv1 qua cùng loadout/layer mechanism. Không mở economy, loot hoặc persistence thật.

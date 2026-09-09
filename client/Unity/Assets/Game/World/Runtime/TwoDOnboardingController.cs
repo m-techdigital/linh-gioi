@@ -39,12 +39,19 @@ namespace LinhGioi.World
         private TextMesh _hudDialogue;
         private TextMesh _hudFeedback;
         private TextMesh _miniMapProgress;
+        private TextMesh _inventoryModeLabel;
+        private TextMesh _inventorySelectedLabel;
+        private TextMesh _inventoryHelpLabel;
         private Camera _camera;
         private string _worldHudSnapshot = string.Empty;
         private string _runtimeAnimationSnapshot = string.Empty;
         private Vector2 _lastPresentedPlayerPosition = TwoDOnboardingState.PlayerStart;
         private int _presentationTick;
         private readonly List<string> _productionSceneBeats = new List<string>();
+        private readonly string[] _inventoryItemIds = { "top_vo_lv1_male", "top_kiem_lv1_male", "weapon_kiem_lv1_starter" };
+        private bool _inventoryOpen;
+        private int _inventorySelectedIndex = 1;
+        private string _inventoryInputState = "Closed";
 
         public TwoDOnboardingState State => _state;
         public string WorldHudSnapshot => _worldHudSnapshot;
@@ -55,6 +62,7 @@ namespace LinhGioi.World
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
+        public string RuntimeInventoryInputSnapshot => BuildInventoryInputSnapshot();
         public string RuntimeTerrainCollisionSnapshot => _mapCatalog.CollisionSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
@@ -98,6 +106,11 @@ namespace LinhGioi.World
             {
                 if (_state.TryUseClassSkill()) RefreshPresentation();
             }
+            if (Input.GetKeyDown(KeyCode.I)) ToggleInventoryPanel();
+            if (_inventoryOpen && Input.GetKeyDown(KeyCode.Tab)) SelectNextInventoryItem();
+            if (_inventoryOpen && Input.GetKeyDown(KeyCode.T)) PreviewSelectedInventoryItem();
+            if (_inventoryOpen && Input.GetKeyDown(KeyCode.Y)) ApplyInventoryPreview();
+            if (_inventoryOpen && Input.GetKeyDown(KeyCode.Escape)) CancelInventoryPreview();
         }
 
         private void BuildScene()
@@ -181,10 +194,11 @@ namespace LinhGioi.World
         private void RefreshPlayerEquipmentPresentation()
         {
             var loadout = EnsurePlayerLoadout();
-            if (_state.Step == TwoDOnboardingStep.Complete)
+            if (_state.Step == TwoDOnboardingStep.Complete && _inventoryInputState != "Applied")
                 loadout.ApplyVoLv1Starter(_moduleCatalog);
-            var voApplied = _state.Step == TwoDOnboardingStep.Complete;
-            if (_playerOuterShirtRenderer != null) _playerOuterShirtRenderer.color = voApplied ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Text;
+            var kiemPreviewOrApplied = _inventoryInputState == "Trying" || _inventoryInputState == "Applied";
+            var voApplied = _state.Step == TwoDOnboardingStep.Complete && !kiemPreviewOrApplied;
+            if (_playerOuterShirtRenderer != null) _playerOuterShirtRenderer.color = kiemPreviewOrApplied ? new Color(0.06f, 0.23f, 0.34f) : voApplied ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Text;
             if (_playerWaistRenderer != null) _playerWaistRenderer.color = voApplied ? new Color(0.62f, 0.12f, 0.09f) : RuntimeArtCatalog.Spirit;
             if (_playerGlovesLeftRenderer != null) _playerGlovesLeftRenderer.color = voApplied ? new Color(0.08f, 0.07f, 0.06f) : RuntimeArtCatalog.Spirit;
             if (_playerGlovesRightRenderer != null) _playerGlovesRightRenderer.color = voApplied ? new Color(0.08f, 0.07f, 0.06f) : RuntimeArtCatalog.Spirit;
@@ -281,6 +295,7 @@ namespace LinhGioi.World
             if (_shadowSlimeLabel != null) _shadowSlimeLabel.gameObject.SetActive(_state.ShadowSlimeVisible);
             SetHudText(_miniMapProgress, "Node: " + _state.CurrentRouteNodeId);
             RefreshPlayerEquipmentPresentation();
+            RefreshInventoryPanelPresentation();
             RefreshPlayerAnimationPresentation();
             RefreshWorldHud();
         }
@@ -313,6 +328,59 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Collision Slime Arena", new Vector2(3.60f, -1.66f), new Vector2(0.92f, 0.06f), new Color(0.48f, 0.20f, 0.82f, 0.42f), -4);
         }
 
+        public void ToggleInventoryPanel()
+        {
+            _inventoryOpen = !_inventoryOpen;
+            _inventoryInputState = _inventoryOpen ? "Open" : "Closed";
+            if (!_inventoryOpen) EnsurePlayerLoadout().CancelPreview();
+            RefreshPresentation();
+        }
+
+        public void SelectNextInventoryItem()
+        {
+            _inventoryOpen = true;
+            _inventorySelectedIndex = (_inventorySelectedIndex + 1) % _inventoryItemIds.Length;
+            _inventoryInputState = "Open";
+            EnsurePlayerLoadout().CancelPreview();
+            RefreshPresentation();
+        }
+
+        public bool PreviewSelectedInventoryItem()
+        {
+            _inventoryOpen = true;
+            var itemId = _inventoryItemIds[_inventorySelectedIndex];
+            var ok = EnsurePlayerLoadout().TryPreview(itemId, _moduleCatalog);
+            _inventoryInputState = ok ? "Trying" : "Open";
+            RefreshPresentation();
+            return ok;
+        }
+
+        public void ApplyInventoryPreview()
+        {
+            _inventoryOpen = true;
+            EnsurePlayerLoadout().ApplyPreview();
+            _inventoryInputState = "Applied";
+            RefreshPresentation();
+        }
+
+        public void CancelInventoryPreview()
+        {
+            EnsurePlayerLoadout().CancelPreview();
+            _inventoryOpen = false;
+            _inventoryInputState = "Cancelled";
+            RefreshPresentation();
+        }
+
+        private string BuildInventoryInputSnapshot()
+        {
+            var selectedId = _inventoryItemIds[_inventorySelectedIndex];
+            return "InventoryInputState=" + _inventoryInputState
+                + " | open=" + _inventoryOpen
+                + " | selected=" + selectedId
+                + " | controls=I toggle, Tab select, T try, Y apply, Esc cancel"
+                + " | " + EnsurePlayerLoadout().Snapshot;
+        }
+
         private string BuildInventoryTryOnSnapshot()
         {
             var previewLoadout = TwoDCharacterLoadout.CreateStarter("male_base", _moduleCatalog);
@@ -329,15 +397,23 @@ namespace LinhGioi.World
 
         private void BuildInventoryTryOnStrip()
         {
-            AddSceneBeat("Inventory try-on strip - icon xem món thử đồ áp dụng/hủy");
-            AddSprite("LGO 2D Inventory TryOn Panel", new Vector2(-0.20f, -1.95f), new Vector2(3.08f, 0.58f), new Color(0.03f, 0.08f, 0.13f, 0.90f), 56);
-            AddWorldLabel("LGO 2D Inventory TryOn Title", "HÀNH TRANG", new Vector2(-1.46f, -1.72f), 0.033f, RuntimeArtCatalog.Gold, 67);
-            AddWorldLabel("LGO 2D Inventory TryOn Flow", "icon → xem → thử → áp dụng/hủy", new Vector2(0.17f, -1.72f), 0.026f, RuntimeArtCatalog.Text, 67);
-            AddSprite("LGO 2D Inventory Slot Vo", new Vector2(-1.34f, -2.04f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Gold, 66);
-            AddSprite("LGO 2D Inventory Slot Kiem", new Vector2(-0.88f, -2.04f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Spirit, 66);
-            AddSprite("LGO 2D Inventory Slot Sword", new Vector2(-0.42f, -2.04f), new Vector2(0.065f, 0.34f), new Color(0.77f, 0.91f, 0.95f), 67);
-            AddSprite("LGO 2D Inventory Selected Ring", new Vector2(-0.88f, -2.04f), new Vector2(0.38f, 0.38f), new Color(0.18f, 0.86f, 0.78f, 0.34f), 65);
-            AddWorldLabel("LGO 2D Inventory TryOn Preview", "Preview: top_kiem_lv1_male", new Vector2(0.52f, -2.04f), 0.027f, RuntimeArtCatalog.Spirit, 67);
+            AddSceneBeat("Inventory try-on panel - input inspect thử đồ áp dụng/hủy");
+            AddSprite("LGO 2D Inventory TryOn Panel", new Vector2(-0.20f, -1.95f), new Vector2(3.28f, 0.72f), new Color(0.03f, 0.08f, 0.13f, 0.90f), 56);
+            AddWorldLabel("LGO 2D Inventory TryOn Title", "HÀNH TRANG", new Vector2(-1.48f, -1.67f), 0.033f, RuntimeArtCatalog.Gold, 67);
+            _inventoryModeLabel = AddWorldLabel("LGO 2D Inventory Input Mode", "OPEN: Tab chọn món", new Vector2(0.12f, -1.67f), 0.026f, RuntimeArtCatalog.Text, 67);
+            AddSprite("LGO 2D Inventory Slot Vo", new Vector2(-1.34f, -2.00f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Gold, 66);
+            AddSprite("LGO 2D Inventory Slot Kiem", new Vector2(-0.88f, -2.00f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Spirit, 66);
+            AddSprite("LGO 2D Inventory Slot Sword", new Vector2(-0.42f, -2.00f), new Vector2(0.065f, 0.34f), new Color(0.77f, 0.91f, 0.95f), 67);
+            AddSprite("LGO 2D Inventory Selected Ring", new Vector2(-0.88f, -2.00f), new Vector2(0.38f, 0.38f), new Color(0.18f, 0.86f, 0.78f, 0.34f), 65);
+            _inventorySelectedLabel = AddWorldLabel("LGO 2D Inventory TryOn Preview", "THỬ: top_kiem_lv1_male", new Vector2(0.48f, -1.96f), 0.027f, RuntimeArtCatalog.Spirit, 67);
+            _inventoryHelpLabel = AddWorldLabel("LGO 2D Inventory Input Help", "T THỬ  •  Y ÁP DỤNG  •  Esc HỦY", new Vector2(0.30f, -2.18f), 0.025f, RuntimeArtCatalog.Gold, 67);
+        }
+
+        private void RefreshInventoryPanelPresentation()
+        {
+            SetHudText(_inventoryModeLabel, (_inventoryOpen ? "OPEN" : "I mở") + ": Tab chọn món");
+            SetHudText(_inventorySelectedLabel, (_inventoryInputState == "Trying" ? "THỬ: " : _inventoryInputState == "Applied" ? "ĐANG MẶC: " : "Chọn: ") + _inventoryItemIds[_inventorySelectedIndex]);
+            SetHudText(_inventoryHelpLabel, "T THỬ  •  Y ÁP DỤNG  •  Esc HỦY");
         }
 
         private void BuildRuntimeMapOverlay()

@@ -15,10 +15,10 @@ Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới qua `docs/des
 
 ## Việc tiếp theo
 
-1. Commit/push checkpoint scenario production spine + terrain collision cho Đông Môn sau khi gate đã pass.
-2. Tiếp roadmap: nâng inventory từ strip preview sang panel inspect/try/apply/cancel có input thật hoặc tiếp tilemap authoring Đông Môn theo scenario spine.
+1. Commit/push checkpoint inventory input runtime spine sau khi source validators và visual review pass.
+2. Tiếp roadmap: tilemap authoring Đông Môn theo scenario spine hoặc nâng inventory panel sang inspect detail/icon grid khi có art asset sạch.
 3. Không mở HP bar, loot/economy/server-authoritative combat trước khi có task/gate riêng.
 
 ## Blocker
 
-Chưa có blocker. Visual capture hiện bắt được world stage, HUD world-space, minimap/route overlay, scene-beat metadata và character base snapshot bằng camera render; manifest lưu `hudSnapshot`, `productionSceneBeatSnapshot`, `runtimeMapSnapshot`, `runtimeCharacterBaseSnapshot`, `runtimeEquipmentSnapshot`, `runtimeAnimationSnapshot` để kiểm copy/trạng thái. Ảnh source cũ đã bị loại khỏi source tree và có validator riêng để ngăn tái nhập nhầm. Shadow Slime micro-slice, map layer budget, route progress, Kiếm Lv1 module runtime, Đông Môn landmark pass và inventory try-on strip hiện được kiểm bằng catalog check, controller snapshot, smoke runner và visual manifest; chưa có blocker.
+Chưa có blocker. Visual capture hiện bắt được world stage, HUD world-space, minimap/route overlay, scene-beat metadata và character base snapshot bằng camera render; manifest lưu `hudSnapshot`, `productionSceneBeatSnapshot`, `runtimeMapSnapshot`, `runtimeCharacterBaseSnapshot`, `runtimeEquipmentSnapshot`, `runtimeAnimationSnapshot` để kiểm copy/trạng thái. Ảnh source cũ đã bị loại khỏi source tree và có validator riêng để ngăn tái nhập nhầm. Shadow Slime micro-slice, map layer budget, route progress, Kiếm Lv1 module runtime, Đông Môn landmark pass và inventory try-on/input runtime hiện được kiểm bằng catalog check, controller snapshot, smoke runner và visual manifest; chưa có blocker.
