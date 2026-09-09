@@ -135,3 +135,11 @@ Thêm route progress cho tutorial/Chapter 1: state expose `CurrentRouteNodeId` t
 ## Next after route progress
 
 Đóng checkpoint sau validation; tiếp theo chọn 2D-04 Kiếm Lv1 hoặc nâng map production Linh Thành/Đông Môn bằng landmark/parallax/route nodes rõ hơn.
+
+## 2026-09-09 — 2D-04 Kiếm Lv1 starter modules
+
+Bổ sung class module thứ hai sau Võ Lv1: áo Kiếm nam/nữ dùng fit profile torso riêng, quần/đai/găng/boots dùng fit profile chung, vũ khí `weapon_kiem_lv1_starter` có anchor `WeaponAnchor` và VFX seed `sword_trail_seed`. Loadout kiểm được mix áo/kiếm Kiếm với quần Võ để bảo vệ hướng auto-fit/module chung thay vì fit thủ công từng tổ hợp. Runtime Đông Môn thêm rack procedural `KIẾM LV1` ở góc phải dưới để player-visible rằng module class thứ hai đã đi vào scene.
+
+## Next after 2D-04
+
+Ưu tiên production map pass cho Linh Thành/Đông Môn: thêm landmark/parallax/route nodes rõ hơn theo GDD 2D mới, giữ scope nhỏ và kiểm runtime visual thật.

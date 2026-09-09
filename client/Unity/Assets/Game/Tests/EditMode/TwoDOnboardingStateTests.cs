@@ -186,6 +186,42 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void KiemLv1StarterModulesCoverMaleFemaleCoreOutfitAndWeaponSlots()
+        {
+            var modules = TwoDCharacterModuleCatalog.CreateDefault();
+
+            foreach (var id in new[]
+            {
+                "top_kiem_lv1_male", "top_kiem_lv1_female", "pants_kiem_lv1_unisex",
+                "waist_kiem_lv1_unisex", "gloves_kiem_lv1_unisex", "boots_kiem_lv1_unisex",
+                "weapon_kiem_lv1_starter"
+            })
+            {
+                Assert.IsTrue(modules.TryFind(id, out _), id);
+            }
+            StringAssert.Contains("class=Kiem", modules.Snapshot);
+            StringAssert.Contains("sword_trail_seed", modules.Snapshot);
+            StringAssert.Contains("base_male_torso", modules.Snapshot);
+            StringAssert.Contains("base_female_torso", modules.Snapshot);
+        }
+
+        [Test]
+        public void CharacterLoadoutCanMixVoPantsWithKiemTopAndWeapon()
+        {
+            var modules = TwoDCharacterModuleCatalog.CreateDefault();
+            var loadout = TwoDCharacterLoadout.CreateStarter("male_base", modules);
+
+            loadout.ApplyVoLv1Starter(modules);
+            Assert.IsTrue(loadout.TryEquip("top_kiem_lv1_male", modules));
+            Assert.IsTrue(loadout.TryEquip("weapon_kiem_lv1_starter", modules));
+
+            StringAssert.Contains("top=top_kiem_lv1_male", loadout.Snapshot);
+            StringAssert.Contains("pants=pants_vo_lv1_unisex", loadout.Snapshot);
+            StringAssert.Contains("weapon=weapon_kiem_lv1_starter", loadout.Snapshot);
+            StringAssert.Contains("status=EQUIPPED", loadout.Snapshot);
+        }
+
+        [Test]
         public void TrainingCompletionAppliesVoLv1StarterPreviewToRuntimeSnapshot()
         {
             var host = new GameObject("2D Vo Lv1 apply test host");

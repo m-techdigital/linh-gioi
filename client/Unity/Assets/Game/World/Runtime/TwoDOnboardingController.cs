@@ -150,6 +150,7 @@ namespace LinhGioi.World
             AddSceneBeat("Shadow Slime - mục tiêu combat nhập môn");
             _shadowSlime = AddShadowSlime("LGO 2D Shadow Slime", new Vector2(3.55f, -1.16f), -1);
             _shadowSlimeLabel = AddWorldLabel("LGO 2D Shadow Slime Label", "SHADOW SLIME", new Vector2(3.55f, -0.34f), 0.034f, new Color(0.82f, 0.60f, 1f), 3).transform;
+            AddKiemLv1PreviewRack(new Vector2(3.35f, -2.02f), 4);
             BuildRuntimeMapOverlay();
             AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
@@ -290,7 +291,7 @@ namespace LinhGioi.World
             _miniMapProgress = AddWorldLabel("LGO 2D Mini Map Progress", "Node: spawn", new Vector2(3.18f, 1.93f), 0.024f, RuntimeArtCatalog.Text, 66);
             AddWorldLabel("LGO 2D Mini Map Layers", "Layers: Sky/Far/Mid/Near/Gameplay/FG", new Vector2(3.18f, 1.69f), 0.021f, new Color(0.73f, 0.87f, 0.88f), 66);
             AddWorldLabel("LGO 2D Base Label", "Base: Male/Female layered", new Vector2(3.18f, 1.55f), 0.022f, RuntimeArtCatalog.Gold, 66);
-            AddWorldLabel("LGO 2D Equipment Label", "Gear: slots + try-on flow", new Vector2(3.18f, 1.42f), 0.021f, RuntimeArtCatalog.Spirit, 66);
+            AddWorldLabel("LGO 2D Equipment Label", "Gear: Võ/Kiếm Lv1 mix slots", new Vector2(3.18f, 1.42f), 0.021f, RuntimeArtCatalog.Spirit, 66);
 
             var route = _mapCatalog.DongMonRoute;
             for (var i = 0; i < route.Length && i < 6; i++)
@@ -428,6 +429,19 @@ namespace LinhGioi.World
             AddSprite(name + " Wrist Guard Left", new Vector2(-0.28f, -0.36f), new Vector2(0.16f, 0.08f), accent, order + 1, root.transform);
             AddSprite(name + " Wrist Guard Right", new Vector2(0.28f, -0.36f), new Vector2(0.16f, 0.08f), accent, order + 1, root.transform);
             return root.transform;
+        }
+
+
+        private void AddKiemLv1PreviewRack(Vector2 position, int order)
+        {
+            AddSceneBeat("Kiếm Lv1 module rack - preview trang bị class thứ hai");
+            AddSprite("LGO 2D Kiem Lv1 Rack Panel", position, new Vector2(1.18f, 0.54f), new Color(0.04f, 0.10f, 0.15f, 0.86f), order);
+            AddSprite("LGO 2D Kiem Lv1 Top Preview", position + new Vector2(-0.33f, 0.02f), new Vector2(0.28f, 0.36f), new Color(0.06f, 0.23f, 0.34f), order + 1);
+            AddSprite("LGO 2D Kiem Lv1 Top Trim", position + new Vector2(-0.33f, 0.20f), new Vector2(0.34f, 0.045f), RuntimeArtCatalog.Spirit, order + 2);
+            AddSprite("LGO 2D Kiem Lv1 Sword Blade", position + new Vector2(0.23f, 0.06f), new Vector2(0.055f, 0.46f), new Color(0.77f, 0.91f, 0.95f), order + 2);
+            AddSprite("LGO 2D Kiem Lv1 Sword Guard", position + new Vector2(0.23f, -0.17f), new Vector2(0.26f, 0.045f), RuntimeArtCatalog.Gold, order + 3);
+            AddSprite("LGO 2D Kiem Lv1 Sword Trail Seed", position + new Vector2(0.42f, 0.16f), new Vector2(0.34f, 0.055f), new Color(0.20f, 0.86f, 0.92f, 0.55f), order + 1);
+            AddWorldLabel("LGO 2D Kiem Lv1 Rack Label", "KIẾM LV1", position + new Vector2(0f, -0.38f), 0.031f, RuntimeArtCatalog.Spirit, order + 8);
         }
 
         private static Transform AddTrainingStone(string name, Vector2 position, int order)

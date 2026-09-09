@@ -33,6 +33,13 @@ namespace LinhGioi.World
                 new CharacterModuleDefinition("waist_vo_lv1_unisex", "Waist", "unisex", "Đai Võ Lv1 đỏ đen", "inventory_icon", "fit_profile=base_hips;class=Vo;level=1"),
                 new CharacterModuleDefinition("gloves_vo_lv1_unisex", "Gloves", "unisex", "Băng tay Võ Lv1", "inventory_icon", "fit_profile=base_hands;class=Vo;level=1"),
                 new CharacterModuleDefinition("boots_vo_lv1_unisex", "Boots", "unisex", "Giày Võ Lv1", "inventory_icon", "fit_profile=base_feet;class=Vo;level=1"),
+                new CharacterModuleDefinition("top_kiem_lv1_male", "OuterShirt", "male_base", "Áo Kiếm Lv1 nam xanh đen gọn", "inventory_icon", "fit_profile=base_male_torso;class=Kiem;level=1;vfx=sword_trail_seed"),
+                new CharacterModuleDefinition("top_kiem_lv1_female", "OuterShirt", "female_base", "Áo Kiếm Lv1 nữ xanh đen gọn", "inventory_icon", "fit_profile=base_female_torso;class=Kiem;level=1;vfx=sword_trail_seed"),
+                new CharacterModuleDefinition("pants_kiem_lv1_unisex", "PantsOrSkirt", "unisex", "Quần Kiếm Lv1 gọn nhẹ", "inventory_icon", "fit_profile=base_hips_legs;class=Kiem;level=1"),
+                new CharacterModuleDefinition("waist_kiem_lv1_unisex", "Waist", "unisex", "Đai Kiếm Lv1 xanh đen", "inventory_icon", "fit_profile=base_hips;class=Kiem;level=1"),
+                new CharacterModuleDefinition("gloves_kiem_lv1_unisex", "Gloves", "unisex", "Bọc tay Kiếm Lv1 nhẹ", "inventory_icon", "fit_profile=base_hands;class=Kiem;level=1"),
+                new CharacterModuleDefinition("boots_kiem_lv1_unisex", "Boots", "unisex", "Giày Kiếm Lv1 linh hoạt", "inventory_icon", "fit_profile=base_feet;class=Kiem;level=1"),
+                new CharacterModuleDefinition("weapon_kiem_lv1_starter", "Weapon", "unisex", "Kiếm gỗ luyện tập Lv1", "inventory_icon", "try_on_anchor=WeaponAnchor;class=Kiem;level=1;vfx=sword_trail_seed"),
                 new CharacterModuleDefinition("weapon_training_staff", "Weapon", "unisex", "Vũ khí tập luyện", "inventory_icon", "try_on_anchor=WeaponAnchor"),
                 new CharacterModuleDefinition("spirit_pet_seed", "PetSpirit", "unisex", "Linh chủng đi kèm", "inventory_icon", "try_on_anchor=PetAnchor")
             });
