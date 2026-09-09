@@ -11,7 +11,8 @@ namespace LinhGioi.World
             MapRouteNode[] dongMonRoute,
             MapLayerBudget[] layerBudgets,
             MapLandmark[] dongMonLandmarks,
-            MapCollisionBand[] dongMonCollisionBands)
+            MapCollisionBand[] dongMonCollisionBands,
+            MapTileDefinition[] dongMonTileDefinitions)
         {
             WorldZones = worldZones;
             LinhThanhDistricts = linhThanhDistricts;
@@ -19,11 +20,13 @@ namespace LinhGioi.World
             LayerBudgets = layerBudgets;
             DongMonLandmarks = dongMonLandmarks;
             DongMonCollisionBands = dongMonCollisionBands;
+            DongMonTileDefinitions = dongMonTileDefinitions;
             WorldSnapshot = BuildWorldSnapshot(worldZones, linhThanhDistricts);
             TutorialRouteSnapshot = BuildRouteSnapshot(dongMonRoute);
             LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
+            TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions);
         }
 
         public MapZone[] WorldZones { get; }
@@ -32,12 +35,14 @@ namespace LinhGioi.World
         public MapLayerBudget[] LayerBudgets { get; }
         public MapLandmark[] DongMonLandmarks { get; }
         public MapCollisionBand[] DongMonCollisionBands { get; }
+        public MapTileDefinition[] DongMonTileDefinitions { get; }
         public string WorldSnapshot { get; }
         public string TutorialRouteSnapshot { get; }
         public string LayerBudgetSnapshot { get; }
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot;
+        public string TilemapSnapshot { get; }
+        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -106,6 +111,15 @@ namespace LinhGioi.World
                     new MapCollisionBand("jump-gap", "Jump Gap", 0.35f, 1.32f, -1.58f, "gap cue for jump lesson"),
                     new MapCollisionBand("dash-lane", "Dash Lane", 1.55f, 3.35f, -1.02f, "horizontal dash read lane"),
                     new MapCollisionBand("slime-arena", "Shadow Slime Arena", 3.12f, 4.10f, -1.16f, "combat stop before forest edge")
+                },
+                new[]
+                {
+                    new MapTileDefinition("tile_ground_grass", "Grass Ground", 1, "ground-main", "walkable top edge and foreground grass fringe"),
+                    new MapTileDefinition("tile_ground_stone", "Spirit Stone Path", 1, "ground-main", "main Dong Mon path surface"),
+                    new MapTileDefinition("tile_platform_wood", "Wood Platform", 1, "training-platform", "bridge/platform around jump lesson"),
+                    new MapTileDefinition("tile_gap_marker", "Jump Gap Marker", 1, "jump-gap", "empty tile span reserved for jump tutorial"),
+                    new MapTileDefinition("tile_dash_lane", "Dash Lane Tile", 1, "dash-lane", "flat read lane for dash tutorial"),
+                    new MapTileDefinition("tile_slime_arena", "Slime Arena Soil", 1, "slime-arena", "combat footing before outer forest")
                 });
         }
 
@@ -165,6 +179,17 @@ namespace LinhGioi.World
             {
                 if (i > 0) builder.Append(" | ");
                 builder.Append(bands[i].Id).Append(':').Append(bands[i].Name).Append('@').Append(bands[i].Y.ToString("0.00"));
+            }
+            return builder.ToString();
+        }
+
+        private static string BuildTilemapSnapshot(MapTileDefinition[] tiles)
+        {
+            var builder = new StringBuilder("Chapter 1 Tilemap: Đông Môn | ");
+            for (var i = 0; i < tiles.Length; i++)
+            {
+                if (i > 0) builder.Append(" | ");
+                builder.Append(tiles[i].Id).Append('@').Append(tiles[i].CollisionBandId).Append("/L").Append(tiles[i].LayerIndex);
             }
             return builder.ToString();
         }
@@ -260,6 +285,25 @@ namespace LinhGioi.World
         public float MaxX { get; }
         public float Y { get; }
         public string Rule { get; }
+    }
+
+    [Serializable]
+    public readonly struct MapTileDefinition
+    {
+        public MapTileDefinition(string id, string name, int layerIndex, string collisionBandId, string usage)
+        {
+            Id = id;
+            Name = name;
+            LayerIndex = layerIndex;
+            CollisionBandId = collisionBandId;
+            Usage = usage;
+        }
+
+        public string Id { get; }
+        public string Name { get; }
+        public int LayerIndex { get; }
+        public string CollisionBandId { get; }
+        public string Usage { get; }
     }
 
     [Serializable]

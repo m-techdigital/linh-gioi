@@ -489,6 +489,38 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeMapCatalogKeepsDongMonTileDefinitions()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            Assert.That(map.DongMonTileDefinitions.Length, Is.GreaterThanOrEqualTo(6));
+            StringAssert.Contains("Chapter 1 Tilemap", map.TilemapSnapshot);
+            StringAssert.Contains("tile_ground_grass", map.TilemapSnapshot);
+            StringAssert.Contains("tile_platform_wood", map.TilemapSnapshot);
+            StringAssert.Contains("tile_gap_marker", map.TilemapSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesTilemapSnapshotForVisualEvidence()
+        {
+            var host = new GameObject("2D tilemap snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("Chapter 1 Tilemap", controller.RuntimeTilemapSnapshot);
+                StringAssert.Contains("tile_ground_grass", controller.RuntimeTilemapSnapshot);
+                StringAssert.Contains("tile_platform_wood", controller.RuntimeTilemapSnapshot);
+                StringAssert.Contains("tile_gap_marker", controller.RuntimeTilemapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerExposesMapSnapshotForVisualEvidence()
         {
             var host = new GameObject("2D onboarding map snapshot test host");

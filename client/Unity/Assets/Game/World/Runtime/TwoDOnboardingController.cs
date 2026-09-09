@@ -64,6 +64,7 @@ namespace LinhGioi.World
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
         public string RuntimeInventoryInputSnapshot => BuildInventoryInputSnapshot();
         public string RuntimeTerrainCollisionSnapshot => _mapCatalog.CollisionSnapshot;
+        public string RuntimeTilemapSnapshot => _mapCatalog.TilemapSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
         public string RuntimeRouteProgressSnapshot => "RouteProgress: current=" + _state.CurrentRouteNodeId + " step=" + _state.Step + " action=" + _state.AvailableAction;
@@ -146,6 +147,7 @@ namespace LinhGioi.World
 
             AddSceneSprite("LGO 2D Training Yard", "Sân luyện nhập môn", new Vector2(0f, -1.52f), new Vector2(8.9f, 1.82f), new Color(0.10f, 0.15f, 0.18f), -12);
             AddSceneSprite("LGO 2D Yard Front Shade", "Bóng nền sân luyện", new Vector2(0f, -2.22f), new Vector2(8.9f, 0.46f), new Color(0.06f, 0.10f, 0.15f), -11);
+            AddDongMonProceduralTilemap();
             AddSceneSprite("LGO 2D Jade Path", "Lối ngọc dẫn tới Bia Luyện Khí", new Vector2(0.8f, -0.95f), new Vector2(5.9f, 0.20f), new Color(0.11f, 0.52f, 0.48f, 0.55f), -10);
             _pathGlow = AddSceneSprite("LGO 2D Path Glow", "Lối ngọc phát sáng sau thoại", new Vector2(0.85f, -0.95f), new Vector2(5.7f, 0.08f), new Color(0.16f, 0.86f, 0.78f, 0.78f), -9).transform;
             AddDongMonTerrainCollisionCues();
@@ -315,6 +317,22 @@ namespace LinhGioi.World
         }
 
 
+
+        private void AddDongMonProceduralTilemap()
+        {
+            AddSceneBeat("TILEMAP Tile: grass/stone/wood/gap/dash/slime procedural Đông Môn tilemap spine");
+            for (var i = 0; i < 12; i++)
+            {
+                var x = -3.70f + i * 0.54f;
+                var grass = i < 4 || i > 8;
+                AddSprite("LGO 2D Tile tile_ground_" + i, new Vector2(x, -2.02f), new Vector2(0.50f, 0.14f), grass ? new Color(0.13f, 0.32f, 0.22f) : new Color(0.24f, 0.30f, 0.31f), -7);
+                AddSprite("LGO 2D Tile lip_" + i, new Vector2(x, -1.91f), new Vector2(0.46f, 0.035f), grass ? new Color(0.25f, 0.64f, 0.42f) : RuntimeArtCatalog.Spirit, -6);
+            }
+            AddSprite("LGO 2D Tile tile_platform_wood", new Vector2(1.05f, -0.88f), new Vector2(1.42f, 0.12f), new Color(0.46f, 0.27f, 0.12f), -6);
+            AddSprite("LGO 2D Tile tile_gap_marker", new Vector2(0.84f, -1.72f), new Vector2(0.84f, 0.06f), new Color(0.04f, 0.07f, 0.10f), -6);
+            AddSprite("LGO 2D Tile tile_dash_lane", new Vector2(2.45f, -1.02f), new Vector2(1.70f, 0.10f), new Color(0.10f, 0.48f, 0.47f, 0.70f), -6);
+            AddSprite("LGO 2D Tile tile_slime_arena", new Vector2(3.58f, -1.36f), new Vector2(1.02f, 0.14f), new Color(0.22f, 0.12f, 0.25f, 0.75f), -6);
+        }
 
         private void AddDongMonTerrainCollisionCues()
         {

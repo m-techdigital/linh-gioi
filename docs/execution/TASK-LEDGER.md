@@ -172,3 +172,11 @@ Tiếp tục bằng tileset/terrain collision pass cho Đông Môn hoặc nâng 
 ## 2026-09-09 — 2D inventory input runtime spine
 
 Nâng inventory từ strip preview tĩnh sang input runtime local: `I` mở panel, `Tab` chọn item, `T` thử, `Y` áp dụng, `Esc` hủy. Controller expose `RuntimeInventoryInputSnapshot`; visual capture tăng lên 10 frame với `09-inventory-try` và `10-inventory-applied`, chứng minh áo Kiếm Lv1 có thể thử/áp dụng trên base Võ Lv1 qua cùng loadout/layer mechanism. Không mở economy, loot hoặc persistence thật.
+
+## 2026-09-09 — Đông Môn tilemap runtime spine
+
+Đã thêm `DongMonTileDefinitions` vào map catalog cho ground grass/stone, wood platform, jump gap, dash lane và slime arena. Runtime onboarding vẽ procedural tile strip/platform/gap/dash/slime cues có thể nhìn thấy trong Player capture, expose `RuntimeTilemapSnapshot` và ghi `runtimeTilemapSnapshot` vào visual manifest. Scope là spine runtime để thay bằng authored tileset/sprite atlas sau; không dùng ảnh source, không mở biome mới và không đổi frozen surfaces.
+
+## Next after tilemap runtime spine
+
+Nâng Đông Môn từ procedural tile strip sang authored tilemap chunks/parallax spacing, hoặc nâng inventory inspect detail/icon grid khi có art asset sạch.
