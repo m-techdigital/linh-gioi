@@ -50,6 +50,8 @@ namespace LinhGioi.World
         public bool PlazaHubPreviewOpen { get; private set; }
         public bool PlazaHubNpcPreviewOpen { get; private set; }
         public string PlazaHubInteractionId { get; private set; } = "locked";
+        public string SelectedPlazaHubTargetId { get; private set; } = "locked";
+        public string SelectedPlazaHubTargetLabel { get; private set; } = "Chưa mở";
         public string CurrentRouteNodeId { get; private set; } = "spawn";
 
         public void Reset()
@@ -71,6 +73,8 @@ namespace LinhGioi.World
             PlazaHubPreviewOpen = false;
             PlazaHubNpcPreviewOpen = false;
             PlazaHubInteractionId = "locked";
+            SelectedPlazaHubTargetId = "locked";
+            SelectedPlazaHubTargetLabel = "Chưa mở";
             CurrentRouteNodeId = "spawn";
             Refresh();
         }
@@ -181,6 +185,8 @@ namespace LinhGioi.World
             PlazaHubPreviewOpen = true;
             PlazaHubNpcPreviewOpen = false;
             PlazaHubInteractionId = "board-preview-open";
+            SelectedPlazaHubTargetId = "event-board";
+            SelectedPlazaHubTargetLabel = "Bảng Sự Kiện";
             DialogueOpen = true;
             DialogueSpeaker = "Bảng Sự Kiện";
             DialogueLine = "Nhiệm vụ cộng đồng đang ở local preview.";
@@ -202,6 +208,8 @@ namespace LinhGioi.World
             PlazaHubPreviewOpen = true;
             PlazaHubNpcPreviewOpen = true;
             PlazaHubInteractionId = "npc-gate-guide-preview";
+            SelectedPlazaHubTargetId = "gate-guide";
+            SelectedPlazaHubTargetLabel = "Người Giữ Cổng";
             DialogueOpen = true;
             DialogueSpeaker = "Người Giữ Cổng";
             DialogueLine = "Quảng Trường là nơi gặp người chơi khác, nhận tin sự kiện và quay về Đông Môn khi cần luyện thêm.";
@@ -223,6 +231,8 @@ namespace LinhGioi.World
             PlazaHubPreviewOpen = true;
             PlazaHubNpcPreviewOpen = true;
             PlazaHubInteractionId = "npc-merchant-preview";
+            SelectedPlazaHubTargetId = "merchant-preview";
+            SelectedPlazaHubTargetLabel = "Thương Nhân";
             DialogueOpen = true;
             DialogueSpeaker = "Thương Nhân";
             DialogueLine = "Hàng tân thủ sẽ hiển thị thử đồ trước, chưa mở mua bán cho tới khi có hệ thống shop riêng.";
@@ -234,6 +244,48 @@ namespace LinhGioi.World
             AvailableAction = TwoDOnboardingAction.None;
             CurrentRouteNodeId = "plaza-merchant";
             return true;
+        }
+
+
+        public bool SelectNextPlazaHubTarget()
+        {
+            Refresh();
+            if (!LinhThanhUnlocked) return false;
+
+            if (SelectedPlazaHubTargetId == "event-board") SetSelectedPlazaHubTarget("gate-guide");
+            else if (SelectedPlazaHubTargetId == "gate-guide") SetSelectedPlazaHubTarget("merchant-preview");
+            else SetSelectedPlazaHubTarget("event-board");
+
+            PlazaHubPreviewOpen = true;
+            PlazaHubNpcPreviewOpen = false;
+            PlazaHubInteractionId = "target-selected-" + SelectedPlazaHubTargetId;
+            DialogueOpen = false;
+            DialogueLine = string.Empty;
+            ObjectiveText = "Chọn mục tiêu Quảng Trường: " + SelectedPlazaHubTargetLabel + ".";
+            HintText = "Bấm P để đổi mục tiêu, E/Enter để tương tác local-only.";
+            AreaText = "Quảng Trường";
+            FeedbackText = "Đang chọn: " + SelectedPlazaHubTargetLabel + ".";
+            LastAnimationIntent = "Idle";
+            AvailableAction = TwoDOnboardingAction.None;
+            CurrentRouteNodeId = "plaza-target-" + SelectedPlazaHubTargetId;
+            return true;
+        }
+
+        public bool TryUseSelectedPlazaHubTarget()
+        {
+            Refresh();
+            if (!LinhThanhUnlocked) return false;
+            if (SelectedPlazaHubTargetId == "gate-guide") return TryTalkPlazaGateGuide();
+            if (SelectedPlazaHubTargetId == "merchant-preview") return TryTalkPlazaMerchantPreview();
+            return TryInspectPlazaHubBoard();
+        }
+
+        private void SetSelectedPlazaHubTarget(string targetId)
+        {
+            SelectedPlazaHubTargetId = targetId;
+            if (targetId == "gate-guide") SelectedPlazaHubTargetLabel = "Người Giữ Cổng";
+            else if (targetId == "merchant-preview") SelectedPlazaHubTargetLabel = "Thương Nhân";
+            else SelectedPlazaHubTargetLabel = "Bảng Sự Kiện";
         }
 
         public void Refresh()

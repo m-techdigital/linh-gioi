@@ -23,6 +23,7 @@ namespace LinhGioi.World
         private Transform _linhThanhUnlockBanner;
         private Transform _plazaUnlockPath;
         private Transform _plazaHubRuntimeRoot;
+        private Transform _plazaHubSelectorRing;
         private Transform _inventoryPanelRoot;
         private Transform _focusRing;
         private SpriteRenderer _playerOuterShirtRenderer;
@@ -43,6 +44,7 @@ namespace LinhGioi.World
         private TextMesh _hudDialogue;
         private TextMesh _hudFeedback;
         private TextMesh _miniMapProgress;
+        private TextMesh _plazaHubSelectedLabel;
         private TextMesh _inventoryModeLabel;
         private TextMesh _inventorySelectedLabel;
         private TextMesh _inventoryHelpLabel;
@@ -68,6 +70,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhHubShellSnapshot => _mapCatalog.LinhThanhHubShellSnapshot;
         public string RuntimeLinhThanhPlazaShellSnapshot => _mapCatalog.LinhThanhPlazaShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
+        public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimeLinhThanhUnlockSnapshot => BuildLinhThanhUnlockSnapshot();
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
@@ -113,8 +116,9 @@ namespace LinhGioi.World
 
             if (Input.GetKeyDown(KeyCode.E) || Input.GetKeyDown(KeyCode.Return))
             {
-                if (_state.TryUseAction()) RefreshPresentation();
+                if (_state.TryUseAction() || UseSelectedPlazaHubTarget()) RefreshPresentation();
             }
+            if (Input.GetKeyDown(KeyCode.P)) SelectNextPlazaHubTarget();
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.J))
             {
                 if (_state.TryUseJump()) RefreshPresentation();
@@ -280,7 +284,39 @@ namespace LinhGioi.World
         {
             var interaction = _state.LinhThanhUnlocked ? _state.PlazaHubInteractionId : "locked-until-unlock";
             if (string.IsNullOrEmpty(interaction) || interaction == "locked") interaction = _state.LinhThanhUnlocked ? "hub-idle" : "locked-until-unlock";
-            return _mapCatalog.LinhThanhPlazaHubRuntimeSnapshot + " | unlocked=" + _state.LinhThanhUnlocked + " | interaction=" + interaction;
+            return _mapCatalog.LinhThanhPlazaHubRuntimeSnapshot + " | unlocked=" + _state.LinhThanhUnlocked + " | selected=" + _state.SelectedPlazaHubTargetId + " | interaction=" + interaction;
+        }
+
+
+        public bool SelectNextPlazaHubTarget()
+        {
+            var ok = _state.SelectNextPlazaHubTarget();
+            if (ok) RefreshPresentation();
+            return ok;
+        }
+
+        public bool UseSelectedPlazaHubTarget()
+        {
+            var ok = _state.TryUseSelectedPlazaHubTarget();
+            if (ok) RefreshPresentation();
+            return ok;
+        }
+
+        private string BuildPlazaHubInputSnapshot()
+        {
+            return "PlazaHubInput: unlocked=" + _state.LinhThanhUnlocked
+                + " | selected=" + _state.SelectedPlazaHubTargetId
+                + " | label=" + _state.SelectedPlazaHubTargetLabel
+                + " | controls=P select, E interact"
+                + " | interaction=" + (_state.LinhThanhUnlocked ? _state.PlazaHubInteractionId : "locked-until-unlock")
+                + " | safe-local-no-shop-backend";
+        }
+
+        private Vector2 PlazaHubTargetPosition()
+        {
+            if (_state.SelectedPlazaHubTargetId == "gate-guide") return new Vector2(-0.88f, 0.54f);
+            if (_state.SelectedPlazaHubTargetId == "merchant-preview") return new Vector2(0.28f, 0.52f);
+            return new Vector2(0.62f, 0.47f);
         }
 
         private string BuildLinhThanhUnlockSnapshot()
@@ -336,6 +372,12 @@ namespace LinhGioi.World
             if (_plazaUnlockPath != null) _plazaUnlockPath.gameObject.SetActive(linhThanhUnlocked);
             if (_linhThanhUnlockBanner != null) _linhThanhUnlockBanner.gameObject.SetActive(linhThanhUnlocked);
             if (_plazaHubRuntimeRoot != null) _plazaHubRuntimeRoot.gameObject.SetActive(linhThanhUnlocked);
+            if (_plazaHubSelectorRing != null)
+            {
+                _plazaHubSelectorRing.gameObject.SetActive(linhThanhUnlocked);
+                _plazaHubSelectorRing.localPosition = ToWorld(PlazaHubTargetPosition(), 0f);
+            }
+            SetHudText(_plazaHubSelectedLabel, linhThanhUnlocked ? "Chọn: " + _state.SelectedPlazaHubTargetLabel + "  P đổi / E tương tác" : "Chọn hub: khóa");
             SetHudText(_miniMapProgress, linhThanhUnlocked ? "Node: return-gate → plaza" : "Node: " + _state.CurrentRouteNodeId);
             RefreshPlayerEquipmentPresentation();
             RefreshInventoryPanelPresentation();
@@ -382,6 +424,8 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Plaza Guild Bulletin Locked Runtime", new Vector2(0.92f, 0.68f), new Vector2(0.22f, 0.28f), new Color(0.30f, 0.22f, 0.62f, 0.62f), -2, _plazaHubRuntimeRoot);
             AddWorldLabel("LGO 2D Plaza Hub Runtime Label", "Quảng Trường: NPC + bảng sự kiện", new Vector2(0.12f, 0.42f), 0.022f, new Color(0.73f, 0.87f, 0.88f, 0.84f), 6, _plazaHubRuntimeRoot);
             AddWorldLabel("LGO 2D Plaza Merchant Preview Label", "Thương Nhân preview", new Vector2(0.30f, 0.30f), 0.019f, RuntimeArtCatalog.Gold, 6, _plazaHubRuntimeRoot);
+            _plazaHubSelectorRing = AddSprite("LGO 2D Plaza Target Selector Ring", new Vector2(0.62f, 0.47f), new Vector2(0.42f, 0.08f), new Color(0.18f, 0.86f, 0.78f, 0.72f), 7, _plazaHubRuntimeRoot).transform;
+            _plazaHubSelectedLabel = AddWorldLabel("LGO 2D Plaza Selected Target Label", "Chọn: Bảng Sự Kiện", new Vector2(0.10f, 0.18f), 0.020f, RuntimeArtCatalog.Spirit, 7, _plazaHubRuntimeRoot);
             _plazaHubRuntimeRoot.gameObject.SetActive(false);
         }
 

@@ -69,15 +69,21 @@ namespace LinhGioi.World
             yield return null;
             yield return Capture(evidenceDir, "08-complete");
 
-            controller.State.TryInspectPlazaHubBoard();
+            controller.UseSelectedPlazaHubTarget();
             controller.RefreshForSmoke();
             yield return null;
             yield return Capture(evidenceDir, "11-plaza-board-preview");
 
-            controller.State.TryTalkPlazaMerchantPreview();
+            controller.SelectNextPlazaHubTarget();
             controller.RefreshForSmoke();
             yield return null;
-            yield return Capture(evidenceDir, "12-plaza-npc-preview");
+            yield return Capture(evidenceDir, "12-plaza-target-selector");
+
+            controller.SelectNextPlazaHubTarget();
+            controller.UseSelectedPlazaHubTarget();
+            controller.RefreshForSmoke();
+            yield return null;
+            yield return Capture(evidenceDir, "13-plaza-npc-preview");
 
             controller.ToggleInventoryPanel();
             controller.PreviewSelectedInventoryItem();
@@ -91,7 +97,7 @@ namespace LinhGioi.World
             var resultPath = Path.Combine(evidenceDir, "twod-onboarding-visual-manifest.json");
             var result = new TwoDOnboardingVisualCaptureResult
             {
-                status = _screenshots.Count == 12 ? "PASS" : "FAIL",
+                status = _screenshots.Count == 13 ? "PASS" : "FAIL",
                 unityVersion = Application.unityVersion,
                 platform = Application.platform.ToString(),
                 evidenceDir = evidenceDir,
@@ -108,6 +114,7 @@ namespace LinhGioi.World
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
                 runtimeInventoryInputSnapshot = controller.RuntimeInventoryInputSnapshot,
+                runtimePlazaHubInputSnapshot = controller.RuntimePlazaHubInputSnapshot,
                 runtimeTerrainCollisionSnapshot = controller.RuntimeTerrainCollisionSnapshot,
                 runtimeTilemapSnapshot = controller.RuntimeTilemapSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
@@ -230,6 +237,7 @@ namespace LinhGioi.World
             public string runtimeEquipmentSnapshot;
             public string runtimeInventoryTryOnSnapshot;
             public string runtimeInventoryInputSnapshot;
+            public string runtimePlazaHubInputSnapshot;
             public string runtimeTerrainCollisionSnapshot;
             public string runtimeTilemapSnapshot;
             public string runtimeAnimationSnapshot;

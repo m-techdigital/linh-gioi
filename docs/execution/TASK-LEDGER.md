@@ -269,3 +269,16 @@ Map vẫn chưa production-complete. Next safe action: thêm interaction local-o
 ## 2026-09-10 — Quảng Trường NPC local interaction
 
 Closure `LGO_LINHTHANH_PLAZA_NPC_INTERACTION_READY`: thêm interaction local-only cho Người Giữ Cổng và Thương Nhân preview ở Quảng Trường sau khi người chơi hoàn tất Đông Môn. Runtime HUD tách speaker khỏi dialogue line để tránh prefix sai NPC; visual capture tăng lên 12 frame với `12-plaza-npc-preview`. Verification: Unity EditMode `99 total / 98 passed / 0 failed / 1 skipped`, 2D onboarding smoke PASS, macOS Player build PASS, runtime smoke matrix PASS và visual evidence matrix PASS.
+
+## 2026-09-10 — Quảng Trường target selector/input runtime
+
+- Branch/worktree: `feature/2d`, clean worktree tách riêng từ `origin/feature/2d` để tránh đụng tab class/art song song.
+- Thêm selector local-only cho Quảng Trường sau unlock Đông Môn: `P` cycle qua Bảng Sự Kiện → Người Giữ Cổng → Thương Nhân, `E/Enter` tương tác mục tiêu đang chọn.
+- `TwoDOnboardingState` giữ `SelectedPlazaHubTargetId`/`SelectedPlazaHubTargetLabel`; controller expose `RuntimePlazaHubInputSnapshot` và ring/label player-visible.
+- Visual capture thêm `12-plaza-target-selector` và đổi NPC preview thành `13-plaza-npc-preview`; manifest có `runtimePlazaHubInputSnapshot`.
+- Validator/matrix cập nhật để bắt đủ `PlazaHubInput`, `controls=P select, E interact`, `interaction=npc-merchant-preview`, `safe-local-no-shop-backend` và 13 screenshot.
+- Scope an toàn: chưa mở teleport, shop/economy, giao dịch, bang hội, social backend hoặc frozen contract.
+
+## Next after Plaza target selector
+
+Tiếp map A-Z bằng một batch player-visible có giá trị: Quảng Trường social layout rõ hơn, transition shell từ Đông Môn vào Linh Thành, hoặc authored Đông Môn Tilemap/tileset sạch. Giữ song song an toàn với tab class/art; chỉ chạm map/runtime/docs/tools liên quan.

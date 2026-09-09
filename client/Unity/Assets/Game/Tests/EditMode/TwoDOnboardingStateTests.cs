@@ -223,6 +223,7 @@ namespace LinhGioi.Tests
 
             Assert.IsNotNull(resultType);
             Assert.IsNotNull(resultType.GetField("runtimeInventoryInputSnapshot"));
+            Assert.IsNotNull(resultType.GetField("runtimePlazaHubInputSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhUnlockSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhPlazaHubSnapshot"));
         }
@@ -652,6 +653,38 @@ namespace LinhGioi.Tests
             StringAssert.Contains("không tạo tiền tệ", state.HintText);
         }
 
+
+        [Test]
+        public void PlazaHubTargetSelectorCyclesAfterUnlockAndUsesSelectedTarget()
+        {
+            var locked = new TwoDOnboardingState();
+            locked.Reset();
+
+            Assert.IsFalse(locked.SelectNextPlazaHubTarget());
+            Assert.AreEqual("locked", locked.SelectedPlazaHubTargetId);
+
+            var state = CompleteDongMonFlow();
+
+            Assert.IsTrue(state.SelectNextPlazaHubTarget());
+            Assert.AreEqual("event-board", state.SelectedPlazaHubTargetId);
+            Assert.AreEqual("Bảng Sự Kiện", state.SelectedPlazaHubTargetLabel);
+            Assert.AreEqual("target-selected-event-board", state.PlazaHubInteractionId);
+            Assert.IsFalse(state.DialogueOpen);
+
+            Assert.IsTrue(state.SelectNextPlazaHubTarget());
+            Assert.AreEqual("gate-guide", state.SelectedPlazaHubTargetId);
+            Assert.AreEqual("Người Giữ Cổng", state.SelectedPlazaHubTargetLabel);
+
+            Assert.IsTrue(state.SelectNextPlazaHubTarget());
+            Assert.AreEqual("merchant-preview", state.SelectedPlazaHubTargetId);
+            Assert.AreEqual("Thương Nhân", state.SelectedPlazaHubTargetLabel);
+
+            Assert.IsTrue(state.TryUseSelectedPlazaHubTarget());
+            Assert.AreEqual("npc-merchant-preview", state.PlazaHubInteractionId);
+            Assert.AreEqual("Thương Nhân", state.DialogueSpeaker);
+            StringAssert.Contains("Hàng tân thủ", state.DialogueLine);
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsLinhThanhPlazaHubRuntime()
         {
@@ -704,9 +737,55 @@ namespace LinhGioi.Tests
                 Assert.IsTrue(controller.State.TryTalkPlazaMerchantPreview());
                 controller.RefreshForSmoke();
                 StringAssert.Contains("interaction=npc-merchant-preview", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("selected=merchant-preview", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("selected=merchant-preview", controller.RuntimePlazaHubInputSnapshot);
+                StringAssert.Contains("controls=P select, E interact", controller.RuntimePlazaHubInputSnapshot);
                 StringAssert.Contains("Thương Nhân: Hàng tân thủ", controller.WorldHudSnapshot);
                 StringAssert.Contains("không tạo tiền tệ", controller.WorldHudSnapshot);
                 StringAssert.Contains("LINH_THANH_PLAZA_HUB_RUNTIME", controller.ProductionSceneBeatSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
+        [Test]
+        public void RuntimeControllerSupportsPlazaHubTargetInput()
+        {
+            var host = new GameObject("2D plaza hub target selector input test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                Assert.IsFalse(controller.SelectNextPlazaHubTarget());
+                StringAssert.Contains("unlocked=False", controller.RuntimePlazaHubInputSnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                Assert.IsTrue(controller.SelectNextPlazaHubTarget());
+                StringAssert.Contains("selected=event-board", controller.RuntimePlazaHubInputSnapshot);
+                StringAssert.Contains("Bấm P để đổi mục tiêu", controller.WorldHudSnapshot);
+
+                Assert.IsTrue(controller.SelectNextPlazaHubTarget());
+                StringAssert.Contains("selected=gate-guide", controller.RuntimePlazaHubInputSnapshot);
+
+                Assert.IsTrue(controller.SelectNextPlazaHubTarget());
+                StringAssert.Contains("selected=merchant-preview", controller.RuntimePlazaHubInputSnapshot);
+
+                Assert.IsTrue(controller.UseSelectedPlazaHubTarget());
+                StringAssert.Contains("interaction=npc-merchant-preview", controller.RuntimePlazaHubInputSnapshot);
+                StringAssert.Contains("Thương Nhân: Hàng tân thủ", controller.WorldHudSnapshot);
             }
             finally
             {

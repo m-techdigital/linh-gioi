@@ -244,3 +244,7 @@ Map vẫn chưa production-complete. Next safe action: thêm interaction local-o
 ## 2026-09-10 — Quảng Trường NPC local interaction
 
 Checkpoint `LGO_LINHTHANH_PLAZA_NPC_INTERACTION_READY`: Quảng Trường có NPC local preview cho Người Giữ Cổng/Thương Nhân sau unlock Đông Môn, capture `12-plaza-npc-preview`, manifest bắt `npc=merchant-preview`, `interaction=npc-merchant-preview`, `safe-local-no-shop-backend`. Next map-safe action: authored Đông Môn Tilemap hoặc nâng Plaza NPC selector/input thật, vẫn không mở shop/backend.
+
+## 2026-09-10 — Quảng Trường target selector/input checkpoint
+
+`LGO_LINHTHANH_PLAZA_TARGET_SELECTOR_READY`: sau khi unlock Linh Thành, Quảng Trường có selector local-only cho ba mục tiêu hub: Bảng Sự Kiện, Người Giữ Cổng và Thương Nhân. Input runtime: `P` đổi mục tiêu, `E/Enter` tương tác mục tiêu đang chọn; manifest ghi `runtimePlazaHubInputSnapshot`, visual capture có frame `12-plaza-target-selector` và `13-plaza-npc-preview`. Gate đã chạy: Unity EditMode, Editor smoke, macOS Player build/capture, runtime smoke matrix và visual evidence matrix. Next map-safe action: tiếp tục A-Z map bằng Quảng Trường social layout/Đông Môn authored Tilemap hoặc hub transition shell, vẫn không mở shop/economy/teleport/bang hội/backend khi chưa có gate riêng.
