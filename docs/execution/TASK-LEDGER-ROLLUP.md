@@ -171,3 +171,11 @@ LGO_VISUAL_EVIDENCE_MATRIX_READY. Đã nâng `tools/lgo_visual_evidence_matrix.p
 ## Next after visual evidence matrix
 
 Tiếp tục task advisor kế tiếp; nếu mở runtime/player-visible mới thì sinh lại screenshot/manifest rồi chạy smoke matrix và visual matrix tương ứng.
+
+## 2026-09-09 — Crash/error reporting plan closure
+
+LGO_CRASH_REPORTING_PLAN_READY. Đã xác minh plan local crash/error reporting hiện có bằng `python3.12 tools/validate_lgo_crash_error_reporting_plan.py`: PASS. Tool `tools/lgo_error_report_summary.py` phân loại missing closure summary là `UNVERIFIED_ENVIRONMENT`, và plan giữ rõ các class `FIX_REQUIRED`, `UNVERIFIED_ENVIRONMENT`, `CONTRACT_CHANGE_REQUIRED`, `HUMAN_REVIEW_REQUIRED`. Không tích hợp production crash-reporting service, telemetry backend, analytics SDK, auth/DB/economy/social/live-ops hoặc frozen surface.
+
+## Next after crash/error plan
+
+Tiếp tục task advisor kế tiếp trong docs/tools hoặc quay lại map/runtime 2D khi không xung đột tab class.
