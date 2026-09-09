@@ -54,7 +54,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_initial",
         "label": "2D Đông Môn initial HUD/map read",
         "screenshot": "01-initial.bmp",
-        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
+        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
         "nonClaim": "not production art",
     },
     {
@@ -146,6 +146,10 @@ def verify_current() -> dict[str, Any]:
     for token in ("Chapter 1 Tilemap", "ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"):
         if token not in tilemap_snapshot:
             failures.append(f"runtimeTilemapSnapshot missing {token!r}")
+    unity_tilemap_snapshot = str(manifest.get("runtimeDongMonUnityTilemapSnapshot", ""))
+    for token in ("DongMonUnityTilemap", "renderer=TilemapRenderer", "grid=Grid", "source=LGOMaps/DongMonChunkPlacement", "cells=16", "safe-no-source-image", "safe-no-3d"):
+        if token not in unity_tilemap_snapshot:
+            failures.append(f"runtimeDongMonUnityTilemapSnapshot missing {token!r}")
     dong_mon_readability_snapshot = str(manifest.get("runtimeDongMonReadabilitySnapshot", ""))
     for token in ("DongMonReadability", "mode=route-label-rail", "world-label-density=reduced", "chips=gate,stone,jump,dash,slime", "avoids-hud-overlap", "safe-local-no-backend"):
         if token not in dong_mon_readability_snapshot:

@@ -198,3 +198,5 @@ Cảng Linh Thuyền shell dùng `spirit-boat=preview-only` và `travel-board=lo
 Đông Môn authored source asset `Resources/LGOMaps/DongMonTilePalette.json` là nguồn runtime đầu tiên cho map 2D: nó giữ palette role dưới dạng data đóng gói trong Player, không dùng ảnh source/3D, và giúp bước sau parse placement/chunk hoặc thay bằng Unity Tilemap asset thật mà không đổi contract gameplay.
 
 Đông Môn authored chunk placement source `Resources/LGOMaps/DongMonChunkPlacement.json` giữ vị trí/count/route-node của các chunk gameplay dưới dạng data đóng gói trong Player. Runtime hiện load placement này để dựng tile strip/paltform/dash/slime arena, giúp bước sau thay renderer procedural bằng Unity Tilemap hoặc sprite atlas mà không đổi route/collision contract.
+
+Đông Môn Unity Tilemap runtime layer dùng `Grid` + `TilemapRenderer` để đặt 16 cell từ authored chunk placement resource. Trong giai đoạn blockout, Tilemap này là underlay mảnh dưới strip hiện có để kiểm pipeline Unity thật và tránh phá readability; bước sau mới thay dần strip/procedural shape bằng tile/atlas production sạch.

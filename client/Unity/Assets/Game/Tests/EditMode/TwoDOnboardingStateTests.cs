@@ -1291,6 +1291,33 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeControllerBuildsDongMonUnityTilemapLayerForVisualEvidence()
+        {
+            var host = new GameObject("2D Dong Mon Unity Tilemap test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonUnityTilemap", controller.RuntimeDongMonUnityTilemapSnapshot);
+                StringAssert.Contains("renderer=TilemapRenderer", controller.RuntimeDongMonUnityTilemapSnapshot);
+                StringAssert.Contains("cells=16", controller.RuntimeDongMonUnityTilemapSnapshot);
+                StringAssert.Contains("source=LGOMaps/DongMonChunkPlacement", controller.RuntimeDongMonUnityTilemapSnapshot);
+                StringAssert.Contains("safe-no-source-image", controller.RuntimeDongMonUnityTilemapSnapshot);
+
+                var tilemapObject = GameObject.Find("LGO 2D Dong Mon Unity Tilemap");
+                Assert.IsNotNull(tilemapObject);
+                Assert.IsNotNull(tilemapObject.GetComponent("Tilemap"));
+                Assert.IsNotNull(tilemapObject.GetComponent("TilemapRenderer"));
+                Assert.IsNotNull(tilemapObject.GetComponentInParent<Grid>());
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerExposesDongMonLabelReadabilityRailForVisualEvidence()
         {
             var host = new GameObject("2D Dong Mon label readability rail test host");

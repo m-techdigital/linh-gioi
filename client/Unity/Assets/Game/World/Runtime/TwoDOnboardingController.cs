@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using LinhGioi.Art;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace LinhGioi.World
 {
@@ -60,6 +61,7 @@ namespace LinhGioi.World
         private int _inventorySelectedIndex = 1;
         private string _inventoryInputState = "Closed";
         private bool _runtimeReady;
+        private int _dongMonUnityTilemapCellCount;
 
         public TwoDOnboardingState State => _state;
         public string WorldHudSnapshot => _worldHudSnapshot;
@@ -90,6 +92,7 @@ namespace LinhGioi.World
         public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
         public string RuntimeTerrainCollisionSnapshot => _mapCatalog.CollisionSnapshot;
         public string RuntimeTilemapSnapshot => _mapCatalog.TilemapSnapshot;
+        public string RuntimeDongMonUnityTilemapSnapshot => BuildDongMonUnityTilemapSnapshot();
         public string RuntimeDongMonTilePaletteSnapshot => _mapCatalog.DongMonTilePaletteSnapshot;
         public string RuntimeDongMonTilePaletteSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonTilePaletteSourceSnapshot();
         public string RuntimeDongMonChunkPlacementSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonChunkPlacementSourceSnapshot();
@@ -200,6 +203,7 @@ namespace LinhGioi.World
 
             AddSceneSprite("LGO 2D Training Yard", "Sân luyện nhập môn", new Vector2(0f, -1.52f), new Vector2(8.9f, 1.82f), new Color(0.10f, 0.15f, 0.18f), -12);
             AddSceneSprite("LGO 2D Yard Front Shade", "Bóng nền sân luyện", new Vector2(0f, -2.22f), new Vector2(8.9f, 0.46f), new Color(0.06f, 0.10f, 0.15f), -11);
+            AddDongMonUnityTilemapLayer();
             AddDongMonProceduralTilemap();
             AddSceneSprite("LGO 2D Jade Path", "Lối ngọc dẫn tới Bia Luyện Khí", new Vector2(0.8f, -0.95f), new Vector2(5.9f, 0.20f), new Color(0.11f, 0.52f, 0.48f, 0.55f), -10);
             _pathGlow = AddSceneSprite("LGO 2D Path Glow", "Lối ngọc phát sáng sau thoại", new Vector2(0.85f, -0.95f), new Vector2(5.7f, 0.08f), new Color(0.16f, 0.86f, 0.78f, 0.78f), -9).transform;
@@ -628,6 +632,61 @@ namespace LinhGioi.World
         }
 
 
+
+        private string BuildDongMonUnityTilemapSnapshot()
+        {
+            var sourceChunks = TwoDMapDesignCatalog.LoadDongMonAuthoredChunkPlacements();
+            var sourceCells = 0;
+            for (var i = 0; i < sourceChunks.Length; i++) sourceCells += sourceChunks[i].TileCount;
+            var cells = _dongMonUnityTilemapCellCount > 0 ? _dongMonUnityTilemapCellCount : sourceCells;
+            return "DongMonUnityTilemap: renderer=TilemapRenderer"
+                + " | grid=Grid"
+                + " | source=LGOMaps/DongMonChunkPlacement"
+                + " | chunks=" + sourceChunks.Length
+                + " | cells=" + cells
+                + " | palette=LGOMaps/DongMonTilePalette"
+                + " | layered-under-procedural-strip"
+                + " | safe-no-source-image"
+                + " | safe-no-3d";
+        }
+
+        private void AddDongMonUnityTilemapLayer()
+        {
+            AddSceneBeat("DONG_MON_UNITY_TILEMAP Grid+TilemapRenderer from authored placement resource");
+            AddSceneBeat(RuntimeDongMonUnityTilemapSnapshot);
+
+            var gridObject = new GameObject("LGO 2D Dong Mon Unity Tilemap Grid");
+            gridObject.transform.SetParent(transform, false);
+            gridObject.transform.localPosition = new Vector3(-3.70f, -2.235f, -0.095f);
+            var grid = gridObject.AddComponent<Grid>();
+            grid.cellSize = new Vector3(0.34f, 0.055f, 0f);
+
+            var tilemapObject = new GameObject("LGO 2D Dong Mon Unity Tilemap");
+            tilemapObject.transform.SetParent(gridObject.transform, false);
+            var tilemap = tilemapObject.AddComponent<Tilemap>();
+            var tilemapRenderer = tilemapObject.AddComponent<TilemapRenderer>();
+            tilemapRenderer.sortingOrder = -8;
+            tilemapRenderer.mode = TilemapRenderer.Mode.Chunk;
+
+            var chunks = TwoDMapDesignCatalog.LoadDongMonAuthoredChunkPlacements();
+            var cursor = 0;
+            _dongMonUnityTilemapCellCount = 0;
+            for (var chunkIndex = 0; chunkIndex < chunks.Length; chunkIndex++)
+            {
+                ResolveDongMonTileColors(chunks[chunkIndex].PrimaryTileId, out var bodyColor, out _);
+                var tile = ScriptableObject.CreateInstance<Tile>();
+                tile.name = "LGO 2D Unity Tile " + chunks[chunkIndex].PrimaryTileId;
+                tile.sprite = SolidSprite();
+                tile.color = new Color(bodyColor.r, bodyColor.g, bodyColor.b, Mathf.Min(bodyColor.a, 0.30f));
+                for (var i = 0; i < chunks[chunkIndex].TileCount; i++)
+                {
+                    tilemap.SetTile(new Vector3Int(cursor + i, 0, 0), tile);
+                    _dongMonUnityTilemapCellCount++;
+                }
+                cursor += chunks[chunkIndex].TileCount + 1;
+            }
+            tilemap.CompressBounds();
+        }
 
         private void AddDongMonProceduralTilemap()
         {

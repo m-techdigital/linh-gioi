@@ -13,7 +13,8 @@
     "LinhGioi.Combat",
     "LinhGioi.CombatUI",
     "LinhGioi.GameData",
-    "LinhGioi.Foundation.Editor"
+    "LinhGioi.Foundation.Editor",
+    "UnityEngine.TilemapModule"
   ],
   "optionalUnityReferences": [
     "TestAssemblies"
