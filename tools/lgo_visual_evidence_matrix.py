@@ -104,14 +104,14 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_plaza_target_selector",
         "label": "2D Plaza target selector input",
         "screenshot": "12-plaza-target-selector.bmp",
-        "requiredManifest": ["runtimePlazaHubInputSnapshot", "hudSnapshot"],
+        "requiredManifest": ["runtimePlazaHubInputSnapshot", "runtimePlazaReadabilitySnapshot", "hudSnapshot"],
         "nonClaim": "not production social interaction system",
     },
     {
         "id": "two_d_plaza_npc_preview",
         "label": "2D Plaza NPC merchant local preview",
         "screenshot": "13-plaza-npc-preview.bmp",
-        "requiredManifest": ["runtimeLinhThanhPlazaHubSnapshot", "runtimePlazaHubInputSnapshot", "hudSnapshot"],
+        "requiredManifest": ["runtimeLinhThanhPlazaHubSnapshot", "runtimePlazaHubInputSnapshot", "runtimePlazaReadabilitySnapshot", "hudSnapshot"],
         "nonClaim": "not production shop backend",
     },
 ]

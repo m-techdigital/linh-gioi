@@ -741,6 +741,9 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("selected=merchant-preview", controller.RuntimePlazaHubInputSnapshot);
                 StringAssert.Contains("controls=P select, E interact", controller.RuntimePlazaHubInputSnapshot);
                 StringAssert.Contains("layout=spaced-social-triangle", controller.RuntimePlazaHubInputSnapshot);
+                StringAssert.Contains("PlazaReadability", controller.RuntimePlazaReadabilitySnapshot);
+                StringAssert.Contains("mode=label-rail", controller.RuntimePlazaReadabilitySnapshot);
+                StringAssert.Contains("world-label-density=reduced", controller.RuntimePlazaReadabilitySnapshot);
                 StringAssert.Contains("Thương Nhân: Hàng tân thủ", controller.WorldHudSnapshot);
                 StringAssert.Contains("không tạo tiền tệ", controller.WorldHudSnapshot);
                 StringAssert.Contains("LINH_THANH_PLAZA_HUB_RUNTIME", controller.ProductionSceneBeatSnapshot);

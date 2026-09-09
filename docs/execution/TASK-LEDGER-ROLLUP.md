@@ -256,3 +256,7 @@ Checkpoint `LGO_LINHTHANH_PLAZA_NPC_INTERACTION_READY`: Quảng Trường có NP
 ## 2026-09-10 — Đông Môn → Quảng Trường transition shell
 
 `LGO_LINHTHANH_HUB_TRANSITION_PREVIEW_READY`: sau unlock Linh Thành, runtime có preview tuyến `east-gate -> plaza` local-only với snapshot `runtimeHubTransitionSnapshot` và frame `14-plaza-transition-preview`. Gate đã chạy: test RED compile fail vì API chưa có, GREEN Unity EditMode `102 total / 101 passed / 0 failed / 1 skipped`, Editor smoke PASS, macOS Player build PASS, visual capture 14 frame, runtime/visual matrix PASS. Next map-safe action: làm authored Đông Môn Tilemap hoặc giảm chồng label Quảng Trường; chưa mở teleport/backend.
+
+## Quảng Trường label readability checkpoint — 2026-09-10
+
+`LGO_LINHTHANH_PLAZA_LABEL_READABILITY_READY`: Quảng Trường đã giảm mật độ chữ trong world-space sau unlock Đông Môn: nhãn chi tiết quanh NPC/board được thay bằng chip `01/02/03`, banner unlock lớn tự ẩn khi tutorial đã `Complete`, manifest có `runtimePlazaReadabilitySnapshot` với `mode=label-rail`, `world-label-density=reduced`, `target-chips=event-board,gate-guide,merchant-preview`. Evidence mới: Unity EditMode `total=102 passed=101 failed=0 skipped=1`, Editor smoke PASS, macOS Player build PASS, visual capture PASS 14 frame và visual matrix PASS. Map tổng thể vẫn chưa production-complete; next safe map action là mở Học Viện/Thương Phố shell hoặc authored Đông Môn Tilemap khi asset sạch sẵn sàng, tránh đụng luồng class/art tab song song.

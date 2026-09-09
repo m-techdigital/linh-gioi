@@ -161,3 +161,11 @@ Checkpoint runtime đầu tiên cho Quảng Trường dùng layout `spaced-socia
 ### Hub transition shell rule
 
 Transition đầu tiên giữa map tutorial và hub là `east-gate -> plaza`. Runtime chỉ được xem là preview khi snapshot có `mode=local-route-preview` và guard `safe-local-no-teleport-backend`; chưa được coi là teleport, streaming hoặc chuyển map server-authoritative. Mọi transition map sau này phải khai báo source, destination, trạng thái unlock, visual cue và guard backend tương tự trước khi mở chức năng thật.
+
+## Runtime map checkpoints hiện tại
+
+- World/Linh Thành/Đông Môn hiện là runtime checkpoint, chưa phải production-complete toàn bộ map.
+- Đông Môn đã có route tutorial, collision band, tile chunk flow và parallax/landmark spine để kiểm movement/jump/dash/skill/Shadow Slime.
+- Linh Thành đã có hub shell, Quảng Trường shell, unlock presentation từ Đông Môn, board/NPC preview, target selector và label readability pass.
+- Quảng Trường readability dùng quy tắc `world-label-density=reduced`: trong world chỉ để chip ngắn cho mục tiêu tương tác; text chi tiết đi vào HUD/snapshot/manifest để tránh che nhân vật và platform.
+- Next production map nên đi theo từng khu: Học Viện hoặc Thương Phố shell trước, rồi mới nâng tileset/collision/detail. Không crop/dán board và không kéo Meshy/3D trở lại branch 2D.

@@ -121,6 +121,7 @@ namespace LinhGioi.World
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
                 runtimeInventoryInputSnapshot = controller.RuntimeInventoryInputSnapshot,
                 runtimePlazaHubInputSnapshot = controller.RuntimePlazaHubInputSnapshot,
+                runtimePlazaReadabilitySnapshot = controller.RuntimePlazaReadabilitySnapshot,
                 runtimeTerrainCollisionSnapshot = controller.RuntimeTerrainCollisionSnapshot,
                 runtimeTilemapSnapshot = controller.RuntimeTilemapSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
@@ -245,6 +246,7 @@ namespace LinhGioi.World
             public string runtimeInventoryTryOnSnapshot;
             public string runtimeInventoryInputSnapshot;
             public string runtimePlazaHubInputSnapshot;
+            public string runtimePlazaReadabilitySnapshot;
             public string runtimeTerrainCollisionSnapshot;
             public string runtimeTilemapSnapshot;
             public string runtimeAnimationSnapshot;
