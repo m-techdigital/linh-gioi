@@ -159,6 +159,48 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void VoLv1StarterModulesCoverMaleFemaleCoreOutfitSlots()
+        {
+            var modules = TwoDCharacterModuleCatalog.CreateDefault();
+
+            foreach (var id in new[]
+            {
+                "top_vo_lv1_male", "top_vo_lv1_female", "waist_vo_lv1_unisex",
+                "gloves_vo_lv1_unisex", "boots_vo_lv1_unisex", "pants_vo_lv1_unisex"
+            })
+            {
+                Assert.IsTrue(modules.TryFind(id, out _), id);
+            }
+            StringAssert.Contains("class=Vo", modules.Snapshot);
+            StringAssert.Contains("level=1", modules.Snapshot);
+        }
+
+        [Test]
+        public void TrainingCompletionAppliesVoLv1StarterPreviewToRuntimeSnapshot()
+        {
+            var host = new GameObject("2D Vo Lv1 apply test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("top=top_vo_lv1_male", controller.RuntimeEquipmentSnapshot);
+                StringAssert.Contains("waist=waist_vo_lv1_unisex", controller.RuntimeEquipmentSnapshot);
+                StringAssert.Contains("class=Vo", controller.RuntimeEquipmentSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsWorldHubAndDongMonRouteTogether()
         {

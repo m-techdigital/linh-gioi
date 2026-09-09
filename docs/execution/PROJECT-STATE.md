@@ -28,8 +28,9 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 - Procedural Đông Môn blockout commit: `eeaf19d Improve 2D onboarding map blockout details`.
 - Direction/map catalog checkpoint: `1fa3231 Lock 2D social action direction and map catalog`.
 - Character base checkpoint: `0d31cc8 Add 2D character base catalog`.
-- Modular equipment WIP/checkpoint: 2D-02 đã có module catalog starter, slot riêng cho hair/eyes/top/pants/boots/weapon/pet, loadout try-on/cancel/apply và `runtimeEquipmentSnapshot` trong visual manifest. Evidence runtime latest: visual manifest `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`; screenshot review PNG `build/2d-onboarding-visual/03-dialogue.png` và `build/2d-onboarding-visual/05-complete.png`.
+- Modular equipment checkpoint: `091a2e3 Add 2D modular equipment runtime spine`.
+- Võ Lv1 seed WIP/checkpoint: 2D-03 đã thêm module seed Võ Lv1 nam/nữ và apply vào loadout sau khi hoàn tất Bia Luyện Khí; visual complete cho thấy outfit vàng/đai đỏ/găng-giày tối. Evidence runtime latest: visual manifest `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`; screenshot review PNG `build/2d-onboarding-visual/05-complete.png`.
 
 ## Next
 
-Đóng gói checkpoint 2D-02 Character Modular Runtime, sau đó sang 2D-03 Võ Lv1 outfit/module cơ bản cho nam/nữ: chỉ làm seed module đơn giản bám level đầu, chưa mở hệ thống art production lớn. Map production lớn quay lại ở 2D-09/2D-10 sau khi character modular runtime đủ spine; hiện giữ Đông Môn blockout/minimap để runtime không bị trống.
+Đóng gói checkpoint 2D-03 Võ Lv1 seed outfit, sau đó sang 2D-04 Kiếm Lv1 hoặc 2D-05 Animation Locomotion tùy ưu tiên runtime. Map production lớn quay lại ở 2D-09/2D-10 sau khi character modular runtime đủ spine; hiện giữ Đông Môn blockout/minimap để runtime không bị trống.

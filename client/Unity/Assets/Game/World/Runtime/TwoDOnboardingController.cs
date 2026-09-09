@@ -18,6 +18,10 @@ namespace LinhGioi.World
         private Transform _trainingStone;
         private Transform _pathGlow;
         private Transform _focusRing;
+        private SpriteRenderer _playerOuterShirtRenderer;
+        private SpriteRenderer _playerWaistRenderer;
+        private SpriteRenderer _playerGlovesLeftRenderer;
+        private SpriteRenderer _playerGlovesRightRenderer;
         private Transform _hudDialoguePanel;
         private TextMesh _hudTitle;
         private TextMesh _hudArea;
@@ -119,8 +123,38 @@ namespace LinhGioi.World
             BuildRuntimeMapOverlay();
             AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
+            CachePlayerEquipmentRenderers();
             _focusRing = AddSceneSprite("LGO 2D Focus Ring", "Vòng chọn mục tiêu tương tác", TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f, new Vector2(1.45f, 0.16f), RuntimeArtCatalog.Spirit, 1).transform;
             BuildWorldHud();
+        }
+
+        private void CachePlayerEquipmentRenderers()
+        {
+            if (_player == null) return;
+            _playerOuterShirtRenderer = FindChildRenderer(_player, "LayerSlot InnerShirt");
+            _playerWaistRenderer = FindChildRenderer(_player, "Sash");
+            _playerGlovesLeftRenderer = FindChildRenderer(_player, "Wrist Guard Left");
+            _playerGlovesRightRenderer = FindChildRenderer(_player, "Wrist Guard Right");
+        }
+
+        private void RefreshPlayerEquipmentPresentation()
+        {
+            var loadout = EnsurePlayerLoadout();
+            if (_state.Step == TwoDOnboardingStep.Complete)
+                loadout.ApplyVoLv1Starter(_moduleCatalog);
+            var voApplied = _state.Step == TwoDOnboardingStep.Complete;
+            if (_playerOuterShirtRenderer != null) _playerOuterShirtRenderer.color = voApplied ? RuntimeArtCatalog.Gold : RuntimeArtCatalog.Text;
+            if (_playerWaistRenderer != null) _playerWaistRenderer.color = voApplied ? new Color(0.62f, 0.12f, 0.09f) : RuntimeArtCatalog.Spirit;
+            if (_playerGlovesLeftRenderer != null) _playerGlovesLeftRenderer.color = voApplied ? new Color(0.08f, 0.07f, 0.06f) : RuntimeArtCatalog.Spirit;
+            if (_playerGlovesRightRenderer != null) _playerGlovesRightRenderer.color = voApplied ? new Color(0.08f, 0.07f, 0.06f) : RuntimeArtCatalog.Spirit;
+        }
+
+        private static SpriteRenderer FindChildRenderer(Transform root, string namePart)
+        {
+            var renderers = root.GetComponentsInChildren<SpriteRenderer>(true);
+            for (var i = 0; i < renderers.Length; i++)
+                if (renderers[i].gameObject.name.Contains(namePart)) return renderers[i];
+            return null;
         }
 
         private TwoDCharacterLoadout EnsurePlayerLoadout()
@@ -163,6 +197,7 @@ namespace LinhGioi.World
                 var pulse = _state.Step == TwoDOnboardingStep.Complete ? 1.18f : 1f;
                 _trainingStone.localScale = new Vector3(pulse, pulse, 1f);
             }
+            RefreshPlayerEquipmentPresentation();
             RefreshWorldHud();
         }
 

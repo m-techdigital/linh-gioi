@@ -27,8 +27,12 @@ namespace LinhGioi.World
                 new CharacterModuleDefinition("top_common_female", "InnerShirt", "female_base", "Áo lót/tân thủ nữ xám", "inventory_icon", "fit_profile=base_female_torso"),
                 new CharacterModuleDefinition("pants_common_unisex", "PantsOrSkirt", "unisex", "Quần tân thủ xám", "inventory_icon", "fit_profile=base_hips_legs"),
                 new CharacterModuleDefinition("boots_common_unisex", "Boots", "unisex", "Giày/vớ tân thủ", "inventory_icon", "fit_profile=base_feet"),
-                new CharacterModuleDefinition("top_vo_lv1_male", "OuterShirt", "male_base", "Áo Võ Lv1 nam vàng đen", "inventory_icon", "fit_profile=base_male_torso"),
-                new CharacterModuleDefinition("top_vo_lv1_female", "OuterShirt", "female_base", "Áo Võ Lv1 nữ vàng đen", "inventory_icon", "fit_profile=base_female_torso"),
+                new CharacterModuleDefinition("top_vo_lv1_male", "OuterShirt", "male_base", "Áo Võ Lv1 nam vàng đen", "inventory_icon", "fit_profile=base_male_torso;class=Vo;level=1"),
+                new CharacterModuleDefinition("top_vo_lv1_female", "OuterShirt", "female_base", "Áo Võ Lv1 nữ vàng đen", "inventory_icon", "fit_profile=base_female_torso;class=Vo;level=1"),
+                new CharacterModuleDefinition("pants_vo_lv1_unisex", "PantsOrSkirt", "unisex", "Quần Võ Lv1 đen gọn", "inventory_icon", "fit_profile=base_hips_legs;class=Vo;level=1"),
+                new CharacterModuleDefinition("waist_vo_lv1_unisex", "Waist", "unisex", "Đai Võ Lv1 đỏ đen", "inventory_icon", "fit_profile=base_hips;class=Vo;level=1"),
+                new CharacterModuleDefinition("gloves_vo_lv1_unisex", "Gloves", "unisex", "Băng tay Võ Lv1", "inventory_icon", "fit_profile=base_hands;class=Vo;level=1"),
+                new CharacterModuleDefinition("boots_vo_lv1_unisex", "Boots", "unisex", "Giày Võ Lv1", "inventory_icon", "fit_profile=base_feet;class=Vo;level=1"),
                 new CharacterModuleDefinition("weapon_training_staff", "Weapon", "unisex", "Vũ khí tập luyện", "inventory_icon", "try_on_anchor=WeaponAnchor"),
                 new CharacterModuleDefinition("spirit_pet_seed", "PetSpirit", "unisex", "Linh chủng đi kèm", "inventory_icon", "try_on_anchor=PetAnchor")
             });
@@ -75,6 +79,8 @@ namespace LinhGioi.World
         private string _top;
         private string _pants;
         private string _boots;
+        private string _waist;
+        private string _gloves;
         private string _weapon;
         private string _pet;
         private CharacterModuleDefinition? _preview;
@@ -96,6 +102,8 @@ namespace LinhGioi.World
             loadout._top = isFemale ? "top_common_female" : "top_common_male";
             loadout._pants = "pants_common_unisex";
             loadout._boots = "boots_common_unisex";
+            loadout._waist = "none";
+            loadout._gloves = "none";
             loadout._weapon = "weapon_training_staff";
             loadout._pet = "spirit_pet_seed";
             return loadout;
@@ -121,6 +129,23 @@ namespace LinhGioi.World
             _preview = null;
         }
 
+        public bool TryEquip(string itemId, TwoDCharacterModuleCatalog modules)
+        {
+            if (!modules.TryFind(itemId, out var item)) return false;
+            if (!IsCompatible(item)) return false;
+            Equip(item);
+            return true;
+        }
+
+        public void ApplyVoLv1Starter(TwoDCharacterModuleCatalog modules)
+        {
+            TryEquip(string.Equals(_baseId, "female_base", StringComparison.Ordinal) ? "top_vo_lv1_female" : "top_vo_lv1_male", modules);
+            TryEquip("pants_vo_lv1_unisex", modules);
+            TryEquip("waist_vo_lv1_unisex", modules);
+            TryEquip("gloves_vo_lv1_unisex", modules);
+            TryEquip("boots_vo_lv1_unisex", modules);
+        }
+
         private bool IsCompatible(CharacterModuleDefinition item)
         {
             return string.Equals(item.BaseFilter, "unisex", StringComparison.Ordinal)
@@ -137,6 +162,8 @@ namespace LinhGioi.World
                 case "InnerShirt":
                 case "OuterShirt": _top = item.Id; break;
                 case "PantsOrSkirt": _pants = item.Id; break;
+                case "Waist": _waist = item.Id; break;
+                case "Gloves": _gloves = item.Id; break;
                 case "Boots": _boots = item.Id; break;
                 case "Weapon": _weapon = item.Id; break;
                 case "PetSpirit": _pet = item.Id; break;
@@ -151,6 +178,8 @@ namespace LinhGioi.World
                 .Append(" | eyes=").Append(_eyes)
                 .Append(" | top=").Append(_top)
                 .Append(" | pants=").Append(_pants)
+                .Append(" | waist=").Append(_waist)
+                .Append(" | gloves=").Append(_gloves)
                 .Append(" | boots=").Append(_boots)
                 .Append(" | weapon=").Append(_weapon)
                 .Append(" | pet=").Append(_pet);
