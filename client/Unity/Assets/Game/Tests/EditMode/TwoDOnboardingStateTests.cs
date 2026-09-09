@@ -1706,5 +1706,57 @@ namespace LinhGioi.Tests
             }
         }
 
+        [Test]
+        public void RuntimeControllerCyclesDistrictPreviewThroughForgeGuildAndHarborWithLockedGuards()
+        {
+            var host = new GameObject("2D Linh Thanh full district rail preview test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                StringAssert.Contains("selected=forge", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("label=Khu Rèn", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("route=plaza->forge", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("safe-no-crafting-backend", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("role=crafting-preview", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("detail=anvil-row-only", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                StringAssert.Contains("selected=guild", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("label=Khu Bang Hội", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("route=plaza->guild", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("safe-no-guild-backend", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("role=social-guild-preview", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("detail=notice-board-locked", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                StringAssert.Contains("selected=harbor", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("label=Cảng Linh Thuyền", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("route=plaza->harbor", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("safe-no-travel-backend", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("safe-no-teleport-backend", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("role=travel-preview", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("detail=spirit-boat-locked", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("next=world-route-gate", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
     }
 }

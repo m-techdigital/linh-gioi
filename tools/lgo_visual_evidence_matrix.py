@@ -115,6 +115,27 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "nonClaim": "not production blessing or story backend",
     },
     {
+        "id": "two_d_linh_thanh_forge_preview",
+        "label": "2D Linh Thanh forge district preview",
+        "screenshot": "18-district-forge-preview.bmp",
+        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhDistrictDetailSnapshot", "runtimeLinhThanhForgeShellSnapshot", "hudSnapshot"],
+        "nonClaim": "not production crafting backend",
+    },
+    {
+        "id": "two_d_linh_thanh_guild_preview",
+        "label": "2D Linh Thanh guild district preview",
+        "screenshot": "19-district-guild-preview.bmp",
+        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhDistrictDetailSnapshot", "runtimeLinhThanhGuildShellSnapshot", "hudSnapshot"],
+        "nonClaim": "not production guild backend",
+    },
+    {
+        "id": "two_d_linh_thanh_harbor_preview",
+        "label": "2D Linh Thanh harbor district preview",
+        "screenshot": "20-district-harbor-preview.bmp",
+        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhDistrictDetailSnapshot", "runtimeLinhThanhHarborShellSnapshot", "hudSnapshot"],
+        "nonClaim": "not production travel or teleport backend",
+    },
+    {
         "id": "two_d_plaza_board_preview",
         "label": "2D Plaza board local preview",
         "screenshot": "11-plaza-board-preview.bmp",
@@ -176,11 +197,11 @@ def verify_current() -> dict[str, Any]:
         if token not in dong_mon_readability_snapshot:
             failures.append(f"runtimeDongMonReadabilitySnapshot missing {token!r}")
     district_preview_snapshot = str(manifest.get("runtimeLinhThanhDistrictPreviewSnapshot", ""))
-    for token in ("DistrictPreviewRail", "unlocked=True", "selected=spirit-temple", "label=Đền Linh", "route=plaza->spirit-temple", "controls=M select-district", "safe-no-buff-backend", "safe-no-district-backend", "safe-local-no-backend"):
+    for token in ("DistrictPreviewRail", "unlocked=True", "selected=harbor", "label=Cảng Linh Thuyền", "route=plaza->harbor", "controls=M select-district", "safe-no-travel-backend", "safe-no-teleport-backend", "safe-no-district-backend", "safe-local-no-backend"):
         if token not in district_preview_snapshot:
             failures.append(f"runtimeLinhThanhDistrictPreviewSnapshot missing {token!r}")
     district_detail_snapshot = str(manifest.get("runtimeLinhThanhDistrictDetailSnapshot", ""))
-    for token in ("DistrictDetail", "selected=spirit-temple", "role=story-blessing-preview", "detail=altar-local-only", "next=quest-buff-gate", "safe-no-buff-backend", "safe-no-district-backend", "safe-local-no-backend"):
+    for token in ("DistrictDetail", "selected=harbor", "role=travel-preview", "detail=spirit-boat-locked", "next=world-route-gate", "safe-no-travel-backend", "safe-no-teleport-backend", "safe-no-district-backend", "safe-local-no-backend"):
         if token not in district_detail_snapshot:
             failures.append(f"runtimeLinhThanhDistrictDetailSnapshot missing {token!r}")
 

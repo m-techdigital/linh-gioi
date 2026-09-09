@@ -158,3 +158,11 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 - Trạng thái: runtime 2D đã có Player capture riêng `17-district-spirit-temple-preview` cho Đền Linh trong district preview rail; manifest selected `spirit-temple`, route `plaza->spirit-temple`, detail `altar-local-only`, next `quest-buff-gate`.
 - Giới hạn: preview local-only, chưa phải production map/art hoàn thiện, chưa mở buff/story/backend/teleport.
 - Next: tiếp tục map-safe bằng polish visual/readability Linh Thành hoặc nâng Đông Môn Tilemap/atlas sạch.
+
+## 2026-09-10 — Linh Thành district rail coverage
+
+- Marker: `LGO_LINHTHANH_DISTRICT_RAIL_COVERAGE_READY`.
+- Trạng thái: Player visual capture đã tăng lên 20 frame và cover rail Học Viện, Thương Phố, Đền Linh, Khu Rèn, Khu Bang Hội, Cảng Linh Thuyền.
+- Evidence cuối giữ Cảng: `selected=harbor`, `label=Cảng Linh Thuyền`, `route=plaza->harbor`, `detail=spirit-boat-locked`, `next=world-route-gate`.
+- Giới hạn: vẫn là runtime blockout/local-only; chưa mở crafting, guild, travel, teleport hoặc district backend.
+- Next: polish visual density/layout Linh Thành hoặc nâng Đông Môn Tilemap/atlas sạch.

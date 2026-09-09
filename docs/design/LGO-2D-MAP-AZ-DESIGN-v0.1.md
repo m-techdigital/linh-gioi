@@ -215,3 +215,6 @@ District preview rail giờ có detail snapshot riêng cho từng khu. Capture r
 ### Runtime checkpoint — Linh Thành Đền Linh district preview
 
 Checkpoint 2026-09-10 thêm frame runtime riêng cho Đền Linh trong district preview rail. Sau unlock Đông Môn, capture Player chuyển rail Học Viện → Thương Phố → Đền Linh và manifest giữ `DistrictPreviewRail: selected=spirit-temple | label=Đền Linh | route=plaza->spirit-temple` cùng `DistrictDetail: selected=spirit-temple | role=story-blessing-preview | detail=altar-local-only | next=quest-buff-gate`. Đây là preview local-only để chứng minh hướng map/story trong Linh Thành; chưa mở buff, story quest backend, teleport hoặc district backend.
+### Runtime checkpoint — Linh Thành district rail coverage
+
+Checkpoint 2026-09-10 mở rộng capture district preview rail tới các khu sau trong Linh Thành: Khu Rèn, Khu Bang Hội và Cảng Linh Thuyền. Player capture giờ chứng minh rail local-only đi qua Học Viện → Thương Phố → Đền Linh → Khu Rèn → Khu Bang Hội → Cảng Linh Thuyền; manifest cuối giữ `DistrictPreviewRail: selected=harbor | label=Cảng Linh Thuyền | route=plaza->harbor` và `DistrictDetail: role=travel-preview | detail=spirit-boat-locked | next=world-route-gate`. Đây là coverage tương tác bản đồ, chưa mở crafting, guild, travel, teleport hoặc backend district.
