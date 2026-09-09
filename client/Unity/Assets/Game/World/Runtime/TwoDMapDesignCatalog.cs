@@ -29,6 +29,7 @@ namespace LinhGioi.World
             TutorialRouteSnapshot = BuildRouteSnapshot(dongMonRoute);
             LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
             ZoneNetworkSnapshot = BuildZoneNetworkSnapshot(worldZones, linhThanhDistricts, zoneConnections);
+            LinhThanhHubShellSnapshot = BuildLinhThanhHubShellSnapshot(linhThanhDistricts);
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
             TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions, dongMonTileChunks);
@@ -48,11 +49,12 @@ namespace LinhGioi.World
         public string TutorialRouteSnapshot { get; }
         public string LayerBudgetSnapshot { get; }
         public string ZoneNetworkSnapshot { get; }
+        public string LinhThanhHubShellSnapshot { get; }
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
         public string TilemapSnapshot { get; }
         public string ParallaxDepthSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
+        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -179,6 +181,20 @@ namespace LinhGioi.World
             {
                 if (i > 0) builder.Append(" -> ");
                 builder.Append(districts[i].Id).Append(':').Append(districts[i].Name);
+            }
+            return builder.ToString();
+        }
+
+
+        private static string BuildLinhThanhHubShellSnapshot(MapDistrict[] districts)
+        {
+            // Snapshot contract: district=east-gate | district=plaza | district=academy | district=market.
+            var builder = new StringBuilder("HubShell: linh-thanh");
+            for (var i = 0; i < districts.Length; i++)
+            {
+                var district = districts[i];
+                if (district.Id != "east-gate" && district.Id != "plaza" && district.Id != "academy" && district.Id != "market") continue;
+                builder.Append(" | district=").Append(district.Id).Append(':').Append(district.Name).Append(':').Append(district.Role);
             }
             return builder.ToString();
         }

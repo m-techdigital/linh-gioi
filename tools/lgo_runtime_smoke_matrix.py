@@ -67,7 +67,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
         "requirements": {"status": "PASS", "finalStep": "Complete"},
         "minimums": {"screenshotCount": 10},
         "contains": {
-            "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:"],
+            "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:", "HubShell: linh-thanh", "district=plaza", "district=market"],
             "runtimeTilemapSnapshot": ["ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
         },

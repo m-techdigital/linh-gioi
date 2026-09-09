@@ -510,6 +510,39 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhHubShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("HubShell: linh-thanh", map.LinhThanhHubShellSnapshot);
+            StringAssert.Contains("district=east-gate", map.LinhThanhHubShellSnapshot);
+            StringAssert.Contains("district=plaza", map.LinhThanhHubShellSnapshot);
+            StringAssert.Contains("district=academy", map.LinhThanhHubShellSnapshot);
+            StringAssert.Contains("district=market", map.LinhThanhHubShellSnapshot);
+            StringAssert.Contains("HubShell: linh-thanh", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhHubShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh hub shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("HubShell: linh-thanh", controller.RuntimeLinhThanhHubShellSnapshot);
+                StringAssert.Contains("district=plaza", controller.RuntimeLinhThanhHubShellSnapshot);
+                StringAssert.Contains("district=market", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsDongMonParallaxPolish()
         {

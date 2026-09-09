@@ -112,3 +112,13 @@ Checkpoint 2026-09-09 đưa phần World Map/Linh Thành từ text spec vào run
 - Minimap overlay trong onboarding hiển thị node World nhỏ `LT ↔ Đông Vực / Âm Giới` để người chơi thấy Đông Môn thuộc mạng vùng lớn hơn, không phải một sân luyện cô lập.
 
 Đây vẫn là runtime spine/prototype; chưa claim World Map production, chưa mở teleport/loading, chưa mở social/economy/guild backend và chưa dùng ảnh source.
+
+## Runtime checkpoint — Linh Thành Hub Shell
+
+Checkpoint 2026-09-09 mở rộng runtime spine từ Đông Môn sang hub shell đầu tiên của Linh Thành:
+
+- `HubShell: linh-thanh` giữ các district có thể mở theo lộ trình: Đông Môn, Quảng Trường, Học Viện và Thương Phố.
+- Runtime scene thêm silhouette/marker nhỏ cho Đông Môn → Quảng Trường/Học Viện/Thương Phố để người chơi thấy cổng đang nối vào thành phố xã hội, không phải một màn luyện cô lập.
+- Smoke matrix 2D yêu cầu visual manifest giữ `HubShell: linh-thanh`, `district=plaza` và `district=market`.
+
+Đây chưa phải Linh Thành production map, chưa mở shop/giao dịch/bang hội/backend; chỉ là shell player-visible để các batch hub sau có spine chung.

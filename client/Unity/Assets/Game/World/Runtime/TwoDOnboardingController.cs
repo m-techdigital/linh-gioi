@@ -60,6 +60,7 @@ namespace LinhGioi.World
         public int ProductionSceneBeatCount => _productionSceneBeats.Count;
         public string RuntimeMapSnapshot => _mapCatalog.RuntimeSnapshot;
         public string RuntimeZoneNetworkSnapshot => _mapCatalog.ZoneNetworkSnapshot;
+        public string RuntimeLinhThanhHubShellSnapshot => _mapCatalog.LinhThanhHubShellSnapshot;
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
@@ -137,6 +138,7 @@ namespace LinhGioi.World
             AddSceneSprite("LGO 2D Distant Roofline", "Mái thành nhiều lớp phía sau", new Vector2(-1.65f, 1.2f), new Vector2(4.15f, 0.18f), new Color(0.13f, 0.31f, 0.42f), -17);
             AddDongMonParallaxPolish();
             AddDongMonLandmarkSilhouettes();
+            AddLinhThanhHubShellOverlay();
 
             AddSceneSprite("LGO 2D Linh Thanh Gate Left Pillar", "Cổng Linh Thành - trụ trái", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
             AddSceneSprite("LGO 2D Linh Thanh Gate Right Pillar", "Cổng Linh Thành - trụ phải", new Vector2(-0.75f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
@@ -305,6 +307,17 @@ namespace LinhGioi.World
         }
 
 
+
+
+        private void AddLinhThanhHubShellOverlay()
+        {
+            AddSceneBeat("LINH_THANH_HUB_SHELL Đông Môn/Quảng Trường/Học Viện/Thương Phố staging");
+            AddSprite("LGO 2D Hub District East Gate", new Vector2(-1.68f, 1.62f), new Vector2(0.42f, 0.08f), RuntimeArtCatalog.Gold, -13);
+            AddSprite("LGO 2D Hub District Plaza", new Vector2(-0.36f, 1.48f), new Vector2(0.48f, 0.10f), new Color(0.22f, 0.50f, 0.58f, 0.46f), -18);
+            AddSprite("LGO 2D Hub District Academy", new Vector2(0.52f, 1.36f), new Vector2(0.36f, 0.30f), new Color(0.18f, 0.40f, 0.62f, 0.38f), -18);
+            AddSprite("LGO 2D Hub District Market", new Vector2(-2.92f, 1.02f), new Vector2(0.52f, 0.16f), new Color(0.58f, 0.36f, 0.18f, 0.36f), -18);
+            AddWorldLabel("LGO 2D Hub Shell Label", "Hub: Đông Môn → Quảng Trường", new Vector2(-0.26f, 1.68f), 0.025f, new Color(0.73f, 0.87f, 0.88f, 0.82f), -10);
+        }
 
         private void AddDongMonParallaxPolish()
         {

@@ -203,3 +203,11 @@ LGO_WORLD_ZONE_NETWORK_RUNTIME_READY. Đã đưa World Map/Linh Thành hub vào 
 ## Next after zone-network overlay
 
 Map chưa xong toàn bộ. Next map-safe action: mở dần Linh Thành hub shell/Quảng Trường hoặc authored Đông Môn tilemap khi asset sạch sẵn sàng; nếu tiếp tục gặp cold build `prepared ~36GB`, ưu tiên tối ưu URP/package/build profile riêng trước các vòng visual lớn.
+
+## 2026-09-09 — Linh Thành hub shell runtime checkpoint
+
+LGO_LINHTHANH_HUB_SHELL_RUNTIME_READY. Đã thêm `LinhThanhHubShellSnapshot` vào map catalog và runtime scene: hub shell giữ district Đông Môn, Quảng Trường, Học Viện, Thương Phố; visual overlay phía sau cổng cho thấy Đông Môn nối vào Linh Thành xã hội thay vì đứng riêng như sân luyện. Evidence: RED `build/tdd-red/check_linhthanh_hub_shell_red.py` fail rồi PASS, Unity EditMode PASS, Editor smoke PASS, macOS Player build PASS (`totalSize=114650595`, errors=0), Player visual capture PASS 10 frame; ảnh `01-initial` và `09-inventory-try` đã review không che HUD/minimap/inventory. Smoke matrix 2D đã nâng để bắt `HubShell: linh-thanh`, `district=plaza`, `district=market`.
+
+## Next after Linh Thành hub shell
+
+Map chưa xong toàn bộ. Next safe action: mở Quảng Trường hub shell chi tiết hơn hoặc tiếp tục authored Đông Môn Tilemap khi asset sạch sẵn sàng; không mở shop/giao dịch/bang hội/backend khi chưa có gate riêng.
