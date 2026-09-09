@@ -155,3 +155,11 @@ Nâng inventory từ strip preview tĩnh sang input runtime local: `I` mở pane
 ## Next after tilemap runtime spine
 
 Nâng Đông Môn bằng parallax spacing/foreground polish hoặc chuyển chunk procedural sang authored Unity Tilemap asset khi asset sạch sẵn sàng; tránh đụng luồng class/art đang chạy song song.
+
+## 2026-09-09 — Runtime smoke matrix 2D evidence gate
+
+LGO_RUNTIME_SMOKE_MATRIX_READY. Đã nâng `tools/lgo_runtime_smoke_matrix.py` với phase `two-d` để kiểm evidence runtime hiện tại mà không chạy lại Unity: onboarding smoke JSON, macOS Player build log và visual capture manifest. Gate `two_d_visual_capture` yêu cầu `status=PASS`, `screenshotCount>=10`, `finalStep=Complete`, `runtimeTilemapSnapshot` chứa `ChunkFlow` và inventory input đã applied. Validator `tools/validate_lgo_runtime_smoke_matrix.py` cũng kiểm list phase 2D để task LGO-TASK-047 không lặp lại. Evidence: `python3.12 tools/lgo_runtime_smoke_matrix.py --phase two-d` in `LGO_RUNTIME_SMOKE_MATRIX_2D_PASS`.
+
+## Next after runtime smoke matrix
+
+Tiếp tục task roadmap an toàn kế tiếp từ advisor; nếu làm map/runtime player-visible thì vẫn chạy Unity compile, smoke, Player build/capture và matrix 2D sau khi sinh evidence mới.

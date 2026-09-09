@@ -15,6 +15,29 @@ This matrix keeps runtime evidence discoverable and prevents repeated stop/start
 | Playable source closure | `./tools/lgo_playable_closure_check.sh --source-only` | source validators pass |
 | Package ready closure | `./tools/lgo_playable_closure_check.sh --package-ready` | source can be packaged cleanly |
 
+
+## 2D Onboarding Gates
+
+These gates validate the current `feature/2d` onboarding evidence without re-running Unity. They are used after Unity compile, Editor smoke, macOS Player build, and visual capture have already produced artifacts. Missing artifacts are `UNVERIFIED_ENVIRONMENT`, not PASS.
+
+| Gate | Evidence | Required proof |
+|---|---|---|
+| `two_d_onboarding_smoke` | `build/2d-onboarding/twod-onboarding-smoke.json` | `status=PASS`, `finalStep=Complete` |
+| `two_d_player_build` | `build/2d-onboarding-player/build-macos-player.log` | `LGO_MACOS_PLAYER_BUILD result=Succeeded`, `errors=0`, `Build Finished, Result: Success` |
+| `two_d_visual_capture` | `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json` | `status=PASS`, `screenshotCount>=10`, `finalStep=Complete`, `runtimeTilemapSnapshot` contains `ChunkFlow`, `chunk_gate_entry`, `chunk_slime_arena`, and inventory input applied state |
+
+Run:
+
+```bash
+python3.12 tools/lgo_runtime_smoke_matrix.py --phase two-d
+```
+
+The 2D closure marker is:
+
+```text
+LGO_RUNTIME_SMOKE_MATRIX_2D_PASS
+```
+
 ## Runtime Gates
 
 | Gate | Command | Required marker |

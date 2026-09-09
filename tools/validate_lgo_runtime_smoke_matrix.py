@@ -41,6 +41,13 @@ def check_list_output() -> None:
     for marker in ("package_hygiene", "continuous_mode", "playable_source", "playable_package_ready"):
         if marker not in result.stdout:
             ERRORS.append(f"matrix list missing gate: {marker}")
+    two_d = subprocess.run(["python3.12", "tools/lgo_runtime_smoke_matrix.py", "--phase", "two-d", "--list", "--json"], cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if two_d.returncode != 0:
+        ERRORS.append(two_d.stderr.strip() or "two-d matrix list failed")
+        return
+    for marker in ("two_d_onboarding_smoke", "two_d_player_build", "two_d_visual_capture", "runtimeTilemapSnapshot", "ChunkFlow"):
+        if marker not in two_d.stdout:
+            ERRORS.append(f"two-d matrix list missing: {marker}")
 
 
 def main() -> int:
@@ -54,6 +61,11 @@ def main() -> int:
         "docs/execution/LGO-RUNTIME-SMOKE-MATRIX-v1.0.md",
         "LGO_RUNTIME_SMOKE_MATRIX_READY",
         "LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS",
+        "2D Onboarding Gates",
+        "two_d_onboarding_smoke",
+        "runtimeTilemapSnapshot",
+        "ChunkFlow",
+        "LGO_RUNTIME_SMOKE_MATRIX_2D_PASS",
         "UNVERIFIED_ENVIRONMENT",
         "Do not mask failures",
     )
@@ -62,6 +74,10 @@ def main() -> int:
         "SOURCE_GATES",
         "RUNTIME_GATES",
         "LGO_RUNTIME_SMOKE_MATRIX_RUN_PASS",
+        "LGO_RUNTIME_SMOKE_MATRIX_2D_PASS",
+        "TWO_D_GATES",
+        "runtimeTilemapSnapshot",
+        "ChunkFlow",
     )
     require(
         "tools/lgo_playable_closure_check.sh",

@@ -4,80 +4,193 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
-import sys
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 
-SOURCE_GATES = [
+SOURCE_GATES: list[dict[str, Any]] = [
     {
         "id": "package_hygiene",
+        "kind": "command",
         "command": ["python3.12", "tools/validate_package_hygiene.py"],
         "marker": "PACKAGE HYGIENE VALIDATION PASS",
     },
     {
         "id": "continuous_mode",
+        "kind": "command",
         "command": ["python3.12", "tools/validate_lgo_continuous_development_mode.py"],
         "marker": "LGO_CONTINUOUS_DEVELOPMENT_MODE_VALIDATION_PASS",
     },
     {
         "id": "playable_source",
+        "kind": "command",
         "command": ["./tools/lgo_playable_closure_check.sh", "--source-only"],
         "marker": "LGO_PLAYABLE_CLOSURE_SOURCE_GATES_PASS",
     },
     {
         "id": "playable_package_ready",
+        "kind": "command",
         "command": ["./tools/lgo_playable_closure_check.sh", "--package-ready"],
         "marker": "LGO_PLAYABLE_CLOSURE_PACKAGE_READY",
     },
 ]
 
-RUNTIME_GATES = [
+RUNTIME_GATES: list[dict[str, Any]] = [
     {
         "id": "playable_runtime",
+        "kind": "command",
         "command": ["./tools/lgo_playable_closure_check.sh", "--runtime"],
         "marker": "LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS",
     }
 ]
 
+TWO_D_GATES: list[dict[str, Any]] = [
+    {
+        "id": "two_d_onboarding_smoke",
+        "kind": "json_artifact",
+        "path": "build/2d-onboarding/twod-onboarding-smoke.json",
+        "requirements": {"status": "PASS", "finalStep": "Complete"},
+        "marker": "LGO_2D_ONBOARDING_SMOKE_PASS",
+    },
+    {
+        "id": "two_d_player_build",
+        "kind": "text_artifact",
+        "path": "build/2d-onboarding-player/build-macos-player.log",
+        "markers": ["LGO_MACOS_PLAYER_BUILD result=Succeeded", "errors=0", "Build Finished, Result: Success"],
+        "marker": "LGO_MACOS_PLAYER_BUILD result=Succeeded",
+    },
+    {
+        "id": "two_d_visual_capture",
+        "kind": "json_artifact",
+        "path": "build/2d-onboarding-visual/twod-onboarding-visual-manifest.json",
+        "requirements": {"status": "PASS", "finalStep": "Complete"},
+        "minimums": {"screenshotCount": 10},
+        "contains": {
+            "runtimeTilemapSnapshot": ["ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"],
+            "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
+        },
+        "marker": "LGO_RUNTIME_SMOKE_MATRIX_2D_PASS",
+    },
+]
 
-def run_gate(gate: dict[str, object]) -> dict[str, object]:
+
+def run_command_gate(gate: dict[str, Any]) -> dict[str, Any]:
     command = list(gate["command"])
     result = subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
     output = result.stdout or ""
     marker = str(gate["marker"])
+    observed = marker in output
     return {
         "id": gate["id"],
+        "kind": gate.get("kind", "command"),
         "command": command,
         "returnCode": result.returncode,
         "marker": marker,
-        "markerObserved": marker in output,
-        "status": "PASS" if result.returncode == 0 and marker in output else "FAIL",
+        "markerObserved": observed,
+        "status": "PASS" if result.returncode == 0 and observed else "FAIL",
     }
+
+
+def run_json_artifact_gate(gate: dict[str, Any]) -> dict[str, Any]:
+    path = ROOT / str(gate["path"])
+    result: dict[str, Any] = {
+        "id": gate["id"],
+        "kind": gate["kind"],
+        "path": str(gate["path"]),
+        "marker": gate["marker"],
+    }
+    if not path.is_file():
+        result.update({"status": "UNVERIFIED_ENVIRONMENT", "reason": "artifact missing"})
+        return result
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8", errors="replace"))
+    except json.JSONDecodeError as exc:
+        result.update({"status": "FAIL", "reason": f"invalid json: {exc}"})
+        return result
+    failures: list[str] = []
+    for key, expected in gate.get("requirements", {}).items():
+        if payload.get(key) != expected:
+            failures.append(f"{key} expected {expected!r} got {payload.get(key)!r}")
+    for key, minimum in gate.get("minimums", {}).items():
+        value = payload.get(key)
+        if not isinstance(value, (int, float)) or value < minimum:
+            failures.append(f"{key} expected >= {minimum!r} got {value!r}")
+    for key, tokens in gate.get("contains", {}).items():
+        value = str(payload.get(key, ""))
+        for token in tokens:
+            if token not in value:
+                failures.append(f"{key} missing token {token!r}")
+    result["observed"] = {key: payload.get(key) for key in sorted(set(gate.get("requirements", {})) | set(gate.get("minimums", {})) | set(gate.get("contains", {})))}
+    if failures:
+        result.update({"status": "FAIL", "reason": "; ".join(failures)})
+    else:
+        result.update({"status": "PASS", "markerObserved": True})
+    return result
+
+
+def run_text_artifact_gate(gate: dict[str, Any]) -> dict[str, Any]:
+    path = ROOT / str(gate["path"])
+    result: dict[str, Any] = {
+        "id": gate["id"],
+        "kind": gate["kind"],
+        "path": str(gate["path"]),
+        "marker": gate["marker"],
+    }
+    if not path.is_file():
+        result.update({"status": "UNVERIFIED_ENVIRONMENT", "reason": "artifact missing"})
+        return result
+    text = path.read_text(encoding="utf-8", errors="replace")
+    missing = [marker for marker in gate.get("markers", []) if marker not in text]
+    if missing:
+        result.update({"status": "FAIL", "reason": "missing markers: " + ", ".join(missing), "markerObserved": False})
+    else:
+        result.update({"status": "PASS", "markerObserved": True})
+    return result
+
+
+def run_gate(gate: dict[str, Any]) -> dict[str, Any]:
+    kind = gate.get("kind", "command")
+    if kind == "command":
+        return run_command_gate(gate)
+    if kind == "json_artifact":
+        return run_json_artifact_gate(gate)
+    if kind == "text_artifact":
+        return run_text_artifact_gate(gate)
+    return {"id": gate.get("id", "unknown"), "kind": kind, "status": "FAIL", "reason": "unknown gate kind"}
+
+
+def selected_gates(phase: str) -> list[dict[str, Any]]:
+    gates: list[dict[str, Any]] = []
+    if phase in ("source", "all"):
+        gates.extend(SOURCE_GATES)
+    if phase in ("runtime", "all"):
+        gates.extend(RUNTIME_GATES)
+    if phase in ("two-d", "all"):
+        gates.extend(TWO_D_GATES)
+    return gates
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="List or run the Linh Gioi runtime smoke matrix.")
-    parser.add_argument("--phase", choices=("source", "runtime", "all"), default="source")
+    parser.add_argument("--phase", choices=("source", "runtime", "two-d", "all"), default="source")
     parser.add_argument("--list", action="store_true")
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args()
 
-    gates = []
-    if args.phase in ("source", "all"):
-        gates.extend(SOURCE_GATES)
-    if args.phase in ("runtime", "all"):
-        gates.extend(RUNTIME_GATES)
+    gates = selected_gates(args.phase)
 
     if args.list:
         payload = {"phase": args.phase, "gates": gates}
-        print(json.dumps(payload, indent=2, sort_keys=True) if args.json else "\n".join(f"{gate['id']}: {' '.join(gate['command'])}" for gate in gates))
+        print(json.dumps(payload, indent=2, sort_keys=True) if args.json else "\n".join(f"{gate['id']}: {' '.join(gate.get('command', [gate.get('path', '')]))}" for gate in gates))
         return 0
 
     results = [run_gate(gate) for gate in gates]
-    print(json.dumps({"phase": args.phase, "results": results}, indent=2, sort_keys=True))
+    print(json.dumps({"phase": args.phase, "results": results}, indent=2, sort_keys=True, ensure_ascii=False))
     if any(result["status"] != "PASS" for result in results):
         return 1
+    if args.phase == "two-d":
+        print("LGO_RUNTIME_SMOKE_MATRIX_2D_PASS")
     print("LGO_RUNTIME_SMOKE_MATRIX_RUN_PASS")
     return 0
 
