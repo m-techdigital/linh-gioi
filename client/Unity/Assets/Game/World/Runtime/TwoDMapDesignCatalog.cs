@@ -30,6 +30,7 @@ namespace LinhGioi.World
             LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
             ZoneNetworkSnapshot = BuildZoneNetworkSnapshot(worldZones, linhThanhDistricts, zoneConnections);
             LinhThanhHubShellSnapshot = BuildLinhThanhHubShellSnapshot(linhThanhDistricts);
+            LinhThanhPlazaShellSnapshot = BuildLinhThanhPlazaShellSnapshot();
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
             TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions, dongMonTileChunks);
@@ -50,11 +51,12 @@ namespace LinhGioi.World
         public string LayerBudgetSnapshot { get; }
         public string ZoneNetworkSnapshot { get; }
         public string LinhThanhHubShellSnapshot { get; }
+        public string LinhThanhPlazaShellSnapshot { get; }
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
         public string TilemapSnapshot { get; }
         public string ParallaxDepthSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
+        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\n" + LinhThanhHubShellSnapshot + "\n" + LinhThanhPlazaShellSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -197,6 +199,12 @@ namespace LinhGioi.World
                 builder.Append(" | district=").Append(district.Id).Append(':').Append(district.Name).Append(':').Append(district.Role);
             }
             return builder.ToString();
+        }
+
+
+        private static string BuildLinhThanhPlazaShellSnapshot()
+        {
+            return "PlazaShell: district=plaza | social-spawn=local-safe | event-board=preview-only | guild-bulletin-preview=locked | safe-no-trade-backend";
         }
 
         private static string BuildRouteSnapshot(MapRouteNode[] nodes)

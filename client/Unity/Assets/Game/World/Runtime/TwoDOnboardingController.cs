@@ -61,6 +61,7 @@ namespace LinhGioi.World
         public string RuntimeMapSnapshot => _mapCatalog.RuntimeSnapshot;
         public string RuntimeZoneNetworkSnapshot => _mapCatalog.ZoneNetworkSnapshot;
         public string RuntimeLinhThanhHubShellSnapshot => _mapCatalog.LinhThanhHubShellSnapshot;
+        public string RuntimeLinhThanhPlazaShellSnapshot => _mapCatalog.LinhThanhPlazaShellSnapshot;
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
@@ -139,6 +140,7 @@ namespace LinhGioi.World
             AddDongMonParallaxPolish();
             AddDongMonLandmarkSilhouettes();
             AddLinhThanhHubShellOverlay();
+            AddLinhThanhPlazaShellPreview();
 
             AddSceneSprite("LGO 2D Linh Thanh Gate Left Pillar", "Cổng Linh Thành - trụ trái", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
             AddSceneSprite("LGO 2D Linh Thanh Gate Right Pillar", "Cổng Linh Thành - trụ phải", new Vector2(-0.75f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
@@ -317,6 +319,16 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Hub District Academy", new Vector2(0.52f, 1.36f), new Vector2(0.36f, 0.30f), new Color(0.18f, 0.40f, 0.62f, 0.38f), -18);
             AddSprite("LGO 2D Hub District Market", new Vector2(-2.92f, 1.02f), new Vector2(0.52f, 0.16f), new Color(0.58f, 0.36f, 0.18f, 0.36f), -18);
             AddWorldLabel("LGO 2D Hub Shell Label", "Hub: Đông Môn → Quảng Trường", new Vector2(-0.26f, 1.68f), 0.025f, new Color(0.73f, 0.87f, 0.88f, 0.82f), -10);
+        }
+
+
+        private void AddLinhThanhPlazaShellPreview()
+        {
+            AddSceneBeat("LINH_THANH_PLAZA_SHELL social-spawn/event-board/guild-bulletin-preview no backend");
+            AddSprite("LGO 2D Plaza Social Spawn Preview", new Vector2(-0.18f, 1.02f), new Vector2(0.20f, 0.20f), new Color(0.18f, 0.86f, 0.78f, 0.38f), -12);
+            AddSprite("LGO 2D Plaza Event Board Preview", new Vector2(0.32f, 0.86f), new Vector2(0.24f, 0.30f), new Color(0.56f, 0.34f, 0.16f, 0.42f), -12);
+            AddSprite("LGO 2D Plaza Guild Bulletin Preview", new Vector2(0.70f, 0.88f), new Vector2(0.18f, 0.26f), new Color(0.30f, 0.22f, 0.62f, 0.38f), -12);
+            AddWorldLabel("LGO 2D Plaza Shell Label", "Quảng Trường: social spawn", new Vector2(0.42f, 1.16f), 0.021f, new Color(0.73f, 0.87f, 0.88f, 0.76f), -9);
         }
 
         private void AddDongMonParallaxPolish()

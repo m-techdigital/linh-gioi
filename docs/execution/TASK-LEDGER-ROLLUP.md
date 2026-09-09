@@ -211,3 +211,11 @@ LGO_LINHTHANH_HUB_SHELL_RUNTIME_READY. Đã thêm `LinhThanhHubShellSnapshot` v�
 ## Next after Linh Thành hub shell
 
 Map chưa xong toàn bộ. Next safe action: mở Quảng Trường hub shell chi tiết hơn hoặc tiếp tục authored Đông Môn Tilemap khi asset sạch sẵn sàng; không mở shop/giao dịch/bang hội/backend khi chưa có gate riêng.
+
+## 2026-09-09 — Quảng Trường plaza shell runtime checkpoint
+
+LGO_LINHTHANH_PLAZA_SHELL_RUNTIME_READY. Đã thêm `LinhThanhPlazaShellSnapshot` và runtime preview cho Quảng Trường: social spawn local-safe, event board preview, guild bulletin preview, kèm contract `safe-no-trade-backend` để không mở giao dịch/economy/bang hội backend. Evidence: RED `build/tdd-red/check_linhthanh_plaza_shell_red.py` fail rồi PASS, Unity EditMode PASS, Editor smoke PASS, macOS Player build PASS (`totalSize=114652131`, errors=0), Player visual capture PASS 10 frame; ảnh `01-initial` và `09-inventory-try` đã review không che HUD/minimap/inventory. Smoke matrix 2D đã nâng để bắt `PlazaShell: district=plaza` và `safe-no-trade-backend`.
+
+## Next after Quảng Trường plaza shell
+
+Map chưa xong toàn bộ. Next safe action: phát triển Quảng Trường thành hub runtime riêng với NPC/board local-only hoặc authored Đông Môn Tilemap khi asset sạch sẵn sàng; không mở shop/giao dịch/bang hội/backend khi chưa có gate riêng.

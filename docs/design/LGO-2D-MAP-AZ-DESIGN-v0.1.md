@@ -122,3 +122,13 @@ Checkpoint 2026-09-09 mở rộng runtime spine từ Đông Môn sang hub shell 
 - Smoke matrix 2D yêu cầu visual manifest giữ `HubShell: linh-thanh`, `district=plaza` và `district=market`.
 
 Đây chưa phải Linh Thành production map, chưa mở shop/giao dịch/bang hội/backend; chỉ là shell player-visible để các batch hub sau có spine chung.
+
+## Runtime checkpoint — Quảng Trường Plaza Shell
+
+Checkpoint 2026-09-09 thêm lát cắt Quảng Trường đầu tiên vào runtime spine:
+
+- `PlazaShell: district=plaza` mô tả social spawn local-safe, event board preview và guild bulletin preview.
+- Runtime scene thêm marker nhỏ `LGO 2D Plaza Social Spawn Preview`, `LGO 2D Plaza Event Board Preview`, `LGO 2D Plaza Guild Bulletin Preview`.
+- Contract `safe-no-trade-backend` khóa rõ rằng đây chưa mở giao dịch, bang hội, economy hoặc backend mutation.
+
+Mục tiêu của checkpoint là mở đường hub xã hội theo North Star trong Player capture, nhưng vẫn giữ branch ở mức pre-alpha runtime prototype.

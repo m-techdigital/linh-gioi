@@ -543,6 +543,39 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhPlazaShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("PlazaShell: district=plaza", map.LinhThanhPlazaShellSnapshot);
+            StringAssert.Contains("social-spawn", map.LinhThanhPlazaShellSnapshot);
+            StringAssert.Contains("event-board", map.LinhThanhPlazaShellSnapshot);
+            StringAssert.Contains("guild-bulletin-preview", map.LinhThanhPlazaShellSnapshot);
+            StringAssert.Contains("safe-no-trade-backend", map.LinhThanhPlazaShellSnapshot);
+            StringAssert.Contains("PlazaShell: district=plaza", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhPlazaShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh plaza shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("PlazaShell: district=plaza", controller.RuntimeLinhThanhPlazaShellSnapshot);
+                StringAssert.Contains("safe-no-trade-backend", controller.RuntimeLinhThanhPlazaShellSnapshot);
+                StringAssert.Contains("event-board", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsDongMonParallaxPolish()
         {

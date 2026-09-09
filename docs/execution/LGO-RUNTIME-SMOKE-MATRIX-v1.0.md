@@ -24,7 +24,7 @@ These gates validate the current `feature/2d` onboarding evidence without re-run
 |---|---|---|
 | `two_d_onboarding_smoke` | `build/2d-onboarding/twod-onboarding-smoke.json` | `status=PASS`, `finalStep=Complete` |
 | `two_d_player_build` | `build/2d-onboarding-player/build-macos-player.log` | `LGO_MACOS_PLAYER_BUILD result=Succeeded`, `errors=0`, `Build Finished, Result: Success` |
-| `two_d_visual_capture` | `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json` | `status=PASS`, `screenshotCount>=10`, `finalStep=Complete`, `runtimeMapSnapshot` contains `WorldMapNetwork: hub=linh-thanh`, `LinhThanhHubRuntime:`, `HubShell: linh-thanh`, `district=plaza`, `district=market`; `runtimeTilemapSnapshot` contains `ChunkFlow`, `chunk_gate_entry`, `chunk_slime_arena`; inventory input is applied |
+| `two_d_visual_capture` | `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json` | `status=PASS`, `screenshotCount>=10`, `finalStep=Complete`, `runtimeMapSnapshot` contains `WorldMapNetwork: hub=linh-thanh`, `LinhThanhHubRuntime:`, `HubShell: linh-thanh`, `district=plaza`, `district=market`, `PlazaShell: district=plaza`, `safe-no-trade-backend`; `runtimeTilemapSnapshot` contains `ChunkFlow`, `chunk_gate_entry`, `chunk_slime_arena`; inventory input is applied |
 
 Run:
 
