@@ -75,6 +75,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhSpiritTempleShellSnapshot => _mapCatalog.LinhThanhSpiritTempleShellSnapshot;
         public string RuntimeLinhThanhResidentialShellSnapshot => _mapCatalog.LinhThanhResidentialShellSnapshot;
         public string RuntimeLinhThanhForgeShellSnapshot => _mapCatalog.LinhThanhForgeShellSnapshot;
+        public string RuntimeLinhThanhGuildShellSnapshot => _mapCatalog.LinhThanhGuildShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
@@ -176,6 +177,7 @@ namespace LinhGioi.World
             AddLinhThanhSpiritTempleShellPreview();
             AddLinhThanhResidentialShellPreview();
             AddLinhThanhForgeShellPreview();
+            AddLinhThanhGuildShellPreview();
             AddLinhThanhPlazaHubRuntimePreview();
             AddLinhThanhHubTransitionPreview();
             AddLinhThanhUnlockPresentation();
@@ -510,6 +512,17 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Forge Glow Local", new Vector2(-1.30f, 0.62f), new Vector2(0.16f, 0.16f), new Color(0.92f, 0.38f, 0.16f, 0.28f), -13);
             AddSprite("LGO 2D Forge Craft Board Locked", new Vector2(-1.30f, 0.82f), new Vector2(0.14f, 0.06f), new Color(0.92f, 0.72f, 0.28f, 0.28f), -13);
             AddWorldLabel("LGO 2D Forge Shell Label", "Khu Rèn", new Vector2(-1.70f, 1.22f), 0.018f, new Color(0.92f, 0.72f, 0.28f, 0.68f), -9);
+        }
+
+
+        private void AddLinhThanhGuildShellPreview()
+        {
+            AddSceneBeat("LINH_THANH_GUILD_SHELL guild-hall/banner local-only no guild backend");
+            AddSprite("LGO 2D Guild Hall Silhouette", new Vector2(1.58f, 0.90f), new Vector2(0.48f, 0.34f), new Color(0.10f, 0.18f, 0.34f, 0.46f), -16);
+            AddSprite("LGO 2D Guild Hall Roof", new Vector2(1.58f, 1.16f), new Vector2(0.58f, 0.09f), new Color(0.24f, 0.28f, 0.58f, 0.44f), -15);
+            AddSprite("LGO 2D Guild Banner Local", new Vector2(1.38f, 0.78f), new Vector2(0.08f, 0.26f), new Color(0.92f, 0.72f, 0.28f, 0.34f), -14);
+            AddSprite("LGO 2D Guild Notice Board Locked", new Vector2(1.76f, 0.78f), new Vector2(0.18f, 0.08f), new Color(0.18f, 0.86f, 0.78f, 0.26f), -13);
+            AddWorldLabel("LGO 2D Guild Shell Label", "Khu Bang Hội", new Vector2(1.26f, 1.38f), 0.018f, new Color(0.73f, 0.87f, 0.88f, 0.68f), -9);
         }
 
 

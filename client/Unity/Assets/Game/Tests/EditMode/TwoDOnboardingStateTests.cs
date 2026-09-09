@@ -766,6 +766,38 @@ namespace LinhGioi.Tests
         }
 
 
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhGuildShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("GuildShell: district=guild", map.LinhThanhGuildShellSnapshot);
+            StringAssert.Contains("guild-hall=preview-only", map.LinhThanhGuildShellSnapshot);
+            StringAssert.Contains("guild-banner=local-preview", map.LinhThanhGuildShellSnapshot);
+            StringAssert.Contains("safe-no-guild-backend", map.LinhThanhGuildShellSnapshot);
+            StringAssert.Contains("GuildShell: district=guild", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhGuildShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh guild shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("GuildShell: district=guild", controller.RuntimeLinhThanhGuildShellSnapshot);
+                StringAssert.Contains("safe-no-guild-backend", controller.RuntimeLinhThanhGuildShellSnapshot);
+                StringAssert.Contains("GuildShell: district=guild", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
 
 
         [Test]
