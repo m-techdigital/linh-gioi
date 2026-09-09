@@ -319,3 +319,6 @@ Checkpoint `LGO_LINHTHANH_PLAZA_LAYOUT_ANCHORS_READY`: thêm snapshot/manifest `
 ## 2026-09-10 — Quảng Trường anchor detail inspect
 
 Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm detail snapshot + world-space detail line cho Plaza target đang chọn, giúp frame board/selector/NPC đọc rõ chức năng anchor. Scope local-only.
+## 2026-09-10 — LGO_LINHTHANH_DISTRICT_PREVIEW_READY
+
+Hoàn tất checkpoint map/runtime nhỏ: Linh Thành district preview rail sau unlock Đông Môn, control `M`, route `plaza->academy`, safe local-only. Evidence: Unity EditMode, smoke, macOS Player build và visual capture 15 frame.

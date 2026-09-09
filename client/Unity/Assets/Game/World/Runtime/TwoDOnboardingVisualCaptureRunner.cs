@@ -74,6 +74,11 @@ namespace LinhGioi.World
             yield return null;
             yield return Capture(evidenceDir, "14-plaza-transition-preview");
 
+            controller.SelectNextLinhThanhDistrictPreview();
+            controller.RefreshForSmoke();
+            yield return null;
+            yield return Capture(evidenceDir, "15-district-preview-rail");
+
             controller.UseSelectedPlazaHubTarget();
             controller.RefreshForSmoke();
             yield return null;
@@ -102,7 +107,7 @@ namespace LinhGioi.World
             var resultPath = Path.Combine(evidenceDir, "twod-onboarding-visual-manifest.json");
             var result = new TwoDOnboardingVisualCaptureResult
             {
-                status = _screenshots.Count == 14 ? "PASS" : "FAIL",
+                status = _screenshots.Count == 15 ? "PASS" : "FAIL",
                 unityVersion = Application.unityVersion,
                 platform = Application.platform.ToString(),
                 evidenceDir = evidenceDir,
@@ -115,6 +120,7 @@ namespace LinhGioi.World
                 runtimeMapSnapshot = controller.RuntimeMapSnapshot,
                 runtimeLinhThanhUnlockSnapshot = controller.RuntimeLinhThanhUnlockSnapshot,
                 runtimeLinhThanhPlazaHubSnapshot = controller.RuntimeLinhThanhPlazaHubSnapshot,
+                runtimeLinhThanhDistrictPreviewSnapshot = controller.RuntimeLinhThanhDistrictPreviewSnapshot,
                 runtimeLinhThanhAcademyShellSnapshot = controller.RuntimeLinhThanhAcademyShellSnapshot,
                 runtimeLinhThanhMarketShellSnapshot = controller.RuntimeLinhThanhMarketShellSnapshot,
                 runtimeLinhThanhSpiritTempleShellSnapshot = controller.RuntimeLinhThanhSpiritTempleShellSnapshot,
@@ -255,6 +261,7 @@ namespace LinhGioi.World
             public string runtimeMapSnapshot;
             public string runtimeLinhThanhUnlockSnapshot;
             public string runtimeLinhThanhPlazaHubSnapshot;
+            public string runtimeLinhThanhDistrictPreviewSnapshot;
             public string runtimeLinhThanhAcademyShellSnapshot;
             public string runtimeLinhThanhMarketShellSnapshot;
             public string runtimeLinhThanhSpiritTempleShellSnapshot;

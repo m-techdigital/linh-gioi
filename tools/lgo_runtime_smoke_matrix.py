@@ -65,11 +65,12 @@ TWO_D_GATES: list[dict[str, Any]] = [
         "kind": "json_artifact",
         "path": "build/2d-onboarding-visual/twod-onboarding-visual-manifest.json",
         "requirements": {"status": "PASS", "finalStep": "Complete"},
-        "minimums": {"screenshotCount": 14},
+        "minimums": {"screenshotCount": 15},
         "contains": {
             "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:", "HubShell: linh-thanh", "district=plaza", "district=academy", "district=market", "PlazaShell: district=plaza", "AcademyShell: district=academy", "MarketShell: district=market", "SpiritTempleShell: district=spirit-temple", "ResidentialShell: district=residential", "ForgeShell: district=forge", "GuildShell: district=guild", "HarborShell: district=harbor", "safe-no-trade-backend", "safe-no-skill-backend", "safe-no-economy-backend", "safe-no-buff-backend", "safe-no-housing-backend", "safe-no-crafting-backend", "safe-no-guild-backend", "safe-no-travel-backend"],
             "runtimeLinhThanhUnlockSnapshot": ["LinhThanhUnlock", "unlocked=True", "unlock=plaza", "safe-local-no-teleport"],
             "runtimeLinhThanhPlazaHubSnapshot": ["PlazaHubRuntime", "unlocked=True", "npc=gate-guide", "npc=merchant-preview", "board=event-local-preview", "interaction=npc-merchant-preview", "safe-local-no-backend", "safe-local-no-shop-backend"],
+            "runtimeLinhThanhDistrictPreviewSnapshot": ["DistrictPreviewRail", "unlocked=True", "selected=academy", "label=Học Viện", "route=plaza->academy", "controls=M select-district", "safe-no-skill-backend", "safe-no-district-backend", "safe-local-no-backend"],
             "runtimeLinhThanhAcademyShellSnapshot": ["AcademyShell: district=academy", "skill-hall=preview-only", "class-trainer=locked", "safe-no-skill-backend", "safe-local-no-backend"],
             "runtimeLinhThanhMarketShellSnapshot": ["MarketShell: district=market", "vendor-row=preview-only", "auction-board=locked", "safe-no-trade-backend", "safe-no-economy-backend", "safe-local-no-backend"],
             "runtimeLinhThanhSpiritTempleShellSnapshot": ["SpiritTempleShell: district=spirit-temple", "blessing-altar=preview-only", "story-shrine=locked", "safe-no-buff-backend", "safe-local-no-backend"],

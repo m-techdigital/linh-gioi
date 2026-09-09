@@ -1580,5 +1580,46 @@ namespace LinhGioi.Tests
             return state;
         }
 
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhDistrictPreviewRailAfterUnlock()
+        {
+            var host = new GameObject("2D Linh Thanh district preview rail test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DistrictPreviewRail", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("locked-until-unlock", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                StringAssert.Contains("DistrictPreviewRail", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("selected=academy", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("label=Học Viện", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("route=plaza->academy", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("safe-no-skill-backend", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("safe-no-district-backend", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                StringAssert.Contains("selected=market", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("safe-no-trade-backend", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
     }
 }

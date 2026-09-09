@@ -73,3 +73,6 @@ LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS
 - `executed=0` is not a pass.
 - Existing runtime smoke can be hardened, but gameplay semantics must not change inside this task.
 - Do not mask failures with `|| true` in evidence commands.
+## LGO_LINHTHANH_DISTRICT_PREVIEW_READY — 2026-09-10
+
+Smoke/visual matrix 2D yêu cầu manifest có `runtimeLinhThanhDistrictPreviewSnapshot` với `DistrictPreviewRail`, `selected=academy`, `route=plaza->academy`, `controls=M select-district`, `safe-no-district-backend` và guard theo khu. Visual capture có thêm frame `15-district-preview-rail.bmp/png` để kiểm player-visible rail sau unlock Đông Môn.

@@ -94,6 +94,13 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "nonClaim": "not production teleport backend",
     },
     {
+        "id": "two_d_linh_thanh_district_preview",
+        "label": "2D Linh Thanh district preview rail",
+        "screenshot": "15-district-preview-rail.bmp",
+        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhAcademyShellSnapshot", "runtimeLinhThanhMarketShellSnapshot", "hudSnapshot"],
+        "nonClaim": "not production district travel backend",
+    },
+    {
         "id": "two_d_plaza_board_preview",
         "label": "2D Plaza board local preview",
         "screenshot": "11-plaza-board-preview.bmp",
@@ -154,6 +161,11 @@ def verify_current() -> dict[str, Any]:
     for token in ("DongMonReadability", "mode=route-label-rail", "world-label-density=reduced", "chips=gate,stone,jump,dash,slime", "avoids-hud-overlap", "safe-local-no-backend"):
         if token not in dong_mon_readability_snapshot:
             failures.append(f"runtimeDongMonReadabilitySnapshot missing {token!r}")
+    district_preview_snapshot = str(manifest.get("runtimeLinhThanhDistrictPreviewSnapshot", ""))
+    for token in ("DistrictPreviewRail", "unlocked=True", "selected=academy", "label=Học Viện", "route=plaza->academy", "controls=M select-district", "safe-no-skill-backend", "safe-no-district-backend", "safe-local-no-backend"):
+        if token not in district_preview_snapshot:
+            failures.append(f"runtimeLinhThanhDistrictPreviewSnapshot missing {token!r}")
+
     plaza_detail_snapshot = str(manifest.get("runtimePlazaHubDetailSnapshot", ""))
     for token in ("PlazaHubDetail", "selected=merchant-preview", "role=starter-gear-preview", "detail=try-before-shop", "safe-no-shop-backend", "safe-local-no-backend"):
         if token not in plaza_detail_snapshot:

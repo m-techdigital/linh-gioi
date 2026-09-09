@@ -51,9 +51,12 @@ namespace LinhGioi.World
         public string HubTransitionPreviewId { get; private set; } = "locked";
         public bool PlazaHubPreviewOpen { get; private set; }
         public bool PlazaHubNpcPreviewOpen { get; private set; }
+        public bool LinhThanhDistrictPreviewOpen { get; private set; }
         public string PlazaHubInteractionId { get; private set; } = "locked";
         public string SelectedPlazaHubTargetId { get; private set; } = "locked";
         public string SelectedPlazaHubTargetLabel { get; private set; } = "Chưa mở";
+        public string SelectedLinhThanhDistrictId { get; private set; } = "locked";
+        public string SelectedLinhThanhDistrictLabel { get; private set; } = "Chưa mở";
         public string CurrentRouteNodeId { get; private set; } = "spawn";
 
         public void Reset()
@@ -76,9 +79,12 @@ namespace LinhGioi.World
             HubTransitionPreviewId = "locked";
             PlazaHubPreviewOpen = false;
             PlazaHubNpcPreviewOpen = false;
+            LinhThanhDistrictPreviewOpen = false;
             PlazaHubInteractionId = "locked";
             SelectedPlazaHubTargetId = "locked";
             SelectedPlazaHubTargetLabel = "Chưa mở";
+            SelectedLinhThanhDistrictId = "locked";
+            SelectedLinhThanhDistrictLabel = "Chưa mở";
             CurrentRouteNodeId = "spawn";
             Refresh();
         }
@@ -191,6 +197,7 @@ namespace LinhGioi.World
             HubTransitionPreviewId = "east-gate-to-plaza";
             PlazaHubPreviewOpen = false;
             PlazaHubNpcPreviewOpen = false;
+            LinhThanhDistrictPreviewOpen = false;
             PlazaHubInteractionId = "transition-preview-open";
             DialogueOpen = false;
             DialogueLine = string.Empty;
@@ -307,6 +314,45 @@ namespace LinhGioi.World
             return TryInspectPlazaHubBoard();
         }
 
+        public bool SelectNextLinhThanhDistrictPreview()
+        {
+            Refresh();
+            if (!LinhThanhUnlocked) return false;
+
+            if (SelectedLinhThanhDistrictId == "academy") SetSelectedLinhThanhDistrict("market");
+            else if (SelectedLinhThanhDistrictId == "market") SetSelectedLinhThanhDistrict("spirit-temple");
+            else if (SelectedLinhThanhDistrictId == "spirit-temple") SetSelectedLinhThanhDistrict("forge");
+            else if (SelectedLinhThanhDistrictId == "forge") SetSelectedLinhThanhDistrict("guild");
+            else if (SelectedLinhThanhDistrictId == "guild") SetSelectedLinhThanhDistrict("harbor");
+            else SetSelectedLinhThanhDistrict("academy");
+
+            LinhThanhDistrictPreviewOpen = true;
+            PlazaHubPreviewOpen = false;
+            PlazaHubNpcPreviewOpen = false;
+            PlazaHubInteractionId = "district-selected-" + SelectedLinhThanhDistrictId;
+            DialogueOpen = false;
+            DialogueLine = string.Empty;
+            ObjectiveText = "Xem lộ trình Linh Thành: " + SelectedLinhThanhDistrictLabel + ".";
+            HintText = "Bấm M để đổi khu preview; đây là bản đồ local-only, chưa chuyển map/backend.";
+            AreaText = "Linh Thành";
+            FeedbackText = "Đang xem khu: " + SelectedLinhThanhDistrictLabel + ".";
+            LastAnimationIntent = "Idle";
+            AvailableAction = TwoDOnboardingAction.None;
+            CurrentRouteNodeId = "district-preview-" + SelectedLinhThanhDistrictId;
+            return true;
+        }
+
+        private void SetSelectedLinhThanhDistrict(string districtId)
+        {
+            SelectedLinhThanhDistrictId = districtId;
+            if (districtId == "academy") SelectedLinhThanhDistrictLabel = "Học Viện";
+            else if (districtId == "market") SelectedLinhThanhDistrictLabel = "Thương Phố";
+            else if (districtId == "spirit-temple") SelectedLinhThanhDistrictLabel = "Đền Linh";
+            else if (districtId == "forge") SelectedLinhThanhDistrictLabel = "Khu Rèn";
+            else if (districtId == "guild") SelectedLinhThanhDistrictLabel = "Khu Bang Hội";
+            else SelectedLinhThanhDistrictLabel = "Cảng Linh Thuyền";
+        }
+
         private void SetSelectedPlazaHubTarget(string targetId)
         {
             SelectedPlazaHubTargetId = targetId;
@@ -320,7 +366,7 @@ namespace LinhGioi.World
             if (Step == TwoDOnboardingStep.Complete)
             {
                 AvailableAction = TwoDOnboardingAction.None;
-                AreaText = PlazaHubPreviewOpen || PlazaHubNpcPreviewOpen ? "Quảng Trường" : "Sân Luyện Khí";
+                AreaText = LinhThanhDistrictPreviewOpen ? "Linh Thành" : PlazaHubPreviewOpen || PlazaHubNpcPreviewOpen ? "Quảng Trường" : "Sân Luyện Khí";
                 return;
             }
 

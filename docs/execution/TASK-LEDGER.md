@@ -368,3 +368,9 @@ Checkpoint `LGO_LINHTHANH_PLAZA_LAYOUT_ANCHORS_READY`: thêm `RuntimePlazaHubLay
 ## 2026-09-10 — Quảng Trường anchor detail inspect
 
 Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm `RuntimePlazaHubDetailSnapshot` vào controller/capture/matrix, hiển thị detail line ở Quảng Trường cho target hiện chọn; merchant preview khóa `try-before-shop`, không tạo shop/economy backend.
+## 2026-09-10 — LGO_LINHTHANH_DISTRICT_PREVIEW_READY
+
+- Scope: thêm district preview rail cho Linh Thành trên `feature/2d`, không dùng Meshy/3D/source image.
+- Runtime: `DistrictPreviewRail` sau unlock Đông Môn, target đầu `academy`, label `Học Viện`, route `plaza->academy`, guard `safe-no-district-backend`.
+- Visual: thêm frame `15-district-preview-rail` để thấy ring/label Học Viện trong Player capture.
+- Guard: không mở teleport, shop, skill, crafting, guild, travel hoặc backend district.
