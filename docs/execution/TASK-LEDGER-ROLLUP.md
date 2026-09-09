@@ -52,3 +52,11 @@ Sau khi checkpoint này pass/push, bắt đầu 2D-01 Male/Female Base Character
 ## Next after 2D-01
 
 Sau khi commit/push checkpoint này, chuyển sang 2D-02 Character Modular Runtime: registry item/layer, equip/unequip, inventory preview flow đã được duyệt, và slot/id riêng cho tóc, mắt, trang bị, vũ khí, pet/spirit.
+
+## 2026-09-09 — 2D-02 Character Modular Runtime
+
+Đã thêm spine module/equipment cho hướng 2D: catalog module starter, slot riêng cho tóc trước/sau, mắt, áo, quần, giày, vũ khí và pet/spirit; loadout hỗ trợ flow hành trang đã duyệt `select_icon -> inspect_item -> try_on -> cancel_or_apply`. Runtime manifest có `runtimeEquipmentSnapshot` để kiểm slot/id/fit profile trước khi tạo đồ Võ Lv1 thật.
+
+## Next after 2D-02
+
+2D-03 Võ Lv1 outfit/module cơ bản cho nam/nữ, giữ form đơn giản theo level đầu và khai báo qua slot/fit profile chung thay vì hardcode từng món.

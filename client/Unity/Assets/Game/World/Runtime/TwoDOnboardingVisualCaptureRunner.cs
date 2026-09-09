@@ -69,6 +69,7 @@ namespace LinhGioi.World
                 productionSceneBeatSnapshot = controller.ProductionSceneBeatSnapshot,
                 runtimeMapSnapshot = controller.RuntimeMapSnapshot,
                 runtimeCharacterBaseSnapshot = controller.RuntimeCharacterBaseSnapshot,
+                runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 screenshotCount = _screenshots.Count,
                 screenshots = _screenshots.ToArray()
             };
@@ -181,6 +182,7 @@ namespace LinhGioi.World
             public string productionSceneBeatSnapshot;
             public string runtimeMapSnapshot;
             public string runtimeCharacterBaseSnapshot;
+            public string runtimeEquipmentSnapshot;
             public int screenshotCount;
             public string[] screenshots;
         }

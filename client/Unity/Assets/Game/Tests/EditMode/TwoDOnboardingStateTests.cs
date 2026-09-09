@@ -103,6 +103,62 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void CharacterModuleCatalogDefinesInventoryPreviewSlots()
+        {
+            var modules = TwoDCharacterModuleCatalog.CreateDefault();
+
+            Assert.That(modules.Items.Length, Is.GreaterThanOrEqualTo(10));
+            StringAssert.Contains("hair_front_basic_male", modules.Snapshot);
+            StringAssert.Contains("eyes_default", modules.Snapshot);
+            StringAssert.Contains("top_common_male", modules.Snapshot);
+            StringAssert.Contains("top_common_female", modules.Snapshot);
+            StringAssert.Contains("pants_common_unisex", modules.Snapshot);
+            StringAssert.Contains("PreviewFlow: select_icon -> inspect_item -> try_on -> cancel_or_apply", modules.Snapshot);
+        }
+
+        [Test]
+        public void CharacterLoadoutSupportsTryOnCancelAndApply()
+        {
+            var modules = TwoDCharacterModuleCatalog.CreateDefault();
+            var loadout = TwoDCharacterLoadout.CreateStarter("male_base", modules);
+
+            StringAssert.Contains("top=top_common_male", loadout.Snapshot);
+            Assert.IsTrue(loadout.TryPreview("top_vo_lv1_male", modules));
+            StringAssert.Contains("preview=top_vo_lv1_male", loadout.Snapshot);
+            StringAssert.Contains("status=TRYING_ON", loadout.Snapshot);
+
+            loadout.CancelPreview();
+            StringAssert.DoesNotContain("top_vo_lv1_male", loadout.Snapshot);
+            StringAssert.Contains("status=EQUIPPED", loadout.Snapshot);
+
+            Assert.IsTrue(loadout.TryPreview("top_vo_lv1_male", modules));
+            loadout.ApplyPreview();
+            StringAssert.Contains("top=top_vo_lv1_male", loadout.Snapshot);
+            StringAssert.Contains("status=EQUIPPED", loadout.Snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesModularEquipmentSnapshotForVisualEvidence()
+        {
+            var host = new GameObject("2D modular equipment snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("LayeredEquipment", controller.RuntimeEquipmentSnapshot);
+                StringAssert.Contains("hair_front_basic_male", controller.RuntimeEquipmentSnapshot);
+                StringAssert.Contains("eyes_default", controller.RuntimeEquipmentSnapshot);
+                StringAssert.Contains("top_common_male", controller.RuntimeEquipmentSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsWorldHubAndDongMonRouteTogether()
         {

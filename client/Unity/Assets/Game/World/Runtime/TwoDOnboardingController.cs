@@ -11,6 +11,8 @@ namespace LinhGioi.World
         private readonly TwoDOnboardingState _state = new TwoDOnboardingState();
         private readonly TwoDMapDesignCatalog _mapCatalog = TwoDMapDesignCatalog.CreateDefault();
         private readonly TwoDCharacterBaseCatalog _characterBaseCatalog = TwoDCharacterBaseCatalog.CreateDefault();
+        private readonly TwoDCharacterModuleCatalog _moduleCatalog = TwoDCharacterModuleCatalog.CreateDefault();
+        private TwoDCharacterLoadout _playerLoadout;
         private Transform _player;
         private Transform _gateKeeper;
         private Transform _trainingStone;
@@ -35,6 +37,7 @@ namespace LinhGioi.World
         public int ProductionSceneBeatCount => _productionSceneBeats.Count;
         public string RuntimeMapSnapshot => _mapCatalog.RuntimeSnapshot;
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
+        public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
 
         public static TwoDOnboardingController Attach(GameObject host)
         {
@@ -43,6 +46,7 @@ namespace LinhGioi.World
 
         private void Awake()
         {
+            EnsurePlayerLoadout();
             BuildScene();
             _state.Reset();
             RefreshPresentation();
@@ -119,6 +123,13 @@ namespace LinhGioi.World
             BuildWorldHud();
         }
 
+        private TwoDCharacterLoadout EnsurePlayerLoadout()
+        {
+            if (_playerLoadout == null)
+                _playerLoadout = TwoDCharacterLoadout.CreateStarter("male_base", _moduleCatalog);
+            return _playerLoadout;
+        }
+
         private Vector2 ReadMovement()
         {
             var x = 0f;
@@ -163,6 +174,7 @@ namespace LinhGioi.World
             AddWorldLabel("LGO 2D Mini Map Hub", "Linh Thành", new Vector2(3.18f, 2.46f), 0.032f, RuntimeArtCatalog.Text, 66);
             AddWorldLabel("LGO 2D Mini Map Route", "Đông Môn → Bia → Jump → Dash → Slime", new Vector2(3.18f, 2.21f), 0.024f, RuntimeArtCatalog.Spirit, 66);
             AddWorldLabel("LGO 2D Base Label", "Base: Male/Female layered", new Vector2(3.18f, 1.67f), 0.024f, RuntimeArtCatalog.Gold, 66);
+            AddWorldLabel("LGO 2D Equipment Label", "Gear: slots + try-on flow", new Vector2(3.18f, 1.54f), 0.022f, RuntimeArtCatalog.Spirit, 66);
 
             var route = _mapCatalog.DongMonRoute;
             for (var i = 0; i < route.Length && i < 6; i++)
@@ -283,16 +295,18 @@ namespace LinhGioi.World
         {
             var root = new GameObject(name);
             root.transform.position = ToWorld(position, order * 0.01f);
-            AddSprite(name + " LayeredCharacter Shadow", new Vector2(0f, -0.58f), new Vector2(0.72f, 0.12f), new Color(0f, 0f, 0f, 0.25f), order - 1, root.transform);
+            AddSprite(name + " LayeredCharacter Shadow Slot Shadow", new Vector2(0f, -0.58f), new Vector2(0.72f, 0.12f), new Color(0f, 0f, 0f, 0.25f), order - 1, root.transform);
             AddSprite(name + " Left Leg", new Vector2(-0.11f, -0.54f), new Vector2(0.13f, 0.28f), robe * 0.72f, order - 1, root.transform);
             AddSprite(name + " Right Leg", new Vector2(0.11f, -0.54f), new Vector2(0.13f, 0.28f), robe * 0.72f, order - 1, root.transform);
-            AddSprite(name + " Robe", new Vector2(0f, -0.16f), new Vector2(0.38f, 0.66f), robe, order, root.transform);
+            AddSprite(name + " LayerSlot Body", new Vector2(0f, 0.04f), new Vector2(0.30f, 0.52f), new Color(0.86f, 0.70f, 0.56f), order - 1, root.transform);
+            AddSprite(name + " LayerSlot InnerShirt", new Vector2(0f, -0.12f), new Vector2(0.36f, 0.46f), robe, order, root.transform);
             AddSprite(name + " Shoulder Line", new Vector2(0f, 0.13f), new Vector2(0.50f, 0.07f), accent, order + 1, root.transform);
             AddSprite(name + " Sash", new Vector2(0f, -0.2f), new Vector2(0.46f, 0.09f), accent, order + 1, root.transform);
             AddSprite(name + " Robe Trim", new Vector2(0f, -0.42f), new Vector2(0.34f, 0.045f), accent, order + 1, root.transform);
             AddSprite(name + " Head", new Vector2(0f, 0.34f), new Vector2(0.30f, 0.30f), new Color(0.86f, 0.70f, 0.56f), order + 2, root.transform);
-            AddSprite(name + " Hair", new Vector2(0f, 0.51f), new Vector2(0.38f, 0.16f), hair, order + 3, root.transform);
-            AddSprite(name + " Hair Fringe", new Vector2(-0.05f, 0.43f), new Vector2(0.28f, 0.08f), hair, order + 4, root.transform);
+            AddSprite(name + " LayerSlot HairBack", new Vector2(0f, 0.51f), new Vector2(0.38f, 0.16f), hair, order + 1, root.transform);
+            AddSprite(name + " LayerSlot Eyes eyes_default", new Vector2(0f, 0.35f), new Vector2(0.18f, 0.035f), new Color(0.03f, 0.05f, 0.07f), order + 4, root.transform);
+            AddSprite(name + " LayerSlot HairFront", new Vector2(-0.05f, 0.43f), new Vector2(0.28f, 0.08f), hair, order + 5, root.transform);
             AddSprite(name + " Left Arm", new Vector2(-0.28f, -0.12f), new Vector2(0.12f, 0.46f), robe, order - 1, root.transform);
             AddSprite(name + " Right Arm", new Vector2(0.28f, -0.12f), new Vector2(0.12f, 0.46f), robe, order - 1, root.transform);
             AddSprite(name + " Wrist Guard Left", new Vector2(-0.28f, -0.36f), new Vector2(0.16f, 0.08f), accent, order + 1, root.transform);

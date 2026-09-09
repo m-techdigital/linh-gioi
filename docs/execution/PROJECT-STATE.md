@@ -10,7 +10,7 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 
 ## Current source state
 
-Đã dọn pipeline/source/asset/tool cũ liên quan hướng dựng nhân vật/cảnh 3D khỏi `feature/2d` và loại bỏ toàn bộ ảnh thiết kế/source cũ khỏi source tree để tránh kéo lại hướng art đã bỏ. Runtime 2D nhập môn hiện có một slice player-visible: di chuyển bằng WASD/phím mũi tên, focus NPC, mở thoại, nhận hướng dẫn tới Bia Luyện Khí, kích hoạt bia và hoàn tất nhập môn. Visual hiện là sprite/layer procedural gọn để kiểm flow, có HUD world-space, minimap/route overlay và snapshot base character nam/nữ được camera capture; chưa phải art final.
+Đã dọn pipeline/source/asset/tool cũ liên quan hướng dựng nhân vật/cảnh 3D khỏi `feature/2d` và loại bỏ toàn bộ ảnh thiết kế/source cũ khỏi source tree để tránh kéo lại hướng art đã bỏ. Runtime 2D nhập môn hiện có một slice player-visible: di chuyển bằng WASD/phím mũi tên, focus NPC, mở thoại, nhận hướng dẫn tới Bia Luyện Khí, kích hoạt bia và hoàn tất nhập môn. Visual hiện là sprite/layer procedural gọn để kiểm flow, có HUD world-space, minimap/route overlay, snapshot base character nam/nữ và snapshot modular equipment được camera capture; chưa phải art final.
 
 ## Validation spine
 
@@ -27,8 +27,9 @@ Linh Giới Online tiếp tục theo North Star Social Action MMORPG, nhưng bra
 - Source image cleanup commit: `646492e Remove legacy images and keep 2D HUD procedural`.
 - Procedural Đông Môn blockout commit: `eeaf19d Improve 2D onboarding map blockout details`.
 - Direction/map catalog checkpoint: `1fa3231 Lock 2D social action direction and map catalog`.
-- Character base WIP/checkpoint: 2D-01 đã có catalog `male_base`/`female_base`, layer order chuẩn, anchor tối thiểu, default outfit xám và `runtimeCharacterBaseSnapshot` trong visual manifest. Evidence runtime latest: visual manifest `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`; screenshot review PNG `build/2d-onboarding-visual/03-dialogue.png` và `build/2d-onboarding-visual/05-complete.png`.
+- Character base checkpoint: `0d31cc8 Add 2D character base catalog`.
+- Modular equipment WIP/checkpoint: 2D-02 đã có module catalog starter, slot riêng cho hair/eyes/top/pants/boots/weapon/pet, loadout try-on/cancel/apply và `runtimeEquipmentSnapshot` trong visual manifest. Evidence runtime latest: visual manifest `build/2d-onboarding-visual/twod-onboarding-visual-manifest.json`; screenshot review PNG `build/2d-onboarding-visual/03-dialogue.png` và `build/2d-onboarding-visual/05-complete.png`.
 
 ## Next
 
-Đóng gói checkpoint 2D-01 Male/Female Base Character, sau đó sang 2D-02 Character Modular Runtime: sprite part registry, layer slot equip/unequip, preview inventory flow và manifest kiểm slot/id. Map production lớn quay lại ở 2D-09/2D-10 sau khi character modular runtime đủ spine; hiện giữ Đông Môn blockout/minimap để runtime không bị trống.
+Đóng gói checkpoint 2D-02 Character Modular Runtime, sau đó sang 2D-03 Võ Lv1 outfit/module cơ bản cho nam/nữ: chỉ làm seed module đơn giản bám level đầu, chưa mở hệ thống art production lớn. Map production lớn quay lại ở 2D-09/2D-10 sau khi character modular runtime đủ spine; hiện giữ Đông Môn blockout/minimap để runtime không bị trống.
