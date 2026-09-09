@@ -22,6 +22,7 @@ namespace LinhGioi.World
         private Transform _pathGlow;
         private Transform _linhThanhUnlockBanner;
         private Transform _plazaUnlockPath;
+        private Transform _plazaHubRuntimeRoot;
         private Transform _focusRing;
         private SpriteRenderer _playerOuterShirtRenderer;
         private SpriteRenderer _playerWaistRenderer;
@@ -64,6 +65,7 @@ namespace LinhGioi.World
         public string RuntimeZoneNetworkSnapshot => _mapCatalog.ZoneNetworkSnapshot;
         public string RuntimeLinhThanhHubShellSnapshot => _mapCatalog.LinhThanhHubShellSnapshot;
         public string RuntimeLinhThanhPlazaShellSnapshot => _mapCatalog.LinhThanhPlazaShellSnapshot;
+        public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimeLinhThanhUnlockSnapshot => BuildLinhThanhUnlockSnapshot();
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
@@ -144,6 +146,7 @@ namespace LinhGioi.World
             AddDongMonLandmarkSilhouettes();
             AddLinhThanhHubShellOverlay();
             AddLinhThanhPlazaShellPreview();
+            AddLinhThanhPlazaHubRuntimePreview();
             AddLinhThanhUnlockPresentation();
 
             AddSceneSprite("LGO 2D Linh Thanh Gate Left Pillar", "Cổng Linh Thành - trụ trái", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
@@ -261,6 +264,11 @@ namespace LinhGioi.World
             return _playerLoadout;
         }
 
+        private string BuildLinhThanhPlazaHubSnapshot()
+        {
+            return _mapCatalog.LinhThanhPlazaHubRuntimeSnapshot + " | unlocked=" + _state.LinhThanhUnlocked;
+        }
+
         private string BuildLinhThanhUnlockSnapshot()
         {
             return "LinhThanhUnlock: unlocked=" + _state.LinhThanhUnlocked + " | unlock=plaza | source=shadow-slime-complete | route=return-gate->plaza | safe-local-no-teleport";
@@ -313,6 +321,7 @@ namespace LinhGioi.World
             var linhThanhUnlocked = _state.LinhThanhUnlocked;
             if (_plazaUnlockPath != null) _plazaUnlockPath.gameObject.SetActive(linhThanhUnlocked);
             if (_linhThanhUnlockBanner != null) _linhThanhUnlockBanner.gameObject.SetActive(linhThanhUnlocked);
+            if (_plazaHubRuntimeRoot != null) _plazaHubRuntimeRoot.gameObject.SetActive(linhThanhUnlocked);
             SetHudText(_miniMapProgress, linhThanhUnlocked ? "Node: return-gate → plaza" : "Node: " + _state.CurrentRouteNodeId);
             RefreshPlayerEquipmentPresentation();
             RefreshInventoryPanelPresentation();
@@ -343,6 +352,21 @@ namespace LinhGioi.World
             AddWorldLabel("LGO 2D Plaza Shell Label", "Quảng Trường: social spawn", new Vector2(0.42f, 1.16f), 0.021f, new Color(0.73f, 0.87f, 0.88f, 0.76f), -9);
         }
 
+
+
+        private void AddLinhThanhPlazaHubRuntimePreview()
+        {
+            AddSceneBeat("LINH_THANH_PLAZA_HUB_RUNTIME NPC/board local-only after Dong Mon unlock");
+            var root = new GameObject("LGO 2D Plaza Hub Runtime Root");
+            root.transform.SetParent(transform, false);
+            _plazaHubRuntimeRoot = root.transform;
+            AddSprite("LGO 2D Plaza Gate Guide NPC", new Vector2(-0.88f, 0.82f), new Vector2(0.12f, 0.34f), new Color(0.92f, 0.72f, 0.28f, 0.72f), -2, _plazaHubRuntimeRoot);
+            AddSprite("LGO 2D Plaza Wandering Student NPC", new Vector2(-0.02f, 0.78f), new Vector2(0.10f, 0.28f), new Color(0.54f, 0.86f, 0.92f, 0.66f), -2, _plazaHubRuntimeRoot);
+            AddSprite("LGO 2D Plaza Event Board Runtime", new Vector2(0.52f, 0.70f), new Vector2(0.34f, 0.32f), new Color(0.58f, 0.34f, 0.16f, 0.70f), -2, _plazaHubRuntimeRoot);
+            AddSprite("LGO 2D Plaza Guild Bulletin Locked Runtime", new Vector2(0.92f, 0.68f), new Vector2(0.22f, 0.28f), new Color(0.30f, 0.22f, 0.62f, 0.62f), -2, _plazaHubRuntimeRoot);
+            AddWorldLabel("LGO 2D Plaza Hub Runtime Label", "Quảng Trường: NPC + bảng sự kiện", new Vector2(0.12f, 0.42f), 0.022f, new Color(0.73f, 0.87f, 0.88f, 0.84f), 6, _plazaHubRuntimeRoot);
+            _plazaHubRuntimeRoot.gameObject.SetActive(false);
+        }
 
         private void AddLinhThanhUnlockPresentation()
         {
@@ -623,8 +647,14 @@ namespace LinhGioi.World
 
         private static TextMesh AddWorldLabel(string name, string value, Vector2 position, float size, Color color, int order)
         {
+            return AddWorldLabel(name, value, position, size, color, order, null);
+        }
+
+        private static TextMesh AddWorldLabel(string name, string value, Vector2 position, float size, Color color, int order, Transform parent)
+        {
             var host = new GameObject(name);
-            host.transform.position = ToWorld(position, order * 0.01f);
+            host.transform.SetParent(parent, false);
+            host.transform.localPosition = ToWorld(position, parent == null ? order * 0.01f : 0f);
             var text = host.AddComponent<TextMesh>();
             text.anchor = TextAnchor.MiddleCenter;
             text.alignment = TextAlignment.Center;

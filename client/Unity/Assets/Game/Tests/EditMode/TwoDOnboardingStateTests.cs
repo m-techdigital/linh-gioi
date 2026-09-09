@@ -224,6 +224,7 @@ namespace LinhGioi.Tests
             Assert.IsNotNull(resultType);
             Assert.IsNotNull(resultType.GetField("runtimeInventoryInputSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhUnlockSnapshot"));
+            Assert.IsNotNull(resultType.GetField("runtimeLinhThanhPlazaHubSnapshot"));
         }
 
         [Test]
@@ -603,6 +604,54 @@ namespace LinhGioi.Tests
             }
         }
 
+
+
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhPlazaHubRuntime()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("PlazaHubRuntime", map.LinhThanhPlazaHubRuntimeSnapshot);
+            StringAssert.Contains("npc=gate-guide", map.LinhThanhPlazaHubRuntimeSnapshot);
+            StringAssert.Contains("board=event-local-preview", map.LinhThanhPlazaHubRuntimeSnapshot);
+            StringAssert.Contains("guild-bulletin=locked", map.LinhThanhPlazaHubRuntimeSnapshot);
+            StringAssert.Contains("safe-local-no-backend", map.LinhThanhPlazaHubRuntimeSnapshot);
+            StringAssert.Contains("PlazaHubRuntime", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesPlazaHubRuntimeAfterUnlock()
+        {
+            var host = new GameObject("2D plaza hub runtime test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("PlazaHubRuntime", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("unlocked=False", controller.RuntimeLinhThanhPlazaHubSnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("unlocked=True", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("npc=gate-guide", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("board=event-local-preview", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("safe-local-no-backend", controller.RuntimeLinhThanhPlazaHubSnapshot);
+                StringAssert.Contains("LINH_THANH_PLAZA_HUB_RUNTIME", controller.ProductionSceneBeatSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
 
         [Test]
         public void RuntimeControllerExposesLinhThanhUnlockSnapshot()

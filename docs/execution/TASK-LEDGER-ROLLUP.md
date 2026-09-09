@@ -227,3 +227,11 @@ LGO_LINHTHANH_UNLOCK_PRESENTATION_READY. Đã nối flow Đông Môn với Linh 
 ## Next after Linh Thành unlock presentation
 
 Map chưa xong toàn bộ. Next safe action: phát triển Quảng Trường hub runtime riêng có NPC/board local-only hoặc chuyển Đông Môn procedural chunk sang authored Tilemap/Tile palette khi asset sạch sẵn sàng; không mở teleport thật, shop/giao dịch/bang hội/backend khi chưa có gate riêng.
+
+## 2026-09-09 — Quảng Trường hub runtime preview local-only
+
+LGO_LINHTHANH_PLAZA_HUB_RUNTIME_READY. Đã nâng Quảng Trường từ shell marker thành runtime preview sau unlock Đông Môn: map catalog có `LinhThanhPlazaHubRuntimeSnapshot`, controller expose `RuntimeLinhThanhPlazaHubSnapshot`, visual manifest ghi `runtimeLinhThanhPlazaHubSnapshot=PlazaHubRuntime: district=plaza | npc=gate-guide | npc=wandering-student | board=event-local-preview | guild-bulletin=locked | social-spawn=local-safe | safe-local-no-backend | unlocked=True`. Runtime scene bật cụm NPC hướng dẫn, học viên lang thang, bảng sự kiện local preview và bảng bang hội locked sau khi `LinhThanhUnlocked=true`; label đã được parent vào root để không hiện sớm ở frame initial. Evidence: RED compile fail vì thiếu snapshot catalog/controller, Unity EditMode PASS, Editor smoke PASS, macOS Player build PASS, Player visual capture PASS 10 frame, smoke matrix 2D PASS; ảnh `01-initial` và `08-complete` đã review.
+
+## Next after Quảng Trường hub runtime preview
+
+Map vẫn chưa production-complete. Next safe action: thêm interaction local-only cho bảng sự kiện/NPC Quảng Trường hoặc chuyển Đông Môn procedural chunk sang authored Tilemap/Tile palette khi asset sạch sẵn sàng; không mở teleport thật, shop/giao dịch/bang hội/backend khi chưa có gate riêng.

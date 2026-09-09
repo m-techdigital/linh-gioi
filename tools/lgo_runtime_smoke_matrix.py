@@ -69,6 +69,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
         "contains": {
             "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:", "HubShell: linh-thanh", "district=plaza", "district=market", "PlazaShell: district=plaza", "safe-no-trade-backend"],
             "runtimeLinhThanhUnlockSnapshot": ["LinhThanhUnlock", "unlocked=True", "unlock=plaza", "safe-local-no-teleport"],
+            "runtimeLinhThanhPlazaHubSnapshot": ["PlazaHubRuntime", "unlocked=True", "npc=gate-guide", "board=event-local-preview", "safe-local-no-backend"],
             "runtimeTilemapSnapshot": ["ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
         },

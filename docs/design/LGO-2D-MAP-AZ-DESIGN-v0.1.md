@@ -136,3 +136,7 @@ Mục tiêu của checkpoint là mở đường hub xã hội theo North Star tr
 ### Runtime unlock presentation — Đông Môn → Quảng Trường
 
 Sau khi người chơi hoàn tất flow Đông Môn và đánh tan Shadow Slime, runtime chỉ mở **presentation local** cho Linh Thành: HUD đổi mục tiêu sang “Mở Linh Thành: Quảng Trường”, scene hiện banner/path về Quảng Trường, manifest ghi `LinhThanhUnlock: unlocked=True | unlock=plaza | source=shadow-slime-complete | route=return-gate->plaza | safe-local-no-teleport`. Bước này giữ đúng thiết kế Zone Network và social hub nhưng chưa mở teleport thật, shop, giao dịch, bang hội hoặc backend xã hội.
+
+### Runtime hub preview — Quảng Trường local-only
+
+Sau unlock Đông Môn, Quảng Trường có lớp runtime preview tách khỏi shell nền: `PlazaHubRuntime: district=plaza | npc=gate-guide | npc=wandering-student | board=event-local-preview | guild-bulletin=locked | social-spawn=local-safe | safe-local-no-backend`. Scene bật cụm NPC/bảng sự kiện/khóa bang hội cùng banner “Mở Linh Thành → Quảng Trường” để người chơi thấy hướng social hub kế tiếp. Đây vẫn là preview local-only, chưa mở teleport thật, shop, giao dịch, bang hội hoặc backend xã hội.
