@@ -85,6 +85,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimeLinhThanhDistrictPreviewSnapshot => BuildLinhThanhDistrictPreviewSnapshot();
         public string RuntimeLinhThanhDistrictDetailSnapshot => BuildLinhThanhDistrictDetailSnapshot();
+        public string RuntimeLinhThanhDistrictReadabilitySnapshot => BuildLinhThanhDistrictReadabilitySnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaHubDetailSnapshot => BuildPlazaHubDetailSnapshot();
         public string RuntimePlazaHubLayoutSnapshot => BuildPlazaHubLayoutSnapshot();
@@ -379,6 +380,21 @@ namespace LinhGioi.World
                 + " | safe-local-no-backend";
         }
 
+        private string BuildLinhThanhDistrictReadabilitySnapshot()
+        {
+            if (!_state.LinhThanhUnlocked)
+                return "DistrictRailReadability: locked-until-unlock | safe-local-no-backend";
+
+            var selected = _state.SelectedLinhThanhDistrictId == "locked" ? "plaza" : _state.SelectedLinhThanhDistrictId;
+            return "DistrictRailReadability: mode=selected-node-callout"
+                + " | selected=" + selected
+                + " | label-follows-selected=True"
+                + " | backplate=follows-selected"
+                + " | callout-size=readable"
+                + " | avoids-hud-overlap"
+                + " | safe-local-no-backend";
+        }
+
         private string BuildLinhThanhDistrictDetailSnapshot()
         {
             if (!_state.LinhThanhUnlocked)
@@ -502,6 +518,13 @@ namespace LinhGioi.World
             return new Vector2(-0.36f, 1.48f);
         }
 
+        private Vector2 LinhThanhDistrictPreviewLabelPosition()
+        {
+            var anchor = LinhThanhDistrictPreviewPosition();
+            var yOffset = anchor.y < -0.20f ? 0.34f : -0.34f;
+            return new Vector2(Mathf.Clamp(anchor.x, -3.05f, 2.65f), anchor.y + yOffset);
+        }
+
         private string BuildLinhThanhUnlockSnapshot()
         {
             return "LinhThanhUnlock: unlocked=" + _state.LinhThanhUnlocked + " | unlock=plaza | source=shadow-slime-complete | route=return-gate->plaza | safe-local-no-teleport";
@@ -561,7 +584,16 @@ namespace LinhGioi.World
                 _linhThanhDistrictPreviewRing.gameObject.SetActive(linhThanhUnlocked && _state.LinhThanhDistrictPreviewOpen);
                 _linhThanhDistrictPreviewRing.localPosition = ToWorld(LinhThanhDistrictPreviewPosition(), 0f);
             }
-            if (_linhThanhDistrictPreviewBackplate != null) _linhThanhDistrictPreviewBackplate.gameObject.SetActive(linhThanhUnlocked && _state.LinhThanhDistrictPreviewOpen);
+            var districtCalloutPosition = LinhThanhDistrictPreviewLabelPosition();
+            if (_linhThanhDistrictPreviewBackplate != null)
+            {
+                _linhThanhDistrictPreviewBackplate.gameObject.SetActive(linhThanhUnlocked && _state.LinhThanhDistrictPreviewOpen);
+                _linhThanhDistrictPreviewBackplate.localPosition = ToWorld(districtCalloutPosition, 0f);
+            }
+            if (_linhThanhDistrictPreviewLabel != null)
+            {
+                _linhThanhDistrictPreviewLabel.transform.localPosition = ToWorld(districtCalloutPosition, 0f);
+            }
             if (_plazaHubSelectorRing != null)
             {
                 _plazaHubSelectorRing.gameObject.SetActive(linhThanhUnlocked);
@@ -588,8 +620,8 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Hub District Market", new Vector2(-2.92f, 1.02f), new Vector2(0.52f, 0.16f), new Color(0.58f, 0.36f, 0.18f, 0.36f), -18);
             AddWorldLabel("LGO 2D Hub Shell Label", "Hub: Đông Môn → Quảng Trường", new Vector2(-0.26f, 1.68f), 0.025f, new Color(0.73f, 0.87f, 0.88f, 0.82f), -10);
             _linhThanhDistrictPreviewRing = AddSprite("LGO 2D Linh Thanh District Preview Ring", new Vector2(-0.36f, 1.48f), new Vector2(0.62f, 0.10f), new Color(0.18f, 0.86f, 0.78f, 0.70f), 7).transform;
-            _linhThanhDistrictPreviewBackplate = AddSprite("LGO 2D Linh Thanh District Preview Label Backplate", new Vector2(-1.10f, -1.02f), new Vector2(1.52f, 0.16f), new Color(0.02f, 0.08f, 0.12f, 0.78f), 7).transform;
-            _linhThanhDistrictPreviewLabel = AddWorldLabel("LGO 2D Linh Thanh District Preview Label", string.Empty, new Vector2(-1.72f, -1.04f), 0.023f, RuntimeArtCatalog.Spirit, 8);
+            _linhThanhDistrictPreviewBackplate = AddSprite("LGO 2D Linh Thanh District Preview Label Backplate", new Vector2(-1.10f, -1.02f), new Vector2(1.82f, 0.22f), new Color(0.02f, 0.08f, 0.12f, 0.88f), 7).transform;
+            _linhThanhDistrictPreviewLabel = AddWorldLabel("LGO 2D Linh Thanh District Preview Label", string.Empty, new Vector2(-1.72f, -1.04f), 0.027f, RuntimeArtCatalog.Spirit, 8);
             _linhThanhDistrictPreviewRing.gameObject.SetActive(false);
             _linhThanhDistrictPreviewBackplate.gameObject.SetActive(false);
         }

@@ -87,3 +87,7 @@ Smoke/visual matrix 2D tăng lên 16 frame và yêu cầu `runtimeLinhThanhDistr
 ## 2026-09-10 — Linh Thành district rail coverage evidence
 
 `LGO_LINHTHANH_DISTRICT_RAIL_COVERAGE_READY`: 2D visual capture tăng lên 20 frame, thêm `18-district-forge-preview`, `19-district-guild-preview` và `20-district-harbor-preview`. Runtime smoke matrix yêu cầu manifest cuối giữ Cảng Linh Thuyền: `selected=harbor`, `label=Cảng Linh Thuyền`, `route=plaza->harbor`, `role=travel-preview`, `detail=spirit-boat-locked`, `next=world-route-gate`, `safe-no-travel-backend`, `safe-no-teleport-backend`, `safe-no-district-backend`. Các frame trước vẫn giữ evidence Khu Rèn/Bang Hội qua screenshot tồn tại và shell snapshot, chưa mở crafting/guild/travel/backend.
+
+## 2026-09-10 — Linh Thành district rail readability evidence
+
+`LGO_LINHTHANH_DISTRICT_RAIL_READABILITY_READY`: visual manifest bổ sung `runtimeLinhThanhDistrictReadabilitySnapshot` và runtime smoke matrix yêu cầu `DistrictRailReadability`, `mode=selected-node-callout`, `label-follows-selected=True`, `backplate=follows-selected`, `callout-size=readable`, `avoids-hud-overlap`. Player capture 20 frame đã review các frame `18-district-forge-preview`, `19-district-guild-preview`, `20-district-harbor-preview`; callout đi theo node đang chọn để giảm việc phải dò text ở đáy màn.

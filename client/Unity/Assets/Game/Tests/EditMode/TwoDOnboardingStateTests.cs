@@ -1758,5 +1758,47 @@ namespace LinhGioi.Tests
             }
         }
 
+        [Test]
+        public void RuntimeControllerExposesDistrictRailReadableSelectedNodeCallout()
+        {
+            var host = new GameObject("2D Linh Thanh district rail readability test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                StringAssert.Contains("DistrictRailReadability", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+                StringAssert.Contains("locked-until-unlock", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+
+                StringAssert.Contains("DistrictRailReadability", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+                StringAssert.Contains("mode=selected-node-callout", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+                StringAssert.Contains("selected=harbor", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+                StringAssert.Contains("label-follows-selected=True", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+                StringAssert.Contains("backplate=follows-selected", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+                StringAssert.Contains("callout-size=readable", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+                StringAssert.Contains("avoids-hud-overlap", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+                StringAssert.Contains("safe-local-no-backend", controller.RuntimeLinhThanhDistrictReadabilitySnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
     }
 }

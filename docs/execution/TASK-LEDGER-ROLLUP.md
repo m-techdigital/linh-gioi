@@ -333,3 +333,7 @@ Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và
 ## 2026-09-10 — Linh Thành district rail coverage runtime checkpoint
 
 `LGO_LINHTHANH_DISTRICT_RAIL_COVERAGE_READY`: mở rộng Player visual capture cho district preview rail từ Đền Linh tới Khu Rèn, Khu Bang Hội và Cảng Linh Thuyền. Capture mới có `18-district-forge-preview`, `19-district-guild-preview`, `20-district-harbor-preview`; manifest cuối giữ `DistrictPreviewRail selected=harbor label=Cảng Linh Thuyền route=plaza->harbor` và `DistrictDetail role=travel-preview detail=spirit-boat-locked next=world-route-gate`. Evidence: Unity EditMode `total=132 passed=131 failed=0 skipped=1`, Editor smoke PASS, macOS Player build PASS, visual capture PASS 20 frame, visual evidence matrix PASS. Giới hạn: local-only, chưa mở crafting/guild/travel/teleport/backend và chưa phải production art map hoàn chỉnh.
+
+## 2026-09-10 — Linh Thành district rail readability runtime checkpoint
+
+`LGO_LINHTHANH_DISTRICT_RAIL_READABILITY_READY`: polish district preview rail để callout/backplate đi theo node đang chọn thay vì nằm cố định ở đáy màn; thêm snapshot `DistrictRailReadability` và gate yêu cầu `label-follows-selected=True`, `backplate=follows-selected`, `callout-size=readable`, `avoids-hud-overlap`. Evidence: Unity EditMode `total=133 passed=132 failed=0 skipped=1`, Editor smoke PASS, macOS Player build PASS, Player visual capture PASS 20 frame; đã review frame Khu Rèn/Bang Hội/Cảng sau polish.

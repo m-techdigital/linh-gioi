@@ -218,3 +218,6 @@ Checkpoint 2026-09-10 thêm frame runtime riêng cho Đền Linh trong district 
 ### Runtime checkpoint — Linh Thành district rail coverage
 
 Checkpoint 2026-09-10 mở rộng capture district preview rail tới các khu sau trong Linh Thành: Khu Rèn, Khu Bang Hội và Cảng Linh Thuyền. Player capture giờ chứng minh rail local-only đi qua Học Viện → Thương Phố → Đền Linh → Khu Rèn → Khu Bang Hội → Cảng Linh Thuyền; manifest cuối giữ `DistrictPreviewRail: selected=harbor | label=Cảng Linh Thuyền | route=plaza->harbor` và `DistrictDetail: role=travel-preview | detail=spirit-boat-locked | next=world-route-gate`. Đây là coverage tương tác bản đồ, chưa mở crafting, guild, travel, teleport hoặc backend district.
+### Runtime checkpoint — Linh Thành district rail readability
+
+Checkpoint 2026-09-10 cải thiện độ đọc của district preview rail: callout `Map: <khu> / local-only` và backplate giờ đi theo node đang chọn thay vì nằm cố định xa ở đáy màn. Manifest có `DistrictRailReadability: mode=selected-node-callout | label-follows-selected=True | backplate=follows-selected | callout-size=readable | avoids-hud-overlap`, giúp các frame Khu Rèn, Khu Bang Hội và Cảng Linh Thuyền đọc nhanh hơn trong Player capture. Đây chỉ là polish UX/readability cho preview local-only.

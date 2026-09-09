@@ -166,3 +166,10 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 - Evidence cuối giữ Cảng: `selected=harbor`, `label=Cảng Linh Thuyền`, `route=plaza->harbor`, `detail=spirit-boat-locked`, `next=world-route-gate`.
 - Giới hạn: vẫn là runtime blockout/local-only; chưa mở crafting, guild, travel, teleport hoặc district backend.
 - Next: polish visual density/layout Linh Thành hoặc nâng Đông Môn Tilemap/atlas sạch.
+
+## 2026-09-10 — Linh Thành district rail readability
+
+- Marker: `LGO_LINHTHANH_DISTRICT_RAIL_READABILITY_READY`.
+- Trạng thái: district preview callout/backplate đi theo selected node, manifest có `DistrictRailReadability` và Player visual capture 20 frame đã review frame Khu Rèn/Bang Hội/Cảng.
+- Giới hạn: polish UX cho runtime blockout local-only; chưa thay production art, chưa mở district backend.
+- Next: polish minimap/district rail density hoặc nâng Đông Môn Tilemap/atlas sạch.

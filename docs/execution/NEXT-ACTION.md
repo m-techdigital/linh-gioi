@@ -180,3 +180,7 @@ Không mở shop/economy, teleport thật, giao dịch, bang hội, HP/loot/serv
 ## Linh Thành district rail coverage checkpoint — 2026-09-10
 
 `LGO_LINHTHANH_DISTRICT_RAIL_COVERAGE_READY`: district preview rail Linh Thành đã có Player visual frames cho Khu Rèn, Khu Bang Hội và Cảng Linh Thuyền sau các frame Học Viện/Thương Phố/Đền Linh. Manifest cuối ở `selected=harbor`, route `plaza->harbor`, detail `spirit-boat-locked`, next `world-route-gate`, guard `safe-no-travel-backend`/`safe-no-teleport-backend`/`safe-no-district-backend`. Evidence: Unity EditMode PASS, Editor smoke PASS, macOS Player build PASS, Player visual capture PASS 20 frame, visual matrix PASS. Map tổng thể vẫn chưa production-complete; next safe map action là polish visual density/layout Linh Thành hoặc nâng Đông Môn Tilemap/atlas sạch.
+
+## Linh Thành district rail readability checkpoint — 2026-09-10
+
+`LGO_LINHTHANH_DISTRICT_RAIL_READABILITY_READY`: district preview rail đã polish callout để label/backplate đi theo node đang chọn, tăng size nhẹ và expose `runtimeLinhThanhDistrictReadabilitySnapshot` với `label-follows-selected=True`, `backplate=follows-selected`, `callout-size=readable`, `avoids-hud-overlap`. Evidence: Unity EditMode PASS, Editor smoke PASS, macOS Player build PASS, Player visual capture PASS 20 frame và visual review frame Khu Rèn/Bang Hội/Cảng. Map tổng thể vẫn chưa production-complete; next safe map action là polish minimap/district rail density hoặc nâng Đông Môn Tilemap/atlas sạch.

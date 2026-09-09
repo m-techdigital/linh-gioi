@@ -132,7 +132,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_linh_thanh_harbor_preview",
         "label": "2D Linh Thanh harbor district preview",
         "screenshot": "20-district-harbor-preview.bmp",
-        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhDistrictDetailSnapshot", "runtimeLinhThanhHarborShellSnapshot", "hudSnapshot"],
+        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhDistrictDetailSnapshot", "runtimeLinhThanhDistrictReadabilitySnapshot", "runtimeLinhThanhHarborShellSnapshot", "hudSnapshot"],
         "nonClaim": "not production travel or teleport backend",
     },
     {
@@ -204,6 +204,11 @@ def verify_current() -> dict[str, Any]:
     for token in ("DistrictDetail", "selected=harbor", "role=travel-preview", "detail=spirit-boat-locked", "next=world-route-gate", "safe-no-travel-backend", "safe-no-teleport-backend", "safe-no-district-backend", "safe-local-no-backend"):
         if token not in district_detail_snapshot:
             failures.append(f"runtimeLinhThanhDistrictDetailSnapshot missing {token!r}")
+
+    district_readability_snapshot = str(manifest.get("runtimeLinhThanhDistrictReadabilitySnapshot", ""))
+    for token in ("DistrictRailReadability", "mode=selected-node-callout", "selected=harbor", "label-follows-selected=True", "backplate=follows-selected", "callout-size=readable", "avoids-hud-overlap", "safe-local-no-backend"):
+        if token not in district_readability_snapshot:
+            failures.append(f"runtimeLinhThanhDistrictReadabilitySnapshot missing {token!r}")
 
     plaza_detail_snapshot = str(manifest.get("runtimePlazaHubDetailSnapshot", ""))
     for token in ("PlazaHubDetail", "selected=merchant-preview", "role=starter-gear-preview", "detail=try-before-shop", "safe-no-shop-backend", "safe-local-no-backend"):
