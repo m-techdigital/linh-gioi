@@ -92,6 +92,7 @@ namespace LinhGioi.World
                 productionSceneBeatCount = controller.ProductionSceneBeatCount,
                 productionSceneBeatSnapshot = controller.ProductionSceneBeatSnapshot,
                 runtimeMapSnapshot = controller.RuntimeMapSnapshot,
+                runtimeLinhThanhUnlockSnapshot = controller.RuntimeLinhThanhUnlockSnapshot,
                 runtimeCharacterBaseSnapshot = controller.RuntimeCharacterBaseSnapshot,
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
@@ -212,6 +213,7 @@ namespace LinhGioi.World
             public int productionSceneBeatCount;
             public string productionSceneBeatSnapshot;
             public string runtimeMapSnapshot;
+            public string runtimeLinhThanhUnlockSnapshot;
             public string runtimeCharacterBaseSnapshot;
             public string runtimeEquipmentSnapshot;
             public string runtimeInventoryTryOnSnapshot;

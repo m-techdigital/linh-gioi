@@ -20,6 +20,8 @@ namespace LinhGioi.World
         private Transform _shadowSlime;
         private Transform _shadowSlimeLabel;
         private Transform _pathGlow;
+        private Transform _linhThanhUnlockBanner;
+        private Transform _plazaUnlockPath;
         private Transform _focusRing;
         private SpriteRenderer _playerOuterShirtRenderer;
         private SpriteRenderer _playerWaistRenderer;
@@ -62,6 +64,7 @@ namespace LinhGioi.World
         public string RuntimeZoneNetworkSnapshot => _mapCatalog.ZoneNetworkSnapshot;
         public string RuntimeLinhThanhHubShellSnapshot => _mapCatalog.LinhThanhHubShellSnapshot;
         public string RuntimeLinhThanhPlazaShellSnapshot => _mapCatalog.LinhThanhPlazaShellSnapshot;
+        public string RuntimeLinhThanhUnlockSnapshot => BuildLinhThanhUnlockSnapshot();
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
@@ -141,6 +144,7 @@ namespace LinhGioi.World
             AddDongMonLandmarkSilhouettes();
             AddLinhThanhHubShellOverlay();
             AddLinhThanhPlazaShellPreview();
+            AddLinhThanhUnlockPresentation();
 
             AddSceneSprite("LGO 2D Linh Thanh Gate Left Pillar", "Cổng Linh Thành - trụ trái", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
             AddSceneSprite("LGO 2D Linh Thanh Gate Right Pillar", "Cổng Linh Thành - trụ phải", new Vector2(-0.75f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
@@ -257,6 +261,11 @@ namespace LinhGioi.World
             return _playerLoadout;
         }
 
+        private string BuildLinhThanhUnlockSnapshot()
+        {
+            return "LinhThanhUnlock: unlocked=" + _state.LinhThanhUnlocked + " | unlock=plaza | source=shadow-slime-complete | route=return-gate->plaza | safe-local-no-teleport";
+        }
+
         private Vector2 ReadMovement()
         {
             var x = 0f;
@@ -301,7 +310,10 @@ namespace LinhGioi.World
                 }
             }
             if (_shadowSlimeLabel != null) _shadowSlimeLabel.gameObject.SetActive(_state.ShadowSlimeVisible);
-            SetHudText(_miniMapProgress, "Node: " + _state.CurrentRouteNodeId);
+            var linhThanhUnlocked = _state.LinhThanhUnlocked;
+            if (_plazaUnlockPath != null) _plazaUnlockPath.gameObject.SetActive(linhThanhUnlocked);
+            if (_linhThanhUnlockBanner != null) _linhThanhUnlockBanner.gameObject.SetActive(linhThanhUnlocked);
+            SetHudText(_miniMapProgress, linhThanhUnlocked ? "Node: return-gate → plaza" : "Node: " + _state.CurrentRouteNodeId);
             RefreshPlayerEquipmentPresentation();
             RefreshInventoryPanelPresentation();
             RefreshPlayerAnimationPresentation();
@@ -329,6 +341,16 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Plaza Event Board Preview", new Vector2(0.32f, 0.86f), new Vector2(0.24f, 0.30f), new Color(0.56f, 0.34f, 0.16f, 0.42f), -12);
             AddSprite("LGO 2D Plaza Guild Bulletin Preview", new Vector2(0.70f, 0.88f), new Vector2(0.18f, 0.26f), new Color(0.30f, 0.22f, 0.62f, 0.38f), -12);
             AddWorldLabel("LGO 2D Plaza Shell Label", "Quảng Trường: social spawn", new Vector2(0.42f, 1.16f), 0.021f, new Color(0.73f, 0.87f, 0.88f, 0.76f), -9);
+        }
+
+
+        private void AddLinhThanhUnlockPresentation()
+        {
+            AddSceneBeat("LINH_THANH_UNLOCK_PRESENTATION Đông Môn complete opens Plaza preview local-only");
+            _plazaUnlockPath = AddSceneSprite("LGO 2D Plaza Unlock Path", "Đường sáng local preview từ Đông Môn về Quảng Trường", new Vector2(-0.42f, 0.12f), new Vector2(1.46f, 0.085f), new Color(0.92f, 0.72f, 0.28f, 0.78f), -3).transform;
+            _linhThanhUnlockBanner = AddWorldLabel("LGO 2D Linh Thanh Unlock Banner", "MỞ LINH THÀNH → QUẢNG TRƯỜNG", new Vector2(-0.36f, 0.72f), 0.040f, RuntimeArtCatalog.Gold, 9).transform;
+            _plazaUnlockPath.gameObject.SetActive(false);
+            _linhThanhUnlockBanner.gameObject.SetActive(false);
         }
 
         private void AddDongMonParallaxPolish()

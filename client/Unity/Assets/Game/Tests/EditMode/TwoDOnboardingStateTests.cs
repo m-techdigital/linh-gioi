@@ -42,6 +42,32 @@ namespace LinhGioi.Tests
             StringAssert.Contains("Hoàn tất nhập môn", state.ObjectiveText);
         }
 
+
+        [Test]
+        public void CompletingDongMonUnlocksLinhThanhPlazaLocally()
+        {
+            var state = new TwoDOnboardingState();
+            state.Reset();
+
+            Assert.IsFalse(state.LinhThanhUnlocked);
+
+            state.Move(TwoDOnboardingState.GateKeeperPosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseAction();
+            state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
+            state.TryUseAction();
+            state.TryUseJump();
+            state.TryUseDash();
+
+            Assert.IsFalse(state.LinhThanhUnlocked);
+            Assert.IsTrue(state.TryUseClassSkill());
+
+            Assert.IsTrue(state.LinhThanhUnlocked);
+            StringAssert.Contains("Mở Linh Thành", state.ObjectiveText);
+            StringAssert.Contains("Quảng Trường", state.HintText);
+            StringAssert.Contains("return-gate", state.CurrentRouteNodeId);
+        }
+
         [Test]
         public void MovementIsClampedAndRejectsInvalidInput()
         {
@@ -197,6 +223,7 @@ namespace LinhGioi.Tests
 
             Assert.IsNotNull(resultType);
             Assert.IsNotNull(resultType.GetField("runtimeInventoryInputSnapshot"));
+            Assert.IsNotNull(resultType.GetField("runtimeLinhThanhUnlockSnapshot"));
         }
 
         [Test]
@@ -569,6 +596,40 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("PlazaShell: district=plaza", controller.RuntimeLinhThanhPlazaShellSnapshot);
                 StringAssert.Contains("safe-no-trade-backend", controller.RuntimeLinhThanhPlazaShellSnapshot);
                 StringAssert.Contains("event-board", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhUnlockSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh unlock snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("LinhThanhUnlock", controller.RuntimeLinhThanhUnlockSnapshot);
+                StringAssert.Contains("unlocked=False", controller.RuntimeLinhThanhUnlockSnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("unlocked=True", controller.RuntimeLinhThanhUnlockSnapshot);
+                StringAssert.Contains("unlock=plaza", controller.RuntimeLinhThanhUnlockSnapshot);
+                StringAssert.Contains("safe-local-no-teleport", controller.RuntimeLinhThanhUnlockSnapshot);
+                StringAssert.Contains("Mở Linh Thành", controller.WorldHudSnapshot);
             }
             finally
             {

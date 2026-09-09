@@ -50,7 +50,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
         "id": "two_d_onboarding_smoke",
         "kind": "json_artifact",
         "path": "build/2d-onboarding/twod-onboarding-smoke.json",
-        "requirements": {"status": "PASS", "finalStep": "Complete"},
+        "requirements": {"status": "PASS", "finalStep": "Complete", "linhThanhUnlocked": True},
         "marker": "LGO_2D_ONBOARDING_SMOKE_PASS",
     },
     {
@@ -68,6 +68,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
         "minimums": {"screenshotCount": 10},
         "contains": {
             "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:", "HubShell: linh-thanh", "district=plaza", "district=market", "PlazaShell: district=plaza", "safe-no-trade-backend"],
+            "runtimeLinhThanhUnlockSnapshot": ["LinhThanhUnlock", "unlocked=True", "unlock=plaza", "safe-local-no-teleport"],
             "runtimeTilemapSnapshot": ["ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
         },

@@ -45,6 +45,7 @@ namespace LinhGioi.World
         public string LastAnimationIntent { get; private set; } = "Idle";
         public bool ShadowSlimeVisible { get; private set; }
         public bool ShadowSlimeDefeated { get; private set; }
+        public bool LinhThanhUnlocked { get; private set; }
         public string CurrentRouteNodeId { get; private set; } = "spawn";
 
         public void Reset()
@@ -61,6 +62,7 @@ namespace LinhGioi.World
             LastAnimationIntent = "Idle";
             ShadowSlimeVisible = false;
             ShadowSlimeDefeated = false;
+            LinhThanhUnlocked = false;
             CurrentRouteNodeId = "spawn";
             Refresh();
         }
@@ -149,12 +151,13 @@ namespace LinhGioi.World
             Refresh();
             if (AvailableAction != TwoDOnboardingAction.Skill) return false;
             Step = TwoDOnboardingStep.Complete;
-            ObjectiveText = "Hoàn tất nhập môn: Linh lực đã cộng hưởng.";
-            HintText = "Shadow Slime đã tan; quay lại Người Giữ Cổng để mở Linh Thành.";
-            FeedbackText = "Kỹ năng Võ Lv1 phá tan Shadow Slime; vòng sáng lan dưới chân.";
+            ObjectiveText = "Mở Linh Thành: Quảng Trường đã sẵn sàng ở bản đồ local.";
+            HintText = "Quay lại Người Giữ Cổng để vào Quảng Trường khi hub transition được bật.";
+            FeedbackText = "Kỹ năng Võ Lv1 phá tan Shadow Slime; lối sáng về Linh Thành mở ra.";
             LastAnimationIntent = "ClassSkill";
             ShadowSlimeVisible = false;
             ShadowSlimeDefeated = true;
+            LinhThanhUnlocked = true;
             AvailableAction = TwoDOnboardingAction.None;
             CurrentRouteNodeId = "return-gate";
             return true;

@@ -219,3 +219,11 @@ LGO_LINHTHANH_PLAZA_SHELL_RUNTIME_READY. Đã thêm `LinhThanhPlazaShellSnapshot
 ## Next after Quảng Trường plaza shell
 
 Map chưa xong toàn bộ. Next safe action: phát triển Quảng Trường thành hub runtime riêng với NPC/board local-only hoặc authored Đông Môn Tilemap khi asset sạch sẵn sàng; không mở shop/giao dịch/bang hội/backend khi chưa có gate riêng.
+
+## 2026-09-09 — Linh Thành unlock presentation runtime checkpoint
+
+LGO_LINHTHANH_UNLOCK_PRESENTATION_READY. Đã nối flow Đông Môn với Linh Thành ở mức runtime local-only: sau `TryUseClassSkill()` đánh tan Shadow Slime, `TwoDOnboardingState.LinhThanhUnlocked` bật true, Objective/HUD chuyển sang “Mở Linh Thành: Quảng Trường”, runtime scene hiện banner/path `LGO 2D Linh Thanh Unlock Banner` + `LGO 2D Plaza Unlock Path`, và visual manifest ghi `runtimeLinhThanhUnlockSnapshot=LinhThanhUnlock: unlocked=True | unlock=plaza | source=shadow-slime-complete | route=return-gate->plaza | safe-local-no-teleport`. Evidence: RED compile fail vì thiếu `LinhThanhUnlocked`/`RuntimeLinhThanhUnlockSnapshot`, Unity EditMode PASS, Editor smoke PASS với `linhThanhUnlocked=true`, macOS Player build PASS, Player visual capture PASS 10 frame, smoke matrix 2D PASS; ảnh `08-complete`/`09-inventory-try` đã review, banner không che HUD/minimap/inventory.
+
+## Next after Linh Thành unlock presentation
+
+Map chưa xong toàn bộ. Next safe action: phát triển Quảng Trường hub runtime riêng có NPC/board local-only hoặc chuyển Đông Môn procedural chunk sang authored Tilemap/Tile palette khi asset sạch sẵn sàng; không mở teleport thật, shop/giao dịch/bang hội/backend khi chưa có gate riêng.

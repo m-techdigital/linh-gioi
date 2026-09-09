@@ -132,3 +132,7 @@ Checkpoint 2026-09-09 thêm lát cắt Quảng Trường đầu tiên vào runti
 - Contract `safe-no-trade-backend` khóa rõ rằng đây chưa mở giao dịch, bang hội, economy hoặc backend mutation.
 
 Mục tiêu của checkpoint là mở đường hub xã hội theo North Star trong Player capture, nhưng vẫn giữ branch ở mức pre-alpha runtime prototype.
+
+### Runtime unlock presentation — Đông Môn → Quảng Trường
+
+Sau khi người chơi hoàn tất flow Đông Môn và đánh tan Shadow Slime, runtime chỉ mở **presentation local** cho Linh Thành: HUD đổi mục tiêu sang “Mở Linh Thành: Quảng Trường”, scene hiện banner/path về Quảng Trường, manifest ghi `LinhThanhUnlock: unlocked=True | unlock=plaza | source=shadow-slime-complete | route=return-gate->plaza | safe-local-no-teleport`. Bước này giữ đúng thiết kế Zone Network và social hub nhưng chưa mở teleport thật, shop, giao dịch, bang hội hoặc backend xã hội.

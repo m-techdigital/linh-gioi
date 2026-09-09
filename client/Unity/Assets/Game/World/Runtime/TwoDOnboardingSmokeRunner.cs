@@ -62,12 +62,15 @@ namespace LinhGioi.World
                 Require(state.TryUseClassSkill(), "class skill lesson failed");
                 Require(state.ShadowSlimeDefeated, "Shadow Slime should be defeated by class skill");
                 Require(state.Step == TwoDOnboardingStep.Complete, "2D onboarding did not complete");
-                Require(state.ObjectiveText.Contains("Hoàn tất nhập môn"), "completion copy drifted");
+                Require(state.LinhThanhUnlocked, "Linh Thành should unlock locally after Shadow Slime");
+                Require(state.ObjectiveText.Contains("Mở Linh Thành"), "completion unlock copy drifted");
+                Require(state.HintText.Contains("Quảng Trường"), "plaza unlock hint drifted");
                 Require(state.FeedbackText.Contains("Shadow Slime"), "completion combat feedback drifted");
 
                 result.finalStep = state.Step.ToString();
                 result.finalObjective = state.ObjectiveText;
                 result.finalFeedback = state.FeedbackText;
+                result.linhThanhUnlocked = state.LinhThanhUnlocked;
                 result.status = "PASS";
                 exitCode = 0;
             }
@@ -129,6 +132,7 @@ namespace LinhGioi.World
             public string finalStep;
             public string finalObjective;
             public string finalFeedback;
+            public bool linhThanhUnlocked;
             public string exceptionType;
             public string exceptionMessage;
             public int exitCode;

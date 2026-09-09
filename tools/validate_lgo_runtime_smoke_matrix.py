@@ -45,7 +45,7 @@ def check_list_output() -> None:
     if two_d.returncode != 0:
         ERRORS.append(two_d.stderr.strip() or "two-d matrix list failed")
         return
-    for marker in ("two_d_onboarding_smoke", "two_d_player_build", "two_d_visual_capture", "runtimeMapSnapshot", "WorldMapNetwork", "LinhThanhHubRuntime", "HubShell", "district=plaza", "PlazaShell", "safe-no-trade-backend", "runtimeTilemapSnapshot", "ChunkFlow"):
+    for marker in ("two_d_onboarding_smoke", "two_d_player_build", "two_d_visual_capture", "runtimeMapSnapshot", "WorldMapNetwork", "LinhThanhHubRuntime", "HubShell", "district=plaza", "PlazaShell", "safe-no-trade-backend", "runtimeLinhThanhUnlockSnapshot", "LinhThanhUnlock", "unlock=plaza", "runtimeTilemapSnapshot", "ChunkFlow"):
         if marker not in two_d.stdout:
             ERRORS.append(f"two-d matrix list missing: {marker}")
 
@@ -64,6 +64,9 @@ def main() -> int:
         "2D Onboarding Gates",
         "two_d_onboarding_smoke",
         "runtimeMapSnapshot",
+        "runtimeLinhThanhUnlockSnapshot",
+        "LinhThanhUnlock",
+        "unlock=plaza",
         "WorldMapNetwork",
         "LinhThanhHubRuntime",
         "HubShell",
@@ -84,6 +87,9 @@ def main() -> int:
         "LGO_RUNTIME_SMOKE_MATRIX_2D_PASS",
         "TWO_D_GATES",
         "runtimeMapSnapshot",
+        "runtimeLinhThanhUnlockSnapshot",
+        "LinhThanhUnlock",
+        "unlock=plaza",
         "WorldMapNetwork",
         "LinhThanhHubRuntime",
         "HubShell",
