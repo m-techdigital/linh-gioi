@@ -97,8 +97,15 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_linh_thanh_district_preview",
         "label": "2D Linh Thanh district preview rail",
         "screenshot": "15-district-preview-rail.bmp",
-        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhAcademyShellSnapshot", "runtimeLinhThanhMarketShellSnapshot", "hudSnapshot"],
+        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhDistrictDetailSnapshot", "runtimeLinhThanhAcademyShellSnapshot", "runtimeLinhThanhMarketShellSnapshot", "hudSnapshot"],
         "nonClaim": "not production district travel backend",
+    },
+    {
+        "id": "two_d_linh_thanh_market_preview",
+        "label": "2D Linh Thanh market district preview",
+        "screenshot": "16-district-market-preview.bmp",
+        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhDistrictDetailSnapshot", "runtimeLinhThanhMarketShellSnapshot", "hudSnapshot"],
+        "nonClaim": "not production market economy backend",
     },
     {
         "id": "two_d_plaza_board_preview",
@@ -162,9 +169,13 @@ def verify_current() -> dict[str, Any]:
         if token not in dong_mon_readability_snapshot:
             failures.append(f"runtimeDongMonReadabilitySnapshot missing {token!r}")
     district_preview_snapshot = str(manifest.get("runtimeLinhThanhDistrictPreviewSnapshot", ""))
-    for token in ("DistrictPreviewRail", "unlocked=True", "selected=academy", "label=Học Viện", "route=plaza->academy", "controls=M select-district", "safe-no-skill-backend", "safe-no-district-backend", "safe-local-no-backend"):
+    for token in ("DistrictPreviewRail", "unlocked=True", "selected=market", "label=Thương Phố", "route=plaza->market", "controls=M select-district", "safe-no-trade-backend", "safe-no-district-backend", "safe-local-no-backend"):
         if token not in district_preview_snapshot:
             failures.append(f"runtimeLinhThanhDistrictPreviewSnapshot missing {token!r}")
+    district_detail_snapshot = str(manifest.get("runtimeLinhThanhDistrictDetailSnapshot", ""))
+    for token in ("DistrictDetail", "selected=market", "role=starter-commerce-preview", "detail=vendor-row-only", "safe-no-trade-backend", "safe-no-economy-backend", "safe-no-district-backend", "safe-local-no-backend"):
+        if token not in district_detail_snapshot:
+            failures.append(f"runtimeLinhThanhDistrictDetailSnapshot missing {token!r}")
 
     plaza_detail_snapshot = str(manifest.get("runtimePlazaHubDetailSnapshot", ""))
     for token in ("PlazaHubDetail", "selected=merchant-preview", "role=starter-gear-preview", "detail=try-before-shop", "safe-no-shop-backend", "safe-local-no-backend"):

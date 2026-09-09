@@ -322,3 +322,6 @@ Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm detail snapshot + wo
 ## 2026-09-10 — LGO_LINHTHANH_DISTRICT_PREVIEW_READY
 
 Hoàn tất checkpoint map/runtime nhỏ: Linh Thành district preview rail sau unlock Đông Môn, control `M`, route `plaza->academy`, safe local-only. Evidence: Unity EditMode, smoke, macOS Player build và visual capture 15 frame.
+## 2026-09-10 — LGO_LINHTHANH_DISTRICT_DETAIL_READY
+
+Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và visual frame Thương Phố. Evidence gồm RED compile fail, EditMode pass, smoke pass, macOS Player build và visual capture 16 frame.

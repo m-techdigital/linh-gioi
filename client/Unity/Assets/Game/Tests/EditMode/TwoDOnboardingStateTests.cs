@@ -1621,5 +1621,48 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhDistrictDetailForAcademyAndMarket()
+        {
+            var host = new GameObject("2D Linh Thanh district detail test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DistrictDetail", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("locked-until-unlock", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                StringAssert.Contains("DistrictDetail", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("selected=academy", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("role=skill-learning-preview", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("detail=class-trainer-locked", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("safe-no-skill-backend", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                StringAssert.Contains("selected=market", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("role=starter-commerce-preview", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("detail=vendor-row-only", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("safe-no-trade-backend", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("safe-no-economy-backend", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
     }
 }

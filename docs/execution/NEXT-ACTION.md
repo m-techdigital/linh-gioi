@@ -170,3 +170,6 @@ Không mở shop/economy, teleport thật, giao dịch, bang hội, HP/loot/serv
 ## Checkpoint — LGO_LINHTHANH_DISTRICT_PREVIEW_READY — 2026-09-10
 
 Đã thêm preview rail chọn khu Linh Thành sau unlock Đông Môn: Học Viện là target đầu, route `plaza->academy`, control `M select-district`, frame visual `15-district-preview-rail`. Next map-safe action: polish readability/density của Linh Thành shell hoặc mở district preview chi tiết tiếp theo local-only; không mở teleport/shop/skill/crafting/guild/travel backend nếu chưa có gate riêng.
+## Checkpoint — LGO_LINHTHANH_DISTRICT_DETAIL_READY — 2026-09-10
+
+Đã thêm district detail snapshot và visual frame `16-district-market-preview`: rail Linh Thành cycle từ Học Viện sang Thương Phố, giữ local-only và không mở shop/trade/economy. Next map-safe action: polish density/visual label cho hub shell hoặc thêm detail preview cho Đền Linh/Khu Rèn/Guild/Harbor theo cùng guard, vẫn không mở backend.

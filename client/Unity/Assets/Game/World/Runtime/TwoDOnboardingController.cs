@@ -84,6 +84,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhHarborShellSnapshot => _mapCatalog.LinhThanhHarborShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimeLinhThanhDistrictPreviewSnapshot => BuildLinhThanhDistrictPreviewSnapshot();
+        public string RuntimeLinhThanhDistrictDetailSnapshot => BuildLinhThanhDistrictDetailSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaHubDetailSnapshot => BuildPlazaHubDetailSnapshot();
         public string RuntimePlazaHubLayoutSnapshot => BuildPlazaHubLayoutSnapshot();
@@ -376,6 +377,27 @@ namespace LinhGioi.World
                 + " | controls=M select-district"
                 + " | " + guard
                 + " | safe-local-no-backend";
+        }
+
+        private string BuildLinhThanhDistrictDetailSnapshot()
+        {
+            if (!_state.LinhThanhUnlocked)
+                return "DistrictDetail: locked-until-unlock | safe-local-no-backend";
+
+            var selected = _state.SelectedLinhThanhDistrictId == "locked" ? "plaza" : _state.SelectedLinhThanhDistrictId;
+            if (selected == "academy")
+                return "DistrictDetail: selected=academy | role=skill-learning-preview | detail=class-trainer-locked | next=skill-hall-preview | safe-no-skill-backend | safe-no-district-backend | safe-local-no-backend";
+            if (selected == "market")
+                return "DistrictDetail: selected=market | role=starter-commerce-preview | detail=vendor-row-only | next=try-before-shop | safe-no-trade-backend | safe-no-economy-backend | safe-no-district-backend | safe-local-no-backend";
+            if (selected == "spirit-temple")
+                return "DistrictDetail: selected=spirit-temple | role=story-blessing-preview | detail=altar-local-only | next=quest-buff-gate | safe-no-buff-backend | safe-no-district-backend | safe-local-no-backend";
+            if (selected == "forge")
+                return "DistrictDetail: selected=forge | role=crafting-preview | detail=anvil-row-only | next=craft-board-locked | safe-no-crafting-backend | safe-no-district-backend | safe-local-no-backend";
+            if (selected == "guild")
+                return "DistrictDetail: selected=guild | role=social-guild-preview | detail=notice-board-locked | next=guild-hall-gate | safe-no-guild-backend | safe-no-district-backend | safe-local-no-backend";
+            if (selected == "harbor")
+                return "DistrictDetail: selected=harbor | role=travel-preview | detail=spirit-boat-locked | next=world-route-gate | safe-no-travel-backend | safe-no-teleport-backend | safe-no-district-backend | safe-local-no-backend";
+            return "DistrictDetail: selected=plaza | role=social-spawn-preview | detail=event-board-and-npc-local | next=academy-market-rail | safe-no-district-backend | safe-local-no-backend";
         }
 
         private string BuildHubTransitionSnapshot()

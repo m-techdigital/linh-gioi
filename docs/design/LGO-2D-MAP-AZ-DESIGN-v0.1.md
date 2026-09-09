@@ -209,3 +209,6 @@ Quảng Trường runtime preview có `PlazaHubDetail` cho target đang chọn. 
 ### Runtime checkpoint — Linh Thành district preview rail
 
 Sau unlock Đông Môn, người chơi có thể xem lộ trình các khu Linh Thành bằng preview rail local-only: `DistrictPreviewRail: unlocked=True | selected=academy | route=plaza->academy | controls=M select-district`. Rail này nối Quảng Trường tới Học Viện, Thương Phố, Đền Linh, Khu Rèn, Khu Bang Hội và Cảng Linh Thuyền để giữ hướng social hub/map A-Z rõ hơn mà chưa mở teleport, shop, skill, crafting, guild hoặc travel backend.
+### Runtime checkpoint — Linh Thành district detail/cycle
+
+District preview rail giờ có detail snapshot riêng cho từng khu. Capture runtime chọn Học Viện rồi chuyển sang Thương Phố để chứng minh rail là flow cycle chứ không phải một marker tĩnh: `DistrictDetail: selected=market | role=starter-commerce-preview | detail=vendor-row-only | safe-no-trade-backend | safe-no-economy-backend`. Thương Phố vẫn là preview local-only, chưa mở shop, trade, economy hoặc backend.

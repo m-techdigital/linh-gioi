@@ -76,3 +76,6 @@ LGO_PLAYABLE_CLOSURE_RUNTIME_GATES_PASS
 ## LGO_LINHTHANH_DISTRICT_PREVIEW_READY — 2026-09-10
 
 Smoke/visual matrix 2D yêu cầu manifest có `runtimeLinhThanhDistrictPreviewSnapshot` với `DistrictPreviewRail`, `selected=academy`, `route=plaza->academy`, `controls=M select-district`, `safe-no-district-backend` và guard theo khu. Visual capture có thêm frame `15-district-preview-rail.bmp/png` để kiểm player-visible rail sau unlock Đông Môn.
+## LGO_LINHTHANH_DISTRICT_DETAIL_READY — 2026-09-10
+
+Smoke/visual matrix 2D tăng lên 16 frame và yêu cầu `runtimeLinhThanhDistrictDetailSnapshot`. Frame `16-district-market-preview` xác nhận district rail cycle từ Học Viện sang Thương Phố, manifest giữ `DistrictDetail`, `selected=market`, `role=starter-commerce-preview`, `detail=vendor-row-only`, `safe-no-trade-backend`, `safe-no-economy-backend`, `safe-no-district-backend`.

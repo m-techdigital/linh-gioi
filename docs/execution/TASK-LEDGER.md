@@ -374,3 +374,9 @@ Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm `RuntimePlazaHubDeta
 - Runtime: `DistrictPreviewRail` sau unlock Đông Môn, target đầu `academy`, label `Học Viện`, route `plaza->academy`, guard `safe-no-district-backend`.
 - Visual: thêm frame `15-district-preview-rail` để thấy ring/label Học Viện trong Player capture.
 - Guard: không mở teleport, shop, skill, crafting, guild, travel hoặc backend district.
+## 2026-09-10 — LGO_LINHTHANH_DISTRICT_DETAIL_READY
+
+- Scope: mở rộng Linh Thành district preview rail để chứng minh cycle Học Viện → Thương Phố.
+- Runtime: thêm `RuntimeLinhThanhDistrictDetailSnapshot` với role/detail/guard cho academy, market, spirit-temple, forge, guild, harbor.
+- Visual: capture thêm `16-district-market-preview` từ Player thật; frame giữ ring/label Thương Phố và không che HUD/minimap.
+- Guard: Thương Phố chỉ `vendor-row-only`, không shop, trade, economy hoặc backend district.

@@ -148,3 +148,6 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 ## LGO_LINHTHANH_DISTRICT_PREVIEW_READY — 2026-09-10
 
 `feature/2d` đã có district preview rail local-only cho Linh Thành sau khi hoàn tất Đông Môn. Controller/manifest xuất `runtimeLinhThanhDistrictPreviewSnapshot`; Player capture có 15 frame, trong đó `15-district-preview-rail` hiển thị ring/label Học Viện và guard `safe-no-district-backend`. Trạng thái vẫn là pre-alpha blockout map, chưa production map toàn thế giới.
+## LGO_LINHTHANH_DISTRICT_DETAIL_READY — 2026-09-10
+
+`feature/2d` đã có `RuntimeLinhThanhDistrictDetailSnapshot` và Player capture 16 frame. Frame `16-district-market-preview` cho thấy district rail chọn Thương Phố sau Học Viện, manifest guard `safe-no-trade-backend`, `safe-no-economy-backend`, `safe-no-district-backend`. Map tổng thể vẫn pre-alpha blockout, chưa production-complete.
