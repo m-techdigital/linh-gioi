@@ -1,0 +1,96 @@
+using System;
+using System.Text;
+using UnityEngine;
+
+namespace LinhGioi.World
+{
+    public static class TwoDPaperDollAtlasCatalog
+    {
+        private const string VoLv1ResourcePath = "LGOClasses/VoLv1PaperDollAtlas";
+
+        public static VoLv1PaperDollAtlasSource LoadVoLv1PaperDollAtlas()
+        {
+            var asset = Resources.Load<TextAsset>(VoLv1ResourcePath);
+            if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
+            return JsonUtility.FromJson<VoLv1PaperDollAtlasSource>(asset.text);
+        }
+
+        public static string LoadVoLv1PaperDollAtlasSnapshot()
+        {
+            var asset = Resources.Load<TextAsset>(VoLv1ResourcePath);
+            if (asset == null) return "VoLv1PaperDollAtlas: resource=" + VoLv1ResourcePath + " | missing";
+
+            var text = asset.text ?? string.Empty;
+            var source = LoadVoLv1PaperDollAtlas();
+            var builder = new StringBuilder("VoLv1PaperDollAtlas: resource=").Append(VoLv1ResourcePath);
+            builder.Append(" | bytes=").Append(text.Length);
+            builder.Append(" | classId=").Append(source != null ? source.classId : "missing");
+            builder.Append(" | displayName=").Append(source != null ? source.displayName : "missing");
+            builder.Append(" | usage=").Append(source != null ? source.usage : "missing");
+            builder.Append(" | parts=").Append(source != null && source.parts != null ? source.parts.Length : 0);
+            if (source != null && source.parts != null)
+            {
+                for (var i = 0; i < source.parts.Length; i++)
+                {
+                    var part = source.parts[i];
+                    builder.Append(" | part=").Append(part.id)
+                        .Append(" slot=").Append(part.slot)
+                        .Append(" anchor=").Append(part.anchor)
+                        .Append(" shape=").Append(string.IsNullOrEmpty(part.shape) ? "rect" : part.shape);
+                }
+            }
+            builder.Append(" | skillCues=").Append(source != null && source.skillCues != null ? source.skillCues.Length : 0);
+            if (source != null && source.skillCues != null)
+            {
+                for (var i = 0; i < source.skillCues.Length; i++)
+                {
+                    var cue = source.skillCues[i];
+                    builder.Append(" | skillCue=").Append(cue.id)
+                        .Append(" slot=").Append(cue.slot)
+                        .Append(" anchor=").Append(cue.anchor)
+                        .Append(" shape=").Append(string.IsNullOrEmpty(cue.shape) ? "rect" : cue.shape);
+                }
+            }
+            builder.Append(" | safe-runtime-resource=").Append(ContainsToken(text, "safe-runtime-resource"));
+            builder.Append(" | safe-no-source-image=").Append(ContainsToken(text, "safe-no-source-image"));
+            builder.Append(" | safe-no-3d=").Append(ContainsToken(text, "safe-no-3d"));
+            builder.Append(" | safe-local-no-backend=").Append(ContainsToken(text, "safe-local-no-backend"));
+            return builder.ToString();
+        }
+
+        private static bool ContainsToken(string text, string token)
+        {
+            return text.IndexOf(token, StringComparison.Ordinal) >= 0;
+        }
+    }
+
+    [Serializable]
+    public sealed class VoLv1PaperDollAtlasSource
+    {
+        public string id;
+        public string classId;
+        public string displayName;
+        public string usage;
+        public string[] safety;
+        public VoLv1PaperDollAtlasPart[] parts;
+        public VoLv1PaperDollAtlasPart[] skillCues;
+    }
+
+    [Serializable]
+    public sealed class VoLv1PaperDollAtlasPart
+    {
+        public string id;
+        public string slot;
+        public string anchor;
+        public string shape;
+        public float x;
+        public float y;
+        public float w;
+        public float h;
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+        public int sortOffset;
+    }
+}

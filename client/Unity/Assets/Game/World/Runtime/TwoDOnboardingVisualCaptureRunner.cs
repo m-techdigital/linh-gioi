@@ -29,6 +29,7 @@ namespace LinhGioi.World
         {
             var evidenceDir = GetArg("--lgo-2d-visual-dir") ?? Path.Combine(Application.persistentDataPath, "lgo-2d-onboarding-visual");
             Directory.CreateDirectory(evidenceDir);
+            Debug.Log($"[LinhGioi] 2D onboarding visual capture start evidenceDir={evidenceDir}");
             var controller = TwoDOnboardingController.Attach(new GameObject("LGO 2D Visual Capture World"));
             yield return null;
             yield return Capture(evidenceDir, "01-initial");
@@ -70,6 +71,7 @@ namespace LinhGioi.World
             yield return null;
             yield return Capture(evidenceDir, "08-complete");
             var voLv1CompleteSnapshot = controller.RuntimeVoLv1ClassSliceSnapshot;
+            var voLv1PaperDollCompleteSnapshot = controller.RuntimeVoLv1PaperDollAtlasSnapshot;
 
             controller.PreviewEastGateToPlazaTransition();
             controller.RefreshForSmoke();
@@ -161,6 +163,7 @@ namespace LinhGioi.World
                 runtimeCharacterBaseSnapshot = controller.RuntimeCharacterBaseSnapshot,
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 runtimeVoLv1ClassSliceSnapshot = voLv1CompleteSnapshot,
+                runtimeVoLv1PaperDollAtlasSnapshot = voLv1PaperDollCompleteSnapshot,
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
                 runtimeInventoryInputSnapshot = controller.RuntimeInventoryInputSnapshot,
                 runtimePlazaHubInputSnapshot = controller.RuntimePlazaHubInputSnapshot,
@@ -193,8 +196,9 @@ namespace LinhGioi.World
 
         private IEnumerator Capture(string evidenceDir, string name)
         {
-            yield return new WaitForEndOfFrame();
+            yield return null;
             var path = Path.Combine(evidenceDir, name + ".bmp");
+            Debug.Log($"[LinhGioi] 2D onboarding visual capture frame={name} path={path}");
             var camera = Camera.main;
             if (camera == null) yield break;
 
@@ -310,6 +314,7 @@ namespace LinhGioi.World
             public string runtimeCharacterBaseSnapshot;
             public string runtimeEquipmentSnapshot;
             public string runtimeVoLv1ClassSliceSnapshot;
+            public string runtimeVoLv1PaperDollAtlasSnapshot;
             public string runtimeInventoryTryOnSnapshot;
             public string runtimeInventoryInputSnapshot;
             public string runtimePlazaHubInputSnapshot;

@@ -266,6 +266,60 @@ namespace LinhGioi.Tests
         }
 
 
+
+        [Test]
+        public void VoLv1PaperDollAtlasLoadsSlotPartsAnchorsAndSkillCueFromRuntimeResource()
+        {
+            var atlas = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlas();
+            var snapshot = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlasSnapshot();
+
+            Assert.IsNotNull(atlas);
+            Assert.AreEqual("vo", atlas.classId);
+            Assert.That(atlas.parts.Length, Is.GreaterThanOrEqualTo(10));
+            Assert.That(atlas.skillCues.Length, Is.GreaterThanOrEqualTo(3));
+            StringAssert.Contains("VoLv1PaperDollAtlas", snapshot);
+            StringAssert.Contains("resource=LGOClasses/VoLv1PaperDollAtlas", snapshot);
+            StringAssert.Contains("parts=", snapshot);
+            StringAssert.Contains("slot=OuterShirt", snapshot);
+            StringAssert.Contains("anchor=Chest", snapshot);
+            StringAssert.Contains("slot=Gloves", snapshot);
+            StringAssert.Contains("anchor=Hand_R", snapshot);
+            StringAssert.Contains("skillCue=vo_lv1_first_skill_trail", snapshot);
+            StringAssert.Contains("safe-no-source-image=True", snapshot);
+            StringAssert.Contains("safe-no-3d=True", snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerRendersVoLv1PaperDollAtlasOverlayForPlayerEvidence()
+        {
+            var host = new GameObject("2D Vo Lv1 paper doll atlas runtime test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("VoLv1PaperDollAtlas", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+                StringAssert.Contains("parts=", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+                StringAssert.Contains("active=True", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+                StringAssert.Contains("pose=vo_lv1_training_complete", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+                Assert.IsNotNull(GameObject.Find("LGO 2D Player Vo PaperDoll OuterShirt chest_panel"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Player Vo PaperDoll Gloves hand_wrap_r"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Player Vo PaperDoll SkillCue vo_lv1_first_skill_trail"));
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void VoLv1ClassSliceLoadsPaperDollMotionAndSkillFromRuntimeResource()
         {

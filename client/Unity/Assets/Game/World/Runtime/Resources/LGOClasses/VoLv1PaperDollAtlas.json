@@ -1,0 +1,27 @@
+{
+  "id": "vo-lv1-paperdoll-atlas-v0",
+  "classId": "vo",
+  "displayName": "Võ Lv1 Paper Doll Atlas",
+  "usage": "runtime-paper-doll-atlas",
+  "safety": ["safe-no-source-image", "safe-runtime-resource", "safe-no-3d", "safe-local-no-backend"],
+  "parts": [
+    {"id": "chest_panel", "slot": "OuterShirt", "anchor": "Chest", "shape": "tapered", "x": 0.00, "y": -0.06, "w": 0.46, "h": 0.43, "r": 0.92, "g": 0.67, "b": 0.20, "a": 0.94, "sortOffset": 3},
+    {"id": "inner_shadow", "slot": "OuterShirt", "anchor": "Chest", "shape": "tapered", "x": 0.00, "y": -0.09, "w": 0.31, "h": 0.37, "r": 0.08, "g": 0.07, "b": 0.06, "a": 0.76, "sortOffset": 4},
+    {"id": "collar_guard", "slot": "OuterShirt", "anchor": "Chest", "shape": "diamond", "x": 0.00, "y": 0.17, "w": 0.36, "h": 0.10, "r": 0.99, "g": 0.82, "b": 0.34, "a": 0.96, "sortOffset": 5},
+    {"id": "shoulder_l", "slot": "OuterShirt", "anchor": "Chest", "shape": "diamond", "x": -0.25, "y": 0.08, "w": 0.18, "h": 0.13, "r": 0.99, "g": 0.78, "b": 0.28, "a": 0.92, "sortOffset": 5},
+    {"id": "shoulder_r", "slot": "OuterShirt", "anchor": "Chest", "shape": "diamond", "x": 0.25, "y": 0.08, "w": 0.18, "h": 0.13, "r": 0.99, "g": 0.78, "b": 0.28, "a": 0.92, "sortOffset": 5},
+    {"id": "sash_red_core", "slot": "Waist", "anchor": "Hips", "shape": "rect", "x": 0.00, "y": -0.25, "w": 0.48, "h": 0.08, "r": 0.62, "g": 0.12, "b": 0.09, "a": 0.96, "sortOffset": 6},
+    {"id": "sash_knot", "slot": "Waist", "anchor": "Hips", "shape": "diamond", "x": 0.18, "y": -0.25, "w": 0.13, "h": 0.13, "r": 0.98, "g": 0.74, "b": 0.22, "a": 0.94, "sortOffset": 7},
+    {"id": "pants_shadow_l", "slot": "PantsOrSkirt", "anchor": "Knee_L", "shape": "tapered", "x": -0.12, "y": -0.54, "w": 0.16, "h": 0.31, "r": 0.06, "g": 0.07, "b": 0.08, "a": 0.88, "sortOffset": 2},
+    {"id": "pants_shadow_r", "slot": "PantsOrSkirt", "anchor": "Knee_R", "shape": "tapered", "x": 0.12, "y": -0.54, "w": 0.16, "h": 0.31, "r": 0.06, "g": 0.07, "b": 0.08, "a": 0.88, "sortOffset": 2},
+    {"id": "hand_wrap_l", "slot": "Gloves", "anchor": "Hand_L", "shape": "rect", "x": -0.30, "y": -0.37, "w": 0.18, "h": 0.08, "r": 0.07, "g": 0.06, "b": 0.05, "a": 0.96, "sortOffset": 7},
+    {"id": "hand_wrap_r", "slot": "Gloves", "anchor": "Hand_R", "shape": "rect", "x": 0.30, "y": -0.37, "w": 0.18, "h": 0.08, "r": 0.07, "g": 0.06, "b": 0.05, "a": 0.96, "sortOffset": 7},
+    {"id": "boot_l", "slot": "Boots", "anchor": "Foot_L", "shape": "rect", "x": -0.12, "y": -0.70, "w": 0.21, "h": 0.07, "r": 0.05, "g": 0.04, "b": 0.04, "a": 0.96, "sortOffset": 5},
+    {"id": "boot_r", "slot": "Boots", "anchor": "Foot_R", "shape": "rect", "x": 0.12, "y": -0.70, "w": 0.21, "h": 0.07, "r": 0.05, "g": 0.04, "b": 0.04, "a": 0.96, "sortOffset": 5}
+  ],
+  "skillCues": [
+    {"id": "vo_lv1_first_skill_trail", "slot": "SkillCue", "anchor": "Hand_R", "shape": "tapered", "x": 0.56, "y": -0.14, "w": 0.78, "h": 0.09, "r": 0.95, "g": 0.72, "b": 0.28, "a": 0.82, "sortOffset": 9},
+    {"id": "vo_lv1_first_skill_edge", "slot": "SkillCue", "anchor": "Hand_R", "shape": "rect", "x": 0.64, "y": -0.04, "w": 0.62, "h": 0.04, "r": 0.18, "g": 0.86, "b": 0.78, "a": 0.66, "sortOffset": 10},
+    {"id": "vo_lv1_first_skill_impact", "slot": "SkillCue", "anchor": "Hand_R", "shape": "diamond", "x": 0.96, "y": -0.10, "w": 0.18, "h": 0.18, "r": 0.99, "g": 0.82, "b": 0.34, "a": 0.78, "sortOffset": 11}
+  ]
+}

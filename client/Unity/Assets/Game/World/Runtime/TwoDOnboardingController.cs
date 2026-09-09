@@ -22,6 +22,7 @@ namespace LinhGioi.World
         private Transform _shadowSlime;
         private Transform _shadowSlimeLabel;
         private Transform _voLv1SkillCueRoot;
+        private Transform _voLv1PaperDollRoot;
         private Transform _pathGlow;
         private Transform _linhThanhUnlockBanner;
         private Transform _plazaUnlockPath;
@@ -99,6 +100,7 @@ namespace LinhGioi.World
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeVoLv1ClassSliceSnapshot => BuildVoLv1ClassSliceRuntimeSnapshot();
+        public string RuntimeVoLv1PaperDollAtlasSnapshot => BuildVoLv1PaperDollAtlasRuntimeSnapshot();
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
         public string RuntimeInventoryInputSnapshot => BuildInventoryInputSnapshot();
         public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
@@ -253,6 +255,9 @@ namespace LinhGioi.World
             AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
             AddSceneBeat(RuntimeDongMonPlayerSceneFitSnapshot);
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
+            AddSceneBeat("VO_LV1_PAPER_DOLL_ATLAS runtime overlay parts anchors skill cues");
+            AddSceneBeat(TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlasSnapshot());
+            _voLv1PaperDollRoot = AddVoLv1PaperDollOverlay(_player, 2);
             CachePlayerEquipmentRenderers();
             _focusRing = AddSceneSprite("LGO 2D Focus Ring", "Vòng chọn mục tiêu tương tác", TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f, new Vector2(1.45f, 0.16f), RuntimeArtCatalog.Spirit, 1).transform;
             BuildWorldHud();
@@ -303,6 +308,7 @@ namespace LinhGioi.World
             if (_playerLeftLeg != null) _playerLeftLeg.localPosition = ToWorld(new Vector2(-0.11f, -0.54f + legSwing), 0f);
             if (_playerRightLeg != null) _playerRightLeg.localPosition = ToWorld(new Vector2(0.11f, -0.54f - legSwing), 0f);
             if (_voLv1SkillCueRoot != null) _voLv1SkillCueRoot.gameObject.SetActive(state == "ClassSkill" || state == "TrainingCompletePose");
+            if (_voLv1PaperDollRoot != null) _voLv1PaperDollRoot.gameObject.SetActive(_state.Step == TwoDOnboardingStep.Complete && _inventoryInputState != "Applied");
 
             _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "ClassSkill" ? "vo_lv1_first_skill" : state == "Dash" ? "dash_stretch" : state == "Jump" ? "jump_lift" : state == "Walk" ? "stride_bob" : "breathing_idle", phase).Snapshot;
             _lastPresentedPlayerPosition = _state.PlayerPosition;
@@ -1086,6 +1092,14 @@ namespace LinhGioi.World
                 + " | runtimeSkillCue=" + (_voLv1SkillCueRoot != null && _voLv1SkillCueRoot.gameObject.activeSelf);
         }
 
+        private string BuildVoLv1PaperDollAtlasRuntimeSnapshot()
+        {
+            return TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlasSnapshot()
+                + " | runtimeLoadout=" + EnsurePlayerLoadout().Snapshot
+                + " | runtimeAnimation=" + _runtimeAnimationSnapshot
+                + " | active=" + (_voLv1PaperDollRoot != null && _voLv1PaperDollRoot.gameObject.activeSelf);
+        }
+
         private string BuildInventoryTryOnSnapshot()
         {
             var previewLoadout = TwoDCharacterLoadout.CreateStarter("male_base", _moduleCatalog);
@@ -1111,6 +1125,50 @@ namespace LinhGioi.World
             AddSprite(name + " Trail Cyan Edge", new Vector2(0.24f, 0.10f), new Vector2(0.72f, 0.045f), new Color(0.18f, 0.86f, 0.78f, 0.56f), order + 1, root.transform);
             AddSprite(name + " Impact Palm", new Vector2(0.58f, 0.02f), new Vector2(0.18f, 0.18f), new Color(0.95f, 0.72f, 0.28f, 0.78f), order + 2, root.transform, "diamond");
             AddWorldLabel(name + " Label", "VÕ Q", new Vector2(0.22f, 0.26f), 0.026f, RuntimeArtCatalog.Gold, order + 3, root.transform);
+            root.SetActive(false);
+            return root.transform;
+        }
+
+
+        private static Transform AddVoLv1PaperDollOverlay(Transform player, int baseOrder)
+        {
+            var root = new GameObject("LGO 2D Player Vo PaperDoll Atlas Root");
+            root.transform.SetParent(player, false);
+            root.transform.localPosition = Vector3.zero;
+
+            var atlas = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlas();
+            if (atlas != null && atlas.parts != null)
+            {
+                for (var i = 0; i < atlas.parts.Length; i++)
+                {
+                    var part = atlas.parts[i];
+                    AddSprite(
+                        "LGO 2D Player Vo PaperDoll " + part.slot + " " + part.id,
+                        new Vector2(part.x, part.y),
+                        new Vector2(part.w, part.h),
+                        new Color(part.r, part.g, part.b, part.a),
+                        baseOrder + part.sortOffset,
+                        root.transform,
+                        part.shape);
+                }
+            }
+
+            if (atlas != null && atlas.skillCues != null)
+            {
+                for (var i = 0; i < atlas.skillCues.Length; i++)
+                {
+                    var cue = atlas.skillCues[i];
+                    AddSprite(
+                        "LGO 2D Player Vo PaperDoll SkillCue " + cue.id,
+                        new Vector2(cue.x, cue.y),
+                        new Vector2(cue.w, cue.h),
+                        new Color(cue.r, cue.g, cue.b, cue.a),
+                        baseOrder + cue.sortOffset,
+                        root.transform,
+                        cue.shape);
+                }
+            }
+
             root.SetActive(false);
             return root.transform;
         }
