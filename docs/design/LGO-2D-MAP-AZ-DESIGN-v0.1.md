@@ -102,3 +102,13 @@ Các thành phần phải có id riêng để sau này thay art mà không đổ
 2. Controller hiển thị minimap/route summary trong Player capture.
 3. Visual manifest có map snapshot để future session không làm mò.
 4. Player visual capture cho thấy: Cổng Linh Thành, Bia Luyện Khí, lối đi Đông Môn và một map/minimap route rõ ràng.
+
+## Runtime checkpoint — World/Linh Thành Zone Network
+
+Checkpoint 2026-09-09 đưa phần World Map/Linh Thành từ text spec vào runtime spine:
+
+- `WorldMapNetwork: hub=linh-thanh` là snapshot kết nối từ Linh Thành tới Đông Vực, Đô Thị, Linh Sơn, Tây Vực và Âm Giới.
+- `LinhThanhHubRuntime` giữ các district đầu cần mở dần: Đông Môn, Quảng Trường, Học Viện, Đền Linh, Khu Dân Cư.
+- Minimap overlay trong onboarding hiển thị node World nhỏ `LT ↔ Đông Vực / Âm Giới` để người chơi thấy Đông Môn thuộc mạng vùng lớn hơn, không phải một sân luyện cô lập.
+
+Đây vẫn là runtime spine/prototype; chưa claim World Map production, chưa mở teleport/loading, chưa mở social/economy/guild backend và chưa dùng ảnh source.

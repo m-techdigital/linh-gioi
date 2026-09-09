@@ -10,6 +10,7 @@ namespace LinhGioi.World
             MapDistrict[] linhThanhDistricts,
             MapRouteNode[] dongMonRoute,
             MapLayerBudget[] layerBudgets,
+            MapZoneConnection[] zoneConnections,
             MapLandmark[] dongMonLandmarks,
             MapCollisionBand[] dongMonCollisionBands,
             MapTileDefinition[] dongMonTileDefinitions,
@@ -19,6 +20,7 @@ namespace LinhGioi.World
             LinhThanhDistricts = linhThanhDistricts;
             DongMonRoute = dongMonRoute;
             LayerBudgets = layerBudgets;
+            ZoneConnections = zoneConnections;
             DongMonLandmarks = dongMonLandmarks;
             DongMonCollisionBands = dongMonCollisionBands;
             DongMonTileDefinitions = dongMonTileDefinitions;
@@ -26,6 +28,7 @@ namespace LinhGioi.World
             WorldSnapshot = BuildWorldSnapshot(worldZones, linhThanhDistricts);
             TutorialRouteSnapshot = BuildRouteSnapshot(dongMonRoute);
             LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
+            ZoneNetworkSnapshot = BuildZoneNetworkSnapshot(worldZones, linhThanhDistricts, zoneConnections);
             LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
             CollisionSnapshot = BuildCollisionSnapshot(dongMonCollisionBands);
             TilemapSnapshot = BuildTilemapSnapshot(dongMonTileDefinitions, dongMonTileChunks);
@@ -36,6 +39,7 @@ namespace LinhGioi.World
         public MapDistrict[] LinhThanhDistricts { get; }
         public MapRouteNode[] DongMonRoute { get; }
         public MapLayerBudget[] LayerBudgets { get; }
+        public MapZoneConnection[] ZoneConnections { get; }
         public MapLandmark[] DongMonLandmarks { get; }
         public MapCollisionBand[] DongMonCollisionBands { get; }
         public MapTileDefinition[] DongMonTileDefinitions { get; }
@@ -43,11 +47,12 @@ namespace LinhGioi.World
         public string WorldSnapshot { get; }
         public string TutorialRouteSnapshot { get; }
         public string LayerBudgetSnapshot { get; }
+        public string ZoneNetworkSnapshot { get; }
         public string LandmarkSnapshot { get; }
         public string CollisionSnapshot { get; }
         public string TilemapSnapshot { get; }
         public string ParallaxDepthSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
+        public string RuntimeSnapshot => WorldSnapshot + "\n" + ZoneNetworkSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot + "\n" + CollisionSnapshot + "\n" + TilemapSnapshot + "\n" + ParallaxDepthSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -102,6 +107,14 @@ namespace LinhGioi.World
                 },
                 new[]
                 {
+                    new MapZoneConnection("linh-thanh->east", "linh-thanh", "east", "Đông Môn mở Đông Vực Lv.1-30 sau tutorial"),
+                    new MapZoneConnection("linh-thanh->city", "linh-thanh", "city", "Đô Thị Lv.1-40 cho xã hội/công nghệ sau onboarding"),
+                    new MapZoneConnection("linh-thanh->spirit-mountain", "linh-thanh", "spirit-mountain", "Linh Sơn Lv.20-50 cho tu luyện/môn phái"),
+                    new MapZoneConnection("linh-thanh->west", "linh-thanh", "west", "Tây Vực Lv.30-60 cho phụ bản trung cấp"),
+                    new MapZoneConnection("linh-thanh->underworld", "linh-thanh", "underworld", "Âm Giới Lv.60-100 cho invasion/world boss dài hạn")
+                },
+                new[]
+                {
                     new MapLandmark("gate-landmark", "Cổng Linh Thành", 2, "spawn/gatekeeper", "cổng thành đọc ngay khi vào map"),
                     new MapLandmark("training-stone-landmark", "Bia Luyện Khí", 1, "training-stone", "mốc học kỹ năng đầu tiên"),
                     new MapLandmark("wood-bridge", "Cầu Gỗ", 2, "jump", "đọc trước bài học jump"),
@@ -149,6 +162,23 @@ namespace LinhGioi.World
             {
                 if (i > 0) builder.Append(" | ");
                 builder.Append(districts[i].Name);
+            }
+            return builder.ToString();
+        }
+
+
+        private static string BuildZoneNetworkSnapshot(MapZone[] zones, MapDistrict[] districts, MapZoneConnection[] connections)
+        {
+            var builder = new StringBuilder("WorldMapNetwork: hub=linh-thanh");
+            for (var i = 0; i < connections.Length; i++)
+            {
+                builder.Append(" | ").Append(connections[i].Id).Append(':').Append(connections[i].Purpose);
+            }
+            builder.Append("\nLinhThanhHubRuntime: ");
+            for (var i = 0; i < districts.Length && i < 5; i++)
+            {
+                if (i > 0) builder.Append(" -> ");
+                builder.Append(districts[i].Id).Append(':').Append(districts[i].Name);
             }
             return builder.ToString();
         }
@@ -250,6 +280,24 @@ namespace LinhGioi.World
         public string Id { get; }
         public string Name { get; }
         public string Role { get; }
+    }
+
+
+    [Serializable]
+    public readonly struct MapZoneConnection
+    {
+        public MapZoneConnection(string id, string fromZoneId, string toZoneId, string purpose)
+        {
+            Id = id;
+            FromZoneId = fromZoneId;
+            ToZoneId = toZoneId;
+            Purpose = purpose;
+        }
+
+        public string Id { get; }
+        public string FromZoneId { get; }
+        public string ToZoneId { get; }
+        public string Purpose { get; }
     }
 
     [Serializable]

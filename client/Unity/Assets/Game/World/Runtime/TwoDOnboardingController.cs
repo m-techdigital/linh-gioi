@@ -59,6 +59,7 @@ namespace LinhGioi.World
         public string ProductionSceneBeatSnapshot => string.Join("\n", _productionSceneBeats.ToArray());
         public int ProductionSceneBeatCount => _productionSceneBeats.Count;
         public string RuntimeMapSnapshot => _mapCatalog.RuntimeSnapshot;
+        public string RuntimeZoneNetworkSnapshot => _mapCatalog.ZoneNetworkSnapshot;
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
@@ -465,6 +466,7 @@ namespace LinhGioi.World
             AddWorldLabel("LGO 2D Mini Map Layers", "Layers: Sky/Far/Mid/Near/Gameplay/FG", new Vector2(3.18f, 1.69f), 0.021f, new Color(0.73f, 0.87f, 0.88f), 66);
             AddWorldLabel("LGO 2D Base Label", "Base: Male/Female layered", new Vector2(3.18f, 1.55f), 0.022f, RuntimeArtCatalog.Gold, 66);
             AddWorldLabel("LGO 2D Equipment Label", "Gear: Võ/Kiếm Lv1 mix slots", new Vector2(3.18f, 1.42f), 0.021f, RuntimeArtCatalog.Spirit, 66);
+            AddWorldZoneNetworkOverlay();
 
             var route = _mapCatalog.DongMonRoute;
             for (var i = 0; i < route.Length && i < 6; i++)
@@ -475,6 +477,18 @@ namespace LinhGioi.World
                 if (i > 0)
                     AddSprite("LGO 2D Mini Map Link " + i, new Vector2(x - 0.16f, 1.80f), new Vector2(0.19f, 0.025f), new Color(0.18f, 0.70f, 0.75f, 0.72f), 63);
             }
+        }
+
+
+        private void AddWorldZoneNetworkOverlay()
+        {
+            AddSceneBeat("ZONE_NETWORK_OVERLAY World Map hub Linh Thành -> Đông Vực/Âm Giới");
+            AddWorldLabel("LGO 2D World Zone Network Label", "World: LT ↔ Đông Vực / Âm Giới", new Vector2(3.18f, 1.30f), 0.019f, RuntimeArtCatalog.Gold, 66);
+            AddSprite("LGO 2D World Zone Link East", new Vector2(3.02f, 1.17f), new Vector2(0.36f, 0.025f), new Color(0.18f, 0.70f, 0.75f, 0.72f), 63);
+            AddSprite("LGO 2D World Zone Link Underworld", new Vector2(3.34f, 1.17f), new Vector2(0.36f, 0.025f), new Color(0.48f, 0.20f, 0.82f, 0.58f), 63);
+            AddSprite("LGO 2D World Zone Node Linh Thanh", new Vector2(3.18f, 1.17f), new Vector2(0.12f, 0.12f), RuntimeArtCatalog.Gold, 64);
+            AddSprite("LGO 2D World Zone Node Dong Vuc", new Vector2(2.78f, 1.17f), new Vector2(0.10f, 0.10f), RuntimeArtCatalog.Spirit, 64);
+            AddSprite("LGO 2D World Zone Node Am Gioi", new Vector2(3.58f, 1.17f), new Vector2(0.10f, 0.10f), new Color(0.62f, 0.28f, 0.92f, 0.90f), 64);
         }
 
         private void BuildWorldHud()

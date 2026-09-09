@@ -195,3 +195,11 @@ LGO_DONGMON_PARALLAX_POLISH_READY. Đã thêm `ParallaxDepthSnapshot` vào map c
 ## Next after parallax polish
 
 Tiếp tục roadmap 2D không xung đột tab class: hoặc điều tra/tối ưu macOS Player build prepared-size, hoặc nâng inventory inspect/icon grid bằng procedural UI, hoặc chuyển Đông Môn sang authored Tilemap asset khi có asset sạch hợp lệ.
+
+## 2026-09-09 — World/Linh Thành zone-network runtime overlay
+
+LGO_WORLD_ZONE_NETWORK_RUNTIME_READY. Đã đưa World Map/Linh Thành hub vào runtime spine: `MapZoneConnection[]`, `ZoneNetworkSnapshot`, `WorldMapNetwork: hub=linh-thanh`, `LinhThanhHubRuntime` cho Đông Môn/Quảng Trường/Học Viện/Đền Linh/Khu Dân Cư. Minimap overlay trong Player hiện có node nhỏ LT ↔ Đông Vực/Âm Giới để Đông Môn không còn là sân luyện cô lập. Evidence: RED `build/tdd-red/check_zone_network_overlay_red.py` fail rồi PASS, Unity EditMode PASS, Editor smoke PASS, macOS Player build PASS (`totalSize=114649059`, errors=0), Player visual capture PASS 10 frame; runtime smoke matrix 2D đã nâng để bắt `runtimeMapSnapshot` chứa `WorldMapNetwork` và `LinhThanhHubRuntime`.
+
+## Next after zone-network overlay
+
+Map chưa xong toàn bộ. Next map-safe action: mở dần Linh Thành hub shell/Quảng Trường hoặc authored Đông Môn tilemap khi asset sạch sẵn sàng; nếu tiếp tục gặp cold build `prepared ~36GB`, ưu tiên tối ưu URP/package/build profile riêng trước các vòng visual lớn.

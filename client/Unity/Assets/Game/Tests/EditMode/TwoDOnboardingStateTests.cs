@@ -475,6 +475,41 @@ namespace LinhGioi.Tests
             StringAssert.Contains("Mini Boss", map.TutorialRouteSnapshot);
         }
 
+
+        [Test]
+        public void RuntimeMapCatalogKeepsWorldZoneNetwork()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            Assert.That(map.ZoneConnections.Length, Is.GreaterThanOrEqualTo(5));
+            StringAssert.Contains("WorldMapNetwork: hub=linh-thanh", map.ZoneNetworkSnapshot);
+            StringAssert.Contains("linh-thanh->east", map.ZoneNetworkSnapshot);
+            StringAssert.Contains("linh-thanh->spirit-mountain", map.ZoneNetworkSnapshot);
+            StringAssert.Contains("linh-thanh->underworld", map.ZoneNetworkSnapshot);
+            StringAssert.Contains("LinhThanhHubRuntime:", map.ZoneNetworkSnapshot);
+            StringAssert.Contains("east-gate:Đông Môn", map.ZoneNetworkSnapshot);
+            StringAssert.Contains("plaza:Quảng Trường", map.ZoneNetworkSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesZoneNetworkSnapshot()
+        {
+            var host = new GameObject("2D zone network snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("WorldMapNetwork: hub=linh-thanh", controller.RuntimeZoneNetworkSnapshot);
+                StringAssert.Contains("LinhThanhHubRuntime:", controller.RuntimeZoneNetworkSnapshot);
+                StringAssert.Contains("linh-thanh->east", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeMapCatalogKeepsDongMonParallaxPolish()
         {
