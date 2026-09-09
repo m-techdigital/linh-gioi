@@ -119,6 +119,7 @@ namespace LinhGioi.World
                 runtimeLinhThanhMarketShellSnapshot = controller.RuntimeLinhThanhMarketShellSnapshot,
                 runtimeLinhThanhSpiritTempleShellSnapshot = controller.RuntimeLinhThanhSpiritTempleShellSnapshot,
                 runtimeLinhThanhResidentialShellSnapshot = controller.RuntimeLinhThanhResidentialShellSnapshot,
+                runtimeLinhThanhForgeShellSnapshot = controller.RuntimeLinhThanhForgeShellSnapshot,
                 runtimeHubTransitionSnapshot = controller.RuntimeHubTransitionSnapshot,
                 runtimeCharacterBaseSnapshot = controller.RuntimeCharacterBaseSnapshot,
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
@@ -248,6 +249,7 @@ namespace LinhGioi.World
             public string runtimeLinhThanhMarketShellSnapshot;
             public string runtimeLinhThanhSpiritTempleShellSnapshot;
             public string runtimeLinhThanhResidentialShellSnapshot;
+            public string runtimeLinhThanhForgeShellSnapshot;
             public string runtimeHubTransitionSnapshot;
             public string runtimeCharacterBaseSnapshot;
             public string runtimeEquipmentSnapshot;

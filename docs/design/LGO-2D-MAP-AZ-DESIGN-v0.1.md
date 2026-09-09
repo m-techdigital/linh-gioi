@@ -166,7 +166,7 @@ Transition đầu tiên giữa map tutorial và hub là `east-gate -> plaza`. Ru
 
 - World/Linh Thành/Đông Môn hiện là runtime checkpoint, chưa phải production-complete toàn bộ map.
 - Đông Môn đã có route tutorial, collision band, tile chunk flow và parallax/landmark spine để kiểm movement/jump/dash/skill/Shadow Slime.
-- Linh Thành đã có hub shell, Quảng Trường shell, Học Viện shell, Thương Phố shell, Đền Linh shell, Khu Dân Cư shell, unlock presentation từ Đông Môn, board/NPC preview, target selector và label readability pass.
+- Linh Thành đã có hub shell, Quảng Trường shell, Học Viện shell, Thương Phố shell, Đền Linh shell, Khu Dân Cư shell, Khu Rèn shell, unlock presentation từ Đông Môn, board/NPC preview, target selector và label readability pass.
 - Quảng Trường readability dùng quy tắc `world-label-density=reduced`: trong world chỉ để chip ngắn cho mục tiêu tương tác; text chi tiết đi vào HUD/snapshot/manifest để tránh che nhân vật và platform.
 - Next production map nên đi theo từng khu: Học Viện hoặc Thương Phố shell trước, rồi mới nâng tileset/collision/detail. Không crop/dán board và không kéo Meshy/3D trở lại branch 2D.
 
@@ -177,3 +177,5 @@ Thương Phố shell dùng `vendor-row=preview-only` và `auction-board=locked` 
 Đền Linh shell dùng `blessing-altar=preview-only` và `story-shrine=locked` để nhận diện trục tín ngưỡng/story trong Linh Thành mà chưa mở buff, story quest backend hoặc progression mới khi chưa có gate riêng.
 
 Khu Dân Cư shell dùng `npc-home-row=preview-only` và `social-chat-node=locked` để mở trục social residential của Linh Thành ở mức map, nhưng chưa mở housing backend, social backend hoặc player-owned home khi chưa có gate riêng.
+
+Khu Rèn shell dùng `anvil-row=preview-only` và `craft-board=locked` để nhận diện crafting district trong Linh Thành mà chưa mở crafting backend, upgrade economy hoặc item mutation khi chưa có gate riêng.

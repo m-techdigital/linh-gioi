@@ -734,6 +734,38 @@ namespace LinhGioi.Tests
         }
 
 
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhForgeShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("ForgeShell: district=forge", map.LinhThanhForgeShellSnapshot);
+            StringAssert.Contains("anvil-row=preview-only", map.LinhThanhForgeShellSnapshot);
+            StringAssert.Contains("craft-board=locked", map.LinhThanhForgeShellSnapshot);
+            StringAssert.Contains("safe-no-crafting-backend", map.LinhThanhForgeShellSnapshot);
+            StringAssert.Contains("ForgeShell: district=forge", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhForgeShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh forge shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("ForgeShell: district=forge", controller.RuntimeLinhThanhForgeShellSnapshot);
+                StringAssert.Contains("safe-no-crafting-backend", controller.RuntimeLinhThanhForgeShellSnapshot);
+                StringAssert.Contains("ForgeShell: district=forge", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
 
 
         [Test]

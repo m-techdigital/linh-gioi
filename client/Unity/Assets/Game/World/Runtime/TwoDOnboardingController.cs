@@ -74,6 +74,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhMarketShellSnapshot => _mapCatalog.LinhThanhMarketShellSnapshot;
         public string RuntimeLinhThanhSpiritTempleShellSnapshot => _mapCatalog.LinhThanhSpiritTempleShellSnapshot;
         public string RuntimeLinhThanhResidentialShellSnapshot => _mapCatalog.LinhThanhResidentialShellSnapshot;
+        public string RuntimeLinhThanhForgeShellSnapshot => _mapCatalog.LinhThanhForgeShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
@@ -174,6 +175,7 @@ namespace LinhGioi.World
             AddLinhThanhMarketShellPreview();
             AddLinhThanhSpiritTempleShellPreview();
             AddLinhThanhResidentialShellPreview();
+            AddLinhThanhForgeShellPreview();
             AddLinhThanhPlazaHubRuntimePreview();
             AddLinhThanhHubTransitionPreview();
             AddLinhThanhUnlockPresentation();
@@ -496,6 +498,18 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Residential Citizen Ambient", new Vector2(-0.84f, 0.76f), new Vector2(0.08f, 0.18f), new Color(0.54f, 0.86f, 0.92f, 0.32f), -14);
             AddSprite("LGO 2D Residential Chat Node Locked", new Vector2(-0.70f, 0.90f), new Vector2(0.12f, 0.04f), new Color(0.18f, 0.86f, 0.78f, 0.26f), -13);
             AddWorldLabel("LGO 2D Residential Shell Label", "Khu Dân Cư", new Vector2(-1.18f, 1.42f), 0.018f, new Color(0.73f, 0.87f, 0.88f, 0.68f), -9);
+        }
+
+
+        private void AddLinhThanhForgeShellPreview()
+        {
+            AddSceneBeat("LINH_THANH_FORGE_SHELL anvil-row/craft-board local-only no crafting backend");
+            AddSprite("LGO 2D Forge Workshop Silhouette", new Vector2(-1.42f, 0.82f), new Vector2(0.44f, 0.30f), new Color(0.16f, 0.12f, 0.10f, 0.48f), -16);
+            AddSprite("LGO 2D Forge Roof", new Vector2(-1.42f, 1.05f), new Vector2(0.54f, 0.08f), new Color(0.38f, 0.21f, 0.10f, 0.48f), -15);
+            AddSprite("LGO 2D Forge Anvil Preview", new Vector2(-1.54f, 0.62f), new Vector2(0.16f, 0.09f), new Color(0.64f, 0.66f, 0.64f, 0.38f), -14);
+            AddSprite("LGO 2D Forge Glow Local", new Vector2(-1.30f, 0.62f), new Vector2(0.16f, 0.16f), new Color(0.92f, 0.38f, 0.16f, 0.28f), -13);
+            AddSprite("LGO 2D Forge Craft Board Locked", new Vector2(-1.30f, 0.82f), new Vector2(0.14f, 0.06f), new Color(0.92f, 0.72f, 0.28f, 0.28f), -13);
+            AddWorldLabel("LGO 2D Forge Shell Label", "Khu Rèn", new Vector2(-1.70f, 1.22f), 0.018f, new Color(0.92f, 0.72f, 0.28f, 0.68f), -9);
         }
 
 
