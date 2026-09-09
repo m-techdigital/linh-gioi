@@ -54,6 +54,7 @@ namespace LinhGioi.World
         public string RuntimeMapSnapshot => _mapCatalog.RuntimeSnapshot;
         public string RuntimeCharacterBaseSnapshot => _characterBaseCatalog.Snapshot;
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
+        public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
         public string RuntimeRouteProgressSnapshot => "RouteProgress: current=" + _state.CurrentRouteNodeId + " step=" + _state.Step + " action=" + _state.AvailableAction;
@@ -152,6 +153,7 @@ namespace LinhGioi.World
             _shadowSlime = AddShadowSlime("LGO 2D Shadow Slime", new Vector2(3.55f, -1.16f), -1);
             _shadowSlimeLabel = AddWorldLabel("LGO 2D Shadow Slime Label", "SHADOW SLIME", new Vector2(3.55f, -0.34f), 0.034f, new Color(0.82f, 0.60f, 1f), 3).transform;
             AddKiemLv1PreviewRack(new Vector2(3.35f, -2.02f), 4);
+            BuildInventoryTryOnStrip();
             BuildRuntimeMapOverlay();
             AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
@@ -293,6 +295,34 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Spirit Waterfall Foam", new Vector2(3.18f, -0.43f), new Vector2(0.56f, 0.10f), new Color(0.70f, 0.96f, 1f, 0.44f), -12);
             AddSprite("LGO 2D Song Linh Wave A", new Vector2(2.40f, -2.31f), new Vector2(0.74f, 0.045f), new Color(0.16f, 0.84f, 0.82f, 0.30f), 6);
             AddSprite("LGO 2D Song Linh Wave B", new Vector2(3.15f, -2.40f), new Vector2(0.64f, 0.035f), new Color(0.16f, 0.84f, 0.82f, 0.22f), 6);
+        }
+
+
+        private string BuildInventoryTryOnSnapshot()
+        {
+            var previewLoadout = TwoDCharacterLoadout.CreateStarter("male_base", _moduleCatalog);
+            previewLoadout.ApplyVoLv1Starter(_moduleCatalog);
+            previewLoadout.TryPreview("top_kiem_lv1_male", _moduleCatalog);
+            return "InventoryTryOn: flow=select_icon -> inspect_item -> try_on -> cancel_or_apply"
+                + " | selected=top_kiem_lv1_male"
+                + " | inspect=Áo Kiếm Lv1 nam xanh đen gọn"
+                + " | preview=top_kiem_lv1_male"
+                + " | apply=weapon_kiem_lv1_starter"
+                + " | cancel=return_to_vo_lv1"
+                + " | " + previewLoadout.Snapshot;
+        }
+
+        private void BuildInventoryTryOnStrip()
+        {
+            AddSceneBeat("Inventory try-on strip - icon xem món thử đồ áp dụng/hủy");
+            AddSprite("LGO 2D Inventory TryOn Panel", new Vector2(-0.20f, -1.95f), new Vector2(3.08f, 0.58f), new Color(0.03f, 0.08f, 0.13f, 0.90f), 56);
+            AddWorldLabel("LGO 2D Inventory TryOn Title", "HÀNH TRANG", new Vector2(-1.46f, -1.72f), 0.033f, RuntimeArtCatalog.Gold, 67);
+            AddWorldLabel("LGO 2D Inventory TryOn Flow", "icon → xem → thử → áp dụng/hủy", new Vector2(0.17f, -1.72f), 0.026f, RuntimeArtCatalog.Text, 67);
+            AddSprite("LGO 2D Inventory Slot Vo", new Vector2(-1.34f, -2.04f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Gold, 66);
+            AddSprite("LGO 2D Inventory Slot Kiem", new Vector2(-0.88f, -2.04f), new Vector2(0.28f, 0.28f), RuntimeArtCatalog.Spirit, 66);
+            AddSprite("LGO 2D Inventory Slot Sword", new Vector2(-0.42f, -2.04f), new Vector2(0.065f, 0.34f), new Color(0.77f, 0.91f, 0.95f), 67);
+            AddSprite("LGO 2D Inventory Selected Ring", new Vector2(-0.88f, -2.04f), new Vector2(0.38f, 0.38f), new Color(0.18f, 0.86f, 0.78f, 0.34f), 65);
+            AddWorldLabel("LGO 2D Inventory TryOn Preview", "Preview: top_kiem_lv1_male", new Vector2(0.52f, -2.04f), 0.027f, RuntimeArtCatalog.Spirit, 67);
         }
 
         private void BuildRuntimeMapOverlay()

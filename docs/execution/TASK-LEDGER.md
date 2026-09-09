@@ -151,3 +151,11 @@ Thêm `DongMonLandmarks` vào map catalog cho Chapter 1 `Vết Nứt Đông Môn
 ## Next after landmark pass
 
 Tiếp tục map production theo hướng tileset/terrain collision và route node cho jump/dash, hoặc mở inventory try-on UI 2D nhẹ nếu cần kiểm trang bị Võ/Kiếm từ hành trang.
+
+## 2026-09-09 — 2D inventory try-on runtime spine
+
+Đưa flow hành trang đã duyệt vào runtime 2D ở mức nhẹ: scene Đông Môn có strip `HÀNH TRANG` với icon Võ/Kiếm/kiếm starter, selected item `top_kiem_lv1_male`, preview text và snapshot `RuntimeInventoryTryOnSnapshot`. Visual manifest thêm `runtimeInventoryTryOnSnapshot`, bảo vệ flow `select_icon -> inspect_item -> try_on -> cancel_or_apply` và loadout preview `status=TRYING_ON`.
+
+## Next after inventory try-on spine
+
+Tiếp tục bằng tileset/terrain collision pass cho Đông Môn hoặc nâng inventory từ strip preview sang panel inspect/try/apply/cancel có input thật.

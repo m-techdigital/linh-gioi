@@ -169,6 +169,28 @@ namespace LinhGioi.Tests
 
 
         [Test]
+        public void RuntimeControllerExposesInventoryTryOnSnapshotForVisualEvidence()
+        {
+            var host = new GameObject("2D inventory try-on snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("InventoryTryOn", controller.RuntimeInventoryTryOnSnapshot);
+                StringAssert.Contains("select_icon -> inspect_item -> try_on -> cancel_or_apply", controller.RuntimeInventoryTryOnSnapshot);
+                StringAssert.Contains("selected=top_kiem_lv1_male", controller.RuntimeInventoryTryOnSnapshot);
+                StringAssert.Contains("preview=top_kiem_lv1_male", controller.RuntimeInventoryTryOnSnapshot);
+                StringAssert.Contains("weapon_kiem_lv1_starter", controller.RuntimeInventoryTryOnSnapshot);
+                StringAssert.Contains("status=TRYING_ON", controller.RuntimeInventoryTryOnSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void VoLv1StarterModulesCoverMaleFemaleCoreOutfitSlots()
         {
             var modules = TwoDCharacterModuleCatalog.CreateDefault();
