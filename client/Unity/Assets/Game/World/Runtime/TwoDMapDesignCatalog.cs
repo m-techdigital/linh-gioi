@@ -85,6 +85,7 @@ namespace LinhGioi.World
 
         private const string DongMonTilePaletteResourcePath = "LGOMaps/DongMonTilePalette";
         private const string DongMonChunkPlacementResourcePath = "LGOMaps/DongMonChunkPlacement";
+        private const string DongMonAuthoredDetailsResourcePath = "LGOMaps/DongMonAuthoredDetails";
 
         public static string LoadDongMonTilePaletteSourceSnapshot()
         {
@@ -155,11 +156,55 @@ namespace LinhGioi.World
             return builder.ToString();
         }
 
+        public static DongMonAuthoredDetailEntry[] LoadDongMonAuthoredDetails()
+        {
+            var source = LoadDongMonAuthoredDetailsSource();
+            if (source == null || source.details == null || source.details.Length == 0)
+            {
+                return Array.Empty<DongMonAuthoredDetailEntry>();
+            }
+
+            return source.details;
+        }
+
+        public static string LoadDongMonAuthoredDetailsSourceSnapshot()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonAuthoredDetailsResourcePath);
+            if (asset == null)
+            {
+                return "DongMonAuthoredDetailSource: resource=" + DongMonAuthoredDetailsResourcePath + " | missing";
+            }
+
+            var text = asset.text ?? string.Empty;
+            var details = LoadDongMonAuthoredDetails();
+            var builder = new StringBuilder("DongMonAuthoredDetailSource: resource=");
+            builder.Append(DongMonAuthoredDetailsResourcePath);
+            builder.Append(" | bytes=").Append(text.Length);
+            builder.Append(" | details=").Append(details.Length);
+            builder.Append(" | moss=").Append(ContainsToken(text, "moss"));
+            builder.Append(" | step=").Append(ContainsToken(text, "step"));
+            builder.Append(" | rope=").Append(ContainsToken(text, "rope"));
+            builder.Append(" | spirit-dust=").Append(ContainsToken(text, "spirit-dust"));
+            builder.Append(" | rune=").Append(ContainsToken(text, "rune"));
+            builder.Append(" | authored-detail=").Append(ContainsToken(text, "authored-detail"));
+            builder.Append(" | safe-runtime-resource=").Append(ContainsToken(text, "safe-runtime-resource"));
+            builder.Append(" | safe-no-source-image=").Append(ContainsToken(text, "safe-no-source-image"));
+            builder.Append(" | safe-no-3d=").Append(ContainsToken(text, "safe-no-3d"));
+            return builder.ToString();
+        }
+
         private static DongMonChunkPlacementSource LoadDongMonChunkPlacementSource()
         {
             var asset = Resources.Load<TextAsset>(DongMonChunkPlacementResourcePath);
             if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
             return JsonUtility.FromJson<DongMonChunkPlacementSource>(asset.text);
+        }
+
+        private static DongMonAuthoredDetailsSource LoadDongMonAuthoredDetailsSource()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonAuthoredDetailsResourcePath);
+            if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
+            return JsonUtility.FromJson<DongMonAuthoredDetailsSource>(asset.text);
         }
 
         private static bool ContainsToken(string text, string token)
@@ -487,6 +532,35 @@ namespace LinhGioi.World
         public float originY;
         public int tileCount;
         public string gameplayRead;
+    }
+
+    [Serializable]
+    public sealed class DongMonAuthoredDetailsSource
+    {
+        public string id;
+        public string mapId;
+        public string chapter;
+        public string usage;
+        public string[] safety;
+        public DongMonAuthoredDetailEntry[] details;
+    }
+
+    [Serializable]
+    public sealed class DongMonAuthoredDetailEntry
+    {
+        public string id;
+        public string name;
+        public string kind;
+        public string routeNodeId;
+        public float x;
+        public float y;
+        public float w;
+        public float h;
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+        public int sortOrder;
     }
 
     [Serializable]

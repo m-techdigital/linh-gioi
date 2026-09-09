@@ -225,3 +225,7 @@ Checkpoint 2026-09-10 cải thiện độ đọc của district preview rail: ca
 ### Minimap readability checkpoint — 2026-09-10
 
 Checkpoint `LGO_MINIMAP_COMPACT_READABILITY_READY`: minimap/runtime overlay chuyển sang dạng compact cho bản 2D hiện tại. Route text rút còn `Đông Môn → Linh Thành`, district chips dùng mã ngắn `HV TP ĐL KR BH CẢ`, world links chuyển về icon/label ngắn để tránh lấn HUD và callout khu đang chọn. Manifest bắt `runtimeMinimapReadabilitySnapshot` với `MinimapReadability`, `mode=compact-district-route`, `route-text=short`, `district-chips=academy,market,spirit,forge,guild,harbor`, `world-links=icon-only`, `selected-node-progress`, `safe-local-no-backend`. Đây là polish đọc map, chưa mở teleport/travel/backend.
+
+### Đông Môn authored detail resource checkpoint — 2026-09-10
+
+Checkpoint `LGO_DONG_MON_AUTHORED_DETAILS_RESOURCE_READY`: các detail nhỏ của Đông Môn như moss, stone step, bridge rope, dash spirit dust và slime rune đã chuyển từ hardcode trong controller sang `Resources/LGOMaps/DongMonAuthoredDetails.json`. Runtime đọc resource này để vẽ detail pass và manifest bắt `runtimeDongMonAuthoredDetailSourceSnapshot` với `details=7`, `authored-detail=True`, `safe-no-source-image=True`, `safe-runtime-resource=True`, `safe-no-3d=True`. Đây là bước data hóa layout để thay bằng atlas/sprite thật sau này mà không dán tay từng chi tiết.

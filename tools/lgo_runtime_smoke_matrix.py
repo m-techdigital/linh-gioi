@@ -86,6 +86,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
             "runtimeDongMonTilePaletteSnapshot": ["DongMonTilePalette", "tile_ground_grass:earth-green:soft-grass-edge", "tile_dash_lane:spirit-cyan:wind-streak", "tile_slime_arena:violet-corruption:rune-boundary", "safe-no-source-image"],
             "runtimeDongMonTilePaletteSourceSnapshot": ["DongMonTilePaletteSource", "resource=LGOMaps/DongMonTilePalette", "tile_dash_lane=True", "safe-no-source-image=True", "safe-runtime-resource=True"],
             "runtimeDongMonChunkPlacementSourceSnapshot": ["DongMonChunkPlacementSource", "resource=LGOMaps/DongMonChunkPlacement", "chunk_gate_entry@-3.70,-2.02x4", "chunk_dash_lane@1.82,-1.02x4", "authored-placement=True", "safe-runtime-resource=True", "safe-no-3d=True"],
+            "runtimeDongMonAuthoredDetailSourceSnapshot": ["DongMonAuthoredDetailSource", "resource=LGOMaps/DongMonAuthoredDetails", "details=7", "moss=True", "step=True", "rope=True", "spirit-dust=True", "rune=True", "authored-detail=True", "safe-runtime-resource=True", "safe-no-source-image=True", "safe-no-3d=True"],
             "runtimeDongMonAuthoredPassSnapshot": ["DongMonAuthoredPass", "route-segments=5", "detail-density=readable", "collision-boundaries=from-bands", "no-random-decoration"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
             "runtimePlazaHubInputSnapshot": ["PlazaHubInput", "selected=merchant-preview", "layout=spaced-social-triangle", "controls=P select, E interact", "interaction=npc-merchant-preview", "safe-local-no-shop-backend"],

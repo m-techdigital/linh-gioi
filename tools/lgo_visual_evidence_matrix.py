@@ -54,7 +54,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_initial",
         "label": "2D Đông Môn initial HUD/map read",
         "screenshot": "01-initial.bmp",
-        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeMinimapReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
+        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeMinimapReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredDetailSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
         "nonClaim": "not production art",
     },
     {
@@ -236,6 +236,10 @@ def verify_current() -> dict[str, Any]:
     for token in ("DongMonChunkPlacementSource", "resource=LGOMaps/DongMonChunkPlacement", "chunk_gate_entry@-3.70,-2.02x4", "chunk_dash_lane@1.82,-1.02x4", "authored-placement=True", "safe-runtime-resource=True", "safe-no-3d=True"):
         if token not in chunk_source_snapshot:
             failures.append(f"runtimeDongMonChunkPlacementSourceSnapshot missing {token!r}")
+    detail_source_snapshot = str(manifest.get("runtimeDongMonAuthoredDetailSourceSnapshot", ""))
+    for token in ("DongMonAuthoredDetailSource", "resource=LGOMaps/DongMonAuthoredDetails", "details=7", "moss=True", "step=True", "rope=True", "spirit-dust=True", "rune=True", "authored-detail=True", "safe-runtime-resource=True", "safe-no-source-image=True", "safe-no-3d=True"):
+        if token not in detail_source_snapshot:
+            failures.append(f"runtimeDongMonAuthoredDetailSourceSnapshot missing {token!r}")
     authored_snapshot = str(manifest.get("runtimeDongMonAuthoredPassSnapshot", ""))
     for token in ("DongMonAuthoredPass", "route-segments=5", "detail-density=readable", "collision-boundaries=from-bands", "no-random-decoration"):
         if token not in authored_snapshot:

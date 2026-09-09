@@ -225,6 +225,7 @@ namespace LinhGioi.Tests
             Assert.IsNotNull(resultType.GetField("runtimeInventoryInputSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimePlazaHubInputSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhUnlockSnapshot"));
+            Assert.IsNotNull(resultType.GetField("runtimeDongMonAuthoredDetailSourceSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhPlazaHubSnapshot"));
         }
 
@@ -1347,6 +1348,50 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("DongMonChunkPlacementSource", controller.RuntimeDongMonChunkPlacementSourceSnapshot);
                 StringAssert.Contains("chunk_slime_arena@3.25,-1.36x2", controller.RuntimeDongMonChunkPlacementSourceSnapshot);
                 StringAssert.Contains("safe-no-3d", controller.RuntimeDongMonChunkPlacementSourceSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
+        [Test]
+        public void RuntimeMapCatalogLoadsDongMonAuthoredDetailsSourceAsset()
+        {
+            var details = TwoDMapDesignCatalog.LoadDongMonAuthoredDetails();
+            var sourceSnapshot = TwoDMapDesignCatalog.LoadDongMonAuthoredDetailsSourceSnapshot();
+
+            Assert.That(details.Length, Is.EqualTo(7));
+            StringAssert.Contains("DongMonAuthoredDetailSource", sourceSnapshot);
+            StringAssert.Contains("resource=LGOMaps/DongMonAuthoredDetails", sourceSnapshot);
+            StringAssert.Contains("details=7", sourceSnapshot);
+            StringAssert.Contains("moss=True", sourceSnapshot);
+            StringAssert.Contains("step=True", sourceSnapshot);
+            StringAssert.Contains("rope=True", sourceSnapshot);
+            StringAssert.Contains("spirit-dust=True", sourceSnapshot);
+            StringAssert.Contains("rune=True", sourceSnapshot);
+            StringAssert.Contains("authored-detail=True", sourceSnapshot);
+            StringAssert.Contains("safe-no-source-image=True", sourceSnapshot);
+            StringAssert.Contains("safe-runtime-resource=True", sourceSnapshot);
+            StringAssert.Contains("safe-no-3d=True", sourceSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerBuildsDongMonAuthoredDetailsFromResourceForVisualEvidence()
+        {
+            var host = new GameObject("2D Dong Mon authored details source snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonAuthoredDetailSource", controller.RuntimeDongMonAuthoredDetailSourceSnapshot);
+                StringAssert.Contains("details=7", controller.RuntimeDongMonAuthoredDetailSourceSnapshot);
+                StringAssert.Contains("safe-no-source-image=True", controller.RuntimeDongMonAuthoredDetailSourceSnapshot);
+
+                var detailObject = GameObject.Find("LGO 2D Authored Detail detail_bridge_rope rope");
+                Assert.IsNotNull(detailObject);
             }
             finally
             {

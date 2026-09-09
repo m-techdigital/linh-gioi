@@ -105,6 +105,7 @@ namespace LinhGioi.World
         public string RuntimeDongMonTilePaletteSnapshot => _mapCatalog.DongMonTilePaletteSnapshot;
         public string RuntimeDongMonTilePaletteSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonTilePaletteSourceSnapshot();
         public string RuntimeDongMonChunkPlacementSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonChunkPlacementSourceSnapshot();
+        public string RuntimeDongMonAuthoredDetailSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonAuthoredDetailsSourceSnapshot();
         public string RuntimeDongMonAuthoredPassSnapshot => _mapCatalog.DongMonAuthoredPassSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
@@ -215,6 +216,7 @@ namespace LinhGioi.World
             AddSceneSprite("LGO 2D Yard Front Shade", "Bóng nền sân luyện", new Vector2(0f, -2.22f), new Vector2(8.9f, 0.46f), new Color(0.06f, 0.10f, 0.15f), -11);
             AddDongMonUnityTilemapLayer();
             AddDongMonProceduralTilemap();
+            AddDongMonAuthoredDetailPass();
             AddSceneSprite("LGO 2D Jade Path", "Lối ngọc dẫn tới Bia Luyện Khí", new Vector2(0.8f, -0.95f), new Vector2(5.9f, 0.20f), new Color(0.11f, 0.52f, 0.48f, 0.55f), -10);
             _pathGlow = AddSceneSprite("LGO 2D Path Glow", "Lối ngọc phát sáng sau thoại", new Vector2(0.85f, -0.95f), new Vector2(5.7f, 0.08f), new Color(0.16f, 0.86f, 0.78f, 0.78f), -9).transform;
             AddDongMonTerrainCollisionCues();
@@ -931,14 +933,19 @@ namespace LinhGioi.World
 
         private void AddDongMonAuthoredDetailPass()
         {
-            AddSceneBeat("DONG_MON_AUTHORED_PASS readable detail density from route/collision bands no random decoration");
-            AddSprite("LGO 2D Authored Gate Moss Left", new Vector2(-3.34f, -1.83f), new Vector2(0.28f, 0.035f), new Color(0.34f, 0.72f, 0.43f, 0.62f), -4);
-            AddSprite("LGO 2D Authored Gate Moss Right", new Vector2(-2.78f, -1.83f), new Vector2(0.22f, 0.035f), new Color(0.34f, 0.72f, 0.43f, 0.54f), -4);
-            AddSprite("LGO 2D Authored Stone Step A", new Vector2(-1.08f, -1.86f), new Vector2(0.34f, 0.035f), new Color(0.52f, 0.61f, 0.60f, 0.54f), -4);
-            AddSprite("LGO 2D Authored Stone Step B", new Vector2(-0.58f, -1.86f), new Vector2(0.28f, 0.035f), new Color(0.52f, 0.61f, 0.60f, 0.46f), -4);
-            AddSprite("LGO 2D Authored Bridge Rope", new Vector2(0.58f, -0.69f), new Vector2(0.86f, 0.028f), new Color(0.72f, 0.46f, 0.22f, 0.58f), -3);
-            AddSprite("LGO 2D Authored Dash Spirit Dust", new Vector2(2.52f, -0.86f), new Vector2(0.58f, 0.035f), new Color(0.18f, 0.86f, 0.78f, 0.38f), -3);
-            AddSprite("LGO 2D Authored Slime Boundary Rune", new Vector2(3.66f, -1.47f), new Vector2(0.22f, 0.22f), new Color(0.48f, 0.20f, 0.82f, 0.26f), -3);
+            AddSceneBeat("DONG_MON_AUTHORED_PASS readable detail density from authored details resource no random decoration");
+            AddSceneBeat(RuntimeDongMonAuthoredDetailSourceSnapshot);
+            var details = TwoDMapDesignCatalog.LoadDongMonAuthoredDetails();
+            for (var i = 0; i < details.Length; i++)
+            {
+                var detail = details[i];
+                AddSprite(
+                    "LGO 2D Authored Detail " + detail.id + " " + detail.kind,
+                    new Vector2(detail.x, detail.y),
+                    new Vector2(detail.w, detail.h),
+                    new Color(detail.r, detail.g, detail.b, detail.a),
+                    detail.sortOrder);
+            }
         }
 
 

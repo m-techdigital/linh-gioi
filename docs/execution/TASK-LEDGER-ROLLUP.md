@@ -341,3 +341,7 @@ Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và
 ## Next after minimap compact readability
 
 `LGO_MINIMAP_COMPACT_READABILITY_READY`: minimap/runtime overlay được rút gọn để dễ đọc hơn trong Player: route text ngắn, district chips `HV TP ĐL KR BH CẢ`, world links dạng ngắn, manifest có `runtimeMinimapReadabilitySnapshot`/`MinimapReadability`. Map chưa xong production toàn bộ; checkpoint này chốt readability của foundation map hiện tại. Next: authored Đông Môn Tilemap/atlas sạch hoặc mở district detail kế tiếp local-only.
+
+## Next after Đông Môn authored detail resource
+
+`LGO_DONG_MON_AUTHORED_DETAILS_RESOURCE_READY`: detail pass Đông Môn được data hóa qua `DongMonAuthoredDetails.json` thay vì đặt từng sprite trong controller. Runtime manifest/matrix bắt `runtimeDongMonAuthoredDetailSourceSnapshot` và 7 detail role. Next: atlas/sprite pipeline hoặc data hóa layout props/NPC khu tiếp theo.

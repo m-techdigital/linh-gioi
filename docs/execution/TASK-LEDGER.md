@@ -396,3 +396,7 @@ Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm `RuntimePlazaHubDeta
 ## Next after minimap compact readability — 2026-09-10
 
 `LGO_MINIMAP_COMPACT_READABILITY_READY`: minimap/runtime overlay được rút gọn để dễ đọc trong Player, gồm `runtimeMinimapReadabilitySnapshot`, `mode=compact-district-route`, `route-text=short`, `district-chips=academy,market,spirit,forge,guild,harbor`, `world-links=icon-only`, `selected-node-progress`, `safe-local-no-backend`. Evidence kỳ vọng: EditMode, smoke, macOS Player build/capture và visual matrix PASS; frame review chính là `01-initial` và `20-district-harbor-preview`. Map hiện là foundation/runtime preview, chưa production-complete A-Z.
+
+## Next after Đông Môn authored detail resource — 2026-09-10
+
+`LGO_DONG_MON_AUTHORED_DETAILS_RESOURCE_READY`: thêm `Resources/LGOMaps/DongMonAuthoredDetails.json` và loader/snapshot để vẽ moss, stone step, bridge rope, dash spirit dust, slime rune từ resource. Gate cần kiểm `runtimeDongMonAuthoredDetailSourceSnapshot`, `details=7`, `authored-detail=True`, `safe-runtime-resource=True`, `safe-no-source-image=True`, `safe-no-3d=True`. Đây là nền để thay atlas/sprite thật sau này, không claim production art.

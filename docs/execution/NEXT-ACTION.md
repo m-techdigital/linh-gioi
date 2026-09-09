@@ -188,3 +188,7 @@ Không mở shop/economy, teleport thật, giao dịch, bang hội, HP/loot/serv
 ## Next after minimap compact readability — 2026-09-10
 
 `LGO_MINIMAP_COMPACT_READABILITY_READY`: world/minimap overlay đã rút route text, dùng district chips ngắn `HV TP ĐL KR BH CẢ`, world links dạng ngắn và manifest bắt `runtimeMinimapReadabilitySnapshot`. Map chưa xong production A-Z; nền tảng hiện có world map/Linh Thành/Đông Môn/district preview chạy trong Player. Next map-safe action: nâng Đông Môn authored Tilemap/atlas sạch hoặc mở layout chi tiết tiếp theo cho một khu Linh Thành theo local-only gate; không mở teleport/travel/shop/guild/backend.
+
+## Next after Đông Môn authored detail resource — 2026-09-10
+
+`LGO_DONG_MON_AUTHORED_DETAILS_RESOURCE_READY`: Đông Môn đã có resource detail pass riêng `DongMonAuthoredDetails.json` cho moss/step/rope/spirit-dust/rune, runtime đọc resource và manifest/matrix bắt snapshot. Next map-safe action: chuyển các props/NPC blockout tiếp theo sang atlas/sprite pipeline sạch hoặc nâng một khu Linh Thành detail layout bằng resource tương tự; không quay lại hardcode/dán tay, không mở backend.

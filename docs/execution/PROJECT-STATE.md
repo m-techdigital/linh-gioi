@@ -180,3 +180,10 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 - Evidence cần giữ: `runtimeMinimapReadabilitySnapshot` trong visual manifest, Player capture frame `01-initial` và `20-district-harbor-preview`, smoke/visual matrix PASS.
 - Giới hạn: local-only, chưa mở teleport/travel/backend; map chưa production-complete toàn bộ A-Z.
 - Next: Đông Môn authored Tilemap/atlas sạch hoặc mở chi tiết khu Linh Thành tiếp theo với guard local-only.
+
+## 2026-09-10 — Đông Môn authored detail resource
+
+- Trạng thái: `LGO_DONG_MON_AUTHORED_DETAILS_RESOURCE_READY`; detail pass Đông Môn đã tách sang `Resources/LGOMaps/DongMonAuthoredDetails.json`.
+- Evidence cần giữ: `runtimeDongMonAuthoredDetailSourceSnapshot` trong manifest với `details=7`, `moss/step/rope/spirit-dust/rune`, `safe-no-source-image`, `safe-no-3d`.
+- Giới hạn: đây là data/runtime foundation, chưa phải production concept art.
+- Next: atlas/sprite pipeline sạch cho props/NPC hoặc Linh Thành detail layout resource.
