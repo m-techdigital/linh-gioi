@@ -397,6 +397,13 @@ namespace LinhGioi.Tests
             StringAssert.Contains("Sky/Fog", map.LayerBudgetSnapshot);
             StringAssert.Contains("Gameplay Plane", map.LayerBudgetSnapshot);
             StringAssert.Contains("Foreground", map.LayerBudgetSnapshot);
+            Assert.That(map.DongMonLandmarks.Length, Is.GreaterThanOrEqualTo(6));
+            StringAssert.Contains("Landmarks: Chapter 1: Vết Nứt Đông Môn", map.LandmarkSnapshot);
+            StringAssert.Contains("gate-landmark", map.LandmarkSnapshot);
+            StringAssert.Contains("wood-bridge", map.LandmarkSnapshot);
+            StringAssert.Contains("spirit-waterfall", map.LandmarkSnapshot);
+            StringAssert.Contains("song-linh", map.LandmarkSnapshot);
+            StringAssert.Contains("outer-forest", map.LandmarkSnapshot);
             StringAssert.Contains("Người Giữ Cổng", map.TutorialRouteSnapshot);
             StringAssert.Contains("Bia Luyện Khí", map.TutorialRouteSnapshot);
             StringAssert.Contains("Shadow Slime", map.TutorialRouteSnapshot);
@@ -417,6 +424,9 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("Linh Thành", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("Đông Môn", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("LayerBudget", controller.RuntimeMapSnapshot);
+                StringAssert.Contains("Landmarks", controller.RuntimeMapSnapshot);
+                StringAssert.Contains("Cầu Gỗ", controller.RuntimeMapSnapshot);
+                StringAssert.Contains("Thác Nước", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("Chapter 1", controller.RuntimeMapSnapshot);
                 StringAssert.Contains("Mini Boss", controller.RuntimeMapSnapshot);
             }

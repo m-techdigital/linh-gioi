@@ -9,25 +9,30 @@ namespace LinhGioi.World
             MapZone[] worldZones,
             MapDistrict[] linhThanhDistricts,
             MapRouteNode[] dongMonRoute,
-            MapLayerBudget[] layerBudgets)
+            MapLayerBudget[] layerBudgets,
+            MapLandmark[] dongMonLandmarks)
         {
             WorldZones = worldZones;
             LinhThanhDistricts = linhThanhDistricts;
             DongMonRoute = dongMonRoute;
             LayerBudgets = layerBudgets;
+            DongMonLandmarks = dongMonLandmarks;
             WorldSnapshot = BuildWorldSnapshot(worldZones, linhThanhDistricts);
             TutorialRouteSnapshot = BuildRouteSnapshot(dongMonRoute);
             LayerBudgetSnapshot = BuildLayerBudgetSnapshot(layerBudgets);
+            LandmarkSnapshot = BuildLandmarkSnapshot(dongMonLandmarks);
         }
 
         public MapZone[] WorldZones { get; }
         public MapDistrict[] LinhThanhDistricts { get; }
         public MapRouteNode[] DongMonRoute { get; }
         public MapLayerBudget[] LayerBudgets { get; }
+        public MapLandmark[] DongMonLandmarks { get; }
         public string WorldSnapshot { get; }
         public string TutorialRouteSnapshot { get; }
         public string LayerBudgetSnapshot { get; }
-        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot;
+        public string LandmarkSnapshot { get; }
+        public string RuntimeSnapshot => WorldSnapshot + "\nRoute: " + TutorialRouteSnapshot + "\n" + LayerBudgetSnapshot + "\n" + LandmarkSnapshot;
 
         public static TwoDMapDesignCatalog CreateDefault()
         {
@@ -79,6 +84,15 @@ namespace LinhGioi.World
                     new MapLayerBudget(2, "Near Background", "cây, nhà, cầu, tháp", "đặt landmark/route đọc được"),
                     new MapLayerBudget(1, "Gameplay Plane", "terrain, platform, player, NPC, monster", "collision và tương tác rõ"),
                     new MapLayerBudget(0, "Foreground", "cỏ, đèn, lá, hạt linh khí", "che nhẹ, không che HUD/action")
+                },
+                new[]
+                {
+                    new MapLandmark("gate-landmark", "Cổng Linh Thành", 2, "spawn/gatekeeper", "cổng thành đọc ngay khi vào map"),
+                    new MapLandmark("training-stone-landmark", "Bia Luyện Khí", 1, "training-stone", "mốc học kỹ năng đầu tiên"),
+                    new MapLandmark("wood-bridge", "Cầu Gỗ", 2, "jump", "đọc trước bài học jump"),
+                    new MapLandmark("spirit-waterfall", "Thác Nước", 3, "dash", "mốc chuyển nhịp dash và chiều sâu"),
+                    new MapLandmark("song-linh", "Sóng Linh", 0, "class-skill", "hiệu ứng foreground báo linh lực"),
+                    new MapLandmark("outer-forest", "Rừng Ngoại Thành", 3, "shadow-slime", "vùng quái cơ bản ngoài cổng")
                 });
         }
 
@@ -118,7 +132,20 @@ namespace LinhGioi.World
             }
             return builder.ToString();
         }
+
+
+        private static string BuildLandmarkSnapshot(MapLandmark[] landmarks)
+        {
+            var builder = new StringBuilder("Landmarks: Chapter 1: Vết Nứt Đông Môn | ");
+            for (var i = 0; i < landmarks.Length; i++)
+            {
+                if (i > 0) builder.Append(" | ");
+                builder.Append(landmarks[i].Id).Append(':').Append(landmarks[i].Name).Append("@L").Append(landmarks[i].LayerIndex).Append("->").Append(landmarks[i].RouteNodeId);
+            }
+            return builder.ToString();
+        }
     }
+
 
     [Serializable]
     public readonly struct MapZone
@@ -166,6 +193,26 @@ namespace LinhGioi.World
         public string Id { get; }
         public string Name { get; }
         public string Marker { get; }
+        public string Purpose { get; }
+    }
+
+
+    [Serializable]
+    public readonly struct MapLandmark
+    {
+        public MapLandmark(string id, string name, int layerIndex, string routeNodeId, string purpose)
+        {
+            Id = id;
+            Name = name;
+            LayerIndex = layerIndex;
+            RouteNodeId = routeNodeId;
+            Purpose = purpose;
+        }
+
+        public string Id { get; }
+        public string Name { get; }
+        public int LayerIndex { get; }
+        public string RouteNodeId { get; }
         public string Purpose { get; }
     }
 

@@ -118,6 +118,7 @@ namespace LinhGioi.World
             AddSceneSprite("LGO 2D Moon Glow", "Vầng linh nguyệt sau Linh Thành", new Vector2(2.95f, 1.55f), new Vector2(0.72f, 0.72f), new Color(0.42f, 0.74f, 0.82f, 0.28f), -19);
             AddSceneSprite("LGO 2D Distant Wall", "Tường thành xa tạo chiều sâu", new Vector2(-1.65f, 0.45f), new Vector2(3.8f, 1.45f), new Color(0.08f, 0.19f, 0.30f), -18);
             AddSceneSprite("LGO 2D Distant Roofline", "Mái thành nhiều lớp phía sau", new Vector2(-1.65f, 1.2f), new Vector2(4.15f, 0.18f), new Color(0.13f, 0.31f, 0.42f), -17);
+            AddDongMonLandmarkSilhouettes();
 
             AddSceneSprite("LGO 2D Linh Thanh Gate Left Pillar", "Cổng Linh Thành - trụ trái", new Vector2(-2.6f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
             AddSceneSprite("LGO 2D Linh Thanh Gate Right Pillar", "Cổng Linh Thành - trụ phải", new Vector2(-0.75f, 0.18f), new Vector2(0.34f, 1.65f), new Color(0.11f, 0.27f, 0.38f), -16);
@@ -278,6 +279,20 @@ namespace LinhGioi.World
             RefreshPlayerEquipmentPresentation();
             RefreshPlayerAnimationPresentation();
             RefreshWorldHud();
+        }
+
+
+        private void AddDongMonLandmarkSilhouettes()
+        {
+            AddSceneBeat("Đông Môn landmark pass: Cầu Gỗ/Thác Nước/Sóng Linh/Rừng Ngoại Thành");
+            AddSprite("LGO 2D Outer Forest Canopy A", new Vector2(2.95f, 0.88f), new Vector2(0.92f, 0.34f), new Color(0.06f, 0.25f, 0.20f, 0.78f), -15);
+            AddSprite("LGO 2D Outer Forest Trunk A", new Vector2(2.78f, 0.50f), new Vector2(0.10f, 0.62f), new Color(0.13f, 0.10f, 0.07f, 0.82f), -14);
+            AddSprite("LGO 2D Wood Bridge Deck", new Vector2(1.05f, -0.55f), new Vector2(1.34f, 0.08f), new Color(0.38f, 0.21f, 0.10f, 0.88f), -8);
+            AddSprite("LGO 2D Wood Bridge Rail", new Vector2(1.05f, -0.36f), new Vector2(1.20f, 0.045f), new Color(0.50f, 0.29f, 0.13f, 0.86f), -7);
+            AddSprite("LGO 2D Spirit Waterfall", new Vector2(3.18f, 0.08f), new Vector2(0.22f, 0.98f), new Color(0.18f, 0.75f, 0.88f, 0.36f), -13);
+            AddSprite("LGO 2D Spirit Waterfall Foam", new Vector2(3.18f, -0.43f), new Vector2(0.56f, 0.10f), new Color(0.70f, 0.96f, 1f, 0.44f), -12);
+            AddSprite("LGO 2D Song Linh Wave A", new Vector2(2.40f, -2.31f), new Vector2(0.74f, 0.045f), new Color(0.16f, 0.84f, 0.82f, 0.30f), 6);
+            AddSprite("LGO 2D Song Linh Wave B", new Vector2(3.15f, -2.40f), new Vector2(0.64f, 0.035f), new Color(0.16f, 0.84f, 0.82f, 0.22f), 6);
         }
 
         private void BuildRuntimeMapOverlay()

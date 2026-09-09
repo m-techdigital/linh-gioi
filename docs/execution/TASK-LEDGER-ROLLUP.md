@@ -121,3 +121,11 @@ Bổ sung class module thứ hai sau Võ Lv1: áo Kiếm nam/nữ dùng fit prof
 ## Next after 2D-04
 
 Ưu tiên production map pass cho Linh Thành/Đông Môn: thêm landmark/parallax/route nodes rõ hơn theo GDD 2D mới, giữ scope nhỏ và kiểm runtime visual thật.
+
+## 2026-09-09 — Đông Môn landmark/parallax pass
+
+Thêm `DongMonLandmarks` vào map catalog cho Chapter 1 `Vết Nứt Đông Môn`: Cổng Linh Thành, Bia Luyện Khí, Cầu Gỗ, Thác Nước, Sóng Linh và Rừng Ngoại Thành, kèm layer index + route node. Runtime scene thêm silhouette cầu, thác, rừng và sóng linh để map đọc được nhiều mốc hơn nhưng không che HUD/NPC/combat. Visual manifest ghi `Landmarks: Chapter 1` trong `runtimeMapSnapshot`.
+
+## Next after landmark pass
+
+Tiếp tục map production theo hướng tileset/terrain collision và route node cho jump/dash, hoặc mở inventory try-on UI 2D nhẹ nếu cần kiểm trang bị Võ/Kiếm từ hành trang.
