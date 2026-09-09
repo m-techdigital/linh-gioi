@@ -98,8 +98,21 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (TwoDOnboardingSmokeRunner.ShouldRun())
+                {
+                    TwoDOnboardingSmokeRunner.RunFromCommandLine();
+                    return;
+                }
+
+                if (TwoDOnboardingVisualCaptureRunner.ShouldRun())
+                {
+                    TwoDOnboardingVisualCaptureRunner.Attach(gameObject);
+                    return;
+                }
+
                 var config = ClientRuntimeConfig.LoadStreamingAssets();
                 Debug.Log($"[LinhGioi] 2D bootstrap environment={config.environment} protocol={config.protocolVersion} gamedata={config.gamedataVersion}");
+                TwoDOnboardingController.Attach(gameObject);
                 if (!config.connectOnStart) return;
                 _realtimeClient = new TcpRealtimeClient();
                 _realtimeClient.StateChanged += OnConnectionStateChanged;
