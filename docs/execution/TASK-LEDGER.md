@@ -380,3 +380,7 @@ Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm `RuntimePlazaHubDeta
 - Runtime: thêm `RuntimeLinhThanhDistrictDetailSnapshot` với role/detail/guard cho academy, market, spirit-temple, forge, guild, harbor.
 - Visual: capture thêm `16-district-market-preview` từ Player thật; frame giữ ring/label Thương Phố và không che HUD/minimap.
 - Guard: Thương Phố chỉ `vendor-row-only`, không shop, trade, economy hoặc backend district.
+
+## 2026-09-10 — Linh Thành Đền Linh district preview runtime checkpoint
+
+`LGO_LINHTHANH_SPIRIT_TEMPLE_PREVIEW_READY`: thêm Player visual frame `17-district-spirit-temple-preview` cho district preview rail Linh Thành. Flow capture chuyển Học Viện → Thương Phố → Đền Linh, manifest giữ `DistrictPreviewRail selected=spirit-temple label=Đền Linh route=plaza->spirit-temple` và `DistrictDetail role=story-blessing-preview detail=altar-local-only next=quest-buff-gate`. Evidence: Unity EditMode `total=131 passed=130 failed=0 skipped=1`, Editor smoke PASS, macOS Player build PASS, visual capture PASS 17 frame, visual evidence matrix PASS. Giới hạn: local-only, chưa mở buff/story/district backend và chưa phải production art map hoàn chỉnh.

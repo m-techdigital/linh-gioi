@@ -325,3 +325,7 @@ Hoàn tất checkpoint map/runtime nhỏ: Linh Thành district preview rail sau 
 ## 2026-09-10 — LGO_LINHTHANH_DISTRICT_DETAIL_READY
 
 Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và visual frame Thương Phố. Evidence gồm RED compile fail, EditMode pass, smoke pass, macOS Player build và visual capture 16 frame.
+
+## 2026-09-10 — Linh Thành Đền Linh district preview runtime checkpoint
+
+`LGO_LINHTHANH_SPIRIT_TEMPLE_PREVIEW_READY`: thêm Player visual frame `17-district-spirit-temple-preview` cho district preview rail Linh Thành. Flow capture chuyển Học Viện → Thương Phố → Đền Linh, manifest giữ `DistrictPreviewRail selected=spirit-temple label=Đền Linh route=plaza->spirit-temple` và `DistrictDetail role=story-blessing-preview detail=altar-local-only next=quest-buff-gate`. Evidence: Unity EditMode `total=131 passed=130 failed=0 skipped=1`, Editor smoke PASS, macOS Player build PASS, visual capture PASS 17 frame, visual evidence matrix PASS. Giới hạn: local-only, chưa mở buff/story/district backend và chưa phải production art map hoàn chỉnh.

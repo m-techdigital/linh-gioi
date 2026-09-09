@@ -84,6 +84,11 @@ namespace LinhGioi.World
             yield return null;
             yield return Capture(evidenceDir, "16-district-market-preview");
 
+            controller.SelectNextLinhThanhDistrictPreview();
+            controller.RefreshForSmoke();
+            yield return null;
+            yield return Capture(evidenceDir, "17-district-spirit-temple-preview");
+
             controller.UseSelectedPlazaHubTarget();
             controller.RefreshForSmoke();
             yield return null;
@@ -112,7 +117,7 @@ namespace LinhGioi.World
             var resultPath = Path.Combine(evidenceDir, "twod-onboarding-visual-manifest.json");
             var result = new TwoDOnboardingVisualCaptureResult
             {
-                status = _screenshots.Count == 16 ? "PASS" : "FAIL",
+                status = _screenshots.Count == 17 ? "PASS" : "FAIL",
                 unityVersion = Application.unityVersion,
                 platform = Application.platform.ToString(),
                 evidenceDir = evidenceDir,

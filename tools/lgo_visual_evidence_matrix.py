@@ -108,6 +108,13 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "nonClaim": "not production market economy backend",
     },
     {
+        "id": "two_d_linh_thanh_spirit_temple_preview",
+        "label": "2D Linh Thanh spirit temple district preview",
+        "screenshot": "17-district-spirit-temple-preview.bmp",
+        "requiredManifest": ["runtimeLinhThanhDistrictPreviewSnapshot", "runtimeLinhThanhDistrictDetailSnapshot", "runtimeLinhThanhSpiritTempleShellSnapshot", "hudSnapshot"],
+        "nonClaim": "not production blessing or story backend",
+    },
+    {
         "id": "two_d_plaza_board_preview",
         "label": "2D Plaza board local preview",
         "screenshot": "11-plaza-board-preview.bmp",
@@ -169,11 +176,11 @@ def verify_current() -> dict[str, Any]:
         if token not in dong_mon_readability_snapshot:
             failures.append(f"runtimeDongMonReadabilitySnapshot missing {token!r}")
     district_preview_snapshot = str(manifest.get("runtimeLinhThanhDistrictPreviewSnapshot", ""))
-    for token in ("DistrictPreviewRail", "unlocked=True", "selected=market", "label=Thương Phố", "route=plaza->market", "controls=M select-district", "safe-no-trade-backend", "safe-no-district-backend", "safe-local-no-backend"):
+    for token in ("DistrictPreviewRail", "unlocked=True", "selected=spirit-temple", "label=Đền Linh", "route=plaza->spirit-temple", "controls=M select-district", "safe-no-buff-backend", "safe-no-district-backend", "safe-local-no-backend"):
         if token not in district_preview_snapshot:
             failures.append(f"runtimeLinhThanhDistrictPreviewSnapshot missing {token!r}")
     district_detail_snapshot = str(manifest.get("runtimeLinhThanhDistrictDetailSnapshot", ""))
-    for token in ("DistrictDetail", "selected=market", "role=starter-commerce-preview", "detail=vendor-row-only", "safe-no-trade-backend", "safe-no-economy-backend", "safe-no-district-backend", "safe-local-no-backend"):
+    for token in ("DistrictDetail", "selected=spirit-temple", "role=story-blessing-preview", "detail=altar-local-only", "next=quest-buff-gate", "safe-no-buff-backend", "safe-no-district-backend", "safe-local-no-backend"):
         if token not in district_detail_snapshot:
             failures.append(f"runtimeLinhThanhDistrictDetailSnapshot missing {token!r}")
 

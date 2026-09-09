@@ -151,3 +151,10 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 ## LGO_LINHTHANH_DISTRICT_DETAIL_READY — 2026-09-10
 
 `feature/2d` đã có `RuntimeLinhThanhDistrictDetailSnapshot` và Player capture 16 frame. Frame `16-district-market-preview` cho thấy district rail chọn Thương Phố sau Học Viện, manifest guard `safe-no-trade-backend`, `safe-no-economy-backend`, `safe-no-district-backend`. Map tổng thể vẫn pre-alpha blockout, chưa production-complete.
+
+## 2026-09-10 — Linh Thành Đền Linh preview rail
+
+- Marker: `LGO_LINHTHANH_SPIRIT_TEMPLE_PREVIEW_READY`.
+- Trạng thái: runtime 2D đã có Player capture riêng `17-district-spirit-temple-preview` cho Đền Linh trong district preview rail; manifest selected `spirit-temple`, route `plaza->spirit-temple`, detail `altar-local-only`, next `quest-buff-gate`.
+- Giới hạn: preview local-only, chưa phải production map/art hoàn thiện, chưa mở buff/story/backend/teleport.
+- Next: tiếp tục map-safe bằng polish visual/readability Linh Thành hoặc nâng Đông Môn Tilemap/atlas sạch.

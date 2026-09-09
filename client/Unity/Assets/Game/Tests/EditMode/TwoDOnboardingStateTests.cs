@@ -1664,5 +1664,47 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void RuntimeControllerCyclesDistrictPreviewToSpiritTempleWithStoryGuard()
+        {
+            var host = new GameObject("2D Linh Thanh spirit temple preview test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+                Assert.IsTrue(controller.SelectNextLinhThanhDistrictPreview());
+
+                StringAssert.Contains("DistrictPreviewRail", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("selected=spirit-temple", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("label=Đền Linh", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("route=plaza->spirit-temple", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+                StringAssert.Contains("safe-no-buff-backend", controller.RuntimeLinhThanhDistrictPreviewSnapshot);
+
+                StringAssert.Contains("DistrictDetail", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("selected=spirit-temple", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("role=story-blessing-preview", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("detail=altar-local-only", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("next=quest-buff-gate", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("safe-no-buff-backend", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+                StringAssert.Contains("safe-no-district-backend", controller.RuntimeLinhThanhDistrictDetailSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
     }
 }

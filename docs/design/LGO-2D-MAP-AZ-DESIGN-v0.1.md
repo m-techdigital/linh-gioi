@@ -212,3 +212,6 @@ Sau unlock Đông Môn, người chơi có thể xem lộ trình các khu Linh T
 ### Runtime checkpoint — Linh Thành district detail/cycle
 
 District preview rail giờ có detail snapshot riêng cho từng khu. Capture runtime chọn Học Viện rồi chuyển sang Thương Phố để chứng minh rail là flow cycle chứ không phải một marker tĩnh: `DistrictDetail: selected=market | role=starter-commerce-preview | detail=vendor-row-only | safe-no-trade-backend | safe-no-economy-backend`. Thương Phố vẫn là preview local-only, chưa mở shop, trade, economy hoặc backend.
+### Runtime checkpoint — Linh Thành Đền Linh district preview
+
+Checkpoint 2026-09-10 thêm frame runtime riêng cho Đền Linh trong district preview rail. Sau unlock Đông Môn, capture Player chuyển rail Học Viện → Thương Phố → Đền Linh và manifest giữ `DistrictPreviewRail: selected=spirit-temple | label=Đền Linh | route=plaza->spirit-temple` cùng `DistrictDetail: selected=spirit-temple | role=story-blessing-preview | detail=altar-local-only | next=quest-buff-gate`. Đây là preview local-only để chứng minh hướng map/story trong Linh Thành; chưa mở buff, story quest backend, teleport hoặc district backend.
