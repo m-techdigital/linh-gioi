@@ -73,6 +73,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhAcademyShellSnapshot => _mapCatalog.LinhThanhAcademyShellSnapshot;
         public string RuntimeLinhThanhMarketShellSnapshot => _mapCatalog.LinhThanhMarketShellSnapshot;
         public string RuntimeLinhThanhSpiritTempleShellSnapshot => _mapCatalog.LinhThanhSpiritTempleShellSnapshot;
+        public string RuntimeLinhThanhResidentialShellSnapshot => _mapCatalog.LinhThanhResidentialShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
@@ -172,6 +173,7 @@ namespace LinhGioi.World
             AddLinhThanhAcademyShellPreview();
             AddLinhThanhMarketShellPreview();
             AddLinhThanhSpiritTempleShellPreview();
+            AddLinhThanhResidentialShellPreview();
             AddLinhThanhPlazaHubRuntimePreview();
             AddLinhThanhHubTransitionPreview();
             AddLinhThanhUnlockPresentation();
@@ -482,6 +484,18 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Spirit Temple Altar Preview", new Vector2(0.98f, 0.92f), new Vector2(0.16f, 0.12f), new Color(0.92f, 0.72f, 0.28f, 0.32f), -14);
             AddSprite("LGO 2D Spirit Temple Incense VFX", new Vector2(1.22f, 0.96f), new Vector2(0.06f, 0.30f), new Color(0.18f, 0.86f, 0.78f, 0.24f), -13);
             AddWorldLabel("LGO 2D Spirit Temple Shell Label", "Đền Linh", new Vector2(0.90f, 1.52f), 0.019f, new Color(0.73f, 0.87f, 0.88f, 0.70f), -9);
+        }
+
+
+        private void AddLinhThanhResidentialShellPreview()
+        {
+            AddSceneBeat("LINH_THANH_RESIDENTIAL_SHELL npc-home/social-chat local-only no housing backend");
+            AddSprite("LGO 2D Residential Home Row", new Vector2(-0.84f, 1.02f), new Vector2(0.56f, 0.28f), new Color(0.12f, 0.24f, 0.30f, 0.42f), -16);
+            AddSprite("LGO 2D Residential Roof A", new Vector2(-1.02f, 1.24f), new Vector2(0.28f, 0.08f), new Color(0.30f, 0.18f, 0.12f, 0.42f), -15);
+            AddSprite("LGO 2D Residential Roof B", new Vector2(-0.66f, 1.22f), new Vector2(0.28f, 0.08f), new Color(0.30f, 0.18f, 0.12f, 0.36f), -15);
+            AddSprite("LGO 2D Residential Citizen Ambient", new Vector2(-0.84f, 0.76f), new Vector2(0.08f, 0.18f), new Color(0.54f, 0.86f, 0.92f, 0.32f), -14);
+            AddSprite("LGO 2D Residential Chat Node Locked", new Vector2(-0.70f, 0.90f), new Vector2(0.12f, 0.04f), new Color(0.18f, 0.86f, 0.78f, 0.26f), -13);
+            AddWorldLabel("LGO 2D Residential Shell Label", "Khu Dân Cư", new Vector2(-1.18f, 1.42f), 0.018f, new Color(0.73f, 0.87f, 0.88f, 0.68f), -9);
         }
 
 

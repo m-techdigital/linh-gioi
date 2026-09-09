@@ -702,6 +702,38 @@ namespace LinhGioi.Tests
         }
 
 
+        [Test]
+        public void RuntimeMapCatalogKeepsLinhThanhResidentialShell()
+        {
+            var map = TwoDMapDesignCatalog.CreateDefault();
+
+            StringAssert.Contains("ResidentialShell: district=residential", map.LinhThanhResidentialShellSnapshot);
+            StringAssert.Contains("npc-home-row=preview-only", map.LinhThanhResidentialShellSnapshot);
+            StringAssert.Contains("social-chat-node=locked", map.LinhThanhResidentialShellSnapshot);
+            StringAssert.Contains("safe-no-housing-backend", map.LinhThanhResidentialShellSnapshot);
+            StringAssert.Contains("ResidentialShell: district=residential", map.RuntimeSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesLinhThanhResidentialShellSnapshot()
+        {
+            var host = new GameObject("2D Linh Thanh residential shell snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("ResidentialShell: district=residential", controller.RuntimeLinhThanhResidentialShellSnapshot);
+                StringAssert.Contains("safe-no-housing-backend", controller.RuntimeLinhThanhResidentialShellSnapshot);
+                StringAssert.Contains("ResidentialShell: district=residential", controller.RuntimeMapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
 
 
         [Test]
