@@ -87,6 +87,7 @@ namespace LinhGioi.World
         private const string DongMonChunkPlacementResourcePath = "LGOMaps/DongMonChunkPlacement";
         private const string DongMonAuthoredDetailsResourcePath = "LGOMaps/DongMonAuthoredDetails";
         private const string DongMonNpcSpritesResourcePath = "LGOMaps/DongMonNpcSprites";
+        private const string DongMonInteractionMarkersResourcePath = "LGOMaps/DongMonInteractionMarkers";
 
         public static string LoadDongMonTilePaletteSourceSnapshot()
         {
@@ -251,6 +252,49 @@ namespace LinhGioi.World
                 + " | safe-local-no-backend=" + ContainsToken(text, "safe-local-no-backend");
         }
 
+        public static DongMonInteractionMarkerEntry[] LoadDongMonInteractionMarkers()
+        {
+            var source = LoadDongMonInteractionMarkerSource();
+            if (source == null || source.markers == null || source.markers.Length == 0)
+            {
+                return Array.Empty<DongMonInteractionMarkerEntry>();
+            }
+
+            return source.markers;
+        }
+
+        public static string LoadDongMonInteractionMarkerSourceSnapshot()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonInteractionMarkersResourcePath);
+            if (asset == null)
+            {
+                return "DongMonInteractionMarkerSource: resource=" + DongMonInteractionMarkersResourcePath + " | missing";
+            }
+
+            var text = asset.text ?? string.Empty;
+            var markers = LoadDongMonInteractionMarkers();
+            var builder = new StringBuilder("DongMonInteractionMarkerSource: resource=");
+            builder.Append(DongMonInteractionMarkersResourcePath);
+            builder.Append(" | bytes=").Append(text.Length);
+            builder.Append(" | markers=").Append(markers.Length);
+            builder.Append(" | route=");
+            for (var i = 0; i < markers.Length; i++)
+            {
+                if (i > 0) builder.Append(',');
+                builder.Append(markers[i].routeNodeId);
+            }
+            for (var i = 0; i < markers.Length; i++)
+            {
+                builder.Append(" | ").Append(markers[i].id).Append(':').Append(markers[i].action);
+            }
+            builder.Append(" | authored-interaction-marker=").Append(ContainsToken(text, "authored-interaction-marker"));
+            builder.Append(" | safe-runtime-resource=").Append(ContainsToken(text, "safe-runtime-resource"));
+            builder.Append(" | safe-no-source-image=").Append(ContainsToken(text, "safe-no-source-image"));
+            builder.Append(" | safe-no-3d=").Append(ContainsToken(text, "safe-no-3d"));
+            builder.Append(" | safe-local-no-backend=").Append(ContainsToken(text, "safe-local-no-backend"));
+            return builder.ToString();
+        }
+
         private static DongMonChunkPlacementSource LoadDongMonChunkPlacementSource()
         {
             var asset = Resources.Load<TextAsset>(DongMonChunkPlacementResourcePath);
@@ -270,6 +314,13 @@ namespace LinhGioi.World
             var asset = Resources.Load<TextAsset>(DongMonNpcSpritesResourcePath);
             if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
             return JsonUtility.FromJson<DongMonNpcSpriteSource>(asset.text);
+        }
+
+        private static DongMonInteractionMarkerSource LoadDongMonInteractionMarkerSource()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonInteractionMarkersResourcePath);
+            if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
+            return JsonUtility.FromJson<DongMonInteractionMarkerSource>(asset.text);
         }
 
         private static bool ContainsToken(string text, string token)
@@ -666,6 +717,35 @@ namespace LinhGioi.World
         public float b;
         public float a;
         public int sortOffset;
+    }
+
+    [Serializable]
+    public sealed class DongMonInteractionMarkerSource
+    {
+        public string id;
+        public string mapId;
+        public string chapter;
+        public string usage;
+        public string[] safety;
+        public DongMonInteractionMarkerEntry[] markers;
+    }
+
+    [Serializable]
+    public sealed class DongMonInteractionMarkerEntry
+    {
+        public string id;
+        public string label;
+        public string routeNodeId;
+        public string action;
+        public float x;
+        public float y;
+        public float radiusW;
+        public float radiusH;
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+        public int sortOrder;
     }
 
     [Serializable]

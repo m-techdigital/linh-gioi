@@ -108,6 +108,8 @@ namespace LinhGioi.World
         public string RuntimeDongMonChunkPlacementSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonChunkPlacementSourceSnapshot();
         public string RuntimeDongMonAuthoredDetailSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonAuthoredDetailsSourceSnapshot();
         public string RuntimeDongMonNpcSpriteSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonNpcSpriteSourceSnapshot();
+        public string RuntimeDongMonInteractionMarkerSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonInteractionMarkerSourceSnapshot();
+        public string RuntimeDongMonPlayerSceneFitSnapshot => BuildDongMonPlayerSceneFitSnapshot();
         public string RuntimeDongMonAuthoredPassSnapshot => _mapCatalog.DongMonAuthoredPassSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
@@ -219,6 +221,7 @@ namespace LinhGioi.World
             AddDongMonUnityTilemapLayer();
             AddDongMonProceduralTilemap();
             AddDongMonAuthoredDetailPass();
+            AddDongMonInteractionMarkers();
             AddSceneSprite("LGO 2D Jade Path", "Lối ngọc dẫn tới Bia Luyện Khí", new Vector2(0.8f, -0.95f), new Vector2(5.9f, 0.20f), new Color(0.11f, 0.52f, 0.48f, 0.55f), -10);
             _pathGlow = AddSceneSprite("LGO 2D Path Glow", "Lối ngọc phát sáng sau thoại", new Vector2(0.85f, -0.95f), new Vector2(5.7f, 0.08f), new Color(0.16f, 0.86f, 0.78f, 0.78f), -9).transform;
             AddDongMonTerrainCollisionCues();
@@ -245,6 +248,7 @@ namespace LinhGioi.World
             BuildInventoryTryOnStrip();
             BuildRuntimeMapOverlay();
             AddSceneBeat("Nhân vật người chơi - tân thủ nhập thành");
+            AddSceneBeat(RuntimeDongMonPlayerSceneFitSnapshot);
             _player = AddCharacter("LGO 2D Player", TwoDOnboardingState.PlayerStart, RuntimeArtCatalog.Text, RuntimeArtCatalog.Spirit, new Color(0.05f, 0.06f, 0.08f), 2);
             CachePlayerEquipmentRenderers();
             _focusRing = AddSceneSprite("LGO 2D Focus Ring", "Vòng chọn mục tiêu tương tác", TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f, new Vector2(1.45f, 0.16f), RuntimeArtCatalog.Spirit, 1).transform;
@@ -514,6 +518,22 @@ namespace LinhGioi.World
                 + " | collision-labels=chip-only"
                 + " | avoids-hud-overlap"
                 + " | safe-local-no-backend";
+        }
+
+        private string BuildDongMonPlayerSceneFitSnapshot()
+        {
+            return "DongMonPlayerSceneFit: map=dong-mon"
+                + " | actor=player"
+                + " | groundBandY=-1.58..-0.78"
+                + " | footAnchor=bottom-center"
+                + " | contactShadow=LayeredCharacter Shadow Slot Shadow"
+                + " | playerSortOrder=2"
+                + " | groundSortOrder=-2"
+                + " | markerSortOrder=5"
+                + " | routeAnchors=gatekeeper,training-stone,jump,dash,shadow-slime"
+                + " | safe-no-3d=True"
+                + " | safe-no-source-image=True"
+                + " | safe-runtime-player-evidence=True";
         }
 
         private Vector2 PlazaHubTargetPosition()
@@ -948,6 +968,23 @@ namespace LinhGioi.World
                     new Vector2(detail.w, detail.h),
                     new Color(detail.r, detail.g, detail.b, detail.a),
                     detail.sortOrder);
+            }
+        }
+
+        private void AddDongMonInteractionMarkers()
+        {
+            AddSceneBeat("DONG_MON_INTERACTION_MARKERS data-driven playable route markers for first map");
+            AddSceneBeat(RuntimeDongMonInteractionMarkerSourceSnapshot);
+            var markers = TwoDMapDesignCatalog.LoadDongMonInteractionMarkers();
+            for (var i = 0; i < markers.Length; i++)
+            {
+                var marker = markers[i];
+                var color = new Color(marker.r, marker.g, marker.b, marker.a);
+                var position = new Vector2(marker.x, marker.y);
+                AddSprite("LGO 2D Interaction Marker " + marker.id + " Ring", position, new Vector2(marker.radiusW, marker.radiusH), color, marker.sortOrder, null, "ellipse");
+                AddSprite("LGO 2D Interaction Marker " + marker.id + " Beam", position + new Vector2(0f, 0.18f), new Vector2(0.045f, 0.28f), new Color(marker.r, marker.g, marker.b, Mathf.Min(0.46f, marker.a)), marker.sortOrder - 1);
+                AddSprite("LGO 2D Interaction Marker " + marker.id + " Label Backing", position + new Vector2(0f, 0.42f), new Vector2(0.54f, 0.14f), new Color(0.03f, 0.08f, 0.12f, 0.76f), marker.sortOrder);
+                AddWorldLabel("LGO 2D Interaction Marker " + marker.id + " Label", marker.label, position + new Vector2(0f, 0.42f), 0.020f, new Color(marker.r, marker.g, marker.b, 0.92f), marker.sortOrder + 1);
             }
         }
 

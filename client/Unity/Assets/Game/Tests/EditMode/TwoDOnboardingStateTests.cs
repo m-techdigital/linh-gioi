@@ -227,6 +227,8 @@ namespace LinhGioi.Tests
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhUnlockSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeDongMonAuthoredDetailSourceSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeDongMonNpcSpriteSourceSnapshot"));
+            Assert.IsNotNull(resultType.GetField("runtimeDongMonInteractionMarkerSourceSnapshot"));
+            Assert.IsNotNull(resultType.GetField("runtimeDongMonPlayerSceneFitSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhPlazaHubSnapshot"));
         }
 
@@ -1540,6 +1542,78 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("DongMonAuthoredPass", controller.RuntimeDongMonAuthoredPassSnapshot);
                 StringAssert.Contains("detail-density=readable", controller.RuntimeDongMonAuthoredPassSnapshot);
                 StringAssert.Contains("collision-boundaries=from-bands", controller.RuntimeDongMonAuthoredPassSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void DongMonInteractionMarkersLoadFromRuntimeResource()
+        {
+            var markers = TwoDMapDesignCatalog.LoadDongMonInteractionMarkers();
+            var sourceSnapshot = TwoDMapDesignCatalog.LoadDongMonInteractionMarkerSourceSnapshot();
+
+            Assert.That(markers.Length, Is.EqualTo(5));
+            Assert.AreEqual("marker_gate_keeper", markers[0].id);
+            Assert.AreEqual("Talk", markers[0].action);
+            Assert.AreEqual("gatekeeper", markers[0].routeNodeId);
+            StringAssert.Contains("DongMonInteractionMarkerSource", sourceSnapshot);
+            StringAssert.Contains("resource=LGOMaps/DongMonInteractionMarkers", sourceSnapshot);
+            StringAssert.Contains("markers=5", sourceSnapshot);
+            StringAssert.Contains("marker_training_stone", sourceSnapshot);
+            StringAssert.Contains("marker_shadow_slime", sourceSnapshot);
+            StringAssert.Contains("safe-runtime-resource=True", sourceSnapshot);
+            StringAssert.Contains("safe-no-source-image=True", sourceSnapshot);
+        }
+
+
+        [Test]
+        public void RuntimeControllerExposesDongMonPlayerSceneFitForPcGroundingEvidence()
+        {
+            var host = new GameObject("2D Dong Mon player scene fit test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonPlayerSceneFit", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("groundBandY=-1.58..-0.78", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("footAnchor=bottom-center", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("contactShadow=LayeredCharacter Shadow Slot Shadow", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("playerSortOrder=2", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("routeAnchors=gatekeeper,training-stone,jump,dash,shadow-slime", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("safe-runtime-player-evidence=True", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+
+                Assert.IsNotNull(GameObject.Find("LGO 2D Player"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Player LayeredCharacter Shadow Slot Shadow"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Dong Mon Unity Tilemap"));
+                StringAssert.Contains("cells=16", controller.RuntimeDongMonUnityTilemapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void RuntimeControllerRendersDongMonInteractionMarkersForPlayerEvidence()
+        {
+            var host = new GameObject("2D Dong Mon interaction marker test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonInteractionMarkerSource", controller.RuntimeDongMonInteractionMarkerSourceSnapshot);
+                StringAssert.Contains("markers=5", controller.RuntimeDongMonInteractionMarkerSourceSnapshot);
+                StringAssert.Contains("route=gatekeeper,training-stone,jump,dash,shadow-slime", controller.RuntimeDongMonInteractionMarkerSourceSnapshot);
+                StringAssert.Contains("safe-no-3d=True", controller.RuntimeDongMonInteractionMarkerSourceSnapshot);
+
+                Assert.IsNotNull(GameObject.Find("LGO 2D Interaction Marker marker_gate_keeper Ring"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Interaction Marker marker_training_stone Ring"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Interaction Marker marker_shadow_slime Ring"));
             }
             finally
             {

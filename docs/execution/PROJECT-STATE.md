@@ -1,14 +1,14 @@
 # PROJECT STATE — Linh Giới Online 2D
 
-Ưu tiên owner mới nhất 2026-09-10: Codex tự quyết hướng kỹ thuật, nhưng phải phục vụ sản phẩm 2D owner có thể tự kiểm chứng trong Player. Goal hiện tại là **hoàn thiện map đầu Đông Môn trước**, sau đó mới tiếp nhận công việc tab riêng để hoàn thiện 5 class, slot đồ, chuyển động và thay đồ khớp. Góc cổng illustrated hiện mới là draft, không đồng nghĩa map đầu đã xong. Không mở map thứ hai hoặc mở rộng hub/district trước khi Đông Môn đạt gate.
+Ưu tiên owner mới nhất 2026-09-10: Codex tự quyết hướng kỹ thuật, nhưng phải phục vụ sản phẩm 2D owner có thể tự kiểm chứng trong Player. Goal hiện tại là **hoàn thiện map đầu Đông Môn trước**, sau đó làm **một class đầu tiên** đủ base body, paper-doll slot, tách đồ, thay đồ, chuyển động và skill trong Player thật để kiểm chứng workflow trước khi nhân rộng sang 5 class. Góc cổng illustrated hiện mới là draft, không đồng nghĩa map đầu đã xong. Không mở map thứ hai hoặc mở rộng hub/district trước khi Đông Môn đạt gate.
 
 Quyết định kỹ thuật đang khóa:
 
 - Đông Môn chuyển dần sang authored Tilemap/Grid + Sprite Atlas/prop atlas + parallax nhiều lớp, data-driven bằng Resource JSON trong giai đoạn draft.
 - Runtime map phải chứng minh flow spawn -> Người Giữ Cổng -> Bia Luyện Khí -> jump/dash/class skill -> Shadow Slime -> complete trong macOS Player thật, có capture/manifest và review ảnh.
 - Không polish primitive/rectangle vô hạn, không crop/dán ảnh concept/reference, không Meshy/3D, không thay frozen surfaces.
-- Sau gate map đầu, 5 class đi theo base chung nam/nữ, paper-doll slots, anchor/pivot, alpha item thật, layer order, motion sync và Player verification cho chọn class/mặc/tháo đồ/chuyển động.
-- Vì có tab khác đang làm 5 class, chỉ tiếp nhận qua commit/asset đã rõ ownership; không sửa đè source dở trong main checkout hoặc worktree của tab đó.
+- Sau gate map đầu, làm một class đầu tiên theo base chung nam/nữ, paper-doll slots, anchor/pivot, alpha item thật, layer order, motion sync và Player verification cho chọn class/mặc/tháo đồ/chuyển động/skill.
+- Sau khi class đầu pass mới nhân rộng sang 5 class; tab song song đã dừng nhưng vẫn không sửa trực tiếp main checkout hoặc ghi đè worktree cũ.
 
 Gate thao tác kiểm chứng chi tiết nằm ở `NEXT-ACTION.md`.
 
@@ -18,6 +18,11 @@ Gate thao tác kiểm chứng chi tiết nằm ở `NEXT-ACTION.md`.
 
 Next/gate: owner xem capture `build/dongmon-art/player-final/03-dialogue.png` (bản copy bền ở `build/dongmon-art-checkpoint/`) và duyệt bố cục/palette/tỷ lệ trước khi nhân rộng. Sau duyệt mới mở thêm foreground/prop và ghép asset 5 class đã được tab riêng chuẩn hóa. Hướng/plan/evidence: `docs/design/dong-mon-illustrated/DESIGN.md`. Không tiếp polish primitive; không ghi đè checkout chính hoặc source tab 5 class. Không có blocker runtime; gate còn lại là duyệt mỹ thuật.
 
+
+
+## Đông Môn interaction marker + PC grounding checkpoint — 2026-09-10
+
+`LGO_DONG_MON_PC_GROUNDING_MARKERS_READY`: Đông Môn map đầu có thêm runtime resource `DongMonInteractionMarkers.json` cho 5 mốc route `gatekeeper -> training-stone -> jump -> dash -> shadow-slime`, render marker/label trực tiếp trong Player để kiểm điểm tương tác. Runtime manifest/matrix bắt `runtimeDongMonInteractionMarkerSourceSnapshot` và `runtimeDongMonPlayerSceneFitSnapshot`; PC được kiểm theo `footAnchor=bottom-center`, contact shadow, ground band, sort order và route anchors để batch class tiếp theo ghép nhân vật/đồ/motion trên cùng hệ tọa độ, không chỉnh tay theo ảnh chụp. Evidence: Unity EditMode `total=143 passed=142 failed=0 skipped=1`, onboarding smoke PASS, macOS Player build Succeeded, Player visual capture PASS 20 frame, runtime smoke matrix PASS, visual evidence matrix PASS, no-3D/no-source-image PASS. Visual vẫn là blockout kỹ thuật, chưa phải art giống concept; next action là làm một class đầu tiên có base/paper-doll/tách đồ/thay đồ/motion/skill trong Player thật trước khi nhân rộng sang 5 class.
 
 ## Gate Keeper silhouette — 2026-09-10
 

@@ -1,0 +1,14 @@
+{
+  "id": "dong-mon-interaction-markers-v0",
+  "mapId": "dong-mon",
+  "chapter": "Chapter 1: Vết Nứt Đông Môn",
+  "usage": "authored-interaction-marker",
+  "safety": ["safe-no-source-image", "safe-runtime-resource", "safe-no-3d", "safe-local-no-backend"],
+  "markers": [
+    {"id": "marker_gate_keeper", "label": "E TALK", "routeNodeId": "gatekeeper", "action": "Talk", "x": -2.18, "y": -1.08, "radiusW": 0.92, "radiusH": 0.16, "r": 0.95, "g": 0.72, "b": 0.28, "a": 0.34, "sortOrder": 5},
+    {"id": "marker_training_stone", "label": "E TRAIN", "routeNodeId": "training-stone", "action": "Train", "x": 2.45, "y": -0.90, "radiusW": 0.86, "radiusH": 0.16, "r": 0.18, "g": 0.86, "b": 0.78, "a": 0.32, "sortOrder": 5},
+    {"id": "marker_jump_gap", "label": "SPACE", "routeNodeId": "jump", "action": "Jump", "x": 0.84, "y": -1.48, "radiusW": 0.78, "radiusH": 0.14, "r": 0.95, "g": 0.72, "b": 0.28, "a": 0.30, "sortOrder": 5},
+    {"id": "marker_dash_lane", "label": "SHIFT", "routeNodeId": "dash", "action": "Dash", "x": 2.48, "y": -0.78, "radiusW": 1.14, "radiusH": 0.13, "r": 0.18, "g": 0.86, "b": 0.78, "a": 0.28, "sortOrder": 5},
+    {"id": "marker_shadow_slime", "label": "Q SKILL", "routeNodeId": "shadow-slime", "action": "Skill", "x": 3.55, "y": -1.58, "radiusW": 0.92, "radiusH": 0.16, "r": 0.82, "g": 0.60, "b": 1.00, "a": 0.30, "sortOrder": 5}
+  ]
+}
