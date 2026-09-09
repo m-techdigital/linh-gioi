@@ -391,6 +391,59 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void OnboardingStateExposesCurrentRouteNodeForMapProgress()
+        {
+            var state = new TwoDOnboardingState();
+            state.Reset();
+
+            Assert.AreEqual("spawn", state.CurrentRouteNodeId);
+            state.Move(TwoDOnboardingState.GateKeeperPosition - state.PlayerPosition);
+            Assert.AreEqual("gatekeeper", state.CurrentRouteNodeId);
+            state.TryUseAction();
+            Assert.AreEqual("gatekeeper", state.CurrentRouteNodeId);
+            state.TryUseAction();
+            state.Move(TwoDOnboardingState.TrainingStonePosition - state.PlayerPosition);
+            Assert.AreEqual("training-stone", state.CurrentRouteNodeId);
+            state.TryUseAction();
+            Assert.AreEqual("jump", state.CurrentRouteNodeId);
+            state.TryUseJump();
+            Assert.AreEqual("dash", state.CurrentRouteNodeId);
+            state.TryUseDash();
+            Assert.AreEqual("shadow-slime", state.CurrentRouteNodeId);
+            state.TryUseClassSkill();
+            Assert.AreEqual("return-gate", state.CurrentRouteNodeId);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesRouteProgressSnapshotForVisualEvidence()
+        {
+            var host = new GameObject("2D route progress snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+                StringAssert.Contains("current=spawn", controller.RuntimeRouteProgressSnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.RefreshForSmoke();
+                StringAssert.Contains("current=gatekeeper", controller.RuntimeRouteProgressSnapshot);
+
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("current=shadow-slime", controller.RuntimeRouteProgressSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerBuildsReadableProceduralSceneBeats()
         {
             var host = new GameObject("2D onboarding scene beat test host");

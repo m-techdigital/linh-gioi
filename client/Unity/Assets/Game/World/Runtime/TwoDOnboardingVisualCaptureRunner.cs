@@ -87,6 +87,7 @@ namespace LinhGioi.World
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
                 runtimeCombatSnapshot = controller.RuntimeCombatSnapshot,
+                runtimeRouteProgressSnapshot = controller.RuntimeRouteProgressSnapshot,
                 screenshotCount = _screenshots.Count,
                 screenshots = _screenshots.ToArray()
             };
@@ -202,6 +203,7 @@ namespace LinhGioi.World
             public string runtimeEquipmentSnapshot;
             public string runtimeAnimationSnapshot;
             public string runtimeCombatSnapshot;
+            public string runtimeRouteProgressSnapshot;
             public int screenshotCount;
             public string[] screenshots;
         }

@@ -106,3 +106,10 @@ Bám kịch bản/GDD mới trước khi design map production: `TwoDMapDesignCa
 ## Next after map layer budget
 
 Đóng checkpoint sau validation; tiếp theo chọn 2D-04 Kiếm Lv1 hoặc nâng map production Linh Thành/Đông Môn bằng landmark/route/parallax rõ hơn.
+## 2026-09-09 — Đông Môn route progress runtime spine
+
+Thêm route progress cho tutorial/Chapter 1: state expose `CurrentRouteNodeId` từ `spawn` tới `return-gate`, controller expose `RuntimeRouteProgressSnapshot`, visual manifest ghi route progress và minimap hiển thị dòng `Node:` hiện tại. Đây là bước map-runtime nhỏ nhưng player-visible, giúp các batch map sau biết người chơi đang ở node nào thay vì chỉ có route tĩnh.
+
+## Next after route progress
+
+Đóng checkpoint sau validation; tiếp theo chọn 2D-04 Kiếm Lv1 hoặc nâng map production Linh Thành/Đông Môn bằng landmark/parallax/route nodes rõ hơn.

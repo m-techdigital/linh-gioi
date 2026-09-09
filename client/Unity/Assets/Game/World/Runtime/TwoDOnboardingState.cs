@@ -45,6 +45,7 @@ namespace LinhGioi.World
         public string LastAnimationIntent { get; private set; } = "Idle";
         public bool ShadowSlimeVisible { get; private set; }
         public bool ShadowSlimeDefeated { get; private set; }
+        public string CurrentRouteNodeId { get; private set; } = "spawn";
 
         public void Reset()
         {
@@ -60,6 +61,7 @@ namespace LinhGioi.World
             LastAnimationIntent = "Idle";
             ShadowSlimeVisible = false;
             ShadowSlimeDefeated = false;
+            CurrentRouteNodeId = "spawn";
             Refresh();
         }
 
@@ -84,6 +86,7 @@ namespace LinhGioi.World
                     HintText = "Bấm E hoặc nút hành động để nhận chỉ dẫn.";
                     FeedbackText = "Người Giữ Cổng cúi chào, ánh ngọc sáng nhẹ quanh cổng.";
                     AvailableAction = TwoDOnboardingAction.Continue;
+                    CurrentRouteNodeId = "gatekeeper";
                     return true;
                 case TwoDOnboardingAction.Continue:
                     Step = TwoDOnboardingStep.GoToTrainingStone;
@@ -92,6 +95,7 @@ namespace LinhGioi.World
                     ObjectiveText = "Tới Bia Luyện Khí trong sân phía đông.";
                     HintText = "Đi theo ánh ngọc tới bia đá.";
                     FeedbackText = "Một vệt sáng dẫn về phía Bia Luyện Khí.";
+                    CurrentRouteNodeId = "training-stone";
                     Refresh();
                     return true;
                 case TwoDOnboardingAction.Train:
@@ -103,6 +107,7 @@ namespace LinhGioi.World
                     FeedbackText = "Bia Luyện Khí mở bài tập thân pháp: nhảy.";
                     LastAnimationIntent = "ClassSkill";
                     AvailableAction = TwoDOnboardingAction.Jump;
+                    CurrentRouteNodeId = "jump";
                     return true;
                 default:
                     return false;
@@ -119,6 +124,7 @@ namespace LinhGioi.World
             FeedbackText = "Bạn bật khỏi mặt sân, linh khí nâng gót chân.";
             LastAnimationIntent = "Jump";
             AvailableAction = TwoDOnboardingAction.Dash;
+            CurrentRouteNodeId = "dash";
             return true;
         }
 
@@ -134,6 +140,7 @@ namespace LinhGioi.World
             ShadowSlimeVisible = true;
             ShadowSlimeDefeated = false;
             AvailableAction = TwoDOnboardingAction.Skill;
+            CurrentRouteNodeId = "shadow-slime";
             return true;
         }
 
@@ -149,6 +156,7 @@ namespace LinhGioi.World
             ShadowSlimeVisible = false;
             ShadowSlimeDefeated = true;
             AvailableAction = TwoDOnboardingAction.None;
+            CurrentRouteNodeId = "return-gate";
             return true;
         }
 
@@ -198,6 +206,7 @@ namespace LinhGioi.World
                 AreaText = "Cổng Linh Thành";
                 ObjectiveText = nearGateKeeper ? "Nói chuyện với Người Giữ Cổng." : "Tới gặp Người Giữ Cổng ở Cổng Linh Thành.";
                 HintText = nearGateKeeper ? "Bấm E để trò chuyện." : "Di chuyển bằng WASD/phím mũi tên. Lại gần NPC để trò chuyện.";
+                CurrentRouteNodeId = nearGateKeeper ? "gatekeeper" : "spawn";
                 return;
             }
 
@@ -205,6 +214,8 @@ namespace LinhGioi.World
             AreaText = "Sân Luyện Khí";
             ObjectiveText = nearTrainingStone ? "Kích hoạt Bia Luyện Khí." : "Tới Bia Luyện Khí trong sân phía đông.";
             HintText = nearTrainingStone ? "Bấm E để cộng hưởng linh lực." : "Đi theo ánh ngọc tới bia đá.";
+            if (Step == TwoDOnboardingStep.GoToTrainingStone)
+                CurrentRouteNodeId = nearTrainingStone ? "training-stone" : "movement";
         }
 
         private static Vector2 ClampToPlayableArea(Vector2 value)
