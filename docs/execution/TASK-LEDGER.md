@@ -365,3 +365,6 @@ Tiếp map production spine bằng authored Đông Môn Tilemap/tileset sạch h
 ## 2026-09-10 — Quảng Trường layout anchors
 
 Checkpoint `LGO_LINHTHANH_PLAZA_LAYOUT_ANCHORS_READY`: thêm `RuntimePlazaHubLayoutSnapshot` vào controller/visual manifest/matrix, render social-spawn anchor và guild locked chip để Quảng Trường đọc rõ hub xã hội sau unlock Đông Môn. Scope local-only, không mở event/shop/guild/backend.
+## 2026-09-10 — Quảng Trường anchor detail inspect
+
+Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm `RuntimePlazaHubDetailSnapshot` vào controller/capture/matrix, hiển thị detail line ở Quảng Trường cho target hiện chọn; merchant preview khóa `try-before-shop`, không tạo shop/economy backend.

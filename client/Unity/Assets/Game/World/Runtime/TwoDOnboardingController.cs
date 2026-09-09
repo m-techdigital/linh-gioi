@@ -81,6 +81,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhHarborShellSnapshot => _mapCatalog.LinhThanhHarborShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
+        public string RuntimePlazaHubDetailSnapshot => BuildPlazaHubDetailSnapshot();
         public string RuntimePlazaHubLayoutSnapshot => BuildPlazaHubLayoutSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
         public string RuntimeDongMonReadabilitySnapshot => BuildDongMonReadabilitySnapshot();
@@ -362,6 +363,31 @@ namespace LinhGioi.World
         }
 
 
+
+
+        private string BuildPlazaHubDetailLabel()
+        {
+            if (_state.SelectedPlazaHubTargetId == "gate-guide") return "Inspect: Người Giữ Cổng — route guide / local-only";
+            if (_state.SelectedPlazaHubTargetId == "merchant-preview") return "Inspect: Thương Nhân — thử đồ trước, chưa mở shop";
+            if (_state.SelectedPlazaHubTargetId == "event-board") return "Inspect: Bảng Sự Kiện — notice preview, chưa mở event";
+            return "Inspect: Bang Hội — locked preview";
+        }
+
+        private string BuildPlazaHubDetailSnapshot()
+        {
+            if (!_state.LinhThanhUnlocked)
+                return "PlazaHubDetail: locked-until-unlock | safe-local-no-backend";
+
+            var selected = _state.SelectedPlazaHubTargetId;
+            if (selected == "gate-guide")
+                return "PlazaHubDetail: selected=gate-guide | role=route-guide | detail=east-gate-return-and-city-intro | safe-no-teleport-backend | safe-local-no-backend";
+            if (selected == "merchant-preview")
+                return "PlazaHubDetail: selected=merchant-preview | role=starter-gear-preview | detail=try-before-shop | safe-no-shop-backend | safe-local-no-backend";
+            if (selected == "event-board")
+                return "PlazaHubDetail: selected=event-board | role=community-event-preview | detail=notice-only | safe-no-event-backend | safe-local-no-backend";
+            return "PlazaHubDetail: selected=guild-locked | role=future-social-system | detail=locked-guild-bulletin | safe-no-guild-backend | safe-local-no-backend";
+        }
+
         private string BuildPlazaHubLayoutSnapshot()
         {
             return "PlazaHubLayout: anchors=5"
@@ -462,7 +488,7 @@ namespace LinhGioi.World
                 _plazaHubSelectorRing.gameObject.SetActive(linhThanhUnlocked);
                 _plazaHubSelectorRing.localPosition = ToWorld(PlazaHubTargetPosition(), 0f);
             }
-            SetHudText(_plazaHubSelectedLabel, string.Empty);
+            SetHudText(_plazaHubSelectedLabel, linhThanhUnlocked && _state.PlazaHubPreviewOpen ? BuildPlazaHubDetailLabel() : string.Empty);
             SetHudText(_miniMapProgress, linhThanhUnlocked ? (_state.HubTransitionPreviewOpen ? "Node: east-gate → plaza preview" : "Node: return-gate → plaza") : "Node: " + _state.CurrentRouteNodeId);
             RefreshPlayerEquipmentPresentation();
             RefreshInventoryPanelPresentation();
@@ -597,7 +623,7 @@ namespace LinhGioi.World
             AddWorldLabel("LGO 2D Plaza Guild Locked Chip", "locked", new Vector2(0.94f, 0.36f), 0.014f, new Color(0.73f, 0.87f, 0.88f, 0.72f), 6, _plazaHubRuntimeRoot);
             AddWorldLabel("LGO 2D Plaza Hub Runtime Label", "Quảng Trường", new Vector2(0.02f, 0.19f), 0.020f, new Color(0.73f, 0.87f, 0.88f, 0.84f), 6, _plazaHubRuntimeRoot);
             _plazaHubSelectorRing = AddSprite("LGO 2D Plaza Target Selector Ring", new Vector2(-0.18f, 0.64f), new Vector2(0.46f, 0.08f), new Color(0.18f, 0.86f, 0.78f, 0.72f), 7, _plazaHubRuntimeRoot).transform;
-            _plazaHubSelectedLabel = AddWorldLabel("LGO 2D Plaza Selected Target Label", string.Empty, new Vector2(-1.76f, -1.38f), 0.016f, RuntimeArtCatalog.Spirit, 7, _plazaHubRuntimeRoot);
+            _plazaHubSelectedLabel = AddWorldLabel("LGO 2D Plaza Selected Target Label", string.Empty, new Vector2(-1.58f, -1.12f), 0.019f, RuntimeArtCatalog.Spirit, 7, _plazaHubRuntimeRoot);
             _plazaHubRuntimeRoot.gameObject.SetActive(false);
         }
 

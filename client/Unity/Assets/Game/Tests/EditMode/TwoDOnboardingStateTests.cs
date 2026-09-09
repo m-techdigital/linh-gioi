@@ -1022,6 +1022,46 @@ namespace LinhGioi.Tests
         }
 
 
+
+        [Test]
+        public void RuntimeControllerExposesSelectedPlazaHubDetailForVisualEvidence()
+        {
+            var host = new GameObject("2D plaza selected detail test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("PlazaHubDetail", controller.RuntimePlazaHubDetailSnapshot);
+                StringAssert.Contains("locked-until-unlock", controller.RuntimePlazaHubDetailSnapshot);
+
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+                Assert.IsTrue(controller.SelectNextPlazaHubTarget());
+                Assert.IsTrue(controller.SelectNextPlazaHubTarget());
+                Assert.IsTrue(controller.SelectNextPlazaHubTarget());
+                Assert.IsTrue(controller.UseSelectedPlazaHubTarget());
+
+                StringAssert.Contains("PlazaHubDetail", controller.RuntimePlazaHubDetailSnapshot);
+                StringAssert.Contains("selected=merchant-preview", controller.RuntimePlazaHubDetailSnapshot);
+                StringAssert.Contains("role=starter-gear-preview", controller.RuntimePlazaHubDetailSnapshot);
+                StringAssert.Contains("detail=try-before-shop", controller.RuntimePlazaHubDetailSnapshot);
+                StringAssert.Contains("safe-no-shop-backend", controller.RuntimePlazaHubDetailSnapshot);
+                StringAssert.Contains("safe-local-no-backend", controller.RuntimePlazaHubDetailSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeControllerExposesPlazaHubLayoutAnchorsForVisualEvidence()
         {

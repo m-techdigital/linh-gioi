@@ -142,3 +142,6 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 ## 2026-09-10 — Quảng Trường layout anchors
 
 `LGO_LINHTHANH_PLAZA_LAYOUT_ANCHORS_READY`: runtime Quảng Trường sau unlock Đông Môn đã có `PlazaHubLayout` với 5 anchor social-spawn, event-board, gate-guide, merchant-preview và guild-locked. Đây là layout/social hub local-only cho Player capture, chưa phải map production art và chưa mở backend event/shop/guild.
+## 2026-09-10 — Quảng Trường anchor detail inspect
+
+`LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: runtime Quảng Trường đã expose `PlazaHubDetail` cho target đang chọn và visual manifest/matrix bắt merchant preview `role=starter-gear-preview`, `detail=try-before-shop`. Đây là inspect local-only, chưa mở shop/event/guild/backend.

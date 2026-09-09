@@ -203,3 +203,6 @@ Cảng Linh Thuyền shell dùng `spirit-boat=preview-only` và `travel-board=lo
 ### Runtime checkpoint — Quảng Trường layout anchors
 
 Quảng Trường runtime preview sau unlock Đông Môn có `PlazaHubLayout` với 5 anchor local-only: social-spawn trung tâm, event-board upper-mid, gate-guide bên trái, merchant-preview bên phải và guild-locked far-right. Layout này giúp Player capture đọc Quảng Trường như hub xã hội có cấu trúc, nhưng chưa mở event/shop/guild/backend.
+### Runtime checkpoint — Quảng Trường anchor detail inspect
+
+Quảng Trường runtime preview có `PlazaHubDetail` cho target đang chọn. Merchant preview ghi rõ `role=starter-gear-preview` và `detail=try-before-shop`, board giữ notice-only, gate-guide giữ route-guide; tất cả local-only để kiểm social hub flow mà chưa mở shop/event/guild/backend.

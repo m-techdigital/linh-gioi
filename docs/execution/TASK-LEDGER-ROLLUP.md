@@ -316,3 +316,6 @@ Checkpoint `LGO_LINHTHANH_PLAZA_NPC_INTERACTION_READY`: Quảng Trường có NP
 ## 2026-09-10 — Quảng Trường layout anchors
 
 Checkpoint `LGO_LINHTHANH_PLAZA_LAYOUT_ANCHORS_READY`: thêm snapshot/manifest `runtimePlazaHubLayoutSnapshot` và marker scene cho social-spawn/event-board/gate-guide/merchant-preview/guild-locked trong Quảng Trường local preview. Next: inspect UI local-only cho anchor hoặc production tile/atlas khi asset sạch.
+## 2026-09-10 — Quảng Trường anchor detail inspect
+
+Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm detail snapshot + world-space detail line cho Plaza target đang chọn, giúp frame board/selector/NPC đọc rõ chức năng anchor. Scope local-only.
