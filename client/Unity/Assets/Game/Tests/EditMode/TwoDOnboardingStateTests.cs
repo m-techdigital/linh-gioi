@@ -226,6 +226,7 @@ namespace LinhGioi.Tests
             Assert.IsNotNull(resultType.GetField("runtimePlazaHubInputSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhUnlockSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeDongMonAuthoredDetailSourceSnapshot"));
+            Assert.IsNotNull(resultType.GetField("runtimeDongMonNpcSpriteSourceSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhPlazaHubSnapshot"));
         }
 
@@ -1355,6 +1356,54 @@ namespace LinhGioi.Tests
             }
         }
 
+
+
+        [Test]
+        public void RuntimeMapCatalogLoadsDongMonNpcSpriteSourceAsset()
+        {
+            var npcs = TwoDMapDesignCatalog.LoadDongMonNpcSprites();
+            var gateKeeper = TwoDMapDesignCatalog.LoadDongMonNpcSprite("gate_keeper");
+            var sourceSnapshot = TwoDMapDesignCatalog.LoadDongMonNpcSpriteSourceSnapshot();
+
+            Assert.That(npcs.Length, Is.EqualTo(1));
+            Assert.IsNotNull(gateKeeper);
+            Assert.That(gateKeeper.parts.Length, Is.EqualTo(13));
+            StringAssert.Contains("DongMonNpcSpriteSource", sourceSnapshot);
+            StringAssert.Contains("resource=LGOMaps/DongMonNpcSprites", sourceSnapshot);
+            StringAssert.Contains("npcs=1", sourceSnapshot);
+            StringAssert.Contains("gate_keeper_parts=13", sourceSnapshot);
+            StringAssert.Contains("role=tutorial-guide", sourceSnapshot);
+            StringAssert.Contains("silhouette=elder-robed-guardian-staff", sourceSnapshot);
+            StringAssert.Contains("slots=robe,cloak,hat,staff,talisman", sourceSnapshot);
+            StringAssert.Contains("authored-npc-sprite=True", sourceSnapshot);
+            StringAssert.Contains("safe-runtime-resource=True", sourceSnapshot);
+            StringAssert.Contains("safe-no-source-image=True", sourceSnapshot);
+            StringAssert.Contains("safe-no-3d=True", sourceSnapshot);
+            StringAssert.Contains("safe-local-no-backend=True", sourceSnapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerBuildsGateKeeperNpcFromSpriteResourceForVisualEvidence()
+        {
+            var host = new GameObject("2D Dong Mon gate keeper npc sprite source snapshot test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("DongMonNpcSpriteSource", controller.RuntimeDongMonNpcSpriteSourceSnapshot);
+                StringAssert.Contains("gate_keeper_parts=13", controller.RuntimeDongMonNpcSpriteSourceSnapshot);
+                StringAssert.Contains("safe-no-source-image=True", controller.RuntimeDongMonNpcSpriteSourceSnapshot);
+
+                Assert.IsNotNull(GameObject.Find("LGO 2D Gate Keeper SpritePart staff staff"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Gate Keeper SpritePart jade_talisman talisman"));
+                Assert.IsNotNull(GameObject.Find("LGO 2D Gate Keeper SpritePart hat_brim hat"));
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
 
         [Test]
         public void RuntimeMapCatalogLoadsDongMonAuthoredDetailsSourceAsset()

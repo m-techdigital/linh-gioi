@@ -187,3 +187,10 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 - Evidence cần giữ: `runtimeDongMonAuthoredDetailSourceSnapshot` trong manifest với `details=7`, `moss/step/rope/spirit-dust/rune`, `safe-no-source-image`, `safe-no-3d`.
 - Giới hạn: đây là data/runtime foundation, chưa phải production concept art.
 - Next: atlas/sprite pipeline sạch cho props/NPC hoặc Linh Thành detail layout resource.
+
+## 2026-09-10 — Gate Keeper NPC sprite source
+
+- Trạng thái: `LGO_DONG_MON_GATEKEEPER_NPC_SPRITE_SOURCE_READY`; Gate Keeper dùng `Resources/LGOMaps/DongMonNpcSprites.json` để render 13 sprite parts.
+- Evidence cần giữ: `runtimeDongMonNpcSpriteSourceSnapshot` trong manifest với `role=tutorial-guide`, `silhouette=elder-robed-guardian-staff`, `safe-no-source-image`, `safe-no-3d`.
+- Giới hạn: vẫn là runtime blockout/stylized sprite parts, chưa phải final concept art/NPC animation.
+- Next: mở atlas/sprite thật cho NPC hoặc áp pattern này cho Training Stone/Shadow Slime/hub NPC.

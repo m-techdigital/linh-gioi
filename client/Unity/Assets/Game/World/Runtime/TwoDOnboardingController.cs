@@ -106,6 +106,7 @@ namespace LinhGioi.World
         public string RuntimeDongMonTilePaletteSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonTilePaletteSourceSnapshot();
         public string RuntimeDongMonChunkPlacementSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonChunkPlacementSourceSnapshot();
         public string RuntimeDongMonAuthoredDetailSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonAuthoredDetailsSourceSnapshot();
+        public string RuntimeDongMonNpcSpriteSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonNpcSpriteSourceSnapshot();
         public string RuntimeDongMonAuthoredPassSnapshot => _mapCatalog.DongMonAuthoredPassSnapshot;
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
@@ -231,7 +232,8 @@ namespace LinhGioi.World
             AddSceneSprite("LGO 2D Spirit Mote B", "Đốm linh khí quanh bia", new Vector2(2.95f, -0.45f), new Vector2(0.08f, 0.08f), RuntimeArtCatalog.Spirit, -6);
 
             AddSceneBeat("Người Giữ Cổng - NPC dẫn nhập");
-            _gateKeeper = AddCharacter("LGO 2D Gate Keeper", TwoDOnboardingState.GateKeeperPosition, RuntimeArtCatalog.Gold, new Color(0.88f, 0.78f, 0.58f), new Color(0.12f, 0.09f, 0.07f), -2);
+            AddSceneBeat(RuntimeDongMonNpcSpriteSourceSnapshot);
+            _gateKeeper = AddNpcSpriteFromResource("LGO 2D Gate Keeper", "gate_keeper", TwoDOnboardingState.GateKeeperPosition, RuntimeArtCatalog.Gold, new Color(0.88f, 0.78f, 0.58f), new Color(0.12f, 0.09f, 0.07f), -2);
             AddSceneBeat("Bia Luyện Khí - mục tiêu tương tác");
             _trainingStone = AddTrainingStone("LGO 2D Training Stone", TwoDOnboardingState.TrainingStonePosition, -2);
             AddWorldLabel("LGO 2D Stone Label", "BIA LUYỆN KHÍ", TwoDOnboardingState.TrainingStonePosition + new Vector2(-0.64f, 0.78f), 0.038f, RuntimeArtCatalog.Spirit, 2);
@@ -1218,6 +1220,31 @@ namespace LinhGioi.World
         private void AddSceneBeat(string beat)
         {
             if (!string.IsNullOrEmpty(beat)) _productionSceneBeats.Add(beat);
+        }
+
+        private static Transform AddNpcSpriteFromResource(string name, string npcId, Vector2 position, Color fallbackRobe, Color fallbackAccent, Color fallbackHair, int order)
+        {
+            var npc = TwoDMapDesignCatalog.LoadDongMonNpcSprite(npcId);
+            if (npc == null || npc.parts == null || npc.parts.Length == 0)
+            {
+                return AddCharacter(name, position, fallbackRobe, fallbackAccent, fallbackHair, order);
+            }
+
+            var root = new GameObject(name);
+            root.transform.position = ToWorld(position, order * 0.01f);
+            for (var i = 0; i < npc.parts.Length; i++)
+            {
+                var part = npc.parts[i];
+                AddSprite(
+                    name + " SpritePart " + part.id + " " + part.slot,
+                    new Vector2(part.x, part.y),
+                    new Vector2(part.w, part.h),
+                    new Color(part.r, part.g, part.b, part.a),
+                    order + part.sortOffset,
+                    root.transform);
+            }
+
+            return root.transform;
         }
 
         private static Transform AddCharacter(string name, Vector2 position, Color robe, Color accent, Color hair, int order)

@@ -173,6 +173,7 @@ namespace LinhGioi.World
                 runtimeDongMonTilePaletteSourceSnapshot = controller.RuntimeDongMonTilePaletteSourceSnapshot,
                 runtimeDongMonChunkPlacementSourceSnapshot = controller.RuntimeDongMonChunkPlacementSourceSnapshot,
                 runtimeDongMonAuthoredDetailSourceSnapshot = controller.RuntimeDongMonAuthoredDetailSourceSnapshot,
+                runtimeDongMonNpcSpriteSourceSnapshot = controller.RuntimeDongMonNpcSpriteSourceSnapshot,
                 runtimeDongMonAuthoredPassSnapshot = controller.RuntimeDongMonAuthoredPassSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
                 runtimeCombatSnapshot = controller.RuntimeCombatSnapshot,
@@ -318,6 +319,7 @@ namespace LinhGioi.World
             public string runtimeDongMonTilePaletteSourceSnapshot;
             public string runtimeDongMonChunkPlacementSourceSnapshot;
             public string runtimeDongMonAuthoredDetailSourceSnapshot;
+            public string runtimeDongMonNpcSpriteSourceSnapshot;
             public string runtimeDongMonAuthoredPassSnapshot;
             public string runtimeAnimationSnapshot;
             public string runtimeCombatSnapshot;

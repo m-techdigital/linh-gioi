@@ -345,3 +345,7 @@ Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và
 ## Next after Đông Môn authored detail resource
 
 `LGO_DONG_MON_AUTHORED_DETAILS_RESOURCE_READY`: detail pass Đông Môn được data hóa qua `DongMonAuthoredDetails.json` thay vì đặt từng sprite trong controller. Runtime manifest/matrix bắt `runtimeDongMonAuthoredDetailSourceSnapshot` và 7 detail role. Next: atlas/sprite pipeline hoặc data hóa layout props/NPC khu tiếp theo.
+
+## Next after Gate Keeper NPC sprite source
+
+`LGO_DONG_MON_GATEKEEPER_NPC_SPRITE_SOURCE_READY`: Người Giữ Cổng được dựng từ resource `DongMonNpcSprites.json` với 13 sprite parts/slot thay vì blockout generic; manifest/matrix bắt snapshot. Next: atlas sprite thật hoặc data hóa NPC/props còn lại.

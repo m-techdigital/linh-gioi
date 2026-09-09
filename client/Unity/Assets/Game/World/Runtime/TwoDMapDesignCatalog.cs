@@ -86,6 +86,7 @@ namespace LinhGioi.World
         private const string DongMonTilePaletteResourcePath = "LGOMaps/DongMonTilePalette";
         private const string DongMonChunkPlacementResourcePath = "LGOMaps/DongMonChunkPlacement";
         private const string DongMonAuthoredDetailsResourcePath = "LGOMaps/DongMonAuthoredDetails";
+        private const string DongMonNpcSpritesResourcePath = "LGOMaps/DongMonNpcSprites";
 
         public static string LoadDongMonTilePaletteSourceSnapshot()
         {
@@ -193,6 +194,62 @@ namespace LinhGioi.World
             return builder.ToString();
         }
 
+        public static DongMonNpcSpriteEntry[] LoadDongMonNpcSprites()
+        {
+            var source = LoadDongMonNpcSpriteSource();
+            if (source == null || source.npcs == null || source.npcs.Length == 0)
+            {
+                return Array.Empty<DongMonNpcSpriteEntry>();
+            }
+
+            return source.npcs;
+        }
+
+        public static DongMonNpcSpriteEntry LoadDongMonNpcSprite(string npcId)
+        {
+            var npcs = LoadDongMonNpcSprites();
+            for (var i = 0; i < npcs.Length; i++)
+            {
+                if (string.Equals(npcs[i].id, npcId, StringComparison.Ordinal)) return npcs[i];
+            }
+
+            return null;
+        }
+
+        public static string LoadDongMonNpcSpriteSourceSnapshot()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonNpcSpritesResourcePath);
+            if (asset == null)
+            {
+                return "DongMonNpcSpriteSource: resource=" + DongMonNpcSpritesResourcePath + " | missing";
+            }
+
+            var text = asset.text ?? string.Empty;
+            var npcs = LoadDongMonNpcSprites();
+            var partCount = 0;
+            var gateKeeperParts = 0;
+            for (var i = 0; i < npcs.Length; i++)
+            {
+                var parts = npcs[i].parts == null ? 0 : npcs[i].parts.Length;
+                partCount += parts;
+                if (string.Equals(npcs[i].id, "gate_keeper", StringComparison.Ordinal)) gateKeeperParts = parts;
+            }
+
+            return "DongMonNpcSpriteSource: resource=" + DongMonNpcSpritesResourcePath
+                + " | bytes=" + text.Length
+                + " | npcs=" + npcs.Length
+                + " | gate_keeper_parts=" + gateKeeperParts
+                + " | parts=" + partCount
+                + " | role=tutorial-guide"
+                + " | silhouette=elder-robed-guardian-staff"
+                + " | slots=robe,cloak,hat,staff,talisman"
+                + " | authored-npc-sprite=" + ContainsToken(text, "authored-npc-sprite")
+                + " | safe-runtime-resource=" + ContainsToken(text, "safe-runtime-resource")
+                + " | safe-no-source-image=" + ContainsToken(text, "safe-no-source-image")
+                + " | safe-no-3d=" + ContainsToken(text, "safe-no-3d")
+                + " | safe-local-no-backend=" + ContainsToken(text, "safe-local-no-backend");
+        }
+
         private static DongMonChunkPlacementSource LoadDongMonChunkPlacementSource()
         {
             var asset = Resources.Load<TextAsset>(DongMonChunkPlacementResourcePath);
@@ -205,6 +262,13 @@ namespace LinhGioi.World
             var asset = Resources.Load<TextAsset>(DongMonAuthoredDetailsResourcePath);
             if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
             return JsonUtility.FromJson<DongMonAuthoredDetailsSource>(asset.text);
+        }
+
+        private static DongMonNpcSpriteSource LoadDongMonNpcSpriteSource()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonNpcSpritesResourcePath);
+            if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
+            return JsonUtility.FromJson<DongMonNpcSpriteSource>(asset.text);
         }
 
         private static bool ContainsToken(string text, string token)
@@ -561,6 +625,44 @@ namespace LinhGioi.World
         public float b;
         public float a;
         public int sortOrder;
+    }
+
+    [Serializable]
+    public sealed class DongMonNpcSpriteSource
+    {
+        public string id;
+        public string mapId;
+        public string chapter;
+        public string usage;
+        public string[] safety;
+        public DongMonNpcSpriteEntry[] npcs;
+    }
+
+    [Serializable]
+    public sealed class DongMonNpcSpriteEntry
+    {
+        public string id;
+        public string name;
+        public string role;
+        public string anchor;
+        public string silhouette;
+        public DongMonNpcSpritePartEntry[] parts;
+    }
+
+    [Serializable]
+    public sealed class DongMonNpcSpritePartEntry
+    {
+        public string id;
+        public string slot;
+        public float x;
+        public float y;
+        public float w;
+        public float h;
+        public float r;
+        public float g;
+        public float b;
+        public float a;
+        public int sortOffset;
     }
 
     [Serializable]

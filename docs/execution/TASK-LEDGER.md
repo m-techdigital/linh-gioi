@@ -400,3 +400,7 @@ Checkpoint `LGO_LINHTHANH_PLAZA_ANCHOR_DETAIL_READY`: thêm `RuntimePlazaHubDeta
 ## Next after Đông Môn authored detail resource — 2026-09-10
 
 `LGO_DONG_MON_AUTHORED_DETAILS_RESOURCE_READY`: thêm `Resources/LGOMaps/DongMonAuthoredDetails.json` và loader/snapshot để vẽ moss, stone step, bridge rope, dash spirit dust, slime rune từ resource. Gate cần kiểm `runtimeDongMonAuthoredDetailSourceSnapshot`, `details=7`, `authored-detail=True`, `safe-runtime-resource=True`, `safe-no-source-image=True`, `safe-no-3d=True`. Đây là nền để thay atlas/sprite thật sau này, không claim production art.
+
+## Next after Gate Keeper NPC sprite source — 2026-09-10
+
+`LGO_DONG_MON_GATEKEEPER_NPC_SPRITE_SOURCE_READY`: thêm `Resources/LGOMaps/DongMonNpcSprites.json`, loader/snapshot và runtime renderer cho Gate Keeper gồm robe, cloak, hat, staff, talisman. Gate cần kiểm `runtimeDongMonNpcSpriteSourceSnapshot`, `gate_keeper_parts=13`, `authored-npc-sprite=True`, `safe-runtime-resource=True`, `safe-no-source-image=True`, `safe-no-3d=True`, `safe-local-no-backend=True`.
