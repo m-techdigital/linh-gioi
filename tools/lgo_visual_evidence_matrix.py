@@ -97,21 +97,21 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_plaza_board_preview",
         "label": "2D Plaza board local preview",
         "screenshot": "11-plaza-board-preview.bmp",
-        "requiredManifest": ["runtimeLinhThanhPlazaHubSnapshot", "hudSnapshot"],
+        "requiredManifest": ["runtimeLinhThanhPlazaHubSnapshot", "runtimePlazaHubLayoutSnapshot", "hudSnapshot"],
         "nonClaim": "not production event backend",
     },
     {
         "id": "two_d_plaza_target_selector",
         "label": "2D Plaza target selector input",
         "screenshot": "12-plaza-target-selector.bmp",
-        "requiredManifest": ["runtimePlazaHubInputSnapshot", "runtimePlazaReadabilitySnapshot", "hudSnapshot"],
+        "requiredManifest": ["runtimePlazaHubInputSnapshot", "runtimePlazaHubLayoutSnapshot", "runtimePlazaReadabilitySnapshot", "hudSnapshot"],
         "nonClaim": "not production social interaction system",
     },
     {
         "id": "two_d_plaza_npc_preview",
         "label": "2D Plaza NPC merchant local preview",
         "screenshot": "13-plaza-npc-preview.bmp",
-        "requiredManifest": ["runtimeLinhThanhPlazaHubSnapshot", "runtimePlazaHubInputSnapshot", "runtimePlazaReadabilitySnapshot", "hudSnapshot"],
+        "requiredManifest": ["runtimeLinhThanhPlazaHubSnapshot", "runtimePlazaHubInputSnapshot", "runtimePlazaHubLayoutSnapshot", "runtimePlazaReadabilitySnapshot", "hudSnapshot"],
         "nonClaim": "not production shop backend",
     },
 ]
@@ -154,6 +154,11 @@ def verify_current() -> dict[str, Any]:
     for token in ("DongMonReadability", "mode=route-label-rail", "world-label-density=reduced", "chips=gate,stone,jump,dash,slime", "avoids-hud-overlap", "safe-local-no-backend"):
         if token not in dong_mon_readability_snapshot:
             failures.append(f"runtimeDongMonReadabilitySnapshot missing {token!r}")
+    plaza_layout_snapshot = str(manifest.get("runtimePlazaHubLayoutSnapshot", ""))
+    for token in ("PlazaHubLayout", "anchors=5", "anchor=social-spawn@center", "anchor=event-board@upper-mid", "anchor=gate-guide@left", "anchor=merchant-preview@right", "anchor=guild-locked@far-right", "safe-local-no-backend"):
+        if token not in plaza_layout_snapshot:
+            failures.append(f"runtimePlazaHubLayoutSnapshot missing {token!r}")
+
     palette_snapshot = str(manifest.get("runtimeDongMonTilePaletteSnapshot", ""))
     for token in ("DongMonTilePalette", "tile_ground_grass:earth-green:soft-grass-edge", "tile_dash_lane:spirit-cyan:wind-streak", "safe-no-source-image"):
         if token not in palette_snapshot:

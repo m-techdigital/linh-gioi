@@ -86,6 +86,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
             "runtimeDongMonAuthoredPassSnapshot": ["DongMonAuthoredPass", "route-segments=5", "detail-density=readable", "collision-boundaries=from-bands", "no-random-decoration"],
             "runtimeInventoryInputSnapshot": ["InventoryInputState=Applied"],
             "runtimePlazaHubInputSnapshot": ["PlazaHubInput", "selected=merchant-preview", "layout=spaced-social-triangle", "controls=P select, E interact", "interaction=npc-merchant-preview", "safe-local-no-shop-backend"],
+            "runtimePlazaHubLayoutSnapshot": ["PlazaHubLayout", "anchors=5", "anchor=social-spawn@center", "anchor=event-board@upper-mid", "anchor=gate-guide@left", "anchor=merchant-preview@right", "anchor=guild-locked@far-right", "safe-local-no-backend"],
             "runtimePlazaReadabilitySnapshot": ["PlazaReadability", "mode=label-rail", "world-label-density=reduced", "target-chips=event-board,gate-guide,merchant-preview", "safe-local-no-backend"],
             "runtimeDongMonReadabilitySnapshot": ["DongMonReadability", "mode=route-label-rail", "world-label-density=reduced", "chips=gate,stone,jump,dash,slime", "avoids-hud-overlap", "safe-local-no-backend"],
         },

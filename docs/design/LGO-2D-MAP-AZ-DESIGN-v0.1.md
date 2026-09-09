@@ -200,3 +200,6 @@ Cảng Linh Thuyền shell dùng `spirit-boat=preview-only` và `travel-board=lo
 Đông Môn authored chunk placement source `Resources/LGOMaps/DongMonChunkPlacement.json` giữ vị trí/count/route-node của các chunk gameplay dưới dạng data đóng gói trong Player. Runtime hiện load placement này để dựng tile strip/paltform/dash/slime arena, giúp bước sau thay renderer procedural bằng Unity Tilemap hoặc sprite atlas mà không đổi route/collision contract.
 
 Đông Môn Unity Tilemap runtime layer dùng `Grid` + `TilemapRenderer` để đặt 16 cell từ authored chunk placement resource. Trong giai đoạn blockout, Tilemap này là underlay mảnh dưới strip hiện có để kiểm pipeline Unity thật và tránh phá readability; bước sau mới thay dần strip/procedural shape bằng tile/atlas production sạch.
+### Runtime checkpoint — Quảng Trường layout anchors
+
+Quảng Trường runtime preview sau unlock Đông Môn có `PlazaHubLayout` với 5 anchor local-only: social-spawn trung tâm, event-board upper-mid, gate-guide bên trái, merchant-preview bên phải và guild-locked far-right. Layout này giúp Player capture đọc Quảng Trường như hub xã hội có cấu trúc, nhưng chưa mở event/shop/guild/backend.

@@ -81,6 +81,7 @@ namespace LinhGioi.World
         public string RuntimeLinhThanhHarborShellSnapshot => _mapCatalog.LinhThanhHarborShellSnapshot;
         public string RuntimeLinhThanhPlazaHubSnapshot => BuildLinhThanhPlazaHubSnapshot();
         public string RuntimePlazaHubInputSnapshot => BuildPlazaHubInputSnapshot();
+        public string RuntimePlazaHubLayoutSnapshot => BuildPlazaHubLayoutSnapshot();
         public string RuntimePlazaReadabilitySnapshot => BuildPlazaReadabilitySnapshot();
         public string RuntimeDongMonReadabilitySnapshot => BuildDongMonReadabilitySnapshot();
         public string RuntimeHubTransitionSnapshot => BuildHubTransitionSnapshot();
@@ -360,6 +361,19 @@ namespace LinhGioi.World
                 + " | safe-local-no-shop-backend";
         }
 
+
+        private string BuildPlazaHubLayoutSnapshot()
+        {
+            return "PlazaHubLayout: anchors=5"
+                + " | anchor=social-spawn@center"
+                + " | anchor=event-board@upper-mid"
+                + " | anchor=gate-guide@left"
+                + " | anchor=merchant-preview@right"
+                + " | anchor=guild-locked@far-right"
+                + " | label-rail=bottom-safe-zone"
+                + " | safe-local-no-backend";
+        }
+
         private string BuildPlazaReadabilitySnapshot()
         {
             return "PlazaReadability: mode=label-rail"
@@ -564,10 +578,13 @@ namespace LinhGioi.World
         private void AddLinhThanhPlazaHubRuntimePreview()
         {
             AddSceneBeat("LINH_THANH_PLAZA_HUB_RUNTIME NPC/board local-only after Dong Mon unlock");
+            AddSceneBeat("LINH_THANH_PLAZA_LAYOUT social-spawn/event-board/gate-guide/merchant/guild-locked anchors");
             AddSceneBeat("LINH_THANH_PLAZA_READABILITY label-rail reduced-density target chips");
             var root = new GameObject("LGO 2D Plaza Hub Runtime Root");
             root.transform.SetParent(transform, false);
             _plazaHubRuntimeRoot = root.transform;
+            AddSprite("LGO 2D Plaza Social Spawn Anchor", new Vector2(-0.18f, 0.30f), new Vector2(0.54f, 0.055f), new Color(0.18f, 0.86f, 0.78f, 0.40f), -3, _plazaHubRuntimeRoot);
+            AddWorldLabel("LGO 2D Plaza Social Spawn Label", "spawn", new Vector2(-0.18f, 0.24f), 0.014f, new Color(0.73f, 0.87f, 0.88f, 0.78f), 6, _plazaHubRuntimeRoot);
             AddSprite("LGO 2D Plaza Gate Guide NPC", new Vector2(-0.98f, 0.78f), new Vector2(0.12f, 0.34f), new Color(0.92f, 0.72f, 0.28f, 0.72f), -2, _plazaHubRuntimeRoot);
             AddWorldLabel("LGO 2D Plaza Gate Guide Chip", "01", new Vector2(-0.98f, 0.43f), 0.017f, RuntimeArtCatalog.Gold, 6, _plazaHubRuntimeRoot);
             AddSprite("LGO 2D Plaza Wandering Student NPC", new Vector2(-0.02f, 0.78f), new Vector2(0.10f, 0.28f), new Color(0.54f, 0.86f, 0.92f, 0.66f), -2, _plazaHubRuntimeRoot);
@@ -577,6 +594,7 @@ namespace LinhGioi.World
             AddSprite("LGO 2D Plaza Event Board Runtime", new Vector2(-0.18f, 0.88f), new Vector2(0.38f, 0.34f), new Color(0.58f, 0.34f, 0.16f, 0.70f), -2, _plazaHubRuntimeRoot);
             AddWorldLabel("LGO 2D Plaza Event Board Chip", "02", new Vector2(-0.18f, 0.52f), 0.017f, RuntimeArtCatalog.Spirit, 6, _plazaHubRuntimeRoot);
             AddSprite("LGO 2D Plaza Guild Bulletin Locked Runtime", new Vector2(0.92f, 0.68f), new Vector2(0.22f, 0.28f), new Color(0.30f, 0.22f, 0.62f, 0.62f), -2, _plazaHubRuntimeRoot);
+            AddWorldLabel("LGO 2D Plaza Guild Locked Chip", "locked", new Vector2(0.94f, 0.36f), 0.014f, new Color(0.73f, 0.87f, 0.88f, 0.72f), 6, _plazaHubRuntimeRoot);
             AddWorldLabel("LGO 2D Plaza Hub Runtime Label", "Quảng Trường", new Vector2(0.02f, 0.19f), 0.020f, new Color(0.73f, 0.87f, 0.88f, 0.84f), 6, _plazaHubRuntimeRoot);
             _plazaHubSelectorRing = AddSprite("LGO 2D Plaza Target Selector Ring", new Vector2(-0.18f, 0.64f), new Vector2(0.46f, 0.08f), new Color(0.18f, 0.86f, 0.78f, 0.72f), 7, _plazaHubRuntimeRoot).transform;
             _plazaHubSelectedLabel = AddWorldLabel("LGO 2D Plaza Selected Target Label", string.Empty, new Vector2(-1.76f, -1.38f), 0.016f, RuntimeArtCatalog.Spirit, 7, _plazaHubRuntimeRoot);

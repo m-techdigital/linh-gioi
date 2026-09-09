@@ -1021,6 +1021,30 @@ namespace LinhGioi.Tests
             }
         }
 
+
+        [Test]
+        public void RuntimeControllerExposesPlazaHubLayoutAnchorsForVisualEvidence()
+        {
+            var host = new GameObject("2D plaza layout anchor test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("PlazaHubLayout", controller.RuntimePlazaHubLayoutSnapshot);
+                StringAssert.Contains("anchor=social-spawn@center", controller.RuntimePlazaHubLayoutSnapshot);
+                StringAssert.Contains("anchor=event-board@upper-mid", controller.RuntimePlazaHubLayoutSnapshot);
+                StringAssert.Contains("anchor=gate-guide@left", controller.RuntimePlazaHubLayoutSnapshot);
+                StringAssert.Contains("anchor=merchant-preview@right", controller.RuntimePlazaHubLayoutSnapshot);
+                StringAssert.Contains("anchor=guild-locked@far-right", controller.RuntimePlazaHubLayoutSnapshot);
+                StringAssert.Contains("safe-local-no-backend", controller.RuntimePlazaHubLayoutSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeControllerExposesEastGateToPlazaTransitionPreview()
         {
