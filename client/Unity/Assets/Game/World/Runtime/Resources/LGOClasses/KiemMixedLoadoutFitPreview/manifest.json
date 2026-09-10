@@ -1,0 +1,130 @@
+{
+  "id": "kiem-mixed-loadout-fit-preview-v2",
+  "classId": "kiem",
+  "levelBand": "1-30",
+  "pixelsPerUnit": 208,
+  "skeletonVersion": "lgo_humanoid_2d_v1",
+  "status": "DRAFT_RUNTIME_FIT",
+  "runtimeEligibleCount": 0,
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/KiemMixedLoadoutFitPreview/kiem-mixed-loadout-fit-atlas.png",
+      "role": "paper-doll-fit-atlas",
+      "generator": "reference_guided_imagegen_attachment_batch",
+      "referenceOnly": false,
+      "bytes": 173683,
+      "sha256": "4bbef88ac875c6fde8d4aa0b21a48fa8e25a380e625a7430c6089a2a1280dcfc"
+    }
+  ],
+  "items": [
+    {
+      "itemId": "kiem-lv001-male-main_weapon",
+      "gender": "male",
+      "slotId": "main_weapon",
+      "attachmentMode": "Rigid",
+      "status": "DRAFT_RUNTIME_FIT",
+      "atlasRect": [
+        8,
+        416,
+        227,
+        88
+      ]
+    },
+    {
+      "itemId": "kiem-lv001-female-main_weapon",
+      "gender": "female",
+      "slotId": "main_weapon",
+      "attachmentMode": "Rigid",
+      "status": "DRAFT_RUNTIME_FIT",
+      "atlasRect": [
+        243,
+        415,
+        237,
+        89
+      ]
+    },
+    {
+      "itemId": "kiem-lv030-male-head_hair-fit-v1",
+      "gender": "male",
+      "slotId": "head_hair",
+      "attachmentMode": "Skinned",
+      "status": "DRAFT_RUNTIME_FIT",
+      "atlasRect": [
+        8,
+        257,
+        174,
+        150
+      ]
+    },
+    {
+      "itemId": "kiem-lv030-female-head_hair-fit-v1",
+      "gender": "female",
+      "slotId": "head_hair",
+      "attachmentMode": "Skinned",
+      "status": "DRAFT_RUNTIME_FIT",
+      "atlasRect": [
+        190,
+        227,
+        124,
+        180
+      ]
+    },
+    {
+      "itemId": "kiem-lv010-male-inner_top",
+      "gender": "male",
+      "slotId": "inner_top",
+      "attachmentMode": "Skinned",
+      "status": "DRAFT_RUNTIME_FIT",
+      "atlasRect": [
+        322,
+        314,
+        82,
+        93
+      ]
+    },
+    {
+      "itemId": "kiem-lv010-female-inner_top",
+      "gender": "female",
+      "slotId": "inner_top",
+      "attachmentMode": "Skinned",
+      "status": "DRAFT_RUNTIME_FIT",
+      "atlasRect": [
+        412,
+        316,
+        93,
+        91
+      ]
+    },
+    {
+      "itemId": "kiem-lv020-male-outer_top-fit-v1",
+      "gender": "male",
+      "slotId": "outer_top",
+      "attachmentMode": "Skinned",
+      "status": "DRAFT_RUNTIME_FIT",
+      "atlasRect": [
+        8,
+        49,
+        80,
+        170
+      ]
+    },
+    {
+      "itemId": "kiem-lv020-female-outer_top-fit-v1",
+      "gender": "female",
+      "slotId": "outer_top",
+      "attachmentMode": "Skinned",
+      "status": "DRAFT_RUNTIME_FIT",
+      "atlasRect": [
+        96,
+        54,
+        80,
+        165
+      ]
+    }
+  ],
+  "nonClaims": [
+    "not production approved",
+    "motion fit not verified",
+    "only eight proof assets"
+  ]
+}

@@ -170,3 +170,11 @@ Nguồn chính thức: [Unity Sprite Swap](https://docs.unity3d.com/Packages/com
 - Hair nam lần đầu bị checkerboard RGB giả alpha và được sửa sang magenta; outer nam v1 vẫn 3/4/quá rộng nên reject, v2 strict profile mới được giữ. Nữ dùng cùng profile rule. Failure/output/hash ở external `generated-batch-v2/fit-spike-v1/`.
 - Dùng PPU 208 suy ra trực tiếp từ base cao 326–340 px/1,56–1,62 world unit. Mỗi output chỉ normalize một lần: hair 174×150/124×180, outer 80×170/80×165, khoảng 23–33 KB/file; không runtime upscale.
 - Contact mixed loadout nam/nữ đã review ở idle và đủ điều kiện đi tiếp sang weighting spike. Đây chưa phải motion fit hoặc runtime approval; `runtimeEligibleCount=0` giữ nguyên.
+
+## Kiếm proof asset authoring — checkpoint 2026-09-10
+
+- Chỉ import 8 proof item vào `KiemMixedLoadoutFitPreview`: 2 weapon Rigid, 2 inner + 2 outer + 2 hair Skinned. Các item được pack đúng kích thước đã normalize vào một atlas 512×512, PNG 173.683 byte; PPU 208, mipmap off, clamp/bilinear, không upscale runtime. Manifest giữ rect từng item và validator khóa đúng một atlas/hash/provenance để tránh PNG rời tăng draw call hoặc lọt source thô vào runtime.
+- `KiemSpriteSkinAssetAuthoring` dùng Unity Sprite Editor data provider để ghi sprite bones và vertex weights có thể tái tạo; hair có `head/hair_mid/hair_tip`, outer có `torso/arm_near_upper/arm_near_forearm`, inner có `torso`. Không cài PSD Importer.
+- TDD RED ban đầu bắt 8 texture chưa được import thành Sprite; GREEN hiện xác nhận một atlas có đủ 8 named sprite, 6 Skinned sprite có bones/BlendWeight và 2 Rigid weapon truy xuất bằng label ổn định. EditMode sau atlas `204 total / 203 pass / 0 fail / 1 ignored`.
+- macOS Player atlas build đạt 169.088.250 byte, 0 error; tổng delta so baseline trước package là 593.255 byte (0,352%), đồng thời giảm 202.672 byte so bản thử 8 texture rời. Vì vậy chuẩn tiếp theo là pack theo batch vào atlas có rect/manifest, không đưa từng crop thành texture runtime riêng.
+- Player build 169.290.922 byte, 0 error: 8 proof asset tăng 478.848 byte (0,284%) so với package checkpoint, tổng tăng 795.927 byte (0,472%) so với baseline. Pack vẫn `DRAFT_RUNTIME_FIT`, eligible=0 cho tới motion capture.

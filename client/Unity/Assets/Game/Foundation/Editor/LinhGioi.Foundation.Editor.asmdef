@@ -9,7 +9,8 @@
     "LinhGioi.UI.Editor",
     "UnityEngine.UIElementsModule",
     "LinhGioi.Combat",
-    "LinhGioi.CombatUI"
+    "LinhGioi.CombatUI",
+    "Unity.2D.Sprite.Editor"
   ],
   "includePlatforms": [
     "Editor"

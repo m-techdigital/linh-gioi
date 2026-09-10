@@ -74,6 +74,17 @@ RUNTIME_ART_PACKS = [
         'max_bytes': 4_000_000,
         'status_error': 'Vo Lv1 runtime art must remain approved runtime art',
     },
+    {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/KiemMixedLoadoutFitPreview',
+        'id': 'kiem-mixed-loadout-fit-preview-v2',
+        'status': 'DRAFT_RUNTIME_FIT',
+        'assets': {
+            'kiem-mixed-loadout-fit-atlas.png': (512, 512, 'paper-doll-fit-atlas'),
+        },
+        'generators': {'reference_guided_imagegen_attachment_batch'},
+        'max_bytes': 300_000,
+        'status_error': 'Kiếm mixed-loadout fit pack must remain draft until Player motion review',
+    },
 ]
 
 

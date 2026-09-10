@@ -393,3 +393,7 @@ Package 13.0.0 compile/test PASS và Player delta khoảng 0,188%, nên giữ. A
 ## Sau mixed-loadout idle prefit — import/weight/motion
 
 Prefit đã sửa hair/outer multi-view, normalize đúng PPU 208 và ghép idle nam/nữ thành công; weapon/inner được kế thừa. Next: import đúng 8 file của proof vào draft runtime pack, weight hair/inner/outer trên skeleton chung và giữ weapon Rigid; đăng ký qua Sprite Library, nối một opt-in Kiếm fit preview, chạy/capture sáu motion state trên mobile/tablet/PC. Chỉ các item qua motion/occlusion mới đổi thành `approved`; toàn bộ 72 candidate còn lại vẫn ở ngoài runtime.
+
+## Sau Kiếm proof asset authoring — opt-in Player motion preview
+
+8 proof item đã vào một draft atlas 512×512 ở PPU 208; 6 Skinned có bone/weight thật, 2 weapon Rigid. Atlas giữ nguyên cell đã normalize và guard khóa hash/provenance. Next: dựng component preview dùng base/rig chung, Sprite Library mixed loadout và SpriteSkin transforms; expose gender + `idle/walk/run/jump/basic_attack/class_skill`, rồi mới build/capture một lượt ba profile và review occlusion/grounding. Chưa nâng `approved` trước evidence này.

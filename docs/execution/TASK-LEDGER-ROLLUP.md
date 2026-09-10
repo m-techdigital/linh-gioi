@@ -454,3 +454,7 @@ Cài Unity 2D Animation 13.0.0 và thêm adapter Category=`componentId`, Label=`
 ## Kiếm mixed-loadout idle prefit — 2026-09-10
 
 Review cận cảnh bắt hair/outer source-v3 còn ghép nhiều view. Giữ weapon Lv1/inner Lv10, chỉ redraw hair Lv30/outer Lv20 nam nữ; hai failure ImageGen được lưu, output key magenta và normalize một lần tại PPU 208. Contact idle nam/nữ đã review PASS cho bước weighting, nhưng runtime eligible vẫn 0. Next import 8 proof asset, weight/skinning và capture sáu motion × ba profile.
+
+## Kiếm proof asset authoring — 2026-09-10
+
+Import đúng 8 item proof vào một atlas 512×512/PPU 208, không scale lại cell. Unity authoring tool ghi bones/weights cho 6 Skinned sprite, giữ 2 kiếm Rigid; validator khóa atlas/hash/provenance và không thêm PSD Importer. EditMode `204/203/0/1`; Player 169.088.250 byte/0 error, delta 0,352% so baseline và nhẹ hơn bản texture rời 202.672 byte. Pack vẫn draft/eligible=0; next opt-in Player motion preview ba profile.

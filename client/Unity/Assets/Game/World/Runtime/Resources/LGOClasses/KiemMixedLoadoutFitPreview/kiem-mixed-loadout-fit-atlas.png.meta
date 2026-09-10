@@ -1,0 +1,667 @@
+fileFormatVersion: 2
+guid: bf2e4df2b6aaf4617ac9293356f86d04
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 0
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 208
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 512
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 2
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: kiem-lv001-male-main_weapon
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 416
+        width: 227
+        height: 88
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4aad1723891b4e1283b8f63575d0cb0
+      internalID: 1611713685
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kiem-lv001-female-main_weapon
+      rect:
+        serializedVersion: 2
+        x: 243
+        y: 415
+        width: 237
+        height: 89
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cce15aa5cce944919a1970068a0261ce
+      internalID: 1778119821
+      vertices: []
+      indices:
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kiem-lv030-male-head_hair-fit-v1
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 257
+        width: 174
+        height: 150
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones:
+      - name: head
+        guid:
+        position: {x: 125.28001, y: 93, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 37.5
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: hair_mid
+        guid:
+        position: {x: -48.72, y: -12, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 48
+        parentId: 0
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: hair_tip
+        guid:
+        position: {x: -48.72, y: -36, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 45
+        parentId: 1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      spriteID: 75771b44c3d234261af5049312ee8242
+      internalID: -1528469149
+      vertices:
+      - {x: 0, y: 0}
+      - {x: 174, y: 0}
+      - {x: 174, y: 150}
+      - {x: 0, y: 150}
+      indices: 000000000200000001000000000000000300000002000000
+      edges:
+      - {x: 0, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: 3}
+      - {x: 3, y: 0}
+      weights:
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 2
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 2
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+    - serializedVersion: 2
+      name: kiem-lv030-female-head_hair-fit-v1
+      rect:
+        serializedVersion: 2
+        x: 190
+        y: 227
+        width: 124
+        height: 180
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones:
+      - name: head
+        guid:
+        position: {x: 89.28001, y: 111.6, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 45
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: hair_mid
+        guid:
+        position: {x: -34.72, y: -14.4, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 57.6
+        parentId: 0
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: hair_tip
+        guid:
+        position: {x: -34.72, y: -43.2, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 54.000004
+        parentId: 1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      spriteID: 3ab8db26dcccd45a7a6ddb74c908f742
+      internalID: 1037927933
+      vertices:
+      - {x: 0, y: 0}
+      - {x: 124, y: 0}
+      - {x: 124, y: 180}
+      - {x: 0, y: 180}
+      indices: 000000000200000001000000000000000300000002000000
+      edges:
+      - {x: 0, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: 3}
+      - {x: 3, y: 0}
+      weights:
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 2
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 2
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+    - serializedVersion: 2
+      name: kiem-lv010-male-inner_top
+      rect:
+        serializedVersion: 2
+        x: 322
+        y: 314
+        width: 82
+        height: 93
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones:
+      - name: torso
+        guid:
+        position: {x: 41, y: 46.5, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 41.85
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      spriteID: 0aed4185eb12d416daaad0f17d1e5c78
+      internalID: -950164744
+      vertices:
+      - {x: 0, y: 0}
+      - {x: 82, y: 0}
+      - {x: 82, y: 93}
+      - {x: 0, y: 93}
+      indices: 000000000200000001000000000000000300000002000000
+      edges:
+      - {x: 0, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: 3}
+      - {x: 3, y: 0}
+      weights:
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+    - serializedVersion: 2
+      name: kiem-lv010-female-inner_top
+      rect:
+        serializedVersion: 2
+        x: 412
+        y: 316
+        width: 93
+        height: 91
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones:
+      - name: torso
+        guid:
+        position: {x: 46.5, y: 45.5, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 40.95
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      spriteID: 61455bc4e2a934a74b5f1363b5dbb0f8
+      internalID: -240874577
+      vertices:
+      - {x: 0, y: 0}
+      - {x: 93, y: 0}
+      - {x: 93, y: 91}
+      - {x: 0, y: 91}
+      indices: 000000000200000001000000000000000300000002000000
+      edges:
+      - {x: 0, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: 3}
+      - {x: 3, y: 0}
+      weights:
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+    - serializedVersion: 2
+      name: kiem-lv020-male-outer_top-fit-v1
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 49
+        width: 80
+        height: 170
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones:
+      - name: torso
+        guid:
+        position: {x: 52, y: 93.5, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 68
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: arm_near_upper
+        guid:
+        position: {x: -16, y: 20.4, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 59.5
+        parentId: 0
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: arm_near_forearm
+        guid:
+        position: {x: 0, y: -51.000004, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 51.000004
+        parentId: 1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      spriteID: 9f04a70fc93344e7db534d399f4f4eca
+      internalID: 1748068993
+      vertices:
+      - {x: 0, y: 0}
+      - {x: 80, y: 0}
+      - {x: 80, y: 170}
+      - {x: 0, y: 170}
+      indices: 000000000200000001000000000000000300000002000000
+      edges:
+      - {x: 0, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: 3}
+      - {x: 3, y: 0}
+      weights:
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 2
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 1
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+    - serializedVersion: 2
+      name: kiem-lv020-female-outer_top-fit-v1
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 54
+        width: 80
+        height: 165
+      alignment: 9
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData:
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones:
+      - name: torso
+        guid:
+        position: {x: 52, y: 90.75, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 66
+        parentId: -1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: arm_near_upper
+        guid:
+        position: {x: -16, y: 19.8, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 57.75
+        parentId: 0
+        color:
+          serializedVersion: 2
+          rgba: 0
+      - name: arm_near_forearm
+        guid:
+        position: {x: 0, y: -49.500004, z: 0}
+        rotation: {x: 0, y: 0, z: 0, w: 1}
+        length: 49.500004
+        parentId: 1
+        color:
+          serializedVersion: 2
+          rgba: 0
+      spriteID: eaf6100ddab4d49c499e3c6d2dc7f6d8
+      internalID: 104184445
+      vertices:
+      - {x: 0, y: 0}
+      - {x: 80, y: 0}
+      - {x: 80, y: 165}
+      - {x: 0, y: 165}
+      indices: 000000000200000001000000000000000300000002000000
+      edges:
+      - {x: 0, y: 1}
+      - {x: 1, y: 2}
+      - {x: 2, y: 3}
+      - {x: 3, y: 0}
+      weights:
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 2
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 0
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+      - 'weight[0]': 1
+        'weight[1]': 0
+        'weight[2]': 0
+        'weight[3]': 0
+        'boneIndex[0]': 1
+        'boneIndex[1]': 0
+        'boneIndex[2]': 0
+        'boneIndex[3]': 0
+    outline: []
+    customData:
+    physicsShape: []
+    bones: []
+    spriteID: 9d181f130929148c1b2399238f0c31b6
+    internalID: 0
+    vertices: []
+    indices:
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      kiem-lv001-female-main_weapon: 1778119821
+      kiem-lv001-male-main_weapon: 1611713685
+      kiem-lv010-female-inner_top: -240874577
+      kiem-lv010-male-inner_top: -950164744
+      kiem-lv020-female-outer_top-fit-v1: 104184445
+      kiem-lv020-male-outer_top-fit-v1: 1748068993
+      kiem-lv030-female-head_hair-fit-v1: 1037927933
+      kiem-lv030-male-head_hair-fit-v1: -1528469149
+  mipmapLimitGroupName:
+  pSDRemoveMatte: 0
+  userData:
+  assetBundleName:
+  assetBundleVariant:

@@ -12,6 +12,8 @@ Update side-view redraw: grid cũ được giữ cho inventory/reference; không
 
 Fit spike chỉ chọn `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer`. Review cận cảnh phát hiện hair và outer trong source-v3 còn ghép nhiều view; đã redraw đúng bốn file hair/outer nam/nữ, reject bản outer nam 3/4, key magenta và normalize một lần tại PPU 208. Contact `generated-batch-v2/fit-spike-v1/mixed-loadout-prefit-contact-v1.jpg` đạt idle prefit cho bước weighting; vẫn runtime eligible bằng 0.
 
+Proof pack Unity gộp 8 item vào một atlas 512×512, PNG 173.683 byte, không resize lại từng item. Sáu sprite Skinned có bones/BlendWeight tái tạo bằng editor authoring tool; hai weapon là Rigid. Player 169.088.250 byte, tăng 0,352% so baseline và nhẹ hơn bản 8 texture rời 202.672 byte. Pack vẫn giữ `DRAFT_RUNTIME_FIT` cho tới khi có motion evidence trong Player.
+
 Update v9: base `head` nam/nữ đã bỏ tóc bake; mọi hairstyle là attachment. Capture matrix 66×3 tại `build/vo-ten-slot-matrix-v2/three-profiles/` đã review đủ 10 slot cho nam Lv1 và nữ Lv30. Trạng thái `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS`; next tách character/action orchestration dùng chung, chưa nhân controller Map01A sang class khác.
 
 Quyết định dependency: chưa cài `2D Animation`/`PSD Importer`/`Addressables` trong checkpoint này. Manifest hiện giữ contract tương đương Sprite Library `Category + Label`; migration package phải là batch riêng có benchmark và giữ nguyên evidence. Asset residency mục tiêu là map hiện tại + class common + tier hiện tại/gần kề, dùng chung cho mobile/tablet/PC.
