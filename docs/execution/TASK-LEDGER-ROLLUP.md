@@ -1,5 +1,13 @@
 # TASK LEDGER ROLLUP — 2D Pivot
 
+## Source selection + stopped class task recovery — 2026-09-10
+
+Đã review bộ Cổng Đông Lâm và sheet hệ thống/identity/base/module Võ–Kiếm–Pháp–Cơ–Linh; tạo source pack chuẩn hóa ngoài repo tại `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1`. Pack có 10 map source canonical theo đúng 10 chức năng triển khai, 37 class source canonical và 12 file Võ WIP được thu hồi từ batch đã dừng. Manifest giữ đường dẫn gốc, SHA-256, purpose và status; ảnh gốc không đổi tên hoặc sửa.
+
+Audit Võ WIP: base nam/nữ đã căn chung ground; mask plan và ba mảnh alpha `inner_top`, `arm_guard`, `main_weapon` có trim/atlas round-trip lossless và toggle review. Chưa được runtime approval vì lỗi tiếp xúc cổ tay/alpha edge, thiếu bảy slot, thiếu motion và female equipment. Phần này được giữ để tiếp tục sau gate Map 01A, không làm lại và không dùng primitive cũ làm art direction.
+
+Next: MAP01A-01 khóa route 10 khu, 12 layer, collision/trigger/UI safe-area theo catalog; sau đó dựng visible art slice và Player evidence trước class Võ Lv1–30.
+
 ## Đông Môn illustrated draft — 2026-09-10
 
 Đã tạo art mới và pack skyline + atlas cổng/NPC/terrain; preview opt-in trong Player qua `--lgo-dongmon-art-preview`, không sửa controller/state/5 class hoặc frozen surfaces. `tools/capture_lgo_dongmon_art.py` capture 5 trạng thái vào thư mục riêng. EditMode 139 pass, 0 fail, 1 skipped; guard 5 test pass; smoke/build/baseline 20 frame và art 5 frame đã chạy, ảnh đã review. Art vẫn DRAFT, player còn placeholder; không claim giống hoàn toàn ảnh owner.

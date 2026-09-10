@@ -1,5 +1,15 @@
 # PROJECT STATE — Linh Giới Online 2D
 
+## Goal hiện hành — Cổng Đông Lâm Map 01A — 2026-09-10
+
+Goal vận hành đã được realign theo source owner mới: trước tiên hoàn thiện **Cổng Đông Lâm Map 01A Lv1–3** thành vertical slice 2D có thể chơi và kiểm bằng macOS Player. Map gồm 10 khu từ Spawn/Hạ Vân tới portal Suối Thanh Minh, 12 lớp render/parallax, safe-zone + khu dân cư + combat edge nhẹ, sáu NPC chính, bốn quái Lv1–3 và quest Q01–Q09. Linh Thành chỉ xuất hiện xa và chưa mở.
+
+Sau gate Map 01A, class mẫu là **Võ Lv1–30** vì batch trước đã có base nam/nữ căn ground, mask/anchor, ba slot alpha và atlas/toggle evidence có thể tái sử dụng. Hoàn thiện Võ đủ 10 slot, thay đồ và motion/skill `Liên Quyền` trước khi nhân sang bốn class còn lại. Không làm lại asset đã dùng được; không coi primitive hoặc ảnh tự sinh cũ là nguồn mỹ thuật.
+
+Source pack đã chuẩn hóa ngoài repo tại `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1`: 10 ảnh Map 01A canonical, 37 ảnh class canonical và 12 file Võ WIP. Catalog trong repo: `docs/art/LGO-SELECTED-2D-SOURCE-CATALOG-v1.md`. Ảnh gốc không đổi. Board chỉ là source; runtime dùng asset tách lớp có provenance.
+
+Các đoạn dưới phản ánh checkpoint trước realignment. Nếu mâu thuẫn, Goal hiện hành và source catalog thắng.
+
 Ưu tiên owner mới nhất 2026-09-10: Codex tự quyết hướng kỹ thuật, nhưng phải phục vụ sản phẩm 2D owner có thể tự kiểm chứng trong Player. Goal hiện tại là **hoàn thiện map đầu Đông Môn trước**, sau đó làm **một class đầu tiên** đủ base body, paper-doll slot, tách đồ, thay đồ, chuyển động và skill trong Player thật để kiểm chứng workflow trước khi nhân rộng sang 5 class. Góc cổng illustrated hiện mới là draft, không đồng nghĩa map đầu đã xong. Không mở map thứ hai hoặc mở rộng hub/district trước khi Đông Môn đạt gate.
 
 Quyết định kỹ thuật đang khóa:

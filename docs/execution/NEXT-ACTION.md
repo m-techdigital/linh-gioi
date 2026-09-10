@@ -1,3 +1,25 @@
+## Owner Goal Override — Cổng Đông Lâm Map 01A — 2026-09-10
+
+Nguồn sản phẩm mới nhất thay các mục Đông Môn/Linh Thành cũ bên dưới:
+
+- Việc đang làm: **Cổng Đông Lâm = Map 01A**, tutorial chung Lv1–3 sau năm class intro riêng.
+- Source hình canonical: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/01..10`; catalog và giới hạn dùng tại `docs/art/LGO-SELECTED-2D-SOURCE-CATALOG-v1.md`.
+- World flow khóa: Class Intro → Cổng Đông Lâm → Suối Thanh Minh → Rừng Ngoại Vi → Đồi Phong Linh → Miếu Linh Sơn → Sơn Thạch Thủ → Linh Thành. Batch này chỉ Map 01A; Linh Thành chỉ là silhouette xa.
+- Không tiếp tục lấy primitive hiện có làm art direction. Giữ state machine, input, anchor, Tilemap/atlas contract và evidence tooling nếu phù hợp; thay nội dung/cảnh theo source canonical.
+- Không đưa nguyên design board vào runtime. Tách/redraw/crop thành asset riêng theo layer với provenance, alpha/pivot/anchor/sort và review Player.
+- Công sức class cũ không bị bỏ: source pack giữ 12 file Võ WIP gồm base nam/nữ đã căn ground, mask plan, ba slot alpha và atlas/toggle review. Chưa import runtime vì còn lỗi cổ tay/alpha và thiếu slot/motion.
+
+### Actions theo thứ tự
+
+1. **MAP01A-01 — World strip contract:** thay route cũ bằng 10 khu `Spawn/Hạ Vân → Đại Cổng → Quan Thủ → Quảng trường → Tổng Phú → Thanh Nhi → Giếng/Cầu → Lão Trần → Combat edge → Portal Suối Thanh Minh`; khóa 12 parallax/render layer, collision và UI safe area từ source.
+2. **MAP01A-02 — Visible art slice:** dựng một màn gameplay 16:9 từ đúng palette/architecture/terrain/vegetation source; loại cảm giác rectangle blockout ở góc spawn–đại cổng; Player và NPC đứng đúng ground.
+3. **MAP01A-03 — Lv1–3 playable flow:** Q01–Q09, NPC chính, inventory/potion/gather/loot/equip/chest, bốn quái chỉ ở rìa làng và portal Map 01B. Không boss, không monetization, không skill thứ hai.
+4. **MAP01A-04 — Runtime gate:** Unity EditMode, smoke, macOS Player build/capture, matrix, no-3D/no-source-image, frozen audit và review ảnh so với 10 source canonical.
+5. **CLASS-VO-01 — sau khi map pass:** tiếp tục WIP Võ, không làm lại; hoàn thiện Võ nam/nữ Lv1–30 với 10 slot, thay đồ, idle/walk/run/jump/basic attack và `Liên Quyền` trong Player.
+6. Chỉ sau CLASS-VO-01 mới nhân cùng contract sang Kiếm/Pháp/Cơ/Linh Lv1–30.
+
+Next action ngay: triển khai **MAP01A-01** trong worktree sạch từ `origin/feature/2d`. Các mục phía dưới là lịch sử và không được dùng để mở Linh Thành hoặc tiếp tục atlas Võ trước gate Map 01A.
+
 ## Current Owner Goal Override — 2026-09-10
 
 - Map đầu Đông Môn là vertical-slice grounding/proof surface; không mở map thứ hai.
