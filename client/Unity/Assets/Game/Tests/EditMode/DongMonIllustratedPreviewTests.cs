@@ -287,7 +287,7 @@ namespace LinhGioi.Tests
                 Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(0));
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
                     .Count(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Võ equipment component lv001 male ")),
-                    Is.EqualTo(12));
+                    Is.EqualTo(14));
             }
             finally
             {
@@ -337,7 +337,7 @@ namespace LinhGioi.Tests
                     "modular mode must render every equipment slot through the shared bone attachment path");
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
                     .Count(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Võ equipment component lv001 female ")),
-                    Is.EqualTo(11));
+                    Is.EqualTo(13));
                 Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 female slot head_hair").enabled, Is.False,
                     "an unequipped slot must not reappear from the full-frame sheet");
             }
@@ -464,8 +464,8 @@ namespace LinhGioi.Tests
                 Assert.That(GameObject.Find("Map01A Võ avatar lv001 male slot boots").GetComponent<SpriteRenderer>().enabled, Is.False);
                 var equipmentComponents = preview.GetComponentsInChildren<SpriteRenderer>(true)
                     .Where(renderer => renderer.name.StartsWith("Map01A Võ equipment component lv001 male ")).ToArray();
-                Assert.That(equipmentComponents, Has.Length.EqualTo(12));
-                Assert.That(equipmentComponents.Count(renderer => renderer.enabled), Is.EqualTo(12));
+                Assert.That(equipmentComponents, Has.Length.EqualTo(14));
+                Assert.That(equipmentComponents.Count(renderer => renderer.enabled), Is.EqualTo(14));
 
                 var weapon = GameObject.Find("Map01A Võ equipment component lv001 male main_weapon center").transform;
                 var boots = GameObject.Find("Map01A Võ equipment component lv001 male boots left").transform;

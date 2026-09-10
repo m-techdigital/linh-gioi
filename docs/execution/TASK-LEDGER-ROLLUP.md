@@ -428,3 +428,7 @@ Tạo nguồn rig nam/nữ theo ảnh Võ đã chọn, component-QA và pack 20 
 ## Võ base-first rig + equipment attachment — 2026-09-10
 
 TDD bắt lỗi combined slot, thiếu hierarchy và world/local rotation. Runtime chung `TwoDSkeletalPaperDollRig` nay quản lý parent bones, pivot và attachment; Võ dùng 96 metadata attachment mà không tăng 724.795 byte texture. EditMode 180 pass/0 fail/1 ignored; capture 46×3 technical pass. Visual còn `GARMENT_ART_VISUAL_FIX_REQUIRED`, đặc biệt Võ nữ Lv30; next sửa source garment theo rig rồi mới claim class pass hoặc mở class thứ hai.
+
+## Võ garment source/atlas batch v8 — 2026-09-10
+
+Tạo đủ 8 source sheet theo một layout 4×3 và pack một lượt thành 112 attachment; các slot áo giáp/hạ trang/găng/giày có nhiều component theo bone. Tổng 7 atlas 885.234 byte. Player v18 capture `build/vo-garment-v1/three-profiles/` đạt 46×3 và visual Lv30 nữ đã rõ outfit/action. Next capture ma trận 10 slot nam/nữ Lv1/Lv30; chưa đóng `CLASS-VO-01`.

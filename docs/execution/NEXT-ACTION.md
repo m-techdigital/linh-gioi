@@ -98,6 +98,10 @@ Next action ngay: căn PC foot/contact shadow trên lane (ảnh hiện vẫn PC 
 
 ### Base-first override mới nhất
 
+Checkpoint mới hơn: manifest Võ v8 đã thay delta trang phục nhỏ bằng batch 8 sheet rig-compatible, đóng 112 attachment vào 7 atlas/885.234 byte. Player mobile/tablet/PC tại `build/vo-garment-v1/three-profiles/` đã review: Lv30 nữ có đủ silhouette trong run/jump/basic/Liên Quyền. Next duy nhất trước khi đóng `CLASS-VO-01`: thêm capture matrix cởi/mặc đủ 10 slot cho nam/nữ ở Lv1 và Lv30, kiểm layer order/pivot; không tạo thêm artwork nếu matrix không chỉ ra lỗi cụ thể.
+
+Gate: `VO_LV1_30_GARMENT_BATCH_PLAYER_PASS / TEN_SLOT_VISUAL_MATRIX_PENDING`. Sau gate này mới tách orchestration/controller base khỏi Map01A và chỉ sau đó mới mở class thứ hai.
+
 Đã bỏ hướng mỗi slot tự dịch/xoay. Võ hiện là consumer đầu tiên của `TwoDSkeletalPaperDollRig`: skeleton cha-con, local pose và 96 attachment metadata dùng chung. Next không được copy `CongDongLamMap01AArtPreview` sang class khác. Việc tiếp theo của `CLASS-VO-01` là tạo/chuẩn hóa garment art tương thích chính skeleton này, kiểm full outfit và equip/unequip từng slot qua idle/run/jump/basic/`Liên Quyền`; chỉ khi visual đạt mới tách controller orchestration ra khỏi Map01A và nhân manifest sang class thứ hai.
 
 Gate hình ảnh hiện tại: `VO_BASE_FIRST_RIG_TECHNICAL_PASS / GARMENT_ART_VISUAL_FIX_REQUIRED`. Evidence mới nhất `build/vo-base-first-v3/three-profiles/`; không dùng capture split-only hoặc independent-pivot trước đó để claim. Quy tắc/lỗi đã ghi tại `LGO-2D-PRODUCTION-WORKFLOW-RESEARCH-v0.1.md`.

@@ -19,7 +19,7 @@ SKIP_PARTS = {
 RUNTIME_ART_PACKS = [
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1MapAvatarArt',
-        'id': 'vo-lv1-30-map-avatar-v7',
+        'id': 'vo-lv1-30-map-avatar-v8',
         'status': 'DRAFT_RUNTIME_REVIEW',
         'assets': {
             'vo-lv1-map-avatar-atlas.png': (1024, 1024, 'two-gender-tier-equipment-atlas'),
@@ -30,7 +30,7 @@ RUNTIME_ART_PACKS = [
             'vo-lv1-female-motion-atlas.png': (1024, 1024, 'two-gender-motion-atlas'),
             'vo-lv1-rig-atlas.png': (1024, 1024, 'two-gender-skeletal-rig-atlas'),
         },
-        'generators': {'aligned_imagegen_delta_batch', 'reference_guided_imagegen_motion_batch',
+        'generators': {'reference_guided_imagegen_attachment_batch', 'reference_guided_imagegen_motion_batch',
                        'reference_guided_imagegen_rig_batch'},
         'max_bytes': 300_000,
         'status_error': 'Võ Lv1-30 avatar must remain draft until animated paper-doll attachment review',

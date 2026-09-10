@@ -2,6 +2,8 @@
 
 ## Override hiện hành — base-first hierarchy checkpoint 2026-09-10
 
+Update v8: source garment hiện ở `generated-batch-v6/source-v1`, đủ 8 sheet cùng layout 4×3. Runtime có 112 attachment; một slot được phép có nhiều component theo bone. Tổng texture 885.234 byte, Player ba profile đã review outfit Lv30 nữ. Gate còn lại là visual matrix cởi/mặc đủ 10 slot; không quay lại cách tách delta nhỏ từ full-body.
+
 Phần “no gameplay/runtime asset” bên dưới là lịch sử của sandbox chuẩn hóa cũ. Branch hiện hành đã có Map01A và Võ runtime. Contract mới dùng chung nằm ở `TwoDSkeletalPaperDollRig.cs`; manifest Võ v7 có 20 rig part, parent/pivot, 120 local pose profile và 96 equipment attachment cho 4 tier × 2 giới × 10 slot. Mọi slot dùng attachment path; `arm_guard/boots` có left/right, tám slot còn lại có center attachment. Tất cả chỉ tham chiếu sub-rect của 7 atlas hiện có, không tăng texture byte.
 
 Không nhân code Võ sang class khác. Trước Kiếm/Pháp/Cơ/Linh phải tái dùng cùng base rig runtime, bone/slot IDs và action/UI base. Asset khác class chỉ được thay manifest/atlas/pose timing. Evidence kỹ thuật mới nhất phải đi cùng visual note trung thực; hierarchy đã giảm rời khớp, nhưng rig-compatible garment art vẫn cần polish trước khi ghi `CLASS-VO-01_PASS`.

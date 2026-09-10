@@ -561,11 +561,11 @@ namespace LinhGioi.World
             if (manifest == null || textures.Values.Any(texture => texture == null))
                 throw new InvalidOperationException("Missing reviewed Võ Lv1-30 map avatar pack");
             var pack = JsonUtility.FromJson<VoAvatarPackInfo>(manifest.text);
-            if (pack.id != "vo-lv1-30-map-avatar-v7" || pack.status != "DRAFT_RUNTIME_REVIEW"
+            if (pack.id != "vo-lv1-30-map-avatar-v8" || pack.status != "DRAFT_RUNTIME_REVIEW"
                 || pack.parts == null || pack.parts.Length != 96 || pack.genders == null || pack.genders.Length != 2
                 || pack.slots == null || pack.slots.Length != 10 || pack.levels == null || pack.levels.Length != 4
                 || pack.attachmentProfiles == null || pack.attachmentProfiles.Length != 120
-                || pack.equipmentComponents == null || pack.equipmentComponents.Length != 96
+                || pack.equipmentComponents == null || pack.equipmentComponents.Length != 112
                 || pack.rigParts == null || pack.rigParts.Length != 20
                 || pack.rigPoseProfiles == null || pack.rigPoseProfiles.Length != 120)
                 throw new InvalidOperationException("Invalid Võ Lv1-30 map avatar manifest");
@@ -638,7 +638,6 @@ namespace LinhGioi.World
                     || component.worldW <= 0 || component.worldH <= 0
                     || !VoEquipmentSlots.Contains(component.slot)
                     || !new[] { "left", "right", "center" }.Contains(component.side)
-                    || ((component.slot == "arm_guard" || component.slot == "boots") == (component.side == "center"))
                     || _voEquipmentComponents.ContainsKey(component.id))
                     throw new InvalidOperationException("Invalid Võ equipment component: " + component.id);
                 var boneId = component.gender + "_" + component.bone;
@@ -1272,7 +1271,7 @@ namespace LinhGioi.World
                     CycleVoAvatarMode();
                     result.voModularVerified = VoAvatarMode == "modular"
                         && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 0
-                        && _voEquipmentComponents.Values.Count(renderer => renderer.enabled) == 12
+                        && _voEquipmentComponents.Values.Count(renderer => renderer.enabled) == 14
                         && _voRigParts.Values.Count(renderer => renderer.enabled) == 10;
                     result.voEquipmentComponentBindingVerified = result.voModularVerified
                         && !_voAvatarParts["lv001_male_slot_arm_guard"].enabled
@@ -1283,7 +1282,7 @@ namespace LinhGioi.World
                     MoveOnLane(1, .1f);
                     result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
                         && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 0
-                        && _voEquipmentComponents.Values.Count(renderer => renderer.enabled) == 12
+                        && _voEquipmentComponents.Values.Count(renderer => renderer.enabled) == 14
                         && _voRigParts.Values.Count(renderer => renderer.enabled) == 10 && !_voMotionRenderer.enabled;
                 }
                 if (i == 21)
@@ -1310,7 +1309,7 @@ namespace LinhGioi.World
                     MoveOnLane(1, .1f);
                     result.voFemaleMotionVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
                         && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 0
-                        && _voEquipmentComponents.Values.Count(renderer => renderer.enabled) == 11
+                        && _voEquipmentComponents.Values.Count(renderer => renderer.enabled) == 13
                         && _voRigParts.Values.Count(renderer => renderer.enabled) == 10
                         && !_voAvatarParts["lv001_female_slot_inner_top"].enabled && !_voMotionRenderer.enabled;
                 }

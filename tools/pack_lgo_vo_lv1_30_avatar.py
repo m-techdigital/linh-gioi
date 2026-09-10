@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import deque
 import json
 import math
 from pathlib import Path
@@ -59,6 +60,20 @@ RIG_PARENTS = {
     "left-thigh": "torso-hips", "left-shin-foot": "left-thigh",
     "right-thigh": "torso-hips", "right-shin-foot": "right-thigh",
 }
+GARMENT_LAYOUT = (
+    ("head_hair", "center", "head", 0, 0, .56, 16),
+    ("outer_tunic", "center", "torso-hips", 0, 1, .82, 14),
+    ("light_armor", "left", "left-upper-arm", 0, 2, .48, 15),
+    ("light_armor", "right", "right-upper-arm", 0, 3, .48, 15),
+    ("arm_guard", "left", "left-forearm-hand", 1, 0, .48, 16),
+    ("arm_guard", "right", "right-forearm-hand", 1, 1, .48, 16),
+    ("lower_garment", "left", "left-thigh", 1, 2, .64, 10),
+    ("lower_garment", "right", "right-thigh", 1, 3, .64, 11),
+    ("boots", "left", "left-shin-foot", 2, 0, .58, 12),
+    ("boots", "right", "right-shin-foot", 2, 1, .58, 13),
+    ("main_weapon", "center", "right-forearm-hand", 2, 2, .62, 17),
+    ("waist", "center", "torso-hips", 2, 3, .78, 16),
+)
 NEW_MOTION_WORLD_HEIGHTS = {
     "run_a": 1.68, "run_b": 1.68, "jump_rise": 1.68, "jump_apex": 1.36,
     "basic_windup": 1.48, "basic_impact": 1.48,
@@ -152,6 +167,79 @@ def rig_pose_profiles() -> list[dict]:
     return profiles
 
 
+def remove_connected_background(source: Image.Image) -> Image.Image:
+    """Remove only the smooth navy field connected to a sheet cell's border."""
+    image = source.convert("RGB")
+    width, height = image.size
+    pixels = image.load()
+    background = bytearray(width * height)
+    queue: deque[tuple[int, int]] = deque()
+
+    def navy(pixel: tuple[int, int, int]) -> bool:
+        red, green, blue = pixel
+        return blue >= red + 6 and blue >= green + 3 and max(pixel) < 130
+
+    def seed(x: int, y: int) -> None:
+        index = y * width + x
+        if not background[index] and navy(pixels[x, y]):
+            background[index] = 1
+            queue.append((x, y))
+
+    for x in range(width):
+        seed(x, 0); seed(x, height - 1)
+    for y in range(height):
+        seed(0, y); seed(width - 1, y)
+    while queue:
+        x, y = queue.popleft()
+        current = pixels[x, y]
+        for nx, ny in ((x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)):
+            if nx < 0 or ny < 0 or nx >= width or ny >= height:
+                continue
+            index = ny * width + nx
+            candidate = pixels[nx, ny]
+            if background[index] or not navy(candidate):
+                continue
+            distance = sum((candidate[channel] - current[channel]) ** 2 for channel in range(3))
+            if distance <= 144:
+                background[index] = 1
+                queue.append((nx, ny))
+    result = image.convert("RGBA")
+    alpha = Image.new("L", image.size, 255)
+    alpha.putdata([0 if value else 255 for value in background])
+    result.putalpha(alpha)
+    return result
+
+
+def garment_entries(garment_dir: Path, level: int, gender: str) -> list[dict]:
+    path = garment_dir / f"vo-lv{level:03d}-{gender}-attachment-sheet.png"
+    sheet = Image.open(path).convert("RGB")
+    if sheet.size != (1448, 1086):
+        raise ValueError(f"Invalid 4x3 garment sheet: {path}")
+    cell_width, cell_height = sheet.width // 4, sheet.height // 3
+    entries = []
+    for slot, side, bone, row, column, world_height, order in GARMENT_LAYOUT:
+        cell = sheet.crop((column * cell_width, row * cell_height,
+                           (column + 1) * cell_width, (row + 1) * cell_height))
+        isolated = remove_connected_background(cell)
+        box = isolated.getchannel("A").getbbox()
+        if box is None:
+            raise ValueError(f"Missing garment component {level}/{gender}/{slot}/{side}")
+        isolated = isolated.crop(box)
+        target_height = round(MOTION_TARGET_HEIGHT * world_height / WORLD_HEIGHT)
+        image = isolated.resize((max(1, round(isolated.width / isolated.height * target_height)),
+                                 target_height), Image.Resampling.LANCZOS)
+        dx, dy = RIG_REST[bone]
+        if slot == "main_weapon":
+            dx += .14
+        entries.append({
+            "id": f"lv{level:03d}_{gender}_{slot}_{side}", "level": level, "gender": gender,
+            "kind": "component", "slot": slot, "side": side, "bone": bone, "order": order,
+            "path": path, "image": image, "worldW": image.width / image.height * world_height,
+            "worldH": world_height, "dx": dx, "dy": dy,
+        })
+    return entries
+
+
 def pack_rig(rig_dir: Path, output: Path) -> tuple[list[dict], dict]:
     entries = []
     for gender in ("male", "female"):
@@ -231,7 +319,7 @@ def equipment_components(entry: dict, level: int) -> list[dict]:
     return components
 
 
-def pack_static(source_dir: Path, level: int, output: Path) -> tuple[list[dict], list[dict], dict, dict | None]:
+def pack_static(source_dir: Path, garment_dir: Path, level: int, output: Path) -> tuple[list[dict], list[dict], dict, dict | None]:
     scale = TARGET_FULL_HEIGHT / (GROUND_SOURCE_Y - 16)
     entries = []
     order_by_slot = {slot: 8 + index for index, slot in enumerate(SLOTS)}
@@ -254,6 +342,7 @@ def pack_static(source_dir: Path, level: int, output: Path) -> tuple[list[dict],
             image = source.crop(box).resize((max(1, round((box[2]-box[0])*scale)), max(1, round((box[3]-box[1])*scale))), Image.Resampling.LANCZOS)
             entries.append({"id": f"lv{level:03d}_{gender}_slot_{slot}", "gender": gender, "kind": "slot",
                             "slot": slot, "order": order_by_slot[slot], "path": path, "box": box, "image": image})
+        entries.extend(garment_entries(garment_dir, level, gender))
     if level == 1:
         entries.append({"id": "skill_slash", "gender": "shared", "kind": "effect", "slot": "", "order": 24,
                         "path": None, "box": (0, 0, 120, 120), "image": skill_slash()})
@@ -263,6 +352,16 @@ def pack_static(source_dir: Path, level: int, output: Path) -> tuple[list[dict],
     for entry in entries:
         image = entry["image"]
         atlas.alpha_composite(image, (entry["left"], entry["top"]))
+        if entry["kind"] == "component":
+            components.append({
+                "id": entry["id"], "level": level, "gender": entry["gender"], "slot": entry["slot"],
+                "side": entry["side"], "bone": entry["bone"], "atlas": f"lv{level:03d}",
+                "x": entry["left"], "y": ATLAS_SIZE - entry["top"] - image.height,
+                "w": image.width, "h": image.height, "order": entry["order"],
+                "worldW": entry["worldW"], "worldH": entry["worldH"],
+                "dx": entry["dx"], "dy": entry["dy"], "sourceSha256": digest(entry["path"]),
+            })
+            continue
         box = entry["box"]
         packed = {"id": entry["id"], "level": level, "gender": entry["gender"], "kind": entry["kind"],
                   "slot": entry["slot"], "atlas": f"lv{level:03d}", "x": entry["left"],
@@ -278,7 +377,8 @@ def pack_static(source_dir: Path, level: int, output: Path) -> tuple[list[dict],
                    "dy": (GROUND_SOURCE_Y-cy)/CANVAS[1]*WORLD_HEIGHT,
                    "source": str(entry["path"].relative_to(source_dir)), "sourceSha256": digest(entry["path"])}
         parts.append(packed)
-        components.extend(equipment_components(entry, level))
+        if entry["kind"] == "slot" and entry["slot"] in {"inner_top", "accessory"}:
+            components.extend(equipment_components(entry, level))
     filename = "vo-lv1-map-avatar-atlas.png" if level == 1 else f"vo-lv{level}-equipment-atlas.png"
     path = output / filename
     atlas.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).save(path, optimize=True, compress_level=9)
@@ -333,6 +433,7 @@ def main() -> int:
     parser.add_argument("--extended-motion-male-dir", type=Path, required=True)
     parser.add_argument("--extended-motion-female-dir", type=Path, required=True)
     parser.add_argument("--rig-dir", type=Path, required=True)
+    parser.add_argument("--garment-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     if args.output_dir.exists(): raise FileExistsError("Use a new output directory")
@@ -341,7 +442,7 @@ def main() -> int:
     effect = None
     for level in LEVELS:
         level_parts, level_components, atlas, level_effect = pack_static(
-            static_source(args.lv1_dir, args.progression_dir, level), level, args.output_dir)
+            static_source(args.lv1_dir, args.progression_dir, level), args.garment_dir, level, args.output_dir)
         parts.extend(level_parts); components.extend(level_components); atlases.append(atlas)
         if level_effect is not None: effect = level_effect
     if effect is None: raise ValueError("Missing Võ skill effect")
@@ -360,16 +461,15 @@ def main() -> int:
                        "role": "two-gender-motion-atlas" if is_motion else (
                            "two-gender-skeletal-rig-atlas" if atlas["id"] == "rig" else "two-gender-tier-equipment-atlas"),
                        "generator": "reference_guided_imagegen_motion_batch" if is_motion else (
-                           "reference_guided_imagegen_rig_batch" if atlas["id"] == "rig" else "aligned_imagegen_delta_batch"),
+                           "reference_guided_imagegen_rig_batch" if atlas["id"] == "rig" else "reference_guided_imagegen_attachment_batch"),
                        "referenceOnly": False})
-    manifest = {"id": "vo-lv1-30-map-avatar-v7", "status": "DRAFT_RUNTIME_REVIEW", "classId": "vo",
+    manifest = {"id": "vo-lv1-30-map-avatar-v8", "status": "DRAFT_RUNTIME_REVIEW", "classId": "vo",
                 "levels": list(LEVELS), "genders": ["male", "female"], "slots": list(SLOTS),
                 "atlases": atlas_records, "assets": assets, "parts": parts, "effects": [effect], "motionFrames": motion,
                 "attachmentProfiles": attachment_profiles(),
                 "equipmentComponents": components,
                 "rigParts": rig_parts, "rigPoseProfiles": rig_pose_profiles(),
-                "nonClaims": ["reusable hierarchical paper-doll rig technical checkpoint",
-                              "garment attachment art visual fix required",
+                "nonClaims": ["reference-guided garment attachment batch requires Player review",
                               "animated paper-doll attachment review required"]}
     (args.output_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))+"\n")
     print(json.dumps({"id": manifest["id"], "parts": len(parts), "equipmentComponents": len(components), "motionFrames": len(motion),

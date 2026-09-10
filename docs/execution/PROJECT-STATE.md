@@ -339,3 +339,7 @@ Trạng thái: `VO_LV1_FULL_FRAME_MOTION_PASS / ANIMATED_PAPER_DOLL_ATTACHMENT_I
 ## Võ base-first skeletal hierarchy — 2026-09-10
 
 Đã chuyển prototype Võ từ sprite pivot độc lập sang bone hierarchy cha-con và đưa phần dựng rig/attachment vào base `TwoDSkeletalPaperDollRig`. Manifest v7 giữ 7 atlas/724.795 byte, thêm 96 attachment metadata cho đủ 10 slot ở Lv1/10/20/30, nam/nữ; pose world được chuyển sang local rotation để không cộng dồn sai. EditMode gần nhất 181 total/180 pass/0 fail/1 ignored; Player capture ba profile technical pass. Visual review xác nhận tay/chân nối tốt hơn, nhưng garment nữ Lv30 còn chưa khớp silhouette production. Trạng thái: `VO_BASE_FIRST_RIG_TECHNICAL_PASS / GARMENT_ART_VISUAL_FIX_REQUIRED`; chưa mở class khác.
+
+## Võ garment attachment v8 — 2026-09-10
+
+Đã chọn/tạo đủ một lượt 8 sheet Võ Lv1/10/20/30 nam-nữ theo layout 4×3, xử lý nền liên thông từ viền và đóng 112 attachment vào 7 atlas 1024²/885.234 byte. EditMode 180 pass/0 fail/1 ignored; macOS Player build v18 không lỗi/cảnh báo; capture 46×3 và review mắt xác nhận Lv30 nữ có trang phục rõ trong bốn action modular. Trạng thái `VO_LV1_30_GARMENT_BATCH_PLAYER_PASS / TEN_SLOT_VISUAL_MATRIX_PENDING`; chưa claim class hoàn chỉnh và chưa mở class khác.

@@ -99,3 +99,11 @@ Bài học bắt buộc không lặp:
 5. Technical capture PASS chỉ xác nhận state/schema. Capture v1 vẫn cho thấy nữ Lv30 thiếu coherence; chỉ v2 sau hierarchy/local rotation mới được dùng làm evidence kỹ thuật. Art attachment vẫn cần source rig-compatible, chưa claim production-final.
 
 Tham khảo kỹ thuật chính: [Spine skins/skin placeholders](https://en.esotericsoftware.com/spine-skins), [Spine attachments follow bones through slots](https://en.esotericsoftware.com/spine-attachments), [spine-unity mix-and-match](https://en.esotericsoftware.com/spine-unity-mix-and-match), [Unity Sprite Atlas](https://docs.unity3d.com/Manual/class-SpriteAtlas.html). Với wardrobe hữu hạn, prepack attachment vào atlas; không runtime-repack mặc định vì tăng cấp phát texture/cache và làm quản lý memory khó dự đoán.
+
+## Garment attachment batch Võ Lv1–30 — checkpoint 2026-09-10
+
+- Nguồn chuẩn được gom một lượt thành 8 sheet tại `LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/generated-batch-v6/source-v1/`, tên `vo-lv{001|010|020|030}-{male|female}-attachment-sheet.png`. Mỗi sheet 1448×1086, layout cố định 4×3 và có manifest hash riêng; không đưa sheet nguồn vào runtime/repository.
+- Một equipment slot có thể sở hữu nhiều attachment. `light_armor`, `lower_garment`, `arm_guard`, `boots` dùng cặp trái/phải theo bone; `head_hair`, `outer_tunic`, `main_weapon`, `waist` dùng component riêng; `inner_top` và `accessory` giữ layer nhỏ độc lập. Không thiết kế base theo giả định “một slot = một sprite”.
+- Nền generated sheet có gradient nhẹ dù prompt yêu cầu màu phẳng. Không dùng global chroma key vì sẽ ăn vào tóc/áo đen; pipeline chỉ flood-fill vùng navy liên thông từ viền từng cell, sau đó crop alpha bounds và scale một lần theo chiều cao bone chuẩn.
+- Atlas v8 có 112 attachment metadata cho 4 tier × 2 giới và vẫn chỉ dùng 7 texture 1024². Tổng PNG 885.234 byte, tăng 160.439 byte so với v7 nhưng thay toàn bộ garment silhouette lớn; không tạo texture riêng theo action hoặc theo thiết bị.
+- Evidence `build/vo-garment-v1/three-profiles/` đạt 46 frame trên mobile/tablet/PC. Review mắt xác nhận Võ nữ Lv30 đã có silhouette trang phục rõ trong run/jump/basic/Liên Quyền. Chưa đóng class vì cần capture ma trận cởi/mặc đủ 10 slot; trạng thái hiện tại `VO_LV1_30_GARMENT_BATCH_PLAYER_PASS / TEN_SLOT_VISUAL_MATRIX_PENDING`.
