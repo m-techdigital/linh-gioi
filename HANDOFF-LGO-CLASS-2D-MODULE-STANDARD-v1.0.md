@@ -10,6 +10,8 @@ Compatibility contract mới ở `docs/art/LGO-2D-EQUIPMENT-COMPATIBILITY-CONTRA
 
 Update side-view redraw: grid cũ được giữ cho inventory/reference; không dùng làm paper-doll vì góc front/3/4 lệch base side-view. Built-in ImageGen đã tạo hai sheet mới ở `classes-lv001-030/kiem/generated-batch-v2/`, đủ 80 cell canonical; nữ v1 bị reject do dính da/tay, nữ v2 sửa đúng hai row. `source-v3` đã key/despill/crop một lượt, nhưng cả 80 vẫn `candidate`, runtime eligible bằng 0 cho tới SpriteSkin/bone-weight + motion fit.
 
+Fit spike chỉ chọn `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer`. Review cận cảnh phát hiện hair và outer trong source-v3 còn ghép nhiều view; đã redraw đúng bốn file hair/outer nam/nữ, reject bản outer nam 3/4, key magenta và normalize một lần tại PPU 208. Contact `generated-batch-v2/fit-spike-v1/mixed-loadout-prefit-contact-v1.jpg` đạt idle prefit cho bước weighting; vẫn runtime eligible bằng 0.
+
 Update v9: base `head` nam/nữ đã bỏ tóc bake; mọi hairstyle là attachment. Capture matrix 66×3 tại `build/vo-ten-slot-matrix-v2/three-profiles/` đã review đủ 10 slot cho nam Lv1 và nữ Lv30. Trạng thái `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS`; next tách character/action orchestration dùng chung, chưa nhân controller Map01A sang class khác.
 
 Quyết định dependency: chưa cài `2D Animation`/`PSD Importer`/`Addressables` trong checkpoint này. Manifest hiện giữ contract tương đương Sprite Library `Category + Label`; migration package phải là batch riêng có benchmark và giữ nguyên evidence. Asset residency mục tiêu là map hiện tại + class common + tier hiện tại/gần kề, dùng chung cho mobile/tablet/PC.

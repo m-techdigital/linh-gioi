@@ -450,3 +450,7 @@ Không ép 80 crop front/3/4 cũ lên side-view base. Tạo batch-v2 nam/nữ đ
 ## Kiếm Sprite Library compatibility spike — 2026-09-10
 
 Cài Unity 2D Animation 13.0.0 và thêm adapter Category=`componentId`, Label=`itemId`. Mixed-level resolve độc lập, candidate bị chặn, apply preflight tránh thay đồ nửa chừng; attachment `Skinned` bắt buộc sprite bone data còn `Rigid` theo transform. EditMode `195/194/0/1`; Player benchmark cuối tăng 317.079 byte (0,188%). Next weight/fit bốn món mixed-level nam/nữ và chạy motion evidence; chưa nâng source-v3 lên approved.
+
+## Kiếm mixed-loadout idle prefit — 2026-09-10
+
+Review cận cảnh bắt hair/outer source-v3 còn ghép nhiều view. Giữ weapon Lv1/inner Lv10, chỉ redraw hair Lv30/outer Lv20 nam nữ; hai failure ImageGen được lưu, output key magenta và normalize một lần tại PPU 208. Contact idle nam/nữ đã review PASS cho bước weighting, nhưng runtime eligible vẫn 0. Next import 8 proof asset, weight/skinning và capture sáu motion × ba profile.

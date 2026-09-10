@@ -163,3 +163,10 @@ Nguồn chính thức: [Unity Sprite Swap](https://docs.unity3d.com/Packages/com
 - Runtime adapter dùng Category=`componentId`, Label=`itemId`, cho phép một loadout mixed-level resolve từng component độc lập. Registration vẫn từ chối `candidate`/`redraw-required`; apply preflight đủ entry và renderer rồi mới đổi sprite.
 - Attachment phân thành `Rigid` và `Skinned`. Rigid tiếp tục theo bone transform; Skinned bị chặn nếu `Sprite.GetBones()` rỗng. Vì source-v3 chưa weight nên chưa item Skinned nào được nâng approved và chưa claim visual fit.
 - TDD đi qua RED thiếu adapter, GREEN mixed-level/candidate, rồi RED thiếu attachment mode và GREEN bone-data gate. Test còn khóa transaction: thiếu một library entry thì mọi renderer giữ nguyên. EditMode cuối `195 total / 194 pass / 0 fail / 1 ignored`.
+
+## Kiếm mixed-loadout idle prefit — checkpoint 2026-09-10
+
+- Zoom review của bốn item proof bắt lỗi mà contact 80 ô không cho thấy: hair Lv30 nam/nữ chứa hai hairstyle/view, outer Lv20 vẫn là góc catalog nhiều view. Weapon Lv1 và inner Lv10 giữ nguyên; chỉ redraw hair/outer.
+- Hair nam lần đầu bị checkerboard RGB giả alpha và được sửa sang magenta; outer nam v1 vẫn 3/4/quá rộng nên reject, v2 strict profile mới được giữ. Nữ dùng cùng profile rule. Failure/output/hash ở external `generated-batch-v2/fit-spike-v1/`.
+- Dùng PPU 208 suy ra trực tiếp từ base cao 326–340 px/1,56–1,62 world unit. Mỗi output chỉ normalize một lần: hair 174×150/124×180, outer 80×170/80×165, khoảng 23–33 KB/file; không runtime upscale.
+- Contact mixed loadout nam/nữ đã review ở idle và đủ điều kiện đi tiếp sang weighting spike. Đây chưa phải motion fit hoặc runtime approval; `runtimeEligibleCount=0` giữ nguyên.

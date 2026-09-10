@@ -43,6 +43,8 @@ Thiết kế sheet phải theo camera gameplay. Grid front/3/4 chỉ được l�
 
 Runtime dùng hybrid attachment. `Rigid` dành cho kiếm, phụ kiện và chi tiết không uốn; chúng theo bone bằng transform. `Skinned` dành cho tóc dài, áo và vạt cần biến dạng; sprite loại này phải có bone data trước khi được đăng ký. Sprite Library dùng `componentId` làm Category và `itemId` làm Label, nên loadout phối chéo level không cần atlas hoặc code riêng theo tier. Adapter preflight toàn bộ library entry/renderer trước khi apply để tránh trạng thái thay đồ nửa chừng.
 
+Contact sheet toàn lô không thay thế review cận cảnh từng item proof. Một cell có thể nhìn như một slot nhưng thực tế chứa hai view; trường hợp đó là `REDRAW_REQUIRED_MULTI_VIEW_CELL`. Normalize chỉ thực hiện một lần từ working resolution xuống PPU/camera target, lưu hash và kích thước canonical; runtime không upscale để bù thiết kế sai.
+
 Nguồn tham khảo:
 - https://docs.unity3d.com/Packages/com.unity.2d.animation@13.0/manual/SLAsset.html
 - https://docs.unity3d.com/Packages/com.unity.2d.animation@13.0/manual/SpriteSwapIntro.html

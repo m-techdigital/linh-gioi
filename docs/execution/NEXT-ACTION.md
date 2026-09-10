@@ -389,3 +389,7 @@ Tách loadout, rig pose và action orchestration khỏi `CongDongLamMap01AArtPre
 ## Sau Sprite Library compatibility spike — weight/fit batch đầu
 
 Package 13.0.0 compile/test PASS và Player delta khoảng 0,188%, nên giữ. Adapter đã chứng minh loadout `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer` resolve độc lập qua Category/Label và chặn Skinned sprite chưa có bones. Next: fit cùng bốn món trên template nam/nữ, để weapon là Rigid, weight hair/inner/outer theo skeleton, kiểm occlusion và sáu state `idle/walk/run/jump/basic_attack/class_skill`, rồi mới nâng đúng các item đã pass lên approved và capture ba profile. Chưa import cả 80 candidate, chưa mở Pháp/Cơ/Linh.
+
+## Sau mixed-loadout idle prefit — import/weight/motion
+
+Prefit đã sửa hair/outer multi-view, normalize đúng PPU 208 và ghép idle nam/nữ thành công; weapon/inner được kế thừa. Next: import đúng 8 file của proof vào draft runtime pack, weight hair/inner/outer trên skeleton chung và giữ weapon Rigid; đăng ký qua Sprite Library, nối một opt-in Kiếm fit preview, chạy/capture sáu motion state trên mobile/tablet/PC. Chỉ các item qua motion/occlusion mới đổi thành `approved`; toàn bộ 72 candidate còn lại vẫn ở ngoài runtime.
