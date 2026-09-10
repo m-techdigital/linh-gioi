@@ -278,7 +278,8 @@
       "b": 0.78,
       "a": 0.66,
       "sortOffset": 10,
-      "cell": "skill_vo_lv1_palm_trail"
+      "cell": "skill_vo_lv1_palm_trail",
+      "approvedRuntimeArt": true
     },
     {
       "id": "vo_lv1_first_skill_impact",
@@ -294,7 +295,8 @@
       "b": 0.34,
       "a": 0.78,
       "sortOffset": 11,
-      "cell": "skill_vo_lv1_palm_burst"
+      "cell": "skill_vo_lv1_palm_burst",
+      "approvedRuntimeArt": true
     }
   ],
   "poseOffsets": [

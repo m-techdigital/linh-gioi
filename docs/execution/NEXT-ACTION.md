@@ -6,6 +6,8 @@
 - Chỉ khi Võ Lv1-30 có runtime evidence đủ rõ mới nhân pattern sang Kiếm/Pháp/Cơ/Linh Lv1-30.
 - Không Meshy/3D, không dùng ảnh thiết kế cũ làm runtime asset, không sửa frozen surfaces.
 
+`LGO_VO_LV1_30_SKILL_CUE_ART_READY`: Skill cue Võ Lv1-30 đã có approved runtime art cho trail/edge/impact (`cells=13`); tiếp theo refine alpha/pivot/body-head-arms coverage và frame motion Võ Lv1-30 trước khi nhân class.
+
 `LGO_VO_LV1_30_CELLMAP_COVERAGE_READY`: Cell-map approved runtime art Võ Lv1-30 đã mở rộng từ 8 lên 11 cell, thêm torso underlay và hai mảnh pants để giảm fallback primitive trong Player. Evidence nằm ở checkpoint commit tương ứng; đây vẫn là art/probe giai đoạn đầu, chưa phải production final.
 
 # NEXT ACTION — Linh Giới Online 2D
