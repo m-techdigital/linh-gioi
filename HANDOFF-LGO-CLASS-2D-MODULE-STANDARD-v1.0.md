@@ -2,6 +2,8 @@
 
 ## Override hiện hành — base-first hierarchy checkpoint 2026-09-10
 
+Update shared-state: `TwoDCharacterRuntimeState` đã lấy ownership của mode/gender/level, 10-slot loadout, locomotion hold và timed action khỏi Map01A. Evidence `build/vo-shared-state-v2/three-profiles/` đạt 66×3 và `voSharedRuntimeStateVerified=True`. Class kế tiếp phải cấp config/assets cho base này, không sao chép state machine Võ.
+
 Update v9: base `head` nam/nữ đã bỏ tóc bake; mọi hairstyle là attachment. Capture matrix 66×3 tại `build/vo-ten-slot-matrix-v2/three-profiles/` đã review đủ 10 slot cho nam Lv1 và nữ Lv30. Trạng thái `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS`; next tách character/action orchestration dùng chung, chưa nhân controller Map01A sang class khác.
 
 Quyết định dependency: chưa cài `2D Animation`/`PSD Importer`/`Addressables` trong checkpoint này. Manifest hiện giữ contract tương đương Sprite Library `Category + Label`; migration package phải là batch riêng có benchmark và giữ nguyên evidence. Asset residency mục tiêu là map hiện tại + class common + tier hiện tại/gần kề, dùng chung cho mobile/tablet/PC.

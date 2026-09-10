@@ -436,3 +436,6 @@ Tạo đủ 8 source sheet theo một layout 4×3 và pack một lượt thành 
 ## Võ ten-slot visual matrix v9 — 2026-09-10
 
 Thêm matrix 20 ảnh tháo từng slot và bắt lỗi tóc còn bake trong base rig. Thay hai base head không tóc, giữ hairstyle thành attachment. EditMode 181 pass/0 fail/1 ignored; Player v20 capture 66×3 pass và review PC/mobile/tablet. `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS`; next refactor orchestration base trước class thứ hai.
+## Shared character runtime state — 2026-09-10
+
+`TwoDCharacterRuntimeState` hiện sở hữu presentation selection, loadout 10 slot, locomotion hold và exclusive action timer/progress; Map01A chỉ còn render rig và xử lý quest/damage. TDD RED/GREEN và toàn bộ EditMode đạt `184/183/0/1`; Player v22 + evidence 66×3 xác nhận shared state, equip, action/hit và Q01–Q09 không regression. Next audit/cắt theo lô source Kiếm Lv1–30 nam/nữ rồi nối cùng base; không sao chép controller Võ.

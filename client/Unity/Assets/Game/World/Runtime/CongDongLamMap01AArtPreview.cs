@@ -108,8 +108,7 @@ namespace LinhGioi.World
             if (DialogueOpen || _controller == null || VoAvatarMotionState == "skill" || VoAvatarMotionState == "basic_attack") return;
             if (Mathf.Abs(axis) > .01f && VoAvatarMotionState != "jump")
             {
-                VoAvatarMotionState = _voRunEnabled ? "run" : "walk";
-                _voWalkHold = .14f;
+                _voState.HoldMovement(.14f);
                 ApplyVoPose();
             }
             var target = Mathf.Clamp(PlayerX + Mathf.Clamp(axis, -1, 1) * Mathf.Clamp(seconds, 0, .1f) * 2.4f, -3.8f, 44.4f);
@@ -198,13 +197,11 @@ namespace LinhGioi.World
         private readonly Dictionary<string, Tuple<Sprite, VoAvatarPart>> _voMotionFrames = new Dictionary<string, Tuple<Sprite, VoAvatarPart>>();
         private readonly Dictionary<string, VoAttachmentProfile> _voAttachmentProfiles = new Dictionary<string, VoAttachmentProfile>();
         private readonly Dictionary<string, VoRigPoseProfile> _voRigPoseProfiles = new Dictionary<string, VoRigPoseProfile>();
-        private readonly HashSet<string> _voEquippedSlots = new HashSet<string>();
         private SpriteRenderer _voSkillVfx, _voMotionRenderer;
         private SpriteRenderer _voCombatTarget;
         private SpriteRenderer _spiritHerbRenderer, _hiddenChestRenderer;
-        private int _voAvatarMode, _voAvatarGender, _voAvatarLevel, _voSelectedEquipmentSlot;
-        private float _voAnimationPhase, _voWalkHold, _voSkillRemaining, _voJumpRemaining, _voBasicRemaining, _voPoseYOffset;
-        private bool _voPendingHit, _voBasicPendingHit, _voRunEnabled;
+        private float _voPoseYOffset;
+        private bool _voPendingHit, _voBasicPendingHit;
         private static readonly string[] VoAvatarModes = { "full", "base", "modular" };
         private static readonly string[] VoAvatarGenders = { "male", "female" };
         private static readonly int[] VoAvatarLevels = { 1, 10, 20, 30 };
@@ -213,22 +210,24 @@ namespace LinhGioi.World
             "main_weapon", "head_hair", "inner_top", "outer_tunic", "lower_garment",
             "waist", "arm_guard", "boots", "light_armor", "accessory"
         };
-        public string VoAvatarMode => VoAvatarModes[_voAvatarMode];
-        public string VoAvatarGender => VoAvatarGenders[_voAvatarGender];
-        public int VoAvatarLevel => VoAvatarLevels[_voAvatarLevel];
-        public int[] VoAvatarAvailableLevels => (int[])VoAvatarLevels.Clone();
-        public string VoSelectedEquipmentSlot => VoEquipmentSlots[_voSelectedEquipmentSlot];
-        public int VoEquippedSlotCount => _voEquippedSlots.Count;
-        public string VoAvatarMotionState { get; private set; } = "idle";
+        private readonly TwoDCharacterRuntimeState _voState = new TwoDCharacterRuntimeState(
+            VoAvatarModes, VoAvatarGenders, VoAvatarLevels, VoEquipmentSlots);
+        public string VoAvatarMode => _voState.Mode;
+        public string VoAvatarGender => _voState.Gender;
+        public int VoAvatarLevel => _voState.Level;
+        public int[] VoAvatarAvailableLevels => _voState.AvailableLevels;
+        public string VoSelectedEquipmentSlot => _voState.SelectedEquipmentSlot;
+        public int VoEquippedSlotCount => _voState.EquippedSlotCount;
+        public string VoAvatarMotionState => _voState.MotionState;
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
-        public bool VoRunEnabled => _voRunEnabled;
+        public bool VoRunEnabled => _voState.RunEnabled;
         public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
         public bool VoAvatarUsesFrameMotion => VoAvatarLevel == 1 && VoAvatarMode == "full" && VoAvatarMotionState != "idle";
         public bool VoAvatarUsesAlignedPaperDollMotion => VoAvatarMotionState != "idle" && !VoAvatarUsesFrameMotion;
         public int VoSkillCastCount { get; private set; }
         public int VoSkillHitCount { get; private set; }
         public int VoTrainingTargetHp { get; private set; } = 100;
-        public bool CanTriggerVoSkill => _voSkillRemaining <= 0 && _voCombatTarget != null
+        public bool CanTriggerVoSkill => !_voState.HasActiveAction && _voCombatTarget != null
             && Mathf.Abs(_voCombatTarget.transform.position.x - PlayerX) <= 2.4f && VoTrainingTargetHp > 0;
         [Serializable] private sealed class VoAvatarPackInfo
         {
@@ -293,6 +292,7 @@ namespace LinhGioi.World
             public bool voAttachmentLv1Verified, voAttachmentLv30FemaleVerified;
             public bool voEquipmentComponentBindingVerified;
             public bool voTenSlotMatrixVerified;
+            public bool voSharedRuntimeStateVerified;
             public int voSkillCastCount, voSkillHitCount, voTrainingTargetHp;
         }
         public float GroundY { get; private set; }
@@ -570,8 +570,7 @@ namespace LinhGioi.World
                 || pack.rigParts == null || pack.rigParts.Length != 20
                 || pack.rigPoseProfiles == null || pack.rigPoseProfiles.Length != 120)
                 throw new InvalidOperationException("Invalid Võ Lv1-30 map avatar manifest");
-            _voEquippedSlots.Clear();
-            foreach (var slot in VoEquipmentSlots) _voEquippedSlots.Add(slot);
+            _voState.EquipAllExcept(null);
             _voAvatarRoot = new GameObject("Map01A Võ avatar").transform;
             _voAvatarRoot.SetParent(transform, false);
             foreach (var part in pack.parts)
@@ -696,31 +695,30 @@ namespace LinhGioi.World
 
         public void CycleVoAvatarMode()
         {
-            _voAvatarMode = (_voAvatarMode + 1) % VoAvatarModes.Length;
+            _voState.CycleMode();
             RefreshVoAvatarMode();
         }
 
         public void CycleVoAvatarGender()
         {
-            _voAvatarGender = (_voAvatarGender + 1) % VoAvatarGenders.Length;
+            _voState.CycleGender();
             RefreshVoAvatarMode();
         }
 
         public void CycleVoAvatarLevel()
         {
-            _voAvatarLevel = (_voAvatarLevel + 1) % VoAvatarLevels.Length;
+            _voState.CycleLevel();
             RefreshVoAvatarMode();
         }
 
         public void CycleVoEquipmentSlot()
         {
-            _voSelectedEquipmentSlot = (_voSelectedEquipmentSlot + 1) % VoEquipmentSlots.Length;
+            _voState.CycleEquipmentSlot();
         }
 
         public void ToggleVoEquipmentSlot()
         {
-            var slot = VoSelectedEquipmentSlot;
-            if (!_voEquippedSlots.Remove(slot)) _voEquippedSlots.Add(slot);
+            _voState.ToggleSelectedEquipmentSlot();
             RefreshVoAvatarMode();
         }
 
@@ -771,7 +769,7 @@ namespace LinhGioi.World
                 renderer.transform.localScale = rest.Item2;
                 var info = _voEquipmentComponentInfo[pair.Key];
                 renderer.enabled = VoAvatarMode == "modular" && pair.Key.StartsWith(prefix, StringComparison.Ordinal)
-                    && _voEquippedSlots.Contains(info.slot);
+                    && _voState.IsEquipped(info.slot);
             }
         }
 
@@ -823,48 +821,43 @@ namespace LinhGioi.World
         public bool TriggerVoSkill()
         {
             if (!CanTriggerVoSkill) return false;
-            _voSkillRemaining = .42f;
+            if (!_voState.TryStartAction("skill", .42f)) return false;
             _voPendingHit = true;
             VoSkillCastCount++;
-            VoAvatarMotionState = "skill";
             ApplyVoPose();
             return true;
         }
 
         public void SetVoRun(bool enabled)
         {
-            _voRunEnabled = enabled;
+            _voState.SetRun(enabled);
         }
 
         public bool TriggerVoJump()
         {
-            if (_voJumpRemaining > 0 || _voBasicRemaining > 0 || _voSkillRemaining > 0 || DialogueOpen) return false;
-            _voJumpRemaining = .55f;
-            VoAvatarMotionState = "jump";
+            if (DialogueOpen || !_voState.TryStartAction("jump", .55f)) return false;
             ApplyVoPose();
             return true;
         }
 
         public bool TriggerVoBasicAttack()
         {
-            if (_voBasicRemaining > 0 || _voJumpRemaining > 0 || _voSkillRemaining > 0 || DialogueOpen
+            if (_voState.HasActiveAction || DialogueOpen
                 || _voCombatTarget == null || Mathf.Abs(_voCombatTarget.transform.position.x - PlayerX) > 2.4f
                 || VoTrainingTargetHp <= 0) return false;
-            _voBasicRemaining = .30f;
+            if (!_voState.TryStartAction("basic_attack", .30f)) return false;
             _voBasicPendingHit = true;
-            VoAvatarMotionState = "basic_attack";
             ApplyVoPose();
             return true;
         }
 
         public void AdvanceVoAnimation(float seconds)
         {
-            var delta = Mathf.Clamp(seconds, 0, .1f);
-            _voAnimationPhase += delta;
-            if (_voSkillRemaining > 0)
+            var activeAction = VoAvatarMotionState;
+            _voState.Advance(seconds);
+            if (activeAction == "skill")
             {
-                _voSkillRemaining = Mathf.Max(0, _voSkillRemaining - Mathf.Max(0, seconds));
-                if (_voPendingHit && _voSkillRemaining <= .28f)
+                if (_voPendingHit && _voState.ActionRemaining <= .28f)
                 {
                     _voPendingHit = false;
                     VoTrainingTargetHp = Mathf.Max(0, VoTrainingTargetHp - 35);
@@ -879,12 +872,10 @@ namespace LinhGioi.World
                         LastInteractionMessage = "Q06 hoàn tất · quái non đã bị hạ; hãy nhặt chiến lợi phẩm.";
                     }
                 }
-                if (_voSkillRemaining <= 0) VoAvatarMotionState = "idle";
             }
-            else if (_voBasicRemaining > 0)
+            else if (activeAction == "basic_attack")
             {
-                _voBasicRemaining = Mathf.Max(0, _voBasicRemaining - Mathf.Max(0, seconds));
-                if (_voBasicPendingHit && _voBasicRemaining <= .18f)
+                if (_voBasicPendingHit && _voState.ActionRemaining <= .18f)
                 {
                     _voBasicPendingHit = false;
                     VoTrainingTargetHp = Mathf.Max(0, VoTrainingTargetHp - 12);
@@ -896,17 +887,6 @@ namespace LinhGioi.World
                         LastInteractionMessage = "Q06 hoàn tất · quái non đã bị hạ; hãy nhặt chiến lợi phẩm.";
                     }
                 }
-                if (_voBasicRemaining <= 0) VoAvatarMotionState = "idle";
-            }
-            else if (_voJumpRemaining > 0)
-            {
-                _voJumpRemaining = Mathf.Max(0, _voJumpRemaining - Mathf.Max(0, seconds));
-                if (_voJumpRemaining <= 0) VoAvatarMotionState = "idle";
-            }
-            else if (_voWalkHold > 0)
-            {
-                _voWalkHold = Mathf.Max(0, _voWalkHold - delta);
-                VoAvatarMotionState = _voWalkHold > 0 ? (_voRunEnabled ? "run" : "walk") : "idle";
             }
             ApplyVoPose();
         }
@@ -919,7 +899,7 @@ namespace LinhGioi.World
             _voAvatarRoot.localRotation = Quaternion.identity;
             if (VoAvatarMotionState == "walk")
             {
-                var stride = Mathf.Sin(_voAnimationPhase * 22f);
+                var stride = Mathf.Sin(_voState.AnimationPhase * 22f);
                 if (VoAvatarUsesFrameMotion) SetVoMotionFrame(VoAvatarGender + "_" + (stride >= 0 ? "walk_a" : "walk_b"));
                 else
                 {
@@ -930,7 +910,7 @@ namespace LinhGioi.World
             }
             else if (VoAvatarMotionState == "run")
             {
-                var stride = Mathf.Sin(_voAnimationPhase * 28f);
+                var stride = Mathf.Sin(_voState.AnimationPhase * 28f);
                 if (VoAvatarUsesFrameMotion) SetVoMotionFrame(VoAvatarGender + "_" + (stride >= 0 ? "run_a" : "run_b"));
                 else
                 {
@@ -941,20 +921,20 @@ namespace LinhGioi.World
             }
             else if (VoAvatarMotionState == "jump")
             {
-                var progress = 1f - _voJumpRemaining / .55f;
+                var progress = _voState.ActionProgress;
                 if (VoAvatarUsesFrameMotion) SetVoMotionFrame(VoAvatarGender + "_" + (progress < .34f ? "jump_rise" : "jump_apex"));
                 else VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_aligned_paper_doll_jump";
                 _voPoseYOffset = Mathf.Sin(progress * Mathf.PI) * .72f;
             }
             else if (VoAvatarMotionState == "basic_attack")
             {
-                var progress = 1f - _voBasicRemaining / .30f;
+                var progress = _voState.ActionProgress;
                 if (VoAvatarUsesFrameMotion) SetVoMotionFrame(VoAvatarGender + "_" + (progress < .35f ? "basic_windup" : "basic_impact"));
                 else VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_aligned_paper_doll_basic";
             }
             else if (VoAvatarMotionState == "skill")
             {
-                var progress = 1f - _voSkillRemaining / .42f;
+                var progress = _voState.ActionProgress;
                 if (VoAvatarUsesFrameMotion) SetVoMotionFrame(VoAvatarGender + "_" + (progress < .55f ? "lien_quyen_hit_a" : "lien_quyen_finish_b"));
                 else
                 {
@@ -966,7 +946,7 @@ namespace LinhGioi.World
             else
             {
                 SetVoMotionFrame(VoAvatarGender + "_idle");
-                _voAvatarRoot.localScale = new Vector3(1f, 1f + Mathf.Sin(_voAnimationPhase * 2.6f) * .005f, 1f);
+                _voAvatarRoot.localScale = new Vector3(1f, 1f + Mathf.Sin(_voState.AnimationPhase * 2.6f) * .005f, 1f);
             }
             _voAvatarRoot.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
             RefreshVoAvatarMode();
@@ -975,7 +955,7 @@ namespace LinhGioi.World
                 _voSkillVfx.enabled = VoAvatarMotionState == "skill";
                 if (_voSkillVfx.enabled)
                 {
-                    var progress = 1f - _voSkillRemaining / .42f;
+                    var progress = _voState.ActionProgress;
                     _voSkillVfx.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Lerp(-48f, -14f, progress));
                     _voSkillVfx.color = new Color(1, 1, 1, Mathf.Sin(progress * Mathf.PI));
                 }
@@ -1444,14 +1424,9 @@ namespace LinhGioi.World
                 if (i >= 46)
                 {
                     var matrixIndex = (i - 46) % VoEquipmentSlots.Length;
-                    _voAvatarGender = i < 56 ? 0 : 1;
-                    _voAvatarLevel = i < 56 ? 0 : 3;
-                    _voAvatarMode = 2;
-                    _voSelectedEquipmentSlot = matrixIndex;
-                    _voEquippedSlots.Clear();
-                    foreach (var slot in VoEquipmentSlots) _voEquippedSlots.Add(slot);
                     var selected = VoEquipmentSlots[matrixIndex];
-                    _voEquippedSlots.Remove(selected);
+                    _voState.SetPresentation(i < 56 ? 0 : 1, i < 56 ? 0 : 3, 2, matrixIndex);
+                    _voState.EquipAllExcept(selected);
                     RefreshVoAvatarMode();
                     var prefix = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_";
                     var affected = _voEquipmentComponentInfo.Count(pair => pair.Key.StartsWith(prefix, StringComparison.Ordinal)
@@ -1461,6 +1436,13 @@ namespace LinhGioi.World
                         && _voRigParts.Values.Count(renderer => renderer.enabled) == 10
                         && _voEquipmentComponents.Values.Count(renderer => renderer.enabled) == 14 - affected;
                     result.voTenSlotMatrixVerified = i == 46 ? matrixValid : result.voTenSlotMatrixVerified && matrixValid;
+                    var sharedStateValid = VoAvatarMode == "modular"
+                        && VoAvatarGender == (i < 56 ? "male" : "female")
+                        && VoAvatarLevel == (i < 56 ? 1 : 30)
+                        && VoSelectedEquipmentSlot == selected
+                        && VoEquippedSlotCount == 9 && !_voState.IsEquipped(selected);
+                    result.voSharedRuntimeStateVerified = i == 46 ? sharedStateValid
+                        : result.voSharedRuntimeStateVerified && sharedStateValid;
                 }
                 _controller.RefreshForSmoke();
                 Refresh();
@@ -1502,6 +1484,7 @@ namespace LinhGioi.World
                 || !result.voAttachmentLv1Verified || !result.voAttachmentLv30FemaleVerified
                 || !result.voEquipmentComponentBindingVerified
                 || !result.voTenSlotMatrixVerified
+                || !result.voSharedRuntimeStateVerified
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";

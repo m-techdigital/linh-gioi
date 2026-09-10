@@ -347,3 +347,6 @@ Trạng thái: `VO_LV1_FULL_FRAME_MOTION_PASS / ANIMATED_PAPER_DOLL_ATTACHMENT_I
 ## Võ ten-slot matrix + base head v9 — 2026-09-10
 
 Matrix đầu bắt lỗi tóc bake trong base head; đã thay base đầu không tóc cho nam/nữ và giữ toàn bộ tóc ở attachment. Manifest v9: 112 equipment component, 7 atlas/884.660 byte. EditMode 182 total/181 pass/0 fail/1 ignored; Player v20 và capture 66×3 tại `build/vo-ten-slot-matrix-v2/three-profiles/` technical pass. Review 20 slot-off xác nhận đủ 10 slot ở nam Lv1/nữ Lv30, gồm slot nhiều bone. Trạng thái `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS`; next tách character/action orchestration base, chưa mở class khác.
+## Shared character runtime state gate — 2026-09-10
+
+Đã tách selection/loadout/action timing Võ khỏi `CongDongLamMap01AArtPreview` vào `TwoDCharacterRuntimeState` dùng chung. EditMode `184/183/0/1`; macOS Player v22 `168.488.627` byte, 0 error; capture `build/vo-shared-state-v2/three-profiles/` đạt 66 frame cho mobile/tablet/PC, `voSharedRuntimeStateVerified=True`, 10-slot matrix/Q01–Q09/combat giữ nguyên và đã review contact sheet. Trạng thái `SHARED_CHARACTER_RUNTIME_STATE_PLAYER_PASS`. Next là một batch source/atlas Kiếm Lv1–30 nam/nữ trên base này; chưa mở class thứ ba.

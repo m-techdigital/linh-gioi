@@ -373,3 +373,7 @@ Không mở shop/economy, teleport thật, giao dịch, bang hội, HP/loot/serv
 ## Sau checkpoint Võ v9 — shared character/action base
 
 Tách loadout, rig pose và action orchestration khỏi `CongDongLamMap01AArtPreview` sang runtime base dùng chung, không đổi hình ảnh/output đã capture. Giữ manifest contract tương đương Sprite Library `Category + Label`; chưa thêm package Unity mới. Sau extraction, build/capture lại cùng ma trận 66×3 để chứng minh không regression rồi mới bắt đầu class thứ hai. Asset loading về sau chia theo map/class/tier residency, không load toàn bộ 5 class hoặc tạo bộ atlas riêng cho ba profile.
+
+## Sau shared character runtime state — Kiếm Lv1–30 source batch
+
+`SHARED_CHARACTER_RUNTIME_STATE_PLAYER_PASS`: state mode/gender/level/loadout/action đã rời Map01A vào `TwoDCharacterRuntimeState`; Player v22 và capture 66×3 giữ nguyên Võ/Q01–Q09, manifest có `voSharedRuntimeStateVerified=True`. Next: audit toàn bộ source Kiếm đã tuyển trong `LGO-Selected-2D-Source-v1` và backup sandbox chuẩn hóa cũ, chọn một identity nam/nữ đồng nhất, lập một crop/attachment plan đủ Lv1/10/20/30 × 10 slot rồi mới pack/nối base chung trong một batch. Không tạo lại từng item, không mở Pháp/Cơ/Linh trước khi Kiếm có Player evidence.

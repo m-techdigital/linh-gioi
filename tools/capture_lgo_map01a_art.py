@@ -18,13 +18,15 @@ def main():
     parser.add_argument('--timeout', type=int, default=90)
     parser.add_argument('--profile', choices=['all', *PROFILES], default='all')
     args = parser.parse_args()
+    args.player = args.player.resolve()
+    args.out_dir = args.out_dir.resolve()
     if args.profile == 'all':
         for profile in PROFILES:
             subprocess.run([sys.executable, __file__, '--player', str(args.player), '--out-dir', str(args.out_dir / profile), '--timeout', str(args.timeout), '--profile', profile], check=True)
         print('MAP01A_THREE_ASPECT_CAPTURE_COMPLETE; not physical device certification')
         return
     width, height = PROFILES[args.profile]
-    player, out = args.player.resolve(), args.out_dir.resolve()
+    player, out = args.player, args.out_dir
     if not player.is_file() or player.parent.name != 'MacOS':
         raise SystemExit('RUNTIME_BLOCKED_ENV: missing macOS Player')
     # Never erase earlier capture logs or reuse a stale successful manifest.
@@ -88,6 +90,7 @@ def main():
             or not manifest.get('voAttachmentLv30FemaleVerified')
             or not manifest.get('voEquipmentComponentBindingVerified')
             or not manifest.get('voTenSlotMatrixVerified')
+            or not manifest.get('voSharedRuntimeStateVerified')
             or not manifest.get('mapQuestFlowVerified') or manifest.get('activeQuestId') != 'COMPLETE'
             or not manifest.get('functionalUiVerified')
             or manifest.get('completedQuestCount') != 9
