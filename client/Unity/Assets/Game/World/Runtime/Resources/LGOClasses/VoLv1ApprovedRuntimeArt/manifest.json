@@ -1,0 +1,26 @@
+{
+  "id": "vo-lv1-approved-runtime-art-v1",
+  "status": "APPROVED_RUNTIME_ART",
+  "source": "original image_gen output, no old concept/runtime reference image reuse",
+  "alphaPass": "automated background matte v0; requires Player visual review before production claim",
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1ApprovedRuntimeArt/vo-lv1-starter-atlas.png",
+      "generator": "image_gen",
+      "prompt": "imagegen:võ-lv1-paper-doll-atlas-original",
+      "referenceOnly": false,
+      "role": "paper-doll-atlas",
+      "sha256": "1008388e9401cd58e0e602e77e88cbd4169d1899e18466e400b278506a720089",
+      "bytes": 2616213
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1ApprovedRuntimeArt/vo-lv1-skill-atlas.png",
+      "generator": "image_gen",
+      "prompt": "imagegen:võ-lv1-skill-vfx-atlas-original",
+      "referenceOnly": false,
+      "role": "skill-vfx-atlas",
+      "sha256": "224bdeec4b411723e32d3cc4958066f1601b5f43ec38a4af7b19daf671becd46",
+      "bytes": 980827
+    }
+  ]
+}

@@ -2,6 +2,8 @@
 
 ## Goal kỹ thuật hiện tại — 2026-09-10
 
+Owner bổ sung: mỗi class chỉ xử lý dải **Lv1-30** theo giai đoạn phát triển; không mở skill/trang bị high-tier 31-100 trong batch class hiện tại.
+
 Owner đã giao Codex tự quyết định hướng kỹ thuật cho task này. Quyết định hiện tại: **đóng map đầu Đông Môn thành vertical slice 2D có thể kiểm chứng trong Player trước, rồi mới chuyển sang hoàn thiện 5 class**. Các checkpoint Linh Thành/Quảng Trường/district bên dưới là lịch sử runtime preview local-only; không dùng chúng làm lý do mở map thứ hai hoặc tiếp hub trước khi Đông Môn đạt gate.
 
 Hướng kỹ thuật map đầu:
@@ -19,7 +21,7 @@ Hướng kỹ thuật sau gate map đầu:
 3. Mỗi class Võ/Kiếm/Pháp/Cơ/Linh phải kiểm được trong Player: chọn class, mặc/tháo từng slot, phối bộ tương thích, idle/walk/run/jump và đòn/skill preview trong scope hiện có.
 4. Gate 5 class là nhìn thấy đồ/vũ khí đi theo thân khi đổi hướng/chuyển động, không hở cổ tay/chân/thân, không sai layer, không dùng ảnh source/reference làm runtime asset.
 
-Next action ngay: Đông Môn/Gate Keeper đã có checkpoint Player pass; tiếp tục một class Võ làm mẫu để kiểm chứng workflow nhân vật trước khi nhân sang 5 class. Võ hiện có anchor gizmo, runtime fit, production atlas contract và atlas cell binding. Bước kế tiếp là tạo pack art Võ Lv1 thật theo allowlist `VoLv1ApprovedRuntimeArt`: `vo-lv1-starter-atlas.png` cho paper-doll/body/equipment cells và `vo-lv1-skill-atlas.png` cho skill cue, manifest đủ hash/provenance, rồi thay `cellSource=runtime-generated-atlas-cell` bằng runtime sprite atlas thật trong Player.
+Next action ngay: Đông Môn/Gate Keeper đã có checkpoint Player pass; tiếp tục một class Võ làm mẫu để kiểm chứng workflow nhân vật trước khi nhân sang 5 class. Võ hiện có anchor gizmo, runtime fit, production atlas contract và atlas cell binding. Bước kế tiếp là slice/cell-map pack `VoLv1ApprovedRuntimeArt` cho Võ Lv1-30: map atlas rect vào các cell `torso_outer_vo_lv1`, `glove_r_vo_lv1`, `skill_vo_lv1_palm_trail`, render một số cell thật trong Player, rồi kiểm chân/slot/skill không lệch trước khi nhân sang class Lv1-30 khác.
 
 ## Đông Môn illustrated draft — 2026-09-10
 
