@@ -89,6 +89,46 @@ namespace LinhGioi.World
         private const string DongMonNpcSpritesResourcePath = "LGOMaps/DongMonNpcSprites";
         private const string DongMonInteractionMarkersResourcePath = "LGOMaps/DongMonInteractionMarkers";
         private const string DongMonPlayerGroundingResourcePath = "LGOMaps/DongMonPlayerGrounding";
+        private const string CongDongLamMap01AContractResourcePath = "LGOMaps/CongDongLamMap01AContract";
+
+        public static CongDongLamMap01AContract LoadCongDongLamMap01AContract()
+        {
+            var asset = Resources.Load<TextAsset>(CongDongLamMap01AContractResourcePath);
+            if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
+            return JsonUtility.FromJson<CongDongLamMap01AContract>(asset.text);
+        }
+
+        public static string LoadCongDongLamMap01AContractSnapshot()
+        {
+            var source = LoadCongDongLamMap01AContract();
+            if (source == null)
+                return "CongDongLamMap01A: resource=" + CongDongLamMap01AContractResourcePath + " | missing";
+
+            var zones = source.zones ?? Array.Empty<CongDongLamMap01AZone>();
+            var layers = source.layers ?? Array.Empty<CongDongLamMap01ALayer>();
+            var npcs = source.npcs ?? Array.Empty<CongDongLamMap01AActor>();
+            var enemies = source.enemies ?? Array.Empty<CongDongLamMap01AActor>();
+            var quests = source.quests ?? Array.Empty<CongDongLamMap01AQuest>();
+            var builder = new StringBuilder("CongDongLamMap01A: mapId=");
+            builder.Append(source.mapId).Append(" | levelBand=").Append(source.levelBand);
+            builder.Append(" | zones=").Append(zones.Length).Append(" | route=");
+            for (var i = 0; i < zones.Length; i++)
+            {
+                if (i > 0) builder.Append('>');
+                builder.Append(zones[i].id);
+            }
+            builder.Append(" | layers=").Append(layers.Length);
+            builder.Append(" | npcs=").Append(npcs.Length);
+            builder.Append(" | enemies=").Append(enemies.Length);
+            builder.Append(" | quests=").Append(quests.Length);
+            builder.Append(" | linh-thanh=").Append(source.linhThanhVisibility);
+            builder.Append(" | collision=").Append(source.collisionPolicy);
+            builder.Append(" | enemy-spawn=").Append(source.enemySpawnPolicy);
+            builder.Append(" | ui-safe-area=").Append(source.uiSafeArea);
+            builder.Append(" | source-pack=").Append(source.sourcePack);
+            builder.Append(" | ").Append(source.runtimePolicy);
+            return builder.ToString();
+        }
 
         public static string LoadDongMonTilePaletteSourceSnapshot()
         {
@@ -680,6 +720,65 @@ namespace LinhGioi.World
             builder.Append(" | detail-density=readable | collision-boundaries=from-bands | foreground-fringe=controlled | landmark-silhouettes=anchored | no-random-decoration | safe-no-procedural-spam");
             return builder.ToString();
         }
+    }
+
+    [Serializable]
+    public sealed class CongDongLamMap01AContract
+    {
+        public string mapId;
+        public string displayName;
+        public string levelBand;
+        public string worldFlow;
+        public string linhThanhVisibility;
+        public string collisionPolicy;
+        public string enemySpawnPolicy;
+        public string uiSafeArea;
+        public string sourcePack;
+        public string runtimePolicy;
+        public CongDongLamMap01AZone[] zones;
+        public CongDongLamMap01ALayer[] layers;
+        public CongDongLamMap01AActor[] npcs;
+        public CongDongLamMap01AActor[] enemies;
+        public CongDongLamMap01AQuest[] quests;
+    }
+
+    [Serializable]
+    public sealed class CongDongLamMap01AZone
+    {
+        public string id;
+        public string name;
+        public string role;
+        public bool safeZone;
+        public string collision;
+        public string trigger;
+    }
+
+    [Serializable]
+    public sealed class CongDongLamMap01ALayer
+    {
+        public int index;
+        public string name;
+        public string content;
+        public float parallax;
+        public string sortBand;
+    }
+
+    [Serializable]
+    public sealed class CongDongLamMap01AActor
+    {
+        public string id;
+        public string name;
+        public string zoneId;
+        public string role;
+    }
+
+    [Serializable]
+    public sealed class CongDongLamMap01AQuest
+    {
+        public string id;
+        public string name;
+        public string giverId;
+        public string zoneId;
     }
 
     [Serializable]

@@ -229,6 +229,7 @@ namespace LinhGioi.Tests
             Assert.IsNotNull(resultType.GetField("runtimeDongMonNpcSpriteSourceSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeDongMonInteractionMarkerSourceSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeDongMonPlayerSceneFitSnapshot"));
+            Assert.IsNotNull(resultType.GetField("runtimeCongDongLamMap01AContractSnapshot"));
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhPlazaHubSnapshot"));
         }
 
@@ -1728,6 +1729,58 @@ namespace LinhGioi.Tests
             StringAssert.Contains("jump-gap", map.CollisionSnapshot);
             StringAssert.Contains("dash-lane", map.CollisionSnapshot);
             StringAssert.Contains("slime-arena", map.CollisionSnapshot);
+        }
+
+        [Test]
+        public void CongDongLamMap01AContractLoadsOwnerLockedWorldStrip()
+        {
+            var contract = TwoDMapDesignCatalog.LoadCongDongLamMap01AContract();
+            var snapshot = TwoDMapDesignCatalog.LoadCongDongLamMap01AContractSnapshot();
+
+            Assert.IsNotNull(contract);
+            Assert.AreEqual("map-01a-cong-dong-lam", contract.mapId);
+            Assert.AreEqual("Lv1-3", contract.levelBand);
+            Assert.That(contract.zones, Has.Length.EqualTo(10));
+            Assert.That(contract.layers, Has.Length.EqualTo(12));
+            Assert.That(contract.npcs, Has.Length.EqualTo(6));
+            Assert.That(contract.enemies, Has.Length.EqualTo(4));
+            Assert.That(contract.quests, Has.Length.EqualTo(9));
+            Assert.AreEqual("spawn-ha-van", contract.zones[0].id);
+            Assert.AreEqual("portal-suoi-thanh-minh", contract.zones[9].id);
+            Assert.AreEqual("Sky", contract.layers[0].name);
+            Assert.AreEqual("VFX/Particles", contract.layers[11].name);
+            for (var i = 0; i < contract.layers.Length; i++)
+                Assert.AreEqual(i, contract.layers[i].index, "Map 01A layer index must stay contiguous");
+            for (var i = 0; i < contract.enemies.Length; i++)
+                Assert.AreEqual("combat-edge", contract.enemies[i].zoneId, "Lv1-3 enemies must stay outside the village safe zone");
+            Assert.IsFalse(contract.zones[8].safeZone);
+            Assert.AreEqual("Q09", contract.quests[8].id);
+            Assert.AreEqual("portal-suoi-thanh-minh", contract.quests[8].zoneId);
+            StringAssert.Contains("route=spawn-ha-van>grand-gate>quan-thu>village-square>tong-phu>thanh-nhi>well-bridge>lao-tran>combat-edge>portal-suoi-thanh-minh", snapshot);
+            StringAssert.Contains("linh-thanh=distant-silhouette-locked", snapshot);
+            StringAssert.Contains("safe-zone-no-enemy", snapshot);
+            StringAssert.Contains("combat-edge-only", snapshot);
+            StringAssert.Contains("ui-safe-area=top-left-hud,top-right-minimap,right-quest,bottom-left-chat,bottom-center-skills,bottom-right-basic-menu", snapshot);
+            StringAssert.Contains("source-pack=LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/01..10", snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerExposesCongDongLamMap01AContractForEvidence()
+        {
+            var host = new GameObject("Cổng Đông Lâm Map 01A contract test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("CongDongLamMap01A", controller.RuntimeCongDongLamMap01AContractSnapshot);
+                StringAssert.Contains("zones=10", controller.RuntimeCongDongLamMap01AContractSnapshot);
+                StringAssert.Contains("layers=12", controller.RuntimeCongDongLamMap01AContractSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
         }
 
         [Test]

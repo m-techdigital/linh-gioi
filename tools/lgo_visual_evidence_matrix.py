@@ -54,7 +54,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_initial",
         "label": "2D Đông Môn initial HUD/map read",
         "screenshot": "01-initial.bmp",
-        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeMinimapReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredDetailSourceSnapshot", "runtimeDongMonNpcSpriteSourceSnapshot", "runtimeDongMonPlayerSceneFitSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
+        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeCongDongLamMap01AContractSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeMinimapReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredDetailSourceSnapshot", "runtimeDongMonNpcSpriteSourceSnapshot", "runtimeDongMonPlayerSceneFitSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
         "nonClaim": "not production art",
     },
     {
@@ -191,6 +191,10 @@ def verify_current() -> dict[str, Any]:
     screenshot_count = manifest.get("screenshotCount")
     if not isinstance(screenshot_count, (int, float)) or screenshot_count < len(TWO_D_ONBOARDING_VIEWS):
         failures.append(f"screenshotCount expected at least {len(TWO_D_ONBOARDING_VIEWS)} got {screenshot_count!r}")
+    map01a_snapshot = str(manifest.get("runtimeCongDongLamMap01AContractSnapshot", ""))
+    for token in ("CongDongLamMap01A", "mapId=map-01a-cong-dong-lam", "levelBand=Lv1-3", "zones=10", "layers=12", "npcs=6", "enemies=4", "quests=9", "linh-thanh=distant-silhouette-locked", "collision=safe-zone-no-enemy", "enemy-spawn=combat-edge-only"):
+        if token not in map01a_snapshot:
+            failures.append(f"runtimeCongDongLamMap01AContractSnapshot missing {token!r}")
     tilemap_snapshot = str(manifest.get("runtimeTilemapSnapshot", ""))
     for token in ("Chapter 1 Tilemap", "ChunkFlow", "chunk_gate_entry", "chunk_slime_arena"):
         if token not in tilemap_snapshot:

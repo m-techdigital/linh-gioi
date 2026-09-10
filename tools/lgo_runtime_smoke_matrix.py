@@ -67,6 +67,7 @@ TWO_D_GATES: list[dict[str, Any]] = [
         "requirements": {"status": "PASS", "finalStep": "Complete"},
         "minimums": {"screenshotCount": 20},
         "contains": {
+            "runtimeCongDongLamMap01AContractSnapshot": ["CongDongLamMap01A", "mapId=map-01a-cong-dong-lam", "levelBand=Lv1-3", "zones=10", "layers=12", "npcs=6", "enemies=4", "quests=9", "linh-thanh=distant-silhouette-locked", "collision=safe-zone-no-enemy", "enemy-spawn=combat-edge-only", "source-pack=LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/01..10"],
             "runtimeMapSnapshot": ["WorldMapNetwork: hub=linh-thanh", "LinhThanhHubRuntime:", "HubShell: linh-thanh", "district=plaza", "district=academy", "district=market", "PlazaShell: district=plaza", "AcademyShell: district=academy", "MarketShell: district=market", "SpiritTempleShell: district=spirit-temple", "ResidentialShell: district=residential", "ForgeShell: district=forge", "GuildShell: district=guild", "HarborShell: district=harbor", "safe-no-trade-backend", "safe-no-skill-backend", "safe-no-economy-backend", "safe-no-buff-backend", "safe-no-housing-backend", "safe-no-crafting-backend", "safe-no-guild-backend", "safe-no-travel-backend"],
             "runtimeLinhThanhUnlockSnapshot": ["LinhThanhUnlock", "unlocked=True", "unlock=plaza", "safe-local-no-teleport"],
             "runtimeLinhThanhPlazaHubSnapshot": ["PlazaHubRuntime", "unlocked=True", "npc=gate-guide", "npc=merchant-preview", "board=event-local-preview", "interaction=npc-merchant-preview", "safe-local-no-backend", "safe-local-no-shop-backend"],

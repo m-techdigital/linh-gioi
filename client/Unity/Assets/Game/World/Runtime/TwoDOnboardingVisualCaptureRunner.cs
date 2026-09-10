@@ -166,6 +166,7 @@ namespace LinhGioi.World
                 runtimeDongMonInteractionMarkerSourceSnapshot = controller.RuntimeDongMonInteractionMarkerSourceSnapshot,
                 runtimeDongMonPlayerSceneFitSnapshot = controller.RuntimeDongMonPlayerSceneFitSnapshot,
                 runtimeDongMonAuthoredPassSnapshot = controller.RuntimeDongMonAuthoredPassSnapshot,
+                runtimeCongDongLamMap01AContractSnapshot = controller.RuntimeCongDongLamMap01AContractSnapshot,
                 runtimeAnimationSnapshot = controller.RuntimeAnimationSnapshot,
                 runtimeCombatSnapshot = controller.RuntimeCombatSnapshot,
                 runtimeRouteProgressSnapshot = controller.RuntimeRouteProgressSnapshot,
@@ -319,6 +320,7 @@ namespace LinhGioi.World
             public string runtimeDongMonInteractionMarkerSourceSnapshot;
             public string runtimeDongMonPlayerSceneFitSnapshot;
             public string runtimeDongMonAuthoredPassSnapshot;
+            public string runtimeCongDongLamMap01AContractSnapshot;
             public string runtimeAnimationSnapshot;
             public string runtimeCombatSnapshot;
             public string runtimeRouteProgressSnapshot;

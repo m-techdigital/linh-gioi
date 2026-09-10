@@ -2,6 +2,8 @@
 
 ## Source selection + stopped class task recovery — 2026-09-10
 
+MAP01A-01: thêm Resource contract Cổng Đông Lâm với route 10 khu, L0–L11, 6 NPC, 4 quái combat-edge-only, Q01–Q09, collision và UI safe area; controller/capture/matrix expose contract từ Player. Visual review 01/02/03/20 xác nhận runtime cũ chưa giống source: nền tối, rectangle và label cũ còn nhiều. Không claim visual pass; next MAP01A-02 thay màn spawn–đại cổng bằng art source-grounded.
+
 Audit sâu sandbox class hoàn tất: nhánh local có 30 commit riêng và lệch origin 54 commit; bundle đầy đủ + patch uncommitted đã lưu. Năm commit cuối được phân loại để port chọn lọc; ground alignment giữ, chroma-key chỉ pre-process, procedural preview chỉ fixture QA. Unit test 28/28 PASS, validator tài liệu 13/13 PASS nhưng không được dùng để claim art/rig/runtime.
 
 Source pack được mở rộng từ 61 lên 87 entry bằng 26 ảnh chi tiết đã review: module map, grid nam/nữ, outfit/silhouette và VFX mood của năm class. Tất cả mang `REDRAW_SOURCE_ONLY`; board Cơ trùng byte trong thư mục Linh bị loại. Audit: `docs/art/LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`.

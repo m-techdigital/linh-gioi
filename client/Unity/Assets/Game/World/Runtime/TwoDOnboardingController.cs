@@ -124,6 +124,7 @@ namespace LinhGioi.World
         public string RuntimeDongMonInteractionMarkerSourceSnapshot => TwoDMapDesignCatalog.LoadDongMonInteractionMarkerSourceSnapshot();
         public string RuntimeDongMonPlayerSceneFitSnapshot => BuildDongMonPlayerSceneFitSnapshot();
         public string RuntimeDongMonAuthoredPassSnapshot => _mapCatalog.DongMonAuthoredPassSnapshot;
+        public string RuntimeCongDongLamMap01AContractSnapshot => TwoDMapDesignCatalog.LoadCongDongLamMap01AContractSnapshot();
         public string RuntimeAnimationSnapshot => _animationProfile.Snapshot + "\n" + _runtimeAnimationSnapshot;
         public string RuntimeCombatSnapshot => "CombatMicroSlice: ShadowSlimeVisible=" + _state.ShadowSlimeVisible + " ShadowSlimeDefeated=" + _state.ShadowSlimeDefeated + " step=" + _state.Step;
         public string RuntimeRouteProgressSnapshot => "RouteProgress: current=" + _state.CurrentRouteNodeId + " step=" + _state.Step + " action=" + _state.AvailableAction;

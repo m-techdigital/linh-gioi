@@ -4,6 +4,8 @@
 
 Audit sandbox class đã đóng: lịch sử `efa46a8` được bảo toàn bằng bundle, diff uncommitted có backup, 26 ảnh chi tiết đã thêm vào source pack và 28 unit test tool class PASS. Không lấy nguyên nhánh lệch hoặc output procedural làm mỹ thuật. Báo cáo: `docs/art/LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`.
 
+MAP01A-01 đã có contract runtime data-driven và field evidence riêng. EditMode, Editor smoke, macOS build/capture và matrix đã chạy; contract hiện diện trong Player. Visual review chưa đạt source owner vì scene cũ vẫn là blockout rectangle tối. Trạng thái sản phẩm vì vậy là `CONTRACT_PASS / VISUAL_FIX_REQUIRED`; tiếp theo chỉ làm visible slice spawn–đại cổng.
+
 Goal vận hành đã được realign theo source owner mới: trước tiên hoàn thiện **Cổng Đông Lâm Map 01A Lv1–3** thành vertical slice 2D có thể chơi và kiểm bằng macOS Player. Map gồm 10 khu từ Spawn/Hạ Vân tới portal Suối Thanh Minh, 12 lớp render/parallax, safe-zone + khu dân cư + combat edge nhẹ, sáu NPC chính, bốn quái Lv1–3 và quest Q01–Q09. Linh Thành chỉ xuất hiện xa và chưa mở.
 
 Sau gate Map 01A, class mẫu là **Võ Lv1–30** vì batch trước đã có base nam/nữ căn ground, mask/anchor, ba slot alpha và atlas/toggle evidence có thể tái sử dụng. Hoàn thiện Võ đủ 10 slot, thay đồ và motion/skill `Liên Quyền` trước khi nhân sang bốn class còn lại. Không làm lại asset đã dùng được; không coi primitive hoặc ảnh tự sinh cũ là nguồn mỹ thuật.

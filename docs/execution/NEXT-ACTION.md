@@ -2,6 +2,8 @@
 
 Audit sandbox “Chuẩn hóa module 2D class” đã hoàn tất trước khi triển khai map. Không cherry-pick nguyên nhánh vì diff có 48 file xóa và nhánh hiện hành đã đi trước 54 commit riêng. Đã giữ bundle/patch, chọn 26 source chi tiết, xác nhận 28 unit test PASS và phân loại rõ tool/contract/WIP tại `docs/art/LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`. Class code chỉ port chọn lọc sau gate Map 01A.
 
+`MAP01A-01` đã khóa bằng runtime JSON: 10 khu, 12 parallax/render layer, 6 NPC, 4 quái chỉ ở combat edge, Q01–Q09, UI safe area và portal Suối Thanh Minh; Player manifest có `runtimeCongDongLamMap01AContractSnapshot`. Review ảnh xác nhận prototype hiện vẫn tối/rectangle và còn label Đông Môn/Linh Thành cũ, nên đây là contract PASS chứ chưa phải visual Map 01A PASS.
+
 Nguồn sản phẩm mới nhất thay các mục Đông Môn/Linh Thành cũ bên dưới:
 
 - Việc đang làm: **Cổng Đông Lâm = Map 01A**, tutorial chung Lv1–3 sau năm class intro riêng.
@@ -20,7 +22,7 @@ Nguồn sản phẩm mới nhất thay các mục Đông Môn/Linh Thành cũ b�
 5. **CLASS-VO-01 — sau khi map pass:** tiếp tục WIP Võ, không làm lại; hoàn thiện Võ nam/nữ Lv1–30 với 10 slot, thay đồ, idle/walk/run/jump/basic attack và `Liên Quyền` trong Player.
 6. Chỉ sau CLASS-VO-01 mới nhân cùng contract sang Kiếm/Pháp/Cơ/Linh Lv1–30.
 
-Next action ngay: triển khai **MAP01A-01** trong worktree sạch từ `origin/feature/2d`. Các mục phía dưới là lịch sử và không được dùng để mở Linh Thành hoặc tiếp tục atlas Võ trước gate Map 01A.
+Next action ngay: triển khai **MAP01A-02 Visible art slice** cho màn `Spawn/Hạ Vân → Đại Cổng` từ đúng source pack; thay silhouette/terrain/architecture/parallax rectangle cũ, giữ ground/collision/HUD safe area và capture Player thật. Các mục phía dưới là lịch sử và không được dùng để mở Linh Thành hoặc tiếp tục atlas Võ trước gate Map 01A.
 
 ## Current Owner Goal Override — 2026-09-10
 

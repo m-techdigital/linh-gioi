@@ -1,0 +1,63 @@
+{
+  "mapId": "map-01a-cong-dong-lam",
+  "displayName": "Cổng Đông Lâm",
+  "levelBand": "Lv1-3",
+  "worldFlow": "class-intro>cong-dong-lam>suoi-thanh-minh>rung-ngoai-vi>doi-phong-linh>mieu-linh-son>son-thach-thu>linh-thanh",
+  "linhThanhVisibility": "distant-silhouette-locked",
+  "collisionPolicy": "safe-zone-no-enemy",
+  "enemySpawnPolicy": "combat-edge-only",
+  "uiSafeArea": "top-left-hud,top-right-minimap,right-quest,bottom-left-chat,bottom-center-skills,bottom-right-basic-menu",
+  "sourcePack": "LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/01..10",
+  "runtimePolicy": "safe-runtime-resource-no-board-import-no-3d",
+  "zones": [
+    {"id":"spawn-ha-van","name":"Spawn / Hạ Vân","role":"shared-tutorial-arrival","safeZone":true,"collision":"flat-main-ground","trigger":"talk-ha-van"},
+    {"id":"grand-gate","name":"Đại Cổng","role":"map-identity-landmark","safeZone":true,"collision":"flat-main-ground","trigger":"look-linh-thanh"},
+    {"id":"quan-thu","name":"Quan Thủ Đông Lâm","role":"lore-and-progression","safeZone":true,"collision":"flat-main-ground","trigger":"talk-quan-thu"},
+    {"id":"village-square","name":"Quảng trường","role":"safe-social-space","safeZone":true,"collision":"flat-main-ground","trigger":"inventory-tutorial"},
+    {"id":"tong-phu","name":"Tổng Phú","role":"gold-only-starter-shop","safeZone":true,"collision":"flat-main-ground","trigger":"shop-basic"},
+    {"id":"thanh-nhi","name":"Thanh Nhi / Dược quán","role":"gather-and-recovery","safeZone":true,"collision":"flat-main-ground","trigger":"gather-linh-thao"},
+    {"id":"well-bridge","name":"Giếng / Cầu gỗ","role":"resource-and-hidden-chest","safeZone":true,"collision":"walkable-bridge-no-death-gap","trigger":"optional-hidden-chest"},
+    {"id":"lao-tran","name":"Lão Trần","role":"combat-quest-handoff","safeZone":true,"collision":"flat-main-ground","trigger":"talk-lao-tran"},
+    {"id":"combat-edge","name":"Rìa làng","role":"light-combat-lv1-3","safeZone":false,"collision":"flat-combat-ground","trigger":"enemy-spawn-and-loot"},
+    {"id":"portal-suoi-thanh-minh","name":"Portal Suối Thanh Minh","role":"map-01b-exit-locked-by-q09","safeZone":true,"collision":"flat-portal-approach","trigger":"portal-after-q09"}
+  ],
+  "layers": [
+    {"index":0,"name":"Sky","content":"blue-sky-gradient","parallax":0.02,"sortBand":"background-farthest"},
+    {"index":1,"name":"Clouds","content":"soft-cloud-banks","parallax":0.05,"sortBand":"background-far"},
+    {"index":2,"name":"Far Mountains","content":"blue-green-mountain-ranges","parallax":0.08,"sortBand":"background-far"},
+    {"index":3,"name":"Linh Thành Silhouette","content":"distant-locked-city-goal","parallax":0.1,"sortBand":"background-far"},
+    {"index":4,"name":"Distant Trees","content":"bamboo-and-forest-canopy","parallax":0.16,"sortBand":"background-mid"},
+    {"index":5,"name":"Waterfalls","content":"distant-waterfall-and-mist","parallax":0.2,"sortBand":"background-mid"},
+    {"index":6,"name":"Mid Architecture","content":"curved-green-roofs-gates-houses","parallax":0.35,"sortBand":"background-near"},
+    {"index":7,"name":"Gameplay Terrain","content":"stone-path-grass-bridge-stream","parallax":1.0,"sortBand":"gameplay-ground"},
+    {"index":8,"name":"Interactive Props","content":"sign-well-shop-herb-chests-portal","parallax":1.0,"sortBand":"gameplay-props"},
+    {"index":9,"name":"Characters/NPC/Enemies","content":"player-six-npcs-four-enemies","parallax":1.0,"sortBand":"gameplay-actors"},
+    {"index":10,"name":"Foreground Vegetation","content":"peach-bamboo-ferns-flowers","parallax":1.12,"sortBand":"foreground"},
+    {"index":11,"name":"VFX/Particles","content":"light-runes-herb-glow-water-mist","parallax":1.0,"sortBand":"vfx"}
+  ],
+  "npcs": [
+    {"id":"ha-van","name":"Hạ Vân","zoneId":"spawn-ha-van","role":"shared-tutorial-guide"},
+    {"id":"quan-thu-dong-lam","name":"Quan Thủ Đông Lâm","zoneId":"quan-thu","role":"lore-progression-gate"},
+    {"id":"tong-phu","name":"Tổng Phú","zoneId":"tong-phu","role":"gold-only-shop"},
+    {"id":"thanh-nhi","name":"Thanh Nhi","zoneId":"thanh-nhi","role":"gather-recovery"},
+    {"id":"lao-tran","name":"Lão Trần","zoneId":"lao-tran","role":"combat-quest"},
+    {"id":"tieu-dong","name":"Tiểu Đồng","zoneId":"well-bridge","role":"ambient-hidden-chest-hint"}
+  ],
+  "enemies": [
+    {"id":"lon-rung-non","name":"Lợn Rừng Non","zoneId":"combat-edge","role":"lv1-3-enemy"},
+    {"id":"soi-hoang-non","name":"Sói Hoang Non","zoneId":"combat-edge","role":"lv1-3-enemy"},
+    {"id":"nam-dai","name":"Nấm Dại","zoneId":"combat-edge","role":"lv1-3-enemy"},
+    {"id":"thao-yeu-nho","name":"Thảo Yêu Nhỏ","zoneId":"combat-edge","role":"lv1-3-enemy"}
+  ],
+  "quests": [
+    {"id":"Q01","name":"Đường Hội Tụ","giverId":"ha-van","zoneId":"spawn-ha-van"},
+    {"id":"Q02","name":"Nhìn Về Linh Thành","giverId":"ha-van","zoneId":"grand-gate"},
+    {"id":"Q03","name":"Luật Của Đông Lâm","giverId":"quan-thu-dong-lam","zoneId":"quan-thu"},
+    {"id":"Q04","name":"Hành Trang Cần Thiết","giverId":"tong-phu","zoneId":"village-square"},
+    {"id":"Q05","name":"Linh Thảo Ven Nước","giverId":"thanh-nhi","zoneId":"thanh-nhi"},
+    {"id":"Q06","name":"Ngoài Cổng Không Yên","giverId":"lao-tran","zoneId":"lao-tran"},
+    {"id":"Q07","name":"Chiến Lợi Phẩm Đầu Tiên","giverId":"lao-tran","zoneId":"combat-edge"},
+    {"id":"Q08","name":"Bí Mật Bên Cầu","giverId":"tieu-dong","zoneId":"well-bridge"},
+    {"id":"Q09","name":"Đường Đến Suối Thanh Minh","giverId":"quan-thu-dong-lam","zoneId":"portal-suoi-thanh-minh"}
+  ]
+}

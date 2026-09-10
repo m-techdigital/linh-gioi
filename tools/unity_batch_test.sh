@@ -4,6 +4,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 UNITY_PROJECT="$ROOT/client/Unity"
 UNITY_EDITOR="${UNITY_EDITOR:-}"
 if [[ -z "$UNITY_EDITOR" ]]; then
+  canonical_editor="/Applications/Unity/Hub/Editor/6000.3.2f1/Unity.app/Contents/MacOS/Unity"
+  if [[ -x "$canonical_editor" ]]; then UNITY_EDITOR="$canonical_editor"; fi
+fi
+if [[ -z "$UNITY_EDITOR" ]]; then
   for candidate in unity-editor Unity unity; do
     if command -v "$candidate" >/dev/null 2>&1; then UNITY_EDITOR="$(command -v "$candidate")"; break; fi
   done
