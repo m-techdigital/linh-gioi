@@ -1,3 +1,25 @@
+> **Checkpoint Map 01A mới nhất — 2026-09-10:** tuyến ngang 10 khu đã có nền xa, 12 terrain module, foreground, cổng/làng, 6 NPC, 6 landmark, 4 quái Lv1–3 chỉ ở combat edge, rương và Linh Thảo. Hạ Vân/thu thập/mở rương/kiểm portal dùng cùng nút E hoặc touch. Atlas runtime 7 texture, 1.049.392 byte PNG; 24 ảnh macOS Player ở `build/map01a-art/final-three-profiles/` đã được xem trên mobile/tablet/PC. Map art đã đủ làm mặt phẳng kiểm chứng class nhưng Q01–Q09/combat đầy đủ chưa được chứng nhận; PC hình học còn lệch art direction.
+>
+> **Next:** tiếp tục đúng WIP Võ Lv1–30 đã audit, ưu tiên thay PC blockout trong Map 01A bằng base/body + các slot đã có, sửa alpha/pivot/cổ tay/chân và kiểm idle/walk/jump/skill/thay đồ trong Player. Không mở class thứ hai hoặc map 01B. Nếu class cần asset thiếu, tạo cả sheet theo batch và cùng pixel budget, không vá từng mảnh.
+
+## Batch source props + phủ nền — 2026-09-10
+
+Goal vẫn Map01A Cổng Đông Lâm trước, sau đó một class Lv1–30; không dùng wording Đông Môn/Người Giữ Cổng cũ để mở scope khác. Batch trước là tiến triển thực: cắt89 mảnh/hash/pixel. Batch này cleanup16 props cùng sheet, ghép4 vào opt-in Player bằng atlas256²/33.209 byte và sửa phủ nền cả hai chiều sau parallax.
+
+Evidence `build/map01a-art/source-props-three-profiles/`: 12 frame/3 aspect technical pass; đã xem ba frame village-lane, hết viền đen trên tablet/PC, props đúng vị trí. EditMode167 pass/0 fail/1 skip sau sửa import. Có3 lần test lỗi trước đó (log riêng),1 macOS build159.293.123 byte/0 errors/13 warnings,1 capture batch3profile; không giấu retry. Baseline smoke +20frame capture + matrices pass chỉ chứng minh regression prototype cũ, không chứng nhận Map01A Q01–Q09. Đã xem baseline01/02/03/20 bằng contact sheet, vẫn blockout.
+
+Map **VISUAL_FIX_REQUIRED**: skyline quá nổi và phóng lớn, ground lặp rõ, player primitive, mới arrival/thoại Hạ Vân; thiếu route đầy đủ/NPC/quest/items/combat. Chưa push/claim map pass hoặc mở class. WIP code/main khác giữ nguyên; hai GUID settings tự sinh đã lưu patch rồi restore trong worktree này.
+
+Đã rà contact sheet toàn bộ35 ảnh Đông Lâm: `build/map01a-art/source-audit/index.json`, page01/02. Sheet parallax ảnh26 đúng bộ xanh–vàng nhưng các lớp trong board chỉ vài trăm pixel, không upscale thành nền full-screen. Board34 có sáu NPC toàn thân nhưng nét cartoon/kiểu cổng khác nên chưa trộn. Tiếp theo hoàn thiện nguồn parallax/terrain/NPC thống nhất ở đúng pixel budget rồi mở route Map01A theo contract; giữ group crop/cleanup/atlas, không tạo từng asset lẻ tùy ý. Bảng alpha nhóm16 vẫn có matte dưới bàn trà/trong kệ/chậu: giữ ngoài ingest, không claim sạch cả16.
+
+> Chỉ đạo nguồn mới nhất: dùng bộ đồng nhất, không tin tên canonical cũ. Đã batch-crop 89 mảnh từ sheet08/06; nguồn hiện hành `/Users/minhdc/Projects/Design/LGO-Extracted-2D-Items-v1/map-01a-reviewed`, plan `docs/art/LGO-MAP01A-BATCH-CROP-PLAN.json`. 04/07 bị giữ ngoài batch do sai chức năng/khác style. Tiếp theo cleanup alpha/duplicate theo nhóm, chọn NPC đúng bộ, rồi ghép Map01A; không tự tạo lại từng item. Runtime WIP vẫn VISUAL_FIX_REQUIRED (cover nền tablet/PC + player placeholder); chỉ chạy bộ Unity/build/3-profile capture khi gom xong batch runtime.
+
+> Quy tắc batch và bài học đã commit tại `57b83f0` (AGENTS.md + docs/art/LGO-MAP01A-ASSET-OPTIMIZATION-LESSONS.md). Batch scale/downsample đã chạy 1 EditMode + 1 build + 1 capture 12 ảnh sau khi gom thay đổi cuối. Capture kỹ thuật pass; review ảnh `build/map01a-art/reduced-three-profiles/` phát hiện hở nền phía trên ở tablet/PC: cover nền mới tính theo width, chưa bao cả height và camera offset. Gom sửa này cùng các lỗi visual tiếp theo; không báo visual PASS, không lặp build chỉ để đổi tài liệu.
+
+> Quy tắc thực thi mới: đọc mục “Quy tắc owner — làm theo batch, tránh vòng lặp nhỏ” trong `AGENTS.md`. Chốt kết quả/batch trước sửa; gom lỗi review; chỉ rerun gate theo trigger cụ thể; lưu số lượt và lý do cuối batch.
+
+> Bắt buộc đọc trước batch art/scale: `docs/art/LGO-MAP01A-ASSET-OPTIMIZATION-LESSONS.md`. Owner yêu cầu runtime giảm chất lượng/dung lượng, chia tile dùng lại và lưu bài học. Batch đang gom camera/HUD scale + downsample/tile; budget mới 4 MiB PNG, chưa dùng số 7 MiB cũ làm mục tiêu.
+
 ## Owner Goal Override — Cổng Đông Lâm Map 01A — 2026-09-10
 
 Audit sandbox “Chuẩn hóa module 2D class” đã hoàn tất trước khi triển khai map. Không cherry-pick nguyên nhánh vì diff có 48 file xóa và nhánh hiện hành đã đi trước 54 commit riêng. Đã giữ bundle/patch, chọn 26 source chi tiết, xác nhận 28 unit test PASS và phân loại rõ tool/contract/WIP tại `docs/art/LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`. Class code chỉ port chọn lọc sau gate Map 01A.
@@ -13,6 +35,14 @@ Nguồn sản phẩm mới nhất thay các mục Đông Môn/Linh Thành cũ b�
 - Không đưa nguyên design board vào runtime. Tách/redraw/crop thành asset riêng theo layer với provenance, alpha/pivot/anchor/sort và review Player.
 - Công sức class cũ không bị bỏ: source pack giữ 12 file Võ WIP gồm base nam/nữ đã căn ground, mask plan, ba slot alpha và atlas/toggle review. Chưa import runtime vì còn lỗi cổ tay/alpha và thiếu slot/motion.
 
+### Batch đa màn hình / tối ưu asset — đã kiểm kỹ thuật
+
+Đã gom importer desktop BC1/BC3 + Android/iOS ASTC 6x6, hai texture dùng chung, terrain lặp sprite, camera, grounding, HUD safe-area, joystick có sẵn và hội thoại Hạ Vân. Input legacy bị suspend khi mở preview; trò chuyện này không chạy quest Shadow Slime/Linh Thành cũ. Pack PNG 6.764.005 byte trong budget 7 MiB; GPU byte trong manifest là **ước tính**, chưa đo thiết bị thật. Build Player mới 161.426.371 byte, trước nén 177.317.779 byte.
+
+Một lượt tích hợp và một lượt sửa lỗi review: EditMode cuối 168 total/167 pass/0 fail/1 skipped; build 0 errors/13 warnings. `tools/capture_lgo_map01a_art.py --profile all` tạo 12 ảnh (arrival/dialogue/gate/village × mobile 1600×720, tablet 1024×768, PC 1280×720), manifest xác nhận grounding/parallax và mở/đóng thoại. Evidence: `build/map01a-art/batch-final-three-profiles/`, log `build/map01a-art/review/batch-final-*`. Đã xem ba ảnh dialogue: marker đúng vị trí, hộp thoại không che NPC. Đây là mô phỏng tỷ lệ macOS, chưa kiểm touch/notch/GPU mobile thật. PC vẫn placeholder; map chưa đạt visual/product gate.
+
+Next batch: mở rộng Map01A theo route/quest source với Quan Thủ và tương tác chung, tiếp tục giữ atlas dùng chung và budget; dùng base/slot WIP đã audit khi cần thay PC placeholder, không phát triển cả năm class. Gom đủ một đoạn gameplay rồi test/build/capture chung, không build sau từng chỉnh nhỏ. Bổ sung các trạng thái cần thiết vào cùng capture; chưa chuyển sang hoàn thiện class trước khi đóng map.
+
 ### Actions theo thứ tự
 
 1. **MAP01A-01 — World strip contract:** thay route cũ bằng 10 khu `Spawn/Hạ Vân → Đại Cổng → Quan Thủ → Quảng trường → Tổng Phú → Thanh Nhi → Giếng/Cầu → Lão Trần → Combat edge → Portal Suối Thanh Minh`; khóa 12 parallax/render layer, collision và UI safe area từ source.
@@ -22,7 +52,13 @@ Nguồn sản phẩm mới nhất thay các mục Đông Môn/Linh Thành cũ b�
 5. **CLASS-VO-01 — sau khi map pass:** tiếp tục WIP Võ, không làm lại; hoàn thiện Võ nam/nữ Lv1–30 với 10 slot, thay đồ, idle/walk/run/jump/basic attack và `Liên Quyền` trong Player.
 6. Chỉ sau CLASS-VO-01 mới nhân cùng contract sang Kiếm/Pháp/Cơ/Linh Lv1–30.
 
-Next action ngay: triển khai **MAP01A-02 Visible art slice** cho màn `Spawn/Hạ Vân → Đại Cổng` từ đúng source pack; thay silhouette/terrain/architecture/parallax rectangle cũ, giữ ground/collision/HUD safe area và capture Player thật. Các mục phía dưới là lịch sử và không được dùng để mở Linh Thành hoặc tiếp tục atlas Võ trước gate Map 01A.
+MAP01A-02 đã có pack draft tái tạo bằng `tools/pack_lgo_map01a_art.py` (Pillow venv class cũ). Nguồn và SHA ở `build/map01a-art/source/manifest.json`; atlas/nền ở `build/map01a-art/pack/`. Cổng và Hạ Vân có alpha thật. Terrain bị bake checkerboard trong cả hai lần export, nên chỉ dùng vùng đá đặc `(0,330,2172,724)` của bản v1; không coi ảnh đó là alpha sprite. Script kiểm hash nguồn/reference và alpha trước pack.
+
+Đã bổ sung `village-midground-draft-v1.png` (alpha thật, review trên trắng/xanh tối), pack bốn part `gate/ha-van/terrain/village` và năm layer placement có order/parallax. Review mới `build/map01a-art/review/authored-layer-assembly-v2.png` dựng trực tiếp từ manifest: chân cổng đã chạm mặt đường, lớp làng che phần khoảng trống dưới cổng. Đây vẫn là composite, chưa Player evidence. `build/map01a-art/review/pack-qa.txt` xác nhận rect bounded/nonoverlap, alpha RGBA giữ nguyên sau resize, source hash mutation bị từ chối; Python compile PASS.
+
+Renderer `CongDongLamMap01AArtPreview` đã tích hợp Resource riêng qua `--lgo-map01a-art-preview`; atlas bốn part/năm layer, parallax và khôi phục renderer/camera được kiểm bằng EditMode. Lượt đầu phát hiện OnDestroy EditMode chưa restore, đã sửa bằng ExecuteAlways; test cuối 168 total, 167 passed, 0 failed, 1 skipped. Build macOS thành công (0 errors, 13 warnings); ảnh cửa sổ Player thật `build/map01a-art/review/player-arrival-camera.png` xác nhận camera đã hết cắt mái. Log ở `unity-editmode-camera.log`, `player-build-camera.log`, `player-camera.log`. Đây là preview art, **không phải Map01A playable/visual PASS**.
+
+Next action ngay: căn PC foot/contact shadow trên lane (ảnh hiện vẫn PC blockout sát mép), nối marker/HUD và tương tác Map01A đúng Hạ Vân/Quan Thủ/route. Preview hiện ẩn HUD cũ; chưa thay flow state cũ. Không dùng Editor smoke Shadow Slime/Linh Thành để claim Q01–Q09. Bổ sung capture tự động cho preview mới, kiểm movement/parallax trong Player; sau đó tiếp Map01A-03. Class WIP giữ nguyên đến gate map.
 
 ## Current Owner Goal Override — 2026-09-10
 

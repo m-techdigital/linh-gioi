@@ -218,7 +218,7 @@ namespace LinhGioi.World
             }
         }
 
-        private static void WriteBmp(string path, Color32[] pixels, int width, int height)
+        internal static void WriteBmp(string path, Color32[] pixels, int width, int height)
         {
             var rowStride = ((width * 3 + 3) / 4) * 4;
             var imageSize = rowStride * height;

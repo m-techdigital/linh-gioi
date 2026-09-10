@@ -1,0 +1,31 @@
+{
+  "id": "map01a-generated-modules-v1",
+  "parts": [
+    {"id":"stone-clean","x":6,"y":908,"w":500,"h":110},
+    {"id":"stone-moss","x":518,"y":894,"w":500,"h":124},
+    {"id":"grass-bank","x":6,"y":590,"w":500,"h":172},
+    {"id":"wood-bridge","x":518,"y":624,"w":500,"h":138},
+    {"id":"bamboo","x":6,"y":262,"w":317,"h":244},
+    {"id":"peach","x":518,"y":262,"w":348,"h":244},
+    {"id":"ferns-flowers","x":6,"y":74,"w":500,"h":176},
+    {"id":"moss-rocks","x":518,"y":54,"w":500,"h":196}
+  ],
+  "layers": [
+    {"id":"terrain-00","part":"stone-clean","x":-3.3,"y":-2.104,"width":4.4,"height":0.968,"order":-15,"parallax":0},
+    {"id":"terrain-01","part":"stone-moss","x":1.1,"y":-2.165,"width":4.4,"height":1.091,"order":-15,"parallax":0},
+    {"id":"terrain-02","part":"stone-clean","x":5.5,"y":-2.104,"width":4.4,"height":0.968,"order":-15,"parallax":0},
+    {"id":"terrain-03","part":"stone-moss","x":9.9,"y":-2.165,"width":4.4,"height":1.091,"order":-15,"parallax":0},
+    {"id":"terrain-04","part":"stone-clean","x":14.3,"y":-2.104,"width":4.4,"height":0.968,"order":-15,"parallax":0},
+    {"id":"terrain-05","part":"wood-bridge","x":18.7,"y":-2.227,"width":4.4,"height":1.214,"order":-15,"parallax":0},
+    {"id":"terrain-06","part":"stone-moss","x":23.1,"y":-2.165,"width":4.4,"height":1.091,"order":-15,"parallax":0},
+    {"id":"terrain-07","part":"stone-clean","x":27.5,"y":-2.104,"width":4.4,"height":0.968,"order":-15,"parallax":0},
+    {"id":"terrain-08","part":"grass-bank","x":31.9,"y":-2.377,"width":4.4,"height":1.514,"order":-15,"parallax":0},
+    {"id":"terrain-09","part":"grass-bank","x":36.3,"y":-2.377,"width":4.4,"height":1.514,"order":-15,"parallax":0},
+    {"id":"terrain-10","part":"stone-moss","x":40.7,"y":-2.165,"width":4.4,"height":1.091,"order":-15,"parallax":0},
+    {"id":"terrain-11","part":"stone-clean","x":45.1,"y":-2.104,"width":4.4,"height":0.968,"order":-15,"parallax":0},
+    {"id":"peach","part":"peach","x":4.8,"y":-0.533,"width":1.8,"height":2.174,"order":3,"parallax":0},
+    {"id":"bamboo","part":"bamboo","x":13.2,"y":-0.543,"width":1.4,"height":2.154,"order":3,"parallax":0},
+    {"id":"flowers","part":"ferns-flowers","x":25.2,"y":-1.321,"width":1.7,"height":0.598,"order":3,"parallax":0},
+    {"id":"rocks","part":"moss-rocks","x":34.8,"y":-1.287,"width":1.8,"height":0.706,"order":3,"parallax":0}
+  ]
+}

@@ -68,3 +68,41 @@ Gom asset/scale/HUD/input rồi EditMode → macOS build → `tools/capture_lgo_
 - [Dead Cells mobile controls](https://playdigious.com/news/sharpen-your-thumbs-dead-cells-is-now-slaying-foes-on-android): control tùy chỉnh/floating hoặc fixed pad. Tham khảo tách cấu hình input khỏi scale cảnh; không tự thêm auto-hit/auto-battle vào LGO.
 
 Các phần camera/downsample/tile mới cần capture xác nhận trong batch hiện hành. Nguồn HD và bản cũ giữ tại `build/map01a-art/source/`, `build/map01a-art/pack/`; pack giảm tại `build/map01a-art/pack-reduced/`.
+
+## Batch chọn nguồn và cắt đồng loạt — 2026-09-10
+
+Owner yêu cầu đồng nhất giao diện; không sử dụng mọi ảnh chỉ vì đã đặt tên canonical.
+Review thực tế phát hiện `04-npc-character-and-placement.png` và `07-environment-vegetation-ambient.png` là board tổng quan khác kiểu cổng/nét vẽ, không đúng chức năng tên file. Hai ảnh bị giữ ngoài batch cắt. Không xóa nguồn cũ.
+
+Nguồn batch: sheet08 kiến trúc/props và sheet06 quái/item, đối chiếu palette mái xanh–vàng, đèn ấm, hoa đào và núi xa của gameplay01. Chỉ reuse ngôn ngữ hình ảnh; UI Lv80/premium, quest cũ, map top-down và vé hồi thành không thành scope Map01A. Terrain isometric cần chuyển đúng góc side-view; không tự bóp méo để giả thành tile hợp lệ. NPC/class chưa chọn lại bằng hai sheet này.
+
+Plan đầy đủ: `docs/art/LGO-MAP01A-BATCH-CROP-PLAN.json`; runner `tools/extract_lgo_design_sheet_items.py`. Output hiện hành ngoài repo: `/Users/minhdc/Projects/Design/LGO-Extracted-2D-Items-v1/map-01a-reviewed`. Có 89 crop PNG, 1.761.077 byte, manifest nguồn/hash/tọa độ normalized và native; ba contact sheet. Bản `map-01a` là lượt trước review, không dùng tiếp.
+
+Kiểm 89/89 crop tương đương pixel vùng ảnh gốc, hash đúng, không upscale; py_compile thành công. Review contact sheet phát hiện đường chia cột hàng rương khác hàng đèn và heading lẫn vào crop; đã gom sửa tọa độ một lượt. Đây là source staging còn nền/chữ/biến thể, không phải 89 asset production hoặc chứng nhận Player. Không chạy lại Unity vì batch này chỉ thêm công cụ và nguồn ngoài runtime. Tiếp theo xử lý alpha theo nhóm prop cùng nền, chọn một mẫu cho vật thể trùng; giữ các vùng chưa đủ pixel/góc nhìn ở trạng thái cần xử lý, không generate từng item mới tùy ý.
+
+### Cleanup nhóm props và kiểm trong Player
+
+Đã xử lý 16 props trong một lượt chung, output hiện hành ngoài repo `LGO-Extracted-2D-Items-v1/map-01a-props-player-batch`. Chọn 4 silhouette cho opt-in Player comparison: crate, bench, lamp-post, stone-lamp; atlas 256² chỉ 33.209 byte PNG, BC3 ước tính 65.536 byte. Không resize crop, không thay màu/vẽ mới. Nhóm còn matte bên trong (bàn trà/kệ/chậu) chưa ingest. File nguồn và các bản lỗi giữ nguyên, chưa gọi cả nhóm production-ready.
+
+Lỗi mới cần tránh: (1) crop rộng 121px không vừa ô 128px nếu chừa padding4 hai bên; kiểm kích thước toàn batch trước tạo output, padding2 cho crop tối đa124; không downsample tùy ý. (2) Key màu toàn ảnh thủng đèn sáng nhưng vẫn giữ bóng nền xanh dưới bàn; đổi sang flood vùng matte nhạt nối biên. Không áp green despill của sandbox class lên nền trắng/xanh nhạt. (3) Texture meta tạo tối thiểu để Unity suy diễn shape sai (sheet-props shape2 so với atlas đang chạy shape1); importer phải khóa `TextureImporterType.Default` và `TextureImporterShape.Texture2D`. Giữ tên layout khác texture cho Resources rõ ràng. Hai log EditMode thất bại: `source-props-editmode.log`, `source-props-editmode-fixed.log`; log sau sửa importer: `source-props-editmode-import-fixed.log` trong `build/map01a-art/review/`. Không biến lần chạy lỗi thành PASS.
+
+Nền đen tablet/PC: công thức cũ chỉ phủ chiều ngang; camera tăng height và lệch tâm dọc khiến phần trên ra ngoài ảnh. Fit cả hai camera extents cộng offset sau parallax; test bounds trên ba aspect trong test preview hiện có. Cần capture Player sau build để xác nhận ảnh, không dựa duy nhất vào test bounds.
+
+Xác nhận từ lần diagnostic: layout=True, texture2D=False và meta vẫn shape2. Chỉ sửa AssetPostprocessor không tự ép reimport asset đã có trong cache; sửa meta asset sở hữu của batch về shape1 để kích hoạt import lại. Không xóa Library/reset checkout để chữa cache.
+
+## Owner mở quyền chủ động tạo ảnh — batch module 2026-09-10
+
+Kết hợp crop source đủ chất lượng với tạo bù module cần thiết. Đã dùng built-in imagegen tạo một bộ8 module theo sheet08/gameplay01 và nền xa theo sheet09/gameplay01. Không dùng API/CLI image generation. Ba call gồm: tạo atlas, một lần sửa toàn bộ nền ô caro sang magenta, tạo nền xa opaque. File/prompt/hash: `build/map01a-art/module-generation-v1/brief.json`, `prompts.txt`, `parallax-prompt.txt`.
+
+Tool không bảo đảm size/alpha theo prompt: atlas yêu cầu1024² nhưng trả1254² RGB với ô caro; giữ bản lỗi, không coi là RGBA. Chỉ sửa nền một lần rồi reuse script main stopped-task `tools/chroma_key_vo_candidate.py` ở chế độ đọc, key255,0,255/tolerance36/feather72, output trong worktree này; không sửa code main. `tools/pack_lgo_map01a_modules.py` áp dụng edge-only despill của sandbox class cho magenta, giữ alpha trước pack, cắt8 vùng đã review và đóng atlas1024², 1.193.261 byte PNG; BC3 ước tính1MiB, ASTC6x6 467.856 byte. Không upscale crop. Nền xa vẫn opaque, chưa có12 layer độc lập.
+
+Đã xem atlas trên nền tối: vật liệu/side-view phù hợp, không còn board/checkerboard; cây cỏ còn một ít viền/speck cần review khi ghép, tile chưa chứng nhận seam/collision. Status DRAFT_REQUIRES_PLAYER_REVIEW, không chạy lại Unity chỉ vì tạo source. Tiếp ghép trọn bộ terrain/vegetation/background và route camera rồi mới build/capture cả3profile một lượt. Không đánh dấu map pass hoặc mở class.
+
+## Batch tuyến hoàn chỉnh, landmark, combat và palette PNG — 2026-09-10
+
+- Tạo theo sheet thay vì từng item: một sheet 6 NPC, một sheet 6 landmark và một sheet 4 quái + rương + Linh Thảo. Mỗi sheet dùng atlas hiện hành làm chuẩn style, chroma magenta một màu, rồi key/trim/despill/pack một lượt. Runtime tương ứng là `npcs-atlas` 512², `landmarks-atlas` 1024² và `combat-atlas` 512².
+- Tỷ lệ thực tế theo camera 4.6 và framebuffer cao nhất 768px: NPC khoảng 149–159px, quái khoảng 77–99px, landmark 180–235px. Bản NPC 1024² ban đầu lớn hơn nhu cầu nên đã repack 512² trước khi tích hợp.
+- `tools/optimize_lgo_map01a_runtime_textures.py` chuyển cả batch sang indexed PNG 256 màu (small props 192 màu), không đổi kích thước. Contact sheet `build/map01a-art/review/optimization-comparison.jpg` đã được xem trên nền tối. Bảy texture runtime hiện 1.049.392 byte; RGBA lý thuyết 17.301.504 byte, desktop GPU estimate 4.030.464 byte, ASTC6x6 estimate 1.932.480 byte. Indexed PNG chỉ giảm source/download; Unity vẫn giải nén/nén theo importer khi chạy.
+- Không quantize lặp trên bản đã quantize để kiếm thêm vài KB: input canonical phải là output RGBA của packer. Batch thử lại cho thấy hash/palette alpha đổi dù ảnh nhìn gần giống; runtime chỉ lấy combat mới từ lượt đó, sáu texture trước giữ bản review lần đầu.
+- Terrain module overlap ngang 0,12 world unit để che khe bilinear giữa tile; không thay collision/route width. Architecture/landmark đặt theo ground anchor, không kéo tỷ lệ riêng ở từng profile.
+- Evidence cuối: `build/map01a-art/final-three-profiles/` gồm 8 frame × mobile/tablet/PC. Đã xem arrival/gate/market/bridge/combat/portal; không thấy matte magenta hoặc nền đen. Player blockout vẫn lộ rõ, vì vậy checkpoint chỉ đóng map art foundation và chuyển sang Võ Lv1–30 để sửa PC; không gọi Q01–Q09/combat hoặc visual production hoàn tất.

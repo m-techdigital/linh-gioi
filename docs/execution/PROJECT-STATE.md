@@ -1,6 +1,14 @@
+> Batch mới nhất: Map 01A đã dựng đủ tuyến nhìn thấy 10 khu bằng atlas/module tái sử dụng, 6 NPC, 6 landmark, 4 quái combat-edge-only và hai interactable. Runtime PNG giảm từ 4.526.172 xuống 1.049.392 byte sau palette optimization và giữ review tương đương. Unity EditMode cuối 175 tổng/174 pass/0 fail/1 skip; macOS Player build 160.624.595 byte, 0 lỗi/13 warning; capture 24 ảnh/3 profile technical pass và đã review. Trạng thái `MAP_ART_FOUNDATION_PASS / CLASS_PC_VISUAL_FIX_REQUIRED`; Q01–Q09 và combat loop chưa được claim.
+
+> Bắt buộc đọc trước batch art/scale: `docs/art/LGO-MAP01A-ASSET-OPTIMIZATION-LESSONS.md`. Owner yêu cầu runtime giảm chất lượng/dung lượng, chia tile dùng lại và lưu bài học. Batch đang gom camera/HUD scale + downsample/tile; budget mới 4 MiB PNG, chưa dùng số 7 MiB cũ làm mục tiêu.
+
 # PROJECT STATE — Linh Giới Online 2D
 
 ## Goal hiện hành — Cổng Đông Lâm Map 01A — 2026-09-10
+
+Batch đa màn hình đã kiểm kỹ thuật: importer nén, grounding, HUD safe-area, joystick dùng lại, thoại Hạ Vân; EditMode 167 pass/0 fail/1 skipped; build 0 errors, 161.426.371 byte. Capture 12 ảnh mobile/tablet/PC ở `build/map01a-art/batch-final-three-profiles/`; xem ba ảnh dialogue, HUD không che NPC. Vẫn **VISUAL_FIX_REQUIRED** vì PC placeholder và map mới có đoạn arrival, chưa đủ route/Q01–Q09. Chưa chứng nhận touch/GPU thiết bị thật.
+
+MAP01A-02 có preview pack nguồn riêng chạy trong macOS Player; camera đã sửa cắt mái. EditMode 167 pass/0 fail/1 skipped, build 0 errors. Ảnh `build/map01a-art/review/player-arrival-camera.png` còn PC blockout và thiếu HUD/marker/flow Map01A: **VISUAL_FIX_REQUIRED**, chưa chuyển class.
 
 Audit sandbox class đã đóng: lịch sử `efa46a8` được bảo toàn bằng bundle, diff uncommitted có backup, 26 ảnh chi tiết đã thêm vào source pack và 28 unit test tool class PASS. Không lấy nguyên nhánh lệch hoặc output procedural làm mỹ thuật. Báo cáo: `docs/art/LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`.
 

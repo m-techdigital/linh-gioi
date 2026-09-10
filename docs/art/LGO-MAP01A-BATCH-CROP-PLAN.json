@@ -1,0 +1,1028 @@
+{
+  "selection": {
+    "anchor": "01-gameplay-screen-16x9.png",
+    "style": "Illustrated blue/gold roofs, warm lanterns, pink blossom, cool distant city. No raw board UI or gameplay text copied.",
+    "primary_props": "08-tileset-props-architecture.png",
+    "secondary_items": "06-enemy-spawn-loot-resource.png",
+    "owner_scope": "Map01A Lv1-3; no premium UI, no town-return ticket; class later Lv1-30"
+  },
+  "exclusions": [
+    {
+      "file": "04-npc-character-and-placement.png",
+      "reason": "Mislabeled overview board; different gate/style; hold until coherent NPC sheet selected."
+    },
+    {
+      "file": "07-environment-vegetation-ambient.png",
+      "reason": "Mislabeled overview board, muted different gate/style; not a vegetation extraction sheet."
+    },
+    {
+      "file": "06-enemy-spawn-loot-resource.png:town-return-ticket-and-map-diagram",
+      "reason": "Not in locked starter items; map diagram top-down and quest text conflicts with owner scope."
+    },
+    {
+      "file": "context/**",
+      "reason": "Older/alternative design; not selected for current runtime batch."
+    }
+  ],
+  "sheets": [
+    {
+      "file": "08-tileset-props-architecture.png",
+      "sha256": "7efe2aed018c8cf88d6464cf113c83f3097c2345e437e072594ed11b2b949023",
+      "reference_size": [
+        1672,
+        941
+      ],
+      "items": [
+        {
+          "name": "terrain-stone-clean",
+          "rect": [
+            14,
+            117,
+            127,
+            207
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-stone-moss",
+          "rect": [
+            130,
+            117,
+            249,
+            207
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-dirt",
+          "rect": [
+            252,
+            117,
+            372,
+            207
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-grass-bank",
+          "rect": [
+            375,
+            117,
+            495,
+            207
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-rock-edge",
+          "rect": [
+            498,
+            117,
+            617,
+            207
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-stairs",
+          "rect": [
+            620,
+            117,
+            741,
+            207
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-wood-floor",
+          "rect": [
+            14,
+            243,
+            127,
+            353
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-bridge-straight",
+          "rect": [
+            130,
+            243,
+            249,
+            353
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-bridge-corner",
+          "rect": [
+            252,
+            243,
+            372,
+            353
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-bridge-railing",
+          "rect": [
+            375,
+            243,
+            495,
+            353
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-water-edge",
+          "rect": [
+            498,
+            243,
+            617,
+            353
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "terrain-cliff-corner",
+          "rect": [
+            620,
+            243,
+            741,
+            353
+          ],
+          "group": "terrain",
+          "review_note": "Isometric source: adapt side-view before runtime; no automatic skew."
+        },
+        {
+          "name": "architecture-gate-front",
+          "rect": [
+            770,
+            98,
+            1007,
+            278
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-gate-side",
+          "rect": [
+            1013,
+            91,
+            1092,
+            277
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-house",
+          "rect": [
+            1095,
+            98,
+            1342,
+            253
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-market-stall",
+          "rect": [
+            1345,
+            98,
+            1524,
+            252
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-well",
+          "rect": [
+            1529,
+            98,
+            1662,
+            252
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-stone-railing",
+          "rect": [
+            774,
+            311,
+            969,
+            381
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-wood-fence",
+          "rect": [
+            975,
+            311,
+            1160,
+            381
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-signpost-single",
+          "rect": [
+            1165,
+            272,
+            1375,
+            373
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-signpost-multi",
+          "rect": [
+            1380,
+            275,
+            1506,
+            370
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "architecture-small-gate",
+          "rect": [
+            1512,
+            272,
+            1662,
+            379
+          ],
+          "group": "architecture",
+          "review_note": "Baked signs/background: cleanup required; retain blue roof/gold material identity."
+        },
+        {
+          "name": "prop-lantern-red",
+          "rect": [
+            20,
+            438,
+            95,
+            521
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-lantern-hex",
+          "rect": [
+            119,
+            438,
+            188,
+            521
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-lamp-post",
+          "rect": [
+            217,
+            437,
+            282,
+            521
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-stone-lamp",
+          "rect": [
+            282,
+            418,
+            386,
+            521
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-banner-large",
+          "rect": [
+            388,
+            418,
+            484,
+            521
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-banner-small",
+          "rect": [
+            486,
+            418,
+            577,
+            521
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-planter-stone",
+          "rect": [
+            579,
+            418,
+            698,
+            521
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-planter-wood",
+          "rect": [
+            700,
+            418,
+            821,
+            521
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-crate",
+          "rect": [
+            14,
+            549,
+            98,
+            626
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-chest-wood",
+          "rect": [
+            99,
+            549,
+            180,
+            626
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-chest-rare",
+          "rect": [
+            183,
+            549,
+            274,
+            626
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-noticeboard",
+          "rect": [
+            275,
+            543,
+            371,
+            626
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-bench",
+          "rect": [
+            373,
+            549,
+            481,
+            626
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-tea-table",
+          "rect": [
+            488,
+            549,
+            596,
+            626
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-jars",
+          "rect": [
+            604,
+            549,
+            706,
+            626
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "prop-goods-rack",
+          "rect": [
+            721,
+            543,
+            823,
+            626
+          ],
+          "group": "props",
+          "review_note": ""
+        },
+        {
+          "name": "nature-tree-large",
+          "rect": [
+            849,
+            440,
+            979,
+            550
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-tree-medium",
+          "rect": [
+            983,
+            434,
+            1105,
+            550
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-peach-large",
+          "rect": [
+            1109,
+            418,
+            1262,
+            550
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-peach-small",
+          "rect": [
+            1264,
+            429,
+            1386,
+            551
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-bush",
+          "rect": [
+            849,
+            573,
+            945,
+            630
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-flower-bush",
+          "rect": [
+            947,
+            573,
+            1055,
+            630
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-rock-small",
+          "rect": [
+            1057,
+            573,
+            1180,
+            630
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-rocks-large",
+          "rect": [
+            1182,
+            573,
+            1382,
+            634
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-waterfall-tall",
+          "rect": [
+            1394,
+            435,
+            1524,
+            636
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-waterfall-wide",
+          "rect": [
+            1532,
+            422,
+            1660,
+            538
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "nature-stream",
+          "rect": [
+            1532,
+            543,
+            1660,
+            636
+          ],
+          "group": "nature",
+          "review_note": ""
+        },
+        {
+          "name": "interactive-quest-main",
+          "rect": [
+            19,
+            690,
+            78,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        },
+        {
+          "name": "interactive-quest-side",
+          "rect": [
+            86,
+            690,
+            139,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        },
+        {
+          "name": "interactive-exchange",
+          "rect": [
+            149,
+            690,
+            207,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        },
+        {
+          "name": "interactive-portal",
+          "rect": [
+            215,
+            690,
+            302,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        },
+        {
+          "name": "interactive-chest-closed",
+          "rect": [
+            308,
+            690,
+            391,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        },
+        {
+          "name": "interactive-chest-open",
+          "rect": [
+            398,
+            685,
+            479,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        },
+        {
+          "name": "interactive-destructible-fence",
+          "rect": [
+            485,
+            677,
+            650,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        },
+        {
+          "name": "interactive-interactive-sign",
+          "rect": [
+            655,
+            675,
+            764,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        },
+        {
+          "name": "interactive-aoe-circle",
+          "rect": [
+            767,
+            690,
+            857,
+            752
+          ],
+          "group": "interactive",
+          "review_note": "Preview art only; glow requires alpha-aware cleanup."
+        }
+      ]
+    },
+    {
+      "file": "06-enemy-spawn-loot-resource.png",
+      "sha256": "9ef9e78e0ceada69c79aa1c464672dd42d5f6b2c4ce43f011d11e65a8a75fa7e",
+      "reference_size": [
+        1672,
+        941
+      ],
+      "items": [
+        {
+          "name": "enemy-boar",
+          "rect": [
+            746,
+            145,
+            963,
+            254
+          ],
+          "group": "enemies",
+          "review_note": "Contains scene garnish/secondary poses: isolate main silhouette in grouped cleanup, not final animation."
+        },
+        {
+          "name": "enemy-wolf",
+          "rect": [
+            974,
+            143,
+            1187,
+            254
+          ],
+          "group": "enemies",
+          "review_note": "Contains scene garnish/secondary poses: isolate main silhouette in grouped cleanup, not final animation."
+        },
+        {
+          "name": "enemy-mushroom",
+          "rect": [
+            1201,
+            143,
+            1416,
+            254
+          ],
+          "group": "enemies",
+          "review_note": "Contains scene garnish/secondary poses: isolate main silhouette in grouped cleanup, not final animation."
+        },
+        {
+          "name": "enemy-herb-spirit",
+          "rect": [
+            1433,
+            143,
+            1660,
+            254
+          ],
+          "group": "enemies",
+          "review_note": "Contains scene garnish/secondary poses: isolate main silhouette in grouped cleanup, not final animation."
+        },
+        {
+          "name": "loot-boar-meat",
+          "rect": [
+            746,
+            447,
+            814,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-boar-hide",
+          "rect": [
+            818,
+            447,
+            886,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-coin-boar",
+          "rect": [
+            890,
+            447,
+            958,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-wolf-meat",
+          "rect": [
+            974,
+            447,
+            1042,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-wolf-fur",
+          "rect": [
+            1046,
+            447,
+            1114,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-coin-wolf",
+          "rect": [
+            1118,
+            447,
+            1186,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-mushroom-spore",
+          "rect": [
+            1202,
+            447,
+            1270,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-wild-mushroom",
+          "rect": [
+            1274,
+            447,
+            1342,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-coin-mushroom",
+          "rect": [
+            1346,
+            447,
+            1414,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-herb-leaf",
+          "rect": [
+            1430,
+            447,
+            1498,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-herb-seed",
+          "rect": [
+            1502,
+            447,
+            1570,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "loot-coin-herb",
+          "rect": [
+            1574,
+            447,
+            1642,
+            487
+          ],
+          "group": "loot",
+          "review_note": "Scope outside locked item list remains reference only; consolidate repeated coins."
+        },
+        {
+          "name": "resource-herb",
+          "rect": [
+            747,
+            555,
+            821,
+            615
+          ],
+          "group": "resource",
+          "review_note": "Scene thumbnail, not isolated alpha; compare herb to locked Linh Thao Non."
+        },
+        {
+          "name": "resource-mushroom",
+          "rect": [
+            832,
+            555,
+            906,
+            615
+          ],
+          "group": "resource",
+          "review_note": "Scene thumbnail, not isolated alpha; compare herb to locked Linh Thao Non."
+        },
+        {
+          "name": "resource-spring-water",
+          "rect": [
+            917,
+            555,
+            991,
+            615
+          ],
+          "group": "resource",
+          "review_note": "Scene thumbnail, not isolated alpha; compare herb to locked Linh Thao Non."
+        },
+        {
+          "name": "resource-wood",
+          "rect": [
+            1002,
+            555,
+            1076,
+            615
+          ],
+          "group": "resource",
+          "review_note": "Scene thumbnail, not isolated alpha; compare herb to locked Linh Thao Non."
+        },
+        {
+          "name": "resource-flower",
+          "rect": [
+            1087,
+            555,
+            1161,
+            615
+          ],
+          "group": "resource",
+          "review_note": "Scene thumbnail, not isolated alpha; compare herb to locked Linh Thao Non."
+        },
+        {
+          "name": "object-chest",
+          "rect": [
+            1186,
+            555,
+            1267,
+            615
+          ],
+          "group": "objects",
+          "review_note": "Secondary style variant; prefer sheet08 for duplicate prop."
+        },
+        {
+          "name": "object-barrel",
+          "rect": [
+            1282,
+            555,
+            1363,
+            615
+          ],
+          "group": "objects",
+          "review_note": "Secondary style variant; prefer sheet08 for duplicate prop."
+        },
+        {
+          "name": "object-signpost",
+          "rect": [
+            1378,
+            555,
+            1459,
+            615
+          ],
+          "group": "objects",
+          "review_note": "Secondary style variant; prefer sheet08 for duplicate prop."
+        },
+        {
+          "name": "object-well",
+          "rect": [
+            1474,
+            555,
+            1555,
+            615
+          ],
+          "group": "objects",
+          "review_note": "Secondary style variant; prefer sheet08 for duplicate prop."
+        },
+        {
+          "name": "object-loot-beam",
+          "rect": [
+            1570,
+            555,
+            1651,
+            615
+          ],
+          "group": "objects",
+          "review_note": "Secondary style variant; prefer sheet08 for duplicate prop."
+        },
+        {
+          "name": "item-hp-potion",
+          "rect": [
+            20,
+            746,
+            93,
+            817
+          ],
+          "group": "items",
+          "review_note": ""
+        },
+        {
+          "name": "item-mp-potion",
+          "rect": [
+            113,
+            746,
+            186,
+            817
+          ],
+          "group": "items",
+          "review_note": ""
+        },
+        {
+          "name": "item-dumpling",
+          "rect": [
+            196,
+            746,
+            275,
+            817
+          ],
+          "group": "items",
+          "review_note": ""
+        },
+        {
+          "name": "item-coin",
+          "rect": [
+            299,
+            746,
+            372,
+            817
+          ],
+          "group": "items",
+          "review_note": ""
+        },
+        {
+          "name": "item-equipment-fragment",
+          "rect": [
+            392,
+            746,
+            465,
+            817
+          ],
+          "group": "items",
+          "review_note": ""
+        }
+      ]
+    }
+  ]
+}

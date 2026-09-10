@@ -1,0 +1,132 @@
+{
+  "id": "map01a-combat-interactables-v1",
+  "status": "DRAFT_REQUIRES_PLAYER_REVIEW",
+  "source": "build/map01a-art/combat-generation-v1/combat-sheet-alpha-v1.png",
+  "sourceSha256": "c8d251b4526e1d2d05ae05f39d260cb42d07fabec89fcfb2bce27a4b8d35c0c6",
+  "parts": [
+    {
+      "id": "young-wild-boar",
+      "x": 9,
+      "y": 274,
+      "w": 152,
+      "h": 143,
+      "sourceCell": 0,
+      "nativeAspectPreserved": true
+    },
+    {
+      "id": "young-wolf",
+      "x": 179,
+      "y": 274,
+      "w": 152,
+      "h": 123,
+      "sourceCell": 1,
+      "nativeAspectPreserved": true
+    },
+    {
+      "id": "wild-mushroom",
+      "x": 349,
+      "y": 274,
+      "w": 152,
+      "h": 147,
+      "sourceCell": 2,
+      "nativeAspectPreserved": true
+    },
+    {
+      "id": "small-herb-spirit",
+      "x": 9,
+      "y": 18,
+      "w": 152,
+      "h": 192,
+      "sourceCell": 3,
+      "nativeAspectPreserved": true
+    },
+    {
+      "id": "common-chest",
+      "x": 179,
+      "y": 18,
+      "w": 152,
+      "h": 112,
+      "sourceCell": 4,
+      "nativeAspectPreserved": true
+    },
+    {
+      "id": "young-spirit-herb",
+      "x": 349,
+      "y": 18,
+      "w": 152,
+      "h": 170,
+      "sourceCell": 5,
+      "nativeAspectPreserved": true
+    }
+  ],
+  "layers": [
+    {
+      "id": "young-wild-boar",
+      "part": "young-wild-boar",
+      "x": 38.0,
+      "y": -1.0950000000000002,
+      "width": 1.116083916083916,
+      "height": 1.05,
+      "order": 2,
+      "parallax": 0
+    },
+    {
+      "id": "young-wolf",
+      "part": "young-wolf",
+      "x": 40.0,
+      "y": -1.0300000000000002,
+      "width": 1.458211382113821,
+      "height": 1.18,
+      "order": 2,
+      "parallax": 0
+    },
+    {
+      "id": "wild-mushroom",
+      "part": "wild-mushroom",
+      "x": 42.0,
+      "y": -1.11,
+      "width": 1.0546938775510204,
+      "height": 1.02,
+      "order": 2,
+      "parallax": 0
+    },
+    {
+      "id": "small-herb-spirit",
+      "part": "small-herb-spirit",
+      "x": 39.0,
+      "y": -1.1600000000000001,
+      "width": 0.7283333333333334,
+      "height": 0.92,
+      "order": 2,
+      "parallax": 0
+    },
+    {
+      "id": "common-chest",
+      "part": "common-chest",
+      "x": 32.0,
+      "y": -1.23,
+      "width": 1.0585714285714285,
+      "height": 0.78,
+      "order": 2,
+      "parallax": 0
+    },
+    {
+      "id": "young-spirit-herb",
+      "part": "young-spirit-herb",
+      "x": 29.0,
+      "y": -1.08,
+      "width": 0.9656470588235295,
+      "height": 1.08,
+      "order": 2,
+      "parallax": 0
+    }
+  ],
+  "atlas": [
+    512,
+    512
+  ],
+  "pngBytes": 275908,
+  "estimatedBc3Bytes": 262144,
+  "upscaled": false,
+  "spawnRule": "four enemies at combat edge only; chest and herb remain outside combat spawn set"
+}

@@ -104,6 +104,13 @@ namespace LinhGioi.Bootstrap
                     return;
                 }
 
+                if (CongDongLamMap01AArtPreview.ShouldRun())
+                {
+                    var map01A = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(gameObject));
+                    LinhGioi.UI.CongDongLamArrivalHud.Attach(map01A);
+                    return;
+                }
+
                 if (DongMonIllustratedPreview.ShouldRun())
                 {
                     DongMonIllustratedPreview.Attach(TwoDOnboardingController.Attach(gameObject));

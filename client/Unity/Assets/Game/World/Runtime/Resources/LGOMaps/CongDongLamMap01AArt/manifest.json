@@ -1,0 +1,243 @@
+{
+  "id": "cong-dong-lam-map01a-art-draft-v1",
+  "status": "DRAFT_NOT_RUNTIME_APPROVED",
+  "groundY": -1.62,
+  "parts": [
+    {
+      "id": "gate",
+      "source": "gate-draft-v1.png",
+      "sourceCrop": null,
+      "x": 8,
+      "y": 504,
+      "w": 768,
+      "h": 512
+    },
+    {
+      "id": "village",
+      "source": "village-midground-draft-v1.png",
+      "sourceCrop": null,
+      "x": 8,
+      "y": 24,
+      "w": 832,
+      "h": 416
+    }
+  ],
+  "layers": [
+    {
+      "id": "far-landscape",
+      "part": "skyline",
+      "x": 0,
+      "y": 0,
+      "width": 12.6,
+      "height": 7.0875,
+      "order": -30,
+      "parallax": 0.08
+    },
+    {
+      "id": "village-behind-gate",
+      "part": "village",
+      "x": 2.1,
+      "y": -0.12,
+      "width": 8.6,
+      "height": 4.3,
+      "order": -24,
+      "parallax": 0
+    },
+    {
+      "id": "grand-gate",
+      "part": "gate",
+      "x": -0.6,
+      "y": 0.77,
+      "width": 7.8,
+      "height": 5.2025,
+      "order": -20,
+      "parallax": 0
+    }
+  ],
+  "sourceManifestSha256": "d17d73a3375a282c2e199dcc806ac87bc69e3ef1828bfedbde20560d600961f0",
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/far-background.png",
+      "sha256": "692ae30fbe2cb6af43c7b03373f315011641d6e2193b59251acf21984866b759",
+      "width": 1024,
+      "height": 576,
+      "role": "far-background",
+      "generator": "image_gen",
+      "referenceOnly": false
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/props-atlas.png",
+      "sha256": "4e3e8019017cd0d6a45262314d853133d78044c9f0f72887d52b122d686b97c0",
+      "width": 1024,
+      "height": 1024,
+      "role": "runtime-atlas",
+      "generator": "image_gen",
+      "referenceOnly": false
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/sheet-props.png",
+      "sha256": "09e29969f8bba63faabc5640e609c428887067c71659949d4b19b258346c7e88",
+      "width": 256,
+      "height": 256,
+      "generator": "extracted_owner_source",
+      "referenceOnly": false,
+      "role": "runtime-atlas",
+      "source": "/Users/minhdc/Projects/Design/LGO-Extracted-2D-Items-v1/map-01a-props-player-batch/manifest.json",
+      "status": "DRAFT_PLAYER_COMPARISON"
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/modules-atlas.png",
+      "sha256": "5f77868d195d6c592794399f6d42663b8c2d8ec172c4eeaeeb97d5e179d8a63a",
+      "width": 1024,
+      "height": 1024,
+      "role": "runtime-atlas",
+      "generator": "image_gen",
+      "referenceOnly": false,
+      "status": "DRAFT_PLAYER_COMPARISON"
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/npcs-atlas.png",
+      "sha256": "8edb58e37719660905513737dabe8d0d839ca24719a1fb5332661fdc0aecc3c1",
+      "width": 512,
+      "height": 512,
+      "role": "runtime-atlas",
+      "generator": "image_gen",
+      "referenceOnly": false,
+      "status": "DRAFT_PLAYER_COMPARISON"
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/landmarks-atlas.png",
+      "sha256": "460cf49009b3c14656fc488cf35096cc3c7b7b6cc9333d6d5b1cbc90c3f4d465",
+      "width": 1024,
+      "height": 1024,
+      "role": "runtime-atlas",
+      "generator": "image_gen",
+      "referenceOnly": false,
+      "status": "DRAFT_PLAYER_COMPARISON"
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/combat-atlas.png",
+      "sha256": "8cb3b0699084c8a9d8ae21d0309772f83380f46b1abf247380442726bfc4356d",
+      "width": 512,
+      "height": 512,
+      "role": "runtime-atlas",
+      "generator": "image_gen",
+      "referenceOnly": false,
+      "status": "DRAFT_PLAYER_COMPARISON"
+    }
+  ],
+  "textureBudget": {
+    "sourcePngBytes": 1049392,
+    "maxSourcePngBytes": 4194304,
+    "uncompressedRgbaBytes": 17301504,
+    "estimatedDesktopGpuBytes": 4030464,
+    "estimatedAstc6x6GpuBytes": 1932480,
+    "mipmaps": false,
+    "readable": false,
+    "textureCount": 7,
+    "sourceOptimization": "indexed PNG; 192 colors for small props and 256 colors for all other textures",
+    "note": "GPU estimates exclude driver overhead; actual device profiling still required"
+  },
+  "provenance": {
+    "id": "map01a-source-grounded-drafts-v1",
+    "assets": [
+      {
+        "file": "arrival-composition-draft-v1.png",
+        "sha256": "6daa2e6902f6513ca7433771aa1be9a267f64fd10f8e1f07fdf1b08331406a39",
+        "role": "COMPOSITION_REFERENCE_ONLY",
+        "status": "DRAFT_NOT_RUNTIME_APPROVED",
+        "generator": "image_gen",
+        "references": [
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/01-gameplay-screen-16x9.png",
+            "sha256": "1e0bc2daba319f43e0df74269aa7e15c28be9bbb255726882ddba7614aca5301"
+          },
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/08-tileset-props-architecture.png",
+            "sha256": "7efe2aed018c8cf88d6464cf113c83f3097c2345e437e072594ed11b2b949023"
+          },
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/09-parallax-lighting-vfx.png",
+            "sha256": "ad480398f7a0d94e1af2d259ba638025e2c5c34c90d3c2aba3d562f351e1c8b8"
+          }
+        ]
+      },
+      {
+        "file": "ha-van-sprite-draft-v1.png",
+        "sha256": "4e3f4e8be6066653a16e3bddabc2efc134661bc3607d6d5b2eb003b4a188d3d6",
+        "role": "NPC_ALPHA_CANDIDATE",
+        "status": "DRAFT_NOT_RUNTIME_APPROVED",
+        "generator": "image_gen",
+        "references": [
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/04-npc-character-and-placement.png",
+            "sha256": "cba787db4235cb5e148cb4750ad66c6e842de3559d5817c3adb9fa3b571d90b3"
+          }
+        ]
+      },
+      {
+        "file": "far-mountains-linh-thanh-draft-v1.png",
+        "sha256": "e7782004f432eb5b72e5dc687e743c333dd943980729429b1496805304f2ff6b",
+        "role": "FAR_BACKGROUND_CANDIDATE",
+        "status": "DRAFT_NOT_RUNTIME_APPROVED",
+        "generator": "image_gen",
+        "references": [
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/09-parallax-lighting-vfx.png",
+            "sha256": "ad480398f7a0d94e1af2d259ba638025e2c5c34c90d3c2aba3d562f351e1c8b8"
+          }
+        ],
+        "derivedFrom": "arrival-composition-draft-v1.png"
+      },
+      {
+        "file": "gate-draft-v1.png",
+        "sha256": "4a56565cea3b8ef620e11e19ac069efc6c8eff2e46554fb6d23a466ae8569c50",
+        "role": "GATE_ALPHA_CANDIDATE",
+        "status": "DRAFT_NOT_RUNTIME_APPROVED",
+        "generator": "image_gen",
+        "references": [
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/08-tileset-props-architecture.png",
+            "sha256": "7efe2aed018c8cf88d6464cf113c83f3097c2345e437e072594ed11b2b949023"
+          },
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/04-npc-character-and-placement.png",
+            "sha256": "cba787db4235cb5e148cb4750ad66c6e842de3559d5817c3adb9fa3b571d90b3"
+          }
+        ]
+      },
+      {
+        "file": "terrain-draft-v1.png",
+        "sha256": "ec76cd325b7d568c58ac97a075e9fa743db16d7680740bfdad5fb89813b5e8ba",
+        "role": "OPAQUE_TERRAIN_CROP_ONLY",
+        "status": "DRAFT_NOT_RUNTIME_APPROVED",
+        "generator": "image_gen",
+        "references": [
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/08-tileset-props-architecture.png",
+            "sha256": "7efe2aed018c8cf88d6464cf113c83f3097c2345e437e072594ed11b2b949023"
+          }
+        ]
+      },
+      {
+        "file": "village-midground-draft-v1.png",
+        "sha256": "3f4a1edd768c671b7a25dd1ba6c847a00788954f392b16739cd52de7342d352b",
+        "role": "MIDGROUND_ALPHA_CANDIDATE",
+        "status": "DRAFT_NOT_RUNTIME_APPROVED",
+        "generator": "image_gen",
+        "references": [
+          {
+            "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/08-tileset-props-architecture.png",
+            "sha256": "7efe2aed018c8cf88d6464cf113c83f3097c2345e437e072594ed11b2b949023"
+          }
+        ],
+        "derivedFrom": "arrival-composition-draft-v1.png"
+      }
+    ],
+    "remaining": [
+      "replace-player-blockout-with-vo-lv1-30-class-art",
+      "complete-q01-q09-and-combat-state",
+      "physical-mobile-tablet-performance-profile"
+    ]
+  }
+}

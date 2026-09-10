@@ -1,0 +1,76 @@
+{
+  "parts": [
+    {
+      "id": "prop-crate",
+      "x": 2,
+      "y": 177,
+      "w": 84,
+      "h": 77
+    },
+    {
+      "id": "prop-bench",
+      "x": 130,
+      "y": 177,
+      "w": 108,
+      "h": 77
+    },
+    {
+      "id": "prop-lamp-post",
+      "x": 2,
+      "y": 42,
+      "w": 65,
+      "h": 84
+    },
+    {
+      "id": "prop-stone-lamp",
+      "x": 130,
+      "y": 23,
+      "w": 104,
+      "h": 103
+    }
+  ],
+  "layers": [
+    {
+      "id": "market-crates",
+      "part": "prop-crate",
+      "x": 3.6,
+      "y": -1.2441666666666669,
+      "width": 0.82,
+      "height": 0.7516666666666666,
+      "order": -2,
+      "parallax": 0
+    },
+    {
+      "id": "village-bench",
+      "part": "prop-bench",
+      "x": 2.2,
+      "y": -1.235,
+      "width": 1.08,
+      "height": 0.7700000000000001,
+      "order": -2,
+      "parallax": 0
+    },
+    {
+      "id": "gate-lamp-left",
+      "part": "prop-lamp-post",
+      "x": -4.2,
+      "y": -1.2646153846153847,
+      "width": 0.55,
+      "height": 0.7107692307692308,
+      "order": -2,
+      "parallax": 0
+    },
+    {
+      "id": "gate-lamp-right",
+      "part": "prop-stone-lamp",
+      "x": 0.95,
+      "y": -1.347644230769231,
+      "width": 0.55,
+      "height": 0.5447115384615385,
+      "order": -2,
+      "parallax": 0
+    }
+  ],
+  "status": "DRAFT_PLAYER_COMPARISON",
+  "sourceManifest": "/Users/minhdc/Projects/Design/LGO-Extracted-2D-Items-v1/map-01a-props-player-batch/manifest.json"
+}

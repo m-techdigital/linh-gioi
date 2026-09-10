@@ -14,6 +14,10 @@ This repository uses persistent continuous-work mode. Read this file before maki
 - Chốt số pixel hiển thị và ngân sách tải/texture trước khi tạo asset. Không mặc định sinh 2K/4K rồi downsample. Tách module có ý nghĩa, dùng chung atlas theo vòng đời tải; lưu lỗi và cách xử lý đã xác nhận để phiên sau không lặp lại.
 - Batch lớn không phải lý do bỏ test bắt buộc, bỏ review Player, nới assertion, sửa frozen surfaces hoặc claim mobile thiết bị thật từ ảnh giả lập tỷ lệ trên macOS. Các chỉ đạo mới của owner được nhập vào batch đang làm, không khởi động lại quy trình từ đầu.
 
+- Chỉ đạo owner về nguồn ảnh: chọn một bộ đồng nhất palette, vật liệu, nét vẽ, góc nhìn và UI language trước khi cắt; tên file/canonical cũ không thay thế review bằng mắt. Loại board cũ hoặc sai chức năng khỏi batch, ghi lý do trong manifest. Lập tọa độ toàn bộ sheet hợp lệ rồi cắt một lượt; review contact sheet và gom sửa lỗi theo nhóm. Giữ nguồn nguyên bản, không phóng crop; crop còn nền/chữ/isometric không được tự công nhận runtime-ready.
+
+- Owner cho phép chủ động tạo ảnh phù hợp: dùng ảnh đã chọn để giữ phong cách, tạo bù module thiếu/góc nhìn sai/nguồn không đủ pixel. Không máy móc chỉ crop hoặc tự vẽ lại toàn bộ. Brief theo nhóm và pixel budget trước; kiểm alpha/layout/kích thước thực của output, giữ prompt/provenance và reuse công cụ đã có.
+
 ## Operating Loop
 
 - Do not stop after one small task when a valid next task exists.

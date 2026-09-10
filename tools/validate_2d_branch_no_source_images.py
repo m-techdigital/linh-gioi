@@ -18,6 +18,21 @@ SKIP_PARTS = {
 
 RUNTIME_ART_PACKS = [
     {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt',
+        'id': 'cong-dong-lam-map01a-art-draft-v1',
+        'status': 'DRAFT_NOT_RUNTIME_APPROVED',
+        'assets': {'far-background.png': (1024, 576, 'far-background'),
+                   'props-atlas.png': (1024, 1024, 'runtime-atlas'),
+                   'sheet-props.png': (256, 256, 'runtime-atlas'),
+                   'modules-atlas.png': (1024, 1024, 'runtime-atlas'),
+                   'npcs-atlas.png': (512, 512, 'runtime-atlas'),
+                   'landmarks-atlas.png': (1024, 1024, 'runtime-atlas'),
+                   'combat-atlas.png': (512, 512, 'runtime-atlas')},
+        'generators': {'image_gen', 'extracted_owner_source'},
+        'max_bytes': 6_000_000,
+        'status_error': 'Map01A art must remain an explicit draft until Player review',
+    },
+    {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/DongMonIllustrated',
         'id': 'dongmon-illustrated-draft-v1',
         'status': 'DRAFT_OWNER_REVIEW',
