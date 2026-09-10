@@ -398,6 +398,47 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeControllerExposesVoLv1To30FunctionProbeForPlayerVerification()
+        {
+            var host = new GameObject("2D Vo Lv1-30 function probe test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.State.TryUseClassSkill();
+                controller.ToggleInventoryPanel();
+                controller.SelectNextInventoryItem();
+                controller.PreviewSelectedInventoryItem();
+                controller.ApplyInventoryPreview();
+                controller.RefreshForSmoke();
+
+                var snapshot = controller.RuntimeVoLv1LevelBandFunctionProbeSnapshot;
+                StringAssert.Contains("VoLv1LevelBandFunctionProbe", snapshot);
+                StringAssert.Contains("classId=vo", snapshot);
+                StringAssert.Contains("levelBand=1-30", snapshot);
+                StringAssert.Contains("highTier31Plus=False", snapshot);
+                StringAssert.Contains("paperDollSlots=OuterShirt,PantsOrSkirt,Waist,Gloves,Boots,Weapon", snapshot);
+                StringAssert.Contains("tryOn=True", snapshot);
+                StringAssert.Contains("applyEquipment=True", snapshot);
+                StringAssert.Contains("motionStates=Idle,Jump,Dash,ClassSkill,TrainingCompletePose", snapshot);
+                StringAssert.Contains("skill=vo_lv1_first_skill target=shadow-slime", snapshot);
+                StringAssert.Contains("grounding=visited-shadow-slime", snapshot);
+                StringAssert.Contains("safe-no-3d=True", snapshot);
+                StringAssert.Contains("safe-no-source-image=True", snapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerUsesApprovedVoLv1ArtForMappedAtlasCells()
         {
             var host = new GameObject("2D Vo Lv1 approved art runtime test host");

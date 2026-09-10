@@ -109,6 +109,7 @@ namespace LinhGioi.World
         public string RuntimeVoLv1PaperDollAtlasSnapshot => BuildVoLv1PaperDollAtlasRuntimeSnapshot();
         public string RuntimeVoLv1AnchorGizmoSnapshot => BuildVoLv1AnchorGizmoSnapshot();
         public string RuntimeVoLv1RuntimeFitSnapshot => BuildVoLv1RuntimeFitSnapshot();
+        public string RuntimeVoLv1LevelBandFunctionProbeSnapshot => BuildVoLv1LevelBandFunctionProbeSnapshot();
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
         public string RuntimeInventoryInputSnapshot => BuildInventoryInputSnapshot();
         public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
@@ -1143,6 +1144,33 @@ namespace LinhGioi.World
             _inventoryOpen = false;
             _inventoryInputState = "Cancelled";
             RefreshPresentation();
+        }
+
+        private string BuildVoLv1LevelBandFunctionProbeSnapshot()
+        {
+            var classSnapshot = BuildVoLv1ClassSliceRuntimeSnapshot();
+            var paperDollSnapshot = BuildVoLv1PaperDollAtlasRuntimeSnapshot();
+            var fitSnapshot = BuildVoLv1RuntimeFitSnapshot();
+            var groundingSnapshot = BuildDongMonPlayerSceneFitSnapshot();
+            var tryOnReady = RuntimeInventoryPanelVisible || _inventoryInputState == "Trying" || _inventoryInputState == "Applied";
+            var applied = _inventoryInputState == "Applied";
+            var groundingVisited = groundingSnapshot.Contains("visitedGrounding=shadow-slime") || _state.ShadowSlimeDefeated ? "visited-shadow-slime" : "pending-shadow-slime";
+            return "VoLv1LevelBandFunctionProbe: classId=vo"
+                + " | levelBand=1-30"
+                + " | highTier31Plus=False"
+                + " | paperDollSlots=OuterShirt,PantsOrSkirt,Waist,Gloves,Boots,Weapon"
+                + " | tryOn=" + tryOnReady
+                + " | applyEquipment=" + applied
+                + " | motionStates=Idle,Jump,Dash,ClassSkill,TrainingCompletePose"
+                + " | currentPose=" + _runtimeVoLv1PaperDollPoseId
+                + " | skill=vo_lv1_first_skill target=shadow-slime"
+                + " | grounding=" + groundingVisited
+                + " | classSlice=" + classSnapshot.Contains("VoLv1ClassSlice")
+                + " | paperDollAtlas=" + paperDollSnapshot.Contains("VoLv1PaperDollAtlas")
+                + " | fitAligned=" + fitSnapshot.Contains("fitStatus=ANCHOR_ALIGNED")
+                + " | safe-runtime-player-evidence=True"
+                + " | safe-no-source-image=True"
+                + " | safe-no-3d=True";
         }
 
         private string BuildInventoryInputSnapshot()

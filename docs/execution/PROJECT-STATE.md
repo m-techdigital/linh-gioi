@@ -26,6 +26,11 @@ Next/gate: owner xem capture `build/dongmon-art/player-final/03-dialogue.png` (b
 
 
 
+
+## Võ Lv1-30 function probe checkpoint — 2026-09-10
+
+`LGO_VO_LV1_30_FUNCTION_PROBE_READY`: Võ là class mẫu đầu tiên trong scope **Lv1-30**; chưa nhân sang 5 class và không mở tier 31-100. `TwoDOnboardingController` expose `runtimeVoLv1LevelBandFunctionProbeSnapshot` vào Player manifest để owner kiểm cùng một chỗ: `classId=vo`, `levelBand=1-30`, `highTier31Plus=False`, paper-doll slots `OuterShirt/PantsOrSkirt/Waist/Gloves/Boots/Weapon`, try-on/apply equipment, motion states `Idle/Jump/Dash/ClassSkill/TrainingCompletePose`, skill `vo_lv1_first_skill` đánh `shadow-slime`, và grounding đã đi qua combat lane Đông Môn. Probe này là contract kiểm chức năng class trong Player, chưa claim art production. Evidence 2026-09-10: TDD red thiếu property; EditMode sau implement `total=165 passed=164 failed=0 skipped=1`; onboarding smoke PASS; macOS Player build marker PASS qua runtime matrix; Player capture 20 frame PASS; runtime/visual matrix PASS; no-3D/no-source-image PASS.
+
 ## Võ Lv1 one-class runtime slice checkpoint — 2026-09-10
 
 `LGO_VO_LV1_APPROVED_RUNTIME_ART_CELLMAP_READY`: Võ Lv1/Lv1-30 đã có cell-map runtime đầu tiên từ `VoLv1ApprovedRuntimeArt` vào Player: manifest thêm `levelBand=1-30`, `starterTexture`, `skillTexture`, và `cellMap`; `chest_panel`, `hand_wrap_r`, `vo_lv1_first_skill_trail` bật `approvedRuntimeArt=true`. Renderer tạo sprite từ atlas rect bằng `Sprite.Create`, scale theo world target size, còn part chưa map tiếp tục fallback primitive để tránh chồng/nhân sai. Visual manifest/matrix bắt `approvedRuntimeArt=True`, `VoLv1ApprovedRuntimeArt`, `approvedCell=...`. Evidence 2026-09-10: TDD red fail đúng vì thiếu loader; EditMode sau implement `total=162 passed=161 failed=0 skipped=1`; 2D onboarding smoke PASS; macOS Player build Succeeded errors=0 warnings=0; Player visual capture PASS; runtime/visual matrix PASS; no-3D/no-source-image PASS; frozen diff audit PASS. Đã review ảnh `07-skill-ready`, `08-complete`, `10-inventory-applied`: art thật thấy rõ nhất ở torso/skill trong `08-complete`; alpha/cell slicing còn thô nên chưa claim production final.

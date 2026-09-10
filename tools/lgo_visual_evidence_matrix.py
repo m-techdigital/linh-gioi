@@ -75,7 +75,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_vo_motion_complete",
         "label": "2D Võ Lv1 paper-doll motion complete",
         "screenshot": "08-complete.bmp",
-        "requiredManifest": ["runtimeVoLv1ClassSliceSnapshot", "runtimeVoLv1PaperDollAtlasSnapshot", "runtimeAnimationSnapshot"],
+        "requiredManifest": ["runtimeVoLv1ClassSliceSnapshot", "runtimeVoLv1PaperDollAtlasSnapshot", "runtimeVoLv1LevelBandFunctionProbeSnapshot", "runtimeAnimationSnapshot"],
         "nonClaim": "not production class art",
     },
     {
@@ -287,6 +287,11 @@ def verify_current() -> dict[str, Any]:
     for token in ("VoLv1AnchorGizmo", "visible=True", "slot=OuterShirt anchor=Chest", "slot=Gloves anchor=Hand_R", "slot=Boots anchor=Foot_L", "pivotPolicy=bottom-center-foot-anchor", "visibleWhen=inventory-or-class-training", "safe-runtime-gizmo=True", "safe-no-source-image=True", "safe-no-3d=True"):
         if token not in vo_anchor_gizmo_snapshot:
             failures.append(f"runtimeVoLv1AnchorGizmoSnapshot missing {token!r}")
+
+    vo_function_probe_snapshot = str(manifest.get("runtimeVoLv1LevelBandFunctionProbeSnapshot", ""))
+    for token in ("VoLv1LevelBandFunctionProbe", "classId=vo", "levelBand=1-30", "highTier31Plus=False", "paperDollSlots=OuterShirt,PantsOrSkirt,Waist,Gloves,Boots,Weapon", "tryOn=True", "applyEquipment=True", "motionStates=Idle,Jump,Dash,ClassSkill,TrainingCompletePose", "skill=vo_lv1_first_skill target=shadow-slime", "grounding=visited-shadow-slime", "safe-no-source-image=True", "safe-no-3d=True"):
+        if token not in vo_function_probe_snapshot:
+            failures.append(f"runtimeVoLv1LevelBandFunctionProbeSnapshot missing {token!r}")
 
     vo_runtime_fit_snapshot = str(manifest.get("runtimeVoLv1RuntimeFitSnapshot", ""))
     for token in ("VoLv1RuntimeFit", "fitStatus=ANCHOR_ALIGNED", "slot=OuterShirt item=top_vo_lv1_male anchor=Chest pivot=bottom-center", "slot=Gloves item=gloves_vo_lv1_unisex anchor=Hand_R", "slot=Boots item=boots_vo_lv1_unisex anchor=Foot_L", "skill=vo_lv1_first_skill anchor=Hand_R", "scenePlane=dong-mon-gameplay-plane", "runtimeCheck=slot-bounds-follow-paperdoll-pose", "safe-runtime-fit=True", "safe-no-source-image=True", "safe-no-3d=True"):
