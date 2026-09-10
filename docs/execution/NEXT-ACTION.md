@@ -385,3 +385,7 @@ Tách loadout, rig pose và action orchestration khỏi `CongDongLamMap01AArtPre
 ## Sau Kiếm side-view redraw source-v3 — SpriteSkin fit spike
 
 Đã tạo lại theo base side-view hai sheet nam/nữ đủ 80 cell; nữ v1 lỗi dính body/tay được giữ làm evidence, nữ v2 đã sửa theo row, source-v3 đã crop/despill sạch theo batch. Tất cả vẫn candidate. Next: cài `com.unity.2d.animation` 13.x trong một spike có benchmark, weight một bộ mixed-level tối thiểu `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer` lên skeleton chung nam và nữ, chạy sáu motion state và capture ba profile. Chỉ giữ package nếu compile/build-size/runtime evidence đạt; nếu SpriteSkin không phù hợp thì quay về split component từ cùng source-v3, không sinh lại art.
+
+## Sau Sprite Library compatibility spike — weight/fit batch đầu
+
+Package 13.0.0 compile/test PASS và Player delta khoảng 0,188%, nên giữ. Adapter đã chứng minh loadout `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer` resolve độc lập qua Category/Label và chặn Skinned sprite chưa có bones. Next: fit cùng bốn món trên template nam/nữ, để weapon là Rigid, weight hair/inner/outer theo skeleton, kiểm occlusion và sáu state `idle/walk/run/jump/basic_attack/class_skill`, rồi mới nâng đúng các item đã pass lên approved và capture ba profile. Chưa import cả 80 candidate, chưa mở Pháp/Cơ/Linh.

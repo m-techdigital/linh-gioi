@@ -11,20 +11,29 @@ namespace LinhGioi.World
         RedrawRequired
     }
 
+    public enum TwoDEquipmentAttachmentMode
+    {
+        Rigid,
+        Skinned
+    }
+
     public readonly struct TwoDEquipmentAttachmentDefinition
     {
-        public TwoDEquipmentAttachmentDefinition(string componentId, string boneId, int sortOrder)
+        public TwoDEquipmentAttachmentDefinition(string componentId, string boneId, int sortOrder,
+            TwoDEquipmentAttachmentMode mode = TwoDEquipmentAttachmentMode.Rigid)
         {
             if (string.IsNullOrEmpty(componentId)) throw new ArgumentException("Component id is required", nameof(componentId));
             if (string.IsNullOrEmpty(boneId)) throw new ArgumentException("Bone id is required", nameof(boneId));
             ComponentId = componentId;
             BoneId = boneId;
             SortOrder = sortOrder;
+            Mode = mode;
         }
 
         public string ComponentId { get; }
         public string BoneId { get; }
         public int SortOrder { get; }
+        public TwoDEquipmentAttachmentMode Mode { get; }
     }
 
     public sealed class TwoDCharacterFitProfile
@@ -172,6 +181,11 @@ namespace LinhGioi.World
         public string GetEquippedItemId(string slotId)
         {
             return _equipped.TryGetValue(slotId, out var item) ? item.ItemId : null;
+        }
+
+        public TwoDEquipmentItemDefinition GetEquippedItem(string slotId)
+        {
+            return _equipped.TryGetValue(slotId, out var item) ? item : null;
         }
 
         public bool IsCoverageVisible(string coverageTag)

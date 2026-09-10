@@ -156,3 +156,10 @@ Nguồn chính thức: [Unity Sprite Swap](https://docs.unity3d.com/Packages/com
 - Nền magenta thực tế dao động quanh `(249,2,248)`, không phải một mã tuyệt đối. Extractor nay hỗ trợ `backgroundMode=magenta`, feather theo `min(red,blue)-green`, edge despill và vẫn bắt buộc 10 slot canonical. RED test thấy viền alpha opaque; GREEN test kiểm alpha feather và spill còn tối đa 24.
 - Crop plan v2 dùng padding 6 để loại grid residue và tách một lượt 80 cell vào `generated-batch-v2/source-v3/`, tổng PNG 1.837.558 byte. Contact review xác nhận đủ ma trận, art direction thống nhất và không còn body rõ sau edit; toàn bộ vẫn `candidate`, runtime eligible bằng 0 vì chưa weight/fit/motion.
 - Unity 2D Animation 13.x là dòng tương thích Unity 6000.3 theo tài liệu chính thức. Chỉ cài khi bắt đầu SpriteSkin spike và đo package/build delta; không thêm dependency chỉ vì đã tạo source sheet.
+
+## Unity Sprite Library compatibility spike — checkpoint 2026-09-10
+
+- Cài `com.unity.2d.animation` 13.0.0; PackageCache local khoảng 56 MB nhưng không được cộng thẳng vào dung lượng phát hành. Player benchmark cuối tăng từ 168.494.995 lên 168.812.074 byte, delta 317.079 byte (0,188%).
+- Runtime adapter dùng Category=`componentId`, Label=`itemId`, cho phép một loadout mixed-level resolve từng component độc lập. Registration vẫn từ chối `candidate`/`redraw-required`; apply preflight đủ entry và renderer rồi mới đổi sprite.
+- Attachment phân thành `Rigid` và `Skinned`. Rigid tiếp tục theo bone transform; Skinned bị chặn nếu `Sprite.GetBones()` rỗng. Vì source-v3 chưa weight nên chưa item Skinned nào được nâng approved và chưa claim visual fit.
+- TDD đi qua RED thiếu adapter, GREEN mixed-level/candidate, rồi RED thiếu attachment mode và GREEN bone-data gate. Test còn khóa transaction: thiếu một library entry thì mọi renderer giữ nguyên. EditMode cuối `195 total / 194 pass / 0 fail / 1 ignored`.

@@ -446,3 +446,7 @@ Chọn grid redraw nam/nữ Kiếm cùng art direction và tách một lượt 8
 ## Kiếm side-view redraw batch — 2026-09-10
 
 Không ép 80 crop front/3/4 cũ lên side-view base. Tạo batch-v2 nam/nữ đúng 4 level × 10 slot; nữ v1 fail body/tay và được sửa đúng hai row thành v2. Nâng extractor bằng TDD cho magenta feather/despill; source-v3 external có 80 PNG, contact/provenance/audit, runtime eligible bằng 0. Next benchmark Unity 2D Animation 13.x và SpriteSkin mixed-level fit trước atlas/runtime.
+
+## Kiếm Sprite Library compatibility spike — 2026-09-10
+
+Cài Unity 2D Animation 13.0.0 và thêm adapter Category=`componentId`, Label=`itemId`. Mixed-level resolve độc lập, candidate bị chặn, apply preflight tránh thay đồ nửa chừng; attachment `Skinned` bắt buộc sprite bone data còn `Rigid` theo transform. EditMode `195/194/0/1`; Player benchmark cuối tăng 317.079 byte (0,188%). Next weight/fit bốn món mixed-level nam/nữ và chạy motion evidence; chưa nâng source-v3 lên approved.

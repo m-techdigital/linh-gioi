@@ -2,6 +2,7 @@
   "name": "LinhGioi.World",
   "rootNamespace": "LinhGioi.World",
   "references": [
+    "Unity.2D.Animation.Runtime",
     "Unity.Cinemachine",
     "LinhGioi.Account",
     "LinhGioi.Art",

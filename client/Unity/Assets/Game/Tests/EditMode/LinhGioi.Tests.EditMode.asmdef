@@ -2,6 +2,7 @@
   "name": "LinhGioi.Tests.EditMode",
   "rootNamespace": "LinhGioi.Tests",
   "references": [
+    "Unity.2D.Animation.Runtime",
     "LinhGioi.Account",
     "LinhGioi.Foundation",
     "LinhGioi.Networking",
