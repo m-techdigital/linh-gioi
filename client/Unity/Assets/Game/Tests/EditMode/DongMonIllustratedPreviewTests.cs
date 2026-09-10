@@ -351,6 +351,42 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void Map01AEveryVoEquipmentSlotTogglesAllOfItsBoneAttachments()
+        {
+            var host = new GameObject("Map01A Võ complete equipment matrix test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = host.AddComponent<TwoDOnboardingController>();
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+                preview.CycleVoAvatarMode();
+                preview.CycleVoAvatarMode();
+                var slots = new[] { "main_weapon", "head_hair", "inner_top", "outer_tunic", "lower_garment",
+                    "waist", "arm_guard", "boots", "light_armor", "accessory" };
+                foreach (var slot in slots)
+                {
+                    Assert.That(preview.VoSelectedEquipmentSlot, Is.EqualTo(slot));
+                    var affected = preview.GetComponentsInChildren<SpriteRenderer>(true)
+                        .Count(renderer => renderer.name.StartsWith("Map01A Võ equipment component lv001 male ")
+                            && renderer.name.Contains(" " + slot + " "));
+                    Assert.That(affected, Is.GreaterThanOrEqualTo(1));
+                    preview.ToggleVoEquipmentSlot();
+                    Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
+                        .Count(renderer => renderer.enabled
+                            && renderer.name.StartsWith("Map01A Võ equipment component lv001 male ")),
+                        Is.EqualTo(14 - affected));
+                    preview.ToggleVoEquipmentSlot();
+                    preview.CycleVoEquipmentSlot();
+                }
+            }
+            finally
+            {
+                if (preview != null) UnityEngine.Object.DestroyImmediate(preview.gameObject);
+                UnityEngine.Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void Map01AVoAvatarWalkAndSkillHaveRuntimeMotionStateAndVfx()
         {
             var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

@@ -68,11 +68,15 @@ def main():
                 '42-vo-male-modular-lien-quyen', '43-vo-female-lv30-modular-run',
                 '44-vo-female-lv30-modular-jump', '45-vo-female-lv30-modular-basic',
                 '46-vo-female-lv30-modular-lien-quyen']
+    slots = ['main-weapon', 'head-hair', 'inner-top', 'outer-tunic', 'lower-garment',
+             'waist', 'arm-guard', 'boots', 'light-armor', 'accessory']
+    required += [f'{47 + index:02d}-vo-male-lv1-off-{slot}' for index, slot in enumerate(slots)]
+    required += [f'{57 + index:02d}-vo-female-lv30-off-{slot}' for index, slot in enumerate(slots)]
     import math
     foot_error = manifest.get('maxFootError', float('nan'))
     parallax = manifest.get('parallaxDelta', float('nan'))
     if (manifest.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED'
-            or manifest.get('frames') != 46
+            or manifest.get('frames') != 66
             or not manifest.get('dialogueOpened') or not manifest.get('greetingCompleted')
             or not manifest.get('voBaseVerified') or not manifest.get('voModularVerified')
             or not manifest.get('voWalkVerified') or not manifest.get('voSkillVerified')
@@ -83,6 +87,7 @@ def main():
             or not manifest.get('voAttachmentLv1Verified')
             or not manifest.get('voAttachmentLv30FemaleVerified')
             or not manifest.get('voEquipmentComponentBindingVerified')
+            or not manifest.get('voTenSlotMatrixVerified')
             or not manifest.get('mapQuestFlowVerified') or manifest.get('activeQuestId') != 'COMPLETE'
             or not manifest.get('functionalUiVerified')
             or manifest.get('completedQuestCount') != 9
@@ -105,7 +110,7 @@ def main():
         raw = (out / (name + '.png')).read_bytes()
         if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
             raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
-    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=46 quest=Q01-Q09 vo-motion-attachments; visual review still required; ' + str(out))
+    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=66 quest=Q01-Q09 vo-motion-attachments ten-slot-matrix; visual review still required; ' + str(out))
 
 
 

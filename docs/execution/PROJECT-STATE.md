@@ -343,3 +343,7 @@ Trạng thái: `VO_LV1_FULL_FRAME_MOTION_PASS / ANIMATED_PAPER_DOLL_ATTACHMENT_I
 ## Võ garment attachment v8 — 2026-09-10
 
 Đã chọn/tạo đủ một lượt 8 sheet Võ Lv1/10/20/30 nam-nữ theo layout 4×3, xử lý nền liên thông từ viền và đóng 112 attachment vào 7 atlas 1024²/885.234 byte. EditMode 180 pass/0 fail/1 ignored; macOS Player build v18 không lỗi/cảnh báo; capture 46×3 và review mắt xác nhận Lv30 nữ có trang phục rõ trong bốn action modular. Trạng thái `VO_LV1_30_GARMENT_BATCH_PLAYER_PASS / TEN_SLOT_VISUAL_MATRIX_PENDING`; chưa claim class hoàn chỉnh và chưa mở class khác.
+
+## Võ ten-slot matrix + base head v9 — 2026-09-10
+
+Matrix đầu bắt lỗi tóc bake trong base head; đã thay base đầu không tóc cho nam/nữ và giữ toàn bộ tóc ở attachment. Manifest v9: 112 equipment component, 7 atlas/884.660 byte. EditMode 182 total/181 pass/0 fail/1 ignored; Player v20 và capture 66×3 tại `build/vo-ten-slot-matrix-v2/three-profiles/` technical pass. Review 20 slot-off xác nhận đủ 10 slot ở nam Lv1/nữ Lv30, gồm slot nhiều bone. Trạng thái `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS`; next tách character/action orchestration base, chưa mở class khác.

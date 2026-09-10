@@ -292,6 +292,7 @@ namespace LinhGioi.World
             public bool voRunVerified, voJumpVerified, voBasicVerified, voLienQuyenVerified;
             public bool voAttachmentLv1Verified, voAttachmentLv30FemaleVerified;
             public bool voEquipmentComponentBindingVerified;
+            public bool voTenSlotMatrixVerified;
             public int voSkillCastCount, voSkillHitCount, voTrainingTargetHp;
         }
         public float GroundY { get; private set; }
@@ -561,7 +562,7 @@ namespace LinhGioi.World
             if (manifest == null || textures.Values.Any(texture => texture == null))
                 throw new InvalidOperationException("Missing reviewed Võ Lv1-30 map avatar pack");
             var pack = JsonUtility.FromJson<VoAvatarPackInfo>(manifest.text);
-            if (pack.id != "vo-lv1-30-map-avatar-v8" || pack.status != "DRAFT_RUNTIME_REVIEW"
+            if (pack.id != "vo-lv1-30-map-avatar-v9" || pack.status != "DRAFT_RUNTIME_REVIEW"
                 || pack.parts == null || pack.parts.Length != 96 || pack.genders == null || pack.genders.Length != 2
                 || pack.slots == null || pack.slots.Length != 10 || pack.levels == null || pack.levels.Length != 4
                 || pack.attachmentProfiles == null || pack.attachmentProfiles.Length != 120
@@ -1203,7 +1204,9 @@ namespace LinhGioi.World
                 26.15f, 30.2f, 30.2f, 34.1f, 39f, 39f, 39f, 42.15f,
                 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f,
                 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f,
-                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f };
+                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f,
+                20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f,
+                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f };
             var names = new[] { "01-arrival-q01", "02-ha-van-dialogue", "03-q01-complete", "04-q02-grand-gate",
                 "05-quan-thu-dialogue", "06-q03-complete", "07-q04-inventory-open", "08-q04-tong-phu-dialogue",
                 "09-q04-starter-supplies", "10-q04-health-potion-used", "11-q05-thanh-nhi", "12-q05-spirit-herb",
@@ -1218,7 +1221,17 @@ namespace LinhGioi.World
                 "39-vo-male-modular-run", "40-vo-male-modular-jump", "41-vo-male-modular-basic",
                 "42-vo-male-modular-lien-quyen", "43-vo-female-lv30-modular-run",
                 "44-vo-female-lv30-modular-jump", "45-vo-female-lv30-modular-basic",
-                "46-vo-female-lv30-modular-lien-quyen" };
+                "46-vo-female-lv30-modular-lien-quyen",
+                "47-vo-male-lv1-off-main-weapon", "48-vo-male-lv1-off-head-hair",
+                "49-vo-male-lv1-off-inner-top", "50-vo-male-lv1-off-outer-tunic",
+                "51-vo-male-lv1-off-lower-garment", "52-vo-male-lv1-off-waist",
+                "53-vo-male-lv1-off-arm-guard", "54-vo-male-lv1-off-boots",
+                "55-vo-male-lv1-off-light-armor", "56-vo-male-lv1-off-accessory",
+                "57-vo-female-lv30-off-main-weapon", "58-vo-female-lv30-off-head-hair",
+                "59-vo-female-lv30-off-inner-top", "60-vo-female-lv30-off-outer-tunic",
+                "61-vo-female-lv30-off-lower-garment", "62-vo-female-lv30-off-waist",
+                "63-vo-female-lv30-off-arm-guard", "64-vo-female-lv30-off-boots",
+                "65-vo-female-lv30-off-light-armor", "66-vo-female-lv30-off-accessory" };
             for (var i = 0; i < targets.Length; i++)
             {
                 _routeX = targets[i];
@@ -1428,6 +1441,27 @@ namespace LinhGioi.World
                     AdvanceVoAnimation(.5f); TriggerVoSkill();
                     result.voAttachmentLv30FemaleVerified &= VoAvatarMotionState == "skill";
                 }
+                if (i >= 46)
+                {
+                    var matrixIndex = (i - 46) % VoEquipmentSlots.Length;
+                    _voAvatarGender = i < 56 ? 0 : 1;
+                    _voAvatarLevel = i < 56 ? 0 : 3;
+                    _voAvatarMode = 2;
+                    _voSelectedEquipmentSlot = matrixIndex;
+                    _voEquippedSlots.Clear();
+                    foreach (var slot in VoEquipmentSlots) _voEquippedSlots.Add(slot);
+                    var selected = VoEquipmentSlots[matrixIndex];
+                    _voEquippedSlots.Remove(selected);
+                    RefreshVoAvatarMode();
+                    var prefix = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_";
+                    var affected = _voEquipmentComponentInfo.Count(pair => pair.Key.StartsWith(prefix, StringComparison.Ordinal)
+                        && pair.Value.slot == selected);
+                    var matrixValid = affected >= 1
+                        && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 0
+                        && _voRigParts.Values.Count(renderer => renderer.enabled) == 10
+                        && _voEquipmentComponents.Values.Count(renderer => renderer.enabled) == 14 - affected;
+                    result.voTenSlotMatrixVerified = i == 46 ? matrixValid : result.voTenSlotMatrixVerified && matrixValid;
+                }
                 _controller.RefreshForSmoke();
                 Refresh();
                 yield return null;
@@ -1467,6 +1501,7 @@ namespace LinhGioi.World
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified
                 || !result.voAttachmentLv1Verified || !result.voAttachmentLv30FemaleVerified
                 || !result.voEquipmentComponentBindingVerified
+                || !result.voTenSlotMatrixVerified
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";

@@ -432,3 +432,7 @@ TDD bắt lỗi combined slot, thiếu hierarchy và world/local rotation. Runti
 ## Võ garment source/atlas batch v8 — 2026-09-10
 
 Tạo đủ 8 source sheet theo một layout 4×3 và pack một lượt thành 112 attachment; các slot áo giáp/hạ trang/găng/giày có nhiều component theo bone. Tổng 7 atlas 885.234 byte. Player v18 capture `build/vo-garment-v1/three-profiles/` đạt 46×3 và visual Lv30 nữ đã rõ outfit/action. Next capture ma trận 10 slot nam/nữ Lv1/Lv30; chưa đóng `CLASS-VO-01`.
+
+## Võ ten-slot visual matrix v9 — 2026-09-10
+
+Thêm matrix 20 ảnh tháo từng slot và bắt lỗi tóc còn bake trong base rig. Thay hai base head không tóc, giữ hairstyle thành attachment. EditMode 181 pass/0 fail/1 ignored; Player v20 capture 66×3 pass và review PC/mobile/tablet. `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS`; next refactor orchestration base trước class thứ hai.

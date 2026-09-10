@@ -100,6 +100,21 @@ Bài học bắt buộc không lặp:
 
 Tham khảo kỹ thuật chính: [Spine skins/skin placeholders](https://en.esotericsoftware.com/spine-skins), [Spine attachments follow bones through slots](https://en.esotericsoftware.com/spine-attachments), [spine-unity mix-and-match](https://en.esotericsoftware.com/spine-unity-mix-and-match), [Unity Sprite Atlas](https://docs.unity3d.com/Manual/class-SpriteAtlas.html). Với wardrobe hữu hạn, prepack attachment vào atlas; không runtime-repack mặc định vì tăng cấp phát texture/cache và làm quản lý memory khó dự đoán.
 
+## Quyết định production dựa trên Unity/Spine — 2026-09-10
+
+Đối chiếu lại tài liệu chính thức cho thấy contract hiện tại đúng hướng, nhưng cần khóa cách áp dụng để các phiên sau không tự thử nhiều pipeline cùng lúc:
+
+- `slotId + itemId` của manifest tương đương `Category + Label` trong Unity Sprite Library. Một loadout chỉ đổi attachment của slot; animation chỉ tác động bone/transform. Không tạo Animator riêng theo bộ đồ và không trộn clip điều khiển trực tiếp `SpriteRenderer.sprite` với clip điều khiển hash của `SpriteResolver` trong cùng controller.
+- Mọi sprite có skinning được thay thế trong cùng slot phải dùng cùng skeleton topology, bone ID, pivot và bind pose. Validator phải chặn attachment thiếu bone hoặc khác anchor trước khi build Player; mắt người chỉ dùng để duyệt silhouette/coherence.
+- PSB/PSD phân lớp là định dạng nguồn sản xuất khi illustrator bàn giao rig art. Runtime chỉ nhận sprite/atlas đã pack và manifest; không đưa file nguồn nhiều layer vào build. Chỉ cài `2D Animation`/`PSD Importer` trong một batch migration riêng sau khi chứng minh import giữ đúng contract hiện có.
+- Atlas được chia theo residency, không theo từng ảnh hoặc từng thiết bị: `map-01a-environment`, `map-01a-actors`, `class-vo-common`, `class-vo-tier-001|010|020|030`, `ui-common`. Ba profile mobile/tablet/PC dùng cùng asset logical; platform override/variant chỉ thêm khi profiler cho thấy memory hoặc chất lượng cần khác.
+- Runtime chỉ giữ map hiện tại, class hiện tại và tier đang dùng/gần kề. Khi chuyển map/class/tier phải giải phóng handle của nhóm cũ. `Read/Write Enabled` mặc định tắt vì Unity tạo thêm bản sao texture trong memory; không runtime-repack wardrobe hữu hạn.
+- Repository hiện chưa có package `2D Animation`, `PSD Importer` hoặc `Addressables`. Vì vậy checkpoint Võ tiếp tục dùng manifest + atlas + `TwoDSkeletalPaperDollRig`; không đổi dependency giữa batch art/equipment. Bước tái cấu trúc kế tiếp chỉ tách orchestration dùng chung và giữ nguyên output đã capture.
+- Tool xử lý ảnh phải preflight `import PIL` trước khi chạy batch. Trên máy hiện tại `python3.12` dùng cho compile/validator không có Pillow, còn `/usr/bin/python3` có Pillow 11.3.0; unit test ảnh phải dùng interpreter có Pillow hoặc một image-tool venv đã pin, không cài dependency ngẫu hứng giữa checkpoint.
+- Unity 6 có thể reserialize `.meta` của texture Map01A trong EditMode/smoke dù asset không đổi. Sau gate phải đối chiếu và restore churn này trước `diff --check`; không commit import metadata ngoài scope chỉ vì Editor đã chạm file.
+
+Nguồn chính thức: [Unity Sprite Swap](https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/SpriteSwapIntro.html), [Unity Sprite Library Asset](https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/SLAsset.html), [Unity PSD Importer](https://docs.unity3d.com/Packages/com.unity.2d.psdimporter@9.0/manual/PSD-importer-properties.html), [Unity Sprite Atlas properties](https://docs.unity3d.com/Manual/class-SpriteAtlas.html), [Unity Addressables memory management](https://docs.unity3d.com/Packages/com.unity.addressables@2.7/manual/MemoryManagement.html), [Spine skins](https://en.esotericsoftware.com/spine-skins).
+
 ## Garment attachment batch Võ Lv1–30 — checkpoint 2026-09-10
 
 - Nguồn chuẩn được gom một lượt thành 8 sheet tại `LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/generated-batch-v6/source-v1/`, tên `vo-lv{001|010|020|030}-{male|female}-attachment-sheet.png`. Mỗi sheet 1448×1086, layout cố định 4×3 và có manifest hash riêng; không đưa sheet nguồn vào runtime/repository.
@@ -107,3 +122,11 @@ Tham khảo kỹ thuật chính: [Spine skins/skin placeholders](https://en.esot
 - Nền generated sheet có gradient nhẹ dù prompt yêu cầu màu phẳng. Không dùng global chroma key vì sẽ ăn vào tóc/áo đen; pipeline chỉ flood-fill vùng navy liên thông từ viền từng cell, sau đó crop alpha bounds và scale một lần theo chiều cao bone chuẩn.
 - Atlas v8 có 112 attachment metadata cho 4 tier × 2 giới và vẫn chỉ dùng 7 texture 1024². Tổng PNG 885.234 byte, tăng 160.439 byte so với v7 nhưng thay toàn bộ garment silhouette lớn; không tạo texture riêng theo action hoặc theo thiết bị.
 - Evidence `build/vo-garment-v1/three-profiles/` đạt 46 frame trên mobile/tablet/PC. Review mắt xác nhận Võ nữ Lv30 đã có silhouette trang phục rõ trong run/jump/basic/Liên Quyền. Chưa đóng class vì cần capture ma trận cởi/mặc đủ 10 slot; trạng thái hiện tại `VO_LV1_30_GARMENT_BATCH_PLAYER_PASS / TEN_SLOT_VISUAL_MATRIX_PENDING`.
+
+## Ten-slot visual matrix và base head v9 — checkpoint 2026-09-10
+
+- Test renderer count không phát hiện tóc bake trong base head. Matrix tháo từng slot cho thấy `head_hair` đã disabled nhưng tóc vẫn hiện; base body phải chứa anatomy/underlayer trung tính, mọi phần tùy biến như tóc phải là attachment.
+- Đã tạo base head không tóc riêng nam/nữ tại `generated-batch-v6/base-head-v1/`, giữ nguồn/hash ngoài runtime. Manifest v9 thay đúng hai head subrect; tổng 7 PNG còn 884.660 byte.
+- Capture automation không được gán public read-only property quan sát. Lần đầu matrix compile fail vì gán `VoAvatarGender/Level/Mode`; sửa bằng state owner nội bộ trong capture và giữ API public read-only để gameplay khác không bypass transition.
+- Evidence `build/vo-ten-slot-matrix-v2/three-profiles/` có 66 frame/profile: 46 flow/action cũ + 10 slot-off nam Lv1 + 10 slot-off nữ Lv30. Review PC và đối chiếu mobile/tablet xác nhận mỗi slot tắt đúng một hoặc nhiều component; hair, weapon, lower garment và các cặp limb nhìn thấy khác biệt rõ.
+- Trạng thái `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS` là checkpoint Player local cho avatar/equip/action trên Map01A, không phải production-final hoặc backend inventory persistence. Trước class thứ hai phải tách orchestration khỏi Map01A vào base character/action chung.

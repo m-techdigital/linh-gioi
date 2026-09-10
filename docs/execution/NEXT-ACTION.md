@@ -98,6 +98,8 @@ Next action ngay: căn PC foot/contact shadow trên lane (ảnh hiện vẫn PC 
 
 ### Base-first override mới nhất
 
+Checkpoint mới nhất: manifest v9 dùng base head không bake tóc; evidence `build/vo-ten-slot-matrix-v2/three-profiles/` đạt 66 frame × 3 profile và đã review đủ 20 trạng thái tháo từng slot cho nam Lv1/nữ Lv30. Gate `CLASS_VO_LV1_30_VERTICAL_SLICE_PASS` chỉ xác nhận map/avatar/equip/action local trong Player, chưa phải production-final. Next: tách loadout, rig pose và action orchestration khỏi `CongDongLamMap01AArtPreview` thành character base dùng chung; giữ Map01A làm consumer và chạy lại cùng evidence trước khi mở class thứ hai.
+
 Checkpoint mới hơn: manifest Võ v8 đã thay delta trang phục nhỏ bằng batch 8 sheet rig-compatible, đóng 112 attachment vào 7 atlas/885.234 byte. Player mobile/tablet/PC tại `build/vo-garment-v1/three-profiles/` đã review: Lv30 nữ có đủ silhouette trong run/jump/basic/Liên Quyền. Next duy nhất trước khi đóng `CLASS-VO-01`: thêm capture matrix cởi/mặc đủ 10 slot cho nam/nữ ở Lv1 và Lv30, kiểm layer order/pivot; không tạo thêm artwork nếu matrix không chỉ ra lỗi cụ thể.
 
 Gate: `VO_LV1_30_GARMENT_BATCH_PLAYER_PASS / TEN_SLOT_VISUAL_MATRIX_PENDING`. Sau gate này mới tách orchestration/controller base khỏi Map01A và chỉ sau đó mới mở class thứ hai.
@@ -368,3 +370,6 @@ Không mở shop/economy, teleport thật, giao dịch, bang hội, HP/loot/serv
 > **Checkpoint CLASS-VO-01B1 — base skeletal rig — 2026-09-10:** hai sheet rig nam/nữ 5×2 được tạo từ identity Võ đã tuyển, tách theo connected component thành 20 segment head/torso/arms/legs, đóng thêm một atlas 1024² 24.232 byte. Manifest v6 có 120 rig-pose profile và 120 equipment-attachment profile dùng chung Lv1/10/20/30. Runtime modular thay base phẳng bằng 10 segment, xoay quanh joint pivot cho idle/walk/run/jump/basic/`Liên Quyền`; capture hiện tại `build/vo-rig-v2/three-profiles/` có 46 ảnh/profile.
 >
 > **Next:** `CLASS-VO-01B2` tách các slot nhiều component (`arm_guard`, `boots`, và phần trang bị hai bên) rồi bind component vào hand/foot/thigh/torso bone. Review B1 xác nhận khớp thân đã chuyển động, nhưng slot đôi còn là sprite chung và Võ nữ Lv30 chưa khớp trang bị đủ sạch; không claim paper-doll hoàn chỉnh và chưa mở class thứ hai.
+## Sau checkpoint Võ v9 — shared character/action base
+
+Tách loadout, rig pose và action orchestration khỏi `CongDongLamMap01AArtPreview` sang runtime base dùng chung, không đổi hình ảnh/output đã capture. Giữ manifest contract tương đương Sprite Library `Category + Label`; chưa thêm package Unity mới. Sau extraction, build/capture lại cùng ma trận 66×3 để chứng minh không regression rồi mới bắt đầu class thứ hai. Asset loading về sau chia theo map/class/tier residency, không load toàn bộ 5 class hoặc tạo bộ atlas riêng cho ba profile.

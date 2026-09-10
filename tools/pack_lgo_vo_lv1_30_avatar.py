@@ -240,11 +240,12 @@ def garment_entries(garment_dir: Path, level: int, gender: str) -> list[dict]:
     return entries
 
 
-def pack_rig(rig_dir: Path, output: Path) -> tuple[list[dict], dict]:
+def pack_rig(rig_dir: Path, base_head_dir: Path, output: Path) -> tuple[list[dict], dict]:
     entries = []
     for gender in ("male", "female"):
         for index, part in enumerate(RIG_PARTS, 1):
-            path = rig_dir / gender / f"{index:02d}-{part}.png"
+            path = ((base_head_dir / gender / "01-head.png") if part == "head"
+                    else (rig_dir / gender / f"{index:02d}-{part}.png"))
             source = Image.open(path).convert("RGBA")
             box = source.getchannel("A").getbbox()
             if source.size != (512, 512) or box is None:
@@ -433,6 +434,7 @@ def main() -> int:
     parser.add_argument("--extended-motion-male-dir", type=Path, required=True)
     parser.add_argument("--extended-motion-female-dir", type=Path, required=True)
     parser.add_argument("--rig-dir", type=Path, required=True)
+    parser.add_argument("--base-head-dir", type=Path, required=True)
     parser.add_argument("--garment-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
@@ -450,7 +452,7 @@ def main() -> int:
     male_frames, male_atlas = pack_motion(args.lv1_dir, args.extended_motion_male_dir, "male", args.output_dir)
     female_frames, female_atlas = pack_motion(args.progression_dir, args.extended_motion_female_dir, "female", args.output_dir)
     motion += male_frames + female_frames; motion_atlases += [male_atlas, female_atlas]
-    rig_parts, rig_atlas = pack_rig(args.rig_dir, args.output_dir)
+    rig_parts, rig_atlas = pack_rig(args.rig_dir, args.base_head_dir, args.output_dir)
     resource_root = "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1MapAvatarArt/"
     atlas_records = atlases + motion_atlases + [rig_atlas]
     assets = []
@@ -463,7 +465,7 @@ def main() -> int:
                        "generator": "reference_guided_imagegen_motion_batch" if is_motion else (
                            "reference_guided_imagegen_rig_batch" if atlas["id"] == "rig" else "reference_guided_imagegen_attachment_batch"),
                        "referenceOnly": False})
-    manifest = {"id": "vo-lv1-30-map-avatar-v8", "status": "DRAFT_RUNTIME_REVIEW", "classId": "vo",
+    manifest = {"id": "vo-lv1-30-map-avatar-v9", "status": "DRAFT_RUNTIME_REVIEW", "classId": "vo",
                 "levels": list(LEVELS), "genders": ["male", "female"], "slots": list(SLOTS),
                 "atlases": atlas_records, "assets": assets, "parts": parts, "effects": [effect], "motionFrames": motion,
                 "attachmentProfiles": attachment_profiles(),
