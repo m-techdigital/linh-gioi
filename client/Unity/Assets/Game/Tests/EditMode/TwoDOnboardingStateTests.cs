@@ -612,6 +612,43 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeControllerExposesVoLv1RuntimeFitForEquippedSlots()
+        {
+            var host = new GameObject("2D Vo Lv1 runtime fit test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("VoLv1RuntimeFit", controller.RuntimeVoLv1RuntimeFitSnapshot);
+                StringAssert.Contains("fitStatus=ANCHOR_ALIGNED", controller.RuntimeVoLv1RuntimeFitSnapshot);
+                StringAssert.Contains("slot=OuterShirt item=top_vo_lv1_male anchor=Chest pivot=bottom-center", controller.RuntimeVoLv1RuntimeFitSnapshot);
+                StringAssert.Contains("slot=Gloves item=gloves_vo_lv1_unisex anchor=Hand_R", controller.RuntimeVoLv1RuntimeFitSnapshot);
+                StringAssert.Contains("slot=Boots item=boots_vo_lv1_unisex anchor=Foot_L", controller.RuntimeVoLv1RuntimeFitSnapshot);
+                StringAssert.Contains("skill=vo_lv1_first_skill anchor=Hand_R", controller.RuntimeVoLv1RuntimeFitSnapshot);
+                StringAssert.Contains("scenePlane=dong-mon-gameplay-plane", controller.RuntimeVoLv1RuntimeFitSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void VisualCaptureManifestIncludesVoLv1RuntimeFitSnapshot()
+        {
+            var resultType = typeof(TwoDOnboardingVisualCaptureRunner).GetNestedType("TwoDOnboardingVisualCaptureResult", System.Reflection.BindingFlags.NonPublic);
+
+            Assert.IsNotNull(resultType);
+            Assert.IsNotNull(resultType.GetField("runtimeVoLv1RuntimeFitSnapshot"));
+        }
+
+        [Test]
         public void LocomotionAnimationProfileDefinesSideScrollStates()
         {
             var profile = TwoDLocomotionAnimationProfile.CreateDefault();

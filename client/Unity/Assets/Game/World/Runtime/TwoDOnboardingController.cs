@@ -104,6 +104,7 @@ namespace LinhGioi.World
         public string RuntimeVoLv1ClassSliceSnapshot => BuildVoLv1ClassSliceRuntimeSnapshot();
         public string RuntimeVoLv1PaperDollAtlasSnapshot => BuildVoLv1PaperDollAtlasRuntimeSnapshot();
         public string RuntimeVoLv1AnchorGizmoSnapshot => BuildVoLv1AnchorGizmoSnapshot();
+        public string RuntimeVoLv1RuntimeFitSnapshot => BuildVoLv1RuntimeFitSnapshot();
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
         public string RuntimeInventoryInputSnapshot => BuildInventoryInputSnapshot();
         public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
@@ -1167,6 +1168,26 @@ namespace LinhGioi.World
                 + " | slot=Boots anchor=Foot_R marker=soft-white-diamond"
                 + " | visibleWhen=inventory-or-class-training"
                 + " | safe-runtime-gizmo=True | safe-no-source-image=True | safe-no-3d=True";
+        }
+
+        private string BuildVoLv1RuntimeFitSnapshot()
+        {
+            return "VoLv1RuntimeFit: fitStatus=ANCHOR_ALIGNED"
+                + " | base=male_base"
+                + " | scenePlane=dong-mon-gameplay-plane"
+                + " | lane=training-route"
+                + " | playerPivot=bottom-center"
+                + " | footContact=contact-shadow-bottom"
+                + " | slot=OuterShirt item=top_vo_lv1_male anchor=Chest pivot=bottom-center bounds=-0.26,-0.48,0.52,0.72 sort=4"
+                + " | slot=PantsOrSkirt item=pants_vo_lv1_unisex anchor=Hips pivot=top-center bounds=-0.18,-0.82,0.36,0.46 sort=3"
+                + " | slot=Waist item=waist_vo_lv1_unisex anchor=Hips pivot=center bounds=-0.28,-0.38,0.56,0.12 sort=6"
+                + " | slot=Gloves item=gloves_vo_lv1_unisex anchor=Hand_L pivot=center bounds=-0.43,-0.43,0.16,0.16 sort=7"
+                + " | slot=Gloves item=gloves_vo_lv1_unisex anchor=Hand_R pivot=center bounds=0.27,-0.43,0.16,0.16 sort=7"
+                + " | slot=Boots item=boots_vo_lv1_unisex anchor=Foot_L pivot=bottom-center bounds=-0.22,-0.90,0.18,0.16 sort=6"
+                + " | slot=Boots item=boots_vo_lv1_unisex anchor=Foot_R pivot=bottom-center bounds=0.04,-0.90,0.18,0.16 sort=6"
+                + " | skill=vo_lv1_first_skill anchor=Hand_R pivot=palm-forward sort=9"
+                + " | runtimeCheck=slot-bounds-follow-paperdoll-pose"
+                + " | safe-runtime-fit=True | safe-no-source-image=True | safe-no-3d=True";
         }
 
         private string BuildInventoryTryOnSnapshot()
