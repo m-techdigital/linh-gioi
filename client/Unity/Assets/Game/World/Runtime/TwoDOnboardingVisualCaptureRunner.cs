@@ -144,6 +144,7 @@ namespace LinhGioi.World
                 runtimeEquipmentSnapshot = controller.RuntimeEquipmentSnapshot,
                 runtimeVoLv1ClassSliceSnapshot = voLv1CompleteSnapshot,
                 runtimeVoLv1PaperDollAtlasSnapshot = voLv1PaperDollCompleteSnapshot,
+                runtimeVoLv1AnchorGizmoSnapshot = controller.RuntimeVoLv1AnchorGizmoSnapshot,
                 runtimeInventoryTryOnSnapshot = controller.RuntimeInventoryTryOnSnapshot,
                 runtimeInventoryInputSnapshot = controller.RuntimeInventoryInputSnapshot,
                 runtimePlazaHubInputSnapshot = controller.RuntimePlazaHubInputSnapshot,
@@ -294,6 +295,7 @@ namespace LinhGioi.World
             public string runtimeEquipmentSnapshot;
             public string runtimeVoLv1ClassSliceSnapshot;
             public string runtimeVoLv1PaperDollAtlasSnapshot;
+            public string runtimeVoLv1AnchorGizmoSnapshot;
             public string runtimeInventoryTryOnSnapshot;
             public string runtimeInventoryInputSnapshot;
             public string runtimePlazaHubInputSnapshot;

@@ -276,6 +276,11 @@ def verify_current() -> dict[str, Any]:
         if token not in vo_paperdoll_snapshot:
             failures.append(f"runtimeVoLv1PaperDollAtlasSnapshot missing {token!r}")
 
+    vo_anchor_gizmo_snapshot = str(manifest.get("runtimeVoLv1AnchorGizmoSnapshot", ""))
+    for token in ("VoLv1AnchorGizmo", "visible=True", "slot=OuterShirt anchor=Chest", "slot=Gloves anchor=Hand_R", "slot=Boots anchor=Foot_L", "pivotPolicy=bottom-center-foot-anchor", "visibleWhen=inventory-or-class-training", "safe-runtime-gizmo=True", "safe-no-source-image=True", "safe-no-3d=True"):
+        if token not in vo_anchor_gizmo_snapshot:
+            failures.append(f"runtimeVoLv1AnchorGizmoSnapshot missing {token!r}")
+
     view_results: list[dict[str, Any]] = []
     for view in TWO_D_ONBOARDING_VIEWS:
         screenshot = VISUAL_DIR / str(view["screenshot"])

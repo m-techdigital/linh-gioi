@@ -573,6 +573,44 @@ namespace LinhGioi.Tests
             Assert.AreEqual(TwoDOnboardingStep.Complete, state.Step);
         }
 
+
+        [Test]
+        public void RuntimeControllerExposesVoLv1AnchorGizmoForSlotPivotVerification()
+        {
+            var host = new GameObject("2D Vo Lv1 anchor gizmo runtime test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("VoLv1AnchorGizmo", controller.RuntimeVoLv1AnchorGizmoSnapshot);
+                StringAssert.Contains("visible=True", controller.RuntimeVoLv1AnchorGizmoSnapshot);
+                StringAssert.Contains("slot=OuterShirt anchor=Chest", controller.RuntimeVoLv1AnchorGizmoSnapshot);
+                StringAssert.Contains("slot=Waist anchor=Hips", controller.RuntimeVoLv1AnchorGizmoSnapshot);
+                StringAssert.Contains("slot=Gloves anchor=Hand_R", controller.RuntimeVoLv1AnchorGizmoSnapshot);
+                StringAssert.Contains("slot=Boots anchor=Foot_L", controller.RuntimeVoLv1AnchorGizmoSnapshot);
+                StringAssert.Contains("pivotPolicy=bottom-center-foot-anchor", controller.RuntimeVoLv1AnchorGizmoSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
+        public void VisualCaptureManifestIncludesVoLv1AnchorGizmoSnapshot()
+        {
+            var resultType = typeof(TwoDOnboardingVisualCaptureRunner).GetNestedType("TwoDOnboardingVisualCaptureResult", System.Reflection.BindingFlags.NonPublic);
+
+            Assert.IsNotNull(resultType);
+            Assert.IsNotNull(resultType.GetField("runtimeVoLv1AnchorGizmoSnapshot"));
+        }
+
         [Test]
         public void LocomotionAnimationProfileDefinesSideScrollStates()
         {

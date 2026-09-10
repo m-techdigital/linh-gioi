@@ -23,6 +23,7 @@ namespace LinhGioi.World
         private Transform _shadowSlimeLabel;
         private Transform _voLv1SkillCueRoot;
         private Transform _voLv1PaperDollRoot;
+        private Transform _voLv1AnchorGizmoRoot;
         private Transform _pathGlow;
         private Transform _linhThanhUnlockBanner;
         private Transform _plazaUnlockPath;
@@ -102,6 +103,7 @@ namespace LinhGioi.World
         public string RuntimeEquipmentSnapshot => _moduleCatalog.Snapshot + "\n" + EnsurePlayerLoadout().Snapshot;
         public string RuntimeVoLv1ClassSliceSnapshot => BuildVoLv1ClassSliceRuntimeSnapshot();
         public string RuntimeVoLv1PaperDollAtlasSnapshot => BuildVoLv1PaperDollAtlasRuntimeSnapshot();
+        public string RuntimeVoLv1AnchorGizmoSnapshot => BuildVoLv1AnchorGizmoSnapshot();
         public string RuntimeInventoryTryOnSnapshot => BuildInventoryTryOnSnapshot();
         public string RuntimeInventoryInputSnapshot => BuildInventoryInputSnapshot();
         public bool RuntimeInventoryPanelVisible => _inventoryPanelRoot != null && _inventoryPanelRoot.gameObject.activeSelf;
@@ -259,6 +261,7 @@ namespace LinhGioi.World
             AddSceneBeat("VO_LV1_PAPER_DOLL_ATLAS runtime overlay parts anchors skill cues");
             AddSceneBeat(TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlasSnapshot());
             _voLv1PaperDollRoot = AddVoLv1PaperDollOverlay(_player, 2);
+            _voLv1AnchorGizmoRoot = AddVoLv1AnchorGizmo(_player, 14);
             CachePlayerEquipmentRenderers();
             _focusRing = AddSceneSprite("LGO 2D Focus Ring", "Vòng chọn mục tiêu tương tác", TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f, new Vector2(1.45f, 0.16f), RuntimeArtCatalog.Spirit, 1).transform;
             BuildWorldHud();
@@ -313,6 +316,7 @@ namespace LinhGioi.World
             _runtimeVoLv1PaperDollPoseId = string.IsNullOrEmpty(sampledFrame.PoseId) ? ToVoLv1PaperDollPoseId(state) : sampledFrame.PoseId;
             ApplyVoLv1PaperDollPose(_voLv1PaperDollRoot, _runtimeVoLv1PaperDollPoseId, state == "ClassSkill" || state == "TrainingCompletePose");
             if (_voLv1PaperDollRoot != null) _voLv1PaperDollRoot.gameObject.SetActive(_state.Step >= TwoDOnboardingStep.LearnJump && _inventoryInputState != "Applied");
+            RefreshVoLv1AnchorGizmoVisibility();
 
             _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "ClassSkill" ? "vo_lv1_first_skill" : state == "Dash" ? "dash_stretch" : state == "Jump" ? "jump_lift" : state == "Walk" ? "stride_bob" : "breathing_idle", phase, sampledFrame.FrameId, _runtimeVoLv1PaperDollPoseId, sampledFrame.Clip).Snapshot;
             _lastPresentedPlayerPosition = _state.PlayerPosition;
@@ -1150,6 +1154,21 @@ namespace LinhGioi.World
                 + " | active=" + (_voLv1PaperDollRoot != null && _voLv1PaperDollRoot.gameObject.activeSelf);
         }
 
+        private string BuildVoLv1AnchorGizmoSnapshot()
+        {
+            return "VoLv1AnchorGizmo: visible=" + (_voLv1AnchorGizmoRoot != null && _voLv1AnchorGizmoRoot.gameObject.activeSelf)
+                + " | pivotPolicy=bottom-center-foot-anchor"
+                + " | slot=OuterShirt anchor=Chest marker=gold-diamond"
+                + " | slot=PantsOrSkirt anchor=Hips marker=red-diamond"
+                + " | slot=Waist anchor=Hips marker=gold-small-diamond"
+                + " | slot=Gloves anchor=Hand_L marker=cyan-diamond"
+                + " | slot=Gloves anchor=Hand_R marker=cyan-diamond"
+                + " | slot=Boots anchor=Foot_L marker=soft-white-diamond"
+                + " | slot=Boots anchor=Foot_R marker=soft-white-diamond"
+                + " | visibleWhen=inventory-or-class-training"
+                + " | safe-runtime-gizmo=True | safe-no-source-image=True | safe-no-3d=True";
+        }
+
         private string BuildInventoryTryOnSnapshot()
         {
             var previewLoadout = TwoDCharacterLoadout.CreateStarter("male_base", _moduleCatalog);
@@ -1224,6 +1243,34 @@ namespace LinhGioi.World
             var anchor = new GameObject("LGO 2D Player Vo PaperDoll PoseAnchor " + part.id);
             anchor.transform.SetParent(root, false);
             anchor.transform.localPosition = ToWorld(new Vector2(part.x, part.y), 0f);
+        }
+
+        private static Transform AddVoLv1AnchorGizmo(Transform player, int baseOrder)
+        {
+            var root = new GameObject("LGO 2D Player Vo Anchor Gizmo Root");
+            root.transform.SetParent(player, false);
+            root.transform.localPosition = Vector3.zero;
+            AddVoLv1AnchorMarker(root.transform, "OuterShirt", "Chest", new Vector2(0f, 0.03f), RuntimeArtCatalog.Gold, baseOrder);
+            AddVoLv1AnchorMarker(root.transform, "PantsOrSkirt", "Hips", new Vector2(0f, -0.28f), new Color(0.86f, 0.32f, 0.20f, 0.88f), baseOrder);
+            AddVoLv1AnchorMarker(root.transform, "Waist", "Hips", new Vector2(0.18f, -0.28f), new Color(0.95f, 0.72f, 0.28f, 0.76f), baseOrder + 1);
+            AddVoLv1AnchorMarker(root.transform, "Gloves", "Hand_R", new Vector2(0.35f, -0.32f), RuntimeArtCatalog.Spirit, baseOrder + 1);
+            AddVoLv1AnchorMarker(root.transform, "Gloves", "Hand_L", new Vector2(-0.35f, -0.32f), RuntimeArtCatalog.Spirit, baseOrder + 1);
+            AddVoLv1AnchorMarker(root.transform, "Boots", "Foot_L", new Vector2(-0.12f, -0.72f), new Color(0.73f, 0.87f, 0.88f, 0.82f), baseOrder);
+            AddVoLv1AnchorMarker(root.transform, "Boots", "Foot_R", new Vector2(0.12f, -0.72f), new Color(0.73f, 0.87f, 0.88f, 0.82f), baseOrder);
+            AddWorldLabel("LGO 2D Player Vo Anchor Gizmo Label", "slot anchors", new Vector2(0f, -0.92f), 0.017f, RuntimeArtCatalog.Spirit, baseOrder + 2, root.transform);
+            root.SetActive(false);
+            return root.transform;
+        }
+
+        private static void AddVoLv1AnchorMarker(Transform root, string slot, string anchor, Vector2 position, Color color, int order)
+        {
+            AddSprite("LGO 2D Player Vo Anchor Gizmo " + slot + " " + anchor, position, new Vector2(0.065f, 0.065f), color, order, root, "diamond");
+        }
+
+        private void RefreshVoLv1AnchorGizmoVisibility()
+        {
+            if (_voLv1AnchorGizmoRoot == null) return;
+            _voLv1AnchorGizmoRoot.gameObject.SetActive(_inventoryOpen || _state.Step >= TwoDOnboardingStep.LearnJump);
         }
 
         private static void ApplyVoLv1PaperDollPose(Transform root, string poseId, bool showSkillCue)
