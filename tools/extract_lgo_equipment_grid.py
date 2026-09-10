@@ -18,7 +18,7 @@ def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def remove_connected_light_background(image):
+def remove_connected_background(image, mode):
     image = image.convert("RGBA")
     pixels = image.load()
     width, height = image.size
@@ -26,8 +26,14 @@ def remove_connected_light_background(image):
 
     def is_background(x, y):
         red, green, blue, alpha = pixels[x, y]
-        return alpha == 0 or (red > 220 and green > 220 and blue > 220
-                              and max(red, green, blue) - min(red, green, blue) < 28)
+        if alpha == 0:
+            return True
+        if mode == "light":
+            return (red > 220 and green > 220 and blue > 220
+                    and max(red, green, blue) - min(red, green, blue) < 28)
+        if mode == "magenta":
+            return red > 180 and blue > 180 and green < 90 and abs(red - blue) < 80
+        raise ValueError("Unsupported backgroundMode: " + mode)
 
     for x in range(width):
         for y in (0, height - 1):
@@ -48,6 +54,23 @@ def remove_connected_light_background(image):
     if not bounds:
         raise ValueError("Crop contains no foreground pixels")
     image = image.crop(bounds)
+    if mode == "magenta":
+        keyed = []
+        for red, green, blue, alpha in image.getdata():
+            score = min(red, blue) - green
+            if score >= 100:
+                alpha = 0
+            elif score > 48:
+                alpha = round(alpha * (100 - score) / 52)
+                spill = max(0, min(red, blue) - green - 24)
+                red -= spill
+                blue -= spill
+            keyed.append((red, green, blue, alpha) if alpha else (0, 0, 0, 0))
+        image.putdata(keyed)
+        bounds = image.getchannel("A").getbbox()
+        if not bounds:
+            raise ValueError("Crop contains no foreground pixels after magenta key")
+        image = image.crop(bounds)
     pixels = image.load()
     width, height = image.size
     seen = set()
@@ -96,6 +119,9 @@ def main():
         if actual_hash != source["sha256"]:
             raise ValueError("Source hash mismatch: " + str(path))
         image = Image.open(path)
+        background_mode = source.get("backgroundMode", "light")
+        if background_mode not in {"light", "magenta"}:
+            raise ValueError("Unsupported backgroundMode: " + background_mode)
         xs, ys, padding = source["xBoundaries"], source["yBoundaries"], source.get("padding", 4)
         if len(xs) != len(levels) + 1 or len(ys) != len(slots) + 1:
             raise ValueError("Grid boundaries do not match levels/slots")
@@ -105,7 +131,7 @@ def main():
             for column, level in enumerate(levels):
                 crop = [xs[column] + padding, ys[row] + padding,
                         xs[column + 1] - padding, ys[row + 1] - padding]
-                item = remove_connected_light_background(image.crop(tuple(crop)))
+                item = remove_connected_background(image.crop(tuple(crop)), background_mode)
                 filename = f'{plan["classId"]}-lv{level:03d}-{source["gender"]}-{slot}.png'
                 target = out / filename
                 item.save(target, optimize=True)

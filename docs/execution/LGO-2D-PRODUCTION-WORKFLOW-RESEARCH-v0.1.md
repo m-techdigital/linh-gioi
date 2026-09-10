@@ -148,3 +148,11 @@ Nguồn chính thức: [Unity Sprite Swap](https://docs.unity3d.com/Packages/com
 - `tools/extract_lgo_equipment_grid.py` nay từ chối alias cũ như `outer_tunic`, `lower_garment`, `waist`, `boots`, bắt buộc đúng 10 slot canonical; manifest v2 luôn gắn `SOURCE_CANDIDATES_EXTRACTED_BASE_FIT_UNVERIFIED`.
 - Runtime contract ở `docs/art/LGO-2D-EQUIPMENT-COMPATIBILITY-CONTRACT-v1.md`: mỗi slot giữ item ID độc lập, cho phép phối chéo level khi đã unlock; candidate chỉ thành `approved` sau skeleton/body/bone/anchor/occlusion/motion gate. Món sai phải redraw theo template base, không upscale hoặc bù offset ngẫu nhiên.
 - TDD chứng minh mixed loadout `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer`, đồng thời chặn class/skeleton/body/bone sai và asset chưa approved. EditMode `191/190/0/1`; Player build `168.494.995` byte, 0 error; onboarding smoke PASS. Contract chưa nối renderer Kiếm nên không claim visual fit và không capture lại frame không thay đổi.
+
+## Kiếm side-view redraw source batch — checkpoint 2026-09-10
+
+- Grid source-v4 cũ phù hợp inventory icon/art language nhưng phần lớn là front/3/4; không thể ép vào base side-view bằng scale/offset. Vì vậy giữ nguyên nguồn cũ và tạo batch-v2 riêng, không ghi đè.
+- Built-in ImageGen tạo một sheet nam và một sheet nữ, mỗi sheet đúng 4 cột level × 10 row slot, 1199×1312. Nữ v1 bị reject do `inner_top` còn vai/ngực và `arm_guard` còn bàn tay; một edit giới hạn hai row tạo nữ v2, còn v1 được giữ làm failure evidence. Provenance/hash ở `generated-batch-v2/GENERATION-PROVENANCE.json`.
+- Nền magenta thực tế dao động quanh `(249,2,248)`, không phải một mã tuyệt đối. Extractor nay hỗ trợ `backgroundMode=magenta`, feather theo `min(red,blue)-green`, edge despill và vẫn bắt buộc 10 slot canonical. RED test thấy viền alpha opaque; GREEN test kiểm alpha feather và spill còn tối đa 24.
+- Crop plan v2 dùng padding 6 để loại grid residue và tách một lượt 80 cell vào `generated-batch-v2/source-v3/`, tổng PNG 1.837.558 byte. Contact review xác nhận đủ ma trận, art direction thống nhất và không còn body rõ sau edit; toàn bộ vẫn `candidate`, runtime eligible bằng 0 vì chưa weight/fit/motion.
+- Unity 2D Animation 13.x là dòng tương thích Unity 6000.3 theo tài liệu chính thức. Chỉ cài khi bắt đầu SpriteSkin spike và đo package/build delta; không thêm dependency chỉ vì đã tạo source sheet.

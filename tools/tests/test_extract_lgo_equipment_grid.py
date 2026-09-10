@@ -18,13 +18,16 @@ CANONICAL_SLOTS = [
 
 
 class EquipmentGridExtractorTests(unittest.TestCase):
-    def make_plan(self, root, slots):
+    def make_plan(self, root, slots, background_mode="light"):
         source = root / "grid.png"
-        image = Image.new("RGB", (80, 200), "white")
+        background = (255, 0, 255) if background_mode == "magenta" else "white"
+        image = Image.new("RGB", (80, 200), background)
         draw = ImageDraw.Draw(image)
         for row in range(10):
             for column in range(4):
                 x, y = column * 20, row * 20
+                if background_mode == "magenta":
+                    draw.rectangle((x + 4, y + 4, x + 15, y + 15), fill=(170, 100, 170))
                 draw.rectangle((x + 5, y + 5, x + 14, y + 14), fill=(20 + row, 50 + column, 110))
         image.save(source)
         plan = {
@@ -38,6 +41,7 @@ class EquipmentGridExtractorTests(unittest.TestCase):
                 "xBoundaries": [0, 20, 40, 60, 80],
                 "yBoundaries": list(range(0, 201, 20)),
                 "padding": 1,
+                "backgroundMode": background_mode,
             }],
         }
         path = root / "plan.json"
@@ -71,6 +75,20 @@ class EquipmentGridExtractorTests(unittest.TestCase):
             result = self.run_tool(self.make_plan(root, legacy), root / "out")
             self.assertNotEqual(result.returncode, 0)
             self.assertIn("canonical slots", result.stderr)
+
+    def test_magenta_source_becomes_real_transparency(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            result = self.run_tool(
+                self.make_plan(root, CANONICAL_SLOTS, background_mode="magenta"),
+                root / "out")
+            self.assertEqual(result.returncode, 0, result.stderr)
+            item = Image.open(root / "out" / "kiem-lv001-male-main_weapon.png").convert("RGBA")
+            self.assertEqual(item.getchannel("A").getextrema(), (147, 255))
+            edge = item.getpixel((0, 0))
+            self.assertLessEqual(min(edge[0], edge[2]) - edge[1], 24)
+            self.assertLess(item.width, 18)
+            self.assertLess(item.height, 18)
 
 
 if __name__ == "__main__":

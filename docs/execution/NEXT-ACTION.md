@@ -381,3 +381,7 @@ Tách loadout, rig pose và action orchestration khỏi `CongDongLamMap01AArtPre
 ## Sau Kiếm source-v4 — base-fit/redraw gate trước atlas
 
 Đã tách một lượt 80 ô thành source-v4 với đúng 10 slot canonical, nhưng không mặc định crop là item sạch: 12 crop nữ đã xác định `redraw-required`, 68 còn lại `candidate`, runtime eligible bằng 0. Next: dựng template canvas/attachment cho base nam/nữ, sửa 12 món dính body và fit theo lô; sau đó chạy mixed-level pairwise matrix qua idle/walk/run/jump/basic attack/class skill. Chỉ item `approved` mới được pack atlas 512–1024 và nối shared runtime state. Không mở Pháp/Cơ/Linh trước Player evidence Kiếm.
+
+## Sau Kiếm side-view redraw source-v3 — SpriteSkin fit spike
+
+Đã tạo lại theo base side-view hai sheet nam/nữ đủ 80 cell; nữ v1 lỗi dính body/tay được giữ làm evidence, nữ v2 đã sửa theo row, source-v3 đã crop/despill sạch theo batch. Tất cả vẫn candidate. Next: cài `com.unity.2d.animation` 13.x trong một spike có benchmark, weight một bộ mixed-level tối thiểu `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer` lên skeleton chung nam và nữ, chạy sáu motion state và capture ba profile. Chỉ giữ package nếu compile/build-size/runtime evidence đạt; nếu SpriteSkin không phù hợp thì quay về split component từ cùng source-v3, không sinh lại art.

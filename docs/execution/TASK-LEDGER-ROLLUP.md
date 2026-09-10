@@ -442,3 +442,7 @@ Thêm matrix 20 ảnh tháo từng slot và bắt lỗi tóc còn bake trong bas
 ## Kiếm Lv1–30 source candidate extraction + compatibility — 2026-09-10
 
 Chọn grid redraw nam/nữ Kiếm cùng art direction và tách một lượt 80 source candidate vào external `source-v4`; tool kiểm hash, đúng 10 slot canonical và luôn chặn runtime eligibility. Visual review ghi 12 crop nữ `redraw-required`, 68 crop còn lại `base-fit-unverified`. Thêm compatibility runtime/test cho mix chéo level theo item/slot, chặn candidate/redraw, class/skeleton/body/bone sai và hợp thành coverage/occlusion. TDD cuối `191/190/0/1`, Player build 0 error và onboarding smoke PASS. Next fit/redraw trước atlas; chưa mở class thứ ba.
+
+## Kiếm side-view redraw batch — 2026-09-10
+
+Không ép 80 crop front/3/4 cũ lên side-view base. Tạo batch-v2 nam/nữ đúng 4 level × 10 slot; nữ v1 fail body/tay và được sửa đúng hai row thành v2. Nâng extractor bằng TDD cho magenta feather/despill; source-v3 external có 80 PNG, contact/provenance/audit, runtime eligible bằng 0. Next benchmark Unity 2D Animation 13.x và SpriteSkin mixed-level fit trước atlas/runtime.

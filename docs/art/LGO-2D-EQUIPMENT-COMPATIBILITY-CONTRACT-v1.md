@@ -39,6 +39,8 @@ Thiết kế theo kích thước hiển thị thật tại camera chơi; không 
 
 Theo tài liệu chính thức, Unity Sprite Library dùng Category/Label và variant để thay sprite, còn Sprite Swap skeletal yêu cầu cùng skeleton. Spine mix-and-match ghép item skin/attachment trên một skeleton; prepack phù hợp tủ đồ hữu hạn, atlas tải thêm phù hợp kho đồ lớn. Runtime repack là tối ưu tùy chọn sau benchmark, không phải cách sửa source sai fit.
 
+Thiết kế sheet phải theo camera gameplay. Grid front/3/4 chỉ được làm inventory/reference; attachment của Player side-view phải được redraw side-view hoặc có mesh/weight được chứng minh trên cùng skeleton. ImageGen output luôn bắt đầu ở `candidate`; một edit sạch body bằng mắt vẫn chưa đủ để nâng `approved`.
+
 Nguồn tham khảo:
 - https://docs.unity3d.com/Packages/com.unity.2d.animation@13.0/manual/SLAsset.html
 - https://docs.unity3d.com/Packages/com.unity.2d.animation@13.0/manual/SpriteSwapIntro.html
