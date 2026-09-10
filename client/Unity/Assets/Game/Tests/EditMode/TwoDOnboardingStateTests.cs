@@ -290,6 +290,58 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void VoLv1PaperDollAtlasDefinesPoseOffsetsForRuntimeMotion()
+        {
+            var atlas = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlas();
+            var snapshot = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlasSnapshot();
+
+            Assert.IsNotNull(atlas);
+            StringAssert.Contains("poseOffsets=", snapshot);
+            StringAssert.Contains("pose=vo_idle", snapshot);
+            StringAssert.Contains("pose=vo_jump_lift", snapshot);
+            StringAssert.Contains("pose=vo_dash_stretch", snapshot);
+            StringAssert.Contains("pose=vo_skill_cast", snapshot);
+            StringAssert.Contains("part=hand_wrap_r dx=0.20 dy=0.08", snapshot);
+            StringAssert.Contains("safe-runtime-motion=True", snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerAppliesVoLv1PaperDollPoseAcrossLessonMotions()
+        {
+            var host = new GameObject("2D Vo Lv1 paper doll motion runtime test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("currentPose=vo_skill_cast", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+                StringAssert.Contains("active=True", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+
+                controller.State.TryUseJump();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("currentPose=vo_jump_lift", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+
+                controller.State.TryUseDash();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("currentPose=vo_dash_stretch", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+
+                controller.State.TryUseClassSkill();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("currentPose=vo_lv1_training_complete", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+                Assert.IsNotNull(GameObject.Find("LGO 2D Player Vo PaperDoll PoseAnchor hand_wrap_r"));
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerRendersVoLv1PaperDollAtlasOverlayForPlayerEvidence()
         {
             var host = new GameObject("2D Vo Lv1 paper doll atlas runtime test host");

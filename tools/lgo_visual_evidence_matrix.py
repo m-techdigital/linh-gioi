@@ -68,8 +68,15 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_skill_ready",
         "label": "2D Shadow Slime / skill ready",
         "screenshot": "07-skill-ready.bmp",
-        "requiredManifest": ["runtimeCombatSnapshot", "runtimeAnimationSnapshot"],
+        "requiredManifest": ["runtimeCombatSnapshot", "runtimeAnimationSnapshot", "runtimeVoLv1PaperDollAtlasSnapshot"],
         "nonClaim": "not production combat",
+    },
+    {
+        "id": "two_d_vo_motion_complete",
+        "label": "2D Võ Lv1 paper-doll motion complete",
+        "screenshot": "08-complete.bmp",
+        "requiredManifest": ["runtimeVoLv1ClassSliceSnapshot", "runtimeVoLv1PaperDollAtlasSnapshot", "runtimeAnimationSnapshot"],
+        "nonClaim": "not production class art",
     },
     {
         "id": "two_d_inventory_try",
@@ -248,6 +255,11 @@ def verify_current() -> dict[str, Any]:
     for token in ("DongMonAuthoredPass", "route-segments=5", "detail-density=readable", "collision-boundaries=from-bands", "no-random-decoration"):
         if token not in authored_snapshot:
             failures.append(f"runtimeDongMonAuthoredPassSnapshot missing {token!r}")
+
+    vo_paperdoll_snapshot = str(manifest.get("runtimeVoLv1PaperDollAtlasSnapshot", ""))
+    for token in ("VoLv1PaperDollAtlas", "poseOffsets=", "pose=vo_jump_lift", "pose=vo_dash_stretch", "currentPose=vo_lv1_training_complete", "safe-runtime-motion=True", "active=True"):
+        if token not in vo_paperdoll_snapshot:
+            failures.append(f"runtimeVoLv1PaperDollAtlasSnapshot missing {token!r}")
 
     view_results: list[dict[str, Any]] = []
     for view in TWO_D_ONBOARDING_VIEWS:

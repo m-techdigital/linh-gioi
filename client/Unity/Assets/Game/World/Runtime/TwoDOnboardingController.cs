@@ -59,6 +59,7 @@ namespace LinhGioi.World
         private Camera _camera;
         private string _worldHudSnapshot = string.Empty;
         private string _runtimeAnimationSnapshot = string.Empty;
+        private string _runtimeVoLv1PaperDollPoseId = "vo_idle";
         private Vector2 _lastPresentedPlayerPosition = TwoDOnboardingState.PlayerStart;
         private int _presentationTick;
         private readonly List<string> _productionSceneBeats = new List<string>();
@@ -308,7 +309,9 @@ namespace LinhGioi.World
             if (_playerLeftLeg != null) _playerLeftLeg.localPosition = ToWorld(new Vector2(-0.11f, -0.54f + legSwing), 0f);
             if (_playerRightLeg != null) _playerRightLeg.localPosition = ToWorld(new Vector2(0.11f, -0.54f - legSwing), 0f);
             if (_voLv1SkillCueRoot != null) _voLv1SkillCueRoot.gameObject.SetActive(state == "ClassSkill" || state == "TrainingCompletePose");
-            if (_voLv1PaperDollRoot != null) _voLv1PaperDollRoot.gameObject.SetActive(_state.Step == TwoDOnboardingStep.Complete && _inventoryInputState != "Applied");
+            _runtimeVoLv1PaperDollPoseId = ToVoLv1PaperDollPoseId(state);
+            ApplyVoLv1PaperDollPose(_voLv1PaperDollRoot, _runtimeVoLv1PaperDollPoseId, state == "ClassSkill" || state == "TrainingCompletePose");
+            if (_voLv1PaperDollRoot != null) _voLv1PaperDollRoot.gameObject.SetActive(_state.Step >= TwoDOnboardingStep.LearnJump && _inventoryInputState != "Applied");
 
             _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "ClassSkill" ? "vo_lv1_first_skill" : state == "Dash" ? "dash_stretch" : state == "Jump" ? "jump_lift" : state == "Walk" ? "stride_bob" : "breathing_idle", phase).Snapshot;
             _lastPresentedPlayerPosition = _state.PlayerPosition;
@@ -1097,6 +1100,7 @@ namespace LinhGioi.World
             return TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlasSnapshot()
                 + " | runtimeLoadout=" + EnsurePlayerLoadout().Snapshot
                 + " | runtimeAnimation=" + _runtimeAnimationSnapshot
+                + " | currentPose=" + _runtimeVoLv1PaperDollPoseId
                 + " | active=" + (_voLv1PaperDollRoot != null && _voLv1PaperDollRoot.gameObject.activeSelf);
         }
 
@@ -1142,14 +1146,7 @@ namespace LinhGioi.World
                 for (var i = 0; i < atlas.parts.Length; i++)
                 {
                     var part = atlas.parts[i];
-                    AddSprite(
-                        "LGO 2D Player Vo PaperDoll " + part.slot + " " + part.id,
-                        new Vector2(part.x, part.y),
-                        new Vector2(part.w, part.h),
-                        new Color(part.r, part.g, part.b, part.a),
-                        baseOrder + part.sortOffset,
-                        root.transform,
-                        part.shape);
+                    AddVoLv1PaperDollPart(root.transform, part, baseOrder + part.sortOffset, false);
                 }
             }
 
@@ -1158,19 +1155,98 @@ namespace LinhGioi.World
                 for (var i = 0; i < atlas.skillCues.Length; i++)
                 {
                     var cue = atlas.skillCues[i];
-                    AddSprite(
-                        "LGO 2D Player Vo PaperDoll SkillCue " + cue.id,
-                        new Vector2(cue.x, cue.y),
-                        new Vector2(cue.w, cue.h),
-                        new Color(cue.r, cue.g, cue.b, cue.a),
-                        baseOrder + cue.sortOffset,
-                        root.transform,
-                        cue.shape);
+                    AddVoLv1PaperDollPart(root.transform, cue, baseOrder + cue.sortOffset, true);
                 }
             }
 
+            ApplyVoLv1PaperDollPose(root.transform, "vo_idle", false);
             root.SetActive(false);
             return root.transform;
+        }
+
+        private static void AddVoLv1PaperDollPart(Transform root, VoLv1PaperDollAtlasPart part, int order, bool skillCue)
+        {
+            var name = skillCue ? "LGO 2D Player Vo PaperDoll SkillCue " + part.id : "LGO 2D Player Vo PaperDoll " + part.slot + " " + part.id;
+            AddSprite(
+                name,
+                new Vector2(part.x, part.y),
+                new Vector2(part.w, part.h),
+                new Color(part.r, part.g, part.b, part.a),
+                order,
+                root,
+                part.shape);
+            var anchor = new GameObject("LGO 2D Player Vo PaperDoll PoseAnchor " + part.id);
+            anchor.transform.SetParent(root, false);
+            anchor.transform.localPosition = ToWorld(new Vector2(part.x, part.y), 0f);
+        }
+
+        private static void ApplyVoLv1PaperDollPose(Transform root, string poseId, bool showSkillCue)
+        {
+            if (root == null) return;
+            var atlas = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlas();
+            if (atlas == null) return;
+
+            ApplyVoLv1PaperDollParts(root, atlas.parts, poseId, false, showSkillCue);
+            ApplyVoLv1PaperDollParts(root, atlas.skillCues, poseId, true, showSkillCue);
+        }
+
+        private static void ApplyVoLv1PaperDollParts(Transform root, VoLv1PaperDollAtlasPart[] parts, string poseId, bool skillCue, bool showSkillCue)
+        {
+            if (parts == null) return;
+            for (var i = 0; i < parts.Length; i++)
+            {
+                var part = parts[i];
+                var offset = FindVoLv1PaperDollPoseOffset(poseId, part.id);
+                var dx = offset != null ? offset.dx : 0f;
+                var dy = offset != null ? offset.dy : 0f;
+                var sx = offset != null && offset.sx > 0.001f ? offset.sx : 1f;
+                var sy = offset != null && offset.sy > 0.001f ? offset.sy : 1f;
+                var partTransform = FindDirectChild(root, skillCue ? "LGO 2D Player Vo PaperDoll SkillCue " + part.id : "LGO 2D Player Vo PaperDoll " + part.slot + " " + part.id);
+                if (partTransform != null)
+                {
+                    partTransform.localPosition = ToWorld(new Vector2(part.x + dx, part.y + dy), 0f);
+                    partTransform.localScale = new Vector3(part.w * sx, part.h * sy, 1f);
+                    partTransform.gameObject.SetActive(!skillCue || showSkillCue);
+                }
+                var anchorTransform = FindDirectChild(root, "LGO 2D Player Vo PaperDoll PoseAnchor " + part.id);
+                if (anchorTransform != null)
+                {
+                    anchorTransform.localPosition = ToWorld(new Vector2(part.x + dx, part.y + dy), 0f);
+                    anchorTransform.gameObject.SetActive(!skillCue || showSkillCue);
+                }
+            }
+        }
+
+        private static VoLv1PaperDollPoseOffset FindVoLv1PaperDollPoseOffset(string poseId, string partId)
+        {
+            var atlas = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlas();
+            if (atlas == null || atlas.poseOffsets == null) return null;
+            for (var i = 0; i < atlas.poseOffsets.Length; i++)
+            {
+                var offset = atlas.poseOffsets[i];
+                if (offset.pose == poseId && offset.partId == partId) return offset;
+            }
+            return null;
+        }
+
+        private static Transform FindDirectChild(Transform root, string childName)
+        {
+            if (root == null) return null;
+            for (var i = 0; i < root.childCount; i++)
+            {
+                var child = root.GetChild(i);
+                if (child.name == childName) return child;
+            }
+            return null;
+        }
+
+        private static string ToVoLv1PaperDollPoseId(string animationState)
+        {
+            if (animationState == "TrainingCompletePose") return "vo_lv1_training_complete";
+            if (animationState == "ClassSkill") return "vo_skill_cast";
+            if (animationState == "Dash") return "vo_dash_stretch";
+            if (animationState == "Jump") return "vo_jump_lift";
+            return "vo_idle";
         }
 
         private void BuildInventoryTryOnStrip()
