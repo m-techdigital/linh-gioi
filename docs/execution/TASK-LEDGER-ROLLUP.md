@@ -1,5 +1,11 @@
 # TASK LEDGER ROLLUP — 2D Pivot
 
+## Võ Lv1–30 map avatar workflow proof — 2026-09-10
+
+Kế thừa trực tiếp Võ WIP từ sandbox đã dừng: base/full chung bbox `(275,16)–(801,1484)` và ba slot alpha `inner_top`, `arm_guard`, `main_weapon`. Packer mới tạo atlas 512²/23.370 byte, manifest giữ SHA nguồn, canvas, offset, ground và non-claim. Map 01A thay PC cyan bằng art Võ; C/touch đổi full/base/modular, movement có walk transform, X/touch chạy slash VFX `Liệt Phong Kích` tại combat edge.
+
+Evidence cuối: EditMode 177/176/0/1, macOS Player 160.896.915 byte với 0 error, 36 ảnh Map 01A mobile/tablet/PC đã review, baseline smoke/build/capture/matrix và hai branch guard pass. Chưa claim đủ class: hiện 3/10 slot, chỉ có bản nam, motion transform dùng làm proof; next là một batch bảy slot + nữ + frame/skeletal animation thật trước khi mở Kiếm/Pháp/Cơ/Linh.
+
 ## Source selection + stopped class task recovery — 2026-09-10
 
 MAP01A-01: thêm Resource contract Cổng Đông Lâm với route 10 khu, L0–L11, 6 NPC, 4 quái combat-edge-only, Q01–Q09, collision và UI safe area; controller/capture/matrix expose contract từ Player. Visual review 01/02/03/20 xác nhận runtime cũ chưa giống source: nền tối, rectangle và label cũ còn nhiều. Không claim visual pass; next MAP01A-02 thay màn spawn–đại cổng bằng art source-grounded.

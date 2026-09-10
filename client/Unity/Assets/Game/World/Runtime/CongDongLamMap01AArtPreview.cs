@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace LinhGioi.World
@@ -30,7 +31,14 @@ namespace LinhGioi.World
         public string DialogueText => "Ngươi cũng đã tới rồi. Đây là Đông Lâm. Phía sau những ngọn núi kia là Linh Thành.";
         public void MoveOnLane(float axis, float seconds)
         {
-            if (DialogueOpen || _controller == null) return;
+            AdvanceVoAnimation(seconds);
+            if (DialogueOpen || _controller == null || VoAvatarMotionState == "skill") return;
+            if (Mathf.Abs(axis) > .01f)
+            {
+                VoAvatarMotionState = "walk";
+                _voWalkHold = .14f;
+                ApplyVoPose();
+            }
             var target = Mathf.Clamp(PlayerX + Mathf.Clamp(axis, -1, 1) * Mathf.Clamp(seconds, 0, .1f) * 2.4f, -3.8f, 44.4f);
             _routeX = target;
             _controller.RefreshForSmoke();
@@ -46,6 +54,29 @@ namespace LinhGioi.World
         private Camera _camera;
         private Transform _player;
         private SpriteRenderer _leftFoot, _rightFoot;
+        private Transform _voAvatarRoot;
+        private readonly Dictionary<string, SpriteRenderer> _voAvatarParts = new Dictionary<string, SpriteRenderer>();
+        private SpriteRenderer _voSkillVfx;
+        private int _voAvatarMode;
+        private float _voAnimationPhase, _voWalkHold, _voSkillRemaining;
+        private static readonly string[] VoAvatarModes = { "full", "base", "modular" };
+        public string VoAvatarMode => VoAvatarModes[_voAvatarMode];
+        public string VoAvatarMotionState { get; private set; } = "idle";
+        public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
+        public int VoSkillCastCount { get; private set; }
+        [Serializable] private sealed class VoAvatarPackInfo
+        {
+            public string id;
+            public string status;
+            public VoAvatarPart[] parts;
+            public VoAvatarPart[] effects;
+        }
+        [Serializable] private sealed class VoAvatarPart
+        {
+            public string id;
+            public int x, y, w, h, order;
+            public float worldW, worldH, dx, dy;
+        }
         [Serializable] private sealed class GroundInfo { public float groundY; }
         [Serializable] private sealed class CaptureInfo
         {
@@ -56,6 +87,8 @@ namespace LinhGioi.World
             public float groundY, maxFootError, parallaxDelta;
             public bool mapQuestFlowVerified = false;
             public bool dialogueOpened, greetingCompleted;
+            public bool voBaseVerified, voModularVerified, voWalkVerified, voSkillVerified;
+            public int voSkillCastCount;
         }
         public float GroundY { get; private set; }
         public float FootY => _leftFoot == null || _rightFoot == null ? float.NaN
@@ -173,6 +206,7 @@ namespace LinhGioi.World
                     if (renderer.name == "LGO 2D Player Right Leg") _rightFoot = renderer;
                 }
             }
+            BuildVoAvatar();
             PartCount = parts.Count;
             parts.Add("skyline", MakeSprite(far, new Rect(0, 0, far.width, far.height)));
             foreach (var layer in info.layers)
@@ -222,7 +256,131 @@ namespace LinhGioi.World
                 _hidden.Add(renderer, renderer.enabled);
                 renderer.enabled = false;
             }
+            if (_player != null)
+                foreach (var renderer in _player.GetComponentsInChildren<Renderer>(true))
+                {
+                    if (!_hidden.ContainsKey(renderer)) _hidden.Add(renderer, renderer.enabled);
+                    renderer.enabled = false;
+                }
             Refresh();
+        }
+
+        private void BuildVoAvatar()
+        {
+            const string path = "LGOClasses/VoLv1MapAvatarArt/";
+            var manifest = Resources.Load<TextAsset>(path + "manifest");
+            var texture = Resources.Load<Texture2D>(path + "vo-lv1-map-avatar-atlas");
+            if (manifest == null || texture == null)
+                throw new InvalidOperationException("Missing reviewed Võ Lv1 map avatar pack");
+            var pack = JsonUtility.FromJson<VoAvatarPackInfo>(manifest.text);
+            if (pack.id != "vo-lv1-map-avatar-v1" || pack.status != "DRAFT_RUNTIME_REVIEW" || pack.parts == null)
+                throw new InvalidOperationException("Invalid Võ Lv1 map avatar manifest");
+            _voAvatarRoot = new GameObject("Map01A Võ avatar").transform;
+            _voAvatarRoot.SetParent(transform, false);
+            foreach (var part in pack.parts)
+            {
+                if (part.x < 0 || part.y < 0 || part.w <= 0 || part.h <= 0
+                    || part.x + part.w > texture.width || part.y + part.h > texture.height
+                    || part.worldW <= 0 || part.worldH <= 0 || _voAvatarParts.ContainsKey(part.id))
+                    throw new InvalidOperationException("Invalid Võ avatar part: " + part.id);
+                var host = new GameObject("Map01A Võ avatar " + part.id);
+                host.transform.SetParent(_voAvatarRoot, false);
+                host.transform.localPosition = new Vector3(part.dx, part.dy, 0);
+                var sprite = MakeSprite(texture, new Rect(part.x, part.y, part.w, part.h));
+                host.transform.localScale = new Vector3(part.worldW / sprite.bounds.size.x, part.worldH / sprite.bounds.size.y, 1);
+                var renderer = host.AddComponent<SpriteRenderer>();
+                renderer.sprite = sprite;
+                renderer.sortingOrder = part.order;
+                _voAvatarParts.Add(part.id, renderer);
+            }
+            foreach (var required in new[] { "base", "full", "inner_top", "arm_guard", "main_weapon" })
+                if (!_voAvatarParts.ContainsKey(required)) throw new InvalidOperationException("Missing Võ avatar part: " + required);
+            if (pack.effects == null || pack.effects.Length != 1 || pack.effects[0].id != "skill_slash")
+                throw new InvalidOperationException("Missing Võ skill effect");
+            var effect = pack.effects[0];
+            var effectHost = new GameObject("Map01A Võ skill");
+            effectHost.transform.SetParent(_voAvatarRoot, false);
+            effectHost.transform.localPosition = new Vector3(effect.dx, effect.dy, 0);
+            var effectSprite = MakeSprite(texture, new Rect(effect.x, effect.y, effect.w, effect.h));
+            effectHost.transform.localScale = new Vector3(effect.worldW / effectSprite.bounds.size.x,
+                effect.worldH / effectSprite.bounds.size.y, 1);
+            _voSkillVfx = effectHost.AddComponent<SpriteRenderer>();
+            _voSkillVfx.sprite = effectSprite;
+            _voSkillVfx.sortingOrder = effect.order;
+            _voSkillVfx.enabled = false;
+            RefreshVoAvatarMode();
+        }
+
+        public void CycleVoAvatarMode()
+        {
+            _voAvatarMode = (_voAvatarMode + 1) % VoAvatarModes.Length;
+            RefreshVoAvatarMode();
+        }
+
+        private void RefreshVoAvatarMode()
+        {
+            foreach (var pair in _voAvatarParts)
+                pair.Value.enabled = VoAvatarMode == "full" ? pair.Key == "full"
+                    : VoAvatarMode == "base" ? pair.Key == "base"
+                    : pair.Key != "full";
+        }
+
+        public bool TriggerVoSkill()
+        {
+            if (_voSkillRemaining > 0) return false;
+            _voSkillRemaining = .42f;
+            VoSkillCastCount++;
+            VoAvatarMotionState = "skill";
+            ApplyVoPose();
+            return true;
+        }
+
+        public void AdvanceVoAnimation(float seconds)
+        {
+            var delta = Mathf.Clamp(seconds, 0, .1f);
+            _voAnimationPhase += delta;
+            if (_voSkillRemaining > 0)
+            {
+                _voSkillRemaining = Mathf.Max(0, _voSkillRemaining - Mathf.Max(0, seconds));
+                if (_voSkillRemaining <= 0) VoAvatarMotionState = "idle";
+            }
+            else if (_voWalkHold > 0)
+            {
+                _voWalkHold = Mathf.Max(0, _voWalkHold - delta);
+                VoAvatarMotionState = _voWalkHold > 0 ? "walk" : "idle";
+            }
+            ApplyVoPose();
+        }
+
+        private void ApplyVoPose()
+        {
+            if (_voAvatarRoot == null) return;
+            if (VoAvatarMotionState == "walk")
+            {
+                var stride = Mathf.Sin(_voAnimationPhase * 22f);
+                _voAvatarRoot.localScale = new Vector3(1f + stride * .035f, 1f - Mathf.Abs(stride) * .025f, 1f);
+                _voAvatarRoot.localRotation = Quaternion.identity;
+            }
+            else if (VoAvatarMotionState == "skill")
+            {
+                _voAvatarRoot.localScale = new Vector3(1.07f, .94f, 1f);
+                _voAvatarRoot.localRotation = Quaternion.Euler(0, 0, -7f);
+            }
+            else
+            {
+                _voAvatarRoot.localScale = new Vector3(1f, 1f + Mathf.Sin(_voAnimationPhase * 2.6f) * .005f, 1f);
+                _voAvatarRoot.localRotation = Quaternion.identity;
+            }
+            if (_voSkillVfx != null)
+            {
+                _voSkillVfx.enabled = VoAvatarMotionState == "skill";
+                if (_voSkillVfx.enabled)
+                {
+                    var progress = 1f - _voSkillRemaining / .42f;
+                    _voSkillVfx.transform.localRotation = Quaternion.Euler(0, 0, Mathf.Lerp(-48f, -14f, progress));
+                    _voSkillVfx.color = new Color(1, 1, 1, Mathf.Sin(progress * Mathf.PI));
+                }
+            }
         }
 
         private void BuildSourceProps()
@@ -390,6 +548,7 @@ namespace LinhGioi.World
                 _player.position = position;
                 if (!float.IsNaN(FootY)) _player.position += Vector3.up * (GroundY - FootY);
             }
+            if (_voAvatarRoot != null) _voAvatarRoot.localPosition = new Vector3(_routeX, GroundY, 0);
             if (_camera != null)
             {
                 var cameraPosition = _camera.transform.position;
@@ -437,12 +596,34 @@ namespace LinhGioi.World
             yield return null;
             var result = new CaptureInfo { groundY = GroundY, width = Screen.width, height = Screen.height };
             var initial = FarOffset;
-            var targets = new[] { TwoDOnboardingState.PlayerStart.x, -3.2f, 0f, 6f, 23f, 31f, 39f, 43f };
+            var targets = new[] { TwoDOnboardingState.PlayerStart.x, -3.2f, 0f, 6f, 23f, 31f, 39f, 43f,
+                20.5f, 20.5f, 20.5f, 39f };
             var names = new[] { "01-arrival", "02-dialogue", "03-grand-gate", "04-gate-captain",
-                "05-market", "06-well-bridge", "07-combat-edge", "08-portal" };
+                "05-market", "06-well-bridge", "07-combat-edge", "08-portal",
+                "09-vo-base", "10-vo-modular", "11-vo-walk", "12-vo-skill" };
             for (var i = 0; i < targets.Length; i++)
             {
                 _routeX = targets[i];
+                if (i == 8)
+                {
+                    CycleVoAvatarMode();
+                    result.voBaseVerified = VoAvatarMode == "base" && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 1;
+                }
+                if (i == 9)
+                {
+                    CycleVoAvatarMode();
+                    result.voModularVerified = VoAvatarMode == "modular" && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 4;
+                }
+                if (i == 10)
+                {
+                    MoveOnLane(1, .1f);
+                    result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarMotionScale != Vector2.one;
+                }
+                if (i == 11)
+                {
+                    result.voSkillVerified = TriggerVoSkill();
+                    AdvanceVoAnimation(.16f);
+                }
                 _controller.RefreshForSmoke();
                 Refresh();
                 if (i == 1) result.dialogueOpened = TalkToHaVan() && DialogueOpen;
@@ -463,14 +644,21 @@ namespace LinhGioi.World
                 if (i == 1) result.greetingCompleted = TalkToHaVan() && HasMetHaVan;
                 result.frames++;
             }
+            result.voSkillCastCount = VoSkillCastCount;
             result.parallaxDelta = FarOffset - initial;
-            if (!result.dialogueOpened || !result.greetingCompleted || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
+            if (!result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
+                || !result.voWalkVerified || !result.voSkillVerified
+                || result.voSkillCastCount != 1 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), JsonUtility.ToJson(result, true));
             Application.Quit(result.status == "FIX_REQUIRED" ? 1 : 0);
         }
 
-        private void LateUpdate() { Refresh(); }
+        private void LateUpdate()
+        {
+            if (Application.isPlaying) AdvanceVoAnimation(Time.deltaTime);
+            Refresh();
+        }
         private void OnDestroy()
         {
             if (_camera != null) { _camera.orthographicSize = _previousCameraSize; _camera.transform.position = _previousCameraPosition; }

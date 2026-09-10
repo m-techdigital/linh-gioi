@@ -11,7 +11,7 @@ namespace LinhGioi.UI
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue;
         private Label _quest, _marker;
-        private Button _talk;
+        private Button _talk, _outfit, _skill;
         private RuntimeTouchMovementPad _pad;
         private RuntimeViewportMetrics _metrics;
         private PanelSettings _ownedPanel;
@@ -73,6 +73,12 @@ namespace LinhGioi.UI
             _pad.Add(nub); _safe.Add(_pad);
             _talk = new Button(() => _scene.UseCurrentRouteAction()) { text = "Tương tác · E" };
             Box(_talk); Place(_talk, null, 16, null, 24); _talk.style.minHeight = _touch ? 64 : 48; _talk.style.minWidth = 170; _safe.Add(_talk);
+            _outfit = new Button(() => _scene.CycleVoAvatarMode()) { text = "Trang bị Võ · C" };
+            Box(_outfit); Place(_outfit, null, 16, null, _touch ? 98 : 80);
+            _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
+            _skill = new Button(() => _scene.TriggerVoSkill()) { text = "Liệt Phong Kích · X" };
+            Box(_skill); Place(_skill, null, _touch ? 202 : 200, null, 24);
+            _skill.style.minHeight = _touch ? 64 : 48; _skill.style.minWidth = 190; _safe.Add(_skill);
             _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 204, null, 20);
             _dialogue.Add(new Label("Hạ Vân"));
             var line = new Label(_scene.DialogueText); line.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(line);
@@ -105,6 +111,8 @@ namespace LinhGioi.UI
                     - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1f : 0f);
                 _scene.MoveOnLane(Mathf.Abs(_pad.Value.x) > .01f ? _pad.Value.x : keyboard, Time.deltaTime);
                 if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
+                if (Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
+                if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
             }
             _quest.text = _scene.HasMetHaVan
                 ? "Khám phá Cổng Đông Lâm\n" + _scene.CurrentRouteNodeLabel
@@ -112,6 +120,8 @@ namespace LinhGioi.UI
                 : "Đường Hội Tụ\nNói chuyện với Hạ Vân.";
             _talk.SetEnabled(_scene.CanUseCurrentRouteAction);
             _talk.text = _scene.CurrentActionLabel + (_touch ? "" : " · E");
+            _outfit.text = "Trang bị Võ: " + _scene.VoAvatarMode + (_touch ? "" : " · C");
+            _skill.text = _scene.VoAvatarMotionState == "skill" ? "Đang thi triển..." : "Liệt Phong Kích" + (_touch ? "" : " · X");
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
             var camera = Camera.main;

@@ -4,6 +4,12 @@
 
 # PROJECT STATE — Linh Giới Online 2D
 
+## Võ Lv1–30 runtime workflow proof — 2026-09-10
+
+Map 01A hiện hiển thị PC Võ nam từ đúng WIP owner đã duyệt thay cho hình cyan. Runtime pack 512²/23.370 byte giữ `base/full` và ba slot tách trên chung canvas; HUD PC/mobile cho đổi `full → base → modular`, đi ngang và dùng `Liệt Phong Kích`. EditMode mới nhất `177 total / 176 passed / 0 failed / 1 skipped`; macOS build `160.896.915` byte, 0 error/13 warning; capture Map 01A `12 × 3` profile technical pass và đã review các frame base/modular/walk/skill. Baseline onboarding smoke/build/capture 20 frame cùng runtime/visual matrix, no-3D và no-source-image đều pass; ảnh baseline vẫn là blockout cũ và không được dùng để claim mỹ thuật Map 01A.
+
+Trạng thái sản phẩm: `VO_RUNTIME_WORKFLOW_PROOF_PASS / VO_10_SLOT_AND_FRAME_MOTION_INCOMPLETE`. Transform motion hiện chỉ chứng minh state/input/VFX; chưa phải frame animation production. Võ còn thiếu bảy slot, nữ, run/jump/basic attack và `Liên Quyền` nhiều frame. Batch sau xử lý cả sheet cùng tỷ lệ rồi mới test/capture, không vá từng item.
+
 ## Goal hiện hành — Cổng Đông Lâm Map 01A — 2026-09-10
 
 Batch đa màn hình đã kiểm kỹ thuật: importer nén, grounding, HUD safe-area, joystick dùng lại, thoại Hạ Vân; EditMode 167 pass/0 fail/1 skipped; build 0 errors, 161.426.371 byte. Capture 12 ảnh mobile/tablet/PC ở `build/map01a-art/batch-final-three-profiles/`; xem ba ảnh dialogue, HUD không che NPC. Vẫn **VISUAL_FIX_REQUIRED** vì PC placeholder và map mới có đoạn arrival, chưa đủ route/Q01–Q09. Chưa chứng nhận touch/GPU thiết bị thật.

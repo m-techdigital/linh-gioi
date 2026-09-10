@@ -1,0 +1,164 @@
+{
+  "id": "vo-lv1-map-avatar-v1",
+  "status": "DRAFT_RUNTIME_REVIEW",
+  "classId": "vo",
+  "levelBand": "1-30",
+  "gender": "male",
+  "canvas": [
+    1024,
+    1536
+  ],
+  "groundSourceY": 1484,
+  "worldHeight": 1.7,
+  "atlas": [
+    512,
+    512
+  ],
+  "pngBytes": 23370,
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1MapAvatarArt/vo-lv1-map-avatar-atlas.png",
+      "sha256": "9246cf72aa3ad4d97c7714f8d14ba47952f18154875d072410f2eb1dd9b1aa8c",
+      "width": 512,
+      "height": 512,
+      "role": "paper-doll-preview-atlas",
+      "generator": "reviewed_owner_wip",
+      "referenceOnly": false
+    }
+  ],
+  "parts": [
+    {
+      "id": "base",
+      "x": 6,
+      "y": 166,
+      "w": 122,
+      "h": 340,
+      "worldW": 0.5821614583333333,
+      "worldH": 1.6247395833333331,
+      "dx": 0.028776041666666665,
+      "dy": 0.8123697916666666,
+      "order": 5,
+      "source": "07-common-male-base-aligned-draft.png",
+      "sourceSha256": "b58d9d634c56c897247076f89d3e8cc3ea0adf1655b7258fd669d0cf00025248",
+      "sourceCanvasRect": [
+        275,
+        16,
+        801,
+        1484
+      ]
+    },
+    {
+      "id": "full",
+      "x": 136,
+      "y": 166,
+      "w": 122,
+      "h": 340,
+      "worldW": 0.5821614583333333,
+      "worldH": 1.6247395833333331,
+      "dx": 0.028776041666666665,
+      "dy": 0.8123697916666666,
+      "order": 8,
+      "source": "01-vo-male-lv001-full-equipped-alpha-draft.png",
+      "sourceSha256": "b64f8f4a4cfa08406c695d0cae0ddf41787214d6cb6b9d554810789b1cdfab18",
+      "sourceCanvasRect": [
+        275,
+        16,
+        801,
+        1484
+      ]
+    },
+    {
+      "id": "inner_top",
+      "x": 266,
+      "y": 66,
+      "w": 54,
+      "h": 80,
+      "worldW": 0.25787760416666666,
+      "worldH": 0.3807291666666667,
+      "dx": -0.01162109375,
+      "dy": 1.2008463541666667,
+      "order": 6,
+      "source": "03-vo-male-lv001-inner-top-trim-draft.png",
+      "sourceSha256": "813fcc427755da63fbd02ef41e03db93cdc4d3a625aecf825b6ef44991cc91fe",
+      "sourceCanvasRect": [
+        385,
+        227,
+        618,
+        571
+      ]
+    },
+    {
+      "id": "arm_guard",
+      "x": 328,
+      "y": 107,
+      "w": 19,
+      "h": 39,
+      "worldW": 0.08854166666666667,
+      "worldH": 0.1859375,
+      "dx": -0.18040364583333335,
+      "dy": 0.9651041666666667,
+      "order": 7,
+      "source": "04-vo-male-lv001-arm-guard-trim-draft.png",
+      "sourceSha256": "9fe9505e164cafed378501666dcce456bcace9f6925180df1f40ce0cdcfc10e5",
+      "sourceCanvasRect": [
+        309,
+        528,
+        389,
+        696
+      ]
+    },
+    {
+      "id": "main_weapon",
+      "x": 355,
+      "y": 119,
+      "w": 21,
+      "h": 27,
+      "worldW": 0.10071614583333333,
+      "worldH": 0.1294921875,
+      "dx": -0.15328776041666667,
+      "dy": 0.8096028645833333,
+      "order": 8,
+      "source": "05-vo-male-lv001-main-weapon-trim-draft.png",
+      "sourceSha256": "c338b3eac0d362575f53159793661a3d7cc72deb9c1f4b40efe6233496f48fa8",
+      "sourceCanvasRect": [
+        328,
+        694,
+        419,
+        811
+      ]
+    }
+  ],
+  "effects": [
+    {
+      "id": "skill_slash",
+      "x": 386,
+      "y": 26,
+      "w": 120,
+      "h": 120,
+      "worldW": 2.45,
+      "worldH": 2.2,
+      "dx": 1.08,
+      "dy": 0.58,
+      "order": 12
+    }
+  ],
+  "modes": {
+    "base": [
+      "base"
+    ],
+    "full": [
+      "full"
+    ],
+    "modular": [
+      "base",
+      "inner_top",
+      "arm_guard",
+      "main_weapon"
+    ]
+  },
+  "nonClaims": [
+    "not final alpha",
+    "not motion complete",
+    "three of ten equipment slots only"
+  ]
+}

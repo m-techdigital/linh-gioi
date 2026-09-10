@@ -186,6 +186,76 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void Map01AUsesReviewedVoAvatarAndCyclesBaseFullModular()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A Võ avatar test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+                var avatar = GameObject.FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                    .Where(renderer => renderer.name.StartsWith("Map01A Võ avatar ")).ToArray();
+                Assert.That(avatar, Has.Length.EqualTo(5));
+                Assert.That(avatar.Select(renderer => renderer.sprite.texture).Distinct().Single().width, Is.EqualTo(512));
+                Assert.That(preview.VoAvatarMode, Is.EqualTo("full"));
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar full").enabled, Is.True);
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar full").bounds.min.y,
+                    Is.EqualTo(preview.GroundY).Within(.001f));
+
+                preview.CycleVoAvatarMode();
+                Assert.That(preview.VoAvatarMode, Is.EqualTo("base"));
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar base").enabled, Is.True);
+                preview.CycleVoAvatarMode();
+                Assert.That(preview.VoAvatarMode, Is.EqualTo("modular"));
+                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(4));
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void Map01AVoAvatarWalkAndSkillHaveRuntimeMotionStateAndVfx()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A Võ motion test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+                Assert.That(preview.VoAvatarMotionState, Is.EqualTo("idle"));
+
+                preview.MoveOnLane(1, .1f);
+                Assert.That(preview.VoAvatarMotionState, Is.EqualTo("walk"));
+                Assert.That(preview.VoAvatarMotionScale, Is.Not.EqualTo(Vector2.one));
+
+                Assert.That(preview.TriggerVoSkill(), Is.True);
+                Assert.That(preview.VoAvatarMotionState, Is.EqualTo("skill"));
+                Assert.That(preview.VoSkillCastCount, Is.EqualTo(1));
+                Assert.That(GameObject.Find("Map01A Võ skill").GetComponent<SpriteRenderer>().enabled, Is.True);
+                Assert.That(preview.TriggerVoSkill(), Is.False, "Skill cannot restart during its active window");
+
+                preview.AdvanceVoAnimation(.5f);
+                Assert.That(preview.VoAvatarMotionState, Is.EqualTo("idle"));
+                Assert.That(GameObject.Find("Map01A Võ skill").GetComponent<SpriteRenderer>().enabled, Is.False);
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void Map01AConfiguresAllTenRouteInteractionMarkers()
         {
             var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
