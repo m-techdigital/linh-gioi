@@ -553,6 +553,56 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void LocomotionAnimationProfileDefinesVoLv1FrameClipsAndTiming()
+        {
+            var profile = TwoDLocomotionAnimationProfile.CreateDefault();
+
+            Assert.That(profile.FrameCount, Is.GreaterThanOrEqualTo(12));
+            StringAssert.Contains("clips=Idle:3@0.18", profile.Snapshot);
+            StringAssert.Contains("Jump:3@0.10", profile.Snapshot);
+            StringAssert.Contains("Dash:3@0.08", profile.Snapshot);
+            StringAssert.Contains("ClassSkill:4@0.07", profile.Snapshot);
+            StringAssert.Contains("frame=vo_skill_03 pose=vo_skill_cast", profile.Snapshot);
+            StringAssert.Contains("anchorPolicy=paper-doll-follows-frame-pose", profile.Snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerSamplesVoLv1MotionFramesAcrossLessonMotions()
+        {
+            var host = new GameObject("2D Vo Lv1 frame sampler runtime test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("motionClip=ClassSkill", controller.RuntimeAnimationSnapshot);
+                StringAssert.Contains("motionFrame=vo_skill_", controller.RuntimeAnimationSnapshot);
+                StringAssert.Contains("paperDollPose=vo_skill_cast", controller.RuntimeAnimationSnapshot);
+
+                controller.State.TryUseJump();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("motionClip=Jump", controller.RuntimeAnimationSnapshot);
+                StringAssert.Contains("motionFrame=vo_jump_", controller.RuntimeAnimationSnapshot);
+                StringAssert.Contains("paperDollPose=vo_jump_lift", controller.RuntimeAnimationSnapshot);
+
+                controller.State.TryUseDash();
+                controller.RefreshForSmoke();
+                StringAssert.Contains("motionClip=Dash", controller.RuntimeAnimationSnapshot);
+                StringAssert.Contains("motionFrame=vo_dash_", controller.RuntimeAnimationSnapshot);
+                StringAssert.Contains("paperDollPose=vo_dash_stretch", controller.RuntimeAnimationSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+        [Test]
         public void RuntimeControllerUpdatesAnimationSnapshotAfterMovementAndCompletion()
         {
             var host = new GameObject("2D locomotion animation snapshot test host");

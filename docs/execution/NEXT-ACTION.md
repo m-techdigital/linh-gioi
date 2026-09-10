@@ -64,6 +64,8 @@ Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới qua `docs/des
 
 Chỉ đạo owner mới nhất 2026-09-10: **map đầu trước → hoàn thiện 5 class sau**, ưu tiên chức năng owner tự kiểm chứng trong game. Không mở map thứ hai.
 
+Cập nhật Goal kỹ thuật: map Đông Môn đã là mặt phẳng kiểm chứng anchor/grounding; batch hiện tại tiếp tục Võ Lv1 trước để chứng minh paper-doll slot, tách đồ, pose/frame motion và skill có thể chạy trong Player thật trên cùng scene. Chưa nhân sang 5 class khi Võ chưa có runtime evidence đủ rõ.
+
 1. Owner xem góc Đông Môn illustrated trong capture Player `03-dialogue.png`; bản này mới là draft góc cổng, chưa coi cả map đầu hoàn thiện.
 2. Hoàn thiện Đông Môn theo kịch bản đã có: cảnh/parallax/terrain, đường đi và tương tác không lệch hình; kiểm spawn → Người Giữ Cổng/thoại → Bia Luyện Khí → hướng dẫn hiện có. Bàn giao Player chạy được, phím điều khiển và bằng chứng trước/sau từng thao tác. Không mở hệ thống mới hoặc map tiếp theo.
 3. Sau gate map đầu, tiếp nhận commit/asset từ tab 5 class rồi triển khai theo base/slot chung: Võ, Kiếm, Pháp, Cơ, Linh; không ghi đè worktree hoặc source chưa commit của tab đó. Mỗi class có nguồn item rời alpha thật, anchor/pivot, thứ tự layer và quy tắc tương thích rõ ràng.

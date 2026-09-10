@@ -239,6 +239,11 @@ def verify_current() -> dict[str, Any]:
     for token in ("DongMonTilePaletteSource", "resource=LGOMaps/DongMonTilePalette", "tile_dash_lane=True", "safe-no-source-image=True", "safe-runtime-resource=True"):
         if token not in source_snapshot:
             failures.append(f"runtimeDongMonTilePaletteSourceSnapshot missing {token!r}")
+    animation_snapshot = str(manifest.get("runtimeAnimationSnapshot", ""))
+    for token in ("motionClip=TrainingCompletePose", "motionFrame=vo_complete_01", "paperDollPose=vo_lv1_training_complete"):
+        if token not in animation_snapshot:
+            failures.append(f"runtimeAnimationSnapshot missing {token!r}")
+
     chunk_source_snapshot = str(manifest.get("runtimeDongMonChunkPlacementSourceSnapshot", ""))
     for token in ("DongMonChunkPlacementSource", "resource=LGOMaps/DongMonChunkPlacement", "chunk_gate_entry@-3.70,-2.02x4", "chunk_dash_lane@1.82,-1.02x4", "authored-placement=True", "safe-runtime-resource=True", "safe-no-3d=True"):
         if token not in chunk_source_snapshot:

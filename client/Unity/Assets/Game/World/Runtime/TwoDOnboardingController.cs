@@ -309,11 +309,12 @@ namespace LinhGioi.World
             if (_playerLeftLeg != null) _playerLeftLeg.localPosition = ToWorld(new Vector2(-0.11f, -0.54f + legSwing), 0f);
             if (_playerRightLeg != null) _playerRightLeg.localPosition = ToWorld(new Vector2(0.11f, -0.54f - legSwing), 0f);
             if (_voLv1SkillCueRoot != null) _voLv1SkillCueRoot.gameObject.SetActive(state == "ClassSkill" || state == "TrainingCompletePose");
-            _runtimeVoLv1PaperDollPoseId = ToVoLv1PaperDollPoseId(state);
+            var sampledFrame = _animationProfile.Sample(state, phase);
+            _runtimeVoLv1PaperDollPoseId = string.IsNullOrEmpty(sampledFrame.PoseId) ? ToVoLv1PaperDollPoseId(state) : sampledFrame.PoseId;
             ApplyVoLv1PaperDollPose(_voLv1PaperDollRoot, _runtimeVoLv1PaperDollPoseId, state == "ClassSkill" || state == "TrainingCompletePose");
             if (_voLv1PaperDollRoot != null) _voLv1PaperDollRoot.gameObject.SetActive(_state.Step >= TwoDOnboardingStep.LearnJump && _inventoryInputState != "Applied");
 
-            _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "ClassSkill" ? "vo_lv1_first_skill" : state == "Dash" ? "dash_stretch" : state == "Jump" ? "jump_lift" : state == "Walk" ? "stride_bob" : "breathing_idle", phase).Snapshot;
+            _runtimeAnimationSnapshot = new TwoDAnimationRuntimeState(state, state == "TrainingCompletePose" ? "vo_lv1_training_complete" : state == "ClassSkill" ? "vo_lv1_first_skill" : state == "Dash" ? "dash_stretch" : state == "Jump" ? "jump_lift" : state == "Walk" ? "stride_bob" : "breathing_idle", phase, sampledFrame.FrameId, _runtimeVoLv1PaperDollPoseId, sampledFrame.Clip).Snapshot;
             _lastPresentedPlayerPosition = _state.PlayerPosition;
         }
 
