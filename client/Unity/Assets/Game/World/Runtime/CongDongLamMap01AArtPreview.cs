@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace LinhGioi.World
 {
-    // First Map01A art slice. Quest state is deliberately owned by the onboarding controller.
+    // Playable Map01A visual slice. State remains local until the production quest backend is approved.
     [ExecuteAlways]
     public sealed class CongDongLamMap01AArtPreview : MonoBehaviour
     {
@@ -24,11 +24,34 @@ namespace LinhGioi.World
         public bool HasHarvestedSpiritHerb { get; private set; }
         public bool HasOpenedHiddenChest { get; private set; }
         public bool HasInspectedPortal { get; private set; }
+        public bool HasStarterSupplies { get; private set; }
+        public bool HasAcceptedGatherQuest { get; private set; }
+        public bool HasAcceptedCombatQuest { get; private set; }
+        public bool HasDefeatedFirstEnemy { get; private set; }
+        public bool HasLootedFirstEnemy { get; private set; }
+        public bool PortalUnlocked { get; private set; }
+        public bool HasInspectedInventory { get; private set; }
+        public string ActiveQuestId { get; private set; } = "Q01";
+        private readonly HashSet<string> _completedQuests = new HashSet<string>();
+        private string _dialogueNodeId = "";
+        public int CompletedQuestCount => _completedQuests.Count;
+        public bool IsQuestComplete(string questId) => _completedQuests.Contains(questId);
         public string LastInteractionMessage { get; private set; } = "";
         public bool IsCapturing => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
-        public string DialogueText => "Ngươi cũng đã tới rồi. Đây là Đông Lâm. Phía sau những ngọn núi kia là Linh Thành.";
+        public string DialogueSpeaker => _dialogueNodeId == "quan-thu" ? "Quan Thủ Đông Lâm"
+            : _dialogueNodeId == "tong-phu" ? "Tổng Phú"
+            : _dialogueNodeId == "thanh-nhi" ? "Thanh Nhi"
+            : _dialogueNodeId == "lao-tran" ? "Lão Trần" : "Hạ Vân";
+        public string DialogueText => _dialogueNodeId == "quan-thu" ? "Trong làng cấm giao chiến. Qua rìa làng, hãy luôn giữ vũ khí sẵn sàng."
+            : _dialogueNodeId == "tong-phu" ? "Mang Bình Máu Nhỏ và Bình Linh Lực này. Hành trang tốt sẽ cứu mạng ngươi."
+            : _dialogueNodeId == "thanh-nhi" ? "Hãy hái Linh Thảo Non bên giếng. Ánh sáng của nó rất dịu, đừng nhầm với Thảo Yêu."
+            : _dialogueNodeId == "lao-tran" ? "Ngoài cổng có thú non nhiễm linh khí. Hạ một con rồi mang chiến lợi phẩm về."
+            : "Ngươi cũng đã tới rồi. Đây là Đông Lâm. Phía sau những ngọn núi kia là Linh Thành.";
+        public string QuestTrackerText => ActiveQuestId == "COMPLETE" ? "Map01A hoàn tất\nPortal Suối Thanh Minh đã mở."
+            : ActiveQuestId + " · " + QuestName(ActiveQuestId) + "\n" + QuestObjective(ActiveQuestId)
+                + "\nTiến độ " + CompletedQuestCount + "/9";
         public void MoveOnLane(float axis, float seconds)
         {
             AdvanceVoAnimation(seconds);
@@ -47,8 +70,68 @@ namespace LinhGioi.World
         public bool TalkToHaVan()
         {
             if (!CanTalk) return false;
-            if (DialogueOpen) { DialogueOpen = false; HasMetHaVan = true; }
+            _dialogueNodeId = "spawn-ha-van";
+            if (DialogueOpen)
+            {
+                DialogueOpen = false;
+                HasMetHaVan = true;
+                if (ActiveQuestId == "Q01") CompleteQuest("Q01", "Q02");
+            }
             else DialogueOpen = true;
+            return true;
+        }
+
+        private static string QuestName(string id)
+        {
+            switch (id)
+            {
+                case "Q01": return "Đường Hội Tụ";
+                case "Q02": return "Nhìn Về Linh Thành";
+                case "Q03": return "Luật Của Đông Lâm";
+                case "Q04": return "Hành Trang Cần Thiết";
+                case "Q05": return "Linh Thảo Ven Nước";
+                case "Q06": return "Ngoài Cổng Không Yên";
+                case "Q07": return "Chiến Lợi Phẩm Đầu Tiên";
+                case "Q08": return "Bí Mật Bên Cầu";
+                case "Q09": return "Đường Đến Suối Thanh Minh";
+                default: return "Hoàn tất";
+            }
+        }
+
+        private static string QuestObjective(string id)
+        {
+            switch (id)
+            {
+                case "Q01": return "Nói chuyện với Hạ Vân.";
+                case "Q02": return "Ngắm Linh Thành từ Đại Cổng.";
+                case "Q03": return "Học luật khu an toàn từ Quan Thủ.";
+                case "Q04": return "Xem hành trang và nhận tiếp tế từ Tổng Phú.";
+                case "Q05": return "Gặp Thanh Nhi, hái Linh Thảo bên giếng.";
+                case "Q06": return "Nhận việc từ Lão Trần và hạ một quái non.";
+                case "Q07": return "Nhặt chiến lợi phẩm đầu tiên.";
+                case "Q09": return "Mở lối sang Suối Thanh Minh.";
+                default: return "Tiếp tục khám phá Đông Lâm.";
+            }
+        }
+
+        private void CompleteQuest(string completed, string next)
+        {
+            _completedQuests.Add(completed);
+            ActiveQuestId = next;
+        }
+
+        private bool ToggleNpcDialogue(string nodeId, Action onComplete)
+        {
+            if (!DialogueOpen)
+            {
+                _dialogueNodeId = nodeId;
+                DialogueOpen = true;
+                LastInteractionMessage = DialogueSpeaker + " đang trò chuyện.";
+                return true;
+            }
+            if (_dialogueNodeId != nodeId) return false;
+            DialogueOpen = false;
+            onComplete();
             return true;
         }
         private Camera _camera;
@@ -60,6 +143,7 @@ namespace LinhGioi.World
         private readonly HashSet<string> _voEquippedSlots = new HashSet<string>();
         private SpriteRenderer _voSkillVfx, _voMotionRenderer;
         private SpriteRenderer _voCombatTarget;
+        private SpriteRenderer _spiritHerbRenderer, _hiddenChestRenderer;
         private int _voAvatarMode, _voAvatarGender, _voAvatarLevel, _voSelectedEquipmentSlot;
         private float _voAnimationPhase, _voWalkHold, _voSkillRemaining;
         private bool _voPendingHit;
@@ -115,6 +199,9 @@ namespace LinhGioi.World
             public string deviceValidation = "macOS aspect simulation only";
             public float groundY, maxFootError, parallaxDelta;
             public bool mapQuestFlowVerified = false;
+            public string activeQuestId;
+            public int completedQuestCount;
+            public bool starterSupplies, spiritHerb, hiddenChest, combatAccepted, enemyDefeated, enemyLooted, portalUnlocked;
             public bool dialogueOpened, greetingCompleted;
             public bool voBaseVerified, voModularVerified, voWalkVerified, voSkillVerified;
             public bool voFemaleVerified, voSlotToggleVerified;
@@ -147,17 +234,37 @@ namespace LinhGioi.World
         public string CurrentRouteNodeId => RouteNodeIds[_currentRouteIndex];
         public string CurrentRouteNodeLabel => RouteNodeLabels[_currentRouteIndex];
         public Vector3 CurrentInteractionPosition => new Vector3(RouteNodeX[_currentRouteIndex], GroundY + 1.55f, 0);
-        public bool CanUseCurrentRouteAction => Mathf.Abs(PlayerX - RouteNodeX[_currentRouteIndex]) <= .95f
-            && (CurrentRouteNodeId == "spawn-ha-van"
-                || CurrentRouteNodeId == "well-bridge" && (!HasHarvestedSpiritHerb || !HasOpenedHiddenChest)
-                || CurrentRouteNodeId == "portal-suoi-thanh-minh" && !HasInspectedPortal);
+        public bool CanUseCurrentRouteAction
+        {
+            get
+            {
+                if (Mathf.Abs(PlayerX - RouteNodeX[_currentRouteIndex]) > .95f) return false;
+                if (DialogueOpen) return _dialogueNodeId == CurrentRouteNodeId;
+                if (CurrentRouteNodeId == "spawn-ha-van") return ActiveQuestId == "Q01";
+                if (CurrentRouteNodeId == "grand-gate") return ActiveQuestId == "Q02";
+                if (CurrentRouteNodeId == "quan-thu") return ActiveQuestId == "Q03";
+                if (CurrentRouteNodeId == "village-square") return ActiveQuestId == "Q04" && !HasInspectedInventory;
+                if (CurrentRouteNodeId == "tong-phu") return ActiveQuestId == "Q04" && HasInspectedInventory;
+                if (CurrentRouteNodeId == "thanh-nhi") return ActiveQuestId == "Q05" && !HasAcceptedGatherQuest;
+                if (CurrentRouteNodeId == "well-bridge") return ActiveQuestId == "Q05" && !HasHarvestedSpiritHerb
+                    || HasHarvestedSpiritHerb && !HasOpenedHiddenChest;
+                if (CurrentRouteNodeId == "lao-tran") return ActiveQuestId == "Q06" && !HasAcceptedCombatQuest;
+                if (CurrentRouteNodeId == "combat-edge") return ActiveQuestId == "Q07" && HasDefeatedFirstEnemy && !HasLootedFirstEnemy;
+                if (CurrentRouteNodeId == "portal-suoi-thanh-minh") return ActiveQuestId == "Q09" && !PortalUnlocked;
+                return false;
+            }
+        }
         public string CurrentActionLabel
         {
             get
             {
                 if (CurrentRouteNodeId == "spawn-ha-van") return DialogueOpen ? "Tiếp tục" : "Trò chuyện";
-                if (CurrentRouteNodeId == "well-bridge") return HasHarvestedSpiritHerb ? "Mở rương" : "Thu thập Linh Thảo";
-                if (CurrentRouteNodeId == "portal-suoi-thanh-minh") return "Kiểm tra lối đi";
+                if (DialogueOpen) return "Tiếp tục";
+                if (CurrentRouteNodeId == "grand-gate") return "Nhìn về Linh Thành";
+                if (CurrentRouteNodeId == "village-square") return "Mở hành trang";
+                if (CurrentRouteNodeId == "well-bridge") return HasHarvestedSpiritHerb ? "Mở rương ẩn" : "Hái Linh Thảo";
+                if (CurrentRouteNodeId == "combat-edge") return "Nhặt chiến lợi phẩm";
+                if (CurrentRouteNodeId == "portal-suoi-thanh-minh") return PortalUnlocked ? "Đã mở" : "Mở lối";
                 return "Tương tác";
             }
         }
@@ -170,22 +277,72 @@ namespace LinhGioi.World
                 LastInteractionMessage = DialogueOpen ? "Hạ Vân đang hướng dẫn." : "Đã nhận chỉ dẫn từ Hạ Vân.";
                 return used;
             }
+            if (CurrentRouteNodeId == "grand-gate" && ActiveQuestId == "Q02")
+            {
+                CompleteQuest("Q02", "Q03");
+                LastInteractionMessage = "Đã nhìn thấy Linh Thành ở phía xa.";
+                return true;
+            }
+            if (CurrentRouteNodeId == "quan-thu" && ActiveQuestId == "Q03")
+                return ToggleNpcDialogue("quan-thu", () =>
+                {
+                    CompleteQuest("Q03", "Q04");
+                    LastInteractionMessage = "Đã hiểu luật khu an toàn Đông Lâm.";
+                });
+            if (CurrentRouteNodeId == "village-square" && ActiveQuestId == "Q04" && !HasInspectedInventory)
+            {
+                HasInspectedInventory = true;
+                LastInteractionMessage = "Đã xem hành trang tân thủ; hãy gặp Tổng Phú.";
+                return true;
+            }
+            if (CurrentRouteNodeId == "tong-phu" && ActiveQuestId == "Q04")
+                return ToggleNpcDialogue("tong-phu", () =>
+                {
+                    HasStarterSupplies = true;
+                    CompleteQuest("Q04", "Q05");
+                    LastInteractionMessage = "Nhận Bình Máu Nhỏ ×3 và Bình Linh Lực Nhỏ ×2.";
+                });
+            if (CurrentRouteNodeId == "thanh-nhi" && ActiveQuestId == "Q05")
+                return ToggleNpcDialogue("thanh-nhi", () =>
+                {
+                    HasAcceptedGatherQuest = true;
+                    LastInteractionMessage = "Thanh Nhi chỉ Linh Thảo phát sáng bên giếng.";
+                });
             if (CurrentRouteNodeId == "well-bridge" && !HasHarvestedSpiritHerb)
             {
                 HasHarvestedSpiritHerb = true;
+                if (_spiritHerbRenderer != null) _spiritHerbRenderer.enabled = false;
+                CompleteQuest("Q05", "Q06");
                 LastInteractionMessage = "Đã thu thập Linh Thảo Non.";
                 return true;
             }
             if (CurrentRouteNodeId == "well-bridge" && !HasOpenedHiddenChest)
             {
                 HasOpenedHiddenChest = true;
-                LastInteractionMessage = "Đã mở rương ẩn bên cầu.";
+                if (_hiddenChestRenderer != null) _hiddenChestRenderer.color = new Color(.62f, .62f, .62f, .58f);
+                _completedQuests.Add("Q08");
+                LastInteractionMessage = "Q08 hoàn tất · rương ẩn: 12 Vàng + Bánh Bao.";
+                return true;
+            }
+            if (CurrentRouteNodeId == "lao-tran" && ActiveQuestId == "Q06")
+                return ToggleNpcDialogue("lao-tran", () =>
+                {
+                    HasAcceptedCombatQuest = true;
+                    LastInteractionMessage = "Lão Trần giao nhiệm vụ hạ một quái non ở rìa làng.";
+                });
+            if (CurrentRouteNodeId == "combat-edge" && ActiveQuestId == "Q07" && HasDefeatedFirstEnemy)
+            {
+                HasLootedFirstEnemy = true;
+                CompleteQuest("Q07", "Q09");
+                LastInteractionMessage = "Nhặt Da Lợn Non + 8 Vàng · chiến lợi phẩm đầu tiên.";
                 return true;
             }
             if (CurrentRouteNodeId == "portal-suoi-thanh-minh")
             {
                 HasInspectedPortal = true;
-                LastInteractionMessage = "Lối sang Suối Thanh Minh đang khóa theo tiến độ nhiệm vụ.";
+                PortalUnlocked = true;
+                CompleteQuest("Q09", "COMPLETE");
+                LastInteractionMessage = "Cổng đường sang Suối Thanh Minh đã mở.";
                 return true;
             }
             return false;
@@ -477,6 +634,12 @@ namespace LinhGioi.World
                     LastInteractionMessage = "Liệt Phong Kích trúng mục tiêu · -35 HP · còn " + VoTrainingTargetHp;
                     if (_voCombatTarget != null)
                         _voCombatTarget.color = VoTrainingTargetHp == 0 ? new Color(.28f, .28f, .28f, .75f) : new Color(1f, .42f, .32f, 1f);
+                    if (VoTrainingTargetHp == 0 && ActiveQuestId == "Q06" && HasAcceptedCombatQuest)
+                    {
+                        HasDefeatedFirstEnemy = true;
+                        CompleteQuest("Q06", "Q07");
+                        LastInteractionMessage = "Q06 hoàn tất · quái non đã bị hạ; hãy nhặt chiến lợi phẩm.";
+                    }
                 }
                 if (_voSkillRemaining <= 0) VoAvatarMotionState = "idle";
             }
@@ -677,6 +840,8 @@ namespace LinhGioi.World
                 var renderer = host.AddComponent<SpriteRenderer>();
                 renderer.sprite = sprite;
                 renderer.sortingOrder = layer.order;
+                if (layer.id == "young-spirit-herb") _spiritHerbRenderer = renderer;
+                if (layer.id == "common-chest") _hiddenChestRenderer = renderer;
                 if (!isWorldInteractable && _voCombatTarget == null)
                     _voCombatTarget = renderer;
             }
@@ -748,47 +913,73 @@ namespace LinhGioi.World
             yield return null;
             var result = new CaptureInfo { groundY = GroundY, width = Screen.width, height = Screen.height };
             var initial = FarOffset;
-            var targets = new[] { TwoDOnboardingState.PlayerStart.x, -3.2f, 0f, 6f, 23f, 31f, 39f, 43f,
-                20.5f, 20.5f, 20.5f, 39f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f };
-            var names = new[] { "01-arrival", "02-dialogue", "03-grand-gate", "04-gate-captain",
-                "05-market", "06-well-bridge", "07-combat-edge", "08-portal",
-                "09-vo-base", "10-vo-modular", "11-vo-walk", "12-vo-skill",
-                "13-vo-female-full", "14-vo-female-slot-toggle", "15-vo-female-walk",
-                "16-vo-lv10-female", "17-vo-lv20-female", "18-vo-lv30-female" };
+            var targets = new[] { -3.58f, -3.58f, -3.58f, 0f, 5.15f, 5.15f, 18.5f, 22.15f, 26.15f, 30.2f, 30.2f, 34.1f, 39f, 39f, 42.15f,
+                20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f };
+            var names = new[] { "01-arrival-q01", "02-ha-van-dialogue", "03-q01-complete", "04-q02-grand-gate",
+                "05-quan-thu-dialogue", "06-q03-complete", "07-q04-inventory", "08-q04-starter-supplies",
+                "09-q05-thanh-nhi", "10-q05-spirit-herb", "11-q08-hidden-chest", "12-q06-lao-tran",
+                "13-q06-combat", "14-q07-loot", "15-q09-portal-open",
+                "16-vo-base", "17-vo-modular", "18-vo-walk", "19-vo-female-full", "20-vo-female-slot-toggle",
+                "21-vo-female-walk", "22-vo-lv10-female", "23-vo-lv20-female", "24-vo-lv30-female" };
             for (var i = 0; i < targets.Length; i++)
             {
                 _routeX = targets[i];
-                if (i == 8)
+                Refresh();
+                if (i == 1) result.dialogueOpened = UseCurrentRouteAction() && DialogueOpen;
+                if (i == 2) result.greetingCompleted = UseCurrentRouteAction() && HasMetHaVan;
+                if (i == 3) UseCurrentRouteAction();
+                if (i == 4) UseCurrentRouteAction();
+                if (i == 5) UseCurrentRouteAction();
+                if (i == 6) UseCurrentRouteAction();
+                if (i == 7) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
+                if (i == 8) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
+                if (i == 9) UseCurrentRouteAction();
+                if (i == 10) UseCurrentRouteAction();
+                if (i == 11) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
+                if (i == 12)
+                {
+                    result.voSkillVerified = true;
+                    for (var hit = 0; hit < 3; hit++)
+                    {
+                        result.voSkillVerified &= TriggerVoSkill();
+                        AdvanceVoAnimation(.16f);
+                        if (hit < 2) AdvanceVoAnimation(.5f);
+                    }
+                }
+                if (i == 13) { AdvanceVoAnimation(.5f); UseCurrentRouteAction(); }
+                if (i == 14)
+                {
+                    UseCurrentRouteAction();
+                    result.mapQuestFlowVerified = ActiveQuestId == "COMPLETE" && CompletedQuestCount == 9
+                        && HasStarterSupplies && HasHarvestedSpiritHerb && HasOpenedHiddenChest
+                        && HasAcceptedCombatQuest && HasDefeatedFirstEnemy && HasLootedFirstEnemy && PortalUnlocked;
+                }
+                if (i == 15)
                 {
                     CycleVoAvatarMode();
                     result.voBaseVerified = VoAvatarMode == "base" && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 1;
                 }
-                if (i == 9)
+                if (i == 16)
                 {
                     CycleVoAvatarMode();
                     result.voModularVerified = VoAvatarMode == "modular" && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 11;
                 }
-                if (i == 10)
+                if (i == 17)
                 {
                     MoveOnLane(1, .1f);
                     result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
                         && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 11 && !_voMotionRenderer.enabled;
                 }
-                if (i == 11)
+                if (i == 18)
                 {
-                    AdvanceVoAnimation(.5f);
+                    AdvanceVoAnimation(.1f);
+                    AdvanceVoAnimation(.1f);
                     CycleVoAvatarMode();
-                    result.voSkillVerified = TriggerVoSkill();
-                    AdvanceVoAnimation(.16f);
-                }
-                if (i == 12)
-                {
-                    AdvanceVoAnimation(.5f);
                     CycleVoAvatarGender();
                     result.voFemaleVerified = VoAvatarMode == "full" && VoAvatarGender == "female"
                         && _voAvatarParts["lv001_female_full"].enabled;
                 }
-                if (i == 13)
+                if (i == 19)
                 {
                     CycleVoAvatarMode();
                     CycleVoAvatarMode();
@@ -798,21 +989,21 @@ namespace LinhGioi.World
                     result.voSlotToggleVerified = VoAvatarMode == "modular" && VoSelectedEquipmentSlot == "inner_top"
                         && VoEquippedSlotCount == 9 && !_voAvatarParts["lv001_female_slot_inner_top"].enabled;
                 }
-                if (i == 14)
+                if (i == 20)
                 {
                     MoveOnLane(1, .1f);
                     result.voFemaleMotionVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
                         && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 10
                         && !_voAvatarParts["lv001_female_slot_inner_top"].enabled && !_voMotionRenderer.enabled;
                 }
-                if (i == 15)
+                if (i == 21)
                 {
                     AdvanceVoAnimation(.5f);
                     CycleVoAvatarMode();
                     CycleVoAvatarLevel();
                 }
-                if (i == 16) CycleVoAvatarLevel();
-                if (i == 17)
+                if (i == 22) CycleVoAvatarLevel();
+                if (i == 23)
                 {
                     CycleVoAvatarLevel();
                     result.voProgressionVerified = VoAvatarLevel == 30
@@ -820,7 +1011,6 @@ namespace LinhGioi.World
                 }
                 _controller.RefreshForSmoke();
                 Refresh();
-                if (i == 1) result.dialogueOpened = TalkToHaVan() && DialogueOpen;
                 yield return null;
                 yield return new WaitForEndOfFrame();
                 result.maxFootError = Mathf.Max(result.maxFootError, Mathf.Abs(FootY - GroundY));
@@ -835,17 +1025,25 @@ namespace LinhGioi.World
                     DongMonIllustratedPreview.WriteBmp(Path.Combine(directory, names[i] + ".bmp"), image.GetPixels32(), result.width, result.height);
                 }
                 finally { RenderTexture.active = active; Destroy(image); }
-                if (i == 1) result.greetingCompleted = TalkToHaVan() && HasMetHaVan;
                 result.frames++;
             }
             result.voSkillCastCount = VoSkillCastCount;
             result.voSkillHitCount = VoSkillHitCount;
             result.voTrainingTargetHp = VoTrainingTargetHp;
+            result.activeQuestId = ActiveQuestId;
+            result.completedQuestCount = CompletedQuestCount;
+            result.starterSupplies = HasStarterSupplies;
+            result.spiritHerb = HasHarvestedSpiritHerb;
+            result.hiddenChest = HasOpenedHiddenChest;
+            result.combatAccepted = HasAcceptedCombatQuest;
+            result.enemyDefeated = HasDefeatedFirstEnemy;
+            result.enemyLooted = HasLootedFirstEnemy;
+            result.portalUnlocked = PortalUnlocked;
             result.parallaxDelta = FarOffset - initial;
-            if (!result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
+            if (!result.mapQuestFlowVerified || !result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified
-                || result.voSkillCastCount != 1 || result.voSkillHitCount != 1 || result.voTrainingTargetHp != 65
+                || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), JsonUtility.ToJson(result, true));

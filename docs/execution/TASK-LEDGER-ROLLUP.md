@@ -1,3 +1,9 @@
+## Map01A Q01–Q09 playable flow — 2026-09-10
+
+Đã nối một state machine local đủ 9 quest vào Cổng Đông Lâm, gồm dialogue Hạ Vân/Quan Thủ/Tổng Phú/Thanh Nhi/Lão Trần, inventory inspect, consumable reward, gather, chest tùy chọn, combat ba hit, loot và portal unlock. Herb/chest/enemy/portal có phản hồi world thay vì chỉ đổi text. EditMode gần nhất `179 total / 178 pass / 0 fail / 1 ignored`; build macOS `166.984.083` byte, 0 error/13 warning. Evidence v4 có 24 frame cho mỗi profile mobile/tablet/PC; cả ba manifest hoàn tất 9/9 và ảnh trọng yếu đã review.
+
+Next: một batch functional UI cho inventory/potion/class-item equip/minimap unlock và capture chứng minh thao tác. Chưa chuyển Võ rig cho tới khi gate Map01A này xong; chưa claim physical-device certification, persistence hoặc Map01B transition.
+
 ## Võ modular motion alignment — 2026-09-10
 
 Sửa lỗi correctness làm trang bị đã tháo có thể xuất hiện lại khi movement dùng full-frame. `base/modular` và tier cao giữ đúng layer đang mặc trong root pose; `Lv1 + full` mới dùng motion frame. RED capture bắt `voFemaleMotionVerified=false` do gate cũ; GREEN sau khi gate kiểm đúng `walk + aligned paper-doll + base/9 slot + inner_top off`. EditMode `179/178/0/1`, build macOS 0 error, 54 ảnh mobile/tablet/PC technical pass và đã review. Next: batch rig/attachment + đủ locomotion/combat Võ Lv1–30; chưa mở class thứ hai.

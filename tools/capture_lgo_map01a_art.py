@@ -52,25 +52,30 @@ def main():
     if code != 0:
         raise SystemExit('FIX_REQUIRED: Player exited ' + str(code))
     manifest = json.loads((out / 'manifest.json').read_text())
-    required = ['01-arrival', '02-dialogue', '03-grand-gate', '04-gate-captain',
-                '05-market', '06-well-bridge', '07-combat-edge', '08-portal',
-                '09-vo-base', '10-vo-modular', '11-vo-walk', '12-vo-skill',
-                '13-vo-female-full', '14-vo-female-slot-toggle']
-    required += ['15-vo-female-walk', '16-vo-lv10-female', '17-vo-lv20-female', '18-vo-lv30-female']
+    required = ['01-arrival-q01', '02-ha-van-dialogue', '03-q01-complete', '04-q02-grand-gate',
+                '05-quan-thu-dialogue', '06-q03-complete', '07-q04-inventory', '08-q04-starter-supplies',
+                '09-q05-thanh-nhi', '10-q05-spirit-herb', '11-q08-hidden-chest', '12-q06-lao-tran',
+                '13-q06-combat', '14-q07-loot', '15-q09-portal-open',
+                '16-vo-base', '17-vo-modular', '18-vo-walk', '19-vo-female-full',
+                '20-vo-female-slot-toggle', '21-vo-female-walk', '22-vo-lv10-female',
+                '23-vo-lv20-female', '24-vo-lv30-female']
     import math
     foot_error = manifest.get('maxFootError', float('nan'))
     parallax = manifest.get('parallaxDelta', float('nan'))
     if (manifest.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED'
-            or manifest.get('frames') != 18
+            or manifest.get('frames') != 24
             or not manifest.get('dialogueOpened') or not manifest.get('greetingCompleted')
             or not manifest.get('voBaseVerified') or not manifest.get('voModularVerified')
             or not manifest.get('voWalkVerified') or not manifest.get('voSkillVerified')
             or not manifest.get('voFemaleVerified') or not manifest.get('voSlotToggleVerified')
             or not manifest.get('voFemaleMotionVerified') or not manifest.get('voProgressionVerified')
-            or manifest.get('voSkillCastCount') != 1
-            or manifest.get('voSkillHitCount') != 1 or manifest.get('voTrainingTargetHp') != 65
+            or not manifest.get('mapQuestFlowVerified') or manifest.get('activeQuestId') != 'COMPLETE'
+            or manifest.get('completedQuestCount') != 9
+            or not all(manifest.get(key) for key in ('starterSupplies', 'spiritHerb', 'hiddenChest',
+                'combatAccepted', 'enemyDefeated', 'enemyLooted', 'portalUnlocked'))
+            or manifest.get('voSkillCastCount') != 3
+            or manifest.get('voSkillHitCount') != 3 or manifest.get('voTrainingTargetHp') != 0
             or (manifest.get('width'), manifest.get('height')) != (width, height)
-            or manifest.get('mapQuestFlowVerified') is not False
             or not math.isfinite(foot_error) or foot_error > .001
             or not math.isfinite(parallax) or abs(parallax) <= .01
             or any(not (out / (name + '.bmp')).is_file() for name in required)):
@@ -82,7 +87,7 @@ def main():
         raw = (out / (name + '.png')).read_bytes()
         if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
             raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
-    print('LGO_MAP01A_ART_CAPTURE_TECHNICAL_PASS frames=18; visual review and quest flow still required; ' + str(out))
+    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=24 quest=Q01-Q09; visual review still required; ' + str(out))
 
 
 

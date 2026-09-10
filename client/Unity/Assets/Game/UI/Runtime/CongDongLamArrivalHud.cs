@@ -10,7 +10,7 @@ namespace LinhGioi.UI
     {
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue;
-        private Label _quest, _marker;
+        private Label _quest, _marker, _dialogueSpeaker, _dialogueLine;
         private Button _talk, _outfit, _level, _gender, _slot, _toggleSlot, _skill;
         private RuntimeTouchMovementPad _pad;
         private RuntimeViewportMetrics _metrics;
@@ -92,8 +92,9 @@ namespace LinhGioi.UI
             Box(_skill); Place(_skill, null, _touch ? 202 : 200, null, 24);
             _skill.style.minHeight = _touch ? 64 : 48; _skill.style.minWidth = 190; _safe.Add(_skill);
             _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 204, null, 20);
-            _dialogue.Add(new Label("Hạ Vân"));
-            var line = new Label(_scene.DialogueText); line.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(line);
+            _dialogueSpeaker = new Label("Hạ Vân");
+            _dialogue.Add(_dialogueSpeaker);
+            _dialogueLine = new Label(_scene.DialogueText); _dialogueLine.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(_dialogueLine);
             _safe.Add(_dialogue);
             _marker = new Label("!\nHạ Vân") { pickingMode = PickingMode.Ignore };
             _marker.style.position = Position.Absolute; _marker.style.color = new Color(1,.83f,.3f);
@@ -130,10 +131,8 @@ namespace LinhGioi.UI
                 if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleVoEquipmentSlot();
                 if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
             }
-            _quest.text = _scene.HasMetHaVan
-                ? "Khám phá Cổng Đông Lâm\n" + _scene.CurrentRouteNodeLabel
-                    + (string.IsNullOrEmpty(_scene.LastInteractionMessage) ? "" : "\n" + _scene.LastInteractionMessage)
-                : "Đường Hội Tụ\nNói chuyện với Hạ Vân.";
+            _quest.text = _scene.QuestTrackerText
+                + (string.IsNullOrEmpty(_scene.LastInteractionMessage) ? "" : "\n" + _scene.LastInteractionMessage);
             _talk.SetEnabled(_scene.CanUseCurrentRouteAction);
             _talk.text = _scene.CurrentActionLabel + (_touch ? "" : " · E");
             _outfit.text = "Trang bị Võ: " + _scene.VoAvatarMode + (_touch ? "" : " · C");
@@ -144,6 +143,8 @@ namespace LinhGioi.UI
             _skill.text = _scene.VoAvatarMotionState == "skill" ? "Đang thi triển..." : "Liệt Phong Kích" + (_touch ? "" : " · X");
             _skill.SetEnabled(_scene.CanTriggerVoSkill);
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _dialogueSpeaker.text = _scene.DialogueSpeaker;
+            _dialogueLine.text = _scene.DialogueText;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
             var camera = Camera.main;
             if (camera != null)

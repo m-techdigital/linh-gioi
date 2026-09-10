@@ -150,7 +150,7 @@ namespace LinhGioi.Tests
         }
 
         [Test]
-        public void Map01ARouteActionsTalkHarvestOpenChestAndInspectPortal()
+        public void Map01ACompletesQ01ToQ09ThroughNpcResourceCombatLootAndPortalActions()
         {
             var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             var host = new GameObject("Map01A route action test");
@@ -159,22 +159,81 @@ namespace LinhGioi.Tests
             {
                 var controller = TwoDOnboardingController.Attach(host);
                 preview = CongDongLamMap01AArtPreview.Attach(controller);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q01"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.DialogueOpen, Is.True);
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.HasMetHaVan, Is.True);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q02"));
+                Assert.That(preview.CompletedQuestCount, Is.EqualTo(1));
 
-                for (var step = 0; step < 143; step++) preview.MoveOnLane(1, .1f);
+                for (var step = 0; step < 13; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("grand-gate"));
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q03"));
+
+                for (var step = 0; step < 25; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("quan-thu"));
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                Assert.That(preview.DialogueOpen, Is.True);
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q04"));
+
+                for (var step = 0; step < 53; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("village-square"));
+                Assert.That(preview.UseCurrentRouteAction(), Is.True, "Q04 first teaches inventory in the square");
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q04"));
+
+                for (var step = 0; step < 19; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("tong-phu"));
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                Assert.That(preview.HasStarterSupplies, Is.True);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q05"));
+
+                for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("thanh-nhi"));
+                Assert.That(preview.UseCurrentRouteAction(), Is.True, "Thanh Nhi must hand off the gather objective");
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+
+                for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
                 Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("well-bridge"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.HasHarvestedSpiritHerb, Is.True);
+                Assert.That(GameObject.Find("Map01A world interactable young-spirit-herb").GetComponent<SpriteRenderer>().enabled, Is.False);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q06"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.HasOpenedHiddenChest, Is.True);
+                Assert.That(GameObject.Find("Map01A world interactable common-chest").GetComponent<SpriteRenderer>().color.a, Is.LessThan(1f));
+                Assert.That(preview.IsQuestComplete("Q08"), Is.True, "Q08 is optional and must not block the main chain");
 
-                for (var step = 0; step < 50; step++) preview.MoveOnLane(1, .1f);
+                for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("lao-tran"));
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                Assert.That(preview.HasAcceptedCombatQuest, Is.True);
+
+                for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("combat-edge"));
+                for (var hit = 0; hit < 3; hit++)
+                {
+                    Assert.That(preview.TriggerVoSkill(), Is.True);
+                    preview.AdvanceVoAnimation(.5f);
+                }
+                Assert.That(preview.HasDefeatedFirstEnemy, Is.True);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q07"));
+                Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                Assert.That(preview.HasLootedFirstEnemy, Is.True);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q09"));
+
+                for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
                 Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("portal-suoi-thanh-minh"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.HasInspectedPortal, Is.True);
+                Assert.That(preview.PortalUnlocked, Is.True);
+                Assert.That(preview.CurrentActionLabel, Is.EqualTo("Đã mở"), "Completed portal label must fit mobile action button");
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("COMPLETE"));
+                Assert.That(preview.CompletedQuestCount, Is.EqualTo(9));
             }
             finally
             {

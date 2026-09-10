@@ -1,3 +1,9 @@
+## Map01A playable quest flow Q01–Q09 — 2026-09-10
+
+Cổng Đông Lâm hiện có state machine local cho đủ tuyến Q01–Q09 trong Player: thoại bốn NPC, quan sát cổng, kiểm tra hành trang, nhận consumable, hái Linh Thảo, mở rương tùy chọn, nhận combat quest, hạ mục tiêu bằng ba lần skill, nhặt loot và mở portal. Trạng thái world phản hồi trực tiếp: herb ẩn, chest dim, enemy chết đổi tint, portal mở. Capture v4 tạo 72 ảnh (24 trạng thái × mobile/tablet/PC); cả ba manifest xác nhận 9/9 quest, 3 cast/3 hit và target HP 0. Visual review đã kiểm thoại, gather/chest, combat và portal.
+
+Trạng thái: `MAP01A_Q01_Q09_PLAYABLE_FLOW_PASS / MAP01A_FUNCTIONAL_UI_INCOMPLETE`. Evidence: `build/map01a-playable/q01-q09-three-profiles-final/`. Chưa claim Map01A hoàn tất vì Q04 mới ghi nhận flag và reward text; cần panel inventory thật, dùng potion, equip class item và minimap/route unlock nhìn thấy được. Đây là macOS aspect simulation, chưa phải chứng nhận mobile/tablet vật lý; quest state chưa nối persistence/backend.
+
 ## Võ modular equipment motion alignment — 2026-09-10
 
 Runtime không còn tráo paper-doll đang mặc sang full-frame Lv1 khi nhân vật ở `base`, `modular` hoặc tier Lv10/20/30. Các layer cùng đi theo root pose; full-frame key pose chỉ chạy ở `Lv1 + full`. EditMode `179/178/0/1`; macOS Player `166.975.891` byte, 0 error/13 warning; 54 ảnh tại `build/map01a-art/vo-aligned-modular-final-three-profiles-v2/` technical pass và các frame 11/12/14/15/18 đã review trên ba profile. Frame 15 xác nhận nữ modular còn đúng `base + 9 slot` sau khi tháo `inner_top`.
