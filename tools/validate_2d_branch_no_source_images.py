@@ -16,38 +16,80 @@ SKIP_PARTS = {
 }
 
 
-PACK = 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/DongMonIllustrated'
+RUNTIME_ART_PACKS = [
+    {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/DongMonIllustrated',
+        'id': 'dongmon-illustrated-draft-v1',
+        'status': 'DRAFT_OWNER_REVIEW',
+        'assets': {
+            'skyline.png': (1536, 864, 'far-background'),
+            'props-atlas.png': (2048, 2048, 'runtime-atlas'),
+        },
+        'generators': {'image_gen'},
+        'max_bytes': 4_000_000,
+        'status_error': 'Pack must remain an explicit draft',
+    },
+    {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1ApprovedRuntimeArt',
+        'id': 'vo-lv1-approved-runtime-art-v1',
+        'status': 'APPROVED_RUNTIME_ART',
+        'assets': {
+            'vo-lv1-starter-atlas.png': (2048, 2048, 'paper-doll-atlas'),
+            'vo-lv1-skill-atlas.png': (1024, 1024, 'skill-vfx-atlas'),
+        },
+        'generators': {'approved_original_2d_art', 'image_gen'},
+        'max_bytes': 4_000_000,
+        'status_error': 'Vo Lv1 runtime art must remain approved runtime art',
+    },
+]
+
+
+def _expected_assets(spec: dict[str, object]) -> dict[str, tuple[int, int, str]]:
+    pack = str(spec['pack'])
+    assets = spec['assets']
+    if not isinstance(assets, dict):
+        raise ValueError('Invalid runtime art spec')
+    return {pack + '/' + name: value for name, value in assets.items()}
+
+
+def _validate_runtime_pack(root: Path, spec: dict[str, object]) -> set[str]:
+    pack = str(spec['pack'])
+    manifest = root / pack / 'manifest.json'
+    if not manifest.exists():
+        return set()
+    data = json.loads(manifest.read_text())
+    expected = _expected_assets(spec)
+    if data['id'] != spec['id'] or data['status'] != spec['status']:
+        raise ValueError(str(spec['status_error']))
+    entries = data['assets']
+    if len(entries) != len(expected) or {a['path'] for a in entries} != set(expected):
+        raise ValueError('Only declared runtime textures are allowed for ' + pack)
+    generators = spec['generators']
+    if not isinstance(generators, set):
+        raise ValueError('Invalid runtime art generators')
+    for entry in entries:
+        path = root / entry['path']
+        if path.is_symlink() or not path.is_file():
+            raise ValueError('Missing or symlinked runtime texture: ' + entry['path'])
+        raw = path.read_bytes()
+        w, h, role = expected[entry['path']]
+        if (entry['generator'] not in generators or entry['referenceOnly'] is not False
+                or entry['role'] != role or len(raw) > int(spec['max_bytes'])
+                or hashlib.sha256(raw).hexdigest() != entry['sha256']
+                or raw[:8] != b'\x89PNG\r\n\x1a\n'
+                or struct.unpack('>II', raw[16:24]) != (w, h)):
+            raise ValueError('Invalid provenance/hash/PNG budget: ' + entry['path'])
+    return set(expected)
 
 
 def runtime_allowlist(root: Path) -> set[str]:
-    manifest = root / PACK / 'manifest.json'
-    if not manifest.exists():
-        return set()
-    try:
-        data = json.loads(manifest.read_text())
-        expected = {PACK + '/skyline.png': (1536, 864, 'far-background'),
-                    PACK + '/props-atlas.png': (2048, 2048, 'runtime-atlas')}
-        if data['id'] != 'dongmon-illustrated-draft-v1' or data['status'] != 'DRAFT_OWNER_REVIEW':
-            raise ValueError('Pack must remain an explicit draft')
-        entries = data['assets']
-        if len(entries) != 2 or {a['path'] for a in entries} != set(expected):
-            raise ValueError('Only the two declared new runtime textures are allowed')
-        for entry in entries:
-            path = root / entry['path']
-            if path.is_symlink() or not path.is_file():
-                raise ValueError('Missing or symlinked runtime texture: ' + entry['path'])
-            raw = path.read_bytes()
-            w, h, role = expected[entry['path']]
-            if (entry['generator'] != 'image_gen' or entry['referenceOnly'] is not False
-                    or entry['role'] != role or len(raw) > 4_000_000
-                    or hashlib.sha256(raw).hexdigest() != entry['sha256']
-                    or raw[:8] != b'\x89PNG\r\n\x1a\n'
-                    or struct.unpack('>II', raw[16:24]) != (w, h)):
-                raise ValueError('Invalid provenance/hash/PNG budget: ' + entry['path'])
-        return set(expected)
-    except (KeyError, TypeError, OSError, json.JSONDecodeError, struct.error) as exc:
-        raise ValueError('Invalid runtime art manifest: ' + str(exc)) from exc
-
+    allowed: set[str] = set()
+    for spec in RUNTIME_ART_PACKS:
+        try:
+            allowed.update(_validate_runtime_pack(root, spec))
+        except (KeyError, TypeError, OSError, json.JSONDecodeError, struct.error) as exc:
+            raise ValueError('Invalid runtime art manifest: ' + str(exc)) from exc
+    return allowed
 
 def main() -> int:
     try:

@@ -19,7 +19,7 @@ Hướng kỹ thuật sau gate map đầu:
 3. Mỗi class Võ/Kiếm/Pháp/Cơ/Linh phải kiểm được trong Player: chọn class, mặc/tháo từng slot, phối bộ tương thích, idle/walk/run/jump và đòn/skill preview trong scope hiện có.
 4. Gate 5 class là nhìn thấy đồ/vũ khí đi theo thân khi đổi hướng/chuyển động, không hở cổ tay/chân/thân, không sai layer, không dùng ảnh source/reference làm runtime asset.
 
-Next action ngay: Đông Môn/Gate Keeper đã có checkpoint Player pass; tiếp tục một class Võ làm mẫu để kiểm chứng workflow nhân vật trước khi nhân sang 5 class. Võ hiện có anchor gizmo, runtime fit, production atlas contract và atlas cell binding. Bước kế tiếp là chốt đường đưa art thật vào repo/runtime: hoặc tạo cơ chế allowlist cho approved 2D runtime spritesheet/PSB không bị validator no-source-images chặn, hoặc tiếp tục code-native atlas preview tạm thời; sau đó thay `cellSource=runtime-generated-atlas-cell` bằng art Võ Lv1 thật trong Player.
+Next action ngay: Đông Môn/Gate Keeper đã có checkpoint Player pass; tiếp tục một class Võ làm mẫu để kiểm chứng workflow nhân vật trước khi nhân sang 5 class. Võ hiện có anchor gizmo, runtime fit, production atlas contract và atlas cell binding. Bước kế tiếp là tạo pack art Võ Lv1 thật theo allowlist `VoLv1ApprovedRuntimeArt`: `vo-lv1-starter-atlas.png` cho paper-doll/body/equipment cells và `vo-lv1-skill-atlas.png` cho skill cue, manifest đủ hash/provenance, rồi thay `cellSource=runtime-generated-atlas-cell` bằng runtime sprite atlas thật trong Player.
 
 ## Đông Môn illustrated draft — 2026-09-10
 

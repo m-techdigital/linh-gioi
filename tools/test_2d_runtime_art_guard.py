@@ -19,6 +19,37 @@ class RuntimeArtGuardTests(unittest.TestCase):
     def test_known_new_pack_is_allowed(self):
         self.assertEqual(len(runtime_allowlist(self.root)), 2)
 
+
+    def test_approved_vo_runtime_art_pack_is_allowed_when_manifest_matches(self):
+        pack = 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1ApprovedRuntimeArt'
+        pack_dir = self.root / pack
+        pack_dir.mkdir(parents=True)
+        assets = []
+        for name, width, height, role in [
+            ('vo-lv1-starter-atlas.png', 2048, 2048, 'paper-doll-atlas'),
+            ('vo-lv1-skill-atlas.png', 1024, 1024, 'skill-vfx-atlas'),
+        ]:
+            raw = b'\x89PNG\r\n\x1a\n' + b'\x00\x00\x00\rIHDR' + width.to_bytes(4, 'big') + height.to_bytes(4, 'big') + b'approved-runtime-art'
+            path = pack_dir / name
+            path.write_bytes(raw)
+            assets.append({
+                'path': f'{pack}/{name}',
+                'generator': 'approved_original_2d_art',
+                'referenceOnly': False,
+                'role': role,
+                'sha256': __import__('hashlib').sha256(raw).hexdigest(),
+            })
+        (pack_dir / 'manifest.json').write_text(json.dumps({
+            'id': 'vo-lv1-approved-runtime-art-v1',
+            'status': 'APPROVED_RUNTIME_ART',
+            'assets': assets,
+        }))
+
+        allowed = runtime_allowlist(self.root)
+
+        self.assertIn(f'{pack}/vo-lv1-starter-atlas.png', allowed)
+        self.assertIn(f'{pack}/vo-lv1-skill-atlas.png', allowed)
+
     def test_changed_png_is_rejected(self):
         with (self.root / PACK / 'skyline.png').open('ab') as f:
             f.write(b'tamper')
