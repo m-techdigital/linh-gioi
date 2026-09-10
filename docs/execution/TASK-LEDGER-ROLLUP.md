@@ -1,3 +1,7 @@
+## Võ modular motion alignment — 2026-09-10
+
+Sửa lỗi correctness làm trang bị đã tháo có thể xuất hiện lại khi movement dùng full-frame. `base/modular` và tier cao giữ đúng layer đang mặc trong root pose; `Lv1 + full` mới dùng motion frame. RED capture bắt `voFemaleMotionVerified=false` do gate cũ; GREEN sau khi gate kiểm đúng `walk + aligned paper-doll + base/9 slot + inner_top off`. EditMode `179/178/0/1`, build macOS 0 error, 54 ảnh mobile/tablet/PC technical pass và đã review. Next: batch rig/attachment + đủ locomotion/combat Võ Lv1–30; chưa mở class thứ hai.
+
 # TASK LEDGER ROLLUP — 2D Pivot
 
 ## Võ skill hit proof — 2026-09-10

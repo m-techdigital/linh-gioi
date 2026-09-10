@@ -1,3 +1,9 @@
+## Võ modular equipment motion alignment — 2026-09-10
+
+Runtime không còn tráo paper-doll đang mặc sang full-frame Lv1 khi nhân vật ở `base`, `modular` hoặc tier Lv10/20/30. Các layer cùng đi theo root pose; full-frame key pose chỉ chạy ở `Lv1 + full`. EditMode `179/178/0/1`; macOS Player `166.975.891` byte, 0 error/13 warning; 54 ảnh tại `build/map01a-art/vo-aligned-modular-final-three-profiles-v2/` technical pass và các frame 11/12/14/15/18 đã review trên ba profile. Frame 15 xác nhận nữ modular còn đúng `base + 9 slot` sau khi tháo `inner_top`.
+
+Trạng thái: `MODULAR_EQUIPMENT_MOTION_ALIGNMENT_PASS / ARTICULATED_RIG_INCOMPLETE`. Đây là root-pose compatibility, chưa phải limb animation; bước tiếp theo là một batch rig/attachment và đủ state Lv1–30 trước khi mở class khác.
+
 > Batch mới nhất: Map 01A đã dựng đủ tuyến nhìn thấy 10 khu bằng atlas/module tái sử dụng, 6 NPC, 6 landmark, 4 quái combat-edge-only và hai interactable. Runtime PNG giảm từ 4.526.172 xuống 1.049.392 byte sau palette optimization và giữ review tương đương. Unity EditMode cuối 175 tổng/174 pass/0 fail/1 skip; macOS Player build 160.624.595 byte, 0 lỗi/13 warning; capture 24 ảnh/3 profile technical pass và đã review. Trạng thái `MAP_ART_FOUNDATION_PASS / CLASS_PC_VISUAL_FIX_REQUIRED`; Q01–Q09 và combat loop chưa được claim.
 
 > Bắt buộc đọc trước batch art/scale: `docs/art/LGO-MAP01A-ASSET-OPTIMIZATION-LESSONS.md`. Owner yêu cầu runtime giảm chất lượng/dung lượng, chia tile dùng lại và lưu bài học. Batch đang gom camera/HUD scale + downsample/tile; budget mới 4 MiB PNG, chưa dùng số 7 MiB cũ làm mục tiêu.

@@ -253,6 +253,13 @@ namespace LinhGioi.Tests
                 preview.ToggleVoEquipmentSlot();
                 Assert.That(preview.VoEquippedSlotCount, Is.EqualTo(9));
                 Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 female slot head_hair").enabled, Is.False);
+                preview.MoveOnLane(1, .1f);
+                Assert.That(preview.VoAvatarUsesAlignedPaperDollMotion, Is.True);
+                Assert.That(GameObject.Find("Map01A Võ motion frame").GetComponent<SpriteRenderer>().enabled, Is.False);
+                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(10),
+                    "base + nine equipped slots must remain visible during modular motion");
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 female slot head_hair").enabled, Is.False,
+                    "an unequipped slot must not reappear from the full-frame sheet");
             }
             finally
             {
@@ -328,6 +335,7 @@ namespace LinhGioi.Tests
                 preview.CycleVoAvatarLevel();
                 Assert.That(preview.VoAvatarLevel, Is.EqualTo(30));
                 preview.MoveOnLane(1, .1f);
+                Assert.That(preview.VoAvatarUsesAlignedPaperDollMotion, Is.True);
                 Assert.That(GameObject.Find("Map01A Võ motion frame").GetComponent<SpriteRenderer>().enabled, Is.False,
                     "A higher-tier outfit must not be replaced by the Lv1 full-frame motion sheet");
                 Assert.That(GameObject.Find("Map01A Võ avatar lv030 male full").GetComponent<SpriteRenderer>().enabled, Is.True);

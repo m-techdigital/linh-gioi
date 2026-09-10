@@ -1,3 +1,7 @@
+> **Checkpoint Võ modular motion alignment — 2026-09-10:** base/modular và các tier Lv10/20/30 giữ nguyên toàn bộ layer đang mặc khi walk/skill bằng một root pose chung; full-frame motion chỉ dùng cho `Lv1 + full`. Capture mobile/tablet/PC đã chứng minh nữ modular sau khi tháo `inner_top` vẫn chỉ còn `base + 9 slot`, slot đã tháo không xuất hiện lại; frame skill vẫn có hit `100→65 HP`. Evidence: `build/map01a-art/vo-aligned-modular-final-three-profiles-v2/`. Đây là compatibility fix, chưa phải limb rig production hoặc chứng nhận thiết bị vật lý.
+>
+> **Next:** làm một batch rig/attachment Võ theo các anchor đầu-ngực-hông-tay-chân, rồi nối idle/walk/run/jump/basic attack/`Liên Quyền` cho outfit Lv1–30. Chỉ capture lại sau khi trọn batch asset + motion + equipment đã nối; chưa mở class thứ hai.
+
 > **Checkpoint Võ combat hit — 2026-09-10:** `Liệt Phong Kích` chỉ kích hoạt khi mục tiêu còn sống và trong 2,4 world unit; hit được áp tại key timing, trừ 35 HP, tăng hit counter, đổi tint mục tiêu và ghi feedback lên HUD. Capture 12 trên cả mobile/tablet/PC xác nhận `100→65 HP`; spam trong active window bị chặn. Đây là một skill runtime kiểm chứng được, chưa phải combo `Liên Quyền`, AI/knockback hoặc combat production.
 >
 > **Next:** đóng phần motion/trang bị khớp nhau cho Võ Lv10/20/30. Ưu tiên rig/attachment theo limb để item tùy chọn đi cùng pose; chỉ dùng full-frame tier sheet nếu batch QA chứng minh không làm nổ tổ hợp asset. Sau gate này mới cân nhắc class thứ hai.

@@ -80,6 +80,8 @@ namespace LinhGioi.World
         public string VoAvatarMotionState { get; private set; } = "idle";
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
         public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
+        public bool VoAvatarUsesFrameMotion => VoAvatarLevel == 1 && VoAvatarMode == "full" && VoAvatarMotionState != "idle";
+        public bool VoAvatarUsesAlignedPaperDollMotion => VoAvatarMotionState != "idle" && !VoAvatarUsesFrameMotion;
         public int VoSkillCastCount { get; private set; }
         public int VoSkillHitCount { get; private set; }
         public int VoTrainingTargetHp { get; private set; } = 100;
@@ -431,7 +433,7 @@ namespace LinhGioi.World
             }
             // The reviewed key-pose sheets currently depict the Lv1 outfit only.
             // Higher tiers keep their selected paper-doll visible until tier-matched motion exists.
-            var usesMotionFrame = VoAvatarLevel == 1 && VoAvatarMotionState != "idle";
+            var usesMotionFrame = VoAvatarUsesFrameMotion;
             if (usesMotionFrame)
                 foreach (var renderer in _voAvatarParts.Values) renderer.enabled = false;
             if (_voMotionRenderer != null) _voMotionRenderer.enabled = usesMotionFrame;
@@ -494,14 +496,24 @@ namespace LinhGioi.World
             if (VoAvatarMotionState == "walk")
             {
                 var stride = Mathf.Sin(_voAnimationPhase * 22f);
-                if (VoAvatarLevel == 1) SetVoMotionFrame(VoAvatarGender + "_" + (stride >= 0 ? "walk_a" : "walk_b"));
-                else VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_paper_doll_walk_pending";
+                if (VoAvatarUsesFrameMotion) SetVoMotionFrame(VoAvatarGender + "_" + (stride >= 0 ? "walk_a" : "walk_b"));
+                else
+                {
+                    VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_aligned_paper_doll_walk";
+                    _voAvatarRoot.localRotation = Quaternion.Euler(0, 0, stride * 1.4f);
+                    _voAvatarRoot.localScale = new Vector3(1f + Mathf.Abs(stride) * .008f, 1f - Mathf.Abs(stride) * .006f, 1f);
+                }
             }
             else if (VoAvatarMotionState == "skill")
             {
                 var progress = 1f - _voSkillRemaining / .42f;
-                if (VoAvatarLevel == 1) SetVoMotionFrame(VoAvatarGender + "_" + (progress < .45f ? "punch_windup" : "punch_impact"));
-                else VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_paper_doll_skill_pending";
+                if (VoAvatarUsesFrameMotion) SetVoMotionFrame(VoAvatarGender + "_" + (progress < .45f ? "punch_windup" : "punch_impact"));
+                else
+                {
+                    VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_aligned_paper_doll_skill";
+                    _voAvatarRoot.localRotation = Quaternion.Euler(0, 0, Mathf.Lerp(-2f, -6f, progress));
+                    _voAvatarRoot.localScale = new Vector3(Mathf.Lerp(1f, 1.045f, progress), Mathf.Lerp(1f, .982f, progress), 1f);
+                }
             }
             else
             {
@@ -759,17 +771,19 @@ namespace LinhGioi.World
                 if (i == 10)
                 {
                     MoveOnLane(1, .1f);
-                    result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarMotionFrameId.StartsWith("male_walk_", StringComparison.Ordinal);
+                    result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
+                        && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 11 && !_voMotionRenderer.enabled;
                 }
                 if (i == 11)
                 {
+                    AdvanceVoAnimation(.5f);
+                    CycleVoAvatarMode();
                     result.voSkillVerified = TriggerVoSkill();
                     AdvanceVoAnimation(.16f);
                 }
                 if (i == 12)
                 {
                     AdvanceVoAnimation(.5f);
-                    CycleVoAvatarMode();
                     CycleVoAvatarGender();
                     result.voFemaleVerified = VoAvatarMode == "full" && VoAvatarGender == "female"
                         && _voAvatarParts["lv001_female_full"].enabled;
@@ -787,7 +801,9 @@ namespace LinhGioi.World
                 if (i == 14)
                 {
                     MoveOnLane(1, .1f);
-                    result.voFemaleMotionVerified = VoAvatarMotionFrameId.StartsWith("female_walk_", StringComparison.Ordinal);
+                    result.voFemaleMotionVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
+                        && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 10
+                        && !_voAvatarParts["lv001_female_slot_inner_top"].enabled && !_voMotionRenderer.enabled;
                 }
                 if (i == 15)
                 {
