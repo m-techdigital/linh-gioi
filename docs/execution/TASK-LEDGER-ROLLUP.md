@@ -439,3 +439,6 @@ Thêm matrix 20 ảnh tháo từng slot và bắt lỗi tóc còn bake trong bas
 ## Shared character runtime state — 2026-09-10
 
 `TwoDCharacterRuntimeState` hiện sở hữu presentation selection, loadout 10 slot, locomotion hold và exclusive action timer/progress; Map01A chỉ còn render rig và xử lý quest/damage. TDD RED/GREEN và toàn bộ EditMode đạt `184/183/0/1`; Player v22 + evidence 66×3 xác nhận shared state, equip, action/hit và Q01–Q09 không regression. Next audit/cắt theo lô source Kiếm Lv1–30 nam/nữ rồi nối cùng base; không sao chép controller Võ.
+## Kiếm Lv1–30 source candidate extraction + compatibility — 2026-09-10
+
+Chọn grid redraw nam/nữ Kiếm cùng art direction và tách một lượt 80 source candidate vào external `source-v4`; tool kiểm hash, đúng 10 slot canonical và luôn chặn runtime eligibility. Visual review ghi 12 crop nữ `redraw-required`, 68 crop còn lại `base-fit-unverified`. Thêm compatibility runtime/test cho mix chéo level theo item/slot, chặn candidate/redraw, class/skeleton/body/bone sai và hợp thành coverage/occlusion. TDD cuối `191/190/0/1`, Player build 0 error và onboarding smoke PASS. Next fit/redraw trước atlas; chưa mở class thứ ba.

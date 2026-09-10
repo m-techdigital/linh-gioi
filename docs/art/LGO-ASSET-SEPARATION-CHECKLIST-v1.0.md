@@ -17,5 +17,7 @@ Hiện trạng 23 ảnh Võ: REFERENCE_ONLY, chưa có pack item sạch; không 
 - [ ] Đo pixel hiển thị trước chọn kích thước texture; ghi sRGB/alpha, filter, compression, mipmap, atlas padding theo use case. Không coi dung lượng PNG là RAM texture.
 - [ ] Task ingest giải quyết gate no-source-images của branch; không tự bỏ gate hoặc nhập board.
 - [ ] Unity import/smoke thật và ảnh ở camera chơi thật được xem trước claim runtime/visual PASS.
+- [ ] Trạng thái vẫn là `candidate` sau crop; chỉ `approved` khi skeletonVersion/bodyProfile/bone/anchor/coverage/occlusion/motion đều pass. Lỗi contour hoặc fit chuyển `redraw-required`, không bù bằng scale/offset runtime.
+- [ ] Mixed-level loadout dùng item ID độc lập theo 10 slot; kiểm ít nhất một bộ phối Lv1/Lv10/Lv20/Lv30 trên cùng base sau khi nhân vật đủ unlock level.
 
 Checker tự động chỉ kiểm text, tên và độ đầy đủ. Không phát hiện da bằng màu: vải ngà có thể giống da và da bị che vẫn là body. Không suy ra asset sạch từ alpha channel hoặc đuôi PNG.

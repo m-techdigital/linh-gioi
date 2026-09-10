@@ -377,3 +377,7 @@ Tách loadout, rig pose và action orchestration khỏi `CongDongLamMap01AArtPre
 ## Sau shared character runtime state — Kiếm Lv1–30 source batch
 
 `SHARED_CHARACTER_RUNTIME_STATE_PLAYER_PASS`: state mode/gender/level/loadout/action đã rời Map01A vào `TwoDCharacterRuntimeState`; Player v22 và capture 66×3 giữ nguyên Võ/Q01–Q09, manifest có `voSharedRuntimeStateVerified=True`. Next: audit toàn bộ source Kiếm đã tuyển trong `LGO-Selected-2D-Source-v1` và backup sandbox chuẩn hóa cũ, chọn một identity nam/nữ đồng nhất, lập một crop/attachment plan đủ Lv1/10/20/30 × 10 slot rồi mới pack/nối base chung trong một batch. Không tạo lại từng item, không mở Pháp/Cơ/Linh trước khi Kiếm có Player evidence.
+
+## Sau Kiếm source-v4 — base-fit/redraw gate trước atlas
+
+Đã tách một lượt 80 ô thành source-v4 với đúng 10 slot canonical, nhưng không mặc định crop là item sạch: 12 crop nữ đã xác định `redraw-required`, 68 còn lại `candidate`, runtime eligible bằng 0. Next: dựng template canvas/attachment cho base nam/nữ, sửa 12 món dính body và fit theo lô; sau đó chạy mixed-level pairwise matrix qua idle/walk/run/jump/basic attack/class skill. Chỉ item `approved` mới được pack atlas 512–1024 và nối shared runtime state. Không mở Pháp/Cơ/Linh trước Player evidence Kiếm.

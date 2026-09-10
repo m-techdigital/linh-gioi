@@ -75,3 +75,5 @@ Prefix: `assets/reference/classes/vo/boards/`.
 4. Runtime: chỉ sau clean sprite, rig, import và screenshot review; chưa chạy trong batch spec.
 
 Tài liệu chi tiết: equipment slots, progression rules, image prompt templates, asset separation checklist và `classes/vo/LGO-VO-2D-MODULE-SPEC-v1.0.md` cùng thư mục này.
+
+Hợp đồng sâu cho fit state, phối chéo level, attachment bone, coverage/occlusion và atlas residency nằm ở `docs/art/LGO-2D-EQUIPMENT-COMPATIBILITY-CONTRACT-v1.md`. Mọi class sau phải dùng chung contract này; không tạo loadout theo nguyên bộ level hoặc tự cấp runtime status từ crop.
