@@ -42,7 +42,8 @@
       "b": 0.06,
       "a": 0.76,
       "sortOffset": 4,
-      "cell": "base_torso_male"
+      "cell": "base_torso_male",
+      "approvedRuntimeArt": true
     },
     {
       "id": "collar_guard",
@@ -139,7 +140,8 @@
       "b": 0.08,
       "a": 0.88,
       "sortOffset": 2,
-      "cell": "pants_vo_lv1"
+      "cell": "pants_vo_lv1",
+      "approvedRuntimeArt": true
     },
     {
       "id": "pants_shadow_r",
@@ -155,7 +157,8 @@
       "b": 0.08,
       "a": 0.88,
       "sortOffset": 2,
-      "cell": "pants_vo_lv1"
+      "cell": "pants_vo_lv1",
+      "approvedRuntimeArt": true
     },
     {
       "id": "hand_wrap_l",

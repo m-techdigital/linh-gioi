@@ -1,3 +1,13 @@
+## Current Owner Goal Override — 2026-09-10
+
+- Map đầu Đông Môn là vertical-slice grounding/proof surface; không mở map thứ hai.
+- Class workflow chỉ xử lý **một class trước: Võ Lv1-30**. Không làm đồng loạt 5 class, không mở nội dung 31+.
+- Việc tiếp theo sau checkpoint cell-map: refine alpha matte/pivot/scale/head-arms-legs coverage và pose/frame motion Võ Lv1-30 trong Player; kiểm chứng thay đồ, tách layer, skill cue, contact shadow và route grounding cùng scene.
+- Chỉ khi Võ Lv1-30 có runtime evidence đủ rõ mới nhân pattern sang Kiếm/Pháp/Cơ/Linh Lv1-30.
+- Không Meshy/3D, không dùng ảnh thiết kế cũ làm runtime asset, không sửa frozen surfaces.
+
+`LGO_VO_LV1_30_CELLMAP_COVERAGE_READY`: Cell-map approved runtime art Võ Lv1-30 đã mở rộng từ 8 lên 11 cell, thêm torso underlay và hai mảnh pants để giảm fallback primitive trong Player. Evidence nằm ở checkpoint commit tương ứng; đây vẫn là art/probe giai đoạn đầu, chưa phải production final.
+
 # NEXT ACTION — Linh Giới Online 2D
 
 ## Goal kỹ thuật hiện tại — 2026-09-10
