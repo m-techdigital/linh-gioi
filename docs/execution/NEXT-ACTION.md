@@ -21,7 +21,7 @@ Hướng kỹ thuật sau gate map đầu:
 3. Mỗi class Võ/Kiếm/Pháp/Cơ/Linh phải kiểm được trong Player: chọn class, mặc/tháo từng slot, phối bộ tương thích, idle/walk/run/jump và đòn/skill preview trong scope hiện có.
 4. Gate 5 class là nhìn thấy đồ/vũ khí đi theo thân khi đổi hướng/chuyển động, không hở cổ tay/chân/thân, không sai layer, không dùng ảnh source/reference làm runtime asset.
 
-Next action ngay: Đông Môn/Gate Keeper đã có checkpoint Player pass; tiếp tục một class Võ làm mẫu để kiểm chứng workflow nhân vật trước khi nhân sang 5 class. Võ hiện có anchor gizmo, runtime fit, production atlas contract và atlas cell binding. Bước kế tiếp là slice/cell-map pack `VoLv1ApprovedRuntimeArt` cho Võ Lv1-30: map atlas rect vào các cell `torso_outer_vo_lv1`, `glove_r_vo_lv1`, `skill_vo_lv1_palm_trail`, render một số cell thật trong Player, rồi kiểm chân/slot/skill không lệch trước khi nhân sang class Lv1-30 khác.
+Next action ngay: Đông Môn/Gate Keeper đã có checkpoint Player pass; tiếp tục một class Võ làm mẫu để kiểm chứng workflow nhân vật trước khi nhân sang 5 class. Võ hiện có anchor gizmo, runtime fit, production atlas contract và atlas cell binding. Bước kế tiếp là refine Võ Lv1-30 runtime art cell-map: làm sạch alpha matte, tách thêm cells đầu/tay/chân/boots/waist/weapon từ `VoLv1ApprovedRuntimeArt`, chỉnh world scale/pivot để nhìn rõ trong Player ở các ảnh 07/08/09/10, rồi mới nhân pipeline sang Kiếm/Pháp/Cơ/Linh Lv1-30.
 
 ## Đông Môn illustrated draft — 2026-09-10
 

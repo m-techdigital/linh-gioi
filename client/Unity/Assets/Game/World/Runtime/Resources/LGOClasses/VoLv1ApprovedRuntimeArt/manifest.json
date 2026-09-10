@@ -22,5 +22,61 @@
       "sha256": "224bdeec4b411723e32d3cc4958066f1601b5f43ec38a4af7b19daf671becd46",
       "bytes": 980827
     }
+  ],
+  "levelBand": "1-30",
+  "starterTexture": "LGOClasses/VoLv1ApprovedRuntimeArt/vo-lv1-starter-atlas",
+  "skillTexture": "LGOClasses/VoLv1ApprovedRuntimeArt/vo-lv1-skill-atlas",
+  "cellMap": [
+    {
+      "partId": "chest_panel",
+      "cell": "torso_outer_vo_lv1",
+      "texture": "starter",
+      "x": 1030,
+      "y": 420,
+      "w": 430,
+      "h": 620,
+      "pivotX": 0.5,
+      "pivotY": 0.38,
+      "pixelsPerUnit": 1024,
+      "worldW": 0.38,
+      "worldH": 0.48,
+      "dx": 0.0,
+      "dy": -0.02,
+      "approvedRuntimeArt": true
+    },
+    {
+      "partId": "hand_wrap_r",
+      "cell": "glove_r_vo_lv1",
+      "texture": "starter",
+      "x": 470,
+      "y": 850,
+      "w": 250,
+      "h": 520,
+      "pivotX": 0.52,
+      "pivotY": 0.54,
+      "pixelsPerUnit": 1024,
+      "worldW": 0.16,
+      "worldH": 0.24,
+      "dx": 0.0,
+      "dy": -0.01,
+      "approvedRuntimeArt": true
+    },
+    {
+      "partId": "vo_lv1_first_skill_trail",
+      "cell": "skill_vo_lv1_palm_trail",
+      "texture": "skill",
+      "x": 300,
+      "y": 120,
+      "w": 360,
+      "h": 190,
+      "pivotX": 0.12,
+      "pivotY": 0.45,
+      "pixelsPerUnit": 512,
+      "worldW": 0.72,
+      "worldH": 0.28,
+      "dx": 0.18,
+      "dy": 0.05,
+      "approvedRuntimeArt": true
+    }
   ]
 }

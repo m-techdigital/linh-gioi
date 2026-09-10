@@ -7,12 +7,64 @@ namespace LinhGioi.World
     public static class TwoDPaperDollAtlasCatalog
     {
         private const string VoLv1ResourcePath = "LGOClasses/VoLv1PaperDollAtlas";
+        private const string VoLv1ApprovedRuntimeArtPath = "LGOClasses/VoLv1ApprovedRuntimeArt/manifest";
 
         public static VoLv1PaperDollAtlasSource LoadVoLv1PaperDollAtlas()
         {
             var asset = Resources.Load<TextAsset>(VoLv1ResourcePath);
             if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
             return JsonUtility.FromJson<VoLv1PaperDollAtlasSource>(asset.text);
+        }
+
+        public static VoLv1ApprovedRuntimeArtManifest LoadVoLv1ApprovedRuntimeArt()
+        {
+            var asset = Resources.Load<TextAsset>(VoLv1ApprovedRuntimeArtPath);
+            if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
+            return JsonUtility.FromJson<VoLv1ApprovedRuntimeArtManifest>(asset.text);
+        }
+
+        public static string LoadVoLv1ApprovedRuntimeArtSnapshot()
+        {
+            var asset = Resources.Load<TextAsset>(VoLv1ApprovedRuntimeArtPath);
+            if (asset == null) return "VoLv1ApprovedRuntimeArt: resource=" + VoLv1ApprovedRuntimeArtPath + " | missing";
+            var manifest = LoadVoLv1ApprovedRuntimeArt();
+            var builder = new StringBuilder("VoLv1ApprovedRuntimeArt: resource=").Append(VoLv1ApprovedRuntimeArtPath);
+            builder.Append(" | bytes=").Append((asset.text ?? string.Empty).Length);
+            builder.Append(" | status=").Append(manifest != null ? manifest.status : "missing");
+            builder.Append(" | levelBand=").Append(manifest != null ? manifest.levelBand : "missing");
+            builder.Append(" | starterTexture=").Append(manifest != null ? manifest.starterTexture : "missing");
+            builder.Append(" | skillTexture=").Append(manifest != null ? manifest.skillTexture : "missing");
+            builder.Append(" | cells=").Append(manifest != null && manifest.cellMap != null ? manifest.cellMap.Length : 0);
+            if (manifest != null && manifest.cellMap != null)
+            {
+                for (var i = 0; i < manifest.cellMap.Length; i++)
+                {
+                    var cell = manifest.cellMap[i];
+                    builder.Append(" | approvedCell=").Append(cell.partId)
+                        .Append(" cell=").Append(cell.cell)
+                        .Append(" texture=").Append(cell.texture)
+                        .Append(" rect=").Append(cell.x).Append(',').Append(cell.y).Append(',').Append(cell.w).Append(',').Append(cell.h);
+                }
+            }
+            return builder.ToString();
+        }
+
+        public static bool TryFindVoLv1ApprovedRuntimeCell(string partId, string cellId, out VoLv1ApprovedRuntimeArtCell cell)
+        {
+            cell = null;
+            var manifest = LoadVoLv1ApprovedRuntimeArt();
+            if (manifest == null || manifest.cellMap == null) return false;
+            for (var i = 0; i < manifest.cellMap.Length; i++)
+            {
+                var candidate = manifest.cellMap[i];
+                if (candidate == null || !candidate.approvedRuntimeArt) continue;
+                if (candidate.partId == partId && candidate.cell == cellId)
+                {
+                    cell = candidate;
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static string LoadVoLv1PaperDollAtlasSnapshot()
@@ -157,5 +209,52 @@ namespace LinhGioi.World
         public float b;
         public float a;
         public int sortOffset;
+        public bool approvedRuntimeArt;
+    }
+
+    [Serializable]
+    public sealed class VoLv1ApprovedRuntimeArtManifest
+    {
+        public string id;
+        public string status;
+        public string source;
+        public string alphaPass;
+        public string levelBand;
+        public string starterTexture;
+        public string skillTexture;
+        public VoLv1ApprovedRuntimeArtAsset[] assets;
+        public VoLv1ApprovedRuntimeArtCell[] cellMap;
+    }
+
+    [Serializable]
+    public sealed class VoLv1ApprovedRuntimeArtAsset
+    {
+        public string path;
+        public string generator;
+        public string prompt;
+        public bool referenceOnly;
+        public string role;
+        public string sha256;
+        public int bytes;
+    }
+
+    [Serializable]
+    public sealed class VoLv1ApprovedRuntimeArtCell
+    {
+        public string partId;
+        public string cell;
+        public string texture;
+        public int x;
+        public int y;
+        public int w;
+        public int h;
+        public float pivotX;
+        public float pivotY;
+        public float pixelsPerUnit;
+        public float worldW;
+        public float worldH;
+        public float dx;
+        public float dy;
+        public bool approvedRuntimeArt;
     }
 }

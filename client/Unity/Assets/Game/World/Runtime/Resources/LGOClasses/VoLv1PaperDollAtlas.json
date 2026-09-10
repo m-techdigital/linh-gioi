@@ -25,7 +25,8 @@
       "b": 0.2,
       "a": 0.94,
       "sortOffset": 3,
-      "cell": "torso_outer_vo_lv1"
+      "cell": "torso_outer_vo_lv1",
+      "approvedRuntimeArt": true
     },
     {
       "id": "inner_shadow",
@@ -185,7 +186,8 @@
       "b": 0.05,
       "a": 0.96,
       "sortOffset": 7,
-      "cell": "glove_r_vo_lv1"
+      "cell": "glove_r_vo_lv1",
+      "approvedRuntimeArt": true
     },
     {
       "id": "boot_l",
@@ -235,7 +237,8 @@
       "b": 0.28,
       "a": 0.82,
       "sortOffset": 9,
-      "cell": "skill_vo_lv1_palm_trail"
+      "cell": "skill_vo_lv1_palm_trail",
+      "approvedRuntimeArt": true
     },
     {
       "id": "vo_lv1_first_skill_edge",

@@ -378,6 +378,58 @@ namespace LinhGioi.Tests
             StringAssert.Contains("cellSource=runtime-generated-atlas-cell", snapshot);
         }
 
+
+        [Test]
+        public void VoLv1ApprovedRuntimeArtManifestDefinesLv1To30CellMap()
+        {
+            var snapshot = TwoDPaperDollAtlasCatalog.LoadVoLv1ApprovedRuntimeArtSnapshot();
+
+            StringAssert.Contains("VoLv1ApprovedRuntimeArt", snapshot);
+            StringAssert.Contains("status=APPROVED_RUNTIME_ART", snapshot);
+            StringAssert.Contains("levelBand=1-30", snapshot);
+            StringAssert.Contains("starterTexture=LGOClasses/VoLv1ApprovedRuntimeArt/vo-lv1-starter-atlas", snapshot);
+            StringAssert.Contains("skillTexture=LGOClasses/VoLv1ApprovedRuntimeArt/vo-lv1-skill-atlas", snapshot);
+            StringAssert.Contains("approvedCell=chest_panel cell=torso_outer_vo_lv1", snapshot);
+            StringAssert.Contains("approvedCell=hand_wrap_r cell=glove_r_vo_lv1", snapshot);
+            StringAssert.Contains("approvedCell=vo_lv1_first_skill_trail cell=skill_vo_lv1_palm_trail", snapshot);
+        }
+
+        [Test]
+        public void RuntimeControllerUsesApprovedVoLv1ArtForMappedAtlasCells()
+        {
+            var host = new GameObject("2D Vo Lv1 approved art runtime test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.RefreshForSmoke();
+
+                StringAssert.Contains("approvedRuntimeArt=True", controller.RuntimeVoLv1PaperDollAtlasSnapshot);
+                var chest = GameObject.Find("LGO 2D Player Vo AtlasCell torso_outer_vo_lv1 OuterShirt chest_panel");
+                Assert.IsNotNull(chest);
+                var chestRenderer = chest.GetComponent<SpriteRenderer>();
+                StringAssert.Contains("ApprovedRuntimeArt", chestRenderer.sprite.name);
+                var chestWorldSize = Vector2.Scale(chestRenderer.sprite.bounds.size, chest.transform.localScale);
+                Assert.That(chestWorldSize.x, Is.InRange(0.35f, 0.41f));
+                Assert.That(chestWorldSize.y, Is.InRange(0.45f, 0.51f));
+                var skill = GameObject.Find("LGO 2D Player Vo AtlasCell skill_vo_lv1_palm_trail SkillCue vo_lv1_first_skill_trail");
+                Assert.IsNotNull(skill);
+                var skillRenderer = skill.GetComponent<SpriteRenderer>();
+                StringAssert.Contains("ApprovedRuntimeArt", skillRenderer.sprite.name);
+                var skillWorldSize = Vector2.Scale(skillRenderer.sprite.bounds.size, skill.transform.localScale);
+                Assert.That(skillWorldSize.x, Is.InRange(0.68f, 0.78f));
+                Assert.That(skillWorldSize.y, Is.InRange(0.25f, 0.31f));
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeControllerNamesVoLv1RenderedPartsWithProductionAtlasCells()
         {

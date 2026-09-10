@@ -10,6 +10,7 @@ namespace LinhGioi.World
         private const float MoveSpeed = 2.75f;
         private static Sprite _solidSprite;
         private static readonly Dictionary<string, Sprite> _shapeSprites = new Dictionary<string, Sprite>();
+        private static readonly Dictionary<string, Sprite> _voLv1ApprovedRuntimeSprites = new Dictionary<string, Sprite>();
         private readonly TwoDOnboardingState _state = new TwoDOnboardingState();
         private readonly TwoDMapDesignCatalog _mapCatalog = TwoDMapDesignCatalog.CreateDefault();
         private readonly TwoDCharacterBaseCatalog _characterBaseCatalog = TwoDCharacterBaseCatalog.CreateDefault();
@@ -1149,6 +1150,8 @@ namespace LinhGioi.World
         private string BuildVoLv1PaperDollAtlasRuntimeSnapshot()
         {
             return TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlasSnapshot()
+                + " | approvedRuntimeArt=" + (TwoDPaperDollAtlasCatalog.LoadVoLv1ApprovedRuntimeArt() != null ? "True" : "False")
+                + " | approvedRuntimeArtSnapshot=" + TwoDPaperDollAtlasCatalog.LoadVoLv1ApprovedRuntimeArtSnapshot()
                 + " | runtimeLoadout=" + EnsurePlayerLoadout().Snapshot
                 + " | runtimeAnimation=" + _runtimeAnimationSnapshot
                 + " | currentPose=" + _runtimeVoLv1PaperDollPoseId
@@ -1253,14 +1256,14 @@ namespace LinhGioi.World
         private static void AddVoLv1PaperDollPart(Transform root, VoLv1PaperDollAtlasPart part, int order, bool skillCue)
         {
             var name = BuildVoLv1PaperDollObjectName(part, skillCue);
-            AddSprite(
-                name,
-                new Vector2(part.x, part.y),
-                new Vector2(part.w, part.h),
-                new Color(part.r, part.g, part.b, part.a),
-                order,
-                root,
-                part.shape);
+            var approvedCell = ResolveVoLv1ApprovedRuntimeCell(part);
+            var sprite = approvedCell != null ? LoadVoLv1ApprovedRuntimeSprite(approvedCell) : null;
+            var position = approvedCell != null ? new Vector2(part.x + approvedCell.dx, part.y + approvedCell.dy) : new Vector2(part.x, part.y);
+            var scale = approvedCell != null && approvedCell.worldW > 0.001f && approvedCell.worldH > 0.001f
+                ? new Vector2(approvedCell.worldW, approvedCell.worldH)
+                : new Vector2(part.w, part.h);
+            var color = sprite != null ? Color.white : new Color(part.r, part.g, part.b, part.a);
+            AddSprite(name, position, scale, color, order, root, part.shape, sprite);
             var anchor = new GameObject("LGO 2D Player Vo PaperDoll PoseAnchor " + part.id);
             anchor.transform.SetParent(root, false);
             anchor.transform.localPosition = ToWorld(new Vector2(part.x, part.y), 0f);
@@ -1272,6 +1275,30 @@ namespace LinhGioi.World
             return skillCue
                 ? "LGO 2D Player Vo AtlasCell " + cellId + " SkillCue " + part.id
                 : "LGO 2D Player Vo AtlasCell " + cellId + " " + part.slot + " " + part.id;
+        }
+
+        private static VoLv1ApprovedRuntimeArtCell ResolveVoLv1ApprovedRuntimeCell(VoLv1PaperDollAtlasPart part)
+        {
+            if (part == null || !part.approvedRuntimeArt) return null;
+            return TwoDPaperDollAtlasCatalog.TryFindVoLv1ApprovedRuntimeCell(part.id, part.cell, out var cell) ? cell : null;
+        }
+
+        private static Sprite LoadVoLv1ApprovedRuntimeSprite(VoLv1ApprovedRuntimeArtCell cell)
+        {
+            if (cell == null) return null;
+            var key = cell.partId + ":" + cell.cell + ":" + cell.texture;
+            if (_voLv1ApprovedRuntimeSprites.TryGetValue(key, out var cached) && cached != null) return cached;
+            var manifest = TwoDPaperDollAtlasCatalog.LoadVoLv1ApprovedRuntimeArt();
+            if (manifest == null) return null;
+            var texturePath = cell.texture == "skill" ? manifest.skillTexture : manifest.starterTexture;
+            var texture = Resources.Load<Texture2D>(texturePath);
+            if (texture == null) return null;
+            var pixelsPerUnit = cell.pixelsPerUnit > 0.001f ? cell.pixelsPerUnit : 1024f;
+            var rect = new Rect(cell.x, texture.height - cell.y - cell.h, cell.w, cell.h);
+            var sprite = Sprite.Create(texture, rect, new Vector2(cell.pivotX, cell.pivotY), pixelsPerUnit);
+            sprite.name = "VoLv1 ApprovedRuntimeArt " + cell.cell + " " + cell.partId;
+            _voLv1ApprovedRuntimeSprites[key] = sprite;
+            return sprite;
         }
 
         private static Transform AddVoLv1AnchorGizmo(Transform player, int baseOrder)
@@ -1326,8 +1353,13 @@ namespace LinhGioi.World
                 var partTransform = FindDirectChild(root, BuildVoLv1PaperDollObjectName(part, skillCue));
                 if (partTransform != null)
                 {
-                    partTransform.localPosition = ToWorld(new Vector2(part.x + dx, part.y + dy), 0f);
-                    partTransform.localScale = new Vector3(part.w * sx, part.h * sy, 1f);
+                    var approvedCell = ResolveVoLv1ApprovedRuntimeCell(part);
+                    var width = approvedCell != null && approvedCell.worldW > 0.001f ? approvedCell.worldW : part.w;
+                    var height = approvedCell != null && approvedCell.worldH > 0.001f ? approvedCell.worldH : part.h;
+                    var artDx = approvedCell != null ? approvedCell.dx : 0f;
+                    var artDy = approvedCell != null ? approvedCell.dy : 0f;
+                    partTransform.localPosition = ToWorld(new Vector2(part.x + dx + artDx, part.y + dy + artDy), 0f);
+                    SetSpriteWorldScale(partTransform, new Vector2(width * sx, height * sy));
                     partTransform.gameObject.SetActive(!skillCue || showSkillCue);
                 }
                 var anchorTransform = FindDirectChild(root, "LGO 2D Player Vo PaperDoll PoseAnchor " + part.id);
@@ -1641,15 +1673,34 @@ namespace LinhGioi.World
 
         private static GameObject AddSprite(string name, Vector2 position, Vector2 scale, Color color, int order, Transform parent, string shape)
         {
+            return AddSprite(name, position, scale, color, order, parent, shape, null);
+        }
+
+        private static GameObject AddSprite(string name, Vector2 position, Vector2 scale, Color color, int order, Transform parent, string shape, Sprite overrideSprite)
+        {
             var host = new GameObject(name);
             host.transform.SetParent(parent, false);
             host.transform.localPosition = ToWorld(position, parent == null ? order * 0.01f : 0f);
-            host.transform.localScale = new Vector3(scale.x, scale.y, 1f);
             var renderer = host.AddComponent<SpriteRenderer>();
-            renderer.sprite = ShapeSprite(shape);
+            renderer.sprite = overrideSprite != null ? overrideSprite : ShapeSprite(shape);
+            SetSpriteWorldScale(host.transform, scale);
             renderer.color = color;
             renderer.sortingOrder = order;
             return host;
+        }
+
+        private static void SetSpriteWorldScale(Transform transform, Vector2 scale)
+        {
+            var renderer = transform.GetComponent<SpriteRenderer>();
+            var sprite = renderer != null ? renderer.sprite : null;
+            if (sprite != null && sprite.bounds.size.x > 0.001f && sprite.bounds.size.y > 0.001f && sprite != _solidSprite)
+            {
+                transform.localScale = new Vector3(scale.x / sprite.bounds.size.x, scale.y / sprite.bounds.size.y, 1f);
+            }
+            else
+            {
+                transform.localScale = new Vector3(scale.x, scale.y, 1f);
+            }
         }
 
         private static Vector3 ToWorld(Vector2 position, float z)
