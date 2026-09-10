@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFilter
@@ -14,6 +15,7 @@ from PIL import Image, ImageDraw, ImageFilter
 CANVAS = (1024, 1536)
 GROUND_SOURCE_Y = 1484
 WORLD_HEIGHT = 1.70
+SPACE_PROFILE_ID = "lgo_character_canvas_1024x1536_v1"
 TARGET_FULL_HEIGHT = 340
 ATLAS_SIZE = 1024
 SLOTS = (
@@ -21,6 +23,41 @@ SLOTS = (
     "waist", "arm_guard", "boots", "light_armor", "accessory",
 )
 MOTION_FRAMES = ("idle", "walk_a", "walk_b", "dash", "punch_windup", "punch_impact")
+
+
+def project_canvas_rect(box) -> dict:
+    """Project an authored rectangle without recentering or fitting its contents.
+
+    WORLD_HEIGHT is the canvas span, not each character/pose's bounding height.
+    Atlas resolution and packing coordinates deliberately do not enter this map.
+    """
+    if not isinstance(box, (tuple, list)) or len(box) != 4 or not all(math.isfinite(float(v)) for v in box):
+        raise ValueError("A finite source canvas rectangle is required")
+    left, top, right, bottom = box
+    if not (0 <= left < right <= CANVAS[0] and 0 <= top < bottom <= CANVAS[1]):
+        raise ValueError("Rectangle lies outside the registered source canvas")
+    return {"sourceSpaceProfile": SPACE_PROFILE_ID, "sourceCanvasRect": list(box),
+            "worldW": (right - left) / CANVAS[1] * WORLD_HEIGHT,
+            "worldH": (bottom - top) / CANVAS[1] * WORLD_HEIGHT,
+            "dx": ((left + right) * .5 - CANVAS[0] * .5) / CANVAS[1] * WORLD_HEIGHT,
+            "dy": (GROUND_SOURCE_Y - (top + bottom) * .5) / CANVAS[1] * WORLD_HEIGHT}
+
+
+def registration_errors(parts) -> list[str]:
+    errors = []
+    for part in parts:
+        label = part.get("id", "<unnamed>")
+        if part.get("sourceSpaceProfile") != SPACE_PROFILE_ID:
+            errors.append(label + ": missing/unsupported source space profile")
+            continue
+        try:
+            expected = project_canvas_rect(part.get("sourceCanvasRect", []))
+            if any(not math.isfinite(float(part[k])) or abs(part[k] - expected[k]) > 1e-6
+                   for k in ("worldW", "worldH", "dx", "dy")):
+                errors.append(label + ": scale/placement differs from source registration")
+        except (ValueError, TypeError, KeyError):
+            errors.append(label + ": invalid source registration")
+    return errors
 
 
 def digest(path: Path) -> str:
@@ -109,16 +146,12 @@ def main() -> int:
                            "w": image.width, "h": image.height, "worldW": 2.45, "worldH": 2.20,
                            "dx": 1.08, "dy": .58, "order": entry["order"]}
             continue
-        width, height = box[2] - box[0], box[3] - box[1]
-        center_x, center_y = (box[0] + box[2]) * .5, (box[1] + box[3]) * .5
         parts.append({
             "id": entry["id"], "gender": entry["gender"], "kind": entry["kind"], "slot": entry["slot"],
             "x": entry["left"], "y": ATLAS_SIZE - entry["top"] - image.height, "w": image.width, "h": image.height,
-            "worldW": width / CANVAS[1] * WORLD_HEIGHT, "worldH": height / CANVAS[1] * WORLD_HEIGHT,
-            "dx": (center_x - CANVAS[0] * .5) / CANVAS[1] * WORLD_HEIGHT,
-            "dy": (GROUND_SOURCE_Y - center_y) / CANVAS[1] * WORLD_HEIGHT,
+            **project_canvas_rect(box),
             "order": entry["order"], "source": str(entry["path"].relative_to(args.source_dir)),
-            "sourceSha256": digest(entry["path"]), "sourceCanvasRect": list(box),
+            "sourceSha256": digest(entry["path"]),
         })
     optimized = atlas.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE)
     atlas_path = args.output_dir / "vo-lv1-map-avatar-atlas.png"

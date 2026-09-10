@@ -10,10 +10,11 @@ import math
 from pathlib import Path
 
 from PIL import Image
+from review_lgo_paper_doll_pack import render_pack
 
 from pack_lgo_vo_lv1_map_avatar import (
     ATLAS_SIZE, CANVAS, GROUND_SOURCE_Y, MOTION_FRAMES as LEGACY_MOTION_FRAMES, SLOTS,
-    TARGET_FULL_HEIGHT, WORLD_HEIGHT, digest, shelf_pack, skill_slash,
+    TARGET_FULL_HEIGHT, WORLD_HEIGHT, digest, shelf_pack, skill_slash, project_canvas_rect,
 )
 
 LEVELS = (1, 10, 20, 30)
@@ -304,18 +305,13 @@ def equipment_components(entry: dict, level: int) -> list[dict]:
     for side, start, width in pieces:
         source_left = box[0] + start / scale
         source_right = source_left + width / scale
-        source_cx = (source_left + source_right) * .5
-        source_cy = (box[1] + box[3]) * .5
         components.append({
             "id": f"lv{level:03d}_{entry['gender']}_{entry['slot']}_{side}",
             "level": level, "gender": entry["gender"], "slot": entry["slot"], "side": side,
             "bone": bone_by_side[side], "atlas": f"lv{level:03d}",
             "x": entry["left"] + start, "y": ATLAS_SIZE - entry["top"] - image.height,
             "w": width, "h": image.height, "order": entry["order"],
-            "worldW": (source_right - source_left) / CANVAS[1] * WORLD_HEIGHT,
-            "worldH": (box[3] - box[1]) / CANVAS[1] * WORLD_HEIGHT,
-            "dx": (source_cx - CANVAS[0] * .5) / CANVAS[1] * WORLD_HEIGHT,
-            "dy": (GROUND_SOURCE_Y - source_cy) / CANVAS[1] * WORLD_HEIGHT,
+            **project_canvas_rect((source_left, box[1], source_right, box[3])),
         })
     return components
 
@@ -371,11 +367,7 @@ def pack_static(source_dir: Path, garment_dir: Path, level: int, output: Path) -
         if entry["kind"] == "effect":
             effect = packed | {"worldW": 2.45, "worldH": 2.20, "dx": 1.08, "dy": .58}
             continue
-        width, height = box[2]-box[0], box[3]-box[1]
-        cx, cy = (box[0]+box[2])*.5, (box[1]+box[3])*.5
-        packed |= {"worldW": width/CANVAS[1]*WORLD_HEIGHT, "worldH": height/CANVAS[1]*WORLD_HEIGHT,
-                   "dx": (cx-CANVAS[0]*.5)/CANVAS[1]*WORLD_HEIGHT,
-                   "dy": (GROUND_SOURCE_Y-cy)/CANVAS[1]*WORLD_HEIGHT,
+        packed |= {**project_canvas_rect(box),
                    "source": str(entry["path"].relative_to(source_dir)), "sourceSha256": digest(entry["path"])}
         parts.append(packed)
         if entry["kind"] == "slot" and entry["slot"] in {"inner_top", "accessory"}:
@@ -474,6 +466,12 @@ def main() -> int:
                 "nonClaims": ["reference-guided garment attachment batch requires Player review",
                               "animated paper-doll attachment review required"]}
     (args.output_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))+"\n")
+    review = render_pack(args.output_dir, args.output_dir / "bind-pose-review", level=1)
+    if not review["referenceFitPassed"] or not review["registrationPassed"]:
+        manifest["status"] = "REJECTED_BIND_POSE_FIT"
+        manifest["runtimeEligible"] = False
+        (args.output_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))+"\n")
+        raise ValueError("Bind registration/reference fit failed; draft saved for repair, not eligible for runtime promotion")
     print(json.dumps({"id": manifest["id"], "parts": len(parts), "equipmentComponents": len(components), "motionFrames": len(motion),
                       "pngBytes": sum(a["pngBytes"] for a in manifest["atlases"])}))
     return 0

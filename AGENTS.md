@@ -2,6 +2,12 @@
 
 This repository uses persistent continuous-work mode. Read this file before making changes.
 
+## Base/không gian 2D — owner lock 2026-09-11
+
+- Trước thay/new asset, rig, animation hoặc layout, đọc mục “Kiểm soát kích thước và tọa độ” trong `docs/art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md`. Dùng công thức/profile chung; không normalize từng item/pose hoặc dùng offset runtime để che source chưa đăng ký.
+- Test count/local attachment không chứng minh base/visual ổn định. Giữ riêng gate root, source registration, bind fit và Player/UI ba profile. Không claim visual PASS/promotion hoặc mở class mới khi gate bắt buộc còn fail.
+- Outfit mới phải qua gate repack và review cả bộ, không chỉ từng ô sheet. Giữ WIP/candidate lỗi cùng provenance để sửa, không xóa công sức cũ. Stage hiện tại vẫn Võ Lv1 → Lv10.
+
 ## Quy tắc owner — làm theo batch, tránh vòng lặp nhỏ (2026-09-10)
 
 - Trước khi sửa, chốt một kết quả người chơi có thể kiểm chứng và danh sách thay đổi phụ thuộc trong `NEXT-ACTION.md`. Với batch visual, gom camera/tỷ lệ, asset budget, grounding, HUD/input và ba profile mobile/tablet/PC trước kiểm tra tích hợp. Không chia từng tọa độ, label, texture hoặc profile thành một vòng build riêng.

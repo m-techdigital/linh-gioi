@@ -1,5 +1,7 @@
 # Chuẩn module class 2D v1.0
 
+Cập nhật kiểm soát không gian 2026-09-11; scope triển khai hiện tại là Võ Lv1 trước, rồi Lv10. Nội dung Lv20–100 là chuẩn mở rộng, chưa phải nội dung đã hoàn thiện.
+
 Ngày 2026-09-09. Scope đang áp dụng: **Võ (`vo`)**, male và female. Owner thu hẹp batch hiện tại về Võ; chưa tạo spec triển khai hoặc art cho Kiếm/Pháp/Cơ/Linh. Chuẩn tài liệu này không đổi equipment contract runtime.
 
 Nguồn ưu tiên: yêu cầu owner → `docs/02-GDD.md` và `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md` → north-star lock → visual reference usage guide → ảnh. Hai base nam/nữ dùng chung giữa các class; tháo đồ vẫn có tóc cơ bản, đồ xám, shorts và socks. Không đổi tỷ lệ body theo level hoặc dùng board để thay skeleton.
@@ -77,3 +79,67 @@ Prefix: `assets/reference/classes/vo/boards/`.
 Tài liệu chi tiết: equipment slots, progression rules, image prompt templates, asset separation checklist và `classes/vo/LGO-VO-2D-MODULE-SPEC-v1.0.md` cùng thư mục này.
 
 Hợp đồng sâu cho fit state, phối chéo level, attachment bone, coverage/occlusion và atlas residency nằm ở `docs/art/LGO-2D-EQUIPMENT-COMPATIBILITY-CONTRACT-v1.md`. Mọi class sau phải dùng chung contract này; không tạo loadout theo nguyên bộ level hoặc tự cấp runtime status từ crop.
+
+
+## Kiểm soát kích thước và tọa độ — bắt buộc từ 2026-09-11
+
+### Sự cố và nguyên nhân đã xác minh
+
+Owner phát hiện nhân vật đổi kích thước/vị trí và tách bộ phận trước–sau hành động. Test cũ đếm slot và so attachment trong avatar-local space nên loại root transform khỏi phép đo; kết quả xanh không chứng minh base ổn định. Code từng scale root lúc đứng thở/đi/chạy/skill và nghiêng root tại chân. Mode full đổi giữa static và motion source được normalize khác nhau. Rig/garment tách rời lại fit chiều cao từng mảnh, lấy center bone làm center item, có da/body trong garment. Đây là các lỗi pipeline, không phải đặc tính thiết kế.
+
+Bằng chứng tại worktree `/private/tmp/lgo-vo-lv1-30-FaSFxE`: root RED 2/2 fail (`build/vo-base-scale-red.xml`) → GREEN 2/2 pass sau bỏ root squash/lean (`build/vo-base-scale-green.xml`). Pack hiện hành bị fit gate reject: silhouette IoU nam 0,537, nữ 0,382; diện tích tương ứng 1,808× và 2,351× reference (`build/vo-bind-fit-rejection-v1/report.json`). Không gọi các con số này là phần trăm chất lượng. Static base nam cao 1,6247 unit, nữ 1,5572; motion idle cùng bị đặt 1,70; rig cả hai 1,71. Sửa root hiện còn WIP trong worktree; checkpoint tài liệu/tooling không đồng nghĩa đã tích hợp root fix hoặc Player pass. Chưa được gọi base hiện tại là hoàn thiện.
+
+### Một công thức không gian, một profile có phiên bản
+
+Nguồn code duy nhất cho phép chiếu hiện tại: `project_canvas_rect()` trong `tools/pack_lgo_vo_lv1_map_avatar.py`; cả hai packer Võ dùng lại hàm này. Profile `lgo_character_canvas_1024x1536_v1` gồm canvas 1024×1536, gốc ngang 512, groundY 1484, hệ số `u = 1,70 / 1536` world unit/source pixel. **1,70 là độ cao canvas, không phải chiều cao mọi nhân vật hoặc mọi pose.** Base nam/nữ có thể khác chiều cao thiết kế; mỗi base giữ nguyên tỷ lệ qua level và hành động.
+
+Với rect nguồn top-left `[l,t,r,b]`:
+
+```text
+worldW = (r-l) * u
+worldH = (b-t) * u
+dx = ((l+r)/2 - 512) * u
+dy = (1484 - (t+b)/2) * u
+worldPoint(x,y) = ((x-512)*u, (1484-y)*u)
+atlasTop = atlasHeight - atlasY - atlasRectHeight
+rigidAttachmentOffset = worldPoint(authoredAnchor) - boneBindPivot
+```
+
+Trim chỉ bỏ pixel rỗng, vẫn giữ `sourceCanvasRect`. Atlas X/Y, padding, độ phân giải PNG, nén texture không tham gia công thức world. Downsample đồng nhất theo budget; không fit từng item về một chiều cao riêng. Cùng điểm nguồn trên base và áo phải ra cùng world point và cùng trường trọng số bone. Pivot là khớp/điểm gắn đã đăng ký, không phải tâm ảnh hoặc tâm bone mặc định. Nếu artwork mới khác canvas/pose, phải đăng ký vào profile hoặc làm lại phần không tương thích trước đóng gói; không thêm offset trong controller để bù.
+
+Mỗi base có danh tính/profile và reference/hash ổn định. Thay tỷ lệ skeleton là thay phiên bản base và phải kiểm lại các item phụ thuộc; tăng level, tháo đồ, đổi mode, đổi thiết bị không được đổi base. Metadata `sourceSpaceProfile` và `sourceCanvasRect` là bắt buộc cho output mới, nhưng **chỉ có metadata chưa đủ**: `registration_errors()` tính lại world bounds để bắt scale/offset tự sửa. Source chưa đăng ký bị reject, không tự gán profile để hợp thức hóa.
+
+### Quy tắc runtime và source mới
+
+- Root giữ scale chuẩn và rotation chuẩn; route/physics quyết định vị trí. Jump có độ cao hợp lệ; grounded action giữ mốc chân. Animation tác động bone, không squash/stretch cả root. Facing thuộc visual child; camera zoom không thay scale base.
+- Một nhân vật dùng cùng base/skeleton cho idle và action. Bộ ảnh full-frame có registration khác không được tự thay vào lúc bắt đầu/dừng action. Bounding box nhỏ hơn khi cúi/nhảy là hợp lệ; không ép chiều cao mọi pose bằng nhau.
+- Base, garment, rigid weapon, VFX là vai trò riêng. Gear không chứa da/bàn tay/chân; ảnh full chỉ là reference của outfit. Sheet chia ô/alpha đẹp không chứng minh item phù hợp.
+- Kế thừa `TwoDSkeletalPaperDollRig`, SpriteSkin/Sprite Library và authoring đã có; mọi class/level dùng cùng cơ chế. Không sao chép controller/UI hoặc nhân các công thức theo item. Chỉ mở profile/class mới sau gate class hiện tại.
+- Asset mới phải có source/hash, profile, rect nguồn, bone/anchor, sort/occlusion, semantics slot và budget. Kiểm trọn bộ + từng món tháo + phối cấp đã được đăng ký trước runtime promotion. Candidate không fit được giữ riêng, không xóa WIP.
+
+### Gate và phạm vi bằng chứng
+
+| Gate | Kiểm gì | Đã có hay còn thiếu |
+|---|---|---|
+| Source registration | World bounds tính lại từ source rect/profile; chặn thiếu profile hoặc tự đổi scale/offset | Đã có hàm chung và test; record rig/garment cũ chưa migrate |
+| Bind outfit fit | So full outfit cùng pose/tọa độ, không normalize riêng bbox; IoU≥0,90, area ratio 0,90–1,10, RGB MAE≤22 | Đã có trong repacker; pack hiện tại bị reject |
+| Root/action regression | Scale/rotation root, route/ground và return-to-bind qua action nam/nữ | Đã có test focused; không chứng minh limb fit |
+| Animation/gear | Bộ phận khớp trước/trong/sau action; trang bị tháo không xuất hiện lại; 10 slot và phối tier hợp lệ | Phải hoàn thiện/review Player; chưa PASS |
+| UI/UX đa màn hình | Cùng tỷ lệ world, safe-area, layout, tương tác, không che chủ thể/hộp thoại | Bắt buộc capture/review; chưa có gate tự động đầy đủ |
+
+Ngưỡng fit là tiêu chí reject kỹ thuật ban đầu cho **cùng outfit ở bind pose**, không phải thuật toán phê duyệt mỹ thuật và không dùng so hai outfit hoặc hai pose khác nhau. Không hạ ngưỡng để hợp thức hóa pack hỏng. Mỗi lần thay tiêu chí phải có nguyên nhân và đối chứng; visual review vẫn bắt buộc. Gate repack hiện chưa chặn mọi đường build/deploy: build chẩn đoán pack cũ vẫn có thể chạy, nhưng không được đánh dấu runtime-approved/checkpoint visual PASS khi gate này đang fail.
+
+Lệnh nhẹ trước Unity (Python có Pillow; môi trường hiện tại là `python3`):
+
+```sh
+PYTHONPYCACHEPREFIX=build/pycache python3 -m unittest discover -s tools -p test_review_lgo_paper_doll_pack.py
+PYTHONPYCACHEPREFIX=build/pycache python3 tools/review_lgo_paper_doll_pack.py --pack-dir <runtime-pack> --out-dir <new-evidence-dir> --require-fit
+```
+
+Lệnh thứ hai trả exit 2 khi fit/registration fail, giữ báo cáo/ảnh để sửa; `pack_lgo_vo_lv1_30_avatar.py` cũng từ chối báo thành công nếu fail. Thư mục evidence mới bắt buộc để không đè kết quả cũ.
+
+### Kiểm UI/UX và cách kết thúc batch
+
+Ba profile macOS hiện có: mobile 1600×720, tablet 1024×768, PC 1280×720. Cùng camera orthographic có `pixelsPerWorldUnit = viewportHeight / (2 * orthographicSize)`; khác tỷ lệ màn hình chủ yếu đổi vùng nhìn ngang, không sửa sprite scale để bù. Nếu thiết kế yêu cầu camera khác phải có profile rõ và review cả ba, không offset tùy màn. UI dùng base layout/safe-area chung; kiểm text, anchor, overflow, hộp thoại, inventory, slot toggle và nút thao tác. Profile capture không thay chứng nhận thiết bị mobile thật.
+
+Gom thay đổi phụ thuộc, kiểm nguồn/registration/full outfit trước, rồi một lượt EditMode/build/capture. Capture phải có idle trước action → windup/impact/recover → idle sau action, cận cảnh khớp và toàn màn hình UI. Phải xem ảnh; kiểm manifest/state/count xanh chỉ là technical evidence. Chạy lại gate tốn thời gian khi có thay đổi liên quan hoặc lỗi mới được xác minh, ghi lý do. Kết luận tách riêng logic, registration, visual và device; fail một gate cần thiết thì giữ `FIX_REQUIRED` và chưa mở class/tier tiếp theo. Lưu lỗi, nguồn sai, công thức sửa và evidence vào tài liệu này/NEXT-ACTION để phiên sau không nghiên cứu lại từ đầu.
