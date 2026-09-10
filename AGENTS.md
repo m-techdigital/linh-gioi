@@ -2,6 +2,18 @@
 
 This repository uses persistent continuous-work mode. Read this file before making changes.
 
+## Quy tắc owner — làm theo batch, tránh vòng lặp nhỏ (2026-09-10)
+
+- Trước khi sửa, chốt một kết quả người chơi có thể kiểm chứng và danh sách thay đổi phụ thuộc trong `NEXT-ACTION.md`. Với batch visual, gom camera/tỷ lệ, asset budget, grounding, HUD/input và ba profile mobile/tablet/PC trước kiểm tra tích hợp. Không chia từng tọa độ, label, texture hoặc profile thành một vòng build riêng.
+- Đọc bài học liên quan trước khi xử lý: `docs/art/LGO-MAP01A-ASSET-OPTIMIZATION-LESSONS.md` và audit công việc đã có. Tái sử dụng source/tool/evidence phù hợp; không nghiên cứu hoặc tạo lại từ đầu nếu kết luận còn đúng.
+- Dùng source review và kiểm tra nhẹ trong lúc triển khai. Chỉ chạy Unity EditMode/build/capture khi tập thay đổi của batch đã sẵn sàng. Khi cần kiểm nhỏ để chẩn đoán lỗi, chọn đúng test/gate liên quan; không mặc định chạy cả bộ.
+- Gom lỗi tìm thấy trong một lượt review thành một danh sách, sửa cùng lượt rồi kiểm lại phần bị ảnh hưởng. Chỉ lặp gate tốn thời gian khi có thay đổi mới liên quan hoặc lỗi chưa giải quyết; ghi rõ trigger. Không chạy lại gate đã pass chỉ vì vừa cập nhật tài liệu/status.
+- Nếu cùng một lỗi hoặc kết quả không đạt lặp lại hai lần, dừng thử mò thông số: xem log/evidence và phân tích nguyên nhân trước lần sửa tiếp. Không tạo thêm ảnh hoặc build tiếp với cùng giả định thất bại.
+- Ghi một tóm tắt cuối batch: kết quả thực tế, số lượt build/capture và lý do chạy lại, lỗi còn lại, evidence và bước kế tiếp. Không sinh nhiều báo cáo/status hoặc commit cho từng chỉnh nhỏ; không dùng cập nhật trạng thái làm thay thế tiến độ triển khai.
+- Không kết thúc công việc chỉ sau một chỉnh nhỏ nếu còn bước an toàn trong batch đã được owner giao. Báo tiến độ ngắn theo kết quả/điểm nghẽn; tránh lặp lại kế hoạch qua nhiều lượt.
+- Chốt số pixel hiển thị và ngân sách tải/texture trước khi tạo asset. Không mặc định sinh 2K/4K rồi downsample. Tách module có ý nghĩa, dùng chung atlas theo vòng đời tải; lưu lỗi và cách xử lý đã xác nhận để phiên sau không lặp lại.
+- Batch lớn không phải lý do bỏ test bắt buộc, bỏ review Player, nới assertion, sửa frozen surfaces hoặc claim mobile thiết bị thật từ ảnh giả lập tỷ lệ trên macOS. Các chỉ đạo mới của owner được nhập vào batch đang làm, không khởi động lại quy trình từ đầu.
+
 ## Operating Loop
 
 - Do not stop after one small task when a valid next task exists.
