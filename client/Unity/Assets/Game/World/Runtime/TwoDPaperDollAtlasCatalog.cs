@@ -34,6 +34,7 @@ namespace LinhGioi.World
                 {
                     var part = source.parts[i];
                     builder.Append(" | part=").Append(part.id)
+                        .Append(" cell=").Append(string.IsNullOrEmpty(part.cell) ? "runtime-generated-atlas-cell" : part.cell)
                         .Append(" slot=").Append(part.slot)
                         .Append(" anchor=").Append(part.anchor)
                         .Append(" shape=").Append(string.IsNullOrEmpty(part.shape) ? "rect" : part.shape);
@@ -71,11 +72,13 @@ namespace LinhGioi.World
                 {
                     var cue = source.skillCues[i];
                     builder.Append(" | skillCue=").Append(cue.id)
+                        .Append(" cell=").Append(string.IsNullOrEmpty(cue.cell) ? "runtime-generated-atlas-cell" : cue.cell)
                         .Append(" slot=").Append(cue.slot)
                         .Append(" anchor=").Append(cue.anchor)
                         .Append(" shape=").Append(string.IsNullOrEmpty(cue.shape) ? "rect" : cue.shape);
                 }
             }
+            builder.Append(" | cellSource=runtime-generated-atlas-cell");
             builder.Append(" | safe-runtime-resource=").Append(ContainsToken(text, "safe-runtime-resource"));
             builder.Append(" | safe-no-source-image=").Append(ContainsToken(text, "safe-no-source-image"));
             builder.Append(" | safe-no-3d=").Append(ContainsToken(text, "safe-no-3d"));
@@ -143,6 +146,7 @@ namespace LinhGioi.World
         public string id;
         public string slot;
         public string anchor;
+        public string cell;
         public string shape;
         public float x;
         public float y;

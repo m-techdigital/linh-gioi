@@ -1252,7 +1252,7 @@ namespace LinhGioi.World
 
         private static void AddVoLv1PaperDollPart(Transform root, VoLv1PaperDollAtlasPart part, int order, bool skillCue)
         {
-            var name = skillCue ? "LGO 2D Player Vo PaperDoll SkillCue " + part.id : "LGO 2D Player Vo PaperDoll " + part.slot + " " + part.id;
+            var name = BuildVoLv1PaperDollObjectName(part, skillCue);
             AddSprite(
                 name,
                 new Vector2(part.x, part.y),
@@ -1264,6 +1264,14 @@ namespace LinhGioi.World
             var anchor = new GameObject("LGO 2D Player Vo PaperDoll PoseAnchor " + part.id);
             anchor.transform.SetParent(root, false);
             anchor.transform.localPosition = ToWorld(new Vector2(part.x, part.y), 0f);
+        }
+
+        private static string BuildVoLv1PaperDollObjectName(VoLv1PaperDollAtlasPart part, bool skillCue)
+        {
+            var cellId = string.IsNullOrEmpty(part.cell) ? "runtime_generated_cell" : part.cell;
+            return skillCue
+                ? "LGO 2D Player Vo AtlasCell " + cellId + " SkillCue " + part.id
+                : "LGO 2D Player Vo AtlasCell " + cellId + " " + part.slot + " " + part.id;
         }
 
         private static Transform AddVoLv1AnchorGizmo(Transform player, int baseOrder)
@@ -1315,7 +1323,7 @@ namespace LinhGioi.World
                 var dy = offset != null ? offset.dy : 0f;
                 var sx = offset != null && offset.sx > 0.001f ? offset.sx : 1f;
                 var sy = offset != null && offset.sy > 0.001f ? offset.sy : 1f;
-                var partTransform = FindDirectChild(root, skillCue ? "LGO 2D Player Vo PaperDoll SkillCue " + part.id : "LGO 2D Player Vo PaperDoll " + part.slot + " " + part.id);
+                var partTransform = FindDirectChild(root, BuildVoLv1PaperDollObjectName(part, skillCue));
                 if (partTransform != null)
                 {
                     partTransform.localPosition = ToWorld(new Vector2(part.x + dx, part.y + dy), 0f);

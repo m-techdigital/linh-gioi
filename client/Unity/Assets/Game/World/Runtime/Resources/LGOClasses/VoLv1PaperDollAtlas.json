@@ -24,7 +24,8 @@
       "g": 0.67,
       "b": 0.2,
       "a": 0.94,
-      "sortOffset": 3
+      "sortOffset": 3,
+      "cell": "torso_outer_vo_lv1"
     },
     {
       "id": "inner_shadow",
@@ -39,7 +40,8 @@
       "g": 0.07,
       "b": 0.06,
       "a": 0.76,
-      "sortOffset": 4
+      "sortOffset": 4,
+      "cell": "base_torso_male"
     },
     {
       "id": "collar_guard",
@@ -54,7 +56,8 @@
       "g": 0.82,
       "b": 0.34,
       "a": 0.96,
-      "sortOffset": 5
+      "sortOffset": 5,
+      "cell": "torso_outer_vo_lv1"
     },
     {
       "id": "shoulder_l",
@@ -69,7 +72,8 @@
       "g": 0.78,
       "b": 0.28,
       "a": 0.92,
-      "sortOffset": 5
+      "sortOffset": 5,
+      "cell": "torso_outer_vo_lv1"
     },
     {
       "id": "shoulder_r",
@@ -84,7 +88,8 @@
       "g": 0.78,
       "b": 0.28,
       "a": 0.92,
-      "sortOffset": 5
+      "sortOffset": 5,
+      "cell": "torso_outer_vo_lv1"
     },
     {
       "id": "sash_red_core",
@@ -99,7 +104,8 @@
       "g": 0.12,
       "b": 0.09,
       "a": 0.96,
-      "sortOffset": 6
+      "sortOffset": 6,
+      "cell": "waist_vo_lv1"
     },
     {
       "id": "sash_knot",
@@ -114,7 +120,8 @@
       "g": 0.74,
       "b": 0.22,
       "a": 0.94,
-      "sortOffset": 7
+      "sortOffset": 7,
+      "cell": "waist_vo_lv1"
     },
     {
       "id": "pants_shadow_l",
@@ -129,7 +136,8 @@
       "g": 0.07,
       "b": 0.08,
       "a": 0.88,
-      "sortOffset": 2
+      "sortOffset": 2,
+      "cell": "pants_vo_lv1"
     },
     {
       "id": "pants_shadow_r",
@@ -144,7 +152,8 @@
       "g": 0.07,
       "b": 0.08,
       "a": 0.88,
-      "sortOffset": 2
+      "sortOffset": 2,
+      "cell": "pants_vo_lv1"
     },
     {
       "id": "hand_wrap_l",
@@ -159,7 +168,8 @@
       "g": 0.06,
       "b": 0.05,
       "a": 0.96,
-      "sortOffset": 7
+      "sortOffset": 7,
+      "cell": "glove_l_vo_lv1"
     },
     {
       "id": "hand_wrap_r",
@@ -174,7 +184,8 @@
       "g": 0.06,
       "b": 0.05,
       "a": 0.96,
-      "sortOffset": 7
+      "sortOffset": 7,
+      "cell": "glove_r_vo_lv1"
     },
     {
       "id": "boot_l",
@@ -189,7 +200,8 @@
       "g": 0.04,
       "b": 0.04,
       "a": 0.96,
-      "sortOffset": 5
+      "sortOffset": 5,
+      "cell": "boot_l_vo_lv1"
     },
     {
       "id": "boot_r",
@@ -204,7 +216,8 @@
       "g": 0.04,
       "b": 0.04,
       "a": 0.96,
-      "sortOffset": 5
+      "sortOffset": 5,
+      "cell": "boot_r_vo_lv1"
     }
   ],
   "skillCues": [
@@ -221,7 +234,8 @@
       "g": 0.72,
       "b": 0.28,
       "a": 0.82,
-      "sortOffset": 9
+      "sortOffset": 9,
+      "cell": "skill_vo_lv1_palm_trail"
     },
     {
       "id": "vo_lv1_first_skill_edge",
@@ -236,7 +250,8 @@
       "g": 0.86,
       "b": 0.78,
       "a": 0.66,
-      "sortOffset": 10
+      "sortOffset": 10,
+      "cell": "skill_vo_lv1_palm_trail"
     },
     {
       "id": "vo_lv1_first_skill_impact",
@@ -251,7 +266,8 @@
       "g": 0.82,
       "b": 0.34,
       "a": 0.78,
-      "sortOffset": 11
+      "sortOffset": 11,
+      "cell": "skill_vo_lv1_palm_burst"
     }
   ],
   "poseOffsets": [
