@@ -11,7 +11,7 @@ namespace LinhGioi.UI
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue;
         private Label _quest, _marker;
-        private Button _talk, _outfit, _skill;
+        private Button _talk, _outfit, _gender, _slot, _toggleSlot, _skill;
         private RuntimeTouchMovementPad _pad;
         private RuntimeViewportMetrics _metrics;
         private PanelSettings _ownedPanel;
@@ -76,6 +76,15 @@ namespace LinhGioi.UI
             _outfit = new Button(() => _scene.CycleVoAvatarMode()) { text = "Trang bị Võ · C" };
             Box(_outfit); Place(_outfit, null, 16, null, _touch ? 98 : 80);
             _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
+            _gender = new Button(() => _scene.CycleVoAvatarGender()) { text = "Nam/Nữ · G" };
+            Box(_gender); Place(_gender, null, 16, null, _touch ? 160 : 128);
+            _gender.style.minHeight = _touch ? 52 : 40; _gender.style.minWidth = 170; _safe.Add(_gender);
+            _slot = new Button(() => _scene.CycleVoEquipmentSlot()) { text = "Chọn slot · V" };
+            Box(_slot); Place(_slot, null, 16, null, _touch ? 218 : 174);
+            _slot.style.minHeight = _touch ? 52 : 40; _slot.style.minWidth = 170; _safe.Add(_slot);
+            _toggleSlot = new Button(() => _scene.ToggleVoEquipmentSlot()) { text = "Mặc/Cởi · B" };
+            Box(_toggleSlot); Place(_toggleSlot, null, 16, null, _touch ? 276 : 220);
+            _toggleSlot.style.minHeight = _touch ? 52 : 40; _toggleSlot.style.minWidth = 170; _safe.Add(_toggleSlot);
             _skill = new Button(() => _scene.TriggerVoSkill()) { text = "Liệt Phong Kích · X" };
             Box(_skill); Place(_skill, null, _touch ? 202 : 200, null, 24);
             _skill.style.minHeight = _touch ? 64 : 48; _skill.style.minWidth = 190; _safe.Add(_skill);
@@ -112,6 +121,9 @@ namespace LinhGioi.UI
                 _scene.MoveOnLane(Mathf.Abs(_pad.Value.x) > .01f ? _pad.Value.x : keyboard, Time.deltaTime);
                 if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
                 if (Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
+                if (Input.GetKeyDown(KeyCode.G)) _scene.CycleVoAvatarGender();
+                if (Input.GetKeyDown(KeyCode.V)) _scene.CycleVoEquipmentSlot();
+                if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleVoEquipmentSlot();
                 if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
             }
             _quest.text = _scene.HasMetHaVan
@@ -121,6 +133,9 @@ namespace LinhGioi.UI
             _talk.SetEnabled(_scene.CanUseCurrentRouteAction);
             _talk.text = _scene.CurrentActionLabel + (_touch ? "" : " · E");
             _outfit.text = "Trang bị Võ: " + _scene.VoAvatarMode + (_touch ? "" : " · C");
+            _gender.text = "Thân: " + _scene.VoAvatarGender + (_touch ? "" : " · G");
+            _slot.text = "Slot: " + _scene.VoSelectedEquipmentSlot + (_touch ? "" : " · V");
+            _toggleSlot.text = (_scene.VoEquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
             _skill.text = _scene.VoAvatarMotionState == "skill" ? "Đang thi triển..." : "Liệt Phong Kích" + (_touch ? "" : " · X");
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;

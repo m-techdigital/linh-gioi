@@ -1,5 +1,9 @@
 # TASK LEDGER ROLLUP — 2D Pivot
 
+## Võ Lv1 equipment + real motion — 2026-09-10
+
+Batch kế thừa WIP đã hoàn thiện checkpoint Lv1 cho cả nam/nữ: 10 lớp paper-doll, đổi giới tính, chọn và bật/tắt từng slot trong Player. Võ nam có sheet sáu pose thật cho idle/walk/dash/punch; hai atlas indexed 1024² tổng 215.938 byte PNG. 42 ảnh mobile/tablet/PC đã review; EditMode `178/177/0/1`, build macOS 0 error, smoke/matrix/guards pass. Hạn chế còn công khai: nữ chưa có motion frame, mới một bộ Lv1, chưa có progression Lv10/20/30 và combat class đầy đủ. Next là một batch sheet tiến cấp hai giới + motion nữ, không mở class khác.
+
 ## Võ Lv1–30 map avatar workflow proof — 2026-09-10
 
 Kế thừa trực tiếp Võ WIP từ sandbox đã dừng: base/full chung bbox `(275,16)–(801,1484)` và ba slot alpha `inner_top`, `arm_guard`, `main_weapon`. Packer mới tạo atlas 512²/23.370 byte, manifest giữ SHA nguồn, canvas, offset, ground và non-claim. Map 01A thay PC cyan bằng art Võ; C/touch đổi full/base/modular, movement có walk transform, X/touch chạy slash VFX `Liệt Phong Kích` tại combat edge.

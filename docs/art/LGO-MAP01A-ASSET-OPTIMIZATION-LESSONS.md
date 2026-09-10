@@ -2,6 +2,16 @@
 
 Chỉ đạo owner: giảm chất lượng/dung lượng runtime theo kích thước thực sự hiển thị; asset phải tách ghép dùng lại được; xử lý mobile/tablet/PC trong batch, kiểm sau khi gom xong. Source HD giữ ngoài Unity để tái xuất, không tạo lại ảnh chỉ vì đổi độ phân giải.
 
+## Batch Võ Lv1: quy tắc tạo và tách nhân vật
+
+- Tạo cả giới tính hoặc cả motion set trong một sheet/batch theo cùng art direction; không gọi sinh từng món. Board owner dùng để redraw và đối chiếu, không crop nguyên board vào runtime.
+- Source làm việc giữ ngoài Unity ở canvas 1024×1536. Trước khi tách, căn bbox với base trong sai số tối đa 3 px và dịch toàn bộ ảnh về cùng ground; sau đó lấy delta theo base để phần da/cơ thể tiếp tục thuộc base.
+- Nền magenta do công cụ sinh có thể không phải một màu tuyệt đối. Key theo độ chênh `min(red, blue) - green`, kiểm alpha/bbox bằng ảnh review nền tối, không chỉ so một mã RGB.
+- Mười slot của một giới tính và sáu motion frame được xử lý cùng lượt. Runtime chỉ giữ hai atlas indexed 1024²: static 91.553 byte và motion 124.385 byte; manifest compact 12.113 byte. Ảnh nguồn độ phân giải cao không vào Resources.
+- Actor hiện cao khoảng 150 px trong ba profile. Vì vậy cell runtime quanh 340 px đủ dự phòng, không xuất mỗi bộ thành texture 2K/4K. Importer giới hạn 1024; mobile dùng ASTC 6×6. Con số PNG không thay cho đo GPU/thiết bị thật.
+- Sheet motion 3×2 giữ cùng nhân vật/trang phục cho idle, hai bước walk, dash, punch windup và punch impact. Đây là cách nhanh hơn và đồng nhất hơn sinh từng frame. Batch kế tiếp làm cùng cấu trúc cho nữ và tiến cấp Lv10/20/30.
+- Slot mảnh có thể thay đổi rất nhẹ khi actor hiển thị nhỏ; kiểm bằng toggle trong Player nhưng chỉ giữ slot có giá trị phối đồ thật. Khi vào production animation dài, ưu tiên layered PSD/PSB hoặc skeletal attachment thay vì nhân số lượng full-frame cho mọi tổ hợp.
+
 ## Quyết định đang áp dụng
 
 - Nguồn canonical: `LGO-SELECTED-2D-SOURCE-CATALOG-v1.md`; công cụ/mask/class WIP: `LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`. Không thay nguồn owner bằng procedural preview cũ.

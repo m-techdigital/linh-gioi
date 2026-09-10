@@ -54,15 +54,17 @@ def main():
     manifest = json.loads((out / 'manifest.json').read_text())
     required = ['01-arrival', '02-dialogue', '03-grand-gate', '04-gate-captain',
                 '05-market', '06-well-bridge', '07-combat-edge', '08-portal',
-                '09-vo-base', '10-vo-modular', '11-vo-walk', '12-vo-skill']
+                '09-vo-base', '10-vo-modular', '11-vo-walk', '12-vo-skill',
+                '13-vo-female-full', '14-vo-female-slot-toggle']
     import math
     foot_error = manifest.get('maxFootError', float('nan'))
     parallax = manifest.get('parallaxDelta', float('nan'))
     if (manifest.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED'
-            or manifest.get('frames') != 12
+            or manifest.get('frames') != 14
             or not manifest.get('dialogueOpened') or not manifest.get('greetingCompleted')
             or not manifest.get('voBaseVerified') or not manifest.get('voModularVerified')
             or not manifest.get('voWalkVerified') or not manifest.get('voSkillVerified')
+            or not manifest.get('voFemaleVerified') or not manifest.get('voSlotToggleVerified')
             or manifest.get('voSkillCastCount') != 1
             or (manifest.get('width'), manifest.get('height')) != (width, height)
             or manifest.get('mapQuestFlowVerified') is not False
@@ -77,7 +79,7 @@ def main():
         raw = (out / (name + '.png')).read_bytes()
         if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
             raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
-    print('LGO_MAP01A_ART_CAPTURE_TECHNICAL_PASS frames=12; visual review and quest flow still required; ' + str(out))
+    print('LGO_MAP01A_ART_CAPTURE_TECHNICAL_PASS frames=14; visual review and quest flow still required; ' + str(out))
 
 
 

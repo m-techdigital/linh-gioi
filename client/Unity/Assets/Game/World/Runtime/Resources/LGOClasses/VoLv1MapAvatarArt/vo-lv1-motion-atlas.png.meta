@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c75763286fdd4b04bb46ae1a5a221798
+guid: 936c03523c7fd06ab9fe28a6ed0c6b43
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -137,6 +137,6 @@ TextureImporter:
     nameFileIdTable: {}
   mipmapLimitGroupName:
   pSDRemoveMatte: 0
-  userData: Reviewed Vo Lv1 generated delta batch; 1024 atlas; desktop lossless; mobile ASTC 6x6
+  userData: Reference-guided Vo Lv1 six-frame motion batch; 1024 atlas; desktop lossless; mobile ASTC 6x6
   assetBundleName:
   assetBundleVariant:

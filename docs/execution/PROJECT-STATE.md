@@ -4,6 +4,14 @@
 
 # PROJECT STATE — Linh Giới Online 2D
 
+## Võ Lv1 equipment + real-motion checkpoint — 2026-09-10
+
+Đã kế thừa base WIP đã audit và tạo đồng bộ Võ nam/nữ Lv1 theo board owner, không dùng board phẳng làm runtime asset. Runtime có 10 slot `main_weapon/head_hair/inner_top/outer_tunic/lower_garment/waist/arm_guard/boots/light_armor/accessory`, cùng canvas và foot anchor; C/G/V/B hoặc touch kiểm được full/base/modular, giới tính, chọn slot và tháo/lắp. Võ nam có sáu pose thật idle/walk/dash/punch; Võ nữ hiện dùng static/fallback và được ghi rõ trong manifest.
+
+Hai atlas indexed 1024² tổng 215.938 byte PNG; source 1024×1536 nằm ngoài Unity và runtime chỉ giữ kích thước đủ cho actor khoảng 150 px. EditMode cuối `178/177/0/1`; Player build `162.751.299` byte, 0 error/13 warning; 42 ảnh ba profile ở `build/map01a-art/vo-lv1-motion-final-three-profiles/` đã review. Baseline onboarding, smoke/matrix, no-3D và no-source-image pass. Trạng thái: `VO_LV1_EQUIPMENT_MOTION_CHECKPOINT_PASS / VO_LV1_30_PROGRESSION_INCOMPLETE`.
+
+Tiếp theo xử lý một batch Võ Lv10/Lv20/Lv30 nam/nữ và motion nữ, rồi nối progression selector + frame animation. Chưa mở class thứ hai; không claim combat loop hoàn chỉnh hoặc chất lượng production cuối.
+
 ## Võ Lv1–30 runtime workflow proof — 2026-09-10
 
 Map 01A hiện hiển thị PC Võ nam từ đúng WIP owner đã duyệt thay cho hình cyan. Runtime pack 512²/23.370 byte giữ `base/full` và ba slot tách trên chung canvas; HUD PC/mobile cho đổi `full → base → modular`, đi ngang và dùng `Liệt Phong Kích`. EditMode mới nhất `177 total / 176 passed / 0 failed / 1 skipped`; macOS build `160.896.915` byte, 0 error/13 warning; capture Map 01A `12 × 3` profile technical pass và đã review các frame base/modular/walk/skill. Baseline onboarding smoke/build/capture 20 frame cùng runtime/visual matrix, no-3D và no-source-image đều pass; ảnh baseline vẫn là blockout cũ và không được dùng để claim mỹ thuật Map 01A.
