@@ -1,5 +1,7 @@
 ## Owner Goal Override — Cổng Đông Lâm Map 01A — 2026-09-10
 
+Audit sandbox “Chuẩn hóa module 2D class” đã hoàn tất trước khi triển khai map. Không cherry-pick nguyên nhánh vì diff có 48 file xóa và nhánh hiện hành đã đi trước 54 commit riêng. Đã giữ bundle/patch, chọn 26 source chi tiết, xác nhận 28 unit test PASS và phân loại rõ tool/contract/WIP tại `docs/art/LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`. Class code chỉ port chọn lọc sau gate Map 01A.
+
 Nguồn sản phẩm mới nhất thay các mục Đông Môn/Linh Thành cũ bên dưới:
 
 - Việc đang làm: **Cổng Đông Lâm = Map 01A**, tutorial chung Lv1–3 sau năm class intro riêng.

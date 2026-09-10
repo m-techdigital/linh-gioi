@@ -4,7 +4,9 @@ Ngày khóa: 2026-09-10
 
 Source pack local: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1`
 
-Manifest SHA-256: `0145e96148a73c423be823ad3c1b447c4fda3470338c5e4836010abab22bca53`
+Manifest SHA-256: `6127e177585ccf6ba59988b02148a5eef8eec7c39fed0a085eaa9488faf383cc`
+
+Checksum index SHA-256: `0fd1ea03f91ee92423dbed1a997c9997a80313556048246caddae87c40493272`
 
 ## Quyền ưu tiên
 
@@ -37,6 +39,8 @@ Runtime không import nguyên board. Mỗi asset phải được crop/redraw/ext
 `classes-lv001-030/common` giữ 7 sheet cho tỷ lệ nam/nữ, chi tiết đầu–tóc–tay–chân, module/anchor, rig/silhouette và palette. Mỗi thư mục `vo`, `kiem`, `phap`, `co`, `linh` giữ 6 sheet: identity/progression, profile nam/nữ, turnaround nam, turnaround nữ, equipment/weapon và skill/motion/VFX.
 
 Các sheet có chữ 3D hoặc hiển thị tới Lv100 chỉ cung cấp tỷ lệ, silhouette, màu, ownership trang bị và motion intent. Pipeline runtime vẫn là cutout/sprite 2D. Phase hiện tại chỉ dùng phần Lv1–30.
+
+Mỗi class còn có thư mục `detail/` từ audit sandbox chuẩn hóa module: tổng cộng 26 ảnh module map, grid nam/nữ, outfit progression và VFX mood đã được review trực tiếp. Chúng mang trạng thái `REDRAW_SOURCE_ONLY`, dùng để vẽ/tách lại phần Lv1–30. Không crop thẳng vì board còn dính skin/body, gộp slot hoặc bake VFX. Board Cơ bị đặt nhầm trong thư mục Linh đã bị loại bằng SHA trùng byte. Chi tiết quyết định và test tại `docs/art/LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`.
 
 ## Công sức class đang giữ lại
 

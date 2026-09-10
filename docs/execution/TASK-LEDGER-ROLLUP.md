@@ -2,6 +2,10 @@
 
 ## Source selection + stopped class task recovery — 2026-09-10
 
+Audit sâu sandbox class hoàn tất: nhánh local có 30 commit riêng và lệch origin 54 commit; bundle đầy đủ + patch uncommitted đã lưu. Năm commit cuối được phân loại để port chọn lọc; ground alignment giữ, chroma-key chỉ pre-process, procedural preview chỉ fixture QA. Unit test 28/28 PASS, validator tài liệu 13/13 PASS nhưng không được dùng để claim art/rig/runtime.
+
+Source pack được mở rộng từ 61 lên 87 entry bằng 26 ảnh chi tiết đã review: module map, grid nam/nữ, outfit/silhouette và VFX mood của năm class. Tất cả mang `REDRAW_SOURCE_ONLY`; board Cơ trùng byte trong thư mục Linh bị loại. Audit: `docs/art/LGO-CLASS-STANDARDIZATION-REUSE-AUDIT-v1.md`.
+
 Đã review bộ Cổng Đông Lâm và sheet hệ thống/identity/base/module Võ–Kiếm–Pháp–Cơ–Linh; tạo source pack chuẩn hóa ngoài repo tại `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1`. Pack có 10 map source canonical theo đúng 10 chức năng triển khai, 37 class source canonical và 12 file Võ WIP được thu hồi từ batch đã dừng. Manifest giữ đường dẫn gốc, SHA-256, purpose và status; ảnh gốc không đổi tên hoặc sửa.
 
 Audit Võ WIP: base nam/nữ đã căn chung ground; mask plan và ba mảnh alpha `inner_top`, `arm_guard`, `main_weapon` có trim/atlas round-trip lossless và toggle review. Chưa được runtime approval vì lỗi tiếp xúc cổ tay/alpha edge, thiếu bảy slot, thiếu motion và female equipment. Phần này được giữ để tiếp tục sau gate Map 01A, không làm lại và không dùng primitive cũ làm art direction.
