@@ -401,3 +401,5 @@ Prefit đã sửa hair/outer multi-view, normalize đúng PPU 208 và ghép idle
 ## Sau Kiếm shared-rig fit preview — hoàn thiện theo batch, không chỉnh từng món
 
 Fit proof 4 slot đã chạy trong Player qua bone proxy và 78×3 capture; production vẫn chặn draft. Next: xử lý một lượt 6 slot Kiếm còn thiếu cho Lv1/10/20/30 nam/nữ từ source-v3, redraw theo cùng side-view base khi crop không phù hợp, pack theo atlas 512–1024 có byte budget; sau đó nối skill Kiếm Lv1 riêng và mới chạy lại full test/build/capture ba profile. Không nâng `approved` hoặc mở Pháp/Cơ/Linh trước khi đủ 10 slot, tháo/mặc và visual motion review.
+
+48 crop của 6 slot còn thiếu đã được pack thành hai atlas candidate ngoài runtime tại `generated-batch-v2/remaining-six-slot-batch-v1/`, không resize và eligible 0. Next cụ thể: chọn `Lv1 lower_body + Lv10 waist_belt + Lv20 arm_guard + Lv30 footwear + Lv20 shoulder_chest_guard + Lv30 class_accessory` cho cả nam/nữ; ghép contact 10-slot với proof hiện tại, sửa lệch theo base rồi author bone proxy trái/phải. Chỉ sau contact pass mới import hai atlas fit đã chọn.

@@ -462,3 +462,7 @@ Import đúng 8 item proof vào một atlas 512×512/PPU 208, không scale lại
 ## Kiếm mixed-loadout shared-rig fit — 2026-09-10
 
 Thêm `DraftRuntimeFit` với API preview opt-in; production equip vẫn chặn. Direct bind sai hệ tọa độ đã được thay bằng bone proxy giữ item-local bind pose và theo rotation skeleton chung. EditMode `206/205/0/1`, Player 169.099.226 byte/0 error; Map01A capture 78×3 cho thấy weapon/hair/inner/outer nam/nữ đi cùng idle/walk/run/jump/basic/shared-skill pose, UI ghi DRAFT. Chưa claim full Kiếm: mới 4/10 slot, chưa có skill/VFX riêng và eligible vẫn 0.
+
+## Kiếm remaining six-slot source batch — 2026-09-10
+
+Pack một lượt 48 crop của 6 slot còn thiếu × 4 mốc level × 2 giới vào hai atlas candidate 1024 ngoài runtime; không resize, manifest có source/atlas rect/hash và eligible 0. Review xác nhận identity chung; arm/boot phải weight hai phía. Next ghép một mixed-level 10-slot contact và chỉ nhập 12 item đã fit, không kéo cả candidate batch vào Player.

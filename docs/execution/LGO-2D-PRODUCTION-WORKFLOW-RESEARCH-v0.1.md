@@ -185,4 +185,10 @@ Nguồn chính thức: [Unity Sprite Swap](https://docs.unity3d.com/Packages/com
 - Capture Map01A tăng 66→78 frame/profile, thêm 6 pose cho mỗi giới trên mobile 1600×720, tablet 1024×768 và PC 1280×720. Review xác nhận 4 món `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer` không tách khỏi nhân vật qua idle/walk/run/jump/basic/shared-skill pose và UI ghi rõ DRAFT.
 - Gate cuối: EditMode `206 total / 205 pass / 0 fail / 1 ignored`; macOS Player 169.099.226 byte, 0 error; 234 ảnh (78×3) ở `build/kiem-motion-preview-v1/checkpoint-capture/` đạt technical capture. Review trực tiếp các frame idle/jump/shared-skill nam/nữ ở cả ba profile: scale đọc được, không còn garment tụt chân; source art/4-slot silhouette vẫn cần hoàn thiện trước approval.
 - Đây là compatibility proof 4/10 slot. Phần thân dưới đang phối với module base/Võ hiện có; chưa có Kiếm-specific lower/waist/arm/boots/guard/accessory và chưa có animation/VFX skill Kiếm riêng, nên `runtimeEligibleCount=0` giữ nguyên.
+
+## Kiếm remaining six-slot source atlas batch — checkpoint 2026-09-10
+
+- Đã pack một lượt 48 crop `lower_body/waist_belt/arm_guard/footwear/shoulder_chest_guard/class_accessory` cho Lv1/10/20/30, nam/nữ vào hai atlas candidate 1024×1024 ngoài runtime tại `generated-batch-v2/remaining-six-slot-batch-v1/`. Không resize cell; manifest giữ source size/path/SHA-256, atlas rect/hash và `runtimeEligibleCount=0`.
+- Mỗi atlas khoảng 562 KB; review nam/nữ cho thấy identity trắng/đen/xanh/vàng đồng nhất và alpha item tách được. Do arm/boot là cặp nhiều chi, các slot này phải weight trái/phải qua bone proxy; không được hạ thành một rigid sprite chỉ vì crop nhìn sạch.
+- Batch tiếp theo chọn đủ 6 slot cho cùng mixed-level proof, ghép contact trên base nam/nữ, sửa item nào lệch rồi mới tạo runtime atlas. Không import nguyên 48 candidate để tránh tăng Player trước fit gate.
 - Player build 169.290.922 byte, 0 error: 8 proof asset tăng 478.848 byte (0,284%) so với package checkpoint, tổng tăng 795.927 byte (0,472%) so với baseline. Pack vẫn `DRAFT_RUNTIME_FIT`, eligible=0 cho tới motion capture.
