@@ -1,3 +1,9 @@
+## Map01A functional UI + playable gate — 2026-09-10
+
+Đã hoàn thiện phần còn thiếu sau Q01–Q09: minimap mở từ Q02 và bám node route; Q04 mở panel hành trang, nhận 3 Bình Máu/2 Bình Linh Lực và buộc dùng một bình để HP 60→100; Q07 nhận Hộ Uyển Võ Tân Thủ và buộc equip trước Q09. UI Toolkit dùng chung ba tỷ lệ, hàng action tự wrap để không tràn panel. EditMode cuối `179/178/0/1`; macOS Player build 0 compiler error; capture `build/map01a-functional-ui/three-profiles-v2/` có 27 frame/profile technical pass và các frame inventory/supplies/potion/loot/equip/portal đã review.
+
+Map gate: `MAP01A_PLAYABLE_VISUAL_SLICE_PASS`. Next là một batch Võ Lv1–30 articulated rig/attachment + idle/walk/run/jump/basic attack/`Liên Quyền`; chưa mở class khác. Non-claim giữ nguyên: chưa persistence/backend, physical-device certification hoặc Map01B scene.
+
 ## Map01A Q01–Q09 playable flow — 2026-09-10
 
 Đã nối một state machine local đủ 9 quest vào Cổng Đông Lâm, gồm dialogue Hạ Vân/Quan Thủ/Tổng Phú/Thanh Nhi/Lão Trần, inventory inspect, consumable reward, gather, chest tùy chọn, combat ba hit, loot và portal unlock. Herb/chest/enemy/portal có phản hồi world thay vì chỉ đổi text. EditMode gần nhất `179 total / 178 pass / 0 fail / 1 ignored`; build macOS `166.984.083` byte, 0 error/13 warning. Evidence v4 có 24 frame cho mỗi profile mobile/tablet/PC; cả ba manifest hoàn tất 9/9 và ảnh trọng yếu đã review.

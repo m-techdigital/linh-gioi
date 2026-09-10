@@ -31,6 +31,15 @@ namespace LinhGioi.World
         public bool HasLootedFirstEnemy { get; private set; }
         public bool PortalUnlocked { get; private set; }
         public bool HasInspectedInventory { get; private set; }
+        public bool InventoryOpen { get; private set; }
+        public bool MinimapUnlocked { get; private set; }
+        public bool HasUsedHealthPotion { get; private set; }
+        public bool HasClassRewardItem { get; private set; }
+        public bool IsClassRewardEquipped { get; private set; }
+        public int HealthPotionCount { get; private set; }
+        public int ManaPotionCount { get; private set; }
+        public int PlayerHealth { get; private set; } = 60;
+        public int PlayerMana { get; private set; } = 50;
         public string ActiveQuestId { get; private set; } = "Q01";
         private readonly HashSet<string> _completedQuests = new HashSet<string>();
         private string _dialogueNodeId = "";
@@ -52,6 +61,47 @@ namespace LinhGioi.World
         public string QuestTrackerText => ActiveQuestId == "COMPLETE" ? "Map01A hoàn tất\nPortal Suối Thanh Minh đã mở."
             : ActiveQuestId + " · " + QuestName(ActiveQuestId) + "\n" + QuestObjective(ActiveQuestId)
                 + "\nTiến độ " + CompletedQuestCount + "/9";
+        public string MinimapRouteText => !MinimapUnlocked ? "BẢN ĐỒ KHU VỰC · CHƯA MỞ"
+            : "BẢN ĐỒ ĐÔNG LÂM\nHạ Vân — Cổng — Làng — Rìa — Suối\nĐang ở: " + CurrentRouteNodeLabel;
+        public string InventorySummaryText => "HÀNH TRANG TÂN THỦ\n"
+            + "HP " + PlayerHealth + "/100  •  MP " + PlayerMana + "/100\n"
+            + "Bình Máu Nhỏ ×" + HealthPotionCount + "  •  Bình Linh Lực Nhỏ ×" + ManaPotionCount + "\n"
+            + "Hộ Uyển Võ Tân Thủ: " + (!HasClassRewardItem ? "chưa nhận" : IsClassRewardEquipped ? "đã trang bị" : "chưa trang bị");
+
+        public void ToggleInventory()
+        {
+            InventoryOpen = !InventoryOpen;
+            LastInteractionMessage = InventoryOpen ? "Đã mở hành trang tân thủ." : "Đã đóng hành trang.";
+        }
+
+        public bool UseHealthPotion()
+        {
+            if (!InventoryOpen || HealthPotionCount <= 0 || PlayerHealth >= 100) return false;
+            HealthPotionCount--;
+            PlayerHealth = Mathf.Min(100, PlayerHealth + 50);
+            HasUsedHealthPotion = true;
+            LastInteractionMessage = "Đã dùng Bình Máu Nhỏ · HP " + PlayerHealth + "/100.";
+            if (ActiveQuestId == "Q04" && HasStarterSupplies) CompleteQuest("Q04", "Q05");
+            return true;
+        }
+
+        public bool UseManaPotion()
+        {
+            if (!InventoryOpen || ManaPotionCount <= 0 || PlayerMana >= 100) return false;
+            ManaPotionCount--;
+            PlayerMana = Mathf.Min(100, PlayerMana + 50);
+            LastInteractionMessage = "Đã dùng Bình Linh Lực Nhỏ · MP " + PlayerMana + "/100.";
+            return true;
+        }
+
+        public bool EquipClassReward()
+        {
+            if (!InventoryOpen || !HasClassRewardItem || IsClassRewardEquipped) return false;
+            IsClassRewardEquipped = true;
+            LastInteractionMessage = "Đã trang bị Hộ Uyển Võ Tân Thủ.";
+            if (ActiveQuestId == "Q07") CompleteQuest("Q07", "Q09");
+            return true;
+        }
         public void MoveOnLane(float axis, float seconds)
         {
             AdvanceVoAnimation(seconds);
@@ -199,9 +249,12 @@ namespace LinhGioi.World
             public string deviceValidation = "macOS aspect simulation only";
             public float groundY, maxFootError, parallaxDelta;
             public bool mapQuestFlowVerified = false;
+            public bool functionalUiVerified = false;
             public string activeQuestId;
             public int completedQuestCount;
             public bool starterSupplies, spiritHerb, hiddenChest, combatAccepted, enemyDefeated, enemyLooted, portalUnlocked;
+            public bool minimapUnlocked, healthPotionUsed, classRewardEquipped;
+            public int healthPotionCount, manaPotionCount, playerHealth;
             public bool dialogueOpened, greetingCompleted;
             public bool voBaseVerified, voModularVerified, voWalkVerified, voSkillVerified;
             public bool voFemaleVerified, voSlotToggleVerified;
@@ -279,6 +332,7 @@ namespace LinhGioi.World
             }
             if (CurrentRouteNodeId == "grand-gate" && ActiveQuestId == "Q02")
             {
+                MinimapUnlocked = true;
                 CompleteQuest("Q02", "Q03");
                 LastInteractionMessage = "Đã nhìn thấy Linh Thành ở phía xa.";
                 return true;
@@ -292,6 +346,7 @@ namespace LinhGioi.World
             if (CurrentRouteNodeId == "village-square" && ActiveQuestId == "Q04" && !HasInspectedInventory)
             {
                 HasInspectedInventory = true;
+                InventoryOpen = true;
                 LastInteractionMessage = "Đã xem hành trang tân thủ; hãy gặp Tổng Phú.";
                 return true;
             }
@@ -299,8 +354,10 @@ namespace LinhGioi.World
                 return ToggleNpcDialogue("tong-phu", () =>
                 {
                     HasStarterSupplies = true;
-                    CompleteQuest("Q04", "Q05");
-                    LastInteractionMessage = "Nhận Bình Máu Nhỏ ×3 và Bình Linh Lực Nhỏ ×2.";
+                    HealthPotionCount = 3;
+                    ManaPotionCount = 2;
+                    InventoryOpen = true;
+                    LastInteractionMessage = "Nhận Bình Máu Nhỏ ×3 và Bình Linh Lực Nhỏ ×2; hãy dùng một bình máu.";
                 });
             if (CurrentRouteNodeId == "thanh-nhi" && ActiveQuestId == "Q05")
                 return ToggleNpcDialogue("thanh-nhi", () =>
@@ -333,8 +390,9 @@ namespace LinhGioi.World
             if (CurrentRouteNodeId == "combat-edge" && ActiveQuestId == "Q07" && HasDefeatedFirstEnemy)
             {
                 HasLootedFirstEnemy = true;
-                CompleteQuest("Q07", "Q09");
-                LastInteractionMessage = "Nhặt Da Lợn Non + 8 Vàng · chiến lợi phẩm đầu tiên.";
+                HasClassRewardItem = true;
+                InventoryOpen = true;
+                LastInteractionMessage = "Nhặt Da Lợn Non + 8 Vàng + Hộ Uyển Võ Tân Thủ; hãy trang bị.";
                 return true;
             }
             if (CurrentRouteNodeId == "portal-suoi-thanh-minh")
@@ -913,14 +971,16 @@ namespace LinhGioi.World
             yield return null;
             var result = new CaptureInfo { groundY = GroundY, width = Screen.width, height = Screen.height };
             var initial = FarOffset;
-            var targets = new[] { -3.58f, -3.58f, -3.58f, 0f, 5.15f, 5.15f, 18.5f, 22.15f, 26.15f, 30.2f, 30.2f, 34.1f, 39f, 39f, 42.15f,
+            var targets = new[] { -3.58f, -3.58f, -3.58f, 0f, 5.15f, 5.15f, 18.5f, 22.15f, 22.15f, 22.15f,
+                26.15f, 30.2f, 30.2f, 34.1f, 39f, 39f, 39f, 42.15f,
                 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f };
             var names = new[] { "01-arrival-q01", "02-ha-van-dialogue", "03-q01-complete", "04-q02-grand-gate",
-                "05-quan-thu-dialogue", "06-q03-complete", "07-q04-inventory", "08-q04-starter-supplies",
-                "09-q05-thanh-nhi", "10-q05-spirit-herb", "11-q08-hidden-chest", "12-q06-lao-tran",
-                "13-q06-combat", "14-q07-loot", "15-q09-portal-open",
-                "16-vo-base", "17-vo-modular", "18-vo-walk", "19-vo-female-full", "20-vo-female-slot-toggle",
-                "21-vo-female-walk", "22-vo-lv10-female", "23-vo-lv20-female", "24-vo-lv30-female" };
+                "05-quan-thu-dialogue", "06-q03-complete", "07-q04-inventory-open", "08-q04-tong-phu-dialogue",
+                "09-q04-starter-supplies", "10-q04-health-potion-used", "11-q05-thanh-nhi", "12-q05-spirit-herb",
+                "13-q08-hidden-chest", "14-q06-lao-tran", "15-q06-combat", "16-q07-class-loot",
+                "17-q07-class-item-equipped", "18-q09-portal-open",
+                "19-vo-base", "20-vo-modular", "21-vo-walk", "22-vo-female-full", "23-vo-female-slot-toggle",
+                "24-vo-female-walk", "25-vo-lv10-female", "26-vo-lv20-female", "27-vo-lv30-female" };
             for (var i = 0; i < targets.Length; i++)
             {
                 _routeX = targets[i];
@@ -931,12 +991,14 @@ namespace LinhGioi.World
                 if (i == 4) UseCurrentRouteAction();
                 if (i == 5) UseCurrentRouteAction();
                 if (i == 6) UseCurrentRouteAction();
-                if (i == 7) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
-                if (i == 8) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
-                if (i == 9) UseCurrentRouteAction();
-                if (i == 10) UseCurrentRouteAction();
-                if (i == 11) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
-                if (i == 12)
+                if (i == 7) UseCurrentRouteAction();
+                if (i == 8) UseCurrentRouteAction();
+                if (i == 9) UseHealthPotion();
+                if (i == 10) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
+                if (i == 11) UseCurrentRouteAction();
+                if (i == 12) UseCurrentRouteAction();
+                if (i == 13) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
+                if (i == 14)
                 {
                     result.voSkillVerified = true;
                     for (var hit = 0; hit < 3; hit++)
@@ -946,31 +1008,35 @@ namespace LinhGioi.World
                         if (hit < 2) AdvanceVoAnimation(.5f);
                     }
                 }
-                if (i == 13) { AdvanceVoAnimation(.5f); UseCurrentRouteAction(); }
-                if (i == 14)
+                if (i == 15) { AdvanceVoAnimation(.5f); UseCurrentRouteAction(); }
+                if (i == 16) EquipClassReward();
+                if (i == 17)
                 {
+                    InventoryOpen = false;
                     UseCurrentRouteAction();
                     result.mapQuestFlowVerified = ActiveQuestId == "COMPLETE" && CompletedQuestCount == 9
                         && HasStarterSupplies && HasHarvestedSpiritHerb && HasOpenedHiddenChest
                         && HasAcceptedCombatQuest && HasDefeatedFirstEnemy && HasLootedFirstEnemy && PortalUnlocked;
+                    result.functionalUiVerified = MinimapUnlocked && HasUsedHealthPotion && HealthPotionCount == 2
+                        && ManaPotionCount == 2 && PlayerHealth == 100 && HasClassRewardItem && IsClassRewardEquipped;
                 }
-                if (i == 15)
+                if (i == 18)
                 {
                     CycleVoAvatarMode();
                     result.voBaseVerified = VoAvatarMode == "base" && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 1;
                 }
-                if (i == 16)
+                if (i == 19)
                 {
                     CycleVoAvatarMode();
                     result.voModularVerified = VoAvatarMode == "modular" && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 11;
                 }
-                if (i == 17)
+                if (i == 20)
                 {
                     MoveOnLane(1, .1f);
                     result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
                         && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 11 && !_voMotionRenderer.enabled;
                 }
-                if (i == 18)
+                if (i == 21)
                 {
                     AdvanceVoAnimation(.1f);
                     AdvanceVoAnimation(.1f);
@@ -979,7 +1045,7 @@ namespace LinhGioi.World
                     result.voFemaleVerified = VoAvatarMode == "full" && VoAvatarGender == "female"
                         && _voAvatarParts["lv001_female_full"].enabled;
                 }
-                if (i == 19)
+                if (i == 22)
                 {
                     CycleVoAvatarMode();
                     CycleVoAvatarMode();
@@ -989,21 +1055,21 @@ namespace LinhGioi.World
                     result.voSlotToggleVerified = VoAvatarMode == "modular" && VoSelectedEquipmentSlot == "inner_top"
                         && VoEquippedSlotCount == 9 && !_voAvatarParts["lv001_female_slot_inner_top"].enabled;
                 }
-                if (i == 20)
+                if (i == 23)
                 {
                     MoveOnLane(1, .1f);
                     result.voFemaleMotionVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
                         && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 10
                         && !_voAvatarParts["lv001_female_slot_inner_top"].enabled && !_voMotionRenderer.enabled;
                 }
-                if (i == 21)
+                if (i == 24)
                 {
                     AdvanceVoAnimation(.5f);
                     CycleVoAvatarMode();
                     CycleVoAvatarLevel();
                 }
-                if (i == 22) CycleVoAvatarLevel();
-                if (i == 23)
+                if (i == 25) CycleVoAvatarLevel();
+                if (i == 26)
                 {
                     CycleVoAvatarLevel();
                     result.voProgressionVerified = VoAvatarLevel == 30
@@ -1039,8 +1105,14 @@ namespace LinhGioi.World
             result.enemyDefeated = HasDefeatedFirstEnemy;
             result.enemyLooted = HasLootedFirstEnemy;
             result.portalUnlocked = PortalUnlocked;
+            result.minimapUnlocked = MinimapUnlocked;
+            result.healthPotionUsed = HasUsedHealthPotion;
+            result.classRewardEquipped = IsClassRewardEquipped;
+            result.healthPotionCount = HealthPotionCount;
+            result.manaPotionCount = ManaPotionCount;
+            result.playerHealth = PlayerHealth;
             result.parallaxDelta = FarOffset - initial;
-            if (!result.mapQuestFlowVerified || !result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
+            if (!result.mapQuestFlowVerified || !result.functionalUiVerified || !result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0

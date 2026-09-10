@@ -9,9 +9,10 @@ namespace LinhGioi.UI
     public sealed class CongDongLamArrivalHud : MonoBehaviour
     {
         private CongDongLamMap01AArtPreview _scene;
-        private VisualElement _root, _safe, _dialogue;
-        private Label _quest, _marker, _dialogueSpeaker, _dialogueLine;
+        private VisualElement _root, _safe, _dialogue, _inventory;
+        private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary;
         private Button _talk, _outfit, _level, _gender, _slot, _toggleSlot, _skill;
+        private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward;
         private RuntimeTouchMovementPad _pad;
         private RuntimeViewportMetrics _metrics;
         private PanelSettings _ownedPanel;
@@ -61,6 +62,9 @@ namespace LinhGioi.UI
             Box(title); Place(title, 12, null, 12, null); _safe.Add(title);
             _quest = new Label(); Box(_quest); Place(_quest, null, 12, 12, null);
             _quest.style.width = 260; _quest.style.whiteSpace = WhiteSpace.Normal; _safe.Add(_quest);
+            _minimap = new Label(); Box(_minimap); Place(_minimap, 220, null, 12, null);
+            _minimap.style.width = 430; _minimap.style.fontSize = 16;
+            _minimap.style.unityTextAlign = TextAnchor.MiddleCenter; _safe.Add(_minimap);
             _pad = new RuntimeTouchMovementPad(); Box(_pad); Place(_pad, 16, null, null, 16);
             _pad.style.width = _pad.style.height = 112;
             _pad.style.display = _touch ? DisplayStyle.Flex : DisplayStyle.None;
@@ -91,6 +95,24 @@ namespace LinhGioi.UI
             _skill = new Button(() => _scene.TriggerVoSkill()) { text = "Liệt Phong Kích · X" };
             Box(_skill); Place(_skill, null, _touch ? 202 : 200, null, 24);
             _skill.style.minHeight = _touch ? 64 : 48; _skill.style.minWidth = 190; _safe.Add(_skill);
+            _inventoryToggle = new Button(() => _scene.ToggleInventory()) { text = "Hành trang · I" };
+            Box(_inventoryToggle); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
+            _inventoryToggle.style.minHeight = _touch ? 64 : 48; _inventoryToggle.style.minWidth = 180; _safe.Add(_inventoryToggle);
+            _inventory = new VisualElement(); Box(_inventory); Place(_inventory, _touch ? 150 : 20, null, null, _touch ? 150 : 82);
+            _inventory.style.width = 390;
+            _inventorySummary = new Label(); _inventorySummary.style.whiteSpace = WhiteSpace.Normal; _inventory.Add(_inventorySummary);
+            var itemActions = new VisualElement(); itemActions.style.flexDirection = FlexDirection.Row;
+            itemActions.style.flexWrap = Wrap.Wrap;
+            _healthPotion = new Button(() => _scene.UseHealthPotion()) { text = "Dùng Máu" };
+            _manaPotion = new Button(() => _scene.UseManaPotion()) { text = "Dùng Linh Lực" };
+            _equipReward = new Button(() => _scene.EquipClassReward()) { text = "Trang bị Hộ Uyển" };
+            foreach (var button in new[] { _healthPotion, _manaPotion, _equipReward })
+            {
+                button.style.minHeight = 38;
+                button.style.marginRight = 6;
+                itemActions.Add(button);
+            }
+            _inventory.Add(itemActions); _safe.Add(_inventory);
             _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 204, null, 20);
             _dialogueSpeaker = new Label("Hạ Vân");
             _dialogue.Add(_dialogueSpeaker);
@@ -110,6 +132,8 @@ namespace LinhGioi.UI
             var r = _metrics.SafePanelRect;
             Place(_safe, r.x, null, r.y, null); _safe.style.width = r.width; _safe.style.height = r.height;
             _quest.style.width = r.width < 900 ? 220 : 260;
+            _minimap.style.left = r.width < 1100 ? 206 : 220;
+            _minimap.style.width = r.width < 1100 ? 360 : 430;
             _dialogue.style.left = _touch ? 150 : 20;
             _talk.style.fontSize = _touch ? 20 : 18;
         }
@@ -130,6 +154,10 @@ namespace LinhGioi.UI
                 if (Input.GetKeyDown(KeyCode.V)) _scene.CycleVoEquipmentSlot();
                 if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleVoEquipmentSlot();
                 if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
+                if (Input.GetKeyDown(KeyCode.I)) _scene.ToggleInventory();
+                if (Input.GetKeyDown(KeyCode.H)) _scene.UseHealthPotion();
+                if (Input.GetKeyDown(KeyCode.K)) _scene.UseManaPotion();
+                if (Input.GetKeyDown(KeyCode.R)) _scene.EquipClassReward();
             }
             _quest.text = _scene.QuestTrackerText
                 + (string.IsNullOrEmpty(_scene.LastInteractionMessage) ? "" : "\n" + _scene.LastInteractionMessage);
@@ -142,6 +170,13 @@ namespace LinhGioi.UI
             _toggleSlot.text = (_scene.VoEquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
             _skill.text = _scene.VoAvatarMotionState == "skill" ? "Đang thi triển..." : "Liệt Phong Kích" + (_touch ? "" : " · X");
             _skill.SetEnabled(_scene.CanTriggerVoSkill);
+            _minimap.text = _scene.MinimapRouteText;
+            _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
+            _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _inventorySummary.text = _scene.InventorySummaryText;
+            _healthPotion.SetEnabled(_scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100);
+            _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
+            _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _dialogueSpeaker.text = _scene.DialogueSpeaker;
             _dialogueLine.text = _scene.DialogueText;

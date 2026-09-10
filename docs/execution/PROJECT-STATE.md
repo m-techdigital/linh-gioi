@@ -1,3 +1,9 @@
+## Map01A playable visual slice gate — 2026-09-10
+
+Cổng Đông Lâm Map01A đã chạy đủ Q01–Q09 trong macOS Player với route 10 khu, source-driven illustrated atlas/parallax, 6 NPC, 4 quái ở combat edge, Linh Thảo/rương, combat ba hit, loot và portal. Functional UI mới cho mở hành trang, nhận Bình Máu ×3/Bình Linh Lực ×2, dùng Bình Máu để HP 60→100, nhận/equip Hộ Uyển Võ Tân Thủ và theo dõi node trên minimap. Capture v2 có 81 ảnh (27 trạng thái × mobile/tablet/PC); ba manifest xác nhận functional UI, 9/9 quest, 3 cast/3 hit, target HP 0. Visual review xác nhận panel xuống dòng trong nền và không chồng tracker/minimap.
+
+Trạng thái: `MAP01A_PLAYABLE_VISUAL_SLICE_PASS / PRODUCTION_SERVICES_DEFERRED`. Evidence: `build/map01a-functional-ui/three-profiles-v2/`. Non-claim: aspect simulation trên macOS chưa phải thiết bị vật lý; state chưa persistence/backend; portal chỉ unlock Map01B, không mở scene map thứ hai; UI vẫn là vertical-slice skin. Next chuyển sang Võ Lv1–30 articulated rig và đủ motion/combat theo Goal.
+
 ## Map01A playable quest flow Q01–Q09 — 2026-09-10
 
 Cổng Đông Lâm hiện có state machine local cho đủ tuyến Q01–Q09 trong Player: thoại bốn NPC, quan sát cổng, kiểm tra hành trang, nhận consumable, hái Linh Thảo, mở rương tùy chọn, nhận combat quest, hạ mục tiêu bằng ba lần skill, nhặt loot và mở portal. Trạng thái world phản hồi trực tiếp: herb ẩn, chest dim, enemy chết đổi tint, portal mở. Capture v4 tạo 72 ảnh (24 trạng thái × mobile/tablet/PC); cả ba manifest xác nhận 9/9 quest, 3 cast/3 hit và target HP 0. Visual review đã kiểm thoại, gather/chest, combat và portal.

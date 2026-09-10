@@ -171,6 +171,8 @@ namespace LinhGioi.Tests
                 Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("grand-gate"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.ActiveQuestId, Is.EqualTo("Q03"));
+                Assert.That(preview.MinimapUnlocked, Is.True);
+                StringAssert.Contains("Đại Cổng", preview.MinimapRouteText);
 
                 for (var step = 0; step < 25; step++) preview.MoveOnLane(1, .1f);
                 Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("quan-thu"));
@@ -182,6 +184,7 @@ namespace LinhGioi.Tests
                 for (var step = 0; step < 53; step++) preview.MoveOnLane(1, .1f);
                 Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("village-square"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True, "Q04 first teaches inventory in the square");
+                Assert.That(preview.InventoryOpen, Is.True);
                 Assert.That(preview.ActiveQuestId, Is.EqualTo("Q04"));
 
                 for (var step = 0; step < 19; step++) preview.MoveOnLane(1, .1f);
@@ -189,6 +192,13 @@ namespace LinhGioi.Tests
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.HasStarterSupplies, Is.True);
+                Assert.That(preview.HealthPotionCount, Is.EqualTo(3));
+                Assert.That(preview.ManaPotionCount, Is.EqualTo(2));
+                Assert.That(preview.PlayerHealth, Is.EqualTo(60));
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q04"), "Q04 requires using a potion after receiving supplies");
+                Assert.That(preview.UseHealthPotion(), Is.True);
+                Assert.That(preview.HealthPotionCount, Is.EqualTo(2));
+                Assert.That(preview.PlayerHealth, Is.EqualTo(100));
                 Assert.That(preview.ActiveQuestId, Is.EqualTo("Q05"));
 
                 for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
@@ -224,6 +234,11 @@ namespace LinhGioi.Tests
                 Assert.That(preview.ActiveQuestId, Is.EqualTo("Q07"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.HasLootedFirstEnemy, Is.True);
+                Assert.That(preview.HasClassRewardItem, Is.True);
+                Assert.That(preview.InventoryOpen, Is.True);
+                Assert.That(preview.ActiveQuestId, Is.EqualTo("Q07"), "Q07 requires equipping the class reward");
+                Assert.That(preview.EquipClassReward(), Is.True);
+                Assert.That(preview.IsClassRewardEquipped, Is.True);
                 Assert.That(preview.ActiveQuestId, Is.EqualTo("Q09"));
 
                 for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
