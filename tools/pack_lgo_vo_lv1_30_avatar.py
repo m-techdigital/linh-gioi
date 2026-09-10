@@ -52,6 +52,13 @@ RIG_PIVOTS = {
     "left-thigh": (-.09, .75), "left-shin-foot": (-.10, .40),
     "right-thigh": (.09, .75), "right-shin-foot": (.10, .40),
 }
+RIG_PARENTS = {
+    "torso-hips": "", "head": "torso-hips",
+    "left-upper-arm": "torso-hips", "left-forearm-hand": "left-upper-arm",
+    "right-upper-arm": "torso-hips", "right-forearm-hand": "right-upper-arm",
+    "left-thigh": "torso-hips", "left-shin-foot": "left-thigh",
+    "right-thigh": "torso-hips", "right-shin-foot": "right-thigh",
+}
 NEW_MOTION_WORLD_HEIGHTS = {
     "run_a": 1.68, "run_b": 1.68, "jump_rise": 1.68, "jump_apex": 1.36,
     "basic_windup": 1.48, "basic_impact": 1.48,
@@ -128,7 +135,10 @@ def rig_pose_profiles() -> list[dict]:
         direction = 1 if gender == "male" else .92
         for pose, values in rotations.items():
             for part in RIG_PARTS:
-                rotation = values.get(part, 0) * direction
+                world_rotation = values.get(part, 0) * direction
+                parent = RIG_PARENTS[part]
+                parent_world_rotation = values.get(parent, 0) * direction if parent else 0
+                rotation = world_rotation - parent_world_rotation
                 center_x, center_y = RIG_REST[part]
                 pivot_x, pivot_y = RIG_PIVOTS[part]
                 radians = math.radians(rotation)
@@ -163,7 +173,9 @@ def pack_rig(rig_dir: Path, output: Path) -> tuple[list[dict], dict]:
         image = entry["image"]
         atlas.alpha_composite(image, (entry["left"], entry["top"]))
         dx, dy = RIG_REST[entry["part"]]
+        pivot_x, pivot_y = RIG_PIVOTS[entry["part"]]
         packed.append({"id": entry["id"], "gender": entry["gender"], "part": entry["part"],
+                       "parent": RIG_PARENTS[entry["part"]], "pivotX": pivot_x, "pivotY": pivot_y,
                        "atlas": "rig", "x": entry["left"], "y": ATLAS_SIZE - entry["top"] - image.height,
                        "w": image.width, "h": image.height,
                        "worldW": image.width / image.height * RIG_HEIGHTS[entry["part"]],
@@ -179,7 +191,47 @@ def static_source(root: Path, progression: Path, level: int) -> Path:
     return root if level == 1 else progression / f"lv{level:03d}"
 
 
-def pack_static(source_dir: Path, level: int, output: Path) -> tuple[list[dict], dict, dict | None]:
+def equipment_components(entry: dict, level: int) -> list[dict]:
+    """Map every equipment slot to a rig bone without duplicating atlas pixels."""
+    if entry["kind"] != "slot":
+        return []
+    image, box = entry["image"], entry["box"]
+    scale = TARGET_FULL_HEIGHT / (GROUND_SOURCE_Y - 16)
+    center_bone_by_slot = {
+        "main_weapon": "right-forearm-hand", "head_hair": "head",
+        "inner_top": "torso-hips", "outer_tunic": "torso-hips",
+        "lower_garment": "torso-hips", "waist": "torso-hips",
+        "light_armor": "torso-hips", "accessory": "torso-hips",
+    }
+    if entry["slot"] in {"arm_guard", "boots"}:
+        split = max(1, min(image.width - 1, round((CANVAS[0] * .5 - box[0]) * scale)))
+        pieces = (("left", 0, split), ("right", split, image.width - split))
+        bone_prefix = "forearm-hand" if entry["slot"] == "arm_guard" else "shin-foot"
+        bone_by_side = {side: f"{side}-{bone_prefix}" for side in ("left", "right")}
+    else:
+        pieces = (("center", 0, image.width),)
+        bone_by_side = {"center": center_bone_by_slot[entry["slot"]]}
+    components = []
+    for side, start, width in pieces:
+        source_left = box[0] + start / scale
+        source_right = source_left + width / scale
+        source_cx = (source_left + source_right) * .5
+        source_cy = (box[1] + box[3]) * .5
+        components.append({
+            "id": f"lv{level:03d}_{entry['gender']}_{entry['slot']}_{side}",
+            "level": level, "gender": entry["gender"], "slot": entry["slot"], "side": side,
+            "bone": bone_by_side[side], "atlas": f"lv{level:03d}",
+            "x": entry["left"] + start, "y": ATLAS_SIZE - entry["top"] - image.height,
+            "w": width, "h": image.height, "order": entry["order"],
+            "worldW": (source_right - source_left) / CANVAS[1] * WORLD_HEIGHT,
+            "worldH": (box[3] - box[1]) / CANVAS[1] * WORLD_HEIGHT,
+            "dx": (source_cx - CANVAS[0] * .5) / CANVAS[1] * WORLD_HEIGHT,
+            "dy": (GROUND_SOURCE_Y - source_cy) / CANVAS[1] * WORLD_HEIGHT,
+        })
+    return components
+
+
+def pack_static(source_dir: Path, level: int, output: Path) -> tuple[list[dict], list[dict], dict, dict | None]:
     scale = TARGET_FULL_HEIGHT / (GROUND_SOURCE_Y - 16)
     entries = []
     order_by_slot = {slot: 8 + index for index, slot in enumerate(SLOTS)}
@@ -207,7 +259,7 @@ def pack_static(source_dir: Path, level: int, output: Path) -> tuple[list[dict],
                         "path": None, "box": (0, 0, 120, 120), "image": skill_slash()})
     shelf_pack(entries)
     atlas = Image.new("RGBA", (ATLAS_SIZE, ATLAS_SIZE))
-    parts, effect = [], None
+    parts, components, effect = [], [], None
     for entry in entries:
         image = entry["image"]
         atlas.alpha_composite(image, (entry["left"], entry["top"]))
@@ -226,10 +278,11 @@ def pack_static(source_dir: Path, level: int, output: Path) -> tuple[list[dict],
                    "dy": (GROUND_SOURCE_Y-cy)/CANVAS[1]*WORLD_HEIGHT,
                    "source": str(entry["path"].relative_to(source_dir)), "sourceSha256": digest(entry["path"])}
         parts.append(packed)
+        components.extend(equipment_components(entry, level))
     filename = "vo-lv1-map-avatar-atlas.png" if level == 1 else f"vo-lv{level}-equipment-atlas.png"
     path = output / filename
     atlas.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).save(path, optimize=True, compress_level=9)
-    return parts, {"id": f"lv{level:03d}", "file": filename, "sha256": digest(path), "pngBytes": path.stat().st_size}, effect
+    return parts, components, {"id": f"lv{level:03d}", "file": filename, "sha256": digest(path), "pngBytes": path.stat().st_size}, effect
 
 
 def pack_motion(source_dir: Path, extended_dir: Path, gender: str, output: Path) -> tuple[list[dict], dict]:
@@ -284,11 +337,12 @@ def main() -> int:
     args = parser.parse_args()
     if args.output_dir.exists(): raise FileExistsError("Use a new output directory")
     args.output_dir.mkdir(parents=True)
-    parts, atlases = [], []
+    parts, components, atlases = [], [], []
     effect = None
     for level in LEVELS:
-        level_parts, atlas, level_effect = pack_static(static_source(args.lv1_dir, args.progression_dir, level), level, args.output_dir)
-        parts.extend(level_parts); atlases.append(atlas)
+        level_parts, level_components, atlas, level_effect = pack_static(
+            static_source(args.lv1_dir, args.progression_dir, level), level, args.output_dir)
+        parts.extend(level_parts); components.extend(level_components); atlases.append(atlas)
         if level_effect is not None: effect = level_effect
     if effect is None: raise ValueError("Missing Võ skill effect")
     motion, motion_atlases = [], []
@@ -308,14 +362,17 @@ def main() -> int:
                        "generator": "reference_guided_imagegen_motion_batch" if is_motion else (
                            "reference_guided_imagegen_rig_batch" if atlas["id"] == "rig" else "aligned_imagegen_delta_batch"),
                        "referenceOnly": False})
-    manifest = {"id": "vo-lv1-30-map-avatar-v6", "status": "DRAFT_RUNTIME_REVIEW", "classId": "vo",
+    manifest = {"id": "vo-lv1-30-map-avatar-v7", "status": "DRAFT_RUNTIME_REVIEW", "classId": "vo",
                 "levels": list(LEVELS), "genders": ["male", "female"], "slots": list(SLOTS),
                 "atlases": atlas_records, "assets": assets, "parts": parts, "effects": [effect], "motionFrames": motion,
                 "attachmentProfiles": attachment_profiles(),
+                "equipmentComponents": components,
                 "rigParts": rig_parts, "rigPoseProfiles": rig_pose_profiles(),
-                "nonClaims": ["Lv1 skeletal rig checkpoint", "equipment limb splitting still pending", "requires Player review"]}
+                "nonClaims": ["reusable hierarchical paper-doll rig technical checkpoint",
+                              "garment attachment art visual fix required",
+                              "animated paper-doll attachment review required"]}
     (args.output_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))+"\n")
-    print(json.dumps({"id": manifest["id"], "parts": len(parts), "motionFrames": len(motion),
+    print(json.dumps({"id": manifest["id"], "parts": len(parts), "equipmentComponents": len(components), "motionFrames": len(motion),
                       "pngBytes": sum(a["pngBytes"] for a in manifest["atlases"])}))
     return 0
 

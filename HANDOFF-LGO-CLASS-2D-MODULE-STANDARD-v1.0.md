@@ -1,5 +1,11 @@
 # Handoff chuẩn module class 2D v1.0 — Võ
 
+## Override hiện hành — base-first hierarchy checkpoint 2026-09-10
+
+Phần “no gameplay/runtime asset” bên dưới là lịch sử của sandbox chuẩn hóa cũ. Branch hiện hành đã có Map01A và Võ runtime. Contract mới dùng chung nằm ở `TwoDSkeletalPaperDollRig.cs`; manifest Võ v7 có 20 rig part, parent/pivot, 120 local pose profile và 96 equipment attachment cho 4 tier × 2 giới × 10 slot. Mọi slot dùng attachment path; `arm_guard/boots` có left/right, tám slot còn lại có center attachment. Tất cả chỉ tham chiếu sub-rect của 7 atlas hiện có, không tăng texture byte.
+
+Không nhân code Võ sang class khác. Trước Kiếm/Pháp/Cơ/Linh phải tái dùng cùng base rig runtime, bone/slot IDs và action/UI base. Asset khác class chỉ được thay manifest/atlas/pose timing. Evidence kỹ thuật mới nhất phải đi cùng visual note trung thực; hierarchy đã giảm rời khớp, nhưng rig-compatible garment art vẫn cần polish trước khi ghi `CLASS-VO-01_PASS`.
+
 Ngày 2026-09-09. Owner thu hẹp phạm vi hiện tại về class Võ; bốn spec class còn lại trong prompt ban đầu được hoãn, không tạo file giả đủ danh sách. Quy ước chung giữ 5 class ID, nhưng checker chỉ yêu cầu spec/pack Võ.
 
 ## Quyết định và hiện trạng

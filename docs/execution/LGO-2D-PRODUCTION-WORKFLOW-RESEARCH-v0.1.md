@@ -80,3 +80,22 @@ Batch tiếp theo: một góc Đông Môn trong Player bằng art mới, trướ
 - Spine — Mix and Match / skins and attachments: https://en.esotericsoftware.com/spine-unity-mix-and-match
 - RPG Maker forum — paper-doll explanation as separate equipment sprite sheets overlaid on character: https://forums.rpgmakerweb.com/index.php?threads/paperdolls-is-it-possible.46337/
 - MapleStory overview as 2D side-scrolling MMORPG reference: https://en.wikipedia.org/wiki/MapleStory
+
+## Chuẩn base-first dùng từ CLASS-VO-01B2 — 2026-09-10
+
+Mọi class dùng một contract chung theo thứ tự `base skeleton → bone hierarchy → slot placeholder → attachment → skin/loadout → animation/action`. ID class, giới tính, cấp và item chỉ là dữ liệu; không tạo renderer, action handler hoặc layout riêng bằng cách sao chép controller. Runtime chung đầu tiên là `TwoDSkeletalPaperDollRig`: dựng toàn bộ bone trước, nối parent sau, attachment làm con trực tiếp của bone và pose lưu rotation cục bộ so với parent.
+
+- Character: một skeleton topology cho nam/nữ nếu joint contract tương thích; asset hình riêng được phép nhưng ID bone/slot phải giống nhau. Đồ đôi khai báo hai attachment trái/phải; đồ một khối vẫn đi qua cùng attachment path. Equip/unequip chỉ đổi visibility/loadout state, không sinh texture mới.
+- Action: input PC/touch map về action ID chung (`move/run/jump/basic/class_skill/equip/toggle_panel`). Class config chỉ đổi animation clip, timing, range, damage và VFX; không tạo nhánh UI/input riêng cho từng class.
+- UI/UX: dùng base panel và responsive rules hiện có; mobile/tablet/PC thay profile kích thước, wrap/safe-area và mật độ, không nhân ba layout hierarchy. Class skin chỉ cung cấp nội dung/icon/theme hợp lệ trong design token đã khóa.
+- Asset: atlas theo nhóm cùng tải; source ở kích thước gần runtime, 512–1024 cho sheet hiện tại; không upscale rồi downsample. Variant thiết bị chỉ dùng khi profiling chứng minh cần. Pack Võ hiện giữ 7 PNG/724.795 byte dù tăng từ 32 lên 96 attachment metadata.
+
+Bài học bắt buộc không lặp:
+
+1. Tách một ảnh đôi ở chính giữa chỉ giải quyết găng/giày; các slot còn lại vẫn đứng ngoài skeleton. Mọi slot phải đi qua attachment-to-bone contract.
+2. Xoay từng sprite quanh pivot độc lập làm cẳng tay rời bắp tay và cẳng chân rời đùi. Bone phải có parent hierarchy thật.
+3. Rotation pose cũ là góc world; gán trực tiếp thành local làm góc con cộng dồn quá mức. Packer phải chuyển `local = world - parentWorld`; unit test tái dựng góc world để khóa lỗi này.
+4. Capture thay đồ có state nối tiếp. Sau frame chứng minh tháo slot phải mặc lại trước frame progression/full outfit, nếu không ảnh review sau đó gây hiểu sai chất lượng bộ đồ.
+5. Technical capture PASS chỉ xác nhận state/schema. Capture v1 vẫn cho thấy nữ Lv30 thiếu coherence; chỉ v2 sau hierarchy/local rotation mới được dùng làm evidence kỹ thuật. Art attachment vẫn cần source rig-compatible, chưa claim production-final.
+
+Tham khảo kỹ thuật chính: [Spine skins/skin placeholders](https://en.esotericsoftware.com/spine-skins), [Spine attachments follow bones through slots](https://en.esotericsoftware.com/spine-attachments), [spine-unity mix-and-match](https://en.esotericsoftware.com/spine-unity-mix-and-match), [Unity Sprite Atlas](https://docs.unity3d.com/Manual/class-SpriteAtlas.html). Với wardrobe hữu hạn, prepack attachment vào atlas; không runtime-repack mặc định vì tăng cấp phát texture/cache và làm quản lý memory khó dự đoán.

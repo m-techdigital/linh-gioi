@@ -336,3 +336,6 @@ Trạng thái: `VO_LV1_FULL_FRAME_MOTION_PASS / ANIMATED_PAPER_DOLL_ATTACHMENT_I
 ## Võ modular skeletal base gate — 2026-09-10
 
 `VO_SKELETAL_BASE_RIG_PASS / EQUIPMENT_COMPONENT_BINDING_INCOMPLETE`: runtime có 10 body segment cho mỗi giới và pose profile data-driven xoay quanh joint pivot; modular không còn dùng một base sprite đứng phẳng. Source QA đúng 10 connected component/sheet, atlas rig 1024² chỉ 24.232 byte; tổng bảy atlas 724.795 byte. Player capture 46×3 đã review: thân/limb chuyển động rõ hơn, nhưng slot đôi vẫn chưa tách theo bone và gear Võ nữ Lv30 còn lệch. Next bắt buộc là split/bind equipment component trước khi đóng Võ hoặc nhân pipeline.
+## Võ base-first skeletal hierarchy — 2026-09-10
+
+Đã chuyển prototype Võ từ sprite pivot độc lập sang bone hierarchy cha-con và đưa phần dựng rig/attachment vào base `TwoDSkeletalPaperDollRig`. Manifest v7 giữ 7 atlas/724.795 byte, thêm 96 attachment metadata cho đủ 10 slot ở Lv1/10/20/30, nam/nữ; pose world được chuyển sang local rotation để không cộng dồn sai. EditMode gần nhất 181 total/180 pass/0 fail/1 ignored; Player capture ba profile technical pass. Visual review xác nhận tay/chân nối tốt hơn, nhưng garment nữ Lv30 còn chưa khớp silhouette production. Trạng thái: `VO_BASE_FIRST_RIG_TECHNICAL_PASS / GARMENT_ART_VISUAL_FIX_REQUIRED`; chưa mở class khác.

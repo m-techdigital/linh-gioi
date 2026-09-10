@@ -82,6 +82,7 @@ def main():
                 'voBasicVerified', 'voLienQuyenVerified'))
             or not manifest.get('voAttachmentLv1Verified')
             or not manifest.get('voAttachmentLv30FemaleVerified')
+            or not manifest.get('voEquipmentComponentBindingVerified')
             or not manifest.get('mapQuestFlowVerified') or manifest.get('activeQuestId') != 'COMPLETE'
             or not manifest.get('functionalUiVerified')
             or manifest.get('completedQuestCount') != 9

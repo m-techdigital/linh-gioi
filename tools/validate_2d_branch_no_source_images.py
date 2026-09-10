@@ -19,7 +19,7 @@ SKIP_PARTS = {
 RUNTIME_ART_PACKS = [
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1MapAvatarArt',
-        'id': 'vo-lv1-30-map-avatar-v6',
+        'id': 'vo-lv1-30-map-avatar-v7',
         'status': 'DRAFT_RUNTIME_REVIEW',
         'assets': {
             'vo-lv1-map-avatar-atlas.png': (1024, 1024, 'two-gender-tier-equipment-atlas'),

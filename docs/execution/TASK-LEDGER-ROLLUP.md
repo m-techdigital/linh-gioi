@@ -425,3 +425,6 @@ Checkpoint chỉ đóng full-frame Lv1. Next làm animated attachment cho 10 slo
 ## Võ base skeletal rig — 2026-09-10
 
 Tạo nguồn rig nam/nữ theo ảnh Võ đã chọn, component-QA và pack 20 body segment vào một atlas 24.232 byte. Manifest v6 cấp 120 rig pose + 120 attachment profile; runtime modular dùng segment và joint pivot cho sáu state trên cả hai giới/tier. EditMode `181/180/0/1`; build và Player capture `build/vo-rig-v2/three-profiles/` đạt 46×3 technical pass. Visual review giữ trạng thái chưa hoàn chỉnh vì slot `boots`/`arm_guard` và các phần hai bên chưa tách để bind từng bone; next `CLASS-VO-01B2`, chưa mở class khác.
+## Võ base-first rig + equipment attachment — 2026-09-10
+
+TDD bắt lỗi combined slot, thiếu hierarchy và world/local rotation. Runtime chung `TwoDSkeletalPaperDollRig` nay quản lý parent bones, pivot và attachment; Võ dùng 96 metadata attachment mà không tăng 724.795 byte texture. EditMode 180 pass/0 fail/1 ignored; capture 46×3 technical pass. Visual còn `GARMENT_ART_VISUAL_FIX_REQUIRED`, đặc biệt Võ nữ Lv30; next sửa source garment theo rig rồi mới claim class pass hoặc mở class thứ hai.

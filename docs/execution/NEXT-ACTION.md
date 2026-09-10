@@ -96,6 +96,12 @@ Next action ngay: căn PC foot/contact shadow trên lane (ảnh hiện vẫn PC 
 
 ## Goal kỹ thuật hiện tại — 2026-09-10
 
+### Base-first override mới nhất
+
+Đã bỏ hướng mỗi slot tự dịch/xoay. Võ hiện là consumer đầu tiên của `TwoDSkeletalPaperDollRig`: skeleton cha-con, local pose và 96 attachment metadata dùng chung. Next không được copy `CongDongLamMap01AArtPreview` sang class khác. Việc tiếp theo của `CLASS-VO-01` là tạo/chuẩn hóa garment art tương thích chính skeleton này, kiểm full outfit và equip/unequip từng slot qua idle/run/jump/basic/`Liên Quyền`; chỉ khi visual đạt mới tách controller orchestration ra khỏi Map01A và nhân manifest sang class thứ hai.
+
+Gate hình ảnh hiện tại: `VO_BASE_FIRST_RIG_TECHNICAL_PASS / GARMENT_ART_VISUAL_FIX_REQUIRED`. Evidence mới nhất `build/vo-base-first-v3/three-profiles/`; không dùng capture split-only hoặc independent-pivot trước đó để claim. Quy tắc/lỗi đã ghi tại `LGO-2D-PRODUCTION-WORKFLOW-RESEARCH-v0.1.md`.
+
 Owner bổ sung: mỗi class chỉ xử lý dải **Lv1-30** theo giai đoạn phát triển; không mở skill/trang bị high-tier 31-100 trong batch class hiện tại.
 
 Owner đã giao Codex tự quyết định hướng kỹ thuật cho task này. Quyết định hiện tại: **đóng map đầu Đông Môn thành vertical slice 2D có thể kiểm chứng trong Player trước, rồi mới chuyển sang hoàn thiện 5 class**. Các checkpoint Linh Thành/Quảng Trường/district bên dưới là lịch sử runtime preview local-only; không dùng chúng làm lý do mở map thứ hai hoặc tiếp hub trước khi Đông Môn đạt gate.

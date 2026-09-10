@@ -284,7 +284,10 @@ namespace LinhGioi.Tests
                 Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 male base").enabled, Is.True);
                 preview.CycleVoAvatarMode();
                 Assert.That(preview.VoAvatarMode, Is.EqualTo("modular"));
-                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(10));
+                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(0));
+                Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Count(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Võ equipment component lv001 male ")),
+                    Is.EqualTo(12));
             }
             finally
             {
@@ -320,7 +323,7 @@ namespace LinhGioi.Tests
                 preview.CycleVoAvatarMode();
                 preview.CycleVoAvatarMode();
                 Assert.That(preview.VoAvatarMode, Is.EqualTo("modular"));
-                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(10));
+                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(0));
 
                 preview.CycleVoEquipmentSlot();
                 Assert.That(preview.VoSelectedEquipmentSlot, Is.EqualTo("head_hair"));
@@ -330,8 +333,11 @@ namespace LinhGioi.Tests
                 preview.MoveOnLane(1, .1f);
                 Assert.That(preview.VoAvatarUsesAlignedPaperDollMotion, Is.True);
                 Assert.That(GameObject.Find("Map01A Võ motion frame").GetComponent<SpriteRenderer>().enabled, Is.False);
-                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(9),
-                    "nine equipped slots must remain visible over the articulated rig");
+                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(0),
+                    "modular mode must render every equipment slot through the shared bone attachment path");
+                Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Count(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Võ equipment component lv001 female ")),
+                    Is.EqualTo(11));
                 Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 female slot head_hair").enabled, Is.False,
                     "an unequipped slot must not reappear from the full-frame sheet");
             }
@@ -454,32 +460,41 @@ namespace LinhGioi.Tests
                 Assert.That(rig, Has.Length.EqualTo(10));
                 Assert.That(rig.Count(renderer => renderer.enabled), Is.EqualTo(10));
                 Assert.That(GameObject.Find("Map01A Võ avatar lv001 male base").GetComponent<SpriteRenderer>().enabled, Is.False);
+                Assert.That(GameObject.Find("Map01A Võ avatar lv001 male slot arm_guard").GetComponent<SpriteRenderer>().enabled, Is.False);
+                Assert.That(GameObject.Find("Map01A Võ avatar lv001 male slot boots").GetComponent<SpriteRenderer>().enabled, Is.False);
+                var equipmentComponents = preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Where(renderer => renderer.name.StartsWith("Map01A Võ equipment component lv001 male ")).ToArray();
+                Assert.That(equipmentComponents, Has.Length.EqualTo(12));
+                Assert.That(equipmentComponents.Count(renderer => renderer.enabled), Is.EqualTo(12));
 
-                var weapon = GameObject.Find("Map01A Võ avatar lv001 male slot main_weapon").transform;
-                var boots = GameObject.Find("Map01A Võ avatar lv001 male slot boots").transform;
-                var tunic = GameObject.Find("Map01A Võ avatar lv001 male slot outer_tunic").transform;
-                var idleWeaponPosition = weapon.localPosition;
-                var idleWeaponRotation = weapon.localEulerAngles.z;
-                var idleBootsPosition = boots.localPosition;
-                var idleTunicRotation = tunic.localEulerAngles.z;
+                var weapon = GameObject.Find("Map01A Võ equipment component lv001 male main_weapon center").transform;
+                var boots = GameObject.Find("Map01A Võ equipment component lv001 male boots left").transform;
+                var tunic = GameObject.Find("Map01A Võ equipment component lv001 male outer_tunic center").transform;
+                var leftForearmBone = GameObject.Find("Map01A Võ bone male left-forearm-hand").transform;
+                Assert.That(leftForearmBone.parent.name, Is.EqualTo("Map01A Võ bone male left-upper-arm"));
+                Assert.That(boots.parent.name, Is.EqualTo("Map01A Võ bone male left-shin-foot"));
+                var idleWeaponPosition = weapon.position;
+                var idleWeaponRotation = weapon.eulerAngles.z;
+                var idleBootsPosition = boots.position;
+                var idleTunicRotation = tunic.eulerAngles.z;
 
                 preview.SetVoRun(true);
                 preview.MoveOnLane(1, .1f);
-                Assert.That(weapon.localPosition, Is.Not.EqualTo(idleWeaponPosition));
-                Assert.That(weapon.localEulerAngles.z, Is.Not.EqualTo(idleWeaponRotation));
+                Assert.That(weapon.position, Is.Not.EqualTo(idleWeaponPosition));
+                Assert.That(weapon.eulerAngles.z, Is.Not.EqualTo(idleWeaponRotation));
 
                 preview.SetVoRun(false);
                 preview.AdvanceVoAnimation(.5f);
                 Assert.That(preview.TriggerVoJump(), Is.True);
-                Assert.That(boots.localPosition, Is.Not.EqualTo(idleBootsPosition));
+                Assert.That(boots.position, Is.Not.EqualTo(idleBootsPosition));
 
                 preview.AdvanceVoAnimation(.6f);
                 for (var step = 0; step < 175; step++) preview.MoveOnLane(1, .1f);
                 Assert.That(preview.TriggerVoBasicAttack(), Is.True);
-                Assert.That(tunic.localEulerAngles.z, Is.Not.EqualTo(idleTunicRotation));
+                Assert.That(tunic.eulerAngles.z, Is.Not.EqualTo(idleTunicRotation));
 
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
-                    .Count(renderer => renderer.enabled && renderer.name.Contains("lv001 male slot")), Is.EqualTo(10));
+                    .Count(renderer => renderer.enabled && renderer.name.Contains("lv001 male slot")), Is.EqualTo(0));
             }
             finally
             {
