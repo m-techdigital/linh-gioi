@@ -11,6 +11,8 @@ Chỉ đạo owner: giảm chất lượng/dung lượng runtime theo kích thư
 - Actor hiện cao khoảng 150 px trong ba profile. Vì vậy cell runtime quanh 340 px đủ dự phòng, không xuất mỗi bộ thành texture 2K/4K. Importer giới hạn 1024; mobile dùng ASTC 6×6. Con số PNG không thay cho đo GPU/thiết bị thật.
 - Sheet motion 3×2 giữ cùng nhân vật/trang phục cho idle, hai bước walk, dash, punch windup và punch impact. Đây là cách nhanh hơn và đồng nhất hơn sinh từng frame. Batch kế tiếp làm cùng cấu trúc cho nữ và tiến cấp Lv10/20/30.
 - Slot mảnh có thể thay đổi rất nhẹ khi actor hiển thị nhỏ; kiểm bằng toggle trong Player nhưng chỉ giữ slot có giá trị phối đồ thật. Khi vào production animation dài, ưu tiên layered PSD/PSB hoặc skeletal attachment thay vì nhân số lượng full-frame cho mọi tổ hợp.
+- Tiến cấp Lv10/20/30 được tạo thành một sheet 3×2 rồi tách đồng loạt; mỗi tier dùng atlas 1024² riêng để chuẩn bị tải theo tier. Sáu atlas equipment + motion hiện là 643.722 byte PNG, thay vì một atlas 2048 luôn tải toàn bộ.
+- Full-frame motion chỉ dùng đúng outfit mà sheet đã vẽ. Không được dùng frame Lv1 khi nhân vật đang mặc Lv10/20/30; runtime hiện giữ paper-doll tier tĩnh cho đến khi có tier-matched sheet hoặc rig attachment. Đây là gate correctness, không che bằng transform hoặc claim animation hoàn chỉnh.
 
 ## Quyết định đang áp dụng
 

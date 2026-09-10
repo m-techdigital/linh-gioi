@@ -4,6 +4,12 @@
 
 # PROJECT STATE — Linh Giới Online 2D
 
+## Võ Lv1/10/20/30 visual progression — 2026-09-10
+
+Runtime hiện có bốn mốc trang bị Võ Lv1/10/20/30, mỗi mốc gồm nam/nữ, base/full và 10 slot paper-doll: 96 part, bốn atlas tier tách vòng đời tải. Hai giới đều có sáu pose Lv1 thật; tổng sáu atlas indexed 1024² là 643.722 byte. L/touch đổi tier trong Player mà không lệch foot anchor; 54 ảnh ba profile tại `build/map01a-art/vo-lv1-30-final-v2-three-profiles/` technical pass và các frame 12/15–18 đã review trực tiếp.
+
+Trạng thái: `VO_LV1_30_VISUAL_PROGRESSION_PASS / TIER_MATCHED_MOTION_AND_COMBAT_INCOMPLETE`. Motion hiện chỉ mang outfit Lv1. Ở Lv10/20/30 runtime giữ đúng paper-doll tĩnh thay vì tráo sang outfit Lv1; cần batch tier-matched motion hoặc rig attachment trước khi đóng class. Build macOS `166.974.355` byte, 0 error/0 warning; EditMode cuối `179/178/0/1`.
+
 ## Võ Lv1 equipment + real-motion checkpoint — 2026-09-10
 
 Đã kế thừa base WIP đã audit và tạo đồng bộ Võ nam/nữ Lv1 theo board owner, không dùng board phẳng làm runtime asset. Runtime có 10 slot `main_weapon/head_hair/inner_top/outer_tunic/lower_garment/waist/arm_guard/boots/light_armor/accessory`, cùng canvas và foot anchor; C/G/V/B hoặc touch kiểm được full/base/modular, giới tính, chọn slot và tháo/lắp. Võ nam có sáu pose thật idle/walk/dash/punch; Võ nữ hiện dùng static/fallback và được ghi rõ trong manifest.

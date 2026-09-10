@@ -1,5 +1,9 @@
 # TASK LEDGER ROLLUP — 2D Pivot
 
+## Võ Lv1/10/20/30 visual progression — 2026-09-10
+
+Đã tạo một sheet tiến cấp đồng nhất cho sáu nhân vật nam/nữ ở Lv10/20/30, batch-key/căn về base và tách 10 slot/tier. Runtime có 96 part, bốn atlas tier và hai atlas motion Lv1 hai giới, tổng 643.722 byte. Selector L/touch và 54 ảnh Player ba profile chứng minh đổi cấp/giới/slot và motion nữ. Chưa đóng class: Lv10/20/30 giữ paper-doll tĩnh khi chuyển động để tránh hiển thị sai outfit Lv1; next là tier-matched motion/rig và `Liên Quyền` có hit feedback.
+
 ## Võ Lv1 equipment + real motion — 2026-09-10
 
 Batch kế thừa WIP đã hoàn thiện checkpoint Lv1 cho cả nam/nữ: 10 lớp paper-doll, đổi giới tính, chọn và bật/tắt từng slot trong Player. Võ nam có sheet sáu pose thật cho idle/walk/dash/punch; hai atlas indexed 1024² tổng 215.938 byte PNG. 42 ảnh mobile/tablet/PC đã review; EditMode `178/177/0/1`, build macOS 0 error, smoke/matrix/guards pass. Hạn chế còn công khai: nữ chưa có motion frame, mới một bộ Lv1, chưa có progression Lv10/20/30 và combat class đầy đủ. Next là một batch sheet tiến cấp hai giới + motion nữ, không mở class khác.
