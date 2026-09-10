@@ -106,7 +106,8 @@
       "b": 0.09,
       "a": 0.96,
       "sortOffset": 6,
-      "cell": "waist_vo_lv1"
+      "cell": "waist_vo_lv1",
+      "approvedRuntimeArt": true
     },
     {
       "id": "sash_knot",
@@ -170,7 +171,8 @@
       "b": 0.05,
       "a": 0.96,
       "sortOffset": 7,
-      "cell": "glove_l_vo_lv1"
+      "cell": "glove_l_vo_lv1",
+      "approvedRuntimeArt": true
     },
     {
       "id": "hand_wrap_r",
@@ -203,7 +205,8 @@
       "b": 0.04,
       "a": 0.96,
       "sortOffset": 5,
-      "cell": "boot_l_vo_lv1"
+      "cell": "boot_l_vo_lv1",
+      "approvedRuntimeArt": true
     },
     {
       "id": "boot_r",
@@ -219,7 +222,25 @@
       "b": 0.04,
       "a": 0.96,
       "sortOffset": 5,
-      "cell": "boot_r_vo_lv1"
+      "cell": "boot_r_vo_lv1",
+      "approvedRuntimeArt": true
+    },
+    {
+      "id": "weapon_staff",
+      "slot": "Weapon",
+      "anchor": "Hand_R",
+      "shape": "rect",
+      "x": 0.42,
+      "y": -0.26,
+      "w": 0.06,
+      "h": 0.62,
+      "r": 0.76,
+      "g": 0.58,
+      "b": 0.34,
+      "a": 0.96,
+      "sortOffset": 8,
+      "cell": "staff_vo_lv1",
+      "approvedRuntimeArt": true
     }
   ],
   "skillCues": [

@@ -392,6 +392,9 @@ namespace LinhGioi.Tests
             StringAssert.Contains("approvedCell=chest_panel cell=torso_outer_vo_lv1", snapshot);
             StringAssert.Contains("approvedCell=hand_wrap_r cell=glove_r_vo_lv1", snapshot);
             StringAssert.Contains("approvedCell=vo_lv1_first_skill_trail cell=skill_vo_lv1_palm_trail", snapshot);
+            StringAssert.Contains("approvedCell=sash_red_core cell=waist_vo_lv1", snapshot);
+            StringAssert.Contains("approvedCell=boot_r cell=boot_r_vo_lv1", snapshot);
+            StringAssert.Contains("approvedCell=weapon_staff cell=staff_vo_lv1", snapshot);
         }
 
         [Test]
@@ -423,6 +426,12 @@ namespace LinhGioi.Tests
                 var skillWorldSize = Vector2.Scale(skillRenderer.sprite.bounds.size, skill.transform.localScale);
                 Assert.That(skillWorldSize.x, Is.InRange(0.68f, 0.78f));
                 Assert.That(skillWorldSize.y, Is.InRange(0.25f, 0.31f));
+                var staff = GameObject.Find("LGO 2D Player Vo AtlasCell staff_vo_lv1 Weapon weapon_staff");
+                Assert.IsNotNull(staff);
+                var staffRenderer = staff.GetComponent<SpriteRenderer>();
+                StringAssert.Contains("ApprovedRuntimeArt", staffRenderer.sprite.name);
+                var staffWorldSize = Vector2.Scale(staffRenderer.sprite.bounds.size, staff.transform.localScale);
+                Assert.That(staffWorldSize.y, Is.InRange(0.74f, 0.82f));
             }
             finally
             {

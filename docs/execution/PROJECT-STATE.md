@@ -246,3 +246,4 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 - Giới hạn: vẫn là runtime blockout/stylized sprite parts, chưa phải final concept art/NPC animation.
 - Next: mở atlas/sprite thật cho NPC hoặc áp pattern này cho Training Stone/Shadow Slime/hub NPC.
 - LGO_2D_PRODUCTION_WORKFLOW_RESEARCH_READY: đã ghi `docs/execution/LGO-2D-PRODUCTION-WORKFLOW-RESEARCH-v0.1.md`; batch sau ưu tiên pipeline Tilemap/Sprite Atlas/paper-doll, dùng `tools/capture_lgo_2d_onboarding_visual.py`, không polish bằng rectangle primitive kéo dài.
+- 2026-09-10: `LGO_VO_LV1_APPROVED_RUNTIME_ART_SLOT_EXPANSION_READY` — Võ Lv1-30 đã bật thêm approved runtime art cells cho glove L/R, waist, boots và staff qua manifest/cellMap; Player capture pass nhưng alpha/slicing vẫn là checkpoint kỹ thuật, chưa production-final như reference screenshot.
