@@ -39,6 +39,9 @@ namespace LinhGioi.World
         private SpriteRenderer _playerWaistRenderer;
         private SpriteRenderer _playerGlovesLeftRenderer;
         private SpriteRenderer _playerGlovesRightRenderer;
+        private SpriteRenderer _playerContactShadowRenderer;
+        private string _runtimeDongMonCurrentGroundingSnapshot = string.Empty;
+        private string _runtimeDongMonVisitedGroundingSnapshot = string.Empty;
         private Transform _playerHead;
         private Transform _playerLeftArm;
         private Transform _playerRightArm;
@@ -276,11 +279,65 @@ namespace LinhGioi.World
             _playerWaistRenderer = FindChildRenderer(_player, "Sash");
             _playerGlovesLeftRenderer = FindChildRenderer(_player, "Wrist Guard Left");
             _playerGlovesRightRenderer = FindChildRenderer(_player, "Wrist Guard Right");
+            _playerContactShadowRenderer = FindChildRenderer(_player, "LayeredCharacter Shadow Slot Shadow");
             _playerHead = FindChildTransform(_player, "Head");
             _playerLeftArm = FindChildTransform(_player, "Left Arm");
             _playerRightArm = FindChildTransform(_player, "Right Arm");
             _playerLeftLeg = FindChildTransform(_player, "Left Leg");
             _playerRightLeg = FindChildTransform(_player, "Right Leg");
+        }
+
+        private void ApplyDongMonPlayerGrounding()
+        {
+            var anchor = CurrentDongMonGroundingAnchor();
+            if (anchor == null) return;
+
+            if (_playerContactShadowRenderer != null)
+            {
+                _playerContactShadowRenderer.sortingOrder = anchor.shadowSortOrder;
+                SetSpriteWorldScale(_playerContactShadowRenderer.transform, new Vector2(anchor.shadowW, anchor.shadowH));
+            }
+
+            ApplyPlayerBaseSorting(anchor.playerSortOrder);
+            var groundingSnapshot = anchor.routeNodeId + " lane=" + anchor.lane
+                + " playerSort=" + anchor.playerSortOrder
+                + " shadowSort=" + anchor.shadowSortOrder
+                + " shadowSize=" + anchor.shadowW.ToString("0.00") + "x" + anchor.shadowH.ToString("0.00");
+            _runtimeDongMonCurrentGroundingSnapshot = "currentGrounding=" + groundingSnapshot;
+            if (anchor.routeNodeId == "shadow-slime") _runtimeDongMonVisitedGroundingSnapshot = "visitedGrounding=" + groundingSnapshot;
+        }
+
+        private DongMonPlayerGroundingAnchor CurrentDongMonGroundingAnchor()
+        {
+            var anchors = TwoDMapDesignCatalog.LoadDongMonPlayerGroundingAnchors();
+            if (anchors == null || anchors.Length == 0) return null;
+
+            var routeNodeId = _state.CurrentRouteNodeId;
+            for (var i = 0; i < anchors.Length; i++)
+                if (anchors[i].routeNodeId == routeNodeId) return anchors[i];
+
+            if (routeNodeId == "spawn" || routeNodeId == "movement" || routeNodeId == "return-gate") routeNodeId = "gatekeeper";
+            for (var i = 0; i < anchors.Length; i++)
+                if (anchors[i].routeNodeId == routeNodeId) return anchors[i];
+
+            return anchors[0];
+        }
+
+        private void ApplyPlayerBaseSorting(int playerSortOrder)
+        {
+            if (_player == null) return;
+            var renderers = _player.GetComponentsInChildren<SpriteRenderer>(true);
+            for (var i = 0; i < renderers.Length; i++)
+            {
+                var goName = renderers[i].gameObject.name;
+                if (goName.Contains("LayeredCharacter Shadow Slot Shadow")) continue;
+                if (goName.Contains("LayerSlot InnerShirt")) renderers[i].sortingOrder = playerSortOrder;
+                else if (goName.Contains("LayerSlot Body") || goName.Contains("Left Leg") || goName.Contains("Right Leg") || goName.Contains("Left Arm") || goName.Contains("Right Arm")) renderers[i].sortingOrder = playerSortOrder - 1;
+                else if (goName.Contains("Shoulder Line") || goName.Contains("Sash") || goName.Contains("Robe Trim") || goName.Contains("Wrist Guard")) renderers[i].sortingOrder = playerSortOrder + 1;
+                else if (goName.Contains("LayerSlot HairBack")) renderers[i].sortingOrder = playerSortOrder + 1;
+                else if (goName.Contains("Head")) renderers[i].sortingOrder = playerSortOrder + 2;
+                else if (goName.Contains("LayerSlot Eyes") || goName.Contains("LayerSlot HairFront")) renderers[i].sortingOrder = playerSortOrder + 4;
+            }
         }
 
         private void RefreshPlayerEquipmentPresentation()
@@ -551,6 +608,9 @@ namespace LinhGioi.World
                 + " | groundSortOrder=-2"
                 + " | markerSortOrder=5"
                 + " | routeAnchors=gatekeeper,training-stone,jump,dash,shadow-slime"
+                + " | " + TwoDMapDesignCatalog.LoadDongMonPlayerGroundingSourceSnapshot()
+                + (string.IsNullOrEmpty(_runtimeDongMonCurrentGroundingSnapshot) ? string.Empty : " | " + _runtimeDongMonCurrentGroundingSnapshot)
+                + (string.IsNullOrEmpty(_runtimeDongMonVisitedGroundingSnapshot) ? string.Empty : " | " + _runtimeDongMonVisitedGroundingSnapshot)
                 + " | safe-no-3d=True"
                 + " | safe-no-source-image=True"
                 + " | safe-runtime-player-evidence=True";
@@ -606,6 +666,7 @@ namespace LinhGioi.World
         private void RefreshPresentation()
         {
             if (_player != null) _player.position = ToWorld(_state.PlayerPosition, 1f);
+            ApplyDongMonPlayerGrounding();
             var focusedPosition = _state.AvailableAction == TwoDOnboardingAction.Train
                 ? TwoDOnboardingState.TrainingStonePosition + Vector2.down * 0.48f
                 : TwoDOnboardingState.GateKeeperPosition + Vector2.down * 0.54f;

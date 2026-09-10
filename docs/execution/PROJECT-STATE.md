@@ -12,6 +12,11 @@ Quyết định kỹ thuật đang khóa:
 
 Gate thao tác kiểm chứng chi tiết nằm ở `NEXT-ACTION.md`.
 
+
+## Đông Môn PC route-lane grounding — 2026-09-10
+
+`LGO_DONG_MON_PC_ROUTE_LANE_GROUNDING_READY`: map đầu Đông Môn có source runtime `DongMonPlayerGrounding.json` cho 5 anchor `gatekeeper/training-stone/jump/dash/shadow-slime`, mỗi anchor khai báo lane, foot/contact shadow, player/shadow sort order và shadow size. `TwoDOnboardingController` đọc source này để đổi contact shadow + sort band theo `CurrentRouteNodeId`; manifest giữ `currentGrounding` cho trạng thái cuối và `visitedGrounding=shadow-slime lane=combat-lane playerSort=6 shadowSort=5` để chứng minh Player thật đã đi qua combat lane. Đây là checkpoint khớp PC vào mặt phẳng map đầu, không phải polish art production giống ảnh reference. Evidence 2026-09-10: EditMode `total=164 passed=163 failed=0 skipped=1`; onboarding smoke PASS; macOS Player build Succeeded; Player capture 20 frame PASS; runtime/visual matrix PASS; no-3D/no-source-image PASS; frozen diff audit PASS. Đã xem ảnh `01-initial`, `02-gate-focus`, `03-dialogue`, `08-complete`, `20-district-harbor-preview`: PC/NPC đọc được, bóng chân hiện đúng, combat-lane foreground sort rõ hơn; overlay vẫn blockout, chưa claim thành phẩm.
+
 ## Đông Môn illustrated draft — 2026-09-10
 
 Đã tạo art mới và pack skyline + atlas cổng/NPC/terrain; preview opt-in trong Player qua `--lgo-dongmon-art-preview`, không sửa controller/state/5 class hoặc frozen surfaces. `tools/capture_lgo_dongmon_art.py` capture 5 trạng thái vào thư mục riêng. EditMode 139 pass, 0 fail, 1 skipped; guard 5 test pass; smoke/build/baseline 20 frame và art 5 frame đã chạy, ảnh đã review. Art vẫn DRAFT, player còn placeholder; không claim giống hoàn toàn ảnh owner.

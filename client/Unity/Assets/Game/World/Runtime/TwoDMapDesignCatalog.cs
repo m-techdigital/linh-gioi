@@ -88,6 +88,7 @@ namespace LinhGioi.World
         private const string DongMonAuthoredDetailsResourcePath = "LGOMaps/DongMonAuthoredDetails";
         private const string DongMonNpcSpritesResourcePath = "LGOMaps/DongMonNpcSprites";
         private const string DongMonInteractionMarkersResourcePath = "LGOMaps/DongMonInteractionMarkers";
+        private const string DongMonPlayerGroundingResourcePath = "LGOMaps/DongMonPlayerGrounding";
 
         public static string LoadDongMonTilePaletteSourceSnapshot()
         {
@@ -288,6 +289,61 @@ namespace LinhGioi.World
                 builder.Append(" | ").Append(markers[i].id).Append(':').Append(markers[i].action);
             }
             builder.Append(" | authored-interaction-marker=").Append(ContainsToken(text, "authored-interaction-marker"));
+            builder.Append(" | safe-runtime-resource=").Append(ContainsToken(text, "safe-runtime-resource"));
+            builder.Append(" | safe-no-source-image=").Append(ContainsToken(text, "safe-no-source-image"));
+            builder.Append(" | safe-no-3d=").Append(ContainsToken(text, "safe-no-3d"));
+            builder.Append(" | safe-local-no-backend=").Append(ContainsToken(text, "safe-local-no-backend"));
+            return builder.ToString();
+        }
+
+        private static DongMonPlayerGroundingSource LoadDongMonPlayerGroundingSource()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonPlayerGroundingResourcePath);
+            if (asset == null || string.IsNullOrEmpty(asset.text)) return null;
+            return JsonUtility.FromJson<DongMonPlayerGroundingSource>(asset.text);
+        }
+
+        public static DongMonPlayerGroundingAnchor[] LoadDongMonPlayerGroundingAnchors()
+        {
+            var source = LoadDongMonPlayerGroundingSource();
+            if (source == null || source.anchors == null || source.anchors.Length == 0)
+            {
+                return Array.Empty<DongMonPlayerGroundingAnchor>();
+            }
+
+            return source.anchors;
+        }
+
+        public static string LoadDongMonPlayerGroundingSourceSnapshot()
+        {
+            var asset = Resources.Load<TextAsset>(DongMonPlayerGroundingResourcePath);
+            if (asset == null)
+            {
+                return "DongMonPlayerGroundingSource: resource=" + DongMonPlayerGroundingResourcePath + " | missing";
+            }
+
+            var text = asset.text ?? string.Empty;
+            var source = LoadDongMonPlayerGroundingSource();
+            var anchors = source != null && source.anchors != null ? source.anchors : Array.Empty<DongMonPlayerGroundingAnchor>();
+            var builder = new StringBuilder("DongMonPlayerGroundingSource: resource=");
+            builder.Append(DongMonPlayerGroundingResourcePath);
+            builder.Append(" | bytes=").Append(text.Length);
+            builder.Append(" | anchors=").Append(anchors.Length);
+            builder.Append(" | levelBand=").Append(source != null ? source.levelBand : "missing");
+            builder.Append(" | groundBandY=").Append(source != null ? source.groundBandY : "missing");
+            builder.Append(" | footAnchor=").Append(source != null ? source.footAnchor : "missing");
+            builder.Append(" | contactShadow=").Append(source != null ? source.contactShadow : "missing");
+            for (var i = 0; i < anchors.Length; i++)
+            {
+                var anchor = anchors[i];
+                builder.Append(" | routeAnchor=").Append(anchor.routeNodeId)
+                    .Append(" lane=").Append(anchor.lane)
+                    .Append(" y=").Append(anchor.y.ToString("0.##", CultureInfo.InvariantCulture))
+                    .Append(" sortBand=").Append(anchor.sortBand)
+                    .Append(" playerSort=").Append(anchor.playerSortOrder)
+                    .Append(" shadowSort=").Append(anchor.shadowSortOrder);
+            }
+            builder.Append(" | authored-player-grounding=").Append(ContainsToken(text, "authored-player-grounding"));
             builder.Append(" | safe-runtime-resource=").Append(ContainsToken(text, "safe-runtime-resource"));
             builder.Append(" | safe-no-source-image=").Append(ContainsToken(text, "safe-no-source-image"));
             builder.Append(" | safe-no-3d=").Append(ContainsToken(text, "safe-no-3d"));
@@ -748,6 +804,35 @@ namespace LinhGioi.World
         public int sortOrder;
     }
 
+
+    [Serializable]
+    public sealed class DongMonPlayerGroundingSource
+    {
+        public string id;
+        public string mapId;
+        public string usage;
+        public string levelBand;
+        public string footAnchor;
+        public string contactShadow;
+        public string groundBandY;
+        public string[] safety;
+        public DongMonPlayerGroundingAnchor[] anchors;
+    }
+
+    [Serializable]
+    public sealed class DongMonPlayerGroundingAnchor
+    {
+        public string routeNodeId;
+        public string lane;
+        public float y;
+        public string sortBand;
+        public int playerSortOrder;
+        public int shadowSortOrder;
+        public int groundSortOrder;
+        public float shadowW;
+        public float shadowH;
+    }
+
     [Serializable]
     public readonly struct MapZone
     {
@@ -779,6 +864,7 @@ namespace LinhGioi.World
         public string Name { get; }
         public string Role { get; }
     }
+
 
     [Serializable]
     public readonly struct MapZoneConnection

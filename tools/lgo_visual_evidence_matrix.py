@@ -54,7 +54,7 @@ TWO_D_ONBOARDING_VIEWS: list[dict[str, Any]] = [
         "id": "two_d_initial",
         "label": "2D Đông Môn initial HUD/map read",
         "screenshot": "01-initial.bmp",
-        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeMinimapReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredDetailSourceSnapshot", "runtimeDongMonNpcSpriteSourceSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
+        "requiredManifest": ["status", "screenshotCount", "hudSnapshot", "runtimeTilemapSnapshot", "runtimeDongMonUnityTilemapSnapshot", "runtimeDongMonReadabilitySnapshot", "runtimeMinimapReadabilitySnapshot", "runtimeDongMonTilePaletteSnapshot", "runtimeDongMonTilePaletteSourceSnapshot", "runtimeDongMonChunkPlacementSourceSnapshot", "runtimeDongMonAuthoredDetailSourceSnapshot", "runtimeDongMonNpcSpriteSourceSnapshot", "runtimeDongMonPlayerSceneFitSnapshot", "runtimeDongMonAuthoredPassSnapshot"],
         "nonClaim": "not production art",
     },
     {
@@ -266,6 +266,11 @@ def verify_current() -> dict[str, Any]:
     for token in ("DongMonNpcSpriteSource", "resource=LGOMaps/DongMonNpcSprites", "npcs=1", "gate_keeper_parts=13", "role=tutorial-guide", "silhouette=elder-robed-guardian-staff", "slots=robe,cloak,hat,staff,talisman", "authored-npc-sprite=True", "safe-runtime-resource=True", "safe-no-source-image=True", "safe-no-3d=True", "safe-local-no-backend=True"):
         if token not in npc_sprite_snapshot:
             failures.append(f"runtimeDongMonNpcSpriteSourceSnapshot missing {token!r}")
+    player_scene_fit_snapshot = str(manifest.get("runtimeDongMonPlayerSceneFitSnapshot", ""))
+    for token in ("DongMonPlayerSceneFit", "DongMonPlayerGroundingSource", "authored-player-grounding=True", "routeAnchor=shadow-slime lane=combat-lane y=-1.16 sortBand=combat-front", "visitedGrounding=shadow-slime lane=combat-lane playerSort=6 shadowSort=5", "safe-runtime-player-evidence=True"):
+        if token not in player_scene_fit_snapshot:
+            failures.append(f"runtimeDongMonPlayerSceneFitSnapshot missing {token!r}")
+
     authored_snapshot = str(manifest.get("runtimeDongMonAuthoredPassSnapshot", ""))
     for token in ("DongMonAuthoredPass", "route-segments=5", "detail-density=readable", "collision-boundaries=from-bands", "no-random-decoration"):
         if token not in authored_snapshot:

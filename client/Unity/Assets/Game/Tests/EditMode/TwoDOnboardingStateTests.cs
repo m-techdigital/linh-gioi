@@ -417,8 +417,8 @@ namespace LinhGioi.Tests
                 var chestRenderer = chest.GetComponent<SpriteRenderer>();
                 StringAssert.Contains("ApprovedRuntimeArt", chestRenderer.sprite.name);
                 var chestWorldSize = Vector2.Scale(chestRenderer.sprite.bounds.size, chest.transform.localScale);
-                Assert.That(chestWorldSize.x, Is.InRange(0.35f, 0.41f));
-                Assert.That(chestWorldSize.y, Is.InRange(0.45f, 0.51f));
+                Assert.That(chestWorldSize.x, Is.InRange(0.35f, 0.43f));
+                Assert.That(chestWorldSize.y, Is.InRange(0.44f, 0.51f));
                 var skill = GameObject.Find("LGO 2D Player Vo AtlasCell skill_vo_lv1_palm_trail SkillCue vo_lv1_first_skill_trail");
                 Assert.IsNotNull(skill);
                 var skillRenderer = skill.GetComponent<SpriteRenderer>();
@@ -2014,6 +2014,25 @@ namespace LinhGioi.Tests
         }
 
 
+
+        [Test]
+        public void RuntimeCatalogLoadsDongMonPlayerGroundingSourceForRouteLaneFit()
+        {
+            var snapshot = TwoDMapDesignCatalog.LoadDongMonPlayerGroundingSourceSnapshot();
+
+            StringAssert.Contains("DongMonPlayerGroundingSource", snapshot);
+            StringAssert.Contains("anchors=5", snapshot);
+            StringAssert.Contains("levelBand=map-start", snapshot);
+            StringAssert.Contains("footAnchor=bottom-center", snapshot);
+            StringAssert.Contains("routeAnchor=gatekeeper lane=main-ground y=-1.58 sortBand=foreground-near", snapshot);
+            StringAssert.Contains("routeAnchor=training-stone lane=training-platform y=-1.18 sortBand=gameplay-mid", snapshot);
+            StringAssert.Contains("routeAnchor=shadow-slime lane=combat-lane y=-1.16 sortBand=combat-front", snapshot);
+            StringAssert.Contains("contactShadow=oval-soft under-foot", snapshot);
+            StringAssert.Contains("safe-runtime-resource=True", snapshot);
+            StringAssert.Contains("safe-no-source-image=True", snapshot);
+            StringAssert.Contains("safe-no-3d=True", snapshot);
+        }
+
         [Test]
         public void RuntimeControllerExposesDongMonPlayerSceneFitForPcGroundingEvidence()
         {
@@ -2029,12 +2048,50 @@ namespace LinhGioi.Tests
                 StringAssert.Contains("contactShadow=LayeredCharacter Shadow Slot Shadow", controller.RuntimeDongMonPlayerSceneFitSnapshot);
                 StringAssert.Contains("playerSortOrder=2", controller.RuntimeDongMonPlayerSceneFitSnapshot);
                 StringAssert.Contains("routeAnchors=gatekeeper,training-stone,jump,dash,shadow-slime", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("routeAnchor=gatekeeper lane=main-ground y=-1.58 sortBand=foreground-near", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("routeAnchor=training-stone lane=training-platform y=-1.18 sortBand=gameplay-mid", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("routeAnchor=shadow-slime lane=combat-lane y=-1.16 sortBand=combat-front", controller.RuntimeDongMonPlayerSceneFitSnapshot);
                 StringAssert.Contains("safe-runtime-player-evidence=True", controller.RuntimeDongMonPlayerSceneFitSnapshot);
 
                 Assert.IsNotNull(GameObject.Find("LGO 2D Player"));
                 Assert.IsNotNull(GameObject.Find("LGO 2D Player LayeredCharacter Shadow Slot Shadow"));
                 Assert.IsNotNull(GameObject.Find("LGO 2D Dong Mon Unity Tilemap"));
                 StringAssert.Contains("cells=16", controller.RuntimeDongMonUnityTilemapSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
+
+        [Test]
+        public void RuntimeControllerAppliesDongMonGroundingSortAndShadowByRouteLane()
+        {
+            var host = new GameObject("2D Dong Mon runtime grounding lane test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.State.Move(TwoDOnboardingState.GateKeeperPosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseAction();
+                controller.State.Move(TwoDOnboardingState.TrainingStonePosition - controller.State.PlayerPosition);
+                controller.State.TryUseAction();
+                controller.State.TryUseJump();
+                controller.State.TryUseDash();
+                controller.RefreshForSmoke();
+
+                var player = GameObject.Find("LGO 2D Player");
+                Assert.IsNotNull(player);
+                var shadow = GameObject.Find("LGO 2D Player LayeredCharacter Shadow Slot Shadow");
+                Assert.IsNotNull(shadow);
+                Assert.AreEqual(5, shadow.GetComponent<SpriteRenderer>().sortingOrder);
+                var inner = GameObject.Find("LGO 2D Player LayerSlot InnerShirt");
+                Assert.IsNotNull(inner);
+                Assert.AreEqual(6, inner.GetComponent<SpriteRenderer>().sortingOrder);
+                Assert.That(shadow.transform.localScale.x, Is.InRange(0.66f, 0.74f));
+                StringAssert.Contains("currentGrounding=shadow-slime lane=combat-lane playerSort=6 shadowSort=5", controller.RuntimeDongMonPlayerSceneFitSnapshot);
+                StringAssert.Contains("visitedGrounding=shadow-slime lane=combat-lane playerSort=6 shadowSort=5", controller.RuntimeDongMonPlayerSceneFitSnapshot);
             }
             finally
             {

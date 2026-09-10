@@ -1,0 +1,73 @@
+{
+  "id": "dong-mon-player-grounding-v0",
+  "mapId": "dong-mon",
+  "usage": "runtime-player-grounding-fit",
+  "levelBand": "map-start",
+  "footAnchor": "bottom-center",
+  "contactShadow": "oval-soft under-foot",
+  "groundBandY": "-1.58..-0.78",
+  "safety": [
+    "safe-runtime-resource",
+    "safe-no-source-image",
+    "safe-no-3d",
+    "safe-local-no-backend",
+    "authored-player-grounding"
+  ],
+  "anchors": [
+    {
+      "routeNodeId": "gatekeeper",
+      "lane": "main-ground",
+      "y": -1.58,
+      "sortBand": "foreground-near",
+      "playerSortOrder": 2,
+      "shadowSortOrder": 1,
+      "groundSortOrder": -2,
+      "shadowW": 0.72,
+      "shadowH": 0.12
+    },
+    {
+      "routeNodeId": "training-stone",
+      "lane": "training-platform",
+      "y": -1.18,
+      "sortBand": "gameplay-mid",
+      "playerSortOrder": 4,
+      "shadowSortOrder": 3,
+      "groundSortOrder": -2,
+      "shadowW": 0.66,
+      "shadowH": 0.1
+    },
+    {
+      "routeNodeId": "jump",
+      "lane": "gap-approach",
+      "y": -1.4,
+      "sortBand": "gameplay-mid",
+      "playerSortOrder": 3,
+      "shadowSortOrder": 2,
+      "groundSortOrder": -2,
+      "shadowW": 0.6,
+      "shadowH": 0.09
+    },
+    {
+      "routeNodeId": "dash",
+      "lane": "bridge-dash",
+      "y": -1.3,
+      "sortBand": "gameplay-mid",
+      "playerSortOrder": 3,
+      "shadowSortOrder": 2,
+      "groundSortOrder": -2,
+      "shadowW": 0.6,
+      "shadowH": 0.09
+    },
+    {
+      "routeNodeId": "shadow-slime",
+      "lane": "combat-lane",
+      "y": -1.16,
+      "sortBand": "combat-front",
+      "playerSortOrder": 6,
+      "shadowSortOrder": 5,
+      "groundSortOrder": -2,
+      "shadowW": 0.7,
+      "shadowH": 0.11
+    }
+  ]
+}
