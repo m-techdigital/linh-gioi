@@ -68,6 +68,7 @@ def main():
             or not manifest.get('voFemaleVerified') or not manifest.get('voSlotToggleVerified')
             or not manifest.get('voFemaleMotionVerified') or not manifest.get('voProgressionVerified')
             or manifest.get('voSkillCastCount') != 1
+            or manifest.get('voSkillHitCount') != 1 or manifest.get('voTrainingTargetHp') != 65
             or (manifest.get('width'), manifest.get('height')) != (width, height)
             or manifest.get('mapQuestFlowVerified') is not False
             or not math.isfinite(foot_error) or foot_error > .001

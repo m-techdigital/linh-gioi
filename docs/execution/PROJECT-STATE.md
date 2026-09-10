@@ -4,6 +4,12 @@
 
 # PROJECT STATE — Linh Giới Online 2D
 
+## Võ skill hit proof — 2026-09-10
+
+`Liệt Phong Kích` trong Map01A hiện có range gate 2,4 world unit, active window 0,42 giây, hit timing, damage 35, target HP `100→65`, hit counter, target tint và HUD feedback. EditMode `179/178/0/1`; macOS Player `166.975.379` byte, 0 error/13 warning. Capture `build/map01a-art/vo-combat-final-three-profiles/{mobile,tablet,pc}/12-vo-skill.png` đã review: pose/VFX/target/HP feedback đều xuất hiện, foot vẫn ở combat lane.
+
+Trạng thái skill: `ONE_VO_SKILL_RUNTIME_PROOF_PASS`; chưa claim combo, enemy AI, knockback, death/drop hoặc balance. Class gate còn thiếu tier-matched modular motion.
+
 ## Võ Lv1/10/20/30 visual progression — 2026-09-10
 
 Runtime hiện có bốn mốc trang bị Võ Lv1/10/20/30, mỗi mốc gồm nam/nữ, base/full và 10 slot paper-doll: 96 part, bốn atlas tier tách vòng đời tải. Hai giới đều có sáu pose Lv1 thật; tổng sáu atlas indexed 1024² là 643.722 byte. L/touch đổi tier trong Player mà không lệch foot anchor; 54 ảnh ba profile tại `build/map01a-art/vo-lv1-30-final-v2-three-profiles/` technical pass và các frame 12/15–18 đã review trực tiếp.

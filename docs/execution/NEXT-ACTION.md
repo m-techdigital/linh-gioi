@@ -1,3 +1,7 @@
+> **Checkpoint Võ combat hit — 2026-09-10:** `Liệt Phong Kích` chỉ kích hoạt khi mục tiêu còn sống và trong 2,4 world unit; hit được áp tại key timing, trừ 35 HP, tăng hit counter, đổi tint mục tiêu và ghi feedback lên HUD. Capture 12 trên cả mobile/tablet/PC xác nhận `100→65 HP`; spam trong active window bị chặn. Đây là một skill runtime kiểm chứng được, chưa phải combo `Liên Quyền`, AI/knockback hoặc combat production.
+>
+> **Next:** đóng phần motion/trang bị khớp nhau cho Võ Lv10/20/30. Ưu tiên rig/attachment theo limb để item tùy chọn đi cùng pose; chỉ dùng full-frame tier sheet nếu batch QA chứng minh không làm nổ tổ hợp asset. Sau gate này mới cân nhắc class thứ hai.
+
 > **Checkpoint Võ progression Lv1/10/20/30 — 2026-09-10:** một sheet chung đã được tách theo batch thành bốn tier, hai giới và 10 slot/tier. Runtime có 96 paper-doll part trong bốn atlas 1024²; motion Lv1 có sáu pose thật cho mỗi giới trong hai atlas riêng. Tổng sáu PNG 643.722 byte. Player cho đổi tier bằng L/touch; capture 18 trạng thái × 3 profile đã technical pass và review trực tiếp frame female walk + Lv10/20/30.
 >
 > **Next:** hoàn thiện Võ class gate bằng motion khớp từng tier (hoặc rig attachment production) và combat `Liên Quyền` có hit timing/target feedback. Hiện Lv10/20/30 cố ý giữ paper-doll tĩnh khi walk/skill để không tráo ngược sang bộ Lv1; vì vậy chưa claim class Lv1–30 hoàn chỉnh. Gom asset/motion/combat rồi test ba profile một lượt, chưa mở class thứ hai.

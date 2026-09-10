@@ -280,6 +280,9 @@ namespace LinhGioi.Tests
                 StringAssert.StartsWith("male_walk_", preview.VoAvatarMotionFrameId);
                 Assert.That(preview.VoAvatarMotionScale, Is.EqualTo(Vector2.one));
 
+                for (var step = 0; step < 175; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.CanTriggerVoSkill, Is.True);
+
                 Assert.That(preview.TriggerVoSkill(), Is.True);
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("skill"));
                 Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_punch_windup"));
@@ -287,6 +290,10 @@ namespace LinhGioi.Tests
                 Assert.That(GameObject.Find("Map01A Võ skill").GetComponent<SpriteRenderer>().enabled, Is.True);
                 Assert.That(preview.TriggerVoSkill(), Is.False, "Skill cannot restart during its active window");
 
+                preview.AdvanceVoAnimation(.16f);
+                Assert.That(preview.VoSkillHitCount, Is.EqualTo(1));
+                Assert.That(preview.VoTrainingTargetHp, Is.EqualTo(65));
+                StringAssert.Contains("-35 HP", preview.LastInteractionMessage);
                 preview.AdvanceVoAnimation(.5f);
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("idle"));
                 Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_idle"));
@@ -334,6 +341,7 @@ namespace LinhGioi.Tests
                 Assert.That(preview.VoAvatarMotionScale, Is.EqualTo(Vector2.one));
                 Assert.That(GameObject.Find("Map01A Võ motion frame").GetComponent<SpriteRenderer>().enabled, Is.True);
 
+                for (var step = 0; step < 175; step++) preview.MoveOnLane(1, .1f);
                 Assert.That(preview.TriggerVoSkill(), Is.True);
                 Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("female_punch_windup"));
             }

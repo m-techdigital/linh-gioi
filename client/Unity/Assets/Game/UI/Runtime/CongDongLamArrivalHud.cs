@@ -142,6 +142,7 @@ namespace LinhGioi.UI
             _slot.text = "Slot: " + _scene.VoSelectedEquipmentSlot + (_touch ? "" : " · V");
             _toggleSlot.text = (_scene.VoEquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
             _skill.text = _scene.VoAvatarMotionState == "skill" ? "Đang thi triển..." : "Liệt Phong Kích" + (_touch ? "" : " · X");
+            _skill.SetEnabled(_scene.CanTriggerVoSkill);
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
             var camera = Camera.main;

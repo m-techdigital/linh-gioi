@@ -59,8 +59,10 @@ namespace LinhGioi.World
         private readonly Dictionary<string, Tuple<Sprite, VoAvatarPart>> _voMotionFrames = new Dictionary<string, Tuple<Sprite, VoAvatarPart>>();
         private readonly HashSet<string> _voEquippedSlots = new HashSet<string>();
         private SpriteRenderer _voSkillVfx, _voMotionRenderer;
+        private SpriteRenderer _voCombatTarget;
         private int _voAvatarMode, _voAvatarGender, _voAvatarLevel, _voSelectedEquipmentSlot;
         private float _voAnimationPhase, _voWalkHold, _voSkillRemaining;
+        private bool _voPendingHit;
         private static readonly string[] VoAvatarModes = { "full", "base", "modular" };
         private static readonly string[] VoAvatarGenders = { "male", "female" };
         private static readonly int[] VoAvatarLevels = { 1, 10, 20, 30 };
@@ -79,6 +81,10 @@ namespace LinhGioi.World
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
         public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
         public int VoSkillCastCount { get; private set; }
+        public int VoSkillHitCount { get; private set; }
+        public int VoTrainingTargetHp { get; private set; } = 100;
+        public bool CanTriggerVoSkill => _voSkillRemaining <= 0 && _voCombatTarget != null
+            && Mathf.Abs(_voCombatTarget.transform.position.x - PlayerX) <= 2.4f && VoTrainingTargetHp > 0;
         [Serializable] private sealed class VoAvatarPackInfo
         {
             public string id;
@@ -111,7 +117,7 @@ namespace LinhGioi.World
             public bool voBaseVerified, voModularVerified, voWalkVerified, voSkillVerified;
             public bool voFemaleVerified, voSlotToggleVerified;
             public bool voFemaleMotionVerified, voProgressionVerified;
-            public int voSkillCastCount;
+            public int voSkillCastCount, voSkillHitCount, voTrainingTargetHp;
         }
         public float GroundY { get; private set; }
         public float FootY => _leftFoot == null || _rightFoot == null ? float.NaN
@@ -445,8 +451,9 @@ namespace LinhGioi.World
 
         public bool TriggerVoSkill()
         {
-            if (_voSkillRemaining > 0) return false;
+            if (!CanTriggerVoSkill) return false;
             _voSkillRemaining = .42f;
+            _voPendingHit = true;
             VoSkillCastCount++;
             VoAvatarMotionState = "skill";
             ApplyVoPose();
@@ -460,6 +467,15 @@ namespace LinhGioi.World
             if (_voSkillRemaining > 0)
             {
                 _voSkillRemaining = Mathf.Max(0, _voSkillRemaining - Mathf.Max(0, seconds));
+                if (_voPendingHit && _voSkillRemaining <= .28f)
+                {
+                    _voPendingHit = false;
+                    VoTrainingTargetHp = Mathf.Max(0, VoTrainingTargetHp - 35);
+                    VoSkillHitCount++;
+                    LastInteractionMessage = "Liệt Phong Kích trúng mục tiêu · -35 HP · còn " + VoTrainingTargetHp;
+                    if (_voCombatTarget != null)
+                        _voCombatTarget.color = VoTrainingTargetHp == 0 ? new Color(.28f, .28f, .28f, .75f) : new Color(1f, .42f, .32f, 1f);
+                }
                 if (_voSkillRemaining <= 0) VoAvatarMotionState = "idle";
             }
             else if (_voWalkHold > 0)
@@ -649,6 +665,8 @@ namespace LinhGioi.World
                 var renderer = host.AddComponent<SpriteRenderer>();
                 renderer.sprite = sprite;
                 renderer.sortingOrder = layer.order;
+                if (!isWorldInteractable && _voCombatTarget == null)
+                    _voCombatTarget = renderer;
             }
         }
 
@@ -805,11 +823,14 @@ namespace LinhGioi.World
                 result.frames++;
             }
             result.voSkillCastCount = VoSkillCastCount;
+            result.voSkillHitCount = VoSkillHitCount;
+            result.voTrainingTargetHp = VoTrainingTargetHp;
             result.parallaxDelta = FarOffset - initial;
             if (!result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified
-                || result.voSkillCastCount != 1 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
+                || result.voSkillCastCount != 1 || result.voSkillHitCount != 1 || result.voTrainingTargetHp != 65
+                || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), JsonUtility.ToJson(result, true));
             Application.Quit(result.status == "FIX_REQUIRED" ? 1 : 0);

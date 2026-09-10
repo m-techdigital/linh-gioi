@@ -1,5 +1,9 @@
 # TASK LEDGER ROLLUP — 2D Pivot
 
+## Võ skill hit proof — 2026-09-10
+
+Nâng skill từ cue sang hit runtime: range 2,4, active 0,42 giây, damage 35 tại key timing, HP/counter/tint/HUD feedback và chặn cast lại trong active window. EditMode `179/178/0/1`; build macOS pass; frame 12 của ba profile đã review. Đây là một-skill proof, chưa phải combat loop đầy đủ. Next vẫn là tier-matched modular motion cho Võ Lv10/20/30.
+
 ## Võ Lv1/10/20/30 visual progression — 2026-09-10
 
 Đã tạo một sheet tiến cấp đồng nhất cho sáu nhân vật nam/nữ ở Lv10/20/30, batch-key/căn về base và tách 10 slot/tier. Runtime có 96 part, bốn atlas tier và hai atlas motion Lv1 hai giới, tổng 643.722 byte. Selector L/touch và 54 ảnh Player ba profile chứng minh đổi cấp/giới/slot và motion nữ. Chưa đóng class: Lv10/20/30 giữ paper-doll tĩnh khi chuyển động để tránh hiển thị sai outfit Lv1; next là tier-matched motion/rig và `Liên Quyền` có hit feedback.
