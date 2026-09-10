@@ -189,7 +189,12 @@ namespace LinhGioi.World
         private SpriteRenderer _leftFoot, _rightFoot;
         private Transform _voAvatarRoot;
         private readonly Dictionary<string, SpriteRenderer> _voAvatarParts = new Dictionary<string, SpriteRenderer>();
+        private readonly Dictionary<string, Tuple<Vector3, Vector3>> _voAvatarPartRest = new Dictionary<string, Tuple<Vector3, Vector3>>();
+        private readonly Dictionary<string, SpriteRenderer> _voRigParts = new Dictionary<string, SpriteRenderer>();
+        private readonly Dictionary<string, Tuple<Vector3, Vector3>> _voRigPartRest = new Dictionary<string, Tuple<Vector3, Vector3>>();
         private readonly Dictionary<string, Tuple<Sprite, VoAvatarPart>> _voMotionFrames = new Dictionary<string, Tuple<Sprite, VoAvatarPart>>();
+        private readonly Dictionary<string, VoAttachmentProfile> _voAttachmentProfiles = new Dictionary<string, VoAttachmentProfile>();
+        private readonly Dictionary<string, VoRigPoseProfile> _voRigPoseProfiles = new Dictionary<string, VoRigPoseProfile>();
         private readonly HashSet<string> _voEquippedSlots = new HashSet<string>();
         private SpriteRenderer _voSkillVfx, _voMotionRenderer;
         private SpriteRenderer _voCombatTarget;
@@ -232,14 +237,27 @@ namespace LinhGioi.World
             public VoAvatarPart[] parts;
             public VoAvatarPart[] effects;
             public VoAvatarPart[] motionFrames;
+            public VoAttachmentProfile[] attachmentProfiles;
+            public VoAvatarPart[] rigParts;
+            public VoRigPoseProfile[] rigPoseProfiles;
         }
         [Serializable] private sealed class VoAvatarPart
         {
             public string id;
-            public string gender, kind, slot, atlas;
+            public string gender, kind, slot, atlas, part;
             public int level;
             public int x, y, w, h, order;
             public float worldW, worldH, dx, dy;
+        }
+        [Serializable] private sealed class VoAttachmentProfile
+        {
+            public string id, gender, pose, slot;
+            public float dx, dy, rotation, scaleX, scaleY;
+        }
+        [Serializable] private sealed class VoRigPoseProfile
+        {
+            public string id, gender, pose, part;
+            public float dx, dy, rotation;
         }
         [Serializable] private sealed class GroundInfo { public float groundY; }
         [Serializable] private sealed class CaptureInfo
@@ -261,6 +279,7 @@ namespace LinhGioi.World
             public bool voFemaleVerified, voSlotToggleVerified;
             public bool voFemaleMotionVerified, voProgressionVerified;
             public bool voRunVerified, voJumpVerified, voBasicVerified, voLienQuyenVerified;
+            public bool voAttachmentLv1Verified, voAttachmentLv30FemaleVerified;
             public int voSkillCastCount, voSkillHitCount, voTrainingTargetHp;
         }
         public float GroundY { get; private set; }
@@ -525,13 +544,17 @@ namespace LinhGioi.World
                 { "lv030", Resources.Load<Texture2D>(path + "vo-lv30-equipment-atlas") },
                 { "motion_male", Resources.Load<Texture2D>(path + "vo-lv1-motion-atlas") },
                 { "motion_female", Resources.Load<Texture2D>(path + "vo-lv1-female-motion-atlas") },
+                { "rig", Resources.Load<Texture2D>(path + "vo-lv1-rig-atlas") },
             };
             if (manifest == null || textures.Values.Any(texture => texture == null))
                 throw new InvalidOperationException("Missing reviewed Võ Lv1-30 map avatar pack");
             var pack = JsonUtility.FromJson<VoAvatarPackInfo>(manifest.text);
-            if (pack.id != "vo-lv1-30-map-avatar-v4" || pack.status != "DRAFT_RUNTIME_REVIEW"
+            if (pack.id != "vo-lv1-30-map-avatar-v6" || pack.status != "DRAFT_RUNTIME_REVIEW"
                 || pack.parts == null || pack.parts.Length != 96 || pack.genders == null || pack.genders.Length != 2
-                || pack.slots == null || pack.slots.Length != 10 || pack.levels == null || pack.levels.Length != 4)
+                || pack.slots == null || pack.slots.Length != 10 || pack.levels == null || pack.levels.Length != 4
+                || pack.attachmentProfiles == null || pack.attachmentProfiles.Length != 120
+                || pack.rigParts == null || pack.rigParts.Length != 20
+                || pack.rigPoseProfiles == null || pack.rigPoseProfiles.Length != 120)
                 throw new InvalidOperationException("Invalid Võ Lv1-30 map avatar manifest");
             _voEquippedSlots.Clear();
             foreach (var slot in VoEquipmentSlots) _voEquippedSlots.Add(slot);
@@ -555,6 +578,7 @@ namespace LinhGioi.World
                 renderer.sprite = sprite;
                 renderer.sortingOrder = part.order;
                 _voAvatarParts.Add(part.id, renderer);
+                _voAvatarPartRest.Add(part.id, Tuple.Create(host.transform.localPosition, host.transform.localScale));
             }
             foreach (var level in VoAvatarLevels)
             foreach (var gender in VoAvatarGenders)
@@ -566,6 +590,41 @@ namespace LinhGioi.World
                 foreach (var slot in VoEquipmentSlots)
                     if (!_voAvatarParts.ContainsKey(prefix + "slot_" + slot))
                         throw new InvalidOperationException("Missing Võ avatar slot: " + prefix + slot);
+            }
+            foreach (var profile in pack.attachmentProfiles)
+            {
+                var key = profile.gender + "_" + profile.pose + "_" + profile.slot;
+                if (profile.id != key || !VoAvatarGenders.Contains(profile.gender)
+                    || !VoEquipmentSlots.Contains(profile.slot) || profile.scaleX <= 0 || profile.scaleY <= 0
+                    || _voAttachmentProfiles.ContainsKey(key))
+                    throw new InvalidOperationException("Invalid Võ attachment profile: " + profile.id);
+                _voAttachmentProfiles.Add(key, profile);
+            }
+            foreach (var part in pack.rigParts)
+            {
+                if (part.atlas != "rig" || part.w <= 0 || part.h <= 0 || part.worldW <= 0 || part.worldH <= 0
+                    || part.x < 0 || part.y < 0 || part.x + part.w > textures["rig"].width
+                    || part.y + part.h > textures["rig"].height || _voRigParts.ContainsKey(part.id))
+                    throw new InvalidOperationException("Invalid Võ rig part: " + part.id);
+                var host = new GameObject("Map01A Võ rig " + part.gender + " " + part.part);
+                host.transform.SetParent(_voAvatarRoot, false);
+                host.transform.localPosition = new Vector3(part.dx, part.dy, 0);
+                var sprite = MakeSprite(textures["rig"], new Rect(part.x, part.y, part.w, part.h));
+                host.transform.localScale = new Vector3(part.worldW / sprite.bounds.size.x,
+                    part.worldH / sprite.bounds.size.y, 1);
+                var renderer = host.AddComponent<SpriteRenderer>();
+                renderer.sprite = sprite;
+                renderer.sortingOrder = part.order;
+                renderer.enabled = false;
+                _voRigParts.Add(part.id, renderer);
+                _voRigPartRest.Add(part.id, Tuple.Create(host.transform.localPosition, host.transform.localScale));
+            }
+            foreach (var profile in pack.rigPoseProfiles)
+            {
+                var key = profile.gender + "_" + profile.pose + "_" + profile.part;
+                if (profile.id != key || _voRigPoseProfiles.ContainsKey(key))
+                    throw new InvalidOperationException("Invalid Võ rig pose: " + profile.id);
+                _voRigPoseProfiles.Add(key, profile);
             }
             if (pack.effects == null || pack.effects.Length != 1 || pack.effects[0].id != "skill_slash")
                 throw new InvalidOperationException("Missing Võ skill effect");
@@ -635,6 +694,10 @@ namespace LinhGioi.World
         {
             foreach (var pair in _voAvatarParts)
             {
+                var rest = _voAvatarPartRest[pair.Key];
+                pair.Value.transform.localPosition = rest.Item1;
+                pair.Value.transform.localRotation = Quaternion.identity;
+                pair.Value.transform.localScale = rest.Item2;
                 var prefix = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_";
                 if (!pair.Key.StartsWith(prefix, StringComparison.Ordinal))
                 {
@@ -643,17 +706,55 @@ namespace LinhGioi.World
                 }
                 if (VoAvatarMode == "full") pair.Value.enabled = pair.Key == prefix + "full";
                 else if (VoAvatarMode == "base") pair.Value.enabled = pair.Key == prefix + "base";
-                else if (pair.Key == prefix + "base") pair.Value.enabled = true;
+                else if (pair.Key == prefix + "base") pair.Value.enabled = false;
                 else if (pair.Key.StartsWith(prefix + "slot_", StringComparison.Ordinal))
                     pair.Value.enabled = _voEquippedSlots.Contains(pair.Key.Substring((prefix + "slot_").Length));
                 else pair.Value.enabled = false;
             }
+            ApplyVoRigPose();
+            ApplyVoAttachmentProfiles();
             // The reviewed key-pose sheets currently depict the Lv1 outfit only.
             // Higher tiers keep their selected paper-doll visible until tier-matched motion exists.
             var usesMotionFrame = VoAvatarUsesFrameMotion;
             if (usesMotionFrame)
                 foreach (var renderer in _voAvatarParts.Values) renderer.enabled = false;
             if (_voMotionRenderer != null) _voMotionRenderer.enabled = usesMotionFrame;
+        }
+
+        private void ApplyVoRigPose()
+        {
+            foreach (var pair in _voRigParts)
+            {
+                var rest = _voRigPartRest[pair.Key];
+                pair.Value.transform.localPosition = rest.Item1;
+                pair.Value.transform.localRotation = Quaternion.identity;
+                pair.Value.transform.localScale = rest.Item2;
+                pair.Value.enabled = VoAvatarMode == "modular"
+                    && pair.Key.StartsWith(VoAvatarGender + "_", StringComparison.Ordinal);
+                if (!pair.Value.enabled) continue;
+                var part = pair.Key.Substring(VoAvatarGender.Length + 1);
+                var key = VoAvatarGender + "_" + VoAvatarMotionState + "_" + part;
+                if (!_voRigPoseProfiles.TryGetValue(key, out var profile)) continue;
+                pair.Value.transform.localPosition = rest.Item1 + new Vector3(profile.dx, profile.dy, 0);
+                pair.Value.transform.localRotation = Quaternion.Euler(0, 0, profile.rotation);
+            }
+        }
+
+        private void ApplyVoAttachmentProfiles()
+        {
+            var pose = VoAvatarMotionState;
+            foreach (var slot in VoEquipmentSlots)
+            {
+                var partId = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_slot_" + slot;
+                if (!_voAvatarParts.TryGetValue(partId, out var renderer)) continue;
+                var key = VoAvatarGender + "_" + pose + "_" + slot;
+                if (!_voAttachmentProfiles.TryGetValue(key, out var profile)) continue;
+                var rest = _voAvatarPartRest[partId];
+                renderer.transform.localPosition = rest.Item1 + new Vector3(profile.dx, profile.dy, 0);
+                renderer.transform.localRotation = Quaternion.Euler(0, 0, profile.rotation);
+                renderer.transform.localScale = new Vector3(rest.Item2.x * profile.scaleX,
+                    rest.Item2.y * profile.scaleY, rest.Item2.z);
+            }
         }
 
         private void SetVoMotionFrame(string frameId)
@@ -1051,7 +1152,8 @@ namespace LinhGioi.World
             var targets = new[] { -3.58f, -3.58f, -3.58f, 0f, 5.15f, 5.15f, 18.5f, 22.15f, 22.15f, 22.15f,
                 26.15f, 30.2f, 30.2f, 34.1f, 39f, 39f, 39f, 42.15f,
                 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f,
-                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f };
+                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f,
+                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f };
             var names = new[] { "01-arrival-q01", "02-ha-van-dialogue", "03-q01-complete", "04-q02-grand-gate",
                 "05-quan-thu-dialogue", "06-q03-complete", "07-q04-inventory-open", "08-q04-tong-phu-dialogue",
                 "09-q04-starter-supplies", "10-q04-health-potion-used", "11-q05-thanh-nhi", "12-q05-spirit-herb",
@@ -1062,7 +1164,11 @@ namespace LinhGioi.World
                 "28-vo-female-run", "29-vo-female-jump-rise", "30-vo-female-jump-apex",
                 "31-vo-female-basic-windup", "32-vo-female-basic-impact",
                 "33-vo-female-lien-quyen-hit", "34-vo-female-lien-quyen-finish",
-                "35-vo-male-run", "36-vo-male-jump", "37-vo-male-basic", "38-vo-male-lien-quyen" };
+                "35-vo-male-run", "36-vo-male-jump", "37-vo-male-basic", "38-vo-male-lien-quyen",
+                "39-vo-male-modular-run", "40-vo-male-modular-jump", "41-vo-male-modular-basic",
+                "42-vo-male-modular-lien-quyen", "43-vo-female-lv30-modular-run",
+                "44-vo-female-lv30-modular-jump", "45-vo-female-lv30-modular-basic",
+                "46-vo-female-lv30-modular-lien-quyen" };
             for (var i = 0; i < targets.Length; i++)
             {
                 _routeX = targets[i];
@@ -1103,6 +1209,7 @@ namespace LinhGioi.World
                         && ManaPotionCount == 2 && PlayerHealth == 100 && HasClassRewardItem && IsClassRewardEquipped;
                     result.voSkillCastCount = VoSkillCastCount;
                     result.voSkillHitCount = VoSkillHitCount;
+                    result.voTrainingTargetHp = VoTrainingTargetHp;
                 }
                 if (i == 18)
                 {
@@ -1112,13 +1219,16 @@ namespace LinhGioi.World
                 if (i == 19)
                 {
                     CycleVoAvatarMode();
-                    result.voModularVerified = VoAvatarMode == "modular" && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 11;
+                    result.voModularVerified = VoAvatarMode == "modular"
+                        && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 10
+                        && _voRigParts.Values.Count(renderer => renderer.enabled) == 10;
                 }
                 if (i == 20)
                 {
                     MoveOnLane(1, .1f);
                     result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
-                        && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 11 && !_voMotionRenderer.enabled;
+                        && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 10
+                        && _voRigParts.Values.Count(renderer => renderer.enabled) == 10 && !_voMotionRenderer.enabled;
                 }
                 if (i == 21)
                 {
@@ -1143,7 +1253,8 @@ namespace LinhGioi.World
                 {
                     MoveOnLane(1, .1f);
                     result.voFemaleMotionVerified = VoAvatarMotionState == "walk" && VoAvatarUsesAlignedPaperDollMotion
-                        && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 10
+                        && _voAvatarParts.Values.Count(renderer => renderer.enabled) == 9
+                        && _voRigParts.Values.Count(renderer => renderer.enabled) == 10
                         && !_voAvatarParts["lv001_female_slot_inner_top"].enabled && !_voMotionRenderer.enabled;
                 }
                 if (i == 24)
@@ -1212,6 +1323,54 @@ namespace LinhGioi.World
                     VoTrainingTargetHp = 0;
                     if (_voCombatTarget != null) _voCombatTarget.color = new Color(.28f, .28f, .28f, .75f);
                 }
+                if (i == 38)
+                {
+                    AdvanceVoAnimation(.5f); CycleVoAvatarMode(); CycleVoAvatarMode();
+                    VoTrainingTargetHp = 100;
+                    if (_voCombatTarget != null) _voCombatTarget.color = Color.white;
+                    SetVoRun(true); MoveOnLane(1, .1f);
+                    result.voAttachmentLv1Verified = VoAvatarMode == "modular" && VoAvatarUsesAlignedPaperDollMotion;
+                }
+                if (i == 39)
+                {
+                    SetVoRun(false); AdvanceVoAnimation(.5f); TriggerVoJump();
+                    result.voAttachmentLv1Verified &= VoAvatarMotionState == "jump";
+                }
+                if (i == 40)
+                {
+                    AdvanceVoAnimation(.6f); TriggerVoBasicAttack();
+                    result.voAttachmentLv1Verified &= VoAvatarMotionState == "basic_attack";
+                }
+                if (i == 41)
+                {
+                    AdvanceVoAnimation(.5f); TriggerVoSkill();
+                    result.voAttachmentLv1Verified &= VoAvatarMotionState == "skill";
+                }
+                if (i == 42)
+                {
+                    AdvanceVoAnimation(.5f); CycleVoAvatarGender();
+                    CycleVoAvatarLevel(); CycleVoAvatarLevel(); CycleVoAvatarLevel();
+                    VoTrainingTargetHp = 100;
+                    if (_voCombatTarget != null) _voCombatTarget.color = Color.white;
+                    SetVoRun(true); MoveOnLane(1, .1f);
+                    result.voAttachmentLv30FemaleVerified = VoAvatarMode == "modular" && VoAvatarLevel == 30
+                        && VoAvatarGender == "female" && VoAvatarUsesAlignedPaperDollMotion;
+                }
+                if (i == 43)
+                {
+                    SetVoRun(false); AdvanceVoAnimation(.5f); TriggerVoJump();
+                    result.voAttachmentLv30FemaleVerified &= VoAvatarMotionState == "jump";
+                }
+                if (i == 44)
+                {
+                    AdvanceVoAnimation(.6f); TriggerVoBasicAttack();
+                    result.voAttachmentLv30FemaleVerified &= VoAvatarMotionState == "basic_attack";
+                }
+                if (i == 45)
+                {
+                    AdvanceVoAnimation(.5f); TriggerVoSkill();
+                    result.voAttachmentLv30FemaleVerified &= VoAvatarMotionState == "skill";
+                }
                 _controller.RefreshForSmoke();
                 Refresh();
                 yield return null;
@@ -1230,7 +1389,6 @@ namespace LinhGioi.World
                 finally { RenderTexture.active = active; Destroy(image); }
                 result.frames++;
             }
-            result.voTrainingTargetHp = VoTrainingTargetHp;
             result.activeQuestId = ActiveQuestId;
             result.completedQuestCount = CompletedQuestCount;
             result.starterSupplies = HasStarterSupplies;
@@ -1250,6 +1408,7 @@ namespace LinhGioi.World
             if (!result.mapQuestFlowVerified || !result.functionalUiVerified || !result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified
+                || !result.voAttachmentLv1Verified || !result.voAttachmentLv30FemaleVerified
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";

@@ -421,3 +421,7 @@ Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và
 Thêm 16 frame mới từ hai sheet nam/nữ đã qua alpha/cell-margin QA, nâng runtime lên 28 motion frame. HUD có action bar bốn nút và keyboard Shift/J/Z/X; sửa capture chạy nền để ba profile không kẹt khi mất focus. EditMode `180/179/0/1`, build 0 lỗi, capture `build/vo-motion-v8/three-profiles/` đạt `38×3` technical pass và đã review trực tiếp các pose cùng tablet/mobile/PC. Atlas tổng 700.563 byte; portal/NPC không bị control panel che sau layout cuối.
 
 Checkpoint chỉ đóng full-frame Lv1. Next làm animated attachment cho 10 slot và tier Lv10/20/30; không nhân sang class khác trước gate đó.
+
+## Võ base skeletal rig — 2026-09-10
+
+Tạo nguồn rig nam/nữ theo ảnh Võ đã chọn, component-QA và pack 20 body segment vào một atlas 24.232 byte. Manifest v6 cấp 120 rig pose + 120 attachment profile; runtime modular dùng segment và joint pivot cho sáu state trên cả hai giới/tier. EditMode `181/180/0/1`; build và Player capture `build/vo-rig-v2/three-profiles/` đạt 46×3 technical pass. Visual review giữ trạng thái chưa hoàn chỉnh vì slot `boots`/`arm_guard` và các phần hai bên chưa tách để bind từng bone; next `CLASS-VO-01B2`, chưa mở class khác.

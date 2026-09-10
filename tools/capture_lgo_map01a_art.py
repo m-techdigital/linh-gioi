@@ -63,12 +63,16 @@ def main():
                 '28-vo-female-run', '29-vo-female-jump-rise', '30-vo-female-jump-apex',
                 '31-vo-female-basic-windup', '32-vo-female-basic-impact',
                 '33-vo-female-lien-quyen-hit', '34-vo-female-lien-quyen-finish',
-                '35-vo-male-run', '36-vo-male-jump', '37-vo-male-basic', '38-vo-male-lien-quyen']
+                '35-vo-male-run', '36-vo-male-jump', '37-vo-male-basic', '38-vo-male-lien-quyen',
+                '39-vo-male-modular-run', '40-vo-male-modular-jump', '41-vo-male-modular-basic',
+                '42-vo-male-modular-lien-quyen', '43-vo-female-lv30-modular-run',
+                '44-vo-female-lv30-modular-jump', '45-vo-female-lv30-modular-basic',
+                '46-vo-female-lv30-modular-lien-quyen']
     import math
     foot_error = manifest.get('maxFootError', float('nan'))
     parallax = manifest.get('parallaxDelta', float('nan'))
     if (manifest.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED'
-            or manifest.get('frames') != 38
+            or manifest.get('frames') != 46
             or not manifest.get('dialogueOpened') or not manifest.get('greetingCompleted')
             or not manifest.get('voBaseVerified') or not manifest.get('voModularVerified')
             or not manifest.get('voWalkVerified') or not manifest.get('voSkillVerified')
@@ -76,6 +80,8 @@ def main():
             or not manifest.get('voFemaleMotionVerified') or not manifest.get('voProgressionVerified')
             or not all(manifest.get(key) for key in ('voRunVerified', 'voJumpVerified',
                 'voBasicVerified', 'voLienQuyenVerified'))
+            or not manifest.get('voAttachmentLv1Verified')
+            or not manifest.get('voAttachmentLv30FemaleVerified')
             or not manifest.get('mapQuestFlowVerified') or manifest.get('activeQuestId') != 'COMPLETE'
             or not manifest.get('functionalUiVerified')
             or manifest.get('completedQuestCount') != 9
@@ -98,7 +104,7 @@ def main():
         raw = (out / (name + '.png')).read_bytes()
         if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
             raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
-    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=38 quest=Q01-Q09 vo-motion; visual review still required; ' + str(out))
+    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=46 quest=Q01-Q09 vo-motion-attachments; visual review still required; ' + str(out))
 
 
 

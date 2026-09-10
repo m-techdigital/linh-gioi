@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 
 from PIL import Image
@@ -21,11 +22,157 @@ NEW_MOTION_FRAMES = (
     "basic_windup", "basic_impact", "lien_quyen_hit_a", "lien_quyen_finish_b",
 )
 MOTION_FRAMES = (*LEGACY_MOTION_FRAMES, *NEW_MOTION_FRAMES)
+RIG_PARTS = (
+    "head", "torso-hips", "left-upper-arm", "left-forearm-hand", "right-upper-arm",
+    "right-forearm-hand", "left-thigh", "left-shin-foot", "right-thigh", "right-shin-foot",
+)
+RIG_HEIGHTS = {
+    "head": .42, "torso-hips": .72,
+    "left-upper-arm": .46, "right-upper-arm": .46,
+    "left-forearm-hand": .45, "right-forearm-hand": .45,
+    "left-thigh": .55, "right-thigh": .55,
+    "left-shin-foot": .54, "right-shin-foot": .54,
+}
+RIG_REST = {
+    "head": (0, 1.48), "torso-hips": (0, 1.02),
+    "left-upper-arm": (-.19, 1.12), "left-forearm-hand": (-.24, .78),
+    "right-upper-arm": (.19, 1.12), "right-forearm-hand": (.24, .78),
+    "left-thigh": (-.10, .58), "left-shin-foot": (-.10, .25),
+    "right-thigh": (.10, .58), "right-shin-foot": (.10, .25),
+}
+RIG_ORDERS = {
+    "head": 8, "torso-hips": 7,
+    "left-upper-arm": 6, "left-forearm-hand": 6, "right-upper-arm": 8, "right-forearm-hand": 8,
+    "left-thigh": 6, "left-shin-foot": 6, "right-thigh": 7, "right-shin-foot": 7,
+}
+RIG_PIVOTS = {
+    "head": (0, 1.32), "torso-hips": (0, .70),
+    "left-upper-arm": (-.17, 1.30), "left-forearm-hand": (-.22, .95),
+    "right-upper-arm": (.17, 1.30), "right-forearm-hand": (.22, .95),
+    "left-thigh": (-.09, .75), "left-shin-foot": (-.10, .40),
+    "right-thigh": (.09, .75), "right-shin-foot": (.10, .40),
+}
 NEW_MOTION_WORLD_HEIGHTS = {
     "run_a": 1.68, "run_b": 1.68, "jump_rise": 1.68, "jump_apex": 1.36,
     "basic_windup": 1.48, "basic_impact": 1.48,
     "lien_quyen_hit_a": 1.48, "lien_quyen_finish_b": 1.48,
 }
+
+POSE_DELTAS = {
+    "idle": (0.0, 0.0, 0.0),
+    "walk": (0.018, 0.008, 2.0),
+    "run": (0.055, 0.018, -7.0),
+    "jump": (0.0, 0.075, -4.0),
+    "basic_attack": (0.075, 0.018, -11.0),
+    "skill": (0.105, 0.028, -16.0),
+}
+SLOT_POSE_FACTORS = {
+    "main_weapon": (1.6, 1.1, 2.0),
+    "head_hair": (.35, 1.25, .55),
+    "inner_top": (.55, .70, .55),
+    "outer_tunic": (.75, .80, .85),
+    "lower_garment": (.45, .55, .70),
+    "waist": (.65, .65, .75),
+    "arm_guard": (1.25, .80, 1.55),
+    "boots": (.85, 1.35, 1.10),
+    "light_armor": (.60, .75, .65),
+    "accessory": (.95, 1.05, 1.20),
+}
+
+
+def attachment_profiles() -> list[dict]:
+    """Small pose deltas shared by all four equipment tiers."""
+    profiles = []
+    for gender in ("male", "female"):
+        direction = 1.0 if gender == "male" else .92
+        for pose, (base_x, base_y, base_rotation) in POSE_DELTAS.items():
+            for slot in SLOTS:
+                factor_x, factor_y, factor_rotation = SLOT_POSE_FACTORS[slot]
+                rotation = base_rotation * factor_rotation * direction
+                scale_x = 1.0
+                scale_y = 1.0
+                if pose == "run" and slot in {"outer_tunic", "lower_garment", "accessory"}:
+                    scale_x, scale_y = 1.035, .985
+                elif pose in {"basic_attack", "skill"} and slot in {"main_weapon", "arm_guard"}:
+                    scale_x, scale_y = 1.045, .975
+                profiles.append({
+                    "id": f"{gender}_{pose}_{slot}", "gender": gender, "pose": pose, "slot": slot,
+                    "dx": round(base_x * factor_x * direction, 4),
+                    "dy": round(base_y * factor_y, 4),
+                    "rotation": round(rotation, 3), "scaleX": scale_x, "scaleY": scale_y,
+                })
+    return profiles
+
+
+def rig_pose_profiles() -> list[dict]:
+    profiles = []
+    rotations = {
+        "idle": {},
+        "walk": {"left-upper-arm": 10, "left-forearm-hand": 5, "right-upper-arm": -10,
+                 "right-forearm-hand": -5, "left-thigh": -10, "left-shin-foot": 7,
+                 "right-thigh": 10, "right-shin-foot": -7},
+        "run": {"head": 4, "torso-hips": -7, "left-upper-arm": 22, "left-forearm-hand": 14,
+                "right-upper-arm": -24, "right-forearm-hand": -18, "left-thigh": -24,
+                "left-shin-foot": 18, "right-thigh": 24, "right-shin-foot": -18},
+        "jump": {"head": -3, "torso-hips": -3, "left-upper-arm": -25, "left-forearm-hand": -18,
+                 "right-upper-arm": -35, "right-forearm-hand": -25, "left-thigh": 28,
+                 "left-shin-foot": -35, "right-thigh": -18, "right-shin-foot": 30},
+        "basic_attack": {"head": -5, "torso-hips": -9, "left-upper-arm": 28, "left-forearm-hand": 18,
+                         "right-upper-arm": -58, "right-forearm-hand": -72, "left-thigh": 14,
+                         "right-thigh": -16},
+        "skill": {"head": -8, "torso-hips": -13, "left-upper-arm": -42, "left-forearm-hand": -64,
+                  "right-upper-arm": -78, "right-forearm-hand": -96, "left-thigh": 22,
+                  "left-shin-foot": -18, "right-thigh": -25, "right-shin-foot": 22},
+    }
+    for gender in ("male", "female"):
+        direction = 1 if gender == "male" else .92
+        for pose, values in rotations.items():
+            for part in RIG_PARTS:
+                rotation = values.get(part, 0) * direction
+                center_x, center_y = RIG_REST[part]
+                pivot_x, pivot_y = RIG_PIVOTS[part]
+                radians = math.radians(rotation)
+                offset_x, offset_y = center_x - pivot_x, center_y - pivot_y
+                rotated_x = offset_x * math.cos(radians) - offset_y * math.sin(radians)
+                rotated_y = offset_x * math.sin(radians) + offset_y * math.cos(radians)
+                profiles.append({"id": f"{gender}_{pose}_{part}", "gender": gender, "pose": pose,
+                                 "part": part, "dx": round(pivot_x + rotated_x - center_x, 4),
+                                 "dy": round(pivot_y + rotated_y - center_y, 4),
+                                 "rotation": round(rotation, 3)})
+    return profiles
+
+
+def pack_rig(rig_dir: Path, output: Path) -> tuple[list[dict], dict]:
+    entries = []
+    for gender in ("male", "female"):
+        for index, part in enumerate(RIG_PARTS, 1):
+            path = rig_dir / gender / f"{index:02d}-{part}.png"
+            source = Image.open(path).convert("RGBA")
+            box = source.getchannel("A").getbbox()
+            if source.size != (512, 512) or box is None:
+                raise ValueError(f"Invalid rig part: {path}")
+            target_height = round(MOTION_TARGET_HEIGHT * RIG_HEIGHTS[part] / WORLD_HEIGHT)
+            scale = target_height / (box[3] - box[1])
+            image = source.crop(box).resize((round((box[2] - box[0]) * scale), target_height), Image.Resampling.LANCZOS)
+            entries.append({"id": f"{gender}_{part}", "gender": gender, "part": part,
+                            "path": path, "image": image})
+    shelf_pack(entries)
+    atlas = Image.new("RGBA", (ATLAS_SIZE, ATLAS_SIZE))
+    packed = []
+    for entry in entries:
+        image = entry["image"]
+        atlas.alpha_composite(image, (entry["left"], entry["top"]))
+        dx, dy = RIG_REST[entry["part"]]
+        packed.append({"id": entry["id"], "gender": entry["gender"], "part": entry["part"],
+                       "atlas": "rig", "x": entry["left"], "y": ATLAS_SIZE - entry["top"] - image.height,
+                       "w": image.width, "h": image.height,
+                       "worldW": image.width / image.height * RIG_HEIGHTS[entry["part"]],
+                       "worldH": RIG_HEIGHTS[entry["part"]], "dx": dx, "dy": dy,
+                       "order": RIG_ORDERS[entry["part"]],
+                       "sourceSha256": digest(entry["path"])})
+    path = output / "vo-lv1-rig-atlas.png"
+    atlas.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE).save(path, optimize=True, compress_level=9)
+    return packed, {"id": "rig", "file": path.name, "sha256": digest(path), "pngBytes": path.stat().st_size}
 
 
 def static_source(root: Path, progression: Path, level: int) -> Path:
@@ -132,6 +279,7 @@ def main() -> int:
     parser.add_argument("--progression-dir", type=Path, required=True)
     parser.add_argument("--extended-motion-male-dir", type=Path, required=True)
     parser.add_argument("--extended-motion-female-dir", type=Path, required=True)
+    parser.add_argument("--rig-dir", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     args = parser.parse_args()
     if args.output_dir.exists(): raise FileExistsError("Use a new output directory")
@@ -147,20 +295,25 @@ def main() -> int:
     male_frames, male_atlas = pack_motion(args.lv1_dir, args.extended_motion_male_dir, "male", args.output_dir)
     female_frames, female_atlas = pack_motion(args.progression_dir, args.extended_motion_female_dir, "female", args.output_dir)
     motion += male_frames + female_frames; motion_atlases += [male_atlas, female_atlas]
+    rig_parts, rig_atlas = pack_rig(args.rig_dir, args.output_dir)
     resource_root = "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1MapAvatarArt/"
-    atlas_records = atlases + motion_atlases
+    atlas_records = atlases + motion_atlases + [rig_atlas]
     assets = []
     for atlas in atlas_records:
         is_motion = atlas["id"].startswith("motion_")
         assets.append({"path": resource_root + atlas["file"], "sha256": atlas["sha256"],
                        "width": ATLAS_SIZE, "height": ATLAS_SIZE,
-                       "role": "two-gender-motion-atlas" if is_motion else "two-gender-tier-equipment-atlas",
-                       "generator": "reference_guided_imagegen_motion_batch" if is_motion else "aligned_imagegen_delta_batch",
+                       "role": "two-gender-motion-atlas" if is_motion else (
+                           "two-gender-skeletal-rig-atlas" if atlas["id"] == "rig" else "two-gender-tier-equipment-atlas"),
+                       "generator": "reference_guided_imagegen_motion_batch" if is_motion else (
+                           "reference_guided_imagegen_rig_batch" if atlas["id"] == "rig" else "aligned_imagegen_delta_batch"),
                        "referenceOnly": False})
-    manifest = {"id": "vo-lv1-30-map-avatar-v4", "status": "DRAFT_RUNTIME_REVIEW", "classId": "vo",
+    manifest = {"id": "vo-lv1-30-map-avatar-v6", "status": "DRAFT_RUNTIME_REVIEW", "classId": "vo",
                 "levels": list(LEVELS), "genders": ["male", "female"], "slots": list(SLOTS),
                 "atlases": atlas_records, "assets": assets, "parts": parts, "effects": [effect], "motionFrames": motion,
-                "nonClaims": ["Lv1 motion source checkpoint", "higher-tier articulated attachments pending", "requires Player review"]}
+                "attachmentProfiles": attachment_profiles(),
+                "rigParts": rig_parts, "rigPoseProfiles": rig_pose_profiles(),
+                "nonClaims": ["Lv1 skeletal rig checkpoint", "equipment limb splitting still pending", "requires Player review"]}
     (args.output_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, separators=(",", ":"))+"\n")
     print(json.dumps({"id": manifest["id"], "parts": len(parts), "motionFrames": len(motion),
                       "pngBytes": sum(a["pngBytes"] for a in manifest["atlases"])}))

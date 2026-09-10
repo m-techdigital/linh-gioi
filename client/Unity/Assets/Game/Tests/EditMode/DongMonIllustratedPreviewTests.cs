@@ -284,7 +284,7 @@ namespace LinhGioi.Tests
                 Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 male base").enabled, Is.True);
                 preview.CycleVoAvatarMode();
                 Assert.That(preview.VoAvatarMode, Is.EqualTo("modular"));
-                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(11));
+                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(10));
             }
             finally
             {
@@ -320,7 +320,7 @@ namespace LinhGioi.Tests
                 preview.CycleVoAvatarMode();
                 preview.CycleVoAvatarMode();
                 Assert.That(preview.VoAvatarMode, Is.EqualTo("modular"));
-                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(11));
+                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(10));
 
                 preview.CycleVoEquipmentSlot();
                 Assert.That(preview.VoSelectedEquipmentSlot, Is.EqualTo("head_hair"));
@@ -330,8 +330,8 @@ namespace LinhGioi.Tests
                 preview.MoveOnLane(1, .1f);
                 Assert.That(preview.VoAvatarUsesAlignedPaperDollMotion, Is.True);
                 Assert.That(GameObject.Find("Map01A Võ motion frame").GetComponent<SpriteRenderer>().enabled, Is.False);
-                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(10),
-                    "base + nine equipped slots must remain visible during modular motion");
+                Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(9),
+                    "nine equipped slots must remain visible over the articulated rig");
                 Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 female slot head_hair").enabled, Is.False,
                     "an unequipped slot must not reappear from the full-frame sheet");
             }
@@ -426,6 +426,60 @@ namespace LinhGioi.Tests
                 Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_lien_quyen_hit_a"));
                 preview.AdvanceVoAnimation(.3f);
                 Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_lien_quyen_finish_b"));
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void Map01AVoModularEquipmentUsesSlotSpecificPoseAttachments()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A Võ attachment profile test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+                preview.CycleVoAvatarMode();
+                preview.CycleVoAvatarMode();
+                Assert.That(preview.VoAvatarMode, Is.EqualTo("modular"));
+                var rig = preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Where(renderer => renderer.name.StartsWith("Map01A Võ rig male ")).ToArray();
+                Assert.That(rig, Has.Length.EqualTo(10));
+                Assert.That(rig.Count(renderer => renderer.enabled), Is.EqualTo(10));
+                Assert.That(GameObject.Find("Map01A Võ avatar lv001 male base").GetComponent<SpriteRenderer>().enabled, Is.False);
+
+                var weapon = GameObject.Find("Map01A Võ avatar lv001 male slot main_weapon").transform;
+                var boots = GameObject.Find("Map01A Võ avatar lv001 male slot boots").transform;
+                var tunic = GameObject.Find("Map01A Võ avatar lv001 male slot outer_tunic").transform;
+                var idleWeaponPosition = weapon.localPosition;
+                var idleWeaponRotation = weapon.localEulerAngles.z;
+                var idleBootsPosition = boots.localPosition;
+                var idleTunicRotation = tunic.localEulerAngles.z;
+
+                preview.SetVoRun(true);
+                preview.MoveOnLane(1, .1f);
+                Assert.That(weapon.localPosition, Is.Not.EqualTo(idleWeaponPosition));
+                Assert.That(weapon.localEulerAngles.z, Is.Not.EqualTo(idleWeaponRotation));
+
+                preview.SetVoRun(false);
+                preview.AdvanceVoAnimation(.5f);
+                Assert.That(preview.TriggerVoJump(), Is.True);
+                Assert.That(boots.localPosition, Is.Not.EqualTo(idleBootsPosition));
+
+                preview.AdvanceVoAnimation(.6f);
+                for (var step = 0; step < 175; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.TriggerVoBasicAttack(), Is.True);
+                Assert.That(tunic.localEulerAngles.z, Is.Not.EqualTo(idleTunicRotation));
+
+                Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Count(renderer => renderer.enabled && renderer.name.Contains("lv001 male slot")), Is.EqualTo(10));
             }
             finally
             {

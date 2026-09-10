@@ -332,3 +332,7 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 Võ nam/nữ Lv1 đã có đủ state nhìn thấy trong Map01A: idle, walk, run, jump rise/apex, basic attack và hai key pose `Liên Quyền`. Nguồn candidate đầu 8×2 bị gate mới từ chối vì 16/16 silhouette chạm cell; batch 4×2 riêng từng giới được khử checker bằng border flood, căn margin 32 px, tách 16 frame và đóng lại hai atlas 1024². Action bar chạy bằng touch hoặc Shift/J/Z/X; hit thường trừ 12 HP, `Liên Quyền` trừ 35 HP và có VFX/feedback.
 
 Trạng thái: `VO_LV1_FULL_FRAME_MOTION_PASS / ANIMATED_PAPER_DOLL_ATTACHMENT_INCOMPLETE`. Evidence: `build/vo-motion-v8/three-profiles/`, 114 ảnh (38×3), manifest xác nhận Q01–Q09 và bốn state mới ở cả hai giới. Chưa claim Võ Lv1–30 hoàn chỉnh: full-frame chỉ dùng cho Lv1/full; modular và Lv10/20/30 vẫn giữ slot đúng nhưng dùng root pose. Next là attachment/rig 10 slot, không mở Kiếm/Pháp/Cơ/Linh.
+
+## Võ modular skeletal base gate — 2026-09-10
+
+`VO_SKELETAL_BASE_RIG_PASS / EQUIPMENT_COMPONENT_BINDING_INCOMPLETE`: runtime có 10 body segment cho mỗi giới và pose profile data-driven xoay quanh joint pivot; modular không còn dùng một base sprite đứng phẳng. Source QA đúng 10 connected component/sheet, atlas rig 1024² chỉ 24.232 byte; tổng bảy atlas 724.795 byte. Player capture 46×3 đã review: thân/limb chuyển động rõ hơn, nhưng slot đôi vẫn chưa tách theo bone và gear Võ nữ Lv30 còn lệch. Next bắt buộc là split/bind equipment component trước khi đóng Võ hoặc nhân pipeline.
