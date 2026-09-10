@@ -455,5 +455,68 @@
       "sx": 1.06,
       "sy": 1.0
     }
-  ]
+  ],
+  "productionAtlas": {
+    "atlasId": "vo-lv1-starter-atlas-v1",
+    "importMode": "layered-psb-or-spritesheet",
+    "texturePolicy": "approved-original-2d-art-only",
+    "pixelsPerUnit": 128,
+    "pivotPolicy": "bottom-center-foot-anchor",
+    "requiredCells": [
+      "base_head_male",
+      "base_torso_male",
+      "base_arm_l",
+      "base_arm_r",
+      "base_leg_l",
+      "base_leg_r",
+      "torso_outer_vo_lv1",
+      "pants_vo_lv1",
+      "waist_vo_lv1",
+      "glove_l_vo_lv1",
+      "glove_r_vo_lv1",
+      "boot_l_vo_lv1",
+      "boot_r_vo_lv1",
+      "weapon_training_staff",
+      "skill_vo_lv1_palm_trail",
+      "skill_vo_lv1_palm_burst"
+    ],
+    "runtimeLayers": [
+      "base_shadow",
+      "body_back",
+      "pants",
+      "boots",
+      "torso_inner",
+      "torso_outer",
+      "waist",
+      "arms",
+      "gloves",
+      "weapon",
+      "skill_cue",
+      "anchor_gizmo_debug"
+    ],
+    "rigJoints": [
+      "Root",
+      "Chest",
+      "Hips",
+      "Hand_L",
+      "Hand_R",
+      "Foot_L",
+      "Foot_R"
+    ],
+    "motionClips": [
+      "vo_lv1_guard_idle",
+      "vo_lv1_stride",
+      "vo_lv1_jump_lift",
+      "vo_lv1_dash_stretch",
+      "vo_lv1_first_skill",
+      "vo_lv1_training_complete"
+    ],
+    "replacementGate": [
+      "preserve-runtime-fit-contract",
+      "preserve-paper-doll-slot-ids",
+      "preserve-anchor-gizmo-semantic-points",
+      "preserve-player-collision-plane",
+      "visual-review-in-player"
+    ]
+  }
 }

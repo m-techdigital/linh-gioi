@@ -39,6 +39,19 @@ namespace LinhGioi.World
                         .Append(" shape=").Append(string.IsNullOrEmpty(part.shape) ? "rect" : part.shape);
                 }
             }
+            if (source != null && source.productionAtlas != null)
+            {
+                builder.Append(" | productionAtlas=").Append(source.productionAtlas.atlasId);
+                builder.Append(" | importMode=").Append(source.productionAtlas.importMode);
+                builder.Append(" | texturePolicy=").Append(source.productionAtlas.texturePolicy);
+                builder.Append(" | pixelsPerUnit=").Append(source.productionAtlas.pixelsPerUnit);
+                builder.Append(" | pivotPolicy=").Append(source.productionAtlas.pivotPolicy);
+                AppendTokens(builder, "requiredCell", source.productionAtlas.requiredCells);
+                AppendTokens(builder, "runtimeLayer", source.productionAtlas.runtimeLayers);
+                AppendTokens(builder, "rigJoint", source.productionAtlas.rigJoints);
+                AppendTokens(builder, "motionClip", source.productionAtlas.motionClips);
+                AppendTokens(builder, "replacementGate", source.productionAtlas.replacementGate);
+            }
             builder.Append(" | poseOffsets=").Append(source != null && source.poseOffsets != null ? source.poseOffsets.Length : 0);
             if (source != null && source.poseOffsets != null)
             {
@@ -71,6 +84,13 @@ namespace LinhGioi.World
             return builder.ToString();
         }
 
+        private static void AppendTokens(StringBuilder builder, string label, string[] values)
+        {
+            if (values == null) return;
+            for (var i = 0; i < values.Length; i++)
+                builder.Append(" | ").Append(label).Append("=").Append(values[i]);
+        }
+
         private static bool ContainsToken(string text, string token)
         {
             return text.IndexOf(token, StringComparison.Ordinal) >= 0;
@@ -85,9 +105,25 @@ namespace LinhGioi.World
         public string displayName;
         public string usage;
         public string[] safety;
+        public VoLv1ProductionAtlasContract productionAtlas;
         public VoLv1PaperDollAtlasPart[] parts;
         public VoLv1PaperDollPoseOffset[] poseOffsets;
         public VoLv1PaperDollAtlasPart[] skillCues;
+    }
+
+    [Serializable]
+    public sealed class VoLv1ProductionAtlasContract
+    {
+        public string atlasId;
+        public string importMode;
+        public string texturePolicy;
+        public int pixelsPerUnit;
+        public string pivotPolicy;
+        public string[] requiredCells;
+        public string[] runtimeLayers;
+        public string[] rigJoints;
+        public string[] motionClips;
+        public string[] replacementGate;
     }
 
     [Serializable]

@@ -68,7 +68,7 @@ Cập nhật Goal kỹ thuật: map Đông Môn đã là mặt phẳng kiểm ch
 
 Batch tiếp theo của Võ Lv1 đang khóa theo hướng slot compatibility trước: mọi item runtime phải báo selected slot/anchor/fit/profile/provenance trong manifest để owner kiểm thay đồ không lệch trước khi nâng art atlas/spritesheet.
 
-Batch Võ Lv1 đã có anchor/pivot gizmo và runtime fit contract trong Player: owner có thể kiểm Chest/Hips/Hand/Foot, slot bounds/sort và skill Hand_R trên mặt phẳng Đông Môn. Bước kế tiếp nên thay primitive Võ Lv1 bằng spritesheet/rig atlas sạch cho 1 class trước, không nhân 5 class khi Võ chưa đẹp và chưa đủ motion production.
+Batch Võ Lv1 đã có anchor/pivot gizmo, runtime fit contract và production atlas contract trong Player: owner có thể kiểm Chest/Hips/Hand/Foot, slot bounds/sort, skill Hand_R, required atlas cells, rig joints và replacement gates trên mặt phẳng Đông Môn. Bước kế tiếp là tạo/nhập spritesheet hoặc layered PSB sạch cho Võ Lv1 theo contract này, rồi mới nhân pattern sang Kiếm/Pháp/Cơ/Linh.
 
 1. Owner xem góc Đông Môn illustrated trong capture Player `03-dialogue.png`; bản này mới là draft góc cổng, chưa coi cả map đầu hoàn thiện.
 2. Hoàn thiện Đông Môn theo kịch bản đã có: cảnh/parallax/terrain, đường đi và tương tác không lệch hình; kiểm spawn → Người Giữ Cổng/thoại → Bia Luyện Khí → hướng dẫn hiện có. Bàn giao Player chạy được, phím điều khiển và bằng chứng trước/sau từng thao tác. Không mở hệ thống mới hoặc map tiếp theo.

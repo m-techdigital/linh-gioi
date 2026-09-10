@@ -342,6 +342,29 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void VoLv1PaperDollAtlasDefinesProductionSpritesheetContractForReplacementArt()
+        {
+            var atlas = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlas();
+            var snapshot = TwoDPaperDollAtlasCatalog.LoadVoLv1PaperDollAtlasSnapshot();
+
+            Assert.IsNotNull(atlas);
+            Assert.IsNotNull(atlas.productionAtlas);
+            Assert.AreEqual("vo-lv1-starter-atlas-v1", atlas.productionAtlas.atlasId);
+            Assert.That(atlas.productionAtlas.requiredCells.Length, Is.GreaterThanOrEqualTo(12));
+            Assert.That(atlas.productionAtlas.rigJoints.Length, Is.GreaterThanOrEqualTo(6));
+            StringAssert.Contains("productionAtlas=vo-lv1-starter-atlas-v1", snapshot);
+            StringAssert.Contains("importMode=layered-psb-or-spritesheet", snapshot);
+            StringAssert.Contains("texturePolicy=approved-original-2d-art-only", snapshot);
+            StringAssert.Contains("requiredCell=torso_outer_vo_lv1", snapshot);
+            StringAssert.Contains("requiredCell=skill_vo_lv1_palm_burst", snapshot);
+            StringAssert.Contains("rigJoint=Hand_R", snapshot);
+            StringAssert.Contains("motionClip=vo_lv1_first_skill", snapshot);
+            StringAssert.Contains("replacementGate=preserve-runtime-fit-contract", snapshot);
+            StringAssert.Contains("safe-no-source-image=True", snapshot);
+            StringAssert.Contains("safe-no-3d=True", snapshot);
+        }
+
+        [Test]
         public void RuntimeControllerAppliesVoLv1PaperDollPoseAcrossLessonMotions()
         {
             var host = new GameObject("2D Vo Lv1 paper doll motion runtime test host");

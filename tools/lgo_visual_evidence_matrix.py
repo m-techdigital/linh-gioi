@@ -272,7 +272,7 @@ def verify_current() -> dict[str, Any]:
             failures.append(f"runtimeDongMonAuthoredPassSnapshot missing {token!r}")
 
     vo_paperdoll_snapshot = str(manifest.get("runtimeVoLv1PaperDollAtlasSnapshot", ""))
-    for token in ("VoLv1PaperDollAtlas", "poseOffsets=", "pose=vo_jump_lift", "pose=vo_dash_stretch", "currentPose=vo_lv1_training_complete", "safe-runtime-motion=True", "active=True"):
+    for token in ("VoLv1PaperDollAtlas", "productionAtlas=vo-lv1-starter-atlas-v1", "importMode=layered-psb-or-spritesheet", "texturePolicy=approved-original-2d-art-only", "requiredCell=torso_outer_vo_lv1", "requiredCell=skill_vo_lv1_palm_burst", "rigJoint=Hand_R", "motionClip=vo_lv1_first_skill", "replacementGate=preserve-runtime-fit-contract", "poseOffsets=", "pose=vo_jump_lift", "pose=vo_dash_stretch", "currentPose=vo_lv1_training_complete", "safe-runtime-motion=True", "active=True"):
         if token not in vo_paperdoll_snapshot:
             failures.append(f"runtimeVoLv1PaperDollAtlasSnapshot missing {token!r}")
 
