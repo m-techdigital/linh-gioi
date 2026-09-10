@@ -197,16 +197,17 @@ namespace LinhGioi.Tests
                 preview = CongDongLamMap01AArtPreview.Attach(controller);
                 var avatar = GameObject.FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None)
                     .Where(renderer => renderer.name.StartsWith("Map01A Võ avatar ")).ToArray();
-                Assert.That(avatar, Has.Length.EqualTo(24));
-                Assert.That(avatar.Select(renderer => renderer.sprite.texture).Distinct().Single().width, Is.EqualTo(1024));
+                Assert.That(avatar, Has.Length.EqualTo(96));
+                Assert.That(avatar.Select(renderer => renderer.sprite.texture).Distinct().Count(), Is.EqualTo(4));
+                Assert.That(avatar.All(renderer => renderer.sprite.texture.width == 1024), Is.True);
                 Assert.That(preview.VoAvatarMode, Is.EqualTo("full"));
-                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar male full").enabled, Is.True);
-                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar male full").bounds.min.y,
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 male full").enabled, Is.True);
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 male full").bounds.min.y,
                     Is.EqualTo(preview.GroundY).Within(.001f));
 
                 preview.CycleVoAvatarMode();
                 Assert.That(preview.VoAvatarMode, Is.EqualTo("base"));
-                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar male base").enabled, Is.True);
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 male base").enabled, Is.True);
                 preview.CycleVoAvatarMode();
                 Assert.That(preview.VoAvatarMode, Is.EqualTo("modular"));
                 Assert.That(avatar.Count(renderer => renderer.enabled), Is.EqualTo(11));
@@ -233,14 +234,14 @@ namespace LinhGioi.Tests
                 var avatar = GameObject.FindObjectsByType<SpriteRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None)
                     .Where(renderer => renderer.name.StartsWith("Map01A Võ avatar ")).ToArray();
 
-                Assert.That(avatar, Has.Length.EqualTo(24), "base + full + 10 slots for male and female");
-                Assert.That(avatar.Select(renderer => renderer.sprite.texture).Distinct().Single().width, Is.EqualTo(1024));
+                Assert.That(avatar, Has.Length.EqualTo(96), "four tiers of base + full + 10 slots for male and female");
+                Assert.That(avatar.Select(renderer => renderer.sprite.texture).Distinct().Count(), Is.EqualTo(4));
                 Assert.That(preview.VoAvatarGender, Is.EqualTo("male"));
                 Assert.That(preview.VoEquippedSlotCount, Is.EqualTo(10));
 
                 preview.CycleVoAvatarGender();
                 Assert.That(preview.VoAvatarGender, Is.EqualTo("female"));
-                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar female full").enabled, Is.True);
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 female full").enabled, Is.True);
 
                 preview.CycleVoAvatarMode();
                 preview.CycleVoAvatarMode();
@@ -251,7 +252,7 @@ namespace LinhGioi.Tests
                 Assert.That(preview.VoSelectedEquipmentSlot, Is.EqualTo("head_hair"));
                 preview.ToggleVoEquipmentSlot();
                 Assert.That(preview.VoEquippedSlotCount, Is.EqualTo(9));
-                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar female slot head_hair").enabled, Is.False);
+                Assert.That(avatar.Single(renderer => renderer.name == "Map01A Võ avatar lv001 female slot head_hair").enabled, Is.False);
             }
             finally
             {
@@ -276,20 +277,65 @@ namespace LinhGioi.Tests
 
                 preview.MoveOnLane(1, .1f);
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("walk"));
-                StringAssert.StartsWith("walk_", preview.VoAvatarMotionFrameId);
+                StringAssert.StartsWith("male_walk_", preview.VoAvatarMotionFrameId);
                 Assert.That(preview.VoAvatarMotionScale, Is.EqualTo(Vector2.one));
 
                 Assert.That(preview.TriggerVoSkill(), Is.True);
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("skill"));
-                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("punch_windup"));
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_punch_windup"));
                 Assert.That(preview.VoSkillCastCount, Is.EqualTo(1));
                 Assert.That(GameObject.Find("Map01A Võ skill").GetComponent<SpriteRenderer>().enabled, Is.True);
                 Assert.That(preview.TriggerVoSkill(), Is.False, "Skill cannot restart during its active window");
 
                 preview.AdvanceVoAnimation(.5f);
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("idle"));
-                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("idle"));
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_idle"));
                 Assert.That(GameObject.Find("Map01A Võ skill").GetComponent<SpriteRenderer>().enabled, Is.False);
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void Map01AVoAvatarCyclesLv1To30AndFemaleUsesRealMotionFrames()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A Võ progression test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+                Assert.That(preview.VoAvatarLevel, Is.EqualTo(1));
+                Assert.That(preview.VoAvatarAvailableLevels, Is.EqualTo(new[] { 1, 10, 20, 30 }));
+
+                preview.CycleVoAvatarLevel();
+                Assert.That(preview.VoAvatarLevel, Is.EqualTo(10));
+                Assert.That(GameObject.Find("Map01A Võ avatar lv010 male full").GetComponent<SpriteRenderer>().enabled, Is.True);
+                preview.CycleVoAvatarLevel();
+                preview.CycleVoAvatarLevel();
+                Assert.That(preview.VoAvatarLevel, Is.EqualTo(30));
+                preview.MoveOnLane(1, .1f);
+                Assert.That(GameObject.Find("Map01A Võ motion frame").GetComponent<SpriteRenderer>().enabled, Is.False,
+                    "A higher-tier outfit must not be replaced by the Lv1 full-frame motion sheet");
+                Assert.That(GameObject.Find("Map01A Võ avatar lv030 male full").GetComponent<SpriteRenderer>().enabled, Is.True);
+                preview.AdvanceVoAnimation(.5f);
+
+                preview.CycleVoAvatarGender();
+                preview.CycleVoAvatarLevel();
+                Assert.That(preview.VoAvatarLevel, Is.EqualTo(1));
+                preview.MoveOnLane(1, .1f);
+                StringAssert.StartsWith("female_walk_", preview.VoAvatarMotionFrameId);
+                Assert.That(preview.VoAvatarMotionScale, Is.EqualTo(Vector2.one));
+                Assert.That(GameObject.Find("Map01A Võ motion frame").GetComponent<SpriteRenderer>().enabled, Is.True);
+
+                Assert.That(preview.TriggerVoSkill(), Is.True);
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("female_punch_windup"));
             }
             finally
             {

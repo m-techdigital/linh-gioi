@@ -59,10 +59,11 @@ namespace LinhGioi.World
         private readonly Dictionary<string, Tuple<Sprite, VoAvatarPart>> _voMotionFrames = new Dictionary<string, Tuple<Sprite, VoAvatarPart>>();
         private readonly HashSet<string> _voEquippedSlots = new HashSet<string>();
         private SpriteRenderer _voSkillVfx, _voMotionRenderer;
-        private int _voAvatarMode, _voAvatarGender, _voSelectedEquipmentSlot;
+        private int _voAvatarMode, _voAvatarGender, _voAvatarLevel, _voSelectedEquipmentSlot;
         private float _voAnimationPhase, _voWalkHold, _voSkillRemaining;
         private static readonly string[] VoAvatarModes = { "full", "base", "modular" };
         private static readonly string[] VoAvatarGenders = { "male", "female" };
+        private static readonly int[] VoAvatarLevels = { 1, 10, 20, 30 };
         private static readonly string[] VoEquipmentSlots =
         {
             "main_weapon", "head_hair", "inner_top", "outer_tunic", "lower_garment",
@@ -70,6 +71,8 @@ namespace LinhGioi.World
         };
         public string VoAvatarMode => VoAvatarModes[_voAvatarMode];
         public string VoAvatarGender => VoAvatarGenders[_voAvatarGender];
+        public int VoAvatarLevel => VoAvatarLevels[_voAvatarLevel];
+        public int[] VoAvatarAvailableLevels => (int[])VoAvatarLevels.Clone();
         public string VoSelectedEquipmentSlot => VoEquipmentSlots[_voSelectedEquipmentSlot];
         public int VoEquippedSlotCount => _voEquippedSlots.Count;
         public string VoAvatarMotionState { get; private set; } = "idle";
@@ -82,6 +85,7 @@ namespace LinhGioi.World
             public string status;
             public string[] genders;
             public string[] slots;
+            public int[] levels;
             public VoAvatarPart[] parts;
             public VoAvatarPart[] effects;
             public VoAvatarPart[] motionFrames;
@@ -89,7 +93,8 @@ namespace LinhGioi.World
         [Serializable] private sealed class VoAvatarPart
         {
             public string id;
-            public string gender, kind, slot;
+            public string gender, kind, slot, atlas;
+            public int level;
             public int x, y, w, h, order;
             public float worldW, worldH, dx, dy;
         }
@@ -105,6 +110,7 @@ namespace LinhGioi.World
             public bool dialogueOpened, greetingCompleted;
             public bool voBaseVerified, voModularVerified, voWalkVerified, voSkillVerified;
             public bool voFemaleVerified, voSlotToggleVerified;
+            public bool voFemaleMotionVerified, voProgressionVerified;
             public int voSkillCastCount;
         }
         public float GroundY { get; private set; }
@@ -286,27 +292,36 @@ namespace LinhGioi.World
         {
             const string path = "LGOClasses/VoLv1MapAvatarArt/";
             var manifest = Resources.Load<TextAsset>(path + "manifest");
-            var texture = Resources.Load<Texture2D>(path + "vo-lv1-map-avatar-atlas");
-            var motionTexture = Resources.Load<Texture2D>(path + "vo-lv1-motion-atlas");
-            if (manifest == null || texture == null || motionTexture == null)
-                throw new InvalidOperationException("Missing reviewed Võ Lv1 map avatar pack");
+            var textures = new Dictionary<string, Texture2D>
+            {
+                { "lv001", Resources.Load<Texture2D>(path + "vo-lv1-map-avatar-atlas") },
+                { "lv010", Resources.Load<Texture2D>(path + "vo-lv10-equipment-atlas") },
+                { "lv020", Resources.Load<Texture2D>(path + "vo-lv20-equipment-atlas") },
+                { "lv030", Resources.Load<Texture2D>(path + "vo-lv30-equipment-atlas") },
+                { "motion_male", Resources.Load<Texture2D>(path + "vo-lv1-motion-atlas") },
+                { "motion_female", Resources.Load<Texture2D>(path + "vo-lv1-female-motion-atlas") },
+            };
+            if (manifest == null || textures.Values.Any(texture => texture == null))
+                throw new InvalidOperationException("Missing reviewed Võ Lv1-30 map avatar pack");
             var pack = JsonUtility.FromJson<VoAvatarPackInfo>(manifest.text);
-            if (pack.id != "vo-lv1-map-avatar-v2" || pack.status != "DRAFT_RUNTIME_REVIEW"
-                || pack.parts == null || pack.parts.Length != 24 || pack.genders == null || pack.genders.Length != 2
-                || pack.slots == null || pack.slots.Length != 10)
-                throw new InvalidOperationException("Invalid Võ Lv1 map avatar manifest");
+            if (pack.id != "vo-lv1-30-map-avatar-v3" || pack.status != "DRAFT_RUNTIME_REVIEW"
+                || pack.parts == null || pack.parts.Length != 96 || pack.genders == null || pack.genders.Length != 2
+                || pack.slots == null || pack.slots.Length != 10 || pack.levels == null || pack.levels.Length != 4)
+                throw new InvalidOperationException("Invalid Võ Lv1-30 map avatar manifest");
             _voEquippedSlots.Clear();
             foreach (var slot in VoEquipmentSlots) _voEquippedSlots.Add(slot);
             _voAvatarRoot = new GameObject("Map01A Võ avatar").transform;
             _voAvatarRoot.SetParent(transform, false);
             foreach (var part in pack.parts)
             {
+                if (!textures.TryGetValue(part.atlas, out var texture))
+                    throw new InvalidOperationException("Unknown Võ equipment atlas: " + part.atlas);
                 if (part.x < 0 || part.y < 0 || part.w <= 0 || part.h <= 0
                     || part.x + part.w > texture.width || part.y + part.h > texture.height
                     || part.worldW <= 0 || part.worldH <= 0 || _voAvatarParts.ContainsKey(part.id))
                     throw new InvalidOperationException("Invalid Võ avatar part: " + part.id);
                 var suffix = part.kind == "slot" ? "slot " + part.slot : part.kind;
-                var host = new GameObject("Map01A Võ avatar " + part.gender + " " + suffix);
+                var host = new GameObject("Map01A Võ avatar lv" + part.level.ToString("000") + " " + part.gender + " " + suffix);
                 host.transform.SetParent(_voAvatarRoot, false);
                 host.transform.localPosition = new Vector3(part.dx, part.dy, 0);
                 var sprite = MakeSprite(texture, new Rect(part.x, part.y, part.w, part.h));
@@ -316,14 +331,16 @@ namespace LinhGioi.World
                 renderer.sortingOrder = part.order;
                 _voAvatarParts.Add(part.id, renderer);
             }
+            foreach (var level in VoAvatarLevels)
             foreach (var gender in VoAvatarGenders)
             {
+                var prefix = "lv" + level.ToString("000") + "_" + gender + "_";
                 foreach (var required in new[] { "base", "full" })
-                    if (!_voAvatarParts.ContainsKey(gender + "_" + required))
-                        throw new InvalidOperationException("Missing Võ avatar part: " + gender + " " + required);
+                    if (!_voAvatarParts.ContainsKey(prefix + required))
+                        throw new InvalidOperationException("Missing Võ avatar part: " + prefix + required);
                 foreach (var slot in VoEquipmentSlots)
-                    if (!_voAvatarParts.ContainsKey(gender + "_slot_" + slot))
-                        throw new InvalidOperationException("Missing Võ avatar slot: " + gender + " " + slot);
+                    if (!_voAvatarParts.ContainsKey(prefix + "slot_" + slot))
+                        throw new InvalidOperationException("Missing Võ avatar slot: " + prefix + slot);
             }
             if (pack.effects == null || pack.effects.Length != 1 || pack.effects[0].id != "skill_slash")
                 throw new InvalidOperationException("Missing Võ skill effect");
@@ -331,20 +348,23 @@ namespace LinhGioi.World
             var effectHost = new GameObject("Map01A Võ skill");
             effectHost.transform.SetParent(_voAvatarRoot, false);
             effectHost.transform.localPosition = new Vector3(effect.dx, effect.dy, 0);
-            var effectSprite = MakeSprite(texture, new Rect(effect.x, effect.y, effect.w, effect.h));
+            var effectTexture = textures["lv001"];
+            var effectSprite = MakeSprite(effectTexture, new Rect(effect.x, effect.y, effect.w, effect.h));
             effectHost.transform.localScale = new Vector3(effect.worldW / effectSprite.bounds.size.x,
                 effect.worldH / effectSprite.bounds.size.y, 1);
             _voSkillVfx = effectHost.AddComponent<SpriteRenderer>();
             _voSkillVfx.sprite = effectSprite;
             _voSkillVfx.sortingOrder = effect.order;
             _voSkillVfx.enabled = false;
-            if (pack.motionFrames == null || pack.motionFrames.Length != 6)
-                throw new InvalidOperationException("Missing Võ Lv1 motion frame batch");
+            if (pack.motionFrames == null || pack.motionFrames.Length != 12)
+                throw new InvalidOperationException("Missing Võ two-gender motion frame batch");
             var motionHost = new GameObject("Map01A Võ motion frame");
             motionHost.transform.SetParent(_voAvatarRoot, false);
             _voMotionRenderer = motionHost.AddComponent<SpriteRenderer>();
             foreach (var frame in pack.motionFrames)
             {
+                if (!textures.TryGetValue(frame.atlas, out var motionTexture))
+                    throw new InvalidOperationException("Unknown Võ motion atlas: " + frame.atlas);
                 if (frame.x < 0 || frame.y < 0 || frame.w <= 0 || frame.h <= 0
                     || frame.x + frame.w > motionTexture.width || frame.y + frame.h > motionTexture.height
                     || _voMotionFrames.ContainsKey(frame.id))
@@ -368,6 +388,12 @@ namespace LinhGioi.World
             RefreshVoAvatarMode();
         }
 
+        public void CycleVoAvatarLevel()
+        {
+            _voAvatarLevel = (_voAvatarLevel + 1) % VoAvatarLevels.Length;
+            RefreshVoAvatarMode();
+        }
+
         public void CycleVoEquipmentSlot()
         {
             _voSelectedEquipmentSlot = (_voSelectedEquipmentSlot + 1) % VoEquipmentSlots.Length;
@@ -384,7 +410,7 @@ namespace LinhGioi.World
         {
             foreach (var pair in _voAvatarParts)
             {
-                var prefix = VoAvatarGender + "_";
+                var prefix = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_";
                 if (!pair.Key.StartsWith(prefix, StringComparison.Ordinal))
                 {
                     pair.Value.enabled = false;
@@ -397,7 +423,9 @@ namespace LinhGioi.World
                     pair.Value.enabled = _voEquippedSlots.Contains(pair.Key.Substring((prefix + "slot_").Length));
                 else pair.Value.enabled = false;
             }
-            var usesMotionFrame = VoAvatarGender == "male" && VoAvatarMotionState != "idle";
+            // The reviewed key-pose sheets currently depict the Lv1 outfit only.
+            // Higher tiers keep their selected paper-doll visible until tier-matched motion exists.
+            var usesMotionFrame = VoAvatarLevel == 1 && VoAvatarMotionState != "idle";
             if (usesMotionFrame)
                 foreach (var renderer in _voAvatarParts.Values) renderer.enabled = false;
             if (_voMotionRenderer != null) _voMotionRenderer.enabled = usesMotionFrame;
@@ -450,22 +478,18 @@ namespace LinhGioi.World
             if (VoAvatarMotionState == "walk")
             {
                 var stride = Mathf.Sin(_voAnimationPhase * 22f);
-                if (VoAvatarGender == "male") SetVoMotionFrame(stride >= 0 ? "walk_a" : "walk_b");
-                else _voAvatarRoot.localScale = new Vector3(1f + stride * .035f, 1f - Mathf.Abs(stride) * .025f, 1f);
+                if (VoAvatarLevel == 1) SetVoMotionFrame(VoAvatarGender + "_" + (stride >= 0 ? "walk_a" : "walk_b"));
+                else VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_paper_doll_walk_pending";
             }
             else if (VoAvatarMotionState == "skill")
             {
                 var progress = 1f - _voSkillRemaining / .42f;
-                if (VoAvatarGender == "male") SetVoMotionFrame(progress < .45f ? "punch_windup" : "punch_impact");
-                else
-                {
-                    _voAvatarRoot.localScale = new Vector3(1.07f, .94f, 1f);
-                    _voAvatarRoot.localRotation = Quaternion.Euler(0, 0, -7f);
-                }
+                if (VoAvatarLevel == 1) SetVoMotionFrame(VoAvatarGender + "_" + (progress < .45f ? "punch_windup" : "punch_impact"));
+                else VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_paper_doll_skill_pending";
             }
             else
             {
-                SetVoMotionFrame("idle");
+                SetVoMotionFrame(VoAvatarGender + "_idle");
                 _voAvatarRoot.localScale = new Vector3(1f, 1f + Mathf.Sin(_voAnimationPhase * 2.6f) * .005f, 1f);
             }
             RefreshVoAvatarMode();
@@ -695,11 +719,12 @@ namespace LinhGioi.World
             var result = new CaptureInfo { groundY = GroundY, width = Screen.width, height = Screen.height };
             var initial = FarOffset;
             var targets = new[] { TwoDOnboardingState.PlayerStart.x, -3.2f, 0f, 6f, 23f, 31f, 39f, 43f,
-                20.5f, 20.5f, 20.5f, 39f, 20.5f, 20.5f };
+                20.5f, 20.5f, 20.5f, 39f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f };
             var names = new[] { "01-arrival", "02-dialogue", "03-grand-gate", "04-gate-captain",
                 "05-market", "06-well-bridge", "07-combat-edge", "08-portal",
                 "09-vo-base", "10-vo-modular", "11-vo-walk", "12-vo-skill",
-                "13-vo-female-full", "14-vo-female-slot-toggle" };
+                "13-vo-female-full", "14-vo-female-slot-toggle", "15-vo-female-walk",
+                "16-vo-lv10-female", "17-vo-lv20-female", "18-vo-lv30-female" };
             for (var i = 0; i < targets.Length; i++)
             {
                 _routeX = targets[i];
@@ -716,7 +741,7 @@ namespace LinhGioi.World
                 if (i == 10)
                 {
                     MoveOnLane(1, .1f);
-                    result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarMotionFrameId.StartsWith("walk_", StringComparison.Ordinal);
+                    result.voWalkVerified = VoAvatarMotionState == "walk" && VoAvatarMotionFrameId.StartsWith("male_walk_", StringComparison.Ordinal);
                 }
                 if (i == 11)
                 {
@@ -729,7 +754,7 @@ namespace LinhGioi.World
                     CycleVoAvatarMode();
                     CycleVoAvatarGender();
                     result.voFemaleVerified = VoAvatarMode == "full" && VoAvatarGender == "female"
-                        && _voAvatarParts["female_full"].enabled;
+                        && _voAvatarParts["lv001_female_full"].enabled;
                 }
                 if (i == 13)
                 {
@@ -739,7 +764,25 @@ namespace LinhGioi.World
                     CycleVoEquipmentSlot();
                     ToggleVoEquipmentSlot();
                     result.voSlotToggleVerified = VoAvatarMode == "modular" && VoSelectedEquipmentSlot == "inner_top"
-                        && VoEquippedSlotCount == 9 && !_voAvatarParts["female_slot_inner_top"].enabled;
+                        && VoEquippedSlotCount == 9 && !_voAvatarParts["lv001_female_slot_inner_top"].enabled;
+                }
+                if (i == 14)
+                {
+                    MoveOnLane(1, .1f);
+                    result.voFemaleMotionVerified = VoAvatarMotionFrameId.StartsWith("female_walk_", StringComparison.Ordinal);
+                }
+                if (i == 15)
+                {
+                    AdvanceVoAnimation(.5f);
+                    CycleVoAvatarMode();
+                    CycleVoAvatarLevel();
+                }
+                if (i == 16) CycleVoAvatarLevel();
+                if (i == 17)
+                {
+                    CycleVoAvatarLevel();
+                    result.voProgressionVerified = VoAvatarLevel == 30
+                        && _voAvatarParts["lv030_female_full"].enabled;
                 }
                 _controller.RefreshForSmoke();
                 Refresh();
@@ -765,6 +808,7 @@ namespace LinhGioi.World
             result.parallaxDelta = FarOffset - initial;
             if (!result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
+                || !result.voFemaleMotionVerified || !result.voProgressionVerified
                 || result.voSkillCastCount != 1 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), JsonUtility.ToJson(result, true));

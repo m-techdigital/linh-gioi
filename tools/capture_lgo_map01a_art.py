@@ -56,15 +56,17 @@ def main():
                 '05-market', '06-well-bridge', '07-combat-edge', '08-portal',
                 '09-vo-base', '10-vo-modular', '11-vo-walk', '12-vo-skill',
                 '13-vo-female-full', '14-vo-female-slot-toggle']
+    required += ['15-vo-female-walk', '16-vo-lv10-female', '17-vo-lv20-female', '18-vo-lv30-female']
     import math
     foot_error = manifest.get('maxFootError', float('nan'))
     parallax = manifest.get('parallaxDelta', float('nan'))
     if (manifest.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED'
-            or manifest.get('frames') != 14
+            or manifest.get('frames') != 18
             or not manifest.get('dialogueOpened') or not manifest.get('greetingCompleted')
             or not manifest.get('voBaseVerified') or not manifest.get('voModularVerified')
             or not manifest.get('voWalkVerified') or not manifest.get('voSkillVerified')
             or not manifest.get('voFemaleVerified') or not manifest.get('voSlotToggleVerified')
+            or not manifest.get('voFemaleMotionVerified') or not manifest.get('voProgressionVerified')
             or manifest.get('voSkillCastCount') != 1
             or (manifest.get('width'), manifest.get('height')) != (width, height)
             or manifest.get('mapQuestFlowVerified') is not False
@@ -79,7 +81,7 @@ def main():
         raw = (out / (name + '.png')).read_bytes()
         if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
             raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
-    print('LGO_MAP01A_ART_CAPTURE_TECHNICAL_PASS frames=14; visual review and quest flow still required; ' + str(out))
+    print('LGO_MAP01A_ART_CAPTURE_TECHNICAL_PASS frames=18; visual review and quest flow still required; ' + str(out))
 
 
 

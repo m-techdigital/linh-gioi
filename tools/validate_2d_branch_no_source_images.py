@@ -19,15 +19,19 @@ SKIP_PARTS = {
 RUNTIME_ART_PACKS = [
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1MapAvatarArt',
-        'id': 'vo-lv1-map-avatar-v2',
+        'id': 'vo-lv1-30-map-avatar-v3',
         'status': 'DRAFT_RUNTIME_REVIEW',
         'assets': {
-            'vo-lv1-map-avatar-atlas.png': (1024, 1024, 'two-gender-ten-slot-paper-doll-preview-atlas'),
-            'vo-lv1-motion-atlas.png': (1024, 1024, 'vo-male-lv1-runtime-motion-frames'),
+            'vo-lv1-map-avatar-atlas.png': (1024, 1024, 'two-gender-tier-equipment-atlas'),
+            'vo-lv10-equipment-atlas.png': (1024, 1024, 'two-gender-tier-equipment-atlas'),
+            'vo-lv20-equipment-atlas.png': (1024, 1024, 'two-gender-tier-equipment-atlas'),
+            'vo-lv30-equipment-atlas.png': (1024, 1024, 'two-gender-tier-equipment-atlas'),
+            'vo-lv1-motion-atlas.png': (1024, 1024, 'two-gender-motion-atlas'),
+            'vo-lv1-female-motion-atlas.png': (1024, 1024, 'two-gender-motion-atlas'),
         },
         'generators': {'aligned_imagegen_delta_batch', 'reference_guided_imagegen_motion_batch'},
         'max_bytes': 300_000,
-        'status_error': 'Vo Lv1 map avatar must remain draft until both-gender motion and Lv1-30 progression review',
+        'status_error': 'Võ Lv1-30 avatar must remain draft until tier-motion and combat review',
     },
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt',
