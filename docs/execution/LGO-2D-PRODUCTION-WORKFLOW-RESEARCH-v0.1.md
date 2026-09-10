@@ -177,4 +177,12 @@ Nguồn chính thức: [Unity Sprite Swap](https://docs.unity3d.com/Packages/com
 - `KiemSpriteSkinAssetAuthoring` dùng Unity Sprite Editor data provider để ghi sprite bones và vertex weights có thể tái tạo; hair có `head/hair_mid/hair_tip`, outer có `torso/arm_near_upper/arm_near_forearm`, inner có `torso`. Không cài PSD Importer.
 - TDD RED ban đầu bắt 8 texture chưa được import thành Sprite; GREEN hiện xác nhận một atlas có đủ 8 named sprite, 6 Skinned sprite có bones/BlendWeight và 2 Rigid weapon truy xuất bằng label ổn định. EditMode sau atlas `204 total / 203 pass / 0 fail / 1 ignored`.
 - macOS Player atlas build đạt 169.088.250 byte, 0 error; tổng delta so baseline trước package là 593.255 byte (0,352%), đồng thời giảm 202.672 byte so bản thử 8 texture rời. Vì vậy chuẩn tiếp theo là pack theo batch vào atlas có rect/manifest, không đưa từng crop thành texture runtime riêng.
+
+## Kiếm shared-rig motion fit preview — checkpoint 2026-09-10
+
+- Thêm trạng thái `DraftRuntimeFit` và hai API opt-in có tên rõ; `TryEquip`/`RegisterItem` production vẫn trả `ITEM_FIT_NOT_APPROVED`. Vì vậy evidence Player không vô tình nâng asset draft thành đồ dùng thật.
+- Bind trực tiếp sprite-local bones vào Võ/common world rig làm garment tụt xuống chân. Đã thay bằng bone-proxy adapter dùng bind pose riêng của item và chỉ copy rotation từ skeleton `lgo_humanoid_2d_v1`; bài học áp dụng chung cho mọi item khác canvas/tỷ lệ.
+- Capture Map01A tăng 66→78 frame/profile, thêm 6 pose cho mỗi giới trên mobile 1600×720, tablet 1024×768 và PC 1280×720. Review xác nhận 4 món `Lv1 weapon + Lv30 hair + Lv10 inner + Lv20 outer` không tách khỏi nhân vật qua idle/walk/run/jump/basic/shared-skill pose và UI ghi rõ DRAFT.
+- Gate cuối: EditMode `206 total / 205 pass / 0 fail / 1 ignored`; macOS Player 169.099.226 byte, 0 error; 234 ảnh (78×3) ở `build/kiem-motion-preview-v1/checkpoint-capture/` đạt technical capture. Review trực tiếp các frame idle/jump/shared-skill nam/nữ ở cả ba profile: scale đọc được, không còn garment tụt chân; source art/4-slot silhouette vẫn cần hoàn thiện trước approval.
+- Đây là compatibility proof 4/10 slot. Phần thân dưới đang phối với module base/Võ hiện có; chưa có Kiếm-specific lower/waist/arm/boots/guard/accessory và chưa có animation/VFX skill Kiếm riêng, nên `runtimeEligibleCount=0` giữ nguyên.
 - Player build 169.290.922 byte, 0 error: 8 proof asset tăng 478.848 byte (0,284%) so với package checkpoint, tổng tăng 795.927 byte (0,472%) so với baseline. Pack vẫn `DRAFT_RUNTIME_FIT`, eligible=0 cho tới motion capture.

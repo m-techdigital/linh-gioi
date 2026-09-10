@@ -197,6 +197,8 @@ namespace LinhGioi.World
         private readonly Dictionary<string, Tuple<Sprite, VoAvatarPart>> _voMotionFrames = new Dictionary<string, Tuple<Sprite, VoAvatarPart>>();
         private readonly Dictionary<string, VoAttachmentProfile> _voAttachmentProfiles = new Dictionary<string, VoAttachmentProfile>();
         private readonly Dictionary<string, VoRigPoseProfile> _voRigPoseProfiles = new Dictionary<string, VoRigPoseProfile>();
+        private TwoDKiemMixedLoadoutFitPreview _kiemFitPreview;
+        private bool _kiemFitPreviewActive;
         private SpriteRenderer _voSkillVfx, _voMotionRenderer;
         private SpriteRenderer _voCombatTarget;
         private SpriteRenderer _spiritHerbRenderer, _hiddenChestRenderer;
@@ -221,6 +223,10 @@ namespace LinhGioi.World
         public string VoAvatarMotionState => _voState.MotionState;
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
         public bool VoRunEnabled => _voState.RunEnabled;
+        public string AvatarClassLabel => _kiemFitPreviewActive ? "Kiếm mixed-fit DRAFT" : "Võ";
+        public string EquipmentLevelLabel => _kiemFitPreviewActive ? "Lv1/10/20/30" : "Lv" + VoAvatarLevel;
+        public string EquipmentSlotLabel => _kiemFitPreviewActive ? "weapon+hair+inner+outer" : VoSelectedEquipmentSlot;
+        public string SkillLabel => _kiemFitPreviewActive ? "Kiếm pose DRAFT" : "Liên Quyền";
         public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
         public bool VoAvatarUsesFrameMotion => VoAvatarLevel == 1 && VoAvatarMode == "full" && VoAvatarMotionState != "idle";
         public bool VoAvatarUsesAlignedPaperDollMotion => VoAvatarMotionState != "idle" && !VoAvatarUsesFrameMotion;
@@ -293,6 +299,8 @@ namespace LinhGioi.World
             public bool voEquipmentComponentBindingVerified;
             public bool voTenSlotMatrixVerified;
             public bool voSharedRuntimeStateVerified;
+            public bool kiemMaleMotionVerified, kiemFemaleMotionVerified;
+            public string kiemFitPreviewSnapshot;
             public int voSkillCastCount, voSkillHitCount, voTrainingTargetHp;
         }
         public float GroundY { get; private set; }
@@ -487,6 +495,7 @@ namespace LinhGioi.World
                 }
             }
             BuildVoAvatar();
+            _kiemFitPreview = new TwoDKiemMixedLoadoutFitPreview(_voAvatarRoot, _voRig);
             PartCount = parts.Count;
             parts.Add("skyline", MakeSprite(far, new Rect(0, 0, far.width, far.height)));
             foreach (var layer in info.layers)
@@ -755,6 +764,36 @@ namespace LinhGioi.World
                 foreach (var renderer in _voEquipmentComponents.Values) renderer.enabled = false;
             }
             if (_voMotionRenderer != null) _voMotionRenderer.enabled = usesMotionFrame;
+            ApplyKiemFitPreview();
+        }
+
+        private void SetKiemFitPreview(string gender, string motion)
+        {
+            _kiemFitPreviewActive = true;
+            _voState.SetPresentation(gender == "male" ? 0 : 1, 0, 2, 0);
+            _voState.EquipAllExcept(null);
+            _kiemFitPreview.SetActive(true, gender, motion);
+            RefreshVoAvatarMode();
+        }
+
+        private void ApplyKiemFitPreview()
+        {
+            if (_kiemFitPreview == null) return;
+            if (!_kiemFitPreviewActive)
+            {
+                _kiemFitPreview.SetActive(false, VoAvatarGender, VoAvatarMotionState);
+                return;
+            }
+            _kiemFitPreview.SetActive(true, VoAvatarGender, VoAvatarMotionState);
+            foreach (var renderer in _voAvatarParts.Values) renderer.enabled = false;
+            foreach (var pair in _voEquipmentComponents)
+            {
+                var slot = _voEquipmentComponentInfo[pair.Key].slot;
+                if (slot == "main_weapon" || slot == "head_hair" || slot == "inner_top"
+                    || slot == "outer_tunic" || slot == "light_armor")
+                    pair.Value.enabled = false;
+            }
+            if (_voMotionRenderer != null) _voMotionRenderer.enabled = false;
         }
 
         private void ApplyVoEquipmentComponents()
@@ -1164,7 +1203,8 @@ namespace LinhGioi.World
                     _currentRouteIndex = _interactionMarkers.IndexOf(marker);
                 }
             }
-            foreach (var marker in _interactionMarkers) marker.Item1.SetActive(marker.Item1 == nearest);
+            foreach (var marker in _interactionMarkers)
+                marker.Item1.SetActive(!_kiemFitPreviewActive && marker.Item1 == nearest);
         }
         private IEnumerator Start()
         {
@@ -1186,7 +1226,8 @@ namespace LinhGioi.World
                 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f,
                 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f,
                 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f, 20.5f,
-                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f };
+                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f,
+                39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f, 39f };
             var names = new[] { "01-arrival-q01", "02-ha-van-dialogue", "03-q01-complete", "04-q02-grand-gate",
                 "05-quan-thu-dialogue", "06-q03-complete", "07-q04-inventory-open", "08-q04-tong-phu-dialogue",
                 "09-q04-starter-supplies", "10-q04-health-potion-used", "11-q05-thanh-nhi", "12-q05-spirit-herb",
@@ -1211,7 +1252,11 @@ namespace LinhGioi.World
                 "59-vo-female-lv30-off-inner-top", "60-vo-female-lv30-off-outer-tunic",
                 "61-vo-female-lv30-off-lower-garment", "62-vo-female-lv30-off-waist",
                 "63-vo-female-lv30-off-arm-guard", "64-vo-female-lv30-off-boots",
-                "65-vo-female-lv30-off-light-armor", "66-vo-female-lv30-off-accessory" };
+                "65-vo-female-lv30-off-light-armor", "66-vo-female-lv30-off-accessory",
+                "67-kiem-male-idle", "68-kiem-male-walk", "69-kiem-male-run",
+                "70-kiem-male-jump", "71-kiem-male-basic", "72-kiem-male-class-skill",
+                "73-kiem-female-idle", "74-kiem-female-walk", "75-kiem-female-run",
+                "76-kiem-female-jump", "77-kiem-female-basic", "78-kiem-female-class-skill" };
             for (var i = 0; i < targets.Length; i++)
             {
                 _routeX = targets[i];
@@ -1421,7 +1466,7 @@ namespace LinhGioi.World
                     AdvanceVoAnimation(.5f); TriggerVoSkill();
                     result.voAttachmentLv30FemaleVerified &= VoAvatarMotionState == "skill";
                 }
-                if (i >= 46)
+                if (i >= 46 && i <= 65)
                 {
                     var matrixIndex = (i - 46) % VoEquipmentSlots.Length;
                     var selected = VoEquipmentSlots[matrixIndex];
@@ -1443,6 +1488,72 @@ namespace LinhGioi.World
                         && VoEquippedSlotCount == 9 && !_voState.IsEquipped(selected);
                     result.voSharedRuntimeStateVerified = i == 46 ? sharedStateValid
                         : result.voSharedRuntimeStateVerified && sharedStateValid;
+                }
+                if (i == 66)
+                {
+                    AdvanceVoAnimation(.6f);
+                    VoTrainingTargetHp = 100;
+                    SetKiemFitPreview("male", "idle");
+                    result.kiemMaleMotionVerified = _kiemFitPreview.VisibleItemCount == 4
+                        && _kiemFitPreview.ValidSpriteSkinCount == 3;
+                }
+                if (i == 67)
+                {
+                    MoveOnLane(1, .1f);
+                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "walk";
+                }
+                if (i == 68)
+                {
+                    AdvanceVoAnimation(.5f); SetVoRun(true); MoveOnLane(1, .1f);
+                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "run";
+                }
+                if (i == 69)
+                {
+                    SetVoRun(false); AdvanceVoAnimation(.5f); TriggerVoJump();
+                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "jump";
+                }
+                if (i == 70)
+                {
+                    AdvanceVoAnimation(.6f); TriggerVoBasicAttack();
+                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "basic_attack";
+                }
+                if (i == 71)
+                {
+                    AdvanceVoAnimation(.5f); TriggerVoSkill();
+                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "skill";
+                }
+                if (i == 72)
+                {
+                    AdvanceVoAnimation(.6f); VoTrainingTargetHp = 100;
+                    SetKiemFitPreview("female", "idle");
+                    result.kiemFemaleMotionVerified = _kiemFitPreview.VisibleItemCount == 4
+                        && _kiemFitPreview.ValidSpriteSkinCount == 3;
+                }
+                if (i == 73)
+                {
+                    MoveOnLane(1, .1f);
+                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "walk";
+                }
+                if (i == 74)
+                {
+                    AdvanceVoAnimation(.5f); SetVoRun(true); MoveOnLane(1, .1f);
+                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "run";
+                }
+                if (i == 75)
+                {
+                    SetVoRun(false); AdvanceVoAnimation(.5f); TriggerVoJump();
+                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "jump";
+                }
+                if (i == 76)
+                {
+                    AdvanceVoAnimation(.6f); TriggerVoBasicAttack();
+                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "basic_attack";
+                }
+                if (i == 77)
+                {
+                    AdvanceVoAnimation(.5f); TriggerVoSkill();
+                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "skill";
+                    result.kiemFitPreviewSnapshot = _kiemFitPreview.Snapshot;
                 }
                 _controller.RefreshForSmoke();
                 Refresh();
@@ -1485,6 +1596,8 @@ namespace LinhGioi.World
                 || !result.voEquipmentComponentBindingVerified
                 || !result.voTenSlotMatrixVerified
                 || !result.voSharedRuntimeStateVerified
+                || !result.kiemMaleMotionVerified || !result.kiemFemaleMotionVerified
+                || string.IsNullOrEmpty(result.kiemFitPreviewSnapshot)
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";
@@ -1502,6 +1615,7 @@ namespace LinhGioi.World
             if (_camera != null) { _camera.orthographicSize = _previousCameraSize; _camera.transform.position = _previousCameraPosition; }
             if (_controller != null) { _controller.enabled = _previousControllerEnabled; _controller.RefreshForSmoke(); }
             foreach (var pair in _hidden) if (pair.Key != null) pair.Key.enabled = pair.Value;
+            _kiemFitPreview?.Dispose();
             foreach (var sprite in _sprites)
                 if (sprite != null) { if (Application.isPlaying) Destroy(sprite); else DestroyImmediate(sprite); }
         }

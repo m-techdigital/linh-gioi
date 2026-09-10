@@ -74,11 +74,16 @@ def main():
              'waist', 'arm-guard', 'boots', 'light-armor', 'accessory']
     required += [f'{47 + index:02d}-vo-male-lv1-off-{slot}' for index, slot in enumerate(slots)]
     required += [f'{57 + index:02d}-vo-female-lv30-off-{slot}' for index, slot in enumerate(slots)]
+    required += [
+        '67-kiem-male-idle', '68-kiem-male-walk', '69-kiem-male-run',
+        '70-kiem-male-jump', '71-kiem-male-basic', '72-kiem-male-class-skill',
+        '73-kiem-female-idle', '74-kiem-female-walk', '75-kiem-female-run',
+        '76-kiem-female-jump', '77-kiem-female-basic', '78-kiem-female-class-skill']
     import math
     foot_error = manifest.get('maxFootError', float('nan'))
     parallax = manifest.get('parallaxDelta', float('nan'))
     if (manifest.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED'
-            or manifest.get('frames') != 66
+            or manifest.get('frames') != 78
             or not manifest.get('dialogueOpened') or not manifest.get('greetingCompleted')
             or not manifest.get('voBaseVerified') or not manifest.get('voModularVerified')
             or not manifest.get('voWalkVerified') or not manifest.get('voSkillVerified')
@@ -91,6 +96,10 @@ def main():
             or not manifest.get('voEquipmentComponentBindingVerified')
             or not manifest.get('voTenSlotMatrixVerified')
             or not manifest.get('voSharedRuntimeStateVerified')
+            or not manifest.get('kiemMaleMotionVerified')
+            or not manifest.get('kiemFemaleMotionVerified')
+            or 'runtimeEligibleCount=0' not in manifest.get('kiemFitPreviewSnapshot', '')
+            or 'productionEquipAllowed=False' not in manifest.get('kiemFitPreviewSnapshot', '')
             or not manifest.get('mapQuestFlowVerified') or manifest.get('activeQuestId') != 'COMPLETE'
             or not manifest.get('functionalUiVerified')
             or manifest.get('completedQuestCount') != 9
@@ -113,7 +122,7 @@ def main():
         raw = (out / (name + '.png')).read_bytes()
         if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
             raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
-    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=66 quest=Q01-Q09 vo-motion-attachments ten-slot-matrix; visual review still required; ' + str(out))
+    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=78 quest=Q01-Q09 vo-motion-attachments ten-slot-matrix kiem-draft-fit-motion; visual review still required; ' + str(out))
 
 
 

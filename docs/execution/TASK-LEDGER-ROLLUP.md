@@ -458,3 +458,7 @@ Review cận cảnh bắt hair/outer source-v3 còn ghép nhiều view. Giữ we
 ## Kiếm proof asset authoring — 2026-09-10
 
 Import đúng 8 item proof vào một atlas 512×512/PPU 208, không scale lại cell. Unity authoring tool ghi bones/weights cho 6 Skinned sprite, giữ 2 kiếm Rigid; validator khóa atlas/hash/provenance và không thêm PSD Importer. EditMode `204/203/0/1`; Player 169.088.250 byte/0 error, delta 0,352% so baseline và nhẹ hơn bản texture rời 202.672 byte. Pack vẫn draft/eligible=0; next opt-in Player motion preview ba profile.
+
+## Kiếm mixed-loadout shared-rig fit — 2026-09-10
+
+Thêm `DraftRuntimeFit` với API preview opt-in; production equip vẫn chặn. Direct bind sai hệ tọa độ đã được thay bằng bone proxy giữ item-local bind pose và theo rotation skeleton chung. EditMode `206/205/0/1`, Player 169.099.226 byte/0 error; Map01A capture 78×3 cho thấy weapon/hair/inner/outer nam/nữ đi cùng idle/walk/run/jump/basic/shared-skill pose, UI ghi DRAFT. Chưa claim full Kiếm: mới 4/10 slot, chưa có skill/VFX riêng và eligible vẫn 0.

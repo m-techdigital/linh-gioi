@@ -397,3 +397,7 @@ Prefit đã sửa hair/outer multi-view, normalize đúng PPU 208 và ghép idle
 ## Sau Kiếm proof asset authoring — opt-in Player motion preview
 
 8 proof item đã vào một draft atlas 512×512 ở PPU 208; 6 Skinned có bone/weight thật, 2 weapon Rigid. Atlas giữ nguyên cell đã normalize và guard khóa hash/provenance. Next: dựng component preview dùng base/rig chung, Sprite Library mixed loadout và SpriteSkin transforms; expose gender + `idle/walk/run/jump/basic_attack/class_skill`, rồi mới build/capture một lượt ba profile và review occlusion/grounding. Chưa nâng `approved` trước evidence này.
+
+## Sau Kiếm shared-rig fit preview — hoàn thiện theo batch, không chỉnh từng món
+
+Fit proof 4 slot đã chạy trong Player qua bone proxy và 78×3 capture; production vẫn chặn draft. Next: xử lý một lượt 6 slot Kiếm còn thiếu cho Lv1/10/20/30 nam/nữ từ source-v3, redraw theo cùng side-view base khi crop không phù hợp, pack theo atlas 512–1024 có byte budget; sau đó nối skill Kiếm Lv1 riêng và mới chạy lại full test/build/capture ba profile. Không nâng `approved` hoặc mở Pháp/Cơ/Linh trước khi đủ 10 slot, tháo/mặc và visual motion review.

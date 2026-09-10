@@ -1,4 +1,5 @@
 using System.Linq;
+using LinhGioi.World;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -39,6 +40,46 @@ namespace LinhGioi.Tests.EditMode
         public void RigidWeaponIsAvailableByStableAtlasLabel(string spriteName)
         {
             Assert.That(Resources.LoadAll<Sprite>(Atlas).SingleOrDefault(candidate => candidate.name == spriteName), Is.Not.Null);
+        }
+
+        [Test]
+        public void DraftPreviewUsesSharedSkeletonAndNeverBecomesProductionEligible()
+        {
+            var root = new GameObject("Kiếm preview test root");
+            TwoDKiemMixedLoadoutFitPreview preview = null;
+            try
+            {
+                var rig = new TwoDSkeletalPaperDollRig(root.transform);
+                rig.Build(new[]
+                {
+                    Bone("male_torso-hips", "", 0, .7f), Bone("male_head", "male_torso-hips", 0, 1.32f),
+                    Bone("male_right-upper-arm", "male_torso-hips", .17f, 1.3f),
+                    Bone("male_right-forearm-hand", "male_right-upper-arm", .22f, .95f),
+                    Bone("female_torso-hips", "", 0, .7f), Bone("female_head", "female_torso-hips", 0, 1.32f),
+                    Bone("female_right-upper-arm", "female_torso-hips", .17f, 1.3f),
+                    Bone("female_right-forearm-hand", "female_right-upper-arm", .22f, .95f)
+                });
+                preview = new TwoDKiemMixedLoadoutFitPreview(root.transform, rig);
+                preview.SetActive(true, "male", "walk");
+                Assert.That(preview.VisibleItemCount, Is.EqualTo(4));
+                Assert.That(preview.ValidSpriteSkinCount, Is.EqualTo(3));
+                StringAssert.Contains("runtimeEligibleCount=0", preview.Snapshot);
+                StringAssert.Contains("productionEquipAllowed=False", preview.Snapshot);
+                preview.SetActive(true, "female", "class_skill");
+                Assert.That(preview.VisibleItemCount, Is.EqualTo(4));
+                Assert.That(preview.ValidSpriteSkinCount, Is.EqualTo(3));
+                StringAssert.Contains("gender=female", preview.Snapshot);
+            }
+            finally
+            {
+                preview?.Dispose();
+                Object.DestroyImmediate(root);
+            }
+        }
+
+        private static TwoDSkeletalPaperDollRig.BoneDefinition Bone(string id, string parent, float x, float y)
+        {
+            return new TwoDSkeletalPaperDollRig.BoneDefinition(id, parent, new Vector2(x, y), id);
         }
     }
 }

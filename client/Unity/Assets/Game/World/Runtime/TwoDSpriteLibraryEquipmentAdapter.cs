@@ -26,12 +26,32 @@ namespace LinhGioi.World
             IReadOnlyDictionary<string, Sprite> spritesByComponent,
             out string reason)
         {
+            return RegisterItem(library, item, spritesByComponent, false, out reason);
+        }
+
+        public static bool RegisterDraftFitPreviewItem(
+            SpriteLibraryAsset library,
+            TwoDEquipmentItemDefinition item,
+            IReadOnlyDictionary<string, Sprite> spritesByComponent,
+            out string reason)
+        {
+            return RegisterItem(library, item, spritesByComponent, true, out reason);
+        }
+
+        private static bool RegisterItem(
+            SpriteLibraryAsset library,
+            TwoDEquipmentItemDefinition item,
+            IReadOnlyDictionary<string, Sprite> spritesByComponent,
+            bool allowDraftRuntimeFit,
+            out string reason)
+        {
             if (library == null) throw new ArgumentNullException(nameof(library));
             if (item == null) throw new ArgumentNullException(nameof(item));
             if (spritesByComponent == null) throw new ArgumentNullException(nameof(spritesByComponent));
             if (item.FitStatus == TwoDEquipmentFitStatus.RedrawRequired)
                 return Fail("ITEM_REDRAW_REQUIRED", out reason);
-            if (item.FitStatus != TwoDEquipmentFitStatus.Approved)
+            if (item.FitStatus != TwoDEquipmentFitStatus.Approved
+                && !(allowDraftRuntimeFit && item.FitStatus == TwoDEquipmentFitStatus.DraftRuntimeFit))
                 return Fail("ITEM_FIT_NOT_APPROVED", out reason);
 
             foreach (var attachment in item.Attachments)

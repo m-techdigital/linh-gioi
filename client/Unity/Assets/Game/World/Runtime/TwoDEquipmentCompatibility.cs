@@ -7,6 +7,7 @@ namespace LinhGioi.World
     public enum TwoDEquipmentFitStatus
     {
         Candidate,
+        DraftRuntimeFit,
         Approved,
         RedrawRequired
     }
@@ -138,10 +139,23 @@ namespace LinhGioi.World
 
         public bool TryEquip(TwoDEquipmentLoadout loadout, string itemId, int playerLevel, out string reason)
         {
+            return TryEquip(loadout, itemId, playerLevel, false, out reason);
+        }
+
+        public bool TryEquipDraftFitPreview(TwoDEquipmentLoadout loadout, string itemId, int playerLevel, out string reason)
+        {
+            return TryEquip(loadout, itemId, playerLevel, true, out reason);
+        }
+
+        private bool TryEquip(TwoDEquipmentLoadout loadout, string itemId, int playerLevel,
+            bool allowDraftRuntimeFit, out string reason)
+        {
             if (loadout == null) throw new ArgumentNullException(nameof(loadout));
             if (!_items.TryGetValue(itemId, out var item)) return Fail("ITEM_NOT_FOUND", out reason);
             if (item.FitStatus == TwoDEquipmentFitStatus.RedrawRequired) return Fail("ITEM_REDRAW_REQUIRED", out reason);
-            if (item.FitStatus != TwoDEquipmentFitStatus.Approved) return Fail("ITEM_FIT_NOT_APPROVED", out reason);
+            if (item.FitStatus != TwoDEquipmentFitStatus.Approved
+                && !(allowDraftRuntimeFit && item.FitStatus == TwoDEquipmentFitStatus.DraftRuntimeFit))
+                return Fail("ITEM_FIT_NOT_APPROVED", out reason);
             if (playerLevel < item.UnlockLevel) return Fail("ITEM_LEVEL_LOCKED", out reason);
             if (!item.SupportsClass(loadout.ClassId)) return Fail("CLASS_NOT_ALLOWED", out reason);
             if (!string.Equals(item.SkeletonVersion, loadout.Profile.SkeletonVersion, StringComparison.Ordinal))

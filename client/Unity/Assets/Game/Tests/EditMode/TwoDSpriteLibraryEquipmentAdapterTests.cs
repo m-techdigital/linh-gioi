@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using LinhGioi.World;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.U2D.Animation;
 
 namespace LinhGioi.Tests.EditMode
@@ -57,6 +58,28 @@ namespace LinhGioi.Tests.EditMode
                 Own(ScriptableObject.CreateInstance<SpriteLibraryAsset>()), item,
                 new Dictionary<string, Sprite> { [component] = CreateSprite() }, out var reason), Is.False);
             Assert.That(reason, Is.EqualTo("ITEM_FIT_NOT_APPROVED"));
+        }
+
+        [Test]
+        public void DraftFitRequiresExplicitPreviewOptInForEquipAndSpriteRegistration()
+        {
+            var item = Item("draft-fit", "outer_top", "torso", TwoDEquipmentFitStatus.DraftRuntimeFit,
+                TwoDEquipmentAttachmentMode.Skinned);
+            var profile = Profile();
+            var catalog = new TwoDEquipmentCompatibilityCatalog(new[] { item });
+            var productionLoadout = new TwoDEquipmentLoadout(profile, "kiem");
+            Assert.That(catalog.TryEquip(productionLoadout, item.ItemId, 30, out var productionReason), Is.False);
+            Assert.That(productionReason, Is.EqualTo("ITEM_FIT_NOT_APPROVED"));
+
+            var sprite = CreateSkinnedSpriteStub();
+            var library = Own(ScriptableObject.CreateInstance<SpriteLibraryAsset>());
+            Assert.That(TwoDSpriteLibraryEquipmentAdapter.RegisterItem(
+                library, item, new Dictionary<string, Sprite> { ["draft-fit_part"] = sprite }, out _), Is.False);
+
+            var previewLoadout = new TwoDEquipmentLoadout(profile, "kiem");
+            Assert.That(catalog.TryEquipDraftFitPreview(previewLoadout, item.ItemId, 30, out var equipReason), Is.True, equipReason);
+            Assert.That(TwoDSpriteLibraryEquipmentAdapter.RegisterDraftFitPreviewItem(
+                library, item, new Dictionary<string, Sprite> { ["draft-fit_part"] = sprite }, out var registerReason), Is.True, registerReason);
         }
 
         [Test]
@@ -118,6 +141,15 @@ namespace LinhGioi.Tests.EditMode
         {
             var texture = Own(new Texture2D(2, 2));
             return Own(Sprite.Create(texture, new Rect(0, 0, 2, 2), Vector2.one * 0.5f, 2));
+        }
+
+        private Sprite CreateSkinnedSpriteStub()
+        {
+            foreach (var sprite in Resources.LoadAll<Sprite>(
+                "LGOClasses/KiemMixedLoadoutFitPreview/kiem-mixed-loadout-fit-atlas"))
+                if (sprite.GetBones().Length > 0) return sprite;
+            Assert.Fail("Expected an authored Kiếm skinned proof sprite");
+            return null;
         }
 
         private T Own<T>(T value) where T : Object
