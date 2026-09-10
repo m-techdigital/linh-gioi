@@ -629,10 +629,16 @@ namespace LinhGioi.Tests
                 var previous = gate.enabled;
                 var cameraSize = Camera.main.orthographicSize;
                 preview = CongDongLamMap01AArtPreview.Attach(controller);
-                Assert.That(Camera.main.orthographicSize, Is.GreaterThanOrEqualTo(3.54375f));
+                Assert.That(Camera.main.orthographicSize, Is.EqualTo(3.8f).Within(.001f),
+                    "Map01A framing must keep characters readable instead of spending most of the viewport on empty sky");
+                Assert.That(Camera.main.transform.position.y - preview.GroundY, Is.EqualTo(1.5f).Within(.001f));
                 Assert.That(preview.PartCount, Is.EqualTo(2));
                 Assert.That(preview.LayerCount, Is.EqualTo(3));
                 Assert.That(preview.SourcePropCount, Is.EqualTo(4));
+                var authoredDecor = preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Count(renderer => renderer.name.StartsWith("Map01A foreground "));
+                Assert.That(authoredDecor, Is.GreaterThanOrEqualTo(20),
+                    "The full route needs a reusable vegetation rhythm, not four isolated decorations");
                 var sourceCrate = GameObject.Find("Map01A source market-crates").GetComponent<SpriteRenderer>();
                 Assert.That(sourceCrate.sprite.texture.width, Is.EqualTo(256));
                 Assert.That(sourceCrate.bounds.min.y, Is.EqualTo(preview.GroundY).Within(.001f));

@@ -26,6 +26,27 @@
     {"id":"peach","part":"peach","x":4.8,"y":-0.533,"width":1.8,"height":2.174,"order":3,"parallax":0},
     {"id":"bamboo","part":"bamboo","x":13.2,"y":-0.543,"width":1.4,"height":2.154,"order":3,"parallax":0},
     {"id":"flowers","part":"ferns-flowers","x":25.2,"y":-1.321,"width":1.7,"height":0.598,"order":3,"parallax":0},
-    {"id":"rocks","part":"moss-rocks","x":34.8,"y":-1.287,"width":1.8,"height":0.706,"order":3,"parallax":0}
+    {"id":"rocks","part":"moss-rocks","x":34.8,"y":-1.287,"width":1.8,"height":0.706,"order":3,"parallax":0},
+    {"id":"mid-bamboo-00","part":"bamboo","x":-1.5,"y":0.22499999999999987,"width":2.4,"height":3.69,"order":-7,"parallax":0.52},
+    {"id":"mid-peach-01","part":"peach","x":3.8,"y":0.009999999999999787,"width":2.7,"height":3.26,"order":-7,"parallax":0.58},
+    {"id":"mid-bamboo-02","part":"bamboo","x":9.6,"y":0.30499999999999994,"width":2.5,"height":3.85,"order":-7,"parallax":0.54},
+    {"id":"mid-peach-03","part":"peach","x":15.8,"y":0.07499999999999996,"width":2.8,"height":3.39,"order":-7,"parallax":0.6},
+    {"id":"mid-bamboo-04","part":"bamboo","x":21.2,"y":0.18999999999999995,"width":2.35,"height":3.62,"order":-7,"parallax":0.55},
+    {"id":"mid-peach-05","part":"peach","x":26.4,"y":0.10499999999999998,"width":2.85,"height":3.45,"order":-7,"parallax":0.6},
+    {"id":"mid-bamboo-06","part":"bamboo","x":32.2,"y":0.33999999999999986,"width":2.55,"height":3.92,"order":-7,"parallax":0.54},
+    {"id":"mid-peach-07","part":"peach","x":38.1,"y":0.009999999999999787,"width":2.7,"height":3.26,"order":-7,"parallax":0.58},
+    {"id":"mid-bamboo-08","part":"bamboo","x":44.2,"y":0.2649999999999999,"width":2.45,"height":3.77,"order":-7,"parallax":0.52},
+    {"id":"near-ferns-flowers-00","part":"ferns-flowers","x":-2.3,"y":-1.3650000000000002,"width":1.45,"height":0.51,"order":4,"parallax":0},
+    {"id":"near-moss-rocks-01","part":"moss-rocks","x":1.8,"y":-1.3350000000000002,"width":1.45,"height":0.57,"order":4,"parallax":0},
+    {"id":"near-ferns-flowers-02","part":"ferns-flowers","x":7.8,"y":-1.34,"width":1.6,"height":0.56,"order":4,"parallax":0},
+    {"id":"near-moss-rocks-03","part":"moss-rocks","x":11.4,"y":-1.3450000000000002,"width":1.4,"height":0.55,"order":4,"parallax":0},
+    {"id":"near-ferns-flowers-04","part":"ferns-flowers","x":16.5,"y":-1.355,"width":1.5,"height":0.53,"order":4,"parallax":0},
+    {"id":"near-moss-rocks-05","part":"moss-rocks","x":20.1,"y":-1.3150000000000002,"width":1.55,"height":0.61,"order":4,"parallax":0},
+    {"id":"near-ferns-flowers-06","part":"ferns-flowers","x":24.7,"y":-1.3450000000000002,"width":1.55,"height":0.55,"order":4,"parallax":0},
+    {"id":"near-moss-rocks-07","part":"moss-rocks","x":29.2,"y":-1.3250000000000002,"width":1.5,"height":0.59,"order":4,"parallax":0},
+    {"id":"near-ferns-flowers-08","part":"ferns-flowers","x":33.0,"y":-1.3450000000000002,"width":1.55,"height":0.55,"order":4,"parallax":0},
+    {"id":"near-moss-rocks-09","part":"moss-rocks","x":37.6,"y":-1.3350000000000002,"width":1.45,"height":0.57,"order":4,"parallax":0},
+    {"id":"near-ferns-flowers-10","part":"ferns-flowers","x":41.2,"y":-1.34,"width":1.6,"height":0.56,"order":4,"parallax":0},
+    {"id":"near-moss-rocks-11","part":"moss-rocks","x":45.0,"y":-1.3250000000000002,"width":1.5,"height":0.59,"order":4,"parallax":0}
   ]
 }

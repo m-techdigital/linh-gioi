@@ -1,8 +1,10 @@
 ## Map01A playable visual slice gate — 2026-09-10
 
-Cổng Đông Lâm Map01A đã chạy đủ Q01–Q09 trong macOS Player với route 10 khu, source-driven illustrated atlas/parallax, 6 NPC, 4 quái ở combat edge, Linh Thảo/rương, combat ba hit, loot và portal. Functional UI mới cho mở hành trang, nhận Bình Máu ×3/Bình Linh Lực ×2, dùng Bình Máu để HP 60→100, nhận/equip Hộ Uyển Võ Tân Thủ và theo dõi node trên minimap. Capture v2 có 81 ảnh (27 trạng thái × mobile/tablet/PC); ba manifest xác nhận functional UI, 9/9 quest, 3 cast/3 hit, target HP 0. Visual review xác nhận panel xuống dòng trong nền và không chồng tracker/minimap.
+Cổng Đông Lâm Map01A giữ nguyên functional gate Q01–Q09: route 10 khu, 6 NPC, 4 quái chỉ ở combat edge, Linh Thảo/rương, ba hit combat, loot, inventory/potion/equip, minimap và portal Suối Thanh Minh. Visual audit theo sheet `01-gameplay-screen-16x9.png` đã mở lại gate vì bản cũ dành quá nhiều khung hình cho trời và làm nhân vật/NPC quá nhỏ.
 
-Trạng thái: `MAP01A_PLAYABLE_VISUAL_SLICE_PASS / PRODUCTION_SERVICES_DEFERRED`. Evidence: `build/map01a-functional-ui/three-profiles-v2/`. Non-claim: aspect simulation trên macOS chưa phải thiết bị vật lý; state chưa persistence/backend; portal chỉ unlock Map01B, không mở scene map thứ hai; UI vẫn là vertical-slice skin. Next chuyển sang Võ Lv1–30 articulated rig và đủ motion/combat theo Goal.
+Batch composition v1 hạ camera từ 4,6 xuống 3,8 world unit, đặt gameplay lane ở offset 1,5 và thêm 21 placement cây/trúc/hoa/đá từ chính `modules-atlas.png`; không thêm texture, không resize ảnh và không tăng texture budget. Player capture có 78 artifact/profile trên mobile/tablet/PC simulation; đã review trực tiếp arrival, chợ/thoại, combat edge và portal ở cả ba tỷ lệ. Cổng, kiến trúc, NPC và nhân vật nay chiếm vùng chơi rõ ràng, UI không che objective/interact chính.
+
+Trạng thái: `MAP01A_PLAYABLE_VISUAL_SLICE_PASS / ART_PRODUCTION_DRAFT / PRODUCTION_SERVICES_DEFERRED`. Evidence: `build/map01a-composition-v1/capture/`. Non-claim: chưa đạt illustration final như target screenshot, chưa chứng nhận thiết bị vật lý, persistence/backend hoặc scene Map01B. Theo Goal, task tiếp theo là đóng Võ Lv1–30; Kiếm draft giữ nguyên và chưa được tiếp tục.
 
 ## Map01A playable quest flow Q01–Q09 — 2026-09-10
 

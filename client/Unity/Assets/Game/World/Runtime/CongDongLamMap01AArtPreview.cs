@@ -533,9 +533,10 @@ namespace LinhGioi.World
             {
                 _previousCameraSize = _camera.orthographicSize;
                 _previousCameraPosition = _camera.transform.position;
-                // Authored viewport is 12.6 x 7.0875; preserve both dimensions.
-                _camera.orthographicSize = 4.6f;
-                _camera.transform.position = new Vector3(_camera.transform.position.x, GroundY + .23f * 9.2f, _camera.transform.position.z);
+                // Frame the gameplay lane at a readable side-scroller scale. The background
+                // still covers every supported aspect ratio in Refresh().
+                _camera.orthographicSize = 3.8f;
+                _camera.transform.position = new Vector3(_camera.transform.position.x, GroundY + 1.5f, _camera.transform.position.z);
             }
             // Suppress the old world presentation only while this opt-in slice is attached.
             foreach (var renderer in FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -1054,6 +1055,8 @@ namespace LinhGioi.World
                 var renderer = host.AddComponent<SpriteRenderer>();
                 renderer.sprite = sprite;
                 renderer.sortingOrder = layer.order;
+                if (layer.parallax != 0)
+                    _parallax.Add(Tuple.Create(host.transform, host.transform.localPosition, layer.parallax));
             }
         }
 
