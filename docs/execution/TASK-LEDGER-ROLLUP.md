@@ -416,3 +416,8 @@ Hoàn tất checkpoint district cycle/detail: thêm detail snapshot theo khu và
 
 `LGO_DONG_MON_GATEKEEPER_NPC_SPRITE_SOURCE_READY`: Người Giữ Cổng được dựng từ resource `DongMonNpcSprites.json` với 13 sprite parts/slot thay vì blockout generic; manifest/matrix bắt snapshot. Next: atlas sprite thật hoặc data hóa NPC/props còn lại.
 - LGO_2D_PRODUCTION_WORKFLOW_RESEARCH_READY: đã ghi `docs/execution/LGO-2D-PRODUCTION-WORKFLOW-RESEARCH-v0.1.md`; batch sau ưu tiên pipeline Tilemap/Sprite Atlas/paper-doll, dùng `tools/capture_lgo_2d_onboarding_visual.py`, không polish bằng rectangle primitive kéo dài.
+## Võ Lv1 run/jump/basic/Liên Quyền — 2026-09-10
+
+Thêm 16 frame mới từ hai sheet nam/nữ đã qua alpha/cell-margin QA, nâng runtime lên 28 motion frame. HUD có action bar bốn nút và keyboard Shift/J/Z/X; sửa capture chạy nền để ba profile không kẹt khi mất focus. EditMode `180/179/0/1`, build 0 lỗi, capture `build/vo-motion-v8/three-profiles/` đạt `38×3` technical pass và đã review trực tiếp các pose cùng tablet/mobile/PC. Atlas tổng 700.563 byte; portal/NPC không bị control panel che sau layout cuối.
+
+Checkpoint chỉ đóng full-frame Lv1. Next làm animated attachment cho 10 slot và tier Lv10/20/30; không nhân sang class khác trước gate đó.

@@ -327,3 +327,8 @@ Quảng Trường selector được nới thành layout `spaced-social-triangle`
 - Next: mở atlas/sprite thật cho NPC hoặc áp pattern này cho Training Stone/Shadow Slime/hub NPC.
 - LGO_2D_PRODUCTION_WORKFLOW_RESEARCH_READY: đã ghi `docs/execution/LGO-2D-PRODUCTION-WORKFLOW-RESEARCH-v0.1.md`; batch sau ưu tiên pipeline Tilemap/Sprite Atlas/paper-doll, dùng `tools/capture_lgo_2d_onboarding_visual.py`, không polish bằng rectangle primitive kéo dài.
 - 2026-09-10: `LGO_VO_LV1_APPROVED_RUNTIME_ART_SLOT_EXPANSION_READY` — Võ Lv1-30 đã bật thêm approved runtime art cells cho glove L/R, waist, boots và staff qua manifest/cellMap; Player capture pass nhưng alpha/slicing vẫn là checkpoint kỹ thuật, chưa production-final như reference screenshot.
+## Võ Lv1 full-frame motion gate — 2026-09-10
+
+Võ nam/nữ Lv1 đã có đủ state nhìn thấy trong Map01A: idle, walk, run, jump rise/apex, basic attack và hai key pose `Liên Quyền`. Nguồn candidate đầu 8×2 bị gate mới từ chối vì 16/16 silhouette chạm cell; batch 4×2 riêng từng giới được khử checker bằng border flood, căn margin 32 px, tách 16 frame và đóng lại hai atlas 1024². Action bar chạy bằng touch hoặc Shift/J/Z/X; hit thường trừ 12 HP, `Liên Quyền` trừ 35 HP và có VFX/feedback.
+
+Trạng thái: `VO_LV1_FULL_FRAME_MOTION_PASS / ANIMATED_PAPER_DOLL_ATTACHMENT_INCOMPLETE`. Evidence: `build/vo-motion-v8/three-profiles/`, 114 ảnh (38×3), manifest xác nhận Q01–Q09 và bốn state mới ở cả hai giới. Chưa claim Võ Lv1–30 hoàn chỉnh: full-frame chỉ dùng cho Lv1/full; modular và Lv10/20/30 vẫn giữ slot đúng nhưng dùng root pose. Next là attachment/rig 10 slot, không mở Kiếm/Pháp/Cơ/Linh.

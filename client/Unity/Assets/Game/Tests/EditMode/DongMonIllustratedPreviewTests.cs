@@ -366,7 +366,7 @@ namespace LinhGioi.Tests
 
                 Assert.That(preview.TriggerVoSkill(), Is.True);
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("skill"));
-                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_punch_windup"));
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_lien_quyen_hit_a"));
                 Assert.That(preview.VoSkillCastCount, Is.EqualTo(1));
                 Assert.That(GameObject.Find("Map01A Võ skill").GetComponent<SpriteRenderer>().enabled, Is.True);
                 Assert.That(preview.TriggerVoSkill(), Is.False, "Skill cannot restart during its active window");
@@ -379,6 +379,53 @@ namespace LinhGioi.Tests
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("idle"));
                 Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_idle"));
                 Assert.That(GameObject.Find("Map01A Võ skill").GetComponent<SpriteRenderer>().enabled, Is.False);
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void Map01AVoLv1FullAvatarExposesRunJumpBasicAndLienQuyenKeyPoses()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A Võ extended motion test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+
+                preview.SetVoRun(true);
+                preview.MoveOnLane(1, .1f);
+                Assert.That(preview.VoAvatarMotionState, Is.EqualTo("run"));
+                StringAssert.StartsWith("male_run_", preview.VoAvatarMotionFrameId);
+                preview.SetVoRun(false);
+                preview.AdvanceVoAnimation(.5f);
+
+                Assert.That(preview.TriggerVoJump(), Is.True);
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_jump_rise"));
+                preview.MoveOnLane(1, .1f);
+                Assert.That(preview.VoAvatarMotionState, Is.EqualTo("jump"), "air control must not cancel the jump clip");
+                preview.AdvanceVoAnimation(.1f);
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_jump_apex"));
+                preview.AdvanceVoAnimation(.5f);
+
+                for (var step = 0; step < 175; step++) preview.MoveOnLane(1, .1f);
+                Assert.That(preview.TriggerVoBasicAttack(), Is.True);
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_basic_windup"));
+                preview.AdvanceVoAnimation(.12f);
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_basic_impact"));
+                preview.AdvanceVoAnimation(.4f);
+
+                Assert.That(preview.TriggerVoSkill(), Is.True);
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_lien_quyen_hit_a"));
+                preview.AdvanceVoAnimation(.3f);
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("male_lien_quyen_finish_b"));
             }
             finally
             {
@@ -425,7 +472,7 @@ namespace LinhGioi.Tests
 
                 for (var step = 0; step < 175; step++) preview.MoveOnLane(1, .1f);
                 Assert.That(preview.TriggerVoSkill(), Is.True);
-                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("female_punch_windup"));
+                Assert.That(preview.VoAvatarMotionFrameId, Is.EqualTo("female_lien_quyen_hit_a"));
             }
             finally
             {

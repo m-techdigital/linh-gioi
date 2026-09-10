@@ -19,7 +19,7 @@ SKIP_PARTS = {
 RUNTIME_ART_PACKS = [
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoLv1MapAvatarArt',
-        'id': 'vo-lv1-30-map-avatar-v3',
+        'id': 'vo-lv1-30-map-avatar-v4',
         'status': 'DRAFT_RUNTIME_REVIEW',
         'assets': {
             'vo-lv1-map-avatar-atlas.png': (1024, 1024, 'two-gender-tier-equipment-atlas'),
@@ -31,7 +31,7 @@ RUNTIME_ART_PACKS = [
         },
         'generators': {'aligned_imagegen_delta_batch', 'reference_guided_imagegen_motion_batch'},
         'max_bytes': 300_000,
-        'status_error': 'Võ Lv1-30 avatar must remain draft until tier-motion and combat review',
+        'status_error': 'Võ Lv1-30 avatar must remain draft until animated paper-doll attachment review',
     },
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt',
