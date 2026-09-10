@@ -232,6 +232,42 @@ namespace LinhGioi.Tests
             Assert.IsNotNull(resultType.GetField("runtimeLinhThanhPlazaHubSnapshot"));
         }
 
+
+        [Test]
+        public void VoLv1ClassSliceDefinesSlotCompatibilityAndRuntimeProvenance()
+        {
+            var snapshot = TwoDClassSliceCatalog.LoadVoLv1ClassSliceSnapshot();
+
+            StringAssert.Contains("compat=base_male_torso->OuterShirt", snapshot);
+            StringAssert.Contains("compat=base_hips_legs->PantsOrSkirt", snapshot);
+            StringAssert.Contains("anchorSet=Chest,Hips,Hand_L,Hand_R,Foot_L,Foot_R", snapshot);
+            StringAssert.Contains("source=runtime-authored-json", snapshot);
+            StringAssert.Contains("runtimeArtPolicy=replace-primitive-with-approved-spritesheet", snapshot);
+        }
+
+        [Test]
+        public void RuntimeInventorySnapshotsExposeSelectedItemCompatibilityAndAnchors()
+        {
+            var host = new GameObject("2D Vo Lv1 slot compatibility runtime test host");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                controller.RefreshForSmoke();
+                controller.ToggleInventoryPanel();
+                controller.PreviewSelectedInventoryItem();
+
+                StringAssert.Contains("selectedCompat=True", controller.RuntimeInventoryInputSnapshot);
+                StringAssert.Contains("selectedSlot=OuterShirt", controller.RuntimeInventoryInputSnapshot);
+                StringAssert.Contains("selectedAnchor=Chest", controller.RuntimeInventoryInputSnapshot);
+                StringAssert.Contains("fitProfile=base_male_torso", controller.RuntimeInventoryInputSnapshot);
+                StringAssert.Contains("source=runtime-authored-catalog", controller.RuntimeInventoryInputSnapshot);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+            }
+        }
+
         [Test]
         public void RuntimeControllerSupportsInventoryInputTryApplyCancel()
         {

@@ -226,6 +226,16 @@ def verify_current() -> dict[str, Any]:
         if token not in plaza_detail_snapshot:
             failures.append(f"runtimePlazaHubDetailSnapshot missing {token!r}")
 
+    vo_class_snapshot = str(manifest.get("runtimeVoLv1ClassSliceSnapshot", ""))
+    for token in ("compat=base_male_torso->OuterShirt", "anchorSet=Chest,Hips,Hand_L,Hand_R,Foot_L,Foot_R", "source=runtime-authored-json", "runtimeArtPolicy=replace-primitive-with-approved-spritesheet"):
+        if token not in vo_class_snapshot:
+            failures.append(f"runtimeVoLv1ClassSliceSnapshot missing {token!r}")
+
+    inventory_input_snapshot = str(manifest.get("runtimeInventoryInputSnapshot", ""))
+    for token in ("selectedCompat=True", "selectedSlot=OuterShirt", "selectedAnchor=Chest", "fitProfile=base_male_torso", "source=runtime-authored-catalog"):
+        if token not in inventory_input_snapshot:
+            failures.append(f"runtimeInventoryInputSnapshot missing {token!r}")
+
     plaza_layout_snapshot = str(manifest.get("runtimePlazaHubLayoutSnapshot", ""))
     for token in ("PlazaHubLayout", "anchors=5", "anchor=social-spawn@center", "anchor=event-board@upper-mid", "anchor=gate-guide@left", "anchor=merchant-preview@right", "anchor=guild-locked@far-right", "safe-local-no-backend"):
         if token not in plaza_layout_snapshot:

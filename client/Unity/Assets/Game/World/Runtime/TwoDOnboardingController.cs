@@ -1084,8 +1084,53 @@ namespace LinhGioi.World
             return "InventoryInputState=" + _inventoryInputState
                 + " | open=" + _inventoryOpen
                 + " | selected=" + selectedId
+                + BuildSelectedInventoryCompatibilitySnapshot(selectedId)
                 + " | controls=I toggle, Tab select, T try, Y apply, Esc cancel"
                 + " | " + EnsurePlayerLoadout().Snapshot;
+        }
+
+        private string BuildSelectedInventoryCompatibilitySnapshot(string selectedId)
+        {
+            if (!_moduleCatalog.TryFind(selectedId, out var item))
+                return " | selectedCompat=False | selectedSlot=missing | selectedAnchor=missing | fitProfile=missing | source=runtime-authored-catalog";
+            var compatible = item.BaseFilter == "unisex" || item.BaseFilter == "male_base";
+            return " | selectedCompat=" + compatible
+                + " | selectedSlot=" + item.Slot
+                + " | selectedAnchor=" + ToDefaultAnchor(item.Slot)
+                + " | fitProfile=" + ExtractRuntimeRuleValue(item.RuntimeRule, "fit_profile")
+                + " | source=runtime-authored-catalog";
+        }
+
+        private static string ToDefaultAnchor(string slot)
+        {
+            switch (slot)
+            {
+                case "HairFront": return "HairFrontAnchor";
+                case "HairBack": return "HairBackAnchor";
+                case "Eyes": return "Head";
+                case "InnerShirt":
+                case "OuterShirt": return "Chest";
+                case "PantsOrSkirt":
+                case "Waist": return "Hips";
+                case "Gloves": return "Hand_L,Hand_R";
+                case "Boots": return "Foot_L,Foot_R";
+                case "Weapon": return "WeaponAnchor";
+                case "PetSpirit": return "PetAnchor";
+                default: return "Unknown";
+            }
+        }
+
+        private static string ExtractRuntimeRuleValue(string runtimeRule, string key)
+        {
+            if (string.IsNullOrEmpty(runtimeRule)) return "missing";
+            var prefix = key + "=";
+            var parts = runtimeRule.Split(';');
+            for (var i = 0; i < parts.Length; i++)
+            {
+                var part = parts[i].Trim();
+                if (part.StartsWith(prefix, System.StringComparison.Ordinal)) return part.Substring(prefix.Length);
+            }
+            return "missing";
         }
 
         private string BuildVoLv1ClassSliceRuntimeSnapshot()

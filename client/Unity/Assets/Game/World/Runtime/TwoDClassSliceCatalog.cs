@@ -32,6 +32,9 @@ namespace LinhGioi.World
             {
                 for (var i = 0; i < source.slots.Length; i++)
                     builder.Append(" | ").Append(source.slots[i].slot).Append(':').Append(source.slots[i].moduleId).Append('@').Append(source.slots[i].anchor);
+                builder.Append(" | anchorSet=").Append(BuildAnchorSet(source.slots));
+                for (var i = 0; i < source.slots.Length; i++)
+                    builder.Append(" | compat=").Append(source.slots[i].fitProfile).Append("->").Append(source.slots[i].slot);
             }
             builder.Append(" | motions=");
             if (source != null && source.motions != null)
@@ -53,7 +56,32 @@ namespace LinhGioi.World
             builder.Append(" | safe-no-source-image=").Append(ContainsToken(text, "safe-no-source-image"));
             builder.Append(" | safe-no-3d=").Append(ContainsToken(text, "safe-no-3d"));
             builder.Append(" | safe-local-no-backend=").Append(ContainsToken(text, "safe-local-no-backend"));
+            builder.Append(" | source=runtime-authored-json");
+            builder.Append(" | runtimeArtPolicy=replace-primitive-with-approved-spritesheet");
             return builder.ToString();
+        }
+
+        private static string BuildAnchorSet(VoLv1ClassSlotEntry[] slots)
+        {
+            var builder = new StringBuilder();
+            for (var i = 0; i < slots.Length; i++)
+            {
+                var anchors = (slots[i].anchor ?? string.Empty).Split(',');
+                for (var j = 0; j < anchors.Length; j++)
+                {
+                    var anchor = anchors[j].Trim();
+                    if (string.IsNullOrEmpty(anchor) || ContainsAnchor(builder, anchor)) continue;
+                    if (builder.Length > 0) builder.Append(',');
+                    builder.Append(anchor);
+                }
+            }
+            return builder.ToString();
+        }
+
+        private static bool ContainsAnchor(StringBuilder builder, string anchor)
+        {
+            var text = builder.ToString();
+            return text == anchor || text.StartsWith(anchor + ",", StringComparison.Ordinal) || text.EndsWith("," + anchor, StringComparison.Ordinal) || text.IndexOf("," + anchor + ",", StringComparison.Ordinal) >= 0;
         }
 
         private static bool ContainsToken(string text, string token)
