@@ -1,3 +1,11 @@
+## Võ Lv1–30 functional class slice gate — 2026-09-10
+
+Võ là class mẫu đầu tiên đã qua functional vertical-slice gate trên Map01A: base nam/nữ, bốn mốc Lv1/10/20/30, 10 slot, cởi/mặc từng slot, rig 10 bone, 112 equipment component và idle/walk/run/jump/basic attack/`Liên Quyền` có hit timing/HP feedback. Batch này bổ sung item level độc lập theo slot: owner có thể giữ base/loadout Lv1 nhưng đổi riêng `outer_tunic` sang Lv30, chuyển nam/nữ, chạy/nhảy/đánh/skill rồi cởi/mặc lại mà item vẫn bám shared rig.
+
+Capture `build/vo-mixed-level-v1/capture/` có 78 artifact/profile trên mobile/tablet/PC simulation. Manifest cả ba profile xác nhận mixed loadout `outer_tunic=Lv30`, chín slot còn lại Lv1, motion và toggle đều pass; frame 35/38, 28/34 và 67/71/72/78 đã review trực tiếp. EditMode `207/206/0/1`; build macOS thành công; smoke/matrix/no-3D/no-source-image pass.
+
+Trạng thái: `VO_LV1_30_FUNCTIONAL_VERTICAL_SLICE_PASS / ART_PRODUCTION_DRAFT`. Đây là bằng chứng hệ thống và hướng hình đủ để nhân pipeline; chưa claim animation nhiều frame production, balance, persistence/backend hoặc art final. Theo Goal, tiếp theo kế thừa Kiếm draft hiện có vào cùng base/10-slot/mixed-level contract, chưa mở Pháp/Cơ/Linh đồng thời.
+
 ## Map01A playable visual slice gate — 2026-09-10
 
 Cổng Đông Lâm Map01A giữ nguyên functional gate Q01–Q09: route 10 khu, 6 NPC, 4 quái chỉ ở combat edge, Linh Thảo/rương, ba hit combat, loot, inventory/potion/equip, minimap và portal Suối Thanh Minh. Visual audit theo sheet `01-gameplay-screen-16x9.png` đã mở lại gate vì bản cũ dành quá nhiều khung hình cho trời và làm nhân vật/NPC quá nhỏ.

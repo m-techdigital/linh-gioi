@@ -11,7 +11,7 @@ namespace LinhGioi.UI
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar;
         private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary;
-        private Button _talk, _outfit, _level, _gender, _slot, _toggleSlot, _run, _jump, _basic, _skill;
+        private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward;
         private RuntimeTouchMovementPad _pad;
         private RuntimeViewportMetrics _metrics;
@@ -89,8 +89,11 @@ namespace LinhGioi.UI
             _slot = new Button(() => _scene.CycleVoEquipmentSlot()) { text = "Chọn slot · V" };
             Box(_slot); Place(_slot, 16, null, _touch ? 268 : 230, null);
             _slot.style.minHeight = _touch ? 52 : 40; _slot.style.minWidth = 170; _safe.Add(_slot);
+            _itemLevel = new Button(() => _scene.CycleVoSelectedEquipmentItemLevel()) { text = "Đổi cấp item · M" };
+            Box(_itemLevel); Place(_itemLevel, 16, null, _touch ? 326 : 276, null);
+            _itemLevel.style.minHeight = _touch ? 52 : 40; _itemLevel.style.minWidth = 170; _safe.Add(_itemLevel);
             _toggleSlot = new Button(() => _scene.ToggleVoEquipmentSlot()) { text = "Mặc/Cởi · B" };
-            Box(_toggleSlot); Place(_toggleSlot, 16, null, _touch ? 326 : 276, null);
+            Box(_toggleSlot); Place(_toggleSlot, 16, null, _touch ? 384 : 322, null);
             _toggleSlot.style.minHeight = _touch ? 52 : 40; _toggleSlot.style.minWidth = 170; _safe.Add(_toggleSlot);
             _combatBar = new VisualElement(); Place(_combatBar, _touch ? 150 : 220, null, null, 24);
             _combatBar.style.flexDirection = FlexDirection.Row;
@@ -150,7 +153,7 @@ namespace LinhGioi.UI
             _combatBar.style.left = _touch ? 150 : 220;
             if (r.width < 1300)
             {
-                _inventoryToggle.style.left = 16;
+                _inventoryToggle.style.left = 200;
                 _inventoryToggle.style.right = StyleKeyword.Auto;
                 _inventoryToggle.style.top = _touch ? 390 : 324;
                 _inventoryToggle.style.bottom = StyleKeyword.Auto;
@@ -182,6 +185,7 @@ namespace LinhGioi.UI
                 if (Input.GetKeyDown(KeyCode.L)) _scene.CycleVoAvatarLevel();
                 if (Input.GetKeyDown(KeyCode.G)) _scene.CycleVoAvatarGender();
                 if (Input.GetKeyDown(KeyCode.V)) _scene.CycleVoEquipmentSlot();
+                if (Input.GetKeyDown(KeyCode.M)) _scene.CycleVoSelectedEquipmentItemLevel();
                 if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleVoEquipmentSlot();
                 if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
                 if (Input.GetKeyDown(KeyCode.J)) _scene.TriggerVoJump();
@@ -199,6 +203,7 @@ namespace LinhGioi.UI
             _level.text = "Cấp đồ: " + _scene.EquipmentLevelLabel + (_touch ? "" : " · L");
             _gender.text = "Thân: " + _scene.VoAvatarGender + (_touch ? "" : " · G");
             _slot.text = "Slot: " + _scene.EquipmentSlotLabel + (_touch ? "" : " · V");
+            _itemLevel.text = "Đổi cấp item" + (_touch ? "" : " · M");
             _toggleSlot.text = (_scene.VoEquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
             _run.text = (_scene.VoRunEnabled ? "Đang chạy" : "Chạy") + (_touch ? "" : " · Shift");
             _jump.text = "Nhảy" + (_touch ? "" : " · J");

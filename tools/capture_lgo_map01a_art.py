@@ -75,10 +75,10 @@ def main():
     required += [f'{47 + index:02d}-vo-male-lv1-off-{slot}' for index, slot in enumerate(slots)]
     required += [f'{57 + index:02d}-vo-female-lv30-off-{slot}' for index, slot in enumerate(slots)]
     required += [
-        '67-kiem-male-idle', '68-kiem-male-walk', '69-kiem-male-run',
-        '70-kiem-male-jump', '71-kiem-male-basic', '72-kiem-male-class-skill',
-        '73-kiem-female-idle', '74-kiem-female-walk', '75-kiem-female-run',
-        '76-kiem-female-jump', '77-kiem-female-basic', '78-kiem-female-class-skill']
+        '67-vo-mixed-male-idle', '68-vo-mixed-male-run', '69-vo-mixed-male-jump',
+        '70-vo-mixed-male-basic', '71-vo-mixed-male-lien-quyen', '72-vo-mixed-female-idle',
+        '73-vo-mixed-female-run', '74-vo-mixed-female-jump', '75-vo-mixed-female-basic',
+        '76-vo-mixed-female-lien-quyen', '77-vo-mixed-outer-off', '78-vo-mixed-outer-on']
     import math
     foot_error = manifest.get('maxFootError', float('nan'))
     parallax = manifest.get('parallaxDelta', float('nan'))
@@ -96,10 +96,9 @@ def main():
             or not manifest.get('voEquipmentComponentBindingVerified')
             or not manifest.get('voTenSlotMatrixVerified')
             or not manifest.get('voSharedRuntimeStateVerified')
-            or not manifest.get('kiemMaleMotionVerified')
-            or not manifest.get('kiemFemaleMotionVerified')
-            or 'runtimeEligibleCount=0' not in manifest.get('kiemFitPreviewSnapshot', '')
-            or 'productionEquipAllowed=False' not in manifest.get('kiemFitPreviewSnapshot', '')
+            or not all(manifest.get(key) for key in ('voMixedLevelMaleVerified', 'voMixedLevelFemaleVerified',
+                'voMixedLevelMotionVerified', 'voMixedLevelToggleVerified'))
+            or 'outer_tunic=Lv30' not in manifest.get('voMixedEquipmentSnapshot', '')
             or not manifest.get('mapQuestFlowVerified') or manifest.get('activeQuestId') != 'COMPLETE'
             or not manifest.get('functionalUiVerified')
             or manifest.get('completedQuestCount') != 9
@@ -122,7 +121,7 @@ def main():
         raw = (out / (name + '.png')).read_bytes()
         if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
             raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
-    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=78 quest=Q01-Q09 vo-motion-attachments ten-slot-matrix kiem-draft-fit-motion; visual review still required; ' + str(out))
+    print('LGO_MAP01A_PLAYABLE_CAPTURE_TECHNICAL_PASS frames=78 quest=Q01-Q09 vo-motion-attachments ten-slot-matrix mixed-level-loadout; visual review still required; ' + str(out))
 
 
 

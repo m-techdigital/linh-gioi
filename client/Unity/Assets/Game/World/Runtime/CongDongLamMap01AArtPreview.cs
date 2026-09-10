@@ -212,6 +212,7 @@ namespace LinhGioi.World
             "main_weapon", "head_hair", "inner_top", "outer_tunic", "lower_garment",
             "waist", "arm_guard", "boots", "light_armor", "accessory"
         };
+        private readonly Dictionary<string, int> _voEquipmentLevels = new Dictionary<string, int>();
         private readonly TwoDCharacterRuntimeState _voState = new TwoDCharacterRuntimeState(
             VoAvatarModes, VoAvatarGenders, VoAvatarLevels, VoEquipmentSlots);
         public string VoAvatarMode => _voState.Mode;
@@ -219,13 +220,18 @@ namespace LinhGioi.World
         public int VoAvatarLevel => _voState.Level;
         public int[] VoAvatarAvailableLevels => _voState.AvailableLevels;
         public string VoSelectedEquipmentSlot => _voState.SelectedEquipmentSlot;
+        public int VoSelectedEquipmentItemLevel => _voEquipmentLevels.TryGetValue(VoSelectedEquipmentSlot, out var level)
+            ? level : VoAvatarLevel;
+        public string VoMixedEquipmentSnapshot => string.Join(",", VoEquipmentSlots.Select(slot =>
+            slot + "=Lv" + (_voEquipmentLevels.TryGetValue(slot, out var level) ? level : VoAvatarLevel)));
         public int VoEquippedSlotCount => _voState.EquippedSlotCount;
         public string VoAvatarMotionState => _voState.MotionState;
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
         public bool VoRunEnabled => _voState.RunEnabled;
         public string AvatarClassLabel => _kiemFitPreviewActive ? "Kiếm mixed-fit DRAFT" : "Võ";
         public string EquipmentLevelLabel => _kiemFitPreviewActive ? "Lv1/10/20/30" : "Lv" + VoAvatarLevel;
-        public string EquipmentSlotLabel => _kiemFitPreviewActive ? "weapon+hair+inner+outer" : VoSelectedEquipmentSlot;
+        public string EquipmentSlotLabel => _kiemFitPreviewActive ? "weapon+hair+inner+outer"
+            : VoSelectedEquipmentSlot + " · Lv" + VoSelectedEquipmentItemLevel;
         public string SkillLabel => _kiemFitPreviewActive ? "Kiếm pose DRAFT" : "Liên Quyền";
         public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
         public bool VoAvatarUsesFrameMotion => VoAvatarLevel == 1 && VoAvatarMode == "full" && VoAvatarMotionState != "idle";
@@ -299,8 +305,9 @@ namespace LinhGioi.World
             public bool voEquipmentComponentBindingVerified;
             public bool voTenSlotMatrixVerified;
             public bool voSharedRuntimeStateVerified;
-            public bool kiemMaleMotionVerified, kiemFemaleMotionVerified;
-            public string kiemFitPreviewSnapshot;
+            public bool voMixedLevelMaleVerified, voMixedLevelFemaleVerified;
+            public bool voMixedLevelMotionVerified, voMixedLevelToggleVerified;
+            public string voMixedEquipmentSnapshot;
             public int voSkillCastCount, voSkillHitCount, voTrainingTargetHp;
         }
         public float GroundY { get; private set; }
@@ -581,6 +588,7 @@ namespace LinhGioi.World
                 || pack.rigPoseProfiles == null || pack.rigPoseProfiles.Length != 120)
                 throw new InvalidOperationException("Invalid Võ Lv1-30 map avatar manifest");
             _voState.EquipAllExcept(null);
+            foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = VoAvatarLevel;
             _voAvatarRoot = new GameObject("Map01A Võ avatar").transform;
             _voAvatarRoot.SetParent(transform, false);
             foreach (var part in pack.parts)
@@ -718,6 +726,7 @@ namespace LinhGioi.World
         public void CycleVoAvatarLevel()
         {
             _voState.CycleLevel();
+            foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = VoAvatarLevel;
             RefreshVoAvatarMode();
         }
 
@@ -729,6 +738,14 @@ namespace LinhGioi.World
         public void ToggleVoEquipmentSlot()
         {
             _voState.ToggleSelectedEquipmentSlot();
+            RefreshVoAvatarMode();
+        }
+
+        public void CycleVoSelectedEquipmentItemLevel()
+        {
+            var current = VoSelectedEquipmentItemLevel;
+            var index = Array.IndexOf(VoAvatarLevels, current);
+            _voEquipmentLevels[VoSelectedEquipmentSlot] = VoAvatarLevels[(index + 1) % VoAvatarLevels.Length];
             RefreshVoAvatarMode();
         }
 
@@ -799,7 +816,6 @@ namespace LinhGioi.World
 
         private void ApplyVoEquipmentComponents()
         {
-            var prefix = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_";
             foreach (var pair in _voEquipmentComponents)
             {
                 var renderer = pair.Value;
@@ -808,7 +824,10 @@ namespace LinhGioi.World
                 renderer.transform.localRotation = Quaternion.identity;
                 renderer.transform.localScale = rest.Item2;
                 var info = _voEquipmentComponentInfo[pair.Key];
-                renderer.enabled = VoAvatarMode == "modular" && pair.Key.StartsWith(prefix, StringComparison.Ordinal)
+                var itemLevel = _voEquipmentLevels.TryGetValue(info.slot, out var selectedLevel)
+                    ? selectedLevel : VoAvatarLevel;
+                renderer.enabled = VoAvatarMode == "modular" && info.gender == VoAvatarGender
+                    && info.level == itemLevel
                     && _voState.IsEquipped(info.slot);
             }
         }
@@ -1256,10 +1275,10 @@ namespace LinhGioi.World
                 "61-vo-female-lv30-off-lower-garment", "62-vo-female-lv30-off-waist",
                 "63-vo-female-lv30-off-arm-guard", "64-vo-female-lv30-off-boots",
                 "65-vo-female-lv30-off-light-armor", "66-vo-female-lv30-off-accessory",
-                "67-kiem-male-idle", "68-kiem-male-walk", "69-kiem-male-run",
-                "70-kiem-male-jump", "71-kiem-male-basic", "72-kiem-male-class-skill",
-                "73-kiem-female-idle", "74-kiem-female-walk", "75-kiem-female-run",
-                "76-kiem-female-jump", "77-kiem-female-basic", "78-kiem-female-class-skill" };
+                "67-vo-mixed-male-idle", "68-vo-mixed-male-run", "69-vo-mixed-male-jump",
+                "70-vo-mixed-male-basic", "71-vo-mixed-male-lien-quyen", "72-vo-mixed-female-idle",
+                "73-vo-mixed-female-run", "74-vo-mixed-female-jump", "75-vo-mixed-female-basic",
+                "76-vo-mixed-female-lien-quyen", "77-vo-mixed-outer-off", "78-vo-mixed-outer-on" };
             for (var i = 0; i < targets.Length; i++)
             {
                 _routeX = targets[i];
@@ -1475,6 +1494,7 @@ namespace LinhGioi.World
                     var selected = VoEquipmentSlots[matrixIndex];
                     _voState.SetPresentation(i < 56 ? 0 : 1, i < 56 ? 0 : 3, 2, matrixIndex);
                     _voState.EquipAllExcept(selected);
+                    foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = VoAvatarLevel;
                     RefreshVoAvatarMode();
                     var prefix = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_";
                     var affected = _voEquipmentComponentInfo.Count(pair => pair.Key.StartsWith(prefix, StringComparison.Ordinal)
@@ -1496,67 +1516,75 @@ namespace LinhGioi.World
                 {
                     AdvanceVoAnimation(.6f);
                     VoTrainingTargetHp = 100;
-                    SetKiemFitPreview("male", "idle");
-                    result.kiemMaleMotionVerified = _kiemFitPreview.VisibleItemCount == 4
-                        && _kiemFitPreview.ValidSpriteSkinCount == 3;
+                    _voState.SetPresentation(0, 0, 2, 3);
+                    _voState.EquipAllExcept(null);
+                    foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = 1;
+                    for (var step = 0; step < 3; step++) CycleVoSelectedEquipmentItemLevel();
+                    result.voMixedLevelMaleVerified = VoAvatarGender == "male" && VoAvatarLevel == 1
+                        && VoSelectedEquipmentSlot == "outer_tunic" && VoSelectedEquipmentItemLevel == 30
+                        && _voEquipmentComponents["lv030_male_outer_tunic_center"].enabled
+                        && _voEquipmentComponents["lv001_male_waist_center"].enabled;
                 }
                 if (i == 67)
                 {
-                    MoveOnLane(1, .1f);
-                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "walk";
+                    SetVoRun(true); MoveOnLane(1, .1f);
+                    result.voMixedLevelMotionVerified = VoAvatarMotionState == "run"
+                        && _voEquipmentComponents["lv030_male_outer_tunic_center"].enabled;
                 }
                 if (i == 68)
                 {
-                    AdvanceVoAnimation(.5f); SetVoRun(true); MoveOnLane(1, .1f);
-                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "run";
+                    SetVoRun(false); AdvanceVoAnimation(.5f); TriggerVoJump();
+                    result.voMixedLevelMotionVerified &= VoAvatarMotionState == "jump"
+                        && _voEquipmentComponents["lv030_male_outer_tunic_center"].enabled;
                 }
                 if (i == 69)
                 {
-                    SetVoRun(false); AdvanceVoAnimation(.5f); TriggerVoJump();
-                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "jump";
+                    AdvanceVoAnimation(.6f); TriggerVoBasicAttack();
+                    result.voMixedLevelMotionVerified &= VoAvatarMotionState == "basic_attack";
                 }
                 if (i == 70)
                 {
-                    AdvanceVoAnimation(.6f); TriggerVoBasicAttack();
-                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "basic_attack";
+                    AdvanceVoAnimation(.5f); TriggerVoSkill();
+                    result.voMixedLevelMotionVerified &= VoAvatarMotionState == "skill";
                 }
                 if (i == 71)
                 {
-                    AdvanceVoAnimation(.5f); TriggerVoSkill();
-                    result.kiemMaleMotionVerified &= VoAvatarMotionState == "skill";
+                    AdvanceVoAnimation(.6f); CycleVoAvatarGender();
+                    result.voMixedLevelFemaleVerified = VoAvatarGender == "female"
+                        && VoSelectedEquipmentItemLevel == 30
+                        && _voEquipmentComponents["lv030_female_outer_tunic_center"].enabled
+                        && _voEquipmentComponents["lv001_female_waist_center"].enabled;
                 }
                 if (i == 72)
                 {
-                    AdvanceVoAnimation(.6f); VoTrainingTargetHp = 100;
-                    SetKiemFitPreview("female", "idle");
-                    result.kiemFemaleMotionVerified = _kiemFitPreview.VisibleItemCount == 4
-                        && _kiemFitPreview.ValidSpriteSkinCount == 3;
+                    SetVoRun(true); MoveOnLane(1, .1f);
+                    result.voMixedLevelMotionVerified &= VoAvatarMotionState == "run";
                 }
                 if (i == 73)
                 {
-                    MoveOnLane(1, .1f);
-                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "walk";
+                    SetVoRun(false); AdvanceVoAnimation(.5f); TriggerVoJump();
+                    result.voMixedLevelMotionVerified &= VoAvatarMotionState == "jump";
                 }
                 if (i == 74)
                 {
-                    AdvanceVoAnimation(.5f); SetVoRun(true); MoveOnLane(1, .1f);
-                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "run";
+                    AdvanceVoAnimation(.6f); TriggerVoBasicAttack();
+                    result.voMixedLevelMotionVerified &= VoAvatarMotionState == "basic_attack";
                 }
                 if (i == 75)
                 {
-                    SetVoRun(false); AdvanceVoAnimation(.5f); TriggerVoJump();
-                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "jump";
+                    AdvanceVoAnimation(.5f); TriggerVoSkill();
+                    result.voMixedLevelMotionVerified &= VoAvatarMotionState == "skill";
                 }
                 if (i == 76)
                 {
-                    AdvanceVoAnimation(.6f); TriggerVoBasicAttack();
-                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "basic_attack";
+                    AdvanceVoAnimation(.6f); ToggleVoEquipmentSlot();
+                    result.voMixedLevelToggleVerified = !_voEquipmentComponents["lv030_female_outer_tunic_center"].enabled;
                 }
                 if (i == 77)
                 {
-                    AdvanceVoAnimation(.5f); TriggerVoSkill();
-                    result.kiemFemaleMotionVerified &= VoAvatarMotionState == "skill";
-                    result.kiemFitPreviewSnapshot = _kiemFitPreview.Snapshot;
+                    ToggleVoEquipmentSlot();
+                    result.voMixedLevelToggleVerified &= _voEquipmentComponents["lv030_female_outer_tunic_center"].enabled;
+                    result.voMixedEquipmentSnapshot = VoMixedEquipmentSnapshot;
                 }
                 _controller.RefreshForSmoke();
                 Refresh();
@@ -1599,8 +1627,9 @@ namespace LinhGioi.World
                 || !result.voEquipmentComponentBindingVerified
                 || !result.voTenSlotMatrixVerified
                 || !result.voSharedRuntimeStateVerified
-                || !result.kiemMaleMotionVerified || !result.kiemFemaleMotionVerified
-                || string.IsNullOrEmpty(result.kiemFitPreviewSnapshot)
+                || !result.voMixedLevelMaleVerified || !result.voMixedLevelFemaleVerified
+                || !result.voMixedLevelMotionVerified || !result.voMixedLevelToggleVerified
+                || string.IsNullOrEmpty(result.voMixedEquipmentSnapshot)
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
                 result.status = "FIX_REQUIRED";

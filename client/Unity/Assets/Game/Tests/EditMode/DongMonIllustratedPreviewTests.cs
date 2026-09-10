@@ -387,6 +387,46 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void Map01AVoModularLoadoutMixesEquipmentLevelsOnTheSharedRig()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A Võ mixed level equipment test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+                preview.CycleVoAvatarMode();
+                preview.CycleVoAvatarMode();
+                for (var step = 0; step < 3; step++) preview.CycleVoEquipmentSlot();
+                Assert.That(preview.VoSelectedEquipmentSlot, Is.EqualTo("outer_tunic"));
+                for (var step = 0; step < 3; step++) preview.CycleVoSelectedEquipmentItemLevel();
+
+                Assert.That(preview.VoAvatarLevel, Is.EqualTo(1), "Changing one item must not change the character progression preview");
+                Assert.That(preview.VoSelectedEquipmentItemLevel, Is.EqualTo(30));
+                Assert.That(GameObject.Find("Map01A Võ equipment component lv030 male outer_tunic center")
+                    .GetComponent<SpriteRenderer>().enabled, Is.True);
+                Assert.That(GameObject.Find("Map01A Võ equipment component lv001 male outer_tunic center")
+                    .GetComponent<SpriteRenderer>().enabled, Is.False);
+                Assert.That(GameObject.Find("Map01A Võ equipment component lv001 male waist center")
+                    .GetComponent<SpriteRenderer>().enabled, Is.True, "Other slots must keep their own item levels");
+
+                preview.SetVoRun(true);
+                preview.MoveOnLane(1, .1f);
+                Assert.That(preview.VoAvatarMotionState, Is.EqualTo("run"));
+                Assert.That(GameObject.Find("Map01A Võ equipment component lv030 male outer_tunic center")
+                    .GetComponent<SpriteRenderer>().enabled, Is.True, "Mixed-level equipment must stay attached during motion");
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void Map01AVoAvatarWalkAndSkillHaveRuntimeMotionStateAndVfx()
         {
             var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
