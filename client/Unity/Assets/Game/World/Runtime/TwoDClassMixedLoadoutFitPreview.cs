@@ -5,9 +5,11 @@ using UnityEngine;
 
 namespace LinhGioi.World
 {
-    public sealed class TwoDKiemMixedLoadoutFitPreview : IDisposable
+    public sealed class TwoDClassMixedLoadoutFitPreview : IDisposable
     {
-        private const string Resource = "LGOClasses/KiemMixedLoadoutFitPreview/";
+        private readonly string _classId;
+        private readonly string _classLabel;
+        private readonly string _resource;
         private static readonly int[] Levels = { 1, 10, 20, 30 };
         private readonly Transform _root;
         private readonly List<Sprite> _sprites = new List<Sprite>();
@@ -56,27 +58,31 @@ namespace LinhGioi.World
             public SpriteRenderer Renderer;
         }
 
-        public TwoDKiemMixedLoadoutFitPreview(Transform parent, TwoDSkeletalPaperDollRig rig)
+        public TwoDClassMixedLoadoutFitPreview(Transform parent, TwoDSkeletalPaperDollRig rig, string classId)
         {
             if (parent == null) throw new ArgumentNullException(nameof(parent));
             if (rig == null) throw new ArgumentNullException(nameof(rig));
-            _root = new GameObject("Map01A Kiếm ten-slot shared-rig review").transform;
+            if (classId != "kiem" && classId != "phap") throw new ArgumentException("Unknown review class", nameof(classId));
+            _classId = classId;
+            _classLabel = classId == "kiem" ? "Kiếm" : "Pháp";
+            _resource = "LGOClasses/" + (classId == "kiem" ? "Kiem" : "Phap") + "MixedLoadoutFitPreview/";
+            _root = new GameObject("Map01A " + _classLabel + " ten-slot shared-rig review").transform;
             _root.SetParent(parent, false);
 
-            var manifestAsset = Resources.Load<TextAsset>(Resource + "manifest");
-            var maleAtlas = Resources.Load<Texture2D>(Resource + "kiem-equipment-male-atlas");
-            var femaleAtlas = Resources.Load<Texture2D>(Resource + "kiem-equipment-female-atlas");
+            var manifestAsset = Resources.Load<TextAsset>(_resource + "manifest");
+            var maleAtlas = Resources.Load<Texture2D>(_resource + _classId + "-equipment-male-atlas");
+            var femaleAtlas = Resources.Load<Texture2D>(_resource + _classId + "-equipment-female-atlas");
             if (manifestAsset == null || maleAtlas == null || femaleAtlas == null)
-                throw new InvalidOperationException("Missing Kiếm ten-slot review pack");
+                throw new InvalidOperationException("Missing " + _classLabel + " ten-slot review pack");
             var manifest = JsonUtility.FromJson<Manifest>(manifestAsset.text);
-            if (manifest == null || manifest.id != "kiem-lv1-30-equipment-runtime-v1"
+            if (manifest == null || manifest.id != _classId + "-lv1-30-equipment-runtime-v1"
                 || manifest.status != "DRAFT_RUNTIME_FIT" || manifest.runtimeEligibleCount != 0
                 || manifest.skeletonVersion != "lgo_humanoid_2d_v1"
                 || manifest.levels == null || !manifest.levels.SequenceEqual(Levels)
                 || manifest.genders == null || !manifest.genders.SequenceEqual(new[] { "male", "female" })
                 || manifest.slots == null || manifest.slots.Length != 10
                 || manifest.components == null || manifest.components.Length != 104)
-                throw new InvalidOperationException("Invalid Kiếm ten-slot review manifest");
+                throw new InvalidOperationException("Invalid " + _classLabel + " ten-slot review manifest");
             _slots = manifest.slots;
             foreach (var slot in _slots)
             {
@@ -91,19 +97,19 @@ namespace LinhGioi.World
                     || (source.side != "left" && source.side != "right" && source.side != "center")
                     || source.atlasRect == null || source.atlasRect.Length != 4
                     || source.worldW <= 0 || source.worldH <= 0)
-                    throw new InvalidOperationException("Invalid Kiếm component: " + source.itemId);
-                var texture = source.atlas == "kiem-equipment-male-atlas" ? maleAtlas
-                    : source.atlas == "kiem-equipment-female-atlas" ? femaleAtlas : null;
-                if (texture == null) throw new InvalidOperationException("Unknown Kiếm atlas: " + source.atlas);
+                    throw new InvalidOperationException("Invalid " + _classLabel + " component: " + source.itemId);
+                var texture = source.atlas == _classId + "-equipment-male-atlas" ? maleAtlas
+                    : source.atlas == _classId + "-equipment-female-atlas" ? femaleAtlas : null;
+                if (texture == null) throw new InvalidOperationException("Unknown " + _classLabel + " atlas: " + source.atlas);
                 var rect = new Rect(source.atlasRect[0], source.atlasRect[1],
                     source.atlasRect[2], source.atlasRect[3]);
                 if (rect.xMin < 0 || rect.yMin < 0 || rect.xMax > texture.width || rect.yMax > texture.height)
-                    throw new InvalidOperationException("Kiếm atlas rect outside texture: " + source.itemId);
+                    throw new InvalidOperationException(_classLabel + " atlas rect outside texture: " + source.itemId);
                 var sprite = Sprite.Create(texture, rect, new Vector2(.5f, .5f), 100, 0, SpriteMeshType.FullRect);
                 sprite.name = source.itemId + "-" + source.side;
                 _sprites.Add(sprite);
                 var renderer = rig.Attach(source.gender + "_" + source.bone,
-                    "Map01A Kiếm " + source.itemId + " " + source.side, sprite,
+                    "Map01A " + _classLabel + " " + source.itemId + " " + source.side, sprite,
                     new Vector2(source.worldX, source.worldY), new Vector2(source.worldW, source.worldH), source.order);
                 renderer.enabled = false;
                 _views.Add(new ComponentView { Source = source, Renderer = renderer });
@@ -111,6 +117,8 @@ namespace LinhGioi.World
             SetActive(false, "male", "idle");
         }
 
+        public string ClassId => _classId;
+        public string ClassLabel => _classLabel;
         public bool Active => _active;
         public IReadOnlyList<int> AvailableLevels => Levels;
         public IReadOnlyList<string> SlotIds => _slots;
@@ -119,7 +127,7 @@ namespace LinhGioi.World
             .Select(view => view.Source.slotId).Distinct(StringComparer.Ordinal).Count();
         public int VisibleItemCount => VisibleSlotCount;
         public int ValidSpriteSkinCount => 0;
-        public string Snapshot => "KiemMixedLoadoutFitPreview: status=DRAFT_RUNTIME_FIT"
+        public string Snapshot => _classLabel + "MixedLoadoutFitPreview: status=DRAFT_RUNTIME_FIT"
             + " | runtimeEligibleCount=0 | atlases=2x1024 | slots=" + VisibleSlotCount + "/10"
             + " | components=" + VisibleComponentCount + " | gender=" + _gender + " | motion=" + _motion
             + " | mixed=" + string.Join(",", _slots.Select(slot => slot + "=Lv" + _levels[slot]))
@@ -151,7 +159,7 @@ namespace LinhGioi.World
         public void SetSlotLevel(string slot, int level)
         {
             RequireSlot(slot);
-            if (!Levels.Contains(level)) throw new ArgumentException("Unknown Kiếm level", nameof(level));
+            if (!Levels.Contains(level)) throw new ArgumentException("Unknown " + _classLabel + " level", nameof(level));
             _levels[slot] = level;
             Refresh();
         }
@@ -187,7 +195,7 @@ namespace LinhGioi.World
         private void RequireSlot(string slot)
         {
             if (string.IsNullOrEmpty(slot) || !_visible.ContainsKey(slot))
-                throw new ArgumentException("Unknown Kiếm equipment slot: " + slot, nameof(slot));
+                throw new ArgumentException("Unknown " + _classLabel + " equipment slot: " + slot, nameof(slot));
         }
 
         public void Dispose()

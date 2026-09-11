@@ -131,6 +131,18 @@ RUNTIME_ART_PACKS = [
         'max_bytes': 1_000_000,
         'status_error': 'Kiếm ten-slot fit pack must remain draft until Player motion review',
     },
+    {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/PhapMixedLoadoutFitPreview',
+        'id': 'phap-lv1-30-equipment-runtime-v1',
+        'status': 'DRAFT_RUNTIME_FIT',
+        'assets': {
+            'phap-equipment-male-atlas.png': (1024, 1024, 'paper-doll-atlas'),
+            'phap-equipment-female-atlas.png': (1024, 1024, 'paper-doll-atlas'),
+        },
+        'generators': {'pack_lgo_class_equipment_sheet'},
+        'max_bytes': 1_000_000,
+        'status_error': 'Pháp ten-slot fit pack must remain draft until Player motion review',
+    },
 ]
 
 

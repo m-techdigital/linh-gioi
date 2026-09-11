@@ -1,3 +1,11 @@
+## Hiện hành — Pháp Lv1–30 dùng chung hệ 10 slot của Kiếm — 2026-09-12
+
+Pháp nam/nữ đã có source tách theo lô 4 cấp × 10 slot tại external `classes-lv001-030/phap/generated-batch-v1`. Sheet nữ v1 bị loại vì dính anatomy; v2 chỉ sửa vùng da và giữ 40 thiết kế. Tool `pack_lgo_class_equipment_sheet.py` tách 80 item, khử chroma và đóng hai atlas 1024²/104 attachment bằng đúng fit template, bone, order và skeleton đã khóa của Kiếm. Runtime `phap-lv1-30-equipment-runtime-v1` vẫn `DRAFT_RUNTIME_FIT`, `runtimeEligibleCount=0`.
+
+`TwoDClassMixedLoadoutFitPreview` thay lớp riêng Kiếm: Kiếm/Pháp dùng một actor, một rig, một state hành trang và một capture matrix; đổi class sẽ dispose pack trước rồi mới nạp pack sau. Hành trang hiển thị đúng tên class, 10 slot, itemId/trạng thái, tháo-mặc và đổi cấp riêng; đã sửa flex layout làm hàng cuối chạm mô tả và ẩn dãy control review cũ khi hành trang class mở. Không đổi camera, base, scale hoặc motion Võ.
+
+Player cuối `client/Unity/build/phap-ten-slot-player-v5/LinhGioiOnline.app`; evidence `build/phap-lv1-30-ten-slot-runtime-v5/pc`: 27 frame, 8 full loadout, 10 ca tháo món, 2 phối cấp, 6 motion, `errors=[]`. Đã xem độc lập inventory, nam/nữ Lv1/Lv30, mixed, run và jump; tóc nữ được đặt lại theo head anchor để giữ silhouette dài. Đây là agent visual review, chưa phải owner/production approval.
+
 ## Hiện hành — Kiếm Lv1–30, hành trang 10 slot và shared-rig Player — 2026-09-12
 
 Kiếm đã thay proof 4 slot bằng một runtime module duy nhất `kiem-lv1-30-equipment-runtime-v1`: hai atlas 1024², 104 component, hai giới, bốn cấp 1/10/20/30 và 10 slot canonical. Hành trang Map01A dùng cùng state/actor/rig của Võ để chọn món, tháo/mặc và đổi cấp riêng; khi Kiếm bật, toàn bộ renderer trang bị Võ bị tắt nên không còn hai hệ/nhân vật song song. Pack vẫn `DRAFT_RUNTIME_FIT`, `runtimeEligibleCount=0`; chưa tự nâng production approval.

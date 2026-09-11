@@ -1,3 +1,9 @@
+## Hiện hành — Pháp Lv1–30 đã đóng batch; tiếp theo source gate Cơ — 2026-09-12
+
+Giữ Player Pháp `client/Unity/build/phap-ten-slot-player-v5/LinhGioiOnline.app` và evidence `build/phap-lv1-30-ten-slot-runtime-v5/pc`. Pack Pháp đủ 10 slot nam/nữ ở Lv1/10/20/30, tháo-mặc/phối cấp trên cùng actor và motion Võ đã khóa; vẫn `DRAFT_RUNTIME_FIT`. Không tạo lại controller Kiếm riêng hoặc hiển thị hai hệ song song.
+
+Action tiếp theo: audit design Cơ tại external `classes-lv001-030/co`, xác nhận nguồn nam/nữ và bốn cấp trước khi tạo sheet 4×10. Dùng `pack_lgo_class_equipment_sheet.py` và `TwoDClassMixedLoadoutFitPreview` hiện có; mở rộng danh sách class/resource thay vì copy controller/capture. Nếu source Cơ thiếu progression hay item rõ, ghi source gate và chuyển audit Linh, không đưa crop board nhỏ/mờ vào Player. Sau mỗi class chỉ build/capture khi cả batch đã đủ. Map01A giữ nguyên target; không Meshy/3D, không frozen surfaces.
+
 ## Hiện hành — sau Kiếm Lv1–30, chuyển sang source gate Pháp — 2026-09-12
 
 Checkpoint Kiếm hiện hành dùng Player `client/Unity/build/kiem-ten-slot-player-v5/LinhGioiOnline.app` và evidence `build/kiem-lv1-30-ten-slot-runtime-v1/pc`. Giữ module duy nhất `kiem-lv1-30-equipment-runtime-v1`, không khôi phục proof 4 slot hoặc recovered pack cũ. Art đang ở `DRAFT_RUNTIME_FIT`; feedback owner mới trên Player được ưu tiên sửa source/slot-box theo cả lô, không chỉnh camera/base/scale.

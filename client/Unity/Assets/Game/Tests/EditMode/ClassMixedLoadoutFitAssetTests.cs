@@ -6,28 +6,35 @@ using UnityEngine;
 
 namespace LinhGioi.Tests.EditMode
 {
-    public sealed class KiemMixedLoadoutFitAssetTests
+    public sealed class ClassMixedLoadoutFitAssetTests
     {
-        private const string Resource = "LGOClasses/KiemMixedLoadoutFitPreview/";
+        private const string KiemResource = "LGOClasses/KiemMixedLoadoutFitPreview/";
+        private const string PhapResource = "LGOClasses/PhapMixedLoadoutFitPreview/";
 
         [Test]
         public void ReviewPackUsesTwoBoundedAtlasesForAllFourLevelsAndBothGenders()
         {
-            var male = Resources.Load<Texture2D>(Resource + "kiem-equipment-male-atlas");
-            var female = Resources.Load<Texture2D>(Resource + "kiem-equipment-female-atlas");
+            var male = Resources.Load<Texture2D>(KiemResource + "kiem-equipment-male-atlas");
+            var female = Resources.Load<Texture2D>(KiemResource + "kiem-equipment-female-atlas");
             Assert.That(male, Is.Not.Null);
             Assert.That(female, Is.Not.Null);
             Assert.That(male.width, Is.EqualTo(1024));
             Assert.That(male.height, Is.EqualTo(1024));
             Assert.That(female.width, Is.EqualTo(1024));
             Assert.That(female.height, Is.EqualTo(1024));
+            var phapMale = Resources.Load<Texture2D>(PhapResource + "phap-equipment-male-atlas");
+            var phapFemale = Resources.Load<Texture2D>(PhapResource + "phap-equipment-female-atlas");
+            Assert.That(phapMale, Is.Not.Null);
+            Assert.That(phapFemale, Is.Not.Null);
+            Assert.That(phapMale.width, Is.EqualTo(1024));
+            Assert.That(phapFemale.height, Is.EqualTo(1024));
         }
 
         [Test]
         public void PreviewUsesOneSharedRigWithTenInteractiveSlotsAndCrossLevelItems()
         {
             var root = new GameObject("Kiếm preview test root");
-            TwoDKiemMixedLoadoutFitPreview preview = null;
+            TwoDClassMixedLoadoutFitPreview preview = null;
             try
             {
                 var rig = new TwoDSkeletalPaperDollRig(root.transform);
@@ -48,7 +55,7 @@ namespace LinhGioi.Tests.EditMode
                     Bone("female_left-shin-foot", "female_left-thigh", -.11f, .2f),
                     Bone("female_right-shin-foot", "female_right-thigh", .11f, .2f)
                 });
-                preview = new TwoDKiemMixedLoadoutFitPreview(root.transform, rig);
+                preview = new TwoDClassMixedLoadoutFitPreview(root.transform, rig, "kiem");
                 preview.SetActive(true, "male", "run");
                 Assert.That(preview.VisibleSlotCount, Is.EqualTo(10));
                 Assert.That(preview.VisibleComponentCount, Is.EqualTo(13));
@@ -72,7 +79,7 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
-        public void Map01AUsesTheSameActorAndInventoryFlowForKiemTenSlotReview()
+        public void Map01AUsesOneActorAndInventoryFlowAcrossClassTenSlotReviews()
         {
             var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager
                 .GetActiveScene().GetRootGameObjects());
@@ -82,8 +89,8 @@ namespace LinhGioi.Tests.EditMode
             {
                 var controller = TwoDOnboardingController.Attach(host);
                 preview = CongDongLamMap01AArtPreview.Attach(controller);
-                preview.ActivateKiemReview();
-                Assert.That(preview.KiemPreviewActive, Is.True);
+                preview.ActivateClassEquipmentReview("kiem");
+                Assert.That(preview.ClassEquipmentPreviewActive, Is.True);
                 Assert.That(preview.AvatarClassLabel, Does.StartWith("Kiếm"));
                 Assert.That(preview.EquipmentFitSummary, Is.EqualTo("Kiếm · rig chung · 10 slot · cấp 1/10/20/30"));
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
@@ -100,14 +107,19 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(preview.VoSelectedEquipmentItemLevel, Is.EqualTo(10));
                 StringAssert.Contains("kiem-lv010-male-outer_top", preview.GetVoEquipmentItemId("outer_tunic"));
 
+                preview.ActivateClassEquipmentReview("phap");
+                Assert.That(preview.ActiveEquipmentClassId, Is.EqualTo("phap"));
+                Assert.That(preview.AvatarClassLabel, Does.StartWith("Pháp"));
+                StringAssert.Contains("phap-lv010-male-outer_top", preview.GetVoEquipmentItemId("outer_tunic"));
+
                 preview.SetVoRun(true);
                 preview.MoveOnLane(1, .1f);
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("run"));
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
-                    .Any(renderer => renderer.enabled && renderer.name.Contains("kiem-lv010-male-outer_top")), Is.True);
+                    .Any(renderer => renderer.enabled && renderer.name.Contains("phap-lv010-male-outer_top")), Is.True);
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
                     .Any(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Võ equipment component")), Is.False,
-                    "Kiếm review must not render a parallel Võ wardrobe");
+                    "Class review must not render a parallel Võ wardrobe");
             }
             finally
             {

@@ -9,10 +9,11 @@ namespace LinhGioi.World
     public sealed partial class CongDongLamMap01AArtPreview
     {
         [Serializable]
-        private sealed class KiemCaptureInfo
+        private sealed class ClassEquipmentCaptureInfo
         {
             public string status = "PASS";
-            public string packId = "kiem-lv1-30-equipment-runtime-v1";
+            public string classId;
+            public string packId;
             public string fitStatus = "DRAFT_RUNTIME_FIT";
             public int frames;
             public int fullLoadouts;
@@ -27,40 +28,46 @@ namespace LinhGioi.World
             public List<string> errors = new List<string>();
         }
 
-        private IEnumerator CaptureKiemReview()
+        private IEnumerator CaptureClassEquipmentReview()
         {
             Application.runInBackground = true;
             var args = Environment.GetCommandLineArgs();
             var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
             if (index < 0 || index + 1 >= args.Length)
-                throw new ArgumentException("Missing Kiếm capture directory");
+                throw new ArgumentException("Missing class equipment capture directory");
             var directory = args[index + 1];
+            var classId = Array.IndexOf(args, "--lgo-phap-capture") >= 0 ? "phap" : "kiem";
+            EnsureClassFitPreview(classId);
             Directory.CreateDirectory(directory);
             _controller.enabled = false;
             _routeX = 20.5f;
             InventoryOpen = false;
-            SetKiemFitPreview("male", "idle");
+            SetClassFitPreview("male", "idle");
             yield return null;
             yield return null;
 
-            var result = new KiemCaptureInfo();
-            yield return CaptureKiemFrame(directory, "01-male-lv1-inventory", result, true);
+            var result = new ClassEquipmentCaptureInfo
+            {
+                classId = classId,
+                packId = classId + "-lv1-30-equipment-runtime-v1"
+            };
+            yield return CaptureClassEquipmentFrame(directory, "01-male-lv1-inventory", result, true);
             InventoryOpen = false;
             var levels = new[] { 1, 10, 20, 30 };
             foreach (var gender in new[] { "male", "female" })
             {
-                SetKiemFitPreview(gender, "idle");
+                SetClassFitPreview(gender, "idle");
                 foreach (var level in levels)
                 {
                     _voState.EquipAllExcept(null);
                     foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = level;
                     RefreshVoAvatarMode();
-                    yield return CaptureKiemFrame(directory, gender + "-lv" + level + "-full", result, false);
+                    yield return CaptureClassEquipmentFrame(directory, gender + "-lv" + level + "-full", result, false);
                     result.fullLoadouts++;
                 }
             }
 
-            SetKiemFitPreview("male", "idle");
+            SetClassFitPreview("male", "idle");
             foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = 1;
             for (var slotIndex = 0; slotIndex < VoEquipmentSlots.Length; slotIndex++)
             {
@@ -68,22 +75,22 @@ namespace LinhGioi.World
                 _voState.SetPresentation(0, 0, 2, slotIndex);
                 _voState.EquipAllExcept(slot);
                 RefreshVoAvatarMode();
-                yield return CaptureKiemFrame(directory, "male-lv1-off-" + slot, result, false);
+                yield return CaptureClassEquipmentFrame(directory, "male-lv1-off-" + slot, result, false);
                 result.slotToggleCases++;
             }
 
             foreach (var gender in new[] { "male", "female" })
             {
-                SetKiemFitPreview(gender, "idle");
+                SetClassFitPreview(gender, "idle");
                 _voState.EquipAllExcept(null);
                 for (var slotIndex = 0; slotIndex < VoEquipmentSlots.Length; slotIndex++)
                     _voEquipmentLevels[VoEquipmentSlots[slotIndex]] = levels[slotIndex % levels.Length];
                 RefreshVoAvatarMode();
-                yield return CaptureKiemFrame(directory, gender + "-mixed-levels", result, false);
+                yield return CaptureClassEquipmentFrame(directory, gender + "-mixed-levels", result, false);
                 result.mixedLoadouts++;
             }
 
-            SetKiemFitPreview("male", "idle");
+            SetClassFitPreview("male", "idle");
             _voState.EquipAllExcept(null);
             foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = 10;
             RefreshVoAvatarMode();
@@ -91,19 +98,19 @@ namespace LinhGioi.World
             for (var phase = 0; phase < 4; phase++)
             {
                 MoveOnLane(1, .09f);
-                yield return CaptureKiemFrame(directory, "male-lv10-run-phase-" + phase, result, false);
+                yield return CaptureClassEquipmentFrame(directory, "male-lv10-run-phase-" + phase, result, false);
                 result.motionCases++;
             }
             SetVoRun(false);
             AdvanceVoAnimation(.5f);
             TriggerVoJump();
-            yield return CaptureKiemFrame(directory, "male-lv10-jump-rise", result, false);
+            yield return CaptureClassEquipmentFrame(directory, "male-lv10-jump-rise", result, false);
             result.motionCases++;
             AdvanceVoAnimation(.22f);
-            yield return CaptureKiemFrame(directory, "male-lv10-jump-apex", result, false);
+            yield return CaptureClassEquipmentFrame(directory, "male-lv10-jump-apex", result, false);
             result.motionCases++;
 
-            result.finalSnapshot = _kiemFitPreview.Snapshot;
+            result.finalSnapshot = _classFitPreview.Snapshot;
             if (result.fullLoadouts != 8 || result.slotToggleCases != 10
                 || result.mixedLoadouts != 2 || result.motionCases != 6 || result.frames != 27)
                 result.errors.Add("incomplete capture matrix");
@@ -114,15 +121,15 @@ namespace LinhGioi.World
             Application.Quit(result.status == "PASS" ? 0 : 1);
         }
 
-        private IEnumerator CaptureKiemFrame(string directory, string name, KiemCaptureInfo result, bool inventory)
+        private IEnumerator CaptureClassEquipmentFrame(string directory, string name, ClassEquipmentCaptureInfo result, bool inventory)
         {
             InventoryOpen = inventory;
             _controller.RefreshForSmoke();
             Refresh();
             yield return null;
             yield return new WaitForEndOfFrame();
-            var visibleSlots = _kiemFitPreview.VisibleSlotCount;
-            var visibleComponents = _kiemFitPreview.VisibleComponentCount;
+            var visibleSlots = _classFitPreview.VisibleSlotCount;
+            var visibleComponents = _classFitPreview.VisibleComponentCount;
             result.minVisibleSlots = Mathf.Min(result.minVisibleSlots, visibleSlots);
             result.maxVisibleComponents = Mathf.Max(result.maxVisibleComponents, visibleComponents);
             if ((inventory || name.Contains("-full") || name.Contains("mixed") || name.Contains("run") || name.Contains("jump"))

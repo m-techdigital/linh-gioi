@@ -122,7 +122,7 @@ namespace LinhGioi.UI
             _inventoryToggle.style.minHeight = _touch ? 64 : 48; _inventoryToggle.style.minWidth = 180; _safe.Add(_inventoryToggle);
             _inventory = new VisualElement(); Box(_inventory); Place(_inventory, _touch ? 150 : 20, null, null, _touch ? 150 : 82);
             _inventory.style.width = _touch ? 410 : 470;
-            _inventory.style.maxHeight = _touch ? 610 : 650;
+            _inventory.style.maxHeight = _touch ? 650 : 720;
             _inventorySummary = new Label(); _inventorySummary.style.whiteSpace = WhiteSpace.Normal; _inventory.Add(_inventorySummary);
             _equipmentTitle = new Label("TRANG BỊ VÕ · 10 SLOT");
             _equipmentTitle.style.color = new Color(1f, .78f, .25f);
@@ -131,6 +131,7 @@ namespace LinhGioi.UI
             _inventory.Add(_equipmentTitle);
             var equipmentGrid = new VisualElement();
             equipmentGrid.style.flexDirection = FlexDirection.Row;
+            equipmentGrid.style.flexShrink = 0;
             var equipmentLeft = new VisualElement();
             var equipmentRight = new VisualElement();
             equipmentLeft.style.flexGrow = equipmentRight.style.flexGrow = 1;
@@ -146,6 +147,7 @@ namespace LinhGioi.UI
                     { name = "LGO Equipment Inventory Slot " + slotId };
                 row.style.width = Length.Percent(100);
                 row.style.height = _touch ? 42 : 36;
+                row.style.flexShrink = 0;
                 row.style.marginBottom = 5;
                 row.style.unityTextAlign = TextAnchor.MiddleLeft;
                 _equipmentRows[index] = row;
@@ -154,12 +156,15 @@ namespace LinhGioi.UI
             _inventory.Add(equipmentGrid);
             _equipmentDetail = new Label();
             _equipmentDetail.style.whiteSpace = WhiteSpace.Normal;
+            _equipmentDetail.style.minHeight = 112;
+            _equipmentDetail.style.flexShrink = 0;
             _equipmentDetail.style.marginTop = 5;
             _equipmentDetail.style.marginBottom = 5;
             _inventory.Add(_equipmentDetail);
             var equipmentActions = new VisualElement();
             equipmentActions.style.flexDirection = FlexDirection.Row;
             equipmentActions.style.flexWrap = Wrap.Wrap;
+            equipmentActions.style.flexShrink = 0;
             _equipmentToggle = new Button(() => _scene.ToggleVoEquipmentSlot())
                 { name = "LGO Equipment Inventory Toggle" };
             _equipmentVariant = new Button(() => _scene.CycleVoSelectedEquipmentItemLevel())
@@ -277,14 +282,16 @@ namespace LinhGioi.UI
             _minimap.text = _scene.MinimapRouteText;
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            var compactReview = _scene.IsSourcePoseReviewActive && _scene.InventoryOpen;
+            var compactReview = (_scene.IsSourcePoseReviewActive || _scene.ClassEquipmentPreviewActive)
+                && _scene.InventoryOpen;
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
                 control.style.display = compactReview ? DisplayStyle.None : DisplayStyle.Flex;
             _inventorySummary.text = _scene.IsSourcePoseReviewActive
                 ? "Chọn từng món để xem thông tin và tháo/mặc trực tiếp trên nhân vật."
                 : _scene.InventorySummaryText;
-            _equipmentTitle.text = "TRANG BỊ " + (_scene.KiemPreviewActive ? "KIẾM" : "VÕ") + " · 10 SLOT";
-            _questItemActions.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.None : DisplayStyle.Flex;
+            _equipmentTitle.text = "TRANG BỊ " + _scene.ActiveEquipmentClassLabel.ToUpperInvariant() + " · 10 SLOT";
+            _questItemActions.style.display = _scene.IsSourcePoseReviewActive || _scene.ClassEquipmentPreviewActive
+                ? DisplayStyle.None : DisplayStyle.Flex;
             for (var index = 0; index < _equipmentRows.Length; index++)
             {
                 var slotId = _equipmentSlotIds[index];
