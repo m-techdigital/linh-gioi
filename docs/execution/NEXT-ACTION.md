@@ -1,3 +1,7 @@
+## Hiện hành — Cơ đã đóng batch; chuyển source gate Linh — 2026-09-12
+
+Giữ Player Cơ `client/Unity/build/co-ten-slot-player-v1/LinhGioiOnline.app` và evidence `build/co-lv1-30-ten-slot-runtime-v1/pc`; pack vẫn `DRAFT_RUNTIME_FIT`. Action kế tiếp là audit design Linh, tạo đủ nam/nữ 4×10 ở source trước rồi mới mở rộng cùng `TwoDClassMixedLoadoutFitPreview`. Không copy controller/camera/actor hoặc dùng crop board nhỏ. Sau Linh mới đánh giá lại ma trận ba class và thứ tự level cao hơn.
+
 ## Hiện hành — Pháp Lv1–30 đã đóng batch; tiếp theo source gate Cơ — 2026-09-12
 
 Giữ Player Pháp `client/Unity/build/phap-ten-slot-player-v5/LinhGioiOnline.app` và evidence `build/phap-lv1-30-ten-slot-runtime-v5/pc`. Pack Pháp đủ 10 slot nam/nữ ở Lv1/10/20/30, tháo-mặc/phối cấp trên cùng actor và motion Võ đã khóa; vẫn `DRAFT_RUNTIME_FIT`. Không tạo lại controller Kiếm riêng hoặc hiển thị hai hệ song song.

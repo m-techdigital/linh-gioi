@@ -1,3 +1,9 @@
+## Hiện hành — Cơ Lv1–30 hoàn tất shared-rig 10 slot — 2026-09-12
+
+Cơ nam/nữ dùng source external `classes-lv001-030/co/generated-batch-v1`: hai sheet v1 bị loại vì dính anatomy, hai sheet v2 chỉ sửa vùng anatomy và giữ thiết kế 4 cấp × 10 slot. `pack_lgo_class_equipment_sheet.py` đóng 80 item thành `co-lv1-30-equipment-runtime-v1`, hai atlas 1024²/104 attachment, trạng thái `DRAFT_RUNTIME_FIT`.
+
+Runtime chỉ mở rộng `TwoDClassMixedLoadoutFitPreview` hiện có cho class Cơ; cùng actor, rig, inventory, tháo-mặc, đổi cấp, mixed loadout và capture matrix với Kiếm/Pháp. Player `client/Unity/build/co-ten-slot-player-v1/LinhGioiOnline.app`; evidence `build/co-lv1-30-ten-slot-runtime-v1/pc` đạt 27 frame, 8 full loadout, 10 toggle, 2 mixed, 6 motion, `errors=[]`. Đã xem inventory, nam/nữ Lv1/Lv30, run và jump; cannon/tech silhouette rõ và trang bị bám motion. Chưa tự gán owner/production approval.
+
 ## Hiện hành — Pháp Lv1–30 dùng chung hệ 10 slot của Kiếm — 2026-09-12
 
 Pháp nam/nữ đã có source tách theo lô 4 cấp × 10 slot tại external `classes-lv001-030/phap/generated-batch-v1`. Sheet nữ v1 bị loại vì dính anatomy; v2 chỉ sửa vùng da và giữ 40 thiết kế. Tool `pack_lgo_class_equipment_sheet.py` tách 80 item, khử chroma và đóng hai atlas 1024²/104 attachment bằng đúng fit template, bone, order và skeleton đã khóa của Kiếm. Runtime `phap-lv1-30-equipment-runtime-v1` vẫn `DRAFT_RUNTIME_FIT`, `runtimeEligibleCount=0`.

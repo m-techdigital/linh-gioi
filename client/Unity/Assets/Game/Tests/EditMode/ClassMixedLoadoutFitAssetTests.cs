@@ -10,6 +10,7 @@ namespace LinhGioi.Tests.EditMode
     {
         private const string KiemResource = "LGOClasses/KiemMixedLoadoutFitPreview/";
         private const string PhapResource = "LGOClasses/PhapMixedLoadoutFitPreview/";
+        private const string CoResource = "LGOClasses/CoMixedLoadoutFitPreview/";
 
         [Test]
         public void ReviewPackUsesTwoBoundedAtlasesForAllFourLevelsAndBothGenders()
@@ -28,6 +29,8 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(phapFemale, Is.Not.Null);
             Assert.That(phapMale.width, Is.EqualTo(1024));
             Assert.That(phapFemale.height, Is.EqualTo(1024));
+            Assert.That(Resources.Load<Texture2D>(CoResource + "co-equipment-male-atlas"), Is.Not.Null);
+            Assert.That(Resources.Load<Texture2D>(CoResource + "co-equipment-female-atlas"), Is.Not.Null);
         }
 
         [Test]
@@ -112,11 +115,16 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(preview.AvatarClassLabel, Does.StartWith("Pháp"));
                 StringAssert.Contains("phap-lv010-male-outer_top", preview.GetVoEquipmentItemId("outer_tunic"));
 
+                preview.ActivateClassEquipmentReview("co");
+                Assert.That(preview.ActiveEquipmentClassId, Is.EqualTo("co"));
+                Assert.That(preview.AvatarClassLabel, Does.StartWith("Cơ"));
+                StringAssert.Contains("co-lv010-male-outer_top", preview.GetVoEquipmentItemId("outer_tunic"));
+
                 preview.SetVoRun(true);
                 preview.MoveOnLane(1, .1f);
                 Assert.That(preview.VoAvatarMotionState, Is.EqualTo("run"));
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
-                    .Any(renderer => renderer.enabled && renderer.name.Contains("phap-lv010-male-outer_top")), Is.True);
+                    .Any(renderer => renderer.enabled && renderer.name.Contains("co-lv010-male-outer_top")), Is.True);
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
                     .Any(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Võ equipment component")), Is.False,
                     "Class review must not render a parallel Võ wardrobe");
