@@ -1,3 +1,15 @@
+## Võ POSE THỬ div4 — checkpoint tooling, motion chưa đóng — 2026-09-11
+
+Chỉ đạo owner hiện hành: Võ motion/source review → wardrobe/10 slot Lv1 → Lv10/mặc chéo → class khác. Map01A vẫn là target sản phẩm; các Next sang Kiếm ở lịch sử bên dưới không còn là action hiện hành.
+
+Worktree sạch `/private/tmp/lgo-vo-pose-div4-clean`, nhánh `codex/vo-pose-div4-review`, fork `origin/feature/2d@cc684828`. Chỉ port bốn file Python pack/test/capture và ghi chú này; không C#/camera/close-review/resources outfit/map WIP. Registered outfit/motion gốc tại `/private/tmp/lgo-vo-lv1-30-FaSFxE` giữ nguyên, chưa được coi là đã tích hợp vào nhánh sạch.
+
+Packer mặc định divisor4/max1024, xuất trực tiếp `atlas-review.json/png`, yêu cầu pivot nguồn rõ cho jump_tuck. Test cũ trong WIP thực tế chưa có case divisor4; nay có test reconstruction4/8, default4, CLI/pivot. Pack tái tạo `build/vo-pose-div4-repacked-v1` trùng byte external `legacy-base-run-contact-jump-v3-div4`: 512×1024, PNG373834byte, RGBA8 2097152byte, SHA `27630a5ceece2500e412620b70cf43e61a80bbef5d4391ae450d3d19d6829010`, REVIEW_ONLY. Source hash/reconstruction6/6, registration sạch.
+
+Evidence mới `build/vo-pose-div4-verified-runtime-v2/{mobile,tablet,pc}`: 154 frame/profile, đủ6pose, hash/đường dẫn pack và Player trong provenance; ảnh đứng/chạy/lộn đã xem. Đây là Player binary WIP kế thừa, không phải build HEAD sạch; batch0C#/0build. Không claim motion/production PASS: contact A/B còn cách ground65px nguồn. Hai redraw candidate bị loại vì alpha/registration; giữ source cũ, không bù offset/camera. Chi tiết trong `build/vo-pose-div4-verified-runtime-v2/REVIEW.md`.
+
+Kiểm cuối tooling: pack9/9, capture7/7; no-3D/no-source-image và frozen diff PASS. Code review độc lập đã bắt/sửa provenance khi pack bị thay giữa capture; regression manifest/atlas mutation PASS. 0build,3lượt capture có lý do; chưa có video transition review hoặc source contact pass.
+
 ## Võ Lv1–30 functional class slice gate — 2026-09-10
 
 Võ là class mẫu đầu tiên đã qua functional vertical-slice gate trên Map01A: base nam/nữ, bốn mốc Lv1/10/20/30, 10 slot, cởi/mặc từng slot, rig 10 bone, 112 equipment component và idle/walk/run/jump/basic attack/`Liên Quyền` có hit timing/HP feedback. Batch này bổ sung item level độc lập theo slot: owner có thể giữ base/loadout Lv1 nhưng đổi riêng `outer_tunic` sang Lv30, chuyển nam/nữ, chạy/nhảy/đánh/skill rồi cởi/mặc lại mà item vẫn bám shared rig.

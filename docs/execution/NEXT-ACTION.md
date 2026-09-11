@@ -1,3 +1,15 @@
+## Action hiện hành — Võ contact source/motion — 2026-09-11
+
+Thứ tự owner: motion Võ → wardrobe/10 slot Lv1 → Lv10/mặc chéo → class khác; Map01A vẫn là target. Các Next phía dưới là lịch sử, không mở class/tier mới từ các gate cũ.
+
+Đã port đúng packer/test/capture helper vào worktree sạch `/private/tmp/lgo-vo-pose-div4-clean` từ `origin/feature/2d@cc684828`. Pack div4 tái tạo trùng atlas SHA/byte; capture Player WIP mới154frame ×3profile, đủ6pose, đã review ảnh. Evidence: `build/vo-pose-div4-verified-runtime-v2/REVIEW.md`, từng `pose-review-provenance.json`, `build/vo-pose-div4-repacked-v1/source-audit.json`. Không C#/camera/close-review; chưa gọi runtime WIP là đã tích hợp vào HEAD sạch. Main và `/private/tmp/lgo-vo-lv1-30-FaSFxE` không bị sửa/rollback.
+
+Gate còn FIX_REQUIRED: source `run_contact_a/b` alpha≥128 kết thúc tại y1419, cách groundY1484 là65px. Không dịch/scale toàn base, không đổi camera, không dựng base mới; idle và cặp A/B đã khóa giữ nguyên. Redraw bằng built-in imagegen2lượt không đạt alpha/registration; candidate giữ tại external `class-work-in-progress/vo-lv001/pose-contact-grounding-candidates-v1`. Giới hạn đã xác minh: prompt tọa độ không giữ được vùng không sửa/ground anchor. Không tiếp thử cùng giả định hoặc promote candidate.
+
+Bước được phép tiếp: sửa đúng vùng chân của hai source contact bằng quy trình có mask/anchor kiểm chứng (hoặc correction source đã duyệt), đối chiếu head/torso/base/ground trước pack; giữ div4, canvas1024×1536 và jumpPivot[512,820]. Sau source gate, capture đứng/chạy/lộn Player thật bằng helper đã giữ hash/log; chỉ khi motion ổn mới audit/integrate registered wardrobe WIP Lv1. Nếu thay C# phải build/capture từ worktree sạch. Cần audit dependency C# riêng trước port; không copy nguyên WIP lớn hoặc dùng binary kế thừa để claim clean-build PASS.
+
+## Lịch sử checkpoint (không thay action hiện hành)
+
 > **Gate Võ Lv1–30 — 2026-09-10:** functional class slice đã pass với base nam/nữ, 4 tier, 10 slot, cởi/mặc từng slot, rig 10 bone, 112 component, full-frame Lv1 và rig motion toàn tier cho idle/walk/run/jump/basic/`Liên Quyền` + hit feedback. Batch mixed-level cho mặc riêng `outer_tunic` Lv30 trên loadout Lv1, giữ qua nam/nữ và action. Evidence `build/vo-mixed-level-v1/capture/` có 78 artifact/profile; trạng thái `VO_LV1_30_FUNCTIONAL_VERTICAL_SLICE_PASS / ART_PRODUCTION_DRAFT`.
 >
 > **Next:** chuyển sang Kiếm Lv1–30 bằng cùng shared base/rig/10-slot contract, kế thừa draft atlas đã có và chỉ đưa item qua production equip khi fit gate pass. Sau Kiếm mới tới Pháp, Cơ, Linh; mỗi class theo một batch riêng và vẫn giới hạn Lv1–30.

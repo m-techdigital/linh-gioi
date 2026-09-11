@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+"""Capture registered outfit movement, combat recovery and ten-slot checks in Player."""
+import argparse
+import hashlib
+import json
+import plistlib
+import subprocess
+import time
+from pathlib import Path
+
+PROFILES = {'mobile': (1600, 720), 'tablet': (1024, 768), 'pc': (1280, 720)}
+
+
+def resolve_player(path):
+    player = path.resolve()
+    if player.is_dir() and player.suffix == '.app':
+        with (player / 'Contents/Info.plist').open('rb') as file:
+            executable = plistlib.load(file)['CFBundleExecutable']
+        player = player / 'Contents/MacOS' / executable
+    if not player.is_file():
+        raise FileNotFoundError('Player executable not found: ' + str(player))
+    return player
+
+
+
+def validate_registered_capture_result(*, code, result, width, height, png_count, closed_far_arms=False, closed_body=False, registered_equipment=False):
+    errors = []
+    if code != 0:
+        errors.append('PLAYER_EXIT_CODE_' + str(code))
+    if result.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED':
+        errors.append('STATUS_NOT_TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED')
+    if closed_far_arms and not result.get('closedFarArms'):
+        errors.append('CLOSED_FAR_ARMS_MISSING')
+    if closed_body and not result.get('closedBody'):
+        errors.append('CLOSED_BODY_MISSING')
+    if registered_equipment:
+        if not result.get('registeredEquipment'):
+            errors.append('REGISTERED_EQUIPMENT_MISSING')
+        if not result.get('closedBody'):
+            errors.append('REGISTERED_EQUIPMENT_REQUIRES_CLOSED_BODY')
+        if result.get('maxEquipmentAttachments') != 17:
+            errors.append('REGISTERED_EQUIPMENT_ATTACHMENT_COUNT_MISMATCH')
+        if result.get('maxBodyVariants') != 1:
+            errors.append('REGISTERED_EQUIPMENT_BODY_VARIANT_COUNT_MISMATCH')
+    expected_scalars = {
+        'frames': 154,
+        'basePoseFrames': 30,
+        'actionTransitions': 20,
+        'heldJumpRestarts': 4,
+        'toggles': 40,
+        'width': width,
+        'height': height,
+    }
+    for key, expected in expected_scalars.items():
+        if result.get(key) != expected:
+            errors.append(key.upper() + '_MISMATCH')
+    if result.get('errors'):
+        errors.append('PLAYER_REPORTED_ERRORS')
+    if png_count != 154:
+        errors.append('PNG_FRAME_COUNT_MISMATCH')
+
+    metric_frames = result.get('actorScreenMetricFrames')
+    min_ratio = result.get('minActorScreenHeightRatio')
+    max_ratio = result.get('maxActorScreenHeightRatio')
+    if metric_frames is None:
+        errors.append('ACTOR_SCREEN_METRIC_FRAMES_MISSING')
+    elif metric_frames != result.get('frames'):
+        errors.append('ACTOR_SCREEN_METRIC_FRAMES_INCOMPLETE')
+    if min_ratio is None or max_ratio is None:
+        errors.append('ACTOR_SCREEN_HEIGHT_RATIO_MISSING')
+    elif min_ratio <= 0 or max_ratio < min_ratio:
+        errors.append('ACTOR_SCREEN_HEIGHT_RATIO_INVALID')
+    return errors
+
+def pose_review_fingerprint(directory):
+    return {name: hashlib.sha256((directory / name).read_bytes()).hexdigest()
+            for name in ('atlas-review.json', 'atlas-review.png')}
+
+
+def validate_pose_review_unchanged(directory, expected):
+    if pose_review_fingerprint(directory) != expected:
+        raise ValueError('Pose pack changed during capture; reject mixed evidence')
+
+
+def validate_pose_review_pack(directory):
+    pack = json.loads((directory / 'atlas-review.json').read_text())
+    if pack.get('status') != 'REVIEW_ONLY' or pack.get('runtimeEligible') is not False:
+        raise ValueError('Pose pack must remain REVIEW_ONLY')
+    if pack.get('samplingDivisor') != 4:
+        raise ValueError('Current POSE THỬ review requires div4')
+    atlas = (directory / 'atlas-review.png').read_bytes()
+    if pack.get('atlasSha256') != hashlib.sha256(atlas).hexdigest() or pack.get('pngBytes') != len(atlas):
+        raise ValueError('Pose atlas fingerprint/size changed')
+    return pack
+
+
+def validate_pose_review_log(player_log, directory, pack):
+    lines = set(player_log.splitlines())
+    if 'LGO_POSE_REVIEW_LOADED ' + str(directory.resolve()) not in lines:
+        raise ValueError('Pose review loaded path does not match requested pack')
+    required = {sprite['id'] for sprite in pack['sprites']}
+    if not required:
+        raise ValueError('Pose pack is empty')
+    missing = sorted(pose for pose in required if 'LGO_POSE_REVIEW_FRAME ' + pose not in lines)
+    if missing:
+        raise ValueError('Pose review did not execute: ' + ', '.join(missing))
+    return sorted(required)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--player', type=Path, required=True)
+    parser.add_argument('--out-dir', type=Path, required=True)
+    parser.add_argument('--timeout', type=int, default=90)
+    parser.add_argument('--profile', choices=['all', *PROFILES], default='all')
+    parser.add_argument('--anatomical', action='store_true')
+    parser.add_argument('--closed-far-arms', action='store_true')
+    parser.add_argument('--closed-body', action='store_true')
+    parser.add_argument('--registered-equipment', action='store_true')
+    parser.add_argument('--pose-review-dir', type=Path, help='Optional external idle/A/B review atlas, shown beside the equipped actor')
+    args = parser.parse_args()
+    player = resolve_player(args.player)
+    pose_fingerprint = pose_review_fingerprint(args.pose_review_dir) if args.pose_review_dir else None
+    pose_pack = validate_pose_review_pack(args.pose_review_dir) if args.pose_review_dir else None
+    for profile in PROFILES if args.profile == 'all' else [args.profile]:
+        if pose_pack is not None:
+            validate_pose_review_unchanged(args.pose_review_dir, pose_fingerprint)
+        width, height = PROFILES[profile]
+        out = args.out_dir.resolve() / profile
+        out.mkdir(parents=True, exist_ok=False)
+        with (out / 'launch.log').open('w') as log:
+            process = subprocess.Popen([str(player), '-logFile', str(out / 'player.log'),
+                '-screen-fullscreen', '0', '-screen-width', str(width), '-screen-height', str(height),
+                '--lgo-map01a-art-preview', '--lgo-vo-registered', '--lgo-registered-capture',
+                '--lgo-map01a-device', profile, '--lgo-map01a-art-dir', str(out)] + (['--lgo-vo-anatomical'] if args.anatomical or args.closed_far_arms or args.closed_body else []) + (['--lgo-vo-closed-far-arms'] if args.closed_far_arms else []) + (['--lgo-vo-closed-body'] if args.closed_body else []) + (['--lgo-vo-registered-equipment'] if args.registered_equipment else []) + (['--lgo-vo-pose-review-dir', str(args.pose_review_dir.resolve())] if args.pose_review_dir else []),
+                cwd=player.parent, stdout=log, stderr=subprocess.STDOUT)
+            try:
+                started = time.monotonic()
+                while process.poll() is None and time.monotonic() - started < min(25, args.timeout):
+                    path = out / 'player.log'
+                    if path.exists() and 'UnloadTime:' in path.read_text(errors='replace'):
+                        break
+                    time.sleep(.25)
+                if process.poll() is None:
+                    # Activate this PID, not another interactive app with the same bundle ID.
+                    script = "ObjC.import('AppKit'); $.NSRunningApplication.runningApplicationWithProcessIdentifier(" + str(process.pid) + ").activateWithOptions(2);"
+                    subprocess.run(['osascript', '-l', 'JavaScript', '-e', script], check=True, stdout=log, stderr=log)
+                code = process.wait(timeout=max(1, args.timeout - (time.monotonic() - started)))
+            except Exception:
+                process.kill()
+                process.wait()
+                raise
+        result = json.loads((out / 'registered-manifest.json').read_text())
+        if args.pose_review_dir:
+            validate_pose_review_unchanged(args.pose_review_dir, pose_fingerprint)
+            player_log = (out / 'player.log').read_text(errors='replace')
+            executed_poses = validate_pose_review_log(player_log, args.pose_review_dir, pose_pack)
+        validation_errors = validate_registered_capture_result(
+            code=code,
+            result=result,
+            width=width,
+            height=height,
+            png_count=len(list(out.glob('*.png'))),
+            closed_far_arms=args.closed_far_arms,
+            closed_body=args.closed_body,
+            registered_equipment=args.registered_equipment,
+        )
+        if validation_errors:
+            raise SystemExit('FIX_REQUIRED: ' + str(out) + ' ' + ','.join(validation_errors))
+        if pose_pack is not None:
+            provenance = {
+                'status': 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED',
+                'playerExecutable': str(player),
+                'playerExecutableSha256': hashlib.sha256(player.read_bytes()).hexdigest(),
+                'packDirectory': str(args.pose_review_dir.resolve()),
+                'manifestSha256': pose_fingerprint['atlas-review.json'],
+                'atlasSha256': pose_fingerprint['atlas-review.png'],
+                'packStableBeforeAfterCapture': True,
+                'samplingDivisor': pose_pack['samplingDivisor'],
+                'runtimeEligible': False,
+                'executedPoses': executed_poses,
+                'frames': result['frames'],
+            }
+            (out / 'pose-review-provenance.json').write_text(json.dumps(provenance, indent=2) + chr(10))
+        print(profile + ': 154 Player frames; technical checks passed; visual review required', flush=True)
+
+
+if __name__ == '__main__':
+    main()

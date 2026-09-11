@@ -1,3 +1,9 @@
+## POSE THỬ mờ và contact source — 2026-09-11
+
+Feedback POSE THỬ mờ so base đã truy về pack divisor8; không mở camera/close-review. Review hiện hành `legacy-base-run-contact-jump-v3-div4` dùng cùng nguồn, divisor4, atlas512×1024, PNG373834byte/RGBA8 2097152byte, REVIEW_ONLY. Không tự dùng budget review làm production policy. CLI `pack_lgo_pose_review_atlas.py` mặc định4/1024, xuất tên Player đọc và cần `--jump-pivot-source 512 820` cho bộ6pose này. Capture helper chặn divisor8/promotion/hash sai, đối chiếu exact loaded path và từng pose trong Player log.
+
+Repack đã trùng byte; capture mới `build/vo-pose-div4-verified-runtime-v2` đủ154frame ×3profile trên Player WIP kế thừa và đã xem ảnh. Không phải new-build evidence. Source contactA/B còn thấp hơn mốc chân65px nguồn; cần sửa source có anchor, không normalize/camera để che. Hai imagegen candidate bị loại (RGB/caro giả alpha; magenta nhưng sai ground và đổi shading thân). Giữ lỗi/provenance external để không lặp cùng prompt tọa độ; idle/A/B gốc giữ nguyên, wardrobe chờ motion gate.
+
 # Map01A — tối ưu ảnh, tỷ lệ và bài học cần kế thừa
 
 Chỉ đạo owner: giảm chất lượng/dung lượng runtime theo kích thước thực sự hiển thị; asset phải tách ghép dùng lại được; xử lý mobile/tablet/PC trong batch, kiểm sau khi gom xong. Source HD giữ ngoài Unity để tái xuất, không tạo lại ảnh chỉ vì đổi độ phân giải.
