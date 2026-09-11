@@ -1,5 +1,11 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
+using LinhGioi.UI;
 using LinhGioi.World;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace LinhGioi.Tests.EditMode
 {
@@ -44,6 +50,57 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(state.Level, Is.EqualTo(30));
             Assert.That(state.SelectedEquipmentSlot, Is.EqualTo("boots"));
             Assert.That(state.IsEquipped("boots"), Is.False);
+        }
+
+        [Test]
+        public void InventoryCanSelectAnyEquipmentSlotDirectly()
+        {
+            var state = CreateState();
+
+            state.SelectEquipmentSlot("boots");
+
+            Assert.That(state.SelectedEquipmentSlot, Is.EqualTo("boots"));
+            state.ToggleSelectedEquipmentSlot();
+            Assert.That(state.IsEquipped("boots"), Is.False);
+            Assert.That(() => state.SelectEquipmentSlot("unknown"), Throws.ArgumentException);
+        }
+
+        [Test]
+        public void RuntimeInventoryExposesTenClickableEquipmentRowsAndToggle()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("inventory pointer test");
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                var scene = CongDongLamMap01AArtPreview.Attach(controller);
+                CongDongLamArrivalHud.Attach(scene);
+                var document = host.GetComponentInChildren<UIDocument>();
+                var root = document.rootVisualElement;
+                var rows = root.Query<Button>().ToList()
+                    .Where(button => button.name.StartsWith("LGO Equipment Inventory Slot ")).ToArray();
+                Assert.That(rows, Has.Length.EqualTo(10));
+
+                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot outer_tunic"));
+                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("outer_tunic"));
+
+                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Toggle"));
+                Assert.That(scene.IsVoEquipmentSlotEquipped("outer_tunic"), Is.False);
+            }
+            finally
+            {
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        private static void InvokeBoundButton(Button button)
+        {
+            var callback = typeof(Clickable).GetField("clicked", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.GetValue(button.clickable) as System.Action;
+            Assert.That(callback, Is.Not.Null, "Runtime inventory button must own an actionable callback");
+            callback();
         }
 
         [Test]

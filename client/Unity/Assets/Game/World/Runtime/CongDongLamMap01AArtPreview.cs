@@ -238,6 +238,26 @@ namespace LinhGioi.World
         public string VoSelectedEquipmentSlot => _voState.SelectedEquipmentSlot;
         public int VoSelectedEquipmentItemLevel => _voEquipmentLevels.TryGetValue(VoSelectedEquipmentSlot, out var level)
             ? level : VoAvatarLevel;
+        public bool IsSourcePoseReviewActive => _sourcePoseReview != null;
+        public IReadOnlyList<string> VoEquipmentSlotIds => VoEquipmentSlots;
+        public bool IsVoEquipmentSlotEquipped(string slot) => _voState.IsEquipped(slot);
+        public int GetVoEquipmentItemLevel(string slot) => _voEquipmentLevels.TryGetValue(slot, out var level)
+            ? level : VoAvatarLevel;
+        public string GetVoEquipmentItemId(string slot)
+        {
+            var index = Array.IndexOf(VoEquipmentSlots, slot);
+            if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
+            var reviewId = _sourcePoseReview?.GetSlotItemId(VoReviewSlotIds[index]);
+            return string.IsNullOrEmpty(reviewId) ? "vo_" + slot + "_lv" + GetVoEquipmentItemLevel(slot).ToString("000") : reviewId;
+        }
+        public bool HasVoEquipmentItemVariant(string slot)
+        {
+            if (_sourcePoseReview == null) return false;
+            var index = Array.IndexOf(VoEquipmentSlots, slot);
+            if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
+            var current = GetVoEquipmentItemLevel(slot);
+            return _sourcePoseReview.NextSlotItemLevel(VoReviewSlotIds[index], current) != current;
+        }
         public string VoMixedEquipmentSnapshot => string.Join(",", VoEquipmentSlots.Select(slot =>
             slot + "=Lv" + (_voEquipmentLevels.TryGetValue(slot, out var level) ? level : VoAvatarLevel)));
         public int VoEquippedSlotCount => _voState.EquippedSlotCount;
@@ -519,7 +539,15 @@ namespace LinhGioi.World
             }
             BuildVoAvatar();
             _sourcePoseReview = TwoDSourcePoseReview.CreateIfRequested(transform);
-            if (_sourcePoseReview != null) _registeredOutfit?.SetPresentationVisible(false);
+            if (_sourcePoseReview != null)
+            {
+                _registeredOutfit?.SetPresentationVisible(false);
+                if (!IsCapturing)
+                {
+                    InventoryOpen = true;
+                    LastInteractionMessage = "Hành trang POSE THỬ đã mở · chọn trực tiếp 10 món để tháo/mặc.";
+                }
+            }
             ApplyVoPose();
             _kiemFitPreview = new TwoDKiemMixedLoadoutFitPreview(_voAvatarRoot, _voRig);
             PartCount = parts.Count;
@@ -773,6 +801,12 @@ namespace LinhGioi.World
         public void CycleVoEquipmentSlot()
         {
             _voState.CycleEquipmentSlot();
+        }
+
+        public void SelectVoEquipmentSlot(string slot)
+        {
+            _voState.SelectEquipmentSlot(slot);
+            LastInteractionMessage = "Đã chọn " + slot + ".";
         }
 
         public void ToggleVoEquipmentSlot()

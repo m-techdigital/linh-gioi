@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using LinhGioi.World;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -9,10 +10,12 @@ namespace LinhGioi.UI
     public sealed class CongDongLamArrivalHud : MonoBehaviour
     {
         private CongDongLamMap01AArtPreview _scene;
-        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar;
-        private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary;
+        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions;
+        private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
-        private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward;
+        private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant;
+        private Button[] _equipmentRows;
+        private IReadOnlyList<string> _equipmentSlotIds;
         private RuntimeTouchMovementPad _pad;
         private bool _touchJumpHeld;
         private RuntimeViewportMetrics _metrics;
@@ -118,10 +121,61 @@ namespace LinhGioi.UI
             Box(_inventoryToggle); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
             _inventoryToggle.style.minHeight = _touch ? 64 : 48; _inventoryToggle.style.minWidth = 180; _safe.Add(_inventoryToggle);
             _inventory = new VisualElement(); Box(_inventory); Place(_inventory, _touch ? 150 : 20, null, null, _touch ? 150 : 82);
-            _inventory.style.width = 390;
+            _inventory.style.width = _touch ? 410 : 470;
+            _inventory.style.maxHeight = _touch ? 610 : 650;
             _inventorySummary = new Label(); _inventorySummary.style.whiteSpace = WhiteSpace.Normal; _inventory.Add(_inventorySummary);
-            var itemActions = new VisualElement(); itemActions.style.flexDirection = FlexDirection.Row;
-            itemActions.style.flexWrap = Wrap.Wrap;
+            var equipmentTitle = new Label("TRANG BỊ VÕ · 10 SLOT");
+            equipmentTitle.style.color = new Color(1f, .78f, .25f);
+            equipmentTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
+            equipmentTitle.style.marginTop = 8;
+            _inventory.Add(equipmentTitle);
+            var equipmentGrid = new VisualElement();
+            equipmentGrid.style.flexDirection = FlexDirection.Row;
+            var equipmentLeft = new VisualElement();
+            var equipmentRight = new VisualElement();
+            equipmentLeft.style.flexGrow = equipmentRight.style.flexGrow = 1;
+            equipmentLeft.style.marginRight = 6;
+            equipmentGrid.Add(equipmentLeft);
+            equipmentGrid.Add(equipmentRight);
+            _equipmentSlotIds = _scene.VoEquipmentSlotIds;
+            _equipmentRows = new Button[_equipmentSlotIds.Count];
+            for (var index = 0; index < _equipmentSlotIds.Count; index++)
+            {
+                var slotId = _equipmentSlotIds[index];
+                var row = new Button(() => _scene.SelectVoEquipmentSlot(slotId))
+                    { name = "LGO Equipment Inventory Slot " + slotId };
+                row.style.width = Length.Percent(100);
+                row.style.height = _touch ? 42 : 36;
+                row.style.marginBottom = 5;
+                row.style.unityTextAlign = TextAnchor.MiddleLeft;
+                _equipmentRows[index] = row;
+                (index % 2 == 0 ? equipmentLeft : equipmentRight).Add(row);
+            }
+            _inventory.Add(equipmentGrid);
+            _equipmentDetail = new Label();
+            _equipmentDetail.style.whiteSpace = WhiteSpace.Normal;
+            _equipmentDetail.style.marginTop = 5;
+            _equipmentDetail.style.marginBottom = 5;
+            _inventory.Add(_equipmentDetail);
+            var equipmentActions = new VisualElement();
+            equipmentActions.style.flexDirection = FlexDirection.Row;
+            equipmentActions.style.flexWrap = Wrap.Wrap;
+            _equipmentToggle = new Button(() => _scene.ToggleVoEquipmentSlot())
+                { name = "LGO Equipment Inventory Toggle" };
+            _equipmentVariant = new Button(() => _scene.CycleVoSelectedEquipmentItemLevel())
+                { name = "LGO Equipment Inventory Variant", text = "Đổi cấp món" };
+            foreach (var button in new[] { _equipmentToggle, _equipmentVariant })
+            {
+                button.style.minHeight = 40;
+                button.style.minWidth = _touch ? 174 : 205;
+                button.style.marginRight = 6;
+                button.style.backgroundColor = new Color(.07f, .17f, .21f, .98f);
+                button.style.color = new Color(.98f, .86f, .55f);
+                equipmentActions.Add(button);
+            }
+            _inventory.Add(equipmentActions);
+            _questItemActions = new VisualElement(); _questItemActions.style.flexDirection = FlexDirection.Row;
+            _questItemActions.style.flexWrap = Wrap.Wrap;
             _healthPotion = new Button(() => _scene.UseHealthPotion()) { text = "Dùng Máu" };
             _manaPotion = new Button(() => _scene.UseManaPotion()) { text = "Dùng Linh Lực" };
             _equipReward = new Button(() => _scene.EquipClassReward()) { text = "Trang bị Hộ Uyển" };
@@ -129,9 +183,9 @@ namespace LinhGioi.UI
             {
                 button.style.minHeight = 38;
                 button.style.marginRight = 6;
-                itemActions.Add(button);
+                _questItemActions.Add(button);
             }
-            _inventory.Add(itemActions); _safe.Add(_inventory);
+            _inventory.Add(_questItemActions); _safe.Add(_inventory);
             _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 204, null, 20);
             _dialogueSpeaker = new Label("Hạ Vân");
             _dialogue.Add(_dialogueSpeaker);
@@ -155,6 +209,12 @@ namespace LinhGioi.UI
             _minimap.style.width = r.width < 1100 ? 360 : 430;
             _dialogue.style.left = _touch ? 150 : 20;
             _combatBar.style.left = _touch ? 150 : 220;
+            if (_scene.IsSourcePoseReviewActive)
+            {
+                _inventory.style.left = 16;
+                _inventory.style.top = 72;
+                _inventory.style.bottom = StyleKeyword.Auto;
+            }
             if (r.width < 1300)
             {
                 _inventoryToggle.style.left = 200;
@@ -217,7 +277,31 @@ namespace LinhGioi.UI
             _minimap.text = _scene.MinimapRouteText;
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            _inventorySummary.text = _scene.InventorySummaryText;
+            var compactReview = _scene.IsSourcePoseReviewActive && _scene.InventoryOpen;
+            foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
+                control.style.display = compactReview ? DisplayStyle.None : DisplayStyle.Flex;
+            _inventorySummary.text = _scene.IsSourcePoseReviewActive
+                ? "Chọn từng món để xem thông tin và tháo/mặc trực tiếp trên nhân vật."
+                : _scene.InventorySummaryText;
+            _questItemActions.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.None : DisplayStyle.Flex;
+            for (var index = 0; index < _equipmentRows.Length; index++)
+            {
+                var slotId = _equipmentSlotIds[index];
+                var equipped = _scene.IsVoEquipmentSlotEquipped(slotId);
+                _equipmentRows[index].text = (equipped ? "✓ " : "○ ") + EquipmentDisplayName(slotId)
+                    + " · Lv" + _scene.GetVoEquipmentItemLevel(slotId);
+                _equipmentRows[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
+                    ? new Color(.16f, .48f, .50f, .96f) : new Color(.06f, .13f, .17f, .94f);
+            }
+            var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(_scene.VoSelectedEquipmentSlot);
+            _equipmentDetail.text = EquipmentDisplayName(_scene.VoSelectedEquipmentSlot)
+                + "\n" + _scene.GetVoEquipmentItemId(_scene.VoSelectedEquipmentSlot)
+                + "\nKhớp: Võ nam · cùng base/pivot · đủ 6 pose"
+                + "\nTrạng thái: " + (selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO");
+            _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
+            var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
+            _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "Chưa có cấp khác";
+            _equipmentVariant.SetEnabled(hasVariant);
             _healthPotion.SetEnabled(_scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100);
             _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
             _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
@@ -231,6 +315,23 @@ namespace LinhGioi.UI
                 var v = camera.WorldToViewportPoint(_scene.CurrentInteractionPosition);
                 _marker.style.left = v.x * _metrics.PanelWidth - 48;
                 _marker.style.top = (1-v.y) * _metrics.PanelHeight - 40;
+            }
+        }
+        private static string EquipmentDisplayName(string slot)
+        {
+            switch (slot)
+            {
+                case "main_weapon": return "Vũ khí chính";
+                case "head_hair": return "Đầu & tóc";
+                case "inner_top": return "Áo trong";
+                case "outer_tunic": return "Áo ngoài";
+                case "lower_garment": return "Quần";
+                case "waist": return "Đai lưng";
+                case "arm_guard": return "Hộ uyển";
+                case "boots": return "Giày";
+                case "light_armor": return "Giáp vai/ngực";
+                case "accessory": return "Phụ kiện Võ";
+                default: return slot;
             }
         }
         private void OnDestroy() { if (_ownedPanel != null) Destroy(_ownedPanel); }

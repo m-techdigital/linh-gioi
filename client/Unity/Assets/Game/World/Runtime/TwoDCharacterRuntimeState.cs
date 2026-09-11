@@ -51,6 +51,13 @@ namespace LinhGioi.World
         public void CycleLevel() => _levelIndex = (_levelIndex + 1) % _levels.Length;
         public void CycleEquipmentSlot() => _equipmentSlotIndex = (_equipmentSlotIndex + 1) % _equipmentSlots.Length;
 
+        public void SelectEquipmentSlot(string slot)
+        {
+            var index = Array.IndexOf(_equipmentSlots, slot);
+            if (index < 0) throw new ArgumentException("Unknown equipment slot: " + slot, nameof(slot));
+            _equipmentSlotIndex = index;
+        }
+
         public bool IsEquipped(string slot) => _equippedSlots.Contains(slot);
 
         public void ToggleSelectedEquipmentSlot()

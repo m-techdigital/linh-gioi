@@ -149,7 +149,8 @@ namespace LinhGioi.World
             var atlasPath = Path.Combine(overlayDirectory, "atlas-review.png");
             var pack = JsonUtility.FromJson<Pack>(File.ReadAllText(manifestPath));
             if (pack == null || pack.sprites == null || pack.sprites.Length < 6
-                || pack.samplingDivisor != 4 || pack.status != "REVIEW_ONLY" || pack.runtimeEligible
+                || (pack.samplingDivisor != 1 && pack.samplingDivisor != 2 && pack.samplingDivisor != 4)
+                || pack.status != "REVIEW_ONLY" || pack.runtimeEligible
                 || pack.reviewSlot != expectedSlot
                 || pack.basePoseAtlasSha256 != Hash(Path.Combine(bodyDirectory, "atlas-review.png"))
                 || pack.basePoseManifestSha256 != Hash(Path.Combine(bodyDirectory, "atlas-review.json")))
@@ -265,6 +266,8 @@ namespace LinhGioi.World
 
         public int GetSlotItemLevel(string slot) => _reviewSlots.TryGetValue(slot, out var item) ? item.UnlockLevel : 0;
 
+        public string GetSlotItemId(string slot) => _reviewSlots.TryGetValue(slot, out var item) ? item.ItemId : "";
+
         public int NextSlotItemLevel(string slot, int current)
         {
             if (!_reviewVariants.TryGetValue(slot, out var variants) || variants.Count == 0) return current;
@@ -372,7 +375,8 @@ namespace LinhGioi.World
             if (camera == null) return;
             var point = camera.WorldToScreenPoint(transform.position + Vector3.up * 1.9f);
             if (point.z <= 0) return;
-            var box = new Rect(point.x - 95, Screen.height - point.y - 40, 210, 40);
+            // Keep the world marker beside the actor so it never covers inventory controls.
+            var box = new Rect(point.x + 180, Screen.height - point.y - 40, 210, 40);
             var previousColor = GUI.color;
             GUI.color = new Color(0, 0, 0, .8f);
             GUI.DrawTexture(box, Texture2D.whiteTexture);

@@ -1,3 +1,9 @@
+## Hiện hành — owner đang review Võ Lv1 HD trên Player — 2026-09-11
+
+Owner đã reject toàn bộ atlas nhiều level trước vì mờ/lệch. Không dùng kết quả count/switch cũ làm visual PASS. Player hiện hành là `build/vo-lv1-hd-player-v1/LinhGioiOnline.app`, chỉ nạp pack Lv1 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv001-hd-review-v2`: body/motion v3 div4 bất biến, overlay 10 slot div2, một actor. Source board và runtime board lần lượt ở external `ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v2/` và `build/vo-lv1-hd-runtime-v1/lv1-hd-runtime-review.jpg`.
+
+Action tiếp theo phụ thuộc đúng feedback hình ảnh đang diễn ra: sửa theo lô mọi lỗi source Lv1 được owner chỉ ra, không chỉnh camera/scale/offset runtime và không build từng item. Chỉ khi Lv1 đứng/chạy/lộn + 10 trạng thái tháo được owner chấp nhận mới áp cùng quy trình sang Lv10 và mặc chéo; chưa khôi phục pack Lv20–Lv100 cũ, chưa mở class khác. Map01A vẫn là target tổng thể.
+
 ## Hiện hành — full-level Võ đã chạy; gate còn lại là source-art polish — 2026-09-11
 
 Đã author và pack đủ 10 slot cho 11 mốc Lv1–Lv100 trên body/action v3, rồi nạp tất cả vào một Player. Evidence `build/vo-pose-all-tier-runtime-v3/pc`: 165 frame, full levels `[1,10,20,30,40,50,60,70,80,90,100]`, 11 frame full-set riêng, mixed verified, 149 item switch, 11×22 fingerprint, `errors=[]`. Board `full-level-player-review.jpg` so trực tiếp mọi tier trên cùng idle/camera/body. Không đổi camera/base/scale, không thêm actor/controller theo level. Pose lộn tier cao đã bỏ silhouette transfer gây rối và giữ exact tuck surface.
@@ -531,3 +537,8 @@ Prefit đã sửa hair/outer multi-view, normalize đúng PPU 208 và ghép idle
 Fit proof 4 slot đã chạy trong Player qua bone proxy và 78×3 capture; production vẫn chặn draft. Next: xử lý một lượt 6 slot Kiếm còn thiếu cho Lv1/10/20/30 nam/nữ từ source-v3, redraw theo cùng side-view base khi crop không phù hợp, pack theo atlas 512–1024 có byte budget; sau đó nối skill Kiếm Lv1 riêng và mới chạy lại full test/build/capture ba profile. Không nâng `approved` hoặc mở Pháp/Cơ/Linh trước khi đủ 10 slot, tháo/mặc và visual motion review.
 
 48 crop của 6 slot còn thiếu đã được pack thành hai atlas candidate ngoài runtime tại `generated-batch-v2/remaining-six-slot-batch-v1/`, không resize và eligible 0. Next cụ thể: chọn `Lv1 lower_body + Lv10 waist_belt + Lv20 arm_guard + Lv30 footwear + Lv20 shoulder_chest_guard + Lv30 class_accessory` cho cả nam/nữ; ghép contact 10-slot với proof hiện tại, sửa lệch theo base rồi author bone proxy trái/phải. Chỉ sau contact pass mới import hai atlas fit đã chọn.
+## Hiện hành — khóa Lv1 + hành trang trực tiếp, sau đó author Lv10 HD — 2026-09-11
+
+Hoàn tất gate và commit một checkpoint gồm Lv1 HD đã được owner chấp nhận sơ bộ cùng panel Hành trang 10 món có thể chọn/tháo/mặc bằng chuột. Visual gate phải xác nhận lưới hai cột không cắt hàng, item `accessory` không bị nhãn POSE THỬ che và thao tác đổi đúng state/render trên một actor.
+
+Sau checkpoint, author Võ nam Lv10 theo cả sáu pose trong một batch, bám progression/grid canonical và tái dùng nguyên body atlas/hash, canvas 1024×1536, pivot, scale, camera, pose keys và slot order của Lv1. Nạp Lv1 + Lv10 vào cùng Player/Hành trang; kiểm full Lv10, tháo 10 slot, và loadout phối chéo đại diện. Slot nào lệch/hở/mờ phải sửa source component theo lô trước capture; không thêm offset/controller/camera riêng. Chỉ mở class kế tiếp sau khi Võ Lv10 và mặc chéo qua visual gate.

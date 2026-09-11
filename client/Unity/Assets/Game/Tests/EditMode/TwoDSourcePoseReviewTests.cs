@@ -106,6 +106,34 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void HighDensityDivisorTwoOverlayLoadsOnTheLockedDivisorFourBody()
+        {
+            var directory = Path.Combine(Application.temporaryCachePath, "lgo-pose-hd-overlay-" + Guid.NewGuid().ToString("N"));
+            var root = new GameObject("pose HD overlay test");
+            try
+            {
+                Directory.CreateDirectory(directory);
+                WritePack(directory, null, null, null);
+                var overlay = Path.Combine(directory, "outer-top-review");
+                Directory.CreateDirectory(overlay);
+                WritePack(overlay, "outer_top", Hash(Path.Combine(directory, "atlas-review.png")),
+                    Hash(Path.Combine(directory, "atlas-review.json")), divisor: 2);
+
+                var review = root.AddComponent<TwoDSourcePoseReview>();
+                typeof(TwoDSourcePoseReview).GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(review, new object[] { directory });
+
+                Assert.That(root.GetComponentsInChildren<SpriteRenderer>().Length, Is.EqualTo(2));
+                Assert.That(review.CurrentFrame, Is.EqualTo("idle"));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            }
+        }
+
+        [Test]
         public void MultipleItemSlotsShareOneBodyFrameAndToggleIndependently()
         {
             var directory = Path.Combine(Application.temporaryCachePath, "lgo-pose-ten-slot-" + Guid.NewGuid().ToString("N"));
@@ -194,7 +222,7 @@ namespace LinhGioi.Tests.EditMode
         }
 
         private static void WritePack(string directory, string reviewSlot, string baseAtlas, string baseManifest,
-            string[] components = null, int level = 1)
+            string[] components = null, int level = 1, int divisor = 4)
         {
             var ids = new[] { "idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck" };
             components = components ?? new[] { "main" };
@@ -212,11 +240,11 @@ namespace LinhGioi.Tests.EditMode
                 {
                     var index = component * ids.Length + i;
                     parts[index] = new ReviewPart { id = ids[i], componentId = components[component], order = 25 + component,
-                        atlasRectTopLeft = new[] { index, 0, 1, 1 }, sourceCanvasRect = new[] { index * 4, 0, index * 4 + 4, 4 } };
+                        atlasRectTopLeft = new[] { index, 0, 1, 1 }, sourceCanvasRect = new[] { index * divisor, 0, index * divisor + divisor, divisor } };
                 }
             var pack = new ReviewPack { reviewSlot = reviewSlot, basePoseAtlasSha256 = baseAtlas,
                 itemId = reviewSlot == null ? null : "vo_male_lv" + level.ToString("000") + "_" + reviewSlot,
-                fitFamily = reviewSlot == null ? null : "vo_male_v3", unlockLevel = level,
+                fitFamily = reviewSlot == null ? null : "vo_male_v3", unlockLevel = level, samplingDivisor = divisor,
                 basePoseManifestSha256 = baseManifest, sprites = parts };
             File.WriteAllText(Path.Combine(directory, "atlas-review.json"), JsonUtility.ToJson(pack, true));
         }
