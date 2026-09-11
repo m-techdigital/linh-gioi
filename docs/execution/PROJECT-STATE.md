@@ -1,3 +1,13 @@
+## Hiện hành — Linh nam/nữ Lv1 cùng source-pose runtime — 2026-09-12
+
+Đã giữ nguyên Võ checkpoint thay vì dựng lại: Võ Lv1 HD vẫn `OWNER_ACCEPTED_STABLE_REVIEW_CHECKPOINT`, Lv10 HD vẫn `AGENT_VISUAL_PASS / REVIEW_ONLY`, body nam hash `27630a5c…`. Static-fit Kiếm/Pháp/Cơ/Linh tiếp tục bị thu hồi và không được dùng làm visual candidate.
+
+Linh nữ Lv1 đã được author theo cùng contract source-pose với Linh nam: common female body và 10 slot đều trên canvas 1024×1536, đủ `idle/run_contact_a/run_a/run_contact_b/run_b/jump_tuck`, body divisor 4, overlay divisor 2, pivot lộn `(512,820)`. Source ngoài repo: `class-work-in-progress/common-female-v1/source-pose-authoring-v1/registered-body-v1` và `class-work-in-progress/linh-lv001/female-ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`. Hai lượt mask v1/v2 bị loại trước runtime; v3 giới hạn ownership món tháo được vào vùng common body có thể thay thế, nên không để lại lỗ hoặc mảnh áo rời lớn. Board sáu pose và 10 trạng thái tháo đã được xem ở kích thước lớn.
+
+Runtime dùng hai biến thể giới tính của cùng `TwoDSourcePoseReview` dưới một actor state; chỉ biến thể đang chọn được render. Chuyển giới tính không còn giữ stack nam hoặc bật registered actor song song. Player `build/linh-female-source-pose-review-v2/player/LinhGioiOnline.app`; capture `build/linh-female-source-pose-review-v2/runtime-pc/pc` đạt 154 frame. Đã xem nam/nữ idle, bốn nhịp chạy, lộn và nữ tháo áo ngoài/hộ uyển: silhouette là một người liền, không nền matte trong Player; UI hiển thị đúng `Phụ kiện Linh`. SourcePose EditMode `17/17`; Python pack `10/10`, capture `15/15`. Đây là candidate Lv1 hai giới, chưa claim owner/production approval hoặc Linh Lv10/phối chéo.
+
+Next: author Linh Lv10 nam/nữ trên chính hai fit family hiện hành, bảo toàn alpha/canvas/pivot và pixel Lv1 ngoài vùng top-visible; review board từng món hai chiều + mixed trước một lượt Player. Sau gate đó mới thay static-fit Kiếm/Pháp/Cơ theo cùng pipeline.
+
 ## Hiện hành — thu hồi kết luận class static-fit; Linh nam Lv1 chuyển sang source-pose — 2026-09-12
 
 Owner đã reject Player Linh `client/Unity/build/linh-ten-slot-player-v1/LinhGioiOnline.app`: nhân vật ghép vỡ và không còn silhouette con người. Vì vậy thu hồi toàn bộ câu “hoàn tất/visual pass” cho các pack Kiếm/Pháp/Cơ/Linh dựng bằng `TwoDClassMixedLoadoutFitPreview`. Các pack `DRAFT_RUNTIME_FIT` này chỉ còn là evidence kỹ thuật của loader; không được dùng làm art candidate hoặc căn tiếp bằng box/camera.

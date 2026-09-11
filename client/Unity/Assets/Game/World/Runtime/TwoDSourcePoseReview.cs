@@ -12,7 +12,7 @@ namespace LinhGioi.World
     {
         [Serializable] private sealed class Pack
         {
-            public string status, reviewSlot, itemId, fitFamily, basePoseAtlasSha256, basePoseManifestSha256;
+            public string status, reviewSlot, itemId, fitFamily, gender, basePoseAtlasSha256, basePoseManifestSha256;
             public bool runtimeEligible;
             public int samplingDivisor, unlockLevel;
             public Part[] sprites;
@@ -54,7 +54,7 @@ namespace LinhGioi.World
         private readonly Dictionary<string, SortedDictionary<int, ReviewSlot>> _reviewVariants =
             new Dictionary<string, SortedDictionary<int, ReviewSlot>>();
         private readonly Dictionary<string, bool> _slotVisibility = new Dictionary<string, bool>();
-        private string _bodyAtlasHash, _bodyManifestHash;
+        private string _bodyAtlasHash, _bodyManifestHash, _fitFamily = "vo_male_v3";
         private Texture2D _texture;
         private SpriteRenderer _renderer;
         private Transform _rotationRoot;
@@ -67,6 +67,9 @@ namespace LinhGioi.World
         public string CurrentFrame => _frame;
         public string ClassId { get; private set; } = "vo";
         public string ClassLabel { get; private set; } = "Võ";
+        public string GenderId { get; private set; } = "male";
+        public string GenderLabel => GenderId == "female" ? "nữ" : "nam";
+        public bool PresentationVisible { get; private set; } = true;
 
         public static string ResolveClassId(string itemId)
         {
@@ -89,12 +92,15 @@ namespace LinhGioi.World
         }
 
         public static TwoDSourcePoseReview CreateIfRequested(Transform parent)
+            => CreateIfRequested(parent, "--lgo-vo-pose-review-dir", "Source pose review — male stack");
+
+        public static TwoDSourcePoseReview CreateIfRequested(Transform parent, string argument, string hostName)
         {
             var args = Environment.GetCommandLineArgs();
-            var index = Array.IndexOf(args, "--lgo-vo-pose-review-dir");
+            var index = Array.IndexOf(args, argument);
             if (index < 0) return null;
             if (index + 1 >= args.Length) throw new ArgumentException("Pose review directory missing");
-            var host = new GameObject("Võ male pose review — active stack");
+            var host = new GameObject(hostName);
             host.transform.SetParent(parent, false);
             var review = host.AddComponent<TwoDSourcePoseReview>();
             try
@@ -120,6 +126,8 @@ namespace LinhGioi.World
             var pack = JsonUtility.FromJson<Pack>(File.ReadAllText(Path.Combine(directory, "atlas-review.json")));
             if (pack == null || pack.sprites == null || (pack.sprites.Length != 6 && pack.sprites.Length != 8) || pack.samplingDivisor != 4 || pack.status != "REVIEW_ONLY" || pack.runtimeEligible)
                 throw new InvalidDataException("Expected REVIEW_ONLY div4 idle/four-phase-run/jump pack");
+            _fitFamily = string.IsNullOrEmpty(pack.fitFamily) ? "vo_male_v3" : pack.fitFamily;
+            GenderId = pack.gender == "female" ? "female" : "male";
             _texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             if (!_texture.LoadImage(File.ReadAllBytes(Path.Combine(directory, "atlas-review.png"))))
                 throw new InvalidDataException("Cannot load pose review atlas");
@@ -178,7 +186,7 @@ namespace LinhGioi.World
                 || pack.basePoseManifestSha256 != Hash(Path.Combine(bodyDirectory, "atlas-review.json")))
                 throw new InvalidDataException("Slot review pack does not belong to this body pose pack: " + expectedSlot);
             var level = pack.unlockLevel > 0 ? pack.unlockLevel : 1;
-            if (!string.IsNullOrEmpty(pack.fitFamily) && pack.fitFamily != "vo_male_v3")
+            if (!string.IsNullOrEmpty(pack.fitFamily) && pack.fitFamily != _fitFamily)
                 throw new InvalidDataException("Slot review fit family mismatch: " + expectedSlot);
             if (!_reviewVariants.TryGetValue(expectedSlot, out var variants))
             {
@@ -265,6 +273,13 @@ namespace LinhGioi.World
             if (_slotVisibility.ContainsKey(slot)) _slotVisibility[slot] = visible;
             if (_reviewSlots.TryGetValue(slot, out var reviewSlot))
                 foreach (var component in reviewSlot.Components.Values) component.Renderer.enabled = visible;
+        }
+
+        public void SetPresentationVisible(bool visible)
+        {
+            PresentationVisible = visible;
+            foreach (var renderer in GetComponentsInChildren<SpriteRenderer>(true))
+                renderer.forceRenderingOff = !visible;
         }
 
         public bool SetSlotItemLevel(string slot, int level)
@@ -395,6 +410,7 @@ namespace LinhGioi.World
 
         private void OnGUI()
         {
+            if (!PresentationVisible) return;
             var camera = Camera.main;
             if (camera == null) return;
             var point = camera.WorldToScreenPoint(transform.position + Vector3.up * 1.9f);
@@ -406,8 +422,8 @@ namespace LinhGioi.World
             GUI.DrawTexture(box, Texture2D.whiteTexture);
             GUI.color = Color.white;
             GUI.Label(box, _reviewSlots.Count == 0
-                ? ClassLabel + " nam · POSE THỬ\nĐứng / chạy / lộn · chưa đồ rời"
-                : ClassLabel + " nam · POSE THỬ\n" + _reviewSlots.Count + "/10 slot · đứng / 4 nhịp chạy / lộn");
+                ? ClassLabel + " " + GenderLabel + " · POSE THỬ\nĐứng / chạy / lộn · chưa đồ rời"
+                : ClassLabel + " " + GenderLabel + " · POSE THỬ\n" + _reviewSlots.Count + "/10 slot · đứng / 4 nhịp chạy / lộn");
             GUI.color = previousColor;
         }
 

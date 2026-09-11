@@ -200,6 +200,8 @@ def main():
     parser.add_argument('--registered-equipment', action='store_true')
     parser.add_argument('--wardrobe-matrix', action='store_true', help='Append all 16 core garment combinations for both genders')
     parser.add_argument('--pose-review-dir', type=Path, help='Owner-selected v3 div4 motion stack; supersedes the registered presentation during review')
+    parser.add_argument('--pose-review-female-dir', type=Path,
+                        help='Female pack using the same source-pose runtime path; only one gender stack is visible')
     parser.add_argument('--pose-review-alt-dir', type=Path, action='append', default=[],
                         help='Repeat for each same-body item tier loaded into the active pose-review actor')
     args = parser.parse_args()
@@ -207,6 +209,10 @@ def main():
         parser.error("--wardrobe-matrix requires --registered-equipment")
     if args.pose_review_dir:
         validate_owner_pose_source(args.pose_review_dir)
+    if args.pose_review_female_dir:
+        if not args.pose_review_dir:
+            parser.error('--pose-review-female-dir requires --pose-review-dir')
+        validate_pose_review_pack(args.pose_review_female_dir)
     if args.pose_review_alt_dir:
         if not args.pose_review_dir:
             parser.error('--pose-review-alt-dir requires --pose-review-dir')
@@ -216,6 +222,8 @@ def main():
     player_fingerprint = player_code_fingerprint(player)
     pose_fingerprint = pose_review_fingerprint(args.pose_review_dir) if args.pose_review_dir else None
     pose_pack = validate_pose_review_pack(args.pose_review_dir) if args.pose_review_dir else None
+    female_pose_fingerprint = pose_review_fingerprint(args.pose_review_female_dir) if args.pose_review_female_dir else None
+    female_pose_pack = validate_pose_review_pack(args.pose_review_female_dir) if args.pose_review_female_dir else None
     alternate_fingerprints = {
         str(directory.resolve()): pose_review_fingerprint(directory)
         for directory in args.pose_review_alt_dir
@@ -226,6 +234,8 @@ def main():
             raise ValueError('Player code changed between capture profiles')
         if pose_pack is not None:
             validate_pose_review_unchanged(args.pose_review_dir, pose_fingerprint)
+        if female_pose_pack is not None:
+            validate_pose_review_unchanged(args.pose_review_female_dir, female_pose_fingerprint)
         for directory in args.pose_review_alt_dir:
             validate_pose_review_unchanged(directory, alternate_fingerprints[str(directory.resolve())])
         width, height = PROFILES[profile]
@@ -235,7 +245,7 @@ def main():
             process = subprocess.Popen([str(player), '-logFile', str(out / 'player.log'),
                 '-screen-fullscreen', '0', '-screen-width', str(width), '-screen-height', str(height),
                 '--lgo-map01a-art-preview', '--lgo-vo-registered', '--lgo-registered-capture',
-                '--lgo-map01a-device', profile, '--lgo-map01a-art-dir', str(out)] + (['--lgo-wardrobe-matrix'] if args.wardrobe_matrix else []) + (['--lgo-vo-anatomical'] if args.anatomical or args.closed_far_arms or args.closed_body else []) + (['--lgo-vo-closed-far-arms'] if args.closed_far_arms else []) + (['--lgo-vo-closed-body'] if args.closed_body else []) + (['--lgo-vo-registered-equipment'] if args.registered_equipment else []) + (['--lgo-vo-pose-review-dir', str(args.pose_review_dir.resolve())] if args.pose_review_dir else []) + [arg for directory in args.pose_review_alt_dir for arg in ('--lgo-vo-pose-review-alt-dir', str(directory.resolve()))],
+                '--lgo-map01a-device', profile, '--lgo-map01a-art-dir', str(out)] + (['--lgo-wardrobe-matrix'] if args.wardrobe_matrix else []) + (['--lgo-vo-anatomical'] if args.anatomical or args.closed_far_arms or args.closed_body else []) + (['--lgo-vo-closed-far-arms'] if args.closed_far_arms else []) + (['--lgo-vo-closed-body'] if args.closed_body else []) + (['--lgo-vo-registered-equipment'] if args.registered_equipment else []) + (['--lgo-vo-pose-review-dir', str(args.pose_review_dir.resolve())] if args.pose_review_dir else []) + (['--lgo-vo-pose-review-female-dir', str(args.pose_review_female_dir.resolve())] if args.pose_review_female_dir else []) + [arg for directory in args.pose_review_alt_dir for arg in ('--lgo-vo-pose-review-alt-dir', str(directory.resolve()))],
                 cwd=player.parent, stdout=log, stderr=subprocess.STDOUT)
             try:
                 started = time.monotonic()
@@ -260,6 +270,9 @@ def main():
             validate_pose_review_unchanged(args.pose_review_dir, pose_fingerprint)
             player_log = (out / 'player.log').read_text(errors='replace')
             executed_poses = validate_pose_review_log(player_log, args.pose_review_dir, pose_pack)
+            if female_pose_pack is not None:
+                validate_pose_review_unchanged(args.pose_review_female_dir, female_pose_fingerprint)
+                validate_pose_review_log(player_log, args.pose_review_female_dir, female_pose_pack)
             for directory in args.pose_review_alt_dir:
                 validate_pose_review_unchanged(directory, alternate_fingerprints[str(directory.resolve())])
                 if 'LGO_POSE_REVIEW_VARIANTS_LOADED ' + str(directory.resolve()) not in player_log.splitlines():
@@ -294,6 +307,7 @@ def main():
                 'atlasSha256': pose_fingerprint['atlas-review.png'],
                 'posePackFingerprint': pose_fingerprint,
                 'alternatePosePackFingerprints': alternate_fingerprints,
+                'femalePosePackFingerprint': female_pose_fingerprint,
                 'packStableBeforeAfterCapture': True,
                 'samplingDivisor': pose_pack['samplingDivisor'],
                 'runtimeEligible': False,

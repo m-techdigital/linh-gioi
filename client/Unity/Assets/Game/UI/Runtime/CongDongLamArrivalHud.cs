@@ -325,7 +325,7 @@ namespace LinhGioi.UI
                 _marker.style.top = (1-v.y) * _metrics.PanelHeight - 40;
             }
         }
-        private static string EquipmentDisplayName(string slot)
+        private string EquipmentDisplayName(string slot)
         {
             switch (slot)
             {
@@ -338,7 +338,7 @@ namespace LinhGioi.UI
                 case "arm_guard": return "Hộ uyển";
                 case "boots": return "Giày";
                 case "light_armor": return "Giáp vai/ngực";
-                case "accessory": return "Phụ kiện Võ";
+                case "accessory": return "Phụ kiện " + _scene.ActiveEquipmentClassLabel;
                 default: return slot;
             }
         }

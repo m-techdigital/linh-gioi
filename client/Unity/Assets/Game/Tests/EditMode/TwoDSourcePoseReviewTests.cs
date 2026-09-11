@@ -19,6 +19,7 @@ namespace LinhGioi.Tests.EditMode
             public string reviewSlot;
             public string itemId;
             public string fitFamily;
+            public string gender;
             public int unlockLevel;
             public string basePoseAtlasSha256;
             public string basePoseManifestSha256;
@@ -97,6 +98,65 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(renderers.Single(renderer => renderer.sortingOrder > 24).enabled, Is.False);
                 setVisible.Invoke(review, new object[] { "outer_top", true });
                 Assert.That(renderers.Single(renderer => renderer.sortingOrder > 24).enabled, Is.True);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            }
+        }
+
+        [Test]
+        public void WholePosePresentationCanHideForTheOtherGenderWithoutDestroyingSlotState()
+        {
+            var directory = Path.Combine(Application.temporaryCachePath, "lgo-pose-gender-toggle-" + Guid.NewGuid().ToString("N"));
+            var root = new GameObject("pose gender toggle test");
+            try
+            {
+                Directory.CreateDirectory(directory);
+                WritePack(directory, null, null, null);
+                var overlay = Path.Combine(directory, "outer-top-review");
+                Directory.CreateDirectory(overlay);
+                WritePack(overlay, "outer_top", Hash(Path.Combine(directory, "atlas-review.png")),
+                    Hash(Path.Combine(directory, "atlas-review.json")));
+                var review = root.AddComponent<TwoDSourcePoseReview>();
+                typeof(TwoDSourcePoseReview).GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(review, new object[] { directory });
+
+                review.SetPresentationVisible(false);
+                Assert.That(review.PresentationVisible, Is.False);
+                Assert.That(root.GetComponentsInChildren<SpriteRenderer>().All(renderer => renderer.forceRenderingOff), Is.True);
+                review.SetPresentationVisible(true);
+                Assert.That(review.PresentationVisible, Is.True);
+                Assert.That(root.GetComponentsInChildren<SpriteRenderer>().All(renderer => !renderer.forceRenderingOff), Is.True);
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            }
+        }
+
+        [Test]
+        public void FemalePackUsesItsOwnFitFamilyInTheSameSourcePoseRuntime()
+        {
+            var directory = Path.Combine(Application.temporaryCachePath, "lgo-pose-female-family-" + Guid.NewGuid().ToString("N"));
+            var root = new GameObject("female source pose test");
+            try
+            {
+                Directory.CreateDirectory(directory);
+                WritePack(directory, null, null, null, gender: "female", fitFamily: "common_female_v1");
+                var overlay = Path.Combine(directory, "outer-top-review");
+                Directory.CreateDirectory(overlay);
+                WritePack(overlay, "outer_top", Hash(Path.Combine(directory, "atlas-review.png")),
+                    Hash(Path.Combine(directory, "atlas-review.json")), gender: "female", fitFamily: "common_female_v1");
+                var review = root.AddComponent<TwoDSourcePoseReview>();
+                typeof(TwoDSourcePoseReview).GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(review, new object[] { directory });
+
+                Assert.That(review.GenderId, Is.EqualTo("female"));
+                Assert.That(review.GenderLabel, Is.EqualTo("nữ"));
+                Assert.That(root.GetComponentsInChildren<SpriteRenderer>().Length, Is.EqualTo(2));
             }
             finally
             {
@@ -222,7 +282,7 @@ namespace LinhGioi.Tests.EditMode
         }
 
         private static void WritePack(string directory, string reviewSlot, string baseAtlas, string baseManifest,
-            string[] components = null, int level = 1, int divisor = 4)
+            string[] components = null, int level = 1, int divisor = 4, string gender = null, string fitFamily = null)
         {
             var ids = new[] { "idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck" };
             components = components ?? new[] { "main" };
@@ -242,9 +302,10 @@ namespace LinhGioi.Tests.EditMode
                     parts[index] = new ReviewPart { id = ids[i], componentId = components[component], order = 25 + component,
                         atlasRectTopLeft = new[] { index, 0, 1, 1 }, sourceCanvasRect = new[] { index * divisor, 0, index * divisor + divisor, divisor } };
                 }
+            var family = fitFamily ?? (reviewSlot == null ? null : "vo_male_v3");
             var pack = new ReviewPack { reviewSlot = reviewSlot, basePoseAtlasSha256 = baseAtlas,
-                itemId = reviewSlot == null ? null : "vo_male_lv" + level.ToString("000") + "_" + reviewSlot,
-                fitFamily = reviewSlot == null ? null : "vo_male_v3", unlockLevel = level, samplingDivisor = divisor,
+                itemId = reviewSlot == null ? null : (gender == "female" ? "linh_female_lv" : "vo_male_lv") + level.ToString("000") + "_" + reviewSlot,
+                fitFamily = family, gender = gender, unlockLevel = level, samplingDivisor = divisor,
                 basePoseManifestSha256 = baseManifest, sprites = parts };
             File.WriteAllText(Path.Combine(directory, "atlas-review.json"), JsonUtility.ToJson(pack, true));
         }

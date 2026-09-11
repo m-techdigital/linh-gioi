@@ -206,7 +206,7 @@ namespace LinhGioi.World
         private Transform _player;
         private SpriteRenderer _leftFoot, _rightFoot;
         private Transform _voAvatarRoot;
-        private TwoDSourcePoseReview _sourcePoseReview;
+        private TwoDSourcePoseReview _sourcePoseReview, _femaleSourcePoseReview;
         private int _sourcePoseFacing = 1;
         private readonly Dictionary<string, SpriteRenderer> _voAvatarParts = new Dictionary<string, SpriteRenderer>();
         private readonly Dictionary<string, Tuple<Vector3, Vector3>> _voAvatarPartRest = new Dictionary<string, Tuple<Vector3, Vector3>>();
@@ -249,10 +249,13 @@ namespace LinhGioi.World
         public string VoSelectedEquipmentSlot => _voState.SelectedEquipmentSlot;
         public int VoSelectedEquipmentItemLevel => _voEquipmentLevels.TryGetValue(VoSelectedEquipmentSlot, out var level)
             ? level : VoAvatarLevel;
-        public bool IsSourcePoseReviewActive => _sourcePoseReview != null;
+        private TwoDSourcePoseReview ActiveSourcePoseReview => VoAvatarGender == "female"
+            ? _femaleSourcePoseReview : _sourcePoseReview;
+        private bool HasAnySourcePoseReview => _sourcePoseReview != null || _femaleSourcePoseReview != null;
+        public bool IsSourcePoseReviewActive => ActiveSourcePoseReview != null;
         public bool ClassEquipmentPreviewActive => _classFitPreviewActive;
-        public string ActiveEquipmentClassId => _classFitPreviewActive ? _classFitPreviewId : _sourcePoseReview?.ClassId ?? "vo";
-        public string ActiveEquipmentClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel : _sourcePoseReview?.ClassLabel ?? "Võ";
+        public string ActiveEquipmentClassId => _classFitPreviewActive ? _classFitPreviewId : ActiveSourcePoseReview?.ClassId ?? "vo";
+        public string ActiveEquipmentClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel : ActiveSourcePoseReview?.ClassLabel ?? "Võ";
         public IReadOnlyList<string> VoEquipmentSlotIds => VoEquipmentSlots;
         public bool IsVoEquipmentSlotEquipped(string slot) => _voState.IsEquipped(slot);
         public int GetVoEquipmentItemLevel(string slot) => _voEquipmentLevels.TryGetValue(slot, out var level)
@@ -262,17 +265,17 @@ namespace LinhGioi.World
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
             if (_classFitPreviewActive) return _classFitPreview.GetSlotItemId(VoReviewSlotIds[index]);
-            var reviewId = _sourcePoseReview?.GetSlotItemId(VoReviewSlotIds[index]);
+            var reviewId = ActiveSourcePoseReview?.GetSlotItemId(VoReviewSlotIds[index]);
             return string.IsNullOrEmpty(reviewId) ? "vo_" + slot + "_lv" + GetVoEquipmentItemLevel(slot).ToString("000") : reviewId;
         }
         public bool HasVoEquipmentItemVariant(string slot)
         {
             if (_classFitPreviewActive) return true;
-            if (_sourcePoseReview == null) return false;
+            if (ActiveSourcePoseReview == null) return false;
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
             var current = GetVoEquipmentItemLevel(slot);
-            return _sourcePoseReview.NextSlotItemLevel(VoReviewSlotIds[index], current) != current;
+            return ActiveSourcePoseReview.NextSlotItemLevel(VoReviewSlotIds[index], current) != current;
         }
         public string VoMixedEquipmentSnapshot => string.Join(",", VoEquipmentSlots.Select(slot =>
             slot + "=Lv" + (_voEquipmentLevels.TryGetValue(slot, out var level) ? level : VoAvatarLevel)));
@@ -280,10 +283,10 @@ namespace LinhGioi.World
         public string VoAvatarMotionState => _voState.MotionState;
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
         public bool VoRunEnabled => _voState.RunEnabled;
-        public string AvatarClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel + " · 10 slot review" : _sourcePoseReview?.ClassLabel ?? "Võ";
+        public string AvatarClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel + " · 10 slot review" : ActiveSourcePoseReview?.ClassLabel ?? "Võ";
         public string EquipmentFitSummary => _classFitPreviewActive
             ? _classFitPreview.ClassLabel + " · rig chung · 10 slot · cấp 1/10/20/30"
-            : (_sourcePoseReview?.ClassLabel ?? "Võ") + " nam · cùng base/pivot · đủ 6 pose";
+            : (ActiveSourcePoseReview?.ClassLabel ?? "Võ") + " " + (VoAvatarGender == "female" ? "nữ" : "nam") + " · cùng canvas/pivot · đủ 6 pose";
         public string EquipmentLevelLabel => "Lv" + VoAvatarLevel;
         public string EquipmentSlotLabel => VoSelectedEquipmentSlot + " · Lv" + VoSelectedEquipmentItemLevel;
         public string SkillLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel + " kỹ review" : "Liên Quyền";
@@ -557,7 +560,9 @@ namespace LinhGioi.World
             }
             BuildVoAvatar();
             _sourcePoseReview = TwoDSourcePoseReview.CreateIfRequested(transform);
-            if (_sourcePoseReview != null)
+            _femaleSourcePoseReview = TwoDSourcePoseReview.CreateIfRequested(transform,
+                "--lgo-vo-pose-review-female-dir", "Source pose review — female stack");
+            if (HasAnySourcePoseReview)
             {
                 _registeredOutfit?.SetPresentationVisible(false);
                 if (!IsCapturing)
@@ -810,9 +815,9 @@ namespace LinhGioi.World
 
         public void CycleVoAvatarLevel()
         {
-            if (_sourcePoseReview != null)
+            if (ActiveSourcePoseReview != null)
             {
-                var next = _sourcePoseReview.NextCompleteItemLevel(VoAvatarLevel);
+                var next = ActiveSourcePoseReview.NextCompleteItemLevel(VoAvatarLevel);
                 for (var step = 0; step < VoAvatarLevels.Length && VoAvatarLevel != next; step++) _voState.CycleLevel();
                 foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = next;
                 RefreshVoAvatarMode();
@@ -852,9 +857,9 @@ namespace LinhGioi.World
                 RefreshVoAvatarMode();
                 return;
             }
-            if (_sourcePoseReview != null)
+            if (ActiveSourcePoseReview != null)
             {
-                _voEquipmentLevels[VoSelectedEquipmentSlot] = _sourcePoseReview.NextSlotItemLevel(
+                _voEquipmentLevels[VoSelectedEquipmentSlot] = ActiveSourcePoseReview.NextSlotItemLevel(
                     VoReviewSlotIds[Array.IndexOf(VoEquipmentSlots, VoSelectedEquipmentSlot)], VoSelectedEquipmentItemLevel);
                 RefreshVoAvatarMode();
                 return;
@@ -868,15 +873,21 @@ namespace LinhGioi.World
 
         private void RefreshVoAvatarMode()
         {
-            if (_sourcePoseReview != null)
-                for (var index = 0; index < VoEquipmentSlots.Length; index++)
+            foreach (var review in new[] { _sourcePoseReview, _femaleSourcePoseReview })
+                if (review != null)
+                    for (var index = 0; index < VoEquipmentSlots.Length; index++)
                 {
-                    _sourcePoseReview.SetSlotItemLevel(VoReviewSlotIds[index],
+                    review.SetSlotItemLevel(VoReviewSlotIds[index],
                         _voEquipmentLevels.TryGetValue(VoEquipmentSlots[index], out var level) ? level : VoAvatarLevel);
-                    _sourcePoseReview.SetSlotVisible(VoReviewSlotIds[index], _voState.IsEquipped(VoEquipmentSlots[index]));
+                    review.SetSlotVisible(VoReviewSlotIds[index], _voState.IsEquipped(VoEquipmentSlots[index]));
                 }
+            var activeReview = ActiveSourcePoseReview;
+            _sourcePoseReview?.SetPresentationVisible(activeReview == _sourcePoseReview);
+            _femaleSourcePoseReview?.SetPresentationVisible(activeReview == _femaleSourcePoseReview);
             if (_registeredOutfit != null)
             {
+                var sourcePoseVisible = activeReview != null;
+                _registeredOutfit.SetPresentationVisible(!sourcePoseVisible && !_classFitPreviewActive);
                 var cycle = _voState.AnimationPhase * (VoAvatarMotionState == "run" ? 4.4f : 3.5f);
                 var weight = TwoDPaperDollPoseSampler.Sample(VoAvatarMotionState, cycle, _voState.ActionProgress);
                 _registeredOutfit.Apply(VoAvatarGender, VoAvatarMode == "base", _voState.IsEquipped,
@@ -1077,6 +1088,7 @@ namespace LinhGioi.World
             _voState.Advance(seconds);
             _registeredOutfit?.Advance(seconds);
             _sourcePoseReview?.Advance(seconds);
+            _femaleSourcePoseReview?.Advance(seconds);
             if (activeAction == "jump" && !_voState.HasActiveAction && _voJumpHeld) TriggerVoJump();
             if (activeAction == "skill")
             {
@@ -1178,10 +1190,10 @@ namespace LinhGioi.World
             }
             _voAvatarRoot.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
             RefreshVoAvatarMode();
-            if (_sourcePoseReview != null)
+            if (ActiveSourcePoseReview != null)
             {
-                _sourcePoseReview.transform.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
-                _sourcePoseReview.Apply(VoAvatarMotionState, _voState.AnimationPhase, _sourcePoseFacing, _voState.ActionProgress);
+                ActiveSourcePoseReview.transform.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
+                ActiveSourcePoseReview.Apply(VoAvatarMotionState, _voState.AnimationPhase, _sourcePoseFacing, _voState.ActionProgress);
             }
             if (_voSkillVfx != null)
             {
@@ -1368,6 +1380,7 @@ namespace LinhGioi.World
             }
             if (_voAvatarRoot != null) _voAvatarRoot.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
             if (_sourcePoseReview != null) _sourcePoseReview.transform.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
+            if (_femaleSourcePoseReview != null) _femaleSourcePoseReview.transform.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
             if (_camera != null)
             {
                 var cameraPosition = _camera.transform.position;

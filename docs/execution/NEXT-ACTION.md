@@ -1,3 +1,9 @@
+## Hiện hành — Linh Lv1 hai giới đã vào cùng source-pose runtime — 2026-09-12
+
+Giữ Võ Lv1/Lv10 HD checkpoint đã chốt; không làm lại Võ và không dùng static-fit. Linh nam dùng `ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`; Linh nữ dùng common body `common-female-v1/.../registered-body-v1` và 10 slot `linh-lv001/female-ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`. Cả hai dùng một state/actor path, sáu pose, 10 slot; runtime chỉ render giới tính đang chọn. Player/evidence mới: `build/linh-female-source-pose-review-v2/` (154 frame PC, SourcePose 17/17, Python 10/10 + 15/15). Trạng thái vẫn `REVIEW_ONLY`, chưa hoàn thành goal.
+
+Action tiếp theo: làm Linh Lv10 cho cả nam/nữ theo đúng hai body fit family hiện có, rồi kiểm full Lv1/full Lv10, tháo từng slot và phối chéo Lv1/Lv10 trên Player. Pixel ngoài ownership của món nâng cấp phải kế thừa nguyên byte; không sharpen, warp, offset, đổi camera/base/scale. Chỉ sau visual gate này mới thay lần lượt pack Kiếm/Pháp/Cơ đã bị thu hồi. Map01A tiếp tục là target.
+
 ## Hiện hành — Linh source-pose thay static-fit bị reject — 2026-09-12
 
 Không dùng Player/pack `TwoDClassMixedLoadoutFitPreview` để tiếp tục căn Kiếm/Pháp/Cơ/Linh. Owner đã reject Linh static-fit vì ghép vỡ; kết luận hoàn tất cũ đã được thu hồi trong `PROJECT-STATE.md`.
