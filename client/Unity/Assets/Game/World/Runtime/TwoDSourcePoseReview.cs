@@ -11,9 +11,9 @@ namespace LinhGioi.World
     {
         [Serializable] private sealed class Pack
         {
-            public string status, reviewSlot, basePoseAtlasSha256, basePoseManifestSha256;
+            public string status, reviewSlot, itemId, fitFamily, basePoseAtlasSha256, basePoseManifestSha256;
             public bool runtimeEligible;
-            public int samplingDivisor;
+            public int samplingDivisor, unlockLevel;
             public Part[] sprites;
             public int[] jumpPivotSource;
         }
@@ -33,6 +33,8 @@ namespace LinhGioi.World
         private sealed class ReviewSlot
         {
             public Texture2D Texture;
+            public string ItemId;
+            public int UnlockLevel;
             public readonly Dictionary<string, ReviewComponent> Components = new Dictionary<string, ReviewComponent>();
         }
         private static readonly string[] SlotIds =
@@ -48,10 +50,16 @@ namespace LinhGioi.World
         private readonly Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Rect> _sourceRects = new Dictionary<string, Rect>();
         private readonly Dictionary<string, ReviewSlot> _reviewSlots = new Dictionary<string, ReviewSlot>();
+        private readonly Dictionary<string, SortedDictionary<int, ReviewSlot>> _reviewVariants =
+            new Dictionary<string, SortedDictionary<int, ReviewSlot>>();
+        private readonly Dictionary<string, bool> _slotVisibility = new Dictionary<string, bool>();
+        private string _bodyAtlasHash, _bodyManifestHash;
         private Texture2D _texture;
         private SpriteRenderer _renderer;
         private Transform _rotationRoot;
         private Vector2 _jumpPivot;
+        private Vector3 _lastAppliedPivot;
+        private int _lastAppliedDirection = 1;
         private string _frame;
         private readonly TwoDSourcePoseTimeline _timeline = new TwoDSourcePoseTimeline();
         public bool HasTransitions => _sprites.ContainsKey("run_start") && _sprites.ContainsKey("run_stop");
@@ -66,7 +74,17 @@ namespace LinhGioi.World
             var host = new GameObject("Võ male pose review — active stack");
             host.transform.SetParent(parent, false);
             var review = host.AddComponent<TwoDSourcePoseReview>();
-            try { review.Load(args[index + 1]); }
+            try
+            {
+                review.Load(args[index + 1]);
+                var alternate = Array.IndexOf(args, "--lgo-vo-pose-review-alt-dir");
+                if (alternate >= 0)
+                {
+                    if (alternate + 1 >= args.Length) throw new ArgumentException("Alternate pose review directory missing");
+                    review.LoadItemVariants(args[alternate + 1]);
+                    Debug.Log("LGO_POSE_REVIEW_VARIANTS_LOADED " + args[alternate + 1]);
+                }
+            }
             catch { Destroy(host); throw; }
             Debug.Log("LGO_POSE_REVIEW_LOADED " + args[index + 1]);
             return review;
@@ -74,6 +92,8 @@ namespace LinhGioi.World
 
         private void Load(string directory)
         {
+            _bodyAtlasHash = Hash(Path.Combine(directory, "atlas-review.png"));
+            _bodyManifestHash = Hash(Path.Combine(directory, "atlas-review.json"));
             var pack = JsonUtility.FromJson<Pack>(File.ReadAllText(Path.Combine(directory, "atlas-review.json")));
             if (pack == null || pack.sprites == null || (pack.sprites.Length != 6 && pack.sprites.Length != 8) || pack.samplingDivisor != 4 || pack.status != "REVIEW_ONLY" || pack.runtimeEligible)
                 throw new InvalidDataException("Expected REVIEW_ONLY div4 idle/four-phase-run/jump pack");
@@ -129,11 +149,27 @@ namespace LinhGioi.World
             var pack = JsonUtility.FromJson<Pack>(File.ReadAllText(manifestPath));
             if (pack == null || pack.sprites == null || pack.sprites.Length < 6
                 || pack.samplingDivisor != 4 || pack.status != "REVIEW_ONLY" || pack.runtimeEligible
-                || pack.reviewSlot != expectedSlot || _reviewSlots.ContainsKey(expectedSlot)
+                || pack.reviewSlot != expectedSlot
                 || pack.basePoseAtlasSha256 != Hash(Path.Combine(bodyDirectory, "atlas-review.png"))
                 || pack.basePoseManifestSha256 != Hash(Path.Combine(bodyDirectory, "atlas-review.json")))
                 throw new InvalidDataException("Slot review pack does not belong to this body pose pack: " + expectedSlot);
-            var slot = new ReviewSlot { Texture = new Texture2D(2, 2, TextureFormat.RGBA32, false) };
+            var level = pack.unlockLevel > 0 ? pack.unlockLevel : 1;
+            if (!string.IsNullOrEmpty(pack.fitFamily) && pack.fitFamily != "vo_male_v3")
+                throw new InvalidDataException("Slot review fit family mismatch: " + expectedSlot);
+            if (!_reviewVariants.TryGetValue(expectedSlot, out var variants))
+            {
+                variants = new SortedDictionary<int, ReviewSlot>();
+                _reviewVariants.Add(expectedSlot, variants);
+                _slotVisibility.Add(expectedSlot, true);
+            }
+            if (variants.ContainsKey(level))
+                throw new InvalidDataException("Duplicate slot review level: " + expectedSlot + "/" + level);
+            var slot = new ReviewSlot
+            {
+                Texture = new Texture2D(2, 2, TextureFormat.RGBA32, false),
+                ItemId = string.IsNullOrEmpty(pack.itemId) ? expectedSlot + "_lv" + level : pack.itemId,
+                UnlockLevel = level
+            };
             if (!slot.Texture.LoadImage(File.ReadAllBytes(atlasPath)))
                 throw new InvalidDataException("Cannot load slot review atlas: " + expectedSlot);
             slot.Texture.filterMode = FilterMode.Bilinear;
@@ -167,12 +203,27 @@ namespace LinhGioi.World
                 foreach (var required in new[] { "idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck" })
                     if (!pair.Value.Sprites.ContainsKey(required))
                         throw new InvalidDataException("Missing slot locomotion pose: " + expectedSlot + "/" + pair.Key + "/" + required);
-                var host = new GameObject(expectedSlot + "/" + pair.Key); host.transform.SetParent(_rotationRoot, false);
+                var host = new GameObject(expectedSlot + "/lv" + level + "/" + pair.Key); host.transform.SetParent(_rotationRoot, false);
                 pair.Value.Renderer = host.AddComponent<SpriteRenderer>();
                 pair.Value.Renderer.sortingOrder = pair.Value.Order;
             }
-            _reviewSlots.Add(expectedSlot, slot);
+            variants.Add(level, slot);
+            if (!_reviewSlots.ContainsKey(expectedSlot)) _reviewSlots.Add(expectedSlot, slot);
+            else foreach (var component in slot.Components.Values) component.Renderer.enabled = false;
             Debug.Log("LGO_POSE_REVIEW_OVERLAY_LOADED " + expectedSlot + " " + overlayDirectory);
+            Debug.Log("LGO_POSE_REVIEW_ITEM_LOADED " + expectedSlot + " " + slot.ItemId + " Lv" + level);
+        }
+
+        public void LoadItemVariants(string directory)
+        {
+            if (Hash(Path.Combine(directory, "atlas-review.png")) != _bodyAtlasHash
+                || Hash(Path.Combine(directory, "atlas-review.json")) != _bodyManifestHash)
+                throw new InvalidDataException("Alternate item pack does not share the active body pose authority");
+            for (var index = 0; index < SlotIds.Length; index++)
+            {
+                var overlayDirectory = Path.Combine(directory, SlotDirectories[index]);
+                if (Directory.Exists(overlayDirectory)) LoadReviewSlot(directory, overlayDirectory, SlotIds[index], index);
+            }
         }
 
         private static string Hash(string path)
@@ -185,8 +236,63 @@ namespace LinhGioi.World
 
         public void SetSlotVisible(string slot, bool visible)
         {
+            if (_slotVisibility.ContainsKey(slot)) _slotVisibility[slot] = visible;
             if (_reviewSlots.TryGetValue(slot, out var reviewSlot))
                 foreach (var component in reviewSlot.Components.Values) component.Renderer.enabled = visible;
+        }
+
+        public bool SetSlotItemLevel(string slot, int level)
+        {
+            if (!_reviewVariants.TryGetValue(slot, out var variants) || !variants.TryGetValue(level, out var next)) return false;
+            if (_reviewSlots.TryGetValue(slot, out var current))
+            {
+                if (current == next) return true;
+                foreach (var component in current.Components.Values) component.Renderer.enabled = false;
+            }
+            _reviewSlots[slot] = next;
+            var visible = !_slotVisibility.TryGetValue(slot, out var stored) || stored;
+            foreach (var component in next.Components.Values)
+            {
+                component.Renderer.enabled = visible;
+                if (!string.IsNullOrEmpty(_frame))
+                    ApplySprite(component.Renderer, component.Sprites[_frame], component.SourceRects[_frame],
+                        1.70f / 1536, _lastAppliedDirection, _lastAppliedPivot);
+            }
+            Debug.Log("LGO_POSE_REVIEW_ITEM_ACTIVE " + slot + " " + next.ItemId + " Lv" + level);
+            return true;
+        }
+
+        public int GetSlotItemLevel(string slot) => _reviewSlots.TryGetValue(slot, out var item) ? item.UnlockLevel : 0;
+
+        public int NextSlotItemLevel(string slot, int current)
+        {
+            if (!_reviewVariants.TryGetValue(slot, out var variants) || variants.Count == 0) return current;
+            foreach (var level in variants.Keys) if (level > current) return level;
+            foreach (var level in variants.Keys) return level;
+            return current;
+        }
+
+        public int NextCompleteItemLevel(int current)
+        {
+            var candidates = new SortedSet<int>();
+            foreach (var variants in _reviewVariants.Values)
+                foreach (var level in variants.Keys) candidates.Add(level);
+            foreach (var level in candidates)
+            {
+                if (level <= current) continue;
+                var complete = true;
+                foreach (var variants in _reviewVariants.Values)
+                    if (!variants.ContainsKey(level)) { complete = false; break; }
+                if (complete) return level;
+            }
+            foreach (var level in candidates)
+            {
+                var complete = true;
+                foreach (var variants in _reviewVariants.Values)
+                    if (!variants.ContainsKey(level)) { complete = false; break; }
+                if (complete) return level;
+            }
+            return current;
         }
 
         public void SetOuterTopVisible(bool visible) => SetSlotVisible("outer_top", visible);
@@ -205,6 +311,8 @@ namespace LinhGioi.World
             const float units = 1.70f / 1536;
             var direction = facing < 0 ? -1 : 1;
             var pivot = jumping ? new Vector3(_jumpPivot.x * direction, _jumpPivot.y, 0) : Vector3.zero;
+            _lastAppliedDirection = direction;
+            _lastAppliedPivot = pivot;
             var jumpLean = jumping ? Mathf.Sin(Mathf.Clamp01(actionProgress) * Mathf.PI) : 0;
             _rotationRoot.localPosition = pivot + new Vector3(jumpLean * .18f * direction, jumpLean * .04f, 0);
             _rotationRoot.localRotation = Quaternion.Euler(0, 0, jumping ? (SomersaultDegrees(actionProgress) - jumpLean * 16f) * direction : 0);
@@ -262,12 +370,13 @@ namespace LinhGioi.World
         private void OnDestroy()
         {
             foreach (var sprite in _sprites.Values) Destroy(sprite);
-            foreach (var slot in _reviewSlots.Values)
-            {
-                foreach (var component in slot.Components.Values)
-                    foreach (var sprite in component.Sprites.Values) Destroy(sprite);
-                if (slot.Texture != null) Destroy(slot.Texture);
-            }
+            foreach (var variants in _reviewVariants.Values)
+                foreach (var slot in variants.Values)
+                {
+                    foreach (var component in slot.Components.Values)
+                        foreach (var sprite in component.Sprites.Values) Destroy(sprite);
+                    if (slot.Texture != null) Destroy(slot.Texture);
+                }
             if (_texture != null) Destroy(_texture);
         }
     }

@@ -26,6 +26,8 @@ namespace LinhGioi.World
             public int actorScreenMetricFrames;
             public bool closedFarArms;
             public bool closedBody, registeredEquipment;
+            public bool poseReviewLv10Verified, poseReviewMixedVerified;
+            public int poseReviewVariantSwitches;
             public int maxEquipmentAttachments, maxBodyVariants;
             public List<string> errors = new List<string>();
             public List<WardrobeCombination> wardrobeCombinations = new List<WardrobeCombination>();
@@ -61,6 +63,28 @@ namespace LinhGioi.World
                 yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-idle");
                 foreach (var action in new[] { "walk", "run", "jump", "jump_diagonal", "basic_attack", "skill" })
                 {
+                    if (_sourcePoseReview != null && Array.IndexOf(args, "--lgo-vo-pose-review-alt-dir") >= 0 && gender == 0)
+                    {
+                        for (var slot = 0; slot < VoReviewSlotIds.Length; slot++)
+                        {
+                            var level = action == "run" ? 10 : action == "jump" && slot % 2 == 1 ? 10 : 1;
+                            _voEquipmentLevels[VoEquipmentSlots[slot]] = level;
+                            var changed = _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) != level;
+                            if (_sourcePoseReview.SetSlotItemLevel(VoReviewSlotIds[slot], level) && changed) report.poseReviewVariantSwitches++;
+                        }
+                        if (action == "run")
+                        {
+                            report.poseReviewLv10Verified = true;
+                            foreach (var slot in VoReviewSlotIds) report.poseReviewLv10Verified &= _sourcePoseReview.GetSlotItemLevel(slot) == 10;
+                        }
+                        if (action == "jump")
+                        {
+                            report.poseReviewMixedVerified = true;
+                            for (var slot = 0; slot < VoReviewSlotIds.Length; slot++)
+                                report.poseReviewMixedVerified &= _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) == (slot % 2 == 1 ? 10 : 1);
+                        }
+                        RefreshVoAvatarMode();
+                    }
                     VoTrainingTargetHp = 100;
                     var motionOrigin = action == "basic_attack" || action == "skill" ? 39f : 18.7f;
                     _routeX = motionOrigin;
@@ -242,6 +266,9 @@ namespace LinhGioi.World
                 yield return SaveRegisteredFrame(directory, report, "route-surface-" + tile);
             }
             if (report.maxBindReturnError > .00001f) report.errors.Add("Deformed vertices did not return to original bind coordinates");
+            if (_sourcePoseReview != null && Array.IndexOf(args, "--lgo-vo-pose-review-alt-dir") >= 0
+                && (!report.poseReviewLv10Verified || !report.poseReviewMixedVerified))
+                report.errors.Add("Pose review item variant matrix did not execute");
             if (report.errors.Count > 0) report.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "registered-manifest.json"), JsonUtility.ToJson(report, true));
             Application.Quit(report.errors.Count == 0 ? 0 : 1);

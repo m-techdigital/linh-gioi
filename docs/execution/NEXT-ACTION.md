@@ -1,3 +1,11 @@
+## Hiện hành — item variant Lv1/Lv10 chạy trực tiếp trên một actor — 2026-09-11
+
+Đã nối hai tier vào `TwoDSourcePoseReview`: cùng slot có variant theo level, chung body hash/fit family/root pose; đổi toàn bộ tier hoặc riêng item bằng flow level/slot sẵn có. Không còn phải đổi cả review directory để xem từng loadout và không tạo renderer body thứ hai. Test đúng scope: SourcePose `11/11`, Map preview `17/17`, Python `17/17`. Player `build/vo-pose-item-variants-player-v3/LinhGioiOnline.app` build `171948586` byte, 0 error/0 warning.
+
+Evidence `build/vo-pose-item-variants-runtime-v3/pc`: 154 frame, 40 toggle, `errors=[]`, full fingerprint Lv1+Lv10 `22+22`, đủ sáu pose. Capture đã chuyển đúng 20 item renderer: full Lv10 ở bốn frame chạy và mixed 5×Lv1 + 5×Lv10 ở jump; manifest xác nhận cả hai trạng thái. Đã xem frame 08/18 trên Map01A, một actor, không đổi camera/base/scale.
+
+Action tiếp theo: author Lv20/Lv30 theo cùng surface geometry và thêm chúng làm variant, rồi capture ma trận pairwise theo slot/tier. Dùng `TwoDEquipmentCompatibilityCatalog` cho điều kiện level/body/skeleton ở đường production; pose reviewer chỉ trình bày item đã preflight. Item nào tạo đường cắt/hở hoặc đổi silhouette sai phải sửa source mask, không thêm offset runtime. Chưa mở class khác trước gate Võ nhiều level.
+
 ## Hiện hành — 10 slot Lv1, Lv10 và phối chéo cùng body/action — 2026-09-11
 
 Đã đóng batch review đủ 10 slot Võ nam Lv1 trên source v3 div4 bất biến. Evidence `build/vo-lv1-ten-slot-surface-runtime-v3/pc` có 154 frame, 40 toggle, `errors=[]`, đủ sáu pose và fingerprint 22 file; đã xem một actor, idle, bốn nhịp chạy, lộn và tháo từng slot. External pack: `legacy-base-run-contact-jump-v3-div4-ten-slot-review-v1`. Không đổi camera/base/scale và không rollback registered WIP. Trạng thái art vẫn `REVIEW_ONLY`, chưa tự gán owner/production approval.

@@ -756,6 +756,14 @@ namespace LinhGioi.World
 
         public void CycleVoAvatarLevel()
         {
+            if (_sourcePoseReview != null)
+            {
+                var next = _sourcePoseReview.NextCompleteItemLevel(VoAvatarLevel);
+                for (var step = 0; step < VoAvatarLevels.Length && VoAvatarLevel != next; step++) _voState.CycleLevel();
+                foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = next;
+                RefreshVoAvatarMode();
+                return;
+            }
             if (_registeredOutfit != null) { LastInteractionMessage = "Đang kiểm chứng Võ Lv1 · Lv10 chưa mở"; return; }
             _voState.CycleLevel();
             foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = VoAvatarLevel;
@@ -775,6 +783,13 @@ namespace LinhGioi.World
 
         public void CycleVoSelectedEquipmentItemLevel()
         {
+            if (_sourcePoseReview != null)
+            {
+                _voEquipmentLevels[VoSelectedEquipmentSlot] = _sourcePoseReview.NextSlotItemLevel(
+                    VoReviewSlotIds[Array.IndexOf(VoEquipmentSlots, VoSelectedEquipmentSlot)], VoSelectedEquipmentItemLevel);
+                RefreshVoAvatarMode();
+                return;
+            }
             if (_registeredOutfit != null) { LastInteractionMessage = "Đang kiểm chứng Võ Lv1 · Lv10 chưa mở"; return; }
             var current = VoSelectedEquipmentItemLevel;
             var index = Array.IndexOf(VoAvatarLevels, current);
@@ -786,7 +801,11 @@ namespace LinhGioi.World
         {
             if (_sourcePoseReview != null)
                 for (var index = 0; index < VoEquipmentSlots.Length; index++)
+                {
+                    _sourcePoseReview.SetSlotItemLevel(VoReviewSlotIds[index],
+                        _voEquipmentLevels.TryGetValue(VoEquipmentSlots[index], out var level) ? level : VoAvatarLevel);
                     _sourcePoseReview.SetSlotVisible(VoReviewSlotIds[index], _voState.IsEquipped(VoEquipmentSlots[index]));
+                }
             if (_registeredOutfit != null)
             {
                 var cycle = _voState.AnimationPhase * (VoAvatarMotionState == "run" ? 4.4f : 3.5f);

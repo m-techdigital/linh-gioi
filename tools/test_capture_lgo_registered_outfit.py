@@ -105,6 +105,17 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
             [],
         )
 
+    def test_variant_capture_requires_full_level_and_mixed_switches(self):
+        result = self.valid_result()
+        result.update(poseReviewLv10Verified=True, poseReviewMixedVerified=True,
+                      poseReviewVariantSwitches=20)
+        self.assertEqual(validate_registered_capture_result(code=0, result=result, width=1280,
+            height=720, png_count=154, pose_review_variants=True), [])
+        result['poseReviewMixedVerified'] = False
+        self.assertIn('POSE_REVIEW_MIXED_NOT_VERIFIED', validate_registered_capture_result(
+            code=0, result=result, width=1280, height=720, png_count=154,
+            pose_review_variants=True))
+
     def test_rejects_capture_without_actor_screen_metrics(self):
         result = self.valid_result()
         result.pop("actorScreenMetricFrames")

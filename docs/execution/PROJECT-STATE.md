@@ -1,3 +1,13 @@
+## Hiện hành — đổi item Lv1/Lv10 trực tiếp trên actor POSE THỬ — 2026-09-11
+
+`TwoDSourcePoseReview` hiện nạp đồng thời nhiều item variant của cùng slot theo `unlockLevel`, bắt buộc cùng body atlas/manifest và `fitFamily=vo_male_v3`. Mỗi variant vẫn dùng chung body renderer, frame ID, facing và whole-pose somersault root; đổi item chỉ tắt renderer cũ, bật renderer mới và giữ nguyên trạng thái slot đã tháo. `CycleVoAvatarLevel` đổi toàn bộ level chỉ qua các tier đủ 10 slot; `CycleVoSelectedEquipmentItemLevel` đổi riêng item đang chọn. UI/runtime vẫn một actor và dùng `_voEquipmentLevels` hiện có, không thêm hệ nhân vật hay camera/scale theo tier.
+
+Scoped EditMode: `TwoDSourcePoseReviewTests 11/11`, gồm switch Lv1↔Lv10 và giữ unequipped; `DongMonIllustratedPreviewTests 17/17` ở lượt đúng namespace (một lượt filter sai chạy 0 test đã bị loại, không dùng làm evidence). Python capture/loadout `17/17`. Player mới `build/vo-pose-item-variants-player-v3/LinhGioiOnline.app` build thành công `171948586` byte, 0 error/0 warning.
+
+Capture `build/vo-pose-item-variants-runtime-v3/pc` nạp full pack Lv1 và full pack Lv10 vào cùng actor: 154 frame, 40 toggle, `errors=[]`, fingerprint 22+22 file ổn định. Runtime thực hiện đúng 20 chuyển renderer cần thiết: bốn frame run dùng full Lv10; jump dùng năm slot Lv1 + năm slot Lv10; manifest xác nhận `poseReviewLv10Verified=true` và `poseReviewMixedVerified=true`. Đã xem frame 08 và 18: một nhân vật, bốn nhịp/lộn giữ pose v3; HUD cho thấy base Lv1 với item đang chọn Lv10 ở run và Lv1 trong mixed jump. Art vẫn `REVIEW_ONLY`.
+
+Next: mở rộng cùng item-variant contract sang Lv20/Lv30 bằng source material hiện có, nhưng chỉ đăng ký trên geometry v3 đã dùng cho Lv1/Lv10. Sau đó chạy ma trận đại diện theo slot/tier trên Player mới; không cần dựng trước mọi tổ hợp Cartesian. Chưa mở class khác cho tới khi Võ Lv1/10/20/30 có loadout evidence và các item lỗi hình học đã quay lại source mask.
+
 ## Hiện hành — Võ 10 slot cùng level và phối chéo Lv1/Lv10 — 2026-09-11
 
 Đã author theo lô đủ 10 slot Võ nam Lv1 trên đúng body/action `legacy-base-run-contact-jump-v3-div4`: garment lấy silhouette từ pixel pose đã chốt, material chỉ ghi trong mask; `main_weapon` và `class_accessory` dùng source-space anchor; `outer_top` giữ surface đã review. Không sửa sáu body PNG, pivot, scale, camera hoặc registered wardrobe WIP. Source compose sáu pose đã được xem tại external `ten-slot-pose-authoring-v1/registered-surface-v1/six-pose-full-compose.jpg`. Pack `legacy-base-run-contact-jump-v3-div4-ten-slot-review-v1` có đủ 10 thư mục slot, mỗi slot sáu pose div4 và metadata `itemId/fitFamily/unlockLevel`; vẫn là `REVIEW_ONLY`.

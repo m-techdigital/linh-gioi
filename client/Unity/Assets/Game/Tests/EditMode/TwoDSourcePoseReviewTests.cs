@@ -17,6 +17,9 @@ namespace LinhGioi.Tests.EditMode
             public int samplingDivisor = 4;
             public int[] jumpPivotSource = { 512, 768 };
             public string reviewSlot;
+            public string itemId;
+            public string fitFamily;
+            public int unlockLevel;
             public string basePoseAtlasSha256;
             public string basePoseManifestSha256;
             public ReviewPart[] sprites;
@@ -138,8 +141,58 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
+        [Test]
+        public void SameSlotCanSwitchLevelVariantWithoutAddingAnotherActor()
+        {
+            var primary = Path.Combine(Application.temporaryCachePath, "lgo-pose-level-primary-" + Guid.NewGuid().ToString("N"));
+            var alternate = Path.Combine(Application.temporaryCachePath, "lgo-pose-level-alt-" + Guid.NewGuid().ToString("N"));
+            var root = new GameObject("pose level variant test");
+            try
+            {
+                Directory.CreateDirectory(primary);
+                WritePack(primary, null, null, null);
+                var primarySlot = Path.Combine(primary, "outer-top-review");
+                Directory.CreateDirectory(primarySlot);
+                WritePack(primarySlot, "outer_top", Hash(Path.Combine(primary, "atlas-review.png")),
+                    Hash(Path.Combine(primary, "atlas-review.json")), level: 1);
+
+                Directory.CreateDirectory(alternate);
+                File.Copy(Path.Combine(primary, "atlas-review.png"), Path.Combine(alternate, "atlas-review.png"));
+                File.Copy(Path.Combine(primary, "atlas-review.json"), Path.Combine(alternate, "atlas-review.json"));
+                var alternateSlot = Path.Combine(alternate, "outer-top-review");
+                Directory.CreateDirectory(alternateSlot);
+                WritePack(alternateSlot, "outer_top", Hash(Path.Combine(primary, "atlas-review.png")),
+                    Hash(Path.Combine(primary, "atlas-review.json")), level: 10);
+
+                var review = root.AddComponent<TwoDSourcePoseReview>();
+                typeof(TwoDSourcePoseReview).GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(review, new object[] { primary });
+                review.LoadItemVariants(alternate);
+
+                var renderers = root.GetComponentsInChildren<SpriteRenderer>();
+                Assert.That(renderers.Length, Is.EqualTo(3), "Variants share the existing body actor/root");
+                Assert.That(renderers.Count(renderer => renderer.enabled), Is.EqualTo(2));
+                Assert.That(review.SetSlotItemLevel("outer_top", 10), Is.True);
+                Assert.That(renderers.Count(renderer => renderer.enabled), Is.EqualTo(2));
+                Assert.That(review.GetSlotItemLevel("outer_top"), Is.EqualTo(10));
+                Assert.That(review.NextCompleteItemLevel(1), Is.EqualTo(10));
+                Assert.That(review.NextCompleteItemLevel(10), Is.EqualTo(1));
+                Assert.That(review.NextSlotItemLevel("outer_top", 1), Is.EqualTo(10));
+                review.SetSlotVisible("outer_top", false);
+                Assert.That(renderers.Count(renderer => renderer.enabled), Is.EqualTo(1));
+                Assert.That(review.SetSlotItemLevel("outer_top", 1), Is.True);
+                Assert.That(renderers.Count(renderer => renderer.enabled), Is.EqualTo(1), "Level switch preserves unequipped state");
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(primary)) Directory.Delete(primary, true);
+                if (Directory.Exists(alternate)) Directory.Delete(alternate, true);
+            }
+        }
+
         private static void WritePack(string directory, string reviewSlot, string baseAtlas, string baseManifest,
-            string[] components = null)
+            string[] components = null, int level = 1)
         {
             var ids = new[] { "idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck" };
             components = components ?? new[] { "main" };
@@ -160,6 +213,8 @@ namespace LinhGioi.Tests.EditMode
                         atlasRectTopLeft = new[] { index, 0, 1, 1 }, sourceCanvasRect = new[] { index * 4, 0, index * 4 + 4, 4 } };
                 }
             var pack = new ReviewPack { reviewSlot = reviewSlot, basePoseAtlasSha256 = baseAtlas,
+                itemId = reviewSlot == null ? null : "vo_male_lv" + level.ToString("000") + "_" + reviewSlot,
+                fitFamily = reviewSlot == null ? null : "vo_male_v3", unlockLevel = level,
                 basePoseManifestSha256 = baseManifest, sprites = parts };
             File.WriteAllText(Path.Combine(directory, "atlas-review.json"), JsonUtility.ToJson(pack, true));
         }
