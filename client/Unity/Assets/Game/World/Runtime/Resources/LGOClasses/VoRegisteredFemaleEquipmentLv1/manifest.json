@@ -7,7 +7,7 @@
     512,
     512
   ],
-  "atlasSha256": "09ec321a1b2aba8bd7a3d9021091ae5a869ad8137d6692954cc09155135e1873",
+  "atlasSha256": "40b701b73917ca7a0dde7589d1296b8ffa3214805e2be515e3f62327dcdde89b",
   "bodyMesh": {
     "id": "lv001_female_equipment_body",
     "vertices": [
@@ -1665,8 +1665,8 @@
       "dy": 1.2528645833333332,
       "x": 202,
       "y": 366,
-      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-inner_top.png",
-      "sourceSha256": "c47d4f42f3217e17118b48b49986db23f90e708ae80833f337a812fffb296a12",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-inner-body-preserved-v1/female_body-inner_top.png",
+      "sourceSha256": "830160b8a83eda43d7eb22fb4e587bad13a4ef92bee7d5ed4b47497c90e4f948",
       "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
     },
     {
@@ -1727,8 +1727,8 @@
       "dy": 1.2528645833333332,
       "x": 2,
       "y": 218,
-      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-head_hair-inner_top.png",
-      "sourceSha256": "5ed1fc392272c1f494c50aeabe29445ea0d778f19a79d7896b36f2b9daf72edb",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-inner-body-preserved-v1/female_body-head_hair-inner_top.png",
+      "sourceSha256": "1c4a9fef779649742ff950b13dbc729c3ff0219b0d4aaa164882255fe29b3f44",
       "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
     },
     {
@@ -1758,8 +1758,8 @@
       "dy": 1.2528645833333332,
       "x": 402,
       "y": 366,
-      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-lower_garment-inner_top.png",
-      "sourceSha256": "c47d4f42f3217e17118b48b49986db23f90e708ae80833f337a812fffb296a12",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-inner-body-preserved-v1/female_body-lower_garment-inner_top.png",
+      "sourceSha256": "78c7cee76f7603614112720f125138a8fbb390b5d892b6da03b2143285203dd7",
       "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
     },
     {
@@ -1790,8 +1790,8 @@
       "dy": 1.2528645833333332,
       "x": 102,
       "y": 366,
-      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-head_hair-lower_garment-inner_top.png",
-      "sourceSha256": "5ed1fc392272c1f494c50aeabe29445ea0d778f19a79d7896b36f2b9daf72edb",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-inner-body-preserved-v1/female_body-head_hair-lower_garment-inner_top.png",
+      "sourceSha256": "1c4a9fef779649742ff950b13dbc729c3ff0219b0d4aaa164882255fe29b3f44",
       "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
     },
     {
@@ -6644,16 +6644,22 @@
       "generator": "registered_material_equipment_pack",
       "referenceOnly": false,
       "role": "registered-equipment-atlas",
-      "sha256": "09ec321a1b2aba8bd7a3d9021091ae5a869ad8137d6692954cc09155135e1873"
+      "sha256": "40b701b73917ca7a0dde7589d1296b8ffa3214805e2be515e3f62327dcdde89b"
     }
   ],
   "qualityStatus": "DRAFT_VISUAL_REVIEW_REQUIRED",
-  "qualityNotes": "Female Lv1 registered equipment has technical Player evidence, but remains draft; all parts now have source provenance, full visual production approval is still pending.",
+  "qualityNotes": "Female Lv1 registered equipment has technical Player evidence, but remains draft; all parts now have source provenance, full visual production approval is still pending. Inner-top body variants now preserve the existing body pixels; no skin donor or body redraw is selected by inner_top.",
   "reviewEvidence": [
     "build/vo-both-equipment-runtime-v1/pc/72-female-idle.png",
     "build/vo-both-equipment-runtime-v1/pc/83-female-run.png",
     "build/vo-both-equipment-runtime-v1/pc/106-female-air-off-lower_garment.png",
-    "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/runtime-integration-v1/build/vo-female-equipment-green-v2.log"
+    "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/runtime-integration-v1/build/vo-female-equipment-green-v2.log",
+    "build/vo-run-weight-v1/registered/mobile/120-female-off-inner_top.png",
+    "build/vo-run-weight-v1/registered/mobile/142-female-base-after-jump.png",
+    "build/vo-run-weight-v1/registered/tablet/120-female-off-inner_top.png",
+    "build/vo-run-weight-v1/registered/tablet/142-female-base-after-jump.png",
+    "build/vo-run-weight-v1/registered/pc/120-female-off-inner_top.png",
+    "build/vo-run-weight-v1/registered/pc/142-female-base-after-jump.png"
   ],
   "productionEligible": false
 }

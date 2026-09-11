@@ -1,4 +1,6 @@
 import unittest
+import json
+from pathlib import Path
 
 from PIL import Image, ImageDraw
 
@@ -67,6 +69,29 @@ class BindPoseFitTests(unittest.TestCase):
     def test_empty_images_are_not_a_success(self):
         with self.assertRaises(ValueError):
             compare_bind_pose(self.reference, Image.new("RGBA", self.reference.size))
+
+
+class RegisteredBodyIndependenceTests(unittest.TestCase):
+    def test_female_inner_top_never_changes_body_pixels(self):
+        root = Path(__file__).resolve().parents[1] / "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses"
+        equipment = json.loads((root / "VoRegisteredFemaleEquipmentLv1/manifest.json").read_text())
+        body = json.loads((root / "VoClosedBodyLv1/manifest.json").read_text())
+        variants = {frozenset(p["occlusionState"]): p for p in equipment["parts"] if p["kind"] == "native-body-variant"}
+        original = next(p for p in body["parts"] if p["gender"] == "female" and p["kind"] == "native-body")
+        with Image.open(root / "VoRegisteredFemaleEquipmentLv1/equipment-atlas.png") as texture, Image.open(root / "VoClosedBodyLv1/closed-body-atlas.png") as body_texture:
+            def restore(atlas, part):
+                rect = part["sourceCanvasRect"]
+                self.assertEqual((rect[2] - rect[0], rect[3] - rect[1]), (part["w"] * 4, part["h"] * 4))
+                result = Image.new("RGBA", (256, 384))
+                result.paste(atlas.convert("RGBA").crop((part["x"], atlas.height - part["y"] - part["h"], part["x"] + part["w"], atlas.height - part["y"])), (rect[0] // 4, rect[1] // 4))
+                return result
+            for other in [frozenset(), frozenset(["head_hair"]), frozenset(["lower_garment"]), frozenset(["head_hair", "lower_garment"])]:
+                with self.subTest(other=sorted(other)):
+                    selected = variants[other | {"inner_top"}]
+                    expected = restore(texture, variants[other]) if other else restore(body_texture, original)
+                    actual = restore(texture, selected)
+                    rect = tuple(v // 4 for v in selected["sourceCanvasRect"])
+                    self.assertEqual(expected.crop(rect).tobytes(), actual.crop(rect).tobytes(), "Inner top must select equipment, not rewrite skin")
 
 
 if __name__ == "__main__":

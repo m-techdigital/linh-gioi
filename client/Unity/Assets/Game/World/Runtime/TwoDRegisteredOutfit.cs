@@ -174,8 +174,13 @@ namespace LinhGioi.World
             var cycle = _runTimeline.Cycle;
             var weight = Mathf.SmoothStep(0, 1, _runTimeline.EntryWeight);
             var pose = TwoDAuthoredVoRun.Pose.Blend(TwoDAuthoredVoRun.Entry, TwoDAuthoredVoRun.Sample(cycle), weight);
+            var lift = TwoDAuthoredVoRun.FlightLift(cycle) * weight;
+            var sourceOffset = Vector2.down * lift;
+            pose = new TwoDAuthoredVoRun.Pose(
+                new TwoDAuthoredVoRun.Leg(pose.Left.Hip + sourceOffset, pose.Left.ThighDegrees, pose.Left.ShinDegrees),
+                new TwoDAuthoredVoRun.Leg(pose.Right.Hip + sourceOffset, pose.Right.ThighDegrees, pose.Right.ShinDegrees));
             var torso = _bones["male_torso-hips"];
-            torso.localPosition = Vector2.Lerp(Point(510.198f, 795.546f), Point(535, 770), weight);
+            torso.localPosition = Vector2.Lerp(Point(510.198f, 795.546f), Point(535, 770), weight) + Vector2.up * (lift * 1.7f / 1536);
             Rotate("male", "torso-hips", Mathf.Lerp(-12, -25, weight));
             Rotate("male", "head", 5 * weight);
             ApplyAuthoredLeg("left", pose.Left);
@@ -185,8 +190,8 @@ namespace LinhGioi.World
             var arm = Mathf.Lerp(index >= 2 ? 1 : 0, ((index + 1) % 4) >= 2 ? 1 : 0, Mathf.SmoothStep(0, 1, phase - index));
             // Hand anchors traced from source A/B; preserve limb lengths through IK.
             // Far-back anchor stays within the original arm's reach.
-            ApplyRunHand("left", Vector2.Lerp(new Vector2(180, 760), new Vector2(835, 565), arm), weight);
-            ApplyRunHand("right", Vector2.Lerp(new Vector2(860, 585), new Vector2(380, 745), arm), weight);
+            ApplyRunHand("left", Vector2.Lerp(new Vector2(180, 760), new Vector2(835, 565), arm) + sourceOffset, weight);
+            ApplyRunHand("right", Vector2.Lerp(new Vector2(860, 585), new Vector2(380, 745), arm) + sourceOffset, weight);
         }
         private void ApplyRunHand(string side, Vector2 source, float weight)
         {

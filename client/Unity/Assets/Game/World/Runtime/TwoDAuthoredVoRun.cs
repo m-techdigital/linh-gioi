@@ -29,6 +29,15 @@ namespace LinhGioi.World
         };
         public static readonly Pose Entry = new Pose(new Leg(new Vector2(456.092620f, 809.604415f), 27.284910f, -26.372927f), new Leg(new Vector2(563.688856f, 832.474701f), 32.699644f, -23.560050f));
         public static readonly Pose Exit = new Pose(new Leg(new Vector2(455.190265f, 785.642213f), 27.041170f, -18.790051f), new Leg(new Vector2(564.771682f, 795.229345f), 21.703974f, -17.746683f));
+        // v7 source: lift only the two flight keys by 48 source pixels.
+        // Contact, entry, exit and the original artwork/limb lengths remain unchanged.
+        public static float FlightLift(float cycle)
+        {
+            var phase = Mathf.Repeat(cycle, 1) * 4;
+            var index = Mathf.FloorToInt(phase);
+            return Mathf.Lerp(index % 2 == 0 ? 0 : 48, index % 2 == 0 ? 48 : 0,
+                Mathf.SmoothStep(0, 1, phase - index));
+        }
         public static Pose Sample(float cycle)
         {
             var phase = Mathf.Repeat(cycle, 1) * 4;

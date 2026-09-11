@@ -19,9 +19,9 @@ namespace LinhGioi.Tests
                 var outfit = new TwoDRegisteredOutfit(root.transform, sprites, false, true);
                 var nodes = root.GetComponentsInChildren<Transform>();
                 var expected = new[] { new Vector2(495, 1339), new Vector2(760, 1150),
-                    new Vector2(165, 1230), new Vector2(835, 1190),
+                    new Vector2(165, 1182), new Vector2(835, 1142),
                     new Vector2(750, 1130), new Vector2(605, 1368),
-                    new Vector2(805, 1160), new Vector2(245, 1240) };
+                    new Vector2(805, 1112), new Vector2(245, 1192) };
                 outfit.Apply("male", true, slot => false, part => 0);
                 outfit.ApplyMovement("male", "run", 0, 0, 1);
                 for (var beat = 0; beat < 4; beat++)
@@ -40,6 +40,33 @@ namespace LinhGioi.Tests
                         Assert.That(Vector2.Distance(actual, TwoDRegisteredSpriteSkin.SourcePoint(source.x, source.y)), Is.LessThan(.0001f), "Source beat " + beat + " " + name);
                         Assert.That(Vector3.Distance(thigh.position, knee.position), Is.EqualTo((side == 0 ? 314.00637f : 311.00643f) * 1.7f / 1536).Within(.00001f));
                         Assert.That(Vector3.Distance(knee.position, foot.position), Is.EqualTo((side == 0 ? 301.47968f : 297.06902f) * 1.7f / 1536).Within(.00001f));
+                    }
+                }
+            }
+            finally { Object.DestroyImmediate(root); foreach (var sprite in sprites) Object.DestroyImmediate(sprite); }
+        }
+
+        [Test]
+        public void MaleRunHasTwoFlightPeaksAndReturnsToContactHeight()
+        {
+            var root = new GameObject("run weight transfer");
+            var sprites = new List<Sprite>();
+            try
+            {
+                var outfit = new TwoDRegisteredOutfit(root.transform, sprites, false, true);
+                outfit.Apply("male", true, slot => false, part => 0);
+                outfit.ApplyMovement("male", "run", 0, 0, 1);
+                foreach (var facing in new[] { 1, -1 })
+                {
+                    float contact = 0;
+                    for (var beat = 0; beat <= 4; beat++)
+                    {
+                        outfit.Apply("male", true, slot => false, part => 0);
+                        outfit.ApplyMovement("male", "run", TwoDSourcePoseTimeline.EntrySeconds + beat / 6f, 0, facing);
+                        var head = outfit.BindSpace.InverseTransformPoint(outfit.JointWorldPosition("male", "head"));
+                        if (beat == 0) contact = head.y;
+                        Assert.That(head.y - contact, Is.EqualTo(beat % 2 == 0 ? 0 : 48 * 1.7f / 1536).Within(.00001f),
+                            "Flight must lift the body, not only bend the legs; contact must return without drift");
                     }
                 }
             }
