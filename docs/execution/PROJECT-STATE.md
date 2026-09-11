@@ -1,3 +1,13 @@
+## Hiện hành — Võ đủ progression Lv1–Lv100 trên cùng actor/pose contract — 2026-09-11
+
+Đã audit lại design gốc: `detail/15-male-equipment-grid-redraw-source.png` có đúng 10 slot × 11 mốc Lv1/10/20/30/40/50/60/70/80/90/100; `detail/11-male-outfit-progression-redraw-source.png` có silhouette trước/sau cùng 11 mốc. Vì vậy không sinh một hệ level khác. Tool external tách 110 donor theo cell cố định và hash source; background removal chỉ tạo donor, không tự cấp runtime status.
+
+Lv40–Lv100 được author theo batch trên sáu pose v3. Pixel body gốc, pose, pivot, camera và scale không đổi. Surface trong body dùng mask slot hiện hành với material đúng cột level; phần silhouette tóc/giáp vai/vạt áo chỉ vào component slot tương ứng. Ba sheet Lv40/Lv70/Lv100 do image generation tạo được giữ làm `SOURCE_STUDY_ONLY` để định hình chuyển cấp; không dùng full character thay body. Pose lộn loại bỏ silhouette transfer vì visual zoom cho thấy viền rối, quay về exact registered surface của tuck. Tất cả pack vẫn `REVIEW_ONLY`.
+
+Player evidence `build/vo-pose-all-tier-runtime-v2/pc` dùng cùng Player đã build ở batch trước và nạp 11 full pack vào một actor: 154 frame, 40 toggle, 149 switch thực, `poseReviewFullLevelsVerified=[1,10,20,30,40,50,60,70,80,90,100]`, mixed verified, `errors=[]`. Provenance giữ 11 fingerprint pack, mỗi pack 22 file, và log có 10 đường variant. Đã xem trực tiếp Lv20 walk, Lv10 bốn nhịp run, mixed jump và Lv100 jump-diagonal trên Map01A. Lv100 tuck sau cleanup giữ đúng whole-pose v3, không còn silhouette extension chưa đủ ổn.
+
+Kiến trúc dài hạn đã đối chiếu với runtime skin/attachment: animation giữ slot placeholder ổn định, mỗi item có thể gồm nhiều component và runtime ghép item theo slot trên một skeleton/body. LGO hiện đi cùng hướng `slotId -> itemId -> pose components`, preflight body hash/fit family/level trước apply nguyên tử. Điều này tránh tạo full-outfit cho mọi tổ hợp và cho phép phối chéo level. Gate kỹ thuật toàn tier đã qua; art tier cao vẫn cần polish source component ở kích thước Player trước khi gọi production-final hoặc mở class khác.
+
 ## Hiện hành — Võ Lv1/10/20/30 dùng chung một wardrobe actor — 2026-09-11
 
 `TwoDSourcePoseReview` hiện nạp lặp lại mọi pack level, giữ một body atlas/hash, `fitFamily=vo_male_v3`, pose ID, pivot, scale và camera. Danh sách tier đủ 10 slot được suy ra động; capture kiểm full-set từng tier rồi kiểm một loadout phối vòng theo slot. Cơ chế không hardcode số tier, nên Lv40–Lv100 sẽ đi cùng đường nạp/đổi/verify khi có source item hợp lệ, không thêm controller hay actor theo level.
@@ -6,7 +16,7 @@ Source review đã mở rộng theo lô từ cùng geometry v3 sang Lv20 và Lv3
 
 Player `build/vo-pose-four-tier-player-v2/LinhGioiOnline.app` build thành công `171949610` byte, 0 error/13 warning. Capture `build/vo-pose-four-tier-runtime-v2/pc`: 154 frame, 40 toggle, `errors=[]`, full levels `[1,10,20,30]`, mixed bốn level, 75 lần đổi item thực và fingerprint đầy đủ `22×4` ổn định. Đã xem trực tiếp walk Lv20, bốn nhịp run Lv10, jump mixed và jump-diagonal Lv30: một actor, body/action v3, không đổi camera/base/scale. Scoped Unity: SourcePose `11/11`, Map preview `17/17`; Python capture/loadout `18/18`.
 
-Hướng kỹ thuật được đối chiếu với mô hình skin/attachment phổ biến: animation tham chiếu slot ổn định, item có thể gồm nhiều attachment, runtime ghép item theo slot trên cùng skeleton. Vì vậy contract dài hạn vẫn là `slotId -> itemId -> pose components`, preflight body/fit/source registration trước apply nguyên tử; không dựng full-outfit riêng cho từng tổ hợp. Source tuyển hiện chỉ có design material tới Lv30. Batch kế tiếp phải tạo/duyệt material Lv40–Lv100 theo cùng design progression rồi chạy lại full-level + mixed matrix; không nội suy offset/scale để giả fit và chưa mở class khác.
+Hướng kỹ thuật được đối chiếu với mô hình skin/attachment phổ biến: animation tham chiếu slot ổn định, item có thể gồm nhiều attachment, runtime ghép item theo slot trên cùng skeleton. Vì vậy contract dài hạn vẫn là `slotId -> itemId -> pose components`, preflight body/fit/source registration trước apply nguyên tử; không dựng full-outfit riêng cho từng tổ hợp. Source canonical thực tế có đủ grid và front/back progression Lv1–Lv100; ghi chú giới hạn Lv30 trước đó đã được sửa. Batch kế tiếp dùng chính nguồn này để hoàn thiện component silhouette, không nội suy offset/scale runtime và chưa mở class khác.
 
 ## Hiện hành — đổi item Lv1/Lv10 trực tiếp trên actor POSE THỬ — 2026-09-11
 

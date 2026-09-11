@@ -1,3 +1,9 @@
+## Hiện hành — full-level Võ đã chạy; gate còn lại là source-art polish — 2026-09-11
+
+Đã author và pack đủ 10 slot cho 11 mốc Lv1–Lv100 trên body/action v3, rồi nạp tất cả vào một Player. Evidence `build/vo-pose-all-tier-runtime-v2/pc`: 154 frame, full levels `[1,10,20,30,40,50,60,70,80,90,100]`, mixed verified, 149 item switch, 11×22 fingerprint, `errors=[]`. Không đổi camera/base/scale, không thêm actor/controller theo level. Pose lộn tier cao đã bỏ silhouette transfer gây rối và giữ exact tuck surface.
+
+Action tiếp theo: polish component source Lv40–Lv100 ở kích thước Player, ưu tiên độ đọc của `outer_top`, `shoulder_chest_guard`, `waist_belt` và `head_hair`; so trực tiếp với grid/progression canonical. Giữ vạt/giáp mở rộng trong đúng slot ownership để tháo riêng và phối chéo không kéo theo món khác. Chạy pairwise representative giữa tier thấp/trung/cao và trạng thái tháo từng slot trong một capture cuối. Chỉ sau visual gate này mới promotion khỏi `REVIEW_ONLY` và mở class tiếp theo. Map01A vẫn là target.
+
 ## Hiện hành — gate wardrobe Võ bốn tier và đường mở rộng mọi level — 2026-09-11
 
 Đã nạp đồng thời Lv1/10/20/30 vào một actor POSE THỬ, đủ 10 slot mỗi tier. Runtime và capture lấy danh sách complete level động, kiểm full-set từng level và mixed loadout trên cùng body/action v3. Evidence `build/vo-pose-four-tier-runtime-v2/pc`: 154 frame, 40 toggle, 75 switch thực, full levels `[1,10,20,30]`, mixed verified, `errors=[]`, fingerprint `22×4`. Đã xem walk Lv20, run bốn nhịp Lv10, jump mixed và jump-diagonal Lv30; không có actor thứ hai hay thay camera/base/scale. Test Unity `11/11 + 17/17`, Python `18/18`.
