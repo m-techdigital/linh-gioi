@@ -607,3 +607,10 @@ Tham khảo độc lập cho hướng dài hạn: Unity Sprite Swap dùng catego
 - Võ Lv1/Lv10 HD, một actor, 10 slot tương tác và phối chéo đã được commit/push (`21a7415a`, `6d1a3018`); evidence Player cuối ở `build/vo-lv1-lv10-hd-inventory-runtime-v1/pc`.
 - Audit Kiếm đọc direction lock, production spine, module standard, turnaround nam Lv1 và grid 10 slot. Runtime Kiếm cũ mới là proof 4 slot `DRAFT_RUNTIME_FIT`/eligible 0.
 - Hai batch chuyển Kiếm tự động đã bị visual audit loại trước pack/Unity vì ownership sai, nền checker và trùng chi. Không có source ảnh lỗi nào vào Git; đường đúng cần redraw trực tiếp từng module trên common-body pose template rồi kiểm full/tháo/mix theo lô.
+## Hiện hành — Kiếm Lv1 nam/nữ source-pose runtime — 2026-09-12
+
+Kiếm Lv1 đã được thay khỏi static-fit lỗi bằng cùng pipeline source-pose Võ/Linh. Nam dùng body Võ v3 div4 và source external `kiem-lv001/ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v2`; nữ dùng common female body và `kiem-lv001/female-ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v1`. Cả hai có đúng 10 slot × sáu pose; main weapon tách phía sau body, overlay div2, không camera/scale/offset riêng. Source board full/toggle đã review trước pack; mask v1 nam bị loại vì còn mảnh kiếm nổi, v2 đã sửa tại source.
+
+Player dùng binary từ commit `ec36e8b`, evidence `build/kiem-source-pose-review-v1/runtime-pc-both/pc`: 186 frame, đủ nam/nữ, 20 item load, sáu pose thực thi, `errors=[]`; board runtime `kiem-lv1-male-female-actor-review-board.png` đã xem ở kích thước lớn. Idle, bốn nhịp chạy, lộn, tháo kiếm và tháo áo ngoài đều giữ một silhouette người; phím G chỉ đổi active gender, không render song song. Pack test `10/10`; body hashes nam `27630a5c...`, nữ `7c1ef81d...` giữ nguyên authority. Trạng thái `AGENT_VISUAL_PASS / REVIEW_ONLY`, goal vẫn active.
+
+Tiếp theo là Kiếm Lv10 cho nam/nữ và mixed Lv1/Lv10 trên cùng actor/body. Chỉ sau gate này mới chuyển Pháp; không mở lại Võ, không chạm frozen surfaces, Map01A vẫn là target.
