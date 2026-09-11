@@ -1,3 +1,11 @@
+## Hiện hành — Võ Lv1/Lv10 HD, hành trang 10 ô và phối chéo — 2026-09-11
+
+Checkpoint Lv1 HD đã được owner chấp nhận sơ bộ và khóa tại commit `21a7415a`. Player có một actor POSE THỬ và Hành trang Võ 10 ô: chọn trực tiếp từng món, xem `itemId/level/fit/base/6 pose`, tháo/mặc món đang chọn và đổi cấp món khi có variant. Body/motion vẫn là `legacy-base-run-contact-jump-v3-div4`; không đổi camera, scale, pivot, timeline hoặc registered outfit state.
+
+Lv10 đã được dựng lại từ progression/grid gốc bằng sáu donor cùng action, trên đúng 60 alpha registration của Lv1. Audit phối chéo phát hiện script cũ sharpen lại RGB kế thừa trong vùng mask chồng lớp, tạo khối hình chữ nhật khi trộn level. Bản chọn `ten-slot-pose-authoring-v2/registered-surface-lv010-hd-v5` chỉ thay RGB tại pixel top-visible của slot; mọi pixel bị che kế thừa nguyên byte từ Lv1. Board kiểm hai chiều từng món và bốn mẫu phối chéo ở cùng thư mục không còn khối mask; v1-v4 bị loại, không đóng pack.
+
+Pack hiện hành Lv10 là `legacy-base-run-contact-jump-v3-div4-ten-slot-lv010-hd-review-v2`: 10 slot × 6 pose, overlay divisor 2, body divisor 4. Capture Player `build/vo-lv1-lv10-hd-inventory-runtime-v1/pc` đạt 156 frame, 40 toggle, 30 lần đổi variant, full level `[1,10]`, mixed verified, `errors=[]`; đã xem idle Lv1/Lv10, bốn nhịp chạy Lv10 và lộn phối xen kẽ 5 món Lv1 + 5 món Lv10. Python pack `10/10`, capture `15/15`, no-3D/no-source/frozen audit đều pass. Art vẫn `REVIEW_ONLY`, chưa tự gán production approval.
+
 ## Hiện hành — reject atlas Võ nhiều level bị mờ/lệch; dựng lại Võ Lv1 HD — 2026-09-11
 
 Owner đã reject trực tiếp Player `build/vo-pose-pairwise-player-v1/LinhGioiOnline.app`: trang bị mờ, layer ghép sai và không đọc được hình dáng. Các pack `ten-slot-pose-authoring-v1` Lv1–Lv100 chỉ chứng minh loader/slot/level hoạt động; **không còn là visual candidate** và không được dùng để mở class/level tiếp theo. Nguyên nhân đã xác nhận: nguồn item nhỏ và material-transfer bị đẩy qua mask chồng lớp rồi sampling div4; validator kỹ thuật không đo chất lượng mỹ thuật.

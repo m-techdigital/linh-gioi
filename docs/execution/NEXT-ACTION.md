@@ -1,3 +1,9 @@
+## Hiện hành — Võ Lv1/Lv10 HD đã qua agent visual audit — 2026-09-11
+
+Dùng Player `client/Unity/build/vo-lv1-inventory-player-v6/LinhGioiOnline.app` với pack Lv1 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv001-hd-review-v2` và alt Lv10 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv010-hd-review-v2`. Hành trang hiển thị đủ 10 ô; chọn món để xem thông tin/tháo-mặc, bấm `Đổi cấp món` để đổi riêng Lv1/Lv10. Evidence cuối `build/vo-lv1-lv10-hd-inventory-runtime-v1/pc`: 156 frame, full `[1,10]`, mixed, bốn nhịp chạy, lộn, `errors=[]`.
+
+Source Lv10 hiện hành là external `ten-slot-pose-authoring-v2/registered-surface-lv010-hd-v5`. Giữ quy tắc đã bắt được bằng audit: pixel ngoài vùng top-visible của slot phải kế thừa nguyên byte, không sharpen/filter lại underlayer; alpha/pivot/canvas dùng chung giữa các cấp. Không dùng v1-v4 hoặc bất kỳ pack nhiều level cũ bị reject. Sau review tương tác, bước roadmap kế tiếp là lấy design/demo Kiếm cụ thể rồi áp cùng pipeline theo một batch 10 ô × 6 pose; nếu mở thêm tier Võ thì cũng phải qua board từng món hai chiều và phối chéo trước Player. Không chỉnh camera/base/scale và không chạm frozen surfaces.
+
 ## Hiện hành — owner đang review Võ Lv1 HD trên Player — 2026-09-11
 
 Owner đã reject toàn bộ atlas nhiều level trước vì mờ/lệch. Không dùng kết quả count/switch cũ làm visual PASS. Player hiện hành là `build/vo-lv1-hd-player-v1/LinhGioiOnline.app`, chỉ nạp pack Lv1 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv001-hd-review-v2`: body/motion v3 div4 bất biến, overlay 10 slot div2, một actor. Source board và runtime board lần lượt ở external `ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v2/` và `build/vo-lv1-hd-runtime-v1/lv1-hd-runtime-review.jpg`.
