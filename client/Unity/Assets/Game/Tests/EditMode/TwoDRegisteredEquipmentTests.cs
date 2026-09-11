@@ -54,7 +54,7 @@ namespace LinhGioi.Tests
             finally { UnityEngine.Object.DestroyImmediate(root); foreach (var sprite in sprites) UnityEngine.Object.DestroyImmediate(sprite); }
         }
         [TestCase("male", 2)]
-        [TestCase("female", 4)]
+        [TestCase("female", 6)]
         public void EquippedGarmentTrianglesKeepOrientationAcrossNativeMotion(string gender, int expectedMeshes)
         {
             var root = new GameObject("equipment motion test"); var sprites = new List<Sprite>();
@@ -103,8 +103,8 @@ namespace LinhGioi.Tests
                 }
                 outfit.Apply("female", false, _ => true, _ => 0);
                 Assert.That(outfit.VisibleEquipmentAttachments, Is.EqualTo(17));
-                Assert.That(outfit.VisibleJointGarments, Is.EqualTo(4));
-                Assert.That(outfit.VisibleRigidAttachments, Is.EqualTo(10));
+                Assert.That(outfit.VisibleJointGarments, Is.EqualTo(6));
+                Assert.That(outfit.VisibleRigidAttachments, Is.EqualTo(8));
                 Assert.That(outfit.VisibleLayers, Is.EqualTo(11));
                 foreach (var foot in root.GetComponentsInChildren<SpriteRenderer>().Where(r => r.name == "Closed arm female_left-foot" || r.name == "Closed arm female_right-foot"))
                     Assert.That(foot.enabled, Is.False, "Equipped boots must replace original feet");

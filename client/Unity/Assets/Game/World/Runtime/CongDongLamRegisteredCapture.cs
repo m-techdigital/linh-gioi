@@ -229,11 +229,13 @@ namespace LinhGioi.World
             report.maxEquipmentAttachments = Math.Max(report.maxEquipmentAttachments, _registeredOutfit.VisibleEquipmentAttachments);
             report.maxBodyVariants = Math.Max(report.maxBodyVariants, _registeredOutfit.VisibleBodyVariants);
             var expectedFallbackCloth = _registeredOutfit.UsesEquipmentLowerBody ? 0 : 1;
+            var articulatedBoots = report.registeredEquipment && VoAvatarMode != "base"
+                && VoAvatarGender == "female" && _voState.IsEquipped("boots");
             var expectedJointGarments = VoAvatarMode == "base" || !report.registeredEquipment ? 0
-                : (_voState.IsEquipped("lower_garment") ? 2 : 0) + (VoAvatarGender == "female" && _voState.IsEquipped("outer_tunic") ? 2 : 0);
+                : (_voState.IsEquipped("lower_garment") ? 2 : 0) + (VoAvatarGender == "female" && _voState.IsEquipped("outer_tunic") ? 2 : 0) + (articulatedBoots ? 2 : 0);
             if (report.registeredEquipment && _registeredOutfit.VisibleJointGarments != expectedJointGarments) report.errors.Add("Missing registered garment mesh: " + name);
             if (_registeredOutfit.VisibleBodyVariants > 1) report.errors.Add("Overlapping body occlusion variants: " + name);
-            if (report.closedBody && (_registeredOutfit.VisibleRigidAttachments != 10 || _registeredOutfit.VisibleClothAttachments != expectedFallbackCloth)) report.errors.Add("Missing active closed body attachments: " + name);
+            if (report.closedBody && (_registeredOutfit.VisibleRigidAttachments != (articulatedBoots ? 8 : 10) || _registeredOutfit.VisibleClothAttachments != expectedFallbackCloth)) report.errors.Add("Missing active closed body attachments: " + name);
             if (report.closedFarArms && _registeredOutfit.VisibleRigidAttachments != 2) report.errors.Add("Missing active closed arm attachments: " + name);
             File.WriteAllBytes(Path.Combine(directory, (++report.frames).ToString("00") + "-" + name + ".png"), texture.EncodeToPNG());
             Destroy(texture);

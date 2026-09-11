@@ -178,7 +178,7 @@ namespace LinhGioi.Tests
                 {
                     var progress = tick / 32f;
                     outfit.Apply(gender, true, slot => false, part => 0);
-                    outfit.ApplyMovement(gender, motion, progress / (motion == "run" ? 2.5f : 2f), progress, 1);
+                    outfit.ApplyMovement(gender, motion, (motion == "run" ? TwoDSourcePoseTimeline.EntrySeconds + progress / TwoDSourcePoseTimeline.RunCyclesPerSecond : progress / 2f), progress, 1);
                     var vertices = outfit.SnapshotVertices(root.transform);
                     Assert.That(vertices.Length, Is.EqualTo(dump.bind.Length));
                     foreach (var point in vertices)

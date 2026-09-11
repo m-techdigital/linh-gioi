@@ -167,6 +167,19 @@ namespace LinhGioi.World
                 target.localPosition = center + (Vector3)offset;
                 target.localRotation = Quaternion.identity;
                 _solvers[key].UpdateIK(1);
+                if (gender == "female" && run && offset.y > 0)
+                {
+                    // A recovering foot follows the shin instead of staying world-flat
+                    // through extreme ankle rotation. Planted feet keep the existing target.
+                    var rotation = Quaternion.identity;
+                    for (var bone = _bones[gender + (side == 0 ? "_left-shin-foot" : "_right-shin-foot")]; bone != _skinRoot; bone = bone.parent)
+                        rotation = bone.localRotation * rotation;
+                    var shinAngle = Mathf.DeltaAngle(0, rotation.eulerAngles.z);
+                    var lift = Mathf.SmoothStep(0, 1, Mathf.Clamp01(offset.y / .1f));
+                    var footAngle = (shinAngle - Mathf.Clamp(shinAngle, -60, 60)) * lift;
+                    SetBindRotation(key, footAngle);
+                    target.localRotation = Quaternion.Euler(0, 0, footAngle);
+                }
             }
         }
         private void ApplyAuthoredMaleRun()
