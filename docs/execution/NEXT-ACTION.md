@@ -1,3 +1,11 @@
+## Hiện hành — 10 slot Lv1, Lv10 và phối chéo cùng body/action — 2026-09-11
+
+Đã đóng batch review đủ 10 slot Võ nam Lv1 trên source v3 div4 bất biến. Evidence `build/vo-lv1-ten-slot-surface-runtime-v3/pc` có 154 frame, 40 toggle, `errors=[]`, đủ sáu pose và fingerprint 22 file; đã xem một actor, idle, bốn nhịp chạy, lộn và tháo từng slot. External pack: `legacy-base-run-contact-jump-v3-div4-ten-slot-review-v1`. Không đổi camera/base/scale và không rollback registered WIP. Trạng thái art vẫn `REVIEW_ONLY`, chưa tự gán owner/production approval.
+
+Đã áp cùng source geometry cho 10 item Lv10 và một loadout phối xen kẽ năm item Lv1/năm item Lv10. Evidence lần lượt `build/vo-lv10-ten-slot-surface-runtime-v2/pc` và `build/vo-mixed-lv1-lv10-surface-runtime-v2/pc`, mỗi bộ 154 frame/40 toggle/`errors=[]`, đủ 22 fingerprint và sáu pose. Tool mới `tools/compose_lgo_pose_review_loadout.py` resolve `slotId -> itemId`, preflight đủ 10 slot/body hash/fit family rồi mới copy nguyên atlas; test `3/3`. Đây là review-pack composer, không thay runtime catalog hiện có.
+
+Action tiếp theo: dùng `TwoDEquipmentCompatibilityCatalog` làm resolver production duy nhất và nối item atlas theo pose vào loadout hiện có để đổi riêng từng slot ngay trong Player. Kiểm full Lv1, full Lv10, cặp phối chéo đại diện và tháo từng slot trong một batch. Sau đó tái dùng đúng body profile/geometry cho Lv20/Lv30; item sai silhouette phải quay lại source mask, không thêm offset/scale/controller theo level. Chưa mở class khác cho đến khi Võ qua ma trận này. Map01A giữ nguyên target.
+
 ## Hiện hành — sửa nguồn trang bị theo design gốc — 2026-09-11
 
 Đã đóng presentation một actor cho pose review: v3 div4 + `outer_top` chạy chung một stack tại vị trí actor chính; registered WIP vẫn giữ state nhưng không render song song. Scoped EditMode `28/28`; Player `build/vo-single-stack-player-v1/LinhGioiOnline.app` build thành công `171941930` byte, 0 error/13 warning. Capture `build/vo-single-stack-runtime-v1/pc` có 154 frame, `errors=[]`; đã xem idle, bốn pha chạy, lộn và bật/tắt áo. Không đổi camera/base/scale/source motion.

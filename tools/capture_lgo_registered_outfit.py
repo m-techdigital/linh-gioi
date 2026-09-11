@@ -251,6 +251,7 @@ def main():
                 'packDirectory': str(args.pose_review_dir.resolve()),
                 'manifestSha256': pose_fingerprint['atlas-review.json'],
                 'atlasSha256': pose_fingerprint['atlas-review.png'],
+                'posePackFingerprint': pose_fingerprint,
                 'packStableBeforeAfterCapture': True,
                 'samplingDivisor': pose_pack['samplingDivisor'],
                 'runtimeEligible': False,
