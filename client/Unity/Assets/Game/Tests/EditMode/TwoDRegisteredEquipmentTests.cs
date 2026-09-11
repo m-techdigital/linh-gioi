@@ -1,14 +1,127 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.U2D;
 using LinhGioi.World;
 
 namespace LinhGioi.Tests
 {
     public sealed class TwoDRegisteredEquipmentTests
     {
+        [Test]
+        public void ReviewPresentationCanHideRegisteredRenderersWithoutDestroyingWardrobeState()
+        {
+            var root = new GameObject("registered presentation visibility");
+            var sprites = new List<Sprite>();
+            try
+            {
+                var outfit = new TwoDRegisteredOutfit(root.transform, sprites, false, true, false, true, true);
+                outfit.Apply("male", false, _ => true, _ => 0);
+                var visibleLayers = outfit.VisibleLayers;
+                var method = typeof(TwoDRegisteredOutfit).GetMethod("SetPresentationVisible");
+                Assert.That(method, Is.Not.Null, "The selected pose/wardrobe stack must be able to replace the old presentation");
+                method.Invoke(outfit, new object[] { false });
+                Assert.That(root.GetComponentsInChildren<Renderer>().All(renderer => renderer.forceRenderingOff), Is.True);
+                Assert.That(outfit.VisibleLayers, Is.EqualTo(visibleLayers), "Hiding the superseded visual must not roll back wardrobe state");
+                method.Invoke(outfit, new object[] { true });
+                Assert.That(root.GetComponentsInChildren<Renderer>().Any(renderer => renderer.forceRenderingOff), Is.False);
+            }
+            finally { UnityEngine.Object.DestroyImmediate(root); foreach (var sprite in sprites) UnityEngine.Object.DestroyImmediate(sprite); }
+        }
+
+        [Serializable] private sealed class BindPart { public string id; public int x, y, w, h; public float[] sourceCanvasRect; }
+        [Serializable] private sealed class BindPack { public BindPart[] parts; }
+        [Serializable] private sealed class BindLayer
+        {
+            public string id, atlas, atlasSha256, manifestSha256; public int order; public Vector2[] points, uv; public int[] triangles;
+        }
+        [Serializable] private sealed class BindInput { public string path, sha256; }
+        [Serializable] private sealed class BindEvidence { public string gender; public BindLayer[] layers; public BindInput[] inputs; }
+
+        [TestCase("male")]
+        [TestCase("female")]
+        public void BoundOutfitVerticesMatchCanonicalTextureCoordinates(string gender)
+        {
+            var root = new GameObject("canonical bind evidence"); var sprites = new List<Sprite>();
+            try
+            {
+                var outfit = new TwoDRegisteredOutfit(root.transform, sprites, false, true, false, true, true);
+                outfit.Apply(gender, false, _ => true, _ => 0);
+                outfit.ApplyMovement(gender, "idle", 0, 0, 1);
+                var layers = new List<BindLayer>();
+                foreach (var renderer in root.GetComponentsInChildren<Renderer>().Where(r => r.enabled))
+                {
+                    var sr = renderer as SpriteRenderer;
+                    Vector3[] local; Vector2[] uv; int[] triangles; Texture texture;
+                    if (sr != null)
+                    {
+                        local = sr.sprite.GetVertexAttribute<Vector3>(UnityEngine.Rendering.VertexAttribute.Position).ToArray();
+                        uv = sr.sprite.GetVertexAttribute<Vector2>(UnityEngine.Rendering.VertexAttribute.TexCoord0).ToArray();
+                        triangles = sr.sprite.triangles.Select(i => (int)i).ToArray(); texture = sr.sprite.texture;
+                        var skin = sr.GetComponent<UnityEngine.U2D.Animation.SpriteSkin>();
+                        if (skin != null)
+                        {
+                            var weights = sr.sprite.GetVertexAttribute<BoneWeight>(UnityEngine.Rendering.VertexAttribute.BlendWeight);
+                            var bind = sr.sprite.GetBindPoses();
+                            for (var i = 0; i < local.Length; i++)
+                            {
+                                var w = weights[i]; var v = local[i];
+                                local[i] = skin.boneTransforms[w.boneIndex0].TransformPoint(bind[w.boneIndex0].MultiplyPoint3x4(v)) * w.weight0
+                                    + skin.boneTransforms[w.boneIndex1].TransformPoint(bind[w.boneIndex1].MultiplyPoint3x4(v)) * w.weight1;
+                            }
+                        }
+                        else for (var i = 0; i < local.Length; i++) local[i] = sr.transform.TransformPoint(local[i]);
+                    }
+                    else
+                    {
+                        var mesh = renderer.GetComponent<MeshFilter>().sharedMesh;
+                        local = mesh.vertices.Select(renderer.transform.TransformPoint).ToArray(); uv = mesh.uv; triangles = mesh.triangles;
+                        texture = renderer.sharedMaterial.mainTexture;
+                    }
+                    var atlas = UnityEditor.AssetDatabase.GetAssetPath(texture);
+                    Assert.That(atlas, Is.Not.Empty, renderer.name);
+                    var pack = JsonUtility.FromJson<BindPack>(System.IO.File.ReadAllText(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(atlas), "manifest.json")));
+                    var id = renderer.name.Replace("Registered equipment ", "").Replace("Closed arm ", "").Replace("Registered ", "");
+                    var part = pack.parts.Single(p => p.id == id); var box = part.sourceCanvasRect;
+                    var points = local.Select(v => outfit.BindSpace.InverseTransformPoint(v)).Select(v => new Vector2(v.x * 1536 / 1.7f + 512, 1484 - v.y * 1536 / 1.7f)).ToArray();
+                    Assert.That(triangles.Length, Is.GreaterThan(0));
+                    for (var i = 0; i < points.Length; i++)
+                    {
+                        var expected = new Vector2(box[0] + (uv[i].x * texture.width - part.x) / part.w * (box[2] - box[0]),
+                            box[3] - (uv[i].y * texture.height - part.y) / part.h * (box[3] - box[1]));
+                        Assert.That(Vector2.Distance(points[i], expected), Is.LessThan(.02f), id + " vertex " + i);
+                    }
+                    using (var sha = System.Security.Cryptography.SHA256.Create())
+                    {
+                        string Hash(string path) => BitConverter.ToString(sha.ComputeHash(System.IO.File.ReadAllBytes(path))).Replace("-", "").ToLowerInvariant();
+                        layers.Add(new BindLayer { id = id, atlas = atlas, atlasSha256 = Hash(atlas),
+                            manifestSha256 = Hash(System.IO.Path.Combine(System.IO.Path.GetDirectoryName(atlas), "manifest.json")),
+                            order = renderer.sortingOrder, points = points, uv = uv, triangles = triangles });
+                    }
+                }
+                Assert.That(layers.Count, Is.GreaterThan(20));
+                var output = Environment.GetEnvironmentVariable("LGO_REGISTERED_BIND_DUMP");
+                if (!string.IsNullOrEmpty(output))
+                {
+                    var inputs = System.IO.Directory.GetFiles("Assets/Game/World/Runtime", "TwoDRegistered*.cs").Concat(new[] {
+                        "Assets/Game/Tests/EditMode/TwoDRegisteredEquipmentTests.cs",
+                        "Assets/Game/World/Runtime/Resources/LGOClasses/VoRegisteredLv1/manifest.json",
+                        "Assets/Game/World/Runtime/Resources/LGOClasses/VoRegisteredLv1/anatomical-meshes.json",
+                        "Packages/packages-lock.json"
+                    }).OrderBy(path => path).Select(path => {
+                        using (var sha = System.Security.Cryptography.SHA256.Create())
+                            return new BindInput { path = path, sha256 = BitConverter.ToString(sha.ComputeHash(System.IO.File.ReadAllBytes(path))).Replace("-", "").ToLowerInvariant() };
+                    }).ToArray();
+                    System.IO.Directory.CreateDirectory(output);
+                    System.IO.File.WriteAllText(System.IO.Path.Combine(output, gender + "-bind.json"), JsonUtility.ToJson(new BindEvidence { gender = gender, layers = layers.OrderBy(l => l.order).ToArray(), inputs = inputs }, true));
+                }
+            }
+            finally { UnityEngine.Object.DestroyImmediate(root); foreach (var sprite in sprites) UnityEngine.Object.DestroyImmediate(sprite); }
+        }
+
         [Test]
         public void IndependentHairAndPantsStatesRestoreOriginalBodyAfterMovement()
         {

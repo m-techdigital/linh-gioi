@@ -143,3 +143,14 @@ Lệnh thứ hai trả exit 2 khi fit/registration fail, giữ báo cáo/ảnh �
 Ba profile macOS hiện có: mobile 1600×720, tablet 1024×768, PC 1280×720. Cùng camera orthographic có `pixelsPerWorldUnit = viewportHeight / (2 * orthographicSize)`; khác tỷ lệ màn hình chủ yếu đổi vùng nhìn ngang, không sửa sprite scale để bù. Nếu thiết kế yêu cầu camera khác phải có profile rõ và review cả ba, không offset tùy màn. UI dùng base layout/safe-area chung; kiểm text, anchor, overflow, hộp thoại, inventory, slot toggle và nút thao tác. Profile capture không thay chứng nhận thiết bị mobile thật.
 
 Gom thay đổi phụ thuộc, kiểm nguồn/registration/full outfit trước, rồi một lượt EditMode/build/capture. Capture phải có idle trước action → windup/impact/recover → idle sau action, cận cảnh khớp và toàn màn hình UI. Phải xem ảnh; kiểm manifest/state/count xanh chỉ là technical evidence. Chạy lại gate tốn thời gian khi có thay đổi liên quan hoặc lỗi mới được xác minh, ghi lý do. Kết luận tách riêng logic, registration, visual và device; fail một gate cần thiết thì giữ `FIX_REQUIRED` và chưa mở class/tier tiếp theo. Lưu lỗi, nguồn sai, công thức sửa và evidence vào tài liệu này/NEXT-ACTION để phiên sau không nghiên cứu lại từ đầu.
+
+### Gate registered đã có evidence — 2026-09-11
+
+Pack legacy bị reject ở phần lịch sử không phải pack registered hiện hành. `BoundOutfitVerticesMatchCanonicalTextureCoordinates` trong EditMode equipment tests kiểm geometry sau bind và xuất dump khi có `LGO_REGISTERED_BIND_DUMP=/absolute/new-directory`. Dump khóa input code/rig/packages và atlas/manifest; thay input phải capture dump mới.
+
+```sh
+PYTHONPYCACHEPREFIX=build/pycache build/rig-authoring-venv/bin/python tools/review_lgo_paper_doll_pack.py --registered-bind-dump <dump>/male-bind.json --out-dir <new-evidence>/male --require-fit
+PYTHONPYCACHEPREFIX=build/pycache build/rig-authoring-venv/bin/python tools/review_lgo_paper_doll_pack.py --registered-bind-dump <dump>/female-bind.json --out-dir <new-evidence>/female --require-fit
+```
+
+Reference là source canonical theo rect sở hữu; candidate dùng vertices/UV/indices Unity thực và atlas, trên cùng canvas256×384, không normalize bbox. Gate giữ ngưỡng cũ; sorting/layer selection kế thừa runtime nên cần Player visual review độc lập. Không gọi software raster này là screenshot Player. Final `build/vo-registered-bind-fit-final` đạt nam IoU1,00000/area1,00000/MAE0,016 và nữ0,99898/0,99898/0,129; đã xem ảnh đối chứng. Kết quả này chỉ kiểm bind ở trạng thái đứng và đã stale sau khi sửa runtime. Owner đã bác motion retarget v5/v7; không đủ đóng fit Lv1 hoặc tiếp Lv10/mặc chéo. Chuẩn motion là whole-pose v3 div4 từ sandbox cũ; registered wardrobe vẫn là candidate cần khớp theo chuẩn đó.

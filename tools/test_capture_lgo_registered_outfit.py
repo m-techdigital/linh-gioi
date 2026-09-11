@@ -10,6 +10,27 @@ from capture_lgo_registered_outfit import validate_registered_capture_result, va
 
 
 class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
+    def test_capture_requires_owner_selected_source(self):
+        import capture_lgo_registered_outfit as capture
+        from unittest.mock import patch
+        approved = {
+            'atlas-review.json': '6f78205aa3d1b2f2f4ea7fc43d7abe39a6fb2a7dec93ec5ee28ab997b4bfd98e',
+            'atlas-review.png': '27630a5ceece2500e412620b70cf43e61a80bbef5d4391ae450d3d19d6829010',
+        }
+        with patch.object(capture, 'pose_review_fingerprint', return_value=approved):
+            capture.validate_owner_pose_source(Path('copy-of-approved-pack'))
+        with patch.object(capture, 'pose_review_fingerprint', return_value={
+                **approved,
+                'outer-top-review/atlas-review.json': 'overlay-manifest',
+                'outer-top-review/atlas-review.png': 'overlay-atlas',
+        }):
+            capture.validate_owner_pose_source(Path('approved-pack-with-review-overlay'))
+        for changed in approved:
+            fingerprint = dict(approved, **{changed: 'different'})
+            with self.subTest(changed=changed), patch.object(capture, 'pose_review_fingerprint', return_value=fingerprint):
+                with self.assertRaisesRegex(ValueError, 'owner-selected'):
+                    capture.validate_owner_pose_source(Path('unapproved-pack'))
+
     def test_managed_code_change_is_detected_with_identical_engine(self):
         with tempfile.TemporaryDirectory() as directory:
             contents = Path(directory) / 'Game.app/Contents'
@@ -165,6 +186,36 @@ class PoseReviewCaptureValidationTests(unittest.TestCase):
                     validate_pose_review_unchanged(self.root, expected)
                 path.write_bytes(original)
 
+    def test_capture_fingerprints_optional_outer_top_overlay(self):
+        self.write_pack()
+        overlay = self.root / 'outer-top-review'
+        overlay.mkdir()
+        (overlay / 'atlas-review.png').write_bytes(b'outer-top-atlas')
+        (overlay / 'atlas-review.json').write_text(json.dumps({
+            'status': 'REVIEW_ONLY', 'runtimeEligible': False, 'samplingDivisor': 4,
+            'reviewSlot': 'outer_top',
+        }))
+        expected = pose_review_fingerprint(self.root)
+        self.assertEqual(set(expected), {
+            'atlas-review.json', 'atlas-review.png',
+            'outer-top-review/atlas-review.json', 'outer-top-review/atlas-review.png',
+        })
+        (overlay / 'atlas-review.png').write_bytes(b'changed-outer-top-atlas')
+        with self.assertRaisesRegex(ValueError, 'changed during capture'):
+            validate_pose_review_unchanged(self.root, expected)
+
+    def test_capture_fingerprints_every_present_ten_slot_directory(self):
+        self.write_pack()
+        for subdir in ('outer-top-review', 'waist-belt-review'):
+            overlay = self.root / subdir
+            overlay.mkdir()
+            (overlay / 'atlas-review.png').write_bytes(subdir.encode())
+            (overlay / 'atlas-review.json').write_text('{}')
+        names = set(pose_review_fingerprint(self.root))
+        self.assertIn('outer-top-review/atlas-review.png', names)
+        self.assertIn('waist-belt-review/atlas-review.png', names)
+        self.assertEqual(len(names), 6)
+
     def test_review_pack_cannot_be_promoted(self):
         self.pack['runtimeEligible'] = True
         self.write_pack()
@@ -181,6 +232,20 @@ class PoseReviewCaptureValidationTests(unittest.TestCase):
         lines[-1] += '_wrong'
         with self.assertRaisesRegex(ValueError, 'jump_tuck'):
             validate_pose_review_log('\n'.join(lines), self.root, self.pack)
+
+    def test_log_requires_optional_outer_top_overlay_to_load(self):
+        self.write_pack()
+        overlay = self.root / 'outer-top-review'
+        overlay.mkdir()
+        (overlay / 'atlas-review.json').write_text('{}')
+        (overlay / 'atlas-review.png').write_bytes(b'overlay')
+        lines = ['LGO_POSE_REVIEW_LOADED ' + str(self.root.resolve())]
+        lines += ['LGO_POSE_REVIEW_FRAME ' + p['id'] for p in self.pack['sprites']]
+        with self.assertRaisesRegex(ValueError, 'outer_top'):
+            validate_pose_review_log('\n'.join(lines), self.root, self.pack)
+        lines.append('LGO_POSE_REVIEW_OVERLAY_LOADED outer_top ' + str(overlay.resolve()))
+        self.assertEqual(validate_pose_review_log('\n'.join(lines), self.root, self.pack),
+                         ['idle', 'jump_tuck', 'run_a', 'run_b'])
 
 
 if __name__ == "__main__":

@@ -94,5 +94,80 @@ class RegisteredBodyIndependenceTests(unittest.TestCase):
                     self.assertEqual(expected.crop(rect).tobytes(), actual.crop(rect).tobytes(), "Inner top must select equipment, not rewrite skin")
 
 
+
+
+class RegisteredBindDumpTests(unittest.TestCase):
+    def setUp(self):
+        import tempfile
+        import hashlib
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.pack = self.root / 'client/Unity/Assets/Pack'
+        self.pack.mkdir(parents=True)
+        self.runtime = self.root / 'client/Unity/Assets/Game/World/Runtime/TwoDRegisteredOutfit.cs'
+        paths = ['Assets/Game/World/Runtime/TwoDRegisteredOutfit.cs',
+                 'Assets/Game/Tests/EditMode/TwoDRegisteredEquipmentTests.cs',
+                 'Assets/Game/World/Runtime/Resources/LGOClasses/VoRegisteredLv1/manifest.json',
+                 'Assets/Game/World/Runtime/Resources/LGOClasses/VoRegisteredLv1/anatomical-meshes.json', 'Packages/packages-lock.json']
+        self.inputs = []
+        for path in paths:
+            local = self.root / 'client/Unity' / path; local.parent.mkdir(parents=True, exist_ok=True); local.write_text('fixture')
+            self.inputs.append({'path': path, 'sha256': hashlib.sha256(local.read_bytes()).hexdigest()})
+        self.source = self.root / 'source.png'
+        image = Image.new('RGBA', (256, 384))
+        ImageDraw.Draw(image).rectangle((4, 4, 11, 11), fill='#d4a340')
+        image.save(self.source)
+        atlas = Image.new('RGBA', (16, 16)); atlas.paste(image.crop((4, 4, 12, 12)), (2, 6))
+        atlas.save(self.pack / 'atlas.png')
+        sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+        part = {'id': 'shirt', 'x': 2, 'y': 2, 'w': 8, 'h': 8, 'source': str(self.source),
+                'sourceSha256': sha(self.source), **project_canvas_rect((16, 16, 48, 48))}
+        (self.pack / 'manifest.json').write_text(json.dumps({'parts': [part]}))
+        self.layer = {'id': 'shirt', 'atlas': 'Assets/Pack/atlas.png', 'order': 1,
+                      'atlasSha256': sha(self.pack / 'atlas.png'), 'manifestSha256': sha(self.pack / 'manifest.json'),
+                      'points': [{'x': x, 'y': y} for x, y in [(16, 48), (48, 48), (48, 16), (16, 16)]],
+                      'uv': [{'x': x / 16, 'y': y / 16} for x, y in [(2, 2), (10, 2), (10, 10), (2, 10)]],
+                      'triangles': [0, 1, 2, 0, 2, 3]}
+
+    def review(self):
+        from review_lgo_paper_doll_pack import render_registered_bind_dump
+        dump = self.root / 'dump.json'
+        dump.write_text(json.dumps({'gender': 'male', 'layers': [self.layer], 'inputs': self.inputs}))
+        return render_registered_bind_dump(self.root, dump, self.root / 'review')
+
+    def test_original_sources_match_bound_geometry(self):
+        self.assertTrue(self.review()['referenceFitPassed'])
+
+    def test_displaced_runtime_vertices_fail_without_recentering(self):
+        for p in self.layer['points']:
+            p['x'] += 40
+        self.assertFalse(self.review()['referenceFitPassed'])
+
+    def test_missing_runtime_triangle_fails(self):
+        self.layer['triangles'] = [0, 1, 2]
+        self.assertFalse(self.review()['referenceFitPassed'])
+
+    def test_stale_dump_is_rejected(self):
+        self.layer['atlasSha256'] = '0' * 64
+        with self.assertRaisesRegex(ValueError, 'current atlas'):
+            self.review()
+
+    def test_changed_source_is_rejected(self):
+        self.source.write_bytes(b'changed')
+        with self.assertRaisesRegex(ValueError, 'source fingerprint'):
+            self.review()
+
+    def test_changed_runtime_code_rejects_old_geometry(self):
+        self.runtime.write_text('changed binding implementation')
+        with self.assertRaisesRegex(ValueError, 'current runtime/exporter'):
+            self.review()
+
+    def test_missing_runtime_fingerprint_is_rejected(self):
+        self.inputs.pop()
+        with self.assertRaisesRegex(ValueError, 'Incomplete runtime/exporter'):
+            self.review()
+
+
 if __name__ == "__main__":
     unittest.main()

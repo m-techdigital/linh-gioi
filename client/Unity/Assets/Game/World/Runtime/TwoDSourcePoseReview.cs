@@ -1,21 +1,53 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 
 namespace LinhGioi.World
 {
-    // Explicit local art review only. Never participates in equipment resolution.
+    // Explicit local art review only. One actor stack shares pose, facing and roll.
     public sealed class TwoDSourcePoseReview : MonoBehaviour
     {
-        [Serializable] private sealed class Pack { public string status; public bool runtimeEligible; public int samplingDivisor; public Part[] sprites; public int[] jumpPivotSource; }
+        [Serializable] private sealed class Pack
+        {
+            public string status, reviewSlot, basePoseAtlasSha256, basePoseManifestSha256;
+            public bool runtimeEligible;
+            public int samplingDivisor;
+            public Part[] sprites;
+            public int[] jumpPivotSource;
+        }
         [Serializable] private sealed class Part
         {
-            public string id, sourceSpaceProfile;
+            public string id, sourceSpaceProfile, componentId;
+            public int order;
             public int[] atlasRectTopLeft, sourceCanvasRect;
         }
+        private sealed class ReviewComponent
+        {
+            public readonly Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>();
+            public readonly Dictionary<string, Rect> SourceRects = new Dictionary<string, Rect>();
+            public SpriteRenderer Renderer;
+            public int Order;
+        }
+        private sealed class ReviewSlot
+        {
+            public Texture2D Texture;
+            public readonly Dictionary<string, ReviewComponent> Components = new Dictionary<string, ReviewComponent>();
+        }
+        private static readonly string[] SlotIds =
+        {
+            "main_weapon", "head_hair", "inner_top", "outer_top", "lower_body",
+            "waist_belt", "arm_guard", "footwear", "shoulder_chest_guard", "class_accessory"
+        };
+        private static readonly string[] SlotDirectories =
+        {
+            "main-weapon-review", "head-hair-review", "inner-top-review", "outer-top-review", "lower-body-review",
+            "waist-belt-review", "arm-guard-review", "footwear-review", "shoulder-chest-guard-review", "class-accessory-review"
+        };
         private readonly Dictionary<string, Sprite> _sprites = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Rect> _sourceRects = new Dictionary<string, Rect>();
+        private readonly Dictionary<string, ReviewSlot> _reviewSlots = new Dictionary<string, ReviewSlot>();
         private Texture2D _texture;
         private SpriteRenderer _renderer;
         private Transform _rotationRoot;
@@ -31,7 +63,7 @@ namespace LinhGioi.World
             var index = Array.IndexOf(args, "--lgo-vo-pose-review-dir");
             if (index < 0) return null;
             if (index + 1 >= args.Length) throw new ArgumentException("Pose review directory missing");
-            var host = new GameObject("Võ male pose review — no equipment");
+            var host = new GameObject("Võ male pose review — active stack");
             host.transform.SetParent(parent, false);
             var review = host.AddComponent<TwoDSourcePoseReview>();
             try { review.Load(args[index + 1]); }
@@ -81,11 +113,83 @@ namespace LinhGioi.World
             _rotationRoot.SetParent(transform, false);
             var host = new GameObject("Pose sprite"); host.transform.SetParent(_rotationRoot, false);
             _renderer = host.AddComponent<SpriteRenderer>(); _renderer.sortingOrder = 24;
-            transform.localPosition = new Vector3(1.9f, 0, 0);
+            for (var index = 0; index < SlotIds.Length; index++)
+            {
+                var overlayDirectory = Path.Combine(directory, SlotDirectories[index]);
+                if (Directory.Exists(overlayDirectory)) LoadReviewSlot(directory, overlayDirectory, SlotIds[index], index);
+            }
+            transform.localPosition = Vector3.zero;
             Apply("idle", 0, 1);
         }
 
+        private void LoadReviewSlot(string bodyDirectory, string overlayDirectory, string expectedSlot, int slotOrder)
+        {
+            var manifestPath = Path.Combine(overlayDirectory, "atlas-review.json");
+            var atlasPath = Path.Combine(overlayDirectory, "atlas-review.png");
+            var pack = JsonUtility.FromJson<Pack>(File.ReadAllText(manifestPath));
+            if (pack == null || pack.sprites == null || pack.sprites.Length < 6
+                || pack.samplingDivisor != 4 || pack.status != "REVIEW_ONLY" || pack.runtimeEligible
+                || pack.reviewSlot != expectedSlot || _reviewSlots.ContainsKey(expectedSlot)
+                || pack.basePoseAtlasSha256 != Hash(Path.Combine(bodyDirectory, "atlas-review.png"))
+                || pack.basePoseManifestSha256 != Hash(Path.Combine(bodyDirectory, "atlas-review.json")))
+                throw new InvalidDataException("Slot review pack does not belong to this body pose pack: " + expectedSlot);
+            var slot = new ReviewSlot { Texture = new Texture2D(2, 2, TextureFormat.RGBA32, false) };
+            if (!slot.Texture.LoadImage(File.ReadAllBytes(atlasPath)))
+                throw new InvalidDataException("Cannot load slot review atlas: " + expectedSlot);
+            slot.Texture.filterMode = FilterMode.Bilinear;
+            slot.Texture.wrapMode = TextureWrapMode.Clamp;
+            foreach (var part in pack.sprites)
+            {
+                var a = part.atlasRectTopLeft; var s = part.sourceCanvasRect;
+                var componentId = string.IsNullOrEmpty(part.componentId) ? "main" : part.componentId;
+                if (part.sourceSpaceProfile != "lgo_character_canvas_1024x1536_v1"
+                    || a == null || a.Length != 4 || s == null || s.Length != 4
+                    || a[0] < 0 || a[1] < 0 || a[2] <= 0 || a[3] <= 0
+                    || a[0] + a[2] > slot.Texture.width || a[1] + a[3] > slot.Texture.height
+                    || s[0] < 0 || s[1] < 0 || s[2] > 1024 || s[3] > 1536
+                    || s[2] - s[0] != a[2] * pack.samplingDivisor
+                    || s[3] - s[1] != a[3] * pack.samplingDivisor
+                    || !IsValidPoseId(part.id))
+                    throw new InvalidDataException("Invalid slot pose registration: " + expectedSlot + "/" + part.id);
+                if (!slot.Components.TryGetValue(componentId, out var component))
+                {
+                    component = new ReviewComponent { Order = part.order == 0 ? 25 + slotOrder : part.order };
+                    slot.Components.Add(componentId, component);
+                }
+                if (component.Sprites.ContainsKey(part.id) || (part.order != 0 && component.Order != part.order))
+                    throw new InvalidDataException("Duplicate/inconsistent slot component pose: " + expectedSlot + "/" + componentId + "/" + part.id);
+                component.Sprites.Add(part.id, Sprite.Create(slot.Texture,
+                    new Rect(a[0], slot.Texture.height - a[1] - a[3], a[2], a[3]), new Vector2(.5f, .5f), 100));
+                component.SourceRects.Add(part.id, Rect.MinMaxRect(s[0], s[1], s[2], s[3]));
+            }
+            foreach (var pair in slot.Components)
+            {
+                foreach (var required in new[] { "idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck" })
+                    if (!pair.Value.Sprites.ContainsKey(required))
+                        throw new InvalidDataException("Missing slot locomotion pose: " + expectedSlot + "/" + pair.Key + "/" + required);
+                var host = new GameObject(expectedSlot + "/" + pair.Key); host.transform.SetParent(_rotationRoot, false);
+                pair.Value.Renderer = host.AddComponent<SpriteRenderer>();
+                pair.Value.Renderer.sortingOrder = pair.Value.Order;
+            }
+            _reviewSlots.Add(expectedSlot, slot);
+            Debug.Log("LGO_POSE_REVIEW_OVERLAY_LOADED " + expectedSlot + " " + overlayDirectory);
+        }
+
+        private static string Hash(string path)
+        {
+            using (var sha = SHA256.Create())
+                return BitConverter.ToString(sha.ComputeHash(File.ReadAllBytes(path))).Replace("-", "").ToLowerInvariant();
+        }
+
         public void Advance(float seconds) => _timeline.Advance(seconds);
+
+        public void SetSlotVisible(string slot, bool visible)
+        {
+            if (_reviewSlots.TryGetValue(slot, out var reviewSlot))
+                foreach (var component in reviewSlot.Components.Values) component.Renderer.enabled = visible;
+        }
+
+        public void SetOuterTopVisible(bool visible) => SetSlotVisible("outer_top", visible);
 
         public void Apply(string motion, float phaseSeconds, int facing, float actionProgress = 0)
         {
@@ -104,12 +208,20 @@ namespace LinhGioi.World
             var jumpLean = jumping ? Mathf.Sin(Mathf.Clamp01(actionProgress) * Mathf.PI) : 0;
             _rotationRoot.localPosition = pivot + new Vector3(jumpLean * .18f * direction, jumpLean * .04f, 0);
             _rotationRoot.localRotation = Quaternion.Euler(0, 0, jumping ? (SomersaultDegrees(actionProgress) - jumpLean * 16f) * direction : 0);
-            _renderer.sprite = sprite;
-            _renderer.transform.localPosition = new Vector3((rect.center.x - 512) * units * direction,
-                (1484 - rect.center.y) * units, 0) - pivot;
-            _renderer.transform.localScale = new Vector3(rect.width * units / sprite.bounds.size.x * direction,
-                rect.height * units / sprite.bounds.size.y, 1);
+            ApplySprite(_renderer, sprite, rect, units, direction, pivot);
+            foreach (var slot in _reviewSlots.Values)
+                foreach (var component in slot.Components.Values)
+                    ApplySprite(component.Renderer, component.Sprites[frame], component.SourceRects[frame], units, direction, pivot);
             if (_frame != frame) { _frame = frame; Debug.Log("LGO_POSE_REVIEW_FRAME " + frame); }
+        }
+
+        private static void ApplySprite(SpriteRenderer renderer, Sprite sprite, Rect rect, float units, int direction, Vector3 pivot)
+        {
+            renderer.sprite = sprite;
+            renderer.transform.localPosition = new Vector3((rect.center.x - 512) * units * direction,
+                (1484 - rect.center.y) * units, 0) - pivot;
+            renderer.transform.localScale = new Vector3(rect.width * units / sprite.bounds.size.x * direction,
+                rect.height * units / sprite.bounds.size.y, 1);
         }
 
         public static float SomersaultDegrees(float progress) => -360f * Mathf.SmoothStep(0, 1, Mathf.InverseLerp(.03f, .40f, progress));
@@ -141,13 +253,21 @@ namespace LinhGioi.World
             GUI.color = new Color(0, 0, 0, .8f);
             GUI.DrawTexture(box, Texture2D.whiteTexture);
             GUI.color = Color.white;
-            GUI.Label(box, "Võ nam · POSE THỬ\nĐứng / chạy / lộn · chưa đồ rời");
+            GUI.Label(box, _reviewSlots.Count == 0
+                ? "Võ nam · POSE THỬ\nĐứng / chạy / lộn · chưa đồ rời"
+                : "Võ nam · POSE THỬ\n" + _reviewSlots.Count + "/10 slot · đứng / 4 nhịp chạy / lộn");
             GUI.color = previousColor;
         }
 
         private void OnDestroy()
         {
             foreach (var sprite in _sprites.Values) Destroy(sprite);
+            foreach (var slot in _reviewSlots.Values)
+            {
+                foreach (var component in slot.Components.Values)
+                    foreach (var sprite in component.Sprites.Values) Destroy(sprite);
+                if (slot.Texture != null) Destroy(slot.Texture);
+            }
             if (_texture != null) Destroy(_texture);
         }
     }

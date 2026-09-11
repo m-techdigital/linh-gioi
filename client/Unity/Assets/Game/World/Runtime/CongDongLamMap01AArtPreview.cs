@@ -223,6 +223,11 @@ namespace LinhGioi.World
             "main_weapon", "head_hair", "inner_top", "outer_tunic", "lower_garment",
             "waist", "arm_guard", "boots", "light_armor", "accessory"
         };
+        private static readonly string[] VoReviewSlotIds =
+        {
+            "main_weapon", "head_hair", "inner_top", "outer_top", "lower_body",
+            "waist_belt", "arm_guard", "footwear", "shoulder_chest_guard", "class_accessory"
+        };
         private readonly Dictionary<string, int> _voEquipmentLevels = new Dictionary<string, int>();
         private readonly TwoDCharacterRuntimeState _voState = new TwoDCharacterRuntimeState(
             VoAvatarModes, VoAvatarGenders, VoAvatarLevels, VoEquipmentSlots);
@@ -514,6 +519,7 @@ namespace LinhGioi.World
             }
             BuildVoAvatar();
             _sourcePoseReview = TwoDSourcePoseReview.CreateIfRequested(transform);
+            if (_sourcePoseReview != null) _registeredOutfit?.SetPresentationVisible(false);
             ApplyVoPose();
             _kiemFitPreview = new TwoDKiemMixedLoadoutFitPreview(_voAvatarRoot, _voRig);
             PartCount = parts.Count;
@@ -778,6 +784,9 @@ namespace LinhGioi.World
 
         private void RefreshVoAvatarMode()
         {
+            if (_sourcePoseReview != null)
+                for (var index = 0; index < VoEquipmentSlots.Length; index++)
+                    _sourcePoseReview.SetSlotVisible(VoReviewSlotIds[index], _voState.IsEquipped(VoEquipmentSlots[index]));
             if (_registeredOutfit != null)
             {
                 var cycle = _voState.AnimationPhase * (VoAvatarMotionState == "run" ? 4.4f : 3.5f);
@@ -1064,7 +1073,7 @@ namespace LinhGioi.World
             RefreshVoAvatarMode();
             if (_sourcePoseReview != null)
             {
-                _sourcePoseReview.transform.localPosition = new Vector3(_routeX + 1.9f, GroundY + _voPoseYOffset, 0);
+                _sourcePoseReview.transform.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
                 _sourcePoseReview.Apply(VoAvatarMotionState, _voState.AnimationPhase, _sourcePoseFacing, _voState.ActionProgress);
             }
             if (_voSkillVfx != null)
@@ -1251,7 +1260,7 @@ namespace LinhGioi.World
                 if (!float.IsNaN(FootY)) _player.position += Vector3.up * (GroundY - FootY);
             }
             if (_voAvatarRoot != null) _voAvatarRoot.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
-            if (_sourcePoseReview != null) _sourcePoseReview.transform.localPosition = new Vector3(_routeX + 1.9f, GroundY + _voPoseYOffset, 0);
+            if (_sourcePoseReview != null) _sourcePoseReview.transform.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
             if (_camera != null)
             {
                 var cameraPosition = _camera.transform.position;
