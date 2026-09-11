@@ -64,12 +64,15 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
         expected_levels = sorted({1, *pose_review_variant_levels})
         if result.get('poseReviewFullLevelsVerified') != expected_levels:
             errors.append('POSE_REVIEW_FULL_LEVEL_MATRIX_NOT_VERIFIED')
+        frames = result.get('poseReviewFullLevelFrames', [])
+        if len(frames) != len(expected_levels) or len(set(frames)) != len(frames):
+            errors.append('POSE_REVIEW_FULL_LEVEL_FRAMES_MISSING')
         if not result.get('poseReviewMixedVerified'):
             errors.append('POSE_REVIEW_MIXED_NOT_VERIFIED')
         minimum_switches = max(20, 10 * len(pose_review_variant_levels))
         if result.get('poseReviewVariantSwitches', 0) < minimum_switches:
             errors.append('POSE_REVIEW_VARIANT_SWITCH_COUNT_MISMATCH')
-    expected_frames = 186 if wardrobe_matrix else 154
+    expected_frames = (186 if wardrobe_matrix else 154) + (len(pose_review_variant_levels) + 1 if pose_review_variant_levels else 0)
     if wardrobe_matrix:
         core = ('inner_top', 'outer_tunic', 'lower_garment', 'waist')
         rows = result.get('wardrobeCombinations', [])

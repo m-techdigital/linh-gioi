@@ -1,6 +1,6 @@
 ## Hiện hành — full-level Võ đã chạy; gate còn lại là source-art polish — 2026-09-11
 
-Đã author và pack đủ 10 slot cho 11 mốc Lv1–Lv100 trên body/action v3, rồi nạp tất cả vào một Player. Evidence `build/vo-pose-all-tier-runtime-v2/pc`: 154 frame, full levels `[1,10,20,30,40,50,60,70,80,90,100]`, mixed verified, 149 item switch, 11×22 fingerprint, `errors=[]`. Không đổi camera/base/scale, không thêm actor/controller theo level. Pose lộn tier cao đã bỏ silhouette transfer gây rối và giữ exact tuck surface.
+Đã author và pack đủ 10 slot cho 11 mốc Lv1–Lv100 trên body/action v3, rồi nạp tất cả vào một Player. Evidence `build/vo-pose-all-tier-runtime-v3/pc`: 165 frame, full levels `[1,10,20,30,40,50,60,70,80,90,100]`, 11 frame full-set riêng, mixed verified, 149 item switch, 11×22 fingerprint, `errors=[]`. Board `full-level-player-review.jpg` so trực tiếp mọi tier trên cùng idle/camera/body. Không đổi camera/base/scale, không thêm actor/controller theo level. Pose lộn tier cao đã bỏ silhouette transfer gây rối và giữ exact tuck surface.
 
 Action tiếp theo: polish component source Lv40–Lv100 ở kích thước Player, ưu tiên độ đọc của `outer_top`, `shoulder_chest_guard`, `waist_belt` và `head_hair`; so trực tiếp với grid/progression canonical. Giữ vạt/giáp mở rộng trong đúng slot ownership để tháo riêng và phối chéo không kéo theo món khác. Chạy pairwise representative giữa tier thấp/trung/cao và trạng thái tháo từng slot trong một capture cuối. Chỉ sau visual gate này mới promotion khỏi `REVIEW_ONLY` và mở class tiếp theo. Map01A vẫn là target.
 

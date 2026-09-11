@@ -108,26 +108,29 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
     def test_variant_capture_requires_full_level_and_mixed_switches(self):
         result = self.valid_result()
         result.update(poseReviewLv10Verified=True, poseReviewFullLevelsVerified=[1, 10],
-                      poseReviewMixedVerified=True,
+                      poseReviewFullLevelFrames=[2, 3], poseReviewMixedVerified=True,
+                      frames=156, actorScreenMetricFrames=156,
                       poseReviewVariantSwitches=20)
         self.assertEqual(validate_registered_capture_result(code=0, result=result, width=1280,
-            height=720, png_count=154, pose_review_variant_levels={10}), [])
+            height=720, png_count=156, pose_review_variant_levels={10}), [])
         result['poseReviewMixedVerified'] = False
         self.assertIn('POSE_REVIEW_MIXED_NOT_VERIFIED', validate_registered_capture_result(
-            code=0, result=result, width=1280, height=720, png_count=154,
+            code=0, result=result, width=1280, height=720, png_count=156,
             pose_review_variant_levels={10}))
 
     def test_four_tier_capture_requires_lv20_lv30_and_full_switch_matrix(self):
         result = self.valid_result()
         result.update(poseReviewLv10Verified=True, poseReviewLv20Verified=True,
                       poseReviewLv30Verified=True, poseReviewMixedVerified=True,
-                      poseReviewFullLevelsVerified=[1, 10, 20, 30], poseReviewVariantSwitches=40)
+                      poseReviewFullLevelsVerified=[1, 10, 20, 30],
+                      poseReviewFullLevelFrames=[2, 3, 4, 5], frames=158,
+                      actorScreenMetricFrames=158, poseReviewVariantSwitches=40)
         self.assertEqual(validate_registered_capture_result(code=0, result=result, width=1280,
-            height=720, png_count=154, pose_review_variant_levels={10, 20, 30}), [])
+            height=720, png_count=158, pose_review_variant_levels={10, 20, 30}), [])
         result['poseReviewFullLevelsVerified'] = [1, 10, 20]
         result['poseReviewVariantSwitches'] = 29
         errors = validate_registered_capture_result(code=0, result=result, width=1280,
-            height=720, png_count=154, pose_review_variant_levels={10, 20, 30})
+            height=720, png_count=158, pose_review_variant_levels={10, 20, 30})
         self.assertIn('POSE_REVIEW_FULL_LEVEL_MATRIX_NOT_VERIFIED', errors)
         self.assertIn('POSE_REVIEW_VARIANT_SWITCH_COUNT_MISMATCH', errors)
 

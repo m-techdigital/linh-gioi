@@ -29,6 +29,7 @@ namespace LinhGioi.World
             public bool closedBody, registeredEquipment;
             public bool poseReviewLv10Verified, poseReviewLv20Verified, poseReviewLv30Verified, poseReviewMixedVerified;
             public int[] poseReviewFullLevelsVerified = Array.Empty<int>();
+            public List<int> poseReviewFullLevelFrames = new List<int>();
             public int poseReviewVariantSwitches;
             public int maxEquipmentAttachments, maxBodyVariants;
             public List<string> errors = new List<string>();
@@ -73,12 +74,19 @@ namespace LinhGioi.World
                         var allSlots = true;
                         for (var slot = 0; slot < VoReviewSlotIds.Length; slot++)
                         {
+                            _voEquipmentLevels[VoEquipmentSlots[slot]] = level;
                             var changed = _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) != level;
                             allSlots &= _sourcePoseReview.SetSlotItemLevel(VoReviewSlotIds[slot], level);
                             if (changed) report.poseReviewVariantSwitches++;
                         }
                         foreach (var slot in VoReviewSlotIds) allSlots &= _sourcePoseReview.GetSlotItemLevel(slot) == level;
-                        if (allSlots) verified.Add(level);
+                        if (allSlots)
+                        {
+                            verified.Add(level);
+                            RefreshVoAvatarMode(); Refresh();
+                            yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-level-" + level);
+                            report.poseReviewFullLevelFrames.Add(report.frames);
+                        }
                     }
                     report.poseReviewFullLevelsVerified = verified.ToArray();
                     report.poseReviewLv10Verified = verified.Contains(10);
