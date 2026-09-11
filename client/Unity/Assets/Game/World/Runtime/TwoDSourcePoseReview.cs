@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using UnityEngine;
 
@@ -77,9 +78,9 @@ namespace LinhGioi.World
             try
             {
                 review.Load(args[index + 1]);
-                var alternate = Array.IndexOf(args, "--lgo-vo-pose-review-alt-dir");
-                if (alternate >= 0)
+                for (var alternate = 0; alternate < args.Length; alternate++)
                 {
+                    if (args[alternate] != "--lgo-vo-pose-review-alt-dir") continue;
                     if (alternate + 1 >= args.Length) throw new ArgumentException("Alternate pose review directory missing");
                     review.LoadItemVariants(args[alternate + 1]);
                     Debug.Log("LGO_POSE_REVIEW_VARIANTS_LOADED " + args[alternate + 1]);
@@ -293,6 +294,21 @@ namespace LinhGioi.World
                 if (complete) return level;
             }
             return current;
+        }
+
+        public bool HasCompleteItemLevel(int level)
+        {
+            if (_reviewVariants.Count == 0) return false;
+            foreach (var variants in _reviewVariants.Values) if (!variants.ContainsKey(level)) return false;
+            return true;
+        }
+
+        public int[] GetCompleteItemLevels()
+        {
+            if (_reviewVariants.Count == 0) return Array.Empty<int>();
+            var levels = new SortedSet<int>(_reviewVariants.First().Value.Keys);
+            foreach (var variants in _reviewVariants.Values) levels.IntersectWith(variants.Keys);
+            return levels.ToArray();
         }
 
         public void SetOuterTopVisible(bool visible) => SetSlotVisible("outer_top", visible);

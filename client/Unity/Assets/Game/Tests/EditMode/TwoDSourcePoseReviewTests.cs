@@ -178,6 +178,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(review.NextCompleteItemLevel(1), Is.EqualTo(10));
                 Assert.That(review.NextCompleteItemLevel(10), Is.EqualTo(1));
                 Assert.That(review.NextSlotItemLevel("outer_top", 1), Is.EqualTo(10));
+                Assert.That(review.HasCompleteItemLevel(10), Is.True);
+                Assert.That(review.GetCompleteItemLevels(), Is.EqualTo(new[] { 1, 10 }));
                 review.SetSlotVisible("outer_top", false);
                 Assert.That(renderers.Count(renderer => renderer.enabled), Is.EqualTo(1));
                 Assert.That(review.SetSlotItemLevel("outer_top", 1), Is.True);

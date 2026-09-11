@@ -1,3 +1,9 @@
+## Hiện hành — gate wardrobe Võ bốn tier và đường mở rộng mọi level — 2026-09-11
+
+Đã nạp đồng thời Lv1/10/20/30 vào một actor POSE THỬ, đủ 10 slot mỗi tier. Runtime và capture lấy danh sách complete level động, kiểm full-set từng level và mixed loadout trên cùng body/action v3. Evidence `build/vo-pose-four-tier-runtime-v2/pc`: 154 frame, 40 toggle, 75 switch thực, full levels `[1,10,20,30]`, mixed verified, `errors=[]`, fingerprint `22×4`. Đã xem walk Lv20, run bốn nhịp Lv10, jump mixed và jump-diagonal Lv30; không có actor thứ hai hay thay camera/base/scale. Test Unity `11/11 + 17/17`, Python `18/18`.
+
+Action tiếp theo: hoàn thiện progression Võ còn lại Lv40/50/60/70/80/90/100 theo cùng 10 slot và source-space geometry. Nguồn selected hiện chỉ có material canonical đến Lv30, nên trước khi pack phải lập một progression board đủ bảy tier còn lại bám turnaround/grid Võ, kiểm silhouette/ownership theo lô rồi mới register sáu pose. Khi có pack, chỉ thêm các `--pose-review-alt-dir`; code hiện tại tự phát hiện/verify mọi tier. Chạy một Player capture full-level + mixed đại diện, sửa item lỗi tại source mask/component. Chỉ sau gate Võ đầy đủ mới mở class khác. Map01A vẫn là target.
+
 ## Hiện hành — item variant Lv1/Lv10 chạy trực tiếp trên một actor — 2026-09-11
 
 Đã nối hai tier vào `TwoDSourcePoseReview`: cùng slot có variant theo level, chung body hash/fit family/root pose; đổi toàn bộ tier hoặc riêng item bằng flow level/slot sẵn có. Không còn phải đổi cả review directory để xem từng loadout và không tạo renderer body thứ hai. Test đúng scope: SourcePose `11/11`, Map preview `17/17`, Python `17/17`. Player `build/vo-pose-item-variants-player-v3/LinhGioiOnline.app` build `171948586` byte, 0 error/0 warning.

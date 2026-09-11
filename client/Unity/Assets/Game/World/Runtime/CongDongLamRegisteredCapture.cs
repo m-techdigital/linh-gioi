@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace LinhGioi.World
@@ -26,7 +27,8 @@ namespace LinhGioi.World
             public int actorScreenMetricFrames;
             public bool closedFarArms;
             public bool closedBody, registeredEquipment;
-            public bool poseReviewLv10Verified, poseReviewMixedVerified;
+            public bool poseReviewLv10Verified, poseReviewLv20Verified, poseReviewLv30Verified, poseReviewMixedVerified;
+            public int[] poseReviewFullLevelsVerified = Array.Empty<int>();
             public int poseReviewVariantSwitches;
             public int maxEquipmentAttachments, maxBodyVariants;
             public List<string> errors = new List<string>();
@@ -61,27 +63,51 @@ namespace LinhGioi.World
                 RefreshVoAvatarMode(); Refresh();
                 var rest = _registeredOutfit.SnapshotVertices(_registeredOutfit.BindSpace);
                 yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-idle");
-                foreach (var action in new[] { "walk", "run", "jump", "jump_diagonal", "basic_attack", "skill" })
+                var reviewLevels = _sourcePoseReview != null && Array.IndexOf(args, "--lgo-vo-pose-review-alt-dir") >= 0 && gender == 0
+                    ? _sourcePoseReview.GetCompleteItemLevels() : Array.Empty<int>();
+                if (reviewLevels.Length > 1)
                 {
-                    if (_sourcePoseReview != null && Array.IndexOf(args, "--lgo-vo-pose-review-alt-dir") >= 0 && gender == 0)
+                    var verified = new List<int>();
+                    foreach (var level in reviewLevels)
                     {
+                        var allSlots = true;
                         for (var slot = 0; slot < VoReviewSlotIds.Length; slot++)
                         {
-                            var level = action == "run" ? 10 : action == "jump" && slot % 2 == 1 ? 10 : 1;
+                            var changed = _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) != level;
+                            allSlots &= _sourcePoseReview.SetSlotItemLevel(VoReviewSlotIds[slot], level);
+                            if (changed) report.poseReviewVariantSwitches++;
+                        }
+                        foreach (var slot in VoReviewSlotIds) allSlots &= _sourcePoseReview.GetSlotItemLevel(slot) == level;
+                        if (allSlots) verified.Add(level);
+                    }
+                    report.poseReviewFullLevelsVerified = verified.ToArray();
+                    report.poseReviewLv10Verified = verified.Contains(10);
+                    report.poseReviewLv20Verified = verified.Contains(20);
+                    report.poseReviewLv30Verified = verified.Contains(30);
+                }
+                foreach (var action in new[] { "walk", "run", "jump", "jump_diagonal", "basic_attack", "skill" })
+                {
+                    if (reviewLevels.Length > 1)
+                    {
+                        var runLevel = reviewLevels.Contains(10) ? 10 : reviewLevels[1];
+                        var walkLevel = reviewLevels.Contains(20) ? 20 : runLevel;
+                        var jumpDiagonalLevel = reviewLevels[reviewLevels.Length - 1];
+                        for (var slot = 0; slot < VoReviewSlotIds.Length; slot++)
+                        {
+                            var level = 1;
+                            if (action == "walk") level = walkLevel;
+                            else if (action == "run") level = runLevel;
+                            else if (action == "jump") level = reviewLevels[slot % reviewLevels.Length];
+                            else if (action == "jump_diagonal") level = jumpDiagonalLevel;
                             _voEquipmentLevels[VoEquipmentSlots[slot]] = level;
                             var changed = _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) != level;
                             if (_sourcePoseReview.SetSlotItemLevel(VoReviewSlotIds[slot], level) && changed) report.poseReviewVariantSwitches++;
-                        }
-                        if (action == "run")
-                        {
-                            report.poseReviewLv10Verified = true;
-                            foreach (var slot in VoReviewSlotIds) report.poseReviewLv10Verified &= _sourcePoseReview.GetSlotItemLevel(slot) == 10;
                         }
                         if (action == "jump")
                         {
                             report.poseReviewMixedVerified = true;
                             for (var slot = 0; slot < VoReviewSlotIds.Length; slot++)
-                                report.poseReviewMixedVerified &= _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) == (slot % 2 == 1 ? 10 : 1);
+                                report.poseReviewMixedVerified &= _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) == reviewLevels[slot % reviewLevels.Length];
                         }
                         RefreshVoAvatarMode();
                     }
@@ -267,7 +293,8 @@ namespace LinhGioi.World
             }
             if (report.maxBindReturnError > .00001f) report.errors.Add("Deformed vertices did not return to original bind coordinates");
             if (_sourcePoseReview != null && Array.IndexOf(args, "--lgo-vo-pose-review-alt-dir") >= 0
-                && (!report.poseReviewLv10Verified || !report.poseReviewMixedVerified))
+                && (!report.poseReviewMixedVerified
+                    || !_sourcePoseReview.GetCompleteItemLevels().SequenceEqual(report.poseReviewFullLevelsVerified)))
                 report.errors.Add("Pose review item variant matrix did not execute");
             if (report.errors.Count > 0) report.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "registered-manifest.json"), JsonUtility.ToJson(report, true));

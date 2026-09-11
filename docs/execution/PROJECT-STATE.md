@@ -1,3 +1,13 @@
+## Hiện hành — Võ Lv1/10/20/30 dùng chung một wardrobe actor — 2026-09-11
+
+`TwoDSourcePoseReview` hiện nạp lặp lại mọi pack level, giữ một body atlas/hash, `fitFamily=vo_male_v3`, pose ID, pivot, scale và camera. Danh sách tier đủ 10 slot được suy ra động; capture kiểm full-set từng tier rồi kiểm một loadout phối vòng theo slot. Cơ chế không hardcode số tier, nên Lv40–Lv100 sẽ đi cùng đường nạp/đổi/verify khi có source item hợp lệ, không thêm controller hay actor theo level.
+
+Source review đã mở rộng theo lô từ cùng geometry v3 sang Lv20 và Lv30: external `ten-slot-pose-authoring-v1/registered-surface-lv020-v1`, `registered-surface-lv030-v1` và hai pack sibling `legacy-base-run-contact-jump-v3-div4-ten-slot-lv020-review-v1`, `...lv030-review-v1`. Mỗi tier đủ 10 slot × sáu pose; root body atlas/manifest giữ đúng hash owner đã chốt. Art vẫn `REVIEW_ONLY`; khác biệt vật liệu Lv20/Lv30 còn nhẹ và chưa được gọi là production-final.
+
+Player `build/vo-pose-four-tier-player-v2/LinhGioiOnline.app` build thành công `171949610` byte, 0 error/13 warning. Capture `build/vo-pose-four-tier-runtime-v2/pc`: 154 frame, 40 toggle, `errors=[]`, full levels `[1,10,20,30]`, mixed bốn level, 75 lần đổi item thực và fingerprint đầy đủ `22×4` ổn định. Đã xem trực tiếp walk Lv20, bốn nhịp run Lv10, jump mixed và jump-diagonal Lv30: một actor, body/action v3, không đổi camera/base/scale. Scoped Unity: SourcePose `11/11`, Map preview `17/17`; Python capture/loadout `18/18`.
+
+Hướng kỹ thuật được đối chiếu với mô hình skin/attachment phổ biến: animation tham chiếu slot ổn định, item có thể gồm nhiều attachment, runtime ghép item theo slot trên cùng skeleton. Vì vậy contract dài hạn vẫn là `slotId -> itemId -> pose components`, preflight body/fit/source registration trước apply nguyên tử; không dựng full-outfit riêng cho từng tổ hợp. Source tuyển hiện chỉ có design material tới Lv30. Batch kế tiếp phải tạo/duyệt material Lv40–Lv100 theo cùng design progression rồi chạy lại full-level + mixed matrix; không nội suy offset/scale để giả fit và chưa mở class khác.
+
 ## Hiện hành — đổi item Lv1/Lv10 trực tiếp trên actor POSE THỬ — 2026-09-11
 
 `TwoDSourcePoseReview` hiện nạp đồng thời nhiều item variant của cùng slot theo `unlockLevel`, bắt buộc cùng body atlas/manifest và `fitFamily=vo_male_v3`. Mỗi variant vẫn dùng chung body renderer, frame ID, facing và whole-pose somersault root; đổi item chỉ tắt renderer cũ, bật renderer mới và giữ nguyên trạng thái slot đã tháo. `CycleVoAvatarLevel` đổi toàn bộ level chỉ qua các tier đủ 10 slot; `CycleVoSelectedEquipmentItemLevel` đổi riêng item đang chọn. UI/runtime vẫn một actor và dùng `_voEquipmentLevels` hiện có, không thêm hệ nhân vật hay camera/scale theo tier.

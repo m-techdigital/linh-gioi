@@ -107,14 +107,29 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
 
     def test_variant_capture_requires_full_level_and_mixed_switches(self):
         result = self.valid_result()
-        result.update(poseReviewLv10Verified=True, poseReviewMixedVerified=True,
+        result.update(poseReviewLv10Verified=True, poseReviewFullLevelsVerified=[1, 10],
+                      poseReviewMixedVerified=True,
                       poseReviewVariantSwitches=20)
         self.assertEqual(validate_registered_capture_result(code=0, result=result, width=1280,
-            height=720, png_count=154, pose_review_variants=True), [])
+            height=720, png_count=154, pose_review_variant_levels={10}), [])
         result['poseReviewMixedVerified'] = False
         self.assertIn('POSE_REVIEW_MIXED_NOT_VERIFIED', validate_registered_capture_result(
             code=0, result=result, width=1280, height=720, png_count=154,
-            pose_review_variants=True))
+            pose_review_variant_levels={10}))
+
+    def test_four_tier_capture_requires_lv20_lv30_and_full_switch_matrix(self):
+        result = self.valid_result()
+        result.update(poseReviewLv10Verified=True, poseReviewLv20Verified=True,
+                      poseReviewLv30Verified=True, poseReviewMixedVerified=True,
+                      poseReviewFullLevelsVerified=[1, 10, 20, 30], poseReviewVariantSwitches=40)
+        self.assertEqual(validate_registered_capture_result(code=0, result=result, width=1280,
+            height=720, png_count=154, pose_review_variant_levels={10, 20, 30}), [])
+        result['poseReviewFullLevelsVerified'] = [1, 10, 20]
+        result['poseReviewVariantSwitches'] = 29
+        errors = validate_registered_capture_result(code=0, result=result, width=1280,
+            height=720, png_count=154, pose_review_variant_levels={10, 20, 30})
+        self.assertIn('POSE_REVIEW_FULL_LEVEL_MATRIX_NOT_VERIFIED', errors)
+        self.assertIn('POSE_REVIEW_VARIANT_SWITCH_COUNT_MISMATCH', errors)
 
     def test_rejects_capture_without_actor_screen_metrics(self):
         result = self.valid_result()
