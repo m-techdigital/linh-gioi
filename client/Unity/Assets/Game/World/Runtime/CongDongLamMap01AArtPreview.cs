@@ -9,7 +9,7 @@ namespace LinhGioi.World
 {
     // Playable Map01A visual slice. State remains local until the production quest backend is approved.
     [ExecuteAlways]
-    public sealed class CongDongLamMap01AArtPreview : MonoBehaviour
+    public sealed partial class CongDongLamMap01AArtPreview : MonoBehaviour
     {
         public const string ResourcePath = "LGOMaps/CongDongLamMap01AArt/";
         private readonly List<Sprite> _sprites = new List<Sprite>();
@@ -46,7 +46,7 @@ namespace LinhGioi.World
         public int CompletedQuestCount => _completedQuests.Count;
         public bool IsQuestComplete(string questId) => _completedQuests.Contains(questId);
         public string LastInteractionMessage { get; private set; } = "";
-        public bool IsCapturing => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
+        public bool IsCapturing => _poseLoopCapturing || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string DialogueSpeaker => _dialogueNodeId == "quan-thu" ? "Quan Thủ Đông Lâm"
@@ -104,6 +104,7 @@ namespace LinhGioi.World
         }
         public void MoveOnLane(float axis, float seconds)
         {
+            if (Mathf.Abs(axis) > .01f) _sourcePoseFacing = axis < 0 ? -1 : 1;
             AdvanceVoAnimation(seconds);
             if (DialogueOpen || _controller == null || VoAvatarMotionState == "skill" || VoAvatarMotionState == "basic_attack") return;
             if (Mathf.Abs(axis) > .01f && VoAvatarMotionState != "jump")
@@ -187,6 +188,8 @@ namespace LinhGioi.World
         private Transform _player;
         private SpriteRenderer _leftFoot, _rightFoot;
         private Transform _voAvatarRoot;
+        private TwoDSourcePoseReview _sourcePoseReview;
+        private int _sourcePoseFacing = 1;
         private readonly Dictionary<string, SpriteRenderer> _voAvatarParts = new Dictionary<string, SpriteRenderer>();
         private readonly Dictionary<string, Tuple<Vector3, Vector3>> _voAvatarPartRest = new Dictionary<string, Tuple<Vector3, Vector3>>();
         private readonly Dictionary<string, SpriteRenderer> _voEquipmentComponents = new Dictionary<string, SpriteRenderer>();
@@ -502,6 +505,8 @@ namespace LinhGioi.World
                 }
             }
             BuildVoAvatar();
+            _sourcePoseReview = TwoDSourcePoseReview.CreateIfRequested(transform);
+            ApplyVoPose();
             _kiemFitPreview = new TwoDKiemMixedLoadoutFitPreview(_voAvatarRoot, _voRig);
             PartCount = parts.Count;
             parts.Add("skyline", MakeSprite(far, new Rect(0, 0, far.width, far.height)));
@@ -1009,6 +1014,11 @@ namespace LinhGioi.World
             }
             _voAvatarRoot.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
             RefreshVoAvatarMode();
+            if (_sourcePoseReview != null)
+            {
+                _sourcePoseReview.transform.localPosition = new Vector3(_routeX + 1.9f, GroundY + _voPoseYOffset, 0);
+                _sourcePoseReview.Apply(VoAvatarMotionState, _voState.AnimationPhase, _sourcePoseFacing, _voState.ActionProgress);
+            }
             if (_voSkillVfx != null)
             {
                 _voSkillVfx.enabled = VoAvatarMotionState == "skill";
@@ -1193,6 +1203,7 @@ namespace LinhGioi.World
                 if (!float.IsNaN(FootY)) _player.position += Vector3.up * (GroundY - FootY);
             }
             if (_voAvatarRoot != null) _voAvatarRoot.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
+            if (_sourcePoseReview != null) _sourcePoseReview.transform.localPosition = new Vector3(_routeX + 1.9f, GroundY + _voPoseYOffset, 0);
             if (_camera != null)
             {
                 var cameraPosition = _camera.transform.position;
@@ -1231,6 +1242,11 @@ namespace LinhGioi.World
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            if (Application.isPlaying && Array.IndexOf(args, "--lgo-vo-pose-loop-capture") >= 0)
+            {
+                yield return CaptureSourcePoseLoop();
+                yield break;
+            }
             if (!Application.isPlaying || Array.IndexOf(args, "--lgo-map01a-art-capture") < 0) yield break;
             Application.runInBackground = true;
             var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
@@ -1639,7 +1655,7 @@ namespace LinhGioi.World
 
         private void LateUpdate()
         {
-            if (Application.isPlaying) AdvanceVoAnimation(Time.deltaTime);
+            if (Application.isPlaying && !_poseLoopCapturing) AdvanceVoAnimation(Time.deltaTime);
             Refresh();
         }
         private void OnDestroy()

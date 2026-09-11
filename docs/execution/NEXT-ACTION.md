@@ -1,12 +1,14 @@
-## Action hiện hành — Võ contact source/motion — 2026-09-11
+## Action hiện hành — Võ vào/dừng ngoài vòng chạy bốn nhịp — 2026-09-11
 
-Thứ tự owner: motion Võ → wardrobe/10 slot Lv1 → Lv10/mặc chéo → class khác; Map01A vẫn là target. Các Next phía dưới là lịch sử, không mở class/tier mới từ các gate cũ.
+Owner: bốn nhịp chạy khác nhau lặp, hai nhịp đầu/cuối riêng; chất lượng và thời gian, gom motion rồi kiểm. Thứ tự Võ motion → wardrobe/10 slot Lv1 → Lv10/mặc chéo → class khác; Map01A target tổng thể.
 
-Đã port đúng packer/test/capture helper vào worktree sạch `/private/tmp/lgo-vo-pose-div4-clean` từ `origin/feature/2d@cc684828`. Pack div4 tái tạo trùng atlas SHA/byte; capture Player WIP mới154frame ×3profile, đủ6pose, đã review ảnh. Evidence: `build/vo-pose-div4-verified-runtime-v2/REVIEW.md`, từng `pose-review-provenance.json`, `build/vo-pose-div4-repacked-v1/source-audit.json`. Không C#/camera/close-review; chưa gọi runtime WIP là đã tích hợp vào HEAD sạch. Main và `/private/tmp/lgo-vo-lv1-30-FaSFxE` không bị sửa/rollback.
+Nguồn review mới `class-work-in-progress/vo-lv001/legacy-base-four-phase-run-v5-div4`: chân gần/xa luân phiên từ đúng mảnh base cũ, hai contact gap0 và hai nhịp bay109/128px; sửa đường quần trong mask, không sinh base mới. Bản v3/v4 giữ nguyên. Div4 REVIEW_ONLY512×1024/369348byte. Bốn nhịp đã chạy trên Player WIP PC154frame và Player build sạch180frame/30fps; sạch có3vòng liên tục, pose ID/timestamp/clock đúng. Evidence `build/vo-four-phase-clean-runtime-v2/REVIEW.md` và `player-run-loop.webp`, bản copy external cùng source.
 
-Gate còn FIX_REQUIRED: source `run_contact_a/b` alpha≥128 kết thúc tại y1419, cách groundY1484 là65px. Không dịch/scale toàn base, không đổi camera, không dựng base mới; idle và cặp A/B đã khóa giữ nguyên. Redraw bằng built-in imagegen2lượt không đạt alpha/registration; candidate giữ tại external `class-work-in-progress/vo-lv001/pose-contact-grounding-candidates-v1`. Giới hạn đã xác minh: prompt tọa độ không giữ được vùng không sửa/ground anchor. Không tiếp thử cùng giả định hoặc promote candidate.
+C# POSE THỬ và capture toàn vòng đã port độc lập; không camera/close-review, không đổi avatar production. Test selector3/3, build0error; một lượt capture đầu bị loại do HUD input double-clock/run→walk, đã sửa và v2 pass. Packer9test giữ kết quả cũ; capture helper8/8 sau bổ sung hash game DLL từ code review. Main/registered WIP không sửa; avatar trang bị bên trái trong build sạch là code cũ của branch, chưa đại diện registered outfit WIP.
 
-Bước được phép tiếp: sửa đúng vùng chân của hai source contact bằng quy trình có mask/anchor kiểm chứng (hoặc correction source đã duyệt), đối chiếu head/torso/base/ground trước pack; giữ div4, canvas1024×1536 và jumpPivot[512,820]. Sau source gate, capture đứng/chạy/lộn Player thật bằng helper đã giữ hash/log; chỉ khi motion ổn mới audit/integrate registered wardrobe WIP Lv1. Nếu thay C# phải build/capture từ worktree sạch. Cần audit dependency C# riêng trước port; không copy nguyên WIP lớn hoặc dùng binary kế thừa để claim clean-build PASS.
+Gate còn MOTION_ENTRY_EXIT_AND_REGISTERED_INTEGRATION_PENDING. Next: author hai pose vào/dừng ngoài loop bằng cùng base/khớp; nối transition state theo input, không nhét idle hoặc jump vào vòng4nhịp. Sau đó audit/port phần registered motion cần thiết, giữ toàn bộ outfit WIP và kiểm đứng/chạy/đổi hướng/giữ lộn trên Player sạch. Chưa mở wardrobe. Không copy cả WIP lớn hoặc chỉnh camera để match screenshot.
+
+Capture mới có flag `--lgo-vo-pose-loop-capture` (kèm preview,pose-review-dir,art-dir), chỉ PC theo chu kỳ; ba profile khi có thay đổi hiển thị cần xác nhận. Tránh thêm tài liệu/validator hoặc chạy matrix wardrobe để chữa nhịp. Pack/source/motion là batch, không commit từng mảnh.
 
 ## Lịch sử checkpoint (không thay action hiện hành)
 

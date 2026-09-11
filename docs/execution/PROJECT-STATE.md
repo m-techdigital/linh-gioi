@@ -1,3 +1,11 @@
+## Võ bốn nhịp đã có Player sạch; vào/dừng còn thiếu — 2026-09-11
+
+Nguồn review hiện hành `legacy-base-four-phase-run-v5-div4`: 4pose phân biệt theo chân gần/xa từ các mảnh base cũ, contact gap0, hai nhịp bay109/128px; cloth repair trong mask giữ ngoài mask/head upper700. Idle/jump và nguồn v3/v4 nguyên byte. Pack REVIEW_ONLY/div4/512×1024/369348byte, atlas SHA `65a7389ae4f28d28be4f9f38d4cfd25a8609045585a7f19f75a3403708ccb1eb`.
+
+Runtime opt-in POSE THỬ và capture từng frame đã tích hợp vào worktree sạch; không camera/close-review hoặc registered outfit WIP. Test3/3, build169111386byte/0error/13warning. Capture sạch v2 180frame/30fps, ba vòng4nhịp,6pose/log/hash và bước clock đúng; đã xem ảnh đứng/bốn nhịp/lộn. `build/vo-four-phase-clean-runtime-v2/REVIEW.md`, `player-run-loop.webp`, raw pose-loop.json/provenance; copy evidence review ở external nguồn. Lần test đầu thiếu generated local protocol, capture sạch v1 lỗi HUD double-clock/run→walk đã giữ log và sửa; không giấu retry.
+
+Gate hiện tại MOTION_ENTRY_EXIT_AND_REGISTERED_INTEGRATION_PENDING: chưa pose vào/dừng riêng, chưa motion/facing/giữ lộn với registered outfit trong runtime sạch. Bản trang bị bên trái capture sạch vẫn là implementation branch cũ; WIP registered còn nguyên, không claim wardrobe PASS hoặc rollback. Chưa mở wardrobe/class khác; Next duy nhất trong NEXT-ACTION. Code review bổ sung hash game DLL (engine SHA riêng không đủ); capture helper8/8 PASS. No3D/no-source-image/frozen guards pass, chỉ cleanup whitespace importer và hai GUID settings do Unity batch tự sinh.
+
 ## Võ POSE THỬ div4 — checkpoint tooling, motion chưa đóng — 2026-09-11
 
 Chỉ đạo owner hiện hành: Võ motion/source review → wardrobe/10 slot Lv1 → Lv10/mặc chéo → class khác. Map01A vẫn là target sản phẩm; các Next sang Kiếm ở lịch sử bên dưới không còn là action hiện hành.

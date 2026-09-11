@@ -1,3 +1,13 @@
+## Bốn ID không bảo đảm bốn nhịp chạy — 2026-09-11
+
+RunA/B nguồn cũ gần cùng thế chân; thêm contact vẫn chưa đủ cảm giác bốn nhịp. Sheet imagegen toàn vòng tiếp tục lặp1/3 và2/4 nên loại trước pack/Player. Hướng hiệu quả hơn trong batch này: khóa ownership chân gần/xa bằng mảnh base + IK, rồi chỉ dùng donor sửa đường nối quần trên mask. Source v5 giữ phần ngoài mask, tiếp đất0gap, nhịp bay được phép cách nền; không normalize mọi pose về ground. Pack div4 vẫn512×1024 và369348byte.
+
+Hướng joint + sprite cho phần đổi silhouette tham khảo [Unity Animated Swap](https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/manual/ex-sprite-swap.html) và [Spine weights](https://esotericsoftware.com/spine-weights); đây là nguyên tắc tác nghiệp, không thêm engine/đổi rig hoặc tự coi wardrobe đã đạt.
+
+Capture bốn ảnh rời có thể thiếu nhịp hoặc sai đồng hồ. Capture mới ghi180frame/30fps, pose ID/state/time và3vòng đầy đủ. Nó bắt được HUD vẫn đọc input, ép run→walk và tăng phase hai lần: chặn input trong capture và kiểm delta1/30, không nới assertion. Chỉ chạy PC để xác minh lỗi nhịp; ba profile khi thay đổi hiển thị cần kiểm. Evidence `build/vo-four-phase-clean-runtime-v2/REVIEW.md`; hai nhịp vào/dừng còn pending.
+
+## Lịch sử divisor8 và contact grounding
+
 ## POSE THỬ mờ và contact source — 2026-09-11
 
 Feedback POSE THỬ mờ so base đã truy về pack divisor8; không mở camera/close-review. Review hiện hành `legacy-base-run-contact-jump-v3-div4` dùng cùng nguồn, divisor4, atlas512×1024, PNG373834byte/RGBA8 2097152byte, REVIEW_ONLY. Không tự dùng budget review làm production policy. CLI `pack_lgo_pose_review_atlas.py` mặc định4/1024, xuất tên Player đọc và cần `--jump-pivot-source 512 820` cho bộ6pose này. Capture helper chặn divisor8/promotion/hash sai, đối chiếu exact loaded path và từng pose trong Player log.

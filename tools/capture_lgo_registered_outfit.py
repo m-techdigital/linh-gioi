@@ -22,6 +22,16 @@ def resolve_player(path):
     return player
 
 
+def player_code_fingerprint(player):
+    """The engine executable alone does not identify the game's C# implementation."""
+    contents = player.parent.parent
+    managed = contents / 'Resources/Data/Managed'
+    assemblies = sorted(managed.glob('LinhGioi.*.dll'))
+    if not (managed / 'LinhGioi.World.dll').is_file():
+        raise FileNotFoundError('Expected Mono Player game assemblies: ' + str(managed))
+    return {str(path.relative_to(contents)): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in [player, *assemblies]}
+
 
 def validate_registered_capture_result(*, code, result, width, height, png_count, closed_far_arms=False, closed_body=False, registered_equipment=False):
     errors = []
@@ -120,9 +130,12 @@ def main():
     parser.add_argument('--pose-review-dir', type=Path, help='Optional external idle/A/B review atlas, shown beside the equipped actor')
     args = parser.parse_args()
     player = resolve_player(args.player)
+    player_fingerprint = player_code_fingerprint(player)
     pose_fingerprint = pose_review_fingerprint(args.pose_review_dir) if args.pose_review_dir else None
     pose_pack = validate_pose_review_pack(args.pose_review_dir) if args.pose_review_dir else None
     for profile in PROFILES if args.profile == 'all' else [args.profile]:
+        if player_code_fingerprint(player) != player_fingerprint:
+            raise ValueError('Player code changed between capture profiles')
         if pose_pack is not None:
             validate_pose_review_unchanged(args.pose_review_dir, pose_fingerprint)
         width, height = PROFILES[profile]
@@ -150,6 +163,8 @@ def main():
                 process.kill()
                 process.wait()
                 raise
+        if player_code_fingerprint(player) != player_fingerprint:
+            raise ValueError('Player code changed during capture')
         result = json.loads((out / 'registered-manifest.json').read_text())
         if args.pose_review_dir:
             validate_pose_review_unchanged(args.pose_review_dir, pose_fingerprint)
@@ -172,6 +187,7 @@ def main():
                 'status': 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED',
                 'playerExecutable': str(player),
                 'playerExecutableSha256': hashlib.sha256(player.read_bytes()).hexdigest(),
+                'playerCodeFingerprint': player_fingerprint,
                 'packDirectory': str(args.pose_review_dir.resolve()),
                 'manifestSha256': pose_fingerprint['atlas-review.json'],
                 'atlasSha256': pose_fingerprint['atlas-review.png'],

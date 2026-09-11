@@ -6,10 +6,25 @@ import unittest
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from capture_lgo_registered_outfit import validate_registered_capture_result, validate_pose_review_pack, validate_pose_review_log, pose_review_fingerprint, validate_pose_review_unchanged
+from capture_lgo_registered_outfit import validate_registered_capture_result, validate_pose_review_pack, validate_pose_review_log, pose_review_fingerprint, validate_pose_review_unchanged, player_code_fingerprint
 
 
 class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
+    def test_managed_code_change_is_detected_with_identical_engine(self):
+        with tempfile.TemporaryDirectory() as directory:
+            contents = Path(directory) / 'Game.app/Contents'
+            player = contents / 'MacOS/Unity'
+            assembly = contents / 'Resources/Data/Managed/LinhGioi.World.dll'
+            player.parent.mkdir(parents=True)
+            assembly.parent.mkdir(parents=True)
+            player.write_bytes(b'same Unity engine')
+            assembly.write_bytes(b'old capture code')
+            before = player_code_fingerprint(player)
+            assembly.write_bytes(b'fixed HUD and animation clock')
+            after = player_code_fingerprint(player)
+            self.assertEqual(before['MacOS/Unity'], after['MacOS/Unity'])
+            self.assertNotEqual(before, after)
+
     def valid_result(self):
         return {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
