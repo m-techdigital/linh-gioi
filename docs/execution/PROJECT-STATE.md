@@ -1,4 +1,14 @@
-## Hiện hành — Linh Lv1–30 hoàn tất shared-rig 10 slot — 2026-09-12
+## Hiện hành — thu hồi kết luận class static-fit; Linh nam Lv1 chuyển sang source-pose — 2026-09-12
+
+Owner đã reject Player Linh `client/Unity/build/linh-ten-slot-player-v1/LinhGioiOnline.app`: nhân vật ghép vỡ và không còn silhouette con người. Vì vậy thu hồi toàn bộ câu “hoàn tất/visual pass” cho các pack Kiếm/Pháp/Cơ/Linh dựng bằng `TwoDClassMixedLoadoutFitPreview`. Các pack `DRAFT_RUNTIME_FIT` này chỉ còn là evidence kỹ thuật của loader; không được dùng làm art candidate hoặc căn tiếp bằng box/camera.
+
+Đường thay thế bám pipeline Võ đã chốt: body/motion `legacy-base-run-contact-jump-v3-div4` bất biến; mỗi item có sáu surface pose cùng canvas 1024×1536; overlay div2; một actor. Linh nam Lv1 đã có source external `class-work-in-progress/linh-lv001/ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`, đủ 10 slot × sáu pose. Hai lượt mask đầu bị loại trước runtime; v3 dùng vùng ngữ nghĩa rời nhau và compose thành một người liền mạch. Source board `six-pose-full-compose.jpg` và `idle-ten-slot-toggle-review.jpg` đã được xem ở kích thước lớn.
+
+Pack review nằm ở `build/linh-source-pose-review-v1/pack`; body hash giữ `27630a5c…`, 10 overlay atlas có `samplingDivisor=2`, `status=REVIEW_ONLY`. Player mới `build/linh-source-pose-review-v3/player/LinhGioiOnline.app` build 0 error/0 warning; capture `build/linh-source-pose-review-v3/runtime-pc/pc` đạt 154 frame và đủ idle/bốn nhịp run/jump/10 toggle. Đã xem ảnh Player: một actor, silhouette nguyên, chân chạm lane và cả hành trang/marker nhận đúng class Linh. SourcePose EditMode `15/15`; Python pack `10/10`, capture `15/15`. Đây là candidate nam Lv1; chưa claim nữ, Lv10, phối chéo hoặc production approval.
+
+Next: hoàn thiện Linh nữ Lv1 theo cùng sáu pose/10 slot, sau đó Linh Lv10 và phối chéo trên cùng actor. Chỉ khi source board và Player lớn đạt mới thay/revoke tiếp Kiếm/Pháp/Cơ; không quay lại static icon-fit.
+
+## Đã thu hồi — Linh Lv1–30 static-fit 10 slot — 2026-09-12
 
 Linh nam/nữ bám turnaround và equipment grid gốc tại external `classes-lv001-030/linh`. Hai sheet v1 bị loại vì dính anatomy; hai sheet v2 chỉ sửa vùng anatomy, sau đó tách thành 80 item và đóng `linh-lv1-30-equipment-runtime-v1`: hai atlas 1024², 104 attachment, trạng thái `DRAFT_RUNTIME_FIT`. Tóc dài Linh dùng cùng quy tắc head-anchor giữ tỷ lệ đã áp cho Pháp; không đổi body, camera, scale hoặc motion Võ.
 

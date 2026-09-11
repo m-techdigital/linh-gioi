@@ -251,8 +251,8 @@ namespace LinhGioi.World
             ? level : VoAvatarLevel;
         public bool IsSourcePoseReviewActive => _sourcePoseReview != null;
         public bool ClassEquipmentPreviewActive => _classFitPreviewActive;
-        public string ActiveEquipmentClassId => _classFitPreviewActive ? _classFitPreviewId : "vo";
-        public string ActiveEquipmentClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel : "Võ";
+        public string ActiveEquipmentClassId => _classFitPreviewActive ? _classFitPreviewId : _sourcePoseReview?.ClassId ?? "vo";
+        public string ActiveEquipmentClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel : _sourcePoseReview?.ClassLabel ?? "Võ";
         public IReadOnlyList<string> VoEquipmentSlotIds => VoEquipmentSlots;
         public bool IsVoEquipmentSlotEquipped(string slot) => _voState.IsEquipped(slot);
         public int GetVoEquipmentItemLevel(string slot) => _voEquipmentLevels.TryGetValue(slot, out var level)
@@ -280,10 +280,10 @@ namespace LinhGioi.World
         public string VoAvatarMotionState => _voState.MotionState;
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
         public bool VoRunEnabled => _voState.RunEnabled;
-        public string AvatarClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel + " · 10 slot review" : "Võ";
+        public string AvatarClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel + " · 10 slot review" : _sourcePoseReview?.ClassLabel ?? "Võ";
         public string EquipmentFitSummary => _classFitPreviewActive
             ? _classFitPreview.ClassLabel + " · rig chung · 10 slot · cấp 1/10/20/30"
-            : "Võ nam · cùng base/pivot · đủ 6 pose";
+            : (_sourcePoseReview?.ClassLabel ?? "Võ") + " nam · cùng base/pivot · đủ 6 pose";
         public string EquipmentLevelLabel => "Lv" + VoAvatarLevel;
         public string EquipmentSlotLabel => VoSelectedEquipmentSlot + " · Lv" + VoSelectedEquipmentItemLevel;
         public string SkillLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel + " kỹ review" : "Liên Quyền";

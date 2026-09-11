@@ -323,6 +323,15 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(TwoDSourcePoseReview.SelectRunFrame(i * .25f + .01f, true), Is.EqualTo(expected[i % 4]));
         }
 
+        [TestCase("linh_male_lv001_main_weapon", "linh", "Linh")]
+        [TestCase("kiem_male_lv001_main_weapon", "kiem", "Kiếm")]
+        [TestCase("vo_male_lv001_main_weapon", "vo", "Võ")]
+        public void PoseReviewDerivesDisplayedClassFromLoadedItem(string itemId, string classId, string label)
+        {
+            Assert.That(TwoDSourcePoseReview.ResolveClassId(itemId), Is.EqualTo(classId));
+            Assert.That(TwoDSourcePoseReview.ResolveClassLabel(itemId), Is.EqualTo(label));
+        }
+
         [Test]
         public void SomersaultCompletesEarlierForSnappierJump()
         {

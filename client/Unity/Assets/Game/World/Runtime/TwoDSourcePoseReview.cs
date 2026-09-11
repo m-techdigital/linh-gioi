@@ -65,6 +65,28 @@ namespace LinhGioi.World
         private readonly TwoDSourcePoseTimeline _timeline = new TwoDSourcePoseTimeline();
         public bool HasTransitions => _sprites.ContainsKey("run_start") && _sprites.ContainsKey("run_stop");
         public string CurrentFrame => _frame;
+        public string ClassId { get; private set; } = "vo";
+        public string ClassLabel { get; private set; } = "Võ";
+
+        public static string ResolveClassId(string itemId)
+        {
+            if (string.IsNullOrEmpty(itemId)) return "vo";
+            foreach (var id in new[] { "vo", "kiem", "phap", "co", "linh" })
+                if (itemId.StartsWith(id + "_", StringComparison.Ordinal)) return id;
+            return "vo";
+        }
+
+        public static string ResolveClassLabel(string itemId)
+        {
+            switch (ResolveClassId(itemId))
+            {
+                case "kiem": return "Kiếm";
+                case "phap": return "Pháp";
+                case "co": return "Cơ";
+                case "linh": return "Linh";
+                default: return "Võ";
+            }
+        }
 
         public static TwoDSourcePoseReview CreateIfRequested(Transform parent)
         {
@@ -172,6 +194,8 @@ namespace LinhGioi.World
                 ItemId = string.IsNullOrEmpty(pack.itemId) ? expectedSlot + "_lv" + level : pack.itemId,
                 UnlockLevel = level
             };
+            ClassId = ResolveClassId(slot.ItemId);
+            ClassLabel = ResolveClassLabel(slot.ItemId);
             if (!slot.Texture.LoadImage(File.ReadAllBytes(atlasPath)))
                 throw new InvalidDataException("Cannot load slot review atlas: " + expectedSlot);
             slot.Texture.filterMode = FilterMode.Bilinear;
@@ -382,8 +406,8 @@ namespace LinhGioi.World
             GUI.DrawTexture(box, Texture2D.whiteTexture);
             GUI.color = Color.white;
             GUI.Label(box, _reviewSlots.Count == 0
-                ? "Võ nam · POSE THỬ\nĐứng / chạy / lộn · chưa đồ rời"
-                : "Võ nam · POSE THỬ\n" + _reviewSlots.Count + "/10 slot · đứng / 4 nhịp chạy / lộn");
+                ? ClassLabel + " nam · POSE THỬ\nĐứng / chạy / lộn · chưa đồ rời"
+                : ClassLabel + " nam · POSE THỬ\n" + _reviewSlots.Count + "/10 slot · đứng / 4 nhịp chạy / lộn");
             GUI.color = previousColor;
         }
 

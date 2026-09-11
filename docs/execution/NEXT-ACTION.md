@@ -1,4 +1,12 @@
-## Hiện hành — đủ Kiếm/Pháp/Cơ/Linh Lv1–30; chờ visual review trước tier mới — 2026-09-12
+## Hiện hành — Linh source-pose thay static-fit bị reject — 2026-09-12
+
+Không dùng Player/pack `TwoDClassMixedLoadoutFitPreview` để tiếp tục căn Kiếm/Pháp/Cơ/Linh. Owner đã reject Linh static-fit vì ghép vỡ; kết luận hoàn tất cũ đã được thu hồi trong `PROJECT-STATE.md`.
+
+Candidate hiện hành là Linh nam Lv1 external `class-work-in-progress/linh-lv001/ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`: cùng body/motion Võ v3 div4, 10 slot × sáu pose, overlay div2, một actor. Player `build/linh-source-pose-review-v3/player/LinhGioiOnline.app`; evidence `build/linh-source-pose-review-v3/runtime-pc/pc` có 154 frame. Không đổi camera/base/scale.
+
+Action tiếp theo: dựng Linh nữ Lv1 theo cùng contract, review source full/toggle trước một Player; sau đó Linh Lv10 và ma trận phối chéo Lv1/Lv10. Khi hai giới và phối chéo đạt visual gate mới áp lại pipeline này cho Kiếm/Pháp/Cơ. Trạng thái vẫn `CONTINUE`, chưa hoàn thành goal.
+
+## Đã thu hồi — đủ Kiếm/Pháp/Cơ/Linh Lv1–30 static-fit — 2026-09-12
 
 Giữ bốn Player/evidence class hiện hành và cùng `TwoDClassMixedLoadoutFitPreview`; không tạo controller, actor, camera hoặc hệ equip thứ hai. Linh cuối ở `client/Unity/build/linh-ten-slot-player-v1/LinhGioiOnline.app`, evidence `build/linh-lv1-30-ten-slot-runtime-v1/pc`, pack vẫn `DRAFT_RUNTIME_FIT`.
 
