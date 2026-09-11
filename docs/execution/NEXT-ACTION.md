@@ -1,3 +1,9 @@
+## Hiện hành — Linh Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
+
+Linh nam/nữ dùng cùng source-pose runtime, body authority cố định và 10 slot cho Lv1/Lv10. Evidence cuối `build/linh-lv10-source-pose-review-v2/runtime-pc-v2/pc` đạt 158 frame, full Lv1/Lv10 cho cả hai giới, 60 switch, mixed verified và `errors=[]`; ảnh đã review ở kích thước lớn. Nữ v1 hai-linh-cầu đã bị loại, chỉ v2 được pack. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`, chưa phải owner/production approval.
+
+Action tiếp theo: audit Kiếm theo turnaround/grid gốc và thay static-fit đã thu hồi bằng một batch source-pose 10 slot × 6 pose trên đúng body authority; review source board và toggle board trước Player. Không mở lại Võ, không đổi camera/base/scale, không chạm frozen surfaces; Map01A giữ nguyên target.
+
 ## Hiện hành — Linh Lv1 hai giới đã vào cùng source-pose runtime — 2026-09-12
 
 Giữ Võ Lv1/Lv10 HD checkpoint đã chốt; không làm lại Võ và không dùng static-fit. Linh nam dùng `ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`; Linh nữ dùng common body `common-female-v1/.../registered-body-v1` và 10 slot `linh-lv001/female-ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`. Cả hai dùng một state/actor path, sáu pose, 10 slot; runtime chỉ render giới tính đang chọn. Player/evidence mới: `build/linh-female-source-pose-review-v2/` (154 frame PC, SourcePose 17/17, Python 10/10 + 15/15). Trạng thái vẫn `REVIEW_ONLY`, chưa hoàn thành goal.

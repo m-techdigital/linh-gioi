@@ -1,3 +1,9 @@
+## Hiện hành — Linh Lv10 nam/nữ + phối chéo trên cùng source-pose — 2026-09-12
+
+Đã giữ nguyên Võ checkpoint và mở rộng đúng pipeline Linh Lv1 sang Lv10: body atlas nam/nữ được copy byte-identical từ Lv1; chỉ 10 overlay/tier thay đổi. Source ngoài repo ở `class-work-in-progress/linh-lv010/`; board source đã xem đủ sáu pose và 10 trạng thái tháo. Nữ v1 bị loại do hai linh cầu ở pose chạy; v2 tách `main_weapon` theo từng pose và board cuối chỉ còn một linh cầu, tháo vũ khí không làm thủng người.
+
+Runtime tách alt-pack theo giới (`--lgo-vo-pose-review-alt-dir` và `--lgo-vo-pose-review-female-alt-dir`) nên không nạp chéo fit family. Capture dùng active actor của từng giới, kiểm full Lv1/full Lv10 và mixed trên cả nam/nữ. Evidence `build/linh-lv10-source-pose-review-v2/runtime-pc-v2/pc`: 158 frame, full levels `[1,10]`, 4 full-level frame, 60 variant switch, mixed verified, `errors=[]`. Đã xem Player crop idle, bốn nhịp run, jump và tháo outer: một actor, silhouette người liền, không matte/camera/scale riêng. SourcePose EditMode `17/17`; Python pack `10/10`, capture `16/16`; Player build 0 error/0 warning. Trạng thái `AGENT_VISUAL_PASS / REVIEW_ONLY`, chưa claim owner hoặc production approval.
+
 ## Hiện hành — Linh nam/nữ Lv1 cùng source-pose runtime — 2026-09-12
 
 Đã giữ nguyên Võ checkpoint thay vì dựng lại: Võ Lv1 HD vẫn `OWNER_ACCEPTED_STABLE_REVIEW_CHECKPOINT`, Lv10 HD vẫn `AGENT_VISUAL_PASS / REVIEW_ONLY`, body nam hash `27630a5c…`. Static-fit Kiếm/Pháp/Cơ/Linh tiếp tục bị thu hồi và không được dùng làm visual candidate.

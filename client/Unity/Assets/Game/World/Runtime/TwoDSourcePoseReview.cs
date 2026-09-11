@@ -92,9 +92,17 @@ namespace LinhGioi.World
         }
 
         public static TwoDSourcePoseReview CreateIfRequested(Transform parent)
-            => CreateIfRequested(parent, "--lgo-vo-pose-review-dir", "Source pose review — male stack");
+            => CreateIfRequested(parent, "--lgo-vo-pose-review-dir", "--lgo-vo-pose-review-alt-dir",
+                "Source pose review — male stack");
 
         public static TwoDSourcePoseReview CreateIfRequested(Transform parent, string argument, string hostName)
+            => CreateIfRequested(parent, argument,
+                argument == "--lgo-vo-pose-review-female-dir"
+                    ? "--lgo-vo-pose-review-female-alt-dir"
+                    : "--lgo-vo-pose-review-alt-dir", hostName);
+
+        public static TwoDSourcePoseReview CreateIfRequested(Transform parent, string argument,
+            string alternateArgument, string hostName)
         {
             var args = Environment.GetCommandLineArgs();
             var index = Array.IndexOf(args, argument);
@@ -108,7 +116,7 @@ namespace LinhGioi.World
                 review.Load(args[index + 1]);
                 for (var alternate = 0; alternate < args.Length; alternate++)
                 {
-                    if (args[alternate] != "--lgo-vo-pose-review-alt-dir") continue;
+                    if (args[alternate] != alternateArgument) continue;
                     if (alternate + 1 >= args.Length) throw new ArgumentException("Alternate pose review directory missing");
                     review.LoadItemVariants(args[alternate + 1]);
                     Debug.Log("LGO_POSE_REVIEW_VARIANTS_LOADED " + args[alternate + 1]);

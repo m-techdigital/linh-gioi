@@ -118,6 +118,16 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
             code=0, result=result, width=1280, height=720, png_count=156,
             pose_review_variant_levels={10}))
 
+    def test_variant_capture_accepts_full_level_frames_for_both_genders(self):
+        result = self.valid_result()
+        result.update(poseReviewLv10Verified=True, poseReviewFullLevelsVerified=[1, 10],
+                      poseReviewFullLevelFrames=[2, 3, 75, 76], poseReviewMixedVerified=True,
+                      frames=158, actorScreenMetricFrames=158,
+                      poseReviewVariantSwitches=40)
+        self.assertEqual(validate_registered_capture_result(code=0, result=result,
+            width=1280, height=720, png_count=158, pose_review_variant_levels={10},
+            pose_review_variant_gender_count=2), [])
+
     def test_four_tier_capture_requires_lv20_lv30_and_full_switch_matrix(self):
         result = self.valid_result()
         result.update(poseReviewLv10Verified=True, poseReviewLv20Verified=True,

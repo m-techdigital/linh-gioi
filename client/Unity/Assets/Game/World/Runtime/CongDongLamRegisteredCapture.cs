@@ -64,8 +64,12 @@ namespace LinhGioi.World
                 RefreshVoAvatarMode(); Refresh();
                 var rest = _registeredOutfit.SnapshotVertices(_registeredOutfit.BindSpace);
                 yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-idle");
-                var reviewLevels = _sourcePoseReview != null && Array.IndexOf(args, "--lgo-vo-pose-review-alt-dir") >= 0 && gender == 0
-                    ? _sourcePoseReview.GetCompleteItemLevels() : Array.Empty<int>();
+                var activeReview = ActiveSourcePoseReview;
+                var alternateArgument = gender == 0
+                    ? "--lgo-vo-pose-review-alt-dir"
+                    : "--lgo-vo-pose-review-female-alt-dir";
+                var reviewLevels = activeReview != null && Array.IndexOf(args, alternateArgument) >= 0
+                    ? activeReview.GetCompleteItemLevels() : Array.Empty<int>();
                 if (reviewLevels.Length > 1)
                 {
                     var verified = new List<int>();
@@ -75,11 +79,11 @@ namespace LinhGioi.World
                         for (var slot = 0; slot < VoReviewSlotIds.Length; slot++)
                         {
                             _voEquipmentLevels[VoEquipmentSlots[slot]] = level;
-                            var changed = _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) != level;
-                            allSlots &= _sourcePoseReview.SetSlotItemLevel(VoReviewSlotIds[slot], level);
+                            var changed = activeReview.GetSlotItemLevel(VoReviewSlotIds[slot]) != level;
+                            allSlots &= activeReview.SetSlotItemLevel(VoReviewSlotIds[slot], level);
                             if (changed) report.poseReviewVariantSwitches++;
                         }
-                        foreach (var slot in VoReviewSlotIds) allSlots &= _sourcePoseReview.GetSlotItemLevel(slot) == level;
+                        foreach (var slot in VoReviewSlotIds) allSlots &= activeReview.GetSlotItemLevel(slot) == level;
                         if (allSlots)
                         {
                             verified.Add(level);
@@ -88,7 +92,10 @@ namespace LinhGioi.World
                             report.poseReviewFullLevelFrames.Add(report.frames);
                         }
                     }
-                    report.poseReviewFullLevelsVerified = verified.ToArray();
+                    if (report.poseReviewFullLevelsVerified.Length == 0)
+                        report.poseReviewFullLevelsVerified = verified.ToArray();
+                    else if (!report.poseReviewFullLevelsVerified.SequenceEqual(verified))
+                        report.errors.Add("Male/female pose review tiers differ");
                     report.poseReviewLv10Verified = verified.Contains(10);
                     report.poseReviewLv20Verified = verified.Contains(20);
                     report.poseReviewLv30Verified = verified.Contains(30);
@@ -108,14 +115,17 @@ namespace LinhGioi.World
                             else if (action == "jump") level = reviewLevels[slot % reviewLevels.Length];
                             else if (action == "jump_diagonal") level = jumpDiagonalLevel;
                             _voEquipmentLevels[VoEquipmentSlots[slot]] = level;
-                            var changed = _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) != level;
-                            if (_sourcePoseReview.SetSlotItemLevel(VoReviewSlotIds[slot], level) && changed) report.poseReviewVariantSwitches++;
+                            var changed = activeReview.GetSlotItemLevel(VoReviewSlotIds[slot]) != level;
+                            if (activeReview.SetSlotItemLevel(VoReviewSlotIds[slot], level) && changed) report.poseReviewVariantSwitches++;
                         }
                         if (action == "jump")
                         {
-                            report.poseReviewMixedVerified = true;
+                            var mixedVerified = true;
                             for (var slot = 0; slot < VoReviewSlotIds.Length; slot++)
-                                report.poseReviewMixedVerified &= _sourcePoseReview.GetSlotItemLevel(VoReviewSlotIds[slot]) == reviewLevels[slot % reviewLevels.Length];
+                                mixedVerified &= activeReview.GetSlotItemLevel(VoReviewSlotIds[slot]) == reviewLevels[slot % reviewLevels.Length];
+                            report.poseReviewMixedVerified = gender == 0
+                                ? mixedVerified
+                                : report.poseReviewMixedVerified && mixedVerified;
                         }
                         RefreshVoAvatarMode();
                     }
@@ -304,6 +314,10 @@ namespace LinhGioi.World
                 && (!report.poseReviewMixedVerified
                     || !_sourcePoseReview.GetCompleteItemLevels().SequenceEqual(report.poseReviewFullLevelsVerified)))
                 report.errors.Add("Pose review item variant matrix did not execute");
+            if (_femaleSourcePoseReview != null && Array.IndexOf(args, "--lgo-vo-pose-review-female-alt-dir") >= 0
+                && (!report.poseReviewMixedVerified
+                    || !_femaleSourcePoseReview.GetCompleteItemLevels().SequenceEqual(report.poseReviewFullLevelsVerified)))
+                report.errors.Add("Female pose review item variant matrix did not execute");
             if (report.errors.Count > 0) report.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "registered-manifest.json"), JsonUtility.ToJson(report, true));
             Application.Quit(report.errors.Count == 0 ? 0 : 1);
