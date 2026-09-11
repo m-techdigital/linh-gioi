@@ -52,12 +52,14 @@ namespace LinhGioi.World
         public bool VoSomersaultEnabled => _registeredOutfit != null;
         private bool RegisteredRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered") >= 0 || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered-equipment") >= 0;
         private bool ClassReviewRequested => ReviewClassId != null;
-        private string ReviewClassId => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-co-review") >= 0 ? "co"
+        private string ReviewClassId => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-linh-review") >= 0 ? "linh"
+            : Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-co-review") >= 0 ? "co"
             : Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-phap-review") >= 0 ? "phap"
             : Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-kiem-review") >= 0 ? "kiem" : null;
         private bool ClassCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-kiem-capture") >= 0
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-phap-capture") >= 0
-            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-co-capture") >= 0;
+            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-co-capture") >= 0
+            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-linh-capture") >= 0;
         public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || ClassCaptureRequested
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
         public float PlayerX => _routeX;

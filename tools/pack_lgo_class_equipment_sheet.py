@@ -94,8 +94,8 @@ def build(class_id: str, male_sheet: Path, female_sheet: Path, template_path: Pa
         component["atlas"] = f"{class_id}-equipment-{gender}-atlas"
         component.pop("reviewNote", None)
         if slot == "head_hair":
-            if class_id == "phap":
-                # Pháp hair is a defining long silhouette.  Scale the locked
+            if class_id in {"phap", "linh"}:
+                # Pháp/Linh hair is a defining long silhouette. Scale the locked
                 # head-anchor box uniformly so its source aspect stays intact.
                 factor = 1.25 if gender == "male" else 1.65
                 component["worldW"] *= factor

@@ -36,7 +36,8 @@ namespace LinhGioi.World
             if (index < 0 || index + 1 >= args.Length)
                 throw new ArgumentException("Missing class equipment capture directory");
             var directory = args[index + 1];
-            var classId = Array.IndexOf(args, "--lgo-co-capture") >= 0 ? "co"
+            var classId = Array.IndexOf(args, "--lgo-linh-capture") >= 0 ? "linh"
+                : Array.IndexOf(args, "--lgo-co-capture") >= 0 ? "co"
                 : Array.IndexOf(args, "--lgo-phap-capture") >= 0 ? "phap" : "kiem";
             EnsureClassFitPreview(classId);
             Directory.CreateDirectory(directory);

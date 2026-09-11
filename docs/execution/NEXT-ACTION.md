@@ -1,3 +1,9 @@
+## Hiện hành — đủ Kiếm/Pháp/Cơ/Linh Lv1–30; chờ visual review trước tier mới — 2026-09-12
+
+Giữ bốn Player/evidence class hiện hành và cùng `TwoDClassMixedLoadoutFitPreview`; không tạo controller, actor, camera hoặc hệ equip thứ hai. Linh cuối ở `client/Unity/build/linh-ten-slot-player-v1/LinhGioiOnline.app`, evidence `build/linh-lv1-30-ten-slot-runtime-v1/pc`, pack vẫn `DRAFT_RUNTIME_FIT`.
+
+Audit ma trận chung đã PASS tại `build/linh-runtime-v1/cross-class-contract-audit.json`: cùng 10 slot canonical, skeleton, hai giới, cấp 1/10/20/30 và 104 component; không có contract mismatch. Gate tiếp theo là owner xem Player Linh cùng các Player Kiếm/Pháp/Cơ. Chỉ mở Lv40+ nếu review không phát hiện lệch/mờ; tier mới phải dùng cùng slot/component contract, không dựng full-outfit hoặc base riêng cho từng level.
+
 ## Hiện hành — Cơ đã đóng batch; chuyển source gate Linh — 2026-09-12
 
 Giữ Player Cơ `client/Unity/build/co-ten-slot-player-v1/LinhGioiOnline.app` và evidence `build/co-lv1-30-ten-slot-runtime-v1/pc`; pack vẫn `DRAFT_RUNTIME_FIT`. Action kế tiếp là audit design Linh, tạo đủ nam/nữ 4×10 ở source trước rồi mới mở rộng cùng `TwoDClassMixedLoadoutFitPreview`. Không copy controller/camera/actor hoặc dùng crop board nhỏ. Sau Linh mới đánh giá lại ma trận ba class và thứ tự level cao hơn.

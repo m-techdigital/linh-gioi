@@ -62,11 +62,11 @@ namespace LinhGioi.World
         {
             if (parent == null) throw new ArgumentNullException(nameof(parent));
             if (rig == null) throw new ArgumentNullException(nameof(rig));
-            if (classId != "kiem" && classId != "phap" && classId != "co")
+            if (classId != "kiem" && classId != "phap" && classId != "co" && classId != "linh")
                 throw new ArgumentException("Unknown review class", nameof(classId));
             _classId = classId;
-            _classLabel = classId == "kiem" ? "Kiếm" : classId == "phap" ? "Pháp" : "Cơ";
-            var resourceClass = classId == "kiem" ? "Kiem" : classId == "phap" ? "Phap" : "Co";
+            _classLabel = classId == "kiem" ? "Kiếm" : classId == "phap" ? "Pháp" : classId == "co" ? "Cơ" : "Linh";
+            var resourceClass = classId == "kiem" ? "Kiem" : classId == "phap" ? "Phap" : classId == "co" ? "Co" : "Linh";
             _resource = "LGOClasses/" + resourceClass + "MixedLoadoutFitPreview/";
             _root = new GameObject("Map01A " + _classLabel + " ten-slot shared-rig review").transform;
             _root.SetParent(parent, false);

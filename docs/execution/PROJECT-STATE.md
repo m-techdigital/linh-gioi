@@ -1,3 +1,11 @@
+## Hiện hành — Linh Lv1–30 hoàn tất shared-rig 10 slot — 2026-09-12
+
+Linh nam/nữ bám turnaround và equipment grid gốc tại external `classes-lv001-030/linh`. Hai sheet v1 bị loại vì dính anatomy; hai sheet v2 chỉ sửa vùng anatomy, sau đó tách thành 80 item và đóng `linh-lv1-30-equipment-runtime-v1`: hai atlas 1024², 104 attachment, trạng thái `DRAFT_RUNTIME_FIT`. Tóc dài Linh dùng cùng quy tắc head-anchor giữ tỷ lệ đã áp cho Pháp; không đổi body, camera, scale hoặc motion Võ.
+
+Runtime mở Linh trong chính `TwoDClassMixedLoadoutFitPreview`: một actor, một rig, một state hành trang cho Kiếm/Pháp/Cơ/Linh. Player `client/Unity/build/linh-ten-slot-player-v1/LinhGioiOnline.app`; evidence `build/linh-lv1-30-ten-slot-runtime-v1/pc` đạt 27 frame, 8 full loadout, 10 toggle, 2 mixed, 6 motion, `errors=[]`. Đã xem inventory, toàn bộ trạng thái tháo, nam/nữ Lv1/Lv30, mixed, bốn nhịp chạy và lộn; silhouette tím/đen/trắng rõ, slot tách sạch và bám motion. Đây là agent visual review; chưa tự gán owner/production approval.
+
+Audit chung `build/linh-runtime-v1/cross-class-contract-audit.json` xác nhận Kiếm/Pháp/Cơ/Linh cùng 10 slot, level `[1,10,20,30]`, hai giới, skeleton `lgo_humanoid_2d_v1`, 104 component và `runtimeEligibleCount=0`, không có contract mismatch. Mỗi atlas của cả bốn class vẫn dưới ngân sách 1 MB.
+
 ## Hiện hành — Cơ Lv1–30 hoàn tất shared-rig 10 slot — 2026-09-12
 
 Cơ nam/nữ dùng source external `classes-lv001-030/co/generated-batch-v1`: hai sheet v1 bị loại vì dính anatomy, hai sheet v2 chỉ sửa vùng anatomy và giữ thiết kế 4 cấp × 10 slot. `pack_lgo_class_equipment_sheet.py` đóng 80 item thành `co-lv1-30-equipment-runtime-v1`, hai atlas 1024²/104 attachment, trạng thái `DRAFT_RUNTIME_FIT`.
