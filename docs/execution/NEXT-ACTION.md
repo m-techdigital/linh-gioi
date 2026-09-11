@@ -1,3 +1,9 @@
+## Hiện hành — Kiếm Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
+
+Kiếm nam/nữ Lv1/Lv10 hiện dùng bốn pack source-pose cùng body authority và một actor. Evidence `build/kiem-lv10-source-pose-review-v1/runtime-pc/pc`: 190 frame, full `[1,10]`, 60 switch, mixed verified, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn phối cấp, tháo kiếm/áo ngoài của cả hai giới trên Player thật. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; Player vẫn mở để owner thao tác.
+
+Action tiếp theo: audit design Pháp và thay static-fit đã thu hồi bằng một batch source-pose Lv1 đủ nam/nữ, 10 slot × sáu pose. Dùng đúng common body/canvas/pivot hiện hành, review full-compose và toggle board ở kích thước lớn trước một lượt Player; không đổi camera/base/scale, không tạo actor hoặc hệ wardrobe thứ hai. Sau Pháp Lv1 mới làm Lv10/mixed rồi chuyển Cơ.
+
 ## Hiện hành — Linh Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
 
 Linh nam/nữ dùng cùng source-pose runtime, body authority cố định và 10 slot cho Lv1/Lv10. Evidence cuối `build/linh-lv10-source-pose-review-v2/runtime-pc-v2/pc` đạt 158 frame, full Lv1/Lv10 cho cả hai giới, 60 switch, mixed verified và `errors=[]`; ảnh đã review ở kích thước lớn. Nữ v1 hai-linh-cầu đã bị loại, chỉ v2 được pack. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`, chưa phải owner/production approval.

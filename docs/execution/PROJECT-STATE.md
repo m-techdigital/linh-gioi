@@ -1,3 +1,11 @@
+## Hiện hành — Kiếm Lv1/Lv10 nam/nữ trên source-pose và Player thật — 2026-09-12
+
+Đã thay candidate Kiếm static-fit bị thu hồi bằng cùng contract source-pose đang dùng cho Võ/Linh: body authority nam/nữ giữ nguyên, mỗi tier có 10 slot × sáu pose `idle/run_contact_a/run_a/run_contact_b/run_b/jump_tuck`, overlay divisor 2. Source ngoài repo nằm tại `class-work-in-progress/kiem-lv001/` và `class-work-in-progress/kiem-lv010/`; các board full-compose và 10 trạng thái tháo đã được xem ở kích thước lớn trước khi pack. Bản nam v1 để lại mảnh kiếm đã bị loại; candidate hiện hành dùng nam v2, nữ v1.
+
+Player thật dùng đồng thời bốn pack Kiếm nam/nữ Lv1/Lv10 trên một actor. Evidence `build/kiem-lv10-source-pose-review-v1/runtime-pc/pc` có 190 frame, full levels `[1,10]`, 60 lần đổi variant, mixed verified, `maxBodyVariants=1`, bind-return error < 0,000008 và `errors=[]`. Đã xem trực tiếp Lv1/Lv10, bốn nhịp chạy, lộn phối cấp, tháo kiếm và tháo áo ngoài ở cả hai giới: silhouette người liền, không mảnh đồ rời, không actor thứ hai; camera/base/scale không đổi. Log live nạp đủ 40 item của bốn pack và phát chuỗi `contact A → run A → contact B → run B`. Python pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit đều pass. Trạng thái là `AGENT_VISUAL_PASS / REVIEW_ONLY`, chưa tự gán owner hoặc production approval.
+
+Next: audit Pháp theo turnaround/equipment grid gốc và author trọn batch Lv1 nam/nữ bằng cùng source-pose/body authority; không tiếp tục pack static-fit cũ và không căn bằng camera.
+
 ## Hiện hành — Linh Lv10 nam/nữ + phối chéo trên cùng source-pose — 2026-09-12
 
 Đã giữ nguyên Võ checkpoint và mở rộng đúng pipeline Linh Lv1 sang Lv10: body atlas nam/nữ được copy byte-identical từ Lv1; chỉ 10 overlay/tier thay đổi. Source ngoài repo ở `class-work-in-progress/linh-lv010/`; board source đã xem đủ sáu pose và 10 trạng thái tháo. Nữ v1 bị loại do hai linh cầu ở pose chạy; v2 tách `main_weapon` theo từng pose và board cuối chỉ còn một linh cầu, tháo vũ khí không làm thủng người.
