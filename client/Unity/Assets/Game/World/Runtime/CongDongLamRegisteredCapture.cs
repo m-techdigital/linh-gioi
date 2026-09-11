@@ -9,6 +9,12 @@ namespace LinhGioi.World
     public sealed partial class CongDongLamMap01AArtPreview
     {
         private bool _registeredCapturing;
+        [Serializable] private sealed class WardrobeCombination
+        {
+            public string gender, file;
+            public int bits, frame;
+            public string[] enabledCore;
+        }
         [Serializable] private sealed class RegisteredEvidence
         {
             public string status = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED";
@@ -22,6 +28,7 @@ namespace LinhGioi.World
             public bool closedBody, registeredEquipment;
             public int maxEquipmentAttachments, maxBodyVariants;
             public List<string> errors = new List<string>();
+            public List<WardrobeCombination> wardrobeCombinations = new List<WardrobeCombination>();
         }
         public static float RegisteredActorScreenHeightRatio(Camera camera, Bounds worldBounds, int screenHeight)
         {
@@ -195,6 +202,33 @@ namespace LinhGioi.World
                     AdvanceVoAnimation(2); AdvanceVoAnimation(.15f); Refresh();
                     yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-base-after-" + motion);
                     report.basePoseFrames++;
+                }
+                if (Array.IndexOf(args, "--lgo-wardrobe-matrix") >= 0)
+                {
+                    if (!report.registeredEquipment) throw new InvalidOperationException("Wardrobe matrix requires registered equipment");
+                    var core = new[] { "inner_top", "outer_tunic", "lower_garment", "waist" };
+                    _routeX = 18.7f;
+                    _voState.FaceMovement(1);
+                    for (var bits = 0; bits < 16; bits++)
+                    {
+                        AdvanceVoAnimation(2); AdvanceVoAnimation(.15f);
+                        _voState.EquipAllExcept(null);
+                        for (var slot = 0; slot < 10; slot++)
+                        {
+                            _voState.SetPresentation(gender, 0, 2, slot);
+                            var bit = Array.IndexOf(core, _voState.SelectedEquipmentSlot);
+                            if (bit >= 0 && (bits & (1 << bit)) == 0) _voState.ToggleSelectedEquipmentSlot();
+                        }
+                        RefreshVoAvatarMode(); Refresh();
+                        var enabled = new List<string>();
+                        foreach (var slot in core) if (_voState.IsEquipped(slot)) enabled.Add(slot);
+                        if (_registeredOutfit.VisibleLayers != 7 + enabled.Count || VoAvatarMotionState != "idle")
+                            report.errors.Add("Wardrobe combination state mismatch " + VoAvatarGender + "/" + bits);
+                        var name = VoAvatarGender + "-wardrobe-" + bits.ToString("D2");
+                        yield return SaveRegisteredFrame(directory, report, name);
+                        report.wardrobeCombinations.Add(new WardrobeCombination { gender = VoAvatarGender, bits = bits,
+                            frame = report.frames, file = report.frames.ToString("00") + "-" + name + ".png", enabledCore = enabled.ToArray() });
+                    }
                 }
             }
             _voState.SetPresentation(0, 0, 2, 0);

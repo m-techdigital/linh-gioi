@@ -33,7 +33,7 @@ def player_code_fingerprint(player):
             for path in [player, *assemblies]}
 
 
-def validate_registered_capture_result(*, code, result, width, height, png_count, closed_far_arms=False, closed_body=False, registered_equipment=False):
+def validate_registered_capture_result(*, code, result, width, height, png_count, closed_far_arms=False, closed_body=False, registered_equipment=False, wardrobe_matrix=False):
     errors = []
     if code != 0:
         errors.append('PLAYER_EXIT_CODE_' + str(code))
@@ -52,8 +52,29 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
             errors.append('REGISTERED_EQUIPMENT_ATTACHMENT_COUNT_MISMATCH')
         if result.get('maxBodyVariants') != 1:
             errors.append('REGISTERED_EQUIPMENT_BODY_VARIANT_COUNT_MISMATCH')
+    expected_frames = 186 if wardrobe_matrix else 154
+    if wardrobe_matrix:
+        core = ('inner_top', 'outer_tunic', 'lower_garment', 'waist')
+        rows = result.get('wardrobeCombinations', [])
+        expected = {(gender, bits) for gender in ('male', 'female') for bits in range(16)}
+        if len(rows) != 32 or {(r.get('gender'), r.get('bits')) for r in rows} != expected:
+            errors.append('WARDROBE_COMBINATIONS_INCOMPLETE')
+        frames = [r.get('frame') for r in rows]
+        if len(set(frames)) != 32 or any(not isinstance(f, int) or not 1 <= f <= expected_frames for f in frames):
+            errors.append('WARDROBE_FRAME_REUSE_OR_MISSING')
+        for row in rows:
+            bits = row.get('bits')
+            frame = row.get('frame')
+            gender = row.get('gender')
+            if (not isinstance(bits, int) or not isinstance(frame, int)
+                    or gender not in ('male', 'female')
+                    or row.get('file') != f'{frame:02d}-{gender}-wardrobe-{bits:02d}.png'):
+                errors.append('WARDROBE_IMAGE_REFERENCE_MISMATCH')
+            if not isinstance(bits, int) or row.get('enabledCore') != [slot for bit, slot in enumerate(core) if bits & (1 << bit)]:
+                errors.append('WARDROBE_EQUIPMENT_STATE_MISMATCH')
+                break
     expected_scalars = {
-        'frames': 154,
+        'frames': expected_frames,
         'basePoseFrames': 30,
         'actionTransitions': 20,
         'heldJumpRestarts': 4,
@@ -66,7 +87,7 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
             errors.append(key.upper() + '_MISMATCH')
     if result.get('errors'):
         errors.append('PLAYER_REPORTED_ERRORS')
-    if png_count != 154:
+    if png_count != expected_frames:
         errors.append('PNG_FRAME_COUNT_MISMATCH')
 
     metric_frames = result.get('actorScreenMetricFrames')
@@ -127,8 +148,11 @@ def main():
     parser.add_argument('--closed-far-arms', action='store_true')
     parser.add_argument('--closed-body', action='store_true')
     parser.add_argument('--registered-equipment', action='store_true')
+    parser.add_argument('--wardrobe-matrix', action='store_true', help='Append all 16 core garment combinations for both genders')
     parser.add_argument('--pose-review-dir', type=Path, help='Optional external idle/A/B review atlas, shown beside the equipped actor')
     args = parser.parse_args()
+    if args.wardrobe_matrix and not args.registered_equipment:
+        parser.error("--wardrobe-matrix requires --registered-equipment")
     player = resolve_player(args.player)
     player_fingerprint = player_code_fingerprint(player)
     pose_fingerprint = pose_review_fingerprint(args.pose_review_dir) if args.pose_review_dir else None
@@ -145,7 +169,7 @@ def main():
             process = subprocess.Popen([str(player), '-logFile', str(out / 'player.log'),
                 '-screen-fullscreen', '0', '-screen-width', str(width), '-screen-height', str(height),
                 '--lgo-map01a-art-preview', '--lgo-vo-registered', '--lgo-registered-capture',
-                '--lgo-map01a-device', profile, '--lgo-map01a-art-dir', str(out)] + (['--lgo-vo-anatomical'] if args.anatomical or args.closed_far_arms or args.closed_body else []) + (['--lgo-vo-closed-far-arms'] if args.closed_far_arms else []) + (['--lgo-vo-closed-body'] if args.closed_body else []) + (['--lgo-vo-registered-equipment'] if args.registered_equipment else []) + (['--lgo-vo-pose-review-dir', str(args.pose_review_dir.resolve())] if args.pose_review_dir else []),
+                '--lgo-map01a-device', profile, '--lgo-map01a-art-dir', str(out)] + (['--lgo-wardrobe-matrix'] if args.wardrobe_matrix else []) + (['--lgo-vo-anatomical'] if args.anatomical or args.closed_far_arms or args.closed_body else []) + (['--lgo-vo-closed-far-arms'] if args.closed_far_arms else []) + (['--lgo-vo-closed-body'] if args.closed_body else []) + (['--lgo-vo-registered-equipment'] if args.registered_equipment else []) + (['--lgo-vo-pose-review-dir', str(args.pose_review_dir.resolve())] if args.pose_review_dir else []),
                 cwd=player.parent, stdout=log, stderr=subprocess.STDOUT)
             try:
                 started = time.monotonic()
@@ -179,7 +203,13 @@ def main():
             closed_far_arms=args.closed_far_arms,
             closed_body=args.closed_body,
             registered_equipment=args.registered_equipment,
+            wardrobe_matrix=args.wardrobe_matrix,
         )
+        if args.wardrobe_matrix:
+            for row in result.get('wardrobeCombinations', []):
+                name = row.get('file', '')
+                if Path(name).name != name or not (out / name).is_file():
+                    validation_errors.append('WARDROBE_IMAGE_MISSING')
         if validation_errors:
             raise SystemExit('FIX_REQUIRED: ' + str(out) + ' ' + ','.join(validation_errors))
         if pose_pack is not None:
@@ -198,7 +228,7 @@ def main():
                 'frames': result['frames'],
             }
             (out / 'pose-review-provenance.json').write_text(json.dumps(provenance, indent=2) + chr(10))
-        print(profile + ': 154 Player frames; technical checks passed; visual review required', flush=True)
+        print(f"{profile}: {result['frames']} Player frames; technical checks passed; visual review required", flush=True)
 
 
 if __name__ == '__main__':

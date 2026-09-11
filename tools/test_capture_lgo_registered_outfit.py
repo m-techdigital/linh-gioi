@@ -41,6 +41,34 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
             "maxActorScreenHeightRatio": 0.24,
         }
 
+    def matrix_result(self):
+        result = self.valid_result()
+        core = ('inner_top', 'outer_tunic', 'lower_garment', 'waist')
+        result.update(frames=186, actorScreenMetricFrames=186, registeredEquipment=True,
+                      closedBody=True, maxEquipmentAttachments=17, maxBodyVariants=1)
+        result['wardrobeCombinations'] = [
+            dict(gender=gender, bits=bits, frame=1 + index * 16 + bits,
+                 file=f'{1 + index * 16 + bits:02d}-{gender}-wardrobe-{bits:02d}.png',
+                 enabledCore=[slot for bit, slot in enumerate(core) if bits & (1 << bit)])
+            for index, gender in enumerate(('male', 'female')) for bits in range(16)]
+        return result
+
+    def test_matrix_requires_unique_images_and_actual_equipment_states(self):
+        def check(result):
+            return validate_registered_capture_result(code=0, result=result, width=1280,
+                height=720, png_count=186, registered_equipment=True, wardrobe_matrix=True)
+        self.assertEqual(check(self.matrix_result()), [])
+        for defect in ('missing', 'duplicate', 'frame_reuse', 'wrong_equipment', 'image_reuse', 'non_png'):
+            result = self.matrix_result()
+            rows = result['wardrobeCombinations']
+            if defect == 'missing': rows.pop()
+            elif defect == 'duplicate': rows[-1] = dict(rows[0])
+            elif defect == 'frame_reuse': rows[-1]['frame'] = rows[0]['frame']
+            elif defect == 'image_reuse': rows[-1]['file'] = rows[0]['file']
+            elif defect == 'non_png': rows[0]['file'] = 'player.log'
+            else: rows[0]['enabledCore'] = ['inner_top']
+            with self.subTest(defect=defect): self.assertTrue(check(result))
+
     def test_accepts_capture_when_actor_screen_metrics_cover_every_frame(self):
         self.assertEqual(
             validate_registered_capture_result(
