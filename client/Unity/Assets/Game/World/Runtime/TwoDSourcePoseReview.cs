@@ -85,13 +85,15 @@ namespace LinhGioi.World
             Apply("idle", 0, 1);
         }
 
+        public void Advance(float seconds) => _timeline.Advance(seconds);
+
         public void Apply(string motion, float phaseSeconds, int facing, float actionProgress = 0)
         {
             if (_renderer == null) return;
             // The existing character state owns time and facing; no second animation clock.
             var moving = motion == "walk" || motion == "run";
             var hasContactFrames = _sprites.ContainsKey("run_contact_a") && _sprites.ContainsKey("run_contact_b");
-            var frame = moving ? SelectRunFrame(Mathf.Repeat(phaseSeconds * 1.5f, 1), hasContactFrames) : "idle";
+            var frame = moving ? SelectRunFrame(Mathf.Repeat(phaseSeconds * TwoDSourcePoseTimeline.RunCyclesPerSecond, 1), hasContactFrames) : "idle";
             if (HasTransitions) frame = _timeline.Select(motion, phaseSeconds);
             var jumping = motion == "jump" && _sprites.ContainsKey("jump_tuck");
             if (jumping) frame = "jump_tuck";

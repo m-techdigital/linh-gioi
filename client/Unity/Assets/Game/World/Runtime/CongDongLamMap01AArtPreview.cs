@@ -120,7 +120,7 @@ namespace LinhGioi.World
                 _voState.HoldMovement(.14f);
                 ApplyVoPose();
             }
-            var target = Mathf.Clamp(PlayerX + Mathf.Clamp(axis, -1, 1) * Mathf.Clamp(seconds, 0, .1f) * (_registeredOutfit != null && _voState.RunEnabled ? 4f : 2.4f), -3.8f, 44.4f);
+            var target = Mathf.Clamp(PlayerX + Mathf.Clamp(axis, -1, 1) * Mathf.Clamp(seconds, 0, .1f) * 2.4f, -3.8f, 44.4f);
             _routeX = target;
             _controller.RefreshForSmoke();
             Refresh();
@@ -960,6 +960,7 @@ namespace LinhGioi.World
             var activeAction = VoAvatarMotionState;
             _voState.Advance(seconds);
             _registeredOutfit?.Advance(seconds);
+            _sourcePoseReview?.Advance(seconds);
             if (activeAction == "jump" && !_voState.HasActiveAction && _voJumpHeld) TriggerVoJump();
             if (activeAction == "skill")
             {

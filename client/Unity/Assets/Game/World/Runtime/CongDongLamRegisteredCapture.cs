@@ -69,7 +69,7 @@ namespace LinhGioi.World
                         for (var sample = 0; sample < 4; sample++)
                         {
                             for (var step = 0; step < 2; step++)
-                                MoveOnLane(sample < 2 ? 1 : -1, .125f / (action == "run" ? 2.5f : 2f));
+                                MoveOnLane(sample < 2 ? 1 : -1, .125f / (action == "run" ? TwoDSourcePoseTimeline.RunCyclesPerSecond : 2f));
                             yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-" + action + "-phase-" + sample);
                         }
                     }
@@ -186,7 +186,7 @@ namespace LinhGioi.World
                     for (var sample = 0; sample < 4; sample++)
                     {
                         if (motion == "jump") AdvanceVoAnimation(.15f);
-                        else for (var step = 0; step < 2; step++) MoveOnLane(1, .125f / (motion == "run" ? 2.5f : 2f));
+                        else for (var step = 0; step < 2; step++) MoveOnLane(1, .125f / (motion == "run" ? TwoDSourcePoseTimeline.RunCyclesPerSecond : 2f));
                         if (_registeredOutfit.VisibleLayers != 1) report.errors.Add("Base diagnostic contains equipment");
                         Refresh();
                         yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-base-" + motion + "-" + sample);

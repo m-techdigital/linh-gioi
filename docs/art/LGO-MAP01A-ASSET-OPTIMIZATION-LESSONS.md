@@ -138,3 +138,7 @@ Tool không bảo đảm size/alpha theo prompt: atlas yêu cầu1024² nhưng t
 ### Atlas ít frame: tối ưu xếp hàng trước khi tăng cạnh — 2026-09-11
 
 Tám sprite Võ div4 bị greedy shelf đẩy1024²/4MiB dù xếp được512×1024/2MiB. Exact row partition tối đa10sprite giữ pixel/divisor, giảm PNG503540→439382byte. Ưu tiên greedy khi hòa để pack cũ không đổi byte; regression reconstruct đủ tám sprite, repack v5 nguyên SHA. Không giảm sampling để chữa packing.
+
+### Retarget phải kiểm cả nhánh khớp và clock — 2026-09-11
+
+Võ bốn nhịp dùng mốc source + nội suy góc để giữ chiều dài, không chỉ đổi tên frame trên đường chân sin cũ. Đặt góc ở bind-space tránh mirror làm sai world rotation. Hand-target error nhỏ chưa chứng minh tay ôm gối: thêm điều kiện khuỷu dưới vai và continuity khi restart để bắt nhánh IK gập ra sau đầu. Tham khảo mô hình target+bend direction của [Spine IK](https://us.esotericsoftware.com/spine-ik-constraints), áp dụng `LimbSolver2D.flip` sẵn có, không thay engine hay sinh lại base. Capture tiến nhanh2giây phải kết thúc transition, không khởi tạo stop mới; source và rig nhận cùng step. Bằng chứng: build/vo-source-retarget-v1 và vo-source-retarget-registered-v4.

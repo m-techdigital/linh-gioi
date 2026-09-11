@@ -6,6 +6,21 @@ namespace LinhGioi.Tests.EditMode
     public sealed class TwoDSourcePoseReviewTests
     {
         [Test]
+        public void ExplicitSeekSettlesMovementInsteadOfStartingANewStop()
+        {
+            var timeline = new TwoDSourcePoseTimeline();
+            timeline.Select("run", 0);
+            timeline.Select("run", .4f);
+            timeline.Advance(2);
+            Assert.That(timeline.Select("idle", .5f), Is.EqualTo("idle"));
+            timeline.Advance(1f / 30);
+            Assert.That(timeline.Select("run", .6f), Is.EqualTo("run_start"));
+            Assert.That(timeline.Select("idle", .7f), Is.EqualTo("run_stop"));
+            timeline.Advance(2);
+            Assert.That(timeline.Select("idle", .8f), Is.EqualTo("idle"));
+        }
+
+        [Test]
         public void EntryAndExitAreOutsideTheFourPoseLoop()
         {
             var timeline = new TwoDSourcePoseTimeline();

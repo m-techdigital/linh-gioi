@@ -13,14 +13,28 @@ namespace LinhGioi.World
         {
             public int frame;
             public float seconds, animationPhase;
-            public string motion, pose;
+            public string motion, pose, registeredPose;
+            public float registeredRunCycle;
+            public Vector3[] registeredJoints;
         }
         [Serializable] private sealed class PoseLoopEvidence
         {
             public string status = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED";
-            public string limitation = "Source review only; Facing and held-jump integration still pending";
+            public string limitation = "Fixed-step run comparison; live input and held-jump are covered by the registered capture separately";
+            public bool registeredComparison;
             public int fps = 30;
             public List<PoseLoopFrame> frames = new List<PoseLoopFrame>();
+        }
+
+        private Vector3[] CaptureRegisteredJointPoints()
+        {
+            if (_registeredOutfit == null) return Array.Empty<Vector3>();
+            var points = new List<Vector3>();
+            foreach (var part in new[] { "head", "left-upper-arm", "left-forearm-hand", "right-upper-arm", "right-forearm-hand", "left-thigh", "left-shin-foot", "left-foot", "right-thigh", "right-shin-foot", "right-foot" })
+                points.Add(Camera.main.WorldToScreenPoint(_registeredOutfit.JointWorldPosition("male", part)));
+            foreach (var side in new[] { "left", "right" })
+                points.Add(Camera.main.WorldToScreenPoint(_registeredOutfit.HandWorldPosition("male", side)));
+            return points.ToArray();
         }
 
         private IEnumerator CaptureSourcePoseLoop()
@@ -35,13 +49,13 @@ namespace LinhGioi.World
             Application.runInBackground = true;
             var previousRate = Time.captureFramerate;
             Time.captureFramerate = 30;
-            var evidence = new PoseLoopEvidence();
+            var evidence = new PoseLoopEvidence { registeredComparison = _registeredOutfit != null };
             var image = new Texture2D(Screen.width, Screen.height, TextureFormat.RGBA32, false);
             try
             {
                 _routeX = 18.7f;
                 AdvanceVoAnimation(2);
-                _voState.SetPresentation(0, 0, 2, 0);
+                _voState.SetPresentation(0, 0, Array.IndexOf(args, "--lgo-vo-pose-loop-base") >= 0 ? 1 : 2, 0);
                 SetVoRun(true);
                 yield return null;
                 var phaseOrigin = _voState.AnimationPhase;
@@ -60,6 +74,9 @@ namespace LinhGioi.World
                         evidence.status = "FIX_REQUIRED_ANIMATION_CLOCK";
                     if (frame >= 15 && frame < 79 && VoAvatarMotionState != "run")
                         evidence.status = "FIX_REQUIRED_RUN_STATE";
+                    if (_registeredOutfit != null && (VoAvatarMotionState == "run" || VoAvatarMotionState == "idle") && _sourcePoseReview.HasTransitions
+                        && _registeredOutfit.CurrentRunPose != _sourcePoseReview.CurrentFrame)
+                        evidence.status = "FIX_REQUIRED_REGISTERED_SOURCE_PHASE";
                     var active = RenderTexture.active;
                     try
                     {
@@ -70,7 +87,9 @@ namespace LinhGioi.World
                     }
                     finally { RenderTexture.active = active; }
                     evidence.frames.Add(new PoseLoopFrame { frame = frame, seconds = frame / 30f,
-                        animationPhase = _voState.AnimationPhase, motion = VoAvatarMotionState, pose = _sourcePoseReview.CurrentFrame });
+                        animationPhase = _voState.AnimationPhase, motion = VoAvatarMotionState, pose = _sourcePoseReview.CurrentFrame, registeredPose = _registeredOutfit?.CurrentRunPose,
+                        registeredRunCycle = _registeredOutfit == null ? 0 : _registeredOutfit.RunCycle,
+                        registeredJoints = CaptureRegisteredJointPoints() });
                     yield return null;
                 }
                 var poses = new HashSet<string>();

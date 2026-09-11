@@ -78,9 +78,17 @@ namespace LinhGioi.World
         public Transform BindSpace => _skinRoot;
         public float RollDegrees { get; private set; }
         private TwoDPoseTransition _transition;
-        public void Advance(float seconds) => _transition?.Advance(seconds);
+        public string CurrentRunPose { get; private set; } = "idle";
+        public float RunCycle => _runTimeline.Cycle;
+        private readonly TwoDSourcePoseTimeline _runTimeline = new TwoDSourcePoseTimeline();
+        public void Advance(float seconds)
+        {
+            _transition?.Advance(seconds);
+            _runTimeline.Advance(seconds);
+        }
         public void ApplyMovement(string gender, string motion, float phase, float progress, int facing)
         {
+            CurrentRunPose = _runTimeline.Select(motion, phase);
             SampleMovement(gender, motion, phase, progress, facing);
             _transition?.Blend(gender + "_" + motion);
             foreach (var layer in _clothLayers) if (layer.Item2.Visible) layer.Item2.UpdatePose();
@@ -90,11 +98,15 @@ namespace LinhGioi.World
         {
             _facingRoot.localScale = new Vector3(facing < 0 ? -1 : 1, 1, 1);
             RollDegrees = motion == "jump" ? TwoDLocomotionCurves.SomersaultDegrees(progress) : 0;
-            _rollRoot.localRotation = Quaternion.Euler(0, 0, RollDegrees);
+            var jumpLean = motion == "jump" ? Mathf.Sin(Mathf.Clamp01(progress) * Mathf.PI) : 0;
+            _rollRoot.localPosition = new Vector3(jumpLean * .18f, Point(512, 820).y + jumpLean * .04f, 0);
+            _rollRoot.localRotation = Quaternion.Euler(0, 0, RollDegrees - jumpLean * 16f);
             if (motion == "jump")
             {
                 var tuck = TwoDLocomotionCurves.Tuck(progress);
-                Rotate(gender, "torso-hips", -35 * tuck);
+                Rotate(gender, "torso-hips", (gender == "male" ? -25 : -35) * tuck);
+                if (gender == "male") _bones[gender + "_torso-hips"].localPosition = _boneRest[gender + "_torso-hips"]
+                    + (Vector3)(Point(400, 900) - Point(505, 710)) * tuck;
                 Rotate(gender, "head", -15 * tuck);
                 foreach (var side in new[] { "left", "right" })
                 {
@@ -109,19 +121,30 @@ namespace LinhGioi.World
                         var hand = _handTips[key];
                         var knee = _bones[gender + "_" + side + "-shin-foot"];
                         var rest = _skinRoot.InverseTransformPoint(hand.position);
-                        var folded = _skinRoot.InverseTransformPoint(knee.position) + Vector3.up * .1f;
+                        var folded = _skinRoot.InverseTransformPoint(knee.position) + Vector3.up * (gender == "male" ? -.065f : .1f);
                         _targets[key].localPosition = Vector3.Lerp(rest, folded, tuck);
                         // A target returning to rest can still choose the other
                         // elbow solution. Fade the solve itself so both branches
                         // converge to FK at the held-jump restart boundary.
+                        _solvers[key].flip = gender == "male";
                         _solvers[key].UpdateIK(tuck);
                     }
                 }
                 return;
             }
+            if (gender == "male" && motion == "idle" && CurrentRunPose == "run_stop")
+            {
+                ApplyAuthoredMaleExit();
+                return;
+            }
             if (motion != "walk" && motion != "run") return;
+            if (motion == "run" && gender == "male")
+            {
+                ApplyAuthoredMaleRun();
+                return;
+            }
             var run = motion == "run";
-            var frequency = run ? 2.5f : 2f;
+            var frequency = run ? TwoDSourcePoseTimeline.RunCyclesPerSecond : 2f;
             var cycle = phase * frequency;
             var swing = Mathf.Sin(cycle * Mathf.PI * 2f);
             Rotate(gender, "torso-hips", run ? -14 : -4);
@@ -145,6 +168,72 @@ namespace LinhGioi.World
                 target.localRotation = Quaternion.identity;
                 _solvers[key].UpdateIK(1);
             }
+        }
+        private void ApplyAuthoredMaleRun()
+        {
+            var cycle = _runTimeline.Cycle;
+            var weight = Mathf.SmoothStep(0, 1, _runTimeline.EntryWeight);
+            var pose = TwoDAuthoredVoRun.Pose.Blend(TwoDAuthoredVoRun.Entry, TwoDAuthoredVoRun.Sample(cycle), weight);
+            var torso = _bones["male_torso-hips"];
+            torso.localPosition = Vector2.Lerp(Point(510.198f, 795.546f), Point(535, 770), weight);
+            Rotate("male", "torso-hips", Mathf.Lerp(-12, -25, weight));
+            Rotate("male", "head", 5 * weight);
+            ApplyAuthoredLeg("left", pose.Left);
+            ApplyAuthoredLeg("right", pose.Right);
+            var phase = Mathf.Repeat(cycle, 1) * 4;
+            var index = Mathf.FloorToInt(phase);
+            var arm = Mathf.Lerp(index >= 2 ? 1 : 0, ((index + 1) % 4) >= 2 ? 1 : 0, Mathf.SmoothStep(0, 1, phase - index));
+            // Hand anchors traced from source A/B; preserve limb lengths through IK.
+            // Far-back anchor stays within the original arm's reach.
+            ApplyRunHand("left", Vector2.Lerp(new Vector2(180, 760), new Vector2(835, 565), arm), weight);
+            ApplyRunHand("right", Vector2.Lerp(new Vector2(860, 585), new Vector2(380, 745), arm), weight);
+        }
+        private void ApplyRunHand(string side, Vector2 source, float weight)
+        {
+            var key = "male_" + side + "-hand";
+            var rest = _skinRoot.InverseTransformPoint(_handTips[key].position);
+            _targets[key].localPosition = Vector3.Lerp(rest, Point(source.x, source.y), weight);
+            _solvers[key].flip = true;
+            _solvers[key].UpdateIK(weight);
+        }
+        private void ApplyAuthoredMaleExit()
+        {
+            _bones["male_torso-hips"].localPosition = Point(507.179f, 765.095f);
+            Rotate("male", "torso-hips", -5);
+            ApplyAuthoredLeg("left", TwoDAuthoredVoRun.Exit.Left);
+            ApplyAuthoredLeg("right", TwoDAuthoredVoRun.Exit.Right);
+            // The source stop is a transition key, returning exactly to bind at its end.
+            var settle = Mathf.SmoothStep(0, 1, _runTimeline.ExitWeight);
+            foreach (var pair in _bones)
+            {
+                if (!pair.Key.StartsWith("male_", StringComparison.Ordinal)) continue;
+                pair.Value.localPosition = Vector3.Lerp(pair.Value.localPosition, _boneRest[pair.Key], settle);
+                pair.Value.localRotation = Quaternion.Slerp(pair.Value.localRotation, Quaternion.identity, settle);
+            }
+        }
+        private void SetBindRotation(string key, float degrees)
+        {
+            // Accumulate bone rotations below bind space; facing reflection is outside it.
+            var bone = _bones[key];
+            var parentRotation = Quaternion.identity;
+            for (var parent = bone.parent; parent != _skinRoot; parent = parent.parent)
+                parentRotation = parent.localRotation * parentRotation;
+            bone.localRotation = Quaternion.Inverse(parentRotation) * Quaternion.Euler(0, 0, degrees);
+        }
+        private void ApplyAuthoredLeg(string side, TwoDAuthoredVoRun.Leg pose)
+        {
+            var prefix = "male_" + side;
+            var thigh = _bones[prefix + "-thigh"];
+            thigh.position = _skinRoot.TransformPoint(Point(pose.Hip.x, pose.Hip.y));
+            SetBindRotation(prefix + "-thigh", pose.ThighDegrees);
+            SetBindRotation(prefix + "-shin-foot", pose.ShinDegrees);
+            SetBindRotation(prefix + "-foot", 0);
+            // FK target comes from the authored chain, retaining both bind lengths.
+            var bindThigh = _boneRest[prefix + "-shin-foot"];
+            var bindShin = _boneRest[prefix + "-foot"];
+            _targets[prefix + "-foot"].localPosition = (Vector3)Point(pose.Hip.x, pose.Hip.y)
+                + Quaternion.Euler(0, 0, pose.ThighDegrees) * bindThigh
+                + Quaternion.Euler(0, 0, pose.ShinDegrees) * bindShin;
         }
         private static Vector2 Point(float x, float y) => TwoDRegisteredSpriteSkin.SourcePoint(x, y);
         private Transform CreateLimbSolver(string key, Transform effector, Transform root, bool constrainRotation)
@@ -176,10 +265,10 @@ namespace LinhGioi.World
             _facingRoot.SetParent(root, false);
             _rollRoot = new GameObject("Registered somersault pivot").transform;
             _rollRoot.SetParent(_facingRoot, false);
-            _rollRoot.localPosition = Vector3.up * .85f;
+            _rollRoot.localPosition = Vector3.up * Point(512, 820).y;
             _skinRoot = new GameObject("Registered bind space").transform;
             _skinRoot.SetParent(_rollRoot, false);
-            _skinRoot.localPosition = Vector3.down * .85f;
+            _skinRoot.localPosition = Vector3.down * Point(512, 820).y;
             root = _skinRoot;
             const string path = "LGOClasses/VoRegisteredLv1/";
             var data = Resources.Load<TextAsset>(path + "manifest");
@@ -339,6 +428,8 @@ namespace LinhGioi.World
         // This checks deformation math; screenshots check the rendered result.
         // Authoring diagnostics only: map canonical character coordinates to
         // the sampled pose. Same palette order as the manifest, including IK.
+        public Vector3 JointWorldPosition(string gender, string part) => _bones[gender + "_" + part].position;
+        public Vector3 HandWorldPosition(string gender, string side) => _handTips[gender + "_" + side + "-hand"].position;
         public Matrix4x4[] SnapshotBoneMatrices(string gender, Transform root)
         {
             var result = new List<Matrix4x4>();
