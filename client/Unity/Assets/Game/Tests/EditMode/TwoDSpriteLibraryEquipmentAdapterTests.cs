@@ -63,15 +63,14 @@ namespace LinhGioi.Tests.EditMode
         [Test]
         public void DraftFitRequiresExplicitPreviewOptInForEquipAndSpriteRegistration()
         {
-            var item = Item("draft-fit", "outer_top", "torso", TwoDEquipmentFitStatus.DraftRuntimeFit,
-                TwoDEquipmentAttachmentMode.Skinned);
+            var item = Item("draft-fit", "outer_top", "torso", TwoDEquipmentFitStatus.DraftRuntimeFit);
             var profile = Profile();
             var catalog = new TwoDEquipmentCompatibilityCatalog(new[] { item });
             var productionLoadout = new TwoDEquipmentLoadout(profile, "kiem");
             Assert.That(catalog.TryEquip(productionLoadout, item.ItemId, 30, out var productionReason), Is.False);
             Assert.That(productionReason, Is.EqualTo("ITEM_FIT_NOT_APPROVED"));
 
-            var sprite = CreateSkinnedSpriteStub();
+            var sprite = CreateSprite();
             var library = Own(ScriptableObject.CreateInstance<SpriteLibraryAsset>());
             Assert.That(TwoDSpriteLibraryEquipmentAdapter.RegisterItem(
                 library, item, new Dictionary<string, Sprite> { ["draft-fit_part"] = sprite }, out _), Is.False);
@@ -141,15 +140,6 @@ namespace LinhGioi.Tests.EditMode
         {
             var texture = Own(new Texture2D(2, 2));
             return Own(Sprite.Create(texture, new Rect(0, 0, 2, 2), Vector2.one * 0.5f, 2));
-        }
-
-        private Sprite CreateSkinnedSpriteStub()
-        {
-            foreach (var sprite in Resources.LoadAll<Sprite>(
-                "LGOClasses/KiemMixedLoadoutFitPreview/kiem-mixed-loadout-fit-atlas"))
-                if (sprite.GetBones().Length > 0) return sprite;
-            Assert.Fail("Expected an authored Kiếm skinned proof sprite");
-            return null;
         }
 
         private T Own<T>(T value) where T : Object

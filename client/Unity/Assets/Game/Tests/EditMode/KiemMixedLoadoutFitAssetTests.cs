@@ -1,49 +1,30 @@
+using System.Collections.Generic;
 using System.Linq;
 using LinhGioi.World;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.U2D;
 
 namespace LinhGioi.Tests.EditMode
 {
     public sealed class KiemMixedLoadoutFitAssetTests
     {
-        private const string Atlas = "LGOClasses/KiemMixedLoadoutFitPreview/kiem-mixed-loadout-fit-atlas";
+        private const string Resource = "LGOClasses/KiemMixedLoadoutFitPreview/";
 
         [Test]
-        public void ProofPackUsesOneBoundedAtlasWithEightNamedSprites()
+        public void ReviewPackUsesTwoBoundedAtlasesForAllFourLevelsAndBothGenders()
         {
-            var sprites = Resources.LoadAll<Sprite>(Atlas);
-            Assert.That(sprites.Length, Is.EqualTo(8));
-            Assert.That(sprites.Select(sprite => sprite.name).Distinct().Count(), Is.EqualTo(8));
-            Assert.That(sprites.All(sprite => sprite.texture.width == 512 && sprite.texture.height == 512), Is.True);
-            Assert.That(sprites.All(sprite => Mathf.Approximately(sprite.pixelsPerUnit, 208)), Is.True);
-        }
-
-        [TestCase("kiem-lv030-male-head_hair-fit-v1")]
-        [TestCase("kiem-lv030-female-head_hair-fit-v1")]
-        [TestCase("kiem-lv020-male-outer_top-fit-v1")]
-        [TestCase("kiem-lv020-female-outer_top-fit-v1")]
-        [TestCase("kiem-lv010-male-inner_top")]
-        [TestCase("kiem-lv010-female-inner_top")]
-        public void SkinnedProofSpriteHasCanonicalImportAndBoneData(string spriteName)
-        {
-            var sprite = Resources.LoadAll<Sprite>(Atlas).SingleOrDefault(candidate => candidate.name == spriteName);
-            Assert.That(sprite, Is.Not.Null, spriteName);
-            Assert.That(sprite.GetBones().Length, Is.GreaterThan(0), spriteName);
-            Assert.That(sprite.GetVertexAttribute<BoneWeight>(
-                UnityEngine.Rendering.VertexAttribute.BlendWeight).Length, Is.EqualTo(sprite.GetVertexCount()));
-        }
-
-        [TestCase("kiem-lv001-male-main_weapon")]
-        [TestCase("kiem-lv001-female-main_weapon")]
-        public void RigidWeaponIsAvailableByStableAtlasLabel(string spriteName)
-        {
-            Assert.That(Resources.LoadAll<Sprite>(Atlas).SingleOrDefault(candidate => candidate.name == spriteName), Is.Not.Null);
+            var male = Resources.Load<Texture2D>(Resource + "kiem-equipment-male-atlas");
+            var female = Resources.Load<Texture2D>(Resource + "kiem-equipment-female-atlas");
+            Assert.That(male, Is.Not.Null);
+            Assert.That(female, Is.Not.Null);
+            Assert.That(male.width, Is.EqualTo(1024));
+            Assert.That(male.height, Is.EqualTo(1024));
+            Assert.That(female.width, Is.EqualTo(1024));
+            Assert.That(female.height, Is.EqualTo(1024));
         }
 
         [Test]
-        public void DraftPreviewUsesSharedSkeletonAndNeverBecomesProductionEligible()
+        public void PreviewUsesOneSharedRigWithTenInteractiveSlotsAndCrossLevelItems()
         {
             var root = new GameObject("Kiếm preview test root");
             TwoDKiemMixedLoadoutFitPreview preview = null;
@@ -53,27 +34,87 @@ namespace LinhGioi.Tests.EditMode
                 rig.Build(new[]
                 {
                     Bone("male_torso-hips", "", 0, .7f), Bone("male_head", "male_torso-hips", 0, 1.32f),
-                    Bone("male_right-upper-arm", "male_torso-hips", .17f, 1.3f),
-                    Bone("male_right-forearm-hand", "male_right-upper-arm", .22f, .95f),
+                    Bone("male_left-thigh", "male_torso-hips", -.11f, .58f),
+                    Bone("male_right-thigh", "male_torso-hips", .11f, .58f),
+                    Bone("male_left-forearm-hand", "male_torso-hips", -.25f, .82f),
+                    Bone("male_right-forearm-hand", "male_torso-hips", .25f, .82f),
+                    Bone("male_left-shin-foot", "male_left-thigh", -.11f, .2f),
+                    Bone("male_right-shin-foot", "male_right-thigh", .11f, .2f),
                     Bone("female_torso-hips", "", 0, .7f), Bone("female_head", "female_torso-hips", 0, 1.32f),
-                    Bone("female_right-upper-arm", "female_torso-hips", .17f, 1.3f),
-                    Bone("female_right-forearm-hand", "female_right-upper-arm", .22f, .95f)
+                    Bone("female_left-thigh", "female_torso-hips", -.11f, .58f),
+                    Bone("female_right-thigh", "female_torso-hips", .11f, .58f),
+                    Bone("female_left-forearm-hand", "female_torso-hips", -.25f, .82f),
+                    Bone("female_right-forearm-hand", "female_torso-hips", .25f, .82f),
+                    Bone("female_left-shin-foot", "female_left-thigh", -.11f, .2f),
+                    Bone("female_right-shin-foot", "female_right-thigh", .11f, .2f)
                 });
                 preview = new TwoDKiemMixedLoadoutFitPreview(root.transform, rig);
-                preview.SetActive(true, "male", "walk");
-                Assert.That(preview.VisibleItemCount, Is.EqualTo(4));
-                Assert.That(preview.ValidSpriteSkinCount, Is.EqualTo(3));
+                preview.SetActive(true, "male", "run");
+                Assert.That(preview.VisibleSlotCount, Is.EqualTo(10));
+                Assert.That(preview.VisibleComponentCount, Is.EqualTo(13));
+                Assert.That(preview.AvailableLevels, Is.EqualTo(new[] { 1, 10, 20, 30 }));
+                StringAssert.Contains("slots=10/10", preview.Snapshot);
+                StringAssert.Contains("sharedSkeleton=lgo_humanoid_2d_v1", preview.Snapshot);
+
+                preview.SetSlotVisible("outer_top", false);
+                Assert.That(preview.VisibleSlotCount, Is.EqualTo(9));
+                Assert.That(preview.VisibleComponentCount, Is.EqualTo(12));
+                preview.SetSlotLevel("main_weapon", 30);
+                Assert.That(preview.GetSlotLevel("main_weapon"), Is.EqualTo(30));
+                StringAssert.Contains("lv030", preview.GetSlotItemId("main_weapon"));
                 StringAssert.Contains("runtimeEligibleCount=0", preview.Snapshot);
-                StringAssert.Contains("productionEquipAllowed=False", preview.Snapshot);
-                preview.SetActive(true, "female", "class_skill");
-                Assert.That(preview.VisibleItemCount, Is.EqualTo(4));
-                Assert.That(preview.ValidSpriteSkinCount, Is.EqualTo(3));
-                StringAssert.Contains("gender=female", preview.Snapshot);
             }
             finally
             {
                 preview?.Dispose();
                 Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void Map01AUsesTheSameActorAndInventoryFlowForKiemTenSlotReview()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager
+                .GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A Kiếm inventory test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+                preview.ActivateKiemReview();
+                Assert.That(preview.KiemPreviewActive, Is.True);
+                Assert.That(preview.AvatarClassLabel, Does.StartWith("Kiếm"));
+                Assert.That(preview.EquipmentFitSummary, Is.EqualTo("Kiếm · rig chung · 10 slot · cấp 1/10/20/30"));
+                Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Count(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Kiếm kiem-lv001-male-")),
+                    Is.EqualTo(13));
+
+                preview.SelectVoEquipmentSlot("outer_tunic");
+                preview.ToggleVoEquipmentSlot();
+                Assert.That(preview.VoEquippedSlotCount, Is.EqualTo(9));
+                Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Any(renderer => renderer.enabled && renderer.name.Contains("male-outer_top")), Is.False);
+                preview.ToggleVoEquipmentSlot();
+                preview.CycleVoSelectedEquipmentItemLevel();
+                Assert.That(preview.VoSelectedEquipmentItemLevel, Is.EqualTo(10));
+                StringAssert.Contains("kiem-lv010-male-outer_top", preview.GetVoEquipmentItemId("outer_tunic"));
+
+                preview.SetVoRun(true);
+                preview.MoveOnLane(1, .1f);
+                Assert.That(preview.VoAvatarMotionState, Is.EqualTo("run"));
+                Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Any(renderer => renderer.enabled && renderer.name.Contains("kiem-lv010-male-outer_top")), Is.True);
+                Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
+                    .Any(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Võ equipment component")), Is.False,
+                    "Kiếm review must not render a parallel Võ wardrobe");
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
             }
         }
 

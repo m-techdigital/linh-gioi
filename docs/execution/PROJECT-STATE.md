@@ -1,3 +1,11 @@
+## Hiện hành — Kiếm Lv1–30, hành trang 10 slot và shared-rig Player — 2026-09-12
+
+Kiếm đã thay proof 4 slot bằng một runtime module duy nhất `kiem-lv1-30-equipment-runtime-v1`: hai atlas 1024², 104 component, hai giới, bốn cấp 1/10/20/30 và 10 slot canonical. Hành trang Map01A dùng cùng state/actor/rig của Võ để chọn món, tháo/mặc và đổi cấp riêng; khi Kiếm bật, toàn bộ renderer trang bị Võ bị tắt nên không còn hai hệ/nhân vật song song. Pack vẫn `DRAFT_RUNTIME_FIT`, `runtimeEligibleCount=0`; chưa tự nâng production approval.
+
+Visual audit Player phát hiện và sửa hai lỗi nguồn theo lô. `head_hair` chứa hai góc nhìn trong một PNG nên runtime cũ co cả hai lên đầu; manifest hiện chỉ lấy candidate front/side. `shoulder_chest_guard` và `class_accessory` dạng dọc từng bị phóng quá cao do scale theo width; hiện giữ aspect trong hộp chiều cao canonical của slot. Không đổi camera, root scale, common body hay shared skeleton. Bản nguồn runtime hiện hành được lưu ngoài repo tại `class-work-in-progress/kiem-lv1-30/runtime-fit-v2`.
+
+Player cuối: `client/Unity/build/kiem-ten-slot-player-v5/LinhGioiOnline.app`, build 174.556.010 byte, 0 error/13 warning. Evidence `build/kiem-lv1-30-ten-slot-runtime-v1/pc`: 27 frame, 8 full loadout, 10 ca tháo món, 2 phối cấp, 6 motion, `errors=[]`. Đã xem độc lập inventory, full-loadout contact, slot-toggle contact và motion contact; tiêu đề/mô tả hành trang hiển thị đúng Kiếm. EditMode toàn bộ 245 total/244 pass/0 fail/1 ignored; pack Python 10/10, capture Python 15/15, no-3D/no-source/frozen audit pass.
+
 ## Hiện hành — Võ Lv1/Lv10 HD, hành trang 10 ô và phối chéo — 2026-09-11
 
 Checkpoint Lv1 HD đã được owner chấp nhận sơ bộ và khóa tại commit `21a7415a`. Player có một actor POSE THỬ và Hành trang Võ 10 ô: chọn trực tiếp từng món, xem `itemId/level/fit/base/6 pose`, tháo/mặc món đang chọn và đổi cấp món khi có variant. Body/motion vẫn là `legacy-base-run-contact-jump-v3-div4`; không đổi camera, scale, pivot, timeline hoặc registered outfit state.

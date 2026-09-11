@@ -1,3 +1,9 @@
+## Hiện hành — sau Kiếm Lv1–30, chuyển sang source gate Pháp — 2026-09-12
+
+Checkpoint Kiếm hiện hành dùng Player `client/Unity/build/kiem-ten-slot-player-v5/LinhGioiOnline.app` và evidence `build/kiem-lv1-30-ten-slot-runtime-v1/pc`. Giữ module duy nhất `kiem-lv1-30-equipment-runtime-v1`, không khôi phục proof 4 slot hoặc recovered pack cũ. Art đang ở `DRAFT_RUNTIME_FIT`; feedback owner mới trên Player được ưu tiên sửa source/slot-box theo cả lô, không chỉnh camera/base/scale.
+
+Action kế tiếp theo thứ tự owner: audit design/demo Pháp trong `LGO-Selected-2D-Source-v1/classes-lv001-030/phap`, chọn identity nam/nữ và xác nhận nguồn đủ 4 cấp × 10 slot trước khi import. Tái dùng shared rig, canonical slot mapping, hành trang và capture matrix Kiếm; không thêm actor/controller/equip flow thứ hai. Nếu source chứa turnaround hoặc nhiều góc nhìn trong một file, tách/chọn candidate tại source plan trước atlas. Chỉ build/capture sau khi đủ cả batch; sau Pháp mới tới Cơ rồi Linh. Map01A vẫn là target tổng thể; không Meshy/3D và không sửa frozen surfaces.
+
 ## Hiện hành — Võ Lv1/Lv10 HD đã qua agent visual audit — 2026-09-11
 
 Dùng Player `client/Unity/build/vo-lv1-inventory-player-v6/LinhGioiOnline.app` với pack Lv1 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv001-hd-review-v2` và alt Lv10 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv010-hd-review-v2`. Hành trang hiển thị đủ 10 ô; chọn món để xem thông tin/tháo-mặc, bấm `Đổi cấp món` để đổi riêng Lv1/Lv10. Evidence cuối `build/vo-lv1-lv10-hd-inventory-runtime-v1/pc`: 156 frame, full `[1,10]`, mixed, bốn nhịp chạy, lộn, `errors=[]`.

@@ -121,14 +121,15 @@ RUNTIME_ART_PACKS = [
     },
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/KiemMixedLoadoutFitPreview',
-        'id': 'kiem-mixed-loadout-fit-preview-v2',
+        'id': 'kiem-lv1-30-equipment-runtime-v1',
         'status': 'DRAFT_RUNTIME_FIT',
         'assets': {
-            'kiem-mixed-loadout-fit-atlas.png': (512, 512, 'paper-doll-fit-atlas'),
+            'kiem-equipment-male-atlas.png': (1024, 1024, 'paper-doll-atlas'),
+            'kiem-equipment-female-atlas.png': (1024, 1024, 'paper-doll-atlas'),
         },
-        'generators': {'reference_guided_imagegen_attachment_batch'},
-        'max_bytes': 300_000,
-        'status_error': 'Kiếm mixed-loadout fit pack must remain draft until Player motion review',
+        'generators': {'batch_pack_reviewed_source_items'},
+        'max_bytes': 1_000_000,
+        'status_error': 'Kiếm ten-slot fit pack must remain draft until Player motion review',
     },
 ]
 

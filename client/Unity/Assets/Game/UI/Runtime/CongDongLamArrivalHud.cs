@@ -11,7 +11,7 @@ namespace LinhGioi.UI
     {
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions;
-        private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary, _equipmentDetail;
+        private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant;
         private Button[] _equipmentRows;
@@ -124,11 +124,11 @@ namespace LinhGioi.UI
             _inventory.style.width = _touch ? 410 : 470;
             _inventory.style.maxHeight = _touch ? 610 : 650;
             _inventorySummary = new Label(); _inventorySummary.style.whiteSpace = WhiteSpace.Normal; _inventory.Add(_inventorySummary);
-            var equipmentTitle = new Label("TRANG BỊ VÕ · 10 SLOT");
-            equipmentTitle.style.color = new Color(1f, .78f, .25f);
-            equipmentTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
-            equipmentTitle.style.marginTop = 8;
-            _inventory.Add(equipmentTitle);
+            _equipmentTitle = new Label("TRANG BỊ VÕ · 10 SLOT");
+            _equipmentTitle.style.color = new Color(1f, .78f, .25f);
+            _equipmentTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
+            _equipmentTitle.style.marginTop = 8;
+            _inventory.Add(_equipmentTitle);
             var equipmentGrid = new VisualElement();
             equipmentGrid.style.flexDirection = FlexDirection.Row;
             var equipmentLeft = new VisualElement();
@@ -283,6 +283,7 @@ namespace LinhGioi.UI
             _inventorySummary.text = _scene.IsSourcePoseReviewActive
                 ? "Chọn từng món để xem thông tin và tháo/mặc trực tiếp trên nhân vật."
                 : _scene.InventorySummaryText;
+            _equipmentTitle.text = "TRANG BỊ " + (_scene.KiemPreviewActive ? "KIẾM" : "VÕ") + " · 10 SLOT";
             _questItemActions.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.None : DisplayStyle.Flex;
             for (var index = 0; index < _equipmentRows.Length; index++)
             {
@@ -296,7 +297,7 @@ namespace LinhGioi.UI
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(_scene.VoSelectedEquipmentSlot);
             _equipmentDetail.text = EquipmentDisplayName(_scene.VoSelectedEquipmentSlot)
                 + "\n" + _scene.GetVoEquipmentItemId(_scene.VoSelectedEquipmentSlot)
-                + "\nKhớp: Võ nam · cùng base/pivot · đủ 6 pose"
+                + "\nKhớp: " + _scene.EquipmentFitSummary
                 + "\nTrạng thái: " + (selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO");
             _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
             var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);

@@ -51,7 +51,10 @@ namespace LinhGioi.World
         public int VoJumpStartCount { get; private set; }
         public bool VoSomersaultEnabled => _registeredOutfit != null;
         private bool RegisteredRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered") >= 0 || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered-equipment") >= 0;
-        public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
+        private bool KiemReviewRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-kiem-review") >= 0;
+        private bool KiemCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-kiem-capture") >= 0;
+        public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || KiemCaptureRequested
+            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string DialogueSpeaker => _dialogueNodeId == "quan-thu" ? "Quan Thủ Đông Lâm"
@@ -239,6 +242,7 @@ namespace LinhGioi.World
         public int VoSelectedEquipmentItemLevel => _voEquipmentLevels.TryGetValue(VoSelectedEquipmentSlot, out var level)
             ? level : VoAvatarLevel;
         public bool IsSourcePoseReviewActive => _sourcePoseReview != null;
+        public bool KiemPreviewActive => _kiemFitPreviewActive;
         public IReadOnlyList<string> VoEquipmentSlotIds => VoEquipmentSlots;
         public bool IsVoEquipmentSlotEquipped(string slot) => _voState.IsEquipped(slot);
         public int GetVoEquipmentItemLevel(string slot) => _voEquipmentLevels.TryGetValue(slot, out var level)
@@ -247,11 +251,13 @@ namespace LinhGioi.World
         {
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
+            if (_kiemFitPreviewActive) return _kiemFitPreview.GetSlotItemId(VoReviewSlotIds[index]);
             var reviewId = _sourcePoseReview?.GetSlotItemId(VoReviewSlotIds[index]);
             return string.IsNullOrEmpty(reviewId) ? "vo_" + slot + "_lv" + GetVoEquipmentItemLevel(slot).ToString("000") : reviewId;
         }
         public bool HasVoEquipmentItemVariant(string slot)
         {
+            if (_kiemFitPreviewActive) return true;
             if (_sourcePoseReview == null) return false;
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
@@ -264,11 +270,13 @@ namespace LinhGioi.World
         public string VoAvatarMotionState => _voState.MotionState;
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
         public bool VoRunEnabled => _voState.RunEnabled;
-        public string AvatarClassLabel => _kiemFitPreviewActive ? "Kiếm mixed-fit DRAFT" : "Võ";
-        public string EquipmentLevelLabel => _kiemFitPreviewActive ? "Lv1/10/20/30" : "Lv" + VoAvatarLevel;
-        public string EquipmentSlotLabel => _kiemFitPreviewActive ? "weapon+hair+inner+outer"
-            : VoSelectedEquipmentSlot + " · Lv" + VoSelectedEquipmentItemLevel;
-        public string SkillLabel => _kiemFitPreviewActive ? "Kiếm pose DRAFT" : "Liên Quyền";
+        public string AvatarClassLabel => _kiemFitPreviewActive ? "Kiếm · 10 slot review" : "Võ";
+        public string EquipmentFitSummary => _kiemFitPreviewActive
+            ? "Kiếm · rig chung · 10 slot · cấp 1/10/20/30"
+            : "Võ nam · cùng base/pivot · đủ 6 pose";
+        public string EquipmentLevelLabel => "Lv" + VoAvatarLevel;
+        public string EquipmentSlotLabel => VoSelectedEquipmentSlot + " · Lv" + VoSelectedEquipmentItemLevel;
+        public string SkillLabel => _kiemFitPreviewActive ? "Kiếm pháp review" : "Liên Quyền";
         public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
         public bool VoAvatarUsesFrameMotion => _registeredOutfit == null && VoAvatarLevel == 1 && VoAvatarMode == "full" && VoAvatarMotionState != "idle";
         public bool VoAvatarUsesAlignedPaperDollMotion => VoAvatarMotionState != "idle" && !VoAvatarUsesFrameMotion;
@@ -550,6 +558,12 @@ namespace LinhGioi.World
             }
             ApplyVoPose();
             _kiemFitPreview = new TwoDKiemMixedLoadoutFitPreview(_voAvatarRoot, _voRig);
+            if (KiemReviewRequested)
+            {
+                InventoryOpen = true;
+                LastInteractionMessage = "Hành trang Kiếm 10 slot đã mở · chọn món để tháo/mặc hoặc đổi cấp.";
+                SetKiemFitPreview("male", "idle");
+            }
             PartCount = parts.Count;
             parts.Add("skyline", MakeSprite(far, new Rect(0, 0, far.width, far.height)));
             foreach (var layer in info.layers)
@@ -817,6 +831,15 @@ namespace LinhGioi.World
 
         public void CycleVoSelectedEquipmentItemLevel()
         {
+            if (_kiemFitPreviewActive)
+            {
+                var slotIndex = Array.IndexOf(VoEquipmentSlots, VoSelectedEquipmentSlot);
+                var slot = VoReviewSlotIds[slotIndex];
+                _voEquipmentLevels[VoSelectedEquipmentSlot] = _kiemFitPreview.NextSlotLevel(
+                    slot, VoSelectedEquipmentItemLevel);
+                RefreshVoAvatarMode();
+                return;
+            }
             if (_sourcePoseReview != null)
             {
                 _voEquipmentLevels[VoSelectedEquipmentSlot] = _sourcePoseReview.NextSlotItemLevel(
@@ -848,6 +871,7 @@ namespace LinhGioi.World
                     part => _voRigPoseProfiles.TryGetValue(VoAvatarGender + "_" + VoAvatarMotionState + "_" + part, out var profile)
                         ? profile.rotation * weight : 0);
                 _registeredOutfit.ApplyMovement(VoAvatarGender, VoAvatarMotionState, _voState.AnimationPhase, _voState.ActionProgress, _voState.FacingSign);
+                ApplyKiemFitPreview();
                 return;
             }
 
@@ -890,8 +914,16 @@ namespace LinhGioi.World
             _kiemFitPreviewActive = true;
             _voState.SetPresentation(gender == "male" ? 0 : 1, 0, 2, 0);
             _voState.EquipAllExcept(null);
+            _registeredOutfit?.SetPresentationVisible(false);
             _kiemFitPreview.SetActive(true, gender, motion);
             RefreshVoAvatarMode();
+        }
+
+        public void ActivateKiemReview()
+        {
+            if (_kiemFitPreview == null) throw new InvalidOperationException("Kiếm review pack is not initialized");
+            InventoryOpen = true;
+            SetKiemFitPreview("male", "idle");
         }
 
         private void ApplyKiemFitPreview()
@@ -902,15 +934,16 @@ namespace LinhGioi.World
                 _kiemFitPreview.SetActive(false, VoAvatarGender, VoAvatarMotionState);
                 return;
             }
+            for (var index = 0; index < VoEquipmentSlots.Length; index++)
+            {
+                var slot = VoReviewSlotIds[index];
+                _kiemFitPreview.SetSlotLevel(slot, _voEquipmentLevels.TryGetValue(VoEquipmentSlots[index], out var level)
+                    ? level : VoAvatarLevel);
+                _kiemFitPreview.SetSlotVisible(slot, _voState.IsEquipped(VoEquipmentSlots[index]));
+            }
             _kiemFitPreview.SetActive(true, VoAvatarGender, VoAvatarMotionState);
             foreach (var renderer in _voAvatarParts.Values) renderer.enabled = false;
-            foreach (var pair in _voEquipmentComponents)
-            {
-                var slot = _voEquipmentComponentInfo[pair.Key].slot;
-                if (slot == "main_weapon" || slot == "head_hair" || slot == "inner_top"
-                    || slot == "outer_tunic" || slot == "light_armor")
-                    pair.Value.enabled = false;
-            }
+            foreach (var renderer in _voEquipmentComponents.Values) renderer.enabled = false;
             if (_voMotionRenderer != null) _voMotionRenderer.enabled = false;
         }
 
@@ -1352,6 +1385,11 @@ namespace LinhGioi.World
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
+            if (Application.isPlaying && KiemCaptureRequested)
+            {
+                yield return CaptureKiemReview();
+                yield break;
+            }
             if (Application.isPlaying && Array.IndexOf(args, "--lgo-vo-pose-loop-capture") >= 0)
             {
                 yield return CaptureSourcePoseLoop();
