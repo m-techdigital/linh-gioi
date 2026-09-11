@@ -134,3 +134,7 @@ Tool không bảo đảm size/alpha theo prompt: atlas yêu cầu1024² nhưng t
 - Không quantize lặp trên bản đã quantize để kiếm thêm vài KB: input canonical phải là output RGBA của packer. Batch thử lại cho thấy hash/palette alpha đổi dù ảnh nhìn gần giống; runtime chỉ lấy combat mới từ lượt đó, sáu texture trước giữ bản review lần đầu.
 - Terrain module overlap ngang 0,12 world unit để che khe bilinear giữa tile; không thay collision/route width. Architecture/landmark đặt theo ground anchor, không kéo tỷ lệ riêng ở từng profile.
 - Evidence cuối: `build/map01a-art/final-three-profiles/` gồm 8 frame × mobile/tablet/PC. Đã xem arrival/gate/market/bridge/combat/portal; không thấy matte magenta hoặc nền đen. Player blockout vẫn lộ rõ, vì vậy checkpoint chỉ đóng map art foundation và chuyển sang Võ Lv1–30 để sửa PC; không gọi Q01–Q09/combat hoặc visual production hoàn tất.
+
+### Atlas ít frame: tối ưu xếp hàng trước khi tăng cạnh — 2026-09-11
+
+Tám sprite Võ div4 bị greedy shelf đẩy1024²/4MiB dù xếp được512×1024/2MiB. Exact row partition tối đa10sprite giữ pixel/divisor, giảm PNG503540→439382byte. Ưu tiên greedy khi hòa để pack cũ không đổi byte; regression reconstruct đủ tám sprite, repack v5 nguyên SHA. Không giảm sampling để chữa packing.

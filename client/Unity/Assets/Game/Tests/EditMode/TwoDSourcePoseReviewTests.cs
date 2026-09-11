@@ -6,6 +6,41 @@ namespace LinhGioi.Tests.EditMode
     public sealed class TwoDSourcePoseReviewTests
     {
         [Test]
+        public void EntryAndExitAreOutsideTheFourPoseLoop()
+        {
+            var timeline = new TwoDSourcePoseTimeline();
+            Assert.That(timeline.Select("idle", 0), Is.EqualTo("idle"));
+            Assert.That(timeline.Select("run", 1), Is.EqualTo("run_start"));
+            Assert.That(timeline.Select("run", 1.13f), Is.EqualTo("run_contact_a"));
+            Assert.That(timeline.Select("run", 1.30f), Is.EqualTo("run_a"));
+            Assert.That(timeline.Select("run", 1.47f), Is.EqualTo("run_contact_b"));
+            Assert.That(timeline.Select("run", 1.64f), Is.EqualTo("run_b"));
+            Assert.That(timeline.Select("run", 1.80f), Is.EqualTo("run_contact_a"));
+            Assert.That(timeline.Select("idle", 2), Is.EqualTo("run_stop"));
+            Assert.That(timeline.Select("idle", 2.13f), Is.EqualTo("idle"));
+        }
+
+        [Test]
+        public void RepeatedRefreshDoesNotExtendEntryAndRestartBeginsAtContactA()
+        {
+            var timeline = new TwoDSourcePoseTimeline();
+            for (var i = 0; i < 20; i++) Assert.That(timeline.Select("run", 10), Is.EqualTo("run_start"));
+            Assert.That(timeline.Select("run", 10.13f), Is.EqualTo("run_contact_a"));
+            Assert.That(timeline.Select("idle", 10.2f), Is.EqualTo("run_stop"));
+            Assert.That(timeline.Select("run", 10.25f), Is.EqualTo("run_start"));
+            Assert.That(timeline.Select("run", 10.38f), Is.EqualTo("run_contact_a"));
+        }
+
+        [Test]
+        public void JumpInterruptsRunWithoutPlayingStopAfterLanding()
+        {
+            var timeline = new TwoDSourcePoseTimeline();
+            timeline.Select("run", 0);
+            timeline.Select("jump", .2f);
+            Assert.That(timeline.Select("idle", .7f), Is.EqualTo("idle"));
+        }
+
+        [Test]
         public void RunReviewUsesGroundedContactFramesWhenAvailable()
         {
             Assert.That(TwoDSourcePoseReview.SelectRunFrame(0.00f, true), Is.EqualTo("run_contact_a"));

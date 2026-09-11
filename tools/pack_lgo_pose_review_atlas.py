@@ -3,10 +3,53 @@
 import argparse
 import hashlib
 import json
+from functools import lru_cache
 from pathlib import Path
 
 from PIL import Image
 from pack_lgo_vo_lv1_map_avatar import CANVAS, project_canvas_rect
+
+
+def compact_rows(unique, width):
+    """Exact shelf partition for small pose sets; no sprite resampling or rotation."""
+    items = list(unique.items())
+    count = len(items)
+    if count > 10:
+        return None
+    rows = {}
+    for mask in range(1, 1 << count):
+        members = [i for i in range(count) if mask & (1 << i)]
+        if 2 + sum(items[i][1].width + 2 for i in members) <= width:
+            rows[mask] = max(items[i][1].height for i in members) + 2
+
+    @lru_cache(None)
+    def partition(mask):
+        if not mask:
+            return 0, ()
+        anchor = mask & -mask
+        best = (float('inf'), ())
+        subset = mask
+        while subset:
+            if subset & anchor and subset in rows:
+                height, tail = partition(mask ^ subset)
+                candidate = (rows[subset] + height, (subset, *tail))
+                if candidate < best:
+                    best = candidate
+            subset = (subset - 1) & mask
+        return best
+
+    height, groups = partition((1 << count) - 1)
+    if height == float('inf'):
+        return None
+    positions, y = {}, 2
+    for group in groups:
+        x = 2
+        for i, (key, sprite) in enumerate(items):
+            if group & (1 << i):
+                positions[key] = [x, y, sprite.width, sprite.height]
+                x += sprite.width + 2
+        y += rows[group]
+    return 1 << (y - 1).bit_length(), positions
 
 
 def pack_review(sources, divisor=4, max_side=1024):
@@ -54,6 +97,15 @@ def pack_review(sources, divisor=4, max_side=1024):
             row_height = max(row_height, sprite.height)
         else:
             height = 1 << (y + row_height + 1).bit_length()
+            if height <= max_side:
+                layouts.append((width * height, width, height, positions))
+        width *= 2
+    # Keep existing layout bytes when equally compact; optimize only wasted atlas area.
+    width = 1
+    while width <= max_side:
+        compact = compact_rows(unique, width)
+        if compact is not None:
+            height, positions = compact
             if height <= max_side:
                 layouts.append((width * height, width, height, positions))
         width *= 2

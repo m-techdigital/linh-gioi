@@ -35,6 +35,12 @@ namespace LinhGioi.World
         public int EquippedSlotCount => _equippedSlots.Count;
         public string MotionState { get; private set; } = "idle";
         public bool RunEnabled { get; private set; }
+        public int FacingSign { get; private set; } = 1;
+        public void FaceMovement(float axis)
+        {
+            if (axis > .01f) FacingSign = 1;
+            else if (axis < -.01f) FacingSign = -1;
+        }
         public float AnimationPhase { get; private set; }
         public float ActionRemaining { get; private set; }
         public float ActionProgress => _actionDuration <= 0 ? 0 : 1f - ActionRemaining / _actionDuration;
@@ -70,6 +76,11 @@ namespace LinhGioi.World
             _equipmentSlotIndex = RequireIndex(equipmentSlotIndex, _equipmentSlots.Length, nameof(equipmentSlotIndex));
         }
 
+        public void ReleaseMovement()
+        {
+            _movementHold = 0;
+            if (!HasActiveAction && (MotionState == "walk" || MotionState == "run")) MotionState = "idle";
+        }
         public void SetRun(bool enabled)
         {
             RunEnabled = enabled;
@@ -105,7 +116,7 @@ namespace LinhGioi.World
                 return;
             }
             if (_movementHold <= 0) return;
-            _movementHold = Math.Max(0, _movementHold - Math.Min(elapsed, .1f));
+            _movementHold = Math.Max(0, _movementHold - elapsed);
             MotionState = _movementHold > 0 ? (RunEnabled ? "run" : "walk") : "idle";
         }
 

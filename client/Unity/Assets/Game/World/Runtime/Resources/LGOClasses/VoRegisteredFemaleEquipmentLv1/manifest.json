@@ -1,0 +1,6659 @@
+{
+  "id": "vo-female-lv001-registered-equipment-draft",
+  "status": "DRAFT_REGISTERED_EQUIPMENT_REVIEW",
+  "runtimeEligible": false,
+  "rigSha256": "89a8fe89d21f8c1e56187b7c18995460f8a96029cdceaa9af326d60dd8f13569",
+  "atlasSize": [
+    512,
+    512
+  ],
+  "atlasSha256": "09ec321a1b2aba8bd7a3d9021091ae5a869ad8137d6692954cc09155135e1873",
+  "bodyMesh": {
+    "id": "lv001_female_equipment_body",
+    "vertices": [
+      {
+        "x": 256.0,
+        "y": 128.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 320.0,
+        "y": 128.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 320.0,
+        "y": 64.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 384.0,
+        "y": 128.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 384.0,
+        "y": 64.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 448.0,
+        "y": 128.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 448.0,
+        "y": 64.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 512.0,
+        "y": 128.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 512.0,
+        "y": 64.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 576.0,
+        "y": 128.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 576.0,
+        "y": 64.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 640.0,
+        "y": 128.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 256.0,
+        "y": 192.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 320.0,
+        "y": 192.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 384.0,
+        "y": 192.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 448.0,
+        "y": 192.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 512.0,
+        "y": 192.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 576.0,
+        "y": 192.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 640.0,
+        "y": 192.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 256.0,
+        "y": 256.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 320.0,
+        "y": 256.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 384.0,
+        "y": 256.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 448.0,
+        "y": 256.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 512.0,
+        "y": 256.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 576.0,
+        "y": 256.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 640.0,
+        "y": 256.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 256.0,
+        "y": 320.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 320.0,
+        "y": 320.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 384.0,
+        "y": 320.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 448.0,
+        "y": 320.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 512.0,
+        "y": 320.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 576.0,
+        "y": 320.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 640.0,
+        "y": 320.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 256.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 320.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 384.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 448.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 512.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 576.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "head"
+      },
+      {
+        "x": 256.0,
+        "y": 384.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 320.0,
+        "y": 384.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 320.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 256.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 384.0,
+        "y": 384.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 384.0,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 406.458064516129,
+        "y": 384.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 406.80645161290323,
+        "y": 330.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 256.0,
+        "y": 448.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 320.0,
+        "y": 448.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 384.0,
+        "y": 448.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 406.0451612903226,
+        "y": 448.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 256.0,
+        "y": 512.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 320.0,
+        "y": 512.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 384.0,
+        "y": 512.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 405.6322580645161,
+        "y": 512.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 256.0,
+        "y": 576.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 320.0,
+        "y": 576.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 384.0,
+        "y": 576.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 405.2193548387097,
+        "y": 576.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 320.0,
+        "y": 610.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 384.0,
+        "y": 610.0,
+        "bone0": 1,
+        "weight0": 1.0,
+        "bone1": 1,
+        "weight1": 0,
+        "region": "rear-hair"
+      },
+      {
+        "x": 406.71053958648514,
+        "y": 344.8663640948059,
+        "bone0": 2,
+        "weight0": 0.8946753366643877,
+        "bone1": 3,
+        "weight1": 0.10532466333561226,
+        "region": "near-arm"
+      },
+      {
+        "x": 406.45806451612907,
+        "y": 384.0,
+        "bone0": 2,
+        "weight0": 0.9207756472255302,
+        "bone1": 3,
+        "weight1": 0.07922435277446979,
+        "region": "near-arm"
+      },
+      {
+        "x": 448.0,
+        "y": 384.0,
+        "bone0": 2,
+        "weight0": 0.9811932249431498,
+        "bone1": 3,
+        "weight1": 0.018806775056850245,
+        "region": "near-arm"
+      },
+      {
+        "x": 448.0,
+        "y": 341.640625,
+        "bone0": 2,
+        "weight0": 0.9272322058634594,
+        "bone1": 3,
+        "weight1": 0.07276779413654054,
+        "region": "near-arm"
+      },
+      {
+        "x": 469.0,
+        "y": 340.0,
+        "bone0": 2,
+        "weight0": 0.9221966893710617,
+        "bone1": 3,
+        "weight1": 0.07780331062893836,
+        "region": "near-arm"
+      },
+      {
+        "x": 481.7111111111111,
+        "y": 384.0,
+        "bone0": 2,
+        "weight0": 0.9587412922034176,
+        "bone1": 3,
+        "weight1": 0.041258707796582354,
+        "region": "near-arm"
+      },
+      {
+        "x": 448.0,
+        "y": 448.0,
+        "bone0": 2,
+        "weight0": 0.9739614153085425,
+        "bone1": 3,
+        "weight1": 0.02603858469145758,
+        "region": "near-arm"
+      },
+      {
+        "x": 406.0451612903226,
+        "y": 448.0,
+        "bone0": 2,
+        "weight0": 0.8844332274671246,
+        "bone1": 3,
+        "weight1": 0.11556677253287545,
+        "region": "near-arm"
+      },
+      {
+        "x": 495.0,
+        "y": 430.0,
+        "bone0": 2,
+        "weight0": 0.8937543499581961,
+        "bone1": 3,
+        "weight1": 0.10624565004180378,
+        "region": "near-arm"
+      },
+      {
+        "x": 489.0521739130435,
+        "y": 448.0,
+        "bone0": 2,
+        "weight0": 0.8766970874965987,
+        "bone1": 3,
+        "weight1": 0.12330291250340128,
+        "region": "near-arm"
+      },
+      {
+        "x": 448.0,
+        "y": 512.0,
+        "bone0": 2,
+        "weight0": 0.838289720217947,
+        "bone1": 3,
+        "weight1": 0.16171027978205293,
+        "region": "near-arm"
+      },
+      {
+        "x": 405.6322580645161,
+        "y": 512.0,
+        "bone0": 2,
+        "weight0": 0.7386340538310727,
+        "bone1": 3,
+        "weight1": 0.2613659461689274,
+        "region": "near-arm"
+      },
+      {
+        "x": 467.90434782608696,
+        "y": 512.0,
+        "bone0": 2,
+        "weight0": 0.7343948370500287,
+        "bone1": 3,
+        "weight1": 0.26560516294997116,
+        "region": "near-arm"
+      },
+      {
+        "x": 448.0,
+        "y": 576.0,
+        "bone0": 3,
+        "weight0": 0.5608504093057045,
+        "bone1": 2,
+        "weight1": 0.43914959069429543,
+        "region": "near-arm"
+      },
+      {
+        "x": 405.2193548387097,
+        "y": 576.0,
+        "bone0": 3,
+        "weight0": 0.6136887749099873,
+        "bone1": 2,
+        "weight1": 0.3863112250900128,
+        "region": "near-arm"
+      },
+      {
+        "x": 457.0,
+        "y": 545.0,
+        "bone0": 2,
+        "weight0": 0.5608042424762169,
+        "bone1": 3,
+        "weight1": 0.43919575752378326,
+        "region": "near-arm"
+      },
+      {
+        "x": 451.4526315789474,
+        "y": 576.0,
+        "bone0": 3,
+        "weight0": 0.5510796797766504,
+        "bone1": 2,
+        "weight1": 0.4489203202233496,
+        "region": "near-arm"
+      },
+      {
+        "x": 384.0,
+        "y": 640.0,
+        "bone0": 3,
+        "weight0": 0.8493138064547238,
+        "bone1": 2,
+        "weight1": 0.15068619354527624,
+        "region": "near-arm"
+      },
+      {
+        "x": 405.0,
+        "y": 610.0,
+        "bone0": 3,
+        "weight0": 0.8575225300248768,
+        "bone1": 2,
+        "weight1": 0.14247746997512323,
+        "region": "near-arm"
+      },
+      {
+        "x": 440.0,
+        "y": 640.0,
+        "bone0": 3,
+        "weight0": 0.9036138003919846,
+        "bone1": 2,
+        "weight1": 0.09638619960801545,
+        "region": "near-arm"
+      },
+      {
+        "x": 448.0,
+        "y": 595.2941176470588,
+        "bone0": 3,
+        "weight0": 0.689803825478353,
+        "bone1": 2,
+        "weight1": 0.310196174521647,
+        "region": "near-arm"
+      },
+      {
+        "x": 640.0,
+        "y": 422.1363636363636,
+        "bone0": 4,
+        "weight0": 0.7791275802793498,
+        "bone1": 5,
+        "weight1": 0.22087241972065008,
+        "region": "far-arm"
+      },
+      {
+        "x": 600.6564885496183,
+        "y": 448.0,
+        "bone0": 4,
+        "weight0": 0.8968083142253176,
+        "bone1": 5,
+        "weight1": 0.10319168577468234,
+        "region": "far-arm"
+      },
+      {
+        "x": 640.0,
+        "y": 448.0,
+        "bone0": 4,
+        "weight0": 0.740818275451128,
+        "bone1": 5,
+        "weight1": 0.25918172454887195,
+        "region": "far-arm"
+      },
+      {
+        "x": 601.0,
+        "y": 418.0,
+        "bone0": 4,
+        "weight0": 0.9123551643297297,
+        "bone1": 5,
+        "weight1": 0.08764483567027029,
+        "region": "far-arm"
+      },
+      {
+        "x": 640.0,
+        "y": 512.0,
+        "bone0": 4,
+        "weight0": 0.5879867588257464,
+        "bone1": 5,
+        "weight1": 0.4120132411742536,
+        "region": "far-arm"
+      },
+      {
+        "x": 599.9236641221374,
+        "y": 512.0,
+        "bone0": 4,
+        "weight0": 0.7971346343351889,
+        "bone1": 5,
+        "weight1": 0.20286536566481106,
+        "region": "far-arm"
+      },
+      {
+        "x": 640.0,
+        "y": 576.0,
+        "bone0": 5,
+        "weight0": 0.5266509156284895,
+        "bone1": 4,
+        "weight1": 0.4733490843715104,
+        "region": "far-arm"
+      },
+      {
+        "x": 599.1908396946565,
+        "y": 576.0,
+        "bone0": 5,
+        "weight0": 0.5684474423138327,
+        "bone1": 4,
+        "weight1": 0.4315525576861673,
+        "region": "far-arm"
+      },
+      {
+        "x": 640.0,
+        "y": 640.0,
+        "bone0": 5,
+        "weight0": 0.8116601233143178,
+        "bone1": 4,
+        "weight1": 0.18833987668568222,
+        "region": "far-arm"
+      },
+      {
+        "x": 598.4580152671756,
+        "y": 640.0,
+        "bone0": 5,
+        "weight0": 0.9478356743903174,
+        "bone1": 4,
+        "weight1": 0.052164325609682594,
+        "region": "far-arm"
+      },
+      {
+        "x": 406.80645161290323,
+        "y": 330.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 406.71053958648514,
+        "y": 344.8663640948059,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 448.0,
+        "y": 341.640625,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 448.0,
+        "y": 330.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 469.0,
+        "y": 340.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 512.0,
+        "y": 330.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 481.7111111111111,
+        "y": 384.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 512.0,
+        "y": 384.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 576.0,
+        "y": 384.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 576.0,
+        "y": 330.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 640.0,
+        "y": 384.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 495.0,
+        "y": 430.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 512.0,
+        "y": 448.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 489.0521739130435,
+        "y": 448.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 576.0,
+        "y": 448.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 601.0,
+        "y": 418.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 640.0,
+        "y": 422.1363636363636,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 600.6564885496183,
+        "y": 448.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 512.0,
+        "y": 512.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 467.90434782608696,
+        "y": 512.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 576.0,
+        "y": 512.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 599.9236641221374,
+        "y": 512.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 457.0,
+        "y": 545.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 451.4526315789474,
+        "y": 576.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 512.0,
+        "y": 576.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 576.0,
+        "y": 576.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 599.1908396946565,
+        "y": 576.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 440.0,
+        "y": 640.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 448.0,
+        "y": 640.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 448.0,
+        "y": 595.2941176470588,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 512.0,
+        "y": 640.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 576.0,
+        "y": 640.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      },
+      {
+        "x": 598.4580152671756,
+        "y": 640.0,
+        "bone0": 0,
+        "weight0": 1.0,
+        "bone1": 0,
+        "weight1": 0,
+        "region": "trunk"
+      }
+    ],
+    "indices": [
+      39,
+      40,
+      41,
+      41,
+      42,
+      39,
+      41,
+      40,
+      43,
+      43,
+      44,
+      41,
+      45,
+      44,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      40,
+      40,
+      39,
+      47,
+      40,
+      48,
+      49,
+      49,
+      43,
+      40,
+      50,
+      43,
+      49,
+      43,
+      50,
+      45,
+      51,
+      52,
+      48,
+      48,
+      47,
+      51,
+      48,
+      52,
+      53,
+      53,
+      49,
+      48,
+      54,
+      49,
+      53,
+      49,
+      54,
+      50,
+      55,
+      56,
+      52,
+      52,
+      51,
+      55,
+      52,
+      56,
+      57,
+      57,
+      53,
+      52,
+      58,
+      53,
+      57,
+      53,
+      58,
+      54,
+      60,
+      57,
+      56,
+      56,
+      59,
+      60,
+      82,
+      83,
+      84,
+      83,
+      82,
+      85,
+      83,
+      86,
+      84,
+      86,
+      83,
+      87,
+      87,
+      88,
+      86,
+      88,
+      87,
+      89,
+      89,
+      90,
+      88,
+      90,
+      89,
+      91,
+      92,
+      93,
+      94,
+      94,
+      95,
+      92,
+      95,
+      94,
+      96,
+      97,
+      98,
+      99,
+      97,
+      95,
+      96,
+      98,
+      97,
+      96,
+      97,
+      99,
+      100,
+      100,
+      101,
+      97,
+      103,
+      104,
+      99,
+      99,
+      98,
+      103,
+      104,
+      103,
+      105,
+      99,
+      104,
+      106,
+      106,
+      100,
+      99,
+      107,
+      108,
+      102,
+      107,
+      106,
+      109,
+      107,
+      102,
+      100,
+      106,
+      107,
+      100,
+      105,
+      110,
+      104,
+      110,
+      105,
+      111,
+      104,
+      110,
+      112,
+      112,
+      106,
+      104,
+      113,
+      106,
+      112,
+      106,
+      113,
+      109,
+      114,
+      115,
+      116,
+      114,
+      110,
+      111,
+      110,
+      114,
+      116,
+      110,
+      116,
+      117,
+      117,
+      112,
+      110,
+      118,
+      112,
+      117,
+      112,
+      118,
+      113,
+      119,
+      120,
+      121,
+      121,
+      120,
+      122,
+      121,
+      116,
+      115,
+      116,
+      121,
+      122,
+      116,
+      122,
+      123,
+      123,
+      117,
+      116,
+      124,
+      117,
+      123,
+      117,
+      124,
+      118,
+      61,
+      62,
+      63,
+      63,
+      64,
+      61,
+      65,
+      64,
+      63,
+      63,
+      66,
+      65,
+      62,
+      67,
+      63,
+      67,
+      62,
+      68,
+      69,
+      66,
+      63,
+      69,
+      67,
+      70,
+      67,
+      69,
+      63,
+      68,
+      71,
+      67,
+      71,
+      68,
+      72,
+      73,
+      67,
+      71,
+      67,
+      73,
+      70,
+      76,
+      73,
+      71,
+      74,
+      76,
+      71,
+      79,
+      78,
+      80,
+      75,
+      81,
+      74,
+      81,
+      75,
+      79,
+      81,
+      79,
+      80,
+      77,
+      74,
+      81,
+      2,
+      1,
+      3,
+      3,
+      4,
+      2,
+      4,
+      3,
+      5,
+      5,
+      6,
+      4,
+      6,
+      5,
+      7,
+      7,
+      8,
+      6,
+      8,
+      7,
+      9,
+      9,
+      10,
+      8,
+      12,
+      13,
+      1,
+      1,
+      0,
+      12,
+      1,
+      13,
+      14,
+      14,
+      3,
+      1,
+      3,
+      14,
+      15,
+      15,
+      5,
+      3,
+      5,
+      15,
+      16,
+      16,
+      7,
+      5,
+      7,
+      16,
+      17,
+      17,
+      9,
+      7,
+      9,
+      17,
+      18,
+      18,
+      11,
+      9,
+      19,
+      20,
+      13,
+      13,
+      12,
+      19,
+      13,
+      20,
+      21,
+      21,
+      14,
+      13,
+      14,
+      21,
+      22,
+      22,
+      15,
+      14,
+      15,
+      22,
+      23,
+      23,
+      16,
+      15,
+      16,
+      23,
+      24,
+      24,
+      17,
+      16,
+      17,
+      24,
+      25,
+      25,
+      18,
+      17,
+      26,
+      27,
+      20,
+      20,
+      19,
+      26,
+      20,
+      27,
+      28,
+      28,
+      21,
+      20,
+      21,
+      28,
+      29,
+      29,
+      22,
+      21,
+      22,
+      29,
+      30,
+      30,
+      23,
+      22,
+      23,
+      30,
+      31,
+      31,
+      24,
+      23,
+      24,
+      31,
+      32,
+      32,
+      25,
+      24,
+      33,
+      34,
+      27,
+      27,
+      26,
+      33,
+      35,
+      28,
+      27,
+      27,
+      34,
+      35,
+      36,
+      29,
+      28,
+      28,
+      35,
+      36,
+      37,
+      30,
+      29,
+      29,
+      36,
+      37,
+      38,
+      31,
+      30,
+      30,
+      37,
+      38
+    ]
+  },
+  "parts": [
+    {
+      "id": "female_body-head_hair",
+      "gender": "female",
+      "w": 96,
+      "h": 144,
+      "runtimeEligible": false,
+      "kind": "native-body-variant",
+      "bone": "torso-hips",
+      "slot": "",
+      "drawOrder": 600,
+      "occlusionState": [
+        "head_hair"
+      ],
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        256,
+        64,
+        640,
+        640
+      ],
+      "worldW": 0.425,
+      "worldH": 0.6375,
+      "dx": -0.07083333333333333,
+      "dy": 1.2528645833333332,
+      "x": 2,
+      "y": 366,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-head_hair.png",
+      "sourceSha256": "0000fea5ac93b65ec6fcf3fe528dd414a702204795cfd07f834d481603f47a2e",
+      "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
+    },
+    {
+      "id": "female_body-lower_garment",
+      "gender": "female",
+      "w": 96,
+      "h": 144,
+      "runtimeEligible": false,
+      "kind": "native-body-variant",
+      "bone": "torso-hips",
+      "slot": "",
+      "drawOrder": 600,
+      "occlusionState": [
+        "lower_garment"
+      ],
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        256,
+        64,
+        640,
+        640
+      ],
+      "worldW": 0.425,
+      "worldH": 0.6375,
+      "dx": -0.07083333333333333,
+      "dy": 1.2528645833333332,
+      "x": 302,
+      "y": 366,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-lower_garment.png",
+      "sourceSha256": "c88366d0ed46c44413ec1dcac060da132bebdcedf1a27691762a3304ccee8667",
+      "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
+    },
+    {
+      "id": "female_body-inner_top",
+      "gender": "female",
+      "w": 96,
+      "h": 144,
+      "runtimeEligible": false,
+      "kind": "native-body-variant",
+      "bone": "torso-hips",
+      "slot": "",
+      "drawOrder": 600,
+      "occlusionState": [
+        "inner_top"
+      ],
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        256,
+        64,
+        640,
+        640
+      ],
+      "worldW": 0.425,
+      "worldH": 0.6375,
+      "dx": -0.07083333333333333,
+      "dy": 1.2528645833333332,
+      "x": 202,
+      "y": 366,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-inner_top.png",
+      "sourceSha256": "c47d4f42f3217e17118b48b49986db23f90e708ae80833f337a812fffb296a12",
+      "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
+    },
+    {
+      "id": "female_body-head_hair-lower_garment",
+      "gender": "female",
+      "w": 96,
+      "h": 144,
+      "runtimeEligible": false,
+      "kind": "native-body-variant",
+      "bone": "torso-hips",
+      "slot": "",
+      "drawOrder": 600,
+      "occlusionState": [
+        "head_hair",
+        "lower_garment"
+      ],
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        256,
+        64,
+        640,
+        640
+      ],
+      "worldW": 0.425,
+      "worldH": 0.6375,
+      "dx": -0.07083333333333333,
+      "dy": 1.2528645833333332,
+      "x": 2,
+      "y": 70,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-head_hair-lower_garment.png",
+      "sourceSha256": "0000fea5ac93b65ec6fcf3fe528dd414a702204795cfd07f834d481603f47a2e",
+      "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
+    },
+    {
+      "id": "female_body-head_hair-inner_top",
+      "gender": "female",
+      "w": 96,
+      "h": 144,
+      "runtimeEligible": false,
+      "kind": "native-body-variant",
+      "bone": "torso-hips",
+      "slot": "",
+      "drawOrder": 600,
+      "occlusionState": [
+        "head_hair",
+        "inner_top"
+      ],
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        256,
+        64,
+        640,
+        640
+      ],
+      "worldW": 0.425,
+      "worldH": 0.6375,
+      "dx": -0.07083333333333333,
+      "dy": 1.2528645833333332,
+      "x": 2,
+      "y": 218,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-head_hair-inner_top.png",
+      "sourceSha256": "5ed1fc392272c1f494c50aeabe29445ea0d778f19a79d7896b36f2b9daf72edb",
+      "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
+    },
+    {
+      "id": "female_body-lower_garment-inner_top",
+      "gender": "female",
+      "w": 96,
+      "h": 144,
+      "runtimeEligible": false,
+      "kind": "native-body-variant",
+      "bone": "torso-hips",
+      "slot": "",
+      "drawOrder": 600,
+      "occlusionState": [
+        "lower_garment",
+        "inner_top"
+      ],
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        256,
+        64,
+        640,
+        640
+      ],
+      "worldW": 0.425,
+      "worldH": 0.6375,
+      "dx": -0.07083333333333333,
+      "dy": 1.2528645833333332,
+      "x": 402,
+      "y": 366,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-lower_garment-inner_top.png",
+      "sourceSha256": "c47d4f42f3217e17118b48b49986db23f90e708ae80833f337a812fffb296a12",
+      "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
+    },
+    {
+      "id": "female_body-head_hair-lower_garment-inner_top",
+      "gender": "female",
+      "w": 96,
+      "h": 144,
+      "runtimeEligible": false,
+      "kind": "native-body-variant",
+      "bone": "torso-hips",
+      "slot": "",
+      "drawOrder": 600,
+      "occlusionState": [
+        "head_hair",
+        "lower_garment",
+        "inner_top"
+      ],
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        256,
+        64,
+        640,
+        640
+      ],
+      "worldW": 0.425,
+      "worldH": 0.6375,
+      "dx": -0.07083333333333333,
+      "dy": 1.2528645833333332,
+      "x": 102,
+      "y": 366,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/body-states-v1/body-head_hair-lower_garment-inner_top.png",
+      "sourceSha256": "5ed1fc392272c1f494c50aeabe29445ea0d778f19a79d7896b36f2b9daf72edb",
+      "sourceStateStatus": "DRAFT_EIGHT_STATE_BODY_SOURCE"
+    },
+    {
+      "id": "female_main_weapon-near",
+      "gender": "female",
+      "w": 25,
+      "h": 44,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "left-forearm-hand",
+      "slot": "main_weapon",
+      "drawOrder": 640,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/main_weapon-near.png",
+      "sourceSha256": "5b3aa1c31c5d0d62d9a0d75b2970fa0c80d6531fd923c10233801ed3faf1ecf0",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        364,
+        684,
+        464,
+        860
+      ],
+      "worldW": 0.11067708333333334,
+      "worldH": 0.19479166666666664,
+      "dx": -0.10846354166666665,
+      "dy": 0.7880208333333334,
+      "x": 183,
+      "y": 130
+    },
+    {
+      "id": "female_main_weapon-far",
+      "gender": "female",
+      "w": 21,
+      "h": 38,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "right-forearm-hand",
+      "slot": "main_weapon",
+      "drawOrder": 640,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/main_weapon-far.png",
+      "sourceSha256": "c557ea0651daa8b6fe288772eb40793434d53c8c399b28a712429381c0e2d8b1",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        584,
+        704,
+        668,
+        856
+      ],
+      "worldW": 0.09296875,
+      "worldH": 0.16822916666666665,
+      "dx": 0.126171875,
+      "dy": 0.7791666666666666,
+      "x": 193,
+      "y": 228
+    },
+    {
+      "id": "female_head_hair",
+      "gender": "female",
+      "w": 87,
+      "h": 136,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "head",
+      "slot": "head_hair",
+      "drawOrder": 605,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/head_hair.png",
+      "sourceSha256": "12b9655b47873752bb36f301106667d1851b5afc745b3dcc17f03bd0a24bfddd",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        268,
+        68,
+        616,
+        612
+      ],
+      "worldW": 0.38515625,
+      "worldH": 0.6020833333333333,
+      "dx": -0.07747395833333333,
+      "dy": 1.2661458333333333,
+      "x": 102,
+      "y": 226
+    },
+    {
+      "id": "female_inner_top",
+      "gender": "female",
+      "w": 48,
+      "h": 60,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "torso-hips",
+      "slot": "inner_top",
+      "drawOrder": 601,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/inner_top.png",
+      "sourceSha256": "df9f75b8406f3988602413d51e75f4c6ac1782a872c579c4696721294bec2637",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        424,
+        300,
+        616,
+        540
+      ],
+      "worldW": 0.2125,
+      "worldH": 0.265625,
+      "dx": 0.008854166666666666,
+      "dy": 1.1776041666666668,
+      "x": 2,
+      "y": 6
+    },
+    {
+      "id": "female_outer_top-near",
+      "gender": "female",
+      "w": 15,
+      "h": 48,
+      "runtimeEligible": false,
+      "kind": "joint-cloth",
+      "bone": "garment-own-mesh-required",
+      "slot": "outer_tunic",
+      "drawOrder": 602,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/outer_top-near.png",
+      "sourceSha256": "98cd93d68f3238be510f6ec2ea143de73ef333cd6d6adff6d5bb0bdd14577ca9",
+      "jointCloth": {
+        "vertices": [
+          {
+            "x": 464.0,
+            "y": 648.0
+          },
+          {
+            "x": 464.0,
+            "y": 644.0
+          },
+          {
+            "x": 468.0,
+            "y": 644.0
+          },
+          {
+            "x": 468.0,
+            "y": 632.0
+          },
+          {
+            "x": 476.0,
+            "y": 632.0
+          },
+          {
+            "x": 476.0,
+            "y": 648.0
+          },
+          {
+            "x": 464.0,
+            "y": 656.0
+          },
+          {
+            "x": 460.0,
+            "y": 662.3550063353732
+          },
+          {
+            "x": 460.0,
+            "y": 656.0
+          },
+          {
+            "x": 460.76511333238454,
+            "y": 662.4697733352309
+          },
+          {
+            "x": 460.0,
+            "y": 664.0
+          },
+          {
+            "x": 476.0,
+            "y": 664.0
+          },
+          {
+            "x": 470.9666244308449,
+            "y": 664.0
+          },
+          {
+            "x": 492.0,
+            "y": 648.0
+          },
+          {
+            "x": 484.0,
+            "y": 636.0
+          },
+          {
+            "x": 492.0,
+            "y": 636.0
+          },
+          {
+            "x": 492.0,
+            "y": 640.0
+          },
+          {
+            "x": 484.0,
+            "y": 632.0
+          },
+          {
+            "x": 492.0,
+            "y": 664.0
+          },
+          {
+            "x": 500.0,
+            "y": 648.0
+          },
+          {
+            "x": 500.0,
+            "y": 640.0
+          },
+          {
+            "x": 500.0,
+            "y": 664.0
+          },
+          {
+            "x": 474.83845179173346,
+            "y": 664.5807741041333
+          },
+          {
+            "x": 460.0,
+            "y": 672.0
+          },
+          {
+            "x": 476.0,
+            "y": 680.0
+          },
+          {
+            "x": 460.0,
+            "y": 680.0
+          },
+          {
+            "x": 476.0,
+            "y": 664.7550063353733
+          },
+          {
+            "x": 489.2565162301102,
+            "y": 666.7434837698898
+          },
+          {
+            "x": 492.0,
+            "y": 667.1550063353733
+          },
+          {
+            "x": 492.0,
+            "y": 680.0
+          },
+          {
+            "x": 500.0,
+            "y": 668.0
+          },
+          {
+            "x": 499.7848446452283,
+            "y": 668.3227330321575
+          },
+          {
+            "x": 504.0,
+            "y": 668.0
+          },
+          {
+            "x": 504.0,
+            "y": 668.9550063353732
+          },
+          {
+            "x": 500.1245636264468,
+            "y": 668.3736908793403
+          },
+          {
+            "x": 504.0,
+            "y": 680.0
+          },
+          {
+            "x": 456.0,
+            "y": 680.0
+          },
+          {
+            "x": 456.0,
+            "y": 672.0
+          },
+          {
+            "x": 456.0,
+            "y": 684.0
+          },
+          {
+            "x": 452.0,
+            "y": 696.0
+          },
+          {
+            "x": 452.0,
+            "y": 684.0
+          },
+          {
+            "x": 460.0,
+            "y": 696.0
+          },
+          {
+            "x": 476.0,
+            "y": 696.0
+          },
+          {
+            "x": 492.0,
+            "y": 696.0
+          },
+          {
+            "x": 504.0,
+            "y": 696.0
+          },
+          {
+            "x": 452.0,
+            "y": 700.0
+          },
+          {
+            "x": 448.0,
+            "y": 712.0
+          },
+          {
+            "x": 448.0,
+            "y": 700.0
+          },
+          {
+            "x": 460.0,
+            "y": 712.0
+          },
+          {
+            "x": 476.0,
+            "y": 712.0
+          },
+          {
+            "x": 492.0,
+            "y": 712.0
+          },
+          {
+            "x": 496.0,
+            "y": 708.0
+          },
+          {
+            "x": 496.0,
+            "y": 712.0
+          },
+          {
+            "x": 500.0,
+            "y": 704.0
+          },
+          {
+            "x": 500.0,
+            "y": 708.0
+          },
+          {
+            "x": 504.0,
+            "y": 704.0
+          },
+          {
+            "x": 448.0,
+            "y": 716.0
+          },
+          {
+            "x": 444.0,
+            "y": 728.0
+          },
+          {
+            "x": 444.0,
+            "y": 716.0
+          },
+          {
+            "x": 460.0,
+            "y": 728.0
+          },
+          {
+            "x": 476.0,
+            "y": 728.0
+          },
+          {
+            "x": 492.0,
+            "y": 728.0
+          },
+          {
+            "x": 496.0,
+            "y": 728.0
+          },
+          {
+            "x": 444.0,
+            "y": 736.0
+          },
+          {
+            "x": 448.0,
+            "y": 736.0
+          },
+          {
+            "x": 456.0,
+            "y": 740.0
+          },
+          {
+            "x": 448.0,
+            "y": 740.0
+          },
+          {
+            "x": 460.0,
+            "y": 744.0
+          },
+          {
+            "x": 456.0,
+            "y": 744.0
+          },
+          {
+            "x": 476.0,
+            "y": 744.0
+          },
+          {
+            "x": 492.0,
+            "y": 744.0
+          },
+          {
+            "x": 496.0,
+            "y": 740.0
+          },
+          {
+            "x": 500.0,
+            "y": 740.0
+          },
+          {
+            "x": 500.0,
+            "y": 744.0
+          },
+          {
+            "x": 460.0,
+            "y": 756.0
+          },
+          {
+            "x": 476.0,
+            "y": 760.0
+          },
+          {
+            "x": 460.0,
+            "y": 760.0
+          },
+          {
+            "x": 492.0,
+            "y": 760.0
+          },
+          {
+            "x": 500.0,
+            "y": 760.0
+          },
+          {
+            "x": 456.0,
+            "y": 760.0
+          },
+          {
+            "x": 456.0,
+            "y": 756.0
+          },
+          {
+            "x": 456.0,
+            "y": 776.0
+          },
+          {
+            "x": 460.0,
+            "y": 776.0
+          },
+          {
+            "x": 476.0,
+            "y": 776.0
+          },
+          {
+            "x": 492.0,
+            "y": 776.0
+          },
+          {
+            "x": 500.0,
+            "y": 776.0
+          },
+          {
+            "x": 456.0,
+            "y": 780.0
+          },
+          {
+            "x": 452.0,
+            "y": 784.0
+          },
+          {
+            "x": 452.0,
+            "y": 780.0
+          },
+          {
+            "x": 460.0,
+            "y": 788.0
+          },
+          {
+            "x": 456.0,
+            "y": 788.0
+          },
+          {
+            "x": 456.0,
+            "y": 784.0
+          },
+          {
+            "x": 468.0,
+            "y": 792.0
+          },
+          {
+            "x": 460.0,
+            "y": 792.0
+          },
+          {
+            "x": 476.0,
+            "y": 792.0
+          },
+          {
+            "x": 492.0,
+            "y": 792.0
+          },
+          {
+            "x": 500.0,
+            "y": 784.0
+          },
+          {
+            "x": 504.0,
+            "y": 784.0
+          },
+          {
+            "x": 504.0,
+            "y": 792.0
+          },
+          {
+            "x": 468.0,
+            "y": 796.0
+          },
+          {
+            "x": 472.0,
+            "y": 796.0
+          },
+          {
+            "x": 476.0,
+            "y": 800.0
+          },
+          {
+            "x": 472.0,
+            "y": 800.0
+          },
+          {
+            "x": 488.0,
+            "y": 800.0
+          },
+          {
+            "x": 488.0,
+            "y": 808.0
+          },
+          {
+            "x": 476.0,
+            "y": 808.0
+          },
+          {
+            "x": 492.0,
+            "y": 800.0
+          },
+          {
+            "x": 500.0,
+            "y": 804.0
+          },
+          {
+            "x": 492.0,
+            "y": 804.0
+          },
+          {
+            "x": 504.0,
+            "y": 808.0
+          },
+          {
+            "x": 500.0,
+            "y": 808.0
+          },
+          {
+            "x": 476.0,
+            "y": 816.0
+          },
+          {
+            "x": 480.0,
+            "y": 816.0
+          },
+          {
+            "x": 484.0,
+            "y": 820.0
+          },
+          {
+            "x": 480.0,
+            "y": 820.0
+          },
+          {
+            "x": 488.0,
+            "y": 824.0
+          },
+          {
+            "x": 484.0,
+            "y": 824.0
+          }
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          2,
+          5,
+          0,
+          2,
+          5,
+          2,
+          4,
+          6,
+          0,
+          5,
+          7,
+          8,
+          6,
+          7,
+          6,
+          9,
+          10,
+          7,
+          9,
+          5,
+          11,
+          6,
+          9,
+          6,
+          11,
+          9,
+          11,
+          12,
+          10,
+          9,
+          12,
+          13,
+          5,
+          14,
+          14,
+          15,
+          16,
+          4,
+          17,
+          14,
+          14,
+          16,
+          13,
+          4,
+          14,
+          5,
+          11,
+          5,
+          13,
+          13,
+          18,
+          11,
+          19,
+          13,
+          16,
+          16,
+          20,
+          19,
+          18,
+          13,
+          19,
+          19,
+          21,
+          18,
+          12,
+          11,
+          22,
+          23,
+          10,
+          12,
+          23,
+          12,
+          22,
+          24,
+          25,
+          23,
+          22,
+          11,
+          26,
+          23,
+          22,
+          26,
+          23,
+          26,
+          24,
+          26,
+          11,
+          18,
+          26,
+          18,
+          27,
+          24,
+          26,
+          27,
+          18,
+          28,
+          27,
+          28,
+          29,
+          24,
+          28,
+          24,
+          27,
+          28,
+          18,
+          30,
+          28,
+          30,
+          31,
+          29,
+          28,
+          31,
+          32,
+          33,
+          34,
+          32,
+          34,
+          30,
+          33,
+          35,
+          34,
+          21,
+          30,
+          18,
+          31,
+          30,
+          34,
+          29,
+          31,
+          34,
+          29,
+          34,
+          35,
+          25,
+          36,
+          37,
+          37,
+          23,
+          25,
+          38,
+          36,
+          25,
+          39,
+          40,
+          38,
+          25,
+          41,
+          38,
+          39,
+          38,
+          41,
+          41,
+          25,
+          24,
+          24,
+          42,
+          41,
+          42,
+          24,
+          29,
+          29,
+          43,
+          42,
+          43,
+          29,
+          35,
+          35,
+          44,
+          43,
+          45,
+          39,
+          41,
+          46,
+          47,
+          45,
+          41,
+          48,
+          45,
+          46,
+          45,
+          48,
+          48,
+          41,
+          42,
+          42,
+          49,
+          48,
+          49,
+          42,
+          43,
+          43,
+          50,
+          49,
+          50,
+          43,
+          51,
+          51,
+          52,
+          50,
+          53,
+          54,
+          51,
+          44,
+          55,
+          53,
+          51,
+          43,
+          53,
+          44,
+          53,
+          43,
+          56,
+          46,
+          48,
+          57,
+          58,
+          56,
+          48,
+          59,
+          56,
+          57,
+          56,
+          59,
+          59,
+          48,
+          49,
+          49,
+          60,
+          59,
+          60,
+          49,
+          50,
+          50,
+          61,
+          60,
+          61,
+          50,
+          52,
+          52,
+          62,
+          61,
+          63,
+          57,
+          64,
+          65,
+          66,
+          64,
+          67,
+          68,
+          65,
+          59,
+          64,
+          57,
+          59,
+          67,
+          65,
+          65,
+          64,
+          59,
+          67,
+          59,
+          60,
+          60,
+          69,
+          67,
+          69,
+          60,
+          61,
+          61,
+          70,
+          69,
+          70,
+          61,
+          71,
+          72,
+          73,
+          71,
+          62,
+          71,
+          61,
+          70,
+          71,
+          73,
+          74,
+          67,
+          69,
+          75,
+          76,
+          74,
+          74,
+          69,
+          75,
+          75,
+          69,
+          70,
+          70,
+          77,
+          75,
+          77,
+          70,
+          73,
+          73,
+          78,
+          77,
+          76,
+          79,
+          80,
+          80,
+          74,
+          76,
+          81,
+          79,
+          76,
+          76,
+          82,
+          81,
+          82,
+          76,
+          75,
+          75,
+          83,
+          82,
+          83,
+          75,
+          77,
+          77,
+          84,
+          83,
+          84,
+          77,
+          78,
+          78,
+          85,
+          84,
+          86,
+          81,
+          82,
+          87,
+          88,
+          86,
+          89,
+          90,
+          91,
+          86,
+          82,
+          89,
+          91,
+          87,
+          86,
+          86,
+          89,
+          91,
+          89,
+          82,
+          83,
+          92,
+          93,
+          89,
+          83,
+          94,
+          92,
+          92,
+          89,
+          83,
+          94,
+          83,
+          84,
+          84,
+          95,
+          94,
+          95,
+          84,
+          96,
+          97,
+          98,
+          96,
+          85,
+          96,
+          84,
+          95,
+          96,
+          98,
+          99,
+          92,
+          100,
+          101,
+          102,
+          100,
+          94,
+          100,
+          92,
+          94,
+          101,
+          100,
+          101,
+          94,
+          103,
+          104,
+          105,
+          101,
+          95,
+          106,
+          103,
+          103,
+          104,
+          101,
+          95,
+          103,
+          94,
+          106,
+          95,
+          98,
+          107,
+          108,
+          106,
+          109,
+          110,
+          107,
+          107,
+          106,
+          98,
+          98,
+          109,
+          107,
+          111,
+          105,
+          112,
+          113,
+          114,
+          112,
+          115,
+          116,
+          113,
+          104,
+          112,
+          105,
+          104,
+          115,
+          113,
+          113,
+          112,
+          104
+        ],
+        "upstream": "torso-hips",
+        "downstream": "left-thigh",
+        "pivotX": 505.0,
+        "pivotY": 750.0,
+        "axisX": -42,
+        "axisY": 280,
+        "blendStart": -80,
+        "blendEnd": 140,
+        "maxRelativeDegrees": 30
+      },
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        444,
+        632,
+        504,
+        824
+      ],
+      "worldW": 0.06640625,
+      "worldH": 0.2125,
+      "dx": -0.04205729166666666,
+      "dy": 0.83671875,
+      "x": 244,
+      "y": 269
+    },
+    {
+      "id": "female_outer_top-far",
+      "gender": "female",
+      "w": 18,
+      "h": 60,
+      "runtimeEligible": false,
+      "kind": "joint-cloth",
+      "bone": "garment-own-mesh-required",
+      "slot": "outer_tunic",
+      "drawOrder": 602,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/outer_top-far.png",
+      "sourceSha256": "edc2d5a6527d0b5be6fe88446b8832929a53aab78c6b71b0410a0671e612b9c2",
+      "jointCloth": {
+        "vertices": [
+          {
+            "x": 564.0,
+            "y": 648.0
+          },
+          {
+            "x": 564.0,
+            "y": 644.0
+          },
+          {
+            "x": 568.0,
+            "y": 644.0
+          },
+          {
+            "x": 568.0,
+            "y": 640.0
+          },
+          {
+            "x": 572.0,
+            "y": 640.0
+          },
+          {
+            "x": 572.0,
+            "y": 648.0
+          },
+          {
+            "x": 564.0,
+            "y": 664.0
+          },
+          {
+            "x": 572.0,
+            "y": 664.0
+          },
+          {
+            "x": 588.0,
+            "y": 648.0
+          },
+          {
+            "x": 576.0,
+            "y": 640.0
+          },
+          {
+            "x": 576.0,
+            "y": 636.0
+          },
+          {
+            "x": 588.0,
+            "y": 636.0
+          },
+          {
+            "x": 588.0,
+            "y": 664.0
+          },
+          {
+            "x": 604.0,
+            "y": 648.0
+          },
+          {
+            "x": 600.0,
+            "y": 644.0
+          },
+          {
+            "x": 604.0,
+            "y": 644.0
+          },
+          {
+            "x": 588.0,
+            "y": 632.0
+          },
+          {
+            "x": 600.0,
+            "y": 632.0
+          },
+          {
+            "x": 604.0,
+            "y": 656.0
+          },
+          {
+            "x": 604.0,
+            "y": 664.0
+          },
+          {
+            "x": 564.0,
+            "y": 679.9370650101259
+          },
+          {
+            "x": 564.0310163480563,
+            "y": 679.9379673038876
+          },
+          {
+            "x": 564.0,
+            "y": 680.0
+          },
+          {
+            "x": 572.0,
+            "y": 680.0
+          },
+          {
+            "x": 566.1633902769207,
+            "y": 680.0
+          },
+          {
+            "x": 588.0,
+            "y": 680.0
+          },
+          {
+            "x": 608.0,
+            "y": 664.0
+          },
+          {
+            "x": 608.0,
+            "y": 656.0
+          },
+          {
+            "x": 604.0,
+            "y": 680.0
+          },
+          {
+            "x": 612.0,
+            "y": 664.0
+          },
+          {
+            "x": 612.0,
+            "y": 680.0
+          },
+          {
+            "x": 571.9163210075544,
+            "y": 680.1673579848912
+          },
+          {
+            "x": 564.0,
+            "y": 696.0
+          },
+          {
+            "x": 572.0,
+            "y": 680.1697922828532
+          },
+          {
+            "x": 572.0,
+            "y": 696.0
+          },
+          {
+            "x": 587.3827106792062,
+            "y": 680.6172893207938
+          },
+          {
+            "x": 588.0,
+            "y": 680.6352468283078
+          },
+          {
+            "x": 588.0,
+            "y": 696.0
+          },
+          {
+            "x": 602.9304138594182,
+            "y": 681.0695861405818
+          },
+          {
+            "x": 604.0,
+            "y": 681.1007013737623
+          },
+          {
+            "x": 604.0,
+            "y": 696.0
+          },
+          {
+            "x": 611.3428443050454,
+            "y": 681.3143113899091
+          },
+          {
+            "x": 616.0,
+            "y": 680.0
+          },
+          {
+            "x": 616.0,
+            "y": 681.4497922828532
+          },
+          {
+            "x": 612.3357993386306,
+            "y": 681.3431973545224
+          },
+          {
+            "x": 616.0,
+            "y": 696.0
+          },
+          {
+            "x": 564.0,
+            "y": 700.0
+          },
+          {
+            "x": 560.0,
+            "y": 712.0
+          },
+          {
+            "x": 560.0,
+            "y": 700.0
+          },
+          {
+            "x": 572.0,
+            "y": 712.0
+          },
+          {
+            "x": 588.0,
+            "y": 712.0
+          },
+          {
+            "x": 604.0,
+            "y": 712.0
+          },
+          {
+            "x": 620.0,
+            "y": 696.0
+          },
+          {
+            "x": 620.0,
+            "y": 712.0
+          },
+          {
+            "x": 560.0,
+            "y": 724.0
+          },
+          {
+            "x": 568.0,
+            "y": 724.0
+          },
+          {
+            "x": 572.0,
+            "y": 728.0
+          },
+          {
+            "x": 568.0,
+            "y": 728.0
+          },
+          {
+            "x": 588.0,
+            "y": 728.0
+          },
+          {
+            "x": 604.0,
+            "y": 728.0
+          },
+          {
+            "x": 620.0,
+            "y": 720.0
+          },
+          {
+            "x": 620.0,
+            "y": 728.0
+          },
+          {
+            "x": 568.0,
+            "y": 740.0
+          },
+          {
+            "x": 564.0,
+            "y": 744.0
+          },
+          {
+            "x": 564.0,
+            "y": 740.0
+          },
+          {
+            "x": 572.0,
+            "y": 744.0
+          },
+          {
+            "x": 588.0,
+            "y": 744.0
+          },
+          {
+            "x": 604.0,
+            "y": 744.0
+          },
+          {
+            "x": 624.0,
+            "y": 728.0
+          },
+          {
+            "x": 624.0,
+            "y": 720.0
+          },
+          {
+            "x": 620.0,
+            "y": 744.0
+          },
+          {
+            "x": 624.0,
+            "y": 740.0
+          },
+          {
+            "x": 628.0,
+            "y": 740.0
+          },
+          {
+            "x": 628.0,
+            "y": 744.0
+          },
+          {
+            "x": 564.0,
+            "y": 760.0
+          },
+          {
+            "x": 572.0,
+            "y": 760.0
+          },
+          {
+            "x": 588.0,
+            "y": 760.0
+          },
+          {
+            "x": 604.0,
+            "y": 760.0
+          },
+          {
+            "x": 620.0,
+            "y": 760.0
+          },
+          {
+            "x": 624.0,
+            "y": 760.0
+          },
+          {
+            "x": 628.0,
+            "y": 760.0
+          },
+          {
+            "x": 564.0,
+            "y": 764.0
+          },
+          {
+            "x": 560.0,
+            "y": 776.0
+          },
+          {
+            "x": 560.0,
+            "y": 764.0
+          },
+          {
+            "x": 572.0,
+            "y": 776.0
+          },
+          {
+            "x": 588.0,
+            "y": 776.0
+          },
+          {
+            "x": 604.0,
+            "y": 776.0
+          },
+          {
+            "x": 612.0,
+            "y": 772.0
+          },
+          {
+            "x": 612.0,
+            "y": 776.0
+          },
+          {
+            "x": 616.0,
+            "y": 768.0
+          },
+          {
+            "x": 616.0,
+            "y": 772.0
+          },
+          {
+            "x": 620.0,
+            "y": 764.0
+          },
+          {
+            "x": 620.0,
+            "y": 768.0
+          },
+          {
+            "x": 624.0,
+            "y": 764.0
+          },
+          {
+            "x": 560.0,
+            "y": 788.0
+          },
+          {
+            "x": 556.0,
+            "y": 792.0
+          },
+          {
+            "x": 556.0,
+            "y": 788.0
+          },
+          {
+            "x": 572.0,
+            "y": 792.0
+          },
+          {
+            "x": 588.0,
+            "y": 792.0
+          },
+          {
+            "x": 604.0,
+            "y": 792.0
+          },
+          {
+            "x": 612.0,
+            "y": 784.0
+          },
+          {
+            "x": 616.0,
+            "y": 784.0
+          },
+          {
+            "x": 616.0,
+            "y": 792.0
+          },
+          {
+            "x": 556.0,
+            "y": 808.0
+          },
+          {
+            "x": 572.0,
+            "y": 808.0
+          },
+          {
+            "x": 588.0,
+            "y": 808.0
+          },
+          {
+            "x": 604.0,
+            "y": 808.0
+          },
+          {
+            "x": 616.0,
+            "y": 808.0
+          },
+          {
+            "x": 556.0,
+            "y": 816.0
+          },
+          {
+            "x": 560.0,
+            "y": 816.0
+          },
+          {
+            "x": 572.0,
+            "y": 824.0
+          },
+          {
+            "x": 560.0,
+            "y": 824.0
+          },
+          {
+            "x": 588.0,
+            "y": 824.0
+          },
+          {
+            "x": 604.0,
+            "y": 824.0
+          },
+          {
+            "x": 616.0,
+            "y": 816.0
+          },
+          {
+            "x": 620.0,
+            "y": 816.0
+          },
+          {
+            "x": 620.0,
+            "y": 824.0
+          },
+          {
+            "x": 612.0,
+            "y": 824.0
+          },
+          {
+            "x": 560.0,
+            "y": 840.0
+          },
+          {
+            "x": 572.0,
+            "y": 840.0
+          },
+          {
+            "x": 576.0,
+            "y": 840.0
+          },
+          {
+            "x": 588.0,
+            "y": 840.0
+          },
+          {
+            "x": 592.0,
+            "y": 840.0
+          },
+          {
+            "x": 600.0,
+            "y": 836.0
+          },
+          {
+            "x": 600.0,
+            "y": 840.0
+          },
+          {
+            "x": 604.0,
+            "y": 832.0
+          },
+          {
+            "x": 604.0,
+            "y": 836.0
+          },
+          {
+            "x": 608.0,
+            "y": 832.0
+          },
+          {
+            "x": 608.0,
+            "y": 828.0
+          },
+          {
+            "x": 612.0,
+            "y": 828.0
+          },
+          {
+            "x": 560.0,
+            "y": 844.0
+          },
+          {
+            "x": 568.0,
+            "y": 844.0
+          },
+          {
+            "x": 556.0,
+            "y": 852.0
+          },
+          {
+            "x": 556.0,
+            "y": 844.0
+          },
+          {
+            "x": 564.0,
+            "y": 848.0
+          },
+          {
+            "x": 564.0,
+            "y": 852.0
+          },
+          {
+            "x": 568.0,
+            "y": 848.0
+          },
+          {
+            "x": 572.0,
+            "y": 844.0
+          },
+          {
+            "x": 576.0,
+            "y": 852.0
+          },
+          {
+            "x": 588.0,
+            "y": 844.0
+          },
+          {
+            "x": 572.0,
+            "y": 856.0
+          },
+          {
+            "x": 572.0,
+            "y": 852.0
+          },
+          {
+            "x": 588.0,
+            "y": 856.0
+          },
+          {
+            "x": 592.0,
+            "y": 844.0
+          },
+          {
+            "x": 576.0,
+            "y": 872.0
+          },
+          {
+            "x": 572.0,
+            "y": 872.0
+          },
+          {
+            "x": 576.0,
+            "y": 868.0
+          },
+          {
+            "x": 580.0,
+            "y": 864.0
+          },
+          {
+            "x": 580.0,
+            "y": 868.0
+          },
+          {
+            "x": 584.0,
+            "y": 860.0
+          },
+          {
+            "x": 584.0,
+            "y": 864.0
+          },
+          {
+            "x": 588.0,
+            "y": 860.0
+          }
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          2,
+          5,
+          0,
+          2,
+          5,
+          2,
+          4,
+          6,
+          0,
+          5,
+          5,
+          7,
+          6,
+          8,
+          5,
+          9,
+          10,
+          11,
+          9,
+          4,
+          9,
+          5,
+          8,
+          9,
+          11,
+          7,
+          5,
+          8,
+          8,
+          12,
+          7,
+          13,
+          8,
+          14,
+          14,
+          15,
+          13,
+          16,
+          17,
+          11,
+          11,
+          14,
+          8,
+          14,
+          11,
+          17,
+          12,
+          8,
+          18,
+          18,
+          19,
+          12,
+          13,
+          18,
+          8,
+          20,
+          6,
+          7,
+          20,
+          7,
+          21,
+          22,
+          20,
+          21,
+          7,
+          23,
+          24,
+          7,
+          24,
+          21,
+          24,
+          22,
+          21,
+          23,
+          7,
+          12,
+          12,
+          25,
+          23,
+          26,
+          19,
+          18,
+          18,
+          27,
+          26,
+          25,
+          12,
+          19,
+          19,
+          28,
+          25,
+          28,
+          19,
+          26,
+          29,
+          30,
+          26,
+          28,
+          26,
+          30,
+          24,
+          23,
+          31,
+          32,
+          22,
+          24,
+          32,
+          24,
+          31,
+          23,
+          33,
+          31,
+          33,
+          34,
+          32,
+          33,
+          32,
+          31,
+          33,
+          23,
+          25,
+          33,
+          25,
+          35,
+          34,
+          33,
+          35,
+          25,
+          36,
+          35,
+          36,
+          37,
+          34,
+          36,
+          34,
+          35,
+          36,
+          25,
+          28,
+          36,
+          28,
+          38,
+          37,
+          36,
+          38,
+          28,
+          39,
+          38,
+          39,
+          40,
+          37,
+          39,
+          37,
+          38,
+          39,
+          28,
+          30,
+          39,
+          30,
+          41,
+          40,
+          39,
+          41,
+          42,
+          43,
+          44,
+          42,
+          44,
+          30,
+          43,
+          45,
+          44,
+          41,
+          30,
+          44,
+          40,
+          41,
+          44,
+          40,
+          44,
+          45,
+          46,
+          32,
+          34,
+          47,
+          48,
+          46,
+          34,
+          49,
+          46,
+          47,
+          46,
+          49,
+          49,
+          34,
+          37,
+          37,
+          50,
+          49,
+          50,
+          37,
+          40,
+          40,
+          51,
+          50,
+          51,
+          40,
+          45,
+          52,
+          53,
+          45,
+          51,
+          45,
+          53,
+          54,
+          47,
+          55,
+          56,
+          57,
+          55,
+          49,
+          55,
+          47,
+          49,
+          56,
+          55,
+          56,
+          49,
+          50,
+          50,
+          58,
+          56,
+          58,
+          50,
+          51,
+          51,
+          59,
+          58,
+          59,
+          51,
+          60,
+          60,
+          61,
+          59,
+          53,
+          60,
+          51,
+          62,
+          57,
+          56,
+          63,
+          64,
+          62,
+          62,
+          56,
+          65,
+          65,
+          63,
+          62,
+          65,
+          56,
+          58,
+          58,
+          66,
+          65,
+          66,
+          58,
+          59,
+          59,
+          67,
+          66,
+          68,
+          61,
+          60,
+          60,
+          69,
+          68,
+          67,
+          59,
+          61,
+          61,
+          70,
+          67,
+          70,
+          61,
+          71,
+          72,
+          73,
+          71,
+          68,
+          71,
+          61,
+          70,
+          71,
+          73,
+          74,
+          63,
+          65,
+          65,
+          75,
+          74,
+          75,
+          65,
+          66,
+          66,
+          76,
+          75,
+          76,
+          66,
+          67,
+          67,
+          77,
+          76,
+          77,
+          67,
+          70,
+          70,
+          78,
+          77,
+          78,
+          70,
+          79,
+          73,
+          80,
+          79,
+          73,
+          79,
+          70,
+          81,
+          74,
+          75,
+          82,
+          83,
+          81,
+          75,
+          84,
+          81,
+          82,
+          81,
+          84,
+          84,
+          75,
+          76,
+          76,
+          85,
+          84,
+          85,
+          76,
+          77,
+          77,
+          86,
+          85,
+          86,
+          77,
+          87,
+          87,
+          88,
+          86,
+          89,
+          90,
+          87,
+          91,
+          92,
+          89,
+          77,
+          78,
+          89,
+          89,
+          87,
+          77,
+          91,
+          89,
+          78,
+          91,
+          78,
+          79,
+          79,
+          93,
+          91,
+          94,
+          82,
+          84,
+          95,
+          96,
+          94,
+          94,
+          84,
+          97,
+          97,
+          95,
+          94,
+          97,
+          84,
+          85,
+          85,
+          98,
+          97,
+          98,
+          85,
+          86,
+          86,
+          99,
+          98,
+          99,
+          86,
+          100,
+          101,
+          102,
+          100,
+          88,
+          100,
+          86,
+          99,
+          100,
+          102,
+          103,
+          95,
+          97,
+          97,
+          104,
+          103,
+          104,
+          97,
+          98,
+          98,
+          105,
+          104,
+          105,
+          98,
+          99,
+          99,
+          106,
+          105,
+          106,
+          99,
+          102,
+          102,
+          107,
+          106,
+          108,
+          103,
+          109,
+          110,
+          111,
+          109,
+          104,
+          109,
+          103,
+          104,
+          110,
+          109,
+          110,
+          104,
+          105,
+          105,
+          112,
+          110,
+          112,
+          105,
+          106,
+          106,
+          113,
+          112,
+          113,
+          106,
+          114,
+          115,
+          116,
+          114,
+          107,
+          114,
+          106,
+          117,
+          114,
+          116,
+          113,
+          114,
+          117,
+          118,
+          111,
+          110,
+          110,
+          119,
+          118,
+          119,
+          110,
+          120,
+          112,
+          121,
+          120,
+          112,
+          120,
+          110,
+          121,
+          112,
+          122,
+          123,
+          124,
+          122,
+          125,
+          126,
+          123,
+          113,
+          125,
+          112,
+          123,
+          122,
+          112,
+          125,
+          123,
+          112,
+          127,
+          125,
+          128,
+          117,
+          129,
+          128,
+          113,
+          128,
+          125,
+          113,
+          117,
+          128,
+          130,
+          118,
+          131,
+          132,
+          133,
+          130,
+          134,
+          135,
+          132,
+          131,
+          136,
+          134,
+          119,
+          137,
+          131,
+          132,
+          130,
+          134,
+          131,
+          134,
+          130,
+          119,
+          131,
+          118,
+          138,
+          120,
+          139,
+          140,
+          141,
+          138,
+          139,
+          142,
+          138,
+          121,
+          139,
+          120,
+          140,
+          138,
+          142,
+          139,
+          121,
+          122,
+          122,
+          143,
+          139,
+          144,
+          145,
+          146,
+          147,
+          148,
+          146,
+          149,
+          150,
+          147,
+          142,
+          151,
+          149,
+          140,
+          146,
+          145,
+          140,
+          142,
+          149,
+          147,
+          146,
+          140,
+          140,
+          149,
+          147
+        ],
+        "upstream": "torso-hips",
+        "downstream": "right-thigh",
+        "pivotX": 565.0,
+        "pivotY": 760.0,
+        "axisX": -8,
+        "axisY": 275,
+        "blendStart": -80,
+        "blendEnd": 140,
+        "maxRelativeDegrees": 30
+      },
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        556,
+        632,
+        628,
+        872
+      ],
+      "worldW": 0.0796875,
+      "worldH": 0.265625,
+      "dx": 0.08854166666666667,
+      "dy": 0.81015625,
+      "x": 222,
+      "y": 257
+    },
+    {
+      "id": "female_waist_belt",
+      "gender": "female",
+      "w": 41,
+      "h": 18,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "torso-hips",
+      "slot": "waist",
+      "drawOrder": 603,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/waist_belt.png",
+      "sourceSha256": "85e0c6b73ad2add4d0e027bceb590d99c6d650797f5aac5b7fb9042dc3db5733",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        452,
+        608,
+        616,
+        680
+      ],
+      "worldW": 0.18151041666666665,
+      "worldH": 0.0796875,
+      "dx": 0.02434895833333333,
+      "dy": 0.9296875,
+      "x": 218,
+      "y": 235
+    },
+    {
+      "id": "female_arm_guard-near",
+      "gender": "female",
+      "w": 17,
+      "h": 46,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "left-forearm-hand",
+      "slot": "arm_guard",
+      "drawOrder": 630,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/arm_guard-near.png",
+      "sourceSha256": "151e7005af8598484caa7754898ec98c49a01205fbb5967ef83cd09f1c9f866e",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        388,
+        576,
+        456,
+        760
+      ],
+      "worldW": 0.07526041666666666,
+      "worldH": 0.20364583333333333,
+      "dx": -0.099609375,
+      "dy": 0.903125,
+      "x": 183,
+      "y": 41
+    },
+    {
+      "id": "female_arm_guard-far",
+      "gender": "female",
+      "w": 15,
+      "h": 46,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "right-forearm-hand",
+      "slot": "arm_guard",
+      "drawOrder": 630,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/arm_guard-far.png",
+      "sourceSha256": "b5e47df437840030556739761562147f1ec88b8fdfc479eba8595b563bf6c46b",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        576,
+        580,
+        636,
+        764
+      ],
+      "worldW": 0.06640625,
+      "worldH": 0.20364583333333333,
+      "dx": 0.10403645833333333,
+      "dy": 0.8986979166666667,
+      "x": 204,
+      "y": 41
+    },
+    {
+      "id": "female_footwear-near",
+      "gender": "female",
+      "w": 48,
+      "h": 44,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "left-foot",
+      "slot": "boots",
+      "drawOrder": 575,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/footwear-near.png",
+      "sourceSha256": "e85db94506a1cb520669d87958a939bda8925eaff44cd7c8c7fb2542fb9e777c",
+      "replaces": "female_left-foot",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        344,
+        1312,
+        536,
+        1488
+      ],
+      "worldW": 0.2125,
+      "worldH": 0.19479166666666664,
+      "dx": -0.0796875,
+      "dy": 0.09296875,
+      "x": 183,
+      "y": 178
+    },
+    {
+      "id": "female_footwear-far",
+      "gender": "female",
+      "w": 51,
+      "h": 41,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "right-foot",
+      "slot": "boots",
+      "drawOrder": 575,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/footwear-far.png",
+      "sourceSha256": "d97f919464f5033bd1cea9f4b298be45456bdf6ac0a68257395836291e03893e",
+      "replaces": "female_right-foot",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        524,
+        1300,
+        728,
+        1464
+      ],
+      "worldW": 0.22578125,
+      "worldH": 0.18151041666666665,
+      "dx": 0.126171875,
+      "dy": 0.112890625,
+      "x": 193,
+      "y": 321
+    },
+    {
+      "id": "female_shoulder_chest_guard-near",
+      "gender": "female",
+      "w": 22,
+      "h": 26,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "left-upper-arm",
+      "slot": "light_armor",
+      "drawOrder": 625,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/shoulder_chest_guard-near.png",
+      "sourceSha256": "46b1ae3109f0606c7953983ab437e3b1afa0d0f942ee0017e604d10bbbad255b",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        416,
+        348,
+        504,
+        452
+      ],
+      "worldW": 0.09739583333333332,
+      "worldH": 0.11510416666666666,
+      "dx": -0.05755208333333333,
+      "dy": 1.1997395833333333,
+      "x": 183,
+      "y": 11
+    },
+    {
+      "id": "female_shoulder_chest_guard-far",
+      "gender": "female",
+      "w": 19,
+      "h": 24,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "right-upper-arm",
+      "slot": "light_armor",
+      "drawOrder": 625,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/shoulder_chest_guard-far.png",
+      "sourceSha256": "5b2162bf7da3c01bf2d4256106a05da551ff38914374ae86339c888aef052493",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        524,
+        352,
+        600,
+        448
+      ],
+      "worldW": 0.08411458333333333,
+      "worldH": 0.10625,
+      "dx": 0.05533854166666667,
+      "dy": 1.1997395833333333,
+      "x": 209,
+      "y": 13
+    },
+    {
+      "id": "female_class_accessory",
+      "gender": "female",
+      "w": 8,
+      "h": 28,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "torso-hips",
+      "slot": "accessory",
+      "drawOrder": 604,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/registered-fit-v8/class_accessory.png",
+      "sourceSha256": "2a314578066ae3f8d0741cc4c9c13d46464c7dec165b453c52fc3238ed2ffa7a",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        580,
+        636,
+        612,
+        748
+      ],
+      "worldW": 0.035416666666666666,
+      "worldH": 0.12395833333333334,
+      "dx": 0.09296875,
+      "dy": 0.8765625,
+      "x": 502,
+      "y": 482
+    },
+    {
+      "id": "female_lower-near",
+      "gender": "female",
+      "w": 29,
+      "h": 35,
+      "runtimeEligible": false,
+      "kind": "joint-cloth",
+      "bone": "left-thigh",
+      "slot": "lower_garment",
+      "drawOrder": 586,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/shorts-panels-v2/near.png",
+      "sourceSha256": "1df2857d6ee3d9fbeb6f4f3226770d3c2c74c76f5a477e02be12addb900cdd91",
+      "jointCloth": {
+        "vertices": [
+          {
+            "x": 496.0,
+            "y": 696.0
+          },
+          {
+            "x": 496.0,
+            "y": 692.0
+          },
+          {
+            "x": 500.0,
+            "y": 692.0
+          },
+          {
+            "x": 500.0,
+            "y": 688.0
+          },
+          {
+            "x": 504.0,
+            "y": 688.0
+          },
+          {
+            "x": 504.0,
+            "y": 696.0
+          },
+          {
+            "x": 492.0,
+            "y": 700.0
+          },
+          {
+            "x": 492.0,
+            "y": 696.0
+          },
+          {
+            "x": 488.0,
+            "y": 708.0
+          },
+          {
+            "x": 488.0,
+            "y": 700.0
+          },
+          {
+            "x": 504.0,
+            "y": 712.0
+          },
+          {
+            "x": 488.0,
+            "y": 712.0
+          },
+          {
+            "x": 520.0,
+            "y": 696.0
+          },
+          {
+            "x": 512.0,
+            "y": 684.0
+          },
+          {
+            "x": 512.0,
+            "y": 680.0
+          },
+          {
+            "x": 520.0,
+            "y": 680.0
+          },
+          {
+            "x": 504.0,
+            "y": 684.0
+          },
+          {
+            "x": 520.0,
+            "y": 712.0
+          },
+          {
+            "x": 536.0,
+            "y": 696.0
+          },
+          {
+            "x": 528.0,
+            "y": 684.0
+          },
+          {
+            "x": 536.0,
+            "y": 684.0
+          },
+          {
+            "x": 536.0,
+            "y": 688.0
+          },
+          {
+            "x": 528.0,
+            "y": 680.0
+          },
+          {
+            "x": 536.0,
+            "y": 712.0
+          },
+          {
+            "x": 544.0,
+            "y": 692.0
+          },
+          {
+            "x": 544.0,
+            "y": 696.0
+          },
+          {
+            "x": 540.0,
+            "y": 692.0
+          },
+          {
+            "x": 540.0,
+            "y": 688.0
+          },
+          {
+            "x": 548.0,
+            "y": 704.0
+          },
+          {
+            "x": 552.0,
+            "y": 704.0
+          },
+          {
+            "x": 552.0,
+            "y": 712.0
+          },
+          {
+            "x": 548.0,
+            "y": 696.0
+          },
+          {
+            "x": 448.0,
+            "y": 712.0
+          },
+          {
+            "x": 448.0,
+            "y": 708.0
+          },
+          {
+            "x": 456.0,
+            "y": 708.0
+          },
+          {
+            "x": 456.0,
+            "y": 712.0
+          },
+          {
+            "x": 448.0,
+            "y": 720.0
+          },
+          {
+            "x": 444.0,
+            "y": 728.0
+          },
+          {
+            "x": 444.0,
+            "y": 720.0
+          },
+          {
+            "x": 456.0,
+            "y": 728.0
+          },
+          {
+            "x": 484.0,
+            "y": 712.0
+          },
+          {
+            "x": 484.0,
+            "y": 708.0
+          },
+          {
+            "x": 480.0,
+            "y": 720.0
+          },
+          {
+            "x": 480.0,
+            "y": 712.0
+          },
+          {
+            "x": 472.0,
+            "y": 728.0
+          },
+          {
+            "x": 472.0,
+            "y": 720.0
+          },
+          {
+            "x": 488.0,
+            "y": 728.0
+          },
+          {
+            "x": 504.0,
+            "y": 728.0
+          },
+          {
+            "x": 520.0,
+            "y": 728.0
+          },
+          {
+            "x": 536.0,
+            "y": 728.0
+          },
+          {
+            "x": 552.0,
+            "y": 728.0
+          },
+          {
+            "x": 444.0,
+            "y": 744.0
+          },
+          {
+            "x": 456.0,
+            "y": 744.0
+          },
+          {
+            "x": 464.0,
+            "y": 716.0
+          },
+          {
+            "x": 472.0,
+            "y": 716.0
+          },
+          {
+            "x": 464.0,
+            "y": 712.0
+          },
+          {
+            "x": 472.0,
+            "y": 744.0
+          },
+          {
+            "x": 488.0,
+            "y": 744.0
+          },
+          {
+            "x": 504.0,
+            "y": 744.0
+          },
+          {
+            "x": 520.0,
+            "y": 744.0
+          },
+          {
+            "x": 536.0,
+            "y": 744.0
+          },
+          {
+            "x": 552.0,
+            "y": 740.0
+          },
+          {
+            "x": 552.0,
+            "y": 744.0
+          },
+          {
+            "x": 444.0,
+            "y": 760.0
+          },
+          {
+            "x": 456.0,
+            "y": 760.0
+          },
+          {
+            "x": 472.0,
+            "y": 760.0
+          },
+          {
+            "x": 488.0,
+            "y": 760.0
+          },
+          {
+            "x": 504.0,
+            "y": 760.0
+          },
+          {
+            "x": 520.0,
+            "y": 760.0
+          },
+          {
+            "x": 536.0,
+            "y": 760.0
+          },
+          {
+            "x": 556.0,
+            "y": 740.0
+          },
+          {
+            "x": 556.0,
+            "y": 728.0
+          },
+          {
+            "x": 552.0,
+            "y": 760.0
+          },
+          {
+            "x": 444.0,
+            "y": 764.0
+          },
+          {
+            "x": 440.0,
+            "y": 776.0
+          },
+          {
+            "x": 440.0,
+            "y": 764.0
+          },
+          {
+            "x": 456.0,
+            "y": 776.0
+          },
+          {
+            "x": 472.0,
+            "y": 776.0
+          },
+          {
+            "x": 488.0,
+            "y": 776.0
+          },
+          {
+            "x": 504.0,
+            "y": 776.0
+          },
+          {
+            "x": 520.0,
+            "y": 776.0
+          },
+          {
+            "x": 536.0,
+            "y": 776.0
+          },
+          {
+            "x": 548.0,
+            "y": 776.0
+          },
+          {
+            "x": 548.0,
+            "y": 764.0
+          },
+          {
+            "x": 552.0,
+            "y": 764.0
+          },
+          {
+            "x": 440.0,
+            "y": 784.0
+          },
+          {
+            "x": 444.0,
+            "y": 784.0
+          },
+          {
+            "x": 448.0,
+            "y": 792.0
+          },
+          {
+            "x": 444.0,
+            "y": 792.0
+          },
+          {
+            "x": 456.0,
+            "y": 792.0
+          },
+          {
+            "x": 472.0,
+            "y": 792.0
+          },
+          {
+            "x": 488.0,
+            "y": 792.0
+          },
+          {
+            "x": 504.0,
+            "y": 792.0
+          },
+          {
+            "x": 520.0,
+            "y": 792.0
+          },
+          {
+            "x": 536.0,
+            "y": 792.0
+          },
+          {
+            "x": 548.0,
+            "y": 792.0
+          },
+          {
+            "x": 448.0,
+            "y": 796.0
+          },
+          {
+            "x": 452.0,
+            "y": 796.0
+          },
+          {
+            "x": 452.0,
+            "y": 798.6764955652387
+          },
+          {
+            "x": 455.14881831204553,
+            "y": 799.1488183120456
+          },
+          {
+            "x": 456.0,
+            "y": 800.0
+          },
+          {
+            "x": 452.0,
+            "y": 800.0
+          },
+          {
+            "x": 456.0,
+            "y": 799.2764955652387
+          },
+          {
+            "x": 459.93324084607497,
+            "y": 799.8664816921499
+          },
+          {
+            "x": 460.0,
+            "y": 800.0
+          },
+          {
+            "x": 464.0,
+            "y": 804.0
+          },
+          {
+            "x": 460.0,
+            "y": 804.0
+          },
+          {
+            "x": 472.0,
+            "y": 808.0
+          },
+          {
+            "x": 464.0,
+            "y": 808.0
+          },
+          {
+            "x": 460.15122992011584,
+            "y": 799.8991800532561
+          },
+          {
+            "x": 466.1354572331887,
+            "y": 800.796814150217
+          },
+          {
+            "x": 472.0,
+            "y": 801.6764955652387
+          },
+          {
+            "x": 477.4986995084881,
+            "y": 802.5013004915119
+          },
+          {
+            "x": 488.0,
+            "y": 804.0764955652387
+          },
+          {
+            "x": 488.0,
+            "y": 808.0
+          },
+          {
+            "x": 491.41174298674895,
+            "y": 804.588257013251
+          },
+          {
+            "x": 504.0,
+            "y": 806.4764955652387
+          },
+          {
+            "x": 504.0,
+            "y": 808.0
+          },
+          {
+            "x": 505.3247864650098,
+            "y": 806.6752135349902
+          },
+          {
+            "x": 520.0,
+            "y": 808.0
+          },
+          {
+            "x": 514.156696231742,
+            "y": 808.0
+          },
+          {
+            "x": 532.0,
+            "y": 808.0
+          },
+          {
+            "x": 536.0,
+            "y": 808.0
+          },
+          {
+            "x": 540.0,
+            "y": 808.0
+          },
+          {
+            "x": 548.0,
+            "y": 808.0
+          },
+          {
+            "x": 472.0,
+            "y": 812.0
+          },
+          {
+            "x": 480.0,
+            "y": 812.0
+          },
+          {
+            "x": 488.0,
+            "y": 816.0
+          },
+          {
+            "x": 480.0,
+            "y": 816.0
+          },
+          {
+            "x": 504.0,
+            "y": 816.0
+          },
+          {
+            "x": 518.6515452842482,
+            "y": 808.6742273578759
+          },
+          {
+            "x": 520.0,
+            "y": 808.8764955652387
+          },
+          {
+            "x": 520.0,
+            "y": 816.0
+          },
+          {
+            "x": 524.0,
+            "y": 816.0
+          },
+          {
+            "x": 524.0,
+            "y": 812.0
+          },
+          {
+            "x": 532.0,
+            "y": 810.6764955652387
+          },
+          {
+            "x": 527.8823145150174,
+            "y": 810.0588427424913
+          },
+          {
+            "x": 532.0,
+            "y": 812.0
+          },
+          {
+            "x": 521.031171253222,
+            "y": 809.031171253222
+          },
+          {
+            "x": 540.0,
+            "y": 811.8764955652387
+          },
+          {
+            "x": 542.0954030082371,
+            "y": 812.1908060164743
+          },
+          {
+            "x": 540.0,
+            "y": 816.0
+          },
+          {
+            "x": 544.0,
+            "y": 816.0
+          },
+          {
+            "x": 548.0,
+            "y": 820.0
+          },
+          {
+            "x": 544.0,
+            "y": 820.0
+          },
+          {
+            "x": 545.638839271982,
+            "y": 812.722321456036
+          },
+          {
+            "x": 548.0,
+            "y": 813.0764955652387
+          }
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          2,
+          5,
+          0,
+          2,
+          5,
+          2,
+          4,
+          6,
+          7,
+          0,
+          8,
+          9,
+          6,
+          10,
+          11,
+          8,
+          0,
+          5,
+          10,
+          8,
+          6,
+          10,
+          0,
+          10,
+          6,
+          12,
+          5,
+          13,
+          14,
+          15,
+          13,
+          4,
+          16,
+          13,
+          12,
+          13,
+          15,
+          4,
+          13,
+          5,
+          10,
+          5,
+          12,
+          12,
+          17,
+          10,
+          18,
+          12,
+          19,
+          19,
+          20,
+          21,
+          15,
+          22,
+          19,
+          19,
+          21,
+          18,
+          15,
+          19,
+          12,
+          17,
+          12,
+          18,
+          18,
+          23,
+          17,
+          24,
+          25,
+          26,
+          21,
+          27,
+          26,
+          18,
+          26,
+          25,
+          18,
+          21,
+          26,
+          23,
+          18,
+          28,
+          29,
+          30,
+          28,
+          25,
+          31,
+          28,
+          23,
+          28,
+          30,
+          25,
+          28,
+          18,
+          32,
+          33,
+          34,
+          34,
+          35,
+          32,
+          36,
+          32,
+          35,
+          37,
+          38,
+          36,
+          35,
+          39,
+          36,
+          37,
+          36,
+          39,
+          11,
+          40,
+          41,
+          41,
+          8,
+          11,
+          42,
+          43,
+          40,
+          44,
+          45,
+          42,
+          40,
+          11,
+          42,
+          46,
+          44,
+          42,
+          46,
+          42,
+          11,
+          46,
+          11,
+          10,
+          10,
+          47,
+          46,
+          47,
+          10,
+          17,
+          17,
+          48,
+          47,
+          48,
+          17,
+          23,
+          23,
+          49,
+          48,
+          49,
+          23,
+          30,
+          30,
+          50,
+          49,
+          51,
+          37,
+          39,
+          39,
+          52,
+          51,
+          44,
+          39,
+          53,
+          53,
+          54,
+          45,
+          35,
+          55,
+          53,
+          53,
+          45,
+          44,
+          35,
+          53,
+          39,
+          52,
+          39,
+          44,
+          44,
+          56,
+          52,
+          56,
+          44,
+          46,
+          46,
+          57,
+          56,
+          57,
+          46,
+          47,
+          47,
+          58,
+          57,
+          58,
+          47,
+          48,
+          48,
+          59,
+          58,
+          59,
+          48,
+          49,
+          49,
+          60,
+          59,
+          60,
+          49,
+          61,
+          61,
+          62,
+          60,
+          50,
+          61,
+          49,
+          63,
+          51,
+          52,
+          52,
+          64,
+          63,
+          64,
+          52,
+          56,
+          56,
+          65,
+          64,
+          65,
+          56,
+          57,
+          57,
+          66,
+          65,
+          66,
+          57,
+          58,
+          58,
+          67,
+          66,
+          67,
+          58,
+          59,
+          59,
+          68,
+          67,
+          68,
+          59,
+          60,
+          60,
+          69,
+          68,
+          70,
+          61,
+          50,
+          50,
+          71,
+          70,
+          69,
+          60,
+          62,
+          62,
+          72,
+          69,
+          73,
+          63,
+          64,
+          74,
+          75,
+          73,
+          64,
+          76,
+          73,
+          74,
+          73,
+          76,
+          76,
+          64,
+          65,
+          65,
+          77,
+          76,
+          77,
+          65,
+          66,
+          66,
+          78,
+          77,
+          78,
+          66,
+          67,
+          67,
+          79,
+          78,
+          79,
+          67,
+          68,
+          68,
+          80,
+          79,
+          80,
+          68,
+          69,
+          69,
+          81,
+          80,
+          82,
+          81,
+          83,
+          72,
+          84,
+          83,
+          69,
+          83,
+          81,
+          69,
+          72,
+          83,
+          85,
+          74,
+          86,
+          87,
+          88,
+          86,
+          76,
+          89,
+          86,
+          76,
+          86,
+          74,
+          87,
+          86,
+          89,
+          89,
+          76,
+          77,
+          77,
+          90,
+          89,
+          90,
+          77,
+          78,
+          78,
+          91,
+          90,
+          91,
+          78,
+          79,
+          79,
+          92,
+          91,
+          92,
+          79,
+          80,
+          80,
+          93,
+          92,
+          93,
+          80,
+          81,
+          81,
+          94,
+          93,
+          94,
+          81,
+          82,
+          82,
+          95,
+          94,
+          96,
+          87,
+          97,
+          98,
+          97,
+          99,
+          100,
+          101,
+          98,
+          100,
+          98,
+          99,
+          89,
+          97,
+          87,
+          89,
+          102,
+          99,
+          89,
+          99,
+          97,
+          102,
+          100,
+          99,
+          102,
+          89,
+          103,
+          100,
+          102,
+          103,
+          100,
+          103,
+          104,
+          105,
+          106,
+          104,
+          107,
+          108,
+          105,
+          90,
+          109,
+          103,
+          90,
+          103,
+          89,
+          109,
+          104,
+          103,
+          110,
+          90,
+          111,
+          107,
+          105,
+          110,
+          107,
+          110,
+          111,
+          109,
+          90,
+          110,
+          104,
+          109,
+          110,
+          104,
+          110,
+          105,
+          111,
+          90,
+          91,
+          111,
+          91,
+          112,
+          107,
+          111,
+          112,
+          91,
+          113,
+          112,
+          113,
+          114,
+          107,
+          113,
+          107,
+          112,
+          113,
+          91,
+          92,
+          113,
+          92,
+          115,
+          114,
+          113,
+          115,
+          92,
+          116,
+          115,
+          116,
+          117,
+          114,
+          116,
+          114,
+          115,
+          116,
+          92,
+          93,
+          116,
+          93,
+          118,
+          117,
+          116,
+          118,
+          93,
+          119,
+          120,
+          93,
+          120,
+          118,
+          120,
+          117,
+          118,
+          119,
+          93,
+          121,
+          94,
+          122,
+          121,
+          94,
+          121,
+          93,
+          122,
+          94,
+          123,
+          95,
+          124,
+          123,
+          95,
+          123,
+          94,
+          125,
+          107,
+          126,
+          127,
+          128,
+          126,
+          114,
+          126,
+          107,
+          114,
+          127,
+          126,
+          127,
+          114,
+          117,
+          117,
+          129,
+          127,
+          120,
+          119,
+          130,
+          129,
+          117,
+          120,
+          129,
+          120,
+          130,
+          119,
+          131,
+          130,
+          131,
+          132,
+          129,
+          131,
+          129,
+          130,
+          133,
+          132,
+          134,
+          121,
+          135,
+          136,
+          135,
+          137,
+          134,
+          135,
+          134,
+          136,
+          119,
+          138,
+          131,
+          138,
+          134,
+          132,
+          138,
+          132,
+          131,
+          119,
+          121,
+          136,
+          119,
+          136,
+          138,
+          136,
+          134,
+          138,
+          139,
+          123,
+          140,
+          141,
+          139,
+          140,
+          141,
+          140,
+          142,
+          143,
+          144,
+          142,
+          124,
+          145,
+          140,
+          124,
+          140,
+          123,
+          145,
+          142,
+          140,
+          124,
+          146,
+          145,
+          146,
+          143,
+          142,
+          146,
+          142,
+          145
+        ],
+        "upstream": "torso-hips",
+        "downstream": "left-thigh",
+        "pivotX": 505.0,
+        "pivotY": 750.0,
+        "axisX": -42,
+        "axisY": 280,
+        "blendStart": -160,
+        "blendEnd": 56,
+        "maxRelativeDegrees": 180
+      },
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        440,
+        680,
+        556,
+        820
+      ],
+      "worldW": 0.12838541666666667,
+      "worldH": 0.15494791666666666,
+      "dx": -0.015494791666666667,
+      "dy": 0.8123697916666666,
+      "x": 183,
+      "y": 91
+    },
+    {
+      "id": "female_lower-far",
+      "gender": "female",
+      "w": 25,
+      "h": 47,
+      "runtimeEligible": false,
+      "kind": "joint-cloth",
+      "bone": "right-thigh",
+      "slot": "lower_garment",
+      "drawOrder": 585,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/shorts-panels-v2/far.png",
+      "sourceSha256": "d9c9385c0747112f8abf3a56113d1b1b78a70058f3a265fd6d2e297be6c41f61",
+      "jointCloth": {
+        "vertices": [
+          {
+            "x": 608.0,
+            "y": 632.0
+          },
+          {
+            "x": 608.0,
+            "y": 636.0
+          },
+          {
+            "x": 604.0,
+            "y": 636.0
+          },
+          {
+            "x": 604.0,
+            "y": 632.0
+          },
+          {
+            "x": 608.0,
+            "y": 640.0
+          },
+          {
+            "x": 612.0,
+            "y": 640.0
+          },
+          {
+            "x": 612.0,
+            "y": 648.0
+          },
+          {
+            "x": 608.0,
+            "y": 648.0
+          },
+          {
+            "x": 608.0,
+            "y": 656.0
+          },
+          {
+            "x": 612.0,
+            "y": 656.0
+          },
+          {
+            "x": 616.0,
+            "y": 668.0
+          },
+          {
+            "x": 616.0,
+            "y": 672.0
+          },
+          {
+            "x": 612.0,
+            "y": 672.0
+          },
+          {
+            "x": 612.0,
+            "y": 668.0
+          },
+          {
+            "x": 536.0,
+            "y": 712.0
+          },
+          {
+            "x": 536.0,
+            "y": 708.0
+          },
+          {
+            "x": 540.0,
+            "y": 708.0
+          },
+          {
+            "x": 544.0,
+            "y": 700.0
+          },
+          {
+            "x": 548.0,
+            "y": 700.0
+          },
+          {
+            "x": 544.0,
+            "y": 704.0
+          },
+          {
+            "x": 540.0,
+            "y": 704.0
+          },
+          {
+            "x": 548.0,
+            "y": 712.0
+          },
+          {
+            "x": 536.0,
+            "y": 716.0
+          },
+          {
+            "x": 532.0,
+            "y": 728.0
+          },
+          {
+            "x": 532.0,
+            "y": 716.0
+          },
+          {
+            "x": 548.0,
+            "y": 728.0
+          },
+          {
+            "x": 564.0,
+            "y": 712.0
+          },
+          {
+            "x": 552.0,
+            "y": 700.0
+          },
+          {
+            "x": 552.0,
+            "y": 696.0
+          },
+          {
+            "x": 564.0,
+            "y": 696.0
+          },
+          {
+            "x": 564.0,
+            "y": 728.0
+          },
+          {
+            "x": 580.0,
+            "y": 708.0
+          },
+          {
+            "x": 580.0,
+            "y": 712.0
+          },
+          {
+            "x": 576.0,
+            "y": 704.0
+          },
+          {
+            "x": 580.0,
+            "y": 704.0
+          },
+          {
+            "x": 568.0,
+            "y": 700.0
+          },
+          {
+            "x": 576.0,
+            "y": 700.0
+          },
+          {
+            "x": 568.0,
+            "y": 696.0
+          },
+          {
+            "x": 580.0,
+            "y": 728.0
+          },
+          {
+            "x": 584.0,
+            "y": 712.0
+          },
+          {
+            "x": 584.0,
+            "y": 708.0
+          },
+          {
+            "x": 588.0,
+            "y": 720.0
+          },
+          {
+            "x": 596.0,
+            "y": 724.0
+          },
+          {
+            "x": 596.0,
+            "y": 728.0
+          },
+          {
+            "x": 592.0,
+            "y": 724.0
+          },
+          {
+            "x": 592.0,
+            "y": 720.0
+          },
+          {
+            "x": 588.0,
+            "y": 712.0
+          },
+          {
+            "x": 532.0,
+            "y": 744.0
+          },
+          {
+            "x": 548.0,
+            "y": 744.0
+          },
+          {
+            "x": 564.0,
+            "y": 744.0
+          },
+          {
+            "x": 580.0,
+            "y": 744.0
+          },
+          {
+            "x": 596.0,
+            "y": 732.0
+          },
+          {
+            "x": 596.0,
+            "y": 744.0
+          },
+          {
+            "x": 532.0,
+            "y": 756.0
+          },
+          {
+            "x": 536.0,
+            "y": 756.0
+          },
+          {
+            "x": 540.0,
+            "y": 760.0
+          },
+          {
+            "x": 536.0,
+            "y": 760.0
+          },
+          {
+            "x": 548.0,
+            "y": 760.0
+          },
+          {
+            "x": 564.0,
+            "y": 760.0
+          },
+          {
+            "x": 580.0,
+            "y": 760.0
+          },
+          {
+            "x": 596.0,
+            "y": 760.0
+          },
+          {
+            "x": 612.0,
+            "y": 736.0
+          },
+          {
+            "x": 612.0,
+            "y": 744.0
+          },
+          {
+            "x": 600.0,
+            "y": 736.0
+          },
+          {
+            "x": 600.0,
+            "y": 732.0
+          },
+          {
+            "x": 612.0,
+            "y": 760.0
+          },
+          {
+            "x": 628.0,
+            "y": 744.0
+          },
+          {
+            "x": 624.0,
+            "y": 736.0
+          },
+          {
+            "x": 624.0,
+            "y": 732.0
+          },
+          {
+            "x": 628.0,
+            "y": 732.0
+          },
+          {
+            "x": 628.0,
+            "y": 760.0
+          },
+          {
+            "x": 540.0,
+            "y": 764.0
+          },
+          {
+            "x": 544.0,
+            "y": 764.0
+          },
+          {
+            "x": 548.0,
+            "y": 768.0
+          },
+          {
+            "x": 544.0,
+            "y": 768.0
+          },
+          {
+            "x": 564.0,
+            "y": 776.0
+          },
+          {
+            "x": 548.0,
+            "y": 776.0
+          },
+          {
+            "x": 580.0,
+            "y": 776.0
+          },
+          {
+            "x": 596.0,
+            "y": 776.0
+          },
+          {
+            "x": 612.0,
+            "y": 776.0
+          },
+          {
+            "x": 628.0,
+            "y": 764.0
+          },
+          {
+            "x": 628.0,
+            "y": 776.0
+          },
+          {
+            "x": 548.0,
+            "y": 792.0
+          },
+          {
+            "x": 564.0,
+            "y": 792.0
+          },
+          {
+            "x": 580.0,
+            "y": 792.0
+          },
+          {
+            "x": 596.0,
+            "y": 792.0
+          },
+          {
+            "x": 612.0,
+            "y": 792.0
+          },
+          {
+            "x": 628.0,
+            "y": 792.0
+          },
+          {
+            "x": 632.0,
+            "y": 776.0
+          },
+          {
+            "x": 632.0,
+            "y": 764.0
+          },
+          {
+            "x": 632.0,
+            "y": 792.0
+          },
+          {
+            "x": 548.0,
+            "y": 808.0
+          },
+          {
+            "x": 564.0,
+            "y": 808.0
+          },
+          {
+            "x": 580.0,
+            "y": 808.0
+          },
+          {
+            "x": 596.0,
+            "y": 808.0
+          },
+          {
+            "x": 604.0,
+            "y": 808.0
+          },
+          {
+            "x": 608.0,
+            "y": 804.0
+          },
+          {
+            "x": 608.0,
+            "y": 808.0
+          },
+          {
+            "x": 612.0,
+            "y": 804.0
+          },
+          {
+            "x": 616.0,
+            "y": 804.0
+          },
+          {
+            "x": 616.0,
+            "y": 800.0
+          },
+          {
+            "x": 620.0,
+            "y": 796.0
+          },
+          {
+            "x": 620.0,
+            "y": 800.0
+          },
+          {
+            "x": 628.0,
+            "y": 796.0
+          },
+          {
+            "x": 548.0,
+            "y": 815.5291454020028
+          },
+          {
+            "x": 553.738553159623,
+            "y": 815.6960851302827
+          },
+          {
+            "x": 548.0,
+            "y": 820.0
+          },
+          {
+            "x": 564.0,
+            "y": 815.9945999474573
+          },
+          {
+            "x": 564.0,
+            "y": 820.0
+          },
+          {
+            "x": 576.0,
+            "y": 816.0
+          },
+          {
+            "x": 575.0516891081865,
+            "y": 816.3161036306045
+          },
+          {
+            "x": 576.0,
+            "y": 816.3436908565482
+          },
+          {
+            "x": 576.0,
+            "y": 820.0
+          },
+          {
+            "x": 580.0,
+            "y": 816.0
+          },
+          {
+            "x": 592.0,
+            "y": 812.0
+          },
+          {
+            "x": 592.0,
+            "y": 816.0
+          },
+          {
+            "x": 596.0,
+            "y": 812.0
+          },
+          {
+            "x": 604.0,
+            "y": 812.0
+          }
+        ],
+        "indices": [
+          0,
+          1,
+          2,
+          2,
+          3,
+          0,
+          4,
+          5,
+          6,
+          6,
+          7,
+          4,
+          8,
+          7,
+          6,
+          6,
+          9,
+          8,
+          10,
+          11,
+          12,
+          12,
+          13,
+          10,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          16,
+          20,
+          19,
+          21,
+          14,
+          16,
+          21,
+          19,
+          18,
+          21,
+          16,
+          19,
+          22,
+          14,
+          21,
+          23,
+          24,
+          22,
+          21,
+          25,
+          22,
+          23,
+          22,
+          25,
+          26,
+          21,
+          27,
+          28,
+          29,
+          27,
+          18,
+          27,
+          21,
+          26,
+          27,
+          29,
+          25,
+          21,
+          26,
+          26,
+          30,
+          25,
+          31,
+          32,
+          33,
+          33,
+          34,
+          31,
+          35,
+          36,
+          33,
+          29,
+          37,
+          35,
+          26,
+          33,
+          32,
+          26,
+          29,
+          35,
+          35,
+          33,
+          26,
+          30,
+          26,
+          32,
+          32,
+          38,
+          30,
+          39,
+          32,
+          31,
+          31,
+          40,
+          39,
+          38,
+          32,
+          41,
+          42,
+          43,
+          44,
+          41,
+          45,
+          44,
+          39,
+          46,
+          41,
+          38,
+          44,
+          43,
+          39,
+          41,
+          32,
+          41,
+          44,
+          38,
+          47,
+          23,
+          25,
+          25,
+          48,
+          47,
+          48,
+          25,
+          30,
+          30,
+          49,
+          48,
+          49,
+          30,
+          38,
+          38,
+          50,
+          49,
+          50,
+          38,
+          51,
+          51,
+          52,
+          50,
+          43,
+          51,
+          38,
+          53,
+          47,
+          54,
+          55,
+          56,
+          54,
+          48,
+          57,
+          55,
+          48,
+          54,
+          47,
+          48,
+          55,
+          54,
+          57,
+          48,
+          49,
+          49,
+          58,
+          57,
+          58,
+          49,
+          50,
+          50,
+          59,
+          58,
+          59,
+          50,
+          52,
+          52,
+          60,
+          59,
+          61,
+          62,
+          63,
+          51,
+          64,
+          63,
+          52,
+          63,
+          62,
+          52,
+          51,
+          63,
+          60,
+          52,
+          62,
+          62,
+          65,
+          60,
+          66,
+          62,
+          67,
+          68,
+          69,
+          67,
+          61,
+          67,
+          62,
+          66,
+          67,
+          69,
+          65,
+          62,
+          66,
+          66,
+          70,
+          65,
+          71,
+          55,
+          72,
+          73,
+          74,
+          72,
+          57,
+          72,
+          55,
+          57,
+          73,
+          72,
+          73,
+          57,
+          58,
+          75,
+          76,
+          73,
+          73,
+          58,
+          75,
+          75,
+          58,
+          59,
+          59,
+          77,
+          75,
+          77,
+          59,
+          60,
+          60,
+          78,
+          77,
+          78,
+          60,
+          65,
+          65,
+          79,
+          78,
+          79,
+          65,
+          80,
+          80,
+          81,
+          79,
+          70,
+          80,
+          65,
+          82,
+          76,
+          75,
+          75,
+          83,
+          82,
+          83,
+          75,
+          77,
+          77,
+          84,
+          83,
+          84,
+          77,
+          78,
+          78,
+          85,
+          84,
+          85,
+          78,
+          79,
+          79,
+          86,
+          85,
+          86,
+          79,
+          81,
+          81,
+          87,
+          86,
+          88,
+          81,
+          80,
+          80,
+          89,
+          88,
+          87,
+          81,
+          88,
+          88,
+          90,
+          87,
+          91,
+          82,
+          83,
+          83,
+          92,
+          91,
+          92,
+          83,
+          84,
+          84,
+          93,
+          92,
+          93,
+          84,
+          85,
+          85,
+          94,
+          93,
+          94,
+          85,
+          95,
+          96,
+          97,
+          95,
+          86,
+          98,
+          96,
+          95,
+          85,
+          96,
+          86,
+          96,
+          85,
+          99,
+          98,
+          100,
+          101,
+          102,
+          100,
+          87,
+          103,
+          101,
+          86,
+          100,
+          98,
+          86,
+          87,
+          101,
+          101,
+          100,
+          86,
+          104,
+          91,
+          92,
+          104,
+          92,
+          105,
+          106,
+          104,
+          105,
+          92,
+          107,
+          105,
+          107,
+          108,
+          106,
+          107,
+          106,
+          105,
+          107,
+          92,
+          109,
+          107,
+          109,
+          110,
+          108,
+          107,
+          110,
+          109,
+          111,
+          110,
+          111,
+          112,
+          108,
+          111,
+          108,
+          110,
+          93,
+          113,
+          109,
+          93,
+          109,
+          92,
+          113,
+          93,
+          114,
+          114,
+          115,
+          113,
+          94,
+          116,
+          114,
+          94,
+          114,
+          93,
+          116,
+          94,
+          95,
+          95,
+          117,
+          116
+        ],
+        "upstream": "torso-hips",
+        "downstream": "right-thigh",
+        "pivotX": 565.0,
+        "pivotY": 760.0,
+        "axisX": -8,
+        "axisY": 275,
+        "blendStart": -160,
+        "blendEnd": 56,
+        "maxRelativeDegrees": 180
+      },
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        532,
+        632,
+        632,
+        820
+      ],
+      "worldW": 0.11067708333333334,
+      "worldH": 0.20807291666666666,
+      "dx": 0.07747395833333333,
+      "dy": 0.8389322916666666,
+      "x": 193,
+      "y": 270
+    },
+    {
+      "id": "female_lower-hip",
+      "gender": "female",
+      "w": 44,
+      "h": 44,
+      "runtimeEligible": false,
+      "kind": "rigid",
+      "bone": "torso-hips",
+      "slot": "lower_garment",
+      "drawOrder": 587,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/shorts-panels-v2/hip.png",
+      "sourceSha256": "df5b2e98982e526e876cce3260754343c817c7ef0e4ea27094f00399aebe39e8",
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        448,
+        600,
+        624,
+        776
+      ],
+      "worldW": 0.19479166666666664,
+      "worldH": 0.19479166666666664,
+      "dx": 0.0265625,
+      "dy": 0.8809895833333332,
+      "x": 54,
+      "y": 22
+    },
+    {
+      "id": "female_coverage-left-thigh",
+      "gender": "female",
+      "w": 41,
+      "h": 95,
+      "runtimeEligible": false,
+      "kind": "rigid-body-variant",
+      "bone": "left-thigh",
+      "slot": "lower_garment",
+      "replaces": "female_left-thigh",
+      "drawOrder": 550,
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        404,
+        708,
+        568,
+        1088
+      ],
+      "worldW": 0.18151041666666665,
+      "worldH": 0.4205729166666667,
+      "dx": -0.028776041666666665,
+      "dy": 0.6485677083333333,
+      "x": 102,
+      "y": 17,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/base-preserving-legs-native-input-v2/female-left-thigh.png",
+      "sourceSha256": "32ba4154dbf401a066bfec970d15480d0f1f931587a5e9ba7ea133a749f7e454",
+      "coverageMask": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/base-preserving-legs-native-input-v2/female-garment-ownership-mask.png",
+      "coverageMaskSha256": "c65ed1c8954b307113cbb41691ce0c2c05fa6c1cf6d4e35dac7c912c507eff10",
+      "sourceTransformNote": "Generated by lgo_pack_female_equipment.py: apply female garment ownership mask, resize to 256x384 runtime density, crop alpha bbox; draft provenance only."
+    },
+    {
+      "id": "female_coverage-left-shin-foot",
+      "gender": "female",
+      "w": 43,
+      "h": 106,
+      "runtimeEligible": false,
+      "kind": "rigid-body-variant",
+      "bone": "left-shin-foot",
+      "slot": "lower_garment",
+      "replaces": "female_left-shin-foot",
+      "drawOrder": 560,
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        344,
+        972,
+        516,
+        1396
+      ],
+      "worldW": 0.19036458333333334,
+      "worldH": 0.46927083333333336,
+      "dx": -0.09075520833333332,
+      "dy": 0.33203125,
+      "x": 102,
+      "y": 116,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/base-preserving-legs-native-input-v2/female-left-shin-foot.png",
+      "sourceSha256": "0484c06fbe05fff7982822e3ed014e7901e2a38fd45ba3f6dba4eec82a63c885",
+      "coverageMask": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/base-preserving-legs-native-input-v2/female-garment-ownership-mask.png",
+      "coverageMaskSha256": "c65ed1c8954b307113cbb41691ce0c2c05fa6c1cf6d4e35dac7c912c507eff10",
+      "sourceTransformNote": "Generated by lgo_pack_female_equipment.py: apply female garment ownership mask, resize to 256x384 runtime density, crop alpha bbox; draft provenance only."
+    },
+    {
+      "id": "female_coverage-right-thigh",
+      "gender": "female",
+      "w": 30,
+      "h": 93,
+      "runtimeEligible": false,
+      "kind": "rigid-body-variant",
+      "bone": "right-thigh",
+      "slot": "lower_garment",
+      "replaces": "female_right-thigh",
+      "drawOrder": 520,
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        504,
+        724,
+        624,
+        1096
+      ],
+      "worldW": 0.1328125,
+      "worldH": 0.41171874999999997,
+      "dx": 0.05755208333333333,
+      "dy": 0.6352864583333333,
+      "x": 149,
+      "y": 129,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/base-preserving-legs-native-input-v2/female-right-thigh.png",
+      "sourceSha256": "be8a7de777c3e93758348c41cd06586f6e9d5d7e417b5c9d96e04d25058659a4",
+      "coverageMask": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/base-preserving-legs-native-input-v2/female-garment-ownership-mask.png",
+      "coverageMaskSha256": "c65ed1c8954b307113cbb41691ce0c2c05fa6c1cf6d4e35dac7c912c507eff10",
+      "sourceTransformNote": "Generated by lgo_pack_female_equipment.py: apply female garment ownership mask, resize to 256x384 runtime density, crop alpha bbox; draft provenance only."
+    },
+    {
+      "id": "female_coverage-right-shin-foot",
+      "gender": "female",
+      "w": 32,
+      "h": 104,
+      "runtimeEligible": false,
+      "kind": "rigid-body-variant",
+      "bone": "right-shin-foot",
+      "slot": "lower_garment",
+      "replaces": "female_right-shin-foot",
+      "drawOrder": 530,
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        500,
+        976,
+        628,
+        1392
+      ],
+      "worldW": 0.14166666666666666,
+      "worldH": 0.46041666666666664,
+      "dx": 0.05755208333333333,
+      "dy": 0.33203125,
+      "x": 147,
+      "y": 8,
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/base-preserving-legs-native-input-v2/female-right-shin-foot.png",
+      "sourceSha256": "ce59fce9ee12de57b9356508b99eb219a7474fb3fb49ac13ee91290eedebeea6",
+      "coverageMask": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/base-preserving-legs-native-input-v2/female-garment-ownership-mask.png",
+      "coverageMaskSha256": "c65ed1c8954b307113cbb41691ce0c2c05fa6c1cf6d4e35dac7c912c507eff10",
+      "sourceTransformNote": "Generated by lgo_pack_female_equipment.py: apply female garment ownership mask, resize to 256x384 runtime density, crop alpha bbox; draft provenance only."
+    }
+  ],
+  "requiredIntegration": [
+    "Per-gender exact occlusion states",
+    "Canonical crop mesh verification",
+    "maxRelativeDegrees for separate tails",
+    "Boot replaces original foot atomically",
+    "Gender-specific capture counts:17gear4jointcloth"
+  ],
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoRegisteredFemaleEquipmentLv1/equipment-atlas.png",
+      "generator": "registered_material_equipment_pack",
+      "referenceOnly": false,
+      "role": "registered-equipment-atlas",
+      "sha256": "09ec321a1b2aba8bd7a3d9021091ae5a869ad8137d6692954cc09155135e1873"
+    }
+  ],
+  "qualityStatus": "DRAFT_VISUAL_REVIEW_REQUIRED",
+  "qualityNotes": "Female Lv1 registered equipment has technical Player evidence, but remains draft; all parts now have source provenance, full visual production approval is still pending.",
+  "reviewEvidence": [
+    "build/vo-both-equipment-runtime-v1/pc/72-female-idle.png",
+    "build/vo-both-equipment-runtime-v1/pc/83-female-run.png",
+    "build/vo-both-equipment-runtime-v1/pc/106-female-air-off-lower_garment.png",
+    "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/vo-lv001/registered-equipment-authoring-v1/female-material-v1/runtime-integration-v1/build/vo-female-equipment-green-v2.log"
+  ],
+  "productionEligible": false
+}

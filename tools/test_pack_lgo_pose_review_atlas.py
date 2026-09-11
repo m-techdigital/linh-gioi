@@ -31,6 +31,19 @@ class PoseReviewAtlasTests(unittest.TestCase):
         self.assertEqual(report['status'], 'REVIEW_ONLY')
         self.assertFalse(report['runtimeEligible'])
 
+    def test_entry_exit_set_fits_without_doubling_texture_memory(self):
+        sizes = [(137, 373), (216, 312), (228, 285), (156, 312),
+                 (179, 280), (167, 230), (150, 347), (143, 358)]
+        sources = [self.source('pose' + str(i), (0, 0, w - 1, h - 1))
+                   for i, (w, h) in enumerate(sizes)]
+        atlas, report = pack_review(sources, divisor=1)
+        self.assertEqual(report['rgba8Bytes'], 512 * 1024 * 4)
+        for part, size in zip(report['sprites'], sizes):
+            x, y, w, h = part['atlasRectTopLeft']
+            self.assertEqual((w, h), size)
+            self.assertEqual(atlas.crop((x, y, x + w, y + h)).tobytes(),
+                             Image.new('RGBA', size, (190, 100, 30, 255)).tobytes())
+
     def test_trim_preserves_reconstruction_and_world_projection(self):
         sources = [self.source('idle'), self.source('run_a', (60, 520, 900, 1479))]
         for divisor in (4, 8):

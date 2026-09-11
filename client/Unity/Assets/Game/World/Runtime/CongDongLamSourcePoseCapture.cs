@@ -18,7 +18,7 @@ namespace LinhGioi.World
         [Serializable] private sealed class PoseLoopEvidence
         {
             public string status = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED";
-            public string limitation = "Source review only; run entry/exit artwork still pending";
+            public string limitation = "Source review only; Facing and held-jump integration still pending";
             public int fps = 30;
             public List<PoseLoopFrame> frames = new List<PoseLoopFrame>();
         }
@@ -48,7 +48,7 @@ namespace LinhGioi.World
                 for (var frame = 0; frame < 180; frame++)
                 {
                     // Three complete four-pose loops, then recovery and a somersault.
-                    if (frame >= 15 && frame < 75) MoveOnLane(1, 1f / 30);
+                    if (frame >= 15 && frame < 79) MoveOnLane(1, 1f / 30);
                     else
                     {
                         if (frame == 90) TriggerVoJump();
@@ -58,7 +58,7 @@ namespace LinhGioi.World
                     yield return new WaitForEndOfFrame();
                     if (Mathf.Abs(_voState.AnimationPhase - phaseOrigin - (frame + 1) / 30f) > .001f)
                         evidence.status = "FIX_REQUIRED_ANIMATION_CLOCK";
-                    if (frame >= 15 && frame < 75 && VoAvatarMotionState != "run")
+                    if (frame >= 15 && frame < 79 && VoAvatarMotionState != "run")
                         evidence.status = "FIX_REQUIRED_RUN_STATE";
                     var active = RenderTexture.active;
                     try
@@ -77,6 +77,8 @@ namespace LinhGioi.World
                 foreach (var frame in evidence.frames) poses.Add(frame.pose);
                 foreach (var required in new[] { "idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck" })
                     if (!poses.Contains(required)) evidence.status = "FIX_REQUIRED_MISSING_POSE_" + required;
+                if (_sourcePoseReview.HasTransitions && (!poses.Contains("run_start") || !poses.Contains("run_stop")))
+                    evidence.status = "FIX_REQUIRED_ENTRY_EXIT";
                 File.WriteAllText(Path.Combine(directory, "pose-loop.json"), JsonUtility.ToJson(evidence, true));
             }
             finally

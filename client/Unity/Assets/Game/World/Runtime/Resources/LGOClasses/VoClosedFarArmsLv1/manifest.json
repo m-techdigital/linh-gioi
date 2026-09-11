@@ -1,0 +1,115 @@
+{
+  "id": "vo-closed-far-arms-lv1-v1",
+  "status": "DRAFT_CLOSED_FAR_ARM_REVIEW",
+  "runtimeEligible": false,
+  "sourceRepresentation": "base-visible-pixels-with-hidden-same-base-donor",
+  "rigSha256": "89a8fe89d21f8c1e56187b7c18995460f8a96029cdceaa9af326d60dd8f13569",
+  "parts": [
+    {
+      "id": "male_right-upper-arm",
+      "gender": "male",
+      "bone": "right-upper-arm",
+      "x": 2,
+      "y": 187,
+      "w": 34,
+      "h": 67,
+      "order": 4,
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        520,
+        280,
+        656,
+        548
+      ],
+      "worldW": 0.15052083333333333,
+      "worldH": 0.2966145833333333,
+      "dx": 0.08411458333333333,
+      "dy": 1.1842447916666667,
+      "sourceSha256": "2ef4cdb2fa6aef26c3ed0e4021b503532b7a5a12bd1747c671035832f34b6a17"
+    },
+    {
+      "id": "male_right-forearm-hand",
+      "gender": "male",
+      "bone": "right-forearm-hand",
+      "x": 40,
+      "y": 159,
+      "w": 37,
+      "h": 95,
+      "order": 5,
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        592,
+        492,
+        740,
+        872
+      ],
+      "worldW": 0.16380208333333335,
+      "worldH": 0.4205729166666667,
+      "dx": 0.17044270833333333,
+      "dy": 0.8876302083333333,
+      "sourceSha256": "dd2f480fd88b3d2274d4f3dbba405bfc5b137b39c9b8c067c815d80fdb189469"
+    },
+    {
+      "id": "female_right-upper-arm",
+      "gender": "female",
+      "bone": "right-upper-arm",
+      "x": 81,
+      "y": 190,
+      "w": 32,
+      "h": 64,
+      "order": 4,
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        484,
+        336,
+        612,
+        592
+      ],
+      "worldW": 0.14166666666666666,
+      "worldH": 0.2833333333333333,
+      "dx": 0.03984375,
+      "dy": 1.12890625,
+      "sourceSha256": "e2b857b34096f0dc3a5da8ec89f582b939d810448a90ff204b7fd01ee463b6f8"
+    },
+    {
+      "id": "female_right-forearm-hand",
+      "gender": "female",
+      "bone": "right-forearm-hand",
+      "x": 117,
+      "y": 168,
+      "w": 26,
+      "h": 86,
+      "order": 5,
+      "sourceSpaceProfile": "lgo_character_canvas_1024x1536_v1",
+      "sourceCanvasRect": [
+        560,
+        540,
+        664,
+        884
+      ],
+      "worldW": 0.11510416666666666,
+      "worldH": 0.3807291666666667,
+      "dx": 0.11067708333333334,
+      "dy": 0.8544270833333333,
+      "sourceSha256": "18bb485733464ecf850713abd78d7e15063be3255b0d416b664cc81b87f1fb71"
+    }
+  ],
+  "atlasSize": [
+    256,
+    256
+  ],
+  "textureDivisor": 4,
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/VoClosedFarArmsLv1/closed-far-arm-atlas.png",
+      "sha256": "1b77fc93df259aa25a532511c2d808ea8e5d3ac823c43daa7cc526e8a755859b",
+      "referenceOnly": false,
+      "role": "closed-base-arm-attachments",
+      "generator": "base_preserving_hidden_extension_pack"
+    }
+  ],
+  "nonClaims": [
+    "Opt-in body experiment; existing equipment delta layers are not production items",
+    "Source rest integrity is not Player visual approval"
+  ]
+}

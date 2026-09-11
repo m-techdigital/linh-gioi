@@ -46,7 +46,12 @@ namespace LinhGioi.World
         public int CompletedQuestCount => _completedQuests.Count;
         public bool IsQuestComplete(string questId) => _completedQuests.Contains(questId);
         public string LastInteractionMessage { get; private set; } = "";
-        public bool IsCapturing => _poseLoopCapturing || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
+        private TwoDRegisteredOutfit _registeredOutfit;
+        private bool _voJumpHeld;
+        public int VoJumpStartCount { get; private set; }
+        public bool VoSomersaultEnabled => _registeredOutfit != null;
+        private bool RegisteredRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered") >= 0 || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered-equipment") >= 0;
+        public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string DialogueSpeaker => _dialogueNodeId == "quan-thu" ? "Quan Thủ Đông Lâm"
@@ -104,15 +109,18 @@ namespace LinhGioi.World
         }
         public void MoveOnLane(float axis, float seconds)
         {
+            _voState.FaceMovement(axis);
+            if (_registeredOutfit != null && Mathf.Abs(axis) <= .01f) _voState.ReleaseMovement();
             if (Mathf.Abs(axis) > .01f) _sourcePoseFacing = axis < 0 ? -1 : 1;
-            AdvanceVoAnimation(seconds);
+            // Live HUD input is advanced once by LateUpdate; explicit capture/edit-mode steps own their clock.
+            if (!Application.isPlaying || IsCapturing) AdvanceVoAnimation(seconds);
             if (DialogueOpen || _controller == null || VoAvatarMotionState == "skill" || VoAvatarMotionState == "basic_attack") return;
             if (Mathf.Abs(axis) > .01f && VoAvatarMotionState != "jump")
             {
                 _voState.HoldMovement(.14f);
                 ApplyVoPose();
             }
-            var target = Mathf.Clamp(PlayerX + Mathf.Clamp(axis, -1, 1) * Mathf.Clamp(seconds, 0, .1f) * 2.4f, -3.8f, 44.4f);
+            var target = Mathf.Clamp(PlayerX + Mathf.Clamp(axis, -1, 1) * Mathf.Clamp(seconds, 0, .1f) * (_registeredOutfit != null && _voState.RunEnabled ? 4f : 2.4f), -3.8f, 44.4f);
             _routeX = target;
             _controller.RefreshForSmoke();
             Refresh();
@@ -237,7 +245,7 @@ namespace LinhGioi.World
             : VoSelectedEquipmentSlot + " · Lv" + VoSelectedEquipmentItemLevel;
         public string SkillLabel => _kiemFitPreviewActive ? "Kiếm pose DRAFT" : "Liên Quyền";
         public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
-        public bool VoAvatarUsesFrameMotion => VoAvatarLevel == 1 && VoAvatarMode == "full" && VoAvatarMotionState != "idle";
+        public bool VoAvatarUsesFrameMotion => _registeredOutfit == null && VoAvatarLevel == 1 && VoAvatarMode == "full" && VoAvatarMotionState != "idle";
         public bool VoAvatarUsesAlignedPaperDollMotion => VoAvatarMotionState != "idle" && !VoAvatarUsesFrameMotion;
         public int VoSkillCastCount { get; private set; }
         public int VoSkillHitCount { get; private set; }
@@ -711,6 +719,18 @@ namespace LinhGioi.World
                     throw new InvalidOperationException("Invalid Võ motion frame: " + frame.id);
                 _voMotionFrames.Add(frame.id, Tuple.Create(MakeSprite(motionTexture, new Rect(frame.x, frame.y, frame.w, frame.h)), frame));
             }
+            if (RegisteredRequested)
+            {
+                var equipment = Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered-equipment") >= 0;
+                var closedBody = equipment || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-closed-body") >= 0;
+                var closedArms = Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-closed-far-arms") >= 0;
+                var anatomy = closedBody || closedArms || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-anatomical") >= 0;
+                _registeredOutfit = new TwoDRegisteredOutfit(_voAvatarRoot, _sprites, true, anatomy, closedArms, closedBody, equipment);
+                _voSkillVfx.transform.SetParent(_registeredOutfit.FacingRoot, false);
+                foreach (var renderer in _voAvatarParts.Values) renderer.enabled = false;
+                foreach (var renderer in _voRigParts.Values) renderer.enabled = false;
+                foreach (var renderer in _voEquipmentComponents.Values) renderer.enabled = false;
+            }
             SetVoMotionFrame("idle");
             _voMotionRenderer.enabled = false;
             RefreshVoAvatarMode();
@@ -730,6 +750,7 @@ namespace LinhGioi.World
 
         public void CycleVoAvatarLevel()
         {
+            if (_registeredOutfit != null) { LastInteractionMessage = "Đang kiểm chứng Võ Lv1 · Lv10 chưa mở"; return; }
             _voState.CycleLevel();
             foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = VoAvatarLevel;
             RefreshVoAvatarMode();
@@ -748,6 +769,7 @@ namespace LinhGioi.World
 
         public void CycleVoSelectedEquipmentItemLevel()
         {
+            if (_registeredOutfit != null) { LastInteractionMessage = "Đang kiểm chứng Võ Lv1 · Lv10 chưa mở"; return; }
             var current = VoSelectedEquipmentItemLevel;
             var index = Array.IndexOf(VoAvatarLevels, current);
             _voEquipmentLevels[VoSelectedEquipmentSlot] = VoAvatarLevels[(index + 1) % VoAvatarLevels.Length];
@@ -756,6 +778,17 @@ namespace LinhGioi.World
 
         private void RefreshVoAvatarMode()
         {
+            if (_registeredOutfit != null)
+            {
+                var cycle = _voState.AnimationPhase * (VoAvatarMotionState == "run" ? 4.4f : 3.5f);
+                var weight = TwoDPaperDollPoseSampler.Sample(VoAvatarMotionState, cycle, _voState.ActionProgress);
+                _registeredOutfit.Apply(VoAvatarGender, VoAvatarMode == "base", _voState.IsEquipped,
+                    part => _voRigPoseProfiles.TryGetValue(VoAvatarGender + "_" + VoAvatarMotionState + "_" + part, out var profile)
+                        ? profile.rotation * weight : 0);
+                _registeredOutfit.ApplyMovement(VoAvatarGender, VoAvatarMotionState, _voState.AnimationPhase, _voState.ActionProgress, _voState.FacingSign);
+                return;
+            }
+
             var prefix = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_";
             foreach (var pair in _voAvatarParts)
             {
@@ -897,9 +930,16 @@ namespace LinhGioi.World
             _voState.SetRun(enabled);
         }
 
+        public void SetVoJumpHeld(bool held)
+        {
+            _voJumpHeld = held;
+            if (held && !_voState.HasActiveAction) TriggerVoJump();
+        }
+
         public bool TriggerVoJump()
         {
-            if (DialogueOpen || !_voState.TryStartAction("jump", .55f)) return false;
+            if (DialogueOpen || !_voState.TryStartAction("jump", _registeredOutfit == null ? .55f : .72f)) return false;
+            VoJumpStartCount++;
             ApplyVoPose();
             return true;
         }
@@ -919,6 +959,8 @@ namespace LinhGioi.World
         {
             var activeAction = VoAvatarMotionState;
             _voState.Advance(seconds);
+            _registeredOutfit?.Advance(seconds);
+            if (activeAction == "jump" && !_voState.HasActiveAction && _voJumpHeld) TriggerVoJump();
             if (activeAction == "skill")
             {
                 if (_voPendingHit && _voState.ActionRemaining <= .28f)
@@ -988,7 +1030,7 @@ namespace LinhGioi.World
                 var progress = _voState.ActionProgress;
                 if (VoAvatarUsesFrameMotion) SetVoMotionFrame(VoAvatarGender + "_" + (progress < .34f ? "jump_rise" : "jump_apex"));
                 else VoAvatarMotionFrameId = "lv" + VoAvatarLevel + "_aligned_paper_doll_jump";
-                _voPoseYOffset = Mathf.Sin(progress * Mathf.PI) * .72f;
+                _voPoseYOffset = Mathf.Sin(progress * Mathf.PI) * (_registeredOutfit == null ? .72f : 1.25f);
             }
             else if (VoAvatarMotionState == "basic_attack")
             {
@@ -1011,6 +1053,11 @@ namespace LinhGioi.World
             {
                 SetVoMotionFrame(VoAvatarGender + "_idle");
                 _voAvatarRoot.localScale = new Vector3(1f, 1f + Mathf.Sin(_voState.AnimationPhase * 2.6f) * .005f, 1f);
+            }
+            if (_registeredOutfit != null)
+            {
+                _voAvatarRoot.localScale = Vector3.one;
+                _voAvatarRoot.localRotation = Quaternion.identity;
             }
             _voAvatarRoot.localPosition = new Vector3(_routeX, GroundY + _voPoseYOffset, 0);
             RefreshVoAvatarMode();
@@ -1245,6 +1292,11 @@ namespace LinhGioi.World
             if (Application.isPlaying && Array.IndexOf(args, "--lgo-vo-pose-loop-capture") >= 0)
             {
                 yield return CaptureSourcePoseLoop();
+                yield break;
+            }
+            if (Application.isPlaying && Array.IndexOf(args, "--lgo-registered-capture") >= 0)
+            {
+                yield return CaptureRegistered();
                 yield break;
             }
             if (!Application.isPlaying || Array.IndexOf(args, "--lgo-map01a-art-capture") < 0) yield break;
@@ -1655,7 +1707,7 @@ namespace LinhGioi.World
 
         private void LateUpdate()
         {
-            if (Application.isPlaying && !_poseLoopCapturing) AdvanceVoAnimation(Time.deltaTime);
+            if (Application.isPlaying && !_poseLoopCapturing && !_registeredCapturing) AdvanceVoAnimation(Mathf.Min(Time.deltaTime, .1f));
             Refresh();
         }
         private void OnDestroy()

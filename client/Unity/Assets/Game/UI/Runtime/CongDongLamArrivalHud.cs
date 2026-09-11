@@ -14,6 +14,7 @@ namespace LinhGioi.UI
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward;
         private RuntimeTouchMovementPad _pad;
+        private bool _touchJumpHeld;
         private RuntimeViewportMetrics _metrics;
         private PanelSettings _ownedPanel;
         private bool _touch;
@@ -98,7 +99,10 @@ namespace LinhGioi.UI
             _combatBar = new VisualElement(); Place(_combatBar, _touch ? 150 : 220, null, null, 24);
             _combatBar.style.flexDirection = FlexDirection.Row;
             _run = new Button(() => _scene.SetVoRun(!_scene.VoRunEnabled)) { text = "Chạy" };
-            _jump = new Button(() => _scene.TriggerVoJump()) { text = "Nhảy" };
+            _jump = new Button { text = "Nhảy" };
+            _jump.RegisterCallback<PointerDownEvent>(evt => { _touchJumpHeld = true; _jump.CapturePointer(evt.pointerId); _scene.SetVoJumpHeld(true); });
+            _jump.RegisterCallback<PointerUpEvent>(evt => { _touchJumpHeld = false; _jump.ReleasePointer(evt.pointerId); _scene.SetVoJumpHeld(false); });
+            _jump.RegisterCallback<PointerCaptureOutEvent>(evt => { _touchJumpHeld = false; _scene.SetVoJumpHeld(false); });
             _basic = new Button(() => _scene.TriggerVoBasicAttack()) { text = "Đánh" };
             _skill = new Button(() => _scene.TriggerVoSkill()) { text = "Liên Quyền" };
             foreach (var button in new[] { _run, _jump, _basic, _skill })
@@ -188,7 +192,7 @@ namespace LinhGioi.UI
                 if (Input.GetKeyDown(KeyCode.M)) _scene.CycleVoSelectedEquipmentItemLevel();
                 if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleVoEquipmentSlot();
                 if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
-                if (Input.GetKeyDown(KeyCode.J)) _scene.TriggerVoJump();
+                _scene.SetVoJumpHeld(_touchJumpHeld || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow));
                 if (Input.GetKeyDown(KeyCode.Z)) _scene.TriggerVoBasicAttack();
                 if (Input.GetKeyDown(KeyCode.I)) _scene.ToggleInventory();
                 if (Input.GetKeyDown(KeyCode.H)) _scene.UseHealthPotion();
@@ -206,7 +210,7 @@ namespace LinhGioi.UI
             _itemLevel.text = "Đổi cấp item" + (_touch ? "" : " · M");
             _toggleSlot.text = (_scene.VoEquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
             _run.text = (_scene.VoRunEnabled ? "Đang chạy" : "Chạy") + (_touch ? "" : " · Shift");
-            _jump.text = "Nhảy" + (_touch ? "" : " · J");
+            _jump.text = (_scene.VoSomersaultEnabled ? "Nhảy lộn" : "Nhảy") + (_touch ? "" : " · ↑/W");
             _basic.text = _scene.VoAvatarMotionState == "basic_attack" ? "Đang đánh..." : "Đánh" + (_touch ? "" : " · Z");
             _skill.text = _scene.VoAvatarMotionState == "skill" ? "Đang thi triển..." : _scene.SkillLabel + (_touch ? "" : " · X");
             _skill.SetEnabled(_scene.CanTriggerVoSkill);

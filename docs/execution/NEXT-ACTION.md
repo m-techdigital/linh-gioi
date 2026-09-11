@@ -1,14 +1,16 @@
-## Action hiện hành — Võ vào/dừng ngoài vòng chạy bốn nhịp — 2026-09-11
+## Võ đủ bốn nhịp + vào/dừng; còn khớp registered với source — 2026-09-11
 
-Owner: bốn nhịp chạy khác nhau lặp, hai nhịp đầu/cuối riêng; chất lượng và thời gian, gom motion rồi kiểm. Thứ tự Võ motion → wardrobe/10 slot Lv1 → Lv10/mặc chéo → class khác; Map01A target tổng thể.
+Nguồn review external hiện hành `legacy-base-run-entry-exit-v6-div4`: run_start → [run_contact_a → run_a → run_contact_b → run_b] lặp → run_stop → idle. Sáu pose v5 nguyên byte; hai pose vào/dừng từ mảnh base/IK giữ chiều dài, ground1484, cloth donor chỉ trong mask. Div4 REVIEW_ONLY512×1024/439382byte/2MiB RGBA, SHA `d52ac7992b1eea742c2e76168eb551f2209389529447a0da1379bc157c0a7cfa`. Xếp hàng tối ưu tránh1024²; v5 repack vẫn nguyên byte. Recipe/rig/anatomy/donor/evidence đã giữ external, không phụ thuộc temp WIP.
 
-Nguồn review mới `class-work-in-progress/vo-lv001/legacy-base-four-phase-run-v5-div4`: chân gần/xa luân phiên từ đúng mảnh base cũ, hai contact gap0 và hai nhịp bay109/128px; sửa đường quần trong mask, không sinh base mới. Bản v3/v4 giữ nguyên. Div4 REVIEW_ONLY512×1024/369348byte. Bốn nhịp đã chạy trên Player WIP PC154frame và Player build sạch180frame/30fps; sạch có3vòng liên tục, pose ID/timestamp/clock đúng. Evidence `build/vo-four-phase-clean-runtime-v2/REVIEW.md` và `player-run-loop.webp`, bản copy external cùng source.
+Entry/exit0,12s ngoài vòng chạy, refresh không tiến clock. Player trước registered: `build/vo-entry-exit-clean-runtime-v1`,180frame/30fps,ba vòng4nhịp,tám pose; đã xem transition-review.png, có player-entry-run-stop.webp. Hash DLL riêng; clip này không đại diện build registered sau đó.
 
-C# POSE THỬ và capture toàn vòng đã port độc lập; không camera/close-review, không đổi avatar production. Test selector3/3, build0error; một lượt capture đầu bị loại do HUD input double-clock/run→walk, đã sửa và v2 pass. Packer9test giữ kết quả cũ; capture helper8/8 sau bổ sung hash game DLL từ code review. Main/registered WIP không sửa; avatar trang bị bên trái trong build sạch là code cũ của branch, chưa đại diện registered outfit WIP.
+Registered đã port chọn lọc rig/cloth/atlas nam-nữ/tests và input/facing/giữ lộn, không rollback WIP/main hoặc copy camera/close-review. Registered root scale1; source vẫn sibling trung tính. EditMode241/241; pack10/10,capturehelper8/8; build cuối171883450byte,0error/0warning. Review code bắt frame chậm làm hết movement hold: live timestep đã clamp0,1 cùng bước di chuyển; capture settle vẫn elapsed tường minh. Năm atlas runtime có manifest/hash/budget/draft được port cùng allowlist; không cho phép ảnh source tùy ý.
 
-Gate còn MOTION_ENTRY_EXIT_AND_REGISTERED_INTEGRATION_PENDING. Next: author hai pose vào/dừng ngoài loop bằng cùng base/khớp; nối transition state theo input, không nhét idle hoặc jump vào vòng4nhịp. Sau đó audit/port phần registered motion cần thiết, giữ toàn bộ outfit WIP và kiểm đứng/chạy/đổi hướng/giữ lộn trên Player sạch. Chưa mở wardrobe. Không copy cả WIP lớn hoặc chỉnh camera để match screenshot.
+`build/vo-registered-clean-runtime-v1/{mobile,tablet,pc}` mỗi profile154frame,20 action transitions,4 held jump restarts,30 base pose frames,errors=[]; pack/gameDLL hash trước/sau ổn định. Đã xem idle/run PC+mobile và lộn tablet. TECHNICAL_PASS, CHƯA VISUAL_MOTION_PASS: registered thân chạy còn thẳng hơn nguồn, ôm gối khác nguồn; review1,5 vòng/s và rig2,5 vòng/s chưa thống nhất. Next: retarget mốc khớp/cadence theo source, gom full-loop review; chưa mở wardrobe. Map01A target tổng thể.
 
-Capture mới có flag `--lgo-vo-pose-loop-capture` (kèm preview,pose-review-dir,art-dir), chỉ PC theo chu kỳ; ba profile khi có thay đổi hiển thị cần xác nhận. Tránh thêm tài liệu/validator hoặc chạy matrix wardrobe để chữa nhịp. Pack/source/motion là batch, không commit từng mảnh.
+Next duy nhất: retarget registered Võ nam theo mốc khớp source v5/v6; đối chiếu thân/chân/ôm gối và chọn clock/phase nhất quán cho so sánh. Giữ base/scale/material/outfit, không redraw nguồn đã ổn để bù lỗi rig, không chỉnh camera. Gom dáng+nhịp+vào/dừng rồi test/build/full-loop capture; chỉ sửa tiếp theo lỗi cụ thể. Võ motion → wardrobe/10 slot Lv1 → Lv10/mặc chéo → class khác.
+
+Audit: build/vo-registered-port-audit/source-copy.json và build/vo-registered-integration/source-hashes.json. Batch nhiều file do giữ dependency registered và atlas manifests sẵn có, không mở wardrobe mới. Main/WIP chỉ đọc. Frozen/no3D/no-source guards bắt buộc trước checkpoint.
 
 ## Lịch sử checkpoint (không thay action hiện hành)
 

@@ -21,6 +21,8 @@ namespace LinhGioi.World
         private Transform _rotationRoot;
         private Vector2 _jumpPivot;
         private string _frame;
+        private readonly TwoDSourcePoseTimeline _timeline = new TwoDSourcePoseTimeline();
+        public bool HasTransitions => _sprites.ContainsKey("run_start") && _sprites.ContainsKey("run_stop");
         public string CurrentFrame => _frame;
 
         public static TwoDSourcePoseReview CreateIfRequested(Transform parent)
@@ -41,7 +43,7 @@ namespace LinhGioi.World
         private void Load(string directory)
         {
             var pack = JsonUtility.FromJson<Pack>(File.ReadAllText(Path.Combine(directory, "atlas-review.json")));
-            if (pack == null || pack.sprites == null || pack.sprites.Length != 6 || pack.samplingDivisor != 4 || pack.status != "REVIEW_ONLY" || pack.runtimeEligible)
+            if (pack == null || pack.sprites == null || (pack.sprites.Length != 6 && pack.sprites.Length != 8) || pack.samplingDivisor != 4 || pack.status != "REVIEW_ONLY" || pack.runtimeEligible)
                 throw new InvalidDataException("Expected REVIEW_ONLY div4 idle/four-phase-run/jump pack");
             _texture = new Texture2D(2, 2, TextureFormat.RGBA32, false);
             if (!_texture.LoadImage(File.ReadAllBytes(Path.Combine(directory, "atlas-review.png"))))
@@ -66,6 +68,8 @@ namespace LinhGioi.World
             }
             if (!_sprites.ContainsKey("idle") || !_sprites.ContainsKey("run_a") || !_sprites.ContainsKey("run_b") || !_sprites.ContainsKey("run_contact_a") || !_sprites.ContainsKey("run_contact_b") || !_sprites.ContainsKey("jump_tuck"))
                 throw new InvalidDataException("Missing required locomotion pose");
+            if (_sprites.ContainsKey("run_start") != _sprites.ContainsKey("run_stop"))
+                throw new InvalidDataException("Run entry/exit must be supplied together");
             if (_sprites.ContainsKey("jump_tuck"))
             {
                 var pivot = pack.jumpPivotSource;
@@ -88,6 +92,7 @@ namespace LinhGioi.World
             var moving = motion == "walk" || motion == "run";
             var hasContactFrames = _sprites.ContainsKey("run_contact_a") && _sprites.ContainsKey("run_contact_b");
             var frame = moving ? SelectRunFrame(Mathf.Repeat(phaseSeconds * 1.5f, 1), hasContactFrames) : "idle";
+            if (HasTransitions) frame = _timeline.Select(motion, phaseSeconds);
             var jumping = motion == "jump" && _sprites.ContainsKey("jump_tuck");
             if (jumping) frame = "jump_tuck";
             var sprite = _sprites[frame]; var rect = _sourceRects[frame];
@@ -119,7 +124,7 @@ namespace LinhGioi.World
 
         private static bool IsValidPoseId(string id)
         {
-            return id == "idle" || id == "run_a" || id == "run_b" || id == "jump_tuck"
+            return id == "run_start" || id == "run_stop" || id == "idle" || id == "run_a" || id == "run_b" || id == "jump_tuck"
                 || id == "run_contact_a" || id == "run_contact_b";
         }
 
@@ -129,7 +134,7 @@ namespace LinhGioi.World
             if (camera == null) return;
             var point = camera.WorldToScreenPoint(transform.position + Vector3.up * 1.9f);
             if (point.z <= 0) return;
-            var box = new Rect(point.x - 95, Screen.height - point.y, 210, 40);
+            var box = new Rect(point.x - 95, Screen.height - point.y - 40, 210, 40);
             var previousColor = GUI.color;
             GUI.color = new Color(0, 0, 0, .8f);
             GUI.DrawTexture(box, Texture2D.whiteTexture);
