@@ -192,6 +192,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("chưa kết nối"));
+                Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("bên phải"),
+                    "Storage copy must preserve the decided right-side item detail placement.");
                 Assert.That(root.Q<Button>("Map01A Storage Deposit").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Storage Withdraw").enabledSelf, Is.False);
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));

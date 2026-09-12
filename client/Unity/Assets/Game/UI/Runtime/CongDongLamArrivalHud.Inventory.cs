@@ -205,7 +205,7 @@ namespace LinhGioi.UI
             _storagePanel.style.marginRight = 0;
             body.Add(_storagePanel);
             _storagePanel.Add(InventoryLabel("RƯƠNG ĐỒ", 22, InventoryGold, true));
-            _storageState = InventoryLabel("Kho gửi/rút chưa kết nối model dữ liệu thật trong Map01A. Không tạo vật phẩm giả; khi có storage API/state sẽ dùng lại panel chi tiết bên trái để xem món đang chọn.", 16, new Color(.91f, .93f, .84f, .96f));
+            _storageState = InventoryLabel("Kho gửi/rút chưa kết nối model dữ liệu thật trong Map01A. Không tạo vật phẩm giả; khi có storage API/state sẽ dùng lại panel chi tiết bên phải để xem món đang chọn.", 16, new Color(.91f, .93f, .84f, .96f));
             _storageState.name = "Map01A Storage State";
             _storageState.style.marginTop = 10;
             _storagePanel.Add(_storageState);
