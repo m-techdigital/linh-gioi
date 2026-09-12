@@ -1,18 +1,18 @@
 ## Quick Resume
 
-`FIX_REQUIRED / CONTINUE`. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
+`NEED_HUMAN_VISUAL_REVIEW / CONTINUE`. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
 
-Nguồn chọn duy nhất của Pháp Lv1 là hai `authoring-selection.json` trong `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/` và `female-complete-garment-authoring-v1/` ở selected-source root. Mỗi giới đủ 10 slot × sáu pose; source cũ ngoài selection không phải evidence hiện hành. Source/atlas metadata dùng profile thứ tự lớp chung trong [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12).
+Owner đã reject áo ngoài Pháp nam complete-garment v1 vì sai silhouette Lv1. Candidate mới external `class-work-in-progress/phap-lv001/deterministic-preserve-authoring-v7`: body/motion và 9 slot cũ giữ nguyên byte; chỉ `outer_top` được cắt gọn bằng một quy tắc source-space chung cho cả sáu pose. Pack `build/phap-source-pose-review-deterministic-v7/pack` giữ nguyên body hash `27630a5c…`; 9/10 atlas slot trùng byte với checkpoint cũ.
 
 ## Next task
 
-Pháp Lv1/Lv10 nam/nữ đã đủ 10 slot × sáu pose trên hai body authority bất biến. Lv10 kế thừa từng complete garment Lv1 và chỉ nâng vật liệu/chi tiết thuộc slot theo progression grid; không dùng full-outfit partition cũ. Evidence `build/phap-complete-garment-lv10-runtime-v1/pc` có 190 frame, `errors=[]`, full `[1,10]`, mixed verified, 60 variant switch, 32 tổ hợp core garment, bốn nhịp chạy riêng, root scale 1 và `maxBodyVariants=1`. Source full/toggle cùng Player Lv1/Lv10/mixed/nhảy đã được audit trực quan. Trạng thái là `AGENT_VISUAL_PASS / REVIEW_ONLY`; chưa phải owner hoặc production approval.
+Owner test trực tiếp Player mới `build/phap-v7-current-player/LinhGioiOnline.app` với Pháp nam Lv1. Source board `_review/six-pose-full-compose-v1.jpg` và `_review/idle-ten-slot-toggle-v1.jpg` đã được xem; Player capture nam có 87 frame hoàn chỉnh tại `build/phap-source-pose-review-deterministic-v7/runtime-pc/pc`, gồm full/off-10, bốn nhịp và lộn. Không dùng lại cửa sổ/binary `source-pose-semantic-v4-player` để bàn giao.
 
-Action kế tiếp: mở Player Pháp hiện hành khi owner yêu cầu kiểm trực tiếp, giữ feedback hình tại source slot/sáu pose. Trong lúc chưa có owner reject, audit class tiếp theo theo đúng thứ tự roadmap bằng complete-garment inheritance trên hai fit family hiện hành; bắt đầu từ design grid và source selection, không dùng static-fit/full-outfit partition, không đổi camera/root scale và không tạo wardrobe runtime thứ hai.
+Nếu owner chấp nhận sai lệch nhỏ hiện tại thì khóa Pháp nam Lv1 rồi làm nữ Lv1, sau đó Lv10 từ geometry đã duyệt. Nếu còn lỗi hình, chỉ sửa đúng slot/pose được chỉ ra trên source v7; không thay body, motion, chín slot đã giữ, camera/root scale hoặc tạo presentation thứ hai.
 
 ## Current blocker
 
-Không có blocker môi trường đã xác minh. Còn owner review Pháp và các class tiếp theo. Launcher vẫn chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
+Capture tự động dừng sau frame nam 87 khi chuyển sang nữ vì batch này chưa có pack nữ; log ghi `NullReferenceException` tại `CaptureRegistered`. Phần nam đã capture đủ trước lỗi và đã review trực quan, nhưng chưa được coi là owner approval. Launcher có regression gate đọc `authoring-selection.json` và chặn status chứa `REJECTED`/`WITHDRAWN`, nên pack cũ đã thu hồi không thể vô tình mở lại qua launcher.
 
 ## Lịch sử — không thay action hiện hành
 

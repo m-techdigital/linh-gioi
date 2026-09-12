@@ -18,6 +18,30 @@ PACK_SUFFIXES = {
              '-female-source-pose-review-v1/pack', '-female-source-pose-review-lv10-v1/pack'),
 }
 
+REJECTED_SELECTION_MARKERS = ('REJECTED', 'WITHDRAWN')
+
+
+def validate_source_selection(manifest_path: Path, manifest: dict, cache: dict[Path, dict]) -> None:
+    """Reject an atlas whose source belongs to a withdrawn authoring selection."""
+    for sprite in manifest.get('sprites', ()):
+        source_value = sprite.get('source') if isinstance(sprite, dict) else None
+        if not source_value:
+            continue
+        source = Path(source_value)
+        if not source.is_absolute():
+            source = manifest_path.parent / source
+        for parent in (source.parent, *source.parents):
+            selection_path = parent / 'authoring-selection.json'
+            if selection_path.is_file():
+                selection = cache.setdefault(selection_path, json.loads(selection_path.read_text()))
+                status = str(selection.get('status', '')).upper()
+                if any(marker in status for marker in REJECTED_SELECTION_MARKERS):
+                    reason = selection.get('rejectionReason') or selection.get('reason') or ''
+                    raise ValueError(
+                        f'Nguồn review đã bị loại ({status}): {selection_path}'
+                        + (f' — {reason}' if reason else ''))
+                break
+
 
 def resolve_player(path: Path) -> Path:
     path = path.resolve()
@@ -34,6 +58,7 @@ def class_pack_paths(repo: Path, class_id: str) -> tuple[Path, Path, Path, Path]
     if class_id not in PACK_SUFFIXES:
         raise ValueError('Unsupported source-pose class: ' + class_id)
     paths = tuple(repo / 'build' / (class_id + suffix) for suffix in PACK_SUFFIXES[class_id])
+    selection_cache = {}
     for path in paths:
         if not (path / 'atlas-review.json').is_file():
             raise FileNotFoundError('Missing source-pose pack: ' + str(path))
@@ -41,6 +66,7 @@ def class_pack_paths(repo: Path, class_id: str) -> tuple[Path, Path, Path, Path]
             manifest = json.loads(manifest_path.read_text())
             if manifest.get('status') in ('SOURCE_REJECTED', 'FIX_REQUIRED'):
                 raise ValueError(f'Nguồn review đã bị loại, cần sửa source trước khi mở Player: {manifest_path}')
+            validate_source_selection(manifest_path, manifest, selection_cache)
             for pose, scale in manifest.get('poseScaleCorrections', {}).items():
                 if type(scale) not in (int, float) or scale != 1:
                     raise ValueError(

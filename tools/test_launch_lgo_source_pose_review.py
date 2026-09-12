@@ -44,6 +44,37 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                         main(['--player', str(player), '--repo', str(root)])
                     launch.assert_not_called()
 
+    def test_owner_rejected_authoring_selection_never_starts_player(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            player = root / 'Player'; player.write_text('player')
+            selected = root / 'selected' / 'phap-lv001' / 'complete-garment-authoring-v1'
+            selected.mkdir(parents=True)
+            (selected / 'authoring-selection.json').write_text(json.dumps({
+                'status': 'OWNER_REJECTED_VISUAL',
+                'runtimeEligible': False,
+                'rejectionReason': 'wrong level silhouette',
+            }))
+            source = selected / 'outer_top' / 'registered-six-pose-v1' / 'idle' / 'front.png'
+            source.parent.mkdir(parents=True)
+            source.write_bytes(b'not read by launcher')
+            for class_id, suffixes in PACK_SUFFIXES.items():
+                for suffix in suffixes:
+                    pack = root / 'build' / (class_id + suffix)
+                    pack.mkdir(parents=True)
+                    (pack / 'atlas-review.json').write_text(json.dumps({'status': 'REVIEW_ONLY'}))
+                    if class_id == 'phap':
+                        item = pack / 'outer-top-review'
+                        item.mkdir()
+                        (item / 'atlas-review.json').write_text(json.dumps({
+                            'status': 'REVIEW_ONLY',
+                            'sprites': [{'source': str(source)}],
+                        }))
+            with patch('launch_lgo_source_pose_review.subprocess.Popen') as launch:
+                with self.assertRaisesRegex(ValueError, 'OWNER_REJECTED_VISUAL'):
+                    main(['--player', str(player), '--repo', str(root)])
+                launch.assert_not_called()
+
     def test_identity_scale_is_allowed_but_invalid_item_scale_is_not(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
