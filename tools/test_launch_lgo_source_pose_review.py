@@ -109,6 +109,36 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                     main(['--player', str(player), '--repo', str(root)])
                 launch.assert_not_called()
 
+
+    def test_do_not_pack_source_manifest_never_starts_player(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            player = root / 'Player'; player.write_text('player')
+            rejected = root / 'selected' / 'phap-lv001' / 'registered-surface-v9'
+            rejected.mkdir(parents=True)
+            (rejected / 'DO-NOT-PACK.md').write_text('# SOURCE_REJECTED\nDo not pack runtime')
+            (rejected / 'manifest.json').write_text(json.dumps({'status': 'SOURCE_REJECTED'}))
+            source = rejected / 'outer_top' / 'idle.png'
+            source.parent.mkdir(parents=True)
+            source.write_bytes(b'not read by launcher')
+            for class_id, suffixes in PACK_SUFFIXES.items():
+                for suffix in suffixes:
+                    if suffix is None: continue
+                    pack = root / 'build' / (class_id + suffix)
+                    pack.mkdir(parents=True)
+                    (pack / 'atlas-review.json').write_text(json.dumps({'status': 'REVIEW_ONLY'}))
+                    if class_id == 'vo':
+                        item = pack / 'outer-top-review'
+                        item.mkdir()
+                        (item / 'atlas-review.json').write_text(json.dumps({
+                            'status': 'REVIEW_ONLY',
+                            'sprites': [{'source': str(source)}],
+                        }))
+            with patch('launch_lgo_source_pose_review.subprocess.Popen') as launch:
+                with self.assertRaisesRegex(ValueError, 'DO-NOT-PACK|SOURCE_REJECTED'):
+                    main(['--player', str(player), '--repo', str(root)])
+                launch.assert_not_called()
+
     def test_identity_scale_is_allowed_but_invalid_item_scale_is_not(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

@@ -1,4 +1,9 @@
 
+## Source reject guard active — 2026-09-13
+
+Do not pack Pháp v8/v9 pose-contract sources or any source tree with `DO-NOT-PACK.md`/`manifest.status=SOURCE_REJECTED`; owner-review launcher now blocks these markers. To re-enable Pháp, create a new accepted source directory/manifest without pose-scale correction and without reject markers, then regenerate pack, Player capture, close-up and provenance.
+
+
 ## Close-up provenance required — 2026-09-13
 
 Nếu owner-review close-up trong `build/source-pose-catalog-audit-v2` bị thiếu hoặc stale, chạy `python3.12 tools/write_lgo_owner_review_closeups.py --class-id kiem --class-id co --class-id linh` để regenerate ảnh + JSON provenance trước `tools/validate_lgo_owner_review_catalog.py`. Pháp vẫn held-out, không regenerate vào active catalog cho tới khi có pack no-scale mới.

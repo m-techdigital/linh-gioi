@@ -24,6 +24,7 @@ PACK_SUFFIXES = {
 }
 
 REJECTED_SELECTION_MARKERS = ('REJECTED', 'WITHDRAWN')
+REJECTED_SOURCE_MARKERS = ('REJECTED', 'WITHDRAWN', 'FIX_REQUIRED', 'DO_NOT_PACK')
 
 
 def validate_source_selection(manifest_path: Path, manifest: dict, cache: dict[Path, dict]) -> None:
@@ -36,6 +37,18 @@ def validate_source_selection(manifest_path: Path, manifest: dict, cache: dict[P
         if not source.is_absolute():
             source = manifest_path.parent / source
         for parent in (source.parent, *source.parents):
+            do_not_pack = parent / 'DO-NOT-PACK.md'
+            if do_not_pack.is_file():
+                raise ValueError(f'Nguồn review có DO-NOT-PACK, không được mở Player: {do_not_pack}')
+            source_manifest = parent / 'manifest.json'
+            if source_manifest.is_file():
+                data = cache.setdefault(source_manifest, json.loads(source_manifest.read_text()))
+                status = str(data.get('status', '')).upper()
+                if any(marker in status for marker in REJECTED_SOURCE_MARKERS):
+                    reason = data.get('rejectionReason') or data.get('reason') or ''
+                    raise ValueError(
+                        f'Nguồn review đã bị loại ({status}): {source_manifest}'
+                        + (f' — {reason}' if reason else ''))
             selection_path = parent / 'authoring-selection.json'
             if selection_path.is_file():
                 selection = cache.setdefault(selection_path, json.loads(selection_path.read_text()))
