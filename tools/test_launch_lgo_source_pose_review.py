@@ -27,7 +27,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             self.assertFalse(any(arg in command for arg in (
                 '--lgo-kiem-review', '--lgo-phap-review', '--lgo-co-review', '--lgo-linh-review')))
 
-    def test_current_launch_excludes_phap_until_class_art_is_complete(self):
+    def test_current_launch_exposes_only_locked_vo_until_class_art_is_complete(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             player = root / 'Player'; player.write_text('player')
@@ -38,8 +38,10 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text('{}')
             command = build_player_command(player, root, root / 'player.log')
-            self.assertEqual(command.count('--lgo-source-pose-class'), len(CLASSES))
-            self.assertNotIn('phap', command)
+            self.assertEqual(CLASSES, ('vo',))
+            self.assertEqual(command.count('--lgo-source-pose-class'), 1)
+            for hidden in ('kiem', 'phap', 'co', 'linh'):
+                self.assertNotIn(hidden, command)
             self.assertEqual(command[command.index('--lgo-source-pose-class') + 1], 'vo')
             self.assertIn('vo-source-pose-review-preserved-lv1', command[command.index('--lgo-vo-pose-review-dir') + 1])
 
@@ -55,7 +57,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                         if suffix is None: continue
                         pack = root / 'build' / (class_id + suffix)
                         pack.mkdir(parents=True)
-                        data = invalid if class_id == 'kiem' else {'status': 'REVIEW_ONLY'}
+                        data = invalid if class_id == 'vo' else {'status': 'REVIEW_ONLY'}
                         (pack / 'atlas-review.json').write_text(json.dumps(data))
                 with patch('launch_lgo_source_pose_review.subprocess.Popen') as launch:
                     with self.assertRaisesRegex(ValueError, 'Nguồn review'):
@@ -82,7 +84,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                     pack = root / 'build' / (class_id + suffix)
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text(json.dumps({'status': 'REVIEW_ONLY'}))
-                    if class_id == 'kiem':
+                    if class_id == 'vo':
                         item = pack / 'outer-top-review'
                         item.mkdir()
                         (item / 'atlas-review.json').write_text(json.dumps({
@@ -113,16 +115,16 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
     def test_builds_one_catalog_entry_per_class_with_four_existing_pack_paths(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            for class_id in ('kiem', 'phap'):
+            for class_id in ('vo', 'kiem'):
                 for suffix in PACK_SUFFIXES[class_id]:
                     if suffix is None: continue
                     pack = root / 'build' / (class_id + suffix)
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text('{}')
-            args = build_class_args(root, ('kiem', 'phap'))
+            args = build_class_args(root, ('vo', 'kiem'))
             self.assertEqual(args.count('--lgo-source-pose-class'), 2)
-            self.assertEqual(args[1], 'kiem')
-            self.assertEqual(args[7], 'phap')
+            self.assertEqual(args[1], 'vo')
+            self.assertEqual(args[7], 'kiem')
 
 
 if __name__ == '__main__':
