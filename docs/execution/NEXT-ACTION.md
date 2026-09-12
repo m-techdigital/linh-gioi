@@ -1,4 +1,11 @@
 
+## Class equipment visual audit checkpoint — 2026-09-13
+
+- Current Player evidence captured for Kiếm/Pháp/Cơ/Linh: `build/class-equipment-current-audit-v1/{kiem,phap,co,linh}/`, 27 frames each, status `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`.
+- Contact sheet for quick review: `build/class-equipment-current-audit-v1/class-equipment-current-audit-character-crops-v2.png`. Treat it as audit evidence only; technical capture does not approve the art/design.
+- Next wardrobe/class work: review each class per frame group (`male/female full`, `off outer_tunic`, `off lower_garment`, `mixed-levels`, `jump`) against source/design, then choose one class/level for source repair or promotion. Do not bulk promote Kiếm/Pháp/Cơ/Linh and do not touch Võ div4/base/camera/scale while auditing.
+
+
 ## Map01A owner HUD cleanup checkpoint — 2026-09-13
 
 - Normal owner-facing gameplay HUD now hides source/review/debug controls instead of showing `_outfit`, `_level`, `_gender`, `_slot`, `_itemLevel`, `_toggleSlot` on the left side.

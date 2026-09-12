@@ -1,4 +1,9 @@
 
+## Kiếm/Pháp/Cơ/Linh class-equipment runtime audit evidence — 2026-09-13
+
+Captured current Player class-equipment matrices for `kiem`, `phap`, `co`, and `linh` with `tools/capture_lgo_class_equipment.py` using the latest Player build. Each class produced 27 frames and `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not visual approval. Evidence root: `build/class-equipment-current-audit-v1/`; focused review sheet: `class-equipment-current-audit-character-crops-v2.png`. Visual review confirms the packs are renderable in Player and the owner-facing HUD no longer carries the old left review buttons, but these classes remain audit-only until per-slot/motion review checks full/off-slot/mixed-level/jump frames against the design source. Do not promote or replace Võ with these packs based only on capture status.
+
+
 ## Map01A owner HUD hides review controls — 2026-09-13
 
 Owner-facing gameplay HUD no longer shows the left-side review/debug controls (`_outfit`, `_level`, `_gender`, `_slot`, `_itemLevel`, `_toggleSlot`). The controls remain non-product internals while inventory/detail and hotkeys keep owning review actions where needed. Regression in `TwoDCharacterRuntimeStateTests.DialogueHidesUnderlyingActionsAndRestoresThemAfterContinue` now asserts these controls are hidden both during normal gameplay and behind inventory. Player evidence `build/map01a-owner-hud-capture-v1/pc` captured Q01–Q09 with 18 quest frames and 38 dialogue frames; reviewed `01-arrival-q01.png`, `02-ha-van-dialogue.png`, and `07-q04-inventory-open.png`, confirming normal gameplay HUD is clean and inventory/dialogue still render.
