@@ -48,17 +48,16 @@ def build_class_args(repo: Path, class_ids=CLASSES) -> list[str]:
     return result
 
 
-def main() -> None:
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--player', type=Path, required=True)
-    parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[1])
-    parser.add_argument('--log', type=Path)
-    args = parser.parse_args()
-    repo = args.repo.resolve()
+def build_player_command(player: Path, repo: Path, log: Path) -> list[str]:
+    """Build the sole owner-review command: registered source poses only.
+
+    Legacy ``--lgo-*-review`` flags select the static class-fit renderer.  They
+    are deliberately absent here so the interactive review cannot silently
+    switch to a second character representation.
+    """
+    executable = resolve_player(player)
     first = class_pack_paths(repo, CLASSES[0])
-    log = (args.log or repo / 'build/source-pose-class-switch-player-v1/interactive-player.log').resolve()
-    log.parent.mkdir(parents=True, exist_ok=True)
-    command = [str(resolve_player(args.player)), '-logFile', str(log), '-screen-fullscreen', '0',
+    command = [str(executable), '-logFile', str(log), '-screen-fullscreen', '0',
                '-screen-width', '1440', '-screen-height', '900', '--lgo-map01a-art-preview',
                '--lgo-vo-registered', '--lgo-vo-registered-equipment',
                '--lgo-vo-pose-review-dir', str(first[0].resolve()),
@@ -66,6 +65,22 @@ def main() -> None:
                '--lgo-vo-pose-review-female-dir', str(first[2].resolve()),
                '--lgo-vo-pose-review-female-alt-dir', str(first[3].resolve()),
                *build_class_args(repo)]
+    legacy = {'--lgo-kiem-review', '--lgo-phap-review', '--lgo-co-review', '--lgo-linh-review'}
+    if legacy.intersection(command):
+        raise RuntimeError('Owner review command selected the revoked static-fit renderer')
+    return command
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--player', type=Path, required=True)
+    parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument('--log', type=Path)
+    args = parser.parse_args()
+    repo = args.repo.resolve()
+    log = (args.log or repo / 'build/source-pose-class-switch-player-v1/interactive-player.log').resolve()
+    log.parent.mkdir(parents=True, exist_ok=True)
+    command = build_player_command(args.player, repo, log)
     process = subprocess.Popen(command, cwd=resolve_player(args.player).parent, start_new_session=True)
     print(f'LGO_SOURCE_POSE_REVIEW_STARTED pid={process.pid} classes={",".join(CLASSES)} log={log}')
 

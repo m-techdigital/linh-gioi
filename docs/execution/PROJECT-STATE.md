@@ -1,3 +1,11 @@
+## Hiện hành — thu hồi Pháp shared-rig v5 sau owner visual reject — 2026-09-12
+
+Owner kiểm trực tiếp `build/phap-shared-rig-v5-player/LinhGioiOnline.app` và reject: các bộ phận tách rời khi chuyển động, đồng thời cách dựng khác base/source-pose đã chốt. Technical capture 34 frame của checkpoint `f80c3074` không phải visual pass; mọi nhận định agent-pass và hướng chuyển Kiếm sang schema 15 component của checkpoint đó đã bị thu hồi. Commit `eeeb1898` đã hoàn nguyên toàn bộ source/runtime pack shared-rig v5, không rollback registered outfit/source-pose WIP trước đó.
+
+Root cause: tám sheet 5×3 là presentation grid với từng vật thể được căn giữa độc lập; packer cắt rồi fit mỗi mảnh theo `worldX/worldY/worldW/worldH`, sau đó gắn các mảnh lên `TwoDSkeletalPaperDollRig`. Dữ liệu không có common source canvas/pivot/bind registration nên rotation làm lộ khe và bung silhouette. Đây là lỗi kiến trúc/visual gate, không tiếp tục căn offset hoặc camera.
+
+Player review trở lại duy nhất đường registered source-pose. `tools/launch_lgo_source_pose_review.py` có command builder và test chặn bốn legacy `--lgo-*-review` flag khỏi owner-review launch. Pháp canonical-v2 chỉ là baseline để audit lại, chưa đạt bàn giao: ảnh jump hiện bị thu nhỏ do bake `2/3`, và slot ownership cần kiểm lại bằng design gốc. Không mở Player cho owner tới khi full/toggle/motion boards ở kích thước lớn đạt visual gate.
+
 ## Hiện hành — thu hồi Pháp semantic-v3; sửa đúng source jump và layer — 2026-09-12
 
 Owner kiểm trực tiếp Player và reject pack Pháp semantic-v3: việc chia pixel full-outfit bằng khoảng cách tới anchor làm một món bị rải qua nhiều slot, nên tháo item chỉ mất một mảng hoặc xé silhouette. Kết luận audit 16/16 trước đó đã được thu hồi; đủ file/slot và full-compose invariant không chứng minh thiết kế paper-doll đúng.

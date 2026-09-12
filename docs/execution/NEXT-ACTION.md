@@ -1,3 +1,9 @@
+## Hiện hành — sửa Pháp trên đúng source-pose/base cũ sau visual reject — 2026-09-12
+
+Checkpoint shared-rig v5 đã bị owner reject và hoàn nguyên bằng `eeeb1898`. Không dùng sheet 5×3 hoặc legacy `--lgo-phap-review` để mở Player; launcher review chỉ được dùng registered source-pose và có regression test chặn nhầm đường. Technical PASS cũ không còn giá trị visual.
+
+Action: audit design/source Pháp canonical-v2 theo từng pose và từng slot ở full resolution; sửa trọn batch nam/nữ Lv1/Lv10 trên common canvas/pivot, bắt đầu từ jump để trả đúng chiều cao base thay vì scale `2/3`. Sau đó tạo board full, off từng slot, mixed và bốn nhịp chạy + jump; chỉ build/capture/mở Player khi silhouette liền, tháo đúng toàn món và tỷ lệ body giữ nguyên. Chưa mở Lv20/Lv30 hoặc class khác trước gate Pháp này.
+
 ## Hiện hành — owner kiểm Pháp canonical-v2 sau khi thu hồi semantic-v3 — 2026-09-12
 
 Pháp semantic-v3 đã bị reject vì chia pixel theo anchor tạo layer chắp vá. Launcher hiện chỉ dùng candidate `canonical-v2`: surface tách trước semantic-v3 và `jump_tuck` được bake `2/3` quanh pivot cho body + đủ 10 layer. Evidence `build/phap-canonical-v2-runtime-v1/pc` có 190 frame, root scale 1, đúng bốn nhịp, đủ Lv1/Lv10/mixed/từng món tháo/32 tổ hợp và `errors=[]`; ảnh Player đã được agent xem nhưng chưa thay quyền review của owner.
