@@ -67,6 +67,10 @@ REQUIRED_AGENT_MARKERS = [
     "không giữ hai hệ UI song song",
     "entry/login, character select, inventory/bag, character info, storage/chest và item-detail phải dùng cùng shell/shared component",
     "detail món đặt ở panel phải theo design đã chốt",
+    "Design demo owner upload là visual reference cho toàn bộ login/entry, character select, HUD, inventory/bag, storage/chest, fashion/wardrobe, dialog và item-detail",
+    "không dựng khung thô chỉ để có chức năng",
+    "Hành trang, Thông tin nhân vật và Rương đồ là các tab/flow riêng",
+    "modal/dialog/card/tab/button/detail panel dùng base chung",
     "python3.12 tools/validate_lgo_ui_shared_skin.py",
 ]
 

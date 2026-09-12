@@ -38,6 +38,37 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("AGENTS.md" in item and "detail món" in item for item in violations), violations)
 
+
+    def test_rejects_missing_uploaded_design_reference_scope(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            agents = Path(temp) / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    "Design demo owner upload là visual reference cho toàn bộ login/entry, character select, HUD, inventory/bag, storage/chest, fashion/wardrobe, dialog và item-detail",
+                    "Design demo chỉ tham khảo tùy màn",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("Design demo owner upload" in item for item in violations), violations)
+
+    def test_rejects_missing_separate_inventory_info_storage_flow_rule(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            agents = Path(temp) / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    "Hành trang, Thông tin nhân vật và Rương đồ là các tab/flow riêng",
+                    "Hành trang có thể gộp chung tùy nhanh",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("Hành trang, Thông tin" in item for item in violations), violations)
+
     def test_rejects_inventory_detail_added_before_shared_content_columns(self) -> None:
         with self._copy_minimal_repo() as temp:
             inventory = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs"
