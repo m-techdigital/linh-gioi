@@ -1,4 +1,9 @@
 
+## Owner-review catalog active/held-out split — 2026-09-13
+
+Active owner-review evidence hiện chỉ tính `kiem,co,linh`; Pháp là held-out candidate trong validator, không được mở lại bằng launcher mặc định cho tới khi có pack no-scale mới. Khi làm Pháp, cập nhật source/pack/evidence trước rồi mới chuyển khỏi `HELD_OUT_CLASSES` và đưa lại vào `CLASSES`.
+
+
 ## Pháp source gate reopened — 2026-09-13
 
 Không mở Pháp trong owner-review launcher hiện hành: semantic-v3 bị reject visual, canonical-v2 còn `poseScaleCorrections.jump_tuck=2/3` nên `class_pack_paths` chặn theo guard no-scale. Bước đúng tiếp theo cho Pháp là sửa/redraw source pose trên body/canvas/pivot chuẩn để pack mới không cần `poseScaleCorrections`, rồi regenerate Player capture + close-up trước khi đưa lại vào `CLASSES`. Không nới launcher guard và không quay lại semantic-v3.

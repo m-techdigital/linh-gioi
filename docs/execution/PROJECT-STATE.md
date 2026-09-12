@@ -1,4 +1,9 @@
 
+## Owner-review active evidence separated from held-out Pháp — 2026-09-13
+
+`tools/validate_lgo_owner_review_catalog.py` đã tách active owner-review evidence khỏi held-out candidates. Pháp nằm trong `HELD_OUT_CLASSES` với lý do semantic-v3 bị reject visual và canonical-v2 còn pose-scale correction; evidence/candidate Pháp vẫn được giữ để sửa tiếp nhưng không còn bị tính vào owner-review catalog pass. Regression test chặn held-out class xuất hiện trong `CLASSES`, `EXPECTED_CLASSES` hoặc active evidence.
+
+
 ## Pháp held out of owner-review catalog until no-scale source pack exists — 2026-09-13
 
 Audit sau checkpoint canonical-v2 phát hiện owner launcher thật sẽ fail Pháp vì bốn pack canonical-v2 còn `poseScaleCorrections.jump_tuck = 0.6666666667`; semantic-v3 trước đó đã bị reject vì chắp vá. Để không đưa owner test một class sai hoặc không launchable, `CLASSES` owner-review tạm chỉ expose `vo,kiem,co,linh`. `PACK_SUFFIXES['phap']` và evidence canonical-v2 vẫn giữ để sửa tiếp, nhưng Pháp không xuất hiện trong catalog mặc định cho tới khi có source/pack Pháp mới không dùng pose-scale correction và qua Player close-up.

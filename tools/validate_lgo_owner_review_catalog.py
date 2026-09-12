@@ -17,10 +17,6 @@ PLAYER_EVIDENCE = {
         "build/kiem-semantic-v3-runtime-v1/pc/registered-manifest.json",
         "build/source-pose-catalog-audit-v2/kiem-owner-review-closeup.jpg",
     ),
-    "phap": (
-        "build/phap-canonical-v2-runtime-v1/pc/registered-manifest.json",
-        "build/source-pose-catalog-audit-v2/phap-owner-review-closeup.jpg",
-    ),
     "co": (
         "build/co-semantic-v3-runtime-v3/pc/registered-manifest.json",
         "build/source-pose-catalog-audit-v2/co-owner-review-closeup.jpg",
@@ -29,6 +25,13 @@ PLAYER_EVIDENCE = {
         "build/linh-semantic-v3-runtime-v2/pc/registered-manifest.json",
         "build/source-pose-catalog-audit-v2/linh-owner-review-closeup.jpg",
     ),
+}
+HELD_OUT_CLASSES = {
+    "phap": {
+        "reason": "semantic-v3 rejected visually; canonical-v2 still has poseScaleCorrections.jump_tuck=2/3 and is blocked by launcher no-scale guard",
+        "candidateManifest": "build/phap-canonical-v2-runtime-v1/pc/registered-manifest.json",
+        "candidateCloseup": "build/source-pose-catalog-audit-v2/phap-owner-review-closeup.jpg",
+    },
 }
 MAX_JUMP_TO_IDLE_SCREEN_HEIGHT_RATIO = 1.08
 ROOT_SCALE_EPSILON = 0.001
@@ -39,8 +42,12 @@ def fail(message: str) -> int:
     return 1
 
 
+def active_player_evidence() -> dict[str, tuple[str, str]]:
+    return {class_id: PLAYER_EVIDENCE[class_id] for class_id in EXPECTED_CLASSES if class_id != "vo"}
+
+
 def validate_player_evidence(class_id: str) -> str | None:
-    manifest_rel, closeup_rel = PLAYER_EVIDENCE[class_id]
+    manifest_rel, closeup_rel = active_player_evidence()[class_id]
     manifest = ROOT / manifest_rel
     closeup = ROOT / closeup_rel
     if not manifest.is_file():
@@ -139,9 +146,13 @@ def main() -> int:
     required = "non-base source-pose art has Player close-up evidence"
     if required not in source:
         return fail("launcher is missing the non-base class-art gate comment")
-    closeups = [PLAYER_EVIDENCE[class_id][1] for class_id in EXPECTED_CLASSES[1:]]
+    active_evidence = active_player_evidence()
+    closeups = [active_evidence[class_id][1] for class_id in EXPECTED_CLASSES[1:]]
     if len(set(closeups)) != len(closeups):
         return fail("each owner-facing class must have an independent close-up visual sheet")
+    for class_id in HELD_OUT_CLASSES:
+        if class_id in launcher.CLASSES or class_id in EXPECTED_CLASSES or class_id in active_evidence:
+            return fail("held-out class must not be exposed as owner-review evidence: " + class_id)
     for class_id in EXPECTED_CLASSES[1:]:
         if class_id not in launcher.PACK_SUFFIXES:
             return fail("audit pack suffix missing for " + class_id)

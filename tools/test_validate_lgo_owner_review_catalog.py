@@ -96,6 +96,13 @@ class OwnerReviewCatalogValidatorTests(unittest.TestCase):
                 validator.launcher.class_pack_paths(validator.ROOT, class_id)
 
 
+    def test_held_out_class_must_not_be_counted_as_owner_review_evidence(self):
+        self.assertIn("phap", validator.HELD_OUT_CLASSES)
+        self.assertNotIn("phap", validator.EXPECTED_CLASSES)
+        self.assertNotIn("phap", validator.launcher.CLASSES)
+        self.assertNotIn("phap", validator.active_player_evidence())
+
+
 
 if __name__ == "__main__":
     unittest.main()
