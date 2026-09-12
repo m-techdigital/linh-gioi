@@ -220,6 +220,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Character Select Title").text, Does.Contain("Chọn Nhân Vật"));
                 foreach (var label in new[] { "Võ", "Kiếm", "Pháp", "Cơ", "Linh" })
                     Assert.That(root.Q<Button>("Map01A Character Card " + label), Is.Not.Null);
+                var phap = root.Q<Button>("Map01A Character Card Pháp");
+                Assert.That(phap.enabledSelf, Is.False, "Pháp must stay visible but disabled while source promotion is held out");
+                Assert.That(phap.text, Does.Contain("đang audit"));
                 Assert.That(root.Q<Label>("Map01A Character Select Scope").text, Does.Contain("review"));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
 

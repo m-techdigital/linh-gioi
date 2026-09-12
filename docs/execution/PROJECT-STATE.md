@@ -1,4 +1,9 @@
 
+## Character select holds out Pháp until deterministic source promotion — 2026-09-13
+
+Pháp remains visible in character select for roadmap transparency but is disabled and labelled `đang audit` while source promotion is blocked. This prevents owner-facing UI from implying a held-out class pack is ready. Player evidence: `build/map01a-character-select-heldout-runtime-v1/character-select.png` with `usesOsMouseOrKeyboard=false`; a first `-nographics` capture was discarded as invalid, then rerun with graphics. Owner constraint reaffirmed: do not continue class-art work by generating random/new images through tools. Class work may continue only through deterministic source/design audit, off-slot board acceptance, repack and Player evidence; otherwise focus on safe UI/Map01A work.
+
+
 ## Pháp source candidate promotion audit — 2026-09-13
 
 Ran `validate_phap_source_candidate()` across current Pháp Lv1 male/female registered surfaces under the external selected source tree. No Pháp source is promotion-ready. Male `ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v5` and `ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v7-base-authority`, plus female `female-ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`, have the required structure/boards but remain blocked by `SOURCE_REVIEW_REQUIRED` off-slot provenance; they need visual acceptance before packing. v8/v9 pose-contract and class-accessory repair surfaces are protected by `DO-NOT-PACK.md`. Earlier v1/v2/v3/semantic-v2/semantic-v3 candidates miss off-slot review boards; v4/v6/canonical-jump and jump-redraw candidates miss 10-slot pose files. Keep Pháp held out of owner-review catalog until a source surface has accepted off-slot boards and then Player evidence.

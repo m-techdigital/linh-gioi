@@ -67,7 +67,9 @@ namespace LinhGioi.UI
 
         private Button MakeCharacterCard(string label)
         {
-            var card = new Button(() => SelectCharacterCard(label)) { name = "Map01A Character Card " + label, text = label + "\nLv review · " + ClassRole(label) };
+            var heldOut = label == "Pháp";
+            var status = heldOut ? "đang audit" : "Lv review";
+            var card = new Button(() => SelectCharacterCard(label)) { name = "Map01A Character Card " + label, text = label + "\n" + status + " · " + ClassRole(label) };
             card.style.flexGrow = 0;
             card.style.flexBasis = new Length(30.5f, LengthUnit.Percent);
             card.style.height = 116;
@@ -77,6 +79,8 @@ namespace LinhGioi.UI
             card.style.whiteSpace = WhiteSpace.Normal;
             card.style.unityTextAlign = TextAnchor.MiddleCenter;
             ApplyLgoButton(card);
+            card.SetEnabled(!heldOut);
+            if (heldOut) ApplyLgoDisabledAction(card);
             return card;
         }
 
@@ -94,6 +98,7 @@ namespace LinhGioi.UI
 
         private void SelectCharacterCard(string label)
         {
+            if (label == "Pháp") return;
             if (_scene.CanCycleSourcePoseClass)
             {
                 for (var i = 0; i < 5 && _scene.ActiveEquipmentClassLabel != label; i++)

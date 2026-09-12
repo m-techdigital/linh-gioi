@@ -1,4 +1,10 @@
 
+## Character select held-out class checkpoint — 2026-09-13
+
+- Pháp card remains visible but disabled as `đang audit`; it no longer acts like a selectable ready class while Pháp source candidates are blocked. Evidence: `build/map01a-character-select-heldout-runtime-v1/character-select.png`.
+- Owner constraint: do not proceed with class art via random/image-tool generation. Continue class work only with a deterministic source/design pipeline: choose audited source surface, fix/review off-slot boards, mark visual acceptance, repack, then verify in Player. If that pipeline is not clear, switch to safe Map01A/UI tasks instead of generating more class art.
+
+
 ## Pháp promotion audit checkpoint — 2026-09-13
 
 - Pháp remains held out. Current structured candidates are not promotion-ready: male v5/v7 and female v3 still require visual-accepted off-slot provenance; v8/v9 and repair surfaces are `DO-NOT-PACK`; older candidates miss boards or slot pose files.
