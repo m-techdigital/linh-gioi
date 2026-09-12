@@ -2,11 +2,13 @@
 
 `FIX_REQUIRED / CONTINUE`. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
 
-Nguồn chọn duy nhất của batch Pháp: `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/authoring-selection.json` trong selected-source root. Áo trong và áo ngoài đều ở `registered-six-pose-v1`: sáu pose, đầy đủ phần dưới đai, board tháo hai lớp đã xem. Không dùng `inner_top/idle/seams-underlap-review.jpg` cũ làm evidence hiện hành. Source/atlas metadata dùng profile thứ tự lớp chung trong [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12).
+Nguồn chọn duy nhất của batch Pháp: `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/authoring-selection.json` trong selected-source root. Bốn slot hiện hành `inner_top`, `outer_top`, `waist_belt`, `shoulder_chest_guard` đều trỏ `registered-six-pose-v1`. Không dùng source cũ ngoài selection làm evidence hiện hành. Source/atlas metadata dùng profile thứ tự lớp chung trong [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12).
 
 ## Next task
 
-Author đai/giáp rồi tám slot còn thiếu trên body/template bất biến, bám Pháp turnaround `03-male-starter-turnaround-reference.png` và grid `detail/12-male-equipment-grid-redraw-source.png`. Kết quả batch cần thấy: từng món hoàn chỉnh, tháo cả món, 16 tổ hợp áo trong/áo ngoài/đai/giáp qua sáu pose, không dính anatomy hoặc xé vải. Giữ vải dưới item khác; body occlusion riêng với ownership. Không chia ảnh mặc đủ, fit bbox hoặc normalize jump.
+Giáp vai/ngực đã có `shoulder_chest_guard/registered-six-pose-v1` theo visible-contribution của từng pose, không chứa coat/anatomy và không tái dựng pixel khuất đè lên tay/tóc/thân. Board full outfit cùng trạng thái guard on/off với các slot trước on/off đã xem ở idle, bốn nhịp chạy và jump. Atlas div4 `128x512`, PNG 40.838 byte; reconstruction 12/12 pixel-exact. Vẫn REVIEW_ONLY, chưa Player.
+
+Author sáu slot còn thiếu trên body/template bất biến, bắt đầu `head_hair`, bám Pháp turnaround `03-male-starter-turnaround-reference.png` và grid `detail/12-male-equipment-grid-redraw-source.png`. Mỗi slot phải có visible contribution đủ sáu pose, tháo cả món, ghép với bốn slot đã khóa không dính anatomy hoặc xé vải. Giữ vải dưới item khác; body occlusion riêng với ownership. Không chia ảnh mặc đủ, fit bbox hoặc normalize jump.
 
 Source cặp áo: `inner_top/registered-six-pose-v1/six-pose-pair-review.jpg` và từng pose `inner-outer-toggle-review.jpg`; atlas/evidence tại `build/phap-garment-six-pose-batch/`. Đã xác minh 24 component tái dựng pixel-exact, xem board div4. Chưa đủ 10 slot/mixed/Player; không dùng trạng thái REVIEW_ONLY làm quyền bàn giao.
 
@@ -14,7 +16,7 @@ Sau nam đủ 10 món/sáu pose, làm nữ và mixed Lv1/Lv10, kiểm Player th�
 
 ## Current blocker
 
-Không có blocker môi trường đã xác minh. Thiếu nguồn tám slot và các gate nữ/mixed/Player. Fallback hiện chứa trang phục Võ; không tự tạo base trung tính. Launcher chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
+Không có blocker môi trường đã xác minh. Thiếu nguồn sáu slot và các gate nữ/mixed/Player. Fallback hiện chứa trang phục Võ; không tự tạo base trung tính. Launcher chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
 
 ## Lịch sử — không thay action hiện hành
 

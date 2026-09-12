@@ -1,14 +1,18 @@
-## Hiện hành — Pháp đã có cặp áo sáu pose, chưa đủ wardrobe/Player — 2026-09-12
+## Hiện hành — Pháp đã có bốn slot sáu pose, chưa đủ wardrobe/Player — 2026-09-12
 
 `FIX_REQUIRED / CONTINUE`. Giữ body Võ div4, tỷ lệ/camera và registered WIP; Map01A là target. Shared-rig v5, semantic-v3, nguồn v8/v9, jump slot proof v5 và normalization jump `2/3` vẫn bị thu hồi. Không khôi phục nearest-seed partition: các món phải có phần vải khuất đầy đủ và được overlap.
 
-Nguồn hiện hành ngoài repo: `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/` trong selected-source root; `authoring-selection.json` chọn `inner_top/registered-six-pose-v1` và `outer_top/registered-six-pose-v1`. Hai áo đã có đủ idle/bốn nhịp chạy/jump trên body bất biến. Áo trong được vẽ tới hem dưới đai; overlap với áo ngoài 26.540–46.268 pixel nguồn tùy pose. Đã xem 24 trạng thái cặp áo (base, inner, cả hai, outer) và board tái dựng div4. Jump sửa biên lưng trên source áo, có edit mask/provenance; không scale body. Fallback vẫn chứa đồ Võ, không phải base trung tính.
+Nguồn hiện hành ngoài repo: `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/` trong selected-source root; `authoring-selection.json` chọn bốn slot `inner_top`, `outer_top`, `waist_belt`, `shoulder_chest_guard` ở `registered-six-pose-v1`. Tất cả có idle/bốn nhịp chạy/jump trên body bất biến. Áo trong được vẽ tới hem dưới đai; overlap với áo ngoài 26.540–46.268 pixel nguồn tùy pose. Jump sửa biên lưng trên source áo, có edit mask/provenance; không scale body. Fallback vẫn chứa đồ Võ, không phải base trung tính.
 
 Tooling pack giữ component trước/sau cùng pose, cho phép frame trong suốt có khai báo; profile thứ tự lớp chung giữ quần dưới áo ngoài và chặn trộn thứ tự legacy trong loadout mới. Chuẩn: [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12). Atlas áo ngoài div4 1024²/290.714 byte; áo trong 256²/63.703 byte. `build/phap-garment-six-pose-batch/pair-reconstruction.json` kiểm 24 component khôi phục đúng pixel và hash body sáu pose; `pair-native-div4-review.png` là ảnh ghép phần mềm, không phải Player.
 
 Validation batch: 26 unittest pack/compose/semantic + 18 capture test đạt; no-3D/no-source-images đạt. Không đổi C#, không build/capture Player trong batch nguồn này. Kết quả kỹ thuật không chứng minh đủ 10 món hoặc visual runtime.
 
-Action: author đai/giáp và tám slot còn thiếu theo turnaround/grid gốc, kiểm 16 tổ hợp áo/đai/giáp, rồi toàn bộ 10 item × sáu pose nam/nữ, mixed Lv1/Lv10 và Player/UI thật. Sau gate Pháp mới thay Kiếm/Cơ/Linh theo cùng chuẩn. Còn thiếu các gate đó; goal vẫn active.
+Đai `waist_belt/registered-six-pose-v1` đã qua tám tổ hợp hai áo/đai ở sáu pose; jump chỉ lộ đoạn đai sau và bản khóa sai ở lưng đã loại. Atlas div4 `64x256`, PNG 11.484 byte, 12 component khôi phục pixel-exact.
+
+Giáp vai/ngực `shoulder_chest_guard/registered-six-pose-v1` dùng visible-contribution riêng cho mỗi pose: asset chỉ giữ phần giáp được nhìn thấy sau che khuất tay/tóc/thân, không chứa coat/anatomy và không tái dựng phần khuất đè ngược lên người. Đã xem full outfit cùng trạng thái giáp on/off khi các slot trước on/off ở idle, bốn nhịp chạy và jump; không thấy đổi tỷ lệ hoặc phá silhouette. Atlas div4 `128x512`, PNG 40.838 byte; `build/phap-garment-six-pose-batch/registered-shoulder-guard-atlas-div4/atlas-reconstruction.json` kiểm 12/12 component pixel-exact. Vẫn `SOURCE_REVIEW_REQUIRED / REVIEW_ONLY`, chưa Player.
+
+Action: author sáu slot còn thiếu theo turnaround/grid gốc, bắt đầu `head_hair`; mỗi slot phải có board tháo/mặc trên cả bốn slot đã khóa và đủ sáu pose trước khi pack. Sau nam đủ 10 item mới làm nữ, mixed Lv1/Lv10 và Player/UI thật. Sau gate Pháp mới thay Kiếm/Cơ/Linh theo cùng chuẩn. Còn thiếu các gate đó; goal vẫn active.
 
 ## Lịch sử — chỉ để truy nguồn, không phải trạng thái nghiệm thu hoặc action hiện hành
 
