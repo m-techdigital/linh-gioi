@@ -64,9 +64,30 @@ def validate_player_evidence(class_id: str) -> str | None:
     return None
 
 
+def validate_exposed_pack_matrix(class_id: str) -> str | None:
+    suffixes = launcher.PACK_SUFFIXES.get(class_id)
+    if suffixes is None:
+        return f"missing pack suffix matrix for {class_id}"
+    if len(suffixes) != 4:
+        return f"pack suffix matrix must have four entries for {class_id}: {suffixes}"
+    if class_id != "vo" and any(suffix is None for suffix in suffixes):
+        return f"owner-facing class must expose male/female Lv1/Lv10 packs for {class_id}: {suffixes}"
+    for suffix in suffixes:
+        if suffix is None:
+            continue
+        pack = ROOT / "build" / (class_id + suffix)
+        if not (pack / "atlas-review.json").is_file():
+            return f"missing owner-facing source-pose pack for {class_id}: build/{class_id + suffix}"
+    return None
+
+
 def main() -> int:
     if tuple(launcher.CLASSES) != EXPECTED_CLASSES:
         return fail("interactive catalog must contain only visually audited source-pose classes in the approved order")
+    for class_id in EXPECTED_CLASSES:
+        error = validate_exposed_pack_matrix(class_id)
+        if error:
+            return fail(error)
     source = (ROOT / "tools/launch_lgo_source_pose_review.py").read_text(encoding="utf-8")
     required = "non-base source-pose art has Player close-up evidence"
     if required not in source:

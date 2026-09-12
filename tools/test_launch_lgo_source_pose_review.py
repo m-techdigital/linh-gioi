@@ -43,6 +43,12 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             labels = [command[i + 1] for i, arg in enumerate(command) if arg == '--lgo-source-pose-class']
             self.assertEqual(labels, list(CLASSES))
             self.assertIn('vo-source-pose-review-preserved-lv1', command[command.index('--lgo-vo-pose-review-dir') + 1])
+            phap_index = labels.index('phap')
+            phap_args = command[[i for i, arg in enumerate(command) if arg == '--lgo-source-pose-class'][phap_index]:]
+            self.assertIn('phap-source-pose-review-semantic-v3', phap_args[2])
+            self.assertIn('phap-source-pose-review-lv10-semantic-v3', phap_args[3])
+            self.assertIn('phap-female-source-pose-review-semantic-v3', phap_args[4])
+            self.assertIn('phap-female-source-pose-review-lv10-semantic-v3', phap_args[5])
 
     def test_invalid_source_never_starts_player(self):
         cases = ({'poseScaleCorrections': {'jump_tuck': 0.6666666667}},

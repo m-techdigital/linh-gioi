@@ -27,15 +27,13 @@ Owner-review catalog đã mở lại đủ `('vo','kiem','phap','co','linh')`, n
 
 Owner-review catalog nay mở lại có kiểm soát `('vo','kiem')`. Pháp/Cơ/Linh vẫn audit-only cho tới khi có close-up Player evidence tương tự; không dùng static `MixedLoadoutFitPreview` hoặc root atlas base-style để claim class pass. Kiếm vẫn `REVIEW_ONLY`, chưa owner/production approval.
 
-## Owner-review catalog narrowed to Võ until class art passes visual gate — 2026-09-13
+## Superseded note — owner-review catalog từng narrowed to Võ — 2026-09-13
 
-Audit contact sheet `build/source-pose-catalog-audit-v1/kiem-co-linh-source-sheet.jpg` cho thấy Kiếm/Cơ/Linh source-pose trong catalog hiện hành vẫn dùng gần như cùng base võ-style, chưa đủ bám design class riêng. Để tránh lặp lỗi owner test thấy class sai design nhưng launcher vẫn cho đổi class, `tools/launch_lgo_source_pose_review.py` nay chỉ expose Võ trong catalog owner-review. Kiếm/Cơ/Linh/Pháp vẫn giữ `PACK_SUFFIXES` để audit thủ công bằng `build_class_args`, nhưng không xuất hiện trong command tương tác cho tới khi từng class có source-pose thật đủ nam/nữ/tier và pass visual gate như Võ.
-
-Next class work: chọn từng class, dựng lại source-pose đúng design gốc trên body/motion authority đã khóa, board full/toggle ở kích thước lớn trước Player, rồi mới thêm lại vào `CLASSES`. Không dùng static `MixedLoadoutFitPreview` hoặc base võ-style làm owner-facing completion.
+Ghi chú này chỉ để truy nguồn: trước đây catalog owner-review từng bị thu hẹp về Võ sau khi audit thấy Kiếm/Cơ/Linh còn base-style. Trạng thái hiện hành đã supersede bằng close-up Player audit và validator `tools/validate_lgo_owner_review_catalog.py`: launcher expose `vo,kiem,phap,co,linh` nhưng tất cả class ngoài Võ vẫn là `REVIEW_ONLY / TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, phải có đủ male/female Lv1/Lv10 pack và evidence 190 frame + close-up sheet. Không dùng static `MixedLoadoutFitPreview` hoặc base-style cũ làm owner-facing completion.
 
 ## Owner-review launcher class catalog corrected — 2026-09-13
 
-Audit source-pose Pháp cho thấy các candidate hiện hành vẫn là base/body-style, chưa phải Pháp class art hoàn chỉnh; nam `deterministic-v7` và các pack nữ/Lv10 không đủ điều kiện làm class catalog owner-review. Launcher `tools/launch_lgo_source_pose_review.py` nay bắt đầu bằng Võ đã khóa và chỉ đưa `vo/kiem/co/linh` vào catalog tương tác; Pháp vẫn còn trong `PACK_SUFFIXES` để audit thủ công nhưng không xuất hiện trong owner-review command cho tới khi có source-pose Pháp thật đủ nam/nữ/tier. Test khóa command không còn lấy Pháp làm `--lgo-vo-pose-review-dir`.
+Launcher `tools/launch_lgo_source_pose_review.py` nay khớp với owner-review catalog hiện hành: `vo,kiem,phap,co,linh`, trong đó Pháp owner-facing dùng đủ bốn pack `semantic-v3` nam/nữ Lv1/Lv10, không còn trỏ vào `deterministic-v7` chỉ nam Lv1. Validator `tools/validate_lgo_owner_review_catalog.py` khóa rằng mọi class owner-facing ngoài Võ phải có đủ male/female Lv1/Lv10 pack thật dưới `build/` và Player evidence 190 frame + close-up sheet; test hồi quy tái hiện lỗi Pháp thiếu pack và chặn lại. Tất cả class ngoài Võ vẫn là `REVIEW_ONLY / TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, chưa phải owner/production approval.
 
 ## Class equipment capture semantics locked — 2026-09-13
 
