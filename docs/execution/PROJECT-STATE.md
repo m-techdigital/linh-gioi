@@ -5,7 +5,7 @@ Created local evidence `build/phap-source-slot-audit-v1/slot-area-ratios.json` f
 
 ## Pháp off-slot source boards generated but visual-held — 2026-09-13
 
-Generated six `*-ten-slot-off-review.jpg` boards plus `off-slot-board-provenance.json` for Pháp male v5, male v7 and female v3 source candidates. `validate_phap_source_candidate()` now also requires this provenance and verifies board SHA256, poses and slots; file-level gates for v5/v7/v3 return clean after generation. Manual visual review still rejects all three candidates for promotion: male v5/v7 jump boards leave broken clothing/ownership fragments when hiding `outer_top`, `head_hair` or `class_accessory`; female v3 jump board also breaks `head_hair` ownership and removes a large garment mass in `off_class_accessory`. Pháp therefore remains held-out and must not be packed or exposed until source masks/slot ownership are repaired and reviewed again.
+Generated six `*-ten-slot-off-review.jpg` boards plus `off-slot-board-provenance.json` for Pháp male v5, male v7 and female v3 source candidates. `validate_phap_source_candidate()` now also requires this provenance and verifies board SHA256, poses and slots; file/provenance checks pass, but promotion gate now intentionally fails until `visualReviewStatus=VISUAL_ACCEPTED_FOR_PACKING`. Manual visual review still rejects all three candidates for promotion: male v5/v7 jump boards leave broken clothing/ownership fragments when hiding `outer_top`, `head_hair` or `class_accessory`; female v3 jump board also breaks `head_hair` ownership and removes a large garment mass in `off_class_accessory`. Pháp therefore remains held-out and must not be packed or exposed until source masks/slot ownership are repaired and reviewed again.
 
 ## Shared UI governance applied to all uploaded designs — 2026-09-13
 
@@ -13,7 +13,7 @@ Project rule and `validate_lgo_ui_shared_skin.py` now require the owner-uploaded
 
 ## Pháp source candidate audit gate — 2026-09-13
 
-Added `validate_phap_source_candidate()` to the owner-review validator. It requires 10 slots × six pose PNGs, no reject markers, `six-pose-full-compose.jpg`, six `*-ten-slot-off-review.jpg` boards, and `off-slot-board-provenance.json` with SHA-matched board files before a Pháp source directory can be considered promotion-ready at file level. Superseding audit: male v5/v7 and female v3 now have boards/provenance and file-level gate returns clean, but visual review still rejects them because slot ownership breaks in jump/off-slot boards. v8/v9 remain blocked by `DO-NOT-PACK`/`SOURCE_REJECTED`. Therefore Pháp remains held-out until source ownership is repaired and reviewed, or a new accepted source set exists.
+Added `validate_phap_source_candidate()` to the owner-review validator. It requires 10 slots × six pose PNGs, no reject markers, `six-pose-full-compose.jpg`, six `*-ten-slot-off-review.jpg` boards, and `off-slot-board-provenance.json` with SHA-matched board files before a Pháp source directory can be considered promotion-ready at file level. Superseding audit: male v5/v7 and female v3 now have boards/provenance, but promotion gate fails until explicit visual acceptance because visual review still rejects jump/off-slot slot ownership. v8/v9 remain blocked by `DO-NOT-PACK`/`SOURCE_REJECTED`. Therefore Pháp remains held-out until source ownership is repaired and reviewed, or a new accepted source set exists.
 
 
 ## Pháp complete-garment fallback rejected by source gate — 2026-09-13

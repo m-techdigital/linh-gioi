@@ -177,6 +177,36 @@ class OwnerReviewCatalogValidatorTests(unittest.TestCase):
             self.assertIsNotNone(error)
             self.assertIn("off-slot board provenance", error)
 
+    def test_phap_source_candidate_requires_visual_accepted_off_slot_review(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            candidate = root / "registered-surface"
+            for slot in validator.SOURCE_SLOTS:
+                for pose in validator.SOURCE_POSES:
+                    target = candidate / slot / f"{pose}.png"
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(b"png")
+            (candidate / "manifest.json").write_text(json.dumps({"status": "SOURCE_REVIEW_REQUIRED"}))
+            (candidate / "six-pose-full-compose.jpg").write_bytes(b"jpg")
+            boards = []
+            for pose in validator.SOURCE_POSES:
+                board = candidate / f"{pose}-ten-slot-off-review.jpg"
+                board.write_bytes(f"{pose}-jpg".encode("utf-8"))
+                import hashlib
+                boards.append({"file": board.name, "sha256": hashlib.sha256(board.read_bytes()).hexdigest()})
+            (candidate / "off-slot-board-provenance.json").write_text(json.dumps({
+                "status": "SOURCE_REVIEW_REQUIRED",
+                "visualReviewStatus": "SOURCE_REVIEW_REQUIRED",
+                "poses": list(validator.SOURCE_POSES),
+                "slots": list(validator.SOURCE_SLOTS),
+                "boards": boards,
+            }))
+
+            error = validator.validate_phap_source_candidate(candidate)
+
+            self.assertIsNotNone(error)
+            self.assertIn("visual accepted", error)
+
 
 
 if __name__ == "__main__":

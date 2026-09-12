@@ -43,6 +43,7 @@ SOURCE_SLOTS = (
     "main_weapon", "inner_top", "lower_body", "outer_top", "waist_belt",
     "footwear", "arm_guard", "shoulder_chest_guard", "head_hair", "class_accessory",
 )
+SOURCE_VISUAL_ACCEPTED_STATUS = "VISUAL_ACCEPTED_FOR_PACKING"
 
 
 def fail(message: str) -> int:
@@ -159,6 +160,9 @@ def validate_off_slot_board_provenance(candidate: Path) -> str | None:
         return f"Pháp source candidate off-slot board provenance pose mismatch: {candidate}"
     if provenance.get("slots") != list(SOURCE_SLOTS):
         return f"Pháp source candidate off-slot board provenance slot mismatch: {candidate}"
+    visual_status = str(provenance.get("visualReviewStatus", provenance.get("status", ""))).upper()
+    if visual_status != SOURCE_VISUAL_ACCEPTED_STATUS:
+        return f"Pháp source candidate requires visual accepted off-slot review before promotion: {candidate} status={visual_status or 'MISSING'}"
     boards = provenance.get("boards")
     if not isinstance(boards, list):
         return f"Pháp source candidate off-slot board provenance has no board list: {candidate}"

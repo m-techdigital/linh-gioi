@@ -30,6 +30,7 @@ class WriteLgoSourceOffSlotBoardsTests(unittest.TestCase):
             writer.write_boards(surface, body)
 
             provenance = json.loads((surface / "off-slot-board-provenance.json").read_text(encoding="utf-8"))
+            self.assertEqual("SOURCE_REVIEW_REQUIRED", provenance["visualReviewStatus"])
             self.assertEqual(list(writer.POSES), provenance["poses"])
             self.assertEqual(list(writer.SLOTS), provenance["slots"])
             self.assertEqual([f"{pose}-ten-slot-off-review.jpg" for pose in writer.POSES], [board["file"] for board in provenance["boards"]])

@@ -89,6 +89,7 @@ def write_boards(surface: Path, body_dir: Path) -> None:
     manifest = _load_json(surface / "manifest.json") or _load_json(surface / "audit.json")
     payload = {
         "status": "SOURCE_REVIEW_REQUIRED",
+        "visualReviewStatus": "SOURCE_REVIEW_REQUIRED",
         "surface": str(surface.resolve()),
         "bodyDir": str(body_dir.resolve()),
         "sourceStatus": manifest.get("status"),
