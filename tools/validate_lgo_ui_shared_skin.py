@@ -76,6 +76,8 @@ REQUIRED_AGENT_MARKERS = [
     "detail món đặt ở panel phải theo design đã chốt",
     "Design demo owner upload là visual reference cho toàn bộ login/entry, character select, HUD, inventory/bag, storage/chest, fashion/wardrobe, dialog và item-detail",
     "không dựng khung thô chỉ để có chức năng",
+    "Áp dụng cho toàn bộ design owner mới upload, không chỉ một màn riêng lẻ",
+    "Nếu UI/UX giống nhau, cập nhật base/shared component trước rồi mới bind data/state/action từng màn",
     "Hành trang, Thông tin nhân vật và Rương đồ là các tab/flow riêng",
     "modal/dialog/card/tab/button/detail panel dùng base chung",
         "Không tạo helper skin song song kiểu `StyleModalDialog`, `BuildCardPanel`, `CreateDetailPanel`",

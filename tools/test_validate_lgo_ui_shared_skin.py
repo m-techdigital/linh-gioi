@@ -54,6 +54,25 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("Design demo owner upload" in item for item in violations), violations)
 
+    def test_rejects_missing_all_uploaded_designs_and_base_first_rule(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            agents = Path(temp) / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    "Áp dụng cho toàn bộ design owner mới upload, không chỉ một màn riêng lẻ",
+                    "Áp dụng tùy màn đang sửa",
+                ).replace(
+                    "Nếu UI/UX giống nhau, cập nhật base/shared component trước rồi mới bind data/state/action từng màn",
+                    "Nếu UI giống nhau có thể copy nhanh theo màn",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("toàn bộ design owner mới upload" in item for item in violations), violations)
+        self.assertTrue(any("cập nhật base/shared component trước" in item for item in violations), violations)
+
     def test_rejects_missing_separate_inventory_info_storage_flow_rule(self) -> None:
         with self._copy_minimal_repo() as temp:
             agents = Path(temp) / "AGENTS.md"
