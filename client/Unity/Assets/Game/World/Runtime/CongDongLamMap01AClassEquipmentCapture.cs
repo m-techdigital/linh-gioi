@@ -11,7 +11,7 @@ namespace LinhGioi.World
         [Serializable]
         private sealed class ClassEquipmentCaptureInfo
         {
-            public string status = "PASS";
+            public string status = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED";
             public string classId;
             public string packId;
             public string fitStatus = "DRAFT_RUNTIME_FIT";
@@ -120,7 +120,7 @@ namespace LinhGioi.World
                 result.errors.Add("unexpected visible slot/component counts");
             if (result.errors.Count > 0) result.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), JsonUtility.ToJson(result, true));
-            Application.Quit(result.status == "PASS" ? 0 : 1);
+            Application.Quit(result.errors.Count == 0 ? 0 : 1);
         }
 
         private IEnumerator CaptureClassEquipmentFrame(string directory, string name, ClassEquipmentCaptureInfo result, bool inventory)

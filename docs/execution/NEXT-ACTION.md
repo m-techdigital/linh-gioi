@@ -1,3 +1,12 @@
+
+## Class equipment capture semantics locked — 2026-09-13
+
+Đã audit lại Player HEAD cho Kiếm/Pháp/Cơ/Linh bằng class equipment capture đúng flag `--lgo-map01a-art-preview` và đường dẫn absolute. Mỗi class hiện ghi đủ 27 frame, 8 full loadout, 10 tháo slot, 2 mixed, 6 motion, `errors=[]`, nhưng pack vẫn là `DRAFT_RUNTIME_FIT/runtimeEligibleCount=0`; đây chỉ là technical evidence, không phải visual PASS. Contact sheet audit: `build/current-class-audit-summary-v1.jpg`; Pháp detail: `build/current-class-audit-phap-v4/`.
+
+Đã đổi manifest capture class từ `PASS` sang `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED` khi không có lỗi kỹ thuật; `FIX_REQUIRED` chỉ dùng khi count/slot/capture fail. Tool mới `tools/capture_lgo_class_equipment.py` luôn thêm `--lgo-map01a-art-preview`, dùng output absolute và từ chối manifest claim `PASS`, để tránh lặp lỗi test xanh nhưng art draft/visual chưa đạt. Player xác nhận sau sửa: `build/class-capture-semantics-player-v1/LinhGioiOnline.app`; evidence `build/class-capture-semantics-v1/phap/manifest.json` status `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, 27 frame, `errors=[]`.
+
+Next: không dùng `TwoDClassMixedLoadoutFitPreview` draft của Kiếm/Pháp/Cơ/Linh làm owner-facing completion. Muốn tiếp class phải theo source-pose pipeline đã chốt: body/motion authority, 10 slot × sáu pose cùng canvas, board full/toggle xem trước ở kích thước lớn, rồi mới Player capture; hoặc giữ class đó ở trạng thái draft kỹ thuật. Võ div4/base/scale/camera và registered WIP không đổi.
+
 ## Quy tắc chung — shared UI skin/base Map01A — 2026-09-13
 
 Khi tiếp tục login/chọn nhân vật/hành trang/rương đồ/HUD/dialog, phải bám bộ demo owner gửi nhưng redesign cho game 2D hiện tại và dùng base chung `CongDongLamArrivalHud.Skin.cs` cho glass panel, modal shell, CTA, tab, label và frame. Không tạo modal/tab/card/detail panel thứ hai nếu vai trò giống nhau. Chạy `python3.12 tools/validate_lgo_ui_shared_skin.py` cùng Unity EditMode trước checkpoint; validator này chặn local skin constants/helper cũ như `InventoryGlass`, `StyleFrame`, `InventoryLabel` quay lại. Checkpoint rule/base hiện tại đã có test overlay entry và validator shared-skin; bước tiếp theo sau commit là visual/player review sâu hơn cho các screen còn lại, không coi đây là nghiệm thu toàn bộ UI.
