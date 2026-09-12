@@ -66,6 +66,21 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void EntryCaptureFlagRunsPreviewWithoutSuppressingEntryOverlay()
+        {
+            var args = new[] { "LinhGioiOnline", "--lgo-map01a-entry-capture" };
+
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(args), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(args), Is.False,
+                "Entry capture must not enter the quest capture clock because that hides the entry overlay.");
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(args, sceneIsCapturing: false), Is.True);
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(
+                new[] { "LinhGioiOnline", "--lgo-map01a-art-capture" }, sceneIsCapturing: true), Is.False);
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(
+                new[] { "LinhGioiOnline", "--lgo-map01a-skip-entry" }, sceneIsCapturing: false), Is.False);
+        }
+
+        [Test]
         public void RuntimeInventoryExposesTenClickableEquipmentRowsAndToggle()
         {
             var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
@@ -188,9 +203,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
                 Assert.That(start.text, Does.Contain("Bắt đầu"));
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("dev"));
+                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Entry/login must not leave the in-game HUD visible behind the modal.");
 
                 InvokeBoundButton(start);
                 Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
             }
             finally

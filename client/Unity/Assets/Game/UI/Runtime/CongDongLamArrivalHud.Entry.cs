@@ -164,11 +164,13 @@ namespace LinhGioi.UI
             ApplyLgoButton(button, primary);
         }
 
-        private bool ShouldShowEntryOnLaunch()
+        private bool ShouldShowEntryOnLaunch() => ShouldShowEntryOnLaunchForArgs(
+            Environment.GetCommandLineArgs(), _scene != null && _scene.IsCapturing);
+
+        public static bool ShouldShowEntryOnLaunchForArgs(string[] args, bool sceneIsCapturing)
         {
-            var args = Environment.GetCommandLineArgs();
             if (Array.IndexOf(args, "--lgo-map01a-skip-entry") >= 0) return false;
-            if (_scene != null && _scene.IsCapturing) return false;
+            if (sceneIsCapturing) return false;
             return true;
         }
 
@@ -182,6 +184,8 @@ namespace LinhGioi.UI
         {
             if (_entryOverlay == null) return;
             _entryOverlay.style.display = _entryOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_safe != null) _safe.style.display = _entryOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            if (_marker != null) _marker.style.display = _entryOpen ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }
 }

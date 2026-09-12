@@ -66,7 +66,7 @@ namespace LinhGioi.UI
             _root.style.flexGrow = 1;
             RuntimeUiTypography.ApplyBodyFont(_root);
             _root.pickingMode = PickingMode.Ignore;
-            _safe = new VisualElement { pickingMode = PickingMode.Ignore };
+            _safe = new VisualElement { name = "Map01A Safe Hud", pickingMode = PickingMode.Ignore };
             _root.Add(_safe);
             var title = new Label("CỔNG ĐÔNG LÂM\nKhu an toàn • Lv1–3");
             Box(title); Place(title, 12, null, 12, null); _safe.Add(title);
