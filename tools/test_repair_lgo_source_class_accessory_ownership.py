@@ -39,6 +39,8 @@ class RepairClassAccessoryOwnershipTests(unittest.TestCase):
             payload = repair.repair_surface(source, output)
 
             self.assertEqual("SOURCE_REVIEW_REQUIRED", payload["status"])
+            self.assertTrue((output / "DO-NOT-PACK.md").is_file())
+            self.assertIn("not pack", (output / "DO-NOT-PACK.md").read_text(encoding="utf-8").lower())
             accessory = np.asarray(Image.open(output / "class_accessory" / "jump_tuck.png").convert("RGBA"))
             outer = np.asarray(Image.open(output / "outer_top" / "jump_tuck.png").convert("RGBA"))
             self.assertLess(int((accessory[:, :, 3] > 8).sum()), 100)

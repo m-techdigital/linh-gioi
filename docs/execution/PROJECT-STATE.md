@@ -1,4 +1,8 @@
 
+## Pháp diagnostic repair candidates blocked from packing — 2026-09-13
+
+`repair_lgo_source_class_accessory_ownership.py` now writes `DO-NOT-PACK.md` for every repair output. The already-created male v5 and female v3 `*-class-accessory-repair-v1` external directories were marked the same way, and `validate_phap_source_candidate()` now rejects them via the marker. These surfaces remain diagnostic only until a later source repair passes off-slot visual review and explicit visual acceptance.
+
 ## Pháp class_accessory repair v1 diagnostic — 2026-09-13
 
 Added `tools/repair_lgo_source_class_accessory_ownership.py` with regression coverage. It creates a new source surface and moves oversized `class_accessory` pixels not connected near `waist_belt` into `outer_top`, preserving full-compose alpha. Trial external candidates were generated for male v5 and female v3 under `*-class-accessory-repair-v1`; off-slot boards show `off_class_accessory` improves, but both candidates still fail visual review because `off_outer_top` and `off_head_hair` break body/hair/garment ownership. Do not pack/promote repair-v1; use it only as diagnostic evidence that class_accessory is one subproblem, not the whole Pháp fix.

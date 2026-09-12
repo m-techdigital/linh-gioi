@@ -114,6 +114,12 @@ def repair_surface(source: Path, output: Path) -> dict:
         "records": records,
     }
     (output / "class-accessory-ownership-repair.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (output / "DO-NOT-PACK.md").write_text(
+        "# DO NOT PACK\n\n"
+        "This source surface is a diagnostic repair candidate only. "
+        "It must not be packed or exposed in Player until off-slot boards and Player visual review are accepted.\n",
+        encoding="utf-8",
+    )
     return payload
 
 

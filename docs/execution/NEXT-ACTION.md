@@ -1,4 +1,8 @@
 
+## Repair candidate safety marker — 2026-09-13
+
+Any generated source repair candidate must keep `DO-NOT-PACK.md` until visual review is accepted. The Pháp repair-v1 directories are currently blocked by this marker; do not remove it just to run pack/capture. Remove/replace only after source boards are visually accepted and state is updated.
+
 ## Pháp repair-v1 hold — 2026-09-13
 
 Do not pack `registered-surface-lv001-hd-v5-class-accessory-repair-v1` or `registered-surface-lv001-hd-v3-class-accessory-repair-v1`. They improve `off_class_accessory` but still fail visual review at `off_outer_top` and `off_head_hair`; next repair must address outer-top/head-hair ownership, not just accessory pixels.
