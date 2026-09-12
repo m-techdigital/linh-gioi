@@ -214,6 +214,7 @@ namespace LinhGioi.World
         }
         private readonly List<SourcePoseClassOption> _sourcePoseClassOptions = new List<SourcePoseClassOption>();
         private int _sourcePoseClassIndex;
+        private float _sourcePoseClassSwitchReadyAt;
         private int _sourcePoseFacing = 1;
         private readonly Dictionary<string, SpriteRenderer> _voAvatarParts = new Dictionary<string, SpriteRenderer>();
         private readonly Dictionary<string, Tuple<Vector3, Vector3>> _voAvatarPartRest = new Dictionary<string, Tuple<Vector3, Vector3>>();
@@ -824,7 +825,7 @@ namespace LinhGioi.World
 
         public void CycleSourcePoseClass()
         {
-            if (!CanCycleSourcePoseClass) return;
+            if (!CanCycleSourcePoseClass || Time.realtimeSinceStartup < _sourcePoseClassSwitchReadyAt) return;
             _sourcePoseClassIndex = (_sourcePoseClassIndex + 1) % _sourcePoseClassOptions.Count;
             var option = _sourcePoseClassOptions[_sourcePoseClassIndex];
             _sourcePoseReview.ReloadPack(option.MalePrimary, option.MaleAlternates);
@@ -836,6 +837,9 @@ namespace LinhGioi.World
                 foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = selectedLevel;
             RefreshVoAvatarMode();
             ApplyVoPose();
+            // Loading both gender stacks is synchronous in this review tool. Ignore key-repeat
+            // events queued while the main thread was loading so one press advances one class.
+            _sourcePoseClassSwitchReadyAt = Time.realtimeSinceStartup + .5f;
             LastInteractionMessage = "Đã đổi class sang " + option.Id + " · giữ nguyên giới tính và trạng thái tháo/mặc.";
         }
 
