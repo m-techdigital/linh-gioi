@@ -19,6 +19,10 @@ namespace LinhGioi.UI
         private IReadOnlyList<string> _equipmentSlotIds;
         private RuntimeTouchMovementPad _pad;
         private bool _touchJumpHeld;
+        private VisualElement _vitals;
+        private Label _vitalsName;
+        private UnityEngine.UIElements.ProgressBar _health, _mana;
+        private Button _inventoryGender;
         private RuntimeViewportMetrics _metrics;
         private PanelSettings _ownedPanel;
         private bool _touch;
@@ -60,11 +64,18 @@ namespace LinhGioi.UI
         {
             _root = root;
             _root.style.flexGrow = 1;
+            RuntimeUiTypography.ApplyBodyFont(_root);
             _root.pickingMode = PickingMode.Ignore;
             _safe = new VisualElement { pickingMode = PickingMode.Ignore };
             _root.Add(_safe);
             var title = new Label("CỔNG ĐÔNG LÂM\nKhu an toàn • Lv1–3");
             Box(title); Place(title, 12, null, 12, null); _safe.Add(title);
+            _vitals = new VisualElement { name = "Map01A Vitals", pickingMode = PickingMode.Ignore };
+            Box(_vitals); Place(_vitals, 12, null, 92, null); _vitals.style.width = 240;
+            _vitalsName = new Label(); _vitalsName.style.fontSize = 18; _vitals.Add(_vitalsName);
+            _health = MakeVital("Map01A Health", new Color(.67f, .16f, .15f));
+            _mana = MakeVital("Map01A Mana", new Color(.12f, .37f, .64f));
+            _vitals.Add(_health); _vitals.Add(_mana); _safe.Add(_vitals);
             _quest = new Label(); Box(_quest); Place(_quest, null, 12, 12, null);
             _quest.style.width = 260; _quest.style.whiteSpace = WhiteSpace.Normal; _safe.Add(_quest);
             _minimap = new Label(); Box(_minimap); Place(_minimap, 220, null, 12, null);
@@ -123,7 +134,18 @@ namespace LinhGioi.UI
             _safe.Add(_combatBar);
             _inventoryToggle = new Button(() => _scene.ToggleInventory()) { text = "Hành trang · I" };
             Box(_inventoryToggle); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
-            _inventoryToggle.style.minHeight = _touch ? 64 : 48; _inventoryToggle.style.minWidth = 180; _safe.Add(_inventoryToggle);
+            _inventoryToggle.style.minHeight = _touch ? 64 : 48; _inventoryToggle.style.minWidth = 180;
+            var actionBar = new VisualElement { name = "Map01A Context Actions", pickingMode = PickingMode.Ignore };
+            Place(actionBar, null, 16, null, 24); actionBar.style.flexDirection = FlexDirection.Row;
+            actionBar.style.alignItems = Align.FlexEnd;
+            foreach (var button in new[] { _inventoryToggle, _talk })
+            {
+                button.style.position = Position.Relative;
+                button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
+                button.style.maxWidth = 260; button.style.whiteSpace = WhiteSpace.Normal;
+                actionBar.Add(button);
+            }
+            _inventoryToggle.style.marginRight = 12; _safe.Add(actionBar);
             var inventoryScroll = new ScrollView(ScrollViewMode.Vertical)
             {
                 name = "LGO Inventory Scroll",
@@ -186,7 +208,8 @@ namespace LinhGioi.UI
                 { name = "LGO Equipment Inventory Variant", text = "Đổi cấp món" };
             _equipmentClass = new Button(() => _scene.CycleSourcePoseClass())
                 { name = "LGO Equipment Inventory Class", text = "Đổi class · F" };
-            foreach (var button in new[] { _equipmentToggle, _equipmentVariant, _equipmentClass })
+            _inventoryGender = new Button(() => _scene.CycleVoAvatarGender()) { name = "Map01A Inventory Gender" };
+            foreach (var button in new[] { _equipmentToggle, _equipmentVariant, _equipmentClass, _inventoryGender })
             {
                 button.style.minHeight = 40;
                 button.style.minWidth = _touch ? 174 : 205;
@@ -228,12 +251,22 @@ namespace LinhGioi.UI
             _safe.Add(_dialogue);
             _marker = new Label("!\nHạ Vân") { pickingMode = PickingMode.Ignore };
             _marker.style.position = Position.Absolute; _marker.style.color = new Color(1,.83f,.3f);
-            _marker.style.width = 96; _marker.style.height = 56;
+            _marker.style.width = 240; _marker.style.height = 64;
+            _marker.style.whiteSpace = WhiteSpace.Normal;
             _marker.style.fontSize = 18; _marker.style.unityTextAlign = TextAnchor.MiddleCenter;
             _root.Insert(0, _marker);
             _root.RegisterCallback<GeometryChangedEvent>(_ => Layout());
             Layout();
         }
+        private static UnityEngine.UIElements.ProgressBar MakeVital(string name, Color color)
+        {
+            var bar = new UnityEngine.UIElements.ProgressBar { name = name, lowValue = 0, highValue = 100 };
+            bar.style.height = 22; bar.style.marginTop = 4; bar.style.fontSize = 15;
+            bar.Q(className: "unity-progress-bar__progress").style.backgroundColor = color;
+            bar.Q(className: "unity-progress-bar__background").style.backgroundColor = new Color(.03f,.05f,.07f);
+            return bar;
+        }
+
         private void Layout()
         {
             _metrics = RuntimeViewportMetrics.FromRoot(_root);
@@ -247,22 +280,6 @@ namespace LinhGioi.UI
             _inventory.style.width = Mathf.Min(520, r.width - 32);
             _inventory.style.bottom = r.width < 1300 ? 180 : 100;
             _combatBar.style.bottom = r.width < 1300 ? 100 : 24;
-            if (r.width < 1300)
-            {
-                _inventoryToggle.style.left = StyleKeyword.Auto;
-                _inventoryToggle.style.right = 204;
-                _inventoryToggle.style.top = StyleKeyword.Auto;
-                _inventoryToggle.style.bottom = 24;
-                _inventoryToggle.style.minWidth = 170;
-            }
-            else
-            {
-                _inventoryToggle.style.left = StyleKeyword.Auto;
-                _inventoryToggle.style.right = _touch ? 408 : 410;
-                _inventoryToggle.style.top = StyleKeyword.Auto;
-                _inventoryToggle.style.bottom = 24;
-                _inventoryToggle.style.minWidth = 180;
-            }
             _talk.style.fontSize = _touch ? 20 : 18;
         }
         private void Update()
@@ -280,7 +297,7 @@ namespace LinhGioi.UI
                 if (Input.GetKeyDown(KeyCode.Escape)) _scene.CloseNpcDialogue();
                 if (!_scene.DialogueOpen)
                 {
-                    if (Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
+                    if (!_scene.IsSourcePoseReviewActive && Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
                     if (Input.GetKeyDown(KeyCode.L)) _scene.CycleVoAvatarLevel();
                     if (Input.GetKeyDown(KeyCode.G)) _scene.CycleVoAvatarGender();
                     if (Input.GetKeyDown(KeyCode.V)) _scene.CycleVoEquipmentSlot();
@@ -315,8 +332,8 @@ namespace LinhGioi.UI
             _minimap.text = _scene.MinimapRouteText;
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            var compactReview = _scene.DialogueOpen || ((_scene.IsSourcePoseReviewActive || _scene.ClassEquipmentPreviewActive)
-                && _scene.InventoryOpen);
+            var compactReview = _scene.DialogueOpen || _scene.IsSourcePoseReviewActive
+                || (_scene.ClassEquipmentPreviewActive && _scene.InventoryOpen);
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
                 control.style.display = compactReview ? DisplayStyle.None : DisplayStyle.Flex;
             _inventorySummary.text = _scene.InventorySummaryText;
@@ -344,6 +361,14 @@ namespace LinhGioi.UI
                 ? "Đổi class · đang " + _scene.ActiveEquipmentClassLabel + (_touch ? "" : " · F")
                 : "Chỉ có 1 class";
             _equipmentClass.SetEnabled(_scene.CanCycleSourcePoseClass);
+            _inventoryGender.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
+            _inventoryGender.text = (_scene.CanCycleSourcePoseGender ? "Đổi giới · " : "Hiện có · ")
+                + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + (_touch ? "" : " · G");
+            _inventoryGender.SetEnabled(_scene.CanCycleSourcePoseGender);
+            _vitals.style.display = _scene.InventoryOpen || _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _vitalsName.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
+            _health.value = _scene.PlayerHealth; _health.title = "HP " + _scene.PlayerHealth + "/100";
+            _mana.value = _scene.PlayerMana; _mana.title = "MP " + _scene.PlayerMana + "/100";
             _healthPotion.SetEnabled(_scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100);
             _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
             _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
@@ -359,12 +384,13 @@ namespace LinhGioi.UI
             _dialogueSpeaker.text = _scene.DialogueSpeaker + " · " + _scene.DialogueProgress;
             _dialogueLine.text = _scene.DialogueText;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
+            _marker.style.display = _scene.DialogueOpen || _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             var camera = Camera.main;
             if (camera != null)
             {
                 var v = camera.WorldToViewportPoint(_scene.CurrentInteractionPosition);
-                _marker.style.left = v.x * _metrics.PanelWidth - 48;
-                _marker.style.top = (1-v.y) * _metrics.PanelHeight - 40;
+                _marker.style.left = v.x * _metrics.PanelWidth - 120;
+                _marker.style.top = (1-v.y) * _metrics.PanelHeight - 64;
             }
         }
         private string EquipmentDisplayName(string slot)

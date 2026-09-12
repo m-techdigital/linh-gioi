@@ -450,7 +450,8 @@ namespace LinhGioi.World
         {
             if (!PresentationVisible) return;
             var map = GetComponentInParent<CongDongLamMap01AArtPreview>();
-            if (map != null && (map.InventoryOpen || map.DialogueOpen)) return;
+            // Map01A owns the player-facing HUD; this label is only for standalone authoring.
+            if (map != null) return;
             var camera = Camera.main;
             if (camera == null) return;
             var point = camera.WorldToScreenPoint(transform.position + Vector3.up * 1.9f);

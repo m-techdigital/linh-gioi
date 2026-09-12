@@ -226,6 +226,7 @@ namespace LinhGioi.World
             ? _femaleSourcePoseReview : _sourcePoseReview;
         private bool HasAnySourcePoseReview => _sourcePoseReview != null || _femaleSourcePoseReview != null;
         public bool IsSourcePoseReviewActive => ActiveSourcePoseReview != null;
+        public bool CanCycleSourcePoseGender => _sourcePoseReview != null && _femaleSourcePoseReview != null;
         public bool CanCycleSourcePoseClass => IsSourcePoseReviewActive && _sourcePoseClassOptions.Count > 1;
         public bool ClassEquipmentPreviewActive => _classFitPreviewActive;
         public string ActiveEquipmentClassId => _classFitPreviewActive ? _classFitPreviewId : ActiveSourcePoseReview?.ClassId ?? "vo";
@@ -369,7 +370,7 @@ namespace LinhGioi.World
         private int _currentRouteIndex;
         public string CurrentRouteNodeId => RouteNodeIds[_currentRouteIndex];
         public string CurrentRouteNodeLabel => RouteNodeLabels[_currentRouteIndex];
-        public Vector3 CurrentInteractionPosition => new Vector3(RouteNodeX[_currentRouteIndex], GroundY + 1.55f, 0);
+        public Vector3 CurrentInteractionPosition => new Vector3(RouteNodeX[_currentRouteIndex], GroundY + 2.15f, 0);
         public bool CanUseCurrentRouteAction
         {
             get
@@ -1297,7 +1298,7 @@ namespace LinhGioi.World
             {
                 var host = new GameObject("Map01A interaction " + RouteNodeIds[index]);
                 host.transform.SetParent(transform, false);
-                host.transform.localPosition = new Vector3(RouteNodeX[index], GroundY + 1.55f, 0);
+                host.transform.localPosition = new Vector3(RouteNodeX[index], GroundY + 2.15f, 0);
                 var text = host.AddComponent<TextMesh>();
                 text.text = "!";
                 text.anchor = TextAnchor.MiddleCenter;

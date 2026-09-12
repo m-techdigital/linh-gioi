@@ -1,3 +1,11 @@
+## Hiện hành — Map01A HUD chơi, giữ source-pose đã chọn — 2026-09-12
+
+`CONTINUE`. Đã chặn dãy nút mode/base legacy xuất hiện lại khi đóng hành trang ở source-pose, chặn phím C chuyển mode; giữ F/G và 10 món dùng state cũ đã audit. HUD có HP/MP/class/giới; nút đổi giới trong hành trang chỉ bật khi có đủ pack. Nhãn POSE THỬ OnGUI nhường HUD Map01A, không đổi phân loại REVIEW_ONLY. Nhãn NPC lên trên đầu và ẩn trong thoại; nút hành trang/tương tác dùng một hàng flex để nhãn dài không đè nhau. Không sửa PNG/body/pose/camera/scale.
+
+RED tái hiện nút legacy hiện lại, GREEN 67 EditMode. Build cuối `build/map01a-playable-hud-player/build-marker-final.log`: 0 error/13 warning. Capture cuối `quest-hud-reviewed/{pc,tablet,mobile}` trong cùng thư mục Player có Q01–Q09 + 38 ảnh thoại/profile, sáu NPC quay lại; đã xem ảnh tablet/mobile/PC và thao tác C/F/scroll trên Player (`manual-hud-c-key.png`, `manual-kiem-inventory.png`, `manual-kiem-gender-button.png`). Player đã thoát sạch sau lượt kiểm, không claim nút G đã được kiểm chuột thành công vì ảnh xác nhận sau click không lấy được. No-3D/no-source/frozen/diff audit sạch.
+
+Player hiện hành: `build/map01a-playable-hud-player/LinhGioiOnline.app`, vẫn mở bằng launcher catalog đủ năm class. Thiết kế/bước tiếp: `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`. Map còn atlas kiến trúc bị cắt, thiếu source gốc; đăng nhập/skin hành trang đầy đủ chưa triển khai. Không coi helper Login còn trong repo là màn đang hoạt động; không nghiệm thu toàn map hoặc design character.
+
 ## Hiện hành — Map01A hội thoại NPC dùng base chung — 2026-09-12
 
 `CONTINUE`. Sáu NPC dùng `NpcDialogueSession` chung: nhiều trang, hỏi chỉ dẫn, đóng sớm, lựa chọn cuối mới nhận việc và lời thoại khi quay lại. Tiểu Đồng có nút trò chuyện riêng cạnh thao tác hái cây/rương. Đã sửa nhận tiếp tế lặp ở Tổng Phú; hội thoại khóa nút/hotkey hành trang–combat trong khi mở. Không đổi art, body, pose, camera hoặc scale.

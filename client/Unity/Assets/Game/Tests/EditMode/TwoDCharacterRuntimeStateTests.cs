@@ -136,6 +136,43 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
+        [Test]
+        public void SourceGameplayHudKeepsVitalsAndHidesLegacyModeButtonsWhenInventoryCloses()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("source gameplay HUD test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var review = new GameObject("source presentation").AddComponent<TwoDSourcePoseReview>();
+                review.transform.SetParent(scene.transform);
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                typeof(CongDongLamMap01AArtPreview).GetField("_sourcePoseReview", flags).SetValue(scene, review);
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var update = typeof(CongDongLamArrivalHud).GetMethod("Update", flags);
+                if (scene.InventoryOpen) scene.ToggleInventory();
+                update.Invoke(hud, null);
+                foreach (var field in new[] { "_outfit", "_level", "_gender", "_slot", "_itemLevel", "_toggleSlot" })
+                    Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
+                        Is.EqualTo(DisplayStyle.None), "Old review control reappeared: " + field);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Health").value, Is.EqualTo(60));
+                Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Mana").value, Is.EqualTo(50));
+                Assert.That(root.Q<Button>("Map01A Inventory Gender").enabledSelf, Is.False,
+                    "A missing female pack must not offer a renderer fallback");
+                scene.ToggleInventory(); update.Invoke(hud, null);
+                Assert.That(root.Q("Map01A Vitals").style.display.value, Is.EqualTo(DisplayStyle.None));
+                scene.ToggleInventory(); scene.TalkToHaVan(); update.Invoke(hud, null);
+                Assert.That(root.Q("Map01A Vitals").style.display.value, Is.EqualTo(DisplayStyle.None));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
         private static void FinishDialogue(CongDongLamMap01AArtPreview scene)
         {
             for (var page = 0; scene.DialogueOpen && page < 8; page++) scene.UseCurrentRouteAction();

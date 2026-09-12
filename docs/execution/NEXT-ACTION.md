@@ -6,9 +6,11 @@
 
 Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F` hoặc nút trong hành trang đã kiểm đủ Pháp/Võ/Kiếm/Cơ/Linh trên một actor. Pháp chỉ có nam Lv1 v7; Võ nam Lv1/Lv10; giới/cấp chưa có không được rơi về renderer cũ. Các pack vẫn REVIEW_ONLY, không suy diễn rằng toàn bộ design/pose đã nghiệm thu.
 
-Player hiện hành: `build/map01a-dialogue-player/LinhGioiOnline.app`; mở qua `tools/launch_lgo_source_pose_review.py` để giữ catalog đủ năm class. Không mở pack đơn hoặc renderer class cũ. Hội thoại sáu NPC dùng session chung, lựa chọn cuối mới nhận việc; đóng sớm/hỏi thêm không chuyển quest, quay lại không nhận tiếp tế lặp. Đã kiểm 66 EditMode + 37 Python, Q01–Q09 và 38 ảnh thoại × ba profile, thao tác Player bằng E/Escape/chuột. Evidence `build/map01a-dialogue-player/quest-dialogue-capture/`, `manual-accepted-q02.png` và `manual-dialogue-stable.log`. Các profile là mô phỏng trên macOS.
+Player hiện hành: `build/map01a-playable-hud-player/LinhGioiOnline.app`; mở qua `tools/launch_lgo_source_pose_review.py` để giữ đủ năm class. Nút review mode/base cũ không quay lại khi đóng hành trang, phím C không chuyển renderer nguồn đã chọn; F/G vẫn giữ. HP/MP/class/giới trên HUD, hai action đáy chung hàng flex, nhãn NPC không đè mặt trong thoại. Không đổi art/base/pose/camera/scale. Nút giới thiếu pack bị khóa; PC đã kiểm C/F/scroll, chưa có ảnh xác nhận click nút giới vì Player đã thoát sạch trước ảnh sau click.
 
-Terrain đã sửa bằng mốc mặt đi 20/28/62/18 px chung theo part, không đổi atlas/actor/camera. Next: tương tác/UI map còn thiếu và design/demo đăng nhập–hành trang–HUD theo yêu cầu dưới đây. Audit flow đăng nhập cũ trước khi reuse, vì các helper layout còn tồn tại không chứng minh màn đã được nối vào entry 2D hiện hành. Giữ lỗi kiến trúc bên dưới ở trạng thái chưa đạt, không dùng nó để mở lại vòng redraw character.
+Gate gần nhất: 67 EditMode, no-3D/no-source/frozen sạch; build 0 error/13 warning. Evidence `build/map01a-playable-hud-player/quest-hud-reviewed/{pc,tablet,mobile}`: 18 ảnh tuyến Q01–Q09 + 38 ảnh thoại/profile, đã xem ảnh. Hội thoại sáu NPC nhận việc ở lựa chọn cuối, quay lại không nhận tiếp tế lặp; giữ checkpoint `f7d5ba11`.
+
+Next: theo `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`, tiếp tục phần map có thể sửa an toàn và design/demo các màn sau map. Atlas kiến trúc còn lỗi, blocker source dưới đây. Đăng nhập chưa được nối vào entry 2D; asset Login V3B không còn trên branch, dù helper layout/API vẫn có. Không dựng backend/auth mới; cần demo cụ thể trước khi nối. Hành trang skin/inspect cần header/footer cố định và chỉ body cuộn, thay panel review hiện hành trong batch màn hình được owner yêu cầu. Không mở lại vòng redraw character hoặc tự claim map xong.
 
 ## Yêu cầu tiếp nối của owner — 2026-09-12
 
