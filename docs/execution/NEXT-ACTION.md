@@ -2,21 +2,17 @@
 
 `FIX_REQUIRED / CONTINUE`. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
 
-Nguồn chọn duy nhất của batch Pháp: `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/authoring-selection.json` trong selected-source root. Bốn slot hiện hành `inner_top`, `outer_top`, `waist_belt`, `shoulder_chest_guard` đều trỏ `registered-six-pose-v1`. Không dùng source cũ ngoài selection làm evidence hiện hành. Source/atlas metadata dùng profile thứ tự lớp chung trong [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12).
+Nguồn chọn duy nhất của batch Pháp nam Lv1: `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/authoring-selection.json` trong selected-source root. Selection hiện đủ 10 slot, mỗi slot trỏ một `registered-six-pose-v1`; source cũ ngoài selection không phải evidence hiện hành. Source/atlas metadata dùng profile thứ tự lớp chung trong [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12).
 
 ## Next task
 
-Giáp vai/ngực đã có `shoulder_chest_guard/registered-six-pose-v1` theo visible-contribution của từng pose, không chứa coat/anatomy và không tái dựng pixel khuất đè lên tay/tóc/thân. Board full outfit cùng trạng thái guard on/off với các slot trước on/off đã xem ở idle, bốn nhịp chạy và jump. Atlas div4 `128x512`, PNG 40.838 byte; reconstruction 12/12 pixel-exact. Vẫn REVIEW_ONLY, chưa Player.
+Pháp nam Lv1 đã đủ 10 slot × sáu pose trên body Võ div4 bất biến. Pack hiện hành `build/phap-source-pose-review-complete-garment-v2/pack` giữ nguyên byte body atlas/manifest, chỉ nạp các item được selection chọn. `compose_lgo_pose_review_loadout.py` preflight đủ 10 slot. Evidence Player `build/phap-complete-garment-lv1-runtime-v4/pc` có 154 frame, `errors=[]`, bốn nhịp chạy riêng, root scale 1 và 40 lần tháo/mặc; ảnh đứng/chạy/lộn và trạng thái tháo item đã được audit trực quan. Nam đạt `AGENT_VISUAL_PASS / REVIEW_ONLY`; chưa phải owner hoặc production approval.
 
-Author sáu slot còn thiếu trên body/template bất biến, bắt đầu `head_hair`, bám Pháp turnaround `03-male-starter-turnaround-reference.png` và grid `detail/12-male-equipment-grid-redraw-source.png`. Mỗi slot phải có visible contribution đủ sáu pose, tháo cả món, ghép với bốn slot đã khóa không dính anatomy hoặc xé vải. Giữ vải dưới item khác; body occlusion riêng với ownership. Không chia ảnh mặc đủ, fit bbox hoặc normalize jump.
-
-Source cặp áo: `inner_top/registered-six-pose-v1/six-pose-pair-review.jpg` và từng pose `inner-outer-toggle-review.jpg`; atlas/evidence tại `build/phap-garment-six-pose-batch/`. Đã xác minh 24 component tái dựng pixel-exact, xem board div4. Chưa đủ 10 slot/mixed/Player; không dùng trạng thái REVIEW_ONLY làm quyền bàn giao.
-
-Sau nam đủ 10 món/sáu pose, làm nữ và mixed Lv1/Lv10, kiểm Player thật bốn nhịp chạy/jump/return/tháo-mặc/UI. Sau Pháp mới audit thay Kiếm/Cơ/Linh. Gom validation/evidence và commit/push qua supervisor theo batch.
+Batch tiếp theo là Pháp nữ Lv1 trên common female body/canvas/pivot hiện hành, theo cùng 10 slot, thứ tự lớp và quy tắc ownership. Review source full/toggle đủ sáu pose trước một lượt Player nam+nữ. Sau hai giới Lv1 mới author Lv10 và kiểm full Lv1/full Lv10/mixed; chỉ sau gate đó mới chuyển Kiếm/Cơ/Linh. Không dùng female fallback cũ của capture nam làm evidence hình nữ.
 
 ## Current blocker
 
-Không có blocker môi trường đã xác minh. Thiếu nguồn sáu slot và các gate nữ/mixed/Player. Fallback hiện chứa trang phục Võ; không tự tạo base trung tính. Launcher chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
+Không có blocker môi trường đã xác minh. Còn thiếu Pháp nữ Lv1, Lv10 hai giới, mixed và owner review. Capture nam cần truyền pack nữ cũ chỉ để thỏa contract harness hai giới; 82 frame nữ của lượt đó không được dùng làm evidence hiện hành. Launcher vẫn chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
 
 ## Lịch sử — không thay action hiện hành
 
