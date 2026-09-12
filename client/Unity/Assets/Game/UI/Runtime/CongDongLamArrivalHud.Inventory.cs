@@ -6,11 +6,11 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private VisualElement _equipmentPage, _suppliesPage, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel;
-        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _suppliesTitle;
-        private Button _bagTab, _characterInfoTab, _equipmentTab, _suppliesTab;
+        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel;
+        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _suppliesTitle, _storageState;
+        private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button[] _equipmentTiles;
-        private bool _characterInfoOpen, _suppliesOpen;
+        private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
 
         private static readonly Color InventoryGlass = new Color(.012f, .045f, .078f, .965f);
         private static readonly Color InventoryGlassRaised = new Color(.026f, .082f, .128f, .94f);
@@ -97,7 +97,8 @@ namespace LinhGioi.UI
             var mainTabs = InventoryRow("Map01A Inventory Main Tabs");
             _bagTab = InventoryButton(() => ShowInventoryMode(false), "Map01A Bag Main Tab", "Hành trang");
             _characterInfoTab = InventoryButton(() => ShowInventoryMode(true), "Map01A Character Info Main Tab", "Thông tin");
-            mainTabs.Add(_bagTab); mainTabs.Add(_characterInfoTab); _inventory.Add(mainTabs);
+            _storageTab = InventoryButton(ShowStorageMode, "Map01A Storage Main Tab", "Rương đồ");
+            mainTabs.Add(_bagTab); mainTabs.Add(_characterInfoTab); mainTabs.Add(_storageTab); _inventory.Add(mainTabs);
 
             var body = new VisualElement { name = "Map01A Inventory Body" };
             body.style.flexDirection = FlexDirection.Row;
@@ -200,6 +201,25 @@ namespace LinhGioi.UI
             _inventoryGender = InventoryButton(() => _scene.CycleVoAvatarGender(), "Map01A Inventory Gender");
             identity.Add(_equipmentClass); identity.Add(_inventoryGender); _inventoryHeroPanel.Add(identity);
 
+            _storagePanel = InventoryPanel("Map01A Storage Panel");
+            _storagePanel.style.flexGrow = 1;
+            _storagePanel.style.marginRight = 0;
+            body.Add(_storagePanel);
+            _storagePanel.Add(InventoryLabel("RƯƠNG ĐỒ", 22, InventoryGold, true));
+            _storageState = InventoryLabel("Kho gửi/rút chưa kết nối model dữ liệu thật trong Map01A. Không tạo vật phẩm giả; khi có storage API/state sẽ dùng lại panel chi tiết bên trái để xem món đang chọn.", 16, new Color(.91f, .93f, .84f, .96f));
+            _storageState.name = "Map01A Storage State";
+            _storageState.style.marginTop = 10;
+            _storagePanel.Add(_storageState);
+            var storageActions = InventoryRow("Map01A Storage Actions");
+            storageActions.style.marginTop = 16;
+            var deposit = InventoryButton(() => { }, "Map01A Storage Deposit", "Gửi đồ");
+            var withdraw = InventoryButton(() => { }, "Map01A Storage Withdraw", "Rút đồ");
+            deposit.SetEnabled(false);
+            withdraw.SetEnabled(false);
+            storageActions.Add(deposit);
+            storageActions.Add(withdraw);
+            _storagePanel.Add(storageActions);
+
             _equipmentPage = new VisualElement { name = "Map01A Equipment Page" };
             _equipmentPage.style.flexDirection = FlexDirection.Row;
             _equipmentPage.style.flexWrap = Wrap.Wrap;
@@ -245,12 +265,29 @@ namespace LinhGioi.UI
         private void ShowInventoryMode(bool characterInfo)
         {
             _characterInfoOpen = characterInfo;
+            _storageOpen = false;
             _inventoryGridPanel.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryHeroPanel.style.display = characterInfo ? DisplayStyle.Flex : DisplayStyle.None;
+            _storagePanel.style.display = DisplayStyle.None;
             _inventoryDetailPanel.style.display = characterInfo || !_suppliesOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _inventoryFooter.style.display = characterInfo || !_suppliesOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _bagTab.style.backgroundColor = characterInfo ? new Color(.045f,.13f,.18f) : InventoryBlue;
             _characterInfoTab.style.backgroundColor = characterInfo ? InventoryBlue : new Color(.045f,.13f,.18f);
+            _storageTab.style.backgroundColor = new Color(.045f,.13f,.18f);
+        }
+
+        private void ShowStorageMode()
+        {
+            _characterInfoOpen = false;
+            _storageOpen = true;
+            _inventoryGridPanel.style.display = DisplayStyle.None;
+            _inventoryHeroPanel.style.display = DisplayStyle.None;
+            _storagePanel.style.display = DisplayStyle.Flex;
+            _inventoryDetailPanel.style.display = DisplayStyle.None;
+            _inventoryFooter.style.display = DisplayStyle.None;
+            _bagTab.style.backgroundColor = new Color(.045f,.13f,.18f);
+            _characterInfoTab.style.backgroundColor = new Color(.045f,.13f,.18f);
+            _storageTab.style.backgroundColor = InventoryBlue;
         }
 
         private void ShowInventoryPage(bool supplies)
@@ -258,8 +295,11 @@ namespace LinhGioi.UI
             _suppliesOpen = supplies;
             _equipmentPage.style.display = supplies ? DisplayStyle.None : DisplayStyle.Flex;
             _suppliesPage.style.display = supplies ? DisplayStyle.Flex : DisplayStyle.None;
-            _inventoryFooter.style.display = !_characterInfoOpen && supplies ? DisplayStyle.None : DisplayStyle.Flex;
-            _inventoryDetailPanel.style.display = !_characterInfoOpen && supplies ? DisplayStyle.None : DisplayStyle.Flex;
+            if (!_storageOpen)
+            {
+                _inventoryFooter.style.display = !_characterInfoOpen && supplies ? DisplayStyle.None : DisplayStyle.Flex;
+                _inventoryDetailPanel.style.display = !_characterInfoOpen && supplies ? DisplayStyle.None : DisplayStyle.Flex;
+            }
             _equipmentTab.style.backgroundColor = supplies ? new Color(.045f,.13f,.18f) : InventoryBlue;
             _suppliesTab.style.backgroundColor = supplies ? InventoryBlue : new Color(.045f,.13f,.18f);
         }

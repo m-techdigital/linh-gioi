@@ -166,6 +166,39 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void InventoryStorageTabShowsExplicitGateWithoutChangingLoadout()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("inventory storage gate test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                scene.ToggleInventory();
+                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
+                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+
+                var storageTab = root.Q<Button>("Map01A Storage Main Tab");
+                Assert.That(storageTab, Is.Not.Null);
+                InvokeBoundButton(storageTab);
+                Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("chưa kết nối"));
+                Assert.That(root.Q<Button>("Map01A Storage Deposit").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Storage Withdraw").enabledSelf, Is.False);
+                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void SourcePoseInventoryKeepsQuestPotionActionUsable()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

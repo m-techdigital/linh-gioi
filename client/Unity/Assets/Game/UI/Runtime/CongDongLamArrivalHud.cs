@@ -206,9 +206,12 @@ namespace LinhGioi.UI
                 _inventoryHeroPanel.style.flexGrow = _characterInfoOpen ? 1 : 0;
                 _inventoryHeroPanel.style.marginRight = 0;
                 _inventoryHeroPanel.style.marginBottom = stacked ? 10 : 0;
-                _inventoryGridPanel.style.flexGrow = _characterInfoOpen ? 0 : 1;
+                _inventoryGridPanel.style.flexGrow = _characterInfoOpen || _storageOpen ? 0 : 1;
                 _inventoryGridPanel.style.marginRight = 0;
                 _inventoryGridPanel.style.marginBottom = stacked ? 10 : 0;
+                _storagePanel.style.flexGrow = _storageOpen ? 1 : 0;
+                _storagePanel.style.marginRight = 0;
+                _storagePanel.style.marginBottom = stacked ? 10 : 0;
                 _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 300;
                 _inventoryDetailPanel.style.marginRight = stacked ? 0 : 10;
                 _inventoryDetailPanel.style.marginBottom = stacked ? 10 : 0;
