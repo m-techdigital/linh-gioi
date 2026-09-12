@@ -88,5 +88,11 @@ namespace LinhGioi.World
         {
             Bone(boneId).localRotation = Quaternion.Euler(0, 0, degrees);
         }
+
+        public float LocalRotationDegrees(string boneId)
+        {
+            var degrees = Bone(boneId).localEulerAngles.z;
+            return degrees > 180 ? degrees - 360 : degrees;
+        }
     }
 }

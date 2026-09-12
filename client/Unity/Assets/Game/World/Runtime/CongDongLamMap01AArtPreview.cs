@@ -1071,7 +1071,29 @@ namespace LinhGioi.World
                 var part = pair.Key.Substring(VoAvatarGender.Length + 1);
                 var key = VoAvatarGender + "_" + VoAvatarMotionState + "_" + part;
                 if (!_voRigPoseProfiles.TryGetValue(key, out var profile)) continue;
-                _voRig.SetLocalRotation(pair.Key, profile.rotation);
+                var rotation = VoAvatarMotionState == "run"
+                    ? SharedRunBoneRotation(part, _voState.AnimationPhase)
+                    : profile.rotation;
+                _voRig.SetLocalRotation(pair.Key, rotation);
+            }
+        }
+
+        private static float SharedRunBoneRotation(string part, float animationPhase)
+        {
+            var stride = Mathf.Sin(animationPhase * 28f);
+            switch (part)
+            {
+                case "head": return 2f;
+                case "torso-hips": return -5f;
+                case "left-upper-arm": return 22f * stride;
+                case "right-upper-arm": return -22f * stride;
+                case "left-forearm-hand": return -8f - 6f * stride;
+                case "right-forearm-hand": return 8f + 6f * stride;
+                case "left-thigh": return -25f * stride;
+                case "right-thigh": return 25f * stride;
+                case "left-shin-foot": return stride > 0 ? 36f * stride : -10f * stride;
+                case "right-shin-foot": return stride < 0 ? -36f * stride : 10f * stride;
+                default: return 0;
             }
         }
 
@@ -1246,7 +1268,7 @@ namespace LinhGioi.World
                 SetVoMotionFrame(VoAvatarGender + "_idle");
                 _voAvatarRoot.localScale = new Vector3(1f, 1f + Mathf.Sin(_voState.AnimationPhase * 2.6f) * .005f, 1f);
             }
-            if (_registeredOutfit != null)
+            if (_registeredOutfit != null || _classFitPreviewActive)
             {
                 _voAvatarRoot.localScale = Vector3.one;
                 _voAvatarRoot.localRotation = Quaternion.identity;

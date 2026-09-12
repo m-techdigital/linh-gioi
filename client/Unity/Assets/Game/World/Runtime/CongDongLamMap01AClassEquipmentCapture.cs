@@ -18,10 +18,16 @@ namespace LinhGioi.World
             public int frames;
             public int fullLoadouts;
             public int slotToggleCases;
+            public int emptyLoadouts;
             public int mixedLoadouts;
             public int motionCases;
             public int minVisibleSlots = 10;
             public int maxVisibleComponents;
+            public float idleHeight;
+            public float maxMotionHeight;
+            public float maxMotionHeightRatio;
+            public float maxRootScaleDelta;
+            public List<string> runPoseSignatures = new List<string>();
             public string[] levels = { "1", "10", "20", "30" };
             public string[] genders = { "male", "female" };
             public string finalSnapshot;
@@ -80,6 +86,15 @@ namespace LinhGioi.World
                 yield return CaptureClassEquipmentFrame(directory, "male-lv1-off-" + slot, result, false);
                 result.slotToggleCases++;
             }
+            _voState.EquipAllExcept(null);
+            for (var slotIndex = 0; slotIndex < VoEquipmentSlots.Length; slotIndex++)
+            {
+                _voState.SetPresentation(0, 0, 2, slotIndex);
+                _voState.ToggleSelectedEquipmentSlot();
+            }
+            RefreshVoAvatarMode();
+            yield return CaptureClassEquipmentFrame(directory, "male-lv1-all-equipment-off", result, false);
+            result.emptyLoadouts++;
 
             foreach (var gender in new[] { "male", "female" })
             {
@@ -92,32 +107,52 @@ namespace LinhGioi.World
                 result.mixedLoadouts++;
             }
 
-            SetClassFitPreview("male", "idle");
-            _voState.EquipAllExcept(null);
-            foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = 10;
-            RefreshVoAvatarMode();
-            SetVoRun(true);
-            for (var phase = 0; phase < 4; phase++)
+            foreach (var motionLevel in new[] { 1, 10 })
             {
-                MoveOnLane(1, .09f);
-                yield return CaptureClassEquipmentFrame(directory, "male-lv10-run-phase-" + phase, result, false);
+                SetClassFitPreview("male", "idle");
+                _voState.EquipAllExcept(null);
+                foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = motionLevel;
+                RefreshVoAvatarMode();
+                if (motionLevel == 1) result.idleHeight = _classFitPreview.VisibleBodyWorldBounds().size.y;
+                SetVoRun(true);
+                for (var phase = 0; phase < 4; phase++)
+                {
+                    MoveOnLane(1, .09f);
+                    yield return CaptureClassEquipmentFrame(directory, "male-lv" + motionLevel + "-run-phase-" + phase, result, false);
+                    if (motionLevel == 1)
+                        result.runPoseSignatures.Add(string.Join(",", new[]
+                        {
+                            _voRig.LocalRotationDegrees("male_left-upper-arm").ToString("F1"),
+                            _voRig.LocalRotationDegrees("male_right-upper-arm").ToString("F1"),
+                            _voRig.LocalRotationDegrees("male_left-thigh").ToString("F1"),
+                            _voRig.LocalRotationDegrees("male_right-thigh").ToString("F1")
+                        }));
+                    result.motionCases++;
+                }
+                SetVoRun(false);
+                AdvanceVoAnimation(.5f);
+                TriggerVoJump();
+                yield return CaptureClassEquipmentFrame(directory, "male-lv" + motionLevel + "-jump-rise", result, false);
+                result.motionCases++;
+                AdvanceVoAnimation(.22f);
+                yield return CaptureClassEquipmentFrame(directory, "male-lv" + motionLevel + "-jump-apex", result, false);
                 result.motionCases++;
             }
-            SetVoRun(false);
-            AdvanceVoAnimation(.5f);
-            TriggerVoJump();
-            yield return CaptureClassEquipmentFrame(directory, "male-lv10-jump-rise", result, false);
-            result.motionCases++;
-            AdvanceVoAnimation(.22f);
-            yield return CaptureClassEquipmentFrame(directory, "male-lv10-jump-apex", result, false);
-            result.motionCases++;
+
+            result.maxMotionHeightRatio = result.idleHeight > 0 ? result.maxMotionHeight / result.idleHeight : 0;
 
             result.finalSnapshot = _classFitPreview.Snapshot;
-            if (result.fullLoadouts != 8 || result.slotToggleCases != 10
-                || result.mixedLoadouts != 2 || result.motionCases != 6 || result.frames != 27)
+            if (result.fullLoadouts != 8 || result.slotToggleCases != 10 || result.emptyLoadouts != 1
+                || result.mixedLoadouts != 2 || result.motionCases != 12 || result.frames != 34)
                 result.errors.Add("incomplete capture matrix");
-            if (result.minVisibleSlots != 9 || result.maxVisibleComponents != 13)
+            if (result.minVisibleSlots != 0 || result.maxVisibleComponents != 15)
                 result.errors.Add("unexpected visible slot/component counts");
+            if (result.maxRootScaleDelta > .0001f)
+                result.errors.Add("avatar root scale changed during shared-rig motion");
+            if (result.maxMotionHeightRatio > 1.20f)
+                result.errors.Add("motion silhouette exceeds idle height by more than 20 percent");
+            if (new HashSet<string>(result.runPoseSignatures).Count != 4)
+                result.errors.Add("run review does not contain four distinct skeletal beats");
             if (result.errors.Count > 0) result.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), JsonUtility.ToJson(result, true));
             Application.Quit(result.status == "PASS" ? 0 : 1);
@@ -132,13 +167,21 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var visibleSlots = _classFitPreview.VisibleSlotCount;
             var visibleComponents = _classFitPreview.VisibleComponentCount;
+            if (name.StartsWith("male-lv1-run-") || name.StartsWith("male-lv1-jump-"))
+                result.maxMotionHeight = Mathf.Max(result.maxMotionHeight,
+                    _classFitPreview.VisibleBodyWorldBounds().size.y);
+            var scale = _classFitPreview.RootScale;
+            result.maxRootScaleDelta = Mathf.Max(result.maxRootScaleDelta,
+                Mathf.Max(Mathf.Abs(scale.x - 1), Mathf.Abs(scale.y - 1)));
             result.minVisibleSlots = Mathf.Min(result.minVisibleSlots, visibleSlots);
             result.maxVisibleComponents = Mathf.Max(result.maxVisibleComponents, visibleComponents);
             if ((inventory || name.Contains("-full") || name.Contains("mixed") || name.Contains("run") || name.Contains("jump"))
-                && (visibleSlots != 10 || visibleComponents != 13))
-                result.errors.Add(name + ": expected 10 slots/13 components");
+                && (visibleSlots != 10 || visibleComponents != 15))
+                result.errors.Add(name + ": expected 10 slots/15 components");
             if (name.Contains("-off-") && visibleSlots != 9)
                 result.errors.Add(name + ": expected 9 visible slots");
+            if (name.Contains("all-equipment-off") && (visibleSlots != 0 || visibleComponents != 0))
+                result.errors.Add(name + ": expected base character with no equipment components");
 
             var active = RenderTexture.active;
             var image = new Texture2D(Screen.width, Screen.height, TextureFormat.RGBA32, false);

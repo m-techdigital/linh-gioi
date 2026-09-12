@@ -1,3 +1,9 @@
+## Hiện hành — Pháp common-rig đã qua agent visual gate; tiếp tục Kiếm — 2026-09-12
+
+Giữ Pháp pack 120-component và evidence `build/phap-shared-rig-v5-runtime/pc`: 34/34 frame, 4 run beat riêng, root scale 1, jump height ratio 1.0142, đủ nam/nữ Lv1/10/20/30, tháo từng slot/all-off và mixed. Mở Player này cho owner sau checkpoint; không promotion khỏi `DRAFT_RUNTIME_FIT` nếu chưa có owner review.
+
+Action tiếp theo: audit design Kiếm gốc rồi tạo tám sheet 5×3 cùng schema 15 component cho nam/nữ Lv1/10/20/30; dùng lại `TwoDSkeletalPaperDollRig`, packer, inventory, class switch và capture hiện có. Không chia full-outfit theo dải/nearest-anchor, không tạo base/camera/controller thứ hai. Sau Kiếm làm Cơ rồi Linh; Map01A tiếp tục là target, không Meshy/3D hoặc frozen surfaces.
+
 ## Hiện hành — owner kiểm Pháp canonical-v2 sau khi thu hồi semantic-v3 — 2026-09-12
 
 Pháp semantic-v3 đã bị reject vì chia pixel theo anchor tạo layer chắp vá. Launcher hiện chỉ dùng candidate `canonical-v2`: surface tách trước semantic-v3 và `jump_tuck` được bake `2/3` quanh pivot cho body + đủ 10 layer. Evidence `build/phap-canonical-v2-runtime-v1/pc` có 190 frame, root scale 1, đúng bốn nhịp, đủ Lv1/Lv10/mixed/từng món tháo/32 tổ hợp và `errors=[]`; ảnh Player đã được agent xem nhưng chưa thay quyền review của owner.
