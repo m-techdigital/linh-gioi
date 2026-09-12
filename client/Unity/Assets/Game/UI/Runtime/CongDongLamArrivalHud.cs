@@ -13,7 +13,7 @@ namespace LinhGioi.UI
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions;
         private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
-        private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
+        private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
         private Button _dialogueInformation, _dialogueClose, _npcTalk;
         private Button[] _equipmentRows;
         private IReadOnlyList<string> _equipmentSlotIds;
@@ -132,21 +132,26 @@ namespace LinhGioi.UI
                 _combatBar.Add(button);
             }
             _safe.Add(_combatBar);
+            _characterSelectButton = new Button(OpenCharacterSelect) { name = "Map01A Character Select Button", text = "Nhân vật" };
+            Box(_characterSelectButton);
+            _characterSelectButton.style.minHeight = _touch ? 64 : 48; _characterSelectButton.style.minWidth = 150;
             _inventoryToggle = new Button(() => _scene.ToggleInventory()) { text = "Hành trang · I" };
             Box(_inventoryToggle); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
             _inventoryToggle.style.minHeight = _touch ? 64 : 48; _inventoryToggle.style.minWidth = 180;
             var actionBar = new VisualElement { name = "Map01A Context Actions", pickingMode = PickingMode.Ignore };
             Place(actionBar, null, 16, null, 24); actionBar.style.flexDirection = FlexDirection.Row;
             actionBar.style.alignItems = Align.FlexEnd;
-            foreach (var button in new[] { _inventoryToggle, _talk })
+            foreach (var button in new[] { _characterSelectButton, _inventoryToggle, _talk })
             {
                 button.style.position = Position.Relative;
                 button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
                 button.style.maxWidth = 260; button.style.whiteSpace = WhiteSpace.Normal;
                 actionBar.Add(button);
             }
+            _characterSelectButton.style.marginRight = 12;
             _inventoryToggle.style.marginRight = 12; _safe.Add(actionBar);
             BuildInventory();
+            BuildCharacterSelect();
             BuildEntryScreen();
             _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 290, null, 20);
             _dialogueSpeaker = new Label("Hạ Vân");
@@ -233,10 +238,11 @@ namespace LinhGioi.UI
                 if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
                 if (Input.GetKeyDown(KeyCode.Escape))
                 {
-                    if (_scene.DialogueOpen) _scene.CloseNpcDialogue();
+                    if (_characterSelectOpen) CloseCharacterSelect();
+                    else if (_scene.DialogueOpen) _scene.CloseNpcDialogue();
                     else if (_scene.InventoryOpen) _scene.ToggleInventory();
                 }
-                if (!_scene.DialogueOpen)
+                if (!_scene.DialogueOpen && !_characterSelectOpen)
                 {
                     if (!_scene.IsSourcePoseReviewActive && Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
                     if (Input.GetKeyDown(KeyCode.L)) _scene.CycleVoAvatarLevel();
@@ -272,6 +278,7 @@ namespace LinhGioi.UI
             _skill.SetEnabled(_scene.CanTriggerVoSkill);
             _minimap.text = _scene.MinimapRouteText;
             _minimap.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _characterSelectButton.text = "Nhân vật" + (_touch ? "" : " · P");
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _quest.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
@@ -327,10 +334,12 @@ namespace LinhGioi.UI
             _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
             _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            _inventoryToggle.style.display = _scene.DialogueOpen || _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _talk.style.display = _scene.DialogueOpen || _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _combatBar.style.display = _scene.DialogueOpen || _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _pad.style.display = _touch && !_scene.DialogueOpen && !_scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            var hudBlocked = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen;
+            _characterSelectButton.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
+            _inventoryToggle.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
+            _talk.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
+            _combatBar.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
+            _pad.style.display = _touch && !hudBlocked ? DisplayStyle.Flex : DisplayStyle.None;
             _dialogueInformation.style.display = _scene.CanReadDialogueInformation ? DisplayStyle.Flex : DisplayStyle.None;
             _npcTalk.style.display = !_scene.DialogueOpen && _scene.CanTalkToCurrentNpc
                 && _scene.CurrentRouteNodeId == "well-bridge" && _scene.CurrentActionLabel != "Trò chuyện"
@@ -339,7 +348,8 @@ namespace LinhGioi.UI
             _dialogueSpeaker.text = _scene.DialogueSpeaker + " · " + _scene.DialogueProgress;
             _dialogueLine.text = _scene.DialogueText;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
-            _marker.style.display = _scene.DialogueOpen || _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _marker.style.display = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            UpdateHudShellVisibility();
             var camera = Camera.main;
             if (camera != null)
             {

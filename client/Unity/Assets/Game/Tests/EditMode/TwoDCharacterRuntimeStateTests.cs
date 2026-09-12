@@ -74,6 +74,12 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(args), Is.False,
                 "Entry capture must not enter the quest capture clock because that hides the entry overlay.");
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(args, sceneIsCapturing: false), Is.True);
+            var characterArgs = new[] { "LinhGioiOnline", "--lgo-map01a-character-select-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(characterArgs), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(characterArgs), Is.False,
+                "Character select capture must not advance the quest capture route.");
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(characterArgs, sceneIsCapturing: true), Is.False,
+                "Character select capture should open character modal directly instead of stacking over entry login.");
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(
                 new[] { "LinhGioiOnline", "--lgo-map01a-art-capture" }, sceneIsCapturing: true), Is.False);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(
@@ -177,6 +183,42 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(bagTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void CharacterSelectModalUsesSharedSkinAndDoesNotAdvanceQuest()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character select modal test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Start Button"));
+                var open = root.Q<Button>("Map01A Character Select Button");
+                Assert.That(open, Is.Not.Null);
+                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
+
+                InvokeBoundButton(open);
+                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Label>("Map01A Character Select Title").text, Does.Contain("Chọn Nhân Vật"));
+                foreach (var label in new[] { "Võ", "Kiếm", "Pháp", "Cơ", "Linh" })
+                    Assert.That(root.Q<Button>("Map01A Character Card " + label), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Character Select Scope").text, Does.Contain("review"));
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Character Select Close"));
+                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
             }
             finally
             {

@@ -7,6 +7,11 @@ Tất cả màn UI 2D mới theo bộ demo owner gửi phải dùng cùng ngôn 
 Đã thêm flag `--lgo-map01a-entry-capture` để lấy ảnh entry/login trực tiếp trong Player, không dùng osascript, click chuột hoặc bàn phím hệ điều hành. Test khóa: flag này khởi động Map01A nhưng không đi vào quest capture clock nên entry overlay không bị ẩn; entry mở thì safe HUD/marker bị ẩn để tránh lộ UI chơi phía sau modal. Evidence mới nhất: `build/map01a-entry-form-runtime/entry-login.png`, manifest `usesOsMouseOrKeyboard=false`, 1600×900, status `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`. Entry modal có form tài khoản/mật khẩu, server card, nút đăng nhập dev và nút bắt đầu; HUD chơi vẫn bị ẩn phía sau modal. Player build `client/Unity/build/map01a-entry-form-player/LinhGioiOnline.app` đạt exit 0. Đây là evidence kỹ thuật/visual nội bộ, chưa phải owner approval toàn bộ login UI hoặc production auth.
 
 
+
+## Character select review modal — 2026-09-13
+
+Đã thêm modal `Chọn Nhân Vật` trong Map01A bằng shared skin/base `CongDongLamArrivalHud.Skin.cs`, không tạo modal/card/button skin song song. Nút `Nhân vật` mở modal 5 class Võ/Kiếm/Pháp/Cơ/Linh, ẩn safe HUD phía sau, đóng modal không đổi quest/map state. Capture nội bộ mới `--lgo-map01a-character-select-capture` ghi `build/map01a-character-select-runtime/character-select.png`, manifest `usesOsMouseOrKeyboard=false`, 1600×900, status `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`. Unity EditMode mới `total=268 passed=267 failed=0 skipped=1`. Đây là review UI shell, chưa mở tạo nhân vật/production account hoặc nghiệm thu class art.
+
 ## Audit chống nhầm validator UI cũ — 2026-09-13
 
 `tools/report_lgo_legacy_ui_validator_refs.py` phân loại 73 validator `validate_lgo_*` còn trỏ `M4PlayableClientController.cs` là `LEGACY_STALE_NOT_CURRENT_GATE` vì controller này đã bị gỡ khỏi branch hiện tại. Không dùng các validator M4/V3B đó làm bằng chứng cho UI 2D mới và không phục hồi hệ cũ chỉ để làm xanh chúng. Chi tiết: `docs/design/LGO-2D-UI-LEGACY-VALIDATOR-AUDIT-v0.1.md`.
