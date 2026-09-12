@@ -882,8 +882,8 @@ namespace LinhGioi.World
                     review.SetSlotVisible(VoReviewSlotIds[index], _voState.IsEquipped(VoEquipmentSlots[index]));
                 }
             var activeReview = ActiveSourcePoseReview;
-            _sourcePoseReview?.SetPresentationVisible(activeReview == _sourcePoseReview);
-            _femaleSourcePoseReview?.SetPresentationVisible(activeReview == _femaleSourcePoseReview);
+            _sourcePoseReview?.SetPresentationVisible(!_classFitPreviewActive && activeReview == _sourcePoseReview);
+            _femaleSourcePoseReview?.SetPresentationVisible(!_classFitPreviewActive && activeReview == _femaleSourcePoseReview);
             if (_registeredOutfit != null)
             {
                 var sourcePoseVisible = activeReview != null;

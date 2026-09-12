@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using LinhGioi.World;
 using NUnit.Framework;
 using UnityEngine;
@@ -136,6 +137,37 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(preview.GetComponentsInChildren<SpriteRenderer>(true)
                     .Any(renderer => renderer.enabled && renderer.name.StartsWith("Map01A Võ equipment component")), Is.False,
                     "Class review must not render a parallel Võ wardrobe");
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void ActivatingLegacyClassPreviewHidesAnyLoadedSourcePoseActor()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager
+                .GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A presentation precedence test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                var controller = TwoDOnboardingController.Attach(host);
+                preview = CongDongLamMap01AArtPreview.Attach(controller);
+                var sourceReview = preview.gameObject.AddComponent<TwoDSourcePoseReview>();
+                typeof(CongDongLamMap01AArtPreview)
+                    .GetField("_sourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(preview, sourceReview);
+
+                Assert.That(sourceReview.PresentationVisible, Is.True);
+                preview.ActivateClassEquipmentReview("kiem");
+
+                Assert.That(sourceReview.PresentationVisible, Is.False,
+                    "Only the selected presentation may remain visible");
             }
             finally
             {

@@ -1,3 +1,11 @@
+## Hiện hành — khóa một presentation và audit chéo source-pose 4 class — 2026-09-12
+
+Đã hoàn tất candidate source-pose Lv1/Lv10 cho Cơ nam/nữ trên cùng body authority: bốn pack có 10 slot × sáu pose, body div4, overlay div2 và không đổi camera/base/scale. Player mới `build/source-pose-cross-class-player-v1/LinhGioiOnline.app` được build từ source hiện hành với 0 error/0 warning. Evidence Cơ từ đúng Player này ở `build/co-lv10-source-pose-review-v2/runtime-pc/pc`: 190 frame, full `[1,10]`, 60 variant switch, 32 tổ hợp wardrobe, mixed verified, `maxBodyVariants=1`, bind-return error < 0,000008 và `errors=[]`. Ảnh lớn nam/nữ Lv10 và lộn đã review: một silhouette người liền, cannon/đồ bám pose, không matte hoặc actor thứ hai. Trạng thái `AGENT_VISUAL_PASS / REVIEW_ONLY`.
+
+Đã bổ sung regression guard cho lỗi hai presentation: `RefreshVoAvatarMode` chỉ cho source-pose nam/nữ hiển thị khi class-preview cũ không active. Test mới chứng minh đường lỗi trước sửa và full Unity EditMode sau sửa đạt 251 total / 250 pass / 0 fail / 1 ignored. Audit tổng `build/source-pose-cross-class-audit-v1.json` kiểm 16 pack Kiếm/Pháp/Cơ/Linh, 160 item, hai body hash cố định, đủ 10 slot/sáu pose và capture Lv1/Lv10/mixed/32 tổ hợp của từng class. Linh đã được capture lại ở `build/linh-lv10-source-pose-review-v3/runtime-pc/pc` để nâng evidence cũ 158 frame lên 190 frame; ảnh lớn xác nhận bốn nhịp chạy riêng và tháo/phối đồ vẫn nguyên người. Audit không có lỗi; metadata `gender` tùy chọn còn thiếu ở 10 manifest Linh nam Lv1 cũ nhưng item ID/fit family/body/level đều đúng và runtime không dựa vào trường này.
+
+Next: để owner kiểm trực tiếp Cơ Lv1/Lv10 nam/nữ trên Player mới bằng hành trang; giữ goal active tới khi có phản hồi hình. Nếu được chấp nhận, dùng audit này làm checkpoint source-pose chung và chỉ mở tier/class tiếp theo theo roadmap, không quay lại static-fit đã thu hồi.
+
 ## Hiện hành — Cơ Lv1 nam/nữ source-pose trên Player thật — 2026-09-12
 
 Đã audit turnaround, equipment grid và weapon module Cơ gốc; static-fit cũ tiếp tục bị thu hồi. Source ngoài repo `class-work-in-progress/co-lv001/` dùng sáu donor cùng action, tách thành 10 slot trên body authority nam/nữ hiện hành. Cannon được mask theo trục nòng–tay riêng từng pose nên không dính vào áo/đai; board sáu pose và 10 trạng thái tháo đã được xem ở kích thước lớn.

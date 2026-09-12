@@ -1,3 +1,9 @@
+## Hiện hành — Player kiểm Cơ Lv1/Lv10 và khóa một presentation — 2026-09-12
+
+Player hiện hành: `build/source-pose-cross-class-player-v1/LinhGioiOnline.app`, build 0 error/0 warning từ source mới. Cơ nam/nữ Lv1/Lv10 dùng bốn source-pose pack, một actor, 10 slot, sáu pose và cùng body/canvas/pivot. Evidence `build/co-lv10-source-pose-review-v2/runtime-pc/pc` có 190 frame, 32 tổ hợp tháo/mặc, full `[1,10]`, mixed, 60 switch, `maxBodyVariants=1`, `errors=[]`; ảnh lớn đã review. Linh cũng đã tái capture đủ ma trận tại `build/linh-lv10-source-pose-review-v3/runtime-pc/pc`. Audit chéo 16 pack/160 item Kiếm–Pháp–Cơ–Linh ở `build/source-pose-cross-class-audit-v1.json` là PASS.
+
+Code đã khóa presentation loại trừ nhau: nếu class-preview cũ được kích hoạt thì source-pose nam/nữ bị ẩn trong cùng refresh path; test hồi quy và full Unity EditMode đạt 250 pass/0 fail/1 ignored. Action hiện tại là để owner thao tác Player Cơ: `G` đổi giới, chọn slot trong hành trang rồi `Đổi cấp món`, `Shift` chạy, `W/↑` lộn. Giữ `REVIEW_ONLY`; không claim owner/production approval, không mở lại static-fit hoặc đổi camera/base/scale. Feedback hình phải sửa theo source surface/ownership cả batch.
+
 ## Hiện hành — Cơ Lv1 hai giới đã qua source board và Player evidence — 2026-09-12
 
 Cơ nam/nữ Lv1 đã thay static-fit bằng source-pose 10 slot × sáu pose trên một actor. Evidence `build/co-source-pose-review-v1/runtime-pc/pc`: 186 frame, 20 item load, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn và tháo cannon/áo/giày trên Player. Gate pack/capture/no-3D/no-source/frozen pass. Trạng thái `REVIEW_ONLY / AGENT_VISUAL_PASS`.
