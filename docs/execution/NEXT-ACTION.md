@@ -2,17 +2,17 @@
 
 `FIX_REQUIRED / CONTINUE`. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
 
-Nguồn chọn duy nhất của batch Pháp nam Lv1: `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/authoring-selection.json` trong selected-source root. Selection hiện đủ 10 slot, mỗi slot trỏ một `registered-six-pose-v1`; source cũ ngoài selection không phải evidence hiện hành. Source/atlas metadata dùng profile thứ tự lớp chung trong [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12).
+Nguồn chọn duy nhất của Pháp Lv1 là hai `authoring-selection.json` trong `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/` và `female-complete-garment-authoring-v1/` ở selected-source root. Mỗi giới đủ 10 slot × sáu pose; source cũ ngoài selection không phải evidence hiện hành. Source/atlas metadata dùng profile thứ tự lớp chung trong [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12).
 
 ## Next task
 
-Pháp nam Lv1 đã đủ 10 slot × sáu pose trên body Võ div4 bất biến. Pack hiện hành `build/phap-source-pose-review-complete-garment-v2/pack` giữ nguyên byte body atlas/manifest, chỉ nạp các item được selection chọn. `compose_lgo_pose_review_loadout.py` preflight đủ 10 slot. Evidence Player `build/phap-complete-garment-lv1-runtime-v4/pc` có 154 frame, `errors=[]`, bốn nhịp chạy riêng, root scale 1 và 40 lần tháo/mặc; ảnh đứng/chạy/lộn và trạng thái tháo item đã được audit trực quan. Nam đạt `AGENT_VISUAL_PASS / REVIEW_ONLY`; chưa phải owner hoặc production approval.
+Pháp Lv1 nam/nữ đã đủ 10 slot × sáu pose trên hai body authority bất biến. Evidence hai giới mới `build/phap-complete-garment-lv1-both-runtime-v1/pc` có 154 frame, `errors=[]`, bốn nhịp chạy riêng, root scale 1, 40 lần tháo/mặc và `maxBodyVariants=1`; ảnh nữ đứng/chạy/lộn cùng trạng thái tháo đủ 10 món ở đứng/trên không đã được audit trực quan. Hai giới đạt `AGENT_VISUAL_PASS / REVIEW_ONLY`; chưa phải owner hoặc production approval.
 
-Batch tiếp theo là Pháp nữ Lv1 trên common female body/canvas/pivot hiện hành, theo cùng 10 slot, thứ tự lớp và quy tắc ownership. Review source full/toggle đủ sáu pose trước một lượt Player nam+nữ. Sau hai giới Lv1 mới author Lv10 và kiểm full Lv1/full Lv10/mixed; chỉ sau gate đó mới chuyển Kiếm/Cơ/Linh. Không dùng female fallback cũ của capture nam làm evidence hình nữ.
+Batch tiếp theo là Pháp Lv10 nam/nữ trên đúng `vo_male_v3` và `common_female_v1`: audit progression/equipment grid Lv10, author đủ 10 slot × sáu pose, giữ body byte-identical, rồi review source full/toggle. Sau đó capture một Player với full Lv1, full Lv10 và phối chéo từng slot. Không tái dùng pack canonical-v2 đã bake jump `2/3`, không đổi camera/root scale và không tạo hệ wardrobe thứ hai.
 
 ## Current blocker
 
-Không có blocker môi trường đã xác minh. Còn thiếu Pháp nữ Lv1, Lv10 hai giới, mixed và owner review. Capture nam cần truyền pack nữ cũ chỉ để thỏa contract harness hai giới; 82 frame nữ của lượt đó không được dùng làm evidence hiện hành. Launcher vẫn chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
+Không có blocker môi trường đã xác minh. Còn thiếu Pháp Lv10 hai giới, mixed và owner review. Launcher vẫn chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
 
 ## Lịch sử — không thay action hiện hành
 
