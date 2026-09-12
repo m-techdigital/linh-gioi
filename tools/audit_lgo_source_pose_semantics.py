@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from compose_lgo_pose_review_loadout import body_identity, digest, item_identity
+from compose_lgo_pose_review_loadout import body_identity, digest, item_identity, validate_layer_profile
 
 POSES = ('idle', 'run_contact_a', 'run_a', 'run_contact_b', 'run_b', 'jump_tuck')
 SLOT_DIRS = ('main-weapon-review', 'head-hair-review', 'inner-top-review', 'outer-top-review',
@@ -57,8 +57,13 @@ def audit_pack(label: str, pack: Path) -> dict:
     if body.get('atlasSha256') != body_hash[0]:
         errors.append('BODY_ATLAS_HASH_MISMATCH')
     class_ids, genders, levels = set(), set(), set()
+    layer_profiles = set()
     for directory in SLOT_DIRS:
         manifest = json.loads((pack / directory / 'atlas-review.json').read_text())
+        try:
+            layer_profiles.add(validate_layer_profile(manifest, directory.removesuffix('-review').replace('-', '_')))
+        except ValueError as exc:
+            errors.append('SLOT_LAYER_PROFILE_INVALID:' + directory + ':' + str(exc))
         if body_hash != (manifest.get('basePoseAtlasSha256'), manifest.get('basePoseManifestSha256')):
             errors.append('SLOT_BODY_AUTHORITY_MISMATCH:' + directory)
         if manifest.get('atlasSha256') != digest(pack / directory / 'atlas-review.png'):
@@ -81,6 +86,7 @@ def audit_pack(label: str, pack: Path) -> dict:
             levels.add(level)
     if len(class_ids) != 1: errors.append('CLASS_ID_INCONSISTENT')
     if len(genders) != 1: errors.append('GENDER_INCONSISTENT')
+    if len(layer_profiles) > 1: errors.append('LAYER_PROFILE_INCONSISTENT')
     for pose in POSES:
         base, slots = load_pose_masks(pack, pose)
         full = base.copy()

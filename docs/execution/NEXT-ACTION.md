@@ -1,20 +1,20 @@
 ## Quick Resume
 
-`FIX_REQUIRED / CONTINUE`. Làm tại `/private/tmp/lgo-vo-pose-div4-clean`, từ `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
+`FIX_REQUIRED / CONTINUE`. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
 
-Jump proof `build/sam-authoring/male-jump-slot-proof-v5/` chưa đạt: layer áo chỉ có mảnh đang lộ, quần có anatomy và off-outer còn viền rách. Thu hồi hướng kế thừa jump sạch/pairwise-disjoint. Shared-rig v5, semantic-v3, v8/v9 và jump normalization `2/3` đã bị thu hồi; không pack/mở Player từ các nguồn đó.
-
-Chuẩn dùng chung: [source/pose wardrobe](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12): item có phần khuất đầy đủ, ownership riêng với occlusion, layer được overlap, cùng canvas/pivot/scale từng pose. Fallback vẫn là trang phục Võ có sẵn theo owner lock, không tự gọi là base trung tính.
+Nguồn chọn duy nhất của batch Pháp: `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/authoring-selection.json` trong selected-source root. Áo trong và áo ngoài đều ở `registered-six-pose-v1`: sáu pose, đầy đủ phần dưới đai, board tháo hai lớp đã xem. Không dùng `inner_top/idle/seams-underlap-review.jpg` cũ làm evidence hiện hành. Source/atlas metadata dùng profile thứ tự lớp chung trong [contract source/pose](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12).
 
 ## Next task
 
-Tiếp tục source `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/` trong selected-source root: áo ngoài idle/jump đã có ảnh ghép lên base gốc; cặp áo idle có board `inner_top/idle/inner-outer-toggle-review.jpg` và `seams-underlap-review.jpg` chứng minh áo trong nguyên thân sau tháo outer. Hoàn thiện phần áo trong nằm dưới đai, rồi author trọn sáu pose theo guide chung `class-work-in-progress/common-male-v1/pose-registration-guide-v1/`. Bám turnaround/grid; vẽ từng món trên đúng pose rồi lấy garment, không chia ảnh mặc đủ hoặc fit bbox. Giữ status source review tới khi kiểm áo/giáp/đai cùng nhau và tháo kết hợp.
+Author đai/giáp rồi tám slot còn thiếu trên body/template bất biến, bám Pháp turnaround `03-male-starter-turnaround-reference.png` và grid `detail/12-male-equipment-grid-redraw-source.png`. Kết quả batch cần thấy: từng món hoàn chỉnh, tháo cả món, 16 tổ hợp áo trong/áo ngoài/đai/giáp qua sáu pose, không dính anatomy hoặc xé vải. Giữ vải dưới item khác; body occlusion riêng với ownership. Không chia ảnh mặc đủ, fit bbox hoặc normalize jump.
 
-Sau proof, hoàn thiện 10 slot/sáu pose nam rồi nữ, mixed Lv1/Lv10 và Player thật với bốn nhịp chạy/jump/return/UI. Sau gate Pháp mới thay các pack Kiếm/Cơ/Linh theo cùng contract. Gom batch, test/build/capture theo thay đổi, xem ảnh rồi commit/push; chưa có căn cứ đóng goal.
+Source cặp áo: `inner_top/registered-six-pose-v1/six-pose-pair-review.jpg` và từng pose `inner-outer-toggle-review.jpg`; atlas/evidence tại `build/phap-garment-six-pose-batch/`. Đã xác minh 24 component tái dựng pixel-exact, xem board div4. Chưa đủ 10 slot/mixed/Player; không dùng trạng thái REVIEW_ONLY làm quyền bàn giao.
+
+Sau nam đủ 10 món/sáu pose, làm nữ và mixed Lv1/Lv10, kiểm Player thật bốn nhịp chạy/jump/return/tháo-mặc/UI. Sau Pháp mới audit thay Kiếm/Cơ/Linh. Gom validation/evidence và commit/push qua supervisor theo batch.
 
 ## Current blocker
 
-Không có blocker môi trường đã xác minh. Gate 10 item/sáu pose/mixed/Player còn thiếu; source áo trong mới vẫn kết thúc tại mép đai của fitting reference. Base fallback đang chứa đồ Võ, không được nhận là neutral. Launcher chủ động chặn canonical-v2 có jump scale `2/3`; đây là lỗi nguồn đã xác minh, không phải lỗi môi trường hoặc quyền mở app. Tiếp tục source mới ở trên, chưa mở lại Player lỗi cho owner.
+Không có blocker môi trường đã xác minh. Thiếu nguồn tám slot và các gate nữ/mixed/Player. Fallback hiện chứa trang phục Võ; không tự tạo base trung tính. Launcher chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
 
 ## Lịch sử — không thay action hiện hành
 

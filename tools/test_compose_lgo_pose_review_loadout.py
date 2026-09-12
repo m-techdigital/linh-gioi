@@ -6,7 +6,8 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw
 
-from compose_lgo_pose_review_loadout import DIRECTORIES, SLOTS, compose_loadout
+from compose_lgo_pose_review_loadout import (
+    COMPLETE_GARMENT_LAYER_PROFILE, FRONT_ORDERS, DIRECTORIES, SLOTS, compose_loadout)
 from pack_lgo_pose_review_atlas import pack_review
 
 
@@ -71,6 +72,26 @@ class ComposePoseReviewLoadoutTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'Body authority mismatch'):
             compose_loadout(self.packs, selection, output)
         self.assertFalse(output.exists())
+
+    def test_complete_layers_keep_coat_over_trousers_and_reject_legacy_mixing(self):
+        for pack in self.packs.values():
+            for slot in SLOTS:
+                path = pack / DIRECTORIES[slot] / 'atlas-review.json'
+                self.change_manifest(path, layerOrderProfile=COMPLETE_GARMENT_LAYER_PROFILE,
+                    sprites=[{'id': 'idle', 'componentId': 'front', 'order': FRONT_ORDERS[slot]}])
+        selection = {slot: ('lv10' if slot == 'lower_body' else 'lv1') for slot in SLOTS}
+        loadout = compose_loadout(self.packs, selection, self.root / 'complete-mixed')
+        self.assertEqual(COMPLETE_GARMENT_LAYER_PROFILE, loadout['layerOrderProfile'])
+        self.assertGreater(FRONT_ORDERS['outer_top'], FRONT_ORDERS['lower_body'])
+        pants = self.packs['lv10'] / DIRECTORIES['lower_body'] / 'atlas-review.json'
+        self.change_manifest(pants, layerOrderProfile='legacy')
+        with self.assertRaisesRegex(ValueError, 'profile mismatch'):
+            compose_loadout(self.packs, selection, self.root / 'bad-mixed')
+        self.assertFalse((self.root / 'bad-mixed').exists())
+        self.change_manifest(pants, layerOrderProfile=COMPLETE_GARMENT_LAYER_PROFILE,
+            sprites=[{'id': 'idle', 'componentId': 'front', 'order': 29}])
+        with self.assertRaisesRegex(ValueError, 'Layer order mismatch'):
+            compose_loadout(self.packs, selection, self.root / 'pants-over-coat')
 
     def test_female_loadout_uses_declared_body_profile_and_skeleton(self):
         pack = self.make_pack('female', 10, 'common_female_v1', 'female', 'phap')

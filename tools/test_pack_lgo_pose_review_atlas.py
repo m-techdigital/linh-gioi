@@ -97,6 +97,33 @@ class PoseReviewAtlasTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'empty'):
             pack_review([source])
 
+    def test_component_pose_ids_and_fully_occluded_frame_are_preserved(self):
+        front = {**self.source('front'), 'id': 'idle', 'componentId': 'front', 'order': 29}
+        rear = {**self.source('rear'), 'id': 'idle', 'componentId': 'back', 'order': 23}
+        path = Path(rear['source'])
+        Image.new('RGBA', (1024, 1536)).save(path)
+        rear['sourceSha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+        atlas, report = pack_review([front, rear], divisor=2, allow_empty_components=True)
+        self.assertEqual([(p['id'], p['componentId'], p['order']) for p in report['sprites']],
+                         [('idle', 'front', 29), ('idle', 'back', 23)])
+        empty = report['sprites'][1]
+        self.assertTrue(empty['emptyComponent'])
+        x, y, w, h = empty['atlasRectTopLeft']
+        self.assertIsNone(atlas.crop((x, y, x+w, y+h)).getchannel('A').getbbox())
+        self.assertFalse(report['sprites'][0].get('emptyComponent', False))
+        with self.assertRaisesRegex(ValueError, 'Duplicate'):
+            pack_review([front, front], allow_empty_components=True)
+        with self.assertRaisesRegex(ValueError, 'empty'):
+            pack_review([rear])
+        with self.assertRaisesRegex(ValueError, 'empty'):
+            pack_review([{k: v for k, v in rear.items() if k != 'componentId'}],
+                        allow_empty_components=True)
+
+    def test_implicit_main_cannot_collide_with_explicit_main_component(self):
+        source = self.source('idle')
+        with self.assertRaisesRegex(ValueError, 'Duplicate'):
+            pack_review([source, {**source, 'componentId': 'main'}])
+
     def test_cli_exports_player_filenames_div4_and_jump_pivot(self):
         sources = [self.source('idle'), self.source('run_a', (60, 520, 900, 1479)),
                    self.source('run_b', (90, 510, 880, 1479)),

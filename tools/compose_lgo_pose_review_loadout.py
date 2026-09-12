@@ -13,6 +13,27 @@ SLOTS = (
     'waist_belt', 'arm_guard', 'footwear', 'shoulder_chest_guard', 'class_accessory',
 )
 DIRECTORIES = {slot: slot.replace('_', '-') + '-review' for slot in SLOTS}
+COMPLETE_GARMENT_LAYER_PROFILE = 'lgo_complete_garment_layers_v1'
+# Same actor range as the legacy renderer (body=24, equipment=25..34).
+# Complete overlapping clothes need semantic order instead of slot-list order.
+FRONT_ORDERS = dict(zip(('inner_top', 'lower_body', 'footwear', 'outer_top',
+                        'waist_belt', 'arm_guard', 'shoulder_chest_guard',
+                        'class_accessory', 'head_hair', 'main_weapon'), range(25, 35)))
+
+
+def validate_layer_profile(manifest: dict, slot: str) -> str:
+    profile = manifest.get('layerOrderProfile') or 'legacy'
+    if profile == 'legacy':
+        return profile
+    if profile != COMPLETE_GARMENT_LAYER_PROFILE:
+        raise ValueError('Unknown layer order profile: ' + profile)
+    if not manifest.get('sprites'):
+        raise ValueError('Layer profile needs component sprites: ' + slot)
+    orders = {'front': FRONT_ORDERS[slot], 'back': FRONT_ORDERS[slot] - 11}
+    for part in manifest['sprites']:
+        if part.get('componentId') not in orders or part.get('order') != orders[part['componentId']]:
+            raise ValueError('Layer order mismatch: ' + slot + '/' + str(part.get('componentId')))
+    return profile
 
 
 def digest(path: Path) -> str:
@@ -60,12 +81,14 @@ def compose_loadout(packs: dict[str, Path], selection: dict[str, str], output: P
         body = {'atlas': digest(output / 'atlas-review.png'),
                 'manifest': digest(output / 'atlas-review.json')}
         items = []
+        layer_profiles = set()
         for slot in SLOTS:
             alias = selection[slot]
             source = packs[alias] / DIRECTORIES[slot]
             manifest = json.loads((source / 'atlas-review.json').read_text())
             if manifest.get('reviewSlot') != slot:
                 raise ValueError('Slot manifest mismatch: ' + slot)
+            layer_profiles.add(validate_layer_profile(manifest, slot))
             if manifest.get('fitFamily') != family:
                 raise ValueError('Fit family mismatch: ' + slot)
             if (manifest.get('basePoseAtlasSha256') != body['atlas']
@@ -88,6 +111,8 @@ def compose_loadout(packs: dict[str, Path], selection: dict[str, str], output: P
             items.append({'slotId': slot, 'itemId': item_id, 'sourcePack': alias,
                           'unlockLevel': unlock_level, 'fitFamily': manifest['fitFamily'],
                           'atlasSha256': atlas_hash})
+        if len(layer_profiles) != 1:
+            raise ValueError('Layer order profile mismatch across loadout')
         loadout = {'status': 'REVIEW_ONLY', 'runtimeEligible': False,
                    'resolver': 'slotId -> itemId', 'atomicPreflight': True,
                    'bodyProfile': authority_manifest.get('bodyProfile') or family,
@@ -95,6 +120,8 @@ def compose_loadout(packs: dict[str, Path], selection: dict[str, str], output: P
                    'bodyHashes': body, 'items': items}
         if authority_manifest.get('skeletonVersion'):
             loadout['skeletonVersion'] = authority_manifest['skeletonVersion']
+        if layer_profiles != {'legacy'}:
+            loadout['layerOrderProfile'] = next(iter(layer_profiles))
         (output / 'review-loadout.json').write_text(json.dumps(loadout, indent=2) + '\n')
         return loadout
     except Exception:

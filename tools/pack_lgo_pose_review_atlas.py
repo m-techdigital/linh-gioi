@@ -52,16 +52,18 @@ def compact_rows(unique, width):
     return 1 << (y - 1).bit_length(), positions
 
 
-def pack_review(sources, divisor=4, max_side=1024):
+def pack_review(sources, divisor=4, max_side=1024, *, allow_empty_components=False):
     if not sources:
         raise ValueError('Source list is empty')
     if not isinstance(divisor, int) or divisor <= 0 or any(n % divisor for n in CANVAS):
         raise ValueError('Divisor must divide the canonical canvas')
     ids, unique, sprites = set(), {}, []
     for source in sources:
-        if source['id'] in ids:
+        component = source.get('componentId') or 'main'
+        pose_key = (component, source['id'])
+        if pose_key in ids:
             raise ValueError('Duplicate pose id: ' + source['id'])
-        ids.add(source['id'])
+        ids.add(pose_key)
         path = Path(source['source'])
         digest = hashlib.sha256(path.read_bytes()).hexdigest()
         if digest != source['sourceSha256']:
@@ -72,13 +74,25 @@ def pack_review(sources, divisor=4, max_side=1024):
             sampled = opened.convert('RGBA').resize(
                 tuple(n // divisor for n in CANVAS), Image.Resampling.LANCZOS)
         box = sampled.getchannel('A').getbbox()
+        empty = box is None
         if box is None:
-            raise ValueError('Source sprite is empty: ' + str(path))
+            if not allow_empty_components or not source.get('componentId'):
+                raise ValueError('Source sprite is empty: ' + str(path))
+            # A fully occluded component still has a pose entry. Keep it genuinely
+            # transparent; never invent a visible pixel to satisfy the frame count.
+            box = (0, 0, 1, 1)
         trimmed = sampled.crop(box)
         key = (trimmed.size, hashlib.sha256(trimmed.tobytes()).hexdigest())
         unique.setdefault(key, trimmed)
-        sprites.append({'id': source['id'], 'source': str(path), 'sourceSha256': digest,
-                        **project_canvas_rect([n * divisor for n in box]), '_key': key})
+        part = {'id': source['id'], 'source': str(path), 'sourceSha256': digest,
+                **project_canvas_rect([n * divisor for n in box]), '_key': key}
+        if source.get('componentId'):
+            part['componentId'] = component
+            if 'order' in source:
+                part['order'] = source['order']
+        if empty:
+            part['emptyComponent'] = True
+        sprites.append(part)
 
     # Uniform sampling precedes trimming. Atlas placement never changes world placement.
     layouts = []
@@ -129,6 +143,8 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--divisor', type=int, default=4)
     parser.add_argument('--max-side', type=int, default=1024)
+    parser.add_argument('--allow-empty-components', action='store_true',
+                        help='Allow transparent poses only for explicitly named item components')
     parser.add_argument('--jump-pivot-source', type=int, nargs=2, metavar=('X', 'Y'),
                         help='Registered source-space pivot for jump_tuck; never inferred from its trim')
     args = parser.parse_args()
@@ -140,7 +156,8 @@ def main():
             not has_jump or any(value < 0 or value > limit
                                 for value, limit in zip(args.jump_pivot_source, CANVAS))):
         parser.error('jump pivot must lie on canonical canvas and requires jump_tuck')
-    atlas, report = pack_review(sources, args.divisor, args.max_side)
+    atlas, report = pack_review(sources, args.divisor, args.max_side,
+                                allow_empty_components=args.allow_empty_components)
     if has_jump:
         report['jumpPivotSource'] = args.jump_pivot_source
     args.output_dir.mkdir(parents=True, exist_ok=False)
