@@ -1,4 +1,9 @@
 
+## Owner-review scale guard checkpoint — 2026-09-13
+
+Catalog owner-review hiện có thêm scale guard: `python3.12 tools/validate_lgo_owner_review_catalog.py` sẽ fail nếu Player manifest thiếu idle/jump metric, runtime root scale khác 1.0, hoặc jump cao bất thường so với idle. Khi sửa pack Kiếm/Pháp/Cơ/Linh tiếp theo, vẫn phải review close-up/player bằng mắt vì scale guard không thay thế kiểm design, tháo/mặc và silhouette.
+
+
 ## Shared UI base governance checkpoint — 2026-09-13
 
 Rule mới đã được đưa vào gate: khi tiếp tục login/character select/HUD/inventory/storage/dialog/item-detail, mọi modal/dialog/card/tab/button/detail panel dùng shared base trong `CongDongLamArrivalHud.Skin.cs` hoặc wrapper hẹp quanh `ApplyLgo*`. Không copy layout/skin thành hệ mới; nếu UX giống nhau thì chỉ tách data/state/action. Chạy `python3.12 tools/validate_lgo_ui_shared_skin.py` trong mọi batch sửa UI runtime.

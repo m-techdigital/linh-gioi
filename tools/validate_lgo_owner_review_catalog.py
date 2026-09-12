@@ -30,6 +30,8 @@ PLAYER_EVIDENCE = {
         "build/source-pose-catalog-audit-v2/linh-owner-review-closeup.jpg",
     ),
 }
+MAX_JUMP_TO_IDLE_SCREEN_HEIGHT_RATIO = 1.08
+ROOT_SCALE_EPSILON = 0.001
 
 
 def fail(message: str) -> int:
@@ -61,6 +63,51 @@ def validate_player_evidence(class_id: str) -> str | None:
         return f"missing mixed-level verification for {class_id}"
     if data.get("maxBodyVariants") != 1:
         return f"expected one active body variant for {class_id}: {data.get('maxBodyVariants')}"
+    scale_error = validate_pose_motion_scale_metrics(data, class_id)
+    if scale_error:
+        return scale_error
+    return None
+
+
+def _metric_float(metric: dict, key: str) -> float | None:
+    value = metric.get(key)
+    if isinstance(value, (int, float)):
+        return float(value)
+    return None
+
+
+def _find_pose_metric(metrics: list[dict], gender: str, token: str) -> dict | None:
+    for metric in metrics:
+        filename = str(metric.get("file", ""))
+        if gender in filename and token in filename:
+            return metric
+    return None
+
+
+def validate_pose_motion_scale_metrics(data: dict, class_id: str) -> str | None:
+    metrics = data.get("actorFrameMetrics")
+    if not isinstance(metrics, list) or not metrics:
+        return f"missing actor frame scale metrics for {class_id}"
+    for metric in metrics:
+        filename = str(metric.get("file", "unknown"))
+        scale_x = _metric_float(metric, "rootScaleX")
+        scale_y = _metric_float(metric, "rootScaleY")
+        if scale_x is None or scale_y is None:
+            return f"missing root scale metric for {class_id}: {filename}"
+        if abs(scale_x - 1.0) > ROOT_SCALE_EPSILON or abs(scale_y - 1.0) > ROOT_SCALE_EPSILON:
+            return f"unexpected runtime root scale for {class_id}: {filename} scale=({scale_x},{scale_y})"
+    for gender in ("male", "female"):
+        idle = _find_pose_metric(metrics, gender, "idle")
+        jump = _find_pose_metric(metrics, gender, "-jump.png")
+        if idle is None or jump is None:
+            return f"missing idle/jump scale metric for {class_id}: {gender}"
+        idle_height = _metric_float(idle, "screenHeightRatio")
+        jump_height = _metric_float(jump, "screenHeightRatio")
+        if idle_height is None or jump_height is None or idle_height <= 0:
+            return f"invalid idle/jump screen height metric for {class_id}: {gender}"
+        ratio = jump_height / idle_height
+        if ratio > MAX_JUMP_TO_IDLE_SCREEN_HEIGHT_RATIO:
+            return f"jump scale exceeds idle height for {class_id}: {gender} ratio={ratio:.3f} max={MAX_JUMP_TO_IDLE_SCREEN_HEIGHT_RATIO:.3f}"
     return None
 
 

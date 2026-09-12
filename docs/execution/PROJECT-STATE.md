@@ -1,4 +1,9 @@
 
+## Owner-review jump scale guard — 2026-09-13
+
+Đã thêm gate trong `tools/validate_lgo_owner_review_catalog.py` để đọc `actorFrameMetrics` từ Player manifest của Kiếm/Pháp/Cơ/Linh: mọi frame phải giữ `rootScaleX/Y≈1.0`, nam/nữ phải có idle + jump metric, và jump screen-height không được vượt idle quá 8%. Regression test dùng manifest giả với jump cao hơn idle để chặn lỗi owner từng thấy khi nhảy làm nhân vật phình. Gate này chỉ khóa scale/runtime; các pack ngoài Võ vẫn là `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, chưa phải owner visual/design pass.
+
+
 ## Shared UI base governance tightened — 2026-09-13
 
 Đã khóa thêm rule dự án cho UI Map01A: các màn/flow có cùng UI/UX phải dùng shared base/skin/helper, chỉ tách data/state/action khi khác hành vi; không tạo helper skin song song kiểu modal/dialog/card/tab/detail/panel trong partial runtime. Validator `tools/validate_lgo_ui_shared_skin.py` có regression test mô phỏng `StyleModalDialog` riêng và sẽ fail nếu màn mới tự dựng skin thay vì dùng `CongDongLamArrivalHud.Skin.cs`/`ApplyLgo*`. Rule này nhằm tránh lặp lại lỗi login/inventory/dialog hoặc modal nhìn giống nhau nhưng được build bằng nhiều hệ khác nhau.
