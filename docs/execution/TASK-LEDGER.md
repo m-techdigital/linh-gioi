@@ -1,5 +1,13 @@
 # TASK LEDGER — 2D Branch
 
+## LGO-TASK-045 — UI atlas/import settings closed — 2026-09-13
+
+`LGO_UI_ATLAS_PLAN_READY`. Gate `PYTHONPYCACHEPREFIX=build/pycache python3.12 tools/validate_lgo_ui_atlas_plan.py` prints `LGO_UI_ATLAS_PLAN_VALIDATION_PASS`. Scope was planning/tooling only: no design-token change, no image generation, no runtime art replacement. Rules live at `docs/art/UI-ATLAS-IMPORT-SETTINGS.md` and task note at `docs/tasks/LGO-UI-ATLAS-IMPORT-SETTINGS-v1.0.md`; closure check is wired into `tools/lgo_playable_closure_check.sh`.
+
+## LGO-TASK-042 — Asset provenance rules closed — 2026-09-13
+
+`LGO_ASSET_PROVENANCE_READY`. Gate `PYTHONPYCACHEPREFIX=build/pycache python3.12 tools/validate_lgo_asset_provenance.py` prints `LGO_ASSET_PROVENANCE_VALIDATION_PASS`. Scope was docs/art governance only: no runtime art replacement, no image generation, no composite-sheet slicing, no protocol/GameData/schema/ADR/design-token change. Rules live at `docs/art/ASSET-PROVENANCE-RULES.md` and task note at `docs/tasks/LGO-ASSET-PROVENANCE-RULES-v1.0.md`; closure check is wired into `tools/lgo_playable_closure_check.sh`.
+
 ## 2026-09-09 — 2D pivot cleanup
 
 - Branch: `feature/2d`.

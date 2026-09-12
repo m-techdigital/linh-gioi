@@ -3,6 +3,10 @@
 
 
 
+## Map01A UI review catalog locked — 2026-09-13
+
+Đã gom evidence UI hiện hành vào `docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md` với marker `LGO_MAP01A_UI_REVIEW_CATALOG_READY` để tránh mở nhầm Player/capture cũ: entry/login `build/map01a-entry-form-runtime/entry-login.png`, character select `build/map01a-character-select-runtime/character-select.png`, và quest/inventory route `build/map01a-detail-right-player/quest-capture/{pc,tablet,mobile}/`. Validator mới `tools/validate_lgo_map01a_ui_review_catalog.py` kiểm manifest `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, modal capture không dùng OS mouse/keyboard, và matrix quest 18 frame + 38 dialogue frame trên PC/tablet/mobile. Đã xem ảnh đại diện entry, character select và inventory PC; đây vẫn là technical visual review, chưa phải owner/final UI approval hoặc wardrobe/class-art approval.
+
 ## Cập nhật — khóa quy tắc UI shared component và detail panel — 2026-09-13
 
 Đã đưa yêu cầu owner về UI/UX dùng chung base vào `AGENTS.md`: login/entry, character select, Map01A HUD, inventory/bag, character info, storage/chest, fashion/wardrobe và item-detail không được phát triển thành hai hệ song song. Hành trang và Thông tin là hai tab/flow khác nhau nhưng dùng chung shell/shared skin; detail đồ phải ở panel bên phải khi chọn từ túi hoặc từ trang bị nhân vật. Gate `tools/validate_lgo_ui_shared_skin.py` đã được refactor thành `validate_root()` và siết thêm marker/order để chặn detail panel đặt trước grid/character/storage hoặc thiếu rule AGENTS; test hồi quy mới nằm ở `tools/test_validate_lgo_ui_shared_skin.py`.

@@ -3,6 +3,12 @@
 
 
 
+## Review catalog — Map01A UI hiện hành — 2026-09-13
+
+- Dùng `docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md` để mở đúng evidence entry/login, character select và hành trang/detail-right hiện hành; không dùng các Player/capture cũ làm chuẩn review.
+- Gate: `PYTHONPATH=tools PYTHONPYCACHEPREFIX=build/pycache python3.12 -m unittest tools/test_validate_lgo_map01a_ui_review_catalog.py` và `PYTHONPYCACHEPREFIX=build/pycache python3.12 tools/validate_lgo_map01a_ui_review_catalog.py`.
+- Mọi kết quả trong catalog là `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`; chưa phải owner/final UI approval, production auth, wardrobe/class-art approval, hoặc completion của goal.
+
 ## Guardrail mới — UI shared component/detail panel — 2026-09-13
 
 - Khi sửa UI runtime Map01A hoặc các màn login/character/inventory/storage/fashion, bắt buộc dùng shared shell/base/skin/component, không hồi sinh hai hệ UI song song.
