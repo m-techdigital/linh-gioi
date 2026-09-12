@@ -1,4 +1,8 @@
 
+## Handoff note — UI still needs visual redesign polish — 2026-09-13
+
+Current login/inventory/dialog screens are structurally safer but not yet visually close enough to the owner design references. Do not claim UI completion. Next valid work is focused visual polish/redesign of login and inventory using shared `CongDongLamArrivalHud.Skin.cs`: stronger navy glass/gold frame hierarchy, right-side item detail quality, clearer CTA/header/footer, and Player screenshot review. The latest small code checkpoint only adds quest context inside NPC dialogue and keeps tests/guards green for handoff.
+
 ## Class art deterministic gate locked — 2026-09-13
 
 Class equipment capture is now audit-only by contract: manifests must keep `promotionStatus=AUDIT_ONLY_NOT_PROMOTION_READY` and `runtimeEligibleCount=0`, and the capture helper rejects promotion-ready claims. Do not generate new class images through random/tool output. If no accepted source/off-slot board exists, continue Map01A/UI work instead of class art.

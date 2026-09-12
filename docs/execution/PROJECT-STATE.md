@@ -1,4 +1,8 @@
 
+## Map01A dialogue quest context checkpoint — 2026-09-13
+
+Dialogue panel now shows the active quest line and dialogue page inside the NPC conversation panel, so player review can see which quest is being accepted/advanced without reading the separate tracker. This is a small functional/UI polish only; login and inventory are still not visually close enough to the owner design references and must be redesigned/polished further in the next UI batch. Validation: targeted Unity EditMode `TwoDCharacterRuntimeStateTests.DialoguePanelShowsQuestContextAndProgressInsideConversation` passed as part of `UNITY_EDITMODE_RESULTS_VERIFIED total=270 passed=269 failed=0 ignored=1`; shared UI, Map01A UI catalog, no-3D, no-source-image and frozen diff checks passed.
+
 ## Class capture promotion guard — 2026-09-13
 
 Owner constraint is now enforced in tooling: class equipment capture may only emit audit-only evidence. Runtime manifests add `promotionStatus=AUDIT_ONLY_NOT_PROMOTION_READY`, `runtimeEligibleCount=0`, `visualApprovalStatus=NOT_VISUALLY_ACCEPTED`, and `promotionGate=SOURCE_DESIGN_OFF_SLOT_ACCEPTANCE_REQUIRED`. `tools/capture_lgo_class_equipment.py` rejects any technical capture manifest that tries to claim promotion readiness or runtime eligibility. Do not continue class art by random image generation; class work only resumes after deterministic source/design audit, accepted off-slot boards, repack, and Player evidence.

@@ -434,6 +434,35 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
+
+        [Test]
+        public void DialoguePanelShowsQuestContextAndProgressInsideConversation()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("dialogue quest context test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+
+                scene.UseCurrentRouteAction();
+                typeof(CongDongLamArrivalHud).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(host.GetComponentInChildren<CongDongLamArrivalHud>(), null);
+                var context = root.Q<Label>("Map01A Dialogue Quest Context");
+                Assert.That(context, Is.Not.Null, "Dialogue panel must show quest context for NPC conversations.");
+                Assert.That(context.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(context.text, Does.Contain("Q01"));
+                Assert.That(context.text, Does.Contain("Đường Hội Tụ"));
+                Assert.That(context.text, Does.Contain(scene.DialogueProgress));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
         private static void FinishDialogue(CongDongLamMap01AArtPreview scene)
         {
             for (var page = 0; scene.DialogueOpen && page < 8; page++) scene.UseCurrentRouteAction();

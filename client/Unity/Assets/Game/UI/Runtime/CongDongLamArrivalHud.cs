@@ -11,7 +11,7 @@ namespace LinhGioi.UI
     {
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions;
-        private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
+        private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
         private Button _dialogueInformation, _dialogueClose, _npcTalk;
@@ -157,9 +157,16 @@ namespace LinhGioi.UI
             _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
             _dialogue.style.paddingTop = _dialogue.style.paddingBottom = 10;
             _dialogue.style.fontSize = 20;
-            _dialogueSpeaker = new Label("Hạ Vân");
+            _dialogueSpeaker = LgoLabel("Hạ Vân", 20, UiGold, true);
             _dialogue.Add(_dialogueSpeaker);
-            _dialogueLine = new Label(_scene.DialogueText); _dialogueLine.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(_dialogueLine);
+            _dialogueQuestContext = LgoLabel("", 14, new Color(.72f, .86f, .92f, .94f));
+            _dialogueQuestContext.name = "Map01A Dialogue Quest Context";
+            _dialogueQuestContext.style.whiteSpace = WhiteSpace.Normal;
+            _dialogueQuestContext.style.marginTop = 4;
+            _dialogueQuestContext.style.marginBottom = 8;
+            _dialogue.Add(_dialogueQuestContext);
+            _dialogueLine = LgoLabel(_scene.DialogueText, 20, new Color(.95f, .91f, .78f, .98f));
+            _dialogueLine.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(_dialogueLine);
             var dialogueOptions = new VisualElement(); dialogueOptions.style.flexDirection = FlexDirection.Row;
             dialogueOptions.style.flexWrap = Wrap.Wrap;
             _dialogueInformation = new Button(() => _scene.ReadDialogueInformation()) { name = "Map01A Dialogue Information", text = "Hỏi việc tiếp theo" };
@@ -347,6 +354,7 @@ namespace LinhGioi.UI
                 ? DisplayStyle.Flex : DisplayStyle.None;
             _talk.style.width = _scene.DialogueOpen ? new StyleLength(260) : new StyleLength(StyleKeyword.Auto);
             _dialogueSpeaker.text = _scene.DialogueSpeaker + " · " + _scene.DialogueProgress;
+            _dialogueQuestContext.text = DialogueQuestContextText();
             _dialogueLine.text = _scene.DialogueText;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
             _marker.style.display = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen ? DisplayStyle.None : DisplayStyle.Flex;
@@ -359,6 +367,16 @@ namespace LinhGioi.UI
                 _marker.style.top = (1-v.y) * _metrics.PanelHeight - 64;
             }
         }
+
+        private string DialogueQuestContextText()
+        {
+            var tracker = _scene.QuestTrackerText ?? "";
+            var firstLineEnd = tracker.IndexOf('\n');
+            var questLine = firstLineEnd >= 0 ? tracker.Substring(0, firstLineEnd) : tracker;
+            if (string.IsNullOrEmpty(questLine)) questLine = _scene.ActiveQuestId;
+            return questLine + " · " + _scene.DialogueProgress;
+        }
+
         private string EquipmentDisplayName(string slot)
         {
             switch (slot)
