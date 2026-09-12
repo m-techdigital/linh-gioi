@@ -6,7 +6,10 @@ import plistlib
 import subprocess
 from pathlib import Path
 
-CLASSES = ('phap', 'vo', 'kiem', 'co', 'linh')
+# Owner review starts from the locked Võ source-pose stack. Pháp stays in
+# PACK_SUFFIXES for explicit audits, but is excluded from the interactive catalog
+# until it has non-base source-pose class art for the same gate as Kiếm/Cơ/Linh.
+CLASSES = ('vo', 'kiem', 'co', 'linh')
 PACK_SUFFIXES = {
     'vo': ('-source-pose-review-preserved-lv1/pack', '-source-pose-review-preserved-lv10/pack', None, None),
     'kiem': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-v1/pack',

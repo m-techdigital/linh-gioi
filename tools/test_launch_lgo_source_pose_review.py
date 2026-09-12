@@ -27,7 +27,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             self.assertFalse(any(arg in command for arg in (
                 '--lgo-kiem-review', '--lgo-phap-review', '--lgo-co-review', '--lgo-linh-review')))
 
-    def test_current_launch_keeps_catalog_when_phap_has_only_male_lv1(self):
+    def test_current_launch_excludes_phap_until_class_art_is_complete(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             player = root / 'Player'; player.write_text('player')
@@ -39,10 +39,9 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                     (pack / 'atlas-review.json').write_text('{}')
             command = build_player_command(player, root, root / 'player.log')
             self.assertEqual(command.count('--lgo-source-pose-class'), len(CLASSES))
-            index = command.index('phap')
-            self.assertEqual(command[index + 2:index + 5], ['-', '-', '-'])
-            self.assertIn('deterministic-v7', command[index + 1])
-            self.assertNotIn('--lgo-vo-pose-review-female-dir', command)
+            self.assertNotIn('phap', command)
+            self.assertEqual(command[command.index('--lgo-source-pose-class') + 1], 'vo')
+            self.assertIn('vo-source-pose-review-preserved-lv1', command[command.index('--lgo-vo-pose-review-dir') + 1])
 
     def test_invalid_source_never_starts_player(self):
         cases = ({'poseScaleCorrections': {'jump_tuck': 0.6666666667}},
@@ -56,7 +55,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                         if suffix is None: continue
                         pack = root / 'build' / (class_id + suffix)
                         pack.mkdir(parents=True)
-                        data = invalid if class_id == 'phap' else {'status': 'REVIEW_ONLY'}
+                        data = invalid if class_id == 'kiem' else {'status': 'REVIEW_ONLY'}
                         (pack / 'atlas-review.json').write_text(json.dumps(data))
                 with patch('launch_lgo_source_pose_review.subprocess.Popen') as launch:
                     with self.assertRaisesRegex(ValueError, 'Nguồn review'):
@@ -83,7 +82,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                     pack = root / 'build' / (class_id + suffix)
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text(json.dumps({'status': 'REVIEW_ONLY'}))
-                    if class_id == 'phap':
+                    if class_id == 'kiem':
                         item = pack / 'outer-top-review'
                         item.mkdir()
                         (item / 'atlas-review.json').write_text(json.dumps({

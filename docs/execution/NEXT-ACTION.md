@@ -1,4 +1,9 @@
 
+
+## Owner-review launcher class catalog corrected — 2026-09-13
+
+Audit source-pose Pháp cho thấy các candidate hiện hành vẫn là base/body-style, chưa phải Pháp class art hoàn chỉnh; nam `deterministic-v7` và các pack nữ/Lv10 không đủ điều kiện làm class catalog owner-review. Launcher `tools/launch_lgo_source_pose_review.py` nay bắt đầu bằng Võ đã khóa và chỉ đưa `vo/kiem/co/linh` vào catalog tương tác; Pháp vẫn còn trong `PACK_SUFFIXES` để audit thủ công nhưng không xuất hiện trong owner-review command cho tới khi có source-pose Pháp thật đủ nam/nữ/tier. Test khóa command không còn lấy Pháp làm `--lgo-vo-pose-review-dir`.
+
 ## Class equipment capture semantics locked — 2026-09-13
 
 Đã audit lại Player HEAD cho Kiếm/Pháp/Cơ/Linh bằng class equipment capture đúng flag `--lgo-map01a-art-preview` và đường dẫn absolute. Mỗi class hiện ghi đủ 27 frame, 8 full loadout, 10 tháo slot, 2 mixed, 6 motion, `errors=[]`, nhưng pack vẫn là `DRAFT_RUNTIME_FIT/runtimeEligibleCount=0`; đây chỉ là technical evidence, không phải visual PASS. Contact sheet audit: `build/current-class-audit-summary-v1.jpg`; Pháp detail: `build/current-class-audit-phap-v4/`.
