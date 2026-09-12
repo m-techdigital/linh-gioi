@@ -213,7 +213,8 @@ namespace LinhGioi.UI
                 _storagePanel.style.marginRight = 0;
                 _storagePanel.style.marginBottom = stacked ? 10 : 0;
                 _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 300;
-                _inventoryDetailPanel.style.marginRight = stacked ? 0 : 10;
+                _inventoryDetailPanel.style.marginLeft = stacked ? 0 : 10;
+                _inventoryDetailPanel.style.marginRight = 0;
                 _inventoryDetailPanel.style.marginBottom = stacked ? 10 : 0;
             }
         }

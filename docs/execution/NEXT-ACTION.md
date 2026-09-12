@@ -4,7 +4,7 @@ Giữ nguyên mục tiêu wardrobe/pose còn tồn đọng; thứ tự hiện h�
 
 Đã lưu đủ 8 PNG gốc, tên rõ từng màn, hash và nhãn REFERENCE_ONLY tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/` (ảnh 05 trùng 02). Phân tích, nguồn tham khảo và ma trận các màn: `docs/design/LGO-2D-UI-OWNER-DEMO-ANALYSIS-v0.1.md`. Mục tiêu chưa hoàn thành; bổ sung này phải được đọc cùng goal cũ khi resume.
 
-Owner gửi thêm 4 ảnh ưu tiên tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/preferred-v2/`, status `OWNER_PRIORITY_UIUX_REFERENCE`, hash đã lưu trong manifest. Chỉ đạo mới nhất: thiết kế trong ảnh vẫn chưa hoàn thiện, cần phân tích/redesign cho hợp game 2D hiện tại, **không follow 100%**. Batch hành trang đã chuyển sang modal hai tab cấp chính: `Hành trang` là grid/túi + chi tiết món, `Thông tin` là nhân vật + 10 slot, cả hai dùng chung panel chi tiết bên trái; không sinh actor/base/item/chỉ số giả và không đổi wardrobe source/camera/scale.
+Owner gửi thêm 4 ảnh ưu tiên tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/preferred-v2/`, status `OWNER_PRIORITY_UIUX_REFERENCE`, hash đã lưu trong manifest. Chỉ đạo mới nhất: thiết kế trong ảnh vẫn chưa hoàn thiện, cần phân tích/redesign cho hợp game 2D hiện tại, **không follow 100%**. Batch hành trang đã chuyển sang modal hai tab cấp chính: `Hành trang` là grid/túi + chi tiết món, `Thông tin` là nhân vật + 10 slot, cả hai dùng chung panel chi tiết bên phải; không sinh actor/base/item/chỉ số giả và không đổi wardrobe source/camera/scale.
 
 ## Quick Resume
 
@@ -12,7 +12,7 @@ Owner gửi thêm 4 ảnh ưu tiên tại `/Users/minhdc/Projects/Design/LGO-2D-
 
 ## Next task
 
-Batch chức năng hiện tại: hành trang 2D theo demo `docs/design/demos/map01a-inventory-2d-layout.svg`; modal tách `Hành trang` và `Thông tin` theo góp ý owner, thêm `Rương đồ` dưới dạng gate an toàn. `Hành trang` mặc định: panel chi tiết bên trái + grid túi bên phải. `Thông tin`: panel chi tiết bên trái + nhân vật/10 slot bên phải. `Rương đồ`: chưa có model/API thật nên hiển thị thông báo rõ, không tạo item giả và khóa gửi/rút. Chọn item ở grid hoặc slot trang bị đều cập nhật cùng panel chi tiết. Giữ catalog/actor/art; không đụng base/camera/scale.
+Batch chức năng hiện tại: hành trang 2D theo demo `docs/design/demos/map01a-inventory-2d-layout.svg`; modal tách `Hành trang` và `Thông tin` theo góp ý owner, thêm `Rương đồ` dưới dạng gate an toàn. `Hành trang` mặc định: grid túi bên trái + panel chi tiết bên phải. `Thông tin`: nhân vật/10 slot bên trái + panel chi tiết bên phải. `Rương đồ`: chưa có model/API thật nên hiển thị thông báo rõ, không tạo item giả và khóa gửi/rút. Chọn item ở grid hoặc slot trang bị đều cập nhật cùng panel chi tiết. Giữ catalog/actor/art; không đụng base/camera/scale.
 
 Checkpoint hành trang/storage tabs có evidence tại `build/map01a-storage-tabs-player/quest-capture/{pc,tablet,mobile}/07-q04-inventory-open.png` và đã được xem: modal Hành trang mặc định không bị minimap/action bar chồng, detail/grid đọc được, tab Rương đồ hiển thị ở header. EditMode `client/Unity/Logs/m0-editmode-results.xml` 265 total/264 pass/0 fail/1 ignored, gồm test tách tab Hành trang/Thông tin và test Rương đồ gate không đổi loadout. Build storage tabs `errors=0 warnings=13`; capture Q01–Q09 đủ 18 frame/profile + 38 thoại + 6 NPC revisit. Không dùng click hệ điều hành/chuột thật cho evidence; nếu cần ảnh tab Thông tin/Rương đồ thì dùng runner/capture nội bộ.
 

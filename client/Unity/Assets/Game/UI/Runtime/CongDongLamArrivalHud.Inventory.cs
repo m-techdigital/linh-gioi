@@ -110,8 +110,7 @@ namespace LinhGioi.UI
             _inventoryDetailPanel = InventoryPanel("Map01A Inventory Detail Panel");
             _inventoryDetailPanel.style.flexGrow = 0;
             _inventoryDetailPanel.style.flexBasis = 300;
-            _inventoryDetailPanel.style.marginRight = 10;
-            body.Add(_inventoryDetailPanel);
+            _inventoryDetailPanel.style.marginLeft = 10;
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
             _inventoryFooter.style.flexGrow = 1;
             _inventoryFooter.style.flexShrink = 0;
@@ -258,6 +257,8 @@ namespace LinhGioi.UI
                 button.style.marginBottom = 8; _questItemActions.Add(button);
             }
             _suppliesPage.Add(_questItemActions); scroll.Add(_suppliesPage);
+
+            body.Add(_inventoryDetailPanel);
 
             ShowInventoryPage(false); ShowInventoryMode(false); _safe.Add(_inventory);
         }

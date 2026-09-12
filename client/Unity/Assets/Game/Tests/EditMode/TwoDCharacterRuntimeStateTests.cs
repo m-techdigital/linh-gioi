@@ -146,11 +146,16 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(infoTab, Is.Not.Null);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                var body = root.Q("Map01A Inventory Body");
+                Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")), Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Grid Panel"))),
+                    "Item detail must stay on the right side of the bag grid.");
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")), Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Character Panel"))),
+                    "Item detail must stay on the right side of character equipment slots.");
 
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
