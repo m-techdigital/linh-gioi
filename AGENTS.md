@@ -93,6 +93,11 @@ Do not change these without explicit approval and a contract-change task:
 - Bám kịch bản gốc và `docs/02-GDD.md`: Linh Thành là trung tâm, social city và Âm Giới Xâm Lăng là hướng dài hạn. Không biến sân luyện kỹ thuật thành đích sản phẩm hoặc tự mở hệ thống ngoài roadmap.
 - Demo mới phải phân biệt rõ draft/đã duyệt và phần runtime hiện có/đề xuất; không tự coi concept là gameplay đã triển khai. Các màn cùng loại dùng base chung; chỉ tạo ngoại lệ khi có design và evidence cụ thể.
 - UI/UX cùng pattern phải dùng shared base/skin/helper: modal, dialog, card, tab, CTA, HUD panel và detail panel không được mỗi màn tự định nghĩa màu/viền/button riêng. Với Map01A hiện hành, dùng `CongDongLamArrivalHud.Skin.cs` và chạy `python3.12 tools/validate_lgo_ui_shared_skin.py` khi sửa UI runtime; chỉ tạo ngoại lệ khi có design/evidence riêng và ghi rõ lý do. Khi một màn/flow đã chốt, không giữ hai hệ UI song song hoặc hồi sinh control cũ: entry/login, character select, inventory/bag, character info, storage/chest và item-detail phải dùng cùng shell/shared component; detail món đặt ở panel phải theo design đã chốt, không tự đảo bên giữa các tab.
+- UI shared component governance — owner lock 2026-09-13:
+  - Login/entry, character select, Map01A HUD, inventory/bag, character info, storage/chest, fashion/wardrobe và item-detail phải phát triển trên shared shell/base/skin/component hiện hành; không tạo UI cùng chức năng bằng hệ màu, viền, tab, modal hoặc button riêng.
+  - Hành trang và Thông tin là hai tab/flow khác nhau nhưng dùng chung inventory shell, shared tab/button skin và cùng item-detail component. Khi chọn món từ túi hoặc từ trang bị nhân vật, detail đồ hiện ở panel bên phải theo design đã chốt.
+  - Sau khi một flow đã chốt, xóa hoặc khóa đường hiển thị cũ để tránh hai hệ song song trong Player; nếu cần giữ code cũ làm tham khảo thì phải không còn reachable từ runtime và ghi lý do trong state/evidence.
+  - Mọi thay đổi UI runtime Map01A phải chạy `python3.12 tools/validate_lgo_ui_shared_skin.py`; nếu thêm pattern tái sử dụng mới, cập nhật validator/test cùng batch để chặn hồi quy.
 - Khi Player đang capture input/ảnh, hoàn tất capture rồi mới mở ảnh review; mất focus giữa smoke phải giữ log thất bại, không nới assertion để claim pass.
 
 - `./tools/lgo_visual_runtime_review.sh` is the visual evidence command.

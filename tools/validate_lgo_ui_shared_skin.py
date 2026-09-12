@@ -7,9 +7,6 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-UI_DIR = ROOT / "client/Unity/Assets/Game/UI/Runtime"
-SKIN = UI_DIR / "CongDongLamArrivalHud.Skin.cs"
-PARTIALS = sorted(UI_DIR.glob("CongDongLamArrivalHud*.cs"))
 
 REQUIRED_SKIN_MARKERS = [
     "ApplyLgoFrame",
@@ -48,12 +45,30 @@ REQUIRED_PARTIAL_MARKERS = {
     ],
     "CongDongLamArrivalHud.Inventory.cs": [
         "_inventoryDetailPanel = InventoryPanel(\"Map01A Inventory Detail Panel\")",
-        "body.Add(_inventoryDetailPanel)",
         "_inventoryGridPanel = InventoryPanel(\"Map01A Inventory Grid Panel\")",
+        "_inventoryHeroPanel = InventoryPanel(\"Map01A Inventory Character Panel\")",
+        "_storagePanel = InventoryPanel(\"Map01A Storage Panel\")",
+        "body.Add(_inventoryGridPanel)",
+        "body.Add(_inventoryHeroPanel)",
+        "body.Add(_storagePanel)",
+        "body.Add(_inventoryDetailPanel)",
         "ApplyLgoSelectedTab(_bagTab",
         "ApplyLgoSelectedTab(_characterInfoTab",
+        "_bagTab = InventoryButton(() => ShowInventoryMode(false)",
+        "_characterInfoTab = InventoryButton(() => ShowInventoryMode(true)",
+        "_storageTab = InventoryButton(ShowStorageMode",
+        "_inventoryDetailPanel.style.marginLeft = 10",
+        "_inventoryDetailPanel.style.flexBasis = 300",
     ],
 }
+
+REQUIRED_AGENT_MARKERS = [
+    "UI/UX cùng pattern phải dùng shared base/skin/helper",
+    "không giữ hai hệ UI song song",
+    "entry/login, character select, inventory/bag, character info, storage/chest và item-detail phải dùng cùng shell/shared component",
+    "detail món đặt ở panel phải theo design đã chốt",
+    "python3.12 tools/validate_lgo_ui_shared_skin.py",
+]
 
 REQUIRED_TEST_MARKERS = [
     "InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection",
@@ -68,19 +83,49 @@ def fail(message: str) -> int:
     return 1
 
 
-def main() -> int:
-    if not SKIN.is_file():
-        return fail("missing CongDongLamArrivalHud.Skin.cs shared skin")
-    skin_text = SKIN.read_text(encoding="utf-8", errors="replace")
-    missing = [marker for marker in REQUIRED_SKIN_MARKERS if marker not in skin_text]
-    if missing:
-        return fail("skin_missing_markers=" + ",".join(missing))
+def _check_order(text: str, markers: list[str], rel: str, violations: list[str]) -> None:
+    positions: list[tuple[str, int]] = []
+    for marker in markers:
+        index = text.find(marker)
+        if index < 0:
+            violations.append(f"{rel}: missing order marker {marker}")
+        else:
+            positions.append((marker, index))
+    if len(positions) == len(markers):
+        bad = [(a, b) for (a, ai), (b, bi) in zip(positions, positions[1:]) if ai >= bi]
+        if bad:
+            first, second = bad[0]
+            violations.append(f"{rel}: Inventory detail panel must be added after shared content columns; order violation {first} before {second}")
 
+
+def validate_root(root: Path = ROOT) -> list[str]:
+    root = root.resolve()
+    ui_dir = root / "client/Unity/Assets/Game/UI/Runtime"
+    skin = ui_dir / "CongDongLamArrivalHud.Skin.cs"
+    partials = sorted(ui_dir.glob("CongDongLamArrivalHud*.cs"))
     violations: list[str] = []
-    for path in PARTIALS:
+
+    agents = root / "AGENTS.md"
+    if not agents.is_file():
+        violations.append("AGENTS.md: missing project rules")
+    else:
+        agents_text = agents.read_text(encoding="utf-8", errors="replace")
+        for marker in REQUIRED_AGENT_MARKERS:
+            if marker not in agents_text:
+                violations.append(f"AGENTS.md: missing shared UI governance marker {marker}")
+
+    if not skin.is_file():
+        violations.append("client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs: missing shared skin")
+    else:
+        skin_text = skin.read_text(encoding="utf-8", errors="replace")
+        missing = [marker for marker in REQUIRED_SKIN_MARKERS if marker not in skin_text]
+        for marker in missing:
+            violations.append(f"{skin.relative_to(root)}: skin missing marker {marker}")
+
+    for path in partials:
         text = path.read_text(encoding="utf-8", errors="replace")
-        rel = path.relative_to(ROOT)
-        if path == SKIN:
+        rel = str(path.relative_to(root))
+        if path == skin:
             continue
         for snippet in FORBIDDEN_SNIPPETS:
             if snippet in text:
@@ -88,30 +133,50 @@ def main() -> int:
         for pattern in FORBIDDEN_LOCAL_PATTERNS:
             for match in pattern.finditer(text):
                 violations.append(f"{rel}: local skin pattern {match.group(0)}")
+
     for filename, markers in REQUIRED_PARTIAL_MARKERS.items():
-        path = UI_DIR / filename
+        path = ui_dir / filename
+        rel = f"client/Unity/Assets/Game/UI/Runtime/{filename}"
         if not path.is_file():
-            violations.append(f"client/Unity/Assets/Game/UI/Runtime/{filename}: missing shared UI partial")
+            violations.append(f"{rel}: missing shared UI partial")
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
         for marker in markers:
             if marker not in text:
-                violations.append(f"{path.relative_to(ROOT)}: missing structural marker {marker}")
+                violations.append(f"{rel}: missing structural marker {marker}")
+        if filename == "CongDongLamArrivalHud.Inventory.cs":
+            _check_order(
+                text,
+                [
+                    "body.Add(_inventoryGridPanel)",
+                    "body.Add(_inventoryHeroPanel)",
+                    "body.Add(_storagePanel)",
+                    "body.Add(_inventoryDetailPanel)",
+                ],
+                rel,
+                violations,
+            )
 
-    tests = ROOT / "client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs"
+    tests = root / "client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs"
     if not tests.is_file():
         violations.append("client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs: missing UI regression tests")
     else:
         test_text = tests.read_text(encoding="utf-8", errors="replace")
         for marker in REQUIRED_TEST_MARKERS:
             if marker not in test_text:
-                violations.append(f"{tests.relative_to(ROOT)}: missing UI regression marker {marker}")
+                violations.append(f"{tests.relative_to(root)}: missing UI regression marker {marker}")
 
+    return violations
+
+
+def main() -> int:
+    violations = validate_root(ROOT)
     if violations:
         for item in violations:
             print(item, file=sys.stderr)
         return fail(f"violations={len(violations)}")
-    print("LGO_UI_SHARED_SKIN_PASS partials=" + str(len(PARTIALS)))
+    partials = sorted((ROOT / "client/Unity/Assets/Game/UI/Runtime").glob("CongDongLamArrivalHud*.cs"))
+    print("LGO_UI_SHARED_SKIN_PASS partials=" + str(len(partials)))
     return 0
 
 

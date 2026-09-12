@@ -3,6 +3,12 @@
 
 
 
+## Guardrail mới — UI shared component/detail panel — 2026-09-13
+
+- Khi sửa UI runtime Map01A hoặc các màn login/character/inventory/storage/fashion, bắt buộc dùng shared shell/base/skin/component, không hồi sinh hai hệ UI song song.
+- Hành trang và Thông tin tách tab/flow nhưng dùng chung shell; item detail đặt panel bên phải cho cả chọn từ túi và chọn từ trang bị nhân vật.
+- Chạy `PYTHONPATH=tools PYTHONPYCACHEPREFIX=build/pycache python3.12 -m unittest tools/test_validate_lgo_ui_shared_skin.py` và `PYTHONPYCACHEPREFIX=build/pycache python3.12 tools/validate_lgo_ui_shared_skin.py` trong batch UI.
+
 ## Full source-pose class catalog reopened after close-up Player audit — 2026-09-13
 
 Sau khi khóa catalog để tránh nhầm static/base art, đã re-audit đúng runtime overlay/loadout bằng Player close-up. Kiếm có `build/source-pose-catalog-audit-v1/kiem-semantic-v3-actor-closeup.jpg`; Pháp/Cơ/Linh có `build/source-pose-catalog-audit-v1/phap-co-linh-semantic-closeup.jpg`. Manifest kỹ thuật tương ứng đều 190 frame, nam/nữ, Lv1/Lv10, mixed verified, `maxBodyVariants=1`, `errors=[]`: Kiếm `build/kiem-semantic-v3-runtime-v1/pc/registered-manifest.json`, Pháp `build/phap-semantic-v3-runtime-v3/pc/registered-manifest.json`, Cơ `build/co-semantic-v3-runtime-v3/pc/registered-manifest.json`, Linh `build/linh-semantic-v3-runtime-v2/pc/registered-manifest.json`.

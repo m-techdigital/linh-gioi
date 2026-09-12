@@ -3,6 +3,10 @@
 
 
 
+## Cập nhật — khóa quy tắc UI shared component và detail panel — 2026-09-13
+
+Đã đưa yêu cầu owner về UI/UX dùng chung base vào `AGENTS.md`: login/entry, character select, Map01A HUD, inventory/bag, character info, storage/chest, fashion/wardrobe và item-detail không được phát triển thành hai hệ song song. Hành trang và Thông tin là hai tab/flow khác nhau nhưng dùng chung shell/shared skin; detail đồ phải ở panel bên phải khi chọn từ túi hoặc từ trang bị nhân vật. Gate `tools/validate_lgo_ui_shared_skin.py` đã được refactor thành `validate_root()` và siết thêm marker/order để chặn detail panel đặt trước grid/character/storage hoặc thiếu rule AGENTS; test hồi quy mới nằm ở `tools/test_validate_lgo_ui_shared_skin.py`.
+
 ## Full source-pose class catalog reopened after close-up Player audit — 2026-09-13
 
 Sau khi khóa catalog để tránh nhầm static/base art, đã re-audit đúng runtime overlay/loadout bằng Player close-up. Kiếm có `build/source-pose-catalog-audit-v1/kiem-semantic-v3-actor-closeup.jpg`; Pháp/Cơ/Linh có `build/source-pose-catalog-audit-v1/phap-co-linh-semantic-closeup.jpg`. Manifest kỹ thuật tương ứng đều 190 frame, nam/nữ, Lv1/Lv10, mixed verified, `maxBodyVariants=1`, `errors=[]`: Kiếm `build/kiem-semantic-v3-runtime-v1/pc/registered-manifest.json`, Pháp `build/phap-semantic-v3-runtime-v3/pc/registered-manifest.json`, Cơ `build/co-semantic-v3-runtime-v3/pc/registered-manifest.json`, Linh `build/linh-semantic-v3-runtime-v2/pc/registered-manifest.json`.
