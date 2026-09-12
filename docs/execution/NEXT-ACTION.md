@@ -1,3 +1,9 @@
+## Hiện hành — owner kiểm Pháp canonical-v2 sau khi thu hồi semantic-v3 — 2026-09-12
+
+Pháp semantic-v3 đã bị reject vì chia pixel theo anchor tạo layer chắp vá. Launcher hiện chỉ dùng candidate `canonical-v2`: surface tách trước semantic-v3 và `jump_tuck` được bake `2/3` quanh pivot cho body + đủ 10 layer. Evidence `build/phap-canonical-v2-runtime-v1/pc` có 190 frame, root scale 1, đúng bốn nhịp, đủ Lv1/Lv10/mixed/từng món tháo/32 tổ hợp và `errors=[]`; ảnh Player đã được agent xem nhưng chưa thay quyền review của owner.
+
+Action: owner dùng `F` tới Pháp, `G` đổi giới, chọn từng slot rồi tháo/mặc/đổi cấp, `Shift` chạy và `W/↑` nhảy lộn. Nếu còn lệch, sửa source của toàn slot trên cả sáu pose rồi capture lại một lượt. Không dùng lại semantic-v3, không căn bằng camera/offset/runtime scale, không mở promotion/tier/class mới trước visual gate này.
+
 ## Hiện hành — Player kiểm Cơ Lv1/Lv10 và khóa một presentation — 2026-09-12
 
 Player hiện hành: `build/source-pose-cross-class-player-v1/LinhGioiOnline.app`, build 0 error/0 warning từ source mới. Cơ nam/nữ Lv1/Lv10 dùng bốn source-pose pack, một actor, 10 slot, sáu pose và cùng body/canvas/pivot. Evidence `build/co-lv10-source-pose-review-v2/runtime-pc/pc` có 190 frame, 32 tổ hợp tháo/mặc, full `[1,10]`, mixed, 60 switch, `maxBodyVariants=1`, `errors=[]`; ảnh lớn đã review. Linh cũng đã tái capture đủ ma trận tại `build/linh-lv10-source-pose-review-v3/runtime-pc/pc`. Audit chéo 16 pack/160 item Kiếm–Pháp–Cơ–Linh ở `build/source-pose-cross-class-audit-v1.json` là PASS.

@@ -161,3 +161,9 @@ Reference là source canonical theo rect sở hữu; candidate dùng vertices/UV
 - Source full-outfit chỉ được dùng làm donor. Trước khi đóng atlas phải phân vùng theo canonical slot anchor của từng pose, giữ full-compose invariant, và review hai chiều: full set cùng từng trạng thái tháo. Một slot không được sở hữu anatomy hoặc phần lớn trang phục của slot khác.
 - Gate bắt buộc gồm đủ sáu pose, 10 slot, full Lv1/full tier đích, phối chéo level, 16 tổ hợp bốn garment core, actor bounds đúng presentation, root scale 1 và chuỗi chạy riêng `contact A → run A → contact B → run B`. Count/test xanh không thay cho review ảnh Player.
 - Khi số tier tăng, catalog/manifest chứa class, gender, level, fit family, body hashes và component order; atlas được load/release theo loadout. Không hardcode thêm controller hay renderer tree cho từng class.
+
+### Gate mới sau lỗi Pháp semantic-v3
+
+- Không dùng phép chia nearest-anchor để biến một full-outfit thành item paper-doll. Phương pháp đó chỉ bảo toàn phép hợp pixel, không bảo toàn nghĩa của món; một robe có thể bị rải qua nhiều slot và trạng thái tháo sẽ thành các mảng rách.
+- Candidate mới phải bắt đầu từ surface item đã tách theo thiết kế. Full-compose chỉ là đối chứng. Mỗi board bắt buộc có `all_on` và từng `off_<slot>` trên cùng canvas, không tự fit từng ô.
+- Nếu một pose nguồn vẽ sai tỷ lệ giải phẫu, sửa đồng nhất body và mọi layer của đúng pose tại source quanh pivot đăng ký. Không dùng root transform/camera để bù. Pháp `jump_tuck` hiện dùng correction `2/3`; idle và bốn nhịp chạy giữ nguyên byte nguồn.

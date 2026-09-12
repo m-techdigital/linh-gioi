@@ -1,3 +1,13 @@
+## Hiện hành — thu hồi Pháp semantic-v3; sửa đúng source jump và layer — 2026-09-12
+
+Owner kiểm trực tiếp Player và reject pack Pháp semantic-v3: việc chia pixel full-outfit bằng khoảng cách tới anchor làm một món bị rải qua nhiều slot, nên tháo item chỉ mất một mảng hoặc xé silhouette. Kết luận audit 16/16 trước đó đã được thu hồi; đủ file/slot và full-compose invariant không chứng minh thiết kế paper-doll đúng.
+
+Candidate thay thế dùng lại surface Pháp đã tách và review trước semantic-v3 (nam Lv1 v5, nữ Lv1 v3 và hai pack Lv10 tương ứng). Tool `normalize_lgo_source_pose_pack.py` chỉ bake `jump_tuck` ở tỷ lệ `2/3` quanh pivot `(512,820)` cho body và đủ 10 layer; idle và bốn nhịp chạy giữ nguyên, runtime root scale/camera không đổi. Pack mới: `build/phap-source-pose-review-canonical-v2/pack`, `build/phap-source-pose-review-lv10-canonical-v2/pack` và hai pack nữ cùng suffix. Launcher không còn trỏ Pháp vào semantic-v3.
+
+Evidence Player `build/phap-canonical-v2-runtime-v1/pc`: 190 frame, nam/nữ, full Lv1/Lv10, mixed, từng món tháo và 32 tổ hợp wardrobe, `errors=[]`, root scale mọi frame bằng 1. Đã xem trực tiếp idle/jump và tháo áo ngoài/phụ kiện hai giới; không còn lỗi mất nửa thân của semantic-v3. Trạng thái vẫn `REVIEW_ONLY / NEED_HUMAN_VISUAL_REVIEW`, chưa claim hoàn thành.
+
+Next: mở Player class-switch dùng candidate Pháp canonical-v2 cho owner kiểm. Feedback còn lại phải sửa tại source surface theo trọn slot/sáu pose; không khôi phục semantic-v3, không đổi camera/root scale và chưa promotion class khác.
+
 ## Hiện hành — khóa một presentation và audit chéo source-pose 4 class — 2026-09-12
 
 Đã hoàn tất candidate source-pose Lv1/Lv10 cho Cơ nam/nữ trên cùng body authority: bốn pack có 10 slot × sáu pose, body div4, overlay div2 và không đổi camera/base/scale. Player mới `build/source-pose-cross-class-player-v1/LinhGioiOnline.app` được build từ source hiện hành với 0 error/0 warning. Evidence Cơ từ đúng Player này ở `build/co-lv10-source-pose-review-v2/runtime-pc/pc`: 190 frame, full `[1,10]`, 60 variant switch, 32 tổ hợp wardrobe, mixed verified, `maxBodyVariants=1`, bind-return error < 0,000008 và `errors=[]`. Ảnh lớn nam/nữ Lv10 và lộn đã review: một silhouette người liền, cannon/đồ bám pose, không matte hoặc actor thứ hai. Trạng thái `AGENT_VISUAL_PASS / REVIEW_ONLY`.

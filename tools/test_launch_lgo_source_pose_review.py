@@ -6,6 +6,13 @@ from launch_lgo_source_pose_review import PACK_SUFFIXES, build_class_args
 
 
 class SourcePoseReviewLaunchTests(unittest.TestCase):
+    def test_phap_uses_canonical_layer_pack_with_baked_jump_scale(self):
+        self.assertEqual(
+            ('-source-pose-review-canonical-v2/pack', '-source-pose-review-lv10-canonical-v2/pack',
+             '-female-source-pose-review-canonical-v2/pack', '-female-source-pose-review-lv10-canonical-v2/pack'),
+            PACK_SUFFIXES['phap'],
+        )
+
     def test_builds_one_catalog_entry_per_class_with_four_existing_pack_paths(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

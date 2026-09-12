@@ -155,13 +155,19 @@ def pose_review_fingerprint(directory):
 def validate_owner_pose_source(directory):
     # Owner accepted the old session's whole-pose motion. v3 changes only div8→div4.
     # Newer v5/v7 redraw/retarget candidates were explicitly rejected on 2026-09-11.
-    approved = {
-        'atlas-review.json': '6f78205aa3d1b2f2f4ea7fc43d7abe39a6fb2a7dec93ec5ee28ab997b4bfd98e',
-        'atlas-review.png': '27630a5ceece2500e412620b70cf43e61a80bbef5d4391ae450d3d19d6829010',
-    }
+    # Owner then identified jump artwork at about 1.5x anatomical scale and explicitly
+    # requested that pose alone be corrected. The second pair is the deterministic
+    # div4 body atlas with jump_tuck baked at 2/3; idle and four run poses are unchanged.
+    approved = (
+        ('6f78205aa3d1b2f2f4ea7fc43d7abe39a6fb2a7dec93ec5ee28ab997b4bfd98e',
+         '27630a5ceece2500e412620b70cf43e61a80bbef5d4391ae450d3d19d6829010'),
+        ('f150916f13accba565a7cb7d5cebefffcdf3518e736be2c41b7f937783e933cf',
+         '0c11e05c6bac37bdd1cddf05aff59e7ec045026937311e730cff60f7dcfdd34f'),
+    )
     fingerprint = pose_review_fingerprint(directory)
-    if any(fingerprint.get(name) != digest for name, digest in approved.items()):
-        raise ValueError('Use the owner-selected legacy-base-run-contact-jump-v3-div4 pack; changed poses are not the approved motion')
+    pair = (fingerprint.get('atlas-review.json'), fingerprint.get('atlas-review.png'))
+    if pair not in approved:
+        raise ValueError('Use the owner-selected div4 body authority or its exact owner-requested jump-only scale correction')
 
 
 def validate_pose_review_unchanged(directory, expected):

@@ -25,6 +25,12 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
                 'outer-top-review/atlas-review.png': 'overlay-atlas',
         }):
             capture.validate_owner_pose_source(Path('approved-pack-with-review-overlay'))
+        normalized = {
+            'atlas-review.json': 'f150916f13accba565a7cb7d5cebefffcdf3518e736be2c41b7f937783e933cf',
+            'atlas-review.png': '0c11e05c6bac37bdd1cddf05aff59e7ec045026937311e730cff60f7dcfdd34f',
+        }
+        with patch.object(capture, 'pose_review_fingerprint', return_value=normalized):
+            capture.validate_owner_pose_source(Path('owner-requested-jump-scale-correction'))
         for changed in approved:
             fingerprint = dict(approved, **{changed: 'different'})
             with self.subTest(changed=changed), patch.object(capture, 'pose_review_fingerprint', return_value=fingerprint):

@@ -9,8 +9,8 @@ CLASSES = ('kiem', 'phap', 'co', 'linh')
 PACK_SUFFIXES = {
     'kiem': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-v1/pack',
              '-female-source-pose-review-v1/pack', '-female-source-pose-review-lv10-v1/pack'),
-    'phap': ('-source-pose-review-semantic-v3/pack', '-source-pose-review-lv10-semantic-v3/pack',
-             '-female-source-pose-review-semantic-v3/pack', '-female-source-pose-review-lv10-semantic-v3/pack'),
+    'phap': ('-source-pose-review-canonical-v2/pack', '-source-pose-review-lv10-canonical-v2/pack',
+             '-female-source-pose-review-canonical-v2/pack', '-female-source-pose-review-lv10-canonical-v2/pack'),
     'co': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-semantic-v3/pack',
            '-female-source-pose-review-semantic-v3/pack', '-female-source-pose-review-lv10-semantic-v3/pack'),
     'linh': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-semantic-v3/pack',
