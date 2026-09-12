@@ -38,19 +38,21 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text('{}')
             command = build_player_command(player, root, root / 'player.log')
-            self.assertEqual(CLASSES, ('vo', 'kiem', 'phap', 'co', 'linh'))
-            self.assertEqual(command.count('--lgo-source-pose-class'), 5)
+            self.assertEqual(CLASSES, ('vo', 'kiem', 'co', 'linh'))
+            self.assertEqual(command.count('--lgo-source-pose-class'), 4)
             labels = [command[i + 1] for i, arg in enumerate(command) if arg == '--lgo-source-pose-class']
             self.assertEqual(labels, list(CLASSES))
             self.assertIn('vo-source-pose-review-preserved-lv1', command[command.index('--lgo-vo-pose-review-dir') + 1])
-            phap_index = labels.index('phap')
-            phap_args = command[[i for i, arg in enumerate(command) if arg == '--lgo-source-pose-class'][phap_index]:]
-            self.assertIn('phap-source-pose-review-canonical-v2', phap_args[2])
-            self.assertIn('phap-source-pose-review-lv10-canonical-v2', phap_args[3])
-            self.assertIn('phap-female-source-pose-review-canonical-v2', phap_args[4])
-            self.assertIn('phap-female-source-pose-review-lv10-canonical-v2', phap_args[5])
-            self.assertFalse(any('phap-' in arg and 'semantic-v3' in arg for arg in phap_args[:6]))
+            self.assertNotIn('phap', labels)
+            self.assertFalse(any('phap-' in arg and 'semantic-v3' in arg for arg in command))
+            self.assertFalse(any('phap-' in arg and 'canonical-v2' in arg for arg in command))
 
+
+
+    def test_phap_is_not_exposed_until_it_has_launchable_no_scale_pack(self):
+        self.assertNotIn('phap', CLASSES)
+        with self.assertRaisesRegex(ValueError, 'jump_tuck'):
+            build_class_args(Path(__file__).resolve().parents[1], ('phap',))
 
     def test_phap_owner_review_must_not_use_rejected_semantic_v3_pack(self):
         self.assertFalse(any(suffix and 'semantic-v3' in suffix for suffix in PACK_SUFFIXES['phap']), PACK_SUFFIXES['phap'])

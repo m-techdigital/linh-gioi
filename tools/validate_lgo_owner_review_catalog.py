@@ -11,7 +11,7 @@ sys.path.insert(0, str(ROOT / "tools"))
 
 import launch_lgo_source_pose_review as launcher  # noqa: E402
 
-EXPECTED_CLASSES = ("vo", "kiem", "phap", "co", "linh")
+EXPECTED_CLASSES = ("vo", "kiem", "co", "linh")
 PLAYER_EVIDENCE = {
     "kiem": (
         "build/kiem-semantic-v3-runtime-v1/pc/registered-manifest.json",
@@ -148,7 +148,7 @@ def main() -> int:
         error = validate_player_evidence(class_id)
         if error:
             return fail(error)
-    print("LGO_OWNER_REVIEW_CATALOG_PASS classes=vo,kiem,phap,co,linh review_only=true player_evidence=4")
+    print("LGO_OWNER_REVIEW_CATALOG_PASS classes=" + ",".join(EXPECTED_CLASSES) + " review_only=true player_evidence=" + str(len(EXPECTED_CLASSES) - 1))
     return 0
 
 

@@ -10,7 +10,7 @@ from pathlib import Path
 # are present only after non-base source-pose art has Player close-up evidence
 # for male/female, Lv1/Lv10, motion, and slot-off states. All entries remain
 # REVIEW_ONLY until owner/production approval.
-CLASSES = ('vo', 'kiem', 'phap', 'co', 'linh')
+CLASSES = ('vo', 'kiem', 'co', 'linh')
 PACK_SUFFIXES = {
     'vo': ('-source-pose-review-preserved-lv1/pack', '-source-pose-review-preserved-lv10/pack', None, None),
     'kiem': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-v1/pack',

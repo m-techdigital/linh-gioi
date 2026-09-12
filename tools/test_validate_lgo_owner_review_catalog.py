@@ -89,6 +89,13 @@ class OwnerReviewCatalogValidatorTests(unittest.TestCase):
                 self.assertIn("jump scale", validator.validate_player_evidence("kiem"))
 
 
+    def test_owner_catalog_pack_paths_must_be_launchable_with_real_launcher_guard(self):
+        for class_id in validator.EXPECTED_CLASSES:
+            with self.subTest(class_id=class_id):
+                self.assertIsNone(validator.validate_exposed_pack_matrix(class_id))
+                validator.launcher.class_pack_paths(validator.ROOT, class_id)
+
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,4 +1,9 @@
 
+## Pháp source gate reopened — 2026-09-13
+
+Không mở Pháp trong owner-review launcher hiện hành: semantic-v3 bị reject visual, canonical-v2 còn `poseScaleCorrections.jump_tuck=2/3` nên `class_pack_paths` chặn theo guard no-scale. Bước đúng tiếp theo cho Pháp là sửa/redraw source pose trên body/canvas/pivot chuẩn để pack mới không cần `poseScaleCorrections`, rồi regenerate Player capture + close-up trước khi đưa lại vào `CLASSES`. Không nới launcher guard và không quay lại semantic-v3.
+
+
 ## Pháp catalog regression fixed — 2026-09-13
 
 Owner-review launcher Pháp phải dùng `canonical-v2`, không quay lại `semantic-v3`. Regression test `test_phap_owner_review_must_not_use_rejected_semantic_v3_pack` chặn suffix semantic-v3 trong `PACK_SUFFIXES['phap']`; validator owner catalog trỏ manifest Pháp canonical-v2. Khi tiếp tục visual polish, sửa trên source/canonical-v2 hoặc source kế nhiệm đã audit, không dùng semantic-v3 làm baseline.

@@ -1,4 +1,9 @@
 
+## Pháp held out of owner-review catalog until no-scale source pack exists — 2026-09-13
+
+Audit sau checkpoint canonical-v2 phát hiện owner launcher thật sẽ fail Pháp vì bốn pack canonical-v2 còn `poseScaleCorrections.jump_tuck = 0.6666666667`; semantic-v3 trước đó đã bị reject vì chắp vá. Để không đưa owner test một class sai hoặc không launchable, `CLASSES` owner-review tạm chỉ expose `vo,kiem,co,linh`. `PACK_SUFFIXES['phap']` và evidence canonical-v2 vẫn giữ để sửa tiếp, nhưng Pháp không xuất hiện trong catalog mặc định cho tới khi có source/pack Pháp mới không dùng pose-scale correction và qua Player close-up.
+
+
 ## Pháp owner-review launcher restored to canonical-v2 — 2026-09-13
 
 Đã sửa regression catalog: `tools/launch_lgo_source_pose_review.py` không còn expose Pháp `semantic-v3` đã bị reject vì chắp vá; bốn pack Pháp owner-review quay lại `canonical-v2` nam/nữ Lv1/Lv10. `tools/write_lgo_owner_review_closeups.py` và `tools/validate_lgo_owner_review_catalog.py` cũng trỏ Pháp về `build/phap-canonical-v2-runtime-v1/pc/registered-manifest.json`; close-up Pháp đã regenerate từ canonical-v2 tại `build/source-pose-catalog-audit-v2/phap-owner-review-closeup.jpg` và được xem thủ công. Trạng thái vẫn `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, không phải owner visual pass.
