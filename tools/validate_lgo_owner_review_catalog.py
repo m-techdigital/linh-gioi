@@ -38,6 +38,11 @@ HELD_OUT_CLASSES = {
 }
 MAX_JUMP_TO_IDLE_SCREEN_HEIGHT_RATIO = 1.08
 ROOT_SCALE_EPSILON = 0.001
+SOURCE_POSES = ("idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck")
+SOURCE_SLOTS = (
+    "main_weapon", "inner_top", "lower_body", "outer_top", "waist_belt",
+    "footwear", "arm_guard", "shoulder_chest_guard", "head_hair", "class_accessory",
+)
 
 
 def fail(message: str) -> int:
@@ -101,6 +106,41 @@ def validate_closeup_provenance(class_id: str, closeup: Path) -> str | None:
     digest = hashlib.sha256(closeup.read_bytes()).hexdigest()
     if provenance.get("sha256") != digest:
         return f"close-up provenance sha mismatch for {class_id}"
+    return None
+
+
+def _source_status(candidate: Path) -> str:
+    for filename in ("manifest.json", "authoring-selection.json", "audit.json"):
+        path = candidate / filename
+        if not path.is_file():
+            continue
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        status = str(data.get("status", "")).upper()
+        if status:
+            return status
+    return ""
+
+
+def validate_phap_source_candidate(candidate: Path) -> str | None:
+    if (candidate / "DO-NOT-PACK.md").is_file():
+        return f"Pháp source candidate has DO-NOT-PACK marker: {candidate}"
+    status = _source_status(candidate)
+    if any(marker in status for marker in ("REJECTED", "WITHDRAWN", "FIX_REQUIRED")):
+        return f"Pháp source candidate is rejected: {candidate} status={status}"
+    missing = []
+    for slot in SOURCE_SLOTS:
+        for pose in SOURCE_POSES:
+            if not (candidate / slot / f"{pose}.png").is_file():
+                missing.append(f"{slot}/{pose}.png")
+    if missing:
+        return f"Pháp source candidate missing 10-slot pose files: {candidate} missing={missing[:4]}"
+    required_boards = ["six-pose-full-compose.jpg"] + [f"{pose}-ten-slot-off-review.jpg" for pose in SOURCE_POSES]
+    missing_boards = [name for name in required_boards if not (candidate / name).is_file()]
+    if missing_boards:
+        return f"Pháp source candidate missing off-slot review boards: {candidate} missing={missing_boards}"
     return None
 
 

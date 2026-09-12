@@ -1,4 +1,9 @@
 
+## Pháp source candidate audit gate — 2026-09-13
+
+Added `validate_phap_source_candidate()` to the owner-review validator. It requires 10 slots × six pose PNGs, no reject markers, `six-pose-full-compose.jpg`, and all six `*-ten-slot-off-review.jpg` boards before a Pháp source directory can be considered promotion-ready. Current audit: male v5/v7 and female v3 have complete slot/pose files but are missing six off-slot boards; v8/v9 have boards but are `DO-NOT-PACK`/`SOURCE_REJECTED`. Therefore Pháp remains held-out until off-slot boards are generated/reviewed or a new accepted source set exists.
+
+
 ## Pháp complete-garment fallback rejected by source gate — 2026-09-13
 
 Audited the no-scale `complete-garment` Pháp pack set and Player evidence `build/phap-complete-garment-lv10-runtime-v1/pc`. Although it has 190 technical frames and Lv1/Lv10 mixed manifest, launcher guard blocks it through external `authoring-selection.json` status `OWNER_REJECTED_VISUAL`: wrong Pháp progression silhouette and Lv10 inherits rejected geometry. Regression test now asserts the complete-garment suffix set remains blocked, so Pháp cannot be re-enabled by swapping to that fallback.

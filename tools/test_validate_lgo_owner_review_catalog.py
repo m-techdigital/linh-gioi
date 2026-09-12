@@ -141,6 +141,24 @@ class OwnerReviewCatalogValidatorTests(unittest.TestCase):
                 validator.launcher.class_pack_paths(validator.ROOT, "phap")
 
 
+    def test_phap_source_candidate_requires_six_off_slot_boards_before_promotion(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            candidate = root / "registered-surface"
+            slots = ("main_weapon", "inner_top", "lower_body", "outer_top", "waist_belt", "footwear", "arm_guard", "shoulder_chest_guard", "head_hair", "class_accessory")
+            poses = ("idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck")
+            for slot in slots:
+                for pose in poses:
+                    target = candidate / slot / f"{pose}.png"
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(b"png")
+            (candidate / "manifest.json").write_text(json.dumps({"status": "SOURCE_REVIEW_REQUIRED"}))
+            (candidate / "six-pose-full-compose.jpg").write_bytes(b"jpg")
+            (candidate / "idle-ten-slot-off-review.jpg").write_bytes(b"jpg")
+
+            self.assertIn("off-slot review boards", validator.validate_phap_source_candidate(candidate))
+
+
 
 if __name__ == "__main__":
     unittest.main()

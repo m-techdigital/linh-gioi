@@ -1,4 +1,9 @@
 
+## Pháp next source action — 2026-09-13
+
+Before any Pháp pack/capture, run source candidate gate. Likely repair path: generate/review six off-slot boards for male v5/v7 and female v3, then only pack if `validate_phap_source_candidate()` returns clean and source has no reject marker. Do not use v8/v9 despite having off-slot boards because they are `DO-NOT-PACK`/`SOURCE_REJECTED`.
+
+
 ## Pháp fallback audit result — 2026-09-13
 
 Do not use Pháp `complete-garment` as fallback: `class_pack_paths` blocks it via `OWNER_REJECTED_VISUAL` authoring selection. Remaining valid route is new/fixed item-only source pose set on accepted body/canvas/pivot, with no poseScaleCorrections and no reject markers, then Player capture and close-up provenance.
