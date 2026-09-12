@@ -6,11 +6,11 @@
 
 Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F` hoặc nút trong hành trang đã kiểm đủ Pháp/Võ/Kiếm/Cơ/Linh trên một actor. Pháp chỉ có nam Lv1 v7; Võ nam Lv1/Lv10; giới/cấp chưa có không được rơi về renderer cũ. Các pack vẫn REVIEW_ONLY, không suy diễn rằng toàn bộ design/pose đã nghiệm thu.
 
-Player hiện hành: `build/map01a-playable-hud-player/LinhGioiOnline.app`; mở qua `tools/launch_lgo_source_pose_review.py` để giữ đủ năm class. Nút review mode/base cũ không quay lại khi đóng hành trang, phím C không chuyển renderer nguồn đã chọn; F/G vẫn giữ. HP/MP/class/giới trên HUD, hai action đáy chung hàng flex, nhãn NPC không đè mặt trong thoại. Không đổi art/base/pose/camera/scale. Nút giới thiếu pack bị khóa; PC đã kiểm C/F/scroll, chưa có ảnh xác nhận click nút giới vì Player đã thoát sạch trước ảnh sau click.
+Player hiện hành: `build/map01a-restored-landmarks-player/LinhGioiOnline.app`; mở bằng `tools/launch_lgo_source_pose_review.py`, giữ catalog đủ năm class, không bật renderer cũ. Kế thừa HUD/hội thoại ở `b930acea`/`f7d5ba11`; giữ body/pose/camera/scale. Lỗi mái/đèn cắt sang ô khác đã sửa bằng raw source phục hồi, không imagegen lại.
 
-Gate gần nhất: 67 EditMode, no-3D/no-source/frozen sạch; build 0 error/13 warning. Evidence `build/map01a-playable-hud-player/quest-hud-reviewed/{pc,tablet,mobile}`: 18 ảnh tuyến Q01–Q09 + 38 ảnh thoại/profile, đã xem ảnh. Hội thoại sáu NPC nhận việc ở lựa chọn cuối, quay lại không nhận tiếp tế lặp; giữ checkpoint `f7d5ba11`.
+Gate: 3 packer test + 20 EditMode map; build 0 error/0 warning. Evidence `build/map01a-restored-landmarks-player/quest-capture/{pc,tablet,mobile}` có Q01–Q09 và 38 ảnh thoại/profile; đã xem cả raw sheet và Player. Báo cáo `build/map01a-source-recovery-audit/repair-report.json`. Giới hạn: local playable slice, chưa nghiệm thu toàn bộ character/production hoặc thiết bị thật.
 
-Next: theo `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`, tiếp tục phần map có thể sửa an toàn và design/demo các màn sau map. Atlas kiến trúc còn lỗi, blocker source dưới đây. Đăng nhập chưa được nối vào entry 2D; asset Login V3B không còn trên branch, dù helper layout/API vẫn có. Không dựng backend/auth mới; cần demo cụ thể trước khi nối. Hành trang skin/inspect cần header/footer cố định và chỉ body cuộn, thay panel review hiện hành trong batch màn hình được owner yêu cầu. Không mở lại vòng redraw character hoặc tự claim map xong.
+Next: tạo demo cụ thể màn đăng nhập và hành trang/HUD theo `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md` và reference gốc, sau đó nối UI vào entry hiện hành. Đăng nhập chưa nối vào entry 2D, nhưng còn `AccountApiClient.LoginDevAsync`; giữ dev-key prototype, không auth mới/frozen contract. Nền login đã tìm thấy tại `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-2c5015b0-417f-4d01-91d3-b1942f3901e4.png`, phải xem ảnh trước reuse; không bật fallback V3B ngẫu nhiên. Hành trang cần header/footer cố định, chỉ body cuộn, card/inspect dựa catalog thật. Không mở lại redraw character.
 
 ## Yêu cầu tiếp nối của owner — 2026-09-12
 
@@ -18,7 +18,7 @@ Sau khi xử lý map, thiết kế và triển khai màn đăng nhập, hành tr
 
 ## Current blocker
 
-Không có blocker Player. Source landmark `build/map01a-art/module-generation-v1/landmarks-sheet-alpha-v1.png` (SHA256 `753d3d8af390b0a27eb26f573128ab9672ee04bdf58bfeae84d3761833c0ac90`) thiếu. Đã tìm theo tên và kiểm header/hash 27.033 PNG, 38 candidate 1536×1024, không có match; evidence `build/map01a-grounded-player/landmark-source-search.json`. Atlas đang cắt mái social-hall sang merchant-stall và mảnh đèn sang hunter-post do chia source theo ô 512. Giữ atlas để bảo toàn công sức; chỉ sửa khi phục hồi nguồn tin cậy hoặc có phương án sửa xác định được toàn object. Tiếp tục UI/map flow không phụ thuộc nguồn này.
+Không còn blocker source kiến trúc: đã phục hồi raw magenta sheet (không phải alpha cũ byte-identical) từ generated_images; raw và regions được lưu external tại `map-01a-cong-dong-lam/runtime-source-recovery/landmarks-v1`. Không dùng lại crop grid 512. Nguồn PNG gốc nằm ngoài Unity; runtime chỉ có atlas đã pack và provenance. Các màn đăng nhập/hành trang còn cần demo và implementation, không phải đã hoàn thành.
 
 ## Evidence và giới hạn
 

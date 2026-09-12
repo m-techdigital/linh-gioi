@@ -1,61 +1,127 @@
 {
   "id": "map01a-six-landmarks-v1",
   "status": "DRAFT_REQUIRES_PLAYER_REVIEW",
-  "source": "build/map01a-art/module-generation-v1/landmarks-sheet-alpha-v1.png",
-  "sourceSha256": "753d3d8af390b0a27eb26f573128ab9672ee04bdf58bfeae84d3761833c0ac90",
+  "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/runtime-source-recovery/landmarks-v1/source-magenta.png",
+  "sourceSha256": "7e190bc725410061273788feebfb26a5715143ec284bd6af0711714fdc78796d",
   "parts": [
     {
       "id": "social-hall",
-      "x": 5,
-      "y": 534,
-      "w": 330,
-      "h": 260,
-      "sourceCell": 0,
+      "x": 31,
+      "y": 689,
+      "w": 450,
+      "h": 329,
+      "sourceRect": [
+        0,
+        0,
+        555,
+        512
+      ],
+      "sourceContentRect": [
+        14,
+        77,
+        551,
+        470
+      ],
       "nativeAspectPreserved": true
     },
     {
       "id": "merchant-stall",
-      "x": 346,
-      "y": 534,
-      "w": 330,
-      "h": 218,
-      "sourceCell": 1,
+      "x": 545,
+      "y": 689,
+      "w": 446,
+      "h": 326,
+      "sourceRect": [
+        555,
+        0,
+        1012,
+        512
+      ],
+      "sourceContentRect": [
+        560,
+        144,
+        1006,
+        470
+      ],
       "nativeAspectPreserved": true
     },
     {
       "id": "herbal-clinic",
-      "x": 687,
-      "y": 534,
-      "w": 330,
-      "h": 247,
-      "sourceCell": 2,
+      "x": 33,
+      "y": 348,
+      "w": 445,
+      "h": 329,
+      "sourceRect": [
+        1012,
+        0,
+        1536,
+        512
+      ],
+      "sourceContentRect": [
+        1018,
+        102,
+        1519,
+        472
+      ],
       "nativeAspectPreserved": true
     },
     {
       "id": "village-well",
-      "x": 5,
-      "y": 22,
-      "w": 330,
-      "h": 257,
-      "sourceCell": 3,
+      "x": 597,
+      "y": 348,
+      "w": 342,
+      "h": 329,
+      "sourceRect": [
+        0,
+        512,
+        436,
+        1024
+      ],
+      "sourceContentRect": [
+        14,
+        547,
+        417,
+        935
+      ],
       "nativeAspectPreserved": true
     },
     {
       "id": "hunter-post",
-      "x": 346,
-      "y": 22,
-      "w": 330,
-      "h": 217,
-      "sourceCell": 4,
+      "x": 6,
+      "y": 7,
+      "w": 500,
+      "h": 294,
+      "sourceRect": [
+        436,
+        512,
+        1010,
+        1024
+      ],
+      "sourceContentRect": [
+        456,
+        618,
+        992,
+        933
+      ],
       "nativeAspectPreserved": true
     },
     {
       "id": "suoi-thanh-minh-portal",
-      "x": 687,
-      "y": 22,
-      "w": 330,
-      "h": 262,
-      "sourceCell": 5,
+      "x": 560,
+      "y": 7,
+      "w": 415,
+      "h": 329,
+      "sourceRect": [
+        1010,
+        512,
+        1536,
+        1024
+      ],
+      "sourceContentRect": [
+        1027,
+        544,
+        1522,
+        936
+      ],
       "nativeAspectPreserved": true
     }
   ],
@@ -65,7 +131,7 @@
       "part": "social-hall",
       "x": 18.5,
       "y": -0.2200000000000002,
-      "width": 3.553846153846153,
+      "width": 3.8297872340425534,
       "height": 2.8,
       "order": -4,
       "parallax": 0
@@ -75,7 +141,7 @@
       "part": "merchant-stall",
       "x": 23.0,
       "y": -0.3450000000000002,
-      "width": 3.8600917431192654,
+      "width": 3.488650306748466,
       "height": 2.55,
       "order": -4,
       "parallax": 0
@@ -85,7 +151,7 @@
       "part": "herbal-clinic",
       "x": 27.0,
       "y": -0.2450000000000001,
-      "width": 3.674089068825911,
+      "width": 3.7196048632218845,
       "height": 2.75,
       "order": -4,
       "parallax": 0
@@ -95,7 +161,7 @@
       "part": "village-well",
       "x": 31.0,
       "y": -0.5450000000000002,
-      "width": 2.7607003891050583,
+      "width": 2.2349544072948326,
       "height": 2.15,
       "order": -4,
       "parallax": 0
@@ -105,7 +171,7 @@
       "part": "hunter-post",
       "x": 35.0,
       "y": -0.4950000000000001,
-      "width": 3.421658986175115,
+      "width": 3.826530612244898,
       "height": 2.25,
       "order": -4,
       "parallax": 0
@@ -115,7 +181,7 @@
       "part": "suoi-thanh-minh-portal",
       "x": 43.0,
       "y": -0.2200000000000002,
-      "width": 3.526717557251908,
+      "width": 3.5319148936170213,
       "height": 2.8,
       "order": -4,
       "parallax": 0
@@ -125,9 +191,11 @@
     1024,
     1024
   ],
-  "pngBytes": 1003688,
+  "pngBytes": 1637421,
   "estimatedBc3Bytes": 1048576,
   "upscaled": false,
-  "edgePixelsDespill": 38297,
-  "detachedNoisePixelsRemoved": 189
+  "edgePixelsDespill": 31819,
+  "detachedNoisePixelsRemoved": 2,
+  "sourcePixelCoverage": 1,
+  "alphaPolicy": "soft-magenta-radius-70-edge-6"
 }

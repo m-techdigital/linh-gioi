@@ -15,6 +15,6 @@ Trạng thái: thiết kế triển khai theo phạm vi owner, chưa nghiệm th
 
 Đăng nhập theo `LOGIN-GATE-ENTRY-VISUAL-SPEC-v1.md`: cổng/nền, title, vùng chọn máy chủ/tài khoản thử và CTA vào thế giới. Audit thấy `RuntimeLoginResponsiveLayout` còn nhưng entry 2D không gọi nó, asset Login V3B cũng không có trên branch; không coi helper tồn tại là màn đã hoạt động. Reuse `AccountApiClient.LoginDevAsync` khi nối luồng, không tự mở production auth/đăng ký hoặc sửa contract. Phải tạo demo cụ thể trước khi nối.
 
-Hành trang tiếp theo cần card/inspect món, trạng thái đang mặc/tháo, cấp có thật và nút đóng rõ; giữ catalog/equip đã audit. HUD tiếp theo chỉ dùng hành vi hiện có; chưa thêm chat/guild/shop/minimap tương tác giả. Lỗi atlas kiến trúc thiếu source vẫn là gate art chưa đạt, độc lập với công việc UI.
+Hành trang tiếp theo cần card/inspect món, trạng thái đang mặc/tháo, cấp có thật và nút đóng rõ; giữ catalog/equip đã audit. HUD tiếp theo chỉ dùng hành vi hiện có; chưa thêm chat/guild/shop/minimap tương tác giả. Lỗi atlas kiến trúc đã sửa sau khi phục hồi raw source ngày 2026-09-12; gate sửa cắt mảnh có Player evidence. Đây chưa phải nghiệm thu toàn bộ sản phẩm.
 
 Tham khảo: [Unity 6 UI Document](https://docs.unity3d.com/6000.0/Documentation/Manual/UIE-create-ui-document-component.html) mô tả nhiều document dùng chung panel/focus. Áp dụng ở đây là tái sử dụng panel hiện hành và điều khiển theo trạng thái màn, không nhân UI riêng theo class hoặc tỷ lệ màn hình.

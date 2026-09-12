@@ -1,3 +1,11 @@
+## Không chia sheet theo ô khi object vượt biên — 2026-09-12
+
+Mái social-hall vượt x=512, đèn hunter-post lấn ô well; grid cố định đã tạo mảnh lẻ trong Player. Raw gốc còn ở generated_images dù alpha trung gian trong build đã mất: tìm theo thời điểm + contact sheet thay vì chỉ so SHA alpha cũ. Phục hồi raw và provenance ngoài repo tại selected source `map-01a-cong-dong-lam/runtime-source-recovery/landmarks-v1`.
+
+Packer landmarks nay nhận sáu source rect có biên trong cột alpha rỗng; chặn object chạm biên, overlap và thiếu coverage sau key/noise cleanup. `sourceContentRect` ghi cả bbox đã trim theo tọa độ raw, không mất dữ kiện khi pack. Test kiểm màu mái xuất hiện trong atlas hall và không xuất hiện trong merchant. Không tuyên bố alpha mới byte-identical với file trung gian đã mất.
+
+Atlas đổi từ 3×2 sang 2×3 ô để tăng số pixel công trình trong cùng 1024², không upscale và không tăng ước tính BC3 1 MiB. PNG tăng 1.003.688→1.637.421 byte; build cùng target đo tăng 1.184 byte (183.190.682→183.191.866). Không đồng nhất PNG với GPU/build. Player đã xem mái/đèn/giếng liền, Q01–Q09 vẫn chạy trên ba tỷ lệ; evidence `build/map01a-restored-landmarks-player/quest-capture/`.
+
 ## Mặt đi bộ phải nằm trên ảnh, không phải mép rect — 2026-09-12
 
 Terrain cũ gán đỉnh Sprite.bounds = GroundY, nhưng đá/rêu/cỏ/cầu có padding và phối cảnh khác nhau, làm chân trông lơ lửng dù test bounds xanh. `modules-layout.json` hiện khai báo `walkSurfaceFromTop` cho bốn part (20/28/62/18 px); renderer dịch terrain đúng độ lệch source-pixel theo world height. Mọi instance cùng part dùng chung mốc, không chỉnh actor/camera/scale, không sửa pixel atlas.

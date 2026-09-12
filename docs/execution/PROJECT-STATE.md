@@ -1,3 +1,11 @@
+## Hiện hành — phục hồi sáu kiến trúc Map01A từ raw source — 2026-09-12
+
+`CONTINUE`. Blocker atlas đã được xử lý: raw sheet gốc còn trong `~/.codex/generated_images/01a0882c-6082-7b80-8ddd-3e7d7657a5e5/exec-44fa9278-3d6d-44f2-9098-82cd0d08ed7a.png`. Bản sao/provenance/regions tại external selected source `map-01a-cong-dong-lam/runtime-source-recovery/landmarks-v1`. Không tái tạo art; bỏ chia ô 512, tách theo dải alpha rỗng giữa từng công trình. Packer chặn cắt xuyên object, crop chồng nhau và bỏ sót nội dung. Đã xem raw/source pack và Player: mái nhà, gian hàng, giếng và đèn Lão Trần liền đúng công trình.
+
+Ba test packer pass (có RED lỗi mái sang ô kế bên), 20 EditMode map pass; Player build 0 error/0 warning. Q01–Q09 + 38 ảnh thoại/profile chạy đủ PC/tablet/mobile; đã xem ảnh cuối `build/map01a-restored-landmarks-player/quest-capture/`. Atlas vẫn 1024²/BC3 ước tính 1 MiB; PNG 1.637.421 byte so với 1.003.688 trước, nhưng build cùng target tăng 1.184 byte theo report. Giữ nguyên actor/pose/body/camera/scale và mọi PNG khác. No-3D/no-source/frozen sạch.
+
+Next: demo đăng nhập–hành trang–HUD theo yêu cầu owner và `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`, rồi nối vào entry 2D hiện hành. Nền Linh Thành cũ cũng còn ở raw generated path trong REFERENCE-NOTES; kiểm ảnh trước reuse. Chưa hoàn tất goal/character art, production auth hoặc Map01B. Player mới `build/map01a-restored-landmarks-player/LinhGioiOnline.app`, mở bằng launcher catalog đủ năm class.
+
 ## Hiện hành — Map01A HUD chơi, giữ source-pose đã chọn — 2026-09-12
 
 `CONTINUE`. Đã chặn dãy nút mode/base legacy xuất hiện lại khi đóng hành trang ở source-pose, chặn phím C chuyển mode; giữ F/G và 10 món dùng state cũ đã audit. HUD có HP/MP/class/giới; nút đổi giới trong hành trang chỉ bật khi có đủ pack. Nhãn POSE THỬ OnGUI nhường HUD Map01A, không đổi phân loại REVIEW_ONLY. Nhãn NPC lên trên đầu và ẩn trong thoại; nút hành trang/tương tác dùng một hàng flex để nhãn dài không đè nhau. Không sửa PNG/body/pose/camera/scale.

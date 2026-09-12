@@ -107,13 +107,15 @@
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/landmarks-atlas.png",
-      "sha256": "460cf49009b3c14656fc488cf35096cc3c7b7b6cc9333d6d5b1cbc90c3f4d465",
+      "sha256": "dbc5f8feb134f054303d0632105a0794ade15c1521815fbfcf35bb4ecf801145",
       "width": 1024,
       "height": 1024,
       "role": "runtime-atlas",
       "generator": "image_gen",
       "referenceOnly": false,
-      "status": "DRAFT_PLAYER_COMPARISON"
+      "status": "DRAFT_PLAYER_COMPARISON",
+      "processor": "pack_lgo_map01a_landmarks --regions --chroma-key",
+      "source": "map-01a-cong-dong-lam/runtime-source-recovery/landmarks-v1/source-magenta.png"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AArt/combat-atlas.png",
