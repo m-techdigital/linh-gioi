@@ -2,6 +2,13 @@
 
 
 
+
+## Full source-pose class catalog reopened after close-up Player audit — 2026-09-13
+
+Sau khi khóa catalog để tránh nhầm static/base art, đã re-audit đúng runtime overlay/loadout bằng Player close-up. Kiếm có `build/source-pose-catalog-audit-v1/kiem-semantic-v3-actor-closeup.jpg`; Pháp/Cơ/Linh có `build/source-pose-catalog-audit-v1/phap-co-linh-semantic-closeup.jpg`. Manifest kỹ thuật tương ứng đều 190 frame, nam/nữ, Lv1/Lv10, mixed verified, `maxBodyVariants=1`, `errors=[]`: Kiếm `build/kiem-semantic-v3-runtime-v1/pc/registered-manifest.json`, Pháp `build/phap-semantic-v3-runtime-v3/pc/registered-manifest.json`, Cơ `build/co-semantic-v3-runtime-v3/pc/registered-manifest.json`, Linh `build/linh-semantic-v3-runtime-v2/pc/registered-manifest.json`.
+
+Owner-review catalog đã mở lại đủ `('vo','kiem','phap','co','linh')`, nhưng tất cả class ngoài Võ vẫn là `REVIEW_ONLY / visual review required`, chưa production approval. Static `TwoDClassMixedLoadoutFitPreview` vẫn chỉ là technical evidence; catalog dùng source-pose semantic-v3. Không đổi Võ div4/base/camera/scale hoặc registered WIP.
+
 ## Kiếm source-pose reopened in owner-review catalog — 2026-09-13
 
 Đã re-audit đúng runtime overlay/loadout thay vì chỉ nhìn root atlas. Kiếm semantic-v3 có Player evidence `build/kiem-semantic-v3-runtime-v1/pc/registered-manifest.json`: 190 frame, nam/nữ, Lv1/Lv10, mixed verified, `maxBodyVariants=1`, `errors=[]`. Close-up sheet mới `build/source-pose-catalog-audit-v1/kiem-semantic-v3-actor-closeup.jpg` cho thấy silhouette một người liền, tháo vũ khí/áo ngoài sạch và run/jump đọc được ở kích thước Player.
