@@ -1,3 +1,9 @@
+## Map01A HUD shared-button checkpoint — 2026-09-13
+
+- HUD/action buttons and dialogue/inventory modal state are now guarded by shared UI skin validator and EditMode. Do not return `_talk`, `_npcTalk`, combat bar or inventory toggle to local `Box()` styling.
+- Inventory must hide review/debug controls behind the modal; evidence path: `build/map01a-hud-shared-buttons-capture-v2/pc/07-q04-inventory-open.png`.
+- Remaining visible UI debt: left-side review/debug controls on normal gameplay still exist for source/class review. Next UI polish should either move them into a shared review drawer/panel or hide them for owner-facing gameplay mode; do not leave them as product HUD.
+
 ## Map01A dialogue shared-skin checkpoint — 2026-09-13
 
 - Dialogue/HUD panels must continue using shared `CongDongLamArrivalHud.Skin.cs`; do not reintroduce local `Box()`/one-off button styling for modal/dialog/action panels when the role matches shared skin.

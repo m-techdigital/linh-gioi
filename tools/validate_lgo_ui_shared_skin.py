@@ -45,6 +45,10 @@ REQUIRED_PARTIAL_MARKERS = {
         "_dialogue = new VisualElement { name = \"Map01A Dialogue Panel\" }",
         "ApplyLgoGlassPanel(_dialogue",
         "ApplyLgoButton(option",
+        "ApplyLgoButton(_talk",
+        "ApplyLgoButton(_npcTalk",
+        "ApplyLgoButton(button)",
+        "ApplyLgoButton(_inventoryToggle",
     ],
     "CongDongLamArrivalHud.Entry.cs": [
         "ApplyLgoModalShell(panel, 24)",

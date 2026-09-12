@@ -418,6 +418,9 @@ namespace LinhGioi.Tests.EditMode
                     "A missing female pack must not offer a renderer fallback");
                 scene.ToggleInventory(); update.Invoke(hud, null);
                 Assert.That(root.Q("Map01A Vitals").style.display.value, Is.EqualTo(DisplayStyle.None));
+                foreach (var field in new[] { "_outfit", "_level", "_gender", "_slot", "_itemLevel", "_toggleSlot" })
+                    Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
+                        Is.EqualTo(DisplayStyle.None), "Review/debug controls must not bleed behind inventory: " + field);
                 scene.ToggleInventory(); scene.TalkToHaVan(); update.Invoke(hud, null);
                 Assert.That(root.Q("Map01A Vitals").style.display.value, Is.EqualTo(DisplayStyle.None));
             }
@@ -489,6 +492,13 @@ namespace LinhGioi.Tests.EditMode
                 var inventory = (Button)typeof(CongDongLamArrivalHud).GetField("_inventoryToggle", flags).GetValue(hud);
                 var combat = (VisualElement)typeof(CongDongLamArrivalHud).GetField("_combatBar", flags).GetValue(hud);
                 var talk = (Button)typeof(CongDongLamArrivalHud).GetField("_talk", flags).GetValue(hud);
+                InvokeBoundButton(inventory);
+                update.Invoke(hud, null);
+                foreach (var field in new[] { "_outfit", "_level", "_gender", "_slot", "_itemLevel", "_toggleSlot" })
+                    Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
+                        Is.EqualTo(DisplayStyle.None), "Review/debug controls must not bleed behind inventory: " + field);
+                InvokeBoundButton(inventory);
+                update.Invoke(hud, null);
                 InvokeBoundButton(talk);
                 Assert.That(scene.DialogueOpen, Is.True);
                 update.Invoke(hud, null);

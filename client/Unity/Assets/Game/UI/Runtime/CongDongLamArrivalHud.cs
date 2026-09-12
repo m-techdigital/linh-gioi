@@ -92,10 +92,10 @@ namespace LinhGioi.UI
             nub.style.marginLeft = nub.style.marginTop = 22;
             _pad.Add(nub); _safe.Add(_pad);
             _talk = new Button(() => _scene.UseCurrentRouteAction()) { text = "Tương tác · E" };
-            Box(_talk); Place(_talk, null, 16, null, 24); _talk.style.minHeight = _touch ? 64 : 48; _talk.style.minWidth = 170; _safe.Add(_talk);
+            ApplyLgoButton(_talk); Place(_talk, null, 16, null, 24); _talk.style.minHeight = _touch ? 64 : 48; _talk.style.minWidth = 170; _safe.Add(_talk);
             _talk.style.whiteSpace = WhiteSpace.Normal;
             _npcTalk = new Button(() => _scene.UseNpcConversation()) { text = "Nói chuyện với Tiểu Đồng" };
-            Box(_npcTalk); Place(_npcTalk, null, 16, null, 100); _npcTalk.style.minHeight = 48; _safe.Add(_npcTalk);
+            ApplyLgoButton(_npcTalk); Place(_npcTalk, null, 16, null, 100); _npcTalk.style.minHeight = 48; _safe.Add(_npcTalk);
             _outfit = new Button(() => _scene.CycleVoAvatarMode()) { text = "Trang bị Võ · C" };
             Box(_outfit); Place(_outfit, 16, null, _touch ? 90 : 90, null);
             _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
@@ -125,7 +125,7 @@ namespace LinhGioi.UI
             _skill = new Button(() => _scene.TriggerVoSkill()) { text = "Liên Quyền" };
             foreach (var button in new[] { _run, _jump, _basic, _skill })
             {
-                Box(button);
+                ApplyLgoButton(button);
                 button.style.minHeight = _touch ? 64 : 48;
                 button.style.minWidth = _touch ? 112 : 108;
                 button.style.marginRight = 6;
@@ -133,10 +133,10 @@ namespace LinhGioi.UI
             }
             _safe.Add(_combatBar);
             _characterSelectButton = new Button(OpenCharacterSelect) { name = "Map01A Character Select Button", text = "Nhân vật" };
-            Box(_characterSelectButton);
+            ApplyLgoButton(_characterSelectButton);
             _characterSelectButton.style.minHeight = _touch ? 64 : 48; _characterSelectButton.style.minWidth = 150;
             _inventoryToggle = new Button(() => _scene.ToggleInventory()) { text = "Hành trang · I" };
-            Box(_inventoryToggle); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
+            ApplyLgoButton(_inventoryToggle); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
             _inventoryToggle.style.minHeight = _touch ? 64 : 48; _inventoryToggle.style.minWidth = 180;
             var actionBar = new VisualElement { name = "Map01A Context Actions", pickingMode = PickingMode.Ignore };
             Place(actionBar, null, 16, null, 24); actionBar.style.flexDirection = FlexDirection.Row;
@@ -285,8 +285,8 @@ namespace LinhGioi.UI
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _quest.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            var compactReview = _scene.DialogueOpen || _scene.IsSourcePoseReviewActive
-                || (_scene.ClassEquipmentPreviewActive && _scene.InventoryOpen);
+            var compactReview = _scene.DialogueOpen || _scene.InventoryOpen || _scene.IsSourcePoseReviewActive
+                || _scene.ClassEquipmentPreviewActive;
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
                 control.style.display = compactReview ? DisplayStyle.None : DisplayStyle.Flex;
             _inventorySummary.text = _scene.InventorySummaryText;

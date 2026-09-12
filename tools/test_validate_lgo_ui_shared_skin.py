@@ -104,6 +104,22 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("Inventory detail panel must be added after" in item for item in violations), violations)
 
+    def test_rejects_hud_action_buttons_that_skip_shared_skin(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"
+            hud.write_text(
+                hud.read_text(encoding="utf-8").replace(
+                    "ApplyLgoButton(_talk);",
+                    "Box(_talk);",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoButton(_talk" in item for item in violations), violations)
+
+
     def test_rejects_dialogue_panel_that_skips_shared_skin(self) -> None:
         with self._copy_minimal_repo() as temp:
             hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"
