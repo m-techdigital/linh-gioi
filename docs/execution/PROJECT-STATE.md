@@ -1,3 +1,11 @@
+## Hiện hành — đóng hướng tự tách full-composite Pháp; khóa pose-slot contract — 2026-09-12
+
+Audit full-resolution đã xác nhận shared-rig v5 và source-pose canonical-v2/semantic-v3 đều không thể tiếp tục bằng offset, camera hoặc chia pixel gần anchor. Shared-rig v5 thiếu common canvas/pivot/bind registration nên bung mảnh; canonical-v2 scale toàn bộ jump `2/3`; semantic-v3 và surface v5/v7 đưa donor anatomy cùng các tà áo vào sai slot. Technical test/capture cũ không còn giá trị visual nghiệm thu.
+
+Đã redraw jump Pháp nam/nữ trực tiếp trên đúng pose authority, không scale body. Nam hiện có proof 10 slot trên canvas `1024x1536` tại external `class-work-in-progress/phap-lv001/ten-slot-pose-authoring-v2/jump-redraw-candidate-v1` và evidence `build/sam-authoring/male-jump-slot-proof-v5/ten-slot-off-review.jpg`: pháp khí tháo sạch, áo ngoài lộ base, phụ kiện là charm nhỏ, layer pairwise-disjoint. Nữ candidate v2 giữ pose compact tại `class-work-in-progress/phap-lv001/female-ten-slot-pose-authoring-v2/jump-redraw-candidate-v2`; chưa tách đủ 10 slot.
+
+Hai batch thử tổng quát hóa năm pose cũ bằng segmentation đã bị reject. External v8/v9 đều có `SOURCE_REJECTED` và `DO-NOT-PACK.md`; v9 full-resolution còn donor tattoo ở `run_contact_b` và mảng trắng/cross-slot khi tháo áo/quần. Kết luận kiến trúc: SAM chỉ được hỗ trợ biên mask; source hợp lệ phải author item-only trên template riêng của từng pose, giữ chung body/canvas/pivot/ground, mỗi pixel thiết bị thuộc đúng một slot. Không pack, build hoặc mở Player Pháp cho tới khi đủ sáu pose × all-on/off-10 sạch.
+
 ## Hiện hành — thu hồi Pháp shared-rig v5 sau owner visual reject — 2026-09-12
 
 Owner kiểm trực tiếp `build/phap-shared-rig-v5-player/LinhGioiOnline.app` và reject: các bộ phận tách rời khi chuyển động, đồng thời cách dựng khác base/source-pose đã chốt. Technical capture 34 frame của checkpoint `f80c3074` không phải visual pass; mọi nhận định agent-pass và hướng chuyển Kiếm sang schema 15 component của checkpoint đó đã bị thu hồi. Commit `eeeb1898` đã hoàn nguyên toàn bộ source/runtime pack shared-rig v5, không rollback registered outfit/source-pose WIP trước đó.

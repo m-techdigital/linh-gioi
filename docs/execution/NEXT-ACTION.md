@@ -1,3 +1,9 @@
+## Hiện hành — author item-only Pháp trên pose-slot contract — 2026-09-12
+
+Không dùng hoặc pack external `registered-surface-lv001-hd-v8-pose-contract` và `registered-surface-lv001-hd-v9-pose-contract`; cả hai đã `SOURCE_REJECTED`. Không tiếp tục tự động chia full-composite, không trở lại shared-rig v5, canonical jump scale `2/3`, semantic-v3, camera/offset hoặc actor thứ hai.
+
+Action: dùng design turnaround/equipment grid gốc và đúng sáu body pose authority để author Pháp nam Lv1 thành 10 layer item-only riêng cho từng pose. Kế thừa jump proof đã sạch; redraw năm pose còn lại theo cùng canvas `1024x1536`, pivot/ground/scale và occlusion order. Gate nguồn bắt buộc gồm sáu board all-on + off từng 10 slot ở full resolution, layer pairwise-disjoint, không donor anatomy/tattoo/matte/mảnh rời. Sau nam mới làm nữ, rồi mới pack/capture Player một lượt với bốn nhịp chạy và jump; chưa mở Lv10/class khác trước gate này.
+
 ## Hiện hành — sửa Pháp trên đúng source-pose/base cũ sau visual reject — 2026-09-12
 
 Checkpoint shared-rig v5 đã bị owner reject và hoàn nguyên bằng `eeeb1898`. Không dùng sheet 5×3 hoặc legacy `--lgo-phap-review` để mở Player; launcher review chỉ được dùng registered source-pose và có regression test chặn nhầm đường. Technical PASS cũ không còn giá trị visual.
