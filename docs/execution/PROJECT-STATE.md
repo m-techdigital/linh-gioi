@@ -1,4 +1,9 @@
 
+## Pháp source candidate promotion audit — 2026-09-13
+
+Ran `validate_phap_source_candidate()` across current Pháp Lv1 male/female registered surfaces under the external selected source tree. No Pháp source is promotion-ready. Male `ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v5` and `ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v7-base-authority`, plus female `female-ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`, have the required structure/boards but remain blocked by `SOURCE_REVIEW_REQUIRED` off-slot provenance; they need visual acceptance before packing. v8/v9 pose-contract and class-accessory repair surfaces are protected by `DO-NOT-PACK.md`. Earlier v1/v2/v3/semantic-v2/semantic-v3 candidates miss off-slot review boards; v4/v6/canonical-jump and jump-redraw candidates miss 10-slot pose files. Keep Pháp held out of owner-review catalog until a source surface has accepted off-slot boards and then Player evidence.
+
+
 ## Kiếm/Pháp/Cơ/Linh class-equipment runtime audit evidence — 2026-09-13
 
 Captured current Player class-equipment matrices for `kiem`, `phap`, `co`, and `linh` with `tools/capture_lgo_class_equipment.py` using the latest Player build. Each class produced 27 frames and `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not visual approval. Evidence root: `build/class-equipment-current-audit-v1/`; focused review sheet: `class-equipment-current-audit-character-crops-v2.png`. Visual review confirms the packs are renderable in Player and the owner-facing HUD no longer carries the old left review buttons, but these classes remain audit-only until per-slot/motion review checks full/off-slot/mixed-level/jump frames against the design source. Do not promote or replace Võ with these packs based only on capture status.

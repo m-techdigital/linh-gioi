@@ -1,4 +1,10 @@
 
+## Pháp promotion audit checkpoint — 2026-09-13
+
+- Pháp remains held out. Current structured candidates are not promotion-ready: male v5/v7 and female v3 still require visual-accepted off-slot provenance; v8/v9 and repair surfaces are `DO-NOT-PACK`; older candidates miss boards or slot pose files.
+- Next Pháp work must choose one source surface, review/repair off-slot boards to `VISUAL_ACCEPTED_FOR_PACKING`, then repack/capture Player. Do not point launcher/runtime at any `SOURCE_REVIEW_REQUIRED` or `DO-NOT-PACK` Pháp candidate.
+
+
 ## Class equipment visual audit checkpoint — 2026-09-13
 
 - Current Player evidence captured for Kiếm/Pháp/Cơ/Linh: `build/class-equipment-current-audit-v1/{kiem,phap,co,linh}/`, 27 frames each, status `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`.
