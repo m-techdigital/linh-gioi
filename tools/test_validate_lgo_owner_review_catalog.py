@@ -103,6 +103,30 @@ class OwnerReviewCatalogValidatorTests(unittest.TestCase):
         self.assertNotIn("phap", validator.active_player_evidence())
 
 
+    def test_player_evidence_requires_closeup_provenance_manifest(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            manifest = root / "registered-manifest.json"
+            closeup = root / "closeup.jpg"
+            manifest.write_text(json.dumps({
+                "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
+                "frames": 190,
+                "errors": [],
+                "poseReviewFullLevelsVerified": [1, 10],
+                "poseReviewMixedVerified": True,
+                "maxBodyVariants": 1,
+                "actorFrameMetrics": [
+                    {"file": "01-male-idle.png", "screenHeightRatio": 0.20, "rootScaleX": 1.0, "rootScaleY": 1.0},
+                    {"file": "19-male-jump.png", "screenHeightRatio": 0.18, "rootScaleX": 1.0, "rootScaleY": 1.0},
+                    {"file": "90-female-idle.png", "screenHeightRatio": 0.20, "rootScaleX": 1.0, "rootScaleY": 1.0},
+                    {"file": "108-female-jump.png", "screenHeightRatio": 0.18, "rootScaleX": 1.0, "rootScaleY": 1.0},
+                ],
+            }))
+            closeup.write_bytes(b"jpg")
+            with patch.dict(validator.PLAYER_EVIDENCE, {"kiem": (str(manifest), str(closeup))}):
+                self.assertIn("close-up provenance", validator.validate_player_evidence("kiem"))
+
+
 
 if __name__ == "__main__":
     unittest.main()

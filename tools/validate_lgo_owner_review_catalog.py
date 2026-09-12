@@ -2,6 +2,7 @@
 """Guard the owner-review source-pose catalog from exposing unapproved class art."""
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -10,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 
 import launch_lgo_source_pose_review as launcher  # noqa: E402
+import write_lgo_owner_review_closeups as closeup_writer  # noqa: E402
 
 EXPECTED_CLASSES = ("vo", "kiem", "co", "linh")
 PLAYER_EVIDENCE = {
@@ -73,6 +75,31 @@ def validate_player_evidence(class_id: str) -> str | None:
     scale_error = validate_pose_motion_scale_metrics(data, class_id)
     if scale_error:
         return scale_error
+    provenance_error = validate_closeup_provenance(class_id, closeup)
+    if provenance_error:
+        return provenance_error
+    return None
+
+
+def validate_closeup_provenance(class_id: str, closeup: Path) -> str | None:
+    provenance_path = closeup.with_suffix(".json")
+    if not provenance_path.is_file():
+        return f"missing close-up provenance for {class_id}: {provenance_path.relative_to(ROOT) if provenance_path.is_absolute() and provenance_path.is_relative_to(ROOT) else provenance_path}"
+    try:
+        provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return f"invalid close-up provenance json for {class_id}: {exc}"
+    if provenance.get("classId") != class_id:
+        return f"close-up provenance class mismatch for {class_id}: {provenance.get('classId')}"
+    expected_runtime = closeup_writer.CLASS_RUNTIME_DIRS.get(class_id)
+    if provenance.get("runtimeDir") != expected_runtime:
+        return f"close-up provenance runtime mismatch for {class_id}: {provenance.get('runtimeDir')} != {expected_runtime}"
+    expected_frames = [{"label": label, "file": filename} for label, filename in closeup_writer.FRAME_MATRIX]
+    if provenance.get("frames") != expected_frames:
+        return f"close-up provenance frame matrix mismatch for {class_id}"
+    digest = hashlib.sha256(closeup.read_bytes()).hexdigest()
+    if provenance.get("sha256") != digest:
+        return f"close-up provenance sha mismatch for {class_id}"
     return None
 
 

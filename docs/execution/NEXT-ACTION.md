@@ -1,4 +1,9 @@
 
+## Close-up provenance required — 2026-09-13
+
+Nếu owner-review close-up trong `build/source-pose-catalog-audit-v2` bị thiếu hoặc stale, chạy `python3.12 tools/write_lgo_owner_review_closeups.py --class-id kiem --class-id co --class-id linh` để regenerate ảnh + JSON provenance trước `tools/validate_lgo_owner_review_catalog.py`. Pháp vẫn held-out, không regenerate vào active catalog cho tới khi có pack no-scale mới.
+
+
 ## Owner-review catalog active/held-out split — 2026-09-13
 
 Active owner-review evidence hiện chỉ tính `kiem,co,linh`; Pháp là held-out candidate trong validator, không được mở lại bằng launcher mặc định cho tới khi có pack no-scale mới. Khi làm Pháp, cập nhật source/pack/evidence trước rồi mới chuyển khỏi `HELD_OUT_CLASSES` và đưa lại vào `CLASSES`.

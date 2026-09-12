@@ -7,6 +7,7 @@ class to owner/production approval.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 import tempfile
@@ -115,6 +116,14 @@ def write_sheet(class_id: str, runtime_dir: Path, output: Path) -> None:
         swift.write_text(SWIFT_SOURCE, encoding="utf-8")
         spec.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
         subprocess.run(["/usr/bin/swift", str(swift), str(spec)], check=True)
+    provenance = {
+        "classId": class_id,
+        "runtimeDir": str(runtime_dir.relative_to(ROOT) if runtime_dir.is_relative_to(ROOT) else runtime_dir),
+        "output": str(output.relative_to(ROOT) if output.is_relative_to(ROOT) else output),
+        "sha256": hashlib.sha256(output.read_bytes()).hexdigest(),
+        "frames": [{"label": label, "file": filename} for label, filename in FRAME_MATRIX],
+    }
+    output.with_suffix(".json").write_text(json.dumps(provenance, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def main(argv: list[str] | None = None) -> int:
