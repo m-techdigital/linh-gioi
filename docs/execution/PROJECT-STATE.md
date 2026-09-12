@@ -1,4 +1,4 @@
-## Hiện hành — Pháp Lv1 nam/nữ đủ 10 slot và đã qua Player — 2026-09-12
+## Hiện hành — Pháp Lv1/Lv10 nam/nữ và mixed đã qua Player — 2026-09-12
 
 `FIX_REQUIRED / CONTINUE`. Giữ body Võ div4, common female body, tỷ lệ/camera và registered WIP; Map01A là target. Shared-rig v5, semantic-v3, nguồn v8/v9, jump slot proof v5 và normalization jump `2/3` vẫn bị thu hồi. Không khôi phục nearest-seed partition hoặc full-outfit-per-slot.
 
@@ -10,7 +10,11 @@ Pack nữ hiện hành `build/phap-female-source-pose-review-complete-garment-v1
 
 Ảnh Player nữ đã được xem ở kích thước gốc: idle, bốn nhịp chạy, lộn, 10 trạng thái tháo khi đứng và 10 trạng thái tháo trên không đều giữ một silhouette người liền; không còn mảnh mặt/thân từ head/shoulder, không actor thứ hai và không matte. Body sở hữu giày trung tính nên tháo footwear vẫn còn chân/giày base thay vì thủng hình. Root scale luôn 1. Độ cao hình full-outfit khi lộn đạt đỉnh `1,745583`, body-only đạt `1,739311`, chênh khoảng `0,36%`; không có lỗi phình `1,5×` do runtime scale.
 
-Trạng thái Pháp Lv1 hai giới là `AGENT_VISUAL_PASS / REVIEW_ONLY`, chưa phải owner hoặc production approval. Không có C# thay đổi trong batch nữ nên Player hiện hành được tái sử dụng và capture bằng pack mới. Action tiếp theo: author/audit Pháp Lv10 trên đúng hai fit family, sau đó kiểm full Lv1/full Lv10/mixed trên một Player; chỉ qua gate này mới tiếp tục class khác. Goal vẫn active.
+Pháp Lv10 không dùng lại `ten-slot-pose-authoring-v1` full-outfit partition hoặc canonical jump cũ. Hai source selection mới nằm ở `class-work-in-progress/phap-lv010/complete-garment-authoring-v1/` và `female-complete-garment-authoring-v1/`. Mỗi item kế thừa trọn garment Lv1 của chính slot trên cùng sáu canvas/pivot rồi nâng vật liệu xanh lam/cyan/vàng và chi tiết thuộc slot theo cột Lv10 của equipment grid; alpha/geometry body không đổi. `author_complete_garment_progression.py` và hai sheet 10 món độc lập lưu cùng external source để tái dựng. Draft kẹp tóc nam có tassel che mặt đã bị loại trước pack; source hiện hành chỉ giữ clasp nhỏ ở thái dương.
+
+Pack Lv10 hiện hành: `build/phap-source-pose-review-lv10-complete-garment-v1/pack` và `build/phap-female-source-pose-review-lv10-complete-garment-v1/pack`. Bốn preflight full Lv10/mixed hai giới đều resolve đủ 10 item và body hash giữ nguyên (`27630a5c…` nam, `7c1ef81d…` nữ). Evidence `build/phap-complete-garment-lv10-runtime-v1/pc` có 190 Player frame, full levels `[1,10]`, 60 variant switch, mixed verified, 32 tổ hợp core garment, `maxBodyVariants=1`, bind-return error tối đa `0,000007629` và `errors=[]`. Đã xem source full/toggle và Player Lv1/Lv10, bốn nhịp chạy, lộn, mixed và tháo áo ngoài trên không: một người liền, không matte, không actor thứ hai. Root scale luôn 1; đỉnh full/base khi lộn chênh `0,31%` nam và `0,36%` nữ.
+
+Trạng thái Pháp Lv1/Lv10 hai giới là `AGENT_VISUAL_PASS / REVIEW_ONLY`, chưa phải owner hoặc production approval. Không có C# thay đổi nên Player hiện hành được tái sử dụng và capture bằng bốn pack mới. Action tiếp theo: owner kiểm Pháp trực tiếp; đồng thời audit class tiếp theo theo cùng complete-garment inheritance, không khôi phục static-fit/full-outfit partition. Goal vẫn active.
 
 ## Lịch sử — chỉ để truy nguồn, không phải trạng thái nghiệm thu hoặc action hiện hành
 

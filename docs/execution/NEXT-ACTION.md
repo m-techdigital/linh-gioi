@@ -6,13 +6,13 @@ Nguồn chọn duy nhất của Pháp Lv1 là hai `authoring-selection.json` tro
 
 ## Next task
 
-Pháp Lv1 nam/nữ đã đủ 10 slot × sáu pose trên hai body authority bất biến. Evidence hai giới mới `build/phap-complete-garment-lv1-both-runtime-v1/pc` có 154 frame, `errors=[]`, bốn nhịp chạy riêng, root scale 1, 40 lần tháo/mặc và `maxBodyVariants=1`; ảnh nữ đứng/chạy/lộn cùng trạng thái tháo đủ 10 món ở đứng/trên không đã được audit trực quan. Hai giới đạt `AGENT_VISUAL_PASS / REVIEW_ONLY`; chưa phải owner hoặc production approval.
+Pháp Lv1/Lv10 nam/nữ đã đủ 10 slot × sáu pose trên hai body authority bất biến. Lv10 kế thừa từng complete garment Lv1 và chỉ nâng vật liệu/chi tiết thuộc slot theo progression grid; không dùng full-outfit partition cũ. Evidence `build/phap-complete-garment-lv10-runtime-v1/pc` có 190 frame, `errors=[]`, full `[1,10]`, mixed verified, 60 variant switch, 32 tổ hợp core garment, bốn nhịp chạy riêng, root scale 1 và `maxBodyVariants=1`. Source full/toggle cùng Player Lv1/Lv10/mixed/nhảy đã được audit trực quan. Trạng thái là `AGENT_VISUAL_PASS / REVIEW_ONLY`; chưa phải owner hoặc production approval.
 
-Batch tiếp theo là Pháp Lv10 nam/nữ trên đúng `vo_male_v3` và `common_female_v1`: audit progression/equipment grid Lv10, author đủ 10 slot × sáu pose, giữ body byte-identical, rồi review source full/toggle. Sau đó capture một Player với full Lv1, full Lv10 và phối chéo từng slot. Không tái dùng pack canonical-v2 đã bake jump `2/3`, không đổi camera/root scale và không tạo hệ wardrobe thứ hai.
+Action kế tiếp: mở Player Pháp hiện hành khi owner yêu cầu kiểm trực tiếp, giữ feedback hình tại source slot/sáu pose. Trong lúc chưa có owner reject, audit class tiếp theo theo đúng thứ tự roadmap bằng complete-garment inheritance trên hai fit family hiện hành; bắt đầu từ design grid và source selection, không dùng static-fit/full-outfit partition, không đổi camera/root scale và không tạo wardrobe runtime thứ hai.
 
 ## Current blocker
 
-Không có blocker môi trường đã xác minh. Còn thiếu Pháp Lv10 hai giới, mixed và owner review. Launcher vẫn chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
+Không có blocker môi trường đã xác minh. Còn owner review Pháp và các class tiếp theo. Launcher vẫn chặn canonical-v2 có jump scale `2/3`; không mở lại pack bị thu hồi. Còn việc nguồn an toàn để tiếp tục.
 
 ## Lịch sử — không thay action hiện hành
 
