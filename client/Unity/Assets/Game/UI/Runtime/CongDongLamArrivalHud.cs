@@ -153,7 +153,10 @@ namespace LinhGioi.UI
             BuildInventory();
             BuildCharacterSelect();
             BuildEntryScreen();
-            _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 290, null, 20);
+            _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); Place(_dialogue, 142, 290, null, 20);
+            _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
+            _dialogue.style.paddingTop = _dialogue.style.paddingBottom = 10;
+            _dialogue.style.fontSize = 20;
             _dialogueSpeaker = new Label("Hạ Vân");
             _dialogue.Add(_dialogueSpeaker);
             _dialogueLine = new Label(_scene.DialogueText); _dialogueLine.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(_dialogueLine);
@@ -163,7 +166,7 @@ namespace LinhGioi.UI
             _dialogueClose = new Button(() => _scene.CloseNpcDialogue()) { name = "Map01A Dialogue Close", text = "Để sau" };
             foreach (var option in new[] { _dialogueInformation, _dialogueClose })
             {
-                Box(option); option.style.minHeight = 44; option.style.marginTop = 8; option.style.marginRight = 10;
+                ApplyLgoButton(option); option.style.minHeight = 44; option.style.marginTop = 8; option.style.marginRight = 10;
                 dialogueOptions.Add(option);
             }
             _dialogue.Add(dialogueOptions);

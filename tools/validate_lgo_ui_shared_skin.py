@@ -41,6 +41,11 @@ FORBIDDEN_SNIPPETS = [
 # parallel one-off implementation. Keep these checks structural and cheap so the
 # guard can run with every Map01A UI edit.
 REQUIRED_PARTIAL_MARKERS = {
+    "CongDongLamArrivalHud.cs": [
+        "_dialogue = new VisualElement { name = \"Map01A Dialogue Panel\" }",
+        "ApplyLgoGlassPanel(_dialogue",
+        "ApplyLgoButton(option",
+    ],
     "CongDongLamArrivalHud.Entry.cs": [
         "ApplyLgoModalShell(panel, 24)",
         "StyleEntryButton",

@@ -1,3 +1,9 @@
+## Map01A dialogue shared-skin checkpoint — 2026-09-13
+
+- Dialogue/HUD panels must continue using shared `CongDongLamArrivalHud.Skin.cs`; do not reintroduce local `Box()`/one-off button styling for modal/dialog/action panels when the role matches shared skin.
+- Evidence: `build/map01a-dialogue-shared-skin-capture/pc`, Q01–Q09 quest-only capture with 38 dialogue frames.
+- Next UI work should keep polishing HUD/dialog/inventory from owner preferred-v2 references and use shared skin/base first; capture Player evidence before checkpoint.
+
 ## Map01A entry disabled-action checkpoint — 2026-09-13
 
 - Entry/login side actions now must be disabled placeholders until the backing screens exist; do not reintroduce clickable no-op controls.
