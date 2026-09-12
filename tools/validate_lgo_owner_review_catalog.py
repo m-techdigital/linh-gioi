@@ -15,19 +15,19 @@ EXPECTED_CLASSES = ("vo", "kiem", "phap", "co", "linh")
 PLAYER_EVIDENCE = {
     "kiem": (
         "build/kiem-semantic-v3-runtime-v1/pc/registered-manifest.json",
-        "build/source-pose-catalog-audit-v1/kiem-semantic-v3-actor-closeup.jpg",
+        "build/source-pose-catalog-audit-v2/kiem-owner-review-closeup.jpg",
     ),
     "phap": (
         "build/phap-semantic-v3-runtime-v3/pc/registered-manifest.json",
-        "build/source-pose-catalog-audit-v1/phap-co-linh-semantic-closeup.jpg",
+        "build/source-pose-catalog-audit-v2/phap-owner-review-closeup.jpg",
     ),
     "co": (
         "build/co-semantic-v3-runtime-v3/pc/registered-manifest.json",
-        "build/source-pose-catalog-audit-v1/phap-co-linh-semantic-closeup.jpg",
+        "build/source-pose-catalog-audit-v2/co-owner-review-closeup.jpg",
     ),
     "linh": (
         "build/linh-semantic-v3-runtime-v2/pc/registered-manifest.json",
-        "build/source-pose-catalog-audit-v1/phap-co-linh-semantic-closeup.jpg",
+        "build/source-pose-catalog-audit-v2/linh-owner-review-closeup.jpg",
     ),
 }
 
@@ -92,6 +92,9 @@ def main() -> int:
     required = "non-base source-pose art has Player close-up evidence"
     if required not in source:
         return fail("launcher is missing the non-base class-art gate comment")
+    closeups = [PLAYER_EVIDENCE[class_id][1] for class_id in EXPECTED_CLASSES[1:]]
+    if len(set(closeups)) != len(closeups):
+        return fail("each owner-facing class must have an independent close-up visual sheet")
     for class_id in EXPECTED_CLASSES[1:]:
         if class_id not in launcher.PACK_SUFFIXES:
             return fail("audit pack suffix missing for " + class_id)

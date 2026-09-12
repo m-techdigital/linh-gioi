@@ -31,6 +31,10 @@ Owner-review catalog nay mở lại có kiểm soát `('vo','kiem')`. Pháp/Cơ/
 
 Ghi chú này chỉ để truy nguồn: trước đây catalog owner-review từng bị thu hẹp về Võ sau khi audit thấy Kiếm/Cơ/Linh còn base-style. Trạng thái hiện hành đã supersede bằng close-up Player audit và validator `tools/validate_lgo_owner_review_catalog.py`: launcher expose `vo,kiem,phap,co,linh` nhưng tất cả class ngoài Võ vẫn là `REVIEW_ONLY / TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, phải có đủ male/female Lv1/Lv10 pack và evidence 190 frame + close-up sheet. Không dùng static `MixedLoadoutFitPreview` hoặc base-style cũ làm owner-facing completion.
 
+## Owner-review close-up evidence split per class — 2026-09-13
+
+Đã tách evidence close-up owner-review thành từng class riêng để tránh sheet gộp che lỗi visual: `build/source-pose-catalog-audit-v2/kiem-owner-review-closeup.jpg`, `phap-owner-review-closeup.jpg`, `co-owner-review-closeup.jpg`, `linh-owner-review-closeup.jpg`. Tool `tools/write_lgo_owner_review_closeups.py` dựng sheet từ Player frame hiện hành theo 12 trạng thái nam/nữ: idle, Lv10, run0, jump, tháo vũ khí, tháo áo ngoài. Validator `tools/validate_lgo_owner_review_catalog.py` nay yêu cầu mỗi class owner-facing có close-up sheet độc lập, manifest 190 frame, Lv1/Lv10, mixed và một body variant; sheet độc lập chỉ là technical visual review evidence, chưa phải owner approval.
+
 ## Owner-review launcher class catalog corrected — 2026-09-13
 
 Launcher `tools/launch_lgo_source_pose_review.py` nay khớp với owner-review catalog hiện hành: `vo,kiem,phap,co,linh`, trong đó Pháp owner-facing dùng đủ bốn pack `semantic-v3` nam/nữ Lv1/Lv10, không còn trỏ vào `deterministic-v7` chỉ nam Lv1. Validator `tools/validate_lgo_owner_review_catalog.py` khóa rằng mọi class owner-facing ngoài Võ phải có đủ male/female Lv1/Lv10 pack thật dưới `build/` và Player evidence 190 frame + close-up sheet; test hồi quy tái hiện lỗi Pháp thiếu pack và chặn lại. Tất cả class ngoài Võ vẫn là `REVIEW_ONLY / TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, chưa phải owner/production approval.

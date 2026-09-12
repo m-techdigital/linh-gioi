@@ -12,6 +12,17 @@ class OwnerReviewCatalogValidatorTests(unittest.TestCase):
         self.assertEqual(validator.main(), 0)
 
 
+
+    def test_owner_facing_closeup_sheets_must_be_independent_per_class(self):
+        duplicate = {
+            "kiem": ("manifest-a.json", "shared.jpg"),
+            "phap": ("manifest-b.json", "shared.jpg"),
+            "co": ("manifest-c.json", "co.jpg"),
+            "linh": ("manifest-d.json", "linh.jpg"),
+        }
+        with patch.dict(validator.PLAYER_EVIDENCE, duplicate, clear=True):
+            self.assertEqual(validator.main(), 1)
+
     def test_owner_facing_non_vo_class_requires_four_pack_paths(self):
         with patch.dict(validator.launcher.PACK_SUFFIXES, {"phap": ("-source-pose-review-deterministic-v7/pack", None, None, None)}):
             self.assertIn("male/female Lv1/Lv10", validator.validate_exposed_pack_matrix("phap"))
