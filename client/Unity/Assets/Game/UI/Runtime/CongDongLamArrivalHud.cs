@@ -147,6 +147,7 @@ namespace LinhGioi.UI
             }
             _inventoryToggle.style.marginRight = 12; _safe.Add(actionBar);
             BuildInventory();
+            BuildEntryScreen();
             _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 290, null, 20);
             _dialogueSpeaker = new Label("Hạ Vân");
             _dialogue.Add(_dialogueSpeaker);

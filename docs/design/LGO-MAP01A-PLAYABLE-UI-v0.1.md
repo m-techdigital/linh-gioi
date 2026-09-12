@@ -17,6 +17,8 @@ Owner chỉnh hướng ngày 2026-09-12: **thiết kế mới cho game 2D hiện
 
 Bộ màn cần cùng một ngôn ngữ UI: đăng nhập (trống/nhập/đang kết nối/lỗi/vào game), HUD chơi (HP/MP, nhiệm vụ, di chuyển, kỹ năng đang có, tương tác), hành trang (10 slot, xem món, tháo/mặc, cấp có thật, class/giới có pack), thoại NPC (nhiều trang, hỏi thêm, nhận việc, đóng, quay lại). Hành trang giữ header/footer, chỉ phần danh sách cuộn; trung tâm màn chơi dành cho actor/map. Chỉ tái sử dụng phần kỹ thuật UI Toolkit, font, input và state hiện hành, không ép layout cũ vào màn mới.
 
+Rule triển khai: các màn cùng pattern phải dùng shared skin/base. `CongDongLamArrivalHud.Skin.cs` là base hiện tại cho glass panel, modal shell, CTA, tab, label và viền; entry/login, hành trang/thông tin/rương đồ, HUD và dialog phải reuse hoặc mở rộng base này. Không thêm màu/viền/button helper riêng trong từng partial nếu cùng vai trò; validator `tools/validate_lgo_ui_shared_skin.py` bảo vệ rule này.
+
 `AccountApiClient.LoginDevAsync` là API dev có thể dùng khi nối đăng nhập; chưa phải entry hoạt động. Không tự mở production auth/đăng ký hoặc sửa contract. Tạo demo 2D cụ thể trước khi nối; các trạng thái phải kiểm trên Player.
 
 Hành trang tiếp theo cần card/inspect món, trạng thái đang mặc/tháo, cấp có thật và nút đóng rõ; giữ catalog/equip đã audit. HUD tiếp theo chỉ dùng hành vi hiện có; chưa thêm chat/guild/shop/minimap tương tác giả. Lỗi atlas kiến trúc đã sửa sau khi phục hồi raw source ngày 2026-09-12; gate sửa cắt mảnh có Player evidence. Đây chưa phải nghiệm thu toàn bộ sản phẩm.

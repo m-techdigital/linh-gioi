@@ -51,6 +51,10 @@ Các điều áp dụng dưới đây là lựa chọn thiết kế của LGO, k
 - [Xbox Accessibility Guideline 101](https://learn.microsoft.com/en-us/xbox/accessibility/xbox-accessibility-guidelines/101): đánh giá chữ ở ảnh game thật, theo thiết bị/DPI và khả năng scale; không dùng fontSize trong code làm bằng chứng đủ đọc. LGO dùng font Việt đầy đủ, label thường thay đoạn ALL CAPS dài, cuộn một chiều khi thiếu chỗ. Chưa tuyên bố đạt toàn bộ XAG/thiết bị thật.
 - [Unity 6 ScrollView](https://docs.unity3d.com/6000.0/Documentation/Manual/UIE-uxml-element-ScrollView.html): nội dung cuộn có container riêng. Header/footer hành trang là sibling để hành động không trôi khi cuộn.
 
+## Quy tắc base UI dùng chung
+
+Bộ reference mới áp dụng cho toàn bộ màn cùng họ, không chỉ màn đăng nhập. Các màn Map01A/HUD, đăng nhập/entry, hành trang, thông tin nhân vật, rương đồ, hội thoại NPC và màn chọn nhân vật phải dùng chung ngôn ngữ navy glass + viền vàng + CTA vàng + tab/card thống nhất. Khi hai UI có cùng vai trò như modal/dialog/card/tab/action button, tạo hoặc dùng base helper chung trước; không build hai bộ style song song. Validator hiện hành: `python3.12 tools/validate_lgo_ui_shared_skin.py` chặn các partial `CongDongLamArrivalHud*` tái tạo skin riêng ngoài `CongDongLamArrivalHud.Skin.cs`.
+
 ## Ma trận màn và trạng thái cần làm
 
 | Màn/nhóm | Tương tác và trạng thái phải kiểm | Trạng thái thực tế/giới hạn |

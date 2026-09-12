@@ -1,3 +1,7 @@
+## Quy tắc chung — shared UI skin/base Map01A — 2026-09-13
+
+Khi tiếp tục login/chọn nhân vật/hành trang/rương đồ/HUD/dialog, phải bám bộ demo owner gửi nhưng redesign cho game 2D hiện tại và dùng base chung `CongDongLamArrivalHud.Skin.cs` cho glass panel, modal shell, CTA, tab, label và frame. Không tạo modal/tab/card/detail panel thứ hai nếu vai trò giống nhau. Chạy `python3.12 tools/validate_lgo_ui_shared_skin.py` cùng Unity EditMode trước checkpoint; validator này chặn local skin constants/helper cũ như `InventoryGlass`, `StyleFrame`, `InventoryLabel` quay lại. Checkpoint rule/base hiện tại đã có test overlay entry và validator shared-skin; bước tiếp theo sau commit là visual/player review sâu hơn cho các screen còn lại, không coi đây là nghiệm thu toàn bộ UI.
+
 ## Bổ sung mục tiêu owner — 2026-09-13
 
 Giữ nguyên mục tiêu wardrobe/pose còn tồn đọng; thứ tự hiện hành owner chốt: **hoàn thiện Map01A → màn đăng nhập/chọn nhân vật → hành trang và rương đồ/kho → các screen, nút chơi và hội thoại NPC liên quan**. Phân tích/thích nghi bộ demo vừa gửi cho game 2D, không mặc định đó là design chuẩn; tham khảo các game/hệ thống khác. Code xong tự kiểm Player trước, owner review chỉnh sửa sau. Không mở auth/frozen contract trái phép hoặc tạo nút/số liệu giả. Rương đồ là kho gửi/rút, không đánh đồng với rương nhiệm vụ đang có.

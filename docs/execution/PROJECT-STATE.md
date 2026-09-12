@@ -1,3 +1,7 @@
+## Quy tắc chung — shared UI skin/base Map01A — 2026-09-13
+
+Tất cả màn UI 2D mới theo bộ demo owner gửi phải dùng cùng ngôn ngữ `navy glass + gold border + gold CTA + tab/card/detail panel` và tái sử dụng base chung trước khi tạo biến thể. Runtime hiện khóa base ở `client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs`; entry/login, HUD, hành trang, thông tin, rương đồ, NPC dialogue và các modal cùng vai trò phải dùng/extend helper này, không dựng một hệ style song song. Validator `python3.12 tools/validate_lgo_ui_shared_skin.py` là gate bắt buộc cho batch UI; nếu cần ngoại lệ, phải ghi design/evidence cụ thể trước khi thêm helper riêng. Batch khóa rule hiện tại đã kiểm `LGO_UI_SHARED_SKIN_PASS partials=4`, Unity EditMode `total=266 passed=265 failed=0`, Player build `client/Unity/build/map01a-shared-ui-player/LinhGioiOnline.app` với `errors=0 warnings=13`.
+
 
 ## Audit chống nhầm validator UI cũ — 2026-09-13
 

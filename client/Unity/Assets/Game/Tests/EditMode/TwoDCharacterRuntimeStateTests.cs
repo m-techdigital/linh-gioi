@@ -171,6 +171,36 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void EntryScreenSeparatesDevLoginAndStartWithoutChangingMapState()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("entry screen test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var overlay = root.Q("Map01A Entry Overlay");
+                Assert.That(overlay, Is.Not.Null);
+                Assert.That(root.Q<Button>("Map01A Entry Login Button"), Is.Not.Null);
+                var start = root.Q<Button>("Map01A Entry Start Button");
+                Assert.That(start, Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
+                Assert.That(start.text, Does.Contain("Bắt đầu"));
+                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("dev"));
+
+                InvokeBoundButton(start);
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void InventoryStorageTabShowsExplicitGateWithoutChangingLoadout()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

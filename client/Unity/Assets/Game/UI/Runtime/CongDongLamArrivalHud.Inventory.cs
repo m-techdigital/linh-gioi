@@ -12,11 +12,6 @@ namespace LinhGioi.UI
         private Button[] _equipmentTiles;
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
 
-        private static readonly Color InventoryGlass = new Color(.012f, .045f, .078f, .965f);
-        private static readonly Color InventoryGlassRaised = new Color(.026f, .082f, .128f, .94f);
-        private static readonly Color InventoryGold = new Color(.95f, .75f, .36f, .95f);
-        private static readonly Color InventoryBlue = new Color(.10f, .35f, .58f, .96f);
-
         private Button InventoryButton(Action action, string name, string text = "")
         {
             var button = new Button(action) { name = name, text = text };
@@ -29,8 +24,7 @@ namespace LinhGioi.UI
             button.style.fontSize = 17;
             button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
-            StyleFrame(button, new Color(.045f, .13f, .18f, .98f), new Color(.50f, .58f, .58f, .55f));
-            button.style.color = new Color(.96f, .91f, .76f);
+            ApplyLgoButton(button);
             return button;
         }
 
@@ -43,29 +37,10 @@ namespace LinhGioi.UI
             return row;
         }
 
-        private static void StyleFrame(VisualElement element, Color background, Color border)
-        {
-            element.style.backgroundColor = background;
-            element.style.borderTopWidth = element.style.borderBottomWidth = 1;
-            element.style.borderLeftWidth = element.style.borderRightWidth = 1;
-            element.style.borderTopColor = element.style.borderBottomColor = border;
-            element.style.borderLeftColor = element.style.borderRightColor = border;
-        }
-
-        private static Label InventoryLabel(string text, int size, Color color, bool bold = false)
-        {
-            var label = new Label(text);
-            label.style.fontSize = size;
-            label.style.color = color;
-            label.style.whiteSpace = WhiteSpace.Normal;
-            label.style.unityFontStyleAndWeight = bold ? FontStyle.Bold : FontStyle.Normal;
-            return label;
-        }
-
         private VisualElement InventoryPanel(string name)
         {
             var panel = new VisualElement { name = name };
-            StyleFrame(panel, InventoryGlassRaised, new Color(.58f, .47f, .27f, .50f));
+            ApplyLgoGlassPanel(panel, true);
             panel.style.paddingLeft = panel.style.paddingRight = 12;
             panel.style.paddingTop = panel.style.paddingBottom = 10;
             panel.style.minWidth = 0;
@@ -76,18 +51,17 @@ namespace LinhGioi.UI
         {
             _inventory = new VisualElement { name = "Map01A Inventory" };
             Box(_inventory); Place(_inventory, 72, 72, 86, 72);
-            _inventory.style.backgroundColor = InventoryGlass;
             _inventory.style.flexDirection = FlexDirection.Column;
             _inventory.style.paddingLeft = _inventory.style.paddingRight = 12;
             _inventory.style.paddingTop = _inventory.style.paddingBottom = 12;
-            StyleFrame(_inventory, InventoryGlass, new Color(.78f, .62f, .32f, .70f));
+            ApplyLgoGlassPanel(_inventory);
 
             var header = InventoryRow("Map01A Inventory Header");
             header.style.alignItems = Align.Center;
             var titleGroup = new VisualElement();
             titleGroup.style.flexGrow = 1;
-            titleGroup.Add(InventoryLabel("HÀNH TRANG", 26, InventoryGold, true));
-            titleGroup.Add(InventoryLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 14, new Color(.73f, .85f, .88f, .88f)));
+            titleGroup.Add(LgoLabel("HÀNH TRANG", 26, UiGold, true));
+            titleGroup.Add(LgoLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 14, new Color(.73f, .85f, .88f, .88f)));
             var close = InventoryButton(() => { if (_scene.InventoryOpen) _scene.ToggleInventory(); },
                 "LGO Inventory Close", "×");
             close.tooltip = "Đóng hành trang (I / Esc)";
@@ -114,14 +88,14 @@ namespace LinhGioi.UI
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
             _inventoryFooter.style.flexGrow = 1;
             _inventoryFooter.style.flexShrink = 0;
-            _inventoryFooter.Add(InventoryLabel("Đang chọn", 15, new Color(.73f, .85f, .88f, .92f)));
-            _equipmentDetail = InventoryLabel("", 22, InventoryGold, true);
+            _inventoryFooter.Add(LgoLabel("Đang chọn", 15, new Color(.73f, .85f, .88f, .92f)));
+            _equipmentDetail = LgoLabel("", 22, UiGold, true);
             _equipmentDetail.style.marginTop = 6;
             _inventoryFooter.Add(_equipmentDetail);
-            _inventoryItemId = InventoryLabel("", 14, new Color(.78f, .88f, .90f, .88f));
+            _inventoryItemId = LgoLabel("", 14, new Color(.78f, .88f, .90f, .88f));
             _inventoryItemId.style.marginTop = 8;
             _inventoryFooter.Add(_inventoryItemId);
-            _inventoryItemState = InventoryLabel("", 16, new Color(.91f, .93f, .84f, .96f));
+            _inventoryItemState = LgoLabel("", 16, new Color(.91f, .93f, .84f, .96f));
             _inventoryItemState.style.marginTop = 12;
             _inventoryFooter.Add(_inventoryItemState);
             var spacer = new VisualElement();
@@ -159,15 +133,15 @@ namespace LinhGioi.UI
             _inventoryHeroPanel.style.flexGrow = 0;
             _inventoryHeroPanel.style.flexBasis = 360;
             body.Add(_inventoryHeroPanel);
-            _inventoryHeroTitle = InventoryLabel("", 22, InventoryGold, true);
-            _inventoryHeroMeta = InventoryLabel("", 15, new Color(.78f, .94f, .96f, .92f));
+            _inventoryHeroTitle = LgoLabel("", 22, UiGold, true);
+            _inventoryHeroMeta = LgoLabel("", 15, new Color(.78f, .94f, .96f, .92f));
             _inventoryHeroPanel.Add(_inventoryHeroTitle);
             _inventoryHeroPanel.Add(_inventoryHeroMeta);
             var heroDivider = new VisualElement();
             heroDivider.style.height = 1; heroDivider.style.marginTop = heroDivider.style.marginBottom = 10;
             heroDivider.style.backgroundColor = new Color(.75f, .60f, .32f, .45f);
             _inventoryHeroPanel.Add(heroDivider);
-            _equipmentTitle = InventoryLabel("", 16, new Color(.95f, .86f, .58f, .96f), true);
+            _equipmentTitle = LgoLabel("", 16, new Color(.95f, .86f, .58f, .96f), true);
             _inventoryHeroPanel.Add(_equipmentTitle);
 
             var equipmentSlots = new VisualElement { name = "Map01A Equipment Grid" };
@@ -204,8 +178,8 @@ namespace LinhGioi.UI
             _storagePanel.style.flexGrow = 1;
             _storagePanel.style.marginRight = 0;
             body.Add(_storagePanel);
-            _storagePanel.Add(InventoryLabel("RƯƠNG ĐỒ", 22, InventoryGold, true));
-            _storageState = InventoryLabel("Kho gửi/rút chưa kết nối model dữ liệu thật trong Map01A. Không tạo vật phẩm giả; khi có storage API/state sẽ dùng lại panel chi tiết bên phải để xem món đang chọn.", 16, new Color(.91f, .93f, .84f, .96f));
+            _storagePanel.Add(LgoLabel("RƯƠNG ĐỒ", 22, UiGold, true));
+            _storageState = LgoLabel("Kho gửi/rút chưa kết nối model dữ liệu thật trong Map01A. Không tạo vật phẩm giả; khi có storage API/state sẽ dùng lại panel chi tiết bên phải để xem món đang chọn.", 16, new Color(.91f, .93f, .84f, .96f));
             _storageState.name = "Map01A Storage State";
             _storageState.style.marginTop = 10;
             _storagePanel.Add(_storageState);
@@ -242,9 +216,9 @@ namespace LinhGioi.UI
 
             _suppliesPage = new VisualElement { name = "Map01A Supplies Page" };
             _suppliesPage.style.flexShrink = 0;
-            _suppliesTitle = InventoryLabel("Vật phẩm nhiệm vụ", 18, InventoryGold, true);
+            _suppliesTitle = LgoLabel("Vật phẩm nhiệm vụ", 18, UiGold, true);
             _suppliesPage.Add(_suppliesTitle);
-            _inventorySummary = InventoryLabel("", 17, new Color(.91f, .93f, .84f, .96f));
+            _inventorySummary = LgoLabel("", 17, new Color(.91f, .93f, .84f, .96f));
             _inventorySummary.style.marginTop = 8; _inventorySummary.style.marginBottom = 14;
             _suppliesPage.Add(_inventorySummary);
             _questItemActions = new VisualElement { name = "Map01A Quest Item Actions" };
@@ -272,8 +246,8 @@ namespace LinhGioi.UI
             _storagePanel.style.display = DisplayStyle.None;
             _inventoryDetailPanel.style.display = characterInfo || !_suppliesOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _inventoryFooter.style.display = characterInfo || !_suppliesOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            _bagTab.style.backgroundColor = characterInfo ? new Color(.045f,.13f,.18f) : InventoryBlue;
-            _characterInfoTab.style.backgroundColor = characterInfo ? InventoryBlue : new Color(.045f,.13f,.18f);
+            ApplyLgoSelectedTab(_bagTab, !characterInfo);
+            ApplyLgoSelectedTab(_characterInfoTab, characterInfo);
             _storageTab.style.backgroundColor = new Color(.045f,.13f,.18f);
         }
 
@@ -288,7 +262,7 @@ namespace LinhGioi.UI
             _inventoryFooter.style.display = DisplayStyle.None;
             _bagTab.style.backgroundColor = new Color(.045f,.13f,.18f);
             _characterInfoTab.style.backgroundColor = new Color(.045f,.13f,.18f);
-            _storageTab.style.backgroundColor = InventoryBlue;
+            ApplyLgoSelectedTab(_storageTab, true);
         }
 
         private void ShowInventoryPage(bool supplies)
@@ -301,8 +275,8 @@ namespace LinhGioi.UI
                 _inventoryFooter.style.display = !_characterInfoOpen && supplies ? DisplayStyle.None : DisplayStyle.Flex;
                 _inventoryDetailPanel.style.display = !_characterInfoOpen && supplies ? DisplayStyle.None : DisplayStyle.Flex;
             }
-            _equipmentTab.style.backgroundColor = supplies ? new Color(.045f,.13f,.18f) : InventoryBlue;
-            _suppliesTab.style.backgroundColor = supplies ? InventoryBlue : new Color(.045f,.13f,.18f);
+            ApplyLgoSelectedTab(_equipmentTab, !supplies);
+            ApplyLgoSelectedTab(_suppliesTab, supplies);
         }
     }
 }
