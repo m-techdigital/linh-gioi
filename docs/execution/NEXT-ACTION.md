@@ -1,3 +1,9 @@
+## Hiện hành — Cơ Lv1 hai giới đã qua source board và Player evidence — 2026-09-12
+
+Cơ nam/nữ Lv1 đã thay static-fit bằng source-pose 10 slot × sáu pose trên một actor. Evidence `build/co-source-pose-review-v1/runtime-pc/pc`: 186 frame, 20 item load, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn và tháo cannon/áo/giày trên Player. Gate pack/capture/no-3D/no-source/frozen pass. Trạng thái `REVIEW_ONLY / AGENT_VISUAL_PASS`.
+
+Action tiếp theo: author Cơ Lv10 nam/nữ theo progression gốc, giữ body/canvas/pivot byte-identical; review full Lv1/full Lv10 và mixed trên một Player. Không đổi camera/base/scale hoặc tạo hệ thứ hai.
+
 ## Hiện hành — Pháp Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
 
 Bốn pack Pháp source-pose nam/nữ Lv1/Lv10 dùng đúng hai body authority hiện hành và một actor. Evidence `build/phap-lv10-source-pose-review-v1/runtime-pc/pc`: 190 frame, full `[1,10]`, 60 switch, mixed verified, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn phối cấp và tháo pháp khí/áo trên Player. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; app được mở lại với cả hai cấp để owner thao tác.

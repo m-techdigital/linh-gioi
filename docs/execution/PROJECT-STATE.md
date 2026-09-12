@@ -1,3 +1,11 @@
+## Hiện hành — Cơ Lv1 nam/nữ source-pose trên Player thật — 2026-09-12
+
+Đã audit turnaround, equipment grid và weapon module Cơ gốc; static-fit cũ tiếp tục bị thu hồi. Source ngoài repo `class-work-in-progress/co-lv001/` dùng sáu donor cùng action, tách thành 10 slot trên body authority nam/nữ hiện hành. Cannon được mask theo trục nòng–tay riêng từng pose nên không dính vào áo/đai; board sáu pose và 10 trạng thái tháo đã được xem ở kích thước lớn.
+
+Pack `build/co-source-pose-review-v1/pack` và `build/co-female-source-pose-review-v1/pack` dùng overlay divisor 2, body hash bất biến. Evidence Player `build/co-source-pose-review-v1/runtime-pc/pc`: 186 frame, 20 item load, 30 base-pose frame, `maxBodyVariants=1`, bind-return error < 0,000008, `errors=[]`. Đã xem đứng, bốn nhịp chạy, lộn và tháo cannon/áo/giày ở cả hai giới: một người liền, không matte/mảnh kim loại, camera/base/scale không đổi. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Trạng thái `AGENT_VISUAL_PASS / REVIEW_ONLY`.
+
+Next: author Cơ Lv10 nam/nữ trên cùng fit family và kiểm full Lv1/Lv10 cùng mixed trong một Player.
+
 ## Hiện hành — Pháp Lv1/Lv10 nam/nữ và mixed source-pose — 2026-09-12
 
 Đã mở rộng Pháp Lv1 đã review sang Lv10 bằng chính sáu pose/canvas của từng giới và progression/grid gốc. Body atlas nam/nữ giữ byte-identical với Lv1; 10 overlay Lv10 dùng divisor 2. Source ngoài repo `class-work-in-progress/phap-lv010/`; board sáu pose và 10 trạng thái tháo đã được xem trước pack. Lv10 giữ silhouette starter, chỉ tăng rune cyan và chi tiết phần cứng; pháp khí được tách riêng nên off-main-weapon sạch.
