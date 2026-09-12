@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using LinhGioi.World;
 using NUnit.Framework;
@@ -8,6 +9,41 @@ namespace LinhGioi.Tests
 {
     public sealed class DongMonIllustratedPreviewTests
     {
+        [Test]
+        public void Map01ATerrainWalkSurfaceIsOpaqueAndMatchesFeetOnEveryModule()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A visible walk surface test");
+            var texture = new Texture2D(2, 2);
+            try
+            {
+                var preview = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                const string resource = "LGOMaps/CongDongLamMap01AArt/";
+                var pack = JsonUtility.FromJson<DongMonIllustratedPreview.PackInfo>(Resources.Load<TextAsset>(resource + "modules-layout").text);
+                // Reviewed walk surfaces inside the authored artwork, not the transparent rectangle edge.
+                var surfaceRows = new Dictionary<string, int> { ["stone-clean"] = 20, ["stone-moss"] = 28,
+                    ["grass-bank"] = 62, ["wood-bridge"] = 18 };
+                texture.LoadImage(File.ReadAllBytes(Application.dataPath + "/Game/World/Runtime/Resources/" + resource + "modules-atlas.png"));
+                foreach (var layer in pack.layers.Where(layer => layer.id.StartsWith("terrain-")))
+                {
+                    var part = pack.parts.Single(part => part.id == layer.part);
+                    var row = surfaceRows[part.id];
+                    var renderer = GameObject.Find("Map01A authored terrain " + int.Parse(layer.id.Substring(8))).GetComponent<SpriteRenderer>();
+                    var worldSurface = renderer.bounds.max.y - row * renderer.bounds.size.y / part.h;
+                    Assert.That(worldSurface, Is.EqualTo(preview.GroundY).Within(.001f), layer.id + " visible surface must meet the flat lane");
+                    for (var x = 5; x < part.w - 5; x++)
+                        Assert.That(texture.GetPixel(part.x + x, part.y + part.h - 1 - row).a,
+                            Is.GreaterThan(.78f), layer.id + " unsupported pixel at " + x);
+                }
+            }
+            finally
+            {
+                Object.DestroyImmediate(texture);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
         [Test]
         public void Map01ARouteScrollsAcrossMultipleScreensWhileFeetRemainGrounded()
         {
@@ -51,7 +87,7 @@ namespace LinhGioi.Tests
                 var terrain = GameObject.Find("Map01A authored terrain 0").GetComponent<SpriteRenderer>();
                 var foreground = GameObject.Find("Map01A foreground bamboo").GetComponent<SpriteRenderer>();
                 Assert.That(terrain.sprite.texture.width, Is.EqualTo(1024));
-                Assert.That(terrain.bounds.max.y, Is.EqualTo(preview.GroundY).Within(.001f));
+                Assert.That(terrain.bounds.min.y, Is.LessThan(preview.GroundY));
                 Assert.That(terrain.sortingOrder, Is.LessThan(0));
                 Assert.That(foreground.sortingOrder, Is.GreaterThan(0));
             }

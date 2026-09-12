@@ -1,4 +1,10 @@
-## Hiện hành — giữ character, chuyển trọng tâm Map01A — 2026-09-12
+## Hiện hành — Map01A sửa mặt terrain và thoại — 2026-09-12
+
+`CONTINUE`. Batch sau checkpoint an toàn đã sửa nguyên nhân chân nổi trên nền: mốc mặt đi trong từng module đá/rêu/cỏ/cầu được lưu tại `modules-layout.json`, áp dụng cho toàn bộ 12 instance. Actor/body/source-pose/camera/scale và PNG giữ nguyên. Đã tái hiện hai test đỏ (surface lệch 0,176 world; nút hành trang vẫn hiện trong thoại), sau sửa có 45 test xanh. Player `build/map01a-grounded-player/LinhGioiOnline.app` build 0 error/7 warning; capture Q01–Q09 đủ 18 ảnh × PC/tablet/mobile và đã xem ảnh mặt đất, nối terrain, thoại tablet, hành trang mobile.
+
+Không claim toàn map/wardrobe đã nghiệm thu. Audit ảnh phát hiện cắt nhầm object qua ô 512 của sheet landmarks, cần phục hồi source theo hash trước khi sửa; xem NEXT-ACTION. Vẫn giữ năm class hiện hành và ưu tiên map theo owner. Owner bổ sung: sau map làm màn đăng nhập, hành trang, HUD/nút chơi theo design gốc và hội thoại NPC đầy đủ như chơi thật; đã đưa vào NEXT-ACTION.
+
+## Checkpoint trước — giữ character, chuyển trọng tâm Map01A — 2026-09-12
 
 `CONTINUE`. Theo chỉ đạo mới của owner, giữ các thay đổi character an toàn và chuyển sang hoàn thiện Map01A; không tiếp tục sinh lại set/pose, không rollback body/div4/motion/camera/scale hoặc registered outfit. Character vẫn REVIEW_ONLY, chưa nghiệm thu toàn bộ design hay mixed-level.
 

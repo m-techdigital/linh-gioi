@@ -24,7 +24,13 @@ namespace LinhGioi.World
         public Sprite GateSprite { get; private set; }
         public float FarOffset => _far == null ? 0f : _far.localPosition.x;
 
-        [Serializable] public sealed class Part { public string id; public int x, y, w, h; }
+        [Serializable] public sealed class Part
+        {
+            public string id;
+            public int x, y, w, h;
+            // Optional authored contact row in sprite pixels, measured from the top.
+            public int walkSurfaceFromTop;
+        }
         [Serializable] public sealed class Layer
         {
             public string id, part;

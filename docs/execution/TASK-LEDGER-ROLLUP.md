@@ -1,3 +1,7 @@
+## Map01A — mốc mặt terrain và thoại tablet — 2026-09-12
+
+Dùng mốc source-pixel chung cho bốn loại terrain để mặt đi thực sự khớp GroundY trên cả 12 instance; giữ nguyên PNG và actor/camera/scale. Nút hành trang/combat ẩn trong thoại, hiện lại khi tiếp tục. RED 2 lỗi tái hiện; GREEN 45 test. Player build 0 error/7 warning, Q01–Q09 đủ 18 frame × ba profile và ảnh đã xem tại `build/map01a-grounded-player/quest-capture/`. Next là phục hồi nguồn landmarks để sửa object bị cắt ngang ô; chưa nghiệm thu toàn map hoặc character.
+
 ## Ưu tiên hiện hành — ổn định code, chuyển Map01A — 2026-09-12
 
 Owner dừng mở rộng character để hoàn thiện map. Đã giữ source/base/div4, sửa class catalog thiếu giới để không bật renderer cũ, khôi phục đổi đủ năm class, sửa hành trang dùng bình và chống tràn. Python 37 test, Unity 26 test; Player Q01–Q09 18 ảnh × ba tỷ lệ, ảnh UI đã review. Chi tiết `build/map01a-stable-player/quest-ui-verified`, cuối PC `quest-ui-labels-pc`. Chưa nghiệm thu toàn bộ art/Map01A. Next: audit mặt terrain alpha so với GroundY và thoại tablet; không tự tiếp task character trong lịch sử dưới đây.

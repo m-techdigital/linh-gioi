@@ -145,6 +145,39 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void DialogueHidesUnderlyingActionsAndRestoresThemAfterContinue()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("dialogue action visibility test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var update = typeof(CongDongLamArrivalHud).GetMethod("Update", flags);
+                var inventory = (Button)typeof(CongDongLamArrivalHud).GetField("_inventoryToggle", flags).GetValue(hud);
+                var combat = (VisualElement)typeof(CongDongLamArrivalHud).GetField("_combatBar", flags).GetValue(hud);
+                var talk = (Button)typeof(CongDongLamArrivalHud).GetField("_talk", flags).GetValue(hud);
+                InvokeBoundButton(talk);
+                Assert.That(scene.DialogueOpen, Is.True);
+                update.Invoke(hud, null);
+                Assert.That(inventory.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(combat.style.display.value, Is.EqualTo(DisplayStyle.None));
+                InvokeBoundButton(talk);
+                Assert.That(scene.DialogueOpen, Is.False);
+                update.Invoke(hud, null);
+                Assert.That(inventory.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(combat.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void SharedStateOwnsExclusiveActionTimingAndLocomotionHold()
         {
             var state = CreateState();

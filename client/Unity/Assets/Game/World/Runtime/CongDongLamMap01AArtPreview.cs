@@ -1333,6 +1333,7 @@ namespace LinhGioi.World
             if (manifest == null || texture == null)
                 throw new InvalidOperationException($"Missing authored Map01A modules: layout={manifest != null}, texture2D={texture != null}");
             var pack = JsonUtility.FromJson<DongMonIllustratedPreview.PackInfo>(manifest.text);
+            var sourceParts = pack.parts.ToDictionary(part => part.id);
             var parts = new Dictionary<string, Sprite>();
             foreach (var part in pack.parts)
                 parts.Add(part.id, MakeSprite(texture, new Rect(part.x, part.y, part.w, part.h)));
@@ -1344,7 +1345,10 @@ namespace LinhGioi.World
                     : "Map01A foreground " + layer.id;
                 var host = new GameObject(objectName);
                 host.transform.SetParent(transform, false);
-                host.transform.localPosition = new Vector3(layer.x, layer.y, 0);
+                var part = sourceParts[layer.part];
+                var surfaceOffset = layer.id.StartsWith("terrain-")
+                    ? part.walkSurfaceFromTop * layer.height / part.h : 0;
+                host.transform.localPosition = new Vector3(layer.x, layer.y + surfaceOffset, 0);
                 var displayWidth = layer.id.StartsWith("terrain-") ? layer.width + .12f : layer.width;
                 host.transform.localScale = new Vector3(displayWidth / sprite.bounds.size.x, layer.height / sprite.bounds.size.y, 1);
                 var renderer = host.AddComponent<SpriteRenderer>();

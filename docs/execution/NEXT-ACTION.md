@@ -8,11 +8,17 @@ Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F`
 
 Player hiện hành: `build/map01a-stable-player/LinhGioiOnline.app`; mở qua `tools/launch_lgo_source_pose_review.py` để nạp đủ catalog, không mở bằng một pack đơn rồi kết luận mất đổi class. Giữ v7, không quay lại pack Pháp bị REJECTED/WITHDRAWN. Bộ trang phục không phải hướng đầu tư tiếp trong batch map này.
 
-Tiếp theo audit nền đi bộ/cầu/bờ cỏ và chỗ nối rìa làng: ảnh hiện có cho thấy khoảng hở giữa chân và mặt ảnh terrain dù mốc logic GroundY đúng. Đã đo alpha tại 10/25/50/75/90% bề ngang: stone-clean bắt đầu ở hàng 5/5/5/6/5 trên 110 px, stone-moss 9/16/16/17/16 trên 124 px, grass-bank 12/36/47/41/26 trên 172 px, bridge 5/5/5/5/5 trên 138 px. Layout đang gán đỉnh RECT = GroundY nên test bounds xanh không chứng minh chân chạm mặt ảnh. Phải đối chiếu mặt đi thực sự của sprite với modules-layout; không hạ actor hoặc chỉnh camera để che. Đồng thời kiểm thao tác hành trang/cuộn/đóng/mở và chuyển class bằng input thật trên Player cuối.
+Terrain và thoại tablet đã sửa trong batch kế tiếp: mốc mặt đi 20/28/62/18 px dùng chung theo part, ảnh atlas không đổi; 45 test pass, Q01–Q09 đủ 18 ảnh × ba tỷ lệ. Đã xem chân chạm nền, nối cỏ–đá/cầu và khung thoại không bị nút nền đè. Evidence: `build/map01a-grounded-player/quest-capture/`. Player mới `build/map01a-grounded-player/LinhGioiOnline.app` vẫn mở bằng launcher đủ năm class.
+
+Next: audit lỗi cắt kiến trúc trong `landmarks-atlas.png`. Đã thấy rõ góc mái social-hall bị cắt sang mép trái merchant-stall, một mảnh đèn ở mép hunter-post. Packer đang chia sheet thành ô 512×512 trước khi crop, nên một object vượt ô bị tách. Tìm lại source hash `753d3d8af390b0a27eb26f573128ab9672ee04bdf58bfeae84d3761833c0ac90` trước khi sửa source rect theo object; không xóa mảnh ngẫu nhiên hoặc sinh lại cả map.
+
+## Yêu cầu tiếp nối của owner — 2026-09-12
+
+Sau khi xử lý map, thiết kế và triển khai màn đăng nhập, hành trang, các nút cần thiết khi chơi theo design gốc. Hoàn thiện hội thoại NPC như chơi thật: nội dung đầy đủ, lựa chọn/tiếp tục, nhận/trả nhiệm vụ, trạng thái trước/trong/sau nhiệm vụ và khi quay lại NPC. Trước implementation chỉ rõ design/demo từng màn và các tương tác; dùng base chung, kiểm input/UI trên Player, không chỉ test xanh. Không tự mở auth backend/frozen contract; audit flow đăng nhập hiện có để tái sử dụng.
 
 ## Current blocker
 
-Không có blocker tooling. Chưa nghiệm thu design character hoặc toàn Map01A. Task map tiếp theo vẫn hợp lệ: terrain/đường đi và review thoại ở tablet (nút hành trang disabled còn nằm dưới panel thoại).
+Không có blocker Player. Source landmark được manifest trỏ tới `build/map01a-art/module-generation-v1/landmarks-sheet-alpha-v1.png` hiện không tồn tại ở worktree, main build hoặc các temp worktree cùng đường dẫn; cũng chưa tìm thấy theo tên trong Projects/Design. Cần kiểm archive/worktree cũ để phục hồi đúng source. Nếu nguồn không phục hồi được, giữ atlas để bảo toàn công sức và chuyển sang tương tác/map flow được phép; không dựng lại art bằng may rủi.
 
 ## Evidence và giới hạn
 

@@ -1,3 +1,9 @@
+## Mặt đi bộ phải nằm trên ảnh, không phải mép rect — 2026-09-12
+
+Terrain cũ gán đỉnh Sprite.bounds = GroundY, nhưng đá/rêu/cỏ/cầu có padding và phối cảnh khác nhau, làm chân trông lơ lửng dù test bounds xanh. `modules-layout.json` hiện khai báo `walkSurfaceFromTop` cho bốn part (20/28/62/18 px); renderer dịch terrain đúng độ lệch source-pixel theo world height. Mọi instance cùng part dùng chung mốc, không chỉnh actor/camera/scale, không sửa pixel atlas.
+
+Mốc được chọn trên mặt đi bộ trong module gốc, không lấy pixel alpha đầu tiên (hoa/cỏ có thể nhô cao). Test đọc PNG thật, kiểm hàng mặt đi opaque xuyên 490 pixel/part và tọa độ surface của cả 12 terrain trùng GroundY. Capture `build/map01a-grounded-player/quest-capture/{pc,tablet,mobile}` đủ Q01–Q09, đã xem chỗ nối cỏ–đá/cầu và chân nhân vật. Không đồng nhất kết quả này với nghiệm thu art toàn map.
+
 ## Bốn ID không bảo đảm bốn nhịp chạy — 2026-09-11
 
 RunA/B nguồn cũ gần cùng thế chân; thêm contact vẫn chưa đủ cảm giác bốn nhịp. Sheet imagegen toàn vòng tiếp tục lặp1/3 và2/4 nên loại trước pack/Player. Hướng hiệu quả hơn trong batch này: khóa ownership chân gần/xa bằng mảnh base + IK, rồi chỉ dùng donor sửa đường nối quần trên mask. Source v5 giữ phần ngoài mask, tiếp đất0gap, nhịp bay được phép cách nền; không normalize mọi pose về ground. Pack div4 vẫn512×1024 và369348byte.

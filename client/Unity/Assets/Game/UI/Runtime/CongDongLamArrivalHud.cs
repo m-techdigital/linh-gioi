@@ -329,6 +329,8 @@ namespace LinhGioi.UI
             _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
             _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _inventoryToggle.style.display = _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _combatBar.style.display = _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _dialogueSpeaker.text = _scene.DialogueSpeaker;
             _dialogueLine.text = _scene.DialogueText;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
