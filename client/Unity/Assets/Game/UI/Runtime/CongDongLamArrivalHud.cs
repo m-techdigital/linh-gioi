@@ -13,7 +13,7 @@ namespace LinhGioi.UI
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions;
         private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
-        private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant;
+        private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
         private Button[] _equipmentRows;
         private IReadOnlyList<string> _equipmentSlotIds;
         private RuntimeTouchMovementPad _pad;
@@ -169,7 +169,9 @@ namespace LinhGioi.UI
                 { name = "LGO Equipment Inventory Toggle" };
             _equipmentVariant = new Button(() => _scene.CycleVoSelectedEquipmentItemLevel())
                 { name = "LGO Equipment Inventory Variant", text = "Đổi cấp món" };
-            foreach (var button in new[] { _equipmentToggle, _equipmentVariant })
+            _equipmentClass = new Button(() => _scene.CycleSourcePoseClass())
+                { name = "LGO Equipment Inventory Class", text = "Đổi class · F" };
+            foreach (var button in new[] { _equipmentToggle, _equipmentVariant, _equipmentClass })
             {
                 button.style.minHeight = 40;
                 button.style.minWidth = _touch ? 174 : 205;
@@ -263,6 +265,7 @@ namespace LinhGioi.UI
                 if (Input.GetKeyDown(KeyCode.H)) _scene.UseHealthPotion();
                 if (Input.GetKeyDown(KeyCode.K)) _scene.UseManaPotion();
                 if (Input.GetKeyDown(KeyCode.R)) _scene.EquipClassReward();
+                if (Input.GetKeyDown(KeyCode.F)) _scene.CycleSourcePoseClass();
             }
             _quest.text = _scene.QuestTrackerText
                 + (string.IsNullOrEmpty(_scene.LastInteractionMessage) ? "" : "\n" + _scene.LastInteractionMessage);
@@ -310,6 +313,11 @@ namespace LinhGioi.UI
             var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
             _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "Chưa có cấp khác";
             _equipmentVariant.SetEnabled(hasVariant);
+            _equipmentClass.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
+            _equipmentClass.text = _scene.CanCycleSourcePoseClass
+                ? "Đổi class · đang " + _scene.ActiveEquipmentClassLabel + (_touch ? "" : " · F")
+                : "Chỉ có 1 class";
+            _equipmentClass.SetEnabled(_scene.CanCycleSourcePoseClass);
             _healthPotion.SetEnabled(_scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100);
             _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
             _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);

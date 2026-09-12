@@ -62,7 +62,7 @@ namespace LinhGioi.World
         private Vector3 _lastAppliedPivot;
         private int _lastAppliedDirection = 1;
         private string _frame;
-        private readonly TwoDSourcePoseTimeline _timeline = new TwoDSourcePoseTimeline();
+        private TwoDSourcePoseTimeline _timeline = new TwoDSourcePoseTimeline();
         public bool HasTransitions => _sprites.ContainsKey("run_start") && _sprites.ContainsKey("run_stop");
         public string CurrentFrame => _frame;
         public string ClassId { get; private set; } = "vo";
@@ -70,6 +70,21 @@ namespace LinhGioi.World
         public string GenderId { get; private set; } = "male";
         public string GenderLabel => GenderId == "female" ? "nữ" : "nam";
         public bool PresentationVisible { get; private set; } = true;
+        public Vector3 PoseRootScale => _rotationRoot == null ? Vector3.one : _rotationRoot.localScale;
+        public float PoseRootRotationDegrees => _rotationRoot == null ? 0f : Mathf.DeltaAngle(0f, _rotationRoot.localEulerAngles.z);
+
+        public Bounds VisibleWorldBounds()
+        {
+            var bounds = new Bounds();
+            var found = false;
+            foreach (var renderer in GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                if (!renderer.enabled || renderer.forceRenderingOff || renderer.sprite == null) continue;
+                if (!found) { bounds = renderer.bounds; found = true; }
+                else bounds.Encapsulate(renderer.bounds);
+            }
+            return found ? bounds : new Bounds();
+        }
 
         public static string ResolveClassId(string itemId)
         {
@@ -179,6 +194,21 @@ namespace LinhGioi.World
             }
             transform.localPosition = Vector3.zero;
             Apply("idle", 0, 1);
+        }
+
+        public void ReloadPack(string primaryDirectory, params string[] alternateDirectories)
+        {
+            var visible = PresentationVisible;
+            ClearLoadedAssets();
+            _timeline = new TwoDSourcePoseTimeline();
+            ClassId = "vo";
+            ClassLabel = "Võ";
+            GenderId = "male";
+            Load(primaryDirectory);
+            foreach (var alternate in alternateDirectories ?? Array.Empty<string>())
+                if (!string.IsNullOrEmpty(alternate)) LoadItemVariants(alternate);
+            SetPresentationVisible(visible);
+            Debug.Log("LGO_POSE_REVIEW_CLASS_RELOADED " + ClassId + " " + GenderId);
         }
 
         private void LoadReviewSlot(string bodyDirectory, string overlayDirectory, string expectedSlot, int slotOrder)
@@ -436,16 +466,36 @@ namespace LinhGioi.World
         }
 
         private void OnDestroy()
+            => ClearLoadedAssets();
+
+        private void ClearLoadedAssets()
         {
-            foreach (var sprite in _sprites.Values) Destroy(sprite);
+            foreach (var sprite in _sprites.Values) DestroyAsset(sprite);
             foreach (var variants in _reviewVariants.Values)
                 foreach (var slot in variants.Values)
                 {
                     foreach (var component in slot.Components.Values)
-                        foreach (var sprite in component.Sprites.Values) Destroy(sprite);
-                    if (slot.Texture != null) Destroy(slot.Texture);
+                        foreach (var sprite in component.Sprites.Values) DestroyAsset(sprite);
+                    if (slot.Texture != null) DestroyAsset(slot.Texture);
                 }
-            if (_texture != null) Destroy(_texture);
+            if (_texture != null) DestroyAsset(_texture);
+            if (_rotationRoot != null) DestroyAsset(_rotationRoot.gameObject);
+            _sprites.Clear();
+            _sourceRects.Clear();
+            _reviewSlots.Clear();
+            _reviewVariants.Clear();
+            _slotVisibility.Clear();
+            _texture = null;
+            _renderer = null;
+            _rotationRoot = null;
+            _frame = null;
+        }
+
+        private static void DestroyAsset(UnityEngine.Object asset)
+        {
+            if (asset == null) return;
+            if (Application.isPlaying) Destroy(asset);
+            else DestroyImmediate(asset);
         }
     }
 }

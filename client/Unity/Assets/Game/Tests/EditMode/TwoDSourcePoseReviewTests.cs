@@ -230,6 +230,77 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void VisibleBoundsAndTransformDiagnosticsDescribeTheDisplayedPoseActor()
+        {
+            var directory = Path.Combine(Application.temporaryCachePath, "lgo-pose-bounds-" + Guid.NewGuid().ToString("N"));
+            var root = new GameObject("pose bounds test");
+            try
+            {
+                Directory.CreateDirectory(directory);
+                WritePack(directory, null, null, null);
+                var review = root.AddComponent<TwoDSourcePoseReview>();
+                typeof(TwoDSourcePoseReview).GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(review, new object[] { directory });
+
+                review.Apply("idle", 0, 1);
+                Assert.That(review.VisibleWorldBounds().size.y, Is.GreaterThan(0));
+                Assert.That(review.PoseRootScale, Is.EqualTo(Vector3.one));
+                Assert.That(review.PoseRootRotationDegrees, Is.EqualTo(0).Within(.001f));
+                review.Apply("jump", 0, 1, .2f);
+                Assert.That(review.PoseRootScale, Is.EqualTo(Vector3.one));
+                Assert.That(Mathf.Abs(review.PoseRootRotationDegrees), Is.GreaterThan(1));
+                review.SetPresentationVisible(false);
+                Assert.That(review.VisibleWorldBounds().size, Is.EqualTo(Vector3.zero));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            }
+        }
+
+        [Test]
+        public void ReloadPackReplacesClassOnTheSameActorWithoutLeavingOldRenderers()
+        {
+            var first = Path.Combine(Application.temporaryCachePath, "lgo-pose-reload-a-" + Guid.NewGuid().ToString("N"));
+            var second = Path.Combine(Application.temporaryCachePath, "lgo-pose-reload-b-" + Guid.NewGuid().ToString("N"));
+            var root = new GameObject("pose reload test");
+            try
+            {
+                Directory.CreateDirectory(first);
+                Directory.CreateDirectory(second);
+                WritePack(first, null, null, null);
+                WritePack(second, null, null, null);
+                foreach (var pair in new[] { (first, "vo_male_lv001_outer_top"), (second, "phap_male_lv001_outer_top") })
+                {
+                    var overlay = Path.Combine(pair.Item1, "outer-top-review");
+                    Directory.CreateDirectory(overlay);
+                    WritePack(overlay, "outer_top", Hash(Path.Combine(pair.Item1, "atlas-review.png")),
+                        Hash(Path.Combine(pair.Item1, "atlas-review.json")));
+                    var path = Path.Combine(overlay, "atlas-review.json");
+                    File.WriteAllText(path, File.ReadAllText(path).Replace("vo_male_lv001_outer_top", pair.Item2));
+                }
+                var review = root.AddComponent<TwoDSourcePoseReview>();
+                typeof(TwoDSourcePoseReview).GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(review, new object[] { first });
+                Assert.That(review.ClassId, Is.EqualTo("vo"));
+                Assert.That(root.GetComponentsInChildren<SpriteRenderer>(true).Length, Is.EqualTo(2));
+
+                review.ReloadPack(second);
+
+                Assert.That(review.ClassId, Is.EqualTo("phap"));
+                Assert.That(root.GetComponentsInChildren<SpriteRenderer>(true).Length, Is.EqualTo(2));
+                Assert.That(review.GetSlotItemId("outer_top"), Does.StartWith("phap_"));
+            }
+            finally
+            {
+                UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(first)) Directory.Delete(first, true);
+                if (Directory.Exists(second)) Directory.Delete(second, true);
+            }
+        }
+
+        [Test]
         public void SameSlotCanSwitchLevelVariantWithoutAddingAnotherActor()
         {
             var primary = Path.Combine(Application.temporaryCachePath, "lgo-pose-level-primary-" + Guid.NewGuid().ToString("N"));

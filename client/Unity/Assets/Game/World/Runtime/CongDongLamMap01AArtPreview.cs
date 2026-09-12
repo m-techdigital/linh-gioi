@@ -207,6 +207,13 @@ namespace LinhGioi.World
         private SpriteRenderer _leftFoot, _rightFoot;
         private Transform _voAvatarRoot;
         private TwoDSourcePoseReview _sourcePoseReview, _femaleSourcePoseReview;
+        private sealed class SourcePoseClassOption
+        {
+            public string Id, MalePrimary, FemalePrimary;
+            public string[] MaleAlternates, FemaleAlternates;
+        }
+        private readonly List<SourcePoseClassOption> _sourcePoseClassOptions = new List<SourcePoseClassOption>();
+        private int _sourcePoseClassIndex;
         private int _sourcePoseFacing = 1;
         private readonly Dictionary<string, SpriteRenderer> _voAvatarParts = new Dictionary<string, SpriteRenderer>();
         private readonly Dictionary<string, Tuple<Vector3, Vector3>> _voAvatarPartRest = new Dictionary<string, Tuple<Vector3, Vector3>>();
@@ -253,6 +260,7 @@ namespace LinhGioi.World
             ? _femaleSourcePoseReview : _sourcePoseReview;
         private bool HasAnySourcePoseReview => _sourcePoseReview != null || _femaleSourcePoseReview != null;
         public bool IsSourcePoseReviewActive => ActiveSourcePoseReview != null;
+        public bool CanCycleSourcePoseClass => IsSourcePoseReviewActive && _sourcePoseClassOptions.Count > 1;
         public bool ClassEquipmentPreviewActive => _classFitPreviewActive;
         public string ActiveEquipmentClassId => _classFitPreviewActive ? _classFitPreviewId : ActiveSourcePoseReview?.ClassId ?? "vo";
         public string ActiveEquipmentClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel : ActiveSourcePoseReview?.ClassLabel ?? "Võ";
@@ -562,6 +570,7 @@ namespace LinhGioi.World
             _sourcePoseReview = TwoDSourcePoseReview.CreateIfRequested(transform);
             _femaleSourcePoseReview = TwoDSourcePoseReview.CreateIfRequested(transform,
                 "--lgo-vo-pose-review-female-dir", "Source pose review — female stack");
+            LoadSourcePoseClassOptions();
             if (HasAnySourcePoseReview)
             {
                 _registeredOutfit?.SetPresentationVisible(false);
@@ -812,6 +821,56 @@ namespace LinhGioi.World
             _voState.CycleGender();
             RefreshVoAvatarMode();
         }
+
+        public void CycleSourcePoseClass()
+        {
+            if (!CanCycleSourcePoseClass) return;
+            _sourcePoseClassIndex = (_sourcePoseClassIndex + 1) % _sourcePoseClassOptions.Count;
+            var option = _sourcePoseClassOptions[_sourcePoseClassIndex];
+            _sourcePoseReview.ReloadPack(option.MalePrimary, option.MaleAlternates);
+            _femaleSourcePoseReview.ReloadPack(option.FemalePrimary, option.FemaleAlternates);
+            var complete = _sourcePoseReview.GetCompleteItemLevels()
+                .Intersect(_femaleSourcePoseReview.GetCompleteItemLevels()).OrderBy(level => level).ToArray();
+            var selectedLevel = complete.Contains(VoAvatarLevel) ? VoAvatarLevel : complete.FirstOrDefault();
+            if (selectedLevel > 0)
+                foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = selectedLevel;
+            RefreshVoAvatarMode();
+            ApplyVoPose();
+            LastInteractionMessage = "Đã đổi class sang " + option.Id + " · giữ nguyên giới tính và trạng thái tháo/mặc.";
+        }
+
+        private void LoadSourcePoseClassOptions()
+        {
+            _sourcePoseClassOptions.Clear();
+            var args = Environment.GetCommandLineArgs();
+            for (var index = 0; index < args.Length; index++)
+            {
+                if (args[index] != "--lgo-source-pose-class") continue;
+                if (index + 5 >= args.Length) throw new ArgumentException("Source pose class requires id and four pack path fields");
+                var option = new SourcePoseClassOption
+                {
+                    Id = args[index + 1],
+                    MalePrimary = args[index + 2],
+                    MaleAlternates = SplitPackPaths(args[index + 3]),
+                    FemalePrimary = args[index + 4],
+                    FemaleAlternates = SplitPackPaths(args[index + 5])
+                };
+                if (string.IsNullOrEmpty(option.Id) || string.IsNullOrEmpty(option.MalePrimary)
+                    || string.IsNullOrEmpty(option.FemalePrimary)
+                    || _sourcePoseClassOptions.Any(existing => existing.Id == option.Id))
+                    throw new ArgumentException("Invalid/duplicate source pose class option: " + option.Id);
+                _sourcePoseClassOptions.Add(option);
+                index += 5;
+            }
+            if (_sourcePoseClassOptions.Count == 0 || _sourcePoseReview == null || _femaleSourcePoseReview == null) return;
+            _sourcePoseClassIndex = _sourcePoseClassOptions.FindIndex(option => option.Id == _sourcePoseReview.ClassId);
+            if (_sourcePoseClassIndex < 0)
+                throw new ArgumentException("Active source pose class is absent from --lgo-source-pose-class options");
+        }
+
+        private static string[] SplitPackPaths(string value)
+            => string.IsNullOrEmpty(value) || value == "-" ? Array.Empty<string>()
+                : value.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
 
         public void CycleVoAvatarLevel()
         {

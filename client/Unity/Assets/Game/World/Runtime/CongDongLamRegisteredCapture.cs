@@ -16,6 +16,11 @@ namespace LinhGioi.World
             public int bits, frame;
             public string[] enabledCore;
         }
+        [Serializable] private sealed class ActorFrameMetric
+        {
+            public string file, actor, motion, poseFrame;
+            public float screenHeightRatio, worldWidth, worldHeight, rootScaleX, rootScaleY, rootRotationDegrees;
+        }
         [Serializable] private sealed class RegisteredEvidence
         {
             public string status = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED";
@@ -34,6 +39,7 @@ namespace LinhGioi.World
             public int maxEquipmentAttachments, maxBodyVariants;
             public List<string> errors = new List<string>();
             public List<WardrobeCombination> wardrobeCombinations = new List<WardrobeCombination>();
+            public List<ActorFrameMetric> actorFrameMetrics = new List<ActorFrameMetric>();
         }
         public static float RegisteredActorScreenHeightRatio(Camera camera, Bounds worldBounds, int screenHeight)
         {
@@ -329,13 +335,35 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
             texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0); texture.Apply();
-            var actorRatio = RegisteredActorScreenHeightRatio(Camera.main, _registeredOutfit.VisibleWorldBounds(), Screen.height);
+            var sourceReview = ActiveSourcePoseReview;
+            var sourceVisible = sourceReview != null && sourceReview.PresentationVisible;
+            var actorBounds = sourceVisible ? sourceReview.VisibleWorldBounds() : _registeredOutfit.VisibleWorldBounds();
+            var actorRatio = RegisteredActorScreenHeightRatio(Camera.main, actorBounds, Screen.height);
             if (actorRatio > 0f)
             {
                 report.minActorScreenHeightRatio = Mathf.Min(report.minActorScreenHeightRatio, actorRatio);
                 report.maxActorScreenHeightRatio = Mathf.Max(report.maxActorScreenHeightRatio, actorRatio);
                 report.actorScreenMetricFrames++;
             }
+            var outputFile = (report.frames + 1).ToString("00") + "-" + name + ".png";
+            var rootScale = sourceVisible ? sourceReview.PoseRootScale : _voAvatarRoot.localScale;
+            var rootRotation = sourceVisible ? sourceReview.PoseRootRotationDegrees
+                : Mathf.DeltaAngle(0f, _voAvatarRoot.localEulerAngles.z);
+            report.actorFrameMetrics.Add(new ActorFrameMetric
+            {
+                file = outputFile,
+                actor = sourceVisible ? "source_pose" : "registered_outfit",
+                motion = VoAvatarMotionState,
+                poseFrame = sourceVisible ? sourceReview.CurrentFrame : VoAvatarMotionFrameId,
+                screenHeightRatio = actorRatio,
+                worldWidth = actorBounds.size.x,
+                worldHeight = actorBounds.size.y,
+                rootScaleX = rootScale.x,
+                rootScaleY = rootScale.y,
+                rootRotationDegrees = rootRotation
+            });
+            if (sourceVisible && ((rootScale - Vector3.one).sqrMagnitude > .00000001f))
+                report.errors.Add("Source pose root scale changed: " + name);
             report.maxEquipmentAttachments = Math.Max(report.maxEquipmentAttachments, _registeredOutfit.VisibleEquipmentAttachments);
             report.maxBodyVariants = Math.Max(report.maxBodyVariants, _registeredOutfit.VisibleBodyVariants);
             var expectedFallbackCloth = _registeredOutfit.UsesEquipmentLowerBody ? 0 : 1;
@@ -347,7 +375,8 @@ namespace LinhGioi.World
             if (_registeredOutfit.VisibleBodyVariants > 1) report.errors.Add("Overlapping body occlusion variants: " + name);
             if (report.closedBody && (_registeredOutfit.VisibleRigidAttachments != (articulatedBoots ? 8 : 10) || _registeredOutfit.VisibleClothAttachments != expectedFallbackCloth)) report.errors.Add("Missing active closed body attachments: " + name);
             if (report.closedFarArms && _registeredOutfit.VisibleRigidAttachments != 2) report.errors.Add("Missing active closed arm attachments: " + name);
-            File.WriteAllBytes(Path.Combine(directory, (++report.frames).ToString("00") + "-" + name + ".png"), texture.EncodeToPNG());
+            report.frames++;
+            File.WriteAllBytes(Path.Combine(directory, outputFile), texture.EncodeToPNG());
             Destroy(texture);
         }
     }

@@ -105,6 +105,20 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
             [],
         )
 
+    def test_source_pose_capture_requires_metrics_from_visible_source_actor_and_stable_scale(self):
+        result = self.valid_result()
+        result['actorFrameMetrics'] = [dict(actor='source_pose', rootScaleX=1.0, rootScaleY=1.0)
+                                       for _ in range(result['frames'])]
+        self.assertEqual(validate_registered_capture_result(code=0, result=result, width=1280,
+            height=720, png_count=154, source_pose_review=True), [])
+        result['actorFrameMetrics'][8]['actor'] = 'registered_outfit'
+        self.assertIn('SOURCE_POSE_METRICS_MEASURED_WRONG_ACTOR', validate_registered_capture_result(
+            code=0, result=result, width=1280, height=720, png_count=154, source_pose_review=True))
+        result['actorFrameMetrics'][8]['actor'] = 'source_pose'
+        result['actorFrameMetrics'][19]['rootScaleY'] = 1.2
+        self.assertIn('SOURCE_POSE_ROOT_SCALE_CHANGED', validate_registered_capture_result(
+            code=0, result=result, width=1280, height=720, png_count=154, source_pose_review=True))
+
     def test_variant_capture_requires_full_level_and_mixed_switches(self):
         result = self.valid_result()
         result.update(poseReviewLv10Verified=True, poseReviewFullLevelsVerified=[1, 10],

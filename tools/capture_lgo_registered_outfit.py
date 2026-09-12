@@ -41,7 +41,7 @@ def player_code_fingerprint(player):
             for path in [player, *assemblies]}
 
 
-def validate_registered_capture_result(*, code, result, width, height, png_count, closed_far_arms=False, closed_body=False, registered_equipment=False, wardrobe_matrix=False, pose_review_variant_levels=(), pose_review_variant_gender_count=1):
+def validate_registered_capture_result(*, code, result, width, height, png_count, closed_far_arms=False, closed_body=False, registered_equipment=False, wardrobe_matrix=False, pose_review_variant_levels=(), pose_review_variant_gender_count=1, source_pose_review=False):
     errors = []
     if code != 0:
         errors.append('PLAYER_EXIT_CODE_' + str(code))
@@ -124,6 +124,15 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
         errors.append('ACTOR_SCREEN_HEIGHT_RATIO_MISSING')
     elif min_ratio <= 0 or max_ratio < min_ratio:
         errors.append('ACTOR_SCREEN_HEIGHT_RATIO_INVALID')
+    if source_pose_review:
+        metrics = result.get('actorFrameMetrics', [])
+        if len(metrics) != result.get('frames'):
+            errors.append('SOURCE_POSE_FRAME_METRICS_INCOMPLETE')
+        elif any(row.get('actor') != 'source_pose' for row in metrics):
+            errors.append('SOURCE_POSE_METRICS_MEASURED_WRONG_ACTOR')
+        elif any(abs(row.get('rootScaleX', 0) - 1) > 1e-5 or abs(row.get('rootScaleY', 0) - 1) > 1e-5
+                 for row in metrics):
+            errors.append('SOURCE_POSE_ROOT_SCALE_CHANGED')
     return errors
 
 def pose_review_fingerprint(directory):
@@ -310,6 +319,7 @@ def main():
             wardrobe_matrix=args.wardrobe_matrix,
             pose_review_variant_levels=variant_levels,
             pose_review_variant_gender_count=2 if args.pose_review_female_alt_dir else 1,
+            source_pose_review=bool(args.pose_review_dir),
         )
         if args.wardrobe_matrix:
             for row in result.get('wardrobeCombinations', []):

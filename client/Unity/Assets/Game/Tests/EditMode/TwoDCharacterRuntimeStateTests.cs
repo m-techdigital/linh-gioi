@@ -80,6 +80,7 @@ namespace LinhGioi.Tests.EditMode
                 var rows = root.Query<Button>().ToList()
                     .Where(button => button.name.StartsWith("LGO Equipment Inventory Slot ")).ToArray();
                 Assert.That(rows, Has.Length.EqualTo(10));
+                Assert.That(root.Q<Button>("LGO Equipment Inventory Class"), Is.Not.Null);
 
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot outer_tunic"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("outer_tunic"));
