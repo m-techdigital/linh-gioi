@@ -1,4 +1,9 @@
 
+## Shared UI governance tightened — 2026-09-13
+
+Project rule now explicitly requires reusable UI patterns to live in shared base/skin/helper before implementation. Modal/dialog/card/tab/button/detail/panel helpers must not be copied into per-screen partials; named exceptions such as `InventoryPanel` and `MakeCharacterCard` are locked to their owning partial only. `tools/validate_lgo_ui_shared_skin.py` and `tools.test_validate_lgo_ui_shared_skin` now include a regression that rejects reusing an allowed helper name from another partial, preventing future screens from bypassing shared UI governance while still allowing narrow wrappers that call `ApplyLgo*`.
+
+
 ## Source DO-NOT-PACK ancestor guard — 2026-09-13
 
 Owner-review launcher now keeps scanning source ancestors after reading a valid `authoring-selection.json`, so a `DO-NOT-PACK.md` marker above the selected surface still blocks Player launch. Regression test covers a pack source under a valid selection but with an ancestor DO-NOT-PACK marker; Player no longer starts in that case. This protects diagnostic repair directories and grouped external source trees from accidental pack/capture.

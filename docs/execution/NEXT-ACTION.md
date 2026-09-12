@@ -1,3 +1,10 @@
+
+## Shared UI governance rule/test checkpoint — 2026-09-13
+
+- Rule added to `AGENTS.md`: UI/UX with the same pattern must update shared base/skin/helper first; helper exceptions such as `InventoryPanel` must stay in the partial that owns that flow and cannot be copied to avoid the validator.
+- Guard added to `tools/validate_lgo_ui_shared_skin.py` and regression `test_rejects_reusing_allowed_helper_name_outside_owning_partial`: new modal/dialog/card/tab/detail/panel helpers in runtime UI are rejected unless locked to a specific owning partial.
+- Required for next UI work: run `PYTHONPATH=tools PYTHONPYCACHEPREFIX=build/pycache python3.12 -m unittest tools.test_validate_lgo_ui_shared_skin` and `PYTHONPYCACHEPREFIX=build/pycache python3.12 tools/validate_lgo_ui_shared_skin.py`; if a screen needs a new reusable pattern, add it to shared skin/base with a test in the same batch.
+
 ## Map01A HUD shared-button checkpoint — 2026-09-13
 
 - HUD/action buttons and dialogue/inventory modal state are now guarded by shared UI skin validator and EditMode. Do not return `_talk`, `_npcTalk`, combat bar or inventory toggle to local `Box()` styling.

@@ -160,7 +160,36 @@ namespace LinhGioi.UI
 
             violations = validator.validate_root(Path(temp))
 
-        self.assertTrue(any("parallel modal/dialog/card/tab/button skin helper" in item for item in violations), violations)
+        self.assertTrue(any("parallel modal/dialog/card/tab/button/detail/panel skin helper" in item for item in violations), violations)
+
+
+    def test_rejects_reusing_allowed_helper_name_outside_owning_partial(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            rogue = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.RogueInventory.cs"
+            rogue.write_text(
+                """using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace LinhGioi.UI
+{
+    public sealed partial class CongDongLamArrivalHud
+    {
+        private VisualElement InventoryPanel(string name)
+        {
+            var panel = new VisualElement { name = name };
+            panel.style.backgroundColor = new Color(.01f, .04f, .07f, .95f);
+            panel.style.borderTopWidth = panel.style.borderBottomWidth = 1;
+            return panel;
+        }
+    }
+}
+""",
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("helper InventoryPanel is only allowed" in item for item in violations), violations)
 
 
 

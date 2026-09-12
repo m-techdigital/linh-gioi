@@ -22,11 +22,13 @@ FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+Label\s+(?!LgoLabel\b)[A-Za-z0-9_]*Label\s*\("),
 ]
 FORBIDDEN_PARALLEL_SKIN_HELPER = re.compile(
-    r"private\s+static\s+(?:void|VisualElement|Button|Label)\s+"
-    r"(?P<name>(?:Style|Build|Create|Make)[A-Za-z0-9_]*(?:Modal|Dialog|Card|Tab|Detail|Panel)[A-Za-z0-9_]*)\s*\("
+    r"private\s+(?:static\s+)?(?:"
+    r"void\s+(?P<void_name>(?:Style|Build|Create|Make)[A-Za-z0-9_]*(?:Modal|Dialog|Card|Tab|Detail|Panel)[A-Za-z0-9_]*)"
+    r"|(?:VisualElement|Button|Label)\s+(?P<element_name>[A-Za-z0-9_]*(?:Modal|Dialog|Card|Tab|Detail|Panel)[A-Za-z0-9_]*))\s*\("
 )
 ALLOWED_PARALLEL_SKIN_HELPERS = {
-    "InventoryPanel",
+    "InventoryPanel": "CongDongLamArrivalHud.Inventory.cs",
+    "MakeCharacterCard": "CongDongLamArrivalHud.CharacterSelect.cs",
 }
 # Exact legacy snippets that previously caused each screen to grow its own skin.
 FORBIDDEN_SNIPPETS = [
@@ -94,6 +96,7 @@ REQUIRED_AGENT_MARKERS = [
     "modal/dialog/card/tab/button/detail panel dùng base chung",
         "Không tạo helper skin song song kiểu `StyleModalDialog`, `BuildCardPanel`, `CreateDetailPanel`",
     "Nếu hai UI/UX giống nhau mà cần khác hành vi, tách data/state/action",
+    "Helper ngoại lệ như `InventoryPanel` chỉ được nằm trong partial sở hữu flow",
     "python3.12 tools/validate_lgo_ui_shared_skin.py",
 ]
 
@@ -162,9 +165,12 @@ def validate_root(root: Path = ROOT) -> list[str]:
             for match in pattern.finditer(text):
                 violations.append(f"{rel}: local skin pattern {match.group(0)}")
         for match in FORBIDDEN_PARALLEL_SKIN_HELPER.finditer(text):
-            name = match.group("name")
-            if name not in ALLOWED_PARALLEL_SKIN_HELPERS:
-                violations.append(f"{rel}: parallel modal/dialog/card/tab/button skin helper {name}; use CongDongLamArrivalHud.Skin.cs shared base or a narrow wrapper around ApplyLgo*")
+            name = match.group("void_name") or match.group("element_name")
+            allowed_owner = ALLOWED_PARALLEL_SKIN_HELPERS.get(name)
+            if allowed_owner is None:
+                violations.append(f"{rel}: parallel modal/dialog/card/tab/button/detail/panel skin helper {name}; use CongDongLamArrivalHud.Skin.cs shared base or a narrow wrapper around ApplyLgo*")
+            elif path.name != allowed_owner:
+                violations.append(f"{rel}: helper {name} is only allowed in {allowed_owner}; add shared skin/base in CongDongLamArrivalHud.Skin.cs instead of copying the wrapper")
 
     for filename, markers in REQUIRED_PARTIAL_MARKERS.items():
         path = ui_dir / filename
