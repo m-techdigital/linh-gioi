@@ -1,6 +1,13 @@
 
 
 
+
+## Kiếm source-pose reopened in owner-review catalog — 2026-09-13
+
+Đã re-audit đúng runtime overlay/loadout thay vì chỉ nhìn root atlas. Kiếm semantic-v3 có Player evidence `build/kiem-semantic-v3-runtime-v1/pc/registered-manifest.json`: 190 frame, nam/nữ, Lv1/Lv10, mixed verified, `maxBodyVariants=1`, `errors=[]`. Close-up sheet mới `build/source-pose-catalog-audit-v1/kiem-semantic-v3-actor-closeup.jpg` cho thấy silhouette một người liền, tháo vũ khí/áo ngoài sạch và run/jump đọc được ở kích thước Player.
+
+Owner-review catalog nay mở lại có kiểm soát `('vo','kiem')`. Pháp/Cơ/Linh vẫn audit-only cho tới khi có close-up Player evidence tương tự; không dùng static `MixedLoadoutFitPreview` hoặc root atlas base-style để claim class pass. Kiếm vẫn `REVIEW_ONLY`, chưa owner/production approval.
+
 ## Owner-review catalog narrowed to Võ until class art passes visual gate — 2026-09-13
 
 Audit contact sheet `build/source-pose-catalog-audit-v1/kiem-co-linh-source-sheet.jpg` cho thấy Kiếm/Cơ/Linh source-pose trong catalog hiện hành vẫn dùng gần như cùng base võ-style, chưa đủ bám design class riêng. Để tránh lặp lỗi owner test thấy class sai design nhưng launcher vẫn cho đổi class, `tools/launch_lgo_source_pose_review.py` nay chỉ expose Võ trong catalog owner-review. Kiếm/Cơ/Linh/Pháp vẫn giữ `PACK_SUFFIXES` để audit thủ công bằng `build_class_args`, nhưng không xuất hiện trong command tương tác cho tới khi từng class có source-pose thật đủ nam/nữ/tier và pass visual gate như Võ.

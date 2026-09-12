@@ -6,11 +6,11 @@ import plistlib
 import subprocess
 from pathlib import Path
 
-# Owner review starts from the locked Võ source-pose stack. Other classes stay
-# in PACK_SUFFIXES for explicit audits, but are excluded from the interactive
-# catalog until each has non-base source-pose class art that passes the same
-# visual gate as Võ.
-CLASSES = ('vo',)
+# Owner review starts from the locked Võ source-pose stack. Add another class
+# only after its non-base source-pose art has Player close-up evidence for
+# male/female, Lv1/Lv10, motion, and slot-off states. Other classes stay in
+# PACK_SUFFIXES for explicit audits until they pass the same visual gate.
+CLASSES = ('vo', 'kiem')
 PACK_SUFFIXES = {
     'vo': ('-source-pose-review-preserved-lv1/pack', '-source-pose-review-preserved-lv10/pack', None, None),
     'kiem': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-v1/pack',

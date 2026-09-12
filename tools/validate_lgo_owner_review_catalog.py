@@ -17,16 +17,16 @@ def fail(message: str) -> int:
 
 
 def main() -> int:
-    if tuple(launcher.CLASSES) != ("vo",):
-        return fail("interactive catalog must stay locked to Võ until another class has source-pose visual approval")
+    if tuple(launcher.CLASSES) != ("vo", "kiem"):
+        return fail("interactive catalog must stay locked to Võ + visually audited Kiếm until another class has source-pose visual approval")
     source = (ROOT / "tools/launch_lgo_source_pose_review.py").read_text(encoding="utf-8")
-    required = "until each has non-base source-pose class art"
+    required = "non-base source-pose art has Player close-up evidence"
     if required not in source:
         return fail("launcher is missing the non-base class-art gate comment")
     for class_id in ("kiem", "phap", "co", "linh"):
         if class_id not in launcher.PACK_SUFFIXES:
             return fail("audit pack suffix missing for " + class_id)
-    print("LGO_OWNER_REVIEW_CATALOG_PASS classes=vo audit_only=kiem,phap,co,linh")
+    print("LGO_OWNER_REVIEW_CATALOG_PASS classes=vo,kiem audit_only=phap,co,linh")
     return 0
 
 

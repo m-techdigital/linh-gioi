@@ -27,7 +27,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             self.assertFalse(any(arg in command for arg in (
                 '--lgo-kiem-review', '--lgo-phap-review', '--lgo-co-review', '--lgo-linh-review')))
 
-    def test_current_launch_exposes_only_locked_vo_until_class_art_is_complete(self):
+    def test_current_launch_exposes_only_locked_vo_and_visually_audited_kiem(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             player = root / 'Player'; player.write_text('player')
@@ -38,11 +38,13 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text('{}')
             command = build_player_command(player, root, root / 'player.log')
-            self.assertEqual(CLASSES, ('vo',))
-            self.assertEqual(command.count('--lgo-source-pose-class'), 1)
-            for hidden in ('kiem', 'phap', 'co', 'linh'):
+            self.assertEqual(CLASSES, ('vo', 'kiem'))
+            self.assertEqual(command.count('--lgo-source-pose-class'), 2)
+            for hidden in ('phap', 'co', 'linh'):
                 self.assertNotIn(hidden, command)
             self.assertEqual(command[command.index('--lgo-source-pose-class') + 1], 'vo')
+            second = command.index('--lgo-source-pose-class', command.index('--lgo-source-pose-class') + 1)
+            self.assertEqual(command[second + 1], 'kiem')
             self.assertIn('vo-source-pose-review-preserved-lv1', command[command.index('--lgo-vo-pose-review-dir') + 1])
 
     def test_invalid_source_never_starts_player(self):
