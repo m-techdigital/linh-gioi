@@ -9,6 +9,70 @@ namespace LinhGioi.Tests
 {
     public sealed class DongMonIllustratedPreviewTests
     {
+        private static void FinishDialogue(CongDongLamMap01AArtPreview scene)
+        {
+            for (var page = 0; scene.DialogueOpen && page < 8; page++)
+                Assert.That(scene.UseCurrentRouteAction(), Is.True);
+            Assert.That(scene.DialogueOpen, Is.False, "Dialogue must have a reachable completion");
+        }
+
+        [Test]
+        public void Map01ADialogueRequiresAllPagesAndAllowsReturningToHaVan()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A dialogue progression test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                Assert.That(scene.UseCurrentRouteAction(), Is.True);
+                var firstLine = scene.DialogueText;
+                Assert.That(scene.UseCurrentRouteAction(), Is.True);
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"), "Reading one page must not accept the quest");
+                Assert.That(scene.DialogueText, Is.Not.EqualTo(firstLine));
+                FinishDialogue(scene);
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q02"));
+                Assert.That(scene.CanUseCurrentRouteAction, Is.True, "NPC remains available after the first conversation");
+                Assert.That(scene.UseCurrentRouteAction(), Is.True);
+                Assert.That(scene.DialogueText, Is.Not.EqualTo(firstLine));
+                FinishDialogue(scene);
+                Assert.That(scene.CompletedQuestCount, Is.EqualTo(1));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void Map01AReturningToTongPhuDoesNotRefillConsumedSupplies()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A supply idempotence test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                scene.UseCurrentRouteAction(); FinishDialogue(scene);
+                foreach (var steps in new[] { 13, 25, 53, 19 })
+                {
+                    for (var i = 0; i < steps; i++) scene.MoveOnLane(1, .1f);
+                    Assert.That(scene.UseCurrentRouteAction(), Is.True);
+                    FinishDialogue(scene);
+                }
+                Assert.That(scene.UseManaPotion(), Is.True);
+                Assert.That(scene.ManaPotionCount, Is.EqualTo(1));
+                Assert.That(scene.UseCurrentRouteAction(), Is.True);
+                FinishDialogue(scene);
+                Assert.That(scene.ManaPotionCount, Is.EqualTo(1), "A reminder conversation cannot grant the starter reward again");
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q04"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
         [Test]
         public void Map01ATerrainWalkSurfaceIsOpaqueAndMatchesFeetOnEveryModule()
         {
@@ -199,6 +263,7 @@ namespace LinhGioi.Tests
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.DialogueOpen, Is.True);
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                FinishDialogue(preview);
                 Assert.That(preview.HasMetHaVan, Is.True);
                 Assert.That(preview.ActiveQuestId, Is.EqualTo("Q02"));
                 Assert.That(preview.CompletedQuestCount, Is.EqualTo(1));
@@ -215,6 +280,7 @@ namespace LinhGioi.Tests
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.DialogueOpen, Is.True);
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                FinishDialogue(preview);
                 Assert.That(preview.ActiveQuestId, Is.EqualTo("Q04"));
 
                 for (var step = 0; step < 53; step++) preview.MoveOnLane(1, .1f);
@@ -227,6 +293,7 @@ namespace LinhGioi.Tests
                 Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("tong-phu"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                FinishDialogue(preview);
                 Assert.That(preview.HasStarterSupplies, Is.True);
                 Assert.That(preview.HealthPotionCount, Is.EqualTo(3));
                 Assert.That(preview.ManaPotionCount, Is.EqualTo(2));
@@ -242,6 +309,7 @@ namespace LinhGioi.Tests
                 Assert.That(preview.UseCurrentRouteAction(), Is.True, "Thanh Nhi must hand off the gather objective");
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
 
+                FinishDialogue(preview);
                 for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
                 Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("well-bridge"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
@@ -257,6 +325,7 @@ namespace LinhGioi.Tests
                 Assert.That(preview.CurrentRouteNodeId, Is.EqualTo("lao-tran"));
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
                 Assert.That(preview.UseCurrentRouteAction(), Is.True);
+                FinishDialogue(preview);
                 Assert.That(preview.HasAcceptedCombatQuest, Is.True);
 
                 for (var step = 0; step < 17; step++) preview.MoveOnLane(1, .1f);
@@ -731,6 +800,7 @@ namespace LinhGioi.Tests
                 preview.MoveOnLane(1, .1f);
                 Assert.That(preview.PlayerX, Is.EqualTo(talkingX), "Dialogue pauses movement");
                 Assert.IsTrue(preview.TalkToHaVan());
+                FinishDialogue(preview);
                 Assert.IsTrue(preview.HasMetHaVan);
                 Assert.That(controller.State.Step, Is.EqualTo(TwoDOnboardingStep.FindGateKeeper), "Map01A talk must not trigger legacy quest");
                 var before = gateArt.transform.position;

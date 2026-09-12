@@ -104,12 +104,12 @@ namespace LinhGioi.Tests.EditMode
             try
             {
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
-                scene.UseCurrentRouteAction(); scene.UseCurrentRouteAction();
+                scene.UseCurrentRouteAction(); FinishDialogue(scene);
                 foreach (var steps in new[] { 13, 25, 53, 19 })
                 {
                     for (var i = 0; i < steps; i++) scene.MoveOnLane(1, .1f);
                     scene.UseCurrentRouteAction();
-                    if (scene.DialogueOpen) scene.UseCurrentRouteAction();
+                    FinishDialogue(scene);
                 }
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q04"));
                 Assert.That(scene.HealthPotionCount, Is.EqualTo(3));
@@ -128,6 +128,44 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(potion);
                 Assert.That(scene.PlayerHealth, Is.EqualTo(100));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q05"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        private static void FinishDialogue(CongDongLamMap01AArtPreview scene)
+        {
+            for (var page = 0; scene.DialogueOpen && page < 8; page++) scene.UseCurrentRouteAction();
+            Assert.That(scene.DialogueOpen, Is.False);
+        }
+
+        [Test]
+        public void DialogueChoiceButtonsCancelOrReadInformationWithoutAcceptingQuest()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("dialogue choices test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                scene.UseCurrentRouteAction();
+                InvokeBoundButton(root.Q<Button>("Map01A Dialogue Close"));
+                Assert.That(scene.DialogueOpen, Is.False);
+                Assert.That(scene.HasMetHaVan, Is.False);
+                scene.UseCurrentRouteAction(); scene.UseCurrentRouteAction(); scene.UseCurrentRouteAction();
+                var choiceLine = scene.DialogueText;
+                Assert.That(scene.CanReadDialogueInformation, Is.True);
+                InvokeBoundButton(root.Q<Button>("Map01A Dialogue Information"));
+                Assert.That(scene.DialogueText, Is.Not.EqualTo(choiceLine));
+                scene.UseCurrentRouteAction();
+                Assert.That(scene.DialogueText, Is.EqualTo(choiceLine));
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
+                scene.UseCurrentRouteAction();
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q02"));
             }
             finally
             {
@@ -165,6 +203,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(inventory.style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(combat.style.display.value, Is.EqualTo(DisplayStyle.None));
                 InvokeBoundButton(talk);
+                FinishDialogue(scene);
                 Assert.That(scene.DialogueOpen, Is.False);
                 update.Invoke(hud, null);
                 Assert.That(inventory.style.display.value, Is.EqualTo(DisplayStyle.Flex));

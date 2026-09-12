@@ -450,7 +450,7 @@ namespace LinhGioi.World
         {
             if (!PresentationVisible) return;
             var map = GetComponentInParent<CongDongLamMap01AArtPreview>();
-            if (map != null && map.InventoryOpen) return;
+            if (map != null && (map.InventoryOpen || map.DialogueOpen)) return;
             var camera = Camera.main;
             if (camera == null) return;
             var point = camera.WorldToScreenPoint(transform.position + Vector3.up * 1.9f);

@@ -6,11 +6,9 @@
 
 Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F` hoặc nút trong hành trang đã kiểm đủ Pháp/Võ/Kiếm/Cơ/Linh trên một actor. Pháp chỉ có nam Lv1 v7; Võ nam Lv1/Lv10; giới/cấp chưa có không được rơi về renderer cũ. Các pack vẫn REVIEW_ONLY, không suy diễn rằng toàn bộ design/pose đã nghiệm thu.
 
-Player hiện hành: `build/map01a-stable-player/LinhGioiOnline.app`; mở qua `tools/launch_lgo_source_pose_review.py` để nạp đủ catalog, không mở bằng một pack đơn rồi kết luận mất đổi class. Giữ v7, không quay lại pack Pháp bị REJECTED/WITHDRAWN. Bộ trang phục không phải hướng đầu tư tiếp trong batch map này.
+Player hiện hành: `build/map01a-dialogue-player/LinhGioiOnline.app`; mở qua `tools/launch_lgo_source_pose_review.py` để giữ catalog đủ năm class. Không mở pack đơn hoặc renderer class cũ. Hội thoại sáu NPC dùng session chung, lựa chọn cuối mới nhận việc; đóng sớm/hỏi thêm không chuyển quest, quay lại không nhận tiếp tế lặp. Đã kiểm 66 EditMode + 37 Python, Q01–Q09 và 38 ảnh thoại × ba profile, thao tác Player bằng E/Escape/chuột. Evidence `build/map01a-dialogue-player/quest-dialogue-capture/`, `manual-accepted-q02.png` và `manual-dialogue-stable.log`. Các profile là mô phỏng trên macOS.
 
-Terrain và thoại tablet đã sửa trong batch kế tiếp: mốc mặt đi 20/28/62/18 px dùng chung theo part, ảnh atlas không đổi; 45 test pass, Q01–Q09 đủ 18 ảnh × ba tỷ lệ. Đã xem chân chạm nền, nối cỏ–đá/cầu và khung thoại không bị nút nền đè. Evidence: `build/map01a-grounded-player/quest-capture/`. Player mới `build/map01a-grounded-player/LinhGioiOnline.app` vẫn mở bằng launcher đủ năm class.
-
-Next: audit lỗi cắt kiến trúc trong `landmarks-atlas.png`. Đã thấy rõ góc mái social-hall bị cắt sang mép trái merchant-stall, một mảnh đèn ở mép hunter-post. Packer đang chia sheet thành ô 512×512 trước khi crop, nên một object vượt ô bị tách. Tìm lại source hash `753d3d8af390b0a27eb26f573128ab9672ee04bdf58bfeae84d3761833c0ac90` trước khi sửa source rect theo object; không xóa mảnh ngẫu nhiên hoặc sinh lại cả map.
+Terrain đã sửa bằng mốc mặt đi 20/28/62/18 px chung theo part, không đổi atlas/actor/camera. Next: tương tác/UI map còn thiếu và design/demo đăng nhập–hành trang–HUD theo yêu cầu dưới đây. Audit flow đăng nhập cũ trước khi reuse, vì các helper layout còn tồn tại không chứng minh màn đã được nối vào entry 2D hiện hành. Giữ lỗi kiến trúc bên dưới ở trạng thái chưa đạt, không dùng nó để mở lại vòng redraw character.
 
 ## Yêu cầu tiếp nối của owner — 2026-09-12
 
@@ -18,7 +16,7 @@ Sau khi xử lý map, thiết kế và triển khai màn đăng nhập, hành tr
 
 ## Current blocker
 
-Không có blocker Player. Source landmark được manifest trỏ tới `build/map01a-art/module-generation-v1/landmarks-sheet-alpha-v1.png` hiện không tồn tại ở worktree, main build hoặc các temp worktree cùng đường dẫn; cũng chưa tìm thấy theo tên trong Projects/Design. Cần kiểm archive/worktree cũ để phục hồi đúng source. Nếu nguồn không phục hồi được, giữ atlas để bảo toàn công sức và chuyển sang tương tác/map flow được phép; không dựng lại art bằng may rủi.
+Không có blocker Player. Source landmark `build/map01a-art/module-generation-v1/landmarks-sheet-alpha-v1.png` (SHA256 `753d3d8af390b0a27eb26f573128ab9672ee04bdf58bfeae84d3761833c0ac90`) thiếu. Đã tìm theo tên và kiểm header/hash 27.033 PNG, 38 candidate 1536×1024, không có match; evidence `build/map01a-grounded-player/landmark-source-search.json`. Atlas đang cắt mái social-hall sang merchant-stall và mảnh đèn sang hunter-post do chia source theo ô 512. Giữ atlas để bảo toàn công sức; chỉ sửa khi phục hồi nguồn tin cậy hoặc có phương án sửa xác định được toàn object. Tiếp tục UI/map flow không phụ thuộc nguồn này.
 
 ## Evidence và giới hạn
 

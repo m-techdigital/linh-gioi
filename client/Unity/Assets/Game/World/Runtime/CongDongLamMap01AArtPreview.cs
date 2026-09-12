@@ -19,7 +19,6 @@ namespace LinhGioi.World
         private TwoDOnboardingController _controller;
         private bool _previousControllerEnabled;
         private float _routeX;
-        public bool DialogueOpen { get; private set; }
         public bool HasMetHaVan { get; private set; }
         public bool HasHarvestedSpiritHerb { get; private set; }
         public bool HasOpenedHiddenChest { get; private set; }
@@ -64,15 +63,6 @@ namespace LinhGioi.World
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-art-capture") >= 0;
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
-        public string DialogueSpeaker => _dialogueNodeId == "quan-thu" ? "Quan Thủ Đông Lâm"
-            : _dialogueNodeId == "tong-phu" ? "Tổng Phú"
-            : _dialogueNodeId == "thanh-nhi" ? "Thanh Nhi"
-            : _dialogueNodeId == "lao-tran" ? "Lão Trần" : "Hạ Vân";
-        public string DialogueText => _dialogueNodeId == "quan-thu" ? "Trong làng cấm giao chiến. Qua rìa làng, hãy luôn giữ vũ khí sẵn sàng."
-            : _dialogueNodeId == "tong-phu" ? "Mang Bình Máu Nhỏ và Bình Linh Lực này. Hành trang tốt sẽ cứu mạng ngươi."
-            : _dialogueNodeId == "thanh-nhi" ? "Hãy hái Linh Thảo Non bên giếng. Ánh sáng của nó rất dịu, đừng nhầm với Thảo Yêu."
-            : _dialogueNodeId == "lao-tran" ? "Ngoài cổng có thú non nhiễm linh khí. Hạ một con rồi mang chiến lợi phẩm về."
-            : "Ngươi cũng đã tới rồi. Đây là Đông Lâm. Phía sau những ngọn núi kia là Linh Thành.";
         public string QuestTrackerText => ActiveQuestId == "COMPLETE" ? "Map01A hoàn tất\nPortal Suối Thanh Minh đã mở."
             : ActiveQuestId + " · " + QuestName(ActiveQuestId) + "\n" + QuestObjective(ActiveQuestId)
                 + "\nTiến độ " + CompletedQuestCount + "/9";
@@ -85,6 +75,7 @@ namespace LinhGioi.World
 
         public void ToggleInventory()
         {
+            if (DialogueOpen) return;
             InventoryOpen = !InventoryOpen;
             LastInteractionMessage = InventoryOpen ? "Đã mở hành trang tân thủ." : "Đã đóng hành trang.";
         }
@@ -135,19 +126,7 @@ namespace LinhGioi.World
             _controller.RefreshForSmoke();
             Refresh();
         }
-        public bool TalkToHaVan()
-        {
-            if (!CanTalk) return false;
-            _dialogueNodeId = "spawn-ha-van";
-            if (DialogueOpen)
-            {
-                DialogueOpen = false;
-                HasMetHaVan = true;
-                if (ActiveQuestId == "Q01") CompleteQuest("Q01", "Q02");
-            }
-            else DialogueOpen = true;
-            return true;
-        }
+        public bool TalkToHaVan() => CanTalk && CurrentRouteNodeId == "spawn-ha-van" && UseNpcConversation();
 
         private static string QuestName(string id)
         {
@@ -188,20 +167,6 @@ namespace LinhGioi.World
             ActiveQuestId = next;
         }
 
-        private bool ToggleNpcDialogue(string nodeId, Action onComplete)
-        {
-            if (!DialogueOpen)
-            {
-                _dialogueNodeId = nodeId;
-                DialogueOpen = true;
-                LastInteractionMessage = DialogueSpeaker + " đang trò chuyện.";
-                return true;
-            }
-            if (_dialogueNodeId != nodeId) return false;
-            DialogueOpen = false;
-            onComplete();
-            return true;
-        }
         private Camera _camera;
         private Transform _player;
         private SpriteRenderer _leftFoot, _rightFoot;
@@ -305,7 +270,7 @@ namespace LinhGioi.World
         public int VoSkillCastCount { get; private set; }
         public int VoSkillHitCount { get; private set; }
         public int VoTrainingTargetHp { get; private set; } = 100;
-        public bool CanTriggerVoSkill => !_voState.HasActiveAction && _voCombatTarget != null
+        public bool CanTriggerVoSkill => !DialogueOpen && !_voState.HasActiveAction && _voCombatTarget != null
             && Mathf.Abs(_voCombatTarget.transform.position.x - PlayerX) <= 2.4f && VoTrainingTargetHp > 0;
         [Serializable] private sealed class VoAvatarPackInfo
         {
@@ -352,7 +317,9 @@ namespace LinhGioi.World
         {
             public string status = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED";
             public string pack = "cong-dong-lam-map01a-art-draft-v1";
-            public int frames, width, height;
+            public int frames, width, height, dialogueFrames;
+            public string[] revisitedNpcs;
+            public bool dialogueRevisitsVerified;
             public string deviceValidation = "macOS aspect simulation only";
             public string captureScope = "map-and-legacy-wardrobe";
             public float groundY, maxFootError, parallaxDelta;
@@ -409,15 +376,9 @@ namespace LinhGioi.World
             {
                 if (Mathf.Abs(PlayerX - RouteNodeX[_currentRouteIndex]) > .95f) return false;
                 if (DialogueOpen) return _dialogueNodeId == CurrentRouteNodeId;
-                if (CurrentRouteNodeId == "spawn-ha-van") return ActiveQuestId == "Q01";
+                if (CanTalkToCurrentNpc) return true;
                 if (CurrentRouteNodeId == "grand-gate") return ActiveQuestId == "Q02";
-                if (CurrentRouteNodeId == "quan-thu") return ActiveQuestId == "Q03";
                 if (CurrentRouteNodeId == "village-square") return ActiveQuestId == "Q04" && !HasInspectedInventory;
-                if (CurrentRouteNodeId == "tong-phu") return ActiveQuestId == "Q04" && HasInspectedInventory;
-                if (CurrentRouteNodeId == "thanh-nhi") return ActiveQuestId == "Q05" && !HasAcceptedGatherQuest;
-                if (CurrentRouteNodeId == "well-bridge") return ActiveQuestId == "Q05" && !HasHarvestedSpiritHerb
-                    || HasHarvestedSpiritHerb && !HasOpenedHiddenChest;
-                if (CurrentRouteNodeId == "lao-tran") return ActiveQuestId == "Q06" && !HasAcceptedCombatQuest;
                 if (CurrentRouteNodeId == "combat-edge") return ActiveQuestId == "Q07" && HasDefeatedFirstEnemy && !HasLootedFirstEnemy;
                 if (CurrentRouteNodeId == "portal-suoi-thanh-minh") return ActiveQuestId == "Q09" && !PortalUnlocked;
                 return false;
@@ -427,11 +388,12 @@ namespace LinhGioi.World
         {
             get
             {
-                if (CurrentRouteNodeId == "spawn-ha-van") return DialogueOpen ? "Tiếp tục" : "Trò chuyện";
-                if (DialogueOpen) return "Tiếp tục";
+                if (DialogueOpen) return DialogueActionLabel;
                 if (CurrentRouteNodeId == "grand-gate") return "Nhìn về Linh Thành";
                 if (CurrentRouteNodeId == "village-square") return "Mở hành trang";
-                if (CurrentRouteNodeId == "well-bridge") return HasHarvestedSpiritHerb ? "Mở rương ẩn" : "Hái Linh Thảo";
+                if (CurrentRouteNodeId == "well-bridge") return ActiveQuestId == "Q05" && HasAcceptedGatherQuest && !HasHarvestedSpiritHerb
+                    ? "Hái Linh Thảo" : HasHarvestedSpiritHerb && !HasOpenedHiddenChest ? "Mở rương ẩn" : "Trò chuyện";
+                if (CanTalkToCurrentNpc) return "Trò chuyện";
                 if (CurrentRouteNodeId == "combat-edge") return "Nhặt chiến lợi phẩm";
                 if (CurrentRouteNodeId == "portal-suoi-thanh-minh") return PortalUnlocked ? "Đã mở" : "Mở lối";
                 return "Tương tác";
@@ -440,12 +402,8 @@ namespace LinhGioi.World
         public bool UseCurrentRouteAction()
         {
             if (!CanUseCurrentRouteAction) return false;
-            if (CurrentRouteNodeId == "spawn-ha-van")
-            {
-                var used = TalkToHaVan();
-                LastInteractionMessage = DialogueOpen ? "Hạ Vân đang hướng dẫn." : "Đã nhận chỉ dẫn từ Hạ Vân.";
-                return used;
-            }
+            if (DialogueOpen) return AdvanceNpcDialogue();
+            if (CanTalkToCurrentNpc && CurrentRouteNodeId != "well-bridge") return UseNpcConversation();
             if (CurrentRouteNodeId == "grand-gate" && ActiveQuestId == "Q02")
             {
                 MinimapUnlocked = true;
@@ -453,12 +411,6 @@ namespace LinhGioi.World
                 LastInteractionMessage = "Đã nhìn thấy Linh Thành ở phía xa.";
                 return true;
             }
-            if (CurrentRouteNodeId == "quan-thu" && ActiveQuestId == "Q03")
-                return ToggleNpcDialogue("quan-thu", () =>
-                {
-                    CompleteQuest("Q03", "Q04");
-                    LastInteractionMessage = "Đã hiểu luật khu an toàn Đông Lâm.";
-                });
             if (CurrentRouteNodeId == "village-square" && ActiveQuestId == "Q04" && !HasInspectedInventory)
             {
                 HasInspectedInventory = true;
@@ -466,22 +418,7 @@ namespace LinhGioi.World
                 LastInteractionMessage = "Đã xem hành trang tân thủ; hãy gặp Tổng Phú.";
                 return true;
             }
-            if (CurrentRouteNodeId == "tong-phu" && ActiveQuestId == "Q04")
-                return ToggleNpcDialogue("tong-phu", () =>
-                {
-                    HasStarterSupplies = true;
-                    HealthPotionCount = 3;
-                    ManaPotionCount = 2;
-                    InventoryOpen = true;
-                    LastInteractionMessage = "Nhận Bình Máu Nhỏ ×3 và Bình Linh Lực Nhỏ ×2; hãy dùng một bình máu.";
-                });
-            if (CurrentRouteNodeId == "thanh-nhi" && ActiveQuestId == "Q05")
-                return ToggleNpcDialogue("thanh-nhi", () =>
-                {
-                    HasAcceptedGatherQuest = true;
-                    LastInteractionMessage = "Thanh Nhi chỉ Linh Thảo phát sáng bên giếng.";
-                });
-            if (CurrentRouteNodeId == "well-bridge" && !HasHarvestedSpiritHerb)
+            if (CurrentRouteNodeId == "well-bridge" && ActiveQuestId == "Q05" && HasAcceptedGatherQuest && !HasHarvestedSpiritHerb)
             {
                 HasHarvestedSpiritHerb = true;
                 if (_spiritHerbRenderer != null) _spiritHerbRenderer.enabled = false;
@@ -489,7 +426,7 @@ namespace LinhGioi.World
                 LastInteractionMessage = "Đã thu thập Linh Thảo Non.";
                 return true;
             }
-            if (CurrentRouteNodeId == "well-bridge" && !HasOpenedHiddenChest)
+            if (CurrentRouteNodeId == "well-bridge" && HasHarvestedSpiritHerb && !HasOpenedHiddenChest)
             {
                 HasOpenedHiddenChest = true;
                 if (_hiddenChestRenderer != null) _hiddenChestRenderer.color = new Color(.62f, .62f, .62f, .58f);
@@ -497,12 +434,7 @@ namespace LinhGioi.World
                 LastInteractionMessage = "Q08 hoàn tất · rương ẩn: 12 Vàng + Bánh Bao.";
                 return true;
             }
-            if (CurrentRouteNodeId == "lao-tran" && ActiveQuestId == "Q06")
-                return ToggleNpcDialogue("lao-tran", () =>
-                {
-                    HasAcceptedCombatQuest = true;
-                    LastInteractionMessage = "Lão Trần giao nhiệm vụ hạ một quái non ở rìa làng.";
-                });
+            if (CurrentRouteNodeId == "well-bridge") return UseNpcConversation();
             if (CurrentRouteNodeId == "combat-edge" && ActiveQuestId == "Q07" && HasDefeatedFirstEnemy)
             {
                 HasLootedFirstEnemy = true;
@@ -1583,18 +1515,18 @@ namespace LinhGioi.World
                 _routeX = targets[i];
                 Refresh();
                 if (i == 1) result.dialogueOpened = UseCurrentRouteAction() && DialogueOpen;
-                if (i == 2) result.greetingCompleted = UseCurrentRouteAction() && HasMetHaVan;
+                if (i == 2) { yield return CaptureNpcDialoguePages(directory, "ha-van-offer", result); result.greetingCompleted = HasMetHaVan; }
                 if (i == 3) UseCurrentRouteAction();
                 if (i == 4) UseCurrentRouteAction();
-                if (i == 5) UseCurrentRouteAction();
+                if (i == 5) yield return CaptureNpcDialoguePages(directory, "quan-thu-offer", result);
                 if (i == 6) UseCurrentRouteAction();
                 if (i == 7) UseCurrentRouteAction();
-                if (i == 8) UseCurrentRouteAction();
+                if (i == 8) yield return CaptureNpcDialoguePages(directory, "tong-phu-offer", result);
                 if (i == 9) UseHealthPotion();
-                if (i == 10) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
+                if (i == 10) { UseCurrentRouteAction(); yield return CaptureNpcDialoguePages(directory, "thanh-nhi-offer", result); }
                 if (i == 11) UseCurrentRouteAction();
                 if (i == 12) UseCurrentRouteAction();
-                if (i == 13) { UseCurrentRouteAction(); UseCurrentRouteAction(); }
+                if (i == 13) { UseCurrentRouteAction(); yield return CaptureNpcDialoguePages(directory, "lao-tran-offer", result); }
                 if (i == 14)
                 {
                     result.voSkillVerified = true;
@@ -1890,18 +1822,23 @@ namespace LinhGioi.World
                 yield return null;
                 yield return new WaitForEndOfFrame();
                 result.maxFootError = Mathf.Max(result.maxFootError, Mathf.Abs(FootY - GroundY));
-                var active = RenderTexture.active;
-                var image = new Texture2D(result.width, result.height, TextureFormat.RGBA32, false);
-                try
-                {
-                    // Capture the completed screen including UI Toolkit, not camera-only world art.
-                    RenderTexture.active = null;
-                    image.ReadPixels(new Rect(0, 0, result.width, result.height), 0, 0);
-                    image.Apply();
-                    DongMonIllustratedPreview.WriteBmp(Path.Combine(directory, names[i] + ".bmp"), image.GetPixels32(), result.width, result.height);
-                }
-                finally { RenderTexture.active = active; Destroy(image); }
+                WriteMapCaptureBmp(Path.Combine(directory, names[i] + ".bmp"), result.width, result.height);
                 result.frames++;
+            }
+            if (questOnly)
+            {
+                var quests = CompletedQuestCount; var health = HealthPotionCount; var mana = ManaPotionCount;
+                var revisited = new List<string>();
+                foreach (var routeIndex in new[] { 0, 2, 4, 5, 6, 7 })
+                {
+                    _routeX = RouteNodeX[routeIndex]; Refresh();
+                    if (!UseNpcConversation()) throw new InvalidOperationException("Cannot revisit " + CurrentRouteNodeId);
+                    yield return CaptureNpcDialoguePages(directory, CurrentRouteNodeId + "-return", result);
+                    revisited.Add(CurrentRouteNodeId);
+                }
+                result.revisitedNpcs = revisited.ToArray();
+                result.dialogueRevisitsVerified = CompletedQuestCount == quests && HealthPotionCount == health
+                    && ManaPotionCount == mana && ActiveQuestId == "COMPLETE";
             }
             result.activeQuestId = ActiveQuestId;
             result.completedQuestCount = CompletedQuestCount;
@@ -1923,6 +1860,7 @@ namespace LinhGioi.World
                 || !result.dialogueOpened || !result.greetingCompleted
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f;
+            mapFailed |= questOnly && !result.dialogueRevisitsVerified;
             var wardrobeFailed = !questOnly && (!result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified

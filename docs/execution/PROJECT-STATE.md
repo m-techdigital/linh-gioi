@@ -1,3 +1,11 @@
+## Hiện hành — Map01A hội thoại NPC dùng base chung — 2026-09-12
+
+`CONTINUE`. Sáu NPC dùng `NpcDialogueSession` chung: nhiều trang, hỏi chỉ dẫn, đóng sớm, lựa chọn cuối mới nhận việc và lời thoại khi quay lại. Tiểu Đồng có nút trò chuyện riêng cạnh thao tác hái cây/rương. Đã sửa nhận tiếp tế lặp ở Tổng Phú; hội thoại khóa nút/hotkey hành trang–combat trong khi mở. Không đổi art, body, pose, camera hoặc scale.
+
+RED tái hiện 2 lỗi; cuối GREEN 66/66 EditMode, Python 37/37, no-3D/no-source/frozen audit sạch. Player `build/map01a-dialogue-player/LinhGioiOnline.app` build 0 error/13 warning; `quest-dialogue-capture/{pc,tablet,mobile}` đủ Q01–Q09, 18 ảnh tuyến + 38 ảnh thoại/profile và sáu NPC quay lại không phát thưởng lặp. Đã xem ảnh thoại tablet/mobile và kiểm Player bằng E/Escape/chuột: hỏi thêm vẫn Q01, lựa chọn cuối chuyển Q02. Evidence thao tác `manual-*-q01.png`, `manual-choice-page3.png`, `manual-accepted-q02.png`, `manual-dialogue-stable.log`.
+
+Map còn lỗi atlas cắt kiến trúc. Đã kiểm 27.033 PNG/38 ảnh đúng kích thước, không tìm thấy source đúng SHA (evidence `build/map01a-grounded-player/landmark-source-search.json`); giữ atlas thay vì sinh lại ngẫu nhiên. Next: hoàn thiện tương tác/UI map theo reference hiện có, chuẩn bị design/demo đăng nhập–hành trang–HUD theo yêu cầu owner; không quay lại redraw character. Chưa nghiệm thu toàn map/art, chưa auth production/Map01B.
+
 ## Hiện hành — Map01A sửa mặt terrain và thoại — 2026-09-12
 
 `CONTINUE`. Batch sau checkpoint an toàn đã sửa nguyên nhân chân nổi trên nền: mốc mặt đi trong từng module đá/rêu/cỏ/cầu được lưu tại `modules-layout.json`, áp dụng cho toàn bộ 12 instance. Actor/body/source-pose/camera/scale và PNG giữ nguyên. Đã tái hiện hai test đỏ (surface lệch 0,176 world; nút hành trang vẫn hiện trong thoại), sau sửa có 45 test xanh. Player `build/map01a-grounded-player/LinhGioiOnline.app` build 0 error/7 warning; capture Q01–Q09 đủ 18 ảnh × PC/tablet/mobile và đã xem ảnh mặt đất, nối terrain, thoại tablet, hành trang mobile.

@@ -108,13 +108,24 @@ def main():
             # Quest play does not exercise all motion poses; require the exact pack and overlays to load.
             idle_only = {**pack, 'sprites': [row for row in pack['sprites'] if row['id'] == 'idle']}
             validate_pose_review_log((out / 'player.log').read_text(), args.pose_review_dir, idle_only)
+        npc_ids = ['spawn-ha-van', 'quan-thu', 'tong-phu', 'thanh-nhi', 'well-bridge', 'lao-tran']
+        dialogue_images = sorted((out / 'dialogue').glob('*.bmp'))
+        tags = [npc + '-return' for npc in npc_ids] + [npc + '-offer' for npc in
+                ('ha-van', 'quan-thu', 'tong-phu', 'thanh-nhi', 'lao-tran')]
+        if (manifest.get('revisitedNpcs') != npc_ids or not manifest.get('dialogueRevisitsVerified')
+                or manifest.get('dialogueFrames') != len(dialogue_images)
+                or any(not (out / 'dialogue' / (tag + '-' + str(page) + '.bmp')).is_file()
+                       for tag in tags for page in (1, 2))
+                or any(not list((out / 'dialogue').glob(tag + '-*-info.bmp')) for tag in tags)):
+            raise SystemExit('FIX_REQUIRED: incomplete NPC dialogue or repeated reward on revisit ' + str(out))
+        required += [str(path.relative_to(out).with_suffix('')) for path in dialogue_images]
         for name in required:
             subprocess.run(['sips', '-s', 'format', 'png', str(out / (name + '.bmp')),
                             '--out', str(out / (name + '.png'))], check=True, stdout=subprocess.DEVNULL)
             raw = (out / (name + '.png')).read_bytes()
             if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
                 raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
-        print('LGO_MAP01A_QUEST_CAPTURE_TECHNICAL_PASS frames=18 quests=9/9; visual review required; ' + str(out))
+        print(f'LGO_MAP01A_QUEST_CAPTURE_TECHNICAL_PASS frames=18 quests=9/9 dialogueFrames={len(dialogue_images)} revisitedNpcs=6; visual review required; ' + str(out))
         return
     slots = ['main-weapon', 'head-hair', 'inner-top', 'outer-tunic', 'lower-garment',
              'waist', 'arm-guard', 'boots', 'light-armor', 'accessory']

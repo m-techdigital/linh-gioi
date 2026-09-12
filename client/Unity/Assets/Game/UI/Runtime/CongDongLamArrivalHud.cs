@@ -14,6 +14,7 @@ namespace LinhGioi.UI
         private Label _quest, _marker, _dialogueSpeaker, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
+        private Button _dialogueInformation, _dialogueClose, _npcTalk;
         private Button[] _equipmentRows;
         private IReadOnlyList<string> _equipmentSlotIds;
         private RuntimeTouchMovementPad _pad;
@@ -81,6 +82,9 @@ namespace LinhGioi.UI
             _pad.Add(nub); _safe.Add(_pad);
             _talk = new Button(() => _scene.UseCurrentRouteAction()) { text = "Tương tác · E" };
             Box(_talk); Place(_talk, null, 16, null, 24); _talk.style.minHeight = _touch ? 64 : 48; _talk.style.minWidth = 170; _safe.Add(_talk);
+            _talk.style.whiteSpace = WhiteSpace.Normal;
+            _npcTalk = new Button(() => _scene.UseNpcConversation()) { text = "Nói chuyện với Tiểu Đồng" };
+            Box(_npcTalk); Place(_npcTalk, null, 16, null, 100); _npcTalk.style.minHeight = 48; _safe.Add(_npcTalk);
             _outfit = new Button(() => _scene.CycleVoAvatarMode()) { text = "Trang bị Võ · C" };
             Box(_outfit); Place(_outfit, 16, null, _touch ? 90 : 90, null);
             _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
@@ -207,10 +211,20 @@ namespace LinhGioi.UI
             }
             _questItemActions.style.flexShrink = 0;
             _inventory.Insert(1, _questItemActions); _safe.Add(_inventory);
-            _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 204, null, 20);
+            _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 290, null, 20);
             _dialogueSpeaker = new Label("Hạ Vân");
             _dialogue.Add(_dialogueSpeaker);
             _dialogueLine = new Label(_scene.DialogueText); _dialogueLine.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(_dialogueLine);
+            var dialogueOptions = new VisualElement(); dialogueOptions.style.flexDirection = FlexDirection.Row;
+            dialogueOptions.style.flexWrap = Wrap.Wrap;
+            _dialogueInformation = new Button(() => _scene.ReadDialogueInformation()) { name = "Map01A Dialogue Information", text = "Hỏi việc tiếp theo" };
+            _dialogueClose = new Button(() => _scene.CloseNpcDialogue()) { name = "Map01A Dialogue Close", text = "Để sau" };
+            foreach (var option in new[] { _dialogueInformation, _dialogueClose })
+            {
+                Box(option); option.style.minHeight = 44; option.style.marginTop = 8; option.style.marginRight = 10;
+                dialogueOptions.Add(option);
+            }
+            _dialogue.Add(dialogueOptions);
             _safe.Add(_dialogue);
             _marker = new Label("!\nHạ Vân") { pickingMode = PickingMode.Ignore };
             _marker.style.position = Position.Absolute; _marker.style.color = new Color(1,.83f,.3f);
@@ -263,20 +277,25 @@ namespace LinhGioi.UI
                 if (!_touch) _scene.SetVoRun(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
                 _scene.MoveOnLane(Mathf.Abs(_pad.Value.x) > .01f ? _pad.Value.x : keyboard, Time.deltaTime);
                 if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
-                if (Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
-                if (Input.GetKeyDown(KeyCode.L)) _scene.CycleVoAvatarLevel();
-                if (Input.GetKeyDown(KeyCode.G)) _scene.CycleVoAvatarGender();
-                if (Input.GetKeyDown(KeyCode.V)) _scene.CycleVoEquipmentSlot();
-                if (Input.GetKeyDown(KeyCode.M)) _scene.CycleVoSelectedEquipmentItemLevel();
-                if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleVoEquipmentSlot();
-                if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
-                _scene.SetVoJumpHeld(_touchJumpHeld || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow));
-                if (Input.GetKeyDown(KeyCode.Z)) _scene.TriggerVoBasicAttack();
-                if (Input.GetKeyDown(KeyCode.I)) _scene.ToggleInventory();
-                if (Input.GetKeyDown(KeyCode.H)) _scene.UseHealthPotion();
-                if (Input.GetKeyDown(KeyCode.K)) _scene.UseManaPotion();
-                if (Input.GetKeyDown(KeyCode.R)) _scene.EquipClassReward();
-                if (Input.GetKeyDown(KeyCode.F)) _scene.CycleSourcePoseClass();
+                if (Input.GetKeyDown(KeyCode.Escape)) _scene.CloseNpcDialogue();
+                if (!_scene.DialogueOpen)
+                {
+                    if (Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
+                    if (Input.GetKeyDown(KeyCode.L)) _scene.CycleVoAvatarLevel();
+                    if (Input.GetKeyDown(KeyCode.G)) _scene.CycleVoAvatarGender();
+                    if (Input.GetKeyDown(KeyCode.V)) _scene.CycleVoEquipmentSlot();
+                    if (Input.GetKeyDown(KeyCode.M)) _scene.CycleVoSelectedEquipmentItemLevel();
+                    if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleVoEquipmentSlot();
+                    if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
+                    _scene.SetVoJumpHeld(_touchJumpHeld || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow));
+                    if (Input.GetKeyDown(KeyCode.Z)) _scene.TriggerVoBasicAttack();
+                    if (Input.GetKeyDown(KeyCode.I)) _scene.ToggleInventory();
+                    if (Input.GetKeyDown(KeyCode.H)) _scene.UseHealthPotion();
+                    if (Input.GetKeyDown(KeyCode.K)) _scene.UseManaPotion();
+                    if (Input.GetKeyDown(KeyCode.R)) _scene.EquipClassReward();
+                    if (Input.GetKeyDown(KeyCode.F)) _scene.CycleSourcePoseClass();
+                }
+                else _scene.SetVoJumpHeld(false);
             }
             _quest.text = _scene.QuestTrackerText
                 + (string.IsNullOrEmpty(_scene.LastInteractionMessage) ? "" : "\n" + _scene.LastInteractionMessage);
@@ -296,8 +315,8 @@ namespace LinhGioi.UI
             _minimap.text = _scene.MinimapRouteText;
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            var compactReview = (_scene.IsSourcePoseReviewActive || _scene.ClassEquipmentPreviewActive)
-                && _scene.InventoryOpen;
+            var compactReview = _scene.DialogueOpen || ((_scene.IsSourcePoseReviewActive || _scene.ClassEquipmentPreviewActive)
+                && _scene.InventoryOpen);
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
                 control.style.display = compactReview ? DisplayStyle.None : DisplayStyle.Flex;
             _inventorySummary.text = _scene.InventorySummaryText;
@@ -331,7 +350,13 @@ namespace LinhGioi.UI
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _inventoryToggle.style.display = _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _combatBar.style.display = _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _dialogueSpeaker.text = _scene.DialogueSpeaker;
+            _pad.style.display = _touch && !_scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _dialogueInformation.style.display = _scene.CanReadDialogueInformation ? DisplayStyle.Flex : DisplayStyle.None;
+            _npcTalk.style.display = !_scene.DialogueOpen && _scene.CanTalkToCurrentNpc
+                && _scene.CurrentRouteNodeId == "well-bridge" && _scene.CurrentActionLabel != "Trò chuyện"
+                ? DisplayStyle.Flex : DisplayStyle.None;
+            _talk.style.width = _scene.DialogueOpen ? new StyleLength(260) : new StyleLength(StyleKeyword.Auto);
+            _dialogueSpeaker.text = _scene.DialogueSpeaker + " · " + _scene.DialogueProgress;
             _dialogueLine.text = _scene.DialogueText;
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
             var camera = Camera.main;
