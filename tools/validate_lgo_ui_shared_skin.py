@@ -32,6 +32,36 @@ FORBIDDEN_SNIPPETS = [
     "style.gap =",
 ]
 
+# Runtime UI decisions that previously regressed when a new screen was built as a
+# parallel one-off implementation. Keep these checks structural and cheap so the
+# guard can run with every Map01A UI edit.
+REQUIRED_PARTIAL_MARKERS = {
+    "CongDongLamArrivalHud.Entry.cs": [
+        "ApplyLgoModalShell(panel, 24)",
+        "StyleEntryButton",
+        "_safe.style.display = _entryOpen ? DisplayStyle.None : DisplayStyle.Flex",
+    ],
+    "CongDongLamArrivalHud.CharacterSelect.cs": [
+        "ApplyLgoModalShell(panel, 20)",
+        "ApplyLgoButton(card)",
+        "UpdateHudShellVisibility()",
+    ],
+    "CongDongLamArrivalHud.Inventory.cs": [
+        "_inventoryDetailPanel = InventoryPanel(\"Map01A Inventory Detail Panel\")",
+        "body.Add(_inventoryDetailPanel)",
+        "_inventoryGridPanel = InventoryPanel(\"Map01A Inventory Grid Panel\")",
+        "ApplyLgoSelectedTab(_bagTab",
+        "ApplyLgoSelectedTab(_characterInfoTab",
+    ],
+}
+
+REQUIRED_TEST_MARKERS = [
+    "InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection",
+    "Item detail must stay on the right side of the bag grid",
+    "CharacterSelectModalUsesSharedSkinAndDoesNotAdvanceQuest",
+    "Entry/login must not leave the in-game HUD visible behind the modal",
+]
+
 
 def fail(message: str) -> int:
     print("LGO_UI_SHARED_SKIN_FAIL " + message, file=sys.stderr)
@@ -58,6 +88,25 @@ def main() -> int:
         for pattern in FORBIDDEN_LOCAL_PATTERNS:
             for match in pattern.finditer(text):
                 violations.append(f"{rel}: local skin pattern {match.group(0)}")
+    for filename, markers in REQUIRED_PARTIAL_MARKERS.items():
+        path = UI_DIR / filename
+        if not path.is_file():
+            violations.append(f"client/Unity/Assets/Game/UI/Runtime/{filename}: missing shared UI partial")
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        for marker in markers:
+            if marker not in text:
+                violations.append(f"{path.relative_to(ROOT)}: missing structural marker {marker}")
+
+    tests = ROOT / "client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs"
+    if not tests.is_file():
+        violations.append("client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs: missing UI regression tests")
+    else:
+        test_text = tests.read_text(encoding="utf-8", errors="replace")
+        for marker in REQUIRED_TEST_MARKERS:
+            if marker not in test_text:
+                violations.append(f"{tests.relative_to(ROOT)}: missing UI regression marker {marker}")
+
     if violations:
         for item in violations:
             print(item, file=sys.stderr)
