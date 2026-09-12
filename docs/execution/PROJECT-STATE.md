@@ -1,4 +1,9 @@
 
+## Pháp complete-garment fallback rejected by source gate — 2026-09-13
+
+Audited the no-scale `complete-garment` Pháp pack set and Player evidence `build/phap-complete-garment-lv10-runtime-v1/pc`. Although it has 190 technical frames and Lv1/Lv10 mixed manifest, launcher guard blocks it through external `authoring-selection.json` status `OWNER_REJECTED_VISUAL`: wrong Pháp progression silhouette and Lv10 inherits rejected geometry. Regression test now asserts the complete-garment suffix set remains blocked, so Pháp cannot be re-enabled by swapping to that fallback.
+
+
 ## Source reject markers block owner-review launch — 2026-09-13
 
 Launcher owner-review now rejects atlas sources under `DO-NOT-PACK.md` or source `manifest.json` statuses containing rejected/withdrawn/fix-required markers. This protects the Pháp v8/v9 pose-contract sources, which are explicitly `SOURCE_REJECTED`, from being accidentally packed or opened in Player while Pháp remains held out. Regression test confirms Player does not start when a pack source points under a rejected source directory.

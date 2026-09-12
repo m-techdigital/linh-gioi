@@ -1,4 +1,9 @@
 
+## Pháp fallback audit result — 2026-09-13
+
+Do not use Pháp `complete-garment` as fallback: `class_pack_paths` blocks it via `OWNER_REJECTED_VISUAL` authoring selection. Remaining valid route is new/fixed item-only source pose set on accepted body/canvas/pivot, with no poseScaleCorrections and no reject markers, then Player capture and close-up provenance.
+
+
 ## Source reject guard active — 2026-09-13
 
 Do not pack Pháp v8/v9 pose-contract sources or any source tree with `DO-NOT-PACK.md`/`manifest.status=SOURCE_REJECTED`; owner-review launcher now blocks these markers. To re-enable Pháp, create a new accepted source directory/manifest without pose-scale correction and without reject markers, then regenerate pack, Player capture, close-up and provenance.

@@ -127,6 +127,20 @@ class OwnerReviewCatalogValidatorTests(unittest.TestCase):
                 self.assertIn("close-up provenance", validator.validate_player_evidence("kiem"))
 
 
+    def test_phap_complete_garment_candidate_remains_blocked_by_owner_rejection(self):
+        combo = {
+            "phap": (
+                "-source-pose-review-complete-garment-v1/pack",
+                "-source-pose-review-lv10-complete-garment-v1/pack",
+                "-female-source-pose-review-complete-garment-v1/pack",
+                "-female-source-pose-review-lv10-complete-garment-v1/pack",
+            )
+        }
+        with patch.dict(validator.launcher.PACK_SUFFIXES, combo):
+            with self.assertRaisesRegex(ValueError, "OWNER_REJECTED_VISUAL"):
+                validator.launcher.class_pack_paths(validator.ROOT, "phap")
+
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -30,9 +30,10 @@ PLAYER_EVIDENCE = {
 }
 HELD_OUT_CLASSES = {
     "phap": {
-        "reason": "semantic-v3 rejected visually; canonical-v2 still has poseScaleCorrections.jump_tuck=2/3 and is blocked by launcher no-scale guard",
+        "reason": "semantic-v3 rejected visually; canonical-v2 still has poseScaleCorrections.jump_tuck=2/3; complete-garment authoring is OWNER_REJECTED_VISUAL",
         "candidateManifest": "build/phap-canonical-v2-runtime-v1/pc/registered-manifest.json",
         "candidateCloseup": "build/source-pose-catalog-audit-v2/phap-owner-review-closeup.jpg",
+        "blockedCompleteGarmentManifest": "build/phap-complete-garment-lv10-runtime-v1/pc/registered-manifest.json",
     },
 }
 MAX_JUMP_TO_IDLE_SCREEN_HEIGHT_RATIO = 1.08
