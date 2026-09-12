@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Collections;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace LinhGioi.World
 {
@@ -60,8 +62,9 @@ namespace LinhGioi.World
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-co-capture") >= 0
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-linh-capture") >= 0;
         private bool CharacterSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
+        private bool InventoryTabsCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-inventory-tabs-capture") >= 0;
         public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || ClassCaptureRequested
-            || CharacterSelectCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
+            || CharacterSelectCaptureRequested || InventoryTabsCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string QuestTrackerText => ActiveQuestId == "COMPLETE" ? "Map01A hoàn tất\nPortal Suối Thanh Minh đã mở."
@@ -460,7 +463,8 @@ namespace LinhGioi.World
         public static bool ShouldRunForArgs(string[] args) => Array.IndexOf(args, "--lgo-map01a-art-preview") >= 0
             || IsMapQuestCaptureForArgs(args)
             || Array.IndexOf(args, "--lgo-map01a-entry-capture") >= 0
-            || Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0;
+            || Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0
+            || Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0;
 
         public static bool IsMapQuestCaptureForArgs(string[] args) => Array.IndexOf(args, "--lgo-map01a-art-capture") >= 0;
 
@@ -1478,6 +1482,11 @@ namespace LinhGioi.World
                 yield return CaptureCharacterSelectScreen(args);
                 yield break;
             }
+            if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0)
+            {
+                yield return CaptureInventoryTabs(args);
+                yield break;
+            }
             if (!Application.isPlaying || !IsMapQuestCaptureForArgs(args)) yield break;
             Application.runInBackground = true;
             var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
@@ -1924,6 +1933,63 @@ namespace LinhGioi.World
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
+        }
+
+
+        private IEnumerator CaptureInventoryTabs(string[] args)
+        {
+            Application.runInBackground = true;
+            var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
+            if (index < 0 || index + 1 >= args.Length) throw new ArgumentException("Missing Map01A inventory tab capture directory");
+            var directory = args[index + 1];
+            Directory.CreateDirectory(directory);
+            _controller.enabled = false;
+            yield return null;
+            yield return null;
+            if (!InventoryOpen) ToggleInventory();
+            yield return null;
+            var document = GetComponentInChildren<UIDocument>();
+            if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for inventory tab capture");
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Character Info Main Tab"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var characterInfo = Path.Combine(directory, "character-info.png");
+            CaptureScreenPng(characterInfo);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Storage Main Tab"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var storage = Path.Combine(directory, "storage.png");
+            CaptureScreenPng(storage);
+            var status = File.Exists(characterInfo) && File.Exists(storage) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var manifest = "{\n"
+                + "  \"status\": \"" + status + "\",\n"
+                + "  \"captureScope\": \"map01a-inventory-tabs\",\n"
+                + "  \"usesOsMouseOrKeyboard\": false,\n"
+                + "  \"width\": " + Screen.width + ",\n"
+                + "  \"height\": " + Screen.height + ",\n"
+                + "  \"frames\": [\"character-info.png\", \"storage.png\"]\n"
+                + "}\n";
+            File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
+            Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
+        }
+
+
+        private static void InvokeHudButton(Button button)
+        {
+            if (button == null) throw new InvalidOperationException("Missing Map01A HUD button for capture");
+            var callback = typeof(Clickable).GetField("clicked", BindingFlags.Instance | BindingFlags.NonPublic)
+                ?.GetValue(button.clickable) as Action;
+            if (callback == null) throw new InvalidOperationException("Map01A HUD button has no capture callback: " + button.name);
+            callback();
+        }
+
+        private static void CaptureScreenPng(string imagePath)
+        {
+            var image = new Texture2D(Screen.width, Screen.height, TextureFormat.RGBA32, false);
+            image.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+            image.Apply();
+            File.WriteAllBytes(imagePath, image.EncodeToPNG());
+            UnityEngine.Object.Destroy(image);
         }
 
         private IEnumerator CaptureCharacterSelectScreen(string[] args)

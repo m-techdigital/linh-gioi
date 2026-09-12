@@ -3,6 +3,12 @@
 
 
 
+## Map01A inventory tab Player evidence locked — 2026-09-13
+
+Đã bổ sung capture nội bộ Player cho hai tab modal hành trang chưa có ảnh riêng: `build/map01a-inventory-tab-runtime/character-info.png` và `build/map01a-inventory-tab-runtime/storage.png`, manifest `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900, frames đúng `character-info.png` + `storage.png`. Lỗi capture đầu tiên bị entry/login overlay do `--lgo-map01a-inventory-tabs-capture` chưa được tính vào capture state; đã thêm regression test đỏ rồi xanh trong `TwoDCharacterRuntimeStateTests.EntryCaptureFlagRunsPreviewWithoutSuppressingEntryOverlay` và sửa `ShouldShowEntryOnLaunchForArgs`/`IsCapturing`.
+
+Ảnh đã xem: `character-info.png` active tab Thông tin, dùng chung shell, detail món ở panel bên phải; `storage.png` active Rương đồ, không tạo item giả và giữ trạng thái kho placeholder/gate. Đây vẫn là technical visual review evidence, chưa phải final UI polish hoặc owner approval. Player build dùng `--burst-disable-compilation` cho evidence vì Burst AOT macOS crash trong môi trường build; không thay đổi source product hoặc ProjectSettings.
+
 ## Map01A UI review catalog locked — 2026-09-13
 
 Đã gom evidence UI hiện hành vào `docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md` với marker `LGO_MAP01A_UI_REVIEW_CATALOG_READY` để tránh mở nhầm Player/capture cũ: entry/login `build/map01a-entry-form-runtime/entry-login.png`, character select `build/map01a-character-select-runtime/character-select.png`, và quest/inventory route `build/map01a-detail-right-player/quest-capture/{pc,tablet,mobile}/`. Validator mới `tools/validate_lgo_map01a_ui_review_catalog.py` kiểm manifest `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, modal capture không dùng OS mouse/keyboard, và matrix quest 18 frame + 38 dialogue frame trên PC/tablet/mobile. Đã xem ảnh đại diện entry, character select và inventory PC; đây vẫn là technical visual review, chưa phải owner/final UI approval hoặc wardrobe/class-art approval.

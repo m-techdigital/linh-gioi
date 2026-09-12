@@ -30,6 +30,8 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "entry/login: `build/map01a-entry-form-runtime/entry-login.png`\n"
             "character select: `build/map01a-character-select-runtime/character-select.png`\n"
             "inventory: `build/map01a-detail-right-player/quest-capture/pc/07-q04-inventory-open.png`\n"
+            "character-info.png\n"
+            "storage.png\n"
             "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED\n"
             "usesOsMouseOrKeyboard=false\n",
             encoding="utf-8",
@@ -48,6 +50,15 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "height": 900,
         })
         (root / "build/map01a-character-select-runtime/character-select.png").write_bytes(b"png")
+        write_json(root / "build/map01a-inventory-tab-runtime/manifest.json", {
+            "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
+            "usesOsMouseOrKeyboard": False,
+            "width": 1600,
+            "height": 900,
+            "frames": ["character-info.png", "storage.png"],
+        })
+        (root / "build/map01a-inventory-tab-runtime/character-info.png").write_bytes(b"png")
+        (root / "build/map01a-inventory-tab-runtime/storage.png").write_bytes(b"png")
         for profile, size in {"pc": (1280, 720), "tablet": (1024, 768), "mobile": (1600, 720)}.items():
             write_json(root / f"build/map01a-detail-right-player/quest-capture/{profile}/manifest.json", {
                 "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",

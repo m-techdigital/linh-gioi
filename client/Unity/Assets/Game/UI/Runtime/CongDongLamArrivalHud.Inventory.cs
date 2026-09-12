@@ -237,6 +237,16 @@ namespace LinhGioi.UI
             ShowInventoryPage(false); ShowInventoryMode(false); _safe.Add(_inventory);
         }
 
+
+        public void OpenInventoryReviewMode(string mode)
+        {
+            if (!_scene.InventoryOpen) _scene.ToggleInventory();
+            if (mode == "character-info") ShowInventoryMode(true);
+            else if (mode == "storage") ShowStorageMode();
+            else ShowInventoryMode(false);
+            Update();
+        }
+
         private void ShowInventoryMode(bool characterInfo)
         {
             _characterInfoOpen = characterInfo;

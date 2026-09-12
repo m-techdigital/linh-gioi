@@ -74,6 +74,14 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(args), Is.False,
                 "Entry capture must not enter the quest capture clock because that hides the entry overlay.");
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(args, sceneIsCapturing: false), Is.True);
+            var inventoryTabArgs = new[] { "LinhGioiOnline", "--lgo-map01a-inventory-tabs-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(inventoryTabArgs), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(inventoryTabArgs), Is.False,
+                "Inventory tab capture must not advance the quest capture route.");
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(inventoryTabArgs, sceneIsCapturing: true), Is.False);
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(inventoryTabArgs, sceneIsCapturing: false), Is.False,
+                "Inventory tab capture should open Map01A HUD directly instead of stacking behind entry login.");
+
             var characterArgs = new[] { "LinhGioiOnline", "--lgo-map01a-character-select-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(characterArgs), Is.True);
             Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(characterArgs), Is.False,
@@ -292,6 +300,38 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Storage Deposit").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Storage Withdraw").enabledSelf, Is.False);
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+
+        [Test]
+        public void InventoryReviewCaptureCanOpenCharacterInfoAndStorageTabsWithoutInput()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("inventory review capture tab test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+
+                hud.OpenInventoryReviewMode("character-info");
+                Assert.That(scene.InventoryOpen, Is.True);
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+
+                hud.OpenInventoryReviewMode("storage");
+                Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Button>("Map01A Storage Deposit").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Storage Withdraw").enabledSelf, Is.False);
             }
             finally
             {

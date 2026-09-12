@@ -25,6 +25,10 @@ REQUIRED_QUEST_FRAMES = [
     "07-q04-inventory-open.png",
     "18-q09-portal-open.png",
 ]
+INVENTORY_TAB_EVIDENCE = [
+    ("character info tab", "build/map01a-inventory-tab-runtime/character-info.png"),
+    ("storage tab", "build/map01a-inventory-tab-runtime/storage.png"),
+]
 
 
 def load_json(root: Path, rel: str, violations: list[str]) -> dict[str, Any]:
@@ -60,6 +64,8 @@ def validate_root(root: Path = ROOT) -> list[str]:
             "character-select.png",
             "07-q04-inventory-open.png",
             "pc/tablet/mobile",
+            "character-info.png",
+            "storage.png",
             "not owner approval",
         ]:
             if marker not in text:
@@ -74,6 +80,16 @@ def validate_root(root: Path = ROOT) -> list[str]:
             violations.append(f"{label}: usesOsMouseOrKeyboard must be false")
         if data.get("width") != width or data.get("height") != height:
             violations.append(f"{label}: expected {width}x{height}, got {data.get('width')}x{data.get('height')}")
+
+    tab_manifest = load_json(root, "build/map01a-inventory-tab-runtime/manifest.json", violations)
+    if tab_manifest.get("status") != TECH_STATUS:
+        violations.append(f"inventory tabs: status must be {TECH_STATUS}")
+    if tab_manifest.get("usesOsMouseOrKeyboard") is not False:
+        violations.append("inventory tabs: usesOsMouseOrKeyboard must be false")
+    if tab_manifest.get("frames") != ["character-info.png", "storage.png"]:
+        violations.append("inventory tabs: frames must list character-info.png and storage.png")
+    for label, rel in INVENTORY_TAB_EVIDENCE:
+        require_file(root, rel, violations)
 
     for profile, (width, height) in QUEST_PROFILES.items():
         base = f"build/map01a-detail-right-player/quest-capture/{profile}"
