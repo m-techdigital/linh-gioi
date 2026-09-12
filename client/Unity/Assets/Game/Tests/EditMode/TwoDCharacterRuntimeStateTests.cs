@@ -97,6 +97,75 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void InventoryKeepsActionsOutsideScrollAndClosingPreservesEquipment()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("inventory fixed actions test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var scroll = root.Q<ScrollView>("LGO Inventory Scroll");
+                Assert.That(scroll, Is.Not.Null);
+                Assert.That(scroll.Contains(root.Q<Button>("LGO Equipment Inventory Class")), Is.False,
+                    "Class switch must stay visible when the item list scrolls");
+                Assert.That(scroll.Contains(root.Q<Button>("LGO Equipment Inventory Toggle")), Is.False,
+                    "Equip action must stay outside scrolling content");
+                scene.ToggleInventory();
+                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot outer_tunic"));
+                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Toggle"));
+                var close = root.Q<Button>("LGO Inventory Close");
+                Assert.That(close, Is.Not.Null);
+                InvokeBoundButton(close);
+                Assert.That(scene.InventoryOpen, Is.False);
+                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("outer_tunic"));
+                Assert.That(scene.IsVoEquipmentSlotEquipped("outer_tunic"), Is.False);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("inventory main tabs test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                scene.ToggleInventory();
+                var bagTab = root.Q<Button>("Map01A Bag Main Tab");
+                var infoTab = root.Q<Button>("Map01A Character Info Main Tab");
+                Assert.That(bagTab, Is.Not.Null);
+                Assert.That(infoTab, Is.Not.Null);
+                Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+
+                InvokeBoundButton(infoTab);
+                Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+
+                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
+                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+                InvokeBoundButton(bagTab);
+                Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void SourcePoseInventoryKeepsQuestPotionActionUsable()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
@@ -122,7 +191,11 @@ namespace LinhGioi.Tests.EditMode
                 typeof(CongDongLamArrivalHud).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(hud, null);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
-                var potion = root.Query<Button>().ToList().Single(button => button.text == "Dùng Máu");
+                InvokeBoundButton(root.Q<Button>("Map01A Supplies Tab"));
+                Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Footer").style.display.value, Is.EqualTo(DisplayStyle.None));
+                var potion = root.Q<Button>("Map01A Health Potion");
+                Assert.That(potion, Is.Not.Null);
                 Assert.That(potion.parent.style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Source-pose review must not hide the inventory actions needed to complete Q04");
                 InvokeBoundButton(potion);

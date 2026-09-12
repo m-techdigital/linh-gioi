@@ -22,3 +22,14 @@ Bộ màn cần cùng một ngôn ngữ UI: đăng nhập (trống/nhập/đang 
 Hành trang tiếp theo cần card/inspect món, trạng thái đang mặc/tháo, cấp có thật và nút đóng rõ; giữ catalog/equip đã audit. HUD tiếp theo chỉ dùng hành vi hiện có; chưa thêm chat/guild/shop/minimap tương tác giả. Lỗi atlas kiến trúc đã sửa sau khi phục hồi raw source ngày 2026-09-12; gate sửa cắt mảnh có Player evidence. Đây chưa phải nghiệm thu toàn bộ sản phẩm.
 
 Tham khảo: [Unity 6 UI Document](https://docs.unity3d.com/6000.0/Documentation/Manual/UIE-create-ui-document-component.html) mô tả nhiều document dùng chung panel/focus. Áp dụng ở đây là tái sử dụng panel hiện hành và điều khiển theo trạng thái màn, không nhân UI riêng theo class hoặc tỷ lệ màn hình.
+
+## Bố cục hành trang 2D — draft chức năng 2026-09-13
+
+Demo: [map01a-inventory-2d-layout.svg](demos/map01a-inventory-2d-layout.svg). Bốn ảnh ưu tiên v2 của owner là reference UI/UX, không phải contract phải copy 100%. Runtime hiện tách **Hành trang** và **Thông tin** thành hai tab cấp chính để tránh gộp sai vai trò:
+
+- **Hành trang**: trái là panel chi tiết món đang chọn và hành động tháo/mặc/đổi cấp; phải là tab vật phẩm/trang bị và grid cuộn. Khi chọn một món trong grid, chi tiết hiển thị ở panel trái.
+- **Thông tin**: trái vẫn là panel chi tiết món đang chọn; phải là nhân vật/class/giới và 10 slot trang bị thật. Khi click trang bị đang mặc, panel trái hiển thị đúng thông tin món đó.
+
+Tracker nhiệm vụ, minimap và combat/action bar tạm ẩn khi hành trang mở để tránh chồng panel. Không dựng actor thứ hai, không tạo item/currency/chỉ số giả, không đổi base/camera/scale. Tên slot, cấp, mặc/tháo và điều kiện nút lấy từ state/catalog hiện hành. Chuyển tab/đóng panel không thay loadout; thiếu pack/cấp thì nút vô hiệu hóa. Bố cục co về một cột khi màn thấp/hẹp. Đây là draft chức năng, không phải owner đã duyệt mỹ thuật UI mới.
+
+Kỹ thuật theo [Unity ScrollView](https://docs.unity3d.com/6000.0/Documentation/Manual/UIE-uxml-element-ScrollView.html): phần cuộn có content container riêng; header/footer là sibling, không đặt bên trong nó. Dùng font/theme chung và UI Toolkit hiện hành, không thêm framework. Evidence Player mặc định Hành trang ở `build/map01a-inventory-tabs-player/quest-capture/{pc,tablet,mobile}/07-q04-inventory-open.png`; tab Thông tin được khóa bằng EditMode test `InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection`.

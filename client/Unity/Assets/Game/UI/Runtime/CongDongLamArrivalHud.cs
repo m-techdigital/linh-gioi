@@ -7,7 +7,7 @@ using UnityEngine.UIElements;
 namespace LinhGioi.UI
 {
     // Arrival UI follows Map01A reference 01/05/10; reuses shared touch and viewport policies.
-    public sealed class CongDongLamArrivalHud : MonoBehaviour
+    public sealed partial class CongDongLamArrivalHud : MonoBehaviour
     {
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions;
@@ -146,94 +146,7 @@ namespace LinhGioi.UI
                 actionBar.Add(button);
             }
             _inventoryToggle.style.marginRight = 12; _safe.Add(actionBar);
-            var inventoryScroll = new ScrollView(ScrollViewMode.Vertical)
-            {
-                name = "LGO Inventory Scroll",
-                horizontalScrollerVisibility = ScrollerVisibility.Hidden
-            };
-            // Constrain the content to the viewport; ScrollView content otherwise measures unbounded.
-            inventoryScroll.contentViewport.RegisterCallback<GeometryChangedEvent>(evt =>
-                inventoryScroll.contentContainer.style.width = evt.newRect.width);
-            _inventory = inventoryScroll;
-            Box(_inventory); Place(_inventory, 16, null, 96, 100);
-            _inventory.style.width = 520;
-            _inventorySummary = new Label(); _inventorySummary.style.whiteSpace = WhiteSpace.Normal; _inventory.Add(_inventorySummary);
-            _equipmentTitle = new Label("TRANG BỊ VÕ · 10 SLOT");
-            _equipmentTitle.style.color = new Color(1f, .78f, .25f);
-            _equipmentTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
-            _equipmentTitle.style.marginTop = 8;
-            _inventory.Add(_equipmentTitle);
-            var equipmentGrid = new VisualElement();
-            equipmentGrid.style.flexDirection = FlexDirection.Row;
-            equipmentGrid.style.flexShrink = 0;
-            var equipmentLeft = new VisualElement();
-            var equipmentRight = new VisualElement();
-            equipmentLeft.style.flexGrow = equipmentRight.style.flexGrow = 1;
-            equipmentLeft.style.flexBasis = equipmentRight.style.flexBasis = 0;
-            equipmentLeft.style.minWidth = equipmentRight.style.minWidth = 0;
-            equipmentLeft.style.marginRight = 6;
-            equipmentGrid.Add(equipmentLeft);
-            equipmentGrid.Add(equipmentRight);
-            _equipmentSlotIds = _scene.VoEquipmentSlotIds;
-            _equipmentRows = new Button[_equipmentSlotIds.Count];
-            for (var index = 0; index < _equipmentSlotIds.Count; index++)
-            {
-                var slotId = _equipmentSlotIds[index];
-                var row = new Button(() => _scene.SelectVoEquipmentSlot(slotId))
-                    { name = "LGO Equipment Inventory Slot " + slotId };
-                row.style.width = Length.Percent(100);
-                row.style.height = _touch ? 42 : 36;
-                row.style.fontSize = 18;
-                row.style.flexShrink = 0;
-                row.style.marginBottom = 5;
-                row.style.unityTextAlign = TextAnchor.MiddleLeft;
-                _equipmentRows[index] = row;
-                (index % 2 == 0 ? equipmentLeft : equipmentRight).Add(row);
-            }
-            _inventory.Add(equipmentGrid);
-            _equipmentDetail = new Label();
-            _equipmentDetail.style.whiteSpace = WhiteSpace.Normal;
-            _equipmentDetail.style.minHeight = 62;
-            _equipmentDetail.style.flexShrink = 0;
-            _equipmentDetail.style.marginTop = 5;
-            _equipmentDetail.style.marginBottom = 5;
-            _inventory.Add(_equipmentDetail);
-            var equipmentActions = new VisualElement();
-            equipmentActions.style.flexDirection = FlexDirection.Row;
-            equipmentActions.style.flexWrap = Wrap.Wrap;
-            equipmentActions.style.flexShrink = 0;
-            _equipmentToggle = new Button(() => _scene.ToggleVoEquipmentSlot())
-                { name = "LGO Equipment Inventory Toggle" };
-            _equipmentVariant = new Button(() => _scene.CycleVoSelectedEquipmentItemLevel())
-                { name = "LGO Equipment Inventory Variant", text = "Đổi cấp món" };
-            _equipmentClass = new Button(() => _scene.CycleSourcePoseClass())
-                { name = "LGO Equipment Inventory Class", text = "Đổi class · F" };
-            _inventoryGender = new Button(() => _scene.CycleVoAvatarGender()) { name = "Map01A Inventory Gender" };
-            foreach (var button in new[] { _equipmentToggle, _equipmentVariant, _equipmentClass, _inventoryGender })
-            {
-                button.style.minHeight = 40;
-                button.style.minWidth = _touch ? 174 : 205;
-                button.style.marginRight = 6;
-                button.style.backgroundColor = new Color(.07f, .17f, .21f, .98f);
-                button.style.color = new Color(.98f, .86f, .55f);
-                equipmentActions.Add(button);
-            }
-            _inventory.Add(equipmentActions);
-            _questItemActions = new VisualElement(); _questItemActions.style.flexDirection = FlexDirection.Row;
-            _questItemActions.style.flexWrap = Wrap.Wrap;
-            _healthPotion = new Button(() => _scene.UseHealthPotion()) { text = "Dùng Máu" };
-            _manaPotion = new Button(() => _scene.UseManaPotion()) { text = "Dùng Linh Lực" };
-            _equipReward = new Button(() => _scene.EquipClassReward()) { text = "Trang bị Hộ Uyển" };
-            foreach (var button in new[] { _healthPotion, _manaPotion, _equipReward })
-            {
-                button.style.minHeight = 38;
-                button.style.marginRight = 6;
-                button.style.backgroundColor = new Color(.07f, .17f, .21f, .98f);
-                button.style.color = new Color(.98f, .86f, .55f);
-                _questItemActions.Add(button);
-            }
-            _questItemActions.style.flexShrink = 0;
-            _inventory.Insert(1, _questItemActions); _safe.Add(_inventory);
+            BuildInventory();
             _dialogue = new VisualElement(); Box(_dialogue); Place(_dialogue, 142, 290, null, 20);
             _dialogueSpeaker = new Label("Hạ Vân");
             _dialogue.Add(_dialogueSpeaker);
@@ -277,10 +190,29 @@ namespace LinhGioi.UI
             _minimap.style.width = r.width < 1100 ? 360 : 430;
             _dialogue.style.left = _touch ? 150 : 20;
             _combatBar.style.left = _touch ? 150 : 220;
-            _inventory.style.width = Mathf.Min(520, r.width - 32);
-            _inventory.style.bottom = r.width < 1300 ? 180 : 100;
+            _inventory.style.left = r.width < 950 ? 14 : 56;
+            _inventory.style.right = r.width < 950 ? 14 : 56;
+            _inventory.style.top = r.width < 950 ? 70 : 82;
+            _inventory.style.bottom = r.width < 950 ? 96 : 70;
+            _inventory.style.width = StyleKeyword.Auto;
             _combatBar.style.bottom = r.width < 1300 ? 100 : 24;
             _talk.style.fontSize = _touch ? 20 : 18;
+            if (_inventoryHeroPanel != null)
+            {
+                var stacked = r.width < 950;
+                var body = _inventory.Q("Map01A Inventory Body");
+                body.style.flexDirection = stacked ? FlexDirection.Column : FlexDirection.Row;
+                _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : StyleKeyword.Auto;
+                _inventoryHeroPanel.style.flexGrow = _characterInfoOpen ? 1 : 0;
+                _inventoryHeroPanel.style.marginRight = 0;
+                _inventoryHeroPanel.style.marginBottom = stacked ? 10 : 0;
+                _inventoryGridPanel.style.flexGrow = _characterInfoOpen ? 0 : 1;
+                _inventoryGridPanel.style.marginRight = 0;
+                _inventoryGridPanel.style.marginBottom = stacked ? 10 : 0;
+                _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 300;
+                _inventoryDetailPanel.style.marginRight = stacked ? 0 : 10;
+                _inventoryDetailPanel.style.marginBottom = stacked ? 10 : 0;
+            }
         }
         private void Update()
         {
@@ -294,7 +226,11 @@ namespace LinhGioi.UI
                 if (!_touch) _scene.SetVoRun(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
                 _scene.MoveOnLane(Mathf.Abs(_pad.Value.x) > .01f ? _pad.Value.x : keyboard, Time.deltaTime);
                 if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
-                if (Input.GetKeyDown(KeyCode.Escape)) _scene.CloseNpcDialogue();
+                if (Input.GetKeyDown(KeyCode.Escape))
+                {
+                    if (_scene.DialogueOpen) _scene.CloseNpcDialogue();
+                    else if (_scene.InventoryOpen) _scene.ToggleInventory();
+                }
                 if (!_scene.DialogueOpen)
                 {
                     if (!_scene.IsSourcePoseReviewActive && Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
@@ -330,36 +266,49 @@ namespace LinhGioi.UI
             _skill.text = _scene.VoAvatarMotionState == "skill" ? "Đang thi triển..." : _scene.SkillLabel + (_touch ? "" : " · X");
             _skill.SetEnabled(_scene.CanTriggerVoSkill);
             _minimap.text = _scene.MinimapRouteText;
+            _minimap.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _quest.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             var compactReview = _scene.DialogueOpen || _scene.IsSourcePoseReviewActive
                 || (_scene.ClassEquipmentPreviewActive && _scene.InventoryOpen);
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
                 control.style.display = compactReview ? DisplayStyle.None : DisplayStyle.Flex;
             _inventorySummary.text = _scene.InventorySummaryText;
-            _equipmentTitle.text = "TRANG BỊ " + _scene.ActiveEquipmentClassLabel.ToUpperInvariant() + " · 10 SLOT";
+            _inventoryHeroTitle.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
+            _inventoryHeroMeta.text = "LC review local · " + _scene.EquipmentFitSummary
+                + "\nHP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
+            _equipmentTitle.text = "TRANG BỊ · " + _scene.VoEquippedSlotCount + "/10 món đang mặc";
             _questItemActions.style.display = DisplayStyle.Flex;
             for (var index = 0; index < _equipmentRows.Length; index++)
             {
                 var slotId = _equipmentSlotIds[index];
                 var equipped = _scene.IsVoEquipmentSlotEquipped(slotId);
-                _equipmentRows[index].text = (equipped ? "✓ " : "○ ") + EquipmentDisplayName(slotId)
-                    + " · Lv" + _scene.GetVoEquipmentItemLevel(slotId);
+                _equipmentRows[index].text = (equipped ? "✓ " : "○ ") + EquipmentShortName(slotId)
+                    + "\nLv" + _scene.GetVoEquipmentItemLevel(slotId);
                 _equipmentRows[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
-                    ? new Color(.16f, .48f, .50f, .96f) : new Color(.06f, .13f, .17f, .94f);
+                    ? new Color(.16f, .48f, .50f, .96f)
+                    : equipped ? new Color(.06f, .13f, .17f, .94f) : new Color(.035f, .055f, .065f, .82f);
+                _equipmentTiles[index].text = EquipmentShortName(slotId)
+                    + "\nLv" + _scene.GetVoEquipmentItemLevel(slotId) + (equipped ? " · mặc" : " · tháo");
+                _equipmentTiles[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
+                    ? new Color(.12f, .33f, .56f, .98f)
+                    : equipped ? new Color(.045f, .12f, .18f, .96f) : new Color(.025f, .040f, .052f, .78f);
             }
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(_scene.VoSelectedEquipmentSlot);
             _equipmentDetail.text = EquipmentDisplayName(_scene.VoSelectedEquipmentSlot)
-                + " · Lv" + _scene.GetVoEquipmentItemLevel(_scene.VoSelectedEquipmentSlot)
-                + "\nTrạng thái: " + (selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO");
+                + "\nLv" + _scene.GetVoEquipmentItemLevel(_scene.VoSelectedEquipmentSlot);
+            _inventoryItemId.text = _scene.GetVoEquipmentItemId(_scene.VoSelectedEquipmentSlot);
+            _inventoryItemState.text = (selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.")
+                + "\nKhớp: " + _scene.EquipmentFitSummary;
             _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
             var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
             _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "Chưa có cấp khác";
             _equipmentVariant.SetEnabled(hasVariant);
             _equipmentClass.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
             _equipmentClass.text = _scene.CanCycleSourcePoseClass
-                ? "Đổi class · đang " + _scene.ActiveEquipmentClassLabel + (_touch ? "" : " · F")
-                : "Chỉ có 1 class";
+                ? "Đổi class: " + _scene.ActiveEquipmentClassLabel + (_touch ? "" : " · F")
+                : "Class: " + _scene.ActiveEquipmentClassLabel;
             _equipmentClass.SetEnabled(_scene.CanCycleSourcePoseClass);
             _inventoryGender.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
             _inventoryGender.text = (_scene.CanCycleSourcePoseGender ? "Đổi giới · " : "Hiện có · ")
@@ -373,9 +322,10 @@ namespace LinhGioi.UI
             _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
             _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            _inventoryToggle.style.display = _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _combatBar.style.display = _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _pad.style.display = _touch && !_scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _inventoryToggle.style.display = _scene.DialogueOpen || _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _talk.style.display = _scene.DialogueOpen || _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _combatBar.style.display = _scene.DialogueOpen || _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _pad.style.display = _touch && !_scene.DialogueOpen && !_scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _dialogueInformation.style.display = _scene.CanReadDialogueInformation ? DisplayStyle.Flex : DisplayStyle.None;
             _npcTalk.style.display = !_scene.DialogueOpen && _scene.CanTalkToCurrentNpc
                 && _scene.CurrentRouteNodeId == "well-bridge" && _scene.CurrentActionLabel != "Trò chuyện"
@@ -408,6 +358,17 @@ namespace LinhGioi.UI
                 case "light_armor": return "Giáp vai/ngực";
                 case "accessory": return "Phụ kiện " + _scene.ActiveEquipmentClassLabel;
                 default: return slot;
+            }
+        }
+        private string EquipmentShortName(string slot)
+        {
+            switch (slot)
+            {
+                case "main_weapon": return "Vũ khí";
+                case "head_hair": return "Đầu tóc";
+                case "light_armor": return "Giáp";
+                case "accessory": return "Phụ kiện";
+                default: return EquipmentDisplayName(slot);
             }
         }
         private void OnDestroy() { if (_ownedPanel != null) Destroy(_ownedPanel); }

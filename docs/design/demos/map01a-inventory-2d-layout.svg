@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="760" viewBox="0 0 1180 760">
+  <rect width="1180" height="760" fill="#eef4f5"/>
+  <text x="30" y="38" font-family="Arial,sans-serif" font-size="24" fill="#173646">DRAFT · Hành trang Map01A tách Hành trang / Thông tin</text>
+  <text x="30" y="66" font-family="Arial,sans-serif" font-size="15" fill="#46616b">Không follow demo 100%; dùng state thật, không sinh actor/base/item/chỉ số giả.</text>
+  <rect x="30" y="90" width="1120" height="620" rx="4" fill="#061623" stroke="#c69a4a" stroke-width="2"/>
+  <text x="54" y="130" font-family="Arial,sans-serif" font-size="28" fill="#efcb79" font-weight="700">TÚI ĐỒ</text>
+  <text x="54" y="154" font-family="Arial,sans-serif" font-size="15" fill="#b8d7dc">Hai tab cấp chính: Hành trang là túi/grid, Thông tin là nhân vật và slot đang mặc.</text>
+  <rect x="1088" y="106" width="42" height="42" fill="#102938" stroke="#7b8c86"/>
+  <text x="1102" y="136" font-family="Arial,sans-serif" font-size="30" fill="#f3e8c8">×</text>
+
+  <rect x="54" y="178" width="500" height="48" fill="#17598e" stroke="#6d89a0"/>
+  <text x="260" y="209" font-family="Arial,sans-serif" font-size="19" fill="#f7eed3" text-anchor="middle">Hành trang</text>
+  <rect x="562" y="178" width="500" height="48" fill="#112c38" stroke="#5f7371"/>
+  <text x="812" y="209" font-family="Arial,sans-serif" font-size="19" fill="#f7eed3" text-anchor="middle">Thông tin</text>
+
+  <rect x="54" y="246" width="318" height="424" rx="3" fill="#0b2535" stroke="#8e733b"/>
+  <text x="78" y="282" font-family="Arial,sans-serif" font-size="15" fill="#b8d7dc">Chi tiết món đang chọn</text>
+  <text x="78" y="322" font-family="Arial,sans-serif" font-size="25" fill="#efcb79" font-weight="700">Áo ngoài</text>
+  <text x="78" y="352" font-family="Arial,sans-serif" font-size="18" fill="#efcb79">Lv1 · Đang mặc</text>
+  <line x1="78" y1="374" x2="344" y2="374" stroke="#8e733b"/>
+  <text x="78" y="410" font-family="Arial,sans-serif" font-size="15" fill="#c7e2e6">phap_outer_tunic_lv001</text>
+  <text x="78" y="444" font-family="Arial,sans-serif" font-size="15" fill="#efe8cc">Panel này dùng chung cho:</text>
+  <text x="94" y="474" font-family="Arial,sans-serif" font-size="15" fill="#efe8cc">• item chọn trong grid Hành trang</text>
+  <text x="94" y="502" font-family="Arial,sans-serif" font-size="15" fill="#efe8cc">• slot đang mặc ở tab Thông tin</text>
+  <rect x="78" y="592" width="124" height="46" fill="#8b6724" stroke="#a88e54"/>
+  <text x="100" y="621" font-family="Arial,sans-serif" font-size="16" fill="#fff0cc">Tháo món</text>
+  <rect x="216" y="592" width="128" height="46" fill="#112c38" stroke="#5f7371"/>
+  <text x="236" y="621" font-family="Arial,sans-serif" font-size="16" fill="#efe8cc">Đổi cấp</text>
+
+  <rect x="392" y="246" width="336" height="424" rx="3" fill="#0b2535" stroke="#8e733b"/>
+  <text x="416" y="282" font-family="Arial,sans-serif" font-size="21" fill="#efcb79" font-weight="700">Tab Hành trang</text>
+  <rect x="416" y="306" width="132" height="38" fill="#17598e" stroke="#6d89a0"/>
+  <text x="482" y="331" font-family="Arial,sans-serif" font-size="15" fill="#f7eed3" text-anchor="middle">Trang bị</text>
+  <rect x="558" y="306" width="132" height="38" fill="#112c38" stroke="#5f7371"/>
+  <text x="624" y="331" font-family="Arial,sans-serif" font-size="15" fill="#f7eed3" text-anchor="middle">Vật phẩm</text>
+  <g font-family="Arial,sans-serif" font-size="13" fill="#efe8cc">
+    <rect x="416" y="366" width="132" height="74" fill="#123643" stroke="#5f7371"/><text x="430" y="394">Áo ngoài</text><text x="430" y="418">Lv1 · mặc</text>
+    <rect x="558" y="366" width="132" height="74" fill="#123643" stroke="#5f7371"/><text x="572" y="394">Vũ khí</text><text x="572" y="418">Lv1 · mặc</text>
+    <rect x="416" y="452" width="132" height="74" fill="#123643" stroke="#5f7371"/><text x="430" y="480">Đầu tóc</text><text x="430" y="504">Lv1 · mặc</text>
+    <rect x="558" y="452" width="132" height="74" fill="#123643" stroke="#5f7371"/><text x="572" y="480">Bình máu nhỏ</text><text x="572" y="504">x0</text>
+    <rect x="416" y="538" width="132" height="74" fill="#123643" stroke="#5f7371"/><text x="430" y="566">Quần</text><text x="430" y="590">Lv1 · mặc</text>
+    <rect x="558" y="538" width="132" height="74" fill="#123643" stroke="#5f7371"/><text x="572" y="566">Giày</text><text x="572" y="590">Lv1 · mặc</text>
+  </g>
+  <rect x="706" y="366" width="6" height="246" fill="#d0a24c"/>
+
+  <rect x="748" y="246" width="382" height="424" rx="3" fill="#0b2535" stroke="#8e733b"/>
+  <text x="772" y="282" font-family="Arial,sans-serif" font-size="21" fill="#efcb79" font-weight="700">Tab Thông tin</text>
+  <text x="772" y="312" font-family="Arial,sans-serif" font-size="17" fill="#efe8cc">Pháp · Nam · cùng canvas/pivot</text>
+  <rect x="804" y="340" width="270" height="116" rx="12" fill="#07141d" stroke="#39535b"/>
+  <text x="939" y="405" font-family="Arial,sans-serif" font-size="18" fill="#b8d7dc" text-anchor="middle">nhân vật runtime hiện tại</text>
+  <text x="772" y="492" font-family="Arial,sans-serif" font-size="16" fill="#f0df9b">TRANG BỊ · 10 SLOT</text>
+  <g font-family="Arial,sans-serif" font-size="13" fill="#efe8cc">
+    <rect x="772" y="510" width="104" height="50" fill="#123643" stroke="#5f7371"/><text x="782" y="540">✓ Vũ khí</text>
+    <rect x="886" y="510" width="104" height="50" fill="#123643" stroke="#5f7371"/><text x="896" y="540">✓ Đầu tóc</text>
+    <rect x="1000" y="510" width="104" height="50" fill="#123643" stroke="#5f7371"/><text x="1010" y="540">✓ Áo trong</text>
+    <rect x="772" y="570" width="104" height="50" fill="#28757a" stroke="#5f7371"/><text x="782" y="600">✓ Áo ngoài</text>
+    <rect x="886" y="570" width="104" height="50" fill="#123643" stroke="#5f7371"/><text x="896" y="600">✓ Quần</text>
+    <rect x="1000" y="570" width="104" height="50" fill="#123643" stroke="#5f7371"/><text x="1010" y="600">✓ Đai</text>
+    <rect x="772" y="630" width="104" height="30" fill="#123643" stroke="#5f7371"/><text x="782" y="651">Hộ uyển</text>
+    <rect x="886" y="630" width="104" height="30" fill="#123643" stroke="#5f7371"/><text x="896" y="651">Giày</text>
+    <rect x="1000" y="630" width="104" height="30" fill="#123643" stroke="#5f7371"/><text x="1010" y="651">Phụ kiện</text>
+  </g>
+
+  <text x="54" y="735" font-family="Arial,sans-serif" font-size="15" fill="#46616b">Quest/minimap/combat bar ẩn khi mở modal; chuyển tab không đổi loadout; rương đồ/kho sẽ dùng cùng base ở batch sau.</text>
+</svg>

@@ -1,8 +1,22 @@
+## Bổ sung mục tiêu owner — 2026-09-13
+
+Giữ nguyên mục tiêu wardrobe/pose còn tồn đọng; thứ tự hiện hành owner chốt: **hoàn thiện Map01A → màn đăng nhập/chọn nhân vật → hành trang và rương đồ/kho → các screen, nút chơi và hội thoại NPC liên quan**. Phân tích/thích nghi bộ demo vừa gửi cho game 2D, không mặc định đó là design chuẩn; tham khảo các game/hệ thống khác. Code xong tự kiểm Player trước, owner review chỉnh sửa sau. Không mở auth/frozen contract trái phép hoặc tạo nút/số liệu giả. Rương đồ là kho gửi/rút, không đánh đồng với rương nhiệm vụ đang có.
+
+Đã lưu đủ 8 PNG gốc, tên rõ từng màn, hash và nhãn REFERENCE_ONLY tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/` (ảnh 05 trùng 02). Phân tích, nguồn tham khảo và ma trận các màn: `docs/design/LGO-2D-UI-OWNER-DEMO-ANALYSIS-v0.1.md`. Mục tiêu chưa hoàn thành; bổ sung này phải được đọc cùng goal cũ khi resume.
+
+Owner gửi thêm 4 ảnh ưu tiên tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/preferred-v2/`, status `OWNER_PRIORITY_UIUX_REFERENCE`, hash đã lưu trong manifest. Chỉ đạo mới nhất: thiết kế trong ảnh vẫn chưa hoàn thiện, cần phân tích/redesign cho hợp game 2D hiện tại, **không follow 100%**. Batch hành trang đã chuyển sang modal hai tab cấp chính: `Hành trang` là grid/túi + chi tiết món, `Thông tin` là nhân vật + 10 slot, cả hai dùng chung panel chi tiết bên trái; không sinh actor/base/item/chỉ số giả và không đổi wardrobe source/camera/scale.
+
 ## Quick Resume
 
 `CONTINUE`. Owner chuyển ưu tiên sang hoàn thiện Map01A sau checkpoint an toàn; dừng mở rộng/redraw character. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`. Giữ nguyên Võ div4/body/motion/camera/scale, registered WIP và art hiện có. Không Meshy/3D/frozen surfaces.
 
 ## Next task
+
+Batch chức năng hiện tại: hành trang 2D theo demo `docs/design/demos/map01a-inventory-2d-layout.svg`; modal tách `Hành trang` và `Thông tin` theo góp ý owner. `Hành trang` mặc định: panel chi tiết bên trái + grid túi bên phải. `Thông tin`: panel chi tiết bên trái + nhân vật/10 slot bên phải. Chọn item ở grid hoặc slot trang bị đều cập nhật cùng panel chi tiết. Giữ catalog/actor/art; không đụng base/camera/scale.
+
+Checkpoint hành trang tabs đã có evidence tại `build/map01a-inventory-tabs-player/quest-capture/{pc,tablet,mobile}/07-q04-inventory-open.png` và đã được xem: modal Hành trang mặc định không bị minimap/action bar chồng, detail/grid đọc được. EditMode `build/map01a-inventory-redesign-tabs/editmode.xml` 10/10 pass, gồm test tách tab Hành trang/Thông tin và chọn slot trang bị cập nhật panel chi tiết. Build tabs `errors=0 warnings=13`; capture Q01–Q09 đủ 18 frame/profile + 38 thoại + 6 NPC revisit. Không dùng click hệ điều hành/chuột thật cho evidence; nếu cần ảnh tab Thông tin thì dùng runner/capture nội bộ.
+
+Next sau checkpoint: dùng cùng base modal để thiết kế/ràng buộc rương đồ/kho gửi-rút thật nếu có model/API; nếu thiếu backend thì ghi gate, không sửa frozen contract. Song song audit login/chọn nhân vật theo ảnh ưu tiên v2 và API dev hiện có, tách rõ `Đăng nhập`/`Bắt đầu`, không mở production auth giả. Không quay lại character redraw/wardrobe class art trong batch UI này trừ khi owner đổi ưu tiên.
 
 Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F` hoặc nút trong hành trang đã kiểm đủ Pháp/Võ/Kiếm/Cơ/Linh trên một actor. Pháp chỉ có nam Lv1 v7; Võ nam Lv1/Lv10; giới/cấp chưa có không được rơi về renderer cũ. Các pack vẫn REVIEW_ONLY, không suy diễn rằng toàn bộ design/pose đã nghiệm thu.
 
