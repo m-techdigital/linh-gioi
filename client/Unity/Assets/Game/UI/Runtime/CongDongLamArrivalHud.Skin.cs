@@ -37,6 +37,30 @@ namespace LinhGioi.UI
             element.style.paddingTop = element.style.paddingBottom = padding;
         }
 
+
+
+        private static void ApplyLgoInputField(VisualElement element)
+        {
+            ApplyLgoFrame(element, new Color(.010f, .035f, .060f, .86f), new Color(.46f, .64f, .74f, .50f));
+            element.style.color = UiSubText;
+        }
+
+        private static void ApplyLgoDetailCard(VisualElement element)
+        {
+            ApplyLgoFrame(element, new Color(.014f, .050f, .086f, .97f), new Color(.86f, .66f, .34f, .76f));
+            element.style.color = UiText;
+        }
+
+        private static VisualElement LgoDivider(string name)
+        {
+            var divider = new VisualElement { name = name };
+            divider.style.height = 1;
+            divider.style.marginTop = 10;
+            divider.style.marginBottom = 10;
+            divider.style.backgroundColor = new Color(.75f, .60f, .32f, .45f);
+            return divider;
+        }
+
         private static Label LgoLabel(string text, int size, Color color, bool bold = false)
         {
             var label = new Label(text);

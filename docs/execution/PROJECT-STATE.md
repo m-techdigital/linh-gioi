@@ -1,4 +1,8 @@
 
+## Map01A login/inventory shared detail polish — 2026-09-13
+
+Entry/login now separates the server name and health/status seal, and the inventory detail card uses the shared UI skin with a right-side item header, slot/type line, divider, and equipped/removed badge. Selecting equipment slots, toggling equip state, changing tabs, or cycling item level refreshes the detail card immediately instead of leaving stale text. Player evidence was refreshed from a newly built macOS Player at `build/map01a-entry-form-runtime/entry-login.png`, `build/map01a-inventory-tab-runtime/character-info.png`, and `build/map01a-inventory-tab-runtime/storage.png`; manifests record `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED` and `usesOsMouseOrKeyboard=false`. This is a visual/UX polish checkpoint, not final owner acceptance of the full login/inventory redesign.
+
 ## Map01A dialogue quest context checkpoint — 2026-09-13
 
 Dialogue panel now shows the active quest line and dialogue page inside the NPC conversation panel, so player review can see which quest is being accepted/advanced without reading the separate tracker. This is a small functional/UI polish only; login and inventory are still not visually close enough to the owner design references and must be redesigned/polished further in the next UI batch. Validation: targeted Unity EditMode `TwoDCharacterRuntimeStateTests.DialoguePanelShowsQuestContextAndProgressInsideConversation` passed as part of `UNITY_EDITMODE_RESULTS_VERIFIED total=270 passed=269 failed=0 ignored=1`; shared UI, Map01A UI catalog, no-3D, no-source-image and frozen diff checks passed.

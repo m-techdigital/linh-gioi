@@ -178,6 +178,8 @@ namespace LinhGioi.Tests.EditMode
                 var body = root.Q("Map01A Inventory Body");
                 Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")), Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Grid Panel"))),
                     "Item detail must stay on the right side of the bag grid.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Does.Contain("CHI TIẾT"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
@@ -188,6 +190,10 @@ namespace LinhGioi.Tests.EditMode
 
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Does.Contain("Giày"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
+                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Toggle"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐÃ THÁO"));
                 InvokeBoundButton(bagTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
@@ -256,6 +262,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Entry Password Field"), Is.Not.Null);
                 Assert.That(root.Q<Label>("Map01A Entry Password Placeholder").text, Does.Contain("Mật khẩu"));
                 Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("review"));
+                Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
+                Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
+                Assert.That(root.Q<Label>("Map01A Entry Server State").text, Does.Contain("Mượt"));
                 var start = root.Q<Button>("Map01A Entry Start Button");
                 Assert.That(start, Is.Not.Null);
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));

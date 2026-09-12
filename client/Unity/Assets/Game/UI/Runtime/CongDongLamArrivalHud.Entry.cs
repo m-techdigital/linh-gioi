@@ -107,18 +107,28 @@ namespace LinhGioi.UI
             panel.Add(authScope);
 
             var serverCard = new VisualElement { name = "Map01A Entry Server Card" };
-            serverCard.style.backgroundColor = new Color(.010f, .035f, .060f, .82f);
+            serverCard.style.flexDirection = FlexDirection.Row;
+            serverCard.style.alignItems = Align.Center;
             serverCard.style.paddingLeft = 14;
             serverCard.style.paddingRight = 14;
             serverCard.style.paddingTop = 10;
             serverCard.style.paddingBottom = 10;
             serverCard.style.marginBottom = 8;
-            ApplyLgoFrame(serverCard, new Color(.010f, .035f, .060f, .82f), new Color(.36f, .60f, .72f, .48f));
-            var server = new Label("Máy chủ  S1 · Đông Lâm        ● Mượt") { name = "Map01A Entry Server" };
-            server.style.fontSize = 17;
-            server.style.color = new Color(.86f, .94f, .90f, .96f);
-            serverCard.Add(server);
+            ApplyLgoDetailCard(serverCard);
+            var serverName = LgoLabel("Máy chủ · S1 · Đông Lâm", 17, new Color(.86f, .94f, .90f, .96f), true);
+            serverName.name = "Map01A Entry Server Name";
+            serverName.style.flexGrow = 1;
+            var serverState = LgoLabel("● Mượt", 16, new Color(.58f, 1f, .36f, .96f), true);
+            serverState.name = "Map01A Entry Server State";
+            serverCard.Add(serverName);
+            serverCard.Add(serverState);
             panel.Add(serverCard);
+
+            var brandSeal = LgoLabel("S1 · Đông Lâm · bản review 2D", 14, UiGold, true);
+            brandSeal.name = "Map01A Entry Brand Seal";
+            brandSeal.style.unityTextAlign = TextAnchor.MiddleCenter;
+            brandSeal.style.marginBottom = 8;
+            panel.Add(brandSeal);
 
             _entryStatus = new Label("Tài khoản dev/local dùng cho review UI. Chưa mở mật khẩu, đăng ký hoặc production auth.") { name = "Map01A Entry Safety Note" };
             _entryStatus.style.fontSize = 14;
@@ -178,7 +188,7 @@ namespace LinhGioi.UI
             field.style.paddingLeft = 16;
             field.style.paddingRight = 16;
             field.style.justifyContent = Justify.Center;
-            ApplyLgoFrame(field, new Color(.010f, .035f, .060f, .86f), new Color(.46f, .64f, .74f, .50f));
+            ApplyLgoInputField(field);
 
             var placeholder = new Label(placeholderText) { name = placeholderName };
             placeholder.style.fontSize = 17;
@@ -189,7 +199,8 @@ namespace LinhGioi.UI
 
         private static void StyleEntryButton(Button button, bool primary)
         {
-            button.style.minWidth = primary ? 190 : 160;
+            button.style.minWidth = primary ? 230 : 170;
+            button.style.minHeight = primary ? 64 : 50;
             ApplyLgoButton(button, primary);
         }
 

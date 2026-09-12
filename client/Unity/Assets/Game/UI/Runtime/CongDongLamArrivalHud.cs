@@ -315,12 +315,9 @@ namespace LinhGioi.UI
                     ? new Color(.12f, .33f, .56f, .98f)
                     : equipped ? new Color(.045f, .12f, .18f, .96f) : new Color(.025f, .040f, .052f, .78f);
             }
-            var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(_scene.VoSelectedEquipmentSlot);
-            _equipmentDetail.text = EquipmentDisplayName(_scene.VoSelectedEquipmentSlot)
-                + "\nLv" + _scene.GetVoEquipmentItemLevel(_scene.VoSelectedEquipmentSlot);
-            _inventoryItemId.text = _scene.GetVoEquipmentItemId(_scene.VoSelectedEquipmentSlot);
-            _inventoryItemState.text = (selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.")
-                + "\nKhớp: " + _scene.EquipmentFitSummary;
+            RefreshInventoryDetailCard();
+            var selectedSlot = _scene.VoSelectedEquipmentSlot;
+            var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
             _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
             var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
             _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "Chưa có cấp khác";

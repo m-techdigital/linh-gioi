@@ -7,7 +7,7 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud
     {
         private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel;
-        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _suppliesTitle, _storageState;
+        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailSlotType, _inventoryDetailStateBadge, _suppliesTitle, _storageState;
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button[] _equipmentTiles;
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
@@ -85,16 +85,33 @@ namespace LinhGioi.UI
             _inventoryDetailPanel.style.flexGrow = 0;
             _inventoryDetailPanel.style.flexBasis = 300;
             _inventoryDetailPanel.style.marginLeft = 10;
+            ApplyLgoDetailCard(_inventoryDetailPanel);
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
             _inventoryFooter.style.flexGrow = 1;
             _inventoryFooter.style.flexShrink = 0;
-            _inventoryFooter.Add(LgoLabel("Đang chọn", 15, new Color(.73f, .85f, .88f, .92f)));
-            _equipmentDetail = LgoLabel("", 22, UiGold, true);
+            _inventoryDetailHeader = LgoLabel("CHI TIẾT MÓN", 15, new Color(.73f, .85f, .88f, .92f), true);
+            _inventoryDetailHeader.name = "Map01A Inventory Detail Header";
+            _inventoryFooter.Add(_inventoryDetailHeader);
+            _equipmentDetail = LgoLabel("", 24, UiGold, true);
             _equipmentDetail.style.marginTop = 6;
             _inventoryFooter.Add(_equipmentDetail);
+            _inventoryDetailSlotType = LgoLabel("", 16, new Color(.88f, .94f, .92f, .94f), true);
+            _inventoryDetailSlotType.name = "Map01A Inventory Detail Slot Type";
+            _inventoryDetailSlotType.style.marginTop = 4;
+            _inventoryFooter.Add(_inventoryDetailSlotType);
+            _inventoryFooter.Add(LgoDivider("Map01A Inventory Detail Divider"));
             _inventoryItemId = LgoLabel("", 14, new Color(.78f, .88f, .90f, .88f));
-            _inventoryItemId.style.marginTop = 8;
+            _inventoryItemId.style.marginTop = 2;
             _inventoryFooter.Add(_inventoryItemId);
+            _inventoryDetailStateBadge = LgoLabel("", 15, new Color(.12f, .08f, .03f, 1f), true);
+            _inventoryDetailStateBadge.name = "Map01A Inventory Detail State Badge";
+            _inventoryDetailStateBadge.style.marginTop = 12;
+            _inventoryDetailStateBadge.style.paddingLeft = 10;
+            _inventoryDetailStateBadge.style.paddingRight = 10;
+            _inventoryDetailStateBadge.style.paddingTop = 5;
+            _inventoryDetailStateBadge.style.paddingBottom = 5;
+            ApplyLgoFrame(_inventoryDetailStateBadge, UiGold, new Color(.98f, .86f, .48f, .92f));
+            _inventoryFooter.Add(_inventoryDetailStateBadge);
             _inventoryItemState = LgoLabel("", 16, new Color(.91f, .93f, .84f, .96f));
             _inventoryItemState.style.marginTop = 12;
             _inventoryFooter.Add(_inventoryItemState);
@@ -103,8 +120,8 @@ namespace LinhGioi.UI
             _inventoryFooter.Add(spacer);
             var actions = InventoryRow("Map01A Inventory Equipment Actions");
             actions.style.marginTop = 10;
-            _equipmentToggle = InventoryButton(() => _scene.ToggleVoEquipmentSlot(), "LGO Equipment Inventory Toggle");
-            _equipmentVariant = InventoryButton(() => _scene.CycleVoSelectedEquipmentItemLevel(), "LGO Equipment Inventory Variant");
+            _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
+            _equipmentVariant = InventoryButton(() => { _scene.CycleVoSelectedEquipmentItemLevel(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
             actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
             _inventoryFooter.Add(actions); _inventoryDetailPanel.Add(_inventoryFooter);
 
@@ -156,7 +173,7 @@ namespace LinhGioi.UI
             for (var i = 0; i < _equipmentSlotIds.Count; i++)
             {
                 var slotId = _equipmentSlotIds[i];
-                var row = InventoryButton(() => _scene.SelectVoEquipmentSlot(slotId), "LGO Equipment Inventory Slot " + slotId);
+                var row = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "LGO Equipment Inventory Slot " + slotId);
                 row.style.flexGrow = 0;
                 row.style.flexBasis = new Length(48, LengthUnit.Percent);
                 row.style.height = 52;
@@ -201,7 +218,7 @@ namespace LinhGioi.UI
             for (var i = 0; i < _equipmentSlotIds.Count; i++)
             {
                 var slotId = _equipmentSlotIds[i];
-                var tile = InventoryButton(() => _scene.SelectVoEquipmentSlot(slotId), "Map01A Equipment Item Tile " + slotId);
+                var tile = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "Map01A Equipment Item Tile " + slotId);
                 tile.style.flexGrow = 0;
                 tile.style.flexBasis = new Length(31.5f, LengthUnit.Percent);
                 tile.style.height = 72;
@@ -247,6 +264,12 @@ namespace LinhGioi.UI
             Update();
         }
 
+        private void SelectInventoryEquipmentSlot(string slotId)
+        {
+            _scene.SelectVoEquipmentSlot(slotId);
+            RefreshInventoryDetailCard();
+        }
+
         private void ShowInventoryMode(bool characterInfo)
         {
             _characterInfoOpen = characterInfo;
@@ -259,6 +282,7 @@ namespace LinhGioi.UI
             ApplyLgoSelectedTab(_bagTab, !characterInfo);
             ApplyLgoSelectedTab(_characterInfoTab, characterInfo);
             _storageTab.style.backgroundColor = new Color(.045f,.13f,.18f);
+            RefreshInventoryDetailCard();
         }
 
         private void ShowStorageMode()
@@ -287,6 +311,22 @@ namespace LinhGioi.UI
             }
             ApplyLgoSelectedTab(_equipmentTab, !supplies);
             ApplyLgoSelectedTab(_suppliesTab, supplies);
+            RefreshInventoryDetailCard();
+        }
+
+        private void RefreshInventoryDetailCard()
+        {
+            if (_scene == null || _inventoryDetailStateBadge == null) return;
+            var selectedSlot = _scene.VoSelectedEquipmentSlot;
+            var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
+            var selectedLevel = _scene.GetVoEquipmentItemLevel(selectedSlot);
+            var selectedName = EquipmentDisplayName(selectedSlot);
+            _equipmentDetail.text = selectedName + " · Lv" + selectedLevel;
+            _inventoryDetailSlotType.text = selectedName;
+            _inventoryItemId.text = _scene.GetVoEquipmentItemId(selectedSlot);
+            _inventoryDetailStateBadge.text = selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO";
+            _inventoryItemState.text = (selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.")
+                + "\nKhớp: " + _scene.EquipmentFitSummary;
         }
     }
 }

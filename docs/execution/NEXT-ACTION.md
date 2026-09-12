@@ -1,4 +1,9 @@
 
+## Next UI task — continue design fidelity pass — 2026-09-13
+
+Continue Map01A UI polish against the owner reference set: login still needs stronger visual richness/branding closer to the provided design boards, and inventory/rương đồ still need item-grid art/icon treatment and better hierarchy while preserving the shared skin/base and right-side detail contract. Do not resume class image generation unless a deterministic source/design method is available; keep Võ div4/base/camera/scale and registered outfit intact.
+
+
 ## Handoff note — UI still needs visual redesign polish — 2026-09-13
 
 Current login/inventory/dialog screens are structurally safer but not yet visually close enough to the owner design references. Do not claim UI completion. Next valid work is focused visual polish/redesign of login and inventory using shared `CongDongLamArrivalHud.Skin.cs`: stronger navy glass/gold frame hierarchy, right-side item detail quality, clearer CTA/header/footer, and Player screenshot review. The latest small code checkpoint only adds quest context inside NPC dialogue and keeps tests/guards green for handoff.
