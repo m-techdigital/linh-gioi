@@ -1,64 +1,80 @@
-## Hiện hành — author item-only Pháp trên pose-slot contract — 2026-09-12
+## Quick Resume
 
-Không dùng hoặc pack external `registered-surface-lv001-hd-v8-pose-contract` và `registered-surface-lv001-hd-v9-pose-contract`; cả hai đã `SOURCE_REJECTED`. Không tiếp tục tự động chia full-composite, không trở lại shared-rig v5, canonical jump scale `2/3`, semantic-v3, camera/offset hoặc actor thứ hai.
+`FIX_REQUIRED / CONTINUE`. Làm tại `/private/tmp/lgo-vo-pose-div4-clean`, từ `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
 
-Action: dùng design turnaround/equipment grid gốc và đúng sáu body pose authority để author Pháp nam Lv1 thành 10 layer item-only riêng cho từng pose. Kế thừa jump proof đã sạch; redraw năm pose còn lại theo cùng canvas `1024x1536`, pivot/ground/scale và occlusion order. Gate nguồn bắt buộc gồm sáu board all-on + off từng 10 slot ở full resolution, layer pairwise-disjoint, không donor anatomy/tattoo/matte/mảnh rời. Sau nam mới làm nữ, rồi mới pack/capture Player một lượt với bốn nhịp chạy và jump; chưa mở Lv10/class khác trước gate này.
+Jump proof `build/sam-authoring/male-jump-slot-proof-v5/` chưa đạt: layer áo chỉ có mảnh đang lộ, quần có anatomy và off-outer còn viền rách. Thu hồi hướng kế thừa jump sạch/pairwise-disjoint. Shared-rig v5, semantic-v3, v8/v9 và jump normalization `2/3` đã bị thu hồi; không pack/mở Player từ các nguồn đó.
 
-## Hiện hành — sửa Pháp trên đúng source-pose/base cũ sau visual reject — 2026-09-12
+Chuẩn dùng chung: [source/pose wardrobe](../art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md#contract-sourcepose-wardrobe-hiện-hành--2026-09-12): item có phần khuất đầy đủ, ownership riêng với occlusion, layer được overlap, cùng canvas/pivot/scale từng pose. Fallback vẫn là trang phục Võ có sẵn theo owner lock, không tự gọi là base trung tính.
+
+## Next task
+
+Tiếp tục source `class-work-in-progress/phap-lv001/complete-garment-authoring-v1/` trong selected-source root: áo ngoài idle/jump đã có ảnh ghép lên base gốc; cặp áo idle có board `inner_top/idle/inner-outer-toggle-review.jpg` và `seams-underlap-review.jpg` chứng minh áo trong nguyên thân sau tháo outer. Hoàn thiện phần áo trong nằm dưới đai, rồi author trọn sáu pose theo guide chung `class-work-in-progress/common-male-v1/pose-registration-guide-v1/`. Bám turnaround/grid; vẽ từng món trên đúng pose rồi lấy garment, không chia ảnh mặc đủ hoặc fit bbox. Giữ status source review tới khi kiểm áo/giáp/đai cùng nhau và tháo kết hợp.
+
+Sau proof, hoàn thiện 10 slot/sáu pose nam rồi nữ, mixed Lv1/Lv10 và Player thật với bốn nhịp chạy/jump/return/UI. Sau gate Pháp mới thay các pack Kiếm/Cơ/Linh theo cùng contract. Gom batch, test/build/capture theo thay đổi, xem ảnh rồi commit/push; chưa có căn cứ đóng goal.
+
+## Current blocker
+
+Không có blocker môi trường đã xác minh. Gate 10 item/sáu pose/mixed/Player còn thiếu; source áo trong mới vẫn kết thúc tại mép đai của fitting reference. Base fallback đang chứa đồ Võ, không được nhận là neutral. Launcher chủ động chặn canonical-v2 có jump scale `2/3`; đây là lỗi nguồn đã xác minh, không phải lỗi môi trường hoặc quyền mở app. Tiếp tục source mới ở trên, chưa mở lại Player lỗi cho owner.
+
+## Lịch sử — không thay action hiện hành
+
+Các action/PASS dưới đây được giữ để truy nguồn. Chỉ các mục Quick Resume, Next task và Current blocker ở trên định hướng batch hiện tại.
+
+## Lịch sử — sửa Pháp trên đúng source-pose/base cũ sau visual reject — 2026-09-12
 
 Checkpoint shared-rig v5 đã bị owner reject và hoàn nguyên bằng `eeeb1898`. Không dùng sheet 5×3 hoặc legacy `--lgo-phap-review` để mở Player; launcher review chỉ được dùng registered source-pose và có regression test chặn nhầm đường. Technical PASS cũ không còn giá trị visual.
 
 Action: audit design/source Pháp canonical-v2 theo từng pose và từng slot ở full resolution; sửa trọn batch nam/nữ Lv1/Lv10 trên common canvas/pivot, bắt đầu từ jump để trả đúng chiều cao base thay vì scale `2/3`. Sau đó tạo board full, off từng slot, mixed và bốn nhịp chạy + jump; chỉ build/capture/mở Player khi silhouette liền, tháo đúng toàn món và tỷ lệ body giữ nguyên. Chưa mở Lv20/Lv30 hoặc class khác trước gate Pháp này.
 
-## Hiện hành — owner kiểm Pháp canonical-v2 sau khi thu hồi semantic-v3 — 2026-09-12
+## Lịch sử — owner kiểm Pháp canonical-v2 sau khi thu hồi semantic-v3 — 2026-09-12
 
 Pháp semantic-v3 đã bị reject vì chia pixel theo anchor tạo layer chắp vá. Launcher hiện chỉ dùng candidate `canonical-v2`: surface tách trước semantic-v3 và `jump_tuck` được bake `2/3` quanh pivot cho body + đủ 10 layer. Evidence `build/phap-canonical-v2-runtime-v1/pc` có 190 frame, root scale 1, đúng bốn nhịp, đủ Lv1/Lv10/mixed/từng món tháo/32 tổ hợp và `errors=[]`; ảnh Player đã được agent xem nhưng chưa thay quyền review của owner.
 
 Action: owner dùng `F` tới Pháp, `G` đổi giới, chọn từng slot rồi tháo/mặc/đổi cấp, `Shift` chạy và `W/↑` nhảy lộn. Nếu còn lệch, sửa source của toàn slot trên cả sáu pose rồi capture lại một lượt. Không dùng lại semantic-v3, không căn bằng camera/offset/runtime scale, không mở promotion/tier/class mới trước visual gate này.
 
-## Hiện hành — Player kiểm Cơ Lv1/Lv10 và khóa một presentation — 2026-09-12
+## Lịch sử — Player kiểm Cơ Lv1/Lv10 và khóa một presentation — 2026-09-12
 
 Player hiện hành: `build/source-pose-cross-class-player-v1/LinhGioiOnline.app`, build 0 error/0 warning từ source mới. Cơ nam/nữ Lv1/Lv10 dùng bốn source-pose pack, một actor, 10 slot, sáu pose và cùng body/canvas/pivot. Evidence `build/co-lv10-source-pose-review-v2/runtime-pc/pc` có 190 frame, 32 tổ hợp tháo/mặc, full `[1,10]`, mixed, 60 switch, `maxBodyVariants=1`, `errors=[]`; ảnh lớn đã review. Linh cũng đã tái capture đủ ma trận tại `build/linh-lv10-source-pose-review-v3/runtime-pc/pc`. Audit chéo 16 pack/160 item Kiếm–Pháp–Cơ–Linh ở `build/source-pose-cross-class-audit-v1.json` là PASS.
 
 Code đã khóa presentation loại trừ nhau: nếu class-preview cũ được kích hoạt thì source-pose nam/nữ bị ẩn trong cùng refresh path; test hồi quy và full Unity EditMode đạt 250 pass/0 fail/1 ignored. Action hiện tại là để owner thao tác Player Cơ: `G` đổi giới, chọn slot trong hành trang rồi `Đổi cấp món`, `Shift` chạy, `W/↑` lộn. Giữ `REVIEW_ONLY`; không claim owner/production approval, không mở lại static-fit hoặc đổi camera/base/scale. Feedback hình phải sửa theo source surface/ownership cả batch.
 
-## Hiện hành — Cơ Lv1 hai giới đã qua source board và Player evidence — 2026-09-12
+## Lịch sử — Cơ Lv1 hai giới đã qua source board và Player evidence — 2026-09-12
 
 Cơ nam/nữ Lv1 đã thay static-fit bằng source-pose 10 slot × sáu pose trên một actor. Evidence `build/co-source-pose-review-v1/runtime-pc/pc`: 186 frame, 20 item load, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn và tháo cannon/áo/giày trên Player. Gate pack/capture/no-3D/no-source/frozen pass. Trạng thái `REVIEW_ONLY / AGENT_VISUAL_PASS`.
 
 Action tiếp theo: author Cơ Lv10 nam/nữ theo progression gốc, giữ body/canvas/pivot byte-identical; review full Lv1/full Lv10 và mixed trên một Player. Không đổi camera/base/scale hoặc tạo hệ thứ hai.
 
-## Hiện hành — Pháp Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
+## Lịch sử — Pháp Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
 
 Bốn pack Pháp source-pose nam/nữ Lv1/Lv10 dùng đúng hai body authority hiện hành và một actor. Evidence `build/phap-lv10-source-pose-review-v1/runtime-pc/pc`: 190 frame, full `[1,10]`, 60 switch, mixed verified, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn phối cấp và tháo pháp khí/áo trên Player. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; app được mở lại với cả hai cấp để owner thao tác.
 
 Action tiếp theo: audit design Cơ và author trọn source-pose Lv1 nam/nữ, 10 slot × sáu pose, trên cùng body/canvas/pivot; review source full/toggle trước Player. Sau Cơ Lv1 mới làm Lv10/mixed. Không dùng static-fit đã thu hồi, không đổi camera/base/scale hoặc tạo hệ thứ hai.
 
-## Hiện hành — Pháp Lv1 hai giới đã qua source board và Player evidence — 2026-09-12
+## Lịch sử — Pháp Lv1 hai giới đã qua source board và Player evidence — 2026-09-12
 
 Pháp nam/nữ Lv1 hiện dùng cùng source-pose contract với Võ/Linh/Kiếm: 10 slot × sáu pose, một actor, body authority bất biến. Evidence `build/phap-source-pose-review-v1/runtime-pc/pc` có 186 frame, 20 item load, `maxBodyVariants=1`, `errors=[]`; đã xem đứng, bốn nhịp chạy, lộn và tháo pháp khí/áo/giày trên Player thật. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; app vẫn mở cho owner.
 
 Action tiếp theo: author Pháp Lv10 nam/nữ từ progression/grid gốc trên đúng source/canvas/pivot và body hash Lv1; review từng món hai chiều, full Lv1/full Lv10 và mixed trên một Player. Không đổi camera/base/scale, không tạo actor hay hệ wardrobe thứ hai. Sau gate Pháp Lv10 mới chuyển Cơ.
 
-## Hiện hành — Kiếm Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
+## Lịch sử — Kiếm Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
 
 Kiếm nam/nữ Lv1/Lv10 hiện dùng bốn pack source-pose cùng body authority và một actor. Evidence `build/kiem-lv10-source-pose-review-v1/runtime-pc/pc`: 190 frame, full `[1,10]`, 60 switch, mixed verified, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn phối cấp, tháo kiếm/áo ngoài của cả hai giới trên Player thật. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; Player vẫn mở để owner thao tác.
 
 Action tiếp theo: audit design Pháp và thay static-fit đã thu hồi bằng một batch source-pose Lv1 đủ nam/nữ, 10 slot × sáu pose. Dùng đúng common body/canvas/pivot hiện hành, review full-compose và toggle board ở kích thước lớn trước một lượt Player; không đổi camera/base/scale, không tạo actor hoặc hệ wardrobe thứ hai. Sau Pháp Lv1 mới làm Lv10/mixed rồi chuyển Cơ.
 
-## Hiện hành — Linh Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
+## Lịch sử — Linh Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
 
 Linh nam/nữ dùng cùng source-pose runtime, body authority cố định và 10 slot cho Lv1/Lv10. Evidence cuối `build/linh-lv10-source-pose-review-v2/runtime-pc-v2/pc` đạt 158 frame, full Lv1/Lv10 cho cả hai giới, 60 switch, mixed verified và `errors=[]`; ảnh đã review ở kích thước lớn. Nữ v1 hai-linh-cầu đã bị loại, chỉ v2 được pack. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`, chưa phải owner/production approval.
 
 Action tiếp theo: audit Kiếm theo turnaround/grid gốc và thay static-fit đã thu hồi bằng một batch source-pose 10 slot × 6 pose trên đúng body authority; review source board và toggle board trước Player. Không mở lại Võ, không đổi camera/base/scale, không chạm frozen surfaces; Map01A giữ nguyên target.
 
-## Hiện hành — Linh Lv1 hai giới đã vào cùng source-pose runtime — 2026-09-12
+## Lịch sử — Linh Lv1 hai giới đã vào cùng source-pose runtime — 2026-09-12
 
 Giữ Võ Lv1/Lv10 HD checkpoint đã chốt; không làm lại Võ và không dùng static-fit. Linh nam dùng `ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`; Linh nữ dùng common body `common-female-v1/.../registered-body-v1` và 10 slot `linh-lv001/female-ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v3`. Cả hai dùng một state/actor path, sáu pose, 10 slot; runtime chỉ render giới tính đang chọn. Player/evidence mới: `build/linh-female-source-pose-review-v2/` (154 frame PC, SourcePose 17/17, Python 10/10 + 15/15). Trạng thái vẫn `REVIEW_ONLY`, chưa hoàn thành goal.
 
 Action tiếp theo: làm Linh Lv10 cho cả nam/nữ theo đúng hai body fit family hiện có, rồi kiểm full Lv1/full Lv10, tháo từng slot và phối chéo Lv1/Lv10 trên Player. Pixel ngoài ownership của món nâng cấp phải kế thừa nguyên byte; không sharpen, warp, offset, đổi camera/base/scale. Chỉ sau visual gate này mới thay lần lượt pack Kiếm/Pháp/Cơ đã bị thu hồi. Map01A tiếp tục là target.
 
-## Hiện hành — Linh source-pose thay static-fit bị reject — 2026-09-12
+## Lịch sử — Linh source-pose thay static-fit bị reject — 2026-09-12
 
 Không dùng Player/pack `TwoDClassMixedLoadoutFitPreview` để tiếp tục căn Kiếm/Pháp/Cơ/Linh. Owner đã reject Linh static-fit vì ghép vỡ; kết luận hoàn tất cũ đã được thu hồi trong `PROJECT-STATE.md`.
 
@@ -72,47 +88,47 @@ Giữ bốn Player/evidence class hiện hành và cùng `TwoDClassMixedLoadoutF
 
 Audit ma trận chung đã PASS tại `build/linh-runtime-v1/cross-class-contract-audit.json`: cùng 10 slot canonical, skeleton, hai giới, cấp 1/10/20/30 và 104 component; không có contract mismatch. Gate tiếp theo là owner xem Player Linh cùng các Player Kiếm/Pháp/Cơ. Chỉ mở Lv40+ nếu review không phát hiện lệch/mờ; tier mới phải dùng cùng slot/component contract, không dựng full-outfit hoặc base riêng cho từng level.
 
-## Hiện hành — Cơ đã đóng batch; chuyển source gate Linh — 2026-09-12
+## Lịch sử — Cơ đã đóng batch; chuyển source gate Linh — 2026-09-12
 
 Giữ Player Cơ `client/Unity/build/co-ten-slot-player-v1/LinhGioiOnline.app` và evidence `build/co-lv1-30-ten-slot-runtime-v1/pc`; pack vẫn `DRAFT_RUNTIME_FIT`. Action kế tiếp là audit design Linh, tạo đủ nam/nữ 4×10 ở source trước rồi mới mở rộng cùng `TwoDClassMixedLoadoutFitPreview`. Không copy controller/camera/actor hoặc dùng crop board nhỏ. Sau Linh mới đánh giá lại ma trận ba class và thứ tự level cao hơn.
 
-## Hiện hành — Pháp Lv1–30 đã đóng batch; tiếp theo source gate Cơ — 2026-09-12
+## Lịch sử — Pháp Lv1–30 đã đóng batch; tiếp theo source gate Cơ — 2026-09-12
 
 Giữ Player Pháp `client/Unity/build/phap-ten-slot-player-v5/LinhGioiOnline.app` và evidence `build/phap-lv1-30-ten-slot-runtime-v5/pc`. Pack Pháp đủ 10 slot nam/nữ ở Lv1/10/20/30, tháo-mặc/phối cấp trên cùng actor và motion Võ đã khóa; vẫn `DRAFT_RUNTIME_FIT`. Không tạo lại controller Kiếm riêng hoặc hiển thị hai hệ song song.
 
 Action tiếp theo: audit design Cơ tại external `classes-lv001-030/co`, xác nhận nguồn nam/nữ và bốn cấp trước khi tạo sheet 4×10. Dùng `pack_lgo_class_equipment_sheet.py` và `TwoDClassMixedLoadoutFitPreview` hiện có; mở rộng danh sách class/resource thay vì copy controller/capture. Nếu source Cơ thiếu progression hay item rõ, ghi source gate và chuyển audit Linh, không đưa crop board nhỏ/mờ vào Player. Sau mỗi class chỉ build/capture khi cả batch đã đủ. Map01A giữ nguyên target; không Meshy/3D, không frozen surfaces.
 
-## Hiện hành — sau Kiếm Lv1–30, chuyển sang source gate Pháp — 2026-09-12
+## Lịch sử — sau Kiếm Lv1–30, chuyển sang source gate Pháp — 2026-09-12
 
 Checkpoint Kiếm hiện hành dùng Player `client/Unity/build/kiem-ten-slot-player-v5/LinhGioiOnline.app` và evidence `build/kiem-lv1-30-ten-slot-runtime-v1/pc`. Giữ module duy nhất `kiem-lv1-30-equipment-runtime-v1`, không khôi phục proof 4 slot hoặc recovered pack cũ. Art đang ở `DRAFT_RUNTIME_FIT`; feedback owner mới trên Player được ưu tiên sửa source/slot-box theo cả lô, không chỉnh camera/base/scale.
 
 Action kế tiếp theo thứ tự owner: audit design/demo Pháp trong `LGO-Selected-2D-Source-v1/classes-lv001-030/phap`, chọn identity nam/nữ và xác nhận nguồn đủ 4 cấp × 10 slot trước khi import. Tái dùng shared rig, canonical slot mapping, hành trang và capture matrix Kiếm; không thêm actor/controller/equip flow thứ hai. Nếu source chứa turnaround hoặc nhiều góc nhìn trong một file, tách/chọn candidate tại source plan trước atlas. Chỉ build/capture sau khi đủ cả batch; sau Pháp mới tới Cơ rồi Linh. Map01A vẫn là target tổng thể; không Meshy/3D và không sửa frozen surfaces.
 
-## Hiện hành — Võ Lv1/Lv10 HD đã qua agent visual audit — 2026-09-11
+## Lịch sử — Võ Lv1/Lv10 HD đã qua agent visual audit — 2026-09-11
 
 Dùng Player `client/Unity/build/vo-lv1-inventory-player-v6/LinhGioiOnline.app` với pack Lv1 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv001-hd-review-v2` và alt Lv10 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv010-hd-review-v2`. Hành trang hiển thị đủ 10 ô; chọn món để xem thông tin/tháo-mặc, bấm `Đổi cấp món` để đổi riêng Lv1/Lv10. Evidence cuối `build/vo-lv1-lv10-hd-inventory-runtime-v1/pc`: 156 frame, full `[1,10]`, mixed, bốn nhịp chạy, lộn, `errors=[]`.
 
 Source Lv10 hiện hành là external `ten-slot-pose-authoring-v2/registered-surface-lv010-hd-v5`. Giữ quy tắc đã bắt được bằng audit: pixel ngoài vùng top-visible của slot phải kế thừa nguyên byte, không sharpen/filter lại underlayer; alpha/pivot/canvas dùng chung giữa các cấp. Không dùng v1-v4 hoặc bất kỳ pack nhiều level cũ bị reject. Sau review tương tác, bước roadmap kế tiếp là lấy design/demo Kiếm cụ thể rồi áp cùng pipeline theo một batch 10 ô × 6 pose; nếu mở thêm tier Võ thì cũng phải qua board từng món hai chiều và phối chéo trước Player. Không chỉnh camera/base/scale và không chạm frozen surfaces.
 
-## Hiện hành — owner đang review Võ Lv1 HD trên Player — 2026-09-11
+## Lịch sử — owner đang review Võ Lv1 HD trên Player — 2026-09-11
 
 Owner đã reject toàn bộ atlas nhiều level trước vì mờ/lệch. Không dùng kết quả count/switch cũ làm visual PASS. Player hiện hành là `build/vo-lv1-hd-player-v1/LinhGioiOnline.app`, chỉ nạp pack Lv1 `legacy-base-run-contact-jump-v3-div4-ten-slot-lv001-hd-review-v2`: body/motion v3 div4 bất biến, overlay 10 slot div2, một actor. Source board và runtime board lần lượt ở external `ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v2/` và `build/vo-lv1-hd-runtime-v1/lv1-hd-runtime-review.jpg`.
 
 Action tiếp theo phụ thuộc đúng feedback hình ảnh đang diễn ra: sửa theo lô mọi lỗi source Lv1 được owner chỉ ra, không chỉnh camera/scale/offset runtime và không build từng item. Chỉ khi Lv1 đứng/chạy/lộn + 10 trạng thái tháo được owner chấp nhận mới áp cùng quy trình sang Lv10 và mặc chéo; chưa khôi phục pack Lv20–Lv100 cũ, chưa mở class khác. Map01A vẫn là target tổng thể.
 
-## Hiện hành — full-level Võ đã chạy; gate còn lại là source-art polish — 2026-09-11
+## Lịch sử — full-level Võ đã chạy; gate còn lại là source-art polish — 2026-09-11
 
 Đã author và pack đủ 10 slot cho 11 mốc Lv1–Lv100 trên body/action v3, rồi nạp tất cả vào một Player. Evidence `build/vo-pose-all-tier-runtime-v3/pc`: 165 frame, full levels `[1,10,20,30,40,50,60,70,80,90,100]`, 11 frame full-set riêng, mixed verified, 149 item switch, 11×22 fingerprint, `errors=[]`. Board `full-level-player-review.jpg` so trực tiếp mọi tier trên cùng idle/camera/body. Không đổi camera/base/scale, không thêm actor/controller theo level. Pose lộn tier cao đã bỏ silhouette transfer gây rối và giữ exact tuck surface.
 
 Action tiếp theo: polish component source Lv40–Lv100 ở kích thước Player, ưu tiên độ đọc của `outer_top`, `shoulder_chest_guard`, `waist_belt` và `head_hair`; so trực tiếp với grid/progression canonical. Giữ vạt/giáp mở rộng trong đúng slot ownership để tháo riêng và phối chéo không kéo theo món khác. Chạy pairwise representative giữa tier thấp/trung/cao và trạng thái tháo từng slot trong một capture cuối. Chỉ sau visual gate này mới promotion khỏi `REVIEW_ONLY` và mở class tiếp theo. Map01A vẫn là target.
 
-## Hiện hành — gate wardrobe Võ bốn tier và đường mở rộng mọi level — 2026-09-11
+## Lịch sử — gate wardrobe Võ bốn tier và đường mở rộng mọi level — 2026-09-11
 
 Đã nạp đồng thời Lv1/10/20/30 vào một actor POSE THỬ, đủ 10 slot mỗi tier. Runtime và capture lấy danh sách complete level động, kiểm full-set từng level và mixed loadout trên cùng body/action v3. Evidence `build/vo-pose-four-tier-runtime-v2/pc`: 154 frame, 40 toggle, 75 switch thực, full levels `[1,10,20,30]`, mixed verified, `errors=[]`, fingerprint `22×4`. Đã xem walk Lv20, run bốn nhịp Lv10, jump mixed và jump-diagonal Lv30; không có actor thứ hai hay thay camera/base/scale. Test Unity `11/11 + 17/17`, Python `18/18`.
 
 Action tiếp theo: hoàn thiện progression Võ còn lại Lv40/50/60/70/80/90/100 theo cùng 10 slot và source-space geometry. Nguồn selected hiện chỉ có material canonical đến Lv30, nên trước khi pack phải lập một progression board đủ bảy tier còn lại bám turnaround/grid Võ, kiểm silhouette/ownership theo lô rồi mới register sáu pose. Khi có pack, chỉ thêm các `--pose-review-alt-dir`; code hiện tại tự phát hiện/verify mọi tier. Chạy một Player capture full-level + mixed đại diện, sửa item lỗi tại source mask/component. Chỉ sau gate Võ đầy đủ mới mở class khác. Map01A vẫn là target.
 
-## Hiện hành — item variant Lv1/Lv10 chạy trực tiếp trên một actor — 2026-09-11
+## Lịch sử — item variant Lv1/Lv10 chạy trực tiếp trên một actor — 2026-09-11
 
 Đã nối hai tier vào `TwoDSourcePoseReview`: cùng slot có variant theo level, chung body hash/fit family/root pose; đổi toàn bộ tier hoặc riêng item bằng flow level/slot sẵn có. Không còn phải đổi cả review directory để xem từng loadout và không tạo renderer body thứ hai. Test đúng scope: SourcePose `11/11`, Map preview `17/17`, Python `17/17`. Player `build/vo-pose-item-variants-player-v3/LinhGioiOnline.app` build `171948586` byte, 0 error/0 warning.
 
@@ -120,7 +136,7 @@ Evidence `build/vo-pose-item-variants-runtime-v3/pc`: 154 frame, 40 toggle, `err
 
 Action tiếp theo: author Lv20/Lv30 theo cùng surface geometry và thêm chúng làm variant, rồi capture ma trận pairwise theo slot/tier. Dùng `TwoDEquipmentCompatibilityCatalog` cho điều kiện level/body/skeleton ở đường production; pose reviewer chỉ trình bày item đã preflight. Item nào tạo đường cắt/hở hoặc đổi silhouette sai phải sửa source mask, không thêm offset runtime. Chưa mở class khác trước gate Võ nhiều level.
 
-## Hiện hành — 10 slot Lv1, Lv10 và phối chéo cùng body/action — 2026-09-11
+## Lịch sử — 10 slot Lv1, Lv10 và phối chéo cùng body/action — 2026-09-11
 
 Đã đóng batch review đủ 10 slot Võ nam Lv1 trên source v3 div4 bất biến. Evidence `build/vo-lv1-ten-slot-surface-runtime-v3/pc` có 154 frame, 40 toggle, `errors=[]`, đủ sáu pose và fingerprint 22 file; đã xem một actor, idle, bốn nhịp chạy, lộn và tháo từng slot. External pack: `legacy-base-run-contact-jump-v3-div4-ten-slot-review-v1`. Không đổi camera/base/scale và không rollback registered WIP. Trạng thái art vẫn `REVIEW_ONLY`, chưa tự gán owner/production approval.
 
@@ -128,7 +144,7 @@ Action tiếp theo: author Lv20/Lv30 theo cùng surface geometry và thêm chún
 
 Action tiếp theo: dùng `TwoDEquipmentCompatibilityCatalog` làm resolver production duy nhất và nối item atlas theo pose vào loadout hiện có để đổi riêng từng slot ngay trong Player. Kiểm full Lv1, full Lv10, cặp phối chéo đại diện và tháo từng slot trong một batch. Sau đó tái dùng đúng body profile/geometry cho Lv20/Lv30; item sai silhouette phải quay lại source mask, không thêm offset/scale/controller theo level. Chưa mở class khác cho đến khi Võ qua ma trận này. Map01A giữ nguyên target.
 
-## Hiện hành — sửa nguồn trang bị theo design gốc — 2026-09-11
+## Lịch sử — sửa nguồn trang bị theo design gốc — 2026-09-11
 
 Đã đóng presentation một actor cho pose review: v3 div4 + `outer_top` chạy chung một stack tại vị trí actor chính; registered WIP vẫn giữ state nhưng không render song song. Scoped EditMode `28/28`; Player `build/vo-single-stack-player-v1/LinhGioiOnline.app` build thành công `171941930` byte, 0 error/13 warning. Capture `build/vo-single-stack-runtime-v1/pc` có 154 frame, `errors=[]`; đã xem idle, bốn pha chạy, lộn và bật/tắt áo. Không đổi camera/base/scale/source motion.
 
@@ -385,7 +401,7 @@ Việc tiếp theo: tạo pack clean transparent cho Võ `lv001` + `lv050`: dùn
 
 Ingest vào Unity còn bị gate `tools/validate_2d_branch_no_source_images.py` chặn ảnh source; cần task asset/ingest riêng giải quyết gate, không tự tắt validator, không import/crop board. Bản chọn vẫn REFERENCE_ONLY; chưa production/runtime art.
 
-## Trạng thái
+## Lịch sử — trạng thái 2026-09-09
 
 Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới qua `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md`: **2D Side-Scrolling Social Action MMORPG**, HD 2D anime / illustrated character, không pixel-art, không Meshy/3D, side-view parallax, social hub + action combat. Kịch bản mới đã được đưa vào `docs/02-GDD.md` để làm nguồn chính trước khi design map: giữ thế giới/class/progression/story/backend, chuyển pipeline sang base sprite/cutout body, layer trang phục 2D, skeleton 2D, anchor point, sprite atlas và runtime test. Cleanup 3D đã commit/push ở `d97a3c8`, cleanup trace dịch vụ 3D ở `6bf905e`, xoá ảnh source cũ ở `646492e`, Đông Môn procedural blockout ở `eeaf19d`, direction/map catalog ở `1fa3231`. Tutorial Jump/Dash/Skill đã checkpoint ở `e330c58`; Shadow Slime combat micro-slice ở `ad9cd52`; map layer budget ở `4bb77f0`; route progress/minimap ở `986b0e5`; 2D-04 Kiếm Lv1 module catalog, Đông Môn landmark/parallax và inventory try-on strip đã checkpoint; batch hiện tại sẵn sàng chuyển sang tileset/terrain collision hoặc panel inventory input thật. Roadmap khóa: 2D-00 Direction Lock → 2D-01 Male/Female Base Character → 2D-02 Modular Runtime → 2D-03 Võ Lv1 → 2D-04 Kiếm Lv1 → 2D-05 Pháp Lv1 → 2D-06 Cơ Lv1 → 2D-07 Linh Lv1 → 2D-08 Animation Foundation → 2D-09 Linh Thành Map → 2D-10 Gate Keeper Tutorial → 2D-11 Shadow Slime Combat → 2D-12 Vertical Slice, trong Zone Network thay vì open-world liên tục.
 
@@ -398,7 +414,7 @@ Branch hiện tại: `feature/2d`. Owner đã khóa hướng mới qua `docs/des
 - Runtime visual capture phải có manifest và ảnh đã xem bằng mắt nếu có thay đổi player-visible.
 - Không sửa frozen surfaces nếu chưa có owner decision riêng.
 
-## Việc tiếp theo
+## Lịch sử — việc tiếp theo 2026-09-10
 
 Chỉ đạo owner mới nhất 2026-09-10: **map đầu trước → hoàn thiện 5 class sau**, ưu tiên chức năng owner tự kiểm chứng trong game. Không mở map thứ hai.
 
@@ -414,7 +430,7 @@ Batch Võ Lv1 đã có anchor/pivot gizmo, runtime fit contract và production a
 4. Gate kiểm chứng 5 class trong Player: chọn class → mặc/tháo từng slot → phối các bộ tương thích → idle/walk/run/jump và đòn/skill preview trong scope đã có. Kiểm đồ đi theo chuyển động, không lệch tay/chân/vũ khí, không hở/cắt thân hoặc sai layer khi đổi hướng; snapshot trang bị phải khớp phần đang thấy. Đây là task tiếp theo, chưa phải chức năng đã hoàn thiện.
 5. Bàn giao một bản game với hướng dẫn thao tác và expected result ngắn cho từng chức năng; test/capture thực, owner nhìn và thao tác được. Không dùng ảnh concept hoặc test xanh thay bằng chứng gameplay.
 
-## Blocker
+## Lịch sử — blocker 2026-09-09
 
 Chưa có blocker. Visual capture hiện bắt được world stage, HUD world-space, minimap/route overlay, scene-beat metadata và character base snapshot bằng camera render; manifest lưu `hudSnapshot`, `productionSceneBeatSnapshot`, `runtimeMapSnapshot`, `runtimeCharacterBaseSnapshot`, `runtimeEquipmentSnapshot`, `runtimeAnimationSnapshot` để kiểm copy/trạng thái. Ảnh source cũ đã bị loại khỏi source tree và có validator riêng để ngăn tái nhập nhầm. Shadow Slime micro-slice, map layer budget, route progress, Kiếm Lv1 module runtime, Đông Môn landmark pass và inventory try-on/input runtime hiện được kiểm bằng catalog check, controller snapshot, smoke runner và visual manifest; chưa có blocker.
 
@@ -633,24 +649,24 @@ Prefit đã sửa hair/outer multi-view, normalize đúng PPU 208 và ghép idle
 Fit proof 4 slot đã chạy trong Player qua bone proxy và 78×3 capture; production vẫn chặn draft. Next: xử lý một lượt 6 slot Kiếm còn thiếu cho Lv1/10/20/30 nam/nữ từ source-v3, redraw theo cùng side-view base khi crop không phù hợp, pack theo atlas 512–1024 có byte budget; sau đó nối skill Kiếm Lv1 riêng và mới chạy lại full test/build/capture ba profile. Không nâng `approved` hoặc mở Pháp/Cơ/Linh trước khi đủ 10 slot, tháo/mặc và visual motion review.
 
 48 crop của 6 slot còn thiếu đã được pack thành hai atlas candidate ngoài runtime tại `generated-batch-v2/remaining-six-slot-batch-v1/`, không resize và eligible 0. Next cụ thể: chọn `Lv1 lower_body + Lv10 waist_belt + Lv20 arm_guard + Lv30 footwear + Lv20 shoulder_chest_guard + Lv30 class_accessory` cho cả nam/nữ; ghép contact 10-slot với proof hiện tại, sửa lệch theo base rồi author bone proxy trái/phải. Chỉ sau contact pass mới import hai atlas fit đã chọn.
-## Hiện hành — khóa Lv1 + hành trang trực tiếp, sau đó author Lv10 HD — 2026-09-11
+## Lịch sử — khóa Lv1 + hành trang trực tiếp, sau đó author Lv10 HD — 2026-09-11
 
 Hoàn tất gate và commit một checkpoint gồm Lv1 HD đã được owner chấp nhận sơ bộ cùng panel Hành trang 10 món có thể chọn/tháo/mặc bằng chuột. Visual gate phải xác nhận lưới hai cột không cắt hàng, item `accessory` không bị nhãn POSE THỬ che và thao tác đổi đúng state/render trên một actor.
 
 Sau checkpoint, author Võ nam Lv10 theo cả sáu pose trong một batch, bám progression/grid canonical và tái dùng nguyên body atlas/hash, canvas 1024×1536, pivot, scale, camera, pose keys và slot order của Lv1. Nạp Lv1 + Lv10 vào cùng Player/Hành trang; kiểm full Lv10, tháo 10 slot, và loadout phối chéo đại diện. Slot nào lệch/hở/mờ phải sửa source component theo lô trước capture; không thêm offset/controller/camera riêng. Chỉ mở class kế tiếp sau khi Võ Lv10 và mặc chéo qua visual gate.
-## Hiện hành — Võ đã khóa; Kiếm dừng tại source gate — 2026-09-11
+## Lịch sử — Võ đã khóa; Kiếm dừng tại source gate — 2026-09-11
 
 Checkpoint Võ Lv1/Lv10 HD và hành trang 10 slot vẫn là bản Player hiện hành ở mục kế tiếp; commit `21a7415a` và `6d1a3018` đã push lên `origin/feature/2d`. Audit design-first Kiếm dùng đúng turnaround nam Lv1 và grid 10 slot. Pack Kiếm cũ đủ material nhưng runtime chỉ là proof 4 slot `DRAFT_RUNTIME_FIT`, không được nối vào hệ hành trang hiện hành.
 
 Batch Kiếm 30 phút đã thử hai hướng source và **reject cả hai trước runtime**: donor toàn thân không khớp ranh giới ownership Võ; mười donor module độc lập sinh nền checker/trùng chi khi ép vào mask cũ. Evidence lỗi giữ ngoài repository tại `class-work-in-progress/kiem-lv001/ten-slot-pose-authoring-v1/registered-surface-lv001-hd-v1..v3`; tuyệt đối không pack/import các bản này. Bước hợp lệ tiếp theo là redraw Kiếm trực tiếp trên clean common-body pose template, tạo alpha riêng cho từng slot/chi và kiểm contact sheet full + tháo từng món trước khi build. Không đổi camera/base/scale và không lấy trang phục Võ làm alpha authority cho class khác.
-## Hiện hành — Kiếm Lv1 nam/nữ đã qua source và Player visual gate — 2026-09-12
+## Lịch sử — Kiếm Lv1 nam/nữ đã qua source và Player visual gate — 2026-09-12
 
 Không mở lại hoặc thay pipeline Võ; Kiếm kế thừa đúng body/motion authority đã chốt: nam dùng Võ v3 div4, nữ dùng common female sáu pose. Hai source ngoài repo là `class-work-in-progress/kiem-lv001/ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v2` và `class-work-in-progress/kiem-lv001/female-ten-slot-pose-authoring-v2/registered-surface-lv001-hd-v1`. Mỗi giới có 10 slot × sáu pose; kiếm ở sorting order 23 phía sau body, các overlay div2 và body atlas giữ byte-identical.
 
 Evidence Player `build/kiem-source-pose-review-v1/runtime-pc-both/pc`: 186 frame, nạp đủ 20 item, thực thi `idle/run_contact_a/run_a/run_contact_b/run_b/jump_tuck`, `errors=[]`. Board đã xem tại `kiem-lv1-male-female-actor-review-board.png`: một actor, đủ bốn nhịp chạy, lộn liền hình, tháo kiếm/áo ngoài không để mảnh nổi. Trạng thái `REVIEW_ONLY / AGENT_VISUAL_PASS`, chưa claim owner hoặc production approval.
 
 Action tiếp theo: author Kiếm Lv10 nam/nữ từ design progression gốc trên chính hai body/canvas hiện hành, rồi nạp Lv1+Lv10 để kiểm full-set, tháo từng slot và mixed-level trên Player. Không đổi camera/base/scale, không dùng static-fit đã thu hồi, không tạo controller/actor thứ hai; sau Kiếm Lv10 mới sang Pháp.
-## Hiện hành — FIX_REQUIRED sau audit đúng actor và semantic slot — 2026-09-12
+## Lịch sử — FIX_REQUIRED sau audit đúng actor và semantic slot — 2026-09-12
 
 Không dùng các kết luận `AGENT_VISUAL_PASS` cũ để nghiệm thu. Capture cũ đo nhầm bounds của registered actor ẩn; đường capture đã được sửa để ghi actor source-pose, pose/frame, bounds, root scale và rotation theo từng ảnh. Oracle đúng hiện nằm ở `build/kiem-source-pose-metric-audit-v2/pc/registered-manifest.json`; root scale giữ 1 nên không chỉnh camera/base/scale để xử lý cảm nhận nhân vật lớn khi nhảy.
 

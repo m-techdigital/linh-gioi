@@ -19,6 +19,25 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def body_identity(manifest: dict) -> tuple[str, str]:
+    # Match the legacy div4 runtime default; new authorities declare their profile.
+    family = manifest.get('fitFamily') or 'vo_male_v3'
+    gender = manifest.get('gender') or 'male'
+    if gender not in ('male', 'female'):
+        raise ValueError('Invalid body gender: ' + str(gender))
+    return family, gender
+
+
+def item_identity(manifest: dict) -> tuple[str, str]:
+    parts = manifest.get('itemId', '').split('_', 2)
+    if len(parts) != 3 or parts[0] not in ('vo', 'kiem', 'phap', 'co', 'linh') or parts[1] not in ('male', 'female'):
+        raise ValueError('Invalid item identity: ' + str(manifest.get('itemId')))
+    for field, value in (('classId', parts[0]), ('gender', parts[1])):
+        if manifest.get(field) and manifest[field] != value:
+            raise ValueError('Item identity metadata mismatch: ' + field)
+    return parts[0], parts[1]
+
+
 def compose_loadout(packs: dict[str, Path], selection: dict[str, str], output: Path) -> dict:
     if set(selection) != set(SLOTS):
         raise ValueError('Selection must contain exactly the ten canonical slots')
@@ -29,6 +48,11 @@ def compose_loadout(packs: dict[str, Path], selection: dict[str, str], output: P
         raise FileExistsError('Output already exists: ' + str(output))
 
     authority = packs[next(iter(packs))]
+    authority_manifest = json.loads((authority / 'atlas-review.json').read_text())
+    family, gender = body_identity(authority_manifest)
+    if authority_manifest.get('atlasSha256') != digest(authority / 'atlas-review.png'):
+        raise ValueError('Body atlas hash mismatch')
+    class_id = authority_manifest.get('classId')
     output.mkdir(parents=True)
     try:
         for name in ('atlas-review.png', 'atlas-review.json'):
@@ -42,23 +66,35 @@ def compose_loadout(packs: dict[str, Path], selection: dict[str, str], output: P
             manifest = json.loads((source / 'atlas-review.json').read_text())
             if manifest.get('reviewSlot') != slot:
                 raise ValueError('Slot manifest mismatch: ' + slot)
-            if manifest.get('fitFamily') != 'vo_male_v3':
+            if manifest.get('fitFamily') != family:
                 raise ValueError('Fit family mismatch: ' + slot)
             if (manifest.get('basePoseAtlasSha256') != body['atlas']
                     or manifest.get('basePoseManifestSha256') != body['manifest']):
                 raise ValueError('Body authority mismatch: ' + slot)
+            item_class, item_gender = item_identity(manifest)
+            if item_gender != gender:
+                raise ValueError('Gender mismatch: ' + slot)
+            class_id = class_id or item_class
+            if item_class != class_id:
+                raise ValueError('Class mismatch: ' + slot)
+            atlas_hash = digest(source / 'atlas-review.png')
+            if manifest.get('atlasSha256') != atlas_hash:
+                raise ValueError('Item atlas hash mismatch: ' + slot)
             item_id = manifest.get('itemId')
             unlock_level = manifest.get('unlockLevel')
-            if not item_id or not isinstance(unlock_level, int) or unlock_level < 1:
+            if type(unlock_level) is not int or unlock_level < 1:
                 raise ValueError('Item identity missing: ' + slot)
             shutil.copytree(source, output / DIRECTORIES[slot])
             items.append({'slotId': slot, 'itemId': item_id, 'sourcePack': alias,
                           'unlockLevel': unlock_level, 'fitFamily': manifest['fitFamily'],
-                          'atlasSha256': manifest['atlasSha256']})
+                          'atlasSha256': atlas_hash})
         loadout = {'status': 'REVIEW_ONLY', 'runtimeEligible': False,
                    'resolver': 'slotId -> itemId', 'atomicPreflight': True,
-                   'bodyProfile': 'vo_male_v3', 'skeletonVersion': 'vo_source_pose_v3',
+                   'bodyProfile': authority_manifest.get('bodyProfile') or family,
+                   'fitFamily': family, 'gender': gender, 'classId': class_id,
                    'bodyHashes': body, 'items': items}
+        if authority_manifest.get('skeletonVersion'):
+            loadout['skeletonVersion'] = authority_manifest['skeletonVersion']
         (output / 'review-loadout.json').write_text(json.dumps(loadout, indent=2) + '\n')
         return loadout
     except Exception:

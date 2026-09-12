@@ -1,13 +1,17 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
 STATUS_FILE="$ROOT/build/codex-autopilot/status.json"
 ROUND="${1:-manual}"
 PUSH="${LGO_AUTOPILOT_PUSH:-0}"
 
 cd "$ROOT"
-test "$(basename "$PWD")" = "LinhGioiOnline"
+git_root="$(git rev-parse --show-toplevel)"
+if [[ "$(cd "$git_root" && pwd -P)" != "$ROOT" ]]; then
+  echo "LGO_GIT_CHECKPOINT_BLOCKED script is not at its git worktree root" >&2
+  exit 3
+fi
 
 if [[ ! -f "$STATUS_FILE" ]]; then
   echo "LGO_GIT_CHECKPOINT_SKIP missing status.json"
@@ -31,12 +35,11 @@ case "$status" in
     ;;
 esac
 
-if [[ -z "$(git --no-pager status --short --untracked-files=all)" ]]; then
-  echo "LGO_GIT_CHECKPOINT_SKIP clean_worktree"
-  exit 0
-fi
-
-frozen_changed="$(git --no-pager diff --name-only -- protocol gamedata/schemas docs/adr client/Unity/Assets/Game/UI/design-tokens.json)"
+FROZEN=(protocol gamedata/schemas docs/adr client/Unity/Assets/Game/UI/design-tokens.json)
+# Check both index and worktree before staging anything. Never unstage owner work.
+frozen_changed="$(git --no-pager diff --name-only HEAD -- "${FROZEN[@]}";
+  git --no-pager diff --cached --name-only -- "${FROZEN[@]}";
+  git ls-files --others --exclude-standard -- "${FROZEN[@]}")"
 if [[ -n "$frozen_changed" ]]; then
   echo "LGO_GIT_CHECKPOINT_BLOCKED frozen surfaces changed:" >&2
   echo "$frozen_changed" >&2
@@ -44,47 +47,35 @@ if [[ -n "$frozen_changed" ]]; then
 fi
 
 git --no-pager diff --check
+git --no-pager diff --cached --check
 
-stage_checkpoint_paths() {
-  local staged_count=0
-  while IFS= read -r path; do
-    [[ -z "$path" ]] && continue
-    case "$path" in
-      protocol/*|gamedata/schemas/*|docs/adr/*|client/Unity/Assets/Game/UI/design-tokens.json)
-        echo "LGO_GIT_CHECKPOINT_BLOCKED frozen path in checkpoint candidate: $path" >&2
-        return 3
-        ;;
-      build/*|client/Unity/Library/*|client/Unity/Temp/*|client/Unity/Logs/*|client/Unity/UserSettings/*|client/Unity/obj/*|client/Unity/Build/*|client/Unity/Builds/*)
-        echo "LGO_GIT_CHECKPOINT_SKIP generated_or_local $path"
-        continue
-        ;;
-      *.zip|*.tar.gz|*.sha256|*.pyc|*__pycache__*|*.log|*.tmp|*.csproj|*.sln|*.user)
-        echo "LGO_GIT_CHECKPOINT_SKIP generated_or_local $path"
-        continue
-        ;;
-      AGENTS.md|README.md|START-HERE.md|VERSIONING.md|.gitignore|.vscode/*|client/*|server/*|tools/*|docs/*)
-        git add -- "$path"
-        staged_count=$((staged_count + 1))
-        ;;
-      *)
-        echo "LGO_GIT_CHECKPOINT_SKIP outside_allowlist $path"
-        ;;
-    esac
-  done < <(git ls-files -m -o -d --exclude-standard)
+checkpoint_path_allowed() {
+  case "$1" in
+    protocol/*|gamedata/schemas/*|docs/adr/*|client/Unity/Assets/Game/UI/design-tokens.json) return 3 ;;
+    build/*|client/Unity/Library/*|client/Unity/Temp/*|client/Unity/Logs/*|client/Unity/UserSettings/*|client/Unity/obj/*|client/Unity/Build/*|client/Unity/Builds/*) return 1 ;;
+    *.zip|*.tar.gz|*.sha256|*.pyc|*__pycache__*|*.log|*.tmp|*.csproj|*.sln|*.user) return 1 ;;
+    AGENTS.md|README.md|START-HERE.md|VERSIONING.md|.gitignore|.vscode/*|client/*|server/*|tools/*|docs/*) return 0 ;;
+    *) return 1 ;;
+  esac
+}
 
-  if [[ "$staged_count" -eq 0 ]]; then
-    echo "LGO_GIT_CHECKPOINT_SKIP no_allowlisted_changes"
-    exit 0
-  fi
-
-  local staged_frozen
-  staged_frozen="$(git --no-pager diff --cached --name-only -- protocol gamedata/schemas docs/adr client/Unity/Assets/Game/UI/design-tokens.json)"
-  if [[ -n "$staged_frozen" ]]; then
-    echo "LGO_GIT_CHECKPOINT_BLOCKED staged frozen surfaces:" >&2
-    echo "$staged_frozen" >&2
-    git restore --staged -- protocol gamedata/schemas docs/adr client/Unity/Assets/Game/UI/design-tokens.json
+# Pre-staged files must meet the same rules as unstaged candidates.
+while IFS= read -r -d '' path; do
+  if ! checkpoint_path_allowed "$path"; then
+    echo "LGO_GIT_CHECKPOINT_BLOCKED disallowed staged path: $path" >&2
     exit 3
   fi
+done < <(git diff --cached --name-only -z)
+
+stage_checkpoint_paths() {
+  local path
+  while IFS= read -r -d '' path; do
+    if checkpoint_path_allowed "$path"; then
+      git add -- "$path"
+    else
+      echo "LGO_GIT_CHECKPOINT_SKIP generated_or_outside_allowlist $path"
+    fi
+  done < <(git ls-files -m -o -d -z --exclude-standard)
 }
 
 subject="$(python3.12 - "$STATUS_FILE" "$ROUND" <<'PY'
@@ -122,15 +113,43 @@ PY
 )"
 
 stage_checkpoint_paths
-git commit -m "$subject" -m "$body"
-echo "LGO_GIT_CHECKPOINT_COMMITTED $subject"
+if git diff --cached --quiet; then
+  echo "LGO_GIT_CHECKPOINT_SKIP no_allowlisted_changes"
+else
+  git --no-pager diff --cached --check
+  git commit -m "$subject" -m "$body"
+  echo "LGO_GIT_CHECKPOINT_COMMITTED $subject"
+fi
 
 if [[ "$PUSH" == "1" ]]; then
-  if [[ -z "$(git remote)" ]]; then
-    echo "LGO_GIT_CHECKPOINT_PUSH_SKIPPED no_remote"
+  branch="$(git symbolic-ref --quiet --short HEAD)" || {
+    echo "LGO_GIT_CHECKPOINT_BLOCKED push requires a branch with configured upstream" >&2
+    exit 3
+  }
+  remote="$(git config --get "branch.$branch.remote")" || remote=""
+  merge_ref="$(git config --get "branch.$branch.merge")" || merge_ref=""
+  if [[ -z "$remote" || "$remote" == "." || "$merge_ref" != refs/heads/* ]] || ! git check-ref-format "$merge_ref"; then
+    echo "LGO_GIT_CHECKPOINT_BLOCKED push requires an explicit remote branch upstream" >&2
+    exit 3
+  fi
+  # Read the actual destination, including when this local branch has a different name.
+  git fetch --no-tags "$remote" "$merge_ref"
+  remote_tip="$(git rev-parse FETCH_HEAD)"
+  if ! git merge-base --is-ancestor "$remote_tip" HEAD; then
+    echo "LGO_GIT_CHECKPOINT_BLOCKED upstream diverged; integrate before checkpoint push" >&2
+    exit 3
+  fi
+  frozen_commits="$(git log --format= --name-only "$remote_tip..HEAD" -- "${FROZEN[@]}")"
+  if [[ -n "$frozen_commits" ]]; then
+    echo "LGO_GIT_CHECKPOINT_BLOCKED outgoing commits touch frozen surfaces:" >&2
+    echo "$frozen_commits" >&2
+    exit 3
+  fi
+  if [[ "$remote_tip" == "$(git rev-parse HEAD)" ]]; then
+    echo "LGO_GIT_CHECKPOINT_PUSH_SKIPPED already_up_to_date"
   else
-    git push
-    echo "LGO_GIT_CHECKPOINT_PUSHED"
+    git push "$remote" "HEAD:$merge_ref"
+    echo "LGO_GIT_CHECKPOINT_PUSHED $remote $merge_ref"
   fi
 else
   echo "LGO_GIT_CHECKPOINT_PUSH_SKIPPED set LGO_AUTOPILOT_PUSH=1"

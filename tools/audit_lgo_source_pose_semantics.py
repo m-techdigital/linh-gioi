@@ -1,11 +1,17 @@
 #!/usr/bin/env python3.12
-"""Audit semantic ownership and shared-body invariants of source-pose review packs."""
+"""Check pack integrity, body identity and excessive accessory coverage.
+
+These structural checks do not establish garment completeness, correct pixel
+ownership, design fidelity or visual quality in the Player.
+"""
 import argparse
 import json
 from pathlib import Path
 
 import numpy as np
 from PIL import Image
+
+from compose_lgo_pose_review_loadout import body_identity, digest, item_identity
 
 POSES = ('idle', 'run_contact_a', 'run_a', 'run_contact_b', 'run_b', 'jump_tuck')
 SLOT_DIRS = ('main-weapon-review', 'head-hair-review', 'inner-top-review', 'outer-top-review',
@@ -46,20 +52,35 @@ def audit_pack(label: str, pack: Path) -> dict:
     pack = pack.resolve()
     body = json.loads((pack / 'atlas-review.json').read_text())
     errors, rows = [], []
-    body_hash = None
+    body_hash = (digest(pack / 'atlas-review.png'), digest(pack / 'atlas-review.json'))
+    family, gender = body_identity(body)
+    if body.get('atlasSha256') != body_hash[0]:
+        errors.append('BODY_ATLAS_HASH_MISMATCH')
     class_ids, genders, levels = set(), set(), set()
     for directory in SLOT_DIRS:
         manifest = json.loads((pack / directory / 'atlas-review.json').read_text())
-        body_hash = body_hash or (manifest.get('basePoseAtlasSha256'), manifest.get('basePoseManifestSha256'))
         if body_hash != (manifest.get('basePoseAtlasSha256'), manifest.get('basePoseManifestSha256')):
             errors.append('SLOT_BODY_AUTHORITY_MISMATCH:' + directory)
-        item = manifest.get('itemId', '').split('_')
-        if len(item) >= 3:
-            class_ids.add(item[0]); genders.add(item[1])
-        levels.add(manifest.get('unlockLevel'))
+        if manifest.get('atlasSha256') != digest(pack / directory / 'atlas-review.png'):
+            errors.append('SLOT_ATLAS_HASH_MISMATCH:' + directory)
+        if manifest.get('fitFamily') != family:
+            errors.append('SLOT_FIT_FAMILY_MISMATCH:' + directory)
+        try:
+            item_class, item_gender = item_identity(manifest)
+            class_ids.add(item_class); genders.add(item_gender)
+            if body.get('classId') and item_class != body['classId']:
+                errors.append('SLOT_CLASS_MISMATCH:' + directory)
+            if item_gender != gender:
+                errors.append('SLOT_GENDER_MISMATCH:' + directory)
+        except ValueError:
+            errors.append('ITEM_ID_INVALID:' + directory)
+        level = manifest.get('unlockLevel')
+        if type(level) is not int or level < 1:
+            errors.append('ITEM_LEVEL_INVALID:' + directory)
+        else:
+            levels.add(level)
     if len(class_ids) != 1: errors.append('CLASS_ID_INCONSISTENT')
     if len(genders) != 1: errors.append('GENDER_INCONSISTENT')
-    if len(levels) != 1: errors.append('ITEM_LEVEL_INCONSISTENT')
     for pose in POSES:
         base, slots = load_pose_masks(pack, pose)
         full = base.copy()
@@ -71,9 +92,11 @@ def audit_pack(label: str, pack: Path) -> dict:
         if share > ACCESSORY_MAX_FULL_ALPHA_SHARE:
             errors.append(f'CLASS_ACCESSORY_OWNS_OUTFIT:{pose}:{share:.4f}')
     return {'label': label, 'pack': str(pack), 'classId': next(iter(class_ids), ''),
-            'gender': next(iter(genders), ''), 'level': next(iter(levels), 0),
+            'gender': gender, 'fitFamily': family,
+            'level': next(iter(levels)) if len(levels) == 1 else None, 'levels': sorted(levels),
             'samplingDivisor': body.get('samplingDivisor'), 'bodyAuthority': body_hash,
-            'poses': rows, 'errors': errors, 'status': 'PASS' if not errors else 'FIX_REQUIRED'}
+            'poses': rows, 'errors': errors, 'status': 'PASS' if not errors else 'FIX_REQUIRED',
+            'visualStatus': 'NOT_ASSESSED', 'garmentCompleteness': 'NOT_ASSESSED'}
 
 
 def main() -> None:

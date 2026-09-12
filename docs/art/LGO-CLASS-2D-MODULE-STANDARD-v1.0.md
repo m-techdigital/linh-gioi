@@ -1,14 +1,12 @@
 # Chuẩn module class 2D v1.0
 
-Cập nhật kiểm soát không gian 2026-09-11; scope triển khai hiện tại là Võ Lv1 trước, rồi Lv10. Nội dung Lv20–100 là chuẩn mở rộng, chưa phải nội dung đã hoàn thiện.
+Cập nhật 2026-09-12. Chuẩn source/pose dùng chung cho Võ, Kiếm, Pháp, Cơ, Linh và hai giới. Batch hiện tại sửa Pháp Lv1 trên body/motion Võ đã khóa; sau gate nguồn và Player mới sang Lv10/phối cấp và audit lại class khác. Lv20–100 là phạm vi mở rộng, chưa phải nội dung đã hoàn thiện. Không đổi equipment contract runtime hoặc frozen surfaces.
 
-Ngày 2026-09-09. Scope đang áp dụng: **Võ (`vo`)**, male và female. Owner thu hẹp batch hiện tại về Võ; chưa tạo spec triển khai hoặc art cho Kiếm/Pháp/Cơ/Linh. Chuẩn tài liệu này không đổi equipment contract runtime.
-
-Nguồn ưu tiên: yêu cầu owner → `docs/02-GDD.md` và `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md` → north-star lock → visual reference usage guide → ảnh. Hai base nam/nữ dùng chung giữa các class; tháo đồ vẫn có tóc cơ bản, đồ xám, shorts và socks. Không đổi tỷ lệ body theo level hoặc dùng board để thay skeleton.
+Nguồn ưu tiên: yêu cầu owner → `docs/02-GDD.md` và `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md` → north-star lock → visual reference usage guide → ảnh. Hai body/pose authority nam/nữ dùng chung giữa các class. Fallback hiện tại giữ nguyên base Võ theo owner lock, gồm tóc và trang phục vốn có trong ảnh base; **không phải underlayer trung tính shorts/socks**. Tháo item lộ đúng fallback đó, không được báo rằng mọi áo/quần/giày đã biến mất. Không đổi base, tỷ lệ body, pose hoặc camera để xử lý trang phục.
 
 ## Định danh ổn định
 
-Class registry dùng cho tên reference: `vo`, `kiem`, `phap`, `co`, `linh`. Đây không phải ID protocol/GameData. Chỉ `vo` được kiểm độ đầy đủ trong batch này; không yêu cầu asset của bốn class còn lại.
+Class registry dùng cho tên reference: `vo`, `kiem`, `phap`, `co`, `linh`. Đây không phải ID protocol/GameData. Validator reference cũ chỉ kiểm độ đầy đủ của `vo`; kết quả đó không chứng nhận source hoặc runtime của class khác.
 
 Gender: `male`, `female`.
 
@@ -36,7 +34,7 @@ Equipment phải **không dính da thịt**: không body, tay, chân, mặt, tor
 - Không gộp `lower_body` với `waist_belt`.
 - Không gộp `outer_top` với `shoulder_chest_guard`.
 
-Mỗi pixel chi tiết thuộc đúng một slot: vạt may vào áo thuộc áo, tua treo từ đai thuộc đai, charm tháo riêng thuộc accessory. Tóc front/back, đôi giày, trái/phải của quyền khí là các phần của một slot, không tạo slot thứ 11. Base và VFX không phải equipment slot.
+Mỗi **chi tiết vật lý** thuộc đúng một slot: vạt may vào áo thuộc áo, tua treo từ đai thuộc đai, charm tháo riêng thuộc accessory. Đây là ownership, không phải yêu cầu alpha các layer không giao nhau. Áo trong và áo ngoài được có pixel tại cùng tọa độ vì chúng che nhau. Tóc front/back, đôi giày, trái/phải của quyền khí là các phần của một slot, không tạo slot thứ 11. Base và VFX không phải equipment slot.
 
 ## Folder và naming
 
@@ -50,9 +48,9 @@ Folder vật lý đi theo class/gender/equipment/slot; level nằm trong filenam
 
 ## Base, anchor và motion contract
 
-Base nhân vật không đổi theo level. Mọi item Võ phải khớp cùng một skeleton nam và một skeleton nữ qua `lv001` đến `lv100`; level chỉ thay trang bị, không thay chiều cao, tỉ lệ, khớp, thế đứng hoặc camera side-view. Cross-level mixing là gate bắt buộc: item cấp thấp/cao có thể dùng chéo trên cùng base mà không scale body hoặc dịch anchor.
+Base nhân vật không đổi theo level. Mọi item phải khớp cùng body/pose authority của từng giới qua `lv001` đến `lv100`; level chỉ thay trang bị, không thay chiều cao, tỉ lệ, khớp, thế đứng hoặc camera side-view. Cross-level mixing là gate bắt buộc: item cấp thấp/cao có thể dùng chéo trên cùng base mà không scale body hoặc dịch anchor.
 
-Anchor tối thiểu phải ổn định cho tóc, áo trong, áo ngoài, hạ y, đai, giáp vai/ngực, cẳng tay, quyền khí, giày và phụ kiện. Motion test tối thiểu gồm `idle`, `walk`, `run`, `jump_start`, `jump_air`, `fall`, `land`, `basic_attack`, `skill_windup`, `skill_cast`, `skill_recover`. VFX skill là layer riêng, không bake vào equipment.
+Anchor tối thiểu phải ổn định cho tóc, áo trong, áo ngoài, hạ y, đai, giáp vai/ngực, cẳng tay, quyền khí, giày và phụ kiện. Phạm vi animation mở rộng gồm `idle`, `walk`, `run`, `jump_start`, `jump_air`, `fall`, `land`, `basic_attack`, `skill_windup`, `skill_cast`, `skill_recover`; gate source-pose hiện tại là sáu pose đã khóa trong contract cuối tài liệu, không claim đã có toàn bộ phạm vi mở rộng. VFX skill là layer riêng, không bake vào equipment.
 
 Chi tiết đang áp dụng cho Võ ở `docs/art/classes/vo/LGO-VO-2D-BASE-RIG-ANIMATION-SPEC-v1.0.md`. Màn rương/paper doll để thử đồ nằm ở `docs/design/LGO-2D-VO-CHEST-PAPERDOLL-DESIGN-v0.1.md`.
 
@@ -74,7 +72,7 @@ Prefix: `assets/reference/classes/vo/boards/`.
 1. Spec: chạy `python3.12 tools/validate_class_2d_module_spec.py`; kiểm tài liệu/ID/quy tắc, không đánh giá ảnh.
 2. Pack reference Võ đầy đủ: chạy cùng lệnh với `--require-assets --asset-root /path/to/assets/reference/classes`. Phải đủ 220 item PNG và 6 board; thiếu ảnh trả mã khác 0, không tạo placeholder.
 3. Visual separation: người review mở từng ảnh theo checklist, ghi nguồn và lỗi. Checker tên file không phát hiện da, slot gộp hoặc alpha giả.
-4. Runtime: chỉ sau clean sprite, rig, import và screenshot review; chưa chạy trong batch spec.
+4. Runtime: chỉ sau clean sprite, registration, import và screenshot review; validator spec không kiểm Player.
 
 Tài liệu chi tiết: equipment slots, progression rules, image prompt templates, asset separation checklist và `classes/vo/LGO-VO-2D-MODULE-SPEC-v1.0.md` cùng thư mục này.
 
@@ -111,10 +109,10 @@ Mỗi base có danh tính/profile và reference/hash ổn định. Thay tỷ l�
 
 ### Quy tắc runtime và source mới
 
-- Root giữ scale chuẩn và rotation chuẩn; route/physics quyết định vị trí. Jump có độ cao hợp lệ; grounded action giữ mốc chân. Animation tác động bone, không squash/stretch cả root. Facing thuộc visual child; camera zoom không thay scale base.
+- Root giữ scale chuẩn và rotation chuẩn; route/physics quyết định vị trí. Jump có độ cao hợp lệ; grounded action giữ mốc chân. Animation lấy từ pose authority đã khóa, không squash/stretch cả root. Facing thuộc visual child; camera zoom không thay scale base.
 - Một nhân vật dùng cùng base/skeleton cho idle và action. Bộ ảnh full-frame có registration khác không được tự thay vào lúc bắt đầu/dừng action. Bounding box nhỏ hơn khi cúi/nhảy là hợp lệ; không ép chiều cao mọi pose bằng nhau.
 - Base, garment, rigid weapon, VFX là vai trò riêng. Gear không chứa da/bàn tay/chân; ảnh full chỉ là reference của outfit. Sheet chia ô/alpha đẹp không chứng minh item phù hợp.
-- Kế thừa `TwoDSkeletalPaperDollRig`, SpriteSkin/Sprite Library và authoring đã có; mọi class/level dùng cùng cơ chế. Không sao chép controller/UI hoặc nhân các công thức theo item. Chỉ mở profile/class mới sau gate class hiện tại.
+- Kế thừa đường registered source-pose hiện hành và một resolver/actor/UI dùng chung. Không chuyển sang `TwoDSkeletalPaperDollRig` hoặc SpriteSkin chỉ vì sheet đã tách ô; một hướng rig cần source registration và bằng chứng riêng, hiện không phải action. Không nhân controller hoặc công thức theo class/item.
 - Asset mới phải có source/hash, profile, rect nguồn, bone/anchor, sort/occlusion, semantics slot và budget. Kiểm trọn bộ + từng món tháo + phối cấp đã được đăng ký trước runtime promotion. Candidate không fit được giữ riêng, không xóa WIP.
 
 ### Gate và phạm vi bằng chứng
@@ -154,16 +152,18 @@ PYTHONPYCACHEPREFIX=build/pycache build/rig-authoring-venv/bin/python tools/revi
 ```
 
 Reference là source canonical theo rect sở hữu; candidate dùng vertices/UV/indices Unity thực và atlas, trên cùng canvas256×384, không normalize bbox. Gate giữ ngưỡng cũ; sorting/layer selection kế thừa runtime nên cần Player visual review độc lập. Không gọi software raster này là screenshot Player. Final `build/vo-registered-bind-fit-final` đạt nam IoU1,00000/area1,00000/MAE0,016 và nữ0,99898/0,99898/0,129; đã xem ảnh đối chứng. Kết quả này chỉ kiểm bind ở trạng thái đứng và đã stale sau khi sửa runtime. Owner đã bác motion retarget v5/v7; không đủ đóng fit Lv1 hoặc tiếp Lv10/mặc chéo. Chuẩn motion là whole-pose v3 div4 từ sandbox cũ; registered wardrobe vẫn là candidate cần khớp theo chuẩn đó.
-# Runtime wardrobe invariant cho nhiều class và nhiều tier — 2026-09-12
+## Contract source/pose wardrobe hiện hành — 2026-09-12
 
-- Mỗi giới dùng đúng một body/action authority. Mọi item của mọi class/tier phải dùng chung canvas, pivot, pose IDs và fit family tương ứng; runtime không tạo actor, camera, scale hoặc animation clock riêng theo class/level.
-- Resolver duy nhất chọn `slotId -> itemId -> components`. Một item có thể gồm nhiều attachment như tay áo trước/sau, nhưng việc đổi class/tier/loadout phải resolve trọn bộ rồi swap trên cùng actor. Candidate lỗi không được hiển thị song song với candidate cũ.
-- Source full-outfit chỉ được dùng làm donor. Trước khi đóng atlas phải phân vùng theo canonical slot anchor của từng pose, giữ full-compose invariant, và review hai chiều: full set cùng từng trạng thái tháo. Một slot không được sở hữu anatomy hoặc phần lớn trang phục của slot khác.
-- Gate bắt buộc gồm đủ sáu pose, 10 slot, full Lv1/full tier đích, phối chéo level, 16 tổ hợp bốn garment core, actor bounds đúng presentation, root scale 1 và chuỗi chạy riêng `contact A → run A → contact B → run B`. Count/test xanh không thay cho review ảnh Player.
-- Khi số tier tăng, catalog/manifest chứa class, gender, level, fit family, body hashes và component order; atlas được load/release theo loadout. Không hardcode thêm controller hay renderer tree cho từng class.
+Phần này là hướng authoring hiện hành, thay thế các thử nghiệm chia full-composite. Pháp shared-rig v5, semantic-v3, v8/v9 và jump slot proof v5 đều chưa đạt. **Normalization jump `2/3` đã bị thu hồi**: giữ đúng tỷ lệ body Võ, sửa trang phục của pose sai tại source. Không dùng kết quả lịch sử làm quyền promotion.
 
-### Gate mới sau lỗi Pháp semantic-v3
+- **Registration:** mỗi giới có một body/action authority, canvas `1024x1536`, origin X `512`, ground Y `1484`, hệ số `1.70/1536` world unit/pixel, jump pivot `(512,820)` và sáu pose `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`. Từng item/tier dùng đúng template pose đó, không center/fit riêng theo bbox. Atlas trim/downsample phải giữ tọa độ nguồn; pose cúi/nhảy không bị ép về chiều cao đứng.
+- **Item hoàn chỉnh:** author từng áo/quần/giày theo thiết kế gốc và pose, gồm phần vải đang bị item khác che nhưng sẽ lộ khi tháo/mặc chéo. Áo trong phải có thân áo, áo ngoài có đủ thân/tay/vạt và phần dưới đai/giáp. Không chỉ lưu các mảnh top-visible của bộ mặc đủ. Full-outfit là đối chứng mỹ thuật; SAM/mask có thể hỗ trợ biên nhưng không tự xác định ownership hoặc tạo phần khuất chưa được vẽ. Không dùng nearest-anchor/distance partition để biến ảnh full thành item.
+- **Ownership và occlusion riêng:** mỗi chi tiết thuộc một slot; source layer được overlap. Một item có thể gồm component trước/sau, cùng `itemId`, với order cố định xuyên sáu pose; từng pose thay sprite/alpha, không tự đảo sorting. Body order `24`, component sau `<24`, trước `>24`. Alpha áo phải chừa đúng vùng tay/mặt/chân đi phía trước; không chứa pixel anatomy sao chép vào item. Không cắt mất vĩnh viễn phần áo nằm dưới giáp/đai của một tier cụ thể.
+- **Fallback được công bố:** `base-only` hiện vẫn là Võ có trang phục gốc. So off-item với chính fallback này; phân biệt đồ nền còn sẵn với mảnh Pháp còn sót. Giữ body/base hiện tại theo owner lock, không tự vẽ base trung tính mới hoặc claim đã có base shorts/socks.
+- **Một runtime:** resolver `slotId -> itemId -> components` resolve trọn loadout rồi swap trên cùng actor và animation clock. Class/tier/giới tính không tạo camera, scale hay presentation song song. Catalog giữ fit family, body hashes, pose IDs và component order; atlas load/release theo loadout.
 
-- Không dùng phép chia nearest-anchor để biến một full-outfit thành item paper-doll. Phương pháp đó chỉ bảo toàn phép hợp pixel, không bảo toàn nghĩa của món; một robe có thể bị rải qua nhiều slot và trạng thái tháo sẽ thành các mảng rách.
-- Candidate mới phải bắt đầu từ surface item đã tách theo thiết kế. Full-compose chỉ là đối chứng. Mỗi board bắt buộc có `all_on` và từng `off_<slot>` trên cùng canvas, không tự fit từng ô.
-- Nếu một pose nguồn vẽ sai tỷ lệ giải phẫu, sửa đồng nhất body và mọi layer của đúng pose tại source quanh pivot đăng ký. Không dùng root transform/camera để bù. Pháp `jump_tuck` hiện dùng correction `2/3`; idle và bốn nhịp chạy giữ nguyên byte nguồn.
+Guide hình học nam nằm ngoài repo tại `class-work-in-progress/common-male-v1/pose-registration-guide-v1/` trong selected-source root: sáu overlay + JSON hash nguồn và mốc cổ/vai/khuỷu/cổ tay/hông/gối/cổ chân. Đây là `DRAFT_GUIDE_REQUIRES_REVIEW`; mốc dưới quần và khớp bị che là ước lượng, chưa được dùng để auto-warp. Mọi class/level dùng chung guide đã review của từng giới, không tự đặt lại mốc riêng. Chỉnh đường ráp trên source garment được phép khi giữ collar/cuff/hem đúng template và kiểm lại ảnh ghép; không chuyển sửa fit thành offset runtime.
+
+Gate nguồn cho **mỗi pose và mỗi giới**: xem alpha-composite trên nền đặc ở độ phân giải nguồn, gồm `base-only`, `base + từng item riêng`, `all_on`, `off_<slot>` đủ 10 món, và 16 tổ hợp tháo/mặc của `inner_top/outer_top/waist_belt/shoulder_chest_guard`. Xem cả tháo quần + giày để phân biệt anatomy/fallback và mảnh sai ownership. Với tier mới, thêm full hai tier, đổi từng món hai chiều và phối cấp ở các đường ráp cổ/tay/eo/cổ chân. Bảo toàn body hash, count 10 slot hoặc hợp ảnh full không chứng minh gate này.
+
+Sau gate nguồn mới pack và kiểm Player thật: một actor, bốn nhịp `contact A → run A → contact B → run B`, jump/return, tháo-mặc và phối cấp xuyên chuyển động, UI thông tin/đổi class/giới/item khớp hình. Giữ camera đã khóa; capture rõ chủ thể ở độ phân giải đủ xem chi tiết. Technical test/capture xanh chỉ là bằng chứng kỹ thuật; mọi gate visual cần ảnh đã xem, lỗi cụ thể đã đóng và đúng phạm vi nam/nữ/pose/tier. Chưa đủ thì `FIX_REQUIRED`, chưa promotion.

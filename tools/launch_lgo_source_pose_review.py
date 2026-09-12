@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.12
 """Open one interactive Player with a single switchable source-pose actor."""
 import argparse
+import json
 import plistlib
 import subprocess
 from pathlib import Path
@@ -36,6 +37,15 @@ def class_pack_paths(repo: Path, class_id: str) -> tuple[Path, Path, Path, Path]
     for path in paths:
         if not (path / 'atlas-review.json').is_file():
             raise FileNotFoundError('Missing source-pose pack: ' + str(path))
+        for manifest_path in (path / 'atlas-review.json', *sorted(path.glob('*-review/atlas-review.json'))):
+            manifest = json.loads(manifest_path.read_text())
+            if manifest.get('status') in ('SOURCE_REJECTED', 'FIX_REQUIRED'):
+                raise ValueError(f'Nguồn review đã bị loại, cần sửa source trước khi mở Player: {manifest_path}')
+            for pose, scale in manifest.get('poseScaleCorrections', {}).items():
+                if type(scale) not in (int, float) or scale != 1:
+                    raise ValueError(
+                        f'Nguồn review đổi tỷ lệ riêng pose {pose} ({scale}); '
+                        f'cần trả về body authority và sửa garment tại source: {manifest_path}')
     return paths
 
 
@@ -71,12 +81,12 @@ def build_player_command(player: Path, repo: Path, log: Path) -> list[str]:
     return command
 
 
-def main() -> None:
+def main(argv=None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--player', type=Path, required=True)
     parser.add_argument('--repo', type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument('--log', type=Path)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     repo = args.repo.resolve()
     log = (args.log or repo / 'build/source-pose-class-switch-player-v1/interactive-player.log').resolve()
     log.parent.mkdir(parents=True, exist_ok=True)
