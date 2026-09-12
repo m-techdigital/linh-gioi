@@ -1,3 +1,9 @@
+## Current operating goal realignment — Map01A product UI/UX first — 2026-09-13
+
+The current source checkpoint is pushed through `5dea28fe` on `origin/feature/2d`. Owner direction now prioritizes a stable Map01A product UI/UX pass and no further zip handoff packages. Class/outfit generation remains held unless there is a deterministic source/design method; do not spend cycles on random image-tool outputs or repeated class pack trial loops. Existing Võ div4/base/camera/scale and registered outfit work must remain intact.
+
+Immediate next work is the shared UI path: finish the Hành trang item visual component, then continue login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue and HUD toward the latest owner references. Hành trang and Thông tin stay separate; item/equipment detail appears on the right. All repeated modal/card/tab/button/detail styling must go through `CongDongLamArrivalHud.Skin.cs`/shared helpers first. No handoff zip should be created unless the owner asks again.
+
 
 ## Map01A inventory item grid icon checkpoint — 2026-09-13
 

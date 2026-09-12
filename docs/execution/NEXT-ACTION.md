@@ -1,16 +1,16 @@
+## Current operating goal — Map01A product UI/UX first — 2026-09-13
 
-## Next UI task — replace placeholder symbols with reusable item visuals — 2026-09-13
+Continue from the current pushed checkpoint on `origin/feature/2d` without creating a handoff zip. The active product path is Map01A UI/UX quality, not more random class/outfit generation. Keep Võ POSE THỬ div4/base/camera/scale and registered outfit state intact; keep Kiếm/Pháp/Cơ/Linh class packs audit-only until a deterministic source/design pipeline exists.
 
-The Hành trang grid now has compact slot symbols/state text and Player evidence at `build/map01a-inventory-grid-icons-quest-pc/07-q04-inventory-open.png`. Continue by replacing placeholder glyphs with a reusable item-icon visual system and polishing login/auth richness, still through shared UI skin/base. Do not create zip unless requested.
+Order of work:
 
-## Next UI task — item grid and login visual richness — 2026-09-13
+1. Finish visible Map01A gameplay UI polish against the latest owner references using shared `CongDongLamArrivalHud.Skin.cs`/base helpers first. Do not create a second modal/card/tab/button/detail system.
+2. Replace Hành trang placeholder item glyph treatment with a reusable item visual component, then refresh Player evidence for the Hành trang tab.
+3. Continue login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue and HUD polish from the uploaded design references. Hành trang and Thông tin remain separate tabs; selected item/equipment details show on the right.
+4. Only after the Map01A UI pass is visually stable, revisit class/wardrobe with a deterministic source/design audit. If that method is not clear, keep the class work held and continue product UI/map tasks.
+5. Do not create zip packages unless the owner explicitly asks again.
 
-Continue Map01A UI fidelity from the current shared skin: item detail card now has compact icon/rarity/stats/action and Player evidence at `build/map01a-inventory-detail-polish-runtime-v3/`; next improve item-grid visual treatment and login/auth shell richness toward the owner reference designs. Do not create handoff zip unless the owner asks. Keep class art generation blocked unless a deterministic source/design method exists.
-
-## Next UI task — continue design fidelity pass — 2026-09-13
-
-Continue Map01A UI polish against the owner reference set: login still needs stronger visual richness/branding closer to the provided design boards, and inventory/rương đồ still need item-grid art/icon treatment and better hierarchy while preserving the shared skin/base and right-side detail contract. Do not resume class image generation unless a deterministic source/design method is available; keep Võ div4/base/camera/scale and registered outfit intact.
-
+Required checkpoint before any handoff claim: targeted EditMode/UI tests, shared UI validator, no-3D/no-source-image validators, frozen diff audit, Player capture, and manual visual review of screenshots. Technical PASS is not visual acceptance.
 
 ## Handoff note — UI still needs visual redesign polish — 2026-09-13
 
