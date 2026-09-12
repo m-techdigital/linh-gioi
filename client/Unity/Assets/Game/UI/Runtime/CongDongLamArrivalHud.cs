@@ -318,7 +318,9 @@ namespace LinhGioi.UI
             RefreshInventoryDetailCard();
             var selectedSlot = _scene.VoSelectedEquipmentSlot;
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
-            _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
+            var equipToggleText = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
+            _inventoryDetailPrimaryAction.text = equipToggleText;
+            _equipmentToggle.text = equipToggleText;
             var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
             _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "Chưa có cấp khác";
             _equipmentVariant.SetEnabled(hasVariant);

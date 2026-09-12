@@ -1,4 +1,8 @@
 
+## Map01A inventory detail card runtime polish — 2026-09-13
+
+Inventory/character-info detail now has a compact item icon, rarity/level line, primary stat line, fit stat line, and a visible primary equip/unequip action while keeping the legacy toggle action as a hidden compatibility alias for existing tests. The detail action refreshes immediately after slot/toggle changes and no longer overflows the card in 1600x900 Player capture. Evidence: `build/map01a-inventory-detail-polish-runtime-v3/character-info.png` and `storage.png`; manifest records `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED` and `usesOsMouseOrKeyboard=false`. This improves item-detail fidelity only; full login/inventory visual redesign and real item art/icons remain next work.
+
 ## Map01A login/inventory shared detail polish — 2026-09-13
 
 Entry/login now separates the server name and health/status seal, and the inventory detail card uses the shared UI skin with a right-side item header, slot/type line, divider, and equipped/removed badge. Selecting equipment slots, toggling equip state, changing tabs, or cycling item level refreshes the detail card immediately instead of leaving stale text. Player evidence was refreshed from a newly built macOS Player at `build/map01a-entry-form-runtime/entry-login.png`, `build/map01a-inventory-tab-runtime/character-info.png`, and `build/map01a-inventory-tab-runtime/storage.png`; manifests record `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED` and `usesOsMouseOrKeyboard=false`. This is a visual/UX polish checkpoint, not final owner acceptance of the full login/inventory redesign.

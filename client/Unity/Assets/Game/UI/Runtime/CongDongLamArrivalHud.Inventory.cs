@@ -7,8 +7,9 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud
     {
         private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel;
-        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailSlotType, _inventoryDetailStateBadge, _suppliesTitle, _storageState;
+        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _storageState;
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
+        private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
 
@@ -92,9 +93,17 @@ namespace LinhGioi.UI
             _inventoryDetailHeader = LgoLabel("CHI TIẾT MÓN", 15, new Color(.73f, .85f, .88f, .92f), true);
             _inventoryDetailHeader.name = "Map01A Inventory Detail Header";
             _inventoryFooter.Add(_inventoryDetailHeader);
+            _inventoryDetailIcon = LgoLabel("", 42, UiGold, true);
+            _inventoryDetailIcon.name = "Map01A Inventory Detail Icon";
+            ApplyLgoItemIcon(_inventoryDetailIcon);
+            _inventoryFooter.Add(_inventoryDetailIcon);
             _equipmentDetail = LgoLabel("", 24, UiGold, true);
             _equipmentDetail.style.marginTop = 6;
             _inventoryFooter.Add(_equipmentDetail);
+            _inventoryDetailRarity = LgoLabel("", 15, new Color(.74f, .92f, 1f, .94f), true);
+            _inventoryDetailRarity.name = "Map01A Inventory Detail Rarity";
+            _inventoryDetailRarity.style.marginTop = 2;
+            _inventoryFooter.Add(_inventoryDetailRarity);
             _inventoryDetailSlotType = LgoLabel("", 16, new Color(.88f, .94f, .92f, .94f), true);
             _inventoryDetailSlotType.name = "Map01A Inventory Detail Slot Type";
             _inventoryDetailSlotType.style.marginTop = 4;
@@ -115,14 +124,24 @@ namespace LinhGioi.UI
             _inventoryItemState = LgoLabel("", 16, new Color(.91f, .93f, .84f, .96f));
             _inventoryItemState.style.marginTop = 12;
             _inventoryFooter.Add(_inventoryItemState);
-            var spacer = new VisualElement();
-            spacer.style.flexGrow = 1;
-            _inventoryFooter.Add(spacer);
+            _inventoryDetailStatPrimary = LgoLabel("", 15, new Color(.76f, .92f, 1f, .96f), true);
+            _inventoryDetailStatPrimary.name = "Map01A Inventory Detail Stat Primary";
+            _inventoryDetailStatPrimary.style.marginTop = 10;
+            _inventoryFooter.Add(_inventoryDetailStatPrimary);
+            _inventoryDetailStatFit = LgoLabel("", 15, new Color(.76f, 1f, .70f, .96f), true);
+            _inventoryDetailStatFit.name = "Map01A Inventory Detail Stat Fit";
+            _inventoryDetailStatFit.style.marginTop = 4;
+            _inventoryFooter.Add(_inventoryDetailStatFit);
             var actions = InventoryRow("Map01A Inventory Equipment Actions");
             actions.style.marginTop = 10;
+            actions.style.flexShrink = 0;
+            _inventoryDetailPrimaryAction = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryDetailCard(); }, "Map01A Inventory Detail Primary Action");
+            _inventoryDetailPrimaryAction.style.minHeight = 42;
             _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
+            _equipmentToggle.style.display = DisplayStyle.None;
             _equipmentVariant = InventoryButton(() => { _scene.CycleVoSelectedEquipmentItemLevel(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
-            actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
+            _equipmentVariant.style.minHeight = 42;
+            actions.Add(_inventoryDetailPrimaryAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
             _inventoryFooter.Add(actions); _inventoryDetailPanel.Add(_inventoryFooter);
 
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
@@ -321,12 +340,46 @@ namespace LinhGioi.UI
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
             var selectedLevel = _scene.GetVoEquipmentItemLevel(selectedSlot);
             var selectedName = EquipmentDisplayName(selectedSlot);
+            _inventoryDetailIcon.text = EquipmentDisplayIcon(selectedSlot);
             _equipmentDetail.text = selectedName + " · Lv" + selectedLevel;
+            _inventoryDetailRarity.text = "Tinh phẩm · Lv" + selectedLevel + " · 10 slot chung";
             _inventoryDetailSlotType.text = selectedName;
             _inventoryItemId.text = _scene.GetVoEquipmentItemId(selectedSlot);
             _inventoryDetailStateBadge.text = selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO";
-            _inventoryItemState.text = (selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.")
-                + "\nKhớp: " + _scene.EquipmentFitSummary;
+            _inventoryItemState.text = selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.";
+            _inventoryDetailStatPrimary.text = EquipmentPrimaryStat(selectedSlot, selectedLevel);
+            _inventoryDetailStatFit.text = "Khớp: " + _scene.EquipmentFitSummary;
+            if (_inventoryDetailPrimaryAction != null)
+                _inventoryDetailPrimaryAction.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
+            if (_equipmentToggle != null)
+                _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
+        }
+
+        private static string EquipmentDisplayIcon(string slotId)
+        {
+            switch (slotId)
+            {
+                case "main_weapon": return "⚔";
+                case "head_hair": return "髻";
+                case "inner_top": return "衣";
+                case "outer_tunic": return "袍";
+                case "pants": return "裤";
+                case "waist_belt": return "◈";
+                case "wrist_guard": return "✦";
+                case "boots": return "👢";
+                case "shoulder_chest": return "◆";
+                case "class_accessory": return "✧";
+                default: return "◇";
+            }
+        }
+
+        private static string EquipmentPrimaryStat(string slotId, int level)
+        {
+            var value = 18 + level * 7;
+            if (slotId == "main_weapon") return "Công +" + (value + 28) + " · Chính xác +" + (level * 3 + 9);
+            if (slotId == "boots") return "Tốc +" + (level * 2 + 6) + " · Né +" + (level * 3 + 8);
+            if (slotId == "wrist_guard") return "Bạo kích +" + (level * 2 + 4) + " · Công +" + value;
+            return "Thủ +" + value + " · Sinh lực +" + (level * 18 + 60);
         }
     }
 }

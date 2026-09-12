@@ -1,4 +1,8 @@
 
+## Next UI task — item grid and login visual richness — 2026-09-13
+
+Continue Map01A UI fidelity from the current shared skin: item detail card now has compact icon/rarity/stats/action and Player evidence at `build/map01a-inventory-detail-polish-runtime-v3/`; next improve item-grid visual treatment and login/auth shell richness toward the owner reference designs. Do not create handoff zip unless the owner asks. Keep class art generation blocked unless a deterministic source/design method exists.
+
 ## Next UI task — continue design fidelity pass — 2026-09-13
 
 Continue Map01A UI polish against the owner reference set: login still needs stronger visual richness/branding closer to the provided design boards, and inventory/rương đồ still need item-grid art/icon treatment and better hierarchy while preserving the shared skin/base and right-side detail contract. Do not resume class image generation unless a deterministic source/design method is available; keep Võ div4/base/camera/scale and registered outfit intact.

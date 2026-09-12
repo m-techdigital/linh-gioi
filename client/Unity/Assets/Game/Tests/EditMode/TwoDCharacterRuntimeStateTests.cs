@@ -180,6 +180,11 @@ namespace LinhGioi.Tests.EditMode
                     "Item detail must stay on the right side of the bag grid.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Does.Contain("CHI TIẾT"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Does.Contain("⚔"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Does.Contain("Công"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Khớp"));
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action"), Is.Not.Null);
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
@@ -191,9 +196,11 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Does.Contain("Giày"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Does.Contain("👢"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Toggle"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐÃ THÁO"));
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Does.Contain("Mặc"));
                 InvokeBoundButton(bagTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
