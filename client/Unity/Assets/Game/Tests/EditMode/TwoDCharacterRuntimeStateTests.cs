@@ -258,6 +258,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
                 Assert.That(start.text, Does.Contain("Bắt đầu"));
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("dev"));
+                foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ" })
+                {
+                    var sideAction = root.Q<Button>("Map01A Entry Side Action " + name);
+                    Assert.That(sideAction, Is.Not.Null);
+                    Assert.That(sideAction.enabledSelf, Is.False, "Entry/login side actions must not be clickable dead buttons.");
+                    Assert.That(sideAction.text, Does.Contain("chưa mở"));
+                }
                 Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "Entry/login must not leave the in-game HUD visible behind the modal.");
 

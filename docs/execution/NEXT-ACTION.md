@@ -1,3 +1,9 @@
+## Map01A entry disabled-action checkpoint — 2026-09-13
+
+- Entry/login side actions now must be disabled placeholders until the backing screens exist; do not reintroduce clickable no-op controls.
+- Shared UI gate remains mandatory for UI runtime batches: `PYTHONPATH=tools PYTHONPYCACHEPREFIX=build/pycache python3.12 -m unittest tools.test_validate_lgo_ui_shared_skin` and `PYTHONPYCACHEPREFIX=build/pycache python3.12 tools/validate_lgo_ui_shared_skin.py`.
+- Continue Map01A UI polish from the uploaded design references using shared base/skin/component first; next valid work is improving visible HUD/login/inventory screens, not creating another parallel UI system.
+
 
 ## Source tree marker rule — 2026-09-13
 

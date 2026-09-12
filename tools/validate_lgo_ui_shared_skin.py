@@ -14,6 +14,7 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoModalShell",
     "ApplyLgoButton",
     "ApplyLgoSelectedTab",
+    "ApplyLgoDisabledAction",
 ]
 FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+readonly\s+Color\s+(?!Ui)[A-Za-z0-9_]*(Glass|Gold|Blue|Border|Text|SubText)"),
@@ -43,6 +44,8 @@ REQUIRED_PARTIAL_MARKERS = {
     "CongDongLamArrivalHud.Entry.cs": [
         "ApplyLgoModalShell(panel, 24)",
         "StyleEntryButton",
+        "ApplyLgoDisabledAction(button)",
+        "Map01A Entry Side Action ",
         "_safe.style.display = _entryOpen ? DisplayStyle.None : DisplayStyle.Flex",
     ],
     "CongDongLamArrivalHud.CharacterSelect.cs": [
@@ -90,6 +93,7 @@ REQUIRED_TEST_MARKERS = [
     "Item detail must stay on the right side of the bag grid",
     "CharacterSelectModalUsesSharedSkinAndDoesNotAdvanceQuest",
     "Entry/login must not leave the in-game HUD visible behind the modal",
+    "Entry/login side actions must not be clickable dead buttons",
 ]
 
 

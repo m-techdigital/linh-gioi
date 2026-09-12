@@ -162,11 +162,11 @@ namespace LinhGioi.UI
 
         private static void AddEntrySideAction(VisualElement parent, string text)
         {
-            var button = new Button(() => { }) { text = text };
+            var button = new Button { name = "Map01A Entry Side Action " + text, text = text + " · chưa mở" };
             button.style.height = 44;
             button.style.marginBottom = 12;
             button.style.fontSize = 15;
-            ApplyLgoButton(button);
+            ApplyLgoDisabledAction(button);
             parent.Add(button);
         }
 

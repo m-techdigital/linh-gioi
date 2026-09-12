@@ -64,5 +64,13 @@ namespace LinhGioi.UI
             button.style.backgroundColor = selected ? UiBlue : new Color(.045f, .13f, .18f, .98f);
             button.style.color = selected ? new Color(.98f, .95f, .78f, .98f) : UiText;
         }
+
+        private static void ApplyLgoDisabledAction(Button button)
+        {
+            ApplyLgoButton(button);
+            button.SetEnabled(false);
+            button.style.opacity = .58f;
+            button.style.color = new Color(.70f, .78f, .78f, .82f);
+        }
     }
 }
