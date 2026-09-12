@@ -94,6 +94,18 @@ namespace LinhGioi.UI
             loginTitle.style.color = new Color(.95f, .75f, .36f, .96f);
             panel.Add(loginTitle);
 
+            panel.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "👤  Tài khoản / Email / Số điện thoại"));
+            panel.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "🔒  Mật khẩu"));
+
+            var authScope = new Label("review local: form hiển thị theo UI/UX, chưa gửi tài khoản hoặc mật khẩu thật.")
+            {
+                name = "Map01A Entry Auth Scope"
+            };
+            authScope.style.fontSize = 13;
+            authScope.style.color = new Color(.66f, .82f, .90f, .88f);
+            authScope.style.marginBottom = 10;
+            panel.Add(authScope);
+
             var serverCard = new VisualElement { name = "Map01A Entry Server Card" };
             serverCard.style.backgroundColor = new Color(.010f, .035f, .060f, .82f);
             serverCard.style.paddingLeft = 14;
@@ -156,6 +168,23 @@ namespace LinhGioi.UI
             button.style.fontSize = 15;
             ApplyLgoButton(button);
             parent.Add(button);
+        }
+
+        private static VisualElement MakeEntryField(string fieldName, string placeholderName, string placeholderText)
+        {
+            var field = new VisualElement { name = fieldName };
+            field.style.height = 48;
+            field.style.marginBottom = 10;
+            field.style.paddingLeft = 16;
+            field.style.paddingRight = 16;
+            field.style.justifyContent = Justify.Center;
+            ApplyLgoFrame(field, new Color(.010f, .035f, .060f, .86f), new Color(.46f, .64f, .74f, .50f));
+
+            var placeholder = new Label(placeholderText) { name = placeholderName };
+            placeholder.style.fontSize = 17;
+            placeholder.style.color = new Color(.74f, .82f, .88f, .82f);
+            field.Add(placeholder);
+            return field;
         }
 
         private static void StyleEntryButton(Button button, bool primary)

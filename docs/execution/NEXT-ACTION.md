@@ -2,7 +2,7 @@
 
 Khi tiếp tục login/chọn nhân vật/hành trang/rương đồ/HUD/dialog, phải bám bộ demo owner gửi nhưng redesign cho game 2D hiện tại và dùng base chung `CongDongLamArrivalHud.Skin.cs` cho glass panel, modal shell, CTA, tab, label và frame. Không tạo modal/tab/card/detail panel thứ hai nếu vai trò giống nhau. Chạy `python3.12 tools/validate_lgo_ui_shared_skin.py` cùng Unity EditMode trước checkpoint; validator này chặn local skin constants/helper cũ như `InventoryGlass`, `StyleFrame`, `InventoryLabel` quay lại. Checkpoint rule/base hiện tại đã có test overlay entry và validator shared-skin; bước tiếp theo sau commit là visual/player review sâu hơn cho các screen còn lại, không coi đây là nghiệm thu toàn bộ UI.
 
-Entry/login hiện có capture nội bộ không dùng OS input tại `build/map01a-entry-capture-runtime-v2/entry-login.png`; HUD chơi đã bị ẩn sau modal. Next UI hợp lệ: polish entry/login sát reference hơn, rồi mở character select/HUD/dialog bằng cùng shared skin/base; vẫn phải capture Player thật trước khi bàn giao.
+Entry/login hiện có capture nội bộ không dùng OS input tại `build/map01a-entry-form-runtime/entry-login.png`; HUD chơi đã bị ẩn sau modal và form tài khoản/mật khẩu đã được khóa bằng Unity EditMode. Next UI hợp lệ: character select/HUD/dialog và polish hành trang/rương đồ bằng cùng shared skin/base; vẫn phải capture Player thật trước khi bàn giao. Không mở production auth hoặc tạo hệ modal/tab/card/detail panel thứ hai.
 
 ## Bổ sung mục tiêu owner — 2026-09-13
 
@@ -26,7 +26,7 @@ Batch chức năng hiện tại: hành trang 2D theo demo `docs/design/demos/map
 
 Checkpoint hành trang/storage tabs có evidence tại `build/map01a-detail-right-player/quest-capture/{pc,tablet,mobile}/07-q04-inventory-open.png` và đã được xem: modal Hành trang mặc định không bị minimap/action bar chồng, detail/grid đọc được, tab Rương đồ hiển thị ở header. EditMode `client/Unity/Logs/m0-editmode-results.xml` 265 total/264 pass/0 fail/1 ignored, gồm test tách tab Hành trang/Thông tin và test Rương đồ gate không đổi loadout. Build detail-right `errors=0 warnings=13`; capture Q01–Q09 đủ 18 frame/profile + 38 thoại + 6 NPC revisit. Không dùng click hệ điều hành/chuột thật cho evidence; nếu cần ảnh tab Thông tin/Rương đồ thì dùng runner/capture nội bộ.
 
-Next sau checkpoint: audit login/chọn nhân vật theo ảnh ưu tiên v2 và API dev hiện có, tách rõ `Đăng nhập`/`Bắt đầu`, không mở production auth giả; không dùng validator M4/V3B stale làm gate hoặc phục hồi hệ cũ. Rương đồ/kho đã có gate UI; chỉ bật gửi/rút thật khi có model/API hoặc task contract hợp lệ, không sửa frozen contract. Không quay lại character redraw/wardrobe class art trong batch UI này trừ khi owner đổi ưu tiên.
+Next sau checkpoint: mở character select/HUD/dialog theo ảnh ưu tiên v2 và API dev hiện có, giữ tách rõ `Đăng nhập`/`Bắt đầu`, không mở production auth giả; không dùng validator M4/V3B stale làm gate hoặc phục hồi hệ cũ. Rương đồ/kho đã có gate UI; chỉ bật gửi/rút thật khi có model/API hoặc task contract hợp lệ, không sửa frozen contract. Không quay lại character redraw/wardrobe class art trong batch UI này trừ khi owner đổi ưu tiên.
 
 Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F` hoặc nút trong hành trang đã kiểm đủ Pháp/Võ/Kiếm/Cơ/Linh trên một actor. Pháp chỉ có nam Lv1 v7; Võ nam Lv1/Lv10; giới/cấp chưa có không được rơi về renderer cũ. Các pack vẫn REVIEW_ONLY, không suy diễn rằng toàn bộ design/pose đã nghiệm thu.
 

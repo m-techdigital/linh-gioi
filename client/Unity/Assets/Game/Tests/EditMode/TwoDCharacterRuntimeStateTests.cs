@@ -198,6 +198,11 @@ namespace LinhGioi.Tests.EditMode
                 var overlay = root.Q("Map01A Entry Overlay");
                 Assert.That(overlay, Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Entry Login Button"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Entry Account Field"), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Entry Account Placeholder").text, Does.Contain("Tài khoản"));
+                Assert.That(root.Q("Map01A Entry Password Field"), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Entry Password Placeholder").text, Does.Contain("Mật khẩu"));
+                Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("review"));
                 var start = root.Q<Button>("Map01A Entry Start Button");
                 Assert.That(start, Is.Not.Null);
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
