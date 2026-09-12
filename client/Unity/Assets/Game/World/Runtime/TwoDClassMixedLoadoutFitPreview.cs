@@ -83,8 +83,7 @@ namespace LinhGioi.World
                 || manifest.levels == null || !manifest.levels.SequenceEqual(Levels)
                 || manifest.genders == null || !manifest.genders.SequenceEqual(new[] { "male", "female" })
                 || manifest.slots == null || manifest.slots.Length != 10
-                || manifest.components == null || manifest.components.Length < 104 || manifest.components.Length > 120
-                || (manifest.components.Length - 104) % 2 != 0)
+                || manifest.components == null || manifest.components.Length != 104)
                 throw new InvalidOperationException("Invalid " + _classLabel + " ten-slot review manifest");
             _slots = manifest.slots;
             foreach (var slot in _slots)
@@ -129,34 +128,6 @@ namespace LinhGioi.World
         public int VisibleSlotCount => _views.Where(view => view.Renderer.enabled)
             .Select(view => view.Source.slotId).Distinct(StringComparer.Ordinal).Count();
         public int VisibleItemCount => VisibleSlotCount;
-        public Vector3 RootScale => _root.parent == null ? Vector3.one : _root.parent.localScale;
-        public Bounds VisibleWorldBounds()
-        {
-            return VisibleWorldBounds(false);
-        }
-
-        public Bounds VisibleBodyWorldBounds()
-        {
-            return VisibleWorldBounds(true);
-        }
-
-        private Bounds VisibleWorldBounds(bool bodyOnly)
-        {
-            var initialized = false;
-            var bounds = new Bounds();
-            foreach (var view in _views)
-            {
-                if (!view.Renderer.enabled || view.Renderer.sprite == null
-                    || (bodyOnly && view.Source.slotId == "main_weapon")) continue;
-                if (!initialized)
-                {
-                    bounds = view.Renderer.bounds;
-                    initialized = true;
-                }
-                else bounds.Encapsulate(view.Renderer.bounds);
-            }
-            return bounds;
-        }
         public int ValidSpriteSkinCount => 0;
         public string Snapshot => _classLabel + "MixedLoadoutFitPreview: status=DRAFT_RUNTIME_FIT"
             + " | runtimeEligibleCount=0 | atlases=2x1024 | slots=" + VisibleSlotCount + "/10"

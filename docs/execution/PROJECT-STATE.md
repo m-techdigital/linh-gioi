@@ -1,11 +1,3 @@
-## Hiện hành — Pháp chuyển sang common 15-component rig sau owner visual audit — 2026-09-12
-
-Owner reject Pháp canonical/source-pose vì thiết kế từng pose không đồng nhất và tháo một slot vẫn để lại mảng cùng món ở slot khác. Audit lại xác nhận nguyên nhân gốc là phân vùng một full-outfit phẳng theo anchor; cách đó không thể tạo underlayer hoặc sleeve/pant độc lập. Candidate mới dùng duy nhất `TwoDSkeletalPaperDollRig` và schema chung 15 component: 10 slot canonical, trong đó áo ngoài có torso + hai sleeve, quần/arm guard/boots tách trái-phải; chỉ vũ khí giữ anchor riêng theo class. Không đổi camera hoặc body base.
-
-Pháp nam/nữ Lv1/10/20/30 đã được thiết kế lại thành tám sheet 5×3 tại external `class-work-in-progress/phap-lv*/shared-rig-redesign-v1`. Packer nhận `--rig-sheet GENDER:LEVEL:PATH`, loại bleed từ cell lân cận nhưng giữ chi tiết phép thuật rời; không còn chia áo phẳng thành ba dải. Runtime pack có 120 component trên hai atlas 1024². Evidence Player `build/phap-shared-rig-v5-runtime/pc` đạt 34 frame: 8 full set, 10 trạng thái tháo riêng, all-off base, 2 phối chéo và 12 motion Lv1/Lv10; `errors=[]`. Agent đã xem board lớn: silhouette nguyên, tháo áo ngoài trả đúng áo trong, bốn nhịp chạy khác nhau; jump root scale tuyệt đối `1.0`, body-height ratio tối đa `1.0142`, không còn phình. Art vẫn `DRAFT_RUNTIME_FIT`, chưa coi là owner/production approval.
-
-Kiếm/Cơ/Linh cũ vẫn tải qua cùng renderer nhưng 104-component flattened packs chưa đạt source-design gate và không được dùng làm chuẩn. Bước tiếp theo là chuyển từng class sang đúng schema 15-component này, bắt đầu Kiếm theo thứ tự owner; mỗi class phải đủ nam/nữ và bốn cấp trước Player capture.
-
 ## Hiện hành — thu hồi Pháp semantic-v3; sửa đúng source jump và layer — 2026-09-12
 
 Owner kiểm trực tiếp Player và reject pack Pháp semantic-v3: việc chia pixel full-outfit bằng khoảng cách tới anchor làm một món bị rải qua nhiều slot, nên tháo item chỉ mất một mảng hoặc xé silhouette. Kết luận audit 16/16 trước đó đã được thu hồi; đủ file/slot và full-compose invariant không chứng minh thiết kế paper-doll đúng.
