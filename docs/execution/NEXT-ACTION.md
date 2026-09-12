@@ -1,3 +1,9 @@
+## Hiện hành — Pháp Lv1 hai giới đã qua source board và Player evidence — 2026-09-12
+
+Pháp nam/nữ Lv1 hiện dùng cùng source-pose contract với Võ/Linh/Kiếm: 10 slot × sáu pose, một actor, body authority bất biến. Evidence `build/phap-source-pose-review-v1/runtime-pc/pc` có 186 frame, 20 item load, `maxBodyVariants=1`, `errors=[]`; đã xem đứng, bốn nhịp chạy, lộn và tháo pháp khí/áo/giày trên Player thật. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; app vẫn mở cho owner.
+
+Action tiếp theo: author Pháp Lv10 nam/nữ từ progression/grid gốc trên đúng source/canvas/pivot và body hash Lv1; review từng món hai chiều, full Lv1/full Lv10 và mixed trên một Player. Không đổi camera/base/scale, không tạo actor hay hệ wardrobe thứ hai. Sau gate Pháp Lv10 mới chuyển Cơ.
+
 ## Hiện hành — Kiếm Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
 
 Kiếm nam/nữ Lv1/Lv10 hiện dùng bốn pack source-pose cùng body authority và một actor. Evidence `build/kiem-lv10-source-pose-review-v1/runtime-pc/pc`: 190 frame, full `[1,10]`, 60 switch, mixed verified, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn phối cấp, tháo kiếm/áo ngoài của cả hai giới trên Player thật. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; Player vẫn mở để owner thao tác.

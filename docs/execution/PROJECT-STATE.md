@@ -1,3 +1,11 @@
+## Hiện hành — Pháp Lv1 nam/nữ source-pose trên Player thật — 2026-09-12
+
+Đã audit trực tiếp turnaround, profile và equipment grid Pháp gốc. Candidate static-fit cũ không được tái sử dụng. Source ngoài repo `class-work-in-progress/phap-lv001/` dùng sáu donor cùng action, sau đó tách thành 10 slot disjoint trên body authority nam `vo_male_v3` và nữ `common_female_v1`. Hai lượt mask đầu bị loại vì nền caro mắc giữa chi; candidate hiện hành nam v5/nữ v3 dùng background-connected chroma mask và vùng pháp khí riêng, nên tháo pháp khí sạch. Board full-compose và 10 trạng thái tháo đã được xem ở kích thước lớn.
+
+Pack `build/phap-source-pose-review-v1/pack` và `build/phap-female-source-pose-review-v1/pack` dùng overlay divisor 2, body atlas byte-identical với fit family hiện hành. Evidence Player `build/phap-source-pose-review-v1/runtime-pc/pc`: 186 frame, 30 base-pose frame, 20 item load, `maxBodyVariants=1`, bind-return error < 0,000008, `errors=[]`. Đã xem đứng, bốn nhịp chạy, lộn, tháo pháp khí/áo ngoài/giày của cả hai giới: một silhouette người liền, không matte, không mảnh pháp khí, không đổi camera/base/scale. Python pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Trạng thái `AGENT_VISUAL_PASS / REVIEW_ONLY`; Player đang mở cho owner, chưa claim owner/production approval.
+
+Next: author Pháp Lv10 nam/nữ trên chính hai fit family này, giữ body byte-identical và chỉ thay pixel thuộc slot; review full Lv1/Lv10 và mixed trước Player.
+
 ## Hiện hành — Kiếm Lv1/Lv10 nam/nữ trên source-pose và Player thật — 2026-09-12
 
 Đã thay candidate Kiếm static-fit bị thu hồi bằng cùng contract source-pose đang dùng cho Võ/Linh: body authority nam/nữ giữ nguyên, mỗi tier có 10 slot × sáu pose `idle/run_contact_a/run_a/run_contact_b/run_b/jump_tuck`, overlay divisor 2. Source ngoài repo nằm tại `class-work-in-progress/kiem-lv001/` và `class-work-in-progress/kiem-lv010/`; các board full-compose và 10 trạng thái tháo đã được xem ở kích thước lớn trước khi pack. Bản nam v1 để lại mảnh kiếm đã bị loại; candidate hiện hành dùng nam v2, nữ v1.
