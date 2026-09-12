@@ -6,12 +6,12 @@ import plistlib
 import subprocess
 from pathlib import Path
 
-CLASSES = ('kiem', 'phap', 'co', 'linh')
+CLASSES = ('phap', 'vo', 'kiem', 'co', 'linh')
 PACK_SUFFIXES = {
+    'vo': ('-source-pose-review-preserved-lv1/pack', '-source-pose-review-preserved-lv10/pack', None, None),
     'kiem': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-v1/pack',
              '-female-source-pose-review-v1/pack', '-female-source-pose-review-lv10-v1/pack'),
-    'phap': ('-source-pose-review-canonical-v2/pack', '-source-pose-review-lv10-canonical-v2/pack',
-             '-female-source-pose-review-canonical-v2/pack', '-female-source-pose-review-lv10-canonical-v2/pack'),
+    'phap': ('-source-pose-review-deterministic-v7/pack', None, None, None),
     'co': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-semantic-v3/pack',
            '-female-source-pose-review-semantic-v3/pack', '-female-source-pose-review-lv10-semantic-v3/pack'),
     'linh': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-semantic-v3/pack',
@@ -54,12 +54,14 @@ def resolve_player(path: Path) -> Path:
     return path
 
 
-def class_pack_paths(repo: Path, class_id: str) -> tuple[Path, Path, Path, Path]:
+def class_pack_paths(repo: Path, class_id: str) -> tuple[Path | None, Path | None, Path | None, Path | None]:
     if class_id not in PACK_SUFFIXES:
         raise ValueError('Unsupported source-pose class: ' + class_id)
-    paths = tuple(repo / 'build' / (class_id + suffix) for suffix in PACK_SUFFIXES[class_id])
+    paths = tuple(repo / 'build' / (class_id + suffix) if suffix is not None else None
+                  for suffix in PACK_SUFFIXES[class_id])
     selection_cache = {}
     for path in paths:
+        if path is None: continue
         if not (path / 'atlas-review.json').is_file():
             raise FileNotFoundError('Missing source-pose pack: ' + str(path))
         for manifest_path in (path / 'atlas-review.json', *sorted(path.glob('*-review/atlas-review.json'))):
@@ -79,8 +81,9 @@ def build_class_args(repo: Path, class_ids=CLASSES) -> list[str]:
     result = []
     for class_id in class_ids:
         male, male_alt, female, female_alt = class_pack_paths(repo, class_id)
-        result += ['--lgo-source-pose-class', class_id, str(male.resolve()), str(male_alt.resolve()),
-                   str(female.resolve()), str(female_alt.resolve())]
+        result += ['--lgo-source-pose-class', class_id,
+                   *(str(path.resolve()) if path is not None else '-'
+                     for path in (male, male_alt, female, female_alt))]
     return result
 
 
@@ -96,10 +99,10 @@ def build_player_command(player: Path, repo: Path, log: Path) -> list[str]:
     command = [str(executable), '-logFile', str(log), '-screen-fullscreen', '0',
                '-screen-width', '1440', '-screen-height', '900', '--lgo-map01a-art-preview',
                '--lgo-vo-registered', '--lgo-vo-registered-equipment',
-               '--lgo-vo-pose-review-dir', str(first[0].resolve()),
-               '--lgo-vo-pose-review-alt-dir', str(first[1].resolve()),
-               '--lgo-vo-pose-review-female-dir', str(first[2].resolve()),
-               '--lgo-vo-pose-review-female-alt-dir', str(first[3].resolve()),
+               *[arg for flag, path in zip(
+                   ('--lgo-vo-pose-review-dir', '--lgo-vo-pose-review-alt-dir',
+                    '--lgo-vo-pose-review-female-dir', '--lgo-vo-pose-review-female-alt-dir'), first)
+                 if path is not None for arg in (flag, str(path.resolve()))],
                *build_class_args(repo)]
     legacy = {'--lgo-kiem-review', '--lgo-phap-review', '--lgo-co-review', '--lgo-linh-review'}
     if legacy.intersection(command):

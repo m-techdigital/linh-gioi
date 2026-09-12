@@ -1,4 +1,16 @@
-## Hiện hành — Pháp nam Lv1 giữ 9 slot, thay áo ngoài — 2026-09-12
+## Hiện hành — giữ character, chuyển trọng tâm Map01A — 2026-09-12
+
+`CONTINUE`. Theo chỉ đạo mới của owner, giữ các thay đổi character an toàn và chuyển sang hoàn thiện Map01A; không tiếp tục sinh lại set/pose, không rollback body/div4/motion/camera/scale hoặc registered outfit. Character vẫn REVIEW_ONLY, chưa nghiệm thu toàn bộ design hay mixed-level.
+
+Đã xác minh hai nguyên nhân khác nhau: mở Player với chỉ một pack làm thiếu catalog đổi class; chuyển sang giới không có source làm bật presentation Võ nữ cũ và capture gọi null. Runtime/launcher hiện hỗ trợ catalog thiếu giới/cấp, giữ một source actor và chỉ chọn giới có source. Catalog gồm Pháp nam Lv1 v7, Võ nam Lv1/Lv10 và pack Kiếm/Cơ/Linh đang giữ; source Pháp bị REJECTED/WITHDRAWN tiếp tục bị launcher chặn. Đã dùng phím F qua đủ năm class, lưu ảnh/log tại `build/source-classes-stable-player/`.
+
+Map01A đã sửa lỗi hành trang source-mode ẩn HP/vật phẩm/nút dùng bình, khiến Q04 không thể thao tác đầy đủ qua UI. Nút bình máu được kiểm qua callback thật Q04→Q05. Hành trang giữ 10 món nhưng dùng vùng cuộn giới hạn, thông tin item dễ đọc; hàng nút không tràn xuống di chuyển. Không thay art/map camera. Player hiện hành `build/map01a-stable-player/LinhGioiOnline.app`.
+
+Gate map riêng `--quest-only` chạy Q01–Q09 trên source hiện hành, không gọi wardrobe renderer lịch sử. Capture `build/map01a-stable-player/quest-ui-final/{pc,tablet,mobile}` đạt 18 ảnh/profile và đủ 9 nhiệm vụ; đây là mô phỏng tỷ lệ trên macOS và technical pass. Lượt `quest-ui-verified` đã giới hạn viewport và xem lại ba profile: không còn cuộn ngang, nút bình nằm phía trên danh sách trang bị, tablet cuộn dọc trong khung. Cách giới hạn content dựa trên [Unity ScrollView](https://docs.unity3d.com/6000.0/Documentation/Manual/UIE-uxml-element-ScrollView.html). Terrain rìa làng còn cần audit khoảng hở chân/mặt ảnh; chưa claim Map01A hoàn tất.
+
+Python 37 test và Unity 26 test pass trong batch. Pháp nam capture sửa đúng phạm vi có 99 ảnh/16 tổ hợp, `capturedGenders=[male]`, errors rỗng; không còn lỗi thiếu pack nữ. Chi tiết và next task trong NEXT-ACTION.
+
+## Lịch sử — Pháp nam Lv1 giữ 9 slot, thay áo ngoài — 2026-09-12
 
 `NEED_HUMAN_VISUAL_REVIEW / CONTINUE`. Owner yêu cầu giữ tối đa công sức an toàn và chấp nhận sai lệch nhỏ. Pháp nam Lv1 hiện dùng external source `class-work-in-progress/phap-lv001/deterministic-preserve-authoring-v7`: body/action authority Võ v3 div4 bất biến, 9 slot source cũ được copy byte-identical, chỉ `outer_top` dài sai progression được cắt về silhouette gọn bằng một envelope source-space thống nhất trên đủ sáu pose.
 

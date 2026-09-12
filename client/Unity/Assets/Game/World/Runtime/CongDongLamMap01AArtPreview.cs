@@ -354,6 +354,7 @@ namespace LinhGioi.World
             public string pack = "cong-dong-lam-map01a-art-draft-v1";
             public int frames, width, height;
             public string deviceValidation = "macOS aspect simulation only";
+            public string captureScope = "map-and-legacy-wardrobe";
             public float groundY, maxFootError, parallaxDelta;
             public bool mapQuestFlowVerified = false;
             public bool functionalUiVerified = false;
@@ -828,10 +829,10 @@ namespace LinhGioi.World
             if (!CanCycleSourcePoseClass || Time.realtimeSinceStartup < _sourcePoseClassSwitchReadyAt) return;
             _sourcePoseClassIndex = (_sourcePoseClassIndex + 1) % _sourcePoseClassOptions.Count;
             var option = _sourcePoseClassOptions[_sourcePoseClassIndex];
-            _sourcePoseReview.ReloadPack(option.MalePrimary, option.MaleAlternates);
-            _femaleSourcePoseReview.ReloadPack(option.FemalePrimary, option.FemaleAlternates);
-            var complete = _sourcePoseReview.GetCompleteItemLevels()
-                .Intersect(_femaleSourcePoseReview.GetCompleteItemLevels()).OrderBy(level => level).ToArray();
+            _sourcePoseReview = ReloadClassGender(_sourcePoseReview, option.MalePrimary, option.MaleAlternates);
+            _femaleSourcePoseReview = ReloadClassGender(_femaleSourcePoseReview, option.FemalePrimary, option.FemaleAlternates);
+            if (ActiveSourcePoseReview == null) _voState.CycleGender();
+            var complete = ActiveSourcePoseReview.GetCompleteItemLevels();
             var selectedLevel = complete.Contains(VoAvatarLevel) ? VoAvatarLevel : complete.FirstOrDefault();
             if (selectedLevel > 0)
                 foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = selectedLevel;
@@ -840,7 +841,30 @@ namespace LinhGioi.World
             // Loading both gender stacks is synchronous in this review tool. Ignore key-repeat
             // events queued while the main thread was loading so one press advances one class.
             _sourcePoseClassSwitchReadyAt = Time.realtimeSinceStartup + .5f;
-            LastInteractionMessage = "Đã đổi class sang " + option.Id + " · giữ nguyên giới tính và trạng thái tháo/mặc.";
+            LastInteractionMessage = "Đã đổi class sang " + ActiveEquipmentClassLabel + " · "
+                + (VoAvatarGender == "female" ? "nữ" : "nam") + " · giữ trạng thái tháo/mặc.";
+        }
+
+        private TwoDSourcePoseReview ReloadClassGender(TwoDSourcePoseReview review, string primary, string[] alternates)
+        {
+            if (string.IsNullOrEmpty(primary) || primary == "-")
+            {
+                if (review != null)
+                {
+                    review.SetPresentationVisible(false);
+                    if (Application.isPlaying) Destroy(review.gameObject);
+                    else DestroyImmediate(review.gameObject);
+                }
+                return null;
+            }
+            if (review == null)
+            {
+                var host = new GameObject("Source pose class stack");
+                host.transform.SetParent(transform, false);
+                review = host.AddComponent<TwoDSourcePoseReview>();
+            }
+            review.ReloadPack(primary, alternates);
+            return review;
         }
 
         private void LoadSourcePoseClassOptions()
@@ -859,15 +883,15 @@ namespace LinhGioi.World
                     FemalePrimary = args[index + 4],
                     FemaleAlternates = SplitPackPaths(args[index + 5])
                 };
-                if (string.IsNullOrEmpty(option.Id) || string.IsNullOrEmpty(option.MalePrimary)
-                    || string.IsNullOrEmpty(option.FemalePrimary)
+                if (string.IsNullOrEmpty(option.Id)
+                    || (SplitPackPaths(option.MalePrimary).Length == 0 && SplitPackPaths(option.FemalePrimary).Length == 0)
                     || _sourcePoseClassOptions.Any(existing => existing.Id == option.Id))
                     throw new ArgumentException("Invalid/duplicate source pose class option: " + option.Id);
                 _sourcePoseClassOptions.Add(option);
                 index += 5;
             }
-            if (_sourcePoseClassOptions.Count == 0 || _sourcePoseReview == null || _femaleSourcePoseReview == null) return;
-            _sourcePoseClassIndex = _sourcePoseClassOptions.FindIndex(option => option.Id == _sourcePoseReview.ClassId);
+            if (_sourcePoseClassOptions.Count == 0 || !HasAnySourcePoseReview) return;
+            _sourcePoseClassIndex = _sourcePoseClassOptions.FindIndex(option => option.Id == (_sourcePoseReview ?? _femaleSourcePoseReview).ClassId);
             if (_sourcePoseClassIndex < 0)
                 throw new ArgumentException("Active source pose class is absent from --lgo-source-pose-class options");
         }
@@ -936,6 +960,9 @@ namespace LinhGioi.World
 
         private void RefreshVoAvatarMode()
         {
+            // A partial source catalog must not silently revive the legacy renderer.
+            if (HasAnySourcePoseReview && ActiveSourcePoseReview == null)
+                _voState.CycleGender();
             foreach (var review in new[] { _sourcePoseReview, _femaleSourcePoseReview })
                 if (review != null)
                     for (var index = 0; index < VoEquipmentSlots.Length; index++)
@@ -1506,7 +1533,9 @@ namespace LinhGioi.World
             _controller.enabled = false;
             yield return null;
             yield return null;
-            var result = new CaptureInfo { groundY = GroundY, width = Screen.width, height = Screen.height };
+            var questOnly = Array.IndexOf(args, "--lgo-map01a-quest-only") >= 0;
+            var result = new CaptureInfo { groundY = GroundY, width = Screen.width, height = Screen.height,
+                captureScope = questOnly ? "map-quests-q01-q09" : "map-and-legacy-wardrobe" };
             var initial = FarOffset;
             var targets = new[] { -3.58f, -3.58f, -3.58f, 0f, 5.15f, 5.15f, 18.5f, 22.15f, 22.15f, 22.15f,
                 26.15f, 30.2f, 30.2f, 34.1f, 39f, 39f, 39f, 42.15f,
@@ -1545,7 +1574,7 @@ namespace LinhGioi.World
                 "70-vo-mixed-male-basic", "71-vo-mixed-male-lien-quyen", "72-vo-mixed-female-idle",
                 "73-vo-mixed-female-run", "74-vo-mixed-female-jump", "75-vo-mixed-female-basic",
                 "76-vo-mixed-female-lien-quyen", "77-vo-mixed-outer-off", "78-vo-mixed-outer-on" };
-            for (var i = 0; i < targets.Length; i++)
+            for (var i = 0; i < (questOnly ? 18 : targets.Length); i++)
             {
                 _routeX = targets[i];
                 Refresh();
@@ -1886,7 +1915,11 @@ namespace LinhGioi.World
             result.manaPotionCount = ManaPotionCount;
             result.playerHealth = PlayerHealth;
             result.parallaxDelta = FarOffset - initial;
-            if (!result.mapQuestFlowVerified || !result.functionalUiVerified || !result.dialogueOpened || !result.greetingCompleted || !result.voBaseVerified || !result.voModularVerified
+            var mapFailed = !result.mapQuestFlowVerified || !result.functionalUiVerified
+                || !result.dialogueOpened || !result.greetingCompleted
+                || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
+                || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f;
+            var wardrobeFailed = !questOnly && (!result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified
                 || !result.voAttachmentLv1Verified || !result.voAttachmentLv30FemaleVerified
@@ -1895,10 +1928,8 @@ namespace LinhGioi.World
                 || !result.voSharedRuntimeStateVerified
                 || !result.voMixedLevelMaleVerified || !result.voMixedLevelFemaleVerified
                 || !result.voMixedLevelMotionVerified || !result.voMixedLevelToggleVerified
-                || string.IsNullOrEmpty(result.voMixedEquipmentSnapshot)
-                || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
-                || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f)
-                result.status = "FIX_REQUIRED";
+                || string.IsNullOrEmpty(result.voMixedEquipmentSnapshot));
+            if (mapFailed || wardrobeFailed) result.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), JsonUtility.ToJson(result, true));
             Application.Quit(result.status == "FIX_REQUIRED" ? 1 : 0);
         }

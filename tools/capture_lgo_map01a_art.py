@@ -2,6 +2,8 @@
 """Capture the opt-in Map01A art slice in a real macOS Player, separate from baseline evidence."""
 import argparse
 import json
+import math
+import struct
 import subprocess
 import time
 import sys
@@ -17,12 +19,20 @@ def main():
     parser.add_argument('--out-dir', type=Path, default=ROOT / 'build/map01a-art/capture')
     parser.add_argument('--timeout', type=int, default=90)
     parser.add_argument('--profile', choices=['all', *PROFILES], default='all')
+    parser.add_argument('--quest-only', action='store_true', help='Capture Q01-Q09 without invoking historical wardrobe renderers')
+    parser.add_argument('--pose-review-dir', type=Path)
     args = parser.parse_args()
+    extra = (['--quest-only'] if args.quest_only else [])
+    if args.pose_review_dir:
+        args.pose_review_dir = args.pose_review_dir.resolve()
+        if not args.quest_only:
+            parser.error('--pose-review-dir requires --quest-only; legacy wardrobe assertions do not cover source poses')
+        extra += ['--pose-review-dir', str(args.pose_review_dir)]
     args.player = args.player.resolve()
     args.out_dir = args.out_dir.resolve()
     if args.profile == 'all':
         for profile in PROFILES:
-            subprocess.run([sys.executable, __file__, '--player', str(args.player), '--out-dir', str(args.out_dir / profile), '--timeout', str(args.timeout), '--profile', profile], check=True)
+            subprocess.run([sys.executable, __file__, '--player', str(args.player), '--out-dir', str(args.out_dir / profile), '--timeout', str(args.timeout), '--profile', profile, *extra], check=True)
         print('MAP01A_THREE_ASPECT_CAPTURE_COMPLETE; not physical device certification')
         return
     width, height = PROFILES[args.profile]
@@ -34,7 +44,10 @@ def main():
     with (out / 'launch.log').open('w') as log:
         process = subprocess.Popen([str(player), '-logFile', str(out / 'player.log'),
             '-screen-fullscreen', '0', '-screen-width', str(width), '-screen-height', str(height),
-            '--lgo-map01a-device', args.profile, '--lgo-map01a-art-capture', '--lgo-map01a-art-dir', str(out)],
+            '--lgo-map01a-device', args.profile, '--lgo-map01a-art-capture', '--lgo-map01a-art-dir', str(out),
+            *(['--lgo-map01a-quest-only'] if args.quest_only else []),
+            *(['--lgo-vo-registered', '--lgo-vo-registered-equipment', '--lgo-vo-pose-review-dir',
+               str(args.pose_review_dir)] if args.pose_review_dir else [])],
             cwd=player.parent, stdout=log, stderr=subprocess.STDOUT)
         try:
             started = time.monotonic()
@@ -45,7 +58,8 @@ def main():
                     break
                 time.sleep(.25)
             if process.poll() is None:
-                subprocess.run(['open', str(player.parents[2])], check=True, stdout=log, stderr=log)
+                script = 'ObjC.import("AppKit"); $.NSRunningApplication.runningApplicationWithProcessIdentifier(' + str(process.pid) + ').activateWithOptions(2);'
+                subprocess.run(['osascript', '-l', 'JavaScript', '-e', script], check=True, stdout=log, stderr=log)
             code = process.wait(timeout=max(1, args.timeout - (time.monotonic() - started)))
         except (subprocess.TimeoutExpired, subprocess.CalledProcessError):
             process.kill()
@@ -70,6 +84,38 @@ def main():
                 '42-vo-male-modular-lien-quyen', '43-vo-female-lv30-modular-run',
                 '44-vo-female-lv30-modular-jump', '45-vo-female-lv30-modular-basic',
                 '46-vo-female-lv30-modular-lien-quyen']
+    if args.quest_only:
+        required = required[:18]
+        flags = ('mapQuestFlowVerified', 'functionalUiVerified', 'dialogueOpened', 'greetingCompleted',
+                 'starterSupplies', 'spiritHerb', 'hiddenChest', 'combatAccepted', 'enemyDefeated',
+                 'enemyLooted', 'portalUnlocked', 'minimapUnlocked', 'healthPotionUsed', 'classRewardEquipped')
+        expected = {'captureScope': 'map-quests-q01-q09', 'frames': 18, 'completedQuestCount': 9,
+                    'activeQuestId': 'COMPLETE', 'healthPotionCount': 2, 'manaPotionCount': 2,
+                    'playerHealth': 100, 'voSkillCastCount': 3, 'voSkillHitCount': 3,
+                    'voTrainingTargetHp': 0, 'width': width, 'height': height,
+                    'status': 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED'}
+        if (any(manifest.get(key) != value for key, value in expected.items())
+                or not all(manifest.get(key) for key in flags)
+                or not math.isfinite(manifest.get('maxFootError', float('nan')))
+                or not 0 <= manifest['maxFootError'] <= .001
+                or not math.isfinite(manifest.get('parallaxDelta', float('nan')))
+                or abs(manifest['parallaxDelta']) <= .01
+                or any(not (out / (name + '.bmp')).is_file() for name in required)):
+            raise SystemExit('FIX_REQUIRED: incomplete Map01A quest capture ' + str(out))
+        if args.pose_review_dir:
+            from capture_lgo_registered_outfit import validate_pose_review_pack, validate_pose_review_log
+            pack = validate_pose_review_pack(args.pose_review_dir)
+            # Quest play does not exercise all motion poses; require the exact pack and overlays to load.
+            idle_only = {**pack, 'sprites': [row for row in pack['sprites'] if row['id'] == 'idle']}
+            validate_pose_review_log((out / 'player.log').read_text(), args.pose_review_dir, idle_only)
+        for name in required:
+            subprocess.run(['sips', '-s', 'format', 'png', str(out / (name + '.bmp')),
+                            '--out', str(out / (name + '.png'))], check=True, stdout=subprocess.DEVNULL)
+            raw = (out / (name + '.png')).read_bytes()
+            if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):
+                raise SystemExit('FIX_REQUIRED: invalid capture PNG ' + name)
+        print('LGO_MAP01A_QUEST_CAPTURE_TECHNICAL_PASS frames=18 quests=9/9; visual review required; ' + str(out))
+        return
     slots = ['main-weapon', 'head-hair', 'inner-top', 'outer-tunic', 'lower-garment',
              'waist', 'arm-guard', 'boots', 'light-armor', 'accessory']
     required += [f'{47 + index:02d}-vo-male-lv1-off-{slot}' for index, slot in enumerate(slots)]
@@ -79,7 +125,6 @@ def main():
         '70-vo-mixed-male-basic', '71-vo-mixed-male-lien-quyen', '72-vo-mixed-female-idle',
         '73-vo-mixed-female-run', '74-vo-mixed-female-jump', '75-vo-mixed-female-basic',
         '76-vo-mixed-female-lien-quyen', '77-vo-mixed-outer-off', '78-vo-mixed-outer-on']
-    import math
     foot_error = manifest.get('maxFootError', float('nan'))
     parallax = manifest.get('parallaxDelta', float('nan'))
     if (manifest.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED'
@@ -116,7 +161,6 @@ def main():
         raise SystemExit('FIX_REQUIRED: incomplete Map01A art capture ' + str(out))
     for name in required:
         subprocess.run(['sips', '-s', 'format', 'png', str(out / (name + '.bmp')), '--out', str(out / (name + '.png'))], check=True, stdout=subprocess.DEVNULL)
-    import struct
     for name in required:
         raw = (out / (name + '.png')).read_bytes()
         if raw[:8] != b'\x89PNG\r\n\x1a\n' or struct.unpack('>II', raw[16:24]) != (width, height):

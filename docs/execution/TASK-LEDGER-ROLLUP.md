@@ -1,3 +1,7 @@
+## Ưu tiên hiện hành — ổn định code, chuyển Map01A — 2026-09-12
+
+Owner dừng mở rộng character để hoàn thiện map. Đã giữ source/base/div4, sửa class catalog thiếu giới để không bật renderer cũ, khôi phục đổi đủ năm class, sửa hành trang dùng bình và chống tràn. Python 37 test, Unity 26 test; Player Q01–Q09 18 ảnh × ba tỷ lệ, ảnh UI đã review. Chi tiết `build/map01a-stable-player/quest-ui-verified`, cuối PC `quest-ui-labels-pc`. Chưa nghiệm thu toàn bộ art/Map01A. Next: audit mặt terrain alpha so với GroundY và thoại tablet; không tự tiếp task character trong lịch sử dưới đây.
+
 ## Map01A functional UI + playable gate — 2026-09-10
 
 Đã hoàn thiện phần còn thiếu sau Q01–Q09: minimap mở từ Q02 và bám node route; Q04 mở panel hành trang, nhận 3 Bình Máu/2 Bình Linh Lực và buộc dùng một bình để HP 60→100; Q07 nhận Hộ Uyển Võ Tân Thủ và buộc equip trước Q09. UI Toolkit dùng chung ba tỷ lệ, hàng action tự wrap để không tràn panel. EditMode cuối `179/178/0/1`; macOS Player build 0 compiler error; capture `build/map01a-functional-ui/three-profiles-v2/` có 27 frame/profile technical pass và các frame inventory/supplies/potion/loot/equip/portal đã review.

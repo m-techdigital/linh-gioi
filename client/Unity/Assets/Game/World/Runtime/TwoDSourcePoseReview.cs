@@ -449,11 +449,13 @@ namespace LinhGioi.World
         private void OnGUI()
         {
             if (!PresentationVisible) return;
+            var map = GetComponentInParent<CongDongLamMap01AArtPreview>();
+            if (map != null && map.InventoryOpen) return;
             var camera = Camera.main;
             if (camera == null) return;
             var point = camera.WorldToScreenPoint(transform.position + Vector3.up * 1.9f);
             if (point.z <= 0) return;
-            // Keep the world marker beside the actor so it never covers inventory controls.
+            // The review marker is visible only while the inventory is closed.
             var box = new Rect(point.x + 180, Screen.height - point.y - 40, 210, 40);
             var previousColor = GUI.color;
             GUI.color = new Color(0, 0, 0, .8f);

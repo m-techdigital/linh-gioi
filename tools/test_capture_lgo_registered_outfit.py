@@ -56,6 +56,7 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
         return {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
             "frames": 154,
+            "capturedGenders": ["male", "female"],
             "basePoseFrames": 30,
             "actionTransitions": 20,
             "heldJumpRestarts": 4,
@@ -79,6 +80,24 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
                  enabledCore=[slot for bit, slot in enumerate(core) if bits & (1 << bit)])
             for index, gender in enumerate(('male', 'female')) for bits in range(16)]
         return result
+
+    def test_single_gender_capture_is_complete_only_for_requested_scope(self):
+        result = self.valid_result()
+        result.update(frames=83, actorScreenMetricFrames=83, basePoseFrames=15,
+                      actionTransitions=10, heldJumpRestarts=2, toggles=20,
+                      capturedGenders=['male'], registeredEquipment=True, closedBody=True,
+                      maxEquipmentAttachments=16, maxBodyVariants=1)
+        self.assertEqual(validate_registered_capture_result(
+            code=0, result=result, width=1280, height=720, png_count=83,
+            captured_genders=('male',), registered_equipment=True), [])
+        errors = validate_registered_capture_result(
+            code=0, result=result, width=1280, height=720, png_count=83,
+            captured_genders=('male', 'female'))
+        self.assertIn('CAPTURE_GENDERS_MISMATCH', errors)
+        result['capturedGenders'] = ['female']
+        self.assertIn('CAPTURE_GENDERS_MISMATCH', validate_registered_capture_result(
+            code=0, result=result, width=1280, height=720, png_count=83,
+            captured_genders=('male',)))
 
     def test_matrix_requires_unique_images_and_actual_equipment_states(self):
         def check(result):

@@ -96,6 +96,46 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
+        [Test]
+        public void SourcePoseInventoryKeepsQuestPotionActionUsable()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("source inventory quest test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                scene.UseCurrentRouteAction(); scene.UseCurrentRouteAction();
+                foreach (var steps in new[] { 13, 25, 53, 19 })
+                {
+                    for (var i = 0; i < steps; i++) scene.MoveOnLane(1, .1f);
+                    scene.UseCurrentRouteAction();
+                    if (scene.DialogueOpen) scene.UseCurrentRouteAction();
+                }
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q04"));
+                Assert.That(scene.HealthPotionCount, Is.EqualTo(3));
+                var review = new GameObject("source presentation").AddComponent<TwoDSourcePoseReview>();
+                review.transform.SetParent(scene.transform);
+                typeof(CongDongLamMap01AArtPreview).GetField("_sourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(scene, review);
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                typeof(CongDongLamArrivalHud).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(hud, null);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var potion = root.Query<Button>().ToList().Single(button => button.text == "Dùng Máu");
+                Assert.That(potion.parent.style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "Source-pose review must not hide the inventory actions needed to complete Q04");
+                InvokeBoundButton(potion);
+                Assert.That(scene.PlayerHealth, Is.EqualTo(100));
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q05"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
         private static void InvokeBoundButton(Button button)
         {
             var callback = typeof(Clickable).GetField("clicked", BindingFlags.Instance | BindingFlags.NonPublic)

@@ -1,18 +1,26 @@
 ## Quick Resume
 
-`NEED_HUMAN_VISUAL_REVIEW / CONTINUE`. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`; giữ Võ div4/base/tỷ lệ/camera và registered WIP. Map01A là target. Không Meshy/3D, không frozen surfaces.
-
-Owner đã reject áo ngoài Pháp nam complete-garment v1 vì sai silhouette Lv1. Candidate mới external `class-work-in-progress/phap-lv001/deterministic-preserve-authoring-v7`: body/motion và 9 slot cũ giữ nguyên byte; chỉ `outer_top` được cắt gọn bằng một quy tắc source-space chung cho cả sáu pose. Pack `build/phap-source-pose-review-deterministic-v7/pack` giữ nguyên body hash `27630a5c…`; 9/10 atlas slot trùng byte với checkpoint cũ.
+`CONTINUE`. Owner chuyển ưu tiên sang hoàn thiện Map01A sau checkpoint an toàn; dừng mở rộng/redraw character. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`. Giữ nguyên Võ div4/body/motion/camera/scale, registered WIP và art hiện có. Không Meshy/3D/frozen surfaces.
 
 ## Next task
 
-Owner test trực tiếp Player mới `build/phap-v7-current-player/LinhGioiOnline.app` với Pháp nam Lv1. Source board `_review/six-pose-full-compose-v1.jpg` và `_review/idle-ten-slot-toggle-v1.jpg` đã được xem; Player capture nam có 87 frame hoàn chỉnh tại `build/phap-source-pose-review-deterministic-v7/runtime-pc/pc`, gồm full/off-10, bốn nhịp và lộn. Không dùng lại cửa sổ/binary `source-pose-semantic-v4-player` để bàn giao.
+Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F` hoặc nút trong hành trang đã kiểm đủ Pháp/Võ/Kiếm/Cơ/Linh trên một actor. Pháp chỉ có nam Lv1 v7; Võ nam Lv1/Lv10; giới/cấp chưa có không được rơi về renderer cũ. Các pack vẫn REVIEW_ONLY, không suy diễn rằng toàn bộ design/pose đã nghiệm thu.
 
-Nếu owner chấp nhận sai lệch nhỏ hiện tại thì khóa Pháp nam Lv1 rồi làm nữ Lv1, sau đó Lv10 từ geometry đã duyệt. Nếu còn lỗi hình, chỉ sửa đúng slot/pose được chỉ ra trên source v7; không thay body, motion, chín slot đã giữ, camera/root scale hoặc tạo presentation thứ hai.
+Player hiện hành: `build/map01a-stable-player/LinhGioiOnline.app`; mở qua `tools/launch_lgo_source_pose_review.py` để nạp đủ catalog, không mở bằng một pack đơn rồi kết luận mất đổi class. Giữ v7, không quay lại pack Pháp bị REJECTED/WITHDRAWN. Bộ trang phục không phải hướng đầu tư tiếp trong batch map này.
+
+Tiếp theo audit nền đi bộ/cầu/bờ cỏ và chỗ nối rìa làng: ảnh hiện có cho thấy khoảng hở giữa chân và mặt ảnh terrain dù mốc logic GroundY đúng. Đã đo alpha tại 10/25/50/75/90% bề ngang: stone-clean bắt đầu ở hàng 5/5/5/6/5 trên 110 px, stone-moss 9/16/16/17/16 trên 124 px, grass-bank 12/36/47/41/26 trên 172 px, bridge 5/5/5/5/5 trên 138 px. Layout đang gán đỉnh RECT = GroundY nên test bounds xanh không chứng minh chân chạm mặt ảnh. Phải đối chiếu mặt đi thực sự của sprite với modules-layout; không hạ actor hoặc chỉnh camera để che. Đồng thời kiểm thao tác hành trang/cuộn/đóng/mở và chuyển class bằng input thật trên Player cuối.
 
 ## Current blocker
 
-Capture tự động dừng sau frame nam 87 khi chuyển sang nữ vì batch này chưa có pack nữ; log ghi `NullReferenceException` tại `CaptureRegistered`. Phần nam đã capture đủ trước lỗi và đã review trực quan, nhưng chưa được coi là owner approval. Launcher có regression gate đọc `authoring-selection.json` và chặn status chứa `REJECTED`/`WITHDRAWN`, nên pack cũ đã thu hồi không thể vô tình mở lại qua launcher.
+Không có blocker tooling. Chưa nghiệm thu design character hoặc toàn Map01A. Task map tiếp theo vẫn hợp lệ: terrain/đường đi và review thoại ở tablet (nút hành trang disabled còn nằm dưới panel thoại).
+
+## Evidence và giới hạn
+
+- Lỗi capture thiếu pack nữ đã sửa tận gốc: capture chỉ giới thực sự có, không tự bật Võ nữ legacy; báo cáo ghi `capturedGenders`. Pháp nam có 99 frame/16 tổ hợp tại `build/source-classes-stable-player/phap-male-verified/pc`, không còn exception. Đây là gate kỹ thuật, không phải nghiệm thu design.
+- Ảnh và log đổi năm class: `build/source-classes-stable-player/actor-*.png`, `interactive.log`.
+- Map Q01–Q09: `build/map01a-stable-player/quest-ui-final/{pc,tablet,mobile}` đủ 18 frame/profile, 9 nhiệm vụ, dùng bình/nhận thưởng/mở cổng. Các profile là mô phỏng tỷ lệ trên macOS, chưa phải thiết bị thật. Lượt `quest-ui-verified` đã sửa cuộn ngang và xem lại cả ba profile. Bản cuối ẩn nhãn POSE THỬ khi mở hành trang; `quest-ui-labels-pc` đã capture 18 ảnh và review, chữ item không bị nhãn debug đè.
+- `--quest-only --pose-review-dir` tách gate map khỏi 60 frame wardrobe lịch sử; không phải bỏ assertion để claim wardrobe pass. Capture cũ `quest-capture/mobile` ghi nhầm scope nhưng chạy 78 frame đã bị helper từ chối, giữ để truy lỗi.
+- Python pack/launcher/capture: 37 test; Unity `build/map-ui-final-tests.xml`: 26 test pass, gồm switch class/giới và nút bình máu Q04→Q05. Sửa UI chỉ giới hạn/định dạng lại hành trang hiện có.
 
 ## Lịch sử — không thay action hiện hành
 

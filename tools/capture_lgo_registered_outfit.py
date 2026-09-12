@@ -41,8 +41,14 @@ def player_code_fingerprint(player):
             for path in [player, *assemblies]}
 
 
-def validate_registered_capture_result(*, code, result, width, height, png_count, closed_far_arms=False, closed_body=False, registered_equipment=False, wardrobe_matrix=False, pose_review_variant_levels=(), pose_review_variant_gender_count=1, source_pose_review=False):
+def validate_registered_capture_result(*, code, result, width, height, png_count, closed_far_arms=False, closed_body=False, registered_equipment=False, wardrobe_matrix=False, pose_review_variant_levels=(), pose_review_variant_gender_count=1, source_pose_review=False, captured_genders=('male', 'female')):
     errors = []
+    if not captured_genders or len(set(captured_genders)) != len(captured_genders) or any(
+            gender not in ('male', 'female') for gender in captured_genders):
+        raise ValueError('Capture must request distinct supported genders')
+    if result.get('capturedGenders') != list(captured_genders):
+        errors.append('CAPTURE_GENDERS_MISMATCH')
+    gender_count = len(captured_genders)
     if code != 0:
         errors.append('PLAYER_EXIT_CODE_' + str(code))
     if result.get('status') != 'TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED':
@@ -56,7 +62,9 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
             errors.append('REGISTERED_EQUIPMENT_MISSING')
         if not result.get('closedBody'):
             errors.append('REGISTERED_EQUIPMENT_REQUIRES_CLOSED_BODY')
-        if result.get('maxEquipmentAttachments') != 17:
+        # The registered source manifests contain 16 male and 17 female parts.
+        expected_attachments = 17 if 'female' in captured_genders else 16
+        if result.get('maxEquipmentAttachments') != expected_attachments:
             errors.append('REGISTERED_EQUIPMENT_ATTACHMENT_COUNT_MISMATCH')
         if result.get('maxBodyVariants') != 1:
             errors.append('REGISTERED_EQUIPMENT_BODY_VARIANT_COUNT_MISMATCH')
@@ -73,24 +81,24 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
         minimum_switches = max(20, 10 * len(pose_review_variant_levels))
         if result.get('poseReviewVariantSwitches', 0) < minimum_switches:
             errors.append('POSE_REVIEW_VARIANT_SWITCH_COUNT_MISMATCH')
-    expected_frames = ((186 if wardrobe_matrix else 154)
+    expected_frames = ((71 + (16 if wardrobe_matrix else 0)) * gender_count + 12
                        + ((len(pose_review_variant_levels) + 1) * pose_review_variant_gender_count
                           if pose_review_variant_levels else 0))
     if wardrobe_matrix:
         core = ('inner_top', 'outer_tunic', 'lower_garment', 'waist')
         rows = result.get('wardrobeCombinations', [])
-        expected = {(gender, bits) for gender in ('male', 'female') for bits in range(16)}
-        if len(rows) != 32 or {(r.get('gender'), r.get('bits')) for r in rows} != expected:
+        expected = {(gender, bits) for gender in captured_genders for bits in range(16)}
+        if len(rows) != 16 * gender_count or {(r.get('gender'), r.get('bits')) for r in rows} != expected:
             errors.append('WARDROBE_COMBINATIONS_INCOMPLETE')
         frames = [r.get('frame') for r in rows]
-        if len(set(frames)) != 32 or any(not isinstance(f, int) or not 1 <= f <= expected_frames for f in frames):
+        if len(set(frames)) != 16 * gender_count or any(not isinstance(f, int) or not 1 <= f <= expected_frames for f in frames):
             errors.append('WARDROBE_FRAME_REUSE_OR_MISSING')
         for row in rows:
             bits = row.get('bits')
             frame = row.get('frame')
             gender = row.get('gender')
             if (not isinstance(bits, int) or not isinstance(frame, int)
-                    or gender not in ('male', 'female')
+                    or gender not in captured_genders
                     or row.get('file') != f'{frame:02d}-{gender}-wardrobe-{bits:02d}.png'):
                 errors.append('WARDROBE_IMAGE_REFERENCE_MISMATCH')
             if not isinstance(bits, int) or row.get('enabledCore') != [slot for bit, slot in enumerate(core) if bits & (1 << bit)]:
@@ -98,10 +106,10 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
                 break
     expected_scalars = {
         'frames': expected_frames,
-        'basePoseFrames': 30,
-        'actionTransitions': 20,
-        'heldJumpRestarts': 4,
-        'toggles': 40,
+        'basePoseFrames': 15 * gender_count,
+        'actionTransitions': 10 * gender_count,
+        'heldJumpRestarts': 2 * gender_count,
+        'toggles': 20 * gender_count,
         'width': width,
         'height': height,
     }
@@ -134,7 +142,7 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
                  for row in metrics):
             errors.append('SOURCE_POSE_ROOT_SCALE_CHANGED')
         expected_beats = ['run_contact_a', 'run_a', 'run_contact_b', 'run_b']
-        for gender in ('male', 'female'):
+        for gender in captured_genders:
             for action in ('walk', 'run'):
                 prefix = f'-{gender}-{action}-phase-'
                 rows = sorted((row for row in metrics if prefix in row.get('file', '')),
@@ -251,6 +259,7 @@ def main():
             parser.error('--pose-review-female-alt-dir requires --pose-review-female-dir')
         for directory in args.pose_review_female_alt_dir:
             validate_pose_review_pack(directory)
+    captured_genders = ('male', 'female') if not args.pose_review_dir or args.pose_review_female_dir else ('male',)
     player = resolve_player(args.player)
     player_fingerprint = player_code_fingerprint(player)
     pose_fingerprint = pose_review_fingerprint(args.pose_review_dir) if args.pose_review_dir else None
@@ -334,6 +343,7 @@ def main():
             pose_review_variant_levels=variant_levels,
             pose_review_variant_gender_count=2 if args.pose_review_female_alt_dir else 1,
             source_pose_review=bool(args.pose_review_dir),
+            captured_genders=captured_genders,
         )
         if args.wardrobe_matrix:
             for row in result.get('wardrobeCombinations', []):
@@ -360,6 +370,7 @@ def main():
                 'runtimeEligible': False,
                 'executedPoses': executed_poses,
                 'frames': result['frames'],
+                'capturedGenders': list(captured_genders),
             }
             (out / 'pose-review-provenance.json').write_text(json.dumps(provenance, indent=2) + chr(10))
         print(f"{profile}: {result['frames']} Player frames; technical checks passed; visual review required", flush=True)

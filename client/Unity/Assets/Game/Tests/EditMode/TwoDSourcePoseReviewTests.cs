@@ -36,6 +36,90 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void ClassSwitchLoadsAndRemovesOptionalGenderWithoutLegacyFallback()
+        {
+            var directory = Path.Combine(Application.temporaryCachePath, "lgo-class-genders-" + Guid.NewGuid().ToString("N"));
+            var before = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+            var host = new GameObject("class catalog review");
+            try
+            {
+                Directory.CreateDirectory(directory);
+                WritePack(directory, null, null, null);
+                var preview = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var type = typeof(CongDongLamMap01AArtPreview);
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var male = new GameObject("male review").AddComponent<TwoDSourcePoseReview>();
+                male.transform.SetParent(preview.transform);
+                male.ReloadPack(directory);
+                type.GetField("_sourcePoseReview", flags).SetValue(preview, male);
+                var optionType = type.GetNestedType("SourcePoseClassOption", BindingFlags.NonPublic);
+                var options = (System.Collections.IList)type.GetField("_sourcePoseClassOptions", flags).GetValue(preview);
+                foreach (var femalePath in new[] { "-", directory })
+                {
+                    var option = Activator.CreateInstance(optionType, true);
+                    optionType.GetField("Id").SetValue(option, femalePath == "-" ? "single" : "pair");
+                    optionType.GetField("MalePrimary").SetValue(option, directory);
+                    optionType.GetField("FemalePrimary").SetValue(option, femalePath);
+                    options.Add(option);
+                }
+                preview.CycleSourcePoseClass();
+                preview.CycleVoAvatarGender();
+                Assert.That(preview.VoAvatarGender, Is.EqualTo("female"));
+                Assert.That(preview.IsSourcePoseReviewActive, Is.True);
+                type.GetField("_sourcePoseClassSwitchReadyAt", flags).SetValue(preview, 0f);
+                preview.CycleSourcePoseClass();
+                Assert.That(preview.VoAvatarGender, Is.EqualTo("male"));
+                Assert.That(preview.IsSourcePoseReviewActive, Is.True);
+                Assert.That(type.GetField("_femaleSourcePoseReview", flags).GetValue(preview), Is.Null);
+                Assert.That(preview.CanCycleSourcePoseClass, Is.True);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            }
+        }
+
+        [Test]
+        public void SingleGenderReviewCannotSwitchBackToLegacyPresentation()
+        {
+            var directory = Path.Combine(Application.temporaryCachePath, "lgo-single-gender-" + Guid.NewGuid().ToString("N"));
+            var before = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+            var host = new GameObject("single gender review");
+            try
+            {
+                Directory.CreateDirectory(directory);
+                WritePack(directory, null, null, null);
+                var preview = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var male = new GameObject("male review").AddComponent<TwoDSourcePoseReview>();
+                male.transform.SetParent(preview.transform);
+                typeof(TwoDSourcePoseReview).GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(male, new object[] { directory });
+                typeof(CongDongLamMap01AArtPreview).GetField("_sourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(preview, male);
+                preview.CycleVoAvatarGender();
+                Assert.That(preview.VoAvatarGender, Is.EqualTo("male"), "Missing female source must never select the legacy female renderer");
+                Assert.That(preview.IsSourcePoseReviewActive, Is.True);
+                var female = new GameObject("female review").AddComponent<TwoDSourcePoseReview>();
+                female.transform.SetParent(preview.transform);
+                typeof(TwoDSourcePoseReview).GetMethod("Load", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(female, new object[] { directory });
+                typeof(CongDongLamMap01AArtPreview).GetField("_femaleSourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(preview, female);
+                preview.CycleVoAvatarGender();
+                Assert.That(preview.VoAvatarGender, Is.EqualTo("female"));
+                Assert.That(preview.IsSourcePoseReviewActive, Is.True);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) UnityEngine.Object.DestroyImmediate(root);
+                if (Directory.Exists(directory)) Directory.Delete(directory, true);
+            }
+        }
+
+        [Test]
         public void OptionalOuterTopPackSharesFrameFacingAndSomersaultRoot()
         {
             var directory = Path.Combine(Application.temporaryCachePath, "lgo-pose-overlay-" + Guid.NewGuid().ToString("N"));

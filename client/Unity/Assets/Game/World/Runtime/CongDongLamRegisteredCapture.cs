@@ -37,6 +37,7 @@ namespace LinhGioi.World
             public List<int> poseReviewFullLevelFrames = new List<int>();
             public int poseReviewVariantSwitches;
             public int maxEquipmentAttachments, maxBodyVariants;
+            public string[] capturedGenders;
             public List<string> errors = new List<string>();
             public List<WardrobeCombination> wardrobeCombinations = new List<WardrobeCombination>();
             public List<ActorFrameMetric> actorFrameMetrics = new List<ActorFrameMetric>();
@@ -60,8 +61,12 @@ namespace LinhGioi.World
             var directory = args[index + 1];
             Directory.CreateDirectory(directory);
             var report = new RegisteredEvidence { registeredEquipment = _registeredOutfit.RegisteredEquipmentEnabled, width = Screen.width, height = Screen.height, closedBody = _registeredOutfit.ClosedBodyEnabled, closedFarArms = _registeredOutfit.ClosedFarArmsEnabled };
+            var genders = HasAnySourcePoseReview
+                ? new[] { 0, 1 }.Where(gender => gender == 0 ? _sourcePoseReview != null : _femaleSourcePoseReview != null).ToArray()
+                : new[] { 0, 1 };
+            report.capturedGenders = genders.Select(gender => VoAvatarGenders[gender]).ToArray();
             yield return null;
-            foreach (var gender in new[] { 0, 1 })
+            foreach (var gender in genders)
             {
                 AdvanceVoAnimation(2); AdvanceVoAnimation(.1f);
                 _voState.SetPresentation(gender, 0, 2, 0);
@@ -151,11 +156,15 @@ namespace LinhGioi.World
                         for (var sample = 0; sample < 4; sample++)
                         {
                             MoveOnLane(sample < 2 ? 1 : -1, .01f);
-                            activeReview.Apply(action,
-                                (sample * .25f + .01f) / TwoDSourcePoseTimeline.RunCyclesPerSecond,
-                                _voState.FacingSign, _voState.ActionProgress);
-                            if (activeReview.CurrentFrame != expectedFrames[sample])
-                                report.errors.Add(VoAvatarGender + " " + action + " four-beat capture mismatch at " + sample);
+                            if (activeReview != null)
+                            {
+                                activeReview.Apply(action,
+                                    (sample * .25f + .01f) / TwoDSourcePoseTimeline.RunCyclesPerSecond,
+                                    _voState.FacingSign, _voState.ActionProgress);
+                                if (activeReview.CurrentFrame != expectedFrames[sample])
+                                    report.errors.Add(VoAvatarGender + " " + action + " four-beat capture mismatch at " + sample);
+                            }
+                            else AdvanceVoAnimation(.25f / TwoDRegisteredOutfit.RunCyclesPerSecond(VoAvatarGender));
                             yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-" + action + "-phase-" + sample);
                         }
                     }
@@ -310,7 +319,7 @@ namespace LinhGioi.World
                     }
                 }
             }
-            _voState.SetPresentation(0, 0, 2, 0);
+            _voState.SetPresentation(genders[0], 0, 2, 0);
             _voState.EquipAllExcept(null);
             AdvanceVoAnimation(2); AdvanceVoAnimation(.1f);
             RefreshVoAvatarMode();

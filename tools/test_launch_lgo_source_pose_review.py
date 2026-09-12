@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 from unittest.mock import patch
 
-from launch_lgo_source_pose_review import PACK_SUFFIXES, build_class_args, build_player_command, main
+from launch_lgo_source_pose_review import CLASSES, PACK_SUFFIXES, build_class_args, build_player_command, main
 
 
 class SourcePoseReviewLaunchTests(unittest.TestCase):
@@ -13,8 +13,9 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             root = Path(directory)
             player = root / 'LinhGioiOnline'
             player.write_text('player')
-            for class_id in ('kiem', 'phap', 'co', 'linh'):
+            for class_id in CLASSES:
                 for suffix in PACK_SUFFIXES[class_id]:
+                    if suffix is None: continue
                     pack = root / 'build' / (class_id + suffix)
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text('{}')
@@ -22,9 +23,26 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             command = build_player_command(player, root, root / 'player.log')
 
             self.assertIn('--lgo-vo-pose-review-dir', command)
-            self.assertEqual(command.count('--lgo-source-pose-class'), 4)
+            self.assertEqual(command.count('--lgo-source-pose-class'), len(CLASSES))
             self.assertFalse(any(arg in command for arg in (
                 '--lgo-kiem-review', '--lgo-phap-review', '--lgo-co-review', '--lgo-linh-review')))
+
+    def test_current_launch_keeps_catalog_when_phap_has_only_male_lv1(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            player = root / 'Player'; player.write_text('player')
+            for class_id, suffixes in PACK_SUFFIXES.items():
+                for suffix in suffixes:
+                    if suffix is None: continue
+                    pack = root / 'build' / (class_id + suffix)
+                    pack.mkdir(parents=True)
+                    (pack / 'atlas-review.json').write_text('{}')
+            command = build_player_command(player, root, root / 'player.log')
+            self.assertEqual(command.count('--lgo-source-pose-class'), len(CLASSES))
+            index = command.index('phap')
+            self.assertEqual(command[index + 2:index + 5], ['-', '-', '-'])
+            self.assertIn('deterministic-v7', command[index + 1])
+            self.assertNotIn('--lgo-vo-pose-review-female-dir', command)
 
     def test_invalid_source_never_starts_player(self):
         cases = ({'poseScaleCorrections': {'jump_tuck': 0.6666666667}},
@@ -35,6 +53,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                 player = root / 'Player'; player.write_text('player')
                 for class_id, suffixes in PACK_SUFFIXES.items():
                     for suffix in suffixes:
+                        if suffix is None: continue
                         pack = root / 'build' / (class_id + suffix)
                         pack.mkdir(parents=True)
                         data = invalid if class_id == 'phap' else {'status': 'REVIEW_ONLY'}
@@ -60,6 +79,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             source.write_bytes(b'not read by launcher')
             for class_id, suffixes in PACK_SUFFIXES.items():
                 for suffix in suffixes:
+                    if suffix is None: continue
                     pack = root / 'build' / (class_id + suffix)
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text(json.dumps({'status': 'REVIEW_ONLY'}))
@@ -79,6 +99,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for suffix in PACK_SUFFIXES['phap']:
+                if suffix is None: continue
                 pack = root / 'build' / ('phap' + suffix); pack.mkdir(parents=True)
                 (pack / 'atlas-review.json').write_text(json.dumps(
                     {'status': 'REVIEW_ONLY', 'poseScaleCorrections': {'jump_tuck': 1}}))
@@ -95,6 +116,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             root = Path(directory)
             for class_id in ('kiem', 'phap'):
                 for suffix in PACK_SUFFIXES[class_id]:
+                    if suffix is None: continue
                     pack = root / 'build' / (class_id + suffix)
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text('{}')
