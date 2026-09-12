@@ -135,11 +135,11 @@ namespace LinhGioi.UI
             var actions = InventoryRow("Map01A Inventory Equipment Actions");
             actions.style.marginTop = 10;
             actions.style.flexShrink = 0;
-            _inventoryDetailPrimaryAction = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryDetailCard(); }, "Map01A Inventory Detail Primary Action");
+            _inventoryDetailPrimaryAction = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "Map01A Inventory Detail Primary Action");
             _inventoryDetailPrimaryAction.style.minHeight = 42;
-            _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
+            _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
             _equipmentToggle.style.display = DisplayStyle.None;
-            _equipmentVariant = InventoryButton(() => { _scene.CycleVoSelectedEquipmentItemLevel(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
+            _equipmentVariant = InventoryButton(() => { _scene.CycleVoSelectedEquipmentItemLevel(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
             _equipmentVariant.style.minHeight = 42;
             actions.Add(_inventoryDetailPrimaryAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
             _inventoryFooter.Add(actions); _inventoryDetailPanel.Add(_inventoryFooter);
@@ -286,6 +286,7 @@ namespace LinhGioi.UI
         private void SelectInventoryEquipmentSlot(string slotId)
         {
             _scene.SelectVoEquipmentSlot(slotId);
+            RefreshInventoryEquipmentTiles();
             RefreshInventoryDetailCard();
         }
 
@@ -293,6 +294,7 @@ namespace LinhGioi.UI
         {
             _characterInfoOpen = characterInfo;
             _storageOpen = false;
+            RefreshInventoryEquipmentTiles();
             _inventoryGridPanel.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryHeroPanel.style.display = characterInfo ? DisplayStyle.Flex : DisplayStyle.None;
             _storagePanel.style.display = DisplayStyle.None;
@@ -321,6 +323,7 @@ namespace LinhGioi.UI
         private void ShowInventoryPage(bool supplies)
         {
             _suppliesOpen = supplies;
+            RefreshInventoryEquipmentTiles();
             _equipmentPage.style.display = supplies ? DisplayStyle.None : DisplayStyle.Flex;
             _suppliesPage.style.display = supplies ? DisplayStyle.Flex : DisplayStyle.None;
             if (!_storageOpen)
@@ -331,6 +334,27 @@ namespace LinhGioi.UI
             ApplyLgoSelectedTab(_equipmentTab, !supplies);
             ApplyLgoSelectedTab(_suppliesTab, supplies);
             RefreshInventoryDetailCard();
+        }
+
+        private void RefreshInventoryEquipmentTiles()
+        {
+            if (_scene == null || _equipmentRows == null || _equipmentTiles == null) return;
+            for (var index = 0; index < _equipmentRows.Length; index++)
+            {
+                var slotId = _equipmentSlotIds[index];
+                var equipped = _scene.IsVoEquipmentSlotEquipped(slotId);
+                var level = _scene.GetVoEquipmentItemLevel(slotId);
+                _equipmentRows[index].text = (equipped ? "✓ " : "○ ") + EquipmentShortName(slotId)
+                    + "\nLv" + level;
+                _equipmentRows[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
+                    ? new Color(.16f, .48f, .50f, .96f)
+                    : equipped ? new Color(.06f, .13f, .17f, .94f) : new Color(.035f, .055f, .065f, .82f);
+                _equipmentTiles[index].text = EquipmentDisplayIcon(slotId) + "\n" + EquipmentShortName(slotId)
+                    + " · Lv" + level + (equipped ? "\nĐang mặc" : "\nĐã tháo");
+                _equipmentTiles[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
+                    ? new Color(.12f, .33f, .56f, .98f)
+                    : equipped ? new Color(.045f, .12f, .18f, .96f) : new Color(.025f, .040f, .052f, .78f);
+            }
         }
 
         private void RefreshInventoryDetailCard()

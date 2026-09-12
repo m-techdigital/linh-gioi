@@ -300,21 +300,7 @@ namespace LinhGioi.UI
                 + "\nHP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
             _equipmentTitle.text = "TRANG BỊ · " + _scene.VoEquippedSlotCount + "/10 món đang mặc";
             _questItemActions.style.display = DisplayStyle.Flex;
-            for (var index = 0; index < _equipmentRows.Length; index++)
-            {
-                var slotId = _equipmentSlotIds[index];
-                var equipped = _scene.IsVoEquipmentSlotEquipped(slotId);
-                _equipmentRows[index].text = (equipped ? "✓ " : "○ ") + EquipmentShortName(slotId)
-                    + "\nLv" + _scene.GetVoEquipmentItemLevel(slotId);
-                _equipmentRows[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
-                    ? new Color(.16f, .48f, .50f, .96f)
-                    : equipped ? new Color(.06f, .13f, .17f, .94f) : new Color(.035f, .055f, .065f, .82f);
-                _equipmentTiles[index].text = EquipmentShortName(slotId)
-                    + "\nLv" + _scene.GetVoEquipmentItemLevel(slotId) + (equipped ? " · mặc" : " · tháo");
-                _equipmentTiles[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
-                    ? new Color(.12f, .33f, .56f, .98f)
-                    : equipped ? new Color(.045f, .12f, .18f, .96f) : new Color(.025f, .040f, .052f, .78f);
-            }
+            RefreshInventoryEquipmentTiles();
             RefreshInventoryDetailCard();
             var selectedSlot = _scene.VoSelectedEquipmentSlot;
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);

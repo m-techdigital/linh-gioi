@@ -1,4 +1,8 @@
 
+## Next UI task — replace placeholder symbols with reusable item visuals — 2026-09-13
+
+The Hành trang grid now has compact slot symbols/state text and Player evidence at `build/map01a-inventory-grid-icons-quest-pc/07-q04-inventory-open.png`. Continue by replacing placeholder glyphs with a reusable item-icon visual system and polishing login/auth richness, still through shared UI skin/base. Do not create zip unless requested.
+
 ## Next UI task — item grid and login visual richness — 2026-09-13
 
 Continue Map01A UI fidelity from the current shared skin: item detail card now has compact icon/rarity/stats/action and Player evidence at `build/map01a-inventory-detail-polish-runtime-v3/`; next improve item-grid visual treatment and login/auth shell richness toward the owner reference designs. Do not create handoff zip unless the owner asks. Keep class art generation blocked unless a deterministic source/design method exists.

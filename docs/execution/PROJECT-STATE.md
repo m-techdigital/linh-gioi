@@ -1,4 +1,8 @@
 
+## Map01A inventory item grid icon checkpoint — 2026-09-13
+
+Equipment tiles in the Hành trang tab now refresh from a shared runtime path and show compact slot icons, level, and equipped/removed state instead of plain text-only cells. Slot selection, equip/unequip, and level cycling refresh both the grid and the right-side detail card immediately. Player evidence: `build/map01a-inventory-grid-icons-quest-pc/07-q04-inventory-open.png` from quest-only PC capture, plus detail capture `build/map01a-inventory-grid-icons-runtime/character-info.png`; manifest/evidence remain technical visual review, not final art-icon acceptance.
+
 ## Map01A inventory detail card runtime polish — 2026-09-13
 
 Inventory/character-info detail now has a compact item icon, rarity/level line, primary stat line, fit stat line, and a visible primary equip/unequip action while keeping the legacy toggle action as a hidden compatibility alias for existing tests. The detail action refreshes immediately after slot/toggle changes and no longer overflows the card in 1600x900 Player capture. Evidence: `build/map01a-inventory-detail-polish-runtime-v3/character-info.png` and `storage.png`; manifest records `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED` and `usesOsMouseOrKeyboard=false`. This improves item-detail fidelity only; full login/inventory visual redesign and real item art/icons remain next work.
