@@ -1,4 +1,8 @@
 
+## Source tree marker rule — 2026-09-13
+
+`DO-NOT-PACK.md` on any ancestor of a source image blocks owner-review launch. Keep marker files at the highest unsafe repair/candidate tree so child surfaces cannot be packed by moving manifests around.
+
 ## Repair candidate safety marker — 2026-09-13
 
 Any generated source repair candidate must keep `DO-NOT-PACK.md` until visual review is accepted. The Pháp repair-v1 directories are currently blocked by this marker; do not remove it just to run pack/capture. Remove/replace only after source boards are visually accepted and state is updated.

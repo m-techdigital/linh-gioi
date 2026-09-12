@@ -58,7 +58,6 @@ def validate_source_selection(manifest_path: Path, manifest: dict, cache: dict[P
                     raise ValueError(
                         f'Nguồn review đã bị loại ({status}): {selection_path}'
                         + (f' — {reason}' if reason else ''))
-                break
 
 
 def resolve_player(path: Path) -> Path:

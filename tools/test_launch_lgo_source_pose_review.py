@@ -139,6 +139,37 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
                     main(['--player', str(player), '--repo', str(root)])
                 launch.assert_not_called()
 
+    def test_ancestor_do_not_pack_above_authoring_selection_never_starts_player(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            player = root / 'Player'; player.write_text('player')
+            selected = root / 'selected'
+            (selected / 'DO-NOT-PACK.md').parent.mkdir(parents=True)
+            (selected / 'DO-NOT-PACK.md').write_text('# DO NOT PACK\nblocked ancestor')
+            surface = selected / 'phap-lv001' / 'registered-surface'
+            surface.mkdir(parents=True)
+            (surface / 'authoring-selection.json').write_text(json.dumps({'status': 'SOURCE_REVIEW_REQUIRED'}))
+            source = surface / 'outer_top' / 'idle.png'
+            source.parent.mkdir(parents=True)
+            source.write_bytes(b'not read by launcher')
+            for class_id, suffixes in PACK_SUFFIXES.items():
+                for suffix in suffixes:
+                    if suffix is None: continue
+                    pack = root / 'build' / (class_id + suffix)
+                    pack.mkdir(parents=True)
+                    (pack / 'atlas-review.json').write_text(json.dumps({'status': 'REVIEW_ONLY'}))
+                    if class_id == 'vo':
+                        item = pack / 'outer-top-review'
+                        item.mkdir()
+                        (item / 'atlas-review.json').write_text(json.dumps({
+                            'status': 'REVIEW_ONLY',
+                            'sprites': [{'source': str(source)}],
+                        }))
+            with patch('launch_lgo_source_pose_review.subprocess.Popen') as launch:
+                with self.assertRaisesRegex(ValueError, 'DO-NOT-PACK'):
+                    main(['--player', str(player), '--repo', str(root)])
+                launch.assert_not_called()
+
     def test_identity_scale_is_allowed_but_invalid_item_scale_is_not(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

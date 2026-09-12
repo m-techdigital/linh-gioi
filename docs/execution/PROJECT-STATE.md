@@ -1,4 +1,8 @@
 
+## Source DO-NOT-PACK ancestor guard — 2026-09-13
+
+Owner-review launcher now keeps scanning source ancestors after reading a valid `authoring-selection.json`, so a `DO-NOT-PACK.md` marker above the selected surface still blocks Player launch. Regression test covers a pack source under a valid selection but with an ancestor DO-NOT-PACK marker; Player no longer starts in that case. This protects diagnostic repair directories and grouped external source trees from accidental pack/capture.
+
 ## Pháp diagnostic repair candidates blocked from packing — 2026-09-13
 
 `repair_lgo_source_class_accessory_ownership.py` now writes `DO-NOT-PACK.md` for every repair output. The already-created male v5 and female v3 `*-class-accessory-repair-v1` external directories were marked the same way, and `validate_phap_source_candidate()` now rejects them via the marker. These surfaces remain diagnostic only until a later source repair passes off-slot visual review and explicit visual acceptance.
