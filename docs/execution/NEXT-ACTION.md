@@ -1,7 +1,15 @@
 
+## Pháp source board visual hold — 2026-09-13
+
+Do not pack/promote Pháp male v5, male v7 or female v3 even though their file-level source candidate gate now returns clean. Off-slot boards and provenance exist, but manual review found broken slot ownership in jump pose: male v5/v7 leave garment fragments around `outer_top`/`head_hair`/`class_accessory`; female v3 breaks `head_hair` ownership and loses a large garment mass in `off_class_accessory`. Next valid Pháp action is source-mask/slot-ownership repair on the same body/canvas/pivot, regenerate off-slot boards with provenance, re-run `validate_phap_source_candidate()`, then visual review before any pack/capture.
+
+## Shared UI design governance active — 2026-09-13
+
+All future UI batches must apply the newly uploaded owner design references across the full Map01A UI family, not only login. Similar modal/dialog/card/tab/button/detail patterns must go through shared base/skin/component first; different behavior belongs in data/state/action. Gate: `PYTHONPATH=tools PYTHONPYCACHEPREFIX=build/pycache python3.12 -m unittest tools.test_validate_lgo_ui_shared_skin` and `PYTHONPYCACHEPREFIX=build/pycache python3.12 tools/validate_lgo_ui_shared_skin.py`.
+
 ## Pháp next source action — 2026-09-13
 
-Before any Pháp pack/capture, run source candidate gate. Likely repair path: generate/review six off-slot boards for male v5/v7 and female v3, then only pack if `validate_phap_source_candidate()` returns clean and source has no reject marker. Do not use v8/v9 despite having off-slot boards because they are `DO-NOT-PACK`/`SOURCE_REJECTED`.
+Before any Pháp pack/capture, run source candidate gate and visual review. Male v5/v7/female v3 already have six off-slot boards and provenance, but manual visual review rejects them; repair masks/slot ownership first, regenerate boards/provenance, then only pack if `validate_phap_source_candidate()` returns clean and visual review no longer shows broken off-slot ownership. Do not use v8/v9 because they are `DO-NOT-PACK`/`SOURCE_REJECTED`.
 
 
 ## Pháp fallback audit result — 2026-09-13

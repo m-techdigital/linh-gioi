@@ -158,6 +158,25 @@ class OwnerReviewCatalogValidatorTests(unittest.TestCase):
 
             self.assertIn("off-slot review boards", validator.validate_phap_source_candidate(candidate))
 
+    def test_phap_source_candidate_requires_off_slot_board_provenance(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            candidate = root / "registered-surface"
+            for slot in validator.SOURCE_SLOTS:
+                for pose in validator.SOURCE_POSES:
+                    target = candidate / slot / f"{pose}.png"
+                    target.parent.mkdir(parents=True, exist_ok=True)
+                    target.write_bytes(b"png")
+            (candidate / "manifest.json").write_text(json.dumps({"status": "SOURCE_REVIEW_REQUIRED"}))
+            (candidate / "six-pose-full-compose.jpg").write_bytes(b"jpg")
+            for pose in validator.SOURCE_POSES:
+                (candidate / f"{pose}-ten-slot-off-review.jpg").write_bytes(f"{pose}-jpg".encode("utf-8"))
+
+            error = validator.validate_phap_source_candidate(candidate)
+
+            self.assertIsNotNone(error)
+            self.assertIn("off-slot board provenance", error)
+
 
 
 if __name__ == "__main__":

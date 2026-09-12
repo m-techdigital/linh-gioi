@@ -141,6 +141,43 @@ def validate_phap_source_candidate(candidate: Path) -> str | None:
     missing_boards = [name for name in required_boards if not (candidate / name).is_file()]
     if missing_boards:
         return f"Pháp source candidate missing off-slot review boards: {candidate} missing={missing_boards}"
+    provenance_error = validate_off_slot_board_provenance(candidate)
+    if provenance_error:
+        return provenance_error
+    return None
+
+
+def validate_off_slot_board_provenance(candidate: Path) -> str | None:
+    provenance_path = candidate / "off-slot-board-provenance.json"
+    if not provenance_path.is_file():
+        return f"Pháp source candidate missing off-slot board provenance: {candidate}"
+    try:
+        provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return f"Pháp source candidate invalid off-slot board provenance: {candidate} error={exc}"
+    if provenance.get("poses") != list(SOURCE_POSES):
+        return f"Pháp source candidate off-slot board provenance pose mismatch: {candidate}"
+    if provenance.get("slots") != list(SOURCE_SLOTS):
+        return f"Pháp source candidate off-slot board provenance slot mismatch: {candidate}"
+    boards = provenance.get("boards")
+    if not isinstance(boards, list):
+        return f"Pháp source candidate off-slot board provenance has no board list: {candidate}"
+    expected = {f"{pose}-ten-slot-off-review.jpg" for pose in SOURCE_POSES}
+    seen = set()
+    for board in boards:
+        if not isinstance(board, dict):
+            return f"Pháp source candidate off-slot board provenance has invalid board entry: {candidate}"
+        filename = board.get("file")
+        if filename not in expected:
+            return f"Pháp source candidate off-slot board provenance unexpected board: {candidate} file={filename}"
+        seen.add(filename)
+        board_path = candidate / filename
+        digest = hashlib.sha256(board_path.read_bytes()).hexdigest()
+        if board.get("sha256") != digest:
+            return f"Pháp source candidate off-slot board provenance sha mismatch: {candidate} file={filename}"
+    missing = sorted(expected - seen)
+    if missing:
+        return f"Pháp source candidate off-slot board provenance missing boards: {candidate} missing={missing}"
     return None
 
 
