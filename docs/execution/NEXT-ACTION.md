@@ -1,4 +1,8 @@
 
+## Pháp repair-v1 hold — 2026-09-13
+
+Do not pack `registered-surface-lv001-hd-v5-class-accessory-repair-v1` or `registered-surface-lv001-hd-v3-class-accessory-repair-v1`. They improve `off_class_accessory` but still fail visual review at `off_outer_top` and `off_head_hair`; next repair must address outer-top/head-hair ownership, not just accessory pixels.
+
 ## Pháp source audit command — 2026-09-13
 
 After any Pháp source-mask/slot-ownership edit, run `build/rig-authoring-venv/bin/python tools/write_lgo_source_slot_area_audit.py --surface <surface> --output build/phap-source-slot-audit-vNext/<name>.json` before regenerating off-slot boards. Use the flags to focus review; this tool does not replace visual board review or Player capture.

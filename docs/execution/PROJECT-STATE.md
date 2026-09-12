@@ -1,4 +1,8 @@
 
+## Pháp class_accessory repair v1 diagnostic — 2026-09-13
+
+Added `tools/repair_lgo_source_class_accessory_ownership.py` with regression coverage. It creates a new source surface and moves oversized `class_accessory` pixels not connected near `waist_belt` into `outer_top`, preserving full-compose alpha. Trial external candidates were generated for male v5 and female v3 under `*-class-accessory-repair-v1`; off-slot boards show `off_class_accessory` improves, but both candidates still fail visual review because `off_outer_top` and `off_head_hair` break body/hair/garment ownership. Do not pack/promote repair-v1; use it only as diagnostic evidence that class_accessory is one subproblem, not the whole Pháp fix.
+
 ## Pháp slot ownership audit tool — 2026-09-13
 
 Added `tools/write_lgo_source_slot_area_audit.py` with regression coverage. It produces per-pose slot pixel counts, ratios, top slots and threshold flags so source repairs can be grouped by ownership problem instead of repeated Player trial. Current evidence `build/phap-source-slot-audit-v2/`: male v5 jump flags `class_accessory` + `outer_top`; male v7 jump flags `outer_top`; female v3 jump flags `class_accessory` + `outer_top`.
