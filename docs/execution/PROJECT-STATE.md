@@ -1,4 +1,8 @@
 
+## Pháp slot ownership audit tool — 2026-09-13
+
+Added `tools/write_lgo_source_slot_area_audit.py` with regression coverage. It produces per-pose slot pixel counts, ratios, top slots and threshold flags so source repairs can be grouped by ownership problem instead of repeated Player trial. Current evidence `build/phap-source-slot-audit-v2/`: male v5 jump flags `class_accessory` + `outer_top`; male v7 jump flags `outer_top`; female v3 jump flags `class_accessory` + `outer_top`.
+
 ## Pháp slot ownership ratio audit — 2026-09-13
 
 Created local evidence `build/phap-source-slot-audit-v1/slot-area-ratios.json` from the three held-out Pháp source candidates. Jump pose confirms the manual visual issue: male v5 `outer_top` is 32.0% and `class_accessory` 13.5% of slot pixels; male v7 `outer_top` is 46.9%; female v3 `outer_top` is 36.9% and `class_accessory` 16.4%. Treat these as source ownership repair targets, not runtime/camera issues.

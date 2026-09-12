@@ -1,4 +1,8 @@
 
+## Pháp source audit command — 2026-09-13
+
+After any Pháp source-mask/slot-ownership edit, run `build/rig-authoring-venv/bin/python tools/write_lgo_source_slot_area_audit.py --surface <surface> --output build/phap-source-slot-audit-vNext/<name>.json` before regenerating off-slot boards. Use the flags to focus review; this tool does not replace visual board review or Player capture.
+
 ## Pháp ownership repair target — 2026-09-13
 
 Use `build/phap-source-slot-audit-v1/slot-area-ratios.json` plus the off-slot boards when repairing Pháp. Priority slots are `outer_top`, `class_accessory`, and `head_hair` in jump pose; `class_accessory` must be reduced back to actual detachable ornament scope, and `head_hair` must not own face/body/garment pixels. Do not solve this with runtime offsets, camera, scale, or poseScaleCorrections.
