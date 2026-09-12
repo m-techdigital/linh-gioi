@@ -1,4 +1,11 @@
 
+## Map01A owner HUD cleanup checkpoint — 2026-09-13
+
+- Normal owner-facing gameplay HUD now hides source/review/debug controls instead of showing `_outfit`, `_level`, `_gender`, `_slot`, `_itemLevel`, `_toggleSlot` on the left side.
+- Evidence: `build/map01a-owner-hud-capture-v1/pc/01-arrival-q01.png`, `02-ha-van-dialogue.png`, `07-q04-inventory-open.png`; PC quest-only capture passed 18 frames, 9/9 quests, 38 dialogue frames.
+- Next valid UI work: continue polishing visible Map01A screens from the owner design references using shared base/skin first, then return to wardrobe/class art only after a focused source/design audit; do not reintroduce product HUD review controls or a second UI system.
+
+
 ## Shared UI governance rule/test checkpoint — 2026-09-13
 
 - Rule added to `AGENTS.md`: UI/UX with the same pattern must update shared base/skin/helper first; helper exceptions such as `InventoryPanel` must stay in the partial that owns that flow and cannot be copied to avoid the validator.

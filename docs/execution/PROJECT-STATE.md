@@ -1,4 +1,9 @@
 
+## Map01A owner HUD hides review controls — 2026-09-13
+
+Owner-facing gameplay HUD no longer shows the left-side review/debug controls (`_outfit`, `_level`, `_gender`, `_slot`, `_itemLevel`, `_toggleSlot`). The controls remain non-product internals while inventory/detail and hotkeys keep owning review actions where needed. Regression in `TwoDCharacterRuntimeStateTests.DialogueHidesUnderlyingActionsAndRestoresThemAfterContinue` now asserts these controls are hidden both during normal gameplay and behind inventory. Player evidence `build/map01a-owner-hud-capture-v1/pc` captured Q01–Q09 with 18 quest frames and 38 dialogue frames; reviewed `01-arrival-q01.png`, `02-ha-van-dialogue.png`, and `07-q04-inventory-open.png`, confirming normal gameplay HUD is clean and inventory/dialogue still render.
+
+
 ## Shared UI governance tightened — 2026-09-13
 
 Project rule now explicitly requires reusable UI patterns to live in shared base/skin/helper before implementation. Modal/dialog/card/tab/button/detail/panel helpers must not be copied into per-screen partials; named exceptions such as `InventoryPanel` and `MakeCharacterCard` are locked to their owning partial only. `tools/validate_lgo_ui_shared_skin.py` and `tools.test_validate_lgo_ui_shared_skin` now include a regression that rejects reusing an allowed helper name from another partial, preventing future screens from bypassing shared UI governance while still allowing narrow wrappers that call `ApplyLgo*`.

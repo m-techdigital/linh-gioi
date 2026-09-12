@@ -285,10 +285,8 @@ namespace LinhGioi.UI
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _quest.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            var compactReview = _scene.DialogueOpen || _scene.InventoryOpen || _scene.IsSourcePoseReviewActive
-                || _scene.ClassEquipmentPreviewActive;
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
-                control.style.display = compactReview ? DisplayStyle.None : DisplayStyle.Flex;
+                control.style.display = DisplayStyle.None;
             _inventorySummary.text = _scene.InventorySummaryText;
             _inventoryHeroTitle.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
             _inventoryHeroMeta.text = "LC review local · " + _scene.EquipmentFitSummary
