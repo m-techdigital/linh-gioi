@@ -13,7 +13,11 @@ Trạng thái: thiết kế triển khai theo phạm vi owner, chưa nghiệm th
 
 ## Sau map
 
-Đăng nhập theo `LOGIN-GATE-ENTRY-VISUAL-SPEC-v1.md`: cổng/nền, title, vùng chọn máy chủ/tài khoản thử và CTA vào thế giới. Audit thấy `RuntimeLoginResponsiveLayout` còn nhưng entry 2D không gọi nó, asset Login V3B cũng không có trên branch; không coi helper tồn tại là màn đã hoạt động. Reuse `AccountApiClient.LoginDevAsync` khi nối luồng, không tự mở production auth/đăng ký hoặc sửa contract. Phải tạo demo cụ thể trước khi nối.
+Owner chỉnh hướng ngày 2026-09-12: **thiết kế mới cho game 2D hiện tại**, không dùng login/sảnh V3B, nền Linh Thành đêm cũ hoặc bố cục 3D làm mẫu. Góc ngang, nét vẽ và màu sắc theo Cổng Đông Lâm đang chạy. Owner có thể cung cấp design khi cần; chưa có bộ UI mới được duyệt và chưa nhập ảnh login mới vào runtime.
+
+Bộ màn cần cùng một ngôn ngữ UI: đăng nhập (trống/nhập/đang kết nối/lỗi/vào game), HUD chơi (HP/MP, nhiệm vụ, di chuyển, kỹ năng đang có, tương tác), hành trang (10 slot, xem món, tháo/mặc, cấp có thật, class/giới có pack), thoại NPC (nhiều trang, hỏi thêm, nhận việc, đóng, quay lại). Hành trang giữ header/footer, chỉ phần danh sách cuộn; trung tâm màn chơi dành cho actor/map. Chỉ tái sử dụng phần kỹ thuật UI Toolkit, font, input và state hiện hành, không ép layout cũ vào màn mới.
+
+`AccountApiClient.LoginDevAsync` là API dev có thể dùng khi nối đăng nhập; chưa phải entry hoạt động. Không tự mở production auth/đăng ký hoặc sửa contract. Tạo demo 2D cụ thể trước khi nối; các trạng thái phải kiểm trên Player.
 
 Hành trang tiếp theo cần card/inspect món, trạng thái đang mặc/tháo, cấp có thật và nút đóng rõ; giữ catalog/equip đã audit. HUD tiếp theo chỉ dùng hành vi hiện có; chưa thêm chat/guild/shop/minimap tương tác giả. Lỗi atlas kiến trúc đã sửa sau khi phục hồi raw source ngày 2026-09-12; gate sửa cắt mảnh có Player evidence. Đây chưa phải nghiệm thu toàn bộ sản phẩm.
 

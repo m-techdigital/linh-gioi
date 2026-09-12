@@ -75,7 +75,7 @@ stage_checkpoint_paths() {
     else
       echo "LGO_GIT_CHECKPOINT_SKIP generated_or_outside_allowlist $path"
     fi
-  done < <(git ls-files -m -o -d -z --exclude-standard)
+  done < <(git ls-files --deduplicate -m -o -d -z --exclude-standard)
 }
 
 subject="$(python3.12 - "$STATUS_FILE" "$ROUND" <<'PY'

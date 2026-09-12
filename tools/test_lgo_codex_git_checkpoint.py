@@ -69,6 +69,15 @@ class GitCheckpointTests(unittest.TestCase):
         self.assertEqual(before, self.tip())
         self.assertEqual(before, self.remote_tip())
 
+    def test_unstaged_deletion_is_committed_once_and_pushed(self):
+        (self.work / 'README.md').unlink()
+        result = self.checkpoint(push=True)
+        self.assertEqual(0, result.returncode, result.stderr + result.stdout)
+        self.assertEqual(self.tip(), self.remote_tip())
+        self.assertEqual('', self.run_git(self.work, 'ls-files', 'README.md'))
+        self.assertEqual('', self.run_git(self.work, 'status', '--porcelain'))
+        self.assertEqual('baseline\n', (self.main / 'README.md').read_text())
+
     def test_cached_only_changes_are_committed(self):
         (self.work / 'README.md').write_text('staged batch\n')
         self.run_git(self.work, 'add', 'README.md')

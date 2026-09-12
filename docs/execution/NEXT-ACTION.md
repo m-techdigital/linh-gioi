@@ -6,15 +6,17 @@
 
 Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F` hoặc nút trong hành trang đã kiểm đủ Pháp/Võ/Kiếm/Cơ/Linh trên một actor. Pháp chỉ có nam Lv1 v7; Võ nam Lv1/Lv10; giới/cấp chưa có không được rơi về renderer cũ. Các pack vẫn REVIEW_ONLY, không suy diễn rằng toàn bộ design/pose đã nghiệm thu.
 
-Player hiện hành: `build/map01a-restored-landmarks-player/LinhGioiOnline.app`; mở bằng `tools/launch_lgo_source_pose_review.py`, giữ catalog đủ năm class, không bật renderer cũ. Kế thừa HUD/hội thoại ở `b930acea`/`f7d5ba11`; giữ body/pose/camera/scale. Lỗi mái/đèn cắt sang ô khác đã sửa bằng raw source phục hồi, không imagegen lại.
+Player hiện hành: `build/legacy-3d-cleanup-player/LinhGioiOnline.app`; mở bằng `tools/launch_lgo_source_pose_review.py`, giữ catalog đủ năm class, không bật renderer cũ. Kế thừa HUD/hội thoại ở `b930acea`/`f7d5ba11`; giữ body/pose/camera/scale. Lỗi mái/đèn cắt sang ô khác đã sửa bằng raw source phục hồi, không imagegen lại.
 
 Gate: 3 packer test + 20 EditMode map; build 0 error/0 warning. Evidence `build/map01a-restored-landmarks-player/quest-capture/{pc,tablet,mobile}` có Q01–Q09 và 38 ảnh thoại/profile; đã xem cả raw sheet và Player. Báo cáo `build/map01a-source-recovery-audit/repair-report.json`. Giới hạn: local playable slice, chưa nghiệm thu toàn bộ character/production hoặc thiết bị thật.
 
-Next: tạo demo cụ thể màn đăng nhập và hành trang/HUD theo `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md` và reference gốc, sau đó nối UI vào entry hiện hành. Đăng nhập chưa nối vào entry 2D, nhưng còn `AccountApiClient.LoginDevAsync`; giữ dev-key prototype, không auth mới/frozen contract. Nền login đã tìm thấy tại `~/.codex/generated_images/01a0748f-76a8-7be2-bd55-33fe5e41c403/exec-2c5015b0-417f-4d01-91d3-b1942f3901e4.png`, phải xem ảnh trước reuse; không bật fallback V3B ngẫu nhiên. Hành trang cần header/footer cố định, chỉ body cuộn, card/inspect dựa catalog thật. Không mở lại redraw character.
+Batch dọn đã kiểm: gỡ 56 file presentation/metadata hết dùng, không có Unity C#/GUID consumer còn lại; no-3D guard chặn nhóm đã loại quay lại. 71 EditMode + 1 pointer test có graphics đạt; build 0 error/13 cảnh báo deprecated. PC capture Q01–Q09 + 38 ảnh thoại đã xem tại `build/legacy-3d-cleanup/pc/`; fixture chỉ Pháp, lệnh mở owner phải dùng launcher catalog năm class. Giữ M4/M6 gameplay còn dùng và toàn bộ art/registered WIP/camera/base/scale. Audit `build/legacy-3d-cleanup/audit.json`.
+
+Next: tạo design/demo **mới cho game 2D hiện tại**, theo `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`; không dùng nền login Linh Thành đêm/3D hoặc layout V3B cũ. Owner có thể cung cấp design khi cần. Chưa có design UI mới được duyệt. Sau demo nối vào entry 2D, dùng state/catalog và API dev sẵn có; hành trang header/footer cố định, body cuộn. Không mở lại redraw character.
 
 ## Yêu cầu tiếp nối của owner — 2026-09-12
 
-Sau khi xử lý map, thiết kế và triển khai màn đăng nhập, hành trang, các nút cần thiết khi chơi theo design gốc. Hoàn thiện hội thoại NPC như chơi thật: nội dung đầy đủ, lựa chọn/tiếp tục, nhận/trả nhiệm vụ, trạng thái trước/trong/sau nhiệm vụ và khi quay lại NPC. Trước implementation chỉ rõ design/demo từng màn và các tương tác; dùng base chung, kiểm input/UI trên Player, không chỉ test xanh. Không tự mở auth backend/frozen contract; audit flow đăng nhập hiện có để tái sử dụng.
+Sau khi xử lý map, thiết kế và triển khai màn đăng nhập, hành trang, các nút cần thiết khi chơi theo design mới phù hợp game 2D hiện tại. Hoàn thiện hội thoại NPC như chơi thật: nội dung đầy đủ, lựa chọn/tiếp tục, nhận/trả nhiệm vụ, trạng thái trước/trong/sau nhiệm vụ và khi quay lại NPC. Trước implementation chỉ rõ design/demo từng màn và các tương tác; dùng base chung, kiểm input/UI trên Player, không chỉ test xanh. Không tự mở auth backend/frozen contract; audit flow đăng nhập hiện có để tái sử dụng.
 
 ## Current blocker
 

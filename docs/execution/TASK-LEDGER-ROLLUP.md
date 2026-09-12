@@ -1,10 +1,18 @@
+## Hiện hành — dọn presentation cũ, giữ game 2D — 2026-09-12
+
+`CONTINUE`. Theo owner, đã gỡ 56 file hết dùng (69.242 byte): 6 helper màn login/sảnh/menu/HUD/thoại cũ, registry V2, metadata đi kèm và 42 metadata thư mục V2/V3B rỗng. Audit trước xoá và sau Unity import không có C# hoặc GUID consumer ngoài nhóm gỡ. Không có model FBX/Blend trên branch để xoá thêm. Giữ `PlayableWorldController`, registry V3B/material còn phục vụ M4/M6 smoke; không xóa mesh trang phục 2D, source/registered WIP hoặc ảnh đã làm. Lịch sử design/provenance và validator V3B cũ được giữ để tra cứu, không phải design/gate hiện hành; không phục hồi code chỉ để làm xanh validator của màn đã bỏ. Danh sách/hash: `build/legacy-3d-cleanup/audit.json`.
+
+Kiểm: 71 test EditMode đạt; test pointer bị skip ở headless đã chạy riêng có graphics và đạt 1/1. Một build Player thành công, 0 error/13 cảnh báo API deprecated trong code dùng chung còn nguyên. Một capture PC: 18 ảnh Q01–Q09 + 38 ảnh thoại, quay lại đủ 6 NPC; đã xem hành trang, thoại Tổng Phú và cổng cuối tại `build/legacy-3d-cleanup/pc/`. Đây là fixture Pháp một class để kiểm map, không dùng nó làm lệnh mở game cho owner. Launcher catalog năm class giữ nguyên. Không nghiệm thu lại art/wardrobe hoặc tuyên bố đã làm UI mới.
+
+Player mới: `build/legacy-3d-cleanup-player/LinhGioiOnline.app`; luôn mở bằng `tools/launch_lgo_source_pose_review.py` để đủ catalog. Next: design/demo **mới cho game 2D Cổng Đông Lâm**, không reuse nền/layout login 3D/V3B cũ. Owner có thể cung cấp design khi cần. Chuẩn màn/trạng thái trong `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`. Chưa hoàn tất goal. Batch xoá có 63 file thay đổi, chủ yếu giảm source/metadata; cho phép ngân sách kiểm checkpoint 65 file/1.650 dòng, không tăng mặc định toàn repo. Checkpoint phát hiện `git ls-files -m -d` phát đường dẫn xoá hai lần: thêm deduplicate; test RED tái hiện pathspec rồi GREEN 9/9, giữ nguyên gate frozen/upstream.
+
 ## Hiện hành — phục hồi sáu kiến trúc Map01A từ raw source — 2026-09-12
 
 `CONTINUE`. Blocker atlas đã được xử lý: raw sheet gốc còn trong `~/.codex/generated_images/01a0882c-6082-7b80-8ddd-3e7d7657a5e5/exec-44fa9278-3d6d-44f2-9098-82cd0d08ed7a.png`. Bản sao/provenance/regions tại external selected source `map-01a-cong-dong-lam/runtime-source-recovery/landmarks-v1`. Không tái tạo art; bỏ chia ô 512, tách theo dải alpha rỗng giữa từng công trình. Packer chặn cắt xuyên object, crop chồng nhau và bỏ sót nội dung. Đã xem raw/source pack và Player: mái nhà, gian hàng, giếng và đèn Lão Trần liền đúng công trình.
 
 Ba test packer pass (có RED lỗi mái sang ô kế bên), 20 EditMode map pass; Player build 0 error/0 warning. Q01–Q09 + 38 ảnh thoại/profile chạy đủ PC/tablet/mobile; đã xem ảnh cuối `build/map01a-restored-landmarks-player/quest-capture/`. Atlas vẫn 1024²/BC3 ước tính 1 MiB; PNG 1.637.421 byte so với 1.003.688 trước, nhưng build cùng target tăng 1.184 byte theo report. Giữ nguyên actor/pose/body/camera/scale và mọi PNG khác. No-3D/no-source/frozen sạch.
 
-Next: demo đăng nhập–hành trang–HUD theo yêu cầu owner và `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`, rồi nối vào entry 2D hiện hành. Nền Linh Thành cũ cũng còn ở raw generated path trong REFERENCE-NOTES; kiểm ảnh trước reuse. Chưa hoàn tất goal/character art, production auth hoặc Map01B. Player mới `build/map01a-restored-landmarks-player/LinhGioiOnline.app`, mở bằng launcher catalog đủ năm class.
+Next: demo đăng nhập–hành trang–HUD theo yêu cầu owner và `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`, rồi nối vào entry 2D hiện hành. Owner đã loại hướng reuse nền/login 3D cũ: cần thiết kế UI mới cho game 2D Cổng Đông Lâm, xem `docs/design/LGO-MAP01A-PLAYABLE-UI-v0.1.md`. Chưa hoàn tất goal/character art, production auth hoặc Map01B. Player mới `build/map01a-restored-landmarks-player/LinhGioiOnline.app`, mở bằng launcher catalog đủ năm class.
 
 ## Hiện hành — Map01A HUD chơi, giữ source-pose đã chọn — 2026-09-12
 

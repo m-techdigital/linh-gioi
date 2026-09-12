@@ -60,6 +60,25 @@ FORBIDDEN_PATHS = [
     "tools/art",
 ]
 
+# Retired presentation with no remaining Unity code or serialized GUID consumers.
+# Keep shared 2D mesh rendering and M4/M6 gameplay smoke contracts intact.
+FORBIDDEN_PATHS += [
+    "client/Unity/Assets/Game/Art/Runtime/V2",
+    "client/Unity/Assets/Game/Art/Runtime/V3B",
+    "client/Unity/Assets/Game/Art/Runtime/LgoVisualAssetRegistryV2.cs",
+    *[
+        "client/Unity/Assets/Game/UI/Runtime/" + name + ".cs"
+        for name in (
+            "RuntimeLoginResponsiveLayout",
+            "RuntimeCharacterHallResponsiveLayout",
+            "RuntimeSessionMenuLayout",
+            "RuntimeWorldHudResponsiveLayout",
+            "RuntimeWorldGuidanceView",
+            "RuntimeNpcDialogueView",
+        )
+    ],
+]
+
 FORBIDDEN_SUFFIXES = {
     ".fbx",
     ".blend",
