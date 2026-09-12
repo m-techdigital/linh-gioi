@@ -1,4 +1,8 @@
 
+## Class capture promotion guard — 2026-09-13
+
+Owner constraint is now enforced in tooling: class equipment capture may only emit audit-only evidence. Runtime manifests add `promotionStatus=AUDIT_ONLY_NOT_PROMOTION_READY`, `runtimeEligibleCount=0`, `visualApprovalStatus=NOT_VISUALLY_ACCEPTED`, and `promotionGate=SOURCE_DESIGN_OFF_SLOT_ACCEPTANCE_REQUIRED`. `tools/capture_lgo_class_equipment.py` rejects any technical capture manifest that tries to claim promotion readiness or runtime eligibility. Do not continue class art by random image generation; class work only resumes after deterministic source/design audit, accepted off-slot boards, repack, and Player evidence.
+
 ## Character select holds out Pháp until deterministic source promotion — 2026-09-13
 
 Pháp remains visible in character select for roadmap transparency but is disabled and labelled `đang audit` while source promotion is blocked. This prevents owner-facing UI from implying a held-out class pack is ready. Player evidence: `build/map01a-character-select-heldout-runtime-v1/character-select.png` with `usesOsMouseOrKeyboard=false`; a first `-nographics` capture was discarded as invalid, then rerun with graphics. Owner constraint reaffirmed: do not continue class-art work by generating random/new images through tools. Class work may continue only through deterministic source/design audit, off-slot board acceptance, repack and Player evidence; otherwise focus on safe UI/Map01A work.

@@ -15,6 +15,10 @@ namespace LinhGioi.World
             public string classId;
             public string packId;
             public string fitStatus = "DRAFT_RUNTIME_FIT";
+            public string promotionStatus = "AUDIT_ONLY_NOT_PROMOTION_READY";
+            public int runtimeEligibleCount = 0;
+            public string visualApprovalStatus = "NOT_VISUALLY_ACCEPTED";
+            public string promotionGate = "SOURCE_DESIGN_OFF_SLOT_ACCEPTANCE_REQUIRED";
             public int frames;
             public int fullLoadouts;
             public int slotToggleCases;

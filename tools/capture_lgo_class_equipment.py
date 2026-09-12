@@ -62,6 +62,13 @@ def capture(player: Path, class_id: str, output_dir: Path, keep_existing: bool =
     data = json.loads(manifest.read_text())
     if data.get("status") == "PASS":
         raise RuntimeError("class capture must not claim visual PASS for draft art")
+    if data.get("status") == "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED":
+        if data.get("fitStatus") != "DRAFT_RUNTIME_FIT":
+            raise RuntimeError("class capture must remain audit-only: unexpected fitStatus=" + str(data.get("fitStatus")))
+        if data.get("promotionStatus") != "AUDIT_ONLY_NOT_PROMOTION_READY":
+            raise RuntimeError("class capture must remain audit-only: unexpected promotionStatus=" + str(data.get("promotionStatus")))
+        if data.get("runtimeEligibleCount") != 0:
+            raise RuntimeError("class capture must remain audit-only: runtimeEligibleCount=" + str(data.get("runtimeEligibleCount")))
     if result.returncode != 0:
         raise RuntimeError(f"Player capture failed with exit {result.returncode}: {manifest}")
     return data

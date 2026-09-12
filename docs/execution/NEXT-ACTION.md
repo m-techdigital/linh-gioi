@@ -1,4 +1,8 @@
 
+## Class art deterministic gate locked — 2026-09-13
+
+Class equipment capture is now audit-only by contract: manifests must keep `promotionStatus=AUDIT_ONLY_NOT_PROMOTION_READY` and `runtimeEligibleCount=0`, and the capture helper rejects promotion-ready claims. Do not generate new class images through random/tool output. If no accepted source/off-slot board exists, continue Map01A/UI work instead of class art.
+
 ## Character select held-out class checkpoint — 2026-09-13
 
 - Pháp card remains visible but disabled as `đang audit`; it no longer acts like a selectable ready class while Pháp source candidates are blocked. Evidence: `build/map01a-character-select-heldout-runtime-v1/character-select.png`.
