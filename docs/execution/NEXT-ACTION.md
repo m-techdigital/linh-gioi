@@ -1,4 +1,8 @@
 
+## Pháp ownership repair target — 2026-09-13
+
+Use `build/phap-source-slot-audit-v1/slot-area-ratios.json` plus the off-slot boards when repairing Pháp. Priority slots are `outer_top`, `class_accessory`, and `head_hair` in jump pose; `class_accessory` must be reduced back to actual detachable ornament scope, and `head_hair` must not own face/body/garment pixels. Do not solve this with runtime offsets, camera, scale, or poseScaleCorrections.
+
 ## Pháp source board visual hold — 2026-09-13
 
 Do not pack/promote Pháp male v5, male v7 or female v3 even though their file-level source candidate gate now returns clean. Off-slot boards and provenance exist, but manual review found broken slot ownership in jump pose: male v5/v7 leave garment fragments around `outer_top`/`head_hair`/`class_accessory`; female v3 breaks `head_hair` ownership and loses a large garment mass in `off_class_accessory`. Next valid Pháp action is source-mask/slot-ownership repair on the same body/canvas/pivot, regenerate off-slot boards with provenance, re-run `validate_phap_source_candidate()`, then visual review before any pack/capture.

@@ -1,4 +1,8 @@
 
+## Pháp slot ownership ratio audit — 2026-09-13
+
+Created local evidence `build/phap-source-slot-audit-v1/slot-area-ratios.json` from the three held-out Pháp source candidates. Jump pose confirms the manual visual issue: male v5 `outer_top` is 32.0% and `class_accessory` 13.5% of slot pixels; male v7 `outer_top` is 46.9%; female v3 `outer_top` is 36.9% and `class_accessory` 16.4%. Treat these as source ownership repair targets, not runtime/camera issues.
+
 ## Pháp off-slot source boards generated but visual-held — 2026-09-13
 
 Generated six `*-ten-slot-off-review.jpg` boards plus `off-slot-board-provenance.json` for Pháp male v5, male v7 and female v3 source candidates. `validate_phap_source_candidate()` now also requires this provenance and verifies board SHA256, poses and slots; file-level gates for v5/v7/v3 return clean after generation. Manual visual review still rejects all three candidates for promotion: male v5/v7 jump boards leave broken clothing/ownership fragments when hiding `outer_top`, `head_hair` or `class_accessory`; female v3 jump board also breaks `head_hair` ownership and removes a large garment mass in `off_class_accessory`. Pháp therefore remains held-out and must not be packed or exposed until source masks/slot ownership are repaired and reviewed again.
