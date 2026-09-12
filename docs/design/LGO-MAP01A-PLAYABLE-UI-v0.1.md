@@ -27,8 +27,8 @@ Tham khảo: [Unity 6 UI Document](https://docs.unity3d.com/6000.0/Documentation
 
 Demo: [map01a-inventory-2d-layout.svg](demos/map01a-inventory-2d-layout.svg). Bốn ảnh ưu tiên v2 của owner là reference UI/UX, không phải contract phải copy 100%. Runtime hiện tách **Hành trang** và **Thông tin** thành hai tab cấp chính để tránh gộp sai vai trò:
 
-- **Hành trang**: trái là tab vật phẩm/trang bị và grid cuộn; phải là panel chi tiết món đang chọn và hành động tháo/mặc/đổi cấp. Khi chọn một món trong grid, chi tiết hiển thị ở panel trái.
-- **Thông tin**: trái là nhân vật/class/giới và 10 slot trang bị thật; phải vẫn là panel chi tiết món đang chọn. Khi click trang bị đang mặc, panel trái hiển thị đúng thông tin món đó.
+- **Hành trang**: trái là tab vật phẩm/trang bị và grid cuộn; phải là panel chi tiết món đang chọn và hành động tháo/mặc/đổi cấp. Khi chọn một món trong grid, chi tiết hiển thị ở panel phải.
+- **Thông tin**: trái là nhân vật/class/giới và 10 slot trang bị thật; phải vẫn là panel chi tiết món đang chọn. Khi click trang bị đang mặc, panel phải hiển thị đúng thông tin món đó.
 - **Rương đồ**: hiện là gate an toàn vì Map01A chưa có storage model/API thật; không tạo item giả, nút gửi/rút bị khóa và ghi rõ cần state/API trước khi bật.
 
 Tracker nhiệm vụ, minimap và combat/action bar tạm ẩn khi hành trang mở để tránh chồng panel. Không dựng actor thứ hai, không tạo item/currency/chỉ số giả, không đổi base/camera/scale. Tên slot, cấp, mặc/tháo và điều kiện nút lấy từ state/catalog hiện hành. Chuyển tab/đóng panel không thay loadout; thiếu pack/cấp thì nút vô hiệu hóa. Bố cục co về một cột khi màn thấp/hẹp. Đây là draft chức năng, không phải owner đã duyệt mỹ thuật UI mới.

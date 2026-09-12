@@ -6,6 +6,10 @@ Giữ nguyên mục tiêu wardrobe/pose còn tồn đọng; thứ tự hiện h�
 
 Owner gửi thêm 4 ảnh ưu tiên tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/preferred-v2/`, status `OWNER_PRIORITY_UIUX_REFERENCE`, hash đã lưu trong manifest. Chỉ đạo mới nhất: thiết kế trong ảnh vẫn chưa hoàn thiện, cần phân tích/redesign cho hợp game 2D hiện tại, **không follow 100%**. Batch hành trang đã chuyển sang modal hai tab cấp chính: `Hành trang` là grid/túi + chi tiết món, `Thông tin` là nhân vật + 10 slot, cả hai dùng chung panel chi tiết bên phải; không sinh actor/base/item/chỉ số giả và không đổi wardrobe source/camera/scale.
 
+## Audit chống nhầm validator UI cũ — 2026-09-13
+
+`tools/report_lgo_legacy_ui_validator_refs.py` phân loại 73 validator `validate_lgo_*` còn trỏ `M4PlayableClientController.cs` là `LEGACY_STALE_NOT_CURRENT_GATE` vì controller này đã bị gỡ khỏi branch hiện tại. Không dùng các validator M4/V3B đó làm bằng chứng cho UI 2D mới và không phục hồi hệ cũ chỉ để làm xanh chúng. Chi tiết: `docs/design/LGO-2D-UI-LEGACY-VALIDATOR-AUDIT-v0.1.md`.
+
 ## Quick Resume
 
 `CONTINUE`. Owner chuyển ưu tiên sang hoàn thiện Map01A sau checkpoint an toàn; dừng mở rộng/redraw character. Worktree `/private/tmp/lgo-vo-pose-div4-clean`, upstream `origin/feature/2d`. Giữ nguyên Võ div4/body/motion/camera/scale, registered WIP và art hiện có. Không Meshy/3D/frozen surfaces.
@@ -16,7 +20,7 @@ Batch chức năng hiện tại: hành trang 2D theo demo `docs/design/demos/map
 
 Checkpoint hành trang/storage tabs có evidence tại `build/map01a-detail-right-player/quest-capture/{pc,tablet,mobile}/07-q04-inventory-open.png` và đã được xem: modal Hành trang mặc định không bị minimap/action bar chồng, detail/grid đọc được, tab Rương đồ hiển thị ở header. EditMode `client/Unity/Logs/m0-editmode-results.xml` 265 total/264 pass/0 fail/1 ignored, gồm test tách tab Hành trang/Thông tin và test Rương đồ gate không đổi loadout. Build detail-right `errors=0 warnings=13`; capture Q01–Q09 đủ 18 frame/profile + 38 thoại + 6 NPC revisit. Không dùng click hệ điều hành/chuột thật cho evidence; nếu cần ảnh tab Thông tin/Rương đồ thì dùng runner/capture nội bộ.
 
-Next sau checkpoint: audit login/chọn nhân vật theo ảnh ưu tiên v2 và API dev hiện có, tách rõ `Đăng nhập`/`Bắt đầu`, không mở production auth giả. Rương đồ/kho đã có gate UI; chỉ bật gửi/rút thật khi có model/API hoặc task contract hợp lệ, không sửa frozen contract. Không quay lại character redraw/wardrobe class art trong batch UI này trừ khi owner đổi ưu tiên.
+Next sau checkpoint: audit login/chọn nhân vật theo ảnh ưu tiên v2 và API dev hiện có, tách rõ `Đăng nhập`/`Bắt đầu`, không mở production auth giả; không dùng validator M4/V3B stale làm gate hoặc phục hồi hệ cũ. Rương đồ/kho đã có gate UI; chỉ bật gửi/rút thật khi có model/API hoặc task contract hợp lệ, không sửa frozen contract. Không quay lại character redraw/wardrobe class art trong batch UI này trừ khi owner đổi ưu tiên.
 
 Hoàn thiện Map01A theo contract Q01–Q09 hiện có. Đổi class bằng `F` hoặc nút trong hành trang đã kiểm đủ Pháp/Võ/Kiếm/Cơ/Linh trên một actor. Pháp chỉ có nam Lv1 v7; Võ nam Lv1/Lv10; giới/cấp chưa có không được rơi về renderer cũ. Các pack vẫn REVIEW_ONLY, không suy diễn rằng toàn bộ design/pose đã nghiệm thu.
 
