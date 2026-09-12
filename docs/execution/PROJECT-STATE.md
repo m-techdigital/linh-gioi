@@ -1,3 +1,11 @@
+## Hiện hành — Pháp Lv1/Lv10 nam/nữ và mixed source-pose — 2026-09-12
+
+Đã mở rộng Pháp Lv1 đã review sang Lv10 bằng chính sáu pose/canvas của từng giới và progression/grid gốc. Body atlas nam/nữ giữ byte-identical với Lv1; 10 overlay Lv10 dùng divisor 2. Source ngoài repo `class-work-in-progress/phap-lv010/`; board sáu pose và 10 trạng thái tháo đã được xem trước pack. Lv10 giữ silhouette starter, chỉ tăng rune cyan và chi tiết phần cứng; pháp khí được tách riêng nên off-main-weapon sạch.
+
+Evidence Player `build/phap-lv10-source-pose-review-v1/runtime-pc/pc`: 190 frame, full levels `[1,10]` cho cả nam/nữ, 60 variant switch, mixed verified, `maxBodyVariants=1`, bind-return error < 0,000008, 40 item load và `errors=[]`. Đã xem full Lv1/Lv10, bốn nhịp chạy, lộn phối cấp, tháo pháp khí/áo ngoài ở cả hai giới: một actor liền khối, không matte hoặc mảnh rời, camera/base/scale không đổi. Python pack `10/10`, capture `16/16`, no-3D/no-source/frozen/change-budget đều pass. Trạng thái `AGENT_VISUAL_PASS / REVIEW_ONLY`, chưa claim owner/production approval.
+
+Next: audit Cơ theo turnaround/equipment grid gốc và thay candidate static-fit cũ bằng source-pose Lv1 nam/nữ trọn batch; sau gate Lv1 mới làm Lv10/mixed.
+
 ## Hiện hành — Pháp Lv1 nam/nữ source-pose trên Player thật — 2026-09-12
 
 Đã audit trực tiếp turnaround, profile và equipment grid Pháp gốc. Candidate static-fit cũ không được tái sử dụng. Source ngoài repo `class-work-in-progress/phap-lv001/` dùng sáu donor cùng action, sau đó tách thành 10 slot disjoint trên body authority nam `vo_male_v3` và nữ `common_female_v1`. Hai lượt mask đầu bị loại vì nền caro mắc giữa chi; candidate hiện hành nam v5/nữ v3 dùng background-connected chroma mask và vùng pháp khí riêng, nên tháo pháp khí sạch. Board full-compose và 10 trạng thái tháo đã được xem ở kích thước lớn.

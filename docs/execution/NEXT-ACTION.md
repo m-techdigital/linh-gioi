@@ -1,3 +1,9 @@
+## Hiện hành — Pháp Lv1/Lv10 hai giới và mixed đã có Player evidence — 2026-09-12
+
+Bốn pack Pháp source-pose nam/nữ Lv1/Lv10 dùng đúng hai body authority hiện hành và một actor. Evidence `build/phap-lv10-source-pose-review-v1/runtime-pc/pc`: 190 frame, full `[1,10]`, 60 switch, mixed verified, `maxBodyVariants=1`, `errors=[]`; đã xem bốn nhịp chạy, lộn phối cấp và tháo pháp khí/áo trên Player. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; app được mở lại với cả hai cấp để owner thao tác.
+
+Action tiếp theo: audit design Cơ và author trọn source-pose Lv1 nam/nữ, 10 slot × sáu pose, trên cùng body/canvas/pivot; review source full/toggle trước Player. Sau Cơ Lv1 mới làm Lv10/mixed. Không dùng static-fit đã thu hồi, không đổi camera/base/scale hoặc tạo hệ thứ hai.
+
 ## Hiện hành — Pháp Lv1 hai giới đã qua source board và Player evidence — 2026-09-12
 
 Pháp nam/nữ Lv1 hiện dùng cùng source-pose contract với Võ/Linh/Kiếm: 10 slot × sáu pose, một actor, body authority bất biến. Evidence `build/phap-source-pose-review-v1/runtime-pc/pc` có 186 frame, 20 item load, `maxBodyVariants=1`, `errors=[]`; đã xem đứng, bốn nhịp chạy, lộn và tháo pháp khí/áo/giày trên Player thật. Pack `10/10`, capture `16/16`, no-3D/no-source/frozen audit pass. Đây là `REVIEW_ONLY / AGENT_VISUAL_PASS`; app vẫn mở cho owner.
