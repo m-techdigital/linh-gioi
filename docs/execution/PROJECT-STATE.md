@@ -1,4 +1,9 @@
 
+## Shared UI base governance tightened — 2026-09-13
+
+Đã khóa thêm rule dự án cho UI Map01A: các màn/flow có cùng UI/UX phải dùng shared base/skin/helper, chỉ tách data/state/action khi khác hành vi; không tạo helper skin song song kiểu modal/dialog/card/tab/detail/panel trong partial runtime. Validator `tools/validate_lgo_ui_shared_skin.py` có regression test mô phỏng `StyleModalDialog` riêng và sẽ fail nếu màn mới tự dựng skin thay vì dùng `CongDongLamArrivalHud.Skin.cs`/`ApplyLgo*`. Rule này nhằm tránh lặp lại lỗi login/inventory/dialog hoặc modal nhìn giống nhau nhưng được build bằng nhiều hệ khác nhau.
+
+
 
 
 

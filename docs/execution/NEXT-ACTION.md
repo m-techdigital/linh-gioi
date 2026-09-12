@@ -1,4 +1,9 @@
 
+## Shared UI base governance checkpoint — 2026-09-13
+
+Rule mới đã được đưa vào gate: khi tiếp tục login/character select/HUD/inventory/storage/dialog/item-detail, mọi modal/dialog/card/tab/button/detail panel dùng shared base trong `CongDongLamArrivalHud.Skin.cs` hoặc wrapper hẹp quanh `ApplyLgo*`. Không copy layout/skin thành hệ mới; nếu UX giống nhau thì chỉ tách data/state/action. Chạy `python3.12 tools/validate_lgo_ui_shared_skin.py` trong mọi batch sửa UI runtime.
+
+
 
 
 

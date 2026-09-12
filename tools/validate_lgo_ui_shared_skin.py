@@ -20,6 +20,13 @@ FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+void\s+StyleFrame\s*\("),
     re.compile(r"private\s+static\s+Label\s+(?!LgoLabel\b)[A-Za-z0-9_]*Label\s*\("),
 ]
+FORBIDDEN_PARALLEL_SKIN_HELPER = re.compile(
+    r"private\s+static\s+(?:void|VisualElement|Button|Label)\s+"
+    r"(?P<name>(?:Style|Build|Create|Make)[A-Za-z0-9_]*(?:Modal|Dialog|Card|Tab|Detail|Panel)[A-Za-z0-9_]*)\s*\("
+)
+ALLOWED_PARALLEL_SKIN_HELPERS = {
+    "InventoryPanel",
+}
 # Exact legacy snippets that previously caused each screen to grow its own skin.
 FORBIDDEN_SNIPPETS = [
     "InventoryGlass",
@@ -71,6 +78,8 @@ REQUIRED_AGENT_MARKERS = [
     "không dựng khung thô chỉ để có chức năng",
     "Hành trang, Thông tin nhân vật và Rương đồ là các tab/flow riêng",
     "modal/dialog/card/tab/button/detail panel dùng base chung",
+        "Không tạo helper skin song song kiểu `StyleModalDialog`, `BuildCardPanel`, `CreateDetailPanel`",
+    "Nếu hai UI/UX giống nhau mà cần khác hành vi, tách data/state/action",
     "python3.12 tools/validate_lgo_ui_shared_skin.py",
 ]
 
@@ -137,6 +146,10 @@ def validate_root(root: Path = ROOT) -> list[str]:
         for pattern in FORBIDDEN_LOCAL_PATTERNS:
             for match in pattern.finditer(text):
                 violations.append(f"{rel}: local skin pattern {match.group(0)}")
+        for match in FORBIDDEN_PARALLEL_SKIN_HELPER.finditer(text):
+            name = match.group("name")
+            if name not in ALLOWED_PARALLEL_SKIN_HELPERS:
+                violations.append(f"{rel}: parallel modal/dialog/card/tab/button skin helper {name}; use CongDongLamArrivalHud.Skin.cs shared base or a narrow wrapper around ApplyLgo*")
 
     for filename, markers in REQUIRED_PARTIAL_MARKERS.items():
         path = ui_dir / filename

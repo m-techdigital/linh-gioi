@@ -85,6 +85,33 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("Inventory detail panel must be added after" in item for item in violations), violations)
 
+    def test_rejects_new_ui_partial_that_creates_parallel_modal_or_dialog_skin(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            rogue = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.RogueDialog.cs"
+            rogue.write_text(
+                """using UnityEngine;
+using UnityEngine.UIElements;
+
+namespace LinhGioi.UI
+{
+    public sealed partial class CongDongLamArrivalHud
+    {
+        private static void StyleModalDialog(VisualElement panel)
+        {
+            panel.style.backgroundColor = new Color(.01f, .04f, .07f, .95f);
+            panel.style.borderTopWidth = panel.style.borderBottomWidth = 1;
+        }
+    }
+}
+""",
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("parallel modal/dialog/card/tab/button skin helper" in item for item in violations), violations)
+
+
 
 if __name__ == "__main__":
     unittest.main()
