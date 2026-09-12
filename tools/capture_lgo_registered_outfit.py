@@ -133,6 +133,14 @@ def validate_registered_capture_result(*, code, result, width, height, png_count
         elif any(abs(row.get('rootScaleX', 0) - 1) > 1e-5 or abs(row.get('rootScaleY', 0) - 1) > 1e-5
                  for row in metrics):
             errors.append('SOURCE_POSE_ROOT_SCALE_CHANGED')
+        expected_beats = ['run_contact_a', 'run_a', 'run_contact_b', 'run_b']
+        for gender in ('male', 'female'):
+            for action in ('walk', 'run'):
+                prefix = f'-{gender}-{action}-phase-'
+                rows = sorted((row for row in metrics if prefix in row.get('file', '')),
+                              key=lambda row: int(row['file'].split(prefix, 1)[1].split('.', 1)[0]))
+                if [row.get('poseFrame') for row in rows] != expected_beats:
+                    errors.append(f'SOURCE_POSE_FOUR_BEAT_SEQUENCE_INVALID:{gender}:{action}')
     return errors
 
 def pose_review_fingerprint(directory):

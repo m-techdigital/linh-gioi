@@ -107,8 +107,15 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
 
     def test_source_pose_capture_requires_metrics_from_visible_source_actor_and_stable_scale(self):
         result = self.valid_result()
-        result['actorFrameMetrics'] = [dict(actor='source_pose', rootScaleX=1.0, rootScaleY=1.0)
-                                       for _ in range(result['frames'])]
+        result['actorFrameMetrics'] = [dict(actor='source_pose', rootScaleX=1.0, rootScaleY=1.0,
+                                            file=f'{index:02d}-other.png', poseFrame='idle')
+                                       for index in range(result['frames'])]
+        expected = ('run_contact_a', 'run_a', 'run_contact_b', 'run_b')
+        for offset, (gender, action) in enumerate((('male', 'walk'), ('male', 'run'),
+                                                   ('female', 'walk'), ('female', 'run'))):
+            for phase, pose in enumerate(expected):
+                result['actorFrameMetrics'][offset * 4 + phase].update(
+                    file=f'{offset * 4 + phase + 1:02d}-{gender}-{action}-phase-{phase}.png', poseFrame=pose)
         self.assertEqual(validate_registered_capture_result(code=0, result=result, width=1280,
             height=720, png_count=154, source_pose_review=True), [])
         result['actorFrameMetrics'][8]['actor'] = 'registered_outfit'
@@ -118,6 +125,22 @@ class RegisteredOutfitCaptureValidationTests(unittest.TestCase):
         result['actorFrameMetrics'][19]['rootScaleY'] = 1.2
         self.assertIn('SOURCE_POSE_ROOT_SCALE_CHANGED', validate_registered_capture_result(
             code=0, result=result, width=1280, height=720, png_count=154, source_pose_review=True))
+
+    def test_source_pose_capture_rejects_duplicate_or_missing_four_beat_frame(self):
+        result = self.valid_result()
+        expected = ('run_contact_a', 'run_a', 'run_contact_b', 'run_b')
+        result['actorFrameMetrics'] = [dict(actor='source_pose', rootScaleX=1.0, rootScaleY=1.0,
+                                            file=f'{index:02d}-other.png', poseFrame='idle')
+                                       for index in range(result['frames'])]
+        for offset, (gender, action) in enumerate((('male', 'walk'), ('male', 'run'),
+                                                   ('female', 'walk'), ('female', 'run'))):
+            for phase, pose in enumerate(expected):
+                result['actorFrameMetrics'][offset * 4 + phase].update(
+                    file=f'{offset * 4 + phase + 1:02d}-{gender}-{action}-phase-{phase}.png', poseFrame=pose)
+        result['actorFrameMetrics'][6]['poseFrame'] = 'run_a'
+        self.assertIn('SOURCE_POSE_FOUR_BEAT_SEQUENCE_INVALID:male:run',
+                      validate_registered_capture_result(code=0, result=result, width=1280,
+                          height=720, png_count=154, source_pose_review=True))
 
     def test_variant_capture_requires_full_level_and_mixed_switches(self):
         result = self.valid_result()

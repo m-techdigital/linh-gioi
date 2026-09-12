@@ -154,3 +154,10 @@ PYTHONPYCACHEPREFIX=build/pycache build/rig-authoring-venv/bin/python tools/revi
 ```
 
 Reference là source canonical theo rect sở hữu; candidate dùng vertices/UV/indices Unity thực và atlas, trên cùng canvas256×384, không normalize bbox. Gate giữ ngưỡng cũ; sorting/layer selection kế thừa runtime nên cần Player visual review độc lập. Không gọi software raster này là screenshot Player. Final `build/vo-registered-bind-fit-final` đạt nam IoU1,00000/area1,00000/MAE0,016 và nữ0,99898/0,99898/0,129; đã xem ảnh đối chứng. Kết quả này chỉ kiểm bind ở trạng thái đứng và đã stale sau khi sửa runtime. Owner đã bác motion retarget v5/v7; không đủ đóng fit Lv1 hoặc tiếp Lv10/mặc chéo. Chuẩn motion là whole-pose v3 div4 từ sandbox cũ; registered wardrobe vẫn là candidate cần khớp theo chuẩn đó.
+# Runtime wardrobe invariant cho nhiều class và nhiều tier — 2026-09-12
+
+- Mỗi giới dùng đúng một body/action authority. Mọi item của mọi class/tier phải dùng chung canvas, pivot, pose IDs và fit family tương ứng; runtime không tạo actor, camera, scale hoặc animation clock riêng theo class/level.
+- Resolver duy nhất chọn `slotId -> itemId -> components`. Một item có thể gồm nhiều attachment như tay áo trước/sau, nhưng việc đổi class/tier/loadout phải resolve trọn bộ rồi swap trên cùng actor. Candidate lỗi không được hiển thị song song với candidate cũ.
+- Source full-outfit chỉ được dùng làm donor. Trước khi đóng atlas phải phân vùng theo canonical slot anchor của từng pose, giữ full-compose invariant, và review hai chiều: full set cùng từng trạng thái tháo. Một slot không được sở hữu anatomy hoặc phần lớn trang phục của slot khác.
+- Gate bắt buộc gồm đủ sáu pose, 10 slot, full Lv1/full tier đích, phối chéo level, 16 tổ hợp bốn garment core, actor bounds đúng presentation, root scale 1 và chuỗi chạy riêng `contact A → run A → contact B → run B`. Count/test xanh không thay cho review ảnh Player.
+- Khi số tier tăng, catalog/manifest chứa class, gender, level, fit family, body hashes và component order; atlas được load/release theo loadout. Không hardcode thêm controller hay renderer tree cho từng class.

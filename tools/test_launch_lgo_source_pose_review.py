@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from launch_lgo_source_pose_review import build_class_args
+from launch_lgo_source_pose_review import PACK_SUFFIXES, build_class_args
 
 
 class SourcePoseReviewLaunchTests(unittest.TestCase):
@@ -10,8 +10,7 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             for class_id in ('kiem', 'phap'):
-                for suffix in ('-source-pose-review-v1/pack', '-source-pose-review-lv10-v1/pack',
-                               '-female-source-pose-review-v1/pack', '-female-source-pose-review-lv10-v1/pack'):
+                for suffix in PACK_SUFFIXES[class_id]:
                     pack = root / 'build' / (class_id + suffix)
                     pack.mkdir(parents=True)
                     (pack / 'atlas-review.json').write_text('{}')

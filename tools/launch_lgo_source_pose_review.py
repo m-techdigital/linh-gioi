@@ -6,6 +6,16 @@ import subprocess
 from pathlib import Path
 
 CLASSES = ('kiem', 'phap', 'co', 'linh')
+PACK_SUFFIXES = {
+    'kiem': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-v1/pack',
+             '-female-source-pose-review-v1/pack', '-female-source-pose-review-lv10-v1/pack'),
+    'phap': ('-source-pose-review-semantic-v3/pack', '-source-pose-review-lv10-semantic-v3/pack',
+             '-female-source-pose-review-semantic-v3/pack', '-female-source-pose-review-lv10-semantic-v3/pack'),
+    'co': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-semantic-v3/pack',
+           '-female-source-pose-review-semantic-v3/pack', '-female-source-pose-review-lv10-semantic-v3/pack'),
+    'linh': ('-source-pose-review-v1/pack', '-source-pose-review-lv10-semantic-v3/pack',
+             '-female-source-pose-review-v1/pack', '-female-source-pose-review-lv10-v1/pack'),
+}
 
 
 def resolve_player(path: Path) -> Path:
@@ -20,13 +30,9 @@ def resolve_player(path: Path) -> Path:
 
 
 def class_pack_paths(repo: Path, class_id: str) -> tuple[Path, Path, Path, Path]:
-    prefix = repo / 'build' / class_id
-    paths = (
-        Path(str(prefix) + '-source-pose-review-v1/pack'),
-        Path(str(prefix) + '-source-pose-review-lv10-v1/pack'),
-        Path(str(prefix) + '-female-source-pose-review-v1/pack'),
-        Path(str(prefix) + '-female-source-pose-review-lv10-v1/pack'),
-    )
+    if class_id not in PACK_SUFFIXES:
+        raise ValueError('Unsupported source-pose class: ' + class_id)
+    paths = tuple(repo / 'build' / (class_id + suffix) for suffix in PACK_SUFFIXES[class_id])
     for path in paths:
         if not (path / 'atlas-review.json').is_file():
             raise FileNotFoundError('Missing source-pose pack: ' + str(path))

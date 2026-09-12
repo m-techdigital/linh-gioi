@@ -145,12 +145,17 @@ namespace LinhGioi.World
                         SetVoRun(action == "run");
                         for (var tick = 0; tick < 12; tick++) MoveOnLane(tick < 6 ? 1 : -1, .05f);
                         AdvanceVoAnimation(.05f);
-                        // Four evenly spaced samples cover a whole stride, avoiding
-                        // accidentally capturing only the near-idle zero crossing.
+                        var expectedFrames = new[] { "run_contact_a", "run_a", "run_contact_b", "run_b" };
+                        // Seek the four source phases explicitly. The gameplay clock still owns
+                        // normal playback; capture must not alias two samples onto one beat.
                         for (var sample = 0; sample < 4; sample++)
                         {
-                            for (var step = 0; step < 2; step++)
-                                MoveOnLane(sample < 2 ? 1 : -1, .125f / (action == "run" ? TwoDRegisteredOutfit.RunCyclesPerSecond(VoAvatarGender) : 2f));
+                            MoveOnLane(sample < 2 ? 1 : -1, .01f);
+                            activeReview.Apply(action,
+                                (sample * .25f + .01f) / TwoDSourcePoseTimeline.RunCyclesPerSecond,
+                                _voState.FacingSign, _voState.ActionProgress);
+                            if (activeReview.CurrentFrame != expectedFrames[sample])
+                                report.errors.Add(VoAvatarGender + " " + action + " four-beat capture mismatch at " + sample);
                             yield return SaveRegisteredFrame(directory, report, VoAvatarGender + "-" + action + "-phase-" + sample);
                         }
                     }
