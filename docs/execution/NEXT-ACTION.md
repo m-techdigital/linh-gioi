@@ -1,4 +1,9 @@
 
+## Pháp catalog regression fixed — 2026-09-13
+
+Owner-review launcher Pháp phải dùng `canonical-v2`, không quay lại `semantic-v3`. Regression test `test_phap_owner_review_must_not_use_rejected_semantic_v3_pack` chặn suffix semantic-v3 trong `PACK_SUFFIXES['phap']`; validator owner catalog trỏ manifest Pháp canonical-v2. Khi tiếp tục visual polish, sửa trên source/canonical-v2 hoặc source kế nhiệm đã audit, không dùng semantic-v3 làm baseline.
+
+
 ## Owner-review scale guard checkpoint — 2026-09-13
 
 Catalog owner-review hiện có thêm scale guard: `python3.12 tools/validate_lgo_owner_review_catalog.py` sẽ fail nếu Player manifest thiếu idle/jump metric, runtime root scale khác 1.0, hoặc jump cao bất thường so với idle. Khi sửa pack Kiếm/Pháp/Cơ/Linh tiếp theo, vẫn phải review close-up/player bằng mắt vì scale guard không thay thế kiểm design, tháo/mặc và silhouette.

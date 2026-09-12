@@ -45,10 +45,16 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
             self.assertIn('vo-source-pose-review-preserved-lv1', command[command.index('--lgo-vo-pose-review-dir') + 1])
             phap_index = labels.index('phap')
             phap_args = command[[i for i, arg in enumerate(command) if arg == '--lgo-source-pose-class'][phap_index]:]
-            self.assertIn('phap-source-pose-review-semantic-v3', phap_args[2])
-            self.assertIn('phap-source-pose-review-lv10-semantic-v3', phap_args[3])
-            self.assertIn('phap-female-source-pose-review-semantic-v3', phap_args[4])
-            self.assertIn('phap-female-source-pose-review-lv10-semantic-v3', phap_args[5])
+            self.assertIn('phap-source-pose-review-canonical-v2', phap_args[2])
+            self.assertIn('phap-source-pose-review-lv10-canonical-v2', phap_args[3])
+            self.assertIn('phap-female-source-pose-review-canonical-v2', phap_args[4])
+            self.assertIn('phap-female-source-pose-review-lv10-canonical-v2', phap_args[5])
+            self.assertFalse(any('phap-' in arg and 'semantic-v3' in arg for arg in phap_args[:6]))
+
+
+    def test_phap_owner_review_must_not_use_rejected_semantic_v3_pack(self):
+        self.assertFalse(any(suffix and 'semantic-v3' in suffix for suffix in PACK_SUFFIXES['phap']), PACK_SUFFIXES['phap'])
+        self.assertTrue(all(suffix and 'canonical-v2' in suffix for suffix in PACK_SUFFIXES['phap']), PACK_SUFFIXES['phap'])
 
     def test_invalid_source_never_starts_player(self):
         cases = ({'poseScaleCorrections': {'jump_tuck': 0.6666666667}},

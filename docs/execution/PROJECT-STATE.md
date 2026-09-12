@@ -1,4 +1,9 @@
 
+## Pháp owner-review launcher restored to canonical-v2 — 2026-09-13
+
+Đã sửa regression catalog: `tools/launch_lgo_source_pose_review.py` không còn expose Pháp `semantic-v3` đã bị reject vì chắp vá; bốn pack Pháp owner-review quay lại `canonical-v2` nam/nữ Lv1/Lv10. `tools/write_lgo_owner_review_closeups.py` và `tools/validate_lgo_owner_review_catalog.py` cũng trỏ Pháp về `build/phap-canonical-v2-runtime-v1/pc/registered-manifest.json`; close-up Pháp đã regenerate từ canonical-v2 tại `build/source-pose-catalog-audit-v2/phap-owner-review-closeup.jpg` và được xem thủ công. Trạng thái vẫn `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, không phải owner visual pass.
+
+
 ## Owner-review jump scale guard — 2026-09-13
 
 Đã thêm gate trong `tools/validate_lgo_owner_review_catalog.py` để đọc `actorFrameMetrics` từ Player manifest của Kiếm/Pháp/Cơ/Linh: mọi frame phải giữ `rootScaleX/Y≈1.0`, nam/nữ phải có idle + jump metric, và jump screen-height không được vượt idle quá 8%. Regression test dùng manifest giả với jump cao hơn idle để chặn lỗi owner từng thấy khi nhảy làm nhân vật phình. Gate này chỉ khóa scale/runtime; các pack ngoài Võ vẫn là `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, chưa phải owner visual/design pass.

@@ -18,7 +18,7 @@ PLAYER_EVIDENCE = {
         "build/source-pose-catalog-audit-v2/kiem-owner-review-closeup.jpg",
     ),
     "phap": (
-        "build/phap-semantic-v3-runtime-v3/pc/registered-manifest.json",
+        "build/phap-canonical-v2-runtime-v1/pc/registered-manifest.json",
         "build/source-pose-catalog-audit-v2/phap-owner-review-closeup.jpg",
     ),
     "co": (

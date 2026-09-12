@@ -16,7 +16,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 CLASS_RUNTIME_DIRS = {
     "kiem": "build/kiem-semantic-v3-runtime-v1/pc",
-    "phap": "build/phap-semantic-v3-runtime-v3/pc",
+    "phap": "build/phap-canonical-v2-runtime-v1/pc",
     "co": "build/co-semantic-v3-runtime-v3/pc",
     "linh": "build/linh-semantic-v3-runtime-v2/pc",
 }
