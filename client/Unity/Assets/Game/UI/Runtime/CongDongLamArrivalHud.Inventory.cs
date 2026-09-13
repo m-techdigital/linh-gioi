@@ -78,11 +78,10 @@ namespace LinhGioi.UI
         private void BuildInventory()
         {
             _inventory = new VisualElement { name = "Map01A Inventory" };
-            Box(_inventory); Place(_inventory, 72, 72, 86, 72);
+            ApplyLgoModalShell(_inventory, 12); Place(_inventory, 72, 72, 86, 72);
             _inventory.style.flexDirection = FlexDirection.Column;
             _inventory.style.paddingLeft = _inventory.style.paddingRight = 12;
             _inventory.style.paddingTop = _inventory.style.paddingBottom = 12;
-            ApplyLgoGlassPanel(_inventory);
 
             var header = InventoryRow("Map01A Inventory Header");
             header.style.alignItems = Align.Center;

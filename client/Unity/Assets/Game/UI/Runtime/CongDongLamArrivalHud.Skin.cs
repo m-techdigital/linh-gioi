@@ -31,6 +31,7 @@ namespace LinhGioi.UI
         private const string LgoHudShortcutActionClass = "lgo-hud-shortcut-action";
         private const string LgoHudContextActionClass = "lgo-hud-context-action";
         private const string LgoHudQuestTabClass = "lgo-hud-quest-tab";
+        private const string LgoHudInfoPanelClass = "lgo-hud-info-panel";
         private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
         private const string LgoEntryCtaActionClass = "lgo-entry-cta-action";
@@ -394,6 +395,16 @@ namespace LinhGioi.UI
             ApplyLgoButton(button);
             button.style.minHeight = 44;
             button.style.marginRight = 10;
+        }
+
+        private static void ApplyLgoHudInfoPanel(VisualElement element)
+        {
+            element.AddToClassList(LgoHudInfoPanelClass);
+            element.style.backgroundColor = new Color(.025f, .065f, .10f, .90f);
+            element.style.color = UiText;
+            element.style.paddingLeft = element.style.paddingRight = 12;
+            element.style.paddingTop = element.style.paddingBottom = 8;
+            element.style.fontSize = 20;
         }
 
         private static void ApplyLgoHudQuestTab(Button button, bool selected, bool enabled, bool isLast)

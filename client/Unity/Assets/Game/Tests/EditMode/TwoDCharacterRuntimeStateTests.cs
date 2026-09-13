@@ -843,6 +843,19 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
                         Is.EqualTo(DisplayStyle.None), "Old review control reappeared: " + field);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var locationTitle = root.Q("Map01A Location Title");
+                Assert.That(locationTitle, Is.Not.Null,
+                    "HUD location title needs a named shared info panel for visual audit and base-first reuse.");
+                Assert.That(locationTitle.ClassListContains("lgo-hud-info-panel"), Is.True,
+                    "HUD location title must use the shared info-panel base instead of the legacy Box helper.");
+                Assert.That(root.Q("Map01A Vitals").ClassListContains("lgo-hud-info-panel"), Is.True,
+                    "HUD vitals must share the same info-panel base as the title and quest tracker.");
+                Assert.That(root.Q("Map01A Quest Tracker Body").ClassListContains("lgo-hud-info-panel"), Is.True,
+                    "HUD quest body must use the shared info-panel base instead of one-off panel styling.");
+                Assert.That(root.Q("Map01A Minimap").ClassListContains("lgo-hud-info-panel"), Is.True,
+                    "HUD minimap placeholder must use the shared info-panel base until a real minimap art pass replaces it.");
+                Assert.That(root.Q("LGO World Touch Movement Pad").ClassListContains("lgo-hud-info-panel"), Is.True,
+                    "Touch movement pad shell must reuse HUD info-panel base rather than the legacy Box helper.");
                 Assert.That(root.Q("Map01A Quest Tracker Tabs"), Is.Not.Null,
                     "HUD quest tracker should expose the Nhiệm Vụ/Đội tab structure from the product reference instead of staying as a plain text block.");
                 Assert.That(root.Q<Button>("Map01A Quest Tab Missions").text, Does.Contain("Nhiệm vụ"));

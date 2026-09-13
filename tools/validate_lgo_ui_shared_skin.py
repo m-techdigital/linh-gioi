@@ -37,6 +37,8 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoHudShortcutAction",
     "ApplyLgoHudContextAction",
     "ApplyLgoHudQuestTab",
+    "LgoHudInfoPanelClass",
+    "ApplyLgoHudInfoPanel",
     "ApplyLgoDialoguePrimaryAction",
     "ApplyLgoDialogueSecondaryAction",
     "LgoEntryCtaActionClass",
@@ -67,6 +69,7 @@ FORBIDDEN_SNIPPETS = [
     "InventoryGold",
     "InventoryBlue",
     "style.gap =",
+    "Box(",
 ]
 
 # Runtime UI decisions that previously regressed when a new screen was built as a
@@ -87,6 +90,11 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoHudShortcutAction(button",
         "ApplyLgoHudQuestTab(_questMissionsTab",
         "ApplyLgoHudQuestTab(_questPartyTab",
+        "ApplyLgoHudInfoPanel(title)",
+        "ApplyLgoHudInfoPanel(_vitals)",
+        "ApplyLgoHudInfoPanel(_quest)",
+        "ApplyLgoHudInfoPanel(_minimap)",
+        "ApplyLgoHudInfoPanel(_pad)",
         "ApplyLgoHudContextAction(_inventoryToggle",
         "ApplyLgoHudContextAction(_characterSelectButton",
     ],
@@ -130,6 +138,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoSelectedTab(_characterInfoTab",
         "ApplyLgoInventoryButtonBase(button, _touch)",
         "ApplyLgoInventoryPanelShell(panel)",
+        "ApplyLgoModalShell(_inventory, 12)",
         "ApplyLgoInventoryItemRow(row, _touch)",
         "ApplyLgoInventoryCountBadge(countLabel)",
         "ApplyLgoInventoryBadge(badge)",

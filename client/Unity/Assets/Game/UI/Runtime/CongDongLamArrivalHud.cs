@@ -45,14 +45,6 @@ namespace LinhGioi.UI
             hud._touch = Application.isMobilePlatform || (index >= 0 && index + 1 < args.Length && args[index + 1] != "pc");
             hud.Build(document.rootVisualElement);
         }
-        private static void Box(VisualElement e)
-        {
-            e.style.backgroundColor = new Color(.025f, .065f, .10f, .9f);
-            e.style.color = new Color(.95f, .91f, .78f);
-            e.style.paddingLeft = e.style.paddingRight = 12;
-            e.style.paddingTop = e.style.paddingBottom = 8;
-            e.style.fontSize = 20;
-        }
         private static void Place(VisualElement e, float? left, float? right, float? top, float? bottom)
         {
             e.style.position = Position.Absolute;
@@ -69,10 +61,10 @@ namespace LinhGioi.UI
             _root.pickingMode = PickingMode.Ignore;
             _safe = new VisualElement { name = "Map01A Safe Hud", pickingMode = PickingMode.Ignore };
             _root.Add(_safe);
-            var title = new Label("CỔNG ĐÔNG LÂM\nKhu an toàn • Lv1–3");
-            Box(title); Place(title, 12, null, 12, null); _safe.Add(title);
+            var title = new Label("CỔNG ĐÔNG LÂM\nKhu an toàn • Lv1–3") { name = "Map01A Location Title" };
+            ApplyLgoHudInfoPanel(title); Place(title, 12, null, 12, null); _safe.Add(title);
             _vitals = new VisualElement { name = "Map01A Vitals", pickingMode = PickingMode.Ignore };
-            Box(_vitals); Place(_vitals, 12, null, 92, null); _vitals.style.width = 240;
+            ApplyLgoHudInfoPanel(_vitals); Place(_vitals, 12, null, 92, null); _vitals.style.width = 240;
             _vitalsName = new Label(); _vitalsName.style.fontSize = 18; _vitals.Add(_vitalsName);
             _health = MakeVital("Map01A Health", new Color(.67f, .16f, .15f));
             _mana = MakeVital("Map01A Mana", new Color(.12f, .37f, .64f));
@@ -89,12 +81,12 @@ namespace LinhGioi.UI
             _questTabs.Add(_questMissionsTab);
             _questTabs.Add(_questPartyTab);
             _safe.Add(_questTabs);
-            _quest = new Label { name = "Map01A Quest Tracker Body" }; Box(_quest); Place(_quest, null, 12, 46, null);
+            _quest = new Label { name = "Map01A Quest Tracker Body" }; ApplyLgoHudInfoPanel(_quest); Place(_quest, null, 12, 46, null);
             _quest.style.width = 260; _quest.style.whiteSpace = WhiteSpace.Normal; _safe.Add(_quest);
-            _minimap = new Label(); Box(_minimap); Place(_minimap, 220, null, 12, null);
+            _minimap = new Label { name = "Map01A Minimap" }; ApplyLgoHudInfoPanel(_minimap); Place(_minimap, 220, null, 12, null);
             _minimap.style.width = 430; _minimap.style.fontSize = 16;
             _minimap.style.unityTextAlign = TextAnchor.MiddleCenter; _safe.Add(_minimap);
-            _pad = new RuntimeTouchMovementPad(); Box(_pad); Place(_pad, 16, null, null, 16);
+            _pad = new RuntimeTouchMovementPad { name = "LGO World Touch Movement Pad" }; ApplyLgoHudInfoPanel(_pad); Place(_pad, 16, null, null, 16);
             _pad.style.width = _pad.style.height = 112;
             _pad.style.display = _touch ? DisplayStyle.Flex : DisplayStyle.None;
             _pad.style.borderTopLeftRadius = _pad.style.borderTopRightRadius = 52;
@@ -109,22 +101,22 @@ namespace LinhGioi.UI
             _npcTalk = new Button(() => _scene.UseNpcConversation()) { text = "Nói chuyện với Tiểu Đồng" };
             ApplyLgoHudContextAction(_npcTalk, _touch, minHeight: 48); Place(_npcTalk, null, 16, null, 100); _safe.Add(_npcTalk);
             _outfit = new Button(() => _scene.CycleVoAvatarMode()) { text = "Trang bị Võ · C" };
-            Box(_outfit); Place(_outfit, 16, null, _touch ? 90 : 90, null);
+            ApplyLgoHudInfoPanel(_outfit); Place(_outfit, 16, null, _touch ? 90 : 90, null);
             _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
             _level = new Button(() => _scene.CycleVoAvatarLevel()) { text = "Cấp trang bị · L" };
-            Box(_level); Place(_level, 16, null, _touch ? 152 : 138, null);
+            ApplyLgoHudInfoPanel(_level); Place(_level, 16, null, _touch ? 152 : 138, null);
             _level.style.minHeight = _touch ? 52 : 40; _level.style.minWidth = 170; _safe.Add(_level);
             _gender = new Button(() => _scene.CycleVoAvatarGender()) { text = "Nam/Nữ · G" };
-            Box(_gender); Place(_gender, 16, null, _touch ? 210 : 184, null);
+            ApplyLgoHudInfoPanel(_gender); Place(_gender, 16, null, _touch ? 210 : 184, null);
             _gender.style.minHeight = _touch ? 52 : 40; _gender.style.minWidth = 170; _safe.Add(_gender);
             _slot = new Button(() => _scene.CycleVoEquipmentSlot()) { text = "Chọn slot · V" };
-            Box(_slot); Place(_slot, 16, null, _touch ? 268 : 230, null);
+            ApplyLgoHudInfoPanel(_slot); Place(_slot, 16, null, _touch ? 268 : 230, null);
             _slot.style.minHeight = _touch ? 52 : 40; _slot.style.minWidth = 170; _safe.Add(_slot);
             _itemLevel = new Button(() => _scene.CycleVoSelectedEquipmentItemLevel()) { text = "Đổi cấp item · M" };
-            Box(_itemLevel); Place(_itemLevel, 16, null, _touch ? 326 : 276, null);
+            ApplyLgoHudInfoPanel(_itemLevel); Place(_itemLevel, 16, null, _touch ? 326 : 276, null);
             _itemLevel.style.minHeight = _touch ? 52 : 40; _itemLevel.style.minWidth = 170; _safe.Add(_itemLevel);
             _toggleSlot = new Button(() => _scene.ToggleVoEquipmentSlot()) { text = "Mặc/Cởi · B" };
-            Box(_toggleSlot); Place(_toggleSlot, 16, null, _touch ? 384 : 322, null);
+            ApplyLgoHudInfoPanel(_toggleSlot); Place(_toggleSlot, 16, null, _touch ? 384 : 322, null);
             _toggleSlot.style.minHeight = _touch ? 52 : 40; _toggleSlot.style.minWidth = 170; _safe.Add(_toggleSlot);
             _combatBar = new VisualElement(); Place(_combatBar, _touch ? 150 : 220, null, null, 24);
             _combatBar.style.flexDirection = FlexDirection.Row;

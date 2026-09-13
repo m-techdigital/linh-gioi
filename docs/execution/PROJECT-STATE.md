@@ -1,3 +1,10 @@
+## Map01A — HUD info panel base-first guard — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật.
+- Legacy `Box(...)` đã được loại khỏi Map01A runtime partials. Title khu vực, vitals, quest body, minimap placeholder, touch movement pad và các review/debug controls đang ẩn cùng đi qua shared `ApplyLgoHudInfoPanel(...)` / class `lgo-hud-info-panel`; inventory shell chuyển sang shared `ApplyLgoModalShell(_inventory, 12)` để không giữ hai hệ panel song song.
+- TDD: targeted EditMode RED fail đúng khi `Map01A Location Title` chưa có shared info panel/name; GREEN pass `total=1 passed=1 failed=0`. `tools/validate_lgo_ui_shared_skin.py` khóa marker `LgoHudInfoPanelClass`, `ApplyLgoHudInfoPanel(...)`, call-site HUD và cấm snippet `Box(` trong runtime partials.
+- Player evidence: build `build/map01a-hud-info-panel-player-v1/LinhGioiOnline.app`; route capture `build/map01a-hud-info-panel-runtime-v1/pc/01-arrival-q01.png` cùng full Q01-Q09. Visual audit: HUD không chồng/cắt, panel đồng nhất hơn; UI tổng thể vẫn `CONTINUE`, chưa phải nghiệm thu mỹ thuật cuối vì còn cần polish depth/ornament/icon/provenance-backed assets theo reference owner.
+
 ## Map01A — entry CTA base-first guard — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật.

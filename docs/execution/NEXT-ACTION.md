@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI after HUD info panel foundation — 2026-09-13
+
+`CONTINUE`. HUD info panels đã dùng shared `ApplyLgoHudInfoPanel(...)` / `lgo-hud-info-panel`, legacy `Box(...)` bị validator chặn để tránh tự build UI tràn lan. Evidence Player mới: `build/map01a-hud-info-panel-runtime-v1/pc/01-arrival-q01.png` và full route capture cùng thư mục.
+
+Next valid work: tiếp tục Map01A/UI-only theo owner references, ưu tiên polish visual richness có base chung cho login/HUD/dialogue/inventory: depth/ornament, button/font density, icon/asset thật có provenance. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt và nếu hình còn thô/xấu thì trạng thái là `CONTINUE` hoặc `FIX_REQUIRED`, không báo hoàn thành.
+
 ## Next — Map01A base-first UI after entry CTA foundation — 2026-09-13
 
 `CONTINUE`. Entry/login CTA đã dùng shared `ApplyLgoEntryCtaAction(...)` / `lgo-entry-cta-action`, evidence Player tại `build/map01a-entry-cta-base-runtime-v1/entry/entry-login.png`. Quy tắc hiện hành: cùng UI/UX phải đi qua shared Skin/base helper trước; không giữ helper local kiểu một màn một bộ style.
