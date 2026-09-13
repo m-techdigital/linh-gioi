@@ -23,10 +23,25 @@ from compose_lgo_pose_review_loadout import SLOTS, COMPLETE_GARMENT_LAYER_PROFIL
 
 POSES = ('idle', 'run_contact_a', 'run_a', 'run_contact_b', 'run_b', 'jump_tuck')
 CANVAS = (1024, 1536)
+NEUTRAL_BODY_COMPONENTS = (
+    'far_upper_arm', 'far_thigh', 'far_shin', 'far_foot',
+    'near_thigh', 'near_shin', 'near_foot', 'far_forearm_hand',
+    'training_cloth', 'torso_head_base', 'near_upper_arm',
+    'near_forearm_hand',
+)
+NEUTRAL_BODY_DRAW_ORDER = tuple(range(51, 63))
+NEUTRAL_BODY_PRESENTATION = 'MODEST_TRAINING_CLOTHES_NO_LEVEL_EQUIPMENT'
 
 
 def fingerprint(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def validate_cutout_alpha(alpha):
+    if not any(alpha):
+        raise ValueError('Cutout has no visible pixels')
+    if all(value == 255 for value in alpha):
+        raise ValueError('Cutout has no transparent pixels')
 
 
 def validate_job(job, output):
@@ -87,6 +102,343 @@ def validate_job(job, output):
                     or struct.unpack('>II', header[16:24]) != CANVAS):
                 raise ValueError('Source must use canonical PNG canvas: ' + str(path))
     return output
+
+
+def validate_neutral_body_job(job, output):
+    """Validate an immutable, registered training-body layer source.
+
+    Neutral means the level equipment slots are absent. The art specification
+    intentionally keeps modest training clothes visible when every item is
+    removed, so this gate neither requests nor claims a naked anatomy source.
+    """
+    output = Path(output).resolve()
+    if output.exists():
+        raise FileExistsError('Use a new output directory: ' + str(output))
+    if (job.get('candidateId') != 'vo_male_neutral_training_body_v1'
+            or job.get('gender') != 'male'
+            or job.get('sourceSpaceProfile') != 'lgo_character_canvas_1024x1536_v1'
+            or job.get('sourceCanvas') != list(CANVAS)
+            or job.get('originX') != 512 or job.get('groundY') != 1484
+            or job.get('basePresentation') != NEUTRAL_BODY_PRESENTATION):
+        raise ValueError('Unsupported neutral body identity or registration')
+    layers = job.get('layers', [])
+    if tuple(layer.get('id') for layer in layers) != NEUTRAL_BODY_COMPONENTS:
+        raise ValueError('Neutral body requires the ordered component contract')
+    orders = [layer.get('drawOrder') for layer in layers]
+    if tuple(orders) != NEUTRAL_BODY_DRAW_ORDER:
+        raise ValueError('Neutral body draw order must match the rig manifest')
+    for layer in layers:
+        if not layer.get('ownership'):
+            raise ValueError('Neutral body layer ownership is required')
+        path = Path(layer.get('path', '')).resolve()
+        if output == path or output in path.parents:
+            raise ValueError('Output contains a locked input: ' + str(path))
+        if fingerprint(path) != layer.get('sha256'):
+            raise ValueError('Source fingerprint changed: ' + str(path))
+        with path.open('rb') as file:
+            header = file.read(26)
+        if (header[:8] != b'\x89PNG\r\n\x1a\n' or header[12:16] != b'IHDR'
+                or struct.unpack('>II', header[16:24]) != CANVAS
+                or header[25] not in (4, 6)):
+            raise ValueError('Neutral body source must be canonical RGBA PNG: ' + str(path))
+    return output
+
+
+def validate_skeletal_garment_master_job(job, output):
+    """Validate one rest-pose garment master; pose-specific rasters are forbidden."""
+    output = Path(output).resolve()
+    if output.exists():
+        raise FileExistsError('Use a new output directory: ' + str(output))
+    if ('poses' in job or job.get('gender') != 'male' or job.get('slot') != 'upper'
+            or not job.get('candidateId') or not job.get('fitFamily')
+            or job.get('sourceSpaceProfile') != 'lgo_character_canvas_1024x1536_v1'
+            or job.get('sourceCanvas') != list(CANVAS)
+            or job.get('originX') != 512 or job.get('groundY') != 1484
+            or not job.get('sourceStatus') or not job.get('designReferences')):
+        raise ValueError('Unsupported skeletal garment master contract')
+    master = job.get('master', {})
+    ownership = set(master.get('ownership', []))
+    if not ownership or not ownership <= {'neck', 'torso', 'upper_arm', 'forearm'}:
+        raise ValueError('Upper garment ownership crosses slot boundary')
+    material = job.get('variantB', {})
+    if set(material) != {'h', 's', 'v'} or any(
+            type(value) not in (int, float) or not math.isfinite(value) or not -180 <= value <= 180
+            for value in material.values()):
+        raise ValueError('Explicit finite HSV material parameters are required')
+    refs = [job.get('bodyReference', {}), master] + job['designReferences']
+    for ref in refs:
+        path = Path(ref.get('path', '')).resolve()
+        if output == path or output in path.parents:
+            raise ValueError('Output contains a locked input: ' + str(path))
+        if fingerprint(path) != ref.get('sha256'):
+            raise ValueError('Source fingerprint changed: ' + str(path))
+        with path.open('rb') as file:
+            header = file.read(26)
+        if (ref in (job['bodyReference'], master)
+                and (header[:8] != b'\x89PNG\r\n\x1a\n' or header[12:16] != b'IHDR'
+                     or struct.unpack('>II', header[16:24]) != CANVAS
+                     or header[25] not in (4, 6))):
+            raise ValueError('Body and master must be canonical RGBA PNG')
+    return output
+
+
+def author_neutral_body_job(job, output):
+    """Create, reopen and export a real layered KRA through Krita's API."""
+    output = validate_neutral_body_job(job, output)
+    from krita import Krita, InfoObject
+    from PyQt5.QtGui import QImage
+
+    app = Krita.instance()
+    previous_batchmode = app.batchmode()
+    width, height = CANVAS
+    output.mkdir(parents=True)
+    job_path = output / 'input-job.json'
+    job_path.write_text(json.dumps(job, ensure_ascii=False, indent=2) + '\n')
+    report = {
+        'status': 'NEUTRAL_TRAINING_BODY_NATIVE_TECHNICAL_REVIEW',
+        'runtimeEligible': False,
+        'candidateId': job['candidateId'],
+        'toolVersion': app.version(),
+        'sourceSpaceProfile': job['sourceSpaceProfile'],
+        'canvas': list(CANVAS),
+        'originX': job['originX'],
+        'groundY': job['groundY'],
+        'basePresentation': job['basePresentation'],
+        'inputJobSha256': fingerprint(job_path),
+        'layers': [],
+    }
+    document = None
+
+    def image_bytes(image):
+        image = image.convertToFormat(QImage.Format_ARGB32)
+        data = image.constBits()
+        data.setsize(image.byteCount())
+        return bytes(data)
+
+    try:
+        app.setBatchmode(True)
+        document = app.createDocument(width, height, job['candidateId'], 'RGBA', 'U8', '', 120.0)
+        document.setBatchmode(True)
+        document.setAutosave(False)
+        root = document.rootNode()
+        for child in tuple(root.childNodes()):
+            if not root.removeChildNode(child):
+                raise RuntimeError('Krita could not remove default document layer')
+        expected_pixels = {}
+        for layer in job['layers']:
+            image = QImage(layer['path'])
+            if image.isNull() or (image.width(), image.height()) != CANVAS:
+                raise ValueError('Krita image read/canvas failed: ' + layer['path'])
+            pixels = image_bytes(image)
+            validate_cutout_alpha(pixels[3::4])
+            name = 'AUTHOR - BODY/' + layer['id']
+            node = document.createNode(name, 'paintlayer')
+            if not root.addChildNode(node, None) or not node.setPixelData(pixels, 0, 0, width, height):
+                raise RuntimeError('Krita could not import layer: ' + name)
+            node.setLocked(True)
+            expected_pixels[name] = hashlib.sha256(pixels).hexdigest()
+            report['layers'].append({
+                'id': layer['id'], 'name': name, 'drawOrder': layer['drawOrder'],
+                'ownership': layer['ownership'], 'source': layer['path'],
+                'sourceSha256': layer['sha256'],
+                'pixelSha256': expected_pixels[name],
+            })
+        document.refreshProjection()
+        document.waitForDone()
+        native = output / 'neutral-training-body.kra'
+        if not document.saveAs(str(native)):
+            raise RuntimeError('Krita native save failed')
+        document.close()
+        document = app.openDocument(str(native))
+        if document is None:
+            raise RuntimeError('Krita native reopen failed')
+        document.setBatchmode(True)
+        document.waitForDone()
+        if (document.width(), document.height()) != CANVAS:
+            raise ValueError('Native canvas drift')
+        for name, expected in expected_pixels.items():
+            node = document.nodeByName(name)
+            if node is None or node.type() != 'paintlayer' or not node.locked():
+                raise ValueError('Native body layer missing or unlocked: ' + name)
+            actual = hashlib.sha256(bytes(node.pixelData(0, 0, width, height))).hexdigest()
+            if actual != expected:
+                raise ValueError('Native body pixel drift: ' + name)
+        preview = output / 'neutral-training-body.png'
+        if not document.exportImage(str(preview), InfoObject()):
+            raise RuntimeError('Krita composite export failed')
+        image = QImage(str(preview))
+        if image.isNull() or (image.width(), image.height()) != CANVAS:
+            raise ValueError('Composite export canvas drift')
+        validate_cutout_alpha(image_bytes(image)[3::4])
+        report['native'] = str(native)
+        report['nativeSha256'] = fingerprint(native)
+        report['preview'] = str(preview)
+        report['previewSha256'] = fingerprint(preview)
+        report['technicalRoundtrip'] = 'PASS'
+        report['artReview'] = 'REQUIRED'
+    except Exception as error:
+        report['technicalRoundtrip'] = 'FAIL'
+        report['error'] = str(error)
+        raise
+    finally:
+        app.setBatchmode(previous_batchmode)
+        if document is not None:
+            document.setModified(False)
+            document.close()
+        (output / 'authoring-report.json').write_text(
+            json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+    return report
+
+
+def author_skeletal_garment_master_job(job, output):
+    """Create one A/B surface family from one registered rest master in Krita."""
+    output = validate_skeletal_garment_master_job(job, output)
+    from krita import Krita, InfoObject, Selection
+    from PyQt5.QtCore import QRect
+    from PyQt5.QtGui import QImage
+
+    app = Krita.instance()
+    previous_batchmode = app.batchmode()
+    width, height = CANVAS
+    output.mkdir(parents=True)
+    job_path = output / 'input-job.json'
+    job_path.write_text(json.dumps(job, ensure_ascii=False, indent=2) + '\n')
+    report = {
+        'status': 'SKELETAL_GARMENT_REST_MASTER_TECHNICAL_REVIEW',
+        'runtimeEligible': False,
+        'candidateId': job['candidateId'],
+        'fitFamily': job['fitFamily'],
+        'toolVersion': app.version(),
+        'canvas': list(CANVAS),
+        'originX': job['originX'],
+        'groundY': job['groundY'],
+        'inputJobSha256': fingerprint(job_path),
+        'restMasterCount': 1,
+        'poseSpecificSourceCount': 0,
+        'sourceStatus': job['sourceStatus'],
+        'artReview': 'REQUIRED',
+    }
+    document = None
+
+    def image_bytes(image):
+        image = image.convertToFormat(QImage.Format_ARGB32)
+        data = image.constBits()
+        data.setsize(image.byteCount())
+        return bytes(data)
+
+    def add_paint(root, name, ref, locked):
+        image = QImage(ref['path'])
+        if image.isNull() or (image.width(), image.height()) != CANVAS:
+            raise ValueError('Krita image read/canvas failed: ' + ref['path'])
+        pixels = image_bytes(image)
+        validate_cutout_alpha(pixels[3::4])
+        node = document.createNode(name, 'paintlayer')
+        if not root.addChildNode(node, None) or not node.setPixelData(pixels, 0, 0, width, height):
+            raise RuntimeError('Krita could not import layer: ' + name)
+        node.setLocked(locked)
+        return node, hashlib.sha256(pixels).hexdigest()
+
+    try:
+        app.setBatchmode(True)
+        document = app.createDocument(width, height, job['candidateId'], 'RGBA', 'U8', '', 120.0)
+        document.setBatchmode(True)
+        document.setAutosave(False)
+        root = document.rootNode()
+        for child in tuple(root.childNodes()):
+            if not root.removeChildNode(child):
+                raise RuntimeError('Krita could not remove default document layer')
+        body, body_pixels = add_paint(root, 'REFERENCE - NEUTRAL TRAINING BODY', job['bodyReference'], True)
+        master, master_pixels = add_paint(root, 'MASTER - UPPER/REST', job['master'], True)
+        master.setVisible(False)
+        variants = {}
+        for variant in ('A', 'B'):
+            clone = document.createCloneLayer(variant + ' - UPPER/REST', master)
+            root.addChildNode(clone, None)
+            if variant == 'B':
+                material = app.filter('hsvadjustment')
+                config = material.configuration()
+                for key, value in job['variantB'].items():
+                    config.setProperty(key, value)
+                material.setConfiguration(config)
+                selection = Selection()
+                selection.select(0, 0, width, height, 255)
+                clone.addChildNode(document.createFilterMask(
+                    'B_SURFACE_VARIANT_NOT_LEVEL_PROGRESSION', material, selection), None)
+            clone.setVisible(variant == 'A')
+            variants[variant] = clone
+        document.refreshProjection()
+        document.waitForDone()
+        native = output / 'skeletal-upper-master.kra'
+        if not document.saveAs(str(native)):
+            raise RuntimeError('Krita native save failed')
+        document.close()
+        document = app.openDocument(str(native))
+        if document is None:
+            raise RuntimeError('Krita native reopen failed')
+        document.setBatchmode(True)
+        document.waitForDone()
+        if (document.width(), document.height()) != CANVAS:
+            raise ValueError('Native canvas drift')
+        body = document.nodeByName('REFERENCE - NEUTRAL TRAINING BODY')
+        master = document.nodeByName('MASTER - UPPER/REST')
+        if (body is None or master is None or not body.locked() or not master.locked()):
+            raise ValueError('Native authority layer missing or unlocked')
+        if hashlib.sha256(bytes(body.pixelData(0, 0, width, height))).hexdigest() != body_pixels:
+            raise ValueError('Body reference pixel drift')
+        if hashlib.sha256(bytes(master.pixelData(0, 0, width, height))).hexdigest() != master_pixels:
+            raise ValueError('Garment master pixel drift')
+        alpha_a = None
+        variant_records = []
+        for variant in ('A', 'B'):
+            clone = document.nodeByName(variant + ' - UPPER/REST')
+            other = document.nodeByName(('B' if variant == 'A' else 'A') + ' - UPPER/REST')
+            if clone is None or clone.type() != 'clonelayer' or clone.sourceNode().uniqueId() != master.uniqueId():
+                raise ValueError('Variant lost shared rest master: ' + variant)
+            clone.setVisible(True)
+            other.setVisible(False)
+            document.refreshProjection()
+            document.waitForDone()
+            component = output / variant / 'upper.png'
+            component.parent.mkdir(parents=True, exist_ok=True)
+            clone.save(str(component), document.xRes(), document.yRes(), InfoObject(), QRect(0, 0, width, height))
+            pixels = image_bytes(QImage(str(component)))
+            validate_cutout_alpha(pixels[3::4])
+            if variant == 'A':
+                alpha_a = pixels[3::4]
+            elif pixels[3::4] != alpha_a:
+                raise ValueError('Surface variant changed garment alpha')
+            composite = output / variant / 'body-upper-composite.png'
+            if not document.exportImage(str(composite), InfoObject()):
+                raise RuntimeError('Krita composite export failed: ' + variant)
+            composite_pixels = image_bytes(QImage(str(composite)))
+            validate_cutout_alpha(composite_pixels[3::4])
+            variant_records.append({
+                'variant': variant,
+                'component': str(component), 'componentSha256': fingerprint(component),
+                'composite': str(composite), 'compositeSha256': fingerprint(composite),
+                'sharedMaster': 'MASTER - UPPER/REST', 'alphaPreserved': True,
+            })
+        if variant_records[0]['componentSha256'] == variant_records[1]['componentSha256']:
+            raise ValueError('Surface variant did not change component pixels')
+        for ref in [job['bodyReference'], job['master']] + job['designReferences']:
+            if fingerprint(ref['path']) != ref['sha256']:
+                raise ValueError('Locked external input changed during export')
+        report['native'] = str(native)
+        report['nativeSha256'] = fingerprint(native)
+        report['variants'] = variant_records
+        report['technicalRoundtrip'] = 'PASS'
+    except Exception as error:
+        report['technicalRoundtrip'] = 'FAIL'
+        report['error'] = str(error)
+        raise
+    finally:
+        app.setBatchmode(previous_batchmode)
+        if document is not None:
+            document.setModified(False)
+            document.close()
+        (output / 'authoring-report.json').write_text(
+            json.dumps(report, ensure_ascii=False, indent=2) + '\n')
+    return report
 
 
 def rigid_transform_xml(identity_xml, mapping):

@@ -139,5 +139,130 @@ class KritaAuthoringPreflightTests(unittest.TestCase):
         self.assertEqual(root.find('.//scaleY').get('value'), '1')
 
 
+class KritaNeutralBodyPreflightTests(unittest.TestCase):
+    REQUIRED = (
+        'far_upper_arm', 'far_thigh', 'far_shin', 'far_foot',
+        'near_thigh', 'near_shin', 'near_foot', 'far_forearm_hand',
+        'training_cloth', 'torso_head_base', 'near_upper_arm',
+        'near_forearm_hand',
+    )
+    DRAW_ORDER = (51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62)
+
+    def setUp(self):
+        self.module = __import__('lgo_krita_layer_authoring')
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.output = self.root / 'native'
+        layers = []
+        for component, order in zip(self.REQUIRED, self.DRAW_ORDER):
+            image = Image.new('RGBA', (1024, 1536))
+            image.putpixel((300 + order, 400 + order), (50, 60, 70, 255))
+            path = self.root / (component + '.png')
+            image.save(path)
+            layers.append({
+                'id': component,
+                'path': str(path),
+                'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                'ownership': ['pelvis'] if component == 'training_cloth' else ['torso'],
+                'drawOrder': order,
+            })
+        self.job = {
+            'candidateId': 'vo_male_neutral_training_body_v1',
+            'gender': 'male',
+            'sourceSpaceProfile': 'lgo_character_canvas_1024x1536_v1',
+            'sourceCanvas': [1024, 1536],
+            'originX': 512,
+            'groundY': 1484,
+            'basePresentation': 'MODEST_TRAINING_CLOTHES_NO_LEVEL_EQUIPMENT',
+            'layers': layers,
+        }
+
+    def test_accepts_complete_registered_body_without_writing(self):
+        self.module.validate_neutral_body_job(self.job, self.output)
+        self.assertFalse(self.output.exists())
+
+    def test_rejects_missing_layer_duplicate_order_and_changed_source(self):
+        for mutate in (
+            lambda job: job['layers'].pop(),
+            lambda job: job['layers'][-1].update(drawOrder=0),
+            lambda job: job['layers'][-1].update(sha256='0' * 64),
+        ):
+            job = copy.deepcopy(self.job)
+            mutate(job)
+            with self.subTest(job=job), self.assertRaises(ValueError):
+                self.module.validate_neutral_body_job(job, self.output)
+        self.assertFalse(self.output.exists())
+
+    def test_rejects_contiguous_order_invented_outside_rig_manifest(self):
+        job = copy.deepcopy(self.job)
+        for order, layer in enumerate(job['layers']):
+            layer['drawOrder'] = order
+        with self.assertRaisesRegex(ValueError, 'draw order'):
+            self.module.validate_neutral_body_job(job, self.output)
+
+    def test_rejects_naked_or_level_equipment_claim_and_wrong_registration(self):
+        for key, value in (
+            ('basePresentation', 'NAKED_ANATOMY'),
+            ('groundY', 1535),
+            ('originX', 500),
+            ('gender', 'female'),
+        ):
+            job = copy.deepcopy(self.job)
+            job[key] = value
+            with self.subTest(key=key), self.assertRaises(ValueError):
+                self.module.validate_neutral_body_job(job, self.output)
+
+    def test_cutout_alpha_requires_both_visible_and_transparent_pixels(self):
+        self.module.validate_cutout_alpha(bytes((0, 255)))
+        for alpha in (bytes((0, 0)), bytes((255, 255))):
+            with self.subTest(alpha=alpha), self.assertRaises(ValueError):
+                self.module.validate_cutout_alpha(alpha)
+
+
+class KritaSkeletalGarmentMasterPreflightTests(unittest.TestCase):
+    def setUp(self):
+        self.module = __import__('lgo_krita_layer_authoring')
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        self.output = self.root / 'native'
+        self.body = self.root / 'body.png'
+        self.garment = self.root / 'garment.png'
+        for path, pixel in ((self.body, (400, 400)), (self.garment, (480, 450))):
+            image = Image.new('RGBA', (1024, 1536))
+            image.putpixel(pixel, (50, 80, 120, 255))
+            image.save(path)
+        self.job = {
+            'candidateId': 'phap_male_inner_top_skeletal_master_v1',
+            'gender': 'male', 'slot': 'upper',
+            'fitFamily': 'lgo_male_upper_skeletal_v1',
+            'sourceSpaceProfile': 'lgo_character_canvas_1024x1536_v1',
+            'sourceCanvas': [1024, 1536], 'originX': 512, 'groundY': 1484,
+            'bodyReference': {'path': str(self.body), 'sha256': hashlib.sha256(self.body.read_bytes()).hexdigest()},
+            'master': {'path': str(self.garment), 'sha256': hashlib.sha256(self.garment.read_bytes()).hexdigest(),
+                       'ownership': ['neck', 'torso']},
+            'variantB': {'h': 10, 's': -20, 'v': 5},
+            'sourceStatus': 'LEGACY_IDLE_COMPONENT_REUSED_AS_SKELETAL_REST_MASTER',
+            'designReferences': [{'path': str(self.garment), 'sha256': hashlib.sha256(self.garment.read_bytes()).hexdigest()}],
+        }
+
+    def test_accepts_one_registered_rest_master_without_writing(self):
+        self.module.validate_skeletal_garment_master_job(self.job, self.output)
+        self.assertFalse(self.output.exists())
+
+    def test_rejects_pose_list_cross_slot_ownership_and_changed_hash(self):
+        mutations = (
+            lambda job: job.update(poses=['idle', 'jump']),
+            lambda job: job['master'].update(ownership=['torso', 'pelvis']),
+            lambda job: job['master'].update(sha256='0' * 64),
+        )
+        for mutate in mutations:
+            job = copy.deepcopy(self.job)
+            mutate(job)
+            with self.subTest(job=job), self.assertRaises(ValueError):
+                self.module.validate_skeletal_garment_master_job(job, self.output)
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -1087,3 +1087,17 @@ Audit kho source A không tìm thấy neutral layer có thể tái dùng. `male-
 Unity Development Player đã được build và chạy trong scene review cô lập. Timeline `idle → run → jump → run → attack → return_to_idle → run` hoàn tất; đổi upper equipment giữa lúc chạy giữ state, root scale drift `0`, rigid item scale drift `0,000132`. Cửa sổ được chuyển sang màn trái tại `(-1800,100)` và capture display thật thành công: `build/character-model-architecture-review-01/modular-3d-player-probe/runtime-v7/display-3.png`; review `capture-review.json`.
 
 Đây chỉ là `NARROW_PLAYER_TECHNICAL_PASS`. Proxy khối thiếu giải phẫu, silhouette trang phục và occlusion LGO nên bị loại ở gate thị giác, không được promote runtime. p95 Development Player `17,57 ms` cao hơn budget tạm `16,7 ms`; counter draw call `7983` bị loại vì không hợp lý. Không lặp capture hoặc chỉnh hình khối. Bước có giá trị tiếp theo là hoàn thiện common task cho skeletal 2D từ neutral anatomy authority có layer thật, thêm fall/land, unseen item và mixed loadout; sau đó dùng cùng scenario/capture/metrics để so sánh kiến trúc.
+
+## Batch hiện hành — neutral training-body source native — 2026-09-13
+
+Kết quả kiểm chứng cần tạo: một tài liệu Krita 1024×1536 của base nam, mỗi chi/thân và fallback training cloth là layer nguồn thật có hash/provenance, mở lại và xuất qua Krita mà không đổi pixel/canvas. Art spec cho phép base mặc đồ tập xám khi tháo hết, nên `neutral` ở gate này là base presentation không mang item cấp độ; không yêu cầu anatomy trần. Batch không cắt lại composite, không sinh ảnh và không đưa source vào Unity.
+
+Danh sách phụ thuộc xử lý cùng lượt: khóa 12 component body hiện có theo rig/source profile, audit alpha/ownership bằng gate hiện hành, tạo KRA bằng Krita thật, reopen/export và review composite. Nếu source vẫn cần body-variant nguyên người để đổi một item hoặc layer thực tế rỗng/sai canvas thì gate source fail; không hạ assertion. Sau khi source body đạt kỹ thuật, batch kế tiếp mới author một upper garment deforming và một rigid accessory trên cùng skeleton, A/B cùng topology và unseen item không sửa theo pose.
+
+## Kết quả source native và action tiếp theo — 2026-09-13
+
+Neutral nam đã qua round-trip Krita 5.3.3 với 12 paint layer thật, khóa theo draw order authority `51..62`; composite có alpha thật và pixel-identical với idle authority (`changedPixels=0`, `alphaChangedPixels=0`). Hai lượt lỗi v1/v2 được giữ làm evidence: v1 dùng draw order tự đặt nên tay xa phủ ngực; v2 giữ default document layer nên export alpha kín canvas. V3 tại `common-male-v1/skeletal-architecture-probe-01/neutral-training-body-native-v3/` sửa đúng nguyên nhân, không redraw hoặc dịch pixel.
+
+Upper garment Pháp đã được chuyển thành một rest master duy nhất trong KRA, A/B là clone chung source và B chỉ đổi material bằng filter mask. Kiểm định cho thấy alpha A/B giống tuyệt đối, 69.682 pixel màu hữu hình thay đổi và composite không đổi pixel nào bên ngoài alpha áo. Đây là source-only technical pass; chưa chứng minh deformation, motion, occlusion động hoặc Player.
+
+Action tiếp theo: author mesh/weights có ownership `neck/torso` cho neutral body và upper garment trên skeleton chung, dùng rest master này làm texture authority. Chạy một isolated Player timeline `idle → run → jump → fall → land → run → attack → return_to_idle → run`, đổi A/B khi đang chạy và đo bone-length drift, triangle inversion, seam gap, timeline reset cùng frame time. Không sinh raster áo theo pose, không sửa Map01A và không promote runtime trước review video/body/full/mixed tại cùng timestamp.
