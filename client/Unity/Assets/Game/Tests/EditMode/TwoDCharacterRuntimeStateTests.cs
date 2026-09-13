@@ -332,9 +332,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(overlay, Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Entry Login Button"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Entry Account Field"), Is.Not.Null);
-                Assert.That(root.Q<Label>("Map01A Entry Account Placeholder").text, Does.Contain("Tài khoản"));
+                var accountPlaceholder = root.Q<Label>("Map01A Entry Account Placeholder").text;
+                Assert.That(accountPlaceholder, Does.Contain("Tài khoản"));
+                Assert.That(accountPlaceholder, Does.Not.Contain("👤"), "Login must not use temporary emoji glyphs as field icons.");
                 Assert.That(root.Q("Map01A Entry Password Field"), Is.Not.Null);
-                Assert.That(root.Q<Label>("Map01A Entry Password Placeholder").text, Does.Contain("Mật khẩu"));
+                var passwordPlaceholder = root.Q<Label>("Map01A Entry Password Placeholder").text;
+                Assert.That(passwordPlaceholder, Does.Contain("Mật khẩu"));
+                Assert.That(passwordPlaceholder, Does.Not.Contain("🔒"), "Login must not use temporary emoji glyphs as field icons.");
                 Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("review"));
                 Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
@@ -344,7 +348,11 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
                 Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));
                 Assert.That(root.Q("Map01A Entry Auth Options"), Is.Not.Null);
-                Assert.That(root.Q<Label>("Map01A Entry Remember Account").text, Does.Contain("Lưu tài khoản"));
+                Assert.That(root.Q("Map01A Entry Remember Box"), Is.Not.Null,
+                    "Remember-account state should use a UI element box, not a temporary checkbox glyph.");
+                var rememberText = root.Q<Label>("Map01A Entry Remember Account").text;
+                Assert.That(rememberText, Does.Contain("Lưu tài khoản"));
+                Assert.That(rememberText, Does.Not.Contain("☑"), "Entry/login must not use temporary checkbox glyphs as UI art.");
                 Assert.That(root.Q<Button>("Map01A Entry Forgot Password").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Entry Support Link").enabledSelf, Is.False);
                 Assert.That(start.text, Does.Contain("Bắt đầu"));

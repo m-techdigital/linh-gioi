@@ -103,8 +103,8 @@ namespace LinhGioi.UI
             loginTitle.style.color = new Color(.95f, .75f, .36f, .96f);
             panel.Add(loginTitle);
 
-            panel.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "👤  Tài khoản / Email / Số điện thoại"));
-            panel.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "🔒  Mật khẩu"));
+            panel.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "Tài khoản / Email / Số điện thoại"));
+            panel.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "Mật khẩu"));
             panel.Add(MakeEntryAuthOptions());
 
             var authScope = new Label("review local: form hiển thị theo UI/UX, chưa gửi tài khoản hoặc mật khẩu thật.")
@@ -199,10 +199,30 @@ namespace LinhGioi.UI
             row.style.marginTop = -2;
             row.style.marginBottom = 10;
 
-            var remember = LgoLabel("☑ Lưu tài khoản", 14, new Color(.86f, .92f, .88f, .92f), true);
+            var rememberWrap = new VisualElement { name = "Map01A Entry Remember Wrap" };
+            rememberWrap.style.flexDirection = FlexDirection.Row;
+            rememberWrap.style.alignItems = Align.Center;
+            rememberWrap.style.flexGrow = 1;
+
+            var rememberBox = new VisualElement { name = "Map01A Entry Remember Box" };
+            rememberBox.style.width = 13;
+            rememberBox.style.height = 13;
+            rememberBox.style.marginRight = 6;
+            ApplyLgoFrame(rememberBox, new Color(.025f, .075f, .080f, .92f), new Color(.86f, .78f, .48f, .88f));
+
+            var rememberMark = new VisualElement { name = "Map01A Entry Remember Mark" };
+            rememberMark.style.width = 7;
+            rememberMark.style.height = 7;
+            rememberMark.style.marginLeft = 3;
+            rememberMark.style.marginTop = 3;
+            rememberMark.style.backgroundColor = UiGold;
+            rememberBox.Add(rememberMark);
+            rememberWrap.Add(rememberBox);
+
+            var remember = LgoLabel("Lưu tài khoản", 14, new Color(.86f, .92f, .88f, .92f), true);
             remember.name = "Map01A Entry Remember Account";
-            remember.style.flexGrow = 1;
-            row.Add(remember);
+            rememberWrap.Add(remember);
+            row.Add(rememberWrap);
 
             var forgot = new Button { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu · chưa mở" };
             forgot.style.flexGrow = 0;

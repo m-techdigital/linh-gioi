@@ -1,3 +1,7 @@
+## Next Map01A UI polish after entry glyph cleanup — 2026-09-13
+
+Continue Map01A product UI/UX polish from the owner references using shared skin/base helpers and runtime/approved assets only. Entry/login now avoids temporary glyph art; next safe work should improve overall visual richness, HUD/dialogue readability, and inventory/item-detail hierarchy without fake/generic icons or random generated art. Keep Hành trang and Thông tin separate, show selected item/equipment details on the right, and re-capture Player evidence after visible changes.
+
 ## Next Map01A UI polish after dialogue card hierarchy — 2026-09-13
 
 Dialogue now has a clearer card hierarchy and Player evidence at `build/map01a-dialogue-card-runtime-v1/pc/02-ha-van-dialogue.png`. Continue Map01A product UI/UX polish from owner references: improve login/inventory visual richness and item detail/card hierarchy through shared skin helpers and approved/runtime assets only. Do not add fake item icons, random generated class art, or a second modal/card/tab/button system. Wardrobe/class redraw remains deferred until a deterministic source/design pipeline exists.
