@@ -325,6 +325,24 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void InventoryModalUsesBoundedDesktopShellInsteadOfFullWidthOverlay()
+        {
+            var desktop = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 1600, 900), touch: false);
+
+            Assert.That(desktop.width, Is.InRange(1240, 1320),
+                "Desktop inventory modal should be bounded near the owner RPG modal references instead of spanning the whole screen.");
+            Assert.That(desktop.x, Is.GreaterThanOrEqualTo(120),
+                "Desktop inventory modal should leave balanced map backdrop margins rather than a full-screen debug overlay.");
+            Assert.That(desktop.y, Is.EqualTo(82));
+            Assert.That(desktop.height, Is.EqualTo(748));
+
+            var compact = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 800, 480), touch: true);
+            Assert.That(compact.x, Is.EqualTo(14));
+            Assert.That(compact.width, Is.EqualTo(772),
+                "Compact/touch inventory should keep safe side margins instead of using the desktop bounded shell.");
+        }
+
+        [Test]
         public void CharacterSelectModalUsesSharedSkinAndDoesNotAdvanceQuest()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

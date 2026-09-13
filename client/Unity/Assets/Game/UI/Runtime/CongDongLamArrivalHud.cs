@@ -264,6 +264,30 @@ namespace LinhGioi.UI
             return bar;
         }
 
+        public static Rect CalculateInventoryModalRect(Rect safePanelRect, bool touch)
+        {
+            var compact = touch || safePanelRect.width < 950;
+            if (compact)
+            {
+                const float sideMargin = 14f;
+                const float topMargin = 70f;
+                const float bottomMargin = 96f;
+                return new Rect(
+                    safePanelRect.x + sideMargin,
+                    safePanelRect.y + topMargin,
+                    Mathf.Max(0f, safePanelRect.width - sideMargin * 2f),
+                    Mathf.Max(0f, safePanelRect.height - topMargin - bottomMargin));
+            }
+
+            const float maxDesktopWidth = 1280f;
+            const float minSideMargin = 56f;
+            const float top = 82f;
+            const float bottom = 70f;
+            var width = Mathf.Min(maxDesktopWidth, Mathf.Max(0f, safePanelRect.width - minSideMargin * 2f));
+            var x = safePanelRect.x + Mathf.Max(minSideMargin, (safePanelRect.width - width) * .5f);
+            return new Rect(x, safePanelRect.y + top, width, Mathf.Max(0f, safePanelRect.height - top - bottom));
+        }
+
         private void Layout()
         {
             _metrics = RuntimeViewportMetrics.FromRoot(_root);
@@ -275,11 +299,13 @@ namespace LinhGioi.UI
             _minimap.style.width = r.width < 1100 ? 360 : 430;
             _dialogue.style.left = _touch ? 150 : 20;
             _combatBar.style.left = _touch ? 150 : 220;
-            _inventory.style.left = r.width < 950 ? 14 : 56;
-            _inventory.style.right = r.width < 950 ? 14 : 56;
-            _inventory.style.top = r.width < 950 ? 70 : 82;
-            _inventory.style.bottom = r.width < 950 ? 96 : 70;
-            _inventory.style.width = StyleKeyword.Auto;
+            var inventoryRect = CalculateInventoryModalRect(new Rect(0, 0, r.width, r.height), _touch);
+            _inventory.style.left = inventoryRect.x;
+            _inventory.style.right = StyleKeyword.Auto;
+            _inventory.style.top = inventoryRect.y;
+            _inventory.style.bottom = StyleKeyword.Auto;
+            _inventory.style.width = inventoryRect.width;
+            _inventory.style.height = inventoryRect.height;
             _combatBar.style.bottom = r.width < 1300 ? 100 : 24;
             _talk.style.fontSize = _touch ? 20 : 18;
             if (_inventoryHeroPanel != null)

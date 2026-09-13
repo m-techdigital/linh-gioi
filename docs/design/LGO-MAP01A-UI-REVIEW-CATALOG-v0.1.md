@@ -102,3 +102,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-bounded-grid-runtime-v1/inventory/bag.png`, `character-info.png`, `character-info-after-supplies.png`, `supplies.png`, `storage.png`.
 - Result: Hành trang grid panel now uses bounded desktop width instead of stretching full-width, reducing wide table-card presentation and keeping detail on the right.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit shows improvement over the previous base-style capture, but final-quality icon art, ornament treatment, and shell richness remain pending.
+
+## 2026-09-13 — Inventory bounded modal shell evidence
+
+- Evidence: `build/map01a-inventory-bounded-shell-runtime-v1/inventory/bag.png`, `character-info.png`, `character-info-after-supplies.png`, `supplies.png`, `storage.png`.
+- Result: Hành trang/Thông tin/Rương shell uses a bounded desktop modal layout through shared `CalculateInventoryModalRect(...)`, with compact/touch safe margins retained. This locks the base-first rule for modal sizing instead of per-screen full-width styling.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit finds the modal less like a full-screen debug overlay, but final polish still needs approved/provenance-backed icons, richer ornament/depth, and continued shared base treatment.

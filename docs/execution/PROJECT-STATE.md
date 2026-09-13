@@ -1,3 +1,11 @@
+## Map01A — inventory bounded modal shell + base-first rule — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Áp dụng tiếp rule base-first: inventory modal không còn hard-code full-width left/right/top/bottom trong `Layout()`; dùng chung `CongDongLamArrivalHud.CalculateInventoryModalRect(...)` để giữ shell desktop bounded và compact/touch safe-margin.
+- Guard mới trong EditMode fail đúng khi thiếu helper layout chung, sau đó pass khi shell desktop giữ khoảng 1280px, căn giữa và không trải full-screen như debug overlay. Test inventory tab hiện có cũng pass để bảo đảm Hành trang/Thông tin/Rương/Vật phẩm không bị phá.
+- Player evidence: `build/map01a-inventory-bounded-shell-runtime-v1/inventory/bag.png`, `character-info.png`, `supplies.png`, `storage.png`, `manifest.json`.
+- Visual audit: shell Hành trang/Thông tin bớt full-screen và grid không còn kéo ngang như bảng debug. Vẫn `CONTINUE`, chưa nghiệm thu mỹ thuật vì còn thiếu icon/item art/ornament/logo polish có provenance và cần tiếp tục dùng base chung cho dialog/card/button.
+
 ## Map01A — inventory bounded grid visual audit — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

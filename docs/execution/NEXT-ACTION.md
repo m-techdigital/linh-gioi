@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after bounded modal shell — 2026-09-13
+
+`CONTINUE`. Evidence mới: `build/map01a-inventory-bounded-shell-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Inventory shell đã dùng helper layout chung `CalculateInventoryModalRect(...)` để tránh mỗi nơi tự set full-width/margin riêng; test guard khóa desktop bounded shell và compact/touch safe margin.
+
+Quy tắc hiện hành: mọi UI/UX giống nhau phải đi qua base/shared helper trước khi dựng thêm màn mới: modal shell, tab, filter chip, button, grid cell, detail card, close button. Không tạo style một lần ở từng màn nếu hành vi/hình thái giống nhau. Next valid work: tiếp tục Map01A UI-only theo owner references, ưu tiên polish visual richness cho login/HUD/NPC dialogue/inventory với base chung và asset runtime/approved/provenance-backed. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated, không dùng test xanh thay visual review.
+
 ## Next — Map01A inventory visual polish after bounded grid — 2026-09-13
 
 `CONTINUE`. Evidence mới: `build/map01a-inventory-bounded-grid-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Grid Hành trang đã bớt table-like nhờ khổ bounded 720px và test guard chặn quay lại flex full-width.
