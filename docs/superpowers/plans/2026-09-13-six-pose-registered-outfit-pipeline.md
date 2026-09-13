@@ -88,6 +88,16 @@ Prep evidence 2026-09-13: `tools/inspect_lgo_source_png_inventory.py` wrote `bui
 
 Current repair gate 2026-09-13: `tools/audit_lgo_six_pose_repair_source_layers.py` wrote `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-layer-audit-v1.json`, status `SOURCE_REPAIR_LAYER_GAP`. All three fixed candidate directories currently have `present=0/24`; this is expected before source authoring and must not be treated as a packable state.
 
+Partial staging 2026-09-13: `tools/stage_lgo_six_pose_repair_layers.py` copied only clean measured material exports into the fixed repair directories and did not synthesize missing poses. Evidence:
+
+- `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-staging-selection-v1.json`
+- `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/stage-repair-layers-v1.json`
+- `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-layer-audit-v2-after-staging.json`
+- `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-board-v1/contact-sheet.png`
+- `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-board-v1/visual-findings-v1.json`
+
+Current status remains `SOURCE_VISUAL_FIX_REQUIRED`: `outer_top` has 4/24 layer files, `waist_belt` has 20/24, `shoulder_chest_guard` has 4/24; repair-layer audit still has 44 missing layer failures. External repair directories and the batch folder contain `DO-NOT-PACK.md`.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.
