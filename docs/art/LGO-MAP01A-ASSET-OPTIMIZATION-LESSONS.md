@@ -253,6 +253,14 @@ Continuity score cũng phải có hard anatomy flags. Audit v1 ưu tiên width/s
 
 Feedback owner 3ca3 được nhận như một bài học cấp kiến trúc: nguồn/pose/renderer hiện tại là authority vận hành, không phải cam kết giữ nguyên. Khi một pipeline cần sửa body, shoulder, mask hoặc layer từng chút để qua một item, phải nâng vấn đề lên đơn vị sản xuất nhân vật/trang bị thay vì tiếp tục vẽ lại từng pose. Từ nay trước khi tạo thêm garment candidate production, chạy gate kiến trúc hữu hạn: A 2D skeletal runtime modular và B direct 3D modular runtime trên cùng bài test, đo item unseen sau khi khóa template/tooling. Pose-image pipeline cũ chỉ dùng làm baseline đối chứng cho đến khi nó thắng gate bằng evidence.
 
+## 2026-09-13 — Owner reject là gate thiết kế, không phải lỗi cần vá tiếp
+
+`bind-authority-candidate-v1` của skeletal 2D đã có metric kỹ thuật tốt ở mức narrow probe, nhưng owner reject kết quả Player vì chân tay rời rạc, tỷ lệ cơ thể sai và jump/flip không thể là nền cho trang phục. Đây là fail thiết kế nguồn/body, không phải thiếu thêm một animation curve hoặc vài pixel overlap. Marker `DO-NOT-PACK.md` đã được đặt ở candidate external; manifest benchmark nay trả `AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT`.
+
+Bài học: technical pass chỉ có giá trị khi nó đo đúng điều kiện sản phẩm. Bone length drift, root scale hoặc capture đủ state không được ghi thành visual acceptance nếu nhân vật nhìn sai. Khi source body bị reject, không tiếp tục fit áo/quần/giáp lên nó vì mọi slot sau đó sẽ kế thừa anatomy sai và làm chi phí bỏ đi tăng lên.
+
+Cách xử lý đã xác nhận: đóng candidate thành failure evidence, giữ provenance để so sánh, cập nhật planner để không chạy lại cùng source, rồi yêu cầu một neutral layered body/rig blueprint mới trước khi runtime hoặc garment gate tiếp tục. Blueprint mới phải có canvas 1024x1536, origin X 512, ground Y 1484, joint centers rõ, hidden surfaces, overlap ownership, lower-leg/foot policy và board tỷ lệ so với reference đã duyệt. Trigger kiểm lại chỉ xảy ra khi có source blueprint mới hoặc khi benchmark chuyển hẳn sang `modular_3d`; không rerun probe cũ với cùng input hash.
+
 ## Capture Player nhiều màn hình phải xác nhận display — 2026-09-13
 
 Trên macOS ba màn hình, `screencapture -R` và window-id không lấy đúng Unity Player dù cửa sổ đã tồn tại. Cách đã xác nhận: mở Development Player, dùng System Events chuyển cửa sổ `Unity` sang màn trái tại tọa độ tuyệt đối `(-1800,100)`, đọc lại position/size, rồi chụp mỗi display bằng `screencapture -D`. Chỉ display có nhãn Development Build và nội dung probe được nhận; ảnh Blender/browser bị ghi rõ là rejected evidence. Không lặp thử window-id/region sau khi display capture đã giải quyết.

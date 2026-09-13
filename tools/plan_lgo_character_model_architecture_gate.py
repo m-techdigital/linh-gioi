@@ -244,6 +244,13 @@ def plan_architecture_gate(manifest: dict[str, Any]) -> dict[str, Any]:
         evaluation = evaluations[name]
         if evaluation["closedByAntiLoop"]:
             continue
+        if name == "skeletal_2d" and record.get("probeStatus") == "OWNER_REJECTED_SOURCE":
+            return {
+                **result,
+                "status": "AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT",
+                "nextAction": "author_skeletal_2d_neutral_layered_source",
+                "nextCandidate": name,
+            }
         if record.get("probeStatus") != "COMPLETE":
             label = "SKELETAL_2D" if name == "skeletal_2d" else "MODULAR_3D"
             return {

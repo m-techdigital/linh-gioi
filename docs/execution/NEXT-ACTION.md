@@ -1,3 +1,17 @@
+## Skeletal 2D source blueprint gate — owner rejection recorded 2026-09-13
+
+Owner rejected the current generated-cutout skeletal Player result as visually unacceptable: limbs read detached, proportions do not match the accepted character design, and jump/flip motion cannot be used as a foundation for clothing. This closes `bind-authority-candidate-v1` as runtime/bind evidence; it is preserved only for failure analysis.
+
+Authoritative evidence now records this state:
+
+- External candidate marker: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/common-male-v1/skeletal-architecture-probe-01/bind-authority-candidate-v1/DO-NOT-PACK.md`
+- Source blueprint spec: `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`
+- Benchmark manifest: `build/character-model-architecture-review-01/benchmark-manifest-v1.json`
+- Planner output: `build/character-model-architecture-review-01/next-action-v1.json`, status `AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT`
+- Readiness audit: `build/character-model-architecture-review-01/skeletal-2d-readiness-audit-v1.json`
+
+Next valid architecture action is not another Player pass on the same cutout source. Create or obtain a new neutral layered body/rig blueprint that matches Linh Giới proportions before rerunning skeletal source admission, motion continuity, deformation and garment gates. The old six-pose sprite set remains a visual/motion baseline only; it must not be presented as the new skeletal method. If the new source blueprint cannot be produced with explicit joints, hidden surfaces, overlap ownership and proportional review evidence, close `skeletal_2d` for this benchmark and move to the bounded `modular_3d` probe rather than continuing pixel fixes.
+
 ## Blender toolchain restored — structured source proof hẹp
 
 Owner cho phép tải lại nếu bundle Blender không còn. PID 81705 vẫn chạy từ path cũ, nhưng executable path trước đó không tồn tại nên đã tải lại Blender 4.5.5 LTS chính thức vào root project `build/toolchains/blender/Blender.app` và kiểm `--version`. Evidence `build/structured-garment-method-verification/blender-discovery.json`.

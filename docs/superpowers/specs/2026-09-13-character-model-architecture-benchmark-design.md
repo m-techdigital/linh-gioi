@@ -11,6 +11,12 @@ Chọn đơn vị sản xuất nhân vật có thể mở rộng cho tủ đồ 
 
 Benchmark không thay gameplay/server/protocol/schema/ADR, không promote candidate trang phục hiện hành và không sửa body/pose cũ để làm đẹp kết quả.
 
+## Kết quả probe skeletal 2D hiện tại
+
+`bind-authority-candidate-v1` và Player probe từ generated cutout source bị owner reject sau review thực tế. Lý do sản phẩm: chân tay đọc như rời rạc, tỷ lệ cơ thể không khớp design 1:1, jump/flip không thể dùng làm nền mặc đồ, và technical pass không phản ánh chất lượng hình ảnh cuối. Candidate này đã chuyển sang `OWNER_REJECTED_VISUAL` và có marker `DO-NOT-PACK.md` trong selected-source external tree.
+
+Điều này không đóng toàn bộ hướng `skeletal_2d`, nhưng đóng nguồn body/cutout hiện tại. Planner phải trả `AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT` khi manifest có `probeStatus=OWNER_REJECTED_SOURCE`. Next action hợp lệ là author hoặc nhận một neutral layered body/rig blueprint mới theo `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`, rồi chạy lại source admission và visual body gate trước garment. Nếu không có blueprint mới đủ chuẩn, benchmark phải chuyển sang `modular_3d` hoặc ghi owner decision, không tiếp tục cứu source cũ bằng animation curve, overlap, mask hay pixel edits.
+
 ## Đơn vị đối chứng chung
 
 Ba hướng `pose_sprite_baseline`, `skeletal_2d` và `modular_3d` dùng cùng một brief hình ảnh, cùng chiều cao hiển thị và cùng tập hành vi:
@@ -49,10 +55,11 @@ Planner chỉ cho phép đi theo các trạng thái sau:
 
 1. Thiếu baseline định lượng → `BASELINE_EVIDENCE_REQUIRED`.
 2. Candidate chưa có toolchain/probe → `RUN_SKELETAL_2D_PROBE` hoặc `RUN_MODULAR_3D_PROBE`.
-3. Có probe nhưng thiếu task/evidence → `COMPLETE_COMMON_TASK_EVIDENCE`.
-4. Evidence kỹ thuật đủ nhưng chưa có review mắt → `NEED_HUMAN_VISUAL_REVIEW`.
-5. Hai candidate đủ gate → `BENCHMARK_READY_FOR_DECISION`.
-6. Một candidate có hard failure đã tái hiện và candidate kia đủ gate → `BENCHMARK_READY_FOR_DECISION`, giữ failure làm evidence, không chạy vô hạn để cứu candidate.
+3. Source/body của skeletal probe bị owner reject → `AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT`.
+4. Có probe nhưng thiếu task/evidence → `COMPLETE_COMMON_TASK_EVIDENCE`.
+5. Evidence kỹ thuật đủ nhưng chưa có review mắt → `NEED_HUMAN_VISUAL_REVIEW`.
+6. Hai candidate đủ gate → `BENCHMARK_READY_FOR_DECISION`.
+7. Một candidate có hard failure đã tái hiện và candidate kia đủ gate → `BENCHMARK_READY_FOR_DECISION`, giữ failure làm evidence, không chạy vô hạn để cứu candidate.
 
 Một candidate chỉ `eligible` khi hoàn thành toàn bộ task, không sửa pixel theo pose cho unseen item, không làm hỏng tổ hợp cũ, automation có provenance, không còn hard failure, có review hình ảnh `APPROVED`, và có đo PC thật. Mobile thật là gate trước production promotion, không ngăn quyết định kiến trúc thử nghiệm nếu được ghi `DEFERRED_DEVICE_REQUIRED`.
 

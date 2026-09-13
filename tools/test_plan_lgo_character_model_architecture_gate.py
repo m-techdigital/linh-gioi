@@ -134,6 +134,28 @@ class CharacterModelArchitectureGateTests(unittest.TestCase):
         self.assertFalse(result["candidates"]["skeletal_2d"]["eligible"])
         self.assertFalse(result["candidates"]["modular_3d"]["eligible"])
 
+    def test_owner_rejected_skeletal_source_requires_new_blueprint_not_same_probe(self):
+        manifest = complete_manifest()
+        skeletal = manifest["candidates"]["skeletal_2d"]
+        skeletal["probeStatus"] = "OWNER_REJECTED_SOURCE"
+        skeletal["sourceGate"] = {
+            "status": "OWNER_REJECTED_VISUAL",
+            "requiresNewNeutralLayeredSource": True,
+            "evidence": "bind-authority-candidate-v1/review-board.png",
+        }
+        skeletal["visualReview"] = {
+            "status": "REJECTED",
+            "artifacts": ["bind-authority-candidate-v1/review-board.png"],
+        }
+        skeletal["commonTask"] = {}
+
+        result = plan_architecture_gate(manifest)
+
+        self.assertEqual(result["status"], "AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT")
+        self.assertEqual(result["nextAction"], "author_skeletal_2d_neutral_layered_source")
+        self.assertEqual(result["nextCandidate"], "skeletal_2d")
+        self.assertFalse(result["runtimePromotionAllowed"])
+
     def test_second_probe_runs_after_skeletal_evidence_is_eligible(self):
         manifest = complete_manifest()
         manifest["candidates"]["modular_3d"]["probeStatus"] = "NOT_RUN"

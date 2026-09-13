@@ -86,3 +86,7 @@ Produce **one run stack review batch**:
 - Acceptance for the batch: the board clearly shows whether the method can produce cloth attached to the torso using measured anchors. If the guide still has anomalies such as the current `run_b` shoulder width outlier, fix the guide/body source first. If outer_top still reads as floating or body-mask artifact after measurement sanity, stop asset generation and choose a different authoring method, such as manual Krita source-paint over pose screenshots or a Spine offline mesh proof.
 
 This decision is a guardrail against endless small candidate loops. Future sessions should not resume by creating `outer_top` v4/v5 from the same polygon/body-mask assumptions.
+
+## Superseded by character source gate — 2026-09-13
+
+After the skeletal Player probe, owner rejected the generated cutout body result visually. The run stack batch above remains useful as source-space garment evidence, but it is no longer the next action while the body foundation is rejected. Current planner status is `AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT`; garment fitting resumes only after a new neutral layered body/rig blueprint passes anatomy/proportion/source admission gates. Do not use the old six-pose baseline or the rejected skeletal cutout as proof of the new method.

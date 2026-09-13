@@ -140,3 +140,71 @@ Expected và observed: exit 2; `OWNERSHIP_CROSSES_SLOT_BOUNDARY`, `CANVAS_DIMENS
 - [x] **Step 4: Export FBX, import tạm bằng Unity 6000.3.2f1 và xóa temp model**
 
 Observed: Blender report `NARROW_TECHNICAL_PASS_TOOLCHAIN_ONLY`; GLB có 1 skin/24 node/5 animation; Blender round-trip PASS; Unity nhận 2 SkinnedMeshRenderer, 5 clip và đủ object trang bị. Đây là readiness của đường dữ liệu, không hoàn thành common task hoặc visual/runtime gate.
+
+### Task 6: Owner-rejected skeletal source branch
+
+**Files:**
+- Modify: `tools/test_plan_lgo_character_model_architecture_gate.py`
+- Modify: `tools/plan_lgo_character_model_architecture_gate.py`
+- Modify: `build/character-model-architecture-review-01/benchmark-manifest-v1.json`
+- Modify: `build/character-model-architecture-review-01/next-action-v1.json`
+- Modify: `build/character-model-architecture-review-01/skeletal-2d-readiness-audit-v1.json`
+- Modify: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/common-male-v1/skeletal-architecture-probe-01/bind-authority-candidate-v1/manifest.json`
+- Modify: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/common-male-v1/skeletal-architecture-probe-01/bind-authority-candidate-v1/bind-profile-candidate.json`
+- Create: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/common-male-v1/skeletal-architecture-probe-01/bind-authority-candidate-v1/DO-NOT-PACK.md`
+
+**Interfaces:**
+- Consumes: owner visual rejection of `bind-authority-candidate-v1` and its Player evidence.
+- Produces: planner status `AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT`, which blocks rerunning the same generated cutout source and requires a new neutral layered body/rig blueprint before skeletal garment work continues.
+
+- [x] **Step 1: Write the failing test**
+
+```python
+def test_owner_rejected_skeletal_source_requires_new_blueprint_not_same_probe(self):
+    manifest = complete_manifest()
+    skeletal = manifest["candidates"]["skeletal_2d"]
+    skeletal["probeStatus"] = "OWNER_REJECTED_SOURCE"
+    skeletal["sourceGate"] = {
+        "status": "OWNER_REJECTED_VISUAL",
+        "requiresNewNeutralLayeredSource": True,
+        "evidence": "bind-authority-candidate-v1/review-board.png",
+    }
+    skeletal["visualReview"] = {
+        "status": "REJECTED",
+        "artifacts": ["bind-authority-candidate-v1/review-board.png"],
+    }
+    skeletal["commonTask"] = {}
+
+    result = plan_architecture_gate(manifest)
+
+    self.assertEqual(result["status"], "AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT")
+    self.assertEqual(result["nextAction"], "author_skeletal_2d_neutral_layered_source")
+    self.assertEqual(result["nextCandidate"], "skeletal_2d")
+    self.assertFalse(result["runtimePromotionAllowed"])
+```
+
+- [x] **Step 2: Run test to verify it fails**
+
+Run: `PYTHONPATH=tools PYTHONPYCACHEPREFIX=build/pycache python3.12 -m unittest tools.test_plan_lgo_character_model_architecture_gate.CharacterModelArchitectureGateTests.test_owner_rejected_skeletal_source_requires_new_blueprint_not_same_probe`
+
+Observed: FAIL because planner returned `RUN_SKELETAL_2D_PROBE`.
+
+- [x] **Step 3: Implement the planner branch**
+
+```python
+if name == "skeletal_2d" and record.get("probeStatus") == "OWNER_REJECTED_SOURCE":
+    return {
+        **result,
+        "status": "AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT",
+        "nextAction": "author_skeletal_2d_neutral_layered_source",
+        "nextCandidate": name,
+    }
+```
+
+- [x] **Step 4: Update authoritative evidence**
+
+Set the external bind candidate to `OWNER_REJECTED_VISUAL`, write `DO-NOT-PACK.md`, set `benchmark-manifest-v1.json` skeletal `probeStatus` to `OWNER_REJECTED_SOURCE`, and rerun:
+
+`PYTHONPATH=tools PYTHONPYCACHEPREFIX=build/pycache python3.12 tools/plan_lgo_character_model_architecture_gate.py --manifest build/character-model-architecture-review-01/benchmark-manifest-v1.json --output build/character-model-architecture-review-01/next-action-v1.json`
+
+Observed: exit 2 with status `AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT`.
