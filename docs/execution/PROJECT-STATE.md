@@ -1,3 +1,10 @@
+## Map01A — Rương đồ xác nhận item detail-right bằng callback thật — 2026-09-14
+
+- Route capture Q04 giờ chọn `Bình Máu Nhỏ` qua chính button callback của UI; cột phải phải đổi sang tên, icon provenance-backed, số lượng, trạng thái và hành động dùng bình trước khi chụp.
+- Manifest thêm `inventoryItemDetailVerified`; Player fail nếu title hoặc sprite detail không khớp item đã chọn. `09-q04-starter-supplies.png` xác nhận x3/HP 60 và action khả dụng; `10-q04-health-potion-used.png` xác nhận x2/HP 100 cùng action bị khóa đúng điều kiện.
+- `TwoDCharacterRuntimeStateTests` đạt 20/20; Player `build/map01a-item-detail-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=38`. Evidence `build/map01a-item-detail-runtime-v1/` đạt 9/9 quest, `inventoryItemDetailVerified=true`, `questWorldFramesUnobstructed=true`; đã xem Q04 trước/sau dùng bình, combat và portal ở 1600×900.
+- Catalog/validator chuyển sang evidence item-detail v1. Không thay thumbnail 10 trang bị bằng art giả; chúng vẫn chờ nguồn icon riêng được duyệt và không mở lại class/pose/wardrobe/source.
+
 ## Map01A — route evidence không còn bị Hành trang che sau Q04 — 2026-09-14
 
 - Audit Player 1600×900 phát hiện capture Q01–Q09 giữ modal Hành trang từ Q04 đến Q07; quest state vẫn xanh nhưng các khung combat/reward không thể review bằng mắt.

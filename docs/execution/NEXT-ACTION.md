@@ -1,3 +1,9 @@
+## Next — sau khi khóa interaction item → detail-right — 2026-09-14
+
+`CONTINUE`. Route evidence hiện hành là `build/map01a-item-detail-runtime-v1/`; Player `build/map01a-item-detail-player-v1/LinhGioiOnline.app`. Q04 phải có `inventoryItemDetailVerified=true`, hiển thị Bình Máu thật ở detail bên phải trước/sau sử dụng; Q05–Q09 tiếp tục không bị overlay che.
+
+Next valid work: tiếp tục Map01A/UI theo năm design owner đã duyệt, chọn interaction hoặc sai lệch visual rõ trên Player. Giữ 10 icon trang bị là asset gate đến khi có source riêng được duyệt; không tạo icon giả, không mở class/pose/wardrobe/source và không đổi frozen surfaces.
+
 ## Next — sau khi khóa world-view evidence Q05–Q09 — 2026-09-14
 
 `CONTINUE`. Route evidence hiện hành là `build/map01a-world-view-capture-runtime-v3/`; Player `build/map01a-world-view-capture-player-v3/LinhGioiOnline.app`. Q04 giữ đúng modal cho dùng vật phẩm, Q05–Q09 phải có `questWorldFramesUnobstructed=true`; không dùng lại route evidence bị modal che.

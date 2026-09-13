@@ -461,6 +461,7 @@ namespace LinhGioi.World
             public int completedQuestCount;
             public bool starterSupplies, spiritHerb, hiddenChest, combatAccepted, enemyDefeated, enemyLooted, portalUnlocked;
             public bool minimapUnlocked, healthPotionUsed, classRewardEquipped;
+            public bool inventoryItemDetailVerified;
             public int healthPotionCount, manaPotionCount, playerHealth;
             public bool dialogueOpened, greetingCompleted;
             public bool voBaseVerified, voModularVerified, voWalkVerified, voSkillVerified;
@@ -1683,7 +1684,17 @@ namespace LinhGioi.World
                 if (i == 5) yield return CaptureNpcDialoguePages(directory, "quan-thu-offer", result);
                 if (i == 6) UseCurrentRouteAction();
                 if (i == 7) UseCurrentRouteAction();
-                if (i == 8) yield return CaptureNpcDialoguePages(directory, "tong-phu-offer", result);
+                if (i == 8)
+                {
+                    yield return CaptureNpcDialoguePages(directory, "tong-phu-offer", result);
+                    var document = GetComponentInChildren<UIDocument>();
+                    if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for item-detail capture");
+                    InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Health Potion"));
+                    var detailTitle = document.rootVisualElement.Q<Label>("Map01A Inventory Detail Item Name");
+                    var detailIcon = document.rootVisualElement.Q<VisualElement>("Map01A Inventory Detail Icon");
+                    result.inventoryItemDetailVerified = detailTitle != null && detailTitle.text == "Bình Máu Nhỏ"
+                        && detailIcon != null && detailIcon.style.backgroundImage.value.sprite == GetMap01AItemThumbnailSprite("health_potion");
+                }
                 if (i == 9) UseHealthPotion();
                 if (i == 10) { UseCurrentRouteAction(); yield return CaptureNpcDialoguePages(directory, "thanh-nhi-offer", result); }
                 if (i == 11) UseCurrentRouteAction();
@@ -2029,6 +2040,7 @@ namespace LinhGioi.World
             result.parallaxDelta = FarOffset - initial;
             var mapFailed = !result.mapQuestFlowVerified || !result.functionalUiVerified
                 || !result.dialogueOpened || !result.greetingCompleted
+                || !result.inventoryItemDetailVerified
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f;
             mapFailed |= questOnly && !result.dialogueRevisitsVerified;

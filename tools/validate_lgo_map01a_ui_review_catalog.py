@@ -20,7 +20,7 @@ ENTRY_EVIDENCE = (
 )
 HUB_MANIFEST = "build/map01a-five-tab-player-copy-runtime-v1/manifest.json"
 HUB_FRAMES = ["character-info.png", "bag.png", "skills.png", "potential.png", "spirit-pet.png"]
-ROUTE_MANIFEST = "build/map01a-world-view-capture-runtime-v3/manifest.json"
+ROUTE_MANIFEST = "build/map01a-item-detail-runtime-v1/manifest.json"
 ROUTE_FRAMES = ["01-arrival-q01.png", "18-q09-portal-open.png"]
 MENU_EVIDENCE = (
     "build/map01a-menu-current-runtime-v1/manifest.json",
@@ -155,6 +155,8 @@ def validate_root(root: Path = ROOT) -> list[str]:
         violations.append("route: dialogueFrames must be 38")
     if route.get("questWorldFramesUnobstructed") is not True:
         violations.append("route: Q05-Q09 world frames must be unobstructed")
+    if route.get("inventoryItemDetailVerified") is not True:
+        violations.append("route: Q04 must verify selected item detail on the right")
     route_base = str(Path(ROUTE_MANIFEST).parent)
     for frame in ROUTE_FRAMES:
         require_file(root, f"{route_base}/{frame}", violations)
