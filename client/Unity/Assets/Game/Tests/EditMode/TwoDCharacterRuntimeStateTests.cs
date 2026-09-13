@@ -1152,6 +1152,8 @@ namespace LinhGioi.Tests.EditMode
                 var combat = (VisualElement)typeof(CongDongLamArrivalHud).GetField("_combatBar", flags).GetValue(hud);
                 var talk = (Button)typeof(CongDongLamArrivalHud).GetField("_talk", flags).GetValue(hud);
                 update.Invoke(hud, null);
+                Assert.That(talk.style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "The contextual action must be visible when the current route action is usable.");
                 foreach (var field in new[] { "_outfit", "_level", "_gender", "_slot", "_itemLevel", "_toggleSlot" })
                     Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
                         Is.EqualTo(DisplayStyle.None), "Review/debug controls must not appear in owner-facing gameplay HUD: " + field);
@@ -1170,9 +1172,14 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(talk);
                 FinishDialogue(scene);
                 Assert.That(scene.DialogueOpen, Is.False);
+                typeof(CongDongLamMap01AArtPreview).GetField("_routeX", flags).SetValue(scene, scene.PlayerX + 2f);
+                scene.Refresh();
                 update.Invoke(hud, null);
                 Assert.That(inventory.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(combat.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(scene.CanUseCurrentRouteAction, Is.False);
+                Assert.That(talk.style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "A completed or out-of-range route action must leave the HUD instead of becoming a dead translucent button.");
             }
             finally
             {

@@ -558,7 +558,7 @@ namespace LinhGioi.UI
             var hudBlocked = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen;
             _characterSelectButton.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryToggle.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
-            _talk.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
+            _talk.style.display = hudBlocked || !_scene.CanUseCurrentRouteAction ? DisplayStyle.None : DisplayStyle.Flex;
             _productShortcutActions.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
             _combatBar.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
             _pad.style.display = _touch && !hudBlocked ? DisplayStyle.Flex : DisplayStyle.None;

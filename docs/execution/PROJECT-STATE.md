@@ -1,3 +1,10 @@
+## Map01A — contextual action no longer leaves dead controls on the HUD — 2026-09-14
+
+- Full-route Player review found disabled contextual actions such as `Nhìn về Linh Thành` and `Chạm` remained as translucent dead controls after the player left the usable range or completed the action, occupying the combat area.
+- The shared HUD now displays the contextual action only when `CanUseCurrentRouteAction` is true. Usable `Trò chuyện · E` remains visible at Hạ Vân; completed and out-of-range actions leave the HUD instead of staying disabled.
+- TDD reproduced the dead-control state, then targeted and full `TwoDCharacterRuntimeStateTests` passed (`1/1`, `20/20`). Player `build/map01a-context-action-player-v1/LinhGioiOnline.app` built with `errors=0`, `warnings=38`; capture `build/map01a-context-action-runtime-v1/` passed 18 route frames, 9/9 quests and 38 dialogue frames.
+- Visual review compared `01-arrival-q01.png`, `04-q02-grand-gate.png`, `06-q03-complete.png` and `18-q09-portal-open.png`: available talk remains discoverable while inactive route actions no longer overlap the combat/HUD region.
+
 ## Map01A — dialogue and Menu hierarchy audited on one current Player — 2026-09-14
 
 - Player audit found dialogue progress repeated beside the NPC name and again in the quest-context row. The header now contains only the active NPC name; quest id/title/progress remain together in the context row.

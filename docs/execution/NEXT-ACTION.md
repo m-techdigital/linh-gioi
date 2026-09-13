@@ -1,3 +1,9 @@
+## Next — sau contextual-action visibility audit — 2026-09-14
+
+`CONTINUE`. Nút interaction ngữ cảnh chỉ xuất hiện khi action hiện hành thật sự dùng được; trạng thái disabled không được nằm mờ trên cụm chiến đấu. Evidence hiện hành: `build/map01a-context-action-runtime-v1/{01-arrival-q01,04-q02-grand-gate,06-q03-complete,18-q09-portal-open}.png`; Player `build/map01a-context-action-player-v1/LinhGioiOnline.app`.
+
+Next valid work: tiếp tục Map01A/UI bằng lỗi Player rõ và có dữ liệu/asset thật. Audit nguồn xác nhận atlas item Map01A hiện chỉ có 5 vật phẩm và chưa có 10 icon trang bị độc lập, nên không tạo icon giả và không mở lại class/wardrobe để lấp chỗ trống. Giữ shared Skin/base, năm tab compact và detail-right; chuyển sang interaction/screen khác nếu asset gate chưa đổi.
+
 ## Next — sau dialogue/Menu hierarchy audit — 2026-09-14
 
 `CONTINUE`. Dialogue header chỉ hiện tên NPC; quest id/title/progress nằm ở context row. Menu hiện đủ năm điểm đến đã duyệt và không chồng HUD. Evidence hiện hành: `build/map01a-dialogue-menu-hierarchy-runtime-v1/{02-ha-van-dialogue,05-quan-thu-dialogue,08-q04-tong-phu-dialogue}.png`, `build/map01a-dialogue-menu-hierarchy-menu-runtime-v1/menu.png`; Player `build/map01a-dialogue-menu-hierarchy-player-v1/LinhGioiOnline.app`.
