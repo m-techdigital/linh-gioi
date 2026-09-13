@@ -130,3 +130,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-entry-secondary-base-style-entry-runtime-v2/entry-login.png` and full PC route capture `build/map01a-entry-secondary-base-style-runtime-v1/`.
 - Result: entry/login secondary actions (`Đổi máy chủ`, `Quên mật khẩu`, `Hỗ trợ`) now share `ApplyLgoEntrySecondaryAction(...)` and `lgo-entry-secondary-action`, avoiding per-button one-off sizing.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms secondary actions are consistent and do not break the form, but the broader login/inventory redesign still needs deeper polish against owner references.
+
+## 2026-09-13 — Entry side-action base-first evidence
+
+- Evidence: `build/map01a-entry-side-action-base-style-entry-runtime-v1/entry-login.png`.
+- Result: entry/login side actions (`Thông Báo`, `Cài Đặt`, `Hỗ Trợ`) now share `ApplyLgoEntrySideAction(...)` and `lgo-entry-side-action`, replacing local height/margin/font/nowrap styling in the entry partial.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms the side actions remain compact/disabled and do not break the login shell.

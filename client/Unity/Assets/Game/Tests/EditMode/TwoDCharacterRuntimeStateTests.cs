@@ -516,6 +516,8 @@ namespace LinhGioi.Tests.EditMode
                     var sideAction = root.Q<Button>("Map01A Entry Side Action " + name);
                     Assert.That(sideAction, Is.Not.Null);
                     Assert.That(sideAction.enabledSelf, Is.False, "Entry/login side actions must not be clickable dead buttons.");
+                    Assert.That(sideAction.ClassListContains("lgo-entry-side-action"), Is.True,
+                        "Entry side actions must use the shared entry side-action base instead of local inline sizing.");
                     Assert.That(sideAction.text, Is.EqualTo(name));
                     Assert.That(sideAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
                         "Entry side actions must stay compact and must not wrap into two-line placeholders.");

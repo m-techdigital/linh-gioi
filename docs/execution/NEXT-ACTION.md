@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after entry side-action helper — 2026-09-13
+
+`CONTINUE`. Entry/login secondary form actions và side actions đều đã đi qua helper shared. Evidence mới: `build/map01a-entry-side-action-base-style-entry-runtime-v1/entry-login.png`.
+
+Next valid work: tiếp tục Map01A/UI-only theo design owner, gom tiếp context/action/card/modal/dialog pattern còn lặp vào shared base trước khi polish visual. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI polish after entry secondary helper — 2026-09-13
 
 `CONTINUE`. Rule hiện hành: cùng UI/UX thì tạo/extend base shared helper trước, rồi mới bind data/action theo màn; không dựng button/tab/card/modal/dialog/grid riêng lẻ nếu vai trò giống nhau. Evidence mới: `build/map01a-entry-secondary-base-style-entry-runtime-v2/entry-login.png` và route capture `build/map01a-entry-secondary-base-style-runtime-v1/`.

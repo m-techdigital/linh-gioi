@@ -24,6 +24,7 @@ namespace LinhGioi.UI
         private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
         private const string LgoEntrySecondaryActionClass = "lgo-entry-secondary-action";
+        private const string LgoEntrySideActionClass = "lgo-entry-side-action";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -204,6 +205,16 @@ namespace LinhGioi.UI
             button.style.fontSize = 13;
             if (minWidth > 0f) button.style.minWidth = minWidth;
             if (marginRight > 0f) button.style.marginRight = marginRight;
+        }
+
+        private static void ApplyLgoEntrySideAction(Button button)
+        {
+            button.AddToClassList(LgoEntrySideActionClass);
+            ApplyLgoDisabledAction(button);
+            button.style.height = 38;
+            button.style.marginBottom = 10;
+            button.style.fontSize = 13;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         private static void ApplyLgoDialoguePrimaryAction(Button button)

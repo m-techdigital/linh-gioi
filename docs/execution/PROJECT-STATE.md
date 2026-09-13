@@ -1,3 +1,10 @@
+## Map01A — entry side-action base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Entry/login side actions (`Thông Báo`, `Cài Đặt`, `Hỗ Trợ`) chuyển từ inline per-button sizing sang shared helper/class: `ApplyLgoEntrySideAction(...)` và `lgo-entry-side-action`. Entry partial giờ chỉ gọi helper semantic cho các nút cùng vai trò.
+- RED/GREEN: EditMode fail khi side actions chưa có shared base class, sau đó pass khi refactor về helper chung; shared-skin validator không còn yêu cầu partial gọi low-level `ApplyLgoDisabledAction(button)` cho pattern này.
+- Player evidence: `build/map01a-entry-side-action-base-style-entry-runtime-v1/entry-login.png` từ graphics Player capture. Visual review: side actions vẫn compact/disabled và không phá layout login; trạng thái vẫn `CONTINUE` vì login tổng thể còn cần polish sâu theo design owner.
+
 ## Map01A — entry secondary action base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
