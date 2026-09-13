@@ -277,6 +277,11 @@ namespace LinhGioi.Tests.EditMode
                 var start = root.Q<Button>("Map01A Entry Start Button");
                 Assert.That(start, Is.Not.Null);
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
+                Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));
+                Assert.That(root.Q("Map01A Entry Auth Options"), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Entry Remember Account").text, Does.Contain("Lưu tài khoản"));
+                Assert.That(root.Q<Button>("Map01A Entry Forgot Password").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Entry Support Link").enabledSelf, Is.False);
                 Assert.That(start.text, Does.Contain("Bắt đầu"));
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("dev"));
                 foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ" })

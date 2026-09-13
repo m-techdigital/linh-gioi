@@ -46,7 +46,10 @@ namespace LinhGioi.UI
             notice.style.paddingTop = 10;
             notice.style.paddingBottom = 10;
             ApplyLgoFrame(notice, new Color(.018f, .055f, .090f, .82f), new Color(.56f, .68f, .72f, .42f));
-            notice.Add(new Label("Thông Báo") { name = "Map01A Entry Notice Title" });
+            var noticeTitle = LgoLabel("Thông Báo", 17, UiGold, true);
+            noticeTitle.name = "Map01A Entry Notice Title";
+            noticeTitle.style.marginBottom = 6;
+            notice.Add(noticeTitle);
             var noticeLine = new Label("• Cổng Đông Lâm mở bản review 2D · UI còn trong giai đoạn chỉnh mỹ thuật") { name = "Map01A Entry Notice Line" };
             noticeLine.style.color = new Color(.90f, .94f, .90f, .92f);
             noticeLine.style.fontSize = 14;
@@ -85,8 +88,14 @@ namespace LinhGioi.UI
             subtitle.style.fontSize = 16;
             subtitle.style.color = new Color(.72f, .86f, .92f, .92f);
             subtitle.style.unityTextAlign = TextAnchor.MiddleCenter;
-            subtitle.style.marginBottom = 18;
+            subtitle.style.marginBottom = 8;
             panel.Add(subtitle);
+
+            var motto = LgoLabel("Chính nghĩa trong lòng · Bước vào Cổng Đông Lâm", 15, UiGold, true);
+            motto.name = "Map01A Entry Hero Motto";
+            motto.style.unityTextAlign = TextAnchor.MiddleCenter;
+            motto.style.marginBottom = 16;
+            panel.Add(motto);
 
             var loginTitle = new Label("Đăng nhập") { name = "Map01A Entry Login Title" };
             loginTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
@@ -96,6 +105,7 @@ namespace LinhGioi.UI
 
             panel.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "👤  Tài khoản / Email / Số điện thoại"));
             panel.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "🔒  Mật khẩu"));
+            panel.Add(MakeEntryAuthOptions());
 
             var authScope = new Label("review local: form hiển thị theo UI/UX, chưa gửi tài khoản hoặc mật khẩu thật.")
             {
@@ -178,6 +188,35 @@ namespace LinhGioi.UI
             button.style.fontSize = 15;
             ApplyLgoDisabledAction(button);
             parent.Add(button);
+        }
+
+
+        private static VisualElement MakeEntryAuthOptions()
+        {
+            var row = new VisualElement { name = "Map01A Entry Auth Options" };
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            row.style.marginTop = -2;
+            row.style.marginBottom = 10;
+
+            var remember = LgoLabel("☑ Lưu tài khoản", 14, new Color(.86f, .92f, .88f, .92f), true);
+            remember.name = "Map01A Entry Remember Account";
+            remember.style.flexGrow = 1;
+            row.Add(remember);
+
+            var forgot = new Button { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu · chưa mở" };
+            forgot.style.flexGrow = 0;
+            forgot.style.marginRight = 6;
+            forgot.style.fontSize = 13;
+            ApplyLgoDisabledAction(forgot);
+            row.Add(forgot);
+
+            var support = new Button { name = "Map01A Entry Support Link", text = "Hỗ trợ · chưa mở" };
+            support.style.flexGrow = 0;
+            support.style.fontSize = 13;
+            ApplyLgoDisabledAction(support);
+            row.Add(support);
+            return row;
         }
 
         private static VisualElement MakeEntryField(string fieldName, string placeholderName, string placeholderText)

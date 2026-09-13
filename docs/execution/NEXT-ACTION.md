@@ -13,6 +13,10 @@ Order of work:
 Required checkpoint before any handoff claim: targeted EditMode/UI tests, shared UI validator, no-3D/no-source-image validators, frozen diff audit, Player capture, and manual visual review of screenshots. Technical PASS is not visual acceptance.
 
 
+## Next UI polish after entry auth row — 2026-09-13
+
+Entry/login has a clearer auth-options row and readable notice evidence at `build/map01a-entry-auth-options-runtime-v2/entry-login.png`, but it remains a structural UI polish checkpoint rather than final visual acceptance. Continue by improving screen richness only from approved/reference design language and shared skin/base; do not add temporary item icons or random art.
+
 ## Item/equipment icon art quality gate — 2026-09-13
 
 Owner rejected temporary/generic inventory icons. Future Hành trang item/equipment visuals must be real design-quality art matching Linh Giới Online's 2D UI style and the owner reference screens. Do not commit placeholder glyphs, text badges, simple generated geometry icons, or random image-tool outputs as final item art. Runtime wiring may be prepared only if it expects approved assets/design-board outputs.

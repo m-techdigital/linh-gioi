@@ -1,3 +1,7 @@
+## Map01A entry auth options polish — 2026-09-13
+
+Entry/login now includes a design-aligned motto line plus a non-production auth-options row (`Lưu tài khoản`, disabled `Quên mật khẩu`, disabled `Hỗ trợ`) and a readable notice title. These controls stay explicitly disabled/placeholders where backing flows do not exist, so the login shell is clearer without pretending production auth is implemented. Player evidence: `build/map01a-entry-auth-options-runtime-v2/entry-login.png`; visual review confirms the new row and notice are readable, but the login screen still needs richer final art/background/icon treatment from approved design references before owner acceptance.
+
 ## Inventory item art correction — 2026-09-13
 
 Owner clarified that inventory icons, outfit thumbnails and item visuals must be based on real game design, not temporary technical badges or simple generated placeholder geometry. A quick deterministic placeholder-icon attempt was discarded and not kept in the working tree. Next inventory/icon work must use approved design-quality art or a reviewed design board before runtime wiring is treated as product-ready.
