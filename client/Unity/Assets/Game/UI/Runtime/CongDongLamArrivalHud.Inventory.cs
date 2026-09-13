@@ -308,7 +308,7 @@ namespace LinhGioi.UI
                 textGroup.style.flexGrow = 1;
                 textGroup.style.minWidth = 0;
                 textGroup.style.flexDirection = FlexDirection.Column;
-                var nameLabel = LgoLabel("", 13, UiText, true);
+                var nameLabel = LgoLabel("", 12, UiText, true);
                 nameLabel.name = "Map01A Character Info Slot Name " + slotId;
                 var stateLabel = LgoLabel("", 12, UiSubText);
                 stateLabel.name = "Map01A Character Info Slot State " + slotId;
@@ -374,35 +374,38 @@ namespace LinhGioi.UI
                 var slotId = _equipmentSlotIds[i];
                 var tile = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "Map01A Equipment Item Tile " + slotId);
                 tile.style.flexGrow = 0;
-                tile.style.flexBasis = new Length(31.5f, LengthUnit.Percent);
-                tile.style.height = 94;
+                tile.style.flexBasis = new Length(15.8f, LengthUnit.Percent);
+                tile.style.height = 110;
                 tile.style.marginRight = 6;
-                tile.style.marginBottom = 7;
-                tile.style.fontSize = 15;
-                tile.style.flexDirection = FlexDirection.Row;
+                tile.style.marginBottom = 8;
+                tile.style.fontSize = 13;
+                tile.style.flexDirection = FlexDirection.Column;
                 tile.style.alignItems = Align.Center;
-                tile.style.justifyContent = Justify.FlexStart;
-                tile.style.unityTextAlign = TextAnchor.MiddleLeft;
+                tile.style.justifyContent = Justify.Center;
+                tile.style.unityTextAlign = TextAnchor.MiddleCenter;
 
                 var icon = new VisualElement { name = "Map01A Equipment Item Icon " + slotId };
                 ApplyLgoItemIcon(icon);
-                icon.style.width = 56;
-                icon.style.height = 56;
-                icon.style.marginTop = 0;
-                icon.style.marginBottom = 0;
-                icon.style.marginLeft = 2;
-                icon.style.marginRight = 8;
+                icon.style.width = 70;
+                icon.style.height = 70;
+                icon.style.marginTop = 2;
+                icon.style.marginBottom = 5;
+                icon.style.marginLeft = 0;
+                icon.style.marginRight = 0;
                 tile.Add(icon);
 
                 var textGroup = new VisualElement { name = "Map01A Equipment Item Text " + slotId };
-                textGroup.style.flexGrow = 1;
+                textGroup.style.flexGrow = 0;
                 textGroup.style.minWidth = 0;
+                textGroup.style.alignItems = Align.Center;
                 textGroup.style.flexDirection = FlexDirection.Column;
-                var nameLabel = LgoLabel("", 14, UiText, true);
+                var nameLabel = LgoLabel("", 13, UiText, true);
+                nameLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
                 nameLabel.name = "Map01A Equipment Item Name " + slotId;
-                var stateLabel = LgoLabel("", 12, UiSubText);
+                var stateLabel = LgoLabel("", 10, UiSubText);
                 stateLabel.name = "Map01A Equipment Item State " + slotId;
-                stateLabel.style.marginTop = 2;
+                stateLabel.style.marginTop = 1;
+                stateLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
                 textGroup.Add(nameLabel);
                 textGroup.Add(stateLabel);
                 tile.Add(textGroup);
@@ -412,6 +415,23 @@ namespace LinhGioi.UI
                 _equipmentTileNames[i] = nameLabel;
                 _equipmentTileStates[i] = stateLabel;
                 _equipmentPage.Add(tile);
+            }
+            for (var emptyIndex = 1; emptyIndex <= 14; emptyIndex++)
+            {
+                var emptySlot = new VisualElement { name = $"Map01A Empty Bag Slot {emptyIndex:00}" };
+                emptySlot.style.flexGrow = 0;
+                emptySlot.style.flexBasis = new Length(15.8f, LengthUnit.Percent);
+                emptySlot.style.height = 110;
+                emptySlot.style.marginRight = 6;
+                emptySlot.style.marginBottom = 8;
+                emptySlot.style.alignItems = Align.Center;
+                emptySlot.style.justifyContent = Justify.Center;
+                ApplyLgoFrame(emptySlot, new Color(.020f, .060f, .088f, .58f), new Color(.50f, .58f, .58f, .32f));
+                var emptyMark = LgoLabel("", 10, new Color(.48f, .58f, .62f, .34f));
+                emptyMark.text = "·";
+                emptyMark.style.unityTextAlign = TextAnchor.MiddleCenter;
+                emptySlot.Add(emptyMark);
+                _equipmentPage.Add(emptySlot);
             }
             scroll.Add(_equipmentPage);
 

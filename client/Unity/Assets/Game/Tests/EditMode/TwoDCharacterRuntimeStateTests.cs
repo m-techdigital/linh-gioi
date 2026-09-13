@@ -196,10 +196,13 @@ namespace LinhGioi.Tests.EditMode
                     "Equipment grid tiles must show the same real runtime thumbnail art, not text-only placeholders.");
                 Assert.That(weaponTileIcon.style.backgroundImage.value.sprite, Is.EqualTo(weaponThumbnail));
                 Assert.That(weaponTileIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(weaponTileIcon.style.width.value.value, Is.GreaterThanOrEqualTo(54),
-                    "Equipment grid thumbnails should be large enough to read as item art on Player captures.");
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.height.value.value, Is.GreaterThanOrEqualTo(92),
-                    "Equipment tiles need enough vertical room for a larger runtime-art thumbnail and labels.");
+                Assert.That(weaponTileIcon.style.width.value.value, Is.GreaterThanOrEqualTo(64),
+                    "Grid item thumbnails should be the visual anchor of the tile.");
+                var mainWeaponTile = root.Q<Button>("Map01A Equipment Item Tile main_weapon");
+                Assert.That(mainWeaponTile.style.height.value.value, Is.InRange(104, 116),
+                    "Inventory equipment tiles should read as compact square-ish game item cells, not long technical rows.");
+                Assert.That(mainWeaponTile.style.flexBasis.value.value, Is.LessThanOrEqualTo(17f),
+                    "Inventory equipment tiles should use a dense 5-6 column bag grid close to the owner bag references.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Is.EqualTo("Chưa có thuộc tính chiến đấu được công bố."));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Dành cho"));
@@ -215,6 +218,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Is.Empty);
                 Assert.That(root.Q<Label>("Map01A Equipment Item Name main_weapon").text, Does.Contain("Vũ khí"));
                 Assert.That(root.Q<Label>("Map01A Equipment Item Name boots").text, Does.Contain("Giày"));
+                var emptyBagSlot = root.Q("Map01A Empty Bag Slot 01");
+                Assert.That(emptyBagSlot, Is.Not.Null,
+                    "Bag layout should reserve empty inventory cells so the screen reads as a game bag grid, not a sparse debug list.");
+                Assert.That(emptyBagSlot.style.flexBasis.value.value, Is.LessThanOrEqualTo(17f));
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));

@@ -1042,3 +1042,10 @@ Không dùng các kết luận `AGENT_VISUAL_PASS` cũ để nghiệm thu. Captu
 Tám pack fail đã được thay bằng source/pack `semantic-v3`; audit tổng mới `build/source-pose-design-audit-v2/semantic-v3-all-classes.json` pass 16/16. Player hiện hành `build/source-pose-semantic-v4-player/LinhGioiOnline.app` có debounce đổi class; evidence cuối là Kiếm `runtime-v1`, Pháp/Cơ `runtime-v3`, Linh `runtime-v2`, mỗi bộ có 190 frame đúng actor, đúng bốn nhịp riêng, root scale 1, Lv1/Lv10/mixed và 32 tổ hợp wardrobe.
 
 Action tiếp theo là owner kiểm trực tiếp Player ở cửa sổ lớn: `F` đổi class, `I` mở hành trang, đổi giới/cấp và tháo từng slot khi đứng/chạy/lộn. Nếu một vùng ownership hoặc anatomy còn sai, sửa lại source semantic-v3 theo cả sáu pose rồi capture lại đúng class; không căn camera/scale/offset. Chưa có pack Võ nữ thì không ghép giả hoặc mở presentation thứ hai. Sau owner gate mới áp cùng contract sang tier tiếp theo.
+
+## Current next action — 2026-09-13 Map01A UI/UX polish only
+
+- Do not resume class/wardrobe/pose/motion work in this worktree. Owner moved that elsewhere and asked not to rollback old class code.
+- Continue Map01A UI/UX toward owner references: shared modal/panel skin, smaller button/font scale, login + in-game HUD + Hành trang/Thông tin/Rương đồ consistency.
+- Latest safe checkpoint in progress: Hành trang uses dense equipment grid cells and empty bag slots; evidence at `build/map01a-inventory-grid-tile-runtime-v4/inventory/bag.png`.
+- Known visual gap: real item/outfit icons are not available as approved source assets yet; do not fake them with random/emoji/3D assets. Use source audit and create a proper asset request or deterministic 2D icon pipeline before replacing thumbnails.

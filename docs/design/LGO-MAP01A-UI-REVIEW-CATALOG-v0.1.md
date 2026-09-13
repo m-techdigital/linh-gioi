@@ -46,3 +46,9 @@ Evidence mới: `build/map01a-supply-card-runtime-v1/{pc,tablet,mobile}/supplies
 ## Cập nhật 2026-09-13 — hierarchy polish login/hành trang
 
 Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.png` và `build/map01a-ui-hierarchy-polish-runtime-v2/inventory/{bag,character-info,character-info-after-supplies,supplies,storage}.png`. Capture v1 chạy `-batchmode` cho ảnh xám đã bị loại; v2 chạy graphics Player, `usesOsMouseOrKeyboard=false`. Login đã bỏ copy debug `chưa mở` khỏi các affordance chính; inventory đổi copy trạng thái vật phẩm sang player-facing hơn và tăng nhẹ hierarchy/detail. Visual vẫn chỉ là technical checkpoint, chưa đạt sát design owner vì còn thiếu logo/ornament/icon/item art thật và card vẫn còn tính kỹ thuật.
+
+## 2026-09-13 — Inventory grid tile v4 evidence
+
+- Evidence: `build/map01a-inventory-grid-tile-runtime-v4/inventory/bag.png`, `character-info.png`, `supplies.png`, `storage.png`.
+- Result: Hành trang now uses dense 6-column equipment cells with reserved empty inventory slots and keeps item detail on the right.
+- Review status: technical runtime checkpoint only. It improves the previous sparse/row-card presentation but remains below final owner-reference quality because approved dedicated item/outfit icon art is still missing. Do not replace this with fake emoji/random/3D-derived icons.

@@ -1116,3 +1116,10 @@ Trạng thái hiện hành: `OWNER_VISUAL_REVIEW_REQUIRED / REVIEW_ONLY`, không
 ## Map01A UI hierarchy polish + item icon source audit — 2026-09-13
 
 Scope hiện tại là Map01A/UI only; không resume class/wardrobe/pose. Đã audit nguồn icon vật phẩm và ghi `docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md`: chưa tìm thấy bộ icon UI chuyên dụng đã duyệt cho HP/MP/reward, nên không dùng icon giả/random/class crop. Login/Hành trang có polish nhỏ: bỏ copy debug `chưa mở` khỏi login affordance, làm copy trạng thái vật phẩm player-facing hơn, giữ detail bên phải và shared skin. Evidence graphics Player: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.png` và `build/map01a-ui-hierarchy-polish-runtime-v2/inventory/supplies.png`. Tự audit ảnh: readable hơn nhưng vẫn chưa sát design owner; còn thiếu asset/logo/icon thật và card vẫn còn kỹ thuật.
+
+## 2026-09-13 — Map01A inventory grid runtime polish checkpoint
+
+- Scope: Map01A/UI only. Class/wardrobe/pose work remains out of scope in this worktree per owner direction.
+- Changed Hành trang equipment view from wide debug-like row cards to dense 6-column item cells with reserved empty bag slots and right-side item detail.
+- Runtime evidence: `build/map01a-inventory-grid-tile-runtime-v4/inventory/bag.png`, plus character-info/supplies/storage captures in the same folder.
+- Self-audit: layout is more like a game bag grid, but it is not final design quality yet. Dedicated item/outfit icon art is still missing; current thumbnails are runtime equipment crops, so the screen remains visually rough compared with owner references.
