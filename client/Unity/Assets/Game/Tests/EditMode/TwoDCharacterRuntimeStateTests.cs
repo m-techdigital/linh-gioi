@@ -595,6 +595,15 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Entry Cta Ornament Right").ClassListContains("lgo-ornament-rail"), Is.True);
                 Assert.That(root.Q("Map01A Entry Control Card"), Is.Not.Null,
                     "Login fields, auth options and server selection should sit inside one design card, matching the owner reference hierarchy.");
+                var entryPanel = root.Q("Map01A Entry Panel");
+                Assert.That(entryPanel.ClassListContains("lgo-entry-shell"), Is.True,
+                    "Entry/login panel sizing must go through a shared entry-shell base instead of screen-local width/padding values.");
+                Assert.That(entryPanel.style.maxWidth.value.value, Is.LessThanOrEqualTo(620),
+                    "Entry/login panel should stay compact so the screen reads as a game login card instead of a wide web form.");
+                Assert.That(root.Q("Map01A Entry Panel Glow").style.maxWidth.value.value, Is.LessThanOrEqualTo(660),
+                    "Entry/login glow should frame the compact shell instead of widening the black rectangle behind the form.");
+                Assert.That(root.Q<Label>("Map01A Entry Logo").style.fontSize.value.value, Is.LessThanOrEqualTo(42),
+                    "Entry logo should stay strong but must not force the login shell into an oversized web-form stack.");
                 Assert.That(root.Q("Map01A Entry Ornament Top"), Is.Not.Null,
                     "Entry/login needs a simple shared ornament separator instead of a plain blocky form stack.");
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Not.Contain("production auth"),

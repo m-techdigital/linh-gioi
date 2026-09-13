@@ -48,6 +48,8 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoDialoguePrimaryAction",
     "ApplyLgoDialogueSecondaryAction",
     "LgoEntryCtaActionClass",
+    "LgoEntryShellClass",
+    "ApplyLgoEntryShell",
     "ApplyLgoEntryCtaAction",
     "ApplyLgoEntrySecondaryAction",
     "ApplyLgoEntrySideAction",
@@ -105,7 +107,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoHudContextAction(_characterSelectButton",
     ],
     "CongDongLamArrivalHud.Entry.cs": [
-        "ApplyLgoModalShell(panel, 24)",
+        "ApplyLgoEntryShell(panel)",
         "ApplyLgoStatusCard(notice, 14, 10)",
         "ApplyLgoDetailCard(serverCard, 14, 10)",
         "ApplyLgoInputField(field)",

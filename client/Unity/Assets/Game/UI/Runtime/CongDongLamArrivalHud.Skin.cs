@@ -39,6 +39,7 @@ namespace LinhGioi.UI
         private const string LgoEntryCtaActionClass = "lgo-entry-cta-action";
         private const string LgoEntrySecondaryActionClass = "lgo-entry-secondary-action";
         private const string LgoEntrySideActionClass = "lgo-entry-side-action";
+        private const string LgoEntryShellClass = "lgo-entry-shell";
         private const string LgoCharacterSelectCardClass = "lgo-character-select-card";
         private const string LgoCharacterSelectPrimaryActionClass = "lgo-character-select-primary-action";
         private const string LgoActionButtonClass = "lgo-action-button";
@@ -354,6 +355,19 @@ namespace LinhGioi.UI
             button.style.minWidth = primary ? 230 : 156;
             button.style.minHeight = primary ? 46 : 38;
             button.style.fontSize = primary ? 18 : 14;
+        }
+
+        private static void ApplyLgoEntryShell(VisualElement panel)
+        {
+            panel.AddToClassList(LgoEntryShellClass);
+            panel.style.width = Length.Percent(38);
+            panel.style.minWidth = 500;
+            panel.style.maxWidth = 620;
+            panel.style.paddingLeft = 24;
+            panel.style.paddingRight = 24;
+            panel.style.paddingTop = 22;
+            panel.style.paddingBottom = 22;
+            ApplyLgoModalShell(panel, 22);
         }
 
         private static void ApplyLgoEntrySecondaryAction(Button button, float minWidth = 0f, float marginRight = 0f)

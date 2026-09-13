@@ -64,28 +64,21 @@ namespace LinhGioi.UI
 
             var panelGlow = new VisualElement { name = "Map01A Entry Panel Glow" };
             panelGlow.style.position = Position.Absolute;
-            panelGlow.style.width = Length.Percent(46);
-            panelGlow.style.minWidth = 560;
-            panelGlow.style.maxWidth = 730;
-            panelGlow.style.height = 720;
+            panelGlow.style.width = Length.Percent(42);
+            panelGlow.style.minWidth = 540;
+            panelGlow.style.maxWidth = 660;
+            panelGlow.style.height = 690;
             panelGlow.style.alignSelf = Align.Center;
             ApplyLgoSoftGlow(panelGlow, .22f);
             _entryOverlay.Add(panelGlow);
 
             var panel = new VisualElement { name = "Map01A Entry Panel" };
-            panel.style.width = Length.Percent(42);
-            panel.style.minWidth = 520;
-            panel.style.maxWidth = 680;
-            panel.style.paddingLeft = 28;
-            panel.style.paddingRight = 28;
-            panel.style.paddingTop = 24;
-            panel.style.paddingBottom = 24;
-            ApplyLgoModalShell(panel, 24);
+            ApplyLgoEntryShell(panel);
             _entryOverlay.Add(panel);
 
             var logo = new Label("LINH GIỚI ONLINE") { name = "Map01A Entry Logo" };
             logo.style.unityFontStyleAndWeight = FontStyle.Bold;
-            logo.style.fontSize = 46;
+            logo.style.fontSize = 40;
             logo.style.letterSpacing = 2;
             logo.style.color = new Color(.96f, .98f, 1f, .98f);
             logo.style.unityTextAlign = TextAnchor.MiddleCenter;

@@ -1,3 +1,9 @@
+## Next — Map01A UI polish after compact entry shell — 2026-09-13
+
+`CONTINUE`. Entry/login đã có shared `lgo-entry-shell` và density gọn hơn, nhưng vẫn chưa sát design owner. Tiếp tục Map01A/UI-only: ưu tiên polish visual richness theo reference owner cho login/HUD/NPC dialogue/inventory, giảm cảm giác web/debug panel, chuẩn hóa typography/button density bằng shared helpers, và chỉ dùng runtime/approved/provenance-backed assets.
+
+Không resume class/wardrobe/pose/source, không chạy class build/capture loops, không rollback class code, không thêm icon/item art giả hoặc random generated. Mỗi visible batch phải có Player screenshot review bằng mắt; nếu ảnh còn xấu/xa design thì ghi `CONTINUE` hoặc `FIX_REQUIRED`, không gọi hoàn thành.
+
 ## Next — Map01A UI polish after inventory ornament rails — 2026-09-13
 
 `CONTINUE`. Checkpoint mới nhất chỉ cải thiện shell/ornament của Hành trang/Thông tin/Rương bằng shared base, chưa đạt sát design owner. Tiếp tục Map01A/UI-only: ưu tiên polish sâu login/HUD/NPC dialogue/inventory theo reference owner, giảm cảm giác web/debug panel, chuẩn hóa typography/button density, và chỉ dùng runtime/approved/provenance-backed assets.

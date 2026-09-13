@@ -1,3 +1,10 @@
+## Map01A — entry shell compact base-first checkpoint, still visual CONTINUE — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.
+- Batch này chuyển sizing/padding login panel sang shared `ApplyLgoEntryShell(...)` / `lgo-entry-shell`, giảm panel max width còn 620px, glow max width 660px và logo 46→40 để màn đăng nhập bớt giống web-form rộng. Đây là cải thiện density/base-first, chưa phải redesign cuối theo owner reference.
+- Evidence Player thật: `build/map01a-entry-shell-player-v2/LinhGioiOnline.app`, capture `build/map01a-entry-shell-runtime-v2/entry-login.png`, manifest `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`. Đã xem bằng mắt: shell/login gọn hơn nhưng tổng thể vẫn `CONTINUE`, còn cần polish visual richness/icon/ornament/background theo reference owner.
+- Guard: targeted EditMode `EntryScreenSeparatesDevLoginAndStartWithoutChangingMapState` pass sau RED thiếu `lgo-entry-shell` và logo quá lớn; shared skin validator/unit tests pass.
+
 ## Map01A — inventory ornament rails checkpoint, still visual CONTINUE — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.
