@@ -533,7 +533,7 @@ namespace LinhGioi.Tests.EditMode
                     "Entry input fields need shared inner spacing so they read as game UI controls rather than thin web-form rectangles.");
                 Assert.That(root.Q("Map01A Entry Account Field").style.borderBottomWidth.value, Is.GreaterThanOrEqualTo(2),
                     "Entry input fields need a stronger shared frame instead of the default one-pixel web-form border.");
-                Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("trải nghiệm"));
+                Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
                 var serverState = root.Q<Label>("Map01A Entry Server State");
@@ -645,6 +645,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Not.Contain("production auth"),
                     "Runtime login copy should be player-facing and must not expose implementation wording on the main screen.");
                 Assert.That(root.Q("Map01A Entry Auth Options"), Is.Not.Null);
+                var noticeLine = root.Q<Label>("Map01A Entry Notice Line");
+                StringAssert.DoesNotContain("trải nghiệm", noticeLine.text,
+                    "The visible server notice must read as product UI instead of a build disclaimer.");
+                StringAssert.DoesNotContain("2D", noticeLine.text);
                 Assert.That(root.Q("Map01A Entry Remember Box"), Is.Not.Null,
                     "Remember-account state should use a UI element box, not a temporary checkbox glyph.");
                 var rememberText = root.Q<Label>("Map01A Entry Remember Account").text;
@@ -659,7 +663,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Entry Support Link"), Is.Null,
                     "The approved login keeps support in the side rail; a second disabled support link inside the auth row is duplicate UI.");
                 Assert.That(start.text, Does.Contain("Bắt đầu"));
-                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("local"));
+                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Not.Contain("local"));
                 foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ", "Cinematic" })
                 {
                     var sideAction = root.Q<Button>("Map01A Entry Side Action " + name);
@@ -673,6 +677,12 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(sideAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f));
                     Assert.That(sideAction.style.height.value.value, Is.InRange(56f, 68f));
                     Assert.That(sideAction.Q(sideAction.name + " Icon"), Is.Not.Null);
+                    InvokeBoundButton(sideAction);
+                    var feedback = root.Q<Label>("Map01A Entry Safety Note").text;
+                    StringAssert.DoesNotContain("local", feedback);
+                    StringAssert.DoesNotContain("Map01A", feedback);
+                    StringAssert.DoesNotContain("2D", feedback);
+                    StringAssert.DoesNotContain("duyệt", feedback);
                 }
                 var sideActions = root.Q("Map01A Entry Side Actions");
                 CollectionAssert.AreEqual(new[]

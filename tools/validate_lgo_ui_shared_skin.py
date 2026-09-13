@@ -159,7 +159,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoInputField(field)",
         "ApplyLgoOrnamentRail(rail)",
         "LgoTitleLabel(\"Đăng nhập\", 20)",
-        "LgoSubtitleLabel(\"Thông tin chỉ dùng",
+        "var authScope = LgoSubtitleLabel(",
         "ApplyLgoEntryCtaAction(start, true)",
         "ApplyLgoEntryAuthAction(login, true)",
         "ApplyLgoEntryAuthAction(register, false)",

@@ -1,3 +1,10 @@
+## Map01A — entry feedback đã dùng ngôn ngữ sản phẩm — 2026-09-14
+
+- Audit callback của bốn nút rail phát hiện nội dung hiển thị cho người chơi còn lộ `local`, `Map01A`, `2D` và trạng thái duyệt nội bộ; notice mặc định cũng tự gọi đây là “bản trải nghiệm 2D”.
+- Notice, Hỗ Trợ, Cinematic, Cài Đặt, Đăng nhập và Đăng ký giờ dùng câu chữ trong ngữ cảnh game. Hệ thống chưa có thật vẫn báo “chưa khả dụng”, không giả lập backend hoặc progression.
+- TDD RED bắt đúng notice kỹ thuật; GREEN targeted `1/1`, full `TwoDCharacterRuntimeStateTests` đạt `20/20` và guard gọi thật cả bốn callback. Player `build/map01a-entry-product-copy-player-v1/LinhGioiOnline.app` build thành công; visual audit `build/map01a-entry-product-copy-runtime-v1/entry-login.png` ở 1600×900 xác nhận notice mới không tràn/chồng và hàng server vẫn đúng một dòng.
+- Shared-skin validator đã đổi guard từ một câu copy cụ thể sang marker cấu trúc `var authScope = LgoSubtitleLabel(`; base-first vẫn được bảo vệ mà nội dung sản phẩm có thể thay đổi an toàn.
+
 ## Map01A — trạng thái máy chủ đăng nhập giữ đúng một hàng — 2026-09-14
 
 - Visual audit Player phát hiện `● Mượt` bị flex-shrink và xuống hai dòng giữa tên server và nút đổi server, lệch rõ reference đăng nhập.

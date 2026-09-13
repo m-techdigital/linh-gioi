@@ -8,14 +8,14 @@ This catalog points reviewers to the current Map01A 2D UI evidence. It is techni
 
 | Screen / flow | Evidence | Status |
 | --- | --- | --- |
-| Entry/login | `build/map01a-entry-server-state-runtime-v1/entry-login.png` and `build/map01a-entry-server-state-runtime-v1/manifest.json` | Current entry evidence; `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
+| Entry/login | `build/map01a-entry-product-copy-runtime-v1/entry-login.png` and `build/map01a-entry-product-copy-runtime-v1/manifest.json` | Current entry evidence; `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
 | Approved five-tab character hub | `build/map01a-five-tab-player-copy-runtime-v1/character-info.png`, `build/map01a-five-tab-player-copy-runtime-v1/bag.png`, `build/map01a-five-tab-player-copy-runtime-v1/skills.png`, `build/map01a-five-tab-player-copy-runtime-v1/potential.png`, `build/map01a-five-tab-player-copy-runtime-v1/spirit-pet.png`, and `build/map01a-five-tab-player-copy-runtime-v1/manifest.json` | Current five-tab evidence; player-facing copy, shared two-column/detail-right layout, `usesOsMouseOrKeyboard=false`, 1600×900 |
 | Quest/HUD route | `build/map01a-context-action-runtime-v1/01-arrival-q01.png`, `build/map01a-context-action-runtime-v1/18-q09-portal-open.png`, and `build/map01a-context-action-runtime-v1/manifest.json` | Current Q01–Q09 route evidence; 18 route frames, 38 dialogue frames, 1280×720 |
 | Gameplay menu | `build/map01a-menu-current-runtime-v1/menu.png` and `build/map01a-menu-current-runtime-v1/manifest.json` | Current menu evidence; v1/v2 rejected; `usesOsMouseOrKeyboard=false`, 1600×900 |
 
 ## Required review frames
 
-- Entry/login: `build/map01a-entry-server-state-runtime-v1/entry-login.png`.
+- Entry/login: `build/map01a-entry-product-copy-runtime-v1/entry-login.png`.
 - Five approved tabs: all five PNGs under `build/map01a-five-tab-player-copy-runtime-v1/`; they must keep one compact navigation row, two content columns and detail on the right.
 - Route start/end: `build/map01a-context-action-runtime-v1/01-arrival-q01.png` and `build/map01a-context-action-runtime-v1/18-q09-portal-open.png`.
 - Menu: `build/map01a-menu-current-runtime-v1/menu.png`.

@@ -36,7 +36,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "# Map01A UI Review Catalog\n\n"
             "Marker: `LGO_MAP01A_UI_REVIEW_CATALOG_READY`\n\n"
             "## Current evidence\n\n"
-            "entry/login: `build/map01a-entry-server-state-runtime-v1/entry-login.png`, `build/map01a-entry-server-state-runtime-v1/manifest.json`\n"
+            "entry/login: `build/map01a-entry-product-copy-runtime-v1/entry-login.png`, `build/map01a-entry-product-copy-runtime-v1/manifest.json`\n"
             "five tabs: `build/map01a-five-tab-player-copy-runtime-v1/character-info.png`, `build/map01a-five-tab-player-copy-runtime-v1/bag.png`, `build/map01a-five-tab-player-copy-runtime-v1/skills.png`, `build/map01a-five-tab-player-copy-runtime-v1/potential.png`, `build/map01a-five-tab-player-copy-runtime-v1/spirit-pet.png`, `build/map01a-five-tab-player-copy-runtime-v1/manifest.json`\n"
             "route: `build/map01a-context-action-runtime-v1/01-arrival-q01.png`, `build/map01a-context-action-runtime-v1/18-q09-portal-open.png`, `build/map01a-context-action-runtime-v1/manifest.json`\n"
             "menu: `build/map01a-menu-current-runtime-v1/menu.png`, `build/map01a-menu-current-runtime-v1/manifest.json`\n"
@@ -55,14 +55,14 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "prettier but fake icon is a regression\n",
             encoding="utf-8",
         )
-        write_json(root / "build/map01a-entry-server-state-runtime-v1/manifest.json", {
+        write_json(root / "build/map01a-entry-product-copy-runtime-v1/manifest.json", {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
             "usesOsMouseOrKeyboard": False,
             "width": 1600,
             "height": 900,
             "captureScope": "map01a-entry-login",
         })
-        (root / "build/map01a-entry-server-state-runtime-v1/entry-login.png").write_bytes(b"png")
+        (root / "build/map01a-entry-product-copy-runtime-v1/entry-login.png").write_bytes(b"png")
         write_json(root / validator.HUB_MANIFEST, {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
             "usesOsMouseOrKeyboard": False,
@@ -102,7 +102,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             doc = Path(temp) / "docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md"
             text = doc.read_text(encoding="utf-8")
             text = text.replace(
-                "entry/login: `build/map01a-entry-server-state-runtime-v1/entry-login.png`",
+                "entry/login: `build/map01a-entry-product-copy-runtime-v1/entry-login.png`",
                 "entry/login: `build/missing-entry-runtime/entry-login.png`",
             )
             doc.write_text(text, encoding="utf-8")
@@ -131,7 +131,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
 
     def test_rejects_os_input_capture_for_modal_evidence(self) -> None:
         with self._fixture() as temp:
-            manifest = Path(temp) / "build/map01a-entry-server-state-runtime-v1/manifest.json"
+            manifest = Path(temp) / "build/map01a-entry-product-copy-runtime-v1/manifest.json"
             data = json.loads(manifest.read_text())
             data["usesOsMouseOrKeyboard"] = True
             write_json(manifest, data)

@@ -49,7 +49,7 @@ namespace LinhGioi.UI
             noticeTitle.name = "Map01A Entry Notice Title";
             noticeTitle.style.marginBottom = 6;
             notice.Add(noticeTitle);
-            var noticeLine = new Label("• Cổng Đông Lâm mở bản trải nghiệm 2D") { name = "Map01A Entry Notice Line" };
+            var noticeLine = new Label("• Máy chủ S1 · Đông Lâm đang hoạt động ổn định") { name = "Map01A Entry Notice Line" };
             noticeLine.style.color = new Color(.90f, .94f, .90f, .92f);
             noticeLine.style.fontSize = 14;
             notice.Add(noticeLine);
@@ -62,9 +62,9 @@ namespace LinhGioi.UI
             sideActions.style.width = 92;
             _entryOverlay.Add(sideActions);
             AddEntrySideAction(sideActions, "Thông Báo", "Thông báo máy chủ Đông Lâm đang mở ở góc trái dưới.", "notice");
-            AddEntrySideAction(sideActions, "Hỗ Trợ", "Hỗ trợ sẽ mở sau; bản trải nghiệm hiện chạy local để kiểm Map01A.", "support");
-            AddEntrySideAction(sideActions, "Cinematic", "Cinematic giới thiệu sẽ mở khi nội dung 2D được duyệt.", "cinematic");
-            AddEntrySideAction(sideActions, "Cài Đặt", "Cài đặt sẽ mở sau; hiện dùng cấu hình trải nghiệm 2D mặc định.", "menu");
+            AddEntrySideAction(sideActions, "Hỗ Trợ", "Trung tâm hỗ trợ hiện chưa khả dụng.", "support");
+            AddEntrySideAction(sideActions, "Cinematic", "Cinematic giới thiệu hiện chưa khả dụng.", "cinematic");
+            AddEntrySideAction(sideActions, "Cài Đặt", "Cài đặt nâng cao hiện chưa khả dụng.", "menu");
 
             var panelGlow = new VisualElement { name = "Map01A Entry Panel Glow" };
             panelGlow.style.position = Position.Absolute;
@@ -134,7 +134,7 @@ namespace LinhGioi.UI
             controlCard.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "Mật khẩu", "lock"));
             controlCard.Add(MakeEntryAuthOptions());
 
-            var authScope = LgoSubtitleLabel("Thông tin chỉ dùng để vào bản trải nghiệm, không gửi dữ liệu thật.", 13);
+            var authScope = LgoSubtitleLabel("Đăng nhập để tiếp tục hành trình tại Đông Lâm.", 13);
             authScope.name = "Map01A Entry Auth Scope";
             authScope.style.marginBottom = 10;
             authScope.style.display = DisplayStyle.None;
@@ -145,7 +145,7 @@ namespace LinhGioi.UI
             authActions.style.marginBottom = 10;
             var login = new Button(() =>
             {
-                _entryStatus.text = "Tài khoản local đã sẵn sàng. Chọn Bắt đầu để vào Đông Lâm.";
+                _entryStatus.text = "Sẵn sàng vào Đông Lâm. Chọn Bắt đầu để tiếp tục.";
                 _entryStatus.style.display = DisplayStyle.Flex;
             })
             {
@@ -157,7 +157,7 @@ namespace LinhGioi.UI
             login.style.marginRight = 8;
             var register = new Button(() =>
             {
-                _entryStatus.text = "Đăng ký sẽ mở khi dịch vụ tài khoản được nối.";
+                _entryStatus.text = "Đăng ký tài khoản hiện chưa khả dụng.";
                 _entryStatus.style.display = DisplayStyle.Flex;
             })
             {
@@ -194,14 +194,14 @@ namespace LinhGioi.UI
             serverCard.Add(serverSwitch);
             controlCard.Add(serverCard);
 
-            var brandSeal = LgoLabel("S1 · Đông Lâm · bản trải nghiệm 2D", 14, UiGold, true);
+            var brandSeal = LgoLabel("S1 · Đông Lâm · Khu an toàn", 14, UiGold, true);
             brandSeal.name = "Map01A Entry Brand Seal";
             brandSeal.style.unityTextAlign = TextAnchor.MiddleCenter;
             brandSeal.style.marginBottom = 8;
             brandSeal.style.display = DisplayStyle.None;
             panel.Add(brandSeal);
 
-            _entryStatus = new Label("Tài khoản local dùng cho bản trải nghiệm. Dùng để vào nhanh Map01A.") { name = "Map01A Entry Safety Note" };
+            _entryStatus = new Label("Sẵn sàng kết nối tới máy chủ Đông Lâm.") { name = "Map01A Entry Safety Note" };
             _entryStatus.style.fontSize = 14;
             _entryStatus.style.whiteSpace = WhiteSpace.Normal;
             _entryStatus.style.color = new Color(.72f, .86f, .92f, .90f);

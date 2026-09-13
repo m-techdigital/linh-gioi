@@ -1,3 +1,9 @@
+## Next — sau khi loại nội dung kỹ thuật khỏi entry feedback — 2026-09-14
+
+`CONTINUE`. Evidence entry hiện hành là `build/map01a-entry-product-copy-runtime-v1/entry-login.png`; Player `build/map01a-entry-product-copy-player-v1/LinhGioiOnline.app`. Notice và feedback rail không được lộ `local`, `Map01A`, `2D` hoặc trạng thái duyệt nội bộ; chức năng chưa có thật phải báo rõ là chưa khả dụng.
+
+Next valid work: chuyển khỏi entry và audit một lỗi Map01A interaction/HUD/NPC rõ trên Player; không chỉnh vi mô thêm màn đăng nhập nếu không có regression mới. Giữ hub năm tab đã duyệt, asset provenance gate, không quay lại class/pose/wardrobe/source và không đổi frozen surfaces.
+
 ## Next — sau khi sửa hàng trạng thái máy chủ đăng nhập — 2026-09-14
 
 `CONTINUE`. Evidence entry hiện hành là `build/map01a-entry-server-state-runtime-v1/entry-login.png`; `● Mượt` phải giữ một dòng cùng tên server và nút đổi server. Menu cùng Player đã refresh tại `build/map01a-menu-current-runtime-v1/menu.png`; Player: `build/map01a-entry-server-state-player-v1/LinhGioiOnline.app`.
