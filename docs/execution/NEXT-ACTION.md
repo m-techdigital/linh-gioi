@@ -5,12 +5,17 @@ Continue from the current pushed checkpoint on `origin/feature/2d` without creat
 Order of work:
 
 1. Finish visible Map01A gameplay UI polish against the latest owner references using shared `CongDongLamArrivalHud.Skin.cs`/base helpers first. Do not create a second modal/card/tab/button/detail system.
-2. Replace Hành trang placeholder item glyph treatment with a reusable item visual component, then refresh Player evidence for the Hành trang tab.
+2. Replace Hành trang placeholder item glyph treatment with real item/equipment art based on the game design direction. Do not ship temporary text badges, generic geometry icons, or random generated item art. If real item/trang phục/vật phẩm designs are not available, first create/review a proper design board or wait for owner-provided design before wiring final runtime icons.
 3. Continue login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue and HUD polish from the uploaded design references. Hành trang and Thông tin remain separate tabs; selected item/equipment details show on the right.
 4. Only after the Map01A UI pass is visually stable, revisit class/wardrobe with a deterministic source/design audit. If that method is not clear, keep the class work held and continue product UI/map tasks.
 5. Do not create zip packages unless the owner explicitly asks again.
 
 Required checkpoint before any handoff claim: targeted EditMode/UI tests, shared UI validator, no-3D/no-source-image validators, frozen diff audit, Player capture, and manual visual review of screenshots. Technical PASS is not visual acceptance.
+
+
+## Item/equipment icon art quality gate — 2026-09-13
+
+Owner rejected temporary/generic inventory icons. Future Hành trang item/equipment visuals must be real design-quality art matching Linh Giới Online's 2D UI style and the owner reference screens. Do not commit placeholder glyphs, text badges, simple generated geometry icons, or random image-tool outputs as final item art. Runtime wiring may be prepared only if it expects approved assets/design-board outputs.
 
 ## Handoff note — UI still needs visual redesign polish — 2026-09-13
 

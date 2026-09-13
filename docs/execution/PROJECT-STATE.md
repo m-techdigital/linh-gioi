@@ -1,3 +1,7 @@
+## Inventory item art correction — 2026-09-13
+
+Owner clarified that inventory icons, outfit thumbnails and item visuals must be based on real game design, not temporary technical badges or simple generated placeholder geometry. A quick deterministic placeholder-icon attempt was discarded and not kept in the working tree. Next inventory/icon work must use approved design-quality art or a reviewed design board before runtime wiring is treated as product-ready.
+
 ## Current operating goal realignment — Map01A product UI/UX first — 2026-09-13
 
 The current source checkpoint is pushed through `5dea28fe` on `origin/feature/2d`. Owner direction now prioritizes a stable Map01A product UI/UX pass and no further zip handoff packages. Class/outfit generation remains held unless there is a deterministic source/design method; do not spend cycles on random image-tool outputs or repeated class pack trial loops. Existing Võ div4/base/camera/scale and registered outfit work must remain intact.
