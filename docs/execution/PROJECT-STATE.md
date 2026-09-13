@@ -1,3 +1,10 @@
+## Map01A — action button base-first density guard — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật.
+- `ApplyLgoButton(...)` giờ gắn base class chung `lgo-action-button` và role `lgo-action-primary` / `lgo-action-standard` trước khi các helper semantic như entry, HUD, inventory, dialogue override density. Primary button giảm nhẹ từ 20px/48px xuống 18px/46px để bớt phình trên Player.
+- TDD: Entry test fail đúng khi `Map01A Entry Start Button` chưa có `lgo-action-button`; sau refactor targeted EditMode pass cho entry, inventory, HUD shortcut và dialogue representative tests (`total=1 passed=1 failed=0` mỗi filter). Shared-skin validator khóa marker class mới.
+- Player evidence: `build/map01a-action-button-base-runtime-v1/entry-login.png`, 1600x900, Player graphics thật, `usesOsMouseOrKeyboard=false`. Visual audit: login không chồng/cắt, CTA bớt quá khổ; UI tổng thể vẫn `CONTINUE`, chưa phải nghiệm thu mỹ thuật cuối.
+
 ## Map01A — shared detail-card foundation — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, pose, wardrobe, camera hay scale; không rollback code nhân vật.

@@ -510,11 +510,19 @@ namespace LinhGioi.Tests.EditMode
                     "Disabled design affordances should read like game UI, not debug placeholder copy.");
                 var start = root.Q<Button>("Map01A Entry Start Button");
                 Assert.That(start, Is.Not.Null);
+                Assert.That(start.ClassListContains("lgo-action-button"), Is.True,
+                    "All Map01A buttons must pass through the shared action-button base before screen-specific role styling.");
+                Assert.That(start.ClassListContains("lgo-action-primary"), Is.True,
+                    "Primary CTAs must use the shared primary action class instead of login-only button styling.");
                 Assert.That(root.Q("Map01A Entry Primary Cta Row"), Is.Not.Null,
                     "Entry reference uses the start action as its own gold CTA row instead of burying it beside secondary auth actions.");
                 Assert.That(root.Q("Map01A Entry Secondary Actions"), Is.Not.Null,
                     "Secondary login actions should stay visually subordinate to the primary start CTA.");
                 var loginButton = root.Q<Button>("Map01A Entry Login Button");
+                Assert.That(loginButton.ClassListContains("lgo-action-button"), Is.True,
+                    "Secondary login actions must still inherit the shared action-button base.");
+                Assert.That(loginButton.ClassListContains("lgo-action-standard"), Is.True,
+                    "Secondary login actions should use the standard shared action role, then entry-specific sizing.");
                 Assert.That(loginButton.text, Does.Contain("Vào nhanh"));
                 Assert.That(loginButton.text, Does.Not.Contain("dev"), "Entry/login surface must not expose developer wording to the player.");
                 Assert.That(start.style.minHeight.value.value, Is.GreaterThan(loginButton.style.minHeight.value.value));

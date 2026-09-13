@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI after action button foundation — 2026-09-13
+
+`CONTINUE`. Action buttons giờ có base class chung `lgo-action-button` và role `lgo-action-primary` / `lgo-action-standard`; evidence Player mới tại `build/map01a-action-button-base-runtime-v1/entry-login.png`. Rule hiện hành: mọi button/tab/card/modal/dialog/detail cùng pattern phải đi qua shared Skin/base trước, partial chỉ bind data/state/action.
+
+Next valid work: tiếp tục Map01A product UI/UX theo owner references, ưu tiên polish sâu login/Hành trang/Thông tin/Rương/NPC dialogue/HUD bằng component base chung và asset runtime/approved/provenance-backed. Không resume class/wardrobe/pose/source hoặc class build/capture loop, không rollback class code, không icon giả/random/generated, và không dùng test xanh thay visual review bằng mắt.
+
 ## Next — Map01A base-first UI after shared detail cards — 2026-09-13
 
 `CONTINUE`. Login server summary, inventory detail/hero và NPC dialogue body đã dùng chung `ApplyLgoDetailCard(...)` / `lgo-detail-card`; evidence tại `build/map01a-detail-card-runtime-v1/`. Tiếp tục Map01A UI theo design owner, ưu tiên audit hierarchy/typography/component đang lặp có tác động nhìn thấy rõ; chỉ tạo semantic helper khi có từ hai consumer thật. Không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; visible batch phải có Player screenshot review bằng mắt.

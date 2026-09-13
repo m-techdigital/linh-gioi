@@ -37,6 +37,9 @@ namespace LinhGioi.UI
         private const string LgoEntrySideActionClass = "lgo-entry-side-action";
         private const string LgoCharacterSelectCardClass = "lgo-character-select-card";
         private const string LgoCharacterSelectPrimaryActionClass = "lgo-character-select-primary-action";
+        private const string LgoActionButtonClass = "lgo-action-button";
+        private const string LgoActionPrimaryClass = "lgo-action-primary";
+        private const string LgoActionStandardClass = "lgo-action-standard";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -126,9 +129,12 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoButton(Button button, bool primary = false)
         {
-            button.style.minHeight = primary ? 48 : 38;
+            button.AddToClassList(LgoActionButtonClass);
+            button.EnableInClassList(LgoActionPrimaryClass, primary);
+            button.EnableInClassList(LgoActionStandardClass, !primary);
+            button.style.minHeight = primary ? 46 : 38;
             button.style.minWidth = 0;
-            button.style.fontSize = primary ? 20 : 14;
+            button.style.fontSize = primary ? 18 : 14;
             button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
             button.style.unityFontStyleAndWeight = primary ? FontStyle.Bold : FontStyle.Normal;
