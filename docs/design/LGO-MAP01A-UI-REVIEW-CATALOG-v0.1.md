@@ -152,3 +152,8 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-button-base-runtime-v1/bag.png`, `character-info.png`, `supplies.png`, `storage.png`, and `manifest.json`.
 - Result: inventory flow buttons now share `ApplyLgoInventoryButtonBase(...)` / `lgo-inventory-button-base` before role-specific helpers override density.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms layout did not break, while final inventory visual richness still needs deeper polish and approved/provenance-backed item art.
+## 2026-09-13 — Inventory panel shell base-first helper evidence
+
+- Evidence: `build/map01a-inventory-panel-shell-runtime-v1/bag.png`, `character-info.png`, `supplies.png`, `storage.png`, and `manifest.json`.
+- Result: inventory content panels now share `ApplyLgoInventoryPanelShell(...)` / `lgo-inventory-panel-shell` rather than each flow owning a flat panel shell.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms layout did not break; final inventory visual richness still needs deeper polish and approved/provenance-backed item art.

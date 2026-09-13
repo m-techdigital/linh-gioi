@@ -248,6 +248,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Not.Null,
                     "Bag category controls should read like compact RPG filter chips, not a pair of full-width debug table tabs.");
                 var inventoryGridPanel = root.Q("Map01A Inventory Grid Panel");
+                Assert.That(inventoryGridPanel.ClassListContains("lgo-inventory-panel-shell"), Is.True,
+                    "Inventory content panels must share a shell base instead of each flow styling a flat panel separately.");
+                Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-inventory-panel-shell"), Is.True,
+                    "Inventory detail panel must share the same shell base as bag/character/storage panels.");
+                Assert.That(root.Q("Map01A Storage Gate Card").ClassListContains("lgo-inventory-panel-shell"), Is.True,
+                    "Storage gate card must not introduce a parallel flat panel style.");
                 Assert.That(inventoryGridPanel.style.flexGrow.value, Is.EqualTo(0),
                     "Bag grid must not stretch across the whole modal because that turns item cells into wide table cards.");
                 Assert.That(inventoryGridPanel.style.flexBasis.value.value, Is.LessThanOrEqualTo(760),

@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after inventory panel shell — 2026-09-13
+
+`CONTINUE`. Inventory content panels đã có shell chung `ApplyLgoInventoryPanelShell(...)` / `lgo-inventory-panel-shell`, evidence `build/map01a-inventory-panel-shell-runtime-v1/`. Rule hiện hành: panel/card/dialog/detail cùng vai trò phải đi qua base/shared helper trước; partial chỉ bind data/state/action và layout vai trò.
+
+Next valid work: tiếp tục Map01A/UI-only, ưu tiên detail/stat/card/chip helpers còn lặp trong inventory hoặc polish login/HUD/NPC dialogue theo design owner với asset runtime/approved/provenance-backed. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI polish after inventory button base — 2026-09-13
 
 `CONTINUE`. Inventory flow đã có button foundation chung `ApplyLgoInventoryButtonBase(...)` / `lgo-inventory-button-base`, evidence `build/map01a-inventory-button-base-runtime-v1/`. Rule hiện hành: mọi UI/UX giống nhau phải đi qua base/shared helper trước; semantic helper chỉ override vai trò cụ thể như tab/filter/grid/action/close, không dựng foundation lẻ.

@@ -1,3 +1,10 @@
+## Map01A — inventory panel shell base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Các panel/carde chính trong Hành trang/Thông tin/Rương đồ tạo qua `InventoryPanel(...)` giờ đi qua shared `ApplyLgoInventoryPanelShell(...)` và class `lgo-inventory-panel-shell`, tránh mỗi flow tự giữ một panel nền phẳng riêng.
+- RED/GREEN: targeted EditMode fail đúng khi grid/detail/storage gate chưa có panel shell class, sau đó pass sau refactor; shared-skin validator/unit test cập nhật marker helper mới.
+- Player evidence: `build/map01a-inventory-panel-shell-runtime-v1/{bag,character-info,supplies,storage}.png`, manifest cùng thư mục. Visual review: bag/detail và storage gate không vỡ layout; vẫn `CONTINUE`, chưa phải nghiệm thu mỹ thuật vì inventory còn cần polish sâu/asset provenance.
+
 ## Map01A — inventory button base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

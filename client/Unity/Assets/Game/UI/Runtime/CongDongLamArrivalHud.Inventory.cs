@@ -36,10 +36,7 @@ namespace LinhGioi.UI
         private VisualElement InventoryPanel(string name)
         {
             var panel = new VisualElement { name = name };
-            ApplyLgoGlassPanel(panel, true);
-            panel.style.paddingLeft = panel.style.paddingRight = 12;
-            panel.style.paddingTop = panel.style.paddingBottom = 10;
-            panel.style.minWidth = 0;
+            ApplyLgoInventoryPanelShell(panel);
             return panel;
         }
 
