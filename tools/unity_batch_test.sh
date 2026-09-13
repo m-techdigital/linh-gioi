@@ -12,6 +12,31 @@ if [[ -z "$UNITY_EDITOR" ]]; then
     if command -v "$candidate" >/dev/null 2>&1; then UNITY_EDITOR="$(command -v "$candidate")"; break; fi
   done
 fi
+FILTER=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --filter)
+      if [[ $# -lt 2 || -z "$2" ]]; then
+        printf '%s\n' 'ERROR: --filter requires a non-empty NUnit/Unity test filter.' >&2
+        exit 24
+      fi
+      FILTER="$2"
+      shift 2
+      ;;
+    --filter=*)
+      FILTER="${1#--filter=}"
+      if [[ -z "$FILTER" ]]; then
+        printf '%s\n' 'ERROR: --filter requires a non-empty NUnit/Unity test filter.' >&2
+        exit 24
+      fi
+      shift
+      ;;
+    *)
+      printf 'ERROR: unknown argument: %s\n' "$1" >&2
+      exit 25
+      ;;
+  esac
+done
 if [[ -z "$UNITY_EDITOR" || ! -x "$UNITY_EDITOR" ]]; then
   printf '%s\n' 'ERROR: Unity 6000.3.2f1 editor is required for runtime/batch verification. Set UNITY_EDITOR=/path/to/Unity.' >&2
   exit 20
@@ -19,17 +44,24 @@ fi
 python3 "$ROOT/tools/prepare_unity_protocol.py"
 RESULTS="$ROOT/client/Unity/Logs/m0-editmode-results.xml"
 mkdir -p "$(dirname "$RESULTS")"
-"$UNITY_EDITOR" -batchmode -nographics \
-  -projectPath "$UNITY_PROJECT" \
-  -runTests -testPlatform EditMode \
-  -testResults "$RESULTS" \
+UNITY_ARGS=(
+  -batchmode -nographics
+  -projectPath "$UNITY_PROJECT"
+  -runTests -testPlatform EditMode
+  -testResults "$RESULTS"
   -logFile -
-python3 - "$RESULTS" <<'PY'
+)
+if [[ -n "$FILTER" ]]; then
+  UNITY_ARGS+=( -testFilter "$FILTER" )
+fi
+"$UNITY_EDITOR" "${UNITY_ARGS[@]}"
+python3 - "$RESULTS" "$FILTER" <<'PY'
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 path = Path(sys.argv[1])
+requested_filter = sys.argv[2] if len(sys.argv) > 2 else ""
 if not path.is_file():
     print(f"ERROR: Unity EditMode test results missing: {path}", file=sys.stderr)
     raise SystemExit(21)
@@ -45,6 +77,16 @@ if total <= 0:
 if failed != 0 or passed <= 0:
     print(f"ERROR: Unity EditMode failed: result={result} total={total} passed={passed} failed={failed}", file=sys.stderr)
     raise SystemExit(23)
-print(f"UNITY_EDITMODE_RESULTS_VERIFIED total={total} passed={passed} failed={failed} result={result}")
+matching = []
+if requested_filter:
+    needle = requested_filter.split(".")[-1]
+    for test_case in root.iter("test-case"):
+        name = test_case.attrib.get("fullname") or test_case.attrib.get("name") or ""
+        if requested_filter in name or needle in name:
+            matching.append(test_case)
+    if not matching:
+        print(f"ERROR: Unity EditMode filter executed no matching tests: filter={requested_filter} path={path}", file=sys.stderr)
+        raise SystemExit(26)
+print(f"UNITY_EDITMODE_RESULTS_VERIFIED total={total} passed={passed} failed={failed} result={result} filter={requested_filter or 'ALL'}")
 PY
-printf 'UNITY_EDITMODE_PASS results=%s\n' "$RESULTS"
+printf 'UNITY_EDITMODE_PASS results=%s filter=%s\n' "$RESULTS" "${FILTER:-ALL}"

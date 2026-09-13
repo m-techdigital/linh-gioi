@@ -576,6 +576,18 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
                         Is.EqualTo(DisplayStyle.None), "Old review control reappeared: " + field);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                Assert.That(root.Q("Map01A Quest Tracker Tabs"), Is.Not.Null,
+                    "HUD quest tracker should expose the Nhiệm Vụ/Đội tab structure from the product reference instead of staying as a plain text block.");
+                Assert.That(root.Q<Button>("Map01A Quest Tab Missions").text, Does.Contain("Nhiệm vụ"));
+                var questMissionTab = root.Q<Button>("Map01A Quest Tab Missions");
+                Assert.That(questMissionTab.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
+                    "Quest tab labels must not wrap in the visible Player HUD.");
+                Assert.That(questMissionTab.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),
+                    "HUD quest tabs must stay compact and must not inherit oversized primary CTA typography.");
+                Assert.That(questMissionTab.resolvedStyle.height, Is.LessThanOrEqualTo(36f),
+                    "HUD quest tabs must stay compact so the tracker does not look oversized on Player.");
+                Assert.That(root.Q<Button>("Map01A Quest Tab Party").enabledSelf, Is.False,
+                    "Đội is a visible roadmap affordance, not a clickable dead team feature.");
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Health").value, Is.EqualTo(60));
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Mana").value, Is.EqualTo(50));
                 Assert.That(root.Q<Button>("Map01A Inventory Gender").enabledSelf, Is.False,

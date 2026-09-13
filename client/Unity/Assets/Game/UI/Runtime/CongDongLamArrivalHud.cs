@@ -10,11 +10,11 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud : MonoBehaviour
     {
         private CongDongLamMap01AArtPreview _scene;
-        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions;
+        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs;
         private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
-        private Button _skillsShortcut, _menuShortcut;
+        private Button _skillsShortcut, _menuShortcut, _questMissionsTab, _questPartyTab;
         private Button _dialogueContinue, _dialogueInformation, _dialogueClose, _npcTalk;
         private Button[] _equipmentRows;
         private IReadOnlyList<string> _equipmentSlotIds;
@@ -77,7 +77,37 @@ namespace LinhGioi.UI
             _health = MakeVital("Map01A Health", new Color(.67f, .16f, .15f));
             _mana = MakeVital("Map01A Mana", new Color(.12f, .37f, .64f));
             _vitals.Add(_health); _vitals.Add(_mana); _safe.Add(_vitals);
-            _quest = new Label(); Box(_quest); Place(_quest, null, 12, 12, null);
+            _questTabs = new VisualElement { name = "Map01A Quest Tracker Tabs", pickingMode = PickingMode.Ignore };
+            Place(_questTabs, null, 12, 12, null);
+            _questTabs.style.width = 260;
+            _questTabs.style.flexDirection = FlexDirection.Row;
+            _questTabs.style.height = 32;
+            _questMissionsTab = new Button { name = "Map01A Quest Tab Missions", text = "Nhiệm vụ" };
+            _questPartyTab = new Button { name = "Map01A Quest Tab Party", text = "Đội" };
+            foreach (var tab in new[] { _questMissionsTab, _questPartyTab })
+            {
+                tab.style.position = Position.Relative;
+                tab.style.left = tab.style.right = tab.style.top = tab.style.bottom = StyleKeyword.Auto;
+                tab.style.flexGrow = 1;
+                tab.style.flexBasis = 0;
+                tab.style.minHeight = 30;
+                tab.style.fontSize = 12;
+                tab.style.marginRight = tab == _questMissionsTab ? 4 : 0;
+                tab.style.whiteSpace = WhiteSpace.NoWrap;
+                _questTabs.Add(tab);
+            }
+            ApplyLgoButton(_questMissionsTab);
+            ApplyLgoDisabledAction(_questPartyTab);
+            foreach (var tab in new[] { _questMissionsTab, _questPartyTab })
+            {
+                tab.style.minHeight = 30;
+                tab.style.fontSize = 12;
+                tab.style.paddingLeft = 8;
+                tab.style.paddingRight = 8;
+                tab.style.whiteSpace = WhiteSpace.NoWrap;
+            }
+            _safe.Add(_questTabs);
+            _quest = new Label { name = "Map01A Quest Tracker Body" }; Box(_quest); Place(_quest, null, 12, 46, null);
             _quest.style.width = 260; _quest.style.whiteSpace = WhiteSpace.Normal; _safe.Add(_quest);
             _minimap = new Label(); Box(_minimap); Place(_minimap, 220, null, 12, null);
             _minimap.style.width = 430; _minimap.style.fontSize = 16;
@@ -235,6 +265,7 @@ namespace LinhGioi.UI
             var r = _metrics.SafePanelRect;
             Place(_safe, r.x, null, r.y, null); _safe.style.width = r.width; _safe.style.height = r.height;
             _quest.style.width = r.width < 900 ? 220 : 260;
+            _questTabs.style.width = r.width < 900 ? 220 : 260;
             _minimap.style.left = r.width < 1100 ? 206 : 220;
             _minimap.style.width = r.width < 1100 ? 360 : 430;
             _dialogue.style.left = _touch ? 150 : 20;
@@ -325,6 +356,7 @@ namespace LinhGioi.UI
             _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _quest.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _questTabs.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
                 control.style.display = DisplayStyle.None;
             _inventorySummary.text = _scene.InventorySummaryText;

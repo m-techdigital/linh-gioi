@@ -1,3 +1,7 @@
+## Next Map01A UI polish after compact quest tabs — 2026-09-13
+
+Continue Map01A product UI/UX only. The safe `--filter` gate is now repaired and must be used for targeted UI tests; do not run broad Unity tests when a Map01A UI-only check is intended. Next safe work: continue login/inventory/character-info/storage/NPC-dialogue/HUD polish against the owner references, keeping button/font sizes compact unless a control is a true modal primary CTA. Do not resume class/wardrobe work, do not run class Player build/capture loops, and do not rollback existing class code.
+
 ## Validation safety lock: no class test/build side effects for Map01A UI — 2026-09-13
 
 A Unity targeted test invocation for Map01A UI still executed `TwoDSourcePoseReviewTests`, so broad/unsafe Unity filters are not acceptable for this worktree while class work is excluded. Until a Map01A/UI-only Unity gate is verified, do not run class pose/source/wardrobe tests, class Player builds, or class visual captures. If a validator or test command starts touching class runtime, stop that validation path, record it as a gate tooling issue, and continue only with source-safe Map01A/UI work or a narrower verified UI test.
