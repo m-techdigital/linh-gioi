@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 PROJECT_STATE = ROOT / "docs/execution/PROJECT-STATE.md"
 NEXT_ACTION = ROOT / "docs/execution/NEXT-ACTION.md"
 LEDGER_ROLLUP = ROOT / "docs/execution/TASK-LEDGER-ROLLUP.md"
+OWNER_STOPPED_ACTIVE_TASKS = {"OUTFIT_BODY_RIG_SOURCE_PROTOTYPE"}
 
 
 def section_prefix(text: str, heading_prefix: str) -> str:
@@ -129,6 +130,8 @@ def next_task_section(next_action: str) -> str:
     state = active_task_state(next_action)
     active_task = state.get("activeTask")
     if isinstance(active_task, str) and active_task:
+        if active_task in OWNER_STOPPED_ACTIVE_TASKS:
+            return "Active task: OWNER_STOPPED_PATH_REVIEW_REQUIRED"
         status = state.get("status")
         return "\n".join(line for line in (f"Active task: {active_task}", f"status={status}" if status else "") if line)
     active = active_goal_lock_section(next_action)
@@ -141,6 +144,9 @@ def next_task_section(next_action: str) -> str:
 def current_blocker_section(next_action: str) -> str:
     state = active_task_state(next_action)
     blockers = state.get("blockers")
+    active_task = state.get("activeTask")
+    if active_task in OWNER_STOPPED_ACTIVE_TASKS:
+        return "Current blocker from active task state: OWNER_STOPPED_PATH. Restore the whole-body six-pose task before any implementation."
     if isinstance(blockers, list) and blockers:
         return "Current blocker from active task state: " + ", ".join(str(item) for item in blockers)
     active = active_goal_lock_section(next_action)

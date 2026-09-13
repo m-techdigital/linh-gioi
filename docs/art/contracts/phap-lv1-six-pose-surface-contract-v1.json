@@ -1,6 +1,6 @@
 {
   "contractId": "phap-lv1-six-pose-surface-contract-v1",
-  "status": "NEED_OWNER_DECISION",
+  "status": "ROUTE_SELECTED_SOURCE_REQUIRED",
   "sourceSpaceProfile": {
     "canvas": [
       1024,
@@ -18,7 +18,7 @@
     "run_b",
     "jump_tuck"
   ],
-  "selectedRoute": null,
+  "selectedRoute": "SLEEVED_PHAP_LV1",
   "routeOptions": {
     "SLEEVELESS_PHAP_LV1": {
       "bodyAuthority": "bare_arm",
@@ -27,34 +27,37 @@
     },
     "SLEEVED_PHAP_LV1": {
       "bodyAuthority": "upper_arm_cloth",
-      "requiredAction": "Add upper_arm_cloth ownership and per-pose masks/attachments before drawing sleeves.",
-      "risk": "Higher setup cost, but preserves the original sleeved Pháp concept."
+      "requiredAction": "Author registered front/back sleeve and torso overlays for all six whole-body poses; body images remain intact and are never rebuilt as limb cards.",
+      "risk": "Requires six-pose occlusion review, but preserves the sleeved Pháp design and the accepted whole-body motion authority."
     }
   },
   "itemFamilies": [
     {
       "slotId": "outer_top",
       "familyType": "cloth_body",
+      "poseSourceMode": "REGISTERED_FRONT_BACK_OVERLAYS",
+      "bodyAuthority": "WHOLE_BODY_POSE_IMAGES",
       "ownership": [
         "torso_cloth",
         "collar",
         "hem",
-        "ornament"
+        "ornament",
+        "upper_arm_cloth"
       ],
       "occlusion": {
         "mayCover": [
           "torso_inner",
-          "waist_overlap"
+          "waist_overlap",
+          "upper_arm_skin"
         ],
         "mustNotCover": [
-          "upper_arm_skin",
           "forearm_skin",
           "hand",
           "face"
         ]
       },
       "sourceGate": "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE",
-      "routeDependency": "SELECT_ROUTE_BEFORE_AUTHORING",
+      "routeDependency": "SLEEVED_PHAP_LV1",
       "knownMismatch": "Idle outer_top contains white sleeves while current run/jump body authority is bare-arm."
     },
     {

@@ -71,7 +71,7 @@ class OutfitSurfaceContractTests(unittest.TestCase):
         self.assertIn("ROUTE_SELECTION_REQUIRED", report["decisionGates"])
         self.assertFalse(report["runtimePromotionAllowed"])
 
-    def test_rejects_sleeved_route_without_upper_arm_masks(self):
+    def test_rejects_sleeved_route_without_registered_pose_overlays(self):
         payload = self._base_contract()
         payload["selectedRoute"] = "SLEEVED_PHAP_LV1"
         path = self._write(payload)
@@ -81,7 +81,20 @@ class OutfitSurfaceContractTests(unittest.TestCase):
         self.assertEqual("REJECT_OUTFIT_SURFACE_CONTRACT", report["status"])
         failures = report["families"][0]["failures"]
         self.assertIn("SLEEVED_ROUTE_REQUIRES_UPPER_ARM_CLOTH_OWNERSHIP", failures)
-        self.assertIn("SLEEVED_ROUTE_REQUIRES_POSE_MASKS", failures)
+        self.assertIn("SLEEVED_ROUTE_REQUIRES_REGISTERED_POSE_OVERLAYS", failures)
+
+    def test_sleeved_route_accepts_whole_body_pose_overlay_declaration(self):
+        payload = self._base_contract()
+        payload["selectedRoute"] = "SLEEVED_PHAP_LV1"
+        payload["itemFamilies"][0]["ownership"].append("upper_arm_cloth")
+        payload["itemFamilies"][0]["poseSourceMode"] = "REGISTERED_FRONT_BACK_OVERLAYS"
+        payload["itemFamilies"][0]["bodyAuthority"] = "WHOLE_BODY_POSE_IMAGES"
+        path = self._write(payload)
+
+        report = validate_contract(path)
+
+        self.assertEqual("NEED_SOURCE_ARTIFACT_REVIEW", report["status"])
+        self.assertEqual([], report["families"][0]["failures"])
 
     def test_valid_declaration_still_needs_source_artifact_review(self):
         payload = self._base_contract()

@@ -2,7 +2,9 @@
 
 2026-09-13 outfit task is now evaluated by real output, not layer count/checkpoint. Surface-contract gate scope was corrected: declaration validity is separate from source/artifact validity, and outfit pack entrypoints require a PASS contract plus `SOURCE_ARTIFACT_VISUAL_ACCEPTED`.
 
-Current prototype path: Blender flat-card body/rig source under `build/outfit-body-rig-prototype-2026-09-13/source` has been generated with `.blend` and FBX. Unity standalone Player behavior is not yet proven: two build attempts were interrupted because URP/Lit shader compile entered a very large variant workload. Runtime promotion remains false.
+The Blender flat-card/skinned body-rig prototype is stopped. A resynced Unity build did run, but visual review showed separated body regions and unusable proportions in both rigid and skinned variants. Evidence remains under `build/outfit-body-rig-prototype-2026-09-13/`; it is rejected evidence, not a candidate source. Runtime promotion remains false.
+
+Active implementation is the whole-body six-pose route. The six body/motion images remain the authority; outfit art is authored as registered front/back overlays for every pose. The first target is a sleeved Pháp outer top plus removable belt/guard. The second item must reuse the same pose registration and source template without body remeasurement or item-specific runtime offsets.
 
 ## Active goal lock — six-pose registered outfit path — 2026-09-13
 

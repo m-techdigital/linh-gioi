@@ -53,7 +53,7 @@ class LgoNextTaskTests(unittest.TestCase):
             "SIX_POSE_REGISTERED_OUTFIT_SURFACE_CONTRACT_DECISION",
         )
 
-    def test_active_task_state_overrides_stale_history_tokens(self):
+    def test_owner_stopped_active_task_cannot_override_six_pose_lock(self):
         text = "\n".join(
             [
                 "## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13",
@@ -70,7 +70,7 @@ class LgoNextTaskTests(unittest.TestCase):
 
         self.assertEqual(
             active_next_action_task_from_text(text),
-            "OUTFIT_BODY_RIG_SOURCE_PROTOTYPE",
+            "OWNER_STOPPED_PATH_REVIEW_REQUIRED",
         )
 
 

@@ -37,6 +37,31 @@ Resume condition:
 - a new neutral layered body/rig blueprint must exist, match Linh Giới proportions, include hidden surfaces/overlap ownership/joint evidence, and pass `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`
 - if this condition is not met, do not reopen skeletal work in this sandbox
 
+### Rejection extension — Blender flat-card/skinned body rig, 2026-09-13
+
+Status: stopped by owner. This is the same rejected split-body premise, not a new production route.
+
+Do not continue or rename:
+
+- `OUTFIT_BODY_RIG_SOURCE_PROTOTYPE`
+- Blender body cards driven by rigid bones or skinned meshes
+- a Player probe assembled from separate head, torso, arm and leg cards
+- garment reuse claims measured on that body
+
+Reason:
+
+- both the rigid and skinned variants displayed detached body regions and unstable proportions
+- changing vertex weights did not correct the source topology; it only changed how the same cut pieces deformed
+- owner explicitly returned this sandbox to whole-body six-pose outfit authoring
+
+Rejected evidence to retain:
+
+- `build/outfit-body-rig-prototype-2026-09-13/runtime-resynced-v2/`
+- `build/outfit-body-rig-prototype-2026-09-13/runtime-skinned-v2/`
+- `build/outfit-body-rig-prototype-2026-09-13/blender-action-renders-skinned-v2/`
+
+This path has no automatic resume condition. Reopening it requires a new explicit owner architecture task; the existing prototype, mesh, weights and Player scene remain evidence only.
+
 ## Stopped path 2: flat 2D pattern/panel direct fit
 
 Status: stopped as a production path.

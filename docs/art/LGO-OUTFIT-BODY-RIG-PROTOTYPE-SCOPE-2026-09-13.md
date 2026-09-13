@@ -1,4 +1,6 @@
-# LGO outfit body/rig prototype scope — 2026-09-13
+# LGO outfit body/rig prototype scope — rejected evidence, 2026-09-13
+
+Status: **STOPPED / OWNER REJECTED**. The rigid and skinned Blender body-card Player results kept limbs and torso visually detached. Do not continue this scope, promote its source, or reuse it under another rig/mesh name. The active route is whole-body six-pose outfit authoring in `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md`.
 
 ## Phạm vi được phép
 

@@ -35,7 +35,8 @@ def _family_report(family: dict, selected_route: str | None) -> dict:
     slot = family.get("slotId")
     family_type = family.get("familyType")
     ownership = set(family.get("ownership") or [])
-    pose_masks = family.get("poseMasks") or {}
+    pose_source_mode = family.get("poseSourceMode")
+    body_authority = family.get("bodyAuthority")
 
     if slot not in SLOTS:
         failures.append("UNKNOWN_SLOT")
@@ -47,9 +48,10 @@ def _family_report(family: dict, selected_route: str | None) -> dict:
     if slot == "outer_top" and selected_route == "SLEEVED_PHAP_LV1":
         if "upper_arm_cloth" not in ownership:
             failures.append("SLEEVED_ROUTE_REQUIRES_UPPER_ARM_CLOTH_OWNERSHIP")
-        missing_masks = [pose for pose in POSES if pose not in pose_masks]
-        if missing_masks:
-            failures.append("SLEEVED_ROUTE_REQUIRES_POSE_MASKS")
+        if pose_source_mode != "REGISTERED_FRONT_BACK_OVERLAYS":
+            failures.append("SLEEVED_ROUTE_REQUIRES_REGISTERED_POSE_OVERLAYS")
+        if body_authority != "WHOLE_BODY_POSE_IMAGES":
+            failures.append("SLEEVED_ROUTE_REQUIRES_WHOLE_BODY_POSE_AUTHORITY")
     if slot == "outer_top" and selected_route == "SLEEVELESS_PHAP_LV1":
         if "upper_arm_cloth" in ownership:
             failures.append("SLEEVELESS_ROUTE_MUST_NOT_OWN_UPPER_ARM_CLOTH")

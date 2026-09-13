@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BACKLOG = ROOT / "docs/execution/LGO-NEXT-50-TASKS-BACKLOG-v1.0.md"
 LEDGER = ROOT / "docs/execution/TASK-LEDGER.md"
 NEXT_ACTION = ROOT / "docs/execution/NEXT-ACTION.md"
+OWNER_STOPPED_ACTIVE_TASKS = {"OUTFIT_BODY_RIG_SOURCE_PROTOTYPE"}
 
 
 @dataclass(frozen=True)
@@ -98,7 +99,10 @@ def active_next_action_task_from_text(text: str) -> str | None:
     active_state = active_task_state_from_text(text)
     active_task = active_state.get("activeTask")
     if isinstance(active_task, str) and active_task.strip():
-        return active_task.strip()
+        active_task = active_task.strip()
+        if active_task in OWNER_STOPPED_ACTIVE_TASKS:
+            return "OWNER_STOPPED_PATH_REVIEW_REQUIRED"
+        return active_task
 
     active_lock = section_from_text(text, "## ACTIVE GOAL LOCK")
     active_context = "\n".join(text.splitlines()[:1]) + "\n" + active_lock
@@ -237,13 +241,18 @@ def main() -> int:
         print("forbidden=per-pose mask/pixel polish, stopped skeletal/cutout path, flat-panel direct-fit production, Player pack")
         print("closure=contract validation PASS for the selected route; source-board plan updated from contract")
         return 0
-    if active_task == "OUTFIT_BODY_RIG_SOURCE_PROTOTYPE":
+    if active_task == "OWNER_STOPPED_PATH_REVIEW_REQUIRED":
+        print("LGO_NEXT_TASK_ADVISOR_OWNER_STOPPED_PATH")
+        print(f"id={active_task}")
+        print("owner_note=Active state trỏ vào OUTFIT_BODY_RIG_SOURCE_PROTOTYPE đã bị owner dừng; không được chạy Blender/body-card/rig. Khôi phục active task về whole-body six-pose authoring trước khi làm tiếp.")
+        return 0
+    if active_task == "SIX_POSE_REGISTERED_OUTFIT_POSE_SET_AUTHORING":
         print("LGO_NEXT_TASK_ADVISOR_READY")
         print(f"id={active_task}")
-        print("purpose=Thử nghiệm riêng một body/rig editable và áo Pháp có tay chuyển động đúng, kèm đai/giáp tháo ghép và item thứ hai cùng họ để đo reuse")
-        print("allowed=docs, tools, build evidence, external experimental source; no production replacement")
-        print("forbidden=sleeve-add/capsule/pixel deletion/flat-panel direct-fit, reuse rejected candidates under new names, production skeletal revival")
-        print("closure=source mở lại được, Player chạy thật, item thứ hai dùng lại cơ chế đã đo, report thời gian thực và lỗi còn lại")
+        print("purpose=Author áo Pháp có tay, belt và guard theo sáu pose body nguyên khối; sau mẫu đầu tạo item thứ hai bằng cùng pose template")
+        print("allowed=six-pose registered front/back outfit source, shared source-space profile, grouped source board and Player review after visual acceptance")
+        print("forbidden=split-body rig/cards, sleeve-add/capsule, pixel deletion, flat-panel direct-fit, per-item body measurement or runtime offsets")
+        print("closure=item đầu chạy đẹp trong Player trên đủ sáu pose; item thứ hai reuse template không đo lại body; visual review ghi lỗi và thời gian thực")
         return 0
     if active_task == "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH":
         print("LGO_NEXT_TASK_ADVISOR_READY")

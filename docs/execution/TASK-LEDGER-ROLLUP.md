@@ -1,4 +1,10 @@
-## Outfit body/rig prototype scope fix — 2026-09-13
+## Blender split-body recurrence stopped — 2026-09-13
+
+`CONTINUE`. Owner xác nhận Blender flat-card/skinned body rig lặp lại đúng hướng body cắt mảnh đã bị hủy. Nguyên nhân là commit `26663f59` ghi `OUTFIT_BODY_RIG_SOURCE_PROTOTYPE` vào JSON active state ở đầu `NEXT-ACTION.md`; advisor ưu tiên JSON này hơn guard six-pose nằm phía dưới, nên đường bị dừng vẫn chạy. Source change chưa commit của lượt skinned đã được restore; Unity temp được chuyển vào evidence, không đưa vào production.
+
+Chặn tái diễn: active state đã chuyển sang `SIX_POSE_REGISTERED_OUTFIT_POSE_SET_AUTHORING`; `lgo_next_task.py` và `lgo_state_brief.py` từ chối trực tiếp task `OUTFIT_BODY_RIG_SOURCE_PROTOTYPE` kể cả khi state bị ghi đè lần nữa. Scope Blender được đánh dấu STOPPED/OWNER REJECTED; evidence rigid/skinned giữ trong `build/outfit-body-rig-prototype-2026-09-13/`. Hướng active chỉ dùng sáu body pose nguyên khối và outfit overlay front/back đã đăng ký; không body cards, limb rig, per-item body measurement hay runtime offsets.
+
+## Outfit body/rig prototype scope fix — historical, superseded 2026-09-13
 
 `CONTINUE`. Gate scope corrected: source contract declaration no longer implies source/artifact validity, and outfit pack entrypoints require surface contract + accepted source artifact. Blender flat-card prototype source created: `.blend` + FBX with body proxy, sleeved Pháp upper A, sleeved upper B using same rig, waist belt and shoulder/chest guard. Player behavior is not claimed: Unity standalone build hit URP/Lit shader compile workload twice and was stopped; next work is a lighter Player/probe path, not more validators or per-pose image edits.
 

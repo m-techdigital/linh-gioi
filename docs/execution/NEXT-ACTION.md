@@ -5,10 +5,12 @@ Owner steering update: đánh giá outfit theo đầu ra thực tế, không the
 ## Active task state
 
 ```json
-{"activeTask":"OUTFIT_BODY_RIG_SOURCE_PROTOTYPE","status":"SOURCE_CREATED_PLAYER_BUILD_BLOCKED","blockers":["PLAYER_BUILD_BLOCKED_BY_URP_LIT_SHADER_COMPILE"],"runtimePromotionAllowed":false}
+{"activeTask":"SIX_POSE_REGISTERED_OUTFIT_POSE_SET_AUTHORING","status":"SLEEVED_ROUTE_SELECTED_SOURCE_AUTHORING_REQUIRED","blockers":["SIX_POSE_SLEEVED_OUTFIT_SOURCE_NOT_VISUALLY_ACCEPTED"],"runtimePromotionAllowed":false}
 ```
 
-Next valid work: hoàn tất thử nghiệm riêng Blender flat-card body/rig → Unity Player probe: source đã tạo được; bước tiếp theo là sửa đường Player/build nhẹ để lấy `runtime-report.json`, sau đó mới đánh giá item thứ hai reuse và lỗi body/phom/che khuất. Không sản xuất thêm ảnh từng pose và không đo lại body theo từng item.
+Next valid work: giữ nguyên sáu ảnh body/motion nguyên khối `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`; author một bộ overlay áo Pháp có tay theo cả sáu pose trên profile chung 1024×1536, rồi belt/guard theo cùng pose registration. Không cắt body thành head/torso/limb, không rig các mảnh body, không sửa ảnh từng pixel để dò fit và không thêm runtime offset riêng cho item. Item thứ hai phải dùng lại cùng pose template/landmarks và chỉ thay phần thiết kế/vật liệu đã khai báo.
+
+Blender flat-card/skinned body-rig prototype was visually rejected and stopped. Its runtime/build evidence stays under `build/outfit-body-rig-prototype-2026-09-13/`; it must not become production source or be reopened under another rig/mesh name.
 
 Surface contract scope fix: contract validator now separates declaration status from source artifact validity. Outfit pack entrypoints must pass a surface contract whose declaration is PASS and whose source artifact status is `SOURCE_ARTIFACT_VISUAL_ACCEPTED`; current Pháp Lv1 contract remains not production-ready.
 
