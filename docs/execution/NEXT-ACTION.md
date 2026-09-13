@@ -1,3 +1,7 @@
+## Next Map01A UI polish after tab-specific inventory headers — 2026-09-13
+
+Continue visible Map01A UI/UX polish from the owner references. The inventory modal now distinguishes `Hành trang`, `Thông tin`, and `Rương đồ` at the header level and keeps right-side detail behavior. Next safe work should improve visual hierarchy and design-quality item/equipment art only from approved/runtime assets or a reviewed design board; do not add fake/generic icons or random generated item art. Keep Hành trang/Thông tin/Rương đồ separate, reuse shared skin helpers, and re-capture Player evidence after visible changes. Wardrobe/class redraw remains deferred unless a deterministic source/design pipeline is available.
+
 ## Next Map01A UI polish after supplies selected row — 2026-09-13
 
 Continue visible Map01A UI/UX polish from the owner references. The supplies tab now has right-side detail and selected-row feedback; next safe work should improve inventory visual hierarchy/density and design-quality item art when approved assets exist. Keep Hành trang/Thông tin/Rương đồ separate, reuse shared skin helpers, and re-capture Player evidence after visible changes.

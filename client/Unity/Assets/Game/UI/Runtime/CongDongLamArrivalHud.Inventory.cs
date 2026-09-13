@@ -7,7 +7,7 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud
     {
         private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel;
-        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageState;
+        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageState;
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
@@ -64,8 +64,12 @@ namespace LinhGioi.UI
             header.style.alignItems = Align.Center;
             var titleGroup = new VisualElement();
             titleGroup.style.flexGrow = 1;
-            titleGroup.Add(LgoLabel("HÀNH TRANG", 26, UiGold, true));
-            titleGroup.Add(LgoLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 14, new Color(.73f, .85f, .88f, .88f)));
+            _inventoryModalTitle = LgoLabel("HÀNH TRANG", 26, UiGold, true);
+            _inventoryModalTitle.name = "Map01A Inventory Modal Title";
+            _inventoryModalSubtitle = LgoLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 14, new Color(.73f, .85f, .88f, .88f));
+            _inventoryModalSubtitle.name = "Map01A Inventory Modal Subtitle";
+            titleGroup.Add(_inventoryModalTitle);
+            titleGroup.Add(_inventoryModalSubtitle);
             var close = InventoryButton(() => { if (_scene.InventoryOpen) _scene.ToggleInventory(); },
                 "LGO Inventory Close", "×");
             close.tooltip = "Đóng hành trang (I / Esc)";
@@ -373,6 +377,7 @@ namespace LinhGioi.UI
         {
             _characterInfoOpen = characterInfo;
             _storageOpen = false;
+            RefreshInventoryModalHeader();
             RefreshInventoryEquipmentTiles();
             _inventoryGridPanel.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryHeroPanel.style.display = characterInfo ? DisplayStyle.Flex : DisplayStyle.None;
@@ -389,6 +394,7 @@ namespace LinhGioi.UI
         {
             _characterInfoOpen = false;
             _storageOpen = true;
+            RefreshInventoryModalHeader();
             _inventoryGridPanel.style.display = DisplayStyle.None;
             _inventoryHeroPanel.style.display = DisplayStyle.None;
             _storagePanel.style.display = DisplayStyle.Flex;
@@ -397,6 +403,27 @@ namespace LinhGioi.UI
             _bagTab.style.backgroundColor = new Color(.045f,.13f,.18f);
             _characterInfoTab.style.backgroundColor = new Color(.045f,.13f,.18f);
             ApplyLgoSelectedTab(_storageTab, true);
+        }
+
+
+        private void RefreshInventoryModalHeader()
+        {
+            if (_inventoryModalTitle == null || _inventoryModalSubtitle == null) return;
+            if (_storageOpen)
+            {
+                _inventoryModalTitle.text = "RƯƠNG ĐỒ";
+                _inventoryModalSubtitle.text = "Kho gửi/rút sẽ dùng chung panel chi tiết khi có model dữ liệu thật";
+            }
+            else if (_characterInfoOpen)
+            {
+                _inventoryModalTitle.text = "THÔNG TIN";
+                _inventoryModalSubtitle.text = "Xem nhân vật, trang bị đang mặc và chi tiết món bên phải";
+            }
+            else
+            {
+                _inventoryModalTitle.text = "HÀNH TRANG";
+                _inventoryModalSubtitle.text = "Túi đồ, vật phẩm và chi tiết món bên phải";
+            }
         }
 
         private void ShowInventoryPage(bool supplies)

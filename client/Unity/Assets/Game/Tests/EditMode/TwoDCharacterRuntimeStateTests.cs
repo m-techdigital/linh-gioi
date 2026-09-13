@@ -424,8 +424,16 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                var modalTitle = root.Q<Label>("Map01A Inventory Modal Title");
+                var modalSubtitle = root.Q<Label>("Map01A Inventory Modal Subtitle");
+                Assert.That(modalTitle, Is.Not.Null, "Inventory modal needs a named title so each main tab can present its own screen.");
+                Assert.That(modalSubtitle, Is.Not.Null, "Inventory modal needs a named subtitle so tab context is visible in Player captures.");
+                Assert.That(modalTitle.text, Is.EqualTo("THÔNG TIN"),
+                    "Switching to character info must not leave the modal titled HÀNH TRANG.");
+                Assert.That(modalSubtitle.text, Does.Contain("trang bị đang mặc"));
 
                 hud.OpenInventoryReviewMode("supplies");
+                Assert.That(modalTitle.text, Is.EqualTo("HÀNH TRANG"));
                 Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Supplies must keep the right-side detail panel instead of becoming a left-only technical list.");
@@ -451,6 +459,8 @@ namespace LinhGioi.Tests.EditMode
                 hud.OpenInventoryReviewMode("storage");
                 Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(modalTitle.text, Is.EqualTo("RƯƠNG ĐỒ"));
+                Assert.That(modalSubtitle.text, Does.Contain("Kho gửi/rút"));
                 Assert.That(root.Q<Button>("Map01A Storage Deposit").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Storage Withdraw").enabledSelf, Is.False);
             }
