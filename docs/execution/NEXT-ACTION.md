@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after inventory badge helper — 2026-09-13
+
+`CONTINUE`. Inventory badges/chips đã có base chung `ApplyLgoInventoryBadge(...)` / `lgo-inventory-badge`, evidence `build/map01a-inventory-badge-tabs-runtime-v1/`. Rule hiện hành: row/card/chip/badge/panel/button cùng vai trò phải đi qua Skin/shared helper trước; partial chỉ bind data/state/action.
+
+Next valid work: Map01A/UI-only, ưu tiên detail stats card/state badge hoặc login/HUD/dialog theo design owner. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI polish after inventory item row helper — 2026-09-13
 
 `CONTINUE`. Inventory supply/item rows đã có base chung `ApplyLgoInventoryItemRow(...)` và count badge chung `ApplyLgoInventoryCountBadge(...)`; evidence `build/map01a-inventory-item-row-tabs-runtime-v1/` và full Player capture `build/map01a-inventory-item-row-runtime-v1/`. Rule hiện hành: mọi row/card/chip/badge/panel/button cùng vai trò phải đi qua Skin/shared helper trước, partial chỉ bind data/state/action.

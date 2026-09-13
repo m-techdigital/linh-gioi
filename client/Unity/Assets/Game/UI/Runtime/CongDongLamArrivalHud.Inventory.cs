@@ -44,13 +44,7 @@ namespace LinhGioi.UI
         {
             var badge = LgoLabel(text, 13, color, true);
             badge.name = name;
-            badge.style.paddingLeft = 10;
-            badge.style.paddingRight = 10;
-            badge.style.paddingTop = 4;
-            badge.style.paddingBottom = 4;
-            badge.style.marginRight = 6;
-            badge.style.unityTextAlign = TextAnchor.MiddleCenter;
-            ApplyLgoFrame(badge, new Color(.018f, .060f, .096f, .88f), new Color(.72f, .62f, .38f, .62f));
+            ApplyLgoInventoryBadge(badge);
             return badge;
         }
 

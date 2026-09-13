@@ -247,6 +247,10 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory filter chips must use a shared base style instead of local per-button overrides.");
                 Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Not.Null,
                     "Bag category controls should read like compact RPG filter chips, not a pair of full-width debug table tabs.");
+                Assert.That(root.Q<Label>("Map01A Inventory Count Badge").ClassListContains("lgo-inventory-badge"), Is.True,
+                    "Inventory count badge must share the reusable inventory badge base instead of hand-styling status chips per section.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Level Chip").ClassListContains("lgo-inventory-badge"), Is.True,
+                    "Detail chips must share the same inventory badge base as grid and character status badges.");
                 var inventoryGridPanel = root.Q("Map01A Inventory Grid Panel");
                 Assert.That(inventoryGridPanel.ClassListContains("lgo-inventory-panel-shell"), Is.True,
                     "Inventory content panels must share a shell base instead of each flow styling a flat panel separately.");

@@ -17,6 +17,7 @@ namespace LinhGioi.UI
         private const string LgoInventoryPanelShellClass = "lgo-inventory-panel-shell";
         private const string LgoInventoryItemRowClass = "lgo-inventory-item-row";
         private const string LgoInventoryCountBadgeClass = "lgo-inventory-count-badge";
+        private const string LgoInventoryBadgeClass = "lgo-inventory-badge";
         private const string LgoInventoryMainTabClass = "lgo-inventory-main-tab";
         private const string LgoInventoryFilterChipClass = "lgo-inventory-filter-chip";
         private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
@@ -182,6 +183,16 @@ namespace LinhGioi.UI
             badge.style.paddingTop = badge.style.paddingBottom = 3;
             badge.style.unityTextAlign = TextAnchor.MiddleCenter;
             ApplyLgoFrame(badge, new Color(.020f, .060f, .088f, .90f), new Color(.92f, .72f, .36f, .55f));
+        }
+
+        private static void ApplyLgoInventoryBadge(Label badge)
+        {
+            badge.AddToClassList(LgoInventoryBadgeClass);
+            badge.style.paddingLeft = badge.style.paddingRight = 10;
+            badge.style.paddingTop = badge.style.paddingBottom = 4;
+            badge.style.marginRight = 6;
+            badge.style.unityTextAlign = TextAnchor.MiddleCenter;
+            ApplyLgoFrame(badge, new Color(.018f, .060f, .096f, .88f), new Color(.72f, .62f, .38f, .62f));
         }
 
         private static void ApplyLgoSelectedTab(Button button, bool selected)

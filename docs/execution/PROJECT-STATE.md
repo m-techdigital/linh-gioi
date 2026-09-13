@@ -1,3 +1,10 @@
+## Map01A — inventory badge/chip base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- `InventoryBadge(...)` giờ chỉ tạo label/data, còn nền/padding/frame dùng shared `ApplyLgoInventoryBadge(...)` và class `lgo-inventory-badge`; count/status/detail/category/character chips không giữ skin riêng trong partial.
+- RED/GREEN: targeted EditMode fail đúng khi `Map01A Inventory Count Badge` chưa có `lgo-inventory-badge`, sau refactor pass; shared-skin validator/unit test cập nhật marker helper mới.
+- Player evidence: build `build/map01a-inventory-badge-player-v1/LinhGioiOnline.app`; inventory tab capture `build/map01a-inventory-badge-tabs-runtime-v1/{bag,character-info,supplies,storage}.png`. Visual review: bag/detail chips không vỡ layout; vẫn chưa phải nghiệm thu mỹ thuật cuối.
+
 ## Map01A — inventory item row/count badge base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
