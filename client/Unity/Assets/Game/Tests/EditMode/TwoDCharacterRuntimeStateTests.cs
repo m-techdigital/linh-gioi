@@ -345,7 +345,7 @@ namespace LinhGioi.Tests.EditMode
                 var passwordPlaceholder = root.Q<Label>("Map01A Entry Password Placeholder").text;
                 Assert.That(passwordPlaceholder, Does.Contain("Mật khẩu"));
                 Assert.That(passwordPlaceholder, Does.Not.Contain("🔒"), "Login must not use temporary emoji glyphs as field icons.");
-                Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("review"));
+                Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("trải nghiệm"));
                 Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
                 Assert.That(root.Q<Label>("Map01A Entry Server State").text, Does.Contain("Mượt"));
@@ -359,11 +359,22 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Entry Primary Cta Row"), Is.Not.Null,
                     "Entry reference uses the start action as its own gold CTA row instead of burying it beside secondary auth actions.");
                 Assert.That(root.Q("Map01A Entry Secondary Actions"), Is.Not.Null,
-                    "Secondary dev/login actions should stay visually subordinate to the primary start CTA.");
-                Assert.That(start.style.minHeight.value.value, Is.GreaterThan(root.Q<Button>("Map01A Entry Login Button").style.minHeight.value.value));
+                    "Secondary login actions should stay visually subordinate to the primary start CTA.");
+                var loginButton = root.Q<Button>("Map01A Entry Login Button");
+                Assert.That(loginButton.text, Does.Contain("Vào nhanh"));
+                Assert.That(loginButton.text, Does.Not.Contain("dev"), "Entry/login surface must not expose developer wording to the player.");
+                Assert.That(start.style.minHeight.value.value, Is.GreaterThan(loginButton.style.minHeight.value.value));
                 Assert.That(start.style.maxWidth.value.value, Is.GreaterThan(300));
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
                 Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));
+                Assert.That(overlay.style.backgroundColor.value.a, Is.LessThanOrEqualTo(.88f),
+                    "Entry/login should keep the Đông Lâm scene visible behind the glass layer instead of blacking it out.");
+                Assert.That(root.Q("Map01A Entry Control Card"), Is.Not.Null,
+                    "Login fields, auth options and server selection should sit inside one design card, matching the owner reference hierarchy.");
+                Assert.That(root.Q("Map01A Entry Ornament Top"), Is.Not.Null,
+                    "Entry/login needs a simple shared ornament separator instead of a plain blocky form stack.");
+                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Not.Contain("production auth"),
+                    "Runtime login copy should be player-facing and must not expose implementation wording on the main screen.");
                 Assert.That(root.Q("Map01A Entry Auth Options"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Entry Remember Box"), Is.Not.Null,
                     "Remember-account state should use a UI element box, not a temporary checkbox glyph.");
@@ -373,7 +384,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Entry Forgot Password").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Entry Support Link").enabledSelf, Is.False);
                 Assert.That(start.text, Does.Contain("Bắt đầu"));
-                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("dev"));
+                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("local"));
                 foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ" })
                 {
                     var sideAction = root.Q<Button>("Map01A Entry Side Action " + name);

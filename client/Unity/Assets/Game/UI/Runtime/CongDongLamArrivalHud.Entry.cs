@@ -19,7 +19,7 @@ namespace LinhGioi.UI
             _entryOverlay.style.right = 0;
             _entryOverlay.style.top = 0;
             _entryOverlay.style.bottom = 0;
-            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .94f);
+            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .86f);
             _entryOverlay.style.justifyContent = Justify.Center;
             _entryOverlay.style.alignItems = Align.Center;
 
@@ -50,7 +50,7 @@ namespace LinhGioi.UI
             noticeTitle.name = "Map01A Entry Notice Title";
             noticeTitle.style.marginBottom = 6;
             notice.Add(noticeTitle);
-            var noticeLine = new Label("• Cổng Đông Lâm mở bản review 2D · UI còn trong giai đoạn chỉnh mỹ thuật") { name = "Map01A Entry Notice Line" };
+            var noticeLine = new Label("• Cổng Đông Lâm mở bản trải nghiệm 2D") { name = "Map01A Entry Notice Line" };
             noticeLine.style.color = new Color(.90f, .94f, .90f, .92f);
             noticeLine.style.fontSize = 14;
             notice.Add(noticeLine);
@@ -97,24 +97,42 @@ namespace LinhGioi.UI
             motto.style.marginBottom = 16;
             panel.Add(motto);
 
+            var controlCard = new VisualElement { name = "Map01A Entry Control Card" };
+            controlCard.style.paddingLeft = 18;
+            controlCard.style.paddingRight = 18;
+            controlCard.style.paddingTop = 16;
+            controlCard.style.paddingBottom = 16;
+            controlCard.style.marginTop = 2;
+            controlCard.style.marginBottom = 14;
+            ApplyLgoFrame(controlCard, new Color(.012f, .044f, .074f, .90f), new Color(.86f, .66f, .34f, .66f));
+            panel.Add(controlCard);
+
+            var ornamentTop = new VisualElement { name = "Map01A Entry Ornament Top" };
+            ornamentTop.style.height = 2;
+            ornamentTop.style.width = Length.Percent(62);
+            ornamentTop.style.alignSelf = Align.Center;
+            ornamentTop.style.marginBottom = 12;
+            ornamentTop.style.backgroundColor = new Color(.95f, .75f, .36f, .70f);
+            controlCard.Add(ornamentTop);
+
             var loginTitle = new Label("Đăng nhập") { name = "Map01A Entry Login Title" };
             loginTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
             loginTitle.style.fontSize = 22;
             loginTitle.style.color = new Color(.95f, .75f, .36f, .96f);
-            panel.Add(loginTitle);
+            controlCard.Add(loginTitle);
 
-            panel.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "Tài khoản / Email / Số điện thoại"));
-            panel.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "Mật khẩu"));
-            panel.Add(MakeEntryAuthOptions());
+            controlCard.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "Tài khoản / Email / Số điện thoại"));
+            controlCard.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "Mật khẩu"));
+            controlCard.Add(MakeEntryAuthOptions());
 
-            var authScope = new Label("review local: form hiển thị theo UI/UX, chưa gửi tài khoản hoặc mật khẩu thật.")
+            var authScope = new Label("Thông tin chỉ dùng để vào bản trải nghiệm, không gửi dữ liệu thật.")
             {
                 name = "Map01A Entry Auth Scope"
             };
             authScope.style.fontSize = 13;
             authScope.style.color = new Color(.66f, .82f, .90f, .88f);
             authScope.style.marginBottom = 10;
-            panel.Add(authScope);
+            controlCard.Add(authScope);
 
             var serverCard = new VisualElement { name = "Map01A Entry Server Card" };
             serverCard.style.flexDirection = FlexDirection.Row;
@@ -140,15 +158,15 @@ namespace LinhGioi.UI
             serverCard.Add(serverName);
             serverCard.Add(serverState);
             serverCard.Add(serverSwitch);
-            panel.Add(serverCard);
+            controlCard.Add(serverCard);
 
-            var brandSeal = LgoLabel("S1 · Đông Lâm · bản review 2D", 14, UiGold, true);
+            var brandSeal = LgoLabel("S1 · Đông Lâm · bản trải nghiệm 2D", 14, UiGold, true);
             brandSeal.name = "Map01A Entry Brand Seal";
             brandSeal.style.unityTextAlign = TextAnchor.MiddleCenter;
             brandSeal.style.marginBottom = 8;
             panel.Add(brandSeal);
 
-            _entryStatus = new Label("Tài khoản dev/local dùng cho review UI. Chưa mở mật khẩu, đăng ký hoặc production auth.") { name = "Map01A Entry Safety Note" };
+            _entryStatus = new Label("Tài khoản local dùng cho bản trải nghiệm. Chưa mở đăng ký hoặc xác thực thật.") { name = "Map01A Entry Safety Note" };
             _entryStatus.style.fontSize = 14;
             _entryStatus.style.whiteSpace = WhiteSpace.Normal;
             _entryStatus.style.color = new Color(.72f, .86f, .92f, .90f);
@@ -176,19 +194,19 @@ namespace LinhGioi.UI
             secondaryActions.style.marginTop = 10;
             panel.Add(secondaryActions);
 
-            var login = new Button(() => _entryStatus.text = "Đăng nhập dev/local đã sẵn sàng cho preview; không gửi mật khẩu hoặc token thật.")
+            var login = new Button(() => _entryStatus.text = "Vào nhanh bằng tài khoản local để kiểm tra Map01A; không gửi mật khẩu hoặc token thật.")
             {
                 name = "Map01A Entry Login Button",
-                text = "Đăng nhập dev"
+                text = "Vào nhanh"
             };
             StyleEntryButton(login, false);
             secondaryActions.Add(login);
 
-            var character = new Label("Nhân vật: LụcThiên · Cổng Đông Lâm · dùng runtime Map01A hiện hành") { name = "Map01A Entry Character Summary" };
-            character.style.fontSize = 15;
+            var character = new Label("Nhân vật: LụcThiên · Cổng Đông Lâm") { name = "Map01A Entry Character Summary" };
+            character.style.fontSize = 13;
             character.style.color = new Color(.90f, .86f, .72f, .96f);
             character.style.unityTextAlign = TextAnchor.MiddleCenter;
-            character.style.marginTop = 18;
+            character.style.marginTop = 12;
             panel.Add(character);
 
             _root.Add(_entryOverlay);
@@ -274,8 +292,8 @@ namespace LinhGioi.UI
 
         private static void StyleEntryButton(Button button, bool primary)
         {
-            button.style.minWidth = primary ? 230 : 170;
-            button.style.minHeight = primary ? 64 : 50;
+            button.style.minWidth = primary ? 230 : 156;
+            button.style.minHeight = primary ? 58 : 42;
             ApplyLgoButton(button, primary);
         }
 
