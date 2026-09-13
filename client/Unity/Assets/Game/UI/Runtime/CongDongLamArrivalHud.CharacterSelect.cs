@@ -50,8 +50,7 @@ namespace LinhGioi.UI
             actions.style.justifyContent = Justify.Center;
             actions.style.marginTop = 16;
             var close = new Button(CloseCharacterSelect) { name = "Map01A Character Select Close", text = "Vào Cổng Đông Lâm" };
-            close.style.minWidth = 220;
-            ApplyLgoButton(close, true);
+            ApplyLgoCharacterSelectPrimaryAction(close);
             actions.Add(close);
             panel.Add(actions);
 
@@ -70,15 +69,7 @@ namespace LinhGioi.UI
             var heldOut = label == "Pháp";
             var status = heldOut ? "đang audit" : "Lv review";
             var card = new Button(() => SelectCharacterCard(label)) { name = "Map01A Character Card " + label, text = label + "\n" + status + " · " + ClassRole(label) };
-            card.style.flexGrow = 0;
-            card.style.flexBasis = new Length(30.5f, LengthUnit.Percent);
-            card.style.height = 116;
-            card.style.marginRight = 8;
-            card.style.marginBottom = 8;
-            card.style.fontSize = 19;
-            card.style.whiteSpace = WhiteSpace.Normal;
-            card.style.unityTextAlign = TextAnchor.MiddleCenter;
-            ApplyLgoButton(card);
+            ApplyLgoCharacterSelectCard(card);
             card.SetEnabled(!heldOut);
             if (heldOut) ApplyLgoDisabledAction(card);
             return card;

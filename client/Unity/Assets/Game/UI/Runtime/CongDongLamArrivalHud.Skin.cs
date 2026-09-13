@@ -26,6 +26,8 @@ namespace LinhGioi.UI
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
         private const string LgoEntrySecondaryActionClass = "lgo-entry-secondary-action";
         private const string LgoEntrySideActionClass = "lgo-entry-side-action";
+        private const string LgoCharacterSelectCardClass = "lgo-character-select-card";
+        private const string LgoCharacterSelectPrimaryActionClass = "lgo-character-select-primary-action";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -216,6 +218,27 @@ namespace LinhGioi.UI
             button.style.marginBottom = 10;
             button.style.fontSize = 13;
             button.style.whiteSpace = WhiteSpace.NoWrap;
+        }
+
+        private static void ApplyLgoCharacterSelectCard(Button card)
+        {
+            card.AddToClassList(LgoCharacterSelectCardClass);
+            card.style.flexGrow = 0;
+            card.style.flexBasis = new Length(30.5f, LengthUnit.Percent);
+            card.style.height = 116;
+            card.style.marginRight = 8;
+            card.style.marginBottom = 8;
+            card.style.fontSize = 19;
+            card.style.whiteSpace = WhiteSpace.Normal;
+            card.style.unityTextAlign = TextAnchor.MiddleCenter;
+            ApplyLgoButton(card);
+        }
+
+        private static void ApplyLgoCharacterSelectPrimaryAction(Button button)
+        {
+            button.AddToClassList(LgoCharacterSelectPrimaryActionClass);
+            button.style.minWidth = 220;
+            ApplyLgoButton(button, true);
         }
 
         private static void ApplyLgoDialoguePrimaryAction(Button button)

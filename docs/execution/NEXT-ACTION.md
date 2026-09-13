@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after character select helper — 2026-09-13
+
+`CONTINUE`. Character select card/CTA đã đi qua shared helpers/classes và có Player evidence `build/map01a-character-select-base-style-runtime-v1/character-select.png`. Quy tắc hiện hành: UI/UX giống nhau phải đi qua base/shared helper trước, kèm guard test/validator nếu là pattern tái diễn; không tự build button/card/modal/dialog/grid lẻ theo từng màn.
+
+Next valid work: tiếp tục Map01A/UI-only theo design owner, ưu tiên inventory/dialog shell/card/detail pattern còn lặp hoặc visual richness bằng shared base và asset runtime/approved/provenance-backed. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI polish after HUD context helper — 2026-09-13
 
 `CONTINUE`. HUD context actions, combat actions, shortcuts, quest tabs, dialogue actions và entry actions đã đi qua shared helpers/classes. Evidence mới: `build/map01a-hud-context-action-base-style-runtime-v1/01-arrival-q01.png`.

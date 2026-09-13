@@ -1,3 +1,10 @@
+## Map01A — character select base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Character select cards (`Võ`, `Kiếm`, `Pháp`, `Cơ`, `Linh`) và CTA đóng/vào cổng đã chuyển từ inline sizing sang shared helpers/classes: `ApplyLgoCharacterSelectCard(...)`, `ApplyLgoCharacterSelectPrimaryAction(...)`, `lgo-character-select-card`, `lgo-character-select-primary-action`.
+- RED/GREEN: targeted EditMode fail đúng khi card/CTA chưa có shared base class, sau đó pass sau refactor; shared-skin validator/unit test cập nhật để khóa helper semantic mới.
+- Player evidence: `build/map01a-character-select-base-style-runtime-v1/character-select.png`, manifest cùng thư mục, capture graphics Player không dùng `-nographics`. Visual review: modal review local không vỡ layout và không dựng card riêng lẻ; vẫn `CONTINUE`, chưa phải nghiệm thu redesign character-select cuối cùng theo concept owner.
+
 ## Map01A — HUD context action base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

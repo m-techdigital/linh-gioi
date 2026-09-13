@@ -23,6 +23,8 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoDialogueSecondaryAction",
     "ApplyLgoEntrySecondaryAction",
     "ApplyLgoEntrySideAction",
+    "ApplyLgoCharacterSelectCard",
+    "ApplyLgoCharacterSelectPrimaryAction",
 ]
 FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+readonly\s+Color\s+(?!Ui)[A-Za-z0-9_]*(Glass|Gold|Blue|Border|Text|SubText)"),
@@ -77,7 +79,8 @@ REQUIRED_PARTIAL_MARKERS = {
     ],
     "CongDongLamArrivalHud.CharacterSelect.cs": [
         "ApplyLgoModalShell(panel, 20)",
-        "ApplyLgoButton(card)",
+        "ApplyLgoCharacterSelectCard(card)",
+        "ApplyLgoCharacterSelectPrimaryAction(close)",
         "UpdateHudShellVisibility()",
     ],
     "CongDongLamArrivalHud.Inventory.cs": [

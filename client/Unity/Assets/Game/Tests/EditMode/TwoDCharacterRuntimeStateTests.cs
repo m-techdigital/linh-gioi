@@ -362,7 +362,15 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Label>("Map01A Character Select Title").text, Does.Contain("Chọn Nhân Vật"));
                 foreach (var label in new[] { "Võ", "Kiếm", "Pháp", "Cơ", "Linh" })
-                    Assert.That(root.Q<Button>("Map01A Character Card " + label), Is.Not.Null);
+                {
+                    var card = root.Q<Button>("Map01A Character Card " + label);
+                    Assert.That(card, Is.Not.Null);
+                    Assert.That(card.ClassListContains("lgo-character-select-card"), Is.True,
+                        "Character select cards must use the shared card base instead of local one-off sizing.");
+                }
+                var close = root.Q<Button>("Map01A Character Select Close");
+                Assert.That(close.ClassListContains("lgo-character-select-primary-action"), Is.True,
+                    "Character select primary action must use a shared modal CTA base for consistent density.");
                 var phap = root.Q<Button>("Map01A Character Card Pháp");
                 Assert.That(phap.enabledSelf, Is.False, "Pháp must stay visible but disabled while source promotion is held out");
                 Assert.That(phap.text, Does.Contain("đang audit"));

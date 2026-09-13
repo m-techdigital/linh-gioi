@@ -142,3 +142,8 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-hud-context-action-base-style-runtime-v1/01-arrival-q01.png` plus full PC route capture in `build/map01a-hud-context-action-base-style-runtime-v1/`.
 - Result: gameplay context buttons (`Tương tác`, `Nói chuyện`, `Nhân vật`, `Hành trang`) now share `ApplyLgoHudContextAction(...)` and `lgo-hud-context-action`, replacing local height/width/white-space styling.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms context actions remain compact and do not look like oversized modal CTAs.
+## 2026-09-13 — Character select base-first helper evidence
+
+- Evidence: `build/map01a-character-select-base-style-runtime-v1/character-select.png` and `manifest.json`.
+- Result: character-select cards and primary close/enter CTA now use shared skin helpers/classes rather than local one-off sizing.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance or class-art approval. This is a base-first guard checkpoint for the Map01A local review modal.
