@@ -1,3 +1,11 @@
+## Map01A — entry background and side-action visual correction, still CONTINUE — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class/wardrobe/pose/source/camera/scale; không rollback class code; không tạo icon/item art giả.
+- Root cause visible trên Player: entry overlay alpha `.62` làm nền Đông Lâm quá tối, và `ApplyLgoEntrySideAction(...)` dùng disabled style nên `Thông Báo/Cài Đặt/Hỗ Trợ` nhìn như control hỏng/placeholder.
+- Batch này giảm overlay alpha xuống `.50`, chuyển side actions sang shared active `ApplyLgoButton(...)` với opacity `.90`, và gắn callback cập nhật status nội bộ để không còn nút sống nhưng không phản hồi. Đây là polish an toàn, chưa phải redesign cuối.
+- Evidence Player thật: `client/Unity/build/map01a-entry-side-action-player-v1/LinhGioiOnline.app`, capture `build/map01a-entry-side-action-runtime-v1/entry-login.png`; catalog hiện hành được refresh tại `build/map01a-entry-form-runtime/entry-login.png`, manifest `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`. Đã xem bằng mắt: sáng/đọc tốt hơn nhưng UI vẫn `CONTINUE`, còn xa reference về logo/icon/ornament/card richness.
+- Guard: RED overlay quá tối, GREEN targeted EditMode `EntryScreenSeparatesDevLoginAndStartWithoutChangingMapState`.
+
 ## Map01A — entry shell compact base-first checkpoint, still visual CONTINUE — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.

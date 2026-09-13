@@ -19,7 +19,7 @@ namespace LinhGioi.UI
             _entryOverlay.style.right = 0;
             _entryOverlay.style.top = 0;
             _entryOverlay.style.bottom = 0;
-            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .62f);
+            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .50f);
             _entryOverlay.style.justifyContent = Justify.Center;
             _entryOverlay.style.alignItems = Align.Center;
 
@@ -58,9 +58,9 @@ namespace LinhGioi.UI
             sideActions.style.top = 80;
             sideActions.style.width = 132;
             _entryOverlay.Add(sideActions);
-            AddEntrySideAction(sideActions, "Thông Báo");
-            AddEntrySideAction(sideActions, "Cài Đặt");
-            AddEntrySideAction(sideActions, "Hỗ Trợ");
+            AddEntrySideAction(sideActions, "Thông Báo", "Thông báo máy chủ Đông Lâm đang mở ở góc trái dưới.");
+            AddEntrySideAction(sideActions, "Cài Đặt", "Cài đặt sẽ mở sau; hiện dùng cấu hình trải nghiệm 2D mặc định.");
+            AddEntrySideAction(sideActions, "Hỗ Trợ", "Hỗ trợ sẽ mở sau; bản trải nghiệm hiện chạy local để kiểm Map01A.");
 
             var panelGlow = new VisualElement { name = "Map01A Entry Panel Glow" };
             panelGlow.style.position = Position.Absolute;
@@ -216,9 +216,16 @@ namespace LinhGioi.UI
             return rail;
         }
 
-        private static void AddEntrySideAction(VisualElement parent, string text)
+        private void AddEntrySideAction(VisualElement parent, string text, string status)
         {
-            var button = new Button { name = "Map01A Entry Side Action " + text, text = text };
+            var button = new Button(() =>
+            {
+                if (_entryStatus != null) _entryStatus.text = status;
+            })
+            {
+                name = "Map01A Entry Side Action " + text,
+                text = text
+            };
             ApplyLgoEntrySideAction(button);
             parent.Add(button);
         }

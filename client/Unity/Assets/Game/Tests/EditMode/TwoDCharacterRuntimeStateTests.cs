@@ -583,8 +583,15 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(entryLoginTitle.style.fontSize.value.value, Is.LessThanOrEqualTo(20),
                     "Entry/login form title should stay compact against the owner reference rather than using oversized web-form typography.");
                 Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));
-                Assert.That(overlay.style.backgroundColor.value.a, Is.LessThanOrEqualTo(.66f),
+                Assert.That(overlay.style.backgroundColor.value.a, Is.LessThanOrEqualTo(.54f),
                     "Entry/login should keep the Đông Lâm scene visible behind the glass layer instead of blacking it out.");
+                var entrySideNav = root.Q<Button>("Map01A Entry Side Action Thông Báo");
+                Assert.That(entrySideNav.ClassListContains("lgo-entry-side-action"), Is.True,
+                    "Entry side actions must share one reusable side-action base.");
+                Assert.That(entrySideNav.enabledSelf, Is.True,
+                    "Entry side actions are navigation affordances and should not look disabled like placeholder debug controls.");
+                Assert.That(entrySideNav.style.opacity.value, Is.GreaterThanOrEqualTo(.82f),
+                    "Entry side actions should read as available controls instead of dim disabled blocks.");
                 Assert.That(root.Q("Map01A Entry Panel Glow"), Is.Not.Null,
                     "Entry/login needs a reusable visual depth layer so it does not read like a flat HTML form.");
                 Assert.That(root.Q("Map01A Entry Cta Ornament Left"), Is.Not.Null,
@@ -631,7 +638,7 @@ namespace LinhGioi.Tests.EditMode
                 {
                     var sideAction = root.Q<Button>("Map01A Entry Side Action " + name);
                     Assert.That(sideAction, Is.Not.Null);
-                    Assert.That(sideAction.enabledSelf, Is.False, "Entry/login side actions must not be clickable dead buttons.");
+                    Assert.That(sideAction.enabledSelf, Is.True, "Entry/login side actions should be active navigation affordances with status feedback.");
                     Assert.That(sideAction.ClassListContains("lgo-entry-side-action"), Is.True,
                         "Entry side actions must use the shared entry side-action base instead of local inline sizing.");
                     Assert.That(sideAction.text, Is.EqualTo(name));

@@ -1,3 +1,9 @@
+## Next — Map01A UI polish after entry background/side-action correction — 2026-09-13
+
+`CONTINUE`. Entry/login đã bớt tối nền và side actions không còn giống disabled placeholder, nhưng vẫn chưa sát design owner. Tiếp tục Map01A/UI-only: ưu tiên redesign visual richness có tiêu chí rõ cho login/HUD/NPC dialogue/inventory bằng shared skin/base; cần logo/icon/ornament/card treatment thật/provenance-backed thay vì chỉnh màu lẻ.
+
+Không resume class/wardrobe/pose/source, không chạy class build/capture loops, không rollback class code, không thêm icon/item art giả hoặc random generated. Mọi visible batch phải có Player screenshot review bằng mắt; nếu ảnh còn xa design thì ghi `CONTINUE` hoặc `FIX_REQUIRED`, không gọi completed.
+
 ## Next — Map01A UI polish after compact entry shell — 2026-09-13
 
 `CONTINUE`. Entry/login đã có shared `lgo-entry-shell` và density gọn hơn, nhưng vẫn chưa sát design owner. Tiếp tục Map01A/UI-only: ưu tiên polish visual richness theo reference owner cho login/HUD/NPC dialogue/inventory, giảm cảm giác web/debug panel, chuẩn hóa typography/button density bằng shared helpers, và chỉ dùng runtime/approved/provenance-backed assets.

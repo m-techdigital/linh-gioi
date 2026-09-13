@@ -384,10 +384,11 @@ namespace LinhGioi.UI
         private static void ApplyLgoEntrySideAction(Button button)
         {
             button.AddToClassList(LgoEntrySideActionClass);
-            ApplyLgoDisabledAction(button);
+            ApplyLgoButton(button);
             button.style.height = 38;
             button.style.marginBottom = 10;
             button.style.fontSize = 13;
+            button.style.opacity = .90f;
             button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 

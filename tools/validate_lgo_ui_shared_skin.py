@@ -191,7 +191,7 @@ REQUIRED_TEST_MARKERS = [
     "Item detail must stay on the right side of the bag grid",
     "CharacterSelectModalUsesSharedSkinAndDoesNotAdvanceQuest",
     "Entry/login must not leave the in-game HUD visible behind the modal",
-    "Entry/login side actions must not be clickable dead buttons",
+    "Entry/login side actions should be active navigation affordances with status feedback",
 ]
 
 
