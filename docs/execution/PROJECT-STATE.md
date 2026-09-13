@@ -1,3 +1,10 @@
+## Map01A — inventory item row/count badge base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Supply item rows/count badges giờ dùng shared `ApplyLgoInventoryItemRow(...)` và `ApplyLgoInventoryCountBadge(...)` với classes `lgo-inventory-item-row`/`lgo-inventory-count-badge`, tránh mỗi tab vật phẩm tự style row/count riêng.
+- Test guard: targeted EditMode kiểm row/count class trong `InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection`; shared-skin validator/unit test cập nhật marker helper mới.
+- Player evidence: build `build/map01a-inventory-item-row-player-v1/LinhGioiOnline.app`; inventory tab capture `build/map01a-inventory-item-row-tabs-runtime-v1/{bag,character-info,supplies,storage}.png`. Visual review: supplies tab không vỡ layout; row item cần review thêm khi có trạng thái nhận vật phẩm, chưa phải nghiệm thu mỹ thuật.
+
 ## Map01A — inventory panel shell base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

@@ -657,6 +657,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Supplies Empty State").text, Does.Contain("Chưa nhận"));
                 Assert.That(root.Q<Button>("Map01A Health Potion").text, Is.Empty,
                     "Supply rows must be composed cards, not plain Button.text labels that look like temporary debug UI.");
+                Assert.That(root.Q<Button>("Map01A Health Potion").ClassListContains("lgo-inventory-item-row"), Is.True,
+                    "Supply rows must share the inventory item row base instead of each item tab styling rows separately.");
+                Assert.That(root.Q<Label>("Map01A Supply Item Count health_potion").ClassListContains("lgo-inventory-count-badge"), Is.True,
+                    "Supply count badges must use the shared count badge base so item grids and lists stay visually consistent.");
                 Assert.That(root.Q<Label>("Map01A Supply Item Name health_potion").text, Is.EqualTo("Bình Máu Nhỏ"));
                 Assert.That(root.Q<Label>("Map01A Supply Item Count health_potion").text, Does.Contain("x0"));
                 Assert.That(root.Q<Label>("Map01A Supply Item State health_potion").text, Does.Contain("Thiếu điều kiện"));

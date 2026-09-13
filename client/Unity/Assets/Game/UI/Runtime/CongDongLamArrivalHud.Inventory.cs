@@ -58,19 +58,7 @@ namespace LinhGioi.UI
         private Button SupplyItemRow(Action action, string name, string itemId, out Label nameLabel, out Label countLabel, out Label stateLabel)
         {
             var row = InventoryButton(action, name);
-            row.text = string.Empty;
-            row.style.flexGrow = 0;
-            row.style.flexBasis = StyleKeyword.Auto;
-            row.style.minHeight = _touch ? 58 : 52;
-            row.style.marginBottom = 8;
-            row.style.paddingLeft = 12;
-            row.style.paddingRight = 12;
-            row.style.paddingTop = 7;
-            row.style.paddingBottom = 7;
-            row.style.flexDirection = FlexDirection.Row;
-            row.style.alignItems = Align.Center;
-            row.style.justifyContent = Justify.FlexStart;
-            row.style.unityTextAlign = TextAnchor.MiddleLeft;
+            ApplyLgoInventoryItemRow(row, _touch);
 
             var textGroup = new VisualElement { name = "Map01A Supply Item Text " + itemId };
             textGroup.style.flexGrow = 1;
@@ -86,13 +74,7 @@ namespace LinhGioi.UI
 
             countLabel = LgoLabel("", 14, UiGold, true);
             countLabel.name = "Map01A Supply Item Count " + itemId;
-            countLabel.style.flexGrow = 0;
-            countLabel.style.marginLeft = 10;
-            countLabel.style.paddingLeft = 8;
-            countLabel.style.paddingRight = 8;
-            countLabel.style.paddingTop = 3;
-            countLabel.style.paddingBottom = 3;
-            ApplyLgoFrame(countLabel, new Color(.020f, .060f, .088f, .90f), new Color(.92f, .72f, .36f, .55f));
+            ApplyLgoInventoryCountBadge(countLabel);
 
             row.Add(textGroup);
             row.Add(countLabel);

@@ -15,6 +15,8 @@ namespace LinhGioi.UI
         private static readonly Color UiSubText = new Color(.73f, .85f, .88f, .90f);
         private const string LgoInventoryButtonBaseClass = "lgo-inventory-button-base";
         private const string LgoInventoryPanelShellClass = "lgo-inventory-panel-shell";
+        private const string LgoInventoryItemRowClass = "lgo-inventory-item-row";
+        private const string LgoInventoryCountBadgeClass = "lgo-inventory-count-badge";
         private const string LgoInventoryMainTabClass = "lgo-inventory-main-tab";
         private const string LgoInventoryFilterChipClass = "lgo-inventory-filter-chip";
         private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
@@ -153,6 +155,33 @@ namespace LinhGioi.UI
             button.style.fontSize = 15;
             button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
+        }
+
+        private static void ApplyLgoInventoryItemRow(Button row, bool touch)
+        {
+            row.AddToClassList(LgoInventoryItemRowClass);
+            row.text = string.Empty;
+            row.style.flexGrow = 0;
+            row.style.flexBasis = StyleKeyword.Auto;
+            row.style.minHeight = touch ? 58 : 52;
+            row.style.marginBottom = 8;
+            row.style.paddingLeft = row.style.paddingRight = 12;
+            row.style.paddingTop = row.style.paddingBottom = 7;
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            row.style.justifyContent = Justify.FlexStart;
+            row.style.unityTextAlign = TextAnchor.MiddleLeft;
+        }
+
+        private static void ApplyLgoInventoryCountBadge(Label badge)
+        {
+            badge.AddToClassList(LgoInventoryCountBadgeClass);
+            badge.style.flexGrow = 0;
+            badge.style.marginLeft = 10;
+            badge.style.paddingLeft = badge.style.paddingRight = 8;
+            badge.style.paddingTop = badge.style.paddingBottom = 3;
+            badge.style.unityTextAlign = TextAnchor.MiddleCenter;
+            ApplyLgoFrame(badge, new Color(.020f, .060f, .088f, .90f), new Color(.92f, .72f, .36f, .55f));
         }
 
         private static void ApplyLgoSelectedTab(Button button, bool selected)

@@ -157,3 +157,8 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-panel-shell-runtime-v1/bag.png`, `character-info.png`, `supplies.png`, `storage.png`, and `manifest.json`.
 - Result: inventory content panels now share `ApplyLgoInventoryPanelShell(...)` / `lgo-inventory-panel-shell` rather than each flow owning a flat panel shell.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms layout did not break; final inventory visual richness still needs deeper polish and approved/provenance-backed item art.
+## 2026-09-13 — Inventory item row/count badge base-first helper evidence
+
+- Evidence: `build/map01a-inventory-item-row-tabs-runtime-v1/supplies.png`, plus `bag.png`, `character-info.png`, `storage.png`, and `manifest.json`.
+- Result: supply item rows and their quantity badges now share `ApplyLgoInventoryItemRow(...)` / `ApplyLgoInventoryCountBadge(...)` instead of keeping row/card badge styling inside the inventory partial.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms the supplies tab layout did not break; final inventory visual richness still needs deeper polish and approved/provenance-backed item art.
