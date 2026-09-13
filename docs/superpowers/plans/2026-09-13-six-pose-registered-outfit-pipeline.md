@@ -108,6 +108,8 @@ Authoring workspace 2026-09-13: `tools/prepare_lgo_six_pose_source_authoring_wor
 
 Selection provenance audit 2026-09-13: `tools/audit_lgo_source_staging_selection.py` wrote `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-staging-selection-audit-v2.json`, status `SOURCE_STAGING_SELECTION_REVIEW_ONLY`. The staged selection does not use visual/prior rejected directories. The audit also records blocked sources so they are not reused by accident: `outer-top-run-four-material-v1`, `outer-top-run-four-material-v2` and `waist-belt-material-idle-v1` are prior-rejected; `outer-top-material-idle-v3..v8` are rejected/preserved for lessons.
 
+Slot envelope gate 2026-09-13: `tools/audit_lgo_slot_envelope_fit.py` converts each target's `slotGuide` into a numeric source-space envelope before source staging. Test `tools/test_audit_lgo_slot_envelope_fit.py` proves the `waist_belt/jump_tuck` ImageGen alpha-cleanup candidate is rejected before staging (`bbox 708x540`, center distance `75.25px`, limits `267x146` and `55px`), while a small in-slot line candidate passes only as `SLOT_ENVELOPE_FIT_PASS_REVIEW_REQUIRED`. Passing this gate does not mean visual acceptance or Player readiness.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.
