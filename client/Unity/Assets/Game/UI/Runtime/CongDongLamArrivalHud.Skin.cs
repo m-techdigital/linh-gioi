@@ -30,6 +30,8 @@ namespace LinhGioi.UI
         private const string LgoInventoryGridCellClass = "lgo-inventory-grid-cell";
         private const string LgoInventorySearchFieldClass = "lgo-inventory-search-field";
         private const string LgoInventorySearchInputClass = "lgo-inventory-search-input";
+        private const string LgoEntryTextFieldClass = "lgo-entry-text-field";
+        private const string LgoEntryTextInputClass = "lgo-entry-text-input";
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
         private const string LgoHudPrimaryCombatActionClass = "lgo-hud-primary-combat-action";
@@ -438,14 +440,38 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoInventorySearchInnerField(TextField field)
         {
+            var input = ApplyLgoTextFieldInnerFrame(field, LgoInventorySearchInputClass);
+            if (input == null) return;
+            input.style.paddingLeft = input.style.paddingRight = 8;
+            input.style.fontSize = 13;
+        }
+
+        private static VisualElement ApplyLgoTextFieldInnerFrame(TextField field, string semanticClass)
+        {
             RuntimeUiSkin.ApplyLobbyInputInnerFrame(field);
             var input = field.Q(className: "unity-base-text-field__input")
                 ?? field.Q(className: "unity-text-field__input")
                 ?? field.Q("unity-text-input");
-            if (input == null) return;
-            input.AddToClassList(LgoInventorySearchInputClass);
-            input.style.paddingLeft = input.style.paddingRight = 8;
-            input.style.fontSize = 13;
+            if (input != null) input.AddToClassList(semanticClass);
+            return input;
+        }
+
+        private static void ApplyLgoEntryTextField(TextField field)
+        {
+            field.AddToClassList(LgoEntryTextFieldClass);
+            ApplyLgoInputField(field);
+            field.style.height = 44;
+            field.style.marginBottom = 10;
+            field.style.paddingLeft = 16;
+            field.style.paddingRight = 16;
+            field.style.fontSize = 15;
+            var input = ApplyLgoTextFieldInnerFrame(field, LgoEntryTextInputClass);
+            if (input != null) input.style.fontSize = 15;
+            field.RegisterCallback<AttachToPanelEvent>(_ =>
+            {
+                var attachedInput = ApplyLgoTextFieldInnerFrame(field, LgoEntryTextInputClass);
+                if (attachedInput != null) attachedInput.style.fontSize = 15;
+            });
         }
 
         private static void ApplyLgoEntryCtaAction(Button button, bool primary)

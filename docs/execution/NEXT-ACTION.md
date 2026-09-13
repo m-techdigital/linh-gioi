@@ -1,3 +1,9 @@
+## Next — sau entry real credential fields — 2026-09-14
+
+`CONTINUE`. Entry evidence hiện hành là `build/map01a-entry-real-fields-runtime-v2/entry-login.png`; Player `build/map01a-entry-real-fields-player-v2/LinhGioiOnline.app`. Tài khoản/mật khẩu phải là `TextField` thật, mật khẩu được mask và Đăng nhập không được giả auth thành công khi backend chưa có.
+
+Next valid work: tiếp tục audit một dead control hoặc sai lệch cấu trúc lớn trên login/HUD/NPC/Menu theo design owner, ưu tiên interaction có thể hoàn thiện bằng state hiện có. Không mở auth backend, class/pose/wardrobe/source, không tạo dữ liệu/art giả và không đổi frozen surfaces.
+
 ## Next — sau Rương đồ search + shared inner-input skin — 2026-09-14
 
 `CONTINUE`. Evidence hub năm tab hiện hành là `build/map01a-inventory-search-runtime-v2/{character-info,bag,skills,potential,spirit-pet}.png`; Player `build/map01a-inventory-search-player-v2/LinhGioiOnline.app`. Rương đồ phải giữ rail phân loại dọc, tìm kiếm không dấu trên dữ liệu thật và detail món ở bên phải; không dùng lại capture v1 có nền input trắng.

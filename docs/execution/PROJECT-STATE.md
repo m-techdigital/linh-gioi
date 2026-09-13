@@ -1,3 +1,10 @@
+## Map01A — đăng nhập dùng trường nhập thật, không giả auth thành công — 2026-09-14
+
+- Player-to-design audit phát hiện ô tài khoản/mật khẩu chỉ là `VisualElement` + `Label`, không thể nhập, trong khi nút Đăng nhập luôn báo sẵn sàng. Hai ô giờ là `TextField` thật dùng shared dark-input base; mật khẩu được mask và icon nguồn hiện hành giữ đúng vị trí.
+- Khi thiếu thông tin, Đăng nhập yêu cầu nhập đủ; khi có thông tin, UI báo dịch vụ tài khoản chưa khả dụng và giữ nguyên entry/quest thay vì giả đăng nhập thành công. `Bắt đầu` tiếp tục là luồng local vào Map01A.
+- TDD RED/GREEN targeted đạt 1/1; full `TwoDCharacterRuntimeStateTests` đạt 22/22. Build lần đầu bị loại vì ổ chỉ còn 427 MiB; sau khi dọn 172 thư mục generated class evidence cũ trong `build/`, Player `build/map01a-entry-real-fields-player-v2/LinhGioiOnline.app` build thành công. Evidence `build/map01a-entry-real-fields-runtime-v2/entry-login.png` đã visual audit ở 1600×900, không vỡ/chồng, input inner skin đúng theme.
+- Không sửa auth backend, class/pose/wardrobe/source hoặc frozen surfaces.
+
 ## Map01A — Rương đồ có tìm kiếm dữ liệu thật theo design năm tab — 2026-09-14
 
 - Đối chiếu `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` với Player cho thấy toolbar Rương đồ còn thiếu ô tìm kiếm. Runtime giờ lọc trực tiếp 10 trang bị và 3 vật phẩm hiện có theo tên/ID; truy vấn không dấu như `binh mau` vẫn tìm đúng `Bình Máu Nhỏ` và chọn kết quả tiếp tục cập nhật detail bên phải.

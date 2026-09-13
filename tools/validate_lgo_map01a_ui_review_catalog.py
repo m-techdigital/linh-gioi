@@ -15,8 +15,8 @@ READY = "LGO_MAP01A_UI_REVIEW_CATALOG_READY"
 TECH_STATUS = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED"
 
 ENTRY_EVIDENCE = (
-    "build/map01a-entry-product-copy-runtime-v1/manifest.json",
-    "build/map01a-entry-product-copy-runtime-v1/entry-login.png",
+    "build/map01a-entry-real-fields-runtime-v2/manifest.json",
+    "build/map01a-entry-real-fields-runtime-v2/entry-login.png",
 )
 HUB_MANIFEST = "build/map01a-inventory-search-runtime-v2/manifest.json"
 HUB_FRAMES = ["character-info.png", "bag.png", "skills.png", "potential.png", "spirit-pet.png"]

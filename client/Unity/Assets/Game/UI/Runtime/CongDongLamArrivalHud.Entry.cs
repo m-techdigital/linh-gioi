@@ -8,6 +8,7 @@ namespace LinhGioi.UI
     {
         private VisualElement _entryOverlay;
         private Label _entryStatus;
+        private TextField _entryAccountField, _entryPasswordField;
         private bool _entryOpen;
 
         private void BuildEntryScreen()
@@ -130,8 +131,10 @@ namespace LinhGioi.UI
             loginTitle.style.display = DisplayStyle.None;
             controlCard.Add(loginTitle);
 
-            controlCard.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "Tài khoản / Email / Số điện thoại", "account"));
-            controlCard.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "Mật khẩu", "lock"));
+            _entryAccountField = MakeEntryField("Map01A Entry Account Field", "Tài khoản / Email / Số điện thoại", "account", false);
+            _entryPasswordField = MakeEntryField("Map01A Entry Password Field", "Mật khẩu", "lock", true);
+            controlCard.Add(_entryAccountField);
+            controlCard.Add(_entryPasswordField);
             controlCard.Add(MakeEntryAuthOptions());
 
             var authScope = LgoSubtitleLabel("Đăng nhập để tiếp tục hành trình tại Đông Lâm.", 13);
@@ -145,7 +148,10 @@ namespace LinhGioi.UI
             authActions.style.marginBottom = 10;
             var login = new Button(() =>
             {
-                _entryStatus.text = "Sẵn sàng vào Đông Lâm. Chọn Bắt đầu để tiếp tục.";
+                _entryStatus.text = string.IsNullOrWhiteSpace(_entryAccountField?.value)
+                    || string.IsNullOrWhiteSpace(_entryPasswordField?.value)
+                    ? "Nhập tài khoản và mật khẩu để đăng nhập."
+                    : "Dịch vụ tài khoản hiện chưa khả dụng. Có thể chọn Bắt đầu để vào Đông Lâm.";
                 _entryStatus.style.display = DisplayStyle.Flex;
             })
             {
@@ -314,20 +320,11 @@ namespace LinhGioi.UI
             return row;
         }
 
-        private VisualElement MakeEntryField(string fieldName, string placeholderName, string placeholderText, string iconId)
+        private TextField MakeEntryField(string fieldName, string placeholderText, string iconId, bool password)
         {
-            var field = new VisualElement { name = fieldName };
-            field.style.height = 44;
-            field.style.marginBottom = 10;
-            field.style.paddingLeft = 16;
-            field.style.paddingRight = 16;
-            field.style.justifyContent = Justify.Center;
-            ApplyLgoInputField(field);
-
-            var placeholder = new Label(placeholderText) { name = placeholderName };
-            placeholder.style.fontSize = 15;
-            placeholder.style.color = new Color(.74f, .82f, .88f, .82f);
-            field.Add(placeholder);
+            var field = new TextField { name = fieldName, isPasswordField = password };
+            field.textEdition.placeholder = placeholderText;
+            ApplyLgoEntryTextField(field);
             AttachLgoEntryFieldIcon(field, _scene.GetMap01AHudIconSprite(iconId));
             return field;
         }

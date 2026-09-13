@@ -497,6 +497,45 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void EntryCredentialsUseRealFieldsWithoutPretendingToAuthenticate()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("entry credential fields test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var account = root.Q<TextField>("Map01A Entry Account Field");
+                var password = root.Q<TextField>("Map01A Entry Password Field");
+
+                Assert.That(account, Is.Not.Null, "The approved login must accept account input instead of rendering a placeholder panel.");
+                Assert.That(password, Is.Not.Null, "The approved login must accept password input instead of rendering a placeholder panel.");
+                Assert.That(account.textEdition.placeholder, Does.Contain("Tài khoản"));
+                Assert.That(password.textEdition.placeholder, Does.Contain("Mật khẩu"));
+                Assert.That(password.isPasswordField, Is.True);
+                Assert.That(account.ClassListContains("lgo-entry-text-field"), Is.True);
+                Assert.That(password.ClassListContains("lgo-entry-text-field"), Is.True);
+
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Login Button"));
+                var status = root.Q<Label>("Map01A Entry Safety Note");
+                Assert.That(status.text, Does.Contain("Nhập tài khoản"));
+
+                account.value = "LụcThiên";
+                password.value = "demo-secret";
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Login Button"));
+                Assert.That(status.text, Does.Contain("chưa khả dụng"));
+                Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void EntryScreenSeparatesDevLoginAndStartWithoutChangingMapState()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
@@ -511,12 +550,14 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Entry Notice Panel").ClassListContains("lgo-status-card"), Is.True,
                     "Entry notices must use the shared status-card foundation instead of a screen-local frame and padding skin.");
                 Assert.That(root.Q<Button>("Map01A Entry Login Button"), Is.Not.Null);
-                Assert.That(root.Q("Map01A Entry Account Field"), Is.Not.Null);
-                var accountPlaceholder = root.Q<Label>("Map01A Entry Account Placeholder").text;
+                var accountField = root.Q<TextField>("Map01A Entry Account Field");
+                Assert.That(accountField, Is.Not.Null);
+                var accountPlaceholder = accountField.textEdition.placeholder;
                 Assert.That(accountPlaceholder, Does.Contain("Tài khoản"));
                 Assert.That(accountPlaceholder, Does.Not.Contain("👤"), "Login must not use temporary emoji glyphs as field icons.");
-                Assert.That(root.Q("Map01A Entry Password Field"), Is.Not.Null);
-                var passwordPlaceholder = root.Q<Label>("Map01A Entry Password Placeholder").text;
+                var passwordField = root.Q<TextField>("Map01A Entry Password Field");
+                Assert.That(passwordField, Is.Not.Null);
+                var passwordPlaceholder = passwordField.textEdition.placeholder;
                 Assert.That(passwordPlaceholder, Does.Contain("Mật khẩu"));
                 Assert.That(passwordPlaceholder, Does.Not.Contain("🔒"), "Login must not use temporary emoji glyphs as field icons.");
                 Assert.That(root.Q("Map01A Entry Account Field").ClassListContains("lgo-input-field"), Is.True,
@@ -527,7 +568,7 @@ namespace LinhGioi.Tests.EditMode
                     Is.EqualTo(scene.GetMap01AHudIconSprite("account")));
                 Assert.That(root.Q("Map01A Entry Password Field Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01AHudIconSprite("lock")));
-                Assert.That(root.Q<Label>("Map01A Entry Account Placeholder").style.fontSize.value.value, Is.LessThanOrEqualTo(15),
+                Assert.That(accountField.style.fontSize.value.value, Is.LessThanOrEqualTo(15),
                     "Entry placeholder text must stay compact against the owner reference instead of using oversized form typography.");
                 Assert.That(root.Q("Map01A Entry Account Field").style.paddingLeft.value.value, Is.GreaterThanOrEqualTo(16),
                     "Entry input fields need shared inner spacing so they read as game UI controls rather than thin web-form rectangles.");
