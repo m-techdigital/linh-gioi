@@ -53,6 +53,26 @@ class LgoNextTaskTests(unittest.TestCase):
             "SIX_POSE_REGISTERED_OUTFIT_SURFACE_CONTRACT_DECISION",
         )
 
+    def test_active_task_state_overrides_stale_history_tokens(self):
+        text = "\n".join(
+            [
+                "## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13",
+                "",
+                "Historical note: Surface contract validation was NEED_OWNER_DECISION with ROUTE_SELECTION_REQUIRED.",
+                "",
+                "## Active task state",
+                "",
+                '```json',
+                '{"activeTask":"OUTFIT_BODY_RIG_SOURCE_PROTOTYPE","blockers":[]}',
+                '```',
+            ]
+        )
+
+        self.assertEqual(
+            active_next_action_task_from_text(text),
+            "OUTFIT_BODY_RIG_SOURCE_PROTOTYPE",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

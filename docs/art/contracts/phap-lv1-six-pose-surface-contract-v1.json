@@ -2,12 +2,22 @@
   "contractId": "phap-lv1-six-pose-surface-contract-v1",
   "status": "NEED_OWNER_DECISION",
   "sourceSpaceProfile": {
-    "canvas": [1024, 1536],
+    "canvas": [
+      1024,
+      1536
+    ],
     "originX": 512,
     "groundY": 1484,
     "unitScale": "1.70/1536"
   },
-  "poses": ["idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck"],
+  "poses": [
+    "idle",
+    "run_contact_a",
+    "run_a",
+    "run_contact_b",
+    "run_b",
+    "jump_tuck"
+  ],
   "selectedRoute": null,
   "routeOptions": {
     "SLEEVELESS_PHAP_LV1": {
@@ -25,10 +35,23 @@
     {
       "slotId": "outer_top",
       "familyType": "cloth_body",
-      "ownership": ["torso_cloth", "collar", "hem", "ornament"],
+      "ownership": [
+        "torso_cloth",
+        "collar",
+        "hem",
+        "ornament"
+      ],
       "occlusion": {
-        "mayCover": ["torso_inner", "waist_overlap"],
-        "mustNotCover": ["upper_arm_skin", "forearm_skin", "hand", "face"]
+        "mayCover": [
+          "torso_inner",
+          "waist_overlap"
+        ],
+        "mustNotCover": [
+          "upper_arm_skin",
+          "forearm_skin",
+          "hand",
+          "face"
+        ]
       },
       "sourceGate": "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE",
       "routeDependency": "SELECT_ROUTE_BEFORE_AUTHORING",
@@ -37,20 +60,41 @@
     {
       "slotId": "waist_belt",
       "familyType": "part_rigid",
-      "ownership": ["waist_plate", "belt_tail"],
+      "ownership": [
+        "waist_plate",
+        "belt_tail"
+      ],
       "occlusion": {
-        "mayCover": ["waist", "pelvis_cloth", "torso_lower_edge"],
-        "mustNotCover": ["upper_arm_skin", "hand", "face"]
+        "mayCover": [
+          "waist",
+          "pelvis_cloth",
+          "torso_lower_edge"
+        ],
+        "mustNotCover": [
+          "upper_arm_skin",
+          "hand",
+          "face"
+        ]
       },
       "sourceGate": "SOURCE_REVIEW_REQUIRED"
     },
     {
       "slotId": "shoulder_chest_guard",
       "familyType": "part_rigid",
-      "ownership": ["shoulder_plate", "chest_strap"],
+      "ownership": [
+        "shoulder_plate",
+        "chest_strap"
+      ],
       "occlusion": {
-        "mayCover": ["torso_cloth", "shoulder_edge"],
-        "mustNotCover": ["hand", "face", "forearm_skin"]
+        "mayCover": [
+          "torso_cloth",
+          "shoulder_edge"
+        ],
+        "mustNotCover": [
+          "hand",
+          "face",
+          "forearm_skin"
+        ]
       },
       "sourceGate": "SOURCE_REVIEW_REQUIRED"
     }
@@ -62,5 +106,14 @@
     "rejectedHeuristicCandidate": "build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/outer-top-sleeveless-unified-style-v2/visual-method-review-v1.json"
   },
   "runtimePromotionAllowed": false,
-  "completedFinalItems": 0
+  "completedFinalItems": 0,
+  "scopeClarification": {
+    "declarationOnly": true,
+    "sourceArtifactValidity": "NOT_VALIDATED",
+    "packEntryPointRequiresContract": true,
+    "packEntryPointRequiresSourceArtifactVisualAccepted": true
+  },
+  "sourceArtifactValidation": {
+    "status": "NOT_VALIDATED"
+  }
 }

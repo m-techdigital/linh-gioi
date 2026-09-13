@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import json
+import re
 import subprocess
 from pathlib import Path
 
@@ -9,6 +11,36 @@ ROOT = Path(__file__).resolve().parents[1]
 PROJECT_STATE = ROOT / "docs/execution/PROJECT-STATE.md"
 NEXT_ACTION = ROOT / "docs/execution/NEXT-ACTION.md"
 LEDGER_ROLLUP = ROOT / "docs/execution/TASK-LEDGER-ROLLUP.md"
+
+
+def section_prefix(text: str, heading_prefix: str) -> str:
+    lines = text.splitlines()
+    start = None
+    for index, line in enumerate(lines):
+        if line.startswith(heading_prefix):
+            start = index
+            break
+    if start is None:
+        return ""
+    out: list[str] = []
+    for line in lines[start + 1:]:
+        if line.startswith("## "):
+            break
+        out.append(line)
+    return "\n".join(out).strip()
+
+
+def active_task_state(next_action: str) -> dict:
+    active = section_prefix(next_action, "## Active task state")
+    if not active:
+        return {}
+    match = re.search(r"```json\s*(.*?)\s*```", active, re.DOTALL)
+    payload = match.group(1) if match else active
+    try:
+        parsed = json.loads(payload)
+    except json.JSONDecodeError:
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
 
 
 def read(path: Path) -> str:
@@ -94,6 +126,11 @@ def resume_section(next_action: str) -> str:
 
 
 def next_task_section(next_action: str) -> str:
+    state = active_task_state(next_action)
+    active_task = state.get("activeTask")
+    if isinstance(active_task, str) and active_task:
+        status = state.get("status")
+        return "\n".join(line for line in (f"Active task: {active_task}", f"status={status}" if status else "") if line)
     active = active_goal_lock_section(next_action)
     if active and "Next valid work:" in active:
         lines = [line for line in active.splitlines() if line.startswith("Next valid work:")]
@@ -102,6 +139,10 @@ def next_task_section(next_action: str) -> str:
 
 
 def current_blocker_section(next_action: str) -> str:
+    state = active_task_state(next_action)
+    blockers = state.get("blockers")
+    if isinstance(blockers, list) and blockers:
+        return "Current blocker from active task state: " + ", ".join(str(item) for item in blockers)
     active = active_goal_lock_section(next_action)
     if active and "NEED_OWNER_DECISION" in active and "ROUTE_SELECTION_REQUIRED" in active:
         return "Current blocker is surface contract route decision: ROUTE_SELECTION_REQUIRED. Do not create more image candidates or pack Player until SLEEVELESS_PHAP_LV1 or SLEEVED_PHAP_LV1 is selected and the contract validator passes."

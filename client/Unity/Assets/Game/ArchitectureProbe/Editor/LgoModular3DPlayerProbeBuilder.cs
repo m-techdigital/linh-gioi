@@ -69,12 +69,28 @@ namespace LinhGioi.ArchitectureProbe.Editor
 
             var transforms = actor.GetComponentsInChildren<Transform>(true);
             var weapon = transforms.FirstOrDefault(item => item.name == "equipment__rigid_hand_item");
-            var upper = transforms.FirstOrDefault(item => item.name == "equipment__upper");
+            var upper = transforms.FirstOrDefault(item => item.name == "equipment__upper_primary")
+                ?? transforms.FirstOrDefault(item => item.name == "equipment__upper");
+            var upperVariant = transforms.FirstOrDefault(item => item.name == "equipment__upper_variant");
+            var waistBelt = transforms.FirstOrDefault(item => item.name == "equipment__waist_belt")
+                ?? transforms.FirstOrDefault(item => item.name == "equipment__waist");
+            var shoulderChestGuard = transforms.FirstOrDefault(item => item.name == "equipment__shoulder_chest_guard");
             if (weapon == null || upper == null) throw new InvalidOperationException("Required equipment object missing");
+            if (upperVariant != null) upperVariant.gameObject.SetActive(false);
             var runnerObject = new GameObject("Modular3DProbeRunner");
-            runnerObject.AddComponent<LgoModular3DPlayerProbe>().Configure(animator, actor.transform, weapon, upper.gameObject);
+            runnerObject.AddComponent<LgoModular3DPlayerProbe>().Configure(animator, actor.transform, weapon, upper.gameObject,
+                upperVariant == null ? null : upperVariant.gameObject,
+                waistBelt == null ? null : waistBelt.gameObject,
+                shoulderChestGuard == null ? null : shoulderChestGuard.gameObject);
 
             var renderers = actor.GetComponentsInChildren<Renderer>(true);
+            var previewShader = Shader.Find("Unlit/Color") ?? Shader.Find("Universal Render Pipeline/Unlit") ?? Shader.Find("Sprites/Default");
+            if (previewShader != null)
+            {
+                var previewMaterial = new Material(previewShader) { color = Color.white };
+                foreach (var renderer in renderers)
+                    renderer.sharedMaterial = previewMaterial;
+            }
             var bounds = renderers[0].bounds;
             foreach (var renderer in renderers.Skip(1)) bounds.Encapsulate(renderer.bounds);
             var cameraObject = new GameObject("ProbeCamera");

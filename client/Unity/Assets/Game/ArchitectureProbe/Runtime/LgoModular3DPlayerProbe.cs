@@ -47,6 +47,9 @@ namespace LinhGioi.ArchitectureProbe
             public int transitionCount;
             public bool equipmentSwapDuringRun;
             public bool equipmentSwapPreservedState;
+            public bool secondUpperItemActivated;
+            public bool waistBeltPresent;
+            public bool shoulderChestGuardPresent;
             public float normalizedTimeBeforeSwap;
             public float normalizedTimeAfterSwap;
             public float rootScaleMaxDrift;
@@ -66,6 +69,9 @@ namespace LinhGioi.ArchitectureProbe
         [SerializeField] private Transform _actorRoot;
         [SerializeField] private Transform _rigidItem;
         [SerializeField] private GameObject _upper;
+        [SerializeField] private GameObject _upperVariant;
+        [SerializeField] private GameObject _waistBelt;
+        [SerializeField] private GameObject _shoulderChestGuard;
         private Vector3 _initialRootScale;
         private Vector3 _initialRigidScale;
         private readonly List<float> _frameTimesMs = new List<float>();
@@ -89,10 +95,19 @@ namespace LinhGioi.ArchitectureProbe
 
         public void Configure(Animator animator, Transform actorRoot, Transform rigidItem, GameObject upper)
         {
+            Configure(animator, actorRoot, rigidItem, upper, null, null, null);
+        }
+
+        public void Configure(Animator animator, Transform actorRoot, Transform rigidItem, GameObject upper,
+            GameObject upperVariant, GameObject waistBelt, GameObject shoulderChestGuard)
+        {
             _animator = animator;
             _actorRoot = actorRoot;
             _rigidItem = rigidItem;
             _upper = upper;
+            _upperVariant = upperVariant;
+            _waistBelt = waistBelt;
+            _shoulderChestGuard = shoulderChestGuard;
         }
 
         public static float Percentile95(IEnumerable<float> values)
@@ -152,11 +167,12 @@ namespace LinhGioi.ArchitectureProbe
                 _swapStateHash = state.fullPathHash;
                 _beforeSwap = state.normalizedTime;
                 _upper.SetActive(false);
+                if (_upperVariant != null) _upperVariant.SetActive(true);
                 _swapStarted = true;
             }
             else if (_swapStarted && !_swapFinished && _elapsed >= EquipmentSwapAtSeconds + 0.12f)
             {
-                _upper.SetActive(true);
+                if (_upperVariant == null) _upper.SetActive(true);
                 var state = _animator.GetCurrentAnimatorStateInfo(0);
                 _afterSwap = state.normalizedTime;
                 if (state.fullPathHash != _swapStateHash || _afterSwap + 0.02f < _beforeSwap)
@@ -200,6 +216,9 @@ namespace LinhGioi.ArchitectureProbe
                 transitionCount = Math.Max(0, _statesPlayed.Count - 1),
                 equipmentSwapDuringRun = true,
                 equipmentSwapPreservedState = !_failures.Contains("EQUIPMENT_SWAP_RESET_ANIMATION_STATE"),
+                secondUpperItemActivated = _upperVariant != null && _upperVariant.activeInHierarchy,
+                waistBeltPresent = _waistBelt != null && _waistBelt.activeInHierarchy,
+                shoulderChestGuardPresent = _shoulderChestGuard != null && _shoulderChestGuard.activeInHierarchy,
                 normalizedTimeBeforeSwap = _beforeSwap,
                 normalizedTimeAfterSwap = _afterSwap,
                 rootScaleMaxDrift = _rootScaleDrift,

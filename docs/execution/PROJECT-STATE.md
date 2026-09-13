@@ -1,3 +1,9 @@
+## Continuous workflow status
+
+2026-09-13 outfit task is now evaluated by real output, not layer count/checkpoint. Surface-contract gate scope was corrected: declaration validity is separate from source/artifact validity, and outfit pack entrypoints require a PASS contract plus `SOURCE_ARTIFACT_VISUAL_ACCEPTED`.
+
+Current prototype path: Blender flat-card body/rig source under `build/outfit-body-rig-prototype-2026-09-13/source` has been generated with `.blend` and FBX. Unity standalone Player behavior is not yet proven: two build attempts were interrupted because URP/Lit shader compile entered a very large variant workload. Runtime promotion remains false.
+
 ## Active goal lock — six-pose registered outfit path — 2026-09-13
 
 `feature-2d-latest` is no longer continuing the current skeletal generated-cutout path. Owner rejected `bind-authority-candidate-v1` visually, and source discovery found no accepted neutral layered body/rig blueprint. Treat skeletal 2D as stopped unless a new accepted blueprint passes `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`.

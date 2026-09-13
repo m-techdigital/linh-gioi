@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import re
 import subprocess
 import sys
@@ -63,21 +64,58 @@ def active_next_action_task() -> str | None:
     return active_next_action_task_from_text(NEXT_ACTION.read_text(encoding="utf-8", errors="replace"))
 
 
+def section_from_text(text: str, heading_prefix: str) -> str:
+    lines = text.splitlines()
+    start = None
+    for index, line in enumerate(lines):
+        if line.startswith(heading_prefix):
+            start = index
+            break
+    if start is None:
+        return ""
+    out: list[str] = []
+    for line in lines[start + 1:]:
+        if line.startswith("## "):
+            break
+        out.append(line)
+    return "\n".join(out).strip()
+
+
+def active_task_state_from_text(text: str) -> dict:
+    section = section_from_text(text, "## Active task state")
+    if not section:
+        return {}
+    match = re.search(r"```json\s*(.*?)\s*```", section, re.DOTALL)
+    payload = match.group(1) if match else section
+    try:
+        data = json.loads(payload)
+    except json.JSONDecodeError:
+        return {}
+    return data if isinstance(data, dict) else {}
+
+
 def active_next_action_task_from_text(text: str) -> str | None:
+    active_state = active_task_state_from_text(text)
+    active_task = active_state.get("activeTask")
+    if isinstance(active_task, str) and active_task.strip():
+        return active_task.strip()
+
+    active_lock = section_from_text(text, "## ACTIVE GOAL LOCK")
+    active_context = "\n".join(text.splitlines()[:1]) + "\n" + active_lock
     if (
-        "## ACTIVE GOAL LOCK" in text
-        and "six-pose registered outfit path" in text
-        and "NEED_OWNER_DECISION" in text
-        and "ROUTE_SELECTION_REQUIRED" in text
+        active_lock
+        and "six-pose registered outfit path" in active_context
+        and "NEED_OWNER_DECISION" in active_lock
+        and "ROUTE_SELECTION_REQUIRED" in active_lock
     ):
         return "SIX_POSE_REGISTERED_OUTFIT_SURFACE_CONTRACT_DECISION"
     if (
-        "## ACTIVE GOAL LOCK" in text
-        and "six-pose registered outfit path" in text
-        and "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE" in text
+        active_lock
+        and "six-pose registered outfit path" in active_context
+        and "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE" in active_lock
     ):
         return "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH"
-    if "## ACTIVE GOAL LOCK" in text and "six-pose registered outfit path" in text:
+    if active_lock and "six-pose registered outfit path" in active_context:
         return "SIX_POSE_REGISTERED_OUTFIT_SOURCE_AUTHORING"
     match = re.search(r"Active task:\s*`([^`]+)`", text)
     if match:
@@ -198,6 +236,14 @@ def main() -> int:
         print("allowed=docs, validators, contract evidence; no new image candidates before route/ownership is selected")
         print("forbidden=per-pose mask/pixel polish, stopped skeletal/cutout path, flat-panel direct-fit production, Player pack")
         print("closure=contract validation PASS for the selected route; source-board plan updated from contract")
+        return 0
+    if active_task == "OUTFIT_BODY_RIG_SOURCE_PROTOTYPE":
+        print("LGO_NEXT_TASK_ADVISOR_READY")
+        print(f"id={active_task}")
+        print("purpose=Thử nghiệm riêng một body/rig editable và áo Pháp có tay chuyển động đúng, kèm đai/giáp tháo ghép và item thứ hai cùng họ để đo reuse")
+        print("allowed=docs, tools, build evidence, external experimental source; no production replacement")
+        print("forbidden=sleeve-add/capsule/pixel deletion/flat-panel direct-fit, reuse rejected candidates under new names, production skeletal revival")
+        print("closure=source mở lại được, Player chạy thật, item thứ hai dùng lại cơ chế đã đo, report thời gian thực và lỗi còn lại")
         return 0
     if active_task == "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH":
         print("LGO_NEXT_TASK_ADVISOR_READY")

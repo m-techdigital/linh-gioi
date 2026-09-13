@@ -1,3 +1,7 @@
+## Outfit body/rig prototype scope fix — 2026-09-13
+
+`CONTINUE`. Gate scope corrected: source contract declaration no longer implies source/artifact validity, and outfit pack entrypoints require surface contract + accepted source artifact. Blender flat-card prototype source created: `.blend` + FBX with body proxy, sleeved Pháp upper A, sleeved upper B using same rig, waist belt and shoulder/chest guard. Player behavior is not claimed: Unity standalone build hit URP/Lit shader compile workload twice and was stopped; next work is a lighter Player/probe path, not more validators or per-pose image edits.
+
 ## Active goal lock — sáu pose thay cho skeletal cutout hiện tại — 2026-09-13
 
 `CONTINUE`. Owner đã chỉ đạo nếu hướng skeletal/cutout vừa thử không khả dụng thì quay lại phát triển theo sáu pose cũ để khớp đồ giữa level và pose. `bind-authority-candidate-v1` đã bị reject visual và có `DO-NOT-PACK`; không tiếp tục probe, animation tweak hoặc garment fit trên source đó. Gate mới `tools/audit_lgo_skeletal_blueprint_package.py` chỉ giữ để chặn mở lại skeletal khi chưa có neutral layered body/rig blueprint được duyệt.

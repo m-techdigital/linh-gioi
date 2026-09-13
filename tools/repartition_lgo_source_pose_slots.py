@@ -156,7 +156,7 @@ def _write_boards(output: Path, composed: dict[str, Image.Image], bodies: dict[s
     toggle.save(output / 'idle-ten-slot-toggle-review.jpg', quality=96, subsampling=0)
 
 
-def repack(pack: Path, surface: Path, output: Path, repo: Path) -> None:
+def repack(pack: Path, surface: Path, output: Path, repo: Path, surface_contract: Path) -> None:
     if output.exists():
         raise FileExistsError(output)
     shutil.copytree(pack, output)
@@ -174,7 +174,8 @@ def repack(pack: Path, surface: Path, output: Path, repo: Path) -> None:
         subprocess.run([str(repo / 'build/rig-authoring-venv/bin/python'),
                         str(repo / 'tools/pack_lgo_pose_review_atlas.py'), '--sources', str(source_file),
                         '--output-dir', str(directory), '--divisor', '2', '--max-side', '2048',
-                        '--jump-pivot-source', '512', '820'], cwd=repo, env=env, check=True)
+                        '--jump-pivot-source', '512', '820',
+                        '--surface-contract', str(surface_contract)], cwd=repo, env=env, check=True)
         path = directory / 'atlas-review.json'; new = json.loads(path.read_text())
         for key in ('reviewSlot', 'basePoseAtlasSha256', 'basePoseManifestSha256', 'fitFamily',
                     'unlockLevel', 'itemId', 'gender', 'fitStatus', 'reviewPurpose'):
@@ -191,10 +192,11 @@ def main() -> None:
     parser.add_argument('--anchor-surface', type=Path, required=True)
     parser.add_argument('--output-surface', type=Path, required=True)
     parser.add_argument('--output-pack', type=Path, required=True)
+    parser.add_argument('--surface-contract', type=Path, required=True)
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[1]
     write_surface(args.pack.resolve(), args.anchor_surface.resolve(), args.output_surface.resolve())
-    repack(args.pack.resolve(), args.output_surface.resolve(), args.output_pack.resolve(), repo)
+    repack(args.pack.resolve(), args.output_surface.resolve(), args.output_pack.resolve(), repo, args.surface_contract.resolve())
     print(f'LGO_SOURCE_POSE_SLOTS_REPARTITIONED pack={args.output_pack}')
 
 

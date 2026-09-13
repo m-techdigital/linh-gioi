@@ -27,6 +27,7 @@ SLOTS = {
 }
 FAMILY_TYPES = {"rigid", "part_rigid", "cloth_body", "pose_authored"}
 ROUTES = {"SLEEVELESS_PHAP_LV1", "SLEEVED_PHAP_LV1"}
+ACCEPTED_SOURCE_ARTIFACT_STATUS = "SOURCE_ARTIFACT_VISUAL_ACCEPTED"
 
 
 def _family_report(family: dict, selected_route: str | None) -> dict:
@@ -93,9 +94,23 @@ def validate_contract(contract_path: Path | str) -> dict:
     failure_count = len(global_failures) + family_failures
 
     if failure_count:
+        declaration_status = "REJECT_DECLARATION"
+    elif decision_gates:
+        declaration_status = "NEED_OWNER_DECISION"
+    else:
+        declaration_status = "PASS"
+    declaration_valid = declaration_status == "PASS"
+
+    source_artifact = contract.get("sourceArtifactValidation") or {}
+    source_artifact_status = source_artifact.get("status") or "NOT_VALIDATED"
+    source_artifact_valid = source_artifact_status == ACCEPTED_SOURCE_ARTIFACT_STATUS
+
+    if failure_count:
         status = "REJECT_OUTFIT_SURFACE_CONTRACT"
     elif decision_gates:
         status = "NEED_OWNER_DECISION"
+    elif not source_artifact_valid:
+        status = "NEED_SOURCE_ARTIFACT_REVIEW"
     else:
         status = "PASS"
 
@@ -108,6 +123,10 @@ def validate_contract(contract_path: Path | str) -> dict:
         "globalFailures": global_failures,
         "families": families,
         "failureCount": failure_count,
+        "declarationStatus": declaration_status,
+        "declarationValid": declaration_valid,
+        "sourceArtifactStatus": source_artifact_status,
+        "sourceArtifactValid": source_artifact_valid,
         "runtimePromotionAllowed": False,
     }
 

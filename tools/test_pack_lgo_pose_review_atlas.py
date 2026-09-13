@@ -25,6 +25,21 @@ class PoseReviewAtlasTests(unittest.TestCase):
         return {'id': name, 'source': str(path),
                 'sourceSha256': hashlib.sha256(path.read_bytes()).hexdigest()}
 
+    def accepted_surface_contract(self):
+        contract = self.root / 'surface-contract-accepted.json'
+        contract.write_text(json.dumps({
+            'sourceSpaceProfile': {'canvas': [1024, 1536], 'originX': 512, 'groundY': 1484, 'unitScale': '1.70/1536'},
+            'poses': ['idle', 'run_contact_a', 'run_a', 'run_contact_b', 'run_b', 'jump_tuck'],
+            'selectedRoute': 'SLEEVELESS_PHAP_LV1',
+            'itemFamilies': [
+                {'slotId': 'outer_top', 'familyType': 'cloth_body', 'ownership': ['torso_cloth'],
+                 'routeDependency': 'IDLE_NATIVE_SOURCE_MUST_REMOVE_SLEEVES'},
+            ],
+            'sourceArtifactValidation': {'status': 'SOURCE_ARTIFACT_VISUAL_ACCEPTED'},
+            'runtimePromotionAllowed': False,
+        }))
+        return contract
+
     def test_default_review_density_is_div4(self):
         _, report = pack_review([self.source('idle')])
         self.assertEqual(report['samplingDivisor'], 4)
@@ -154,24 +169,50 @@ class PoseReviewAtlasTests(unittest.TestCase):
         self.assertIn('jump pivot', result.stderr.lower())
         self.assertFalse(output.exists())
 
-# Keep this assignment outside the class definition so the test is attached even though this file has no __main__ anchor.
-def _test_cli_rejects_surface_contract_that_needs_route_decision(self):
-    sources = [self.source('idle')]
-    records = self.root / 'sources.json'
-    records.write_text(json.dumps(sources))
-    contract = self.root / 'surface-contract.json'
-    contract.write_text(json.dumps({
-        'sourceSpaceProfile': {'canvas': [1024, 1536], 'originX': 512, 'groundY': 1484, 'unitScale': '1.70/1536'},
-        'poses': ['idle', 'run_contact_a', 'run_a', 'run_contact_b', 'run_b', 'jump_tuck'],
-        'selectedRoute': None,
-        'itemFamilies': [{'slotId': 'outer_top', 'familyType': 'cloth_body', 'ownership': ['torso_cloth']}],
-        'runtimePromotionAllowed': False,
-    }))
-    result = subprocess.run([sys.executable, str(Path(__file__).with_name('pack_lgo_pose_review_atlas.py')),
-                             '--sources', str(records), '--output-dir', str(self.root / 'out'),
-                             '--surface-contract', str(contract)], capture_output=True, text=True)
-    self.assertNotEqual(result.returncode, 0)
-    self.assertIn('Surface contract not ready for pack', result.stderr)
-    self.assertIn('NEED_OWNER_DECISION', result.stderr)
+    def test_cli_requires_surface_contract_for_outfit_review_entrypoint(self):
+        records = self.root / 'sources.json'
+        records.write_text(json.dumps([{**self.source('idle'), 'slotId': 'outer_top'}]))
+        output = self.root / 'outer-top-review'
 
-PoseReviewAtlasTests.test_cli_rejects_surface_contract_that_needs_route_decision = _test_cli_rejects_surface_contract_that_needs_route_decision
+        result = subprocess.run([sys.executable, str(Path(__file__).with_name('pack_lgo_pose_review_atlas.py')),
+                                 '--sources', str(records), '--output-dir', str(output)],
+                                capture_output=True, text=True)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('surface contract required for outfit review pack', result.stderr.lower())
+        self.assertFalse(output.exists())
+
+    def test_cli_accepts_outfit_review_entrypoint_only_with_ready_source_artifact(self):
+        records = self.root / 'sources.json'
+        records.write_text(json.dumps([{**self.source('idle'), 'slotId': 'outer_top'}]))
+        output = self.root / 'outer-top-review'
+
+        result = subprocess.run([sys.executable, str(Path(__file__).with_name('pack_lgo_pose_review_atlas.py')),
+                                 '--sources', str(records), '--output-dir', str(output),
+                                 '--surface-contract', str(self.accepted_surface_contract())],
+                                capture_output=True, text=True)
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = json.loads((output / 'atlas-review.json').read_text())
+        self.assertEqual(report['surfaceContractStatus'], 'PASS')
+        self.assertTrue(report['sourceArtifactValid'])
+
+
+    def test_cli_rejects_surface_contract_that_needs_route_decision(self):
+        sources = [{**self.source('idle'), 'slotId': 'outer_top'}]
+        records = self.root / 'sources.json'
+        records.write_text(json.dumps(sources))
+        contract = self.root / 'surface-contract.json'
+        contract.write_text(json.dumps({
+            'sourceSpaceProfile': {'canvas': [1024, 1536], 'originX': 512, 'groundY': 1484, 'unitScale': '1.70/1536'},
+            'poses': ['idle', 'run_contact_a', 'run_a', 'run_contact_b', 'run_b', 'jump_tuck'],
+            'selectedRoute': None,
+            'itemFamilies': [{'slotId': 'outer_top', 'familyType': 'cloth_body', 'ownership': ['torso_cloth']}],
+            'runtimePromotionAllowed': False,
+        }))
+        result = subprocess.run([sys.executable, str(Path(__file__).with_name('pack_lgo_pose_review_atlas.py')),
+                                 '--sources', str(records), '--output-dir', str(self.root / 'outer-top-review'),
+                                 '--surface-contract', str(contract)], capture_output=True, text=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('Surface contract not ready for pack', result.stderr)
+        self.assertIn('NEED_OWNER_DECISION', result.stderr)

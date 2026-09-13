@@ -11,6 +11,27 @@ from pack_lgo_vo_lv1_map_avatar import CANVAS, project_canvas_rect
 from validate_lgo_outfit_surface_contract import validate_contract
 
 
+OUTFIT_REVIEW_DIRS = {
+    'main-weapon-review',
+    'head-hair-review',
+    'inner-top-review',
+    'outer-top-review',
+    'lower-body-review',
+    'waist-belt-review',
+    'arm-guard-review',
+    'footwear-review',
+    'shoulder-chest-guard-review',
+    'class-accessory-review',
+}
+OUTFIT_SOURCE_MARKERS = {'slotId', 'reviewSlot', 'itemId', 'layerOrderProfile', 'fitFamily'}
+
+
+def is_outfit_review_pack(sources: list[dict], output_dir: Path) -> bool:
+    if output_dir.name in OUTFIT_REVIEW_DIRS:
+        return True
+    return any(any(marker in source for marker in OUTFIT_SOURCE_MARKERS) for source in sources)
+
+
 def compact_rows(unique, width):
     """Exact shelf partition for small pose sets; no sprite resampling or rotation."""
     items = list(unique.items())
@@ -149,13 +170,20 @@ def main():
     parser.add_argument('--jump-pivot-source', type=int, nargs=2, metavar=('X', 'Y'),
                         help='Registered source-space pivot for jump_tuck; never inferred from its trim')
     parser.add_argument('--surface-contract', type=Path,
-                        help='Optional outfit surface contract; must validate PASS before review pack')
+                        help='Required for outfit review packs; must validate PASS and source artifact accepted before pack')
     args = parser.parse_args()
-    if args.surface_contract is not None:
+    sources = json.loads(args.sources.read_text())
+    contract_report = None
+    if is_outfit_review_pack(sources, args.output_dir):
+        if args.surface_contract is None:
+            parser.error('surface contract required for outfit review pack')
         contract_report = validate_contract(args.surface_contract)
         if contract_report['status'] != 'PASS':
             parser.error('Surface contract not ready for pack: ' + contract_report['status'])
-    sources = json.loads(args.sources.read_text())
+    elif args.surface_contract is not None:
+        contract_report = validate_contract(args.surface_contract)
+        if contract_report['status'] != 'PASS':
+            parser.error('Surface contract not ready for pack: ' + contract_report['status'])
     has_jump = any(source['id'] == 'jump_tuck' for source in sources)
     if has_jump and args.jump_pivot_source is None:
         parser.error('jump pivot required for jump_tuck (--jump-pivot-source X Y)')
@@ -167,6 +195,11 @@ def main():
                                 allow_empty_components=args.allow_empty_components)
     if has_jump:
         report['jumpPivotSource'] = args.jump_pivot_source
+    if contract_report is not None:
+        report['surfaceContractStatus'] = contract_report['status']
+        report['surfaceContractDeclarationStatus'] = contract_report['declarationStatus']
+        report['sourceArtifactStatus'] = contract_report['sourceArtifactStatus']
+        report['sourceArtifactValid'] = contract_report['sourceArtifactValid']
     args.output_dir.mkdir(parents=True, exist_ok=False)
     atlas_path = args.output_dir / 'atlas-review.png'
     atlas.save(atlas_path, optimize=True)

@@ -1,5 +1,21 @@
 ## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13
 
+Owner steering update: đánh giá outfit theo đầu ra thực tế, không theo số layer, validator hoặc checkpoint. Không tiếp tục sleeve-add, sleeve-capsule, pixel deletion hoặc flat-panel direct-fit. Giữ candidate bị bác làm evidence, không tái sử dụng dưới tên mới.
+
+## Active task state
+
+```json
+{"activeTask":"OUTFIT_BODY_RIG_SOURCE_PROTOTYPE","status":"SOURCE_CREATED_PLAYER_BUILD_BLOCKED","blockers":["PLAYER_BUILD_BLOCKED_BY_URP_LIT_SHADER_COMPILE"],"runtimePromotionAllowed":false}
+```
+
+Next valid work: hoàn tất thử nghiệm riêng Blender flat-card body/rig → Unity Player probe: source đã tạo được; bước tiếp theo là sửa đường Player/build nhẹ để lấy `runtime-report.json`, sau đó mới đánh giá item thứ hai reuse và lỗi body/phom/che khuất. Không sản xuất thêm ảnh từng pose và không đo lại body theo từng item.
+
+Surface contract scope fix: contract validator now separates declaration status from source artifact validity. Outfit pack entrypoints must pass a surface contract whose declaration is PASS and whose source artifact status is `SOURCE_ARTIFACT_VISUAL_ACCEPTED`; current Pháp Lv1 contract remains not production-ready.
+
+## Historical context kept for provenance
+
+## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13
+
 Owner steering after skeletal review: if the current skeletal/cutout approach is not usable, return to the old six-pose body/motion authority and develop outfit matching across levels and poses from design/source registration. This is now the active sandbox path. Read `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md` and execute from `docs/superpowers/plans/2026-09-13-six-pose-registered-outfit-pipeline.md` before any outfit/runtime work.
 
 Resume guard: also read `docs/execution/STOPPED-PATHS-AND-RESUME-GUARDS.md` before touching character, outfit, rig, motion, Krita, Blender, GarmentCode, Comfy or Player work. It explicitly stops the current skeletal generated-cutout Player branch, flat 2D panel direct-fit as production, and per-pixel garment nudging loops. The active goal is source authoring for the six-pose registered Pháp Lv1 outfit path, not continuing the just-stopped branch under a new tool name.

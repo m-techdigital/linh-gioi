@@ -83,7 +83,7 @@ class OutfitSurfaceContractTests(unittest.TestCase):
         self.assertIn("SLEEVED_ROUTE_REQUIRES_UPPER_ARM_CLOTH_OWNERSHIP", failures)
         self.assertIn("SLEEVED_ROUTE_REQUIRES_POSE_MASKS", failures)
 
-    def test_accepts_sleeveless_route_when_outer_top_does_not_own_upper_arm(self):
+    def test_valid_declaration_still_needs_source_artifact_review(self):
         payload = self._base_contract()
         payload["status"] = "SOURCE_CONTRACT_READY_FOR_BOARD"
         payload["selectedRoute"] = "SLEEVELESS_PHAP_LV1"
@@ -92,7 +92,29 @@ class OutfitSurfaceContractTests(unittest.TestCase):
 
         report = validate_contract(path)
 
+        self.assertEqual("NEED_SOURCE_ARTIFACT_REVIEW", report["status"])
+        self.assertEqual("PASS", report["declarationStatus"])
+        self.assertTrue(report["declarationValid"])
+        self.assertEqual("NOT_VALIDATED", report["sourceArtifactStatus"])
+        self.assertFalse(report["sourceArtifactValid"])
+        self.assertEqual(0, report["failureCount"])
+        self.assertFalse(report["runtimePromotionAllowed"])
+
+    def test_pass_requires_declaration_and_accepted_source_artifact(self):
+        payload = self._base_contract()
+        payload["status"] = "SOURCE_CONTRACT_READY_FOR_BOARD"
+        payload["selectedRoute"] = "SLEEVELESS_PHAP_LV1"
+        payload["itemFamilies"][0]["routeDependency"] = "IDLE_NATIVE_SOURCE_MUST_REMOVE_SLEEVES"
+        payload["sourceArtifactValidation"] = {"status": "SOURCE_ARTIFACT_VISUAL_ACCEPTED"}
+        path = self._write(payload)
+
+        report = validate_contract(path)
+
         self.assertEqual("PASS", report["status"])
+        self.assertEqual("PASS", report["declarationStatus"])
+        self.assertTrue(report["declarationValid"])
+        self.assertEqual("SOURCE_ARTIFACT_VISUAL_ACCEPTED", report["sourceArtifactStatus"])
+        self.assertTrue(report["sourceArtifactValid"])
         self.assertEqual(0, report["failureCount"])
         self.assertFalse(report["runtimePromotionAllowed"])
 
