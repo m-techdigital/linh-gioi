@@ -1,3 +1,9 @@
+## Next — Map01A UI polish after review catalog stale-path guard — 2026-09-13
+
+`CONTINUE`. Catalog review hiện không còn trỏ current evidence tới file thiếu; validator đã chặn stale path trong phần `Current evidence`. Tiếp tục Map01A/UI-only với batch visible thật: ưu tiên login/HUD/dialogue/inventory richness bằng shared skin/base và chỉ dùng evidence Player đang tồn tại hoặc capture mới.
+
+Không resume class/wardrobe/pose/source, không chạy class build/capture loops, không rollback class code, không thêm icon/item art giả hoặc random generated. Nếu sửa runtime visible thì phải capture Player và tự xem ảnh; nếu chỉ sửa tool/docs thì gate validator tương ứng phải pass.
+
 ## Next — Map01A UI polish after entry background/side-action correction — 2026-09-13
 
 `CONTINUE`. Entry/login đã bớt tối nền và side actions không còn giống disabled placeholder, nhưng vẫn chưa sát design owner. Tiếp tục Map01A/UI-only: ưu tiên redesign visual richness có tiêu chí rõ cho login/HUD/NPC dialogue/inventory bằng shared skin/base; cần logo/icon/ornament/card treatment thật/provenance-backed thay vì chỉnh màu lẻ.

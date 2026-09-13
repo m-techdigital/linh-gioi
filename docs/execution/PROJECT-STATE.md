@@ -1,3 +1,10 @@
+## Map01A — UI review catalog stale-path guard, still CONTINUE — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi runtime class/wardrobe/pose/source/camera/scale; không rollback class code; không tạo icon/item art giả.
+- Audit phát hiện `docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md` đang trỏ một số current evidence path cũ không tồn tại, trong khi validator vẫn pass vì chỉ kiểm hardcoded evidence. Đây là nguyên nhân dễ mở nhầm bản review cũ.
+- Batch này cập nhật current evidence về các path đang tồn tại (`build/map01a-entry-form-runtime/...`, `build/map01a-entry-side-action-runtime-v1/...`, `build/map01a-character-select-runtime/...`, `build/map01a-inventory-tab-runtime/...`) và thêm validator/test để mọi path cụ thể trong phần `Current evidence` phải tồn tại.
+- Guard: RED `test_rejects_missing_current_evidence_path_listed_in_catalog`, GREEN `tools/test_validate_lgo_map01a_ui_review_catalog.py` và `tools/validate_lgo_map01a_ui_review_catalog.py`. Đây là sửa quy trình review/evidence, không phải nghiệm thu visual cuối.
+
 ## Map01A — entry background and side-action visual correction, still CONTINUE — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class/wardrobe/pose/source/camera/scale; không rollback class code; không tạo icon/item art giả.

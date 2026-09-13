@@ -8,12 +8,11 @@ This catalog points reviewers to the current Map01A 2D UI evidence. It is techni
 
 | Screen / flow | Evidence | Status |
 | --- | --- | --- |
-| Entry/login modal | `build/map01a-entry-glass-card-runtime-v3/entry-login.png` and `build/map01a-entry-glass-card-runtime-v3/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
+| Entry/login modal | `build/map01a-entry-form-runtime/entry-login.png` and `build/map01a-entry-form-runtime/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
+| Latest entry/action polish | `build/map01a-entry-side-action-runtime-v1/entry-login.png` and `build/map01a-entry-side-action-runtime-v1/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900; overlay bớt tối và side actions có feedback |
 | Character select modal | `build/map01a-character-select-runtime/character-select.png` and `build/map01a-character-select-runtime/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
 | Quest/HUD/inventory route | `build/map01a-detail-right-player/quest-capture/{pc,tablet,mobile}/` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, pc/tablet/mobile, 18 route frames and 38 dialogue frames each |
-| Inventory tabs: Hành trang + Thông tin + Vật phẩm + Rương đồ | `build/map01a-inventory-context-runtime-v2/pc/character-info.png`, `build/map01a-inventory-context-runtime-v2/pc/supplies.png`, `build/map01a-inventory-context-runtime-v2/pc/storage.png`, and `build/map01a-inventory-context-runtime-v2/pc/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`; resolution recorded in manifest; internal Player flag, no OS mouse/keyboard |
-| Inventory/Vật phẩm card rows | `build/map01a-supply-card-runtime-v1/{pc,tablet,mobile}/supplies.png` and manifests | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, item rows have name/count/state cards; no approved dedicated item icons yet |
-| Login + inventory hierarchy polish | `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.png`, `build/map01a-ui-hierarchy-polish-runtime-v2/inventory/supplies.png`, `character-info.png`, `storage.png` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, graphics Player capture, no OS mouse/keyboard; still not final design acceptance |
+| Inventory tabs: Hành trang + Thông tin + Vật phẩm + Rương đồ | `build/map01a-inventory-tab-runtime/character-info.png`, `build/map01a-inventory-tab-runtime/supplies.png`, `build/map01a-inventory-tab-runtime/storage.png`, and `build/map01a-inventory-tab-runtime/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900; internal Player flag, no OS mouse/keyboard |
 
 ## Required review frames
 

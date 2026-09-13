@@ -27,15 +27,27 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
         doc.write_text(
             "# Map01A UI Review Catalog\n\n"
             "Marker: `LGO_MAP01A_UI_REVIEW_CATALOG_READY`\n\n"
+            "## Current evidence\n\n"
             "entry/login: `build/map01a-entry-form-runtime/entry-login.png`\n"
             "character select: `build/map01a-character-select-runtime/character-select.png`\n"
             "inventory: `build/map01a-detail-right-player/quest-capture/pc/07-q04-inventory-open.png`\n"
             "character-info.png\n"
+            "supplies.png\n"
             "storage.png\n"
+            "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md\n"
+            "No approved dedicated UI icon set\n"
             "pc/tablet/mobile\n"
             "not owner approval\n"
             "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED\n"
             "usesOsMouseOrKeyboard=false\n",
+            encoding="utf-8",
+        )
+        audit = root / "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md"
+        audit.write_text(
+            "# Item Icon Source Audit\n\n"
+            "SOURCE_AUDIT_CURRENT\n"
+            "No approved dedicated UI icon set\n"
+            "prettier but fake icon is a regression\n",
             encoding="utf-8",
         )
         write_json(root / "build/map01a-entry-form-runtime/manifest.json", {
@@ -79,6 +91,21 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
     def test_current_repo_has_reviewable_map01a_ui_catalog(self) -> None:
         self.assertEqual([], validator.validate_root(ROOT))
 
+
+    def test_rejects_missing_current_evidence_path_listed_in_catalog(self) -> None:
+        with self._fixture() as temp:
+            doc = Path(temp) / "docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md"
+            text = doc.read_text(encoding="utf-8")
+            text = text.replace(
+                "entry/login: `build/map01a-entry-form-runtime/entry-login.png`",
+                "entry/login: `build/missing-entry-runtime/entry-login.png`",
+            )
+            doc.write_text(text, encoding="utf-8")
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("catalog current evidence path missing" in item for item in violations), violations)
+
     def test_rejects_os_input_capture_for_modal_evidence(self) -> None:
         with self._fixture() as temp:
             manifest = Path(temp) / "build/map01a-entry-form-runtime/manifest.json"
@@ -103,10 +130,8 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
 
     def test_rejects_catalog_without_item_icon_source_audit(self) -> None:
         with self._fixture() as temp:
-            doc = Path(temp) / "docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md"
-            text = doc.read_text(encoding="utf-8")
-            text = text.replace("usesOsMouseOrKeyboard=false\n", "usesOsMouseOrKeyboard=false\n")
-            doc.write_text(text, encoding="utf-8")
+            audit = Path(temp) / "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md"
+            audit.unlink()
 
             violations = validator.validate_root(Path(temp))
 

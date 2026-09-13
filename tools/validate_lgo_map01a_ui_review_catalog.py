@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -31,6 +32,26 @@ INVENTORY_TAB_EVIDENCE = [
     ("supplies tab", "build/map01a-inventory-tab-runtime/supplies.png"),
     ("storage tab", "build/map01a-inventory-tab-runtime/storage.png"),
 ]
+
+
+def iter_current_evidence_paths(text: str) -> list[str]:
+    marker = "## Current evidence"
+    start = text.find(marker)
+    if start < 0:
+        return []
+    next_section = text.find("\n## ", start + len(marker))
+    section = text[start:] if next_section < 0 else text[start:next_section]
+    paths: list[str] = []
+    for match in re.finditer(r"`([^`]+)`", section):
+        value = match.group(1).strip()
+        for rel in re.split(r"\s+and\s+|,\s*", value):
+            rel = rel.strip()
+            if not rel.startswith("build/"):
+                continue
+            if "{" in rel or "}" in rel or rel.endswith("/"):
+                continue
+            paths.append(rel)
+    return paths
 
 
 def load_json(root: Path, rel: str, violations: list[str]) -> dict[str, Any]:
@@ -75,6 +96,10 @@ def validate_root(root: Path = ROOT) -> list[str]:
         ]:
             if marker not in text:
                 violations.append(f"{DOC}: missing marker {marker}")
+
+        for rel in iter_current_evidence_paths(text):
+            if not (root / rel).is_file():
+                violations.append(f"{DOC}: catalog current evidence path missing: {rel}")
 
         audit = root / ITEM_ICON_AUDIT_DOC
         if not audit.is_file():
