@@ -98,6 +98,8 @@ namespace LinhGioi.UI
             _inventoryDetailIcon = LgoLabel("", 42, UiGold, true);
             _inventoryDetailIcon.name = "Map01A Inventory Detail Icon";
             ApplyLgoItemIcon(_inventoryDetailIcon);
+            _inventoryDetailIcon.style.width = 78;
+            _inventoryDetailIcon.style.height = 78;
             _inventoryDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             _inventoryFooter.Add(_inventoryDetailIcon);
             _equipmentDetail = LgoLabel("", 24, UiGold, true);

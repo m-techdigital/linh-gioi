@@ -184,10 +184,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(weaponThumbnail, Is.Not.Null);
                 Assert.That(weaponThumbnail.rect.height, Is.GreaterThan(weaponThumbnail.rect.width),
                     "Weapon inventory thumbnail should use the tight vertical runtime component crop, not the wide transparent slot sheet.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                var detailIcon = root.Q<Label>("Map01A Inventory Detail Icon");
+                Assert.That(detailIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Inventory detail must show real runtime equipment art instead of hiding behind fake icons.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Is.Empty,
+                Assert.That(detailIcon.text, Is.Empty,
                     "Inventory must not present emoji/text badges as final item art.");
+                Assert.That(detailIcon.style.width.value.value, Is.GreaterThanOrEqualTo(72),
+                    "Right-side item detail card should present a larger hero thumbnail than grid tiles.");
                 var weaponTileIcon = root.Q<VisualElement>("Map01A Equipment Item Icon main_weapon");
                 Assert.That(weaponTileIcon, Is.Not.Null,
                     "Equipment grid tiles must show the same real runtime thumbnail art, not text-only placeholders.");

@@ -1,3 +1,7 @@
+## Next inventory detail layout action — 2026-09-13
+
+The detail thumbnail hierarchy is improved, but the detail action row sits close to the lower edge in Player evidence. Next safe UI polish: give the right detail card better vertical spacing/action-row layout and continue matching the owner reference with shared skin helpers. Keep runtime/approved art only; do not add placeholder or random generated icons.
+
 ## Next inventory/UI action after grid runtime thumbnails — 2026-09-13
 
 Hành trang grid now shows real runtime art without text overlap. Next valid UI work is broader design alignment: improve the inventory shell, tile spacing, right detail card hierarchy, and separate Hành trang/Thông tin/Rương đồ presentation toward the owner references using shared `CongDongLamArrivalHud.Skin.cs` helpers. Do not introduce fake/generic icons or random generated item art; keep runtime sprites or approved design assets only. Re-capture Player screenshots after each visible polish batch.

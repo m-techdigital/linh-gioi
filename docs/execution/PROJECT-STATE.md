@@ -1,3 +1,7 @@
+## Map01A inventory detail hero thumbnail polish — 2026-09-13
+
+The right-side Hành trang detail card now uses a larger 78px runtime-art hero thumbnail while grid thumbnails stay compact. Regression asserts the detail thumbnail remains larger than grid tiles and still uses real runtime art with no fake text/glyph icon. Player evidence: `build/map01a-inventory-detail-hero-icon-capture-v1/07-q04-inventory-open.png`; visual review confirms the selected item thumbnail is clearer and no new overlap appears. Build: `client/Unity/build/map01a-inventory-detail-hero-icon-player/LinhGioiOnline.app`, `errors=0 warnings=17` deprecated UI API warnings only. Action buttons remain close to the lower edge and should be refined in the next layout pass.
+
 ## Map01A inventory grid runtime art cleanup — 2026-09-13
 
 Equipment grid tiles in Hành trang now use real runtime atlas thumbnails inside each tile and keep `Button.text` empty so UI Toolkit no longer draws duplicate text over the icon. Slot name/state are rendered through child labels, with a regression covering the no-overlap contract. Player evidence: `build/map01a-inventory-grid-runtime-art-clean-capture-v1/07-q04-inventory-open.png`; visual review confirms the grid icons and labels are readable and no longer overlap. Build: `client/Unity/build/map01a-inventory-grid-runtime-art-clean-player/LinhGioiOnline.app`, `errors=0 warnings=17` (deprecated UI API warnings only). This remains an incremental runtime-art polish checkpoint, not final inventory visual design acceptance.
