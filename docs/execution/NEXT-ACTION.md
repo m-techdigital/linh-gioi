@@ -1,3 +1,7 @@
+## Immediate operating lock: Map01A UI/UX only; no class build loop — 2026-09-13
+
+The active owner instruction overrides older class/wardrobe goals in this worktree. Do not resume Kiếm/Pháp/Cơ/Linh class development, do not run class Player build/capture loops, and do not rollback existing class code. If a pending task touches class art, wardrobe, pose packs, class launcher state, or broken class visual evidence, stop that path and choose a Map01A/UI task instead. Valid next work is Map01A product UI/UX only: login/auth shell, Hành trang, Thông tin, Rương đồ, HUD/dialogue readability, map interactions, shared UI components, and documentation/evidence for those screens. Before building/running Player, confirm the change is a visible Map01A/UI change and that the working tree has no unrelated class/test churn.
+
 ## Active goal lock — Map01A UI/UX only in this worktree — 2026-09-13
 
 Continue Map01A product work only: UI/UX polish, login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue/HUD readability, and playable map interactions using existing approved/runtime assets. Do not continue Kiếm/Pháp/Cơ/Linh class/wardrobe art development in this worktree, do not run class build/capture loops for routine UI work, and do not rollback existing class code. Keep the actor-scale audit guard only as a safety checkpoint already pushed; it is not a reason to resume class work here. No random class/item art generation, no Meshy/3D, no frozen surfaces.

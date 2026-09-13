@@ -1,3 +1,7 @@
+## Active goal override: stop class work, continue Map01A UI/UX — 2026-09-13
+
+The conversation-level goal text still mentions class/wardrobe, but the owner has explicitly superseded that direction for this worktree. Treat class/wardrobe work as held outside this task. Do not continue Kiếm/Pháp/Cơ/Linh art, outfit, source-pose, wardrobe, class Player build/capture loops, or class rollback here. Do not use class capture/test failures as a reason to keep rebuilding broken class code. Current authorized work is Map01A product UI/UX and gameplay flow only: login/auth shell, Hành trang, Thông tin, Rương đồ, NPC dialogue/HUD readability, map interactions, and safe shared UI foundations. Keep existing pushed class audit guards only as passive safety checks.
+
 ## Active worktree goal lock: Map01A UI/UX only — 2026-09-13
 
 Owner explicitly redirected this worktree away from class/wardrobe development. Do not continue Kiếm/Pháp/Cơ/Linh art, outfit, source-pose, Player class build/capture, or rollback work here. Keep already-pushed class audit guards as safety checks only. Current valid work is Map01A product UI/UX and gameplay flow: login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue/HUD readability, and map interactions using shared UI helpers and approved/runtime assets. If a task would require class visual repair, stop that path and choose a Map01A/UI task instead.
