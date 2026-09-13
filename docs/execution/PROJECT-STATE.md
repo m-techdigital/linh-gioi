@@ -1,3 +1,10 @@
+## Map01A — shared control skin checkpoint, still CONTINUE — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không thêm icon/item art giả.
+- `ApplyLgoInputField(...)` giờ có padding trong và frame 2px để bớt đọc như web-form mỏng; `ApplyLgoButton(...)` có padding ngang chung và primary CTA dùng viền 2px bốn cạnh. Entry/inventory/dialog consumers vẫn đi qua shared Skin/base.
+- TDD/evidence: RED đầu tiên compile-error do đọc nhầm API `border*Width`, sửa test rồi RED đúng ở input border 1px; GREEN targeted Entry EditMode pass. Shared-skin unit/validator pass.
+- Player evidence: build `build/map01a-control-skin-player-v1/LinhGioiOnline.app` (`errors=0`, `warnings=19`); capture thật tại `build/map01a-control-skin-runtime-v1/entry/entry-login.png` và `inventory/{bag,character-info,supplies,storage}.png`. Visual audit đã xem entry và bag: không vỡ/cắt, CTA/input rõ hơn, inventory tab/chip vẫn đọc được. Trạng thái vẫn `CONTINUE`, chưa phải visual acceptance vì item icons vẫn là crop runtime tối và UI còn thiếu asset/ornament richness sát demo.
+
 ## Map01A — shared layered frame checkpoint, still CONTINUE — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không thêm icon/item art giả.

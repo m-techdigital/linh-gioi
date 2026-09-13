@@ -1,3 +1,11 @@
+## Next — Map01A shared control skin checkpoint, still CONTINUE — 2026-09-13
+
+`CONTINUE`. Batch mới nhất chỉ polish base control chung: `ApplyLgoInputField(...)` có padding/frame 2px rõ hơn, `ApplyLgoButton(...)` có padding ngang và primary CTA dùng viền 2px bốn cạnh. Đây là sửa Skin dùng chung để giảm cảm giác HTML/web-form; không tạo style riêng từng màn, không thêm icon giả, không đổi class/wardrobe/pose/source/camera/scale.
+
+Evidence Player mới: build `build/map01a-control-skin-player-v1/LinhGioiOnline.app`; capture `build/map01a-control-skin-runtime-v1/entry/entry-login.png` và `inventory/{bag,character-info,supplies,storage}.png`, 1600×900, không dùng chuột/phím OS. Visual audit đã xem `entry-login.png` và `bag.png`: không vỡ/cắt, CTA/input rõ hơn, inventory tab/chip vẫn đọc được. Trạng thái vẫn `CONTINUE`: UI còn xa demo về độ giàu asset/icon thật và cần batch provenance-backed item icons/ornament sâu hơn.
+
+Next valid work: tiếp tục Map01A/UI-only theo reference owner; ưu tiên dedicated item/icon art thật có provenance hoặc polish shared card/button/input states sâu hơn bằng base chung. Không resume class/wardrobe/pose/source, không chạy class capture loop.
+
 ## Next — Map01A shared layered frame checkpoint, still CONTINUE — 2026-09-13
 
 `CONTINUE`. Batch mới nhất chỉ nâng nền UI dùng chung: `ApplyLgoLayeredFrame(...)` / `lgo-layered-frame` thêm corner frame cho modal/detail/status dùng lại ở login, Hành trang/Thông tin/Rương và NPC dialogue. Đây là checkpoint base-first để giảm cảm giác debug/web-panel; không phải nghiệm thu visual cuối. Không đổi class/wardrobe/pose/source/camera/scale, không rollback code class, không thêm icon/item art giả.

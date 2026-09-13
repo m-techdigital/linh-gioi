@@ -541,6 +541,10 @@ namespace LinhGioi.Tests.EditMode
                     "Password field must share the same input-field base as account field.");
                 Assert.That(root.Q<Label>("Map01A Entry Account Placeholder").style.fontSize.value.value, Is.LessThanOrEqualTo(15),
                     "Entry placeholder text must stay compact against the owner reference instead of using oversized form typography.");
+                Assert.That(root.Q("Map01A Entry Account Field").style.paddingLeft.value.value, Is.GreaterThanOrEqualTo(16),
+                    "Entry input fields need shared inner spacing so they read as game UI controls rather than thin web-form rectangles.");
+                Assert.That(root.Q("Map01A Entry Account Field").style.borderBottomWidth.value, Is.GreaterThanOrEqualTo(2),
+                    "Entry input fields need a stronger shared frame instead of the default one-pixel web-form border.");
                 Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("trải nghiệm"));
                 Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
@@ -582,6 +586,10 @@ namespace LinhGioi.Tests.EditMode
                     "Primary login CTA should feel like a polished game button, not an oversized web form control.");
                 Assert.That(start.style.fontSize.value.value, Is.LessThanOrEqualTo(21),
                     "Primary CTA typography must stay below the oversized prototype style.");
+                Assert.That(start.style.paddingLeft.value.value, Is.GreaterThanOrEqualTo(18),
+                    "Primary CTA should have shared horizontal padding so the button reads like a game control rather than raw text in a box.");
+                Assert.That(start.style.borderLeftWidth.value, Is.GreaterThanOrEqualTo(2),
+                    "Primary CTA should carry the same stronger frame on every edge, not only top and bottom.");
                 Assert.That(loginButton.style.minHeight.value.value, Is.LessThanOrEqualTo(38),
                     "Secondary login actions should be compact links/buttons under the main CTA.");
                 Assert.That(start.style.maxWidth.value.value, Is.GreaterThan(300));

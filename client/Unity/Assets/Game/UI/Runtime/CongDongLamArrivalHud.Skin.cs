@@ -126,6 +126,9 @@ namespace LinhGioi.UI
         {
             element.AddToClassList(LgoInputFieldClass);
             ApplyLgoFrame(element, new Color(.010f, .035f, .060f, .86f), new Color(.46f, .64f, .74f, .50f));
+            element.style.paddingLeft = element.style.paddingRight = 16;
+            element.style.paddingTop = element.style.paddingBottom = 2;
+            element.style.borderTopWidth = element.style.borderBottomWidth = 2;
             element.style.color = UiSubText;
         }
 
@@ -208,6 +211,8 @@ namespace LinhGioi.UI
             button.EnableInClassList(LgoActionStandardClass, !primary);
             button.style.minHeight = primary ? 46 : 38;
             button.style.minWidth = 0;
+            button.style.paddingLeft = button.style.paddingRight = primary ? 20 : 14;
+            button.style.paddingTop = button.style.paddingBottom = primary ? 3 : 2;
             button.style.fontSize = primary ? 18 : 14;
             button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
@@ -218,6 +223,8 @@ namespace LinhGioi.UI
             {
                 button.style.borderTopWidth = 2;
                 button.style.borderBottomWidth = 2;
+                button.style.borderLeftWidth = 2;
+                button.style.borderRightWidth = 2;
             }
         }
 
