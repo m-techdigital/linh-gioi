@@ -14,6 +14,8 @@ Repair-layer gate evidence: `build/pose-matched-layer-authoring-v1/six-pose-sour
 
 Local authoring toolchain evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/local-authoring-toolchain-discovery.json` is `KRITA_LOCAL_TOOLCHAIN_READY`. Krita 5.3.3 is available at `build/toolchains/krita/Krita.app/Contents/MacOS/krita`, downloaded into the local build toolchain only; do not commit the dmg/app.
 
+Krita CLI smoke evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`; `krita --export` did not finish and created no output PNG. Treat local Krita as available for GUI/Scripter/plugin-based authoring, but do not assume CLI export round-trip is working until a runner is added and verified.
+
 ## Skeletal 2D source blueprint gate — owner rejection recorded 2026-09-13
 
 Owner rejected the current generated-cutout skeletal Player result as visually unacceptable: limbs read detached, proportions do not match the accepted character design, and jump/flip motion cannot be used as a foundation for clothing. This closes `bind-authority-candidate-v1` as runtime/bind evidence; it is preserved only for failure analysis.
