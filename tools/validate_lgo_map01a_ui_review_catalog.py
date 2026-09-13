@@ -27,6 +27,7 @@ REQUIRED_QUEST_FRAMES = [
 ]
 INVENTORY_TAB_EVIDENCE = [
     ("character info tab", "build/map01a-inventory-tab-runtime/character-info.png"),
+    ("supplies tab", "build/map01a-inventory-tab-runtime/supplies.png"),
     ("storage tab", "build/map01a-inventory-tab-runtime/storage.png"),
 ]
 
@@ -65,6 +66,7 @@ def validate_root(root: Path = ROOT) -> list[str]:
             "07-q04-inventory-open.png",
             "pc/tablet/mobile",
             "character-info.png",
+            "supplies.png",
             "storage.png",
             "not owner approval",
         ]:
@@ -86,8 +88,8 @@ def validate_root(root: Path = ROOT) -> list[str]:
         violations.append(f"inventory tabs: status must be {TECH_STATUS}")
     if tab_manifest.get("usesOsMouseOrKeyboard") is not False:
         violations.append("inventory tabs: usesOsMouseOrKeyboard must be false")
-    if tab_manifest.get("frames") != ["character-info.png", "storage.png"]:
-        violations.append("inventory tabs: frames must list character-info.png and storage.png")
+    if tab_manifest.get("frames") != ["character-info.png", "supplies.png", "storage.png"]:
+        violations.append("inventory tabs: frames must list character-info.png, supplies.png and storage.png")
     for label, rel in INVENTORY_TAB_EVIDENCE:
         require_file(root, rel, violations)
 

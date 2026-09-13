@@ -55,9 +55,10 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "usesOsMouseOrKeyboard": False,
             "width": 1600,
             "height": 900,
-            "frames": ["character-info.png", "storage.png"],
+            "frames": ["character-info.png", "supplies.png", "storage.png"],
         })
         (root / "build/map01a-inventory-tab-runtime/character-info.png").write_bytes(b"png")
+        (root / "build/map01a-inventory-tab-runtime/supplies.png").write_bytes(b"png")
         (root / "build/map01a-inventory-tab-runtime/storage.png").write_bytes(b"png")
         for profile, size in {"pc": (1280, 720), "tablet": (1024, 768), "mobile": (1600, 720)}.items():
             write_json(root / f"build/map01a-detail-right-player/quest-capture/{profile}/manifest.json", {

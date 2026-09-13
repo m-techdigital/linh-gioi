@@ -1,3 +1,7 @@
+## Next inventory supplies polish after evidence coverage — 2026-09-13
+
+The Vật phẩm tab is now captured in the required UI catalog: `build/map01a-inventory-tab-runtime/supplies.png`. Visual review shows it is not final: empty/pre-supplies state is too thin and disabled buttons are hard to read. Next safe UI batch should polish Vật phẩm with a clearer empty/locked state, readable action rows, and right-detail behavior when a real item is selected, using shared skin helpers and runtime/approved art only.
+
 ## Next inventory/UI polish after readable grid thumbnails — 2026-09-13
 
 Grid item thumbnails are now larger and still use runtime atlas art: `build/map01a-inventory-grid-readable-icons-capture-v1/07-q04-inventory-open.png`. Continue broader Map01A UI/UX alignment from the owner references: improve shell/card hierarchy, tab/nav density, and the Vật phẩm/Rương đồ flows using shared skin helpers. Do not add fake/generic icons or random generated art; use runtime/approved assets only.
