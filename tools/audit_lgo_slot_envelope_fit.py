@@ -49,29 +49,49 @@ def build_slot_envelope(target: dict, profile: dict | None = None) -> dict:
     """Build a source-space numeric envelope from the target slot guide."""
     profile = dict(profile or DEFAULT_PROFILE)
     guide = target.get("slotGuide") or {}
-    line = guide.get("line")
-    if not line or len(line) != 2:
-        raise ValueError(f"slot target has no line guide: {target.get('slot')}/{target.get('pose')}")
-    center = guide.get("center")
-    if not center:
-        center = [(line[0][0] + line[1][0]) / 2, (line[0][1] + line[1][1]) / 2]
-    line_length = _distance(line[0], line[1])
-    half_width = float(guide.get("halfWidthPx") or (line_length / 2))
     measurements = target.get("measurements") or {}
     torso_length = float(measurements.get("torsoLengthPx") or 0)
+    shoulder_width = float(measurements.get("shoulderWidthPx") or 0)
+    hip_width = float(measurements.get("hipWidthPx") or 0)
+    center = guide.get("center")
 
-    # These limits are source-authoring guardrails, not runtime offsets. They
-    # allow ornament/tail tolerance around the waist guide while rejecting raw
-    # generated layers that are several body segments too large.
-    max_bbox_width = round(line_length * 2.2)
-    max_bbox_height = round(max(half_width * 2.4, torso_length * 0.34, 36))
-    max_center_distance = round(max(half_width * 0.9, 36))
+    if guide.get("line"):
+        kind = "line"
+        line = guide["line"]
+        if len(line) != 2:
+            raise ValueError(f"slot target has invalid line guide: {target.get('slot')}/{target.get('pose')}")
+        if not center:
+            center = [(line[0][0] + line[1][0]) / 2, (line[0][1] + line[1][1]) / 2]
+        line_length = _distance(line[0], line[1])
+        half_width = float(guide.get("halfWidthPx") or (line_length / 2))
+        max_bbox_width = round(line_length * 2.2)
+        max_bbox_height = round(max(half_width * 2.4, torso_length * 0.34, 36))
+        max_center_distance = round(max(half_width * 0.9, 36))
+    elif guide.get("chestLine") and guide.get("shoulderLine"):
+        kind = "guard"
+        line = guide["shoulderLine"]
+        line_length = _distance(line[0], line[1])
+        half_width = line_length / 2
+        max_bbox_width = round(max(shoulder_width * 1.45, line_length * 1.25, 96))
+        max_bbox_height = round(max(torso_length * 0.45, line_length * 0.65, 64))
+        max_center_distance = round(max(shoulder_width * 0.32, 36))
+    elif guide.get("torsoAxis") and guide.get("shoulderLine") and guide.get("waistLine"):
+        kind = "torso"
+        line = guide["torsoAxis"]
+        line_length = torso_length or _distance(line[0], line[1])
+        half_width = max(shoulder_width, hip_width, _distance(guide["shoulderLine"][0], guide["shoulderLine"][1])) / 2
+        max_bbox_width = round(max(shoulder_width * 1.65, hip_width * 2.4, 128))
+        max_bbox_height = round(max(line_length * 1.15, 180))
+        max_center_distance = round(max(line_length * 0.22, 48))
+    else:
+        raise ValueError(f"slot target has no supported guide: {target.get('slot')}/{target.get('pose')}")
 
     return {
         "slot": target.get("slot"),
         "pose": target.get("pose"),
         "profile": profile,
         "guide": {
+            "kind": kind,
             "center": [round(float(center[0]), 2), round(float(center[1]), 2)],
             "line": line,
             "lineLengthPx": round(line_length, 2),
@@ -87,6 +107,23 @@ def build_slot_envelope(target: dict, profile: dict | None = None) -> dict:
         "visualAccepted": False,
         "usage": "Pre-stage source-space fit gate. Passing this does not approve art quality or runtime promotion.",
     }
+
+
+def build_slot_envelope_index(brief: dict, profile: dict | None = None) -> dict:
+    envelopes = []
+    for target in brief.get("targets") or []:
+        envelope = build_slot_envelope(target, profile)
+        envelopes.append({"id": f"{envelope['slot']}/{envelope['pose']}", **envelope})
+    result = {
+        "status": "SLOT_ENVELOPE_INDEX_READY",
+        "runtimePromotionAllowed": False,
+        "visualAccepted": False,
+        "targetCount": len(envelopes),
+        "envelopes": envelopes,
+        "usage": "Reusable numeric source-space fit limits for missing outfit slot authoring.",
+    }
+    result["auditPayloadSha256"] = _payload_sha256(result)
+    return result
 
 
 def audit_candidate_against_brief(
