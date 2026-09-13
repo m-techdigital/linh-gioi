@@ -13,6 +13,7 @@ namespace LinhGioi.UI
         private static readonly Color UiBlue = new Color(.10f, .35f, .58f, .96f);
         private static readonly Color UiText = new Color(.96f, .91f, .76f, .96f);
         private static readonly Color UiSubText = new Color(.73f, .85f, .88f, .90f);
+        private const string LgoInventoryButtonBaseClass = "lgo-inventory-button-base";
         private const string LgoInventoryMainTabClass = "lgo-inventory-main-tab";
         private const string LgoInventoryFilterChipClass = "lgo-inventory-filter-chip";
         private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
@@ -127,6 +128,21 @@ namespace LinhGioi.UI
                 button.style.borderTopWidth = 2;
                 button.style.borderBottomWidth = 2;
             }
+        }
+
+        private static void ApplyLgoInventoryButtonBase(Button button, bool touch)
+        {
+            button.AddToClassList(LgoInventoryButtonBaseClass);
+            ApplyLgoButton(button);
+            button.style.minHeight = touch ? 44 : 38;
+            button.style.minWidth = 0;
+            button.style.flexGrow = 1;
+            button.style.flexBasis = 0;
+            button.style.marginRight = 4;
+            button.style.marginLeft = 0;
+            button.style.fontSize = 15;
+            button.style.whiteSpace = WhiteSpace.Normal;
+            button.style.unityTextAlign = TextAnchor.MiddleCenter;
         }
 
         private static void ApplyLgoSelectedTab(Button button, bool selected)

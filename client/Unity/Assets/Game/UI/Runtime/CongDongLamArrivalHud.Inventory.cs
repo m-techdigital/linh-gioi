@@ -20,18 +20,7 @@ namespace LinhGioi.UI
         private Button InventoryButton(Action action, string name, string text = "")
         {
             var button = new Button(action) { name = name, text = text };
-            button.style.minHeight = _touch ? 58 : 46;
-            button.style.minWidth = 0;
-            button.style.flexGrow = 1;
-            button.style.flexBasis = 0;
-            button.style.marginRight = 4;
-            button.style.marginLeft = 0;
-            button.style.fontSize = 17;
-            button.style.whiteSpace = WhiteSpace.Normal;
-            button.style.unityTextAlign = TextAnchor.MiddleCenter;
-            ApplyLgoButton(button);
-            button.style.minHeight = _touch ? 44 : 38;
-            button.style.fontSize = 15;
+            ApplyLgoInventoryButtonBase(button, _touch);
             return button;
         }
 

@@ -147,3 +147,8 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-character-select-base-style-runtime-v1/character-select.png` and `manifest.json`.
 - Result: character-select cards and primary close/enter CTA now use shared skin helpers/classes rather than local one-off sizing.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance or class-art approval. This is a base-first guard checkpoint for the Map01A local review modal.
+## 2026-09-13 — Inventory button base-first helper evidence
+
+- Evidence: `build/map01a-inventory-button-base-runtime-v1/bag.png`, `character-info.png`, `supplies.png`, `storage.png`, and `manifest.json`.
+- Result: inventory flow buttons now share `ApplyLgoInventoryButtonBase(...)` / `lgo-inventory-button-base` before role-specific helpers override density.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms layout did not break, while final inventory visual richness still needs deeper polish and approved/provenance-backed item art.

@@ -1,3 +1,10 @@
+## Map01A — inventory button base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Tất cả nút tạo qua `InventoryButton(...)` giờ đi qua shared `ApplyLgoInventoryButtonBase(...)` và class `lgo-inventory-button-base` trước khi semantic helpers như main tab/filter/grid/toolbar/close override density. Việc này khóa rule base-first cho flow Hành trang/Thông tin/Rương đồ, tránh mỗi nút tự dựng foundation riêng.
+- RED/GREEN: targeted EditMode fail đúng khi close/detail action/grid tile chưa có base class, sau đó pass sau refactor; shared-skin validator/unit test cập nhật marker helper mới.
+- Player evidence: `build/map01a-inventory-button-base-runtime-v1/{bag,character-info,supplies,storage}.png`, manifest cùng thư mục, capture graphics Player không dùng `-nographics`. Visual review: bag/detail và storage gate không vỡ layout; vẫn `CONTINUE`, chưa phải nghiệm thu mỹ thuật inventory vì còn cần polish sâu/asset provenance.
+
 ## Map01A — character select base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

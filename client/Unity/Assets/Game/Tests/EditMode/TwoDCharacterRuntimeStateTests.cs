@@ -191,6 +191,12 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory must not present emoji/text badges as final item art.");
                 Assert.That(detailIcon.style.width.value.value, Is.GreaterThanOrEqualTo(72),
                     "Right-side item detail card should present a larger hero thumbnail than grid tiles.");
+                Assert.That(root.Q<Button>("LGO Inventory Close").ClassListContains("lgo-inventory-button-base"), Is.True,
+                    "Every inventory button must start from the shared inventory button base before semantic helpers override density.");
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").ClassListContains("lgo-inventory-button-base"), Is.True,
+                    "Inventory detail actions must not use a separate one-off button foundation.");
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").ClassListContains("lgo-inventory-button-base"), Is.True,
+                    "Inventory grid item buttons must share the inventory button base before applying grid-cell styling.");
                 Assert.That(root.Q<Button>("LGO Inventory Close").style.flexBasis.value.value, Is.LessThanOrEqualTo(44),
                     "Inventory close button should be compact like an RPG modal control, not a large debug square.");
                 Assert.That(root.Q<Button>("LGO Inventory Close").style.fontSize.value.value, Is.LessThanOrEqualTo(24),

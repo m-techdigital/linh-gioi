@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after inventory button base — 2026-09-13
+
+`CONTINUE`. Inventory flow đã có button foundation chung `ApplyLgoInventoryButtonBase(...)` / `lgo-inventory-button-base`, evidence `build/map01a-inventory-button-base-runtime-v1/`. Rule hiện hành: mọi UI/UX giống nhau phải đi qua base/shared helper trước; semantic helper chỉ override vai trò cụ thể như tab/filter/grid/action/close, không dựng foundation lẻ.
+
+Next valid work: tiếp tục Map01A/UI-only, ưu tiên giảm độ phẳng của inventory/dialog shell/card/detail bằng shared base, hoặc polish login/HUD/NPC dialogue theo design owner với asset runtime/approved/provenance-backed. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI polish after character select helper — 2026-09-13
 
 `CONTINUE`. Character select card/CTA đã đi qua shared helpers/classes và có Player evidence `build/map01a-character-select-base-style-runtime-v1/character-select.png`. Quy tắc hiện hành: UI/UX giống nhau phải đi qua base/shared helper trước, kèm guard test/validator nếu là pattern tái diễn; không tự build button/card/modal/dialog/grid lẻ theo từng màn.
