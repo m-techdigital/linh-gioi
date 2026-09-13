@@ -50,6 +50,8 @@ namespace LinhGioi.UI
         private const string LgoItemIconFrameClass = "lgo-item-icon-frame";
         private const string LgoTitleLabelClass = "lgo-title-label";
         private const string LgoSubtitleLabelClass = "lgo-subtitle-label";
+        private const string LgoLayeredFrameClass = "lgo-layered-frame";
+        private const string LgoFrameCornerClass = "lgo-frame-corner";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -68,9 +70,51 @@ namespace LinhGioi.UI
             element.style.color = UiText;
         }
 
+        private static bool HasDirectChildNamed(VisualElement element, string name)
+        {
+            foreach (var child in element.Children())
+                if (child.name == name) return true;
+            return false;
+        }
+
+        private static void AddLgoFrameCorner(VisualElement element, string suffix, bool top, bool right, bool bottom, bool left)
+        {
+            var name = "LGO Layered Frame Corner " + suffix;
+            if (HasDirectChildNamed(element, name)) return;
+            var corner = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
+            corner.AddToClassList(LgoFrameCornerClass);
+            corner.style.position = Position.Absolute;
+            corner.style.width = 18;
+            corner.style.height = 18;
+            if (top) corner.style.top = 3;
+            if (right) corner.style.right = 3;
+            if (bottom) corner.style.bottom = 3;
+            if (left) corner.style.left = 3;
+            var color = new Color(.96f, .76f, .36f, .86f);
+            corner.style.borderTopColor = color;
+            corner.style.borderRightColor = color;
+            corner.style.borderBottomColor = color;
+            corner.style.borderLeftColor = color;
+            corner.style.borderTopWidth = top ? 2 : 0;
+            corner.style.borderRightWidth = right ? 2 : 0;
+            corner.style.borderBottomWidth = bottom ? 2 : 0;
+            corner.style.borderLeftWidth = left ? 2 : 0;
+            element.Add(corner);
+        }
+
+        private static void ApplyLgoLayeredFrame(VisualElement element)
+        {
+            element.AddToClassList(LgoLayeredFrameClass);
+            AddLgoFrameCorner(element, "TL", true, false, false, true);
+            AddLgoFrameCorner(element, "TR", true, true, false, false);
+            AddLgoFrameCorner(element, "BL", false, false, true, true);
+            AddLgoFrameCorner(element, "BR", false, true, true, false);
+        }
+
         private static void ApplyLgoModalShell(VisualElement element, float padding = 12)
         {
             ApplyLgoGlassPanel(element);
+            ApplyLgoLayeredFrame(element);
             element.style.flexDirection = FlexDirection.Column;
             element.style.paddingLeft = element.style.paddingRight = padding;
             element.style.paddingTop = element.style.paddingBottom = padding;
@@ -91,6 +135,7 @@ namespace LinhGioi.UI
             element.style.paddingLeft = element.style.paddingRight = horizontalPadding;
             element.style.paddingTop = element.style.paddingBottom = verticalPadding;
             ApplyLgoFrame(element, new Color(.012f, .040f, .074f, .97f), new Color(.90f, .70f, .36f, .82f));
+            ApplyLgoLayeredFrame(element);
             element.style.borderTopWidth = 2;
             element.style.color = UiText;
         }
@@ -276,6 +321,7 @@ namespace LinhGioi.UI
             card.style.paddingLeft = card.style.paddingRight = horizontalPadding;
             card.style.paddingTop = card.style.paddingBottom = verticalPadding;
             ApplyLgoFrame(card, new Color(.018f, .055f, .090f, .86f), new Color(.56f, .68f, .72f, .52f));
+            ApplyLgoLayeredFrame(card);
         }
 
         private static void ApplyLgoSelectedTab(Button button, bool selected)

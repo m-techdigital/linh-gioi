@@ -266,6 +266,8 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory content panels must share a shell base instead of each flow styling a flat panel separately.");
                 Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-inventory-panel-shell"), Is.True,
                     "Inventory detail panel must share the same shell base as bag/character/storage panels.");
+                Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-layered-frame"), Is.True,
+                    "Inventory detail should use the shared layered-frame primitive instead of staying as a flat debug rectangle.");
                 Assert.That(root.Q("Map01A Storage Gate Card").ClassListContains("lgo-inventory-panel-shell"), Is.True,
                     "Storage gate card must not introduce a parallel flat panel style.");
                 Assert.That(inventoryGridPanel.ClassListContains("lgo-inventory-content-fit-panel"), Is.True,
@@ -612,6 +614,10 @@ namespace LinhGioi.Tests.EditMode
                 var entryPanel = root.Q("Map01A Entry Panel");
                 Assert.That(entryPanel.ClassListContains("lgo-entry-shell"), Is.True,
                     "Entry/login panel sizing must go through a shared entry-shell base instead of screen-local width/padding values.");
+                Assert.That(entryPanel.ClassListContains("lgo-layered-frame"), Is.True,
+                    "Entry/login shell must use the shared layered-frame primitive instead of a flat web-form rectangle.");
+                Assert.That(root.Q("Map01A Entry Server Card").ClassListContains("lgo-layered-frame"), Is.True,
+                    "Entry detail cards must share the layered-frame primitive so card depth does not fork per screen.");
                 Assert.That(entryPanel.style.maxWidth.value.value, Is.LessThanOrEqualTo(620),
                     "Entry/login panel should stay compact so the screen reads as a game login card instead of a wide web form.");
                 Assert.That(root.Q("Map01A Entry Panel Glow").style.maxWidth.value.value, Is.LessThanOrEqualTo(660),
@@ -981,6 +987,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(body, Is.Not.Null, "Dialogue panel must frame the spoken line separately from action buttons.");
                 Assert.That(body.ClassListContains("lgo-detail-card"), Is.True,
                     "Dialogue content must inherit the shared detail-card foundation.");
+                Assert.That(body.ClassListContains("lgo-layered-frame"), Is.True,
+                    "Dialogue body must use the shared layered-frame primitive so conversation panels do not stay flat.");
                 var actionRow = root.Q("Map01A Dialogue Actions");
                 Assert.That(actionRow, Is.Not.Null, "Dialogue panel must use a named action row instead of loose buttons.");
                 var speaker = root.Q<Label>("Map01A Dialogue Speaker");

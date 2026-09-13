@@ -1,3 +1,10 @@
+## Map01A — shared layered frame checkpoint, still CONTINUE — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không thêm icon/item art giả.
+- Root-cause workflow adjustment: không dùng test xanh thay visual review. Batch này chỉ tạo primitive dùng chung `ApplyLgoLayeredFrame(...)` / `lgo-layered-frame` trong `CongDongLamArrivalHud.Skin.cs`; modal shell, detail card và status card nhận cùng corner-frame, còn partial screens chỉ gọi helper chung. Validator `tools/validate_lgo_ui_shared_skin.py` khóa marker ở tầng Skin để tránh ép partial tự giữ style literal riêng.
+- TDD/evidence: RED ban đầu fail đúng khi Entry shell thiếu `lgo-layered-frame`; GREEN targeted EditMode cho Entry, Inventory và Dialogue đều exit 0. Shared-skin unit/validator pass.
+- Player evidence: build `build/map01a-layered-frame-player-v1/LinhGioiOnline.app` (`LGO_MACOS_PLAYER_BUILD result=Succeeded`, `errors=0`, `warnings=19`). Capture thật tại `build/map01a-layered-frame-runtime-v1/entry/entry-login.png`, `inventory/{bag,character-info,supplies,storage}.png`, và quest-only PC `quest-pc/02-ha-van-dialogue.png` (`frames=18`, `dialogueFrames=38`, Q01-Q09 pass). Visual audit đã xem các ảnh chính: layout không vỡ, detail ở bên phải, dialogue không bị chồng/cắt. Trạng thái vẫn `CONTINUE`, chưa phải visual acceptance vì login/input/button còn hơi web-form và item icons còn là crop runtime tối/chưa có dedicated product icons.
+
 ## Map01A — inventory column balance, still CONTINUE — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không thêm icon/item art giả.

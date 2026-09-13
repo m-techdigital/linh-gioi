@@ -1,3 +1,11 @@
+## Next — Map01A shared layered frame checkpoint, still CONTINUE — 2026-09-13
+
+`CONTINUE`. Batch mới nhất chỉ nâng nền UI dùng chung: `ApplyLgoLayeredFrame(...)` / `lgo-layered-frame` thêm corner frame cho modal/detail/status dùng lại ở login, Hành trang/Thông tin/Rương và NPC dialogue. Đây là checkpoint base-first để giảm cảm giác debug/web-panel; không phải nghiệm thu visual cuối. Không đổi class/wardrobe/pose/source/camera/scale, không rollback code class, không thêm icon/item art giả.
+
+Evidence Player mới: build `build/map01a-layered-frame-player-v1/LinhGioiOnline.app`; capture `build/map01a-layered-frame-runtime-v1/entry/entry-login.png`, `inventory/{bag,character-info,supplies,storage}.png`, và quest-only PC `quest-pc/02-ha-van-dialogue.png` với Q01-Q09 `frames=18`, `dialogueFrames=38`, `usesOsMouseOrKeyboard=false` cho entry/inventory. Visual audit đã xem login, bag, character-info, storage, dialogue: không vỡ layout/detail vẫn bên phải/dialogue không chồng cắt. Ghi rõ còn `CONTINUE`: login/input/button vẫn còn hơi web-form, inventory icon đang là crop runtime tối/chưa phải icon sản phẩm thật.
+
+Next valid work: tiếp tục Map01A/UI-only theo reference owner bằng shared Skin/base, ưu tiên asset/icon/item thật có provenance và polish button/input/card density sát design. Không resume class/wardrobe/pose/source, không chạy class capture loop. Mọi visible batch phải build/capture Player và tự xem ảnh trước khi báo trạng thái.
+
 ## Next — Map01A inventory column balance, still CONTINUE — 2026-09-13
 
 `CONTINUE`. Batch mới nhất chỉ cân lại bố cục Hành trang theo base-first: grid desktop dùng `InventoryDesktopMainColumnWidth=820`, detail phải `330`, gutter `12`, item cell `14.2%` để bớt cảm giác bảng debug rộng và giảm khoảng trống hai bên. Không đổi class/wardrobe/pose/source/camera/scale, không rollback code class.
