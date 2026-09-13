@@ -328,12 +328,15 @@ namespace LinhGioi.UI
             var selectedSlot = _scene.VoSelectedEquipmentSlot;
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
             var equipToggleText = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
-            _inventoryDetailPrimaryAction.text = equipToggleText;
-            _equipmentToggle.text = equipToggleText;
-            var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
-            _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "";
-            _equipmentVariant.style.display = hasVariant ? DisplayStyle.Flex : DisplayStyle.None;
-            _equipmentVariant.SetEnabled(hasVariant);
+            if (!_suppliesOpen)
+            {
+                _inventoryDetailPrimaryAction.text = equipToggleText;
+                _equipmentToggle.text = equipToggleText;
+                var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
+                _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "";
+                _equipmentVariant.style.display = hasVariant ? DisplayStyle.Flex : DisplayStyle.None;
+                _equipmentVariant.SetEnabled(hasVariant);
+            }
             _equipmentClass.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
             _equipmentClass.text = _scene.CanCycleSourcePoseClass
                 ? "Đổi class: " + _scene.ActiveEquipmentClassLabel + (_touch ? "" : " · F")
@@ -347,11 +350,11 @@ namespace LinhGioi.UI
             _vitalsName.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
             _health.value = _scene.PlayerHealth; _health.title = "HP " + _scene.PlayerHealth + "/100";
             _mana.value = _scene.PlayerMana; _mana.title = "MP " + _scene.PlayerMana + "/100";
-            _healthPotion.SetEnabled(_scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100);
-            _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
-            _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
             foreach (var supplyAction in new[] { _healthPotion, _manaPotion, _equipReward })
+            {
+                supplyAction.SetEnabled(true);
                 supplyAction.style.color = new Color(.70f, .80f, .80f, .92f);
+            }
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             var hudBlocked = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen;
             _characterSelectButton.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;

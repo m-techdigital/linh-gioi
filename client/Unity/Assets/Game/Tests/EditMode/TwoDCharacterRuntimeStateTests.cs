@@ -427,10 +427,18 @@ namespace LinhGioi.Tests.EditMode
 
                 hud.OpenInventoryReviewMode("supplies");
                 Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "Supplies must keep the right-side detail panel instead of becoming a left-only technical list.");
                 Assert.That(root.Q<Label>("Map01A Supplies Empty State").text, Does.Contain("Chưa nhận"));
-                Assert.That(root.Q<Button>("Map01A Health Potion").enabledSelf, Is.False);
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT VẬT PHẨM"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Is.EqualTo("Vật phẩm hồi phục"));
+                Assert.That(root.Q<Button>("Map01A Health Potion").enabledSelf, Is.True,
+                    "Supply rows stay selectable so clicking an item can show detail without consuming it.");
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Is.EqualTo("Dùng bình máu"));
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").enabledSelf, Is.False,
+                    "The right-side action, not the selectable item row, is disabled when the supply cannot be used.");
                 Assert.That(root.Q<Button>("Map01A Health Potion").style.color.value, Is.EqualTo(new Color(.70f, .80f, .80f, .92f)),
-                    "Disabled supply actions must stay readable in Player captures instead of fading into the dark panel.");
+                    "Supply rows must stay readable in Player captures instead of fading into the dark panel.");
 
                 hud.OpenInventoryReviewMode("storage");
                 Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -473,12 +481,17 @@ namespace LinhGioi.Tests.EditMode
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 InvokeBoundButton(root.Q<Button>("Map01A Supplies Tab"));
                 Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Inventory Footer").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Inventory Footer").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 var potion = root.Q<Button>("Map01A Health Potion");
                 Assert.That(potion, Is.Not.Null);
                 Assert.That(potion.parent.style.display.value, Is.EqualTo(DisplayStyle.Flex),
-                    "Source-pose review must not hide the inventory actions needed to complete Q04");
+                    "Source-pose review must keep the inventory item rows visible for Q04");
                 InvokeBoundButton(potion);
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT VẬT PHẨM"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Is.EqualTo("Vật phẩm hồi phục"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Is.EqualTo("CÓ THỂ DÙNG"));
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Is.EqualTo("Dùng bình máu"));
+                InvokeBoundButton(root.Q<Button>("Map01A Inventory Detail Primary Action"));
                 Assert.That(scene.PlayerHealth, Is.EqualTo(100));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q05"));
             }

@@ -14,6 +14,7 @@ namespace LinhGioi.UI
         private VisualElement[] _equipmentTileIcons;
         private Label[] _equipmentTileNames, _equipmentTileStates;
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
+        private string _selectedSupplyItemId = "health_potion";
 
         private Button InventoryButton(Action action, string name, string text = "")
         {
@@ -141,7 +142,7 @@ namespace LinhGioi.UI
             actions.style.marginTop = 14;
             actions.style.marginBottom = 12;
             actions.style.flexShrink = 0;
-            _inventoryDetailPrimaryAction = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "Map01A Inventory Detail Primary Action");
+            _inventoryDetailPrimaryAction = InventoryButton(UseInventoryDetailPrimaryAction, "Map01A Inventory Detail Primary Action");
             _inventoryDetailPrimaryAction.style.minHeight = 46;
             _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
             _equipmentToggle.style.display = DisplayStyle.None;
@@ -308,9 +309,9 @@ namespace LinhGioi.UI
             ApplyLgoFrame(_suppliesEmptyState, new Color(.020f, .060f, .088f, .86f), new Color(.50f, .58f, .58f, .55f));
             _suppliesPage.Add(_suppliesEmptyState);
             _questItemActions = new VisualElement { name = "Map01A Quest Item Actions" };
-            _healthPotion = InventoryButton(() => _scene.UseHealthPotion(), "Map01A Health Potion", "Bình Máu Nhỏ");
-            _manaPotion = InventoryButton(() => _scene.UseManaPotion(), "Map01A Mana Potion", "Bình Linh Lực Nhỏ");
-            _equipReward = InventoryButton(() => _scene.EquipClassReward(), "Map01A Equip Reward", "Hộ Uyển Võ Tân Thủ");
+            _healthPotion = InventoryButton(() => SelectInventorySupply("health_potion"), "Map01A Health Potion", "Bình Máu Nhỏ");
+            _manaPotion = InventoryButton(() => SelectInventorySupply("mana_potion"), "Map01A Mana Potion", "Bình Linh Lực Nhỏ");
+            _equipReward = InventoryButton(() => SelectInventorySupply("class_reward"), "Map01A Equip Reward", "Hộ Uyển Võ Tân Thủ");
             foreach (var button in new[] { _healthPotion, _manaPotion, _equipReward })
             {
                 button.style.flexGrow = 0; button.style.flexBasis = StyleKeyword.Auto;
@@ -341,6 +342,28 @@ namespace LinhGioi.UI
         private void SelectInventoryEquipmentSlot(string slotId)
         {
             _scene.SelectVoEquipmentSlot(slotId);
+            _suppliesOpen = false;
+            RefreshInventoryEquipmentTiles();
+            RefreshInventoryDetailCard();
+        }
+
+        private void SelectInventorySupply(string itemId)
+        {
+            _selectedSupplyItemId = itemId;
+            _suppliesOpen = true;
+            RefreshInventoryEquipmentTiles();
+            RefreshInventoryDetailCard();
+        }
+
+        private void UseInventoryDetailPrimaryAction()
+        {
+            if (_suppliesOpen)
+            {
+                if (_selectedSupplyItemId == "health_potion") _scene.UseHealthPotion();
+                else if (_selectedSupplyItemId == "mana_potion") _scene.UseManaPotion();
+                else if (_selectedSupplyItemId == "class_reward") _scene.EquipClassReward();
+            }
+            else _scene.ToggleVoEquipmentSlot();
             RefreshInventoryEquipmentTiles();
             RefreshInventoryDetailCard();
         }
@@ -353,8 +376,8 @@ namespace LinhGioi.UI
             _inventoryGridPanel.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryHeroPanel.style.display = characterInfo ? DisplayStyle.Flex : DisplayStyle.None;
             _storagePanel.style.display = DisplayStyle.None;
-            _inventoryDetailPanel.style.display = characterInfo || !_suppliesOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            _inventoryFooter.style.display = characterInfo || !_suppliesOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _inventoryDetailPanel.style.display = DisplayStyle.Flex;
+            _inventoryFooter.style.display = DisplayStyle.Flex;
             ApplyLgoSelectedTab(_bagTab, !characterInfo);
             ApplyLgoSelectedTab(_characterInfoTab, characterInfo);
             _storageTab.style.backgroundColor = new Color(.045f,.13f,.18f);
@@ -383,8 +406,8 @@ namespace LinhGioi.UI
             _suppliesPage.style.display = supplies ? DisplayStyle.Flex : DisplayStyle.None;
             if (!_storageOpen)
             {
-                _inventoryFooter.style.display = !_characterInfoOpen && supplies ? DisplayStyle.None : DisplayStyle.Flex;
-                _inventoryDetailPanel.style.display = !_characterInfoOpen && supplies ? DisplayStyle.None : DisplayStyle.Flex;
+                _inventoryFooter.style.display = DisplayStyle.Flex;
+                _inventoryDetailPanel.style.display = DisplayStyle.Flex;
             }
             ApplyLgoSelectedTab(_equipmentTab, !supplies);
             ApplyLgoSelectedTab(_suppliesTab, supplies);
@@ -424,6 +447,13 @@ namespace LinhGioi.UI
         private void RefreshInventoryDetailCard()
         {
             if (_scene == null || _inventoryDetailStateBadge == null) return;
+            if (_suppliesOpen)
+            {
+                RefreshInventorySupplyDetailCard();
+                return;
+            }
+            _inventoryDetailHeader.text = "CHI TIẾT MÓN";
+            if (_inventoryDetailPrimaryAction != null) _inventoryDetailPrimaryAction.SetEnabled(true);
             var selectedSlot = _scene.VoSelectedEquipmentSlot;
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
             var selectedLevel = _scene.GetVoEquipmentItemLevel(selectedSlot);
@@ -444,6 +474,54 @@ namespace LinhGioi.UI
                 _inventoryDetailPrimaryAction.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
             if (_equipmentToggle != null)
                 _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
+        }
+
+        private void RefreshInventorySupplyDetailCard()
+        {
+            _inventoryDetailIcon.text = "";
+            _inventoryDetailIcon.style.backgroundImage = StyleKeyword.None;
+            _inventoryDetailIcon.style.display = DisplayStyle.None;
+            _inventoryDetailHeader.text = "CHI TIẾT VẬT PHẨM";
+            _inventoryDetailRarity.text = "Nhiệm vụ · Map01A · local-only";
+            if (_selectedSupplyItemId == "mana_potion")
+            {
+                _equipmentDetail.text = "Bình Linh Lực Nhỏ";
+                _inventoryDetailSlotType.text = "Vật phẩm hồi phục";
+                _inventoryItemId.text = "map01a_mana_potion_small";
+                _inventoryDetailStateBadge.text = _scene.ManaPotionCount > 0 && _scene.PlayerMana < 100 ? "CÓ THỂ DÙNG" : "TẠM KHÓA";
+                _inventoryItemState.text = "Số lượng: " + _scene.ManaPotionCount + " · MP " + _scene.PlayerMana + "/100.";
+                _inventoryDetailStatPrimary.text = "Hồi MP +50";
+                _inventoryDetailStatFit.text = "Dùng khi MP chưa đầy.";
+                _inventoryDetailPrimaryAction.text = "Dùng bình linh lực";
+                _inventoryDetailPrimaryAction.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
+            }
+            else if (_selectedSupplyItemId == "class_reward")
+            {
+                _equipmentDetail.text = "Hộ Uyển Võ Tân Thủ";
+                _inventoryDetailSlotType.text = "Trang bị nhiệm vụ";
+                _inventoryItemId.text = "map01a_vo_wrist_guard_reward";
+                _inventoryDetailStateBadge.text = !_scene.HasClassRewardItem ? "CHƯA NHẬN" : _scene.IsClassRewardEquipped ? "ĐÃ TRANG BỊ" : "CÓ THỂ TRANG BỊ";
+                _inventoryItemState.text = !_scene.HasClassRewardItem ? "Hoàn thành nhánh Q07 để nhận." : _scene.IsClassRewardEquipped ? "Đã trang bị từ nhiệm vụ." : "Sẵn sàng trang bị từ chi tiết bên phải.";
+                _inventoryDetailStatPrimary.text = "Thủ +24 · Sinh lực +80";
+                _inventoryDetailStatFit.text = "Trang bị nhiệm vụ dùng chung detail bên phải.";
+                _inventoryDetailPrimaryAction.text = "Trang bị hộ uyển";
+                _inventoryDetailPrimaryAction.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
+            }
+            else
+            {
+                _selectedSupplyItemId = "health_potion";
+                _equipmentDetail.text = "Bình Máu Nhỏ";
+                _inventoryDetailSlotType.text = "Vật phẩm hồi phục";
+                _inventoryItemId.text = "map01a_health_potion_small";
+                _inventoryDetailStateBadge.text = _scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100 ? "CÓ THỂ DÙNG" : "TẠM KHÓA";
+                _inventoryItemState.text = "Số lượng: " + _scene.HealthPotionCount + " · HP " + _scene.PlayerHealth + "/100.";
+                _inventoryDetailStatPrimary.text = "Hồi HP +50";
+                _inventoryDetailStatFit.text = "Dùng khi HP chưa đầy.";
+                _inventoryDetailPrimaryAction.text = "Dùng bình máu";
+                _inventoryDetailPrimaryAction.SetEnabled(_scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100);
+            }
+            if (_equipmentToggle != null) _equipmentToggle.style.display = DisplayStyle.None;
+            if (_equipmentVariant != null) _equipmentVariant.style.display = DisplayStyle.None;
         }
 
         private static string EquipmentPrimaryStat(string slotId, int level)

@@ -1,3 +1,7 @@
+## Next Map01A UI polish after supplies right-detail selection — 2026-09-13
+
+Continue visible Map01A UI/UX polish from the owner references. `Vật phẩm` now uses the right-side detail card and safe select-then-action behavior, but the screen is still a structural UI checkpoint: next work should improve visual density/card hierarchy and design-quality item art when approved assets exist, without fake icons or random generated art. Keep Hành trang/Thông tin/Rương đồ separate, reuse shared skin helpers, and re-capture Player evidence after visible changes.
+
 ## Next Map01A UI polish after supplies readability guard — 2026-09-13
 
 Continue Map01A product UI/UX polish from the owner references. The supplies tab is now technically reachable/readable for review, but still needs proper selected-item detail behavior, visual hierarchy, and design-quality item art when approved assets exist. Keep Hành trang/Thông tin/Rương đồ separate, keep item detail on the right, reuse shared UI skin helpers, and do not introduce fake icons or random generated class/item art.
