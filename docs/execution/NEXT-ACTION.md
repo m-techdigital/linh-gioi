@@ -1115,3 +1115,9 @@ Action kế tiếp là `LGO_SKELETAL_2D_SOURCE_REGISTRATION_CONTRACT_02`: giữ 
 Audit phát hiện v1–v14 hardcode tọa độ từ `common_male_pose_registration_guide_v1`, trong khi chính guide là `DRAFT_GUIDE_REQUIRES_REVIEW` và không cho phép coi là bind authority. V15 đã bỏ hardcode: builder bắt buộc đọc profile, kiểm `1024×1536`/top-left/origin512/ground1484, ghi SHA `e96ceed…`, status và policy `ankle_x → groundY` cho cutout shin-foot. Build pass nhưng gate đúng là `REVIEW_ONLY_DRAFT_NOT_AUTHORITY`; ba khoảng joint fail hiện chỉ là provisional.
 
 Tool đối chiếu macOS Vision tại `tools/lgo_detect_body_pose.swift` + `tools/audit_lgo_pose_guide_with_vision.py` chạy 6/6 pose. Kết quả `VISION_REVIEW_ASSIST_ONLY_NOT_BIND_AUTHORITY`: 0 landmark trong dung sai 2px, median 28,39px, max 489,42px do nhận nhầm pose khó. Không dùng Vision để tự nâng guide. Next: author/duyệt rest-rig blueprint có joint center và lower-leg/foot endpoint rõ; rerun v15 gate rồi mới sửa `torso-hips`, seam hoặc item.
+
+## Bind authority candidate chờ visual review — 2026-09-13
+
+Review package đã tạo ngoài repo tại `common-male-v1/skeletal-architecture-probe-01/bind-authority-candidate-v1/`: `review-board.png` đặt idle authority 1:1 cạnh Player idle/jump/attack; `measurement-report.json` ghi mọi segment/ratio; profile candidate giữ `runtimeAuthority=false`. Canvas cao 1,70 world unit theo contract; crown→ground của nam là 1407px = 1,55723 world unit và không được normalize thành 1,70. Đây là khác biệt thiết kế hợp lệ nếu owner chấp nhận base này, không phải lỗi scale pose.
+
+Gate hiện là `NEED_HUMAN_VISUAL_REVIEW`: chọn chấp nhận idle skeleton + policy shin-foot rigid làm common-male bind authority, hoặc reject và yêu cầu rest-body/rig blueprint khác. Không sửa `torso-hips`, seam hoặc item unseen dựa trên guide nháp trước quyết định này.
