@@ -1,10 +1,10 @@
 import hashlib
 import json
+import struct
 import tempfile
 import unittest
+import zlib
 from pathlib import Path
-
-from PIL import Image
 
 from audit_lgo_pose_layer_authoring_coverage import POSES, audit_source_root, write_audit
 
@@ -21,6 +21,37 @@ def payload_sha(data):
     ).hexdigest()
 
 
+def write_png(path, size=(1024, 1536), rgba=(90, 110, 130, 255)):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    width, height = size
+    rows = []
+    for _ in range(height):
+        row = bytearray([0])
+        for _ in range(width):
+            row.extend(rgba)
+        rows.append(bytes(row))
+
+    def chunk(kind, data):
+        payload = kind + data
+        return (
+            struct.pack(">I", len(data))
+            + payload
+            + struct.pack(">I", zlib.crc32(payload) & 0xFFFFFFFF)
+        )
+
+    path.write_bytes(
+        b"".join(
+            [
+                b"\x89PNG\r\n\x1a\n",
+                chunk(b"IHDR", struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)),
+                chunk(b"IDAT", zlib.compress(b"".join(rows), level=9)),
+                chunk(b"IEND", b""),
+            ]
+        )
+    )
+    return path
+
+
 class PoseLayerAuthoringCoverageTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -32,14 +63,10 @@ class PoseLayerAuthoringCoverageTests(unittest.TestCase):
         self.body = Path(self.temp.name) / "body"
         self.body.mkdir()
         for pose in POSES:
-            Image.new("RGBA", (1024, 1536), (20, 30, 40, 255)).save(
-                self.body / f"{pose}-base.png"
-            )
+            write_png(self.body / f"{pose}-base.png", rgba=(20, 30, 40, 255))
 
     def png(self, path):
-        path.parent.mkdir(parents=True, exist_ok=True)
-        Image.new("RGBA", (1024, 1536), (90, 110, 130, 255)).save(path)
-        return path
+        return write_png(path)
 
     def native_slot(self, folder):
         root = self.root / folder

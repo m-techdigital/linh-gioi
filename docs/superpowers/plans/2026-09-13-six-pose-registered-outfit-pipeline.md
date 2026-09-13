@@ -68,9 +68,17 @@ Observed: JSON parses; blockers match the previous coverage and `NEXT-ACTION.md`
 - Consumes: six-pose body authority, current reusable `inner_top` and `class_accessory`, current idle candidates for `outer_top`, `waist_belt`, `shoulder_chest_guard`.
 - Produces: source-review board for all six poses, with grouped failures and no runtime pack.
 
-- [ ] **Step 1: Create one batch brief before editing**
+- [x] **Step 1: Create one batch brief before editing**
 
 The brief must name the candidate directories, slot ownership to change, and the single board to review. It must explicitly avoid skeletal generated-cutout, polygon/body-mask floating panels, AI geometry authority and per-pose pixel nudging.
+
+Observed 2026-09-13: `tools/plan_lgo_six_pose_source_repair_batch.py` generated `SOURCE_REPAIR_BATCH_READY` from active coverage. Evidence:
+
+- `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-batch-plan.json`
+- `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-batch-brief.md`
+- External source brief mirror: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/phap-lv001/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-batch-brief.md`
+
+Candidate directories are fixed as `outer-top-six-pose-source-repair-v1`, `waist-belt-six-pose-source-repair-v1` and `shoulder-chest-guard-six-pose-source-repair-v1`. Plan payload hash: `718db23e15c361781f7e828f802b5a232f8f14b2c97a3437cabd9b26d50970a3`.
 
 - [ ] **Step 2: Repair source by slot group**
 
