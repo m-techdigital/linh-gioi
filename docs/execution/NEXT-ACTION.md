@@ -1284,3 +1284,7 @@ Do not resume class/wardrobe/pose/source work, do not rollback class code, and d
 ## Current next action — after Map01A item-icon atlas (2026-09-13)
 
 Continue Map01A/UI only. The real HP/MP/reward icon gate is implemented and visually reviewed in Player; keep its atlas `DRAFT_RUNTIME_REVIEW` until owner review. Do not derive final 10-slot equipment icons from low-resolution body crops or reopen class/source work. Next visible batch should redesign one remaining screen deeply from owner references, in order: login/entry visual hierarchy, then gameplay HUD/NPC dialogue. Reuse the current shared shell/button/card/icon foundations and capture once per coherent screen batch.
+
+## Current next action — after entry reference hierarchy (2026-09-13)
+
+Continue Map01A/UI only from `build/map01a-entry-reference-layout-runtime-v1/entry/entry-login.png`. Login structure is now aligned more closely with preferred-v2; do not resume micro CSS tuning until final logo/navigation art exists. Next coherent visible batch is gameplay HUD + NPC dialogue hierarchy against the owner gameplay reference: preserve the playable Map01A viewport, use shared bases, reduce debug-like text blocks, and keep all existing Q01–Q09 interactions. Do not resume class/wardrobe/pose/source work or rollback class code.

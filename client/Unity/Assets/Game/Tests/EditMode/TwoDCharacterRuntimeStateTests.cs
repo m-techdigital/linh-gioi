@@ -583,7 +583,8 @@ namespace LinhGioi.Tests.EditMode
                     "Secondary login actions should use the standard shared action role, then entry-specific sizing.");
                 Assert.That(loginButton.ClassListContains("lgo-entry-cta-action"), Is.True,
                     "Entry secondary CTAs must share the same entry CTA base as the primary start button.");
-                Assert.That(loginButton.text, Does.Contain("Vào nhanh"));
+                Assert.That(loginButton.text, Is.EqualTo("Đăng nhập"));
+                Assert.That(root.Q<Button>("Map01A Entry Register Button").text, Is.EqualTo("Đăng ký"));
                 Assert.That(loginButton.text, Does.Not.Contain("dev"), "Entry/login surface must not expose developer wording to the player.");
                 Assert.That(start.style.minHeight.value.value, Is.GreaterThan(loginButton.style.minHeight.value.value));
                 Assert.That(start.style.minHeight.value.value, Is.LessThanOrEqualTo(50),
@@ -634,8 +635,8 @@ namespace LinhGioi.Tests.EditMode
                     "Entry/login panel should stay compact so the screen reads as a game login card instead of a wide web form.");
                 Assert.That(root.Q("Map01A Entry Panel Glow").style.maxWidth.value.value, Is.LessThanOrEqualTo(660),
                     "Entry/login glow should frame the compact shell instead of widening the black rectangle behind the form.");
-                Assert.That(root.Q<Label>("Map01A Entry Logo").style.fontSize.value.value, Is.LessThanOrEqualTo(42),
-                    "Entry logo should stay strong but must not force the login shell into an oversized web-form stack.");
+                Assert.That(root.Q<Label>("Map01A Entry Logo").style.fontSize.value.value, Is.InRange(48, 54),
+                    "Entry logo should carry the visual hierarchy of the owner reference while remaining inside the compact shell.");
                 Assert.That(root.Q("Map01A Entry Ornament Top"), Is.Not.Null,
                     "Entry/login needs a simple shared ornament separator instead of a plain blocky form stack.");
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Not.Contain("production auth"),

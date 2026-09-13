@@ -413,14 +413,15 @@ namespace LinhGioi.UI
         private static void ApplyLgoEntryShell(VisualElement panel)
         {
             panel.AddToClassList(LgoEntryShellClass);
-            panel.style.width = Length.Percent(38);
-            panel.style.minWidth = 500;
-            panel.style.maxWidth = 620;
-            panel.style.paddingLeft = 24;
-            panel.style.paddingRight = 24;
-            panel.style.paddingTop = 22;
-            panel.style.paddingBottom = 22;
-            ApplyLgoModalShell(panel, 22);
+            panel.style.width = Length.Percent(36);
+            panel.style.minWidth = 520;
+            panel.style.maxWidth = 590;
+            panel.style.paddingLeft = 16;
+            panel.style.paddingRight = 16;
+            panel.style.paddingTop = 14;
+            panel.style.paddingBottom = 14;
+            ApplyLgoModalShell(panel, 16);
+            panel.style.backgroundColor = new Color(.010f, .030f, .058f, .72f);
         }
 
         private static void ApplyLgoEntrySecondaryAction(Button button, float minWidth = 0f, float marginRight = 0f)

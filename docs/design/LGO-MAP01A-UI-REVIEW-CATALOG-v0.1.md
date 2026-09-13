@@ -202,3 +202,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-item-icons-review-v1/alpha-review.png` and `build/map01a-item-icons-runtime-v2/inventory/supplies.png`.
 - Result: HP/MP/starter-reward rows and the shared right detail card now use real Map01A item art from the selected source board. A deterministic border flood-mask removes the pale board matte; atlas manifest records each source hash and crop rectangle. No AI/random/emoji icon was introduced.
 - Review status: `DRAFT_RUNTIME_REVIEW / TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`. The five icons read cleanly on light and dark backgrounds; the remaining ten equipment-slot thumbnails are still low-resolution runtime crops.
+
+## 2026-09-13 — Entry reference hierarchy redesign
+
+- Evidence: `build/map01a-entry-reference-layout-runtime-v1/entry/entry-login.png` and `manifest.json`.
+- Result: the entry shell is shorter and more transparent, the logo is the primary visual anchor, login/register live together inside the auth card, server selection follows them, and the gold `Bắt đầu` CTA is the final action. Technical/local notes are hidden until an explicit help action is used, allowing Map01A art and characters to remain visible.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`. Manual 1600×900 comparison shows substantially closer hierarchy and density than the prior tall form, while final brush-logo and circular navigation icon art remain unresolved.
