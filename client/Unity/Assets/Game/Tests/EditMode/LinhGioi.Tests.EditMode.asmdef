@@ -5,6 +5,7 @@
     "Unity.2D.Animation.Runtime",
     "LinhGioi.Account",
     "LinhGioi.Foundation",
+    "LinhGioi.ArchitectureProbe",
     "LinhGioi.Networking",
     "LinhGioi.Bootstrap",
     "LinhGioi.UI",

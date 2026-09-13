@@ -1,0 +1,11 @@
+{
+  "name": "LinhGioi.ArchitectureProbe.Editor",
+  "rootNamespace": "LinhGioi.ArchitectureProbe.Editor",
+  "references": [
+    "LinhGioi.ArchitectureProbe"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

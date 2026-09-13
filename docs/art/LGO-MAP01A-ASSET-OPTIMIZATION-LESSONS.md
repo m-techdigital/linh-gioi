@@ -252,3 +252,9 @@ Continuity score cũng phải có hard anatomy flags. Audit v1 ưu tiên width/s
 ## 2026-09-13 — Không để source authority khóa sai kiến trúc nhân vật
 
 Feedback owner 3ca3 được nhận như một bài học cấp kiến trúc: nguồn/pose/renderer hiện tại là authority vận hành, không phải cam kết giữ nguyên. Khi một pipeline cần sửa body, shoulder, mask hoặc layer từng chút để qua một item, phải nâng vấn đề lên đơn vị sản xuất nhân vật/trang bị thay vì tiếp tục vẽ lại từng pose. Từ nay trước khi tạo thêm garment candidate production, chạy gate kiến trúc hữu hạn: A 2D skeletal runtime modular và B direct 3D modular runtime trên cùng bài test, đo item unseen sau khi khóa template/tooling. Pose-image pipeline cũ chỉ dùng làm baseline đối chứng cho đến khi nó thắng gate bằng evidence.
+
+## Capture Player nhiều màn hình phải xác nhận display — 2026-09-13
+
+Trên macOS ba màn hình, `screencapture -R` và window-id không lấy đúng Unity Player dù cửa sổ đã tồn tại. Cách đã xác nhận: mở Development Player, dùng System Events chuyển cửa sổ `Unity` sang màn trái tại tọa độ tuyệt đối `(-1800,100)`, đọc lại position/size, rồi chụp mỗi display bằng `screencapture -D`. Chỉ display có nhãn Development Build và nội dung probe được nhận; ảnh Blender/browser bị ghi rõ là rejected evidence. Không lặp thử window-id/region sau khi display capture đã giải quyết.
+
+Capture đúng cửa sổ chỉ chứng minh renderer/scenario thật sự hiện trong Player. Proxy khối modular 3D vẫn bị loại về thị giác vì thiếu anatomy, garment silhouette và occlusion; không dùng ảnh capture hợp lệ để suy ra asset hoặc kiến trúc đã đạt. Counter profiler bất hợp lý phải bị loại, và p95 trên Development Player cao hơn budget phải giữ trạng thái chưa đạt/chưa đủ kết luận.
