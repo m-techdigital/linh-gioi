@@ -688,12 +688,12 @@ namespace LinhGioi.UI
             if (_characterInfoOpen)
             {
                 _inventoryModalTitle.text = "THÔNG TIN NHÂN VẬT";
-                _inventoryModalSubtitle.text = "Xem nhân vật, trang bị đang mặc và chi tiết món bên phải";
+                _inventoryModalSubtitle.text = "Trang bị hiện tại và thông tin chiến đấu của LụcThiên";
             }
             else
             {
                 _inventoryModalTitle.text = "HÀNH TRANG";
-                _inventoryModalSubtitle.text = "Rương đồ, phân loại dọc và chi tiết món bên phải";
+                _inventoryModalSubtitle.text = "Vật phẩm đang mang theo, phân loại và thông tin chi tiết";
             }
         }
 
@@ -843,7 +843,7 @@ namespace LinhGioi.UI
             _inventoryItemId.text = _scene.GetVoEquipmentItemId(selectedSlot);
             _inventoryDetailStateBadge.text = selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO";
             _inventoryItemState.text = selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.";
-            _inventoryDetailStatPrimary.text = "Chưa có thuộc tính chiến đấu được công bố.";
+            _inventoryDetailStatPrimary.text = "Chưa có thuộc tính chiến đấu.";
             _inventoryDetailStatFit.text = "Dành cho " + _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
             RefreshInventoryDetailChips("Lv" + selectedLevel, selectedEquipped ? "Đang mặc" : "Đã tháo", _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam"));
             if (_inventoryDetailPrimaryAction != null)

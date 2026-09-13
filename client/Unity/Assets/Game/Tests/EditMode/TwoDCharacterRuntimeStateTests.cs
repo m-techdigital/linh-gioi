@@ -286,6 +286,9 @@ namespace LinhGioi.Tests.EditMode
                     "Rương đồ must remain a two-column grid/detail screen without the obsolete character-preview column.");
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                var modalSubtitle = root.Q<Label>("Map01A Inventory Modal Subtitle");
+                StringAssert.DoesNotContain("phân loại dọc", modalSubtitle.text,
+                    "Player-facing inventory copy must describe the feature rather than its implementation layout.");
                 foreach (var actionName in new[]
                 {
                     "Map01A Inventory Sort Action", "Map01A Inventory Split Action", "Map01A Inventory Quick Sell Action"
@@ -300,6 +303,7 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
                 Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Hub Preview Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                StringAssert.DoesNotContain("state", modalSubtitle.text);
                 Assert.That(root.Q("Map01A Skill Path Stage 1"), Is.Not.Null,
                     "Approved skill screen must present a connected progression path instead of a generic item grid.");
                 Assert.That(root.Q("Map01A Skill Path Stage 2"), Is.Not.Null);
@@ -314,6 +318,8 @@ namespace LinhGioi.Tests.EditMode
                 var flags = BindingFlags.Instance | BindingFlags.NonPublic;
                 var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
                 var hubDetailName = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailName", flags).GetValue(hud);
+                var hubDetailBody = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailBody", flags).GetValue(hud);
+                var hubDetailStatus = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailStatus", flags).GetValue(hud);
                 var selectedSkillNode = root.Q<Button>("Map01A Skill Node Kiếm Vũ");
                 InvokeBoundButton(selectedSkillNode);
                 Assert.That(hubDetailName.text, Is.EqualTo("Kiếm Vũ"),
@@ -321,6 +327,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(selectedSkillNode.style.borderTopWidth.value, Is.EqualTo(2),
                     "The selected node must expose the same visible selection state used by its detail-right content.");
                 Assert.That(firstSkillNode.style.borderTopWidth.value, Is.EqualTo(1));
+                StringAssert.DoesNotContain("chờ dữ liệu", hubDetailBody.text);
+                StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
 
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
                 Assert.That(root.Q("Map01A Potential Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -334,6 +342,9 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Node Công"));
                 Assert.That(hubDetailName.text, Is.EqualTo("Công"),
                     "Selecting a potential node must update detail-right without mutating progression state.");
+                StringAssert.DoesNotContain("state", modalSubtitle.text);
+                StringAssert.DoesNotContain("local", hubDetailBody.text);
+                StringAssert.DoesNotContain("state", hubDetailBody.text);
 
                 InvokeBoundButton(root.Q<Button>("Map01A Spirit Pet Main Tab"));
                 Assert.That(root.Q("Map01A Spirit Pet Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -342,6 +353,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Spirit Pet Locked Roster 1"), Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
                     "Linh thú growth must remain visibly gated until its real progression state exists.");
+                StringAssert.DoesNotContain("Màn này", hubDetailBody.text);
+                StringAssert.DoesNotContain("state", hubDetailBody.text);
+                StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
             }
             finally
             {

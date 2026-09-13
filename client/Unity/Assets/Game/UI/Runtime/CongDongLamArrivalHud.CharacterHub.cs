@@ -417,10 +417,10 @@ namespace LinhGioi.UI
             _hubPreviewDetailPanel.style.display = DisplayStyle.Flex;
             _inventoryModalTitle.text = mode == CharacterHubMode.Skills ? "KỸ NĂNG" : mode == CharacterHubMode.Potential ? "TIỀM NĂNG" : "LINH THÚ";
             _inventoryModalSubtitle.text = mode == CharacterHubMode.Skills
-                ? "Xem bộ kỹ năng hiện có và trạng thái trang bị"
+                ? "Kỹ năng đã lĩnh hội và bộ kỹ năng đang trang bị"
                 : mode == CharacterHubMode.Potential
-                    ? "Xem hướng phát triển; chưa cộng điểm khi chưa có state chính thức"
-                    : "Xem linh thú và kỹ năng đồng hành";
+                    ? "Thuộc tính căn bản và hướng phát triển nhân vật"
+                    : "Linh thú đồng hành, kỹ năng hỗ trợ và mức thân mật";
             ApplyHubMainTabSelection(mode);
             ShowHubDetail(mode);
         }
@@ -469,8 +469,8 @@ namespace LinhGioi.UI
             _hubDetailMeta.text = "Kỹ năng chủ động · " + level;
             _hubDetailBody.text = title == "Thiên Kiếm Quyết"
                 ? "Sát thương: 320% Công\nHồi chiêu: 12 giây\nTiêu hao MP: 180\n\nBộ bốn kỹ năng hiện hành được giữ nguyên."
-                : "Cấp hiện hành: " + level + "\n\nHiệu ứng chi tiết đang chờ dữ liệu kỹ năng chính thức.";
-            _hubDetailStatus.text = "Nâng cấp chờ hệ thống kỹ năng chính thức.";
+                : "Cấp hiện hành: " + level + "\n\nThông tin hiệu ứng sẽ hiển thị khi kỹ năng được mở đầy đủ.";
+            _hubDetailStatus.text = "Tính năng nâng cấp chưa mở.";
         }
 
         private void ShowPotentialDetail(string title, string value, string iconId)
@@ -481,9 +481,9 @@ namespace LinhGioi.UI
             _hubDetailName.text = title;
             _hubDetailMeta.text = "Giá trị xem trước: " + value;
             _hubDetailBody.text = title == "Sinh lực"
-                ? "Ảnh hưởng dự kiến\n• Sinh lực (HP)\n• Phòng thủ\n\nKhông thay đổi chỉ số local khi chưa có state tiến trình."
-                : "Điểm đang chọn: " + title + " · " + value + "\n\nKhông thay đổi chỉ số local khi chưa có state tiến trình.";
-            _hubDetailStatus.text = "Cộng điểm đang khóa an toàn.";
+                ? "Ảnh hưởng dự kiến\n• Sinh lực (HP)\n• Phòng thủ\n\nTính năng cộng điểm chưa mở."
+                : "Điểm đang chọn: " + title + " · " + value + "\n\nTính năng cộng điểm chưa mở.";
+            _hubDetailStatus.text = "Chưa thể cộng điểm tiềm năng.";
         }
 
         private void ShowHubDetail(CharacterHubMode mode)
@@ -506,8 +506,8 @@ namespace LinhGioi.UI
                 _hubDetailHeader.text = "CHI TIẾT LINH THÚ";
                 _hubDetailName.text = "Thanh Vân Hồ";
                 _hubDetailMeta.text = "Tinh phẩm · Hỗ trợ · Lv.20";
-                _hubDetailBody.text = "Kỹ năng Linh thú\n• Thanh Vân Hộ Thể\n• Cửu Vĩ Linh Phong\n\nMàn này chưa tự ghi tăng trưởng hoặc chiến đấu vào state.";
-                _hubDetailStatus.text = "Bồi dưỡng chờ hệ thống Linh thú chính thức.";
+                _hubDetailBody.text = "Kỹ năng Linh thú\n• Thanh Vân Hộ Thể\n• Cửu Vĩ Linh Phong";
+                _hubDetailStatus.text = "Tính năng bồi dưỡng chưa mở.";
             }
         }
 

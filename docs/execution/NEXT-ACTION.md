@@ -1,3 +1,9 @@
+## Next — sau audit nội dung hướng người chơi cho năm tab — 2026-09-14
+
+`CONTINUE`. Evidence năm tab hiện hành là `build/map01a-five-tab-player-copy-runtime-v1/{character-info,bag,skills,potential,spirit-pet}.png`; Player `build/map01a-five-tab-player-copy-v1/LinhGioiOnline.app`. Giữ hàng tab compact dùng chung, workspace hai cột và detail bên phải; không đưa ngôn ngữ mô tả implementation trở lại nội dung người chơi.
+
+Next valid work: tiếp tục Map01A/UI bằng một lỗi nhìn thấy rõ trên Player và có dữ liệu hoặc asset provenance-backed hiện hành. Bộ mười icon trang bị độc lập vẫn chưa có nguồn; không tạo icon giả và không mở lại class/pose/wardrobe/source để lấp khoảng trống. Giữ design năm tab đã duyệt, shared Skin/base, progression gate bị khóa và frozen surfaces.
+
 ## Next — sau contextual-action visibility audit — 2026-09-14
 
 `CONTINUE`. Nút interaction ngữ cảnh chỉ xuất hiện khi action hiện hành thật sự dùng được; trạng thái disabled không được nằm mờ trên cụm chiến đấu. Evidence hiện hành: `build/map01a-context-action-runtime-v1/{01-arrival-q01,04-q02-grand-gate,06-q03-complete,18-q09-portal-open}.png`; Player `build/map01a-context-action-player-v1/LinhGioiOnline.app`.

@@ -1,3 +1,10 @@
+## Map01A — nội dung năm tab đã chuyển sang ngôn ngữ người chơi — 2026-09-14
+
+- Hub năm tab đã duyệt tiếp tục dùng một hàng điều hướng compact và cấu trúc hai cột nội dung/chi tiết phải dùng chung cho `Nhân vật`, `Rương đồ`, `Kỹ năng`, `Tiềm năng` và `Linh thú`.
+- Đã loại khỏi subtitle và thẻ chi tiết/trạng thái các câu mô tả cách dựng layout, từ `state`, “dữ liệu chính thức” và ngôn ngữ an toàn nội bộ. Các action tiến trình vẫn khóa rõ đến khi có hệ thống thật.
+- Guard TDD và toàn bộ `TwoDCharacterRuntimeStateTests` pass (`1/1`, `20/20`). Player `build/map01a-five-tab-player-copy-v1/LinhGioiOnline.app` build thành công; capture hiện hành là `build/map01a-five-tab-player-copy-runtime-v1/{character-info,bag,skills,potential,spirit-pet}.png`.
+- Visual audit ở 1600×900 xác nhận cả năm màn không cắt/chồng và nội dung đọc như UI sản phẩm. Thumbnail trang bị vẫn là crop source tối; atlas item Map01A hiện chỉ có năm asset có provenance nên bộ icon trang bị độc lập còn thiếu được giữ là asset gate, không lấp bằng art sinh ngẫu nhiên hoặc không liên quan.
+
 ## Map01A — contextual action no longer leaves dead controls on the HUD — 2026-09-14
 
 - Full-route Player review found disabled contextual actions such as `Nhìn về Linh Thành` and `Chạm` remained as translucent dead controls after the player left the usable range or completed the action, occupying the combat area.
