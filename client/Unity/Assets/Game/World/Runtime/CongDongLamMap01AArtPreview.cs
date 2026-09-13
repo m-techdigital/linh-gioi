@@ -68,9 +68,17 @@ namespace LinhGioi.World
             || CharacterSelectCaptureRequested || InventoryTabsCaptureRequested || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
-        public string QuestTrackerText => ActiveQuestId == "COMPLETE" ? "Map01A hoàn tất\nPortal Suối Thanh Minh đã mở."
-            : ActiveQuestId + " · " + QuestName(ActiveQuestId) + "\n" + QuestObjective(ActiveQuestId)
-                + "\nTiến độ " + CompletedQuestCount + "/9";
+        public string QuestDisplayTitle => ActiveQuestId == "COMPLETE"
+            ? "Map01A hoàn tất"
+            : ActiveQuestId + " · " + QuestName(ActiveQuestId);
+        public string QuestObjectiveText => ActiveQuestId == "COMPLETE"
+            ? "Portal Suối Thanh Minh đã mở."
+            : QuestObjective(ActiveQuestId);
+        public string QuestProgressText => ActiveQuestId == "COMPLETE"
+            ? "Cổng đường sang Suối Thanh Minh đã mở."
+            : "Tiến độ " + CompletedQuestCount + "/9";
+        public string QuestTrackerText => QuestDisplayTitle + "\n" + QuestObjectiveText
+            + (ActiveQuestId == "COMPLETE" ? "" : "\n" + QuestProgressText);
         public string MinimapRouteText => !MinimapUnlocked ? "BẢN ĐỒ KHU VỰC · CHƯA MỞ"
             : "BẢN ĐỒ ĐÔNG LÂM\nHạ Vân — Cổng — Làng — Rìa — Suối\nĐang ở: " + CurrentRouteNodeLabel;
         public string InventorySummaryText => "HÀNH TRANG TÂN THỦ\n"

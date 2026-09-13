@@ -861,6 +861,22 @@ namespace LinhGioi.Tests.EditMode
                     "HUD quest body must use the shared info-panel base instead of one-off panel styling.");
                 Assert.That(root.Q("Map01A Quest Tracker Body").style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.9f),
                     "Quest tracking needs a readable shared glass background over bright map art.");
+                var questCategory = root.Q<Label>("Map01A Quest Category");
+                var questTitle = root.Q<Label>("Map01A Quest Title");
+                var questObjective = root.Q<Label>("Map01A Quest Objective");
+                var questProgress = root.Q<Label>("Map01A Quest Progress");
+                Assert.That(questCategory.text, Is.EqualTo("NHIỆM VỤ CHÍNH"));
+                Assert.That(questTitle.text, Does.StartWith("Q01 ·"));
+                Assert.That(questObjective.text, Does.Contain("Hạ Vân"));
+                Assert.That(questProgress.text, Does.Contain("0/9"));
+                Assert.That(questTitle.style.fontSize.value.value, Is.GreaterThan(questObjective.style.fontSize.value.value),
+                    "Quest title and objective need separate visual hierarchy instead of one flat multiline debug label.");
+                Assert.That(CongDongLamArrivalHud.QuestInteractionMessageForDisplay(
+                        "Cổng đường sang Suối Thanh Minh đã mở.",
+                        "Portal Suối Thanh Minh đã mở.",
+                        "Cổng đường sang Suối Thanh Minh đã mở."),
+                    Is.Empty,
+                    "Quest completion feedback must not repeat the same sentence already shown as tracker progress.");
                 Assert.That(root.Q("Map01A Minimap").ClassListContains("lgo-hud-info-panel"), Is.True,
                     "HUD minimap placeholder must use the shared info-panel base until a real minimap art pass replaces it.");
                 Assert.That(root.Q("Map01A Minimap").style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.9f),

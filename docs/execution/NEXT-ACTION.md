@@ -1,3 +1,9 @@
+## Next — sau structured quest tracker — 2026-09-14
+
+`CONTINUE`. Tracker phải hiện theo hierarchy category → id/title → objective → progress → interaction và tự bỏ câu interaction trùng objective/progress. Evidence hiện hành duy nhất: `build/map01a-structured-quest-tracker-runtime-v2/{01-arrival-q01,18-q09-portal-open}.png`; Player `build/map01a-structured-quest-tracker-player-v2/LinhGioiOnline.app`; không dùng v1 vì lặp câu completion.
+
+Next valid work: audit dialogue và Menu trên Player theo lỗi hierarchy/interaction rõ, giữ một shared Skin/base. Không thêm nhiệm vụ/progression giả, không mở class selector hoặc class/pose/wardrobe/source, không quay lại design cũ.
+
 ## Next — sau player HUD identity hierarchy — 2026-09-14
 
 `CONTINUE`. Thẻ người chơi góc trái đã đặt `LụcThiên` làm danh tính chính và chuyển class/giới/cấp xuống dòng metadata; HP/MP và portrait dùng state/source hiện hành. Evidence: `build/map01a-player-identity-hud-runtime-v1/{01-arrival-q01,03-q01-complete,18-q09-portal-open}.png`; Player `build/map01a-player-identity-hud-player-v1/LinhGioiOnline.app`; full UI tests `20/20`.

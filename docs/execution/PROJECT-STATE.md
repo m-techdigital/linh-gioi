@@ -1,3 +1,10 @@
+## Map01A — quest tracker now follows the approved information hierarchy — 2026-09-14
+
+- Player audit found the quest tracker rendered title, objective, progress and latest interaction as one flat multiline label. This was readable but visually behaved like debug text instead of the approved RPG quest hierarchy.
+- Tracker now separates `NHIỆM VỤ CHÍNH`, quest id/title, objective, progress and optional interaction feedback while sourcing every value from the existing Q01–Q09 state. No quest, reward or progression data was added.
+- Visual review rejected v1 because the completion interaction repeated the progress sentence. The display layer now suppresses exact objective/progress duplicates; v2 shows one completion message.
+- Full `TwoDCharacterRuntimeStateTests` passes `20/20`. Player `build/map01a-structured-quest-tracker-player-v2/LinhGioiOnline.app` built with `errors=0`, `warnings=38`; full Q01–Q09 evidence `build/map01a-structured-quest-tracker-runtime-v2/` passes 18 route frames, 38 dialogue frames and all functional gates.
+
 ## Map01A — player HUD restores character identity hierarchy — 2026-09-14
 
 - Player-to-owner-reference audit found the top-left card led with `Võ · Nam · Lv.1`, so it read like a review/debug label and omitted the character identity shown throughout the approved HUD designs.

@@ -15,9 +15,10 @@ namespace LinhGioi.UI
         private const float InventoryGridCellBasisPercent = 18.2f;
 
         private CongDongLamMap01AArtPreview _scene;
-        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs, _vitalsPortrait, _dialoguePortrait;
+        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _quest, _questItemActions, _productShortcutActions, _questTabs, _vitalsPortrait, _dialoguePortrait;
         private VisualElement _playerHudCluster, _rightHudCluster, _minimap, _minimapCurrentMarker;
-        private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimapTitle, _minimapStatus, _inventorySummary, _equipmentTitle, _equipmentDetail;
+        private Label _questCategory, _questTitle, _questObjective, _questProgress, _questMessage;
+        private Label _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimapTitle, _minimapStatus, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
         private Button _skillsShortcut, _menuShortcut, _questMissionsTab, _questPartyTab;
@@ -114,8 +115,30 @@ namespace LinhGioi.UI
             ApplyLgoHudQuestTab(_questPartyTab, selected: false, enabled: false, isLast: true);
             _questTabs.Add(_questMissionsTab);
             _questTabs.Add(_questPartyTab);
-            _quest = new Label { name = "Map01A Quest Tracker Body" }; ApplyLgoHudQuestPanel(_quest);
-            _quest.style.width = 286; _quest.style.whiteSpace = WhiteSpace.Normal;
+            _quest = new VisualElement { name = "Map01A Quest Tracker Body", pickingMode = PickingMode.Ignore };
+            ApplyLgoHudQuestPanel(_quest);
+            _quest.style.width = 286;
+            _questCategory = LgoLabel("NHIỆM VỤ CHÍNH", 11, new Color(.45f, .90f, 1f, .96f), true);
+            _questCategory.name = "Map01A Quest Category";
+            _questTitle = LgoLabel("", 15, UiGold, true);
+            _questTitle.name = "Map01A Quest Title";
+            _questTitle.style.marginTop = 3;
+            _questObjective = LgoLabel("", 13, UiText);
+            _questObjective.name = "Map01A Quest Objective";
+            _questObjective.style.whiteSpace = WhiteSpace.Normal;
+            _questObjective.style.marginTop = 3;
+            _questProgress = LgoLabel("", 12, new Color(.76f, 1f, .70f, .94f), true);
+            _questProgress.name = "Map01A Quest Progress";
+            _questProgress.style.marginTop = 4;
+            _questMessage = LgoLabel("", 11, UiSubText);
+            _questMessage.name = "Map01A Quest Interaction Message";
+            _questMessage.style.whiteSpace = WhiteSpace.Normal;
+            _questMessage.style.marginTop = 4;
+            _quest.Add(_questCategory);
+            _quest.Add(_questTitle);
+            _quest.Add(_questObjective);
+            _quest.Add(_questProgress);
+            _quest.Add(_questMessage);
             _minimap = new VisualElement { name = "Map01A Minimap", pickingMode = PickingMode.Ignore }; ApplyLgoHudMapPanel(_minimap);
             _minimap.style.width = 286; _minimap.style.height = 104; _minimap.style.fontSize = 12; _minimap.style.marginBottom = 4;
             _minimapTitle = LgoLabel("BẢN ĐỒ KHU VỰC", 12, UiGold, true);
@@ -333,6 +356,15 @@ namespace LinhGioi.UI
             return Mathf.Min(Mathf.Max(inventoryRect.height, compactDesktopHeight), compactDesktopHeight);
         }
 
+        public static string QuestInteractionMessageForDisplay(string message, string objective, string progress)
+        {
+            var normalized = (message ?? "").Trim();
+            if (normalized.Length == 0) return "";
+            if (string.Equals(normalized, (objective ?? "").Trim(), StringComparison.Ordinal)
+                || string.Equals(normalized, (progress ?? "").Trim(), StringComparison.Ordinal)) return "";
+            return normalized;
+        }
+
         public static Rect CalculateInventoryModalRect(Rect safePanelRect, bool touch)
         {
             var compact = touch || safePanelRect.width < 950;
@@ -446,8 +478,12 @@ namespace LinhGioi.UI
                 }
                 else _scene.SetVoJumpHeld(false);
             }
-            _quest.text = _scene.QuestTrackerText
-                + (string.IsNullOrEmpty(_scene.LastInteractionMessage) ? "" : "\n" + _scene.LastInteractionMessage);
+            _questTitle.text = _scene.QuestDisplayTitle;
+            _questObjective.text = _scene.QuestObjectiveText;
+            _questProgress.text = _scene.QuestProgressText;
+            _questMessage.text = QuestInteractionMessageForDisplay(
+                _scene.LastInteractionMessage, _scene.QuestObjectiveText, _scene.QuestProgressText);
+            _questMessage.style.display = string.IsNullOrEmpty(_questMessage.text) ? DisplayStyle.None : DisplayStyle.Flex;
             _talk.SetEnabled(_scene.CanUseCurrentRouteAction);
             _talk.text = _scene.CurrentActionLabel + (_touch ? "" : " · E");
             _outfit.text = "Trang bị " + _scene.AvatarClassLabel + ": " + _scene.VoAvatarMode + (_touch ? "" : " · C");
