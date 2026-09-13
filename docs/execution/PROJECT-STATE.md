@@ -1,3 +1,10 @@
+## Map01A — Rương đồ có tìm kiếm dữ liệu thật theo design năm tab — 2026-09-14
+
+- Đối chiếu `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` với Player cho thấy toolbar Rương đồ còn thiếu ô tìm kiếm. Runtime giờ lọc trực tiếp 10 trang bị và 3 vật phẩm hiện có theo tên/ID; truy vấn không dấu như `binh mau` vẫn tìm đúng `Bình Máu Nhỏ` và chọn kết quả tiếp tục cập nhật detail bên phải.
+- Ô tìm kiếm dùng lại shared input frame và có lớp inner-input chung; visual capture v1 bị loại vì Unity giữ nền input trắng mặc định, v2 đã sửa từ shared skin thay vì override cục bộ.
+- TDD RED/GREEN xác nhận cả hành vi lọc, khôi phục danh sách, detail-right và inner skin. Full `TwoDCharacterRuntimeStateTests` đạt 21/21 trước visual-fix; targeted sau visual-fix đạt 1/1. Player `build/map01a-inventory-search-player-v2/LinhGioiOnline.app` build `errors=0`; evidence đã xem đủ năm tab tại `build/map01a-inventory-search-runtime-v2/`, 1600×900, `usesOsMouseOrKeyboard=false`.
+- Scope vẫn là Map01A/UI-only. Không sửa hoặc rollback class/pose/wardrobe/source, không thêm art giả và không đổi frozen surfaces.
+
 ## Map01A — Rương đồ xác nhận item detail-right bằng callback thật — 2026-09-14
 
 - Route capture Q04 giờ chọn `Bình Máu Nhỏ` qua chính button callback của UI; cột phải phải đổi sang tên, icon provenance-backed, số lượng, trạng thái và hành động dùng bình trước khi chụp.

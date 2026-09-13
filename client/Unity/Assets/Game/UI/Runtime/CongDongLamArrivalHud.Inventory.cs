@@ -1,4 +1,6 @@
 using System;
+using System.Globalization;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,12 +12,15 @@ namespace LinhGioi.UI
         private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroVitals, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState;
         private Button _bagTab, _characterInfoTab, _skillsTab, _potentialTab, _spiritPetTab, _allItemsTab, _equipmentTab, _suppliesTab, _materialsTab, _otherItemsTab;
         private Button _inventoryDetailPrimaryAction;
+        private TextField _inventorySearchField;
         private Button[] _equipmentTiles;
         private VisualElement[] _emptyBagSlots;
         private VisualElement[] _equipmentTileIcons, _equipmentRowIcons, _characterHeroQuickIcons;
         private Label[] _equipmentTileNames, _equipmentTileStates, _equipmentRowNames, _equipmentRowStates;
         private Label _healthPotionName, _healthPotionCount, _healthPotionState, _manaPotionName, _manaPotionCount, _manaPotionState, _classRewardName, _classRewardCount, _classRewardState;
         private bool _characterInfoOpen, _suppliesOpen;
+        private string _inventoryCategory = "all";
+        private string _inventorySearchQuery = string.Empty;
         private string _selectedSupplyItemId = "health_potion";
 
         private bool IsInventoryCompactShellActive() => !_characterInfoOpen;
@@ -326,6 +331,16 @@ namespace LinhGioi.UI
             gridStatus.Add(_inventoryCountBadge);
             var equippedBadge = InventoryBadge("Map01A Inventory Equipped Badge", "10/10 đang mặc", new Color(.76f, 1f, .70f, .94f));
             gridStatus.Add(equippedBadge);
+            _inventorySearchField = new TextField { name = "Map01A Inventory Search" };
+            _inventorySearchField.textEdition.placeholder = "Tìm vật phẩm...";
+            _inventorySearchField.tooltip = "Tìm trong Rương đồ";
+            ApplyLgoInventorySearchField(_inventorySearchField, _touch);
+            _inventorySearchField.RegisterValueChangedCallback(evt =>
+            {
+                _inventorySearchQuery = NormalizeInventorySearch(evt.newValue);
+                RefreshInventoryVisibility();
+            });
+            gridStatus.Add(_inventorySearchField);
             var gridStatusSpacer = new VisualElement();
             gridStatusSpacer.style.flexGrow = 1;
             gridStatus.Add(gridStatusSpacer);
@@ -704,21 +719,79 @@ namespace LinhGioi.UI
 
         private void ShowInventoryCategory(string category)
         {
-            var showEquipment = category == "all" || category == "equipment";
-            var showSupplies = category == "all" || category == "items";
+            _inventoryCategory = category;
             _suppliesOpen = category == "items";
             RefreshInventoryEquipmentTiles();
-            foreach (var tile in _equipmentTiles) tile.style.display = showEquipment ? DisplayStyle.Flex : DisplayStyle.None;
-            foreach (var supply in new[] { _healthPotion, _manaPotion, _equipReward })
-                supply.style.display = showSupplies ? DisplayStyle.Flex : DisplayStyle.None;
-            foreach (var emptySlot in _emptyBagSlots)
-                emptySlot.style.display = category == "all" ? DisplayStyle.Flex : DisplayStyle.None;
+            RefreshInventoryVisibility();
             _inventoryFooter.style.display = DisplayStyle.Flex;
             _inventoryDetailPanel.style.display = DisplayStyle.Flex;
             ApplyLgoSelectedTab(_allItemsTab, category == "all");
             ApplyLgoSelectedTab(_equipmentTab, category == "equipment");
             ApplyLgoSelectedTab(_suppliesTab, category == "items");
             RefreshInventoryDetailCard();
+        }
+
+        private static string NormalizeInventorySearch(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+            var decomposed = value.Trim().Normalize(NormalizationForm.FormD);
+            var builder = new StringBuilder(decomposed.Length);
+            foreach (var character in decomposed)
+            {
+                if (CharUnicodeInfo.GetUnicodeCategory(character) == UnicodeCategory.NonSpacingMark) continue;
+                builder.Append(char.ToLowerInvariant(character));
+            }
+            return builder.ToString().Normalize(NormalizationForm.FormC);
+        }
+
+        private bool InventoryMatchesSearch(params string[] values)
+        {
+            if (string.IsNullOrEmpty(_inventorySearchQuery)) return true;
+            foreach (var value in values)
+            {
+                if (NormalizeInventorySearch(value).IndexOf(_inventorySearchQuery, StringComparison.Ordinal) >= 0)
+                    return true;
+            }
+            return false;
+        }
+
+        private void RefreshInventoryVisibility()
+        {
+            if (_equipmentTiles == null || _emptyBagSlots == null) return;
+            var showEquipment = _inventoryCategory == "all" || _inventoryCategory == "equipment";
+            var showSupplies = _inventoryCategory == "all" || _inventoryCategory == "items";
+            var visibleItemCount = 0;
+
+            for (var index = 0; index < _equipmentTiles.Length; index++)
+            {
+                var slotId = _equipmentSlotIds[index];
+                var visible = showEquipment && InventoryMatchesSearch(
+                    EquipmentDisplayName(slotId), EquipmentShortName(slotId), slotId, _scene.GetVoEquipmentItemId(slotId));
+                _equipmentTiles[index].style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+                if (visible) visibleItemCount++;
+            }
+
+            var healthVisible = showSupplies && InventoryMatchesSearch("Bình Máu Nhỏ", "health_potion", "hồi phục HP");
+            var manaVisible = showSupplies && InventoryMatchesSearch("Bình Linh Lực Nhỏ", "mana_potion", "hồi phục MP");
+            var rewardVisible = showSupplies && InventoryMatchesSearch("Hộ Uyển Võ Tân Thủ", "class_reward", "phần thưởng nhiệm vụ");
+            _healthPotion.style.display = healthVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            _manaPotion.style.display = manaVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            _equipReward.style.display = rewardVisible ? DisplayStyle.Flex : DisplayStyle.None;
+            if (healthVisible) visibleItemCount++;
+            if (manaVisible) visibleItemCount++;
+            if (rewardVisible) visibleItemCount++;
+
+            var showEmptySlots = _inventoryCategory == "all" && string.IsNullOrEmpty(_inventorySearchQuery);
+            foreach (var emptySlot in _emptyBagSlots)
+                emptySlot.style.display = showEmptySlots ? DisplayStyle.Flex : DisplayStyle.None;
+
+            if (_suppliesEmptyState != null)
+            {
+                _suppliesEmptyState.text = string.IsNullOrEmpty(_inventorySearchQuery)
+                    ? "Chưa có vật phẩm trong nhóm này."
+                    : "Không tìm thấy vật phẩm phù hợp.";
+                _suppliesEmptyState.style.display = visibleItemCount == 0 ? DisplayStyle.Flex : DisplayStyle.None;
+            }
         }
 
         private void RefreshInventorySupplyRows()

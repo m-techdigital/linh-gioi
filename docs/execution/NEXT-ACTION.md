@@ -1,3 +1,9 @@
+## Next — sau Rương đồ search + shared inner-input skin — 2026-09-14
+
+`CONTINUE`. Evidence hub năm tab hiện hành là `build/map01a-inventory-search-runtime-v2/{character-info,bag,skills,potential,spirit-pet}.png`; Player `build/map01a-inventory-search-player-v2/LinhGioiOnline.app`. Rương đồ phải giữ rail phân loại dọc, tìm kiếm không dấu trên dữ liệu thật và detail món ở bên phải; không dùng lại capture v1 có nền input trắng.
+
+Next valid work: audit sai lệch cấu trúc/interaction lớn tiếp theo giữa Player và năm design owner đã duyệt, ưu tiên luồng có dữ liệu thật. Giữ một hàng tab compact, shared Skin/base, không tạo icon/progression giả, không mở class/pose/wardrobe/source và không đổi frozen surfaces.
+
 ## Next — sau khi khóa interaction item → detail-right — 2026-09-14
 
 `CONTINUE`. Route evidence hiện hành là `build/map01a-item-detail-runtime-v1/`; Player `build/map01a-item-detail-player-v1/LinhGioiOnline.app`. Q04 phải có `inventoryItemDetailVerified=true`, hiển thị Bình Máu thật ở detail bên phải trước/sau sử dụng; Q05–Q09 tiếp tục không bị overlay che.

@@ -28,6 +28,8 @@ namespace LinhGioi.UI
         private const string LgoInventoryFilterChipClass = "lgo-inventory-filter-chip";
         private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
         private const string LgoInventoryGridCellClass = "lgo-inventory-grid-cell";
+        private const string LgoInventorySearchFieldClass = "lgo-inventory-search-field";
+        private const string LgoInventorySearchInputClass = "lgo-inventory-search-input";
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
         private const string LgoHudPrimaryCombatActionClass = "lgo-hud-primary-combat-action";
@@ -415,6 +417,35 @@ namespace LinhGioi.UI
             cell.style.marginBottom = 7;
             cell.style.alignItems = Align.Center;
             cell.style.justifyContent = Justify.Center;
+        }
+
+        private static void ApplyLgoInventorySearchField(TextField field, bool touch)
+        {
+            field.AddToClassList(LgoInventorySearchFieldClass);
+            ApplyLgoInputField(field);
+            field.style.flexGrow = 1;
+            field.style.flexShrink = 1;
+            field.style.minWidth = touch ? 140 : 170;
+            field.style.maxWidth = touch ? 210 : 250;
+            field.style.height = touch ? 38 : 32;
+            field.style.marginLeft = 8;
+            field.style.marginRight = 8;
+            field.style.paddingLeft = field.style.paddingRight = 10;
+            field.style.fontSize = 13;
+            ApplyLgoInventorySearchInnerField(field);
+            field.RegisterCallback<AttachToPanelEvent>(_ => ApplyLgoInventorySearchInnerField(field));
+        }
+
+        private static void ApplyLgoInventorySearchInnerField(TextField field)
+        {
+            RuntimeUiSkin.ApplyLobbyInputInnerFrame(field);
+            var input = field.Q(className: "unity-base-text-field__input")
+                ?? field.Q(className: "unity-text-field__input")
+                ?? field.Q("unity-text-input");
+            if (input == null) return;
+            input.AddToClassList(LgoInventorySearchInputClass);
+            input.style.paddingLeft = input.style.paddingRight = 8;
+            input.style.fontSize = 13;
         }
 
         private static void ApplyLgoEntryCtaAction(Button button, bool primary)

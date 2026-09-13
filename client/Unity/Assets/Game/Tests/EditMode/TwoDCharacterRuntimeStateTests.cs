@@ -792,6 +792,47 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void InventorySearchFiltersRealItemsAndKeepsDetailSelectionOnTheRight()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("inventory search test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                hud.OpenInventoryReviewMode("bag");
+
+                var search = root.Q<TextField>("Map01A Inventory Search");
+                Assert.That(search, Is.Not.Null);
+                Assert.That(search.ClassListContains("lgo-input-field"), Is.True);
+                Assert.That(search.ClassListContains("lgo-inventory-search-field"), Is.True);
+                var searchInput = search.Q(className: "unity-base-text-field__input")
+                    ?? search.Q(className: "unity-text-field__input")
+                    ?? search.Q("unity-text-input");
+                Assert.That(searchInput, Is.Not.Null);
+                Assert.That(searchInput.ClassListContains("lgo-inventory-search-input"), Is.True,
+                    "The actual TextField input must use the shared dark game skin instead of Unity's white default.");
+                search.value = "binh mau";
+
+                Assert.That(root.Q<Button>("Map01A Health Potion").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Button>("Map01A Mana Potion").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
+                InvokeBoundButton(root.Q<Button>("Map01A Health Potion"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").text, Is.EqualTo("Bình Máu Nhỏ"));
+
+                search.value = "";
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void SourcePoseInventoryKeepsQuestPotionActionUsable()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

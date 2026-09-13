@@ -18,7 +18,7 @@ ENTRY_EVIDENCE = (
     "build/map01a-entry-product-copy-runtime-v1/manifest.json",
     "build/map01a-entry-product-copy-runtime-v1/entry-login.png",
 )
-HUB_MANIFEST = "build/map01a-five-tab-player-copy-runtime-v1/manifest.json"
+HUB_MANIFEST = "build/map01a-inventory-search-runtime-v2/manifest.json"
 HUB_FRAMES = ["character-info.png", "bag.png", "skills.png", "potential.png", "spirit-pet.png"]
 ROUTE_MANIFEST = "build/map01a-item-detail-runtime-v1/manifest.json"
 ROUTE_FRAMES = ["01-arrival-q01.png", "18-q09-portal-open.png"]
