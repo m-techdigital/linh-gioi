@@ -317,12 +317,20 @@ namespace LinhGioi.UI
             _inventoryBottomActions = InventoryRow("Map01A Inventory Bottom Actions");
             _inventoryBottomActions.style.marginTop = 8;
             _inventoryBottomActions.style.marginBottom = 0;
+            _inventoryBottomActions.style.justifyContent = Justify.FlexEnd;
+            _inventoryBottomActions.style.alignItems = Align.Center;
             var sortButton = InventoryButton(() => { }, "Map01A Inventory Sort Action", "Sắp xếp");
             var splitButton = InventoryButton(() => { }, "Map01A Inventory Split Action", "Tách");
             var quickSellButton = InventoryButton(() => { }, "Map01A Inventory Quick Sell Action", "Bán nhanh");
-            ApplyLgoDisabledAction(sortButton);
-            ApplyLgoDisabledAction(splitButton);
-            ApplyLgoDisabledAction(quickSellButton);
+            foreach (var actionButton in new[] { sortButton, splitButton, quickSellButton })
+            {
+                actionButton.style.flexGrow = 0;
+                actionButton.style.flexBasis = 132;
+                actionButton.style.minHeight = _touch ? 44 : 34;
+                actionButton.style.marginRight = 6;
+                actionButton.style.fontSize = 14;
+                ApplyLgoDisabledAction(actionButton);
+            }
             _inventoryBottomActions.Add(sortButton);
             _inventoryBottomActions.Add(splitButton);
             _inventoryBottomActions.Add(quickSellButton);
@@ -567,7 +575,7 @@ namespace LinhGioi.UI
                 _equipmentTileStates[i] = stateLabel;
                 _equipmentPage.Add(tile);
             }
-            for (var emptyIndex = 1; emptyIndex <= 14; emptyIndex++)
+            for (var emptyIndex = 1; emptyIndex <= 4; emptyIndex++)
             {
                 var emptySlot = new VisualElement { name = $"Map01A Empty Bag Slot {emptyIndex:00}" };
                 emptySlot.style.flexGrow = 0;

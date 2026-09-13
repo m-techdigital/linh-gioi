@@ -85,3 +85,8 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-category-chips-runtime-v1/inventory/bag.png`, `supplies.png`, `character-info.png`, `storage.png`.
 - Result: Hành trang category controls now render as compact chips instead of two full-width tab bars. Passive chips reserve future categories without opening fake item data.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit still finds the inventory shell below the uploaded references; continue shell/ornament/icon/portrait work using shared skin and provenance-backed assets only.
+## 2026-09-13 — Inventory compact toolbar and sparse empty-slot evidence
+
+- Evidence: `build/map01a-inventory-action-toolbar-runtime-v2/inventory/bag.png`, `supplies.png`, `character-info.png`, `storage.png`.
+- Change: bottom inventory actions now behave as compact toolbar controls; demo bag empty cells are limited to a small reserve so the screen does not read as a debug grid.
+- Review: still not final; next pass should improve panel depth, ornament, and bottom whitespace against the owner UI references.

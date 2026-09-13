@@ -1,3 +1,9 @@
+## Next — Map01A UI/UX polish, inventory shell/card depth — 2026-09-13
+
+- Tiếp tục Map01A UI-only, không quay lại class/wardrobe/pose/source trong task này.
+- Ưu tiên gần nhất: giảm cảm giác panel phẳng của Hành trang/Thông tin/Rương đồ bằng shared shell/card style, xử lý khoảng trống dưới grid và depth/ornament giống reference owner hơn.
+- Gate bắt buộc trước khi báo ổn: EditMode targeted test, shared-skin validator, Player capture, mở ảnh runtime để audit bằng mắt.
+
 ## Next Map01A UI polish after inventory category chips — 2026-09-13
 
 Continue Map01A product UI/UX only. Latest evidence `build/map01a-inventory-category-chips-runtime-v1/inventory/` shows Hành trang sub-categories are now compact chips rather than full-width table bars, but review remains `CONTINUE`, not owner acceptance. Next safe work: continue reducing table-like inventory shell, improve card/ornament hierarchy, or prepare provenance-backed item/portrait assets. Do not add fake/random icons, do not resume class/wardrobe/pose work, do not run class build/capture loops, and do not rollback existing class code.

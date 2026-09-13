@@ -1,3 +1,10 @@
+## Map01A — inventory action toolbar + sparse empty-slot visual audit — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Đã chặn regression bằng EditMode test cho Hành trang: bottom actions phải là toolbar compact, và demo bag chỉ giữ vài ô trống thay vì lấp nửa modal bằng ô rỗng.
+- Player evidence: `build/map01a-inventory-action-toolbar-runtime-v2/inventory/bag.png`, `supplies.png`, `character-info.png`, `storage.png`.
+- Visual audit: có cải thiện so với debug-table layout, nhưng vẫn `CONTINUE`; panel Hành trang còn phẳng và còn khoảng trống lớn dưới grid, cần tiếp tục polish shell/card theo reference owner.
+
 ## Map01A — inventory category chips runtime audit — 2026-09-13
 
 `CONTINUE`, chỉ UI/Map01A. Batch này thay cặp sub-tab `Trang bị/Vật phẩm` kéo full-width trong Hành trang bằng category chip row gọn hơn (`Trang bị`, `Vật phẩm`, `Tiêu hao`, `Nguyên liệu`, `Khác`) để giảm cảm giác bảng debug và tiến gần hơn các reference hành trang RPG. Các chip dự phòng chỉ là affordance thụ động/disabled, không mở dữ liệu giả hoặc storage/item model mới. Không thêm icon giả/random, không quay lại class/wardrobe/pose, không rollback class code.

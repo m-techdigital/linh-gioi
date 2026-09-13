@@ -240,10 +240,16 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(emptyBagSlot, Is.Not.Null,
                     "Bag layout should reserve empty inventory cells so the screen reads as a game bag grid, not a sparse debug list.");
                 Assert.That(emptyBagSlot.style.flexBasis.value.value, Is.LessThanOrEqualTo(17f));
+                Assert.That(root.Q("Map01A Empty Bag Slot 05"), Is.Null,
+                    "Demo bag should reserve a few empty cells without filling half the modal with dead empty boxes far from the owner RPG references.");
                 Assert.That(root.Q<Label>("Map01A Inventory Count Badge"), Is.Not.Null,
                     "Bag tab should show an inventory capacity badge like a real bag screen, not only a raw item grid.");
                 Assert.That(root.Q("Map01A Inventory Bottom Actions"), Is.Not.Null,
                     "Bag tab needs a bottom action bar so the modal reads as game inventory instead of a debug table.");
+                Assert.That(root.Q<Button>("Map01A Inventory Sort Action").style.flexGrow.value, Is.EqualTo(0),
+                    "Bottom inventory actions should be compact toolbar actions, not full-width disabled debug bars.");
+                Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").style.flexBasis.value.value, Is.LessThanOrEqualTo(150),
+                    "Bottom inventory actions should stay proportional to the owner RPG bag references.");
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
