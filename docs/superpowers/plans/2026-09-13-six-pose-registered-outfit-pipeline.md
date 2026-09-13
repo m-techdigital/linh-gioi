@@ -116,6 +116,8 @@ Waist belt source staging update 2026-09-13: after reviewing candidates on the c
 
 Shoulder/chest guard staging update 2026-09-13: measured compact v2 candidates passed slot-envelope fit for all five missing run/jump poses and were staged into `shoulder-chest-guard-six-pose-source-repair-v1`. Repair audit `repair-layer-audit-v6-after-waist-guard-staging.json` now reports `waist_belt` `24/24`, `shoulder_chest_guard` `24/24`, and `outer_top` `4/24`; remaining failures are the 20 `outer_top` run/jump A/B front/back files. Board `source-board-v3-after-waist-guard-staging/contact-sheet.png` is still fix-required.
 
+Outer_top template rejection 2026-09-13: `outer-top-measured-template-candidates-v1/visual-review-v1.json` is `OUTER_TOP_MEASURED_TEMPLATE_VISUAL_REJECTED_NOT_STAGED`. The geometric torso/sleeve template failed envelope width and visually repeated the floating-panel failure mode. Do not stage this family; outer_top needs source-paint/native authoring with arm/body ownership before the repair batch can close.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.
