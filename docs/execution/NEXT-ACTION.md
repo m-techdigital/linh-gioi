@@ -20,6 +20,8 @@ Blender flat-card/skinned body-rig prototype was visually rejected and stopped. 
 
 Surface contract scope fix: contract validator now separates declaration status from source artifact validity. Outfit pack entrypoints must pass a surface contract whose declaration is PASS and whose source artifact status is `SOURCE_ARTIFACT_VISUAL_ACCEPTED`; current Pháp Lv1 contract remains not production-ready.
 
+Six-pose body scale correction 2026-09-14: giữ nguyên byte của năm pose cũ `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b` cho cả nam và nữ. Chỉ `jump_tuck` được scale affine đồng nhất `0.948` quanh pivot nguồn `(512,820)`, suy ra từ phép đo mặt bằng macOS Vision: nam cần `0.951`, nữ cần `0.945`; sai lệch dự kiến sau sửa so với idle lần lượt `-0.32%` và `+0.34%`. Source tách hai bộ tại `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/common-character-v2/six-pose-base-v2-scale-corrected/`; chưa tự thay runtime trước Player review. Candidate ImageGen sinh lại cả sheet bị owner bác vì trùng/sai pose semantics đã chuyển sang `rejected-evidence/2026-09-14/common-character-generated-duplicate-pose-candidate-v1`; cấm đổi tên hoặc dùng lại làm pose authority.
+
 ## Historical context kept for provenance
 
 ## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13

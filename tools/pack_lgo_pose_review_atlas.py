@@ -25,6 +25,7 @@ OUTFIT_REVIEW_DIRS = {
 }
 OUTFIT_SOURCE_MARKERS = {'slotId', 'reviewSlot', 'itemId', 'layerOrderProfile', 'fitFamily'}
 REJECTED_SELECTION_MARKERS = ('REJECTED', 'WITHDRAWN')
+ACCEPTED_SOURCE_SELECTION_STATUS = 'SOURCE_ARTIFACT_VISUAL_ACCEPTED'
 
 
 def is_outfit_review_pack(sources: list[dict], output_dir: Path) -> bool:
@@ -33,10 +34,12 @@ def is_outfit_review_pack(sources: list[dict], output_dir: Path) -> bool:
     return any(any(marker in source for marker in OUTFIT_SOURCE_MARKERS) for source in sources)
 
 
-def validate_selectable_sources(sources: list[dict]) -> None:
+def validate_selectable_sources(
+        sources: list[dict], *, require_visual_acceptance: bool = False) -> None:
     """Block rejected evidence at the pack boundary, regardless of caller flags."""
     for source in sources:
         path = Path(source['source']).resolve()
+        nearest_selection = None
         if 'rejected-evidence' in {part.lower() for part in path.parts}:
             raise ValueError('Source is quarantined rejected-evidence: ' + str(path))
         for parent in path.parents:
@@ -48,9 +51,33 @@ def validate_selectable_sources(sources: list[dict]) -> None:
             if not selection_path.is_file():
                 continue
             selection = json.loads(selection_path.read_text(encoding='utf-8'))
+            if nearest_selection is None:
+                nearest_selection = (selection_path, selection)
             status = str(selection.get('status', '')).upper()
             if any(marker in status for marker in REJECTED_SELECTION_MARKERS):
                 raise ValueError(f'Source authoring selection is {status}: {selection_path}')
+        if not require_visual_acceptance:
+            continue
+        if nearest_selection is None:
+            raise ValueError('Outfit source has no authoring-selection.json: ' + str(path))
+        selection_path, selection = nearest_selection
+        status = str(selection.get('status', '')).upper()
+        if status != ACCEPTED_SOURCE_SELECTION_STATUS:
+            raise ValueError(
+                f'Outfit source selection must be {ACCEPTED_SOURCE_SELECTION_STATUS}, '
+                f'not {status or "UNDECLARED"}: {selection_path}')
+        approved = set()
+        for item in selection.get('allowedSourceContent') or []:
+            if not isinstance(item, dict) or not item.get('path') or not item.get('sha256'):
+                continue
+            approved_path = Path(item['path'])
+            if not approved_path.is_absolute():
+                approved_path = selection_path.parent / approved_path
+            approved.add((str(approved_path.resolve()), str(item['sha256']).lower()))
+        source_key = (str(path), str(source.get('sourceSha256', '')).lower())
+        if source_key not in approved:
+            raise ValueError(
+                'Outfit source path/hash is missing from allowedSourceContent: ' + str(path))
 
 
 def compact_rows(unique, width):
@@ -95,10 +122,12 @@ def compact_rows(unique, width):
     return 1 << (y - 1).bit_length(), positions
 
 
-def pack_review(sources, divisor=4, max_side=1024, *, allow_empty_components=False):
+def pack_review(sources, divisor=4, max_side=1024, *, allow_empty_components=False,
+                require_visual_acceptance=False):
     if not sources:
         raise ValueError('Source list is empty')
-    validate_selectable_sources(sources)
+    validate_selectable_sources(
+        sources, require_visual_acceptance=require_visual_acceptance)
     if not isinstance(divisor, int) or divisor <= 0 or any(n % divisor for n in CANVAS):
         raise ValueError('Divisor must divide the canonical canvas')
     ids, unique, sprites = set(), {}, []
@@ -200,7 +229,8 @@ def main():
     args = parser.parse_args()
     sources = json.loads(args.sources.read_text())
     contract_report = None
-    if is_outfit_review_pack(sources, args.output_dir):
+    outfit_review = is_outfit_review_pack(sources, args.output_dir)
+    if outfit_review:
         if args.surface_contract is None:
             parser.error('surface contract required for outfit review pack')
         contract_report = validate_contract(args.surface_contract)
@@ -218,7 +248,8 @@ def main():
                                 for value, limit in zip(args.jump_pivot_source, CANVAS))):
         parser.error('jump pivot must lie on canonical canvas and requires jump_tuck')
     atlas, report = pack_review(sources, args.divisor, args.max_side,
-                                allow_empty_components=args.allow_empty_components)
+                                allow_empty_components=args.allow_empty_components,
+                                require_visual_acceptance=outfit_review)
     if has_jump:
         report['jumpPivotSource'] = args.jump_pivot_source
     if contract_report is not None:

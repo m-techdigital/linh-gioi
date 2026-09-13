@@ -1,3 +1,7 @@
+## Character base jump scale correction — 2026-09-14
+
+`CONTINUE`. Owner sửa phạm vi thành hai bộ riêng: nam 6 pose và nữ 6 pose. Lượt ImageGen thay cả sheet bị reject ngay vì làm sai/trùng pose chạy; toàn bộ candidate được chuyển sang `rejected-evidence/2026-09-14/common-character-generated-duplicate-pose-candidate-v1` và khóa không tái sử dụng. Kết quả thay thế giữ exact SHA-256 của năm pose cũ cho mỗi giới, chỉ scale `jump_tuck` chung `0.948` quanh pivot `(512,820)`. Hệ số lấy từ face-size Vision: nam `79.2103/83.2878 = 0.9510`, nữ `89.8593/95.1142 = 0.9448`; chọn trung điểm cho sai lệch dự kiến dưới `0.4%` ở cả hai. External source: `common-character-v2/six-pose-base-v2-scale-corrected/`; 12/12 frame là RGBA 1024x1536, mỗi bộ có 6 hash riêng, Player chưa chạy và runtime chưa promotion.
+
 ## Blender split-body recurrence stopped — 2026-09-13
 
 `CONTINUE`. Owner xác nhận Blender flat-card/skinned body rig lặp lại đúng hướng body cắt mảnh đã bị hủy. Nguyên nhân là commit `26663f59` ghi `OUTFIT_BODY_RIG_SOURCE_PROTOTYPE` vào JSON active state ở đầu `NEXT-ACTION.md`; advisor ưu tiên JSON này hơn guard six-pose nằm phía dưới, nên đường bị dừng vẫn chạy. Source change chưa commit của lượt skinned đã được restore; Unity temp được chuyển vào evidence, không đưa vào production.

@@ -40,6 +40,23 @@ class PoseReviewAtlasTests(unittest.TestCase):
         }))
         return contract
 
+    def source_under_authoring_selection(self, source, status):
+        selected = self.root / ('selection-' + status.lower())
+        selected.mkdir()
+        old_path = Path(source['source'])
+        new_path = selected / old_path.name
+        old_path.rename(new_path)
+        source['source'] = str(new_path)
+        (selected / 'authoring-selection.json').write_text(json.dumps({
+            'status': status,
+            'runtimeEligible': False,
+            'allowedSourceContent': [{
+                'path': old_path.name,
+                'sha256': source['sourceSha256'],
+            }],
+        }))
+        return source
+
     def test_default_review_density_is_div4(self):
         _, report = pack_review([self.source('idle')])
         self.assertEqual(report['samplingDivisor'], 4)
@@ -228,7 +245,11 @@ class PoseReviewAtlasTests(unittest.TestCase):
 
     def test_cli_accepts_outfit_review_entrypoint_only_with_ready_source_artifact(self):
         records = self.root / 'sources.json'
-        records.write_text(json.dumps([{**self.source('idle'), 'slotId': 'outer_top'}]))
+        source = self.source_under_authoring_selection(
+            {**self.source('idle'), 'slotId': 'outer_top'},
+            'SOURCE_ARTIFACT_VISUAL_ACCEPTED',
+        )
+        records.write_text(json.dumps([source]))
         output = self.root / 'outer-top-review'
 
         result = subprocess.run([sys.executable, str(Path(__file__).with_name('pack_lgo_pose_review_atlas.py')),
@@ -240,6 +261,46 @@ class PoseReviewAtlasTests(unittest.TestCase):
         report = json.loads((output / 'atlas-review.json').read_text())
         self.assertEqual(report['surfaceContractStatus'], 'PASS')
         self.assertTrue(report['sourceArtifactValid'])
+
+    def test_cli_rejects_pending_outfit_source_even_with_accepted_contract(self):
+        source = self.source_under_authoring_selection(
+            {**self.source('idle'), 'slotId': 'outer_top'},
+            'SOURCE_REVIEW_REQUIRED',
+        )
+        records = self.root / 'sources.json'
+        records.write_text(json.dumps([source]))
+
+        result = subprocess.run([
+            sys.executable, str(Path(__file__).with_name('pack_lgo_pose_review_atlas.py')),
+            '--sources', str(records), '--output-dir', str(self.root / 'outer-top-review'),
+            '--surface-contract', str(self.accepted_surface_contract()),
+        ], capture_output=True, text=True)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('source_artifact_visual_accepted', result.stderr.lower())
+        self.assertFalse((self.root / 'outer-top-review').exists())
+
+    def test_cli_rejects_outfit_source_missing_from_accepted_source_allowlist(self):
+        source = self.source_under_authoring_selection(
+            {**self.source('idle'), 'slotId': 'outer_top'},
+            'SOURCE_ARTIFACT_VISUAL_ACCEPTED',
+        )
+        selection_path = Path(source['source']).parent / 'authoring-selection.json'
+        selection = json.loads(selection_path.read_text())
+        selection['allowedSourceContent'][0]['sha256'] = '0' * 64
+        selection_path.write_text(json.dumps(selection))
+        records = self.root / 'sources.json'
+        records.write_text(json.dumps([source]))
+
+        result = subprocess.run([
+            sys.executable, str(Path(__file__).with_name('pack_lgo_pose_review_atlas.py')),
+            '--sources', str(records), '--output-dir', str(self.root / 'outer-top-review'),
+            '--surface-contract', str(self.accepted_surface_contract()),
+        ], capture_output=True, text=True)
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn('allowedsourcecontent', result.stderr.lower())
+        self.assertFalse((self.root / 'outer-top-review').exists())
 
 
     def test_cli_rejects_surface_contract_that_needs_route_decision(self):
