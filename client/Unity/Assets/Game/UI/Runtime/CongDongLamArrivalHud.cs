@@ -148,11 +148,11 @@ namespace LinhGioi.UI
             _basic.tooltip = "Đánh thường · Z";
             _skill = new Button(() => _scene.TriggerVoSkill()) { name = "Map01A Skill Action", text = "Liên quyền" };
             _skill.tooltip = "Kỹ năng · X";
-            foreach (var button in new[] { _run, _jump, _basic, _skill })
-            {
-                ApplyLgoHudCombatAction(button, _touch);
-                _combatBar.Add(button);
-            }
+            ApplyLgoHudCombatAction(_run, _touch);
+            ApplyLgoHudCombatAction(_jump, _touch);
+            ApplyLgoHudCombatAction(_basic, _touch, primary: true);
+            ApplyLgoHudCombatAction(_skill, _touch);
+            foreach (var button in new[] { _run, _jump, _basic, _skill }) _combatBar.Add(button);
             AttachLgoHudActionIcon(_run, _scene.GetMap01AHudIconSprite("run"), _touch);
             AttachLgoHudActionIcon(_jump, _scene.GetMap01AHudIconSprite("jump"), _touch);
             AttachLgoHudActionIcon(_basic, _scene.GetMap01AHudIconSprite("attack"), _touch);

@@ -945,8 +945,12 @@ namespace LinhGioi.Tests.EditMode
                     "HUD vitals must share the same info-panel base as the title and quest tracker.");
                 Assert.That(root.Q("Map01A Quest Tracker Body").ClassListContains("lgo-hud-info-panel"), Is.True,
                     "HUD quest body must use the shared info-panel base instead of one-off panel styling.");
+                Assert.That(root.Q("Map01A Quest Tracker Body").style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.9f),
+                    "Quest tracking needs a readable shared glass background over bright map art.");
                 Assert.That(root.Q("Map01A Minimap").ClassListContains("lgo-hud-info-panel"), Is.True,
                     "HUD minimap placeholder must use the shared info-panel base until a real minimap art pass replaces it.");
+                Assert.That(root.Q("Map01A Minimap").style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.9f),
+                    "Map and quest cards must remain readable over bright sky and share one HUD background token.");
                 Assert.That(root.Q("LGO World Touch Movement Pad").ClassListContains("lgo-hud-info-panel"), Is.True,
                     "Touch movement pad shell must reuse HUD info-panel base rather than the legacy Box helper.");
                 Assert.That(root.Q("Map01A Quest Tracker Tabs"), Is.Not.Null,
@@ -975,11 +979,15 @@ namespace LinhGioi.Tests.EditMode
                     "All combat actions must share the same base style for consistent Player density.");
                 Assert.That(runAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
                     "Bottom HUD action buttons must not wrap into oversized blocks.");
-                Assert.That(runAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),
+                Assert.That(runAction.style.fontSize.value.value, Is.LessThanOrEqualTo(13f),
                     "Bottom HUD action buttons must stay compact on Player.");
-                Assert.That(runAction.resolvedStyle.height, Is.InRange(54f, 64f),
+                Assert.That(runAction.style.minHeight.value.value, Is.InRange(54f, 64f),
                     "Desktop combat icons must stay readable without growing to modal CTA scale.");
-                Assert.That(skillAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f));
+                Assert.That(skillAction.style.fontSize.value.value, Is.LessThanOrEqualTo(13f));
+                var basicAttack = root.Q<Button>("Map01A Basic Attack Action");
+                Assert.That(basicAttack.ClassListContains("lgo-hud-primary-combat-action"), Is.True,
+                    "The primary attack must have an explicit shared emphasis role instead of four equal debug buttons.");
+                Assert.That(basicAttack.style.minWidth.value.value, Is.GreaterThan(runAction.style.minWidth.value.value));
                 foreach (var binding in new[]
                 {
                     ("Map01A Run Action", "run"),
@@ -1007,7 +1015,7 @@ namespace LinhGioi.Tests.EditMode
                     var button = root.Q<Button>(name);
                     Assert.That(button.parent, Is.EqualTo(navigation), name + " must stay in the shared bottom navigation group.");
                     Assert.That(button.ClassListContains("lgo-hud-navigation-action"), Is.True);
-                    Assert.That(button.resolvedStyle.height, Is.InRange(60f, 76f));
+                    Assert.That(button.style.height.value.value, Is.InRange(60f, 76f));
                 }
                 Assert.That(root.Q<Button>("Map01A Talk Action").parent, Is.Not.EqualTo(navigation),
                     "Context interaction must not be mixed into product navigation.");
@@ -1105,6 +1113,8 @@ namespace LinhGioi.Tests.EditMode
                 var portrait = root.Q("Map01A Dialogue NPC Portrait");
                 Assert.That(portrait, Is.Not.Null, "Dialogue must reserve a shared portrait area for the active NPC.");
                 Assert.That(portrait.ClassListContains("lgo-dialogue-portrait"), Is.True);
+                Assert.That(portrait.style.width.value.value, Is.GreaterThanOrEqualTo(104f),
+                    "NPC portrait must carry the conversation visually instead of reading like a small inventory thumbnail.");
                 Assert.That(portrait.style.backgroundImage.value.sprite, Is.EqualTo(scene.GetCurrentDialogueNpcSprite()));
                 var speaker = root.Q<Label>("Map01A Dialogue Speaker");
                 Assert.That(speaker, Is.Not.Null, "Dialogue speaker needs a named shared title label for UI audit and style reuse.");

@@ -1311,3 +1311,8 @@ Next valid work: chọn một screen hoàn chỉnh để giảm khoảng cách v
 `CONTINUE`. Entry/login checkpoint hiện hành là `build/map01a-entry-icons-runtime-v3/entry-login.png`; chỉ dùng ảnh Player này khi review, không quay lại các capture login cũ. Batch đã sửa hierarchy và icon chung, nhưng chưa phải mỹ thuật cuối vì chưa có logo brush/illustration cùng ornament art chuyên dụng.
 
 Next valid work: xử lý trọn một batch gameplay HUD + NPC dialogue theo owner reference, qua shared Skin/base hiện có. Trước khi sửa phải chốt ba sai lệch thị giác lớn từ ảnh Player; sau đó build/capture một lần và đánh giá bằng mắt. Không chạy vòng test/capture lặp cho chỉnh sửa khoảng cách nhỏ. Không resume class/wardrobe/pose/source, không chạy class capture, không rollback class code và không đổi frozen surfaces.
+## Next — gameplay player card + right rail composition — 2026-09-13
+
+`CONTINUE`. HUD/dialogue evidence hiện hành: `build/map01a-hud-dialogue-runtime-v2/01-arrival-q01.png` và `02-ha-van-dialogue.png`. Không dùng capture v1 vì v1 có regression nền quest; v2 đã sửa và được xem trực tiếp.
+
+Next valid visible batch: gom player card/location và minimap/quest thành hai composition dùng shared base, nâng hierarchy gần owner HUD mà vẫn giữ viewport Map01A. Chốt tối đa ba sai lệch lớn trước khi code, sau đó một build/capture và visual audit. Không chỉnh CSS lẻ từng nút, không resume class/wardrobe/pose/source, không rollback class code và không đổi frozen surfaces.

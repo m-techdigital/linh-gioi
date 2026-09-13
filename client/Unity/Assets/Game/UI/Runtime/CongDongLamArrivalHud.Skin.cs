@@ -30,6 +30,7 @@ namespace LinhGioi.UI
         private const string LgoInventoryGridCellClass = "lgo-inventory-grid-cell";
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
+        private const string LgoHudPrimaryCombatActionClass = "lgo-hud-primary-combat-action";
         private const string LgoHudActionIconClass = "lgo-hud-action-icon";
         private const string LgoHudNavigationActionClass = "lgo-hud-navigation-action";
         private const string LgoHudShortcutActionClass = "lgo-hud-shortcut-action";
@@ -566,8 +567,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoDialoguePortrait(VisualElement portrait)
         {
             portrait.AddToClassList(LgoDialoguePortraitClass);
-            portrait.style.width = 92;
-            portrait.style.height = 132;
+            portrait.style.width = 112;
+            portrait.style.height = 144;
             portrait.style.flexShrink = 0;
             portrait.style.marginRight = 12;
             portrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
@@ -620,6 +621,7 @@ namespace LinhGioi.UI
         {
             element.AddToClassList(LgoHudMapPanelClass);
             ApplyLgoHudInfoPanel(element);
+            element.style.backgroundColor = UiGlassStrong;
             element.style.borderTopWidth = 2;
             element.style.borderTopColor = UiGoldBorder;
         }
@@ -628,6 +630,7 @@ namespace LinhGioi.UI
         {
             element.AddToClassList(LgoHudQuestPanelClass);
             ApplyLgoHudInfoPanel(element);
+            element.style.backgroundColor = UiGlassStrong;
             element.style.fontSize = 15;
             element.style.borderLeftWidth = 2;
             element.style.borderLeftColor = new Color(.13f, .58f, .86f, .88f);
@@ -650,29 +653,41 @@ namespace LinhGioi.UI
             if (selected) ApplyLgoSelectedTab(button, true);
         }
 
-        private static void ApplyLgoHudCombatAction(Button button, bool touch)
+        private static void ApplyLgoHudCombatAction(Button button, bool touch, bool primary = false)
         {
             button.AddToClassList(LgoHudCombatActionClass);
+            button.EnableInClassList(LgoHudPrimaryCombatActionClass, primary);
             ApplyLgoButton(button);
-            button.style.minHeight = touch ? 68 : 58;
-            button.style.maxHeight = touch ? 68 : 58;
-            button.style.minWidth = touch ? 72 : 62;
-            button.style.maxWidth = touch ? 72 : 62;
+            var size = primary ? (touch ? 84 : 70) : (touch ? 68 : 58);
+            button.style.minHeight = size;
+            button.style.maxHeight = size;
+            button.style.minWidth = size;
+            button.style.maxWidth = size;
             button.style.flexShrink = 0;
             button.style.fontSize = touch ? 10 : 9;
             button.style.whiteSpace = WhiteSpace.NoWrap;
             button.style.marginRight = 8;
             button.style.paddingLeft = button.style.paddingRight = 0;
-            button.style.paddingTop = touch ? 42 : 35;
+            button.style.paddingTop = primary ? (touch ? 50 : 42) : (touch ? 42 : 35);
             button.style.paddingBottom = 3;
             button.style.unityTextAlign = TextAnchor.LowerCenter;
-            button.style.borderTopLeftRadius = button.style.borderTopRightRadius = touch ? 34 : 29;
-            button.style.borderBottomLeftRadius = button.style.borderBottomRightRadius = touch ? 34 : 29;
+            var radius = size * .5f;
+            button.style.borderTopLeftRadius = button.style.borderTopRightRadius = radius;
+            button.style.borderBottomLeftRadius = button.style.borderBottomRightRadius = radius;
+            if (primary)
+            {
+                button.style.backgroundColor = new Color(.025f, .095f, .16f, .98f);
+                button.style.borderTopWidth = button.style.borderBottomWidth = 3;
+                button.style.borderLeftWidth = button.style.borderRightWidth = 3;
+                button.style.borderTopColor = button.style.borderBottomColor = UiGold;
+                button.style.borderLeftColor = button.style.borderRightColor = UiGoldBorder;
+            }
         }
 
         private static void AttachLgoHudActionIcon(Button button, Sprite sprite, bool touch)
         {
             var combat = button.ClassListContains(LgoHudCombatActionClass);
+            var primaryCombat = button.ClassListContains(LgoHudPrimaryCombatActionClass);
             var navigation = button.ClassListContains(LgoHudNavigationActionClass);
             var icon = new VisualElement
             {
@@ -681,9 +696,9 @@ namespace LinhGioi.UI
             };
             icon.AddToClassList(LgoHudActionIconClass);
             icon.style.position = Position.Absolute;
-            icon.style.left = combat ? (touch ? 18 : 16) : navigation ? (touch ? 25 : 25) : (touch ? 10 : 8);
-            icon.style.top = combat ? (touch ? 7 : 5) : navigation ? 7 : (touch ? 14 : 10);
-            icon.style.width = icon.style.height = combat ? (touch ? 36 : 30) : navigation ? (touch ? 34 : 30) : (touch ? 28 : 24);
+            icon.style.left = combat ? (primaryCombat ? (touch ? 20 : 17) : (touch ? 18 : 14)) : navigation ? (touch ? 25 : 25) : (touch ? 10 : 8);
+            icon.style.top = combat ? (primaryCombat ? (touch ? 9 : 7) : (touch ? 7 : 5)) : navigation ? 7 : (touch ? 14 : 10);
+            icon.style.width = icon.style.height = combat ? (primaryCombat ? (touch ? 44 : 36) : (touch ? 36 : 30)) : navigation ? (touch ? 34 : 30) : (touch ? 28 : 24);
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
             if (!combat && !navigation)
