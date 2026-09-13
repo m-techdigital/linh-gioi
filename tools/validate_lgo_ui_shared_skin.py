@@ -21,6 +21,7 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoInventoryStateBadge",
     "ApplyLgoInventoryStatsCard",
     "ApplyLgoStatusCard",
+    "LgoDetailCardClass",
     "ApplyLgoSelectedTab",
     "ApplyLgoDisabledAction",
     "ApplyLgoHudCombatAction",
@@ -64,6 +65,7 @@ REQUIRED_PARTIAL_MARKERS = {
     "CongDongLamArrivalHud.cs": [
         "_dialogue = new VisualElement { name = \"Map01A Dialogue Panel\" }",
         "ApplyLgoGlassPanel(_dialogue",
+        "ApplyLgoDetailCard(dialogueBody, 12, 10)",
         "ApplyLgoDialoguePrimaryAction(_dialogueContinue",
         "ApplyLgoDialogueSecondaryAction(option",
         "ApplyLgoHudContextAction(_talk",
@@ -78,6 +80,7 @@ REQUIRED_PARTIAL_MARKERS = {
     "CongDongLamArrivalHud.Entry.cs": [
         "ApplyLgoModalShell(panel, 24)",
         "ApplyLgoStatusCard(notice, 14, 10)",
+        "ApplyLgoDetailCard(serverCard, 14, 10)",
         "StyleEntryButton",
         "ApplyLgoEntrySecondaryAction(serverSwitch",
         "ApplyLgoEntrySecondaryAction(forgot",
@@ -111,6 +114,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoInventoryStateBadge(_inventoryDetailStateBadge)",
         "ApplyLgoInventoryStatsCard(_inventoryDetailStatsCard)",
         "ApplyLgoStatusCard(_suppliesEmptyState)",
+        "ApplyLgoDetailCard(_characterHeroCard, 12, 10)",
         "_bagTab = InventoryButton(() => ShowInventoryMode(false)",
         "_characterInfoTab = InventoryButton(() => ShowInventoryMode(true)",
         "_storageTab = InventoryButton(ShowStorageMode",

@@ -185,3 +185,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-status-card-runtime-v1/entry/entry-login.png` and `build/map01a-status-card-runtime-v1/inventory/{bag,character-info,character-info-after-supplies,supplies,storage}.png`.
 - Result: the entry notice and inventory supplies empty state now share `ApplyLgoStatusCard(...)` / `lgo-status-card`, so repeated informational cards inherit one frame and spacing foundation while each screen keeps only its content and placement.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual 1600x900 review confirms both consumers render without overlap or clipping; broader login and inventory polish remains `CONTINUE`.
+
+## 2026-09-13 — Shared detail-card foundation evidence
+
+- Evidence: `build/map01a-detail-card-runtime-v1/entry/entry-login.png`, `inventory/character-info.png`, and `quest/02-ha-van-dialogue.png`; the PC quest manifest records 18 frames, Q01-Q09, and 38 dialogue frames.
+- Result: entry server summary, inventory detail/character hero, and NPC dialogue content inherit `ApplyLgoDetailCard(...)` / `lgo-detail-card`; padding variants are parameters of the shared base rather than local frame/spacing implementations.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual 1600x900 review confirms the three consumers retain their intended density without overlap or clipping.

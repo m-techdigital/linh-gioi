@@ -175,6 +175,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(infoTab, Is.Not.Null);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-detail-card"), Is.True,
+                    "Inventory detail surfaces must inherit the shared detail-card foundation.");
                 var body = root.Q("Map01A Inventory Body");
                 Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")), Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Grid Panel"))),
                     "Item detail must stay on the right side of the bag grid.");
@@ -495,6 +497,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
                 Assert.That(root.Q<Label>("Map01A Entry Server State").text, Does.Contain("Mượt"));
+                Assert.That(root.Q("Map01A Entry Server Card").ClassListContains("lgo-detail-card"), Is.True,
+                    "Entry server summary must inherit the shared detail-card foundation.");
                 var serverSwitch = root.Q<Button>("Map01A Entry Server Switch");
                 Assert.That(serverSwitch, Is.Not.Null,
                     "Entry/login should reserve the design server-switch affordance without opening production server routing.");
@@ -871,6 +875,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(header, Is.Not.Null, "Dialogue panel must have a separate design header for speaker/progress metadata.");
                 var body = root.Q("Map01A Dialogue Body");
                 Assert.That(body, Is.Not.Null, "Dialogue panel must frame the spoken line separately from action buttons.");
+                Assert.That(body.ClassListContains("lgo-detail-card"), Is.True,
+                    "Dialogue content must inherit the shared detail-card foundation.");
                 var actionRow = root.Q("Map01A Dialogue Actions");
                 Assert.That(actionRow, Is.Not.Null, "Dialogue panel must use a named action row instead of loose buttons.");
                 var context = root.Q<Label>("Map01A Dialogue Quest Context");

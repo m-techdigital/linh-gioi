@@ -144,12 +144,8 @@ namespace LinhGioi.UI
             var serverCard = new VisualElement { name = "Map01A Entry Server Card" };
             serverCard.style.flexDirection = FlexDirection.Row;
             serverCard.style.alignItems = Align.Center;
-            serverCard.style.paddingLeft = 14;
-            serverCard.style.paddingRight = 14;
-            serverCard.style.paddingTop = 10;
-            serverCard.style.paddingBottom = 10;
             serverCard.style.marginBottom = 8;
-            ApplyLgoDetailCard(serverCard);
+            ApplyLgoDetailCard(serverCard, 14, 10);
             var serverName = LgoLabel("Máy chủ · S1 · Đông Lâm", 17, new Color(.86f, .94f, .90f, .96f), true);
             serverName.name = "Map01A Entry Server Name";
             serverName.style.flexGrow = 1;

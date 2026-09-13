@@ -299,11 +299,9 @@ namespace LinhGioi.UI
             _characterHeroCard = new VisualElement { name = "Map01A Character Hero Card" };
             _characterHeroCard.style.flexDirection = FlexDirection.Row;
             _characterHeroCard.style.alignItems = Align.Center;
-            _characterHeroCard.style.paddingLeft = _characterHeroCard.style.paddingRight = 12;
-            _characterHeroCard.style.paddingTop = _characterHeroCard.style.paddingBottom = 10;
             _characterHeroCard.style.marginTop = 10;
             _characterHeroCard.style.marginBottom = 8;
-            ApplyLgoDetailCard(_characterHeroCard);
+            ApplyLgoDetailCard(_characterHeroCard, 12, 10);
             _inventoryHeroPanel.Add(_characterHeroCard);
 
             _characterHeroPortrait = new VisualElement { name = "Map01A Character Hero Portrait" };

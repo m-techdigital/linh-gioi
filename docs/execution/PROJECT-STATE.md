@@ -1,3 +1,10 @@
+## Map01A — shared detail-card foundation — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, pose, wardrobe, camera hay scale; không rollback code nhân vật.
+- `ApplyLgoDetailCard(...)` giờ sở hữu class `lgo-detail-card` và padding tùy biến; entry server summary, inventory detail/character hero và dialogue body cùng đi qua một foundation thay vì tự set frame/spacing ở từng màn.
+- TDD: Entry test fail đúng khi server card chưa có shared class; sau refactor ba targeted EditMode tests cho entry, inventory và dialogue đều pass `total=1 passed=1 failed=0`. Shared-skin validator khóa helper và ba call-site.
+- Player evidence: `build/map01a-detail-card-runtime-v1/entry/entry-login.png`, `inventory/character-info.png` và `quest/02-ha-van-dialogue.png`; PC route pass 18 frames, Q01-Q09, 38 dialogue frames. Visual audit xác nhận không chồng/cắt hoặc đổi density; UI tổng thể vẫn `CONTINUE`.
+
 ## Map01A — shared status-card foundation — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, pose, wardrobe, camera hay scale; không rollback code nhân vật.

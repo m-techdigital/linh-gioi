@@ -1,3 +1,7 @@
+## Next — Map01A base-first UI after shared detail cards — 2026-09-13
+
+`CONTINUE`. Login server summary, inventory detail/hero và NPC dialogue body đã dùng chung `ApplyLgoDetailCard(...)` / `lgo-detail-card`; evidence tại `build/map01a-detail-card-runtime-v1/`. Tiếp tục Map01A UI theo design owner, ưu tiên audit hierarchy/typography/component đang lặp có tác động nhìn thấy rõ; chỉ tạo semantic helper khi có từ hai consumer thật. Không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI after shared status card — 2026-09-13
 
 `CONTINUE`. Entry notice và inventory empty-state đã dùng chung `ApplyLgoStatusCard(...)` / `lgo-status-card`, với Player evidence tại `build/map01a-status-card-runtime-v1/`. Tiếp tục audit login/HUD/dialog/inventory theo design owner; chỉ tách semantic helper khi có từ hai consumer thật, ưu tiên component đang lặp và tạo giá trị nhìn thấy rõ. Giữ Map01A/UI-only, không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; visible batch phải có Player screenshot review bằng mắt.

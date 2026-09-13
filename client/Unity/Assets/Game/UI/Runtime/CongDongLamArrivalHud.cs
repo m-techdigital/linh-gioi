@@ -190,9 +190,7 @@ namespace LinhGioi.UI
             dialogueHeader.Add(_dialogueQuestContext);
             _dialogue.Add(dialogueHeader);
             var dialogueBody = new VisualElement { name = "Map01A Dialogue Body" };
-            ApplyLgoDetailCard(dialogueBody);
-            dialogueBody.style.paddingLeft = dialogueBody.style.paddingRight = 12;
-            dialogueBody.style.paddingTop = dialogueBody.style.paddingBottom = 10;
+            ApplyLgoDetailCard(dialogueBody, 12, 10);
             dialogueBody.style.marginTop = 8;
             _dialogueLine = LgoLabel(_scene.DialogueText, 20, new Color(.95f, .91f, .78f, .98f));
             _dialogueLine.style.whiteSpace = WhiteSpace.Normal; dialogueBody.Add(_dialogueLine);
