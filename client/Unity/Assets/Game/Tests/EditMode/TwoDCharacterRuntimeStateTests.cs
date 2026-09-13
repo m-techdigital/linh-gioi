@@ -586,6 +586,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(context.text, Does.Contain("Q01"));
                 Assert.That(context.text, Does.Contain("Đường Hội Tụ"));
                 Assert.That(context.text, Does.Contain(scene.DialogueProgress));
+                var continueButton = root.Q<Button>("Map01A Dialogue Continue");
+                Assert.That(continueButton, Is.Not.Null,
+                    "Dialogue panel must expose its own continue action after the world HUD actions are hidden.");
+                Assert.That(continueButton.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                var firstLine = scene.DialogueText;
+                InvokeBoundButton(continueButton);
+                Assert.That(scene.DialogueText, Is.Not.EqualTo(firstLine));
             }
             finally
             {

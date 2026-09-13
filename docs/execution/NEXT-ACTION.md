@@ -1,3 +1,7 @@
+## Next Map01A UI polish after dialogue continue action — 2026-09-13
+
+The NPC dialogue panel now has an in-panel `Tiếp tục · E` action while world HUD controls are hidden. Continue Map01A product UI/UX polish from the owner references: improve dialogue/HUD readability, login/inventory visual hierarchy, and item detail presentation using shared skin helpers and approved/runtime assets only. Do not add fake item icons, random generated class art, or a second modal/card/tab/button system. Wardrobe/class redraw remains deferred until a deterministic source/design pipeline exists.
+
 ## Next Map01A UI polish after storage gate card — 2026-09-13
 
 Continue visible Map01A UI/UX polish from owner references. `Rương đồ` now communicates its locked storage state without fake data; next safe work should improve inventory/item visual hierarchy only through shared skin helpers and approved/runtime assets. Do not add fake/generic icons or random generated item art. If no approved item art exists, prepare/review an item-thumbnail design board or continue non-art UI polish such as dialogue/HUD readability. Keep wardrobe/class redraw deferred until a deterministic source/design pipeline exists.

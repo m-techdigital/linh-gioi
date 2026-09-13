@@ -15,7 +15,7 @@ namespace LinhGioi.UI
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
         private Button _skillsShortcut, _menuShortcut;
-        private Button _dialogueInformation, _dialogueClose, _npcTalk;
+        private Button _dialogueContinue, _dialogueInformation, _dialogueClose, _npcTalk;
         private Button[] _equipmentRows;
         private IReadOnlyList<string> _equipmentSlotIds;
         private RuntimeTouchMovementPad _pad;
@@ -188,9 +188,10 @@ namespace LinhGioi.UI
             _dialogueLine.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(_dialogueLine);
             var dialogueOptions = new VisualElement(); dialogueOptions.style.flexDirection = FlexDirection.Row;
             dialogueOptions.style.flexWrap = Wrap.Wrap;
+            _dialogueContinue = new Button(() => _scene.UseCurrentRouteAction()) { name = "Map01A Dialogue Continue", text = "Tiếp tục" };
             _dialogueInformation = new Button(() => _scene.ReadDialogueInformation()) { name = "Map01A Dialogue Information", text = "Hỏi việc tiếp theo" };
             _dialogueClose = new Button(() => _scene.CloseNpcDialogue()) { name = "Map01A Dialogue Close", text = "Để sau" };
-            foreach (var option in new[] { _dialogueInformation, _dialogueClose })
+            foreach (var option in new[] { _dialogueContinue, _dialogueInformation, _dialogueClose })
             {
                 ApplyLgoButton(option); option.style.minHeight = 44; option.style.marginTop = 8; option.style.marginRight = 10;
                 dialogueOptions.Add(option);
@@ -361,6 +362,9 @@ namespace LinhGioi.UI
             _productShortcutActions.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
             _combatBar.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
             _pad.style.display = _touch && !hudBlocked ? DisplayStyle.Flex : DisplayStyle.None;
+            _dialogueContinue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            _dialogueContinue.SetEnabled(_scene.CanUseCurrentRouteAction);
+            _dialogueContinue.text = "Tiếp tục" + (_touch ? "" : " · E");
             _dialogueInformation.style.display = _scene.CanReadDialogueInformation ? DisplayStyle.Flex : DisplayStyle.None;
             _npcTalk.style.display = !_scene.DialogueOpen && _scene.CanTalkToCurrentNpc
                 && _scene.CurrentRouteNodeId == "well-bridge" && _scene.CurrentActionLabel != "Trò chuyện"
