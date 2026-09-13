@@ -88,9 +88,9 @@ namespace LinhGioi.UI
             header.style.alignItems = Align.Center;
             var titleGroup = new VisualElement();
             titleGroup.style.flexGrow = 1;
-            _inventoryModalTitle = LgoLabel("HÀNH TRANG", 20, UiGold, true);
+            _inventoryModalTitle = LgoTitleLabel("HÀNH TRANG", 20);
             _inventoryModalTitle.name = "Map01A Inventory Modal Title";
-            _inventoryModalSubtitle = LgoLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 13, new Color(.73f, .85f, .88f, .88f));
+            _inventoryModalSubtitle = LgoSubtitleLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 13);
             _inventoryModalSubtitle.name = "Map01A Inventory Modal Subtitle";
             titleGroup.Add(_inventoryModalTitle);
             titleGroup.Add(_inventoryModalSubtitle);
@@ -440,7 +440,7 @@ namespace LinhGioi.UI
             _storageGateCard.style.paddingLeft = _storageGateCard.style.paddingRight = 18;
             _storageGateCard.style.paddingTop = _storageGateCard.style.paddingBottom = 16;
             _storagePanel.Add(_storageGateCard);
-            _storageGateTitle = LgoLabel("Kho gửi/rút chưa mở", 22, UiGold, true);
+            _storageGateTitle = LgoTitleLabel("Kho gửi/rút chưa mở", 20);
             _storageGateTitle.name = "Map01A Storage Gate Title";
             _storageGateCard.Add(_storageGateTitle);
             _storageState = LgoLabel("Rương đồ chưa khả dụng trong bản trải nghiệm này. Bạn vẫn có thể xem và sử dụng đồ trong Hành trang.", 16, new Color(.91f, .93f, .84f, .96f));

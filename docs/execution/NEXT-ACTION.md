@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI after title/subtitle foundation — 2026-09-13
+
+`CONTINUE`. Rule hiện hành đã khóa rõ: mọi UI/UX giống nhau phải đi qua shared Skin/base helper trước, rồi partial chỉ bind data/state/action; không tự build tràn lan từng màn. Batch mới nhất gom title/subtitle lặp lại vào `LgoTitleLabel(...)` / `LgoSubtitleLabel(...)` với validator/test guard, evidence Player tại `build/map01a-title-label-base-runtime-v1/`.
+
+Next valid work: tiếp tục Map01A/UI-only theo reference owner, ưu tiên polish depth/ornament/icon/provenance-backed assets cho login, HUD, inventory/detail, dialogue và character-select bằng các base có thể tái sử dụng. Không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt và nếu hình còn thô/xấu thì trạng thái là `CONTINUE` hoặc `FIX_REQUIRED`, không báo hoàn thành.
+
 ## Next — Map01A base-first UI after input/ornament foundation — 2026-09-13
 
 `CONTINUE`. Input fields và ornament rails của entry/login đã đi qua shared helpers/classes (`lgo-input-field`, `lgo-ornament-rail`) và có Player evidence mới `build/map01a-input-field-base-runtime-v1/entry-login.png`. Quy tắc hiện hành: cùng UI/UX phải tạo/extend base/shared helper trước, rồi màn cụ thể chỉ bind data/action; không dựng button/tab/card/modal/dialog/input/grid/ornament riêng lẻ nếu vai trò giống nhau.

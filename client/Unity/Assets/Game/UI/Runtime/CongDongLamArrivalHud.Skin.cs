@@ -42,6 +42,8 @@ namespace LinhGioi.UI
         private const string LgoActionStandardClass = "lgo-action-standard";
         private const string LgoInputFieldClass = "lgo-input-field";
         private const string LgoOrnamentRailClass = "lgo-ornament-rail";
+        private const string LgoTitleLabelClass = "lgo-title-label";
+        private const string LgoSubtitleLabelClass = "lgo-subtitle-label";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -128,6 +130,22 @@ namespace LinhGioi.UI
             label.style.color = color;
             label.style.whiteSpace = WhiteSpace.Normal;
             label.style.unityFontStyleAndWeight = bold ? FontStyle.Bold : FontStyle.Normal;
+            return label;
+        }
+
+        private static Label LgoTitleLabel(string text, int size = 20, TextAnchor align = TextAnchor.MiddleLeft)
+        {
+            var label = LgoLabel(text, size, UiGold, true);
+            label.AddToClassList(LgoTitleLabelClass);
+            label.style.unityTextAlign = align;
+            return label;
+        }
+
+        private static Label LgoSubtitleLabel(string text, int size = 13, TextAnchor align = TextAnchor.MiddleLeft)
+        {
+            var label = LgoLabel(text, size, UiSubText);
+            label.AddToClassList(LgoSubtitleLabelClass);
+            label.style.unityTextAlign = align;
             return label;
         }
 

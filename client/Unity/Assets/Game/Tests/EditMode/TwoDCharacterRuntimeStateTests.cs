@@ -384,7 +384,12 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(open);
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q<Label>("Map01A Character Select Title").text, Does.Contain("Chọn Nhân Vật"));
+                var selectTitle = root.Q<Label>("Map01A Character Select Title");
+                Assert.That(selectTitle.text, Does.Contain("Chọn Nhân Vật"));
+                Assert.That(selectTitle.ClassListContains("lgo-title-label"), Is.True,
+                    "Repeated screen titles must use the shared title-label base so modal typography stays consistent.");
+                Assert.That(selectTitle.style.fontSize.value.value, Is.LessThanOrEqualTo(28),
+                    "Character-select title should be game UI scale, not oversized prototype typography.");
                 foreach (var label in new[] { "Võ", "Kiếm", "Pháp", "Cơ", "Linh" })
                 {
                     var card = root.Q<Button>("Map01A Character Card " + label);
@@ -399,6 +404,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(phap.enabledSelf, Is.False, "Pháp must stay visible but disabled while source promotion is held out");
                 Assert.That(phap.text, Does.Contain("đang audit"));
                 Assert.That(root.Q<Label>("Map01A Character Select Scope").text, Does.Contain("review"));
+                Assert.That(root.Q<Label>("Map01A Character Select Scope").ClassListContains("lgo-subtitle-label"), Is.True,
+                    "Repeated modal subtitles must use the shared subtitle-label base instead of local one-off typography.");
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
 
                 InvokeBoundButton(root.Q<Button>("Map01A Character Select Close"));
@@ -539,7 +546,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(loginButton.style.minHeight.value.value, Is.LessThanOrEqualTo(38),
                     "Secondary login actions should be compact links/buttons under the main CTA.");
                 Assert.That(start.style.maxWidth.value.value, Is.GreaterThan(300));
-                Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
+                var entryLoginTitle = root.Q<Label>("Map01A Entry Login Title");
+                Assert.That(entryLoginTitle.text, Does.Contain("Đăng nhập"));
+                Assert.That(entryLoginTitle.ClassListContains("lgo-title-label"), Is.True,
+                    "Entry/login title must use the shared title-label base instead of login-only typography.");
+                Assert.That(entryLoginTitle.style.fontSize.value.value, Is.LessThanOrEqualTo(20),
+                    "Entry/login form title should stay compact against the owner reference rather than using oversized web-form typography.");
                 Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));
                 Assert.That(overlay.style.backgroundColor.value.a, Is.LessThanOrEqualTo(.66f),
                     "Entry/login should keep the Đông Lâm scene visible behind the glass layer instead of blacking it out.");
@@ -680,6 +692,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(modalTitle.text, Is.EqualTo("THÔNG TIN"),
                     "Switching to character info must not leave the modal titled HÀNH TRANG.");
                 Assert.That(modalSubtitle.text, Does.Contain("trang bị đang mặc"));
+                Assert.That(modalTitle.ClassListContains("lgo-title-label"), Is.True,
+                    "Inventory modal titles must inherit the shared title-label base so tab screens do not fork typography.");
+                Assert.That(modalSubtitle.ClassListContains("lgo-subtitle-label"), Is.True,
+                    "Inventory modal subtitles must inherit the shared subtitle-label base instead of local one-off typography.");
 
                 hud.OpenInventoryReviewMode("supplies");
                 Assert.That(modalTitle.text, Is.EqualTo("HÀNH TRANG"));
@@ -896,6 +912,10 @@ namespace LinhGioi.Tests.EditMode
                     "Dialogue content must inherit the shared detail-card foundation.");
                 var actionRow = root.Q("Map01A Dialogue Actions");
                 Assert.That(actionRow, Is.Not.Null, "Dialogue panel must use a named action row instead of loose buttons.");
+                var speaker = root.Q<Label>("Map01A Dialogue Speaker");
+                Assert.That(speaker, Is.Not.Null, "Dialogue speaker needs a named shared title label for UI audit and style reuse.");
+                Assert.That(speaker.ClassListContains("lgo-title-label"), Is.True,
+                    "Dialogue speaker/title must inherit the shared title-label base instead of a dialogue-only label style.");
                 var context = root.Q<Label>("Map01A Dialogue Quest Context");
                 Assert.That(context, Is.Not.Null, "Dialogue panel must show quest context for NPC conversations.");
                 Assert.That(context.style.display.value, Is.EqualTo(DisplayStyle.Flex));

@@ -181,9 +181,10 @@ namespace LinhGioi.UI
             ApplyLgoGlassPanel(dialogueHeader, true);
             dialogueHeader.style.paddingLeft = dialogueHeader.style.paddingRight = 10;
             dialogueHeader.style.paddingTop = dialogueHeader.style.paddingBottom = 8;
-            _dialogueSpeaker = LgoLabel("Hạ Vân", 20, UiGold, true);
+            _dialogueSpeaker = LgoTitleLabel("Hạ Vân", 20);
+            _dialogueSpeaker.name = "Map01A Dialogue Speaker";
             dialogueHeader.Add(_dialogueSpeaker);
-            _dialogueQuestContext = LgoLabel("", 14, new Color(.72f, .86f, .92f, .94f));
+            _dialogueQuestContext = LgoSubtitleLabel("", 14);
             _dialogueQuestContext.name = "Map01A Dialogue Quest Context";
             _dialogueQuestContext.style.whiteSpace = WhiteSpace.Normal;
             _dialogueQuestContext.style.marginTop = 4;

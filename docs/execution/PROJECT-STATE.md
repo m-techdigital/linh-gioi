@@ -1,3 +1,10 @@
+## Map01A — title/subtitle label base-first guard — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật. Theo owner update mới, không tiếp tục class/wardrobe/source-pose trong batch này nếu chưa có phương án deterministic; ưu tiên Map01A UI/UX và base-first.
+- `LgoTitleLabel(...)` và `LgoSubtitleLabel(...)` giờ là base dùng chung cho các title/subtitle lặp lại; Entry/login, Character Select, Inventory/Thông tin/Rương và Dialogue không còn giữ typography title/subtitle riêng lẻ. Các class audit `lgo-title-label` / `lgo-subtitle-label` được gắn để validator/test chặn fork style mới.
+- Density đã được compact tại các điểm quá to: login title 22→20, character-select title 30→28, storage gate title 22→20; mục tiêu là giảm cảm giác web-form thô trước khi polish ornament/icon/card theo reference owner.
+- TDD/evidence: RED đúng ở Entry khi login title chưa dùng shared base; GREEN targeted EditMode cho Entry, Character Select, Inventory tab, Dialogue; shared-skin validator pass. Build Player macOS pass; capture thật 1600x900 tại `build/map01a-title-label-base-runtime-v1/entry/entry-login.png`, `character-select/character-select.png`, `inventory/character-info.png`, `quest-pc/02-ha-van-dialogue.png`. Visual audit: không thấy chồng/cắt/vỡ layout ở bốn màn, nhưng UI tổng thể vẫn `CONTINUE`, chưa phải nghiệm thu mỹ thuật cuối vì còn xa reference về độ sâu, icon/asset thật và ornament richness.
+
 ## Map01A — input field and ornament rail base-first guard — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật.

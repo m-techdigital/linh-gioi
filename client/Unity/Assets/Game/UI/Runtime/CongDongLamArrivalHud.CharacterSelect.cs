@@ -27,13 +27,11 @@ namespace LinhGioi.UI
             ApplyLgoModalShell(panel, 20);
             _characterSelectOverlay.Add(panel);
 
-            var title = LgoLabel("Chọn Nhân Vật", 30, UiGold, true);
+            var title = LgoTitleLabel("Chọn Nhân Vật", 28, TextAnchor.MiddleCenter);
             title.name = "Map01A Character Select Title";
-            title.style.unityTextAlign = TextAnchor.MiddleCenter;
             panel.Add(title);
-            var scope = LgoLabel("review local: chọn class để kiểm tra UI/pose hiện có; chưa mở tạo nhân vật hoặc đổi tài khoản thật.", 14, UiSubText);
+            var scope = LgoSubtitleLabel("review local: chọn class để kiểm tra UI/pose hiện có; chưa mở tạo nhân vật hoặc đổi tài khoản thật.", 14, TextAnchor.MiddleCenter);
             scope.name = "Map01A Character Select Scope";
-            scope.style.unityTextAlign = TextAnchor.MiddleCenter;
             scope.style.marginBottom = 14;
             panel.Add(scope);
 

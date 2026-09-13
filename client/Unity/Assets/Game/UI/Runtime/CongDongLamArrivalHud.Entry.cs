@@ -91,10 +91,8 @@ namespace LinhGioi.UI
             logo.style.unityTextAlign = TextAnchor.MiddleCenter;
             panel.Add(logo);
 
-            var subtitle = new Label("Kiếm trong tay — Chính nghĩa trong lòng") { name = "Map01A Entry Subtitle" };
-            subtitle.style.fontSize = 16;
-            subtitle.style.color = new Color(.72f, .86f, .92f, .92f);
-            subtitle.style.unityTextAlign = TextAnchor.MiddleCenter;
+            var subtitle = LgoSubtitleLabel("Kiếm trong tay — Chính nghĩa trong lòng", 16, TextAnchor.MiddleCenter);
+            subtitle.name = "Map01A Entry Subtitle";
             subtitle.style.marginBottom = 8;
             panel.Add(subtitle);
 
@@ -122,22 +120,16 @@ namespace LinhGioi.UI
             ornamentTop.style.backgroundColor = new Color(.95f, .75f, .36f, .70f);
             controlCard.Add(ornamentTop);
 
-            var loginTitle = new Label("Đăng nhập") { name = "Map01A Entry Login Title" };
-            loginTitle.style.unityFontStyleAndWeight = FontStyle.Bold;
-            loginTitle.style.fontSize = 22;
-            loginTitle.style.color = new Color(.95f, .75f, .36f, .96f);
+            var loginTitle = LgoTitleLabel("Đăng nhập", 20);
+            loginTitle.name = "Map01A Entry Login Title";
             controlCard.Add(loginTitle);
 
             controlCard.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "Tài khoản / Email / Số điện thoại"));
             controlCard.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "Mật khẩu"));
             controlCard.Add(MakeEntryAuthOptions());
 
-            var authScope = new Label("Thông tin chỉ dùng để vào bản trải nghiệm, không gửi dữ liệu thật.")
-            {
-                name = "Map01A Entry Auth Scope"
-            };
-            authScope.style.fontSize = 13;
-            authScope.style.color = new Color(.66f, .82f, .90f, .88f);
+            var authScope = LgoSubtitleLabel("Thông tin chỉ dùng để vào bản trải nghiệm, không gửi dữ liệu thật.", 13);
+            authScope.name = "Map01A Entry Auth Scope";
             authScope.style.marginBottom = 10;
             controlCard.Add(authScope);
 
