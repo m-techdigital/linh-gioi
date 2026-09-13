@@ -1,0 +1,104 @@
+{
+  "id": "map01a-item-icons-v1",
+  "status": "DRAFT_RUNTIME_REVIEW",
+  "runtimeApproved": false,
+  "sourceManifest": "/Users/minhdc/Projects/Design/LGO-Extracted-2D-Items-v1/map-01a/MANIFEST.json",
+  "sourceManifestSha256": "620a8587973bdd34d8fd0f69f11c6ae97f3e020cf4f06cd74602138ce07f69c4",
+  "alphaPolicy": "border-connected-pale-matte-v1",
+  "textureSize": [
+    512,
+    128
+  ],
+  "pngBytes": 31608,
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AItems/map01a-item-icons.png",
+      "role": "ui-item-atlas",
+      "generator": "pack_lgo_map01a_item_icons",
+      "referenceOnly": false,
+      "sha256": "9219a8e34175aab237e33587ede1242af923030a83f6104c068e90df70c282e9"
+    }
+  ],
+  "parts": [
+    {
+      "id": "health_potion",
+      "sourceName": "item-hp-potion",
+      "x": 11,
+      "y": 29,
+      "w": 73,
+      "h": 71,
+      "sourceSha256": "70733e0224c0dc495f1d7ea2f05677c93d25a0e3b842cab71190f17a5bd591c3",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/06-enemy-spawn-loot-resource.png",
+      "sourceRect": [
+        20,
+        746,
+        93,
+        817
+      ]
+    },
+    {
+      "id": "mana_potion",
+      "sourceName": "item-mp-potion",
+      "x": 107,
+      "y": 29,
+      "w": 73,
+      "h": 71,
+      "sourceSha256": "b3dccbe165a1c59ce6b5da1877f2171488dee19e6b2850aea5656b928ff0af04",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/06-enemy-spawn-loot-resource.png",
+      "sourceRect": [
+        113,
+        746,
+        186,
+        817
+      ]
+    },
+    {
+      "id": "class_reward",
+      "sourceName": "item-equipment-fragment",
+      "x": 203,
+      "y": 29,
+      "w": 73,
+      "h": 71,
+      "sourceSha256": "d0f7a91fc04025f16f4d9db58faa0d4b3f5d978aaf338f031d9736c4d3f69213",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/06-enemy-spawn-loot-resource.png",
+      "sourceRect": [
+        392,
+        746,
+        465,
+        817
+      ]
+    },
+    {
+      "id": "dumpling",
+      "sourceName": "item-dumpling",
+      "x": 299,
+      "y": 29,
+      "w": 73,
+      "h": 71,
+      "sourceSha256": "979e42144a5162abfc35e29d7743c6c8855c0e06a6d86408474106cc9ae28e34",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/06-enemy-spawn-loot-resource.png",
+      "sourceRect": [
+        206,
+        746,
+        279,
+        817
+      ]
+    },
+    {
+      "id": "coin",
+      "sourceName": "item-coin",
+      "x": 395,
+      "y": 29,
+      "w": 73,
+      "h": 71,
+      "sourceSha256": "d94304e146521557662de0f2189c1ec45f00858da53c5fdff903e88fbfa96e75",
+      "source": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/06-enemy-spawn-loot-resource.png",
+      "sourceRect": [
+        299,
+        746,
+        372,
+        817
+      ]
+    }
+  ]
+}

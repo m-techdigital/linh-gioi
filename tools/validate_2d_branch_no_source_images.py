@@ -96,6 +96,15 @@ RUNTIME_ART_PACKS = [
         'status_error': 'Map01A art must remain an explicit draft until Player review',
     },
     {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AItems',
+        'id': 'map01a-item-icons-v1',
+        'status': 'DRAFT_RUNTIME_REVIEW',
+        'assets': {'map01a-item-icons.png': (512, 128, 'ui-item-atlas')},
+        'generators': {'pack_lgo_map01a_item_icons'},
+        'max_bytes': 80_000,
+        'status_error': 'Map01A item icons must remain draft until owner visual review',
+    },
+    {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/DongMonIllustrated',
         'id': 'dongmon-illustrated-draft-v1',
         'status': 'DRAFT_OWNER_REVIEW',

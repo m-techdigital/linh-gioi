@@ -29,3 +29,7 @@ No approved dedicated UI icon set for `Bình Máu Nhỏ`, `Bình Linh Lực Nh�
 ## Guardrail
 
 Until a provenance-backed icon set exists, the correct runtime state is text/card presentation plus clear `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED` evidence. A prettier but fake icon is a regression for this project.
+
+## Deterministic candidate atlas — 2026-09-13
+
+`tools/pack_lgo_map01a_item_icons.py` now verifies every source-crop hash, removes only pale matte connected to the crop border, and packs five native-resolution icons into `CongDongLamMap01AItems/map01a-item-icons.png`. The manifest retains the source board, SHA-256 and source rectangle for HP, MP, starter equipment fragment, dumpling and coin. The dark/light alpha board at `build/map01a-item-icons-review-v1/alpha-review.png` has been visually reviewed: silhouettes and interior highlights remain intact, with no generated/redrawn pixels. Runtime status remains `DRAFT_RUNTIME_REVIEW`; owner acceptance is still pending.

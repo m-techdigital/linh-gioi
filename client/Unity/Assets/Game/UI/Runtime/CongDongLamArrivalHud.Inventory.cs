@@ -70,6 +70,18 @@ namespace LinhGioi.UI
             var row = InventoryButton(action, name);
             ApplyLgoInventoryItemRow(row, _touch);
 
+            var icon = new VisualElement { name = "Map01A Supply Item Icon " + itemId };
+            ApplyLgoItemIcon(icon);
+            icon.style.width = 54;
+            icon.style.height = 54;
+            icon.style.marginTop = 0;
+            icon.style.marginBottom = 0;
+            icon.style.marginRight = 10;
+            var sprite = _scene.GetMap01AItemThumbnailSprite(itemId);
+            icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            icon.style.display = sprite == null ? DisplayStyle.None : DisplayStyle.Flex;
+            row.Add(icon);
+
             var textGroup = new VisualElement { name = "Map01A Supply Item Text " + itemId };
             textGroup.style.flexGrow = 1;
             textGroup.style.minWidth = 0;
@@ -870,8 +882,9 @@ namespace LinhGioi.UI
         private void RefreshInventorySupplyDetailCard()
         {
             _inventoryDetailIcon.text = "";
-            _inventoryDetailIcon.style.backgroundImage = StyleKeyword.None;
-            _inventoryDetailIcon.style.display = DisplayStyle.None;
+            var itemSprite = _scene.GetMap01AItemThumbnailSprite(_selectedSupplyItemId);
+            _inventoryDetailIcon.style.backgroundImage = itemSprite == null ? StyleKeyword.None : new StyleBackground(itemSprite);
+            _inventoryDetailIcon.style.display = itemSprite == null ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryDetailHeader.text = "CHI TIẾT VẬT PHẨM";
             _inventoryDetailRarity.text = "Vật phẩm nhiệm vụ";
             if (_selectedSupplyItemId == "mana_potion")

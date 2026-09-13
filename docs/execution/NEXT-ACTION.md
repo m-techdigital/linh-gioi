@@ -1280,3 +1280,7 @@ Required before next checkpoint: targeted EditMode tests for any new shared comp
 Continue Map01A/UI only from `build/map01a-inventory-three-column-runtime-v1/inventory/`. Keep the three-column Hành trang and separate Thông tin/Rương đồ screens; selected-item detail remains on the right. Next high-value batch is a deterministic, provenance-backed Map01A item-icon board/cleanup gate for HP potion, MP potion, starter reward and representative equipment icons, then wire the approved atlas through the existing shared item-icon frame. The extracted candidates under `/Users/minhdc/Projects/Design/LGO-Extracted-2D-Items-v1/map-01a/` remain `runtime_ready=false` until visual cleanup/review.
 
 Do not resume class/wardrobe/pose/source work, do not rollback class code, and do not spend another batch on small CSS adjustments before the icon-art gate. Login/HUD/dialogue remain valid follow-up screens after the inventory asset gate.
+
+## Current next action — after Map01A item-icon atlas (2026-09-13)
+
+Continue Map01A/UI only. The real HP/MP/reward icon gate is implemented and visually reviewed in Player; keep its atlas `DRAFT_RUNTIME_REVIEW` until owner review. Do not derive final 10-slot equipment icons from low-resolution body crops or reopen class/source work. Next visible batch should redesign one remaining screen deeply from owner references, in order: login/entry visual hierarchy, then gameplay HUD/NPC dialogue. Reuse the current shared shell/button/card/icon foundations and capture once per coherent screen batch.

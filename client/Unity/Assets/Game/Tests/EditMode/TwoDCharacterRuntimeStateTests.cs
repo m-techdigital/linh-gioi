@@ -885,6 +885,10 @@ namespace LinhGioi.Tests.EditMode
                     "Source-pose review must keep the inventory item rows visible for Q04");
                 InvokeBoundButton(potion);
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT VẬT PHẨM"));
+                Assert.That(root.Q("Map01A Supply Item Icon health_potion").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01AItemThumbnailSprite("health_potion")));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01AItemThumbnailSprite("health_potion")));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Is.EqualTo("Vật phẩm hồi phục"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Is.EqualTo("SẴN SÀNG"));
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Is.EqualTo("Dùng bình máu"));

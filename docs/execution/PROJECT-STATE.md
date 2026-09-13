@@ -1395,3 +1395,7 @@ Evidence runtime: `build/map01a-shared-skin-density-runtime-v1/entry/entry-login
 `CONTINUE`, chỉ Map01A/UI. Hành trang đã chuyển từ hai cột kỹ thuật sang ba cột theo reference: nhân vật hoàn chỉnh bên trái, lưới item ở giữa, chi tiết món cố định bên phải. Thông tin vẫn là tab riêng và dùng cùng nguồn avatar hoàn chỉnh; không còn lấy món đang chọn hoặc tóc/tay rời làm chân dung. Thumbnail trang bị ưu tiên sprite slot đầy đủ trước component đơn. EditMode `Inventory` đạt 16/16; macOS Player build 0 error; evidence `build/map01a-inventory-three-column-runtime-v1/inventory/` đã xem trực tiếp, không vỡ/cắt.
 
 Chưa đạt visual acceptance: icon trang bị từ atlas runtime vẫn tối và độ phân giải thấp. External extraction có HP/MP/equipment candidate nhưng manifest ghi `runtime_ready=false`, nên chưa import. Không resume class/wardrobe/pose và không dùng random/generated icon để che art debt.
+
+## Map01A real item-icon atlas checkpoint — 2026-09-13
+
+Đã xử lý deterministic năm item thật từ selected Map01A source: HP, MP, mảnh trang bị tân thủ, bánh bao và tiền xu. Packer khóa hash/provenance/source rect, chỉ xoá nền sáng nối biên, không generate/redraw; atlas runtime 512×128, 31.608 byte, mipmap tắt. Hành trang Vật phẩm và detail bên phải đã dùng icon HP/MP/reward. Evidence `build/map01a-item-icons-review-v1/alpha-review.png` và `build/map01a-item-icons-runtime-v2/inventory/supplies.png` đã xem trực tiếp, mép sạch và item đọc rõ; Player v2 build 0 error/0 warning. Trạng thái vẫn `DRAFT_RUNTIME_REVIEW`; icon equipment 10 slot chưa đạt final.

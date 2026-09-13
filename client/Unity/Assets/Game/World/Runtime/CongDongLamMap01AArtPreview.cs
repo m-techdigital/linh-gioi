@@ -195,6 +195,8 @@ namespace LinhGioi.World
         private readonly Dictionary<string, Tuple<Sprite, VoAvatarPart>> _voMotionFrames = new Dictionary<string, Tuple<Sprite, VoAvatarPart>>();
         private readonly Dictionary<string, VoAttachmentProfile> _voAttachmentProfiles = new Dictionary<string, VoAttachmentProfile>();
         private readonly Dictionary<string, VoRigPoseProfile> _voRigPoseProfiles = new Dictionary<string, VoRigPoseProfile>();
+        private readonly Dictionary<string, Sprite> _map01AItemIcons = new Dictionary<string, Sprite>();
+        private bool _map01AItemIconsLoaded;
         private TwoDClassMixedLoadoutFitPreview _classFitPreview;
         private string _classFitPreviewId = "kiem";
         private bool _classFitPreviewActive;
@@ -280,6 +282,33 @@ namespace LinhGioi.World
             var partId = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_full";
             return _voAvatarParts.TryGetValue(partId, out var renderer) ? renderer.sprite : null;
         }
+        public Sprite GetMap01AItemThumbnailSprite(string itemId)
+        {
+            if (!_map01AItemIconsLoaded)
+            {
+                _map01AItemIconsLoaded = true;
+                const string path = "LGOMaps/CongDongLamMap01AItems/";
+                var manifestAsset = Resources.Load<TextAsset>(path + "manifest");
+                var atlas = Resources.Load<Texture2D>(path + "map01a-item-icons");
+                if (manifestAsset != null && atlas != null)
+                {
+                    var manifest = JsonUtility.FromJson<Map01AItemIconManifest>(manifestAsset.text);
+                    if (manifest != null && manifest.id == "map01a-item-icons-v1"
+                        && manifest.status == "DRAFT_RUNTIME_REVIEW" && manifest.parts != null)
+                    {
+                        foreach (var part in manifest.parts)
+                        {
+                            if (string.IsNullOrEmpty(part.id) || part.w <= 0 || part.h <= 0
+                                || part.x < 0 || part.y < 0 || part.x + part.w > atlas.width || part.y + part.h > atlas.height
+                                || _map01AItemIcons.ContainsKey(part.id))
+                                continue;
+                            _map01AItemIcons.Add(part.id, MakeSprite(atlas, new Rect(part.x, part.y, part.w, part.h)));
+                        }
+                    }
+                }
+            }
+            return _map01AItemIcons.TryGetValue(itemId, out var sprite) ? sprite : null;
+        }
         public bool HasVoEquipmentItemVariant(string slot)
         {
             if (_classFitPreviewActive) return true;
@@ -349,6 +378,16 @@ namespace LinhGioi.World
         {
             public string id, gender, pose, part;
             public float dx, dy, rotation;
+        }
+        [Serializable] private sealed class Map01AItemIconManifest
+        {
+            public string id, status;
+            public Map01AItemIconPart[] parts;
+        }
+        [Serializable] private sealed class Map01AItemIconPart
+        {
+            public string id;
+            public int x, y, w, h;
         }
         [Serializable] private sealed class GroundInfo { public float groundY; }
         [Serializable] private sealed class CaptureInfo

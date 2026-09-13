@@ -196,3 +196,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-three-column-runtime-v1/inventory/{bag,character-info,supplies,storage}.png` and `manifest.json`.
 - Result: Hành trang now follows the owner reference hierarchy with a complete character column on the left, the item grid in the middle, and selected-item detail on the right. Thông tin remains a separate main tab and reuses the same complete-avatar source instead of showing the selected limb/item as its portrait. Equipment thumbnails resolve complete detached-slot art before component fallbacks.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`. Manual 1600×900 review confirms a clear improvement in character readability and screen hierarchy. Equipment icons remain dark, low-resolution runtime crops and require a reviewed dedicated icon board before final visual acceptance.
+
+## 2026-09-13 — Provenance-backed Map01A item icons
+
+- Evidence: `build/map01a-item-icons-review-v1/alpha-review.png` and `build/map01a-item-icons-runtime-v2/inventory/supplies.png`.
+- Result: HP/MP/starter-reward rows and the shared right detail card now use real Map01A item art from the selected source board. A deterministic border flood-mask removes the pale board matte; atlas manifest records each source hash and crop rectangle. No AI/random/emoji icon was introduced.
+- Review status: `DRAFT_RUNTIME_REVIEW / TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`. The five icons read cleanly on light and dark backgrounds; the remaining ten equipment-slot thumbnails are still low-resolution runtime crops.
