@@ -68,6 +68,46 @@ def quiet_limited_section_any(text: str, headings: tuple[str, ...], limit: int) 
     return first_lines(extracted, limit, show_truncation=False) if extracted else ""
 
 
+def active_goal_lock_section(text: str) -> str:
+    lines = text.splitlines()
+    start = None
+    for index, line in enumerate(lines):
+        if line.startswith("## ACTIVE GOAL LOCK"):
+            start = index
+            break
+    if start is None:
+        return ""
+    out: list[str] = []
+    for line in lines[start:]:
+        if out and line.startswith("## "):
+            break
+        out.append(line)
+    return "\n".join(out).strip()
+
+
+def resume_section(next_action: str) -> str:
+    active = active_goal_lock_section(next_action)
+    if active:
+        lines = [line for line in active.splitlines() if not line.startswith("Next valid work:")]
+        return first_lines("\n".join(lines), 12, show_truncation=False)
+    return quiet_limited_section_any(next_action, ("## Quick Resume", "## Trạng thái"), 12)
+
+
+def next_task_section(next_action: str) -> str:
+    active = active_goal_lock_section(next_action)
+    if active and "Next valid work:" in active:
+        lines = [line for line in active.splitlines() if line.startswith("Next valid work:")]
+        return "\n".join(lines[:3]).strip()
+    return limited_section_any(next_action, ("## Next task", "## Việc tiếp theo"), 6)
+
+
+def current_blocker_section(next_action: str) -> str:
+    active = active_goal_lock_section(next_action)
+    if active:
+        return "No current blocker from active lock; continue the listed six-pose source-authoring task unless a source/tool gate fails."
+    return limited_section_until_any(next_action, ("## Current blocker", "## Blocker"), ("Evidence:",), 5)
+
+
 def limited_section_until_any(text: str, headings: tuple[str, ...], stop_markers: tuple[str, ...], limit: int) -> str:
     extracted = first_existing_section(text, headings)
     if not extracted:
@@ -118,11 +158,11 @@ def main() -> int:
     print("## Project State")
     print(quiet_limited_section(project_state, "## Continuous workflow status", 6) or first_lines(project_state, 8, show_truncation=False) or "PROJECT_STATE_MISSING")
     print()
-    print(quiet_limited_section_any(next_action, ("## Quick Resume", "## Trạng thái"), 12) or "QUICK_RESUME_MISSING")
+    print(resume_section(next_action) or "QUICK_RESUME_MISSING")
     print()
-    print(limited_section_any(next_action, ("## Next task", "## Việc tiếp theo"), 6) or "NEXT_TASK_MISSING")
+    print(next_task_section(next_action) or "NEXT_TASK_MISSING")
     print()
-    print(limited_section_until_any(next_action, ("## Current blocker", "## Blocker"), ("Evidence:",), 5) or "CURRENT_BLOCKER_MISSING")
+    print(current_blocker_section(next_action) or "CURRENT_BLOCKER_MISSING")
     print()
     print("## Next Task Advisor")
     print(advisor() or "ADVISOR_OUTPUT_MISSING")

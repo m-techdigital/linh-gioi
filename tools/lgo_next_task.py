@@ -60,7 +60,12 @@ def dirty_worktree_is_ambiguous() -> bool:
 def active_next_action_task() -> str | None:
     if not NEXT_ACTION.is_file():
         return None
-    text = NEXT_ACTION.read_text(encoding="utf-8", errors="replace")
+    return active_next_action_task_from_text(NEXT_ACTION.read_text(encoding="utf-8", errors="replace"))
+
+
+def active_next_action_task_from_text(text: str) -> str | None:
+    if "## ACTIVE GOAL LOCK" in text and "six-pose registered outfit path" in text:
+        return "SIX_POSE_REGISTERED_OUTFIT_SOURCE_AUTHORING"
     match = re.search(r"Active task:\s*`([^`]+)`", text)
     if match:
         return match.group(1).strip()
@@ -164,9 +169,17 @@ def main() -> int:
         print("LGO_NEXT_TASK_ADVISOR_DIRTY_WORKTREE_REVIEW_REQUIRED")
         print("owner_note=Cần rà soát worktree trước khi mở batch lớn vì số file thay đổi đang quá nhiều.")
         return 0
+    active_task = active_next_action_task()
+    if active_task == "SIX_POSE_REGISTERED_OUTFIT_SOURCE_AUTHORING":
+        print("LGO_NEXT_TASK_ADVISOR_READY")
+        print(f"id={active_task}")
+        print("purpose=Tiếp tục Task 2 Step 2: author 11 source target Pháp Lv1 cho six-pose registered outfit path")
+        print("allowed=docs, tools, external selected source repair directories with DO-NOT-PACK provenance")
+        print("forbidden=stopped skeletal/cutout path, flat-panel direct-fit production, per-pixel nudging loop, Player pack before source gates")
+        print("closure=repair-layer audit/source-board/provenance evidence updated; runtimePromotionAllowed remains false until visual source gates pass")
+        return 0
     candidates = [task for task in tasks if not closure_already_satisfied(task, text) and is_safe_without_owner(task, text)]
     if not candidates:
-        active_task = active_next_action_task()
         if active_task and active_task != "DONE":
             print("LGO_NEXT_TASK_ADVISOR_READY")
             print(f"id={active_task}")
