@@ -146,8 +146,8 @@ namespace LinhGioi.UI
 
             _inventoryDetailPanel = InventoryPanel("Map01A Inventory Detail Panel");
             _inventoryDetailPanel.style.flexGrow = 0;
-            _inventoryDetailPanel.style.flexBasis = 300;
-            _inventoryDetailPanel.style.marginLeft = 10;
+            _inventoryDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth;
+            _inventoryDetailPanel.style.marginLeft = InventoryDesktopColumnGap;
             ApplyLgoDetailCard(_inventoryDetailPanel);
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
             _inventoryFooter.style.flexGrow = 0;
@@ -236,8 +236,8 @@ namespace LinhGioi.UI
 
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
             ApplyLgoInventoryContentFitPanel(_inventoryGridPanel);
-            _inventoryGridPanel.style.flexBasis = 720;
-            _inventoryGridPanel.style.marginRight = 8;
+            _inventoryGridPanel.style.flexBasis = InventoryDesktopMainColumnWidth;
+            _inventoryGridPanel.style.marginRight = 0;
             body.Add(_inventoryGridPanel);
             var gridAccent = new VisualElement { name = "Map01A Inventory Grid Accent Rail" };
             ApplyLgoOrnamentRail(gridAccent);
@@ -315,7 +315,7 @@ namespace LinhGioi.UI
 
             _inventoryHeroPanel = InventoryPanel("Map01A Inventory Character Panel");
             _inventoryHeroPanel.style.flexGrow = 0;
-            _inventoryHeroPanel.style.flexBasis = 720;
+            _inventoryHeroPanel.style.flexBasis = InventoryDesktopMainColumnWidth;
             body.Add(_inventoryHeroPanel);
             _inventoryHeroTitle = LgoLabel("", 22, UiGold, true);
             _inventoryHeroMeta = LgoLabel("", 15, new Color(.78f, .94f, .96f, .92f));
@@ -629,9 +629,9 @@ namespace LinhGioi.UI
         {
             if (characterInfo) ShowInventoryPage(false);
             _inventoryHeroPanel.style.flexGrow = 0;
-            _inventoryHeroPanel.style.flexBasis = characterInfo ? 720 : 360;
+            _inventoryHeroPanel.style.flexBasis = characterInfo ? InventoryDesktopMainColumnWidth : 360;
             _inventoryGridPanel.style.flexGrow = 0;
-            _inventoryGridPanel.style.flexBasis = characterInfo ? 0 : 720;
+            _inventoryGridPanel.style.flexBasis = characterInfo ? 0 : InventoryDesktopMainColumnWidth;
             _storagePanel.style.flexGrow = 0;
             _characterInfoOpen = characterInfo;
             _storageOpen = false;

@@ -105,6 +105,10 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoHudInfoPanel(_pad)",
         "ApplyLgoHudContextAction(_inventoryToggle",
         "ApplyLgoHudContextAction(_characterSelectButton",
+        "private const float InventoryDesktopColumnGap",
+        "private const float InventoryDesktopDetailColumnWidth",
+        "private const float InventoryDesktopMainColumnWidth",
+        "private const float InventoryGridCellBasisPercent",
     ],
     "CongDongLamArrivalHud.Entry.cs": [
         "ApplyLgoEntryShell(panel)",
@@ -164,8 +168,9 @@ REQUIRED_PARTIAL_MARKERS = {
         "_bagTab = InventoryButton(() => ShowInventoryMode(false)",
         "_characterInfoTab = InventoryButton(() => ShowInventoryMode(true)",
         "_storageTab = InventoryButton(ShowStorageMode",
-        "_inventoryDetailPanel.style.marginLeft = 10",
-        "_inventoryDetailPanel.style.flexBasis = 300",
+        "_inventoryDetailPanel.style.marginLeft = InventoryDesktopColumnGap",
+        "_inventoryDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth",
+        "_inventoryGridPanel.style.flexBasis = InventoryDesktopMainColumnWidth",
     ],
 }
 

@@ -9,6 +9,11 @@ namespace LinhGioi.UI
     // Arrival UI follows Map01A reference 01/05/10; reuses shared touch and viewport policies.
     public sealed partial class CongDongLamArrivalHud : MonoBehaviour
     {
+        private const float InventoryDesktopMainColumnWidth = 820f;
+        private const float InventoryDesktopDetailColumnWidth = 330f;
+        private const float InventoryDesktopColumnGap = 12f;
+        private const float InventoryGridCellBasisPercent = 14.2f;
+
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs;
         private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
@@ -277,17 +282,17 @@ namespace LinhGioi.UI
                 var stacked = r.width < 950;
                 var body = _inventory.Q("Map01A Inventory Body");
                 body.style.flexDirection = stacked ? FlexDirection.Column : FlexDirection.Row;
-                _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 720;
+                _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
                 _inventoryHeroPanel.style.marginRight = 0;
                 _inventoryHeroPanel.style.marginBottom = stacked ? 10 : 0;
-                _inventoryGridPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 720;
+                _inventoryGridPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
                 _inventoryGridPanel.style.marginRight = 0;
                 _inventoryGridPanel.style.marginBottom = stacked ? 10 : 0;
-                _storagePanel.style.flexBasis = stacked ? StyleKeyword.Auto : 720;
+                _storagePanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
                 _storagePanel.style.marginRight = 0;
                 _storagePanel.style.marginBottom = stacked ? 10 : 0;
-                _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 300;
-                _inventoryDetailPanel.style.marginLeft = stacked ? 0 : 10;
+                _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopDetailColumnWidth;
+                _inventoryDetailPanel.style.marginLeft = stacked ? 0 : InventoryDesktopColumnGap;
                 _inventoryDetailPanel.style.marginRight = 0;
                 _inventoryDetailPanel.style.marginBottom = stacked ? 10 : 0;
             }

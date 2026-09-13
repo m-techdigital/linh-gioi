@@ -221,8 +221,8 @@ namespace LinhGioi.Tests.EditMode
                 var mainWeaponTile = root.Q<Button>("Map01A Equipment Item Tile main_weapon");
                 Assert.That(mainWeaponTile.style.height.value.value, Is.LessThanOrEqualTo(116),
                     "Inventory equipment tiles should stay compact and proportional to the owner bag references.");
-                Assert.That(mainWeaponTile.style.flexBasis.value.value, Is.LessThanOrEqualTo(17f),
-                    "Inventory equipment tiles should use a dense 5-6 column bag grid close to the owner bag references.");
+                Assert.That(mainWeaponTile.style.flexBasis.value.value, Is.LessThanOrEqualTo(14.5f),
+                    "Inventory equipment tiles should use a dense 6-7 column bag grid close to the owner bag references, not wide table cards.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Is.EqualTo("Chưa có thuộc tính chiến đấu được công bố."));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Dành cho"));
@@ -274,8 +274,15 @@ namespace LinhGioi.Tests.EditMode
                     "Sparse bag content should anchor to its own content height so the lower half of the modal is not an empty debug box.");
                 Assert.That(inventoryGridPanel.style.flexGrow.value, Is.EqualTo(0),
                     "Bag grid must not stretch across the whole modal because that turns item cells into wide table cards.");
-                Assert.That(inventoryGridPanel.style.flexBasis.value.value, Is.LessThanOrEqualTo(760),
-                    "Bag grid should use a bounded RPG-inventory width so cells stay close to the owner references.");
+                var gridDesktopWidth = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopMainColumnWidth", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
+                var detailDesktopWidth = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopDetailColumnWidth", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
+                var desktopColumnGap = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopColumnGap", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
+                Assert.That(gridDesktopWidth, Is.InRange(800, 840),
+                    "Desktop bag grid should fill the modal beside detail instead of leaving large empty side gutters.");
+                Assert.That(detailDesktopWidth, Is.InRange(320, 340),
+                    "Right-side detail should remain readable while the grid gets enough desktop width.");
+                Assert.That(desktopColumnGap, Is.InRange(12, 14),
+                    "Grid/detail gap should be a deliberate shared desktop gutter, not a tiny accidental seam.");
                 Assert.That(root.Q<Button>("Map01A Equipment Tab").style.flexGrow.value, Is.EqualTo(0),
                     "Equipment category chip should not stretch across the full bag width.");
                 Assert.That(root.Q<Button>("Map01A Supplies Tab").style.flexGrow.value, Is.EqualTo(0),
@@ -290,7 +297,7 @@ namespace LinhGioi.Tests.EditMode
                 var emptyBagSlot = root.Q("Map01A Empty Bag Slot 01");
                 Assert.That(emptyBagSlot, Is.Not.Null,
                     "Bag layout should reserve empty inventory cells so the screen reads as a game bag grid, not a sparse debug list.");
-                Assert.That(emptyBagSlot.style.flexBasis.value.value, Is.LessThanOrEqualTo(17f));
+                Assert.That(emptyBagSlot.style.flexBasis.value.value, Is.LessThanOrEqualTo(14.5f));
                 Assert.That(root.Q("Map01A Empty Bag Slot 05"), Is.Null,
                     "Demo bag should reserve a few empty cells without filling half the modal with dead empty boxes far from the owner RPG references.");
                 Assert.That(root.Q<Label>("Map01A Inventory Count Badge"), Is.Not.Null,
@@ -722,7 +729,7 @@ namespace LinhGioi.Tests.EditMode
                 hud.OpenInventoryReviewMode("character-info");
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(0),
                     "Character info must keep the bounded two-column width instead of stretching like the obsolete full-width layout.");
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexBasis.value.value, Is.EqualTo(720));
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexBasis.value.value, Is.InRange(800, 840));
                 Assert.That(scene.InventoryOpen, Is.True);
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -796,7 +803,7 @@ namespace LinhGioi.Tests.EditMode
                 var equippedBeforeTabSwitch = scene.VoEquippedSlotCount;
                 hud.OpenInventoryReviewMode("character-info");
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(0));
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexBasis.value.value, Is.EqualTo(720),
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexBasis.value.value, Is.InRange(800, 840),
                     "Returning from supplies must restore the bounded character-info column without waiting for geometry changes.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT MÓN"),
                     "Character info must clear the consumable action before showing equipped items.");

@@ -1,3 +1,11 @@
+## Next — Map01A inventory column balance, still CONTINUE — 2026-09-13
+
+`CONTINUE`. Batch mới nhất chỉ cân lại bố cục Hành trang theo base-first: grid desktop dùng `InventoryDesktopMainColumnWidth=820`, detail phải `330`, gutter `12`, item cell `14.2%` để bớt cảm giác bảng debug rộng và giảm khoảng trống hai bên. Không đổi class/wardrobe/pose/source/camera/scale, không rollback code class.
+
+Evidence Player mới: build `build/map01a-inventory-column-balance-player-v1/LinhGioiOnline.app`; capture `build/map01a-inventory-column-balance-runtime-v1/{bag,character-info,character-info-after-supplies,supplies,storage}.png`, manifest `usesOsMouseOrKeyboard=false`, 1600×900. Visual audit đã xem `bag.png`, `character-info.png`, `supplies.png`: không vỡ layout, detail ở bên phải, grid bớt thưa; vẫn chưa nghiệm thu mỹ thuật cuối vì item art còn là runtime crop/provenance placeholder và shell/card còn cần polish sâu theo reference owner.
+
+Next valid work: tiếp tục Map01A/UI-only, ưu tiên polish visual richness bằng shared Skin/base, chuẩn hóa typography/button density và chuẩn bị item/portrait/icon art có provenance. Không resume class/wardrobe/pose/source; không chạy class build/capture loop; không thêm icon fake/random/generated; visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A UI polish after review catalog stale-path guard — 2026-09-13
 
 `CONTINUE`. Catalog review hiện không còn trỏ current evidence tới file thiếu; validator đã chặn stale path trong phần `Current evidence`. Tiếp tục Map01A/UI-only với batch visible thật: ưu tiên login/HUD/dialogue/inventory richness bằng shared skin/base và chỉ dùng evidence Player đang tồn tại hoặc capture mới.

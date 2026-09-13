@@ -1,3 +1,10 @@
+## Map01A — inventory column balance, still CONTINUE — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không thêm icon/item art giả.
+- Root cause của vòng lặp “test xanh nhưng hình vẫn thô”: inventory bag desktop giữ grid 720/detail 300 và item flex 15.8%, làm modal 1280px có gutter lớn và cell đọc như bảng debug. Batch này gom số layout vào constant chung ở `CongDongLamArrivalHud.cs`: main column 820, detail 330, gap 12, grid cell 14.2%; `Inventory.cs`/`Skin.cs` chỉ consume constant, giữ rule base-first.
+- TDD/evidence: RED đầu tiên fail đúng với guard mới; sau khi phát hiện EditMode root chưa có desktop geometry, test chuyển sang khóa constant/marker còn Player capture kiểm hình thật. Targeted EditMode pass `total=1 passed=1 failed=0`; shared-skin validator/unit pass.
+- Player evidence: build `build/map01a-inventory-column-balance-player-v1/LinhGioiOnline.app` (`LGO_MACOS_PLAYER_BUILD result=Succeeded`, `errors=0`, `warnings=19`); capture `build/map01a-inventory-column-balance-runtime-v1/{bag,character-info,character-info-after-supplies,supplies,storage}.png`, manifest `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900. Visual audit đã xem bag/character-info/supplies: layout không vỡ và grid/detail cân hơn, nhưng UI tổng thể vẫn `CONTINUE`, chưa phải owner visual acceptance.
+
 ## Map01A — UI review catalog stale-path guard, still CONTINUE — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi runtime class/wardrobe/pose/source/camera/scale; không rollback class code; không tạo icon/item art giả.
