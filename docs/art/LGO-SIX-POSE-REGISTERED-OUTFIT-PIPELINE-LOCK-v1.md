@@ -3,6 +3,8 @@
 Date: 2026-09-13
 Scope: `feature-2d-latest` pose-matched clothing sandbox after owner rejected the current skeletal cutout result.
 
+Resume guard: `docs/execution/STOPPED-PATHS-AND-RESUME-GUARDS.md`.
+
 ## Active path
 
 Use the six-pose registered outfit pipeline as the active production route for this sandbox. The six existing pose sprites are the runtime/body/motion authority for now:

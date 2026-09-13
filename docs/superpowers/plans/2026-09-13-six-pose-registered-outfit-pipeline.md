@@ -10,7 +10,9 @@
 
 **Spec:** `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md`
 
-**Current execution status, 2026-09-13:** This is the active character/outfit path for `feature-2d-latest`. The current skeletal generated-cutout path is stopped and must not be resumed without a new accepted body blueprint.
+**Resume guard:** `docs/execution/STOPPED-PATHS-AND-RESUME-GUARDS.md`
+
+**Current execution status, 2026-09-13:** This is the active character/outfit path for `feature-2d-latest`. The current skeletal generated-cutout path is stopped and must not be resumed without a new accepted body blueprint. Flat 2D pattern/panel direct-fit and per-pixel garment nudging are also stopped as production loops; reopen them only through the named proof/resume conditions in the guard.
 
 ## Global Constraints
 
