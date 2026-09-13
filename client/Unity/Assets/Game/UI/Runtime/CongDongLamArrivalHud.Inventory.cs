@@ -96,6 +96,7 @@ namespace LinhGioi.UI
             _inventoryDetailIcon = LgoLabel("", 42, UiGold, true);
             _inventoryDetailIcon.name = "Map01A Inventory Detail Icon";
             ApplyLgoItemIcon(_inventoryDetailIcon);
+            _inventoryDetailIcon.style.display = DisplayStyle.None;
             _inventoryFooter.Add(_inventoryDetailIcon);
             _equipmentDetail = LgoLabel("", 24, UiGold, true);
             _equipmentDetail.style.marginTop = 6;
@@ -349,7 +350,7 @@ namespace LinhGioi.UI
                 _equipmentRows[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
                     ? new Color(.16f, .48f, .50f, .96f)
                     : equipped ? new Color(.06f, .13f, .17f, .94f) : new Color(.035f, .055f, .065f, .82f);
-                _equipmentTiles[index].text = EquipmentDisplayIcon(slotId) + "\n" + EquipmentShortName(slotId)
+                _equipmentTiles[index].text = EquipmentShortName(slotId)
                     + " · Lv" + level + (equipped ? "\nĐang mặc" : "\nĐã tháo");
                 _equipmentTiles[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
                     ? new Color(.12f, .33f, .56f, .98f)
@@ -364,7 +365,8 @@ namespace LinhGioi.UI
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
             var selectedLevel = _scene.GetVoEquipmentItemLevel(selectedSlot);
             var selectedName = EquipmentDisplayName(selectedSlot);
-            _inventoryDetailIcon.text = EquipmentDisplayIcon(selectedSlot);
+            _inventoryDetailIcon.text = "";
+            _inventoryDetailIcon.style.display = DisplayStyle.None;
             _equipmentDetail.text = selectedName + " · Lv" + selectedLevel;
             _inventoryDetailRarity.text = "Tinh phẩm · Lv" + selectedLevel + " · 10 slot chung";
             _inventoryDetailSlotType.text = selectedName;
@@ -377,24 +379,6 @@ namespace LinhGioi.UI
                 _inventoryDetailPrimaryAction.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
             if (_equipmentToggle != null)
                 _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
-        }
-
-        private static string EquipmentDisplayIcon(string slotId)
-        {
-            switch (slotId)
-            {
-                case "main_weapon": return "⚔";
-                case "head_hair": return "髻";
-                case "inner_top": return "衣";
-                case "outer_tunic": return "袍";
-                case "pants": return "裤";
-                case "waist_belt": return "◈";
-                case "wrist_guard": return "✦";
-                case "boots": return "👢";
-                case "shoulder_chest": return "◆";
-                case "class_accessory": return "✧";
-                default: return "◇";
-            }
         }
 
         private static string EquipmentPrimaryStat(string slotId, int level)

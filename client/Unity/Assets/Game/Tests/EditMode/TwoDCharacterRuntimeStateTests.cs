@@ -180,13 +180,16 @@ namespace LinhGioi.Tests.EditMode
                     "Item detail must stay on the right side of the bag grid.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Does.Contain("CHI TIẾT"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Does.Contain("⚔"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Inventory must not present emoji/text badges as final item art.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Does.Contain("Công"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Khớp"));
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action"), Is.Not.Null);
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Does.Contain("⚔"));
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Does.Contain("👢"));
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Does.Not.Contain("⚔"));
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Does.Not.Contain("👢"));
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Does.Contain("Vũ khí"));
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Does.Contain("Giày"));
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
@@ -198,7 +201,7 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Does.Contain("Giày"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Does.Contain("👢"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Toggle"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐÃ THÁO"));
@@ -245,6 +248,41 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void GameplayHudShowsProductShortcutGateWithoutDeadClicks()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("gameplay shortcut gate test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Start Button"));
+
+                var shortcutBar = root.Q("Map01A Product Shortcut Actions");
+                Assert.That(shortcutBar, Is.Not.Null);
+                Assert.That(shortcutBar.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+
+                var skills = root.Q<Button>("Map01A Skills Shortcut");
+                var menu = root.Q<Button>("Map01A Menu Shortcut");
+                Assert.That(skills, Is.Not.Null);
+                Assert.That(menu, Is.Not.Null);
+                Assert.That(skills.text, Does.Contain("Kỹ năng"));
+                Assert.That(menu.text, Does.Contain("Menu"));
+                Assert.That(skills.enabledSelf, Is.False, "Kỹ năng shortcut must stay visibly gated until the real screen exists.");
+                Assert.That(menu.enabledSelf, Is.False, "Menu shortcut must stay visibly gated until the real screen exists.");
+
+                InvokeBoundButton(root.Q<Button>("Map01A Character Select Button"));
+                Assert.That(shortcutBar.style.display.value, Is.EqualTo(DisplayStyle.None));
             }
             finally
             {

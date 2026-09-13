@@ -1,3 +1,7 @@
+## Next UI action after fake-icon guard — 2026-09-13
+
+Continue Map01A UI/UX from the owner design references, but do not reintroduce temporary inventory glyphs or fake item icons. The current runtime deliberately hides item-art slots until real design-quality thumbnails exist. Next valid inventory work is one of: (1) map approved item/equipment thumbnail assets from an accepted atlas/cutout source, or (2) create a reviewed item-thumbnail design board before runtime wiring. Keep `Kỹ năng` and `Menu` as shared disabled roadmap actions until their real screens are implemented. Required evidence remains EditMode, shared UI validator, no-3D/no-source-image validators, frozen diff audit, Player capture and manual screenshot review.
+
 ## Current operating goal — Map01A product UI/UX first — 2026-09-13
 
 Continue from the current pushed checkpoint on `origin/feature/2d` without creating a handoff zip. The active product path is Map01A UI/UX quality, not more random class/outfit generation. Keep Võ POSE THỬ div4/base/camera/scale and registered outfit state intact; keep Kiếm/Pháp/Cơ/Linh class packs audit-only until a deterministic source/design pipeline exists.
