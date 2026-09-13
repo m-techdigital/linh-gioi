@@ -121,3 +121,22 @@ Không sửa thêm file runtime nằm trong diff của nhánh review. Commit ch�
 - [x] **Step 4: Chạy trên single-component ImageGen lần hai**
 
 Expected và observed: exit 2; `OWNERSHIP_CROSSES_SLOT_BOUNDARY`, `CANVAS_DIMENSIONS_MISMATCH`, `MISSING_ALPHA_CHANNEL`. Sau hai lần cùng lớp lỗi, đóng phương pháp raster ImageGen hiện tại cho source probe.
+
+### Task 5: Direct-3D authoring/export/import readiness
+
+**Files:**
+- Create: `tools/lgo_blender_modular_3d_probe.py`
+- Create: `tools/test_lgo_blender_modular_3d_probe.py`
+- Create: `client/Unity/Assets/Game/Foundation/Editor/LgoModular3DImportProbe.cs`
+- Modify: benchmark evidence và handoff state.
+
+**Interfaces:**
+- Blender tạo `.blend`, `.glb` và `.fbx` build-only từ một contract modular xác định.
+- Unity verifier import FBX tạm, đếm clip/SkinnedMeshRenderer/equipment object rồi ghi report; model tạm không được giữ trong `Assets`.
+
+- [x] **Step 1: Viết test RED cho năm slot/action, direct-3D path, soft weight và rigid socket**
+- [x] **Step 2: Implement Blender probe, chạy test GREEN và export**
+- [x] **Step 3: Re-import GLB trong clean Blender process**
+- [x] **Step 4: Export FBX, import tạm bằng Unity 6000.3.2f1 và xóa temp model**
+
+Observed: Blender report `NARROW_TECHNICAL_PASS_TOOLCHAIN_ONLY`; GLB có 1 skin/24 node/5 animation; Blender round-trip PASS; Unity nhận 2 SkinnedMeshRenderer, 5 clip và đủ object trang bị. Đây là readiness của đường dữ liệu, không hoàn thành common task hoặc visual/runtime gate.
