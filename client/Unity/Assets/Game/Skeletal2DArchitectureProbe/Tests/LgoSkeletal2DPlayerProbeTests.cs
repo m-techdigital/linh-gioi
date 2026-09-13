@@ -100,5 +100,13 @@ namespace LinhGioi.Tests
 
             Assert.That(distance, Is.EqualTo(5f).Within(.000001f));
         }
+
+        [Test]
+        public void CaptureLabel_KeepsSequenceForRepeatedStates()
+        {
+            Assert.That(LgoSkeletal2DPlayerProbe.CaptureLabel(0, "idle"), Is.EqualTo("01-idle.bmp"));
+            Assert.That(LgoSkeletal2DPlayerProbe.CaptureLabel(1, "run"), Is.EqualTo("02-run.bmp"));
+            Assert.That(LgoSkeletal2DPlayerProbe.CaptureLabel(8, "run"), Is.EqualTo("09-run.bmp"));
+        }
     }
 }

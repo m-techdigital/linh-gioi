@@ -113,7 +113,7 @@ namespace LinhGioi.ArchitectureProbe.Editor
             var cameraObject = new GameObject("ProbeCamera");
             var camera = cameraObject.AddComponent<Camera>();
             camera.orthographic = true; camera.orthographicSize = 1.02f;
-            camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = new Color(.035f, .045f, .065f);
+            camera.clearFlags = CameraClearFlags.SolidColor; camera.backgroundColor = new Color(.22f, .28f, .34f);
             camera.transform.position = new Vector3(0, .82f, -10f); camera.tag = "MainCamera";
 
             EditorSceneManager.SaveScene(scene, ScenePath); AssetDatabase.SaveAssets();

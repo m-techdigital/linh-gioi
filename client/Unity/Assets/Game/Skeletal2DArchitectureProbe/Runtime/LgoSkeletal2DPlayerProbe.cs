@@ -1,5 +1,6 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -48,8 +49,8 @@ namespace LinhGioi.ArchitectureProbe
         [Serializable]
         private sealed class RuntimeReport
         {
-            public string status, unityVersion, renderer, drawCallMeasurementStatus, seamMeasurementStatus, geometryMeasurementLimit;
-            public string[] statesPlayed, failures;
+            public string status, unityVersion, renderer, drawCallMeasurementStatus, seamMeasurementStatus, geometryMeasurementLimit, captureEvidenceStatus;
+            public string[] statesPlayed, capturedStateFrames, failures;
             public int transitionCount, measuredFrames, bodyCutoutPartCount, poseSpecificGarmentSourceCount, restMasterCount;
             public bool equipmentSwapDuringRun, equipmentSwapPreservedState, authoredGarmentWeights, runtimePromotionAllowed;
             public float stateTimeBeforeSwap, stateTimeAfterSwap, rootScaleMaxDrift, boneLengthMaxDriftRatio;
@@ -66,6 +67,7 @@ namespace LinhGioi.ArchitectureProbe
         private SpriteRenderer _upperRenderer;
         private readonly List<float> _frameTimes = new List<float>();
         private readonly List<string> _states = new List<string>();
+        private readonly List<string> _capturedStateFrames = new List<string>();
         private readonly List<string> _failures = new List<string>();
         private readonly Dictionary<string, Transform> _boneByName = new Dictionary<string, Transform>();
         private Vector3 _initialRootScale, _initialRigidScale, _pelvisRestLocalPosition;
@@ -77,7 +79,7 @@ namespace LinhGioi.ArchitectureProbe
         private ProfilerRecorder _drawCalls;
         private float _elapsed, _stateElapsed, _swapStartedAt, _beforeSwap, _afterSwap, _rootScaleDrift, _boneDrift, _rigidScaleDrift;
         private int _nextStep, _triangleInversions;
-        private bool _swapStarted, _swapFinished;
+        private bool _swapStarted, _swapFinished, _captureInFlight;
         private long _peakMemory, _peakDrawCalls;
         private string _outputDirectory, _currentState = "boot";
 
@@ -176,6 +178,14 @@ namespace LinhGioi.ArchitectureProbe
             return Mathf.Sqrt(minimumSquared);
         }
 
+        public static string CaptureLabel(int stepIndex, string state)
+        {
+            if (stepIndex < 0 || string.IsNullOrWhiteSpace(state)) throw new ArgumentException("Capture step and state are required");
+            var safeState = new string(state.Where(character => char.IsLetterOrDigit(character) || character == '_' || character == '-').ToArray());
+            if (safeState.Length == 0) throw new ArgumentException("Capture state must contain a filename-safe character", nameof(state));
+            return $"{stepIndex + 1:00}-{safeState}.bmp";
+        }
+
         private void Awake()
         {
             Application.runInBackground = true; QualitySettings.vSyncCount = 0; Application.targetFrameRate = 60;
@@ -223,6 +233,7 @@ namespace LinhGioi.ArchitectureProbe
                 _currentState = Scenario[_nextStep].State; _states.Add(_currentState); _stateElapsed = 0f; _nextStep++;
             }
             ApplyPose();
+            CaptureCurrentStateIfReady();
             if (!_swapStarted && _currentState == "run" && _stateElapsed >= .35f && _elapsed < 2.2f)
             {
                 _beforeSwap = _stateElapsed; _swapStartedAt = _elapsed;
@@ -242,6 +253,54 @@ namespace LinhGioi.ArchitectureProbe
                 if (_drawCalls.Valid) _peakDrawCalls = Math.Max(_peakDrawCalls, _drawCalls.LastValue);
             }
             if (_elapsed >= QuitAtSeconds) { WriteReportAndQuit(); enabled = false; }
+        }
+
+        private void CaptureCurrentStateIfReady()
+        {
+            if (_nextStep == 0 || _capturedStateFrames.Count >= _nextStep || _stateElapsed < .12f) return;
+            if (_capturedStateFrames.Count != _nextStep - 1)
+            {
+                _failures.Add("CAPTURE_STATE_SEQUENCE_SKIPPED");
+                return;
+            }
+            if (!_captureInFlight) StartCoroutine(CaptureFrameAtEndOfFrame(_capturedStateFrames.Count, _currentState));
+        }
+
+        private IEnumerator CaptureFrameAtEndOfFrame(int stepIndex, string state)
+        {
+            _captureInFlight = true;
+            yield return new WaitForEndOfFrame();
+            var width = Screen.width;
+            var height = Screen.height;
+            var image = new Texture2D(width, height, TextureFormat.RGB24, false);
+            image.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+            image.Apply(false, false);
+            var filename = CaptureLabel(stepIndex, state);
+            WriteBmp(Path.Combine(_outputDirectory, filename), image.GetPixels32(), width, height);
+            Destroy(image);
+            _capturedStateFrames.Add(filename);
+            _captureInFlight = false;
+        }
+
+        private static void WriteBmp(string path, Color32[] pixels, int width, int height)
+        {
+            var rowBytes = ((width * 3 + 3) / 4) * 4;
+            var pixelBytes = rowBytes * height;
+            using var writer = new BinaryWriter(File.Create(path));
+            writer.Write((byte)'B'); writer.Write((byte)'M'); writer.Write(54 + pixelBytes);
+            writer.Write(0); writer.Write(54); writer.Write(40); writer.Write(width); writer.Write(height);
+            writer.Write((short)1); writer.Write((short)24); writer.Write(0); writer.Write(pixelBytes);
+            writer.Write(2835); writer.Write(2835); writer.Write(0); writer.Write(0);
+            var padding = rowBytes - width * 3;
+            for (var y = 0; y < height; y++)
+            {
+                for (var x = 0; x < width; x++)
+                {
+                    var color = pixels[y * width + x];
+                    writer.Write(color.b); writer.Write(color.g); writer.Write(color.r);
+                }
+                for (var index = 0; index < padding; index++) writer.Write((byte)0);
+            }
         }
 
         private void ApplyPose()
@@ -323,11 +382,15 @@ namespace LinhGioi.ArchitectureProbe
             if (_boneDrift > .001f) _failures.Add("BONE_LENGTH_DRIFT");
             if (_rigidScaleDrift > .001f) _failures.Add("RIGID_ITEM_SCALE_DRIFT");
             if (_triangleInversions > 0) _failures.Add("SOFT_TRIANGLE_INVERSION");
+            var captureFilesReady = _capturedStateFrames.Count == Scenario.Length
+                && _capturedStateFrames.All(filename => File.Exists(Path.Combine(_outputDirectory, filename)));
+            if (!captureFilesReady) _failures.Add("STATE_CAPTURE_INCOMPLETE");
             var report = new RuntimeReport
             {
                 status = _failures.Count == 0 ? "NARROW_PLAYER_TECHNICAL_PASS" : "FIX_REQUIRED",
                 unityVersion = Application.unityVersion, renderer = SystemInfo.graphicsDeviceName,
                 statesPlayed = _states.ToArray(), transitionCount = Math.Max(0, _states.Count - 1),
+                capturedStateFrames = _capturedStateFrames.ToArray(), captureEvidenceStatus = captureFilesReady ? "PASS" : "FIX_REQUIRED",
                 equipmentSwapDuringRun = true, equipmentSwapPreservedState = !_failures.Contains("EQUIPMENT_SWAP_RESET_ANIMATION_STATE"),
                 stateTimeBeforeSwap = _beforeSwap, stateTimeAfterSwap = _afterSwap,
                 authoredGarmentWeights = true, bodyCutoutPartCount = 10, poseSpecificGarmentSourceCount = 0, restMasterCount = 1,
