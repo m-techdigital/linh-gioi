@@ -2066,9 +2066,6 @@ namespace LinhGioi.World
             yield return null;
             var document = GetComponentInChildren<UIDocument>();
             if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for inventory tab capture");
-            yield return new WaitForEndOfFrame();
-            var bag = Path.Combine(directory, "bag.png");
-            CaptureScreenPng(bag);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Character Info Main Tab"));
             yield return null;
             yield return new WaitForEndOfFrame();
@@ -2076,29 +2073,32 @@ namespace LinhGioi.World
             CaptureScreenPng(characterInfo);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Bag Main Tab"));
             yield return null;
-            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Supplies Tab"));
+            yield return new WaitForEndOfFrame();
+            var bag = Path.Combine(directory, "bag.png");
+            CaptureScreenPng(bag);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skills Main Tab"));
             yield return null;
             yield return new WaitForEndOfFrame();
-            var supplies = Path.Combine(directory, "supplies.png");
-            CaptureScreenPng(supplies);
-            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Character Info Main Tab"));
+            var skills = Path.Combine(directory, "skills.png");
+            CaptureScreenPng(skills);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Main Tab"));
             yield return null;
             yield return new WaitForEndOfFrame();
-            var returnedInfo = Path.Combine(directory, "character-info-after-supplies.png");
-            CaptureScreenPng(returnedInfo);
-            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Storage Main Tab"));
+            var potential = Path.Combine(directory, "potential.png");
+            CaptureScreenPng(potential);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Spirit Pet Main Tab"));
             yield return null;
             yield return new WaitForEndOfFrame();
-            var storage = Path.Combine(directory, "storage.png");
-            CaptureScreenPng(storage);
-            var status = File.Exists(bag) && File.Exists(returnedInfo) && File.Exists(characterInfo) && File.Exists(supplies) && File.Exists(storage) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var spiritPet = Path.Combine(directory, "spirit-pet.png");
+            CaptureScreenPng(spiritPet);
+            var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(skills) && File.Exists(potential) && File.Exists(spiritPet) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-inventory-tabs\",\n"
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frames\": [\"bag.png\", \"character-info-after-supplies.png\", \"character-info.png\", \"supplies.png\", \"storage.png\"]\n"
+                + "  \"frames\": [\"character-info.png\", \"bag.png\", \"skills.png\", \"potential.png\", \"spirit-pet.png\"]\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);

@@ -73,20 +73,20 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
         self.assertTrue(any("toàn bộ design owner mới upload" in item for item in violations), violations)
         self.assertTrue(any("cập nhật base/shared component trước" in item for item in violations), violations)
 
-    def test_rejects_missing_separate_inventory_info_storage_flow_rule(self) -> None:
+    def test_rejects_missing_expandable_five_tab_character_hub_rule(self) -> None:
         with self._copy_minimal_repo() as temp:
             agents = Path(temp) / "AGENTS.md"
             agents.write_text(
                 agents.read_text(encoding="utf-8").replace(
-                    "Hành trang, Thông tin nhân vật và Rương đồ là các tab/flow riêng",
-                    "Hành trang có thể gộp chung tùy nhanh",
+                    "Character hub dùng một hàng tab gọn có thể mở rộng",
+                    "Character hub có thể tạo tab tùy màn",
                 ),
                 encoding="utf-8",
             )
 
             violations = validator.validate_root(Path(temp))
 
-        self.assertTrue(any("Hành trang, Thông tin" in item for item in violations), violations)
+        self.assertTrue(any("Character hub dùng một hàng tab gọn" in item for item in violations), violations)
 
     def test_rejects_inventory_detail_added_before_shared_content_columns(self) -> None:
         with self._copy_minimal_repo() as temp:
@@ -141,7 +141,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"
             hud.write_text(
                 hud.read_text(encoding="utf-8").replace(
-                    "ApplyLgoHudShortcutAction(button, _touch);",
+                    "ApplyLgoHudShortcutAction(_skillsShortcut, _touch, true);",
                     "ApplyLgoDisabledAction(button);",
                     1,
                 ),
@@ -150,7 +150,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
             violations = validator.validate_root(Path(temp))
 
-        self.assertTrue(any("ApplyLgoHudShortcutAction(button" in item for item in violations), violations)
+        self.assertTrue(any("ApplyLgoHudShortcutAction(_skillsShortcut" in item for item in violations), violations)
 
     def test_rejects_dialogue_panel_that_skips_shared_skin(self) -> None:
         with self._copy_minimal_repo() as temp:

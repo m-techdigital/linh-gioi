@@ -749,10 +749,10 @@ namespace LinhGioi.UI
             }
         }
 
-        private static void ApplyLgoHudShortcutAction(Button button, bool touch)
+        private static void ApplyLgoHudShortcutAction(Button button, bool touch, bool enabled = false)
         {
             button.AddToClassList(LgoHudShortcutActionClass);
-            ApplyLgoHudNavigationAction(button, touch, false);
+            ApplyLgoHudNavigationAction(button, touch, enabled);
         }
 
         private static void ApplyLgoHudContextAction(Button button, bool touch, float minWidth = 170f, float? minHeight = null)

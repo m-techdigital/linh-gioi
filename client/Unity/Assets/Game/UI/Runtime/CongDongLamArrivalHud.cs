@@ -10,8 +10,6 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud : MonoBehaviour
     {
         private const float InventoryDesktopMainColumnWidth = 820f;
-        private const float InventoryDesktopBagCharacterColumnWidth = 280f;
-        private const float InventoryDesktopBagGridColumnWidth = 550f;
         private const float InventoryDesktopDetailColumnWidth = 340f;
         private const float InventoryDesktopColumnGap = 12f;
         private const float InventoryGridCellBasisPercent = 18.2f;
@@ -188,13 +186,16 @@ namespace LinhGioi.UI
             _productShortcutActions.style.alignItems = Align.FlexEnd;
             _productShortcutActions.Add(_characterSelectButton);
             _productShortcutActions.Add(_inventoryToggle);
-            _skillsShortcut = new Button { name = "Map01A Skills Shortcut", text = "Kỹ năng" };
-            _menuShortcut = new Button { name = "Map01A Menu Shortcut", text = "Menu" };
-            foreach (var button in new[] { _skillsShortcut, _menuShortcut })
+            _skillsShortcut = new Button(() =>
             {
-                ApplyLgoHudShortcutAction(button, _touch);
-                _productShortcutActions.Add(button);
-            }
+                if (!_scene.InventoryOpen) _scene.ToggleInventory();
+                ShowCharacterHubPreviewMode(CharacterHubMode.Skills);
+            }) { name = "Map01A Skills Shortcut", text = "Kỹ năng" };
+            _menuShortcut = new Button { name = "Map01A Menu Shortcut", text = "Menu" };
+            ApplyLgoHudShortcutAction(_skillsShortcut, _touch, true);
+            ApplyLgoHudShortcutAction(_menuShortcut, _touch);
+            _productShortcutActions.Add(_skillsShortcut);
+            _productShortcutActions.Add(_menuShortcut);
             AttachLgoHudActionIcon(_skillsShortcut, _scene.GetMap01AHudIconSprite("skills"), _touch);
             AttachLgoHudActionIcon(_menuShortcut, _scene.GetMap01AHudIconSprite("menu"), _touch);
             _safe.Add(_productShortcutActions);
@@ -337,22 +338,28 @@ namespace LinhGioi.UI
                 var stacked = r.width < 950;
                 var body = _inventory.Q("Map01A Inventory Body");
                 body.style.flexDirection = stacked ? FlexDirection.Column : FlexDirection.Row;
-                _inventoryBagCharacterPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopBagCharacterColumnWidth;
-                _inventoryBagCharacterPanel.style.marginRight = stacked ? 0 : InventoryDesktopColumnGap;
-                _inventoryBagCharacterPanel.style.marginBottom = stacked ? 10 : 0;
                 _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
                 _inventoryHeroPanel.style.marginRight = 0;
                 _inventoryHeroPanel.style.marginBottom = stacked ? 10 : 0;
-                _inventoryGridPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopBagGridColumnWidth;
+                _inventoryGridPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
                 _inventoryGridPanel.style.marginRight = 0;
                 _inventoryGridPanel.style.marginBottom = stacked ? 10 : 0;
-                _storagePanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
-                _storagePanel.style.marginRight = 0;
-                _storagePanel.style.marginBottom = stacked ? 10 : 0;
                 _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopDetailColumnWidth;
                 _inventoryDetailPanel.style.marginLeft = stacked ? 0 : InventoryDesktopColumnGap;
                 _inventoryDetailPanel.style.marginRight = 0;
                 _inventoryDetailPanel.style.marginBottom = stacked ? 10 : 0;
+                if (_skillsPanel != null)
+                {
+                    _skillsPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
+                    _skillsPanel.style.marginBottom = stacked ? 10 : 0;
+                    _potentialPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
+                    _potentialPanel.style.marginBottom = stacked ? 10 : 0;
+                    _spiritPetPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
+                    _spiritPetPanel.style.marginBottom = stacked ? 10 : 0;
+                    _hubPreviewDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopDetailColumnWidth;
+                    _hubPreviewDetailPanel.style.marginLeft = stacked ? 0 : InventoryDesktopColumnGap;
+                    _hubPreviewDetailPanel.style.marginBottom = stacked ? 10 : 0;
+                }
             }
         }
         private void Update()

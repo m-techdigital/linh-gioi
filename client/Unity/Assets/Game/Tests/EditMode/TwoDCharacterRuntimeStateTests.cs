@@ -164,232 +164,124 @@ namespace LinhGioi.Tests.EditMode
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             try
             {
-                var host = new GameObject("inventory main tabs test");
+                var host = new GameObject("inventory approved two-column test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 CongDongLamArrivalHud.Attach(scene);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 scene.ToggleInventory();
+                var body = root.Q("Map01A Inventory Body");
                 var bagTab = root.Q<Button>("Map01A Bag Main Tab");
                 var infoTab = root.Q<Button>("Map01A Character Info Main Tab");
-                Assert.That(bagTab, Is.Not.Null);
-                Assert.That(infoTab, Is.Not.Null);
+
+                Assert.That(root.Q("Map01A Inventory Bag Character Panel"), Is.Null,
+                    "Approved Rương đồ must not restore the obsolete third character-preview column.");
+                Assert.That(root.Q("Map01A Storage Panel"), Is.Null,
+                    "The obsolete storage gate must not coexist with the approved Rương đồ flow.");
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q("Map01A Inventory Bag Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Inventory Bag Character Art").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetVoAvatarThumbnailSprite()),
-                    "Bag character column should use one complete avatar sprite, never a detached equipment component.");
-                Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-detail-card"), Is.True,
-                    "Inventory detail surfaces must inherit the shared detail-card foundation.");
-                var body = root.Q("Map01A Inventory Body");
-                Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")), Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Grid Panel"))),
+                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")),
+                    Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Grid Panel"))),
                     "Item detail must stay on the right side of the bag grid.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Does.Contain("CHI TIẾT"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
-                var weaponThumbnail = scene.GetVoEquipmentThumbnailSprite("main_weapon");
-                Assert.That(weaponThumbnail, Is.Not.Null);
-                Assert.That(weaponThumbnail.rect.width, Is.GreaterThan(weaponThumbnail.rect.height * 2f),
-                    "Weapon inventory thumbnail should use the complete aggregate slot art, not one narrow forearm component.");
-                var detailIcon = root.Q<Label>("Map01A Inventory Detail Icon");
-                Assert.That(detailIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex),
-                    "Inventory detail must show real runtime equipment art instead of hiding behind fake icons.");
-                Assert.That(detailIcon.ClassListContains("lgo-item-icon-frame"), Is.True,
-                    "Inventory detail icon must use the shared item-icon frame base before final dedicated item art is available.");
-                Assert.That(detailIcon.text, Is.Empty,
-                    "Inventory must not present emoji/text badges as final item art.");
-                Assert.That(detailIcon.style.width.value.value, Is.GreaterThanOrEqualTo(72),
-                    "Right-side item detail card should present a larger hero thumbnail than grid tiles.");
-                Assert.That(detailIcon.parent.name, Is.EqualTo("Map01A Inventory Detail Hero"),
-                    "Selected item art and identity must share one detail header row like the owner inventory reference.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").parent.name, Is.EqualTo("Map01A Inventory Detail Hero Text"));
-                var bagCharacterArt = root.Q("Map01A Inventory Bag Character Art");
-                Assert.That(bagCharacterArt.style.width.value.value, Is.GreaterThanOrEqualTo(190));
-                Assert.That(bagCharacterArt.style.height.value.value, Is.GreaterThanOrEqualTo(380),
-                    "Bag character preview must remain a readable product silhouette instead of a narrow thumbnail strip.");
-                Assert.That(root.Q<Button>("LGO Inventory Close").ClassListContains("lgo-inventory-button-base"), Is.True,
-                    "Every inventory button must start from the shared inventory button base before semantic helpers override density.");
-                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").ClassListContains("lgo-inventory-button-base"), Is.True,
-                    "Inventory detail actions must not use a separate one-off button foundation.");
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").ClassListContains("lgo-inventory-button-base"), Is.True,
-                    "Inventory grid item buttons must share the inventory button base before applying grid-cell styling.");
-                Assert.That(root.Q<Button>("LGO Inventory Close").style.flexBasis.value.value, Is.LessThanOrEqualTo(44),
-                    "Inventory close button should be compact like an RPG modal control, not a large debug square.");
-                Assert.That(root.Q<Button>("LGO Inventory Close").style.fontSize.value.value, Is.LessThanOrEqualTo(24),
-                    "Inventory close button glyph should not dominate the modal header.");
-                Assert.That(root.Q<Label>("Map01A Inventory Modal Title").style.fontSize.value.value, Is.LessThanOrEqualTo(20),
-                    "Inventory modal title should match the compact game UI hierarchy instead of oversized debug headings.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").style.fontSize.value.value, Is.LessThanOrEqualTo(18),
-                    "Right-side item title should be readable but not oversized compared with owner RPG inventory references.");
-                var weaponTileIcon = root.Q<VisualElement>("Map01A Equipment Item Icon main_weapon");
-                Assert.That(weaponTileIcon, Is.Not.Null,
-                    "Equipment grid tiles must show the same real runtime thumbnail art, not text-only placeholders.");
-                Assert.That(weaponTileIcon.style.backgroundImage.value.sprite, Is.EqualTo(weaponThumbnail));
-                Assert.That(weaponTileIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(weaponTileIcon.ClassListContains("lgo-item-icon-frame"), Is.True,
-                    "Equipment grid thumbnails must use the same shared item-icon frame base as the detail panel.");
-                Assert.That(weaponTileIcon.style.width.value.value, Is.InRange(70, 80),
-                    "Grid item thumbnails should be compact like RPG bag icons, not oversized crops that make the UI look rough.");
-                var mainWeaponTile = root.Q<Button>("Map01A Equipment Item Tile main_weapon");
-                Assert.That(mainWeaponTile.style.height.value.value, Is.LessThanOrEqualTo(116),
-                    "Inventory equipment tiles should stay compact and proportional to the owner bag references.");
-                Assert.That(mainWeaponTile.style.flexBasis.value.value, Is.InRange(17.5f, 19f),
-                    "Inventory equipment tiles should use the five-column scan rhythm shown by preferred-v2/02 and 03.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Is.EqualTo("Chưa có thuộc tính chiến đấu được công bố."));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Dành cho"));
-                Assert.That(root.Q("Map01A Inventory Detail Stats Card"), Is.Not.Null,
-                    "Right-side item detail should group item facts in a card, not leave loose debug labels down the panel.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Level Chip"), Is.Not.Null,
-                    "Right-side item detail should expose level as a compact chip for RPG inventory scanning.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Equipped Chip"), Is.Not.Null,
-                    "Right-side item detail should expose equip state as a compact chip for RPG inventory scanning.");
-                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action"), Is.Not.Null);
-                Assert.That(root.Q<Button>("LGO Equipment Inventory Variant").style.display.value, Is.EqualTo(DisplayStyle.None),
-                    "Unavailable variant actions should not draw a disabled dead button in the narrow detail card.");
-                var detailActions = root.Q("Map01A Inventory Equipment Actions");
-                Assert.That(detailActions, Is.Not.Null);
-                Assert.That(detailActions.style.marginBottom.value.value, Is.GreaterThanOrEqualTo(10),
-                    "Right-side detail actions need breathing room above the bottom edge in Player layout.");
-                Assert.That(root.Q<Button>("Map01A Bag Main Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(34),
-                    "Inventory top tabs should stay compact like the owner reference, not inherit oversized web-button height.");
-                Assert.That(root.Q<Button>("Map01A Bag Main Tab").style.flexBasis.value.value, Is.LessThanOrEqualTo(138),
-                    "Inventory top tabs should not look like large desktop form buttons.");
-                Assert.That(root.Q<Button>("Map01A Bag Main Tab").ClassListContains("lgo-inventory-main-tab"), Is.True,
-                    "Inventory main tabs must use the shared base style so future screens do not hand-tune button size in multiple places.");
-                Assert.That(root.Q<Button>("Map01A Equipment Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(32),
-                    "Inventory sub-tabs should share the compact game-tab density.");
-                Assert.That(root.Q<Button>("Map01A Equipment Tab").style.flexBasis.value.value, Is.LessThanOrEqualTo(112),
-                    "Inventory sub-tabs should be compact filter chips, not oversized buttons.");
-                Assert.That(root.Q<Button>("Map01A Equipment Tab").ClassListContains("lgo-inventory-filter-chip"), Is.True,
-                    "Inventory filter chips must use a shared base style instead of local per-button overrides.");
-                Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Not.Null,
-                    "Bag category controls should read like compact RPG filter chips, not a pair of full-width debug table tabs.");
-                Assert.That(root.Q<Label>("Map01A Inventory Count Badge").ClassListContains("lgo-inventory-badge"), Is.True,
-                    "Inventory count badge must share the reusable inventory badge base instead of hand-styling status chips per section.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Level Chip").ClassListContains("lgo-inventory-badge"), Is.True,
-                    "Detail chips must share the same inventory badge base as grid and character status badges.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").ClassListContains("lgo-inventory-state-badge"), Is.True,
-                    "The selected-item state must use one reusable semantic badge instead of local padding and frame values.");
-                Assert.That(root.Q("Map01A Inventory Detail Stats Card").ClassListContains("lgo-inventory-stats-card"), Is.True,
-                    "Item facts must use one reusable stats-card primitive so bag and character details stay visually aligned.");
-                var inventoryGridPanel = root.Q("Map01A Inventory Grid Panel");
-                Assert.That(inventoryGridPanel.ClassListContains("lgo-inventory-panel-shell"), Is.True,
-                    "Inventory content panels must share a shell base instead of each flow styling a flat panel separately.");
-                Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-inventory-panel-shell"), Is.True,
-                    "Inventory detail panel must share the same shell base as bag/character/storage panels.");
-                Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-layered-frame"), Is.True,
-                    "Inventory detail should use the shared layered-frame primitive instead of staying as a flat debug rectangle.");
-                Assert.That(root.Q("Map01A Storage Gate Card").ClassListContains("lgo-inventory-panel-shell"), Is.True,
-                    "Storage gate card must not introduce a parallel flat panel style.");
-                Assert.That(inventoryGridPanel.ClassListContains("lgo-inventory-content-fit-panel"), Is.True,
-                    "Sparse bag content must use a shared fit-to-content panel base instead of leaving a large blank debug area.");
-                Assert.That(inventoryGridPanel.style.alignSelf.value, Is.EqualTo(Align.FlexStart),
-                    "Sparse bag content should anchor to its own content height so the lower half of the modal is not an empty debug box.");
-                Assert.That(inventoryGridPanel.style.flexGrow.value, Is.EqualTo(0),
-                    "Bag grid must not stretch across the whole modal because that turns item cells into wide table cards.");
-                var gridDesktopWidth = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopMainColumnWidth", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
-                var detailDesktopWidth = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopDetailColumnWidth", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
-                var desktopColumnGap = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopColumnGap", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
-                Assert.That(gridDesktopWidth, Is.InRange(800, 840),
-                    "Desktop bag grid should fill the modal beside detail instead of leaving large empty side gutters.");
-                Assert.That(detailDesktopWidth, Is.InRange(330, 350),
-                    "Right-side detail should remain readable while the grid gets enough desktop width.");
-                var bagCharacterWidth = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopBagCharacterColumnWidth", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
-                var bagGridWidth = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopBagGridColumnWidth", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
-                Assert.That(bagCharacterWidth, Is.InRange(270, 300));
-                Assert.That(bagGridWidth, Is.InRange(540, 580));
-                Assert.That(desktopColumnGap, Is.InRange(12, 14),
-                    "Grid/detail gap should be a deliberate shared desktop gutter, not a tiny accidental seam.");
-                Assert.That(root.Q<Button>("Map01A Equipment Tab").style.flexGrow.value, Is.EqualTo(0),
-                    "Equipment category chip should not stretch across the full bag width.");
-                Assert.That(root.Q<Button>("Map01A Supplies Tab").style.flexGrow.value, Is.EqualTo(0),
-                    "Supplies category chip should not stretch across the full bag width.");
-                Assert.That(root.Q("Map01A Inventory Category Chip Consumable"), Is.Not.Null,
-                    "Bag shell should reserve compact category chips for later item groups without opening fake inventory data.");
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Is.Empty,
-                    "Equipment tile Button.text must stay empty so UIToolkit does not draw text over the runtime thumbnail and child labels.");
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Is.Empty);
-                Assert.That(root.Q<Label>("Map01A Equipment Item Name main_weapon").text, Does.Contain("Vũ khí"));
-                Assert.That(root.Q<Label>("Map01A Equipment Item Name boots").text, Does.Contain("Giày"));
-                var emptyBagSlot = root.Q("Map01A Empty Bag Slot 01");
-                Assert.That(emptyBagSlot, Is.Not.Null,
-                    "Bag layout should reserve empty inventory cells so the screen reads as a game bag grid, not a sparse debug list.");
-                Assert.That(emptyBagSlot.style.flexBasis.value.value, Is.InRange(17.5f, 19f));
-                Assert.That(root.Q("Map01A Empty Bag Slot 05"), Is.Null,
-                    "Demo bag should reserve a few empty cells without filling half the modal with dead empty boxes far from the owner RPG references.");
-                Assert.That(root.Q<Label>("Map01A Inventory Count Badge"), Is.Not.Null,
-                    "Bag tab should show an inventory capacity badge like a real bag screen, not only a raw item grid.");
-                Assert.That(root.Q("Map01A Inventory Bottom Actions"), Is.Not.Null,
-                    "Bag tab needs a bottom action bar so the modal reads as game inventory instead of a debug table.");
-                Assert.That(root.Q<Button>("Map01A Inventory Sort Action").style.flexGrow.value, Is.EqualTo(0),
-                    "Bottom inventory actions should be compact toolbar actions, not full-width disabled debug bars.");
-                Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").style.flexBasis.value.value, Is.LessThanOrEqualTo(118),
-                    "Bottom inventory actions should stay proportional to the owner RPG bag references.");
-                Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").ClassListContains("lgo-inventory-toolbar-action"), Is.True,
-                    "Inventory toolbar buttons must use one reusable base so button density stays consistent across bag/storage flows.");
-                Assert.That(root.Q<Label>("Map01A Equipment Item Name main_weapon").style.fontSize.value.value, Is.LessThanOrEqualTo(12),
-                    "Equipment item labels should stay understated so the grid does not read as a debug table.");
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").ClassListContains("lgo-inventory-grid-cell"), Is.True,
-                    "Equipment grid cells must use the same base as empty bag cells to avoid patchwork sizing.");
-                Assert.That(root.Q<ScrollView>("LGO Inventory Scroll").style.flexGrow.value, Is.EqualTo(0),
-                    "Demo bag content should not stretch the scroll view into a large empty debug table area when item rows are sparse.");
-                Assert.That(root.Q<ScrollView>("LGO Inventory Scroll").style.maxHeight.value.value, Is.InRange(320, 350),
-                    "Bag grid should stay visually grouped around the current demo rows instead of filling the modal with blank table space.");
-                Assert.That(root.Q("Map01A Inventory Grid Accent Rail"), Is.Not.Null,
-                    "Inventory panels need a shared ornament rail to reduce flat debug-panel presentation.");
-                Assert.That(root.Q("Map01A Inventory Modal Top Ornament"), Is.Not.Null,
-                    "Inventory modal shell needs a shared top ornament rail so it does not read as one flat HTML block.");
-                Assert.That(root.Q("Map01A Inventory Modal Top Ornament").ClassListContains("lgo-ornament-rail"), Is.True,
-                    "Inventory modal top ornament must reuse the shared ornament-rail base instead of inline styling.");
-                Assert.That(root.Q("Map01A Inventory Modal Bottom Ornament"), Is.Not.Null,
-                    "Inventory modal shell needs a shared bottom ornament rail to close the visual frame.");
-                Assert.That(root.Q("Map01A Inventory Modal Bottom Ornament").ClassListContains("lgo-ornament-rail"), Is.True,
-                    "Inventory modal bottom ornament must reuse the shared ornament-rail base instead of a second rail style.");
-                Assert.That(root.Q("Map01A Inventory").ClassListContains("lgo-inventory-compact-shell"), Is.True,
-                    "Bag inventory should use a shared compact shell so the modal background does not leave a large empty lower half on Player.");
-                Assert.That(root.Q("Map01A Inventory").style.height.value.value, Is.GreaterThanOrEqualTo(650),
-                    "Bag inventory shell should keep enough shared compact height for the item-detail action stack to breathe.");
-                Assert.That(root.Q("Map01A Inventory").style.height.value.value, Is.LessThanOrEqualTo(680),
-                    "Bag inventory shell should be shorter than the full desktop safe-area when current content is sparse.");
+                Assert.That(root.Q("Map01A Inventory Category Rail").style.flexDirection.value, Is.EqualTo(FlexDirection.Column));
+                Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Null);
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").ClassListContains("lgo-inventory-grid-cell"), Is.True);
+                Assert.That(root.Q<VisualElement>("Map01A Equipment Item Icon main_weapon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetVoEquipmentThumbnailSprite("main_weapon")));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-detail-card"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").ClassListContains("lgo-inventory-button-base"), Is.True);
 
                 InvokeBoundButton(infoTab);
+                Assert.That(root.Q<Label>("Map01A Inventory Modal Title").text, Is.EqualTo("THÔNG TIN NHÂN VẬT"));
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Inventory").ClassListContains("lgo-inventory-compact-shell"), Is.False,
-                    "Character-info needs the regular bounded shell because its loadout matrix can scroll taller than the sparse bag grid.");
-                Assert.That(root.Q("Map01A Inventory").style.height.value.value, Is.GreaterThanOrEqualTo(700),
-                    "Switching from sparse bag to character-info must restore the regular modal height so the 10-slot loadout is not cut off in Player.");
-                Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")), Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Character Panel"))),
-                    "Item detail must stay on the right side of character equipment slots.");
-                Assert.That(root.Q("Map01A Character Hero Card"), Is.Not.Null,
-                    "Character-info must start with a rich hero/equipment overview card instead of a plain technical slot table.");
-                Assert.That(root.Q("Map01A Character Hero Portrait"), Is.Not.Null,
-                    "The hero card needs a visible portrait/equipment frame so the screen reads like character UI.");
-                Assert.That(root.Q<Label>("Map01A Character Hero Name").text, Does.Contain("LụcThiên"));
-                Assert.That(root.Q<Label>("Map01A Character Hero Power").text, Does.Contain("LC"));
-                Assert.That(root.Q("Map01A Character Hero Loadout Strip"), Is.Not.Null,
-                    "The hero card should summarize equipped-slot state before the detailed list.");
-                Assert.That(root.Q("Map01A Character Stat Strip"), Is.Not.Null,
-                    "Character-info needs a compact stat strip so it reads like the owner reference character panel.");
-                Assert.That(root.Q("Map01A Character Loadout Matrix"), Is.Not.Null,
-                    "Character-info needs a named loadout matrix instead of an anonymous wrapped technical list.");
-                Assert.That(root.Q<Button>("LGO Equipment Inventory Slot main_weapon").ClassListContains("lgo-inventory-item-row"), Is.True,
-                    "Character equipment rows must reuse the inventory item-row base instead of maintaining a parallel row skin.");
+                Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")),
+                    Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Character Panel"))),
+                    "Selected equipment detail must stay in the shared right column.");
+                Assert.That(root.Q<VisualElement>("Map01A Character Hero Portrait").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetVoAvatarThumbnailSprite()));
+                Assert.That(root.Q("Map01A Character Hero Left Equipment Rail").childCount, Is.EqualTo(5));
+                Assert.That(root.Q("Map01A Character Hero Right Equipment Rail").childCount, Is.EqualTo(5));
 
-                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
+                InvokeBoundButton(root.Q<Button>("Map01A Character Hero Quick Icon 7"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Does.Contain("Giày"));
-                Assert.That(scene.GetVoEquipmentThumbnailSprite("boots"), Is.Not.Null);
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Is.Empty);
-                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
-                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Toggle"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐÃ THÁO"));
-                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Does.Contain("Mặc"));
+                InvokeBoundButton(root.Q<Button>("Map01A Inventory Detail Primary Action"));
+                Assert.That(scene.IsVoEquipmentSlotEquipped("boots"), Is.False);
                 InvokeBoundButton(bagTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void CharacterHubUsesFiveCompactTabsAndOneSharedDetailColumn()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character hub five-tab test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                scene.ToggleInventory();
+
+                var tabs = root.Q("Map01A Inventory Main Tabs");
+                Assert.That(tabs.childCount, Is.EqualTo(5),
+                    "Approved character hub has one compact row of five tabs, not parallel two/three-tab systems.");
+                var expected = new[]
+                {
+                    ("Map01A Character Info Main Tab", "Nhân vật"),
+                    ("Map01A Bag Main Tab", "Rương đồ"),
+                    ("Map01A Skills Main Tab", "Kỹ năng"),
+                    ("Map01A Potential Main Tab", "Tiềm năng"),
+                    ("Map01A Spirit Pet Main Tab", "Linh thú")
+                };
+                foreach (var item in expected)
+                {
+                    var tab = root.Q<Button>(item.Item1);
+                    Assert.That(tab, Is.Not.Null);
+                    Assert.That(tab.text, Is.EqualTo(item.Item2));
+                    Assert.That(tab.style.flexGrow.value, Is.EqualTo(0));
+                    Assert.That(tab.style.flexBasis.value.value, Is.LessThanOrEqualTo(150),
+                        "Hub tabs must stay compact so later tabs do not force another navigation base.");
+                    Assert.That(tab.ClassListContains("lgo-inventory-main-tab"), Is.True);
+                }
+                Assert.That(root.Q("Map01A Storage Main Tab"), Is.Null,
+                    "The obsolete third inventory/storage tab must not remain beside the approved character-hub tabs.");
+                Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Null,
+                    "Approved Rương đồ uses an internal vertical category rail, not a second horizontal tab row.");
+                var categoryRail = root.Q("Map01A Inventory Category Rail");
+                Assert.That(categoryRail, Is.Not.Null);
+                Assert.That(categoryRail.style.flexDirection.value, Is.EqualTo(FlexDirection.Column));
+                Assert.That(root.Q("Map01A Inventory Bag Character Panel"), Is.Null,
+                    "Rương đồ must remain a two-column grid/detail screen without the obsolete character-preview column.");
+                Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
+                Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Hub Preview Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
+                Assert.That(root.Q("Map01A Potential Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
+                    "Map01A must not create local fake potential progression before the real state contract exists.");
+
+                InvokeBoundButton(root.Q<Button>("Map01A Spirit Pet Main Tab"));
+                Assert.That(root.Q("Map01A Spirit Pet Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
+                    "Linh thú growth must remain visibly gated until its real progression state exists.");
             }
             finally
             {
@@ -493,10 +385,10 @@ namespace LinhGioi.Tests.EditMode
                 var characterSelect = root.Q<Button>("Map01A Character Select Button");
                 Assert.That(talk.ClassListContains("lgo-hud-context-action"), Is.True,
                     "HUD context actions must use a shared context-action base instead of local one-off sizing.");
-                Assert.That(inventoryToggle.ClassListContains("lgo-hud-context-action"), Is.True,
-                    "Inventory/context actions must share one base for consistent Player density.");
-                Assert.That(characterSelect.ClassListContains("lgo-hud-context-action"), Is.True,
-                    "Character/info context actions must not create a parallel HUD button style.");
+                Assert.That(inventoryToggle.ClassListContains("lgo-hud-navigation-action"), Is.True,
+                    "Inventory navigation must share the compact HUD navigation base.");
+                Assert.That(characterSelect.ClassListContains("lgo-hud-navigation-action"), Is.True,
+                    "Character navigation must share the same compact HUD navigation base.");
 
                 var skills = root.Q<Button>("Map01A Skills Shortcut");
                 var menu = root.Q<Button>("Map01A Menu Shortcut");
@@ -504,7 +396,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(menu, Is.Not.Null);
                 Assert.That(skills.text, Is.EqualTo("Kỹ năng"));
                 Assert.That(menu.text, Is.EqualTo("Menu"));
-                Assert.That(skills.enabledSelf, Is.False, "Kỹ năng shortcut must stay visibly gated until the real screen exists.");
+                Assert.That(skills.enabledSelf, Is.True, "Kỹ năng shortcut should open the approved shared character hub.");
                 Assert.That(menu.enabledSelf, Is.False, "Menu shortcut must stay visibly gated until the real screen exists.");
                 Assert.That(skills.ClassListContains("lgo-hud-shortcut-action"), Is.True,
                     "HUD product shortcuts must use the shared shortcut base instead of local one-off sizing.");
@@ -516,6 +408,9 @@ namespace LinhGioi.Tests.EditMode
                     "HUD product shortcuts must stay compact and must not inherit modal/button CTA typography.");
                 Assert.That(skills.resolvedStyle.height, Is.LessThanOrEqualTo(42f),
                     "HUD product shortcuts must stay compact on Player.");
+                InvokeBoundButton(skills);
+                Assert.That(scene.InventoryOpen, Is.True);
+                Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
 
                 InvokeBoundButton(root.Q<Button>("Map01A Character Select Button"));
                 Assert.That(shortcutBar.style.display.value, Is.EqualTo(DisplayStyle.None));
@@ -711,41 +606,26 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
-        public void InventoryStorageTabShowsExplicitGateWithoutChangingLoadout()
+        public void ObsoleteStorageTabIsRemovedWithoutChangingLoadout()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             try
             {
-                var host = new GameObject("inventory storage gate test");
+                var host = new GameObject("obsolete storage flow removed test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 CongDongLamArrivalHud.Attach(scene);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 scene.ToggleInventory();
-                InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
-                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+                InvokeBoundButton(root.Q<Button>("Map01A Equipment Item Tile boots"));
+                var selected = scene.VoSelectedEquipmentSlot;
 
-                var storageTab = root.Q<Button>("Map01A Storage Main Tab");
-                Assert.That(storageTab, Is.Not.Null);
-                InvokeBoundButton(storageTab);
-                Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
-                var storageGate = root.Q("Map01A Storage Gate Card");
-                Assert.That(storageGate, Is.Not.Null,
-                    "Rương đồ must render as an intentional locked-state card, not as an empty broken panel.");
-                Assert.That(root.Q<Label>("Map01A Storage Gate Title").text, Does.Contain("Kho gửi/rút"));
-                Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("chưa khả dụng"));
-                Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Not.Contain("API"));
-                Assert.That(root.Q<Label>("Map01A Storage Gate Safety").text, Does.Contain("được giữ nguyên"));
-                var deposit = root.Q<Button>("Map01A Storage Deposit");
-                var withdraw = root.Q<Button>("Map01A Storage Withdraw");
-                Assert.That(deposit.enabledSelf, Is.False);
-                Assert.That(withdraw.enabledSelf, Is.False);
-                Assert.That(deposit.style.opacity.value, Is.EqualTo(.58f),
-                    "Locked storage actions should use the shared disabled-action skin, not raw inactive buttons.");
-                Assert.That(withdraw.style.opacity.value, Is.EqualTo(.58f));
-                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
+                Assert.That(root.Q("Map01A Storage Main Tab"), Is.Null);
+                Assert.That(root.Q("Map01A Storage Panel"), Is.Null);
+                Assert.That(root.Q<Button>("Map01A Bag Main Tab").text, Is.EqualTo("Rương đồ"));
+                InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
+                InvokeBoundButton(root.Q<Button>("Map01A Bag Main Tab"));
+                Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo(selected),
+                    "Switching approved tabs must preserve the actual selected/equipped state.");
             }
             finally
             {
@@ -754,117 +634,36 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
-
         [Test]
         public void InventoryReviewCaptureCanOpenCharacterInfoAndStorageTabsWithoutInput()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             try
             {
-                var host = new GameObject("inventory review capture tab test");
+                var host = new GameObject("five-tab review capture test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 CongDongLamArrivalHud.Attach(scene);
                 var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
 
-                hud.OpenInventoryReviewMode("character-info");
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(0),
-                    "Character info must keep the bounded two-column width instead of stretching like the obsolete full-width layout.");
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexBasis.value.value, Is.InRange(800, 840));
-                Assert.That(scene.InventoryOpen, Is.True);
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
-                var characterWeaponIcon = root.Q("Map01A Character Info Slot Icon main_weapon");
-                Assert.That(characterWeaponIcon, Is.Not.Null,
-                    "Character-info equipment slots should reuse runtime item thumbnails instead of staying as text-only cells.");
-                Assert.That(characterWeaponIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(characterWeaponIcon.ClassListContains("lgo-item-icon-frame"), Is.True,
-                    "Character-info equipment thumbnails must not carry a parallel icon-frame style.");
-                var heroPortraitSprite = root.Q<VisualElement>("Map01A Character Hero Portrait").style.backgroundImage.value.sprite;
-                Assert.That(heroPortraitSprite, Is.EqualTo(scene.GetVoAvatarThumbnailSprite()),
-                    "Character summary should use stable complete avatar art instead of a detached equipment part.");
-                Assert.That(heroPortraitSprite, Is.Not.EqualTo(scene.GetVoEquipmentThumbnailSprite("main_weapon")),
-                    "Character summary must never present the selected weapon or limb crop as the character portrait.");
-                var modalTitle = root.Q<Label>("Map01A Inventory Modal Title");
-                var modalSubtitle = root.Q<Label>("Map01A Inventory Modal Subtitle");
-                Assert.That(modalTitle, Is.Not.Null, "Inventory modal needs a named title so each main tab can present its own screen.");
-                Assert.That(modalSubtitle, Is.Not.Null, "Inventory modal needs a named subtitle so tab context is visible in Player captures.");
-                Assert.That(modalTitle.text, Is.EqualTo("THÔNG TIN"),
-                    "Switching to character info must not leave the modal titled HÀNH TRANG.");
-                Assert.That(modalSubtitle.text, Does.Contain("trang bị đang mặc"));
-                Assert.That(modalTitle.ClassListContains("lgo-title-label"), Is.True,
-                    "Inventory modal titles must inherit the shared title-label base so tab screens do not fork typography.");
-                Assert.That(modalSubtitle.ClassListContains("lgo-subtitle-label"), Is.True,
-                    "Inventory modal subtitles must inherit the shared subtitle-label base instead of local one-off typography.");
-
-                hud.OpenInventoryReviewMode("supplies");
-                Assert.That(modalTitle.text, Is.EqualTo("HÀNH TRANG"));
-                Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                var suppliesListCard = root.Q("Map01A Supplies List Card");
-                Assert.That(suppliesListCard, Is.Not.Null,
-                    "Supplies should present a left-side list card beside the right detail card, not a flat full-width technical list.");
-                Assert.That(suppliesListCard.IndexOf(root.Q("Map01A Quest Item Actions")), Is.LessThan(suppliesListCard.IndexOf(root.Q("Map01A Supplies Empty State"))),
-                    "Supply item rows must appear before explanatory empty-state copy so they remain visible in the bounded Player inventory viewport.");
-                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
-                    "Supplies must keep the right-side detail panel instead of becoming a left-only technical list.");
-                Assert.That(root.Q<Label>("Map01A Supplies Empty State").text, Does.Contain("Chưa nhận"));
-                Assert.That(root.Q<Label>("Map01A Supplies Empty State").ClassListContains("lgo-status-card"), Is.True,
-                    "Inventory empty states must share the same status-card foundation as entry notices.");
-                Assert.That(root.Q<Button>("Map01A Health Potion").text, Is.Empty,
-                    "Supply rows must be composed cards, not plain Button.text labels that look like temporary debug UI.");
-                Assert.That(root.Q<Button>("Map01A Health Potion").ClassListContains("lgo-inventory-item-row"), Is.True,
-                    "Supply rows must share the inventory item row base instead of each item tab styling rows separately.");
-                Assert.That(root.Q<Label>("Map01A Supply Item Count health_potion").ClassListContains("lgo-inventory-count-badge"), Is.True,
-                    "Supply count badges must use the shared count badge base so item grids and lists stay visually consistent.");
-                Assert.That(root.Q<Label>("Map01A Supply Item Name health_potion").text, Is.EqualTo("Bình Máu Nhỏ"));
-                Assert.That(root.Q<Label>("Map01A Supply Item Count health_potion").text, Does.Contain("x0"));
-                Assert.That(root.Q<Label>("Map01A Supply Item State health_potion").text, Does.Contain("Thiếu điều kiện"));
-                Assert.That(root.Q<Label>("Map01A Supply Item Name mana_potion").text, Is.EqualTo("Bình Linh Lực Nhỏ"));
-                Assert.That(root.Q<Label>("Map01A Supply Item Name class_reward").text, Is.EqualTo("Hộ Uyển Võ Tân Thủ"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT VẬT PHẨM"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Is.EqualTo("Vật phẩm hồi phục"));
-                Assert.That(root.Q<Button>("Map01A Health Potion").enabledSelf, Is.True,
-                    "Supply rows stay selectable so clicking an item can show detail without consuming it.");
-                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Is.EqualTo("Dùng bình máu"));
-                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").enabledSelf, Is.False,
-                    "The right-side action, not the selectable item row, is disabled when the supply cannot be used.");
-                Assert.That(root.Q<Button>("Map01A Health Potion").style.color.value, Is.EqualTo(new Color(.70f, .80f, .80f, .92f)),
-                    "Supply rows must stay readable in Player captures instead of fading into the dark panel.");
-
-                InvokeBoundButton(root.Q<Button>("Map01A Mana Potion"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Is.EqualTo("Vật phẩm hồi phục"));
-                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Is.EqualTo("Dùng bình linh lực"));
-                Assert.That(root.Q<Button>("Map01A Mana Potion").style.backgroundColor.value, Is.EqualTo(new Color(.12f, .33f, .56f, .98f)),
-                    "Selected supply row must be visibly highlighted like equipment item rows.");
-                Assert.That(root.Q<Button>("Map01A Health Potion").style.backgroundColor.value, Is.Not.EqualTo(new Color(.12f, .33f, .56f, .98f)),
-                    "Only the selected supply row should use the selected-row background.");
-                Assert.That(root.Q<Label>("Map01A Supply Item State mana_potion").text, Does.Contain("Thiếu điều kiện"));
-
-                var detailScroll = root.Q<ScrollView>("Map01A Inventory Detail Scroll");
-                Assert.That(detailScroll, Is.Not.Null);
-                Assert.That(detailScroll.Contains(root.Q("Map01A Inventory Equipment Actions")), Is.False,
-                    "Item actions must remain visible outside the scrollable description.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Not.Contain("Tinh phẩm"));
-                var equippedBeforeTabSwitch = scene.VoEquippedSlotCount;
-                hud.OpenInventoryReviewMode("character-info");
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(0));
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexBasis.value.value, Is.InRange(800, 840),
-                    "Returning from supplies must restore the bounded character-info column without waiting for geometry changes.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT MÓN"),
-                    "Character info must clear the consumable action before showing equipped items.");
-                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Does.Contain("Tháo"));
-                Assert.That(scene.VoEquippedSlotCount, Is.EqualTo(equippedBeforeTabSwitch),
-                    "Navigating between tabs must never equip, remove or consume an item.");
-
-                hud.OpenInventoryReviewMode("storage");
-                Assert.That(root.Q("Map01A Storage Panel").style.flexGrow.value, Is.EqualTo(1));
-                Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(modalTitle.text, Is.EqualTo("RƯƠNG ĐỒ"));
-                Assert.That(modalSubtitle.text, Does.Contain("Kho gửi/rút"));
-                Assert.That(root.Q<Button>("Map01A Storage Deposit").enabledSelf, Is.False);
-                Assert.That(root.Q<Button>("Map01A Storage Withdraw").enabledSelf, Is.False);
+                var expected = new[]
+                {
+                    ("character-info", "Map01A Inventory Character Panel", "THÔNG TIN NHÂN VẬT"),
+                    ("bag", "Map01A Inventory Grid Panel", "HÀNH TRANG"),
+                    ("skills", "Map01A Skills Panel", "KỸ NĂNG"),
+                    ("potential", "Map01A Potential Panel", "TIỀM NĂNG"),
+                    ("spirit-pet", "Map01A Spirit Pet Panel", "LINH THÚ")
+                };
+                foreach (var view in expected)
+                {
+                    hud.OpenInventoryReviewMode(view.Item1);
+                    Assert.That(scene.InventoryOpen, Is.True);
+                    Assert.That(root.Q(view.Item2).style.display.value, Is.EqualTo(DisplayStyle.Flex), view.Item1);
+                    Assert.That(root.Q<Label>("Map01A Inventory Modal Title").text, Is.EqualTo(view.Item3), view.Item1);
+                }
+                Assert.That(root.Q<Button>("Map01A Skill Upgrade Action").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False);
             }
             finally
             {

@@ -1326,3 +1326,9 @@ Next valid visible batch: đối chiếu Hành trang với `preferred-v2/02` và
 `CONTINUE`. Hành trang evidence hiện hành: `build/map01a-inventory-hierarchy-runtime-v1/bag.png`; grid năm cột, preview nhân vật lớn hơn và detail-right có item header ngang. Không dùng các capture bag cũ để review.
 
 Next valid visible batch: redesign riêng tab Thông tin theo `preferred-v2/02` nhưng tái sử dụng detail-right và base inventory hiện có; ưu tiên full-body hero, equipment-slot scan và stat hierarchy. Không gộp Hành trang với Thông tin, không dựng detail panel thứ hai, không tạo icon giả, không resume class/wardrobe/pose/source. Build/capture một lần sau khi hoàn tất batch.
+
+## Next — sau checkpoint character hub năm tab — 2026-09-14
+
+`CONTINUE`. Character hub hiện hành đã chuyển sang bộ năm tab owner duyệt tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/`. Evidence Player đã review: `build/map01a-five-tab-character-hub-runtime-v3/{character-info,bag,skills,potential,spirit-pet}.png`; build `build/map01a-five-tab-character-hub-player-v3/LinhGioiOnline.app`.
+
+Next valid work: tiếp tục Map01A/UI-only theo bộ design owner đã duyệt, ưu tiên polish entry/login, HUD và NPC dialogue bằng shared Skin/base; sau đó hoàn thiện interaction/data thật cho character hub khi contract/state tương ứng được mở. Không khôi phục storage gate/cột character-preview cũ; không tạo tab hàng thứ hai. Không resume class/wardrobe/pose/source, không rollback class code. Kỹ năng/Tiềm năng/Linh thú chỉ mở action ghi state khi có contract thật; trước đó giữ read-only rõ ràng. Mọi thay đổi visible tiếp theo phải build/capture Player và tự xem ảnh trước khi báo trạng thái.
