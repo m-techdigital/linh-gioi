@@ -96,3 +96,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-base-style-runtime-v1/inventory/bag.png`, `character-info.png`, `character-info-after-supplies.png`, `supplies.png`, `storage.png`.
 - Result: Hành trang main tabs, filter chips, toolbar actions, grid cells, and modal close button now share semantic base helpers in `CongDongLamArrivalHud.Skin.cs`; targeted tests guard against per-screen button-size drift.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms typography/buttons are less oversized, but item grid and modal shell still need deeper redesign against owner references.
+
+## 2026-09-13 — Inventory bounded grid evidence
+
+- Evidence: `build/map01a-inventory-bounded-grid-runtime-v1/inventory/bag.png`, `character-info.png`, `character-info-after-supplies.png`, `supplies.png`, `storage.png`.
+- Result: Hành trang grid panel now uses bounded desktop width instead of stretching full-width, reducing wide table-card presentation and keeping detail on the right.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit shows improvement over the previous base-style capture, but final-quality icon art, ornament treatment, and shell richness remain pending.

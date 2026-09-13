@@ -1,3 +1,9 @@
+## Next — Map01A inventory visual polish after bounded grid — 2026-09-13
+
+`CONTINUE`. Evidence mới: `build/map01a-inventory-bounded-grid-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Grid Hành trang đã bớt table-like nhờ khổ bounded 720px và test guard chặn quay lại flex full-width.
+
+Next valid work: tiếp tục Map01A UI-only theo base-first: polish shell/card/ornament, chuẩn hóa icon thật hoặc provenance-backed item art, cải thiện Thông tin/Rương/Login/HUD/NPC dialogue theo reference owner. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated, không dùng test xanh thay visual review.
+
 ## Next — Map01A base-first UI polish, grid/card redesign — 2026-09-13
 
 `CONTINUE`. Batch mới nhất đã khóa rule base-first cho Hành trang: tab/filter/action/grid/close dùng helper chung trong `CongDongLamArrivalHud.Skin.cs`, evidence `build/map01a-inventory-base-style-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Không được xem đây là nghiệm thu mỹ thuật; visual audit vẫn thấy grid item giống bảng ngang và modal còn nhiều khoảng trống.

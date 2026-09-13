@@ -1,3 +1,11 @@
+## Map01A — inventory bounded grid visual audit — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Sau checkpoint base-first, tiếp tục sửa nguyên nhân visual còn thô: `Map01A Inventory Grid Panel` không còn flex full-width; body căn giữa, grid/character/storage panel dùng khổ desktop bounded 720px để item cell không bị kéo thành thẻ ngang giống bảng debug.
+- Guard mới trong EditMode fail đúng khi grid panel còn `flexGrow=1`, sau đó pass khi grid dùng bounded width.
+- Player evidence: `build/map01a-inventory-bounded-grid-runtime-v1/inventory/bag.png`, `character-info.png`, `supplies.png`, `storage.png`, `manifest.json`.
+- Visual audit: bag grid đã gần dạng inventory grid hơn và bớt thô so với `base-style` capture. Vẫn `CONTINUE`, chưa nghiệm thu mỹ thuật vì còn thiếu icon/item art/ornament/provenance-backed assets và modal shell còn cần polish sâu.
+
 ## Map01A — inventory base-first density/style audit — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

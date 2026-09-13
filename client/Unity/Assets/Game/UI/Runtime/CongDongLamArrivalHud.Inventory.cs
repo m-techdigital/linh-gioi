@@ -153,6 +153,7 @@ namespace LinhGioi.UI
             body.style.flexGrow = 1;
             body.style.minHeight = 0;
             body.style.marginTop = 6;
+            body.style.justifyContent = Justify.Center;
             _inventory.Add(body);
 
             _inventoryDetailPanel = InventoryPanel("Map01A Inventory Detail Panel");
@@ -255,7 +256,8 @@ namespace LinhGioi.UI
             _inventoryDetailPanel.Add(actions);
 
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
-            _inventoryGridPanel.style.flexGrow = 1;
+            _inventoryGridPanel.style.flexGrow = 0;
+            _inventoryGridPanel.style.flexBasis = 720;
             _inventoryGridPanel.style.marginRight = 8;
             body.Add(_inventoryGridPanel);
             var gridAccent = new VisualElement { name = "Map01A Inventory Grid Accent Rail" };
@@ -334,7 +336,7 @@ namespace LinhGioi.UI
 
             _inventoryHeroPanel = InventoryPanel("Map01A Inventory Character Panel");
             _inventoryHeroPanel.style.flexGrow = 0;
-            _inventoryHeroPanel.style.flexBasis = 360;
+            _inventoryHeroPanel.style.flexBasis = 720;
             body.Add(_inventoryHeroPanel);
             _inventoryHeroTitle = LgoLabel("", 22, UiGold, true);
             _inventoryHeroMeta = LgoLabel("", 15, new Color(.78f, .94f, .96f, .92f));
@@ -660,8 +662,10 @@ namespace LinhGioi.UI
         private void ShowInventoryMode(bool characterInfo)
         {
             if (characterInfo) ShowInventoryPage(false);
-            _inventoryHeroPanel.style.flexGrow = characterInfo ? 1 : 0;
-            _inventoryGridPanel.style.flexGrow = characterInfo ? 0 : 1;
+            _inventoryHeroPanel.style.flexGrow = 0;
+            _inventoryHeroPanel.style.flexBasis = characterInfo ? 720 : 360;
+            _inventoryGridPanel.style.flexGrow = 0;
+            _inventoryGridPanel.style.flexBasis = characterInfo ? 0 : 720;
             _storagePanel.style.flexGrow = 0;
             _characterInfoOpen = characterInfo;
             _storageOpen = false;

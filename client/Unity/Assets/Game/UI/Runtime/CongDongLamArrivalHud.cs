@@ -287,11 +287,13 @@ namespace LinhGioi.UI
                 var stacked = r.width < 950;
                 var body = _inventory.Q("Map01A Inventory Body");
                 body.style.flexDirection = stacked ? FlexDirection.Column : FlexDirection.Row;
-                _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : StyleKeyword.Auto;
+                _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 720;
                 _inventoryHeroPanel.style.marginRight = 0;
                 _inventoryHeroPanel.style.marginBottom = stacked ? 10 : 0;
+                _inventoryGridPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 720;
                 _inventoryGridPanel.style.marginRight = 0;
                 _inventoryGridPanel.style.marginBottom = stacked ? 10 : 0;
+                _storagePanel.style.flexBasis = stacked ? StyleKeyword.Auto : 720;
                 _storagePanel.style.marginRight = 0;
                 _storagePanel.style.marginBottom = stacked ? 10 : 0;
                 _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 300;

@@ -241,6 +241,11 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory filter chips must use a shared base style instead of local per-button overrides.");
                 Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Not.Null,
                     "Bag category controls should read like compact RPG filter chips, not a pair of full-width debug table tabs.");
+                var inventoryGridPanel = root.Q("Map01A Inventory Grid Panel");
+                Assert.That(inventoryGridPanel.style.flexGrow.value, Is.EqualTo(0),
+                    "Bag grid must not stretch across the whole modal because that turns item cells into wide table cards.");
+                Assert.That(inventoryGridPanel.style.flexBasis.value.value, Is.LessThanOrEqualTo(760),
+                    "Bag grid should use a bounded RPG-inventory width so cells stay close to the owner references.");
                 Assert.That(root.Q<Button>("Map01A Equipment Tab").style.flexGrow.value, Is.EqualTo(0),
                     "Equipment category chip should not stretch across the full bag width.");
                 Assert.That(root.Q<Button>("Map01A Supplies Tab").style.flexGrow.value, Is.EqualTo(0),
