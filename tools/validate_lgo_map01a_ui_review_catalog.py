@@ -18,8 +18,16 @@ ENTRY_EVIDENCE = (
     "build/map01a-entry-remember-runtime-v1/manifest.json",
     "build/map01a-entry-remember-runtime-v1/entry-login.png",
 )
-HUB_MANIFEST = "build/map01a-inventory-search-runtime-v2/manifest.json"
-HUB_FRAMES = ["character-info.png", "bag.png", "skills.png", "potential.png", "spirit-pet.png"]
+HUB_MANIFEST = "build/map01a-search-count-runtime-v3/manifest.json"
+HUB_FRAMES = [
+    "character-info.png",
+    "bag.png",
+    "bag-search-binh-mau.png",
+    "bag-search-binh-mau-selected.png",
+    "skills.png",
+    "potential.png",
+    "spirit-pet.png",
+]
 ROUTE_MANIFEST = "build/map01a-item-detail-runtime-v1/manifest.json"
 ROUTE_FRAMES = ["01-arrival-q01.png", "18-q09-portal-open.png"]
 MENU_EVIDENCE = (
@@ -81,6 +89,8 @@ def validate_root(root: Path = ROOT) -> list[str]:
             "entry-login.png",
             "character-info.png",
             "bag.png",
+            "bag-search-binh-mau.png",
+            "bag-search-binh-mau-selected.png",
             "skills.png",
             "potential.png",
             "spirit-pet.png",

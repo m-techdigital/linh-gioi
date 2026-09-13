@@ -2147,6 +2147,19 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var bag = Path.Combine(directory, "bag.png");
             CaptureScreenPng(bag);
+            var search = document.rootVisualElement.Q<TextField>("Map01A Inventory Search");
+            if (search == null) throw new InvalidOperationException("Missing Map01A inventory search for capture");
+            search.value = "binh mau";
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var bagSearch = Path.Combine(directory, "bag-search-binh-mau.png");
+            CaptureScreenPng(bagSearch);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Health Potion"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var bagSearchSelected = Path.Combine(directory, "bag-search-binh-mau-selected.png");
+            CaptureScreenPng(bagSearchSelected);
+            search.value = string.Empty;
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skills Main Tab"));
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skill Node Kiếm Vũ"));
             yield return null;
@@ -2164,14 +2177,17 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var spiritPet = Path.Combine(directory, "spirit-pet.png");
             CaptureScreenPng(spiritPet);
-            var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(skills) && File.Exists(potential) && File.Exists(spiritPet) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(bagSearch)
+                && File.Exists(bagSearchSelected)
+                && File.Exists(skills) && File.Exists(potential) && File.Exists(spiritPet)
+                ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-inventory-tabs\",\n"
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frames\": [\"character-info.png\", \"bag.png\", \"skills.png\", \"potential.png\", \"spirit-pet.png\"]\n"
+                + "  \"frames\": [\"character-info.png\", \"bag.png\", \"bag-search-binh-mau.png\", \"bag-search-binh-mau-selected.png\", \"skills.png\", \"potential.png\", \"spirit-pet.png\"]\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);

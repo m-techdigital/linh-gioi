@@ -1,3 +1,10 @@
+## Map01A — search count và selection-detail đồng bộ — 2026-09-14
+
+- Rương đồ giờ dùng đúng `visibleItemCount` để phản hồi `N kết quả · 56/120 ô` khi tìm kiếm; xóa query trả badge về sức chứa chuẩn.
+- Tile vật phẩm lọc ra không còn tự tô selected khi detail phải vẫn đang là trang bị. Chỉ sau callback chọn vật phẩm, tile mới sáng và detail phải chuyển đồng bộ sang vật phẩm đó.
+- Capture năm-tab được mở rộng bằng hai frame trước/sau chọn, không dùng chuột/phím OS. Evidence hiện hành: `build/map01a-search-count-runtime-v3/{bag-search-binh-mau,bag-search-binh-mau-selected}.png`; Player build đạt `errors=0`, `warnings=0`.
+- Foreground input gate từ checkpoint trước vẫn giữ nguyên: mọi workspace chặn world input, `Esc` đóng Menu. Không đổi class/pose/wardrobe/source/camera/scale.
+
 ## Map01A — Lưu tài khoản là control thật và chỉ lưu tên local — 2026-09-14
 
 - Audit interaction phát hiện ô `Lưu tài khoản` là decoration luôn có dấu chọn nhưng không nhận click. Runtime giờ dùng button/action có shared base; bật sẽ lưu duy nhất tên tài khoản bằng PlayerPrefs, tên đang nhớ tự cập nhật khi sửa, tắt sẽ xoá key. Mật khẩu không được lưu.
@@ -1632,8 +1639,3 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Hai dòng class/vitals trùng phía trên, stat badge strip và equipment summary trùng đã ẩn để không chiếm chiều cao hoặc chồng đáy. Đây chỉ là bố cục UI thumbnail; không đổi sprite, class art, pose, wardrobe, camera hay runtime actor scale.
 - Capture v1 phát hiện identity sai cột; v2/v3 phát hiện overflow và badge overlap; các bản đó bị loại. Evidence hiện hành duy nhất: `build/map01a-character-hierarchy-runtime-v4/{character-info,bag}.png`; Player `build/map01a-character-hierarchy-player-v4/LinhGioiOnline.app`, build `errors=0`.
 - Full `TwoDCharacterRuntimeStateTests` đạt 20/20; shared-skin validator, 12 unit test, no-3D/no-source, frozen diff và capture log sạch. Visual audit v4: không chồng/cắt, actor/10 slot/detail phải đúng hierarchy; art thumbnail trang bị tối vẫn là art debt hiện hành, không được xử bằng cách mở lại class work.
-## Map01A — foreground workspace khóa world input và Esc đóng Menu — 2026-09-14
-
-- Audit HUD/Menu phát hiện bàn phím vẫn có thể di chuyển, chạy, nhảy hoặc kích hoạt gameplay phía sau Entry, Menu, năm-tab workspace, thoại NPC và character-select. Runtime giờ đi qua một cổng `ShouldBlockWorldInput(...)`; khi bị chặn sẽ hạ run/jump thay vì giữ input cũ.
-- `Esc` giờ đóng Menu trước các workspace khác qua một handler chung. Không đổi route, class, pose, wardrobe, camera, scale hoặc asset nhân vật.
-- TDD xác nhận RED cho cổng/handler thiếu; full `TwoDCharacterRuntimeStateTests` đạt 24/24. Player `build/map01a-modal-input-player-v1/LinhGioiOnline.app` build thành công; Menu evidence `build/map01a-modal-input-runtime-v1/menu.png` đã visual audit ở 1600×900, không vỡ/chồng và capture không dùng chuột/phím OS.

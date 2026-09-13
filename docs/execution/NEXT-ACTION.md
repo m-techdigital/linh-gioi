@@ -1,3 +1,9 @@
+## Next — sau search count và selection-detail đồng bộ — 2026-09-14
+
+`CONTINUE`. Rương đồ hiện báo đúng số kết quả tìm kiếm và chỉ tô selected khi panel chi tiết bên phải đã chuyển sang chính món đó. Evidence hiện hành: `build/map01a-search-count-runtime-v3/{bag-search-binh-mau,bag-search-binh-mau-selected}.png`; Player `build/map01a-search-count-player-v3/LinhGioiOnline.app`.
+
+Foreground input gate vẫn là invariant hiện hành: Entry/Menu/năm-tab/thoại/character-select chặn world input và `Esc` đóng Menu. Next valid work: audit interaction Map01A còn sai rõ hoặc dùng asset UI thật khi có nguồn được duyệt; không quay lại class/pose/wardrobe/source, không tạo art/progression giả và không đổi frozen surfaces.
+
 ## Next — sau remember-account interaction — 2026-09-14
 
 `CONTINUE`. Entry evidence hiện hành là `build/map01a-entry-remember-runtime-v1/entry-login.png`; Player `build/map01a-entry-remember-player-v1/LinhGioiOnline.app`. `Lưu tài khoản` phải là control thật, chỉ lưu tên local và không lưu mật khẩu; auth chưa có backend vẫn phải phản hồi trung thực.
@@ -1482,8 +1488,3 @@ Next valid work: audit và xử lý một sai lệch cấu trúc lớn còn lạ
 `CONTINUE`. Hai tab owner duyệt hiện dùng evidence `build/map01a-character-hierarchy-runtime-v4/{character-info,bag}.png`. Cấu trúc Nhân vật và Rương đồ đã khớp: năm tab compact, full-body giữa 10 slot, detail phải, rail phân loại dọc và một all-items grid. Không quay lại các capture v1–v3 hoặc micro-polish hai tab này; phần còn yếu là art thumbnail trang bị hiện hành và không được giải quyết bằng cách resume class/wardrobe.
 
 Next valid work: chuyển sang một batch HUD/NPC dialogue theo owner gameplay reference và shared base, ưu tiên sai lệch cấu trúc/interaction có thể nhìn thấy trên Player. Nếu không còn sai lệch cấu trúc lớn, xử lý screen/interaction Map01A còn thiếu theo roadmap; không mở class/pose/wardrobe, không rollback code class và không đổi frozen surfaces.
-## Next — sau foreground input gate — 2026-09-14
-
-`CONTINUE`. Entry, Menu, năm-tab workspace, thoại NPC và character-select phải chặn toàn bộ world movement/combat input phía sau; `Esc` đóng Menu qua handler chung. Evidence Menu hiện hành là `build/map01a-modal-input-runtime-v1/menu.png`; Player `build/map01a-modal-input-player-v1/LinhGioiOnline.app`.
-
-Next valid work: audit một interaction Map01A còn sai rõ bằng Player hoặc chuyển sang asset UI thật có provenance khi nguồn được duyệt. Không quay lại login vi chỉnh, class/pose/wardrobe/source, không tạo progression/art giả và không đổi frozen surfaces.

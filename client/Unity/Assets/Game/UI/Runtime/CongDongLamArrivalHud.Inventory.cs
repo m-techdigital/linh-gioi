@@ -792,6 +792,12 @@ namespace LinhGioi.UI
                     : "Không tìm thấy vật phẩm phù hợp.";
                 _suppliesEmptyState.style.display = visibleItemCount == 0 ? DisplayStyle.Flex : DisplayStyle.None;
             }
+            if (_inventoryCountBadge != null)
+            {
+                _inventoryCountBadge.text = string.IsNullOrEmpty(_inventorySearchQuery)
+                    ? "56/120 ô"
+                    : visibleItemCount + " kết quả · 56/120 ô";
+            }
         }
 
         private void RefreshInventorySupplyRows()
@@ -808,7 +814,7 @@ namespace LinhGioi.UI
 
         private void RefreshSupplyRow(Button button, Label nameLabel, Label countLabel, Label stateLabel, string itemId, string label, int count, string state)
         {
-            var selected = _selectedSupplyItemId == itemId;
+            var selected = _suppliesOpen && _selectedSupplyItemId == itemId;
             button.text = string.Empty;
             if (nameLabel != null) nameLabel.text = label;
             if (countLabel != null) countLabel.text = "x" + count;
@@ -867,7 +873,8 @@ namespace LinhGioi.UI
             if (_characterHeroPower != null) _characterHeroPower.text = "LC 245.780";
             if (_characterHeroVitals != null) _characterHeroVitals.text = "HP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
             if (_characterHeroLoadout != null) _characterHeroLoadout.text = "Trang bị " + _scene.VoEquippedSlotCount + "/10 · Lv" + _scene.VoAvatarLevel;
-            if (_inventoryCountBadge != null) _inventoryCountBadge.text = "56/120 ô";
+            if (_inventoryCountBadge != null && string.IsNullOrEmpty(_inventorySearchQuery))
+                _inventoryCountBadge.text = "56/120 ô";
 
             var portraitSprite = _scene.GetVoAvatarThumbnailSprite();
             if (_characterHeroPortrait != null)

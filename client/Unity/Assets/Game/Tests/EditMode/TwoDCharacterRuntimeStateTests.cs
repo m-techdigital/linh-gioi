@@ -918,11 +918,19 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Health Potion").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q<Button>("Map01A Mana Potion").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
-                InvokeBoundButton(root.Q<Button>("Map01A Health Potion"));
+                Assert.That(root.Q<Label>("Map01A Inventory Count Badge").text, Is.EqualTo("1 kết quả · 56/120 ô"),
+                    "Search feedback must show the number of real matching items instead of leaving the capacity badge unchanged.");
+                var healthPotion = root.Q<Button>("Map01A Health Potion");
+                Assert.That(healthPotion.style.backgroundColor.value.b, Is.LessThan(.3f),
+                    "A filtered result must not look selected while the right-side detail still belongs to equipment.");
+                InvokeBoundButton(healthPotion);
+                Assert.That(healthPotion.style.backgroundColor.value.b, Is.GreaterThan(.5f),
+                    "Selecting the result must synchronize its highlight with the right-side detail.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").text, Is.EqualTo("Bình Máu Nhỏ"));
 
                 search.value = "";
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Inventory Count Badge").text, Is.EqualTo("56/120 ô"));
             }
             finally
             {
