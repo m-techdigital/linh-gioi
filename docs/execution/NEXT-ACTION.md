@@ -1338,3 +1338,9 @@ Next valid work: tiếp tục Map01A/UI-only theo bộ design owner đã duyệt
 `CONTINUE`. Entry hiện hành dùng evidence `build/map01a-entry-auth-hierarchy-runtime-v1/entry-login.png`: Đăng nhập xanh, Đăng ký viền vàng và Bắt đầu vàng, tất cả qua shared Skin. Không dùng capture entry cũ để review và không tiếp tục chỉnh khoảng cách/màu lẻ trên màn này.
 
 Next valid work: tiếp tục Map01A/UI-only theo bộ năm tab owner duyệt, đối chiếu Player character hub với hai ảnh `01-nhan-vat-nam-tab-compact-APPROVED.png` và `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png`; chỉ xử lý sai lệch cấu trúc/interaction lớn còn lại qua shared base. Giữ năm tab compact, Rương đồ có rail phân loại dọc, detail món ở bên phải; không khôi phục hàng tab phụ hoặc cột preview thứ ba. Không resume class/wardrobe/pose/source và không rollback code class.
+
+## Next — sau unified Rương đồ grid — 2026-09-14
+
+`CONTINUE`. Evidence hiện hành cho Rương đồ là `build/map01a-bag-unified-grid-runtime-v1/bag.png`: main-tab switch đã reset đúng về Tất cả và mọi item nằm trong một wrapping grid. Không khôi phục hai group/page dọc hoặc filter Trang bị mặc định.
+
+Next valid work: audit và xử lý một sai lệch cấu trúc lớn còn lại ở tab Nhân vật so với `01-nhan-vat-nam-tab-compact-APPROVED.png`, ưu tiên hierarchy full-body + 10 slot + detail phải; không chỉnh/capture class art, pose, wardrobe, camera hay scale. Nếu Player hiện hành đã đáp ứng cấu trúc và chỉ còn nợ art chất lượng, ghi rõ art debt rồi chuyển sang HUD/NPC dialogue theo design owner, không tiếp tục micro-polish.

@@ -667,6 +667,22 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(scene.InventoryOpen, Is.True);
                     Assert.That(root.Q(view.Item2).style.display.value, Is.EqualTo(DisplayStyle.Flex), view.Item1);
                     Assert.That(root.Q<Label>("Map01A Inventory Modal Title").text, Is.EqualTo(view.Item3), view.Item1);
+                    if (view.Item1 == "bag")
+                    {
+                        var itemsGrid = root.Q("Map01A Inventory Items Grid");
+                        var equipmentItem = root.Q<Button>("Map01A Equipment Item Tile main_weapon");
+                        var supplyItem = root.Q<Button>("Map01A Health Potion");
+                        Assert.That(itemsGrid.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                        Assert.That(equipmentItem.style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                            "Opening Rương đồ from another main tab must restore equipment in the approved Tất cả view.");
+                        Assert.That(supplyItem.style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                            "The approved Tất cả view must show actual inventory items alongside equipment.");
+                        Assert.That(equipmentItem.parent, Is.EqualTo(supplyItem.parent),
+                            "Tất cả must use one shared wrapping grid so item groups do not fall into separate off-screen pages.");
+                        Assert.That(root.Q<Button>("Map01A All Items Category").style.backgroundColor.value.b,
+                            Is.GreaterThan(root.Q<Button>("Map01A Equipment Tab").style.backgroundColor.value.b),
+                            "The category rail must visibly select Tất cả when Rương đồ opens.");
+                    }
                 }
                 Assert.That(root.Q<Button>("Map01A Skill Upgrade Action").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False);
@@ -706,7 +722,7 @@ namespace LinhGioi.Tests.EditMode
                     .Invoke(hud, null);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 InvokeBoundButton(root.Q<Button>("Map01A Supplies Tab"));
-                Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Items Grid").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Footer").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 var potion = root.Q<Button>("Map01A Health Potion");
                 Assert.That(potion, Is.Not.Null);

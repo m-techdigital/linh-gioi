@@ -6,11 +6,12 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private VisualElement _equipmentPage, _suppliesPage, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterHeroLeftEquipmentRail, _characterHeroRightEquipmentRail, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard, _inventoryCategoryRail;
+        private VisualElement _inventoryItemsGrid, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterHeroLeftEquipmentRail, _characterHeroRightEquipmentRail, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard, _inventoryCategoryRail;
         private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroVitals, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState;
         private Button _bagTab, _characterInfoTab, _skillsTab, _potentialTab, _spiritPetTab, _allItemsTab, _equipmentTab, _suppliesTab, _materialsTab, _otherItemsTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
+        private VisualElement[] _emptyBagSlots;
         private VisualElement[] _equipmentTileIcons, _equipmentRowIcons, _characterHeroQuickIcons;
         private Label[] _equipmentTileNames, _equipmentTileStates, _equipmentRowNames, _equipmentRowStates;
         private Label _healthPotionName, _healthPotionCount, _healthPotionState, _manaPotionName, _manaPotionCount, _manaPotionState, _classRewardName, _classRewardCount, _classRewardState;
@@ -524,10 +525,11 @@ namespace LinhGioi.UI
             _inventoryGender = InventoryButton(() => _scene.CycleVoAvatarGender(), "Map01A Inventory Gender");
             identity.Add(_equipmentClass); identity.Add(_inventoryGender); _inventoryHeroPanel.Add(identity);
 
-            _equipmentPage = new VisualElement { name = "Map01A Equipment Page" };
-            _equipmentPage.style.flexDirection = FlexDirection.Row;
-            _equipmentPage.style.flexWrap = Wrap.Wrap;
-            _equipmentPage.style.flexShrink = 0;
+            _inventoryItemsGrid = new VisualElement { name = "Map01A Inventory Items Grid" };
+            _inventoryItemsGrid.style.flexDirection = FlexDirection.Row;
+            _inventoryItemsGrid.style.flexWrap = Wrap.Wrap;
+            _inventoryItemsGrid.style.flexShrink = 0;
+            scroll.Add(_inventoryItemsGrid);
             _equipmentTiles = new Button[_equipmentSlotIds.Count];
             _equipmentTileIcons = new VisualElement[_equipmentSlotIds.Count];
             _equipmentTileNames = new Label[_equipmentSlotIds.Count];
@@ -572,43 +574,34 @@ namespace LinhGioi.UI
                 _equipmentTileIcons[i] = icon;
                 _equipmentTileNames[i] = nameLabel;
                 _equipmentTileStates[i] = stateLabel;
-                _equipmentPage.Add(tile);
+                _inventoryItemsGrid.Add(tile);
             }
-            for (var emptyIndex = 1; emptyIndex <= 4; emptyIndex++)
-            {
-                var emptySlot = new VisualElement { name = $"Map01A Empty Bag Slot {emptyIndex:00}" };
-                ApplyLgoInventoryGridCell(emptySlot);
-                ApplyLgoFrame(emptySlot, new Color(.020f, .060f, .088f, .58f), new Color(.50f, .58f, .58f, .32f));
-                var emptyMark = LgoLabel("", 10, new Color(.48f, .58f, .62f, .34f));
-                emptyMark.text = "·";
-                emptyMark.style.unityTextAlign = TextAnchor.MiddleCenter;
-                emptySlot.Add(emptyMark);
-                _equipmentPage.Add(emptySlot);
-            }
-            scroll.Add(_equipmentPage);
-
-            _suppliesPage = new VisualElement { name = "Map01A Supplies Page" };
-            _suppliesPage.style.flexDirection = FlexDirection.Row;
-            _suppliesPage.style.flexWrap = Wrap.Wrap;
-            _suppliesPage.style.flexShrink = 0;
-            _questItemActions = new VisualElement { name = "Map01A Quest Item Actions" };
-            _questItemActions.style.flexDirection = FlexDirection.Row;
-            _questItemActions.style.flexWrap = Wrap.Wrap;
+            _questItemActions = _inventoryItemsGrid;
             _healthPotion = SupplyItemRow(() => SelectInventorySupply("health_potion"), "Map01A Health Potion", "health_potion", out _healthPotionName, out _healthPotionCount, out _healthPotionState);
             _manaPotion = SupplyItemRow(() => SelectInventorySupply("mana_potion"), "Map01A Mana Potion", "mana_potion", out _manaPotionName, out _manaPotionCount, out _manaPotionState);
             _equipReward = SupplyItemRow(() => SelectInventorySupply("class_reward"), "Map01A Equip Reward", "class_reward", out _classRewardName, out _classRewardCount, out _classRewardState);
-            _questItemActions.Add(_healthPotion);
-            _questItemActions.Add(_manaPotion);
-            _questItemActions.Add(_equipReward);
-            _suppliesPage.Add(_questItemActions);
+            _inventoryItemsGrid.Add(_healthPotion);
+            _inventoryItemsGrid.Add(_manaPotion);
+            _inventoryItemsGrid.Add(_equipReward);
+            _emptyBagSlots = new VisualElement[4];
+            for (var emptyIndex = 0; emptyIndex < _emptyBagSlots.Length; emptyIndex++)
+            {
+                var emptySlot = new VisualElement { name = $"Map01A Empty Bag Slot {emptyIndex + 1:00}" };
+                ApplyLgoInventoryGridCell(emptySlot);
+                ApplyLgoFrame(emptySlot, new Color(.020f, .060f, .088f, .58f), new Color(.50f, .58f, .58f, .32f));
+                var emptyMark = LgoLabel("·", 10, new Color(.48f, .58f, .62f, .34f));
+                emptyMark.style.unityTextAlign = TextAnchor.MiddleCenter;
+                emptySlot.Add(emptyMark);
+                _emptyBagSlots[emptyIndex] = emptySlot;
+                _inventoryItemsGrid.Add(emptySlot);
+            }
             _inventorySummary = LgoLabel("", 12, UiSubText);
             _inventorySummary.style.display = DisplayStyle.None;
-            _suppliesPage.Add(_inventorySummary);
+            _inventoryItemsGrid.Add(_inventorySummary);
             _suppliesEmptyState = LgoLabel("", 15, new Color(.70f, .80f, .80f, .92f));
             _suppliesEmptyState.name = "Map01A Supplies Empty State";
             _suppliesEmptyState.style.display = DisplayStyle.None;
-            _suppliesPage.Add(_suppliesEmptyState);
-            scroll.Add(_suppliesPage);
+            _inventoryItemsGrid.Add(_suppliesEmptyState);
 
             InitializeCharacterHub(body);
             body.Add(_inventoryDetailPanel);
@@ -662,7 +655,7 @@ namespace LinhGioi.UI
         private void ShowInventoryMode(bool characterInfo)
         {
             HideCharacterHubPreviewPanels();
-            if (characterInfo) ShowInventoryCategory("equipment");
+            ShowInventoryCategory(characterInfo ? "equipment" : "all");
             _inventoryHeroPanel.style.flexGrow = 0;
             _inventoryHeroPanel.style.flexBasis = InventoryDesktopMainColumnWidth;
             _inventoryGridPanel.style.flexGrow = 0;
@@ -705,8 +698,11 @@ namespace LinhGioi.UI
             var showSupplies = category == "all" || category == "items";
             _suppliesOpen = category == "items";
             RefreshInventoryEquipmentTiles();
-            _equipmentPage.style.display = showEquipment ? DisplayStyle.Flex : DisplayStyle.None;
-            _suppliesPage.style.display = showSupplies ? DisplayStyle.Flex : DisplayStyle.None;
+            foreach (var tile in _equipmentTiles) tile.style.display = showEquipment ? DisplayStyle.Flex : DisplayStyle.None;
+            foreach (var supply in new[] { _healthPotion, _manaPotion, _equipReward })
+                supply.style.display = showSupplies ? DisplayStyle.Flex : DisplayStyle.None;
+            foreach (var emptySlot in _emptyBagSlots)
+                emptySlot.style.display = category == "all" ? DisplayStyle.Flex : DisplayStyle.None;
             _inventoryFooter.style.display = DisplayStyle.Flex;
             _inventoryDetailPanel.style.display = DisplayStyle.Flex;
             ApplyLgoSelectedTab(_allItemsTab, category == "all");

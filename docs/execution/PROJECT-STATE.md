@@ -1465,3 +1465,10 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - TDD: test Entry xác nhận hai semantic class, màu/hierarchy và chiều cao compact; targeted Unity EditMode đạt 1/1. Shared-skin validator đạt, 12 unit test đạt.
 - Player build: `build/map01a-entry-auth-hierarchy-player-v1/LinhGioiOnline.app`; capture thật `build/map01a-entry-auth-hierarchy-runtime-v1/entry-login.png`, manifest ghi `usesOsMouseOrKeyboard=false`. Đã xem trực tiếp: không vỡ/cắt, phân cấp action rõ và scene Map01A vẫn đọc được.
 - Trạng thái `CONTINUE`: đây là checkpoint visual có giới hạn, chưa phải nghiệm thu toàn bộ UI. Tiếp tục theo design owner đã duyệt và shared base; không quay lại chỉnh vụn entry khi chưa có art/logo final.
+
+## Map01A — Rương đồ unified all-items grid checkpoint, still CONTINUE — 2026-09-14
+
+- Đối chiếu Player với `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` phát hiện state không đồng nhất: sau khi chuyển từ Nhân vật, rail Rương đồ còn chọn Trang bị nên 3 vật phẩm thật nằm ở page thứ hai ngoài khung nhìn.
+- Root cause là `ShowInventoryMode(false)` giữ filter `equipment`; đã sửa để Rương đồ mở mặc định ở `Tất cả`. Trang bị, bình máu, bình linh lực và phần thưởng nay dùng một shared wrapping grid; rail phân loại dọc và detail bên phải giữ nguyên.
+- TDD có RED xác nhận `Supplies Page=None`, RED tiếp theo xác nhận hai nhóm có parent khác nhau; GREEN full `TwoDCharacterRuntimeStateTests` đạt 20/20. Shared-skin validator, 12 unit test, no-3D/no-source và frozen diff audit đều đạt.
+- Player build `build/map01a-bag-unified-grid-player-v1/LinhGioiOnline.app`, `errors=0`; evidence `build/map01a-bag-unified-grid-runtime-v1/bag.png`, manifest không dùng chuột/phím OS. Visual audit xác nhận `Tất cả` được chọn và ba item thật xuất hiện ngay trong hàng tiếp theo, không vỡ detail hoặc category rail.
