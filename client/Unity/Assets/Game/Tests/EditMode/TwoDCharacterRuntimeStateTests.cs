@@ -226,6 +226,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(emptyBagSlot, Is.Not.Null,
                     "Bag layout should reserve empty inventory cells so the screen reads as a game bag grid, not a sparse debug list.");
                 Assert.That(emptyBagSlot.style.flexBasis.value.value, Is.LessThanOrEqualTo(17f));
+                Assert.That(root.Q<Label>("Map01A Inventory Count Badge"), Is.Not.Null,
+                    "Bag tab should show an inventory capacity badge like a real bag screen, not only a raw item grid.");
+                Assert.That(root.Q("Map01A Inventory Bottom Actions"), Is.Not.Null,
+                    "Bag tab needs a bottom action bar so the modal reads as game inventory instead of a debug table.");
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
@@ -233,6 +237,18 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")), Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Character Panel"))),
                     "Item detail must stay on the right side of character equipment slots.");
+                Assert.That(root.Q("Map01A Character Hero Card"), Is.Not.Null,
+                    "Character-info must start with a rich hero/equipment overview card instead of a plain technical slot table.");
+                Assert.That(root.Q("Map01A Character Hero Portrait"), Is.Not.Null,
+                    "The hero card needs a visible portrait/equipment frame so the screen reads like character UI.");
+                Assert.That(root.Q<Label>("Map01A Character Hero Name").text, Does.Contain("LụcThiên"));
+                Assert.That(root.Q<Label>("Map01A Character Hero Power").text, Does.Contain("LC"));
+                Assert.That(root.Q("Map01A Character Hero Loadout Strip"), Is.Not.Null,
+                    "The hero card should summarize equipped-slot state before the detailed list.");
+                Assert.That(root.Q("Map01A Character Stat Strip"), Is.Not.Null,
+                    "Character-info needs a compact stat strip so it reads like the owner reference character panel.");
+                Assert.That(root.Q("Map01A Character Loadout Matrix"), Is.Not.Null,
+                    "Character-info needs a named loadout matrix instead of an anonymous wrapped technical list.");
 
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));

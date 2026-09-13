@@ -1,3 +1,9 @@
+## Hiện hành — Map01A/UI visual redesign vẫn CONTINUE — 2026-09-13
+
+`CONTINUE`. Batch mới nhất chỉ là checkpoint an toàn để chặn vòng lặp “test xanh nhưng nhìn xa design”: evidence `build/map01a-inventory-shell-polish-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Đánh giá bằng mắt: có thêm capacity badge/action bar/stat strip/loadout matrix nhưng vẫn chưa đạt sát design owner; không được gọi là hoàn thành UI.
+
+Next valid work: tiếp tục Map01A UI/UX redesign sâu với shared component/base: làm inventory/character-info ít giống bảng debug hơn, tăng card hierarchy/ornament/visual density, chuẩn hóa font/button size, chuẩn bị/đấu nối icon thật khi có provenance. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated, không mở storage transaction thật nếu thiếu model/API. Mỗi batch visible phải có Player screenshot review; visual xấu là `FIX_REQUIRED`, không phải completed.
+
 ## Hiện hành — Map01A/UI visual audit sau hierarchy polish — 2026-09-13
 
 `CONTINUE`. Đã có checkpoint nhỏ cho login/hành trang: bỏ copy debug trên login, polish hierarchy detail/vật phẩm, thêm audit nguồn icon thật. Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.png` và `build/map01a-ui-hierarchy-polish-runtime-v2/inventory/{bag,character-info,supplies,storage}.png`. Kết luận visual: chưa đủ gần design owner; đây chỉ là `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, không phải nghiệm thu UI. Next valid work: tiếp tục Map01A UI/UX redesign sâu bằng shared skin/base components, ưu tiên logo/ornament/card hierarchy/HUD/dialogue/inventory visual richness; chỉ dùng runtime/approved/provenance-backed assets, không icon giả/random, không class/wardrobe/pose, không rollback class code.

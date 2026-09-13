@@ -6,12 +6,12 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _storageGateCard;
-        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageGateTitle, _storageState, _storageGateSafety;
+        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _storageGateCard, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions;
+        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroVitals, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageGateTitle, _storageState, _storageGateSafety;
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
-        private VisualElement[] _equipmentTileIcons, _equipmentRowIcons;
+        private VisualElement[] _equipmentTileIcons, _equipmentRowIcons, _characterHeroQuickIcons;
         private Label[] _equipmentTileNames, _equipmentTileStates, _equipmentRowNames, _equipmentRowStates;
         private Label _healthPotionName, _healthPotionCount, _healthPotionState, _manaPotionName, _manaPotionCount, _manaPotionState, _classRewardName, _classRewardCount, _classRewardState;
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
@@ -53,6 +53,21 @@ namespace LinhGioi.UI
             panel.style.minWidth = 0;
             return panel;
         }
+
+        private static Label InventoryBadge(string name, string text, Color color)
+        {
+            var badge = LgoLabel(text, 13, color, true);
+            badge.name = name;
+            badge.style.paddingLeft = 10;
+            badge.style.paddingRight = 10;
+            badge.style.paddingTop = 4;
+            badge.style.paddingBottom = 4;
+            badge.style.marginRight = 6;
+            badge.style.unityTextAlign = TextAnchor.MiddleCenter;
+            ApplyLgoFrame(badge, new Color(.018f, .060f, .096f, .88f), new Color(.72f, .62f, .38f, .62f));
+            return badge;
+        }
+
 
         private Button SupplyItemRow(Action action, string name, string itemId, out Label nameLabel, out Label countLabel, out Label stateLabel)
         {
@@ -231,6 +246,21 @@ namespace LinhGioi.UI
             _suppliesTab = InventoryButton(() => ShowInventoryPage(true), "Map01A Supplies Tab", "Vật phẩm");
             tabs.Add(_equipmentTab); tabs.Add(_suppliesTab); _inventoryGridPanel.Add(tabs);
 
+            var gridStatus = InventoryRow("Map01A Inventory Grid Status");
+            gridStatus.style.alignItems = Align.Center;
+            gridStatus.style.marginTop = 2;
+            gridStatus.style.marginBottom = 8;
+            _inventoryCountBadge = InventoryBadge("Map01A Inventory Count Badge", "56/120 ô", new Color(.86f, .94f, .90f, .96f));
+            gridStatus.Add(_inventoryCountBadge);
+            var equippedBadge = InventoryBadge("Map01A Inventory Equipped Badge", "10/10 đang mặc", new Color(.76f, 1f, .70f, .94f));
+            gridStatus.Add(equippedBadge);
+            var gridStatusSpacer = new VisualElement();
+            gridStatusSpacer.style.flexGrow = 1;
+            gridStatus.Add(gridStatusSpacer);
+            var sortBadge = InventoryBadge("Map01A Inventory Sort Badge", "Sắp xếp: mặc định", UiSubText);
+            gridStatus.Add(sortBadge);
+            _inventoryGridPanel.Add(gridStatus);
+
             var scroll = new ScrollView(ScrollViewMode.Vertical)
             {
                 name = "LGO Inventory Scroll",
@@ -243,6 +273,20 @@ namespace LinhGioi.UI
                 scroll.contentContainer.style.width = evt.newRect.width);
             _inventoryGridPanel.Add(scroll);
 
+            _inventoryBottomActions = InventoryRow("Map01A Inventory Bottom Actions");
+            _inventoryBottomActions.style.marginTop = 8;
+            _inventoryBottomActions.style.marginBottom = 0;
+            var sortButton = InventoryButton(() => { }, "Map01A Inventory Sort Action", "Sắp xếp");
+            var splitButton = InventoryButton(() => { }, "Map01A Inventory Split Action", "Tách");
+            var quickSellButton = InventoryButton(() => { }, "Map01A Inventory Quick Sell Action", "Bán nhanh");
+            ApplyLgoDisabledAction(sortButton);
+            ApplyLgoDisabledAction(splitButton);
+            ApplyLgoDisabledAction(quickSellButton);
+            _inventoryBottomActions.Add(sortButton);
+            _inventoryBottomActions.Add(splitButton);
+            _inventoryBottomActions.Add(quickSellButton);
+            _inventoryGridPanel.Add(_inventoryBottomActions);
+
             _inventoryHeroPanel = InventoryPanel("Map01A Inventory Character Panel");
             _inventoryHeroPanel.style.flexGrow = 0;
             _inventoryHeroPanel.style.flexBasis = 360;
@@ -251,6 +295,70 @@ namespace LinhGioi.UI
             _inventoryHeroMeta = LgoLabel("", 15, new Color(.78f, .94f, .96f, .92f));
             _inventoryHeroPanel.Add(_inventoryHeroTitle);
             _inventoryHeroPanel.Add(_inventoryHeroMeta);
+
+            _characterHeroCard = new VisualElement { name = "Map01A Character Hero Card" };
+            _characterHeroCard.style.flexDirection = FlexDirection.Row;
+            _characterHeroCard.style.alignItems = Align.Center;
+            _characterHeroCard.style.paddingLeft = _characterHeroCard.style.paddingRight = 12;
+            _characterHeroCard.style.paddingTop = _characterHeroCard.style.paddingBottom = 10;
+            _characterHeroCard.style.marginTop = 10;
+            _characterHeroCard.style.marginBottom = 8;
+            ApplyLgoDetailCard(_characterHeroCard);
+            _inventoryHeroPanel.Add(_characterHeroCard);
+
+            _characterHeroPortrait = new VisualElement { name = "Map01A Character Hero Portrait" };
+            ApplyLgoItemIcon(_characterHeroPortrait);
+            _characterHeroPortrait.style.width = 86;
+            _characterHeroPortrait.style.height = 110;
+            _characterHeroPortrait.style.marginRight = 12;
+            _characterHeroPortrait.style.marginTop = 0;
+            _characterHeroPortrait.style.marginBottom = 0;
+            _characterHeroCard.Add(_characterHeroPortrait);
+
+            var heroInfo = new VisualElement { name = "Map01A Character Hero Info" };
+            heroInfo.style.flexGrow = 1;
+            heroInfo.style.minWidth = 0;
+            heroInfo.style.flexDirection = FlexDirection.Column;
+            _characterHeroName = LgoLabel("", 19, UiGold, true);
+            _characterHeroName.name = "Map01A Character Hero Name";
+            _characterHeroPower = LgoLabel("", 17, new Color(.96f, .91f, .76f, .96f), true);
+            _characterHeroPower.name = "Map01A Character Hero Power";
+            _characterHeroVitals = LgoLabel("", 13, UiSubText);
+            _characterHeroVitals.name = "Map01A Character Hero Vitals";
+            _characterHeroLoadout = LgoLabel("", 13, new Color(.76f, 1f, .70f, .94f), true);
+            _characterHeroLoadout.name = "Map01A Character Hero Loadout";
+            _characterHeroLoadoutStrip = new VisualElement { name = "Map01A Character Hero Loadout Strip" };
+            _characterHeroLoadoutStrip.style.flexDirection = FlexDirection.Row;
+            _characterHeroLoadoutStrip.style.marginTop = 8;
+            _characterHeroQuickIcons = new VisualElement[4];
+            for (var heroIconIndex = 0; heroIconIndex < _characterHeroQuickIcons.Length; heroIconIndex++)
+            {
+                var quickIcon = new VisualElement { name = "Map01A Character Hero Quick Icon " + heroIconIndex };
+                ApplyLgoItemIcon(quickIcon);
+                quickIcon.style.width = 34;
+                quickIcon.style.height = 34;
+                quickIcon.style.marginTop = 0;
+                quickIcon.style.marginBottom = 0;
+                quickIcon.style.marginRight = 6;
+                _characterHeroQuickIcons[heroIconIndex] = quickIcon;
+                _characterHeroLoadoutStrip.Add(quickIcon);
+            }
+            heroInfo.Add(_characterHeroName);
+            heroInfo.Add(_characterHeroPower);
+            heroInfo.Add(_characterHeroVitals);
+            heroInfo.Add(_characterHeroLoadout);
+            heroInfo.Add(_characterHeroLoadoutStrip);
+            _characterHeroCard.Add(heroInfo);
+
+            _characterStatStrip = new VisualElement { name = "Map01A Character Stat Strip" };
+            _characterStatStrip.style.flexDirection = FlexDirection.Row;
+            _characterStatStrip.style.marginTop = 2;
+            _characterStatStrip.style.marginBottom = 8;
+            _characterStatStrip.Add(InventoryBadge("Map01A Character HP Badge", "HP 60/100", new Color(.95f, .70f, .70f, .96f)));
+            _characterStatStrip.Add(InventoryBadge("Map01A Character MP Badge", "MP 50/100", new Color(.66f, .84f, 1f, .96f)));
+            _characterStatStrip.Add(InventoryBadge("Map01A Character Gear Badge", "10/10 Lv1", new Color(.76f, 1f, .70f, .94f)));
+            _inventoryHeroPanel.Add(_characterStatStrip);
+
             var heroDivider = new VisualElement();
             heroDivider.style.height = 1; heroDivider.style.marginTop = heroDivider.style.marginBottom = 10;
             heroDivider.style.backgroundColor = new Color(.75f, .60f, .32f, .45f);
@@ -258,7 +366,8 @@ namespace LinhGioi.UI
             _equipmentTitle = LgoLabel("", 16, new Color(.95f, .86f, .58f, .96f), true);
             _inventoryHeroPanel.Add(_equipmentTitle);
 
-            var equipmentSlots = new VisualElement { name = "Map01A Equipment Grid" };
+            _characterLoadoutMatrix = new VisualElement { name = "Map01A Character Loadout Matrix" };
+            var equipmentSlots = _characterLoadoutMatrix;
             equipmentSlots.style.flexGrow = 1;
             equipmentSlots.style.minHeight = 0;
             equipmentSlots.style.flexDirection = FlexDirection.Row;
@@ -651,6 +760,34 @@ namespace LinhGioi.UI
                     _equipmentTileIcons[index].style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
                     _equipmentTileIcons[index].style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
                 }
+            }
+            RefreshCharacterHeroCard();
+        }
+
+        private void RefreshCharacterHeroCard()
+        {
+            if (_scene == null || _characterHeroCard == null) return;
+            var gender = _scene.VoAvatarGender == "female" ? "Nữ" : "Nam";
+            if (_characterHeroName != null) _characterHeroName.text = "LụcThiên · " + _scene.ActiveEquipmentClassLabel + " " + gender;
+            if (_characterHeroPower != null) _characterHeroPower.text = "LC 245.780";
+            if (_characterHeroVitals != null) _characterHeroVitals.text = "HP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
+            if (_characterHeroLoadout != null) _characterHeroLoadout.text = "Trang bị " + _scene.VoEquippedSlotCount + "/10 · Lv" + _scene.VoAvatarLevel;
+            if (_inventoryCountBadge != null) _inventoryCountBadge.text = "56/120 ô";
+
+            var portraitSprite = _scene.GetVoEquipmentThumbnailSprite(_scene.VoSelectedEquipmentSlot)
+                ?? _scene.GetVoEquipmentThumbnailSprite("main_weapon");
+            if (_characterHeroPortrait != null)
+            {
+                _characterHeroPortrait.style.backgroundImage = portraitSprite == null ? StyleKeyword.None : new StyleBackground(portraitSprite);
+                _characterHeroPortrait.style.display = portraitSprite == null ? DisplayStyle.None : DisplayStyle.Flex;
+            }
+            if (_characterHeroQuickIcons == null || _equipmentSlotIds == null) return;
+            for (var i = 0; i < _characterHeroQuickIcons.Length; i++)
+            {
+                var slot = i < _equipmentSlotIds.Count ? _equipmentSlotIds[i] : null;
+                var sprite = string.IsNullOrEmpty(slot) ? null : _scene.GetVoEquipmentThumbnailSprite(slot);
+                _characterHeroQuickIcons[i].style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+                _characterHeroQuickIcons[i].style.display = sprite == null ? DisplayStyle.None : DisplayStyle.Flex;
             }
         }
 

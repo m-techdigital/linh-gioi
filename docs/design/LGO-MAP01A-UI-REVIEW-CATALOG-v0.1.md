@@ -65,3 +65,10 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-shared-skin-density-runtime-v1/entry/entry-login.png` and `build/map01a-shared-skin-density-runtime-v1/inventory/{bag,character-info,character-info-after-supplies,supplies,storage}.png`.
 - Result: shared button/tab/detail/card density is less oversized; entry primary CTA and inventory tabs now have regression coverage so they do not drift back to prototype/web-control scale.
 - Review status: technical visual checkpoint only. Manual review still finds the login too form-like and inventory too table-like versus owner references. Continue with deeper shell redesign and approved art/asset treatment before owner acceptance.
+
+
+## 2026-09-13 — Inventory shell polish/runtime audit evidence
+
+- Evidence: `build/map01a-inventory-shell-polish-runtime-v1/inventory/bag.png`, `character-info.png`, `character-info-after-supplies.png`, `supplies.png`, `storage.png`.
+- Result: Hành trang now has capacity/equipped badges and bottom actions; Thông tin now has a named stat strip and loadout matrix.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit still finds the inventory shell table-like and below the uploaded design references. Dedicated portrait/full-body/item icon art remains pending provenance-backed assets; do not fill the gap with fake/generated/random icons.
