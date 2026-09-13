@@ -86,6 +86,8 @@ Edit source/native layers only enough to complete all six poses for `outer_top`,
 
 Prep evidence 2026-09-13: `tools/inspect_lgo_source_png_inventory.py` wrote `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/current-input-image-inventory.json`. Existing idle/run candidates can be reused only as references: `preview-on-*` and review-board PNGs are full-alpha/RGB/composite preview files, not clean layer source. Do not pack these files directly; export new A/B front/back layer PNGs in the fixed candidate directories.
 
+Current repair gate 2026-09-13: `tools/audit_lgo_six_pose_repair_source_layers.py` wrote `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-layer-audit-v1.json`, status `SOURCE_REPAIR_LAYER_GAP`. All three fixed candidate directories currently have `present=0/24`; this is expected before source authoring and must not be treated as a packable state.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.
