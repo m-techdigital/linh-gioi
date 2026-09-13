@@ -6,8 +6,8 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel;
-        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageState;
+        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _storageGateCard;
+        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageGateTitle, _storageState, _storageGateSafety;
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
@@ -226,11 +226,24 @@ namespace LinhGioi.UI
             _storagePanel.style.flexGrow = 1;
             _storagePanel.style.marginRight = 0;
             body.Add(_storagePanel);
-            _storagePanel.Add(LgoLabel("RƯƠNG ĐỒ", 22, UiGold, true));
-            _storageState = LgoLabel("Kho gửi/rút chưa kết nối model dữ liệu thật trong Map01A. Không tạo vật phẩm giả; khi có storage API/state sẽ dùng lại panel chi tiết bên phải để xem món đang chọn.", 16, new Color(.91f, .93f, .84f, .96f));
+            _storageGateCard = InventoryPanel("Map01A Storage Gate Card");
+            _storageGateCard.style.flexGrow = 0;
+            _storageGateCard.style.marginTop = 8;
+            _storageGateCard.style.marginBottom = 12;
+            _storageGateCard.style.paddingLeft = _storageGateCard.style.paddingRight = 18;
+            _storageGateCard.style.paddingTop = _storageGateCard.style.paddingBottom = 16;
+            _storagePanel.Add(_storageGateCard);
+            _storageGateTitle = LgoLabel("Kho gửi/rút đang khóa", 22, UiGold, true);
+            _storageGateTitle.name = "Map01A Storage Gate Title";
+            _storageGateCard.Add(_storageGateTitle);
+            _storageState = LgoLabel("Kho gửi/rút chưa kết nối model dữ liệu thật trong Map01A. Khi có storage API/state sẽ dùng lại panel chi tiết bên phải để xem món đang chọn.", 16, new Color(.91f, .93f, .84f, .96f));
             _storageState.name = "Map01A Storage State";
             _storageState.style.marginTop = 10;
-            _storagePanel.Add(_storageState);
+            _storageGateCard.Add(_storageState);
+            _storageGateSafety = LgoLabel("Không tạo vật phẩm giả, không gửi/rút local và không đổi trang bị đang mặc.", 15, new Color(.76f, 1f, .70f, .96f), true);
+            _storageGateSafety.name = "Map01A Storage Gate Safety";
+            _storageGateSafety.style.marginTop = 10;
+            _storageGateCard.Add(_storageGateSafety);
             var storageActions = InventoryRow("Map01A Storage Actions");
             storageActions.style.marginTop = 16;
             var deposit = InventoryButton(() => { }, "Map01A Storage Deposit", "Gửi đồ");

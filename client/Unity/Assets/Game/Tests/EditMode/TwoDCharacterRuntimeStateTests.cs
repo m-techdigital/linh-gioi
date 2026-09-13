@@ -392,9 +392,14 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                var storageGate = root.Q("Map01A Storage Gate Card");
+                Assert.That(storageGate, Is.Not.Null,
+                    "Rương đồ must render as an intentional locked-state card, not as an empty broken panel.");
+                Assert.That(root.Q<Label>("Map01A Storage Gate Title").text, Does.Contain("Kho gửi/rút"));
                 Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("chưa kết nối"));
                 Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("bên phải"),
                     "Storage copy must preserve the decided right-side item detail placement.");
+                Assert.That(root.Q<Label>("Map01A Storage Gate Safety").text, Does.Contain("Không tạo vật phẩm giả"));
                 Assert.That(root.Q<Button>("Map01A Storage Deposit").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Storage Withdraw").enabledSelf, Is.False);
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));

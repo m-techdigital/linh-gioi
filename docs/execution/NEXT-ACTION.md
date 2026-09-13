@@ -1,3 +1,7 @@
+## Next Map01A UI polish after storage gate card — 2026-09-13
+
+Continue visible Map01A UI/UX polish from owner references. `Rương đồ` now communicates its locked storage state without fake data; next safe work should improve inventory/item visual hierarchy only through shared skin helpers and approved/runtime assets. Do not add fake/generic icons or random generated item art. If no approved item art exists, prepare/review an item-thumbnail design board or continue non-art UI polish such as dialogue/HUD readability. Keep wardrobe/class redraw deferred until a deterministic source/design pipeline exists.
+
 ## Next Map01A UI polish after tab-specific inventory headers — 2026-09-13
 
 Continue visible Map01A UI/UX polish from the owner references. The inventory modal now distinguishes `Hành trang`, `Thông tin`, and `Rương đồ` at the header level and keeps right-side detail behavior. Next safe work should improve visual hierarchy and design-quality item/equipment art only from approved/runtime assets or a reviewed design board; do not add fake/generic icons or random generated item art. Keep Hành trang/Thông tin/Rương đồ separate, reuse shared skin helpers, and re-capture Player evidence after visible changes. Wardrobe/class redraw remains deferred unless a deterministic source/design pipeline is available.
