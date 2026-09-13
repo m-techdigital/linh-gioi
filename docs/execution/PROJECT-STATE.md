@@ -1,3 +1,10 @@
+## Map01A — entry secondary action base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Entry/login secondary actions (`Đổi máy chủ`, `Quên mật khẩu`, `Hỗ trợ`) chuyển từ inline per-button sizing sang shared helper/class: `ApplyLgoEntrySecondaryAction(...)` và `lgo-entry-secondary-action`. Đây là bước áp dụng rule owner: UI/UX giống nhau phải đi qua base/shared helper trước, không tự build tràn lan mỗi màn một kiểu.
+- RED/GREEN: EditMode fail khi server/auth secondary actions chưa có shared base class, sau đó pass khi refactor về helper chung; shared-skin validator yêu cầu marker helper trong `Skin.cs` và marker gọi helper trong entry partial.
+- Player evidence: entry capture thật không dùng `-nographics` tại `build/map01a-entry-secondary-base-style-entry-runtime-v2/entry-login.png`; full PC route capture tại `build/map01a-entry-secondary-base-style-runtime-v1/`. Visual review: nhóm secondary action đồng nhất và không lệch form; vẫn `CONTINUE`, chưa phải nghiệm thu redesign login/inventory tổng thể.
+
 ## Map01A — dialogue action base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

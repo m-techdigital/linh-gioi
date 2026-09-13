@@ -161,11 +161,7 @@ namespace LinhGioi.UI
             serverState.name = "Map01A Entry Server State";
             serverState.style.marginRight = 8;
             var serverSwitch = new Button { name = "Map01A Entry Server Switch", text = "Đổi máy chủ" };
-            serverSwitch.style.flexGrow = 0;
-            serverSwitch.style.minWidth = 142;
-            serverSwitch.style.minHeight = 34;
-            serverSwitch.style.fontSize = 13;
-            ApplyLgoDisabledAction(serverSwitch);
+            ApplyLgoEntrySecondaryAction(serverSwitch, minWidth: 142);
             serverCard.Add(serverName);
             serverCard.Add(serverState);
             serverCard.Add(serverSwitch);
@@ -289,16 +285,11 @@ namespace LinhGioi.UI
             row.Add(rememberWrap);
 
             var forgot = new Button { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu" };
-            forgot.style.flexGrow = 0;
-            forgot.style.marginRight = 6;
-            forgot.style.fontSize = 13;
-            ApplyLgoDisabledAction(forgot);
+            ApplyLgoEntrySecondaryAction(forgot, marginRight: 6);
             row.Add(forgot);
 
             var support = new Button { name = "Map01A Entry Support Link", text = "Hỗ trợ" };
-            support.style.flexGrow = 0;
-            support.style.fontSize = 13;
-            ApplyLgoDisabledAction(support);
+            ApplyLgoEntrySecondaryAction(support);
             row.Add(support);
             return row;
         }

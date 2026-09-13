@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after entry secondary helper — 2026-09-13
+
+`CONTINUE`. Rule hiện hành: cùng UI/UX thì tạo/extend base shared helper trước, rồi mới bind data/action theo màn; không dựng button/tab/card/modal/dialog/grid riêng lẻ nếu vai trò giống nhau. Evidence mới: `build/map01a-entry-secondary-base-style-entry-runtime-v2/entry-login.png` và route capture `build/map01a-entry-secondary-base-style-runtime-v1/`.
+
+Next valid work: tiếp tục Map01A/UI-only theo design owner, ưu tiên gom tiếp các pattern còn lặp như entry side actions, context action buttons, modal/dialog/card/detail vào shared base trước khi polish visual. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI polish after dialogue action helper — 2026-09-13
 
 `CONTINUE`. Dialogue action buttons đã gom vào shared `ApplyLgoDialoguePrimaryAction(...)` / `ApplyLgoDialogueSecondaryAction(...)` thay vì inline style. Evidence batch: `build/map01a-dialogue-action-base-style-runtime-v1/`.

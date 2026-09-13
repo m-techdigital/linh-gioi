@@ -456,6 +456,8 @@ namespace LinhGioi.Tests.EditMode
                     "Entry/login should reserve the design server-switch affordance without opening production server routing.");
                 Assert.That(serverSwitch.enabledSelf, Is.False);
                 Assert.That(serverSwitch.text, Does.Contain("Đổi máy chủ"));
+                Assert.That(serverSwitch.ClassListContains("lgo-entry-secondary-action"), Is.True,
+                    "Entry server switch must use the shared entry secondary-action base instead of local inline sizing.");
                 Assert.That(serverSwitch.text, Does.Not.Contain("chưa mở"),
                     "Disabled design affordances should read like game UI, not debug placeholder copy.");
                 var start = root.Q<Button>("Map01A Entry Start Button");
@@ -500,6 +502,10 @@ namespace LinhGioi.Tests.EditMode
                 var supportLink = root.Q<Button>("Map01A Entry Support Link");
                 Assert.That(forgotPassword.enabledSelf, Is.False);
                 Assert.That(supportLink.enabledSelf, Is.False);
+                Assert.That(forgotPassword.ClassListContains("lgo-entry-secondary-action"), Is.True,
+                    "Entry auth links must share the secondary-action base instead of per-link sizing.");
+                Assert.That(supportLink.ClassListContains("lgo-entry-secondary-action"), Is.True,
+                    "Entry auth links must share the same base for future auth/help states.");
                 Assert.That(forgotPassword.text, Does.Not.Contain("chưa mở"),
                     "Disabled design affordances should avoid exposing unfinished-state copy on the main login surface.");
                 Assert.That(supportLink.text, Does.Not.Contain("chưa mở"));
