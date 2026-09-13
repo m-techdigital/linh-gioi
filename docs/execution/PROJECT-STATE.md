@@ -1,3 +1,10 @@
+## Map01A — route evidence không còn bị Hành trang che sau Q04 — 2026-09-14
+
+- Audit Player 1600×900 phát hiện capture Q01–Q09 giữ modal Hành trang từ Q04 đến Q07; quest state vẫn xanh nhưng các khung combat/reward không thể review bằng mắt.
+- Capture giờ giữ modal đúng lúc dùng bình và trang bị phần thưởng, sau đó bắt buộc trả về world view trước khi chụp Q05–Q09. Manifest có `questWorldFramesUnobstructed`; Player fail nếu overlay hoặc dialogue còn che các world frame.
+- `DongMonIllustratedPreviewTests` đạt 22/22; Player `build/map01a-world-view-capture-player-v3/LinhGioiOnline.app` build `errors=0`, `warnings=0`. Evidence `build/map01a-world-view-capture-runtime-v3/` đạt 9/9 quest, 18 route frame, 38 dialogue frame và đã xem trực tiếp Q05, Q06, combat, loot, equip, portal ở 1600×900.
+- Catalog review hiện trỏ route evidence v3; validator đạt 8/8 và chặn evidence bị overlay che quay lại. Bộ năm tab owner duyệt vẫn là UI hiện hành; không mở lại class/pose/wardrobe/source.
+
 ## Map01A — entry feedback đã dùng ngôn ngữ sản phẩm — 2026-09-14
 
 - Audit callback của bốn nút rail phát hiện nội dung hiển thị cho người chơi còn lộ `local`, `Map01A`, `2D` và trạng thái duyệt nội bộ; notice mặc định cũng tự gọi đây là “bản trải nghiệm 2D”.

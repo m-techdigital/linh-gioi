@@ -1,3 +1,9 @@
+## Next — sau khi khóa world-view evidence Q05–Q09 — 2026-09-14
+
+`CONTINUE`. Route evidence hiện hành là `build/map01a-world-view-capture-runtime-v3/`; Player `build/map01a-world-view-capture-player-v3/LinhGioiOnline.app`. Q04 giữ đúng modal cho dùng vật phẩm, Q05–Q09 phải có `questWorldFramesUnobstructed=true`; không dùng lại route evidence bị modal che.
+
+Next valid work: tiếp tục Map01A/UI theo năm design đã duyệt, ưu tiên interaction hoặc màn có sai lệch nhìn thấy rõ. Thumbnail 10 trang bị vẫn là asset gate; chỉ dùng icon có provenance, không tạo art giả, không mở class/pose/wardrobe/source và không đổi frozen surfaces.
+
 ## Next — sau khi loại nội dung kỹ thuật khỏi entry feedback — 2026-09-14
 
 `CONTINUE`. Evidence entry hiện hành là `build/map01a-entry-product-copy-runtime-v1/entry-login.png`; Player `build/map01a-entry-product-copy-player-v1/LinhGioiOnline.app`. Notice và feedback rail không được lộ `local`, `Map01A`, `2D` hoặc trạng thái duyệt nội bộ; chức năng chưa có thật phải báo rõ là chưa khả dụng.

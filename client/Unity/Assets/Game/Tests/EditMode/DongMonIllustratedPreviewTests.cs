@@ -9,6 +9,17 @@ namespace LinhGioi.Tests
 {
     public sealed class DongMonIllustratedPreviewTests
     {
+        [Test]
+        public void QuestCaptureReturnsToWorldViewAfterInventoryTutorialFrames()
+        {
+            Assert.That(CongDongLamMap01AArtPreview.QuestCaptureRequiresWorldView(9), Is.False,
+                "Q04 potion-use evidence still needs the inventory overlay");
+            Assert.That(CongDongLamMap01AArtPreview.QuestCaptureRequiresWorldView(10), Is.True,
+                "Q05 onward must expose the playable world for visual review");
+            Assert.That(CongDongLamMap01AArtPreview.QuestCaptureRequiresWorldView(17), Is.True,
+                "Portal evidence must not be hidden by a stale inventory overlay");
+        }
+
         private static void FinishDialogue(CongDongLamMap01AArtPreview scene)
         {
             for (var page = 0; scene.DialogueOpen && page < 8; page++)

@@ -451,6 +451,7 @@ namespace LinhGioi.World
             public int frames, width, height, dialogueFrames;
             public string[] revisitedNpcs;
             public bool dialogueRevisitsVerified;
+            public bool questWorldFramesUnobstructed = true;
             public string deviceValidation = "macOS aspect simulation only";
             public string captureScope = "map-and-legacy-wardrobe";
             public float groundY, maxFootError, parallaxDelta;
@@ -595,6 +596,8 @@ namespace LinhGioi.World
             || Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0;
 
         public static bool IsMapQuestCaptureForArgs(string[] args) => Array.IndexOf(args, "--lgo-map01a-art-capture") >= 0;
+
+        public static bool QuestCaptureRequiresWorldView(int captureIndex) => captureIndex >= 10 && captureIndex <= 17;
 
         public static CongDongLamMap01AArtPreview Attach(TwoDOnboardingController controller)
         {
@@ -1697,7 +1700,11 @@ namespace LinhGioi.World
                     }
                 }
                 if (i == 15) { AdvanceVoAnimation(.5f); UseCurrentRouteAction(); }
-                if (i == 16) EquipClassReward();
+                if (i == 16)
+                {
+                    InventoryOpen = true;
+                    EquipClassReward();
+                }
                 if (i == 17)
                 {
                     InventoryOpen = false;
@@ -1976,10 +1983,15 @@ namespace LinhGioi.World
                     result.voMixedLevelToggleVerified &= _voEquipmentComponents["lv030_female_outer_tunic_center"].enabled;
                     result.voMixedEquipmentSnapshot = VoMixedEquipmentSnapshot;
                 }
+                // Preserve the inventory state while scripted quest actions consume or equip items,
+                // then clear the tutorial overlay so later world evidence can actually be reviewed.
+                if (questOnly && QuestCaptureRequiresWorldView(i)) InventoryOpen = false;
                 _controller.RefreshForSmoke();
                 Refresh();
                 yield return null;
                 yield return new WaitForEndOfFrame();
+                if (questOnly && QuestCaptureRequiresWorldView(i))
+                    result.questWorldFramesUnobstructed &= !InventoryOpen && !DialogueOpen;
                 result.maxFootError = Mathf.Max(result.maxFootError, Mathf.Abs(FootY - GroundY));
                 WriteMapCaptureBmp(Path.Combine(directory, names[i] + ".bmp"), result.width, result.height);
                 result.frames++;
@@ -2020,6 +2032,7 @@ namespace LinhGioi.World
                 || result.voSkillCastCount != 3 || result.voSkillHitCount != 3 || result.voTrainingTargetHp != 0
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f;
             mapFailed |= questOnly && !result.dialogueRevisitsVerified;
+            mapFailed |= questOnly && !result.questWorldFramesUnobstructed;
             var wardrobeFailed = !questOnly && (!result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified

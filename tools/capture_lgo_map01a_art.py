@@ -88,7 +88,8 @@ def main():
         required = required[:18]
         flags = ('mapQuestFlowVerified', 'functionalUiVerified', 'dialogueOpened', 'greetingCompleted',
                  'starterSupplies', 'spiritHerb', 'hiddenChest', 'combatAccepted', 'enemyDefeated',
-                 'enemyLooted', 'portalUnlocked', 'minimapUnlocked', 'healthPotionUsed', 'classRewardEquipped')
+                 'enemyLooted', 'portalUnlocked', 'minimapUnlocked', 'healthPotionUsed', 'classRewardEquipped',
+                 'questWorldFramesUnobstructed')
         expected = {'captureScope': 'map-quests-q01-q09', 'frames': 18, 'completedQuestCount': 9,
                     'activeQuestId': 'COMPLETE', 'healthPotionCount': 2, 'manaPotionCount': 2,
                     'playerHealth': 100, 'voSkillCastCount': 3, 'voSkillHitCount': 3,

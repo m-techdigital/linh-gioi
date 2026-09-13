@@ -38,7 +38,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "## Current evidence\n\n"
             "entry/login: `build/map01a-entry-product-copy-runtime-v1/entry-login.png`, `build/map01a-entry-product-copy-runtime-v1/manifest.json`\n"
             "five tabs: `build/map01a-five-tab-player-copy-runtime-v1/character-info.png`, `build/map01a-five-tab-player-copy-runtime-v1/bag.png`, `build/map01a-five-tab-player-copy-runtime-v1/skills.png`, `build/map01a-five-tab-player-copy-runtime-v1/potential.png`, `build/map01a-five-tab-player-copy-runtime-v1/spirit-pet.png`, `build/map01a-five-tab-player-copy-runtime-v1/manifest.json`\n"
-            "route: `build/map01a-context-action-runtime-v1/01-arrival-q01.png`, `build/map01a-context-action-runtime-v1/18-q09-portal-open.png`, `build/map01a-context-action-runtime-v1/manifest.json`\n"
+            "route: `build/map01a-world-view-capture-runtime-v3/01-arrival-q01.png`, `build/map01a-world-view-capture-runtime-v3/18-q09-portal-open.png`, `build/map01a-world-view-capture-runtime-v3/manifest.json`\n"
             "menu: `build/map01a-menu-current-runtime-v1/menu.png`, `build/map01a-menu-current-runtime-v1/manifest.json`\n"
             "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md\n"
             "No approved dedicated UI icon set\n"
@@ -75,10 +75,11 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             (hub_dir / name).write_bytes(b"png")
         write_json(root / validator.ROUTE_MANIFEST, {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
-            "width": 1280,
-            "height": 720,
+            "width": 1600,
+            "height": 900,
             "frames": 18,
             "dialogueFrames": 38,
+            "questWorldFramesUnobstructed": True,
         })
         route_dir = root / Path(validator.ROUTE_MANIFEST).parent
         for name in validator.ROUTE_FRAMES:
@@ -150,6 +151,17 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             violations = validator.validate_root(Path(temp))
 
         self.assertTrue(any("frames" in item for item in violations), violations)
+
+    def test_rejects_route_evidence_hidden_by_inventory_overlay(self) -> None:
+        with self._fixture() as temp:
+            manifest = Path(temp) / validator.ROUTE_MANIFEST
+            data = json.loads(manifest.read_text())
+            data["questWorldFramesUnobstructed"] = False
+            write_json(manifest, data)
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("world frames must be unobstructed" in item for item in violations), violations)
 
     def test_rejects_catalog_without_item_icon_source_audit(self) -> None:
         with self._fixture() as temp:
