@@ -1,3 +1,7 @@
+## Next inventory/UI action after grid runtime thumbnails — 2026-09-13
+
+Hành trang grid now shows real runtime art without text overlap. Next valid UI work is broader design alignment: improve the inventory shell, tile spacing, right detail card hierarchy, and separate Hành trang/Thông tin/Rương đồ presentation toward the owner references using shared `CongDongLamArrivalHud.Skin.cs` helpers. Do not introduce fake/generic icons or random generated item art; keep runtime sprites or approved design assets only. Re-capture Player screenshots after each visible polish batch.
+
 ## Next inventory/UI action after tight runtime thumbnails — 2026-09-13
 
 The right-side inventory detail thumbnail now uses a tighter runtime component crop, but the screen still needs product-quality UI polish against the owner references. Next valid work: redesign/polish Hành trang and Thông tin as separate tabs using shared UI skin/base, keep details on the right, add real runtime-art thumbnails to grid tiles where readable, and improve navy glass/gold frame hierarchy without temporary glyphs, generic icons, or random generated art. Re-capture `07-q04-inventory-open.png` and review visually before any handoff claim.

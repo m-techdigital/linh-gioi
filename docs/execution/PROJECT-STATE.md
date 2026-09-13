@@ -1,3 +1,7 @@
+## Map01A inventory grid runtime art cleanup — 2026-09-13
+
+Equipment grid tiles in Hành trang now use real runtime atlas thumbnails inside each tile and keep `Button.text` empty so UI Toolkit no longer draws duplicate text over the icon. Slot name/state are rendered through child labels, with a regression covering the no-overlap contract. Player evidence: `build/map01a-inventory-grid-runtime-art-clean-capture-v1/07-q04-inventory-open.png`; visual review confirms the grid icons and labels are readable and no longer overlap. Build: `client/Unity/build/map01a-inventory-grid-runtime-art-clean-player/LinhGioiOnline.app`, `errors=0 warnings=17` (deprecated UI API warnings only). This remains an incremental runtime-art polish checkpoint, not final inventory visual design acceptance.
+
 ## Map01A inventory thumbnail crop tightening — 2026-09-13
 
 Inventory detail thumbnails now prefer tight runtime component sprites before falling back to wide slot sprites. The regression covers `main_weapon` so the detail icon uses the vertical weapon component crop instead of the transparent wide slot sheet. Player evidence: `build/map01a-tight-thumbnails-runtime-v1/07-q04-inventory-open.png`; visual review confirms the right-side detail card uses real atlas art and no fake glyph/icon, but the inventory screen is still a structural/runtime-art checkpoint, not final UI design acceptance. Build: `client/Unity/build/map01a-tight-thumbnails-player/LinhGioiOnline.app`, `errors=0 warnings=0`.

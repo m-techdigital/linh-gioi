@@ -197,10 +197,11 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Does.Contain("Công"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Khớp"));
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action"), Is.Not.Null);
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Does.Not.Contain("⚔"));
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Does.Not.Contain("👢"));
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Does.Contain("Vũ khí"));
-                Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Does.Contain("Giày"));
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Is.Empty,
+                    "Equipment tile Button.text must stay empty so UIToolkit does not draw text over the runtime thumbnail and child labels.");
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Is.Empty);
+                Assert.That(root.Q<Label>("Map01A Equipment Item Name main_weapon").text, Does.Contain("Vũ khí"));
+                Assert.That(root.Q<Label>("Map01A Equipment Item Name boots").text, Does.Contain("Giày"));
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));

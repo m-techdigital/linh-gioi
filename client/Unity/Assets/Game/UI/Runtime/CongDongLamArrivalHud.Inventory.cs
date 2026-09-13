@@ -385,8 +385,7 @@ namespace LinhGioi.UI
                 _equipmentRows[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
                     ? new Color(.16f, .48f, .50f, .96f)
                     : equipped ? new Color(.06f, .13f, .17f, .94f) : new Color(.035f, .055f, .065f, .82f);
-                _equipmentTiles[index].text = EquipmentShortName(slotId)
-                    + " · Lv" + level + (equipped ? "\nĐang mặc" : "\nĐã tháo");
+                _equipmentTiles[index].text = string.Empty;
                 _equipmentTiles[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
                     ? new Color(.12f, .33f, .56f, .98f)
                     : equipped ? new Color(.045f, .12f, .18f, .96f) : new Color(.025f, .040f, .052f, .78f);
