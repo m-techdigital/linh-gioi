@@ -448,6 +448,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                var characterWeaponIcon = root.Q("Map01A Character Info Slot Icon main_weapon");
+                Assert.That(characterWeaponIcon, Is.Not.Null,
+                    "Character-info equipment slots should reuse runtime item thumbnails instead of staying as text-only cells.");
+                Assert.That(characterWeaponIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 var modalTitle = root.Q<Label>("Map01A Inventory Modal Title");
                 var modalSubtitle = root.Q<Label>("Map01A Inventory Modal Subtitle");
                 Assert.That(modalTitle, Is.Not.Null, "Inventory modal needs a named title so each main tab can present its own screen.");

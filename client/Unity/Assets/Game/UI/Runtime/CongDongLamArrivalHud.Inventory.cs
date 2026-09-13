@@ -11,8 +11,8 @@ namespace LinhGioi.UI
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
-        private VisualElement[] _equipmentTileIcons;
-        private Label[] _equipmentTileNames, _equipmentTileStates;
+        private VisualElement[] _equipmentTileIcons, _equipmentRowIcons;
+        private Label[] _equipmentTileNames, _equipmentTileStates, _equipmentRowNames, _equipmentRowStates;
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
         private string _selectedSupplyItemId = "health_potion";
 
@@ -201,18 +201,48 @@ namespace LinhGioi.UI
             _inventoryHeroPanel.Add(equipmentSlots);
             _equipmentSlotIds = _scene.VoEquipmentSlotIds;
             _equipmentRows = new Button[_equipmentSlotIds.Count];
+            _equipmentRowIcons = new VisualElement[_equipmentSlotIds.Count];
+            _equipmentRowNames = new Label[_equipmentSlotIds.Count];
+            _equipmentRowStates = new Label[_equipmentSlotIds.Count];
             for (var i = 0; i < _equipmentSlotIds.Count; i++)
             {
                 var slotId = _equipmentSlotIds[i];
                 var row = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "LGO Equipment Inventory Slot " + slotId);
+                row.text = string.Empty;
                 row.style.flexGrow = 0;
                 row.style.flexBasis = new Length(48, LengthUnit.Percent);
-                row.style.height = 52;
+                row.style.height = 58;
                 row.style.marginBottom = 6;
                 row.style.marginRight = i % 2 == 0 ? 7 : 0;
-                row.style.fontSize = 15;
-                row.style.unityTextAlign = TextAnchor.MiddleCenter;
+                row.style.flexDirection = FlexDirection.Row;
+                row.style.alignItems = Align.Center;
+                row.style.justifyContent = Justify.FlexStart;
+                row.style.unityTextAlign = TextAnchor.MiddleLeft;
+
+                var icon = new VisualElement { name = "Map01A Character Info Slot Icon " + slotId };
+                ApplyLgoItemIcon(icon);
+                icon.style.width = 34;
+                icon.style.height = 34;
+                icon.style.marginLeft = 2;
+                icon.style.marginRight = 7;
+                row.Add(icon);
+
+                var textGroup = new VisualElement { name = "Map01A Character Info Slot Text " + slotId };
+                textGroup.style.flexGrow = 1;
+                textGroup.style.minWidth = 0;
+                textGroup.style.flexDirection = FlexDirection.Column;
+                var nameLabel = LgoLabel("", 13, UiText, true);
+                nameLabel.name = "Map01A Character Info Slot Name " + slotId;
+                var stateLabel = LgoLabel("", 12, UiSubText);
+                stateLabel.name = "Map01A Character Info Slot State " + slotId;
+                textGroup.Add(nameLabel);
+                textGroup.Add(stateLabel);
+                row.Add(textGroup);
+
                 _equipmentRows[i] = row;
+                _equipmentRowIcons[i] = icon;
+                _equipmentRowNames[i] = nameLabel;
+                _equipmentRowStates[i] = stateLabel;
                 equipmentSlots.Add(row);
             }
 
@@ -486,11 +516,20 @@ namespace LinhGioi.UI
                 var slotId = _equipmentSlotIds[index];
                 var equipped = _scene.IsVoEquipmentSlotEquipped(slotId);
                 var level = _scene.GetVoEquipmentItemLevel(slotId);
-                _equipmentRows[index].text = (equipped ? "✓ " : "○ ") + EquipmentShortName(slotId)
-                    + "\nLv" + level;
+                _equipmentRows[index].text = string.Empty;
                 _equipmentRows[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
                     ? new Color(.16f, .48f, .50f, .96f)
                     : equipped ? new Color(.06f, .13f, .17f, .94f) : new Color(.035f, .055f, .065f, .82f);
+                var thumbnail = _scene.GetVoEquipmentThumbnailSprite(slotId);
+                if (_equipmentRowNames != null && index < _equipmentRowNames.Length)
+                    _equipmentRowNames[index].text = (equipped ? "✓ " : "○ ") + EquipmentShortName(slotId);
+                if (_equipmentRowStates != null && index < _equipmentRowStates.Length)
+                    _equipmentRowStates[index].text = "Lv" + level;
+                if (_equipmentRowIcons != null && index < _equipmentRowIcons.Length)
+                {
+                    _equipmentRowIcons[index].style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
+                    _equipmentRowIcons[index].style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
+                }
                 _equipmentTiles[index].text = string.Empty;
                 _equipmentTiles[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
                     ? new Color(.12f, .33f, .56f, .98f)
@@ -501,7 +540,6 @@ namespace LinhGioi.UI
                     _equipmentTileStates[index].text = equipped ? "Đang mặc" : "Đã tháo";
                 if (_equipmentTileIcons != null && index < _equipmentTileIcons.Length)
                 {
-                    var thumbnail = _scene.GetVoEquipmentThumbnailSprite(slotId);
                     _equipmentTileIcons[index].style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
                     _equipmentTileIcons[index].style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
                 }

@@ -1,3 +1,7 @@
+## Next Map01A UI polish after character-info slot thumbnails — 2026-09-13
+
+Continue Map01A product UI/UX only. `Thông tin` now has runtime thumbnails in its equipped-slot list; next safe work should improve inventory/login/HUD visual hierarchy using shared UI helpers and approved/runtime assets. Do not add fake item icons, random generated item/class art, or class build/capture loops. Keep Hành trang, Thông tin, and Rương đồ as separate screens with selected item details on the right, and re-capture Player evidence after visible UI changes.
+
 ## Immediate operating lock: Map01A UI/UX only; no class build loop — 2026-09-13
 
 The active owner instruction overrides older class/wardrobe goals in this worktree. Do not resume Kiếm/Pháp/Cơ/Linh class development, do not run class Player build/capture loops, and do not rollback existing class code. If a pending task touches class art, wardrobe, pose packs, class launcher state, or broken class visual evidence, stop that path and choose a Map01A/UI task instead. Valid next work is Map01A product UI/UX only: login/auth shell, Hành trang, Thông tin, Rương đồ, HUD/dialogue readability, map interactions, shared UI components, and documentation/evidence for those screens. Before building/running Player, confirm the change is a visible Map01A/UI change and that the working tree has no unrelated class/test churn.
