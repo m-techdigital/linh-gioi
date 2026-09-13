@@ -102,6 +102,8 @@ Measured authoring brief 2026-09-13: `tools/plan_lgo_missing_six_pose_source_aut
 
 Authoring guide board 2026-09-13: `tools/render_lgo_missing_source_authoring_guides.py` generated `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/missing-source-authoring-guide-board-v1.png` and report `.json`; visual check `missing-source-authoring-guide-board-visual-check-v1.json` is `AUTHORING_GUIDE_BOARD_VISUAL_CHECKED`. This board is only an authoring overlay for the 11 missing targets and must not be packed.
 
+Selection provenance audit 2026-09-13: `tools/audit_lgo_source_staging_selection.py` wrote `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-staging-selection-audit-v2.json`, status `SOURCE_STAGING_SELECTION_REVIEW_ONLY`. The staged selection does not use visual/prior rejected directories. The audit also records blocked sources so they are not reused by accident: `outer-top-run-four-material-v1`, `outer-top-run-four-material-v2` and `waist-belt-material-idle-v1` are prior-rejected; `outer-top-material-idle-v3..v8` are rejected/preserved for lessons.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.

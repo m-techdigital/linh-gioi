@@ -12,6 +12,8 @@ Measured missing-source authoring brief: `build/pose-matched-layer-authoring-v1/
 
 Authoring guide board: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/missing-source-authoring-guide-board-v1.png`, report `.json`, and visual check `missing-source-authoring-guide-board-visual-check-v1.json` = `AUTHORING_GUIDE_BOARD_VISUAL_CHECKED`. The board has opaque gray background after renderer fix and is an authoring aid only.
 
+Selection provenance audit: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-staging-selection-audit-v2.json` is `SOURCE_STAGING_SELECTION_REVIEW_ONLY`. Current staged sources avoid visual/prior rejected directories. `outer-top-run-four-material-v1` and `outer-top-run-four-material-v2` are blocked by later `priorRejected` provenance; `outer-top-run-four-material-v3-bodymask` remains blocked by the forbidden bodymask/floating-panel method family.
+
 Local Krita evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/local-authoring-toolchain-discovery.json` is `KRITA_LOCAL_TOOLCHAIN_READY`; executable path `build/toolchains/krita/Krita.app/Contents/MacOS/krita`, version `krita 5.3.3 (git 858d352)`.
 
 Krita CLI export smoke is not proven: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`, exit 130 after interrupt, no output PNG. Native round-trip/export should use Krita Scripter or a verified plugin runner until CLI export is fixed.
