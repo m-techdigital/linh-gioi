@@ -16,6 +16,8 @@ Gate envelope số đã thêm để không lặp lỗi trên: `tools/audit_lgo_s
 
 Measured waist jump deterministic draft đã kiểm tiếp: `waist-belt-jump-measured-candidate-v1/slot-envelope-audit-v1.json` pass envelope với bbox `198x90`, lệch tâm `7.76px`; overlay review `visual-review-v1.json` vẫn reject staging vì art quá phẳng/schematic. Kết luận hiện hành: số đo giải quyết được scale/fit gate, nhưng chưa thay thế source-paint/native authoring và review mỹ thuật. 0 item hoàn chỉnh.
 
+Affine reuse từ `waist_belt` run sang jump cũng đã kiểm và reject: `waist-belt-jump-affine-reuse-candidate-v1/slot-envelope-audit-v1.json` pass envelope với bbox `189x72`, lệch tâm `8.14px`, nhưng `visual-review-v1.json` ghi `WAIST_BELT_JUMP_AFFINE_REUSE_FIT_PASS_VISUAL_REJECTED` vì đai đọc như strip cứng của pose chạy, lộ artifact màu và tab treo sai. Không dùng simple affine reuse làm production shortcut cho jump.
+
 ## Hiện hành — dọn presentation cũ, giữ game 2D — 2026-09-12
 
 `CONTINUE`. Theo owner, đã gỡ 56 file hết dùng (69.242 byte): 6 helper màn login/sảnh/menu/HUD/thoại cũ, registry V2, metadata đi kèm và 42 metadata thư mục V2/V3B rỗng. Audit trước xoá và sau Unity import không có C# hoặc GUID consumer ngoài nhóm gỡ. Không có model FBX/Blend trên branch để xoá thêm. Giữ `PlayableWorldController`, registry V3B/material còn phục vụ M4/M6 smoke; không xóa mesh trang phục 2D, source/registered WIP hoặc ảnh đã làm. Lịch sử design/provenance và validator V3B cũ được giữ để tra cứu, không phải design/gate hiện hành; không phục hồi code chỉ để làm xanh validator của màn đã bỏ. Danh sách/hash: `build/legacy-3d-cleanup/audit.json`.
