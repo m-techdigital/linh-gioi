@@ -580,6 +580,12 @@ namespace LinhGioi.Tests.EditMode
                 scene.UseCurrentRouteAction();
                 typeof(CongDongLamArrivalHud).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic)
                     .Invoke(host.GetComponentInChildren<CongDongLamArrivalHud>(), null);
+                var header = root.Q("Map01A Dialogue Header");
+                Assert.That(header, Is.Not.Null, "Dialogue panel must have a separate design header for speaker/progress metadata.");
+                var body = root.Q("Map01A Dialogue Body");
+                Assert.That(body, Is.Not.Null, "Dialogue panel must frame the spoken line separately from action buttons.");
+                var actionRow = root.Q("Map01A Dialogue Actions");
+                Assert.That(actionRow, Is.Not.Null, "Dialogue panel must use a named action row instead of loose buttons.");
                 var context = root.Q<Label>("Map01A Dialogue Quest Context");
                 Assert.That(context, Is.Not.Null, "Dialogue panel must show quest context for NPC conversations.");
                 Assert.That(context.style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -589,7 +595,10 @@ namespace LinhGioi.Tests.EditMode
                 var continueButton = root.Q<Button>("Map01A Dialogue Continue");
                 Assert.That(continueButton, Is.Not.Null,
                     "Dialogue panel must expose its own continue action after the world HUD actions are hidden.");
+                Assert.That(continueButton.parent, Is.SameAs(actionRow));
                 Assert.That(continueButton.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(continueButton.style.minHeight.value.value, Is.GreaterThan(root.Q<Button>("Map01A Dialogue Close").style.minHeight.value.value),
+                    "The main continue action should read as the primary dialogue CTA.");
                 var firstLine = scene.DialogueText;
                 InvokeBoundButton(continueButton);
                 Assert.That(scene.DialogueText, Is.Not.EqualTo(firstLine));

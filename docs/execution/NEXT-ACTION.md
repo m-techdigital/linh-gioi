@@ -1,3 +1,7 @@
+## Next Map01A UI polish after dialogue card hierarchy — 2026-09-13
+
+Dialogue now has a clearer card hierarchy and Player evidence at `build/map01a-dialogue-card-runtime-v1/pc/02-ha-van-dialogue.png`. Continue Map01A product UI/UX polish from owner references: improve login/inventory visual richness and item detail/card hierarchy through shared skin helpers and approved/runtime assets only. Do not add fake item icons, random generated class art, or a second modal/card/tab/button system. Wardrobe/class redraw remains deferred until a deterministic source/design pipeline exists.
+
 ## Next Map01A UI polish after dialogue continue action — 2026-09-13
 
 The NPC dialogue panel now has an in-panel `Tiếp tục · E` action while world HUD controls are hidden. Continue Map01A product UI/UX polish from the owner references: improve dialogue/HUD readability, login/inventory visual hierarchy, and item detail presentation using shared skin helpers and approved/runtime assets only. Do not add fake item icons, random generated class art, or a second modal/card/tab/button system. Wardrobe/class redraw remains deferred until a deterministic source/design pipeline exists.

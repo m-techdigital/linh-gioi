@@ -176,26 +176,39 @@ namespace LinhGioi.UI
             _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
             _dialogue.style.paddingTop = _dialogue.style.paddingBottom = 10;
             _dialogue.style.fontSize = 20;
+            _dialogue.style.flexDirection = FlexDirection.Column;
+            var dialogueHeader = new VisualElement { name = "Map01A Dialogue Header" };
+            ApplyLgoGlassPanel(dialogueHeader, true);
+            dialogueHeader.style.paddingLeft = dialogueHeader.style.paddingRight = 10;
+            dialogueHeader.style.paddingTop = dialogueHeader.style.paddingBottom = 8;
             _dialogueSpeaker = LgoLabel("Hạ Vân", 20, UiGold, true);
-            _dialogue.Add(_dialogueSpeaker);
+            dialogueHeader.Add(_dialogueSpeaker);
             _dialogueQuestContext = LgoLabel("", 14, new Color(.72f, .86f, .92f, .94f));
             _dialogueQuestContext.name = "Map01A Dialogue Quest Context";
             _dialogueQuestContext.style.whiteSpace = WhiteSpace.Normal;
             _dialogueQuestContext.style.marginTop = 4;
-            _dialogueQuestContext.style.marginBottom = 8;
-            _dialogue.Add(_dialogueQuestContext);
+            dialogueHeader.Add(_dialogueQuestContext);
+            _dialogue.Add(dialogueHeader);
+            var dialogueBody = new VisualElement { name = "Map01A Dialogue Body" };
+            ApplyLgoDetailCard(dialogueBody);
+            dialogueBody.style.paddingLeft = dialogueBody.style.paddingRight = 12;
+            dialogueBody.style.paddingTop = dialogueBody.style.paddingBottom = 10;
+            dialogueBody.style.marginTop = 8;
             _dialogueLine = LgoLabel(_scene.DialogueText, 20, new Color(.95f, .91f, .78f, .98f));
-            _dialogueLine.style.whiteSpace = WhiteSpace.Normal; _dialogue.Add(_dialogueLine);
-            var dialogueOptions = new VisualElement(); dialogueOptions.style.flexDirection = FlexDirection.Row;
+            _dialogueLine.style.whiteSpace = WhiteSpace.Normal; dialogueBody.Add(_dialogueLine);
+            _dialogue.Add(dialogueBody);
+            var dialogueOptions = new VisualElement { name = "Map01A Dialogue Actions" }; dialogueOptions.style.flexDirection = FlexDirection.Row;
             dialogueOptions.style.flexWrap = Wrap.Wrap;
+            dialogueOptions.style.marginTop = 8;
             _dialogueContinue = new Button(() => _scene.UseCurrentRouteAction()) { name = "Map01A Dialogue Continue", text = "Tiếp tục" };
             _dialogueInformation = new Button(() => _scene.ReadDialogueInformation()) { name = "Map01A Dialogue Information", text = "Hỏi việc tiếp theo" };
             _dialogueClose = new Button(() => _scene.CloseNpcDialogue()) { name = "Map01A Dialogue Close", text = "Để sau" };
-            foreach (var option in new[] { _dialogueContinue, _dialogueInformation, _dialogueClose })
+            ApplyLgoButton(_dialogueContinue, true); _dialogueContinue.style.marginRight = 10; _dialogueContinue.style.flexGrow = 1;
+            foreach (var option in new[] { _dialogueInformation, _dialogueClose })
             {
-                ApplyLgoButton(option); option.style.minHeight = 44; option.style.marginTop = 8; option.style.marginRight = 10;
-                dialogueOptions.Add(option);
+                ApplyLgoButton(option); option.style.minHeight = 44; option.style.marginRight = 10;
             }
+            foreach (var option in new[] { _dialogueContinue, _dialogueInformation, _dialogueClose }) dialogueOptions.Add(option);
             _dialogue.Add(dialogueOptions);
             _safe.Add(_dialogue);
             _marker = new Label("!\nHạ Vân") { pickingMode = PickingMode.Ignore };
