@@ -14,24 +14,19 @@ ITEM_ICON_AUDIT_DOC = "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md"
 READY = "LGO_MAP01A_UI_REVIEW_CATALOG_READY"
 TECH_STATUS = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED"
 
-MODAL_EVIDENCE = [
-    ("entry/login", "build/map01a-entry-form-runtime/manifest.json", "build/map01a-entry-form-runtime/entry-login.png", 1600, 900),
-    ("character select", "build/map01a-character-select-runtime/manifest.json", "build/map01a-character-select-runtime/character-select.png", 1600, 900),
-]
-QUEST_PROFILES = {
-    "pc": (1280, 720),
-    "tablet": (1024, 768),
-    "mobile": (1600, 720),
-}
-REQUIRED_QUEST_FRAMES = [
-    "07-q04-inventory-open.png",
-    "18-q09-portal-open.png",
-]
-INVENTORY_TAB_EVIDENCE = [
-    ("character info tab", "build/map01a-inventory-tab-runtime/character-info.png"),
-    ("supplies tab", "build/map01a-inventory-tab-runtime/supplies.png"),
-    ("storage tab", "build/map01a-inventory-tab-runtime/storage.png"),
-]
+ENTRY_EVIDENCE = (
+    "build/map01a-entry-reference-align-runtime-v1/manifest.json",
+    "build/map01a-entry-reference-align-runtime-v1/entry-login.png",
+)
+HUB_MANIFEST = "build/map01a-five-tab-player-copy-runtime-v1/manifest.json"
+HUB_FRAMES = ["character-info.png", "bag.png", "skills.png", "potential.png", "spirit-pet.png"]
+ROUTE_MANIFEST = "build/map01a-context-action-runtime-v1/manifest.json"
+ROUTE_FRAMES = ["01-arrival-q01.png", "18-q09-portal-open.png"]
+MENU_EVIDENCE = (
+    "build/map01a-menu-runtime-v3/manifest.json",
+    "build/map01a-menu-runtime-v3/menu.png",
+)
+LEGACY_CURRENT_PATH_MARKERS = ("character-select-runtime", "inventory-tab-runtime", "inventory-column-balance-runtime")
 
 
 def iter_current_evidence_paths(text: str) -> list[str]:
@@ -84,12 +79,14 @@ def validate_root(root: Path = ROOT) -> list[str]:
             TECH_STATUS,
             "usesOsMouseOrKeyboard=false",
             "entry-login.png",
-            "character-select.png",
-            "07-q04-inventory-open.png",
-            "pc/tablet/mobile",
             "character-info.png",
-            "supplies.png",
-            "storage.png",
+            "bag.png",
+            "skills.png",
+            "potential.png",
+            "spirit-pet.png",
+            "01-arrival-q01.png",
+            "18-q09-portal-open.png",
+            "menu.png",
             "not owner approval",
             ITEM_ICON_AUDIT_DOC,
             "No approved dedicated UI icon set",
@@ -97,9 +94,13 @@ def validate_root(root: Path = ROOT) -> list[str]:
             if marker not in text:
                 violations.append(f"{DOC}: missing marker {marker}")
 
-        for rel in iter_current_evidence_paths(text):
+        current_paths = iter_current_evidence_paths(text)
+        for rel in current_paths:
             if not (root / rel).is_file():
                 violations.append(f"{DOC}: catalog current evidence path missing: {rel}")
+        for legacy_marker in LEGACY_CURRENT_PATH_MARKERS:
+            if any(legacy_marker in rel for rel in current_paths):
+                violations.append(f"{DOC}: legacy evidence must not be current: {legacy_marker}")
 
         audit = root / ITEM_ICON_AUDIT_DOC
         if not audit.is_file():
@@ -114,41 +115,47 @@ def validate_root(root: Path = ROOT) -> list[str]:
                 if marker not in audit_text:
                     violations.append(f"{ITEM_ICON_AUDIT_DOC}: missing marker {marker}")
 
-    for label, manifest_rel, png_rel, width, height in MODAL_EVIDENCE:
+    for label, evidence, expected_scope in [
+        ("entry/login", ENTRY_EVIDENCE, "map01a-entry-login"),
+        ("gameplay menu", MENU_EVIDENCE, "map01a-menu"),
+    ]:
+        manifest_rel, png_rel = evidence
         data = load_json(root, manifest_rel, violations)
         require_file(root, png_rel, violations)
         if data.get("status") != TECH_STATUS:
             violations.append(f"{label}: status must be {TECH_STATUS}")
         if data.get("usesOsMouseOrKeyboard") is not False:
             violations.append(f"{label}: usesOsMouseOrKeyboard must be false")
-        if data.get("width") != width or data.get("height") != height:
-            violations.append(f"{label}: expected {width}x{height}, got {data.get('width')}x{data.get('height')}")
+        if data.get("width") != 1600 or data.get("height") != 900:
+            violations.append(f"{label}: expected 1600x900, got {data.get('width')}x{data.get('height')}")
+        if data.get("captureScope") != expected_scope:
+            violations.append(f"{label}: captureScope must be {expected_scope}")
 
-    tab_manifest = load_json(root, "build/map01a-inventory-tab-runtime/manifest.json", violations)
-    if tab_manifest.get("status") != TECH_STATUS:
-        violations.append(f"inventory tabs: status must be {TECH_STATUS}")
-    if tab_manifest.get("usesOsMouseOrKeyboard") is not False:
-        violations.append("inventory tabs: usesOsMouseOrKeyboard must be false")
-    if tab_manifest.get("frames") != ["character-info.png", "supplies.png", "storage.png"]:
-        violations.append("inventory tabs: frames must list character-info.png, supplies.png and storage.png")
-    for label, rel in INVENTORY_TAB_EVIDENCE:
-        require_file(root, rel, violations)
+    hub = load_json(root, HUB_MANIFEST, violations)
+    if hub.get("status") != TECH_STATUS:
+        violations.append(f"five-tab hub: status must be {TECH_STATUS}")
+    if hub.get("usesOsMouseOrKeyboard") is not False:
+        violations.append("five-tab hub: usesOsMouseOrKeyboard must be false")
+    if hub.get("width") != 1600 or hub.get("height") != 900:
+        violations.append("five-tab hub: expected 1600x900")
+    if hub.get("frames") != HUB_FRAMES:
+        violations.append("five-tab hub: manifest must list all five approved tab frames")
+    hub_base = str(Path(HUB_MANIFEST).parent)
+    for frame in HUB_FRAMES:
+        require_file(root, f"{hub_base}/{frame}", violations)
 
-    for profile, (width, height) in QUEST_PROFILES.items():
-        base = f"build/map01a-detail-right-player/quest-capture/{profile}"
-        data = load_json(root, base + "/manifest.json", violations)
-        if data.get("status") != TECH_STATUS:
-            violations.append(f"{profile}: status must be {TECH_STATUS}")
-        if data.get("width") != width or data.get("height") != height:
-            violations.append(f"{profile}: expected {width}x{height}, got {data.get('width')}x{data.get('height')}")
-        if data.get("frames") != 18:
-            violations.append(f"{profile}: frames must be 18")
-        if data.get("dialogueFrames") != 38:
-            violations.append(f"{profile}: dialogueFrames must be 38")
-        if data.get("errors") not in ([], None):
-            violations.append(f"{profile}: errors must be empty")
-        for frame in REQUIRED_QUEST_FRAMES:
-            require_file(root, base + "/" + frame, violations)
+    route = load_json(root, ROUTE_MANIFEST, violations)
+    if route.get("status") != TECH_STATUS:
+        violations.append(f"route: status must be {TECH_STATUS}")
+    if route.get("width") != 1280 or route.get("height") != 720:
+        violations.append("route: expected 1280x720")
+    if route.get("frames") != 18:
+        violations.append("route: frames must be 18")
+    if route.get("dialogueFrames") != 38:
+        violations.append("route: dialogueFrames must be 38")
+    route_base = str(Path(ROUTE_MANIFEST).parent)
+    for frame in ROUTE_FRAMES:
+        require_file(root, f"{route_base}/{frame}", violations)
 
     return violations
 
@@ -160,7 +167,7 @@ def main() -> int:
         for item in violations:
             print(" - " + item, file=sys.stderr)
         return 1
-    print("LGO_MAP01A_UI_REVIEW_CATALOG_PASS screens=entry,character_select,inventory profiles=pc,tablet,mobile")
+    print("LGO_MAP01A_UI_REVIEW_CATALOG_PASS screens=entry,five_tab_hub,route,menu")
     return 0
 
 

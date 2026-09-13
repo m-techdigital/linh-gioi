@@ -1,3 +1,10 @@
+## Map01A — catalog hiện hành đã khóa vào design năm tab — 2026-09-14
+
+- Audit phát hiện `Current evidence` vẫn trỏ vào modal chọn class và bộ Hành trang ba tab cũ, tạo rủi ro reviewer hoặc phiên sau quay lại luồng đã loại.
+- Catalog/validator giờ chỉ coi entry hiện hành, hub năm tab đã duyệt, route Q01–Q09 hiện hành và Menu v3 là evidence hiện tại. Character-select và inventory trước năm tab chỉ còn là lịch sử, không được quay lại phần `Current evidence`.
+- Item-source audit đã phản ánh đúng trạng thái: atlas năm item có provenance đang ở `DRAFT_RUNTIME_REVIEW`; bộ mười icon trang bị độc lập vẫn chưa có nguồn được duyệt. Không mở lại class/wardrobe hoặc dùng art giả để lấp thiếu.
+- TDD RED bắt đúng đường dẫn cũ; GREEN đạt 7/7, gồm guard chặn character-select quay lại `Current evidence`, và `validate_lgo_map01a_ui_review_catalog.py` pass với `screens=entry,five_tab_hub,route,menu`.
+
 ## Map01A — nội dung năm tab đã chuyển sang ngôn ngữ người chơi — 2026-09-14
 
 - Hub năm tab đã duyệt tiếp tục dùng một hàng điều hướng compact và cấu trúc hai cột nội dung/chi tiết phải dùng chung cho `Nhân vật`, `Rương đồ`, `Kỹ năng`, `Tiềm năng` và `Linh thú`.

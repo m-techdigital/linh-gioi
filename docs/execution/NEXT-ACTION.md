@@ -1,3 +1,9 @@
+## Next — sau khi khóa catalog vào evidence năm tab hiện hành — 2026-09-14
+
+`CONTINUE`. Catalog hiện hành chỉ trỏ tới entry, hub năm tab, route và Menu đang dùng; validator chặn character-select và inventory ba tab cũ quay lại phần `Current evidence`. Evidence hub mới nhất vẫn là `build/map01a-five-tab-player-copy-runtime-v1/`.
+
+Next valid work: tiếp tục audit một lỗi tương tác hoặc hiển thị Map01A rõ trên Player. Giữ năm tab compact/two-column/detail-right và các progression action bị khóa. Atlas năm item chỉ là review art có provenance; bộ mười icon trang bị vẫn là asset gate, không resume class/pose/wardrobe/source và không tạo art giả.
+
 ## Next — sau audit nội dung hướng người chơi cho năm tab — 2026-09-14
 
 `CONTINUE`. Evidence năm tab hiện hành là `build/map01a-five-tab-player-copy-runtime-v1/{character-info,bag,skills,potential,spirit-pet}.png`; Player `build/map01a-five-tab-player-copy-v1/LinhGioiOnline.app`. Giữ hàng tab compact dùng chung, workspace hai cột và detail bên phải; không đưa ngôn ngữ mô tả implementation trở lại nội dung người chơi.

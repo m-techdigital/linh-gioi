@@ -19,6 +19,14 @@ def write_json(path: Path, data: dict) -> None:
 
 
 class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
+    def test_current_catalog_uses_approved_five_tab_player_and_excludes_legacy_class_select(self) -> None:
+        text = (ROOT / validator.DOC).read_text(encoding="utf-8")
+        current_paths = validator.iter_current_evidence_paths(text)
+
+        self.assertIn("build/map01a-five-tab-player-copy-runtime-v1/spirit-pet.png", current_paths)
+        self.assertFalse(any("character-select" in path for path in current_paths), current_paths)
+        self.assertFalse(any("inventory-tab-runtime" in path for path in current_paths), current_paths)
+
     def _fixture(self) -> tempfile.TemporaryDirectory[str]:
         temp = tempfile.TemporaryDirectory()
         root = Path(temp.name)
@@ -28,15 +36,12 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "# Map01A UI Review Catalog\n\n"
             "Marker: `LGO_MAP01A_UI_REVIEW_CATALOG_READY`\n\n"
             "## Current evidence\n\n"
-            "entry/login: `build/map01a-entry-form-runtime/entry-login.png`\n"
-            "character select: `build/map01a-character-select-runtime/character-select.png`\n"
-            "inventory: `build/map01a-detail-right-player/quest-capture/pc/07-q04-inventory-open.png`\n"
-            "character-info.png\n"
-            "supplies.png\n"
-            "storage.png\n"
+            "entry/login: `build/map01a-entry-reference-align-runtime-v1/entry-login.png`, `build/map01a-entry-reference-align-runtime-v1/manifest.json`\n"
+            "five tabs: `build/map01a-five-tab-player-copy-runtime-v1/character-info.png`, `build/map01a-five-tab-player-copy-runtime-v1/bag.png`, `build/map01a-five-tab-player-copy-runtime-v1/skills.png`, `build/map01a-five-tab-player-copy-runtime-v1/potential.png`, `build/map01a-five-tab-player-copy-runtime-v1/spirit-pet.png`, `build/map01a-five-tab-player-copy-runtime-v1/manifest.json`\n"
+            "route: `build/map01a-context-action-runtime-v1/01-arrival-q01.png`, `build/map01a-context-action-runtime-v1/18-q09-portal-open.png`, `build/map01a-context-action-runtime-v1/manifest.json`\n"
+            "menu: `build/map01a-menu-runtime-v3/menu.png`, `build/map01a-menu-runtime-v3/manifest.json`\n"
             "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md\n"
             "No approved dedicated UI icon set\n"
-            "pc/tablet/mobile\n"
             "not owner approval\n"
             "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED\n"
             "usesOsMouseOrKeyboard=false\n",
@@ -50,42 +55,42 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "prettier but fake icon is a regression\n",
             encoding="utf-8",
         )
-        write_json(root / "build/map01a-entry-form-runtime/manifest.json", {
+        write_json(root / "build/map01a-entry-reference-align-runtime-v1/manifest.json", {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
             "usesOsMouseOrKeyboard": False,
             "width": 1600,
             "height": 900,
+            "captureScope": "map01a-entry-login",
         })
-        (root / "build/map01a-entry-form-runtime/entry-login.png").write_bytes(b"png")
-        write_json(root / "build/map01a-character-select-runtime/manifest.json", {
+        (root / "build/map01a-entry-reference-align-runtime-v1/entry-login.png").write_bytes(b"png")
+        write_json(root / validator.HUB_MANIFEST, {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
             "usesOsMouseOrKeyboard": False,
             "width": 1600,
             "height": 900,
+            "frames": validator.HUB_FRAMES,
         })
-        (root / "build/map01a-character-select-runtime/character-select.png").write_bytes(b"png")
-        write_json(root / "build/map01a-inventory-tab-runtime/manifest.json", {
+        hub_dir = root / Path(validator.HUB_MANIFEST).parent
+        for name in validator.HUB_FRAMES:
+            (hub_dir / name).write_bytes(b"png")
+        write_json(root / validator.ROUTE_MANIFEST, {
+            "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
+            "width": 1280,
+            "height": 720,
+            "frames": 18,
+            "dialogueFrames": 38,
+        })
+        route_dir = root / Path(validator.ROUTE_MANIFEST).parent
+        for name in validator.ROUTE_FRAMES:
+            (route_dir / name).write_bytes(b"png")
+        write_json(root / "build/map01a-menu-runtime-v3/manifest.json", {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
             "usesOsMouseOrKeyboard": False,
             "width": 1600,
             "height": 900,
-            "frames": ["character-info.png", "supplies.png", "storage.png"],
+            "captureScope": "map01a-menu",
         })
-        (root / "build/map01a-inventory-tab-runtime/character-info.png").write_bytes(b"png")
-        (root / "build/map01a-inventory-tab-runtime/supplies.png").write_bytes(b"png")
-        (root / "build/map01a-inventory-tab-runtime/storage.png").write_bytes(b"png")
-        for profile, size in {"pc": (1280, 720), "tablet": (1024, 768), "mobile": (1600, 720)}.items():
-            write_json(root / f"build/map01a-detail-right-player/quest-capture/{profile}/manifest.json", {
-                "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
-                "width": size[0],
-                "height": size[1],
-                "frames": 18,
-                "dialogueFrames": 38,
-                "errors": [],
-            })
-            capture_dir = root / f"build/map01a-detail-right-player/quest-capture/{profile}"
-            for name in ["07-q04-inventory-open.png", "18-q09-portal-open.png"]:
-                (capture_dir / name).write_bytes(b"png")
+        (root / "build/map01a-menu-runtime-v3/menu.png").write_bytes(b"png")
         return temp
 
     def test_current_repo_has_reviewable_map01a_ui_catalog(self) -> None:
@@ -97,7 +102,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             doc = Path(temp) / "docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md"
             text = doc.read_text(encoding="utf-8")
             text = text.replace(
-                "entry/login: `build/map01a-entry-form-runtime/entry-login.png`",
+                "entry/login: `build/map01a-entry-reference-align-runtime-v1/entry-login.png`",
                 "entry/login: `build/missing-entry-runtime/entry-login.png`",
             )
             doc.write_text(text, encoding="utf-8")
@@ -106,9 +111,27 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
 
         self.assertTrue(any("catalog current evidence path missing" in item for item in violations), violations)
 
+    def test_rejects_legacy_character_select_as_current_evidence(self) -> None:
+        with self._fixture() as temp:
+            root = Path(temp)
+            doc = root / "docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md"
+            text = doc.read_text(encoding="utf-8")
+            text = text.replace(
+                "## Current evidence\n\n",
+                "## Current evidence\n\nlegacy: `build/map01a-character-select-runtime/character-select.png`\n",
+            )
+            doc.write_text(text, encoding="utf-8")
+            legacy = root / "build/map01a-character-select-runtime/character-select.png"
+            legacy.parent.mkdir(parents=True, exist_ok=True)
+            legacy.write_bytes(b"png")
+
+            violations = validator.validate_root(root)
+
+        self.assertTrue(any("legacy evidence must not be current" in item for item in violations), violations)
+
     def test_rejects_os_input_capture_for_modal_evidence(self) -> None:
         with self._fixture() as temp:
-            manifest = Path(temp) / "build/map01a-entry-form-runtime/manifest.json"
+            manifest = Path(temp) / "build/map01a-entry-reference-align-runtime-v1/manifest.json"
             data = json.loads(manifest.read_text())
             data["usesOsMouseOrKeyboard"] = True
             write_json(manifest, data)
@@ -119,7 +142,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
 
     def test_rejects_incomplete_quest_capture_matrix(self) -> None:
         with self._fixture() as temp:
-            manifest = Path(temp) / "build/map01a-detail-right-player/quest-capture/pc/manifest.json"
+            manifest = Path(temp) / validator.ROUTE_MANIFEST
             data = json.loads(manifest.read_text())
             data["frames"] = 17
             write_json(manifest, data)

@@ -4,7 +4,9 @@ Status: `SOURCE_AUDIT_CURRENT`, 2026-09-13. Scope: Map01A UI item/icon presentat
 
 ## Current conclusion
 
-No approved dedicated UI icon set for `Bình Máu Nhỏ`, `Bình Linh Lực Nhỏ`, or the Map01A starter reward is available in the Unity project. External extraction now contains `item-hp-potion.png`, `item-mp-potion.png`, and `item-equipment-fragment.png`, but its manifest marks every file `SOURCE_CROP_NEEDS_CLEANUP_AND_REVIEW` and `runtime_ready=false`. The inventory must not import these crops as final art, or fill the gap with emoji, generic geometry, or random generated icons.
+A deterministic five-item atlas now exists at `CongDongLamMap01AItems/map01a-item-icons.png` for HP potion, MP potion, starter equipment fragment, dumpling and coin. Each crop retains source path, source rectangle and SHA-256 provenance; the pack remains `DRAFT_RUNTIME_REVIEW` / `runtimeApproved=false`, so it is valid review art but not owner-approved final art.
+
+No approved dedicated UI icon set exists for the ten equipment slots. Their current source-layer thumbnails remain dark and temporary. Do not reopen class/wardrobe work or fill those slots with emoji, generic geometry or random generated icons.
 
 ## Sources checked
 

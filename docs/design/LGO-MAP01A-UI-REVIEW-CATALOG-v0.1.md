@@ -8,26 +8,24 @@ This catalog points reviewers to the current Map01A 2D UI evidence. It is techni
 
 | Screen / flow | Evidence | Status |
 | --- | --- | --- |
-| Entry/login modal | `build/map01a-entry-form-runtime/entry-login.png` and `build/map01a-entry-form-runtime/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
-| Latest entry/action polish | `build/map01a-entry-side-action-runtime-v1/entry-login.png` and `build/map01a-entry-side-action-runtime-v1/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900; overlay bớt tối và side actions có feedback |
-| Character select modal | `build/map01a-character-select-runtime/character-select.png` and `build/map01a-character-select-runtime/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
-| Quest/HUD/inventory route | `build/map01a-detail-right-player/quest-capture/{pc,tablet,mobile}/` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, pc/tablet/mobile, 18 route frames and 38 dialogue frames each |
-| Inventory tabs: Hành trang + Thông tin + Vật phẩm + Rương đồ | `build/map01a-inventory-column-balance-runtime-v1/bag.png`, `build/map01a-inventory-column-balance-runtime-v1/character-info.png`, `build/map01a-inventory-column-balance-runtime-v1/supplies.png`, `build/map01a-inventory-column-balance-runtime-v1/storage.png`, and `build/map01a-inventory-column-balance-runtime-v1/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900; internal Player flag, no OS mouse/keyboard; column balance checkpoint, still visual CONTINUE |
-| Approved five-tab character hub | `build/map01a-five-tab-runtime-v2/character-info.png`, `build/map01a-five-tab-runtime-v2/bag.png`, `build/map01a-five-tab-runtime-v2/skills.png`, `build/map01a-five-tab-runtime-v2/potential.png`, `build/map01a-five-tab-runtime-v2/spirit-pet.png`, and `build/map01a-five-tab-runtime-v2/manifest.json` | Current five-tab evidence; v1 rejected for skill text/overflow |
-| Gameplay menu | `build/map01a-menu-runtime-v3/menu.png` and `build/map01a-menu-runtime-v3/manifest.json` | Current menu evidence; v1/v2 rejected for flex-stretch/navigation collision; `usesOsMouseOrKeyboard=false`, 1600×900 |
+| Entry/login | `build/map01a-entry-reference-align-runtime-v1/entry-login.png` and `build/map01a-entry-reference-align-runtime-v1/manifest.json` | Current entry evidence; `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
+| Approved five-tab character hub | `build/map01a-five-tab-player-copy-runtime-v1/character-info.png`, `build/map01a-five-tab-player-copy-runtime-v1/bag.png`, `build/map01a-five-tab-player-copy-runtime-v1/skills.png`, `build/map01a-five-tab-player-copy-runtime-v1/potential.png`, `build/map01a-five-tab-player-copy-runtime-v1/spirit-pet.png`, and `build/map01a-five-tab-player-copy-runtime-v1/manifest.json` | Current five-tab evidence; player-facing copy, shared two-column/detail-right layout, `usesOsMouseOrKeyboard=false`, 1600×900 |
+| Quest/HUD route | `build/map01a-context-action-runtime-v1/01-arrival-q01.png`, `build/map01a-context-action-runtime-v1/18-q09-portal-open.png`, and `build/map01a-context-action-runtime-v1/manifest.json` | Current Q01–Q09 route evidence; 18 route frames, 38 dialogue frames, 1280×720 |
+| Gameplay menu | `build/map01a-menu-runtime-v3/menu.png` and `build/map01a-menu-runtime-v3/manifest.json` | Current menu evidence; v1/v2 rejected; `usesOsMouseOrKeyboard=false`, 1600×900 |
 
 ## Required review frames
 
-- Inventory/default bag and right detail: `build/map01a-inventory-column-balance-runtime-v1/bag.png`; older route context remains `build/map01a-detail-right-player/quest-capture/pc/07-q04-inventory-open.png` plus tablet/mobile equivalents.
-- Full route end state: `build/map01a-detail-right-player/quest-capture/pc/18-q09-portal-open.png` plus tablet/mobile equivalents.
-- Inventory tab review frames: `build/map01a-inventory-column-balance-runtime-v1/character-info.png`, `build/map01a-inventory-column-balance-runtime-v1/supplies.png`, and `build/map01a-inventory-column-balance-runtime-v1/storage.png`; these must show the Map01A inventory shell, not entry/login overlay.
-- Entry, character select, and inventory-tab captures use internal Player capture flags, not OS mouse or keyboard automation.
+- Entry/login: `build/map01a-entry-reference-align-runtime-v1/entry-login.png`.
+- Five approved tabs: all five PNGs under `build/map01a-five-tab-player-copy-runtime-v1/`; they must keep one compact navigation row, two content columns and detail on the right.
+- Route start/end: `build/map01a-context-action-runtime-v1/01-arrival-q01.png` and `build/map01a-context-action-runtime-v1/18-q09-portal-open.png`.
+- Menu: `build/map01a-menu-runtime-v3/menu.png`.
+- Current captures use internal Player flags, not OS mouse or keyboard automation. Legacy character-select and pre-five-tab inventory captures are historical evidence only and must not return to this section.
 
 ## Item icon source audit
 
 - Current audit: `docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md`.
-- Result: No approved dedicated UI icon set currently exists for Map01A HP/MP consumables or starter reward, so runtime UI must keep text/count/state cards until provenance-backed item art is available.
-- Quality guard: do not replace missing item art with fake/generic/generated icons or class wardrobe crops.
+- Result: a five-item provenance-backed atlas is present for HP, MP, starter reward, dumpling and coin with status `DRAFT_RUNTIME_REVIEW`. No approved dedicated UI icon set exists for the ten equipment slots.
+- Quality guard: keep the five source-backed item images in review status; do not fill missing equipment art with fake/generic/generated icons or reopen class wardrobe work.
 
 ## Non-claims
 
