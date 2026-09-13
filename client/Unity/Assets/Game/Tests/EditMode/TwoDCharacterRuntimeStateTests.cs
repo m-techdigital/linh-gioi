@@ -966,9 +966,26 @@ namespace LinhGioi.Tests.EditMode
                     "Bottom HUD action buttons must not wrap into oversized blocks.");
                 Assert.That(runAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),
                     "Bottom HUD action buttons must stay compact on Player.");
-                Assert.That(runAction.resolvedStyle.height, Is.LessThanOrEqualTo(44f),
-                    "Bottom HUD action buttons must stay below modal CTA height.");
+                Assert.That(runAction.resolvedStyle.height, Is.InRange(54f, 64f),
+                    "Desktop combat icons must stay readable without growing to modal CTA scale.");
                 Assert.That(skillAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f));
+                foreach (var binding in new[]
+                {
+                    ("Map01A Run Action", "run"),
+                    ("Map01A Jump Action", "jump"),
+                    ("Map01A Basic Attack Action", "attack"),
+                    ("Map01A Skill Action", "skill"),
+                    ("Map01A Character Select Button", "character"),
+                    ("Map01A Inventory Toggle", "inventory"),
+                    ("Map01A Skills Shortcut", "skills"),
+                    ("Map01A Menu Shortcut", "menu"),
+                })
+                {
+                    var icon = root.Q(binding.Item1 + " Icon");
+                    Assert.That(icon, Is.Not.Null, binding.Item1 + " must use the shared HUD icon base.");
+                    Assert.That(icon.ClassListContains("lgo-hud-action-icon"), Is.True);
+                    Assert.That(icon.style.backgroundImage.value.sprite, Is.EqualTo(scene.GetMap01AHudIconSprite(binding.Item2)));
+                }
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Health").value, Is.EqualTo(60));
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Mana").value, Is.EqualTo(50));
                 Assert.That(root.Q<Button>("Map01A Inventory Gender").enabledSelf, Is.False,

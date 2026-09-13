@@ -1296,3 +1296,8 @@ Continue Map01A/UI only from `build/map01a-hud-dialogue-hierarchy-runtime-v4/`. 
 ## Current next action — after NPC portrait dialogue (2026-09-13)
 
 Continue Map01A/UI only from `build/map01a-dialogue-npc-portrait-runtime-v1/`. All six Q01–Q09 NPC conversations now reuse the existing Map01A NPC atlas in one shared dialogue portrait frame; Hạ Vân and Quan Thủ evidence were visually checked and the portrait changes with the active dialogue node. Do not keep polishing the same dialogue shell. Next high-value UI batch is provenance-backed HUD action/navigation icon mapping, or another incomplete Map01A screen/interaction if acceptable icon sources are unavailable. Keep overall status `CONTINUE`; no class/wardrobe/pose/source work and no rollback of class code.
+## Next — Map01A after shared HUD action icons, still CONTINUE — 2026-09-13
+
+`CONTINUE`. Batch HUD hiện tại đã có atlas 8 icon deterministic và một shared icon component cho combat/navigation. Evidence mới: `build/map01a-hud-icons-runtime-v2/01-arrival-q01.png`; source-final build: `build/map01a-hud-icons-player-v3/LinhGioiOnline.app`. Visual review xác nhận cụm combat không còn text đè icon và đọc rõ hơn, nhưng toàn HUD vẫn chưa sát reference owner.
+
+Next valid work: xử lý một batch nhìn thấy hoàn chỉnh cho bottom navigation (`Nhân vật`, `Hành trang`, `Kỹ năng`, `Menu`) theo hierarchy của reference owner, dùng cùng shared base/icon atlas và giữ touch target/font vừa phải; sau đó mới audit login/inventory theo từng screen. Mỗi batch chỉ build/capture sau khi code đã thành một cụm hoàn chỉnh. Không resume class/wardrobe/pose/source, không chạy class capture loop, không rollback class code.

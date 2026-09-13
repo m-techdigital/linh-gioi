@@ -133,27 +133,37 @@ namespace LinhGioi.UI
             _toggleSlot.style.minHeight = _touch ? 52 : 40; _toggleSlot.style.minWidth = 170; _safe.Add(_toggleSlot);
             _combatBar = new VisualElement { name = "Map01A Combat Actions" }; Place(_combatBar, null, 16, null, _touch ? 154 : 84);
             _combatBar.style.flexDirection = FlexDirection.Row;
-            _combatBar.style.width = _touch ? 392 : 342;
-            _combatBar.style.height = _touch ? 62 : 52;
+            _combatBar.style.width = 330;
+            _combatBar.style.height = _touch ? 76 : 66;
             _combatBar.style.justifyContent = Justify.FlexEnd;
             _combatBar.style.alignItems = Align.Center;
             _run = new Button(() => _scene.SetVoRun(!_scene.VoRunEnabled)) { name = "Map01A Run Action", text = "Chạy" };
+            _run.tooltip = "Chạy · Shift";
             _jump = new Button { name = "Map01A Jump Action", text = "Nhảy" };
+            _jump.tooltip = "Nhảy · W";
             _jump.RegisterCallback<PointerDownEvent>(evt => { _touchJumpHeld = true; _jump.CapturePointer(evt.pointerId); _scene.SetVoJumpHeld(true); });
             _jump.RegisterCallback<PointerUpEvent>(evt => { _touchJumpHeld = false; _jump.ReleasePointer(evt.pointerId); _scene.SetVoJumpHeld(false); });
             _jump.RegisterCallback<PointerCaptureOutEvent>(evt => { _touchJumpHeld = false; _scene.SetVoJumpHeld(false); });
             _basic = new Button(() => _scene.TriggerVoBasicAttack()) { name = "Map01A Basic Attack Action", text = "Đánh" };
+            _basic.tooltip = "Đánh thường · Z";
             _skill = new Button(() => _scene.TriggerVoSkill()) { name = "Map01A Skill Action", text = "Liên quyền" };
+            _skill.tooltip = "Kỹ năng · X";
             foreach (var button in new[] { _run, _jump, _basic, _skill })
             {
                 ApplyLgoHudCombatAction(button, _touch);
                 _combatBar.Add(button);
             }
+            AttachLgoHudActionIcon(_run, _scene.GetMap01AHudIconSprite("run"), _touch);
+            AttachLgoHudActionIcon(_jump, _scene.GetMap01AHudIconSprite("jump"), _touch);
+            AttachLgoHudActionIcon(_basic, _scene.GetMap01AHudIconSprite("attack"), _touch);
+            AttachLgoHudActionIcon(_skill, _scene.GetMap01AHudIconSprite("skill"), _touch);
             _safe.Add(_combatBar);
             _characterSelectButton = new Button(OpenCharacterSelect) { name = "Map01A Character Select Button", text = "Nhân vật" };
             ApplyLgoHudContextAction(_characterSelectButton, _touch, minWidth: 150);
-            _inventoryToggle = new Button(() => _scene.ToggleInventory()) { text = "Hành trang · I" };
+            _inventoryToggle = new Button(() => _scene.ToggleInventory()) { name = "Map01A Inventory Toggle", text = "Hành trang · I" };
             ApplyLgoHudContextAction(_inventoryToggle, _touch, minWidth: 180); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
+            AttachLgoHudActionIcon(_characterSelectButton, _scene.GetMap01AHudIconSprite("character"), _touch);
+            AttachLgoHudActionIcon(_inventoryToggle, _scene.GetMap01AHudIconSprite("inventory"), _touch);
             var actionBar = new VisualElement { name = "Map01A Context Actions", pickingMode = PickingMode.Ignore };
             Place(actionBar, null, 16, null, 24); actionBar.style.flexDirection = FlexDirection.Row;
             actionBar.style.alignItems = Align.FlexEnd;
@@ -177,6 +187,8 @@ namespace LinhGioi.UI
                 ApplyLgoHudShortcutAction(button, _touch);
                 _productShortcutActions.Add(button);
             }
+            AttachLgoHudActionIcon(_skillsShortcut, _scene.GetMap01AHudIconSprite("skills"), _touch);
+            AttachLgoHudActionIcon(_menuShortcut, _scene.GetMap01AHudIconSprite("menu"), _touch);
             _safe.Add(_productShortcutActions);
             BuildInventory();
             BuildCharacterSelect();
@@ -381,10 +393,10 @@ namespace LinhGioi.UI
             _slot.text = "Slot: " + _scene.EquipmentSlotLabel + (_touch ? "" : " · V");
             _itemLevel.text = "Đổi cấp item" + (_touch ? "" : " · M");
             _toggleSlot.text = (_scene.VoEquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
-            _run.text = (_scene.VoRunEnabled ? "Đang chạy" : "Chạy") + (_touch ? "" : " · Shift");
-            _jump.text = (_scene.VoSomersaultEnabled ? "Nhảy lộn" : "Nhảy") + (_touch ? "" : " · ↑/W");
-            _basic.text = _scene.VoAvatarMotionState == "basic_attack" ? "Đang đánh" : "Đánh" + (_touch ? "" : " · Z");
-            _skill.text = _scene.VoAvatarMotionState == "skill" ? "Thi triển" : _scene.SkillLabel + (_touch ? "" : " · X");
+            _run.text = _touch ? "" : "SHIFT";
+            _jump.text = _touch ? "" : "W";
+            _basic.text = _touch ? "" : "Z";
+            _skill.text = _touch ? "" : "X";
             _skill.SetEnabled(_scene.CanTriggerVoSkill);
             _minimap.text = _scene.MinimapRouteText;
             _minimap.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;

@@ -30,6 +30,7 @@ namespace LinhGioi.UI
         private const string LgoInventoryGridCellClass = "lgo-inventory-grid-cell";
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
+        private const string LgoHudActionIconClass = "lgo-hud-action-icon";
         private const string LgoHudShortcutActionClass = "lgo-hud-shortcut-action";
         private const string LgoHudContextActionClass = "lgo-hud-context-action";
         private const string LgoHudQuestTabClass = "lgo-hud-quest-tab";
@@ -580,14 +581,44 @@ namespace LinhGioi.UI
         {
             button.AddToClassList(LgoHudCombatActionClass);
             ApplyLgoButton(button);
-            button.style.minHeight = touch ? 56 : 42;
-            button.style.minWidth = touch ? 92 : 78;
-            button.style.maxWidth = touch ? 104 : 92;
-            button.style.fontSize = touch ? 13 : 12;
+            button.style.minHeight = touch ? 68 : 58;
+            button.style.maxHeight = touch ? 68 : 58;
+            button.style.minWidth = touch ? 72 : 62;
+            button.style.maxWidth = touch ? 72 : 62;
+            button.style.flexShrink = 0;
+            button.style.fontSize = touch ? 10 : 9;
             button.style.whiteSpace = WhiteSpace.NoWrap;
-            button.style.marginRight = 6;
-            button.style.borderTopLeftRadius = button.style.borderTopRightRadius = touch ? 28 : 22;
-            button.style.borderBottomLeftRadius = button.style.borderBottomRightRadius = touch ? 28 : 22;
+            button.style.marginRight = 8;
+            button.style.paddingLeft = button.style.paddingRight = 0;
+            button.style.paddingTop = touch ? 42 : 35;
+            button.style.paddingBottom = 3;
+            button.style.unityTextAlign = TextAnchor.LowerCenter;
+            button.style.borderTopLeftRadius = button.style.borderTopRightRadius = touch ? 34 : 29;
+            button.style.borderBottomLeftRadius = button.style.borderBottomRightRadius = touch ? 34 : 29;
+        }
+
+        private static void AttachLgoHudActionIcon(Button button, Sprite sprite, bool touch)
+        {
+            var combat = button.ClassListContains(LgoHudCombatActionClass);
+            var icon = new VisualElement
+            {
+                name = button.name + " Icon",
+                pickingMode = PickingMode.Ignore,
+            };
+            icon.AddToClassList(LgoHudActionIconClass);
+            icon.style.position = Position.Absolute;
+            icon.style.left = combat ? (touch ? 18 : 16) : (touch ? 10 : 8);
+            icon.style.top = combat ? (touch ? 7 : 5) : (touch ? 14 : 10);
+            icon.style.width = icon.style.height = combat ? (touch ? 36 : 30) : (touch ? 28 : 24);
+            icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            if (!combat)
+            {
+                button.style.paddingLeft = touch ? 43 : 36;
+                button.style.paddingRight = touch ? 10 : 8;
+                button.style.unityTextAlign = TextAnchor.MiddleRight;
+            }
+            button.Add(icon);
         }
 
         private static void ApplyLgoHudShortcutAction(Button button, bool touch)

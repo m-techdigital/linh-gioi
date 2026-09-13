@@ -1,0 +1,80 @@
+{
+  "id": "map01a-hud-icons-v1",
+  "status": "DRAFT_RUNTIME_REVIEW",
+  "runtimeApproved": false,
+  "designReference": "LGO-2D-UI-Owner-Demos-2026-09-13/preferred-v2/01-hud-mobile-cong-dong-lam-joystick-cum-chien-dau-phai.png",
+  "policy": "deterministic-shared-grid-no-text-no-screenshot-crop",
+  "textureSize": [
+    512,
+    256
+  ],
+  "pngBytes": 47641,
+  "sha256": "2da62272e628d069ea1e252aa53d1f91a2bdcf1390bf57d46121999a71727079",
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AHudIcons/map01a-hud-icons.png",
+      "role": "ui-hud-atlas",
+      "generator": "pack_lgo_map01a_hud_icons",
+      "referenceOnly": false,
+      "sha256": "2da62272e628d069ea1e252aa53d1f91a2bdcf1390bf57d46121999a71727079"
+    }
+  ],
+  "parts": [
+    {
+      "id": "run",
+      "x": 16,
+      "y": 144,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "jump",
+      "x": 144,
+      "y": 144,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "attack",
+      "x": 272,
+      "y": 144,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "skill",
+      "x": 400,
+      "y": 144,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "character",
+      "x": 16,
+      "y": 16,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "inventory",
+      "x": 144,
+      "y": 16,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "skills",
+      "x": 272,
+      "y": 16,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "menu",
+      "x": 400,
+      "y": 16,
+      "w": 96,
+      "h": 96
+    }
+  ]
+}

@@ -196,8 +196,10 @@ namespace LinhGioi.World
         private readonly Dictionary<string, VoAttachmentProfile> _voAttachmentProfiles = new Dictionary<string, VoAttachmentProfile>();
         private readonly Dictionary<string, VoRigPoseProfile> _voRigPoseProfiles = new Dictionary<string, VoRigPoseProfile>();
         private readonly Dictionary<string, Sprite> _map01AItemIcons = new Dictionary<string, Sprite>();
+        private readonly Dictionary<string, Sprite> _map01AHudIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ANpcSprites = new Dictionary<string, Sprite>();
         private bool _map01AItemIconsLoaded;
+        private bool _map01AHudIconsLoaded;
         private TwoDClassMixedLoadoutFitPreview _classFitPreview;
         private string _classFitPreviewId = "kiem";
         private bool _classFitPreviewActive;
@@ -309,6 +311,33 @@ namespace LinhGioi.World
                 }
             }
             return _map01AItemIcons.TryGetValue(itemId, out var sprite) ? sprite : null;
+        }
+        public Sprite GetMap01AHudIconSprite(string iconId)
+        {
+            if (!_map01AHudIconsLoaded)
+            {
+                _map01AHudIconsLoaded = true;
+                const string path = "LGOMaps/CongDongLamMap01AHudIcons/";
+                var manifestAsset = Resources.Load<TextAsset>(path + "manifest");
+                var atlas = Resources.Load<Texture2D>(path + "map01a-hud-icons");
+                if (manifestAsset != null && atlas != null)
+                {
+                    var manifest = JsonUtility.FromJson<Map01AItemIconManifest>(manifestAsset.text);
+                    if (manifest != null && manifest.id == "map01a-hud-icons-v1"
+                        && manifest.status == "DRAFT_RUNTIME_REVIEW" && manifest.parts != null)
+                    {
+                        foreach (var part in manifest.parts)
+                        {
+                            if (string.IsNullOrEmpty(part.id) || part.w <= 0 || part.h <= 0
+                                || part.x < 0 || part.y < 0 || part.x + part.w > atlas.width || part.y + part.h > atlas.height
+                                || _map01AHudIcons.ContainsKey(part.id))
+                                continue;
+                            _map01AHudIcons.Add(part.id, MakeSprite(atlas, new Rect(part.x, part.y, part.w, part.h)));
+                        }
+                    }
+                }
+            }
+            return _map01AHudIcons.TryGetValue(iconId, out var sprite) ? sprite : null;
         }
         public Sprite GetCurrentDialogueNpcSprite()
         {
