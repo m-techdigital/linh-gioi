@@ -1,6 +1,10 @@
-## Character base jump scale correction — 2026-09-14
+## Character base generation bounded failure — 2026-09-14
 
-`CONTINUE`. Owner sửa phạm vi thành hai bộ riêng: nam 6 pose và nữ 6 pose. Lượt ImageGen thay cả sheet bị reject ngay vì làm sai/trùng pose chạy; toàn bộ candidate được chuyển sang `rejected-evidence/2026-09-14/common-character-generated-duplicate-pose-candidate-v1` và khóa không tái sử dụng. Kết quả thay thế giữ exact SHA-256 của năm pose cũ cho mỗi giới, chỉ scale `jump_tuck` chung `0.948` quanh pivot `(512,820)`. Hệ số lấy từ face-size Vision: nam `79.2103/83.2878 = 0.9510`, nữ `89.8593/95.1142 = 0.9448`; chọn trung điểm cho sai lệch dự kiến dưới `0.4%` ở cả hai. External source: `common-character-v2/six-pose-base-v2-scale-corrected/`; 12/12 frame là RGBA 1024x1536, mỗi bộ có 6 hash riêng, Player chưa chạy và runtime chưa promotion.
+`FIX_REQUIRED`. Owner requested two separate hairless equipment-fitting bases, male and female, retaining the established design and six distinct poses with 1:1 anatomy in jump. The Blender mannequin route produced editable source and 12 unique RGBA renders in about 21 seconds, but direct review rejected the segmented 3D mannequin visual. ImageGen whole-sheet outputs looked cleaner but changed identity and repeated A/B leg phases; a conservative edit of the original male idle still changed face, stance and body proportions. No output is final or packable. Evidence moved to `rejected-evidence/2026-09-14/common-character-blender-mannequin-six-pose-v1` and `common-character-imagegen-base-removal-drift-v1`. Do not repeat these hypotheses; require a one-frame native/pose+identity-lock proof before generating a batch.
+
+## Character base jump scale correction — historical, superseded 2026-09-14
+
+`HISTORICAL_SUPERSEDED`. Owner sửa phạm vi thành hai bộ riêng: nam 6 pose và nữ 6 pose. Lượt ImageGen thay cả sheet bị reject ngay vì làm sai/trùng pose chạy; toàn bộ candidate được chuyển sang `rejected-evidence/2026-09-14/common-character-generated-duplicate-pose-candidate-v1` và khóa không tái sử dụng. Scale-only `jump_tuck=0.948` đã từng đạt kiểm tra số nhưng sau đó owner bác toàn bộ base cũ về design/pose; không còn là body authority và không được đưa vào runtime.
 
 ## Blender split-body recurrence stopped — 2026-09-13
 

@@ -6,14 +6,37 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 
 ## Current allowed path
 
-The active character/outfit route is the six-pose registered outfit pipeline:
+The target character/outfit route remains the six-pose registered outfit pipeline, but its body authority is currently missing:
 
 - spec: `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md`
 - plan: `docs/superpowers/plans/2026-09-13-six-pose-registered-outfit-pipeline.md`
-- body/motion authority: existing six poses `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`
+- pose contract only: `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`; existing male/female pixels are not accepted body authority after owner review
 - source-space profile: 1024×1536 canvas, `originX=512`, `groundY=1484`, `u=1.70/1536`
 
-Next valid implementation work is native layered source authoring for the selected sleeved Pháp Lv1 route, then grouped source board review. ImageGen may supply a concept/reference only. Do not pack Player before the native source can be reopened, its export has real transparency, and source coverage/provenance/alpha/canvas/visual gates pass.
+Next valid implementation work is one visually accepted neutral `idle` base for each gender made with controllable native inpainting or verified pose-control plus identity conditioning. Expand to six poses only after that gate. ImageGen may supply a concept/reference only. Do not pack Player before accepted body authority and native outfit source both exist.
+
+## Stopped path 0: automated base redraw without identity and pose lock
+
+Status: stopped after bounded visual failures on 2026-09-14.
+
+Do not continue:
+
+- Blender mannequin renders as final Linh Giới body art;
+- ImageGen whole-sheet redraw from the old base;
+- ImageGen per-frame “conservative edit” claimed as identity preservation;
+- renaming either rejected batch into a new character-base candidate.
+
+Reason:
+
+- Blender preserved numeric segment lengths but failed the established 2D design, silhouette and joint appearance;
+- whole-sheet ImageGen repeated A/B limb phases and changed the character identity;
+- direct single-frame ImageGen changed face, stance and anatomy even with the original frame as its only reference.
+
+Resume condition:
+
+- demonstrate one `idle` frame with the old design identity and source proportions locked by an artist-controlled native edit or verified structure-control plus identity-conditioning workflow;
+- compare the actual image visually before any remaining pose generation;
+- evidence paths: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-14/common-character-blender-mannequin-six-pose-v1/` and `common-character-imagegen-base-removal-drift-v1/`.
 
 ## Stopped path 1: current skeletal generated-cutout Player branch
 

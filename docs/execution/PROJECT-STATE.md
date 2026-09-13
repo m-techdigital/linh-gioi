@@ -1,5 +1,7 @@
 ## Continuous workflow status
 
+2026-09-14 character-base correction is blocked at source capability, after bounded visual tests rather than validator status. Blender generated 12 distinct proportional frames but failed final style/silhouette review. ImageGen then failed twice as a source-preserving route: the whole sheets repeated A/B limb phases and the direct old-base `male/idle` edit changed face, stance and anatomy. All outputs are quarantined under external `rejected-evidence/2026-09-14`; runtime promotion remains false. The next admissible step is a single visually accepted native/identity-locked idle base before any six-pose batch or outfit fit.
+
 2026-09-13 outfit task is now evaluated by real output, not layer count/checkpoint. Surface-contract gate scope was corrected: declaration validity is separate from source/artifact validity, and outfit pack entrypoints require a PASS contract plus `SOURCE_ARTIFACT_VISUAL_ACCEPTED`.
 
 The Blender flat-card/skinned body-rig prototype is stopped. A resynced Unity build did run, but visual review showed separated body regions and unusable proportions in both rigid and skinned variants. Evidence remains under `build/outfit-body-rig-prototype-2026-09-13/`; it is rejected evidence, not a candidate source. Runtime promotion remains false.
