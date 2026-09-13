@@ -109,10 +109,10 @@ namespace LinhGioi.UI
             nub.style.backgroundColor = new Color(.4f,.72f,.8f,.9f);
             nub.style.marginLeft = nub.style.marginTop = 22;
             _pad.Add(nub); _safe.Add(_pad);
-            _talk = new Button(() => _scene.UseCurrentRouteAction()) { text = "Tương tác · E" };
-            ApplyLgoHudContextAction(_talk, _touch); Place(_talk, null, 16, null, 24); _safe.Add(_talk);
+            _talk = new Button(() => _scene.UseCurrentRouteAction()) { name = "Map01A Talk Action", text = "Tương tác · E" };
+            ApplyLgoHudContextAction(_talk, _touch, minWidth: 150); Place(_talk, null, 16, null, _touch ? 318 : 232); _safe.Add(_talk);
             _npcTalk = new Button(() => _scene.UseNpcConversation()) { text = "Nói chuyện với Tiểu Đồng" };
-            ApplyLgoHudContextAction(_npcTalk, _touch, minHeight: 48); Place(_npcTalk, null, 16, null, 100); _safe.Add(_npcTalk);
+            ApplyLgoHudContextAction(_npcTalk, _touch, minHeight: 48); Place(_npcTalk, null, 16, null, _touch ? 394 : 292); _safe.Add(_npcTalk);
             _outfit = new Button(() => _scene.CycleVoAvatarMode()) { text = "Trang bị Võ · C" };
             ApplyLgoHudInfoPanel(_outfit); Place(_outfit, 16, null, _touch ? 90 : 90, null);
             _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
@@ -159,27 +159,19 @@ namespace LinhGioi.UI
             AttachLgoHudActionIcon(_skill, _scene.GetMap01AHudIconSprite("skill"), _touch);
             _safe.Add(_combatBar);
             _characterSelectButton = new Button(OpenCharacterSelect) { name = "Map01A Character Select Button", text = "Nhân vật" };
-            ApplyLgoHudContextAction(_characterSelectButton, _touch, minWidth: 150);
+            _characterSelectButton.tooltip = "Thông tin nhân vật · P";
+            ApplyLgoHudNavigationAction(_characterSelectButton, _touch, true);
             _inventoryToggle = new Button(() => _scene.ToggleInventory()) { name = "Map01A Inventory Toggle", text = "Hành trang · I" };
-            ApplyLgoHudContextAction(_inventoryToggle, _touch, minWidth: 180); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
+            _inventoryToggle.tooltip = "Mở hành trang · I";
+            ApplyLgoHudNavigationAction(_inventoryToggle, _touch, true);
             AttachLgoHudActionIcon(_characterSelectButton, _scene.GetMap01AHudIconSprite("character"), _touch);
             AttachLgoHudActionIcon(_inventoryToggle, _scene.GetMap01AHudIconSprite("inventory"), _touch);
-            var actionBar = new VisualElement { name = "Map01A Context Actions", pickingMode = PickingMode.Ignore };
-            Place(actionBar, null, 16, null, 24); actionBar.style.flexDirection = FlexDirection.Row;
-            actionBar.style.alignItems = Align.FlexEnd;
-            foreach (var button in new[] { _characterSelectButton, _inventoryToggle, _talk })
-            {
-                button.style.position = Position.Relative;
-                button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
-                button.style.maxWidth = 260; button.style.whiteSpace = WhiteSpace.Normal;
-                actionBar.Add(button);
-            }
-            _characterSelectButton.style.marginRight = 12;
-            _inventoryToggle.style.marginRight = 12; _safe.Add(actionBar);
             _productShortcutActions = new VisualElement { name = "Map01A Product Shortcut Actions", pickingMode = PickingMode.Ignore };
-            Place(_productShortcutActions, null, 16, null, _touch ? 162 : 92);
+            Place(_productShortcutActions, null, 16, null, 18);
             _productShortcutActions.style.flexDirection = FlexDirection.Row;
             _productShortcutActions.style.alignItems = Align.FlexEnd;
+            _productShortcutActions.Add(_characterSelectButton);
+            _productShortcutActions.Add(_inventoryToggle);
             _skillsShortcut = new Button { name = "Map01A Skills Shortcut", text = "Kỹ năng" };
             _menuShortcut = new Button { name = "Map01A Menu Shortcut", text = "Menu" };
             foreach (var button in new[] { _skillsShortcut, _menuShortcut })
@@ -322,7 +314,7 @@ namespace LinhGioi.UI
             _inventory.style.width = inventoryRect.width;
             _inventory.style.height = CalculateInventoryShellHeight(inventoryRect, _touch, IsInventoryCompactShellActive());
             _combatBar.style.bottom = _touch ? 226 : 154;
-            _talk.style.fontSize = _touch ? 20 : 18;
+            _talk.style.fontSize = _touch ? 16 : 15;
             if (_inventoryHeroPanel != null)
             {
                 var stacked = r.width < 950;
@@ -400,8 +392,8 @@ namespace LinhGioi.UI
             _skill.SetEnabled(_scene.CanTriggerVoSkill);
             _minimap.text = _scene.MinimapRouteText;
             _minimap.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _characterSelectButton.text = "Nhân vật" + (_touch ? "" : " · P");
-            _inventoryToggle.text = (_scene.InventoryOpen ? "Đóng hành trang" : "Hành trang") + (_touch ? "" : " · I");
+            _characterSelectButton.text = "Nhân vật";
+            _inventoryToggle.text = _scene.InventoryOpen ? "Đóng" : "Hành trang";
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _quest.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _questTabs.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;

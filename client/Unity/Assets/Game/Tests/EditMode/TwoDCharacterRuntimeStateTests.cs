@@ -986,6 +986,20 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(icon.ClassListContains("lgo-hud-action-icon"), Is.True);
                     Assert.That(icon.style.backgroundImage.value.sprite, Is.EqualTo(scene.GetMap01AHudIconSprite(binding.Item2)));
                 }
+                var navigation = root.Q("Map01A Product Shortcut Actions");
+                foreach (var name in new[]
+                {
+                    "Map01A Character Select Button", "Map01A Inventory Toggle",
+                    "Map01A Skills Shortcut", "Map01A Menu Shortcut",
+                })
+                {
+                    var button = root.Q<Button>(name);
+                    Assert.That(button.parent, Is.EqualTo(navigation), name + " must stay in the shared bottom navigation group.");
+                    Assert.That(button.ClassListContains("lgo-hud-navigation-action"), Is.True);
+                    Assert.That(button.resolvedStyle.height, Is.InRange(60f, 76f));
+                }
+                Assert.That(root.Q<Button>("Map01A Talk Action").parent, Is.Not.EqualTo(navigation),
+                    "Context interaction must not be mixed into product navigation.");
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Health").value, Is.EqualTo(60));
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Mana").value, Is.EqualTo(50));
                 Assert.That(root.Q<Button>("Map01A Inventory Gender").enabledSelf, Is.False,

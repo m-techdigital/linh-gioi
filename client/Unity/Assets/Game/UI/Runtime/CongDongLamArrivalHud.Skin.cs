@@ -31,6 +31,7 @@ namespace LinhGioi.UI
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
         private const string LgoHudActionIconClass = "lgo-hud-action-icon";
+        private const string LgoHudNavigationActionClass = "lgo-hud-navigation-action";
         private const string LgoHudShortcutActionClass = "lgo-hud-shortcut-action";
         private const string LgoHudContextActionClass = "lgo-hud-context-action";
         private const string LgoHudQuestTabClass = "lgo-hud-quest-tab";
@@ -600,6 +601,7 @@ namespace LinhGioi.UI
         private static void AttachLgoHudActionIcon(Button button, Sprite sprite, bool touch)
         {
             var combat = button.ClassListContains(LgoHudCombatActionClass);
+            var navigation = button.ClassListContains(LgoHudNavigationActionClass);
             var icon = new VisualElement
             {
                 name = button.name + " Icon",
@@ -607,12 +609,12 @@ namespace LinhGioi.UI
             };
             icon.AddToClassList(LgoHudActionIconClass);
             icon.style.position = Position.Absolute;
-            icon.style.left = combat ? (touch ? 18 : 16) : (touch ? 10 : 8);
-            icon.style.top = combat ? (touch ? 7 : 5) : (touch ? 14 : 10);
-            icon.style.width = icon.style.height = combat ? (touch ? 36 : 30) : (touch ? 28 : 24);
+            icon.style.left = combat ? (touch ? 18 : 16) : navigation ? (touch ? 25 : 25) : (touch ? 10 : 8);
+            icon.style.top = combat ? (touch ? 7 : 5) : navigation ? 7 : (touch ? 14 : 10);
+            icon.style.width = icon.style.height = combat ? (touch ? 36 : 30) : navigation ? (touch ? 34 : 30) : (touch ? 28 : 24);
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
-            if (!combat)
+            if (!combat && !navigation)
             {
                 button.style.paddingLeft = touch ? 43 : 36;
                 button.style.paddingRight = touch ? 10 : 8;
@@ -621,18 +623,41 @@ namespace LinhGioi.UI
             button.Add(icon);
         }
 
+        private static void ApplyLgoHudNavigationAction(Button button, bool touch, bool enabled)
+        {
+            button.AddToClassList(LgoHudNavigationActionClass);
+            ApplyLgoButton(button);
+            button.style.position = Position.Relative;
+            button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
+            button.style.width = touch ? 84 : 80;
+            button.style.minWidth = touch ? 84 : 80;
+            button.style.maxWidth = touch ? 84 : 80;
+            button.style.height = touch ? 76 : 68;
+            button.style.minHeight = touch ? 76 : 68;
+            button.style.maxHeight = touch ? 76 : 68;
+            button.style.marginLeft = 6;
+            button.style.paddingLeft = button.style.paddingRight = 0;
+            button.style.paddingTop = touch ? 46 : 40;
+            button.style.paddingBottom = 4;
+            button.style.fontSize = touch ? 12 : 11;
+            button.style.unityTextAlign = TextAnchor.LowerCenter;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+            button.style.backgroundColor = new Color(.008f, .032f, .058f, .82f);
+            button.style.borderTopColor = button.style.borderBottomColor = UiGoldBorder;
+            button.style.borderLeftColor = button.style.borderRightColor = new Color(.12f, .38f, .58f, .64f);
+            button.style.borderTopLeftRadius = button.style.borderTopRightRadius = 10;
+            button.style.borderBottomLeftRadius = button.style.borderBottomRightRadius = 10;
+            if (!enabled)
+            {
+                button.SetEnabled(false);
+                button.style.opacity = .52f;
+            }
+        }
+
         private static void ApplyLgoHudShortcutAction(Button button, bool touch)
         {
             button.AddToClassList(LgoHudShortcutActionClass);
-            ApplyLgoDisabledAction(button);
-            button.style.position = Position.Relative;
-            button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
-            button.style.minHeight = touch ? 46 : 36;
-            button.style.minWidth = touch ? 110 : 92;
-            button.style.maxWidth = 118;
-            button.style.fontSize = 13;
-            button.style.whiteSpace = WhiteSpace.NoWrap;
-            button.style.marginLeft = 8;
+            ApplyLgoHudNavigationAction(button, touch, false);
         }
 
         private static void ApplyLgoHudContextAction(Button button, bool touch, float minWidth = 170f, float? minHeight = null)

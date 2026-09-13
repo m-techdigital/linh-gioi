@@ -1301,3 +1301,8 @@ Continue Map01A/UI only from `build/map01a-dialogue-npc-portrait-runtime-v1/`. A
 `CONTINUE`. Batch HUD hiện tại đã có atlas 8 icon deterministic và một shared icon component cho combat/navigation. Evidence mới: `build/map01a-hud-icons-runtime-v2/01-arrival-q01.png`; source-final build: `build/map01a-hud-icons-player-v3/LinhGioiOnline.app`. Visual review xác nhận cụm combat không còn text đè icon và đọc rõ hơn, nhưng toàn HUD vẫn chưa sát reference owner.
 
 Next valid work: xử lý một batch nhìn thấy hoàn chỉnh cho bottom navigation (`Nhân vật`, `Hành trang`, `Kỹ năng`, `Menu`) theo hierarchy của reference owner, dùng cùng shared base/icon atlas và giữ touch target/font vừa phải; sau đó mới audit login/inventory theo từng screen. Mỗi batch chỉ build/capture sau khi code đã thành một cụm hoàn chỉnh. Không resume class/wardrobe/pose/source, không chạy class capture loop, không rollback class code.
+## Next — Map01A after unified bottom navigation, still CONTINUE — 2026-09-13
+
+`CONTINUE`. Bottom navigation đã gom về một shared component/hierarchy và context action đã tách khỏi product navigation. Evidence: `build/map01a-bottom-nav-runtime-v1/01-arrival-q01.png`; Player: `build/map01a-bottom-nav-player-v1/LinhGioiOnline.app`.
+
+Next valid work: chọn một screen hoàn chỉnh để giảm khoảng cách visual rõ ràng, ưu tiên Entry/Login theo reference `preferred-v2/04-dang-nhap-may-chu-bat-dau-linh-gioi.png`; audit logo/card/background/side actions rồi sửa ở shared base trước khi bind screen. Chỉ build/capture khi trọn batch; không quay lại class/wardrobe/pose/source và không rollback code class.
