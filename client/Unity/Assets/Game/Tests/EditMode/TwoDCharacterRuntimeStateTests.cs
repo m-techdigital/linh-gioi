@@ -199,8 +199,26 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")),
                     Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Character Panel"))),
                     "Selected equipment detail must stay in the shared right column.");
-                Assert.That(root.Q<VisualElement>("Map01A Character Hero Portrait").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetVoAvatarThumbnailSprite()));
+                var heroPanel = root.Q("Map01A Inventory Character Panel");
+                var heroCard = root.Q("Map01A Character Hero Card");
+                var heroPortrait = root.Q<VisualElement>("Map01A Character Hero Portrait");
+                var heroInfo = root.Q("Map01A Character Hero Info");
+                Assert.That(heroPortrait.style.backgroundImage.value.sprite, Is.EqualTo(scene.GetVoAvatarThumbnailSprite()));
+                Assert.That(heroInfo.parent, Is.EqualTo(heroPanel),
+                    "Approved character hierarchy keeps name/power below the actor instead of squeezing it into a third inner column.");
+                Assert.That(heroPortrait.style.height.value.value, Is.GreaterThanOrEqualTo(340),
+                    "The full-body preview should use the available character surface after removing the obsolete inner info column.");
+                Assert.That(root.Q<Label>("Map01A Inventory Hero Title").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "The character surface must not repeat class/gender above the approved full-body composition.");
+                Assert.That(root.Q<Label>("Map01A Inventory Hero Meta").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Duplicate HP/MP copy above the actor steals the height required by the approved bottom identity strip.");
+                Assert.That(root.Q("Map01A Character Stat Strip").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Character vitals must use one bottom identity stack instead of overlapping a second badge strip.");
+                Assert.That(root.Q<Label>("Map01A Character Hero Vitals").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Character Hero Loadout").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Character Equipment Summary").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "The bottom loadout line already carries the equipped count; a second left-aligned summary causes visual overlap.");
+                Assert.That(heroCard.style.minHeight.value.value, Is.LessThanOrEqualTo(370));
                 Assert.That(root.Q("Map01A Character Hero Left Equipment Rail").childCount, Is.EqualTo(5));
                 Assert.That(root.Q("Map01A Character Hero Right Equipment Rail").childCount, Is.EqualTo(5));
 

@@ -1344,3 +1344,9 @@ Next valid work: tiếp tục Map01A/UI-only theo bộ năm tab owner duyệt, �
 `CONTINUE`. Evidence hiện hành cho Rương đồ là `build/map01a-bag-unified-grid-runtime-v1/bag.png`: main-tab switch đã reset đúng về Tất cả và mọi item nằm trong một wrapping grid. Không khôi phục hai group/page dọc hoặc filter Trang bị mặc định.
 
 Next valid work: audit và xử lý một sai lệch cấu trúc lớn còn lại ở tab Nhân vật so với `01-nhan-vat-nam-tab-compact-APPROVED.png`, ưu tiên hierarchy full-body + 10 slot + detail phải; không chỉnh/capture class art, pose, wardrobe, camera hay scale. Nếu Player hiện hành đã đáp ứng cấu trúc và chỉ còn nợ art chất lượng, ghi rõ art debt rồi chuyển sang HUD/NPC dialogue theo design owner, không tiếp tục micro-polish.
+
+## Next — sau character hierarchy v4 — 2026-09-14
+
+`CONTINUE`. Hai tab owner duyệt hiện dùng evidence `build/map01a-character-hierarchy-runtime-v4/{character-info,bag}.png`. Cấu trúc Nhân vật và Rương đồ đã khớp: năm tab compact, full-body giữa 10 slot, detail phải, rail phân loại dọc và một all-items grid. Không quay lại các capture v1–v3 hoặc micro-polish hai tab này; phần còn yếu là art thumbnail trang bị hiện hành và không được giải quyết bằng cách resume class/wardrobe.
+
+Next valid work: chuyển sang một batch HUD/NPC dialogue theo owner gameplay reference và shared base, ưu tiên sai lệch cấu trúc/interaction có thể nhìn thấy trên Player. Nếu không còn sai lệch cấu trúc lớn, xử lý screen/interaction Map01A còn thiếu theo roadmap; không mở class/pose/wardrobe, không rollback code class và không đổi frozen surfaces.

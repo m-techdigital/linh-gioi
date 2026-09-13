@@ -1472,3 +1472,10 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Root cause là `ShowInventoryMode(false)` giữ filter `equipment`; đã sửa để Rương đồ mở mặc định ở `Tất cả`. Trang bị, bình máu, bình linh lực và phần thưởng nay dùng một shared wrapping grid; rail phân loại dọc và detail bên phải giữ nguyên.
 - TDD có RED xác nhận `Supplies Page=None`, RED tiếp theo xác nhận hai nhóm có parent khác nhau; GREEN full `TwoDCharacterRuntimeStateTests` đạt 20/20. Shared-skin validator, 12 unit test, no-3D/no-source và frozen diff audit đều đạt.
 - Player build `build/map01a-bag-unified-grid-player-v1/LinhGioiOnline.app`, `errors=0`; evidence `build/map01a-bag-unified-grid-runtime-v1/bag.png`, manifest không dùng chuột/phím OS. Visual audit xác nhận `Tất cả` được chọn và ba item thật xuất hiện ngay trong hàng tiếp theo, không vỡ detail hoặc category rail.
+
+## Map01A — approved character hierarchy checkpoint, still CONTINUE — 2026-09-14
+
+- Tab Nhân vật đã bỏ cột thông tin chen bên trong actor card. Full-body thumbnail hiện nằm giữa hai rail 5+5 slot; tên, LC, HP/MP và loadout dùng một identity stack phía dưới như design `01-nhan-vat-nam-tab-compact-APPROVED.png`.
+- Hai dòng class/vitals trùng phía trên, stat badge strip và equipment summary trùng đã ẩn để không chiếm chiều cao hoặc chồng đáy. Đây chỉ là bố cục UI thumbnail; không đổi sprite, class art, pose, wardrobe, camera hay runtime actor scale.
+- Capture v1 phát hiện identity sai cột; v2/v3 phát hiện overflow và badge overlap; các bản đó bị loại. Evidence hiện hành duy nhất: `build/map01a-character-hierarchy-runtime-v4/{character-info,bag}.png`; Player `build/map01a-character-hierarchy-player-v4/LinhGioiOnline.app`, build `errors=0`.
+- Full `TwoDCharacterRuntimeStateTests` đạt 20/20; shared-skin validator, 12 unit test, no-3D/no-source, frozen diff và capture log sạch. Visual audit v4: không chồng/cắt, actor/10 slot/detail phải đúng hierarchy; art thumbnail trang bị tối vẫn là art debt hiện hành, không được xử bằng cách mở lại class work.

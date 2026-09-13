@@ -370,6 +370,10 @@ namespace LinhGioi.UI
             body.Add(_inventoryHeroPanel);
             _inventoryHeroTitle = LgoLabel("", 22, UiGold, true);
             _inventoryHeroMeta = LgoLabel("", 15, new Color(.78f, .94f, .96f, .92f));
+            _inventoryHeroTitle.name = "Map01A Inventory Hero Title";
+            _inventoryHeroMeta.name = "Map01A Inventory Hero Meta";
+            _inventoryHeroTitle.style.display = DisplayStyle.None;
+            _inventoryHeroMeta.style.display = DisplayStyle.None;
             _inventoryHeroPanel.Add(_inventoryHeroTitle);
             _inventoryHeroPanel.Add(_inventoryHeroMeta);
             _equipmentSlotIds = _scene.VoEquipmentSlotIds;
@@ -378,7 +382,7 @@ namespace LinhGioi.UI
             _characterHeroCard.style.flexDirection = FlexDirection.Row;
             _characterHeroCard.style.alignItems = Align.Center;
             _characterHeroCard.style.justifyContent = Justify.Center;
-            _characterHeroCard.style.minHeight = 330;
+            _characterHeroCard.style.minHeight = 370;
             _characterHeroCard.style.marginTop = 10;
             _characterHeroCard.style.marginBottom = 8;
             ApplyLgoDetailCard(_characterHeroCard, 12, 10);
@@ -393,8 +397,8 @@ namespace LinhGioi.UI
 
             _characterHeroPortrait = new VisualElement { name = "Map01A Character Hero Portrait" };
             ApplyLgoItemIcon(_characterHeroPortrait);
-            _characterHeroPortrait.style.width = 230;
-            _characterHeroPortrait.style.height = 310;
+            _characterHeroPortrait.style.width = 300;
+            _characterHeroPortrait.style.height = 350;
             _characterHeroPortrait.style.marginRight = 10;
             _characterHeroPortrait.style.marginTop = 0;
             _characterHeroPortrait.style.marginBottom = 0;
@@ -404,13 +408,15 @@ namespace LinhGioi.UI
             _characterHeroRightEquipmentRail.style.flexDirection = FlexDirection.Column;
             _characterHeroRightEquipmentRail.style.flexGrow = 0;
             _characterHeroRightEquipmentRail.style.width = 54;
-            _characterHeroRightEquipmentRail.style.marginRight = 18;
+            _characterHeroRightEquipmentRail.style.marginRight = 0;
             _characterHeroCard.Add(_characterHeroRightEquipmentRail);
 
             var heroInfo = new VisualElement { name = "Map01A Character Hero Info" };
-            heroInfo.style.flexGrow = 1;
+            heroInfo.style.flexGrow = 0;
             heroInfo.style.minWidth = 0;
             heroInfo.style.flexDirection = FlexDirection.Column;
+            heroInfo.style.alignItems = Align.Center;
+            heroInfo.style.marginTop = 4;
             _characterHeroName = LgoLabel("", 19, UiGold, true);
             _characterHeroName.name = "Map01A Character Hero Name";
             _characterHeroPower = LgoLabel("", 17, new Color(.96f, .91f, .76f, .96f), true);
@@ -442,10 +448,11 @@ namespace LinhGioi.UI
             heroInfo.Add(_characterHeroVitals);
             heroInfo.Add(_characterHeroLoadout);
             heroInfo.Add(_characterHeroLoadoutStrip);
-            _characterHeroCard.Add(heroInfo);
+            _inventoryHeroPanel.Add(heroInfo);
 
             _characterStatStrip = new VisualElement { name = "Map01A Character Stat Strip" };
             _characterStatStrip.style.flexDirection = FlexDirection.Row;
+            _characterStatStrip.style.display = DisplayStyle.None;
             _characterStatStrip.style.marginTop = 2;
             _characterStatStrip.style.marginBottom = 8;
             _characterStatStrip.Add(InventoryBadge("Map01A Character HP Badge", "HP 60/100", new Color(.95f, .70f, .70f, .96f)));
@@ -454,8 +461,11 @@ namespace LinhGioi.UI
             _inventoryHeroPanel.Add(_characterStatStrip);
 
             var heroDivider = LgoDivider("Map01A Character Hero Divider");
+            heroDivider.style.display = DisplayStyle.None;
             _inventoryHeroPanel.Add(heroDivider);
             _equipmentTitle = LgoLabel("", 16, new Color(.95f, .86f, .58f, .96f), true);
+            _equipmentTitle.name = "Map01A Character Equipment Summary";
+            _equipmentTitle.style.display = DisplayStyle.None;
             _inventoryHeroPanel.Add(_equipmentTitle);
 
             _characterLoadoutMatrix = new VisualElement { name = "Map01A Character Loadout Matrix" };
