@@ -1,3 +1,9 @@
+## Map01A — polish card vật phẩm trong Hành trang — 2026-09-13
+
+`CONTINUE`, chỉ UI/Map01A. Trang `Vật phẩm` trong Hành trang không còn dùng `Button.text` phẳng cho từng món; mỗi dòng vật phẩm giờ là card selectable có label tên, trạng thái và badge số lượng riêng (`Bình Máu Nhỏ`, `Bình Linh Lực Nhỏ`, `Hộ Uyển Võ Tân Thủ`). Chi tiết món vẫn ở panel phải, action dùng/dùng thử vẫn tách khỏi row chọn món. Không thêm icon giả, không sinh art random, không sửa class/wardrobe/pose/source, không đổi dữ liệu inventory hoặc storage.
+
+Kiểm: test RED bắt `Map01A Health Potion` còn vẽ chữ trực tiếp trên button (`build/inventory-supply-card-red.log`), sau đó GREEN `./tools/unity_batch_test.sh --filter LinhGioi.Tests.EditMode.TwoDCharacterRuntimeStateTests.Inventory` với 5/5 pass (`build/inventory-supply-card-green.log`). Validator UI/catalog 13/13, shared-skin/no-3D/no-source pass. Player build: `build/map01a-supply-card-player/LinhGioiOnline.app`, `errors=0 warnings=17`. Runtime evidence: `build/map01a-supply-card-runtime-v1/{pc,tablet,mobile}/`, 5 ảnh/profile, capture bằng flag nội bộ không dùng chuột/phím OS. Đã xem PC và mobile `supplies.png`: row vật phẩm đọc được, badge số lượng/trạng thái rõ, detail phải không vỡ. Đây vẫn chưa phải nghiệm thu mỹ thuật cuối vì chưa có icon item chuyên dụng/provenance.
+
 ## Map01A — sửa ngữ cảnh và bố cục hành trang — 2026-09-13
 
 `CONTINUE`, chỉ UI/Map01A; class/wardrobe/pose do task khác xử lý. Đã sửa chuyển Vật phẩm → Thông tin còn giữ chi tiết/nút dùng bình thuốc; đổi tab không làm thay loadout. Đã sửa panel Thông tin/Rương đồ chỉ giãn đúng khi resize: giờ phân bổ chiều rộng cập nhật ngay lúc đổi tab. Chi tiết bên phải có vùng cuộn riêng, hành động nằm ngoài vùng cuộn; danh sách trang bị có scroll; tab/header/nút gọn hơn. Loại rarity và chỉ số Công/Thủ tự tính không có nguồn dữ liệu, ẩn ID kỹ thuật, bỏ chữ API/model/local khỏi nội dung người chơi. Không sửa dữ liệu, art, launcher hay logic class.

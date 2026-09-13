@@ -1,3 +1,9 @@
+## Hiện hành — Map01A/UI sau polish card vật phẩm — 2026-09-13
+
+`CONTINUE`. Batch mới nhất chỉ xử lý Hành trang/Vật phẩm: row vật phẩm đã thành card có tên, số lượng, trạng thái và giữ detail bên phải. Evidence Player: `build/map01a-supply-card-runtime-v1/{pc,tablet,mobile}/supplies.png`; đã xem PC/mobile. Không có icon item chuyên dụng trong Unity/source được audit nhanh, nên không tự thêm icon giả, emoji, generic shape hoặc random generated art.
+
+Next valid UI work: tiếp tục Map01A product UI/UX theo reference owner, ưu tiên một trong các hướng không động vào class: (1) audit/propose nguồn item icon thật có provenance hoặc design board riêng trước khi wiring; (2) polish inventory/detail/card spacing thêm bằng shared `CongDongLamArrivalHud.Skin.cs`; (3) login/HUD/NPC dialogue readability. Không resume class/wardrobe/pose/source/launcher, không rollback class code, không mở storage giao dịch thật nếu thiếu model/API/frozen contract.
+
 ## Hiện hành — Map01A/UI, tiếp theo asset và trình bày hành trang — 2026-09-13
 
 `CONTINUE`. Batch ngữ cảnh/bố cục hành trang đã kiểm 5/5 test và ảnh Player cuối tại `build/map01a-inventory-context-runtime-v2/{pc,tablet,mobile}/`. Không chạy lại test/build batch này khi chưa có thay đổi liên quan. Goal tự động vẫn ghi class là dữ liệu cũ; yêu cầu owner loại class có ưu tiên. Không tiếp tục class/wardrobe/pose/source/launcher hoặc rollback.

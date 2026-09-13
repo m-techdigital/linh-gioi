@@ -13,6 +13,7 @@ namespace LinhGioi.UI
         private Button[] _equipmentTiles;
         private VisualElement[] _equipmentTileIcons, _equipmentRowIcons;
         private Label[] _equipmentTileNames, _equipmentTileStates, _equipmentRowNames, _equipmentRowStates;
+        private Label _healthPotionName, _healthPotionCount, _healthPotionState, _manaPotionName, _manaPotionCount, _manaPotionState, _classRewardName, _classRewardCount, _classRewardState;
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
         private string _selectedSupplyItemId = "health_potion";
 
@@ -51,6 +52,50 @@ namespace LinhGioi.UI
             panel.style.paddingTop = panel.style.paddingBottom = 10;
             panel.style.minWidth = 0;
             return panel;
+        }
+
+        private Button SupplyItemRow(Action action, string name, string itemId, out Label nameLabel, out Label countLabel, out Label stateLabel)
+        {
+            var row = InventoryButton(action, name);
+            row.text = string.Empty;
+            row.style.flexGrow = 0;
+            row.style.flexBasis = StyleKeyword.Auto;
+            row.style.minHeight = _touch ? 58 : 52;
+            row.style.marginBottom = 8;
+            row.style.paddingLeft = 12;
+            row.style.paddingRight = 12;
+            row.style.paddingTop = 7;
+            row.style.paddingBottom = 7;
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            row.style.justifyContent = Justify.FlexStart;
+            row.style.unityTextAlign = TextAnchor.MiddleLeft;
+
+            var textGroup = new VisualElement { name = "Map01A Supply Item Text " + itemId };
+            textGroup.style.flexGrow = 1;
+            textGroup.style.minWidth = 0;
+            textGroup.style.flexDirection = FlexDirection.Column;
+            nameLabel = LgoLabel("", 15, UiText, true);
+            nameLabel.name = "Map01A Supply Item Name " + itemId;
+            stateLabel = LgoLabel("", 12, UiSubText);
+            stateLabel.name = "Map01A Supply Item State " + itemId;
+            stateLabel.style.marginTop = 2;
+            textGroup.Add(nameLabel);
+            textGroup.Add(stateLabel);
+
+            countLabel = LgoLabel("", 14, UiGold, true);
+            countLabel.name = "Map01A Supply Item Count " + itemId;
+            countLabel.style.flexGrow = 0;
+            countLabel.style.marginLeft = 10;
+            countLabel.style.paddingLeft = 8;
+            countLabel.style.paddingRight = 8;
+            countLabel.style.paddingTop = 3;
+            countLabel.style.paddingBottom = 3;
+            ApplyLgoFrame(countLabel, new Color(.020f, .060f, .088f, .90f), new Color(.92f, .72f, .36f, .55f));
+
+            row.Add(textGroup);
+            row.Add(countLabel);
+            return row;
         }
 
         private void BuildInventory()
@@ -394,18 +439,12 @@ namespace LinhGioi.UI
             ApplyLgoFrame(_suppliesEmptyState, new Color(.020f, .060f, .088f, .86f), new Color(.50f, .58f, .58f, .55f));
             suppliesListCard.Add(_suppliesEmptyState);
             _questItemActions = new VisualElement { name = "Map01A Quest Item Actions" };
-            _healthPotion = InventoryButton(() => SelectInventorySupply("health_potion"), "Map01A Health Potion", "Bình Máu Nhỏ");
-            _manaPotion = InventoryButton(() => SelectInventorySupply("mana_potion"), "Map01A Mana Potion", "Bình Linh Lực Nhỏ");
-            _equipReward = InventoryButton(() => SelectInventorySupply("class_reward"), "Map01A Equip Reward", "Hộ Uyển Võ Tân Thủ");
-            foreach (var button in new[] { _healthPotion, _manaPotion, _equipReward })
-            {
-                button.style.flexGrow = 0; button.style.flexBasis = StyleKeyword.Auto;
-                button.style.marginBottom = 8;
-                button.style.color = new Color(.70f, .80f, .80f, .92f);
-                button.style.unityTextAlign = TextAnchor.MiddleLeft;
-                button.style.paddingLeft = 14;
-                _questItemActions.Add(button);
-            }
+            _healthPotion = SupplyItemRow(() => SelectInventorySupply("health_potion"), "Map01A Health Potion", "health_potion", out _healthPotionName, out _healthPotionCount, out _healthPotionState);
+            _manaPotion = SupplyItemRow(() => SelectInventorySupply("mana_potion"), "Map01A Mana Potion", "mana_potion", out _manaPotionName, out _manaPotionCount, out _manaPotionState);
+            _equipReward = SupplyItemRow(() => SelectInventorySupply("class_reward"), "Map01A Equip Reward", "class_reward", out _classRewardName, out _classRewardCount, out _classRewardState);
+            _questItemActions.Add(_healthPotion);
+            _questItemActions.Add(_manaPotion);
+            _questItemActions.Add(_equipReward);
             suppliesListCard.Add(_questItemActions); scroll.Add(_suppliesPage);
 
             body.Add(_inventoryDetailPanel);
@@ -533,17 +572,27 @@ namespace LinhGioi.UI
         private void RefreshInventorySupplyRows()
         {
             if (_healthPotion == null || _manaPotion == null || _equipReward == null) return;
-            StyleSupplyRow(_healthPotion, _selectedSupplyItemId == "health_potion");
-            StyleSupplyRow(_manaPotion, _selectedSupplyItemId == "mana_potion");
-            StyleSupplyRow(_equipReward, _selectedSupplyItemId == "class_reward");
+            RefreshSupplyRow(_healthPotion, _healthPotionName, _healthPotionCount, _healthPotionState,
+                "health_potion", "Bình Máu Nhỏ", _scene.HealthPotionCount, _scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100 ? "Có thể dùng" : "Tạm khóa");
+            RefreshSupplyRow(_manaPotion, _manaPotionName, _manaPotionCount, _manaPotionState,
+                "mana_potion", "Bình Linh Lực Nhỏ", _scene.ManaPotionCount, _scene.ManaPotionCount > 0 && _scene.PlayerMana < 100 ? "Có thể dùng" : "Tạm khóa");
+            RefreshSupplyRow(_equipReward, _classRewardName, _classRewardCount, _classRewardState,
+                "class_reward", "Hộ Uyển Võ Tân Thủ", _scene.HasClassRewardItem ? 1 : 0,
+                !_scene.HasClassRewardItem ? "Chưa nhận" : _scene.IsClassRewardEquipped ? "Đã trang bị" : "Có thể trang bị");
         }
 
-        private static void StyleSupplyRow(Button button, bool selected)
+        private void RefreshSupplyRow(Button button, Label nameLabel, Label countLabel, Label stateLabel, string itemId, string label, int count, string state)
         {
+            var selected = _selectedSupplyItemId == itemId;
+            button.text = string.Empty;
+            if (nameLabel != null) nameLabel.text = label;
+            if (countLabel != null) countLabel.text = "x" + count;
+            if (stateLabel != null) stateLabel.text = state;
             button.style.backgroundColor = selected ? new Color(.12f, .33f, .56f, .98f) : new Color(.045f, .13f, .18f, .98f);
             button.style.borderTopColor = button.style.borderBottomColor = selected ? new Color(.92f, .72f, .36f, .86f) : new Color(.50f, .58f, .58f, .55f);
             button.style.borderLeftColor = button.style.borderRightColor = selected ? new Color(.92f, .72f, .36f, .86f) : new Color(.50f, .58f, .58f, .55f);
             button.style.color = new Color(.70f, .80f, .80f, .92f);
+            if (stateLabel != null) stateLabel.style.color = selected ? new Color(.90f, .96f, 1f, .96f) : UiSubText;
         }
 
         private void RefreshInventoryEquipmentTiles()

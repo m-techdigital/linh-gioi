@@ -495,6 +495,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Supplies must keep the right-side detail panel instead of becoming a left-only technical list.");
                 Assert.That(root.Q<Label>("Map01A Supplies Empty State").text, Does.Contain("Chưa nhận"));
+                Assert.That(root.Q<Button>("Map01A Health Potion").text, Is.Empty,
+                    "Supply rows must be composed cards, not plain Button.text labels that look like temporary debug UI.");
+                Assert.That(root.Q<Label>("Map01A Supply Item Name health_potion").text, Is.EqualTo("Bình Máu Nhỏ"));
+                Assert.That(root.Q<Label>("Map01A Supply Item Count health_potion").text, Does.Contain("x0"));
+                Assert.That(root.Q<Label>("Map01A Supply Item State health_potion").text, Does.Contain("Tạm khóa"));
+                Assert.That(root.Q<Label>("Map01A Supply Item Name mana_potion").text, Is.EqualTo("Bình Linh Lực Nhỏ"));
+                Assert.That(root.Q<Label>("Map01A Supply Item Name class_reward").text, Is.EqualTo("Hộ Uyển Võ Tân Thủ"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT VẬT PHẨM"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Is.EqualTo("Vật phẩm hồi phục"));
                 Assert.That(root.Q<Button>("Map01A Health Potion").enabledSelf, Is.True,
@@ -512,6 +519,7 @@ namespace LinhGioi.Tests.EditMode
                     "Selected supply row must be visibly highlighted like equipment item rows.");
                 Assert.That(root.Q<Button>("Map01A Health Potion").style.backgroundColor.value, Is.Not.EqualTo(new Color(.12f, .33f, .56f, .98f)),
                     "Only the selected supply row should use the selected-row background.");
+                Assert.That(root.Q<Label>("Map01A Supply Item State mana_potion").text, Does.Contain("Tạm khóa"));
 
                 var detailScroll = root.Q<ScrollView>("Map01A Inventory Detail Scroll");
                 Assert.That(detailScroll, Is.Not.Null);
