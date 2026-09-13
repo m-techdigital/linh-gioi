@@ -1,3 +1,10 @@
+## Map01A — quest tracker tab base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Quest tracker tabs (`Nhiệm vụ`, `Đội`) chuyển từ inline per-tab sizing sang shared `ApplyLgoHudQuestTab(...)` và class `lgo-hud-quest-tab`.
+- RED/GREEN: EditMode fail khi tab chưa dùng shared base class, sau đó pass khi refactor về helper chung; shared-skin validator yêu cầu marker helper trong `Skin.cs` và marker gọi helper trong HUD.
+- Evidence dự kiến cho batch này: `build/map01a-quest-tab-base-style-runtime-v1/`; trạng thái vẫn `CONTINUE` sau checkpoint vì UI tổng thể còn cần polish/login/inventory/dialog asset thật.
+
 ## Map01A — HUD action/shortcut base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

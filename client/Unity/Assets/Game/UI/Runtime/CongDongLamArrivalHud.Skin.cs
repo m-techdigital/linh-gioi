@@ -20,6 +20,7 @@ namespace LinhGioi.UI
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
         private const string LgoHudShortcutActionClass = "lgo-hud-shortcut-action";
+        private const string LgoHudQuestTabClass = "lgo-hud-quest-tab";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -189,6 +190,23 @@ namespace LinhGioi.UI
             cell.style.marginBottom = 7;
             cell.style.alignItems = Align.Center;
             cell.style.justifyContent = Justify.Center;
+        }
+
+        private static void ApplyLgoHudQuestTab(Button button, bool selected, bool enabled, bool isLast)
+        {
+            button.AddToClassList(LgoHudQuestTabClass);
+            if (enabled) ApplyLgoButton(button); else ApplyLgoDisabledAction(button);
+            button.style.position = Position.Relative;
+            button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
+            button.style.flexGrow = 1;
+            button.style.flexBasis = 0;
+            button.style.minHeight = 30;
+            button.style.fontSize = 12;
+            button.style.marginRight = isLast ? 0 : 4;
+            button.style.paddingLeft = 8;
+            button.style.paddingRight = 8;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+            if (selected) ApplyLgoSelectedTab(button, true);
         }
 
         private static void ApplyLgoHudCombatAction(Button button, bool touch)

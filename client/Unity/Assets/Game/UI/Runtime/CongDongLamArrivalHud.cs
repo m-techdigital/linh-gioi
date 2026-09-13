@@ -84,28 +84,10 @@ namespace LinhGioi.UI
             _questTabs.style.height = 32;
             _questMissionsTab = new Button { name = "Map01A Quest Tab Missions", text = "Nhiệm vụ" };
             _questPartyTab = new Button { name = "Map01A Quest Tab Party", text = "Đội" };
-            foreach (var tab in new[] { _questMissionsTab, _questPartyTab })
-            {
-                tab.style.position = Position.Relative;
-                tab.style.left = tab.style.right = tab.style.top = tab.style.bottom = StyleKeyword.Auto;
-                tab.style.flexGrow = 1;
-                tab.style.flexBasis = 0;
-                tab.style.minHeight = 30;
-                tab.style.fontSize = 12;
-                tab.style.marginRight = tab == _questMissionsTab ? 4 : 0;
-                tab.style.whiteSpace = WhiteSpace.NoWrap;
-                _questTabs.Add(tab);
-            }
-            ApplyLgoButton(_questMissionsTab);
-            ApplyLgoDisabledAction(_questPartyTab);
-            foreach (var tab in new[] { _questMissionsTab, _questPartyTab })
-            {
-                tab.style.minHeight = 30;
-                tab.style.fontSize = 12;
-                tab.style.paddingLeft = 8;
-                tab.style.paddingRight = 8;
-                tab.style.whiteSpace = WhiteSpace.NoWrap;
-            }
+            ApplyLgoHudQuestTab(_questMissionsTab, selected: true, enabled: true, isLast: false);
+            ApplyLgoHudQuestTab(_questPartyTab, selected: false, enabled: false, isLast: true);
+            _questTabs.Add(_questMissionsTab);
+            _questTabs.Add(_questPartyTab);
             _safe.Add(_questTabs);
             _quest = new Label { name = "Map01A Quest Tracker Body" }; Box(_quest); Place(_quest, null, 12, 46, null);
             _quest.style.width = 260; _quest.style.whiteSpace = WhiteSpace.Normal; _safe.Add(_quest);

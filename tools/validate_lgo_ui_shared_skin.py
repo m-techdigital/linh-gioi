@@ -17,6 +17,7 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoDisabledAction",
     "ApplyLgoHudCombatAction",
     "ApplyLgoHudShortcutAction",
+    "ApplyLgoHudQuestTab",
 ]
 FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+readonly\s+Color\s+(?!Ui)[A-Za-z0-9_]*(Glass|Gold|Blue|Border|Text|SubText)"),
@@ -53,6 +54,8 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoButton(_npcTalk",
         "ApplyLgoHudCombatAction(button",
         "ApplyLgoHudShortcutAction(button",
+        "ApplyLgoHudQuestTab(_questMissionsTab",
+        "ApplyLgoHudQuestTab(_questPartyTab",
         "ApplyLgoButton(_inventoryToggle",
     ],
     "CongDongLamArrivalHud.Entry.cs": [

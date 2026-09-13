@@ -114,3 +114,8 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-hud-base-style-runtime-v1/01-arrival-q01.png` plus quest route capture frames in `build/map01a-hud-base-style-runtime-v1/`.
 - Result: bottom combat actions and gated product shortcuts use shared base helpers/classes, keeping one-line compact HUD density instead of per-control sizing.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. The HUD buttons no longer read as oversized modal controls, but richer icon treatment and full UI polish remain pending.
+## 2026-09-13 — Quest tracker tab base-first evidence
+
+- Evidence: `build/map01a-quest-tab-base-style-runtime-v1/01-arrival-q01.png` plus quest route capture frames in `build/map01a-quest-tab-base-style-runtime-v1/`.
+- Result: quest tracker tabs use shared `ApplyLgoHudQuestTab(...)`/`lgo-hud-quest-tab` instead of inline per-tab sizing.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance.

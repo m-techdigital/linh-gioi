@@ -746,6 +746,10 @@ namespace LinhGioi.Tests.EditMode
                     "HUD quest tracker should expose the Nhiệm Vụ/Đội tab structure from the product reference instead of staying as a plain text block.");
                 Assert.That(root.Q<Button>("Map01A Quest Tab Missions").text, Does.Contain("Nhiệm vụ"));
                 var questMissionTab = root.Q<Button>("Map01A Quest Tab Missions");
+                Assert.That(questMissionTab.ClassListContains("lgo-hud-quest-tab"), Is.True,
+                    "Quest tracker tabs must use the shared HUD quest-tab base instead of local inline sizing.");
+                Assert.That(root.Q<Button>("Map01A Quest Tab Party").ClassListContains("lgo-hud-quest-tab"), Is.True,
+                    "All quest tracker tabs must share the same base style for future quest/team states.");
                 Assert.That(questMissionTab.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
                     "Quest tab labels must not wrap in the visible Player HUD.");
                 Assert.That(questMissionTab.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),

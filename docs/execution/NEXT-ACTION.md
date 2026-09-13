@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after quest tab helper — 2026-09-13
+
+`CONTINUE`. Quest tracker tabs đã gom vào shared `ApplyLgoHudQuestTab(...)` thay vì inline style. Evidence batch: `build/map01a-quest-tab-base-style-runtime-v1/` sau Player capture.
+
+Next valid work: tiếp tục Map01A UI-only, ưu tiên dialogue/context action buttons và entry/link/server buttons còn lặp style; mọi pattern giống nhau phải sửa base/helper trước rồi mới bind hành vi. Không resume class/wardrobe/pose/source, không rollback class code, không dùng icon giả/random/generated cho nghiệm thu visual.
+
 ## Next — Map01A base-first UI polish after HUD action helpers — 2026-09-13
 
 `CONTINUE`. Evidence mới: `build/map01a-hud-base-style-runtime-v1/01-arrival-q01.png` và route capture `build/map01a-hud-base-style-runtime-v1/`. HUD combat actions và product shortcuts đã dùng shared helpers/classes thay vì local one-off sizing.
