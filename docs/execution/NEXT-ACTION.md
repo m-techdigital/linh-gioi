@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI after input/ornament foundation — 2026-09-13
+
+`CONTINUE`. Input fields và ornament rails của entry/login đã đi qua shared helpers/classes (`lgo-input-field`, `lgo-ornament-rail`) và có Player evidence mới `build/map01a-input-field-base-runtime-v1/entry-login.png`. Quy tắc hiện hành: cùng UI/UX phải tạo/extend base/shared helper trước, rồi màn cụ thể chỉ bind data/action; không dựng button/tab/card/modal/dialog/input/grid/ornament riêng lẻ nếu vai trò giống nhau.
+
+Next valid work: tiếp tục Map01A/UI-only theo owner references, ưu tiên polish login/inventory/HUD/dialogue visual richness bằng shared base, font/button density hợp lý, asset runtime/approved/provenance-backed. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt và visual xấu là `FIX_REQUIRED`, không phải completed.
+
 ## Next — Map01A base-first UI after action button foundation — 2026-09-13
 
 `CONTINUE`. Action buttons giờ có base class chung `lgo-action-button` và role `lgo-action-primary` / `lgo-action-standard`; evidence Player mới tại `build/map01a-action-button-base-runtime-v1/entry-login.png`. Rule hiện hành: mọi button/tab/card/modal/dialog/detail cùng pattern phải đi qua shared Skin/base trước, partial chỉ bind data/state/action.

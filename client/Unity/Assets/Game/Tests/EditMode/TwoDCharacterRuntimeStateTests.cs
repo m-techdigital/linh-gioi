@@ -493,6 +493,12 @@ namespace LinhGioi.Tests.EditMode
                 var passwordPlaceholder = root.Q<Label>("Map01A Entry Password Placeholder").text;
                 Assert.That(passwordPlaceholder, Does.Contain("Mật khẩu"));
                 Assert.That(passwordPlaceholder, Does.Not.Contain("🔒"), "Login must not use temporary emoji glyphs as field icons.");
+                Assert.That(root.Q("Map01A Entry Account Field").ClassListContains("lgo-input-field"), Is.True,
+                    "Entry input fields must use the shared input-field base instead of login-only frame sizing.");
+                Assert.That(root.Q("Map01A Entry Password Field").ClassListContains("lgo-input-field"), Is.True,
+                    "Password field must share the same input-field base as account field.");
+                Assert.That(root.Q<Label>("Map01A Entry Account Placeholder").style.fontSize.value.value, Is.LessThanOrEqualTo(15),
+                    "Entry placeholder text must stay compact against the owner reference instead of using oversized form typography.");
                 Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("trải nghiệm"));
                 Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
@@ -542,6 +548,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Entry Cta Ornament Left"), Is.Not.Null,
                     "Primary CTA should carry game-style ornament rails instead of being only a plain text button.");
                 Assert.That(root.Q("Map01A Entry Cta Ornament Right"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Entry Cta Ornament Left").ClassListContains("lgo-ornament-rail"), Is.True,
+                    "Repeated ornamental rails must use a shared base class so login/dialog/card polish does not fork.");
+                Assert.That(root.Q("Map01A Entry Cta Ornament Right").ClassListContains("lgo-ornament-rail"), Is.True);
                 Assert.That(root.Q("Map01A Entry Control Card"), Is.Not.Null,
                     "Login fields, auth options and server selection should sit inside one design card, matching the owner reference hierarchy.");
                 Assert.That(root.Q("Map01A Entry Ornament Top"), Is.Not.Null,

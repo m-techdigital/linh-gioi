@@ -40,6 +40,8 @@ namespace LinhGioi.UI
         private const string LgoActionButtonClass = "lgo-action-button";
         private const string LgoActionPrimaryClass = "lgo-action-primary";
         private const string LgoActionStandardClass = "lgo-action-standard";
+        private const string LgoInputFieldClass = "lgo-input-field";
+        private const string LgoOrnamentRailClass = "lgo-ornament-rail";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -70,6 +72,7 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoInputField(VisualElement element)
         {
+            element.AddToClassList(LgoInputFieldClass);
             ApplyLgoFrame(element, new Color(.010f, .035f, .060f, .86f), new Color(.46f, .64f, .74f, .50f));
             element.style.color = UiSubText;
         }
@@ -102,6 +105,7 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoOrnamentRail(VisualElement element)
         {
+            element.AddToClassList(LgoOrnamentRailClass);
             element.style.height = 2;
             element.style.backgroundColor = new Color(.95f, .75f, .36f, .72f);
         }

@@ -1,3 +1,10 @@
+## Map01A — input field and ornament rail base-first guard — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật.
+- `ApplyLgoInputField(...)` và `ApplyLgoOrnamentRail(...)` giờ sở hữu base classes `lgo-input-field` / `lgo-ornament-rail`; entry/login chỉ gọi shared helpers thay vì tự giữ form/ornament foundation riêng. Placeholder login giảm từ 17px xuống 15px, input height từ 48px xuống 44px để bớt thô/quá cỡ theo reference owner.
+- TDD: Entry test fail đúng khi account/password field chưa có shared input class; sau refactor targeted EditMode pass `total=1 passed=1 failed=0`. Shared-skin validator khóa class markers và call-site helper.
+- Player evidence: `build/map01a-input-field-base-runtime-v1/entry-login.png`, Player graphics thật 1600x900, `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, không dùng chuột/phím hệ điều hành. Visual audit: input gọn hơn, không chồng/cắt; login tổng thể vẫn `CONTINUE`, chưa phải nghiệm thu mỹ thuật vì còn thiếu polish icon/ornament/card richness sát design.
+
 ## Map01A — action button base-first density guard — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật.

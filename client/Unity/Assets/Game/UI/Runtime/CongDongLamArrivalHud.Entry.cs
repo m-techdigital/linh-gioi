@@ -285,7 +285,7 @@ namespace LinhGioi.UI
         private static VisualElement MakeEntryField(string fieldName, string placeholderName, string placeholderText)
         {
             var field = new VisualElement { name = fieldName };
-            field.style.height = 48;
+            field.style.height = 44;
             field.style.marginBottom = 10;
             field.style.paddingLeft = 16;
             field.style.paddingRight = 16;
@@ -293,7 +293,7 @@ namespace LinhGioi.UI
             ApplyLgoInputField(field);
 
             var placeholder = new Label(placeholderText) { name = placeholderName };
-            placeholder.style.fontSize = 17;
+            placeholder.style.fontSize = 15;
             placeholder.style.color = new Color(.74f, .82f, .88f, .82f);
             field.Add(placeholder);
             return field;
