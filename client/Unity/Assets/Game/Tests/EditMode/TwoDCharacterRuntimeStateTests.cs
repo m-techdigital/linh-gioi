@@ -175,6 +175,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(infoTab, Is.Not.Null);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Inventory Bag Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Bag Character Art").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetVoAvatarThumbnailSprite()),
+                    "Bag character column should use one complete avatar sprite, never a detached equipment component.");
                 Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-detail-card"), Is.True,
                     "Inventory detail surfaces must inherit the shared detail-card foundation.");
                 var body = root.Q("Map01A Inventory Body");
@@ -184,8 +188,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
                 var weaponThumbnail = scene.GetVoEquipmentThumbnailSprite("main_weapon");
                 Assert.That(weaponThumbnail, Is.Not.Null);
-                Assert.That(weaponThumbnail.rect.height, Is.GreaterThan(weaponThumbnail.rect.width),
-                    "Weapon inventory thumbnail should use the tight vertical runtime component crop, not the wide transparent slot sheet.");
+                Assert.That(weaponThumbnail.rect.width, Is.GreaterThan(weaponThumbnail.rect.height * 2f),
+                    "Weapon inventory thumbnail should use the complete aggregate slot art, not one narrow forearm component.");
                 var detailIcon = root.Q<Label>("Map01A Inventory Detail Icon");
                 Assert.That(detailIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Inventory detail must show real runtime equipment art instead of hiding behind fake icons.");
@@ -754,6 +758,11 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(characterWeaponIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(characterWeaponIcon.ClassListContains("lgo-item-icon-frame"), Is.True,
                     "Character-info equipment thumbnails must not carry a parallel icon-frame style.");
+                var heroPortraitSprite = root.Q<VisualElement>("Map01A Character Hero Portrait").style.backgroundImage.value.sprite;
+                Assert.That(heroPortraitSprite, Is.EqualTo(scene.GetVoAvatarThumbnailSprite()),
+                    "Character summary should use stable complete avatar art instead of a detached equipment part.");
+                Assert.That(heroPortraitSprite, Is.Not.EqualTo(scene.GetVoEquipmentThumbnailSprite("main_weapon")),
+                    "Character summary must never present the selected weapon or limb crop as the character portrait.");
                 var modalTitle = root.Q<Label>("Map01A Inventory Modal Title");
                 var modalSubtitle = root.Q<Label>("Map01A Inventory Modal Subtitle");
                 Assert.That(modalTitle, Is.Not.Null, "Inventory modal needs a named title so each main tab can present its own screen.");
@@ -877,7 +886,7 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(potion);
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT VẬT PHẨM"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Is.EqualTo("Vật phẩm hồi phục"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Is.EqualTo("CÓ THỂ DÙNG"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Is.EqualTo("SẴN SÀNG"));
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Is.EqualTo("Dùng bình máu"));
                 InvokeBoundButton(root.Q<Button>("Map01A Inventory Detail Primary Action"));
                 Assert.That(scene.PlayerHealth, Is.EqualTo(100));

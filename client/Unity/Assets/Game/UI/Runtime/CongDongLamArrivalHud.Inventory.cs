@@ -6,8 +6,8 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _storageGateCard, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard;
-        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroVitals, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageGateTitle, _storageState, _storageGateSafety;
+        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryBagCharacterPanel, _inventoryBagCharacterArt, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _storageGateCard, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard;
+        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryBagCharacterName, _inventoryBagCharacterMeta, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroVitals, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageGateTitle, _storageState, _storageGateSafety;
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
@@ -234,9 +234,31 @@ namespace LinhGioi.UI
             actions.Add(_inventoryDetailPrimaryAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
             _inventoryDetailPanel.Add(actions);
 
+            _inventoryBagCharacterPanel = InventoryPanel("Map01A Inventory Bag Character Panel");
+            _inventoryBagCharacterPanel.style.flexGrow = 0;
+            _inventoryBagCharacterPanel.style.flexBasis = InventoryDesktopBagCharacterColumnWidth;
+            _inventoryBagCharacterPanel.style.marginRight = InventoryDesktopColumnGap;
+            ApplyLgoDetailCard(_inventoryBagCharacterPanel, 12, 10);
+            _inventoryBagCharacterName = LgoLabel("", 17, UiGold, true);
+            _inventoryBagCharacterName.name = "Map01A Inventory Bag Character Name";
+            _inventoryBagCharacterName.style.unityTextAlign = TextAnchor.MiddleCenter;
+            _inventoryBagCharacterPanel.Add(_inventoryBagCharacterName);
+            _inventoryBagCharacterArt = new VisualElement { name = "Map01A Inventory Bag Character Art" };
+            ApplyLgoItemIcon(_inventoryBagCharacterArt);
+            _inventoryBagCharacterArt.style.width = 154;
+            _inventoryBagCharacterArt.style.height = 330;
+            _inventoryBagCharacterArt.style.alignSelf = Align.Center;
+            _inventoryBagCharacterArt.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            _inventoryBagCharacterPanel.Add(_inventoryBagCharacterArt);
+            _inventoryBagCharacterMeta = LgoLabel("", 13, new Color(.76f, 1f, .70f, .94f), true);
+            _inventoryBagCharacterMeta.name = "Map01A Inventory Bag Character Meta";
+            _inventoryBagCharacterMeta.style.unityTextAlign = TextAnchor.MiddleCenter;
+            _inventoryBagCharacterPanel.Add(_inventoryBagCharacterMeta);
+            body.Add(_inventoryBagCharacterPanel);
+
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
             ApplyLgoInventoryContentFitPanel(_inventoryGridPanel);
-            _inventoryGridPanel.style.flexBasis = InventoryDesktopMainColumnWidth;
+            _inventoryGridPanel.style.flexBasis = InventoryDesktopBagGridColumnWidth;
             _inventoryGridPanel.style.marginRight = 0;
             body.Add(_inventoryGridPanel);
             var gridAccent = new VisualElement { name = "Map01A Inventory Grid Accent Rail" };
@@ -631,7 +653,7 @@ namespace LinhGioi.UI
             _inventoryHeroPanel.style.flexGrow = 0;
             _inventoryHeroPanel.style.flexBasis = characterInfo ? InventoryDesktopMainColumnWidth : 360;
             _inventoryGridPanel.style.flexGrow = 0;
-            _inventoryGridPanel.style.flexBasis = characterInfo ? 0 : InventoryDesktopMainColumnWidth;
+            _inventoryGridPanel.style.flexBasis = characterInfo ? 0 : InventoryDesktopBagGridColumnWidth;
             _storagePanel.style.flexGrow = 0;
             _characterInfoOpen = characterInfo;
             _storageOpen = false;
@@ -639,6 +661,7 @@ namespace LinhGioi.UI
             RefreshInventoryModalHeader();
             RefreshInventoryEquipmentTiles();
             _inventoryGridPanel.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
+            _inventoryBagCharacterPanel.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryHeroPanel.style.display = characterInfo ? DisplayStyle.Flex : DisplayStyle.None;
             _storagePanel.style.display = DisplayStyle.None;
             _inventoryDetailPanel.style.display = DisplayStyle.Flex;
@@ -659,6 +682,7 @@ namespace LinhGioi.UI
             _storagePanel.style.flexGrow = 1;
             RefreshInventoryModalHeader();
             _inventoryGridPanel.style.display = DisplayStyle.None;
+            _inventoryBagCharacterPanel.style.display = DisplayStyle.None;
             _inventoryHeroPanel.style.display = DisplayStyle.None;
             _storagePanel.style.display = DisplayStyle.Flex;
             _inventoryDetailPanel.style.display = DisplayStyle.None;
@@ -780,13 +804,19 @@ namespace LinhGioi.UI
             if (_characterHeroLoadout != null) _characterHeroLoadout.text = "Trang bị " + _scene.VoEquippedSlotCount + "/10 · Lv" + _scene.VoAvatarLevel;
             if (_inventoryCountBadge != null) _inventoryCountBadge.text = "56/120 ô";
 
-            var portraitSprite = _scene.GetVoEquipmentThumbnailSprite(_scene.VoSelectedEquipmentSlot)
-                ?? _scene.GetVoEquipmentThumbnailSprite("main_weapon");
+            var portraitSprite = _scene.GetVoAvatarThumbnailSprite();
             if (_characterHeroPortrait != null)
             {
                 _characterHeroPortrait.style.backgroundImage = portraitSprite == null ? StyleKeyword.None : new StyleBackground(portraitSprite);
                 _characterHeroPortrait.style.display = portraitSprite == null ? DisplayStyle.None : DisplayStyle.Flex;
             }
+            if (_inventoryBagCharacterArt != null)
+            {
+                _inventoryBagCharacterArt.style.backgroundImage = portraitSprite == null ? StyleKeyword.None : new StyleBackground(portraitSprite);
+                _inventoryBagCharacterArt.style.display = portraitSprite == null ? DisplayStyle.None : DisplayStyle.Flex;
+            }
+            if (_inventoryBagCharacterName != null) _inventoryBagCharacterName.text = "LụcThiên · " + _scene.ActiveEquipmentClassLabel;
+            if (_inventoryBagCharacterMeta != null) _inventoryBagCharacterMeta.text = "Lv" + _scene.VoAvatarLevel + " · " + _scene.VoEquippedSlotCount + "/10 trang bị";
             if (_characterHeroQuickIcons == null || _equipmentSlotIds == null) return;
             for (var i = 0; i < _characterHeroQuickIcons.Length; i++)
             {

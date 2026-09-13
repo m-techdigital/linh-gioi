@@ -10,6 +10,8 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud : MonoBehaviour
     {
         private const float InventoryDesktopMainColumnWidth = 820f;
+        private const float InventoryDesktopBagCharacterColumnWidth = 218f;
+        private const float InventoryDesktopBagGridColumnWidth = 590f;
         private const float InventoryDesktopDetailColumnWidth = 330f;
         private const float InventoryDesktopColumnGap = 12f;
         private const float InventoryGridCellBasisPercent = 14.2f;
@@ -282,10 +284,13 @@ namespace LinhGioi.UI
                 var stacked = r.width < 950;
                 var body = _inventory.Q("Map01A Inventory Body");
                 body.style.flexDirection = stacked ? FlexDirection.Column : FlexDirection.Row;
+                _inventoryBagCharacterPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopBagCharacterColumnWidth;
+                _inventoryBagCharacterPanel.style.marginRight = stacked ? 0 : InventoryDesktopColumnGap;
+                _inventoryBagCharacterPanel.style.marginBottom = stacked ? 10 : 0;
                 _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
                 _inventoryHeroPanel.style.marginRight = 0;
                 _inventoryHeroPanel.style.marginBottom = stacked ? 10 : 0;
-                _inventoryGridPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
+                _inventoryGridPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopBagGridColumnWidth;
                 _inventoryGridPanel.style.marginRight = 0;
                 _inventoryGridPanel.style.marginBottom = stacked ? 10 : 0;
                 _storagePanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;

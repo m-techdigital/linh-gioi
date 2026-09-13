@@ -190,3 +190,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-detail-card-runtime-v1/entry/entry-login.png`, `inventory/character-info.png`, and `quest/02-ha-van-dialogue.png`; the PC quest manifest records 18 frames, Q01-Q09, and 38 dialogue frames.
 - Result: entry server summary, inventory detail/character hero, and NPC dialogue content inherit `ApplyLgoDetailCard(...)` / `lgo-detail-card`; padding variants are parameters of the shared base rather than local frame/spacing implementations.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual 1600x900 review confirms the three consumers retain their intended density without overlap or clipping.
+
+## 2026-09-13 — Inventory three-column character presentation
+
+- Evidence: `build/map01a-inventory-three-column-runtime-v1/inventory/{bag,character-info,supplies,storage}.png` and `manifest.json`.
+- Result: Hành trang now follows the owner reference hierarchy with a complete character column on the left, the item grid in the middle, and selected-item detail on the right. Thông tin remains a separate main tab and reuses the same complete-avatar source instead of showing the selected limb/item as its portrait. Equipment thumbnails resolve complete detached-slot art before component fallbacks.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`. Manual 1600×900 review confirms a clear improvement in character readability and screen hierarchy. Equipment icons remain dark, low-resolution runtime crops and require a reviewed dedicated icon board before final visual acceptance.

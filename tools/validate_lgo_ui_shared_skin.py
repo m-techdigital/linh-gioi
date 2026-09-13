@@ -113,6 +113,8 @@ REQUIRED_PARTIAL_MARKERS = {
         "private const float InventoryDesktopColumnGap",
         "private const float InventoryDesktopDetailColumnWidth",
         "private const float InventoryDesktopMainColumnWidth",
+        "private const float InventoryDesktopBagCharacterColumnWidth",
+        "private const float InventoryDesktopBagGridColumnWidth",
         "private const float InventoryGridCellBasisPercent",
     ],
     "CongDongLamArrivalHud.Entry.cs": [
@@ -143,8 +145,10 @@ REQUIRED_PARTIAL_MARKERS = {
     "CongDongLamArrivalHud.Inventory.cs": [
         "_inventoryDetailPanel = InventoryPanel(\"Map01A Inventory Detail Panel\")",
         "_inventoryGridPanel = InventoryPanel(\"Map01A Inventory Grid Panel\")",
+        "_inventoryBagCharacterPanel = InventoryPanel(\"Map01A Inventory Bag Character Panel\")",
         "_inventoryHeroPanel = InventoryPanel(\"Map01A Inventory Character Panel\")",
         "_storagePanel = InventoryPanel(\"Map01A Storage Panel\")",
+        "body.Add(_inventoryBagCharacterPanel)",
         "body.Add(_inventoryGridPanel)",
         "body.Add(_inventoryHeroPanel)",
         "body.Add(_storagePanel)",
@@ -175,7 +179,8 @@ REQUIRED_PARTIAL_MARKERS = {
         "_storageTab = InventoryButton(ShowStorageMode",
         "_inventoryDetailPanel.style.marginLeft = InventoryDesktopColumnGap",
         "_inventoryDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth",
-        "_inventoryGridPanel.style.flexBasis = InventoryDesktopMainColumnWidth",
+        "_inventoryBagCharacterPanel.style.flexBasis = InventoryDesktopBagCharacterColumnWidth",
+        "_inventoryGridPanel.style.flexBasis = InventoryDesktopBagGridColumnWidth",
     ],
 }
 
@@ -282,6 +287,7 @@ def validate_root(root: Path = ROOT) -> list[str]:
             _check_order(
                 text,
                 [
+                    "body.Add(_inventoryBagCharacterPanel)",
                     "body.Add(_inventoryGridPanel)",
                     "body.Add(_inventoryHeroPanel)",
                     "body.Add(_storagePanel)",

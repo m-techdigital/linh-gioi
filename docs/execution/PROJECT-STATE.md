@@ -1389,3 +1389,9 @@ Runtime evidence: `build/map01a-entry-depth-polish-runtime-v2/entry/entry-login.
 `CONTINUE`, chỉ UI/Map01A. Owner feedback đúng: UI vẫn còn xa design dù test xanh. Root cause trong batch này là guard cũ chỉ bảo vệ cấu trúc/chức năng, chưa đủ chặn visual debt như button/font phình, card phẳng, thiếu logo/icon/ornament/art thật. Đã thêm regression cho entry CTA và inventory tab density; shared `CongDongLamArrivalHud.Skin.cs` giảm primary CTA 54→48, secondary/tab 42→38, font nhỏ hơn, tăng nhẹ frame/detail/icon border dùng chung. Không đụng class/wardrobe/pose/source, không thêm icon giả/random art.
 
 Evidence runtime: `build/map01a-shared-skin-density-runtime-v1/entry/entry-login.png`, `build/map01a-shared-skin-density-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Đã xem trực tiếp: density tốt hơn và bớt thô, nhưng vẫn chưa đạt visual acceptance vì login còn giống form kỹ thuật và inventory còn thiếu portrait/shell/icon art theo reference. Next phải là redesign/polish shell có tiêu chí visual rõ, không chỉ chỉnh màu lẻ.
+
+## Map01A inventory three-column visual checkpoint — 2026-09-13
+
+`CONTINUE`, chỉ Map01A/UI. Hành trang đã chuyển từ hai cột kỹ thuật sang ba cột theo reference: nhân vật hoàn chỉnh bên trái, lưới item ở giữa, chi tiết món cố định bên phải. Thông tin vẫn là tab riêng và dùng cùng nguồn avatar hoàn chỉnh; không còn lấy món đang chọn hoặc tóc/tay rời làm chân dung. Thumbnail trang bị ưu tiên sprite slot đầy đủ trước component đơn. EditMode `Inventory` đạt 16/16; macOS Player build 0 error; evidence `build/map01a-inventory-three-column-runtime-v1/inventory/` đã xem trực tiếp, không vỡ/cắt.
+
+Chưa đạt visual acceptance: icon trang bị từ atlas runtime vẫn tối và độ phân giải thấp. External extraction có HP/MP/equipment candidate nhưng manifest ghi `runtime_ready=false`, nên chưa import. Không resume class/wardrobe/pose và không dùng random/generated icon để che art debt.
