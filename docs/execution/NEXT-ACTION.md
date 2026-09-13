@@ -1,3 +1,9 @@
+## Next — sau khi loại legacy class selector khỏi luồng Nhân vật — 2026-09-14
+
+`CONTINUE`. Nút HUD `Nhân vật` và action `Nhân vật` trong Menu đều mở thẳng tab `THÔNG TIN NHÂN VẬT`; không quay lại modal chọn class/pose cũ. Evidence `build/map01a-character-navigation-runtime-v1/character-info.png`, Player `build/map01a-character-navigation-player-v1/LinhGioiOnline.app`.
+
+Next valid work: tiếp tục Map01A/UI theo owner reference, ưu tiên audit NPC interaction/HUD hoặc asset UI thật có provenance. Không mở lại class selector, không resume class/pose/wardrobe/source và không rollback code class.
+
 ## Next — sau playable Map01A menu — 2026-09-14
 
 `CONTINUE`. Evidence menu hiện hành duy nhất là `build/map01a-menu-runtime-v3/menu.png`; Player `build/map01a-menu-player-v3/LinhGioiOnline.app`. Không dùng lại v1/v2 vì v1 bị flex-stretch, v2 còn chạm HUD navigation. Menu chỉ route tới workspace đã có, không giả lập settings/progression/data.

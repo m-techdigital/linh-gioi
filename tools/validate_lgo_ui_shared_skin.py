@@ -251,7 +251,7 @@ REQUIRED_AGENT_MARKERS = [
 REQUIRED_TEST_MARKERS = [
     "InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection",
     "Item detail must stay on the right side of the bag grid",
-    "CharacterSelectModalUsesSharedSkinAndDoesNotAdvanceQuest",
+    "CharacterNavigationOpensApprovedCharacterHubWithoutLegacyClassSelector",
     "Entry/login must not leave the in-game HUD visible behind the modal",
     "Entry/login side actions should be active navigation affordances with status feedback",
 ]

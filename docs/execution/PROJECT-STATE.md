@@ -1,3 +1,9 @@
+## Map01A — Nhân vật shortcut no longer reopens legacy class review — 2026-09-14
+
+- Root cause từ runtime/source audit: nút sản phẩm `Nhân vật` vẫn gọi `OpenCharacterSelect()` và mở modal chọn class/pose review cũ, trái design năm tab đã duyệt và owner scope đã chuyển class sang task khác.
+- Nút `Nhân vật` giờ mở thẳng `OpenInventoryReviewMode("character-info")`: modal hiện `THÔNG TIN NHÂN VẬT`, giữ detail món bên phải và năm tab compact. Menu mới cũng đi cùng route này. Legacy character-select code/capture không bị rollback hoặc sửa art, nhưng không còn nằm trên luồng HUD sản phẩm.
+- TDD RED tái hiện legacy overlay xuất hiện; GREEN xác nhận overlay vẫn ẩn, inventory mở, character panel hiển thị và quest Q01 không đổi; full `TwoDCharacterRuntimeStateTests` đạt `20/20`. Player `build/map01a-character-navigation-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=36`; visual evidence `build/map01a-character-navigation-runtime-v1/character-info.png` đã xem, không vỡ layout.
+
 ## Map01A — playable menu routes into approved character hub — 2026-09-14
 
 - Scope Map01A/UI-only; không đổi class/pose/wardrobe/source/camera/scale, gameplay contract hoặc frozen surfaces.

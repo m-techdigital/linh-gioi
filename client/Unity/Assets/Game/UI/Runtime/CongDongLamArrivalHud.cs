@@ -209,7 +209,7 @@ namespace LinhGioi.UI
             AttachLgoHudActionIcon(_basic, _scene.GetMap01AHudIconSprite("attack"), _touch);
             AttachLgoHudActionIcon(_skill, _scene.GetMap01AHudIconSprite("skill"), _touch);
             _safe.Add(_combatBar);
-            _characterSelectButton = new Button(OpenCharacterSelect) { name = "Map01A Character Select Button", text = "Nhân vật" };
+            _characterSelectButton = new Button(() => OpenInventoryReviewMode("character-info")) { name = "Map01A Character Select Button", text = "Nhân vật" };
             _characterSelectButton.tooltip = "Thông tin nhân vật · P";
             ApplyLgoHudNavigationAction(_characterSelectButton, _touch, true);
             _inventoryToggle = new Button(() => _scene.ToggleInventory()) { name = "Map01A Inventory Toggle", text = "Hành trang · I" };

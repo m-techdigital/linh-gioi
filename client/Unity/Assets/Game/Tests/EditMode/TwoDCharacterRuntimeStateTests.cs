@@ -347,7 +347,7 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
-        public void CharacterSelectModalUsesSharedSkinAndDoesNotAdvanceQuest()
+        public void CharacterNavigationOpensApprovedCharacterHubWithoutLegacyClassSelector()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             try
@@ -362,35 +362,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
 
                 InvokeBoundButton(open);
-                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None));
-                var selectTitle = root.Q<Label>("Map01A Character Select Title");
-                Assert.That(selectTitle.text, Does.Contain("Chọn Nhân Vật"));
-                Assert.That(selectTitle.ClassListContains("lgo-title-label"), Is.True,
-                    "Repeated screen titles must use the shared title-label base so modal typography stays consistent.");
-                Assert.That(selectTitle.style.fontSize.value.value, Is.LessThanOrEqualTo(28),
-                    "Character-select title should be game UI scale, not oversized prototype typography.");
-                foreach (var label in new[] { "Võ", "Kiếm", "Pháp", "Cơ", "Linh" })
-                {
-                    var card = root.Q<Button>("Map01A Character Card " + label);
-                    Assert.That(card, Is.Not.Null);
-                    Assert.That(card.ClassListContains("lgo-character-select-card"), Is.True,
-                        "Character select cards must use the shared card base instead of local one-off sizing.");
-                }
-                var close = root.Q<Button>("Map01A Character Select Close");
-                Assert.That(close.ClassListContains("lgo-character-select-primary-action"), Is.True,
-                    "Character select primary action must use a shared modal CTA base for consistent density.");
-                var phap = root.Q<Button>("Map01A Character Card Pháp");
-                Assert.That(phap.enabledSelf, Is.False, "Pháp must stay visible but disabled while source promotion is held out");
-                Assert.That(phap.text, Does.Contain("đang audit"));
-                Assert.That(root.Q<Label>("Map01A Character Select Scope").text, Does.Contain("review"));
-                Assert.That(root.Q<Label>("Map01A Character Select Scope").ClassListContains("lgo-subtitle-label"), Is.True,
-                    "Repeated modal subtitles must use the shared subtitle-label base instead of local one-off typography.");
-                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
-
-                InvokeBoundButton(root.Q<Button>("Map01A Character Select Close"));
-                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "The product Nhân vật shortcut must not reopen the legacy class/pose review selector.");
+                Assert.That(scene.InventoryOpen, Is.True);
+                Assert.That(root.Q("Map01A Inventory").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Inventory Modal Title").text, Is.EqualTo("THÔNG TIN NHÂN VẬT"));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
             }
             finally
