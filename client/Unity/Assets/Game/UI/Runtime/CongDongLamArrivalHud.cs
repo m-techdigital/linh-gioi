@@ -288,13 +288,10 @@ namespace LinhGioi.UI
                 var body = _inventory.Q("Map01A Inventory Body");
                 body.style.flexDirection = stacked ? FlexDirection.Column : FlexDirection.Row;
                 _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : StyleKeyword.Auto;
-                _inventoryHeroPanel.style.flexGrow = _characterInfoOpen ? 1 : 0;
                 _inventoryHeroPanel.style.marginRight = 0;
                 _inventoryHeroPanel.style.marginBottom = stacked ? 10 : 0;
-                _inventoryGridPanel.style.flexGrow = _characterInfoOpen || _storageOpen ? 0 : 1;
                 _inventoryGridPanel.style.marginRight = 0;
                 _inventoryGridPanel.style.marginBottom = stacked ? 10 : 0;
-                _storagePanel.style.flexGrow = _storageOpen ? 1 : 0;
                 _storagePanel.style.marginRight = 0;
                 _storagePanel.style.marginBottom = stacked ? 10 : 0;
                 _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : 300;
@@ -366,8 +363,7 @@ namespace LinhGioi.UI
                 control.style.display = DisplayStyle.None;
             _inventorySummary.text = _scene.InventorySummaryText;
             _inventoryHeroTitle.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
-            _inventoryHeroMeta.text = "LC review local · " + _scene.EquipmentFitSummary
-                + "\nHP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
+            _inventoryHeroMeta.text = "HP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
             _equipmentTitle.text = "TRANG BỊ · " + _scene.VoEquippedSlotCount + "/10 món đang mặc";
             if (_suppliesEmptyState != null)
                 _suppliesEmptyState.text = _scene.HealthPotionCount <= 0 && _scene.ManaPotionCount <= 0 && !_scene.HasClassRewardItem

@@ -201,8 +201,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.height.value.value, Is.GreaterThanOrEqualTo(92),
                     "Equipment tiles need enough vertical room for a larger runtime-art thumbnail and labels.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Does.Contain("Công"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Khớp"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Is.EqualTo("Chưa có thuộc tính chiến đấu được công bố."));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Dành cho"));
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action"), Is.Not.Null);
                 Assert.That(root.Q<Button>("LGO Equipment Inventory Variant").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "Unavailable variant actions should not draw a disabled dead button in the narrow detail card.");
@@ -436,10 +436,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(storageGate, Is.Not.Null,
                     "Rương đồ must render as an intentional locked-state card, not as an empty broken panel.");
                 Assert.That(root.Q<Label>("Map01A Storage Gate Title").text, Does.Contain("Kho gửi/rút"));
-                Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("chưa kết nối"));
-                Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("bên phải"),
-                    "Storage copy must preserve the decided right-side item detail placement.");
-                Assert.That(root.Q<Label>("Map01A Storage Gate Safety").text, Does.Contain("Không tạo vật phẩm giả"));
+                Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("chưa khả dụng"));
+                Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Not.Contain("API"));
+                Assert.That(root.Q<Label>("Map01A Storage Gate Safety").text, Does.Contain("được giữ nguyên"));
                 var deposit = root.Q<Button>("Map01A Storage Deposit");
                 var withdraw = root.Q<Button>("Map01A Storage Withdraw");
                 Assert.That(deposit.enabledSelf, Is.False);
@@ -470,6 +469,8 @@ namespace LinhGioi.Tests.EditMode
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
 
                 hud.OpenInventoryReviewMode("character-info");
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(1),
+                    "Tab content must fill its column immediately without requiring a viewport resize.");
                 Assert.That(scene.InventoryOpen, Is.True);
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -512,7 +513,23 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Health Potion").style.backgroundColor.value, Is.Not.EqualTo(new Color(.12f, .33f, .56f, .98f)),
                     "Only the selected supply row should use the selected-row background.");
 
+                var detailScroll = root.Q<ScrollView>("Map01A Inventory Detail Scroll");
+                Assert.That(detailScroll, Is.Not.Null);
+                Assert.That(detailScroll.Contains(root.Q("Map01A Inventory Equipment Actions")), Is.False,
+                    "Item actions must remain visible outside the scrollable description.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Not.Contain("Tinh phẩm"));
+                var equippedBeforeTabSwitch = scene.VoEquippedSlotCount;
+                hud.OpenInventoryReviewMode("character-info");
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(1),
+                    "Tab content must fill its column immediately without requiring a viewport resize.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT MÓN"),
+                    "Character info must clear the consumable action before showing equipped items.");
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Does.Contain("Tháo"));
+                Assert.That(scene.VoEquippedSlotCount, Is.EqualTo(equippedBeforeTabSwitch),
+                    "Navigating between tabs must never equip, remove or consume an item.");
+
                 hud.OpenInventoryReviewMode("storage");
+                Assert.That(root.Q("Map01A Storage Panel").style.flexGrow.value, Is.EqualTo(1));
                 Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(modalTitle.text, Is.EqualTo("RƯƠNG ĐỒ"));

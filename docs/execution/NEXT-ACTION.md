@@ -1,3 +1,9 @@
+## Hiện hành — Map01A/UI, tiếp theo asset và trình bày hành trang — 2026-09-13
+
+`CONTINUE`. Batch ngữ cảnh/bố cục hành trang đã kiểm 5/5 test và ảnh Player cuối tại `build/map01a-inventory-context-runtime-v2/{pc,tablet,mobile}/`. Không chạy lại test/build batch này khi chưa có thay đổi liên quan. Goal tự động vẫn ghi class là dữ liệu cũ; yêu cầu owner loại class có ưu tiên. Không tiếp tục class/wardrobe/pose/source/launcher hoặc rollback.
+
+Kết quả cần tiếp: UI phù hợp demo 2D owner, Hành trang/Thông tin riêng, chi tiết bên phải, icon nhận ra đúng món. Audit nguồn icon UI/item đã có trước khi tạo; crop runtime chứa cánh tay/chân không phải icon item hoàn thiện. Chỉ thay presentation/icon có provenance; không sửa source trang phục do task khác quản lý. Đối chiếu `docs/design/LGO-2D-UI-OWNER-DEMO-ANALYSIS-v0.1.md` và ảnh owner mới nhất; SVG hành trang cũ có detail bên trái đã lỗi thời, không dùng để đảo layout. Cùng loại UI phải dùng base chung. Rương đồ còn chưa có transaction model/API: không giả gửi/rút hoặc mở frozen contracts; có thể tiếp tục thiết kế màn/trạng thái và UI an toàn. Login/HUD/NPC còn cần tiếp tục theo reference, không gọi toàn bộ UI đã hoàn thiện.
+
 ## Next Map01A UI/UX work after entry/login glass-card pass — 2026-09-13
 
 Continue Map01A/UI-only work. The next best product-visible target is Hành trang/Túi đồ, Thông tin, and Rương đồ density/hierarchy against the latest owner references: keep Hành trang and Thông tin separate, keep selected item/equipment details on the right, use shared card/tab/button helpers, and do not introduce fake/random item art. If approved item/icon assets are unavailable, improve layout/copy/spacing with runtime assets only or prepare a design board, then move to NPC dialogue/HUD/map interaction polish. Do not resume class/wardrobe/pose work or class Player build/capture loops in this worktree.

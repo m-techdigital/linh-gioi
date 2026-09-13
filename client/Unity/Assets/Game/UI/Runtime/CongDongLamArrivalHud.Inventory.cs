@@ -29,6 +29,8 @@ namespace LinhGioi.UI
             button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
             ApplyLgoButton(button);
+            button.style.minHeight = _touch ? 44 : 38;
+            button.style.fontSize = 15;
             return button;
         }
 
@@ -64,7 +66,7 @@ namespace LinhGioi.UI
             header.style.alignItems = Align.Center;
             var titleGroup = new VisualElement();
             titleGroup.style.flexGrow = 1;
-            _inventoryModalTitle = LgoLabel("HÀNH TRANG", 26, UiGold, true);
+            _inventoryModalTitle = LgoLabel("HÀNH TRANG", 22, UiGold, true);
             _inventoryModalTitle.name = "Map01A Inventory Modal Title";
             _inventoryModalSubtitle = LgoLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 14, new Color(.73f, .85f, .88f, .88f));
             _inventoryModalSubtitle.name = "Map01A Inventory Modal Subtitle";
@@ -80,6 +82,11 @@ namespace LinhGioi.UI
             _bagTab = InventoryButton(() => ShowInventoryMode(false), "Map01A Bag Main Tab", "Hành trang");
             _characterInfoTab = InventoryButton(() => ShowInventoryMode(true), "Map01A Character Info Main Tab", "Thông tin");
             _storageTab = InventoryButton(ShowStorageMode, "Map01A Storage Main Tab", "Rương đồ");
+            foreach (var tab in new[] { _bagTab, _characterInfoTab, _storageTab })
+            {
+                tab.style.flexGrow = 0;
+                tab.style.flexBasis = 160;
+            }
             mainTabs.Add(_bagTab); mainTabs.Add(_characterInfoTab); mainTabs.Add(_storageTab); _inventory.Add(mainTabs);
 
             var body = new VisualElement { name = "Map01A Inventory Body" };
@@ -95,8 +102,20 @@ namespace LinhGioi.UI
             _inventoryDetailPanel.style.marginLeft = 10;
             ApplyLgoDetailCard(_inventoryDetailPanel);
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
-            _inventoryFooter.style.flexGrow = 1;
+            _inventoryFooter.style.flexGrow = 0;
             _inventoryFooter.style.flexShrink = 0;
+            var detailScroll = new ScrollView(ScrollViewMode.Vertical)
+            {
+                name = "Map01A Inventory Detail Scroll",
+                horizontalScrollerVisibility = ScrollerVisibility.Hidden
+            };
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(detailScroll, 900);
+            detailScroll.style.flexGrow = 1;
+            detailScroll.style.minHeight = 0;
+            detailScroll.contentViewport.RegisterCallback<GeometryChangedEvent>(evt =>
+                detailScroll.contentContainer.style.width = evt.newRect.width);
+            detailScroll.Add(_inventoryFooter);
+            _inventoryDetailPanel.Add(detailScroll);
             _inventoryDetailHeader = LgoLabel("CHI TIẾT MÓN", 15, new Color(.73f, .85f, .88f, .92f), true);
             _inventoryDetailHeader.name = "Map01A Inventory Detail Header";
             _inventoryFooter.Add(_inventoryDetailHeader);
@@ -107,7 +126,7 @@ namespace LinhGioi.UI
             _inventoryDetailIcon.style.height = 78;
             _inventoryDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             _inventoryFooter.Add(_inventoryDetailIcon);
-            _equipmentDetail = LgoLabel("", 24, UiGold, true);
+            _equipmentDetail = LgoLabel("", 20, UiGold, true);
             _equipmentDetail.style.marginTop = 6;
             _inventoryFooter.Add(_equipmentDetail);
             _inventoryDetailRarity = LgoLabel("", 15, new Color(.74f, .92f, 1f, .94f), true);
@@ -121,6 +140,7 @@ namespace LinhGioi.UI
             _inventoryFooter.Add(LgoDivider("Map01A Inventory Detail Divider"));
             _inventoryItemId = LgoLabel("", 14, new Color(.78f, .88f, .90f, .88f));
             _inventoryItemId.style.marginTop = 2;
+            _inventoryItemId.style.display = DisplayStyle.None;
             _inventoryFooter.Add(_inventoryItemId);
             _inventoryDetailStateBadge = LgoLabel("", 15, new Color(.12f, .08f, .03f, 1f), true);
             _inventoryDetailStateBadge.name = "Map01A Inventory Detail State Badge";
@@ -143,18 +163,18 @@ namespace LinhGioi.UI
             _inventoryDetailStatFit.style.marginTop = 4;
             _inventoryFooter.Add(_inventoryDetailStatFit);
             var actions = InventoryRow("Map01A Inventory Equipment Actions");
-            actions.style.marginTop = 14;
-            actions.style.marginBottom = 12;
+            actions.style.marginTop = 10;
+            actions.style.marginBottom = 10;
             actions.style.flexShrink = 0;
             _inventoryDetailPrimaryAction = InventoryButton(UseInventoryDetailPrimaryAction, "Map01A Inventory Detail Primary Action");
-            _inventoryDetailPrimaryAction.style.minHeight = 46;
+            _inventoryDetailPrimaryAction.style.minHeight = _touch ? 44 : 38;
             _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
             _equipmentToggle.style.display = DisplayStyle.None;
             _equipmentVariant = InventoryButton(() => { _scene.CycleVoSelectedEquipmentItemLevel(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
             _equipmentVariant.style.display = DisplayStyle.None;
-            _equipmentVariant.style.minHeight = 46;
+            _equipmentVariant.style.minHeight = _touch ? 44 : 38;
             actions.Add(_inventoryDetailPrimaryAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
-            _inventoryFooter.Add(actions); _inventoryDetailPanel.Add(_inventoryFooter);
+            _inventoryDetailPanel.Add(actions);
 
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
             _inventoryGridPanel.style.flexGrow = 1;
@@ -198,7 +218,18 @@ namespace LinhGioi.UI
             equipmentSlots.style.flexDirection = FlexDirection.Row;
             equipmentSlots.style.flexWrap = Wrap.Wrap;
             equipmentSlots.style.marginTop = 8;
-            _inventoryHeroPanel.Add(equipmentSlots);
+            var equipmentScroll = new ScrollView(ScrollViewMode.Vertical)
+            {
+                name = "Map01A Character Equipment Scroll",
+                horizontalScrollerVisibility = ScrollerVisibility.Hidden
+            };
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(equipmentScroll, 900);
+            equipmentScroll.style.flexGrow = 1;
+            equipmentScroll.style.minHeight = 0;
+            equipmentScroll.contentViewport.RegisterCallback<GeometryChangedEvent>(evt =>
+                equipmentScroll.contentContainer.style.width = evt.newRect.width);
+            equipmentScroll.Add(equipmentSlots);
+            _inventoryHeroPanel.Add(equipmentScroll);
             _equipmentSlotIds = _scene.VoEquipmentSlotIds;
             _equipmentRows = new Button[_equipmentSlotIds.Count];
             _equipmentRowIcons = new VisualElement[_equipmentSlotIds.Count];
@@ -263,14 +294,14 @@ namespace LinhGioi.UI
             _storageGateCard.style.paddingLeft = _storageGateCard.style.paddingRight = 18;
             _storageGateCard.style.paddingTop = _storageGateCard.style.paddingBottom = 16;
             _storagePanel.Add(_storageGateCard);
-            _storageGateTitle = LgoLabel("Kho gửi/rút đang khóa", 22, UiGold, true);
+            _storageGateTitle = LgoLabel("Kho gửi/rút chưa mở", 22, UiGold, true);
             _storageGateTitle.name = "Map01A Storage Gate Title";
             _storageGateCard.Add(_storageGateTitle);
-            _storageState = LgoLabel("Kho gửi/rút chưa kết nối model dữ liệu thật trong Map01A. Khi có storage API/state sẽ dùng lại panel chi tiết bên phải để xem món đang chọn.", 16, new Color(.91f, .93f, .84f, .96f));
+            _storageState = LgoLabel("Rương đồ chưa khả dụng trong bản trải nghiệm này. Bạn vẫn có thể xem và sử dụng đồ trong Hành trang.", 16, new Color(.91f, .93f, .84f, .96f));
             _storageState.name = "Map01A Storage State";
             _storageState.style.marginTop = 10;
             _storageGateCard.Add(_storageState);
-            _storageGateSafety = LgoLabel("Không tạo vật phẩm giả, không gửi/rút local và không đổi trang bị đang mặc.", 15, new Color(.76f, 1f, .70f, .96f), true);
+            _storageGateSafety = LgoLabel("Đồ trong Hành trang và trang bị đang mặc được giữ nguyên.", 15, new Color(.76f, 1f, .70f, .96f), true);
             _storageGateSafety.name = "Map01A Storage Gate Safety";
             _storageGateSafety.style.marginTop = 10;
             _storageGateCard.Add(_storageGateSafety);
@@ -425,6 +456,10 @@ namespace LinhGioi.UI
 
         private void ShowInventoryMode(bool characterInfo)
         {
+            if (characterInfo) ShowInventoryPage(false);
+            _inventoryHeroPanel.style.flexGrow = characterInfo ? 1 : 0;
+            _inventoryGridPanel.style.flexGrow = characterInfo ? 0 : 1;
+            _storagePanel.style.flexGrow = 0;
             _characterInfoOpen = characterInfo;
             _storageOpen = false;
             RefreshInventoryModalHeader();
@@ -444,6 +479,9 @@ namespace LinhGioi.UI
         {
             _characterInfoOpen = false;
             _storageOpen = true;
+            _inventoryHeroPanel.style.flexGrow = 0;
+            _inventoryGridPanel.style.flexGrow = 0;
+            _storagePanel.style.flexGrow = 1;
             RefreshInventoryModalHeader();
             _inventoryGridPanel.style.display = DisplayStyle.None;
             _inventoryHeroPanel.style.display = DisplayStyle.None;
@@ -462,7 +500,7 @@ namespace LinhGioi.UI
             if (_storageOpen)
             {
                 _inventoryModalTitle.text = "RƯƠNG ĐỒ";
-                _inventoryModalSubtitle.text = "Kho gửi/rút sẽ dùng chung panel chi tiết khi có model dữ liệu thật";
+                _inventoryModalSubtitle.text = "Kho gửi/rút chưa mở trong bản trải nghiệm";
             }
             else if (_characterInfoOpen)
             {
@@ -565,13 +603,13 @@ namespace LinhGioi.UI
             _inventoryDetailIcon.style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
             _inventoryDetailIcon.style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
             _equipmentDetail.text = selectedName + " · Lv" + selectedLevel;
-            _inventoryDetailRarity.text = "Tinh phẩm · Lv" + selectedLevel + " · 10 slot chung";
+            _inventoryDetailRarity.text = "Trang bị · Lv" + selectedLevel;
             _inventoryDetailSlotType.text = selectedName;
             _inventoryItemId.text = _scene.GetVoEquipmentItemId(selectedSlot);
             _inventoryDetailStateBadge.text = selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO";
             _inventoryItemState.text = selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.";
-            _inventoryDetailStatPrimary.text = EquipmentPrimaryStat(selectedSlot, selectedLevel);
-            _inventoryDetailStatFit.text = "Khớp: " + _scene.EquipmentFitSummary;
+            _inventoryDetailStatPrimary.text = "Chưa có thuộc tính chiến đấu được công bố.";
+            _inventoryDetailStatFit.text = "Dành cho " + _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
             if (_inventoryDetailPrimaryAction != null)
                 _inventoryDetailPrimaryAction.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
             if (_equipmentToggle != null)
@@ -584,7 +622,7 @@ namespace LinhGioi.UI
             _inventoryDetailIcon.style.backgroundImage = StyleKeyword.None;
             _inventoryDetailIcon.style.display = DisplayStyle.None;
             _inventoryDetailHeader.text = "CHI TIẾT VẬT PHẨM";
-            _inventoryDetailRarity.text = "Nhiệm vụ · Map01A · local-only";
+            _inventoryDetailRarity.text = "Vật phẩm nhiệm vụ";
             if (_selectedSupplyItemId == "mana_potion")
             {
                 _equipmentDetail.text = "Bình Linh Lực Nhỏ";
@@ -604,8 +642,8 @@ namespace LinhGioi.UI
                 _inventoryItemId.text = "map01a_vo_wrist_guard_reward";
                 _inventoryDetailStateBadge.text = !_scene.HasClassRewardItem ? "CHƯA NHẬN" : _scene.IsClassRewardEquipped ? "ĐÃ TRANG BỊ" : "CÓ THỂ TRANG BỊ";
                 _inventoryItemState.text = !_scene.HasClassRewardItem ? "Hoàn thành nhánh Q07 để nhận." : _scene.IsClassRewardEquipped ? "Đã trang bị từ nhiệm vụ." : "Sẵn sàng trang bị từ chi tiết bên phải.";
-                _inventoryDetailStatPrimary.text = "Thủ +24 · Sinh lực +80";
-                _inventoryDetailStatFit.text = "Trang bị nhiệm vụ dùng chung detail bên phải.";
+                _inventoryDetailStatPrimary.text = "Phần thưởng nhiệm vụ";
+                _inventoryDetailStatFit.text = "Nhận khi hoàn thành nhiệm vụ tân thủ.";
                 _inventoryDetailPrimaryAction.text = "Trang bị hộ uyển";
                 _inventoryDetailPrimaryAction.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
             }
@@ -626,13 +664,5 @@ namespace LinhGioi.UI
             if (_equipmentVariant != null) _equipmentVariant.style.display = DisplayStyle.None;
         }
 
-        private static string EquipmentPrimaryStat(string slotId, int level)
-        {
-            var value = 18 + level * 7;
-            if (slotId == "main_weapon") return "Công +" + (value + 28) + " · Chính xác +" + (level * 3 + 9);
-            if (slotId == "boots") return "Tốc +" + (level * 2 + 6) + " · Né +" + (level * 3 + 8);
-            if (slotId == "wrist_guard") return "Bạo kích +" + (level * 2 + 4) + " · Công +" + value;
-            return "Thủ +" + value + " · Sinh lực +" + (level * 18 + 60);
-        }
     }
 }

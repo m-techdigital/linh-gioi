@@ -1977,6 +1977,9 @@ namespace LinhGioi.World
             yield return null;
             var document = GetComponentInChildren<UIDocument>();
             if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for inventory tab capture");
+            yield return new WaitForEndOfFrame();
+            var bag = Path.Combine(directory, "bag.png");
+            CaptureScreenPng(bag);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Character Info Main Tab"));
             yield return null;
             yield return new WaitForEndOfFrame();
@@ -1989,19 +1992,24 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var supplies = Path.Combine(directory, "supplies.png");
             CaptureScreenPng(supplies);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Character Info Main Tab"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var returnedInfo = Path.Combine(directory, "character-info-after-supplies.png");
+            CaptureScreenPng(returnedInfo);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Storage Main Tab"));
             yield return null;
             yield return new WaitForEndOfFrame();
             var storage = Path.Combine(directory, "storage.png");
             CaptureScreenPng(storage);
-            var status = File.Exists(characterInfo) && File.Exists(supplies) && File.Exists(storage) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var status = File.Exists(bag) && File.Exists(returnedInfo) && File.Exists(characterInfo) && File.Exists(supplies) && File.Exists(storage) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-inventory-tabs\",\n"
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frames\": [\"character-info.png\", \"supplies.png\", \"storage.png\"]\n"
+                + "  \"frames\": [\"bag.png\", \"character-info-after-supplies.png\", \"character-info.png\", \"supplies.png\", \"storage.png\"]\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
