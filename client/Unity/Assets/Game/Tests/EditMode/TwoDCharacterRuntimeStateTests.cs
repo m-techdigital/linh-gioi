@@ -180,7 +180,10 @@ namespace LinhGioi.Tests.EditMode
                     "Item detail must stay on the right side of the bag grid.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Does.Contain("CHI TIẾT"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
-                Assert.That(scene.GetVoEquipmentThumbnailSprite("main_weapon"), Is.Not.Null);
+                var weaponThumbnail = scene.GetVoEquipmentThumbnailSprite("main_weapon");
+                Assert.That(weaponThumbnail, Is.Not.Null);
+                Assert.That(weaponThumbnail.rect.height, Is.GreaterThan(weaponThumbnail.rect.width),
+                    "Weapon inventory thumbnail should use the tight vertical runtime component crop, not the wide transparent slot sheet.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Inventory detail must show real runtime equipment art instead of hiding behind fake icons.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Is.Empty,

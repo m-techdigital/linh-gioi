@@ -253,9 +253,6 @@ namespace LinhGioi.World
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
             if (_classFitPreviewActive) return _classFitPreview.GetSlotThumbnailSprite(VoReviewSlotIds[index]);
             var level = GetVoEquipmentItemLevel(slot);
-            var partId = "lv" + level.ToString("000") + "_" + VoAvatarGender + "_slot_" + slot;
-            if (_voAvatarParts.TryGetValue(partId, out var partRenderer) && partRenderer.sprite != null)
-                return partRenderer.sprite;
             foreach (var pair in _voEquipmentComponentInfo)
             {
                 var info = pair.Value;
@@ -272,6 +269,9 @@ namespace LinhGioi.World
                 if (_voEquipmentComponents.TryGetValue(pair.Key, out var renderer) && renderer.sprite != null)
                     return renderer.sprite;
             }
+            var partId = "lv" + level.ToString("000") + "_" + VoAvatarGender + "_slot_" + slot;
+            if (_voAvatarParts.TryGetValue(partId, out var partRenderer) && partRenderer.sprite != null)
+                return partRenderer.sprite;
             return null;
         }
         public bool HasVoEquipmentItemVariant(string slot)

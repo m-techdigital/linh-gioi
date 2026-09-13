@@ -1,3 +1,7 @@
+## Map01A inventory thumbnail crop tightening — 2026-09-13
+
+Inventory detail thumbnails now prefer tight runtime component sprites before falling back to wide slot sprites. The regression covers `main_weapon` so the detail icon uses the vertical weapon component crop instead of the transparent wide slot sheet. Player evidence: `build/map01a-tight-thumbnails-runtime-v1/07-q04-inventory-open.png`; visual review confirms the right-side detail card uses real atlas art and no fake glyph/icon, but the inventory screen is still a structural/runtime-art checkpoint, not final UI design acceptance. Build: `client/Unity/build/map01a-tight-thumbnails-player/LinhGioiOnline.app`, `errors=0 warnings=0`.
+
 ## Map01A inventory runtime thumbnail binding — 2026-09-13
 
 Hành trang detail card now binds its item thumbnail from the loaded runtime equipment sprites/atlases instead of emoji or text glyph placeholders. `CongDongLamMap01AArtPreview.GetVoEquipmentThumbnailSprite()` returns the selected Võ/class slot sprite, and the UI uses it as a `StyleBackground` with empty text, so tests prevent fake glyph art from returning. Player evidence: `build/map01a-runtime-thumbnails-runtime-v1/07-q04-inventory-open.png`; visual review confirms real atlas art appears, but the current weapon crop is still small and needs thumbnail framing/padding polish before final design acceptance. Build: `client/Unity/build/map01a-runtime-thumbnails-player/LinhGioiOnline.app`, `errors=0 warnings=15`.

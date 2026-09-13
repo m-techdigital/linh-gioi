@@ -1,3 +1,7 @@
+## Next inventory/UI action after tight runtime thumbnails — 2026-09-13
+
+The right-side inventory detail thumbnail now uses a tighter runtime component crop, but the screen still needs product-quality UI polish against the owner references. Next valid work: redesign/polish Hành trang and Thông tin as separate tabs using shared UI skin/base, keep details on the right, add real runtime-art thumbnails to grid tiles where readable, and improve navy glass/gold frame hierarchy without temporary glyphs, generic icons, or random generated art. Re-capture `07-q04-inventory-open.png` and review visually before any handoff claim.
+
 ## Next inventory art polish after runtime thumbnails — 2026-09-13
 
 Inventory item art now comes from runtime atlas sprites, not emoji/glyph placeholders. Next valid polish is thumbnail framing: make weapon/boots/clothing thumbnails readable in the design-style icon frame using deterministic atlas sprites or approved cutout mapping, without random generation and without adding source images. Re-capture `07-q04-inventory-open.png` after changes and visually check that thumbnails are large enough, centered, and consistent with the owner reference UI.
