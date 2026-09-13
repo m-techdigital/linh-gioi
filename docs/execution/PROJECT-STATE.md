@@ -8,6 +8,8 @@ Six-pose repair batch evidence: `build/pose-matched-layer-authoring-v1/six-pose-
 
 Partial source staging 2026-09-13 used only clean measured material exports and did not synthesize missing poses. Evidence `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/stage-repair-layers-v1.json`, `repair-layer-audit-v2-after-staging.json`, `staged-repair-image-inventory-v1.json` and `source-board-v1/visual-findings-v1.json`. Current counts: `outer_top` 4/24, `waist_belt` 20/24, `shoulder_chest_guard` 4/24; status remains `SOURCE_VISUAL_FIX_REQUIRED` and `SOURCE_REPAIR_LAYER_GAP` with 44 missing layer failures. External repair directories have `DO-NOT-PACK.md`.
 
+Measured missing-source authoring brief: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/missing-source-authoring-brief-v1.json` and `.md`, mirrored externally. It turns 44 missing layer failures into 11 slot/pose authoring targets and uses `garment-anchor-measurements-candidate-run-b-shoulder-v2.json`, whose guide/proportion sanity is clean. These dimensions are only source-space draw/check guides.
+
 Local Krita evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/local-authoring-toolchain-discovery.json` is `KRITA_LOCAL_TOOLCHAIN_READY`; executable path `build/toolchains/krita/Krita.app/Contents/MacOS/krita`, version `krita 5.3.3 (git 858d352)`.
 
 Krita CLI export smoke is not proven: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`, exit 130 after interrupt, no output PNG. Native round-trip/export should use Krita Scripter or a verified plugin runner until CLI export is fixed.

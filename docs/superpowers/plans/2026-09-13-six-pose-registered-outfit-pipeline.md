@@ -98,6 +98,8 @@ Partial staging 2026-09-13: `tools/stage_lgo_six_pose_repair_layers.py` copied o
 
 Current status remains `SOURCE_VISUAL_FIX_REQUIRED`: `outer_top` has 4/24 layer files, `waist_belt` has 20/24, `shoulder_chest_guard` has 4/24; repair-layer audit still has 44 missing layer failures. External repair directories and the batch folder contain `DO-NOT-PACK.md`.
 
+Measured authoring brief 2026-09-13: `tools/plan_lgo_missing_six_pose_source_authoring.py` generated `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/missing-source-authoring-brief-v1.json` and `.md` from the after-staging repair audit plus `source-review-v1/garment-anchor-measurements-candidate-run-b-shoulder-v2.json`. It collapses the 44 missing layer files into 11 source-authoring targets with `ANCHOR_GUIDE_SANITY_NO_OUTLIERS` and `PROPORTION_SANITY_NO_OUTLIERS`. These dimensions are source-space draw/check guides only, not runtime offsets or automatic pose scaling.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.

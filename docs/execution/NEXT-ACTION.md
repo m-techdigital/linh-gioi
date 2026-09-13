@@ -16,6 +16,8 @@ Partial staging evidence: `build/pose-matched-layer-authoring-v1/six-pose-source
 
 Next source authoring target after staging: create clean registered source for `outer_top` run_contact_a/run_a/run_contact_b/run_b/jump_tuck, `shoulder_chest_guard` run_contact_a/run_a/run_contact_b/run_b/jump_tuck, and `waist_belt` jump_tuck. Do not synthesize jump from idle/run; fix/accept jump anatomy first or keep jump missing.
 
+Measured authoring brief: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/missing-source-authoring-brief-v1.json` and `.md`, mirrored to the external batch folder. It collapses the 44 missing layer files into 11 slot/pose source targets and attaches slot-guide coordinates from `source-review-v1/garment-anchor-measurements-candidate-run-b-shoulder-v2.json`, which has `ANCHOR_GUIDE_SANITY_NO_OUTLIERS` and `PROPORTION_SANITY_NO_OUTLIERS`. Use these dimensions to draw/check the missing source layers; they are not runtime offsets, per-pose scale fixes or visual acceptance.
+
 Local authoring toolchain evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/local-authoring-toolchain-discovery.json` is `KRITA_LOCAL_TOOLCHAIN_READY`. Krita 5.3.3 is available at `build/toolchains/krita/Krita.app/Contents/MacOS/krita`, downloaded into the local build toolchain only; do not commit the dmg/app.
 
 Krita CLI smoke evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`; `krita --export` did not finish and created no output PNG. Treat local Krita as available for GUI/Scripter/plugin-based authoring, but do not assume CLI export round-trip is working until a runner is added and verified.
