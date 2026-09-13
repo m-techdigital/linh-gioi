@@ -1403,3 +1403,9 @@ Chưa đạt visual acceptance: icon trang bị từ atlas runtime vẫn tối v
 ## Map01A entry reference-layout checkpoint — 2026-09-13
 
 Login/entry đã được đổi theo hierarchy của preferred-v2 thay vì tiếp tục chỉnh CSS nhỏ: shell thấp/gọn và trong hơn, logo lớn, hai action Đăng nhập/Đăng ký nằm trong auth card, server ở dưới, `Bắt đầu` là CTA cuối; copy kỹ thuật mặc định ẩn. Player evidence `build/map01a-entry-reference-layout-runtime-v1/entry/entry-login.png` đã xem trực tiếp: map/nhân vật còn rõ, form không chiếm gần hết chiều cao. EditMode Entry 5/5 pass. Vẫn `CONTINUE`; thiếu logo brush và icon side-action final nên chưa claim owner visual acceptance.
+
+## Map01A HUD + NPC dialogue hierarchy checkpoint — 2026-09-13
+
+Đã thay bố cục HUD debug rời bằng hierarchy theo preferred-v2 trên shared Skin: card nhân vật có portrait/HP/MP ở trái trên; bản đồ và nhiệm vụ thành cột phải; combat, shortcut và context action tách thành ba hàng không chồng; dialogue dùng layered frame giới hạn chiều rộng để không che toàn cảnh. Không đổi logic gameplay, camera, class, pose hoặc wardrobe.
+
+Player `client/Unity/build/map01a-hud-dialogue-hierarchy-player-v4/LinhGioiOnline.app` build `errors=0`; evidence `build/map01a-hud-dialogue-hierarchy-runtime-v4/` đạt 18 frame Q01–Q09 và 38 frame dialogue, `usesOsMouseOrKeyboard=false`. Đã xem `01-arrival-q01.png` và `02-ha-van-dialogue.png`: cụm combat không còn tràn/đè action bar, chữ gọn và scene/NPC còn nhìn rõ. Trạng thái `CONTINUE`, chưa phải owner visual acceptance vì chưa có icon skill/navigation final và portrait cận mặt chất lượng sản phẩm.

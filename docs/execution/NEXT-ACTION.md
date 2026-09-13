@@ -1288,3 +1288,7 @@ Continue Map01A/UI only. The real HP/MP/reward icon gate is implemented and visu
 ## Current next action — after entry reference hierarchy (2026-09-13)
 
 Continue Map01A/UI only from `build/map01a-entry-reference-layout-runtime-v1/entry/entry-login.png`. Login structure is now aligned more closely with preferred-v2; do not resume micro CSS tuning until final logo/navigation art exists. Next coherent visible batch is gameplay HUD + NPC dialogue hierarchy against the owner gameplay reference: preserve the playable Map01A viewport, use shared bases, reduce debug-like text blocks, and keep all existing Q01–Q09 interactions. Do not resume class/wardrobe/pose/source work or rollback class code.
+
+## Current next action — after HUD/dialogue hierarchy (2026-09-13)
+
+Continue Map01A/UI only from `build/map01a-hud-dialogue-hierarchy-runtime-v4/`. The gameplay HUD now groups player portrait/vitals at top-left, map + quest at top-right, combat/context actions in separate bottom-right rows, and bounds NPC dialogue so the scene and quest column remain visible. Q01–Q09 capture remains technically complete. Visual status is `CONTINUE`: the structure is materially closer to preferred-v2, but final HUD skill/navigation icons and a close-up player portrait asset are still missing. Next visible batch should use approved/provenance-backed HUD icons or improve NPC dialogue presentation with existing approved NPC art; do not return to isolated font/margin tuning, class/wardrobe/pose/source work, or rollback class code.

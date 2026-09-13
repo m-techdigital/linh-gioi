@@ -988,6 +988,53 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
+        [Test]
+        public void GameplayHudUsesCompactReferenceHierarchyAndBoundedDialogue()
+        {
+            var desktopDialogue = CongDongLamArrivalHud.CalculateDialoguePanelRect(new Rect(0, 0, 1280, 720), touch: false);
+            Assert.That(desktopDialogue.width, Is.InRange(760f, 880f));
+            Assert.That(desktopDialogue.xMin, Is.GreaterThanOrEqualTo(20f));
+            Assert.That(desktopDialogue.xMax, Is.LessThan(1080f),
+                "Desktop dialogue must leave the right-side quest/navigation column readable like the owner HUD reference.");
+
+            var mobileDialogue = CongDongLamArrivalHud.CalculateDialoguePanelRect(new Rect(0, 0, 800, 480), touch: true);
+            Assert.That(mobileDialogue.xMin, Is.GreaterThanOrEqualTo(12f));
+            Assert.That(mobileDialogue.xMax, Is.LessThanOrEqualTo(788f));
+
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("HUD reference hierarchy test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var playerCard = root.Q("Map01A Vitals");
+                var portrait = root.Q("Map01A Player Portrait");
+                var quest = root.Q("Map01A Quest Tracker Body");
+                var map = root.Q("Map01A Minimap");
+                var dialogue = root.Q("Map01A Dialogue Panel");
+                var combatActions = root.Q("Map01A Combat Actions");
+
+                Assert.That(playerCard, Is.Not.Null);
+                Assert.That(portrait, Is.Not.Null, "The player HUD card needs a real runtime portrait area, not a text-only debug block.");
+                Assert.That(quest.resolvedStyle.fontSize, Is.LessThanOrEqualTo(16f));
+                Assert.That(map.resolvedStyle.fontSize, Is.LessThanOrEqualTo(14f));
+                Assert.That(dialogue.ClassListContains("lgo-layered-frame"), Is.True,
+                    "Dialogue must reuse the shared layered frame rather than remain a flat full-width strip.");
+                Assert.That(root.Q<Label>("Map01A Dialogue Line").resolvedStyle.fontSize, Is.LessThanOrEqualTo(18f));
+                Assert.That(combatActions.style.width.value.value, Is.GreaterThanOrEqualTo(330f),
+                    "A right-anchored combat row needs an explicit width or its children overflow off-screen.");
+                Assert.That(combatActions.style.height.value.value, Is.GreaterThanOrEqualTo(48f));
+                Assert.That(combatActions.style.bottom.value.value, Is.GreaterThanOrEqualTo(150f),
+                    "Combat controls must sit above the shortcut and context rows instead of being painted underneath them.");
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
 
         [Test]
         public void DialoguePanelShowsQuestContextAndProgressInsideConversation()

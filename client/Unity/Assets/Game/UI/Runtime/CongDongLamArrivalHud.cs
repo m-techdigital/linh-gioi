@@ -17,7 +17,7 @@ namespace LinhGioi.UI
         private const float InventoryGridCellBasisPercent = 14.2f;
 
         private CongDongLamMap01AArtPreview _scene;
-        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs;
+        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs, _vitalsPortrait;
         private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
@@ -68,17 +68,23 @@ namespace LinhGioi.UI
             _root.pickingMode = PickingMode.Ignore;
             _safe = new VisualElement { name = "Map01A Safe Hud", pickingMode = PickingMode.Ignore };
             _root.Add(_safe);
-            var title = new Label("CỔNG ĐÔNG LÂM\nKhu an toàn • Lv1–3") { name = "Map01A Location Title" };
-            ApplyLgoHudInfoPanel(title); Place(title, 12, null, 12, null); _safe.Add(title);
+            var title = new Label("CỘNG ĐỒNG LÂM  ·  KÊNH 1\nKhu an toàn  •  Lv1–3") { name = "Map01A Location Title" };
+            ApplyLgoHudLocationChip(title); Place(title, 12, null, 12, null); title.style.width = 292; _safe.Add(title);
             _vitals = new VisualElement { name = "Map01A Vitals", pickingMode = PickingMode.Ignore };
-            ApplyLgoHudInfoPanel(_vitals); Place(_vitals, 12, null, 92, null); _vitals.style.width = 240;
-            _vitalsName = new Label(); _vitalsName.style.fontSize = 18; _vitals.Add(_vitalsName);
+            ApplyLgoHudPlayerCard(_vitals); Place(_vitals, 12, null, 66, null); _vitals.style.width = 292;
+            _vitalsPortrait = new VisualElement { name = "Map01A Player Portrait", pickingMode = PickingMode.Ignore };
+            ApplyLgoHudPortrait(_vitalsPortrait);
+            _vitals.Add(_vitalsPortrait);
+            var vitalsContent = new VisualElement { name = "Map01A Vitals Content", pickingMode = PickingMode.Ignore };
+            vitalsContent.style.flexGrow = 1;
+            vitalsContent.style.marginLeft = 10;
+            _vitalsName = new Label(); _vitalsName.style.fontSize = 15; _vitalsName.style.unityFontStyleAndWeight = FontStyle.Bold; vitalsContent.Add(_vitalsName);
             _health = MakeVital("Map01A Health", new Color(.67f, .16f, .15f));
             _mana = MakeVital("Map01A Mana", new Color(.12f, .37f, .64f));
-            _vitals.Add(_health); _vitals.Add(_mana); _safe.Add(_vitals);
+            vitalsContent.Add(_health); vitalsContent.Add(_mana); _vitals.Add(vitalsContent); _safe.Add(_vitals);
             _questTabs = new VisualElement { name = "Map01A Quest Tracker Tabs", pickingMode = PickingMode.Ignore };
-            Place(_questTabs, null, 12, 12, null);
-            _questTabs.style.width = 260;
+            Place(_questTabs, null, 12, 90, null);
+            _questTabs.style.width = 286;
             _questTabs.style.flexDirection = FlexDirection.Row;
             _questTabs.style.height = 32;
             _questMissionsTab = new Button { name = "Map01A Quest Tab Missions", text = "Nhiệm vụ" };
@@ -88,10 +94,10 @@ namespace LinhGioi.UI
             _questTabs.Add(_questMissionsTab);
             _questTabs.Add(_questPartyTab);
             _safe.Add(_questTabs);
-            _quest = new Label { name = "Map01A Quest Tracker Body" }; ApplyLgoHudInfoPanel(_quest); Place(_quest, null, 12, 46, null);
-            _quest.style.width = 260; _quest.style.whiteSpace = WhiteSpace.Normal; _safe.Add(_quest);
-            _minimap = new Label { name = "Map01A Minimap" }; ApplyLgoHudInfoPanel(_minimap); Place(_minimap, 220, null, 12, null);
-            _minimap.style.width = 430; _minimap.style.fontSize = 16;
+            _quest = new Label { name = "Map01A Quest Tracker Body" }; ApplyLgoHudQuestPanel(_quest); Place(_quest, null, 12, 124, null);
+            _quest.style.width = 286; _quest.style.whiteSpace = WhiteSpace.Normal; _safe.Add(_quest);
+            _minimap = new Label { name = "Map01A Minimap" }; ApplyLgoHudMapPanel(_minimap); Place(_minimap, null, 12, 12, null);
+            _minimap.style.width = 286; _minimap.style.height = 70; _minimap.style.fontSize = 13;
             _minimap.style.unityTextAlign = TextAnchor.MiddleCenter; _safe.Add(_minimap);
             _pad = new RuntimeTouchMovementPad { name = "LGO World Touch Movement Pad" }; ApplyLgoHudInfoPanel(_pad); Place(_pad, 16, null, null, 16);
             _pad.style.width = _pad.style.height = 112;
@@ -125,8 +131,12 @@ namespace LinhGioi.UI
             _toggleSlot = new Button(() => _scene.ToggleVoEquipmentSlot()) { text = "Mặc/Cởi · B" };
             ApplyLgoHudInfoPanel(_toggleSlot); Place(_toggleSlot, 16, null, _touch ? 384 : 322, null);
             _toggleSlot.style.minHeight = _touch ? 52 : 40; _toggleSlot.style.minWidth = 170; _safe.Add(_toggleSlot);
-            _combatBar = new VisualElement(); Place(_combatBar, _touch ? 150 : 220, null, null, 24);
+            _combatBar = new VisualElement { name = "Map01A Combat Actions" }; Place(_combatBar, null, 16, null, _touch ? 154 : 84);
             _combatBar.style.flexDirection = FlexDirection.Row;
+            _combatBar.style.width = _touch ? 392 : 342;
+            _combatBar.style.height = _touch ? 62 : 52;
+            _combatBar.style.justifyContent = Justify.FlexEnd;
+            _combatBar.style.alignItems = Align.Center;
             _run = new Button(() => _scene.SetVoRun(!_scene.VoRunEnabled)) { name = "Map01A Run Action", text = "Chạy" };
             _jump = new Button { name = "Map01A Jump Action", text = "Nhảy" };
             _jump.RegisterCallback<PointerDownEvent>(evt => { _touchJumpHeld = true; _jump.CapturePointer(evt.pointerId); _scene.SetVoJumpHeld(true); });
@@ -171,19 +181,19 @@ namespace LinhGioi.UI
             BuildInventory();
             BuildCharacterSelect();
             BuildEntryScreen();
-            _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); Place(_dialogue, 142, 290, null, 20);
+            _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); ApplyLgoLayeredFrame(_dialogue); Place(_dialogue, 28, null, null, 22);
             _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
             _dialogue.style.paddingTop = _dialogue.style.paddingBottom = 10;
-            _dialogue.style.fontSize = 20;
+            _dialogue.style.fontSize = 17;
             _dialogue.style.flexDirection = FlexDirection.Column;
             var dialogueHeader = new VisualElement { name = "Map01A Dialogue Header" };
             ApplyLgoGlassPanel(dialogueHeader, true);
             dialogueHeader.style.paddingLeft = dialogueHeader.style.paddingRight = 10;
             dialogueHeader.style.paddingTop = dialogueHeader.style.paddingBottom = 8;
-            _dialogueSpeaker = LgoTitleLabel("Hạ Vân", 20);
+            _dialogueSpeaker = LgoTitleLabel("Hạ Vân", 18);
             _dialogueSpeaker.name = "Map01A Dialogue Speaker";
             dialogueHeader.Add(_dialogueSpeaker);
-            _dialogueQuestContext = LgoSubtitleLabel("", 14);
+            _dialogueQuestContext = LgoSubtitleLabel("", 12);
             _dialogueQuestContext.name = "Map01A Dialogue Quest Context";
             _dialogueQuestContext.style.whiteSpace = WhiteSpace.Normal;
             _dialogueQuestContext.style.marginTop = 4;
@@ -192,7 +202,8 @@ namespace LinhGioi.UI
             var dialogueBody = new VisualElement { name = "Map01A Dialogue Body" };
             ApplyLgoDetailCard(dialogueBody, 12, 10);
             dialogueBody.style.marginTop = 8;
-            _dialogueLine = LgoLabel(_scene.DialogueText, 20, new Color(.95f, .91f, .78f, .98f));
+            _dialogueLine = LgoLabel(_scene.DialogueText, 17, new Color(.95f, .91f, .78f, .98f));
+            _dialogueLine.name = "Map01A Dialogue Line";
             _dialogueLine.style.whiteSpace = WhiteSpace.Normal; dialogueBody.Add(_dialogueLine);
             _dialogue.Add(dialogueBody);
             var dialogueOptions = new VisualElement { name = "Map01A Dialogue Actions" }; dialogueOptions.style.flexDirection = FlexDirection.Row;
@@ -221,10 +232,19 @@ namespace LinhGioi.UI
         private static UnityEngine.UIElements.ProgressBar MakeVital(string name, Color color)
         {
             var bar = new UnityEngine.UIElements.ProgressBar { name = name, lowValue = 0, highValue = 100 };
-            bar.style.height = 22; bar.style.marginTop = 4; bar.style.fontSize = 15;
+            bar.style.height = 18; bar.style.marginTop = 3; bar.style.fontSize = 12;
             bar.Q(className: "unity-progress-bar__progress").style.backgroundColor = color;
             bar.Q(className: "unity-progress-bar__background").style.backgroundColor = new Color(.03f,.05f,.07f);
             return bar;
+        }
+
+        public static Rect CalculateDialoguePanelRect(Rect safePanelRect, bool touch)
+        {
+            var side = touch ? 12f : 28f;
+            var rightReserve = touch ? 12f : 220f;
+            var maxWidth = touch ? 840f : 860f;
+            var width = Mathf.Min(maxWidth, Mathf.Max(0f, safePanelRect.width - side - rightReserve));
+            return new Rect(safePanelRect.x + side, safePanelRect.y + 22f, width, 0f);
         }
 
         public static float CalculateInventoryShellHeight(Rect inventoryRect, bool touch, bool compactShell)
@@ -264,12 +284,14 @@ namespace LinhGioi.UI
             _metrics = RuntimeViewportMetrics.FromRoot(_root);
             var r = _metrics.SafePanelRect;
             Place(_safe, r.x, null, r.y, null); _safe.style.width = r.width; _safe.style.height = r.height;
-            _quest.style.width = r.width < 900 ? 220 : 260;
-            _questTabs.style.width = r.width < 900 ? 220 : 260;
-            _minimap.style.left = r.width < 1100 ? 206 : 220;
-            _minimap.style.width = r.width < 1100 ? 360 : 430;
-            _dialogue.style.left = _touch ? 150 : 20;
-            _combatBar.style.left = _touch ? 150 : 220;
+            var rightColumnWidth = r.width < 900 ? 228f : 286f;
+            _quest.style.width = rightColumnWidth;
+            _questTabs.style.width = rightColumnWidth;
+            _minimap.style.width = rightColumnWidth;
+            var dialogueRect = CalculateDialoguePanelRect(new Rect(0, 0, r.width, r.height), _touch);
+            _dialogue.style.left = dialogueRect.x;
+            _dialogue.style.right = StyleKeyword.Auto;
+            _dialogue.style.width = dialogueRect.width;
             var inventoryRect = CalculateInventoryModalRect(new Rect(0, 0, r.width, r.height), _touch);
             _inventory.style.left = inventoryRect.x;
             _inventory.style.right = StyleKeyword.Auto;
@@ -277,7 +299,7 @@ namespace LinhGioi.UI
             _inventory.style.bottom = StyleKeyword.Auto;
             _inventory.style.width = inventoryRect.width;
             _inventory.style.height = CalculateInventoryShellHeight(inventoryRect, _touch, IsInventoryCompactShellActive());
-            _combatBar.style.bottom = r.width < 1300 ? 100 : 24;
+            _combatBar.style.bottom = _touch ? 226 : 154;
             _talk.style.fontSize = _touch ? 20 : 18;
             if (_inventoryHeroPanel != null)
             {
@@ -396,7 +418,9 @@ namespace LinhGioi.UI
                 + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + (_touch ? "" : " · G");
             _inventoryGender.SetEnabled(_scene.CanCycleSourcePoseGender);
             _vitals.style.display = _scene.InventoryOpen || _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _vitalsName.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
+            _vitalsName.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + "  ·  Lv.1";
+            var playerPortrait = _scene.GetVoAvatarThumbnailSprite();
+            _vitalsPortrait.style.backgroundImage = playerPortrait == null ? StyleKeyword.None : new StyleBackground(playerPortrait);
             _health.value = _scene.PlayerHealth; _health.title = "HP " + _scene.PlayerHealth + "/100";
             _mana.value = _scene.PlayerMana; _mana.title = "MP " + _scene.PlayerMana + "/100";
             foreach (var supplyAction in new[] { _healthPotion, _manaPotion, _equipReward })
