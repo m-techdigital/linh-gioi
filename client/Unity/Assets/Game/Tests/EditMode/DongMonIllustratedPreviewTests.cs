@@ -385,6 +385,8 @@ namespace LinhGioi.Tests
                 Assert.That(preview.PortalUnlocked, Is.True);
                 Assert.That(preview.CurrentActionLabel, Is.EqualTo("Đã mở"), "Completed portal label must fit mobile action button");
                 Assert.That(preview.ActiveQuestId, Is.EqualTo("COMPLETE"));
+                Assert.That(preview.QuestDisplayTitle, Is.EqualTo("Cổng Đông Lâm hoàn tất"),
+                    "The final player-facing tracker must use the location name instead of leaking the internal Map01A id.");
                 Assert.That(preview.CompletedQuestCount, Is.EqualTo(9));
             }
             finally

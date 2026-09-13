@@ -69,7 +69,7 @@ namespace LinhGioi.World
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string QuestDisplayTitle => ActiveQuestId == "COMPLETE"
-            ? "Map01A hoàn tất"
+            ? "Cổng Đông Lâm hoàn tất"
             : ActiveQuestId + " · " + QuestName(ActiveQuestId);
         public string QuestObjectiveText => ActiveQuestId == "COMPLETE"
             ? "Portal Suối Thanh Minh đã mở."

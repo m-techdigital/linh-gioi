@@ -40,7 +40,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "## Current evidence\n\n"
             "entry/login: `build/map01a-entry-remember-runtime-v1/entry-login.png`, `build/map01a-entry-remember-runtime-v1/manifest.json`\n"
             "five tabs: `build/map01a-search-count-runtime-v3/character-info.png`, `build/map01a-search-count-runtime-v3/bag.png`, `build/map01a-search-count-runtime-v3/bag-search-binh-mau.png`, `build/map01a-search-count-runtime-v3/bag-search-binh-mau-selected.png`, `build/map01a-search-count-runtime-v3/skills.png`, `build/map01a-search-count-runtime-v3/potential.png`, `build/map01a-search-count-runtime-v3/spirit-pet.png`, `build/map01a-search-count-runtime-v3/manifest.json`\n"
-            "route: `build/map01a-item-detail-runtime-v1/01-arrival-q01.png`, `build/map01a-item-detail-runtime-v1/18-q09-portal-open.png`, `build/map01a-item-detail-runtime-v1/manifest.json`\n"
+            "route: `build/map01a-completion-copy-runtime-v2/01-arrival-q01.bmp`, `build/map01a-completion-copy-runtime-v2/18-q09-portal-open.bmp`, `build/map01a-completion-copy-runtime-v2/manifest.json`\n"
             "menu: `build/map01a-modal-input-runtime-v1/menu.png`, `build/map01a-modal-input-runtime-v1/manifest.json`\n"
             "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md\n"
             "No approved dedicated UI icon set\n"

@@ -1,3 +1,9 @@
+## Next — sau audit toàn tuyến và sửa completion copy — 2026-09-14
+
+`CONTINUE`. Player mới đã chạy lại Q01–Q09 ở 1600×900: 18/18 route frame, 38 dialogue frame, 6 NPC revisit và 9/9 nhiệm vụ. Tracker cuối dùng `Cổng Đông Lâm hoàn tất`, không lộ mã nội bộ `Map01A`. Evidence: `build/map01a-completion-copy-runtime-v2/`; Player `build/map01a-completion-copy-player-v1/LinhGioiOnline.app`.
+
+Next valid work: audit interaction hoặc lỗi hiển thị Map01A còn có bằng chứng Player; nếu cần art mới thì chỉ dùng nguồn được duyệt/provenance-backed. Không quay lại class/pose/wardrobe/source, không tạo art/progression giả và không đổi frozen surfaces.
+
 ## Next — sau search count và selection-detail đồng bộ — 2026-09-14
 
 `CONTINUE`. Rương đồ hiện báo đúng số kết quả tìm kiếm và chỉ tô selected khi panel chi tiết bên phải đã chuyển sang chính món đó. Evidence hiện hành: `build/map01a-search-count-runtime-v3/{bag-search-binh-mau,bag-search-binh-mau-selected}.png`; Player `build/map01a-search-count-player-v3/LinhGioiOnline.app`.

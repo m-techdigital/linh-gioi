@@ -1,3 +1,10 @@
+## Map01A — toàn tuyến không lộ mã map nội bộ ở completion — 2026-09-14
+
+- Audit Player hiện hành chạy đủ Q01–Q09 và phát hiện tracker cuối ghi `Map01A hoàn tất`. Copy runtime đã đổi thành `Cổng Đông Lâm hoàn tất`; regression test khóa tên location hướng người chơi.
+- Full EditMode đạt 280/280. Player `build/map01a-completion-copy-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=0`; quest-only capture 1600×900 đạt 18 frame, 9/9 nhiệm vụ, 38 dialogue frame, 6 NPC revisit và các functional gate hiện hành.
+- Đã visual audit frame đầu, thoại Quan Thủ, Hành trang Q04, dùng Bình Máu, combat và portal cuối. Evidence hiện hành: `build/map01a-completion-copy-runtime-v2/`.
+- Không đổi class/pose/wardrobe/source/camera/scale hoặc frozen surfaces.
+
 ## Map01A — search count và selection-detail đồng bộ — 2026-09-14
 
 - Rương đồ giờ dùng đúng `visibleItemCount` để phản hồi `N kết quả · 56/120 ô` khi tìm kiếm; xóa query trả badge về sức chứa chuẩn.

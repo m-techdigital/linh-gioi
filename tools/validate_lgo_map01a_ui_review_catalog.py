@@ -28,8 +28,8 @@ HUB_FRAMES = [
     "potential.png",
     "spirit-pet.png",
 ]
-ROUTE_MANIFEST = "build/map01a-item-detail-runtime-v1/manifest.json"
-ROUTE_FRAMES = ["01-arrival-q01.png", "18-q09-portal-open.png"]
+ROUTE_MANIFEST = "build/map01a-completion-copy-runtime-v2/manifest.json"
+ROUTE_FRAMES = ["01-arrival-q01.bmp", "18-q09-portal-open.bmp"]
 MENU_EVIDENCE = (
     "build/map01a-modal-input-runtime-v1/manifest.json",
     "build/map01a-modal-input-runtime-v1/menu.png",
@@ -95,7 +95,7 @@ def validate_root(root: Path = ROOT) -> list[str]:
             "potential.png",
             "spirit-pet.png",
             "01-arrival-q01.png",
-            "18-q09-portal-open.png",
+            "18-q09-portal-open.bmp",
             "menu.png",
             "not owner approval",
             ITEM_ICON_AUDIT_DOC,
