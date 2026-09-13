@@ -480,7 +480,11 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Potential Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Menu Tiềm năng must route into the approved shared hub tab.");
                 InvokeBoundButton(menu);
-                InvokeBoundButton(root.Q<Button>("Map01A Menu Close"));
+                var handleEscape = typeof(CongDongLamArrivalHud).GetMethod("HandleEscape",
+                    BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(handleEscape, Is.Not.Null,
+                    "Menu must share one escape handler with the other foreground workspaces.");
+                handleEscape.Invoke(hud, null);
                 Assert.That(menuOverlay.style.display.value, Is.EqualTo(DisplayStyle.None));
                 InvokeBoundButton(skills);
                 Assert.That(scene.InventoryOpen, Is.True);
@@ -494,6 +498,24 @@ namespace LinhGioi.Tests.EditMode
                 foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
                     if (!before.Contains(root)) Object.DestroyImmediate(root);
             }
+        }
+
+        [Test]
+        public void GameplayWorldInputIsBlockedByEveryForegroundWorkspace()
+        {
+            Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(
+                entryOpen: false, menuOpen: false, inventoryOpen: false, dialogueOpen: false, characterSelectOpen: false),
+                Is.False, "World input should remain available while the HUD is unobstructed.");
+            Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(true, false, false, false, false), Is.True,
+                "Entry/login must block movement and combat behind it.");
+            Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(false, true, false, false, false), Is.True,
+                "Menu must block movement and combat behind it.");
+            Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(false, false, true, false, false), Is.True,
+                "The five-tab workspace must block movement and combat behind it.");
+            Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(false, false, false, true, false), Is.True,
+                "NPC dialogue must block movement and combat behind it.");
+            Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(false, false, false, false, true), Is.True,
+                "Character selection must block movement and combat behind it.");
         }
 
         [Test]

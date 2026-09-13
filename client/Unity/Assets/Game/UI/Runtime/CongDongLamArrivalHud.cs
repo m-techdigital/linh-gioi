@@ -365,6 +365,20 @@ namespace LinhGioi.UI
             return normalized;
         }
 
+        public static bool ShouldBlockWorldInput(bool entryOpen, bool menuOpen, bool inventoryOpen,
+            bool dialogueOpen, bool characterSelectOpen)
+        {
+            return entryOpen || menuOpen || inventoryOpen || dialogueOpen || characterSelectOpen;
+        }
+
+        private void HandleEscape()
+        {
+            if (_menuOpen) CloseMenu();
+            else if (_characterSelectOpen) CloseCharacterSelect();
+            else if (_scene.DialogueOpen) _scene.CloseNpcDialogue();
+            else if (_scene.InventoryOpen) _scene.ToggleInventory();
+        }
+
         public static Rect CalculateInventoryModalRect(Rect safePanelRect, bool touch)
         {
             var compact = touch || safePanelRect.width < 950;
@@ -448,19 +462,18 @@ namespace LinhGioi.UI
             if (!_metrics.LayoutEquals(metrics)) Layout();
             if (!_scene.IsCapturing)
             {
-                var keyboard = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1f : 0f)
-                    - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1f : 0f);
-                if (!_touch) _scene.SetVoRun(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
-                _scene.MoveOnLane(Mathf.Abs(_pad.Value.x) > .01f ? _pad.Value.x : keyboard, Time.deltaTime);
-                if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
                 if (Input.GetKeyDown(KeyCode.Escape))
+                    HandleEscape();
+
+                var worldInputBlocked = ShouldBlockWorldInput(
+                    _entryOpen, _menuOpen, _scene.InventoryOpen, _scene.DialogueOpen, _characterSelectOpen);
+                if (!worldInputBlocked)
                 {
-                    if (_characterSelectOpen) CloseCharacterSelect();
-                    else if (_scene.DialogueOpen) _scene.CloseNpcDialogue();
-                    else if (_scene.InventoryOpen) _scene.ToggleInventory();
-                }
-                if (!_scene.DialogueOpen && !_characterSelectOpen)
-                {
+                    var keyboard = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1f : 0f)
+                        - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1f : 0f);
+                    if (!_touch) _scene.SetVoRun(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+                    _scene.MoveOnLane(Mathf.Abs(_pad.Value.x) > .01f ? _pad.Value.x : keyboard, Time.deltaTime);
+                    if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
                     if (!_scene.IsSourcePoseReviewActive && Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
                     if (Input.GetKeyDown(KeyCode.L)) _scene.CycleVoAvatarLevel();
                     if (Input.GetKeyDown(KeyCode.G)) _scene.CycleVoAvatarGender();
@@ -476,7 +489,11 @@ namespace LinhGioi.UI
                     if (Input.GetKeyDown(KeyCode.R)) _scene.EquipClassReward();
                     if (Input.GetKeyDown(KeyCode.F)) _scene.CycleSourcePoseClass();
                 }
-                else _scene.SetVoJumpHeld(false);
+                else
+                {
+                    if (!_touch) _scene.SetVoRun(false);
+                    _scene.SetVoJumpHeld(false);
+                }
             }
             _questTitle.text = _scene.QuestDisplayTitle;
             _questObjective.text = _scene.QuestObjectiveText;

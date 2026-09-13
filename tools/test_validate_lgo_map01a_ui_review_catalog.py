@@ -40,7 +40,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "entry/login: `build/map01a-entry-remember-runtime-v1/entry-login.png`, `build/map01a-entry-remember-runtime-v1/manifest.json`\n"
             "five tabs: `build/map01a-inventory-search-runtime-v2/character-info.png`, `build/map01a-inventory-search-runtime-v2/bag.png`, `build/map01a-inventory-search-runtime-v2/skills.png`, `build/map01a-inventory-search-runtime-v2/potential.png`, `build/map01a-inventory-search-runtime-v2/spirit-pet.png`, `build/map01a-inventory-search-runtime-v2/manifest.json`\n"
             "route: `build/map01a-item-detail-runtime-v1/01-arrival-q01.png`, `build/map01a-item-detail-runtime-v1/18-q09-portal-open.png`, `build/map01a-item-detail-runtime-v1/manifest.json`\n"
-            "menu: `build/map01a-menu-current-runtime-v1/menu.png`, `build/map01a-menu-current-runtime-v1/manifest.json`\n"
+            "menu: `build/map01a-modal-input-runtime-v1/menu.png`, `build/map01a-modal-input-runtime-v1/manifest.json`\n"
             "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md\n"
             "No approved dedicated UI icon set\n"
             "not owner approval\n"
@@ -86,14 +86,14 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
         route_dir = root / Path(validator.ROUTE_MANIFEST).parent
         for name in validator.ROUTE_FRAMES:
             (route_dir / name).write_bytes(b"png")
-        write_json(root / "build/map01a-menu-current-runtime-v1/manifest.json", {
+        write_json(root / "build/map01a-modal-input-runtime-v1/manifest.json", {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
             "usesOsMouseOrKeyboard": False,
             "width": 1600,
             "height": 900,
             "captureScope": "map01a-menu",
         })
-        (root / "build/map01a-menu-current-runtime-v1/menu.png").write_bytes(b"png")
+        (root / "build/map01a-modal-input-runtime-v1/menu.png").write_bytes(b"png")
         return temp
 
     def test_current_repo_has_reviewable_map01a_ui_catalog(self) -> None:
