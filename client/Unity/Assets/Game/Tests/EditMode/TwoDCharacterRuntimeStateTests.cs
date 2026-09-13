@@ -303,10 +303,16 @@ namespace LinhGioi.Tests.EditMode
                 var menu = root.Q<Button>("Map01A Menu Shortcut");
                 Assert.That(skills, Is.Not.Null);
                 Assert.That(menu, Is.Not.Null);
-                Assert.That(skills.text, Does.Contain("Kỹ năng"));
-                Assert.That(menu.text, Does.Contain("Menu"));
+                Assert.That(skills.text, Is.EqualTo("Kỹ năng"));
+                Assert.That(menu.text, Is.EqualTo("Menu"));
                 Assert.That(skills.enabledSelf, Is.False, "Kỹ năng shortcut must stay visibly gated until the real screen exists.");
                 Assert.That(menu.enabledSelf, Is.False, "Menu shortcut must stay visibly gated until the real screen exists.");
+                Assert.That(skills.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
+                    "HUD product shortcuts must not wrap into tall two-line buttons.");
+                Assert.That(skills.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),
+                    "HUD product shortcuts must stay compact and must not inherit modal/button CTA typography.");
+                Assert.That(skills.resolvedStyle.height, Is.LessThanOrEqualTo(42f),
+                    "HUD product shortcuts must stay compact on Player.");
 
                 InvokeBoundButton(root.Q<Button>("Map01A Character Select Button"));
                 Assert.That(shortcutBar.style.display.value, Is.EqualTo(DisplayStyle.None));

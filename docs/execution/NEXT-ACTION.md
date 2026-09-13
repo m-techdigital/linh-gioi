@@ -1,3 +1,7 @@
+## Next Map01A UI polish after compact HUD shortcuts — 2026-09-13
+
+Continue Map01A/UI-only polish using the repaired targeted Unity filter. Good next candidates: reduce remaining HUD/button visual noise, polish login/inventory/character-info/storage/detail hierarchy, or improve NPC dialogue readability against the owner references. Keep button/font sizes proportional; no class/wardrobe work, no class Player build/capture loops, and no rollback of existing class code.
+
 ## Next Map01A UI polish after compact quest tabs — 2026-09-13
 
 Continue Map01A product UI/UX only. The safe `--filter` gate is now repaired and must be used for targeted UI tests; do not run broad Unity tests when a Map01A UI-only check is intended. Next safe work: continue login/inventory/character-info/storage/NPC-dialogue/HUD polish against the owner references, keeping button/font sizes compact unless a control is a true modal primary CTA. Do not resume class/wardrobe work, do not run class Player build/capture loops, and do not rollback existing class code.

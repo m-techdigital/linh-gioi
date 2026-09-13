@@ -185,17 +185,19 @@ namespace LinhGioi.UI
             Place(_productShortcutActions, null, 16, null, _touch ? 162 : 92);
             _productShortcutActions.style.flexDirection = FlexDirection.Row;
             _productShortcutActions.style.alignItems = Align.FlexEnd;
-            _skillsShortcut = new Button { name = "Map01A Skills Shortcut", text = "Kỹ năng · chưa mở" };
-            _menuShortcut = new Button { name = "Map01A Menu Shortcut", text = "Menu · chưa mở" };
+            _skillsShortcut = new Button { name = "Map01A Skills Shortcut", text = "Kỹ năng" };
+            _menuShortcut = new Button { name = "Map01A Menu Shortcut", text = "Menu" };
             foreach (var button in new[] { _skillsShortcut, _menuShortcut })
             {
                 ApplyLgoDisabledAction(button);
                 button.style.position = Position.Relative;
                 button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
-                button.style.minHeight = _touch ? 58 : 44;
-                button.style.minWidth = _touch ? 138 : 124;
-                button.style.maxWidth = 156;
-                button.style.marginLeft = 10;
+                button.style.minHeight = _touch ? 46 : 36;
+                button.style.minWidth = _touch ? 110 : 92;
+                button.style.maxWidth = 118;
+                button.style.fontSize = 13;
+                button.style.whiteSpace = WhiteSpace.NoWrap;
+                button.style.marginLeft = 8;
                 _productShortcutActions.Add(button);
             }
             _safe.Add(_productShortcutActions);
