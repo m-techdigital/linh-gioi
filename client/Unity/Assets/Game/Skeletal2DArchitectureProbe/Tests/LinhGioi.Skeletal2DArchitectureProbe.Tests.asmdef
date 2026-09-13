@@ -1,0 +1,14 @@
+{
+  "name": "LinhGioi.Skeletal2DArchitectureProbe.Tests",
+  "rootNamespace": "LinhGioi.Tests",
+  "references": [
+    "LinhGioi.Skeletal2DArchitectureProbe"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": false
+}

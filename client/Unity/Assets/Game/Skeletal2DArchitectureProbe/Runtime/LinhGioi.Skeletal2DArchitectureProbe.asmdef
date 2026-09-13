@@ -1,0 +1,9 @@
+{
+  "name": "LinhGioi.Skeletal2DArchitectureProbe",
+  "rootNamespace": "LinhGioi.ArchitectureProbe",
+  "references": [
+    "LinhGioi.World",
+    "Unity.2D.Animation.Runtime"
+  ],
+  "autoReferenced": true
+}

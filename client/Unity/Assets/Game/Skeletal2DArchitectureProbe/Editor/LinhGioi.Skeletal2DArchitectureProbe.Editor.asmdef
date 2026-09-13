@@ -1,0 +1,13 @@
+{
+  "name": "LinhGioi.Skeletal2DArchitectureProbe.Editor",
+  "rootNamespace": "LinhGioi.ArchitectureProbe.Editor",
+  "references": [
+    "LinhGioi.Skeletal2DArchitectureProbe",
+    "LinhGioi.World",
+    "Unity.2D.Animation.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}
