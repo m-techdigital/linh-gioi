@@ -1,3 +1,9 @@
+## Next — Map01A inventory polish after content-fit grid panel — 2026-09-13
+
+`CONTINUE`. Bag grid đã dùng shared `lgo-inventory-content-fit-panel` để không kéo dài thành vùng trống debug khi chỉ có 10 item hiện hành. Evidence Player: `build/map01a-inventory-content-fit-runtime-v1/bag.png` và `supplies.png`; capture không dùng chuột/phím OS.
+
+Next valid work: tiếp tục Map01A/UI-only theo owner references, ưu tiên polish modal shell/background density, detail panel spacing, hoặc chuẩn bị dedicated item-icon board/provenance trước khi wire icon thật. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt và trạng thái vẫn `CONTINUE` nếu chưa sát design.
+
 ## Next — Map01A inventory polish after item-icon frame and supplies visibility — 2026-09-13
 
 `CONTINUE`. Inventory thumbnails đã dùng shared `lgo-item-icon-frame`, và tab `Vật phẩm` không còn bị empty-state đẩy item rows xuống dưới viewport. Evidence Player mới: `build/map01a-item-icon-frame-runtime-v2/supplies.png`, `bag.png`, `character-info.png`; capture không dùng chuột/phím OS.

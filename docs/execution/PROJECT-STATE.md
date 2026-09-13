@@ -1,3 +1,9 @@
+## Map01A — inventory content-fit panel base-first guard — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.
+- Sau visual audit Player, bag grid còn lỗi nhìn thấy: 10 ô item hiện tại làm `Map01A Inventory Grid Panel` kéo cao tới đáy modal, để nửa dưới thành vùng trống như bảng debug. Đã thêm shared base `ApplyLgoInventoryContentFitPanel(...)` / `lgo-inventory-content-fit-panel` để panel item sparse tự neo theo content height thay vì stretch theo body.
+- TDD/evidence: RED thiếu shared content-fit class trên grid panel; GREEN targeted EditMode `InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection` và `LGO_UI_SHARED_SKIN_PASS`. Player build/capture `build/map01a-inventory-content-fit-player-v1/LinhGioiOnline.app`, evidence `build/map01a-inventory-content-fit-runtime-v1/{bag,supplies,character-info,storage}.png`. Visual audit: `bag.png` không còn viền grid kéo xuống vùng trống lớn; `supplies.png` vẫn hiển thị row vật phẩm và detail phải. UI tổng thể vẫn `CONTINUE` vì modal nền/shell còn cần polish sâu theo owner references.
+
 ## Map01A — inventory item icon frame and supplies visibility guard — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.

@@ -20,6 +20,7 @@ namespace LinhGioi.UI
         private const string LgoInventoryBadgeClass = "lgo-inventory-badge";
         private const string LgoInventoryStateBadgeClass = "lgo-inventory-state-badge";
         private const string LgoInventoryStatsCardClass = "lgo-inventory-stats-card";
+        private const string LgoInventoryContentFitPanelClass = "lgo-inventory-content-fit-panel";
         private const string LgoStatusCardClass = "lgo-status-card";
         private const string LgoDetailCardClass = "lgo-detail-card";
         private const string LgoInventoryMainTabClass = "lgo-inventory-main-tab";
@@ -252,6 +253,14 @@ namespace LinhGioi.UI
             card.style.paddingLeft = card.style.paddingRight = 10;
             card.style.paddingTop = card.style.paddingBottom = 7;
             ApplyLgoFrame(card, new Color(.018f, .060f, .096f, .92f), new Color(.72f, .62f, .38f, .58f));
+        }
+
+        private static void ApplyLgoInventoryContentFitPanel(VisualElement panel)
+        {
+            panel.AddToClassList(LgoInventoryContentFitPanelClass);
+            panel.style.alignSelf = Align.FlexStart;
+            panel.style.flexGrow = 0;
+            panel.style.flexShrink = 0;
         }
 
         private static void ApplyLgoStatusCard(VisualElement card, float horizontalPadding = 10, float verticalPadding = 8)

@@ -208,7 +208,7 @@ namespace LinhGioi.UI
             _inventoryDetailPanel.Add(actions);
 
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
-            _inventoryGridPanel.style.flexGrow = 0;
+            ApplyLgoInventoryContentFitPanel(_inventoryGridPanel);
             _inventoryGridPanel.style.flexBasis = 720;
             _inventoryGridPanel.style.marginRight = 8;
             body.Add(_inventoryGridPanel);

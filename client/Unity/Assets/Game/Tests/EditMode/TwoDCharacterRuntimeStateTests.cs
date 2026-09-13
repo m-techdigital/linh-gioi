@@ -268,6 +268,10 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory detail panel must share the same shell base as bag/character/storage panels.");
                 Assert.That(root.Q("Map01A Storage Gate Card").ClassListContains("lgo-inventory-panel-shell"), Is.True,
                     "Storage gate card must not introduce a parallel flat panel style.");
+                Assert.That(inventoryGridPanel.ClassListContains("lgo-inventory-content-fit-panel"), Is.True,
+                    "Sparse bag content must use a shared fit-to-content panel base instead of leaving a large blank debug area.");
+                Assert.That(inventoryGridPanel.style.alignSelf.value, Is.EqualTo(Align.FlexStart),
+                    "Sparse bag content should anchor to its own content height so the lower half of the modal is not an empty debug box.");
                 Assert.That(inventoryGridPanel.style.flexGrow.value, Is.EqualTo(0),
                     "Bag grid must not stretch across the whole modal because that turns item cells into wide table cards.");
                 Assert.That(inventoryGridPanel.style.flexBasis.value.value, Is.LessThanOrEqualTo(760),
