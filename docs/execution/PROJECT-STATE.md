@@ -20,6 +20,8 @@ Local Krita evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-rep
 
 Krita CLI export smoke is not proven: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`, exit 130 after interrupt, no output PNG. Native round-trip/export should use Krita Scripter or a verified plugin runner until CLI export is fixed.
 
+Krita runner smoke is also not proven: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/kritarunner-smoke-v1/report.json` plus `import-path-summary-v1.json` record `KRITARUNNER_USER_SCRIPT_IMPORT_UNRESOLVED`. Four local user-script attempts returned exit 0 but wrote no marker JSON and logged `ModuleNotFoundError`; a built-in plugin probe imported, so the remaining issue is user resource/plugin packaging. Do not treat `kritarunner` exit code 0 as round-trip proof.
+
 KRA archive fallback evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/kra-archive-probe-v1/report.json` is `KRA_ARCHIVE_MERGEDIMAGE_READABLE` for the outer-top idle v7 KRA. This can help inspect old candidates, but it must not be used as a replacement for Krita reopen/export proof or as source-layer acceptance.
 
 ## Map01A inventory grid runtime art cleanup — 2026-09-13

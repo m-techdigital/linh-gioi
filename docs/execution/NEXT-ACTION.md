@@ -28,6 +28,8 @@ Local authoring toolchain evidence: `build/pose-matched-layer-authoring-v1/six-p
 
 Krita CLI smoke evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`; `krita --export` did not finish and created no output PNG. Treat local Krita as available for GUI/Scripter/plugin-based authoring, but do not assume CLI export round-trip is working until a runner is added and verified.
 
+Krita runner audit evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/kritarunner-smoke-v1/report.json` and `import-path-summary-v1.json` are `KRITARUNNER_USER_SCRIPT_IMPORT_UNRESOLVED`. `kritarunner` starts, but exit code 0 is not proof: local user-script/plugin attempts did not create the marker JSON and logs show `ModuleNotFoundError`. A built-in plugin probe imports, so the unresolved part is user resource/plugin packaging. Do not use `kritarunner` for source round-trip automation until this gate writes a marker/export report.
+
 KRA archive probe evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/kra-archive-probe-v1/report.json` is `KRA_ARCHIVE_MERGEDIMAGE_READABLE` for `outer-top-material-idle-v7/outer-top-idle-material.kra`. The extracted `mergedimage.png` is 1024×1536 RGBA with visible alpha, but zip extraction proves archive readability only; it is not Krita reopen/export and not clean A/B front/back source-layer acceptance.
 
 ## Skeletal 2D source blueprint gate — owner rejection recorded 2026-09-13

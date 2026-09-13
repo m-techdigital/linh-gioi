@@ -110,6 +110,8 @@ Selection provenance audit 2026-09-13: `tools/audit_lgo_source_staging_selection
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.
 
+Tooling status 2026-09-13: Krita local app is available, but CLI automation is not accepted yet. `krita --export` timed out, and `tools/audit_lgo_kritarunner_script_execution.py` reports `KRITARUNNER_SCRIPT_IMPORT_UNRESOLVED`: user script/plugin attempts exit 0 without executing marker output. Use Krita GUI/Scripter/manual verified export, or first close a dedicated plugin-packaging gate that writes a real marker/export report.
+
 ### Task 3: Mixed-Level And Off-Slot Review Board
 
 **Files:**
