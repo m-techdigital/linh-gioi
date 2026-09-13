@@ -119,3 +119,8 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-quest-tab-base-style-runtime-v1/01-arrival-q01.png` plus quest route capture frames in `build/map01a-quest-tab-base-style-runtime-v1/`.
 - Result: quest tracker tabs use shared `ApplyLgoHudQuestTab(...)`/`lgo-hud-quest-tab` instead of inline per-tab sizing.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance.
+## 2026-09-13 — Dialogue action base-first evidence
+
+- Evidence: `build/map01a-dialogue-action-base-style-runtime-v1/` quest route capture frames, including dialogue frames.
+- Result: dialogue primary/secondary actions use shared helpers/classes instead of inline per-button sizing.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance.

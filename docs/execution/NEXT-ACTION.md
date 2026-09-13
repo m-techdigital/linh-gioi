@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after dialogue action helper — 2026-09-13
+
+`CONTINUE`. Dialogue action buttons đã gom vào shared `ApplyLgoDialoguePrimaryAction(...)` / `ApplyLgoDialogueSecondaryAction(...)` thay vì inline style. Evidence batch: `build/map01a-dialogue-action-base-style-runtime-v1/`.
+
+Next valid work: tiếp tục Map01A UI-only, ưu tiên entry/link/server buttons hoặc context action buttons còn lặp style; mọi pattern giống nhau phải sửa base/helper trước rồi mới bind hành vi. Không resume class/wardrobe/pose/source, không rollback class code, không dùng icon giả/random/generated cho nghiệm thu visual.
+
 ## Next — Map01A base-first UI polish after quest tab helper — 2026-09-13
 
 `CONTINUE`. Quest tracker tabs đã gom vào shared `ApplyLgoHudQuestTab(...)` thay vì inline style. Evidence batch: `build/map01a-quest-tab-base-style-runtime-v1/` sau Player capture.

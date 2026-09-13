@@ -1,3 +1,10 @@
+## Map01A — dialogue action base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Dialogue actions (`Tiếp tục`, `Hỏi việc tiếp theo`, `Để sau`) chuyển từ inline per-button sizing sang shared helpers/classes: `ApplyLgoDialoguePrimaryAction(...)`, `ApplyLgoDialogueSecondaryAction(...)`, `lgo-dialogue-primary-action`, `lgo-dialogue-secondary-action`.
+- RED/GREEN: EditMode fail khi dialogue action chưa có shared base class, sau đó pass khi refactor về helper chung; shared-skin validator yêu cầu marker helper trong `Skin.cs` và marker gọi helper trong HUD.
+- Evidence batch: `build/map01a-dialogue-action-base-style-runtime-v1/`; trạng thái vẫn `CONTINUE` vì UI tổng thể còn cần polish sâu và asset/icon thật.
+
 ## Map01A — quest tracker tab base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

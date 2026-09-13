@@ -18,6 +18,8 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoHudCombatAction",
     "ApplyLgoHudShortcutAction",
     "ApplyLgoHudQuestTab",
+    "ApplyLgoDialoguePrimaryAction",
+    "ApplyLgoDialogueSecondaryAction",
 ]
 FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+readonly\s+Color\s+(?!Ui)[A-Za-z0-9_]*(Glass|Gold|Blue|Border|Text|SubText)"),
@@ -49,7 +51,8 @@ REQUIRED_PARTIAL_MARKERS = {
     "CongDongLamArrivalHud.cs": [
         "_dialogue = new VisualElement { name = \"Map01A Dialogue Panel\" }",
         "ApplyLgoGlassPanel(_dialogue",
-        "ApplyLgoButton(option",
+        "ApplyLgoDialoguePrimaryAction(_dialogueContinue",
+        "ApplyLgoDialogueSecondaryAction(option",
         "ApplyLgoButton(_talk",
         "ApplyLgoButton(_npcTalk",
         "ApplyLgoHudCombatAction(button",

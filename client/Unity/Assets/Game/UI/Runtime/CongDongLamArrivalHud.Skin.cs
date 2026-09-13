@@ -21,6 +21,8 @@ namespace LinhGioi.UI
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
         private const string LgoHudShortcutActionClass = "lgo-hud-shortcut-action";
         private const string LgoHudQuestTabClass = "lgo-hud-quest-tab";
+        private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
+        private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -190,6 +192,22 @@ namespace LinhGioi.UI
             cell.style.marginBottom = 7;
             cell.style.alignItems = Align.Center;
             cell.style.justifyContent = Justify.Center;
+        }
+
+        private static void ApplyLgoDialoguePrimaryAction(Button button)
+        {
+            button.AddToClassList(LgoDialoguePrimaryActionClass);
+            ApplyLgoButton(button, true);
+            button.style.marginRight = 10;
+            button.style.flexGrow = 1;
+        }
+
+        private static void ApplyLgoDialogueSecondaryAction(Button button)
+        {
+            button.AddToClassList(LgoDialogueSecondaryActionClass);
+            ApplyLgoButton(button);
+            button.style.minHeight = 44;
+            button.style.marginRight = 10;
         }
 
         private static void ApplyLgoHudQuestTab(Button button, bool selected, bool enabled, bool isLast)

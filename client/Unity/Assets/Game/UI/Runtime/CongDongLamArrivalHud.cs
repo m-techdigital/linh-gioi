@@ -206,10 +206,10 @@ namespace LinhGioi.UI
             _dialogueContinue = new Button(() => _scene.UseCurrentRouteAction()) { name = "Map01A Dialogue Continue", text = "Tiếp tục" };
             _dialogueInformation = new Button(() => _scene.ReadDialogueInformation()) { name = "Map01A Dialogue Information", text = "Hỏi việc tiếp theo" };
             _dialogueClose = new Button(() => _scene.CloseNpcDialogue()) { name = "Map01A Dialogue Close", text = "Để sau" };
-            ApplyLgoButton(_dialogueContinue, true); _dialogueContinue.style.marginRight = 10; _dialogueContinue.style.flexGrow = 1;
+            ApplyLgoDialoguePrimaryAction(_dialogueContinue);
             foreach (var option in new[] { _dialogueInformation, _dialogueClose })
             {
-                ApplyLgoButton(option); option.style.minHeight = 44; option.style.marginRight = 10;
+                ApplyLgoDialogueSecondaryAction(option);
             }
             foreach (var option in new[] { _dialogueContinue, _dialogueInformation, _dialogueClose }) dialogueOptions.Add(option);
             _dialogue.Add(dialogueOptions);

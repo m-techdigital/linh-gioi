@@ -824,6 +824,12 @@ namespace LinhGioi.Tests.EditMode
                     "Dialogue panel must expose its own continue action after the world HUD actions are hidden.");
                 Assert.That(continueButton.parent, Is.SameAs(actionRow));
                 Assert.That(continueButton.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(continueButton.ClassListContains("lgo-dialogue-primary-action"), Is.True,
+                    "Dialogue continue must use the shared dialogue primary action base instead of one-off inline sizing.");
+                Assert.That(root.Q<Button>("Map01A Dialogue Information").ClassListContains("lgo-dialogue-secondary-action"), Is.True,
+                    "Dialogue secondary actions must use the shared dialogue action base instead of local sizing.");
+                Assert.That(root.Q<Button>("Map01A Dialogue Close").ClassListContains("lgo-dialogue-secondary-action"), Is.True,
+                    "All dialogue secondary actions must share the same reusable base style.");
                 Assert.That(continueButton.style.minHeight.value.value, Is.GreaterThan(root.Q<Button>("Map01A Dialogue Close").style.minHeight.value.value),
                     "The main continue action should read as the primary dialogue CTA.");
                 var firstLine = scene.DialogueText;
