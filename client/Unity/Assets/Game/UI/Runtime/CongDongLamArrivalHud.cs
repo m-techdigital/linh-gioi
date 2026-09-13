@@ -18,6 +18,7 @@ namespace LinhGioi.UI
 
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs, _vitalsPortrait, _dialoguePortrait;
+        private VisualElement _playerHudCluster, _rightHudCluster;
         private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
@@ -68,10 +69,23 @@ namespace LinhGioi.UI
             _root.pickingMode = PickingMode.Ignore;
             _safe = new VisualElement { name = "Map01A Safe Hud", pickingMode = PickingMode.Ignore };
             _root.Add(_safe);
+
+            _playerHudCluster = new VisualElement { name = "Map01A Player Status Cluster", pickingMode = PickingMode.Ignore };
+            ApplyLgoHudComposition(_playerHudCluster);
+            Place(_playerHudCluster, 12, null, 12, null);
+            _playerHudCluster.style.width = 292;
+            _safe.Add(_playerHudCluster);
+
+            _rightHudCluster = new VisualElement { name = "Map01A Right Hud Cluster", pickingMode = PickingMode.Ignore };
+            ApplyLgoHudComposition(_rightHudCluster);
+            Place(_rightHudCluster, null, 12, 12, null);
+            _rightHudCluster.style.width = 286;
+            _safe.Add(_rightHudCluster);
+
             var title = new Label("CỘNG ĐỒNG LÂM  ·  KÊNH 1\nKhu an toàn  •  Lv1–3") { name = "Map01A Location Title" };
-            ApplyLgoHudLocationChip(title); Place(title, 12, null, 12, null); title.style.width = 292; _safe.Add(title);
+            ApplyLgoHudLocationChip(title); title.style.width = 286; title.style.marginBottom = 4; _rightHudCluster.Add(title);
             _vitals = new VisualElement { name = "Map01A Vitals", pickingMode = PickingMode.Ignore };
-            ApplyLgoHudPlayerCard(_vitals); Place(_vitals, 12, null, 66, null); _vitals.style.width = 292;
+            ApplyLgoHudPlayerCard(_vitals); _vitals.style.width = 292;
             _vitalsPortrait = new VisualElement { name = "Map01A Player Portrait", pickingMode = PickingMode.Ignore };
             ApplyLgoHudPortrait(_vitalsPortrait);
             _vitals.Add(_vitalsPortrait);
@@ -81,24 +95,26 @@ namespace LinhGioi.UI
             _vitalsName = new Label(); _vitalsName.style.fontSize = 15; _vitalsName.style.unityFontStyleAndWeight = FontStyle.Bold; vitalsContent.Add(_vitalsName);
             _health = MakeVital("Map01A Health", new Color(.67f, .16f, .15f));
             _mana = MakeVital("Map01A Mana", new Color(.12f, .37f, .64f));
-            vitalsContent.Add(_health); vitalsContent.Add(_mana); _vitals.Add(vitalsContent); _safe.Add(_vitals);
+            vitalsContent.Add(_health); vitalsContent.Add(_mana); _vitals.Add(vitalsContent); _playerHudCluster.Add(_vitals);
             _questTabs = new VisualElement { name = "Map01A Quest Tracker Tabs", pickingMode = PickingMode.Ignore };
-            Place(_questTabs, null, 12, 90, null);
             _questTabs.style.width = 286;
             _questTabs.style.flexDirection = FlexDirection.Row;
             _questTabs.style.height = 32;
+            _questTabs.style.marginBottom = 4;
             _questMissionsTab = new Button { name = "Map01A Quest Tab Missions", text = "Nhiệm vụ" };
             _questPartyTab = new Button { name = "Map01A Quest Tab Party", text = "Đội" };
             ApplyLgoHudQuestTab(_questMissionsTab, selected: true, enabled: true, isLast: false);
             ApplyLgoHudQuestTab(_questPartyTab, selected: false, enabled: false, isLast: true);
             _questTabs.Add(_questMissionsTab);
             _questTabs.Add(_questPartyTab);
-            _safe.Add(_questTabs);
-            _quest = new Label { name = "Map01A Quest Tracker Body" }; ApplyLgoHudQuestPanel(_quest); Place(_quest, null, 12, 124, null);
-            _quest.style.width = 286; _quest.style.whiteSpace = WhiteSpace.Normal; _safe.Add(_quest);
-            _minimap = new Label { name = "Map01A Minimap" }; ApplyLgoHudMapPanel(_minimap); Place(_minimap, null, 12, 12, null);
+            _quest = new Label { name = "Map01A Quest Tracker Body" }; ApplyLgoHudQuestPanel(_quest);
+            _quest.style.width = 286; _quest.style.whiteSpace = WhiteSpace.Normal;
+            _minimap = new Label { name = "Map01A Minimap" }; ApplyLgoHudMapPanel(_minimap);
             _minimap.style.width = 286; _minimap.style.height = 70; _minimap.style.fontSize = 13;
-            _minimap.style.unityTextAlign = TextAnchor.MiddleCenter; _safe.Add(_minimap);
+            _minimap.style.unityTextAlign = TextAnchor.MiddleCenter; _minimap.style.marginBottom = 4;
+            _rightHudCluster.Add(_minimap);
+            _rightHudCluster.Add(_questTabs);
+            _rightHudCluster.Add(_quest);
             _pad = new RuntimeTouchMovementPad { name = "LGO World Touch Movement Pad" }; ApplyLgoHudInfoPanel(_pad); Place(_pad, 16, null, null, 16);
             _pad.style.width = _pad.style.height = 112;
             _pad.style.display = _touch ? DisplayStyle.Flex : DisplayStyle.None;
@@ -299,6 +315,7 @@ namespace LinhGioi.UI
             var r = _metrics.SafePanelRect;
             Place(_safe, r.x, null, r.y, null); _safe.style.width = r.width; _safe.style.height = r.height;
             var rightColumnWidth = r.width < 900 ? 228f : 286f;
+            _rightHudCluster.style.width = rightColumnWidth;
             _quest.style.width = rightColumnWidth;
             _questTabs.style.width = rightColumnWidth;
             _minimap.style.width = rightColumnWidth;

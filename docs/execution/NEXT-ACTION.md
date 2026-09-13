@@ -1316,3 +1316,8 @@ Next valid work: xử lý trọn một batch gameplay HUD + NPC dialogue theo ow
 `CONTINUE`. HUD/dialogue evidence hiện hành: `build/map01a-hud-dialogue-runtime-v2/01-arrival-q01.png` và `02-ha-van-dialogue.png`. Không dùng capture v1 vì v1 có regression nền quest; v2 đã sửa và được xem trực tiếp.
 
 Next valid visible batch: gom player card/location và minimap/quest thành hai composition dùng shared base, nâng hierarchy gần owner HUD mà vẫn giữ viewport Map01A. Chốt tối đa ba sai lệch lớn trước khi code, sau đó một build/capture và visual audit. Không chỉnh CSS lẻ từng nút, không resume class/wardrobe/pose/source, không rollback class code và không đổi frozen surfaces.
+## Next — inventory/detail-right visual hierarchy batch — 2026-09-13
+
+`CONTINUE`. HUD composition hiện hành dùng evidence `build/map01a-hud-composition-runtime-v1/01-arrival-q01.png`; player card/right rail đã thống nhất base và không còn đặt rời. Không quay lại capture HUD cũ.
+
+Next valid visible batch: đối chiếu Hành trang với `preferred-v2/02` và `03`, chốt tối đa ba sai lệch lớn ở shell/grid/detail-right rồi sửa qua shared base. Giữ Hành trang và Thông tin là hai tab khác nhau; chọn item hoặc trang bị phải hiện chi tiết bên phải. Một build/capture sau batch, không chỉnh lẻ từng button/font và không resume class/wardrobe/pose/source.

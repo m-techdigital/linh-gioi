@@ -42,6 +42,7 @@ namespace LinhGioi.UI
         private const string LgoHudLocationChipClass = "lgo-hud-location-chip";
         private const string LgoHudMapPanelClass = "lgo-hud-map-panel";
         private const string LgoHudQuestPanelClass = "lgo-hud-quest-panel";
+        private const string LgoHudCompositionClass = "lgo-hud-composition";
         private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
         private const string LgoDialoguePortraitClass = "lgo-dialogue-portrait";
@@ -594,6 +595,13 @@ namespace LinhGioi.UI
             element.style.fontSize = 14;
             element.style.unityFontStyleAndWeight = FontStyle.Bold;
             element.style.paddingTop = element.style.paddingBottom = 5;
+        }
+
+        private static void ApplyLgoHudComposition(VisualElement element)
+        {
+            element.AddToClassList(LgoHudCompositionClass);
+            element.style.flexDirection = FlexDirection.Column;
+            element.style.alignItems = Align.Stretch;
         }
 
         private static void ApplyLgoHudPlayerCard(VisualElement element)

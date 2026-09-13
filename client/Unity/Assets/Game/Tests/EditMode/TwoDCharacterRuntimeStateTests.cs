@@ -936,6 +936,13 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
                         Is.EqualTo(DisplayStyle.None), "Old review control reappeared: " + field);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var playerCluster = root.Q("Map01A Player Status Cluster");
+                var rightCluster = root.Q("Map01A Right Hud Cluster");
+                Assert.That(playerCluster.ClassListContains("lgo-hud-composition"), Is.True);
+                Assert.That(rightCluster.ClassListContains("lgo-hud-composition"), Is.True);
+                Assert.That(root.Q("Map01A Vitals").parent, Is.EqualTo(playerCluster));
+                foreach (var name in new[] { "Map01A Location Title", "Map01A Minimap", "Map01A Quest Tracker Tabs", "Map01A Quest Tracker Body" })
+                    Assert.That(root.Q(name).parent, Is.EqualTo(rightCluster), name + " must stay inside the shared right-side HUD composition.");
                 var locationTitle = root.Q("Map01A Location Title");
                 Assert.That(locationTitle, Is.Not.Null,
                     "HUD location title needs a named shared info panel for visual audit and base-first reuse.");
