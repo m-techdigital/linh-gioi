@@ -147,19 +147,10 @@ namespace LinhGioi.UI
             _entryStatus.style.marginBottom = 16;
             panel.Add(_entryStatus);
 
-            var actions = new VisualElement { name = "Map01A Entry Actions" };
-            actions.style.flexDirection = FlexDirection.Row;
-            actions.style.justifyContent = Justify.Center;
-            panel.Add(actions);
-
-            var login = new Button(() => _entryStatus.text = "Đăng nhập dev/local đã sẵn sàng cho preview; không gửi mật khẩu hoặc token thật.")
-            {
-                name = "Map01A Entry Login Button",
-                text = "Đăng nhập dev"
-            };
-            StyleEntryButton(login, false);
-            login.style.marginRight = 12;
-            actions.Add(login);
+            var primaryCta = new VisualElement { name = "Map01A Entry Primary Cta Row" };
+            primaryCta.style.alignItems = Align.Center;
+            primaryCta.style.marginTop = 2;
+            panel.Add(primaryCta);
 
             var start = new Button(CloseEntryScreen)
             {
@@ -167,7 +158,23 @@ namespace LinhGioi.UI
                 text = "Bắt đầu"
             };
             StyleEntryButton(start, true);
-            actions.Add(start);
+            start.style.width = Length.Percent(100);
+            start.style.maxWidth = 420;
+            primaryCta.Add(start);
+
+            var secondaryActions = new VisualElement { name = "Map01A Entry Secondary Actions" };
+            secondaryActions.style.flexDirection = FlexDirection.Row;
+            secondaryActions.style.justifyContent = Justify.Center;
+            secondaryActions.style.marginTop = 10;
+            panel.Add(secondaryActions);
+
+            var login = new Button(() => _entryStatus.text = "Đăng nhập dev/local đã sẵn sàng cho preview; không gửi mật khẩu hoặc token thật.")
+            {
+                name = "Map01A Entry Login Button",
+                text = "Đăng nhập dev"
+            };
+            StyleEntryButton(login, false);
+            secondaryActions.Add(login);
 
             var character = new Label("Nhân vật: LụcThiên · Cổng Đông Lâm · dùng runtime Map01A hiện hành") { name = "Map01A Entry Character Summary" };
             character.style.fontSize = 15;

@@ -345,6 +345,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Entry Server State").text, Does.Contain("Mượt"));
                 var start = root.Q<Button>("Map01A Entry Start Button");
                 Assert.That(start, Is.Not.Null);
+                Assert.That(root.Q("Map01A Entry Primary Cta Row"), Is.Not.Null,
+                    "Entry reference uses the start action as its own gold CTA row instead of burying it beside secondary auth actions.");
+                Assert.That(root.Q("Map01A Entry Secondary Actions"), Is.Not.Null,
+                    "Secondary dev/login actions should stay visually subordinate to the primary start CTA.");
+                Assert.That(start.style.minHeight.value.value, Is.GreaterThan(root.Q<Button>("Map01A Entry Login Button").style.minHeight.value.value));
+                Assert.That(start.style.maxWidth.value.value, Is.GreaterThan(300));
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
                 Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));
                 Assert.That(root.Q("Map01A Entry Auth Options"), Is.Not.Null);

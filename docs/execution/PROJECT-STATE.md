@@ -2,6 +2,10 @@
 
 Owner explicitly redirected this worktree away from class/wardrobe development. Do not continue Kiếm/Pháp/Cơ/Linh art, outfit, source-pose, Player class build/capture, or rollback work here. Keep already-pushed class audit guards as safety checks only. Current valid work is Map01A product UI/UX and gameplay flow: login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue/HUD readability, and map interactions using shared UI helpers and approved/runtime assets. If a task would require class visual repair, stop that path and choose a Map01A/UI task instead.
 
+## Map01A entry primary CTA hierarchy — 2026-09-13
+
+Entry/login now separates the owner-facing `Bắt đầu` action into its own gold primary CTA row, while `Đăng nhập dev` remains a smaller secondary review action. This moves the runtime login shell closer to the uploaded 2D UI references without adding fake icons, production auth, or random art. TDD evidence: RED failed on missing `Map01A Entry Primary Cta Row`; GREEN passed `./tools/unity_batch_test.sh --filter EntryScreenSeparatesDevLoginAndStartWithoutChangingMapState` with `UNITY_EDITMODE_RESULTS_VERIFIED total=271 passed=270 failed=0 result=Skipped:Ignored`. Player evidence: `build/map01a-entry-cta-runtime-v1/entry-login.png`, manifest `usesOsMouseOrKeyboard=false`, 1600x900. Visual review confirms the primary CTA is centered and visually dominant; login art is still not final product art.
+
 ## Owner direction: stop class development in this worktree — 2026-09-13
 
 Owner clarified that Kiếm/Pháp/Cơ/Linh class development should not continue in this task because class handling is moving in another task. Do not rollback existing class/wardrobe code or old checkpoints. The only retained change in the current checkpoint is an audit guard that records actor-scale metrics and prevents jump/run scale regressions from passing technical capture; it does not modify class art, class packs, camera, base, scale, or wardrobe assets. Future work in this worktree should return to Map01A/UI/gameplay flow unless the owner explicitly reopens class work here.
