@@ -1,9 +1,22 @@
 import unittest
 
-from lgo_next_task import active_next_action_task_from_text
+from lgo_next_task import active_next_action_task_from_text, active_state_execution_blocker_from_text
 
 
 class LgoNextTaskTests(unittest.TestCase):
+    def test_native_authoring_capability_blocker_stops_ready_advice(self):
+        text = """## Active task state
+
+```json
+{"activeTask":"SIX_POSE_REGISTERED_OUTFIT_POSE_SET_AUTHORING","blockers":["KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED","ACCEPTED_SLEEVED_SOURCE_MISSING"]}
+```
+"""
+
+        self.assertEqual(
+            active_state_execution_blocker_from_text(text),
+            "KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED",
+        )
+
     def test_active_goal_lock_selects_six_pose_source_authoring(self):
         text = "\n".join(
             [

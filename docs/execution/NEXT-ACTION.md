@@ -5,7 +5,7 @@ Owner steering update: đánh giá outfit theo đầu ra thực tế, không the
 ## Active task state
 
 ```json
-{"activeTask":"SIX_POSE_REGISTERED_OUTFIT_POSE_SET_AUTHORING","status":"NATIVE_LAYERED_SIX_POSE_SOURCE_REQUIRED","blockers":["VERIFIED_NATIVE_LAYER_EXPORT_AND_ACCEPTED_SLEEVED_SOURCE_MISSING"],"runtimePromotionAllowed":false}
+{"activeTask":"SIX_POSE_REGISTERED_OUTFIT_POSE_SET_AUTHORING","status":"NATIVE_AUTHORING_CAPABILITY_REQUIRED","blockers":["KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED","ACCEPTED_SLEEVED_SOURCE_MISSING"],"runtimePromotionAllowed":false}
 ```
 
 Next valid work: giữ nguyên sáu ảnh body/motion nguyên khối `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`; tạo source native có layer mở lại được cho một bộ overlay áo Pháp có tay trên profile chung 1024×1536, rồi belt/guard theo cùng pose registration. ImageGen chỉ được dùng làm concept/reference; output RGB/caro, alpha cleanup hoặc ảnh composite không được làm source. Không cắt body thành head/torso/limb, không rig các mảnh body, không sửa ảnh từng pixel để dò fit và không thêm runtime offset riêng cho item. Item thứ hai phải dùng lại cùng pose template/landmarks và chỉ thay phần thiết kế/vật liệu đã khai báo.
@@ -13,6 +13,8 @@ Next valid work: giữ nguyên sáu ảnh body/motion nguyên khối `idle`, `ru
 Rejected-source quarantine: năm cây Pháp có quyết định cuối `REJECTED`/`WITHDRAWN` đã được chuyển khỏi `class-work-in-progress` sang `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-13/`. Manifest SHA-256: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-13/quarantine-manifest.json`. Đường cũ chỉ còn tombstone `authoring-selection.json` và `DO-NOT-SELECT.md`; không copy/rename evidence này trở lại cây active. Packer hiện chặn bắt buộc status `REJECTED/WITHDRAWN`, cây `rejected-evidence`, PNG không có alpha thật và PNG không có nền trong suốt.
 
 Kiểm đối chứng sau sửa: `source-staging-selection-audit-v3-after-quarantine.json` vẫn cho phép đúng bảy source review hiện hành, và `current-selected-source-boundary-audit-v1.json` xác nhận cả bảy là RGBA 1024×1536 có vùng trong suốt. Guard phân biệt nguồn review đang hoạt động với nguồn đã bị bác; nó không chặn toàn bộ WIP bằng `runtimeEligible=false`.
+
+Krita capability closure: GUI 5.3.3 có thể chạy, nhưng Codex sandbox không có desktop/Scripter control. `kritarunner` không import user module; bundle-module probe bị macOS chặn quyền/chữ ký, và CLI theo cú pháp chính thức `krita input.kra --export --export-filename output.png` timeout 30 giây, không tạo output. Evidence: `kritarunner-smoke-v2-bundle-module/report.json` và `krita-cli-official-syntax-v2/report.json` trong build batch. Dừng thử thêm runner/path/signature. Bước tiếp theo chỉ hợp lệ khi có host điều khiển Krita GUI/Scripter hoặc một native layered source do artist tạo/mở/lưu được; không thay capability thiếu bằng ImageGen, alpha cleanup hay validator.
 
 Blender flat-card/skinned body-rig prototype was visually rejected and stopped. Its runtime/build evidence stays under `build/outfit-body-rig-prototype-2026-09-13/`; it must not become production source or be reopened under another rig/mesh name.
 

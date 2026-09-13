@@ -10,6 +10,8 @@ Rejected-source recurrence was fixed at the source and pack boundaries. Five Ph�
 
 The latest ImageGen jump-layer export is evidence of a failed capability boundary: it had canonical dimensions but was RGB with checkerboard baked in. ImageGen is therefore concept/reference only for this pipeline; alpha cleanup/background deletion is not an allowed bridge to registered source. The current blocker is one native layered sleeved source that can be reopened and exported with true transparency.
 
+The selected Krita path was tested and then stopped at a concrete environment boundary. GUI 5.3.3 launches, but `kritarunner` cannot import user modules in this macOS bundle; copying/injecting a module invalidates the signed runner and macOS blocks the repair path. The official CLI export syntax also timed out after 30 seconds with no output. No new garment candidate was created during these checks. The project now needs a controllable Krita GUI/Scripter host or an artist-created native layered source before the six-pose sleeved item can proceed.
+
 ## Active goal lock — six-pose registered outfit path — 2026-09-13
 
 `feature-2d-latest` is no longer continuing the current skeletal generated-cutout path. Owner rejected `bind-authority-candidate-v1` visually, and source discovery found no accepted neutral layered body/rig blueprint. Treat skeletal 2D as stopped unless a new accepted blueprint passes `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`.

@@ -14,6 +14,7 @@ BACKLOG = ROOT / "docs/execution/LGO-NEXT-50-TASKS-BACKLOG-v1.0.md"
 LEDGER = ROOT / "docs/execution/TASK-LEDGER.md"
 NEXT_ACTION = ROOT / "docs/execution/NEXT-ACTION.md"
 OWNER_STOPPED_ACTIVE_TASKS = {"OUTFIT_BODY_RIG_SOURCE_PROTOTYPE"}
+ACTIVE_STATE_EXECUTION_BLOCKERS = ("KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED",)
 
 
 @dataclass(frozen=True)
@@ -93,6 +94,13 @@ def active_task_state_from_text(text: str) -> dict:
     except json.JSONDecodeError:
         return {}
     return data if isinstance(data, dict) else {}
+
+
+def active_state_execution_blocker_from_text(text: str) -> str | None:
+    blockers = active_task_state_from_text(text).get("blockers")
+    if not isinstance(blockers, list):
+        return None
+    return next((marker for marker in ACTIVE_STATE_EXECUTION_BLOCKERS if marker in blockers), None)
 
 
 def active_next_action_task_from_text(text: str) -> str | None:
@@ -223,6 +231,14 @@ def main() -> int:
     if dirty_worktree_is_ambiguous():
         print("LGO_NEXT_TASK_ADVISOR_DIRTY_WORKTREE_REVIEW_REQUIRED")
         print("owner_note=Cần rà soát worktree trước khi mở batch lớn vì số file thay đổi đang quá nhiều.")
+        return 0
+    execution_blocker = active_state_execution_blocker_from_text(
+        NEXT_ACTION.read_text(encoding="utf-8", errors="replace")
+    )
+    if execution_blocker:
+        print("LGO_NEXT_TASK_ADVISOR_FIX_REQUIRED")
+        print(f"blocker={execution_blocker}")
+        print("owner_note=Krita automation đã bị đóng sau các probe có giới hạn; không thử thêm runner/path/signature hoặc tạo ảnh thay source. Cần host GUI/Scripter điều khiển được hoặc native layered source mới.")
         return 0
     active_task = active_next_action_task()
     if active_task == "SIX_POSE_REGISTERED_OUTFIT_SOURCE_AUTHORING":

@@ -163,6 +163,16 @@ The following evidence may be read, but not promoted to runtime-ready status:
 - `waist-belt-jump-imagegen-candidate-v1`
 - source boards or guide boards marked authoring aid, review-only, partial, `SOURCE_VISUAL_FIX_REQUIRED`, or `runtimePromotionAllowed=false`
 
+## Current native-authoring capability blocker
+
+Krita 5.3.3 GUI launches, but this Codex sandbox has no desktop/Scripter control. Bounded automation checks are closed:
+
+- user-resource/PYTHONPATH `kritarunner` could not import the module;
+- bundle injection required modifying a signed app and macOS blocked the copied runner/signing path;
+- the documented CLI export form timed out after 30 seconds and wrote no PNG while another Krita GUI process was active.
+
+Do not continue trying module locations, writable app copies, ad-hoc signing or longer export waits. Resume native authoring only with a controllable Krita GUI/Scripter session or a newly supplied layered source that opens and saves in Krita. This blocker concerns source creation; it does not weaken the alpha, quarantine or visual Player gates.
+
 ## Resume checklist
 
 Before changing character/outfit work in this sandbox:
