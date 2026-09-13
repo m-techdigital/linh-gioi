@@ -88,5 +88,17 @@ namespace LinhGioi.Tests
             Assert.That(scale, Is.EqualTo(1.5f).Within(.000001f));
             Assert.That((300f / 600f) * scale, Is.EqualTo(.75f).Within(.000001f));
         }
+
+        [Test]
+        public void DistanceToOpaqueAlpha_MeasuresNearestVisibleSourcePixel()
+        {
+            var pixels = new Color32[25];
+            pixels[4 * 5 + 3] = new Color32(255, 255, 255, 255);
+
+            var distance = LgoSkeletal2DPlayerProbe.DistanceToOpaqueAlpha(
+                pixels, 5, 5, new Vector2(.5f, .5f));
+
+            Assert.That(distance, Is.EqualTo(5f).Within(.000001f));
+        }
     }
 }

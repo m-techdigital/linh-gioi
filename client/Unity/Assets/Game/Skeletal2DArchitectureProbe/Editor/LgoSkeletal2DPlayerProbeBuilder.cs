@@ -27,6 +27,8 @@ namespace LinhGioi.ArchitectureProbe.Editor
             public bool authoredGarmentWeights, runtimePromotionAllowed;
             public ulong totalSizeBytes;
             public PartRegistrationEvidence[] bodyPartRegistration;
+            public JointRegistrationEvidence[] jointRegistration;
+            public string jointRegistrationGateStatus;
         }
 
         [Serializable]
@@ -36,6 +38,13 @@ namespace LinhGioi.ArchitectureProbe.Editor
             public int textureWidth, textureHeight;
             public Vector2 topCenterPixels, bottomCenterPixels;
             public float sourceAxisLengthPixels, bindLengthWorld, uniformScale;
+        }
+
+        [Serializable]
+        private sealed class JointRegistrationEvidence
+        {
+            public string id, partA, partB, status;
+            public float partADistanceSourcePixels, partBDistanceSourcePixels, gapUpperBoundSourcePixels;
         }
 
         [Serializable] private sealed class RigSourceJob { public RigSourcePart[] parts; }
@@ -69,11 +78,14 @@ namespace LinhGioi.ArchitectureProbe.Editor
 
             var skinnedRenderers = new List<SpriteRenderer>();
             var bodyRegistration = new List<PartRegistrationEvidence>();
+            var bodyRenderers = new Dictionary<string, SpriteRenderer>();
             for (var index = 0; index < bodyJob.parts.Length; index++)
             {
                 var part = bodyJob.parts[index];
-                bodyRegistration.Add(AddRigPart(skeleton, part.id, bodySprites[index]));
+                bodyRegistration.Add(AddRigPart(skeleton, part.id, bodySprites[index], out var renderer));
+                bodyRenderers.Add(part.id, renderer);
             }
+            var jointRegistration = MeasureJointRegistration(skeleton, bodyRenderers);
             var authoredUpper = CreateUpperMesh();
             var upperA = AddLayer(actor.transform, "UpperVariantA", upperASprite, 10);
             var upperASkin = binder.Bind(upperA, 1, 1, authoredUpper);
@@ -121,6 +133,8 @@ namespace LinhGioi.ArchitectureProbe.Editor
                 bodyCutoutPartCount = 10, garmentRestMasterCount = 1, poseSpecificGarmentSourceCount = 0,
                 authoredGarmentWeights = true, sourceProfile = "lgo_character_canvas_1024x1536_v1",
                 runtimePromotionAllowed = false, bodyPartRegistration = bodyRegistration.ToArray(),
+                jointRegistration = jointRegistration,
+                jointRegistrationGateStatus = jointRegistration.All(item => item.status == "PASS") ? "PASS" : "FIX_REQUIRED",
             };
             var report = RequireEnvironment("LGO_SKELETAL2D_BUILD_REPORT");
             Directory.CreateDirectory(Path.GetDirectoryName(report));
@@ -209,7 +223,7 @@ namespace LinhGioi.ArchitectureProbe.Editor
             return renderer;
         }
 
-        private static PartRegistrationEvidence AddRigPart(SkeletonBone[] skeleton, string id, Sprite sprite)
+        private static PartRegistrationEvidence AddRigPart(SkeletonBone[] skeleton, string id, Sprite sprite, out SpriteRenderer renderer)
         {
             var boneId = id switch
             {
@@ -222,7 +236,7 @@ namespace LinhGioi.ArchitectureProbe.Editor
             };
             var bone = skeleton.First(item => item.Id == boneId);
             var pivotAtBottom = BodyPivotAtBottom(id);
-            var renderer = AddLayer(bone.Transform, "Body/" + id, sprite, BodySortingOrder(id));
+            renderer = AddLayer(bone.Transform, "Body/" + id, sprite, BodySortingOrder(id));
             var direction = bone.Definition.End - bone.Definition.Start;
             var metrics = LgoSkeletal2DPlayerProbe.MeasureCutoutAxis(
                 sprite.texture.GetPixels32(), sprite.texture.width, sprite.texture.height);
@@ -241,6 +255,49 @@ namespace LinhGioi.ArchitectureProbe.Editor
                 sourceAxisLengthPixels = artDirectionPixels.magnitude,
                 bindLengthWorld = direction.magnitude, uniformScale = uniformScale,
             };
+        }
+
+        private static JointRegistrationEvidence[] MeasureJointRegistration(
+            SkeletonBone[] skeleton, IReadOnlyDictionary<string, SpriteRenderer> renderers)
+        {
+            var definitions = new[]
+            {
+                ("neck", "torso-hips", "head", "head"),
+                ("near-shoulder", "torso-hips", "left-upper-arm", "near_upper_arm"),
+                ("near-elbow", "left-upper-arm", "left-forearm-hand", "near_forearm"),
+                ("far-shoulder", "torso-hips", "right-upper-arm", "far_upper_arm"),
+                ("far-elbow", "right-upper-arm", "right-forearm-hand", "far_forearm"),
+                ("near-hip", "torso-hips", "left-thigh", "near_thigh"),
+                ("near-knee", "left-thigh", "left-shin-foot", "near_shin"),
+                ("far-hip", "torso-hips", "right-thigh", "far_thigh"),
+                ("far-knee", "right-thigh", "right-shin-foot", "far_shin"),
+            };
+            return definitions.Select(definition =>
+            {
+                var joint = skeleton.First(item => item.Id == definition.Item4).Transform.position;
+                var distanceA = AlphaDistanceSourcePixels(renderers[definition.Item2], joint);
+                var distanceB = AlphaDistanceSourcePixels(renderers[definition.Item3], joint);
+                var gap = distanceA + distanceB;
+                return new JointRegistrationEvidence
+                {
+                    id = definition.Item1, partA = definition.Item2, partB = definition.Item3,
+                    partADistanceSourcePixels = distanceA, partBDistanceSourcePixels = distanceB,
+                    gapUpperBoundSourcePixels = gap, status = gap <= 2f ? "PASS" : "FIX_REQUIRED",
+                };
+            }).ToArray();
+        }
+
+        private static float AlphaDistanceSourcePixels(SpriteRenderer renderer, Vector3 worldPoint)
+        {
+            var sprite = renderer.sprite;
+            var local = renderer.transform.InverseTransformPoint(worldPoint);
+            var texturePoint = new Vector2(
+                sprite.rect.x + sprite.pivot.x + local.x * sprite.pixelsPerUnit,
+                sprite.rect.y + sprite.pivot.y + local.y * sprite.pixelsPerUnit);
+            var textureDistance = LgoSkeletal2DPlayerProbe.DistanceToOpaqueAlpha(
+                sprite.texture.GetPixels32(), sprite.texture.width, sprite.texture.height, texturePoint);
+            var worldPerTexturePixel = renderer.transform.TransformVector(Vector3.right / sprite.pixelsPerUnit).magnitude;
+            return textureDistance * worldPerTexturePixel * PixelsPerUnit;
         }
 
         private static bool BodyPivotAtBottom(string id) => id == "head" || id == "torso-hips";

@@ -161,6 +161,21 @@ namespace LinhGioi.ArchitectureProbe
             return bindLengthWorld / (sourceAxisLengthPixels / pixelsPerUnit);
         }
 
+        public static float DistanceToOpaqueAlpha(Color32[] pixels, int width, int height, Vector2 pointPixels)
+        {
+            if (pixels == null || width <= 0 || height <= 0 || pixels.Length != width * height)
+                throw new ArgumentException("Cutout pixels and dimensions must describe one image");
+            var minimumSquared = float.PositiveInfinity;
+            for (var y = 0; y < height; y++)
+            for (var x = 0; x < width; x++)
+            {
+                if (pixels[y * width + x].a == 0) continue;
+                var delta = new Vector2(x + .5f, y + .5f) - pointPixels;
+                minimumSquared = Mathf.Min(minimumSquared, delta.sqrMagnitude);
+            }
+            return Mathf.Sqrt(minimumSquared);
+        }
+
         private void Awake()
         {
             Application.runInBackground = true; QualitySettings.vSyncCount = 0; Application.targetFrameRate = 60;
