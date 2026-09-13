@@ -58,3 +58,10 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-entry-depth-polish-runtime-v2/entry/entry-login.png`.
 - Result: entry/login backdrop is less blacked out, the login panel has shared soft-depth styling, and the primary CTA has ornament rails.
 - Review status: technical runtime checkpoint only; still needs richer final login visual treatment before owner acceptance.
+
+
+## 2026-09-13 — Shared density/skin guard evidence
+
+- Evidence: `build/map01a-shared-skin-density-runtime-v1/entry/entry-login.png` and `build/map01a-shared-skin-density-runtime-v1/inventory/{bag,character-info,character-info-after-supplies,supplies,storage}.png`.
+- Result: shared button/tab/detail/card density is less oversized; entry primary CTA and inventory tabs now have regression coverage so they do not drift back to prototype/web-control scale.
+- Review status: technical visual checkpoint only. Manual review still finds the login too form-like and inventory too table-like versus owner references. Continue with deeper shell redesign and approved art/asset treatment before owner acceptance.

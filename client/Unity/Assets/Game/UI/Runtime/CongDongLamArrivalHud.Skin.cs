@@ -26,6 +26,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoGlassPanel(VisualElement element, bool raised = false)
         {
             ApplyLgoFrame(element, raised ? UiGlassRaised : UiGlass, UiGoldBorder);
+            element.style.borderTopWidth = 2;
+            element.style.borderBottomWidth = 2;
             element.style.color = UiText;
         }
 
@@ -47,7 +49,8 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoDetailCard(VisualElement element)
         {
-            ApplyLgoFrame(element, new Color(.014f, .045f, .080f, .96f), new Color(.86f, .66f, .34f, .76f));
+            ApplyLgoFrame(element, new Color(.012f, .040f, .074f, .97f), new Color(.90f, .70f, .36f, .82f));
+            element.style.borderTopWidth = 2;
             element.style.color = UiText;
         }
 
@@ -80,7 +83,8 @@ namespace LinhGioi.UI
             icon.style.marginTop = 8;
             icon.style.marginBottom = 4;
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            ApplyLgoFrame(icon, new Color(.025f, .075f, .130f, .96f), new Color(.92f, .72f, .36f, .86f));
+            ApplyLgoFrame(icon, new Color(.020f, .070f, .128f, .96f), new Color(.96f, .76f, .36f, .90f));
+            icon.style.borderTopWidth = icon.style.borderBottomWidth = 2;
         }
 
         private static Label LgoLabel(string text, int size, Color color, bool bold = false)
@@ -95,20 +99,27 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoButton(Button button, bool primary = false)
         {
-            button.style.minHeight = primary ? 54 : 42;
+            button.style.minHeight = primary ? 48 : 38;
             button.style.minWidth = 0;
-            button.style.fontSize = primary ? 23 : 16;
+            button.style.fontSize = primary ? 20 : 14;
             button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
             button.style.unityFontStyleAndWeight = primary ? FontStyle.Bold : FontStyle.Normal;
             button.style.color = primary ? new Color(.10f, .07f, .03f, 1f) : UiText;
-            ApplyLgoFrame(button, primary ? UiGold : new Color(.045f, .13f, .18f, .98f), primary ? new Color(.98f, .86f, .48f, .92f) : new Color(.50f, .58f, .58f, .55f));
+            ApplyLgoFrame(button, primary ? UiGold : new Color(.038f, .118f, .172f, .98f), primary ? new Color(.98f, .86f, .48f, .94f) : new Color(.56f, .68f, .70f, .58f));
+            if (primary)
+            {
+                button.style.borderTopWidth = 2;
+                button.style.borderBottomWidth = 2;
+            }
         }
 
         private static void ApplyLgoSelectedTab(Button button, bool selected)
         {
-            button.style.backgroundColor = selected ? UiBlue : new Color(.045f, .13f, .18f, .98f);
+            button.style.backgroundColor = selected ? UiBlue : new Color(.038f, .118f, .172f, .98f);
             button.style.color = selected ? new Color(.98f, .95f, .78f, .98f) : UiText;
+            button.style.borderBottomWidth = selected ? 2 : 1;
+            button.style.borderBottomColor = selected ? UiGold : new Color(.56f, .68f, .70f, .58f);
         }
 
         private static void ApplyLgoDisabledAction(Button button)

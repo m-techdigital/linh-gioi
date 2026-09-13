@@ -213,6 +213,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(detailActions, Is.Not.Null);
                 Assert.That(detailActions.style.marginBottom.value.value, Is.GreaterThanOrEqualTo(10),
                     "Right-side detail actions need breathing room above the bottom edge in Player layout.");
+                Assert.That(root.Q<Button>("Map01A Bag Main Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(38),
+                    "Inventory top tabs should stay compact like the owner reference, not inherit oversized web-button height.");
+                Assert.That(root.Q<Button>("Map01A Equipment Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(38),
+                    "Inventory sub-tabs should share the compact game-tab density.");
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Is.Empty,
                     "Equipment tile Button.text must stay empty so UIToolkit does not draw text over the runtime thumbnail and child labels.");
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Is.Empty);
@@ -373,6 +377,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(loginButton.text, Does.Contain("Vào nhanh"));
                 Assert.That(loginButton.text, Does.Not.Contain("dev"), "Entry/login surface must not expose developer wording to the player.");
                 Assert.That(start.style.minHeight.value.value, Is.GreaterThan(loginButton.style.minHeight.value.value));
+                Assert.That(start.style.minHeight.value.value, Is.LessThanOrEqualTo(50),
+                    "Primary login CTA should feel like a polished game button, not an oversized web form control.");
+                Assert.That(start.style.fontSize.value.value, Is.LessThanOrEqualTo(21),
+                    "Primary CTA typography must stay below the oversized prototype style.");
+                Assert.That(loginButton.style.minHeight.value.value, Is.LessThanOrEqualTo(38),
+                    "Secondary login actions should be compact links/buttons under the main CTA.");
                 Assert.That(start.style.maxWidth.value.value, Is.GreaterThan(300));
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
                 Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));

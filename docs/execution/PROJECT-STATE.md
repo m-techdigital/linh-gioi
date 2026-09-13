@@ -1129,3 +1129,10 @@ Scope hiện tại là Map01A/UI only; không resume class/wardrobe/pose. Đã a
 `CONTINUE`, Map01A/UI only. Entry/login now keeps the Đông Lâm scene more visible behind the glass overlay, adds a shared soft-depth layer behind the login panel, and gives the primary `Bắt đầu` CTA ornament rails so it reads less like a plain form button. No auth/server routing was opened and no fake icon art was added.
 
 Runtime evidence: `build/map01a-entry-depth-polish-runtime-v2/entry/entry-login.png`; manifest records `usesOsMouseOrKeyboard=false`. Visual self-audit: improved over the flat form checkpoint, but still below final owner-reference quality because the screen lacks final illustrated login art/icon treatment and richer ornamental UI.
+
+
+## Map01A shared UI density/skin audit — 2026-09-13
+
+`CONTINUE`, chỉ UI/Map01A. Owner feedback đúng: UI vẫn còn xa design dù test xanh. Root cause trong batch này là guard cũ chỉ bảo vệ cấu trúc/chức năng, chưa đủ chặn visual debt như button/font phình, card phẳng, thiếu logo/icon/ornament/art thật. Đã thêm regression cho entry CTA và inventory tab density; shared `CongDongLamArrivalHud.Skin.cs` giảm primary CTA 54→48, secondary/tab 42→38, font nhỏ hơn, tăng nhẹ frame/detail/icon border dùng chung. Không đụng class/wardrobe/pose/source, không thêm icon giả/random art.
+
+Evidence runtime: `build/map01a-shared-skin-density-runtime-v1/entry/entry-login.png`, `build/map01a-shared-skin-density-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Đã xem trực tiếp: density tốt hơn và bớt thô, nhưng vẫn chưa đạt visual acceptance vì login còn giống form kỹ thuật và inventory còn thiếu portrait/shell/icon art theo reference. Next phải là redesign/polish shell có tiêu chí visual rõ, không chỉ chỉnh màu lẻ.

@@ -1053,3 +1053,10 @@ Action tiếp theo là owner kiểm trực tiếp Player ở cửa sổ lớn: `
 ## Next Map01A UI polish after entry depth/CTA pass — 2026-09-13
 
 Continue Map01A/UI-only work. Entry/login has a lighter map backdrop, shared soft-depth layer, and ornamented primary CTA, but this is still an incremental polish checkpoint, not final owner acceptance. Next safe work: continue shared-skin visual richness for login/HUD/dialogue/inventory, reduce remaining flat form styling, and keep Player screenshot review as the gate. Do not resume class/wardrobe/pose work or class Player build/capture loops.
+
+
+## Next UI polish after shared density guard — 2026-09-13
+
+Continue Map01A/UI-only from `build/map01a-shared-skin-density-runtime-v1/`. Do not claim visual completion. The next valid batch should redesign one visible screen deeply against the owner references instead of tuning tiny style fragments. Recommended order: inventory shell first, because current bag/info screens have correct functional tabs/detail-right behavior but still look like technical tables. Keep Hành trang and Thông tin separate; selected item/equipment detail stays on the right; add/prepare a proper left character/equipment presentation or stronger game-style shell using shared skin helpers only. Do not create fake/generic/random item icons; if final item art is missing, keep it documented as art debt and avoid pretending runtime crops are final.
+
+Required before next checkpoint: targeted EditMode tests for any new shared component/density rule, shared UI validator, no-3D/no-source-image validators, frozen diff audit, Player capture, and manual visual review. No class/wardrobe/pose work unless the owner explicitly reopens it with a deterministic source pipeline.
