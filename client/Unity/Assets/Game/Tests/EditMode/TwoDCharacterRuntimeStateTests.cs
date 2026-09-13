@@ -313,11 +313,21 @@ namespace LinhGioi.Tests.EditMode
                     "Bag grid should stay visually grouped around the current demo rows instead of filling the modal with blank table space.");
                 Assert.That(root.Q("Map01A Inventory Grid Accent Rail"), Is.Not.Null,
                     "Inventory panels need a shared ornament rail to reduce flat debug-panel presentation.");
+                Assert.That(root.Q("Map01A Inventory").ClassListContains("lgo-inventory-compact-shell"), Is.True,
+                    "Bag inventory should use a shared compact shell so the modal background does not leave a large empty lower half on Player.");
+                Assert.That(root.Q("Map01A Inventory").style.height.value.value, Is.GreaterThanOrEqualTo(650),
+                    "Bag inventory shell should keep enough shared compact height for the item-detail action stack to breathe.");
+                Assert.That(root.Q("Map01A Inventory").style.height.value.value, Is.LessThanOrEqualTo(680),
+                    "Bag inventory shell should be shorter than the full desktop safe-area when current content is sparse.");
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Inventory").ClassListContains("lgo-inventory-compact-shell"), Is.False,
+                    "Character-info needs the regular bounded shell because its loadout matrix can scroll taller than the sparse bag grid.");
+                Assert.That(root.Q("Map01A Inventory").style.height.value.value, Is.GreaterThanOrEqualTo(700),
+                    "Switching from sparse bag to character-info must restore the regular modal height so the 10-slot loadout is not cut off in Player.");
                 Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")), Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Character Panel"))),
                     "Item detail must stay on the right side of character equipment slots.");
                 Assert.That(root.Q("Map01A Character Hero Card"), Is.Not.Null,

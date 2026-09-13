@@ -1,3 +1,11 @@
+## Next — Map01A UI base-first polish after inventory compact shell — 2026-09-13
+
+`CONTINUE`. Inventory modal shell đã có policy base-first: `lgo-inventory-compact-shell` cho Hành trang/Vật phẩm sparse-content, regular bounded shell cho Thông tin/Rương. Evidence Player mới: `build/map01a-inventory-compact-shell-runtime-v3/bag.png`, `supplies.png`, `character-info.png`, `storage.png`; capture không dùng chuột/phím OS.
+
+Rule hiện hành: cùng UI/UX phải tạo/extend shared Skin/base helper trước, partial chỉ bind data/state/action; không build tràn lan mỗi modal/button/card/tab một kiểu. Nếu pattern lặp nhưng chưa có base, tạo base và thêm test/validator marker trước khi polish.
+
+Next valid work: tiếp tục Map01A/UI-only theo owner references, ưu tiên polish visual depth/ornament/font/button density và dedicated item-icon board/provenance-backed assets. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt và nếu chưa sát design thì trạng thái vẫn `CONTINUE`, không báo completed.
+
 ## Next — Map01A inventory polish after content-fit grid panel — 2026-09-13
 
 `CONTINUE`. Bag grid đã dùng shared `lgo-inventory-content-fit-panel` để không kéo dài thành vùng trống debug khi chỉ có 10 item hiện hành. Evidence Player: `build/map01a-inventory-content-fit-runtime-v1/bag.png` và `supplies.png`; capture không dùng chuột/phím OS.

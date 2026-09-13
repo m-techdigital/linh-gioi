@@ -220,6 +220,14 @@ namespace LinhGioi.UI
             return bar;
         }
 
+        public static float CalculateInventoryShellHeight(Rect inventoryRect, bool touch, bool compactShell)
+        {
+            const float compactDesktopHeight = 660f;
+            if (touch) return inventoryRect.height;
+            if (!compactShell) return Mathf.Max(inventoryRect.height, 720f);
+            return Mathf.Min(Mathf.Max(inventoryRect.height, compactDesktopHeight), compactDesktopHeight);
+        }
+
         public static Rect CalculateInventoryModalRect(Rect safePanelRect, bool touch)
         {
             var compact = touch || safePanelRect.width < 950;
@@ -261,7 +269,7 @@ namespace LinhGioi.UI
             _inventory.style.top = inventoryRect.y;
             _inventory.style.bottom = StyleKeyword.Auto;
             _inventory.style.width = inventoryRect.width;
-            _inventory.style.height = inventoryRect.height;
+            _inventory.style.height = CalculateInventoryShellHeight(inventoryRect, _touch, IsInventoryCompactShellActive());
             _combatBar.style.bottom = r.width < 1300 ? 100 : 24;
             _talk.style.fontSize = _touch ? 20 : 18;
             if (_inventoryHeroPanel != null)

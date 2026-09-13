@@ -17,6 +17,22 @@ namespace LinhGioi.UI
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
         private string _selectedSupplyItemId = "health_potion";
 
+        private bool IsInventoryCompactShellActive() => !_characterInfoOpen && !_storageOpen;
+
+        private void RefreshInventoryShellMode()
+        {
+            if (_inventory == null) return;
+            var compact = IsInventoryCompactShellActive();
+            ApplyLgoInventoryCompactShell(_inventory, compact);
+            var safe = _metrics.SafePanelRect;
+            if (safe.width <= 0 || safe.height <= 0)
+            {
+                safe = _touch ? new Rect(0, 0, 800, 480) : new Rect(0, 0, 1600, 900);
+            }
+            var rect = CalculateInventoryModalRect(new Rect(0, 0, safe.width, safe.height), _touch);
+            _inventory.style.height = CalculateInventoryShellHeight(rect, _touch, compact);
+        }
+
         private Button InventoryButton(Action action, string name, string text = "")
         {
             var button = new Button(action) { name = name, text = text };
@@ -608,6 +624,7 @@ namespace LinhGioi.UI
             _storagePanel.style.flexGrow = 0;
             _characterInfoOpen = characterInfo;
             _storageOpen = false;
+            RefreshInventoryShellMode();
             RefreshInventoryModalHeader();
             RefreshInventoryEquipmentTiles();
             _inventoryGridPanel.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
@@ -625,6 +642,7 @@ namespace LinhGioi.UI
         {
             _characterInfoOpen = false;
             _storageOpen = true;
+            RefreshInventoryShellMode();
             _inventoryHeroPanel.style.flexGrow = 0;
             _inventoryGridPanel.style.flexGrow = 0;
             _storagePanel.style.flexGrow = 1;

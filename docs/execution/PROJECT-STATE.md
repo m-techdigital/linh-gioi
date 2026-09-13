@@ -1,3 +1,10 @@
+## Map01A — inventory compact shell base-first guard — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.
+- Theo owner rule mới, tiếp tục khóa “base first”: UI/UX giống nhau phải đi qua shared Skin/base helper trước, partial chỉ bind data/state/action. Batch này thêm `ApplyLgoInventoryCompactShell(...)` / `lgo-inventory-compact-shell` và `CalculateInventoryShellHeight(...)` để cùng một shell policy điều khiển Hành trang/Vật phẩm compact, còn Thông tin/Rương dùng regular bounded shell.
+- Root cause visual: Player v1/v2 cho thấy modal Túi đồ/Vật phẩm còn nền đen kéo dài hoặc detail action bị ép sát đáy; đồng thời khi chuyển sang Thông tin không được giữ compact height vì 10-slot loadout cần chiều cao riêng.
+- TDD/evidence: RED kiểm compact shell thiếu và RED chiều cao 620 không đủ breathing room; GREEN targeted EditMode `InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection` pass, `LGO_UI_SHARED_SKIN_PASS`. Player build/capture `build/map01a-inventory-compact-shell-player-v3/LinhGioiOnline.app`, evidence `build/map01a-inventory-compact-shell-runtime-v3/{bag,supplies,character-info,storage}.png`, manifest `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`. Visual audit: Bag/Vật phẩm gọn hơn và detail action không sát đáy; Thông tin không còn giữ compact shell. UI tổng thể vẫn `CONTINUE`, chưa phải final polish sát design.
+
 ## Map01A — inventory content-fit panel base-first guard — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.
