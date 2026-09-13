@@ -459,6 +459,8 @@ namespace LinhGioi.Tests.EditMode
                 hud.OpenInventoryReviewMode("supplies");
                 Assert.That(modalTitle.text, Is.EqualTo("HÀNH TRANG"));
                 Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Supplies List Card"), Is.Not.Null,
+                    "Supplies should present a left-side list card beside the right detail card, not a flat full-width technical list.");
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Supplies must keep the right-side detail panel instead of becoming a left-only technical list.");
                 Assert.That(root.Q<Label>("Map01A Supplies Empty State").text, Does.Contain("Chưa nhận"));

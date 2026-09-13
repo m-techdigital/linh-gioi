@@ -2,6 +2,10 @@
 
 Continue Map01A product work only: UI/UX polish, login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue/HUD readability, and playable map interactions using existing approved/runtime assets. Do not continue Kiếm/Pháp/Cơ/Linh class/wardrobe art development in this worktree, do not run class build/capture loops for routine UI work, and do not rollback existing class code. Keep the actor-scale audit guard only as a safety checkpoint already pushed; it is not a reason to resume class work here. No random class/item art generation, no Meshy/3D, no frozen surfaces.
 
+## Next Map01A UI polish after supplies list card — 2026-09-13
+
+Continue Map01A product UI/UX polish using shared skin/base helpers and approved/runtime assets only. `Vật phẩm` now has a left list card and right detail card; next safe work should improve real item/equipment visual richness, inventory/detail hierarchy, login/HUD/dialogue polish, or prepare an approved item-thumbnail design board. Do not add fake/generic icons, random item/class art, production auth/storage, or class build/capture loops.
+
 ## Next Map01A UI polish after entry primary CTA — 2026-09-13
 
 Continue Map01A product UI/UX polish from the owner references using shared skin/base helpers and approved/runtime assets only. Entry/login now has a clearer primary `Bắt đầu` CTA and secondary dev-login action; next safe work should improve visual richness and inventory/detail hierarchy without fake/generic icons, random item/class art, production auth, or class build/capture loops. Keep Hành trang and Thông tin separate, show selected item/equipment details on the right, and re-capture Player evidence after visible changes.

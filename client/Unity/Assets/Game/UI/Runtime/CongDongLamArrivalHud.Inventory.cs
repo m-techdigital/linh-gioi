@@ -310,11 +310,18 @@ namespace LinhGioi.UI
 
             _suppliesPage = new VisualElement { name = "Map01A Supplies Page" };
             _suppliesPage.style.flexShrink = 0;
+            var suppliesListCard = new VisualElement { name = "Map01A Supplies List Card" };
+            suppliesListCard.style.paddingLeft = suppliesListCard.style.paddingRight = 14;
+            suppliesListCard.style.paddingTop = suppliesListCard.style.paddingBottom = 12;
+            suppliesListCard.style.marginTop = 2;
+            suppliesListCard.style.marginBottom = 8;
+            ApplyLgoDetailCard(suppliesListCard);
+            _suppliesPage.Add(suppliesListCard);
             _suppliesTitle = LgoLabel("Vật phẩm nhiệm vụ", 18, UiGold, true);
-            _suppliesPage.Add(_suppliesTitle);
+            suppliesListCard.Add(_suppliesTitle);
             _inventorySummary = LgoLabel("", 17, new Color(.91f, .93f, .84f, .96f));
             _inventorySummary.style.marginTop = 8; _inventorySummary.style.marginBottom = 10;
-            _suppliesPage.Add(_inventorySummary);
+            suppliesListCard.Add(_inventorySummary);
             _suppliesEmptyState = LgoLabel("", 15, new Color(.70f, .80f, .80f, .92f));
             _suppliesEmptyState.name = "Map01A Supplies Empty State";
             _suppliesEmptyState.style.marginTop = 2;
@@ -324,7 +331,7 @@ namespace LinhGioi.UI
             _suppliesEmptyState.style.paddingTop = 8;
             _suppliesEmptyState.style.paddingBottom = 8;
             ApplyLgoFrame(_suppliesEmptyState, new Color(.020f, .060f, .088f, .86f), new Color(.50f, .58f, .58f, .55f));
-            _suppliesPage.Add(_suppliesEmptyState);
+            suppliesListCard.Add(_suppliesEmptyState);
             _questItemActions = new VisualElement { name = "Map01A Quest Item Actions" };
             _healthPotion = InventoryButton(() => SelectInventorySupply("health_potion"), "Map01A Health Potion", "Bình Máu Nhỏ");
             _manaPotion = InventoryButton(() => SelectInventorySupply("mana_potion"), "Map01A Mana Potion", "Bình Linh Lực Nhỏ");
@@ -338,7 +345,7 @@ namespace LinhGioi.UI
                 button.style.paddingLeft = 14;
                 _questItemActions.Add(button);
             }
-            _suppliesPage.Add(_questItemActions); scroll.Add(_suppliesPage);
+            suppliesListCard.Add(_questItemActions); scroll.Add(_suppliesPage);
 
             body.Add(_inventoryDetailPanel);
 
