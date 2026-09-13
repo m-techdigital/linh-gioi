@@ -343,6 +343,11 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
                 Assert.That(root.Q<Label>("Map01A Entry Server State").text, Does.Contain("Mượt"));
+                var serverSwitch = root.Q<Button>("Map01A Entry Server Switch");
+                Assert.That(serverSwitch, Is.Not.Null,
+                    "Entry/login should reserve the design server-switch affordance without opening production server routing.");
+                Assert.That(serverSwitch.enabledSelf, Is.False);
+                Assert.That(serverSwitch.text, Does.Contain("Đổi máy chủ"));
                 var start = root.Q<Button>("Map01A Entry Start Button");
                 Assert.That(start, Is.Not.Null);
                 Assert.That(root.Q("Map01A Entry Primary Cta Row"), Is.Not.Null,

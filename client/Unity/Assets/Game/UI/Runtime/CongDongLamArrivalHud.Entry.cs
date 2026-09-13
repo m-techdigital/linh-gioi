@@ -130,8 +130,16 @@ namespace LinhGioi.UI
             serverName.style.flexGrow = 1;
             var serverState = LgoLabel("● Mượt", 16, new Color(.58f, 1f, .36f, .96f), true);
             serverState.name = "Map01A Entry Server State";
+            serverState.style.marginRight = 8;
+            var serverSwitch = new Button { name = "Map01A Entry Server Switch", text = "Đổi máy chủ · chưa mở" };
+            serverSwitch.style.flexGrow = 0;
+            serverSwitch.style.minWidth = 142;
+            serverSwitch.style.minHeight = 34;
+            serverSwitch.style.fontSize = 13;
+            ApplyLgoDisabledAction(serverSwitch);
             serverCard.Add(serverName);
             serverCard.Add(serverState);
+            serverCard.Add(serverSwitch);
             panel.Add(serverCard);
 
             var brandSeal = LgoLabel("S1 · Đông Lâm · bản review 2D", 14, UiGold, true);

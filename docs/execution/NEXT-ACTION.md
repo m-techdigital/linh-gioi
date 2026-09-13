@@ -1,3 +1,7 @@
+## Next Map01A UI polish after entry server switch — 2026-09-13
+
+Continue Map01A product UI/UX only. Entry/login now has a disabled server-switch affordance in the server card; next safe work should improve visual richness and hierarchy using shared UI helpers and approved/runtime assets only. Do not open production auth/server routing, add fake item/class art, or run class build/capture loops. Re-capture Player evidence after visible UI changes.
+
 ## Next Map01A UI polish after character-info slot thumbnails — 2026-09-13
 
 Continue Map01A product UI/UX only. `Thông tin` now has runtime thumbnails in its equipped-slot list; next safe work should improve inventory/login/HUD visual hierarchy using shared UI helpers and approved/runtime assets. Do not add fake item icons, random generated item/class art, or class build/capture loops. Keep Hành trang, Thông tin, and Rương đồ as separate screens with selected item details on the right, and re-capture Player evidence after visible UI changes.
