@@ -1,3 +1,7 @@
+## Next Map01A UI/UX work after entry side-action cleanup — 2026-09-13
+
+Continue Map01A/UI-only work from the owner reference direction. Do not resume Kiếm/Pháp/Cơ/Linh class, wardrobe, pose, source-image, or class Player build/capture loops in this worktree, and do not rollback existing class code. Next valid work is the visible product UI pass: make login closer to the uploaded design, then continue Hành trang/Túi đồ, Thông tin, Rương đồ, NPC dialogue, HUD and map interaction polish using shared UI helpers and approved/runtime assets. Keep Hành trang and Thông tin as separate tabs/screens, keep selected item/equipment detail on the right, keep button/font sizes proportional, and re-capture Player screenshots after each visible UI batch. If real item/icon/trang phục art is missing, do not fill with fake/random/generated placeholders; use approved/runtime assets or prepare an explicit design board for later review.
+
 ## Next Map01A UI polish after compact action bar — 2026-09-13
 
 Continue Map01A/UI-only work. The HUD text buttons are now less oversized, but the longer-term target remains closer to the owner references: icon-like skill/action affordances, cleaner login/inventory/character-info/storage hierarchy, and NPC dialogue readability. Use targeted UI filters and Player evidence; do not run class/wardrobe build or capture loops.

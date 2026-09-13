@@ -379,7 +379,11 @@ namespace LinhGioi.Tests.EditMode
                     var sideAction = root.Q<Button>("Map01A Entry Side Action " + name);
                     Assert.That(sideAction, Is.Not.Null);
                     Assert.That(sideAction.enabledSelf, Is.False, "Entry/login side actions must not be clickable dead buttons.");
-                    Assert.That(sideAction.text, Does.Contain("chưa mở"));
+                    Assert.That(sideAction.text, Is.EqualTo(name));
+                    Assert.That(sideAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
+                        "Entry side actions must stay compact and must not wrap into two-line placeholders.");
+                    Assert.That(sideAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f));
+                    Assert.That(sideAction.resolvedStyle.height, Is.LessThanOrEqualTo(42f));
                 }
                 Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "Entry/login must not leave the in-game HUD visible behind the modal.");
