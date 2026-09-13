@@ -1,3 +1,7 @@
+## Map01A inventory grid readable runtime icons — 2026-09-13
+
+Equipment tiles in the Hành trang grid now reserve a larger runtime-art thumbnail frame, so item art is easier to read without reintroducing fake/generic icons. Tile height was increased with the icon size, preserving the three-column grid and label/state readability. Regression asserts the grid thumbnail and tile are large enough for Player review while still using the same real runtime sprite as the selected detail card. Player evidence: `build/map01a-inventory-grid-readable-icons-capture-v1/07-q04-inventory-open.png`; visual review confirms the grid remains readable with no text overlap. Build: `client/Unity/build/map01a-inventory-grid-readable-icons-player-v1/LinhGioiOnline.app`, `errors=0 warnings=17` deprecated UI API warnings only.
+
 ## Map01A inventory detail action row cleanup — 2026-09-13
 
 The right-side Hành trang detail card no longer renders an unavailable variant button in the narrow action row. The primary equip/unequip action now gets a full-width row with added bottom spacing, while the variant action is hidden unless a real item variant exists. Regression covers both the action-row bottom margin and the hidden unavailable variant button. Player evidence: `build/map01a-inventory-detail-actions-capture-v4/07-q04-inventory-open.png`; visual review confirms the detail action no longer overlaps or clips at the lower edge. Build: `client/Unity/build/map01a-inventory-detail-actions-player-v4/LinhGioiOnline.app`, `errors=0 warnings=17` deprecated UI API warnings only.

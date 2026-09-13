@@ -1,3 +1,7 @@
+## Next inventory/UI polish after readable grid thumbnails — 2026-09-13
+
+Grid item thumbnails are now larger and still use runtime atlas art: `build/map01a-inventory-grid-readable-icons-capture-v1/07-q04-inventory-open.png`. Continue broader Map01A UI/UX alignment from the owner references: improve shell/card hierarchy, tab/nav density, and the Vật phẩm/Rương đồ flows using shared skin helpers. Do not add fake/generic icons or random generated art; use runtime/approved assets only.
+
 ## Next inventory/UI polish after detail action cleanup — 2026-09-13
 
 Hành trang detail action row is now stable in Player evidence: `build/map01a-inventory-detail-actions-capture-v4/07-q04-inventory-open.png`. Continue broader Map01A UI/UX alignment against the owner references: improve the inventory shell/card hierarchy, tab spacing, readable item art framing, and separate Hành trang/Thông tin/Rương đồ presentation through shared `CongDongLamArrivalHud.Skin.cs` helpers. Keep runtime/approved art only; do not add fake/generic icons or random generated item art.

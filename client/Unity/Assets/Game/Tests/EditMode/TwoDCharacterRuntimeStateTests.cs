@@ -196,6 +196,10 @@ namespace LinhGioi.Tests.EditMode
                     "Equipment grid tiles must show the same real runtime thumbnail art, not text-only placeholders.");
                 Assert.That(weaponTileIcon.style.backgroundImage.value.sprite, Is.EqualTo(weaponThumbnail));
                 Assert.That(weaponTileIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(weaponTileIcon.style.width.value.value, Is.GreaterThanOrEqualTo(54),
+                    "Equipment grid thumbnails should be large enough to read as item art on Player captures.");
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.height.value.value, Is.GreaterThanOrEqualTo(92),
+                    "Equipment tiles need enough vertical room for a larger runtime-art thumbnail and labels.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Does.Contain("Công"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Khớp"));

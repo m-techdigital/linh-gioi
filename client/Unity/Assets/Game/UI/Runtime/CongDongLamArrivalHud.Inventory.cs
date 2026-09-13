@@ -250,7 +250,7 @@ namespace LinhGioi.UI
                 var tile = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "Map01A Equipment Item Tile " + slotId);
                 tile.style.flexGrow = 0;
                 tile.style.flexBasis = new Length(31.5f, LengthUnit.Percent);
-                tile.style.height = 84;
+                tile.style.height = 94;
                 tile.style.marginRight = 6;
                 tile.style.marginBottom = 7;
                 tile.style.fontSize = 15;
@@ -261,8 +261,8 @@ namespace LinhGioi.UI
 
                 var icon = new VisualElement { name = "Map01A Equipment Item Icon " + slotId };
                 ApplyLgoItemIcon(icon);
-                icon.style.width = 46;
-                icon.style.height = 46;
+                icon.style.width = 56;
+                icon.style.height = 56;
                 icon.style.marginTop = 0;
                 icon.style.marginBottom = 0;
                 icon.style.marginLeft = 2;
