@@ -1332,3 +1332,9 @@ Next valid visible batch: redesign riêng tab Thông tin theo `preferred-v2/02` 
 `CONTINUE`. Character hub hiện hành đã chuyển sang bộ năm tab owner duyệt tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/`. Evidence Player đã review: `build/map01a-five-tab-character-hub-runtime-v3/{character-info,bag,skills,potential,spirit-pet}.png`; build `build/map01a-five-tab-character-hub-player-v3/LinhGioiOnline.app`.
 
 Next valid work: tiếp tục Map01A/UI-only theo bộ design owner đã duyệt, ưu tiên polish entry/login, HUD và NPC dialogue bằng shared Skin/base; sau đó hoàn thiện interaction/data thật cho character hub khi contract/state tương ứng được mở. Không khôi phục storage gate/cột character-preview cũ; không tạo tab hàng thứ hai. Không resume class/wardrobe/pose/source, không rollback class code. Kỹ năng/Tiềm năng/Linh thú chỉ mở action ghi state khi có contract thật; trước đó giữ read-only rõ ràng. Mọi thay đổi visible tiếp theo phải build/capture Player và tự xem ảnh trước khi báo trạng thái.
+
+## Next — sau entry auth hierarchy — 2026-09-14
+
+`CONTINUE`. Entry hiện hành dùng evidence `build/map01a-entry-auth-hierarchy-runtime-v1/entry-login.png`: Đăng nhập xanh, Đăng ký viền vàng và Bắt đầu vàng, tất cả qua shared Skin. Không dùng capture entry cũ để review và không tiếp tục chỉnh khoảng cách/màu lẻ trên màn này.
+
+Next valid work: tiếp tục Map01A/UI-only theo bộ năm tab owner duyệt, đối chiếu Player character hub với hai ảnh `01-nhan-vat-nam-tab-compact-APPROVED.png` và `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png`; chỉ xử lý sai lệch cấu trúc/interaction lớn còn lại qua shared base. Giữ năm tab compact, Rương đồ có rail phân loại dọc, detail món ở bên phải; không khôi phục hàng tab phụ hoặc cột preview thứ ba. Không resume class/wardrobe/pose/source và không rollback code class.

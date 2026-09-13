@@ -493,8 +493,15 @@ namespace LinhGioi.Tests.EditMode
                     "Secondary login actions should use the standard shared action role, then entry-specific sizing.");
                 Assert.That(loginButton.ClassListContains("lgo-entry-cta-action"), Is.True,
                     "Entry secondary CTAs must share the same entry CTA base as the primary start button.");
+                Assert.That(loginButton.ClassListContains("lgo-entry-auth-primary"), Is.True,
+                    "Login must use the shared blue auth-action role from the approved entry hierarchy.");
                 Assert.That(loginButton.text, Is.EqualTo("Đăng nhập"));
-                Assert.That(root.Q<Button>("Map01A Entry Register Button").text, Is.EqualTo("Đăng ký"));
+                var registerButton = root.Q<Button>("Map01A Entry Register Button");
+                Assert.That(registerButton.text, Is.EqualTo("Đăng ký"));
+                Assert.That(registerButton.ClassListContains("lgo-entry-auth-secondary"), Is.True,
+                    "Register must use the shared gold-outline auth-action role instead of matching the login fill.");
+                Assert.That(loginButton.style.backgroundColor.value.b, Is.GreaterThan(registerButton.style.backgroundColor.value.b),
+                    "The primary login action should read as blue while register remains visually secondary.");
                 Assert.That(loginButton.text, Does.Not.Contain("dev"), "Entry/login surface must not expose developer wording to the player.");
                 Assert.That(start.style.minHeight.value.value, Is.GreaterThan(loginButton.style.minHeight.value.value));
                 Assert.That(start.style.minHeight.value.value, Is.LessThanOrEqualTo(50),
@@ -505,7 +512,7 @@ namespace LinhGioi.Tests.EditMode
                     "Primary CTA should have shared horizontal padding so the button reads like a game control rather than raw text in a box.");
                 Assert.That(start.style.borderLeftWidth.value, Is.GreaterThanOrEqualTo(2),
                     "Primary CTA should carry the same stronger frame on every edge, not only top and bottom.");
-                Assert.That(loginButton.style.minHeight.value.value, Is.LessThanOrEqualTo(38),
+                Assert.That(loginButton.style.minHeight.value.value, Is.LessThanOrEqualTo(40),
                     "Secondary login actions should be compact links/buttons under the main CTA.");
                 Assert.That(start.style.maxWidth.value.value, Is.GreaterThan(300));
                 var entryLoginTitle = root.Q<Label>("Map01A Entry Login Title");

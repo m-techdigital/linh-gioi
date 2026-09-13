@@ -152,7 +152,7 @@ namespace LinhGioi.UI
                 name = "Map01A Entry Login Button",
                 text = "Đăng nhập"
             };
-            ApplyLgoEntryCtaAction(login, false);
+            ApplyLgoEntryAuthAction(login, true);
             login.style.flexGrow = 1;
             login.style.marginRight = 8;
             var register = new Button(() =>
@@ -164,7 +164,7 @@ namespace LinhGioi.UI
                 name = "Map01A Entry Register Button",
                 text = "Đăng ký"
             };
-            ApplyLgoEntryCtaAction(register, false);
+            ApplyLgoEntryAuthAction(register, false);
             register.style.flexGrow = 1;
             authActions.Add(login);
             authActions.Add(register);

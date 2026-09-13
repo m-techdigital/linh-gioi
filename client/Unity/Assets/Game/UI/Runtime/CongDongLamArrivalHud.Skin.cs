@@ -47,6 +47,8 @@ namespace LinhGioi.UI
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
         private const string LgoDialoguePortraitClass = "lgo-dialogue-portrait";
         private const string LgoEntryCtaActionClass = "lgo-entry-cta-action";
+        private const string LgoEntryAuthPrimaryClass = "lgo-entry-auth-primary";
+        private const string LgoEntryAuthSecondaryClass = "lgo-entry-auth-secondary";
         private const string LgoEntrySecondaryActionClass = "lgo-entry-secondary-action";
         private const string LgoEntrySideActionClass = "lgo-entry-side-action";
         private const string LgoEntryShellClass = "lgo-entry-shell";
@@ -424,6 +426,31 @@ namespace LinhGioi.UI
             button.style.borderLeftWidth = button.style.borderRightWidth = 3;
             button.style.borderTopColor = button.style.borderBottomColor = new Color(1f, .86f, .50f, .98f);
             button.style.borderLeftColor = button.style.borderRightColor = new Color(.66f, .42f, .12f, .98f);
+        }
+
+        private static void ApplyLgoEntryAuthAction(Button button, bool primary)
+        {
+            ApplyLgoEntryCtaAction(button, false);
+            button.EnableInClassList(LgoEntryAuthPrimaryClass, primary);
+            button.EnableInClassList(LgoEntryAuthSecondaryClass, !primary);
+            button.style.minHeight = 40;
+            button.style.fontSize = 15;
+            button.style.borderTopWidth = button.style.borderBottomWidth = 2;
+            button.style.borderLeftWidth = button.style.borderRightWidth = 2;
+            if (primary)
+            {
+                button.style.backgroundColor = new Color(.025f, .28f, .68f, .98f);
+                button.style.borderTopColor = button.style.borderBottomColor = new Color(.28f, .78f, 1f, .98f);
+                button.style.borderLeftColor = button.style.borderRightColor = new Color(.12f, .52f, .92f, .98f);
+                button.style.color = new Color(.98f, .98f, .90f, 1f);
+            }
+            else
+            {
+                button.style.backgroundColor = new Color(.018f, .065f, .12f, .96f);
+                button.style.borderTopColor = button.style.borderBottomColor = new Color(.95f, .75f, .36f, .92f);
+                button.style.borderLeftColor = button.style.borderRightColor = new Color(.68f, .46f, .18f, .92f);
+                button.style.color = new Color(.96f, .89f, .70f, .98f);
+            }
         }
 
         private static void ApplyLgoEntryShell(VisualElement panel)

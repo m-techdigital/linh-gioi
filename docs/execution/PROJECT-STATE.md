@@ -1457,3 +1457,11 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - `Kỹ năng`, `Tiềm năng`, `Linh thú` có màn đọc/review hoàn chỉnh theo cùng base; action nâng cấp/cộng điểm/bồi dưỡng khóa rõ vì chưa có state contract thật. Shortcut `Kỹ năng` ngoài HUD mở trực tiếp đúng tab; `Menu` vẫn khóa. Linh thú dùng runtime art pack có manifest/provenance tại `CongDongLamMap01ACharacterHub`; asset vẫn là `DRAFT_RUNTIME_REVIEW`, không coi số liệu minh họa là gameplay contract.
 - Verification: toàn bộ `TwoDCharacterRuntimeStateTests` đạt 20/20; shared-skin validator và 12 unit tests đạt; no-3D/no-source validators đạt. Player macOS build thành công, `errors=0`; capture không dùng chuột/phím OS tại `build/map01a-five-tab-character-hub-runtime-v3/{character-info,bag,skills,potential,spirit-pet}.png`.
 - Visual audit đã xem đủ năm ảnh 1600×900: tab không tràn, không còn ba cột, detail luôn ở phải, rail Rương đồ dọc, ba màn mới không chồng/cắt; status/action detail đã sửa khoảng cách. Đây là checkpoint UI đã tích hợp, dự án tổng thể vẫn `CONTINUE` vì login/HUD/dialogue và art item hiện hành còn cần polish theo design owner.
+
+## Map01A — entry auth action hierarchy checkpoint, still CONTINUE — 2026-09-14
+
+- Scope giữ ở Map01A/UI-only; không sửa class, wardrobe, pose, source, camera hoặc scale và không rollback code nhân vật.
+- Entry dùng shared auth-action role: `Đăng nhập` là nút xanh, `Đăng ký` là nút nền tối viền vàng; `Bắt đầu` vẫn là CTA vàng chính. Hai action dùng chung helper trong `CongDongLamArrivalHud.Skin.cs`, không tạo style riêng theo màn.
+- TDD: test Entry xác nhận hai semantic class, màu/hierarchy và chiều cao compact; targeted Unity EditMode đạt 1/1. Shared-skin validator đạt, 12 unit test đạt.
+- Player build: `build/map01a-entry-auth-hierarchy-player-v1/LinhGioiOnline.app`; capture thật `build/map01a-entry-auth-hierarchy-runtime-v1/entry-login.png`, manifest ghi `usesOsMouseOrKeyboard=false`. Đã xem trực tiếp: không vỡ/cắt, phân cấp action rõ và scene Map01A vẫn đọc được.
+- Trạng thái `CONTINUE`: đây là checkpoint visual có giới hạn, chưa phải nghiệm thu toàn bộ UI. Tiếp tục theo design owner đã duyệt và shared base; không quay lại chỉnh vụn entry khi chưa có art/logo final.
