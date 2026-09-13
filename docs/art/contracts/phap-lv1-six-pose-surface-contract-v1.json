@@ -1,0 +1,66 @@
+{
+  "contractId": "phap-lv1-six-pose-surface-contract-v1",
+  "status": "NEED_OWNER_DECISION",
+  "sourceSpaceProfile": {
+    "canvas": [1024, 1536],
+    "originX": 512,
+    "groundY": 1484,
+    "unitScale": "1.70/1536"
+  },
+  "poses": ["idle", "run_contact_a", "run_a", "run_contact_b", "run_b", "jump_tuck"],
+  "selectedRoute": null,
+  "routeOptions": {
+    "SLEEVELESS_PHAP_LV1": {
+      "bodyAuthority": "bare_arm",
+      "requiredAction": "Edit native idle outer_top source to remove sleeves by design decision, then regenerate boards.",
+      "risk": "Less robe-like than original idle concept, but matches current run/jump body authority without upper-arm cloth masks."
+    },
+    "SLEEVED_PHAP_LV1": {
+      "bodyAuthority": "upper_arm_cloth",
+      "requiredAction": "Add upper_arm_cloth ownership and per-pose masks/attachments before drawing sleeves.",
+      "risk": "Higher setup cost, but preserves the original sleeved Pháp concept."
+    }
+  },
+  "itemFamilies": [
+    {
+      "slotId": "outer_top",
+      "familyType": "cloth_body",
+      "ownership": ["torso_cloth", "collar", "hem", "ornament"],
+      "occlusion": {
+        "mayCover": ["torso_inner", "waist_overlap"],
+        "mustNotCover": ["upper_arm_skin", "forearm_skin", "hand", "face"]
+      },
+      "sourceGate": "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE",
+      "routeDependency": "SELECT_ROUTE_BEFORE_AUTHORING",
+      "knownMismatch": "Idle outer_top contains white sleeves while current run/jump body authority is bare-arm."
+    },
+    {
+      "slotId": "waist_belt",
+      "familyType": "part_rigid",
+      "ownership": ["waist_plate", "belt_tail"],
+      "occlusion": {
+        "mayCover": ["waist", "pelvis_cloth", "torso_lower_edge"],
+        "mustNotCover": ["upper_arm_skin", "hand", "face"]
+      },
+      "sourceGate": "SOURCE_REVIEW_REQUIRED"
+    },
+    {
+      "slotId": "shoulder_chest_guard",
+      "familyType": "part_rigid",
+      "ownership": ["shoulder_plate", "chest_strap"],
+      "occlusion": {
+        "mayCover": ["torso_cloth", "shoulder_edge"],
+        "mustNotCover": ["hand", "face", "forearm_skin"]
+      },
+      "sourceGate": "SOURCE_REVIEW_REQUIRED"
+    }
+  ],
+  "evidence": {
+    "methodAudit": "docs/art/LGO-OUTFIT-PRODUCTION-METHOD-AUDIT-2026-09-13.md",
+    "coverageAudit": "build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-layer-audit-v7-after-all-slot-staging.json",
+    "sourceBoard": "build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-board-v4-after-all-slot-staging/contact-sheet.png",
+    "rejectedHeuristicCandidate": "build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/outer-top-sleeveless-unified-style-v2/visual-method-review-v1.json"
+  },
+  "runtimePromotionAllowed": false,
+  "completedFinalItems": 0
+}

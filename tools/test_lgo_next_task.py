@@ -38,6 +38,21 @@ class LgoNextTaskTests(unittest.TestCase):
             "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH",
         )
 
+    def test_surface_contract_decision_gate_overrides_visual_polish(self):
+        text = "\n".join(
+            [
+                "## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13",
+                "",
+                "Current visual status remains SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE.",
+                "Surface contract validation is NEED_OWNER_DECISION with ROUTE_SELECTION_REQUIRED.",
+            ]
+        )
+
+        self.assertEqual(
+            active_next_action_task_from_text(text),
+            "SIX_POSE_REGISTERED_OUTFIT_SURFACE_CONTRACT_DECISION",
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

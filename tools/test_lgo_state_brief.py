@@ -64,6 +64,22 @@ class LgoStateBriefTests(unittest.TestCase):
         self.assertIn("SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE", blocker)
         self.assertNotIn("source-authoring task", blocker)
 
+    def test_active_goal_lock_reports_surface_contract_route_decision_first(self):
+        text = "\n".join(
+            [
+                "## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13",
+                "",
+                "Current visual status remains SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE.",
+                "Surface contract validation is NEED_OWNER_DECISION with ROUTE_SELECTION_REQUIRED.",
+            ]
+        )
+
+        blocker = current_blocker_section(text)
+
+        self.assertIn("surface contract route decision", blocker)
+        self.assertIn("ROUTE_SELECTION_REQUIRED", blocker)
+        self.assertNotIn("source visual polish", blocker)
+
 
 if __name__ == "__main__":
     unittest.main()

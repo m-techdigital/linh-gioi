@@ -67,6 +67,13 @@ def active_next_action_task_from_text(text: str) -> str | None:
     if (
         "## ACTIVE GOAL LOCK" in text
         and "six-pose registered outfit path" in text
+        and "NEED_OWNER_DECISION" in text
+        and "ROUTE_SELECTION_REQUIRED" in text
+    ):
+        return "SIX_POSE_REGISTERED_OUTFIT_SURFACE_CONTRACT_DECISION"
+    if (
+        "## ACTIVE GOAL LOCK" in text
+        and "six-pose registered outfit path" in text
         and "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE" in text
     ):
         return "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH"
@@ -183,6 +190,14 @@ def main() -> int:
         print("allowed=docs, tools, external selected source repair directories with DO-NOT-PACK provenance")
         print("forbidden=stopped skeletal/cutout path, flat-panel direct-fit production, per-pixel nudging loop, Player pack before source gates")
         print("closure=repair-layer audit/source-board/provenance evidence updated; runtimePromotionAllowed remains false until visual source gates pass")
+        return 0
+    if active_task == "SIX_POSE_REGISTERED_OUTFIT_SURFACE_CONTRACT_DECISION":
+        print("LGO_NEXT_TASK_ADVISOR_READY")
+        print(f"id={active_task}")
+        print("purpose=Chốt surface contract route Pháp Lv1 trước khi author thêm asset: SLEEVELESS_PHAP_LV1 hoặc SLEEVED_PHAP_LV1")
+        print("allowed=docs, validators, contract evidence; no new image candidates before route/ownership is selected")
+        print("forbidden=per-pose mask/pixel polish, stopped skeletal/cutout path, flat-panel direct-fit production, Player pack")
+        print("closure=contract validation PASS for the selected route; source-board plan updated from contract")
         return 0
     if active_task == "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH":
         print("LGO_NEXT_TASK_ADVISOR_READY")

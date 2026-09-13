@@ -103,6 +103,8 @@ def next_task_section(next_action: str) -> str:
 
 def current_blocker_section(next_action: str) -> str:
     active = active_goal_lock_section(next_action)
+    if active and "NEED_OWNER_DECISION" in active and "ROUTE_SELECTION_REQUIRED" in active:
+        return "Current blocker is surface contract route decision: ROUTE_SELECTION_REQUIRED. Do not create more image candidates or pack Player until SLEEVELESS_PHAP_LV1 or SLEEVED_PHAP_LV1 is selected and the contract validator passes."
     if active and "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE" in active:
         return "Current blocker is source visual polish: SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE. Continue outer_top run/jump visual fixes and regenerate source/mixed boards before any Player pack."
     if active:
