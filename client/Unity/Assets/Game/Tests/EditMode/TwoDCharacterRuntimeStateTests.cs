@@ -440,6 +440,14 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Health Potion").style.color.value, Is.EqualTo(new Color(.70f, .80f, .80f, .92f)),
                     "Supply rows must stay readable in Player captures instead of fading into the dark panel.");
 
+                InvokeBoundButton(root.Q<Button>("Map01A Mana Potion"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Is.EqualTo("Vật phẩm hồi phục"));
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Is.EqualTo("Dùng bình linh lực"));
+                Assert.That(root.Q<Button>("Map01A Mana Potion").style.backgroundColor.value, Is.EqualTo(new Color(.12f, .33f, .56f, .98f)),
+                    "Selected supply row must be visibly highlighted like equipment item rows.");
+                Assert.That(root.Q<Button>("Map01A Health Potion").style.backgroundColor.value, Is.Not.EqualTo(new Color(.12f, .33f, .56f, .98f)),
+                    "Only the selected supply row should use the selected-row background.");
+
                 hud.OpenInventoryReviewMode("storage");
                 Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));

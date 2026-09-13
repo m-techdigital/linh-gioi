@@ -351,10 +351,8 @@ namespace LinhGioi.UI
             _health.value = _scene.PlayerHealth; _health.title = "HP " + _scene.PlayerHealth + "/100";
             _mana.value = _scene.PlayerMana; _mana.title = "MP " + _scene.PlayerMana + "/100";
             foreach (var supplyAction in new[] { _healthPotion, _manaPotion, _equipReward })
-            {
                 supplyAction.SetEnabled(true);
-                supplyAction.style.color = new Color(.70f, .80f, .80f, .92f);
-            }
+            RefreshInventorySupplyRows();
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             var hudBlocked = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen;
             _characterSelectButton.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;

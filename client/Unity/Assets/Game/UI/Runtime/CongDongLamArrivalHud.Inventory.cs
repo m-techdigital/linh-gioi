@@ -352,6 +352,7 @@ namespace LinhGioi.UI
             _selectedSupplyItemId = itemId;
             _suppliesOpen = true;
             RefreshInventoryEquipmentTiles();
+            RefreshInventorySupplyRows();
             RefreshInventoryDetailCard();
         }
 
@@ -412,6 +413,22 @@ namespace LinhGioi.UI
             ApplyLgoSelectedTab(_equipmentTab, !supplies);
             ApplyLgoSelectedTab(_suppliesTab, supplies);
             RefreshInventoryDetailCard();
+        }
+
+        private void RefreshInventorySupplyRows()
+        {
+            if (_healthPotion == null || _manaPotion == null || _equipReward == null) return;
+            StyleSupplyRow(_healthPotion, _selectedSupplyItemId == "health_potion");
+            StyleSupplyRow(_manaPotion, _selectedSupplyItemId == "mana_potion");
+            StyleSupplyRow(_equipReward, _selectedSupplyItemId == "class_reward");
+        }
+
+        private static void StyleSupplyRow(Button button, bool selected)
+        {
+            button.style.backgroundColor = selected ? new Color(.12f, .33f, .56f, .98f) : new Color(.045f, .13f, .18f, .98f);
+            button.style.borderTopColor = button.style.borderBottomColor = selected ? new Color(.92f, .72f, .36f, .86f) : new Color(.50f, .58f, .58f, .55f);
+            button.style.borderLeftColor = button.style.borderRightColor = selected ? new Color(.92f, .72f, .36f, .86f) : new Color(.50f, .58f, .58f, .55f);
+            button.style.color = new Color(.70f, .80f, .80f, .92f);
         }
 
         private void RefreshInventoryEquipmentTiles()
