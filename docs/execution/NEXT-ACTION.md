@@ -1321,3 +1321,8 @@ Next valid visible batch: gom player card/location và minimap/quest thành hai 
 `CONTINUE`. HUD composition hiện hành dùng evidence `build/map01a-hud-composition-runtime-v1/01-arrival-q01.png`; player card/right rail đã thống nhất base và không còn đặt rời. Không quay lại capture HUD cũ.
 
 Next valid visible batch: đối chiếu Hành trang với `preferred-v2/02` và `03`, chốt tối đa ba sai lệch lớn ở shell/grid/detail-right rồi sửa qua shared base. Giữ Hành trang và Thông tin là hai tab khác nhau; chọn item hoặc trang bị phải hiện chi tiết bên phải. Một build/capture sau batch, không chỉnh lẻ từng button/font và không resume class/wardrobe/pose/source.
+## Next — character-info equipment composition — 2026-09-13
+
+`CONTINUE`. Hành trang evidence hiện hành: `build/map01a-inventory-hierarchy-runtime-v1/bag.png`; grid năm cột, preview nhân vật lớn hơn và detail-right có item header ngang. Không dùng các capture bag cũ để review.
+
+Next valid visible batch: redesign riêng tab Thông tin theo `preferred-v2/02` nhưng tái sử dụng detail-right và base inventory hiện có; ưu tiên full-body hero, equipment-slot scan và stat hierarchy. Không gộp Hành trang với Thông tin, không dựng detail panel thứ hai, không tạo icon giả, không resume class/wardrobe/pose/source. Build/capture một lần sau khi hoàn tất batch.

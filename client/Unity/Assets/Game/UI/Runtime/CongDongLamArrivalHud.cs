@@ -10,11 +10,11 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud : MonoBehaviour
     {
         private const float InventoryDesktopMainColumnWidth = 820f;
-        private const float InventoryDesktopBagCharacterColumnWidth = 218f;
-        private const float InventoryDesktopBagGridColumnWidth = 590f;
-        private const float InventoryDesktopDetailColumnWidth = 330f;
+        private const float InventoryDesktopBagCharacterColumnWidth = 280f;
+        private const float InventoryDesktopBagGridColumnWidth = 550f;
+        private const float InventoryDesktopDetailColumnWidth = 340f;
         private const float InventoryDesktopColumnGap = 12f;
-        private const float InventoryGridCellBasisPercent = 14.2f;
+        private const float InventoryGridCellBasisPercent = 18.2f;
 
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs, _vitalsPortrait, _dialoguePortrait;

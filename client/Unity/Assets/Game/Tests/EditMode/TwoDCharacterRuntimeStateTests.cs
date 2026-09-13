@@ -199,6 +199,13 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory must not present emoji/text badges as final item art.");
                 Assert.That(detailIcon.style.width.value.value, Is.GreaterThanOrEqualTo(72),
                     "Right-side item detail card should present a larger hero thumbnail than grid tiles.");
+                Assert.That(detailIcon.parent.name, Is.EqualTo("Map01A Inventory Detail Hero"),
+                    "Selected item art and identity must share one detail header row like the owner inventory reference.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").parent.name, Is.EqualTo("Map01A Inventory Detail Hero Text"));
+                var bagCharacterArt = root.Q("Map01A Inventory Bag Character Art");
+                Assert.That(bagCharacterArt.style.width.value.value, Is.GreaterThanOrEqualTo(190));
+                Assert.That(bagCharacterArt.style.height.value.value, Is.GreaterThanOrEqualTo(380),
+                    "Bag character preview must remain a readable product silhouette instead of a narrow thumbnail strip.");
                 Assert.That(root.Q<Button>("LGO Inventory Close").ClassListContains("lgo-inventory-button-base"), Is.True,
                     "Every inventory button must start from the shared inventory button base before semantic helpers override density.");
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").ClassListContains("lgo-inventory-button-base"), Is.True,
@@ -220,13 +227,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(weaponTileIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(weaponTileIcon.ClassListContains("lgo-item-icon-frame"), Is.True,
                     "Equipment grid thumbnails must use the same shared item-icon frame base as the detail panel.");
-                Assert.That(weaponTileIcon.style.width.value.value, Is.InRange(58, 72),
+                Assert.That(weaponTileIcon.style.width.value.value, Is.InRange(70, 80),
                     "Grid item thumbnails should be compact like RPG bag icons, not oversized crops that make the UI look rough.");
                 var mainWeaponTile = root.Q<Button>("Map01A Equipment Item Tile main_weapon");
                 Assert.That(mainWeaponTile.style.height.value.value, Is.LessThanOrEqualTo(116),
                     "Inventory equipment tiles should stay compact and proportional to the owner bag references.");
-                Assert.That(mainWeaponTile.style.flexBasis.value.value, Is.LessThanOrEqualTo(14.5f),
-                    "Inventory equipment tiles should use a dense 6-7 column bag grid close to the owner bag references, not wide table cards.");
+                Assert.That(mainWeaponTile.style.flexBasis.value.value, Is.InRange(17.5f, 19f),
+                    "Inventory equipment tiles should use the five-column scan rhythm shown by preferred-v2/02 and 03.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Is.EqualTo("Chưa có thuộc tính chiến đấu được công bố."));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Dành cho"));
@@ -285,8 +292,12 @@ namespace LinhGioi.Tests.EditMode
                 var desktopColumnGap = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopColumnGap", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
                 Assert.That(gridDesktopWidth, Is.InRange(800, 840),
                     "Desktop bag grid should fill the modal beside detail instead of leaving large empty side gutters.");
-                Assert.That(detailDesktopWidth, Is.InRange(320, 340),
+                Assert.That(detailDesktopWidth, Is.InRange(330, 350),
                     "Right-side detail should remain readable while the grid gets enough desktop width.");
+                var bagCharacterWidth = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopBagCharacterColumnWidth", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
+                var bagGridWidth = (float)typeof(CongDongLamArrivalHud).GetField("InventoryDesktopBagGridColumnWidth", BindingFlags.Static | BindingFlags.NonPublic).GetRawConstantValue();
+                Assert.That(bagCharacterWidth, Is.InRange(270, 300));
+                Assert.That(bagGridWidth, Is.InRange(540, 580));
                 Assert.That(desktopColumnGap, Is.InRange(12, 14),
                     "Grid/detail gap should be a deliberate shared desktop gutter, not a tiny accidental seam.");
                 Assert.That(root.Q<Button>("Map01A Equipment Tab").style.flexGrow.value, Is.EqualTo(0),
@@ -303,7 +314,7 @@ namespace LinhGioi.Tests.EditMode
                 var emptyBagSlot = root.Q("Map01A Empty Bag Slot 01");
                 Assert.That(emptyBagSlot, Is.Not.Null,
                     "Bag layout should reserve empty inventory cells so the screen reads as a game bag grid, not a sparse debug list.");
-                Assert.That(emptyBagSlot.style.flexBasis.value.value, Is.LessThanOrEqualTo(14.5f));
+                Assert.That(emptyBagSlot.style.flexBasis.value.value, Is.InRange(17.5f, 19f));
                 Assert.That(root.Q("Map01A Empty Bag Slot 05"), Is.Null,
                     "Demo bag should reserve a few empty cells without filling half the modal with dead empty boxes far from the owner RPG references.");
                 Assert.That(root.Q<Label>("Map01A Inventory Count Badge"), Is.Not.Null,
@@ -322,7 +333,7 @@ namespace LinhGioi.Tests.EditMode
                     "Equipment grid cells must use the same base as empty bag cells to avoid patchwork sizing.");
                 Assert.That(root.Q<ScrollView>("LGO Inventory Scroll").style.flexGrow.value, Is.EqualTo(0),
                     "Demo bag content should not stretch the scroll view into a large empty debug table area when item rows are sparse.");
-                Assert.That(root.Q<ScrollView>("LGO Inventory Scroll").style.maxHeight.value.value, Is.LessThanOrEqualTo(300),
+                Assert.That(root.Q<ScrollView>("LGO Inventory Scroll").style.maxHeight.value.value, Is.InRange(320, 350),
                     "Bag grid should stay visually grouped around the current demo rows instead of filling the modal with blank table space.");
                 Assert.That(root.Q("Map01A Inventory Grid Accent Rail"), Is.Not.Null,
                     "Inventory panels need a shared ornament rail to reduce flat debug-panel presentation.");

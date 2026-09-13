@@ -405,7 +405,7 @@ namespace LinhGioi.UI
             cell.AddToClassList(LgoInventoryGridCellClass);
             cell.style.flexGrow = 0;
             cell.style.flexBasis = new Length(InventoryGridCellBasisPercent, LengthUnit.Percent);
-            cell.style.height = 108;
+            cell.style.height = 116;
             cell.style.marginRight = 6;
             cell.style.marginBottom = 7;
             cell.style.alignItems = Align.Center;
