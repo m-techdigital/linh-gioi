@@ -1,3 +1,7 @@
+## Next Map01A UI polish after inventory card/detail audit — 2026-09-13
+
+Continue Map01A product UI/UX only. Latest runtime evidence is `build/map01a-inventory-card-polish-runtime-v2/inventory/`: bag/detail card improved and no longer uses the rejected crop-heavy v1, but visual review remains `CONTINUE`, not owner acceptance. The next safe work should either improve the inventory shell toward the uploaded references using shared skin/base helpers, or prepare provenance-backed item/portrait/full-body assets before adding richer visuals. Do not add fake/random icons, do not resume class/wardrobe/pose work, do not run class build/capture loops, and do not rollback existing class code.
+
 ## Hiện hành — Map01A/UI visual redesign vẫn CONTINUE — 2026-09-13
 
 `CONTINUE`. Batch mới nhất chỉ là checkpoint an toàn để chặn vòng lặp “test xanh nhưng nhìn xa design”: evidence `build/map01a-inventory-shell-polish-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Đánh giá bằng mắt: có thêm capacity badge/action bar/stat strip/loadout matrix nhưng vẫn chưa đạt sát design owner; không được gọi là hoàn thành UI.

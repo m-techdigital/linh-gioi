@@ -6,8 +6,8 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _storageGateCard, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions;
-        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroVitals, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageGateTitle, _storageState, _storageGateSafety;
+        private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _storageGateCard, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard;
+        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroVitals, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageGateTitle, _storageState, _storageGateSafety;
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
@@ -182,13 +182,13 @@ namespace LinhGioi.UI
             _inventoryDetailIcon = LgoLabel("", 42, UiGold, true);
             _inventoryDetailIcon.name = "Map01A Inventory Detail Icon";
             ApplyLgoItemIcon(_inventoryDetailIcon);
-            _inventoryDetailIcon.style.width = 78;
-            _inventoryDetailIcon.style.height = 78;
+            _inventoryDetailIcon.style.width = 72;
+            _inventoryDetailIcon.style.height = 72;
             _inventoryDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             _inventoryDetailIcon.style.alignSelf = Align.Center;
             _inventoryFooter.Add(_inventoryDetailIcon);
             _equipmentDetail = LgoLabel("", 21, UiGold, true);
-            _equipmentDetail.style.marginTop = 6;
+            _equipmentDetail.style.marginTop = 4;
             _inventoryFooter.Add(_equipmentDetail);
             _inventoryDetailRarity = LgoLabel("", 15, new Color(.74f, .92f, 1f, .94f), true);
             _inventoryDetailRarity.name = "Map01A Inventory Detail Rarity";
@@ -205,24 +205,41 @@ namespace LinhGioi.UI
             _inventoryFooter.Add(_inventoryItemId);
             _inventoryDetailStateBadge = LgoLabel("", 15, new Color(.12f, .08f, .03f, 1f), true);
             _inventoryDetailStateBadge.name = "Map01A Inventory Detail State Badge";
-            _inventoryDetailStateBadge.style.marginTop = 12;
+            _inventoryDetailStateBadge.style.marginTop = 8;
             _inventoryDetailStateBadge.style.paddingLeft = 10;
             _inventoryDetailStateBadge.style.paddingRight = 10;
             _inventoryDetailStateBadge.style.paddingTop = 5;
             _inventoryDetailStateBadge.style.paddingBottom = 5;
             ApplyLgoFrame(_inventoryDetailStateBadge, UiGold, new Color(.98f, .86f, .48f, .92f));
             _inventoryFooter.Add(_inventoryDetailStateBadge);
-            _inventoryItemState = LgoLabel("", 16, new Color(.91f, .93f, .84f, .96f));
-            _inventoryItemState.style.marginTop = 12;
+            _inventoryItemState = LgoLabel("", 14, new Color(.91f, .93f, .84f, .96f));
+            _inventoryItemState.style.marginTop = 8;
             _inventoryFooter.Add(_inventoryItemState);
-            _inventoryDetailStatPrimary = LgoLabel("", 15, new Color(.76f, .92f, 1f, .96f), true);
+
+            _inventoryDetailStatsCard = new VisualElement { name = "Map01A Inventory Detail Stats Card" };
+            _inventoryDetailStatsCard.style.flexDirection = FlexDirection.Column;
+            _inventoryDetailStatsCard.style.marginTop = 8;
+            _inventoryDetailStatsCard.style.paddingLeft = _inventoryDetailStatsCard.style.paddingRight = 10;
+            _inventoryDetailStatsCard.style.paddingTop = _inventoryDetailStatsCard.style.paddingBottom = 7;
+            ApplyLgoFrame(_inventoryDetailStatsCard, new Color(.018f, .060f, .096f, .92f), new Color(.72f, .62f, .38f, .58f));
+            var detailChips = InventoryRow("Map01A Inventory Detail Chip Row");
+            detailChips.style.marginBottom = 6;
+            _inventoryDetailLevelChip = InventoryBadge("Map01A Inventory Detail Level Chip", "Lv1", new Color(.86f, .94f, .90f, .96f));
+            _inventoryDetailEquippedChip = InventoryBadge("Map01A Inventory Detail Equipped Chip", "Đang mặc", new Color(.76f, 1f, .70f, .94f));
+            _inventoryDetailFitChip = InventoryBadge("Map01A Inventory Detail Fit Chip", "Võ · Nam", UiSubText);
+            detailChips.Add(_inventoryDetailLevelChip);
+            detailChips.Add(_inventoryDetailEquippedChip);
+            _inventoryDetailStatsCard.Add(detailChips);
+            _inventoryDetailStatsCard.Add(_inventoryDetailFitChip);
+            _inventoryDetailStatPrimary = LgoLabel("", 13, new Color(.76f, .92f, 1f, .96f), true);
             _inventoryDetailStatPrimary.name = "Map01A Inventory Detail Stat Primary";
-            _inventoryDetailStatPrimary.style.marginTop = 10;
-            _inventoryFooter.Add(_inventoryDetailStatPrimary);
-            _inventoryDetailStatFit = LgoLabel("", 15, new Color(.76f, 1f, .70f, .96f), true);
+            _inventoryDetailStatPrimary.style.marginTop = 8;
+            _inventoryDetailStatsCard.Add(_inventoryDetailStatPrimary);
+            _inventoryDetailStatFit = LgoLabel("", 13, new Color(.76f, 1f, .70f, .96f), true);
             _inventoryDetailStatFit.name = "Map01A Inventory Detail Stat Fit";
             _inventoryDetailStatFit.style.marginTop = 4;
-            _inventoryFooter.Add(_inventoryDetailStatFit);
+            _inventoryDetailStatsCard.Add(_inventoryDetailStatFit);
+            _inventoryFooter.Add(_inventoryDetailStatsCard);
             var actions = InventoryRow("Map01A Inventory Equipment Actions");
             actions.style.marginTop = 10;
             actions.style.marginBottom = 10;
@@ -484,7 +501,7 @@ namespace LinhGioi.UI
                 var tile = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "Map01A Equipment Item Tile " + slotId);
                 tile.style.flexGrow = 0;
                 tile.style.flexBasis = new Length(15.8f, LengthUnit.Percent);
-                tile.style.height = 110;
+                tile.style.height = 132;
                 tile.style.marginRight = 6;
                 tile.style.marginBottom = 8;
                 tile.style.fontSize = 13;
@@ -495,10 +512,11 @@ namespace LinhGioi.UI
 
                 var icon = new VisualElement { name = "Map01A Equipment Item Icon " + slotId };
                 ApplyLgoItemIcon(icon);
-                icon.style.width = 70;
-                icon.style.height = 70;
+                icon.style.width = 86;
+                icon.style.height = 86;
                 icon.style.marginTop = 2;
-                icon.style.marginBottom = 5;
+                icon.style.marginBottom = 6;
+                icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
                 icon.style.marginLeft = 0;
                 icon.style.marginRight = 0;
                 tile.Add(icon);
@@ -530,7 +548,7 @@ namespace LinhGioi.UI
                 var emptySlot = new VisualElement { name = $"Map01A Empty Bag Slot {emptyIndex:00}" };
                 emptySlot.style.flexGrow = 0;
                 emptySlot.style.flexBasis = new Length(15.8f, LengthUnit.Percent);
-                emptySlot.style.height = 110;
+                emptySlot.style.height = 132;
                 emptySlot.style.marginRight = 6;
                 emptySlot.style.marginBottom = 8;
                 emptySlot.style.alignItems = Align.Center;
@@ -791,6 +809,13 @@ namespace LinhGioi.UI
             }
         }
 
+        private void RefreshInventoryDetailChips(string level, string state, string fit)
+        {
+            if (_inventoryDetailLevelChip != null) _inventoryDetailLevelChip.text = level;
+            if (_inventoryDetailEquippedChip != null) _inventoryDetailEquippedChip.text = state;
+            if (_inventoryDetailFitChip != null) _inventoryDetailFitChip.text = fit;
+        }
+
         private void RefreshInventoryDetailCard()
         {
             if (_scene == null || _inventoryDetailStateBadge == null) return;
@@ -817,6 +842,7 @@ namespace LinhGioi.UI
             _inventoryItemState.text = selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.";
             _inventoryDetailStatPrimary.text = "Chưa có thuộc tính chiến đấu được công bố.";
             _inventoryDetailStatFit.text = "Dành cho " + _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
+            RefreshInventoryDetailChips("Lv" + selectedLevel, selectedEquipped ? "Đang mặc" : "Đã tháo", _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam"));
             if (_inventoryDetailPrimaryAction != null)
                 _inventoryDetailPrimaryAction.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
             if (_equipmentToggle != null)
@@ -839,6 +865,7 @@ namespace LinhGioi.UI
                 _inventoryItemState.text = "Số lượng: " + _scene.ManaPotionCount + " · MP " + _scene.PlayerMana + "/100.";
                 _inventoryDetailStatPrimary.text = "Hồi MP +50";
                 _inventoryDetailStatFit.text = "Dùng khi MP chưa đầy.";
+                RefreshInventoryDetailChips("x" + _scene.ManaPotionCount, _inventoryDetailStateBadge.text, "Hồi phục MP");
                 _inventoryDetailPrimaryAction.text = "Dùng bình linh lực";
                 _inventoryDetailPrimaryAction.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
             }
@@ -851,6 +878,7 @@ namespace LinhGioi.UI
                 _inventoryItemState.text = !_scene.HasClassRewardItem ? "Hoàn thành nhánh Q07 để nhận." : _scene.IsClassRewardEquipped ? "Đã trang bị từ nhiệm vụ." : "Sẵn sàng trang bị từ chi tiết bên phải.";
                 _inventoryDetailStatPrimary.text = "Phần thưởng nhiệm vụ";
                 _inventoryDetailStatFit.text = "Nhận khi hoàn thành nhiệm vụ tân thủ.";
+                RefreshInventoryDetailChips(_scene.HasClassRewardItem ? "x1" : "x0", _inventoryDetailStateBadge.text, "Nhiệm vụ");
                 _inventoryDetailPrimaryAction.text = "Trang bị hộ uyển";
                 _inventoryDetailPrimaryAction.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
             }
@@ -864,6 +892,7 @@ namespace LinhGioi.UI
                 _inventoryItemState.text = "Số lượng: " + _scene.HealthPotionCount + " · HP " + _scene.PlayerHealth + "/100.";
                 _inventoryDetailStatPrimary.text = "Hồi HP +50";
                 _inventoryDetailStatFit.text = "Dùng khi HP chưa đầy.";
+                RefreshInventoryDetailChips("x" + _scene.HealthPotionCount, _inventoryDetailStateBadge.text, "Hồi phục HP");
                 _inventoryDetailPrimaryAction.text = "Dùng bình máu";
                 _inventoryDetailPrimaryAction.SetEnabled(_scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100);
             }

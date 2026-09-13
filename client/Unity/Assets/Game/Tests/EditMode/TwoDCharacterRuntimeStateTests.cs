@@ -196,16 +196,22 @@ namespace LinhGioi.Tests.EditMode
                     "Equipment grid tiles must show the same real runtime thumbnail art, not text-only placeholders.");
                 Assert.That(weaponTileIcon.style.backgroundImage.value.sprite, Is.EqualTo(weaponThumbnail));
                 Assert.That(weaponTileIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(weaponTileIcon.style.width.value.value, Is.GreaterThanOrEqualTo(64),
-                    "Grid item thumbnails should be the visual anchor of the tile.");
+                Assert.That(weaponTileIcon.style.width.value.value, Is.GreaterThanOrEqualTo(84),
+                    "Grid item thumbnails should be the visual anchor of the tile, closer to RPG bag item art than a tiny debug crop.");
                 var mainWeaponTile = root.Q<Button>("Map01A Equipment Item Tile main_weapon");
-                Assert.That(mainWeaponTile.style.height.value.value, Is.InRange(104, 116),
-                    "Inventory equipment tiles should read as compact square-ish game item cells, not long technical rows.");
+                Assert.That(mainWeaponTile.style.height.value.value, Is.InRange(124, 140),
+                    "Inventory equipment tiles should read as polished RPG item cards, not flat technical cells.");
                 Assert.That(mainWeaponTile.style.flexBasis.value.value, Is.LessThanOrEqualTo(17f),
                     "Inventory equipment tiles should use a dense 5-6 column bag grid close to the owner bag references.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Is.EqualTo("Chưa có thuộc tính chiến đấu được công bố."));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Dành cho"));
+                Assert.That(root.Q("Map01A Inventory Detail Stats Card"), Is.Not.Null,
+                    "Right-side item detail should group item facts in a card, not leave loose debug labels down the panel.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Level Chip"), Is.Not.Null,
+                    "Right-side item detail should expose level as a compact chip for RPG inventory scanning.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Equipped Chip"), Is.Not.Null,
+                    "Right-side item detail should expose equip state as a compact chip for RPG inventory scanning.");
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action"), Is.Not.Null);
                 Assert.That(root.Q<Button>("LGO Equipment Inventory Variant").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "Unavailable variant actions should not draw a disabled dead button in the narrow detail card.");
