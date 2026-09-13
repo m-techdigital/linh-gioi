@@ -1,3 +1,9 @@
+## Next — sau interactive detail-right cho Kỹ năng/Tiềm năng — 2026-09-14
+
+`CONTINUE`. Các node Kỹ năng và Tiềm năng giờ cập nhật cột chi tiết phải và trạng thái chọn đồng bộ; action ghi progression vẫn khóa. Evidence hiện hành: `build/map01a-hub-selection-runtime-v1/{skills,potential}.png`; Player `build/map01a-hub-selection-player-v2/LinhGioiOnline.app`; full `TwoDCharacterRuntimeStateTests` đạt `20/20`.
+
+Next valid work: audit một interaction Map01A còn thiếu theo design owner, ưu tiên lựa chọn/chi tiết trong Rương đồ hoặc trạng thái NPC/HUD có dữ liệu thật. Icon HP/MP/reward đã dùng atlas provenance-backed; thumbnail trang bị tối là art debt thuộc class source và không được sửa trong scope này. Không mở progression giả, class selector, pose/wardrobe/source hoặc design cũ.
+
 ## Next — sau khi Menu đủ năm tab đã duyệt — 2026-09-14
 
 `CONTINUE`. Menu đã có đủ Nhân vật, Rương đồ, Kỹ năng, Tiềm năng và Linh thú; Tiềm năng mở đúng panel trong hub chung. Evidence hiện hành: `build/map01a-five-tab-menu-runtime-v1/menu.png`, `build/map01a-five-tab-menu-tabs-runtime-v1/potential.png`; Player `build/map01a-five-tab-menu-player-v1/LinhGioiOnline.app`; full `TwoDCharacterRuntimeStateTests` đạt `20/20`.

@@ -2115,11 +2115,13 @@ namespace LinhGioi.World
             var bag = Path.Combine(directory, "bag.png");
             CaptureScreenPng(bag);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skills Main Tab"));
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skill Node Kiếm Vũ"));
             yield return null;
             yield return new WaitForEndOfFrame();
             var skills = Path.Combine(directory, "skills.png");
             CaptureScreenPng(skills);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Main Tab"));
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Node Công"));
             yield return null;
             yield return new WaitForEndOfFrame();
             var potential = Path.Combine(directory, "potential.png");

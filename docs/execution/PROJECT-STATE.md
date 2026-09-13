@@ -1,3 +1,10 @@
+## Map01A — skill and potential selections drive shared detail-right — 2026-09-14
+
+- Interaction audit found that every skill and potential node was clickable but all callbacks reopened the same default detail (`Thiên Kiếm Quyết` or `Sinh lực`). This made the approved detail-right panel visually present but functionally stale.
+- Skill and potential nodes now reuse one selection-state helper and update the shared detail icon, name, meta and safe read-only body for the selected node. Selected borders move with the detail. Upgrade/add-point actions remain disabled and no progression state or gameplay contract was invented.
+- The inventory-tab capture now selects `Kiếm Vũ` and `Công`, so future evidence exercises the interaction instead of only rendering defaults. TDD reproduced the stale details and full `TwoDCharacterRuntimeStateTests` passes `20/20` after the fix.
+- Player `build/map01a-hub-selection-player-v2/LinhGioiOnline.app` built with `errors=0`, `warnings=39`. Visual evidence `build/map01a-hub-selection-runtime-v1/{skills,potential}.png` confirms selection border, icon and detail-right content stay synchronized without clipping or layout regression.
+
 ## Map01A — approved five-tab menu route is complete — 2026-09-14
 
 - Independent navigation audit found that the shared character hub already had all five approved tabs, but the external Menu exposed only four destinations and omitted `Tiềm năng`.

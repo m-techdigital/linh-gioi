@@ -302,6 +302,16 @@ namespace LinhGioi.Tests.EditMode
                 var firstSkillNode = root.Q<Button>("Map01A Skill Node Thiên Kiếm Quyết");
                 Assert.That(firstSkillNode.style.minWidth.value.value, Is.GreaterThanOrEqualTo(140),
                     "Skill path nodes need a fixed readable base width; flex shrinking stacks Vietnamese labels vertically.");
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var hubDetailName = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailName", flags).GetValue(hud);
+                var selectedSkillNode = root.Q<Button>("Map01A Skill Node Kiếm Vũ");
+                InvokeBoundButton(selectedSkillNode);
+                Assert.That(hubDetailName.text, Is.EqualTo("Kiếm Vũ"),
+                    "Selecting a skill must update the shared detail-right panel instead of leaving the default skill visible.");
+                Assert.That(selectedSkillNode.style.borderTopWidth.value, Is.EqualTo(2),
+                    "The selected node must expose the same visible selection state used by its detail-right content.");
+                Assert.That(firstSkillNode.style.borderTopWidth.value, Is.EqualTo(1));
 
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
                 Assert.That(root.Q("Map01A Potential Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -312,6 +322,9 @@ namespace LinhGioi.Tests.EditMode
                     "Potential diagram and recommendation must fit inside the shared modal shell.");
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
                     "Map01A must not create local fake potential progression before the real state contract exists.");
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Node Công"));
+                Assert.That(hubDetailName.text, Is.EqualTo("Công"),
+                    "Selecting a potential node must update detail-right without mutating progression state.");
 
                 InvokeBoundButton(root.Q<Button>("Map01A Spirit Pet Main Tab"));
                 Assert.That(root.Q("Map01A Spirit Pet Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));

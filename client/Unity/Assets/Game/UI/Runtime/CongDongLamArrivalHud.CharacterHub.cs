@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -13,6 +14,8 @@ namespace LinhGioi.UI
         private VisualElement _hubDetailIcon;
         private Button _hubSkillUpgradeAction, _potentialAddPointAction, _spiritPetDevelopAction;
         private Texture2D _spiritPetPreviewTexture;
+        private readonly List<Button> _skillPathNodes = new List<Button>();
+        private readonly List<Button> _potentialPathNodes = new List<Button>();
 
         private VisualElement CreateHubSurface(string name)
         {
@@ -83,22 +86,32 @@ namespace LinhGioi.UI
             node.style.justifyContent = Justify.Center;
             node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 52;
             node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 52;
+            node.Add(HubIcon(name + " Icon", iconId, 48));
+            var titleLabel = LgoLabel(title, 12, UiText, true);
+            titleLabel.name = name + " Title";
+            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            titleLabel.style.marginTop = 2;
+            titleLabel.style.whiteSpace = WhiteSpace.NoWrap;
+            node.Add(titleLabel);
+            var levelLabel = LgoLabel(level, 10, new Color(.74f, .92f, 1f, .92f), true);
+            levelLabel.name = name + " Level";
+            levelLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            node.Add(levelLabel);
+            ApplyHubPathNodeSelection(node, selected);
+            return node;
+        }
+
+
+        private static void ApplyHubPathNodeSelection(Button node, bool selected)
+        {
             ApplyLgoFrame(node,
                 selected ? new Color(.025f, .18f, .30f, .96f) : new Color(.025f, .085f, .13f, .92f),
                 selected ? UiGold : new Color(.28f, .55f, .70f, .78f));
             var nodeBorderWidth = selected ? 2 : 1;
             node.style.borderLeftWidth = node.style.borderRightWidth = nodeBorderWidth;
             node.style.borderTopWidth = node.style.borderBottomWidth = nodeBorderWidth;
-            node.Add(HubIcon(name + " Icon", iconId, 48));
-            var titleLabel = LgoLabel(title, 12, selected ? UiGold : UiText, true);
-            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-            titleLabel.style.marginTop = 2;
-            titleLabel.style.whiteSpace = WhiteSpace.NoWrap;
-            node.Add(titleLabel);
-            var levelLabel = LgoLabel(level, 10, new Color(.74f, .92f, 1f, .92f), true);
-            levelLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
-            node.Add(levelLabel);
-            return node;
+            var title = node.Q<Label>(node.name + " Title");
+            if (title != null) title.style.color = selected ? UiGold : UiText;
         }
 
         private static VisualElement CreateHubPathConnector(string name, bool vertical = false)
@@ -116,7 +129,8 @@ namespace LinhGioi.UI
             float left, float top, bool selected = false)
         {
             var node = CreateHubPathNode(name, title, value, iconId,
-                () => ShowHubDetail(CharacterHubMode.Potential), selected);
+                () => SelectPotentialNode(name, title, value, iconId), selected);
+            _potentialPathNodes.Add(node);
             node.style.position = Position.Absolute;
             node.style.left = left;
             node.style.top = top;
@@ -220,8 +234,11 @@ namespace LinhGioi.UI
                 for (var nodeIndex = 0; nodeIndex < stages[stageIndex].Length; nodeIndex++)
                 {
                     var skill = stages[stageIndex][nodeIndex];
-                    stage.Add(CreateHubPathNode("Map01A Skill Node " + skill.Item1, skill.Item1, skill.Item2, skill.Item3,
-                        () => ShowHubDetail(CharacterHubMode.Skills), stageIndex == 0 && nodeIndex == 0));
+                    var nodeName = "Map01A Skill Node " + skill.Item1;
+                    var node = CreateHubPathNode(nodeName, skill.Item1, skill.Item2, skill.Item3,
+                        () => SelectSkillNode(nodeName, skill.Item1, skill.Item2, skill.Item3), stageIndex == 0 && nodeIndex == 0);
+                    _skillPathNodes.Add(node);
+                    stage.Add(node);
                     if (nodeIndex < stages[stageIndex].Length - 1)
                         stage.Add(CreateHubPathConnector("Map01A Skill Stage " + (stageIndex + 1) + " Connector " + (nodeIndex + 1)));
                 }
@@ -416,32 +433,71 @@ namespace LinhGioi.UI
             ApplyLgoSelectedTab(_spiritPetTab, previewMode == CharacterHubMode.SpiritPet);
         }
 
-        private void ShowHubDetail(CharacterHubMode mode)
+        private void SelectSkillNode(string nodeName, string title, string level, string iconId)
         {
-            var iconId = mode == CharacterHubMode.Skills ? "skill" : mode == CharacterHubMode.Potential ? "character" : "crest";
-            var sprite = _scene.GetMap01AHudIconSprite(iconId);
-            _hubDetailIcon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            foreach (var node in _skillPathNodes) ApplyHubPathNodeSelection(node, node.name == nodeName);
+            ShowSkillDetail(title, level, iconId);
+        }
+
+        private void SelectPotentialNode(string nodeName, string title, string value, string iconId)
+        {
+            foreach (var node in _potentialPathNodes) ApplyHubPathNodeSelection(node, node.name == nodeName);
+            ShowPotentialDetail(title, value, iconId);
+        }
+
+        private void ConfigureHubDetailMode(CharacterHubMode mode)
+        {
             _hubSkillUpgradeAction.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
             _potentialAddPointAction.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _spiritPetDevelopAction.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+        }
+
+        private void SetHubDetailIcon(string iconId)
+        {
+            var sprite = _scene.GetMap01AHudIconSprite(iconId);
+            _hubDetailIcon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+        }
+
+        private void ShowSkillDetail(string title, string level, string iconId)
+        {
+            ConfigureHubDetailMode(CharacterHubMode.Skills);
+            SetHubDetailIcon(iconId);
+            _hubDetailHeader.text = "CHI TIẾT KỸ NĂNG";
+            _hubDetailName.text = title;
+            _hubDetailMeta.text = "Kỹ năng chủ động · " + level;
+            _hubDetailBody.text = title == "Thiên Kiếm Quyết"
+                ? "Sát thương: 320% Công\nHồi chiêu: 12 giây\nTiêu hao MP: 180\n\nBộ bốn kỹ năng hiện hành được giữ nguyên."
+                : "Cấp hiện hành: " + level + "\n\nHiệu ứng chi tiết đang chờ dữ liệu kỹ năng chính thức.";
+            _hubDetailStatus.text = "Nâng cấp chờ hệ thống kỹ năng chính thức.";
+        }
+
+        private void ShowPotentialDetail(string title, string value, string iconId)
+        {
+            ConfigureHubDetailMode(CharacterHubMode.Potential);
+            SetHubDetailIcon(iconId);
+            _hubDetailHeader.text = "CHI TIẾT TIỀM NĂNG";
+            _hubDetailName.text = title;
+            _hubDetailMeta.text = "Giá trị xem trước: " + value;
+            _hubDetailBody.text = title == "Sinh lực"
+                ? "Ảnh hưởng dự kiến\n• Sinh lực (HP)\n• Phòng thủ\n\nKhông thay đổi chỉ số local khi chưa có state tiến trình."
+                : "Điểm đang chọn: " + title + " · " + value + "\n\nKhông thay đổi chỉ số local khi chưa có state tiến trình.";
+            _hubDetailStatus.text = "Cộng điểm đang khóa an toàn.";
+        }
+
+        private void ShowHubDetail(CharacterHubMode mode)
+        {
             if (mode == CharacterHubMode.Skills)
             {
-                _hubDetailHeader.text = "CHI TIẾT KỸ NĂNG";
-                _hubDetailName.text = "Thiên Kiếm Quyết";
-                _hubDetailMeta.text = "Kỹ năng chủ động · Lv.8/10";
-                _hubDetailBody.text = "Sát thương: 320% Công\nHồi chiêu: 12 giây\nTiêu hao MP: 180\n\nBộ bốn kỹ năng hiện hành được giữ nguyên.";
-                _hubDetailStatus.text = "Nâng cấp chờ hệ thống kỹ năng chính thức.";
+                ShowSkillDetail("Thiên Kiếm Quyết", "Lv.8", "skill");
             }
             else if (mode == CharacterHubMode.Potential)
             {
-                _hubDetailHeader.text = "CHI TIẾT TIỀM NĂNG";
-                _hubDetailName.text = "Sinh lực";
-                _hubDetailMeta.text = "Giá trị xem trước: 250";
-                _hubDetailBody.text = "Ảnh hưởng dự kiến\n• Sinh lực (HP)\n• Phòng thủ\n\nKhông thay đổi chỉ số local khi chưa có state tiến trình.";
-                _hubDetailStatus.text = "Cộng điểm đang khóa an toàn.";
+                ShowPotentialDetail("Sinh lực", "250", "character");
             }
             else
             {
+                ConfigureHubDetailMode(CharacterHubMode.SpiritPet);
                 _hubDetailIcon.style.backgroundImage = _spiritPetPreviewTexture == null
                     ? new StyleBackground(_scene.GetMap01AHudIconSprite("crest"))
                     : new StyleBackground(_spiritPetPreviewTexture);
@@ -453,5 +509,6 @@ namespace LinhGioi.UI
                 _hubDetailStatus.text = "Bồi dưỡng chờ hệ thống Linh thú chính thức.";
             }
         }
+
     }
 }
