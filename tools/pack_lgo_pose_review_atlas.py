@@ -8,6 +8,7 @@ from pathlib import Path
 
 from PIL import Image
 from pack_lgo_vo_lv1_map_avatar import CANVAS, project_canvas_rect
+from validate_lgo_outfit_surface_contract import validate_contract
 
 
 def compact_rows(unique, width):
@@ -147,7 +148,13 @@ def main():
                         help='Allow transparent poses only for explicitly named item components')
     parser.add_argument('--jump-pivot-source', type=int, nargs=2, metavar=('X', 'Y'),
                         help='Registered source-space pivot for jump_tuck; never inferred from its trim')
+    parser.add_argument('--surface-contract', type=Path,
+                        help='Optional outfit surface contract; must validate PASS before review pack')
     args = parser.parse_args()
+    if args.surface_contract is not None:
+        contract_report = validate_contract(args.surface_contract)
+        if contract_report['status'] != 'PASS':
+            parser.error('Surface contract not ready for pack: ' + contract_report['status'])
     sources = json.loads(args.sources.read_text())
     has_jump = any(source['id'] == 'jump_tuck' for source in sources)
     if has_jump and args.jump_pivot_source is None:

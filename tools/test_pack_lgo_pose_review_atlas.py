@@ -153,3 +153,25 @@ class PoseReviewAtlasTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('jump pivot', result.stderr.lower())
         self.assertFalse(output.exists())
+
+# Keep this assignment outside the class definition so the test is attached even though this file has no __main__ anchor.
+def _test_cli_rejects_surface_contract_that_needs_route_decision(self):
+    sources = [self.source('idle')]
+    records = self.root / 'sources.json'
+    records.write_text(json.dumps(sources))
+    contract = self.root / 'surface-contract.json'
+    contract.write_text(json.dumps({
+        'sourceSpaceProfile': {'canvas': [1024, 1536], 'originX': 512, 'groundY': 1484, 'unitScale': '1.70/1536'},
+        'poses': ['idle', 'run_contact_a', 'run_a', 'run_contact_b', 'run_b', 'jump_tuck'],
+        'selectedRoute': None,
+        'itemFamilies': [{'slotId': 'outer_top', 'familyType': 'cloth_body', 'ownership': ['torso_cloth']}],
+        'runtimePromotionAllowed': False,
+    }))
+    result = subprocess.run([sys.executable, str(Path(__file__).with_name('pack_lgo_pose_review_atlas.py')),
+                             '--sources', str(records), '--output-dir', str(self.root / 'out'),
+                             '--surface-contract', str(contract)], capture_output=True, text=True)
+    self.assertNotEqual(result.returncode, 0)
+    self.assertIn('Surface contract not ready for pack', result.stderr)
+    self.assertIn('NEED_OWNER_DECISION', result.stderr)
+
+PoseReviewAtlasTests.test_cli_rejects_surface_contract_that_needs_route_decision = _test_cli_rejects_surface_contract_that_needs_route_decision
