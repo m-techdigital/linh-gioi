@@ -138,14 +138,16 @@ namespace LinhGioi.UI
             _inventoryDetailStatFit.style.marginTop = 4;
             _inventoryFooter.Add(_inventoryDetailStatFit);
             var actions = InventoryRow("Map01A Inventory Equipment Actions");
-            actions.style.marginTop = 10;
+            actions.style.marginTop = 14;
+            actions.style.marginBottom = 12;
             actions.style.flexShrink = 0;
             _inventoryDetailPrimaryAction = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "Map01A Inventory Detail Primary Action");
-            _inventoryDetailPrimaryAction.style.minHeight = 42;
+            _inventoryDetailPrimaryAction.style.minHeight = 46;
             _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
             _equipmentToggle.style.display = DisplayStyle.None;
             _equipmentVariant = InventoryButton(() => { _scene.CycleVoSelectedEquipmentItemLevel(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
-            _equipmentVariant.style.minHeight = 42;
+            _equipmentVariant.style.display = DisplayStyle.None;
+            _equipmentVariant.style.minHeight = 46;
             actions.Add(_inventoryDetailPrimaryAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
             _inventoryFooter.Add(actions); _inventoryDetailPanel.Add(_inventoryFooter);
 

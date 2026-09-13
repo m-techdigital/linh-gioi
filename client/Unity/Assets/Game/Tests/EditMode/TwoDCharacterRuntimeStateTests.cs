@@ -200,6 +200,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Does.Contain("Công"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Khớp"));
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action"), Is.Not.Null);
+                Assert.That(root.Q<Button>("LGO Equipment Inventory Variant").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Unavailable variant actions should not draw a disabled dead button in the narrow detail card.");
+                var detailActions = root.Q("Map01A Inventory Equipment Actions");
+                Assert.That(detailActions, Is.Not.Null);
+                Assert.That(detailActions.style.marginBottom.value.value, Is.GreaterThanOrEqualTo(10),
+                    "Right-side detail actions need breathing room above the bottom edge in Player layout.");
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Is.Empty,
                     "Equipment tile Button.text must stay empty so UIToolkit does not draw text over the runtime thumbnail and child labels.");
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Is.Empty);

@@ -327,7 +327,8 @@ namespace LinhGioi.UI
             _inventoryDetailPrimaryAction.text = equipToggleText;
             _equipmentToggle.text = equipToggleText;
             var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
-            _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "Chưa có cấp khác";
+            _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "";
+            _equipmentVariant.style.display = hasVariant ? DisplayStyle.Flex : DisplayStyle.None;
             _equipmentVariant.SetEnabled(hasVariant);
             _equipmentClass.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
             _equipmentClass.text = _scene.CanCycleSourcePoseClass

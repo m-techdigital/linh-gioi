@@ -1,6 +1,6 @@
-## Next inventory detail layout action — 2026-09-13
+## Next inventory/UI polish after detail action cleanup — 2026-09-13
 
-The detail thumbnail hierarchy is improved, but the detail action row sits close to the lower edge in Player evidence. Next safe UI polish: give the right detail card better vertical spacing/action-row layout and continue matching the owner reference with shared skin helpers. Keep runtime/approved art only; do not add placeholder or random generated icons.
+Hành trang detail action row is now stable in Player evidence: `build/map01a-inventory-detail-actions-capture-v4/07-q04-inventory-open.png`. Continue broader Map01A UI/UX alignment against the owner references: improve the inventory shell/card hierarchy, tab spacing, readable item art framing, and separate Hành trang/Thông tin/Rương đồ presentation through shared `CongDongLamArrivalHud.Skin.cs` helpers. Keep runtime/approved art only; do not add fake/generic icons or random generated item art.
 
 ## Next inventory/UI action after grid runtime thumbnails — 2026-09-13
 
