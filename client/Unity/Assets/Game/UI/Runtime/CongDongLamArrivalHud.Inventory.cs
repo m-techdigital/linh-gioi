@@ -248,8 +248,8 @@ namespace LinhGioi.UI
             storageActions.style.marginTop = 16;
             var deposit = InventoryButton(() => { }, "Map01A Storage Deposit", "Gửi đồ");
             var withdraw = InventoryButton(() => { }, "Map01A Storage Withdraw", "Rút đồ");
-            deposit.SetEnabled(false);
-            withdraw.SetEnabled(false);
+            ApplyLgoDisabledAction(deposit);
+            ApplyLgoDisabledAction(withdraw);
             storageActions.Add(deposit);
             storageActions.Add(withdraw);
             _storagePanel.Add(storageActions);

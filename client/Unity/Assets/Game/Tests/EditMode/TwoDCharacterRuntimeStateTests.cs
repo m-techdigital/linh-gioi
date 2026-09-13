@@ -408,8 +408,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Storage State").text, Does.Contain("bên phải"),
                     "Storage copy must preserve the decided right-side item detail placement.");
                 Assert.That(root.Q<Label>("Map01A Storage Gate Safety").text, Does.Contain("Không tạo vật phẩm giả"));
-                Assert.That(root.Q<Button>("Map01A Storage Deposit").enabledSelf, Is.False);
-                Assert.That(root.Q<Button>("Map01A Storage Withdraw").enabledSelf, Is.False);
+                var deposit = root.Q<Button>("Map01A Storage Deposit");
+                var withdraw = root.Q<Button>("Map01A Storage Withdraw");
+                Assert.That(deposit.enabledSelf, Is.False);
+                Assert.That(withdraw.enabledSelf, Is.False);
+                Assert.That(deposit.style.opacity.value, Is.EqualTo(.58f),
+                    "Locked storage actions should use the shared disabled-action skin, not raw inactive buttons.");
+                Assert.That(withdraw.style.opacity.value, Is.EqualTo(.58f));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
             }
             finally

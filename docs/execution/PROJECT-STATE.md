@@ -1,3 +1,7 @@
+## Active worktree goal lock: Map01A UI/UX only — 2026-09-13
+
+Owner explicitly redirected this worktree away from class/wardrobe development. Do not continue Kiếm/Pháp/Cơ/Linh art, outfit, source-pose, Player class build/capture, or rollback work here. Keep already-pushed class audit guards as safety checks only. Current valid work is Map01A product UI/UX and gameplay flow: login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue/HUD readability, and map interactions using shared UI helpers and approved/runtime assets. If a task would require class visual repair, stop that path and choose a Map01A/UI task instead.
+
 ## Owner direction: stop class development in this worktree — 2026-09-13
 
 Owner clarified that Kiếm/Pháp/Cơ/Linh class development should not continue in this task because class handling is moving in another task. Do not rollback existing class/wardrobe code or old checkpoints. The only retained change in the current checkpoint is an audit guard that records actor-scale metrics and prevents jump/run scale regressions from passing technical capture; it does not modify class art, class packs, camera, base, scale, or wardrobe assets. Future work in this worktree should return to Map01A/UI/gameplay flow unless the owner explicitly reopens class work here.

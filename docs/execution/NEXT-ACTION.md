@@ -1,10 +1,6 @@
-## Next action after class work halt — 2026-09-13
+## Active goal lock — Map01A UI/UX only in this worktree — 2026-09-13
 
-Do not continue class/wardrobe art development in this worktree and do not rollback existing class code. Preserve the actor-scale audit guard as a safety check, then continue with Map01A product work: UI/UX polish, inventory/info/storage flow, NPC dialogue/HUD readability, and playable map interactions using existing approved/runtime assets only. No random class art generation, no Meshy/3D, no frozen surfaces.
-
-## Next class/wardrobe action after actor-scale guard — 2026-09-13
-
-Continue class/wardrobe work through deterministic source-pose or approved design assets only. The capture gate now prevents jump/run actor-scale inflation from passing silently, but Kiếm/Pháp/Cơ/Linh still require visual design audit at large Player size before any production/owner-facing completion claim. Next safe class work: add stronger visual/design acceptance checks for slot removal/mixed-level silhouettes or continue Map01A UI polish if no accepted class source board is available. Do not use random image generation, camera/scale changes, or the draft `TwoDClassMixedLoadoutFitPreview` status as visual pass.
+Continue Map01A product work only: UI/UX polish, login/auth, Hành trang, Thông tin, Rương đồ, NPC dialogue/HUD readability, and playable map interactions using existing approved/runtime assets. Do not continue Kiếm/Pháp/Cơ/Linh class/wardrobe art development in this worktree, do not run class build/capture loops for routine UI work, and do not rollback existing class code. Keep the actor-scale audit guard only as a safety checkpoint already pushed; it is not a reason to resume class work here. No random class/item art generation, no Meshy/3D, no frozen surfaces.
 
 ## Next Map01A UI polish after entry glyph cleanup — 2026-09-13
 
