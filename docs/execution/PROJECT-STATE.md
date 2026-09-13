@@ -1,3 +1,9 @@
+## Map01A — trạng thái máy chủ đăng nhập giữ đúng một hàng — 2026-09-14
+
+- Visual audit Player phát hiện `● Mượt` bị flex-shrink và xuống hai dòng giữa tên server và nút đổi server, lệch rõ reference đăng nhập.
+- Label trạng thái giờ khóa `NoWrap`, không shrink và có chiều rộng tối thiểu; tên server, trạng thái và affordance đổi server nằm cùng một hàng mà không đổi shared detail-card hoặc layout màn khác.
+- TDD RED fail đúng ở `WhiteSpace.Normal`; GREEN targeted `1/1`, full `TwoDCharacterRuntimeStateTests` đạt `20/20`. Player `build/map01a-entry-server-state-player-v1/LinhGioiOnline.app` build thành công, evidence `build/map01a-entry-server-state-runtime-v1/entry-login.png` đã visual audit ở 1600×900, không còn wrap/chồng.
+
 ## Map01A — catalog hiện hành đã khóa vào design năm tab — 2026-09-14
 
 - Audit phát hiện `Current evidence` vẫn trỏ vào modal chọn class và bộ Hành trang ba tab cũ, tạo rủi ro reviewer hoặc phiên sau quay lại luồng đã loại.

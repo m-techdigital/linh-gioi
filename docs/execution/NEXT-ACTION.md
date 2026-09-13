@@ -1,3 +1,9 @@
+## Next — sau khi sửa hàng trạng thái máy chủ đăng nhập — 2026-09-14
+
+`CONTINUE`. Evidence entry hiện hành là `build/map01a-entry-server-state-runtime-v1/entry-login.png`; `● Mượt` phải giữ một dòng cùng tên server và nút đổi server. Player: `build/map01a-entry-server-state-player-v1/LinhGioiOnline.app`.
+
+Next valid work: tiếp tục Map01A/UI bằng sai lệch Player rõ, ưu tiên interaction/HUD/NPC hoặc shared component có ảnh hưởng trực tiếp; không micro-polish entry nếu không có lỗi mới. Giữ design năm tab, asset provenance gate và không quay lại class/pose/wardrobe/source.
+
 ## Next — sau khi khóa catalog vào evidence năm tab hiện hành — 2026-09-14
 
 `CONTINUE`. Catalog hiện hành chỉ trỏ tới entry, hub năm tab, route và Menu đang dùng; validator chặn character-select và inventory ba tab cũ quay lại phần `Current evidence`. Evidence hub mới nhất vẫn là `build/map01a-five-tab-player-copy-runtime-v1/`.

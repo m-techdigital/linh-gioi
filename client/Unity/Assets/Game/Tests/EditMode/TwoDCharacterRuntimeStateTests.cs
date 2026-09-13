@@ -536,7 +536,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("trải nghiệm"));
                 Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
                 Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
-                Assert.That(root.Q<Label>("Map01A Entry Server State").text, Does.Contain("Mượt"));
+                var serverState = root.Q<Label>("Map01A Entry Server State");
+                Assert.That(serverState.text, Does.Contain("Mượt"));
+                Assert.That(serverState.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
+                    "Server quality must remain on one line like the approved entry reference.");
+                Assert.That(serverState.style.flexShrink.value, Is.EqualTo(0),
+                    "Server quality must not collapse between the server name and switch affordance.");
+                Assert.That(serverState.style.minWidth.value.value, Is.GreaterThanOrEqualTo(68));
                 Assert.That(root.Q("Map01A Entry Server Card").ClassListContains("lgo-detail-card"), Is.True,
                     "Entry server summary must inherit the shared detail-card foundation.");
                 var serverSwitch = root.Q<Button>("Map01A Entry Server Switch");

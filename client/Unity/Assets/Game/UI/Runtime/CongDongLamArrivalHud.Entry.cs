@@ -182,6 +182,9 @@ namespace LinhGioi.UI
             serverName.style.flexGrow = 1;
             var serverState = LgoLabel("● Mượt", 16, new Color(.58f, 1f, .36f, .96f), true);
             serverState.name = "Map01A Entry Server State";
+            serverState.style.whiteSpace = WhiteSpace.NoWrap;
+            serverState.style.flexShrink = 0;
+            serverState.style.minWidth = 68;
             serverState.style.marginRight = 8;
             var serverSwitch = new Button { name = "Map01A Entry Server Switch", text = "Đổi máy chủ" };
             ApplyLgoEntrySecondaryAction(serverSwitch, minWidth: 142);
