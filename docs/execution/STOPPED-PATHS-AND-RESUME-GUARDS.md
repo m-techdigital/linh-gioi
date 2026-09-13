@@ -77,6 +77,28 @@ Resume condition:
 - any repair must start from source-space body/slot measurements, accepted source/design evidence, and grouped board review
 - after two repeated failures on the same assumption, record the root cause before making another candidate
 
+## Stopped path 4: raw image/prompt candidate without numeric slot envelope
+
+Status: stopped as a repeatable production method.
+
+Do not continue:
+
+- generating another outfit piece from a raw prompt/reference image and placing it directly on the six-pose body
+- using alpha cleanup or background removal as proof that a generated layer is source-ready
+- asking for owner review of a candidate that has not first passed a measured overlay check against the slot envelope
+
+Reason:
+
+- the `waist_belt/jump_tuck` ImageGen candidate produced cleaner style than the line/knot draft, but the overlay failed visual review because the belt scale and ribbons were much too large for the jump body
+- alpha cleanup solved only the RGB/checkerboard artifact; it did not solve body-space fit, occlusion or long-term reuse
+- repeating prompts without measured bounds returns to the slow trial loop the owner explicitly rejected
+
+Resume condition:
+
+- before creating or staging another generated/painted candidate, define the target slot envelope in the 1024×1536 source profile from body authority plus accepted neighboring pose/source evidence
+- the candidate must pass an overlay board against that envelope before it can enter the repair source directories
+- if the envelope cannot be defined for a slot/pose, keep that slot missing and move to a source-authoring method that can be measured
+
 ## Evidence that must not be promoted
 
 The following evidence may be read, but not promoted to runtime-ready status:
@@ -85,6 +107,7 @@ The following evidence may be read, but not promoted to runtime-ready status:
 - Blender/GarmentCode flat-panel direct-fit overlays
 - Krita CLI export timeout result
 - KRA archive mergedimage extraction
+- `waist-belt-jump-imagegen-candidate-v1`
 - source boards or guide boards marked authoring aid, review-only, partial, `SOURCE_VISUAL_FIX_REQUIRED`, or `runtimePromotionAllowed=false`
 
 ## Resume checklist
