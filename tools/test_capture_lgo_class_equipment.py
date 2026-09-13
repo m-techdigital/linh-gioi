@@ -43,6 +43,14 @@ class ClassEquipmentCaptureCommandTests(unittest.TestCase):
                     "promotionStatus": "AUDIT_ONLY_NOT_PROMOTION_READY",
                     "runtimeEligibleCount": 0,
                     "frames": 27,
+                    "actorFrameMetrics": [
+                        {"file": "male-lv10-full.bmp", "actorHeightRatio": 0.28},
+                        {"file": "male-lv10-jump-apex.bmp", "actorHeightRatio": 0.31}
+                    ],
+                    "idleActorHeightRatio": 0.28,
+                    "maxRunToIdleHeightRatio": 1.04,
+                    "maxJumpToIdleHeightRatio": 1.11,
+                    "maxMotionToIdleHeightRatio": 1.11,
                     "errors": [],
                 }))
                 return subprocess.CompletedProcess(command, 0)
@@ -52,6 +60,62 @@ class ClassEquipmentCaptureCommandTests(unittest.TestCase):
 
             self.assertEqual("AUDIT_ONLY_NOT_PROMOTION_READY", data["promotionStatus"])
             self.assertEqual(0, data["runtimeEligibleCount"])
+
+
+    def test_capture_rejects_manifest_without_actor_scale_metrics(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            player = Path(tmp) / "Unity"
+            player.write_text("stub")
+            out = Path(tmp) / "out"
+
+            def write_manifest(command, cwd=None):
+                art_dir = Path(command[command.index("--lgo-map01a-art-dir") + 1])
+                art_dir.mkdir(parents=True, exist_ok=True)
+                (art_dir / "manifest.json").write_text(json.dumps({
+                    "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
+                    "fitStatus": "DRAFT_RUNTIME_FIT",
+                    "promotionStatus": "AUDIT_ONLY_NOT_PROMOTION_READY",
+                    "runtimeEligibleCount": 0,
+                    "frames": 27,
+                    "errors": [],
+                }))
+                return subprocess.CompletedProcess(command, 0)
+
+            with patch.object(capture.subprocess, "run", side_effect=write_manifest):
+                with self.assertRaisesRegex(RuntimeError, "actor scale metrics"):
+                    capture.capture(player, "kiem", out)
+
+    def test_capture_accepts_manifest_with_actor_scale_metrics(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            player = Path(tmp) / "Unity"
+            player.write_text("stub")
+            out = Path(tmp) / "out"
+
+            def write_manifest(command, cwd=None):
+                art_dir = Path(command[command.index("--lgo-map01a-art-dir") + 1])
+                art_dir.mkdir(parents=True, exist_ok=True)
+                (art_dir / "manifest.json").write_text(json.dumps({
+                    "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
+                    "fitStatus": "DRAFT_RUNTIME_FIT",
+                    "promotionStatus": "AUDIT_ONLY_NOT_PROMOTION_READY",
+                    "runtimeEligibleCount": 0,
+                    "frames": 27,
+                    "actorFrameMetrics": [
+                        {"file": "male-lv10-full.bmp", "actorHeightRatio": 0.28},
+                        {"file": "male-lv10-jump-apex.bmp", "actorHeightRatio": 0.31}
+                    ],
+                    "idleActorHeightRatio": 0.28,
+                    "maxRunToIdleHeightRatio": 1.04,
+                    "maxJumpToIdleHeightRatio": 1.11,
+                    "maxMotionToIdleHeightRatio": 1.11,
+                    "errors": [],
+                }))
+                return subprocess.CompletedProcess(command, 0)
+
+            with patch.object(capture.subprocess, "run", side_effect=write_manifest):
+                data = capture.capture(player, "kiem", out)
+
+            self.assertLessEqual(data["maxJumpToIdleHeightRatio"], 1.18)
 
     def test_capture_rejects_manifest_that_claims_promotion_ready(self):
         with tempfile.TemporaryDirectory() as tmp:

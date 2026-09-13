@@ -69,6 +69,15 @@ def capture(player: Path, class_id: str, output_dir: Path, keep_existing: bool =
             raise RuntimeError("class capture must remain audit-only: unexpected promotionStatus=" + str(data.get("promotionStatus")))
         if data.get("runtimeEligibleCount") != 0:
             raise RuntimeError("class capture must remain audit-only: runtimeEligibleCount=" + str(data.get("runtimeEligibleCount")))
+        metrics = data.get("actorFrameMetrics")
+        if not isinstance(metrics, list) or len(metrics) < 2 or data.get("idleActorHeightRatio", 0) <= 0:
+            raise RuntimeError("class capture missing actor scale metrics")
+        if data.get("maxRunToIdleHeightRatio", 0) <= 0 or data.get("maxJumpToIdleHeightRatio", 0) <= 0:
+            raise RuntimeError("class capture missing actor scale metrics")
+        if data.get("maxJumpToIdleHeightRatio", 0) > 1.18:
+            raise RuntimeError("class capture jump actor scale exceeds locked base ratio: " + str(data.get("maxJumpToIdleHeightRatio")))
+        if data.get("maxRunToIdleHeightRatio", 0) > 1.12:
+            raise RuntimeError("class capture run actor scale exceeds locked base ratio: " + str(data.get("maxRunToIdleHeightRatio")))
     if result.returncode != 0:
         raise RuntimeError(f"Player capture failed with exit {result.returncode}: {manifest}")
     return data

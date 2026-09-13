@@ -26,10 +26,23 @@ namespace LinhGioi.World
             public int motionCases;
             public int minVisibleSlots = 10;
             public int maxVisibleComponents;
+            public float idleActorHeightRatio;
+            public float maxRunToIdleHeightRatio;
+            public float maxJumpToIdleHeightRatio;
+            public float maxMotionToIdleHeightRatio;
+            public List<ClassActorFrameMetric> actorFrameMetrics = new List<ClassActorFrameMetric>();
             public string[] levels = { "1", "10", "20", "30" };
             public string[] genders = { "male", "female" };
             public string finalSnapshot;
             public List<string> errors = new List<string>();
+        }
+
+        [Serializable]
+        private sealed class ClassActorFrameMetric
+        {
+            public string file;
+            public float actorHeightRatio;
+            public float normalizedToIdle;
         }
 
         private IEnumerator CaptureClassEquipmentReview()
@@ -122,6 +135,13 @@ namespace LinhGioi.World
                 result.errors.Add("incomplete capture matrix");
             if (result.minVisibleSlots != 9 || result.maxVisibleComponents != 13)
                 result.errors.Add("unexpected visible slot/component counts");
+            if (result.idleActorHeightRatio <= 0f || result.maxRunToIdleHeightRatio <= 0f
+                || result.maxJumpToIdleHeightRatio <= 0f || result.actorFrameMetrics.Count != result.frames)
+                result.errors.Add("missing actor scale metrics");
+            if (result.maxRunToIdleHeightRatio > 1.12f)
+                result.errors.Add("run actor scale exceeds locked base ratio: " + result.maxRunToIdleHeightRatio.ToString("0.###"));
+            if (result.maxJumpToIdleHeightRatio > 1.18f)
+                result.errors.Add("jump actor scale exceeds locked base ratio: " + result.maxJumpToIdleHeightRatio.ToString("0.###"));
             if (result.errors.Count > 0) result.status = "FIX_REQUIRED";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), JsonUtility.ToJson(result, true));
             Application.Quit(result.errors.Count == 0 ? 0 : 1);
@@ -143,6 +163,20 @@ namespace LinhGioi.World
                 result.errors.Add(name + ": expected 10 slots/13 components");
             if (name.Contains("-off-") && visibleSlots != 9)
                 result.errors.Add(name + ": expected 9 visible slots");
+
+            var actorHeightRatio = RegisteredActorScreenHeightRatio(
+                Camera.main, _classFitPreview.VisibleWorldBounds(), Screen.height);
+            if (name == "male-lv10-full") result.idleActorHeightRatio = actorHeightRatio;
+            var normalized = result.idleActorHeightRatio > 0f ? actorHeightRatio / result.idleActorHeightRatio : 1f;
+            if (name.Contains("run")) result.maxRunToIdleHeightRatio = Mathf.Max(result.maxRunToIdleHeightRatio, normalized);
+            if (name.Contains("jump")) result.maxJumpToIdleHeightRatio = Mathf.Max(result.maxJumpToIdleHeightRatio, normalized);
+            if (name.Contains("run") || name.Contains("jump")) result.maxMotionToIdleHeightRatio = Mathf.Max(result.maxMotionToIdleHeightRatio, normalized);
+            result.actorFrameMetrics.Add(new ClassActorFrameMetric
+            {
+                file = name + ".bmp",
+                actorHeightRatio = actorHeightRatio,
+                normalizedToIdle = normalized
+            });
 
             var active = RenderTexture.active;
             var image = new Texture2D(Screen.width, Screen.height, TextureFormat.RGBA32, false);

@@ -66,6 +66,8 @@ namespace LinhGioi.Tests.EditMode
                 preview.SetActive(true, "male", "run");
                 Assert.That(preview.VisibleSlotCount, Is.EqualTo(10));
                 Assert.That(preview.VisibleComponentCount, Is.EqualTo(13));
+                Assert.That(preview.VisibleWorldBounds().size.y, Is.GreaterThan(.1f),
+                    "Class capture must measure actor bounds so jump/run scale regressions cannot pass as technical success.");
                 Assert.That(preview.AvailableLevels, Is.EqualTo(new[] { 1, 10, 20, 30 }));
                 StringAssert.Contains("slots=10/10", preview.Snapshot);
                 StringAssert.Contains("sharedSkeleton=lgo_humanoid_2d_v1", preview.Snapshot);

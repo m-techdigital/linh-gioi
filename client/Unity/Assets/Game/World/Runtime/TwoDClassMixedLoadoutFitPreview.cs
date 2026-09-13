@@ -129,6 +129,19 @@ namespace LinhGioi.World
             .Select(view => view.Source.slotId).Distinct(StringComparer.Ordinal).Count();
         public int VisibleItemCount => VisibleSlotCount;
         public int ValidSpriteSkinCount => 0;
+
+        public Bounds VisibleWorldBounds()
+        {
+            var hasBounds = false;
+            var bounds = new Bounds();
+            foreach (var view in _views)
+            {
+                if (view.Renderer == null || !view.Renderer.enabled || view.Renderer.sprite == null) continue;
+                if (!hasBounds) { bounds = view.Renderer.bounds; hasBounds = true; }
+                else bounds.Encapsulate(view.Renderer.bounds);
+            }
+            return hasBounds ? bounds : new Bounds(_root.position, Vector3.zero);
+        }
         public string Snapshot => _classLabel + "MixedLoadoutFitPreview: status=DRAFT_RUNTIME_FIT"
             + " | runtimeEligibleCount=0 | atlases=2x1024 | slots=" + VisibleSlotCount + "/10"
             + " | components=" + VisibleComponentCount + " | gender=" + _gender + " | motion=" + _motion
