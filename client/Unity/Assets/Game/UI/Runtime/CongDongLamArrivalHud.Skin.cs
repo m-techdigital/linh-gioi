@@ -61,14 +61,14 @@ namespace LinhGioi.UI
             return divider;
         }
 
-        private static void ApplyLgoItemIcon(Label label)
+        private static void ApplyLgoItemIcon(VisualElement icon)
         {
-            label.style.width = 58;
-            label.style.height = 58;
-            label.style.marginTop = 8;
-            label.style.marginBottom = 4;
-            label.style.unityTextAlign = TextAnchor.MiddleCenter;
-            ApplyLgoFrame(label, new Color(.025f, .075f, .130f, .96f), new Color(.92f, .72f, .36f, .86f));
+            icon.style.width = 58;
+            icon.style.height = 58;
+            icon.style.marginTop = 8;
+            icon.style.marginBottom = 4;
+            icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            ApplyLgoFrame(icon, new Color(.025f, .075f, .130f, .96f), new Color(.92f, .72f, .36f, .86f));
         }
 
         private static Label LgoLabel(string text, int size, Color color, bool bold = false)

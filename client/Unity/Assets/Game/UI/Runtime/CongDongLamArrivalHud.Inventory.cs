@@ -11,6 +11,8 @@ namespace LinhGioi.UI
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
+        private VisualElement[] _equipmentTileIcons;
+        private Label[] _equipmentTileNames, _equipmentTileStates;
         private bool _characterInfoOpen, _suppliesOpen, _storageOpen;
 
         private Button InventoryButton(Action action, string name, string text = "")
@@ -235,18 +237,51 @@ namespace LinhGioi.UI
             _equipmentPage.style.flexWrap = Wrap.Wrap;
             _equipmentPage.style.flexShrink = 0;
             _equipmentTiles = new Button[_equipmentSlotIds.Count];
+            _equipmentTileIcons = new VisualElement[_equipmentSlotIds.Count];
+            _equipmentTileNames = new Label[_equipmentSlotIds.Count];
+            _equipmentTileStates = new Label[_equipmentSlotIds.Count];
             for (var i = 0; i < _equipmentSlotIds.Count; i++)
             {
                 var slotId = _equipmentSlotIds[i];
                 var tile = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "Map01A Equipment Item Tile " + slotId);
                 tile.style.flexGrow = 0;
                 tile.style.flexBasis = new Length(31.5f, LengthUnit.Percent);
-                tile.style.height = 72;
+                tile.style.height = 84;
                 tile.style.marginRight = 6;
                 tile.style.marginBottom = 7;
                 tile.style.fontSize = 15;
-                tile.style.unityTextAlign = TextAnchor.MiddleCenter;
+                tile.style.flexDirection = FlexDirection.Row;
+                tile.style.alignItems = Align.Center;
+                tile.style.justifyContent = Justify.FlexStart;
+                tile.style.unityTextAlign = TextAnchor.MiddleLeft;
+
+                var icon = new VisualElement { name = "Map01A Equipment Item Icon " + slotId };
+                ApplyLgoItemIcon(icon);
+                icon.style.width = 46;
+                icon.style.height = 46;
+                icon.style.marginTop = 0;
+                icon.style.marginBottom = 0;
+                icon.style.marginLeft = 2;
+                icon.style.marginRight = 8;
+                tile.Add(icon);
+
+                var textGroup = new VisualElement { name = "Map01A Equipment Item Text " + slotId };
+                textGroup.style.flexGrow = 1;
+                textGroup.style.minWidth = 0;
+                textGroup.style.flexDirection = FlexDirection.Column;
+                var nameLabel = LgoLabel("", 14, UiText, true);
+                nameLabel.name = "Map01A Equipment Item Name " + slotId;
+                var stateLabel = LgoLabel("", 12, UiSubText);
+                stateLabel.name = "Map01A Equipment Item State " + slotId;
+                stateLabel.style.marginTop = 2;
+                textGroup.Add(nameLabel);
+                textGroup.Add(stateLabel);
+                tile.Add(textGroup);
+
                 _equipmentTiles[i] = tile;
+                _equipmentTileIcons[i] = icon;
+                _equipmentTileNames[i] = nameLabel;
+                _equipmentTileStates[i] = stateLabel;
                 _equipmentPage.Add(tile);
             }
             scroll.Add(_equipmentPage);
@@ -355,6 +390,16 @@ namespace LinhGioi.UI
                 _equipmentTiles[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
                     ? new Color(.12f, .33f, .56f, .98f)
                     : equipped ? new Color(.045f, .12f, .18f, .96f) : new Color(.025f, .040f, .052f, .78f);
+                if (_equipmentTileNames != null && index < _equipmentTileNames.Length)
+                    _equipmentTileNames[index].text = EquipmentShortName(slotId) + " · Lv" + level;
+                if (_equipmentTileStates != null && index < _equipmentTileStates.Length)
+                    _equipmentTileStates[index].text = equipped ? "Đang mặc" : "Đã tháo";
+                if (_equipmentTileIcons != null && index < _equipmentTileIcons.Length)
+                {
+                    var thumbnail = _scene.GetVoEquipmentThumbnailSprite(slotId);
+                    _equipmentTileIcons[index].style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
+                    _equipmentTileIcons[index].style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
+                }
             }
         }
 

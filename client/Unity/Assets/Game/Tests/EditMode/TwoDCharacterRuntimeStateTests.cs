@@ -188,6 +188,11 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory detail must show real runtime equipment art instead of hiding behind fake icons.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Is.Empty,
                     "Inventory must not present emoji/text badges as final item art.");
+                var weaponTileIcon = root.Q<VisualElement>("Map01A Equipment Item Icon main_weapon");
+                Assert.That(weaponTileIcon, Is.Not.Null,
+                    "Equipment grid tiles must show the same real runtime thumbnail art, not text-only placeholders.");
+                Assert.That(weaponTileIcon.style.backgroundImage.value.sprite, Is.EqualTo(weaponThumbnail));
+                Assert.That(weaponTileIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Does.Contain("Công"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Fit").text, Does.Contain("Khớp"));
