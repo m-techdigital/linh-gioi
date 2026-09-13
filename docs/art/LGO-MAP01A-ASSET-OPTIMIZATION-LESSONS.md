@@ -278,3 +278,9 @@ V10 vẫn `FIX_REQUIRED`: source cutout chưa có anchor khớp và vùng overla
 ## Capture theo state marker và nền tương phản — 2026-09-13
 
 Capture theo timer ngoài đã chụp thừa editor và bỏ sót state. Probe nay tự chụp framebuffer sau `EndOfFrame`, tên file gồm index + state; v14 có đúng 9/9 ảnh cho timeline. Không dùng `ScreenCapture` vì project tắt module đó; `ReadPixels` + BMP là đường đã chạy được mà không thêm package. Nền gần đen che silhouette áo/quần đen, nên review scene dùng xanh xám trung tính; background là công cụ evidence, không đổi art/runtime game. V14 xác nhận root/bone ratio ổn định khi jump/attack nhưng vẫn giữ `FIX_REQUIRED` cho ba joint source và seam garment-body chưa đo.
+
+## Số đo chính xác vẫn phải có authority — 2026-09-13
+
+V1–v14 dùng đúng các tọa độ idle trong `pose-registration-guide-v1`, nhưng builder hardcode chúng và không ghi rằng guide có status `DRAFT_GUIDE_REQUIRES_REVIEW`, landmark được ước lượng thủ công và tài liệu cấm coi nó là bind pose mới. V15 đọc profile thật, kiểm canvas/origin/ground, ghi SHA/status và đặt `bindProfileRuntimeAuthority=false`. Ba joint fail trước đó chỉ là sai khác với guide nháp; không được dùng riêng chúng để tự sửa source.
+
+macOS Vision được thử như tool đối chiếu không cần tải model: nhận body ở đủ 6/6 pose, nhưng trong 78 landmark chỉ 72 điểm đạt confidence tối thiểu 0,2; không điểm nào khớp dung sai bind 2px, median lệch 28,39px và `run_b` có nhận nhầm tới 489,42px. Vision hữu ích để phát hiện outlier lớn và so độc lập với review radius, không đủ tạo authority cho nhân vật stylized/khớp bị che. Bước đúng là author/duyệt một rest-rig blueprint có joint center và policy chân rõ; sau đó toàn bộ body, animation và item dùng lại profile có hash này.

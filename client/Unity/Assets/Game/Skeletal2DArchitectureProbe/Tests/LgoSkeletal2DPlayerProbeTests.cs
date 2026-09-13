@@ -108,5 +108,28 @@ namespace LinhGioi.Tests
             Assert.That(LgoSkeletal2DPlayerProbe.CaptureLabel(1, "run"), Is.EqualTo("02-run.bmp"));
             Assert.That(LgoSkeletal2DPlayerProbe.CaptureLabel(8, "run"), Is.EqualTo("09-run.bmp"));
         }
+
+        [Test]
+        public void BindProfile_ExposesDraftStatusAndDerivesFeetFromGroundPolicy()
+        {
+            const string json = @"{
+              ""status"":""DRAFT_GUIDE_REQUIRES_REVIEW"",""guideId"":""test-guide"",
+              ""sourceSpaceProfile"":""lgo_character_canvas_1024x1536_v1"",""sourceCanvas"":[1024,1536],
+              ""coordinateOrigin"":""top_left"",""originX"":512,""groundY"":1484,
+              ""poses"":[{""pose"":""idle"",""landmarks"":[
+                {""id"":""crown"",""xy"":[520,77]},{""id"":""neck"",""xy"":[510,263]},
+                {""id"":""near_shoulder"",""xy"":[403,322]},{""id"":""near_elbow"",""xy"":[351,519]},{""id"":""near_wrist"",""xy"":[349,721]},
+                {""id"":""far_shoulder"",""xy"":[585,342]},{""id"":""far_elbow"",""xy"":[640,554]},{""id"":""far_wrist"",""xy"":[686,728]},
+                {""id"":""near_hip"",""xy"":[480,718]},{""id"":""near_knee"",""xy"":[407,1002]},{""id"":""near_ankle"",""xy"":[337,1351]},
+                {""id"":""far_hip"",""xy"":[589,720]},{""id"":""far_knee"",""xy"":[628,1017]},{""id"":""far_ankle"",""xy"":[645,1350]}
+              ]}] }";
+
+            var profile = LgoSkeletal2DBindProfile.Parse(json);
+            var segments = profile.CreateReviewSegments();
+
+            Assert.That(profile.RuntimeAuthority, Is.False);
+            Assert.That(segments.Single(segment => segment.Id == "near_shin").End, Is.EqualTo(new Vector2(337, 1484)));
+            Assert.That(segments.Single(segment => segment.Id == "pelvis").Start, Is.EqualTo(new Vector2(534.5f, 719f)));
+        }
     }
 }

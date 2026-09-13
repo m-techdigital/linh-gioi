@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using LinhGioi.ArchitectureProbe;
 using LinhGioi.World;
 using UnityEditor;
@@ -23,8 +24,9 @@ namespace LinhGioi.ArchitectureProbe.Editor
         private sealed class BuildEvidence
         {
             public string status, unityVersion, output, sourceProfile;
+            public string bindProfileGuideId, bindProfileStatus, bindProfileSha256, bindProfileGateStatus, lowerLegEndpointPolicy;
             public int errors, warnings, spriteSkinCount, bodyCutoutPartCount, garmentRestMasterCount, poseSpecificGarmentSourceCount;
-            public bool authoredGarmentWeights, runtimePromotionAllowed;
+            public bool authoredGarmentWeights, bindProfileRuntimeAuthority, runtimePromotionAllowed;
             public ulong totalSizeBytes;
             public PartRegistrationEvidence[] bodyPartRegistration;
             public JointRegistrationEvidence[] jointRegistration;
@@ -54,6 +56,8 @@ namespace LinhGioi.ArchitectureProbe.Editor
         {
             if (AssetDatabase.IsValidFolder(TempRoot)) AssetDatabase.DeleteAsset(TempRoot);
             Directory.CreateDirectory(ToFullPath(TempRoot));
+            var bindProfilePath = RequireEnvironment("LGO_SKELETAL2D_BIND_PROFILE");
+            var bindProfile = LgoSkeletal2DBindProfile.Parse(File.ReadAllText(bindProfilePath));
             var rigQaPath = RequireEnvironment("LGO_SKELETAL2D_RIG_QA");
             var bodyJob = JsonUtility.FromJson<RigSourceJob>(File.ReadAllText(rigQaPath));
             if (bodyJob?.parts == null || bodyJob.parts.Length != 10)
@@ -72,7 +76,7 @@ namespace LinhGioi.ArchitectureProbe.Editor
 
             var scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
             var actor = new GameObject("Skeletal2DReviewActor");
-            var skeleton = BuildSkeleton(actor.transform);
+            var skeleton = BuildSkeleton(actor.transform, bindProfile.CreateReviewSegments());
             var definitions = skeleton.Select(item => item.Definition).ToArray();
             var binder = new TwoDRegisteredSpriteSkin(actor.transform, definitions);
 
@@ -131,7 +135,11 @@ namespace LinhGioi.ArchitectureProbe.Editor
                 totalSizeBytes = summary.totalSize, errors = summary.totalErrors, warnings = summary.totalWarnings,
                 spriteSkinCount = UnityEngine.Object.FindObjectsByType<SpriteSkin>(FindObjectsInactive.Include, FindObjectsSortMode.None).Length,
                 bodyCutoutPartCount = 10, garmentRestMasterCount = 1, poseSpecificGarmentSourceCount = 0,
-                authoredGarmentWeights = true, sourceProfile = "lgo_character_canvas_1024x1536_v1",
+                authoredGarmentWeights = true, sourceProfile = bindProfile.sourceSpaceProfile,
+                bindProfileGuideId = bindProfile.guideId, bindProfileStatus = bindProfile.status,
+                bindProfileSha256 = Sha256(bindProfilePath), bindProfileRuntimeAuthority = bindProfile.RuntimeAuthority,
+                bindProfileGateStatus = bindProfile.RuntimeAuthority ? "PASS" : "REVIEW_ONLY_DRAFT_NOT_AUTHORITY",
+                lowerLegEndpointPolicy = "ankle_x_to_registered_ground_y_for_rigid_shin_foot_cutout",
                 runtimePromotionAllowed = false, bodyPartRegistration = bodyRegistration.ToArray(),
                 jointRegistration = jointRegistration,
                 jointRegistrationGateStatus = jointRegistration.All(item => item.status == "PASS") ? "PASS" : "FIX_REQUIRED",
@@ -151,21 +159,8 @@ namespace LinhGioi.ArchitectureProbe.Editor
             public TwoDRegisteredSpriteSkin.Bone Definition { get; }
         }
 
-        private static SkeletonBone[] BuildSkeleton(Transform actor)
+        private static SkeletonBone[] BuildSkeleton(Transform actor, LgoSkeletal2DBindProfile.Segment[] source)
         {
-            var source = new[]
-            {
-                new BoneSource("pelvis", -1, new Vector2(534.5f, 719f), new Vector2(510f, 263f)),
-                new BoneSource("head", 0, new Vector2(510f, 263f), new Vector2(520f, 77f)),
-                new BoneSource("near_upper_arm", 0, new Vector2(403f, 322f), new Vector2(351f, 519f)),
-                new BoneSource("near_forearm", 2, new Vector2(351f, 519f), new Vector2(349f, 721f)),
-                new BoneSource("far_upper_arm", 0, new Vector2(585f, 342f), new Vector2(640f, 554f)),
-                new BoneSource("far_forearm", 4, new Vector2(640f, 554f), new Vector2(686f, 728f)),
-                new BoneSource("near_thigh", 0, new Vector2(480f, 718f), new Vector2(407f, 1002f)),
-                new BoneSource("near_shin", 6, new Vector2(407f, 1002f), new Vector2(337f, 1484f)),
-                new BoneSource("far_thigh", 0, new Vector2(589f, 720f), new Vector2(628f, 1017f)),
-                new BoneSource("far_shin", 8, new Vector2(628f, 1017f), new Vector2(645f, 1484f)),
-            };
             var result = new SkeletonBone[source.Length];
             for (var i = 0; i < source.Length; i++)
             {
@@ -178,15 +173,6 @@ namespace LinhGioi.ArchitectureProbe.Editor
                         TwoDRegisteredSpriteSkin.SourcePoint(source[i].End.x, source[i].End.y), source[i].Parent));
             }
             return result;
-        }
-
-        private readonly struct BoneSource
-        {
-            public BoneSource(string id, int parent, Vector2 start, Vector2 end) { Id = id; Parent = parent; Start = start; End = end; }
-            public string Id { get; }
-            public int Parent { get; }
-            public Vector2 Start { get; }
-            public Vector2 End { get; }
         }
 
         private static TwoDRegisteredSpriteSkin.AuthoredMesh CreateUpperMesh()
@@ -370,6 +356,12 @@ namespace LinhGioi.ArchitectureProbe.Editor
             var value = Environment.GetEnvironmentVariable(key);
             if (string.IsNullOrWhiteSpace(value)) throw new InvalidOperationException("Missing environment variable " + key);
             return value;
+        }
+
+        private static string Sha256(string path)
+        {
+            using var hash = SHA256.Create();
+            return string.Concat(hash.ComputeHash(File.ReadAllBytes(path)).Select(value => value.ToString("x2")));
         }
     }
 }
