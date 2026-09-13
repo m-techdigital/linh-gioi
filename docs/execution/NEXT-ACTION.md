@@ -1,3 +1,11 @@
+## Validation safety lock: no class test/build side effects for Map01A UI — 2026-09-13
+
+A Unity targeted test invocation for Map01A UI still executed `TwoDSourcePoseReviewTests`, so broad/unsafe Unity filters are not acceptable for this worktree while class work is excluded. Until a Map01A/UI-only Unity gate is verified, do not run class pose/source/wardrobe tests, class Player builds, or class visual captures. If a validator or test command starts touching class runtime, stop that validation path, record it as a gate tooling issue, and continue only with source-safe Map01A/UI work or a narrower verified UI test.
+
+## Operating lock refresh: Map01A/UI only, compact UI audit — 2026-09-13
+
+Owner re-confirmed that this worktree must not drift back into class/wardrobe work. Current active scope is Map01A and UI/UX runtime only: map flow, login, Hành trang/Túi đồ, Thông tin nhân vật, Rương đồ, NPC dialogue, HUD, buttons, typography, and shared UI foundations. Do not continue class development, do not run class build/capture loops, do not rollback existing class code, and do not use class failures as a reason to keep rebuilding. For visible UI work, button and font sizes must be reviewed on Player screenshots before handoff: HUD tabs/buttons should stay compact, modal CTAs may be larger only when they are true primary actions, and any obviously oversized/ugly UI is `FIX_REQUIRED`, not a completed checkpoint.
+
 ## Next Map01A UI polish after entry server switch — 2026-09-13
 
 Continue Map01A product UI/UX only. Entry/login now has a disabled server-switch affordance in the server card; next safe work should improve visual richness and hierarchy using shared UI helpers and approved/runtime assets only. Do not open production auth/server routing, add fake item/class art, or run class build/capture loops. Re-capture Player evidence after visible UI changes.

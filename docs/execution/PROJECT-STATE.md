@@ -1,3 +1,11 @@
+## Validation safety lock: no class test/build side effects for Map01A UI — 2026-09-13
+
+A Unity targeted test invocation for Map01A UI still executed `TwoDSourcePoseReviewTests`, so broad/unsafe Unity filters are not acceptable for this worktree while class work is excluded. Until a Map01A/UI-only Unity gate is verified, do not run class pose/source/wardrobe tests, class Player builds, or class visual captures. If a validator or test command starts touching class runtime, stop that validation path, record it as a gate tooling issue, and continue only with source-safe Map01A/UI work or a narrower verified UI test.
+
+## Operating lock refresh: Map01A/UI only, compact UI audit — 2026-09-13
+
+Owner re-confirmed that this worktree must not drift back into class/wardrobe work. Current active scope is Map01A and UI/UX runtime only: map flow, login, Hành trang/Túi đồ, Thông tin nhân vật, Rương đồ, NPC dialogue, HUD, buttons, typography, and shared UI foundations. Do not continue class development, do not run class build/capture loops, do not rollback existing class code, and do not use class failures as a reason to keep rebuilding. For visible UI work, button and font sizes must be reviewed on Player screenshots before handoff: HUD tabs/buttons should stay compact, modal CTAs may be larger only when they are true primary actions, and any obviously oversized/ugly UI is `FIX_REQUIRED`, not a completed checkpoint.
+
 ## Map01A entry server-switch placeholder — 2026-09-13
 
 Entry/login now reserves the server-switch affordance inside the server card as a disabled `Đổi máy chủ · chưa mở` action. This aligns the login shell with the owner references that expose server/channel controls while avoiding fake production routing or account/server state. TDD evidence: RED failed because `Map01A Entry Server Switch` was missing; GREEN passed `./tools/unity_batch_test.sh --filter EntryScreenSeparatesDevLoginAndStartWithoutChangingMapState` with `UNITY_EDITMODE_RESULTS_VERIFIED total=271 passed=270 failed=0 result=Skipped:Ignored`. Player evidence: `build/map01a-entry-server-switch-runtime-v1/entry-login.png`, manifest `usesOsMouseOrKeyboard=false`, 1600x900. Visual review confirms the server-switch placeholder sits inside the server card without overlapping the form or primary `Bắt đầu` CTA.
