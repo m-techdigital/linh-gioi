@@ -52,6 +52,7 @@ namespace LinhGioi.UI
             navigation.Add(MenuAction("Map01A Menu Character Action", "Nhân vật", "character-info"));
             navigation.Add(MenuAction("Map01A Menu Bag Action", "Rương đồ", "bag"));
             navigation.Add(MenuAction("Map01A Menu Skills Action", "Kỹ năng", "skills"));
+            navigation.Add(MenuAction("Map01A Menu Potential Action", "Tiềm năng", "potential"));
             navigation.Add(MenuAction("Map01A Menu Spirit Pet Action", "Linh thú", "spirit-pet"));
             panel.Add(navigation);
 

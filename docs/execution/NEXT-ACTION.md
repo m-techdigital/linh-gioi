@@ -1,3 +1,9 @@
+## Next — sau khi Menu đủ năm tab đã duyệt — 2026-09-14
+
+`CONTINUE`. Menu đã có đủ Nhân vật, Rương đồ, Kỹ năng, Tiềm năng và Linh thú; Tiềm năng mở đúng panel trong hub chung. Evidence hiện hành: `build/map01a-five-tab-menu-runtime-v1/menu.png`, `build/map01a-five-tab-menu-tabs-runtime-v1/potential.png`; Player `build/map01a-five-tab-menu-player-v1/LinhGioiOnline.app`; full `TwoDCharacterRuntimeStateTests` đạt `20/20`.
+
+Next valid work: audit asset/icon thật có provenance cho Rương đồ và detail-right vì thumbnail trang bị hiện hành vẫn tối, khó đọc hơn design đã duyệt. Chỉ thay qua shared icon source/base, không tạo icon giả hoặc sửa class/pose/wardrobe/source; giữ năm tab compact và không quay lại design cũ.
+
 ## Next — sau post-completion NPC dialogue audit — 2026-09-14
 
 `CONTINUE`. Sau Q09, sáu NPC Map01A dùng trạng thái lời thoại hoàn tất chung và không còn chỉ người chơi quay lại tutorial. Evidence hiện hành: `build/map01a-post-completion-dialogue-runtime-v1/`; Player: `build/map01a-post-completion-dialogue-player-v1/LinhGioiOnline.app`; full `DongMonIllustratedPreviewTests` đạt `21/21`.
@@ -1380,8 +1386,3 @@ Next valid work: audit và xử lý một sai lệch cấu trúc lớn còn lạ
 `CONTINUE`. Hai tab owner duyệt hiện dùng evidence `build/map01a-character-hierarchy-runtime-v4/{character-info,bag}.png`. Cấu trúc Nhân vật và Rương đồ đã khớp: năm tab compact, full-body giữa 10 slot, detail phải, rail phân loại dọc và một all-items grid. Không quay lại các capture v1–v3 hoặc micro-polish hai tab này; phần còn yếu là art thumbnail trang bị hiện hành và không được giải quyết bằng cách resume class/wardrobe.
 
 Next valid work: chuyển sang một batch HUD/NPC dialogue theo owner gameplay reference và shared base, ưu tiên sai lệch cấu trúc/interaction có thể nhìn thấy trên Player. Nếu không còn sai lệch cấu trúc lớn, xử lý screen/interaction Map01A còn thiếu theo roadmap; không mở class/pose/wardrobe, không rollback code class và không đổi frozen surfaces.
-## Next — sau post-completion NPC dialogue audit — 2026-09-14
-
-`CONTINUE`. Sau Q09, sáu NPC Map01A dùng trạng thái lời thoại hoàn tất chung và không còn chỉ người chơi quay lại tutorial. Evidence hiện hành: `build/map01a-post-completion-dialogue-runtime-v1/`; Player: `build/map01a-post-completion-dialogue-player-v1/LinhGioiOnline.app`; full `DongMonIllustratedPreviewTests` đạt `21/21`.
-
-Next valid work: tiếp tục triển khai và audit bộ năm tab owner đã duyệt — Nhân vật, Rương đồ, Kỹ năng, Tiềm năng, Linh thú — theo một navigation/base chung, hai cột nội dung + detail bên phải và tab ngắn để còn mở rộng. Không dùng lại design cũ, không mở class selector, không resume class/pose/wardrobe/source và không rollback code class.

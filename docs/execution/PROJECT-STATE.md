@@ -1,3 +1,10 @@
+## Map01A — approved five-tab menu route is complete — 2026-09-14
+
+- Independent navigation audit found that the shared character hub already had all five approved tabs, but the external Menu exposed only four destinations and omitted `Tiềm năng`.
+- Menu now routes to Nhân vật, Rương đồ, Kỹ năng, Tiềm năng and Linh thú through the existing shared `MenuAction` / `OpenInventoryReviewMode` path. No parallel modal, tab row or progression state was added.
+- TDD reproduced the missing control, then verified the new action opens the existing Tiềm năng panel and closes Menu. Full `TwoDCharacterRuntimeStateTests` passes `20/20`.
+- Player `build/map01a-five-tab-menu-player-v1/LinhGioiOnline.app` built with `errors=0`, `warnings=36`. Visual evidence `build/map01a-five-tab-menu-runtime-v1/menu.png` and `build/map01a-five-tab-menu-tabs-runtime-v1/potential.png` confirms all five destinations are readable, Menu stays above the bottom HUD, and the approved two-column detail-right layout remains intact.
+
 ## Map01A — post-completion NPC dialogue no longer reopens tutorial guidance — 2026-09-14
 
 - Visual audit of the full Q01–Q09 Player route rejected the previous revisit copy: after `ActiveQuestId == "COMPLETE"`, several NPCs still directed the player to the next tutorial stop.
@@ -1514,9 +1521,3 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Hai dòng class/vitals trùng phía trên, stat badge strip và equipment summary trùng đã ẩn để không chiếm chiều cao hoặc chồng đáy. Đây chỉ là bố cục UI thumbnail; không đổi sprite, class art, pose, wardrobe, camera hay runtime actor scale.
 - Capture v1 phát hiện identity sai cột; v2/v3 phát hiện overflow và badge overlap; các bản đó bị loại. Evidence hiện hành duy nhất: `build/map01a-character-hierarchy-runtime-v4/{character-info,bag}.png`; Player `build/map01a-character-hierarchy-player-v4/LinhGioiOnline.app`, build `errors=0`.
 - Full `TwoDCharacterRuntimeStateTests` đạt 20/20; shared-skin validator, 12 unit test, no-3D/no-source, frozen diff và capture log sạch. Visual audit v4: không chồng/cắt, actor/10 slot/detail phải đúng hierarchy; art thumbnail trang bị tối vẫn là art debt hiện hành, không được xử bằng cách mở lại class work.
-## Map01A — post-completion NPC dialogue no longer reopens tutorial guidance — 2026-09-14
-
-- Visual audit of the full Q01–Q09 Player route rejected the previous revisit copy: after `ActiveQuestId == "COMPLETE"`, several NPCs still directed the player to the next tutorial stop.
-- All six Map01A NPCs now share one explicit post-journey dialogue state while retaining NPC-specific copy. Each acknowledges the completed route and the opened Suối Thanh Minh path; quest state, rewards, route, portraits and interaction controls are unchanged.
-- TDD guard covers all six nodes and rejects stale `phía trước` / `việc tiếp theo` guidance. Full `DongMonIllustratedPreviewTests` passes `21/21`.
-- Player `build/map01a-post-completion-dialogue-player-v1/LinhGioiOnline.app` built with `errors=0`, `warnings=36`. Full route evidence `build/map01a-post-completion-dialogue-runtime-v1/` reports Q01–Q09 complete, 18 route frames, 38 dialogue frames and `dialogueRevisitsVerified=true`. Visual review confirmed correct speaker/portrait/copy and no clipping on representative Hạ Vân, Tổng Phú, Thanh Nhi and Lão Trần revisits.

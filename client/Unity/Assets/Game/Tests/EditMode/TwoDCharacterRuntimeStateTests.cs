@@ -430,11 +430,20 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Menu Character Action"), Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Menu Bag Action"), Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Menu Skills Action"), Is.Not.Null);
+                var potentialAction = root.Q<Button>("Map01A Menu Potential Action");
+                Assert.That(potentialAction, Is.Not.Null,
+                    "The navigation menu must expose every approved character-hub tab, including Tiềm năng.");
                 Assert.That(root.Q<Button>("Map01A Menu Spirit Pet Action"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Menu Panel").ClassListContains("lgo-layered-frame"), Is.True,
                     "Menu should reuse the shared modal frame instead of defining a second panel system.");
                 Assert.That(root.Q<Button>("Map01A Menu Character Action").style.flexGrow.value, Is.EqualTo(0),
                     "Menu grid actions must keep a bounded row height instead of stretching into the panel body.");
+                InvokeBoundButton(potentialAction);
+                Assert.That(menuOverlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(scene.InventoryOpen, Is.True);
+                Assert.That(root.Q("Map01A Potential Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "Menu Tiềm năng must route into the approved shared hub tab.");
+                InvokeBoundButton(menu);
                 InvokeBoundButton(root.Q<Button>("Map01A Menu Close"));
                 Assert.That(menuOverlay.style.display.value, Is.EqualTo(DisplayStyle.None));
                 InvokeBoundButton(skills);
