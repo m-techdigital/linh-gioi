@@ -98,7 +98,7 @@ Partial staging 2026-09-13: `tools/stage_lgo_six_pose_repair_layers.py` copied o
 - `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-board-v1/contact-sheet.png`
 - `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/source-board-v1/visual-findings-v1.json`
 
-Current status remains `SOURCE_VISUAL_FIX_REQUIRED`: `outer_top` has 4/24 layer files, `waist_belt` has 20/24, `shoulder_chest_guard` has 4/24; repair-layer audit still has 44 missing layer failures. External repair directories and the batch folder contain `DO-NOT-PACK.md`.
+This partial stage is historical only. Current coverage is superseded by `repair-layer-audit-v7-after-all-slot-staging.json`: `outer_top`, `waist_belt` and `shoulder_chest_guard` are all 24/24, failureCount 0. External repair directories and the batch folder still contain `DO-NOT-PACK.md`, and visual acceptance remains required before any Player pack.
 
 Measured authoring brief 2026-09-13: `tools/plan_lgo_missing_six_pose_source_authoring.py` generated `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/missing-source-authoring-brief-v1.json` and `.md` from the after-staging repair audit plus `source-review-v1/garment-anchor-measurements-candidate-run-b-shoulder-v2.json`. It collapses the 44 missing layer files into 11 source-authoring targets with `ANCHOR_GUIDE_SANITY_NO_OUTLIERS` and `PROPORTION_SANITY_NO_OUTLIERS`. These dimensions are source-space draw/check guides only, not runtime offsets or automatic pose scaling.
 
@@ -118,9 +118,11 @@ Shoulder/chest guard staging update 2026-09-13: measured compact v2 candidates p
 
 Outer_top template rejection 2026-09-13: `outer-top-measured-template-candidates-v1/visual-review-v1.json` is `OUTER_TOP_MEASURED_TEMPLATE_VISUAL_REJECTED_NOT_STAGED`. The geometric torso/sleeve template failed envelope width and visually repeated the floating-panel failure mode. Do not stage this family; outer_top needs source-paint/native authoring with arm/body ownership before the repair batch can close.
 
-- [ ] **Step 3: Export and reopen/check native source**
+Layer coverage completion 2026-09-13: `outer-top-body-aware-source-paint-v1` was staged for run/jump poses after passing slot-envelope fit. `repair-layer-audit-v7-after-all-slot-staging.json` is `SOURCE_REPAIR_LAYER_READY_FOR_VISUAL_BOARD`, failureCount 0, and full A/B boards under `source-board-v4-after-all-slot-staging/` have missingLayerCount 0. Mixed/off-slot board set `mixed-offslot-board-v1/summary.json` covers 7 scenarios with missingLayerCount 0. Current visual status remains `SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE` because outer_top run/jump still need style/ownership polish before review pack.
 
-Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.
+- [ ] **Step 3: Polish visual source and reopen/check native source**
+
+Use Krita/manual native source edits only for visually meaningful fixes, starting with `outer_top` run/jump sleeve/body ownership. Required evidence: save/reopen/export hashes where native files are edited, alpha checks, source path provenance, regenerated A/B source boards and mixed/off-slot boards. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage, and no board-level style mismatch such as body-painted/sleeveless `outer_top` against the idle Pháp top.
 
 Tooling status 2026-09-13: Krita local app is available, but CLI automation is not accepted yet. `krita --export` timed out, and `tools/audit_lgo_kritarunner_script_execution.py` reports `KRITARUNNER_SCRIPT_IMPORT_UNRESOLVED`: user script/plugin attempts exit 0 without executing marker output. Use Krita GUI/Scripter/manual verified export, or first close a dedicated plugin-packaging gate that writes a real marker/export report.
 

@@ -103,6 +103,8 @@ def next_task_section(next_action: str) -> str:
 
 def current_blocker_section(next_action: str) -> str:
     active = active_goal_lock_section(next_action)
+    if active and "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE" in active:
+        return "Current blocker is source visual polish: SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE. Continue outer_top run/jump visual fixes and regenerate source/mixed boards before any Player pack."
     if active:
         return "No current blocker from active lock; continue the listed six-pose source-authoring task unless a source/tool gate fails."
     return limited_section_until_any(next_action, ("## Current blocker", "## Blocker"), ("Evidence:",), 5)

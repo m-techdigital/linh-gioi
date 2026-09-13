@@ -64,6 +64,12 @@ def active_next_action_task() -> str | None:
 
 
 def active_next_action_task_from_text(text: str) -> str | None:
+    if (
+        "## ACTIVE GOAL LOCK" in text
+        and "six-pose registered outfit path" in text
+        and "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE" in text
+    ):
+        return "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH"
     if "## ACTIVE GOAL LOCK" in text and "six-pose registered outfit path" in text:
         return "SIX_POSE_REGISTERED_OUTFIT_SOURCE_AUTHORING"
     match = re.search(r"Active task:\s*`([^`]+)`", text)
@@ -177,6 +183,14 @@ def main() -> int:
         print("allowed=docs, tools, external selected source repair directories with DO-NOT-PACK provenance")
         print("forbidden=stopped skeletal/cutout path, flat-panel direct-fit production, per-pixel nudging loop, Player pack before source gates")
         print("closure=repair-layer audit/source-board/provenance evidence updated; runtimePromotionAllowed remains false until visual source gates pass")
+        return 0
+    if active_task == "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH":
+        print("LGO_NEXT_TASK_ADVISOR_READY")
+        print(f"id={active_task}")
+        print("purpose=Polish visual source Pháp Lv1 sau khi layer coverage đã đủ; ưu tiên outer_top run/jump để khớp style idle áo tay trắng")
+        print("allowed=docs, tools, external selected source repair directories with DO-NOT-PACK provenance, source-board/mixed-board evidence")
+        print("forbidden=stopped skeletal/cutout path, flat-panel direct-fit production, per-pixel nudging loop, Player pack before visual source gates")
+        print("closure=source boards A/B and mixed/off-slot boards visually acceptable; repair audit remains failureCount 0; runtimePromotionAllowed still false until pack gate")
         return 0
     candidates = [task for task in tasks if not closure_already_satisfied(task, text) and is_safe_without_owner(task, text)]
     if not candidates:

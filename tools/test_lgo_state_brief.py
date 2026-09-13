@@ -47,6 +47,23 @@ class LgoStateBriefTests(unittest.TestCase):
         self.assertIn("No current blocker from active lock", blocker)
         self.assertNotIn("Stale Map01A blocker", blocker)
 
+    def test_active_goal_lock_reports_visual_polish_after_layer_coverage_complete(self):
+        text = "\n".join(
+            [
+                "## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13",
+                "",
+                "Current visual status remains SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE.",
+                "",
+                "Next valid work: execute source visual polish, not another missing-target authoring loop.",
+            ]
+        )
+
+        blocker = current_blocker_section(text)
+
+        self.assertIn("source visual polish", blocker)
+        self.assertIn("SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE", blocker)
+        self.assertNotIn("source-authoring task", blocker)
+
 
 if __name__ == "__main__":
     unittest.main()
