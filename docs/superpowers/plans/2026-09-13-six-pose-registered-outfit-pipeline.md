@@ -112,6 +112,8 @@ Slot envelope gate 2026-09-13: `tools/audit_lgo_slot_envelope_fit.py` converts e
 
 Measured candidate evidence 2026-09-13: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/waist-belt-jump-measured-candidate-v1/visual-review-v1.json` is `WAIST_BELT_JUMP_MEASURED_FIT_PASS_VISUAL_DRAFT_NOT_STAGED`. It passes numeric fit but remains too schematic for source staging; use it as proof that the envelope is useful, not as packable art.
 
+Waist belt source staging update 2026-09-13: after reviewing candidates on the clean body reference, `waist-belt-jump-imagegen-rescaled-cleanup-v2` was staged into `waist-belt-six-pose-source-repair-v1/A|B/jump_tuck`. Repair audit `repair-layer-audit-v5-after-waist-jump-imagegen-rescaled.json` now reports `waist_belt` `24/24`, while `outer_top` and `shoulder_chest_guard` remain `4/24` each. Board `source-board-v2-after-waist-jump-imagegen-rescaled/contact-sheet.png` is still `SOURCE_REPAIR_BOARD_FIX_REQUIRED` because outer/guard run+jump layers are missing.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.
