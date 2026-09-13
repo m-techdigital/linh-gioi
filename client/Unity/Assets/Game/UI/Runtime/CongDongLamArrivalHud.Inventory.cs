@@ -7,7 +7,7 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud
     {
         private VisualElement _equipmentPage, _suppliesPage, _storagePanel, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel;
-        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _storageState;
+        private Label _inventoryHeroTitle, _inventoryHeroMeta, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState, _storageState;
         private Button _bagTab, _characterInfoTab, _storageTab, _equipmentTab, _suppliesTab;
         private Button _inventoryDetailPrimaryAction;
         private Button[] _equipmentTiles;
@@ -295,8 +295,18 @@ namespace LinhGioi.UI
             _suppliesTitle = LgoLabel("Vật phẩm nhiệm vụ", 18, UiGold, true);
             _suppliesPage.Add(_suppliesTitle);
             _inventorySummary = LgoLabel("", 17, new Color(.91f, .93f, .84f, .96f));
-            _inventorySummary.style.marginTop = 8; _inventorySummary.style.marginBottom = 14;
+            _inventorySummary.style.marginTop = 8; _inventorySummary.style.marginBottom = 10;
             _suppliesPage.Add(_inventorySummary);
+            _suppliesEmptyState = LgoLabel("", 15, new Color(.70f, .80f, .80f, .92f));
+            _suppliesEmptyState.name = "Map01A Supplies Empty State";
+            _suppliesEmptyState.style.marginTop = 2;
+            _suppliesEmptyState.style.marginBottom = 12;
+            _suppliesEmptyState.style.paddingLeft = 10;
+            _suppliesEmptyState.style.paddingRight = 10;
+            _suppliesEmptyState.style.paddingTop = 8;
+            _suppliesEmptyState.style.paddingBottom = 8;
+            ApplyLgoFrame(_suppliesEmptyState, new Color(.020f, .060f, .088f, .86f), new Color(.50f, .58f, .58f, .55f));
+            _suppliesPage.Add(_suppliesEmptyState);
             _questItemActions = new VisualElement { name = "Map01A Quest Item Actions" };
             _healthPotion = InventoryButton(() => _scene.UseHealthPotion(), "Map01A Health Potion", "Bình Máu Nhỏ");
             _manaPotion = InventoryButton(() => _scene.UseManaPotion(), "Map01A Mana Potion", "Bình Linh Lực Nhỏ");
@@ -304,7 +314,11 @@ namespace LinhGioi.UI
             foreach (var button in new[] { _healthPotion, _manaPotion, _equipReward })
             {
                 button.style.flexGrow = 0; button.style.flexBasis = StyleKeyword.Auto;
-                button.style.marginBottom = 8; _questItemActions.Add(button);
+                button.style.marginBottom = 8;
+                button.style.color = new Color(.70f, .80f, .80f, .92f);
+                button.style.unityTextAlign = TextAnchor.MiddleLeft;
+                button.style.paddingLeft = 14;
+                _questItemActions.Add(button);
             }
             _suppliesPage.Add(_questItemActions); scroll.Add(_suppliesPage);
 
@@ -319,6 +333,7 @@ namespace LinhGioi.UI
             if (!_scene.InventoryOpen) _scene.ToggleInventory();
             if (mode == "character-info") ShowInventoryMode(true);
             else if (mode == "storage") ShowStorageMode();
+            else if (mode == "supplies") { ShowInventoryMode(false); ShowInventoryPage(true); }
             else ShowInventoryMode(false);
             Update();
         }

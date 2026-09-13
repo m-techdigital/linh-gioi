@@ -1,3 +1,7 @@
+## Next Map01A UI polish after supplies readability guard — 2026-09-13
+
+Continue Map01A product UI/UX polish from the owner references. The supplies tab is now technically reachable/readable for review, but still needs proper selected-item detail behavior, visual hierarchy, and design-quality item art when approved assets exist. Keep Hành trang/Thông tin/Rương đồ separate, keep item detail on the right, reuse shared UI skin helpers, and do not introduce fake icons or random generated class/item art.
+
 ## Next inventory supplies polish after evidence coverage — 2026-09-13
 
 The Vật phẩm tab is now captured in the required UI catalog: `build/map01a-inventory-tab-runtime/supplies.png`. Visual review shows it is not final: empty/pre-supplies state is too thin and disabled buttons are hard to read. Next safe UI batch should polish Vật phẩm with a clearer empty/locked state, readable action rows, and right-detail behavior when a real item is selected, using shared skin helpers and runtime/approved art only.

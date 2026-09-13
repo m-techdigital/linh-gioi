@@ -425,6 +425,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
 
+                hud.OpenInventoryReviewMode("supplies");
+                Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Supplies Empty State").text, Does.Contain("Chưa nhận"));
+                Assert.That(root.Q<Button>("Map01A Health Potion").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Health Potion").style.color.value, Is.EqualTo(new Color(.70f, .80f, .80f, .92f)),
+                    "Disabled supply actions must stay readable in Player captures instead of fading into the dark panel.");
+
                 hud.OpenInventoryReviewMode("storage");
                 Assert.That(root.Q("Map01A Storage Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.None));

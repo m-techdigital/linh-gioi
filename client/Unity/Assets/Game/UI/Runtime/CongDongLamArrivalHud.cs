@@ -318,6 +318,10 @@ namespace LinhGioi.UI
             _inventoryHeroMeta.text = "LC review local · " + _scene.EquipmentFitSummary
                 + "\nHP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
             _equipmentTitle.text = "TRANG BỊ · " + _scene.VoEquippedSlotCount + "/10 món đang mặc";
+            if (_suppliesEmptyState != null)
+                _suppliesEmptyState.text = _scene.HealthPotionCount <= 0 && _scene.ManaPotionCount <= 0 && !_scene.HasClassRewardItem
+                    ? "Chưa nhận vật phẩm nhiệm vụ. Hoàn thành Q04 để nhận bình máu, bình linh lực và hộ uyển tân thủ."
+                    : "Chọn vật phẩm để dùng hoặc trang bị. Vật phẩm chưa đủ điều kiện sẽ tạm khóa nhưng vẫn đọc rõ trạng thái.";
             _questItemActions.style.display = DisplayStyle.Flex;
             RefreshInventoryEquipmentTiles();
             RefreshInventoryDetailCard();
@@ -346,6 +350,8 @@ namespace LinhGioi.UI
             _healthPotion.SetEnabled(_scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100);
             _manaPotion.SetEnabled(_scene.ManaPotionCount > 0 && _scene.PlayerMana < 100);
             _equipReward.SetEnabled(_scene.HasClassRewardItem && !_scene.IsClassRewardEquipped);
+            foreach (var supplyAction in new[] { _healthPotion, _manaPotion, _equipReward })
+                supplyAction.style.color = new Color(.70f, .80f, .80f, .92f);
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             var hudBlocked = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen;
             _characterSelectButton.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
