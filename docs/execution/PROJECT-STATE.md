@@ -1,3 +1,10 @@
+## Map01A — unavailable hub controls no longer expose dead clicks — 2026-09-14
+
+- Interaction audit found two enabled skill category controls (`Bị động`, `Tâm pháp`) with no backing content or state transition. The existing Rương đồ toolbar guard already disables `Sắp xếp`, `Tách` and `Bán nhanh` until an inventory model exists.
+- Both unavailable skill categories now use the shared disabled-action state. The active `Chủ động` path, node selection and detail-right behavior are unchanged; no skill/progression data was invented.
+- TDD reproduced the enabled dead click, then the full `TwoDCharacterRuntimeStateTests` suite passed `20/20`. Player `build/map01a-hub-no-dead-click-player-v1/LinhGioiOnline.app` built with `errors=0`, `warnings=38`.
+- Visual evidence `build/map01a-hub-no-dead-click-runtime-v1/{skills,bag}.png` confirms unavailable controls are visibly gated while the approved five-tab, two-column layout remains readable and synchronized.
+
 ## Map01A — skill and potential selections drive shared detail-right — 2026-09-14
 
 - Interaction audit found that every skill and potential node was clickable but all callbacks reopened the same default detail (`Thiên Kiếm Quyết` or `Sinh lực`). This made the approved detail-right panel visually present but functionally stale.

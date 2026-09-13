@@ -68,6 +68,7 @@ namespace LinhGioi.UI
             button.style.marginRight = 0;
             button.style.marginBottom = 7;
             ApplyLgoSelectedTab(button, selected);
+            if (!selected) ApplyLgoDisabledAction(button);
             return button;
         }
 

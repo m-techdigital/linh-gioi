@@ -286,6 +286,12 @@ namespace LinhGioi.Tests.EditMode
                     "Rương đồ must remain a two-column grid/detail screen without the obsolete character-preview column.");
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                foreach (var actionName in new[]
+                {
+                    "Map01A Inventory Sort Action", "Map01A Inventory Split Action", "Map01A Inventory Quick Sell Action"
+                })
+                    Assert.That(root.Q<Button>(actionName).enabledSelf, Is.False,
+                        actionName + " must not expose an enabled dead click before its inventory model exists.");
 
                 InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -299,6 +305,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Skill Path Stage 2"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Skill Path Stage 3"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Skill Path Connector 1"), Is.Not.Null);
+                Assert.That(root.Q<Button>("Map01A Passive Skills Category").enabledSelf, Is.False,
+                    "Unimplemented skill categories must be visibly gated instead of accepting dead clicks.");
+                Assert.That(root.Q<Button>("Map01A Method Skills Category").enabledSelf, Is.False);
                 var firstSkillNode = root.Q<Button>("Map01A Skill Node Thiên Kiếm Quyết");
                 Assert.That(firstSkillNode.style.minWidth.value.value, Is.GreaterThanOrEqualTo(140),
                     "Skill path nodes need a fixed readable base width; flex shrinking stacks Vietnamese labels vertically.");

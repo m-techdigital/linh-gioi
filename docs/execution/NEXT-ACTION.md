@@ -1,3 +1,9 @@
+## Next — sau dead-click audit của character hub — 2026-09-14
+
+`CONTINUE`. Các control chưa có model thật trong Kỹ năng và Rương đồ đã bị khóa bằng shared disabled state; luồng chọn node và detail-right vẫn hoạt động. Evidence hiện hành: `build/map01a-hub-no-dead-click-runtime-v1/{skills,bag}.png`; Player `build/map01a-hub-no-dead-click-player-v1/LinhGioiOnline.app`; full `TwoDCharacterRuntimeStateTests` đạt `20/20`.
+
+Next valid work: audit interaction/data binding còn thiếu trong tab Linh thú và Rương đồ theo năm design owner đã duyệt, ưu tiên mọi control đang nhận click nhưng không đổi selection/detail. Chỉ dùng dữ liệu và asset có provenance; không mở progression giả, class selector, pose/wardrobe/source hoặc design cũ.
+
 ## Next — sau interactive detail-right cho Kỹ năng/Tiềm năng — 2026-09-14
 
 `CONTINUE`. Các node Kỹ năng và Tiềm năng giờ cập nhật cột chi tiết phải và trạng thái chọn đồng bộ; action ghi progression vẫn khóa. Evidence hiện hành: `build/map01a-hub-selection-runtime-v1/{skills,potential}.png`; Player `build/map01a-hub-selection-player-v2/LinhGioiOnline.app`; full `TwoDCharacterRuntimeStateTests` đạt `20/20`.
