@@ -1,3 +1,9 @@
+## Active goal lock — six-pose registered outfit path — 2026-09-13
+
+`feature-2d-latest` is no longer continuing the current skeletal generated-cutout path. Owner rejected `bind-authority-candidate-v1` visually, and source discovery found no accepted neutral layered body/rig blueprint. Treat skeletal 2D as stopped unless a new accepted blueprint passes `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`.
+
+The active character/outfit path for this sandbox is now `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md` with execution plan `docs/superpowers/plans/2026-09-13-six-pose-registered-outfit-pipeline.md`: use the existing six-pose body/motion authority and develop registered outfit pieces across pose and level combinations from design/source evidence. Current next work is Pháp Lv1 six-pose source coverage and mixed-level outfit review; do not rerun the rejected skeletal Player probe or fit garments on that source.
+
 ## Map01A inventory grid runtime art cleanup — 2026-09-13
 
 Equipment grid tiles in Hành trang now use real runtime atlas thumbnails inside each tile and keep `Button.text` empty so UI Toolkit no longer draws duplicate text over the icon. Slot name/state are rendered through child labels, with a regression covering the no-overlap contract. Player evidence: `build/map01a-inventory-grid-runtime-art-clean-capture-v1/07-q04-inventory-open.png`; visual review confirms the grid icons and labels are readable and no longer overlap. Build: `client/Unity/build/map01a-inventory-grid-runtime-art-clean-player/LinhGioiOnline.app`, `errors=0 warnings=17` (deprecated UI API warnings only). This remains an incremental runtime-art polish checkpoint, not final inventory visual design acceptance.

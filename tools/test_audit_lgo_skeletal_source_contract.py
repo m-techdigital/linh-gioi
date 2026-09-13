@@ -3,9 +3,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from PIL import Image
-
 from audit_lgo_skeletal_source_contract import audit_source_contract
+from test_audit_lgo_skeletal_blueprint_package import write_cutout
 
 
 class SkeletalSourceContractTests(unittest.TestCase):
@@ -13,11 +12,7 @@ class SkeletalSourceContractTests(unittest.TestCase):
         temporary = tempfile.TemporaryDirectory()
         root = Path(temporary.name)
         image_path = root / "upper.png"
-        color = (20, 30, 40, alpha) if mode == "RGBA" else (20, 30, 40)
-        image = Image.new(mode, size, color)
-        if mode == "RGBA" and alpha == 0:
-            image.putpixel((size[0] // 2, size[1] // 2), (20, 30, 40, 255))
-        image.save(image_path)
+        write_cutout(image_path, mode=mode, size=size, full_opaque=alpha == 255)
         manifest = {
             "canvas": {"width": 1024, "height": 1536, "originX": 512, "groundY": 1484},
             "allowedSlots": ["upper", "lower", "footwear", "waist", "rigid_hand_item", "body"],

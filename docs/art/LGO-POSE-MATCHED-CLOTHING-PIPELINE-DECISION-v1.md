@@ -90,3 +90,5 @@ This decision is a guardrail against endless small candidate loops. Future sessi
 ## Superseded by character source gate — 2026-09-13
 
 After the skeletal Player probe, owner rejected the generated cutout body result visually. The run stack batch above remains useful as source-space garment evidence, but it is no longer the next action while the body foundation is rejected. Current planner status is `AUTHOR_SKELETAL_2D_SOURCE_BLUEPRINT`; garment fitting resumes only after a new neutral layered body/rig blueprint passes anatomy/proportion/source admission gates. Do not use the old six-pose baseline or the rejected skeletal cutout as proof of the new method.
+
+Owner steering after that decision changes the active sandbox route: do not keep waiting on or developing the current skeletal source-blueprint path. Return to the existing six-pose body/motion authority and continue registered outfit work for level/pose mixing, as locked in `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md`. The skeletal blueprint gate remains only as a future admission guard if a genuinely new accepted body source appears.

@@ -1,3 +1,9 @@
+## Active goal lock — sáu pose thay cho skeletal cutout hiện tại — 2026-09-13
+
+`CONTINUE`. Owner đã chỉ đạo nếu hướng skeletal/cutout vừa thử không khả dụng thì quay lại phát triển theo sáu pose cũ để khớp đồ giữa level và pose. `bind-authority-candidate-v1` đã bị reject visual và có `DO-NOT-PACK`; không tiếp tục probe, animation tweak hoặc garment fit trên source đó. Gate mới `tools/audit_lgo_skeletal_blueprint_package.py` chỉ giữ để chặn mở lại skeletal khi chưa có neutral layered body/rig blueprint được duyệt.
+
+Đường active của sandbox là `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md`: dùng sáu pose body/motion hiện có làm authority tạm thời, hoàn thiện Pháp Lv1 registered outfit theo source/design, kiểm đủ `inner_top`, `outer_top`, `waist_belt`, `shoulder_chest_guard`, rigid accessory, A/B hoặc level variants và mixed-loadout board trước Player pack. Coverage hiện có: `inner_top` và `class_accessory` đủ sáu pose A/B; `outer_top`, `waist_belt`, `shoulder_chest_guard` và jump_tuck còn blocking source/design gaps. Không claim technical pass là visual acceptance.
+
 ## Hiện hành — dọn presentation cũ, giữ game 2D — 2026-09-12
 
 `CONTINUE`. Theo owner, đã gỡ 56 file hết dùng (69.242 byte): 6 helper màn login/sảnh/menu/HUD/thoại cũ, registry V2, metadata đi kèm và 42 metadata thư mục V2/V3B rỗng. Audit trước xoá và sau Unity import không có C# hoặc GUID consumer ngoài nhóm gỡ. Không có model FBX/Blend trên branch để xoá thêm. Giữ `PlayableWorldController`, registry V3B/material còn phục vụ M4/M6 smoke; không xóa mesh trang phục 2D, source/registered WIP hoặc ảnh đã làm. Lịch sử design/provenance và validator V3B cũ được giữ để tra cứu, không phải design/gate hiện hành; không phục hồi code chỉ để làm xanh validator của màn đã bỏ. Danh sách/hash: `build/legacy-3d-cleanup/audit.json`.

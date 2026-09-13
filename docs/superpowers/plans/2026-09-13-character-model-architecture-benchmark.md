@@ -10,6 +10,8 @@
 
 **Spec:** `docs/superpowers/specs/2026-09-13-character-model-architecture-benchmark-design.md`
 
+**Current execution status, 2026-09-13:** Superseded as active work by owner fallback to `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md`. Keep this plan as benchmark/guard history only. Do not continue the current skeletal generated-cutout implementation path unless a new accepted neutral layered body/rig blueprint exists.
+
 ## Global Constraints
 
 - Không sửa `protocol/**`, `gamedata/schemas/**`, `docs/adr/**` hoặc `client/Unity/Assets/Game/UI/design-tokens.json`.

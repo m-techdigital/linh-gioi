@@ -3,6 +3,8 @@
 Date: 2026-09-13
 Scope: common male body foundation for the `skeletal_2d` architecture benchmark. This spec is review-only until a source package passes the gates below.
 
+Current status: not the active sandbox path. Owner fallback on 2026-09-13 returns production work to the six-pose registered outfit pipeline. Use this spec only as a future admission guard if a genuinely new skeletal body source is supplied or authored.
+
 ## Why this spec exists
 
 The previous generated cutout bind candidate was rejected by owner visual review. Its technical metrics were not enough because the Player result showed detached limbs, wrong proportions and unusable jump/flip anatomy. The next skeletal attempt must start from a better source body, not from more animation or garment tweaks.

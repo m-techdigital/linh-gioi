@@ -5,7 +5,7 @@ import argparse
 import json
 from pathlib import Path
 
-from PIL import Image
+from audit_lgo_skeletal_blueprint_package import PngAuditError, _read_png
 
 
 EXPECTED_CANVAS = {"width": 1024, "height": 1536, "originX": 512, "groundY": 1484}
@@ -42,22 +42,22 @@ def _component_report(component, base_dir, canvas):
         return report
 
     try:
-        with Image.open(image_path) as image:
-            report["mode"] = image.mode
-            report["width"], report["height"] = image.size
-            if image.size != (canvas["width"], canvas["height"]):
-                failures.append("CANVAS_DIMENSIONS_MISMATCH")
-            if "A" not in image.getbands():
-                failures.append("MISSING_ALPHA_CHANNEL")
-            else:
-                alpha = image.getchannel("A")
-                alpha_min, alpha_max = alpha.getextrema()
-                report["alphaExtrema"] = [alpha_min, alpha_max]
-                if alpha_min == 255:
-                    failures.append("NO_TRANSPARENT_PIXELS")
-                if alpha_max == 0:
-                    failures.append("NO_VISIBLE_PIXELS")
-    except (OSError, ValueError):
+        png = _read_png(image_path)
+        report["width"] = png["width"]
+        report["height"] = png["height"]
+        report["hasAlpha"] = png["hasAlpha"]
+        if (png["width"], png["height"]) != (canvas["width"], canvas["height"]):
+            failures.append("CANVAS_DIMENSIONS_MISMATCH")
+        if not png["hasAlpha"]:
+            failures.append("MISSING_ALPHA_CHANNEL")
+        else:
+            alpha_min, alpha_max = png["alphaExtrema"]
+            report["alphaExtrema"] = [alpha_min, alpha_max]
+            if alpha_min == 255:
+                failures.append("NO_TRANSPARENT_PIXELS")
+            if alpha_max == 0:
+                failures.append("NO_VISIBLE_PIXELS")
+    except (OSError, PngAuditError, ValueError):
         failures.append("IMAGE_DECODE_FAILED")
     return report
 

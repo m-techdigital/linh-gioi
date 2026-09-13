@@ -261,6 +261,8 @@ Bài học: technical pass chỉ có giá trị khi nó đo đúng điều kiệ
 
 Cách xử lý đã xác nhận: đóng candidate thành failure evidence, giữ provenance để so sánh, cập nhật planner để không chạy lại cùng source, rồi yêu cầu một neutral layered body/rig blueprint mới trước khi runtime hoặc garment gate tiếp tục. Blueprint mới phải có canvas 1024x1536, origin X 512, ground Y 1484, joint centers rõ, hidden surfaces, overlap ownership, lower-leg/foot policy và board tỷ lệ so với reference đã duyệt. Trigger kiểm lại chỉ xảy ra khi có source blueprint mới hoặc khi benchmark chuyển hẳn sang `modular_3d`; không rerun probe cũ với cùng input hash.
 
+Owner fallback cùng ngày: nếu hướng skeletal hiện tại không còn khả dụng thì quay lại sáu pose cũ để khớp trang phục giữa level và pose. Khi có chỉ đạo fallback kiểu này, phải cập nhật `PROJECT-STATE`, `NEXT-ACTION`, rollup và status ngay để không có phiên sau đọc một planner cũ rồi phát triển tiếp thứ vừa dừng. Gate mới có thể giữ lại làm guard, nhưng không được coi là active path.
+
 ## Capture Player nhiều màn hình phải xác nhận display — 2026-09-13
 
 Trên macOS ba màn hình, `screencapture -R` và window-id không lấy đúng Unity Player dù cửa sổ đã tồn tại. Cách đã xác nhận: mở Development Player, dùng System Events chuyển cửa sổ `Unity` sang màn trái tại tọa độ tuyệt đối `(-1800,100)`, đọc lại position/size, rồi chụp mỗi display bằng `screencapture -D`. Chỉ display có nhãn Development Build và nội dung probe được nhận; ảnh Blender/browser bị ghi rõ là rejected evidence. Không lặp thử window-id/region sau khi display capture đã giải quyết.

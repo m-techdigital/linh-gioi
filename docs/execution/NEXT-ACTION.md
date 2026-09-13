@@ -1,3 +1,11 @@
+## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13
+
+Owner steering after skeletal review: if the current skeletal/cutout approach is not usable, return to the old six-pose body/motion authority and develop outfit matching across levels and poses from design/source registration. This is now the active sandbox path. Read `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md` and execute from `docs/superpowers/plans/2026-09-13-six-pose-registered-outfit-pipeline.md` before any outfit/runtime work.
+
+Do not continue the stopped skeletal generated-cutout path in this sandbox. `bind-authority-candidate-v1` is owner-rejected, current `skeletal_2d` has no accepted source blueprint, and no further Player probe/animation tweak/garment fit should run on that source. Skeletal 2D may reopen only if a new accepted neutral layered body/rig blueprint appears and passes `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`.
+
+Next valid work: continue the six-pose registered outfit pipeline for Pháp Lv1. Use existing six-pose body/motion as authority, then produce source-review evidence for all six poses and mixed levels/variants before any Player pack. Active coverage evidence `build/pose-matched-layer-authoring-v1/six-pose-active-coverage-v1.json` says `inner_top` and `class_accessory` have six-pose A/B exports; `outer_top`, `waist_belt`, `shoulder_chest_guard` and `jump_tuck` remain blocking source/design gaps.
+
 ## Skeletal 2D source blueprint gate — owner rejection recorded 2026-09-13
 
 Owner rejected the current generated-cutout skeletal Player result as visually unacceptable: limbs read detached, proportions do not match the accepted character design, and jump/flip motion cannot be used as a foundation for clothing. This closes `bind-authority-candidate-v1` as runtime/bind evidence; it is preserved only for failure analysis.

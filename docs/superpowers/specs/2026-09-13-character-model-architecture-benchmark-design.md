@@ -2,6 +2,8 @@
 
 **Gate:** `LGO_CHARACTER_MODEL_ARCHITECTURE_REVIEW_01`
 
+**Current execution status, 2026-09-13:** This benchmark is no longer the active sandbox path after owner fallback to the six-pose registered outfit pipeline. Keep it as guard/history. Do not resume the current skeletal generated-cutout work without a new accepted neutral layered body/rig blueprint.
+
 ## Mục tiêu
 
 Chọn đơn vị sản xuất nhân vật có thể mở rộng cho tủ đồ Linh Giới bằng một benchmark hữu hạn, có thể lặp lại. Pipeline ảnh theo sáu pose hiện hành là baseline chi phí và chất lượng; nó không còn là kiến trúc mặc định. Hai candidate duy nhất là:
