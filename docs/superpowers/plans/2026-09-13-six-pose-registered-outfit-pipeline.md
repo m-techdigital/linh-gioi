@@ -110,6 +110,8 @@ Selection provenance audit 2026-09-13: `tools/audit_lgo_source_staging_selection
 
 Slot envelope gate 2026-09-13: `tools/audit_lgo_slot_envelope_fit.py` converts each target's `slotGuide` into a numeric source-space envelope before source staging. Index evidence `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/slot-envelope-index-v1.json` covers all 11 missing targets. Test `tools/test_audit_lgo_slot_envelope_fit.py` proves the `waist_belt/jump_tuck` ImageGen alpha-cleanup candidate is rejected before staging (`bbox 708x540`, center distance `75.25px`, limits `267x146` and `55px`), while a small in-slot line candidate passes only as `SLOT_ENVELOPE_FIT_PASS_REVIEW_REQUIRED`. Passing this gate does not mean visual acceptance or Player readiness.
 
+Measured candidate evidence 2026-09-13: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/waist-belt-jump-measured-candidate-v1/visual-review-v1.json` is `WAIST_BELT_JUMP_MEASURED_FIT_PASS_VISUAL_DRAFT_NOT_STAGED`. It passes numeric fit but remains too schematic for source staging; use it as proof that the envelope is useful, not as packable art.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.
