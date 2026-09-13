@@ -223,6 +223,14 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory top tabs should stay compact like the owner reference, not inherit oversized web-button height.");
                 Assert.That(root.Q<Button>("Map01A Equipment Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(38),
                     "Inventory sub-tabs should share the compact game-tab density.");
+                Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Not.Null,
+                    "Bag category controls should read like compact RPG filter chips, not a pair of full-width debug table tabs.");
+                Assert.That(root.Q<Button>("Map01A Equipment Tab").style.flexGrow.value, Is.EqualTo(0),
+                    "Equipment category chip should not stretch across the full bag width.");
+                Assert.That(root.Q<Button>("Map01A Supplies Tab").style.flexGrow.value, Is.EqualTo(0),
+                    "Supplies category chip should not stretch across the full bag width.");
+                Assert.That(root.Q("Map01A Inventory Category Chip Consumable"), Is.Not.Null,
+                    "Bag shell should reserve compact category chips for later item groups without opening fake inventory data.");
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").text, Is.Empty,
                     "Equipment tile Button.text must stay empty so UIToolkit does not draw text over the runtime thumbnail and child labels.");
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").text, Is.Empty);

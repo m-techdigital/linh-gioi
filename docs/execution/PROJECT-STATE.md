@@ -1,3 +1,9 @@
+## Map01A — inventory category chips runtime audit — 2026-09-13
+
+`CONTINUE`, chỉ UI/Map01A. Batch này thay cặp sub-tab `Trang bị/Vật phẩm` kéo full-width trong Hành trang bằng category chip row gọn hơn (`Trang bị`, `Vật phẩm`, `Tiêu hao`, `Nguyên liệu`, `Khác`) để giảm cảm giác bảng debug và tiến gần hơn các reference hành trang RPG. Các chip dự phòng chỉ là affordance thụ động/disabled, không mở dữ liệu giả hoặc storage/item model mới. Không thêm icon giả/random, không quay lại class/wardrobe/pose, không rollback class code.
+
+Kiểm: RED fail đúng vì thiếu `Map01A Inventory Category Chips`; GREEN `./tools/unity_batch_test.sh --filter LinhGioi.Tests.EditMode.TwoDCharacterRuntimeStateTests.InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection` pass `total=1 passed=1 failed=0`. Player build/capture: `build/map01a-inventory-category-chips-player-v1/LinhGioiOnline.app`, evidence `build/map01a-inventory-category-chips-runtime-v1/inventory/{bag,character-info,character-info-after-supplies,supplies,storage}.png`, manifest `usesOsMouseOrKeyboard=false`, 1600x900. Manual visual audit: bag/supplies giảm độ bảng rộng ở đầu panel nhưng **chưa đạt nghiệm thu mỹ thuật**; còn cần shell/ornament/icon/portrait/provenance assets.
+
 ## Map01A — inventory detail/card polish runtime audit — 2026-09-13
 
 `CONTINUE`, chỉ UI/Map01A. Owner feedback đúng: UI/UX vẫn còn xa design nếu chỉ dựa vào test xanh. Batch này khóa thêm guard để Hành trang có card chi tiết bên phải với level/equipped/fit chips và item grid không bị giữ ở ô debug 70px/110px; item tile hiện dùng card cao hơn, icon lớn hơn nhưng vẫn `ScaleToFit` để không cắt hỏng thumbnail runtime. Không thêm icon giả/random, không dùng image generation, không quay lại class/wardrobe/pose, không rollback class code.

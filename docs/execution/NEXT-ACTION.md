@@ -1,3 +1,7 @@
+## Next Map01A UI polish after inventory category chips — 2026-09-13
+
+Continue Map01A product UI/UX only. Latest evidence `build/map01a-inventory-category-chips-runtime-v1/inventory/` shows Hành trang sub-categories are now compact chips rather than full-width table bars, but review remains `CONTINUE`, not owner acceptance. Next safe work: continue reducing table-like inventory shell, improve card/ornament hierarchy, or prepare provenance-backed item/portrait assets. Do not add fake/random icons, do not resume class/wardrobe/pose work, do not run class build/capture loops, and do not rollback existing class code.
+
 ## Next Map01A UI polish after inventory card/detail audit — 2026-09-13
 
 Continue Map01A product UI/UX only. Latest runtime evidence is `build/map01a-inventory-card-polish-runtime-v2/inventory/`: bag/detail card improved and no longer uses the rejected crop-heavy v1, but visual review remains `CONTINUE`, not owner acceptance. The next safe work should either improve the inventory shell toward the uploaded references using shared skin/base helpers, or prepare provenance-backed item/portrait/full-body assets before adding richer visuals. Do not add fake/random icons, do not resume class/wardrobe/pose work, do not run class build/capture loops, and do not rollback existing class code.

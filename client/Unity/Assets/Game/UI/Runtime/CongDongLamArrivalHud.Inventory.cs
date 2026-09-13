@@ -258,10 +258,34 @@ namespace LinhGioi.UI
             _inventoryGridPanel.style.flexGrow = 1;
             _inventoryGridPanel.style.marginRight = 8;
             body.Add(_inventoryGridPanel);
-            var tabs = InventoryRow("Map01A Inventory Tabs");
+            var tabs = InventoryRow("Map01A Inventory Category Chips");
+            tabs.style.alignItems = Align.Center;
+            tabs.style.flexWrap = Wrap.Wrap;
             _equipmentTab = InventoryButton(() => ShowInventoryPage(false), "Map01A Equipment Tab", "Trang bị");
             _suppliesTab = InventoryButton(() => ShowInventoryPage(true), "Map01A Supplies Tab", "Vật phẩm");
-            tabs.Add(_equipmentTab); tabs.Add(_suppliesTab); _inventoryGridPanel.Add(tabs);
+            foreach (var categoryTab in new[] { _equipmentTab, _suppliesTab })
+            {
+                categoryTab.style.flexGrow = 0;
+                categoryTab.style.flexBasis = 132;
+                categoryTab.style.minHeight = _touch ? 44 : 34;
+                categoryTab.style.marginRight = 6;
+                categoryTab.style.marginBottom = 4;
+                categoryTab.style.fontSize = 14;
+            }
+            tabs.Add(_equipmentTab);
+            tabs.Add(_suppliesTab);
+            var consumableChip = InventoryBadge("Map01A Inventory Category Chip Consumable", "Tiêu hao", UiSubText);
+            var materialChip = InventoryBadge("Map01A Inventory Category Chip Material", "Nguyên liệu", UiSubText);
+            var otherChip = InventoryBadge("Map01A Inventory Category Chip Other", "Khác", UiSubText);
+            foreach (var passiveChip in new[] { consumableChip, materialChip, otherChip })
+            {
+                passiveChip.style.opacity = .58f;
+                passiveChip.style.marginBottom = 4;
+            }
+            tabs.Add(consumableChip);
+            tabs.Add(materialChip);
+            tabs.Add(otherChip);
+            _inventoryGridPanel.Add(tabs);
 
             var gridStatus = InventoryRow("Map01A Inventory Grid Status");
             gridStatus.style.alignItems = Align.Center;
