@@ -1,3 +1,9 @@
+## Next — sau deterministic route minimap — 2026-09-14
+
+`CONTINUE`. HUD minimap hiện hành dùng evidence `build/map01a-route-minimap-runtime-v1/{01-arrival-q01,05-quan-thu-dialogue,18-q09-portal-open}.png`; Player `build/map01a-route-minimap-player-v1/LinhGioiOnline.app`. Không quay lại ô text-only placeholder. Route strip lấy state Q01–Q09 thật và giữ gate trước Q02.
+
+Next valid work: audit screen/interaction Map01A còn thiếu theo owner references, ưu tiên character select/menu hoặc polish một screen hoàn chỉnh có sai lệch cấu trúc lớn. Không chỉnh tiếp minimap bằng vi chỉnh nhỏ; không dùng icon/art giả; không resume class/pose/wardrobe/source, không rollback class code và không đổi frozen surfaces. Năm tab character hub tiếp tục dùng evidence v2 và các progression action giữ read-only đến khi contract mở.
+
 ## Next — sau approved five-tab workspace hierarchy — 2026-09-14
 
 `CONTINUE`. Evidence hiện hành duy nhất cho character hub là `build/map01a-five-tab-runtime-v2/{character-info,bag,skills,potential,spirit-pet}.png`; Player `build/map01a-five-tab-player-v2/LinhGioiOnline.app`. Không quay lại v1 vì v1 có chữ Kỹ năng xếp dọc và Tiềm năng overflow. Năm tab dùng một navigation base, content/detail hai cột; progression actions chưa có contract vẫn read-only.

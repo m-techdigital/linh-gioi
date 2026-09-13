@@ -41,6 +41,8 @@ namespace LinhGioi.UI
         private const string LgoHudPortraitClass = "lgo-hud-portrait";
         private const string LgoHudLocationChipClass = "lgo-hud-location-chip";
         private const string LgoHudMapPanelClass = "lgo-hud-map-panel";
+        private const string LgoHudMapRouteClass = "lgo-hud-map-route";
+        private const string LgoHudMapNodeClass = "lgo-hud-map-node";
         private const string LgoHudQuestPanelClass = "lgo-hud-quest-panel";
         private const string LgoHudCompositionClass = "lgo-hud-composition";
         private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
@@ -659,6 +661,45 @@ namespace LinhGioi.UI
             element.style.backgroundColor = UiGlassStrong;
             element.style.borderTopWidth = 2;
             element.style.borderTopColor = UiGoldBorder;
+        }
+
+        private static void ApplyLgoHudMapRouteLine(VisualElement element)
+        {
+            element.AddToClassList(LgoHudMapRouteClass);
+            element.style.position = Position.Absolute;
+            element.style.left = 18;
+            element.style.right = 18;
+            element.style.top = 12;
+            element.style.height = 2;
+            element.style.backgroundColor = new Color(.22f, .58f, .78f, .62f);
+        }
+
+        private static void ApplyLgoHudMapRouteNode(VisualElement element)
+        {
+            element.AddToClassList(LgoHudMapNodeClass);
+            element.style.width = 46;
+            element.style.alignItems = Align.Center;
+            element.style.flexShrink = 0;
+        }
+
+        private static void ApplyLgoHudMapRouteDot(VisualElement element)
+        {
+            element.style.width = element.style.height = 10;
+            element.style.borderTopLeftRadius = element.style.borderTopRightRadius = 5;
+            element.style.borderBottomLeftRadius = element.style.borderBottomRightRadius = 5;
+            ApplyLgoFrame(element, new Color(.08f, .36f, .58f, 1f), new Color(.90f, .72f, .34f, .94f));
+        }
+
+        private static void ApplyLgoHudMapCurrentMarker(VisualElement element)
+        {
+            element.style.position = Position.Absolute;
+            element.style.top = 4;
+            element.style.width = element.style.height = 16;
+            element.style.borderTopLeftRadius = element.style.borderTopRightRadius = 8;
+            element.style.borderBottomLeftRadius = element.style.borderBottomRightRadius = 8;
+            ApplyLgoFrame(element, new Color(.12f, .72f, 1f, .98f), new Color(1f, .84f, .42f, 1f));
+            element.style.borderLeftWidth = element.style.borderRightWidth = 2;
+            element.style.borderTopWidth = element.style.borderBottomWidth = 2;
         }
 
         private static void ApplyLgoHudQuestPanel(VisualElement element)

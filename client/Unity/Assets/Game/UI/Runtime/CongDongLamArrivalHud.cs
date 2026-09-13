@@ -16,8 +16,8 @@ namespace LinhGioi.UI
 
         private CongDongLamMap01AArtPreview _scene;
         private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs, _vitalsPortrait, _dialoguePortrait;
-        private VisualElement _playerHudCluster, _rightHudCluster;
-        private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
+        private VisualElement _playerHudCluster, _rightHudCluster, _minimap, _minimapCurrentMarker;
+        private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimapTitle, _minimapStatus, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
         private Button _skillsShortcut, _menuShortcut, _questMissionsTab, _questPartyTab;
@@ -107,9 +107,46 @@ namespace LinhGioi.UI
             _questTabs.Add(_questPartyTab);
             _quest = new Label { name = "Map01A Quest Tracker Body" }; ApplyLgoHudQuestPanel(_quest);
             _quest.style.width = 286; _quest.style.whiteSpace = WhiteSpace.Normal;
-            _minimap = new Label { name = "Map01A Minimap" }; ApplyLgoHudMapPanel(_minimap);
-            _minimap.style.width = 286; _minimap.style.height = 70; _minimap.style.fontSize = 13;
-            _minimap.style.unityTextAlign = TextAnchor.MiddleCenter; _minimap.style.marginBottom = 4;
+            _minimap = new VisualElement { name = "Map01A Minimap", pickingMode = PickingMode.Ignore }; ApplyLgoHudMapPanel(_minimap);
+            _minimap.style.width = 286; _minimap.style.height = 104; _minimap.style.fontSize = 12; _minimap.style.marginBottom = 4;
+            _minimapTitle = LgoLabel("BẢN ĐỒ KHU VỰC", 12, UiGold, true);
+            _minimapTitle.name = "Map01A Minimap Title";
+            _minimapTitle.style.unityTextAlign = TextAnchor.MiddleCenter;
+            _minimap.Add(_minimapTitle);
+            var minimapRoute = new VisualElement { name = "Map01A Minimap Route", pickingMode = PickingMode.Ignore };
+            minimapRoute.style.height = 42;
+            minimapRoute.style.marginTop = 3;
+            minimapRoute.style.position = Position.Relative;
+            var routeLine = new VisualElement { name = "Map01A Minimap Route Line", pickingMode = PickingMode.Ignore };
+            ApplyLgoHudMapRouteLine(routeLine);
+            minimapRoute.Add(routeLine);
+            var routeTrack = new VisualElement { name = "Map01A Minimap Route Track", pickingMode = PickingMode.Ignore };
+            routeTrack.style.flexDirection = FlexDirection.Row;
+            routeTrack.style.justifyContent = Justify.SpaceBetween;
+            routeTrack.style.alignItems = Align.Center;
+            routeTrack.style.height = 42;
+            routeTrack.style.paddingLeft = routeTrack.style.paddingRight = 6;
+            foreach (var label in new[] { "Hạ Vân", "Cổng", "Làng", "Rìa", "Suối" })
+            {
+                var routeNode = new VisualElement { name = "Map01A Minimap Node " + label, pickingMode = PickingMode.Ignore };
+                ApplyLgoHudMapRouteNode(routeNode);
+                var dot = new VisualElement { name = "Map01A Minimap Dot " + label, pickingMode = PickingMode.Ignore };
+                ApplyLgoHudMapRouteDot(dot);
+                var nodeLabel = LgoLabel(label, 9, UiSubText, true);
+                nodeLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+                routeNode.Add(dot);
+                routeNode.Add(nodeLabel);
+                routeTrack.Add(routeNode);
+            }
+            minimapRoute.Add(routeTrack);
+            _minimapCurrentMarker = new VisualElement { name = "Map01A Minimap Current Marker", pickingMode = PickingMode.Ignore };
+            ApplyLgoHudMapCurrentMarker(_minimapCurrentMarker);
+            minimapRoute.Add(_minimapCurrentMarker);
+            _minimap.Add(minimapRoute);
+            _minimapStatus = LgoLabel("", 10, UiSubText, true);
+            _minimapStatus.name = "Map01A Minimap Status";
+            _minimapStatus.style.unityTextAlign = TextAnchor.MiddleCenter;
+            _minimap.Add(_minimapStatus);
             _rightHudCluster.Add(_minimap);
             _rightHudCluster.Add(_questTabs);
             _rightHudCluster.Add(_quest);
@@ -414,7 +451,11 @@ namespace LinhGioi.UI
             _basic.text = _touch ? "" : "Z";
             _skill.text = _touch ? "" : "X";
             _skill.SetEnabled(_scene.CanTriggerVoSkill);
-            _minimap.text = _scene.MinimapRouteText;
+            _minimapTitle.text = _scene.MinimapUnlocked ? "BẢN ĐỒ ĐÔNG LÂM" : "BẢN ĐỒ KHU VỰC";
+            _minimapStatus.text = _scene.MinimapUnlocked ? "Đang ở: " + _scene.CurrentRouteNodeLabel : "Hoàn thành Q02 để mở tuyến đường";
+            _minimapCurrentMarker.style.display = _scene.MinimapUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
+            _minimapCurrentMarker.style.left = new Length(7f + 86f * Mathf.Clamp01(_scene.CurrentRouteProgress), LengthUnit.Percent);
+            _minimap.style.opacity = _scene.MinimapUnlocked ? 1f : .74f;
             _minimap.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _characterSelectButton.text = "Nhân vật";
             _inventoryToggle.text = _scene.InventoryOpen ? "Đóng" : "Hành trang";

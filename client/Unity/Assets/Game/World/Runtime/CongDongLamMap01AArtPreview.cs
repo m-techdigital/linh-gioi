@@ -491,6 +491,7 @@ namespace LinhGioi.World
         private int _currentRouteIndex;
         public string CurrentRouteNodeId => RouteNodeIds[_currentRouteIndex];
         public string CurrentRouteNodeLabel => RouteNodeLabels[_currentRouteIndex];
+        public float CurrentRouteProgress => RouteNodeIds.Length <= 1 ? 0f : (float)_currentRouteIndex / (RouteNodeIds.Length - 1);
         public Vector3 CurrentInteractionPosition => new Vector3(RouteNodeX[_currentRouteIndex], GroundY + 2.15f, 0);
         public bool CanUseCurrentRouteAction
         {

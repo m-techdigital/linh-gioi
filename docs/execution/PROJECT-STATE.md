@@ -1,3 +1,10 @@
+## Map01A — deterministic route minimap replaces placeholder — 2026-09-14
+
+- Scope Map01A/UI-only. Không tạo map art giả, không đổi gameplay route, camera, class/pose/wardrobe/source hoặc frozen surfaces.
+- Root cause: HUD vẫn render `MinimapRouteText` trong một `Label` 286×70 nên dù Q01–Q09 có sẵn 10 route nodes/tiến độ, Player chỉ thấy ô chữ placeholder. HUD giờ dựng route strip năm mốc Hạ Vân–Cổng–Làng–Rìa–Suối từ state thật, marker nội suy theo `CurrentRouteProgress`, hiển thị gate Q02 trước khi mở và tên node hiện tại sau khi mở. Route line/node/marker dùng shared HUD Skin helpers.
+- TDD RED/GREEN `SourceGameplayHudKeepsVitalsAndHidesLegacyModeButtonsWhenInventoryCloses` đạt `1/1`; full `TwoDCharacterRuntimeStateTests` đạt `20/20` sau khi khóa font minimap ở 12px để không kế thừa cỡ HUD lớn. Player `build/map01a-route-minimap-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=36`; full Q01–Q09 capture `build/map01a-route-minimap-runtime-v1/` đạt 18 frame + 38 dialogue, `minimapUnlocked=true`, `functionalUiVerified=true`.
+- Visual audit đã xem Q01 khóa, Q03 tại Quan Thủ và Q09 Portal: route không chồng quest/dialogue, marker ở Cổng rồi tiến đến Suối đúng state. Đây là map điều hướng sản phẩm có dữ liệu, không phải ảnh minh họa giả.
+
 ## Map01A — approved five-tab workspace hierarchy — 2026-09-14
 
 - Scope vẫn khóa ở Map01A/UI-only; không đổi hoặc capture class/wardrobe/pose/source/camera/scale và không rollback code class.

@@ -825,6 +825,12 @@ namespace LinhGioi.Tests.EditMode
                     "HUD minimap placeholder must use the shared info-panel base until a real minimap art pass replaces it.");
                 Assert.That(root.Q("Map01A Minimap").style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.9f),
                     "Map and quest cards must remain readable over bright sky and share one HUD background token.");
+                var minimapTrack = root.Q("Map01A Minimap Route Track");
+                Assert.That(minimapTrack, Is.Not.Null,
+                    "Map01A HUD must render its deterministic route data instead of leaving a text-only minimap placeholder.");
+                Assert.That(minimapTrack.childCount, Is.EqualTo(5));
+                Assert.That(root.Q("Map01A Minimap Current Marker"), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Minimap Status"), Is.Not.Null);
                 Assert.That(root.Q("LGO World Touch Movement Pad").ClassListContains("lgo-hud-info-panel"), Is.True,
                     "Touch movement pad shell must reuse HUD info-panel base rather than the legacy Box helper.");
                 Assert.That(root.Q("Map01A Quest Tracker Tabs"), Is.Not.Null,
