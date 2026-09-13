@@ -10,6 +10,8 @@ Local Krita evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-rep
 
 Krita CLI export smoke is not proven: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`, exit 130 after interrupt, no output PNG. Native round-trip/export should use Krita Scripter or a verified plugin runner until CLI export is fixed.
 
+KRA archive fallback evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/kra-archive-probe-v1/report.json` is `KRA_ARCHIVE_MERGEDIMAGE_READABLE` for the outer-top idle v7 KRA. This can help inspect old candidates, but it must not be used as a replacement for Krita reopen/export proof or as source-layer acceptance.
+
 ## Map01A inventory grid runtime art cleanup — 2026-09-13
 
 Equipment grid tiles in Hành trang now use real runtime atlas thumbnails inside each tile and keep `Button.text` empty so UI Toolkit no longer draws duplicate text over the icon. Slot name/state are rendered through child labels, with a regression covering the no-overlap contract. Player evidence: `build/map01a-inventory-grid-runtime-art-clean-capture-v1/07-q04-inventory-open.png`; visual review confirms the grid icons and labels are readable and no longer overlap. Build: `client/Unity/build/map01a-inventory-grid-runtime-art-clean-player/LinhGioiOnline.app`, `errors=0 warnings=17` (deprecated UI API warnings only). This remains an incremental runtime-art polish checkpoint, not final inventory visual design acceptance.

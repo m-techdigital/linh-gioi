@@ -16,6 +16,8 @@ Local authoring toolchain evidence: `build/pose-matched-layer-authoring-v1/six-p
 
 Krita CLI smoke evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`; `krita --export` did not finish and created no output PNG. Treat local Krita as available for GUI/Scripter/plugin-based authoring, but do not assume CLI export round-trip is working until a runner is added and verified.
 
+KRA archive probe evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/kra-archive-probe-v1/report.json` is `KRA_ARCHIVE_MERGEDIMAGE_READABLE` for `outer-top-material-idle-v7/outer-top-idle-material.kra`. The extracted `mergedimage.png` is 1024×1536 RGBA with visible alpha, but zip extraction proves archive readability only; it is not Krita reopen/export and not clean A/B front/back source-layer acceptance.
+
 ## Skeletal 2D source blueprint gate — owner rejection recorded 2026-09-13
 
 Owner rejected the current generated-cutout skeletal Player result as visually unacceptable: limbs read detached, proportions do not match the accepted character design, and jump/flip motion cannot be used as a foundation for clothing. This closes `bind-authority-candidate-v1` as runtime/bind evidence; it is preserved only for failure analysis.
