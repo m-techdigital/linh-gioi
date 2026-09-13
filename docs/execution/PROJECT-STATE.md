@@ -3,6 +3,7 @@
 - Visual audit Player phát hiện `● Mượt` bị flex-shrink và xuống hai dòng giữa tên server và nút đổi server, lệch rõ reference đăng nhập.
 - Label trạng thái giờ khóa `NoWrap`, không shrink và có chiều rộng tối thiểu; tên server, trạng thái và affordance đổi server nằm cùng một hàng mà không đổi shared detail-card hoặc layout màn khác.
 - TDD RED fail đúng ở `WhiteSpace.Normal`; GREEN targeted `1/1`, full `TwoDCharacterRuntimeStateTests` đạt `20/20`. Player `build/map01a-entry-server-state-player-v1/LinhGioiOnline.app` build thành công, evidence `build/map01a-entry-server-state-runtime-v1/entry-login.png` đã visual audit ở 1600×900, không còn wrap/chồng.
+- Cùng Player đã refresh `build/map01a-menu-current-runtime-v1/menu.png`: Menu hiện đủ năm đích đến và HUD phía sau dùng identity/tracker mới, nên catalog không còn trỏ ảnh Menu v3 được chụp trước các sửa đổi này.
 
 ## Map01A — catalog hiện hành đã khóa vào design năm tab — 2026-09-14
 

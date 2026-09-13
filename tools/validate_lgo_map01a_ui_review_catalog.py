@@ -23,8 +23,8 @@ HUB_FRAMES = ["character-info.png", "bag.png", "skills.png", "potential.png", "s
 ROUTE_MANIFEST = "build/map01a-context-action-runtime-v1/manifest.json"
 ROUTE_FRAMES = ["01-arrival-q01.png", "18-q09-portal-open.png"]
 MENU_EVIDENCE = (
-    "build/map01a-menu-runtime-v3/manifest.json",
-    "build/map01a-menu-runtime-v3/menu.png",
+    "build/map01a-menu-current-runtime-v1/manifest.json",
+    "build/map01a-menu-current-runtime-v1/menu.png",
 )
 LEGACY_CURRENT_PATH_MARKERS = ("character-select-runtime", "inventory-tab-runtime", "inventory-column-balance-runtime")
 
