@@ -186,6 +186,19 @@ namespace LinhGioi.World
                 source.gender == _gender && source.level == _levels[slot] && source.slotId == slot).itemId;
         }
 
+        public Sprite GetSlotThumbnailSprite(string slot)
+        {
+            RequireSlot(slot);
+            var center = _views.FirstOrDefault(view => view.Source.gender == _gender
+                && view.Source.level == _levels[slot] && view.Source.slotId == slot
+                && view.Source.side == "center" && view.Renderer != null);
+            if (center != null) return center.Renderer.sprite;
+            var any = _views.FirstOrDefault(view => view.Source.gender == _gender
+                && view.Source.level == _levels[slot] && view.Source.slotId == slot
+                && view.Renderer != null);
+            return any?.Renderer.sprite;
+        }
+
         private void Refresh()
         {
             var active = Active;

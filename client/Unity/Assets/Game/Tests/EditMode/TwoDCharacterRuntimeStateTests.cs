@@ -180,7 +180,10 @@ namespace LinhGioi.Tests.EditMode
                     "Item detail must stay on the right side of the bag grid.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Does.Contain("CHI TIẾT"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.None),
+                Assert.That(scene.GetVoEquipmentThumbnailSprite("main_weapon"), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "Inventory detail must show real runtime equipment art instead of hiding behind fake icons.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Is.Empty,
                     "Inventory must not present emoji/text badges as final item art.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Stat Primary").text, Does.Contain("Công"));
@@ -201,7 +204,9 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").text, Does.Contain("Giày"));
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(scene.GetVoEquipmentThumbnailSprite("boots"), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").text, Is.Empty);
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐANG MẶC"));
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Toggle"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").text, Does.Contain("ĐÃ THÁO"));

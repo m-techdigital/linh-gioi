@@ -96,7 +96,7 @@ namespace LinhGioi.UI
             _inventoryDetailIcon = LgoLabel("", 42, UiGold, true);
             _inventoryDetailIcon.name = "Map01A Inventory Detail Icon";
             ApplyLgoItemIcon(_inventoryDetailIcon);
-            _inventoryDetailIcon.style.display = DisplayStyle.None;
+            _inventoryDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             _inventoryFooter.Add(_inventoryDetailIcon);
             _equipmentDetail = LgoLabel("", 24, UiGold, true);
             _equipmentDetail.style.marginTop = 6;
@@ -365,8 +365,10 @@ namespace LinhGioi.UI
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
             var selectedLevel = _scene.GetVoEquipmentItemLevel(selectedSlot);
             var selectedName = EquipmentDisplayName(selectedSlot);
+            var thumbnail = _scene.GetVoEquipmentThumbnailSprite(selectedSlot);
             _inventoryDetailIcon.text = "";
-            _inventoryDetailIcon.style.display = DisplayStyle.None;
+            _inventoryDetailIcon.style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
+            _inventoryDetailIcon.style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
             _equipmentDetail.text = selectedName + " · Lv" + selectedLevel;
             _inventoryDetailRarity.text = "Tinh phẩm · Lv" + selectedLevel + " · 10 slot chung";
             _inventoryDetailSlotType.text = selectedName;

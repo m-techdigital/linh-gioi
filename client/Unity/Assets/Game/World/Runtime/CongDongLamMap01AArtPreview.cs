@@ -247,6 +247,33 @@ namespace LinhGioi.World
             var reviewId = ActiveSourcePoseReview?.GetSlotItemId(VoReviewSlotIds[index]);
             return string.IsNullOrEmpty(reviewId) ? "vo_" + slot + "_lv" + GetVoEquipmentItemLevel(slot).ToString("000") : reviewId;
         }
+        public Sprite GetVoEquipmentThumbnailSprite(string slot)
+        {
+            var index = Array.IndexOf(VoEquipmentSlots, slot);
+            if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
+            if (_classFitPreviewActive) return _classFitPreview.GetSlotThumbnailSprite(VoReviewSlotIds[index]);
+            var level = GetVoEquipmentItemLevel(slot);
+            var partId = "lv" + level.ToString("000") + "_" + VoAvatarGender + "_slot_" + slot;
+            if (_voAvatarParts.TryGetValue(partId, out var partRenderer) && partRenderer.sprite != null)
+                return partRenderer.sprite;
+            foreach (var pair in _voEquipmentComponentInfo)
+            {
+                var info = pair.Value;
+                if (info.slot != slot || info.gender != VoAvatarGender || info.level != level || info.side != "center")
+                    continue;
+                if (_voEquipmentComponents.TryGetValue(pair.Key, out var renderer) && renderer.sprite != null)
+                    return renderer.sprite;
+            }
+            foreach (var pair in _voEquipmentComponentInfo)
+            {
+                var info = pair.Value;
+                if (info.slot != slot || info.gender != VoAvatarGender || info.level != level)
+                    continue;
+                if (_voEquipmentComponents.TryGetValue(pair.Key, out var renderer) && renderer.sprite != null)
+                    return renderer.sprite;
+            }
+            return null;
+        }
         public bool HasVoEquipmentItemVariant(string slot)
         {
             if (_classFitPreviewActive) return true;

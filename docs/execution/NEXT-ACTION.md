@@ -1,3 +1,7 @@
+## Next inventory art polish after runtime thumbnails — 2026-09-13
+
+Inventory item art now comes from runtime atlas sprites, not emoji/glyph placeholders. Next valid polish is thumbnail framing: make weapon/boots/clothing thumbnails readable in the design-style icon frame using deterministic atlas sprites or approved cutout mapping, without random generation and without adding source images. Re-capture `07-q04-inventory-open.png` after changes and visually check that thumbnails are large enough, centered, and consistent with the owner reference UI.
+
 ## Next UI action after fake-icon guard — 2026-09-13
 
 Continue Map01A UI/UX from the owner design references, but do not reintroduce temporary inventory glyphs or fake item icons. The current runtime deliberately hides item-art slots until real design-quality thumbnails exist. Next valid inventory work is one of: (1) map approved item/equipment thumbnail assets from an accepted atlas/cutout source, or (2) create a reviewed item-thumbnail design board before runtime wiring. Keep `Kỹ năng` and `Menu` as shared disabled roadmap actions until their real screens are implemented. Required evidence remains EditMode, shared UI validator, no-3D/no-source-image validators, frozen diff audit, Player capture and manual screenshot review.
