@@ -5,7 +5,7 @@ namespace LinhGioi.World
     // Local Map01A copy follows reference 05; quest effects remain owned by the map state.
     public static class Map01ADialogueContent
     {
-        public static NpcDialogueSession Create(string node, bool offer, bool done, string objective)
+        public static NpcDialogueSession Create(string node, bool offer, bool done, string objective, bool journeyComplete = false)
         {
             string speaker, accept;
             string[] lines;
@@ -62,8 +62,35 @@ namespace LinhGioi.World
                     break;
                 default: throw new ArgumentException("Unknown Map01A NPC: " + node);
             }
+            if (journeyComplete) lines = PostJourneyLines(node);
             return new NpcDialogueSession(speaker, lines, "Hỏi việc tiếp theo", objective,
                 offer ? accept : "Tạm biệt");
+        }
+
+        private static string[] PostJourneyLines(string node)
+        {
+            switch (node)
+            {
+                case "spawn-ha-van": return new[] {
+                    "Ngươi đã đi trọn đường thử thách ở Đông Lâm. Ta mừng vì ngươi đã sẵn sàng.",
+                    "Lối Suối Thanh Minh đã mở. Hãy chuẩn bị hành trang rồi tiếp tục khi muốn." };
+                case "quan-thu": return new[] {
+                    "Ngươi đã giữ đúng luật làng và xử lý mối nguy ngoài rìa. Cổng Đông Lâm vẫn bình yên.",
+                    "Lối Suối Thanh Minh đã mở. Qua cổng nhớ luôn quan sát đường và giữ sức." };
+                case "tong-phu": return new[] {
+                    "Phần tiếp tế tân thủ đã giao đủ. Trước chuyến đi mới, hãy kiểm lại số bình còn trong hành trang.",
+                    "Lối Suối Thanh Minh đã mở. Khi trở về Đông Lâm, cứ ghé ta bổ sung chỉ dẫn." };
+                case "thanh-nhi": return new[] {
+                    "Ngươi đã nhận ra Linh Thảo Non và hoàn thành việc ở dược quán. Ta không còn gì phải nhắc lại.",
+                    "Lối Suối Thanh Minh đã mở. Nếu gặp cây lạ, hãy quan sát ánh sáng trước khi hái." };
+                case "well-bridge": return new[] {
+                    "Ngươi đã tìm thấy cả linh thảo lẫn chiếc rương cạnh giếng. Mắt quan sát khá lắm.",
+                    "Lối Suối Thanh Minh đã mở. Sau này quay lại, ta sẽ kể thêm chuyện trong làng." };
+                case "lao-tran": return new[] {
+                    "Rìa làng đã yên và chiến lợi phẩm đã thuộc về ngươi. Việc ta nhờ đã hoàn tất.",
+                    "Lối Suối Thanh Minh đã mở. Hãy kiểm trang bị trước khi bước qua portal." };
+                default: throw new ArgumentException("Unknown Map01A NPC: " + node);
+            }
         }
     }
 }

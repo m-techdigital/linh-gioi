@@ -74,6 +74,27 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void Map01APostCompletionNpcDialogueDoesNotPointBackIntoFinishedTutorial()
+        {
+            foreach (var node in new[] { "spawn-ha-van", "quan-thu", "tong-phu", "thanh-nhi", "well-bridge", "lao-tran" })
+            {
+                var session = Map01ADialogueContent.Create(node, offer: false, done: true,
+                    objective: "Lối Suối Thanh Minh đã mở.", journeyComplete: true);
+                Assert.That(session.Open(), Is.True);
+                var lines = new List<string>();
+                while (session.Active)
+                {
+                    lines.Add(session.Line);
+                    session.Advance();
+                }
+                var copy = string.Join("\n", lines);
+                Assert.That(copy, Does.Contain("Suối Thanh Minh"), node);
+                Assert.That(copy, Does.Not.Contain("phía trước"), node + " must not send the player back into the finished route");
+                Assert.That(copy, Does.Not.Contain("việc tiếp theo"), node + " must acknowledge completion instead of offering stale tutorial guidance");
+            }
+        }
+
+        [Test]
         public void Map01ATerrainWalkSurfaceIsOpaqueAndMatchesFeetOnEveryModule()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

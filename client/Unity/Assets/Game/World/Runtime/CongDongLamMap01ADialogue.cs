@@ -41,7 +41,7 @@ namespace LinhGioi.World
                 || node == "lao-tran" && HasDefeatedFirstEnemy;
             var hint = ActiveQuestId == "COMPLETE" ? "Lối Suối Thanh Minh đã mở. Ngươi có thể tiếp tục khám phá Đông Lâm."
                 : QuestName(ActiveQuestId) + "\n" + QuestObjective(ActiveQuestId);
-            _dialogueSession = Map01ADialogueContent.Create(node, offer, done, hint);
+            _dialogueSession = Map01ADialogueContent.Create(node, offer, done, hint, ActiveQuestId == "COMPLETE");
             _dialogueNodeId = node;
             _onDialogueComplete = offer ? () => AcceptNpcTask(node) : (Action)null;
             _inventoryBeforeDialogue = InventoryOpen;
