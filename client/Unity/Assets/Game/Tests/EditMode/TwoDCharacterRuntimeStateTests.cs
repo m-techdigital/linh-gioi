@@ -189,6 +189,8 @@ namespace LinhGioi.Tests.EditMode
                 var detailIcon = root.Q<Label>("Map01A Inventory Detail Icon");
                 Assert.That(detailIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Inventory detail must show real runtime equipment art instead of hiding behind fake icons.");
+                Assert.That(detailIcon.ClassListContains("lgo-item-icon-frame"), Is.True,
+                    "Inventory detail icon must use the shared item-icon frame base before final dedicated item art is available.");
                 Assert.That(detailIcon.text, Is.Empty,
                     "Inventory must not present emoji/text badges as final item art.");
                 Assert.That(detailIcon.style.width.value.value, Is.GreaterThanOrEqualTo(72),
@@ -212,6 +214,8 @@ namespace LinhGioi.Tests.EditMode
                     "Equipment grid tiles must show the same real runtime thumbnail art, not text-only placeholders.");
                 Assert.That(weaponTileIcon.style.backgroundImage.value.sprite, Is.EqualTo(weaponThumbnail));
                 Assert.That(weaponTileIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(weaponTileIcon.ClassListContains("lgo-item-icon-frame"), Is.True,
+                    "Equipment grid thumbnails must use the same shared item-icon frame base as the detail panel.");
                 Assert.That(weaponTileIcon.style.width.value.value, Is.InRange(58, 72),
                     "Grid item thumbnails should be compact like RPG bag icons, not oversized crops that make the UI look rough.");
                 var mainWeaponTile = root.Q<Button>("Map01A Equipment Item Tile main_weapon");
@@ -689,6 +693,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(characterWeaponIcon, Is.Not.Null,
                     "Character-info equipment slots should reuse runtime item thumbnails instead of staying as text-only cells.");
                 Assert.That(characterWeaponIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(characterWeaponIcon.ClassListContains("lgo-item-icon-frame"), Is.True,
+                    "Character-info equipment thumbnails must not carry a parallel icon-frame style.");
                 var modalTitle = root.Q<Label>("Map01A Inventory Modal Title");
                 var modalSubtitle = root.Q<Label>("Map01A Inventory Modal Subtitle");
                 Assert.That(modalTitle, Is.Not.Null, "Inventory modal needs a named title so each main tab can present its own screen.");
@@ -704,8 +710,11 @@ namespace LinhGioi.Tests.EditMode
                 hud.OpenInventoryReviewMode("supplies");
                 Assert.That(modalTitle.text, Is.EqualTo("HÀNH TRANG"));
                 Assert.That(root.Q("Map01A Supplies Page").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Supplies List Card"), Is.Not.Null,
+                var suppliesListCard = root.Q("Map01A Supplies List Card");
+                Assert.That(suppliesListCard, Is.Not.Null,
                     "Supplies should present a left-side list card beside the right detail card, not a flat full-width technical list.");
+                Assert.That(suppliesListCard.IndexOf(root.Q("Map01A Quest Item Actions")), Is.LessThan(suppliesListCard.IndexOf(root.Q("Map01A Supplies Empty State"))),
+                    "Supply item rows must appear before explanatory empty-state copy so they remain visible in the bounded Player inventory viewport.");
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Supplies must keep the right-side detail panel instead of becoming a left-only technical list.");
                 Assert.That(root.Q<Label>("Map01A Supplies Empty State").text, Does.Contain("Chưa nhận"));

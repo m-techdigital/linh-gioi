@@ -537,12 +537,6 @@ namespace LinhGioi.UI
             _inventorySummary = LgoLabel("", 15, new Color(.91f, .93f, .84f, .96f));
             _inventorySummary.style.marginTop = 8; _inventorySummary.style.marginBottom = 10;
             suppliesListCard.Add(_inventorySummary);
-            _suppliesEmptyState = LgoLabel("", 15, new Color(.70f, .80f, .80f, .92f));
-            _suppliesEmptyState.name = "Map01A Supplies Empty State";
-            _suppliesEmptyState.style.marginTop = 2;
-            _suppliesEmptyState.style.marginBottom = 12;
-            ApplyLgoStatusCard(_suppliesEmptyState);
-            suppliesListCard.Add(_suppliesEmptyState);
             _questItemActions = new VisualElement { name = "Map01A Quest Item Actions" };
             _healthPotion = SupplyItemRow(() => SelectInventorySupply("health_potion"), "Map01A Health Potion", "health_potion", out _healthPotionName, out _healthPotionCount, out _healthPotionState);
             _manaPotion = SupplyItemRow(() => SelectInventorySupply("mana_potion"), "Map01A Mana Potion", "mana_potion", out _manaPotionName, out _manaPotionCount, out _manaPotionState);
@@ -550,7 +544,13 @@ namespace LinhGioi.UI
             _questItemActions.Add(_healthPotion);
             _questItemActions.Add(_manaPotion);
             _questItemActions.Add(_equipReward);
-            suppliesListCard.Add(_questItemActions); scroll.Add(_suppliesPage);
+            suppliesListCard.Add(_questItemActions);
+            _suppliesEmptyState = LgoLabel("", 15, new Color(.70f, .80f, .80f, .92f));
+            _suppliesEmptyState.name = "Map01A Supplies Empty State";
+            _suppliesEmptyState.style.marginTop = 2;
+            _suppliesEmptyState.style.marginBottom = 12;
+            ApplyLgoStatusCard(_suppliesEmptyState);
+            suppliesListCard.Add(_suppliesEmptyState); scroll.Add(_suppliesPage);
 
             body.Add(_inventoryDetailPanel);
 

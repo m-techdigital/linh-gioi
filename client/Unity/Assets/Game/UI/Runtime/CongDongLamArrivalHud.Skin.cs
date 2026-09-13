@@ -44,6 +44,7 @@ namespace LinhGioi.UI
         private const string LgoActionStandardClass = "lgo-action-standard";
         private const string LgoInputFieldClass = "lgo-input-field";
         private const string LgoOrnamentRailClass = "lgo-ornament-rail";
+        private const string LgoItemIconFrameClass = "lgo-item-icon-frame";
         private const string LgoTitleLabelClass = "lgo-title-label";
         private const string LgoSubtitleLabelClass = "lgo-subtitle-label";
 
@@ -116,6 +117,7 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoItemIcon(VisualElement icon)
         {
+            icon.AddToClassList(LgoItemIconFrameClass);
             icon.style.width = 58;
             icon.style.height = 58;
             icon.style.marginTop = 8;

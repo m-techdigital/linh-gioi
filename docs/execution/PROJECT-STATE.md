@@ -1,3 +1,10 @@
+## Map01A — inventory item icon frame and supplies visibility guard — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.
+- `ApplyLgoItemIcon(...)` giờ gắn class shared `lgo-item-icon-frame`, áp dụng cho detail thumbnail, grid equipment thumbnails, hero portrait/quick icons và character-info slot icons. Đây là foundation để sau này thay dedicated item icon art an toàn mà không mỗi nơi một frame.
+- Player visual audit phát hiện tab `Vật phẩm` bị empty-state đẩy danh sách item xuống đáy viewport; đã đảo thứ tự để item rows hiển thị trước explanatory empty-state copy. Không thêm icon fake vì `docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md` vẫn xác định chưa có approved dedicated UI icon set cho potion/reward.
+- TDD/evidence: RED thiếu `lgo-item-icon-frame`, RED supplies order `Quest Item Actions` sau empty-state; GREEN targeted EditMode pass cho inventory separation và inventory review capture. Player build/capture `build/map01a-item-icon-frame-player-v2/LinhGioiOnline.app`, evidence `build/map01a-item-icon-frame-runtime-v2/{bag,character-info,supplies,storage}.png`. Visual audit: supplies row hiện rõ, bag/character-info không vỡ; UI tổng thể vẫn `CONTINUE`, còn cần polish grid depth/spacing và dedicated icon board có provenance.
+
 ## Map01A — HUD info panel base-first guard — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật.

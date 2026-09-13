@@ -1,3 +1,9 @@
+## Next — Map01A inventory polish after item-icon frame and supplies visibility — 2026-09-13
+
+`CONTINUE`. Inventory thumbnails đã dùng shared `lgo-item-icon-frame`, và tab `Vật phẩm` không còn bị empty-state đẩy item rows xuống dưới viewport. Evidence Player mới: `build/map01a-item-icon-frame-runtime-v2/supplies.png`, `bag.png`, `character-info.png`; capture không dùng chuột/phím OS.
+
+Next valid work: tiếp tục Map01A/UI-only theo owner references, ưu tiên giảm khoảng trống/thô ở bag grid và detail panel bằng shared base, hoặc chuẩn bị dedicated item-icon board/provenance trước khi wire icon thật. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt và trạng thái vẫn `CONTINUE` nếu chưa sát design.
+
 ## Next — Map01A base-first UI after HUD info panel foundation — 2026-09-13
 
 `CONTINUE`. HUD info panels đã dùng shared `ApplyLgoHudInfoPanel(...)` / `lgo-hud-info-panel`, legacy `Box(...)` bị validator chặn để tránh tự build UI tràn lan. Evidence Player mới: `build/map01a-hud-info-panel-runtime-v1/pc/01-arrival-q01.png` và full route capture cùng thư mục.
