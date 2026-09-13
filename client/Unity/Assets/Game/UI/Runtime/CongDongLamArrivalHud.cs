@@ -17,7 +17,7 @@ namespace LinhGioi.UI
         private const float InventoryGridCellBasisPercent = 14.2f;
 
         private CongDongLamMap01AArtPreview _scene;
-        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs, _vitalsPortrait;
+        private VisualElement _root, _safe, _dialogue, _inventory, _combatBar, _questItemActions, _productShortcutActions, _questTabs, _vitalsPortrait, _dialoguePortrait;
         private Label _quest, _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimap, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
         private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
@@ -186,6 +186,14 @@ namespace LinhGioi.UI
             _dialogue.style.paddingTop = _dialogue.style.paddingBottom = 10;
             _dialogue.style.fontSize = 17;
             _dialogue.style.flexDirection = FlexDirection.Column;
+            var dialogueLayout = new VisualElement { name = "Map01A Dialogue Content Layout", pickingMode = PickingMode.Ignore };
+            dialogueLayout.style.flexDirection = FlexDirection.Row;
+            dialogueLayout.style.alignItems = Align.FlexEnd;
+            _dialoguePortrait = new VisualElement { name = "Map01A Dialogue NPC Portrait", pickingMode = PickingMode.Ignore };
+            ApplyLgoDialoguePortrait(_dialoguePortrait);
+            dialogueLayout.Add(_dialoguePortrait);
+            var dialogueContent = new VisualElement { name = "Map01A Dialogue Text And Actions" };
+            dialogueContent.style.flexGrow = 1;
             var dialogueHeader = new VisualElement { name = "Map01A Dialogue Header" };
             ApplyLgoGlassPanel(dialogueHeader, true);
             dialogueHeader.style.paddingLeft = dialogueHeader.style.paddingRight = 10;
@@ -198,14 +206,14 @@ namespace LinhGioi.UI
             _dialogueQuestContext.style.whiteSpace = WhiteSpace.Normal;
             _dialogueQuestContext.style.marginTop = 4;
             dialogueHeader.Add(_dialogueQuestContext);
-            _dialogue.Add(dialogueHeader);
+            dialogueContent.Add(dialogueHeader);
             var dialogueBody = new VisualElement { name = "Map01A Dialogue Body" };
             ApplyLgoDetailCard(dialogueBody, 12, 10);
             dialogueBody.style.marginTop = 8;
             _dialogueLine = LgoLabel(_scene.DialogueText, 17, new Color(.95f, .91f, .78f, .98f));
             _dialogueLine.name = "Map01A Dialogue Line";
             _dialogueLine.style.whiteSpace = WhiteSpace.Normal; dialogueBody.Add(_dialogueLine);
-            _dialogue.Add(dialogueBody);
+            dialogueContent.Add(dialogueBody);
             var dialogueOptions = new VisualElement { name = "Map01A Dialogue Actions" }; dialogueOptions.style.flexDirection = FlexDirection.Row;
             dialogueOptions.style.flexWrap = Wrap.Wrap;
             dialogueOptions.style.marginTop = 8;
@@ -218,7 +226,9 @@ namespace LinhGioi.UI
                 ApplyLgoDialogueSecondaryAction(option);
             }
             foreach (var option in new[] { _dialogueContinue, _dialogueInformation, _dialogueClose }) dialogueOptions.Add(option);
-            _dialogue.Add(dialogueOptions);
+            dialogueContent.Add(dialogueOptions);
+            dialogueLayout.Add(dialogueContent);
+            _dialogue.Add(dialogueLayout);
             _safe.Add(_dialogue);
             _marker = new Label("!\nHạ Vân") { pickingMode = PickingMode.Ignore };
             _marker.style.position = Position.Absolute; _marker.style.color = new Color(1,.83f,.3f);
@@ -445,6 +455,8 @@ namespace LinhGioi.UI
             _dialogueSpeaker.text = _scene.DialogueSpeaker + " · " + _scene.DialogueProgress;
             _dialogueQuestContext.text = DialogueQuestContextText();
             _dialogueLine.text = _scene.DialogueText;
+            var dialoguePortrait = _scene.GetCurrentDialogueNpcSprite();
+            _dialoguePortrait.style.backgroundImage = dialoguePortrait == null ? StyleKeyword.None : new StyleBackground(dialoguePortrait);
             _marker.text = "!\n" + _scene.CurrentRouteNodeLabel;
             _marker.style.display = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen ? DisplayStyle.None : DisplayStyle.Flex;
             UpdateHudShellVisibility();

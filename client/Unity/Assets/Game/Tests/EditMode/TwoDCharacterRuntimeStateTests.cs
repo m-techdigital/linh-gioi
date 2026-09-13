@@ -1060,6 +1060,10 @@ namespace LinhGioi.Tests.EditMode
                     "Dialogue body must use the shared layered-frame primitive so conversation panels do not stay flat.");
                 var actionRow = root.Q("Map01A Dialogue Actions");
                 Assert.That(actionRow, Is.Not.Null, "Dialogue panel must use a named action row instead of loose buttons.");
+                var portrait = root.Q("Map01A Dialogue NPC Portrait");
+                Assert.That(portrait, Is.Not.Null, "Dialogue must reserve a shared portrait area for the active NPC.");
+                Assert.That(portrait.ClassListContains("lgo-dialogue-portrait"), Is.True);
+                Assert.That(portrait.style.backgroundImage.value.sprite, Is.EqualTo(scene.GetCurrentDialogueNpcSprite()));
                 var speaker = root.Q<Label>("Map01A Dialogue Speaker");
                 Assert.That(speaker, Is.Not.Null, "Dialogue speaker needs a named shared title label for UI audit and style reuse.");
                 Assert.That(speaker.ClassListContains("lgo-title-label"), Is.True,

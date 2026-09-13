@@ -196,6 +196,7 @@ namespace LinhGioi.World
         private readonly Dictionary<string, VoAttachmentProfile> _voAttachmentProfiles = new Dictionary<string, VoAttachmentProfile>();
         private readonly Dictionary<string, VoRigPoseProfile> _voRigPoseProfiles = new Dictionary<string, VoRigPoseProfile>();
         private readonly Dictionary<string, Sprite> _map01AItemIcons = new Dictionary<string, Sprite>();
+        private readonly Dictionary<string, Sprite> _map01ANpcSprites = new Dictionary<string, Sprite>();
         private bool _map01AItemIconsLoaded;
         private TwoDClassMixedLoadoutFitPreview _classFitPreview;
         private string _classFitPreviewId = "kiem";
@@ -308,6 +309,21 @@ namespace LinhGioi.World
                 }
             }
             return _map01AItemIcons.TryGetValue(itemId, out var sprite) ? sprite : null;
+        }
+        public Sprite GetCurrentDialogueNpcSprite()
+        {
+            string npcId;
+            switch (_dialogueNodeId)
+            {
+                case "spawn-ha-van": npcId = "ha-van"; break;
+                case "quan-thu": npcId = "quan-thu-dong-lam"; break;
+                case "tong-phu": npcId = "tong-phu"; break;
+                case "thanh-nhi": npcId = "thanh-nhi"; break;
+                case "lao-tran": npcId = "lao-tran"; break;
+                case "well-bridge": npcId = "tieu-dong"; break;
+                default: return null;
+            }
+            return _map01ANpcSprites.TryGetValue(npcId, out var sprite) ? sprite : null;
         }
         public bool HasVoEquipmentItemVariant(string slot)
         {
@@ -1401,12 +1417,11 @@ namespace LinhGioi.World
             if (manifest == null || texture == null)
                 throw new InvalidOperationException($"Missing Map01A NPC batch: layout={manifest != null}, texture2D={texture != null}");
             var pack = JsonUtility.FromJson<DongMonIllustratedPreview.PackInfo>(manifest.text);
-            var parts = new Dictionary<string, Sprite>();
             foreach (var part in pack.parts)
-                parts.Add(part.id, MakeSprite(texture, new Rect(part.x, part.y, part.w, part.h)));
+                _map01ANpcSprites.Add(part.id, MakeSprite(texture, new Rect(part.x, part.y, part.w, part.h)));
             foreach (var layer in pack.layers)
             {
-                var sprite = parts[layer.part];
+                var sprite = _map01ANpcSprites[layer.part];
                 var host = new GameObject("Map01A NPC " + layer.id);
                 host.transform.SetParent(transform, false);
                 host.transform.localPosition = new Vector3(layer.x, layer.y, 0);

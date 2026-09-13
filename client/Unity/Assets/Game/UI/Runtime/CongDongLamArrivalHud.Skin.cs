@@ -41,6 +41,7 @@ namespace LinhGioi.UI
         private const string LgoHudQuestPanelClass = "lgo-hud-quest-panel";
         private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
+        private const string LgoDialoguePortraitClass = "lgo-dialogue-portrait";
         private const string LgoEntryCtaActionClass = "lgo-entry-cta-action";
         private const string LgoEntrySecondaryActionClass = "lgo-entry-secondary-action";
         private const string LgoEntrySideActionClass = "lgo-entry-side-action";
@@ -486,6 +487,17 @@ namespace LinhGioi.UI
             ApplyLgoButton(button);
             button.style.minHeight = 44;
             button.style.marginRight = 10;
+        }
+
+        private static void ApplyLgoDialoguePortrait(VisualElement portrait)
+        {
+            portrait.AddToClassList(LgoDialoguePortraitClass);
+            portrait.style.width = 92;
+            portrait.style.height = 132;
+            portrait.style.flexShrink = 0;
+            portrait.style.marginRight = 12;
+            portrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            ApplyLgoFrame(portrait, new Color(.018f, .060f, .096f, .72f), new Color(.90f, .70f, .36f, .72f));
         }
 
         private static void ApplyLgoHudInfoPanel(VisualElement element)
