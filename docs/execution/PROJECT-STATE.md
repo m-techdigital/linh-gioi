@@ -10,6 +10,8 @@ Partial source staging 2026-09-13 used only clean measured material exports and 
 
 Measured missing-source authoring brief: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/missing-source-authoring-brief-v1.json` and `.md`, mirrored externally. It turns 44 missing layer failures into 11 slot/pose authoring targets and uses `garment-anchor-measurements-candidate-run-b-shoulder-v2.json`, whose guide/proportion sanity is clean. These dimensions are only source-space draw/check guides.
 
+Authoring guide board: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/missing-source-authoring-guide-board-v1.png`, report `.json`, and visual check `missing-source-authoring-guide-board-visual-check-v1.json` = `AUTHORING_GUIDE_BOARD_VISUAL_CHECKED`. The board has opaque gray background after renderer fix and is an authoring aid only.
+
 Local Krita evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/local-authoring-toolchain-discovery.json` is `KRITA_LOCAL_TOOLCHAIN_READY`; executable path `build/toolchains/krita/Krita.app/Contents/MacOS/krita`, version `krita 5.3.3 (git 858d352)`.
 
 Krita CLI export smoke is not proven: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/krita-export-smoke-v1/report.json` is `KRITA_CLI_EXPORT_TIMEOUT`, exit 130 after interrupt, no output PNG. Native round-trip/export should use Krita Scripter or a verified plugin runner until CLI export is fixed.
