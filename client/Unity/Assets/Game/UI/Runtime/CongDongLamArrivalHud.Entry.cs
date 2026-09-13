@@ -9,7 +9,10 @@ namespace LinhGioi.UI
         private VisualElement _entryOverlay;
         private Label _entryStatus;
         private TextField _entryAccountField, _entryPasswordField;
+        private VisualElement _entryRememberMark;
+        private bool _entryRememberAccount;
         private bool _entryOpen;
+        private const string RememberedAccountKey = "lgo.map01a.entry.remembered-account";
 
         private void BuildEntryScreen()
         {
@@ -133,6 +136,16 @@ namespace LinhGioi.UI
 
             _entryAccountField = MakeEntryField("Map01A Entry Account Field", "Tài khoản / Email / Số điện thoại", "account", false);
             _entryPasswordField = MakeEntryField("Map01A Entry Password Field", "Mật khẩu", "lock", true);
+            var rememberedAccount = PlayerPrefs.GetString(RememberedAccountKey, string.Empty);
+            _entryRememberAccount = !string.IsNullOrWhiteSpace(rememberedAccount);
+            _entryAccountField.SetValueWithoutNotify(rememberedAccount);
+            _entryAccountField.RegisterValueChangedCallback(evt =>
+            {
+                if (!_entryRememberAccount) return;
+                if (string.IsNullOrWhiteSpace(evt.newValue)) PlayerPrefs.DeleteKey(RememberedAccountKey);
+                else PlayerPrefs.SetString(RememberedAccountKey, evt.newValue.Trim());
+                PlayerPrefs.Save();
+            });
             controlCard.Add(_entryAccountField);
             controlCard.Add(_entryPasswordField);
             controlCard.Add(MakeEntryAuthOptions());
@@ -281,7 +294,7 @@ namespace LinhGioi.UI
         }
 
 
-        private static VisualElement MakeEntryAuthOptions()
+        private VisualElement MakeEntryAuthOptions()
         {
             var row = new VisualElement { name = "Map01A Entry Auth Options" };
             row.style.flexDirection = FlexDirection.Row;
@@ -289,7 +302,9 @@ namespace LinhGioi.UI
             row.style.marginTop = -2;
             row.style.marginBottom = 10;
 
-            var rememberWrap = new VisualElement { name = "Map01A Entry Remember Wrap" };
+            var rememberWrap = new Button(ToggleRememberAccount) { name = "Map01A Entry Remember Action", text = string.Empty };
+            rememberWrap.tooltip = "Lưu tên tài khoản trên thiết bị này";
+            ApplyLgoEntryRememberAction(rememberWrap);
             rememberWrap.style.flexDirection = FlexDirection.Row;
             rememberWrap.style.alignItems = Align.Center;
             rememberWrap.style.flexGrow = 1;
@@ -306,6 +321,8 @@ namespace LinhGioi.UI
             rememberMark.style.marginLeft = 3;
             rememberMark.style.marginTop = 3;
             rememberMark.style.backgroundColor = UiGold;
+            rememberMark.style.display = _entryRememberAccount ? DisplayStyle.Flex : DisplayStyle.None;
+            _entryRememberMark = rememberMark;
             rememberBox.Add(rememberMark);
             rememberWrap.Add(rememberBox);
 
@@ -318,6 +335,25 @@ namespace LinhGioi.UI
             ApplyLgoEntrySecondaryAction(forgot);
             row.Add(forgot);
             return row;
+        }
+
+        private void ToggleRememberAccount()
+        {
+            if (!_entryRememberAccount && string.IsNullOrWhiteSpace(_entryAccountField?.value))
+            {
+                _entryStatus.text = "Nhập tên tài khoản trước khi bật Lưu tài khoản.";
+                _entryStatus.style.display = DisplayStyle.Flex;
+                return;
+            }
+
+            _entryRememberAccount = !_entryRememberAccount;
+            if (_entryRememberAccount)
+                PlayerPrefs.SetString(RememberedAccountKey, _entryAccountField.value.Trim());
+            else
+                PlayerPrefs.DeleteKey(RememberedAccountKey);
+            PlayerPrefs.Save();
+            if (_entryRememberMark != null)
+                _entryRememberMark.style.display = _entryRememberAccount ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private TextField MakeEntryField(string fieldName, string placeholderText, string iconId, bool password)

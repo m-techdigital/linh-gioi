@@ -32,6 +32,7 @@ namespace LinhGioi.UI
         private const string LgoInventorySearchInputClass = "lgo-inventory-search-input";
         private const string LgoEntryTextFieldClass = "lgo-entry-text-field";
         private const string LgoEntryTextInputClass = "lgo-entry-text-input";
+        private const string LgoEntryRememberActionClass = "lgo-entry-remember-action";
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
         private const string LgoHudPrimaryCombatActionClass = "lgo-hud-primary-combat-action";
@@ -472,6 +473,23 @@ namespace LinhGioi.UI
                 var attachedInput = ApplyLgoTextFieldInnerFrame(field, LgoEntryTextInputClass);
                 if (attachedInput != null) attachedInput.style.fontSize = 15;
             });
+        }
+
+        private static void ApplyLgoEntryRememberAction(Button button)
+        {
+            button.AddToClassList(LgoEntryRememberActionClass);
+            ApplyLgoButton(button);
+            button.style.flexGrow = 1;
+            button.style.flexBasis = 0;
+            button.style.minHeight = 28;
+            button.style.paddingLeft = button.style.paddingRight = 0;
+            button.style.paddingTop = button.style.paddingBottom = 0;
+            button.style.marginRight = 8;
+            button.style.backgroundColor = Color.clear;
+            button.style.borderTopWidth = button.style.borderRightWidth = 0;
+            button.style.borderBottomWidth = button.style.borderLeftWidth = 0;
+            button.style.justifyContent = Justify.FlexStart;
+            button.style.unityTextAlign = TextAnchor.MiddleLeft;
         }
 
         private static void ApplyLgoEntryCtaAction(Button button, bool primary)

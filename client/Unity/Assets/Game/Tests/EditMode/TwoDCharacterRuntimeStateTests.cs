@@ -536,6 +536,42 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void EntryRememberAccountControlPersistsOnlyTheAccountLocally()
+        {
+            const string rememberKey = "lgo.map01a.entry.remembered-account";
+            PlayerPrefs.DeleteKey(rememberKey);
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("entry remember account test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var account = root.Q<TextField>("Map01A Entry Account Field");
+                var remember = root.Q<Button>("Map01A Entry Remember Action");
+
+                Assert.That(remember, Is.Not.Null, "Lưu tài khoản must be an actual control instead of a checked-looking decoration.");
+                Assert.That(remember.ClassListContains("lgo-entry-remember-action"), Is.True);
+                account.value = "LụcThiên";
+                InvokeBoundButton(remember);
+                Assert.That(PlayerPrefs.GetString(rememberKey, ""), Is.EqualTo("LụcThiên"));
+                Assert.That(root.Q("Map01A Entry Remember Mark").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+
+                account.value = "LụcThiên2";
+                Assert.That(PlayerPrefs.GetString(rememberKey, ""), Is.EqualTo("LụcThiên2"));
+                InvokeBoundButton(remember);
+                Assert.That(PlayerPrefs.HasKey(rememberKey), Is.False);
+                Assert.That(root.Q("Map01A Entry Remember Mark").style.display.value, Is.EqualTo(DisplayStyle.None));
+            }
+            finally
+            {
+                PlayerPrefs.DeleteKey(rememberKey);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void EntryScreenSeparatesDevLoginAndStartWithoutChangingMapState()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

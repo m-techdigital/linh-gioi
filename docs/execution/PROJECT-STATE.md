@@ -1,3 +1,9 @@
+## Map01A — Lưu tài khoản là control thật và chỉ lưu tên local — 2026-09-14
+
+- Audit interaction phát hiện ô `Lưu tài khoản` là decoration luôn có dấu chọn nhưng không nhận click. Runtime giờ dùng button/action có shared base; bật sẽ lưu duy nhất tên tài khoản bằng PlayerPrefs, tên đang nhớ tự cập nhật khi sửa, tắt sẽ xoá key. Mật khẩu không được lưu.
+- Nếu tên tài khoản trống, action giữ trạng thái tắt và hiển thị hướng dẫn nhập tên trước. Không mở hoặc giả lập auth backend.
+- TDD RED/GREEN targeted đạt 1/1; full `TwoDCharacterRuntimeStateTests` đạt 23/23. Player `build/map01a-entry-remember-player-v1/LinhGioiOnline.app` build thành công; evidence `build/map01a-entry-remember-runtime-v1/entry-login.png` đã visual audit ở 1600×900, hàng auth và checkbox không vỡ/chồng.
+
 ## Map01A — đăng nhập dùng trường nhập thật, không giả auth thành công — 2026-09-14
 
 - Player-to-design audit phát hiện ô tài khoản/mật khẩu chỉ là `VisualElement` + `Label`, không thể nhập, trong khi nút Đăng nhập luôn báo sẵn sàng. Hai ô giờ là `TextField` thật dùng shared dark-input base; mật khẩu được mask và icon nguồn hiện hành giữ đúng vị trí.

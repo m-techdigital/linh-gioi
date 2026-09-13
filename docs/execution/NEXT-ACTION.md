@@ -1,3 +1,9 @@
+## Next — sau remember-account interaction — 2026-09-14
+
+`CONTINUE`. Entry evidence hiện hành là `build/map01a-entry-remember-runtime-v1/entry-login.png`; Player `build/map01a-entry-remember-player-v1/LinhGioiOnline.app`. `Lưu tài khoản` phải là control thật, chỉ lưu tên local và không lưu mật khẩu; auth chưa có backend vẫn phải phản hồi trung thực.
+
+Next valid work: chuyển khỏi login micro-polish và audit HUD/NPC/Menu hoặc một interaction năm-tab còn sai rõ trên Player. Giữ shared base, dữ liệu/art có provenance; không mở class/pose/wardrobe/source, auth backend hoặc frozen surfaces.
+
 ## Next — sau entry real credential fields — 2026-09-14
 
 `CONTINUE`. Entry evidence hiện hành là `build/map01a-entry-real-fields-runtime-v2/entry-login.png`; Player `build/map01a-entry-real-fields-player-v2/LinhGioiOnline.app`. Tài khoản/mật khẩu phải là `TextField` thật, mật khẩu được mask và Đăng nhập không được giả auth thành công khi backend chưa có.

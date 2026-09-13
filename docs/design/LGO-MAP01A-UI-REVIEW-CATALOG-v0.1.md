@@ -8,14 +8,14 @@ This catalog points reviewers to the current Map01A 2D UI evidence. It is techni
 
 | Screen / flow | Evidence | Status |
 | --- | --- | --- |
-| Entry/login | `build/map01a-entry-real-fields-runtime-v2/entry-login.png` and `build/map01a-entry-real-fields-runtime-v2/manifest.json` | Current entry evidence; real account/password fields with masked password and honest unavailable-auth feedback; `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
+| Entry/login | `build/map01a-entry-remember-runtime-v1/entry-login.png` and `build/map01a-entry-remember-runtime-v1/manifest.json` | Current entry evidence; real account/password fields with masked password and honest unavailable-auth feedback; `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
 | Approved five-tab character hub | `build/map01a-inventory-search-runtime-v2/character-info.png`, `build/map01a-inventory-search-runtime-v2/bag.png`, `build/map01a-inventory-search-runtime-v2/skills.png`, `build/map01a-inventory-search-runtime-v2/potential.png`, `build/map01a-inventory-search-runtime-v2/spirit-pet.png`, and `build/map01a-inventory-search-runtime-v2/manifest.json` | Current five-tab evidence; Rương đồ adds real accent-insensitive item search through the shared dark input skin; two-column/detail-right layout, `usesOsMouseOrKeyboard=false`, 1600×900 |
 | Quest/HUD route | `build/map01a-item-detail-runtime-v1/01-arrival-q01.png`, `build/map01a-item-detail-runtime-v1/09-q04-starter-supplies.png`, `build/map01a-item-detail-runtime-v1/10-q04-health-potion-used.png`, `build/map01a-item-detail-runtime-v1/18-q09-portal-open.png`, and `build/map01a-item-detail-runtime-v1/manifest.json` | Current Q01–Q09 route evidence; selected item updates detail-right through the real UI callback, Q05–Q09 world view unobstructed, 18 route frames and 38 dialogue frames at 1600×900 |
 | Gameplay menu | `build/map01a-menu-current-runtime-v1/menu.png` and `build/map01a-menu-current-runtime-v1/manifest.json` | Current menu evidence; v1/v2 rejected; `usesOsMouseOrKeyboard=false`, 1600×900 |
 
 ## Required review frames
 
-- Entry/login: `build/map01a-entry-real-fields-runtime-v2/entry-login.png`.
+- Entry/login: `build/map01a-entry-remember-runtime-v1/entry-login.png`.
 - Five approved tabs: all five PNGs under `build/map01a-inventory-search-runtime-v2/`; they must keep one compact navigation row, two content columns and detail on the right.
 - Route start/item detail/end: `build/map01a-item-detail-runtime-v1/01-arrival-q01.png`, `build/map01a-item-detail-runtime-v1/09-q04-starter-supplies.png`, `build/map01a-item-detail-runtime-v1/10-q04-health-potion-used.png`, and `build/map01a-item-detail-runtime-v1/18-q09-portal-open.png`.
 - Menu: `build/map01a-menu-current-runtime-v1/menu.png`.
