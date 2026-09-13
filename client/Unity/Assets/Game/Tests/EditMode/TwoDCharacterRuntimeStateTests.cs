@@ -313,6 +313,14 @@ namespace LinhGioi.Tests.EditMode
                     "Bag grid should stay visually grouped around the current demo rows instead of filling the modal with blank table space.");
                 Assert.That(root.Q("Map01A Inventory Grid Accent Rail"), Is.Not.Null,
                     "Inventory panels need a shared ornament rail to reduce flat debug-panel presentation.");
+                Assert.That(root.Q("Map01A Inventory Modal Top Ornament"), Is.Not.Null,
+                    "Inventory modal shell needs a shared top ornament rail so it does not read as one flat HTML block.");
+                Assert.That(root.Q("Map01A Inventory Modal Top Ornament").ClassListContains("lgo-ornament-rail"), Is.True,
+                    "Inventory modal top ornament must reuse the shared ornament-rail base instead of inline styling.");
+                Assert.That(root.Q("Map01A Inventory Modal Bottom Ornament"), Is.Not.Null,
+                    "Inventory modal shell needs a shared bottom ornament rail to close the visual frame.");
+                Assert.That(root.Q("Map01A Inventory Modal Bottom Ornament").ClassListContains("lgo-ornament-rail"), Is.True,
+                    "Inventory modal bottom ornament must reuse the shared ornament-rail base instead of a second rail style.");
                 Assert.That(root.Q("Map01A Inventory").ClassListContains("lgo-inventory-compact-shell"), Is.True,
                     "Bag inventory should use a shared compact shell so the modal background does not leave a large empty lower half on Player.");
                 Assert.That(root.Q("Map01A Inventory").style.height.value.value, Is.GreaterThanOrEqualTo(650),

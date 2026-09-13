@@ -222,7 +222,7 @@ namespace LinhGioi.UI
 
         public static float CalculateInventoryShellHeight(Rect inventoryRect, bool touch, bool compactShell)
         {
-            const float compactDesktopHeight = 660f;
+            const float compactDesktopHeight = 680f;
             if (touch) return inventoryRect.height;
             if (!compactShell) return Mathf.Max(inventoryRect.height, 720f);
             return Mathf.Min(Mathf.Max(inventoryRect.height, compactDesktopHeight), compactDesktopHeight);

@@ -114,6 +114,11 @@ namespace LinhGioi.UI
             close.tooltip = "Đóng hành trang (I / Esc)";
             ApplyLgoModalCloseButton(close, _touch);
             header.Add(titleGroup); header.Add(close); _inventory.Add(header);
+            var topOrnament = new VisualElement { name = "Map01A Inventory Modal Top Ornament" };
+            ApplyLgoOrnamentRail(topOrnament);
+            topOrnament.style.marginTop = 8;
+            topOrnament.style.marginBottom = 10;
+            _inventory.Add(topOrnament);
 
             var mainTabs = InventoryRow("Map01A Inventory Main Tabs");
             _bagTab = InventoryButton(() => ShowInventoryMode(false), "Map01A Bag Main Tab", "Hành trang");
@@ -132,6 +137,12 @@ namespace LinhGioi.UI
             body.style.marginTop = 6;
             body.style.justifyContent = Justify.Center;
             _inventory.Add(body);
+
+            var bottomOrnament = new VisualElement { name = "Map01A Inventory Modal Bottom Ornament" };
+            ApplyLgoOrnamentRail(bottomOrnament);
+            bottomOrnament.style.marginTop = 10;
+            bottomOrnament.style.marginBottom = 0;
+            _inventory.Add(bottomOrnament);
 
             _inventoryDetailPanel = InventoryPanel("Map01A Inventory Detail Panel");
             _inventoryDetailPanel.style.flexGrow = 0;

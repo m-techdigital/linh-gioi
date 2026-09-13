@@ -1,3 +1,10 @@
+## Map01A — inventory ornament rails checkpoint, still visual CONTINUE — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.
+- Batch này chỉ khóa một cải thiện an toàn cho modal Hành trang/Thông tin/Rương: thêm top/bottom ornament rails bằng shared `ApplyLgoOrnamentRail(...)` / `lgo-ornament-rail`, và compact shell tăng lên 680px để tránh detail/action bị ép sát đáy sau khi thêm ornament. Đây là cải thiện base-first, không phải redesign cuối.
+- Evidence Player thật: `build/map01a-inventory-ornament-rails-player-v3/LinhGioiOnline.app`, capture `build/map01a-inventory-ornament-rails-runtime-v3/{bag,supplies,character-info,storage}.png`, manifest `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`. Đã xem bằng mắt: modal bớt phẳng hơn nhưng vẫn còn xa reference owner về depth, icon thật, typography và richness; tiếp tục `CONTINUE`, không claim hoàn thiện UI.
+- Guard: targeted EditMode `InventorySeparatesBagAndCharacterInfoTabsWithSharedSelection` pass; shared skin validator pass. Quy tắc vẫn là base-first: cùng loại button/card/modal/rail/tab dùng shared helper trước, partial chỉ bind state/action.
+
 ## Map01A — inventory compact shell base-first guard — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không tạo icon/item art giả.
