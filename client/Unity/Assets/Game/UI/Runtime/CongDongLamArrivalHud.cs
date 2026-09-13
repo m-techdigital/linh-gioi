@@ -156,13 +156,7 @@ namespace LinhGioi.UI
             _skill = new Button(() => _scene.TriggerVoSkill()) { name = "Map01A Skill Action", text = "Liên quyền" };
             foreach (var button in new[] { _run, _jump, _basic, _skill })
             {
-                ApplyLgoButton(button);
-                button.style.minHeight = _touch ? 48 : 38;
-                button.style.minWidth = _touch ? 104 : 88;
-                button.style.maxWidth = _touch ? 136 : 122;
-                button.style.fontSize = _touch ? 14 : 13;
-                button.style.whiteSpace = WhiteSpace.NoWrap;
-                button.style.marginRight = 6;
+                ApplyLgoHudCombatAction(button, _touch);
                 _combatBar.Add(button);
             }
             _safe.Add(_combatBar);
@@ -192,15 +186,7 @@ namespace LinhGioi.UI
             _menuShortcut = new Button { name = "Map01A Menu Shortcut", text = "Menu" };
             foreach (var button in new[] { _skillsShortcut, _menuShortcut })
             {
-                ApplyLgoDisabledAction(button);
-                button.style.position = Position.Relative;
-                button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
-                button.style.minHeight = _touch ? 46 : 36;
-                button.style.minWidth = _touch ? 110 : 92;
-                button.style.maxWidth = 118;
-                button.style.fontSize = 13;
-                button.style.whiteSpace = WhiteSpace.NoWrap;
-                button.style.marginLeft = 8;
+                ApplyLgoHudShortcutAction(button, _touch);
                 _productShortcutActions.Add(button);
             }
             _safe.Add(_productShortcutActions);

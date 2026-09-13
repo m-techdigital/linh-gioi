@@ -108,3 +108,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-bounded-shell-runtime-v1/inventory/bag.png`, `character-info.png`, `character-info-after-supplies.png`, `supplies.png`, `storage.png`.
 - Result: Hành trang/Thông tin/Rương shell uses a bounded desktop modal layout through shared `CalculateInventoryModalRect(...)`, with compact/touch safe margins retained. This locks the base-first rule for modal sizing instead of per-screen full-width styling.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit finds the modal less like a full-screen debug overlay, but final polish still needs approved/provenance-backed icons, richer ornament/depth, and continued shared base treatment.
+
+## 2026-09-13 — HUD action/shortcut base-first evidence
+
+- Evidence: `build/map01a-hud-base-style-runtime-v1/01-arrival-q01.png` plus quest route capture frames in `build/map01a-hud-base-style-runtime-v1/`.
+- Result: bottom combat actions and gated product shortcuts use shared base helpers/classes, keeping one-line compact HUD density instead of per-control sizing.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. The HUD buttons no longer read as oversized modal controls, but richer icon treatment and full UI polish remain pending.

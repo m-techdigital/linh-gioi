@@ -1,3 +1,11 @@
+## Map01A — HUD action/shortcut base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Áp dụng tiếp rule base-first ngoài Hành trang: combat HUD actions (`Chạy`, `Nhảy`, `Đánh`, `Liên quyền`) dùng chung `ApplyLgoHudCombatAction(...)`; product shortcuts (`Kỹ năng`, `Menu`) dùng chung `ApplyLgoHudShortcutAction(...)`.
+- Guard mới trong EditMode fail đúng khi các nút HUD chưa có shared base class, sau đó pass khi refactor về helper chung. Shortcut gating vẫn giữ disabled, không mở screen giả.
+- Player evidence: `build/map01a-hud-base-style-runtime-v1/01-arrival-q01.png` và quest route capture `build/map01a-hud-base-style-runtime-v1/` pass 18 frames, Q01-Q09, dialogue frames 38.
+- Visual audit: HUD action/shortcut một dòng, không phình như modal CTA. Vẫn `CONTINUE`; chưa nghiệm thu UI tổng thể vì inventory/login/dialog còn cần polish sâu và asset/icon thật.
+
 ## Map01A — inventory bounded modal shell + base-first rule — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

@@ -18,6 +18,8 @@ namespace LinhGioi.UI
         private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
         private const string LgoInventoryGridCellClass = "lgo-inventory-grid-cell";
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
+        private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
+        private const string LgoHudShortcutActionClass = "lgo-hud-shortcut-action";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -187,6 +189,32 @@ namespace LinhGioi.UI
             cell.style.marginBottom = 7;
             cell.style.alignItems = Align.Center;
             cell.style.justifyContent = Justify.Center;
+        }
+
+        private static void ApplyLgoHudCombatAction(Button button, bool touch)
+        {
+            button.AddToClassList(LgoHudCombatActionClass);
+            ApplyLgoButton(button);
+            button.style.minHeight = touch ? 48 : 38;
+            button.style.minWidth = touch ? 104 : 88;
+            button.style.maxWidth = touch ? 136 : 122;
+            button.style.fontSize = touch ? 14 : 13;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+            button.style.marginRight = 6;
+        }
+
+        private static void ApplyLgoHudShortcutAction(Button button, bool touch)
+        {
+            button.AddToClassList(LgoHudShortcutActionClass);
+            ApplyLgoDisabledAction(button);
+            button.style.position = Position.Relative;
+            button.style.left = button.style.right = button.style.top = button.style.bottom = StyleKeyword.Auto;
+            button.style.minHeight = touch ? 46 : 36;
+            button.style.minWidth = touch ? 110 : 92;
+            button.style.maxWidth = 118;
+            button.style.fontSize = 13;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+            button.style.marginLeft = 8;
         }
 
         private static void ApplyLgoDisabledAction(Button button)

@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after HUD action helpers — 2026-09-13
+
+`CONTINUE`. Evidence mới: `build/map01a-hud-base-style-runtime-v1/01-arrival-q01.png` và route capture `build/map01a-hud-base-style-runtime-v1/`. HUD combat actions và product shortcuts đã dùng shared helpers/classes thay vì local one-off sizing.
+
+Next valid work: tiếp tục Map01A UI-only, ưu tiên gom tiếp các pattern còn lặp như quest tabs/dialogue action buttons/context action buttons vào base helper trước khi polish visual. Mọi UI/UX giống nhau phải đi qua shared helper/base; không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated, và mọi visible UI batch phải có Player screenshot review.
+
 ## Next — Map01A base-first UI polish after bounded modal shell — 2026-09-13
 
 `CONTINUE`. Evidence mới: `build/map01a-inventory-bounded-shell-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Inventory shell đã dùng helper layout chung `CalculateInventoryModalRect(...)` để tránh mỗi nơi tự set full-width/margin riêng; test guard khóa desktop bounded shell và compact/touch safe margin.

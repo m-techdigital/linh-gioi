@@ -120,6 +120,38 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
         self.assertTrue(any("ApplyLgoButton(_talk" in item for item in violations), violations)
 
 
+    def test_rejects_hud_combat_actions_that_skip_shared_action_base(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"
+            hud.write_text(
+                hud.read_text(encoding="utf-8").replace(
+                    "ApplyLgoHudCombatAction(button, _touch);",
+                    "ApplyLgoButton(button);",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoHudCombatAction(button" in item for item in violations), violations)
+
+    def test_rejects_hud_shortcuts_that_skip_shared_shortcut_base(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"
+            hud.write_text(
+                hud.read_text(encoding="utf-8").replace(
+                    "ApplyLgoHudShortcutAction(button, _touch);",
+                    "ApplyLgoDisabledAction(button);",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoHudShortcutAction(button" in item for item in violations), violations)
+
     def test_rejects_dialogue_panel_that_skips_shared_skin(self) -> None:
         with self._copy_minimal_repo() as temp:
             hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"

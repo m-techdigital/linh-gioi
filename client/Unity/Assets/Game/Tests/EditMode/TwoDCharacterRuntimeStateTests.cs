@@ -405,6 +405,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(menu.text, Is.EqualTo("Menu"));
                 Assert.That(skills.enabledSelf, Is.False, "Kỹ năng shortcut must stay visibly gated until the real screen exists.");
                 Assert.That(menu.enabledSelf, Is.False, "Menu shortcut must stay visibly gated until the real screen exists.");
+                Assert.That(skills.ClassListContains("lgo-hud-shortcut-action"), Is.True,
+                    "HUD product shortcuts must use the shared shortcut base instead of local one-off sizing.");
+                Assert.That(menu.ClassListContains("lgo-hud-shortcut-action"), Is.True,
+                    "All HUD product shortcuts must share the same base style for consistent Player density.");
                 Assert.That(skills.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
                     "HUD product shortcuts must not wrap into tall two-line buttons.");
                 Assert.That(skills.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),
@@ -754,6 +758,10 @@ namespace LinhGioi.Tests.EditMode
                 var skillAction = root.Q<Button>("Map01A Skill Action");
                 Assert.That(runAction, Is.Not.Null);
                 Assert.That(skillAction, Is.Not.Null);
+                Assert.That(runAction.ClassListContains("lgo-hud-combat-action"), Is.True,
+                    "Bottom HUD action buttons must use the shared HUD combat-action base instead of one-off sizing.");
+                Assert.That(skillAction.ClassListContains("lgo-hud-combat-action"), Is.True,
+                    "All combat actions must share the same base style for consistent Player density.");
                 Assert.That(runAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
                     "Bottom HUD action buttons must not wrap into oversized blocks.");
                 Assert.That(runAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),
