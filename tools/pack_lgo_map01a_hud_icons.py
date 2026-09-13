@@ -20,7 +20,12 @@ INK = (226, 244, 255, 255)
 CYAN = (64, 176, 255, 255)
 GOLD = (241, 191, 88, 255)
 GLOW = (22, 116, 222, 105)
-ICON_IDS = ("run", "jump", "attack", "skill", "character", "inventory", "skills", "menu")
+ICON_IDS = (
+    "run", "jump", "attack", "skill",
+    "character", "inventory", "skills", "menu",
+    "account", "lock", "eye", "notice",
+    "support", "cinematic", "server", "crest",
+)
 
 
 def _scaled(points):
@@ -141,15 +146,90 @@ def draw_menu():
     return image
 
 
+def draw_account():
+    image, draw = _base()
+    _ellipse(draw, (34, 14, 62, 42), fill=GOLD, outline=INK, width=3)
+    _rounded(draw, (20, 50, 76, 82), 16, fill=(23, 81, 139, 255), outline=INK, width=5)
+    _line(draw, ((48, 52), (48, 78)), CYAN, 4)
+    return image
+
+
+def draw_lock():
+    image, draw = _base()
+    _line(draw, ((31, 44), (31, 31), (37, 19), (48, 14), (59, 19), (65, 31), (65, 44)), GOLD, 6)
+    _rounded(draw, (22, 40, 74, 82), 9, fill=(23, 81, 139, 255), outline=INK, width=5)
+    _ellipse(draw, (43, 52, 53, 62), fill=GOLD, outline=INK, width=2)
+    _line(draw, ((48, 61), (48, 72)), GOLD, 4)
+    return image
+
+
+def draw_eye():
+    image, draw = _base()
+    _line(draw, ((10, 48), (24, 32), (48, 24), (72, 32), (86, 48), (72, 64), (48, 72), (24, 64), (10, 48)), INK, 5)
+    _ellipse(draw, (34, 34, 62, 62), fill=(23, 81, 139, 255), outline=CYAN, width=4)
+    _ellipse(draw, (43, 43, 53, 53), fill=GOLD, outline=INK, width=2)
+    return image
+
+
+def draw_notice():
+    image, draw = _base()
+    _polygon(draw, ((16, 43), (58, 24), (58, 72), (16, 55)), (23, 81, 139, 255), INK, 4)
+    _rounded(draw, (11, 42, 24, 57), 3, fill=GOLD, outline=INK, width=3)
+    _polygon(draw, ((28, 57), (42, 60), (39, 80), (28, 76)), GOLD, INK, 3)
+    _line(draw, ((68, 31), (82, 20)), CYAN, 4)
+    _line(draw, ((70, 48), (87, 48)), CYAN, 4)
+    _line(draw, ((68, 65), (82, 76)), CYAN, 4)
+    return image
+
+
+def draw_support():
+    image, draw = _base()
+    _line(draw, ((18, 52), (18, 39), (24, 24), (37, 15), (59, 15), (72, 24), (78, 39), (78, 52)), GOLD, 6)
+    _rounded(draw, (12, 43, 29, 70), 7, fill=(23, 81, 139, 255), outline=INK, width=4)
+    _rounded(draw, (67, 43, 84, 70), 7, fill=(23, 81, 139, 255), outline=INK, width=4)
+    _line(draw, ((77, 67), (69, 78), (53, 78)), CYAN, 5)
+    _ellipse(draw, (45, 73, 56, 83), fill=GOLD, outline=INK, width=2)
+    return image
+
+
+def draw_cinematic():
+    image, draw = _base()
+    _rounded(draw, (12, 22, 84, 74), 8, fill=(20, 72, 126, 255), outline=INK, width=5)
+    _polygon(draw, ((42, 34), (42, 63), (66, 48)), CYAN, GOLD, 2)
+    _line(draw, ((19, 83), (77, 83)), GOLD, 4)
+    return image
+
+
+def draw_server():
+    image, draw = _base()
+    for top in (14, 39, 64):
+        _rounded(draw, (17, top, 79, top + 20), 6, fill=(20, 72, 126, 255), outline=INK, width=4)
+        _ellipse(draw, (25, top + 6, 33, top + 14), fill=GOLD, outline=GOLD, width=1)
+        _line(draw, ((42, top + 10), (68, top + 10)), CYAN, 3)
+    return image
+
+
+def draw_crest():
+    image, draw = _base()
+    _polygon(draw, ((48, 7), (82, 48), (48, 89), (14, 48)), (15, 60, 110, 220), GOLD, 4)
+    _polygon(draw, ((48, 18), (59, 43), (53, 67), (48, 80), (43, 67), (37, 43)), CYAN, INK, 2)
+    _line(draw, ((27, 48), (69, 48)), INK, 4)
+    _ellipse(draw, (42, 41, 54, 53), fill=GOLD, outline=INK, width=2)
+    return image
+
+
 DRAWERS = {
     "run": draw_run, "jump": draw_jump, "attack": draw_attack, "skill": draw_skill,
     "character": draw_character, "inventory": draw_inventory, "skills": draw_skills, "menu": draw_menu,
+    "account": draw_account, "lock": draw_lock, "eye": draw_eye, "notice": draw_notice,
+    "support": draw_support, "cinematic": draw_cinematic, "server": draw_server, "crest": draw_crest,
 }
 
 
 def build(out_dir: Path, review_path: Path | None = None) -> dict:
     out_dir.mkdir(parents=True, exist_ok=True)
-    atlas = Image.new("RGBA", (CELL * 4, CELL * 2), (0, 0, 0, 0))
+    rows = (len(ICON_IDS) + 3) // 4
+    atlas = Image.new("RGBA", (CELL * 4, CELL * rows), (0, 0, 0, 0))
     parts = []
     rendered = {}
     for index, icon_id in enumerate(ICON_IDS):
@@ -183,7 +263,7 @@ def build(out_dir: Path, review_path: Path | None = None) -> dict:
     (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     if review_path:
         review_path.parent.mkdir(parents=True, exist_ok=True)
-        board = Image.new("RGB", (4 * 180, 2 * 150), (7, 28, 52))
+        board = Image.new("RGB", (4 * 180, rows * 150), (7, 28, 52))
         draw = ImageDraw.Draw(board)
         font = ImageFont.load_default(size=18)
         for index, icon_id in enumerate(ICON_IDS):

@@ -6,71 +6,127 @@
   "policy": "deterministic-shared-grid-no-text-no-screenshot-crop",
   "textureSize": [
     512,
-    256
+    512
   ],
-  "pngBytes": 47641,
-  "sha256": "2da62272e628d069ea1e252aa53d1f91a2bdcf1390bf57d46121999a71727079",
+  "pngBytes": 85119,
+  "sha256": "2811e85fe84116b4f890c0a55bdcb7b09589a131a4af5867bf32cb53fd845314",
   "assets": [
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AHudIcons/map01a-hud-icons.png",
       "role": "ui-hud-atlas",
       "generator": "pack_lgo_map01a_hud_icons",
       "referenceOnly": false,
-      "sha256": "2da62272e628d069ea1e252aa53d1f91a2bdcf1390bf57d46121999a71727079"
+      "sha256": "2811e85fe84116b4f890c0a55bdcb7b09589a131a4af5867bf32cb53fd845314"
     }
   ],
   "parts": [
     {
       "id": "run",
       "x": 16,
-      "y": 144,
+      "y": 400,
       "w": 96,
       "h": 96
     },
     {
       "id": "jump",
       "x": 144,
-      "y": 144,
+      "y": 400,
       "w": 96,
       "h": 96
     },
     {
       "id": "attack",
       "x": 272,
-      "y": 144,
+      "y": 400,
       "w": 96,
       "h": 96
     },
     {
       "id": "skill",
       "x": 400,
-      "y": 144,
+      "y": 400,
       "w": 96,
       "h": 96
     },
     {
       "id": "character",
       "x": 16,
-      "y": 16,
+      "y": 272,
       "w": 96,
       "h": 96
     },
     {
       "id": "inventory",
       "x": 144,
-      "y": 16,
+      "y": 272,
       "w": 96,
       "h": 96
     },
     {
       "id": "skills",
       "x": 272,
-      "y": 16,
+      "y": 272,
       "w": 96,
       "h": 96
     },
     {
       "id": "menu",
+      "x": 400,
+      "y": 272,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "account",
+      "x": 16,
+      "y": 144,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "lock",
+      "x": 144,
+      "y": 144,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "eye",
+      "x": 272,
+      "y": 144,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "notice",
+      "x": 400,
+      "y": 144,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "support",
+      "x": 16,
+      "y": 16,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "cinematic",
+      "x": 144,
+      "y": 16,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "server",
+      "x": 272,
+      "y": 16,
+      "w": 96,
+      "h": 96
+    },
+    {
+      "id": "crest",
       "x": 400,
       "y": 16,
       "w": 96,

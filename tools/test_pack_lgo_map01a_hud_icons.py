@@ -23,7 +23,7 @@ class PackMap01AHudIconsTests(unittest.TestCase):
             second_png = second / "map01a-hud-icons.png"
             self.assertEqual(first_png.read_bytes(), second_png.read_bytes())
             self.assertEqual(hashlib.sha256(first_png.read_bytes()).hexdigest(), first_manifest["sha256"])
-            self.assertEqual([512, 256], first_manifest["textureSize"])
+            self.assertEqual([512, 512], first_manifest["textureSize"])
             self.assertEqual(list(ICON_IDS), [part["id"] for part in first_manifest["parts"]])
             self.assertEqual("ui-hud-atlas", first_manifest["assets"][0]["role"])
             self.assertEqual("pack_lgo_map01a_hud_icons", first_manifest["assets"][0]["generator"])

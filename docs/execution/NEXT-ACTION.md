@@ -1306,3 +1306,8 @@ Next valid work: xử lý một batch nhìn thấy hoàn chỉnh cho bottom navi
 `CONTINUE`. Bottom navigation đã gom về một shared component/hierarchy và context action đã tách khỏi product navigation. Evidence: `build/map01a-bottom-nav-runtime-v1/01-arrival-q01.png`; Player: `build/map01a-bottom-nav-player-v1/LinhGioiOnline.app`.
 
 Next valid work: chọn một screen hoàn chỉnh để giảm khoảng cách visual rõ ràng, ưu tiên Entry/Login theo reference `preferred-v2/04-dang-nhap-may-chu-bat-dau-linh-gioi.png`; audit logo/card/background/side actions rồi sửa ở shared base trước khi bind screen. Chỉ build/capture khi trọn batch; không quay lại class/wardrobe/pose/source và không rollback code class.
+## Next — gameplay HUD + NPC dialogue as one visual batch — 2026-09-13
+
+`CONTINUE`. Entry/login checkpoint hiện hành là `build/map01a-entry-icons-runtime-v3/entry-login.png`; chỉ dùng ảnh Player này khi review, không quay lại các capture login cũ. Batch đã sửa hierarchy và icon chung, nhưng chưa phải mỹ thuật cuối vì chưa có logo brush/illustration cùng ornament art chuyên dụng.
+
+Next valid work: xử lý trọn một batch gameplay HUD + NPC dialogue theo owner reference, qua shared Skin/base hiện có. Trước khi sửa phải chốt ba sai lệch thị giác lớn từ ảnh Player; sau đó build/capture một lần và đánh giá bằng mắt. Không chạy vòng test/capture lặp cho chỉnh sửa khoảng cách nhỏ. Không resume class/wardrobe/pose/source, không chạy class capture, không rollback class code và không đổi frozen surfaces.

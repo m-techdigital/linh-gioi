@@ -108,9 +108,9 @@ RUNTIME_ART_PACKS = [
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AHudIcons',
         'id': 'map01a-hud-icons-v1',
         'status': 'DRAFT_RUNTIME_REVIEW',
-        'assets': {'map01a-hud-icons.png': (512, 256, 'ui-hud-atlas')},
+        'assets': {'map01a-hud-icons.png': (512, 512, 'ui-hud-atlas')},
         'generators': {'pack_lgo_map01a_hud_icons'},
-        'max_bytes': 80_000,
+        'max_bytes': 140_000,
         'status_error': 'Map01A HUD icons must remain draft until owner visual review',
     },
     {

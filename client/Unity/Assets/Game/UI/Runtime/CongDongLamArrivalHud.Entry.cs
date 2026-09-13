@@ -59,11 +59,12 @@ namespace LinhGioi.UI
             sideActions.style.position = Position.Absolute;
             sideActions.style.right = 32;
             sideActions.style.top = 80;
-            sideActions.style.width = 132;
+            sideActions.style.width = 92;
             _entryOverlay.Add(sideActions);
-            AddEntrySideAction(sideActions, "Thông Báo", "Thông báo máy chủ Đông Lâm đang mở ở góc trái dưới.");
-            AddEntrySideAction(sideActions, "Cài Đặt", "Cài đặt sẽ mở sau; hiện dùng cấu hình trải nghiệm 2D mặc định.");
-            AddEntrySideAction(sideActions, "Hỗ Trợ", "Hỗ trợ sẽ mở sau; bản trải nghiệm hiện chạy local để kiểm Map01A.");
+            AddEntrySideAction(sideActions, "Thông Báo", "Thông báo máy chủ Đông Lâm đang mở ở góc trái dưới.", "notice");
+            AddEntrySideAction(sideActions, "Cài Đặt", "Cài đặt sẽ mở sau; hiện dùng cấu hình trải nghiệm 2D mặc định.", "menu");
+            AddEntrySideAction(sideActions, "Hỗ Trợ", "Hỗ trợ sẽ mở sau; bản trải nghiệm hiện chạy local để kiểm Map01A.", "support");
+            AddEntrySideAction(sideActions, "Cinematic", "Cinematic giới thiệu sẽ mở khi nội dung 2D được duyệt.", "cinematic");
 
             var panelGlow = new VisualElement { name = "Map01A Entry Panel Glow" };
             panelGlow.style.position = Position.Absolute;
@@ -79,13 +80,26 @@ namespace LinhGioi.UI
             ApplyLgoEntryShell(panel);
             _entryOverlay.Add(panel);
 
-            var logo = new Label("LINH GIỚI ONLINE") { name = "Map01A Entry Logo" };
-            logo.style.unityFontStyleAndWeight = FontStyle.Bold;
+            var brandCrest = new VisualElement { name = "Map01A Entry Brand Crest", pickingMode = PickingMode.Ignore };
+            ApplyLgoEntryBrandCrest(brandCrest, _scene.GetMap01AHudIconSprite("crest"));
+            panel.Add(brandCrest);
+
+            var logo = new Label("LINH GIỚI") { name = "Map01A Entry Logo" };
+            RuntimeUiTypography.ApplyHeadingFont(logo);
             logo.style.fontSize = 52;
-            logo.style.letterSpacing = 2;
+            logo.style.letterSpacing = 4;
             logo.style.color = new Color(.96f, .98f, 1f, .98f);
             logo.style.unityTextAlign = TextAnchor.MiddleCenter;
             panel.Add(logo);
+
+            var logoOnline = new Label("O  N  L  I  N  E") { name = "Map01A Entry Logo Online" };
+            logoOnline.style.fontSize = 14;
+            logoOnline.style.letterSpacing = 3;
+            logoOnline.style.color = new Color(.90f, .94f, 1f, .94f);
+            logoOnline.style.unityTextAlign = TextAnchor.MiddleCenter;
+            logoOnline.style.marginTop = -5;
+            logoOnline.style.marginBottom = 4;
+            panel.Add(logoOnline);
 
             var subtitle = LgoSubtitleLabel("Kiếm trong tay — Chính nghĩa trong lòng", 16, TextAnchor.MiddleCenter);
             subtitle.name = "Map01A Entry Subtitle";
@@ -100,13 +114,7 @@ namespace LinhGioi.UI
             panel.Add(motto);
 
             var controlCard = new VisualElement { name = "Map01A Entry Control Card" };
-            controlCard.style.paddingLeft = 18;
-            controlCard.style.paddingRight = 18;
-            controlCard.style.paddingTop = 16;
-            controlCard.style.paddingBottom = 16;
-            controlCard.style.marginTop = 2;
-            controlCard.style.marginBottom = 14;
-            ApplyLgoFrame(controlCard, new Color(.012f, .044f, .074f, .90f), new Color(.86f, .66f, .34f, .66f));
+            ApplyLgoEntryControlCard(controlCard);
             panel.Add(controlCard);
 
             var ornamentTop = new VisualElement { name = "Map01A Entry Ornament Top" };
@@ -122,8 +130,8 @@ namespace LinhGioi.UI
             loginTitle.style.display = DisplayStyle.None;
             controlCard.Add(loginTitle);
 
-            controlCard.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "Tài khoản / Email / Số điện thoại"));
-            controlCard.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "Mật khẩu"));
+            controlCard.Add(MakeEntryField("Map01A Entry Account Field", "Map01A Entry Account Placeholder", "Tài khoản / Email / Số điện thoại", "account"));
+            controlCard.Add(MakeEntryField("Map01A Entry Password Field", "Map01A Entry Password Placeholder", "Mật khẩu", "lock"));
             controlCard.Add(MakeEntryAuthOptions());
 
             var authScope = LgoSubtitleLabel("Thông tin chỉ dùng để vào bản trải nghiệm, không gửi dữ liệu thật.", 13);
@@ -167,6 +175,8 @@ namespace LinhGioi.UI
             serverCard.style.alignItems = Align.Center;
             serverCard.style.marginBottom = 8;
             ApplyLgoDetailCard(serverCard, 14, 10);
+            var serverIcon = CreateLgoEntryIcon("Map01A Entry Server Icon", _scene.GetMap01AHudIconSprite("server"), 30);
+            serverIcon.style.marginRight = 10;
             var serverName = LgoLabel("Máy chủ · S1 · Đông Lâm", 17, new Color(.86f, .94f, .90f, .96f), true);
             serverName.name = "Map01A Entry Server Name";
             serverName.style.flexGrow = 1;
@@ -175,6 +185,7 @@ namespace LinhGioi.UI
             serverState.style.marginRight = 8;
             var serverSwitch = new Button { name = "Map01A Entry Server Switch", text = "Đổi máy chủ" };
             ApplyLgoEntrySecondaryAction(serverSwitch, minWidth: 142);
+            serverCard.Add(serverIcon);
             serverCard.Add(serverName);
             serverCard.Add(serverState);
             serverCard.Add(serverSwitch);
@@ -241,7 +252,7 @@ namespace LinhGioi.UI
             return rail;
         }
 
-        private void AddEntrySideAction(VisualElement parent, string text, string status)
+        private void AddEntrySideAction(VisualElement parent, string text, string status, string iconId)
         {
             var button = new Button(() =>
             {
@@ -256,6 +267,7 @@ namespace LinhGioi.UI
                 text = text
             };
             ApplyLgoEntrySideAction(button);
+            AttachLgoEntrySideActionIcon(button, _scene.GetMap01AHudIconSprite(iconId));
             parent.Add(button);
         }
 
@@ -303,7 +315,7 @@ namespace LinhGioi.UI
             return row;
         }
 
-        private static VisualElement MakeEntryField(string fieldName, string placeholderName, string placeholderText)
+        private VisualElement MakeEntryField(string fieldName, string placeholderName, string placeholderText, string iconId)
         {
             var field = new VisualElement { name = fieldName };
             field.style.height = 44;
@@ -317,6 +329,7 @@ namespace LinhGioi.UI
             placeholder.style.fontSize = 15;
             placeholder.style.color = new Color(.74f, .82f, .88f, .82f);
             field.Add(placeholder);
+            AttachLgoEntryFieldIcon(field, _scene.GetMap01AHudIconSprite(iconId));
             return field;
         }
 

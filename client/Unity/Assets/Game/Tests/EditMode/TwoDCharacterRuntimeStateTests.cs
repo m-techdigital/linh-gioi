@@ -543,6 +543,10 @@ namespace LinhGioi.Tests.EditMode
                     "Entry input fields must use the shared input-field base instead of login-only frame sizing.");
                 Assert.That(root.Q("Map01A Entry Password Field").ClassListContains("lgo-input-field"), Is.True,
                     "Password field must share the same input-field base as account field.");
+                Assert.That(root.Q("Map01A Entry Account Field Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01AHudIconSprite("account")));
+                Assert.That(root.Q("Map01A Entry Password Field Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01AHudIconSprite("lock")));
                 Assert.That(root.Q<Label>("Map01A Entry Account Placeholder").style.fontSize.value.value, Is.LessThanOrEqualTo(15),
                     "Entry placeholder text must stay compact against the owner reference instead of using oversized form typography.");
                 Assert.That(root.Q("Map01A Entry Account Field").style.paddingLeft.value.value, Is.GreaterThanOrEqualTo(16),
@@ -624,6 +628,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Entry Cta Ornament Right").ClassListContains("lgo-ornament-rail"), Is.True);
                 Assert.That(root.Q("Map01A Entry Control Card"), Is.Not.Null,
                     "Login fields, auth options and server selection should sit inside one design card, matching the owner reference hierarchy.");
+                Assert.That(root.Q("Map01A Entry Control Card").ClassListContains("lgo-entry-control-card"), Is.True);
+                Assert.That(root.Q("Map01A Entry Control Card").ClassListContains("lgo-layered-frame"), Is.True);
+                Assert.That(root.Q("Map01A Entry Brand Crest"), Is.Not.Null,
+                    "Entry brand needs a reusable crest treatment above the logo hierarchy.");
                 var entryPanel = root.Q("Map01A Entry Panel");
                 Assert.That(entryPanel.ClassListContains("lgo-entry-shell"), Is.True,
                     "Entry/login panel sizing must go through a shared entry-shell base instead of screen-local width/padding values.");
@@ -637,6 +645,8 @@ namespace LinhGioi.Tests.EditMode
                     "Entry/login glow should frame the compact shell instead of widening the black rectangle behind the form.");
                 Assert.That(root.Q<Label>("Map01A Entry Logo").style.fontSize.value.value, Is.InRange(48, 54),
                     "Entry logo should carry the visual hierarchy of the owner reference while remaining inside the compact shell.");
+                Assert.That(root.Q<Label>("Map01A Entry Logo Online").text, Does.Contain("O  N  L  I  N  E"),
+                    "Entry brand should preserve the stacked logo hierarchy from the approved reference.");
                 Assert.That(root.Q("Map01A Entry Ornament Top"), Is.Not.Null,
                     "Entry/login needs a simple shared ornament separator instead of a plain blocky form stack.");
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Not.Contain("production auth"),
@@ -660,7 +670,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(supportLink.text, Does.Not.Contain("chưa mở"));
                 Assert.That(start.text, Does.Contain("Bắt đầu"));
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("local"));
-                foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ" })
+                foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ", "Cinematic" })
                 {
                     var sideAction = root.Q<Button>("Map01A Entry Side Action " + name);
                     Assert.That(sideAction, Is.Not.Null);
@@ -671,7 +681,8 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(sideAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
                         "Entry side actions must stay compact and must not wrap into two-line placeholders.");
                     Assert.That(sideAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f));
-                    Assert.That(sideAction.resolvedStyle.height, Is.LessThanOrEqualTo(42f));
+                    Assert.That(sideAction.style.height.value.value, Is.InRange(56f, 68f));
+                    Assert.That(sideAction.Q(sideAction.name + " Icon"), Is.Not.Null);
                 }
                 Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "Entry/login must not leave the in-game HUD visible behind the modal.");
