@@ -8,6 +8,8 @@ Resume guard mới: `docs/execution/STOPPED-PATHS-AND-RESUME-GUARDS.md` khóa c�
 
 Krita tooling audit mới: `tools/audit_lgo_kritarunner_script_execution.py` ghi `kritarunner-smoke-v1/report.json` = `KRITARUNNER_SCRIPT_IMPORT_UNRESOLVED`; `import-path-summary-v1.json` kết luận user script/plugin chưa chạy dù process exit 0. Built-in plugin import qua được, nên không claim runner automation sẵn sàng trước khi giải quyết resource/plugin packaging và có marker/export report thật.
 
+Authoring workspace mới: `tools/prepare_lgo_six_pose_source_authoring_workspace.py` đã tạo gói external `source-authoring-workspace-v1` cho 11 target thiếu, gồm body reference, guide overlay, template trong suốt và destination export path. Workspace có `DO-NOT-PACK` và không ghi vào repair dirs; audit sau đó `repair-layer-audit-v3-after-workspace.json` vẫn 44 failures như trước. Next thực tế là mở workspace này trong Krita/GUI authoring để vẽ/export layer source thật, rồi chạy lại repair-layer + source-board gate.
+
 ## Hiện hành — dọn presentation cũ, giữ game 2D — 2026-09-12
 
 `CONTINUE`. Theo owner, đã gỡ 56 file hết dùng (69.242 byte): 6 helper màn login/sảnh/menu/HUD/thoại cũ, registry V2, metadata đi kèm và 42 metadata thư mục V2/V3B rỗng. Audit trước xoá và sau Unity import không có C# hoặc GUID consumer ngoài nhóm gỡ. Không có model FBX/Blend trên branch để xoá thêm. Giữ `PlayableWorldController`, registry V3B/material còn phục vụ M4/M6 smoke; không xóa mesh trang phục 2D, source/registered WIP hoặc ảnh đã làm. Lịch sử design/provenance và validator V3B cũ được giữ để tra cứu, không phải design/gate hiện hành; không phục hồi code chỉ để làm xanh validator của màn đã bỏ. Danh sách/hash: `build/legacy-3d-cleanup/audit.json`.
