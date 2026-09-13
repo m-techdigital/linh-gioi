@@ -966,6 +966,8 @@ namespace LinhGioi.Tests.EditMode
                         Is.EqualTo(DisplayStyle.None), "Review/debug controls must not bleed behind inventory: " + field);
                 scene.ToggleInventory(); scene.TalkToHaVan(); update.Invoke(hud, null);
                 Assert.That(root.Q("Map01A Vitals").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Quest Interaction Message").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "The quest tracker must not repeat an NPC conversation status while the dialogue panel already identifies the speaker.");
             }
             finally
             {

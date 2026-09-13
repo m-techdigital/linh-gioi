@@ -483,7 +483,9 @@ namespace LinhGioi.UI
             _questProgress.text = _scene.QuestProgressText;
             _questMessage.text = QuestInteractionMessageForDisplay(
                 _scene.LastInteractionMessage, _scene.QuestObjectiveText, _scene.QuestProgressText);
-            _questMessage.style.display = string.IsNullOrEmpty(_questMessage.text) ? DisplayStyle.None : DisplayStyle.Flex;
+            _questMessage.style.display = _scene.DialogueOpen || string.IsNullOrEmpty(_questMessage.text)
+                ? DisplayStyle.None
+                : DisplayStyle.Flex;
             _talk.SetEnabled(_scene.CanUseCurrentRouteAction);
             _talk.text = _scene.CurrentActionLabel + (_touch ? "" : " · E");
             _outfit.text = "Trang bị " + _scene.AvatarClassLabel + ": " + _scene.VoAvatarMode + (_touch ? "" : " · C");
