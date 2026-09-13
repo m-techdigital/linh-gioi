@@ -1,3 +1,9 @@
+## Next — sau entry reference-alignment audit — 2026-09-14
+
+`CONTINUE`. Màn đăng nhập hiện không còn `Hỗ trợ` trùng trong hàng auth; rail phải theo thứ tự mẫu mới Thông Báo → Hỗ Trợ → Cinematic → Cài Đặt. Evidence hiện hành: `build/map01a-entry-reference-align-runtime-v1/entry-login.png`; Player `build/map01a-entry-reference-align-player-v1/LinhGioiOnline.app`; full `TwoDCharacterRuntimeStateTests` đạt `20/20`.
+
+Next valid work: audit luồng Menu/HUD/NPC còn thiếu phản hồi hoặc lệch cấu trúc lớn theo owner references, rồi quay lại polish visual theo shared base khi có asset thật. Không mở class selector, class/pose/wardrobe/source hoặc progression giả; không dùng lại design cũ.
+
 ## Next — sau dead-click audit của character hub — 2026-09-14
 
 `CONTINUE`. Các control chưa có model thật trong Kỹ năng và Rương đồ đã bị khóa bằng shared disabled state; luồng chọn node và detail-right vẫn hoạt động. Evidence hiện hành: `build/map01a-hub-no-dead-click-runtime-v1/{skills,bag}.png`; Player `build/map01a-hub-no-dead-click-player-v1/LinhGioiOnline.app`; full `TwoDCharacterRuntimeStateTests` đạt `20/20`.

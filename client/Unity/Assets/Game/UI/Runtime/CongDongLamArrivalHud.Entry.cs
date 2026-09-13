@@ -62,9 +62,9 @@ namespace LinhGioi.UI
             sideActions.style.width = 92;
             _entryOverlay.Add(sideActions);
             AddEntrySideAction(sideActions, "Thông Báo", "Thông báo máy chủ Đông Lâm đang mở ở góc trái dưới.", "notice");
-            AddEntrySideAction(sideActions, "Cài Đặt", "Cài đặt sẽ mở sau; hiện dùng cấu hình trải nghiệm 2D mặc định.", "menu");
             AddEntrySideAction(sideActions, "Hỗ Trợ", "Hỗ trợ sẽ mở sau; bản trải nghiệm hiện chạy local để kiểm Map01A.", "support");
             AddEntrySideAction(sideActions, "Cinematic", "Cinematic giới thiệu sẽ mở khi nội dung 2D được duyệt.", "cinematic");
+            AddEntrySideAction(sideActions, "Cài Đặt", "Cài đặt sẽ mở sau; hiện dùng cấu hình trải nghiệm 2D mặc định.", "menu");
 
             var panelGlow = new VisualElement { name = "Map01A Entry Panel Glow" };
             panelGlow.style.position = Position.Absolute;
@@ -306,12 +306,8 @@ namespace LinhGioi.UI
             row.Add(rememberWrap);
 
             var forgot = new Button { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu" };
-            ApplyLgoEntrySecondaryAction(forgot, marginRight: 6);
+            ApplyLgoEntrySecondaryAction(forgot);
             row.Add(forgot);
-
-            var support = new Button { name = "Map01A Entry Support Link", text = "Hỗ trợ" };
-            ApplyLgoEntrySecondaryAction(support);
-            row.Add(support);
             return row;
         }
 

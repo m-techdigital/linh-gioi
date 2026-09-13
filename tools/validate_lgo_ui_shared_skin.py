@@ -165,7 +165,6 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoEntryAuthAction(register, false)",
         "ApplyLgoEntrySecondaryAction(serverSwitch",
         "ApplyLgoEntrySecondaryAction(forgot",
-        "ApplyLgoEntrySecondaryAction(support",
         "ApplyLgoEntrySideAction(button)",
         "Map01A Entry Side Action ",
         "_safe.style.display = _entryOpen ? DisplayStyle.None : DisplayStyle.Flex",

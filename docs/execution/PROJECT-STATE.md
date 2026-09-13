@@ -1,3 +1,10 @@
+## Map01A — entry actions aligned to the latest owner reference — 2026-09-14
+
+- Direct Player-to-reference audit found duplicate support affordances: the right-side `Hỗ Trợ` route already gives feedback, while a second disabled `Hỗ trợ` link occupied the auth row beside `Quên mật khẩu`.
+- The duplicate auth-row link was removed. The shared side rail now follows the latest reference order: `Thông Báo`, `Hỗ Trợ`, `Cinematic`, `Cài Đặt`; Login/Register/Start and local Map01A entry behavior are unchanged.
+- TDD reproduced the duplicate control, then the full `TwoDCharacterRuntimeStateTests` suite passed `20/20`. Player `build/map01a-entry-reference-align-player-v1/LinhGioiOnline.app` built with `errors=0`, `warnings=38`.
+- Visual evidence `build/map01a-entry-reference-align-runtime-v1/entry-login.png` confirms the auth row is cleaner, the forgot-password control sits at the right edge, and the side rail remains readable without clipping.
+
 ## Map01A — unavailable hub controls no longer expose dead clicks — 2026-09-14
 
 - Interaction audit found two enabled skill category controls (`Bị động`, `Tâm pháp`) with no backing content or state transition. The existing Rương đồ toolbar guard already disables `Sắp xếp`, `Tách` and `Bán nhanh` until an inventory model exists.

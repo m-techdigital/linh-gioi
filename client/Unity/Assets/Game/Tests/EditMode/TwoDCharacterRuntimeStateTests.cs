@@ -631,16 +631,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(rememberText, Does.Contain("Lưu tài khoản"));
                 Assert.That(rememberText, Does.Not.Contain("☑"), "Entry/login must not use temporary checkbox glyphs as UI art.");
                 var forgotPassword = root.Q<Button>("Map01A Entry Forgot Password");
-                var supportLink = root.Q<Button>("Map01A Entry Support Link");
                 Assert.That(forgotPassword.enabledSelf, Is.False);
-                Assert.That(supportLink.enabledSelf, Is.False);
                 Assert.That(forgotPassword.ClassListContains("lgo-entry-secondary-action"), Is.True,
                     "Entry auth links must share the secondary-action base instead of per-link sizing.");
-                Assert.That(supportLink.ClassListContains("lgo-entry-secondary-action"), Is.True,
-                    "Entry auth links must share the same base for future auth/help states.");
                 Assert.That(forgotPassword.text, Does.Not.Contain("chưa mở"),
                     "Disabled design affordances should avoid exposing unfinished-state copy on the main login surface.");
-                Assert.That(supportLink.text, Does.Not.Contain("chưa mở"));
+                Assert.That(root.Q("Map01A Entry Support Link"), Is.Null,
+                    "The approved login keeps support in the side rail; a second disabled support link inside the auth row is duplicate UI.");
                 Assert.That(start.text, Does.Contain("Bắt đầu"));
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("local"));
                 foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ", "Cinematic" })
@@ -657,6 +654,15 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(sideAction.style.height.value.value, Is.InRange(56f, 68f));
                     Assert.That(sideAction.Q(sideAction.name + " Icon"), Is.Not.Null);
                 }
+                var sideActions = root.Q("Map01A Entry Side Actions");
+                CollectionAssert.AreEqual(new[]
+                {
+                    "Map01A Entry Side Action Thông Báo",
+                    "Map01A Entry Side Action Hỗ Trợ",
+                    "Map01A Entry Side Action Cinematic",
+                    "Map01A Entry Side Action Cài Đặt"
+                }, sideActions.Children().Select(child => child.name).ToArray(),
+                    "Entry side rail order must follow the latest owner reference and stay stable across rebuilds.");
                 Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "Entry/login must not leave the in-game HUD visible behind the modal.");
 
