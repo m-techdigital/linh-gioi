@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish after HUD context helper — 2026-09-13
+
+`CONTINUE`. HUD context actions, combat actions, shortcuts, quest tabs, dialogue actions và entry actions đã đi qua shared helpers/classes. Evidence mới: `build/map01a-hud-context-action-base-style-runtime-v1/01-arrival-q01.png`.
+
+Next valid work: tiếp tục Map01A/UI-only theo design owner, ưu tiên các pattern còn lặp trong character select/inventory cards/dialog shell hoặc polish visual richness bằng shared base. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI polish after entry side-action helper — 2026-09-13
 
 `CONTINUE`. Entry/login secondary form actions và side actions đều đã đi qua helper shared. Evidence mới: `build/map01a-entry-side-action-base-style-entry-runtime-v1/entry-login.png`.

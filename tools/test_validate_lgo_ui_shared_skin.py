@@ -109,15 +109,15 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"
             hud.write_text(
                 hud.read_text(encoding="utf-8").replace(
-                    "ApplyLgoButton(_talk);",
-                    "Box(_talk);",
+                    "ApplyLgoHudContextAction(_talk",
+                    "ApplyLgoButton(_talk",
                 ),
                 encoding="utf-8",
             )
 
             violations = validator.validate_root(Path(temp))
 
-        self.assertTrue(any("ApplyLgoButton(_talk" in item for item in violations), violations)
+        self.assertTrue(any("ApplyLgoHudContextAction(_talk" in item for item in violations), violations)
 
 
     def test_rejects_hud_combat_actions_that_skip_shared_action_base(self) -> None:

@@ -20,6 +20,7 @@ namespace LinhGioi.UI
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
         private const string LgoHudShortcutActionClass = "lgo-hud-shortcut-action";
+        private const string LgoHudContextActionClass = "lgo-hud-context-action";
         private const string LgoHudQuestTabClass = "lgo-hud-quest-tab";
         private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
@@ -274,6 +275,15 @@ namespace LinhGioi.UI
             button.style.fontSize = 13;
             button.style.whiteSpace = WhiteSpace.NoWrap;
             button.style.marginLeft = 8;
+        }
+
+        private static void ApplyLgoHudContextAction(Button button, bool touch, float minWidth = 170f, float? minHeight = null)
+        {
+            button.AddToClassList(LgoHudContextActionClass);
+            ApplyLgoButton(button);
+            button.style.minHeight = minHeight ?? (touch ? 64 : 48);
+            button.style.minWidth = minWidth;
+            button.style.whiteSpace = WhiteSpace.Normal;
         }
 
         private static void ApplyLgoDisabledAction(Button button)

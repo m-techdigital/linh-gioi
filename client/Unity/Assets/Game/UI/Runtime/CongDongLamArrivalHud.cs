@@ -105,10 +105,9 @@ namespace LinhGioi.UI
             nub.style.marginLeft = nub.style.marginTop = 22;
             _pad.Add(nub); _safe.Add(_pad);
             _talk = new Button(() => _scene.UseCurrentRouteAction()) { text = "Tương tác · E" };
-            ApplyLgoButton(_talk); Place(_talk, null, 16, null, 24); _talk.style.minHeight = _touch ? 64 : 48; _talk.style.minWidth = 170; _safe.Add(_talk);
-            _talk.style.whiteSpace = WhiteSpace.Normal;
+            ApplyLgoHudContextAction(_talk, _touch); Place(_talk, null, 16, null, 24); _safe.Add(_talk);
             _npcTalk = new Button(() => _scene.UseNpcConversation()) { text = "Nói chuyện với Tiểu Đồng" };
-            ApplyLgoButton(_npcTalk); Place(_npcTalk, null, 16, null, 100); _npcTalk.style.minHeight = 48; _safe.Add(_npcTalk);
+            ApplyLgoHudContextAction(_npcTalk, _touch, minHeight: 48); Place(_npcTalk, null, 16, null, 100); _safe.Add(_npcTalk);
             _outfit = new Button(() => _scene.CycleVoAvatarMode()) { text = "Trang bị Võ · C" };
             Box(_outfit); Place(_outfit, 16, null, _touch ? 90 : 90, null);
             _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
@@ -143,11 +142,9 @@ namespace LinhGioi.UI
             }
             _safe.Add(_combatBar);
             _characterSelectButton = new Button(OpenCharacterSelect) { name = "Map01A Character Select Button", text = "Nhân vật" };
-            ApplyLgoButton(_characterSelectButton);
-            _characterSelectButton.style.minHeight = _touch ? 64 : 48; _characterSelectButton.style.minWidth = 150;
+            ApplyLgoHudContextAction(_characterSelectButton, _touch, minWidth: 150);
             _inventoryToggle = new Button(() => _scene.ToggleInventory()) { text = "Hành trang · I" };
-            ApplyLgoButton(_inventoryToggle); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
-            _inventoryToggle.style.minHeight = _touch ? 64 : 48; _inventoryToggle.style.minWidth = 180;
+            ApplyLgoHudContextAction(_inventoryToggle, _touch, minWidth: 180); Place(_inventoryToggle, null, _touch ? 408 : 410, null, 24);
             var actionBar = new VisualElement { name = "Map01A Context Actions", pickingMode = PickingMode.Ignore };
             Place(actionBar, null, 16, null, 24); actionBar.style.flexDirection = FlexDirection.Row;
             actionBar.style.alignItems = Align.FlexEnd;

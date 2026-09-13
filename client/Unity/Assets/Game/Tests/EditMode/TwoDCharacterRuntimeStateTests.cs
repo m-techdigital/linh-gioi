@@ -397,6 +397,18 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(shortcutBar, Is.Not.Null);
                 Assert.That(shortcutBar.style.display.value, Is.EqualTo(DisplayStyle.Flex));
 
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var talk = (Button)typeof(CongDongLamArrivalHud).GetField("_talk", flags).GetValue(hud);
+                var inventoryToggle = (Button)typeof(CongDongLamArrivalHud).GetField("_inventoryToggle", flags).GetValue(hud);
+                var characterSelect = root.Q<Button>("Map01A Character Select Button");
+                Assert.That(talk.ClassListContains("lgo-hud-context-action"), Is.True,
+                    "HUD context actions must use a shared context-action base instead of local one-off sizing.");
+                Assert.That(inventoryToggle.ClassListContains("lgo-hud-context-action"), Is.True,
+                    "Inventory/context actions must share one base for consistent Player density.");
+                Assert.That(characterSelect.ClassListContains("lgo-hud-context-action"), Is.True,
+                    "Character/info context actions must not create a parallel HUD button style.");
+
                 var skills = root.Q<Button>("Map01A Skills Shortcut");
                 var menu = root.Q<Button>("Map01A Menu Shortcut");
                 Assert.That(skills, Is.Not.Null);

@@ -136,3 +136,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-entry-side-action-base-style-entry-runtime-v1/entry-login.png`.
 - Result: entry/login side actions (`Thông Báo`, `Cài Đặt`, `Hỗ Trợ`) now share `ApplyLgoEntrySideAction(...)` and `lgo-entry-side-action`, replacing local height/margin/font/nowrap styling in the entry partial.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms the side actions remain compact/disabled and do not break the login shell.
+
+## 2026-09-13 — HUD context action base-first evidence
+
+- Evidence: `build/map01a-hud-context-action-base-style-runtime-v1/01-arrival-q01.png` plus full PC route capture in `build/map01a-hud-context-action-base-style-runtime-v1/`.
+- Result: gameplay context buttons (`Tương tác`, `Nói chuyện`, `Nhân vật`, `Hành trang`) now share `ApplyLgoHudContextAction(...)` and `lgo-hud-context-action`, replacing local height/width/white-space styling.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms context actions remain compact and do not look like oversized modal CTAs.

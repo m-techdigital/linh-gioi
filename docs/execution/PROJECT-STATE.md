@@ -1,3 +1,10 @@
+## Map01A — HUD context action base-first guard — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- HUD context actions (`Tương tác`, `Nói chuyện`, `Nhân vật`, `Hành trang`) chuyển từ inline per-button sizing sang shared helper/class: `ApplyLgoHudContextAction(...)` và `lgo-hud-context-action`. Debug/review class controls vẫn giữ nguyên trạng thái ẩn, không mở lại class work.
+- RED/GREEN: targeted EditMode fail khi context actions chưa có shared base class, sau đó pass sau refactor; shared-skin validator/unit test cập nhật để bắt helper semantic mới thay vì low-level button style.
+- Player evidence: `build/map01a-hud-context-action-base-style-runtime-v1/01-arrival-q01.png` và full PC route capture cùng thư mục. Visual review: cụm context actions vẫn compact, không phình như modal CTA; trạng thái vẫn `CONTINUE` vì UI tổng thể còn cần polish sâu.
+
 ## Map01A — entry side-action base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
