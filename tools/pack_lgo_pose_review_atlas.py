@@ -24,12 +24,33 @@ OUTFIT_REVIEW_DIRS = {
     'class-accessory-review',
 }
 OUTFIT_SOURCE_MARKERS = {'slotId', 'reviewSlot', 'itemId', 'layerOrderProfile', 'fitFamily'}
+REJECTED_SELECTION_MARKERS = ('REJECTED', 'WITHDRAWN')
 
 
 def is_outfit_review_pack(sources: list[dict], output_dir: Path) -> bool:
     if output_dir.name in OUTFIT_REVIEW_DIRS:
         return True
     return any(any(marker in source for marker in OUTFIT_SOURCE_MARKERS) for source in sources)
+
+
+def validate_selectable_sources(sources: list[dict]) -> None:
+    """Block rejected evidence at the pack boundary, regardless of caller flags."""
+    for source in sources:
+        path = Path(source['source']).resolve()
+        if 'rejected-evidence' in {part.lower() for part in path.parts}:
+            raise ValueError('Source is quarantined rejected-evidence: ' + str(path))
+        for parent in path.parents:
+            for marker_name in ('DO-NOT-SELECT.md', 'DO-NOT-PACK.md'):
+                marker = parent / marker_name
+                if marker.is_file():
+                    raise ValueError(f'Source is blocked by {marker_name}: {marker}')
+            selection_path = parent / 'authoring-selection.json'
+            if not selection_path.is_file():
+                continue
+            selection = json.loads(selection_path.read_text(encoding='utf-8'))
+            status = str(selection.get('status', '')).upper()
+            if any(marker in status for marker in REJECTED_SELECTION_MARKERS):
+                raise ValueError(f'Source authoring selection is {status}: {selection_path}')
 
 
 def compact_rows(unique, width):
@@ -77,6 +98,7 @@ def compact_rows(unique, width):
 def pack_review(sources, divisor=4, max_side=1024, *, allow_empty_components=False):
     if not sources:
         raise ValueError('Source list is empty')
+    validate_selectable_sources(sources)
     if not isinstance(divisor, int) or divisor <= 0 or any(n % divisor for n in CANVAS):
         raise ValueError('Divisor must divide the canonical canvas')
     ids, unique, sprites = set(), {}, []
@@ -93,6 +115,10 @@ def pack_review(sources, divisor=4, max_side=1024, *, allow_empty_components=Fal
         with Image.open(path) as opened:
             if opened.size != CANVAS:
                 raise ValueError('Source must use canonical canvas: ' + str(path))
+            if 'A' not in opened.getbands():
+                raise ValueError('Source PNG must contain explicit alpha: ' + str(path))
+            if opened.getchannel('A').getextrema()[0] == 255:
+                raise ValueError('Source sprite must contain transparent background: ' + str(path))
             sampled = opened.convert('RGBA').resize(
                 tuple(n // divisor for n in CANVAS), Image.Resampling.LANCZOS)
         box = sampled.getchannel('A').getbbox()

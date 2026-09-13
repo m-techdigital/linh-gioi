@@ -54,6 +54,10 @@ Blocking source gaps:
 - `shoulder_chest_guard` is idle-only/current review candidate.
 - `jump_tuck` anatomy and outfit fit remain high-risk and must be reviewed before pack.
 
+The source tool boundary is now explicit: ImageGen output is concept/reference only. A registered garment must come from one native layered document that can be reopened and exported with real alpha. RGB/checkerboard output, background-removal repair, and any file from a rejected/withdrawn evidence tree are not source candidates.
+
+Rejected designs are retained for learning but physically isolated from discovery. Five final rejected/withdrawn Pháp trees were moved to `LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-13/`; the SHA-256 inventory is `quarantine-manifest.json`. Their former locations contain tombstones only, so preserving evidence no longer makes those pixels selectable.
+
 ## Guardrails
 
 Do not return to these stopped loops:
@@ -62,6 +66,8 @@ Do not return to these stopped loops:
 - per-pose pixel nudging without source review;
 - polygon/body-mask garment candidates that already failed as floating panels;
 - AI/composite geometry authority;
+- ImageGen PNG as a registered source layer or alpha-cleanup input;
+- copying/renaming rejected evidence back into active WIP;
 - claiming technical test/capture pass as visual acceptance.
 
 If the six-pose path also fails to produce a coherent source board after a bounded batch, record the root cause and switch to a higher-level product decision. Do not open another architecture/tool branch just to keep moving.

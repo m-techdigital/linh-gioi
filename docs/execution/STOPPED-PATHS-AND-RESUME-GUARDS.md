@@ -13,7 +13,7 @@ The active character/outfit route is the six-pose registered outfit pipeline:
 - body/motion authority: existing six poses `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`
 - source-space profile: 1024×1536 canvas, `originX=512`, `groundY=1484`, `u=1.70/1536`
 
-Next valid implementation work is source authoring for the 11 missing Pháp Lv1 slot/pose targets from `missing-source-authoring-brief-v1`, then grouped source board review. Do not pack Player before source coverage, provenance, alpha/canvas and visual source gates pass.
+Next valid implementation work is native layered source authoring for the selected sleeved Pháp Lv1 route, then grouped source board review. ImageGen may supply a concept/reference only. Do not pack Player before the native source can be reopened, its export has real transparency, and source coverage/provenance/alpha/canvas/visual gates pass.
 
 ## Stopped path 1: current skeletal generated-cutout Player branch
 
@@ -123,6 +123,34 @@ Resume condition:
 - before creating or staging another generated/painted candidate, define the target slot envelope in the 1024×1536 source profile from body authority plus accepted neighboring pose/source evidence
 - the candidate must pass an overlay board against that envelope before it can enter the repair source directories
 - if the envelope cannot be defined for a slot/pose, keep that slot missing and move to a source-authoring method that can be measured
+
+## Stopped path 5: ImageGen export or rejected design as source
+
+Status: stopped as a production-source route.
+
+Do not continue:
+
+- treating an ImageGen PNG as a registered garment layer, including requests for a transparent background;
+- repairing an RGB/checkerboard output into source through alpha cleanup, pixel deletion or background removal;
+- selecting any file below `rejected-evidence` or a source tree marked `REJECTED`/`WITHDRAWN`;
+- copying or renaming rejected pixels into a new candidate directory.
+
+Reason:
+
+- the jump-layer capability check returned a 1024×1536 RGB file with checkerboard baked into the pixels;
+- prompt wording did not guarantee a true alpha channel or editable layer ownership;
+- rejected and active WIP previously shared one discoverable tree, so `runtimeEligible=false` alone did not prevent later source reuse.
+
+Enforcement:
+
+- final rejected/withdrawn trees are preserved outside selectable roots under `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-13/`, with per-file hashes in `quarantine-manifest.json`;
+- former paths contain only `DO-NOT-SELECT.md` and an authoring-selection tombstone;
+- `pack_lgo_pose_review_atlas.py` rejects rejected/withdrawn ancestors, quarantine paths, PNGs without explicit alpha and fully opaque PNGs at its mandatory pack boundary;
+- `audit_lgo_source_staging_selection.py` reads both material provenance and authoring-selection status.
+
+Resume condition:
+
+- no resume as a direct source route. A concept may be redrawn in one native layered authoring source and must pass reopen/export verification before it enters staging.
 
 ## Evidence that must not be promoted
 

@@ -88,6 +88,32 @@ class PoseReviewAtlasTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'fingerprint'):
             pack_review([source])
 
+    def test_pack_entrypoint_rejects_source_under_rejected_authoring_selection(self):
+        rejected = self.root / 'rejected-design-v1'
+        rejected.mkdir()
+        (rejected / 'authoring-selection.json').write_text(json.dumps({
+            'status': 'REJECTED_SOURCE_VISUAL',
+            'runtimeEligible': False,
+        }))
+        source = self.source('idle')
+        moved = rejected / 'idle.png'
+        Path(source['source']).rename(moved)
+        source['source'] = str(moved)
+
+        with self.assertRaisesRegex(ValueError, 'REJECTED_SOURCE_VISUAL'):
+            pack_review([source])
+
+    def test_pack_entrypoint_rejects_quarantined_evidence_path(self):
+        quarantined = self.root / 'rejected-evidence' / 'bad-v1'
+        quarantined.mkdir(parents=True)
+        source = self.source('idle')
+        moved = quarantined / 'idle.png'
+        Path(source['source']).rename(moved)
+        source['source'] = str(moved)
+
+        with self.assertRaisesRegex(ValueError, 'rejected-evidence'):
+            pack_review([source])
+
     def test_noncanonical_source_and_duplicate_ids_are_rejected(self):
         source = self.source('idle')
         with self.assertRaisesRegex(ValueError, 'Duplicate'):
@@ -96,6 +122,24 @@ class PoseReviewAtlasTests(unittest.TestCase):
         Image.new('RGBA', (128, 192)).save(path)
         source['sourceSha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
         with self.assertRaisesRegex(ValueError, 'canonical'):
+            pack_review([source])
+
+    def test_rgb_source_cannot_gain_fake_alpha_during_pack(self):
+        source = self.source('idle')
+        path = Path(source['source'])
+        Image.new('RGB', (1024, 1536), (128, 128, 128)).save(path)
+        source['sourceSha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+
+        with self.assertRaisesRegex(ValueError, 'explicit alpha'):
+            pack_review([source])
+
+    def test_fully_opaque_rgba_source_is_not_a_transparent_sprite(self):
+        source = self.source('idle')
+        path = Path(source['source'])
+        Image.new('RGBA', (1024, 1536), (128, 128, 128, 255)).save(path)
+        source['sourceSha256'] = hashlib.sha256(path.read_bytes()).hexdigest()
+
+        with self.assertRaisesRegex(ValueError, 'transparent background'):
             pack_review([source])
 
     def test_budget_overflow_does_not_silently_downsample(self):

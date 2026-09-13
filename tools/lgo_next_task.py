@@ -250,9 +250,9 @@ def main() -> int:
         print("LGO_NEXT_TASK_ADVISOR_READY")
         print(f"id={active_task}")
         print("purpose=Author áo Pháp có tay, belt và guard theo sáu pose body nguyên khối; sau mẫu đầu tạo item thứ hai bằng cùng pose template")
-        print("allowed=six-pose registered front/back outfit source, shared source-space profile, grouped source board and Player review after visual acceptance")
-        print("forbidden=split-body rig/cards, sleeve-add/capsule, pixel deletion, flat-panel direct-fit, per-item body measurement or runtime offsets")
-        print("closure=item đầu chạy đẹp trong Player trên đủ sáu pose; item thứ hai reuse template không đo lại body; visual review ghi lỗi và thời gian thực")
+        print("allowed=one native layered KRA/ORA source that reopens and exports true-alpha six-pose front/back overlays; shared source-space profile; ImageGen concept/reference only")
+        print("forbidden=split-body rig/cards, ImageGen PNG as source, RGB/checkerboard alpha cleanup, rejected-evidence reuse, sleeve-add/capsule, pixel deletion, flat-panel direct-fit, per-item body measurement or runtime offsets")
+        print("closure=native source reopen/export verified; item đầu chạy đẹp trong Player trên đủ sáu pose; item thứ hai reuse template không đo lại body; visual review ghi lỗi và thời gian thực")
         return 0
     if active_task == "SIX_POSE_REGISTERED_OUTFIT_SOURCE_VISUAL_POLISH":
         print("LGO_NEXT_TASK_ADVISOR_READY")

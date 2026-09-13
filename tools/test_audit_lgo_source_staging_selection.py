@@ -17,6 +17,11 @@ class SourceStagingSelectionAuditTests(unittest.TestCase):
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(data), encoding="utf-8")
 
+    def write_authoring_selection(self, directory, **data):
+        path = self.root / directory / "authoring-selection.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(data), encoding="utf-8")
+
     def test_rejects_selected_source_inside_visual_rejected_directory(self):
         self.write_provenance(
             "outer-top-material-idle-v7",
@@ -36,6 +41,49 @@ class SourceStagingSelectionAuditTests(unittest.TestCase):
         self.assertEqual(report["status"], "SOURCE_STAGING_SELECTION_REJECTED")
         self.assertIn(
             "outer_top/idle selects visually rejected directory outer-top-material-idle-v7",
+            report["failures"],
+        )
+
+    def test_rejects_source_when_nearest_authoring_selection_rejects_visual(self):
+        self.write_authoring_selection(
+            "design-locked-authoring-v1",
+            status="REJECTED_SOURCE_VISUAL",
+            runtimeEligible=False,
+        )
+        selection = {
+            "slots": {
+                "outer_top": {
+                    "idle": "design-locked-authoring-v1/outer_top/idle/front.png",
+                }
+            }
+        }
+
+        report = audit_selection(self.root, selection)
+
+        self.assertEqual(report["status"], "SOURCE_STAGING_SELECTION_REJECTED")
+        self.assertIn(
+            "outer_top/idle selects authoring-rejected directory design-locked-authoring-v1",
+            report["failures"],
+        )
+
+    def test_rejects_any_source_inside_rejected_evidence_tree(self):
+        rejected_root = self.root.parent / "rejected-evidence"
+        rejected_asset = rejected_root / "phap-lv001" / "bad-v1" / "outer-top.png"
+        rejected_asset.parent.mkdir(parents=True, exist_ok=True)
+        rejected_asset.write_bytes(b"evidence")
+        selection = {
+            "slots": {
+                "outer_top": {
+                    "idle": str(rejected_asset),
+                }
+            }
+        }
+
+        report = audit_selection(self.root, selection)
+
+        self.assertEqual(report["status"], "SOURCE_STAGING_SELECTION_REJECTED")
+        self.assertIn(
+            "outer_top/idle selects quarantined rejected evidence",
             report["failures"],
         )
 

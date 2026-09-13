@@ -94,6 +94,10 @@ Sửa lỗi correctness làm trang bị đã tháo có thể xuất hiện lại
 
 # TASK LEDGER ROLLUP — 2D Pivot
 
+## Rejected source quarantine + real-alpha pack boundary — 2026-09-13
+
+Root cause of repeated bad-design reuse: final rejected/withdrawn Pháp assets remained beside active WIP, while the staging audit ignored `authoring-selection.json`; the packer also converted RGB to RGBA, masking baked checkerboard as opaque pixels. Five final rejected/withdrawn trees were moved to external `rejected-evidence/2026-09-13` with 1,477 file hashes and tombstones at old paths. Existing staging audit now rejects authoring decisions and quarantine paths; `pack_lgo_pose_review_atlas.py` enforces the same selection boundary and requires real alpha plus transparent background. The post-fix control audit allows the seven current review sources and confirms all are RGBA 1024×1536, so the guard does not confuse review-only with rejected. ImageGen is locked to concept/reference. Current source blocker remains a reopenable native layered sleeved Pháp source; completed final items remain 0.
+
 ## Võ skill hit proof — 2026-09-10
 
 Nâng skill từ cue sang hit runtime: range 2,4, active 0,42 giây, damage 35 tại key timing, HP/counter/tint/HUD feedback và chặn cast lại trong active window. EditMode `179/178/0/1`; build macOS pass; frame 12 của ba profile đã review. Đây là một-skill proof, chưa phải combat loop đầy đủ. Next vẫn là tier-matched modular motion cho Võ Lv10/20/30.
