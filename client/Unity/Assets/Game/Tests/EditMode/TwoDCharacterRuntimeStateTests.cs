@@ -322,6 +322,8 @@ namespace LinhGioi.Tests.EditMode
                     "Character-info needs a compact stat strip so it reads like the owner reference character panel.");
                 Assert.That(root.Q("Map01A Character Loadout Matrix"), Is.Not.Null,
                     "Character-info needs a named loadout matrix instead of an anonymous wrapped technical list.");
+                Assert.That(root.Q<Button>("LGO Equipment Inventory Slot main_weapon").ClassListContains("lgo-inventory-item-row"), Is.True,
+                    "Character equipment rows must reuse the inventory item-row base instead of maintaining a parallel row skin.");
 
                 InvokeBoundButton(root.Q<Button>("LGO Equipment Inventory Slot boots"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));

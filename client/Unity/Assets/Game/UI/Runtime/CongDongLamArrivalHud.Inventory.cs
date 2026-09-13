@@ -359,9 +359,7 @@ namespace LinhGioi.UI
             _characterStatStrip.Add(InventoryBadge("Map01A Character Gear Badge", "10/10 Lv1", new Color(.76f, 1f, .70f, .94f)));
             _inventoryHeroPanel.Add(_characterStatStrip);
 
-            var heroDivider = new VisualElement();
-            heroDivider.style.height = 1; heroDivider.style.marginTop = heroDivider.style.marginBottom = 10;
-            heroDivider.style.backgroundColor = new Color(.75f, .60f, .32f, .45f);
+            var heroDivider = LgoDivider("Map01A Character Hero Divider");
             _inventoryHeroPanel.Add(heroDivider);
             _equipmentTitle = LgoLabel("", 16, new Color(.95f, .86f, .58f, .96f), true);
             _inventoryHeroPanel.Add(_equipmentTitle);
@@ -394,16 +392,11 @@ namespace LinhGioi.UI
             {
                 var slotId = _equipmentSlotIds[i];
                 var row = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "LGO Equipment Inventory Slot " + slotId);
-                row.text = string.Empty;
-                row.style.flexGrow = 0;
+                ApplyLgoInventoryItemRow(row, _touch);
                 row.style.flexBasis = new Length(48, LengthUnit.Percent);
                 row.style.height = 58;
                 row.style.marginBottom = 6;
                 row.style.marginRight = i % 2 == 0 ? 7 : 0;
-                row.style.flexDirection = FlexDirection.Row;
-                row.style.alignItems = Align.Center;
-                row.style.justifyContent = Justify.FlexStart;
-                row.style.unityTextAlign = TextAnchor.MiddleLeft;
 
                 var icon = new VisualElement { name = "Map01A Character Info Slot Icon " + slotId };
                 ApplyLgoItemIcon(icon);

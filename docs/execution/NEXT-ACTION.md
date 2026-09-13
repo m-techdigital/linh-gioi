@@ -1167,3 +1167,6 @@ Required before next checkpoint: targeted EditMode tests for any new shared comp
 ## Next — Map01A base-first UI after inventory detail primitives — 2026-09-13
 
 `CONTINUE`. State badge và stats card trong panel chi tiết đã dùng shared Skin/classes; evidence 1600x900 tại `build/map01a-inventory-detail-base-runtime-v1/`. Batch kế tiếp vẫn là Map01A/UI-only: audit các card/divider/empty-state còn viết tay trong Hành trang/Thông tin/Rương đồ, ưu tiên reuse helper sẵn có trước khi tạo helper mới; sau đó chuyển sang login/HUD/dialog theo cùng base-first rule. Không resume class/wardrobe/pose/source, không rollback code class, không dùng icon giả/random/generated; thay đổi nhìn thấy phải build/capture và review ảnh Player.
+## Next — Map01A base-first UI after character equipment rows — 2026-09-13
+
+`CONTINUE`. Item rows trong Hành trang và 10 slot ở Thông tin đã cùng dùng một base; detail badge/card và divider cũng đã gom về shared Skin. Tiếp theo audit các empty-state/card còn viết tay, chỉ tạo semantic helper khi có từ hai consumer thật; sau đó polish login/HUD/dialog theo design owner. Giữ Map01A/UI-only, không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; visible batch phải có Player screenshot review.
