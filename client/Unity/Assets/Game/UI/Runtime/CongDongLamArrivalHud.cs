@@ -27,7 +27,7 @@ namespace LinhGioi.UI
         private RuntimeTouchMovementPad _pad;
         private bool _touchJumpHeld;
         private VisualElement _vitals;
-        private Label _vitalsName;
+        private Label _vitalsName, _vitalsMeta;
         private UnityEngine.UIElements.ProgressBar _health, _mana;
         private Button _inventoryGender;
         private RuntimeViewportMetrics _metrics;
@@ -90,7 +90,16 @@ namespace LinhGioi.UI
             var vitalsContent = new VisualElement { name = "Map01A Vitals Content", pickingMode = PickingMode.Ignore };
             vitalsContent.style.flexGrow = 1;
             vitalsContent.style.marginLeft = 10;
-            _vitalsName = new Label(); _vitalsName.style.fontSize = 15; _vitalsName.style.unityFontStyleAndWeight = FontStyle.Bold; vitalsContent.Add(_vitalsName);
+            _vitalsName = new Label { name = "Map01A Player Name" };
+            _vitalsName.style.fontSize = 15;
+            _vitalsName.style.unityFontStyleAndWeight = FontStyle.Bold;
+            _vitalsName.style.color = new Color(.96f, .91f, .76f, .98f);
+            vitalsContent.Add(_vitalsName);
+            _vitalsMeta = new Label { name = "Map01A Player Class Meta" };
+            _vitalsMeta.style.fontSize = 11;
+            _vitalsMeta.style.color = UiSubText;
+            _vitalsMeta.style.marginTop = -1;
+            vitalsContent.Add(_vitalsMeta);
             _health = MakeVital("Map01A Health", new Color(.67f, .16f, .15f));
             _mana = MakeVital("Map01A Mana", new Color(.12f, .37f, .64f));
             vitalsContent.Add(_health); vitalsContent.Add(_mana); _vitals.Add(vitalsContent); _playerHudCluster.Add(_vitals);
@@ -498,7 +507,8 @@ namespace LinhGioi.UI
                 + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + (_touch ? "" : " · G");
             _inventoryGender.SetEnabled(_scene.CanCycleSourcePoseGender);
             _vitals.style.display = _scene.InventoryOpen || _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _vitalsName.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + "  ·  Lv.1";
+            _vitalsName.text = "LụcThiên";
+            _vitalsMeta.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + "  ·  Lv.1";
             var playerPortrait = _scene.GetVoAvatarThumbnailSprite();
             _vitalsPortrait.style.backgroundImage = playerPortrait == null ? StyleKeyword.None : new StyleBackground(playerPortrait);
             _health.value = _scene.PlayerHealth; _health.title = "HP " + _scene.PlayerHealth + "/100";

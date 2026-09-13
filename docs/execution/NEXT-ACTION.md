@@ -1,3 +1,9 @@
+## Next — sau player HUD identity hierarchy — 2026-09-14
+
+`CONTINUE`. Thẻ người chơi góc trái đã đặt `LụcThiên` làm danh tính chính và chuyển class/giới/cấp xuống dòng metadata; HP/MP và portrait dùng state/source hiện hành. Evidence: `build/map01a-player-identity-hud-runtime-v1/{01-arrival-q01,03-q01-complete,18-q09-portal-open}.png`; Player `build/map01a-player-identity-hud-player-v1/LinhGioiOnline.app`; full UI tests `20/20`.
+
+Next valid work: audit quest tracker/dialogue/menu trên Player với ưu tiên lỗi cấu trúc hoặc interaction rõ, tránh vi chỉnh vụn. Chỉ polish qua shared HUD/Skin base và asset có provenance; không mở class/pose/wardrobe/source hoặc progression giả.
+
 ## Next — sau entry reference-alignment audit — 2026-09-14
 
 `CONTINUE`. Màn đăng nhập hiện không còn `Hỗ trợ` trùng trong hàng auth; rail phải theo thứ tự mẫu mới Thông Báo → Hỗ Trợ → Cinematic → Cài Đặt. Evidence hiện hành: `build/map01a-entry-reference-align-runtime-v1/entry-login.png`; Player `build/map01a-entry-reference-align-player-v1/LinhGioiOnline.app`; full `TwoDCharacterRuntimeStateTests` đạt `20/20`.

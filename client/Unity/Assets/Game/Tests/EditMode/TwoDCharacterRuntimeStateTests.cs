@@ -849,6 +849,14 @@ namespace LinhGioi.Tests.EditMode
                     "HUD location title must use the shared info-panel base instead of the legacy Box helper.");
                 Assert.That(root.Q("Map01A Vitals").ClassListContains("lgo-hud-info-panel"), Is.True,
                     "HUD vitals must share the same info-panel base as the title and quest tracker.");
+                Assert.That(root.Q<Label>("Map01A Player Name").text, Is.EqualTo("LụcThiên"),
+                    "The player card must lead with the character identity from the approved HUD hierarchy, not only a class/debug label.");
+                var playerMeta = root.Q<Label>("Map01A Player Class Meta");
+                Assert.That(playerMeta, Is.Not.Null);
+                Assert.That(playerMeta.text, Does.Contain(scene.ActiveEquipmentClassLabel));
+                Assert.That(playerMeta.text, Does.Contain("Lv.1"));
+                Assert.That(playerMeta.style.fontSize.value.value, Is.LessThan(root.Q<Label>("Map01A Player Name").style.fontSize.value.value),
+                    "Class, gender and level must stay subordinate to the player name instead of sharing one flat line.");
                 Assert.That(root.Q("Map01A Quest Tracker Body").ClassListContains("lgo-hud-info-panel"), Is.True,
                     "HUD quest body must use the shared info-panel base instead of one-off panel styling.");
                 Assert.That(root.Q("Map01A Quest Tracker Body").style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.9f),

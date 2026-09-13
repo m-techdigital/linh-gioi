@@ -1,3 +1,10 @@
+## Map01A — player HUD restores character identity hierarchy — 2026-09-14
+
+- Player-to-owner-reference audit found the top-left card led with `Võ · Nam · Lv.1`, so it read like a review/debug label and omitted the character identity shown throughout the approved HUD designs.
+- The shared player card now leads with `LụcThiên`; class, gender and current level move to a smaller metadata line. HP/MP bars, portrait source and all gameplay state remain unchanged.
+- TDD reproduced the missing identity hierarchy, then full `TwoDCharacterRuntimeStateTests` passed `20/20`. Player `build/map01a-player-identity-hud-player-v1/LinhGioiOnline.app` built with `errors=0`, `warnings=38`.
+- Full Q01–Q09 Player capture `build/map01a-player-identity-hud-runtime-v1/` passed 18 route frames, 38 dialogue frames and all functional gates. Visual review of arrival, Q01 complete and portal-open frames confirms the name/meta/HP/MP stack remains readable without overlap.
+
 ## Map01A — entry actions aligned to the latest owner reference — 2026-09-14
 
 - Direct Player-to-reference audit found duplicate support affordances: the right-side `Hỗ Trợ` route already gives feedback, while a second disabled `Hỗ trợ` link occupied the auth row beside `Quên mật khẩu`.
