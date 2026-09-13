@@ -341,6 +341,7 @@ namespace LinhGioi.UI
             if (Array.IndexOf(args, "--lgo-map01a-skip-entry") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0) return false;
+            if (Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0) return false;
             if (sceneIsCapturing) return false;
             return true;
         }

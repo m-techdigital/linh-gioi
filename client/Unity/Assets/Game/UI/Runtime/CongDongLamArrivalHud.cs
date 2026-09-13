@@ -228,9 +228,9 @@ namespace LinhGioi.UI
                 if (!_scene.InventoryOpen) _scene.ToggleInventory();
                 ShowCharacterHubPreviewMode(CharacterHubMode.Skills);
             }) { name = "Map01A Skills Shortcut", text = "Kỹ năng" };
-            _menuShortcut = new Button { name = "Map01A Menu Shortcut", text = "Menu" };
+            _menuShortcut = new Button(ToggleMenu) { name = "Map01A Menu Shortcut", text = "Menu" };
             ApplyLgoHudShortcutAction(_skillsShortcut, _touch, true);
-            ApplyLgoHudShortcutAction(_menuShortcut, _touch);
+            ApplyLgoHudShortcutAction(_menuShortcut, _touch, true);
             _productShortcutActions.Add(_skillsShortcut);
             _productShortcutActions.Add(_menuShortcut);
             AttachLgoHudActionIcon(_skillsShortcut, _scene.GetMap01AHudIconSprite("skills"), _touch);
@@ -239,6 +239,7 @@ namespace LinhGioi.UI
             BuildInventory();
             BuildCharacterSelect();
             BuildEntryScreen();
+            BuildMenu();
             _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); ApplyLgoLayeredFrame(_dialogue); Place(_dialogue, 28, null, null, 22);
             _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
             _dialogue.style.paddingTop = _dialogue.style.paddingBottom = 10;

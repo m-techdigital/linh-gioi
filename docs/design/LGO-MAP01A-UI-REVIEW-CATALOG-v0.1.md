@@ -13,6 +13,8 @@ This catalog points reviewers to the current Map01A 2D UI evidence. It is techni
 | Character select modal | `build/map01a-character-select-runtime/character-select.png` and `build/map01a-character-select-runtime/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
 | Quest/HUD/inventory route | `build/map01a-detail-right-player/quest-capture/{pc,tablet,mobile}/` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, pc/tablet/mobile, 18 route frames and 38 dialogue frames each |
 | Inventory tabs: Hành trang + Thông tin + Vật phẩm + Rương đồ | `build/map01a-inventory-column-balance-runtime-v1/bag.png`, `build/map01a-inventory-column-balance-runtime-v1/character-info.png`, `build/map01a-inventory-column-balance-runtime-v1/supplies.png`, `build/map01a-inventory-column-balance-runtime-v1/storage.png`, and `build/map01a-inventory-column-balance-runtime-v1/manifest.json` | `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900; internal Player flag, no OS mouse/keyboard; column balance checkpoint, still visual CONTINUE |
+| Approved five-tab character hub | `build/map01a-five-tab-runtime-v2/character-info.png`, `build/map01a-five-tab-runtime-v2/bag.png`, `build/map01a-five-tab-runtime-v2/skills.png`, `build/map01a-five-tab-runtime-v2/potential.png`, `build/map01a-five-tab-runtime-v2/spirit-pet.png`, and `build/map01a-five-tab-runtime-v2/manifest.json` | Current five-tab evidence; v1 rejected for skill text/overflow |
+| Gameplay menu | `build/map01a-menu-runtime-v3/menu.png` and `build/map01a-menu-runtime-v3/manifest.json` | Current menu evidence; v1/v2 rejected for flex-stretch/navigation collision; `usesOsMouseOrKeyboard=false`, 1600×900 |
 
 ## Required review frames
 

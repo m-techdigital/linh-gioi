@@ -88,6 +88,10 @@ namespace LinhGioi.Tests.EditMode
                 "Character select capture must not advance the quest capture route.");
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(characterArgs, sceneIsCapturing: true), Is.False,
                 "Character select capture should open character modal directly instead of stacking over entry login.");
+            var menuArgs = new[] { "LinhGioiOnline", "--lgo-map01a-menu-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(menuArgs), Is.True);
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(menuArgs, sceneIsCapturing: true), Is.False,
+                "Menu capture should open the playable HUD directly instead of stacking behind entry login.");
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(
                 new[] { "LinhGioiOnline", "--lgo-map01a-art-capture" }, sceneIsCapturing: true), Is.False);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(
@@ -431,7 +435,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(skills.text, Is.EqualTo("Kỹ năng"));
                 Assert.That(menu.text, Is.EqualTo("Menu"));
                 Assert.That(skills.enabledSelf, Is.True, "Kỹ năng shortcut should open the approved shared character hub.");
-                Assert.That(menu.enabledSelf, Is.False, "Menu shortcut must stay visibly gated until the real screen exists.");
+                Assert.That(menu.enabledSelf, Is.True, "Menu shortcut should open the Map01A navigation menu.");
                 Assert.That(skills.ClassListContains("lgo-hud-shortcut-action"), Is.True,
                     "HUD product shortcuts must use the shared shortcut base instead of local one-off sizing.");
                 Assert.That(menu.ClassListContains("lgo-hud-shortcut-action"), Is.True,
@@ -442,6 +446,20 @@ namespace LinhGioi.Tests.EditMode
                     "HUD product shortcuts must stay compact and must not inherit modal/button CTA typography.");
                 Assert.That(skills.resolvedStyle.height, Is.LessThanOrEqualTo(42f),
                     "HUD product shortcuts must stay compact on Player.");
+                InvokeBoundButton(menu);
+                var menuOverlay = root.Q("Map01A Menu Overlay");
+                Assert.That(menuOverlay, Is.Not.Null);
+                Assert.That(menuOverlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Button>("Map01A Menu Character Action"), Is.Not.Null);
+                Assert.That(root.Q<Button>("Map01A Menu Bag Action"), Is.Not.Null);
+                Assert.That(root.Q<Button>("Map01A Menu Skills Action"), Is.Not.Null);
+                Assert.That(root.Q<Button>("Map01A Menu Spirit Pet Action"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Menu Panel").ClassListContains("lgo-layered-frame"), Is.True,
+                    "Menu should reuse the shared modal frame instead of defining a second panel system.");
+                Assert.That(root.Q<Button>("Map01A Menu Character Action").style.flexGrow.value, Is.EqualTo(0),
+                    "Menu grid actions must keep a bounded row height instead of stretching into the panel body.");
+                InvokeBoundButton(root.Q<Button>("Map01A Menu Close"));
+                Assert.That(menuOverlay.style.display.value, Is.EqualTo(DisplayStyle.None));
                 InvokeBoundButton(skills);
                 Assert.That(scene.InventoryOpen, Is.True);
                 Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));

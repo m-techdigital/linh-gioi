@@ -63,8 +63,9 @@ namespace LinhGioi.World
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-linh-capture") >= 0;
         private bool CharacterSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
         private bool InventoryTabsCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-inventory-tabs-capture") >= 0;
+        private bool MenuCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-menu-capture") >= 0;
         public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || ClassCaptureRequested
-            || CharacterSelectCaptureRequested || InventoryTabsCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
+            || CharacterSelectCaptureRequested || InventoryTabsCaptureRequested || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string QuestTrackerText => ActiveQuestId == "COMPLETE" ? "Map01A hoàn tất\nPortal Suối Thanh Minh đã mở."
@@ -582,7 +583,8 @@ namespace LinhGioi.World
             || IsMapQuestCaptureForArgs(args)
             || Array.IndexOf(args, "--lgo-map01a-entry-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0
-            || Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0;
+            || Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0
+            || Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0;
 
         public static bool IsMapQuestCaptureForArgs(string[] args) => Array.IndexOf(args, "--lgo-map01a-art-capture") >= 0;
 
@@ -1604,6 +1606,11 @@ namespace LinhGioi.World
                 yield return CaptureInventoryTabs(args);
                 yield break;
             }
+            if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0)
+            {
+                yield return CaptureMenuScreen(args);
+                yield break;
+            }
             if (!Application.isPlaying || !IsMapQuestCaptureForArgs(args)) yield break;
             Application.runInBackground = true;
             var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
@@ -2052,6 +2059,36 @@ namespace LinhGioi.World
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
         }
 
+
+        private IEnumerator CaptureMenuScreen(string[] args)
+        {
+            Application.runInBackground = true;
+            var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
+            if (index < 0 || index + 1 >= args.Length) throw new ArgumentException("Missing Map01A menu capture directory");
+            var directory = args[index + 1];
+            Directory.CreateDirectory(directory);
+            _controller.enabled = false;
+            yield return null;
+            yield return null;
+            var document = GetComponentInChildren<UIDocument>();
+            if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for menu capture");
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Menu Shortcut"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var imagePath = Path.Combine(directory, "menu.png");
+            CaptureScreenPng(imagePath);
+            var status = File.Exists(imagePath) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var manifest = "{\n"
+                + "  \"status\": \"" + status + "\",\n"
+                + "  \"captureScope\": \"map01a-menu\",\n"
+                + "  \"usesOsMouseOrKeyboard\": false,\n"
+                + "  \"width\": " + Screen.width + ",\n"
+                + "  \"height\": " + Screen.height + ",\n"
+                + "  \"frame\": \"menu.png\"\n"
+                + "}\n";
+            File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
+            Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
+        }
 
         private IEnumerator CaptureInventoryTabs(string[] args)
         {

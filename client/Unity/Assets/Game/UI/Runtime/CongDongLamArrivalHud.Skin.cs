@@ -57,6 +57,7 @@ namespace LinhGioi.UI
         private const string LgoEntryControlCardClass = "lgo-entry-control-card";
         private const string LgoCharacterSelectCardClass = "lgo-character-select-card";
         private const string LgoCharacterSelectPrimaryActionClass = "lgo-character-select-primary-action";
+        private const string LgoMenuActionClass = "lgo-menu-action";
         private const string LgoActionButtonClass = "lgo-action-button";
         private const string LgoActionPrimaryClass = "lgo-action-primary";
         private const string LgoActionStandardClass = "lgo-action-standard";
@@ -576,6 +577,21 @@ namespace LinhGioi.UI
             button.AddToClassList(LgoCharacterSelectPrimaryActionClass);
             button.style.minWidth = 220;
             ApplyLgoButton(button, true);
+        }
+
+        private static void ApplyLgoMenuAction(Button button, bool primary = false)
+        {
+            button.AddToClassList(LgoMenuActionClass);
+            ApplyLgoButton(button, primary);
+            button.style.flexGrow = 0;
+            button.style.flexShrink = 0;
+            button.style.flexBasis = new Length(47f, LengthUnit.Percent);
+            button.style.minWidth = 142;
+            button.style.minHeight = 46;
+            button.style.marginRight = 6;
+            button.style.marginBottom = 6;
+            button.style.fontSize = 13;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         private static void ApplyLgoDialoguePrimaryAction(Button button)

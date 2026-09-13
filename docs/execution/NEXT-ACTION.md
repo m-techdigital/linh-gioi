@@ -1,3 +1,9 @@
+## Next — sau playable Map01A menu — 2026-09-14
+
+`CONTINUE`. Evidence menu hiện hành duy nhất là `build/map01a-menu-runtime-v3/menu.png`; Player `build/map01a-menu-player-v3/LinhGioiOnline.app`. Không dùng lại v1/v2 vì v1 bị flex-stretch, v2 còn chạm HUD navigation. Menu chỉ route tới workspace đã có, không giả lập settings/progression/data.
+
+Next valid work: audit một flow Map01A còn thiếu chức năng hoặc sai lệch cấu trúc lớn so với owner references; ưu tiên interaction/NPC/HUD hoặc asset UI thật có provenance. Không mở character-select/class review vì owner đã chuyển class sang task khác; không resume pose/wardrobe/source và không rollback code class.
+
 ## Next — sau deterministic route minimap — 2026-09-14
 
 `CONTINUE`. HUD minimap hiện hành dùng evidence `build/map01a-route-minimap-runtime-v1/{01-arrival-q01,05-quan-thu-dialogue,18-q09-portal-open}.png`; Player `build/map01a-route-minimap-player-v1/LinhGioiOnline.app`. Không quay lại ô text-only placeholder. Route strip lấy state Q01–Q09 thật và giữ gate trước Q02.

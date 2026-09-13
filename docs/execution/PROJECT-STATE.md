@@ -1,3 +1,10 @@
+## Map01A — playable menu routes into approved character hub — 2026-09-14
+
+- Scope Map01A/UI-only; không đổi class/pose/wardrobe/source/camera/scale, gameplay contract hoặc frozen surfaces.
+- Nút `Menu` ở HUD trước đây bị khóa. Menu mới dùng lại `ApplyLgoModalShell`, `ApplyLgoLayeredFrame`, shared button/status-card bases; bốn action đi tới Nhân vật, Rương đồ, Kỹ năng và Linh thú hiện có, kèm hướng dẫn điều khiển và nút tiếp tục. Không dựng settings/progression/data giả.
+- TDD bắt trạng thái nút/menu/frame dùng chung và chiều cao action không được flex-stretch; full `TwoDCharacterRuntimeStateTests` đạt `20/20`. Capture v1 bị loại vì action/footer phình và chồng; v2 sửa sizing nhưng còn sát navigation; evidence hiện hành là `build/map01a-menu-runtime-v3/menu.png`, có khoảng hở với HUD navigation và không chồng tracker/vitals.
+- Player `build/map01a-menu-player-v3/LinhGioiOnline.app` build `errors=0`, `warnings=36`; capture tự gọi UI callback, `usesOsMouseOrKeyboard=false`. Trạng thái vẫn `CONTINUE`, chưa phải hoàn tất toàn bộ UI Map01A.
+
 ## Map01A — deterministic route minimap replaces placeholder — 2026-09-14
 
 - Scope Map01A/UI-only. Không tạo map art giả, không đổi gameplay route, camera, class/pose/wardrobe/source hoặc frozen surfaces.
