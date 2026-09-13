@@ -1058,6 +1058,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(speaker, Is.Not.Null, "Dialogue speaker needs a named shared title label for UI audit and style reuse.");
                 Assert.That(speaker.ClassListContains("lgo-title-label"), Is.True,
                     "Dialogue speaker/title must inherit the shared title-label base instead of a dialogue-only label style.");
+                Assert.That(speaker.text, Is.EqualTo(scene.DialogueSpeaker),
+                    "Dialogue progress belongs in the quest-context row and must not repeat beside the NPC name.");
                 var context = root.Q<Label>("Map01A Dialogue Quest Context");
                 Assert.That(context, Is.Not.Null, "Dialogue panel must show quest context for NPC conversations.");
                 Assert.That(context.style.display.value, Is.EqualTo(DisplayStyle.Flex));

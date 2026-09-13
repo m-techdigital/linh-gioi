@@ -1,3 +1,10 @@
+## Map01A — dialogue and Menu hierarchy audited on one current Player — 2026-09-14
+
+- Player audit found dialogue progress repeated beside the NPC name and again in the quest-context row. The header now contains only the active NPC name; quest id/title/progress remain together in the context row.
+- The same current Player confirms Menu exposes all five approved destinations (`Nhân vật`, `Rương đồ`, `Kỹ năng`, `Tiềm năng`, `Linh thú`) without clipping or overlap. No destination, progression data or class renderer was added.
+- TDD reproduced the duplicate header metadata, then targeted and full `TwoDCharacterRuntimeStateTests` passed (`1/1`, `20/20`). Player `build/map01a-dialogue-menu-hierarchy-player-v1/LinhGioiOnline.app` built with `errors=0`, `warnings=0`; full Q01–Q09 capture `build/map01a-dialogue-menu-hierarchy-runtime-v1/` passed 18 route frames and 38 dialogue frames.
+- Visual review covers Hạ Vân, Quan Thủ Đông Lâm and Tổng Phú plus `build/map01a-dialogue-menu-hierarchy-menu-runtime-v1/menu.png`; these are the current dialogue/Menu evidence. Older Menu v1/v2 images remain rejected evidence.
+
 ## Map01A — quest tracker now follows the approved information hierarchy — 2026-09-14
 
 - Player audit found the quest tracker rendered title, objective, progress and latest interaction as one flat multiline label. This was readable but visually behaved like debug text instead of the approved RPG quest hierarchy.

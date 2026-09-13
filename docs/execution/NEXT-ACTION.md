@@ -1,3 +1,9 @@
+## Next — sau dialogue/Menu hierarchy audit — 2026-09-14
+
+`CONTINUE`. Dialogue header chỉ hiện tên NPC; quest id/title/progress nằm ở context row. Menu hiện đủ năm điểm đến đã duyệt và không chồng HUD. Evidence hiện hành: `build/map01a-dialogue-menu-hierarchy-runtime-v1/{02-ha-van-dialogue,05-quan-thu-dialogue,08-q04-tong-phu-dialogue}.png`, `build/map01a-dialogue-menu-hierarchy-menu-runtime-v1/menu.png`; Player `build/map01a-dialogue-menu-hierarchy-player-v1/LinhGioiOnline.app`.
+
+Next valid work: audit NPC/map interaction còn thiếu phản hồi thật hoặc lỗi hierarchy lớn trên Player; nếu không có lỗi rõ thì chuyển sang screen Map01A UI còn xa design nhất. Giữ shared Skin/base, asset có provenance và dữ liệu hiện có; không mở class/pose/wardrobe/source, không tạo progression giả hoặc quay lại evidence Menu v1/v2.
+
 ## Next — sau structured quest tracker — 2026-09-14
 
 `CONTINUE`. Tracker phải hiện theo hierarchy category → id/title → objective → progress → interaction, tự bỏ câu interaction trùng objective/progress và ẩn interaction phụ khi panel thoại đang mở. Evidence hiện hành duy nhất: `build/map01a-structured-quest-tracker-runtime-v3/{05-quan-thu-dialogue,18-q09-portal-open}.png`; Player `build/map01a-structured-quest-tracker-player-v3/LinhGioiOnline.app`; không dùng v1 vì lặp câu completion hoặc v2 vì lặp trạng thái hội thoại.

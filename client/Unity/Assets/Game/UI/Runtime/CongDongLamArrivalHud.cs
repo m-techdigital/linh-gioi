@@ -570,7 +570,7 @@ namespace LinhGioi.UI
                 && _scene.CurrentRouteNodeId == "well-bridge" && _scene.CurrentActionLabel != "Trò chuyện"
                 ? DisplayStyle.Flex : DisplayStyle.None;
             _talk.style.width = _scene.DialogueOpen ? new StyleLength(260) : new StyleLength(StyleKeyword.Auto);
-            _dialogueSpeaker.text = _scene.DialogueSpeaker + " · " + _scene.DialogueProgress;
+            _dialogueSpeaker.text = _scene.DialogueSpeaker;
             _dialogueQuestContext.text = DialogueQuestContextText();
             _dialogueLine.text = _scene.DialogueText;
             var dialoguePortrait = _scene.GetCurrentDialogueNpcSprite();
