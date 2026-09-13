@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI after entry CTA foundation — 2026-09-13
+
+`CONTINUE`. Entry/login CTA đã dùng shared `ApplyLgoEntryCtaAction(...)` / `lgo-entry-cta-action`, evidence Player tại `build/map01a-entry-cta-base-runtime-v1/entry/entry-login.png`. Quy tắc hiện hành: cùng UI/UX phải đi qua shared Skin/base helper trước; không giữ helper local kiểu một màn một bộ style.
+
+Next valid work: tiếp tục Map01A/UI-only theo owner reference, ưu tiên polish depth/ornament/icon thật/provenance-backed và gom các pattern còn lặp trong HUD/inventory/dialogue/character-select vào base chung. Không resume class/wardrobe/pose/source, không rollback class code, không icon giả/random/generated; mọi visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI after title/subtitle foundation — 2026-09-13
 
 `CONTINUE`. Rule hiện hành đã khóa rõ: mọi UI/UX giống nhau phải đi qua shared Skin/base helper trước, rồi partial chỉ bind data/state/action; không tự build tràn lan từng màn. Batch mới nhất gom title/subtitle lặp lại vào `LgoTitleLabel(...)` / `LgoSubtitleLabel(...)` với validator/test guard, evidence Player tại `build/map01a-title-label-base-runtime-v1/`.

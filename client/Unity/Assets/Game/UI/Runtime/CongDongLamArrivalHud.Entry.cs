@@ -177,7 +177,7 @@ namespace LinhGioi.UI
                 name = "Map01A Entry Start Button",
                 text = "Bắt đầu"
             };
-            StyleEntryButton(start, true);
+            ApplyLgoEntryCtaAction(start, true);
             start.style.width = Length.Percent(64);
             start.style.maxWidth = 420;
             start.style.marginLeft = 12;
@@ -198,7 +198,7 @@ namespace LinhGioi.UI
                 name = "Map01A Entry Login Button",
                 text = "Vào nhanh"
             };
-            StyleEntryButton(login, false);
+            ApplyLgoEntryCtaAction(login, false);
             secondaryActions.Add(login);
 
             var character = new Label("Nhân vật: LụcThiên · Cổng Đông Lâm") { name = "Map01A Entry Character Summary" };
@@ -289,13 +289,6 @@ namespace LinhGioi.UI
             placeholder.style.color = new Color(.74f, .82f, .88f, .82f);
             field.Add(placeholder);
             return field;
-        }
-
-        private static void StyleEntryButton(Button button, bool primary)
-        {
-            button.style.minWidth = primary ? 230 : 156;
-            button.style.minHeight = primary ? 58 : 42;
-            ApplyLgoButton(button, primary);
         }
 
         private bool ShouldShowEntryOnLaunch() => ShouldShowEntryOnLaunchForArgs(

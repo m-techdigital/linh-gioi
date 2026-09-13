@@ -1,3 +1,10 @@
+## Map01A — entry CTA base-first guard — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật.
+- Entry/login CTA (`Bắt đầu`, `Vào nhanh`) đã bỏ helper cục bộ `StyleEntryButton` và dùng shared `ApplyLgoEntryCtaAction(...)` / class `lgo-entry-cta-action`. Start/login vẫn kế thừa `lgo-action-button` + primary/standard role, nhưng sizing/density của entry nằm ở base chung thay vì style riêng trong partial.
+- TDD: RED fail đúng khi Entry CTA chưa có `lgo-entry-cta-action`; GREEN targeted EditMode pass `total=1 passed=1 failed=0`. Shared-skin validator pass và khóa marker helper mới.
+- Player evidence: build `build/map01a-entry-cta-base-player-v1/LinhGioiOnline.app`, capture `build/map01a-entry-cta-base-runtime-v1/entry/entry-login.png`. Visual audit: login không chồng/cắt, CTA gọn và thống nhất base hơn; UI tổng thể vẫn `CONTINUE`, chưa nghiệm thu mỹ thuật cuối vì còn cần depth/icon/ornament/provenance-backed asset theo reference owner.
+
 ## Map01A — title/subtitle label base-first guard — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật. Theo owner update mới, không tiếp tục class/wardrobe/source-pose trong batch này nếu chưa có phương án deterministic; ưu tiên Map01A UI/UX và base-first.

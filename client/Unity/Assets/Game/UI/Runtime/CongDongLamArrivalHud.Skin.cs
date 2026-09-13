@@ -33,6 +33,7 @@ namespace LinhGioi.UI
         private const string LgoHudQuestTabClass = "lgo-hud-quest-tab";
         private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
+        private const string LgoEntryCtaActionClass = "lgo-entry-cta-action";
         private const string LgoEntrySecondaryActionClass = "lgo-entry-secondary-action";
         private const string LgoEntrySideActionClass = "lgo-entry-side-action";
         private const string LgoCharacterSelectCardClass = "lgo-character-select-card";
@@ -326,6 +327,15 @@ namespace LinhGioi.UI
             cell.style.marginBottom = 7;
             cell.style.alignItems = Align.Center;
             cell.style.justifyContent = Justify.Center;
+        }
+
+        private static void ApplyLgoEntryCtaAction(Button button, bool primary)
+        {
+            button.AddToClassList(LgoEntryCtaActionClass);
+            ApplyLgoButton(button, primary);
+            button.style.minWidth = primary ? 230 : 156;
+            button.style.minHeight = primary ? 46 : 38;
+            button.style.fontSize = primary ? 18 : 14;
         }
 
         private static void ApplyLgoEntrySecondaryAction(Button button, float minWidth = 0f, float marginRight = 0f)
