@@ -19,7 +19,7 @@ namespace LinhGioi.UI
             _entryOverlay.style.right = 0;
             _entryOverlay.style.top = 0;
             _entryOverlay.style.bottom = 0;
-            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .86f);
+            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .78f);
             _entryOverlay.style.justifyContent = Justify.Center;
             _entryOverlay.style.alignItems = Align.Center;
 
@@ -67,19 +67,20 @@ namespace LinhGioi.UI
             AddEntrySideAction(sideActions, "Hỗ Trợ");
 
             var panel = new VisualElement { name = "Map01A Entry Panel" };
-            panel.style.width = Length.Percent(44);
-            panel.style.minWidth = 500;
-            panel.style.maxWidth = 720;
-            panel.style.paddingLeft = 24;
-            panel.style.paddingRight = 24;
-            panel.style.paddingTop = 22;
-            panel.style.paddingBottom = 22;
+            panel.style.width = Length.Percent(42);
+            panel.style.minWidth = 520;
+            panel.style.maxWidth = 680;
+            panel.style.paddingLeft = 28;
+            panel.style.paddingRight = 28;
+            panel.style.paddingTop = 24;
+            panel.style.paddingBottom = 24;
             ApplyLgoModalShell(panel, 24);
             _entryOverlay.Add(panel);
 
             var logo = new Label("LINH GIỚI ONLINE") { name = "Map01A Entry Logo" };
             logo.style.unityFontStyleAndWeight = FontStyle.Bold;
-            logo.style.fontSize = 42;
+            logo.style.fontSize = 46;
+            logo.style.letterSpacing = 2;
             logo.style.color = new Color(.96f, .98f, 1f, .98f);
             logo.style.unityTextAlign = TextAnchor.MiddleCenter;
             panel.Add(logo);
@@ -149,7 +150,7 @@ namespace LinhGioi.UI
             var serverState = LgoLabel("● Mượt", 16, new Color(.58f, 1f, .36f, .96f), true);
             serverState.name = "Map01A Entry Server State";
             serverState.style.marginRight = 8;
-            var serverSwitch = new Button { name = "Map01A Entry Server Switch", text = "Đổi máy chủ · chưa mở" };
+            var serverSwitch = new Button { name = "Map01A Entry Server Switch", text = "Đổi máy chủ" };
             serverSwitch.style.flexGrow = 0;
             serverSwitch.style.minWidth = 142;
             serverSwitch.style.minHeight = 34;
@@ -166,7 +167,7 @@ namespace LinhGioi.UI
             brandSeal.style.marginBottom = 8;
             panel.Add(brandSeal);
 
-            _entryStatus = new Label("Tài khoản local dùng cho bản trải nghiệm. Chưa mở đăng ký hoặc xác thực thật.") { name = "Map01A Entry Safety Note" };
+            _entryStatus = new Label("Tài khoản local dùng cho bản trải nghiệm. Dùng để vào nhanh Map01A.") { name = "Map01A Entry Safety Note" };
             _entryStatus.style.fontSize = 14;
             _entryStatus.style.whiteSpace = WhiteSpace.Normal;
             _entryStatus.style.color = new Color(.72f, .86f, .92f, .90f);
@@ -258,14 +259,14 @@ namespace LinhGioi.UI
             rememberWrap.Add(remember);
             row.Add(rememberWrap);
 
-            var forgot = new Button { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu · chưa mở" };
+            var forgot = new Button { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu" };
             forgot.style.flexGrow = 0;
             forgot.style.marginRight = 6;
             forgot.style.fontSize = 13;
             ApplyLgoDisabledAction(forgot);
             row.Add(forgot);
 
-            var support = new Button { name = "Map01A Entry Support Link", text = "Hỗ trợ · chưa mở" };
+            var support = new Button { name = "Map01A Entry Support Link", text = "Hỗ trợ" };
             support.style.flexGrow = 0;
             support.style.fontSize = 13;
             ApplyLgoDisabledAction(support);

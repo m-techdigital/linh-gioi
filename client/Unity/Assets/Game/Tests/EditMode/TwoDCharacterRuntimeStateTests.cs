@@ -354,6 +354,8 @@ namespace LinhGioi.Tests.EditMode
                     "Entry/login should reserve the design server-switch affordance without opening production server routing.");
                 Assert.That(serverSwitch.enabledSelf, Is.False);
                 Assert.That(serverSwitch.text, Does.Contain("Đổi máy chủ"));
+                Assert.That(serverSwitch.text, Does.Not.Contain("chưa mở"),
+                    "Disabled design affordances should read like game UI, not debug placeholder copy.");
                 var start = root.Q<Button>("Map01A Entry Start Button");
                 Assert.That(start, Is.Not.Null);
                 Assert.That(root.Q("Map01A Entry Primary Cta Row"), Is.Not.Null,
@@ -381,8 +383,13 @@ namespace LinhGioi.Tests.EditMode
                 var rememberText = root.Q<Label>("Map01A Entry Remember Account").text;
                 Assert.That(rememberText, Does.Contain("Lưu tài khoản"));
                 Assert.That(rememberText, Does.Not.Contain("☑"), "Entry/login must not use temporary checkbox glyphs as UI art.");
-                Assert.That(root.Q<Button>("Map01A Entry Forgot Password").enabledSelf, Is.False);
-                Assert.That(root.Q<Button>("Map01A Entry Support Link").enabledSelf, Is.False);
+                var forgotPassword = root.Q<Button>("Map01A Entry Forgot Password");
+                var supportLink = root.Q<Button>("Map01A Entry Support Link");
+                Assert.That(forgotPassword.enabledSelf, Is.False);
+                Assert.That(supportLink.enabledSelf, Is.False);
+                Assert.That(forgotPassword.text, Does.Not.Contain("chưa mở"),
+                    "Disabled design affordances should avoid exposing unfinished-state copy on the main login surface.");
+                Assert.That(supportLink.text, Does.Not.Contain("chưa mở"));
                 Assert.That(start.text, Does.Contain("Bắt đầu"));
                 Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Contain("local"));
                 foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ" })
@@ -499,7 +506,7 @@ namespace LinhGioi.Tests.EditMode
                     "Supply rows must be composed cards, not plain Button.text labels that look like temporary debug UI.");
                 Assert.That(root.Q<Label>("Map01A Supply Item Name health_potion").text, Is.EqualTo("Bình Máu Nhỏ"));
                 Assert.That(root.Q<Label>("Map01A Supply Item Count health_potion").text, Does.Contain("x0"));
-                Assert.That(root.Q<Label>("Map01A Supply Item State health_potion").text, Does.Contain("Tạm khóa"));
+                Assert.That(root.Q<Label>("Map01A Supply Item State health_potion").text, Does.Contain("Thiếu điều kiện"));
                 Assert.That(root.Q<Label>("Map01A Supply Item Name mana_potion").text, Is.EqualTo("Bình Linh Lực Nhỏ"));
                 Assert.That(root.Q<Label>("Map01A Supply Item Name class_reward").text, Is.EqualTo("Hộ Uyển Võ Tân Thủ"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT VẬT PHẨM"));
@@ -519,7 +526,7 @@ namespace LinhGioi.Tests.EditMode
                     "Selected supply row must be visibly highlighted like equipment item rows.");
                 Assert.That(root.Q<Button>("Map01A Health Potion").style.backgroundColor.value, Is.Not.EqualTo(new Color(.12f, .33f, .56f, .98f)),
                     "Only the selected supply row should use the selected-row background.");
-                Assert.That(root.Q<Label>("Map01A Supply Item State mana_potion").text, Does.Contain("Tạm khóa"));
+                Assert.That(root.Q<Label>("Map01A Supply Item State mana_potion").text, Does.Contain("Thiếu điều kiện"));
 
                 var detailScroll = root.Q<ScrollView>("Map01A Inventory Detail Scroll");
                 Assert.That(detailScroll, Is.Not.Null);

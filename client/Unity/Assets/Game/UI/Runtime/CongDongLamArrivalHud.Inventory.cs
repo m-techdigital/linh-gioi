@@ -143,7 +143,7 @@ namespace LinhGioi.UI
 
             _inventoryDetailPanel = InventoryPanel("Map01A Inventory Detail Panel");
             _inventoryDetailPanel.style.flexGrow = 0;
-            _inventoryDetailPanel.style.flexBasis = 300;
+            _inventoryDetailPanel.style.flexBasis = 330;
             _inventoryDetailPanel.style.marginLeft = 10;
             ApplyLgoDetailCard(_inventoryDetailPanel);
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
@@ -170,8 +170,9 @@ namespace LinhGioi.UI
             _inventoryDetailIcon.style.width = 78;
             _inventoryDetailIcon.style.height = 78;
             _inventoryDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            _inventoryDetailIcon.style.alignSelf = Align.Center;
             _inventoryFooter.Add(_inventoryDetailIcon);
-            _equipmentDetail = LgoLabel("", 20, UiGold, true);
+            _equipmentDetail = LgoLabel("", 21, UiGold, true);
             _equipmentDetail.style.marginTop = 6;
             _inventoryFooter.Add(_equipmentDetail);
             _inventoryDetailRarity = LgoLabel("", 15, new Color(.74f, .92f, 1f, .94f), true);
@@ -223,7 +224,7 @@ namespace LinhGioi.UI
 
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
             _inventoryGridPanel.style.flexGrow = 1;
-            _inventoryGridPanel.style.marginRight = 10;
+            _inventoryGridPanel.style.marginRight = 8;
             body.Add(_inventoryGridPanel);
             var tabs = InventoryRow("Map01A Inventory Tabs");
             _equipmentTab = InventoryButton(() => ShowInventoryPage(false), "Map01A Equipment Tab", "Trang bị");
@@ -423,9 +424,9 @@ namespace LinhGioi.UI
             suppliesListCard.style.marginBottom = 8;
             ApplyLgoDetailCard(suppliesListCard);
             _suppliesPage.Add(suppliesListCard);
-            _suppliesTitle = LgoLabel("Vật phẩm nhiệm vụ", 18, UiGold, true);
+            _suppliesTitle = LgoLabel("Vật phẩm", 20, UiGold, true);
             suppliesListCard.Add(_suppliesTitle);
-            _inventorySummary = LgoLabel("", 17, new Color(.91f, .93f, .84f, .96f));
+            _inventorySummary = LgoLabel("", 15, new Color(.91f, .93f, .84f, .96f));
             _inventorySummary.style.marginTop = 8; _inventorySummary.style.marginBottom = 10;
             suppliesListCard.Add(_inventorySummary);
             _suppliesEmptyState = LgoLabel("", 15, new Color(.70f, .80f, .80f, .92f));
@@ -573,9 +574,9 @@ namespace LinhGioi.UI
         {
             if (_healthPotion == null || _manaPotion == null || _equipReward == null) return;
             RefreshSupplyRow(_healthPotion, _healthPotionName, _healthPotionCount, _healthPotionState,
-                "health_potion", "Bình Máu Nhỏ", _scene.HealthPotionCount, _scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100 ? "Có thể dùng" : "Tạm khóa");
+                "health_potion", "Bình Máu Nhỏ", _scene.HealthPotionCount, _scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100 ? "Sẵn sàng" : "Thiếu điều kiện");
             RefreshSupplyRow(_manaPotion, _manaPotionName, _manaPotionCount, _manaPotionState,
-                "mana_potion", "Bình Linh Lực Nhỏ", _scene.ManaPotionCount, _scene.ManaPotionCount > 0 && _scene.PlayerMana < 100 ? "Có thể dùng" : "Tạm khóa");
+                "mana_potion", "Bình Linh Lực Nhỏ", _scene.ManaPotionCount, _scene.ManaPotionCount > 0 && _scene.PlayerMana < 100 ? "Sẵn sàng" : "Thiếu điều kiện");
             RefreshSupplyRow(_equipReward, _classRewardName, _classRewardCount, _classRewardState,
                 "class_reward", "Hộ Uyển Võ Tân Thủ", _scene.HasClassRewardItem ? 1 : 0,
                 !_scene.HasClassRewardItem ? "Chưa nhận" : _scene.IsClassRewardEquipped ? "Đã trang bị" : "Có thể trang bị");
@@ -677,7 +678,7 @@ namespace LinhGioi.UI
                 _equipmentDetail.text = "Bình Linh Lực Nhỏ";
                 _inventoryDetailSlotType.text = "Vật phẩm hồi phục";
                 _inventoryItemId.text = "map01a_mana_potion_small";
-                _inventoryDetailStateBadge.text = _scene.ManaPotionCount > 0 && _scene.PlayerMana < 100 ? "CÓ THỂ DÙNG" : "TẠM KHÓA";
+                _inventoryDetailStateBadge.text = _scene.ManaPotionCount > 0 && _scene.PlayerMana < 100 ? "SẴN SÀNG" : "THIẾU ĐIỀU KIỆN";
                 _inventoryItemState.text = "Số lượng: " + _scene.ManaPotionCount + " · MP " + _scene.PlayerMana + "/100.";
                 _inventoryDetailStatPrimary.text = "Hồi MP +50";
                 _inventoryDetailStatFit.text = "Dùng khi MP chưa đầy.";
@@ -702,7 +703,7 @@ namespace LinhGioi.UI
                 _equipmentDetail.text = "Bình Máu Nhỏ";
                 _inventoryDetailSlotType.text = "Vật phẩm hồi phục";
                 _inventoryItemId.text = "map01a_health_potion_small";
-                _inventoryDetailStateBadge.text = _scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100 ? "CÓ THỂ DÙNG" : "TẠM KHÓA";
+                _inventoryDetailStateBadge.text = _scene.HealthPotionCount > 0 && _scene.PlayerHealth < 100 ? "SẴN SÀNG" : "THIẾU ĐIỀU KIỆN";
                 _inventoryItemState.text = "Số lượng: " + _scene.HealthPotionCount + " · HP " + _scene.PlayerHealth + "/100.";
                 _inventoryDetailStatPrimary.text = "Hồi HP +50";
                 _inventoryDetailStatFit.text = "Dùng khi HP chưa đầy.";

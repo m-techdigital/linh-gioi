@@ -5,9 +5,9 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private static readonly Color UiGlass = new Color(.012f, .045f, .078f, .94f);
-        private static readonly Color UiGlassStrong = new Color(.020f, .060f, .100f, .96f);
-        private static readonly Color UiGlassRaised = new Color(.026f, .082f, .128f, .94f);
+        private static readonly Color UiGlass = new Color(.010f, .034f, .064f, .92f);
+        private static readonly Color UiGlassStrong = new Color(.016f, .052f, .092f, .96f);
+        private static readonly Color UiGlassRaised = new Color(.022f, .072f, .118f, .94f);
         private static readonly Color UiGold = new Color(.95f, .75f, .36f, .96f);
         private static readonly Color UiGoldBorder = new Color(.78f, .62f, .32f, .70f);
         private static readonly Color UiBlue = new Color(.10f, .35f, .58f, .96f);
@@ -47,7 +47,7 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoDetailCard(VisualElement element)
         {
-            ApplyLgoFrame(element, new Color(.014f, .050f, .086f, .97f), new Color(.86f, .66f, .34f, .76f));
+            ApplyLgoFrame(element, new Color(.014f, .045f, .080f, .96f), new Color(.86f, .66f, .34f, .76f));
             element.style.color = UiText;
         }
 
@@ -83,9 +83,9 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoButton(Button button, bool primary = false)
         {
-            button.style.minHeight = primary ? 56 : 46;
+            button.style.minHeight = primary ? 54 : 42;
             button.style.minWidth = 0;
-            button.style.fontSize = primary ? 24 : 17;
+            button.style.fontSize = primary ? 23 : 16;
             button.style.whiteSpace = WhiteSpace.Normal;
             button.style.unityTextAlign = TextAnchor.MiddleCenter;
             button.style.unityFontStyleAndWeight = primary ? FontStyle.Bold : FontStyle.Normal;

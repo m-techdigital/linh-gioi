@@ -32,6 +32,8 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "inventory: `build/map01a-detail-right-player/quest-capture/pc/07-q04-inventory-open.png`\n"
             "character-info.png\n"
             "storage.png\n"
+            "pc/tablet/mobile\n"
+            "not owner approval\n"
             "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED\n"
             "usesOsMouseOrKeyboard=false\n",
             encoding="utf-8",
@@ -98,6 +100,17 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             violations = validator.validate_root(Path(temp))
 
         self.assertTrue(any("frames" in item for item in violations), violations)
+
+    def test_rejects_catalog_without_item_icon_source_audit(self) -> None:
+        with self._fixture() as temp:
+            doc = Path(temp) / "docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md"
+            text = doc.read_text(encoding="utf-8")
+            text = text.replace("usesOsMouseOrKeyboard=false\n", "usesOsMouseOrKeyboard=false\n")
+            doc.write_text(text, encoding="utf-8")
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ITEM-ICON-SOURCE-AUDIT" in item or "item icon source audit" in item for item in violations), violations)
 
 
 if __name__ == "__main__":

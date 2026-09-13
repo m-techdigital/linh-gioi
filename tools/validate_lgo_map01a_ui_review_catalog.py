@@ -9,6 +9,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DOC = "docs/design/LGO-MAP01A-UI-REVIEW-CATALOG-v0.1.md"
+ITEM_ICON_AUDIT_DOC = "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md"
 READY = "LGO_MAP01A_UI_REVIEW_CATALOG_READY"
 TECH_STATUS = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED"
 
@@ -69,9 +70,24 @@ def validate_root(root: Path = ROOT) -> list[str]:
             "supplies.png",
             "storage.png",
             "not owner approval",
+            ITEM_ICON_AUDIT_DOC,
+            "No approved dedicated UI icon set",
         ]:
             if marker not in text:
                 violations.append(f"{DOC}: missing marker {marker}")
+
+        audit = root / ITEM_ICON_AUDIT_DOC
+        if not audit.is_file():
+            violations.append(f"missing item icon source audit: {ITEM_ICON_AUDIT_DOC}")
+        else:
+            audit_text = audit.read_text(encoding="utf-8", errors="replace")
+            for marker in [
+                "SOURCE_AUDIT_CURRENT",
+                "No approved dedicated UI icon set",
+                "prettier but fake icon is a regression",
+            ]:
+                if marker not in audit_text:
+                    violations.append(f"{ITEM_ICON_AUDIT_DOC}: missing marker {marker}")
 
     for label, manifest_rel, png_rel, width, height in MODAL_EVIDENCE:
         data = load_json(root, manifest_rel, violations)

@@ -1,3 +1,7 @@
+## Hiện hành — Map01A/UI visual audit sau hierarchy polish — 2026-09-13
+
+`CONTINUE`. Đã có checkpoint nhỏ cho login/hành trang: bỏ copy debug trên login, polish hierarchy detail/vật phẩm, thêm audit nguồn icon thật. Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.png` và `build/map01a-ui-hierarchy-polish-runtime-v2/inventory/{bag,character-info,supplies,storage}.png`. Kết luận visual: chưa đủ gần design owner; đây chỉ là `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, không phải nghiệm thu UI. Next valid work: tiếp tục Map01A UI/UX redesign sâu bằng shared skin/base components, ưu tiên logo/ornament/card hierarchy/HUD/dialogue/inventory visual richness; chỉ dùng runtime/approved/provenance-backed assets, không icon giả/random, không class/wardrobe/pose, không rollback class code.
+
 ## Hiện hành — Map01A/UI sau polish card vật phẩm — 2026-09-13
 
 `CONTINUE`. Batch mới nhất chỉ xử lý Hành trang/Vật phẩm: row vật phẩm đã thành card có tên, số lượng, trạng thái và giữ detail bên phải. Evidence Player: `build/map01a-supply-card-runtime-v1/{pc,tablet,mobile}/supplies.png`; đã xem PC/mobile. Không có icon item chuyên dụng trong Unity/source được audit nhanh, nên không tự thêm icon giả, emoji, generic shape hoặc random generated art.
