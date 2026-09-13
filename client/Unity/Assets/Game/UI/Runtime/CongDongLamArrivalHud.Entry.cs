@@ -19,7 +19,7 @@ namespace LinhGioi.UI
             _entryOverlay.style.right = 0;
             _entryOverlay.style.top = 0;
             _entryOverlay.style.bottom = 0;
-            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .78f);
+            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .62f);
             _entryOverlay.style.justifyContent = Justify.Center;
             _entryOverlay.style.alignItems = Align.Center;
 
@@ -65,6 +65,16 @@ namespace LinhGioi.UI
             AddEntrySideAction(sideActions, "Thông Báo");
             AddEntrySideAction(sideActions, "Cài Đặt");
             AddEntrySideAction(sideActions, "Hỗ Trợ");
+
+            var panelGlow = new VisualElement { name = "Map01A Entry Panel Glow" };
+            panelGlow.style.position = Position.Absolute;
+            panelGlow.style.width = Length.Percent(46);
+            panelGlow.style.minWidth = 560;
+            panelGlow.style.maxWidth = 730;
+            panelGlow.style.height = 720;
+            panelGlow.style.alignSelf = Align.Center;
+            ApplyLgoSoftGlow(panelGlow, .22f);
+            _entryOverlay.Add(panelGlow);
 
             var panel = new VisualElement { name = "Map01A Entry Panel" };
             panel.style.width = Length.Percent(42);
@@ -175,19 +185,27 @@ namespace LinhGioi.UI
             panel.Add(_entryStatus);
 
             var primaryCta = new VisualElement { name = "Map01A Entry Primary Cta Row" };
+            primaryCta.style.flexDirection = FlexDirection.Row;
             primaryCta.style.alignItems = Align.Center;
+            primaryCta.style.justifyContent = Justify.Center;
             primaryCta.style.marginTop = 2;
             panel.Add(primaryCta);
 
+            var ctaLeft = MakeEntryCtaOrnament("Map01A Entry Cta Ornament Left");
             var start = new Button(CloseEntryScreen)
             {
                 name = "Map01A Entry Start Button",
                 text = "Bắt đầu"
             };
             StyleEntryButton(start, true);
-            start.style.width = Length.Percent(100);
+            start.style.width = Length.Percent(64);
             start.style.maxWidth = 420;
+            start.style.marginLeft = 12;
+            start.style.marginRight = 12;
+            var ctaRight = MakeEntryCtaOrnament("Map01A Entry Cta Ornament Right");
+            primaryCta.Add(ctaLeft);
             primaryCta.Add(start);
+            primaryCta.Add(ctaRight);
 
             var secondaryActions = new VisualElement { name = "Map01A Entry Secondary Actions" };
             secondaryActions.style.flexDirection = FlexDirection.Row;
@@ -212,6 +230,17 @@ namespace LinhGioi.UI
 
             _root.Add(_entryOverlay);
             UpdateEntryScreen();
+        }
+
+        private static VisualElement MakeEntryCtaOrnament(string name)
+        {
+            var rail = new VisualElement { name = name };
+            rail.style.flexGrow = 1;
+            rail.style.maxWidth = 82;
+            rail.style.minWidth = 42;
+            rail.style.marginTop = 2;
+            ApplyLgoOrnamentRail(rail);
+            return rail;
         }
 
         private static void AddEntrySideAction(VisualElement parent, string text)

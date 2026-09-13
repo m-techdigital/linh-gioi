@@ -1049,3 +1049,7 @@ Action tiếp theo là owner kiểm trực tiếp Player ở cửa sổ lớn: `
 - Continue Map01A UI/UX toward owner references: shared modal/panel skin, smaller button/font scale, login + in-game HUD + Hành trang/Thông tin/Rương đồ consistency.
 - Latest safe checkpoint in progress: Hành trang uses dense equipment grid cells and empty bag slots; evidence at `build/map01a-inventory-grid-tile-runtime-v4/inventory/bag.png`.
 - Known visual gap: real item/outfit icons are not available as approved source assets yet; do not fake them with random/emoji/3D assets. Use source audit and create a proper asset request or deterministic 2D icon pipeline before replacing thumbnails.
+
+## Next Map01A UI polish after entry depth/CTA pass — 2026-09-13
+
+Continue Map01A/UI-only work. Entry/login has a lighter map backdrop, shared soft-depth layer, and ornamented primary CTA, but this is still an incremental polish checkpoint, not final owner acceptance. Next safe work: continue shared-skin visual richness for login/HUD/dialogue/inventory, reduce remaining flat form styling, and keep Player screenshot review as the gate. Do not resume class/wardrobe/pose work or class Player build/capture loops.

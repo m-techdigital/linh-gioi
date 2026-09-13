@@ -376,8 +376,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(start.style.maxWidth.value.value, Is.GreaterThan(300));
                 Assert.That(root.Q<Label>("Map01A Entry Login Title").text, Does.Contain("Đăng nhập"));
                 Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));
-                Assert.That(overlay.style.backgroundColor.value.a, Is.LessThanOrEqualTo(.88f),
+                Assert.That(overlay.style.backgroundColor.value.a, Is.LessThanOrEqualTo(.66f),
                     "Entry/login should keep the Đông Lâm scene visible behind the glass layer instead of blacking it out.");
+                Assert.That(root.Q("Map01A Entry Panel Glow"), Is.Not.Null,
+                    "Entry/login needs a reusable visual depth layer so it does not read like a flat HTML form.");
+                Assert.That(root.Q("Map01A Entry Cta Ornament Left"), Is.Not.Null,
+                    "Primary CTA should carry game-style ornament rails instead of being only a plain text button.");
+                Assert.That(root.Q("Map01A Entry Cta Ornament Right"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Entry Control Card"), Is.Not.Null,
                     "Login fields, auth options and server selection should sit inside one design card, matching the owner reference hierarchy.");
                 Assert.That(root.Q("Map01A Entry Ornament Top"), Is.Not.Null,

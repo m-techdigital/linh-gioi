@@ -61,6 +61,18 @@ namespace LinhGioi.UI
             return divider;
         }
 
+        private static void ApplyLgoSoftGlow(VisualElement element, float alpha = .16f)
+        {
+            ApplyLgoFrame(element, new Color(.10f, .32f, .52f, alpha * .18f), new Color(.95f, .75f, .36f, alpha));
+            element.style.opacity = .46f;
+        }
+
+        private static void ApplyLgoOrnamentRail(VisualElement element)
+        {
+            element.style.height = 2;
+            element.style.backgroundColor = new Color(.95f, .75f, .36f, .72f);
+        }
+
         private static void ApplyLgoItemIcon(VisualElement icon)
         {
             icon.style.width = 58;

@@ -52,3 +52,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-grid-tile-runtime-v4/inventory/bag.png`, `character-info.png`, `supplies.png`, `storage.png`.
 - Result: Hành trang now uses dense 6-column equipment cells with reserved empty inventory slots and keeps item detail on the right.
 - Review status: technical runtime checkpoint only. It improves the previous sparse/row-card presentation but remains below final owner-reference quality because approved dedicated item/outfit icon art is still missing. Do not replace this with fake emoji/random/3D-derived icons.
+
+## 2026-09-13 — Entry login depth/CTA evidence
+
+- Evidence: `build/map01a-entry-depth-polish-runtime-v2/entry/entry-login.png`.
+- Result: entry/login backdrop is less blacked out, the login panel has shared soft-depth styling, and the primary CTA has ornament rails.
+- Review status: technical runtime checkpoint only; still needs richer final login visual treatment before owner acceptance.

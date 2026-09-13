@@ -1123,3 +1123,9 @@ Scope hiện tại là Map01A/UI only; không resume class/wardrobe/pose. Đã a
 - Changed Hành trang equipment view from wide debug-like row cards to dense 6-column item cells with reserved empty bag slots and right-side item detail.
 - Runtime evidence: `build/map01a-inventory-grid-tile-runtime-v4/inventory/bag.png`, plus character-info/supplies/storage captures in the same folder.
 - Self-audit: layout is more like a game bag grid, but it is not final design quality yet. Dedicated item/outfit icon art is still missing; current thumbnails are runtime equipment crops, so the screen remains visually rough compared with owner references.
+
+## Map01A entry login depth/CTA polish — 2026-09-13
+
+`CONTINUE`, Map01A/UI only. Entry/login now keeps the Đông Lâm scene more visible behind the glass overlay, adds a shared soft-depth layer behind the login panel, and gives the primary `Bắt đầu` CTA ornament rails so it reads less like a plain form button. No auth/server routing was opened and no fake icon art was added.
+
+Runtime evidence: `build/map01a-entry-depth-polish-runtime-v2/entry/entry-login.png`; manifest records `usesOsMouseOrKeyboard=false`. Visual self-audit: improved over the flat form checkpoint, but still below final owner-reference quality because the screen lacks final illustrated login art/icon treatment and richer ornamental UI.

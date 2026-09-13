@@ -143,7 +143,7 @@ namespace LinhGioi.UI
 
             _inventoryDetailPanel = InventoryPanel("Map01A Inventory Detail Panel");
             _inventoryDetailPanel.style.flexGrow = 0;
-            _inventoryDetailPanel.style.flexBasis = 330;
+            _inventoryDetailPanel.style.flexBasis = 300;
             _inventoryDetailPanel.style.marginLeft = 10;
             ApplyLgoDetailCard(_inventoryDetailPanel);
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
