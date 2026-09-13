@@ -84,6 +84,8 @@ Candidate directories are fixed as `outer-top-six-pose-source-repair-v1`, `waist
 
 Edit source/native layers only enough to complete all six poses for `outer_top`, `waist_belt` and `shoulder_chest_guard`. Keep variants A/B within one accepted phom/template; if a level changes silhouette, declare it a new family instead of forcing reuse.
 
+Prep evidence 2026-09-13: `tools/inspect_lgo_source_png_inventory.py` wrote `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/current-input-image-inventory.json`. Existing idle/run candidates can be reused only as references: `preview-on-*` and review-board PNGs are full-alpha/RGB/composite preview files, not clean layer source. Do not pack these files directly; export new A/B front/back layer PNGs in the fixed candidate directories.
+
 - [ ] **Step 3: Export and reopen/check native source**
 
 Use Krita automation when native files are edited. Required evidence: save/reopen/export hashes, alpha checks and source path provenance. Expected: no source PNG has wrong canvas, missing alpha, fully opaque alpha or background leakage.

@@ -4,7 +4,7 @@
 
 The active character/outfit path for this sandbox is now `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md` with execution plan `docs/superpowers/plans/2026-09-13-six-pose-registered-outfit-pipeline.md`: use the existing six-pose body/motion authority and develop registered outfit pieces across pose and level combinations from design/source evidence. Coverage audit and the grouped repair-batch brief are complete. Current next work is Task 2 Step 2: repair Pháp Lv1 source by slot group in `outer-top-six-pose-source-repair-v1`, `waist-belt-six-pose-source-repair-v1` and `shoulder-chest-guard-six-pose-source-repair-v1`, then build the single source board before any Player pack. Do not rerun the rejected skeletal Player probe or fit garments on that source.
 
-Six-pose repair batch evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-batch-plan.json`, status `SOURCE_REPAIR_BATCH_READY`, `runtimePromotionAllowed=false`, payload hash `718db23e15c361781f7e828f802b5a232f8f14b2c97a3437cabd9b26d50970a3`.
+Six-pose repair batch evidence: `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/repair-batch-plan.json`, status `SOURCE_REPAIR_BATCH_READY`, `runtimePromotionAllowed=false`, payload hash `718db23e15c361781f7e828f802b5a232f8f14b2c97a3437cabd9b26d50970a3`. Source PNG inventory evidence `build/pose-matched-layer-authoring-v1/six-pose-source-repair-batch-v1/current-input-image-inventory.json` confirms existing preview/reference PNGs must not be packed directly: several are full-alpha composites, RGB review files, or non-canvas crop boards rather than clean registered layer source.
 
 ## Map01A inventory grid runtime art cleanup — 2026-09-13
 
