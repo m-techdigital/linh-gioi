@@ -290,14 +290,30 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
                 Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Hub Preview Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Skill Path Stage 1"), Is.Not.Null,
+                    "Approved skill screen must present a connected progression path instead of a generic item grid.");
+                Assert.That(root.Q("Map01A Skill Path Stage 2"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Skill Path Stage 3"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Skill Path Connector 1"), Is.Not.Null);
+                var firstSkillNode = root.Q<Button>("Map01A Skill Node Thiên Kiếm Quyết");
+                Assert.That(firstSkillNode.style.minWidth.value.value, Is.GreaterThanOrEqualTo(140),
+                    "Skill path nodes need a fixed readable base width; flex shrinking stacks Vietnamese labels vertically.");
 
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
                 Assert.That(root.Q("Map01A Potential Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Potential Diagram Core"), Is.Not.Null,
+                    "Approved potential screen must use one central meridian diagram rather than a repeated card grid.");
+                Assert.That(root.Q("Map01A Potential Orbit"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Potential Diagram").style.height.value.value, Is.LessThanOrEqualTo(400),
+                    "Potential diagram and recommendation must fit inside the shared modal shell.");
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
                     "Map01A must not create local fake potential progression before the real state contract exists.");
 
                 InvokeBoundButton(root.Q<Button>("Map01A Spirit Pet Main Tab"));
                 Assert.That(root.Q("Map01A Spirit Pet Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Spirit Pet Selected Roster Art").style.backgroundImage.value.texture, Is.Not.Null,
+                    "The selected spirit-pet roster entry must reuse the provenance-backed pet art, not a generic HUD crest.");
+                Assert.That(root.Q("Map01A Spirit Pet Locked Roster 1"), Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
                     "Linh thú growth must remain visibly gated until its real progression state exists.");
             }

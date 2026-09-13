@@ -1,3 +1,9 @@
+## Next — sau approved five-tab workspace hierarchy — 2026-09-14
+
+`CONTINUE`. Evidence hiện hành duy nhất cho character hub là `build/map01a-five-tab-runtime-v2/{character-info,bag,skills,potential,spirit-pet}.png`; Player `build/map01a-five-tab-player-v2/LinhGioiOnline.app`. Không quay lại v1 vì v1 có chữ Kỹ năng xếp dọc và Tiềm năng overflow. Năm tab dùng một navigation base, content/detail hai cột; progression actions chưa có contract vẫn read-only.
+
+Next valid work: trở lại Map01A gameplay HUD theo reference owner. Sai lệch cấu trúc lớn hiện hành là minimap vẫn là ô chữ placeholder dù route Q01–Q09 đã có dữ liệu. Audit khả năng dựng minimap deterministic từ node/route Map01A và shared HUD base; nếu thiếu nguồn art/map contract thì ghi asset/contract gate và chuyển sang interaction/screen Map01A hợp lệ khác. Không dùng art ngẫu nhiên, không chỉnh CSS lẻ, không resume class/pose/wardrobe/source, không rollback class code và không đổi frozen surfaces.
+
 ## Next — Map01A shared control skin checkpoint, still CONTINUE — 2026-09-13
 
 `CONTINUE`. Batch mới nhất chỉ polish base control chung: `ApplyLgoInputField(...)` có padding/frame 2px rõ hơn, `ApplyLgoButton(...)` có padding ngang và primary CTA dùng viền 2px bốn cạnh. Đây là sửa Skin dùng chung để giảm cảm giác HTML/web-form; không tạo style riêng từng màn, không thêm icon giả, không đổi class/wardrobe/pose/source/camera/scale.

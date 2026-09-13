@@ -1,3 +1,11 @@
+## Map01A — approved five-tab workspace hierarchy — 2026-09-14
+
+- Scope vẫn khóa ở Map01A/UI-only; không đổi hoặc capture class/wardrobe/pose/source/camera/scale và không rollback code class.
+- Đối chiếu trực tiếp ba design owner đã duyệt `03-ky-nang`, `04-tiem-nang`, `05-linh-thu`: thay skeleton generic bằng progression path ba tầng cho Kỹ năng, sơ đồ kinh mạch orbit/core cho Tiềm năng, và preview/roster Linh thú dùng ảnh Thanh Vân Hồ có provenance. Cả năm tab tiếp tục dùng một hàng compact và một detail column bên phải; các wrapper chỉ bind dữ liệu qua shared inventory/button/frame/icon bases.
+- Action tăng điểm/nâng cấp/bồi dưỡng vẫn khóa vì chưa có progression contract. Ba ô Linh thú chưa có asset thật hiển thị trạng thái khóa thay vì lặp crest hoặc dựng pet giả.
+- TDD: guard mới bắt lỗi node Kỹ năng bị flex co thành chữ dọc và sơ đồ Tiềm năng tràn modal; RED đúng, GREEN targeted `1/1`, toàn `TwoDCharacterRuntimeStateTests` đạt `20/20`. Shared-skin validator và 12 unit tests pass; no-3D/no-source-image/frozen diff pass.
+- Player `build/map01a-five-tab-player-v2/LinhGioiOnline.app` build thành công, `errors=0`, `warnings=36`. Evidence đã xem đủ năm tab tại `build/map01a-five-tab-runtime-v2/{character-info,bag,skills,potential,spirit-pet}.png`; v1 bị loại vì lỗi chữ dọc/overflow. Nhân vật và Rương đồ không regression; ba workspace mới không cắt/chồng và gần design hơn rõ ràng. Trạng thái tổng vẫn `CONTINUE`: skill/item art còn dùng atlas hiện hành, chưa phải asset final.
+
 ## Map01A — shared control skin checkpoint, still CONTINUE — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, wardrobe, pose, source, camera hay scale; không rollback code nhân vật; không thêm icon/item art giả.

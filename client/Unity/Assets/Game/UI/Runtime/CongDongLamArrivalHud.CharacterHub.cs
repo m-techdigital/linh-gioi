@@ -12,6 +12,7 @@ namespace LinhGioi.UI
         private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
         private VisualElement _hubDetailIcon;
         private Button _hubSkillUpgradeAction, _potentialAddPointAction, _spiritPetDevelopAction;
+        private Texture2D _spiritPetPreviewTexture;
 
         private VisualElement CreateHubSurface(string name)
         {
@@ -67,6 +68,103 @@ namespace LinhGioi.UI
             return button;
         }
 
+        private Button CreateHubPathNode(string name, string title, string level, string iconId, Action action, bool selected = false)
+        {
+            var node = InventoryButton(action, name);
+            node.style.width = 142;
+            node.style.minWidth = 142;
+            node.style.maxWidth = 142;
+            node.style.flexBasis = 142;
+            node.style.flexGrow = 0;
+            node.style.height = 104;
+            node.style.flexShrink = 0;
+            node.style.flexDirection = FlexDirection.Column;
+            node.style.alignItems = Align.Center;
+            node.style.justifyContent = Justify.Center;
+            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 52;
+            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 52;
+            ApplyLgoFrame(node,
+                selected ? new Color(.025f, .18f, .30f, .96f) : new Color(.025f, .085f, .13f, .92f),
+                selected ? UiGold : new Color(.28f, .55f, .70f, .78f));
+            var nodeBorderWidth = selected ? 2 : 1;
+            node.style.borderLeftWidth = node.style.borderRightWidth = nodeBorderWidth;
+            node.style.borderTopWidth = node.style.borderBottomWidth = nodeBorderWidth;
+            node.Add(HubIcon(name + " Icon", iconId, 48));
+            var titleLabel = LgoLabel(title, 12, selected ? UiGold : UiText, true);
+            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            titleLabel.style.marginTop = 2;
+            titleLabel.style.whiteSpace = WhiteSpace.NoWrap;
+            node.Add(titleLabel);
+            var levelLabel = LgoLabel(level, 10, new Color(.74f, .92f, 1f, .92f), true);
+            levelLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            node.Add(levelLabel);
+            return node;
+        }
+
+        private static VisualElement CreateHubPathConnector(string name, bool vertical = false)
+        {
+            var connector = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
+            connector.style.flexShrink = 0;
+            connector.style.alignSelf = Align.Center;
+            connector.style.backgroundColor = new Color(.20f, .58f, .82f, .68f);
+            connector.style.width = vertical ? 2 : 44;
+            connector.style.height = vertical ? 12 : 2;
+            return connector;
+        }
+
+        private VisualElement CreatePotentialNode(string name, string title, string value, string iconId,
+            float left, float top, bool selected = false)
+        {
+            var node = CreateHubPathNode(name, title, value, iconId,
+                () => ShowHubDetail(CharacterHubMode.Potential), selected);
+            node.style.position = Position.Absolute;
+            node.style.left = left;
+            node.style.top = top;
+            node.style.width = 116;
+            node.style.minWidth = 116;
+            node.style.maxWidth = 116;
+            node.style.flexBasis = 116;
+            node.style.height = 116;
+            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 58;
+            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 58;
+            return node;
+        }
+
+        private VisualElement CreateSpiritPetRosterEntry(string name, string title, string level, bool selected, int lockedIndex)
+        {
+            var card = InventoryButton(() => ShowHubDetail(CharacterHubMode.SpiritPet), name);
+            ApplyLgoInventoryGridCell(card);
+            card.style.flexBasis = new Length(23, LengthUnit.Percent);
+            card.style.height = 104;
+            card.style.flexDirection = FlexDirection.Column;
+            card.style.alignItems = Align.Center;
+            card.style.justifyContent = Justify.Center;
+            var art = new VisualElement
+            {
+                name = selected ? "Map01A Spirit Pet Selected Roster Art" : "Map01A Spirit Pet Locked Roster " + lockedIndex,
+                pickingMode = PickingMode.Ignore
+            };
+            ApplyLgoItemIcon(art);
+            art.style.width = 58;
+            art.style.height = 58;
+            art.style.marginTop = 0;
+            art.style.marginBottom = 2;
+            art.style.unityBackgroundScaleMode = selected ? ScaleMode.ScaleAndCrop : ScaleMode.ScaleToFit;
+            art.style.backgroundImage = selected && _spiritPetPreviewTexture != null
+                ? new StyleBackground(_spiritPetPreviewTexture)
+                : new StyleBackground(_scene.GetMap01AHudIconSprite("lock"));
+            card.Add(art);
+            var titleLabel = LgoLabel(title, 11, selected ? UiGold : UiSubText, true);
+            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            card.Add(titleLabel);
+            var stateLabel = LgoLabel(level, 10, selected ? new Color(.76f, 1f, .70f, .94f) : new Color(.56f, .64f, .68f, .78f));
+            stateLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            card.Add(stateLabel);
+            ApplyLgoSelectedTab(card, selected);
+            if (!selected) ApplyLgoDisabledAction(card);
+            return card;
+        }
+
         private void InitializeCharacterHub(VisualElement body)
         {
             InitializeSkillsView(body);
@@ -98,25 +196,47 @@ namespace LinhGioi.UI
             skillArea.style.minWidth = 0;
             var pointRow = InventoryRow("Map01A Skill Point Row");
             pointRow.style.alignItems = Align.Center;
-            pointRow.Add(LgoLabel("Điểm kỹ năng: 12", 14, UiGold, true));
+            pointRow.style.justifyContent = Justify.SpaceBetween;
+            pointRow.Add(LgoTitleLabel("Lộ trình Thiên Kiếm", 17));
+            pointRow.Add(InventoryBadge("Map01A Skill Points Badge", "Điểm kỹ năng: 12", UiGold));
             skillArea.Add(pointRow);
-            var grid = new VisualElement { name = "Map01A Skill Grid" };
-            grid.style.flexDirection = FlexDirection.Row;
-            grid.style.flexWrap = Wrap.Wrap;
-            foreach (var skill in new[]
+
+            var path = new VisualElement { name = "Map01A Skill Progression Path" };
+            path.style.flexGrow = 1;
+            path.style.alignItems = Align.Center;
+            var stages = new[]
             {
-                ("Thiên Kiếm Quyết", "Lv.8", "skill"), ("Lăng Không Bộ", "Lv.5", "run"),
-                ("Kiếm Vũ", "Lv.4", "attack"), ("Hộ Thể", "Lv.3", "skills"),
-                ("Song Kiếm", "Lv.6", "attack"), ("Phong Trảm", "Lv.2", "skill"),
-                ("Kiếm Trận", "Lv.1", "crest"), ("Ngự Kiếm", "Lv.3", "jump"),
-                ("Vạn Kiếm", "Lv.1", "skills")
-            })
-                grid.Add(CreateHubTile("Map01A Skill Card " + skill.Item1, skill.Item1, skill.Item2, skill.Item3,
-                    () => ShowHubDetail(CharacterHubMode.Skills)));
-            skillArea.Add(grid);
-            var equipped = InventoryBadge("Map01A Equipped Skill Summary", "Đã trang bị 4/4 kỹ năng chủ động", new Color(.76f, 1f, .70f, .94f));
-            equipped.style.marginTop = 8;
-            skillArea.Add(equipped);
+                new[] { ("Thiên Kiếm Quyết", "Lv.8", "skill"), ("Lăng Không Bộ", "Lv.5", "run"), ("Kiếm Vũ", "Lv.4", "attack") },
+                new[] { ("Hộ Thể", "Lv.3", "skills"), ("Song Kiếm", "Lv.6", "attack"), ("Phong Trảm", "Lv.2", "skill") },
+                new[] { ("Kiếm Trận", "Lv.1", "crest"), ("Ngự Kiếm", "Lv.3", "jump"), ("Vạn Kiếm", "Lv.1", "skills") }
+            };
+            for (var stageIndex = 0; stageIndex < stages.Length; stageIndex++)
+            {
+                var stage = new VisualElement { name = "Map01A Skill Path Stage " + (stageIndex + 1) };
+                stage.style.flexDirection = FlexDirection.Row;
+                stage.style.alignItems = Align.Center;
+                stage.style.justifyContent = Justify.Center;
+                stage.style.width = new Length(100, LengthUnit.Percent);
+                for (var nodeIndex = 0; nodeIndex < stages[stageIndex].Length; nodeIndex++)
+                {
+                    var skill = stages[stageIndex][nodeIndex];
+                    stage.Add(CreateHubPathNode("Map01A Skill Node " + skill.Item1, skill.Item1, skill.Item2, skill.Item3,
+                        () => ShowHubDetail(CharacterHubMode.Skills), stageIndex == 0 && nodeIndex == 0));
+                    if (nodeIndex < stages[stageIndex].Length - 1)
+                        stage.Add(CreateHubPathConnector("Map01A Skill Stage " + (stageIndex + 1) + " Connector " + (nodeIndex + 1)));
+                }
+                path.Add(stage);
+                if (stageIndex < stages.Length - 1)
+                    path.Add(CreateHubPathConnector("Map01A Skill Path Connector " + (stageIndex + 1), true));
+            }
+            skillArea.Add(path);
+            var equippedRow = InventoryRow("Map01A Equipped Skill Strip");
+            equippedRow.style.alignItems = Align.Center;
+            equippedRow.style.justifyContent = Justify.SpaceBetween;
+            equippedRow.Add(InventoryBadge("Map01A Equipped Skill Summary", "Kỹ năng đã trang bị", UiSubText));
+            foreach (var icon in new[] { "skill", "run", "attack", "skills" }) equippedRow.Add(HubIcon("Map01A Equipped Skill " + icon, icon, 46));
+            equippedRow.Add(InventoryBadge("Map01A Equipped Skill Count", "4/4", new Color(.76f, 1f, .70f, .94f)));
+            skillArea.Add(equippedRow);
             content.Add(skillArea);
             body.Add(_skillsPanel);
         }
@@ -124,40 +244,72 @@ namespace LinhGioi.UI
         private void InitializePotentialView(VisualElement body)
         {
             _potentialPanel = CreateHubSurface("Map01A Potential Panel");
-            _potentialPanel.Add(LgoTitleLabel("Kinh mạch tiềm năng", 19));
-            var intro = LgoSubtitleLabel("Chọn một thuộc tính để xem hiệu quả. Cộng điểm chờ state tiến trình chính thức.", 12);
-            intro.style.marginBottom = 12;
-            _potentialPanel.Add(intro);
-            var nodes = new VisualElement { name = "Map01A Potential Node Grid" };
-            nodes.style.flexDirection = FlexDirection.Row;
-            nodes.style.flexWrap = Wrap.Wrap;
-            foreach (var node in new[]
-            {
-                ("Công", "120", "attack"), ("Thủ", "118", "lock"), ("Sinh lực", "250", "character"),
-                ("Linh lực", "96", "skill"), ("Nhanh nhẹn", "110", "run")
-            })
-            {
-                var card = CreateHubTile("Map01A Potential Node " + node.Item1, node.Item1, node.Item2, node.Item3,
-                    () => ShowHubDetail(CharacterHubMode.Potential));
-                card.style.flexBasis = new Length(30.5f, LengthUnit.Percent);
-                nodes.Add(card);
-            }
-            _potentialPanel.Add(nodes);
-            var remaining = InventoryBadge("Map01A Potential Remaining Points", "Điểm tiềm năng còn lại: 12", UiGold);
-            remaining.style.marginTop = 12;
-            _potentialPanel.Add(remaining);
+            var heading = InventoryRow("Map01A Potential Heading");
+            heading.style.alignItems = Align.Center;
+            heading.style.justifyContent = Justify.SpaceBetween;
+            heading.Add(LgoTitleLabel("Kinh mạch tiềm năng", 18));
+            heading.Add(InventoryBadge("Map01A Potential Remaining Points", "Điểm còn lại: 12", UiGold));
+            _potentialPanel.Add(heading);
+
+            var diagram = new VisualElement { name = "Map01A Potential Diagram" };
+            diagram.style.width = 650;
+            diagram.style.height = 400;
+            diagram.style.alignSelf = Align.Center;
+            diagram.style.position = Position.Relative;
+            diagram.style.flexShrink = 0;
+            var orbit = new VisualElement { name = "Map01A Potential Orbit", pickingMode = PickingMode.Ignore };
+            orbit.style.position = Position.Absolute;
+            orbit.style.left = 72;
+            orbit.style.top = 14;
+            orbit.style.width = 506;
+            orbit.style.height = 348;
+            orbit.style.borderTopLeftRadius = orbit.style.borderTopRightRadius = 174;
+            orbit.style.borderBottomLeftRadius = orbit.style.borderBottomRightRadius = 174;
+            orbit.style.borderLeftWidth = orbit.style.borderRightWidth = 2;
+            orbit.style.borderTopWidth = orbit.style.borderBottomWidth = 2;
+            orbit.style.borderLeftColor = orbit.style.borderRightColor = new Color(.18f, .48f, .72f, .56f);
+            orbit.style.borderTopColor = orbit.style.borderBottomColor = new Color(.78f, .60f, .23f, .72f);
+            diagram.Add(orbit);
+
+            var core = new VisualElement { name = "Map01A Potential Diagram Core", pickingMode = PickingMode.Ignore };
+            core.style.position = Position.Absolute;
+            core.style.left = 241;
+            core.style.top = 108;
+            core.style.width = 168;
+            core.style.height = 168;
+            core.style.alignItems = Align.Center;
+            core.style.justifyContent = Justify.Center;
+            core.style.borderTopLeftRadius = core.style.borderTopRightRadius = 84;
+            core.style.borderBottomLeftRadius = core.style.borderBottomRightRadius = 84;
+            ApplyLgoFrame(core, new Color(.025f, .11f, .19f, .94f), new Color(.24f, .66f, 1f, .82f));
+            core.style.borderLeftWidth = core.style.borderRightWidth = 2;
+            core.style.borderTopWidth = core.style.borderBottomWidth = 2;
+            core.Add(HubIcon("Map01A Potential Core Icon", "character", 80));
+            var coreText = LgoLabel("TÂM MẠCH", 12, UiGold, true);
+            coreText.style.unityTextAlign = TextAnchor.MiddleCenter;
+            core.Add(coreText);
+            diagram.Add(core);
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Công", "Công", "120", "attack", 267, 0));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Thủ", "Thủ", "118", "lock", 20, 132));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Sinh lực", "Sinh lực", "250", "character", 514, 132, true));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Linh lực", "Linh lực", "96", "skill", 142, 274));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Nhanh nhẹn", "Nhanh nhẹn", "110", "run", 392, 274));
+            _potentialPanel.Add(diagram);
+            var recommendation = InventoryBadge("Map01A Potential Recommendation", "Đề xuất Võ: cân bằng Công · Sinh lực · Nhanh nhẹn", new Color(.74f, .92f, 1f, .94f));
+            recommendation.style.alignSelf = Align.Center;
+            _potentialPanel.Add(recommendation);
             body.Add(_potentialPanel);
         }
 
         private void InitializeSpiritPetView(VisualElement body)
         {
             _spiritPetPanel = CreateHubSurface("Map01A Spirit Pet Panel");
+            _spiritPetPreviewTexture = Resources.Load<Texture2D>("LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview");
             var preview = new VisualElement { name = "Map01A Spirit Pet Preview Art" };
             ApplyLgoDetailCard(preview, 10, 8);
-            preview.style.height = 390;
+            preview.style.height = 382;
             preview.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-            var texture = Resources.Load<Texture2D>("LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview");
-            preview.style.backgroundImage = texture == null ? StyleKeyword.None : new StyleBackground(texture);
+            preview.style.backgroundImage = _spiritPetPreviewTexture == null ? StyleKeyword.None : new StyleBackground(_spiritPetPreviewTexture);
             _spiritPetPanel.Add(preview);
             var identity = LgoTitleLabel("Thanh Vân Hồ · Lv.20", 19);
             identity.style.unityTextAlign = TextAnchor.MiddleCenter;
@@ -167,14 +319,11 @@ namespace LinhGioi.UI
             _spiritPetPanel.Add(growth);
             var roster = InventoryRow("Map01A Spirit Pet Roster");
             roster.style.marginTop = 10;
-            foreach (var pet in new[] { "Thanh Vân Hồ", "Xích Diệm Khuyển", "Trúc Linh", "Lam Vũ Điểu" })
-            {
-                var card = CreateHubTile("Map01A Spirit Pet Card " + pet, pet, pet == "Thanh Vân Hồ" ? "Đang chọn" : "Chưa thức tỉnh", "crest",
-                    () => ShowHubDetail(CharacterHubMode.SpiritPet));
-                card.style.flexBasis = new Length(23, LengthUnit.Percent);
-                card.style.height = 92;
-                roster.Add(card);
-            }
+            roster.style.justifyContent = Justify.SpaceBetween;
+            roster.Add(CreateSpiritPetRosterEntry("Map01A Spirit Pet Card Thanh Vân Hồ", "Thanh Vân Hồ", "Lv.20 · Đang chọn", true, 0));
+            roster.Add(CreateSpiritPetRosterEntry("Map01A Spirit Pet Card Locked 1", "Ô Linh thú II", "Chưa thức tỉnh", false, 1));
+            roster.Add(CreateSpiritPetRosterEntry("Map01A Spirit Pet Card Locked 2", "Ô Linh thú III", "Chưa thức tỉnh", false, 2));
+            roster.Add(CreateSpiritPetRosterEntry("Map01A Spirit Pet Card Locked 3", "Ô Linh thú IV", "Chưa thức tỉnh", false, 3));
             _spiritPetPanel.Add(roster);
             body.Add(_spiritPetPanel);
         }
@@ -293,6 +442,10 @@ namespace LinhGioi.UI
             }
             else
             {
+                _hubDetailIcon.style.backgroundImage = _spiritPetPreviewTexture == null
+                    ? new StyleBackground(_scene.GetMap01AHudIconSprite("crest"))
+                    : new StyleBackground(_spiritPetPreviewTexture);
+                _hubDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
                 _hubDetailHeader.text = "CHI TIẾT LINH THÚ";
                 _hubDetailName.text = "Thanh Vân Hồ";
                 _hubDetailMeta.text = "Tinh phẩm · Hỗ trợ · Lv.20";
