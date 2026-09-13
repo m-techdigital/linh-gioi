@@ -1,3 +1,7 @@
+## Next Map01A UI polish after compact action bar — 2026-09-13
+
+Continue Map01A/UI-only work. The HUD text buttons are now less oversized, but the longer-term target remains closer to the owner references: icon-like skill/action affordances, cleaner login/inventory/character-info/storage hierarchy, and NPC dialogue readability. Use targeted UI filters and Player evidence; do not run class/wardrobe build or capture loops.
+
 ## Next Map01A UI polish after compact HUD shortcuts — 2026-09-13
 
 Continue Map01A/UI-only polish using the repaired targeted Unity filter. Good next candidates: reduce remaining HUD/button visual noise, polish login/inventory/character-info/storage/detail hierarchy, or improve NPC dialogue readability against the owner references. Keep button/font sizes proportional; no class/wardrobe work, no class Player build/capture loops, and no rollback of existing class code.

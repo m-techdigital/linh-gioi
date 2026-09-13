@@ -594,6 +594,17 @@ namespace LinhGioi.Tests.EditMode
                     "HUD quest tabs must stay compact so the tracker does not look oversized on Player.");
                 Assert.That(root.Q<Button>("Map01A Quest Tab Party").enabledSelf, Is.False,
                     "Đội is a visible roadmap affordance, not a clickable dead team feature.");
+                var runAction = root.Q<Button>("Map01A Run Action");
+                var skillAction = root.Q<Button>("Map01A Skill Action");
+                Assert.That(runAction, Is.Not.Null);
+                Assert.That(skillAction, Is.Not.Null);
+                Assert.That(runAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
+                    "Bottom HUD action buttons must not wrap into oversized blocks.");
+                Assert.That(runAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),
+                    "Bottom HUD action buttons must stay compact on Player.");
+                Assert.That(runAction.resolvedStyle.height, Is.LessThanOrEqualTo(44f),
+                    "Bottom HUD action buttons must stay below modal CTA height.");
+                Assert.That(skillAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f));
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Health").value, Is.EqualTo(60));
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Mana").value, Is.EqualTo(50));
                 Assert.That(root.Q<Button>("Map01A Inventory Gender").enabledSelf, Is.False,

@@ -147,18 +147,21 @@ namespace LinhGioi.UI
             _toggleSlot.style.minHeight = _touch ? 52 : 40; _toggleSlot.style.minWidth = 170; _safe.Add(_toggleSlot);
             _combatBar = new VisualElement(); Place(_combatBar, _touch ? 150 : 220, null, null, 24);
             _combatBar.style.flexDirection = FlexDirection.Row;
-            _run = new Button(() => _scene.SetVoRun(!_scene.VoRunEnabled)) { text = "Chạy" };
-            _jump = new Button { text = "Nhảy" };
+            _run = new Button(() => _scene.SetVoRun(!_scene.VoRunEnabled)) { name = "Map01A Run Action", text = "Chạy" };
+            _jump = new Button { name = "Map01A Jump Action", text = "Nhảy" };
             _jump.RegisterCallback<PointerDownEvent>(evt => { _touchJumpHeld = true; _jump.CapturePointer(evt.pointerId); _scene.SetVoJumpHeld(true); });
             _jump.RegisterCallback<PointerUpEvent>(evt => { _touchJumpHeld = false; _jump.ReleasePointer(evt.pointerId); _scene.SetVoJumpHeld(false); });
             _jump.RegisterCallback<PointerCaptureOutEvent>(evt => { _touchJumpHeld = false; _scene.SetVoJumpHeld(false); });
-            _basic = new Button(() => _scene.TriggerVoBasicAttack()) { text = "Đánh" };
-            _skill = new Button(() => _scene.TriggerVoSkill()) { text = "Liên Quyền" };
+            _basic = new Button(() => _scene.TriggerVoBasicAttack()) { name = "Map01A Basic Attack Action", text = "Đánh" };
+            _skill = new Button(() => _scene.TriggerVoSkill()) { name = "Map01A Skill Action", text = "Liên quyền" };
             foreach (var button in new[] { _run, _jump, _basic, _skill })
             {
                 ApplyLgoButton(button);
-                button.style.minHeight = _touch ? 64 : 48;
-                button.style.minWidth = _touch ? 112 : 108;
+                button.style.minHeight = _touch ? 48 : 38;
+                button.style.minWidth = _touch ? 104 : 88;
+                button.style.maxWidth = _touch ? 136 : 122;
+                button.style.fontSize = _touch ? 14 : 13;
+                button.style.whiteSpace = WhiteSpace.NoWrap;
                 button.style.marginRight = 6;
                 _combatBar.Add(button);
             }
@@ -349,8 +352,8 @@ namespace LinhGioi.UI
             _toggleSlot.text = (_scene.VoEquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
             _run.text = (_scene.VoRunEnabled ? "Đang chạy" : "Chạy") + (_touch ? "" : " · Shift");
             _jump.text = (_scene.VoSomersaultEnabled ? "Nhảy lộn" : "Nhảy") + (_touch ? "" : " · ↑/W");
-            _basic.text = _scene.VoAvatarMotionState == "basic_attack" ? "Đang đánh..." : "Đánh" + (_touch ? "" : " · Z");
-            _skill.text = _scene.VoAvatarMotionState == "skill" ? "Đang thi triển..." : _scene.SkillLabel + (_touch ? "" : " · X");
+            _basic.text = _scene.VoAvatarMotionState == "basic_attack" ? "Đang đánh" : "Đánh" + (_touch ? "" : " · Z");
+            _skill.text = _scene.VoAvatarMotionState == "skill" ? "Thi triển" : _scene.SkillLabel + (_touch ? "" : " · X");
             _skill.SetEnabled(_scene.CanTriggerVoSkill);
             _minimap.text = _scene.MinimapRouteText;
             _minimap.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
