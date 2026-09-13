@@ -1,3 +1,10 @@
+## Map01A — inventory detail primitives and character rows base-first — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, pose, wardrobe, camera hay scale; không rollback code nhân vật.
+- State badge và stats card của panel chi tiết dùng shared `ApplyLgoInventoryStateBadge(...)` / `ApplyLgoInventoryStatsCard(...)`. Danh sách 10 slot trong tab Thông tin dùng `ApplyLgoInventoryItemRow(...)`, cùng base với item row ở Hành trang; divider hero reuse `LgoDivider(...)`.
+- TDD: targeted EditMode đã fail đúng khi các shared classes còn thiếu, rồi pass `total=1 passed=1 failed=0`; validator shared-skin và 12 unit tests pass.
+- Player evidence: `build/map01a-inventory-detail-base-runtime-v1/` và `build/map01a-character-row-base-runtime-v1/`, 1600x900, không dùng chuột/phím hệ điều hành. Visual audit xác nhận detail card/badge và hàng slot hai cột không chồng/cắt; chưa phải nghiệm thu mỹ thuật cuối vì icon item chuyên dụng và portrait/full-body có provenance vẫn thiếu.
+
 ## Map01A — inventory badge/chip base-first guard — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
@@ -1263,15 +1270,3 @@ Runtime evidence: `build/map01a-entry-depth-polish-runtime-v2/entry/entry-login.
 `CONTINUE`, chỉ UI/Map01A. Owner feedback đúng: UI vẫn còn xa design dù test xanh. Root cause trong batch này là guard cũ chỉ bảo vệ cấu trúc/chức năng, chưa đủ chặn visual debt như button/font phình, card phẳng, thiếu logo/icon/ornament/art thật. Đã thêm regression cho entry CTA và inventory tab density; shared `CongDongLamArrivalHud.Skin.cs` giảm primary CTA 54→48, secondary/tab 42→38, font nhỏ hơn, tăng nhẹ frame/detail/icon border dùng chung. Không đụng class/wardrobe/pose/source, không thêm icon giả/random art.
 
 Evidence runtime: `build/map01a-shared-skin-density-runtime-v1/entry/entry-login.png`, `build/map01a-shared-skin-density-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Đã xem trực tiếp: density tốt hơn và bớt thô, nhưng vẫn chưa đạt visual acceptance vì login còn giống form kỹ thuật và inventory còn thiếu portrait/shell/icon art theo reference. Next phải là redesign/polish shell có tiêu chí visual rõ, không chỉ chỉnh màu lẻ.
-## Map01A — inventory detail primitives base-first guard — 2026-09-13
-
-- Scope: Map01A UI-only. Class/wardrobe/pose/source vẫn giữ ngoài task này; không rollback code nhân vật.
-- State badge và stats card của panel chi tiết giờ dùng shared `ApplyLgoInventoryStateBadge(...)` / `ApplyLgoInventoryStatsCard(...)` với classes `lgo-inventory-state-badge` / `lgo-inventory-stats-card`; inventory partial chỉ tạo element và bind state/data.
-- TDD: targeted EditMode fail đúng khi hai element chưa có shared class, rồi pass `total=1 passed=1 failed=0`; validator shared-skin và 12 unit tests pass.
-- Player: build `build/map01a-inventory-detail-base-player-v1/LinhGioiOnline.app`; capture `build/map01a-inventory-detail-base-runtime-v1/{bag,character-info,supplies,storage}.png`, 1600x900, không dùng chuột/phím hệ điều hành. Visual audit xác nhận detail card/badge không vỡ bố cục; chưa phải nghiệm thu mỹ thuật cuối vì icon item chuyên dụng và portrait/full-body có provenance vẫn thiếu.
-## Map01A — character equipment rows reuse inventory base — 2026-09-13
-
-- Scope giữ Map01A/UI-only; không đổi class art, pose, wardrobe, camera hay scale.
-- Danh sách 10 slot trong tab Thông tin giờ gọi `ApplyLgoInventoryItemRow(...)`, cùng base với item row ở Hành trang; phần riêng chỉ còn grid 2 cột và bind icon/tên/level. Divider hero cũng reuse `LgoDivider(...)` thay vì lặp style.
-- TDD: targeted EditMode fail đúng khi character row chưa có `lgo-inventory-item-row`, sau refactor pass `total=1 passed=1 failed=0`.
-- Player: build `build/map01a-character-row-base-player-v1/LinhGioiOnline.app`; capture `build/map01a-character-row-base-runtime-v1/character-info.png`, 1600x900, không dùng chuột/phím hệ điều hành. Visual audit xác nhận hàng 2 cột vẫn thẳng, icon/tên/level không bị chồng hoặc cắt.

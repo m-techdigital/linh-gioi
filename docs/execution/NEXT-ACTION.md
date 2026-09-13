@@ -1,3 +1,7 @@
+## Next — Map01A base-first UI after inventory detail and character rows — 2026-09-13
+
+`CONTINUE`. Item rows trong Hành trang và 10 slot ở Thông tin đã cùng dùng một base; detail badge/card và divider cũng đã gom về shared Skin. Tiếp theo audit các empty-state/card còn viết tay, chỉ tạo semantic helper khi có từ hai consumer thật; sau đó polish login/HUD/dialog theo design owner. Giữ Map01A/UI-only, không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; visible batch phải có Player screenshot review. Evidence mới nhất: `build/map01a-character-row-base-runtime-v1/` và `build/map01a-inventory-detail-base-runtime-v1/`.
+
 ## Next — Map01A base-first UI polish after inventory badge helper — 2026-09-13
 
 `CONTINUE`. Inventory badges/chips đã có base chung `ApplyLgoInventoryBadge(...)` / `lgo-inventory-badge`, evidence `build/map01a-inventory-badge-tabs-runtime-v1/`. Rule hiện hành: row/card/chip/badge/panel/button cùng vai trò phải đi qua Skin/shared helper trước; partial chỉ bind data/state/action.
@@ -1164,9 +1168,3 @@ Continue Map01A/UI-only work. Entry/login has a lighter map backdrop, shared sof
 Continue Map01A/UI-only from `build/map01a-shared-skin-density-runtime-v1/`. Do not claim visual completion. The next valid batch should redesign one visible screen deeply against the owner references instead of tuning tiny style fragments. Recommended order: inventory shell first, because current bag/info screens have correct functional tabs/detail-right behavior but still look like technical tables. Keep Hành trang and Thông tin separate; selected item/equipment detail stays on the right; add/prepare a proper left character/equipment presentation or stronger game-style shell using shared skin helpers only. Do not create fake/generic/random item icons; if final item art is missing, keep it documented as art debt and avoid pretending runtime crops are final.
 
 Required before next checkpoint: targeted EditMode tests for any new shared component/density rule, shared UI validator, no-3D/no-source-image validators, frozen diff audit, Player capture, and manual visual review. No class/wardrobe/pose work unless the owner explicitly reopens it with a deterministic source pipeline.
-## Next — Map01A base-first UI after inventory detail primitives — 2026-09-13
-
-`CONTINUE`. State badge và stats card trong panel chi tiết đã dùng shared Skin/classes; evidence 1600x900 tại `build/map01a-inventory-detail-base-runtime-v1/`. Batch kế tiếp vẫn là Map01A/UI-only: audit các card/divider/empty-state còn viết tay trong Hành trang/Thông tin/Rương đồ, ưu tiên reuse helper sẵn có trước khi tạo helper mới; sau đó chuyển sang login/HUD/dialog theo cùng base-first rule. Không resume class/wardrobe/pose/source, không rollback code class, không dùng icon giả/random/generated; thay đổi nhìn thấy phải build/capture và review ảnh Player.
-## Next — Map01A base-first UI after character equipment rows — 2026-09-13
-
-`CONTINUE`. Item rows trong Hành trang và 10 slot ở Thông tin đã cùng dùng một base; detail badge/card và divider cũng đã gom về shared Skin. Tiếp theo audit các empty-state/card còn viết tay, chỉ tạo semantic helper khi có từ hai consumer thật; sau đó polish login/HUD/dialog theo design owner. Giữ Map01A/UI-only, không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; visible batch phải có Player screenshot review.
