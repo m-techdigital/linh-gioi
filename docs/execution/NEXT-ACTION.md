@@ -12,6 +12,8 @@ Authoritative evidence now records this state:
 
 Next valid architecture action is not another Player pass on the same cutout source. Create or obtain a new neutral layered body/rig blueprint that matches Linh Giới proportions before rerunning skeletal source admission, motion continuity, deformation and garment gates. The old six-pose sprite set remains a visual/motion baseline only; it must not be presented as the new skeletal method. If the new source blueprint cannot be produced with explicit joints, hidden surfaces, overlap ownership and proportional review evidence, close `skeletal_2d` for this benchmark and move to the bounded `modular_3d` probe rather than continuing pixel fixes.
 
+Source discovery v1 found no existing accepted blueprint. Evidence: `build/character-model-architecture-review-01/source-blueprint-discovery-v1.json`. Existing `neutral-training-body-native-v1` fails draw order, v2 fails opaque background, v3 is source-only/compositing-patch evidence and not a full skeletal blueprint, canonical ORA has empty AUTHOR layers, and `jump-anatomy-candidate-v1` is only a partial pose candidate. Do not re-audit these as a fresh path unless their source files or reports change.
+
 ## Blender toolchain restored — structured source proof hẹp
 
 Owner cho phép tải lại nếu bundle Blender không còn. PID 81705 vẫn chạy từ path cũ, nhưng executable path trước đó không tồn tại nên đã tải lại Blender 4.5.5 LTS chính thức vào root project `build/toolchains/blender/Blender.app` và kiểm `--version`. Evidence `build/structured-garment-method-verification/blender-discovery.json`.
