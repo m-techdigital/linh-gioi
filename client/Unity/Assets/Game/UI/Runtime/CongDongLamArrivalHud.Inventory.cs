@@ -168,23 +168,14 @@ namespace LinhGioi.UI
             _inventoryFooter.Add(_inventoryItemId);
             _inventoryDetailStateBadge = LgoLabel("", 13, new Color(.12f, .08f, .03f, 1f), true);
             _inventoryDetailStateBadge.name = "Map01A Inventory Detail State Badge";
-            _inventoryDetailStateBadge.style.marginTop = 8;
-            _inventoryDetailStateBadge.style.paddingLeft = 10;
-            _inventoryDetailStateBadge.style.paddingRight = 10;
-            _inventoryDetailStateBadge.style.paddingTop = 5;
-            _inventoryDetailStateBadge.style.paddingBottom = 5;
-            ApplyLgoFrame(_inventoryDetailStateBadge, UiGold, new Color(.98f, .86f, .48f, .92f));
+            ApplyLgoInventoryStateBadge(_inventoryDetailStateBadge);
             _inventoryFooter.Add(_inventoryDetailStateBadge);
             _inventoryItemState = LgoLabel("", 13, new Color(.91f, .93f, .84f, .96f));
             _inventoryItemState.style.marginTop = 8;
             _inventoryFooter.Add(_inventoryItemState);
 
             _inventoryDetailStatsCard = new VisualElement { name = "Map01A Inventory Detail Stats Card" };
-            _inventoryDetailStatsCard.style.flexDirection = FlexDirection.Column;
-            _inventoryDetailStatsCard.style.marginTop = 8;
-            _inventoryDetailStatsCard.style.paddingLeft = _inventoryDetailStatsCard.style.paddingRight = 10;
-            _inventoryDetailStatsCard.style.paddingTop = _inventoryDetailStatsCard.style.paddingBottom = 7;
-            ApplyLgoFrame(_inventoryDetailStatsCard, new Color(.018f, .060f, .096f, .92f), new Color(.72f, .62f, .38f, .58f));
+            ApplyLgoInventoryStatsCard(_inventoryDetailStatsCard);
             var detailChips = InventoryRow("Map01A Inventory Detail Chip Row");
             detailChips.style.marginBottom = 6;
             _inventoryDetailLevelChip = InventoryBadge("Map01A Inventory Detail Level Chip", "Lv1", new Color(.86f, .94f, .90f, .96f));

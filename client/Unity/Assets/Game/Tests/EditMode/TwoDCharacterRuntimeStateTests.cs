@@ -251,6 +251,10 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory count badge must share the reusable inventory badge base instead of hand-styling status chips per section.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Level Chip").ClassListContains("lgo-inventory-badge"), Is.True,
                     "Detail chips must share the same inventory badge base as grid and character status badges.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail State Badge").ClassListContains("lgo-inventory-state-badge"), Is.True,
+                    "The selected-item state must use one reusable semantic badge instead of local padding and frame values.");
+                Assert.That(root.Q("Map01A Inventory Detail Stats Card").ClassListContains("lgo-inventory-stats-card"), Is.True,
+                    "Item facts must use one reusable stats-card primitive so bag and character details stay visually aligned.");
                 var inventoryGridPanel = root.Q("Map01A Inventory Grid Panel");
                 Assert.That(inventoryGridPanel.ClassListContains("lgo-inventory-panel-shell"), Is.True,
                     "Inventory content panels must share a shell base instead of each flow styling a flat panel separately.");

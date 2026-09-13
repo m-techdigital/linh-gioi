@@ -18,6 +18,8 @@ namespace LinhGioi.UI
         private const string LgoInventoryItemRowClass = "lgo-inventory-item-row";
         private const string LgoInventoryCountBadgeClass = "lgo-inventory-count-badge";
         private const string LgoInventoryBadgeClass = "lgo-inventory-badge";
+        private const string LgoInventoryStateBadgeClass = "lgo-inventory-state-badge";
+        private const string LgoInventoryStatsCardClass = "lgo-inventory-stats-card";
         private const string LgoInventoryMainTabClass = "lgo-inventory-main-tab";
         private const string LgoInventoryFilterChipClass = "lgo-inventory-filter-chip";
         private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
@@ -193,6 +195,26 @@ namespace LinhGioi.UI
             badge.style.marginRight = 6;
             badge.style.unityTextAlign = TextAnchor.MiddleCenter;
             ApplyLgoFrame(badge, new Color(.018f, .060f, .096f, .88f), new Color(.72f, .62f, .38f, .62f));
+        }
+
+        private static void ApplyLgoInventoryStateBadge(Label badge)
+        {
+            badge.AddToClassList(LgoInventoryStateBadgeClass);
+            badge.style.marginTop = 8;
+            badge.style.paddingLeft = badge.style.paddingRight = 10;
+            badge.style.paddingTop = badge.style.paddingBottom = 5;
+            badge.style.unityTextAlign = TextAnchor.MiddleCenter;
+            ApplyLgoFrame(badge, UiGold, new Color(.98f, .86f, .48f, .92f));
+        }
+
+        private static void ApplyLgoInventoryStatsCard(VisualElement card)
+        {
+            card.AddToClassList(LgoInventoryStatsCardClass);
+            card.style.flexDirection = FlexDirection.Column;
+            card.style.marginTop = 8;
+            card.style.paddingLeft = card.style.paddingRight = 10;
+            card.style.paddingTop = card.style.paddingBottom = 7;
+            ApplyLgoFrame(card, new Color(.018f, .060f, .096f, .92f), new Color(.72f, .62f, .38f, .58f));
         }
 
         private static void ApplyLgoSelectedTab(Button button, bool selected)

@@ -167,3 +167,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-badge-tabs-runtime-v1/bag.png`, plus `character-info.png`, `supplies.png`, `storage.png`, and `manifest.json`.
 - Result: inventory count/status/detail/category/character chips now share `ApplyLgoInventoryBadge(...)` / `lgo-inventory-badge` instead of keeping badge frame/padding in the inventory partial.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms bag/detail chips did not break; final inventory visual richness still needs deeper polish and approved/provenance-backed item art.
+
+## 2026-09-13 — Inventory detail primitive base-first evidence
+
+- Evidence: `build/map01a-inventory-detail-base-runtime-v1/bag.png`, `character-info.png`, `supplies.png`, `storage.png`, and `manifest.json`.
+- Result: selected-item state badges and item-fact cards now use shared `ApplyLgoInventoryStateBadge(...)` / `ApplyLgoInventoryStatsCard(...)` helpers and semantic classes instead of inline frame/padding values in the inventory flow.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual 1600x900 review confirms the right-side detail layout remains intact in bag, supplies, and character-info states; final art richness still depends on approved/provenance-backed item icons and character presentation.
