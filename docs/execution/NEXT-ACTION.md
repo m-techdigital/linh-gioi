@@ -1,3 +1,7 @@
+## Next — Map01A base-first UI after shared status card — 2026-09-13
+
+`CONTINUE`. Entry notice và inventory empty-state đã dùng chung `ApplyLgoStatusCard(...)` / `lgo-status-card`, với Player evidence tại `build/map01a-status-card-runtime-v1/`. Tiếp tục audit login/HUD/dialog/inventory theo design owner; chỉ tách semantic helper khi có từ hai consumer thật, ưu tiên component đang lặp và tạo giá trị nhìn thấy rõ. Giữ Map01A/UI-only, không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; visible batch phải có Player screenshot review bằng mắt.
+
 ## Next — Map01A base-first UI after inventory detail and character rows — 2026-09-13
 
 `CONTINUE`. Item rows trong Hành trang và 10 slot ở Thông tin đã cùng dùng một base; detail badge/card và divider cũng đã gom về shared Skin. Tiếp theo audit các empty-state/card còn viết tay, chỉ tạo semantic helper khi có từ hai consumer thật; sau đó polish login/HUD/dialog theo design owner. Giữ Map01A/UI-only, không resume class/wardrobe/pose/source, không rollback code class, không icon giả/random/generated; visible batch phải có Player screenshot review. Evidence mới nhất: `build/map01a-character-row-base-runtime-v1/` và `build/map01a-inventory-detail-base-runtime-v1/`.

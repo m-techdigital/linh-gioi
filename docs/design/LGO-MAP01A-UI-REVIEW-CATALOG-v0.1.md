@@ -179,3 +179,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-character-row-base-runtime-v1/character-info.png` and `manifest.json`.
 - Result: the 10 equipment rows in Thông tin reuse the same `ApplyLgoInventoryItemRow(...)` foundation as bag item rows; only the two-column role layout and bound icon/name/level remain local. The character separator now reuses `LgoDivider(...)`.
 - Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual 1600x900 review confirms the two-column equipment rows remain aligned without overlap or clipping.
+
+## 2026-09-13 — Shared status-card foundation evidence
+
+- Evidence: `build/map01a-status-card-runtime-v1/entry/entry-login.png` and `build/map01a-status-card-runtime-v1/inventory/{bag,character-info,character-info-after-supplies,supplies,storage}.png`.
+- Result: the entry notice and inventory supplies empty state now share `ApplyLgoStatusCard(...)` / `lgo-status-card`, so repeated informational cards inherit one frame and spacing foundation while each screen keeps only its content and placement.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual 1600x900 review confirms both consumers render without overlap or clipping; broader login and inventory polish remains `CONTINUE`.

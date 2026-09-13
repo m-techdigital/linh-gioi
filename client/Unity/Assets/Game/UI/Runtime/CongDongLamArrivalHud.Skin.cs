@@ -20,6 +20,7 @@ namespace LinhGioi.UI
         private const string LgoInventoryBadgeClass = "lgo-inventory-badge";
         private const string LgoInventoryStateBadgeClass = "lgo-inventory-state-badge";
         private const string LgoInventoryStatsCardClass = "lgo-inventory-stats-card";
+        private const string LgoStatusCardClass = "lgo-status-card";
         private const string LgoInventoryMainTabClass = "lgo-inventory-main-tab";
         private const string LgoInventoryFilterChipClass = "lgo-inventory-filter-chip";
         private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
@@ -215,6 +216,14 @@ namespace LinhGioi.UI
             card.style.paddingLeft = card.style.paddingRight = 10;
             card.style.paddingTop = card.style.paddingBottom = 7;
             ApplyLgoFrame(card, new Color(.018f, .060f, .096f, .92f), new Color(.72f, .62f, .38f, .58f));
+        }
+
+        private static void ApplyLgoStatusCard(VisualElement card, float horizontalPadding = 10, float verticalPadding = 8)
+        {
+            card.AddToClassList(LgoStatusCardClass);
+            card.style.paddingLeft = card.style.paddingRight = horizontalPadding;
+            card.style.paddingTop = card.style.paddingBottom = verticalPadding;
+            ApplyLgoFrame(card, new Color(.018f, .055f, .090f, .86f), new Color(.56f, .68f, .72f, .52f));
         }
 
         private static void ApplyLgoSelectedTab(Button button, bool selected)

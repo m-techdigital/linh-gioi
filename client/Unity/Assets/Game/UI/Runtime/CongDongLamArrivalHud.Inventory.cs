@@ -544,11 +544,7 @@ namespace LinhGioi.UI
             _suppliesEmptyState.name = "Map01A Supplies Empty State";
             _suppliesEmptyState.style.marginTop = 2;
             _suppliesEmptyState.style.marginBottom = 12;
-            _suppliesEmptyState.style.paddingLeft = 10;
-            _suppliesEmptyState.style.paddingRight = 10;
-            _suppliesEmptyState.style.paddingTop = 8;
-            _suppliesEmptyState.style.paddingBottom = 8;
-            ApplyLgoFrame(_suppliesEmptyState, new Color(.020f, .060f, .088f, .86f), new Color(.50f, .58f, .58f, .55f));
+            ApplyLgoStatusCard(_suppliesEmptyState);
             suppliesListCard.Add(_suppliesEmptyState);
             _questItemActions = new VisualElement { name = "Map01A Quest Item Actions" };
             _healthPotion = SupplyItemRow(() => SelectInventorySupply("health_potion"), "Map01A Health Potion", "health_potion", out _healthPotionName, out _healthPotionCount, out _healthPotionState);

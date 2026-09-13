@@ -1,3 +1,10 @@
+## Map01A — shared status-card foundation — 2026-09-13
+
+- Scope: Map01A/UI-only. Không đổi class art, pose, wardrobe, camera hay scale; không rollback code nhân vật.
+- Thông báo ở màn đăng nhập và empty-state trong tab Vật phẩm dùng chung `ApplyLgoStatusCard(...)` / `lgo-status-card`; hai consumer thật chia sẻ cùng nền, viền và padding thay vì giữ skin riêng ở từng partial.
+- TDD: test Entry fail đúng khi notice chưa có shared class rồi pass `total=1 passed=1 failed=0`; test inventory pass sau khi đồng bộ assertion cũ với bounded character panel hiện hành (`flexGrow=0`, `flexBasis=720`). Shared-skin validator và unit tests tiếp tục khóa helper/call-site.
+- Player evidence: `build/map01a-status-card-runtime-v1/entry/entry-login.png` và `build/map01a-status-card-runtime-v1/inventory/{bag,character-info,character-info-after-supplies,supplies,storage}.png`, 1600x900, không dùng chuột/phím hệ điều hành. Visual audit xác nhận không chồng/cắt; đây là checkpoint base-first, chưa phải nghiệm thu mỹ thuật login/inventory cuối.
+
 ## Map01A — inventory detail primitives and character rows base-first — 2026-09-13
 
 - Scope: Map01A/UI-only. Không đổi class art, pose, wardrobe, camera hay scale; không rollback code nhân vật.

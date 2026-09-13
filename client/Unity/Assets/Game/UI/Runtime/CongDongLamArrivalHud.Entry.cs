@@ -41,11 +41,7 @@ namespace LinhGioi.UI
             notice.style.left = 28;
             notice.style.bottom = 28;
             notice.style.width = 430;
-            notice.style.paddingLeft = 14;
-            notice.style.paddingRight = 14;
-            notice.style.paddingTop = 10;
-            notice.style.paddingBottom = 10;
-            ApplyLgoFrame(notice, new Color(.018f, .055f, .090f, .82f), new Color(.56f, .68f, .72f, .42f));
+            ApplyLgoStatusCard(notice, 14, 10);
             var noticeTitle = LgoLabel("Thông Báo", 17, UiGold, true);
             noticeTitle.name = "Map01A Entry Notice Title";
             noticeTitle.style.marginBottom = 6;

@@ -20,6 +20,7 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoInventoryBadge",
     "ApplyLgoInventoryStateBadge",
     "ApplyLgoInventoryStatsCard",
+    "ApplyLgoStatusCard",
     "ApplyLgoSelectedTab",
     "ApplyLgoDisabledAction",
     "ApplyLgoHudCombatAction",
@@ -76,6 +77,7 @@ REQUIRED_PARTIAL_MARKERS = {
     ],
     "CongDongLamArrivalHud.Entry.cs": [
         "ApplyLgoModalShell(panel, 24)",
+        "ApplyLgoStatusCard(notice, 14, 10)",
         "StyleEntryButton",
         "ApplyLgoEntrySecondaryAction(serverSwitch",
         "ApplyLgoEntrySecondaryAction(forgot",
@@ -108,6 +110,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoInventoryBadge(badge)",
         "ApplyLgoInventoryStateBadge(_inventoryDetailStateBadge)",
         "ApplyLgoInventoryStatsCard(_inventoryDetailStatsCard)",
+        "ApplyLgoStatusCard(_suppliesEmptyState)",
         "_bagTab = InventoryButton(() => ShowInventoryMode(false)",
         "_characterInfoTab = InventoryButton(() => ShowInventoryMode(true)",
         "_storageTab = InventoryButton(ShowStorageMode",

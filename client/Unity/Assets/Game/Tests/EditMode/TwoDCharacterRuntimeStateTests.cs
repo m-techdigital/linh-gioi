@@ -480,6 +480,8 @@ namespace LinhGioi.Tests.EditMode
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 var overlay = root.Q("Map01A Entry Overlay");
                 Assert.That(overlay, Is.Not.Null);
+                Assert.That(root.Q("Map01A Entry Notice Panel").ClassListContains("lgo-status-card"), Is.True,
+                    "Entry notices must use the shared status-card foundation instead of a screen-local frame and padding skin.");
                 Assert.That(root.Q<Button>("Map01A Entry Login Button"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Entry Account Field"), Is.Not.Null);
                 var accountPlaceholder = root.Q<Label>("Map01A Entry Account Placeholder").text;
@@ -639,8 +641,9 @@ namespace LinhGioi.Tests.EditMode
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
 
                 hud.OpenInventoryReviewMode("character-info");
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(1),
-                    "Tab content must fill its column immediately without requiring a viewport resize.");
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(0),
+                    "Character info must keep the bounded two-column width instead of stretching like the obsolete full-width layout.");
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexBasis.value.value, Is.EqualTo(720));
                 Assert.That(scene.InventoryOpen, Is.True);
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -665,6 +668,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Supplies must keep the right-side detail panel instead of becoming a left-only technical list.");
                 Assert.That(root.Q<Label>("Map01A Supplies Empty State").text, Does.Contain("Chưa nhận"));
+                Assert.That(root.Q<Label>("Map01A Supplies Empty State").ClassListContains("lgo-status-card"), Is.True,
+                    "Inventory empty states must share the same status-card foundation as entry notices.");
                 Assert.That(root.Q<Button>("Map01A Health Potion").text, Is.Empty,
                     "Supply rows must be composed cards, not plain Button.text labels that look like temporary debug UI.");
                 Assert.That(root.Q<Button>("Map01A Health Potion").ClassListContains("lgo-inventory-item-row"), Is.True,
@@ -702,8 +707,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Not.Contain("Tinh phẩm"));
                 var equippedBeforeTabSwitch = scene.VoEquippedSlotCount;
                 hud.OpenInventoryReviewMode("character-info");
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(1),
-                    "Tab content must fill its column immediately without requiring a viewport resize.");
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexGrow.value, Is.EqualTo(0));
+                Assert.That(root.Q("Map01A Inventory Character Panel").style.flexBasis.value.value, Is.EqualTo(720),
+                    "Returning from supplies must restore the bounded character-info column without waiting for geometry changes.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").text, Is.EqualTo("CHI TIẾT MÓN"),
                     "Character info must clear the consumable action before showing equipped items.");
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").text, Does.Contain("Tháo"));
