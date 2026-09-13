@@ -13,6 +13,11 @@ namespace LinhGioi.UI
         private static readonly Color UiBlue = new Color(.10f, .35f, .58f, .96f);
         private static readonly Color UiText = new Color(.96f, .91f, .76f, .96f);
         private static readonly Color UiSubText = new Color(.73f, .85f, .88f, .90f);
+        private const string LgoInventoryMainTabClass = "lgo-inventory-main-tab";
+        private const string LgoInventoryFilterChipClass = "lgo-inventory-filter-chip";
+        private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
+        private const string LgoInventoryGridCellClass = "lgo-inventory-grid-cell";
+        private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -120,6 +125,68 @@ namespace LinhGioi.UI
             button.style.color = selected ? new Color(.98f, .95f, .78f, .98f) : UiText;
             button.style.borderBottomWidth = selected ? 2 : 1;
             button.style.borderBottomColor = selected ? UiGold : new Color(.56f, .68f, .70f, .58f);
+        }
+
+        private static void ApplyLgoInventoryMainTab(Button button, bool touch)
+        {
+            button.AddToClassList(LgoInventoryMainTabClass);
+            ApplyLgoButton(button);
+            button.style.flexGrow = 0;
+            button.style.flexBasis = 128;
+            button.style.minHeight = touch ? 38 : 32;
+            button.style.fontSize = 13;
+            button.style.marginRight = 4;
+        }
+
+        private static void ApplyLgoInventoryFilterChip(Button button, bool touch)
+        {
+            button.AddToClassList(LgoInventoryFilterChipClass);
+            ApplyLgoButton(button);
+            button.style.flexGrow = 0;
+            button.style.flexBasis = 100;
+            button.style.minHeight = touch ? 36 : 28;
+            button.style.marginRight = 6;
+            button.style.marginBottom = 4;
+            button.style.fontSize = 12;
+        }
+
+        private static void ApplyLgoInventoryToolbarAction(Button button, bool touch, bool disabled = true)
+        {
+            button.AddToClassList(LgoInventoryToolbarActionClass);
+            ApplyLgoButton(button);
+            button.style.flexGrow = 0;
+            button.style.flexBasis = 112;
+            button.style.minHeight = touch ? 38 : 30;
+            button.style.marginRight = 6;
+            button.style.fontSize = 13;
+            if (!disabled) return;
+            button.SetEnabled(false);
+            button.style.opacity = .58f;
+            button.style.color = new Color(.70f, .78f, .78f, .82f);
+        }
+
+        private static void ApplyLgoModalCloseButton(Button button, bool touch)
+        {
+            button.AddToClassList(LgoModalCloseButtonClass);
+            ApplyLgoButton(button);
+            button.style.flexGrow = 0;
+            button.style.flexBasis = touch ? 46 : 42;
+            button.style.minHeight = touch ? 42 : 38;
+            button.style.fontSize = 22;
+            button.style.marginRight = 0;
+            button.style.unityFontStyleAndWeight = FontStyle.Bold;
+        }
+
+        private static void ApplyLgoInventoryGridCell(VisualElement cell)
+        {
+            cell.AddToClassList(LgoInventoryGridCellClass);
+            cell.style.flexGrow = 0;
+            cell.style.flexBasis = new Length(15.8f, LengthUnit.Percent);
+            cell.style.height = 108;
+            cell.style.marginRight = 6;
+            cell.style.marginBottom = 7;
+            cell.style.alignItems = Align.Center;
+            cell.style.justifyContent = Justify.Center;
         }
 
         private static void ApplyLgoDisabledAction(Button button)

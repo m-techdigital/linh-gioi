@@ -90,3 +90,9 @@ Evidence mới: `build/map01a-ui-hierarchy-polish-runtime-v2/entry/entry-login.p
 - Evidence: `build/map01a-inventory-action-toolbar-runtime-v2/inventory/bag.png`, `supplies.png`, `character-info.png`, `storage.png`.
 - Change: bottom inventory actions now behave as compact toolbar controls; demo bag empty cells are limited to a small reserve so the screen does not read as a debug grid.
 - Review: still not final; next pass should improve panel depth, ornament, and bottom whitespace against the owner UI references.
+
+## 2026-09-13 — Inventory base-first density/style evidence
+
+- Evidence: `build/map01a-inventory-base-style-runtime-v1/inventory/bag.png`, `character-info.png`, `character-info-after-supplies.png`, `supplies.png`, `storage.png`.
+- Result: Hành trang main tabs, filter chips, toolbar actions, grid cells, and modal close button now share semantic base helpers in `CongDongLamArrivalHud.Skin.cs`; targeted tests guard against per-screen button-size drift.
+- Review status: `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, not owner visual acceptance. Manual audit confirms typography/buttons are less oversized, but item grid and modal shell still need deeper redesign against owner references.

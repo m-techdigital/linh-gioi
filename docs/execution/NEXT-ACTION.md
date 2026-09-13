@@ -1,3 +1,9 @@
+## Next — Map01A base-first UI polish, grid/card redesign — 2026-09-13
+
+`CONTINUE`. Batch mới nhất đã khóa rule base-first cho Hành trang: tab/filter/action/grid/close dùng helper chung trong `CongDongLamArrivalHud.Skin.cs`, evidence `build/map01a-inventory-base-style-runtime-v1/inventory/{bag,character-info,supplies,storage}.png`. Không được xem đây là nghiệm thu mỹ thuật; visual audit vẫn thấy grid item giống bảng ngang và modal còn nhiều khoảng trống.
+
+Next valid work: tiếp tục Map01A UI-only, ưu tiên redesign lưới Hành trang/Thông tin bằng component base chung để gần owner references hơn: ô item/card vuông gọn, hierarchy panel/detail tốt hơn, dùng asset runtime/approved/provenance-backed; không icon giả/random/generated, không resume class/wardrobe/pose/source, không rollback class code, không dùng test xanh thay visual review.
+
 ## Next — Map01A UI/UX polish, inventory shell/card depth — 2026-09-13
 
 - Tiếp tục Map01A UI-only, không quay lại class/wardrobe/pose/source trong task này.

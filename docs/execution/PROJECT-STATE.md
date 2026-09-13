@@ -1,3 +1,11 @@
+## Map01A — inventory base-first density/style audit — 2026-09-13
+
+- Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.
+- Đã chuyển các style lặp của Hành trang sang base semantic trong `CongDongLamArrivalHud.Skin.cs`: main tab, filter chip, toolbar action, grid cell và modal close button. Đây là bước khóa “base first” để cùng UI/UX không còn tự build tràn lan mỗi nơi một kiểu.
+- Đã thêm guard EditMode kiểm các control chính phải dùng shared base class, đồng thời khóa density: main tab/filter chip/action/tile compact, close button nhỏ hơn, title/detail không phóng đại. RED fail đúng khi thiếu base class/close còn 54px; GREEN pass sau refactor.
+- Player evidence: `build/map01a-inventory-base-style-runtime-v1/inventory/bag.png`, `character-info.png`, `supplies.png`, `storage.png`, `manifest.json`.
+- Visual audit: đã giảm độ thô do chữ/nút quá lớn, nhưng vẫn `CONTINUE`; lưới item còn table-like và modal còn khoảng trống lớn, cần tiếp tục redesign shell/grid/card theo reference owner bằng base chung và asset có provenance.
+
 ## Map01A — inventory action toolbar + sparse empty-slot visual audit — 2026-09-13
 
 - Scope: Map01A UI-only. Không tiếp tục class/wardrobe/pose/source; không rollback nhánh nhân vật.

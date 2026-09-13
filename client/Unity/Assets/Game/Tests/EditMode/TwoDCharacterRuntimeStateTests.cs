@@ -191,16 +191,24 @@ namespace LinhGioi.Tests.EditMode
                     "Inventory must not present emoji/text badges as final item art.");
                 Assert.That(detailIcon.style.width.value.value, Is.GreaterThanOrEqualTo(72),
                     "Right-side item detail card should present a larger hero thumbnail than grid tiles.");
+                Assert.That(root.Q<Button>("LGO Inventory Close").style.flexBasis.value.value, Is.LessThanOrEqualTo(44),
+                    "Inventory close button should be compact like an RPG modal control, not a large debug square.");
+                Assert.That(root.Q<Button>("LGO Inventory Close").style.fontSize.value.value, Is.LessThanOrEqualTo(24),
+                    "Inventory close button glyph should not dominate the modal header.");
+                Assert.That(root.Q<Label>("Map01A Inventory Modal Title").style.fontSize.value.value, Is.LessThanOrEqualTo(20),
+                    "Inventory modal title should match the compact game UI hierarchy instead of oversized debug headings.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").style.fontSize.value.value, Is.LessThanOrEqualTo(18),
+                    "Right-side item title should be readable but not oversized compared with owner RPG inventory references.");
                 var weaponTileIcon = root.Q<VisualElement>("Map01A Equipment Item Icon main_weapon");
                 Assert.That(weaponTileIcon, Is.Not.Null,
                     "Equipment grid tiles must show the same real runtime thumbnail art, not text-only placeholders.");
                 Assert.That(weaponTileIcon.style.backgroundImage.value.sprite, Is.EqualTo(weaponThumbnail));
                 Assert.That(weaponTileIcon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(weaponTileIcon.style.width.value.value, Is.GreaterThanOrEqualTo(84),
-                    "Grid item thumbnails should be the visual anchor of the tile, closer to RPG bag item art than a tiny debug crop.");
+                Assert.That(weaponTileIcon.style.width.value.value, Is.InRange(58, 72),
+                    "Grid item thumbnails should be compact like RPG bag icons, not oversized crops that make the UI look rough.");
                 var mainWeaponTile = root.Q<Button>("Map01A Equipment Item Tile main_weapon");
-                Assert.That(mainWeaponTile.style.height.value.value, Is.InRange(124, 140),
-                    "Inventory equipment tiles should read as polished RPG item cards, not flat technical cells.");
+                Assert.That(mainWeaponTile.style.height.value.value, Is.LessThanOrEqualTo(116),
+                    "Inventory equipment tiles should stay compact and proportional to the owner bag references.");
                 Assert.That(mainWeaponTile.style.flexBasis.value.value, Is.LessThanOrEqualTo(17f),
                     "Inventory equipment tiles should use a dense 5-6 column bag grid close to the owner bag references.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Rarity").text, Does.Contain("Lv"));
@@ -219,10 +227,18 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(detailActions, Is.Not.Null);
                 Assert.That(detailActions.style.marginBottom.value.value, Is.GreaterThanOrEqualTo(10),
                     "Right-side detail actions need breathing room above the bottom edge in Player layout.");
-                Assert.That(root.Q<Button>("Map01A Bag Main Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(38),
+                Assert.That(root.Q<Button>("Map01A Bag Main Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(34),
                     "Inventory top tabs should stay compact like the owner reference, not inherit oversized web-button height.");
-                Assert.That(root.Q<Button>("Map01A Equipment Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(38),
+                Assert.That(root.Q<Button>("Map01A Bag Main Tab").style.flexBasis.value.value, Is.LessThanOrEqualTo(138),
+                    "Inventory top tabs should not look like large desktop form buttons.");
+                Assert.That(root.Q<Button>("Map01A Bag Main Tab").ClassListContains("lgo-inventory-main-tab"), Is.True,
+                    "Inventory main tabs must use the shared base style so future screens do not hand-tune button size in multiple places.");
+                Assert.That(root.Q<Button>("Map01A Equipment Tab").style.minHeight.value.value, Is.LessThanOrEqualTo(32),
                     "Inventory sub-tabs should share the compact game-tab density.");
+                Assert.That(root.Q<Button>("Map01A Equipment Tab").style.flexBasis.value.value, Is.LessThanOrEqualTo(112),
+                    "Inventory sub-tabs should be compact filter chips, not oversized buttons.");
+                Assert.That(root.Q<Button>("Map01A Equipment Tab").ClassListContains("lgo-inventory-filter-chip"), Is.True,
+                    "Inventory filter chips must use a shared base style instead of local per-button overrides.");
                 Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Not.Null,
                     "Bag category controls should read like compact RPG filter chips, not a pair of full-width debug table tabs.");
                 Assert.That(root.Q<Button>("Map01A Equipment Tab").style.flexGrow.value, Is.EqualTo(0),
@@ -248,8 +264,20 @@ namespace LinhGioi.Tests.EditMode
                     "Bag tab needs a bottom action bar so the modal reads as game inventory instead of a debug table.");
                 Assert.That(root.Q<Button>("Map01A Inventory Sort Action").style.flexGrow.value, Is.EqualTo(0),
                     "Bottom inventory actions should be compact toolbar actions, not full-width disabled debug bars.");
-                Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").style.flexBasis.value.value, Is.LessThanOrEqualTo(150),
+                Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").style.flexBasis.value.value, Is.LessThanOrEqualTo(118),
                     "Bottom inventory actions should stay proportional to the owner RPG bag references.");
+                Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").ClassListContains("lgo-inventory-toolbar-action"), Is.True,
+                    "Inventory toolbar buttons must use one reusable base so button density stays consistent across bag/storage flows.");
+                Assert.That(root.Q<Label>("Map01A Equipment Item Name main_weapon").style.fontSize.value.value, Is.LessThanOrEqualTo(12),
+                    "Equipment item labels should stay understated so the grid does not read as a debug table.");
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").ClassListContains("lgo-inventory-grid-cell"), Is.True,
+                    "Equipment grid cells must use the same base as empty bag cells to avoid patchwork sizing.");
+                Assert.That(root.Q<ScrollView>("LGO Inventory Scroll").style.flexGrow.value, Is.EqualTo(0),
+                    "Demo bag content should not stretch the scroll view into a large empty debug table area when item rows are sparse.");
+                Assert.That(root.Q<ScrollView>("LGO Inventory Scroll").style.maxHeight.value.value, Is.LessThanOrEqualTo(300),
+                    "Bag grid should stay visually grouped around the current demo rows instead of filling the modal with blank table space.");
+                Assert.That(root.Q("Map01A Inventory Grid Accent Rail"), Is.Not.Null,
+                    "Inventory panels need a shared ornament rail to reduce flat debug-panel presentation.");
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
