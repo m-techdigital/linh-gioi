@@ -603,8 +603,8 @@ namespace LinhGioi.Tests.EditMode
                 {
                     var item = expected[itemIndex];
                     var tab = root.Q<Button>(item.Item1);
-                    Assert.That(tab.style.minHeight.value.value, Is.EqualTo(48).Within(1));
-                    Assert.That(tab.style.fontSize.value.value, Is.EqualTo(17).Within(1));
+                    Assert.That(tab.style.minHeight.value.value, Is.EqualTo(52).Within(1));
+                    Assert.That(tab.style.fontSize.value.value, Is.EqualTo(23).Within(1));
                     Assert.That(tab.style.borderTopWidth.value, Is.EqualTo(0),
                         "Tabs keep the ornamental border authored inside their shared texture without an outer CSS frame.");
                     Assert.That(tab.style.marginRight.value.value, Is.EqualTo(itemIndex == expected.Length - 1 ? 0 : 6).Within(1));
@@ -681,7 +681,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Hub Preview Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Hub Preview Detail Hero").style.flexDirection.value, Is.EqualTo(FlexDirection.Row),
                     "Skills, Potential and Spirit Pet must share the canonical icon-plus-heading inspector hierarchy.");
-                Assert.That(root.Q<Label>("Map01A Hub Preview Detail Name").style.fontSize.value.value, Is.EqualTo(24).Within(1));
+                Assert.That(root.Q<Label>("Map01A Hub Preview Detail Name").style.fontSize.value.value, Is.EqualTo(28).Within(1));
                 Assert.That(root.Q("Map01A Hub Preview Detail Action Spacer").style.flexGrow.value, Is.EqualTo(1),
                     "Context actions must remain docked to the lower edge of the shared detail column.");
                 StringAssert.DoesNotContain("state", modalSubtitle.text);
@@ -788,8 +788,21 @@ namespace LinhGioi.Tests.EditMode
                     Does.Contain("Sinh lực (HP)  +12.500"));
                 Assert.That(root.Q<Label>("Map01A Potential Next Effect").text,
                     Does.Contain("Sinh lực (HP)  +50"));
+                Assert.That(root.Q<Label>("Map01A Potential Current Level").style.fontSize.value.value,
+                    Is.EqualTo(21).Within(1));
+                Assert.That(root.Q<Label>("Map01A Potential Current Effect Heading").style.fontSize.value.value,
+                    Is.EqualTo(17).Within(1));
+                Assert.That(root.Q<Label>("Map01A Potential Current Effect").style.fontSize.value.value,
+                    Is.EqualTo(20).Within(1));
+                Assert.That(root.Q<Label>("Map01A Potential Next Effect").style.fontSize.value.value,
+                    Is.EqualTo(20).Within(1));
                 Assert.That(root.Q<Label>("Map01A Potential Cost").text,
                     Is.EqualTo("Tiêu hao  Điểm tiềm năng ×1"));
+                Assert.That(root.Q("Map01A Potential Cost Row").style.minHeight.value.value,
+                    Is.EqualTo(52).Within(1));
+                Assert.That(root.Q("Map01A Potential Cost Row").style.flexShrink.value,
+                    Is.EqualTo(0).Within(.01),
+                    "The shared Potential cost row must keep its frame clear of the docked action row at every approved viewport.");
                 Assert.That(root.Q<VisualElement>("Map01A Potential Cost Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("core")),
                     "The shared cost row reuses the provenance-backed point icon instead of drawing a per-class placeholder.");
@@ -803,6 +816,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
                     "Map01A must not create local fake potential progression before the real state contract exists.");
                 Assert.That(root.Q<Button>("Map01A Potential Reset").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Potential Add Point").style.minHeight.value.value,
+                    Is.EqualTo(52).Within(1));
+                Assert.That(root.Q<Button>("Map01A Potential Add Point").style.fontSize.value.value,
+                    Is.EqualTo(18).Within(1));
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Node 0"));
                 Assert.That(hubDetailName.text, Is.EqualTo("Công"),
                     "Selecting a potential node must update detail-right without mutating progression state.");

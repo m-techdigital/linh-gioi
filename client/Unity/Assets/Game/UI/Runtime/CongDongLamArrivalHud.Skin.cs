@@ -567,8 +567,8 @@ namespace LinhGioi.UI
             button.style.flexGrow = 1;
             button.style.flexBasis = 0;
             button.style.minWidth = 0;
-            button.style.minHeight = 48;
-            button.style.fontSize = 17;
+            button.style.minHeight = 52;
+            button.style.fontSize = 23;
             button.style.marginRight = 6;
             button.style.whiteSpace = WhiteSpace.NoWrap;
             ApplyLgoCharacterHubSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
@@ -639,6 +639,13 @@ namespace LinhGioi.UI
             ApplyLgoCharacterHubSurface(button, ref _characterHubActionGold, "character-hub-action-gold");
             RemoveLgoOuterBorder(button);
             ApplyLgoCharacterHubInteractiveMotion(button);
+        }
+
+        private static void ApplyLgoCharacterHubInspectorAction(Button button)
+        {
+            button.style.minHeight = 52;
+            button.style.fontSize = 18;
+            button.style.unityFontStyleAndWeight = FontStyle.Bold;
         }
 
         private static void AnimateLgoCharacterHubOpen(VisualElement shell, VisualElement backdrop)

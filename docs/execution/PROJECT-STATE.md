@@ -1,3 +1,10 @@
+## Character Hub — Tiềm năng shared hierarchy v15 — 2026-09-15
+
+- Canonical active duy nhất vẫn là `redesign-v4-five-tabs/04-tiem-nang-five-tab-APPROVED.png`. Vòng ngoài, toàn bộ đường nối, năm vòng node, năm ô giá trị, năm ô cộng và lõi thiền nằm trong một asset topology 600×520; runtime chỉ phủ icon/tên/value/click. `SharedPotentials` là collection bất biến dùng chung; Võ/Kiếm/Pháp/Cơ/Linh chỉ truyền selection/recommendation, không tạo layout hay topology riêng.
+- Audit trực quan v13 phát hiện hàng tiêu hao chồng hàng action trên ba viewport nên evidence v13 bị loại. v15 sửa tại shared inspector: hero spacing dùng chung, cost row cố định không flex-shrink, padding/action hierarchy dùng helper `ApplyLgoCharacterHubInspectorAction`; validator khóa helper này để tab/class sau không tự căn riêng.
+- Player `build/character-hub-visual-hierarchy-player-v15/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=50` (CS0618 hiện hữu). Evidence `build/character-hub-visual-hierarchy-runtime-v15/{pc,tablet,mobile}/{potential-default,potential}.png`: 1280×720, 1024×768, 1600×720, 9 frame/profile, internal Player input. Đã xem default/selected trên đủ ba viewport; không còn chồng/cắt ở current/next/cost/action.
+- Targeted EditMode `1/1`; full EditMode `287 total / 286 passed / 0 failed / 1 ignored`. Trạng thái `NEED_HUMAN_VISUAL_REVIEW`; không chuyển screen, class art, pose, wardrobe hoặc source trước khi owner review v15.
+
 ## Character Hub — catalog bất biến và state năm class tách biệt v12 — 2026-09-15
 
 - Audit goal đủ năm class phát hiện `Profiles`, `Skills`, `EquippedSkillIndices` và skill Linh thú vẫn trả backing array có thể bị cast/sửa từ code ngoài. Đây là khe hở có thể làm dữ liệu class lẫn nhau dù UI đã bind theo `classId`.
