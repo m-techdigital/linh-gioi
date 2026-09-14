@@ -112,8 +112,8 @@ def active_state_execution_blocker_from_text(text: str) -> str | None:
 def execution_blocker_owner_note(blocker: str) -> str:
     if blocker == "BLOCKED_SPINE_TOOLING":
         return (
-            "Cần cài và kích hoạt Spine Professional 4.3.x, rồi cung cấp đường dẫn Spine.app; "
-            "sau đó mới cài runtime 4.3 khớp phiên bản và chạy mẫu Mix and Match chính thức."
+            "Trial 4.3.26 và Mix and Match evaluation đã chạy; cần provision/kích hoạt Spine Professional 4.3.x. "
+            "Sau đó mới tích hợp runtime 4.3 đã kiểm chứng vào client/Unity và lặp lại Player proof chính thức."
         )
     if blocker == "KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED":
         return (

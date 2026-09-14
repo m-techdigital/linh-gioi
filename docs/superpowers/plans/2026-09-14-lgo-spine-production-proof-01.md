@@ -37,7 +37,10 @@
 - [x] Verify current compatibility, Mix-and-Match behavior and license requirements against official documentation.
 - [x] Write machine-readable preflight evidence.
 - [x] Add a regression test so the next-task advisor honors `BLOCKED_SPINE_TOOLING` instead of selecting an unrelated backlog task.
-- [x] Stop implementation because Spine Professional, spine-unity and official examples are unavailable.
+- [x] Install official Spine Trial 4.3.26 and open the official Mix-and-Match source without modifying it.
+- [x] Clone official 4.3 runtimes at a pinned commit and run the official scene in an isolated Unity evaluation project.
+- [x] Capture and visually review base, replace, remove, restore, combined-skin and walk states.
+- [x] Keep production integration blocked because Trial cannot save/export and no valid Spine license is available.
 
 Resume command after owner installation:
 
@@ -46,6 +49,8 @@ find /Applications "$HOME/Applications" -maxdepth 5 -type f -path '*Spine*.app/C
 ```
 
 Expected: a licensed Spine 4.3.x editor executable is found. Do not print activation data.
+
+Evaluation checkpoint: `REFERENCE_REPRODUCTION_EVALUATION_PASS` at runtime commit `51aad49f3e5db76e91c1c7f1800b0e7536bad11b`. Evidence is under `build/lgo-spine-production-proof-01/reference-automated/`. This does not complete Task 2 or Task 3 because the required `client/Unity` integration is still license-blocked.
 
 ---
 

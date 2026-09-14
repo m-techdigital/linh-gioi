@@ -25,6 +25,7 @@ class LgoNextTaskTests(unittest.TestCase):
         note = execution_blocker_owner_note("BLOCKED_SPINE_TOOLING")
 
         self.assertIn("Spine Professional 4.3", note)
+        self.assertIn("client/Unity", note)
         self.assertNotIn("Krita", note)
 
     def test_native_authoring_capability_blocker_stops_ready_advice(self):

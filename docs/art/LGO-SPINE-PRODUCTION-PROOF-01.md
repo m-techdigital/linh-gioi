@@ -4,7 +4,7 @@ Date: 2026-09-14
 
 Task: `LGO-SPINE-PRODUCTION-PROOF-01`
 
-Current phase: `TOOLCHAIN_PREFLIGHT`
+Current phase: `LICENSE_GATE_BEFORE_LGO_INTEGRATION`
 Current decision: `BLOCKED_SPINE_TOOLING`
 
 ## Decision and verified basis
@@ -62,16 +62,20 @@ Failure at a phase blocks dependent phases. A compiler PASS, object count or scr
 |---|---|---|
 | Unity project/editor | PASS | `client/Unity`, editor 6000.3.2f1 exists |
 | URP | PASS | package 17.3.0 |
-| Spine Professional editor | BLOCKED | no `Spine.app` or executable found |
+| Spine Trial editor | PASS | official macOS Apple Silicon Trial installed at `~/Applications/SpineTrial.app`; launcher 4.3.08 loaded editor 4.3.26 |
+| Spine Professional editor | BLOCKED | Trial cannot save/export; no activated Professional seat is available |
 | Valid Spine license | BLOCKED | no locally usable licensed installation detected |
-| spine-csharp/spine-unity 4.3 | BLOCKED | absent from Packages and Assets |
-| Official Spine Examples | BLOCKED | absent from project |
-| Spine skeleton/atlas import | NOT EXECUTED | depends on runtime installation |
-| Reference Player proof | NOT EXECUTED | depends on licensed/runtime preflight |
+| spine-csharp/spine-unity 4.3 evaluation | PASS | official commit `51aad49f3e5db76e91c1c7f1800b0e7536bad11b`; packages 4.3.39/4.3.107 in isolated build workspace |
+| Official Spine Examples evaluation | PASS | official `Mix and Match Skins` source opened in Trial and imported into isolated Unity evaluation project |
+| Spine skeleton/atlas import evaluation | PASS | official 4.3 export imported without compiler/import errors |
+| Reference Player evaluation | PASS | graphics Player captured base, bag, backpack, remove, restore, combined skin and two walk phases |
+| LGO project integration | BLOCKED | license required before adding Spine Runtimes to `client/Unity` |
 
-Machine-readable evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json`.
+Machine-readable evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json` and `build/lgo-spine-production-proof-01/reference-evaluation.json`. Visual board: `build/lgo-spine-production-proof-01/reference-automated/contact-sheet.png`.
 
-Smallest unblock action: install and activate one valid Spine Professional 4.3.x seat on this machine and provide the `Spine.app` path. The activation code must not be pasted into chat, source control, logs or evidence. After that, install official spine-csharp, spine-unity and examples from the matching 4.3 line and reproduce the official sample before touching LGO assets.
+Smallest unblock action: purchase/provision and activate one valid Spine Professional 4.3.x seat on this machine. The activation code must not be pasted into chat, source control, logs or evidence. After activation, use the already verified 4.3 runtime line in `client/Unity`, reproduce the same Player sequence there, then begin authoritative LGO source admission.
+
+The evaluation PASS proves the official workflow and local Unity/tool compatibility. It does not prove LGO body quality, Pháp sleeves, run/jump proportions or permission to ship/integrate the runtime.
 
 ## Legacy classification
 

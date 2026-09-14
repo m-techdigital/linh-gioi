@@ -1,6 +1,6 @@
 ## LGO Spine production proof preflight — 2026-09-14
 
-`BLOCKED_SPINE_TOOLING`. The proposal is technically credible but not assumed proven for LGO. Official documentation confirms Mix-and-Match skins/template attachments and spine-unity 4.3 compatibility with Unity 6000.3.2f1. Local audit found Unity/URP ready but no Spine Editor, usable Professional installation, spine-unity/examples or Spine data. Because Spine licensing is required for runtime integration and the proof requires Professional mesh/weights/IK, implementation stopped before package or LGO asset changes. Active goal, spec, phased plan, legacy classification and handoff now point only to `LGO-SPINE-PRODUCTION-PROOF-01`; smallest unblock is owner installation/activation of Spine Professional 4.3.x.
+`BLOCKED_SPINE_TOOLING`, narrowed to the license boundary. Official Trial 4.3.26, spine-csharp 4.3.39 and spine-unity 4.3.107 were installed in isolated evaluation space. The official Mix-and-Match source opened in Trial; Unity 6000.3.2f1 built and ran the official scene with 0 build errors/warnings. Eight Player captures visibly prove base, bag, backpack, remove, restore, combined skin and two walk phases. No package entered `client/Unity` and no LGO asset changed. Trial cannot save/export and the runtime requires a valid license for LGO integration, so the next action is provisioning/activating Spine Professional 4.3.x, then repeating the verified sequence in the authoritative project.
 
 ## Character base generation bounded failure — historical, superseded 2026-09-14
 
