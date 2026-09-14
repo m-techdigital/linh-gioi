@@ -36,6 +36,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(profile.EquippedSkillIndices.Count, Is.EqualTo(4));
                 Assert.That(profile.SpiritPet, Is.Not.Null);
                 Assert.That(profile.SpiritPet.Synergy, Is.Not.Empty);
+                Assert.That(profile.SpiritPet.Skills.Count, Is.EqualTo(2),
+                    profile.Id + " must bind both fixed spirit-pet skill rows.");
+                Assert.That(profile.SpiritPet.Skills.All(skill => !string.IsNullOrEmpty(skill.IconId)
+                    && !string.IsNullOrEmpty(skill.Description)), Is.True);
                 Assert.That(profile.Skills.All(skill => !string.IsNullOrEmpty(skill.Description)), Is.True);
                 Assert.That(profile.Potentials.All(potential => !string.IsNullOrEmpty(potential.Description)), Is.True);
                 if (profile.Id != "kiem")
@@ -797,6 +801,7 @@ namespace LinhGioi.Tests.EditMode
                 var skillNode0 = root.Q<Button>("Map01A Skill Node 0");
                 var potentialNode0 = root.Q<Button>("Map01A Potential Node 0");
                 var potentialTopology = root.Q("Map01A Potential Topology Base");
+                var spiritSkillRow0 = root.Q("Map01A Spirit Pet Skill Row 0");
                 Assert.That(potentialTopology, Is.Not.Null,
                     "The circles, outer ring and connectors must be one prebuilt shared topology behind class-bound icons.");
                 Assert.That(potentialTopology.ClassListContains("lgo-potential-topology"), Is.True);
@@ -809,6 +814,11 @@ namespace LinhGioi.Tests.EditMode
                     "Potential buttons are interaction/data overlays on the shared vector base.");
                 Assert.That(potentialNode0.style.borderLeftWidth.value, Is.EqualTo(0));
                 Assert.That(potentialNode0.style.borderTopWidth.value, Is.EqualTo(0));
+                Assert.That(spiritSkillRow0, Is.Not.Null,
+                    "Spirit pet skill rows must be prebuilt once and rebound from profile data.");
+                Assert.That(root.Q("Map01A Spirit Pet Skill Row 1"), Is.Not.Null);
+                Assert.That(root.Q<VisualElement>("Map01A Spirit Pet Skill Row 0 Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01ASkillIconSprite("ho_the")));
 
                 var sourcePose = new GameObject("shared topology class actor").AddComponent<TwoDSourcePoseReview>();
                 sourcePose.transform.SetParent(scene.transform, false);
@@ -825,6 +835,7 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(root.Q("Map01A Skills Panel"), Is.SameAs(skillsPanel), profile.Id);
                     Assert.That(root.Q("Map01A Potential Panel"), Is.SameAs(potentialPanel), profile.Id);
                     Assert.That(root.Q("Map01A Spirit Pet Panel"), Is.SameAs(spiritPanel), profile.Id);
+                    Assert.That(root.Q("Map01A Spirit Pet Skill Row 0"), Is.SameAs(spiritSkillRow0), profile.Id);
                     Assert.That(root.Q<Button>("Map01A Skill Node 0"), Is.SameAs(skillNode0), profile.Id);
                     Assert.That(root.Q<Button>("Map01A Potential Node 0"), Is.SameAs(potentialNode0), profile.Id);
                     Assert.That(root.Q("Map01A Potential Topology Base"), Is.SameAs(potentialTopology), profile.Id);
@@ -836,6 +847,8 @@ namespace LinhGioi.Tests.EditMode
                         Is.EqualTo(profile.Potentials[0].Name), profile.Id);
                     Assert.That(root.Q<Label>("Map01A Spirit Pet Identity").text,
                         Does.Contain(profile.Label), profile.Id);
+                    Assert.That(root.Q<Label>("Map01A Spirit Pet Skill Row 0 Name").text,
+                        Is.EqualTo("Thanh Vân Hộ Thể"), profile.Id);
                 }
             }
             finally

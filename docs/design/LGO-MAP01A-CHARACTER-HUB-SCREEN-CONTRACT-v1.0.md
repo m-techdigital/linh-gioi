@@ -94,6 +94,8 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ### 5. Linh thú
 
+- Preview, thanh thân mật/tăng trưởng, roster bốn ô, inspector và đúng hai hàng kỹ năng được dựng một lần trên shared component tree. `CharacterHubSpiritPetPreview` chỉ bind art có provenance, tên/cấp, badge, chỉ số, hai skill icon/name/level/description và trạng thái vào các control có sẵn; không ghép toàn bộ skill thành một chuỗi text hoặc dựng lại row theo class.
+
 - Main workspace: hero art lớn, identity/progress và roster ngang ở đáy.
 - Detail-right: portrait, thuộc tính, kỹ năng và action; dùng asset provenance-backed hiện hành, không letterbox canvas vuông.
 

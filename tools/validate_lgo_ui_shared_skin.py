@@ -343,6 +343,8 @@ REQUIRED_PARTIAL_MARKERS = {
         "InitializeSkillsView(body)",
         "InitializePotentialView(body)",
         "InitializeSpiritPetView(body)",
+        "Map01A Spirit Pet Skill Row ",
+        "CharacterHubSpiritPetPreview.SkillPreview",
         "InitializeHubInspector(body)",
         "BindCharacterHubProfile()",
         "ApplyLgoDisabledAction(action)",

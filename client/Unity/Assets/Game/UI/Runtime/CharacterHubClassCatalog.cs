@@ -49,8 +49,25 @@ namespace LinhGioi.UI
 
     public sealed class CharacterHubSpiritPetPreview
     {
+        public sealed class SkillPreview
+        {
+            public SkillPreview(string name, string level, string iconId, string description)
+            {
+                Name = name;
+                Level = level;
+                IconId = iconId;
+                Description = description;
+            }
+
+            public string Name { get; }
+            public string Level { get; }
+            public string IconId { get; }
+            public string Description { get; }
+        }
+
         public CharacterHubSpiritPetPreview(string name, string level, string artResource,
-            string rarity, string role, string state, string stats, string skills, string synergy)
+            string rarity, string role, string state, string stats,
+            IReadOnlyList<SkillPreview> skills, string synergy)
         {
             Name = name;
             Level = level;
@@ -70,7 +87,7 @@ namespace LinhGioi.UI
         public string Role { get; }
         public string State { get; }
         public string Stats { get; }
-        public string Skills { get; }
+        public IReadOnlyList<SkillPreview> Skills { get; }
         public string Synergy { get; }
     }
 
@@ -204,7 +221,14 @@ namespace LinhGioi.UI
                 "Thanh Vân Hồ", "Lv.20", "LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview",
                 "Tinh phẩm", "Hỗ trợ", "Đang xuất chiến",
                 "Thuộc tính Linh thú\nHP  +8720\nTấn Công  +860\nPhòng Thủ  +430\nHồi Phục  +28%\nGiảm Sát Thương  +12%",
-                "Kỹ năng Linh thú\nThanh Vân Hộ Thể · Lv.1\nCửu Vĩ Linh Phong · Lv.1", synergy);
+                new[]
+                {
+                    new CharacterHubSpiritPetPreview.SkillPreview(
+                        "Thanh Vân Hộ Thể", "Lv.1", "ho_the", "Tạo lá chắn trị liệu cho chủ nhân."),
+                    new CharacterHubSpiritPetPreview.SkillPreview(
+                        "Cửu Vĩ Linh Phong", "Lv.1", "phong_tram", "Tung linh phong hỗ trợ đồng đội.")
+                },
+                synergy);
 
         private static readonly CharacterHubClassProfile[] Items =
         {

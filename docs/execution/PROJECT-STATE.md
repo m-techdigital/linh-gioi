@@ -1,3 +1,12 @@
+## Character Hub — Linh thú có skill row cố định, profile chỉ bind dữ liệu — 2026-09-15
+
+- Audit canonical `05-linh-thu-five-tab-APPROVED.png` cho thấy inspector runtime cũ gộp hai kỹ năng Linh thú thành text, trong khi design yêu cầu hai row có icon/name/level/description. Đây là cùng lỗi khó mở rộng: presentation bị nhét vào copy thay vì component tree cố định.
+- Inspector Linh thú nay dựng đúng hai skill row một lần. `CharacterHubSpiritPetPreview.SkillPreview` cấp dữ liệu; bind class chỉ thay art/identity/badge/stats/skill/synergy trên control có sẵn. Hai icon dùng atlas skill hiện hành có provenance (`ho_the`, `phong_tram`), không tạo placeholder hoặc art class mới.
+- TDD RED `0/1` vì thiếu `Map01A Spirit Pet Skill Row 0`, GREEN `1/1`; test giữ nguyên reference hai row khi bind đủ `Võ/Kiếm/Pháp/Cơ/Linh` và kiểm icon/text. Player v1/v2 phát hiện overflow thật ở row thứ hai/cộng hưởng; bản v3 bỏ copy ngoài canonical và co typography ở shared row, không còn chồng status/action.
+- Player `build/map01a-character-hub-spirit-base-player-v3/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=48`. Evidence `build/map01a-character-hub-spirit-base-runtime-v3/{pc,mobile,tablet}/` đạt 9 frame/profile, `usesOsMouseOrKeyboard=false`; đã xem trực tiếp Linh thú trên ba viewport, hai skill row/status/action không overlap.
+- Gate cuối: full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared governance `23/23`; pose pack `12/12`; registered capture `19/19`; no-3D/no-source-images pass. Frozen diff/change-budget/`git diff --check` được chạy sau khi loại Unity import churn.
+- Trạng thái `CONTINUE`: audit tích hợp năm tab sau checkpoint; không mở class/pose/wardrobe/source art.
+
 ## Character Hub — Tiềm năng dùng một vector template hoàn chỉnh — 2026-09-15
 
 - Audit theo feedback owner xác nhận topology trước chỉ sở hữu vòng ngoài và đường nối, còn năm button vẫn tự vẽ border tròn. Cấu trúc đó tuy không rebuild theo class nhưng vẫn chia presentation của cùng một graph qua nhiều control.
