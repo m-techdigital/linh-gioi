@@ -1,0 +1,160 @@
+{
+  "id": "map01a-character-equipment-icons-v1",
+  "status": "DRAFT_RUNTIME_REVIEW",
+  "runtimeApproved": false,
+  "canonicalScreen": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/01-nhan-vat-nam-tab-compact-APPROVED.png",
+  "sourceImagegen": "/Users/minhdc/.codex/generated_images/01a08f32-6e63-7b20-b705-259faaa286c0/exec-c667545e-04fb-4af7-9a47-d69df2a7043f.png",
+  "sourceBoard": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/assets-character-equipment/character-equipment-10-icon-atlas-SELF-REVIEWED-v1.png",
+  "alphaPolicy": "grabcut-checker-removal-v2",
+  "textureSize": [
+    640,
+    256
+  ],
+  "cellSize": [
+    128,
+    128
+  ],
+  "pngBytes": 195785,
+  "sha256": "0475270c24a0a8f6434984e4f349415cd5c1e111ae979809a3ecb4b9a4e0714e",
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ACharacterEquipmentIcons/map01a-character-equipment-icons.png",
+      "role": "ui-equipment-icon-atlas",
+      "generator": "image_gen_alpha_extraction",
+      "referenceOnly": false,
+      "sha256": "0475270c24a0a8f6434984e4f349415cd5c1e111ae979809a3ecb4b9a4e0714e"
+    }
+  ],
+  "parts": [
+    {
+      "id": "main_weapon",
+      "x": 0,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        9,
+        9,
+        124,
+        123
+      ]
+    },
+    {
+      "id": "head_hair",
+      "x": 128,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        20,
+        24,
+        121,
+        124
+      ]
+    },
+    {
+      "id": "inner_top",
+      "x": 256,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        7,
+        23,
+        120,
+        124
+      ]
+    },
+    {
+      "id": "outer_top",
+      "x": 384,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        4,
+        16,
+        121,
+        124
+      ]
+    },
+    {
+      "id": "lower_body",
+      "x": 512,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        13,
+        16,
+        115,
+        124
+      ]
+    },
+    {
+      "id": "waist_belt",
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        20,
+        21,
+        124,
+        117
+      ]
+    },
+    {
+      "id": "arm_guard",
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        20,
+        18,
+        119,
+        111
+      ]
+    },
+    {
+      "id": "footwear",
+      "x": 256,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        16,
+        15,
+        104,
+        115
+      ]
+    },
+    {
+      "id": "shoulder_chest_guard",
+      "x": 384,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        4,
+        12,
+        124,
+        117
+      ]
+    },
+    {
+      "id": "class_accessory",
+      "x": 512,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "alphaBoundsTopLeft": [
+        9,
+        12,
+        110,
+        121
+      ]
+    }
+  ]
+}

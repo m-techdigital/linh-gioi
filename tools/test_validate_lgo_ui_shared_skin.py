@@ -88,6 +88,20 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("Character hub dùng một hàng tab gọn" in item for item in violations), violations)
 
+    def test_rejects_item_frame_reintroduced_around_full_body_character(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            inventory = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs"
+            text = inventory.read_text(encoding="utf-8").replace(
+                "_characterHeroPortrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;",
+                "ApplyLgoItemIcon(_characterHeroPortrait);\n            _characterHeroPortrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;",
+                1,
+            )
+            inventory.write_text(text, encoding="utf-8")
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoItemIcon(_characterHeroPortrait)" in item for item in violations), violations)
+
     def test_rejects_inventory_detail_added_before_shared_content_columns(self) -> None:
         with self._copy_minimal_repo() as temp:
             inventory = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs"

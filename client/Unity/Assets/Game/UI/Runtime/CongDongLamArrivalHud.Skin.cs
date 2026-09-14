@@ -335,6 +335,7 @@ namespace LinhGioi.UI
         {
             badge.AddToClassList(LgoInventoryStateBadgeClass);
             badge.style.marginTop = 8;
+            badge.style.alignSelf = Align.FlexStart;
             badge.style.paddingLeft = badge.style.paddingRight = 10;
             badge.style.paddingTop = badge.style.paddingBottom = 5;
             badge.style.unityTextAlign = TextAnchor.MiddleCenter;
@@ -388,9 +389,9 @@ namespace LinhGioi.UI
             button.style.flexGrow = 1;
             button.style.flexBasis = 0;
             button.style.minWidth = 0;
-            button.style.minHeight = touch ? 38 : 32;
-            button.style.fontSize = 13;
-            button.style.marginRight = 4;
+            button.style.minHeight = 50;
+            button.style.fontSize = 16;
+            button.style.marginRight = 8;
         }
 
         private static void ApplyLgoInventoryFilterChip(Button button, bool touch)

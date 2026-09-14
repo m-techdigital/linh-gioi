@@ -19,12 +19,13 @@ def write_json(path: Path, data: dict) -> None:
 
 
 class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
-    def test_current_catalog_uses_approved_five_tab_player_and_excludes_legacy_class_select(self) -> None:
+    def test_current_catalog_uses_screen_locked_character_player_and_excludes_legacy_flows(self) -> None:
         text = (ROOT / validator.DOC).read_text(encoding="utf-8")
         current_paths = validator.iter_current_evidence_paths(text)
 
-        self.assertIn("build/map01a-shared-layout-runtime-v4/spirit-pet.png", current_paths)
-        self.assertIn("build/map01a-shared-layout-runtime-v4/bag-search-binh-mau-selected.png", current_paths)
+        self.assertIn("build/map01a-character-screen-runtime-v5/pc/character-info-selected.png", current_paths)
+        self.assertIn("build/map01a-character-screen-runtime-v5/pc/character-info-locked.png", current_paths)
+        self.assertFalse(any("map01a-shared-layout-runtime-v4" in path for path in current_paths), current_paths)
         self.assertFalse(any("map01a-five-tab-player-copy-runtime-v1" in path for path in current_paths), current_paths)
         self.assertFalse(any("character-select" in path for path in current_paths), current_paths)
         self.assertFalse(any("inventory-tab-runtime" in path for path in current_paths), current_paths)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace LinhGioi.UI
         private VisualElement _inventoryItemsGrid, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterHeroLeftEquipmentRail, _characterHeroRightEquipmentRail, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard, _inventoryCategoryRail;
         private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState;
         private Button _bagTab, _characterInfoTab, _skillsTab, _potentialTab, _spiritPetTab, _allItemsTab, _equipmentTab, _suppliesTab, _materialsTab, _otherItemsTab;
-        private Button _inventoryDetailPrimaryAction;
+        private Button _inventoryDetailPrimaryAction, _inventoryDetailLockAction;
         private TextField _inventorySearchField;
         private Button[] _equipmentTiles;
         private VisualElement[] _emptyBagSlots;
@@ -23,6 +24,7 @@ namespace LinhGioi.UI
         private string _inventoryCategory = "all";
         private string _inventorySearchQuery = string.Empty;
         private string _selectedSupplyItemId = "health_potion";
+        private readonly HashSet<string> _lockedEquipmentItemIds = new HashSet<string>();
 
         private bool IsInventoryCompactShellActive() => !_characterInfoOpen;
 
@@ -129,7 +131,8 @@ namespace LinhGioi.UI
             header.style.alignItems = Align.Center;
             var titleGroup = new VisualElement();
             titleGroup.style.flexGrow = 1;
-            _inventoryModalTitle = LgoTitleLabel("HÀNH TRANG", 20);
+            titleGroup.style.marginLeft = 20;
+            _inventoryModalTitle = LgoTitleLabel("HÀNH TRANG", 26);
             _inventoryModalTitle.name = "Map01A Inventory Modal Title";
             _inventoryModalSubtitle = LgoSubtitleLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 13);
             _inventoryModalSubtitle.name = "Map01A Inventory Modal Subtitle";
@@ -143,11 +146,13 @@ namespace LinhGioi.UI
             header.Add(titleGroup); header.Add(close); _inventory.Add(header);
             var topOrnament = new VisualElement { name = "Map01A Inventory Modal Top Ornament" };
             ApplyLgoOrnamentRail(topOrnament);
-            topOrnament.style.marginTop = 8;
-            topOrnament.style.marginBottom = 10;
+            topOrnament.style.display = DisplayStyle.None;
             _inventory.Add(topOrnament);
 
             var mainTabs = InventoryRow("Map01A Inventory Main Tabs");
+            mainTabs.style.width = 992;
+            mainTabs.style.alignSelf = Align.FlexStart;
+            mainTabs.style.marginLeft = 20;
             _characterInfoTab = InventoryButton(() => ShowInventoryMode(true), "Map01A Character Info Main Tab", "Nhân vật");
             _bagTab = InventoryButton(() => ShowInventoryMode(false), "Map01A Bag Main Tab", "Rương đồ");
             _skillsTab = InventoryButton(() => ShowCharacterHubPreviewMode(CharacterHubMode.Skills), "Map01A Skills Main Tab", "Kỹ năng");
@@ -200,6 +205,7 @@ namespace LinhGioi.UI
             _inventoryDetailPanel.Add(detailScroll);
             _inventoryDetailHeader = LgoLabel("CHI TIẾT MÓN", 15, new Color(.73f, .85f, .88f, .92f), true);
             _inventoryDetailHeader.name = "Map01A Inventory Detail Header";
+            _inventoryDetailHeader.style.display = DisplayStyle.None;
             _inventoryFooter.Add(_inventoryDetailHeader);
             var detailHero = InventoryRow("Map01A Inventory Detail Hero");
             detailHero.style.alignItems = Align.Center;
@@ -208,8 +214,8 @@ namespace LinhGioi.UI
             _inventoryDetailIcon = LgoLabel("", 42, UiGold, true);
             _inventoryDetailIcon.name = "Map01A Inventory Detail Icon";
             ApplyLgoItemIcon(_inventoryDetailIcon);
-            _inventoryDetailIcon.style.width = 88;
-            _inventoryDetailIcon.style.height = 88;
+            _inventoryDetailIcon.style.width = 112;
+            _inventoryDetailIcon.style.height = 112;
             _inventoryDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             _inventoryDetailIcon.style.marginTop = 0;
             _inventoryDetailIcon.style.marginBottom = 0;
@@ -219,10 +225,10 @@ namespace LinhGioi.UI
             detailHeroText.style.flexGrow = 1;
             detailHeroText.style.minWidth = 0;
             detailHeroText.style.flexDirection = FlexDirection.Column;
-            _equipmentDetail = LgoLabel("", 18, UiGold, true);
+            _equipmentDetail = LgoLabel("", 22, UiGold, true);
             _equipmentDetail.name = "Map01A Inventory Detail Item Name";
             detailHeroText.Add(_equipmentDetail);
-            _inventoryDetailRarity = LgoLabel("", 14, new Color(.74f, .92f, 1f, .94f), true);
+            _inventoryDetailRarity = LgoLabel("", 16, new Color(.74f, .92f, 1f, .94f), true);
             _inventoryDetailRarity.name = "Map01A Inventory Detail Rarity";
             _inventoryDetailRarity.style.marginTop = 2;
             detailHeroText.Add(_inventoryDetailRarity);
@@ -271,12 +277,14 @@ namespace LinhGioi.UI
             actions.style.flexShrink = 0;
             _inventoryDetailPrimaryAction = InventoryButton(UseInventoryDetailPrimaryAction, "Map01A Inventory Detail Primary Action");
             _inventoryDetailPrimaryAction.style.minHeight = _touch ? 44 : 38;
+            _inventoryDetailLockAction = InventoryButton(ToggleSelectedEquipmentLock, "Map01A Inventory Detail Lock Action", "Khóa");
+            ApplyLgoButton(_inventoryDetailLockAction, true);
             _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
             _equipmentToggle.style.display = DisplayStyle.None;
             _equipmentVariant = InventoryButton(() => { _scene.CycleVoSelectedEquipmentItemLevel(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
             _equipmentVariant.style.display = DisplayStyle.None;
             _equipmentVariant.style.minHeight = _touch ? 44 : 38;
-            actions.Add(_inventoryDetailPrimaryAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
+            actions.Add(_inventoryDetailPrimaryAction); actions.Add(_inventoryDetailLockAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
             _inventoryDetailPanel.Add(actions);
 
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
@@ -399,24 +407,33 @@ namespace LinhGioi.UI
             _characterHeroCard.style.flexDirection = FlexDirection.Row;
             _characterHeroCard.style.alignItems = Align.Center;
             _characterHeroCard.style.justifyContent = Justify.Center;
-            _characterHeroCard.style.minHeight = 370;
-            _characterHeroCard.style.marginTop = 10;
-            _characterHeroCard.style.marginBottom = 8;
+            _characterHeroCard.style.height = 430;
+            _characterHeroCard.style.minHeight = 430;
+            _characterHeroCard.style.flexShrink = 0;
+            _characterHeroCard.style.marginTop = 0;
+            _characterHeroCard.style.marginBottom = 4;
             ApplyLgoDetailCard(_characterHeroCard, 12, 10);
+            _characterHeroCard.style.backgroundColor = Color.clear;
+            _characterHeroCard.style.borderTopWidth = 0;
+            _characterHeroCard.style.borderBottomWidth = 0;
+            _characterHeroCard.style.borderLeftWidth = 0;
+            _characterHeroCard.style.borderRightWidth = 0;
             _inventoryHeroPanel.Add(_characterHeroCard);
 
             _characterHeroLeftEquipmentRail = new VisualElement { name = "Map01A Character Hero Left Equipment Rail" };
             _characterHeroLeftEquipmentRail.style.flexDirection = FlexDirection.Column;
             _characterHeroLeftEquipmentRail.style.flexGrow = 0;
-            _characterHeroLeftEquipmentRail.style.width = 54;
-            _characterHeroLeftEquipmentRail.style.marginRight = 10;
+            _characterHeroLeftEquipmentRail.style.width = 68;
+            _characterHeroLeftEquipmentRail.style.height = 420;
+            _characterHeroLeftEquipmentRail.style.justifyContent = Justify.SpaceBetween;
+            _characterHeroLeftEquipmentRail.style.marginRight = 8;
             _characterHeroCard.Add(_characterHeroLeftEquipmentRail);
 
             _characterHeroPortrait = new VisualElement { name = "Map01A Character Hero Portrait" };
-            ApplyLgoItemIcon(_characterHeroPortrait);
-            _characterHeroPortrait.style.width = 300;
-            _characterHeroPortrait.style.height = 350;
-            _characterHeroPortrait.style.marginRight = 10;
+            _characterHeroPortrait.style.width = 380;
+            _characterHeroPortrait.style.height = 420;
+            _characterHeroPortrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            _characterHeroPortrait.style.marginRight = 8;
             _characterHeroPortrait.style.marginTop = 0;
             _characterHeroPortrait.style.marginBottom = 0;
             _characterHeroCard.Add(_characterHeroPortrait);
@@ -424,7 +441,9 @@ namespace LinhGioi.UI
             _characterHeroRightEquipmentRail = new VisualElement { name = "Map01A Character Hero Right Equipment Rail" };
             _characterHeroRightEquipmentRail.style.flexDirection = FlexDirection.Column;
             _characterHeroRightEquipmentRail.style.flexGrow = 0;
-            _characterHeroRightEquipmentRail.style.width = 54;
+            _characterHeroRightEquipmentRail.style.width = 68;
+            _characterHeroRightEquipmentRail.style.height = 420;
+            _characterHeroRightEquipmentRail.style.justifyContent = Justify.SpaceBetween;
             _characterHeroRightEquipmentRail.style.marginRight = 0;
             _characterHeroCard.Add(_characterHeroRightEquipmentRail);
 
@@ -440,6 +459,7 @@ namespace LinhGioi.UI
             _characterHeroPower.name = "Map01A Character Hero Power";
             _characterHeroLoadout = LgoLabel("", 13, new Color(.76f, 1f, .70f, .94f), true);
             _characterHeroLoadout.name = "Map01A Character Hero Loadout";
+            _characterHeroLoadout.style.display = DisplayStyle.None;
             _characterHeroLoadoutStrip = new VisualElement { name = "Map01A Character Hero Loadout Strip" };
             _characterHeroLoadoutStrip.style.display = DisplayStyle.None;
             _characterHeroQuickIcons = new VisualElement[_equipmentSlotIds.Count];
@@ -448,10 +468,15 @@ namespace LinhGioi.UI
                 var slotId = _equipmentSlotIds[heroIconIndex];
                 var quickIcon = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "Map01A Character Hero Quick Icon " + heroIconIndex);
                 ApplyLgoItemIcon(quickIcon);
-                quickIcon.style.width = 50;
-                quickIcon.style.height = 50;
+                quickIcon.style.flexGrow = 0;
+                quickIcon.style.flexShrink = 0;
+                quickIcon.style.flexBasis = 68;
+                quickIcon.style.width = 68;
+                quickIcon.style.height = 68;
+                quickIcon.style.minHeight = 68;
+                quickIcon.style.maxHeight = 68;
                 quickIcon.style.marginTop = 0;
-                quickIcon.style.marginBottom = 6;
+                quickIcon.style.marginBottom = 0;
                 quickIcon.style.marginRight = 0;
                 quickIcon.tooltip = EquipmentDisplayName(slotId);
                 _characterHeroQuickIcons[heroIconIndex] = quickIcon;
@@ -461,7 +486,7 @@ namespace LinhGioi.UI
             heroInfo.Add(_characterHeroName);
             heroInfo.Add(_characterHeroPower);
             var heroVitalsBars = InventoryRow("Map01A Character Hero Vitals Bars");
-            heroVitalsBars.style.width = 340;
+            heroVitalsBars.style.width = 290;
             heroVitalsBars.style.marginTop = 2;
             heroVitalsBars.style.marginBottom = 2;
             _characterHeroHealth = MakeVital("Map01A Character Hero Health", new Color(.67f, .16f, .15f));
@@ -688,6 +713,15 @@ namespace LinhGioi.UI
             RefreshInventoryDetailCard();
         }
 
+        private void ToggleSelectedEquipmentLock()
+        {
+            if (_scene == null || _suppliesOpen) return;
+            var itemId = _scene.GetVoEquipmentItemId(_scene.VoSelectedEquipmentSlot);
+            if (string.IsNullOrEmpty(itemId)) return;
+            if (!_lockedEquipmentItemIds.Remove(itemId)) _lockedEquipmentItemIds.Add(itemId);
+            RefreshInventoryDetailCard();
+        }
+
         private void ShowInventoryMode(bool characterInfo)
         {
             HideCharacterHubPreviewPanels();
@@ -849,7 +883,9 @@ namespace LinhGioi.UI
                 _equipmentRows[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
                     ? new Color(.16f, .48f, .50f, .96f)
                     : equipped ? new Color(.06f, .13f, .17f, .94f) : new Color(.035f, .055f, .065f, .82f);
-                var thumbnail = _scene.GetVoEquipmentThumbnailSprite(slotId);
+                var thumbnail = _characterInfoOpen
+                    ? _scene.GetMap01ACharacterEquipmentIconSprite(slotId)
+                    : _scene.GetVoEquipmentThumbnailSprite(slotId);
                 if (_equipmentRowNames != null && index < _equipmentRowNames.Length)
                     _equipmentRowNames[index].text = (equipped ? "✓ " : "○ ") + EquipmentShortName(slotId);
                 if (_equipmentRowStates != null && index < _equipmentRowStates.Length)
@@ -879,8 +915,7 @@ namespace LinhGioi.UI
         private void RefreshCharacterHeroCard()
         {
             if (_scene == null || _characterHeroCard == null) return;
-            var gender = _scene.VoAvatarGender == "female" ? "Nữ" : "Nam";
-            if (_characterHeroName != null) _characterHeroName.text = "LụcThiên · " + _scene.ActiveEquipmentClassLabel + " " + gender;
+            if (_characterHeroName != null) _characterHeroName.text = "LụcThiên";
             if (_characterHeroPower != null) _characterHeroPower.text = "LC 245.780";
             if (_characterHeroHealth != null)
             {
@@ -906,7 +941,7 @@ namespace LinhGioi.UI
             for (var i = 0; i < _characterHeroQuickIcons.Length; i++)
             {
                 var slot = i < _equipmentSlotIds.Count ? _equipmentSlotIds[i] : null;
-                var sprite = string.IsNullOrEmpty(slot) ? null : _scene.GetVoEquipmentThumbnailSprite(slot);
+                var sprite = string.IsNullOrEmpty(slot) ? null : _scene.GetMap01ACharacterEquipmentIconSprite(slot);
                 _characterHeroQuickIcons[i].style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
                 _characterHeroQuickIcons[i].style.display = sprite == null ? DisplayStyle.None : DisplayStyle.Flex;
             }
@@ -928,32 +963,45 @@ namespace LinhGioi.UI
                 return;
             }
             _inventoryDetailHeader.text = "CHI TIẾT MÓN";
+            _inventoryDetailHeader.style.display = DisplayStyle.None;
             if (_inventoryDetailPrimaryAction != null) _inventoryDetailPrimaryAction.SetEnabled(true);
             var selectedSlot = _scene.VoSelectedEquipmentSlot;
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
             var selectedLevel = _scene.GetVoEquipmentItemLevel(selectedSlot);
             var selectedName = EquipmentDisplayName(selectedSlot);
-            var thumbnail = _scene.GetVoEquipmentThumbnailSprite(selectedSlot);
+            var selectedItemId = _scene.GetVoEquipmentItemId(selectedSlot);
+            var selectedLocked = _lockedEquipmentItemIds.Contains(selectedItemId);
+            if (_inventoryDetailLockAction != null)
+            {
+                _inventoryDetailLockAction.style.display = DisplayStyle.Flex;
+                _inventoryDetailLockAction.text = selectedLocked ? "Mở khóa" : "Khóa";
+            }
+            if (_inventoryDetailPrimaryAction != null) _inventoryDetailPrimaryAction.SetEnabled(!selectedLocked);
+            var thumbnail = _characterInfoOpen
+                ? _scene.GetMap01ACharacterEquipmentIconSprite(selectedSlot)
+                : _scene.GetVoEquipmentThumbnailSprite(selectedSlot);
             _inventoryDetailIcon.text = "";
             _inventoryDetailIcon.style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
             _inventoryDetailIcon.style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
-            _equipmentDetail.text = selectedName + " · Lv" + selectedLevel;
+            _equipmentDetail.text = selectedName;
             _inventoryDetailRarity.text = "Trang bị · Lv" + selectedLevel;
             _inventoryDetailSlotType.text = selectedName;
-            _inventoryItemId.text = _scene.GetVoEquipmentItemId(selectedSlot);
+            _inventoryItemId.text = selectedItemId;
             _inventoryDetailStateBadge.text = selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO";
             _inventoryItemState.text = selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.";
+            _inventoryItemState.style.display = _characterInfoOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _inventoryDetailStatPrimary.text = "Chưa có thuộc tính chiến đấu.";
             _inventoryDetailStatFit.text = "Dành cho " + _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
             RefreshInventoryDetailChips("Lv" + selectedLevel, selectedEquipped ? "Đang mặc" : "Đã tháo", _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam"));
             if (_inventoryDetailPrimaryAction != null)
-                _inventoryDetailPrimaryAction.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
+                _inventoryDetailPrimaryAction.text = selectedEquipped ? "Tháo" : "Trang bị";
             if (_equipmentToggle != null)
                 _equipmentToggle.text = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
         }
 
         private void RefreshInventorySupplyDetailCard()
         {
+            if (_inventoryDetailLockAction != null) _inventoryDetailLockAction.style.display = DisplayStyle.None;
             _inventoryDetailIcon.text = "";
             var itemSprite = _scene.GetMap01AItemThumbnailSprite(_selectedSupplyItemId);
             _inventoryDetailIcon.style.backgroundImage = itemSprite == null ? StyleKeyword.None : new StyleBackground(itemSprite);

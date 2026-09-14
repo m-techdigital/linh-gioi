@@ -1682,3 +1682,13 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Hai dòng class/vitals trùng phía trên, stat badge strip và equipment summary trùng đã ẩn để không chiếm chiều cao hoặc chồng đáy. Đây chỉ là bố cục UI thumbnail; không đổi sprite, class art, pose, wardrobe, camera hay runtime actor scale.
 - Capture v1 phát hiện identity sai cột; v2/v3 phát hiện overflow và badge overlap; các bản đó bị loại. Evidence hiện hành duy nhất: `build/map01a-character-hierarchy-runtime-v4/{character-info,bag}.png`; Player `build/map01a-character-hierarchy-player-v4/LinhGioiOnline.app`, build `errors=0`.
 - Full `TwoDCharacterRuntimeStateTests` đạt 20/20; shared-skin validator, 12 unit test, no-3D/no-source, frozen diff và capture log sạch. Visual audit v4: không chồng/cắt, actor/10 slot/detail phải đúng hierarchy; art thumbnail trang bị tối vẫn là art debt hiện hành, không được xử bằng cách mở lại class work.
+
+## Map01A — khóa layout screen Nhân vật, chuyển gate sang Rương đồ — 2026-09-14
+
+- Nguồn design duy nhất: `redesign-v4-five-tabs/01-nhan-vat-nam-tab-compact-APPROVED.png`; contract hình học nằm tại `docs/design/LGO-MAP01A-CHARACTER-HUB-SCREEN-CONTRACT-v1.0.md`.
+- Shared shell đổi sang canvas 1672×941, modal 1098×724, body hai cột 600/448 với gap 12. PC 1600×900, mobile landscape 1600×720 và tablet 1024×768 đều giữ cùng composition, không stack/reflow.
+- Main workspace giữ runtime actor hiện hành, không đổi class/pose/wardrobe/camera/scale; hai rail có 5+5 slot 68×68. Atlas UI 640×256 `map01a-character-equipment-icons-v1` cung cấp đủ mười thumbnail, có alpha, hash và provenance manifest, status `DRAFT_RUNTIME_REVIEW`.
+- Detail-right dùng chung component với Rương đồ; chọn slot cập nhật icon/tên/state. Action `Tháo/Trang bị` và `Khóa/Mở khóa` thao tác được; item khóa vô hiệu hóa action trang bị/tháo trong session.
+- Evidence Player đã xem trực tiếp: `build/map01a-character-screen-runtime-v5/{pc,mobile,tablet}/{character-info,character-info-selected,character-info-locked}.png`; không tràn/cắt/chồng, icon không co dẹt, detail luôn ở bên phải. Player: `build/map01a-character-screen-player-v5/LinhGioiOnline.app`.
+- TDD RED đúng khi chưa có action khóa; GREEN focused 1/1 và full `TwoDCharacterRuntimeStateTests` 24/24. Shared-skin guard được cập nhật để cấm bọc full-body portrait bằng item frame cũ; Python 28/28, shared-skin/no-3D/no-source/frozen/change-budget đều pass trước checkpoint.
+- Screen `Nhân vật` được khóa ở mức layout/runtime technical pass; chưa claim owner art approval cho atlas. Screen active kế tiếp duy nhất là `Rương đồ`. Scope vẫn UI/Map01A, không quay lại class work.

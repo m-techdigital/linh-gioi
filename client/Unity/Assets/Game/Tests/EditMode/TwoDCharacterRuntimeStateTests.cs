@@ -76,6 +76,8 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(args, sceneIsCapturing: false), Is.True);
             var inventoryTabArgs = new[] { "LinhGioiOnline", "--lgo-map01a-inventory-tabs-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(inventoryTabArgs), Is.True);
+            var characterScreenArgs = new[] { "LinhGioiOnline", "--lgo-map01a-character-screen-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(characterScreenArgs), Is.True);
             Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(inventoryTabArgs), Is.False,
                 "Inventory tab capture must not advance the quest capture route.");
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(inventoryTabArgs, sceneIsCapturing: true), Is.False);
@@ -229,12 +231,30 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(heroMana.ClassListContains("lgo-vital-bar"), Is.True);
                 Assert.That(heroHealth.value, Is.EqualTo(scene.PlayerHealth));
                 Assert.That(heroMana.value, Is.EqualTo(scene.PlayerMana));
-                Assert.That(root.Q<Label>("Map01A Character Hero Loadout").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Character Hero Loadout").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "The ten visible equipment slots already communicate loadout completeness; the approved identity footer keeps only name, power and vitals.");
                 Assert.That(root.Q<Label>("Map01A Character Equipment Summary").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "The bottom loadout line already carries the equipped count; a second left-aligned summary causes visual overlap.");
-                Assert.That(heroCard.style.minHeight.value.value, Is.LessThanOrEqualTo(370));
-                Assert.That(root.Q("Map01A Character Hero Left Equipment Rail").childCount, Is.EqualTo(5));
-                Assert.That(root.Q("Map01A Character Hero Right Equipment Rail").childCount, Is.EqualTo(5));
+                Assert.That(heroCard.style.height.value.value, Is.InRange(425, 435),
+                    "The canonical character workspace reserves the upper body for one readable full-body stage.");
+                var leftRail = root.Q("Map01A Character Hero Left Equipment Rail");
+                var rightRail = root.Q("Map01A Character Hero Right Equipment Rail");
+                Assert.That(leftRail.childCount, Is.EqualTo(5));
+                Assert.That(rightRail.childCount, Is.EqualTo(5));
+                Assert.That(leftRail.style.height.value.value, Is.EqualTo(420));
+                Assert.That(root.Q("Map01A Character Hero Quick Icon 0").style.height.value.value, Is.EqualTo(68),
+                    "Equipment rail icons must keep square design slots instead of flex-collapsing into short rows.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Header").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "The approved detail hierarchy starts with the selected item hero, without a redundant technical header.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.width.value.value, Is.EqualTo(112));
+                var lockAction = root.Q<Button>("Map01A Inventory Detail Lock Action");
+                var primaryAction = root.Q<Button>("Map01A Inventory Detail Primary Action");
+                Assert.That(lockAction, Is.Not.Null);
+                Assert.That(lockAction.text, Is.EqualTo("Khóa"));
+                InvokeBoundButton(lockAction);
+                Assert.That(lockAction.text, Is.EqualTo("Mở khóa"));
+                Assert.That(primaryAction.enabledSelf, Is.False,
+                    "A locked equipment item cannot be equipped or removed until it is unlocked.");
 
                 InvokeBoundButton(root.Q<Button>("Map01A Character Hero Quick Icon 7"));
                 Assert.That(scene.VoSelectedEquipmentSlot, Is.EqualTo("boots"));
@@ -281,11 +301,15 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(tab, Is.Not.Null);
                     Assert.That(tab.text, Is.EqualTo(item.Item2));
                     Assert.That(tab.style.flexGrow.value, Is.EqualTo(1),
-                        "The approved five-tab navigation must share the full modal width instead of leaving a large dead region.");
+                        "The five canonical tabs must share their compact navigation rail equally.");
                     Assert.That(tab.style.flexBasis.value.value, Is.EqualTo(0),
                         "All five tabs must derive equal width from one reusable navigation base.");
                     Assert.That(tab.ClassListContains("lgo-inventory-main-tab"), Is.True);
                 }
+                Assert.That(tabs.style.width.value.value, Is.EqualTo(992).Within(1),
+                    "The approved navigation rail is compact and leaves the close/title edge clear for future tabs.");
+                Assert.That(root.Q("Map01A Inventory Body").style.flexDirection.value, Is.EqualTo(FlexDirection.Row),
+                    "PC, tablet, and landscape mobile must preserve the canonical two-column composition.");
                 Assert.That(root.Q("Map01A Storage Main Tab"), Is.Null,
                     "The obsolete third inventory/storage tab must not remain beside the approved character-hub tabs.");
                 Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Null,
@@ -317,10 +341,16 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(characterPanel.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(equipmentDetail.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 var sharedColumns = CongDongLamArrivalHud.CalculateInventoryDesktopColumnWidths();
-                Assert.That(sharedColumns.x, Is.InRange(640, 680),
-                    "The approved layout uses a balanced main workspace rather than an oversized left column.");
-                Assert.That(sharedColumns.y, Is.InRange(410, 440),
-                    "The shared detail-right column must remain wide enough for item hierarchy and actions.");
+                Assert.That(sharedColumns.x, Is.EqualTo(600).Within(1));
+                Assert.That(sharedColumns.y, Is.EqualTo(448).Within(1));
+                for (var iconIndex = 0; iconIndex < scene.VoEquipmentSlotIds.Count; iconIndex++)
+                {
+                    var slotId = scene.VoEquipmentSlotIds[iconIndex];
+                    var expectedIcon = scene.GetMap01ACharacterEquipmentIconSprite(slotId);
+                    Assert.That(expectedIcon, Is.Not.Null, "Missing dedicated UI icon for " + slotId);
+                    Assert.That(root.Q("Map01A Character Hero Quick Icon " + iconIndex).style.backgroundImage.value.sprite,
+                        Is.EqualTo(expectedIcon), "Character rail must use the dedicated readable UI atlas for " + slotId);
+                }
 
                 InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
                 Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -392,24 +422,28 @@ namespace LinhGioi.Tests.EditMode
         [Test]
         public void InventoryModalUsesBoundedDesktopShellInsteadOfFullWidthOverlay()
         {
-            var desktop = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 1600, 900), touch: false);
+            var canonical = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 1672, 941), touch: false);
 
-            Assert.That(desktop.width, Is.InRange(1100, 1140),
-                "Desktop inventory modal should follow the approved centered RPG shell proportion instead of dominating the map.");
-            Assert.That(desktop.x, Is.InRange(230, 250),
-                "Desktop inventory modal should preserve the balanced map backdrop margins in the approved composition.");
-            Assert.That(desktop.y, Is.EqualTo(104));
-            Assert.That(desktop.height, Is.EqualTo(720));
-            Assert.That(CongDongLamArrivalHud.CalculateInventoryShellHeight(desktop, touch: false, compactShell: false),
-                Is.EqualTo(720));
-            Assert.That(CongDongLamArrivalHud.CalculateInventoryShellHeight(desktop, touch: false, compactShell: true),
-                Is.EqualTo(720),
+            Assert.That(canonical.x, Is.EqualTo(287).Within(1));
+            Assert.That(canonical.y, Is.EqualTo(127).Within(1));
+            Assert.That(canonical.width, Is.EqualTo(1098));
+            Assert.That(canonical.height, Is.EqualTo(724));
+            Assert.That(CongDongLamArrivalHud.CalculateInventoryShellHeight(canonical, touch: false, compactShell: false),
+                Is.EqualTo(724));
+            Assert.That(CongDongLamArrivalHud.CalculateInventoryShellHeight(canonical, touch: true, compactShell: true),
+                Is.EqualTo(724),
                 "Every approved character-hub tab must keep one stable outer shell instead of jumping between heights.");
 
             var compact = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 800, 480), touch: true);
-            Assert.That(compact.x, Is.EqualTo(14));
-            Assert.That(compact.width, Is.EqualTo(772),
-                "Compact/touch inventory should keep safe side margins instead of using the desktop bounded shell.");
+            Assert.That(compact.x, Is.EqualTo(24));
+            Assert.That(compact.y, Is.EqualTo(24));
+            Assert.That(compact.width, Is.EqualTo(752));
+            Assert.That(compact.height, Is.EqualTo(432));
+            var compactColumns = CongDongLamArrivalHud.CalculateInventoryColumnWidths(compact.width);
+            Assert.That(compactColumns.x / compactColumns.y, Is.EqualTo(600f / 448f).Within(.01f));
+            Assert.That(compactColumns.x + compactColumns.y + compactColumns.z,
+                Is.EqualTo(compact.width - 38).Within(.1f),
+                "Small screens must scale both canonical columns together instead of stacking detail below content.");
         }
 
         [Test]

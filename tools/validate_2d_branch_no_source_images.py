@@ -105,6 +105,15 @@ RUNTIME_ART_PACKS = [
         'status_error': 'Map01A item icons must remain draft until owner visual review',
     },
     {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ACharacterEquipmentIcons',
+        'id': 'map01a-character-equipment-icons-v1',
+        'status': 'DRAFT_RUNTIME_REVIEW',
+        'assets': {'map01a-character-equipment-icons.png': (640, 256, 'ui-equipment-icon-atlas')},
+        'generators': {'image_gen_alpha_extraction'},
+        'max_bytes': 250_000,
+        'status_error': 'Map01A character equipment icons must remain draft until owner visual review',
+    },
+    {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AHudIcons',
         'id': 'map01a-hud-icons-v1',
         'status': 'DRAFT_RUNTIME_REVIEW',

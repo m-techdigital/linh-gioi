@@ -9,23 +9,28 @@ This catalog points reviewers to the current Map01A 2D UI evidence. It is techni
 | Screen / flow | Evidence | Status |
 | --- | --- | --- |
 | Entry/login | `build/map01a-entry-remember-runtime-v1/entry-login.png` and `build/map01a-entry-remember-runtime-v1/manifest.json` | Current entry evidence; real account/password fields with masked password and honest unavailable-auth feedback; `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, `usesOsMouseOrKeyboard=false`, 1600×900 |
-| Approved five-tab character hub | `build/map01a-shared-layout-runtime-v4/character-info.png`, `build/map01a-shared-layout-runtime-v4/bag.png`, `build/map01a-shared-layout-runtime-v4/bag-search-binh-mau.png`, `build/map01a-shared-layout-runtime-v4/bag-search-binh-mau-selected.png`, `build/map01a-shared-layout-runtime-v4/skills.png`, `build/map01a-shared-layout-runtime-v4/potential.png`, `build/map01a-shared-layout-runtime-v4/spirit-pet.png`, and `build/map01a-shared-layout-runtime-v4/manifest.json` | Current five-tab layout evidence; one stable 1120×720 desktop shell, balanced 660/424 workspace/detail columns, five equal-width tabs, vertical bag categories and detail-right; `usesOsMouseOrKeyboard=false`, 1600×900. Responsive evidence: `build/map01a-shared-layout-mobile-runtime-v1/` and `build/map01a-shared-layout-tablet-runtime-v1/` |
+| Character hub — Nhân vật | `build/map01a-character-screen-runtime-v5/pc/character-info.png`, `build/map01a-character-screen-runtime-v5/pc/character-info-selected.png`, `build/map01a-character-screen-runtime-v5/pc/character-info-locked.png`, `build/map01a-character-screen-runtime-v5/pc/manifest.json`, `build/map01a-character-screen-runtime-v5/mobile/manifest.json`, and `build/map01a-character-screen-runtime-v5/tablet/manifest.json` | Current canonical screen evidence; shared 1098×724 shell, 600/448 two-column composition, 10 dedicated equipment icons, selected-item detail and lock state. Same composition at 1600×900, 1600×720 and 1024×768; `usesOsMouseOrKeyboard=false`. Layout is locked; icon atlas remains `DRAFT_RUNTIME_REVIEW` pending owner art review. |
 | Quest/HUD route | `build/map01a-completion-copy-runtime-v2/01-arrival-q01.bmp`, `build/map01a-completion-copy-runtime-v2/09-q04-starter-supplies.bmp`, `build/map01a-completion-copy-runtime-v2/10-q04-health-potion-used.bmp`, `build/map01a-completion-copy-runtime-v2/18-q09-portal-open.bmp`, and `build/map01a-completion-copy-runtime-v2/manifest.json` | Current Q01–Q09 route evidence; final tracker uses the player-facing Đông Lâm name, item detail remains functional, Q05–Q09 world view unobstructed, 18 route frames and 38 dialogue frames at 1600×900 |
 | Gameplay menu | `build/map01a-modal-input-runtime-v1/menu.png` and `build/map01a-modal-input-runtime-v1/manifest.json` | Current menu evidence; v1/v2 rejected; `usesOsMouseOrKeyboard=false`, 1600×900 |
 
 ## Required review frames
 
 - Entry/login: `build/map01a-entry-remember-runtime-v1/entry-login.png`.
-- Five approved tabs and search states: all seven PNGs under `build/map01a-shared-layout-runtime-v4/`; they must keep one equal-width navigation row, one stable outer shell, balanced main/detail columns, HP/MP bars bound to current values, accurate search-result feedback, detail on the right, and the provenance-backed spirit pet without square-canvas letterboxing.
+- Nhân vật: all nine PNGs under `build/map01a-character-screen-runtime-v5/`; they must keep one five-tab rail, one stable outer shell, 600/448 main/detail ratio, HP/MP bound to current values, detail on the right and a visible locked-action state.
 - Route start/item detail/end: `build/map01a-completion-copy-runtime-v2/01-arrival-q01.bmp`, `build/map01a-completion-copy-runtime-v2/09-q04-starter-supplies.bmp`, `build/map01a-completion-copy-runtime-v2/10-q04-health-potion-used.bmp`, and `build/map01a-completion-copy-runtime-v2/18-q09-portal-open.bmp`.
 - Menu: `build/map01a-modal-input-runtime-v1/menu.png`.
 - Current captures use internal Player flags, not OS mouse or keyboard automation. Legacy character-select and pre-five-tab inventory captures are historical evidence only and must not return to this section.
 
+## Historical five-tab baseline
+
+The superseded grouped capture remains diagnostic history only: `bag.png`, `bag-search-binh-mau.png`, `bag-search-binh-mau-selected.png`, `skills.png`, `potential.png`, and `spirit-pet.png` under `build/map01a-shared-layout-runtime-v4/`. It is not current evidence for any screen and cannot reopen a completed gate.
+
 ## Item icon source audit
 
 - Current audit: `docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md`.
-- Result: a five-item provenance-backed atlas is present for HP, MP, starter reward, dumpling and coin with status `DRAFT_RUNTIME_REVIEW`. No approved dedicated UI icon set exists for the ten equipment slots.
-- Quality guard: keep the five source-backed item images in review status; do not fill missing equipment art with fake/generic/generated icons or reopen class wardrobe work.
+- Result: a five-item provenance-backed atlas is present for HP, MP, starter reward, dumpling and coin. A separate 640×256 atlas now provides all ten equipment thumbnails for the character screen; both packs remain `DRAFT_RUNTIME_REVIEW`.
+- No approved dedicated UI icon set exists yet; the new equipment atlas is a review candidate rather than owner-approved art.
+- Quality guard: keep both atlases in review status until owner art review; equipment icons must come from the declared atlas and must not reopen class wardrobe work.
 
 ## Non-claims
 

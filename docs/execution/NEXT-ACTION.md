@@ -1523,3 +1523,9 @@ Next valid work: chuyển sang một batch HUD/NPC dialogue theo owner gameplay 
 `CONTINUE`. Evidence hiện hành của character hub là `build/map01a-shared-layout-runtime-v4/` (PC 1600×900), `build/map01a-shared-layout-mobile-runtime-v1/` (1600×720) và `build/map01a-shared-layout-tablet-runtime-v1/` (1024×768); Player `build/map01a-shared-layout-player-v3/LinhGioiOnline.app`. Giữ base chung 1120×720 desktop, cột 660/424, hàng năm tab chia đều và cùng chiều cao ở mọi tab.
 
 Next valid work: tiếp tục theo thứ tự tổng quan → vùng lớn → chi tiết. Audit hierarchy bên trong `Nhân vật` và `Rương đồ` theo ảnh duyệt, ưu tiên tỷ lệ preview/grid/detail và khoảng sử dụng body; chỉ sau khi các vùng lớn ổn mới xử lý typography/icon/copy. Không quay lại vi chỉnh từng pixel, class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+
+## Next — sau khi khóa screen Nhân vật theo canonical design — 2026-09-14
+
+`CONTINUE`, chỉ Map01A/UI. Screen `Nhân vật` đã khóa layout theo design duy nhất `redesign-v4-five-tabs/01-nhan-vat-nam-tab-compact-APPROVED.png`. Evidence hiện hành duy nhất là `build/map01a-character-screen-runtime-v5/{pc,mobile,tablet}/`, mỗi profile có default, chọn `Áo trong` và trạng thái `Mở khóa`; Player nguồn `build/map01a-character-screen-player-v5/LinhGioiOnline.app`. Không quay lại các capture v1–v4 hoặc vi chỉnh màn này khi chưa có feedback owner mới.
+
+Screen active tiếp theo duy nhất là `Rương đồ`, canonical `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png`. Trước khi sửa phải audit toàn màn theo shell → rail dọc/capacity/search → grid năm cột → detail phải → asset → typography; gom thành một batch, giữ shared shell 1098×724 và cột 600/448 trên PC/mobile/tablet. Không sửa Kỹ năng/Tiềm năng/Linh thú trước khi Rương đồ qua gate. Không resume class/pose/wardrobe/source, không rollback code class, không đổi frozen surfaces.

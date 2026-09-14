@@ -11,9 +11,12 @@ namespace LinhGioi.UI
     {
         // Approved five-tab shell: one balanced workspace plus one readable inspector.
         // Keep these widths centralized because every character-hub tab shares them.
-        private const float InventoryDesktopMainColumnWidth = 660f;
-        private const float InventoryDesktopDetailColumnWidth = 424f;
+        private const float InventoryDesktopMainColumnWidth = 600f;
+        private const float InventoryDesktopDetailColumnWidth = 448f;
         private const float InventoryDesktopColumnGap = 12f;
+        private const float InventoryCanonicalShellWidth = 1098f;
+        private const float InventoryCanonicalShellHeight = 724f;
+        private const float InventoryCanonicalBodyHorizontalInset = 38f;
         private const float InventoryGridCellBasisPercent = 18.2f;
 
         private CongDongLamMap01AArtPreview _scene;
@@ -45,9 +48,9 @@ namespace LinhGioi.UI
             var document = host.AddComponent<UIDocument>();
             hud._ownedPanel = Instantiate(RuntimePanelSettingsProvider.LoadOrCreate());
             hud._ownedPanel.scaleMode = PanelScaleMode.ScaleWithScreenSize;
-            hud._ownedPanel.referenceResolution = new Vector2Int(1600, 900);
+            hud._ownedPanel.referenceResolution = new Vector2Int(1672, 941);
             hud._ownedPanel.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
-            hud._ownedPanel.match = 1f;
+            hud._ownedPanel.match = .5f;
             document.panelSettings = hud._ownedPanel;
             var args = Environment.GetCommandLineArgs();
             var index = Array.IndexOf(args, "--lgo-map01a-device");
@@ -351,9 +354,7 @@ namespace LinhGioi.UI
 
         public static float CalculateInventoryShellHeight(Rect inventoryRect, bool touch, bool compactShell)
         {
-            if (touch) return inventoryRect.height;
-            const float approvedDesktopHeight = 720f;
-            return Mathf.Min(inventoryRect.height, approvedDesktopHeight);
+            return Mathf.Min(inventoryRect.height, InventoryCanonicalShellHeight);
         }
 
         public static string QuestInteractionMessageForDisplay(string message, string objective, string progress)
@@ -381,31 +382,33 @@ namespace LinhGioi.UI
 
         public static Rect CalculateInventoryModalRect(Rect safePanelRect, bool touch)
         {
-            var compact = touch || safePanelRect.width < 950;
-            if (compact)
-            {
-                const float sideMargin = 14f;
-                const float topMargin = 70f;
-                const float bottomMargin = 96f;
-                return new Rect(
-                    safePanelRect.x + sideMargin,
-                    safePanelRect.y + topMargin,
-                    Mathf.Max(0f, safePanelRect.width - sideMargin * 2f),
-                    Mathf.Max(0f, safePanelRect.height - topMargin - bottomMargin));
-            }
-
-            const float maxDesktopWidth = 1120f;
-            const float minSideMargin = 56f;
-            const float top = 104f;
-            const float bottom = 76f;
-            var width = Mathf.Min(maxDesktopWidth, Mathf.Max(0f, safePanelRect.width - minSideMargin * 2f));
-            var x = safePanelRect.x + Mathf.Max(minSideMargin, (safePanelRect.width - width) * .5f);
-            return new Rect(x, safePanelRect.y + top, width, Mathf.Max(0f, safePanelRect.height - top - bottom));
+            const float minimumMargin = 24f;
+            const float opticalVerticalOffset = 18f;
+            var width = Mathf.Min(InventoryCanonicalShellWidth,
+                Mathf.Max(0f, safePanelRect.width - minimumMargin * 2f));
+            var height = Mathf.Min(InventoryCanonicalShellHeight,
+                Mathf.Max(0f, safePanelRect.height - minimumMargin * 2f));
+            var x = safePanelRect.x + (safePanelRect.width - width) * .5f;
+            var centeredY = (safePanelRect.height - height) * .5f + opticalVerticalOffset;
+            var y = safePanelRect.y + Mathf.Clamp(centeredY, minimumMargin,
+                Mathf.Max(minimumMargin, safePanelRect.height - height - minimumMargin));
+            return new Rect(x, y, width, height);
         }
 
         public static Vector2 CalculateInventoryDesktopColumnWidths()
         {
             return new Vector2(InventoryDesktopMainColumnWidth, InventoryDesktopDetailColumnWidth);
+        }
+
+        public static Vector3 CalculateInventoryColumnWidths(float shellWidth)
+        {
+            var available = Mathf.Max(0f, shellWidth - InventoryCanonicalBodyHorizontalInset);
+            var canonical = InventoryDesktopMainColumnWidth + InventoryDesktopDetailColumnWidth + InventoryDesktopColumnGap;
+            var scale = canonical <= 0f ? 0f : Mathf.Min(1f, available / canonical);
+            return new Vector3(
+                InventoryDesktopMainColumnWidth * scale,
+                InventoryDesktopDetailColumnWidth * scale,
+                InventoryDesktopColumnGap * scale);
         }
 
         private void Layout()
@@ -433,30 +436,30 @@ namespace LinhGioi.UI
             _talk.style.fontSize = _touch ? 16 : 15;
             if (_inventoryHeroPanel != null)
             {
-                var stacked = r.width < 950;
                 var body = _inventory.Q("Map01A Inventory Body");
-                body.style.flexDirection = stacked ? FlexDirection.Column : FlexDirection.Row;
-                _inventoryHeroPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
+                var columns = CalculateInventoryColumnWidths(inventoryRect.width);
+                body.style.flexDirection = FlexDirection.Row;
+                _inventoryHeroPanel.style.flexBasis = columns.x;
                 _inventoryHeroPanel.style.marginRight = 0;
-                _inventoryHeroPanel.style.marginBottom = stacked ? 10 : 0;
-                _inventoryGridPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
+                _inventoryHeroPanel.style.marginBottom = 0;
+                _inventoryGridPanel.style.flexBasis = columns.x;
                 _inventoryGridPanel.style.marginRight = 0;
-                _inventoryGridPanel.style.marginBottom = stacked ? 10 : 0;
-                _inventoryDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopDetailColumnWidth;
-                _inventoryDetailPanel.style.marginLeft = stacked ? 0 : InventoryDesktopColumnGap;
+                _inventoryGridPanel.style.marginBottom = 0;
+                _inventoryDetailPanel.style.flexBasis = columns.y;
+                _inventoryDetailPanel.style.marginLeft = columns.z;
                 _inventoryDetailPanel.style.marginRight = 0;
-                _inventoryDetailPanel.style.marginBottom = stacked ? 10 : 0;
+                _inventoryDetailPanel.style.marginBottom = 0;
                 if (_skillsPanel != null)
                 {
-                    _skillsPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
-                    _skillsPanel.style.marginBottom = stacked ? 10 : 0;
-                    _potentialPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
-                    _potentialPanel.style.marginBottom = stacked ? 10 : 0;
-                    _spiritPetPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopMainColumnWidth;
-                    _spiritPetPanel.style.marginBottom = stacked ? 10 : 0;
-                    _hubPreviewDetailPanel.style.flexBasis = stacked ? StyleKeyword.Auto : InventoryDesktopDetailColumnWidth;
-                    _hubPreviewDetailPanel.style.marginLeft = stacked ? 0 : InventoryDesktopColumnGap;
-                    _hubPreviewDetailPanel.style.marginBottom = stacked ? 10 : 0;
+                    _skillsPanel.style.flexBasis = columns.x;
+                    _skillsPanel.style.marginBottom = 0;
+                    _potentialPanel.style.flexBasis = columns.x;
+                    _potentialPanel.style.marginBottom = 0;
+                    _spiritPetPanel.style.flexBasis = columns.x;
+                    _spiritPetPanel.style.marginBottom = 0;
+                    _hubPreviewDetailPanel.style.flexBasis = columns.y;
+                    _hubPreviewDetailPanel.style.marginLeft = columns.z;
+                    _hubPreviewDetailPanel.style.marginBottom = 0;
                 }
             }
         }
@@ -547,7 +550,7 @@ namespace LinhGioi.UI
             RefreshInventoryDetailCard();
             var selectedSlot = _scene.VoSelectedEquipmentSlot;
             var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
-            var equipToggleText = selectedEquipped ? "Tháo món đang chọn" : "Mặc món đang chọn";
+            var equipToggleText = selectedEquipped ? "Tháo" : "Trang bị";
             if (!_suppliesOpen)
             {
                 _inventoryDetailPrimaryAction.text = equipToggleText;

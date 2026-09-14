@@ -110,6 +110,7 @@ FORBIDDEN_SNIPPETS = [
     "InventoryBlue",
     "style.gap =",
     "Box(",
+    "ApplyLgoItemIcon(_characterHeroPortrait)",
 ]
 
 # Runtime UI decisions that previously regressed when a new screen was built as a
@@ -188,7 +189,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "body.Add(_inventoryGridPanel)",
         "body.Add(_inventoryHeroPanel)",
         "body.Add(_inventoryDetailPanel)",
-        "LgoTitleLabel(\"HÀNH TRANG\", 20)",
+        "LgoTitleLabel(\"HÀNH TRANG\", 26)",
         "LgoSubtitleLabel(\"Túi đồ",
         "_skillsTab = InventoryButton(() => ShowCharacterHubPreviewMode(CharacterHubMode.Skills)",
         "_potentialTab = InventoryButton(() => ShowCharacterHubPreviewMode(CharacterHubMode.Potential)",
@@ -196,7 +197,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoInventoryButtonBase(button, _touch)",
         "ApplyLgoInventoryPanelShell(panel)",
         "ApplyLgoItemIcon(_inventoryDetailIcon)",
-        "ApplyLgoItemIcon(_characterHeroPortrait)",
+        "_characterHeroPortrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit",
         "ApplyLgoItemIcon(quickIcon)",
         "ApplyLgoItemIcon(icon)",
         "ApplyLgoModalShell(_inventory, 12)",

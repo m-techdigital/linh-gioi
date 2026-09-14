@@ -1,7 +1,7 @@
 # Map01A character hub — canonical screen contract v1.0
 
 Ngày khóa: 2026-09-14  
-Trạng thái: **OWNER_APPROVED_DESIGN_SET / RUNTIME_REALIGN_REQUIRED**
+Trạng thái: **OWNER_APPROVED_DESIGN_SET / CHARACTER_LAYOUT_LOCKED / BAG_ACTIVE**
 
 ## Mục đích
 
@@ -14,8 +14,8 @@ Thư mục nguồn đã duyệt:
 
 | Thứ tự | Screen | Canonical design duy nhất | Trạng thái triển khai |
 |---:|---|---|---|
-| 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **ACTIVE** — phải hoàn thiện trước |
-| 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | Chờ Nhân vật đạt gate |
+| 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** — evidence v5, không vi chỉnh lại |
+| 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **ACTIVE** — screen duy nhất được sửa tiếp |
 | 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | Chờ Rương đồ đạt gate |
 | 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | Chờ Kỹ năng đạt gate |
 | 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | Chờ Tiềm năng đạt gate |
@@ -50,12 +50,12 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ## Contract từng screen
 
-### 1. Nhân vật — active
+### 1. Nhân vật — layout locked
 
 - Main workspace: full-body actor ở giữa, năm slot mỗi bên, identity + Lv/LC + HP/MP ở đáy.
 - Detail-right: icon món đang chọn, tên/level/trạng thái, thuộc tính có dữ liệu thật, set/fit có dữ liệu thật, action `Tháo` và `Khóa` theo state hiện hành.
 - Chọn bất kỳ slot nào phải đổi cùng một detail-right; không mở panel chi tiết thứ hai.
-- Asset gate: actor dùng runtime source hiện hành và không sửa class/pose/wardrobe/camera/scale. Mười equipment thumbnail cần một atlas UI 2D riêng đã review; không crop tối trực tiếp từ full-body atlas làm final.
+- Asset gate: actor dùng runtime source hiện hành và không sửa class/pose/wardrobe/camera/scale. Atlas UI riêng `map01a-character-equipment-icons-v1` chứa đủ mười thumbnail, có alpha và manifest/hash/provenance; vẫn giữ `DRAFT_RUNTIME_REVIEW` chờ owner duyệt mỹ thuật.
 
 ### 2. Rương đồ
 
@@ -92,4 +92,4 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ## Gate hiện hành
 
-Chỉ screen **Nhân vật** được phép sửa. Rương đồ/Kỹ năng/Tiềm năng/Linh thú giữ nguyên cho đến khi Nhân vật có evidence mới đạt contract này. Không resume class/pose/wardrobe/source và không rollback code class.
+Screen **Nhân vật** đã qua gate layout bằng Player v5: ba profile giữ cùng composition, 10 slot không co dẹt, detail nằm bên phải và trạng thái chọn/khóa có evidence. Screen duy nhất được sửa tiếp là **Rương đồ**. Kỹ năng/Tiềm năng/Linh thú giữ nguyên; không resume class/pose/wardrobe/source và không rollback code class.

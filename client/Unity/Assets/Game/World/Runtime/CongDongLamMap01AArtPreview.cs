@@ -63,9 +63,11 @@ namespace LinhGioi.World
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-linh-capture") >= 0;
         private bool CharacterSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
         private bool InventoryTabsCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-inventory-tabs-capture") >= 0;
+        private bool CharacterScreenCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-screen-capture") >= 0;
         private bool MenuCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-menu-capture") >= 0;
         public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || ClassCaptureRequested
-            || CharacterSelectCaptureRequested || InventoryTabsCaptureRequested || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
+            || CharacterSelectCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
+            || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string QuestDisplayTitle => ActiveQuestId == "COMPLETE"
@@ -205,9 +207,11 @@ namespace LinhGioi.World
         private readonly Dictionary<string, VoAttachmentProfile> _voAttachmentProfiles = new Dictionary<string, VoAttachmentProfile>();
         private readonly Dictionary<string, VoRigPoseProfile> _voRigPoseProfiles = new Dictionary<string, VoRigPoseProfile>();
         private readonly Dictionary<string, Sprite> _map01AItemIcons = new Dictionary<string, Sprite>();
+        private readonly Dictionary<string, Sprite> _map01ACharacterEquipmentIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01AHudIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ANpcSprites = new Dictionary<string, Sprite>();
         private bool _map01AItemIconsLoaded;
+        private bool _map01ACharacterEquipmentIconsLoaded;
         private bool _map01AHudIconsLoaded;
         private TwoDClassMixedLoadoutFitPreview _classFitPreview;
         private string _classFitPreviewId = "kiem";
@@ -320,6 +324,37 @@ namespace LinhGioi.World
                 }
             }
             return _map01AItemIcons.TryGetValue(itemId, out var sprite) ? sprite : null;
+        }
+        public Sprite GetMap01ACharacterEquipmentIconSprite(string slot)
+        {
+            var index = Array.IndexOf(VoEquipmentSlots, slot);
+            if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
+            if (!_map01ACharacterEquipmentIconsLoaded)
+            {
+                _map01ACharacterEquipmentIconsLoaded = true;
+                const string path = "LGOMaps/CongDongLamMap01ACharacterEquipmentIcons/";
+                var manifestAsset = Resources.Load<TextAsset>(path + "manifest");
+                var atlas = Resources.Load<Texture2D>(path + "map01a-character-equipment-icons");
+                if (manifestAsset != null && atlas != null)
+                {
+                    var manifest = JsonUtility.FromJson<Map01AItemIconManifest>(manifestAsset.text);
+                    if (manifest != null && manifest.id == "map01a-character-equipment-icons-v1"
+                        && manifest.status == "DRAFT_RUNTIME_REVIEW" && manifest.parts != null)
+                    {
+                        foreach (var part in manifest.parts)
+                        {
+                            if (string.IsNullOrEmpty(part.id) || part.w <= 0 || part.h <= 0
+                                || part.x < 0 || part.y < 0 || part.x + part.w > atlas.width || part.y + part.h > atlas.height
+                                || _map01ACharacterEquipmentIcons.ContainsKey(part.id))
+                                continue;
+                            _map01ACharacterEquipmentIcons.Add(part.id,
+                                MakeSprite(atlas, new Rect(part.x, part.y, part.w, part.h)));
+                        }
+                    }
+                }
+            }
+            var iconId = VoReviewSlotIds[index];
+            return _map01ACharacterEquipmentIcons.TryGetValue(iconId, out var sprite) ? sprite : null;
         }
         public Sprite GetMap01AHudIconSprite(string iconId)
         {
@@ -594,6 +629,7 @@ namespace LinhGioi.World
             || Array.IndexOf(args, "--lgo-map01a-entry-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0
+            || Array.IndexOf(args, "--lgo-map01a-character-screen-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0;
 
         public static bool IsMapQuestCaptureForArgs(string[] args) => Array.IndexOf(args, "--lgo-map01a-art-capture") >= 0;
@@ -1618,6 +1654,11 @@ namespace LinhGioi.World
                 yield return CaptureInventoryTabs(args);
                 yield break;
             }
+            if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-character-screen-capture") >= 0)
+            {
+                yield return CaptureCharacterScreen(args);
+                yield break;
+            }
             if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0)
             {
                 yield return CaptureMenuScreen(args);
@@ -2188,6 +2229,54 @@ namespace LinhGioi.World
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
                 + "  \"frames\": [\"character-info.png\", \"bag.png\", \"bag-search-binh-mau.png\", \"bag-search-binh-mau-selected.png\", \"skills.png\", \"potential.png\", \"spirit-pet.png\"]\n"
+                + "}\n";
+            File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
+            Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
+        }
+
+        private IEnumerator CaptureCharacterScreen(string[] args)
+        {
+            Application.runInBackground = true;
+            var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
+            if (index < 0 || index + 1 >= args.Length)
+                throw new ArgumentException("Missing Map01A character screen capture directory");
+            var directory = args[index + 1];
+            Directory.CreateDirectory(directory);
+            _controller.enabled = false;
+            yield return null;
+            yield return null;
+            if (!InventoryOpen) ToggleInventory();
+            var document = GetComponentInChildren<UIDocument>();
+            if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for character screen capture");
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Character Info Main Tab"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var imagePath = Path.Combine(directory, "character-info.png");
+            CaptureScreenPng(imagePath);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Character Hero Quick Icon 2"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var selectedPath = Path.Combine(directory, "character-info-selected.png");
+            CaptureScreenPng(selectedPath);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Inventory Detail Lock Action"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var lockedPath = Path.Combine(directory, "character-info-locked.png");
+            CaptureScreenPng(lockedPath);
+            var iconsReady = true;
+            for (var slotIndex = 0; slotIndex < VoEquipmentSlots.Length; slotIndex++)
+                iconsReady &= GetMap01ACharacterEquipmentIconSprite(VoEquipmentSlots[slotIndex]) != null;
+            var status = File.Exists(imagePath) && File.Exists(selectedPath) && File.Exists(lockedPath) && iconsReady
+                ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED"
+                : "FIX_REQUIRED";
+            var manifest = "{\n"
+                + "  \"status\": \"" + status + "\",\n"
+                + "  \"captureScope\": \"map01a-character-screen\",\n"
+                + "  \"usesOsMouseOrKeyboard\": false,\n"
+                + "  \"dedicatedEquipmentIcons\": " + (iconsReady ? "true" : "false") + ",\n"
+                + "  \"width\": " + Screen.width + ",\n"
+                + "  \"height\": " + Screen.height + ",\n"
+                + "  \"frames\": [\"character-info.png\", \"character-info-selected.png\", \"character-info-locked.png\"]\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
