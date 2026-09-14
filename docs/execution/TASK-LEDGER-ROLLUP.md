@@ -1,6 +1,10 @@
-## Character base generation bounded failure — 2026-09-14
+## LGO Spine production proof preflight — 2026-09-14
 
-`FIX_REQUIRED`. Owner requested two separate hairless equipment-fitting bases, male and female, retaining the established design and six distinct poses with 1:1 anatomy in jump. The Blender mannequin route produced editable source and 12 unique RGBA renders in about 21 seconds, but direct review rejected the segmented 3D mannequin visual. ImageGen whole-sheet outputs looked cleaner but changed identity and repeated A/B leg phases; a conservative edit of the original male idle still changed face, stance and body proportions. No output is final or packable. Evidence moved to `rejected-evidence/2026-09-14/common-character-blender-mannequin-six-pose-v1` and `common-character-imagegen-base-removal-drift-v1`. Do not repeat these hypotheses; require a one-frame native/pose+identity-lock proof before generating a batch.
+`BLOCKED_SPINE_TOOLING`. The proposal is technically credible but not assumed proven for LGO. Official documentation confirms Mix-and-Match skins/template attachments and spine-unity 4.3 compatibility with Unity 6000.3.2f1. Local audit found Unity/URP ready but no Spine Editor, usable Professional installation, spine-unity/examples or Spine data. Because Spine licensing is required for runtime integration and the proof requires Professional mesh/weights/IK, implementation stopped before package or LGO asset changes. Active goal, spec, phased plan, legacy classification and handoff now point only to `LGO-SPINE-PRODUCTION-PROOF-01`; smallest unblock is owner installation/activation of Spine Professional 4.3.x.
+
+## Character base generation bounded failure — historical, superseded 2026-09-14
+
+`HISTORICAL_SUPERSEDED`. Blender mannequin and ImageGen redraws failed visual identity/pose review and remain quarantined. The new Spine proof may use the lesson and accepted visual references, but cannot reuse those rejected pixels or restore the rejected split-body prototype.
 
 ## Character base jump scale correction — historical, superseded 2026-09-14
 

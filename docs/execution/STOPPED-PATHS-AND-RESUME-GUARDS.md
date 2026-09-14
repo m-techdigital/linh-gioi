@@ -6,14 +6,18 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 
 ## Current allowed path
 
-The target character/outfit route remains the six-pose registered outfit pipeline, but its body authority is currently missing:
+The only active character/outfit route is `LGO-SPINE-PRODUCTION-PROOF-01`:
 
-- spec: `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md`
-- plan: `docs/superpowers/plans/2026-09-13-six-pose-registered-outfit-pipeline.md`
-- pose contract only: `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`; existing male/female pixels are not accepted body authority after owner review
-- source-space profile: 1024×1536 canvas, `originX=512`, `groundY=1484`, `u=1.70/1536`
+- spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`
+- plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`
+- current phase/status: `TOOLCHAIN_PREFLIGHT / BLOCKED_SPINE_TOOLING`
+- next action: install and activate licensed Spine Professional 4.3.x, then reproduce official `Mix and Match Skins` in Unity before touching LGO assets
 
-Next valid implementation work is one visually accepted neutral `idle` base for each gender made with controllable native inpainting or verified pose-control plus identity conditioning. Expand to six poses only after that gate. ImageGen may supply a concept/reference only. Do not pack Player before accepted body authority and native outfit source both exist.
+The former six-pose pixel/registered-outfit authoring route is legacy reference. Its semantic pose sequence, surface ownership findings, selection/alpha guards, mixed/off-slot scenarios and visual capture rules may be adapted only after the official Spine reference passes. Do not continue its candidate authoring, mask repair, pixel fitting or Player promotion.
+
+### Spine proof boundary
+
+This owner-approved Spine proof does not reopen the rejected generated-cutout or Blender body-card prototypes. It must use official Spine Professional authoring and official spine-unity runtime. No custom skeletal framework, fake export, handmade parser or mock sample is allowed. Existing runtime remains reachable until an accepted Spine Player replacement exists; deletion is forbidden before acceptance.
 
 ## Stopped path 0: automated base redraw without identity and pose lock
 

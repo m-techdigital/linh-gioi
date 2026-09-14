@@ -1,9 +1,32 @@
 import unittest
 
-from lgo_next_task import active_next_action_task_from_text, active_state_execution_blocker_from_text
+from lgo_next_task import (
+    active_next_action_task_from_text,
+    active_state_execution_blocker_from_text,
+    execution_blocker_owner_note,
+)
 
 
 class LgoNextTaskTests(unittest.TestCase):
+    def test_blocked_spine_tooling_status_stops_ready_advice(self):
+        text = """## Active task state
+
+```json
+{"activeTask":"LGO_SPINE_PRODUCTION_PROOF_01","status":"BLOCKED_SPINE_TOOLING","blockers":["SPINE_PROFESSIONAL_LICENSE_NOT_AVAILABLE","SPINE_EDITOR_NOT_INSTALLED"]}
+```
+"""
+
+        self.assertEqual(
+            active_state_execution_blocker_from_text(text),
+            "BLOCKED_SPINE_TOOLING",
+        )
+
+    def test_spine_blocker_note_names_exact_unblock_without_krita(self):
+        note = execution_blocker_owner_note("BLOCKED_SPINE_TOOLING")
+
+        self.assertIn("Spine Professional 4.3", note)
+        self.assertNotIn("Krita", note)
+
     def test_native_authoring_capability_blocker_stops_ready_advice(self):
         text = """## Active task state
 

@@ -1,25 +1,22 @@
-## CHARACTER BASE SOURCE GATE — 2026-09-14
+## ACTIVE GOAL LOCK — LGO Spine Production Proof 01, 2026-09-14
 
-Owner rejected the existing male/female bases as pose/proportion authority and requested a hairless equipment-fitting base derived from the established design. Two bounded automation hypotheses are now closed:
-
-- offline Blender mannequin: proportions were repeatable, but the output was a segmented 3D mannequin that did not match Linh Giới Cartoon/Flat 2D art;
-- ImageGen from the old base: both full-sheet generation and conservative single-frame editing changed identity, stance/anatomy or A/B limb phase.
-
-Rejected evidence is retained at `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-14/common-character-blender-mannequin-six-pose-v1/` and `common-character-imagegen-base-removal-drift-v1/`. Do not pack, rename, repaint over or reuse these outputs. Do not continue whole-sheet prompts or per-frame ImageGen edits from the same assumption.
-
-The six pose names and 1024×1536 coordinate profile remain the target contract, but no existing male/female pixels are accepted as current body authority. Next valid art work requires one controllable method that independently locks the old design identity and pose structure: artist-controlled native inpainting, or a verified pose-control + identity-conditioning workflow. Admit one `idle` frame by direct visual comparison before generating the remaining poses; no Player/outfit batch may claim fit against a rejected base.
-
-## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13
-
-Owner steering update: đánh giá outfit theo đầu ra thực tế, không theo số layer, validator hoặc checkpoint. Không tiếp tục sleeve-add, sleeve-capsule, pixel deletion hoặc flat-panel direct-fit. Giữ candidate bị bác làm evidence, không tái sử dụng dưới tên mới.
+Owner explicitly superseded the active per-pose outfit authoring route with `LGO-SPINE-PRODUCTION-PROOF-01`. The only active character/outfit path is a controlled reproduction of the official Spine Mix-and-Match workflow, followed by incremental substitution of accepted Pháp Lv1 male/female source. Unity remains the game engine.
 
 ## Active task state
 
 ```json
-{"activeTask":"SIX_POSE_REGISTERED_OUTFIT_POSE_SET_AUTHORING","status":"NATIVE_AUTHORING_CAPABILITY_REQUIRED","blockers":["ACCEPTED_NEUTRAL_CHARACTER_BASE_MISSING","IDENTITY_AND_POSE_LOCK_CAPABILITY_MISSING","KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED","ACCEPTED_SLEEVED_SOURCE_MISSING"],"runtimePromotionAllowed":false}
+{"activeTask":"LGO_SPINE_PRODUCTION_PROOF_01","phase":"TOOLCHAIN_PREFLIGHT","status":"BLOCKED_SPINE_TOOLING","blockers":["SPINE_PROFESSIONAL_LICENSE_NOT_AVAILABLE","SPINE_EDITOR_NOT_INSTALLED","SPINE_UNITY_RUNTIME_AND_EXAMPLES_NOT_INSTALLED"],"runtimePromotionAllowed":false}
 ```
 
-Next valid work: tạo và duyệt một neutral base `idle` nam/nữ bám đúng design cũ bằng source native/identity-lock thật; sau đó mới mở rộng sang `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck` trên profile chung 1024×1536. ImageGen whole-sheet và direct single-frame edit đã fail identity lock, chỉ được giữ làm evidence/concept. Không cắt body thành head/torso/limb, không rig các mảnh body, không sửa ảnh từng pixel để dò fit và không thêm runtime offset riêng cho item.
+Verified preflight: Unity 6000.3.2f1 and URP 17.3.0 are present. No Spine Editor, usable Professional installation, spine-csharp/spine-unity package, Spine Examples or Spine skeleton asset was found. Official documentation confirms spine-unity 4.3 is compatible with Unity through 6000.4 and provides the required Mix-and-Match workflow, while a Spine license is required for runtime integration and Professional is required for the mesh/weight/IK proof.
+
+Next valid work: owner installs and activates Spine Professional 4.3.x on this machine and provides the local `Spine.app` path without sharing the activation code. Then install the matching official 4.3 runtime/examples and reproduce `Mix and Match Skins` unchanged in a real Unity Player. Do not modify LGO character assets, install an unlicensed runtime, restore the rejected cutout, or build a substitute framework while this gate is blocked.
+
+Spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`. Plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`. Preflight evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json`. Handoff: `docs/execution/HANDOFF-LGO-SPINE-PRODUCTION-PROOF-01.md`.
+
+## Historical character-base source gate — superseded 2026-09-14
+
+The failed Blender mannequin, ImageGen whole-sheet and ImageGen single-frame edit batches remain rejected evidence. Spine proof does not authorize reusing their pixels, topology, body cards or visual claims.
 
 Rejected-source quarantine: năm cây Pháp có quyết định cuối `REJECTED`/`WITHDRAWN` đã được chuyển khỏi `class-work-in-progress` sang `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-13/`. Manifest SHA-256: `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-13/quarantine-manifest.json`. Đường cũ chỉ còn tombstone `authoring-selection.json` và `DO-NOT-SELECT.md`; không copy/rename evidence này trở lại cây active. Packer hiện chặn bắt buộc status `REJECTED/WITHDRAWN`, cây `rejected-evidence`, PNG không có alpha thật và PNG không có nền trong suốt.
 
@@ -35,11 +32,13 @@ Six-pose body scale correction 2026-09-14: giữ nguyên byte của năm pose c�
 
 ## Historical context kept for provenance
 
-## ACTIVE GOAL LOCK — six-pose registered outfit path, 2026-09-13
+Everything below this heading records superseded work and evidence. It must not be interpreted as a current task, resume instruction or authorization to create more per-pose candidates.
 
-Owner steering after skeletal review: if the current skeletal/cutout approach is not usable, return to the old six-pose body/motion authority and develop outfit matching across levels and poses from design/source registration. This is now the active sandbox path. Read `docs/art/LGO-SIX-POSE-REGISTERED-OUTFIT-PIPELINE-LOCK-v1.md` and execute from `docs/superpowers/plans/2026-09-13-six-pose-registered-outfit-pipeline.md` before any outfit/runtime work.
+## Historical superseded goal lock — six-pose registered outfit path, 2026-09-13
 
-Resume guard: also read `docs/execution/STOPPED-PATHS-AND-RESUME-GUARDS.md` before touching character, outfit, rig, motion, Krita, Blender, GarmentCode, Comfy or Player work. It explicitly stops the current skeletal generated-cutout Player branch, flat 2D panel direct-fit as production, and per-pixel garment nudging loops. The active goal is source authoring for the six-pose registered Pháp Lv1 outfit path, not continuing the just-stopped branch under a new tool name.
+Historical owner steering after skeletal review returned to the old six-pose body/motion authority. It was superseded by `LGO-SPINE-PRODUCTION-PROOF-01`; its spec, plan and findings remain evidence only.
+
+Resume guard: read `docs/execution/STOPPED-PATHS-AND-RESUME-GUARDS.md` before touching character, outfit, rig, motion, Krita, Blender, GarmentCode, Comfy or Player work. It now identifies Spine reference reproduction as the only active path and keeps both the generated-cutout and per-pose garment loops stopped.
 
 Do not continue the stopped skeletal generated-cutout path in this sandbox. `bind-authority-candidate-v1` is owner-rejected, current `skeletal_2d` has no accepted source blueprint, and no further Player probe/animation tweak/garment fit should run on that source. Skeletal 2D may reopen only if a new accepted neutral layered body/rig blueprint appears and passes `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`.
 

@@ -97,10 +97,30 @@ def active_task_state_from_text(text: str) -> dict:
 
 
 def active_state_execution_blocker_from_text(text: str) -> str | None:
-    blockers = active_task_state_from_text(text).get("blockers")
-    if not isinstance(blockers, list):
-        return None
-    return next((marker for marker in ACTIVE_STATE_EXECUTION_BLOCKERS if marker in blockers), None)
+    active_state = active_task_state_from_text(text)
+    blockers = active_state.get("blockers")
+    if isinstance(blockers, list):
+        known_blocker = next((marker for marker in ACTIVE_STATE_EXECUTION_BLOCKERS if marker in blockers), None)
+        if known_blocker:
+            return known_blocker
+    status = active_state.get("status")
+    if isinstance(status, str) and status.startswith(("BLOCKED_", "FIX_REQUIRED", "NEED_OWNER_DECISION")):
+        return status
+    return None
+
+
+def execution_blocker_owner_note(blocker: str) -> str:
+    if blocker == "BLOCKED_SPINE_TOOLING":
+        return (
+            "Cần cài và kích hoạt Spine Professional 4.3.x, rồi cung cấp đường dẫn Spine.app; "
+            "sau đó mới cài runtime 4.3 khớp phiên bản và chạy mẫu Mix and Match chính thức."
+        )
+    if blocker == "KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED":
+        return (
+            "Krita automation đã bị đóng sau các probe có giới hạn; không thử thêm runner/path/signature "
+            "hoặc tạo ảnh thay source. Cần host GUI/Scripter điều khiển được hoặc native layered source mới."
+        )
+    return "Active state đang chặn thực thi; xử lý blocker đã ghi trong NEXT-ACTION trước khi chọn task khác."
 
 
 def active_next_action_task_from_text(text: str) -> str | None:
@@ -238,7 +258,7 @@ def main() -> int:
     if execution_blocker:
         print("LGO_NEXT_TASK_ADVISOR_FIX_REQUIRED")
         print(f"blocker={execution_blocker}")
-        print("owner_note=Krita automation đã bị đóng sau các probe có giới hạn; không thử thêm runner/path/signature hoặc tạo ảnh thay source. Cần host GUI/Scripter điều khiển được hoặc native layered source mới.")
+        print(f"owner_note={execution_blocker_owner_note(execution_blocker)}")
         return 0
     active_task = active_next_action_task()
     if active_task == "SIX_POSE_REGISTERED_OUTFIT_SOURCE_AUTHORING":
