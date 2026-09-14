@@ -278,6 +278,7 @@ namespace LinhGioi.UI
             BuildCharacterSelect();
             BuildEntryScreen();
             BuildServerSelect();
+            BuildRegister();
             BuildMenu();
             _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); ApplyLgoLayeredFrame(_dialogue); Place(_dialogue, 28, null, null, 22);
             _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
@@ -375,7 +376,8 @@ namespace LinhGioi.UI
 
         private void HandleEscape()
         {
-            if (_serverSelectOpen) CloseServerSelect(false);
+            if (_registerOpen) CloseRegister();
+            else if (_serverSelectOpen) CloseServerSelect(false);
             else if (_menuOpen) CloseMenu();
             else if (_characterSelectOpen) CloseCharacterSelect();
             else if (_scene.DialogueOpen) _scene.CloseNpcDialogue();

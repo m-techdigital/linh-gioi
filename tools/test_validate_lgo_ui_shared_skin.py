@@ -53,6 +53,21 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("objective/autopilot prompt cũ" in item for item in violations), violations)
 
+    def test_rejects_register_screen_that_skips_shared_panel_base(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            register = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Register.cs"
+            register.write_text(
+                register.read_text(encoding="utf-8").replace(
+                    "ApplyLgoRegisterPanel(_registerOverlay);",
+                    "ApplyLgoFrame(_registerOverlay, Color.black, Color.yellow);",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoRegisterPanel" in item for item in violations), violations)
+
 
     def test_rejects_missing_uploaded_design_reference_scope(self) -> None:
         with self._copy_minimal_repo() as temp:

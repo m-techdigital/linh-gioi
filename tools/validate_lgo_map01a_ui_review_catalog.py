@@ -23,6 +23,11 @@ SERVER_SELECT_EVIDENCE = (
     ("build/map01a-server-select-runtime-v1/mobile/manifest.json", "build/map01a-server-select-runtime-v1/mobile/server-select.png", 1600, 720),
     ("build/map01a-server-select-runtime-v1/tablet/manifest.json", "build/map01a-server-select-runtime-v1/tablet/server-select.png", 1024, 768),
 )
+REGISTER_EVIDENCE = (
+    ("build/map01a-register-runtime-v1/pc/manifest.json", "build/map01a-register-runtime-v1/pc/register-account.png", 1600, 900),
+    ("build/map01a-register-runtime-v1/mobile/manifest.json", "build/map01a-register-runtime-v1/mobile/register-account.png", 1600, 720),
+    ("build/map01a-register-runtime-v1/tablet/manifest.json", "build/map01a-register-runtime-v1/tablet/register-account.png", 1024, 768),
+)
 HUB_MANIFEST = "build/map01a-spirit-screen-runtime-v1/pc/manifest.json"
 HUB_FRAMES = [
     "character-info.png",
@@ -95,6 +100,7 @@ def validate_root(root: Path = ROOT) -> list[str]:
             "usesOsMouseOrKeyboard=false",
             "entry-login.png",
             "server-select.png",
+            "register-account.png",
             "character-info.png",
             "bag.png",
             "bag-search-binh-mau.png",
@@ -167,6 +173,22 @@ def validate_root(root: Path = ROOT) -> list[str]:
         if data.get("frame") != "server-select.png":
             violations.append("server select: frame must be server-select.png")
 
+    for manifest_rel, png_rel, width, height in REGISTER_EVIDENCE:
+        data = load_json(root, manifest_rel, violations)
+        require_file(root, png_rel, violations)
+        if data.get("status") != TECH_STATUS:
+            violations.append(f"register: status must be {TECH_STATUS}")
+        if data.get("usesOsMouseOrKeyboard") is not False:
+            violations.append("register: usesOsMouseOrKeyboard must be false")
+        if data.get("width") != width or data.get("height") != height:
+            violations.append(f"register: expected {width}x{height}")
+        if data.get("captureScope") != "map01a-register":
+            violations.append("register: captureScope must be map01a-register")
+        if data.get("registerOverlayExpected") is not True:
+            violations.append("register: overlay expectation must be true")
+        if data.get("frame") != "register-account.png":
+            violations.append("register: frame must be register-account.png")
+
     hub = load_json(root, HUB_MANIFEST, violations)
     if hub.get("status") != TECH_STATUS:
         violations.append(f"five-tab hub: status must be {TECH_STATUS}")
@@ -207,7 +229,7 @@ def main() -> int:
         for item in violations:
             print(" - " + item, file=sys.stderr)
         return 1
-    print("LGO_MAP01A_UI_REVIEW_CATALOG_PASS screens=entry,server_select,character_select,five_tab_hub,route,menu")
+    print("LGO_MAP01A_UI_REVIEW_CATALOG_PASS screens=entry,server_select,register,character_select,five_tab_hub,route,menu")
     return 0
 
 

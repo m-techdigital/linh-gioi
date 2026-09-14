@@ -95,6 +95,11 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(serverArgs), Is.False);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(serverArgs, sceneIsCapturing: true), Is.True,
                 "Server select capture reuses the Entry scene layers while replacing only its control card.");
+            var registerArgs = new[] { "LinhGioiOnline", "--lgo-map01a-register-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(registerArgs), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(registerArgs), Is.False);
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(registerArgs, sceneIsCapturing: true), Is.True,
+                "Register capture reuses the Entry scene layers while replacing only its control card.");
             var menuArgs = new[] { "LinhGioiOnline", "--lgo-map01a-menu-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(menuArgs), Is.True);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(menuArgs, sceneIsCapturing: true), Is.False,
@@ -615,6 +620,72 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(classBefore),
                     "Selecting a server must not mutate class, pose, wardrobe or gameplay source state.");
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void RegisterScreenValidatesLocallyAndReturnsToEntry()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("canonical register screen test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var classBefore = scene.ActiveEquipmentClassId;
+
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Register Button"));
+                var overlay = root.Q("Map01A Register Overlay");
+                Assert.That(overlay, Is.Not.Null);
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+
+                var account = root.Q<TextField>("Map01A Register Account Field");
+                var password = root.Q<TextField>("Map01A Register Password Field");
+                var confirmation = root.Q<TextField>("Map01A Register Confirm Password Field");
+                Assert.That(account, Is.Not.Null);
+                Assert.That(password.isPasswordField, Is.True);
+                Assert.That(confirmation.isPasswordField, Is.True);
+                Assert.That(root.Query<Button>(className: "lgo-register-primary").ToList().Count, Is.EqualTo(1));
+                Assert.That(root.Query<Button>(className: "lgo-register-password-reveal").ToList().Count, Is.EqualTo(2));
+                InvokeBoundButton(root.Q<Button>("Map01A Register Password Reveal"));
+                Assert.That(password.isPasswordField, Is.False);
+                Assert.That(confirmation.isPasswordField, Is.True, "Password reveal actions must remain independent.");
+                InvokeBoundButton(root.Q<Button>("Map01A Register Password Reveal"));
+
+                var submit = root.Q<Button>("Map01A Register Submit");
+                var status = root.Q<Label>("Map01A Register Status");
+                InvokeBoundButton(submit);
+                Assert.That(status.text, Is.EqualTo("Nhập đủ tài khoản và hai lần mật khẩu."));
+
+                account.value = "luc-thien@example.test";
+                password.value = "mat-khau-1";
+                confirmation.value = "mat-khau-2";
+                InvokeBoundButton(submit);
+                Assert.That(status.text, Is.EqualTo("Hai mật khẩu chưa khớp."));
+
+                confirmation.value = password.value;
+                InvokeBoundButton(submit);
+                Assert.That(status.text, Is.EqualTo("Bạn cần đồng ý Điều khoản sử dụng."));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Register Agreement"));
+                InvokeBoundButton(submit);
+                Assert.That(status.text, Is.EqualTo("Dịch vụ đăng ký chưa kết nối. Vui lòng thử lại sau."));
+                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Register Back"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Register Button"));
+                Assert.That(password.value, Is.Empty);
+                Assert.That(confirmation.value, Is.Empty, "Register must not retain either password after reopening.");
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(classBefore),
+                    "Register validation must not mutate class, pose, wardrobe or gameplay state.");
             }
             finally
             {

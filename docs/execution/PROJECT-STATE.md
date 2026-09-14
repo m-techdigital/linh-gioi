@@ -3,10 +3,18 @@
 - `OPERATIONAL_GOAL_CURRENT`: goal repo hiện hành là Map01A/UI screen-by-screen. Objective tự động cũ còn nhắc hoàn thiện class/pose/wardrobe/source đã bị owner thay thế và không được dùng để chọn task, build hoặc capture.
 - Goal UI/UX hiện hành: xử lý tuần tự từng screen; trước code phải có đúng một canonical design, scenario/state/interaction, asset budget và plan. Chỉ chuyển screen khi Player evidence PC/mobile landscape/tablet đã được xem và toàn gate sạch.
 - Rule đã được ghi vào `AGENTS.md`; screen contract dùng chung quy trình shell → vùng chính → component base → asset → typography/copy. Mobile/tablet giữ cùng landscape composition bằng scale/safe margin, không wrap/stack thành layout khác.
-- Entry/Login, Character Select và Chọn máy chủ đã khóa layout theo canonical riêng. Screen active kế tiếp là Đăng ký ở design gate; chưa có canonical thì không code.
+- Entry/Login, Character Select, Chọn máy chủ và Đăng ký đã khóa layout theo canonical riêng. Screen active kế tiếp là Quên mật khẩu ở design gate; chưa có canonical thì không code.
 - Các screen liên quan Entry như chọn máy chủ, đăng ký/quên mật khẩu và chọn nhân vật phải lần lượt có contract/canonical riêng sau khi Login khóa; không gộp nhiều screen hoặc triển khai song song.
 - Icon/art phải có design/provenance và pixel budget theo kích thước hiển thị thực; không dùng emoji, glyph, wireframe hay ảnh tạm để bàn giao. Ưu tiên atlas chung theo vòng đời tải, hash/import compression và ID ổn định để mở rộng lâu dài.
-- Screen active duy nhất: Đăng ký; sau khi khóa mới tới Quên mật khẩu. Không resume class/pose/wardrobe/source, không chạy class Player/capture loop, không rollback code class và không đổi frozen surfaces.
+- Screen active duy nhất: Quên mật khẩu. Screen đã khóa không được mở lại nếu chưa có regression hoặc feedback mới có evidence. Không resume class/pose/wardrobe/source, không chạy class Player/capture loop, không rollback code class và không đổi frozen surfaces.
+
+## Map01A — Đăng ký canonical layout locked — 2026-09-14
+
+- Canonical duy nhất: `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v8-register/01-register-account-CANONICAL.png`, `1672×941`, SHA-256 `a63c51012a184f3ad1752a351aeced21cbec639d0057272926c00952d26febfb`. Contract: `docs/design/LGO-MAP01A-REGISTER-SCREEN-CONTRACT-v1.0.md`.
+- Runtime dùng chung Entry scene/shell/Skin, có ba field thật, hai reveal action độc lập, agreement toggle, một primary CTA và back/Escape route. Validation cục bộ báo đúng missing/mismatch/agreement/backend-unavailable, không giả tạo tài khoản và xóa mật khẩu khi rời màn.
+- Full `TwoDCharacterRuntimeStateTests` đạt `27/27`. Player `build/map01a-register-player-v1/LinhGioiOnline.app` build `Succeeded`, `errors=0`; evidence `build/map01a-register-runtime-v1/{pc,mobile,tablet}/register-account.png` đạt `1600×900`, `1600×720`, `1024×768`, không dùng input OS.
+- Đã xem trực tiếp cả ba frame: cùng composition landscape, không wrap/stack hoặc cắt/chồng. Không thêm texture runtime; icon account/lock/eye reuse atlas hiện hành.
+- Next hợp lệ là design gate Quên mật khẩu. Không quay lại micro-polish Đăng ký khi không có regression mới và không mở class/pose/wardrobe/source.
 
 ## Map01A — Chọn máy chủ canonical layout locked — 2026-09-14
 

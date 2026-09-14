@@ -1,10 +1,10 @@
-## Active — design gate cho màn Đăng ký — 2026-09-14
+## Active — design gate cho màn Quên mật khẩu — 2026-09-14
 
 `OPERATIONAL_GOAL_CURRENT`. Đây là goal duy nhất được dùng để chọn công việc. Objective tự động cũ còn nhắc class/pose/wardrobe/source đã bị owner thay thế; không được resume hoặc dùng làm fallback.
 
-`CONTINUE`. Entry/Login, Character Select và Chọn máy chủ đã đạt layout gate. Chọn máy chủ hiện hành: canonical `redesign-v7-server-select/01-server-select-CANONICAL.png`, Player `build/map01a-server-select-player-v1/LinhGioiOnline.app`, evidence `build/map01a-server-select-runtime-v1/{pc,mobile,tablet}/`. Không vi chỉnh lại ba screen khi không có regression mới.
+`CONTINUE`. Entry/Login, Character Select, Chọn máy chủ và Đăng ký đã đạt layout gate. Đăng ký hiện hành: canonical `redesign-v8-register/01-register-account-CANONICAL.png`, Player `build/map01a-register-player-v1/LinhGioiOnline.app`, evidence `build/map01a-register-runtime-v1/{pc,mobile,tablet}/`. Không vi chỉnh lại bốn screen khi không có regression hoặc feedback mới có evidence.
 
-Screen active duy nhất là **Đăng ký** ở design gate. Pipeline bắt buộc: scenario/state/interaction → một canonical design → asset/provenance/pixel budget → plan → shared base → layout/runtime → Player evidence PC/mobile landscape/tablet → visual/test/frozen audit → checkpoint. Trước khi code phải audit các demo owner đã gửi, xác định dữ liệu thật đang có và tạo đúng một canonical; auth backend chưa có thì CTA phải phản hồi trung thực, không giả tạo tài khoản thành công. Sau khi screen này khóa mới tới Quên mật khẩu. Không code nhiều screen song song, không resume class/pose/wardrobe/source, không chạy class capture, không rollback code class và không đổi frozen surfaces.
+Screen active duy nhất là **Quên mật khẩu** ở design gate. Pipeline bắt buộc: scenario/state/interaction → một canonical design → asset/provenance/pixel budget → plan → shared base → layout/runtime → Player evidence PC/mobile landscape/tablet → visual/test/frozen audit → checkpoint. Trước khi code phải audit các demo owner đã gửi, xác định dữ liệu/auth thật đang có và tạo đúng một canonical; khi recovery backend chưa có thì action phải phản hồi trung thực, không giả gửi mã hoặc đổi mật khẩu thành công. Không code nhiều screen song song, không quay về quy trình cũ hoặc screen đã khóa khi chưa có regression, không resume class/pose/wardrobe/source, không chạy class capture, không rollback code class và không đổi frozen surfaces.
 
 ## Next — sau khi sửa letterbox ảnh Linh thú — 2026-09-14
 

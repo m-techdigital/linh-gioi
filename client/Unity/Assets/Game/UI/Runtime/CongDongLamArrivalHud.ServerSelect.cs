@@ -112,6 +112,7 @@ namespace LinhGioi.UI
         {
             _serverSelectReturnTarget = returnTarget;
             _serverSelectOpen = true;
+            _registerOpen = false;
             _entryOpen = true;
             _characterSelectOpen = false;
             UpdateCharacterSelectScreen();
@@ -145,8 +146,7 @@ namespace LinhGioi.UI
         {
             if (_serverSelectOverlay == null) return;
             _serverSelectOverlay.style.display = _serverSelectOpen ? DisplayStyle.Flex : DisplayStyle.None;
-            if (_entryControlCard != null)
-                _entryControlCard.style.display = _serverSelectOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            UpdateEntryControlCardVisibility();
             UpdateHudShellVisibility();
         }
     }

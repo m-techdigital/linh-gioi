@@ -95,6 +95,16 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoServerSelectPanel",
     "ApplyLgoServerSelectCard",
     "ApplyLgoServerSelectAction",
+    "LgoRegisterPanelClass",
+    "LgoRegisterAgreementClass",
+    "LgoRegisterPrimaryClass",
+    "LgoRegisterBackClass",
+    "LgoRegisterPasswordRevealClass",
+    "ApplyLgoRegisterPanel",
+    "ApplyLgoRegisterAgreement",
+    "ApplyLgoRegisterPrimary",
+    "ApplyLgoRegisterBack",
+    "ApplyLgoRegisterPasswordReveal",
     "ApplyLgoCharacterSelectPanel",
     "ApplyLgoCharacterSelectProfile",
     "ApplyLgoCharacterSelectEmptySlot",
@@ -209,6 +219,17 @@ REQUIRED_PARTIAL_MARKERS = {
         "ServerSelectReturnTarget.Entry",
         "ServerSelectReturnTarget.CharacterSelect",
     ],
+    "CongDongLamArrivalHud.Register.cs": [
+        "Map01A Register Overlay",
+        "ApplyLgoRegisterPanel(_registerOverlay)",
+        "Map01A Register Account Field",
+        "Map01A Register Password Field",
+        "Map01A Register Confirm Password Field",
+        "ApplyLgoRegisterAgreement(agreement)",
+        "ApplyLgoRegisterPrimary(submit)",
+        "ApplyLgoRegisterBack(back)",
+        "Dịch vụ đăng ký chưa kết nối. Vui lòng thử lại sau.",
+    ],
     "CongDongLamArrivalHud.Inventory.cs": [
         "_inventoryDetailPanel = InventoryPanel(\"Map01A Inventory Detail Panel\")",
         "_inventoryGridPanel = InventoryPanel(\"Map01A Inventory Grid Panel\")",
@@ -295,6 +316,8 @@ REQUIRED_TEST_MARKERS = [
     "Selecting the saved profile must never cycle class/pose review source",
     "ServerSelectUsesOneRealServerAndReturnsToItsOpeningScreen",
     "Selecting a server must not mutate class, pose, wardrobe or gameplay source state",
+    "RegisterScreenValidatesLocallyAndReturnsToEntry",
+    "Register validation must not mutate class, pose, wardrobe or gameplay state",
 ]
 
 

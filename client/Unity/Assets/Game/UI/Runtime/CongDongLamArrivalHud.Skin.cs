@@ -66,6 +66,11 @@ namespace LinhGioi.UI
         private const string LgoServerSelectPanelClass = "lgo-server-select-panel";
         private const string LgoServerSelectCardClass = "lgo-server-select-card";
         private const string LgoServerSelectActionClass = "lgo-server-select-action";
+        private const string LgoRegisterPanelClass = "lgo-register-panel";
+        private const string LgoRegisterAgreementClass = "lgo-register-agreement";
+        private const string LgoRegisterPrimaryClass = "lgo-register-primary";
+        private const string LgoRegisterBackClass = "lgo-register-back";
+        private const string LgoRegisterPasswordRevealClass = "lgo-register-password-reveal";
         private const string LgoCharacterSelectProfileClass = "lgo-character-select-profile";
         private const string LgoCharacterSelectEmptySlotClass = "lgo-character-select-empty-slot";
         private const string LgoMenuActionClass = "lgo-menu-action";
@@ -787,6 +792,58 @@ namespace LinhGioi.UI
                 button.style.borderTopColor = button.style.borderBottomColor = new Color(1f, .86f, .50f, .98f);
                 button.style.color = new Color(.13f, .08f, .025f, 1f);
             }
+        }
+
+        private static void ApplyLgoRegisterPanel(VisualElement panel)
+        {
+            panel.AddToClassList(LgoRegisterPanelClass);
+            ApplyLgoEntryControlCard(panel);
+            panel.style.minHeight = 492;
+            panel.style.paddingLeft = panel.style.paddingRight = 28;
+            panel.style.paddingTop = 20;
+            panel.style.paddingBottom = 18;
+        }
+
+        private static void ApplyLgoRegisterAgreement(Button button)
+        {
+            button.AddToClassList(LgoRegisterAgreementClass);
+            ApplyLgoEntryRememberAction(button);
+            button.style.flexGrow = 0;
+            button.style.minHeight = 44;
+            button.style.marginRight = 0;
+        }
+
+        private static void ApplyLgoRegisterPrimary(Button button)
+        {
+            button.AddToClassList(LgoRegisterPrimaryClass);
+            ApplyLgoButton(button, true);
+            button.style.flexGrow = 0;
+            button.style.height = 58;
+            button.style.fontSize = 20;
+            button.style.marginTop = 4;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+        }
+
+        private static void ApplyLgoRegisterBack(Button button)
+        {
+            button.AddToClassList(LgoRegisterBackClass);
+            ApplyLgoButton(button);
+            button.style.flexGrow = 0;
+            button.style.alignSelf = Align.Center;
+            button.style.minHeight = 40;
+            button.style.marginTop = 8;
+            button.style.paddingLeft = button.style.paddingRight = 18;
+            button.style.backgroundColor = Color.clear;
+            button.style.borderTopWidth = button.style.borderRightWidth = 0;
+            button.style.borderBottomWidth = button.style.borderLeftWidth = 0;
+            button.style.color = new Color(.72f, .88f, 1f, .96f);
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+        }
+
+        private static void ApplyLgoRegisterPasswordReveal(Button button, Sprite sprite)
+        {
+            button.AddToClassList(LgoRegisterPasswordRevealClass);
+            ApplyLgoEntryPasswordReveal(button, sprite);
         }
 
         private static VisualElement CreateLgoEntryIcon(string name, Sprite sprite, float size)

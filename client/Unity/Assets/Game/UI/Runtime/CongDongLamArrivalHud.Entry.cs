@@ -139,10 +139,7 @@ namespace LinhGioi.UI
             ApplyLgoEntryAuthAction(login, true);
             login.style.flexGrow = 1;
             login.style.marginRight = 10;
-            var register = new Button(() =>
-            {
-                _entryStatus.text = "Đăng ký tài khoản hiện chưa khả dụng.";
-            })
+            var register = new Button(OpenRegister)
             {
                 name = "Map01A Entry Register Button",
                 text = "Đăng ký"
@@ -298,6 +295,7 @@ namespace LinhGioi.UI
         {
             if (Array.IndexOf(args, "--lgo-map01a-skip-entry") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0) return true;
+            if (Array.IndexOf(args, "--lgo-map01a-register-capture") >= 0) return true;
             if (Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0) return false;
@@ -309,8 +307,17 @@ namespace LinhGioi.UI
         {
             if (_entryOverlay == null) return;
             _entryOverlay.style.display = _entryOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            UpdateEntryControlCardVisibility();
             if (_safe != null) _safe.style.display = _entryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             if (_marker != null) _marker.style.display = _entryOpen ? DisplayStyle.None : DisplayStyle.Flex;
+        }
+
+        private void UpdateEntryControlCardVisibility()
+        {
+            if (_entryControlCard == null) return;
+            _entryControlCard.style.display = _serverSelectOpen || _registerOpen
+                ? DisplayStyle.None
+                : DisplayStyle.Flex;
         }
     }
 }
