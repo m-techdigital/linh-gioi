@@ -1,10 +1,11 @@
-## Character Hub — Tiềm năng dùng một template tĩnh đúng kích thước v9 — 2026-09-15
+## Character Hub — Tiềm năng shared topology + evidence đúng ba viewport v10 — 2026-09-15
 
 - Audit theo feedback owner xác nhận dữ liệu và object tree đã dùng chung, nhưng topology v8 vẫn ghép nhiều primitive `Painter2D`; đây là nguyên nhân nét khó khóa theo design và tạo cảm giác mỗi node đang được dựng riêng.
 - v9 thay phần hình học bằng đúng một asset `character-hub-potential-topology.png` 600×520: vòng ngoài, đường nối, năm vòng node, ô giá trị, ô cộng, glyph và silhouette/trục mạch đều có sẵn. `CharacterHubPotentialTopology` chỉ nạp template; năm overlay trong suốt chỉ bind icon/tên/value/click. Đổi Võ/Kiếm/Pháp/Cơ/Linh giữ nguyên object tree, không có UI branch theo class và Skill không dùng chung topology này.
 - Asset được sinh xác định từ `build_lgo_character_hub_skin.py`, không cắt canonical, giảm từ 279 KiB xuống 53.995 byte bằng palette 256 màu. Toàn bộ skin Character Hub khóa `nPOTScale: 0`; Unity không còn tự ép asset 600×520 thành 512×512 hoặc làm mờ/méo các surface/tab/button không phải power-of-two.
-- TDD RED bắt đúng lỗi importer `expected 600 but was 512`; GREEN targeted Unity `1/1`, full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; asset/guard `12/12`, no-3D/no-source-images pass. Player `build/map01a-character-hub-potential-template-player-v9/LinhGioiOnline.app`; evidence `build/map01a-character-hub-potential-template-runtime-v9/{pc,mobile,tablet}/{potential-default,potential}.png`, 9 frame/profile, đã xem trực tiếp không thấy cắt/chồng/vỡ topology.
-- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`; tiếp tục giữ class art/pose/wardrobe/source và screen khác ngoài scope cho đến khi owner duyệt màn Tiềm năng v9.
+- TDD RED bắt đúng lỗi importer `expected 600 but was 512`; GREEN targeted Unity `1/1`, full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; asset/guard `12/12`, no-3D/no-source-images pass. Player `build/map01a-character-hub-potential-template-player-v9/LinhGioiOnline.app`.
+- Audit evidence sau checkpoint phát hiện ba profile v9 đều bị gọi thiếu `-screen-width/-screen-height`, nên cùng ra 1024×768 và không đủ chứng minh responsive. `capture_lgo_character_hub.py` nay là lệnh capture dùng chung cho cả năm tab: Player tự click nội bộ, bắt đúng PC 1280×720, tablet 1024×768, mobile landscape 1600×720, đủ chín frame và manifest; test `4/4`. Evidence thay thế duy nhất: `build/map01a-character-hub-potential-template-runtime-v10/{pc,mobile,tablet}/{potential-default,potential}.png`; đã xem trực tiếp ba ảnh, không cắt/chồng/vỡ topology.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`; tiếp tục giữ class art/pose/wardrobe/source và screen khác ngoài scope cho đến khi owner duyệt màn Tiềm năng v10.
 
 ## Character Hub — Tiềm năng mặc định đúng profile năm class v8 — 2026-09-15
 
