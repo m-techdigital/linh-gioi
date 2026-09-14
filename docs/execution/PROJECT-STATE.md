@@ -1701,3 +1701,11 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Player `build/map01a-bag-screen-player-v3/LinhGioiOnline.app` build `errors=0`, warnings=34. Evidence đã xem trực tiếp tại `build/map01a-bag-screen-runtime-v4/{pc,mobile,tablet}/`: cùng composition hai cột ở 1600×900, 1600×720 và 1024×768, không stack/reflow, không cắt/chồng; capture không dùng chuột/phím OS.
 - Full `TwoDCharacterRuntimeStateTests` đạt 24/24; Python UI/catalog 22/22, shared-skin/no-3D/no-source-image/frozen diff và change budget đều pass sau khi loại Unity import-only churn. Layout Rương đồ được khóa; art pack chưa được coi là owner art approval.
 - Screen active tiếp theo duy nhất là `Kỹ năng` theo `03-ky-nang-five-tab-APPROVED.png`. Phải audit/plan trọn screen trước code; Tiềm năng/Linh thú chờ gate. Không quay lại class/pose/wardrobe/source và không rollback code class.
+
+## Map01A — khóa layout screen Kỹ năng, chuyển gate sang Tiềm năng — 2026-09-14
+
+- Nguồn design duy nhất: `redesign-v4-five-tabs/03-ky-nang-five-tab-APPROVED.png`; plan và gate ở `docs/superpowers/plans/2026-09-14-map01a-skills-screen-realignment.md`.
+- Main workspace dùng ba category card dọc, graph skill 3×3 với connector và dải bốn skill đã trang bị chạy hết chiều rộng cột trái. Detail-right dùng đúng icon skill đang chọn; `Nâng cấp`/`Trang bị` giữ read-only vì chưa có state contract ghi progression.
+- Atlas `map01a-skill-icons-v1` chứa 9 skill icon + 3 category icon RGBA, có manifest/hash/provenance và status `DRAFT_RUNTIME_REVIEW`. Runtime load qua helper atlas chung; node/category/icon dùng shared Skin base, không style từng skill.
+- Player `build/map01a-skills-screen-player-v3/LinhGioiOnline.app` build thành công, `errors=0`. Evidence đã xem trực tiếp tại `build/map01a-skills-screen-runtime-v4/{pc,mobile,tablet}/`: mỗi profile có default/selected state, đúng 1600×900, 1600×720, 1024×768; không stack, cắt hoặc chồng.
+- Focused EditMode đạt 1/1 sau layout cuối. Screen active tiếp theo duy nhất là `Tiềm năng` theo `04-tiem-nang-five-tab-APPROVED.png`, bắt đầu bằng audit/plan toàn màn; không quay lại class/pose/wardrobe/source và không rollback code class.

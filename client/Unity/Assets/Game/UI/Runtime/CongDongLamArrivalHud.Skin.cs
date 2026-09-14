@@ -479,6 +479,52 @@ namespace LinhGioi.UI
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
 
+        private static void ApplyLgoSkillCategoryCard(Button button, bool touch)
+        {
+            ApplyLgoInventoryFilterChip(button, touch);
+            button.AddToClassList("lgo-skill-category-card");
+            button.text = string.Empty;
+            button.style.flexDirection = FlexDirection.Column;
+            button.style.alignItems = Align.Center;
+            button.style.justifyContent = Justify.Center;
+            button.style.flexBasis = StyleKeyword.Auto;
+            button.style.height = 128;
+            button.style.minHeight = 128;
+            button.style.marginRight = 0;
+            button.style.marginBottom = 8;
+        }
+
+        private static void ApplyLgoSkillIcon(VisualElement icon, float size)
+        {
+            icon.style.width = size;
+            icon.style.height = size;
+            icon.style.flexGrow = 0;
+            icon.style.flexShrink = 0;
+            icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+        }
+
+        private static void ApplyLgoSkillNode(Button node)
+        {
+            node.AddToClassList("lgo-skill-node");
+            node.text = string.Empty;
+            node.style.width = 104;
+            node.style.minWidth = 104;
+            node.style.maxWidth = 104;
+            node.style.flexBasis = 104;
+            node.style.flexGrow = 0;
+            node.style.flexShrink = 0;
+            node.style.height = 104;
+            node.style.minHeight = 104;
+            node.style.maxHeight = 104;
+            node.style.paddingLeft = node.style.paddingRight = 4;
+            node.style.paddingTop = node.style.paddingBottom = 4;
+            node.style.flexDirection = FlexDirection.Column;
+            node.style.alignItems = Align.Center;
+            node.style.justifyContent = Justify.Center;
+            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 52;
+            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 52;
+        }
+
         private static void ApplyLgoInventorySearchField(TextField field, bool touch)
         {
             field.AddToClassList(LgoInventorySearchFieldClass);

@@ -28,6 +28,10 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
         self.assertIn("build/map01a-bag-screen-runtime-v4/pc/bag.png", current_paths)
         self.assertIn("build/map01a-bag-screen-runtime-v4/mobile/manifest.json", current_paths)
         self.assertIn("build/map01a-bag-screen-runtime-v4/tablet/manifest.json", current_paths)
+        self.assertIn("build/map01a-skills-screen-runtime-v4/pc/skills-default.png", current_paths)
+        self.assertIn("build/map01a-skills-screen-runtime-v4/pc/skills.png", current_paths)
+        self.assertIn("build/map01a-skills-screen-runtime-v4/mobile/manifest.json", current_paths)
+        self.assertIn("build/map01a-skills-screen-runtime-v4/tablet/manifest.json", current_paths)
         self.assertFalse(any("map01a-shared-layout-runtime-v4" in path for path in current_paths), current_paths)
         self.assertFalse(any("map01a-five-tab-player-copy-runtime-v1" in path for path in current_paths), current_paths)
         self.assertFalse(any("character-select" in path for path in current_paths), current_paths)
@@ -43,7 +47,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "Marker: `LGO_MAP01A_UI_REVIEW_CATALOG_READY`\n\n"
             "## Current evidence\n\n"
             "entry/login: `build/map01a-entry-remember-runtime-v1/entry-login.png`, `build/map01a-entry-remember-runtime-v1/manifest.json`\n"
-            "five tabs: `build/map01a-bag-screen-runtime-v4/pc/character-info.png`, `build/map01a-bag-screen-runtime-v4/pc/bag.png`, `build/map01a-bag-screen-runtime-v4/pc/bag-search-binh-mau.png`, `build/map01a-bag-screen-runtime-v4/pc/bag-search-binh-mau-selected.png`, `build/map01a-bag-screen-runtime-v4/pc/skills.png`, `build/map01a-bag-screen-runtime-v4/pc/potential.png`, `build/map01a-bag-screen-runtime-v4/pc/spirit-pet.png`, `build/map01a-bag-screen-runtime-v4/pc/manifest.json`\n"
+            "five tabs: `build/map01a-skills-screen-runtime-v4/pc/character-info.png`, `build/map01a-skills-screen-runtime-v4/pc/bag.png`, `build/map01a-skills-screen-runtime-v4/pc/bag-search-binh-mau.png`, `build/map01a-skills-screen-runtime-v4/pc/bag-search-binh-mau-selected.png`, `build/map01a-skills-screen-runtime-v4/pc/skills-default.png`, `build/map01a-skills-screen-runtime-v4/pc/skills.png`, `build/map01a-skills-screen-runtime-v4/pc/potential.png`, `build/map01a-skills-screen-runtime-v4/pc/spirit-pet.png`, `build/map01a-skills-screen-runtime-v4/pc/manifest.json`\n"
             "route: `build/map01a-completion-copy-runtime-v2/01-arrival-q01.bmp`, `build/map01a-completion-copy-runtime-v2/18-q09-portal-open.bmp`, `build/map01a-completion-copy-runtime-v2/manifest.json`\n"
             "menu: `build/map01a-modal-input-runtime-v1/menu.png`, `build/map01a-modal-input-runtime-v1/manifest.json`\n"
             "docs/design/LGO-MAP01A-ITEM-ICON-SOURCE-AUDIT-v0.1.md\n"

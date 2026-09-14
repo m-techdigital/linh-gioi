@@ -209,11 +209,13 @@ namespace LinhGioi.World
         private readonly Dictionary<string, Sprite> _map01AItemIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ACharacterEquipmentIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ABagCategoryIcons = new Dictionary<string, Sprite>();
+        private readonly Dictionary<string, Sprite> _map01ASkillIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01AHudIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ANpcSprites = new Dictionary<string, Sprite>();
         private bool _map01AItemIconsLoaded;
         private bool _map01ACharacterEquipmentIconsLoaded;
         private bool _map01ABagCategoryIconsLoaded;
+        private bool _map01ASkillIconsLoaded;
         private bool _map01AHudIconsLoaded;
         private TwoDClassMixedLoadoutFitPreview _classFitPreview;
         private string _classFitPreviewId = "kiem";
@@ -323,6 +325,13 @@ namespace LinhGioi.World
                 "LGOMaps/CongDongLamMap01ABagCategoryIcons/", "map01a-bag-category-icons",
                 "map01a-bag-category-icons-v1");
             return _map01ABagCategoryIcons.TryGetValue(categoryId, out var sprite) ? sprite : null;
+        }
+
+        public Sprite GetMap01ASkillIconSprite(string iconId)
+        {
+            EnsureMap01AIconAtlasLoaded(ref _map01ASkillIconsLoaded, _map01ASkillIcons,
+                "LGOMaps/CongDongLamMap01ASkillIcons/", "map01a-skill-icons", "map01a-skill-icons-v1");
+            return _map01ASkillIcons.TryGetValue(iconId, out var sprite) ? sprite : null;
         }
 
         private void EnsureMap01AIconAtlasLoaded(ref bool loaded, Dictionary<string, Sprite> sprites,
@@ -2192,6 +2201,10 @@ namespace LinhGioi.World
             CaptureScreenPng(bagSearchSelected);
             search.value = string.Empty;
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skills Main Tab"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var skillsDefault = Path.Combine(directory, "skills-default.png");
+            CaptureScreenPng(skillsDefault);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skill Node Kiếm Vũ"));
             yield return null;
             yield return new WaitForEndOfFrame();
@@ -2210,7 +2223,7 @@ namespace LinhGioi.World
             CaptureScreenPng(spiritPet);
             var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(bagSearch)
                 && File.Exists(bagSearchSelected)
-                && File.Exists(skills) && File.Exists(potential) && File.Exists(spiritPet)
+                && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potential) && File.Exists(spiritPet)
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
@@ -2218,7 +2231,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frames\": [\"character-info.png\", \"bag.png\", \"bag-search-binh-mau.png\", \"bag-search-binh-mau-selected.png\", \"skills.png\", \"potential.png\", \"spirit-pet.png\"]\n"
+                + "  \"frames\": [\"character-info.png\", \"bag.png\", \"bag-search-binh-mau.png\", \"bag-search-binh-mau-selected.png\", \"skills-default.png\", \"skills.png\", \"potential.png\", \"spirit-pet.png\"]\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);

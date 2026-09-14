@@ -87,6 +87,9 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoEntrySideAction",
     "ApplyLgoCharacterSelectCard",
     "ApplyLgoCharacterSelectPrimaryAction",
+    "ApplyLgoSkillCategoryCard",
+    "ApplyLgoSkillIcon",
+    "ApplyLgoSkillNode",
 ]
 FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+readonly\s+Color\s+(?!Ui)[A-Za-z0-9_]*(Glass|Gold|Blue|Border|Text|SubText)"),
@@ -223,7 +226,8 @@ REQUIRED_PARTIAL_MARKERS = {
         "CreateHubTile",
         "ApplyLgoInventoryGridCell(button)",
         "CreateHubRailControl",
-        "ApplyLgoInventoryFilterChip(button, _touch)",
+        "ApplyLgoSkillCategoryCard(button, _touch)",
+        "ApplyLgoSkillNode(node)",
         "InitializeSkillsView(body)",
         "InitializePotentialView(body)",
         "InitializeSpiritPetView(body)",

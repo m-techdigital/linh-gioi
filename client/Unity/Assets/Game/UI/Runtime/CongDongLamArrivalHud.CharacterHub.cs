@@ -10,9 +10,10 @@ namespace LinhGioi.UI
         private enum CharacterHubMode { Skills, Potential, SpiritPet }
 
         private VisualElement _skillsPanel, _potentialPanel, _spiritPetPanel, _hubPreviewDetailPanel;
+        private VisualElement _hubSkillActionRow;
         private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
         private VisualElement _hubDetailIcon;
-        private Button _hubSkillUpgradeAction, _potentialAddPointAction, _spiritPetDevelopAction;
+        private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _spiritPetDevelopAction;
         private Texture2D _spiritPetPreviewTexture;
         private readonly List<Button> _skillPathNodes = new List<Button>();
         private readonly List<Button> _potentialPathNodes = new List<Button>();
@@ -42,6 +43,15 @@ namespace LinhGioi.UI
             return icon;
         }
 
+        private VisualElement SkillIcon(string name, string iconId, float size)
+        {
+            var icon = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
+            ApplyLgoSkillIcon(icon, size);
+            var sprite = _scene.GetMap01ASkillIconSprite(iconId);
+            icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            return icon;
+        }
+
         private Button CreateHubTile(string name, string title, string subtitle, string iconId, Action action = null)
         {
             var button = InventoryButton(action ?? (() => { }), name);
@@ -60,43 +70,43 @@ namespace LinhGioi.UI
             return button;
         }
 
-        private Button CreateHubRailControl(string name, string text, bool selected)
+        private Button CreateHubRailControl(string name, string text, string iconId, bool selected)
         {
-            var button = InventoryButton(() => { }, name, text);
-            ApplyLgoInventoryFilterChip(button, _touch);
-            button.style.flexBasis = StyleKeyword.Auto;
-            button.style.marginRight = 0;
-            button.style.marginBottom = 7;
+            var button = InventoryButton(() => { }, name);
+            ApplyLgoSkillCategoryCard(button, _touch);
+            button.Add(SkillIcon(name + " Icon", iconId, 72));
+            var label = LgoLabel(text, 14, UiText, true);
+            label.style.unityTextAlign = TextAnchor.MiddleCenter;
+            button.Add(label);
             ApplyLgoSelectedTab(button, selected);
             if (!selected) ApplyLgoDisabledAction(button);
             return button;
         }
 
-        private Button CreateHubPathNode(string name, string title, string level, string iconId, Action action, bool selected = false)
+        private Button CreateHubPathNode(string name, string title, string level, string iconId, Action action,
+            bool selected = false, bool useSkillArt = false)
         {
             var node = InventoryButton(action, name);
-            node.style.width = 142;
-            node.style.minWidth = 142;
-            node.style.maxWidth = 142;
-            node.style.flexBasis = 142;
-            node.style.flexGrow = 0;
-            node.style.height = 104;
-            node.style.flexShrink = 0;
-            node.style.flexDirection = FlexDirection.Column;
-            node.style.alignItems = Align.Center;
-            node.style.justifyContent = Justify.Center;
-            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 52;
-            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 52;
-            node.Add(HubIcon(name + " Icon", iconId, 48));
+            ApplyLgoSkillNode(node);
+            node.tooltip = title + " · " + level;
+            node.Add(useSkillArt ? SkillIcon(name + " Icon", iconId, 88) : HubIcon(name + " Icon", iconId, 64));
             var titleLabel = LgoLabel(title, 12, UiText, true);
             titleLabel.name = name + " Title";
             titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             titleLabel.style.marginTop = 2;
             titleLabel.style.whiteSpace = WhiteSpace.NoWrap;
+            titleLabel.style.display = useSkillArt ? DisplayStyle.None : DisplayStyle.Flex;
             node.Add(titleLabel);
             var levelLabel = LgoLabel(level, 10, new Color(.74f, .92f, 1f, .92f), true);
             levelLabel.name = name + " Level";
             levelLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            levelLabel.style.position = useSkillArt ? Position.Absolute : Position.Relative;
+            if (useSkillArt)
+            {
+                levelLabel.style.bottom = -7;
+                levelLabel.style.backgroundColor = new Color(.01f, .035f, .06f, .94f);
+                levelLabel.style.paddingLeft = levelLabel.style.paddingRight = 7;
+            }
             node.Add(levelLabel);
             ApplyHubPathNodeSelection(node, selected);
             return node;
@@ -193,37 +203,36 @@ namespace LinhGioi.UI
         {
             _skillsPanel = CreateHubSurface("Map01A Skills Panel");
             var content = new VisualElement { name = "Map01A Skills Workspace" };
-            content.style.flexDirection = FlexDirection.Row;
+            content.style.flexDirection = FlexDirection.Column;
             content.style.flexGrow = 1;
             _skillsPanel.Add(content);
+
+            var progression = new VisualElement { name = "Map01A Skills Progression Area" };
+            progression.style.flexDirection = FlexDirection.Row;
+            progression.style.flexGrow = 1;
+            progression.style.minHeight = 0;
+            content.Add(progression);
 
             var rail = new VisualElement { name = "Map01A Skills Category Rail" };
             rail.style.flexDirection = FlexDirection.Column;
             rail.style.width = 116;
             rail.style.marginRight = 12;
-            rail.Add(CreateHubRailControl("Map01A Active Skills Category", "Chủ động", true));
-            rail.Add(CreateHubRailControl("Map01A Passive Skills Category", "Bị động", false));
-            rail.Add(CreateHubRailControl("Map01A Method Skills Category", "Tâm pháp", false));
-            content.Add(rail);
+            rail.Add(CreateHubRailControl("Map01A Active Skills Category", "Chủ động", "category_active", true));
+            rail.Add(CreateHubRailControl("Map01A Passive Skills Category", "Bị động", "category_passive", false));
+            rail.Add(CreateHubRailControl("Map01A Method Skills Category", "Tâm pháp", "category_method", false));
+            progression.Add(rail);
 
             var skillArea = new VisualElement { name = "Map01A Skills Grid Area" };
             skillArea.style.flexGrow = 1;
             skillArea.style.minWidth = 0;
-            var pointRow = InventoryRow("Map01A Skill Point Row");
-            pointRow.style.alignItems = Align.Center;
-            pointRow.style.justifyContent = Justify.SpaceBetween;
-            pointRow.Add(LgoTitleLabel("Lộ trình Thiên Kiếm", 17));
-            pointRow.Add(InventoryBadge("Map01A Skill Points Badge", "Điểm kỹ năng: 12", UiGold));
-            skillArea.Add(pointRow);
-
             var path = new VisualElement { name = "Map01A Skill Progression Path" };
             path.style.flexGrow = 1;
             path.style.alignItems = Align.Center;
             var stages = new[]
             {
-                new[] { ("Thiên Kiếm Quyết", "Lv.8", "skill"), ("Lăng Không Bộ", "Lv.5", "run"), ("Kiếm Vũ", "Lv.4", "attack") },
-                new[] { ("Hộ Thể", "Lv.3", "skills"), ("Song Kiếm", "Lv.6", "attack"), ("Phong Trảm", "Lv.2", "skill") },
-                new[] { ("Kiếm Trận", "Lv.1", "crest"), ("Ngự Kiếm", "Lv.3", "jump"), ("Vạn Kiếm", "Lv.1", "skills") }
+                new[] { ("Thiên Kiếm Quyết", "Lv.8", "thien_kiem_quyet"), ("Lăng Không Bộ", "Lv.5", "lang_khong_bo"), ("Kiếm Vũ", "Lv.4", "kiem_vu") },
+                new[] { ("Hộ Thể", "Lv.3", "ho_the"), ("Song Kiếm", "Lv.6", "song_kiem"), ("Phong Trảm", "Lv.2", "phong_tram") },
+                new[] { ("Kiếm Trận", "Lv.1", "kiem_tran"), ("Ngự Kiếm", "Lv.3", "ngu_kiem"), ("Vạn Kiếm", "Lv.1", "van_kiem") }
             };
             for (var stageIndex = 0; stageIndex < stages.Length; stageIndex++)
             {
@@ -237,7 +246,8 @@ namespace LinhGioi.UI
                     var skill = stages[stageIndex][nodeIndex];
                     var nodeName = "Map01A Skill Node " + skill.Item1;
                     var node = CreateHubPathNode(nodeName, skill.Item1, skill.Item2, skill.Item3,
-                        () => SelectSkillNode(nodeName, skill.Item1, skill.Item2, skill.Item3), stageIndex == 0 && nodeIndex == 0);
+                        () => SelectSkillNode(nodeName, skill.Item1, skill.Item2, skill.Item3),
+                        stageIndex == 0 && nodeIndex == 0, true);
                     _skillPathNodes.Add(node);
                     stage.Add(node);
                     if (nodeIndex < stages[stageIndex].Length - 1)
@@ -251,11 +261,14 @@ namespace LinhGioi.UI
             var equippedRow = InventoryRow("Map01A Equipped Skill Strip");
             equippedRow.style.alignItems = Align.Center;
             equippedRow.style.justifyContent = Justify.SpaceBetween;
-            equippedRow.Add(InventoryBadge("Map01A Equipped Skill Summary", "Kỹ năng đã trang bị", UiSubText));
-            foreach (var icon in new[] { "skill", "run", "attack", "skills" }) equippedRow.Add(HubIcon("Map01A Equipped Skill " + icon, icon, 46));
-            equippedRow.Add(InventoryBadge("Map01A Equipped Skill Count", "4/4", new Color(.76f, 1f, .70f, .94f)));
-            skillArea.Add(equippedRow);
-            content.Add(skillArea);
+            equippedRow.style.minHeight = 82;
+            equippedRow.Add(InventoryBadge("Map01A Equipped Skill Summary", "Đã trang bị", UiSubText));
+            foreach (var iconId in new[] { "thien_kiem_quyet", "lang_khong_bo", "phong_tram", "van_kiem" })
+                equippedRow.Add(SkillIcon("Map01A Equipped Skill " + iconId, iconId, 58));
+            equippedRow.Add(InventoryBadge("Map01A Skill Points Badge", "12 điểm", UiGold));
+            progression.Add(skillArea);
+            equippedRow.style.marginTop = 6;
+            content.Add(equippedRow);
             body.Add(_skillsPanel);
         }
 
@@ -380,10 +393,22 @@ namespace LinhGioi.UI
             _hubDetailStatus.style.unityTextAlign = TextAnchor.MiddleLeft;
             _hubPreviewDetailPanel.Add(_hubDetailStatus);
 
+            _hubSkillActionRow = InventoryRow("Map01A Skill Detail Actions");
+            _hubSkillActionRow.style.marginTop = 12;
             _hubSkillUpgradeAction = InventoryButton(() => { }, "Map01A Skill Upgrade Action", "Nâng cấp");
+            _hubSkillEquipAction = InventoryButton(() => { }, "Map01A Skill Equip Action", "Trang bị");
+            foreach (var action in new[] { _hubSkillUpgradeAction, _hubSkillEquipAction })
+            {
+                action.style.flexGrow = 1;
+                action.style.flexBasis = 0;
+                action.style.marginRight = 6;
+                ApplyLgoDisabledAction(action);
+                _hubSkillActionRow.Add(action);
+            }
+            _hubPreviewDetailPanel.Add(_hubSkillActionRow);
             _potentialAddPointAction = InventoryButton(() => { }, "Map01A Potential Add Point", "Cộng 1 điểm");
             _spiritPetDevelopAction = InventoryButton(() => { }, "Map01A Spirit Pet Develop Action", "Bồi dưỡng");
-            foreach (var action in new[] { _hubSkillUpgradeAction, _potentialAddPointAction, _spiritPetDevelopAction })
+            foreach (var action in new[] { _potentialAddPointAction, _spiritPetDevelopAction })
             {
                 action.style.marginTop = 12;
                 action.style.flexShrink = 0;
@@ -448,9 +473,10 @@ namespace LinhGioi.UI
 
         private void ConfigureHubDetailMode(CharacterHubMode mode)
         {
-            _hubSkillUpgradeAction.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubSkillActionRow.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
             _potentialAddPointAction.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _spiritPetDevelopAction.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubDetailIcon.style.width = _hubDetailIcon.style.height = mode == CharacterHubMode.Skills ? 124 : 96;
             _hubDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
 
@@ -463,14 +489,16 @@ namespace LinhGioi.UI
         private void ShowSkillDetail(string title, string level, string iconId)
         {
             ConfigureHubDetailMode(CharacterHubMode.Skills);
-            SetHubDetailIcon(iconId);
+            var sprite = _scene.GetMap01ASkillIconSprite(iconId);
+            _hubDetailIcon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            _hubDetailIcon.style.width = _hubDetailIcon.style.height = 124;
             _hubDetailHeader.text = "CHI TIẾT KỸ NĂNG";
             _hubDetailName.text = title;
             _hubDetailMeta.text = "Kỹ năng chủ động · " + level;
             _hubDetailBody.text = title == "Thiên Kiếm Quyết"
-                ? "Sát thương: 320% Công\nHồi chiêu: 12 giây\nTiêu hao MP: 180\n\nBộ bốn kỹ năng hiện hành được giữ nguyên."
-                : "Cấp hiện hành: " + level + "\n\nThông tin hiệu ứng sẽ hiển thị khi kỹ năng được mở đầy đủ.";
-            _hubDetailStatus.text = "Tính năng nâng cấp chưa mở.";
+                ? "Vận kiếm khí thiên đạo, chém mục tiêu phía trước.\n\nSát thương  320% Công\nPhạm vi  Hình quạt trước mặt\nHồi chiêu  12 giây\nTiêu hao MP  180"
+                : "Cấp hiện hành  " + level + "\n\nThông tin hiệu ứng chi tiết sẽ hiển thị khi kỹ năng được lĩnh hội đầy đủ.";
+            _hubDetailStatus.text = "Nâng cấp và thay đổi bộ kỹ năng đang khóa.";
         }
 
         private void ShowPotentialDetail(string title, string value, string iconId)
@@ -490,7 +518,7 @@ namespace LinhGioi.UI
         {
             if (mode == CharacterHubMode.Skills)
             {
-                ShowSkillDetail("Thiên Kiếm Quyết", "Lv.8", "skill");
+                ShowSkillDetail("Thiên Kiếm Quyết", "Lv.8", "thien_kiem_quyet");
             }
             else if (mode == CharacterHubMode.Potential)
             {

@@ -377,8 +377,18 @@ namespace LinhGioi.Tests.EditMode
                     "Unimplemented skill categories must be visibly gated instead of accepting dead clicks.");
                 Assert.That(root.Q<Button>("Map01A Method Skills Category").enabledSelf, Is.False);
                 var firstSkillNode = root.Q<Button>("Map01A Skill Node Thiên Kiếm Quyết");
-                Assert.That(firstSkillNode.style.minWidth.value.value, Is.GreaterThanOrEqualTo(140),
-                    "Skill path nodes need a fixed readable base width; flex shrinking stacks Vietnamese labels vertically.");
+                Assert.That(firstSkillNode.ClassListContains("lgo-skill-node"), Is.True,
+                    "All skill nodes must use the shared circular skill-node base.");
+                Assert.That(firstSkillNode.style.width.value.value, Is.InRange(96, 104));
+                Assert.That(root.Q<VisualElement>("Map01A Active Skills Category Icon"), Is.Not.Null);
+                Assert.That(root.Q<VisualElement>("Map01A Skill Node Thiên Kiếm Quyết Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01ASkillIconSprite("thien_kiem_quyet")));
+                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill thien_kiem_quyet").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01ASkillIconSprite("thien_kiem_quyet")));
+                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill thien_kiem_quyet").style.width.value.value,
+                    Is.EqualTo(58), "The full-width equipped strip must keep readable icons without clipping its skill-points badge.");
+                Assert.That(root.Q<Button>("Map01A Skill Equip Action"), Is.Not.Null);
+                Assert.That(root.Q<Button>("Map01A Skill Equip Action").enabledSelf, Is.False);
                 var flags = BindingFlags.Instance | BindingFlags.NonPublic;
                 var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
                 var hubDetailName = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailName", flags).GetValue(hud);
@@ -391,6 +401,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(selectedSkillNode.style.borderTopWidth.value, Is.EqualTo(2),
                     "The selected node must expose the same visible selection state used by its detail-right content.");
                 Assert.That(firstSkillNode.style.borderTopWidth.value, Is.EqualTo(1));
+                Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01ASkillIconSprite("kiem_vu")));
                 StringAssert.DoesNotContain("chờ dữ liệu", hubDetailBody.text);
                 StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
 
