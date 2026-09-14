@@ -159,6 +159,15 @@ RUNTIME_ART_PACKS = [
         'status_error': 'Map01A character-hub preview art must remain draft until Player visual review',
     },
     {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin',
+        'id': 'map01a-character-hub-surface-v1',
+        'status': 'DRAFT_RUNTIME_REVIEW',
+        'assets': {'character-hub-surface.png': (512, 512, 'ui-modal-surface')},
+        'generators': {'deterministic_svg_raster'},
+        'max_bytes': 320_000,
+        'status_error': 'Map01A character-hub surface must remain draft until owner Player visual review',
+    },
+    {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/DongMonIllustrated',
         'id': 'dongmon-illustrated-draft-v1',
         'status': 'DRAFT_OWNER_REVIEW',

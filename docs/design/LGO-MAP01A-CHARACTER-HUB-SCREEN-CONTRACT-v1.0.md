@@ -1,7 +1,7 @@
 # Map01A character hub — canonical screen contract v1.0
 
 Ngày khóa: 2026-09-14  
-Trạng thái: **OWNER_APPROVED_DESIGN_SET / FIVE_SCREENS_LAYOUT_LOCKED**
+Trạng thái: **OWNER_APPROVED_DESIGN_SET / SHARED_LAYOUT_LOCKED / SCREEN_DETAIL_FIX_REQUIRED**
 
 ## Mục đích
 
@@ -14,11 +14,11 @@ Thư mục nguồn đã duyệt:
 
 | Thứ tự | Screen | Canonical design duy nhất | Trạng thái triển khai |
 |---:|---|---|---|
-| 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** — evidence v5, không vi chỉnh lại |
-| 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** — evidence v4, không vi chỉnh lại |
-| 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** — evidence v4, không vi chỉnh lại |
-| 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** — evidence v1, không vi chỉnh lại |
-| 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | **LAYOUT_LOCKED** — evidence v1 |
+| 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **FIX_REQUIRED** |
+| 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **FIX_REQUIRED** |
+| 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **FIX_REQUIRED** |
+| 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | **FIX_REQUIRED** |
+| 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | **FIX_REQUIRED** |
 
 Các demo cũ trong thư mục cha là tài liệu lịch sử. Chúng không được dùng để quyết định layout hoặc mở lại hệ tab/cột cũ.
 
@@ -92,4 +92,4 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ## Gate hiện hành
 
-Cả năm screen đã qua layout gate ở ba profile. Linh thú dùng Player/evidence v1 với hero art đúng tỷ lệ, hai progress bar, roster và detail-right đầy đủ; ba pet chưa có source vẫn khóa trung thực. Character hub không còn screen active; bước UI kế tiếp phải có một canonical design/contract riêng trước code. Không resume class/pose/wardrobe/source và không rollback code class.
+Shared layout tổng đã được sửa và khóa lại bằng Player/evidence `build/map01a-five-tab-layout-runtime-v4/{pc,mobile,tablet}/`: một hàng năm tab, body hai cột, detail-right và footer giữ cùng composition ở `1600×900`, `1600×720`, `1024×768`. Gate active chuyển sang chi tiết tab `Nhân vật`; bốn tab sau vẫn chờ đúng thứ tự, không làm song song. Không resume class/pose/wardrobe/source và không rollback code class.

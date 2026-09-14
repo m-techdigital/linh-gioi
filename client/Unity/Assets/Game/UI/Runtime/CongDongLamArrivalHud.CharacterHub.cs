@@ -391,19 +391,31 @@ namespace LinhGioi.UI
             ApplyLgoDetailCard(_hubPreviewDetailPanel);
             _hubDetailHeader = LgoLabel("CHI TIẾT", 14, UiSubText, true);
             _hubPreviewDetailPanel.Add(_hubDetailHeader);
+            var detailHero = new VisualElement { name = "Map01A Hub Preview Detail Hero" };
+            detailHero.style.flexDirection = FlexDirection.Row;
+            detailHero.style.alignItems = Align.Center;
+            detailHero.style.flexShrink = 0;
+            detailHero.style.marginTop = 12;
+            detailHero.style.marginBottom = 12;
             _hubDetailIcon = HubIcon("Map01A Hub Preview Detail Icon", "skill", 96);
-            _hubDetailIcon.style.alignSelf = Align.Center;
-            _hubDetailIcon.style.marginTop = 12;
-            _hubDetailIcon.style.marginBottom = 10;
-            _hubPreviewDetailPanel.Add(_hubDetailIcon);
-            _hubDetailName = LgoTitleLabel("", 20);
-            _hubPreviewDetailPanel.Add(_hubDetailName);
+            _hubDetailIcon.style.flexShrink = 0;
+            _hubDetailIcon.style.marginRight = 16;
+            detailHero.Add(_hubDetailIcon);
+            var detailHeroCopy = new VisualElement { name = "Map01A Hub Preview Detail Hero Copy" };
+            detailHeroCopy.style.flexGrow = 1;
+            detailHeroCopy.style.minWidth = 0;
+            detailHeroCopy.style.flexDirection = FlexDirection.Column;
+            _hubDetailName = LgoTitleLabel("", 24);
+            _hubDetailName.name = "Map01A Hub Preview Detail Name";
+            detailHeroCopy.Add(_hubDetailName);
             _hubDetailMeta = LgoSubtitleLabel("", 13);
             _hubDetailMeta.style.marginTop = 4;
-            _hubPreviewDetailPanel.Add(_hubDetailMeta);
+            detailHeroCopy.Add(_hubDetailMeta);
+            detailHero.Add(detailHeroCopy);
+            _hubPreviewDetailPanel.Add(detailHero);
             var facts = new VisualElement { name = "Map01A Hub Preview Detail Facts" };
             ApplyLgoInventoryStatsCard(facts);
-            _hubDetailBody = LgoLabel("", 13, UiText);
+            _hubDetailBody = LgoLabel("", 15, UiText);
             _hubDetailBody.style.whiteSpace = WhiteSpace.Normal;
             facts.Add(_hubDetailBody);
             _hubPreviewDetailPanel.Add(facts);
@@ -415,6 +427,11 @@ namespace LinhGioi.UI
             _hubDetailStatus.style.whiteSpace = WhiteSpace.Normal;
             _hubDetailStatus.style.unityTextAlign = TextAnchor.MiddleLeft;
             _hubPreviewDetailPanel.Add(_hubDetailStatus);
+
+            var actionSpacer = new VisualElement { name = "Map01A Hub Preview Detail Action Spacer", pickingMode = PickingMode.Ignore };
+            actionSpacer.style.flexGrow = 1;
+            actionSpacer.style.minHeight = 8;
+            _hubPreviewDetailPanel.Add(actionSpacer);
 
             _hubSkillActionRow = InventoryRow("Map01A Skill Detail Actions");
             _hubSkillActionRow.style.marginTop = 12;
@@ -516,7 +533,9 @@ namespace LinhGioi.UI
             _hubSkillActionRow.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
             _hubPotentialActionRow.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetActionRow.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
-            _hubDetailIcon.style.width = _hubDetailIcon.style.height = mode == CharacterHubMode.Skills ? 124 : 96;
+            _hubDetailIcon.style.width = _hubDetailIcon.style.height = mode == CharacterHubMode.Skills
+                ? 116
+                : mode == CharacterHubMode.Potential ? 104 : 112;
             _hubDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
 
@@ -531,7 +550,7 @@ namespace LinhGioi.UI
             ConfigureHubDetailMode(CharacterHubMode.Skills);
             var sprite = _scene.GetMap01ASkillIconSprite(iconId);
             _hubDetailIcon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
-            _hubDetailIcon.style.width = _hubDetailIcon.style.height = 124;
+            _hubDetailIcon.style.width = _hubDetailIcon.style.height = 116;
             _hubDetailHeader.text = "CHI TIẾT KỸ NĂNG";
             _hubDetailName.text = title;
             _hubDetailMeta.text = "Kỹ năng chủ động · " + level;

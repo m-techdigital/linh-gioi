@@ -9,7 +9,7 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private VisualElement _inventoryItemsGrid, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterHeroLeftEquipmentRail, _characterHeroRightEquipmentRail, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard, _inventoryCategoryRail;
+        private VisualElement _inventoryBackdrop, _inventoryItemsGrid, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterHeroLeftEquipmentRail, _characterHeroRightEquipmentRail, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard, _inventoryCategoryRail;
         private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState;
         private Button _bagTab, _characterInfoTab, _skillsTab, _potentialTab, _spiritPetTab, _allItemsTab, _equipmentTab, _suppliesTab, _materialsTab, _otherItemsTab;
         private Button _inventoryDetailPrimaryAction, _inventoryDetailLockAction;
@@ -138,19 +138,25 @@ namespace LinhGioi.UI
 
         private void BuildInventory()
         {
+            _inventoryBackdrop = new VisualElement { name = "Map01A Character Hub Backdrop", pickingMode = PickingMode.Ignore };
+            Place(_inventoryBackdrop, 0, 0, 0, 0);
+            ApplyLgoCharacterHubBackdrop(_inventoryBackdrop);
+            _inventoryBackdrop.style.display = DisplayStyle.None;
             _inventory = new VisualElement { name = "Map01A Inventory" };
-            ApplyLgoModalShell(_inventory, 12); Place(_inventory, 72, 72, 86, 72);
+            ApplyLgoCharacterHubShell(_inventory); Place(_inventory, 72, 72, 86, 72);
             _inventory.style.flexDirection = FlexDirection.Column;
             _inventory.style.paddingLeft = _inventory.style.paddingRight = 12;
             _inventory.style.paddingTop = _inventory.style.paddingBottom = 12;
 
             var header = InventoryRow("Map01A Inventory Header");
             header.style.alignItems = Align.Center;
+            header.style.marginBottom = 2;
             var titleGroup = new VisualElement();
             titleGroup.style.flexGrow = 1;
-            titleGroup.style.marginLeft = 20;
+            titleGroup.style.marginLeft = 34;
             _inventoryModalTitle = LgoTitleLabel("HÀNH TRANG", 26);
             _inventoryModalTitle.name = "Map01A Inventory Modal Title";
+            ApplyLgoCharacterHubTitle(_inventoryModalTitle);
             _inventoryModalSubtitle = LgoSubtitleLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 13);
             _inventoryModalSubtitle.name = "Map01A Inventory Modal Subtitle";
             _inventoryModalSubtitle.style.display = DisplayStyle.None;
@@ -179,6 +185,7 @@ namespace LinhGioi.UI
             {
                 ApplyLgoInventoryMainTab(tab, _touch);
             }
+            _spiritPetTab.style.marginRight = 0;
             mainTabs.Add(_characterInfoTab);
             mainTabs.Add(_bagTab);
             mainTabs.Add(_skillsTab);
@@ -198,6 +205,7 @@ namespace LinhGioi.UI
             ApplyLgoOrnamentRail(bottomOrnament);
             bottomOrnament.style.marginTop = 10;
             bottomOrnament.style.marginBottom = 0;
+            bottomOrnament.style.display = DisplayStyle.None;
             _inventory.Add(bottomOrnament);
 
             _inventoryDetailPanel = InventoryPanel("Map01A Inventory Detail Panel");
@@ -293,6 +301,7 @@ namespace LinhGioi.UI
             actions.style.marginBottom = 10;
             actions.style.flexShrink = 0;
             _inventoryDetailPrimaryAction = InventoryButton(UseInventoryDetailPrimaryAction, "Map01A Inventory Detail Primary Action");
+            ApplyLgoCharacterHubPrimaryAction(_inventoryDetailPrimaryAction);
             _inventoryDetailPrimaryAction.style.minHeight = _touch ? 44 : 38;
             _inventoryDetailLockAction = InventoryButton(ToggleSelectedEquipmentLock, "Map01A Inventory Detail Lock Action", "Khóa");
             ApplyLgoButton(_inventoryDetailLockAction, true);
@@ -425,12 +434,14 @@ namespace LinhGioi.UI
             _characterHeroCard.style.flexDirection = FlexDirection.Row;
             _characterHeroCard.style.alignItems = Align.Center;
             _characterHeroCard.style.justifyContent = Justify.Center;
-            _characterHeroCard.style.height = 430;
-            _characterHeroCard.style.minHeight = 430;
+            _characterHeroCard.style.height = 432;
+            _characterHeroCard.style.minHeight = 432;
             _characterHeroCard.style.flexShrink = 0;
             _characterHeroCard.style.marginTop = 0;
             _characterHeroCard.style.marginBottom = 4;
             ApplyLgoDetailCard(_characterHeroCard, 12, 10);
+            _characterHeroCard.style.paddingLeft = _characterHeroCard.style.paddingRight = 0;
+            _characterHeroCard.style.paddingTop = _characterHeroCard.style.paddingBottom = 0;
             _characterHeroCard.style.backgroundColor = Color.clear;
             _characterHeroCard.style.borderTopWidth = 0;
             _characterHeroCard.style.borderBottomWidth = 0;
@@ -441,15 +452,15 @@ namespace LinhGioi.UI
             _characterHeroLeftEquipmentRail = new VisualElement { name = "Map01A Character Hero Left Equipment Rail" };
             _characterHeroLeftEquipmentRail.style.flexDirection = FlexDirection.Column;
             _characterHeroLeftEquipmentRail.style.flexGrow = 0;
-            _characterHeroLeftEquipmentRail.style.width = 68;
+            _characterHeroLeftEquipmentRail.style.width = 76;
             _characterHeroLeftEquipmentRail.style.height = 420;
             _characterHeroLeftEquipmentRail.style.justifyContent = Justify.SpaceBetween;
             _characterHeroLeftEquipmentRail.style.marginRight = 8;
             _characterHeroCard.Add(_characterHeroLeftEquipmentRail);
 
             _characterHeroPortrait = new VisualElement { name = "Map01A Character Hero Portrait" };
-            _characterHeroPortrait.style.width = 380;
-            _characterHeroPortrait.style.height = 420;
+            _characterHeroPortrait.style.width = 400;
+            _characterHeroPortrait.style.height = 428;
             _characterHeroPortrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             _characterHeroPortrait.style.marginRight = 8;
             _characterHeroPortrait.style.marginTop = 0;
@@ -459,7 +470,7 @@ namespace LinhGioi.UI
             _characterHeroRightEquipmentRail = new VisualElement { name = "Map01A Character Hero Right Equipment Rail" };
             _characterHeroRightEquipmentRail.style.flexDirection = FlexDirection.Column;
             _characterHeroRightEquipmentRail.style.flexGrow = 0;
-            _characterHeroRightEquipmentRail.style.width = 68;
+            _characterHeroRightEquipmentRail.style.width = 76;
             _characterHeroRightEquipmentRail.style.height = 420;
             _characterHeroRightEquipmentRail.style.justifyContent = Justify.SpaceBetween;
             _characterHeroRightEquipmentRail.style.marginRight = 0;
@@ -687,7 +698,7 @@ namespace LinhGioi.UI
             InitializeCharacterHub(body);
             body.Add(_inventoryDetailPanel);
 
-            ShowInventoryCategory("all"); ShowInventoryMode(false); _safe.Add(_inventory);
+            ShowInventoryCategory("all"); ShowInventoryMode(false); _safe.Add(_inventoryBackdrop); _safe.Add(_inventory);
         }
 
 

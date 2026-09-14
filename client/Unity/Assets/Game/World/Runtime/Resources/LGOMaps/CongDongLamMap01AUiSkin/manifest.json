@@ -1,0 +1,18 @@
+{
+  "id": "map01a-character-hub-surface-v1",
+  "status": "DRAFT_RUNTIME_REVIEW",
+  "canonicalDesignSet": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs",
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-surface.png",
+      "generator": "deterministic_svg_raster",
+      "referenceOnly": false,
+      "role": "ui-modal-surface",
+      "sha256": "ed272fa378eec4f6ce3a5e90e721b58edcc7fc473a3046cc487c57f04711b330"
+    }
+  ],
+  "dimensions": [512, 512],
+  "displayPolicy": "stretch as low-frequency modal surface; borders and interactive states remain vector-like UI Toolkit geometry",
+  "sourceMethod": "deterministic SVG authored from approved navy/gold visual language and rasterized with macOS sips",
+  "pixelBudget": "512x512; 290816 bytes; no mipmaps; UI texture only"
+}

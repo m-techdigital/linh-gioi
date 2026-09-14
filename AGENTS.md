@@ -2,6 +2,13 @@
 
 This repository uses persistent continuous-work mode. Read this file before making changes.
 
+## Active owner scope — 2026-09-14
+
+- Goal hiện hành chỉ là hoàn thiện UI/UX Layout character hub năm tab theo đúng bộ canonical `redesign-v4-five-tabs`: `Nhân vật`, `Rương đồ`, `Kỹ năng`, `Tiềm năng`, `Linh thú`.
+- Trạng thái runtime là `FIX_REQUIRED`; mọi kết luận `LAYOUT_LOCKED` trước feedback Player mới nhất chỉ là lịch sử và không được dùng để chuyển task.
+- Làm shared layout tổng trước, rồi hoàn thiện tuần tự từng design. Không chuyển sang Login/HUD/NPC hoặc bất kỳ screen khác trước gate năm tab.
+- Class/pose/wardrobe/source bị loại khỏi scope. Không build/capture class, không resume hoặc rollback code class.
+
 ## Operational goal lock — owner override 2026-09-14
 
 - Goal hiện hành lấy từ mục `Active` đầu tiên trong `docs/execution/NEXT-ACTION.md` và phần owner lock đầu `docs/execution/PROJECT-STATE.md`. Mọi objective/autopilot prompt cũ còn nhắc class, pose, wardrobe hoặc source art đã bị owner thay thế và không được dùng để chọn việc tiếp theo.

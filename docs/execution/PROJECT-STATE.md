@@ -1,4 +1,13 @@
-## Owner lock — design-first theo từng screen, một canonical source — 2026-09-14
+## Character hub — shared layout đã khóa lại, tab Nhân vật active — 2026-09-14
+
+- Feedback Player mới nhất của owner bác bỏ kết luận `LAYOUT_LOCKED`: năm tab còn xa canonical về shell, hàng tab, tỷ lệ vùng, skin và mật độ. Evidence cũ chỉ còn là lịch sử kỹ thuật, không được dùng để claim hoàn thành.
+- `OPERATIONAL_GOAL_CURRENT`: chỉ hoàn thiện character hub năm tab theo bộ design duy nhất `redesign-v4-five-tabs`, tuần tự `Nhân vật → Rương đồ → Kỹ năng → Tiềm năng → Linh thú`.
+- Shared base mới gồm nền navy có provenance/hash và budget, backdrop dim, title/close, tab selected xanh, body hai cột, detail-right và action footer. Nút item chính dùng xanh, khóa dùng vàng; tất cả nằm ở shared Skin/base.
+- Full `TwoDCharacterRuntimeStateTests` đạt 28/28; UI governance 17/17; runtime-art guard 7/7; no-3D và no-source-images pass. Player macOS build thành công; evidence `build/map01a-five-tab-layout-runtime-v4/{pc,mobile,tablet}/` đã được xem trực tiếp đủ năm tab, không wrap/stack/cắt/chồng.
+- Shared layout tổng được khóa lại. Từng screen chưa được claim hoàn thiện; screen active duy nhất tiếp theo là `Nhân vật` theo `01-nhan-vat-nam-tab-compact-APPROVED.png`.
+- Scope class/pose/wardrobe/source vẫn đóng. Không build/capture class, không rollback code class và không đổi frozen surfaces.
+
+## Historical — owner lock design-first theo từng screen, một canonical source — 2026-09-14
 
 - `OPERATIONAL_GOAL_CURRENT`: goal repo hiện hành là Map01A/UI screen-by-screen. Objective tự động cũ còn nhắc hoàn thiện class/pose/wardrobe/source đã bị owner thay thế và không được dùng để chọn task, build hoặc capture.
 - Goal UI/UX hiện hành: xử lý tuần tự từng screen; trước code phải có đúng một canonical design, scenario/state/interaction, asset budget và plan. Chỉ chuyển screen khi Player evidence PC/mobile landscape/tablet đã được xem và toàn gate sạch.

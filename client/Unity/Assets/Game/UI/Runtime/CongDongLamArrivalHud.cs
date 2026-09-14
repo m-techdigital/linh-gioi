@@ -540,6 +540,8 @@ namespace LinhGioi.UI
             _characterSelectButton.text = "Nhân vật";
             _inventoryToggle.text = _scene.InventoryOpen ? "Đóng" : "Hành trang";
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            if (_inventoryBackdrop != null)
+                _inventoryBackdrop.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             _quest.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _questTabs.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })

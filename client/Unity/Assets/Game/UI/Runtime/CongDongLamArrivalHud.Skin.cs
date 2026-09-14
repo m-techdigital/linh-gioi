@@ -14,6 +14,8 @@ namespace LinhGioi.UI
         private static readonly Color UiText = new Color(.96f, .91f, .76f, .96f);
         private static readonly Color UiSubText = new Color(.73f, .85f, .88f, .90f);
         private const string LgoInventoryButtonBaseClass = "lgo-inventory-button-base";
+        private const string LgoCharacterHubShellClass = "lgo-character-hub-shell";
+        private const string LgoCharacterHubTitleClass = "lgo-character-hub-title";
         private const string LgoInventoryPanelShellClass = "lgo-inventory-panel-shell";
         private const string LgoInventoryItemRowClass = "lgo-inventory-item-row";
         private const string LgoInventoryCountBadgeClass = "lgo-inventory-count-badge";
@@ -156,6 +158,38 @@ namespace LinhGioi.UI
             element.style.paddingTop = element.style.paddingBottom = padding;
         }
 
+        private static void ApplyLgoCharacterHubShell(VisualElement element)
+        {
+            element.AddToClassList(LgoCharacterHubShellClass);
+            ApplyLgoModalShell(element, 12);
+            element.style.backgroundColor = new Color(.004f, .024f, .052f, .98f);
+            element.style.borderTopWidth = element.style.borderBottomWidth = 2;
+            element.style.borderLeftWidth = element.style.borderRightWidth = 2;
+            element.style.borderTopColor = element.style.borderBottomColor = new Color(.96f, .72f, .28f, .94f);
+            element.style.borderLeftColor = element.style.borderRightColor = new Color(.70f, .48f, .16f, .92f);
+            element.style.paddingTop = 0;
+            element.style.paddingBottom = 0;
+            var surface = Resources.Load<Texture2D>("LGOMaps/CongDongLamMap01AUiSkin/character-hub-surface");
+            if (surface != null)
+            {
+                element.style.backgroundImage = new StyleBackground(surface);
+                element.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
+            }
+        }
+
+        private static void ApplyLgoCharacterHubTitle(Label label)
+        {
+            label.AddToClassList(LgoCharacterHubTitleClass);
+            label.style.fontSize = 30;
+            label.style.color = new Color(.98f, .98f, .94f, 1f);
+            label.style.unityFontStyleAndWeight = FontStyle.Bold;
+        }
+
+        private static void ApplyLgoCharacterHubBackdrop(VisualElement backdrop)
+        {
+            backdrop.style.backgroundColor = new Color(.002f, .018f, .040f, .48f);
+        }
+
 
 
         private static void ApplyLgoInputField(VisualElement element)
@@ -287,7 +321,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoInventoryPanelShell(VisualElement panel)
         {
             panel.AddToClassList(LgoInventoryPanelShellClass);
-            ApplyLgoGlassPanel(panel, true);
+            ApplyLgoFrame(panel, new Color(.004f, .024f, .046f, .985f), new Color(.82f, .62f, .24f, .90f));
+            ApplyLgoLayeredFrame(panel);
             panel.style.paddingLeft = panel.style.paddingRight = 12;
             panel.style.paddingTop = panel.style.paddingBottom = 10;
             panel.style.minWidth = 0;
@@ -390,10 +425,16 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoSelectedTab(Button button, bool selected)
         {
-            button.style.backgroundColor = selected ? UiBlue : new Color(.038f, .118f, .172f, .98f);
-            button.style.color = selected ? new Color(.98f, .95f, .78f, .98f) : UiText;
-            button.style.borderBottomWidth = selected ? 2 : 1;
-            button.style.borderBottomColor = selected ? UiGold : new Color(.56f, .68f, .70f, .58f);
+            button.style.backgroundColor = selected
+                ? new Color(.015f, .38f, .94f, .99f)
+                : new Color(.012f, .060f, .118f, .99f);
+            button.style.color = selected ? new Color(1f, 1f, .98f, 1f) : new Color(.78f, .84f, .91f, .96f);
+            button.style.borderTopWidth = button.style.borderBottomWidth = selected ? 2 : 1;
+            button.style.borderLeftWidth = button.style.borderRightWidth = selected ? 2 : 1;
+            button.style.borderTopColor = button.style.borderLeftColor = button.style.borderRightColor = selected
+                ? new Color(.22f, .82f, 1f, 1f)
+                : new Color(.34f, .48f, .62f, .76f);
+            button.style.borderBottomColor = selected ? new Color(.98f, .78f, .32f, 1f) : new Color(.34f, .48f, .62f, .76f);
         }
 
         private static void ApplyLgoInventoryMainTab(Button button, bool touch)
@@ -403,9 +444,10 @@ namespace LinhGioi.UI
             button.style.flexGrow = 1;
             button.style.flexBasis = 0;
             button.style.minWidth = 0;
-            button.style.minHeight = 50;
-            button.style.fontSize = 16;
-            button.style.marginRight = 8;
+            button.style.minHeight = 52;
+            button.style.fontSize = 19;
+            button.style.marginRight = 6;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         private static void ApplyLgoInventoryFilterChip(Button button, bool touch)
@@ -435,16 +477,33 @@ namespace LinhGioi.UI
             button.style.color = new Color(.70f, .78f, .78f, .82f);
         }
 
+        private static void ApplyLgoCharacterHubPrimaryAction(Button button)
+        {
+            ApplyLgoButton(button);
+            button.style.backgroundColor = new Color(.015f, .31f, .90f, .99f);
+            button.style.color = new Color(.98f, .99f, 1f, 1f);
+            button.style.unityFontStyleAndWeight = FontStyle.Bold;
+            button.style.borderTopWidth = button.style.borderBottomWidth = 2;
+            button.style.borderLeftWidth = button.style.borderRightWidth = 2;
+            button.style.borderTopColor = button.style.borderLeftColor = button.style.borderRightColor = new Color(.22f, .82f, 1f, 1f);
+            button.style.borderBottomColor = new Color(.98f, .78f, .32f, 1f);
+        }
+
         private static void ApplyLgoModalCloseButton(Button button, bool touch)
         {
             button.AddToClassList(LgoModalCloseButtonClass);
             ApplyLgoButton(button);
             button.style.flexGrow = 0;
-            button.style.flexBasis = touch ? 46 : 42;
-            button.style.minHeight = touch ? 42 : 38;
-            button.style.fontSize = 22;
+            button.style.flexBasis = 56;
+            button.style.minHeight = 56;
+            button.style.fontSize = 30;
             button.style.marginRight = 0;
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
+            button.style.backgroundColor = new Color(.012f, .050f, .090f, .99f);
+            button.style.borderTopWidth = button.style.borderBottomWidth = 2;
+            button.style.borderLeftWidth = button.style.borderRightWidth = 2;
+            button.style.borderTopColor = button.style.borderBottomColor = UiGold;
+            button.style.borderLeftColor = button.style.borderRightColor = new Color(.62f, .46f, .22f, .94f);
         }
 
         private static void ApplyLgoInventoryGridCell(VisualElement cell)

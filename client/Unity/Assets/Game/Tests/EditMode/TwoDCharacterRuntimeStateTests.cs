@@ -335,8 +335,37 @@ namespace LinhGioi.Tests.EditMode
                 }
                 Assert.That(tabs.style.width.value.value, Is.EqualTo(992).Within(1),
                     "The approved navigation rail is compact and leaves the close/title edge clear for future tabs.");
+                var modal = root.Q("Map01A Inventory");
+                var backdrop = root.Q("Map01A Character Hub Backdrop");
+                var modalTitle = root.Q<Label>("Map01A Inventory Modal Title");
+                var close = root.Q<Button>("LGO Inventory Close");
+                Assert.That(modalTitle.style.fontSize.value.value, Is.EqualTo(30).Within(1),
+                    "The five-tab shell title must match the canonical visual hierarchy.");
+                Assert.That(modalTitle.style.color.value, Is.EqualTo(new Color(.98f, .98f, .94f, 1f)),
+                    "The canonical title is light, while gold remains an accent color.");
+                Assert.That(close.style.flexBasis.value.value, Is.EqualTo(56).Within(1),
+                    "The close control must keep the canonical framed visual weight.");
+                Assert.That(modal.style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.96f),
+                    "The hub shell must hold contrast against every Map01A backdrop.");
+                Assert.That(backdrop, Is.Not.Null);
+                Assert.That(backdrop.style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.42f),
+                    "The canonical hub dims the live world without replacing it with a second scene.");
+                for (var itemIndex = 0; itemIndex < expected.Length; itemIndex++)
+                {
+                    var item = expected[itemIndex];
+                    var tab = root.Q<Button>(item.Item1);
+                    Assert.That(tab.style.minHeight.value.value, Is.EqualTo(52).Within(1));
+                    Assert.That(tab.style.fontSize.value.value, Is.EqualTo(19).Within(1));
+                    Assert.That(tab.style.marginRight.value.value, Is.EqualTo(itemIndex == expected.Length - 1 ? 0 : 6).Within(1));
+                }
+                Assert.That(root.Q<Button>("Map01A Bag Main Tab").style.backgroundColor.value.b,
+                    Is.GreaterThanOrEqualTo(.88f),
+                    "Selected tabs must use the bright blue canonical state rather than the muted technical state.");
                 Assert.That(root.Q("Map01A Inventory Body").style.flexDirection.value, Is.EqualTo(FlexDirection.Row),
                     "PC, tablet, and landscape mobile must preserve the canonical two-column composition.");
+                Assert.That(root.Q("Map01A Inventory Header").style.marginBottom.value.value, Is.EqualTo(2).Within(1));
+                Assert.That(root.Q("Map01A Inventory Modal Bottom Ornament").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "The body must extend to the canonical lower frame instead of losing height to a decorative flow row.");
                 Assert.That(root.Q("Map01A Storage Main Tab"), Is.Null,
                     "The obsolete third inventory/storage tab must not remain beside the approved character-hub tabs.");
                 Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Null,
@@ -370,6 +399,14 @@ namespace LinhGioi.Tests.EditMode
                 var sharedColumns = CongDongLamArrivalHud.CalculateInventoryDesktopColumnWidths();
                 Assert.That(sharedColumns.x, Is.EqualTo(600).Within(1));
                 Assert.That(sharedColumns.y, Is.EqualTo(448).Within(1));
+                Assert.That(root.Q("Map01A Character Hero Portrait").style.width.value.value, Is.EqualTo(400).Within(1));
+                Assert.That(root.Q("Map01A Character Hero Portrait").style.height.value.value, Is.EqualTo(428).Within(1));
+                Assert.That(root.Q("Map01A Character Hero Left Equipment Rail").style.width.value.value, Is.EqualTo(76).Within(1));
+                var primaryDetailAction = root.Q<Button>("Map01A Inventory Detail Primary Action");
+                Assert.That(primaryDetailAction.style.backgroundColor.value.b, Is.GreaterThanOrEqualTo(.80f),
+                    "The shared item inspector must use the approved bright-blue primary action state.");
+                Assert.That(primaryDetailAction.style.color.value, Is.EqualTo(new Color(.98f, .99f, 1f, 1f)),
+                    "Primary inspector actions must keep readable light text on the blue surface.");
                 for (var iconIndex = 0; iconIndex < scene.VoEquipmentSlotIds.Count; iconIndex++)
                 {
                     var slotId = scene.VoEquipmentSlotIds[iconIndex];
@@ -382,6 +419,11 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
                 Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Hub Preview Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Hub Preview Detail Hero").style.flexDirection.value, Is.EqualTo(FlexDirection.Row),
+                    "Skills, Potential and Spirit Pet must share the canonical icon-plus-heading inspector hierarchy.");
+                Assert.That(root.Q<Label>("Map01A Hub Preview Detail Name").style.fontSize.value.value, Is.EqualTo(24).Within(1));
+                Assert.That(root.Q("Map01A Hub Preview Detail Action Spacer").style.flexGrow.value, Is.EqualTo(1),
+                    "Context actions must remain docked to the lower edge of the shared detail column.");
                 StringAssert.DoesNotContain("state", modalSubtitle.text);
                 Assert.That(root.Q("Map01A Skill Path Stage 1"), Is.Not.Null,
                     "Approved skill screen must present a connected progression path instead of a generic item grid.");

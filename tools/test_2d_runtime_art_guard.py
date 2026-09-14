@@ -56,6 +56,14 @@ class RuntimeArtGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             runtime_allowlist(self.root)
 
+    def test_character_hub_surface_is_allowed_only_with_registered_manifest(self):
+        pack = 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin'
+        shutil.copytree(ROOT / pack, self.root / pack)
+
+        allowed = runtime_allowlist(self.root)
+
+        self.assertIn(f'{pack}/character-hub-surface.png', allowed)
+
     def test_reference_or_path_escape_is_rejected(self):
         p = self.root / PACK / 'manifest.json'
         original = json.loads(p.read_text())

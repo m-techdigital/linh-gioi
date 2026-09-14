@@ -163,6 +163,22 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("Inventory detail panel must be added after" in item for item in violations), violations)
 
+    def test_rejects_character_hub_that_skips_its_shared_shell(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            inventory = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs"
+            inventory.write_text(
+                inventory.read_text(encoding="utf-8").replace(
+                    "ApplyLgoCharacterHubShell(_inventory);",
+                    "ApplyLgoModalShell(_inventory, 12);",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoCharacterHubShell(_inventory)" in item for item in violations), violations)
+
     def test_rejects_hud_action_buttons_that_skip_shared_skin(self) -> None:
         with self._copy_minimal_repo() as temp:
             hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"
