@@ -8,12 +8,15 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 
 The only active character route is `LGO_CHARACTER_BASE_SIX_POSE_REBUILD_01`:
 
-- method: two whole-pose six-frame bases, male and female; no body cards, segmented limbs or skeletal substitute
+- method: two whole-pose six-frame bases, male and female; no runtime body cards, segmented limbs or skeletal substitute
 - identity authority: exact recovered Spine-test pair under external `common-character-v3/identity-authority-recovered-spine-test-v1`
-- pose order: `idle`, `run_contact`, `run_down_recoil`, `run_passing`, `run_flight`, `jump_tuck`
-- current phase/status: `OWNER_VISUAL_REVIEW / NEED_HUMAN_VISUAL_REVIEW`
-- art-review rule: show the detachable canonical hair composite so face, silhouette and secondary motion can be judged; retain a hairless technical body underneath for later equipment composition
-- next action: owner reviews the paired candidate; only an accepted pair proceeds to true-alpha registered full-canvas frames and reopenable source
+- pose order: `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`
+- pose semantics: `idle`, `contact_left`, `passing_to_right`, `contact_right`, `passing_to_left`, `jump_tuck`
+- current phase/status: `POSE_CONTROL_READY_ART_TRANSFER_BLOCKED / NEED_OWNER_DECISION`
+- structural authority: reopenable external `common-character-v3/pose-control-source-blender-v1/lgo-six-pose-controls-v1.blend`, with fixed bone-length audit and absolute anatomical left/right colors
+- next action: one artist-controlled whole-body redraw/paint-over pilot, or one fully specified ControlNet pose-plus-identity workflow; accept only after direct 2→3→4→5 playback
+
+Do not resume prompt-only sheet generation. The prior paired boards and all subsequent ImageGen transfer attempts are `FINAL_REJECTED_DO_NOT_SELECT` because they collapsed A/B limb identity. The Blender mannequin is a control/reference source only; it must never be presented as final Linh Giới body art or used as a segmented runtime renderer.
 
 ### Owner-rejected wrong-scope Spine substitutes — 2026-09-14
 

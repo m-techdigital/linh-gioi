@@ -122,6 +122,24 @@ Current review candidates are ready.
         self.assertIn("NEED_HUMAN_VISUAL_REVIEW", blocker)
         self.assertNotIn("No current blocker", blocker)
 
+    def test_owner_decision_status_is_reported_as_current_gate(self):
+        text = """## ACTIVE GOAL LOCK — two whole-pose six-frame character bases
+
+Pose control source is ready but art transfer is blocked.
+
+## Active task state
+
+```json
+{"activeTask":"LGO_CHARACTER_BASE_SIX_POSE_REBUILD_01","phase":"POSE_CONTROL_READY_ART_TRANSFER_BLOCKED","status":"NEED_OWNER_DECISION"}
+```
+"""
+
+        blocker = current_blocker_section(text)
+
+        self.assertIn("NEED_OWNER_DECISION", blocker)
+        self.assertIn("art transfer", blocker)
+        self.assertNotIn("No current blocker", blocker)
+
 
 if __name__ == "__main__":
     unittest.main()

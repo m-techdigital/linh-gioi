@@ -1,6 +1,10 @@
-## Whole-pose six-frame character base review — 2026-09-14
+## Six-pose limb-phase control and transfer boundary — 2026-09-14
 
-`NEED_HUMAN_VISUAL_REVIEW`. Owner confirmed the recent separate male/female Spine-test characters as the identity authority, then superseded Spine/cutout work with two whole-pose six-frame bases. Exact deleted ImageGen payloads were recovered from Codex thread history and preserved with hashes at external `common-character-v3/identity-authority-recovered-spine-test-v1`. Current review boards use six distinct poses and show detachable canonical hair so face/silhouette/secondary motion can be judged; RGB review boards are not runtime source. Next gate is owner visual acceptance, followed by true-alpha registered full-canvas frames and reopenable source. No outfit/Player promotion is authorized yet.
+Owner review rejected the active male/female boards because run frames 2–5 kept the same apparent arm/leg phase. Prompt-only correction was bounded and stopped: whole-sheet generation, per-frame stick control and per-frame Blender control all collapsed absolute left/right identity or ignored the passing pose. Twelve outputs are `FINAL_REJECTED_DO_NOT_SELECT` under external `rejected-evidence/2026-09-14/common-character-imagegen-limb-phase-transfer-failures-v1`; no rejected image remains in the active identity review folder.
+
+A reusable structural result remains: external `common-character-v3/pose-control-source-blender-v1/lgo-six-pose-controls-v1.blend` opens in Blender 4.5.5 and produces `idle`, left contact, passing to right, right contact, passing to left and jump tuck. The generator keeps upper arm `0.95`, forearm `0.82`, thigh `1.65` and shin `1.85` unchanged for left/right in all six poses; `bone-length-audit.json` passes. Blue is anatomical left/near, orange is anatomical right/far. This source is an artist/ControlNet control only, not final art or a segmented runtime body.
+
+The next production gate is one whole-body male transfer that preserves the selected identity and passes direct fixed-canvas 2→3→4→5 playback. Local ComfyUI/model weights are absent; pose ControlNet alone does not close identity conditioning. Use the prepared `ARTIST-BRIEF.md` for an artist pilot, or first specify the complete pose-plus-identity model workflow. Do not download an incomplete tool stack, generate the female set, or start outfit authoring before the male gate passes.
 
 ## LGO Spine production proof preflight — historical, superseded 2026-09-14
 

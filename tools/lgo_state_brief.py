@@ -149,6 +149,13 @@ def current_blocker_section(next_action: str) -> str:
         return "Current blocker from active task state: OWNER_STOPPED_PATH. Restore the whole-body six-pose task before any implementation."
     if state.get("status") == "NEED_HUMAN_VISUAL_REVIEW":
         return "Current gate from active task state: NEED_HUMAN_VISUAL_REVIEW. Review the paired six-pose character boards before source reconstruction or runtime promotion."
+    if state.get("status") == "NEED_OWNER_DECISION":
+        if state.get("phase") == "POSE_CONTROL_READY_ART_TRANSFER_BLOCKED":
+            return (
+                "Current gate from active task state: NEED_OWNER_DECISION. Six-pose geometry is reusable, but art transfer still needs "
+                "an artist-controlled redraw or a complete pose-plus-identity conditioning workflow. Do not resume prompt-only generation."
+            )
+        return "Current gate from active task state: NEED_OWNER_DECISION. Resolve the decision recorded in NEXT-ACTION before implementation."
     if isinstance(blockers, list) and blockers:
         return "Current blocker from active task state: " + ", ".join(str(item) for item in blockers)
     active = active_goal_lock_section(next_action)
