@@ -140,12 +140,7 @@ namespace LinhGioi.UI
 
         private static void ApplyHubPathNodeSelection(Button node, bool selected)
         {
-            ApplyLgoFrame(node,
-                selected ? new Color(.025f, .18f, .30f, .96f) : new Color(.025f, .085f, .13f, .92f),
-                selected ? UiGold : new Color(.28f, .55f, .70f, .78f));
-            var nodeBorderWidth = selected ? 2 : 1;
-            node.style.borderLeftWidth = node.style.borderRightWidth = nodeBorderWidth;
-            node.style.borderTopWidth = node.style.borderBottomWidth = nodeBorderWidth;
+            ApplyLgoCharacterHubSelectionState(node, selected);
             var title = node.Q<Label>(node.name + " Title");
             if (title != null) title.style.color = selected ? UiGold : UiText;
         }
@@ -216,7 +211,7 @@ namespace LinhGioi.UI
             var stateLabel = LgoLabel(level, 10, selected ? new Color(.76f, 1f, .70f, .94f) : new Color(.56f, .64f, .68f, .78f));
             stateLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             card.Add(stateLabel);
-            ApplyLgoSelectedTab(card, selected);
+            ApplyLgoCharacterHubSelectionState(card, selected);
             if (!selected) ApplyLgoDisabledAction(card);
             return card;
         }
@@ -391,7 +386,7 @@ namespace LinhGioi.UI
             _spiritPetPanel = CreateHubSurface("Map01A Spirit Pet Panel");
             _spiritPetPreviewTexture = Resources.Load<Texture2D>("LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview");
             var preview = new VisualElement { name = "Map01A Spirit Pet Preview Art" };
-            ApplyLgoDetailCard(preview, 10, 8);
+            ApplyLgoCharacterHubDetailCard(preview, 10, 8);
             preview.style.height = 382;
             preview.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             preview.style.backgroundImage = _spiritPetPreviewTexture == null ? StyleKeyword.None : new StyleBackground(_spiritPetPreviewTexture);
@@ -420,7 +415,7 @@ namespace LinhGioi.UI
             _hubPreviewDetailPanel.style.flexGrow = 0;
             _hubPreviewDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth;
             _hubPreviewDetailPanel.style.marginLeft = InventoryDesktopColumnGap;
-            ApplyLgoDetailCard(_hubPreviewDetailPanel);
+            ApplyLgoCharacterHubDetailCard(_hubPreviewDetailPanel);
             _hubDetailHeader = LgoLabel("CHI TIẾT", 14, UiSubText, true);
             _hubDetailHeader.name = "Map01A Hub Detail Header";
             _hubDetailHeader.style.display = DisplayStyle.None;
@@ -432,6 +427,7 @@ namespace LinhGioi.UI
             detailHero.style.marginTop = 12;
             detailHero.style.marginBottom = 12;
             _hubDetailIcon = HubIcon("Map01A Hub Preview Detail Icon", "skill", 96);
+            ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon);
             _hubDetailIcon.style.flexShrink = 0;
             _hubDetailIcon.style.marginRight = 16;
             detailHero.Add(_hubDetailIcon);

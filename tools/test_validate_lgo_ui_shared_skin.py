@@ -19,6 +19,10 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
         (dst / "client/Unity/Assets/Game/UI/Runtime").mkdir(parents=True)
         for path in (ROOT / "client/Unity/Assets/Game/UI/Runtime").glob("CongDongLamArrivalHud*.cs"):
             shutil.copy2(path, dst / "client/Unity/Assets/Game/UI/Runtime" / path.name)
+        shutil.copy2(
+            ROOT / "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
+            dst / "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
+        )
         tests_src = ROOT / "client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs"
         tests_dst = dst / "client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs"
         tests_dst.parent.mkdir(parents=True)
@@ -190,6 +194,34 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             violations = validator.validate_root(Path(temp))
 
         self.assertTrue(any("ApplyLgoCharacterHubPanelSurface" in item for item in violations), violations)
+
+    def test_rejects_character_hub_that_drops_shared_depth_or_interaction(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            skin = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+            skin.write_text(
+                skin.read_text(encoding="utf-8")
+                .replace("ApplyLgoCharacterHubSelectionState", "ApplyFlatSelectionState")
+                .replace("ApplyLgoCharacterHubInteractiveMotion", "ApplyStaticButton"),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoCharacterHubSelectionState" in item for item in violations), violations)
+        self.assertTrue(any("ApplyLgoCharacterHubInteractiveMotion" in item for item in violations), violations)
+
+    def test_rejects_character_hub_that_drops_shared_vector_frame(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            skin = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+            skin.write_text(
+                skin.read_text(encoding="utf-8")
+                .replace("RuntimeUiSkin.ApplyOrnamentedShellFrame", "ApplyPlainFrame"),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("RuntimeUiSkin.ApplyOrnamentedShellFrame" in item for item in violations), violations)
 
     def test_rejects_hud_action_buttons_that_skip_shared_skin(self) -> None:
         with self._copy_minimal_repo() as temp:

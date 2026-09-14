@@ -30,42 +30,42 @@
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-modal-surface",
-      "sha256": "2ff5f4da2b94f9f64e94484c9b2de9ec266fa918c6c0ef01a02f1fa01b1f4e2d"
+      "sha256": "0bb35cbd20a69ff817ece0d16b9c8897516d0c7b3a2028bf5070fae09d2940f9"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-panel-surface.png",
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-panel-surface",
-      "sha256": "5abce5ffe46c0b4684ddd4f2f38c0a0cdeef861e7bbef1baeeb576acb882b2bd"
+      "sha256": "6fe9ebed51687730abc4c3e6cc64a15449c522f15d024ddf0777573a53af847a"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-tab-idle.png",
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-tab-idle",
-      "sha256": "676821c8e19eb9bfb516942e1a482eb8332416309d11c06f67c924280522d66e"
+      "sha256": "e921c10d6ce62a98b916db3d72bc5bcbccf9bd2885b20fd76bbf7e3d9050bb85"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-tab-selected.png",
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-tab-selected",
-      "sha256": "8fa7fcb7ebb6bd2ac7b3f21772f196055a3475eea8f709f181a0f9741a1cd28d"
+      "sha256": "607d22de45ae9d6859dd428401ec15e9d26d184a8e99ee0fb7312d8f96dfef20"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-action-blue.png",
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-action-blue",
-      "sha256": "ba75c4d8740ec39fcee2c92503774f2e4850ff9ff404603e68b2ba4912cf2287"
+      "sha256": "3e8c8f3da5befd3ec1da920b813fd877210da204f51612e2797f979ff036dea8"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-action-gold.png",
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-action-gold",
-      "sha256": "e736e7396057e42f4bbcb9f85bf3a3992158fb295981c94529715c92268e0eb3"
+      "sha256": "1b122efce543dca7217e9293fa7c7301f93e238ee40c635956ae41b0ffd58d80"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-close.png",
@@ -77,6 +77,6 @@
   ],
   "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens",
   "sourceMethod": "deterministic Pillow raster authored from approved navy, cyan-glow and old-gold visual language; no canonical-board crop",
-  "pixelBudget": "actual-display-sized UI chrome; 75664 bytes total; no mipmaps",
+  "pixelBudget": "actual-display-sized UI chrome; 63469 bytes total; no mipmaps",
   "importPolicy": "UI textures keep native display resolution caps (shell 1024, panels/controls 512, close 128) with mipmaps disabled"
 }

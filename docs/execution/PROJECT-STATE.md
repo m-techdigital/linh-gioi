@@ -1,10 +1,10 @@
-## Character hub — chrome v2 thay lớp trình bày phẳng — 2026-09-14
+## Character hub — vector ornament master v8 — 2026-09-14
 
-- Feedback owner xác định evidence năm tab trước còn xa canonical ở hoa văn modal, icon/state và animation. Evidence cũ được hạ xuống lịch sử; không còn dùng nhãn `LAYOUT_LOCKED` để đại diện chất lượng visual.
-- Pack `map01a-character-hub-chrome-v2` tạo riêng bảy asset tối ưu cho shell, panel, tab idle/selected, action xanh/vàng và close bát giác; tổng PNG khoảng 76 KiB, manifest có hash năm canonical và không crop ảnh board vào runtime. Import gate giữ shell ở cap 1024, control/panel đúng cap thực và tắt mipmap để tránh lỗi modal bị giảm nửa độ phân giải hoặc icon/control bị mềm.
-- Shared Skin áp dụng pack cho cả năm tab. Modal/backdrop có fade mở; tab selected có pulse và content/detail có fade khi đổi tab. Capture runner đợi `240 ms` trước ảnh để tránh đánh giá frame giữa animation.
-- Player `build/map01a-five-tab-chrome-player-v3/LinhGioiOnline.app` build `errors=0`. Evidence `build/map01a-five-tab-chrome-runtime-v3/{pc,mobile,tablet}/` đã được xem trực tiếp đủ năm tab: hai cột giữ nguyên, không wrap/stack/cắt/chồng; shell/tab/action cùng một ngôn ngữ navy–gold–cyan.
-- Trạng thái là `NEED_HUMAN_VISUAL_REVIEW`, không phải owner acceptance. Actor/class art giữ runtime source hiện hành theo scope; batch không mở class/pose/wardrobe/source và không rollback code class.
+- Feedback owner chốt cơ chế một corner master + một edge segment dùng chung là đúng, nhưng yêu cầu thiết kế lại hoa văn thay vì crop từ ảnh. Runtime nay dùng `RuntimeUiSkin.ApplyOrnamentedShellFrame`: một nút/lá góc 24 px được vẽ bằng `Painter2D`, ba góc còn lại mirror chính xác và bốn cạnh nối từ cùng đoạn vector 16 px. Không còn raster corner/edge song song hoặc khung chữ L cũ trong preview Linh thú.
+- Shared helper mới áp dụng cùng frame cho modal, panel trái/phải, detail card và hero icon trên đủ năm tab. Mẫu giữ nét 1 px từ `RuntimeArtCatalog.Gold`, không scale/cắt board canonical và không tạo texture hoa văn riêng. Bảy texture chrome nền/tab/action/close còn 63.469 byte tổng.
+- Player `build/map01a-five-tab-depth-player-v8/LinhGioiOnline.app` build `Succeeded`, `errors=0`. Evidence `build/map01a-five-tab-depth-runtime-v8/{pc,mobile,tablet}/` đã được xem trực tiếp đủ 15 frame: góc/cạnh liền nhau, cùng tỷ lệ trên 1600×900, 1600×720 và 1024×768; không wrap/stack/cắt/chồng hoặc quay lại frame cũ.
+- Gate cuối: Python 30/30; Unity EditMode thật `284 total / 283 passed / 0 failed / 1 ignored`; shared-skin/no-3D/no-source/frozen diff/change budget đều pass. Trạng thái vẫn `NEED_HUMAN_VISUAL_REVIEW`, chưa tự nhận owner art approval; class/pose/wardrobe/source tiếp tục hold và không rollback.
+
 
 ## Character hub — cả năm tab layout đã qua gate, chờ owner visual review — 2026-09-14
 

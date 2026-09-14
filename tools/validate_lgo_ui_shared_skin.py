@@ -20,6 +20,12 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoCharacterHubTabState",
     "ApplyLgoCharacterHubPrimaryAction",
     "ApplyLgoCharacterHubGoldAction",
+    "ApplyLgoCharacterHubHeroIconFrame",
+    "ApplyLgoCharacterHubSelectionState",
+    "ApplyLgoCharacterHubInteractiveMotion",
+    "ApplyLgoCharacterHubFiligreeFrame",
+    "ApplyLgoCharacterHubDetailCard",
+    "RuntimeUiSkin.ApplyOrnamentedShellFrame",
     "AnimateLgoCharacterHubOpen",
     "AnimateLgoCharacterHubSwap",
     "ApplyLgoButton",
@@ -271,6 +277,10 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoInventoryButtonBase(button, _touch)",
         "ApplyLgoInventoryPanelShell(panel)",
         "ApplyLgoItemIcon(_inventoryDetailIcon)",
+        "ApplyLgoCharacterHubHeroIconFrame(_inventoryDetailIcon)",
+        "ApplyLgoCharacterHubDetailCard(_inventoryDetailPanel)",
+        "ApplyLgoCharacterHubDetailCard(_characterHeroCard, 12, 10, false)",
+        "ApplyLgoCharacterHubSelectionState(_equipmentTiles[index]",
         "_characterHeroPortrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit",
         "ApplyLgoItemIcon(quickIcon)",
         "ApplyLgoItemIcon(icon)",
@@ -283,7 +293,6 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoInventoryContentFitPanel(_inventoryGridPanel)",
         "RefreshInventoryShellMode()",
         "ApplyLgoInventoryCompactShell(_inventory, compact)",
-        "ApplyLgoDetailCard(_characterHeroCard, 12, 10)",
         "_bagTab = InventoryButton(() => ShowInventoryMode(false)",
         "_characterInfoTab = InventoryButton(() => ShowInventoryMode(true)",
         "_inventoryDetailPanel.style.marginLeft = InventoryDesktopColumnGap",
@@ -304,10 +313,13 @@ REQUIRED_PARTIAL_MARKERS = {
         "InitializePotentialView(body)",
         "InitializeSpiritPetView(body)",
         "InitializeHubInspector(body)",
-        "ApplyLgoDetailCard(_hubPreviewDetailPanel)",
         "ApplyLgoDisabledAction(action)",
         "ApplyLgoCharacterHubTabState(_characterInfoTab",
         "ApplyLgoCharacterHubTabState(_bagTab",
+        "ApplyLgoCharacterHubSelectionState(node, selected)",
+        "ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon)",
+        "ApplyLgoCharacterHubDetailCard(preview, 10, 8)",
+        "ApplyLgoCharacterHubDetailCard(_hubPreviewDetailPanel)",
         "AnimateLgoCharacterHubSwap(_hubPreviewDetailPanel)",
     ],
 }
@@ -347,6 +359,14 @@ REQUIRED_TEST_MARKERS = [
     "Register validation must not mutate class, pose, wardrobe or gameplay state",
     "PasswordRecoveryRequestValidatesLocallyAndReturnsToEntry",
     "Password recovery must not mutate class, pose, wardrobe or gameplay state",
+]
+
+REQUIRED_RUNTIME_SKIN_MARKERS = [
+    "ApplyOrnamentedShellFrame",
+    "DrawShellFrameEdge",
+    "const float segmentLength = 16f",
+    "DrawShellCorner",
+    "painter.ClosePath()",
 ]
 
 
@@ -393,6 +413,24 @@ def validate_root(root: Path = ROOT) -> list[str]:
         missing = [marker for marker in REQUIRED_SKIN_MARKERS if marker not in skin_text]
         for marker in missing:
             violations.append(f"{skin.relative_to(root)}: skin missing marker {marker}")
+        noisy_selection = (
+            "private static void ApplyLgoCharacterHubSelectionState(VisualElement element, bool selected)\n"
+            "        {\n"
+            "            ApplyLgoLayeredFrame(element);"
+        )
+        if noisy_selection in skin_text:
+            violations.append(
+                f"{skin.relative_to(root)}: compact selection state must not repeat decorative frame corners"
+            )
+
+    runtime_skin = ui_dir / "RuntimeUiSkin.cs"
+    if not runtime_skin.is_file():
+        violations.append("client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs: missing shared runtime skin")
+    else:
+        runtime_skin_text = runtime_skin.read_text(encoding="utf-8", errors="replace")
+        for marker in REQUIRED_RUNTIME_SKIN_MARKERS:
+            if marker not in runtime_skin_text:
+                violations.append(f"{runtime_skin.relative_to(root)}: shared vector frame missing marker {marker}")
 
     for path in partials:
         text = path.read_text(encoding="utf-8", errors="replace")

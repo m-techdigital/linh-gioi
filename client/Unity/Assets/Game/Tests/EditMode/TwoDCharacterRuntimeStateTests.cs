@@ -1255,9 +1255,10 @@ namespace LinhGioi.Tests.EditMode
                 var healthPotion = root.Q<Button>("Map01A Health Potion");
                 Assert.That(healthPotion.style.backgroundColor.value.b, Is.LessThan(.3f),
                     "A filtered result must not look selected while the right-side detail still belongs to equipment.");
+                Assert.That(healthPotion.ClassListContains("lgo-character-hub-selected"), Is.False);
                 InvokeBoundButton(healthPotion);
-                Assert.That(healthPotion.style.backgroundColor.value.b, Is.GreaterThan(.5f),
-                    "Selecting the result must synchronize its highlight with the right-side detail.");
+                Assert.That(healthPotion.ClassListContains("lgo-character-hub-selected"), Is.True,
+                    "Selecting the result must synchronize its shared semantic highlight with the right-side detail.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").text, Is.EqualTo("Bình Máu Nhỏ"));
 
                 search.value = "";

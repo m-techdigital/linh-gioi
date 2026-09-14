@@ -72,19 +72,6 @@ def _bezier(points: tuple[tuple[float, float], ...], steps: int = 48) -> list[tu
     return result
 
 
-def _corner_ornament(size: int = 150) -> Image.Image:
-    layer = Image.new("RGBA", (size, size), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(layer)
-    draw.line([(5, 65), (5, 19), (19, 5), (65, 5)], fill=GOLD_LIGHT, width=3)
-    draw.line([(11, 59), (11, 25), (25, 11), (59, 11)], fill=GOLD_DARK, width=2)
-    draw.line(_bezier(((20, 5), (29, 35), (61, 13), (79, 39))), fill=GOLD, width=3)
-    draw.line(_bezier(((5, 20), (35, 29), (13, 61), (39, 79))), fill=GOLD, width=3)
-    draw.line(_bezier(((29, 18), (45, 40), (67, 18), (91, 49))), fill=(210, 153, 53, 180), width=2)
-    draw.polygon([(14, 14), (22, 10), (28, 14), (22, 20)], fill=GOLD_LIGHT)
-    draw.ellipse((17, 17, 25, 25), fill=(37, 143, 218, 255), outline=GOLD_LIGHT, width=2)
-    return layer
-
-
 def build_shell() -> Image.Image:
     size = (1024, 676)
     image = _gradient(size, (8, 38, 70), (1, 13, 28))
@@ -93,46 +80,33 @@ def build_shell() -> Image.Image:
 
     motif = Image.new("RGBA", size, (0, 0, 0, 0))
     md = ImageDraw.Draw(motif)
-    cloud = (41, 132, 190, 42)
+    cloud = (41, 132, 190, 31)
     for offset in (0, 24):
-        md.line(_bezier(((22 + offset, 90), (90 + offset, 16), (130 + offset, 126), (205 + offset, 54))), fill=cloud, width=3)
-        md.line(_bezier(((100 + offset, 40), (150 + offset, 9), (192 + offset, 74), (246 + offset, 28))), fill=cloud, width=2)
+        md.line(_bezier(((22 + offset, 90), (90 + offset, 16), (130 + offset, 126), (205 + offset, 54))), fill=cloud, width=2)
+        md.line(_bezier(((100 + offset, 40), (150 + offset, 9), (192 + offset, 74), (246 + offset, 28))), fill=cloud, width=1)
+    for x in range(36, 990, 48):
+        md.line([(x, 18), (x + 18, 18)], fill=(119, 169, 202, 15), width=1)
     right = motif.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
     motif = Image.alpha_composite(motif, right)
     image = Image.alpha_composite(image, motif)
 
-    glow = Image.new("RGBA", size, (0, 0, 0, 0))
-    gd = ImageDraw.Draw(glow)
-    gd.rounded_rectangle((5, 5, 1018, 670), radius=12, outline=(255, 205, 92, 160), width=7)
-    glow = glow.filter(ImageFilter.GaussianBlur(8))
-    image = Image.alpha_composite(image, glow)
-
-    draw = ImageDraw.Draw(image)
-    draw.rounded_rectangle((3, 3, 1020, 672), radius=12, outline=GOLD_DARK, width=3)
-    draw.rounded_rectangle((7, 7, 1016, 668), radius=10, outline=GOLD_LIGHT, width=2)
-    draw.rounded_rectangle((13, 13, 1010, 662), radius=8, outline=(151, 103, 35, 190), width=2)
-    draw.line([(44, 54), (395, 54), (412, 42), (612, 42), (629, 54), (980, 54)], fill=(221, 169, 67, 155), width=2)
-    draw.polygon([(512, 35), (520, 43), (512, 51), (504, 43)], fill=GOLD_LIGHT)
-    draw.ellipse((508, 39, 516, 47), fill=(25, 140, 222, 255))
-
-    corner = _corner_ornament()
-    image.alpha_composite(corner, (0, 0))
-    image.alpha_composite(corner.transpose(Image.Transpose.FLIP_LEFT_RIGHT), (1024 - corner.width, 0))
-    image.alpha_composite(corner.transpose(Image.Transpose.FLIP_TOP_BOTTOM), (0, 676 - corner.height))
-    image.alpha_composite(corner.transpose(Image.Transpose.ROTATE_180), (1024 - corner.width, 676 - corner.height))
     return image
 
 
 def build_panel() -> Image.Image:
     size = (512, 512)
     image = _gradient(size, (5, 28, 52), (1, 12, 25))
-    image = Image.alpha_composite(image, _radial_glow(size, (430, 30), 420, (16, 93, 155), 56))
+    image = Image.alpha_composite(image, _radial_glow(size, (490, 18), 150, (16, 93, 155), 38))
+    image = Image.alpha_composite(image, _radial_glow(size, (18, 490), 140, (16, 76, 130), 24))
     motif = Image.new("RGBA", size, (0, 0, 0, 0))
     draw = ImageDraw.Draw(motif)
-    color = (42, 124, 177, 35)
-    draw.line(_bezier(((325, 0), (380, 82), (482, 0), (512, 90))), fill=color, width=3)
-    draw.line(_bezier(((360, 0), (398, 58), (466, 32), (512, 132))), fill=color, width=2)
-    draw.line(_bezier(((0, 430), (78, 366), (128, 502), (205, 456))), fill=color, width=3)
+    color = (42, 124, 177, 24)
+    draw.line(_bezier(((450, 0), (458, 38), (500, 28), (512, 72))), fill=color, width=1)
+    draw.line(_bezier(((472, 0), (474, 25), (505, 30), (512, 52))), fill=color, width=1)
+    draw.arc((444, -16, 530, 70), 74, 218, fill=(59, 148, 202, 22), width=1)
+    draw.line(_bezier(((0, 450), (38, 458), (28, 500), (72, 512))), fill=color, width=1)
+    draw.line(_bezier(((0, 472), (25, 474), (30, 505), (52, 512))), fill=color, width=1)
+    draw.arc((-18, 442, 70, 530), 252, 38, fill=(59, 148, 202, 22), width=1)
     return Image.alpha_composite(image, motif)
 
 
@@ -151,8 +125,10 @@ def _bevel_surface(size: tuple[int, int], top: tuple[int, int, int], bottom: tup
     image.paste(fill, (6, 6), mask)
     draw = ImageDraw.Draw(image)
     draw.rounded_rectangle((6, 6, width - 7, height - 7), radius=6, outline=outline, width=2)
+    draw.rounded_rectangle((10, 10, width - 11, height - 11), radius=4, outline=(*outline[:3], min(150, outline[3])), width=1)
     draw.line([(16, 11), (width - 17, 11)], fill=(255, 255, 255, 82), width=1)
     draw.line([(16, height - 12), (width - 17, height - 12)], fill=GOLD_DARK, width=2)
+    draw.line([(width // 3, 15), (2 * width // 3, 15)], fill=(170, 226, 255, 42), width=1)
     draw.polygon([(8, height // 2), (14, height // 2 - 6), (20, height // 2), (14, height // 2 + 6)], fill=outline)
     draw.polygon([(width - 9, height // 2), (width - 15, height // 2 - 6), (width - 21, height // 2), (width - 15, height // 2 + 6)], fill=outline)
     return image

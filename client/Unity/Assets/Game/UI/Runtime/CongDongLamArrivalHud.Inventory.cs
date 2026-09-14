@@ -214,7 +214,7 @@ namespace LinhGioi.UI
             _inventoryDetailPanel.style.flexGrow = 0;
             _inventoryDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth;
             _inventoryDetailPanel.style.marginLeft = InventoryDesktopColumnGap;
-            ApplyLgoDetailCard(_inventoryDetailPanel);
+            ApplyLgoCharacterHubDetailCard(_inventoryDetailPanel);
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
             _inventoryFooter.style.flexGrow = 0;
             _inventoryFooter.style.flexShrink = 0;
@@ -241,6 +241,7 @@ namespace LinhGioi.UI
             _inventoryDetailIcon = LgoLabel("", 42, UiGold, true);
             _inventoryDetailIcon.name = "Map01A Inventory Detail Icon";
             ApplyLgoItemIcon(_inventoryDetailIcon);
+            ApplyLgoCharacterHubHeroIconFrame(_inventoryDetailIcon);
             _inventoryDetailIcon.style.width = 112;
             _inventoryDetailIcon.style.height = 112;
             _inventoryDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
@@ -459,7 +460,7 @@ namespace LinhGioi.UI
             _characterHeroCard.style.flexShrink = 0;
             _characterHeroCard.style.marginTop = 0;
             _characterHeroCard.style.marginBottom = 4;
-            ApplyLgoDetailCard(_characterHeroCard, 12, 10);
+            ApplyLgoCharacterHubDetailCard(_characterHeroCard, 12, 10, false);
             _characterHeroCard.style.paddingLeft = _characterHeroCard.style.paddingRight = 0;
             _characterHeroCard.style.paddingTop = _characterHeroCard.style.paddingBottom = 0;
             _characterHeroCard.style.backgroundColor = Color.clear;
@@ -931,9 +932,7 @@ namespace LinhGioi.UI
             if (countLabel != null) countLabel.text = "x" + count;
             if (stateLabel != null) stateLabel.text = state;
             button.tooltip = label + " · x" + count + " · " + state;
-            button.style.backgroundColor = selected ? new Color(.12f, .33f, .56f, .98f) : new Color(.045f, .13f, .18f, .98f);
-            button.style.borderTopColor = button.style.borderBottomColor = selected ? new Color(.92f, .72f, .36f, .86f) : new Color(.50f, .58f, .58f, .55f);
-            button.style.borderLeftColor = button.style.borderRightColor = selected ? new Color(.92f, .72f, .36f, .86f) : new Color(.50f, .58f, .58f, .55f);
+            ApplyLgoCharacterHubSelectionState(button, selected);
             button.style.color = new Color(.70f, .80f, .80f, .92f);
             if (stateLabel != null) stateLabel.style.color = selected ? new Color(.90f, .96f, 1f, .96f) : UiSubText;
         }
@@ -963,9 +962,7 @@ namespace LinhGioi.UI
                 _equipmentTiles[index].text = string.Empty;
                 _equipmentTiles[index].tooltip = EquipmentDisplayName(slotId) + " · Lv" + level
                     + " · " + (equipped ? "Đang mặc" : "Đã tháo");
-                _equipmentTiles[index].style.backgroundColor = slotId == _scene.VoSelectedEquipmentSlot
-                    ? new Color(.12f, .33f, .56f, .98f)
-                    : equipped ? new Color(.045f, .12f, .18f, .96f) : new Color(.025f, .040f, .052f, .78f);
+                ApplyLgoCharacterHubSelectionState(_equipmentTiles[index], slotId == _scene.VoSelectedEquipmentSlot);
                 if (_equipmentTileNames != null && index < _equipmentTileNames.Length)
                     _equipmentTileNames[index].text = EquipmentShortName(slotId) + " · Lv" + level;
                 if (_equipmentTileStates != null && index < _equipmentTileStates.Length)

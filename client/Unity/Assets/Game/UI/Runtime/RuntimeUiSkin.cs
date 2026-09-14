@@ -137,12 +137,12 @@ namespace LinhGioi.UI
 
         internal static void ApplyOrnamentedShellFrame(VisualElement element)
         {
-            ApplyPanelFrame(element);
+            ApplyEdgeFrame(element, Color.clear, Color.clear, Color.clear, Color.clear, 0f, 0f);
             ApplyRadius(element, 4);
             const string ornamentClass = "lgo-ornamented-shell";
             if (element.ClassListContains(ornamentClass)) return;
             element.AddToClassList(ornamentClass);
-            // Draw inside the shell padding; no extra layout children or input interception.
+            // One vector corner and one short edge segment define every size of framed surface.
             element.generateVisualContent += context =>
             {
                 var width = element.resolvedStyle.width;
@@ -151,31 +151,67 @@ namespace LinhGioi.UI
                 var painter = context.painter2D;
                 painter.lineWidth = 1;
                 painter.strokeColor = RuntimeArtCatalog.Gold;
-                DrawShellCorner(painter, new Vector2(3, 3), 1, 1);
-                DrawShellCorner(painter, new Vector2(width - 3, 3), -1, 1);
-                DrawShellCorner(painter, new Vector2(3, height - 3), 1, -1);
-                DrawShellCorner(painter, new Vector2(width - 3, height - 3), -1, -1);
+                DrawShellFrameEdge(painter, new Vector2(26, 2), new Vector2(width - 26, 2));
+                DrawShellFrameEdge(painter, new Vector2(width - 2, 26), new Vector2(width - 2, height - 26));
+                DrawShellFrameEdge(painter, new Vector2(width - 26, height - 2), new Vector2(26, height - 2));
+                DrawShellFrameEdge(painter, new Vector2(2, height - 26), new Vector2(2, 26));
+                DrawShellCorner(painter, new Vector2(2, 2), 1, 1);
+                DrawShellCorner(painter, new Vector2(width - 2, 2), -1, 1);
+                DrawShellCorner(painter, new Vector2(2, height - 2), 1, -1);
+                DrawShellCorner(painter, new Vector2(width - 2, height - 2), -1, -1);
             };
+        }
+
+        private static void DrawShellFrameEdge(Painter2D painter, Vector2 start, Vector2 end)
+        {
+            const float segmentLength = 16f;
+            var distance = Vector2.Distance(start, end);
+            if (distance <= 0.01f) return;
+            var direction = (end - start) / distance;
+            painter.BeginPath();
+            painter.MoveTo(start);
+            for (var offset = segmentLength; offset < distance; offset += segmentLength)
+                painter.LineTo(start + direction * offset);
+            painter.LineTo(end);
+            painter.Stroke();
         }
 
         private static void DrawShellCorner(Painter2D painter, Vector2 origin, float x, float y)
         {
             Vector2 Point(float a, float b) => origin + new Vector2(a * x, b * y);
+            // The master is authored once as a compact angular leaf-knot. The other
+            // corners are exact mirrors, so the ornament and edge joins stay coherent.
             painter.BeginPath();
-            painter.MoveTo(Point(0, 18));
-            painter.LineTo(Point(0, 7));
-            painter.LineTo(Point(7, 0));
-            painter.LineTo(Point(18, 0));
-            painter.MoveTo(Point(4, 22));
-            painter.LineTo(Point(4, 11));
-            painter.LineTo(Point(11, 4));
-            painter.LineTo(Point(22, 4));
+            painter.MoveTo(Point(0, 24));
+            painter.LineTo(Point(0, 16));
+            painter.LineTo(Point(3, 13));
+            painter.LineTo(Point(3, 7));
+            painter.LineTo(Point(7, 7));
+            painter.LineTo(Point(12, 2));
+            painter.LineTo(Point(17, 2));
+            painter.LineTo(Point(19, 0));
+            painter.LineTo(Point(24, 0));
             painter.Stroke();
+
             painter.BeginPath();
-            painter.MoveTo(Point(3, 3));
-            painter.LineTo(Point(10, 6));
-            painter.LineTo(Point(6, 10));
+            painter.MoveTo(Point(2, 14));
+            painter.LineTo(Point(7, 9));
+            painter.LineTo(Point(11, 13));
+            painter.LineTo(Point(7, 17));
             painter.ClosePath();
+            painter.Stroke();
+
+            painter.BeginPath();
+            painter.MoveTo(Point(7, 9));
+            painter.LineTo(Point(11, 5));
+            painter.LineTo(Point(15, 9));
+            painter.LineTo(Point(11, 13));
+            painter.ClosePath();
+            painter.Stroke();
+
+            painter.BeginPath();
+            painter.MoveTo(Point(11, 5));
+            painter.LineTo(Point(15, 2));
             painter.Stroke();
         }
 
