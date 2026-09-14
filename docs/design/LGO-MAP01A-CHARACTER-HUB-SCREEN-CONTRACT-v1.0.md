@@ -1,7 +1,7 @@
 # Map01A character hub — canonical screen contract v1.0
 
 Ngày khóa: 2026-09-14  
-Trạng thái: **OWNER_APPROVED_DESIGN_SET / CHARACTER_AND_STORAGE_LAYOUT_LOCKED / SKILLS_DETAIL_FIX_REQUIRED**
+Trạng thái: **OWNER_APPROVED_DESIGN_SET / CHARACTER_STORAGE_SKILLS_LAYOUT_LOCKED / POTENTIAL_DETAIL_FIX_REQUIRED**
 
 ## Mục đích
 
@@ -16,7 +16,7 @@ Thư mục nguồn đã duyệt:
 |---:|---|---|---|
 | 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** |
 | 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** |
-| 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **FIX_REQUIRED** |
+| 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** |
 | 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | **FIX_REQUIRED** |
 | 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | **FIX_REQUIRED** |
 
@@ -92,4 +92,4 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ## Gate hiện hành
 
-Shared layout tổng và tab `Nhân vật` đã khóa theo evidence ghi ở trên. Tab `Rương đồ` đã qua Player gate tại `build/map01a-storage-layout-runtime-v1/{pc,mobile,tablet}/`: rail năm category, grid `4×5`, capacity/search/sort, footer và detail ba action giữ cùng composition; ô trống và action bán bị khóa trung thực thay vì sinh dữ liệu/chức năng giả. Gate active chuyển sang `Kỹ năng`; hai tab sau vẫn chờ đúng thứ tự, không làm song song. Không resume class/pose/wardrobe/source và không rollback code class.
+Shared layout, `Nhân vật` và `Rương đồ` đã khóa theo evidence ghi ở trên. Tab `Kỹ năng` đã qua Player gate tại `build/map01a-skills-layout-runtime-v1/{pc,mobile,tablet}/`: rail ba nhóm, graph ba hàng, bốn skill slot đánh số, điểm kỹ năng và detail-right giữ cùng composition; action progression vẫn khóa trung thực. Gate active chuyển sang `Tiềm năng`; `Linh thú` tiếp tục chờ đúng thứ tự. Không resume class/pose/wardrobe/source và không rollback code class.

@@ -1,9 +1,16 @@
-## Character hub — tab Rương đồ đã qua gate, tab Kỹ năng active — 2026-09-14
+## Character hub — tab Kỹ năng đã qua gate, tab Tiềm năng active — 2026-09-14
+
+- Canonical duy nhất: `redesign-v4-five-tabs/03-ky-nang-five-tab-APPROVED.png`. Runtime giữ rail ba nhóm, graph ba hàng có connector, bốn slot skill đánh số, cụm điểm kỹ năng và detail-right dùng chung.
+- Bỏ tiêu đề kỹ thuật thừa khỏi inspector; bốn slot footer dùng shared `lgo-equipped-skill-slot`. Nút cộng điểm/nâng cấp/trang bị vẫn hiện đúng vị trí nhưng khóa vì progression chưa có contract.
+- Full `TwoDCharacterRuntimeStateTests` đạt `28/28`; Player `build/map01a-skills-layout-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=46`. Evidence default/chọn node tại `build/map01a-skills-layout-runtime-v1/{pc,mobile,tablet}/` đã được xem trực tiếp, không wrap/stack/cắt/chồng.
+- Screen active duy nhất tiếp theo là `Tiềm năng` theo `04-tiem-nang-five-tab-APPROVED.png`; sau đó mới `Linh thú`. Scope class/pose/wardrobe/source tiếp tục đóng.
+
+## Character hub — tab Rương đồ đã qua gate — 2026-09-14
 
 - Canonical duy nhất: `redesign-v4-five-tabs/02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png`. Runtime giữ rail phân loại dọc, capacity/search/sort, grid cố định `4×5`, footer action và detail-right ở ba viewport.
 - Grid dùng 13 item thật và 7 ô trống rõ ràng, không tạo item giả. Detail có ba vị trí action như canonical; `Bán` bị khóa và ghi tooltip vì gameplay bán đồ chưa có contract. Màn Nhân vật vẫn giữ đúng hai action.
 - Full `TwoDCharacterRuntimeStateTests` đạt `28/28`; Player `build/map01a-storage-layout-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=46`. Evidence default/search/chọn item tại `build/map01a-storage-layout-runtime-v1/{pc,mobile,tablet}/` đã được xem trực tiếp, không wrap/stack/cắt/chồng.
-- Screen active duy nhất tiếp theo là `Kỹ năng` theo `03-ky-nang-five-tab-APPROVED.png`; sau đó mới `Tiềm năng → Linh thú`. Scope class/pose/wardrobe/source tiếp tục đóng.
+- Sau checkpoint này, gate đã chuyển tuần tự sang Kỹ năng và trạng thái mới nhất nằm ở mục trên.
 
 ## Character hub — tab Nhân vật đã qua gate — 2026-09-14
 

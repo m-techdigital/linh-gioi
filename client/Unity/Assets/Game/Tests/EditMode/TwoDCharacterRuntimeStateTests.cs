@@ -477,6 +477,16 @@ namespace LinhGioi.Tests.EditMode
                     Is.EqualTo(scene.GetMap01ASkillIconSprite("thien_kiem_quyet")));
                 Assert.That(root.Q<VisualElement>("Map01A Equipped Skill thien_kiem_quyet").style.width.value.value,
                     Is.EqualTo(58), "The full-width equipped strip must keep readable icons without clipping its skill-points badge.");
+                Assert.That(root.Q<Label>("Map01A Equipped Skill Heading").text, Is.EqualTo("Kỹ năng đã trang bị"));
+                Assert.That(root.Query<VisualElement>(className: "lgo-equipped-skill-slot").ToList().Count, Is.EqualTo(4));
+                for (var equippedIndex = 1; equippedIndex <= 4; equippedIndex++)
+                    Assert.That(root.Q<Label>("Map01A Equipped Skill Number " + equippedIndex).text,
+                        Is.EqualTo(equippedIndex.ToString()));
+                Assert.That(root.Q<Label>("Map01A Skill Points Label").text, Is.EqualTo("Điểm kỹ năng"));
+                Assert.That(root.Q<Button>("Map01A Skill Points Add").enabledSelf, Is.False,
+                    "The approved points affordance stays visible but locked until progression has a real contract.");
+                Assert.That(root.Q<Label>("Map01A Hub Detail Header").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "The canonical inspector begins with the skill hero, without a redundant technical heading.");
                 Assert.That(root.Q<Button>("Map01A Skill Equip Action"), Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Skill Equip Action").enabledSelf, Is.False);
                 var flags = BindingFlags.Instance | BindingFlags.NonPublic;

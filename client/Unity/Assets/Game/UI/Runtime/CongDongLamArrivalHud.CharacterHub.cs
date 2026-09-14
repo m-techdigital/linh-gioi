@@ -52,6 +52,22 @@ namespace LinhGioi.UI
             return icon;
         }
 
+        private VisualElement CreateEquippedSkillSlot(string iconId, int index)
+        {
+            var slot = new VisualElement { name = "Map01A Equipped Skill Slot " + index };
+            ApplyLgoEquippedSkillSlot(slot);
+            slot.Add(SkillIcon("Map01A Equipped Skill " + iconId, iconId, 58));
+            var number = LgoLabel(index.ToString(), 11, UiGold, true);
+            number.name = "Map01A Equipped Skill Number " + index;
+            number.style.position = Position.Absolute;
+            number.style.left = 0;
+            number.style.top = 0;
+            number.style.paddingLeft = number.style.paddingRight = 4;
+            number.style.backgroundColor = new Color(.005f, .018f, .035f, .94f);
+            slot.Add(number);
+            return slot;
+        }
+
         private VisualElement PotentialIcon(string name, string iconId, float size)
         {
             var icon = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
@@ -278,16 +294,35 @@ namespace LinhGioi.UI
                     path.Add(CreateHubPathConnector("Map01A Skill Path Connector " + (stageIndex + 1), true));
             }
             skillArea.Add(path);
+            var equippedHeading = LgoLabel("Kỹ năng đã trang bị", 14, UiSubText, true);
+            equippedHeading.name = "Map01A Equipped Skill Heading";
+            equippedHeading.style.unityTextAlign = TextAnchor.MiddleCenter;
+            content.Add(equippedHeading);
             var equippedRow = InventoryRow("Map01A Equipped Skill Strip");
             equippedRow.style.alignItems = Align.Center;
             equippedRow.style.justifyContent = Justify.SpaceBetween;
-            equippedRow.style.minHeight = 82;
-            equippedRow.Add(InventoryBadge("Map01A Equipped Skill Summary", "Đã trang bị", UiSubText));
-            foreach (var iconId in new[] { "thien_kiem_quyet", "lang_khong_bo", "phong_tram", "van_kiem" })
-                equippedRow.Add(SkillIcon("Map01A Equipped Skill " + iconId, iconId, 58));
-            equippedRow.Add(InventoryBadge("Map01A Skill Points Badge", "12 điểm", UiGold));
+            equippedRow.style.minHeight = 68;
+            var equippedIconIds = new[] { "thien_kiem_quyet", "lang_khong_bo", "phong_tram", "van_kiem" };
+            for (var equippedIndex = 0; equippedIndex < equippedIconIds.Length; equippedIndex++)
+                equippedRow.Add(CreateEquippedSkillSlot(equippedIconIds[equippedIndex], equippedIndex + 1));
+            var pointsGroup = new VisualElement { name = "Map01A Skill Points Group" };
+            pointsGroup.style.flexDirection = FlexDirection.Row;
+            pointsGroup.style.alignItems = Align.Center;
+            var pointsLabel = LgoLabel("Điểm kỹ năng", 12, UiSubText, true);
+            pointsLabel.name = "Map01A Skill Points Label";
+            var pointsBadge = InventoryBadge("Map01A Skill Points Badge", "12", UiGold);
+            var pointsAdd = InventoryButton(() => { }, "Map01A Skill Points Add", "+");
+            pointsAdd.style.flexGrow = 0;
+            pointsAdd.style.flexBasis = 34;
+            pointsAdd.style.minHeight = 34;
+            pointsAdd.style.marginRight = 0;
+            ApplyLgoDisabledAction(pointsAdd);
+            pointsGroup.Add(pointsLabel);
+            pointsGroup.Add(pointsBadge);
+            pointsGroup.Add(pointsAdd);
+            equippedRow.Add(pointsGroup);
             progression.Add(skillArea);
-            equippedRow.style.marginTop = 6;
+            equippedRow.style.marginTop = 2;
             content.Add(equippedRow);
             body.Add(_skillsPanel);
         }
@@ -390,6 +425,8 @@ namespace LinhGioi.UI
             _hubPreviewDetailPanel.style.marginLeft = InventoryDesktopColumnGap;
             ApplyLgoDetailCard(_hubPreviewDetailPanel);
             _hubDetailHeader = LgoLabel("CHI TIẾT", 14, UiSubText, true);
+            _hubDetailHeader.name = "Map01A Hub Detail Header";
+            _hubDetailHeader.style.display = DisplayStyle.None;
             _hubPreviewDetailPanel.Add(_hubDetailHeader);
             var detailHero = new VisualElement { name = "Map01A Hub Preview Detail Hero" };
             detailHero.style.flexDirection = FlexDirection.Row;

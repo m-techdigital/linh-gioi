@@ -590,6 +590,18 @@ namespace LinhGioi.UI
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
 
+        private static void ApplyLgoEquippedSkillSlot(VisualElement slot)
+        {
+            slot.AddToClassList("lgo-equipped-skill-slot");
+            slot.style.width = 64;
+            slot.style.height = 64;
+            slot.style.flexGrow = 0;
+            slot.style.flexShrink = 0;
+            slot.style.alignItems = Align.Center;
+            slot.style.justifyContent = Justify.Center;
+            ApplyLgoFrame(slot, new Color(.015f, .060f, .105f, .96f), new Color(.64f, .72f, .82f, .72f));
+        }
+
         private static void ApplyLgoSkillNode(Button node)
         {
             node.AddToClassList("lgo-skill-node");
