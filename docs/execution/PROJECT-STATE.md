@@ -1903,3 +1903,11 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Reuse hero art provenance-backed hiện hành; thêm hai progress bar, detail stats/kỹ năng và `Đang xuất chiến`/`Bồi dưỡng` read-only. Ba pet chưa có source giữ khóa, không sinh art giả.
 - Player `build/map01a-spirit-screen-player-v1/LinhGioiOnline.app`; evidence đã xem ở `build/map01a-spirit-screen-runtime-v1/{pc,mobile,tablet}/`, không stack/cắt/chồng.
 - Cả năm screen hub đã layout-locked. Next chỉ audit/chốt một canonical Entry/login trước code; class/pose/wardrobe/source vẫn hold.
+## Character Hub — Tiềm năng khóa thành template dùng chung hoàn chỉnh — 2026-09-15
+
+- Audit theo feedback owner xác nhận phần vòng/đường nối đã dùng chung, nhưng ô giá trị, ô cộng và dấu `+` vẫn còn được style trên từng node; catalog Tiềm năng cũng tạo năm bản sao dữ liệu giống hệt nhau. Đây là phần còn khiến implementation trông như dựng lại theo class.
+- `CharacterHubPotentialTopology` nay sở hữu trọn presentation cố định: vòng ngoài, đường nối, core, năm khung node, năm ô giá trị, năm ô cộng và năm glyph `+`. Overlay node chỉ bind icon/tên/giá trị/selection và nhận tương tác; không tự vẽ thêm khung.
+- Năm profile class cùng tham chiếu một catalog Tiềm năng immutable. Recommendation và trạng thái chọn vẫn là dữ liệu riêng theo profile; Kỹ năng tiếp tục là component/topology tách biệt. Canvas graph được fit về đúng cột main `600 px`, không còn cắt ô bên phải.
+- TDD đã chứng minh các lỗi trước khi sửa: catalog không cùng reference, thiếu value/add/glyph trong template và graph rộng `650 px`; tất cả targeted test đạt `1/1` sau sửa. Full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared governance, pose/capture, no-3D và no-source-images đều pass.
+- Player cuối: `build/map01a-character-hub-potential-template-player-v3/LinhGioiOnline.app`, build `Succeeded`, `errors=0`, `warnings=48`. Evidence `build/map01a-character-hub-potential-template-runtime-v3/{pc,mobile,tablet}/`; đã xem trực tiếp default/selected trên ba viewport, đủ năm node/value/add/glyph, không wrap/cắt/chồng.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`. Batch này không đổi source art, class/pose/wardrobe, camera, scale, renderer hay frozen surfaces; không dùng evidence v1/v2 đã bị thay thế.

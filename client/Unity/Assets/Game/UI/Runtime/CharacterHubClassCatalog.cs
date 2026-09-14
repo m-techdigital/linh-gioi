@@ -176,9 +176,8 @@ namespace LinhGioi.UI
             "attack", "run", "skill", "crest", "jump", "support", "character", "notice", "cinematic"
         };
 
-        private static CharacterHubPotentialPreview[] BasePotentials()
-        {
-            return new[]
+        private static readonly IReadOnlyList<CharacterHubPotentialPreview> SharedPotentials = Array.AsReadOnly(
+            new[]
             {
                 new CharacterHubPotentialPreview("Công", "120", "attack",
                     "Tăng sức tấn công và hiệu quả gây sát thương.\n\nHiệu quả hiện tại  Công +120\nKhi cộng 1 điểm  Công +2"),
@@ -190,8 +189,7 @@ namespace LinhGioi.UI
                     "Tăng linh lực và khả năng duy trì kỹ năng.\n\nHiệu quả hiện tại  Linh lực +96\nKhi cộng 1 điểm  Linh lực +2"),
                 new CharacterHubPotentialPreview("Nhanh nhẹn", "110", "agility",
                     "Tăng tốc độ hành động và khả năng né tránh.\n\nHiệu quả hiện tại  Nhanh nhẹn +110\nKhi cộng 1 điểm  Nhanh nhẹn +2")
-            };
-        }
+            });
 
         private static CharacterHubSkillPreview[] SharedSkills(string classId, string identity, params string[] names)
         {
@@ -235,22 +233,22 @@ namespace LinhGioi.UI
             new CharacterHubClassProfile(
                 "vo", "Võ", "Áp sát · combo · phá giáp · phản đòn", "Đề xuất Võ · Công / Sinh lực",
                 SharedSkills("vo", "Áp sát · combo · phá giáp · phản đòn", "Liên Kích", "Phá Giáp", "Phản Đòn", "Chấn Kình", "Bộ Pháp", "Hộ Thể", "Đột Kích", "Kình Lực", "Quyền Ý"),
-                new[] { 0, 1, 3, 6 }, BasePotentials(), SpiritPet("Thanh Vân Hồ hỗ trợ phòng thủ khi Võ áp sát.")),
+                new[] { 0, 1, 3, 6 }, SharedPotentials, SpiritPet("Thanh Vân Hồ hỗ trợ phòng thủ khi Võ áp sát.")),
             new CharacterHubClassProfile(
                 "kiem", "Kiếm", "Tốc độ · kiếm thuật · phản kích · cơ động", "Đề xuất Kiếm · Nhanh nhẹn / Công",
-                KiemSkills(), new[] { 0, 1, 5, 8 }, BasePotentials(), SpiritPet("Thanh Vân Hồ giữ nhịp hồi phục giữa các chuỗi kiếm.")),
+                KiemSkills(), new[] { 0, 1, 5, 8 }, SharedPotentials, SpiritPet("Thanh Vân Hồ giữ nhịp hồi phục giữa các chuỗi kiếm.")),
             new CharacterHubClassProfile(
                 "phap", "Pháp", "Tầm xa · nguyên tố · diện rộng · khống chế", "Đề xuất Pháp · Linh lực / Công",
                 SharedSkills("phap", "Tầm xa · nguyên tố · diện rộng · khống chế", "Hỏa Thuật", "Băng Thuật", "Lôi Thuật", "Linh Thuật", "Kết Giới", "Trọng Lực", "Nguyên Tố", "Pháp Trận", "Tinh Thần"),
-                new[] { 0, 1, 4, 7 }, BasePotentials(), SpiritPet("Thanh Vân Hồ bổ trợ kết giới và duy trì linh lực.")),
+                new[] { 0, 1, 4, 7 }, SharedPotentials, SpiritPet("Thanh Vân Hồ bổ trợ kết giới và duy trì linh lực.")),
             new CharacterHubClassProfile(
                 "co", "Cơ", "Tầm xa · cơ giới · bố trí · hỏa lực", "Đề xuất Cơ · Công / Nhanh nhẹn",
                 SharedSkills("co", "Tầm xa · cơ giới · bố trí · hỏa lực", "Cơ Nỏ", "Pháo Kích", "Tháp Cơ", "Cơ Lôi", "Linh Cơ", "Thiết Vệ", "Truy Kích", "Hỏa Tuyến", "Cơ Trận"),
-                new[] { 0, 1, 2, 7 }, BasePotentials(), SpiritPet("Thanh Vân Hồ bảo hộ vị trí triển khai cơ giới.")),
+                new[] { 0, 1, 2, 7 }, SharedPotentials, SpiritPet("Thanh Vân Hồ bảo hộ vị trí triển khai cơ giới.")),
             new CharacterHubClassProfile(
                 "linh", "Linh", "Triệu hồi · hỗ trợ · khống chế · thanh tẩy", "Đề xuất Linh · Linh lực / Sinh lực",
                 SharedSkills("linh", "Triệu hồi · hỗ trợ · khống chế · thanh tẩy", "Triệu Linh", "Hồi Phục", "Linh Thuẫn", "Thanh Tẩy", "Linh Phù", "Trói Hồn", "Hộ Mệnh", "Cộng Hưởng", "Linh Giới"),
-                new[] { 0, 1, 2, 6 }, BasePotentials(), SpiritPet("Thanh Vân Hồ cộng hưởng hồi phục và khống chế.")),
+                new[] { 0, 1, 2, 6 }, SharedPotentials, SpiritPet("Thanh Vân Hồ cộng hưởng hồi phục và khống chế.")),
         };
 
         public static IReadOnlyList<CharacterHubClassProfile> Profiles => Items;

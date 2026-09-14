@@ -47,8 +47,8 @@ namespace LinhGioi.Tests.EditMode
                         profile.Id + " must use provenance-backed shared icons instead of pretending Kiếm art belongs to another class.");
             }
             for (var index = 1; index < profiles.Count; index++)
-                Assert.That(ReferenceEquals(profiles[index - 1].Potentials, profiles[index].Potentials), Is.False,
-                    "Potential collections must be class-owned data even while they reuse the shared five-node layout.");
+                Assert.That(ReferenceEquals(profiles[0].Potentials, profiles[index].Potentials), Is.True,
+                    "The five generic potential definitions must be one immutable shared catalog; class profiles only bind recommendation and selection state.");
         }
 
         [Test]
@@ -726,12 +726,16 @@ namespace LinhGioi.Tests.EditMode
                     "The outer ring and connectors must come from one shared prebuilt topology behind the class data.");
                 Assert.That(root.Q("Map01A Potential Diagram").style.height.value.value, Is.LessThanOrEqualTo(400),
                     "Potential diagram and recommendation must fit inside the shared modal shell.");
+                Assert.That(root.Q("Map01A Potential Diagram").style.width.value.value,
+                    Is.LessThanOrEqualTo(600),
+                    "The shared potential template must fit the canonical main column so right-side value/add frames are never clipped by detail-right.");
                 Assert.That(root.Q<Button>("Map01A Potential Node 2").ClassListContains("lgo-potential-node"), Is.True);
                 for (var potentialIndex = 0; potentialIndex < 5; potentialIndex++)
                 {
                     var addMarker = root.Q<Label>("Map01A Potential Node Add " + potentialIndex);
                     Assert.That(addMarker, Is.Not.Null);
-                    Assert.That(addMarker.text, Is.EqualTo("+"));
+                    Assert.That(addMarker.text, Is.Empty,
+                        "The shared vector template owns the plus glyph; the overlay must not redraw it per node.");
                     Assert.That(addMarker.ClassListContains("lgo-potential-add-marker"), Is.True);
                 }
                 Assert.That(root.Q<VisualElement>("Map01A Potential Node 2 Icon").style.backgroundImage.value.sprite,
@@ -810,10 +814,25 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(topologyFrameCount, Is.Not.Null,
                     "Potential topology must own the reusable node rings instead of asking every class-bound control to draw one.");
                 Assert.That(topologyFrameCount.GetValue(null), Is.EqualTo(5));
+                var topologyValueFrameCount = potentialTopology.GetType().GetProperty(
+                    "PrebuiltValueFrameCount", BindingFlags.Static | BindingFlags.NonPublic);
+                var topologyAddFrameCount = potentialTopology.GetType().GetProperty(
+                    "PrebuiltAddFrameCount", BindingFlags.Static | BindingFlags.NonPublic);
+                Assert.That(topologyValueFrameCount?.GetValue(null), Is.EqualTo(5),
+                    "Potential topology must prebuild all value boxes instead of styling one box per class-bound node.");
+                Assert.That(topologyAddFrameCount?.GetValue(null), Is.EqualTo(5),
+                    "Potential topology must prebuild all add boxes; the plus labels above it only bind interaction state.");
+                var topologyAddGlyphCount = potentialTopology.GetType().GetProperty(
+                    "PrebuiltAddGlyphCount", BindingFlags.Static | BindingFlags.NonPublic);
+                Assert.That(topologyAddGlyphCount?.GetValue(null), Is.EqualTo(5),
+                    "Potential topology must prebuild one crisp plus glyph in every add box.");
                 Assert.That(potentialNode0.ClassListContains("lgo-potential-node-overlay"), Is.True,
                     "Potential buttons are interaction/data overlays on the shared vector base.");
                 Assert.That(potentialNode0.style.borderLeftWidth.value, Is.EqualTo(0));
                 Assert.That(potentialNode0.style.borderTopWidth.value, Is.EqualTo(0));
+                var potentialAdd0 = root.Q<Label>("Map01A Potential Node Add 0");
+                Assert.That(potentialAdd0.style.borderLeftWidth.value, Is.EqualTo(0));
+                Assert.That(potentialAdd0.style.borderTopWidth.value, Is.EqualTo(0));
                 Assert.That(spiritSkillRow0, Is.Not.Null,
                     "Spirit pet skill rows must be prebuilt once and rebound from profile data.");
                 Assert.That(root.Q("Map01A Spirit Pet Skill Row 1"), Is.Not.Null);

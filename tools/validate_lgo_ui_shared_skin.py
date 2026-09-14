@@ -331,6 +331,9 @@ REQUIRED_PARTIAL_MARKERS = {
         "Map01A Potential Topology Base",
         "lgo-potential-topology",
         "PrebuiltNodeFrameCount",
+        "PrebuiltValueFrameCount",
+        "PrebuiltAddFrameCount",
+        "PrebuiltAddGlyphCount",
         "lgo-potential-node-overlay",
         "ApplyPotentialNodeSelection",
         "CreateHubSurface",
@@ -356,6 +359,9 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoCharacterHubDetailCard(_hubPreviewDetailPanel)",
         "AnimateLgoCharacterHubSwap(_hubPreviewDetailPanel)",
     ],
+    "CharacterHubClassCatalog.cs": [
+        "SharedPotentials = Array.AsReadOnly",
+    ],
 }
 
 REQUIRED_AGENT_MARKERS = [
@@ -376,6 +382,7 @@ REQUIRED_AGENT_MARKERS = [
     "Nếu hai UI/UX giống nhau mà cần khác hành vi, tách data/state/action",
     "class chỉ truyền profile/data (`classId`, `itemId`, skill, tiềm năng, linh thú)",
     "Character Hub dựng topology Skill, Tiềm năng và Linh thú đúng một lần từ shared base",
+    "Năm định nghĩa thuộc tính Tiềm năng dùng một catalog bất biến chung",
     "Đổi class chỉ bind profile/data/icon/text/state vào các node có sẵn",
     "Helper ngoại lệ như `InventoryPanel` chỉ được nằm trong partial sở hữu flow",
     "python3.12 tools/validate_lgo_ui_shared_skin.py",
@@ -398,6 +405,8 @@ REQUIRED_TEST_MARKERS = [
     "Password recovery must not mutate class, pose, wardrobe or gameplay state",
     "CharacterHubClassRefreshRebindsOneStableSharedTopology",
     "The circles, outer ring and connectors must be one prebuilt shared topology",
+    "Potential topology must prebuild all value boxes",
+    "Potential topology must prebuild all add boxes",
 ]
 
 REQUIRED_RUNTIME_SKIN_MARKERS = [

@@ -828,7 +828,9 @@ namespace LinhGioi.UI
             marker.style.width = 28;
             marker.style.height = 28;
             marker.style.unityTextAlign = TextAnchor.MiddleCenter;
-            ApplyLgoFrame(marker, new Color(.015f, .045f, .075f, .98f), UiGold);
+            marker.style.backgroundColor = Color.clear;
+            marker.style.borderLeftWidth = marker.style.borderRightWidth = 0;
+            marker.style.borderTopWidth = marker.style.borderBottomWidth = 0;
         }
 
         private static void ApplyLgoInventorySearchField(TextField field, bool touch)

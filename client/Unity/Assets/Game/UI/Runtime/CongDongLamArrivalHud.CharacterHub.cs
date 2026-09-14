@@ -7,12 +7,17 @@ namespace LinhGioi.UI
 {
     internal sealed class CharacterHubPotentialTopology : VisualElement
     {
-        internal const float CanvasWidth = 650f;
+        private const float LogicalWidth = 650f;
+        private const float HorizontalFit = 600f / LogicalWidth;
+        internal const float CanvasWidth = 600f;
         internal const float CanvasHeight = 400f;
         internal static readonly Vector2[] NodePositions =
         {
-            new Vector2(263, 0), new Vector2(16, 132), new Vector2(510, 132),
-            new Vector2(138, 270), new Vector2(388, 270)
+            new Vector2(325f * HorizontalFit - 62f, 0),
+            new Vector2(78f * HorizontalFit - 62f, 132),
+            new Vector2(572f * HorizontalFit - 62f, 132),
+            new Vector2(200f * HorizontalFit - 62f, 270),
+            new Vector2(450f * HorizontalFit - 62f, 270)
         };
 
         private static readonly Vector2[] NodeCenters =
@@ -22,6 +27,9 @@ namespace LinhGioi.UI
         };
 
         internal static int PrebuiltNodeFrameCount => NodeCenters.Length;
+        internal static int PrebuiltValueFrameCount => NodeCenters.Length;
+        internal static int PrebuiltAddFrameCount => NodeCenters.Length;
+        internal static int PrebuiltAddGlyphCount => NodeCenters.Length;
 
         internal CharacterHubPotentialTopology()
         {
@@ -41,7 +49,7 @@ namespace LinhGioi.UI
             var width = resolvedStyle.width;
             var height = resolvedStyle.height;
             if (float.IsNaN(width) || float.IsNaN(height) || width < 1 || height < 1) return;
-            var scale = new Vector2(width / CanvasWidth, height / CanvasHeight);
+            var scale = new Vector2(width / LogicalWidth, height / CanvasHeight);
             var center = Vector2.Scale(new Vector2(325, 192), scale);
             var painter = context.painter2D;
 
@@ -74,7 +82,56 @@ namespace LinhGioi.UI
                 DrawEllipse(painter, scaledCenter, Vector2.Scale(new Vector2(49, 49), scale),
                     new Color(.22f, .71f, 1f, .70f), 1.5f);
                 DrawCardinalTicks(painter, scaledCenter, scale);
+                DrawNodeValueFrames(painter, nodeCenter, scale);
             }
+        }
+
+        private static void DrawNodeValueFrames(Painter2D painter, Vector2 center, Vector2 scale)
+        {
+            var valueRect = new Rect(
+                (center.x - 42f) * scale.x,
+                (center.y + 37f) * scale.y,
+                82f * scale.x,
+                28f * scale.y);
+            var addRect = new Rect(
+                (center.x + 42f) * scale.x,
+                (center.y + 37f) * scale.y,
+                28f * scale.x,
+                28f * scale.y);
+            DrawRectFrame(painter, valueRect,
+                new Color(.005f, .025f, .05f, .94f),
+                new Color(.25f, .48f, .66f, .78f), 1.25f);
+            DrawRectFrame(painter, addRect,
+                new Color(.015f, .045f, .075f, .98f),
+                new Color(.96f, .73f, .26f, .92f), 1.5f);
+            DrawPlusGlyph(painter, addRect.center, scale);
+        }
+
+        private static void DrawPlusGlyph(Painter2D painter, Vector2 center, Vector2 scale)
+        {
+            painter.strokeColor = new Color(1f, .82f, .34f, 1f);
+            painter.lineWidth = 2f;
+            painter.BeginPath();
+            painter.MoveTo(center + new Vector2(-6f * scale.x, 0));
+            painter.LineTo(center + new Vector2(6f * scale.x, 0));
+            painter.MoveTo(center + new Vector2(0, -6f * scale.y));
+            painter.LineTo(center + new Vector2(0, 6f * scale.y));
+            painter.Stroke();
+        }
+
+        private static void DrawRectFrame(Painter2D painter, Rect rect, Color background, Color border, float width)
+        {
+            painter.fillColor = background;
+            painter.BeginPath();
+            painter.MoveTo(new Vector2(rect.xMin, rect.yMin));
+            painter.LineTo(new Vector2(rect.xMax, rect.yMin));
+            painter.LineTo(new Vector2(rect.xMax, rect.yMax));
+            painter.LineTo(new Vector2(rect.xMin, rect.yMax));
+            painter.ClosePath();
+            painter.Fill();
+            painter.strokeColor = border;
+            painter.lineWidth = width;
+            painter.Stroke();
         }
 
         private static void DrawCardinalTicks(Painter2D painter, Vector2 center, Vector2 scale)
@@ -365,7 +422,7 @@ namespace LinhGioi.UI
             valueLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             _potentialPathValues.Add(valueLabel);
             node.Add(valueLabel);
-            var addMarker = LgoLabel("+", 18, UiGold, true);
+            var addMarker = LgoLabel(string.Empty, 18, UiGold, true);
             addMarker.name = "Map01A Potential Node Add " + index;
             ApplyLgoPotentialAddMarker(addMarker);
             node.Add(addMarker);
@@ -583,7 +640,7 @@ namespace LinhGioi.UI
 
             var core = new VisualElement { name = "Map01A Potential Diagram Core", pickingMode = PickingMode.Ignore };
             core.style.position = Position.Absolute;
-            core.style.left = 241;
+            core.style.left = (CharacterHubPotentialTopology.CanvasWidth - 168f) * .5f;
             core.style.top = 108;
             core.style.width = 168;
             core.style.height = 168;
