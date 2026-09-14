@@ -335,8 +335,10 @@ REQUIRED_PARTIAL_MARKERS = {
         "PrebuiltAddFrameCount",
         "PrebuiltAddGlyphCount",
         "Map01A Potential Detail Facts",
+        "Map01A Potential Current Level",
         "Map01A Potential Current Effect",
         "Map01A Potential Next Effect",
+        "Map01A Potential Cost Row",
         "lgo-potential-node-overlay",
         "ApplyPotentialNodeSelection",
         "CreateHubSurface",
@@ -413,6 +415,7 @@ REQUIRED_TEST_MARKERS = [
     "Potential topology must prebuild all value boxes",
     "Potential topology must prebuild all add boxes",
     "Class refresh must rebind the shared Potential detail template",
+    "Potential level/value belongs in its canonical facts row",
 ]
 
 REQUIRED_RUNTIME_SKIN_MARKERS = [

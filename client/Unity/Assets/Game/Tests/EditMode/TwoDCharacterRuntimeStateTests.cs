@@ -752,6 +752,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(potentialFacts.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q<Label>("Map01A Potential Current Effect Heading").text,
                     Is.EqualTo("HIỆU QUẢ HIỆN TẠI"));
+                Assert.That(root.Q<Label>("Map01A Potential Current Level").text,
+                    Is.EqualTo("Cấp hiện tại:  250"),
+                    "Potential level/value belongs in its canonical facts row, not in class-specific hero metadata.");
                 Assert.That(root.Q<Label>("Map01A Potential Next Effect Heading").text,
                     Is.EqualTo("HIỆU QUẢ KHI CỘNG 1 ĐIỂM"));
                 Assert.That(root.Q<Label>("Map01A Potential Current Effect").text,
@@ -760,6 +763,16 @@ namespace LinhGioi.Tests.EditMode
                     Does.Contain("Sinh lực (HP)  +50"));
                 Assert.That(root.Q<Label>("Map01A Potential Cost").text,
                     Is.EqualTo("Tiêu hao  Điểm tiềm năng ×1"));
+                Assert.That(root.Q<VisualElement>("Map01A Potential Cost Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01APotentialIconSprite("core")),
+                    "The shared cost row reuses the provenance-backed point icon instead of drawing a per-class placeholder.");
+                Assert.That(root.Q<Label>("Map01A Potential Summary").parent.name,
+                    Is.EqualTo("Map01A Hub Preview Detail Hero Copy"),
+                    "The approved inspector keeps the selected Potential description beside its hero icon.");
+                Assert.That(root.Q<Label>("Map01A Hub Preview Detail Meta").style.display.value,
+                    Is.EqualTo(DisplayStyle.None));
+                Assert.That(hubDetailStatus.style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Potential lock state is already expressed by disabled actions; an extra review-status box is outside the canonical layout.");
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
                     "Map01A must not create local fake potential progression before the real state contract exists.");
                 Assert.That(root.Q<Button>("Map01A Potential Reset").enabledSelf, Is.False);

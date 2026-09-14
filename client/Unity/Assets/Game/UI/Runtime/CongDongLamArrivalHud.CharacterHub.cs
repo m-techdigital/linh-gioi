@@ -321,7 +321,7 @@ namespace LinhGioi.UI
         private VisualElement _hubPotentialFacts;
         private VisualElement _hubSkillActionRow, _hubPotentialActionRow, _hubSpiritPetActionRow;
         private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
-        private Label _hubPotentialSummary, _hubPotentialCurrentEffect, _hubPotentialNextEffect, _hubPotentialCost;
+        private Label _hubPotentialSummary, _hubPotentialCurrentLevel, _hubPotentialCurrentEffect, _hubPotentialNextEffect, _hubPotentialCost;
         private VisualElement _hubDetailIcon;
         private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _potentialResetAction, _spiritPetDeployAction, _spiritPetDevelopAction;
         private Texture2D _spiritPetPreviewTexture;
@@ -865,6 +865,12 @@ namespace LinhGioi.UI
             _hubDetailMeta.name = "Map01A Hub Preview Detail Meta";
             _hubDetailMeta.style.marginTop = 4;
             detailHeroCopy.Add(_hubDetailMeta);
+            _hubPotentialSummary = LgoLabel("", 13, UiText);
+            _hubPotentialSummary.name = "Map01A Potential Summary";
+            _hubPotentialSummary.style.marginTop = 6;
+            _hubPotentialSummary.style.whiteSpace = WhiteSpace.Normal;
+            _hubPotentialSummary.style.display = DisplayStyle.None;
+            detailHeroCopy.Add(_hubPotentialSummary);
             _hubSpiritPetBadges = InventoryRow("Map01A Spirit Pet Detail Badges");
             _hubSpiritPetBadges.style.marginTop = 8;
             _hubSpiritPetBadges.style.marginBottom = 0;
@@ -886,15 +892,17 @@ namespace LinhGioi.UI
             _hubPotentialFacts = new VisualElement { name = "Map01A Potential Detail Facts" };
             _hubPotentialFacts.style.flexDirection = FlexDirection.Column;
             _hubPotentialFacts.style.display = DisplayStyle.None;
-            _hubPotentialSummary = LgoLabel("", 13, UiText);
-            _hubPotentialSummary.name = "Map01A Potential Summary";
-            _hubPotentialSummary.style.whiteSpace = WhiteSpace.Normal;
-            _hubPotentialFacts.Add(_hubPotentialSummary);
-            var currentHeading = LgoLabel("HIỆU QUẢ HIỆN TẠI", 12, new Color(.38f, .74f, 1f, 1f), true);
+            _hubPotentialCurrentLevel = LgoLabel("", 17, UiGold, true);
+            _hubPotentialCurrentLevel.name = "Map01A Potential Current Level";
+            _hubPotentialFacts.Add(_hubPotentialCurrentLevel);
+            var levelDivider = LgoDivider("Map01A Potential Level Divider");
+            levelDivider.style.marginTop = 8;
+            levelDivider.style.marginBottom = 10;
+            _hubPotentialFacts.Add(levelDivider);
+            var currentHeading = LgoLabel("HIỆU QUẢ HIỆN TẠI", 13, new Color(.38f, .74f, 1f, 1f), true);
             currentHeading.name = "Map01A Potential Current Effect Heading";
-            currentHeading.style.marginTop = 14;
             _hubPotentialFacts.Add(currentHeading);
-            _hubPotentialCurrentEffect = LgoLabel("", 15, UiText, true);
+            _hubPotentialCurrentEffect = LgoLabel("", 16, UiText, true);
             _hubPotentialCurrentEffect.name = "Map01A Potential Current Effect";
             _hubPotentialCurrentEffect.style.marginTop = 6;
             _hubPotentialCurrentEffect.style.whiteSpace = WhiteSpace.Normal;
@@ -903,21 +911,29 @@ namespace LinhGioi.UI
             effectDivider.style.marginTop = 12;
             effectDivider.style.marginBottom = 10;
             _hubPotentialFacts.Add(effectDivider);
-            var nextHeading = LgoLabel("HIỆU QUẢ KHI CỘNG 1 ĐIỂM", 12, new Color(.50f, .96f, .58f, 1f), true);
+            var nextHeading = LgoLabel("HIỆU QUẢ KHI CỘNG 1 ĐIỂM", 13, new Color(.50f, .96f, .58f, 1f), true);
             nextHeading.name = "Map01A Potential Next Effect Heading";
             _hubPotentialFacts.Add(nextHeading);
-            _hubPotentialNextEffect = LgoLabel("", 15, new Color(.62f, 1f, .68f, 1f), true);
+            _hubPotentialNextEffect = LgoLabel("", 16, new Color(.62f, 1f, .68f, 1f), true);
             _hubPotentialNextEffect.name = "Map01A Potential Next Effect";
             _hubPotentialNextEffect.style.marginTop = 6;
             _hubPotentialNextEffect.style.whiteSpace = WhiteSpace.Normal;
             _hubPotentialFacts.Add(_hubPotentialNextEffect);
+            var costRow = new VisualElement { name = "Map01A Potential Cost Row" };
+            costRow.style.flexDirection = FlexDirection.Row;
+            costRow.style.alignItems = Align.Center;
+            costRow.style.marginTop = 14;
+            costRow.style.minHeight = 50;
+            ApplyLgoStatusCard(costRow);
+            var costIcon = PotentialIcon("Map01A Potential Cost Icon", "core", 38);
+            costIcon.style.flexShrink = 0;
+            costIcon.style.marginRight = 10;
+            costRow.Add(costIcon);
             _hubPotentialCost = LgoLabel("Tiêu hao  Điểm tiềm năng ×1", 13, UiGold, true);
             _hubPotentialCost.name = "Map01A Potential Cost";
-            ApplyLgoStatusCard(_hubPotentialCost);
-            _hubPotentialCost.style.marginTop = 14;
-            _hubPotentialCost.style.minHeight = 42;
             _hubPotentialCost.style.unityTextAlign = TextAnchor.MiddleLeft;
-            _hubPotentialFacts.Add(_hubPotentialCost);
+            costRow.Add(_hubPotentialCost);
+            _hubPotentialFacts.Add(costRow);
             facts.Add(_hubPotentialFacts);
             _hubSpiritPetFacts = new VisualElement { name = "Map01A Spirit Pet Detail Facts" };
             _hubSpiritPetFacts.style.flexDirection = FlexDirection.Column;
@@ -1134,9 +1150,12 @@ namespace LinhGioi.UI
             _hubPotentialActionRow.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetActionRow.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetBadges.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubDetailMeta.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.None : DisplayStyle.Flex;
+            _hubPotentialSummary.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubDetailBody.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
             _hubPotentialFacts.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetFacts.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubDetailStatus.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.None : DisplayStyle.Flex;
             _hubDetailIcon.style.width = _hubDetailIcon.style.height = mode == CharacterHubMode.Skills
                 ? 116
                 : mode == CharacterHubMode.Potential ? 104 : 112;
@@ -1170,11 +1189,12 @@ namespace LinhGioi.UI
             _hubDetailIcon.style.width = _hubDetailIcon.style.height = 124;
             _hubDetailHeader.text = "CHI TIẾT TIỀM NĂNG";
             _hubDetailName.text = potential.Name;
-            _hubDetailMeta.text = ActiveCharacterHubProfile.Label + " · Giá trị xem trước: " + potential.Value;
+            _hubDetailMeta.text = string.Empty;
             _hubPotentialSummary.text = potential.Summary;
+            _hubPotentialCurrentLevel.text = "Cấp hiện tại:  " + potential.Value;
             _hubPotentialCurrentEffect.text = potential.CurrentEffect;
             _hubPotentialNextEffect.text = potential.NextEffect;
-            _hubDetailStatus.text = "Phân bổ điểm đang khóa trong bản review.";
+            _hubDetailStatus.text = string.Empty;
         }
 
         private void ShowHubDetail(CharacterHubMode mode)
