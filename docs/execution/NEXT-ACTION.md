@@ -1,22 +1,20 @@
-## ACTIVE GOAL LOCK — LGO Spine Production Proof 01, 2026-09-14
+## ACTIVE GOAL LOCK — two whole-pose six-frame character bases, 2026-09-14
 
-Owner explicitly superseded the active per-pose outfit authoring route with `LGO-SPINE-PRODUCTION-PROOF-01`. The only active character/outfit path is a controlled reproduction of the official Spine Mix-and-Match workflow, followed by incremental substitution of accepted Pháp Lv1 male/female source. Unity remains the game engine.
+Owner superseded the Spine/cutout proof with a whole-pose six-frame route and selected the recent separate male/female Spine-test characters as the visual identity authority. Do not resume segmented limbs, generated `SkeletonData`/`MeshAttachment`, flat-card/SpriteSkin body rigs, or the deleted Spine source-v1/v2 mask trees under a new name.
 
 ## Active task state
 
 ```json
-{"activeTask":"LGO_SPINE_PRODUCTION_PROOF_01","phase":"EDITOR_AUTHORING_NOT_STARTED","status":"BLOCKED_SPINE_TOOLING","feasibilityStatus":"API_ATTACHMENT_COMPATIBILITY_ONLY","blockers":["SPINE_PROFESSIONAL_LICENSE_NOT_AVAILABLE","TRIAL_CANNOT_SAVE_OR_EXPORT_LGO_SOURCE","LGO_MALE_ACCEPTED_LAYERED_SOURCE_NOT_AVAILABLE","LGO_FEMALE_ACCEPTED_LAYERED_SOURCE_NOT_AVAILABLE","PHAP_LV1_ACCEPTED_SLEEVED_SOURCE_NOT_AVAILABLE"],"rejectedScope":"PROGRAMMATIC_SPINE_RUNTIME_FIXTURES_IN_UNITY","wrongScopeArtifactsPurged":true,"runtimePromotionAllowed":false}
+{"activeTask":"LGO_CHARACTER_BASE_SIX_POSE_REBUILD_01","phase":"OWNER_VISUAL_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW","method":"WHOLE_POSE_SIX_FRAME","poseOrder":["idle","run_contact","run_down_recoil","run_passing","run_flight","jump_tuck"],"identityAuthority":"common-character-v3/identity-authority-recovered-spine-test-v1","defaultHairIsDetachable":true,"runtimePromotionAllowed":false}
 ```
 
-Verified evaluation: official Spine Trial 4.3.26 is installed and opens the official Mix-and-Match source. Official spine-csharp 4.3.39 and spine-unity 4.3.107 at commit `51aad49f3e5db76e91c1c7f1800b0e7536bad11b` import into an isolated Unity 6000.3.2f1 evaluation project. A graphics Player completed base, bag, backpack, remove, restore, combined skin and two `walk` phases; eight captures were visually reviewed. This proves local reference compatibility only. Trial cannot save/export and a Spine license is required before integrating the runtime into `client/Unity`.
+The exact male and female ImageGen payloads deleted during wrong-scope cleanup were recovered from Codex thread history, hashed, and stored at `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/common-character-v3/identity-authority-recovered-spine-test-v1/`. Owner confirmed this is the intended pair. This recovery restores only the visual identity references; it does not restore or authorize the rejected segmented rig, masks, cutout pixels, or Spine proof claims.
 
-Owner scope correction: the isolated run that attached LGO belt/weapon textures to the official sample is only `API_ATTACHMENT_COMPATIBILITY_ONLY`. The later ten-part cutout and whole-base weighted-mesh fixtures generated through spine-csharp in Unity are `WRONG_TEST_SCOPE_OWNER_REJECTED`. None created, saved, reopened or exported an LGO project in Spine Editor, so none proves LGO feasibility.
+Current review candidates are `review/male-six-pose-default-hair-v1.png` and `review/female-six-pose-default-hair-v1.png` under that authority root. They use six visibly distinct actions; the female idle mechanically matches the male idle. Canonical hair is shown so visual review includes identity and secondary motion, but hair must remain a detachable `head_hair` module over a hairless technical body source. The boards are RGB review images and remain `runtimeEligible=false`; they are not source sprites and must not be sliced, packed, or put in Player.
 
-Actual LGO source admission has now been checked. It did not run in Spine: `build/lgo-spine-production-proof-01/lgo-source-admission.json` records `spineLgoRuntimeTestExecuted=false`. The old male KRA derives from the owner-rejected cutout body, the old female six-pose set has no editable layered source, and the Unity Pháp atlas is a runtime-ineligible draft paper-doll atlas. Owner-authorized source v1 (`VISUAL_REJECTED_MANNEQUIN_NOT_LGO`) and v2 (`VISUAL_REJECTED_STRUCTURAL_MASK_LOSS`) were deleted with their generated pixels; only `DO-NOT-USE` tombstones and the written lesson remain.
+Next valid work: obtain owner visual acceptance of the paired design, pose semantics, jump scale and hair motion. After acceptance, reconstruct one registered full-canvas true-alpha body pose set per gender plus detachable default-hair pose set from the accepted authority, then reopen/export the editable source and audit the complete six-frame sequence. Do not create outfit items or give a whole-wardrobe ETA before this base succeeds.
 
-Next valid work: provision and activate Spine Professional 4.3.x and provide or author one owner-accepted reopenable layered male/female base plus sleeved Pháp Lv1 source package. Then author the complete character/rig/equipment and idle/run/jump in Spine Editor, save and reopen the `.spine` source, export it with the official exporter, and only then run that export in `client/Unity`. Do not run programmatic `SkeletonData`/`MeshAttachment` fixtures, attach LGO art to the official sample as a substitute, iterate rejected v1/v2 masks, integrate an unlicensed runtime, or restore the rejected cutout.
-
-Spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`. Plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`. Retained evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json`, `reference-evaluation.json`, `lgo-source-admission.json`, official reference board and `wrong-scope-cleanup-2026-09-14.json`. Handoff: `docs/execution/HANDOFF-LGO-SPINE-PRODUCTION-PROOF-01.md`.
+Machine evidence: `build/character-base-v4/recovered-spine-references/recovery-manifest.json` and `build/character-base-v4/candidates-v3/review-manifest-v1.json`. The historical Spine reference evaluation remains evidence only in `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md` and must not become the resume action.
 
 ## Historical character-base source gate — superseded 2026-09-14
 
@@ -42,7 +40,7 @@ Everything below this heading records superseded work and evidence. It must not 
 
 Historical owner steering after skeletal review returned to the old six-pose body/motion authority. It was superseded by `LGO-SPINE-PRODUCTION-PROOF-01`; its spec, plan and findings remain evidence only.
 
-Resume guard: read `docs/execution/STOPPED-PATHS-AND-RESUME-GUARDS.md` before touching character, outfit, rig, motion, Krita, Blender, GarmentCode, Comfy or Player work. It now identifies Spine reference reproduction as the only active path and keeps both the generated-cutout and per-pose garment loops stopped.
+Resume guard: read `docs/execution/STOPPED-PATHS-AND-RESUME-GUARDS.md` before touching character, outfit, rig, motion, Krita, Blender, GarmentCode, Comfy or Player work. It identifies the owner-confirmed whole-pose six-frame base review as the active path and keeps the generated-cutout, body-card and rejected garment loops stopped.
 
 Do not continue the stopped skeletal generated-cutout path in this sandbox. `bind-authority-candidate-v1` is owner-rejected, current `skeletal_2d` has no accepted source blueprint, and no further Player probe/animation tweak/garment fit should run on that source. Skeletal 2D may reopen only if a new accepted neutral layered body/rig blueprint appears and passes `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`.
 

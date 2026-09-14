@@ -104,7 +104,7 @@ def active_state_execution_blocker_from_text(text: str) -> str | None:
         if known_blocker:
             return known_blocker
     status = active_state.get("status")
-    if isinstance(status, str) and status.startswith(("BLOCKED_", "FIX_REQUIRED", "NEED_OWNER_DECISION")):
+    if isinstance(status, str) and status.startswith(("BLOCKED_", "FIX_REQUIRED", "NEED_OWNER_DECISION", "NEED_HUMAN_VISUAL_REVIEW")):
         return status
     return None
 

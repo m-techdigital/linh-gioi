@@ -1,6 +1,10 @@
-## LGO Spine production proof preflight — 2026-09-14
+## Whole-pose six-frame character base review — 2026-09-14
 
-`EDITOR_AUTHORING_NOT_STARTED / BLOCKED_SPINE_TOOLING`. Official Trial/runtime Mix-and-Match passed only as a reference. The belt/weapon run was downgraded to `API_ATTACHMENT_COMPATIBILITY_ONLY`. Owner rejected the subsequent programmatic ten-part cutout and whole-base weighted-mesh Unity fixtures as `WRONG_TEST_SCOPE_OWNER_REJECTED`: none created, saved, reopened or exported an LGO project through Spine Editor. Cleanup then deleted 6,024 wrong-scope/generated/cache files totaling 1,142,260,581 bytes, including rejected source v1/v2 pixels; only written lessons, tombstones and `wrong-scope-cleanup-2026-09-14.json` remain. Resume requires Spine Professional 4.3.x plus accepted layered male/female and sleeved Pháp source; the valid sequence begins with full authoring and motion review in Spine Editor, then official export and Unity Player review.
+`NEED_HUMAN_VISUAL_REVIEW`. Owner confirmed the recent separate male/female Spine-test characters as the identity authority, then superseded Spine/cutout work with two whole-pose six-frame bases. Exact deleted ImageGen payloads were recovered from Codex thread history and preserved with hashes at external `common-character-v3/identity-authority-recovered-spine-test-v1`. Current review boards use six distinct poses and show detachable canonical hair so face/silhouette/secondary motion can be judged; RGB review boards are not runtime source. Next gate is owner visual acceptance, followed by true-alpha registered full-canvas frames and reopenable source. No outfit/Player promotion is authorized yet.
+
+## LGO Spine production proof preflight — historical, superseded 2026-09-14
+
+`HISTORICAL_SUPERSEDED`. Official Trial/runtime Mix-and-Match passed only as a reference. The belt/weapon run was downgraded to `API_ATTACHMENT_COMPATIBILITY_ONLY`. Owner rejected the subsequent programmatic ten-part cutout and whole-base weighted-mesh Unity fixtures as `WRONG_TEST_SCOPE_OWNER_REJECTED`: none created, saved, reopened or exported an LGO project through Spine Editor. Cleanup then deleted 6,024 wrong-scope/generated/cache files totaling 1,142,260,581 bytes, including rejected source v1/v2 pixels; only written lessons, tombstones and `wrong-scope-cleanup-2026-09-14.json` remain. Do not resume this from ordinary next-task advice.
 
 ## Character base generation bounded failure — historical, superseded 2026-09-14
 

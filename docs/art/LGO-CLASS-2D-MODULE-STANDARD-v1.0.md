@@ -2,7 +2,9 @@
 
 Cập nhật 2026-09-12. Chuẩn source/pose dùng chung cho Võ, Kiếm, Pháp, Cơ, Linh và hai giới. Batch hiện tại sửa Pháp Lv1 trên body/motion Võ đã khóa; sau gate nguồn và Player mới sang Lv10/phối cấp và audit lại class khác. Lv20–100 là phạm vi mở rộng, chưa phải nội dung đã hoàn thiện. Không đổi equipment contract runtime hoặc frozen surfaces.
 
-Nguồn ưu tiên: yêu cầu owner → `docs/02-GDD.md` và `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md` → north-star lock → visual reference usage guide → ảnh. Hai body/pose authority nam/nữ dùng chung giữa các class. Fallback hiện tại giữ nguyên base Võ theo owner lock, gồm tóc và trang phục vốn có trong ảnh base; **không phải underlayer trung tính shorts/socks**. Tháo item lộ đúng fallback đó, không được báo rằng mọi áo/quần/giày đã biến mất. Không đổi base, tỷ lệ body, pose hoặc camera để xử lý trang phục.
+Nguồn ưu tiên: yêu cầu owner → `docs/02-GDD.md` và `docs/design/LGO-2D-SCENARIO-PRODUCTION-SPINE-v0.1.md` → north-star lock → visual reference usage guide → ảnh. Hai body/pose authority nam/nữ dùng chung giữa các class. Runtime hiện tại vẫn giữ base Võ cũ cho đến khi base mới qua review/source gate; không tự thay production. Candidate mới dùng cặp nhân vật Spine-test được owner xác nhận làm identity authority, underlayer trung tính và sáu pose nguyên khối. Không đổi base, tỷ lệ body, pose hoặc camera để xử lý trang phục.
+
+Ảnh duyệt mỹ thuật của base phải ghép canonical `head_hair` mặc định để người review thấy đúng khuôn mặt, silhouette và secondary motion; không dùng bản đầu trọc/mannequin kỹ thuật làm bằng chứng rằng nhân vật đã có thần thái. Source kỹ thuật bên dưới vẫn không phụ thuộc tóc, và tóc phải là module tháo được. Cả ảnh body không tóc và ảnh ghép tóc mặc định phải trỏ về cùng identity/hash/pose authority; không sinh hai nhân vật gần giống rồi coi là cùng base.
 
 ## Định danh ổn định
 

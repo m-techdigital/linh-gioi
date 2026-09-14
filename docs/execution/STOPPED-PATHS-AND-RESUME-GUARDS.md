@@ -6,16 +6,14 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 
 ## Current allowed path
 
-The only active character/outfit route is `LGO-SPINE-PRODUCTION-PROOF-01`:
+The only active character route is `LGO_CHARACTER_BASE_SIX_POSE_REBUILD_01`:
 
-- spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`
-- plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`
-- current phase/status: `EDITOR_AUTHORING_NOT_STARTED / BLOCKED_SPINE_TOOLING`
-- evaluation proof: official Trial 4.3.26 and official 4.3 runtime/examples passed a graphics Player sequence in isolated build space; this does not authorize LGO integration
-- API compatibility only: current Pháp Lv1 belt/weapon textures could be converted to runtime attachments on the official sample; owner rejected this as an actual-LGO proof
-- LGO body/rig source admission: no LGO body or sleeve rig ran; old sources remain ineligible and the newly created v1/v2 source attempts are explicitly rejected (`VISUAL_REJECTED_MANNEQUIN_NOT_LGO`, `VISUAL_REJECTED_STRUCTURAL_MASK_LOSS`)
-- v1/v2 were quarantined under `rejected-evidence/2026-09-14` with tombstones at their former work paths; do not continue or repackage them. Creating another ORA or adding masks cannot substitute for an accepted source and licensed Spine Player proof
-- next action: provision licensed Spine Professional 4.3.x and an owner-accepted reopenable layered male/female + sleeved Pháp source package; author/save/reopen/run in Spine Editor, export officially, then test that export in Unity
+- method: two whole-pose six-frame bases, male and female; no body cards, segmented limbs or skeletal substitute
+- identity authority: exact recovered Spine-test pair under external `common-character-v3/identity-authority-recovered-spine-test-v1`
+- pose order: `idle`, `run_contact`, `run_down_recoil`, `run_passing`, `run_flight`, `jump_tuck`
+- current phase/status: `OWNER_VISUAL_REVIEW / NEED_HUMAN_VISUAL_REVIEW`
+- art-review rule: show the detachable canonical hair composite so face, silhouette and secondary motion can be judged; retain a hairless technical body underneath for later equipment composition
+- next action: owner reviews the paired candidate; only an accepted pair proceeds to true-alpha registered full-canvas frames and reopenable source
 
 ### Owner-rejected wrong-scope Spine substitutes — 2026-09-14
 
@@ -31,9 +29,9 @@ The fixture code, generated source pixels, Unity project/cache, Player builds, i
 
 The former six-pose pixel/registered-outfit authoring route is legacy reference. Its semantic pose sequence, surface ownership findings, selection/alpha guards, mixed/off-slot scenarios and visual capture rules may be adapted only after the official Spine reference passes. Do not continue its candidate authoring, mask repair, pixel fitting or Player promotion.
 
-### Spine proof boundary
+### Historical Spine proof boundary
 
-This owner-approved Spine proof does not reopen the rejected generated-cutout or Blender body-card prototypes. It must use official Spine Professional authoring and official spine-unity runtime. No custom skeletal framework, fake export, handmade parser or mock sample is allowed. Existing runtime remains reachable until an accepted Spine Player replacement exists; deletion is forbidden before acceptance.
+The Spine proof is no longer the active route. Its official-reference compatibility result and failed LGO source admission remain evidence only. Reopening it requires a new explicit owner architecture task and still cannot use generated-cutout, Blender body-card, fake export, handmade parser or mock sample substitutes.
 
 ## Stopped path 0: automated base redraw without identity and pose lock
 

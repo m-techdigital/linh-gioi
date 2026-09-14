@@ -49,6 +49,19 @@ class LgoNextTaskTests(unittest.TestCase):
             "KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED",
         )
 
+    def test_human_visual_review_status_stops_unrelated_task_advice(self):
+        text = """## Active task state
+
+```json
+{"activeTask":"LGO_CHARACTER_BASE_SIX_POSE_REBUILD_01","status":"NEED_HUMAN_VISUAL_REVIEW","blockers":[]}
+```
+"""
+
+        self.assertEqual(
+            active_state_execution_blocker_from_text(text),
+            "NEED_HUMAN_VISUAL_REVIEW",
+        )
+
     def test_active_goal_lock_selects_six_pose_source_authoring(self):
         text = "\n".join(
             [

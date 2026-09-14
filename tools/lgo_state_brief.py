@@ -147,6 +147,8 @@ def current_blocker_section(next_action: str) -> str:
     active_task = state.get("activeTask")
     if active_task in OWNER_STOPPED_ACTIVE_TASKS:
         return "Current blocker from active task state: OWNER_STOPPED_PATH. Restore the whole-body six-pose task before any implementation."
+    if state.get("status") == "NEED_HUMAN_VISUAL_REVIEW":
+        return "Current gate from active task state: NEED_HUMAN_VISUAL_REVIEW. Review the paired six-pose character boards before source reconstruction or runtime promotion."
     if isinstance(blockers, list) and blockers:
         return "Current blocker from active task state: " + ", ".join(str(item) for item in blockers)
     active = active_goal_lock_section(next_action)

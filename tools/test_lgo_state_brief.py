@@ -105,6 +105,23 @@ class LgoStateBriefTests(unittest.TestCase):
         self.assertNotIn("Stale inventory", next_task_section(text))
         self.assertIn("OWNER_STOPPED_PATH", current_blocker_section(text))
 
+    def test_human_visual_review_status_is_reported_as_current_gate(self):
+        text = """## ACTIVE GOAL LOCK — two whole-pose six-frame character bases
+
+Current review candidates are ready.
+
+## Active task state
+
+```json
+{"activeTask":"LGO_CHARACTER_BASE_SIX_POSE_REBUILD_01","status":"NEED_HUMAN_VISUAL_REVIEW"}
+```
+"""
+
+        blocker = current_blocker_section(text)
+
+        self.assertIn("NEED_HUMAN_VISUAL_REVIEW", blocker)
+        self.assertNotIn("No current blocker", blocker)
+
 
 if __name__ == "__main__":
     unittest.main()
