@@ -334,6 +334,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "PrebuiltValueFrameCount",
         "PrebuiltAddFrameCount",
         "PrebuiltAddGlyphCount",
+        "PrebuiltMeridianAnchorCount",
         "Map01A Potential Detail Facts",
         "Map01A Potential Current Level",
         "Map01A Potential Current Effect",

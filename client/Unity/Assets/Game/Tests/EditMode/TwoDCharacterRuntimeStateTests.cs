@@ -745,6 +745,8 @@ namespace LinhGioi.Tests.EditMode
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("vitality")));
                 Assert.That(root.Q("Map01A Potential Core Figure"), Is.Not.Null,
                     "The canonical center is a prebuilt meditation figure in the shared topology, not a class-bound atlas icon.");
+                Assert.That(root.Q("Map01A Potential Diagram Core").childCount, Is.EqualTo(0),
+                    "The shared center marker must stay structural; the approved design has no duplicate technical label over the figure.");
                 Assert.That(root.Q("Map01A Potential Core Icon"), Is.Null);
                 var potentialFacts = root.Q("Map01A Potential Detail Facts");
                 Assert.That(potentialFacts, Is.Not.Null,
@@ -860,6 +862,10 @@ namespace LinhGioi.Tests.EditMode
                     "PrebuiltAddGlyphCount", BindingFlags.Static | BindingFlags.NonPublic);
                 Assert.That(topologyAddGlyphCount?.GetValue(null), Is.EqualTo(5),
                     "Potential topology must prebuild one crisp plus glyph in every add box.");
+                var topologyMeridianAnchorCount = potentialTopology.GetType().GetProperty(
+                    "PrebuiltMeridianAnchorCount", BindingFlags.Static | BindingFlags.NonPublic);
+                Assert.That(topologyMeridianAnchorCount?.GetValue(null), Is.EqualTo(5),
+                    "Potential topology must own the complete meridian spine; class data may only bind icons and values.");
                 Assert.That(potentialNode0.ClassListContains("lgo-potential-node-overlay"), Is.True,
                     "Potential buttons are interaction/data overlays on the shared vector base.");
                 Assert.That(potentialNode0.style.borderLeftWidth.value, Is.EqualTo(0));

@@ -21,10 +21,17 @@ namespace LinhGioi.UI
             new Vector2(190, 410), new Vector2(430, 410)
         };
 
+        private static readonly Vector2[] MeridianAnchors =
+        {
+            new Vector2(0, -35), new Vector2(0, -14), new Vector2(0, 7),
+            new Vector2(0, 29), new Vector2(0, 52)
+        };
+
         internal static int PrebuiltNodeFrameCount => NodeCenters.Length;
         internal static int PrebuiltValueFrameCount => NodeCenters.Length;
         internal static int PrebuiltAddFrameCount => NodeCenters.Length;
         internal static int PrebuiltAddGlyphCount => NodeCenters.Length;
+        internal static int PrebuiltMeridianAnchorCount => MeridianAnchors.Length;
 
         internal CharacterHubPotentialTopology()
         {
@@ -66,12 +73,15 @@ namespace LinhGioi.UI
             DrawEllipse(painter, center, Vector2.Scale(new Vector2(203, 176), scale),
                 new Color(.18f, .54f, .78f, .36f), 1f);
             DrawRunicRing(painter, center, scale);
+            DrawFilledEllipse(painter, center, Vector2.Scale(new Vector2(108, 108), scale),
+                new Color(.015f, .10f, .17f, .72f));
             DrawEllipse(painter, center, Vector2.Scale(new Vector2(112, 112), scale),
                 new Color(.02f, .04f, .06f, .90f), 5f);
             DrawEllipse(painter, center, Vector2.Scale(new Vector2(112, 112), scale),
                 new Color(.84f, .58f, .16f, .72f), 1.5f);
             DrawEllipse(painter, center, Vector2.Scale(new Vector2(96, 96), scale),
                 new Color(.18f, .66f, 1f, .66f), 1.5f);
+            DrawMeridianField(painter, center, scale);
             DrawMeditationFigure(painter, center, scale);
 
             foreach (var nodeCenter in NodeCenters)
@@ -85,6 +95,37 @@ namespace LinhGioi.UI
                     new Color(.22f, .71f, 1f, .70f), 1.5f);
                 DrawCardinalTicks(painter, scaledCenter, scale);
                 DrawNodeValueFrames(painter, nodeCenter, scale);
+            }
+        }
+
+        private static void DrawMeridianField(Painter2D painter, Vector2 center, Vector2 scale)
+        {
+            var quietBlue = new Color(.15f, .55f, .82f, .30f);
+            var gold = new Color(.92f, .64f, .20f, .48f);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(78, 78), scale), quietBlue, 1f);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(61, 61), scale), gold, 1f);
+
+            painter.strokeColor = quietBlue;
+            painter.lineWidth = 1f;
+            painter.BeginPath();
+            painter.MoveTo(center + Vector2.Scale(new Vector2(-92, 0), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(92, 0), scale));
+            painter.MoveTo(center + Vector2.Scale(new Vector2(0, -92), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(0, 92), scale));
+            painter.MoveTo(center + Vector2.Scale(new Vector2(-66, -66), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(66, 66), scale));
+            painter.MoveTo(center + Vector2.Scale(new Vector2(66, -66), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(-66, 66), scale));
+            painter.Stroke();
+
+            foreach (var offset in new[]
+                     {
+                         new Vector2(0, -92), new Vector2(92, 0), new Vector2(0, 92), new Vector2(-92, 0)
+                     })
+            {
+                var point = center + Vector2.Scale(offset, scale);
+                DrawFilledEllipse(painter, point, Vector2.Scale(new Vector2(3.5f, 3.5f), scale), gold);
+                DrawEllipse(painter, point, Vector2.Scale(new Vector2(7f, 7f), scale), quietBlue, 1f);
             }
         }
 
@@ -110,9 +151,10 @@ namespace LinhGioi.UI
 
         private static void DrawMeditationFigure(Painter2D painter, Vector2 center, Vector2 scale)
         {
-            var ink = new Color(.035f, .17f, .27f, .98f);
-            var aura = new Color(.20f, .62f, .91f, .66f);
-            var energy = new Color(1f, .67f, .20f, .86f);
+            var ink = new Color(.018f, .10f, .17f, .99f);
+            var cloth = new Color(.035f, .22f, .34f, .98f);
+            var aura = new Color(.22f, .70f, 1f, .82f);
+            var energy = new Color(1f, .70f, .22f, .96f);
             var head = center + Vector2.Scale(new Vector2(0, -58), scale);
             DrawFilledEllipse(painter, head, Vector2.Scale(new Vector2(17, 21), scale), ink);
             DrawEllipse(painter, head, Vector2.Scale(new Vector2(18, 22), scale), aura, 2f);
@@ -127,7 +169,7 @@ namespace LinhGioi.UI
                 center + Vector2.Scale(new Vector2(31, -34), scale),
                 center + Vector2.Scale(new Vector2(12, -47), scale),
                 center + Vector2.Scale(new Vector2(-12, -47), scale),
-            }, ink, aura, 2f);
+            }, cloth, aura, 2f);
             DrawFigureStroke(painter, center, scale, aura, 12f, new[]
             {
                 new Vector2(-25, -24), new Vector2(-64, -2), new Vector2(-82, 25), new Vector2(-60, 34)
@@ -160,16 +202,37 @@ namespace LinhGioi.UI
             {
                 new Vector2(18, 32), new Vector2(57, 56), new Vector2(86, 58), new Vector2(52, 72), new Vector2(8, 63)
             });
-            DrawFilledEllipse(painter, center + Vector2.Scale(new Vector2(0, 5), scale),
-                Vector2.Scale(new Vector2(8, 8), scale), energy);
+            DrawOutlinedPolygon(painter, new[]
+            {
+                center + Vector2.Scale(new Vector2(-88, 59), scale),
+                center + Vector2.Scale(new Vector2(-52, 79), scale),
+                center + Vector2.Scale(new Vector2(0, 68), scale),
+                center + Vector2.Scale(new Vector2(52, 79), scale),
+                center + Vector2.Scale(new Vector2(88, 59), scale),
+                center + Vector2.Scale(new Vector2(48, 88), scale),
+                center + Vector2.Scale(new Vector2(-48, 88), scale),
+            }, ink, aura, 1.5f);
             painter.strokeColor = energy;
             painter.lineWidth = 2f;
             painter.BeginPath();
-            painter.MoveTo(center + Vector2.Scale(new Vector2(0, -35), scale));
-            painter.LineTo(center + Vector2.Scale(new Vector2(0, 56), scale));
-            painter.MoveTo(center + Vector2.Scale(new Vector2(-9, 5), scale));
-            painter.LineTo(center + Vector2.Scale(new Vector2(9, 5), scale));
+            painter.MoveTo(center + Vector2.Scale(MeridianAnchors[0], scale));
+            painter.LineTo(center + Vector2.Scale(MeridianAnchors[MeridianAnchors.Length - 1], scale));
+            painter.MoveTo(center + Vector2.Scale(new Vector2(0, -15), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(-25, -4), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(-47, 22), scale));
+            painter.MoveTo(center + Vector2.Scale(new Vector2(0, -15), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(25, -4), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(47, 22), scale));
             painter.Stroke();
+            foreach (var anchor in MeridianAnchors)
+            {
+                var point = center + Vector2.Scale(anchor, scale);
+                DrawFilledEllipse(painter, point, Vector2.Scale(new Vector2(8f, 8f), scale),
+                    new Color(1f, .58f, .10f, .20f));
+                DrawFilledEllipse(painter, point, Vector2.Scale(new Vector2(4f, 4f), scale), energy);
+                DrawEllipse(painter, point, Vector2.Scale(new Vector2(6f, 6f), scale),
+                    new Color(1f, .87f, .52f, .92f), 1f);
+            }
         }
 
         private static void DrawFigureStroke(Painter2D painter, Vector2 center, Vector2 scale,
@@ -783,9 +846,6 @@ namespace LinhGioi.UI
             core.style.backgroundColor = Color.clear;
             core.style.borderLeftWidth = core.style.borderRightWidth = 0;
             core.style.borderTopWidth = core.style.borderBottomWidth = 0;
-            var coreText = LgoLabel("TÂM MẠCH", 12, UiGold, true);
-            coreText.style.unityTextAlign = TextAnchor.MiddleCenter;
-            core.Add(coreText);
             diagram.Add(core);
             for (var potentialIndex = 0; potentialIndex < CharacterHubPotentialTopology.NodePositions.Length; potentialIndex++)
                 diagram.Add(CreatePotentialNode(potentialIndex,

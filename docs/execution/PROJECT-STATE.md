@@ -1,3 +1,11 @@
+## Character Hub — Tiềm năng shared meridian topology v7 — 2026-09-15
+
+- Audit trực tiếp v6 với canonical `04-tiem-nang-five-tab-APPROVED.png` xác nhận node/ring đã dùng chung nhưng core vẫn giống wireframe kỹ thuật và còn nhãn `TÂM MẠCH` ngoài design. v7 chuyển trường năng lượng, silhouette ngồi thiền, nhánh khí và trục năm điểm mạch vào cùng `CharacterHubPotentialTopology`; marker core không còn tự chèn nội dung.
+- Năm vòng node, đường nối, ô giá trị, ô cộng, glyph và năm meridian anchor đều được dựng một lần trong shared renderer. `Võ/Kiếm/Pháp/Cơ/Linh` chỉ bind icon/tên/value/selection; Skill và Tiềm năng vẫn là hai topology độc lập.
+- TDD RED `0/1` vì shared base chưa sở hữu meridian anchors; GREEN `1/1`. Full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared validator pass, governance `23/23`, pose pack `12/12`, registered capture `19/19`, no-3D/no-source-images pass.
+- Player `build/map01a-character-hub-potential-fidelity-player-v7/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=48`. Evidence `build/map01a-character-hub-potential-fidelity-runtime-v7/{pc,mobile,tablet}/`, 9 frame/profile; đã xem trực tiếp ba viewport, không thấy wrap/cắt/chồng và core gần canonical hơn v6.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`; không mở class art/pose/wardrobe/source hoặc screen khác trước owner review.
+
 ## Character Hub — Tiềm năng detail hierarchy sát canonical v6 — 2026-09-15
 
 - Audit trực tiếp v5 với `04-tiem-nang-five-tab-APPROVED.png` phát hiện description/value nằm sai hierarchy và có status review thừa. v6 đưa description vào hero copy cạnh icon, tách `Cấp hiện tại`, current/next effect và hàng tiêu hao có icon điểm tiềm năng từ atlas hiện hữu; status box thừa đã bỏ khỏi mode Tiềm năng.
