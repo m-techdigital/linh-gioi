@@ -1,20 +1,22 @@
-## ACTIVE GOAL LOCK — two whole-pose six-frame character bases, 2026-09-14
+## ACTIVE GOAL LOCK — Unity rigid outfit pilot visual-first, 2026-09-15
 
-Owner superseded the Spine/cutout proof with a whole-pose six-frame route and selected the recent separate male/female Spine-test characters as the visual identity authority. Do not resume segmented limbs, generated `SkeletonData`/`MeshAttachment`, flat-card/SpriteSkin body rigs, or the deleted Spine source-v1/v2 mask trees under a new name.
+Thực hiện theo `docs/execution/LGO-RIGID-OUTFIT-PILOT-GOAL.md`. Kiến trúc duy nhất là fit/equip một lần rồi animate canonical skeleton bằng position/rotation; cấm SpriteSkin, weighted mesh, deformation, sprite swap và animated scale.
 
 ## Active task state
 
 ```json
-{"activeTask":"LGO_CHARACTER_BASE_SIX_POSE_REBUILD_01","phase":"POSE_CONTROL_READY_ART_TRANSFER_BLOCKED","status":"NEED_OWNER_DECISION","method":"WHOLE_POSE_SIX_FRAME","poseOrder":["idle","run_contact_a","run_a","run_contact_b","run_b","jump_tuck"],"poseSemantics":["idle","contact_left","passing_to_right","contact_right","passing_to_left","jump_tuck"],"identityAuthority":"common-character-v3/identity-authority-recovered-spine-test-v1","poseControlSource":"common-character-v3/pose-control-source-blender-v1","defaultHairIsDetachable":true,"runtimePromotionAllowed":false}
+{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_CANDIDATE_READY_FOR_OWNER_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW","method":"UNITY_PARENTED_SPRITERENDERER_RIGID_WITH_TWO_BONE_FOOT_TARGET_IK","sourceProfile":"lgo_character_canvas_1024x1536_v1","requiredMotion":["Idle","Walk","Run","Jump","Attack","Roll"],"currentPlayerEvidence":"build/rigid-outfit-pilot/final-1-review","currentSourceAuthorityValid":true,"technicalInvariantStatus":"PASS_17_OF_17","visualStatus":"FINAL_1_SELF_REVIEW_PASS_OWNER_REVIEW_REQUIRED","stopCondition":"OWNER_REVIEW_FINAL_OUTFIT1","redesignOutfit1Allowed":true,"outfit2IntegrationAllowed":false,"classExpansionAllowed":false,"perPoseAssetsAllowed":false,"deformationAllowed":false,"animatedScaleAllowed":false}
 ```
 
-The selected male/female identity payloads remain preserved with hashes at `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/common-character-v3/identity-authority-recovered-spine-test-v1/`. Owner review then rejected the paired six-pose boards because frames 2–5 kept a one-sided limb phase. Those boards were moved out of the active review folder into dated rejected evidence; `review/review-status.json` now says `NO_ACTIVE_CANDIDATE`.
+## Kết quả batch hiện tại
 
-A reusable structural source now exists at `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/class-work-in-progress/common-character-v3/pose-control-source-blender-v1/`. `lgo-six-pose-controls-v1.blend` was saved and reopened with Blender 4.5.5 LTS. `bone-length-audit.json` is `PASS_FIXED_BONE_LENGTHS` for all six poses: upper arm `0.95`, forearm `0.82`, thigh `1.65`, shin `1.85` on both sides in every frame. Blue is absolute anatomical left/near and orange is absolute anatomical right/far. The four-frame loop is `contact_left → passing_to_right → contact_right → passing_to_left`; every forward arm is opposite the forward leg/knee. `ARTIST-BRIEF.md` defines the male/female whole-body transfer and true-alpha/editable-source deliverable.
+Final #1 review candidate nằm tại `build/rigid-outfit-pilot/final-1-review/`: contact sheet 15 key, clip MP4 150 frame/24 fps, board chi tiết Run/Jump/Roll và runtime evidence. Self-review trực tiếp xác nhận Run có contact/pass hai phía, Jump nén–bay–tiếp đất, Roll quay tới và không còn HUD che hình. Runtime giữ nguyên sprite/fit hash, scale một, root rotation identity và không có deforming component; EditMode đạt 17/17.
 
-The art transfer capability is not proven. Whole-sheet ImageGen, per-frame stick control and per-frame Blender control all collapsed the left/right phase into the same silhouette or changed the requested pose. Twelve failed boards/frames are quarantined at `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-14/common-character-imagegen-limb-phase-transfer-failures-v1/`; do not rename, select or pack them. No female transfer was generated after the male gate failed.
+## Next result người chơi có thể kiểm chứng
 
-ComfyUI and model weights are absent locally. Official Comfy documentation confirms ControlNet can condition pose/depth, but a local install may fetch a roughly 15 GB PyTorch environment and still requires a base checkpoint, ControlNet weights and a separate identity-conditioning workflow. Installing only ComfyUI/OpenPose would not close the proven identity-transfer gap. Next valid work is one bounded artist paint-over/redraw pilot from the editable Blender control and the exact male/female identity authorities, or a fully specified pose-plus-identity ControlNet workflow with its complete model set. Do not resume prompt-only generation, create more review sheets, pack assets or open outfit work before one male four-frame run survives fixed-canvas playback and identity review.
+**DỪNG TẠI OWNER REVIEW.** Owner xem `motion-proof.mp4` và `contact-sheet.png`. Nếu owner bác, ghi finding theo source/pivot/overlap/motion/render order rồi redesign outfit #1 theo nhóm. Nếu owner duyệt, mới đổi visual status; outfit #2 vẫn cần một lệnh tiếp tục riêng theo yêu cầu dừng hiện hành.
+
+Không mở outfit #2, mix-and-match, class, level hoặc production migration trước visual PASS của outfit #1.
 
 ## Historical character-base source gate — superseded 2026-09-14
 

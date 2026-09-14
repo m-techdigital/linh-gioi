@@ -1,0 +1,15 @@
+{
+  "name": "LinhGioi.Character.Tests",
+  "rootNamespace": "LinhGioi.Character.Tests",
+  "references": [
+    "LinhGioi.Character",
+    "LinhGioi.Character.Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": false
+}

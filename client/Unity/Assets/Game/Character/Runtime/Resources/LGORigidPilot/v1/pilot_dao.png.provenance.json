@@ -1,0 +1,18 @@
+{
+  "sourceImage": "/Users/minhdc/.codex/generated_images/01a09842-372b-7901-897f-e0b55a72f0d8/exec-7d41d9f7-2175-4b91-aea2-33c255eb6375.png",
+  "sourceSha256": "2a7b18003db55dfd82396fa20aa6ab0857b84af4dccc40b7a04440a778940ed8",
+  "output": "pilot_dao.png",
+  "outputSha256": "bd2b7abef12441fe08807f86b5c58e1b22790964abd4f22a8d8a40926e441cdd",
+  "mode": "RGBA",
+  "size": [
+    95,
+    400
+  ],
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "derivation": "ALPHA_THRESHOLD_128_CROP_MARGIN_6_UNIFORM_RESIZE_400PX",
+  "poseDependent": false,
+  "geometryDeformedAtRuntime": false
+}

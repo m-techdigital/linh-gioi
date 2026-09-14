@@ -147,7 +147,28 @@ def current_blocker_section(next_action: str) -> str:
     active_task = state.get("activeTask")
     if active_task in OWNER_STOPPED_ACTIVE_TASKS:
         return "Current blocker from active task state: OWNER_STOPPED_PATH. Restore the whole-body six-pose task before any implementation."
+    if active_task == "LGO_RIGID_OUTFIT_PILOT_01" and state.get("status") == "FIX_REQUIRED_VISUAL_OUTFIT1":
+        return (
+            "Current gate: FIX_REQUIRED_VISUAL_OUTFIT1. Re-author/redesign one rigid-native bind source and prove natural "
+            "run/jump plus required motion in Unity Player. Do not start outfit #2, mix, class or level work; stop for owner "
+            "review only after a genuinely final outfit #1 visual candidate exists."
+        )
     if state.get("status") == "NEED_HUMAN_VISUAL_REVIEW":
+        if state.get("phase") == "FINAL_OUTFIT1_CANDIDATE_READY_FOR_OWNER_REVIEW" and active_task == "LGO_RIGID_OUTFIT_PILOT_01":
+            return (
+                "Current gate: NEED_HUMAN_VISUAL_REVIEW. Review build/rigid-outfit-pilot/final-1-review/"
+                "motion-proof.mp4 and contact-sheet.png. Stop before outfit #2, mix, class or level work."
+            )
+        if state.get("phase") == "ARTICULATED_MOTION_CANDIDATE_OWNER_REVIEW" and active_task == "LGO_CHIBI_SIDE_MODULAR_MOTION_PROOF_01":
+            return (
+                "Current gate from active task state: NEED_HUMAN_VISUAL_REVIEW. Review the true-side chibi Blender MP4, "
+                "dense run/front-tuck boards and outfit toggle board; Unity/runtime promotion remains locked."
+            )
+        if state.get("phase") == "OWNER_CONCEPT_REVIEW" and active_task == "LGO_CHARACTER_CHIBI_MODULAR_CONCEPT_01":
+            return (
+                "Current gate from active task state: NEED_HUMAN_VISUAL_REVIEW. Review the mini chibi modular concept before "
+                "source/motion design or Unity implementation."
+            )
         return "Current gate from active task state: NEED_HUMAN_VISUAL_REVIEW. Review the paired six-pose character boards before source reconstruction or runtime promotion."
     if state.get("status") == "NEED_OWNER_DECISION":
         if state.get("phase") == "POSE_CONTROL_READY_ART_TRANSFER_BLOCKED":

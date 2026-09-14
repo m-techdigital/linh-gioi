@@ -1,0 +1,363 @@
+{
+  "status": "RIGID_NATIVE_SOURCE_V2_READY",
+  "method": "FIXED_SOURCE_CANVAS_ALPHA_SPLIT_WITH_SYMMETRIC_OVERLAP",
+  "coordinateProfile": "lgo_character_canvas_1024x1536_v1",
+  "perPoseAssets": false,
+  "perPoseOffsets": false,
+  "geometryChangedAtRuntime": false,
+  "moduleCount": 16,
+  "modules": [
+    {
+      "id": "forearm_near",
+      "source": "forearm_hand_near.png",
+      "sourceSha256": "eb0f71e1aae0ecc4c49c4a46826b16b4aac7a1e106b174c98631d3b0393cb3df",
+      "outputSha256": "7cd263a76100ed4e98c3ac97a446faeeac4cc86cb780d3b2d24c157268377544",
+      "mode": "RGBA",
+      "width": 89,
+      "height": 165,
+      "jointY": 102,
+      "overlapPixels": 36,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        5,
+        5,
+        84,
+        121
+      ],
+      "role": "proximal"
+    },
+    {
+      "id": "hand_near",
+      "source": "forearm_hand_near.png",
+      "sourceSha256": "eb0f71e1aae0ecc4c49c4a46826b16b4aac7a1e106b174c98631d3b0393cb3df",
+      "outputSha256": "2f744d76d576461e59d6a630be68f27a3b0cb1f784f7abe0b6059a10691e580a",
+      "mode": "RGBA",
+      "width": 89,
+      "height": 165,
+      "jointY": 102,
+      "overlapPixels": 36,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        18,
+        84,
+        84,
+        160
+      ],
+      "role": "distal"
+    },
+    {
+      "id": "forearm_far",
+      "source": "forearm_hand_far.png",
+      "sourceSha256": "a2c5b49f4537ad4c2666af137e6372460389307b2a843fc1215469e49c5824f0",
+      "outputSha256": "4edff9a22a39019d657c4e3f4e07dc7885546de2c6701d63c2448111ce4c32db",
+      "mode": "RGBA",
+      "width": 101,
+      "height": 166,
+      "jointY": 103,
+      "overlapPixels": 36,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        5,
+        5,
+        96,
+        122
+      ],
+      "role": "proximal"
+    },
+    {
+      "id": "hand_far",
+      "source": "forearm_hand_far.png",
+      "sourceSha256": "a2c5b49f4537ad4c2666af137e6372460389307b2a843fc1215469e49c5824f0",
+      "outputSha256": "4a7c5214fe1ec8194165ebf0b2b7b88cd6e49fd3ee9b29ecf574ebe7a458c8b7",
+      "mode": "RGBA",
+      "width": 101,
+      "height": 166,
+      "jointY": 103,
+      "overlapPixels": 36,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        32,
+        85,
+        96,
+        161
+      ],
+      "role": "distal"
+    },
+    {
+      "id": "bracer_near",
+      "source": "lower_sleeve_near.png",
+      "sourceSha256": "c185270536a76cf8614c4fe44ebded748b911126b0cedc5c4174d852880714a3",
+      "outputSha256": "18aee1fa12aec1604e7668be5a9b023f413be9cba63cc2b1f424bcdd10afb996",
+      "mode": "RGBA",
+      "width": 96,
+      "height": 137,
+      "jointY": 85,
+      "overlapPixels": 32,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        5,
+        5,
+        91,
+        102
+      ],
+      "role": "proximal"
+    },
+    {
+      "id": "glove_near",
+      "source": "lower_sleeve_near.png",
+      "sourceSha256": "c185270536a76cf8614c4fe44ebded748b911126b0cedc5c4174d852880714a3",
+      "outputSha256": "75b20886c8d44fae1542efd09e71a36e4b6964abc367d131d059c4e9e143330f",
+      "mode": "RGBA",
+      "width": 96,
+      "height": 137,
+      "jointY": 85,
+      "overlapPixels": 32,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        17,
+        69,
+        91,
+        132
+      ],
+      "role": "distal"
+    },
+    {
+      "id": "bracer_far",
+      "source": "lower_sleeve_far.png",
+      "sourceSha256": "95dd02a05f945d1626fdf4815a1716c34e0095702de0738d1f08848dcc7ce3ed",
+      "outputSha256": "f9a52c529e91b2edec04ad24107c38d918196794c765cdec00277d7628353e86",
+      "mode": "RGBA",
+      "width": 100,
+      "height": 143,
+      "jointY": 89,
+      "overlapPixels": 32,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        5,
+        5,
+        95,
+        106
+      ],
+      "role": "proximal"
+    },
+    {
+      "id": "glove_far",
+      "source": "lower_sleeve_far.png",
+      "sourceSha256": "95dd02a05f945d1626fdf4815a1716c34e0095702de0738d1f08848dcc7ce3ed",
+      "outputSha256": "d640b64a0cad7aac498cf6cffd5c439474096d5b3e0b31e45983d4400a418c04",
+      "mode": "RGBA",
+      "width": 100,
+      "height": 143,
+      "jointY": 89,
+      "overlapPixels": 32,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        19,
+        73,
+        95,
+        138
+      ],
+      "role": "distal"
+    },
+    {
+      "id": "shin_near",
+      "source": "shin_foot_near.png",
+      "sourceSha256": "8f9b66ccc83149fe1f6641bda6b9334aab1ad58956602591a132b757628566f5",
+      "outputSha256": "4f1bfc2cb24b4a5c411a26de55e9b5490f8fb0d5b784b4ddd9be0b3e2b7ebf23",
+      "mode": "RGBA",
+      "width": 111,
+      "height": 182,
+      "jointY": 120,
+      "overlapPixels": 40,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        5,
+        5,
+        85,
+        141
+      ],
+      "role": "proximal"
+    },
+    {
+      "id": "foot_near",
+      "source": "shin_foot_near.png",
+      "sourceSha256": "8f9b66ccc83149fe1f6641bda6b9334aab1ad58956602591a132b757628566f5",
+      "outputSha256": "2f6ba313817d1a76db7f50243d2fc1b866cd04bda3af6a6bb20394d073930bc7",
+      "mode": "RGBA",
+      "width": 111,
+      "height": 182,
+      "jointY": 120,
+      "overlapPixels": 40,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        14,
+        100,
+        106,
+        177
+      ],
+      "role": "distal"
+    },
+    {
+      "id": "shin_far",
+      "source": "shin_foot_far.png",
+      "sourceSha256": "f2b82914d1fe6e2dba5e19422d91f18b887bbe2eb63fe275b7ba2984737780c8",
+      "outputSha256": "b24489ff0c8f05328325bfeeaf533598d138ed8b145f76821fa19e14da169df7",
+      "mode": "RGBA",
+      "width": 113,
+      "height": 181,
+      "jointY": 119,
+      "overlapPixels": 40,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        5,
+        5,
+        88,
+        140
+      ],
+      "role": "proximal"
+    },
+    {
+      "id": "foot_far",
+      "source": "shin_foot_far.png",
+      "sourceSha256": "f2b82914d1fe6e2dba5e19422d91f18b887bbe2eb63fe275b7ba2984737780c8",
+      "outputSha256": "2ab8fc3f8cf02255af645f99c39f57ca014cda51de578f6f517f5d6134d7cfc4",
+      "mode": "RGBA",
+      "width": 113,
+      "height": 181,
+      "jointY": 119,
+      "overlapPixels": 40,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        17,
+        99,
+        108,
+        176
+      ],
+      "role": "distal"
+    },
+    {
+      "id": "boot_shaft_near",
+      "source": "boot_near.png",
+      "sourceSha256": "926a87881d2d82b210bf7622545f325e2d947e7164054b585d14da9cb9519f34",
+      "outputSha256": "b4116c7272242f4d6bf24e01f2bd3825483f7dabfa27d89c5ff8a1011615aed0",
+      "mode": "RGBA",
+      "width": 137,
+      "height": 184,
+      "jointY": 121,
+      "overlapPixels": 40,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        6,
+        5,
+        128,
+        142
+      ],
+      "role": "proximal"
+    },
+    {
+      "id": "boot_foot_near",
+      "source": "boot_near.png",
+      "sourceSha256": "926a87881d2d82b210bf7622545f325e2d947e7164054b585d14da9cb9519f34",
+      "outputSha256": "2b2b50b1f1eb659a44f94cf8986409c8ef7677633efe414de28b3f2027d0f723",
+      "mode": "RGBA",
+      "width": 137,
+      "height": 184,
+      "jointY": 121,
+      "overlapPixels": 40,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        5,
+        101,
+        132,
+        179
+      ],
+      "role": "distal"
+    },
+    {
+      "id": "boot_shaft_far",
+      "source": "boot_far.png",
+      "sourceSha256": "c719fcb1c4b02c3628bbf678f2b237b55bc0b5aebf9b6cd8b562ace451a19360",
+      "outputSha256": "0dc81b677cbb4ffdf9d35661f2b03d33954c73f277c77f18d6dcb69aa8a633c2",
+      "mode": "RGBA",
+      "width": 135,
+      "height": 175,
+      "jointY": 116,
+      "overlapPixels": 40,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        5,
+        5,
+        129,
+        137
+      ],
+      "role": "proximal"
+    },
+    {
+      "id": "boot_foot_far",
+      "source": "boot_far.png",
+      "sourceSha256": "c719fcb1c4b02c3628bbf678f2b237b55bc0b5aebf9b6cd8b562ace451a19360",
+      "outputSha256": "dd389e6aeba73114276684fe121f37013af08580b5275377fbf08e621dcbcf5f",
+      "mode": "RGBA",
+      "width": 135,
+      "height": 175,
+      "jointY": 116,
+      "overlapPixels": 40,
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "alphaBoundingBox": [
+        9,
+        96,
+        130,
+        170
+      ],
+      "role": "distal"
+    }
+  ]
+}

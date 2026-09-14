@@ -1,0 +1,17 @@
+{
+  "sourceImage": "/Users/minhdc/.codex/generated_images/01a09842-372b-7901-897f-e0b55a72f0d8/exec-65d56e2e-2bdc-4ecb-b22c-d95fd5defaf8.png",
+  "sourceSha256": "9391ed3d7988b2187b332ab6e6dc3d0141f4380cdee74a94ccc71dbb9b1fa94f",
+  "output": "female_head_hair.png",
+  "outputSha256": "4904f220cf4350b531e050872f4321998240bca5a6f68a9a335e424d21cb7577",
+  "mode": "RGBA",
+  "size": [
+    360,
+    335
+  ],
+  "alphaExtrema": [
+    0,
+    255
+  ],
+  "derivation": "ALPHA_CROP_MARGIN_8_AND_UNIFORM_RESIZE_TO_335PX_HEIGHT",
+  "poseDependent": false
+}

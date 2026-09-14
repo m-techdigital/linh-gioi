@@ -3,7 +3,8 @@
   "rootNamespace": "LinhGioi.Character",
   "references": [
     "LinhGioi.Foundation",
-    "LinhGioi.GameData"
+    "LinhGioi.GameData",
+    "UnityEngine.ImageConversionModule"
   ],
   "autoReferenced": true
 }

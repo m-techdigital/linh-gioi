@@ -6,35 +6,21 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 
 ## Current allowed path
 
-The only active character route is `LGO_CHARACTER_BASE_SIX_POSE_REBUILD_01`:
+The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
 
-- method: two whole-pose six-frame bases, male and female; no runtime body cards, segmented limbs or skeletal substitute
-- identity authority: exact recovered Spine-test pair under external `common-character-v3/identity-authority-recovered-spine-test-v1`
-- pose order: `idle`, `run_contact_a`, `run_a`, `run_contact_b`, `run_b`, `jump_tuck`
-- pose semantics: `idle`, `contact_left`, `passing_to_right`, `contact_right`, `passing_to_left`, `jump_tuck`
-- current phase/status: `POSE_CONTROL_READY_ART_TRANSFER_BLOCKED / NEED_OWNER_DECISION`
-- structural authority: reopenable external `common-character-v3/pose-control-source-blender-v1/lgo-six-pose-controls-v1.blend`, with fixed bone-length audit and absolute anatomical left/right colors
-- next action: one artist-controlled whole-body redraw/paint-over pilot, or one fully specified ControlNet pose-plus-identity workflow; accept only after direct 2→3→4→5 playback
+- Unity Transform hierarchy + ordinary rigid `SpriteRenderer`; one fixed FitProfile per body variant/item.
+- Current gate: `FINAL_OUTFIT1_CANDIDATE_READY_FOR_OWNER_REVIEW / NEED_HUMAN_VISUAL_REVIEW`.
+- Final #1 self-review evidence is `build/rigid-outfit-pilot/final-1-review`; owner acceptance is still required.
+- Stop here for owner review; do not mutate source/motion or start another capture without a concrete owner finding.
+- Outfit #2, mix-and-match, class/level expansion and migration remain locked until outfit #1 visual PASS.
 
-Do not resume prompt-only sheet generation. The prior paired boards and all subsequent ImageGen transfer attempts are `FINAL_REJECTED_DO_NOT_SELECT` because they collapsed A/B limb identity. The Blender mannequin is a control/reference source only; it must never be presented as final Linh Giới body art or used as a segmented runtime renderer.
+Recurrence guard:
 
-### Owner-rejected wrong-scope Spine substitutes — 2026-09-14
-
-Do not continue, run or rename as a new proof:
-
-- programmatic spine-csharp `SkeletonData` generation inside Unity;
-- programmatic runtime `MeshAttachment` generation for the whole-base image;
-- the ten-part LGO body cutout fixture;
-- LGO equipment attached to the official Mix-and-Match skeleton as a substitute for authoring the LGO character;
-- any Unity-only test that has no LGO `.spine` source saved, reopened and exported by Spine Editor.
-
-The fixture code, generated source pixels, Unity project/cache, Player builds, images and logs were purged on owner request; record: `build/lgo-spine-production-proof-01/wrong-scope-cleanup-2026-09-14.json`. Only this guard and small source tombstones remain. The route has no automatic resume condition. A valid Spine proof resumes only with an activated Professional editor and accepted source, and begins in Spine Editor.
-
-The former six-pose pixel/registered-outfit authoring route is legacy reference. Its semantic pose sequence, surface ownership findings, selection/alpha guards, mixed/off-slot scenarios and visual capture rules may be adapted only after the official Spine reference passes. Do not continue its candidate authoring, mask repair, pixel fitting or Player promotion.
-
-### Historical Spine proof boundary
-
-The Spine proof is no longer the active route. Its official-reference compatibility result and failed LGO source admission remain evidence only. Reopening it requires a new explicit owner architecture task and still cannot use generated-cutout, Blender body-card, fake export, handmade parser or mock sample substitutes.
+- Do not resume the Blender weighted-mesh source as rigid authority; its report explicitly says `armSkinning=two_bone_weighted_mesh`.
+- Do not fix the rejected Player by per-frame art, per-pose offsets, sprite swap, scale, SpriteSkin, mesh or capsule/flat-card proxies.
+- Do not treat validator/checkpoint PASS as visual acceptance.
+- Review the whole board, batch issues by source/pivot/overlap/motion/render order, and make one grouped correction. A structural error repeated in two captures rejects that topology/source hypothesis.
+- The generated red armor sheet is `REJECTED-NOT-INTEGRATED` because Phase 8 started before outfit #1 passed; do not copy it into Resources or rename it into an active outfit.
 
 ## Stopped path 0: automated base redraw without identity and pose lock
 

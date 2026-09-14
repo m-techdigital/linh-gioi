@@ -1,0 +1,11 @@
+{
+  "name": "LinhGioi.Character.Editor",
+  "rootNamespace": "LinhGioi.Character.Editor",
+  "references": [
+    "LinhGioi.Character"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "autoReferenced": true
+}

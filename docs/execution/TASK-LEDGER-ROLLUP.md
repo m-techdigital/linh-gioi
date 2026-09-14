@@ -1,3 +1,25 @@
+## Final #1 rigid outfit review candidate — 2026-09-15
+
+`NEED_HUMAN_VISUAL_REVIEW`. Rigid source v2 adds independently attached hands/feet, bracers/gloves and boot shafts/feet with fixed source registration and overlap. Unity Player final evidence has 15 keyframes plus a 150-frame 24-fps MP4 for male/female through Idle/Walk/Run/Jump/Attack/Roll. Run is foot-target IK with four contact/pass phases; Jump includes anticipation/apex/absorbed landing; Roll is forward and articulated. Runtime hashes remain stable, scale is one, root rotation stays identity, deforming components are absent, and 17/17 EditMode tests pass. Stop before outfit #2 for owner review.
+
+## Unity rigid outfit pilot visual rejection and source reset — 2026-09-15
+
+`FIX_REQUIRED_VISUAL_OUTFIT1`. Unity Player ran male/female with one rigid outfit and weapon through Idle/Walk/Run/Attack/Roll. Runtime evidence kept sprite/fit fingerprints stable, scale one, root rotation identity and no SpriteSkin/mesh; 15 EditMode tests and the project invariant gate passed. Owner visual review rejected the actual motion: silhouette and joints still read broken, so no visual pass or item completion is claimed.
+
+Audit traced the source to the prior Blender proof whose own report declares `armSkinning=two_bone_weighted_mesh`. That topology is invalid as authority for the new rigid-only goal. Stop curve/offset polishing on it. Phase 8 red armor generation was halted and marked `REJECTED-NOT-INTEGRATED`. Next action is one rigid-native bind source with measured pivots/overlaps, then one 12-key Player capture and whole-board review. No outfit #2, mix, class or level work before outfit #1 visual PASS.
+
+## True-side chibi single-bind articulated motion candidate — 2026-09-15
+
+`NEED_HUMAN_VISUAL_REVIEW`. External `common-character-chibi-v1/side-motion-proof-blender-v1` contains a reopened Blender 4.5.5 source, current 144-frame MP4, 12-key contact sheet, dense run/jump boards and a moving-pose equipment toggle board. One source/rig drives idle, four opposed run phases with forward lean and high knees, and a front tuck; textures, item offsets and scale do not change by pose.
+
+The first jump action is explicitly rejected because it rotated the complete character through the root. It is frozen at `rejected-iterations/rigid-root-spin-v1`. The replacement has `rootRotationRadians=0`, uses pelvis orientation plus separate spine/head/arm/hip/knee articulation, and passes the structural guard only as `PASS_FOR_OWNER_MOTION_REVIEW`. Direct board review found no detached module or torn garment in the sampled frames. Remaining gates are owner visual acceptance, strict contact-foot/IK work and later Unity Player proof; runtime promotion is false.
+
+## Mini chibi modular concept spike — 2026-09-14
+
+Owner stopped the tall adult character model and requested one purpose-designed mini chibi concept for modular body/equipment/animation. ImageGen concept v1 is stored with prompt/hash provenance at external `common-character-chibi-v1/concept-spike-v1`. It presents a neutral 2.5-head base, an assembled beginner outfit and an exploded module family with seams intended under hair/collar/cuffs/sash/boots. Status is `CONCEPT_REVIEW_ONLY`; Unity implementation, source topology and animation are not claimed.
+
+Active gate is owner visual review. Acceptance proceeds to an architectural design and one editable base/outfit idle-run-jump proof before Unity-native work. Rejection quarantines this concept without reopening the stopped adult or prior split-body paths.
+
 ## Six-pose limb-phase control and transfer boundary — 2026-09-14
 
 Owner review rejected the active male/female boards because run frames 2–5 kept the same apparent arm/leg phase. Prompt-only correction was bounded and stopped: whole-sheet generation, per-frame stick control and per-frame Blender control all collapsed absolute left/right identity or ignored the passing pose. Twelve outputs are `FINAL_REJECTED_DO_NOT_SELECT` under external `rejected-evidence/2026-09-14/common-character-imagegen-limb-phase-transfer-failures-v1`; no rejected image remains in the active identity review folder.
