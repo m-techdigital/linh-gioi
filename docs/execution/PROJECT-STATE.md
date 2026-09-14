@@ -1,3 +1,11 @@
+## Character Hub — Tiềm năng dùng một template tĩnh đúng kích thước v9 — 2026-09-15
+
+- Audit theo feedback owner xác nhận dữ liệu và object tree đã dùng chung, nhưng topology v8 vẫn ghép nhiều primitive `Painter2D`; đây là nguyên nhân nét khó khóa theo design và tạo cảm giác mỗi node đang được dựng riêng.
+- v9 thay phần hình học bằng đúng một asset `character-hub-potential-topology.png` 600×520: vòng ngoài, đường nối, năm vòng node, ô giá trị, ô cộng, glyph và silhouette/trục mạch đều có sẵn. `CharacterHubPotentialTopology` chỉ nạp template; năm overlay trong suốt chỉ bind icon/tên/value/click. Đổi Võ/Kiếm/Pháp/Cơ/Linh giữ nguyên object tree, không có UI branch theo class và Skill không dùng chung topology này.
+- Asset được sinh xác định từ `build_lgo_character_hub_skin.py`, không cắt canonical, giảm từ 279 KiB xuống 53.995 byte bằng palette 256 màu. Toàn bộ skin Character Hub khóa `nPOTScale: 0`; Unity không còn tự ép asset 600×520 thành 512×512 hoặc làm mờ/méo các surface/tab/button không phải power-of-two.
+- TDD RED bắt đúng lỗi importer `expected 600 but was 512`; GREEN targeted Unity `1/1`, full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; asset/guard `12/12`, no-3D/no-source-images pass. Player `build/map01a-character-hub-potential-template-player-v9/LinhGioiOnline.app`; evidence `build/map01a-character-hub-potential-template-runtime-v9/{pc,mobile,tablet}/{potential-default,potential}.png`, 9 frame/profile, đã xem trực tiếp không thấy cắt/chồng/vỡ topology.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`; tiếp tục giữ class art/pose/wardrobe/source và screen khác ngoài scope cho đến khi owner duyệt màn Tiềm năng v9.
+
 ## Character Hub — Tiềm năng mặc định đúng profile năm class v8 — 2026-09-15
 
 - Audit state sau v7 phát hiện mọi class cùng mặc định chọn `Sinh lực` do selection model dùng index cố định, trong khi recommendation của từng profile khác nhau. Đây là lỗi dữ liệu làm Kiếm/Pháp/Cơ/Linh mở sai node dù topology chung đã đúng.

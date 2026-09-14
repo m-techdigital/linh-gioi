@@ -73,10 +73,17 @@
       "referenceOnly": false,
       "role": "ui-close-frame",
       "sha256": "68d2340941e252c9758d61d640159cfa255a8a527ec435fc5b3de4941214a972"
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-potential-topology.png",
+      "generator": "build_lgo_character_hub_skin",
+      "referenceOnly": false,
+      "role": "ui-potential-topology-template",
+      "sha256": "b864168d2a395dfdaad9cfea429fb8adf0aea3d31bac7fb2cd5c49119dd7b938"
     }
   ],
-  "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens",
+  "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template and class data only binds overlays",
   "sourceMethod": "deterministic Pillow raster authored from approved navy, cyan-glow and old-gold visual language; no canonical-board crop",
-  "pixelBudget": "actual-display-sized UI chrome; 63469 bytes total; no mipmaps",
-  "importPolicy": "UI textures keep native display resolution caps (shell 1024, panels/controls 512, close 128) with mipmaps disabled"
+  "pixelBudget": "actual-display-sized UI chrome; 117464 bytes total; no mipmaps",
+  "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled"
 }

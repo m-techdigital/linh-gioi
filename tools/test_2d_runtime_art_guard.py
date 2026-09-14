@@ -70,6 +70,7 @@ class RuntimeArtGuardTests(unittest.TestCase):
             'character-hub-action-blue.png',
             'character-hub-action-gold.png',
             'character-hub-close.png',
+            'character-hub-potential-topology.png',
         }
         self.assertEqual({f'{pack}/{name}' for name in expected}, {path for path in allowed if path.startswith(pack)})
 
@@ -84,6 +85,10 @@ class RuntimeArtGuardTests(unittest.TestCase):
             runtime_allowlist(self.root)
 
         meta.write_text(original.replace('maxTextureSize: 1024', 'maxTextureSize: 512'))
+        with self.assertRaisesRegex(ValueError, 'Invalid UI texture import policy'):
+            runtime_allowlist(self.root)
+
+        meta.write_text(original.replace('nPOTScale: 0', 'nPOTScale: 1'))
         with self.assertRaisesRegex(ValueError, 'Invalid UI texture import policy'):
             runtime_allowlist(self.root)
 

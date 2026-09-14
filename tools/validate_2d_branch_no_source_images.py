@@ -171,6 +171,7 @@ RUNTIME_ART_PACKS = [
             'character-hub-action-blue.png': (384, 72, 'ui-action-blue'),
             'character-hub-action-gold.png': (384, 72, 'ui-action-gold'),
             'character-hub-close.png': (96, 96, 'ui-close-frame'),
+            'character-hub-potential-topology.png': (600, 520, 'ui-potential-topology-template'),
         },
         'generators': {'build_lgo_character_hub_skin'},
         'ui_import_limits': {
@@ -181,6 +182,7 @@ RUNTIME_ART_PACKS = [
             'character-hub-action-blue.png': 512,
             'character-hub-action-gold.png': 512,
             'character-hub-close.png': 128,
+            'character-hub-potential-topology.png': 1024,
         },
         'max_bytes': 750_000,
         'status_error': 'Map01A character-hub chrome must remain draft until owner Player visual review',
@@ -300,7 +302,8 @@ def _validate_runtime_pack(root: Path, spec: dict[str, object]) -> set[str]:
         meta = root / pack / (name + '.meta')
         content = meta.read_text()
         limits = [int(value) for value in re.findall(r'^\s*maxTextureSize:\s*(\d+)\s*$', content, re.MULTILINE)]
-        if 'enableMipMap: 0' not in content or not limits or any(value != max_size for value in limits):
+        if ('enableMipMap: 0' not in content or 'nPOTScale: 0' not in content
+                or not limits or any(value != max_size for value in limits)):
             raise ValueError('Invalid UI texture import policy: ' + pack + '/' + name)
     return set(expected)
 

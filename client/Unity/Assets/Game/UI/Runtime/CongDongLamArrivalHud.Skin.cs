@@ -95,7 +95,8 @@ namespace LinhGioi.UI
         private const string LgoCharacterHubSelectedClass = "lgo-character-hub-selected";
         private const string LgoCharacterHubSkinRoot = "LGOMaps/CongDongLamMap01AUiSkin/";
         private static Texture2D _characterHubSurface, _characterHubPanelSurface, _characterHubTabIdle,
-            _characterHubTabSelected, _characterHubActionBlue, _characterHubActionGold, _characterHubClose;
+            _characterHubTabSelected, _characterHubActionBlue, _characterHubActionGold, _characterHubClose,
+            _characterHubPotentialTopology;
 
         private static Texture2D LoadLgoCharacterHubTexture(ref Texture2D cache, string name)
         {
@@ -121,6 +122,9 @@ namespace LinhGioi.UI
         {
             ApplyLgoCharacterHubSurface(element, ref _characterHubPanelSurface, "character-hub-panel-surface");
         }
+
+        private static Texture2D LoadLgoCharacterHubPotentialTopology()
+            => LoadLgoCharacterHubTexture(ref _characterHubPotentialTopology, "character-hub-potential-topology");
 
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)

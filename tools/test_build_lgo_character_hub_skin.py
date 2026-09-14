@@ -3,11 +3,31 @@
 from __future__ import annotations
 
 import unittest
+import tempfile
+from pathlib import Path
 
 import build_lgo_character_hub_skin as skin
 
 
 class BuildLgoCharacterHubSkinTests(unittest.TestCase):
+    def test_potential_topology_is_one_actual_size_reusable_template(self) -> None:
+        image = skin.build_potential_topology()
+
+        self.assertEqual(image.size, (600, 520))
+        self.assertEqual(image.mode, "RGBA")
+        # The template owns the complete fixed geometry. Dynamic class data only
+        # overlays icons and labels, so all five node centres must already be visible.
+        for x, y in skin.POTENTIAL_NODE_CENTERS:
+            sample = image.crop((x - 64, y - 64, x + 65, y + 65))
+            self.assertGreater(sample.getchannel("A").getbbox()[2], 100)
+        self.assertIn("character-hub-potential-topology.png", skin.BUILDERS)
+
+    def test_potential_topology_runtime_png_stays_under_100_kib(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            skin.build(Path(directory))
+            path = Path(directory) / "character-hub-potential-topology.png"
+            self.assertLess(path.stat().st_size, 100 * 1024)
+
     def test_panel_motif_stays_confined_to_corner_regions(self) -> None:
         image = skin.build_panel()
         # The center must remain visually quiet; ornament belongs to the corners.

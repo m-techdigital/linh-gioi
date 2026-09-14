@@ -30,6 +30,10 @@ GOLD = (231, 181, 74, 238)
 GOLD_LIGHT = (255, 225, 137, 245)
 GOLD_DARK = (103, 68, 22, 230)
 CYAN = (52, 190, 255, 245)
+POTENTIAL_SIZE = (600, 520)
+POTENTIAL_NODE_CENTERS = (
+    (300, 62), (100, 230), (500, 230), (190, 410), (430, 410),
+)
 
 
 def _gradient(size: tuple[int, int], top: tuple[int, int, int], bottom: tuple[int, int, int]) -> Image.Image:
@@ -150,6 +154,117 @@ def build_close() -> Image.Image:
     return image
 
 
+def build_potential_topology() -> Image.Image:
+    """Draw the fixed Potential geometry once; runtime only binds data overlays."""
+    scale = 4
+    width, height = POTENTIAL_SIZE
+    size = (width * scale, height * scale)
+    image = Image.new("RGBA", size, (0, 0, 0, 0))
+    glow = Image.new("RGBA", size, (0, 0, 0, 0))
+    draw = ImageDraw.Draw(image)
+    glow_draw = ImageDraw.Draw(glow)
+
+    def box(bounds: tuple[float, float, float, float]) -> tuple[int, int, int, int]:
+        return tuple(round(value * scale) for value in bounds)
+
+    def line(points: list[tuple[float, float]], fill: tuple[int, int, int, int], line_width: float) -> None:
+        draw.line([(round(x * scale), round(y * scale)) for x, y in points], fill=fill,
+                  width=max(1, round(line_width * scale)), joint="curve")
+
+    def ellipse(center: tuple[float, float], radius: tuple[float, float],
+                fill: tuple[int, int, int, int] | None = None,
+                outline: tuple[int, int, int, int] | None = None, line_width: float = 1) -> None:
+        cx, cy = center
+        rx, ry = radius
+        draw.ellipse(box((cx - rx, cy - ry, cx + rx, cy + ry)), fill=fill, outline=outline,
+                     width=max(1, round(line_width * scale)))
+
+    center = (300, 260)
+    # One fixed orbit and one fixed connector system shared by every class.
+    for node_center in POTENTIAL_NODE_CENTERS:
+        glow_draw.line([(center[0] * scale, center[1] * scale),
+                        (node_center[0] * scale, node_center[1] * scale)],
+                       fill=(28, 155, 255, 95), width=5 * scale)
+        line([center, node_center], (1, 8, 15, 235), 5)
+        line([center, node_center], (67, 177, 255, 170), 1.25)
+
+    glow_draw.ellipse(box((52, 44, 548, 476)), outline=(28, 147, 255, 110), width=7 * scale)
+    glow_draw.ellipse(box((64, 52, 536, 468)), outline=(255, 184, 52, 90), width=6 * scale)
+    image = Image.alpha_composite(image, glow.filter(ImageFilter.GaussianBlur(8 * scale)))
+    draw = ImageDraw.Draw(image)
+
+    ellipse(center, (250, 218), outline=(26, 87, 132, 150), line_width=1)
+    ellipse(center, (244, 212), outline=(213, 151, 43, 105), line_width=1)
+    ellipse(center, (236, 204), outline=(3, 11, 20, 245), line_width=5)
+    ellipse(center, (236, 204), outline=(229, 167, 54, 205), line_width=1.5)
+    ellipse(center, (220, 190), outline=(41, 126, 182, 92), line_width=1)
+    ellipse(center, (203, 176), outline=(49, 145, 206, 95), line_width=1)
+
+    for index in range(24):
+        angle = math.tau * index / 24
+        x = center[0] + math.cos(angle) * 220
+        y = center[1] + math.sin(angle) * 190
+        radius = 5 if index % 4 == 0 else 2.5
+        color = (255, 201, 76, 215) if index % 4 == 0 else (78, 178, 238, 150)
+        ellipse((x, y), (radius, radius), fill=color)
+        ellipse((x, y), (radius + 3, radius + 3), outline=(224, 162, 53, 105), line_width=1)
+
+    # Central meditation seal and silhouette are also part of the fixed template.
+    ellipse(center, (112, 112), fill=(2, 24, 42, 188), outline=(225, 164, 49, 200), line_width=1.5)
+    ellipse(center, (98, 98), outline=(48, 169, 245, 180), line_width=1.5)
+    ellipse(center, (78, 78), outline=(45, 151, 211, 90), line_width=1)
+    for angle in range(0, 360, 45):
+        radians = math.radians(angle)
+        line([(center[0], center[1]),
+              (center[0] + math.cos(radians) * 92, center[1] + math.sin(radians) * 92)],
+             (43, 151, 216, 76), 1)
+
+    aura = (55, 185, 255, 225)
+    ink = (2, 22, 37, 252)
+    cloth = (5, 48, 76, 250)
+    ellipse((300, 202), (17, 21), fill=ink, outline=aura, line_width=2)
+    torso = [(269, 226), (254, 282), (278, 312), (300, 296), (322, 312), (346, 282), (331, 226), (312, 213), (288, 213)]
+    draw.polygon([(x * scale, y * scale) for x, y in torso], fill=cloth)
+    line(torso + [torso[0]], aura, 2)
+    for points, outer_width, inner_width in (
+        ([(275, 236), (236, 258), (218, 285), (240, 294)], 12, 7),
+        ([(325, 236), (364, 258), (382, 285), (360, 294)], 12, 7),
+        ([(282, 292), (243, 316), (214, 318), (248, 332), (292, 323)], 24, 18),
+        ([(318, 292), (357, 316), (386, 318), (352, 332), (308, 323)], 24, 18),
+    ):
+        line(points, aura, outer_width)
+        line(points, ink, inner_width)
+    lap = [(212, 319), (248, 339), (300, 328), (352, 339), (388, 319), (348, 348), (252, 348)]
+    draw.polygon([(x * scale, y * scale) for x, y in lap], fill=ink)
+    line(lap + [lap[0]], aura, 1.5)
+    meridian = [(300, 225), (300, 246), (300, 267), (300, 289), (300, 312)]
+    line(meridian, (255, 180, 40, 245), 2)
+    line([(300, 245), (275, 256), (253, 282)], (255, 180, 40, 210), 1.5)
+    line([(300, 245), (325, 256), (347, 282)], (255, 180, 40, 210), 1.5)
+    for point in meridian:
+        ellipse(point, (8, 8), fill=(255, 150, 25, 45))
+        ellipse(point, (4, 4), fill=(255, 181, 42, 255), outline=(255, 232, 154, 245), line_width=1)
+
+    for cx, cy in POTENTIAL_NODE_CENTERS:
+        # Complete node ring, value box and add box are baked into this one template.
+        ellipse((cx, cy), (61, 61), outline=(2, 11, 20, 248), line_width=7)
+        ellipse((cx, cy), (58, 58), outline=(238, 176, 60, 230), line_width=2)
+        ellipse((cx, cy), (51, 51), outline=(59, 185, 255, 190), line_width=1.5)
+        for dx, dy in ((-69, 0), (69, 0), (0, -69), (0, 69)):
+            if dx:
+                line([(cx + dx - 7, cy), (cx + dx + 7, cy)], (244, 184, 65, 220), 2)
+            else:
+                line([(cx, cy + dy - 7), (cx, cy + dy + 7)], (244, 184, 65, 220), 2)
+        value = (cx - 42, cy + 37, cx + 40, cy + 65)
+        add = (cx + 42, cy + 37, cx + 70, cy + 65)
+        draw.rectangle(box(value), fill=(1, 12, 23, 245), outline=(63, 123, 168, 220), width=5)
+        draw.rectangle(box(add), fill=(2, 17, 30, 250), outline=(244, 185, 66, 242), width=6)
+        line([(cx + 50, cy + 51), (cx + 62, cy + 51)], (255, 211, 92, 255), 2)
+        line([(cx + 56, cy + 45), (cx + 56, cy + 57)], (255, 211, 92, 255), 2)
+
+    return image.resize(POTENTIAL_SIZE, Image.Resampling.LANCZOS)
+
+
 BUILDERS = {
     "character-hub-surface.png": build_shell,
     "character-hub-panel-surface.png": build_panel,
@@ -158,6 +273,7 @@ BUILDERS = {
     "character-hub-action-blue.png": lambda: _bevel_surface((384, 72), (31, 139, 244), (4, 67, 179), (91, 220, 255, 255), (24, 155, 255)),
     "character-hub-action-gold.png": lambda: _bevel_surface((384, 72), (255, 221, 135), (190, 119, 31), GOLD_LIGHT, (255, 190, 61)),
     "character-hub-close.png": build_close,
+    "character-hub-potential-topology.png": build_potential_topology,
 }
 
 
@@ -176,10 +292,14 @@ def build(output_dir: Path) -> dict:
         "character-hub-action-blue.png": "ui-action-blue",
         "character-hub-action-gold.png": "ui-action-gold",
         "character-hub-close.png": "ui-close-frame",
+        "character-hub-potential-topology.png": "ui-potential-topology-template",
     }
     for name, builder in BUILDERS.items():
         path = output_dir / name
-        builder().save(path, format="PNG", optimize=True)
+        image = builder()
+        if name == "character-hub-potential-topology.png":
+            image = image.quantize(colors=256, method=Image.Quantize.FASTOCTREE, dither=Image.Dither.NONE)
+        image.save(path, format="PNG", optimize=True)
         assets.append({
             "path": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else name,
             "generator": "build_lgo_character_hub_skin",
@@ -198,10 +318,10 @@ def build(output_dir: Path) -> dict:
         "canonicalDesignSet": str(CANONICAL_ROOT),
         "canonicalSha256": canonical,
         "assets": assets,
-        "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens",
+        "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template and class data only binds overlays",
         "sourceMethod": "deterministic Pillow raster authored from approved navy, cyan-glow and old-gold visual language; no canonical-board crop",
         "pixelBudget": f"actual-display-sized UI chrome; {total_bytes} bytes total; no mipmaps",
-        "importPolicy": "UI textures keep native display resolution caps (shell 1024, panels/controls 512, close 128) with mipmaps disabled",
+        "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled",
     }
     (output_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return manifest

@@ -20,6 +20,10 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
         for path in (ROOT / "client/Unity/Assets/Game/UI/Runtime").glob("CongDongLamArrivalHud*.cs"):
             shutil.copy2(path, dst / "client/Unity/Assets/Game/UI/Runtime" / path.name)
         shutil.copy2(
+            ROOT / "client/Unity/Assets/Game/UI/Runtime/CharacterHubPotentialTopology.cs",
+            dst / "client/Unity/Assets/Game/UI/Runtime/CharacterHubPotentialTopology.cs",
+        )
+        shutil.copy2(
             ROOT / "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
             dst / "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
         )
@@ -98,6 +102,21 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             violations = validator.validate_root(Path(temp))
 
         self.assertTrue(any("stable shared topology" in item for item in violations), violations)
+
+    def test_rejects_potential_topology_without_one_shared_artwork_template(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            topology = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CharacterHubPotentialTopology.cs"
+            topology.write_text(
+                topology.read_text(encoding="utf-8").replace(
+                    "Map01A Potential Topology Artwork",
+                    "Map01A Potential Per Class Artwork",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("Map01A Potential Topology Artwork" in item for item in violations), violations)
 
     def test_rejects_register_screen_that_skips_shared_panel_base(self) -> None:
         with self._copy_minimal_repo() as temp:

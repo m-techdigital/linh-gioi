@@ -754,8 +754,10 @@ namespace LinhGioi.Tests.EditMode
                 }
                 Assert.That(root.Q<VisualElement>("Map01A Potential Node 2 Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("vitality")));
-                Assert.That(root.Q("Map01A Potential Core Figure"), Is.Not.Null,
-                    "The canonical center is a prebuilt meditation figure in the shared topology, not a class-bound atlas icon.");
+                Assert.That(root.Q("Map01A Potential Topology Artwork"), Is.Not.Null,
+                    "The canonical center and all fixed geometry must come from one shared actual-size template.");
+                Assert.That(root.Q("Map01A Potential Core Figure"), Is.Null,
+                    "The meditation figure is baked into the shared template and must not be rebuilt as a second runtime element.");
                 Assert.That(root.Q("Map01A Potential Diagram Core").childCount, Is.EqualTo(0),
                     "The shared center marker must stay structural; the approved design has no duplicate technical label over the figure.");
                 Assert.That(root.Q("Map01A Potential Core Icon"), Is.Null);
@@ -856,6 +858,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(potentialTopology, Is.Not.Null,
                     "The circles, outer ring and connectors must be one prebuilt shared topology behind class-bound icons.");
                 Assert.That(potentialTopology.ClassListContains("lgo-potential-topology"), Is.True);
+                var topologyArtwork = root.Q("Map01A Potential Topology Artwork");
+                Assert.That(topologyArtwork, Is.Not.Null,
+                    "Potential circles, connectors, node frames and meridian figure must come from one actual-size reusable artwork template.");
+                Assert.That(topologyArtwork.style.backgroundImage.value.texture, Is.Not.Null,
+                    "The shared Potential topology template must be loaded once; class data may only overlay icons, labels and state.");
+                Assert.That(topologyArtwork.style.backgroundImage.value.texture.width, Is.EqualTo(600));
+                Assert.That(topologyArtwork.style.backgroundImage.value.texture.height, Is.EqualTo(520));
                 var topologyFrameCount = potentialTopology.GetType().GetProperty(
                     "PrebuiltNodeFrameCount", BindingFlags.Static | BindingFlags.NonPublic);
                 Assert.That(topologyFrameCount, Is.Not.Null,
