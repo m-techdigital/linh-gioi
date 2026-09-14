@@ -549,6 +549,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Spirit Pet Locked Roster 1"), Is.Not.Null);
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Spirit Pet Intimacy").value, Is.EqualTo(320));
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Spirit Pet Growth").value, Is.EqualTo(180));
+                var spiritBadges = root.Q("Map01A Spirit Pet Detail Badges");
+                Assert.That(spiritBadges.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Spirit Pet Rarity Badge").text, Is.EqualTo("Tinh phẩm"));
+                Assert.That(root.Q<Label>("Map01A Spirit Pet Role Badge").text, Is.EqualTo("Hỗ trợ"));
+                Assert.That(root.Q<Label>("Map01A Spirit Pet State Badge").text, Is.EqualTo("Đang xuất chiến"));
+                Assert.That(hubDetailStatus.text, Is.EqualTo("Tính năng bồi dưỡng đang khóa."),
+                    "Deployment state belongs in the hero badge row instead of being duplicated in the status card.");
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Deploy Action").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
                     "Linh thú growth must remain visibly gated until its real progression state exists.");

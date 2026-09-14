@@ -9,7 +9,7 @@ namespace LinhGioi.UI
     {
         private enum CharacterHubMode { Skills, Potential, SpiritPet }
 
-        private VisualElement _skillsPanel, _potentialPanel, _spiritPetPanel, _hubPreviewDetailPanel;
+        private VisualElement _skillsPanel, _potentialPanel, _spiritPetPanel, _hubPreviewDetailPanel, _hubSpiritPetBadges;
         private VisualElement _hubSkillActionRow, _hubPotentialActionRow, _hubSpiritPetActionRow;
         private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
         private VisualElement _hubDetailIcon;
@@ -445,6 +445,17 @@ namespace LinhGioi.UI
             _hubDetailMeta = LgoSubtitleLabel("", 13);
             _hubDetailMeta.style.marginTop = 4;
             detailHeroCopy.Add(_hubDetailMeta);
+            _hubSpiritPetBadges = InventoryRow("Map01A Spirit Pet Detail Badges");
+            _hubSpiritPetBadges.style.marginTop = 8;
+            _hubSpiritPetBadges.style.marginBottom = 0;
+            var rarityBadge = InventoryBadge("Map01A Spirit Pet Rarity Badge", "Tinh phẩm", new Color(.88f, .62f, 1f, 1f));
+            var roleBadge = InventoryBadge("Map01A Spirit Pet Role Badge", "Hỗ trợ", new Color(.72f, .90f, 1f, 1f));
+            var stateBadge = InventoryBadge("Map01A Spirit Pet State Badge", "Đang xuất chiến", new Color(.55f, 1f, .65f, 1f));
+            _hubSpiritPetBadges.Add(rarityBadge);
+            _hubSpiritPetBadges.Add(roleBadge);
+            _hubSpiritPetBadges.Add(stateBadge);
+            _hubSpiritPetBadges.style.display = DisplayStyle.None;
+            detailHeroCopy.Add(_hubSpiritPetBadges);
             detailHero.Add(detailHeroCopy);
             _hubPreviewDetailPanel.Add(detailHero);
             var facts = new VisualElement { name = "Map01A Hub Preview Detail Facts" };
@@ -567,6 +578,7 @@ namespace LinhGioi.UI
             _hubSkillActionRow.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
             _hubPotentialActionRow.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetActionRow.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubSpiritPetBadges.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
             _hubDetailIcon.style.width = _hubDetailIcon.style.height = mode == CharacterHubMode.Skills
                 ? 116
                 : mode == CharacterHubMode.Potential ? 104 : 112;
@@ -628,9 +640,9 @@ namespace LinhGioi.UI
                 _hubDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
                 _hubDetailHeader.text = "CHI TIẾT LINH THÚ";
                 _hubDetailName.text = "Thanh Vân Hồ";
-                _hubDetailMeta.text = "Tinh phẩm · Hỗ trợ · Lv.20";
+                _hubDetailMeta.text = "Lv.20";
                 _hubDetailBody.text = "Thuộc tính Linh thú\nHP  +8720\nTấn Công  +860\nPhòng Thủ  +430\nHồi Phục  +28%\nGiảm Sát Thương  +12%\n\nKỹ năng Linh thú\nThanh Vân Hộ Thể · Lv.1\nCửu Vĩ Linh Phong · Lv.1";
-                _hubDetailStatus.text = "Đang xuất chiến · tính năng bồi dưỡng đang khóa.";
+                _hubDetailStatus.text = "Tính năng bồi dưỡng đang khóa.";
             }
         }
 

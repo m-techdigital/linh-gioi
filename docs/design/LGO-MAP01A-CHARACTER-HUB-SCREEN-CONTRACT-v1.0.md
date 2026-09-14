@@ -1,7 +1,7 @@
 # Map01A character hub — canonical screen contract v1.0
 
 Ngày khóa: 2026-09-14  
-Trạng thái: **OWNER_APPROVED_DESIGN_SET / FOUR_SCREEN_LAYOUT_LOCKED / SPIRIT_PET_DETAIL_FIX_REQUIRED**
+Trạng thái: **OWNER_APPROVED_DESIGN_SET / FIVE_SCREEN_LAYOUT_LOCKED / OWNER_VISUAL_REVIEW_REQUIRED**
 
 ## Mục đích
 
@@ -18,7 +18,7 @@ Thư mục nguồn đã duyệt:
 | 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** |
 | 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** |
 | 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** |
-| 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | **FIX_REQUIRED** |
+| 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | **LAYOUT_LOCKED** |
 
 Các demo cũ trong thư mục cha là tài liệu lịch sử. Chúng không được dùng để quyết định layout hoặc mở lại hệ tab/cột cũ.
 
@@ -92,4 +92,4 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ## Gate hiện hành
 
-Shared layout và ba tab đầu đã khóa theo evidence ghi ở trên. Tab `Tiềm năng` đã qua Player gate tại `build/map01a-potential-layout-runtime-v1/{pc,mobile,tablet}/`: một diagram, năm node có dấu cộng, core, footer và detail-right giữ cùng composition; action progression vẫn khóa trung thực. Gate active chuyển sang `Linh thú`. Không resume class/pose/wardrobe/source và không rollback code class.
+Shared layout và bốn tab đầu đã khóa theo evidence ghi ở trên. Tab `Linh thú` đã qua Player gate tại `build/map01a-spirit-layout-runtime-v1/{pc,mobile,tablet}/`: hero/progress/roster và inspector có rarity/role/deployed badge giữ cùng composition; slot/action chưa có contract vẫn khóa trung thực. Cả năm screen đang chờ owner visual review; không mở screen ngoài hub trước gate này. Không resume class/pose/wardrobe/source và không rollback code class.
