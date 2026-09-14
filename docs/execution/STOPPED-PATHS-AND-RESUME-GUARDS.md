@@ -10,9 +10,10 @@ The only active character/outfit route is `LGO-SPINE-PRODUCTION-PROOF-01`:
 
 - spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`
 - plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`
-- current phase/status: `LICENSE_AND_LGO_SOURCE_GATE_BEFORE_INTEGRATION / BLOCKED_SPINE_TOOLING`
+- current phase/status: `MINIMUM_RUNTIME_FEASIBILITY_PROVEN_PRODUCTION_GATE_REMAINS / BLOCKED_SPINE_TOOLING`
 - evaluation proof: official Trial 4.3.26 and official 4.3 runtime/examples passed a graphics Player sequence in isolated build space; this does not authorize LGO integration
-- LGO source admission: no actual LGO Spine runtime test ran; old sources remain ineligible and the newly created v1/v2 source attempts are explicitly rejected (`VISUAL_REJECTED_MANNEQUIN_NOT_LGO`, `VISUAL_REJECTED_STRUCTURAL_MASK_LOSS`)
+- actual-LGO mechanism proof: current Pháp Lv1 belt/weapon sprites converted to runtime attachments, animated, removed and restored in isolated Player; this proves the narrow integration mechanism and must not be relabeled as body/sleeve or production visual PASS
+- LGO body/rig source admission: no LGO body or sleeve rig ran; old sources remain ineligible and the newly created v1/v2 source attempts are explicitly rejected (`VISUAL_REJECTED_MANNEQUIN_NOT_LGO`, `VISUAL_REJECTED_STRUCTURAL_MASK_LOSS`)
 - v1/v2 were quarantined under `rejected-evidence/2026-09-14` with tombstones at their former work paths; do not continue or repackage them. Creating another ORA or adding masks cannot substitute for an accepted source and licensed Spine Player proof
 - next action: provision licensed Spine Professional 4.3.x and an owner-accepted reopenable layered male/female + sleeved Pháp source package, then reproduce the verified `Mix and Match Skins` sequence inside `client/Unity`
 

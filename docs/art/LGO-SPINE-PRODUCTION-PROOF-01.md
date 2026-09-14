@@ -4,8 +4,9 @@ Date: 2026-09-14
 
 Task: `LGO-SPINE-PRODUCTION-PROOF-01`
 
-Current phase: `LICENSE_GATE_BEFORE_LGO_INTEGRATION`
-Current decision: `BLOCKED_SPINE_TOOLING`
+Current phase: `MINIMUM_RUNTIME_FEASIBILITY_PROVEN`
+Current feasibility decision: `LGO_RUNTIME_ATTACHMENT_MECHANISM_PROVEN`
+Current production decision: `BLOCKED_SPINE_TOOLING`
 
 ## Decision and verified basis
 
@@ -26,6 +27,21 @@ Official references:
 - https://esotericsoftware.com/spine-purchase
 
 These facts prove capability and version compatibility. They do not prove that the current LGO character source, Pháp Lv1 sleeves or run silhouette will deform acceptably. That conclusion requires the staged Player proof below.
+
+## Minimum actual-LGO runtime proof
+
+After the owner reduced the immediate scope to proving applicability, a bounded Player probe used the already verified official skeleton and two actual Pháp Lv1 components from the current LGO atlas: `waist_belt` and `main_weapon`. Unity imported them as sprites, converted them at runtime to Spine `RegionAttachment` objects, and placed them on the official `body-dress` and `hand-front` animated slots.
+
+The Player executed six captured states: official base, both LGO items equipped at idle, two `walk` phases, both items removed during `walk`, and both items restored while `walk` continued. Visual review confirms that both items appear only in equipped states and move with their separate slots. The motion log records belt-bone movement of 1.0681/0.2718 units and weapon-bone movement of 2.4534/0.2905 units across the captured sequence. Build result: 0 errors, 0 warnings, 2.730754 seconds.
+
+Evidence:
+
+- `build/lgo-spine-production-proof-01/lgo-runtime-attachment-evaluation.json`
+- `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/result.json`
+- `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/motion.csv`
+- `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/contact-sheet.png`
+
+This is sufficient to prove the narrow mechanism: actual LGO RGBA equipment can enter spine-unity as runtime attachments, multiple items can follow separate animated slots, and equip/unequip does not require restarting locomotion. It does not prove accepted LGO body rigging, sleeved deformation, final fit, production licensing or integration into `client/Unity`. The sample mismatch visible in the captures is expected evidence of the remaining source/template work, not a final character design.
 
 ## Scope
 
@@ -69,6 +85,7 @@ Failure at a phase blocks dependent phases. A compiler PASS, object count or scr
 | Official Spine Examples evaluation | PASS | official `Mix and Match Skins` source opened in Trial and imported into isolated Unity evaluation project |
 | Spine skeleton/atlas import evaluation | PASS | official 4.3 export imported without compiler/import errors |
 | Reference Player evaluation | PASS | graphics Player captured base, bag, backpack, remove, restore, combined skin and two walk phases |
+| Actual LGO attachment mechanism | PASS | LGO Pháp Lv1 belt and weapon attached, animated, removed and restored in isolated graphics Player |
 | LGO project integration | BLOCKED | license required before adding Spine Runtimes to `client/Unity` |
 | LGO male source admission | FAIL | old 12-layer KRA reconstructs the rejected cutout body; two newly authored candidates also failed visual/source audit and remain `runtimeEligible=false` |
 | LGO female source admission | FAIL | old six-pose PNGs have no editable layered source; two newly authored candidates also failed visual/source audit and remain `runtimeEligible=false` |
@@ -77,7 +94,7 @@ Failure at a phase blocks dependent phases. A compiler PASS, object count or scr
 
 Machine-readable evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json`, `build/lgo-spine-production-proof-01/reference-evaluation.json` and `build/lgo-spine-production-proof-01/lgo-source-admission.json`. Visual board: `build/lgo-spine-production-proof-01/reference-automated/contact-sheet.png`.
 
-The source-admission precheck was run against the real LGO trees and current Unity Pháp atlases. No LGO asset was admitted into Spine and no LGO Spine Player test was executed. Reusing the old male KRA would restore the body/cutout result already rejected by the owner; treating the current paper-doll atlas as a rig source would only reproduce the stopped static-fit architecture.
+The source-admission precheck was run against the real LGO trees and current Unity Pháp atlases. At that stage no LGO source was admitted as a body/rig and no LGO body Player test was executed. The later bounded attachment probe used two atlas components only; it does not alter the failed body/source admission. Reusing the old male KRA would restore the body/cutout result already rejected by the owner; treating the complete current paper-doll atlas as a rig source would only reproduce the stopped static-fit architecture.
 
 After the owner authorized creating missing test source, two bounded male/female attempts were authored and audited before any runtime use:
 

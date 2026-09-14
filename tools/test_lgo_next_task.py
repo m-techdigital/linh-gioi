@@ -26,6 +26,7 @@ class LgoNextTaskTests(unittest.TestCase):
 
         self.assertIn("Spine Professional 4.3", note)
         self.assertIn("client/Unity", note)
+        self.assertIn("belt/weapon LGO thật", note)
         self.assertIn("base nam/nữ layered", note)
         self.assertIn("áo Pháp Lv1 có tay", note)
         self.assertIn("candidate source", note)
