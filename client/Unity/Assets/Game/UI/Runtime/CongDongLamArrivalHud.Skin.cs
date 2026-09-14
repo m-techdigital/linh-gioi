@@ -641,6 +641,18 @@ namespace LinhGioi.UI
             node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 62;
         }
 
+        private static void ApplyLgoPotentialAddMarker(Label marker)
+        {
+            marker.AddToClassList("lgo-potential-add-marker");
+            marker.style.position = Position.Absolute;
+            marker.style.right = -8;
+            marker.style.bottom = 10;
+            marker.style.width = 28;
+            marker.style.height = 28;
+            marker.style.unityTextAlign = TextAnchor.MiddleCenter;
+            ApplyLgoFrame(marker, new Color(.015f, .045f, .075f, .98f), UiGold);
+        }
+
         private static void ApplyLgoInventorySearchField(TextField field, bool touch)
         {
             field.AddToClassList(LgoInventorySearchFieldClass);

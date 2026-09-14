@@ -174,6 +174,10 @@ namespace LinhGioi.UI
             var valueLabel = LgoLabel(value, 10, new Color(.74f, .92f, 1f, .92f), true);
             valueLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             node.Add(valueLabel);
+            var addMarker = LgoLabel("+", 18, UiGold, true);
+            addMarker.name = "Map01A Potential Node Add " + title;
+            ApplyLgoPotentialAddMarker(addMarker);
+            node.Add(addMarker);
             ApplyHubPathNodeSelection(node, selected);
             _potentialPathNodes.Add(node);
             node.style.position = Position.Absolute;
@@ -330,13 +334,6 @@ namespace LinhGioi.UI
         private void InitializePotentialView(VisualElement body)
         {
             _potentialPanel = CreateHubSurface("Map01A Potential Panel");
-            var heading = InventoryRow("Map01A Potential Heading");
-            heading.style.alignItems = Align.Center;
-            heading.style.justifyContent = Justify.SpaceBetween;
-            heading.Add(LgoTitleLabel("Kinh mạch tiềm năng", 18));
-            heading.Add(InventoryBadge("Map01A Potential Remaining Points", "Điểm còn lại: 12", UiGold));
-            _potentialPanel.Add(heading);
-
             var diagram = new VisualElement { name = "Map01A Potential Diagram" };
             diagram.style.width = 650;
             diagram.style.height = 400;

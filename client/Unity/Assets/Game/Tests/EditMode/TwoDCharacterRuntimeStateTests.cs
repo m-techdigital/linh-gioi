@@ -510,10 +510,19 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Potential Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Potential Diagram Core"), Is.Not.Null,
                     "Approved potential screen must use one central meridian diagram rather than a repeated card grid.");
+                Assert.That(root.Q("Map01A Potential Heading"), Is.Null,
+                    "The canonical diagram does not repeat a technical heading or duplicate remaining-points badge above the orbit.");
                 Assert.That(root.Q("Map01A Potential Orbit"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Potential Diagram").style.height.value.value, Is.LessThanOrEqualTo(400),
                     "Potential diagram and recommendation must fit inside the shared modal shell.");
                 Assert.That(root.Q<Button>("Map01A Potential Node Sinh lực").ClassListContains("lgo-potential-node"), Is.True);
+                foreach (var potentialName in new[] { "Công", "Thủ", "Sinh lực", "Linh lực", "Nhanh nhẹn" })
+                {
+                    var addMarker = root.Q<Label>("Map01A Potential Node Add " + potentialName);
+                    Assert.That(addMarker, Is.Not.Null);
+                    Assert.That(addMarker.text, Is.EqualTo("+"));
+                    Assert.That(addMarker.ClassListContains("lgo-potential-add-marker"), Is.True);
+                }
                 Assert.That(root.Q<VisualElement>("Map01A Potential Node Sinh lực Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("vitality")));
                 Assert.That(root.Q<VisualElement>("Map01A Potential Core Icon").style.backgroundImage.value.sprite,

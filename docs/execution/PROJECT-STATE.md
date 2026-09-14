@@ -1,9 +1,16 @@
-## Character hub — tab Kỹ năng đã qua gate, tab Tiềm năng active — 2026-09-14
+## Character hub — tab Tiềm năng đã qua gate, tab Linh thú active — 2026-09-14
+
+- Canonical duy nhất: `redesign-v4-five-tabs/04-tiem-nang-five-tab-APPROVED.png`. Runtime giữ một sơ đồ kinh mạch trung tâm, năm node quanh core, recommendation/điểm còn lại ở footer và detail-right dùng chung.
+- Bỏ heading/điểm còn lại bị lặp phía trên. Cả năm node có affordance `+` dùng shared `lgo-potential-add-marker`; action cộng/đặt lại vẫn khóa vì progression chưa có contract.
+- Full `TwoDCharacterRuntimeStateTests` đạt `28/28`; Player `build/map01a-potential-layout-player-v1/LinhGioiOnline.app` build `errors=0`. Evidence default/chọn node tại `build/map01a-potential-layout-runtime-v1/{pc,mobile,tablet}/` đã được xem trực tiếp, không wrap/stack/cắt/chồng.
+- Screen active duy nhất tiếp theo là `Linh thú` theo `05-linh-thu-five-tab-APPROVED.png`. Scope class/pose/wardrobe/source tiếp tục đóng.
+
+## Character hub — tab Kỹ năng đã qua gate — 2026-09-14
 
 - Canonical duy nhất: `redesign-v4-five-tabs/03-ky-nang-five-tab-APPROVED.png`. Runtime giữ rail ba nhóm, graph ba hàng có connector, bốn slot skill đánh số, cụm điểm kỹ năng và detail-right dùng chung.
 - Bỏ tiêu đề kỹ thuật thừa khỏi inspector; bốn slot footer dùng shared `lgo-equipped-skill-slot`. Nút cộng điểm/nâng cấp/trang bị vẫn hiện đúng vị trí nhưng khóa vì progression chưa có contract.
 - Full `TwoDCharacterRuntimeStateTests` đạt `28/28`; Player `build/map01a-skills-layout-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=46`. Evidence default/chọn node tại `build/map01a-skills-layout-runtime-v1/{pc,mobile,tablet}/` đã được xem trực tiếp, không wrap/stack/cắt/chồng.
-- Screen active duy nhất tiếp theo là `Tiềm năng` theo `04-tiem-nang-five-tab-APPROVED.png`; sau đó mới `Linh thú`. Scope class/pose/wardrobe/source tiếp tục đóng.
+- Sau checkpoint này, gate đã chuyển tuần tự sang Tiềm năng và trạng thái mới nhất nằm ở mục trên.
 
 ## Character hub — tab Rương đồ đã qua gate — 2026-09-14
 
