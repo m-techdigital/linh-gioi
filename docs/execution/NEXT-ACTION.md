@@ -1,8 +1,10 @@
-## Active — design gate cho màn Chọn máy chủ — 2026-09-14
+## Active — design gate cho màn Đăng ký — 2026-09-14
 
-`CONTINUE`. Entry/Login và Character Select đã đạt layout gate. Character Select hiện hành: canonical `redesign-v6-character-select/01-character-select-CANONICAL.png`, Player `build/map01a-character-select-canonical-player-v6/LinhGioiOnline.app`, evidence `build/map01a-character-select-canonical-runtime-v6/{pc,mobile,tablet}/`. Không vi chỉnh lại hai screen khi không có regression mới.
+`OPERATIONAL_GOAL_CURRENT`. Đây là goal duy nhất được dùng để chọn công việc. Objective tự động cũ còn nhắc class/pose/wardrobe/source đã bị owner thay thế; không được resume hoặc dùng làm fallback.
 
-Screen active kế tiếp là **Chọn máy chủ** ở design gate. Audit các demo owner đã gửi, tạo đúng một canonical screen và contract scenario/state/interaction/asset budget trước code. Luồng từ server row phải tách thành screen riêng; chưa có backend thì selection/local feedback phải trung thực. Sau khi screen này khóa mới tới Đăng ký rồi Quên mật khẩu. Không code nhiều screen song song, không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+`CONTINUE`. Entry/Login, Character Select và Chọn máy chủ đã đạt layout gate. Chọn máy chủ hiện hành: canonical `redesign-v7-server-select/01-server-select-CANONICAL.png`, Player `build/map01a-server-select-player-v1/LinhGioiOnline.app`, evidence `build/map01a-server-select-runtime-v1/{pc,mobile,tablet}/`. Không vi chỉnh lại ba screen khi không có regression mới.
+
+Screen active duy nhất là **Đăng ký** ở design gate. Pipeline bắt buộc: scenario/state/interaction → một canonical design → asset/provenance/pixel budget → plan → shared base → layout/runtime → Player evidence PC/mobile landscape/tablet → visual/test/frozen audit → checkpoint. Trước khi code phải audit các demo owner đã gửi, xác định dữ liệu thật đang có và tạo đúng một canonical; auth backend chưa có thì CTA phải phản hồi trung thực, không giả tạo tài khoản thành công. Sau khi screen này khóa mới tới Quên mật khẩu. Không code nhiều screen song song, không resume class/pose/wardrobe/source, không chạy class capture, không rollback code class và không đổi frozen surfaces.
 
 ## Next — sau khi sửa letterbox ảnh Linh thú — 2026-09-14
 

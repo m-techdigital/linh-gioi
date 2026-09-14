@@ -42,6 +42,9 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
         self.assertIn("build/map01a-character-select-canonical-runtime-v6/pc/character-select.png", current_paths)
         self.assertIn("build/map01a-character-select-canonical-runtime-v6/mobile/manifest.json", current_paths)
         self.assertIn("build/map01a-character-select-canonical-runtime-v6/tablet/manifest.json", current_paths)
+        self.assertIn("build/map01a-server-select-runtime-v1/pc/server-select.png", current_paths)
+        self.assertIn("build/map01a-server-select-runtime-v1/mobile/manifest.json", current_paths)
+        self.assertIn("build/map01a-server-select-runtime-v1/tablet/manifest.json", current_paths)
         self.assertFalse(any("map01a-shared-layout-runtime-v4" in path for path in current_paths), current_paths)
         self.assertFalse(any("map01a-five-tab-player-copy-runtime-v1" in path for path in current_paths), current_paths)
         self.assertFalse(any("map01a-character-select-runtime/" in path for path in current_paths), current_paths)
@@ -57,6 +60,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "Marker: `LGO_MAP01A_UI_REVIEW_CATALOG_READY`\n\n"
             "## Current evidence\n\n"
             "entry/login: `build/map01a-entry-canonical-runtime-v1/pc/entry-login.png`, `build/map01a-entry-canonical-runtime-v1/pc/manifest.json`\n"
+            "server select: `build/map01a-server-select-runtime-v1/pc/server-select.png`, `build/map01a-server-select-runtime-v1/pc/manifest.json`, `build/map01a-server-select-runtime-v1/mobile/manifest.json`, `build/map01a-server-select-runtime-v1/tablet/manifest.json`\n"
             "five tabs: `build/map01a-spirit-screen-runtime-v1/pc/character-info.png`, `build/map01a-spirit-screen-runtime-v1/pc/bag.png`, `build/map01a-spirit-screen-runtime-v1/pc/bag-search-binh-mau.png`, `build/map01a-spirit-screen-runtime-v1/pc/bag-search-binh-mau-selected.png`, `build/map01a-spirit-screen-runtime-v1/pc/skills-default.png`, `build/map01a-spirit-screen-runtime-v1/pc/skills.png`, `build/map01a-spirit-screen-runtime-v1/pc/potential-default.png`, `build/map01a-spirit-screen-runtime-v1/pc/potential.png`, `build/map01a-spirit-screen-runtime-v1/pc/spirit-pet.png`, `build/map01a-spirit-screen-runtime-v1/pc/manifest.json`\n"
             "route: `build/map01a-completion-copy-runtime-v2/01-arrival-q01.bmp`, `build/map01a-completion-copy-runtime-v2/18-q09-portal-open.bmp`, `build/map01a-completion-copy-runtime-v2/manifest.json`\n"
             "menu: `build/map01a-modal-input-runtime-v1/menu.png`, `build/map01a-modal-input-runtime-v1/manifest.json`\n"
@@ -83,6 +87,17 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "captureScope": "map01a-entry-login",
         })
         (root / "build/map01a-entry-canonical-runtime-v1/pc/entry-login.png").write_bytes(b"png")
+        for manifest_rel, png_rel, width, height in validator.SERVER_SELECT_EVIDENCE:
+            write_json(root / manifest_rel, {
+                "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
+                "captureScope": "map01a-server-select",
+                "serverSelectOverlayExpected": True,
+                "usesOsMouseOrKeyboard": False,
+                "width": width,
+                "height": height,
+                "frame": "server-select.png",
+            })
+            (root / png_rel).write_bytes(b"png")
         write_json(root / validator.HUB_MANIFEST, {
             "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
             "usesOsMouseOrKeyboard": False,
@@ -172,6 +187,17 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             violations = validator.validate_root(Path(temp))
 
         self.assertTrue(any("frames" in item for item in violations), violations)
+
+    def test_rejects_server_select_profile_with_wrong_dimensions(self) -> None:
+        with self._fixture() as temp:
+            manifest = Path(temp) / "build/map01a-server-select-runtime-v1/mobile/manifest.json"
+            data = json.loads(manifest.read_text())
+            data["height"] = 900
+            write_json(manifest, data)
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("server select: expected 1600x720" in item for item in violations), violations)
 
     def test_rejects_route_evidence_hidden_by_inventory_overlay(self) -> None:
         with self._fixture() as temp:

@@ -7,6 +7,8 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud
     {
         private VisualElement _entryOverlay;
+        private VisualElement _entryPanel;
+        private VisualElement _entryControlCard;
         private Label _entryStatus;
         private TextField _entryAccountField, _entryPasswordField;
         private VisualElement _entryRememberMark;
@@ -69,13 +71,13 @@ namespace LinhGioi.UI
             ApplyLgoSoftGlow(panelGlow, .24f);
             _entryOverlay.Add(panelGlow);
 
-            var panel = new VisualElement { name = "Map01A Entry Panel" };
-            ApplyLgoEntryShell(panel);
-            _entryOverlay.Add(panel);
+            _entryPanel = new VisualElement { name = "Map01A Entry Panel" };
+            ApplyLgoEntryShell(_entryPanel);
+            _entryOverlay.Add(_entryPanel);
 
             var brandCrest = new VisualElement { name = "Map01A Entry Brand Crest", pickingMode = PickingMode.Ignore };
             ApplyLgoEntryBrandCrest(brandCrest, _scene.GetMap01AHudIconSprite("crest"));
-            panel.Add(brandCrest);
+            _entryPanel.Add(brandCrest);
 
             var logo = new Label("LINH GIỚI") { name = "Map01A Entry Logo" };
             RuntimeUiTypography.ApplyHeadingFont(logo);
@@ -84,7 +86,7 @@ namespace LinhGioi.UI
             logo.style.color = new Color(.96f, .98f, 1f, .98f);
             logo.style.unityTextAlign = TextAnchor.MiddleCenter;
             logo.style.marginTop = -8;
-            panel.Add(logo);
+            _entryPanel.Add(logo);
 
             var logoOnline = new Label("O  N  L  I  N  E") { name = "Map01A Entry Logo Online" };
             logoOnline.style.fontSize = 14;
@@ -93,16 +95,16 @@ namespace LinhGioi.UI
             logoOnline.style.unityTextAlign = TextAnchor.MiddleCenter;
             logoOnline.style.marginTop = -8;
             logoOnline.style.marginBottom = 4;
-            panel.Add(logoOnline);
+            _entryPanel.Add(logoOnline);
 
             var subtitle = LgoSubtitleLabel("Kiếm trong tay — Chính nghĩa trong lòng", 16, TextAnchor.MiddleCenter);
             subtitle.name = "Map01A Entry Subtitle";
             subtitle.style.marginBottom = 4;
-            panel.Add(subtitle);
+            _entryPanel.Add(subtitle);
 
-            var controlCard = new VisualElement { name = "Map01A Entry Control Card" };
-            ApplyLgoEntryControlCard(controlCard);
-            panel.Add(controlCard);
+            _entryControlCard = new VisualElement { name = "Map01A Entry Control Card" };
+            ApplyLgoEntryControlCard(_entryControlCard);
+            _entryPanel.Add(_entryControlCard);
 
             _entryAccountField = MakeEntryField("Map01A Entry Account Field", "Tài khoản / Email / Số điện thoại", "account", false);
             _entryPasswordField = MakeEntryField("Map01A Entry Password Field", "Mật khẩu", "lock", true);
@@ -116,9 +118,9 @@ namespace LinhGioi.UI
                 else PlayerPrefs.SetString(RememberedAccountKey, evt.newValue.Trim());
                 PlayerPrefs.Save();
             });
-            controlCard.Add(_entryAccountField);
-            controlCard.Add(_entryPasswordField);
-            controlCard.Add(MakeEntryAuthOptions());
+            _entryControlCard.Add(_entryAccountField);
+            _entryControlCard.Add(_entryPasswordField);
+            _entryControlCard.Add(MakeEntryAuthOptions());
 
             var authActions = new VisualElement { name = "Map01A Entry Auth Actions" };
             authActions.style.flexDirection = FlexDirection.Row;
@@ -149,7 +151,7 @@ namespace LinhGioi.UI
             register.style.flexGrow = 1;
             authActions.Add(login);
             authActions.Add(register);
-            controlCard.Add(authActions);
+            _entryControlCard.Add(authActions);
 
             var serverCard = new VisualElement { name = "Map01A Entry Server Card" };
             ApplyLgoEntryServerCard(serverCard);
@@ -164,19 +166,23 @@ namespace LinhGioi.UI
             serverState.style.flexShrink = 0;
             serverState.style.minWidth = 76;
             serverState.style.marginRight = 8;
-            var serverSwitch = new Button { name = "Map01A Entry Server Switch", text = "›" };
-            ApplyLgoEntrySecondaryAction(serverSwitch, minWidth: 40);
+            var serverSwitch = new Button(() => OpenServerSelect(ServerSelectReturnTarget.Entry))
+            {
+                name = "Map01A Entry Server Switch",
+                text = "›"
+            };
+            ApplyLgoEntryServerSwitchAction(serverSwitch);
             serverSwitch.style.fontSize = 24;
             serverSwitch.style.paddingLeft = serverSwitch.style.paddingRight = 8;
             serverCard.Add(serverIcon);
             serverCard.Add(serverName);
             serverCard.Add(serverState);
             serverCard.Add(serverSwitch);
-            controlCard.Add(serverCard);
+            _entryControlCard.Add(serverCard);
 
             _entryStatus = new Label("Sẵn sàng kết nối tới máy chủ Đông Lâm.") { name = "Map01A Entry Safety Note" };
             ApplyLgoEntryStatusLine(_entryStatus);
-            controlCard.Add(_entryStatus);
+            _entryControlCard.Add(_entryStatus);
 
             _root.Add(_entryOverlay);
             UpdateEntryScreen();
@@ -291,6 +297,7 @@ namespace LinhGioi.UI
         public static bool ShouldShowEntryOnLaunchForArgs(string[] args, bool sceneIsCapturing)
         {
             if (Array.IndexOf(args, "--lgo-map01a-skip-entry") >= 0) return false;
+            if (Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0) return true;
             if (Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0) return false;

@@ -63,6 +63,9 @@ namespace LinhGioi.UI
         private const string LgoEntryControlCardClass = "lgo-entry-control-card";
         private const string LgoEntryServerCardClass = "lgo-entry-server-card";
         private const string LgoEntryStatusLineClass = "lgo-entry-status-line";
+        private const string LgoServerSelectPanelClass = "lgo-server-select-panel";
+        private const string LgoServerSelectCardClass = "lgo-server-select-card";
+        private const string LgoServerSelectActionClass = "lgo-server-select-action";
         private const string LgoCharacterSelectProfileClass = "lgo-character-select-profile";
         private const string LgoCharacterSelectEmptySlotClass = "lgo-character-select-empty-slot";
         private const string LgoMenuActionClass = "lgo-menu-action";
@@ -726,6 +729,64 @@ namespace LinhGioi.UI
             label.style.unityTextAlign = TextAnchor.MiddleLeft;
             label.style.paddingLeft = 6;
             label.style.paddingRight = 6;
+        }
+
+        private static void ApplyLgoEntryServerSwitchAction(Button button)
+        {
+            button.AddToClassList(LgoEntrySecondaryActionClass);
+            ApplyLgoButton(button);
+            button.style.flexGrow = 0;
+            button.style.minWidth = 40;
+            button.style.minHeight = 34;
+            button.style.paddingLeft = button.style.paddingRight = 8;
+            button.style.fontSize = 24;
+            button.style.opacity = 1;
+        }
+
+        private static void ApplyLgoServerSelectPanel(VisualElement panel)
+        {
+            panel.AddToClassList(LgoServerSelectPanelClass);
+            ApplyLgoEntryControlCard(panel);
+            panel.style.minHeight = 360;
+            panel.style.paddingLeft = panel.style.paddingRight = 28;
+            panel.style.paddingTop = 22;
+            panel.style.paddingBottom = 20;
+        }
+
+        private static void ApplyLgoServerSelectCard(Button card)
+        {
+            card.AddToClassList(LgoServerSelectCardClass);
+            ApplyLgoButton(card);
+            card.style.position = Position.Relative;
+            card.style.flexDirection = FlexDirection.Row;
+            card.style.alignItems = Align.Center;
+            card.style.flexGrow = 0;
+            card.style.height = 112;
+            card.style.marginTop = 18;
+            card.style.marginBottom = 12;
+            card.style.paddingLeft = 18;
+            card.style.paddingRight = 18;
+            card.style.backgroundColor = new Color(.015f, .20f, .48f, .96f);
+            card.style.borderTopWidth = card.style.borderBottomWidth = 2;
+            card.style.borderLeftWidth = card.style.borderRightWidth = 2;
+            card.style.borderTopColor = card.style.borderBottomColor = new Color(.32f, .80f, 1f, .98f);
+            card.style.borderLeftColor = card.style.borderRightColor = UiGold;
+        }
+
+        private static void ApplyLgoServerSelectAction(Button button, bool primary)
+        {
+            button.AddToClassList(LgoServerSelectActionClass);
+            ApplyLgoEntryAuthAction(button, primary);
+            button.style.flexGrow = 1;
+            button.style.flexBasis = 0;
+            button.style.minWidth = 0;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+            if (primary)
+            {
+                button.style.backgroundColor = new Color(.84f, .58f, .18f, .98f);
+                button.style.borderTopColor = button.style.borderBottomColor = new Color(1f, .86f, .50f, .98f);
+                button.style.color = new Color(.13f, .08f, .025f, 1f);
+            }
         }
 
         private static VisualElement CreateLgoEntryIcon(string name, Sprite sprite, float size)

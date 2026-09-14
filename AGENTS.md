@@ -2,6 +2,14 @@
 
 This repository uses persistent continuous-work mode. Read this file before making changes.
 
+## Operational goal lock — owner override 2026-09-14
+
+- Goal hiện hành lấy từ mục `Active` đầu tiên trong `docs/execution/NEXT-ACTION.md` và phần owner lock đầu `docs/execution/PROJECT-STATE.md`. Mọi objective/autopilot prompt cũ còn nhắc class, pose, wardrobe hoặc source art đã bị owner thay thế và không được dùng để chọn việc tiếp theo.
+- Scope hiện hành là hoàn thiện Map01A và các UI screen 2D theo design-first. Entry, Character Select và Chọn máy chủ đã khóa; screen active duy nhất là `Đăng ký`, sau đó mới tới `Quên mật khẩu`. Không resume class/pose/wardrobe/source, không chạy class Player/capture loop và không rollback class code.
+- Mỗi screen đi qua một pipeline duy nhất: `scenario/state/interaction → một canonical design → asset/provenance/pixel budget → implementation plan → shared shell/base → hierarchy/layout → data/action → PC/mobile landscape/tablet Player evidence → visual audit → test/frozen audit → checkpoint`. Không bỏ bước hoặc xen screen khác.
+- Nếu canonical chưa đạt thì sửa design theo một batch; nếu runtime lệch canonical thì gom toàn bộ sai lệch theo layout tổng/vùng lớn trước khi sửa. Không vi chỉnh vài pixel rồi build/capture lặp lại, không dùng test xanh thay cho review bằng mắt và không gọi hoàn thành khi visual còn xa design.
+- Canonical design phải dùng đúng kích thước mục tiêu hoặc asset budget bằng kích thước hiển thị thật có dự phòng mật độ cần thiết; tối ưu dung lượng/import/atlas theo vòng đời tải. Icon, portrait, item art bàn giao phải là asset thật có provenance, không dùng emoji/glyph/wireframe/placeholder.
+
 ## Base/không gian 2D — owner lock 2026-09-11
 
 - Trước thay/new asset, rig, animation hoặc layout, đọc mục “Kiểm soát kích thước và tọa độ” trong `docs/art/LGO-CLASS-2D-MODULE-STANDARD-v1.0.md`. Dùng công thức/profile chung; không normalize từng item/pose hoặc dùng offset runtime để che source chưa đăng ký.

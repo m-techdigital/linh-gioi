@@ -87,7 +87,14 @@ REQUIRED_SKIN_MARKERS = [
     "field.AddToClassList(LgoEntryTextFieldClass)",
     "ApplyLgoTextFieldInnerFrame",
     "ApplyLgoEntrySecondaryAction",
+    "ApplyLgoEntryServerSwitchAction",
     "ApplyLgoEntrySideAction",
+    "LgoServerSelectPanelClass",
+    "LgoServerSelectCardClass",
+    "LgoServerSelectActionClass",
+    "ApplyLgoServerSelectPanel",
+    "ApplyLgoServerSelectCard",
+    "ApplyLgoServerSelectAction",
     "ApplyLgoCharacterSelectPanel",
     "ApplyLgoCharacterSelectProfile",
     "ApplyLgoCharacterSelectEmptySlot",
@@ -163,8 +170,8 @@ REQUIRED_PARTIAL_MARKERS = {
         "private const float InventoryGridCellBasisPercent",
     ],
     "CongDongLamArrivalHud.Entry.cs": [
-        "ApplyLgoEntryShell(panel)",
-        "ApplyLgoEntryControlCard(controlCard)",
+        "ApplyLgoEntryShell(_entryPanel)",
+        "ApplyLgoEntryControlCard(_entryControlCard)",
         "ApplyLgoEntryBrandCrest(brandCrest",
         "AttachLgoEntryFieldIcon(field",
         "AttachLgoEntrySideActionIcon(button",
@@ -175,7 +182,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoEntryTextField(field)",
         "ApplyLgoEntryAuthAction(login, true)",
         "ApplyLgoEntryAuthAction(register, false)",
-        "ApplyLgoEntrySecondaryAction(serverSwitch",
+        "ApplyLgoEntryServerSwitchAction(serverSwitch",
         "ApplyLgoEntrySecondaryAction(forgot",
         "ApplyLgoEntrySideAction(button)",
         "Map01A Entry Side Action ",
@@ -191,6 +198,16 @@ REQUIRED_PARTIAL_MARKERS = {
         "Map01A Character Select Enter Game",
         "Map01A Character Empty Slot \" + index",
         "UpdateHudShellVisibility()",
+    ],
+    "CongDongLamArrivalHud.ServerSelect.cs": [
+        "Map01A Server Select Overlay",
+        "ApplyLgoServerSelectPanel(_serverSelectOverlay)",
+        "ApplyLgoServerSelectCard(server)",
+        "ApplyLgoServerSelectAction(back, false)",
+        "ApplyLgoServerSelectAction(confirm, true)",
+        "S1 · Đông Lâm",
+        "ServerSelectReturnTarget.Entry",
+        "ServerSelectReturnTarget.CharacterSelect",
     ],
     "CongDongLamArrivalHud.Inventory.cs": [
         "_inventoryDetailPanel = InventoryPanel(\"Map01A Inventory Detail Panel\")",
@@ -248,6 +265,9 @@ REQUIRED_PARTIAL_MARKERS = {
 }
 
 REQUIRED_AGENT_MARKERS = [
+    "Mọi objective/autopilot prompt cũ còn nhắc class, pose, wardrobe hoặc source art đã bị owner thay thế",
+    "screen active duy nhất",
+    "scenario/state/interaction → một canonical design → asset/provenance/pixel budget → implementation plan",
     "UI/UX cùng pattern phải dùng shared base/skin/helper",
     "không giữ hai hệ UI song song",
     "entry/login, character select, inventory/bag, character info, storage/chest và item-detail phải dùng cùng shell/shared component",
@@ -273,6 +293,8 @@ REQUIRED_TEST_MARKERS = [
     "lgo-entry-password-reveal",
     "CharacterSelectUsesOneSavedProfileAndNeverMutatesClassSelection",
     "Selecting the saved profile must never cycle class/pose review source",
+    "ServerSelectUsesOneRealServerAndReturnsToItsOpeningScreen",
+    "Selecting a server must not mutate class, pose, wardrobe or gameplay source state",
 ]
 
 

@@ -90,6 +90,11 @@ namespace LinhGioi.Tests.EditMode
                 "Character select capture must not advance the quest capture route.");
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(characterArgs, sceneIsCapturing: true), Is.False,
                 "Character select capture should open character modal directly instead of stacking over entry login.");
+            var serverArgs = new[] { "LinhGioiOnline", "--lgo-map01a-server-select-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(serverArgs), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(serverArgs), Is.False);
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(serverArgs, sceneIsCapturing: true), Is.True,
+                "Server select capture reuses the Entry scene layers while replacing only its control card.");
             var menuArgs = new[] { "LinhGioiOnline", "--lgo-map01a-menu-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(menuArgs), Is.True);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(menuArgs, sceneIsCapturing: true), Is.False,
@@ -570,6 +575,55 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void ServerSelectUsesOneRealServerAndReturnsToItsOpeningScreen()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("canonical server select test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var openCharacter = typeof(CongDongLamArrivalHud).GetMethod("OpenCharacterSelect", flags);
+                Assert.That(openCharacter, Is.Not.Null);
+                var classBefore = scene.ActiveEquipmentClassId;
+
+                var entrySwitch = root.Q<Button>("Map01A Entry Server Switch");
+                Assert.That(entrySwitch.enabledSelf, Is.True);
+                InvokeBoundButton(entrySwitch);
+
+                var overlay = root.Q("Map01A Server Select Overlay");
+                Assert.That(overlay, Is.Not.Null);
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Query<Button>(className: "lgo-server-select-card").ToList().Count, Is.EqualTo(1));
+                Assert.That(root.Q<Label>("Map01A Server Select Name").text, Is.EqualTo("S1 · Đông Lâm"));
+                Assert.That(root.Q<Label>("Map01A Server Select State").text, Is.EqualTo("Mượt"));
+                Assert.That(root.Q("Map01A Server Select Region Tabs"), Is.Null);
+                Assert.That(root.Q("Map01A Server Select Fake Server"), Is.Null);
+
+                InvokeBoundButton(root.Q<Button>("Map01A Server Select Back"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+
+                openCharacter.Invoke(hud, null);
+                InvokeBoundButton(root.Q<Button>("Map01A Character Select Switch Server"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                InvokeBoundButton(root.Q<Button>("Map01A Server Select Confirm"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(classBefore),
+                    "Selecting a server must not mutate class, pose, wardrobe or gameplay source state.");
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void GameplayHudShowsProductShortcutGateWithoutDeadClicks()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
@@ -813,7 +867,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(serverState.text, Is.EqualTo("● Mượt"));
                 Assert.That(serverState.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap));
                 Assert.That(serverSwitch.text, Is.EqualTo("›"));
-                Assert.That(serverSwitch.enabledSelf, Is.False);
+                Assert.That(serverSwitch.enabledSelf, Is.True);
 
                 var status = root.Q<Label>("Map01A Entry Safety Note");
                 Assert.That(status.ClassListContains("lgo-entry-status-line"), Is.True);

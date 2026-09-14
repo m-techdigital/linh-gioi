@@ -62,11 +62,12 @@ namespace LinhGioi.World
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-co-capture") >= 0
             || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-linh-capture") >= 0;
         private bool CharacterSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
+        private bool ServerSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-server-select-capture") >= 0;
         private bool InventoryTabsCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-inventory-tabs-capture") >= 0;
         private bool CharacterScreenCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-screen-capture") >= 0;
         private bool MenuCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-menu-capture") >= 0;
         public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || ClassCaptureRequested
-            || CharacterSelectCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
+            || CharacterSelectCaptureRequested || ServerSelectCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
             || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
@@ -636,6 +637,7 @@ namespace LinhGioi.World
             || IsMapQuestCaptureForArgs(args)
             || Array.IndexOf(args, "--lgo-map01a-entry-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0
+            || Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-character-screen-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0;
@@ -1657,6 +1659,11 @@ namespace LinhGioi.World
                 yield return CaptureCharacterSelectScreen(args);
                 yield break;
             }
+            if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0)
+            {
+                yield return CaptureServerSelectScreen(args);
+                yield break;
+            }
             if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0)
             {
                 yield return CaptureInventoryTabs(args);
@@ -2343,6 +2350,34 @@ namespace LinhGioi.World
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
                 + "  \"frame\": \"character-select.png\"\n"
+                + "}\n";
+            File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
+            Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
+        }
+
+        private IEnumerator CaptureServerSelectScreen(string[] args)
+        {
+            Application.runInBackground = true;
+            var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
+            if (index < 0 || index + 1 >= args.Length)
+                throw new ArgumentException("Missing Map01A server select capture directory");
+            var directory = args[index + 1];
+            Directory.CreateDirectory(directory);
+            _controller.enabled = false;
+            yield return null;
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var imagePath = Path.Combine(directory, "server-select.png");
+            CaptureScreenPng(imagePath);
+            var status = File.Exists(imagePath) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var manifest = "{\n"
+                + "  \"status\": \"" + status + "\",\n"
+                + "  \"captureScope\": \"map01a-server-select\",\n"
+                + "  \"serverSelectOverlayExpected\": true,\n"
+                + "  \"usesOsMouseOrKeyboard\": false,\n"
+                + "  \"width\": " + Screen.width + ",\n"
+                + "  \"height\": " + Screen.height + ",\n"
+                + "  \"frame\": \"server-select.png\"\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);

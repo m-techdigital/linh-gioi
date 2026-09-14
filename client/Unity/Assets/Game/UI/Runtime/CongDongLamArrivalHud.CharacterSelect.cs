@@ -236,7 +236,7 @@ namespace LinhGioi.UI
             serverName.style.flexGrow = 1;
             serverName.style.whiteSpace = WhiteSpace.NoWrap;
             server.Add(serverName);
-            var switchServer = new Button(() => SetCharacterSelectStatus("Màn Chọn máy chủ đang chờ canonical design riêng."))
+            var switchServer = new Button(() => OpenServerSelect(ServerSelectReturnTarget.CharacterSelect))
             {
                 name = "Map01A Character Select Switch Server",
                 text = "Đổi máy chủ"

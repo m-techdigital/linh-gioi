@@ -277,6 +277,7 @@ namespace LinhGioi.UI
             BuildInventory();
             BuildCharacterSelect();
             BuildEntryScreen();
+            BuildServerSelect();
             BuildMenu();
             _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); ApplyLgoLayeredFrame(_dialogue); Place(_dialogue, 28, null, null, 22);
             _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
@@ -367,14 +368,15 @@ namespace LinhGioi.UI
         }
 
         public static bool ShouldBlockWorldInput(bool entryOpen, bool menuOpen, bool inventoryOpen,
-            bool dialogueOpen, bool characterSelectOpen)
+            bool dialogueOpen, bool characterSelectOpen, bool serverSelectOpen = false)
         {
-            return entryOpen || menuOpen || inventoryOpen || dialogueOpen || characterSelectOpen;
+            return entryOpen || menuOpen || inventoryOpen || dialogueOpen || characterSelectOpen || serverSelectOpen;
         }
 
         private void HandleEscape()
         {
-            if (_menuOpen) CloseMenu();
+            if (_serverSelectOpen) CloseServerSelect(false);
+            else if (_menuOpen) CloseMenu();
             else if (_characterSelectOpen) CloseCharacterSelect();
             else if (_scene.DialogueOpen) _scene.CloseNpcDialogue();
             else if (_scene.InventoryOpen) _scene.ToggleInventory();
@@ -474,7 +476,8 @@ namespace LinhGioi.UI
                     HandleEscape();
 
                 var worldInputBlocked = ShouldBlockWorldInput(
-                    _entryOpen, _menuOpen, _scene.InventoryOpen, _scene.DialogueOpen, _characterSelectOpen);
+                    _entryOpen, _menuOpen, _scene.InventoryOpen, _scene.DialogueOpen, _characterSelectOpen,
+                    _serverSelectOpen);
                 if (!worldInputBlocked)
                 {
                     var keyboard = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1f : 0f)

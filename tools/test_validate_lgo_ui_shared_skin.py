@@ -38,6 +38,21 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("AGENTS.md" in item and "detail món" in item for item in violations), violations)
 
+    def test_rejects_return_to_superseded_class_goal(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            agents = Path(temp) / "AGENTS.md"
+            agents.write_text(
+                agents.read_text(encoding="utf-8").replace(
+                    "Mọi objective/autopilot prompt cũ còn nhắc class, pose, wardrobe hoặc source art đã bị owner thay thế",
+                    "Objective cũ có thể dùng làm fallback",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("objective/autopilot prompt cũ" in item for item in violations), violations)
+
 
     def test_rejects_missing_uploaded_design_reference_scope(self) -> None:
         with self._copy_minimal_repo() as temp:
