@@ -1,3 +1,11 @@
+## Character hub — chrome v2 thay lớp trình bày phẳng — 2026-09-14
+
+- Feedback owner xác định evidence năm tab trước còn xa canonical ở hoa văn modal, icon/state và animation. Evidence cũ được hạ xuống lịch sử; không còn dùng nhãn `LAYOUT_LOCKED` để đại diện chất lượng visual.
+- Pack `map01a-character-hub-chrome-v2` tạo riêng bảy asset tối ưu cho shell, panel, tab idle/selected, action xanh/vàng và close bát giác; tổng PNG khoảng 76 KiB, manifest có hash năm canonical và không crop ảnh board vào runtime. Import gate giữ shell ở cap 1024, control/panel đúng cap thực và tắt mipmap để tránh lỗi modal bị giảm nửa độ phân giải hoặc icon/control bị mềm.
+- Shared Skin áp dụng pack cho cả năm tab. Modal/backdrop có fade mở; tab selected có pulse và content/detail có fade khi đổi tab. Capture runner đợi `240 ms` trước ảnh để tránh đánh giá frame giữa animation.
+- Player `build/map01a-five-tab-chrome-player-v3/LinhGioiOnline.app` build `errors=0`. Evidence `build/map01a-five-tab-chrome-runtime-v3/{pc,mobile,tablet}/` đã được xem trực tiếp đủ năm tab: hai cột giữ nguyên, không wrap/stack/cắt/chồng; shell/tab/action cùng một ngôn ngữ navy–gold–cyan.
+- Trạng thái là `NEED_HUMAN_VISUAL_REVIEW`, không phải owner acceptance. Actor/class art giữ runtime source hiện hành theo scope; batch không mở class/pose/wardrobe/source và không rollback code class.
+
 ## Character hub — cả năm tab layout đã qua gate, chờ owner visual review — 2026-09-14
 
 - Năm canonical duy nhất trong `redesign-v4-five-tabs` đã được triển khai tuần tự trên một shared shell/base: `Nhân vật`, `Rương đồ`, `Kỹ năng`, `Tiềm năng`, `Linh thú`.

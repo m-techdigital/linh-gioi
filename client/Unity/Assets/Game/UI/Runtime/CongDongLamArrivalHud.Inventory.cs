@@ -21,6 +21,7 @@ namespace LinhGioi.UI
         private Label _healthPotionName, _healthPotionCount, _healthPotionState, _manaPotionName, _manaPotionCount, _manaPotionState, _classRewardName, _classRewardCount, _classRewardState;
         private UnityEngine.UIElements.ProgressBar _characterHeroHealth, _characterHeroMana;
         private bool _characterInfoOpen, _suppliesOpen;
+        private bool _inventoryWasOpen;
         private string _inventoryCategory = "all";
         private string _inventorySearchQuery = string.Empty;
         private string _selectedSupplyItemId = "health_potion";
@@ -144,6 +145,7 @@ namespace LinhGioi.UI
             _inventoryBackdrop.style.display = DisplayStyle.None;
             _inventory = new VisualElement { name = "Map01A Inventory" };
             ApplyLgoCharacterHubShell(_inventory); Place(_inventory, 72, 72, 86, 72);
+            RuntimeUiTypography.ApplyBodyFont(_inventory);
             _inventory.style.flexDirection = FlexDirection.Column;
             _inventory.style.paddingLeft = _inventory.style.paddingRight = 12;
             _inventory.style.paddingTop = _inventory.style.paddingBottom = 12;
@@ -318,7 +320,7 @@ namespace LinhGioi.UI
             ApplyLgoCharacterHubPrimaryAction(_inventoryDetailPrimaryAction);
             _inventoryDetailPrimaryAction.style.minHeight = _touch ? 44 : 38;
             _inventoryDetailLockAction = InventoryButton(ToggleSelectedEquipmentLock, "Map01A Inventory Detail Lock Action", "Khóa");
-            ApplyLgoButton(_inventoryDetailLockAction, true);
+            ApplyLgoCharacterHubGoldAction(_inventoryDetailLockAction);
             _inventoryDetailSellAction = InventoryButton(() => { }, "Map01A Inventory Detail Sell Action", "Bán");
             ApplyLgoButton(_inventoryDetailSellAction);
             _inventoryDetailSellAction.SetEnabled(false);
@@ -795,7 +797,15 @@ namespace LinhGioi.UI
             _inventoryFooter.style.display = DisplayStyle.Flex;
             _inventoryDetailSellAction.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
             ApplyHubMainTabSelection(null, characterInfo, !characterInfo);
+            AnimateLgoCharacterHubSwap(characterInfo ? _inventoryHeroPanel : _inventoryGridPanel);
+            AnimateLgoCharacterHubSwap(_inventoryDetailPanel);
             RefreshInventoryDetailCard();
+        }
+
+        private void UpdateCharacterHubOpenAnimation(bool isOpen)
+        {
+            if (isOpen && !_inventoryWasOpen) AnimateLgoCharacterHubOpen(_inventory, _inventoryBackdrop);
+            _inventoryWasOpen = isOpen;
         }
 
         private void RefreshInventoryModalHeader()

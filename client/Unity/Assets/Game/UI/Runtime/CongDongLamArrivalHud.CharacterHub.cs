@@ -550,15 +550,19 @@ namespace LinhGioi.UI
                     : "Linh thú đồng hành, kỹ năng hỗ trợ và mức thân mật";
             ApplyHubMainTabSelection(mode);
             ShowHubDetail(mode);
+            AnimateLgoCharacterHubSwap(mode == CharacterHubMode.Skills
+                ? _skillsPanel
+                : mode == CharacterHubMode.Potential ? _potentialPanel : _spiritPetPanel);
+            AnimateLgoCharacterHubSwap(_hubPreviewDetailPanel);
         }
 
         private void ApplyHubMainTabSelection(CharacterHubMode? previewMode = null, bool character = false, bool storage = false)
         {
-            ApplyLgoSelectedTab(_characterInfoTab, character);
-            ApplyLgoSelectedTab(_bagTab, storage);
-            ApplyLgoSelectedTab(_skillsTab, previewMode == CharacterHubMode.Skills);
-            ApplyLgoSelectedTab(_potentialTab, previewMode == CharacterHubMode.Potential);
-            ApplyLgoSelectedTab(_spiritPetTab, previewMode == CharacterHubMode.SpiritPet);
+            ApplyLgoCharacterHubTabState(_characterInfoTab, character);
+            ApplyLgoCharacterHubTabState(_bagTab, storage);
+            ApplyLgoCharacterHubTabState(_skillsTab, previewMode == CharacterHubMode.Skills);
+            ApplyLgoCharacterHubTabState(_potentialTab, previewMode == CharacterHubMode.Potential);
+            ApplyLgoCharacterHubTabState(_spiritPetTab, previewMode == CharacterHubMode.SpiritPet);
         }
 
         private void SelectSkillNode(string nodeName, string title, string level, string iconId)

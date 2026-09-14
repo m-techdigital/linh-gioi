@@ -179,6 +179,18 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("ApplyLgoCharacterHubShell(_inventory)" in item for item in violations), violations)
 
+    def test_rejects_character_hub_that_drops_shared_chrome_or_motion(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            skin = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+            skin.write_text(
+                skin.read_text(encoding="utf-8").replace("ApplyLgoCharacterHubPanelSurface", "ApplyFlatPanelSurface"),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoCharacterHubPanelSurface" in item for item in violations), violations)
+
     def test_rejects_hud_action_buttons_that_skip_shared_skin(self) -> None:
         with self._copy_minimal_repo() as temp:
             hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"

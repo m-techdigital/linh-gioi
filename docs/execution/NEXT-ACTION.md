@@ -1,4 +1,4 @@
-## Active — NEED_HUMAN_VISUAL_REVIEW: character hub năm tab — 2026-09-14
+## Active — NEED_HUMAN_VISUAL_REVIEW: character hub chrome v2 — 2026-09-14
 
 `OPERATIONAL_GOAL_CURRENT`. Đây là goal duy nhất được dùng để chọn công việc trong worktree này. Goal class/pose/wardrobe/source trước đây đã bị owner loại khỏi scope; không được resume, build, capture hoặc dùng làm fallback. Không rollback code class hiện có.
 
@@ -13,12 +13,12 @@ Năm tab cấp cao dùng một shared shell/base:
 4. `Tiềm năng`
 5. `Linh thú`
 
-Shared layout tổng và cả năm tab đã qua gate kỹ thuật/visual nội bộ theo đúng thứ tự. Evidence cuối cho `Linh thú`: `build/map01a-spirit-layout-runtime-v1/{pc,mobile,tablet}/`; evidence từng screen được trỏ trong UI review catalog. Gate hiện tại là owner xem Player/evidence của năm layout trước khi mở screen ngoài character hub.
+Feedback owner mới nhất bác bỏ lớp trình bày phẳng của evidence cũ. Shared chrome v2 đã thay lớp modal bằng asset riêng có provenance: khung vàng nhiều lớp, hoa văn nền shell/panel, tab idle/selected, action xanh/vàng, close bát giác và animation mở/đổi tab. Cả năm tab đã được capture lại sau thời gian settle tại `build/map01a-five-tab-chrome-runtime-v3/{pc,mobile,tablet}/`; đây là evidence duy nhất cho review hiện tại.
 
 ### Gate kế tiếp
 
-- Owner review lần lượt `Nhân vật → Rương đồ → Kỹ năng → Tiềm năng → Linh thú` bằng evidence hiện hành hoặc Player cuối `build/map01a-spirit-layout-player-v1/LinhGioiOnline.app`.
-- Nếu có feedback, sửa đúng screen có evidence; không mở lại screen đã khóa chỉ vì khác dữ liệu/art mà contract hiện hành chưa sở hữu.
+- Owner review lần lượt `Nhân vật → Rương đồ → Kỹ năng → Tiềm năng → Linh thú` bằng evidence chrome v2 hoặc Player `build/map01a-five-tab-chrome-player-v3/LinhGioiOnline.app`.
+- Nếu có feedback, gom sai lệch theo shell → tab → hai cột → nội vùng → typography/icon rồi sửa thành một batch; không quay lại chỉnh rời từng pixel.
 - Không chuyển Login/HUD/NPC hoặc phần UI tiếp theo trước review này. Không resume class/pose/wardrobe/source và không rollback code class.
 
 ### Gate đã đạt
@@ -29,5 +29,6 @@ Shared layout tổng và cả năm tab đã qua gate kỹ thuật/visual nội b
 - `python3.12 tools/validate_2d_branch_no_source_images.py`.
 - Frozen diff audit đối với `protocol/**`, `gamedata/schemas/**`, `docs/adr/**`, `client/Unity/Assets/Game/UI/design-tokens.json`.
 - Player từng batch đã build; mỗi screen có capture PC `1600×900`, mobile landscape `1600×720`, tablet `1024×768` và đã được xem trực tiếp.
+- Chrome v2 dùng bảy texture runtime tổng khoảng 76 KiB, không crop canonical board; validator khóa đủ pack, shared helper, animation marker và import policy không mipmap/không downscale shell.
 
 Không chuyển sang Login, HUD, NPC, class, pose, wardrobe hoặc source trong batch này.

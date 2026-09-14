@@ -5,6 +5,7 @@ from pathlib import Path
 import sys
 import hashlib
 import json
+import re
 import struct
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -160,12 +161,29 @@ RUNTIME_ART_PACKS = [
     },
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin',
-        'id': 'map01a-character-hub-surface-v1',
+        'id': 'map01a-character-hub-chrome-v2',
         'status': 'DRAFT_RUNTIME_REVIEW',
-        'assets': {'character-hub-surface.png': (512, 512, 'ui-modal-surface')},
-        'generators': {'deterministic_svg_raster'},
-        'max_bytes': 320_000,
-        'status_error': 'Map01A character-hub surface must remain draft until owner Player visual review',
+        'assets': {
+            'character-hub-surface.png': (1024, 676, 'ui-modal-surface'),
+            'character-hub-panel-surface.png': (512, 512, 'ui-panel-surface'),
+            'character-hub-tab-idle.png': (320, 72, 'ui-tab-idle'),
+            'character-hub-tab-selected.png': (320, 72, 'ui-tab-selected'),
+            'character-hub-action-blue.png': (384, 72, 'ui-action-blue'),
+            'character-hub-action-gold.png': (384, 72, 'ui-action-gold'),
+            'character-hub-close.png': (96, 96, 'ui-close-frame'),
+        },
+        'generators': {'build_lgo_character_hub_skin'},
+        'ui_import_limits': {
+            'character-hub-surface.png': 1024,
+            'character-hub-panel-surface.png': 512,
+            'character-hub-tab-idle.png': 512,
+            'character-hub-tab-selected.png': 512,
+            'character-hub-action-blue.png': 512,
+            'character-hub-action-gold.png': 512,
+            'character-hub-close.png': 128,
+        },
+        'max_bytes': 750_000,
+        'status_error': 'Map01A character-hub chrome must remain draft until owner Player visual review',
     },
     {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/DongMonIllustrated',
@@ -277,6 +295,13 @@ def _validate_runtime_pack(root: Path, spec: dict[str, object]) -> set[str]:
                 or raw[:8] != b'\x89PNG\r\n\x1a\n'
                 or struct.unpack('>II', raw[16:24]) != (w, h)):
             raise ValueError('Invalid provenance/hash/PNG budget: ' + entry['path'])
+    import_limits = spec.get('ui_import_limits', {})
+    for name, max_size in import_limits.items():
+        meta = root / pack / (name + '.meta')
+        content = meta.read_text()
+        limits = [int(value) for value in re.findall(r'^\s*maxTextureSize:\s*(\d+)\s*$', content, re.MULTILINE)]
+        if 'enableMipMap: 0' not in content or not limits or any(value != max_size for value in limits):
+            raise ValueError('Invalid UI texture import policy: ' + pack + '/' + name)
     return set(expected)
 
 

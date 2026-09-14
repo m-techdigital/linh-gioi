@@ -56,13 +56,36 @@ class RuntimeArtGuardTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             runtime_allowlist(self.root)
 
-    def test_character_hub_surface_is_allowed_only_with_registered_manifest(self):
+    def test_character_hub_chrome_pack_is_allowed_only_with_registered_manifest(self):
         pack = 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin'
         shutil.copytree(ROOT / pack, self.root / pack)
 
         allowed = runtime_allowlist(self.root)
 
-        self.assertIn(f'{pack}/character-hub-surface.png', allowed)
+        expected = {
+            'character-hub-surface.png',
+            'character-hub-panel-surface.png',
+            'character-hub-tab-idle.png',
+            'character-hub-tab-selected.png',
+            'character-hub-action-blue.png',
+            'character-hub-action-gold.png',
+            'character-hub-close.png',
+        }
+        self.assertEqual({f'{pack}/{name}' for name in expected}, {path for path in allowed if path.startswith(pack)})
+
+    def test_character_hub_chrome_rejects_mipmaps_or_downscaled_shell(self):
+        pack = 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin'
+        shutil.copytree(ROOT / pack, self.root / pack)
+        meta = self.root / pack / 'character-hub-surface.png.meta'
+        original = meta.read_text()
+
+        meta.write_text(original.replace('enableMipMap: 0', 'enableMipMap: 1', 1))
+        with self.assertRaisesRegex(ValueError, 'Invalid UI texture import policy'):
+            runtime_allowlist(self.root)
+
+        meta.write_text(original.replace('maxTextureSize: 1024', 'maxTextureSize: 512'))
+        with self.assertRaisesRegex(ValueError, 'Invalid UI texture import policy'):
+            runtime_allowlist(self.root)
 
     def test_reference_or_path_escape_is_rejected(self):
         p = self.root / PACK / 'manifest.json'

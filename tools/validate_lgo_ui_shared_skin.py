@@ -15,7 +15,13 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoCharacterHubShell",
     "ApplyLgoCharacterHubTitle",
     "ApplyLgoCharacterHubBackdrop",
+    "ApplyLgoCharacterHubSurface",
+    "ApplyLgoCharacterHubPanelSurface",
+    "ApplyLgoCharacterHubTabState",
     "ApplyLgoCharacterHubPrimaryAction",
+    "ApplyLgoCharacterHubGoldAction",
+    "AnimateLgoCharacterHubOpen",
+    "AnimateLgoCharacterHubSwap",
     "ApplyLgoButton",
     "ApplyLgoInventoryButtonBase",
     "ApplyLgoInventoryPanelShell",
@@ -188,6 +194,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "private const float InventoryDesktopDetailColumnWidth",
         "private const float InventoryDesktopMainColumnWidth",
         "private const float InventoryGridCellBasisPercent",
+        "UpdateCharacterHubOpenAnimation(_scene.InventoryOpen)",
     ],
     "CongDongLamArrivalHud.Entry.cs": [
         "ApplyLgoEntryShell(_entryPanel)",
@@ -299,8 +306,9 @@ REQUIRED_PARTIAL_MARKERS = {
         "InitializeHubInspector(body)",
         "ApplyLgoDetailCard(_hubPreviewDetailPanel)",
         "ApplyLgoDisabledAction(action)",
-        "ApplyLgoSelectedTab(_characterInfoTab",
-        "ApplyLgoSelectedTab(_bagTab",
+        "ApplyLgoCharacterHubTabState(_characterInfoTab",
+        "ApplyLgoCharacterHubTabState(_bagTab",
+        "AnimateLgoCharacterHubSwap(_hubPreviewDetailPanel)",
     ],
 }
 

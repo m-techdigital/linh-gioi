@@ -542,6 +542,7 @@ namespace LinhGioi.UI
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             if (_inventoryBackdrop != null)
                 _inventoryBackdrop.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
+            UpdateCharacterHubOpenAnimation(_scene.InventoryOpen);
             _quest.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _questTabs.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })

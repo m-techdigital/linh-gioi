@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using UnityEngine.UIElements.Experimental;
 
 namespace LinhGioi.UI
 {
@@ -90,6 +91,28 @@ namespace LinhGioi.UI
         private const string LgoLayeredFrameClass = "lgo-layered-frame";
         private const string LgoFrameCornerClass = "lgo-frame-corner";
         private const string LgoVitalBarClass = "lgo-vital-bar";
+        private const string LgoCharacterHubSkinRoot = "LGOMaps/CongDongLamMap01AUiSkin/";
+        private static Texture2D _characterHubSurface, _characterHubPanelSurface, _characterHubTabIdle,
+            _characterHubTabSelected, _characterHubActionBlue, _characterHubActionGold, _characterHubClose;
+
+        private static Texture2D LoadLgoCharacterHubTexture(ref Texture2D cache, string name)
+        {
+            if (cache == null) cache = Resources.Load<Texture2D>(LgoCharacterHubSkinRoot + name);
+            return cache;
+        }
+
+        private static void ApplyLgoCharacterHubSurface(VisualElement element, ref Texture2D cache, string name)
+        {
+            var texture = LoadLgoCharacterHubTexture(ref cache, name);
+            if (texture == null) return;
+            element.style.backgroundImage = new StyleBackground(texture);
+            element.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
+        }
+
+        private static void ApplyLgoCharacterHubPanelSurface(VisualElement element)
+        {
+            ApplyLgoCharacterHubSurface(element, ref _characterHubPanelSurface, "character-hub-panel-surface");
+        }
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -169,12 +192,7 @@ namespace LinhGioi.UI
             element.style.borderLeftColor = element.style.borderRightColor = new Color(.70f, .48f, .16f, .92f);
             element.style.paddingTop = 0;
             element.style.paddingBottom = 0;
-            var surface = Resources.Load<Texture2D>("LGOMaps/CongDongLamMap01AUiSkin/character-hub-surface");
-            if (surface != null)
-            {
-                element.style.backgroundImage = new StyleBackground(surface);
-                element.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
-            }
+            ApplyLgoCharacterHubSurface(element, ref _characterHubSurface, "character-hub-surface");
         }
 
         private static void ApplyLgoCharacterHubTitle(Label label)
@@ -326,6 +344,7 @@ namespace LinhGioi.UI
             panel.style.paddingLeft = panel.style.paddingRight = 12;
             panel.style.paddingTop = panel.style.paddingBottom = 10;
             panel.style.minWidth = 0;
+            ApplyLgoCharacterHubPanelSurface(panel);
         }
 
         private static void ApplyLgoInventoryButtonBase(Button button, bool touch)
@@ -448,6 +467,21 @@ namespace LinhGioi.UI
             button.style.fontSize = 19;
             button.style.marginRight = 6;
             button.style.whiteSpace = WhiteSpace.NoWrap;
+            ApplyLgoCharacterHubSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
+        }
+
+        private static void ApplyLgoCharacterHubTabState(Button button, bool selected)
+        {
+            ApplyLgoSelectedTab(button, selected);
+            if (selected)
+            {
+                ApplyLgoCharacterHubSurface(button, ref _characterHubTabSelected, "character-hub-tab-selected");
+                button.experimental.animation.Start(
+                    new StyleValues { opacity = .62f },
+                    new StyleValues { opacity = 1f },
+                    150);
+            }
+            else ApplyLgoCharacterHubSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
         }
 
         private static void ApplyLgoInventoryFilterChip(Button button, bool touch)
@@ -487,6 +521,36 @@ namespace LinhGioi.UI
             button.style.borderLeftWidth = button.style.borderRightWidth = 2;
             button.style.borderTopColor = button.style.borderLeftColor = button.style.borderRightColor = new Color(.22f, .82f, 1f, 1f);
             button.style.borderBottomColor = new Color(.98f, .78f, .32f, 1f);
+            ApplyLgoCharacterHubSurface(button, ref _characterHubActionBlue, "character-hub-action-blue");
+        }
+
+        private static void ApplyLgoCharacterHubGoldAction(Button button)
+        {
+            ApplyLgoButton(button, true);
+            ApplyLgoCharacterHubSurface(button, ref _characterHubActionGold, "character-hub-action-gold");
+        }
+
+        private static void AnimateLgoCharacterHubOpen(VisualElement shell, VisualElement backdrop)
+        {
+            if (shell == null) return;
+            shell.experimental.animation.Start(
+                new StyleValues { opacity = .10f },
+                new StyleValues { opacity = 1f },
+                190);
+            if (backdrop != null)
+                backdrop.experimental.animation.Start(
+                    new StyleValues { opacity = 0f },
+                    new StyleValues { opacity = 1f },
+                    160);
+        }
+
+        private static void AnimateLgoCharacterHubSwap(VisualElement element)
+        {
+            if (element == null) return;
+            element.experimental.animation.Start(
+                new StyleValues { opacity = .38f },
+                new StyleValues { opacity = 1f },
+                130);
         }
 
         private static void ApplyLgoEquipmentLevelBadge(Label badge)
@@ -518,6 +582,7 @@ namespace LinhGioi.UI
             button.style.borderLeftWidth = button.style.borderRightWidth = 2;
             button.style.borderTopColor = button.style.borderBottomColor = UiGold;
             button.style.borderLeftColor = button.style.borderRightColor = new Color(.62f, .46f, .22f, .94f);
+            ApplyLgoCharacterHubSurface(button, ref _characterHubClose, "character-hub-close");
         }
 
         private static void ApplyLgoInventoryGridCell(VisualElement cell)

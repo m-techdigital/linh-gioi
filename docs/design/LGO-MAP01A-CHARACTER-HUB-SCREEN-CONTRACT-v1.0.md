@@ -1,7 +1,7 @@
 # Map01A character hub — canonical screen contract v1.0
 
 Ngày khóa: 2026-09-14  
-Trạng thái: **OWNER_APPROVED_DESIGN_SET / FIVE_SCREEN_LAYOUT_LOCKED / OWNER_VISUAL_REVIEW_REQUIRED**
+Trạng thái: **OWNER_APPROVED_DESIGN_SET / CHROME_V2_RUNTIME_REVIEW / OWNER_VISUAL_REVIEW_REQUIRED**
 
 ## Mục đích
 
@@ -14,11 +14,11 @@ Thư mục nguồn đã duyệt:
 
 | Thứ tự | Screen | Canonical design duy nhất | Trạng thái triển khai |
 |---:|---|---|---|
-| 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** |
-| 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** |
-| 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** |
-| 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** |
-| 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | **LAYOUT_LOCKED** |
+| 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **CHROME_V2_REVIEW** |
+| 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **CHROME_V2_REVIEW** |
+| 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **CHROME_V2_REVIEW** |
+| 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | **CHROME_V2_REVIEW** |
+| 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | **CHROME_V2_REVIEW** |
 
 Các demo cũ trong thư mục cha là tài liệu lịch sử. Chúng không được dùng để quyết định layout hoặc mở lại hệ tab/cột cũ.
 
@@ -47,6 +47,13 @@ Tỷ lệ chính: shell `65.7% × 76.9%` canvas; body main/detail là `600/448`,
 | Tablet | `1024 × 768` | Giữ nguyên composition hai cột; căn giữa, phần nền dư thuộc map backdrop |
 
 Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeight`, match `0.5`. Mọi thay đổi dành riêng cho touch chỉ liên quan input/hit state; không được thay hierarchy, thứ tự vùng hoặc tỷ lệ cột của modal.
+
+## Shared chrome v2
+
+- Pack `map01a-character-hub-chrome-v2` sở hữu bảy texture runtime: shell, panel, tab idle/selected, action xanh/vàng và close bát giác. Manifest ghi hash của cả năm canonical và hash từng asset; generator không crop board tham chiếu.
+- Shell dùng nền navy, top rail/diamond, viền old-gold nhiều lớp và corner filigree; các panel nội dung dùng một surface họa tiết chung. Mọi tab và action cùng loại gọi helper trong `CongDongLamArrivalHud.Skin.cs`, không tự dựng skin tại partial.
+- Mở modal fade trong `190 ms`, backdrop `160 ms`; đổi tab/content fade trong `130 ms`, tab selected pulse `150 ms`. Capture evidence phải đợi ít nhất `240 ms` để đánh giá trạng thái ổn định thay vì frame giữa animation.
+- Evidence review hiện hành: `build/map01a-five-tab-chrome-runtime-v3/{pc,mobile,tablet}/`. Player tương ứng: `build/map01a-five-tab-chrome-player-v3/LinhGioiOnline.app`.
 
 ## Contract từng screen
 
@@ -92,4 +99,4 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ## Gate hiện hành
 
-Shared layout và bốn tab đầu đã khóa theo evidence ghi ở trên. Tab `Linh thú` đã qua Player gate tại `build/map01a-spirit-layout-runtime-v1/{pc,mobile,tablet}/`: hero/progress/roster và inspector có rarity/role/deployed badge giữ cùng composition; slot/action chưa có contract vẫn khóa trung thực. Cả năm screen đang chờ owner visual review; không mở screen ngoài hub trước gate này. Không resume class/pose/wardrobe/source và không rollback code class.
+Shared geometry của năm tab giữ đúng contract; feedback owner đã mở lại visual chrome và evidence cũ không còn dùng để claim hoàn thành. Chrome v2 đã được review nội bộ trên đủ ba viewport tại `build/map01a-five-tab-chrome-runtime-v3/{pc,mobile,tablet}/`, không wrap/stack/cắt/chồng và đang chờ owner visual review. Không mở screen ngoài hub trước gate này. Không resume class/pose/wardrobe/source và không rollback code class.
