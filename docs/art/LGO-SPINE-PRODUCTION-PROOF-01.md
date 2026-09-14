@@ -70,10 +70,16 @@ Failure at a phase blocks dependent phases. A compiler PASS, object count or scr
 | Spine skeleton/atlas import evaluation | PASS | official 4.3 export imported without compiler/import errors |
 | Reference Player evaluation | PASS | graphics Player captured base, bag, backpack, remove, restore, combined skin and two walk phases |
 | LGO project integration | BLOCKED | license required before adding Spine Runtimes to `client/Unity` |
+| LGO male source admission | FAIL | only reopenable 12-layer KRA reconstructs the owner-rejected cutout/body authority; `runtimeEligible=false` |
+| LGO female source admission | FAIL | six pose PNGs are `SOURCE_REVIEW_REQUIRED`; no editable layered source exists |
+| Pháp Lv1 source admission | FAIL | active authoring root is `SOURCE_EMPTY_AWAITING_NATIVE_AUTHORING`, `sourceArtifactAccepted=false`, and contains zero garment art files |
+| Existing Unity Pháp atlas | FAIL AS SPINE INPUT | RGBA/alpha is valid, but manifest is `DRAFT_RUNTIME_FIT`, `runtimeEligibleCount=0`, and the assets are static paper-doll parts |
 
-Machine-readable evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json` and `build/lgo-spine-production-proof-01/reference-evaluation.json`. Visual board: `build/lgo-spine-production-proof-01/reference-automated/contact-sheet.png`.
+Machine-readable evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json`, `build/lgo-spine-production-proof-01/reference-evaluation.json` and `build/lgo-spine-production-proof-01/lgo-source-admission.json`. Visual board: `build/lgo-spine-production-proof-01/reference-automated/contact-sheet.png`.
 
-Smallest unblock action: purchase/provision and activate one valid Spine Professional 4.3.x seat on this machine. The activation code must not be pasted into chat, source control, logs or evidence. After activation, use the already verified 4.3 runtime line in `client/Unity`, reproduce the same Player sequence there, then begin authoritative LGO source admission.
+The source-admission precheck was run against the real LGO trees and current Unity Pháp atlases. No LGO asset was admitted into Spine and no LGO Spine Player test was executed. Reusing the old male KRA would restore the body/cutout result already rejected by the owner; treating the current paper-doll atlas as a rig source would only reproduce the stopped static-fit architecture.
+
+The proof now has two independent prerequisites: purchase/provision and activate one valid Spine Professional 4.3.x seat, and supply or author an owner-accepted reopenable layered male/female base plus the Pháp Lv1 sleeved source. The activation code must not be pasted into chat, source control, logs or evidence. After both exist, use the already verified 4.3 runtime line in `client/Unity`, reproduce the same Player sequence there, and substitute the admitted LGO sources incrementally.
 
 The evaluation PASS proves the official workflow and local Unity/tool compatibility. It does not prove LGO body quality, Pháp sleeves, run/jump proportions or permission to ship/integrate the runtime.
 

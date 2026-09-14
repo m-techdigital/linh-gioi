@@ -26,6 +26,8 @@ class LgoNextTaskTests(unittest.TestCase):
 
         self.assertIn("Spine Professional 4.3", note)
         self.assertIn("client/Unity", note)
+        self.assertIn("base nam/nữ layered", note)
+        self.assertIn("áo Pháp Lv1 có tay", note)
         self.assertNotIn("Krita", note)
 
     def test_native_authoring_capability_blocker_stops_ready_advice(self):

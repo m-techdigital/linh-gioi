@@ -50,6 +50,9 @@ VISUAL EVIDENCE: `build/lgo-spine-production-proof-01/reference-automated/contac
 
 MAIN REMAINING VISUAL DEFECTS: no LGO male/female body, Pháp equipment, run cycle or jump has been authored or rendered in Spine; the official reference contains no evidence about LGO proportions or clothing deformation.
 
+LGO SOURCE ADMISSION:
+FAIL — `build/lgo-spine-production-proof-01/lgo-source-admission.json` records `spineLgoRuntimeTestExecuted=false`. The active Pháp Lv1 root contains zero accepted garment art files; the male layered KRA derives from the owner-rejected cutout body; the female set has six review PNGs but no editable layered source; the current Unity Pháp atlas is `DRAFT_RUNTIME_FIT` with `runtimeEligibleCount=0`.
+
 ## Verified environment
 
 - Unity project: `client/Unity`
@@ -61,6 +64,7 @@ MAIN REMAINING VISUAL DEFECTS: no LGO male/female body, Pháp equipment, run cyc
 - spine-csharp/spine-unity evaluation: 4.3.39/4.3.107 at commit `51aad49f3e5db76e91c1c7f1800b0e7536bad11b`
 - isolated Unity evaluation: build PASS, 0 errors, 0 warnings, graphics Player PASS for eight reference states
 - `client/Unity`: unchanged; no unlicensed runtime integration
+- real LGO source admission: FAIL; no accepted male/female + sleeved Pháp source can legally enter the proof
 
 ## Current architecture audit
 
@@ -100,6 +104,7 @@ COMMANDS / RUNTIME TESTS:
 - built the final automated official `Mix and Match Skins` scene in 5.163 seconds: 0 errors, 0 warnings;
 - ran a graphics Player through base, bag, backpack, remove, restore, combined skin and two walk phases;
 - reviewed all eight Player captures; evidence is `build/lgo-spine-production-proof-01/reference-evaluation.json` and `reference-automated/contact-sheet.png`.
+- audited the actual LGO male/female/Pháp source trees and current Unity Pháp atlas; evidence is `build/lgo-spine-production-proof-01/lgo-source-admission.json`; no rejected asset was copied, renamed, rigged or rendered.
 
 Exact evaluation commands, run from the repository root:
 
@@ -122,4 +127,4 @@ The evaluation-only builder and runtime driver are retained under `build/lgo-spi
 
 The isolated official reference evaluation passed. This does not authorize runtime integration into `client/Unity` and does not prove any LGO body, equipment category, run/jump quality, performance target or production automation route.
 
-NEXT ALLOWED STEP: provision and activate a valid Spine Professional 4.3.x seat on this machine without sharing the activation code.
+NEXT ALLOWED STEP: provision Spine Professional 4.3.x and an owner-accepted reopenable layered LGO male/female + sleeved Pháp Lv1 source package, then run the incremental substitution in `client/Unity`.

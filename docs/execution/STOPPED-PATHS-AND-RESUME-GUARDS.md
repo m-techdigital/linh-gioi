@@ -10,9 +10,10 @@ The only active character/outfit route is `LGO-SPINE-PRODUCTION-PROOF-01`:
 
 - spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`
 - plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`
-- current phase/status: `LICENSE_GATE_BEFORE_LGO_INTEGRATION / BLOCKED_SPINE_TOOLING`
+- current phase/status: `LICENSE_AND_LGO_SOURCE_GATE_BEFORE_INTEGRATION / BLOCKED_SPINE_TOOLING`
 - evaluation proof: official Trial 4.3.26 and official 4.3 runtime/examples passed a graphics Player sequence in isolated build space; this does not authorize LGO integration
-- next action: provision and activate licensed Spine Professional 4.3.x, then reproduce the verified `Mix and Match Skins` sequence inside `client/Unity` before touching LGO assets
+- LGO source admission: no actual LGO Spine runtime test ran; the active Pháp root is empty, the male layered source derives from a rejected body, and female has no editable layered source
+- next action: provision licensed Spine Professional 4.3.x and an owner-accepted reopenable layered male/female + sleeved Pháp source package, then reproduce the verified `Mix and Match Skins` sequence inside `client/Unity`
 
 The former six-pose pixel/registered-outfit authoring route is legacy reference. Its semantic pose sequence, surface ownership findings, selection/alpha guards, mixed/off-slot scenarios and visual capture rules may be adapted only after the official Spine reference passes. Do not continue its candidate authoring, mask repair, pixel fitting or Player promotion.
 

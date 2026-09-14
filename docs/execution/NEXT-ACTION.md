@@ -5,14 +5,16 @@ Owner explicitly superseded the active per-pose outfit authoring route with `LGO
 ## Active task state
 
 ```json
-{"activeTask":"LGO_SPINE_PRODUCTION_PROOF_01","phase":"LICENSE_GATE_BEFORE_LGO_INTEGRATION","status":"BLOCKED_SPINE_TOOLING","blockers":["SPINE_PROFESSIONAL_LICENSE_NOT_AVAILABLE","TRIAL_CANNOT_SAVE_OR_EXPORT_LGO_SOURCE","LGO_PROJECT_RUNTIME_INTEGRATION_REQUIRES_LICENSE"],"runtimePromotionAllowed":false}
+{"activeTask":"LGO_SPINE_PRODUCTION_PROOF_01","phase":"LICENSE_AND_LGO_SOURCE_GATE_BEFORE_INTEGRATION","status":"BLOCKED_SPINE_TOOLING","blockers":["SPINE_PROFESSIONAL_LICENSE_NOT_AVAILABLE","TRIAL_CANNOT_SAVE_OR_EXPORT_LGO_SOURCE","LGO_PROJECT_RUNTIME_INTEGRATION_REQUIRES_LICENSE","LGO_MALE_ACCEPTED_LAYERED_SOURCE_NOT_AVAILABLE","LGO_FEMALE_ACCEPTED_LAYERED_SOURCE_NOT_AVAILABLE","PHAP_LV1_ACCEPTED_SLEEVED_SOURCE_NOT_AVAILABLE"],"runtimePromotionAllowed":false}
 ```
 
 Verified evaluation: official Spine Trial 4.3.26 is installed and opens the official Mix-and-Match source. Official spine-csharp 4.3.39 and spine-unity 4.3.107 at commit `51aad49f3e5db76e91c1c7f1800b0e7536bad11b` import into an isolated Unity 6000.3.2f1 evaluation project. A graphics Player completed base, bag, backpack, remove, restore, combined skin and two `walk` phases; eight captures were visually reviewed. This proves local reference compatibility only. Trial cannot save/export and a Spine license is required before integrating the runtime into `client/Unity`.
 
-Next valid work: owner provisions and activates Spine Professional 4.3.x on this machine without sharing the activation code. Then install the already verified official 4.3 runtime line into `client/Unity`, reproduce the same Player sequence in the authoritative project and proceed to LGO source admission. Do not modify LGO character assets, integrate an unlicensed runtime, restore the rejected cutout or build a substitute framework while this gate is blocked.
+Actual LGO source admission has now been checked. It did not run in Spine: `build/lgo-spine-production-proof-01/lgo-source-admission.json` records `spineLgoRuntimeTestExecuted=false`. The active Pháp Lv1 authoring root is empty and default-deny, the only reopenable male KRA derives from the owner-rejected cutout body, the female six-pose set has no editable layered source and remains review-required, and the Unity Pháp atlas is a runtime-ineligible draft paper-doll atlas.
 
-Spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`. Plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`. Evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json`, `reference-evaluation.json` and `reference-automated/contact-sheet.png`. Handoff: `docs/execution/HANDOFF-LGO-SPINE-PRODUCTION-PROOF-01.md`.
+Next valid work: provision and activate Spine Professional 4.3.x and provide or author one owner-accepted reopenable layered male/female base plus sleeved Pháp Lv1 source package. Then install the verified official 4.3 runtime line into `client/Unity`, reproduce the same Player sequence in the authoritative project and substitute the admitted LGO source incrementally. Do not modify LGO character assets, integrate an unlicensed runtime, restore the rejected cutout or build a substitute framework while either gate is blocked.
+
+Spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`. Plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`. Evidence: `build/lgo-spine-production-proof-01/toolchain-preflight.json`, `reference-evaluation.json`, `lgo-source-admission.json` and `reference-automated/contact-sheet.png`. Handoff: `docs/execution/HANDOFF-LGO-SPINE-PRODUCTION-PROOF-01.md`.
 
 ## Historical character-base source gate — superseded 2026-09-14
 
