@@ -800,6 +800,15 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(potentialTopology, Is.Not.Null,
                     "The circles, outer ring and connectors must be one prebuilt shared topology behind class-bound icons.");
                 Assert.That(potentialTopology.ClassListContains("lgo-potential-topology"), Is.True);
+                var topologyFrameCount = potentialTopology.GetType().GetProperty(
+                    "PrebuiltNodeFrameCount", BindingFlags.Static | BindingFlags.NonPublic);
+                Assert.That(topologyFrameCount, Is.Not.Null,
+                    "Potential topology must own the reusable node rings instead of asking every class-bound control to draw one.");
+                Assert.That(topologyFrameCount.GetValue(null), Is.EqualTo(5));
+                Assert.That(potentialNode0.ClassListContains("lgo-potential-node-overlay"), Is.True,
+                    "Potential buttons are interaction/data overlays on the shared vector base.");
+                Assert.That(potentialNode0.style.borderLeftWidth.value, Is.EqualTo(0));
+                Assert.That(potentialNode0.style.borderTopWidth.value, Is.EqualTo(0));
 
                 var sourcePose = new GameObject("shared topology class actor").AddComponent<TwoDSourcePoseReview>();
                 sourcePose.transform.SetParent(scene.transform, false);

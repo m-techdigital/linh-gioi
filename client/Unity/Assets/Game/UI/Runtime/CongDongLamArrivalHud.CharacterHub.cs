@@ -21,6 +21,8 @@ namespace LinhGioi.UI
             new Vector2(200, 332), new Vector2(450, 332)
         };
 
+        internal static int PrebuiltNodeFrameCount => NodeCenters.Length;
+
         internal CharacterHubPotentialTopology()
         {
             name = "Map01A Potential Topology Base";
@@ -43,12 +45,56 @@ namespace LinhGioi.UI
             var center = Vector2.Scale(new Vector2(325, 192), scale);
             var painter = context.painter2D;
 
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(272, 187), scale),
+                new Color(.07f, .21f, .32f, .72f), 1f);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(263, 181), scale),
+                new Color(.86f, .61f, .18f, .34f), 1f);
             DrawConnections(painter, center, scale, new Color(.005f, .025f, .05f, .88f), 5f);
             DrawConnections(painter, center, scale, new Color(.24f, .67f, 1f, .62f), 1.5f);
             DrawEllipse(painter, center, Vector2.Scale(new Vector2(253, 174), scale),
                 new Color(.005f, .025f, .05f, .90f), 5f);
             DrawEllipse(painter, center, Vector2.Scale(new Vector2(253, 174), scale),
                 new Color(.88f, .65f, .20f, .72f), 1.5f);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(190, 132), scale),
+                new Color(.18f, .54f, .78f, .36f), 1f);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(92, 92), scale),
+                new Color(.02f, .04f, .06f, .90f), 5f);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(92, 92), scale),
+                new Color(.84f, .58f, .16f, .72f), 1.5f);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(78, 78), scale),
+                new Color(.18f, .66f, 1f, .66f), 1.5f);
+
+            foreach (var nodeCenter in NodeCenters)
+            {
+                var scaledCenter = Vector2.Scale(nodeCenter, scale);
+                DrawEllipse(painter, scaledCenter, Vector2.Scale(new Vector2(59, 59), scale),
+                    new Color(.005f, .025f, .05f, .94f), 6f);
+                DrawEllipse(painter, scaledCenter, Vector2.Scale(new Vector2(57, 57), scale),
+                    new Color(.90f, .65f, .19f, .86f), 2f);
+                DrawEllipse(painter, scaledCenter, Vector2.Scale(new Vector2(49, 49), scale),
+                    new Color(.22f, .71f, 1f, .70f), 1.5f);
+                DrawCardinalTicks(painter, scaledCenter, scale);
+            }
+        }
+
+        private static void DrawCardinalTicks(Painter2D painter, Vector2 center, Vector2 scale)
+        {
+            painter.strokeColor = new Color(.96f, .73f, .26f, .82f);
+            painter.lineWidth = 2f;
+            var horizontal = 64f * scale.x;
+            var vertical = 64f * scale.y;
+            var tickX = 7f * scale.x;
+            var tickY = 7f * scale.y;
+            painter.BeginPath();
+            painter.MoveTo(center + new Vector2(-horizontal - tickX, 0));
+            painter.LineTo(center + new Vector2(-horizontal + tickX, 0));
+            painter.MoveTo(center + new Vector2(horizontal - tickX, 0));
+            painter.LineTo(center + new Vector2(horizontal + tickX, 0));
+            painter.MoveTo(center + new Vector2(0, -vertical - tickY));
+            painter.LineTo(center + new Vector2(0, -vertical + tickY));
+            painter.MoveTo(center + new Vector2(0, vertical - tickY));
+            painter.LineTo(center + new Vector2(0, vertical + tickY));
+            painter.Stroke();
         }
 
         private static void DrawConnections(Painter2D painter, Vector2 center, Vector2 scale, Color color, float width)
@@ -261,6 +307,27 @@ namespace LinhGioi.UI
             if (title != null) title.style.color = selected ? UiGold : UiText;
         }
 
+        private static void ApplyPotentialNodeSelection(Button node, bool selected)
+        {
+            node.EnableInClassList(LgoCharacterHubSelectedClass, selected);
+            node.style.backgroundColor = Color.clear;
+            node.style.borderLeftWidth = node.style.borderRightWidth = 0;
+            node.style.borderTopWidth = node.style.borderBottomWidth = 0;
+            var icon = node.Q<VisualElement>(node.name + " Icon");
+            if (icon != null)
+            {
+                icon.style.opacity = selected ? 1f : .86f;
+                icon.style.borderTopColor = icon.style.borderLeftColor = selected
+                    ? new Color(1f, .77f, .28f, 1f)
+                    : new Color(.23f, .62f, .88f, .76f);
+                icon.style.borderBottomColor = icon.style.borderRightColor = selected
+                    ? new Color(.20f, .82f, 1f, 1f)
+                    : new Color(.12f, .34f, .52f, .68f);
+            }
+            var title = node.Q<Label>(node.name + " Title");
+            if (title != null) title.style.color = selected ? UiGold : UiText;
+        }
+
         private static VisualElement CreateHubPathConnector(string name, bool vertical = false)
         {
             var connector = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
@@ -277,6 +344,7 @@ namespace LinhGioi.UI
             var name = "Map01A Potential Node " + index;
             var node = InventoryButton(() => SelectPotentialNode(index), name);
             ApplyLgoPotentialNode(node);
+            node.AddToClassList("lgo-potential-node-overlay");
             var icon = new VisualElement { name = name + " Icon", pickingMode = PickingMode.Ignore };
             ApplyLgoSkillIcon(icon, 82);
             _potentialPathIcons.Add(icon);
@@ -295,7 +363,7 @@ namespace LinhGioi.UI
             addMarker.name = "Map01A Potential Node Add " + index;
             ApplyLgoPotentialAddMarker(addMarker);
             node.Add(addMarker);
-            ApplyHubPathNodeSelection(node, false);
+            ApplyPotentialNodeSelection(node, false);
             _potentialPathNodes.Add(node);
             node.style.position = Position.Absolute;
             node.style.left = left;
@@ -475,9 +543,9 @@ namespace LinhGioi.UI
             core.style.justifyContent = Justify.Center;
             core.style.borderTopLeftRadius = core.style.borderTopRightRadius = 84;
             core.style.borderBottomLeftRadius = core.style.borderBottomRightRadius = 84;
-            ApplyLgoFrame(core, new Color(.025f, .11f, .19f, .94f), new Color(.24f, .66f, 1f, .82f));
-            core.style.borderLeftWidth = core.style.borderRightWidth = 2;
-            core.style.borderTopWidth = core.style.borderBottomWidth = 2;
+            core.style.backgroundColor = Color.clear;
+            core.style.borderLeftWidth = core.style.borderRightWidth = 0;
+            core.style.borderTopWidth = core.style.borderBottomWidth = 0;
             core.Add(PotentialIcon("Map01A Potential Core Icon", "core", 128));
             var coreText = LgoLabel("TÂM MẠCH", 12, UiGold, true);
             coreText.style.unityTextAlign = TextAnchor.MiddleCenter;
@@ -676,7 +744,7 @@ namespace LinhGioi.UI
                 _potentialPathTitles[index].text = potential.Name;
                 _potentialPathValues[index].text = potential.Value;
                 _potentialPathNodes[index].tooltip = potential.Name + " · " + potential.Value;
-                ApplyHubPathNodeSelection(_potentialPathNodes[index], potential.Name == selectedPotentialName);
+                ApplyPotentialNodeSelection(_potentialPathNodes[index], potential.Name == selectedPotentialName);
             }
             _potentialRecommendation.text = profile.Recommendation;
 
@@ -760,7 +828,7 @@ namespace LinhGioi.UI
             var potential = ActiveCharacterHubProfile.Potentials[index];
             _characterHubSelectionState.SelectPotential(ActiveCharacterHubProfile, potential.Name);
             for (var nodeIndex = 0; nodeIndex < _potentialPathNodes.Count; nodeIndex++)
-                ApplyHubPathNodeSelection(_potentialPathNodes[nodeIndex], nodeIndex == index);
+                ApplyPotentialNodeSelection(_potentialPathNodes[nodeIndex], nodeIndex == index);
             ShowPotentialDetail(potential);
         }
 

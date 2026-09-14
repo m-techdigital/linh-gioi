@@ -802,6 +802,9 @@ namespace LinhGioi.UI
         {
             node.AddToClassList("lgo-potential-node");
             node.text = string.Empty;
+            node.style.backgroundColor = Color.clear;
+            node.style.borderLeftWidth = node.style.borderRightWidth = 0;
+            node.style.borderTopWidth = node.style.borderBottomWidth = 0;
             node.style.width = node.style.minWidth = node.style.maxWidth = 124;
             node.style.height = node.style.minHeight = node.style.maxHeight = 124;
             node.style.flexBasis = 124;
@@ -813,6 +816,7 @@ namespace LinhGioi.UI
             node.style.justifyContent = Justify.Center;
             node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 62;
             node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 62;
+            ApplyLgoCharacterHubInteractiveMotion(node);
         }
 
         private static void ApplyLgoPotentialAddMarker(Label marker)

@@ -1,3 +1,12 @@
+## Character Hub — Tiềm năng dùng một vector template hoàn chỉnh — 2026-09-15
+
+- Audit theo feedback owner xác nhận topology trước chỉ sở hữu vòng ngoài và đường nối, còn năm button vẫn tự vẽ border tròn. Cấu trúc đó tuy không rebuild theo class nhưng vẫn chia presentation của cùng một graph qua nhiều control.
+- `CharacterHubPotentialTopology` nay vẽ sẵn toàn bộ vòng đồng tâm, đường nối, core, ba lớp khung của đủ năm node và tick trang trí. Button nằm trên graph là interaction/data overlay trong suốt; đổi `Võ → Kiếm → Pháp → Cơ → Linh` chỉ bind icon, tên, giá trị, mô tả và selection state.
+- Skill và Tiềm năng tiếp tục là hai component/topology riêng. Contract, `AGENTS.md`, validator và regression test đều khóa quy tắc này; test RED `0/1` vì chưa có `PrebuiltNodeFrameCount`, GREEN `1/1` sau khi chuyển node frame về vector base.
+- Player `build/map01a-character-hub-potential-base-player-v2/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=48`. Evidence `build/map01a-character-hub-potential-base-runtime-v2/{pc,mobile,tablet}/` đạt 9 frame/profile, `usesOsMouseOrKeyboard=false`; đã xem trực tiếp màn Tiềm năng default/selected ở cả ba viewport, graph không wrap/cắt/chồng và khung node đồng nhất.
+- Gate cuối: full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared governance `23/23`; pose pack `12/12`; registered capture `19/19`; no-3D/no-source-images/change-budget pass. Frozen diff và `git diff --check` sạch sau khi loại Unity import churn.
+- Trạng thái `CONTINUE`: hoàn tất batch base-first cho graph Tiềm năng; chưa claim hoàn tất toàn goal hoặc owner visual acceptance. Không mở lại class/pose/wardrobe/source art.
+
 ## Character Hub — topology cố định, class chỉ bind dữ liệu — 2026-09-15
 
 - Audit xác nhận lỗi kiến trúc cũ: `RefreshCharacterHubClassProfile()` xóa và dựng lại ba panel Kỹ năng/Tiềm năng/Linh thú khi class đổi. Helper có dùng chung nhưng component tree vẫn bị nhân lại, dễ lệch layout và khó mở rộng.

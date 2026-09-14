@@ -89,7 +89,7 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 ### 4. Tiềm năng
 
 - Main workspace: một diagram kinh mạch trung tâm và điểm còn lại ở đáy; không thay bằng card grid.
-- Vòng ngoài và năm đường nối là một vector topology base dùng chung nằm sau core/node; năm node tròn được đặt sẵn theo canonical. Profile class chỉ cấp icon, tên, giá trị và mô tả.
+- Một vector topology base dùng chung vẽ sẵn vòng ngoài, các vòng đồng tâm, năm đường nối, core và ba lớp khung tròn của đủ năm node theo canonical. Button/node phía trên là interaction overlay trong suốt; profile class chỉ cấp icon, tên, giá trị, mô tả và trạng thái chọn. Không để từng class hoặc từng button tự dựng lại khung node.
 - Detail-right: node đang chọn, hiệu quả hiện tại/kế tiếp, chi phí và action bị khóa khi chưa có contract ghi state.
 
 ### 5. Linh thú
