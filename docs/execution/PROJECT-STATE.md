@@ -1,3 +1,11 @@
+## Character Hub — bỏ box chồng box, khóa embedded button border — 2026-09-14
+
+- Theo feedback owner, full filigree chỉ còn ở shell ngoài. Workspace và panel chi tiết bên phải dùng cùng section border 1 px; icon/card dùng inset border một lớp. Không còn hoa văn góc ở panel chi tiết hoặc modal con giả.
+- Tab/action/close dùng border trang trí nằm trong chrome texture và đặt outer/CSS border bằng `0`, tránh hai border lồng nhau. Tab canonical hạ còn `48 px / 17 px`; close còn `52 px / 27 px`. Quy tắc nằm trong shared Skin và validator, không sửa rời từng tab.
+- Player `build/map01a-five-tab-depth-player-v12/LinhGioiOnline.app` build `Succeeded`, `errors=0`. Evidence khung tại `build/map01a-five-tab-depth-runtime-v11/{pc,mobile,tablet}/`; sau khi bắt regression icon Võ, evidence PC cuối tại `build/map01a-five-tab-depth-runtime-v12/pc/`. Đã xem trực tiếp: không còn double border/filigree ở detail-right, không wrap/stack/cắt; icon Võ dùng lại atlas UI rõ thay vì crop trang phục tối.
+- Selector class dùng chung title row và snapshot trang bị riêng cho `Võ → Kiếm → Pháp → Cơ → Linh` đã có cơ chế/state test. Đây mới là checkpoint nền; profile Kỹ năng/Tiềm năng/Linh thú và full-body preview theo class còn phải bind từ asset hiện có trước khi bàn giao 5 class.
+- Gate hiện hành: Python shared-skin `20/20`; Unity EditMode `286 total / 285 passed / 0 failed / 1 ignored`; shared-skin/no-3D/no-source/frozen diff pass. Trạng thái `CONTINUE`, chưa phải owner visual acceptance hay hoàn tất goal 5 class.
+
 ## Character hub — vector ornament master v8 — 2026-09-14
 
 - Feedback owner chốt cơ chế một corner master + một edge segment dùng chung là đúng, nhưng yêu cầu thiết kế lại hoa văn thay vì crop từ ảnh. Runtime nay dùng `RuntimeUiSkin.ApplyOrnamentedShellFrame`: một nút/lá góc 24 px được vẽ bằng `Painter2D`, ba góc còn lại mirror chính xác và bốn cạnh nối từ cùng đoạn vector 16 px. Không còn raster corner/edge song song hoặc khung chữ L cũ trong preview Linh thú.

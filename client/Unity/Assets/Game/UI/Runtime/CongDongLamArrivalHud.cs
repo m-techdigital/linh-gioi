@@ -570,11 +570,9 @@ namespace LinhGioi.UI
                 _equipmentVariant.style.display = hasVariant ? DisplayStyle.Flex : DisplayStyle.None;
                 _equipmentVariant.SetEnabled(hasVariant);
             }
-            _equipmentClass.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
-            _equipmentClass.text = _scene.CanCycleSourcePoseClass
-                ? "Đổi class: " + _scene.ActiveEquipmentClassLabel + (_touch ? "" : " · F")
-                : "Class: " + _scene.ActiveEquipmentClassLabel;
-            _equipmentClass.SetEnabled(_scene.CanCycleSourcePoseClass);
+            _equipmentClass.style.display = _scene.CanCycleCharacterHubClass ? DisplayStyle.Flex : DisplayStyle.None;
+            _equipmentClass.text = "Class · " + _scene.ActiveEquipmentClassLabel + "  ›";
+            _equipmentClass.SetEnabled(_scene.CanCycleCharacterHubClass);
             _inventoryGender.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
             _inventoryGender.text = (_scene.CanCycleSourcePoseGender ? "Đổi giới · " : "Hiện có · ")
                 + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + (_touch ? "" : " · G");

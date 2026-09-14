@@ -111,6 +111,12 @@ namespace LinhGioi.UI
             element.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
         }
 
+        private static void RemoveLgoOuterBorder(VisualElement element)
+        {
+            element.style.borderTopWidth = element.style.borderBottomWidth = 0;
+            element.style.borderLeftWidth = element.style.borderRightWidth = 0;
+        }
+
         private static void ApplyLgoCharacterHubPanelSurface(VisualElement element)
         {
             ApplyLgoCharacterHubSurface(element, ref _characterHubPanelSurface, "character-hub-panel-surface");
@@ -265,19 +271,11 @@ namespace LinhGioi.UI
         }
 
         private static void ApplyLgoCharacterHubDetailCard(
-            VisualElement element, float horizontalPadding = 0, float verticalPadding = 0, bool ornamented = true)
+            VisualElement element, float horizontalPadding = 0, float verticalPadding = 0)
         {
             ApplyLgoDetailCard(element, horizontalPadding, verticalPadding);
             SetLgoFrameCornerVisibility(element, false);
-            if (ornamented)
-            {
-                ApplyLgoCharacterHubFiligreeFrame(element);
-            }
-            else
-            {
-                element.style.borderTopWidth = element.style.borderBottomWidth = 0;
-                element.style.borderLeftWidth = element.style.borderRightWidth = 0;
-            }
+            ApplyLgoCharacterHubSectionFrame(element);
         }
 
         private static VisualElement LgoDivider(string name)
@@ -565,11 +563,12 @@ namespace LinhGioi.UI
             button.style.flexGrow = 1;
             button.style.flexBasis = 0;
             button.style.minWidth = 0;
-            button.style.minHeight = 52;
-            button.style.fontSize = 19;
+            button.style.minHeight = 48;
+            button.style.fontSize = 17;
             button.style.marginRight = 6;
             button.style.whiteSpace = WhiteSpace.NoWrap;
             ApplyLgoCharacterHubSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
+            RemoveLgoOuterBorder(button);
             ApplyLgoCharacterHubInteractiveMotion(button);
         }
 
@@ -585,6 +584,7 @@ namespace LinhGioi.UI
                     150);
             }
             else ApplyLgoCharacterHubSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
+            RemoveLgoOuterBorder(button);
         }
 
         private static void ApplyLgoInventoryFilterChip(Button button, bool touch)
@@ -625,6 +625,7 @@ namespace LinhGioi.UI
             button.style.borderTopColor = button.style.borderLeftColor = button.style.borderRightColor = new Color(.22f, .82f, 1f, 1f);
             button.style.borderBottomColor = new Color(.98f, .78f, .32f, 1f);
             ApplyLgoCharacterHubSurface(button, ref _characterHubActionBlue, "character-hub-action-blue");
+            RemoveLgoOuterBorder(button);
             ApplyLgoCharacterHubInteractiveMotion(button);
         }
 
@@ -632,6 +633,7 @@ namespace LinhGioi.UI
         {
             ApplyLgoButton(button, true);
             ApplyLgoCharacterHubSurface(button, ref _characterHubActionGold, "character-hub-action-gold");
+            RemoveLgoOuterBorder(button);
             ApplyLgoCharacterHubInteractiveMotion(button);
         }
 
@@ -677,9 +679,9 @@ namespace LinhGioi.UI
             button.AddToClassList(LgoModalCloseButtonClass);
             ApplyLgoButton(button);
             button.style.flexGrow = 0;
-            button.style.flexBasis = 56;
-            button.style.minHeight = 56;
-            button.style.fontSize = 30;
+            button.style.flexBasis = 52;
+            button.style.minHeight = 52;
+            button.style.fontSize = 27;
             button.style.marginRight = 0;
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
             button.style.backgroundColor = new Color(.012f, .050f, .090f, .99f);
@@ -688,6 +690,7 @@ namespace LinhGioi.UI
             button.style.borderTopColor = button.style.borderBottomColor = UiGold;
             button.style.borderLeftColor = button.style.borderRightColor = new Color(.62f, .46f, .22f, .94f);
             ApplyLgoCharacterHubSurface(button, ref _characterHubClose, "character-hub-close");
+            RemoveLgoOuterBorder(button);
             ApplyLgoCharacterHubInteractiveMotion(button);
         }
 

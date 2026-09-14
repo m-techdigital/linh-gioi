@@ -150,6 +150,56 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void CharacterHubCyclesFiveClassesAndRestoresEachLoadoutWithoutStateLeak()
+        {
+            var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager
+                .GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("Map01A five-class hub state test");
+            CongDongLamMap01AArtPreview preview = null;
+            try
+            {
+                preview = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CollectionAssert.AreEqual(new[] { "vo", "kiem", "phap", "co", "linh" }, preview.CharacterHubClassIds);
+                Assert.That(preview.CanCycleCharacterHubClass, Is.True);
+
+                preview.CycleCharacterHubClass();
+                Assert.That(preview.ActiveEquipmentClassId, Is.EqualTo("kiem"));
+                preview.SelectVoEquipmentSlot("outer_tunic");
+                preview.ToggleVoEquipmentSlot();
+                preview.CycleVoSelectedEquipmentItemLevel();
+                Assert.That(preview.GetVoEquipmentItemId("outer_tunic"), Does.StartWith("kiem-lv010"));
+
+                preview.CycleCharacterHubClass();
+                Assert.That(preview.ActiveEquipmentClassId, Is.EqualTo("phap"));
+                Assert.That(preview.VoSelectedEquipmentSlot, Is.EqualTo("main_weapon"));
+                Assert.That(preview.IsVoEquipmentSlotEquipped("outer_tunic"), Is.True,
+                    "A newly opened class must not inherit another class's unequipped slot.");
+                Assert.That(preview.GetVoEquipmentItemLevel("outer_tunic"), Is.EqualTo(1));
+                Assert.That(preview.GetVoEquipmentItemId("outer_tunic"), Does.StartWith("phap-lv001"));
+
+                preview.SetCharacterHubClass("kiem");
+                Assert.That(preview.VoSelectedEquipmentSlot, Is.EqualTo("outer_tunic"));
+                Assert.That(preview.IsVoEquipmentSlotEquipped("outer_tunic"), Is.False);
+                Assert.That(preview.GetVoEquipmentItemLevel("outer_tunic"), Is.EqualTo(10));
+
+                preview.SetCharacterHubClass("co");
+                preview.CycleCharacterHubClass();
+                Assert.That(preview.ActiveEquipmentClassId, Is.EqualTo("linh"));
+                preview.CycleCharacterHubClass();
+                Assert.That(preview.ActiveEquipmentClassId, Is.EqualTo("vo"));
+                Assert.That(preview.VoAvatarMode, Is.EqualTo("full"));
+                Assert.That(() => preview.SetCharacterHubClass("unknown"), Throws.ArgumentException);
+            }
+            finally
+            {
+                if (preview != null) Object.DestroyImmediate(preview.gameObject);
+                Object.DestroyImmediate(host);
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!beforeRoots.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void ActivatingLegacyClassPreviewHidesAnyLoadedSourcePoseActor()
         {
             var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager

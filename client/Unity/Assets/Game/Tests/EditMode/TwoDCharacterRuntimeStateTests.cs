@@ -66,6 +66,24 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void SharedStateRestoresOneValidatedLoadoutSnapshot()
+        {
+            var state = CreateState();
+
+            state.SelectMode("modular");
+            state.SetEquipmentState("boots", new[] { "weapon", "boots" });
+
+            Assert.That(state.Mode, Is.EqualTo("modular"));
+            Assert.That(state.SelectedEquipmentSlot, Is.EqualTo("boots"));
+            Assert.That(state.IsEquipped("weapon"), Is.True);
+            Assert.That(state.IsEquipped("hair"), Is.False);
+            Assert.That(state.IsEquipped("boots"), Is.True);
+            Assert.That(state.EquippedSlotCount, Is.EqualTo(2));
+            Assert.That(() => state.SelectMode("unknown"), Throws.ArgumentException);
+            Assert.That(() => state.SetEquipmentState("weapon", new[] { "unknown" }), Throws.ArgumentException);
+        }
+
+        [Test]
         public void EntryCaptureFlagRunsPreviewWithoutSuppressingEntryOverlay()
         {
             var args = new[] { "LinhGioiOnline", "--lgo-map01a-entry-capture" };
@@ -208,7 +226,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Null);
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").ClassListContains("lgo-inventory-grid-cell"), Is.True);
                 Assert.That(root.Q<VisualElement>("Map01A Equipment Item Icon main_weapon").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetMap01ACharacterEquipmentIconSprite("main_weapon")));
+                    Is.EqualTo(scene.GetVoEquipmentThumbnailSprite("main_weapon")));
                 Assert.That(root.Q("Map01A Equipment Item Tile main_weapon").style.height.value.value, Is.EqualTo(92));
                 Assert.That(root.Q<Label>("Map01A Equipment Item Name main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Label>("Map01A Equipment Item State main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
@@ -376,8 +394,10 @@ namespace LinhGioi.Tests.EditMode
                     "The five-tab shell title must match the canonical visual hierarchy.");
                 Assert.That(modalTitle.style.color.value, Is.EqualTo(new Color(.98f, .98f, .94f, 1f)),
                     "The canonical title is light, while gold remains an accent color.");
-                Assert.That(close.style.flexBasis.value.value, Is.EqualTo(56).Within(1),
-                    "The close control must keep the canonical framed visual weight.");
+                Assert.That(close.style.flexBasis.value.value, Is.EqualTo(52).Within(1),
+                    "The close control must stay subordinate to the modal title.");
+                Assert.That(close.style.borderTopWidth.value, Is.EqualTo(0),
+                    "Character Hub chrome already draws its border inside the texture; a CSS border would create a nested frame.");
                 Assert.That(modal.style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.96f),
                     "The hub shell must hold contrast against every Map01A backdrop.");
                 Assert.That(backdrop, Is.Not.Null);
@@ -387,8 +407,10 @@ namespace LinhGioi.Tests.EditMode
                 {
                     var item = expected[itemIndex];
                     var tab = root.Q<Button>(item.Item1);
-                    Assert.That(tab.style.minHeight.value.value, Is.EqualTo(52).Within(1));
-                    Assert.That(tab.style.fontSize.value.value, Is.EqualTo(19).Within(1));
+                    Assert.That(tab.style.minHeight.value.value, Is.EqualTo(48).Within(1));
+                    Assert.That(tab.style.fontSize.value.value, Is.EqualTo(17).Within(1));
+                    Assert.That(tab.style.borderTopWidth.value, Is.EqualTo(0),
+                        "Tabs keep the ornamental border authored inside their shared texture without an outer CSS frame.");
                     Assert.That(tab.style.marginRight.value.value, Is.EqualTo(itemIndex == expected.Length - 1 ? 0 : 6).Within(1));
                 }
                 Assert.That(root.Q<Button>("Map01A Bag Main Tab").style.backgroundColor.value.b,
@@ -440,11 +462,17 @@ namespace LinhGioi.Tests.EditMode
                     "The shared item inspector must use the approved bright-blue primary action state.");
                 Assert.That(primaryDetailAction.style.color.value, Is.EqualTo(new Color(.98f, .99f, 1f, 1f)),
                     "Primary inspector actions must keep readable light text on the blue surface.");
+                Assert.That(primaryDetailAction.style.borderTopWidth.value, Is.EqualTo(0),
+                    "Textured action buttons must not add a second outer border.");
+                Assert.That(equipmentDetail.style.borderTopWidth.value, Is.EqualTo(1),
+                    "The detail panel is a section inside the modal, so it uses one quiet section border without full filigree.");
                 for (var iconIndex = 0; iconIndex < scene.VoEquipmentSlotIds.Count; iconIndex++)
                 {
                     var slotId = scene.VoEquipmentSlotIds[iconIndex];
-                    var expectedIcon = scene.GetMap01ACharacterEquipmentIconSprite(slotId);
+                    var expectedIcon = scene.GetVoEquipmentThumbnailSprite(slotId);
                     Assert.That(expectedIcon, Is.Not.Null, "Missing dedicated UI icon for " + slotId);
+                    Assert.That(expectedIcon, Is.EqualTo(scene.GetMap01ACharacterEquipmentIconSprite(slotId)),
+                        "Baseline Võ must keep the approved readable UI icon atlas instead of a dark runtime clothing crop.");
                     Assert.That(root.Q("Map01A Character Hero Quick Icon " + iconIndex).style.backgroundImage.value.sprite,
                         Is.EqualTo(expectedIcon), "Character rail must use the dedicated readable UI atlas for " + slotId);
                 }

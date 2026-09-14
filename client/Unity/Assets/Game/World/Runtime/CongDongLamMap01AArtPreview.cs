@@ -226,6 +226,16 @@ namespace LinhGioi.World
         private TwoDClassMixedLoadoutFitPreview _classFitPreview;
         private string _classFitPreviewId = "kiem";
         private bool _classFitPreviewActive;
+        private sealed class CharacterHubLoadoutState
+        {
+            public string Mode;
+            public string SelectedSlot;
+            public string[] EquippedSlots;
+            public readonly Dictionary<string, int> Levels = new Dictionary<string, int>(StringComparer.Ordinal);
+        }
+        private static readonly string[] CharacterHubClassOrder = { "vo", "kiem", "phap", "co", "linh" };
+        private readonly Dictionary<string, CharacterHubLoadoutState> _characterHubLoadoutStates =
+            new Dictionary<string, CharacterHubLoadoutState>(StringComparer.Ordinal);
         private SpriteRenderer _voSkillVfx, _voMotionRenderer;
         private SpriteRenderer _voCombatTarget;
         private SpriteRenderer _spiritHerbRenderer, _hiddenChestRenderer;
@@ -260,6 +270,8 @@ namespace LinhGioi.World
         public bool IsSourcePoseReviewActive => ActiveSourcePoseReview != null;
         public bool CanCycleSourcePoseGender => _sourcePoseReview != null && _femaleSourcePoseReview != null;
         public bool CanCycleSourcePoseClass => IsSourcePoseReviewActive && _sourcePoseClassOptions.Count > 1;
+        public bool CanCycleCharacterHubClass => _voRig != null && !HasAnySourcePoseReview;
+        public IReadOnlyList<string> CharacterHubClassIds => CharacterHubClassOrder;
         public bool ClassEquipmentPreviewActive => _classFitPreviewActive;
         public string ActiveEquipmentClassId => _classFitPreviewActive ? _classFitPreviewId : ActiveSourcePoseReview?.ClassId ?? "vo";
         public string ActiveEquipmentClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel : ActiveSourcePoseReview?.ClassLabel ?? "Võ";
@@ -280,6 +292,11 @@ namespace LinhGioi.World
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
             if (_classFitPreviewActive) return _classFitPreview.GetSlotThumbnailSprite(VoReviewSlotIds[index]);
+            if (ActiveSourcePoseReview == null)
+            {
+                var uiIcon = GetMap01ACharacterEquipmentIconSprite(slot);
+                if (uiIcon != null) return uiIcon;
+            }
             var level = GetVoEquipmentItemLevel(slot);
             var partId = "lv" + level.ToString("000") + "_" + VoAvatarGender + "_slot_" + slot;
             if (_voAvatarParts.TryGetValue(partId, out var partRenderer) && partRenderer.sprite != null)
@@ -970,6 +987,69 @@ namespace LinhGioi.World
             _sourcePoseClassSwitchReadyAt = Time.realtimeSinceStartup + .5f;
             LastInteractionMessage = "Đã đổi class sang " + ActiveEquipmentClassLabel + " · "
                 + (VoAvatarGender == "female" ? "nữ" : "nam") + " · giữ trạng thái tháo/mặc.";
+        }
+
+        public void CycleCharacterHubClass()
+        {
+            if (!CanCycleCharacterHubClass) return;
+            var current = Array.IndexOf(CharacterHubClassOrder, ActiveEquipmentClassId);
+            SetCharacterHubClass(CharacterHubClassOrder[(current + 1 + CharacterHubClassOrder.Length) % CharacterHubClassOrder.Length]);
+        }
+
+        public void SetCharacterHubClass(string classId)
+        {
+            if (Array.IndexOf(CharacterHubClassOrder, classId) < 0)
+                throw new ArgumentException("Unknown Character Hub class: " + classId, nameof(classId));
+            if (!CanCycleCharacterHubClass || ActiveEquipmentClassId == classId) return;
+
+            SaveCharacterHubLoadout(ActiveEquipmentClassId);
+            if (classId == "vo")
+            {
+                _classFitPreviewActive = false;
+            }
+            else
+            {
+                EnsureClassFitPreview(classId);
+                _classFitPreviewActive = true;
+                _registeredOutfit?.SetPresentationVisible(false);
+            }
+            RestoreCharacterHubLoadout(classId);
+            RefreshVoAvatarMode();
+            LastInteractionMessage = "Character Hub đã chuyển sang " + ActiveEquipmentClassLabel
+                + " · giữ riêng trạng thái trang bị của từng class.";
+        }
+
+        private void SaveCharacterHubLoadout(string classId)
+        {
+            if (Array.IndexOf(CharacterHubClassOrder, classId) < 0) return;
+            var state = new CharacterHubLoadoutState
+            {
+                Mode = _voState.Mode,
+                SelectedSlot = _voState.SelectedEquipmentSlot,
+                EquippedSlots = VoEquipmentSlots.Where(_voState.IsEquipped).ToArray()
+            };
+            foreach (var slot in VoEquipmentSlots)
+                state.Levels[slot] = GetVoEquipmentItemLevel(slot);
+            _characterHubLoadoutStates[classId] = state;
+        }
+
+        private void RestoreCharacterHubLoadout(string classId)
+        {
+            if (!_characterHubLoadoutStates.TryGetValue(classId, out var state))
+            {
+                state = new CharacterHubLoadoutState
+                {
+                    Mode = classId == "vo" ? "full" : "modular",
+                    SelectedSlot = VoEquipmentSlots[0],
+                    EquippedSlots = (string[])VoEquipmentSlots.Clone()
+                };
+                foreach (var slot in VoEquipmentSlots) state.Levels[slot] = 1;
+                _characterHubLoadoutStates[classId] = state;
+            }
+            _voState.SelectMode(state.Mode);
+            _voState.SetEquipmentState(state.SelectedSlot, state.EquippedSlots);
+            _voEquipmentLevels.Clear();
+            foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = state.Levels[slot];
         }
 
         private TwoDSourcePoseReview ReloadClassGender(TwoDSourcePoseReview review, string primary, string[] alternates)

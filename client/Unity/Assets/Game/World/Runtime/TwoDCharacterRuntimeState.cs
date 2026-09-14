@@ -58,6 +58,28 @@ namespace LinhGioi.World
             _equipmentSlotIndex = index;
         }
 
+        public void SelectMode(string mode)
+        {
+            var index = Array.IndexOf(_modes, mode);
+            if (index < 0) throw new ArgumentException("Unknown presentation mode: " + mode, nameof(mode));
+            _modeIndex = index;
+        }
+
+        public void SetEquipmentState(string selectedSlot, IEnumerable<string> equippedSlots)
+        {
+            if (equippedSlots == null) throw new ArgumentNullException(nameof(equippedSlots));
+            var restored = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var slot in equippedSlots)
+            {
+                if (Array.IndexOf(_equipmentSlots, slot) < 0)
+                    throw new ArgumentException("Unknown equipment slot: " + slot, nameof(equippedSlots));
+                restored.Add(slot);
+            }
+            SelectEquipmentSlot(selectedSlot);
+            _equippedSlots.Clear();
+            foreach (var slot in restored) _equippedSlots.Add(slot);
+        }
+
         public bool IsEquipped(string slot) => _equippedSlots.Contains(slot);
 
         public void ToggleSelectedEquipmentSlot()
