@@ -149,7 +149,7 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoSkillCategoryCard",
     "ApplyLgoSkillIcon",
     "ApplyLgoSkillNode",
-    "ApplyLgoPotentialNode",
+    "ApplyLgoPotentialDataOverlay",
 ]
 FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+readonly\s+Color\s+(?!Ui)[A-Za-z0-9_]*(Glass|Gold|Blue|Border|Text|SubText)"),
@@ -342,7 +342,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "CreateHubRailControl",
         "ApplyLgoSkillCategoryCard(button, _touch)",
         "ApplyLgoSkillNode(node)",
-        "ApplyLgoPotentialNode(node)",
+        "ApplyLgoPotentialDataOverlay(node)",
         "InitializeSkillsView(body)",
         "InitializePotentialView(body)",
         "InitializeSpiritPetView(body)",

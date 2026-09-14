@@ -282,7 +282,9 @@ def build_potential_topology() -> Image.Image:
         ellipse(point, (4, 4), fill=(255, 181, 42, 255), outline=(255, 232, 154, 245), line_width=1)
 
     for cx, cy in POTENTIAL_NODE_CENTERS:
-        # Complete node ring, value box and add box are baked into this one template.
+        # The topology owns one quiet outer slot frame. The authored icon supplies
+        # its inner medallion, avoiding the previous stack of repeated concentric
+        # rings while keeping all placement geometry out of class-bound controls.
         node_glow = Image.new("RGBA", size, (0, 0, 0, 0))
         node_glow_draw = ImageDraw.Draw(node_glow)
         node_glow_draw.ellipse(box((cx - 62, cy - 62, cx + 62, cy + 62)),
@@ -291,8 +293,7 @@ def build_potential_topology() -> Image.Image:
         draw = ImageDraw.Draw(image)
         ellipse((cx, cy), (61, 61), outline=(2, 11, 20, 248), line_width=7)
         ellipse((cx, cy), (58, 58), outline=(238, 176, 60, 230), line_width=2)
-        ellipse((cx, cy), (51, 51), outline=(59, 185, 255, 190), line_width=1.5)
-        ellipse((cx, cy), (45, 45), fill=(2, 28, 52, 85), outline=(28, 116, 191, 155), line_width=1)
+        ellipse((cx, cy), (46, 46), fill=(2, 28, 52, 42))
         for dx, dy in ((-69, 0), (69, 0), (0, -69), (0, 69)):
             if dx:
                 line([(cx + dx - 7, cy), (cx + dx + 7, cy)], (244, 184, 65, 220), 2)
@@ -361,7 +362,7 @@ def build(output_dir: Path) -> dict:
         "canonicalDesignSet": str(CANONICAL_ROOT),
         "canonicalSha256": canonical,
         "assets": assets,
-        "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template and class data only binds overlays",
+        "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template with one outer slot frame per node, while class data overlays remain geometry-free",
         "sourceMethod": "deterministic Pillow raster authored from approved navy, cyan-glow and old-gold visual language; no canonical-board crop",
         "pixelBudget": f"actual-display-sized UI chrome; {total_bytes} bytes total; no mipmaps",
         "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled",

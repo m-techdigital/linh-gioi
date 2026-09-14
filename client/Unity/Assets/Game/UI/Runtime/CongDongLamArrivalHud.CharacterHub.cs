@@ -203,12 +203,6 @@ namespace LinhGioi.UI
             if (icon != null)
             {
                 icon.style.opacity = selected ? 1f : .86f;
-                icon.style.borderTopColor = icon.style.borderLeftColor = selected
-                    ? new Color(1f, .77f, .28f, 1f)
-                    : new Color(.23f, .62f, .88f, .76f);
-                icon.style.borderBottomColor = icon.style.borderRightColor = selected
-                    ? new Color(.20f, .82f, 1f, 1f)
-                    : new Color(.12f, .34f, .52f, .68f);
             }
             var title = node.Q<Label>(node.name + " Title");
             if (title != null) title.style.color = selected ? UiGold : UiText;
@@ -225,11 +219,11 @@ namespace LinhGioi.UI
             return connector;
         }
 
-        private VisualElement CreatePotentialNode(int index, float left, float top)
+        private VisualElement CreatePotentialDataOverlay(int index, float left, float top)
         {
             var name = "Map01A Potential Node " + index;
             var node = InventoryButton(() => SelectPotentialNode(index), name);
-            ApplyLgoPotentialNode(node);
+            ApplyLgoPotentialDataOverlay(node);
             node.AddToClassList("lgo-potential-node-overlay");
             var icon = new VisualElement { name = name + " Icon", pickingMode = PickingMode.Ignore };
             ApplyLgoSkillIcon(icon, 82);
@@ -477,7 +471,7 @@ namespace LinhGioi.UI
             core.style.borderTopWidth = core.style.borderBottomWidth = 0;
             diagram.Add(core);
             for (var potentialIndex = 0; potentialIndex < CharacterHubPotentialTopology.NodePositions.Length; potentialIndex++)
-                diagram.Add(CreatePotentialNode(potentialIndex,
+                diagram.Add(CreatePotentialDataOverlay(potentialIndex,
                     CharacterHubPotentialTopology.NodePositions[potentialIndex].x,
                     CharacterHubPotentialTopology.NodePositions[potentialIndex].y));
             _potentialPanel.Add(diagram);

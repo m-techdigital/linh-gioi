@@ -79,11 +79,11 @@
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-potential-topology-template",
-      "sha256": "3f4d0ab2d17596b5fb8f174b76dcbe4e26c58c45a334691655404226fca4be92"
+      "sha256": "9ad53c538cbd85a1c80b693a303a5c6c09b6de5fa698dee4d381fe3e784f1186"
     }
   ],
-  "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template and class data only binds overlays",
+  "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template with one outer slot frame per node, while class data overlays remain geometry-free",
   "sourceMethod": "deterministic Pillow raster authored from approved navy, cyan-glow and old-gold visual language; no canonical-board crop",
-  "pixelBudget": "actual-display-sized UI chrome; 123147 bytes total; no mipmaps",
+  "pixelBudget": "actual-display-sized UI chrome; 119673 bytes total; no mipmaps",
   "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled"
 }

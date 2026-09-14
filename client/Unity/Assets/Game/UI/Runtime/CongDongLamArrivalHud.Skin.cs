@@ -809,7 +809,7 @@ namespace LinhGioi.UI
             node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 52;
         }
 
-        private static void ApplyLgoPotentialNode(Button node)
+        private static void ApplyLgoPotentialDataOverlay(Button node)
         {
             node.AddToClassList("lgo-potential-node");
             node.text = string.Empty;
@@ -825,8 +825,6 @@ namespace LinhGioi.UI
             node.style.flexDirection = FlexDirection.Column;
             node.style.alignItems = Align.Center;
             node.style.justifyContent = Justify.Center;
-            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 62;
-            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 62;
             ApplyLgoCharacterHubInteractiveMotion(node);
         }
 

@@ -1,3 +1,10 @@
+## Character Hub — Tiềm năng geometry/data separation v16 — 2026-09-15
+
+- Audit sau v15 phát hiện topology đã dùng chung nhưng mỗi node vẫn có nhiều vòng đồng tâm, trong khi sprite icon đã sở hữu medallion hoàn chỉnh. v16 giữ đúng một outer slot frame trong topology tĩnh cùng toàn bộ đường nối/ô value/ô cộng/lõi; bỏ vòng lặp lại trong vùng icon.
+- `CreatePotentialDataOverlay`/`ApplyLgoPotentialDataOverlay` chỉ còn hit target, icon, tên, giá trị và selection opacity; không background, border hoặc border-radius. Validator và test khóa tên/helper cùng invariant overlay không sở hữu hình học. Class không tham gia tạo topology.
+- Player `build/character-hub-potential-overlay-player-v16/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=50` (CS0618 hiện hữu); evidence `build/character-hub-potential-overlay-runtime-v16/{pc,tablet,mobile}/{potential-default,potential}.png`. Đã xem default/selected trên đủ ba viewport: node bớt vòng chồng, icon rõ, alignment và detail cost/action không cắt/chồng. TDD overlay RED `0/1`, GREEN `1/1`; full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; asset/shared-skin `28/28`.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`; Tiềm năng vẫn là screen active duy nhất và chưa chuyển sang class art/pose/wardrobe/screen khác.
+
 ## Character Hub — Tiềm năng shared hierarchy v15 — 2026-09-15
 
 - Canonical active duy nhất vẫn là `redesign-v4-five-tabs/04-tiem-nang-five-tab-APPROVED.png`. Vòng ngoài, toàn bộ đường nối, năm vòng node, năm ô giá trị, năm ô cộng và lõi thiền nằm trong một asset topology 600×520; runtime chỉ phủ icon/tên/value/click. `SharedPotentials` là collection bất biến dùng chung; Võ/Kiếm/Pháp/Cơ/Linh chỉ truyền selection/recommendation, không tạo layout hay topology riêng.

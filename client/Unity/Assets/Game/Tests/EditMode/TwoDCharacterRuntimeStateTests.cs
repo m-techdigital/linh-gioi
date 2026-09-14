@@ -919,6 +919,8 @@ namespace LinhGioi.Tests.EditMode
                     "Potential buttons are interaction/data overlays on the shared vector base.");
                 Assert.That(potentialNode0.style.borderLeftWidth.value, Is.EqualTo(0));
                 Assert.That(potentialNode0.style.borderTopWidth.value, Is.EqualTo(0));
+                Assert.That(potentialNode0.style.borderTopLeftRadius.value.value, Is.EqualTo(0),
+                    "Potential overlay must remain a geometry-free hit target; the reusable topology owns every node circle.");
                 var potentialAdd0 = root.Q<Label>("Map01A Potential Node Add 0");
                 Assert.That(potentialAdd0.style.borderLeftWidth.value, Is.EqualTo(0));
                 Assert.That(potentialAdd0.style.borderTopWidth.value, Is.EqualTo(0));

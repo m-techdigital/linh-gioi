@@ -20,6 +20,10 @@ class BuildLgoCharacterHubSkinTests(unittest.TestCase):
         for x, y in skin.POTENTIAL_NODE_CENTERS:
             sample = image.crop((x - 64, y - 64, x + 65, y + 65))
             self.assertGreater(sample.getchannel("A").getbbox()[2], 100)
+            # A node slot has one quiet authored outer frame. The icon atlas owns
+            # the inner medallion, so the topology must not bake another bright
+            # ring through the icon content area.
+            self.assertLess(image.getpixel((x + 51, y))[3], 180)
         self.assertIn("character-hub-potential-topology.png", skin.BUILDERS)
 
     def test_potential_topology_runtime_png_stays_under_100_kib(self) -> None:
