@@ -29,6 +29,14 @@ namespace LinhGioi.Tests.EditMode
                 Is.EqualTo(new[] { "vo", "kiem", "phap", "co", "linh" }));
             Assert.That(profiles.Select(profile => profile.Label),
                 Is.EqualTo(new[] { "Võ", "Kiếm", "Pháp", "Cơ", "Linh" }));
+            var expectedDefaultPotentials = new Dictionary<string, string>
+            {
+                ["vo"] = "Sinh lực",
+                ["kiem"] = "Nhanh nhẹn",
+                ["phap"] = "Linh lực",
+                ["co"] = "Công",
+                ["linh"] = "Linh lực"
+            };
             foreach (var profile in profiles)
             {
                 Assert.That(profile.Skills.Count, Is.EqualTo(9), profile.Id + " must fill the shared 3x3 skill path.");
@@ -45,6 +53,9 @@ namespace LinhGioi.Tests.EditMode
                     && !string.IsNullOrEmpty(potential.CurrentEffect)
                     && !string.IsNullOrEmpty(potential.NextEffect)), Is.True,
                     profile.Id + " must bind the shared Potential detail sections without embedding layout copy in one blob.");
+                Assert.That(profile.DefaultPotentialName, Is.EqualTo(expectedDefaultPotentials[profile.Id]),
+                    profile.Id + " must select its recommended starting Potential through profile data.");
+                Assert.That(profile.Potentials.Any(potential => potential.Name == profile.DefaultPotentialName), Is.True);
                 if (profile.Id != "kiem")
                     Assert.That(profile.Skills.All(skill => skill.IconCatalog == CharacterHubIconCatalog.Hud), Is.True,
                         profile.Id + " must use provenance-backed shared icons instead of pretending Kiếm art belongs to another class.");
@@ -73,7 +84,7 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(state.SkillIdFor(CharacterHubClassCatalog.Get("phap")),
                 Is.EqualTo(CharacterHubClassCatalog.Get("phap").Skills[0].Id));
             Assert.That(state.PotentialNameFor(CharacterHubClassCatalog.Get("phap")),
-                Is.EqualTo(CharacterHubClassCatalog.Get("phap").Potentials[2].Name));
+                Is.EqualTo("Linh lực"));
         }
 
         [Test]
@@ -906,6 +917,14 @@ namespace LinhGioi.Tests.EditMode
                         Is.EqualTo(profile.Skills[0].Name), profile.Id);
                     Assert.That(root.Q<Label>("Map01A Potential Node 0 Title").text,
                         Is.EqualTo(profile.Potentials[0].Name), profile.Id);
+                    var selectedPotentialIndex = profile.Potentials
+                        .Select((potential, index) => new { potential.Name, Index = index })
+                        .Single(item => item.Name == profile.DefaultPotentialName).Index;
+                    for (var potentialIndex = 0; potentialIndex < profile.Potentials.Count; potentialIndex++)
+                        Assert.That(root.Q<Button>("Map01A Potential Node " + potentialIndex)
+                                .ClassListContains("lgo-character-hub-selected"),
+                            Is.EqualTo(potentialIndex == selectedPotentialIndex),
+                            profile.Id + " default Potential selection must be rebound without a class-specific UI branch.");
                     Assert.That(root.Q<Label>("Map01A Spirit Pet Identity").text,
                         Does.Contain(profile.Label), profile.Id);
                     Assert.That(root.Q<Label>("Map01A Spirit Pet Skill Row 0 Name").text,

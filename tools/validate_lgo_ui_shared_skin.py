@@ -367,6 +367,7 @@ REQUIRED_PARTIAL_MARKERS = {
     ],
     "CharacterHubClassCatalog.cs": [
         "SharedPotentials = Array.AsReadOnly",
+        "public string DefaultPotentialName { get; }",
         "public string CurrentEffect { get; }",
         "public string NextEffect { get; }",
     ],

@@ -1,3 +1,11 @@
+## Character Hub — Tiềm năng mặc định đúng profile năm class v8 — 2026-09-15
+
+- Audit state sau v7 phát hiện mọi class cùng mặc định chọn `Sinh lực` do selection model dùng index cố định, trong khi recommendation của từng profile khác nhau. Đây là lỗi dữ liệu làm Kiếm/Pháp/Cơ/Linh mở sai node dù topology chung đã đúng.
+- `CharacterHubClassProfile.DefaultPotentialName` nay xác định lựa chọn khởi đầu: Võ `Sinh lực`, Kiếm `Nhanh nhẹn`, Pháp `Linh lực`, Cơ `Công`, Linh `Linh lực`. Selection model đọc profile data; UI không có nhánh class và cùng một topology/reference vẫn được giữ khi đổi đủ năm class.
+- TDD RED là compile fail vì chưa có contract `DefaultPotentialName`; GREEN `TwoDCharacterRuntimeStateTests` `35/35`, gồm kiểm node selected trên cùng object tree. Full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared validator/governance `23/23`, pose pack `12/12`, registered capture `19/19`, no-3D/no-source-images pass.
+- Player `build/map01a-character-hub-potential-class-default-player-v8/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=48`. Evidence Võ canonical `build/map01a-character-hub-potential-class-default-runtime-v8/{pc,mobile,tablet}/`, 9 frame/profile; visual audit ba viewport không thấy regression.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`; class art/pose/wardrobe/source và screen khác tiếp tục hold.
+
 ## Character Hub — Tiềm năng shared meridian topology v7 — 2026-09-15
 
 - Audit trực tiếp v6 với canonical `04-tiem-nang-five-tab-APPROVED.png` xác nhận node/ring đã dùng chung nhưng core vẫn giống wireframe kỹ thuật và còn nhãn `TÂM MẠCH` ngoài design. v7 chuyển trường năng lượng, silhouette ngồi thiền, nhánh khí và trục năm điểm mạch vào cùng `CharacterHubPotentialTopology`; marker core không còn tự chèn nội dung.
