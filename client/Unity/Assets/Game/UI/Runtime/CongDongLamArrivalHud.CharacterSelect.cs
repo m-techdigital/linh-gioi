@@ -152,7 +152,7 @@ namespace LinhGioi.UI
                 text = "LụcThiên"
             };
             ApplyLgoCharacterSelectProfile(selected, true);
-            AddCharacterSelectProfileIcon(selected, _scene.GetVoAvatarThumbnailSprite(), "Selected");
+            AddCharacterSelectProfileIcon(selected, _scene.GetCharacterAvatarThumbnailSprite(), "Selected");
             var selectedText = new VisualElement { name = "Map01A Character Saved Profile Text", pickingMode = PickingMode.Ignore };
             selectedText.style.position = Position.Absolute;
             selectedText.style.left = 92;
@@ -289,13 +289,13 @@ namespace LinhGioi.UI
         private void RefreshCharacterSelectContent()
         {
             if (_scene == null) return;
-            var preview = _scene.GetVoAvatarThumbnailSprite();
+            var preview = _scene.GetCharacterAvatarThumbnailSprite();
             if (_characterSelectPreview != null)
                 _characterSelectPreview.style.backgroundImage = preview == null ? StyleKeyword.None : new StyleBackground(preview);
             if (_characterSelectProfileMeta != null)
-                _characterSelectProfileMeta.text = "Lv." + _scene.VoAvatarLevel + " · " + _scene.ActiveEquipmentClassLabel + " · S1 Đông Lâm";
+                _characterSelectProfileMeta.text = "Lv." + _scene.CharacterLevel + " · " + _scene.ActiveEquipmentClassLabel + " · S1 Đông Lâm";
             if (_characterSelectDetailMeta != null)
-                _characterSelectDetailMeta.text = _scene.ActiveEquipmentClassLabel + " · Lv." + _scene.VoAvatarLevel
+                _characterSelectDetailMeta.text = _scene.ActiveEquipmentClassLabel + " · Lv." + _scene.CharacterLevel
                     + "\nHP " + _scene.PlayerHealth + "/100  •  MP " + _scene.PlayerMana + "/100";
         }
 

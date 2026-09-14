@@ -13,6 +13,23 @@ ROOT = Path(__file__).resolve().parents[1]
 PROFILES = {'mobile': (1600, 720), 'tablet': (1024, 768), 'pc': (1280, 720)}
 
 
+def build_player_command(player, out, width, height, profile, quest_only=False, pose_review_dir=None):
+    """Build a Map01A capture command with one character renderer authority.
+
+    Source-pose capture must never instantiate the registered outfit renderer. The
+    registered outfit has its own dedicated capture tool and is not a fallback for
+    product/quest review.
+    """
+    command = [str(player), '-logFile', str(out / 'player.log'),
+        '-screen-fullscreen', '0', '-screen-width', str(width), '-screen-height', str(height),
+        '--lgo-map01a-device', profile, '--lgo-map01a-art-capture', '--lgo-map01a-art-dir', str(out)]
+    if quest_only:
+        command.append('--lgo-map01a-quest-only')
+    if pose_review_dir is not None:
+        command += ['--lgo-vo-pose-review-dir', str(pose_review_dir)]
+    return command
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--player', type=Path, default=ROOT / 'build/map01a-art/player/LinhGioiMap01A.app/Contents/MacOS/Unity')
@@ -42,12 +59,8 @@ def main():
     # Never erase earlier capture logs or reuse a stale successful manifest.
     out.mkdir(parents=True, exist_ok=False)
     with (out / 'launch.log').open('w') as log:
-        process = subprocess.Popen([str(player), '-logFile', str(out / 'player.log'),
-            '-screen-fullscreen', '0', '-screen-width', str(width), '-screen-height', str(height),
-            '--lgo-map01a-device', args.profile, '--lgo-map01a-art-capture', '--lgo-map01a-art-dir', str(out),
-            *(['--lgo-map01a-quest-only'] if args.quest_only else []),
-            *(['--lgo-vo-registered', '--lgo-vo-registered-equipment', '--lgo-vo-pose-review-dir',
-               str(args.pose_review_dir)] if args.pose_review_dir else [])],
+        process = subprocess.Popen(build_player_command(
+            player, out, width, height, args.profile, args.quest_only, args.pose_review_dir),
             cwd=player.parent, stdout=log, stderr=subprocess.STDOUT)
         try:
             started = time.monotonic()

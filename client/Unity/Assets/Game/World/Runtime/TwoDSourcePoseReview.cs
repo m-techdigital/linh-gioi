@@ -65,6 +65,7 @@ namespace LinhGioi.World
         private TwoDSourcePoseTimeline _timeline = new TwoDSourcePoseTimeline();
         public bool HasTransitions => _sprites.ContainsKey("run_start") && _sprites.ContainsKey("run_stop");
         public string CurrentFrame => _frame;
+        public Sprite CurrentBodySprite => _renderer == null ? null : _renderer.sprite;
         public string ClassId { get; private set; } = "vo";
         public string ClassLabel { get; private set; } = "Võ";
         public string GenderId { get; private set; } = "male";

@@ -39,6 +39,13 @@ namespace LinhGioi.World
         public bool HasUsedHealthPotion { get; private set; }
         public bool HasClassRewardItem { get; private set; }
         public bool IsClassRewardEquipped { get; private set; }
+        private const string StarterRewardClassId = "vo";
+        private const string StarterRewardItemId = "map01a_vo_wrist_guard_reward";
+        private const string StarterRewardDisplayName = "Hộ Uyển Võ Tân Thủ";
+        public string ClassRewardItemId => StarterRewardItemId;
+        public string ClassRewardDisplayName => StarterRewardDisplayName;
+        public bool IsClassRewardCompatible => string.Equals(
+            ActiveEquipmentClassId, StarterRewardClassId, StringComparison.Ordinal);
         public int HealthPotionCount { get; private set; }
         public int ManaPotionCount { get; private set; }
         public int PlayerHealth { get; private set; } = 60;
@@ -64,6 +71,16 @@ namespace LinhGioi.World
         public bool IsCapturing => _registeredCapturing || _poseLoopCapturing
             || CharacterSelectCaptureRequested || ServerSelectCaptureRequested || RegisterCaptureRequested || PasswordRecoveryCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
             || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
+
+        public static bool HasRendererAuthorityConflict(IReadOnlyList<string> args)
+        {
+            var registered = args.Contains("--lgo-vo-registered")
+                || args.Contains("--lgo-vo-registered-equipment");
+            var sourcePose = args.Contains("--lgo-vo-pose-review-dir")
+                || args.Contains("--lgo-vo-pose-review-female-dir")
+                || args.Contains("--lgo-source-pose-class");
+            return registered && sourcePose && !args.Contains("--lgo-registered-capture");
+        }
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string QuestDisplayTitle => ActiveQuestId == "COMPLETE"
@@ -113,9 +130,9 @@ namespace LinhGioi.World
 
         public bool EquipClassReward()
         {
-            if (!InventoryOpen || !HasClassRewardItem || IsClassRewardEquipped) return false;
+            if (!InventoryOpen || !HasClassRewardItem || IsClassRewardEquipped || !IsClassRewardCompatible) return false;
             IsClassRewardEquipped = true;
-            LastInteractionMessage = "Đã trang bị Hộ Uyển Võ Tân Thủ.";
+            LastInteractionMessage = "Đã trang bị " + ClassRewardDisplayName + ".";
             if (ActiveQuestId == "Q07") CompleteQuest("Q07", "Q09");
             return true;
         }
@@ -268,24 +285,27 @@ namespace LinhGioi.World
         public IReadOnlyList<string> CharacterHubClassIds => CharacterHubClassOrder;
         public string ActiveEquipmentClassId => ActiveSourcePoseReview?.ClassId ?? "vo";
         public string ActiveEquipmentClassLabel => ActiveSourcePoseReview?.ClassLabel ?? "Võ";
-        public IReadOnlyList<string> VoEquipmentSlotIds => VoEquipmentSlots;
-        public bool IsVoEquipmentSlotEquipped(string slot) => _voState.IsEquipped(slot);
-        public int GetVoEquipmentItemLevel(string slot) => _voEquipmentLevels.TryGetValue(slot, out var level)
-            ? level : VoAvatarLevel;
-        public string GetVoEquipmentItemId(string slot)
+        public IReadOnlyList<string> EquipmentSlotIds => VoEquipmentSlots;
+        public bool IsEquipmentSlotEquipped(string slot) => _voState.IsEquipped(slot);
+        public int GetEquipmentItemLevel(string slot) => _voEquipmentLevels.TryGetValue(slot, out var level)
+            ? level : CharacterLevel;
+        public string GetEquipmentItemId(string slot)
         {
             var index = Array.IndexOf(VoEquipmentSlots, slot);
-            if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
+            if (index < 0) throw new ArgumentException("Unknown character equipment slot: " + slot, nameof(slot));
             var reviewId = ActiveSourcePoseReview?.GetSlotItemId(VoReviewSlotIds[index]);
-            return string.IsNullOrEmpty(reviewId) ? "vo_" + slot + "_lv" + GetVoEquipmentItemLevel(slot).ToString("000") : reviewId;
+            return string.IsNullOrEmpty(reviewId)
+                ? ActiveEquipmentClassId + "_" + slot + "_lv" + GetEquipmentItemLevel(slot).ToString("000")
+                : reviewId;
         }
-        public Sprite GetVoEquipmentThumbnailSprite(string slot)
+        public Sprite GetEquipmentThumbnailSprite(string slot)
         {
             var index = Array.IndexOf(VoEquipmentSlots, slot);
-            if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
+            if (index < 0) throw new ArgumentException("Unknown character equipment slot: " + slot, nameof(slot));
             var uiIcon = GetMap01ACharacterEquipmentIconSprite(slot);
             if (uiIcon != null) return uiIcon;
-            var level = GetVoEquipmentItemLevel(slot);
+            if (!string.Equals(ActiveEquipmentClassId, "vo", StringComparison.OrdinalIgnoreCase)) return null;
+            var level = GetEquipmentItemLevel(slot);
             var partId = "lv" + level.ToString("000") + "_" + VoAvatarGender + "_slot_" + slot;
             if (_voAvatarParts.TryGetValue(partId, out var partRenderer) && partRenderer.sprite != null)
                 return partRenderer.sprite;
@@ -307,12 +327,45 @@ namespace LinhGioi.World
             }
             return null;
         }
-        public Sprite GetVoAvatarThumbnailSprite()
+        public Sprite GetCharacterAvatarThumbnailSprite()
         {
+            if (ActiveSourcePoseReview != null) return ActiveSourcePoseReview.CurrentBodySprite;
             if (!string.Equals(ActiveEquipmentClassId, "vo", StringComparison.OrdinalIgnoreCase)) return null;
             var partId = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_full";
             return _voAvatarParts.TryGetValue(partId, out var renderer) ? renderer.sprite : null;
         }
+
+        // Shared Character Hub contract. The source-pose actor supplies the active
+        // class data; UI code must not branch on a Võ-specific presentation API.
+        public string CharacterAvatarMode => _voState.Mode;
+        public string CharacterGender => _voState.Gender;
+        public int CharacterLevel => _voState.Level;
+        public string SelectedEquipmentSlot => _voState.SelectedEquipmentSlot;
+        public int SelectedEquipmentItemLevel => GetEquipmentItemLevel(SelectedEquipmentSlot);
+        public int EquippedSlotCount => _voState.EquippedSlotCount;
+        public bool HasEquipmentItemVariant(string slot)
+        {
+            if (ActiveSourcePoseReview == null) return false;
+            var index = Array.IndexOf(VoEquipmentSlots, slot);
+            if (index < 0) throw new ArgumentException("Unknown character equipment slot: " + slot, nameof(slot));
+            var current = GetEquipmentItemLevel(slot);
+            return ActiveSourcePoseReview.NextSlotItemLevel(VoReviewSlotIds[index], current) != current;
+        }
+        public bool CharacterRunEnabled => VoRunEnabled;
+        public bool CanTriggerCharacterSkill => CanTriggerVoSkill;
+        public void SetCharacterRun(bool enabled) => SetVoRun(enabled);
+        public void SetCharacterJumpHeld(bool held) => SetVoJumpHeld(held);
+        public void TriggerCharacterBasicAttack() => TriggerVoBasicAttack();
+        public void TriggerCharacterSkill() => TriggerVoSkill();
+
+        // Registered-outfit capture is isolated WIP. Keep these compatibility
+        // names for its evidence tooling while product UI binds only the contract above.
+        public IReadOnlyList<string> VoEquipmentSlotIds => EquipmentSlotIds;
+        public bool IsVoEquipmentSlotEquipped(string slot) => IsEquipmentSlotEquipped(slot);
+        public int GetVoEquipmentItemLevel(string slot) => GetEquipmentItemLevel(slot);
+        public string GetVoEquipmentItemId(string slot) => GetEquipmentItemId(slot);
+        public Sprite GetVoEquipmentThumbnailSprite(string slot) => GetEquipmentThumbnailSprite(slot);
+        public Sprite GetVoAvatarThumbnailSprite() => GetCharacterAvatarThumbnailSprite();
         public Texture2D GetCharacterHubAvatarPreviewTexture()
         {
             if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null) return null;
@@ -394,7 +447,7 @@ namespace LinhGioi.World
         public Sprite GetMap01ACharacterEquipmentIconSprite(string slot)
         {
             var index = Array.IndexOf(VoEquipmentSlots, slot);
-            if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
+            if (index < 0) throw new ArgumentException("Unknown character equipment slot: " + slot, nameof(slot));
             EnsureMap01AIconAtlasLoaded(ref _map01ACharacterEquipmentIconsLoaded, _map01ACharacterEquipmentIcons,
                 "LGOMaps/CongDongLamMap01ACharacterEquipmentIcons/", "map01a-character-equipment-icons",
                 "map01a-character-equipment-icons-v1");
@@ -488,13 +541,7 @@ namespace LinhGioi.World
             return _map01ANpcSprites.TryGetValue(npcId, out var sprite) ? sprite : null;
         }
         public bool HasVoEquipmentItemVariant(string slot)
-        {
-            if (ActiveSourcePoseReview == null) return false;
-            var index = Array.IndexOf(VoEquipmentSlots, slot);
-            if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
-            var current = GetVoEquipmentItemLevel(slot);
-            return ActiveSourcePoseReview.NextSlotItemLevel(VoReviewSlotIds[index], current) != current;
-        }
+            => HasEquipmentItemVariant(slot);
         public string VoMixedEquipmentSnapshot => string.Join(",", VoEquipmentSlots.Select(slot =>
             slot + "=Lv" + (_voEquipmentLevels.TryGetValue(slot, out var level) ? level : VoAvatarLevel)));
         public int VoEquippedSlotCount => _voState.EquippedSlotCount;
@@ -743,6 +790,9 @@ namespace LinhGioi.World
 
         private void Build()
         {
+            if (HasRendererAuthorityConflict(Environment.GetCommandLineArgs()))
+                throw new InvalidOperationException(
+                    "Map01A Player selected registered and source-pose renderers together");
             var manifest = Resources.Load<TextAsset>(ResourcePath + "manifest");
             var atlas = Resources.Load<Texture2D>(ResourcePath + "props-atlas");
             var far = Resources.Load<Texture2D>(ResourcePath + "far-background");
@@ -1011,11 +1061,15 @@ namespace LinhGioi.World
             RefreshVoAvatarMode();
         }
 
+        public void CycleCharacterAvatarMode() => CycleVoAvatarMode();
+
         public void CycleVoAvatarGender()
         {
             _voState.CycleGender();
             RefreshVoAvatarMode();
         }
+
+        public void CycleCharacterGender() => CycleVoAvatarGender();
 
         public void CycleSourcePoseClass()
         {
@@ -1068,7 +1122,7 @@ namespace LinhGioi.World
             {
                 state = new CharacterHubLoadoutState
                 {
-                    Mode = classId == "vo" ? "full" : "modular",
+                    Mode = "modular",
                     SelectedSlot = VoEquipmentSlots[0],
                     EquippedSlots = (string[])VoEquipmentSlots.Clone()
                 };
@@ -1152,10 +1206,14 @@ namespace LinhGioi.World
             RefreshVoAvatarMode();
         }
 
+        public void CycleCharacterLevel() => CycleVoAvatarLevel();
+
         public void CycleVoEquipmentSlot()
         {
             _voState.CycleEquipmentSlot();
         }
+
+        public void CycleEquipmentSlot() => CycleVoEquipmentSlot();
 
         public void SelectVoEquipmentSlot(string slot)
         {
@@ -1163,11 +1221,15 @@ namespace LinhGioi.World
             LastInteractionMessage = "Đã chọn " + slot + ".";
         }
 
+        public void SelectEquipmentSlot(string slot) => SelectVoEquipmentSlot(slot);
+
         public void ToggleVoEquipmentSlot()
         {
             _voState.ToggleSelectedEquipmentSlot();
             RefreshVoAvatarMode();
         }
+
+        public void ToggleEquipmentSlot() => ToggleVoEquipmentSlot();
 
         public void CycleVoSelectedEquipmentItemLevel()
         {
@@ -1184,6 +1246,8 @@ namespace LinhGioi.World
             _voEquipmentLevels[VoSelectedEquipmentSlot] = VoAvatarLevels[(index + 1) % VoAvatarLevels.Length];
             RefreshVoAvatarMode();
         }
+
+        public void CycleSelectedEquipmentItemLevel() => CycleVoSelectedEquipmentItemLevel();
 
         private void RefreshVoAvatarMode()
         {

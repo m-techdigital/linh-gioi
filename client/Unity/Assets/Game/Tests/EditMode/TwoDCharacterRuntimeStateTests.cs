@@ -67,6 +67,60 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void SharedEquipmentContractReadsClassCompatibilityFromActiveActorData()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("shared equipment class-data test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                Assert.That(scene.IsClassRewardCompatible, Is.True);
+                Assert.That(scene.ClassRewardItemId, Is.EqualTo("map01a_vo_wrist_guard_reward"));
+
+                var sourcePose = new GameObject("active class-data actor").AddComponent<TwoDSourcePoseReview>();
+                sourcePose.transform.SetParent(scene.transform, false);
+                typeof(TwoDSourcePoseReview)
+                    .GetField("<ClassId>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(sourcePose, "kiem");
+                typeof(CongDongLamMap01AArtPreview)
+                    .GetField("_sourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(scene, sourcePose);
+
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo("kiem"));
+                Assert.That(scene.IsClassRewardCompatible, Is.False,
+                    "The shared inventory flow must read compatibility from item/class data, not a per-class UI branch.");
+                Assert.That(scene.EquipmentSlotIds.Count, Is.EqualTo(10));
+                Assert.That(scene.SelectedEquipmentSlot, Is.EqualTo(scene.EquipmentSlotIds[0]));
+                Assert.That(scene.GetEquipmentItemId(scene.SelectedEquipmentSlot),
+                    Does.StartWith("kiem_"),
+                    "Fallback item identity must be derived from active actor data, not fixed to Võ.");
+            }
+            finally
+            {
+                foreach (var item in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(item)) Object.DestroyImmediate(item);
+            }
+        }
+
+        [Test]
+        public void ProductPlayerRejectsTwoCharacterRendererAuthorities()
+        {
+            Assert.That(CongDongLamMap01AArtPreview.HasRendererAuthorityConflict(new[]
+            {
+                "Player", "--lgo-vo-registered", "--lgo-vo-pose-review-dir", "/tmp/pose"
+            }), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.HasRendererAuthorityConflict(new[]
+            {
+                "Player", "--lgo-vo-pose-review-dir", "/tmp/pose"
+            }), Is.False);
+            Assert.That(CongDongLamMap01AArtPreview.HasRendererAuthorityConflict(new[]
+            {
+                "Player", "--lgo-vo-registered", "--lgo-registered-capture",
+                "--lgo-vo-pose-review-dir", "/tmp/pose"
+            }), Is.False, "The isolated registered comparison capture remains explicit WIP evidence.");
+        }
+
+        [Test]
         public void CharacterHubDoesNotReviveLegacyStaticClassPreviewAndKeepsFixedActorStage()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

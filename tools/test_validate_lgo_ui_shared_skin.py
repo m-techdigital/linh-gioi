@@ -67,6 +67,22 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("legacy static class renderer" in item for item in violations), violations)
 
+    def test_rejects_class_specific_character_hub_api_in_ui(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            inventory = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs"
+            inventory.write_text(
+                inventory.read_text(encoding="utf-8").replace(
+                    "_scene.GetEquipmentItemId(slotId)",
+                    "_scene.GetVoEquipmentItemId(slotId)",
+                    1,
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("class-specific UI runtime branch" in item for item in violations), violations)
+
     def test_rejects_register_screen_that_skips_shared_panel_base(self) -> None:
         with self._copy_minimal_repo() as temp:
             register = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Register.cs"

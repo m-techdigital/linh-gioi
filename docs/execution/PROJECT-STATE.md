@@ -1,3 +1,12 @@
+## Character Hub — contract chung, class chỉ là dữ liệu — 2026-09-15
+
+- HUD, hành trang và Character Select hiện chỉ gọi contract chung cho actor, motion và 10 slot. Không còn API `Vo*` trong UI hoặc nhánh UI theo tên class; `classId`, item ID, skill, tiềm năng và linh thú đi qua profile/data hiện hành.
+- Item fallback lấy prefix từ `ActiveEquipmentClassId`; thumbnail nhân vật lấy sprite đang hiển thị của chính source-pose actor. API `Vo*` còn lại chỉ là adapter tương thích cho registered-outfit capture WIP biệt lập, không phải implementation mà UI gọi.
+- Đã gỡ cặp flag registered khỏi Map01A source-pose capture và thêm runtime guard từ chối Player chọn đồng thời registered + source-pose renderer. Ngoại lệ duy nhất là `--lgo-registered-capture` để bảo toàn evidence WIP đã đăng ký.
+- Gate: Python `33/33`, pose pack `12/12`, registered capture `19/19`, `TwoDCharacterRuntimeStateTests` `34/34`, full EditMode `283 total / 282 passed / 0 failed / 1 ignored`; shared-skin/no-3D/no-source/frozen pass. Player `build/map01a-shared-character-contract-player-v1/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=46`.
+- Evidence Player mới tại `build/map01a-shared-character-contract-runtime-v1/pc/`: 9 frame, `usesOsMouseOrKeyboard=false`. Đã xem trực tiếp đủ Nhân vật/Rương đồ/Kỹ năng/Tiềm năng/Linh thú; một actor source-pose, layout không vỡ/chồng. Pack ngoài hiện chỉ có body div4 nên ảnh này không được dùng để nghiệm thu mix đồ hoặc art class.
+- Trạng thái `CONTINUE`: giữ một UI/renderer base cho mọi class; không mở rộng class/pose/wardrobe, không phục hồi renderer cũ. Bước UI kế tiếp chỉ tiếp tục theo canonical design và dữ liệu chung.
+
 ## Character Hub — khóa selection state theo class — 2026-09-15
 
 - Kỹ năng và Tiềm năng trước đây chỉ giữ selected state trên VisualElement hiện hành; rebuild UI khi đổi class luôn quay về node mặc định và không có model chứng minh state của hai class tách biệt.

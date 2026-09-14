@@ -173,6 +173,10 @@ FORBIDDEN_SNIPPETS = [
     "Box(",
     "ApplyLgoItemIcon(_characterHeroPortrait)",
 ]
+FORBIDDEN_CLASS_SPECIFIC_UI_PATTERNS = [
+    re.compile(r"_scene\.(?:Get|Set|Cycle|Select|Toggle|Trigger|Is|Has|Can)?Vo[A-Z]"),
+    re.compile(r'ActiveEquipmentClassId\s*==\s*"(?:vo|kiem|phap|co|linh)"'),
+]
 
 # Runtime UI decisions that previously regressed when a new screen was built as a
 # parallel one-off implementation. Keep these checks structural and cheap so the
@@ -353,6 +357,7 @@ REQUIRED_AGENT_MARKERS = [
     "modal/dialog/card/tab/button/detail panel dùng base chung",
         "Không tạo helper skin song song kiểu `StyleModalDialog`, `BuildCardPanel`, `CreateDetailPanel`",
     "Nếu hai UI/UX giống nhau mà cần khác hành vi, tách data/state/action",
+    "class chỉ truyền profile/data (`classId`, `itemId`, skill, tiềm năng, linh thú)",
     "Helper ngoại lệ như `InventoryPanel` chỉ được nằm trong partial sở hữu flow",
     "python3.12 tools/validate_lgo_ui_shared_skin.py",
 ]
@@ -463,6 +468,12 @@ def validate_root(root: Path = ROOT) -> list[str]:
         for pattern in FORBIDDEN_LOCAL_PATTERNS:
             for match in pattern.finditer(text):
                 violations.append(f"{rel}: local skin pattern {match.group(0)}")
+        for pattern in FORBIDDEN_CLASS_SPECIFIC_UI_PATTERNS:
+            for match in pattern.finditer(text):
+                violations.append(
+                    f"{rel}: class-specific UI runtime branch {match.group(0)}; "
+                    "bind the shared Character Hub contract/profile instead"
+                )
         for match in FORBIDDEN_PARALLEL_SKIN_HELPER.finditer(text):
             name = match.group("void_name") or match.group("element_name")
             allowed_owner = ALLOWED_PARALLEL_SKIN_HELPERS.get(name)

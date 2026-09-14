@@ -202,22 +202,22 @@ namespace LinhGioi.UI
             ApplyLgoHudContextAction(_talk, _touch, minWidth: 150); Place(_talk, null, 16, null, _touch ? 318 : 232); _safe.Add(_talk);
             _npcTalk = new Button(() => _scene.UseNpcConversation()) { text = "Nói chuyện với Tiểu Đồng" };
             ApplyLgoHudContextAction(_npcTalk, _touch, minHeight: 48); Place(_npcTalk, null, 16, null, _touch ? 394 : 292); _safe.Add(_npcTalk);
-            _outfit = new Button(() => _scene.CycleVoAvatarMode()) { text = "Trang bị Võ · C" };
+            _outfit = new Button(() => _scene.CycleCharacterAvatarMode()) { text = "Trang bị · C" };
             ApplyLgoHudInfoPanel(_outfit); Place(_outfit, 16, null, _touch ? 90 : 90, null);
             _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
-            _level = new Button(() => _scene.CycleVoAvatarLevel()) { text = "Cấp trang bị · L" };
+            _level = new Button(() => _scene.CycleCharacterLevel()) { text = "Cấp trang bị · L" };
             ApplyLgoHudInfoPanel(_level); Place(_level, 16, null, _touch ? 152 : 138, null);
             _level.style.minHeight = _touch ? 52 : 40; _level.style.minWidth = 170; _safe.Add(_level);
-            _gender = new Button(() => _scene.CycleVoAvatarGender()) { text = "Nam/Nữ · G" };
+            _gender = new Button(() => _scene.CycleCharacterGender()) { text = "Nam/Nữ · G" };
             ApplyLgoHudInfoPanel(_gender); Place(_gender, 16, null, _touch ? 210 : 184, null);
             _gender.style.minHeight = _touch ? 52 : 40; _gender.style.minWidth = 170; _safe.Add(_gender);
-            _slot = new Button(() => _scene.CycleVoEquipmentSlot()) { text = "Chọn slot · V" };
+            _slot = new Button(() => _scene.CycleEquipmentSlot()) { text = "Chọn slot · V" };
             ApplyLgoHudInfoPanel(_slot); Place(_slot, 16, null, _touch ? 268 : 230, null);
             _slot.style.minHeight = _touch ? 52 : 40; _slot.style.minWidth = 170; _safe.Add(_slot);
-            _itemLevel = new Button(() => _scene.CycleVoSelectedEquipmentItemLevel()) { text = "Đổi cấp item · M" };
+            _itemLevel = new Button(() => _scene.CycleSelectedEquipmentItemLevel()) { text = "Đổi cấp item · M" };
             ApplyLgoHudInfoPanel(_itemLevel); Place(_itemLevel, 16, null, _touch ? 326 : 276, null);
             _itemLevel.style.minHeight = _touch ? 52 : 40; _itemLevel.style.minWidth = 170; _safe.Add(_itemLevel);
-            _toggleSlot = new Button(() => _scene.ToggleVoEquipmentSlot()) { text = "Mặc/Cởi · B" };
+            _toggleSlot = new Button(() => _scene.ToggleEquipmentSlot()) { text = "Mặc/Cởi · B" };
             ApplyLgoHudInfoPanel(_toggleSlot); Place(_toggleSlot, 16, null, _touch ? 384 : 322, null);
             _toggleSlot.style.minHeight = _touch ? 52 : 40; _toggleSlot.style.minWidth = 170; _safe.Add(_toggleSlot);
             _combatBar = new VisualElement { name = "Map01A Combat Actions" }; Place(_combatBar, null, 16, null, _touch ? 154 : 84);
@@ -226,16 +226,16 @@ namespace LinhGioi.UI
             _combatBar.style.height = _touch ? 76 : 66;
             _combatBar.style.justifyContent = Justify.FlexEnd;
             _combatBar.style.alignItems = Align.Center;
-            _run = new Button(() => _scene.SetVoRun(!_scene.VoRunEnabled)) { name = "Map01A Run Action", text = "Chạy" };
+            _run = new Button(() => _scene.SetCharacterRun(!_scene.CharacterRunEnabled)) { name = "Map01A Run Action", text = "Chạy" };
             _run.tooltip = "Chạy · Shift";
             _jump = new Button { name = "Map01A Jump Action", text = "Nhảy" };
             _jump.tooltip = "Nhảy · W";
-            _jump.RegisterCallback<PointerDownEvent>(evt => { _touchJumpHeld = true; _jump.CapturePointer(evt.pointerId); _scene.SetVoJumpHeld(true); });
-            _jump.RegisterCallback<PointerUpEvent>(evt => { _touchJumpHeld = false; _jump.ReleasePointer(evt.pointerId); _scene.SetVoJumpHeld(false); });
-            _jump.RegisterCallback<PointerCaptureOutEvent>(evt => { _touchJumpHeld = false; _scene.SetVoJumpHeld(false); });
-            _basic = new Button(() => _scene.TriggerVoBasicAttack()) { name = "Map01A Basic Attack Action", text = "Đánh" };
+            _jump.RegisterCallback<PointerDownEvent>(evt => { _touchJumpHeld = true; _jump.CapturePointer(evt.pointerId); _scene.SetCharacterJumpHeld(true); });
+            _jump.RegisterCallback<PointerUpEvent>(evt => { _touchJumpHeld = false; _jump.ReleasePointer(evt.pointerId); _scene.SetCharacterJumpHeld(false); });
+            _jump.RegisterCallback<PointerCaptureOutEvent>(evt => { _touchJumpHeld = false; _scene.SetCharacterJumpHeld(false); });
+            _basic = new Button(() => _scene.TriggerCharacterBasicAttack()) { name = "Map01A Basic Attack Action", text = "Đánh" };
             _basic.tooltip = "Đánh thường · Z";
-            _skill = new Button(() => _scene.TriggerVoSkill()) { name = "Map01A Skill Action", text = "Liên quyền" };
+            _skill = new Button(() => _scene.TriggerCharacterSkill()) { name = "Map01A Skill Action", text = "Kỹ năng" };
             _skill.tooltip = "Kỹ năng · X";
             ApplyLgoHudCombatAction(_run, _touch);
             ApplyLgoHudCombatAction(_jump, _touch);
@@ -486,18 +486,18 @@ namespace LinhGioi.UI
                 {
                     var keyboard = (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow) ? 1f : 0f)
                         - (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow) ? 1f : 0f);
-                    if (!_touch) _scene.SetVoRun(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
+                    if (!_touch) _scene.SetCharacterRun(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
                     _scene.MoveOnLane(Mathf.Abs(_pad.Value.x) > .01f ? _pad.Value.x : keyboard, Time.deltaTime);
                     if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
-                    if (!_scene.IsSourcePoseReviewActive && Input.GetKeyDown(KeyCode.C)) _scene.CycleVoAvatarMode();
-                    if (Input.GetKeyDown(KeyCode.L)) _scene.CycleVoAvatarLevel();
-                    if (Input.GetKeyDown(KeyCode.G)) _scene.CycleVoAvatarGender();
-                    if (Input.GetKeyDown(KeyCode.V)) _scene.CycleVoEquipmentSlot();
-                    if (Input.GetKeyDown(KeyCode.M)) _scene.CycleVoSelectedEquipmentItemLevel();
-                    if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleVoEquipmentSlot();
-                    if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerVoSkill();
-                    _scene.SetVoJumpHeld(_touchJumpHeld || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow));
-                    if (Input.GetKeyDown(KeyCode.Z)) _scene.TriggerVoBasicAttack();
+                    if (!_scene.IsSourcePoseReviewActive && Input.GetKeyDown(KeyCode.C)) _scene.CycleCharacterAvatarMode();
+                    if (Input.GetKeyDown(KeyCode.L)) _scene.CycleCharacterLevel();
+                    if (Input.GetKeyDown(KeyCode.G)) _scene.CycleCharacterGender();
+                    if (Input.GetKeyDown(KeyCode.V)) _scene.CycleEquipmentSlot();
+                    if (Input.GetKeyDown(KeyCode.M)) _scene.CycleSelectedEquipmentItemLevel();
+                    if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleEquipmentSlot();
+                    if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerCharacterSkill();
+                    _scene.SetCharacterJumpHeld(_touchJumpHeld || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow));
+                    if (Input.GetKeyDown(KeyCode.Z)) _scene.TriggerCharacterBasicAttack();
                     if (Input.GetKeyDown(KeyCode.I)) _scene.ToggleInventory();
                     if (Input.GetKeyDown(KeyCode.H)) _scene.UseHealthPotion();
                     if (Input.GetKeyDown(KeyCode.K)) _scene.UseManaPotion();
@@ -506,8 +506,8 @@ namespace LinhGioi.UI
                 }
                 else
                 {
-                    if (!_touch) _scene.SetVoRun(false);
-                    _scene.SetVoJumpHeld(false);
+                    if (!_touch) _scene.SetCharacterRun(false);
+                    _scene.SetCharacterJumpHeld(false);
                 }
             }
             _questTitle.text = _scene.QuestDisplayTitle;
@@ -520,17 +520,17 @@ namespace LinhGioi.UI
                 : DisplayStyle.Flex;
             _talk.SetEnabled(_scene.CanUseCurrentRouteAction);
             _talk.text = _scene.CurrentActionLabel + (_touch ? "" : " · E");
-            _outfit.text = "Trang bị " + _scene.AvatarClassLabel + ": " + _scene.VoAvatarMode + (_touch ? "" : " · C");
+            _outfit.text = "Trang bị " + _scene.AvatarClassLabel + ": " + _scene.CharacterAvatarMode + (_touch ? "" : " · C");
             _level.text = "Cấp đồ: " + _scene.EquipmentLevelLabel + (_touch ? "" : " · L");
-            _gender.text = "Thân: " + _scene.VoAvatarGender + (_touch ? "" : " · G");
+            _gender.text = "Thân: " + _scene.CharacterGender + (_touch ? "" : " · G");
             _slot.text = "Slot: " + _scene.EquipmentSlotLabel + (_touch ? "" : " · V");
             _itemLevel.text = "Đổi cấp item" + (_touch ? "" : " · M");
-            _toggleSlot.text = (_scene.VoEquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
+            _toggleSlot.text = (_scene.EquippedSlotCount == 10 ? "Cởi slot" : "Mặc/cởi") + (_touch ? "" : " · B");
             _run.text = _touch ? "" : "SHIFT";
             _jump.text = _touch ? "" : "W";
             _basic.text = _touch ? "" : "Z";
-            _skill.text = _touch ? "" : "X";
-            _skill.SetEnabled(_scene.CanTriggerVoSkill);
+            _skill.text = ActiveCharacterHubProfile.Skills[0].Name + (_touch ? "" : " · X");
+            _skill.SetEnabled(_scene.CanTriggerCharacterSkill);
             _minimapTitle.text = _scene.MinimapUnlocked ? "BẢN ĐỒ ĐÔNG LÂM" : "BẢN ĐỒ KHU VỰC";
             _minimapStatus.text = _scene.MinimapUnlocked ? "Đang ở: " + _scene.CurrentRouteNodeLabel : "Hoàn thành Q02 để mở tuyến đường";
             _minimapCurrentMarker.style.display = _scene.MinimapUnlocked ? DisplayStyle.Flex : DisplayStyle.None;
@@ -548,9 +548,9 @@ namespace LinhGioi.UI
             foreach (var control in new[] { _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot })
                 control.style.display = DisplayStyle.None;
             _inventorySummary.text = _scene.InventorySummaryText;
-            _inventoryHeroTitle.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam");
+            _inventoryHeroTitle.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.CharacterGender == "female" ? "Nữ" : "Nam");
             _inventoryHeroMeta.text = "HP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
-            _equipmentTitle.text = "TRANG BỊ · " + _scene.VoEquippedSlotCount + "/10 món đang mặc";
+            _equipmentTitle.text = "TRANG BỊ · " + _scene.EquippedSlotCount + "/10 món đang mặc";
             if (_suppliesEmptyState != null)
                 _suppliesEmptyState.text = _scene.HealthPotionCount <= 0 && _scene.ManaPotionCount <= 0 && !_scene.HasClassRewardItem
                     ? "Chưa nhận vật phẩm nhiệm vụ. Hoàn thành Q04 để nhận bình máu, bình linh lực và hộ uyển tân thủ."
@@ -558,14 +558,14 @@ namespace LinhGioi.UI
             _questItemActions.style.display = DisplayStyle.Flex;
             RefreshInventoryEquipmentTiles();
             RefreshInventoryDetailCard();
-            var selectedSlot = _scene.VoSelectedEquipmentSlot;
-            var selectedEquipped = _scene.IsVoEquipmentSlotEquipped(selectedSlot);
+            var selectedSlot = _scene.SelectedEquipmentSlot;
+            var selectedEquipped = _scene.IsEquipmentSlotEquipped(selectedSlot);
             var equipToggleText = selectedEquipped ? "Tháo" : "Trang bị";
             if (!_suppliesOpen)
             {
                 _inventoryDetailPrimaryAction.text = equipToggleText;
                 _equipmentToggle.text = equipToggleText;
-                var hasVariant = _scene.HasVoEquipmentItemVariant(_scene.VoSelectedEquipmentSlot);
+                var hasVariant = _scene.HasEquipmentItemVariant(_scene.SelectedEquipmentSlot);
                 _equipmentVariant.text = hasVariant ? "Đổi cấp món" : "";
                 _equipmentVariant.style.display = hasVariant ? DisplayStyle.Flex : DisplayStyle.None;
                 _equipmentVariant.SetEnabled(hasVariant);
@@ -576,12 +576,12 @@ namespace LinhGioi.UI
             RefreshCharacterHubClassProfile();
             _inventoryGender.style.display = _scene.CanCycleSourcePoseGender ? DisplayStyle.Flex : DisplayStyle.None;
             _inventoryGender.text = "Đổi giới · "
-                + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + (_touch ? "" : " · G");
+                + (_scene.CharacterGender == "female" ? "Nữ" : "Nam") + (_touch ? "" : " · G");
             _inventoryGender.SetEnabled(_scene.CanCycleSourcePoseGender);
             _vitals.style.display = _scene.InventoryOpen || _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
             _vitalsName.text = "LụcThiên";
-            _vitalsMeta.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + "  ·  Lv.1";
-            var playerPortrait = _scene.GetVoAvatarThumbnailSprite();
+            _vitalsMeta.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.CharacterGender == "female" ? "Nữ" : "Nam") + "  ·  Lv.1";
+            var playerPortrait = _scene.GetCharacterAvatarThumbnailSprite();
             _vitalsPortrait.style.backgroundImage = playerPortrait == null ? StyleKeyword.None : new StyleBackground(playerPortrait);
             _health.value = _scene.PlayerHealth; _health.title = "HP " + _scene.PlayerHealth + "/100";
             _mana.value = _scene.PlayerMana; _mana.title = "MP " + _scene.PlayerMana + "/100";
