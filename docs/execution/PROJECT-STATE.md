@@ -2,10 +2,18 @@
 
 - Goal UI/UX hiện hành: xử lý tuần tự từng screen; trước code phải có đúng một canonical design, scenario/state/interaction, asset budget và plan. Chỉ chuyển screen khi Player evidence PC/mobile landscape/tablet đã được xem và toàn gate sạch.
 - Rule đã được ghi vào `AGENTS.md`; screen contract dùng chung quy trình shell → vùng chính → component base → asset → typography/copy. Mobile/tablet giữ cùng landscape composition bằng scale/safe margin, không wrap/stack thành layout khác.
-- Entry/Login là screen active duy nhất. Canonical mới: `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v5-entry/01-entry-login-CANONICAL.png`; contract `docs/design/LGO-MAP01A-ENTRY-SCREEN-CONTRACT-v1.0.md`; hai demo cũ chỉ là lịch sử.
+- Entry/Login và Character Select đã khóa layout theo canonical riêng. Screen active kế tiếp là Chọn máy chủ ở design gate; chưa có canonical thì không code.
 - Các screen liên quan Entry như chọn máy chủ, đăng ký/quên mật khẩu và chọn nhân vật phải lần lượt có contract/canonical riêng sau khi Login khóa; không gộp nhiều screen hoặc triển khai song song.
 - Icon/art phải có design/provenance và pixel budget theo kích thước hiển thị thực; không dùng emoji, glyph, wireframe hay ảnh tạm để bàn giao. Ưu tiên atlas chung theo vòng đời tải, hash/import compression và ID ổn định để mở rộng lâu dài.
 - Không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+
+## Map01A — Character Select canonical layout locked — 2026-09-14
+
+- Canonical duy nhất: `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v6-character-select/01-character-select-CANONICAL.png` (`1672×941`, SHA-256 `afdc76db54df285b02bd641b3588faa3e7a757d3cfc4eed56ca2fbd266e8d108`). Contract: `docs/design/LGO-MAP01A-CHARACTER-SELECT-SCREEN-CONTRACT-v1.0.md`.
+- Runtime đã bỏ modal năm class, copy review local và toàn callback `CycleSourcePoseClass()` khỏi screen. Màn mới có stage trái, account panel phải, một hồ sơ thật `LụcThiên`, hai slot trống, detail/action/server/footer; empty/create/edit/delete/server đều phản hồi trạng thái trung thực.
+- Stage dùng lại Map01A `far-background.png` 1024×576, khoảng 124 KB và selected avatar source hiện hành; không thêm atlas trùng lặp, không sinh class/profile/art giả và không đổi camera/base/scale gameplay.
+- Full `TwoDCharacterRuntimeStateTests` đạt `25/25`; focused final đạt `1/1` và khóa việc restore HUD khi vào game. Player `build/map01a-character-select-canonical-player-v6/LinhGioiOnline.app` build `errors=0`; evidence `build/map01a-character-select-canonical-runtime-v6/{pc,mobile,tablet}/character-select.png` đã visual audit ở `1600×900`, `1600×720`, `1024×768`, không wrap/cắt/chồng hoặc hai actor song song.
+- Đây là layout lock; avatar/portrait vẫn là art source hiện hành và không phải owner class-art approval. Screen kế tiếp phải quay về design gate cho Chọn máy chủ.
 
 ## Map01A — Entry/Login canonical layout locked — 2026-09-14
 

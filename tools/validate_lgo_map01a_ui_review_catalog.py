@@ -183,7 +183,7 @@ def main() -> int:
         for item in violations:
             print(" - " + item, file=sys.stderr)
         return 1
-    print("LGO_MAP01A_UI_REVIEW_CATALOG_PASS screens=entry,five_tab_hub,route,menu")
+    print("LGO_MAP01A_UI_REVIEW_CATALOG_PASS screens=entry,character_select,five_tab_hub,route,menu")
     return 0
 
 

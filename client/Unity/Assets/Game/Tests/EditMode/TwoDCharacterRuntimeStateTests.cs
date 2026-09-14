@@ -512,6 +512,64 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void CharacterSelectUsesOneSavedProfileAndNeverMutatesClassSelection()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("canonical character select test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var open = typeof(CongDongLamArrivalHud).GetMethod("OpenCharacterSelect", flags);
+                Assert.That(open, Is.Not.Null);
+                var classBefore = scene.ActiveEquipmentClassId;
+
+                open.Invoke(hud, null);
+
+                var overlay = root.Q("Map01A Character Select Overlay");
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Character Select Stage"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Character Select Account Panel"), Is.Not.Null);
+                Assert.That(root.Q<VisualElement>("Map01A Character Select Preview").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetVoAvatarThumbnailSprite()),
+                    "The selected-character stage must reuse the current runtime avatar source.");
+
+                var selected = root.Q<Button>("Map01A Character Saved Profile");
+                Assert.That(selected, Is.Not.Null);
+                Assert.That(selected.text, Does.Contain("LụcThiên"));
+                Assert.That(selected.ClassListContains("lgo-character-select-profile"), Is.True);
+                Assert.That(root.Query<Button>(className: "lgo-character-select-empty-slot").ToList().Count, Is.EqualTo(2));
+                Assert.That(root.Q<Button>("Map01A Character Empty Slot 1").text, Does.Contain("Chưa có nhân vật"));
+                Assert.That(root.Q<Button>("Map01A Character Empty Slot 2").text, Does.Contain("Chưa có nhân vật"));
+                Assert.That(root.Q("Map01A Character Card Võ"), Is.Null);
+                Assert.That(root.Q("Map01A Character Card Kiếm"), Is.Null);
+                Assert.That(root.Q("Map01A Character Card Pháp"), Is.Null);
+
+                InvokeBoundButton(selected);
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(classBefore),
+                    "Selecting the saved profile must never cycle class/pose review source.");
+                Assert.That(root.Q<Label>("Map01A Character Select Status").text, Does.Contain("đã chọn"));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Character Select Enter Game"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Product Shortcut Actions").style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "Entering Map01A must restore the gameplay navigation instead of preserving the hidden overlay state.");
+                open.Invoke(hud, null);
+                InvokeBoundButton(root.Q<Button>("Map01A Character Select Back"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void GameplayHudShowsProductShortcutGateWithoutDeadClicks()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

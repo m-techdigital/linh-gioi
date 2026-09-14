@@ -88,8 +88,11 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoTextFieldInnerFrame",
     "ApplyLgoEntrySecondaryAction",
     "ApplyLgoEntrySideAction",
-    "ApplyLgoCharacterSelectCard",
-    "ApplyLgoCharacterSelectPrimaryAction",
+    "ApplyLgoCharacterSelectPanel",
+    "ApplyLgoCharacterSelectProfile",
+    "ApplyLgoCharacterSelectEmptySlot",
+    "ApplyLgoCharacterSelectAction",
+    "ApplyLgoCharacterSelectServerRow",
     "ApplyLgoSkillCategoryCard",
     "ApplyLgoSkillIcon",
     "ApplyLgoSkillNode",
@@ -107,7 +110,6 @@ FORBIDDEN_PARALLEL_SKIN_HELPER = re.compile(
 )
 ALLOWED_PARALLEL_SKIN_HELPERS = {
     "InventoryPanel": "CongDongLamArrivalHud.Inventory.cs",
-    "MakeCharacterCard": "CongDongLamArrivalHud.CharacterSelect.cs",
 }
 # Exact legacy snippets that previously caused each screen to grow its own skin.
 FORBIDDEN_SNIPPETS = [
@@ -180,11 +182,14 @@ REQUIRED_PARTIAL_MARKERS = {
         "_safe.style.display = _entryOpen ? DisplayStyle.None : DisplayStyle.Flex",
     ],
     "CongDongLamArrivalHud.CharacterSelect.cs": [
-        "ApplyLgoModalShell(panel, 20)",
-        "ApplyLgoCharacterSelectCard(card)",
-        "LgoTitleLabel(\"Chọn Nhân Vật\", 28",
-        "LgoSubtitleLabel(\"review local",
-        "ApplyLgoCharacterSelectPrimaryAction(close)",
+        "ApplyLgoCharacterSelectPanel(panel)",
+        "ApplyLgoCharacterSelectProfile(selected, true)",
+        "ApplyLgoCharacterSelectEmptySlot(slot)",
+        "LgoTitleLabel(\"CHỌN NHÂN VẬT\", 25",
+        "Map01A Character Select Account Panel",
+        "Map01A Character Select Stage",
+        "Map01A Character Select Enter Game",
+        "Map01A Character Empty Slot \" + index",
         "UpdateHudShellVisibility()",
     ],
     "CongDongLamArrivalHud.Inventory.cs": [
@@ -266,6 +271,8 @@ REQUIRED_TEST_MARKERS = [
     "EntryScreenMatchesCanonicalSingleCtaLayoutWithoutChangingMapState",
     "The canonical design has one primary login CTA and no second Start action",
     "lgo-entry-password-reveal",
+    "CharacterSelectUsesOneSavedProfileAndNeverMutatesClassSelection",
+    "Selecting the saved profile must never cycle class/pose review source",
 ]
 
 

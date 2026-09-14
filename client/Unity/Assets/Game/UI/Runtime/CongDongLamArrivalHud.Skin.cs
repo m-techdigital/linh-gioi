@@ -63,8 +63,8 @@ namespace LinhGioi.UI
         private const string LgoEntryControlCardClass = "lgo-entry-control-card";
         private const string LgoEntryServerCardClass = "lgo-entry-server-card";
         private const string LgoEntryStatusLineClass = "lgo-entry-status-line";
-        private const string LgoCharacterSelectCardClass = "lgo-character-select-card";
-        private const string LgoCharacterSelectPrimaryActionClass = "lgo-character-select-primary-action";
+        private const string LgoCharacterSelectProfileClass = "lgo-character-select-profile";
+        private const string LgoCharacterSelectEmptySlotClass = "lgo-character-select-empty-slot";
         private const string LgoMenuActionClass = "lgo-menu-action";
         private const string LgoActionButtonClass = "lgo-action-button";
         private const string LgoActionPrimaryClass = "lgo-action-primary";
@@ -803,25 +803,120 @@ namespace LinhGioi.UI
             button.style.borderLeftColor = button.style.borderRightColor = new Color(.82f, .67f, .36f, .80f);
         }
 
-        private static void ApplyLgoCharacterSelectCard(Button card)
+        private static void ApplyLgoCharacterSelectPanel(VisualElement panel)
         {
-            card.AddToClassList(LgoCharacterSelectCardClass);
-            card.style.flexGrow = 0;
-            card.style.flexBasis = new Length(30.5f, LengthUnit.Percent);
-            card.style.height = 116;
-            card.style.marginRight = 8;
-            card.style.marginBottom = 8;
-            card.style.fontSize = 19;
-            card.style.whiteSpace = WhiteSpace.Normal;
-            card.style.unityTextAlign = TextAnchor.MiddleCenter;
-            ApplyLgoButton(card);
+            ApplyLgoModalShell(panel, 14);
+            panel.style.minWidth = 0;
+            panel.style.minHeight = 0;
+            panel.style.backgroundColor = new Color(.006f, .026f, .052f, .94f);
         }
 
-        private static void ApplyLgoCharacterSelectPrimaryAction(Button button)
+        private static void ApplyLgoCharacterSelectProfile(Button profile, bool selected)
         {
-            button.AddToClassList(LgoCharacterSelectPrimaryActionClass);
-            button.style.minWidth = 220;
-            ApplyLgoButton(button, true);
+            profile.AddToClassList(LgoCharacterSelectProfileClass);
+            ApplyLgoButton(profile);
+            profile.style.position = Position.Relative;
+            profile.style.flexGrow = 0;
+            profile.style.flexShrink = 0;
+            profile.style.height = 84;
+            profile.style.marginBottom = 7;
+            profile.style.paddingLeft = 92;
+            profile.style.fontSize = 18;
+            profile.style.unityTextAlign = TextAnchor.MiddleLeft;
+            profile.style.whiteSpace = WhiteSpace.NoWrap;
+            if (selected)
+            {
+                profile.style.backgroundColor = new Color(.035f, .17f, .30f, .98f);
+                profile.style.borderLeftWidth = profile.style.borderRightWidth = 2;
+                profile.style.borderTopWidth = profile.style.borderBottomWidth = 2;
+                profile.style.borderLeftColor = profile.style.borderRightColor = UiGold;
+                profile.style.borderTopColor = profile.style.borderBottomColor = UiGold;
+            }
+        }
+
+        private static void ApplyLgoCharacterSelectEmptySlot(Button slot)
+        {
+            slot.AddToClassList(LgoCharacterSelectEmptySlotClass);
+            ApplyLgoButton(slot);
+            slot.style.position = Position.Relative;
+            slot.style.flexGrow = 0;
+            slot.style.flexShrink = 0;
+            slot.style.height = 66;
+            slot.style.marginBottom = 6;
+            slot.style.paddingLeft = 84;
+            slot.style.fontSize = 13;
+            slot.style.color = UiSubText;
+            slot.style.unityTextAlign = TextAnchor.MiddleLeft;
+            slot.style.whiteSpace = WhiteSpace.Normal;
+        }
+
+        private static void ApplyLgoCharacterSelectIcon(VisualElement icon, Sprite sprite, float size)
+        {
+            icon.style.width = size;
+            icon.style.height = size;
+            icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            icon.style.opacity = sprite == null ? .25f : .92f;
+        }
+
+        private static void ApplyLgoCharacterSelectSecondaryAction(Button button)
+        {
+            ApplyLgoButton(button);
+            button.style.flexGrow = 0;
+            button.style.flexShrink = 0;
+            button.style.height = 34;
+            button.style.fontSize = 13;
+            button.style.marginBottom = 0;
+        }
+
+        private static void ApplyLgoCharacterSelectStatus(Label status)
+        {
+            status.style.flexGrow = 0;
+            status.style.minHeight = 26;
+            status.style.marginTop = 5;
+            status.style.paddingTop = status.style.paddingBottom = 4;
+            status.style.color = new Color(.70f, .88f, .96f, .92f);
+            status.style.whiteSpace = WhiteSpace.Normal;
+        }
+
+        private static void ApplyLgoCharacterSelectAction(Button button, bool primary = false)
+        {
+            ApplyLgoButton(button, primary);
+            button.style.flexGrow = 1;
+            button.style.flexBasis = 0;
+            button.style.minWidth = 0;
+            button.style.height = 38;
+            button.style.fontSize = 13;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+        }
+
+        private static void ApplyLgoCharacterSelectServerRow(VisualElement row)
+        {
+            ApplyLgoStatusCard(row, 9, 6);
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            row.style.flexGrow = 0;
+            row.style.minHeight = 42;
+            row.style.marginTop = 7;
+        }
+
+        private static void ApplyLgoCharacterSelectServerAction(Button button)
+        {
+            ApplyLgoButton(button);
+            button.style.flexGrow = 0;
+            button.style.height = 30;
+            button.style.minWidth = 104;
+            button.style.fontSize = 11;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
+        }
+
+        private static void ApplyLgoCharacterSelectNavigationAction(Button button)
+        {
+            ApplyLgoButton(button);
+            button.style.minWidth = 120;
+            button.style.height = 38;
+            button.style.fontSize = 13;
+            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         private static void ApplyLgoMenuAction(Button button, bool primary = false)

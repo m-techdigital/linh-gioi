@@ -1,8 +1,8 @@
-## Active — khóa canonical design cho Chọn nhân vật trước code — 2026-09-14
+## Active — design gate cho màn Chọn máy chủ — 2026-09-14
 
-`CONTINUE`. Entry/Login đã đạt layout gate theo `redesign-v5-entry/01-entry-login-CANONICAL.png`; Player/evidence hiện hành là `build/map01a-entry-canonical-player-v1/LinhGioiOnline.app` và `build/map01a-entry-canonical-runtime-v1/{pc,mobile,tablet}/`. Không vi chỉnh lại Login khi không có regression mới.
+`CONTINUE`. Entry/Login và Character Select đã đạt layout gate. Character Select hiện hành: canonical `redesign-v6-character-select/01-character-select-CANONICAL.png`, Player `build/map01a-character-select-canonical-player-v6/LinhGioiOnline.app`, evidence `build/map01a-character-select-canonical-runtime-v6/{pc,mobile,tablet}/`. Không vi chỉnh lại hai screen khi không có regression mới.
 
-Screen active kế tiếp là **Chọn nhân vật**. Ảnh `04-chon-nhan-vat-nam-class-kiem-demo.png` chỉ là demo lịch sử vì gộp chọn class vào navigation trái và chưa phản ánh rule UI hiện hành. Việc hợp lệ đầu tiên là audit/redesign thành đúng một canonical screen, ghi scenario/state/interaction, asset/pixel budget và plan rồi mới sửa runtime. Sau đó mới tuần tự tới screen chọn máy chủ, đăng ký và quên mật khẩu. Không code nhiều screen song song, không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+Screen active kế tiếp là **Chọn máy chủ** ở design gate. Audit các demo owner đã gửi, tạo đúng một canonical screen và contract scenario/state/interaction/asset budget trước code. Luồng từ server row phải tách thành screen riêng; chưa có backend thì selection/local feedback phải trung thực. Sau khi screen này khóa mới tới Đăng ký rồi Quên mật khẩu. Không code nhiều screen song song, không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
 
 ## Next — sau khi sửa letterbox ảnh Linh thú — 2026-09-14
 

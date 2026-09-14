@@ -39,9 +39,12 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
         self.assertIn("build/map01a-spirit-screen-runtime-v1/pc/spirit-pet.png", current_paths)
         self.assertIn("build/map01a-spirit-screen-runtime-v1/mobile/manifest.json", current_paths)
         self.assertIn("build/map01a-spirit-screen-runtime-v1/tablet/manifest.json", current_paths)
+        self.assertIn("build/map01a-character-select-canonical-runtime-v6/pc/character-select.png", current_paths)
+        self.assertIn("build/map01a-character-select-canonical-runtime-v6/mobile/manifest.json", current_paths)
+        self.assertIn("build/map01a-character-select-canonical-runtime-v6/tablet/manifest.json", current_paths)
         self.assertFalse(any("map01a-shared-layout-runtime-v4" in path for path in current_paths), current_paths)
         self.assertFalse(any("map01a-five-tab-player-copy-runtime-v1" in path for path in current_paths), current_paths)
-        self.assertFalse(any("character-select" in path for path in current_paths), current_paths)
+        self.assertFalse(any("map01a-character-select-runtime/" in path for path in current_paths), current_paths)
         self.assertFalse(any("inventory-tab-runtime" in path for path in current_paths), current_paths)
 
     def _fixture(self) -> tempfile.TemporaryDirectory[str]:
