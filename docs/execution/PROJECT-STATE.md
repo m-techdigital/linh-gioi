@@ -1,3 +1,11 @@
+## Character Hub — catalog bất biến và state năm class tách biệt v12 — 2026-09-15
+
+- Audit goal đủ năm class phát hiện `Profiles`, `Skills`, `EquippedSkillIndices` và skill Linh thú vẫn trả backing array có thể bị cast/sửa từ code ngoài. Đây là khe hở có thể làm dữ liệu class lẫn nhau dù UI đã bind theo `classId`.
+- v12 đóng băng toàn bộ collection khi tạo catalog, giữ duy nhất `SharedPotentials` bất biến, kiểm skill id trùng, equipped index trùng/ngoài class, potential name trùng và class id/skill id trùng toàn catalog ngay lúc khởi tạo. Không đổi nội dung class, topology, pose, wardrobe hoặc asset.
+- Test selection nay chọn skill/potential khác nhau cho đủ Võ/Kiếm/Pháp/Cơ/Linh rồi đọc lại từng class; chọn skill/potential không thuộc Võ phải bị từ chối. TDD RED `1 failed` vì backing array bị lộ, GREEN targeted `2/2`; full EditMode `287 total / 286 passed / 0 failed / 1 ignored`.
+- Player `build/character-hub-class-state-player-v12/LinhGioiOnline.app` build thành công `errors=0`; 50 warning CS0618 là API deprecation hiện hữu. Evidence đúng ba viewport và chín frame/profile: `build/character-hub-class-state-runtime-v12/{pc,mobile,tablet}/`. Visual Tiềm năng không đổi so với polish v11 và đã xem lại không cắt/chồng/vỡ.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`; vẫn không chuyển screen hoặc phát triển class art trước khi owner duyệt Tiềm năng.
+
 ## Character Hub — Tiềm năng shared topology polish v11 — 2026-09-15
 
 - Audit theo feedback owner xác nhận dữ liệu và object tree đã dùng chung, nhưng topology v8 vẫn ghép nhiều primitive `Painter2D`; đây là nguyên nhân nét khó khóa theo design và tạo cảm giác mỗi node đang được dựng riêng.

@@ -25,6 +25,8 @@ namespace LinhGioi.Tests.EditMode
         {
             var profiles = CharacterHubClassCatalog.Profiles;
 
+            Assert.That(profiles, Is.Not.InstanceOf<CharacterHubClassProfile[]>(),
+                "The shared catalog must not expose its mutable backing array.");
             Assert.That(profiles.Select(profile => profile.Id),
                 Is.EqualTo(new[] { "vo", "kiem", "phap", "co", "linh" }));
             Assert.That(profiles.Select(profile => profile.Label),
@@ -39,6 +41,10 @@ namespace LinhGioi.Tests.EditMode
             };
             foreach (var profile in profiles)
             {
+                Assert.That(profile.Skills, Is.Not.InstanceOf<CharacterHubSkillPreview[]>(), profile.Id);
+                Assert.That(profile.EquippedSkillIndices, Is.Not.InstanceOf<int[]>(), profile.Id);
+                Assert.That(profile.SpiritPet.Skills,
+                    Is.Not.InstanceOf<CharacterHubSpiritPetPreview.SkillPreview[]>(), profile.Id);
                 Assert.That(profile.Skills.Count, Is.EqualTo(9), profile.Id + " must fill the shared 3x3 skill path.");
                 Assert.That(profile.Potentials.Count, Is.EqualTo(5), profile.Id + " must fill the shared potential diagram.");
                 Assert.That(profile.EquippedSkillIndices.Count, Is.EqualTo(4));
@@ -69,22 +75,28 @@ namespace LinhGioi.Tests.EditMode
         public void CharacterHubSelectionStateIsIsolatedPerClass()
         {
             var state = new CharacterHubSelectionState();
+            var profiles = CharacterHubClassCatalog.Profiles;
+            for (var index = 0; index < profiles.Count; index++)
+            {
+                var profile = profiles[index];
+                var skill = profile.Skills[(index + 2) % profile.Skills.Count];
+                var potential = profile.Potentials[(index + 1) % profile.Potentials.Count];
+                state.SelectSkill(profile, skill.Id);
+                state.SelectPotential(profile, potential.Name);
+            }
+
+            for (var index = 0; index < profiles.Count; index++)
+            {
+                var profile = profiles[index];
+                Assert.That(state.SkillIdFor(profile),
+                    Is.EqualTo(profile.Skills[(index + 2) % profile.Skills.Count].Id), profile.Id);
+                Assert.That(state.PotentialNameFor(profile),
+                    Is.EqualTo(profile.Potentials[(index + 1) % profile.Potentials.Count].Name), profile.Id);
+            }
+
             var vo = CharacterHubClassCatalog.Get("vo");
-            var kiem = CharacterHubClassCatalog.Get("kiem");
-
-            state.SelectSkill(vo, vo.Skills[4].Id);
-            state.SelectPotential(vo, vo.Potentials[1].Name);
-            state.SelectSkill(kiem, kiem.Skills[7].Id);
-            state.SelectPotential(kiem, kiem.Potentials[3].Name);
-
-            Assert.That(state.SkillIdFor(vo), Is.EqualTo(vo.Skills[4].Id));
-            Assert.That(state.PotentialNameFor(vo), Is.EqualTo(vo.Potentials[1].Name));
-            Assert.That(state.SkillIdFor(kiem), Is.EqualTo(kiem.Skills[7].Id));
-            Assert.That(state.PotentialNameFor(kiem), Is.EqualTo(kiem.Potentials[3].Name));
-            Assert.That(state.SkillIdFor(CharacterHubClassCatalog.Get("phap")),
-                Is.EqualTo(CharacterHubClassCatalog.Get("phap").Skills[0].Id));
-            Assert.That(state.PotentialNameFor(CharacterHubClassCatalog.Get("phap")),
-                Is.EqualTo("Linh lực"));
+            Assert.Throws<System.ArgumentException>(() => state.SelectSkill(vo, "kiem_skill_1"));
+            Assert.Throws<System.ArgumentException>(() => state.SelectPotential(vo, "không tồn tại"));
         }
 
         [Test]

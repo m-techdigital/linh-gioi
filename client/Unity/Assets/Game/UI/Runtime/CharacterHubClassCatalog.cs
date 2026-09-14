@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace LinhGioi.UI
@@ -81,8 +82,14 @@ namespace LinhGioi.UI
             Role = role;
             State = state;
             Stats = stats;
-            Skills = skills;
+            Skills = Freeze(skills, nameof(skills));
             Synergy = synergy;
+        }
+
+        private static IReadOnlyList<T> Freeze<T>(IReadOnlyList<T> source, string parameterName)
+        {
+            if (source == null) throw new ArgumentNullException(parameterName);
+            return source is ReadOnlyCollection<T> ? source : Array.AsReadOnly(source.ToArray());
         }
 
         public string Name { get; }
@@ -114,13 +121,31 @@ namespace LinhGioi.UI
             Identity = identity;
             Recommendation = recommendation;
             DefaultPotentialName = defaultPotentialName;
-            Skills = skills;
-            EquippedSkillIndices = equippedSkillIndices;
-            Potentials = potentials;
+            Skills = Freeze(skills, nameof(skills));
+            EquippedSkillIndices = Freeze(equippedSkillIndices, nameof(equippedSkillIndices));
+            Potentials = Freeze(potentials, nameof(potentials));
+            if (Skills.Count == 0 || Skills.Any(skill => skill == null || string.IsNullOrWhiteSpace(skill.Id)))
+                throw new ArgumentException("Character Hub skills require stable ids", nameof(skills));
+            if (Skills.Select(skill => skill.Id).Distinct(StringComparer.Ordinal).Count() != Skills.Count)
+                throw new ArgumentException("Character Hub skill ids must be unique inside class " + id, nameof(skills));
+            if (EquippedSkillIndices.Distinct().Count() != EquippedSkillIndices.Count
+                || EquippedSkillIndices.Any(index => index < 0 || index >= Skills.Count))
+                throw new ArgumentException("Equipped skill indices must be unique and belong to class " + id,
+                    nameof(equippedSkillIndices));
+            if (Potentials.Count == 0
+                || Potentials.Any(potential => potential == null || string.IsNullOrWhiteSpace(potential.Name))
+                || Potentials.Select(potential => potential.Name).Distinct(StringComparer.Ordinal).Count() != Potentials.Count)
+                throw new ArgumentException("Potential names must be non-empty and unique", nameof(potentials));
             if (!Potentials.Any(potential => potential.Name == DefaultPotentialName))
                 throw new ArgumentException("Default Potential does not belong to Character Hub class " + id,
                     nameof(defaultPotentialName));
             SpiritPet = spiritPet;
+        }
+
+        private static IReadOnlyList<T> Freeze<T>(IReadOnlyList<T> source, string parameterName)
+        {
+            if (source == null) throw new ArgumentNullException(parameterName);
+            return source is ReadOnlyCollection<T> ? source : Array.AsReadOnly(source.ToArray());
         }
 
         public string Id { get; }
@@ -264,11 +289,22 @@ namespace LinhGioi.UI
                 new[] { 0, 1, 2, 6 }, SharedPotentials, SpiritPet("Thanh Vân Hồ cộng hưởng hồi phục và khống chế.")),
         };
 
-        public static IReadOnlyList<CharacterHubClassProfile> Profiles => Items;
+        private static readonly IReadOnlyList<CharacterHubClassProfile> ReadOnlyItems = Array.AsReadOnly(Items);
+
+        static CharacterHubClassCatalog()
+        {
+            if (Items.Select(profile => profile.Id).Distinct(StringComparer.OrdinalIgnoreCase).Count() != Items.Length)
+                throw new InvalidOperationException("Character Hub class ids must be unique");
+            if (Items.SelectMany(profile => profile.Skills).Select(skill => skill.Id)
+                    .Distinct(StringComparer.Ordinal).Count() != Items.Sum(profile => profile.Skills.Count))
+                throw new InvalidOperationException("Character Hub skill ids must be unique across classes");
+        }
+
+        public static IReadOnlyList<CharacterHubClassProfile> Profiles => ReadOnlyItems;
 
         public static CharacterHubClassProfile Get(string classId)
         {
-            var profile = Items.FirstOrDefault(item => string.Equals(item.Id, classId, StringComparison.OrdinalIgnoreCase));
+            var profile = ReadOnlyItems.FirstOrDefault(item => string.Equals(item.Id, classId, StringComparison.OrdinalIgnoreCase));
             if (profile == null) throw new ArgumentException("Unknown Character Hub class: " + classId, nameof(classId));
             return profile;
         }
