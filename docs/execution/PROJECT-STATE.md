@@ -1,3 +1,10 @@
+## Map01A — joystick cảm ứng dùng shared circular control — 2026-09-14
+
+- Audit toàn tuyến ở 800×480 phát hiện joystick còn dùng núm vuông màu xanh, nhìn như placeholder và lệch reference HUD cảm ứng. `RuntimeTouchMovementPad` giờ sở hữu presentation base cho vòng ngoài/núm tròn; Map01A và factory dùng chung semantic class/geometry thay vì tự style hai hệ.
+- Pointer displacement/dead-zone giữ nguyên. Dịch núm đã chuyển từ API `transform.position` deprecated sang `style.translate`; Player build giảm từ 38 xuống 30 cảnh báo, `errors=0`.
+- `UIFoundationTests` đạt 5/5, full `TwoDCharacterRuntimeStateTests` đạt 24/24 trước refactor translate và focused HUD đạt 1/1. Player `build/map01a-touch-pad-player-v1/LinhGioiOnline.app`; route evidence `build/map01a-touch-pad-runtime-v1/` đạt 18 frame, Q01–Q09, detail item và world-view gates ở 800×480.
+- Đã visual audit `01-arrival-q01.png`: núm tròn nằm giữa vòng ngoài, không đè viewport hoặc bottom navigation. Không đổi actor/class/pose/wardrobe/source/camera/scale hoặc frozen surfaces.
+
 ## Map01A — tab Nhân vật dùng HP/MP bars theo design đã duyệt — 2026-09-14
 
 - Đối chiếu Player với `01-nhan-vat-nam-tab-compact-APPROVED.png` xác định sai lệch còn rõ nhất ở identity stack: HP/MP chỉ là một dòng chữ nhỏ. Runtime giờ hiển thị hai thanh HP/MP bind trực tiếp `PlayerHealth`/`PlayerMana`, giữ full-body giữa 10 slot và detail món ở bên phải.

@@ -1,3 +1,9 @@
+## Next — sau responsive joystick audit — 2026-09-14
+
+`CONTINUE`. Player responsive hiện hành: `build/map01a-touch-pad-player-v1/LinhGioiOnline.app`; evidence Q01–Q09 ở 800×480: `build/map01a-touch-pad-runtime-v1/`. Joystick phải giữ shared circular presentation và `style.translate`; không khôi phục núm vuông hoặc API transform deprecated.
+
+Next valid work: audit một lỗi hiển thị/interaction Map01A còn rõ ở Player, ưu tiên touch HUD/dialogue hoặc screen đã có design và dữ liệu thật. Không chỉnh vụn năm-tab đã qua PC/tablet/compact audit; không quay lại class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+
 ## Next — sau character HP/MP bars theo design — 2026-09-14
 
 `CONTINUE`. Evidence năm tab hiện hành là `build/map01a-character-vitals-runtime-v1/{character-info,bag,bag-search-binh-mau,bag-search-binh-mau-selected,skills,potential,spirit-pet}.png`; Player `build/map01a-character-vitals-player-v2/LinhGioiOnline.app`. Tab Nhân vật giữ full-body + 10 slot + detail phải và dùng shared HP/MP bars bind state thật.

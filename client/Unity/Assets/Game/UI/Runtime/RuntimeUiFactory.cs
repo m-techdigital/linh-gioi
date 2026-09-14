@@ -867,9 +867,15 @@ namespace LinhGioi.UI
 
             var nub = new VisualElement { name = "LGO World Touch Movement Nub" };
             nub.pickingMode = PickingMode.Ignore;
-            nub.style.position = Position.Absolute;
-            nub.style.backgroundColor = RuntimeUiSkin.BlueGlass;
-            RuntimeUiSkin.ApplyPanelFrame(nub);
+            RuntimeTouchMovementPad.ApplyCircularPresentation(
+                pad,
+                nub,
+                RuntimeUiSkin.DeepGlass,
+                RuntimeUiSkin.BlueGlass,
+                RuntimeUiSkin.MediumSpiritBorder);
+            label.style.position = Position.Absolute;
+            label.style.left = label.style.right = 0;
+            label.style.bottom = 8;
             pad.Add(label);
             pad.Add(nub);
             return pad;

@@ -1049,6 +1049,15 @@ namespace LinhGioi.Tests.EditMode
                     "HUD quest body must use the shared info-panel base instead of one-off panel styling.");
                 Assert.That(root.Q("Map01A Quest Tracker Body").style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.9f),
                     "Quest tracking needs a readable shared glass background over bright map art.");
+                var touchPad = root.Q<RuntimeTouchMovementPad>("LGO World Touch Movement Pad");
+                var touchNub = touchPad.Q<VisualElement>("LGO World Touch Movement Nub");
+                Assert.That(touchPad.ClassListContains("lgo-touch-movement-pad"), Is.True);
+                Assert.That(touchNub.ClassListContains("lgo-touch-movement-nub"), Is.True,
+                    "The touch joystick must use the shared circular control instead of a square placeholder nub.");
+                Assert.That(touchPad.style.borderTopLeftRadius.value.value, Is.GreaterThanOrEqualTo(50));
+                Assert.That(touchNub.style.borderTopLeftRadius.value.value, Is.GreaterThanOrEqualTo(18));
+                Assert.That(touchNub.style.marginLeft.value.value, Is.EqualTo(0));
+                Assert.That(touchNub.style.marginTop.value.value, Is.EqualTo(0));
                 var questCategory = root.Q<Label>("Map01A Quest Category");
                 var questTitle = root.Q<Label>("Map01A Quest Title");
                 var questObjective = root.Q<Label>("Map01A Quest Objective");

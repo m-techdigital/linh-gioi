@@ -185,12 +185,13 @@ namespace LinhGioi.UI
             _pad = new RuntimeTouchMovementPad { name = "LGO World Touch Movement Pad" }; ApplyLgoHudInfoPanel(_pad); Place(_pad, 16, null, null, 16);
             _pad.style.width = _pad.style.height = 112;
             _pad.style.display = _touch ? DisplayStyle.Flex : DisplayStyle.None;
-            _pad.style.borderTopLeftRadius = _pad.style.borderTopRightRadius = 52;
-            _pad.style.borderBottomLeftRadius = _pad.style.borderBottomRightRadius = 52;
             var nub = new VisualElement { name = "LGO World Touch Movement Nub", pickingMode = PickingMode.Ignore };
-            nub.style.width = nub.style.height = 36;
-            nub.style.backgroundColor = new Color(.4f,.72f,.8f,.9f);
-            nub.style.marginLeft = nub.style.marginTop = 22;
+            RuntimeTouchMovementPad.ApplyCircularPresentation(
+                _pad,
+                nub,
+                new Color(.016f, .052f, .092f, .84f),
+                new Color(.10f, .45f, .70f, .96f),
+                UiGoldBorder);
             _pad.Add(nub); _safe.Add(_pad);
             _talk = new Button(() => _scene.UseCurrentRouteAction()) { name = "Map01A Talk Action", text = "Tương tác · E" };
             ApplyLgoHudContextAction(_talk, _touch, minWidth: 150); Place(_talk, null, 16, null, _touch ? 318 : 232); _safe.Add(_talk);
