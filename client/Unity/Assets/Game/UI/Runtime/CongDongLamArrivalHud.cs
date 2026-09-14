@@ -9,8 +9,10 @@ namespace LinhGioi.UI
     // Arrival UI follows Map01A reference 01/05/10; reuses shared touch and viewport policies.
     public sealed partial class CongDongLamArrivalHud : MonoBehaviour
     {
-        private const float InventoryDesktopMainColumnWidth = 820f;
-        private const float InventoryDesktopDetailColumnWidth = 340f;
+        // Approved five-tab shell: one balanced workspace plus one readable inspector.
+        // Keep these widths centralized because every character-hub tab shares them.
+        private const float InventoryDesktopMainColumnWidth = 660f;
+        private const float InventoryDesktopDetailColumnWidth = 424f;
         private const float InventoryDesktopColumnGap = 12f;
         private const float InventoryGridCellBasisPercent = 18.2f;
 
@@ -349,10 +351,9 @@ namespace LinhGioi.UI
 
         public static float CalculateInventoryShellHeight(Rect inventoryRect, bool touch, bool compactShell)
         {
-            const float compactDesktopHeight = 680f;
             if (touch) return inventoryRect.height;
-            if (!compactShell) return Mathf.Max(inventoryRect.height, 720f);
-            return Mathf.Min(Mathf.Max(inventoryRect.height, compactDesktopHeight), compactDesktopHeight);
+            const float approvedDesktopHeight = 720f;
+            return Mathf.Min(inventoryRect.height, approvedDesktopHeight);
         }
 
         public static string QuestInteractionMessageForDisplay(string message, string objective, string progress)
@@ -393,13 +394,18 @@ namespace LinhGioi.UI
                     Mathf.Max(0f, safePanelRect.height - topMargin - bottomMargin));
             }
 
-            const float maxDesktopWidth = 1280f;
+            const float maxDesktopWidth = 1120f;
             const float minSideMargin = 56f;
-            const float top = 82f;
-            const float bottom = 70f;
+            const float top = 104f;
+            const float bottom = 76f;
             var width = Mathf.Min(maxDesktopWidth, Mathf.Max(0f, safePanelRect.width - minSideMargin * 2f));
             var x = safePanelRect.x + Mathf.Max(minSideMargin, (safePanelRect.width - width) * .5f);
             return new Rect(x, safePanelRect.y + top, width, Mathf.Max(0f, safePanelRect.height - top - bottom));
+        }
+
+        public static Vector2 CalculateInventoryDesktopColumnWidths()
+        {
+            return new Vector2(InventoryDesktopMainColumnWidth, InventoryDesktopDetailColumnWidth);
         }
 
         private void Layout()

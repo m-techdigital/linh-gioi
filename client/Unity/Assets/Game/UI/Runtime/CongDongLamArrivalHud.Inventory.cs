@@ -133,6 +133,7 @@ namespace LinhGioi.UI
             _inventoryModalTitle.name = "Map01A Inventory Modal Title";
             _inventoryModalSubtitle = LgoSubtitleLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 13);
             _inventoryModalSubtitle.name = "Map01A Inventory Modal Subtitle";
+            _inventoryModalSubtitle.style.display = DisplayStyle.None;
             titleGroup.Add(_inventoryModalTitle);
             titleGroup.Add(_inventoryModalSubtitle);
             var close = InventoryButton(() => { if (_scene.InventoryOpen) _scene.ToggleInventory(); },

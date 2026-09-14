@@ -1512,3 +1512,8 @@ Next valid work: audit và xử lý một sai lệch cấu trúc lớn còn lạ
 `CONTINUE`. Hai tab owner duyệt hiện dùng evidence `build/map01a-character-hierarchy-runtime-v4/{character-info,bag}.png`. Cấu trúc Nhân vật và Rương đồ đã khớp: năm tab compact, full-body giữa 10 slot, detail phải, rail phân loại dọc và một all-items grid. Không quay lại các capture v1–v3 hoặc micro-polish hai tab này; phần còn yếu là art thumbnail trang bị hiện hành và không được giải quyết bằng cách resume class/wardrobe.
 
 Next valid work: chuyển sang một batch HUD/NPC dialogue theo owner gameplay reference và shared base, ưu tiên sai lệch cấu trúc/interaction có thể nhìn thấy trên Player. Nếu không còn sai lệch cấu trúc lớn, xử lý screen/interaction Map01A còn thiếu theo roadmap; không mở class/pose/wardrobe, không rollback code class và không đổi frozen surfaces.
+## Next — sau khi khóa layout tổng năm tab — 2026-09-14
+
+`CONTINUE`. Evidence hiện hành của character hub là `build/map01a-shared-layout-runtime-v4/` (PC 1600×900), `build/map01a-shared-layout-mobile-runtime-v1/` (1600×720) và `build/map01a-shared-layout-tablet-runtime-v1/` (1024×768); Player `build/map01a-shared-layout-player-v3/LinhGioiOnline.app`. Giữ base chung 1120×720 desktop, cột 660/424, hàng năm tab chia đều và cùng chiều cao ở mọi tab.
+
+Next valid work: tiếp tục theo thứ tự tổng quan → vùng lớn → chi tiết. Audit hierarchy bên trong `Nhân vật` và `Rương đồ` theo ảnh duyệt, ưu tiên tỷ lệ preview/grid/detail và khoảng sử dụng body; chỉ sau khi các vùng lớn ổn mới xử lý typography/icon/copy. Không quay lại vi chỉnh từng pixel, class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.

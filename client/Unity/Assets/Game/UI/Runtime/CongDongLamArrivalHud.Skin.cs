@@ -354,8 +354,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoInventoryContentFitPanel(VisualElement panel)
         {
             panel.AddToClassList(LgoInventoryContentFitPanelClass);
-            panel.style.alignSelf = Align.FlexStart;
-            panel.style.flexGrow = 0;
+            panel.style.alignSelf = Align.Stretch;
+            panel.style.flexGrow = 1;
             panel.style.flexShrink = 0;
         }
 
@@ -385,8 +385,9 @@ namespace LinhGioi.UI
         {
             button.AddToClassList(LgoInventoryMainTabClass);
             ApplyLgoButton(button);
-            button.style.flexGrow = 0;
-            button.style.flexBasis = 128;
+            button.style.flexGrow = 1;
+            button.style.flexBasis = 0;
+            button.style.minWidth = 0;
             button.style.minHeight = touch ? 38 : 32;
             button.style.fontSize = 13;
             button.style.marginRight = 4;

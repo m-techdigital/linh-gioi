@@ -280,9 +280,10 @@ namespace LinhGioi.Tests.EditMode
                     var tab = root.Q<Button>(item.Item1);
                     Assert.That(tab, Is.Not.Null);
                     Assert.That(tab.text, Is.EqualTo(item.Item2));
-                    Assert.That(tab.style.flexGrow.value, Is.EqualTo(0));
-                    Assert.That(tab.style.flexBasis.value.value, Is.LessThanOrEqualTo(150),
-                        "Hub tabs must stay compact so later tabs do not force another navigation base.");
+                    Assert.That(tab.style.flexGrow.value, Is.EqualTo(1),
+                        "The approved five-tab navigation must share the full modal width instead of leaving a large dead region.");
+                    Assert.That(tab.style.flexBasis.value.value, Is.EqualTo(0),
+                        "All five tabs must derive equal width from one reusable navigation base.");
                     Assert.That(tab.ClassListContains("lgo-inventory-main-tab"), Is.True);
                 }
                 Assert.That(root.Q("Map01A Storage Main Tab"), Is.Null,
@@ -297,8 +298,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 var modalSubtitle = root.Q<Label>("Map01A Inventory Modal Subtitle");
+                Assert.That(modalSubtitle.style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Approved character-hub screens use a compact title row; descriptive copy must not consume the shared body height.");
                 StringAssert.DoesNotContain("phân loại dọc", modalSubtitle.text,
                     "Player-facing inventory copy must describe the feature rather than its implementation layout.");
+                Assert.That(root.Q("Map01A Inventory Grid Panel").style.alignSelf.value, Is.EqualTo(Align.Stretch),
+                    "Rương đồ must use the full shared body height instead of ending as a short content-fit card.");
                 foreach (var actionName in new[]
                 {
                     "Map01A Inventory Sort Action", "Map01A Inventory Split Action", "Map01A Inventory Quick Sell Action"
@@ -307,8 +312,15 @@ namespace LinhGioi.Tests.EditMode
                         actionName + " must not expose an enabled dead click before its inventory model exists.");
 
                 InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
-                Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                var characterPanel = root.Q("Map01A Inventory Character Panel");
+                var equipmentDetail = root.Q("Map01A Inventory Detail Panel");
+                Assert.That(characterPanel.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(equipmentDetail.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                var sharedColumns = CongDongLamArrivalHud.CalculateInventoryDesktopColumnWidths();
+                Assert.That(sharedColumns.x, Is.InRange(640, 680),
+                    "The approved layout uses a balanced main workspace rather than an oversized left column.");
+                Assert.That(sharedColumns.y, Is.InRange(410, 440),
+                    "The shared detail-right column must remain wide enough for item hierarchy and actions.");
 
                 InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
                 Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -382,12 +394,17 @@ namespace LinhGioi.Tests.EditMode
         {
             var desktop = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 1600, 900), touch: false);
 
-            Assert.That(desktop.width, Is.InRange(1240, 1320),
-                "Desktop inventory modal should be bounded near the owner RPG modal references instead of spanning the whole screen.");
-            Assert.That(desktop.x, Is.GreaterThanOrEqualTo(120),
-                "Desktop inventory modal should leave balanced map backdrop margins rather than a full-screen debug overlay.");
-            Assert.That(desktop.y, Is.EqualTo(82));
-            Assert.That(desktop.height, Is.EqualTo(748));
+            Assert.That(desktop.width, Is.InRange(1100, 1140),
+                "Desktop inventory modal should follow the approved centered RPG shell proportion instead of dominating the map.");
+            Assert.That(desktop.x, Is.InRange(230, 250),
+                "Desktop inventory modal should preserve the balanced map backdrop margins in the approved composition.");
+            Assert.That(desktop.y, Is.EqualTo(104));
+            Assert.That(desktop.height, Is.EqualTo(720));
+            Assert.That(CongDongLamArrivalHud.CalculateInventoryShellHeight(desktop, touch: false, compactShell: false),
+                Is.EqualTo(720));
+            Assert.That(CongDongLamArrivalHud.CalculateInventoryShellHeight(desktop, touch: false, compactShell: true),
+                Is.EqualTo(720),
+                "Every approved character-hub tab must keep one stable outer shell instead of jumping between heights.");
 
             var compact = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 800, 480), touch: true);
             Assert.That(compact.x, Is.EqualTo(14));

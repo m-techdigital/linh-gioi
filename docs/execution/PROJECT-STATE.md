@@ -1,3 +1,10 @@
+## Map01A — khóa layout tổng cho character hub năm tab — 2026-09-14
+
+- Owner yêu cầu dừng chỉnh lẻ vài pixel và xử lý layout từ tổng quan. Đối chiếu trực tiếp Player với năm ảnh đã duyệt trong `redesign-v4-five-tabs` cho thấy ba sai lệch gốc: modal rộng 1280 px, tỷ lệ cột 820/340 và hàng tab 5×128 px chỉ chiếm nửa khung.
+- Runtime hiện dùng một base chung cho cả năm tab: modal desktop 1120×720 tại viewport 1600×900, main/detail 660/424 với gap 12, năm tab chia đều toàn chiều ngang. Title row đã bỏ subtitle chiếm chỗ; mọi tab giữ cùng vị trí và chiều cao. Rương đồ stretch theo toàn body thay vì một card ngắn; Nhân vật không còn cắt dòng loadout ở đáy.
+- TDD khóa modal, cột, tab và shared body; focused EditMode đạt 2/2. Player `build/map01a-shared-layout-player-v3/LinhGioiOnline.app` build thành công. Evidence đã xem đủ năm tab ở PC `build/map01a-shared-layout-runtime-v4/`, mobile 1600×720 `build/map01a-shared-layout-mobile-runtime-v1/` và tablet 1024×768 `build/map01a-shared-layout-tablet-runtime-v1/`; không chồng/cắt, không đổi khung giữa tab.
+- Đây là checkpoint layout, chưa phải nghiệm thu mỹ thuật/nội dung cuối. Không sửa hoặc rollback class/pose/wardrobe/source/camera/scale và không đổi frozen surfaces.
+
 ## Map01A — Linh thú giữ đúng tỷ lệ nguồn đã duyệt — 2026-09-14
 
 - Visual audit năm tab ở 1600×900 phát hiện `spirit-fox-preview.png` bị đặt giữa canvas vuông 1024×1024 với khoảng trong suốt lớn trên/dưới, làm Thanh Vân Hồ lọt thỏm so với `05-linh-thu-five-tab-APPROVED.png`.
