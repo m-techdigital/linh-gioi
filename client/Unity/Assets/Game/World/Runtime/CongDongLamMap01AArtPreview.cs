@@ -64,11 +64,12 @@ namespace LinhGioi.World
         private bool CharacterSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
         private bool ServerSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-server-select-capture") >= 0;
         private bool RegisterCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-register-capture") >= 0;
+        private bool PasswordRecoveryCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-password-recovery-capture") >= 0;
         private bool InventoryTabsCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-inventory-tabs-capture") >= 0;
         private bool CharacterScreenCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-screen-capture") >= 0;
         private bool MenuCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-menu-capture") >= 0;
         public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || ClassCaptureRequested
-            || CharacterSelectCaptureRequested || ServerSelectCaptureRequested || RegisterCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
+            || CharacterSelectCaptureRequested || ServerSelectCaptureRequested || RegisterCaptureRequested || PasswordRecoveryCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
             || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
         public float PlayerX => _routeX;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
@@ -640,6 +641,7 @@ namespace LinhGioi.World
             || Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-register-capture") >= 0
+            || Array.IndexOf(args, "--lgo-map01a-password-recovery-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-character-screen-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0;
@@ -1671,6 +1673,11 @@ namespace LinhGioi.World
                 yield return CaptureRegisterScreen(args);
                 yield break;
             }
+            if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-password-recovery-capture") >= 0)
+            {
+                yield return CapturePasswordRecoveryScreen(args);
+                yield break;
+            }
             if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0)
             {
                 yield return CaptureInventoryTabs(args);
@@ -2413,6 +2420,34 @@ namespace LinhGioi.World
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
                 + "  \"frame\": \"register-account.png\"\n"
+                + "}\n";
+            File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
+            Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
+        }
+
+        private IEnumerator CapturePasswordRecoveryScreen(string[] args)
+        {
+            Application.runInBackground = true;
+            var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
+            if (index < 0 || index + 1 >= args.Length)
+                throw new ArgumentException("Missing Map01A password recovery capture directory");
+            var directory = args[index + 1];
+            Directory.CreateDirectory(directory);
+            _controller.enabled = false;
+            yield return null;
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var imagePath = Path.Combine(directory, "password-recovery-request.png");
+            CaptureScreenPng(imagePath);
+            var status = File.Exists(imagePath) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var manifest = "{\n"
+                + "  \"status\": \"" + status + "\",\n"
+                + "  \"captureScope\": \"map01a-password-recovery-request\",\n"
+                + "  \"passwordRecoveryOverlayExpected\": true,\n"
+                + "  \"usesOsMouseOrKeyboard\": false,\n"
+                + "  \"width\": " + Screen.width + ",\n"
+                + "  \"height\": " + Screen.height + ",\n"
+                + "  \"frame\": \"password-recovery-request.png\"\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);

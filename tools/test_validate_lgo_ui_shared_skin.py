@@ -68,6 +68,21 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("ApplyLgoRegisterPanel" in item for item in violations), violations)
 
+    def test_rejects_password_recovery_that_skips_shared_auth_flow_base(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            recovery = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.PasswordRecovery.cs"
+            recovery.write_text(
+                recovery.read_text(encoding="utf-8").replace(
+                    "ApplyLgoAuthFlowPanel(_passwordRecoveryOverlay, 410);",
+                    "ApplyLgoFrame(_passwordRecoveryOverlay, Color.black, Color.yellow);",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoAuthFlowPanel" in item for item in violations), violations)
+
 
     def test_rejects_missing_uploaded_design_reference_scope(self) -> None:
         with self._copy_minimal_repo() as temp:

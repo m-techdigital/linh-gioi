@@ -3,10 +3,18 @@
 - `OPERATIONAL_GOAL_CURRENT`: goal repo hiện hành là Map01A/UI screen-by-screen. Objective tự động cũ còn nhắc hoàn thiện class/pose/wardrobe/source đã bị owner thay thế và không được dùng để chọn task, build hoặc capture.
 - Goal UI/UX hiện hành: xử lý tuần tự từng screen; trước code phải có đúng một canonical design, scenario/state/interaction, asset budget và plan. Chỉ chuyển screen khi Player evidence PC/mobile landscape/tablet đã được xem và toàn gate sạch.
 - Rule đã được ghi vào `AGENTS.md`; screen contract dùng chung quy trình shell → vùng chính → component base → asset → typography/copy. Mobile/tablet giữ cùng landscape composition bằng scale/safe margin, không wrap/stack thành layout khác.
-- Entry/Login, Character Select, Chọn máy chủ và Đăng ký đã khóa layout theo canonical riêng. Screen active kế tiếp là Quên mật khẩu ở design gate; chưa có canonical thì không code.
+- Entry/Login, Character Select, Chọn máy chủ và Đăng ký đã khóa layout theo canonical riêng. Yêu cầu khôi phục đã đạt technical layout gate và đang chờ owner visual review; chưa mở Xác minh mã.
 - Các screen liên quan Entry như chọn máy chủ, đăng ký/quên mật khẩu và chọn nhân vật phải lần lượt có contract/canonical riêng sau khi Login khóa; không gộp nhiều screen hoặc triển khai song song.
 - Icon/art phải có design/provenance và pixel budget theo kích thước hiển thị thực; không dùng emoji, glyph, wireframe hay ảnh tạm để bàn giao. Ưu tiên atlas chung theo vòng đời tải, hash/import compression và ID ổn định để mở rộng lâu dài.
-- Screen active duy nhất: Quên mật khẩu. Screen đã khóa không được mở lại nếu chưa có regression hoặc feedback mới có evidence. Không resume class/pose/wardrobe/source, không chạy class Player/capture loop, không rollback code class và không đổi frozen surfaces.
+- Screen active duy nhất: owner visual review Yêu cầu khôi phục. Chỉ sau review mới chuyển Xác minh mã. Screen đã khóa không được mở lại nếu chưa có regression hoặc feedback mới có evidence. Không resume class/pose/wardrobe/source, không chạy class Player/capture loop, không rollback code class và không đổi frozen surfaces.
+
+## Map01A — Yêu cầu khôi phục technical layout locked — 2026-09-14
+
+- Canonical candidate duy nhất: `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v9-password-recovery-request/01-password-recovery-request-CANONICAL-CANDIDATE.png`, `1672×941`, SHA-256 `c0576e5e078941e856e50a7d3885175480e9de30d3808c61d8c2d094ac7b3a48`. Contract: `docs/design/LGO-MAP01A-PASSWORD-RECOVERY-REQUEST-SCREEN-CONTRACT-v1.0.md`.
+- Flow được tách `Yêu cầu khôi phục → Xác minh mã → Đặt mật khẩu mới`; runtime hiện chỉ sở hữu bước đầu, một account/email field, một CTA và back/Escape. Backend chưa có nên báo trung thực, không giả gửi mã hoặc chuyển screen.
+- Register và Recovery cùng dùng shared auth-flow panel/primary/back base. Full `TwoDCharacterRuntimeStateTests` đạt `28/28`; Player `build/map01a-password-recovery-request-player-v1/LinhGioiOnline.app` build `errors=0`.
+- Evidence `build/map01a-password-recovery-request-runtime-v1/{pc,mobile,tablet}/password-recovery-request.png` đạt `1600×900`, `1600×720`, `1024×768`; đã xem trực tiếp, cùng composition, không wrap/stack/cắt/chồng và không dùng input OS.
+- Trạng thái là technical layout lock, chưa phải owner design approval. Không mở Xác minh mã trước review và không quay lại class/pose/wardrobe/source.
 
 ## Map01A — Đăng ký canonical layout locked — 2026-09-14
 

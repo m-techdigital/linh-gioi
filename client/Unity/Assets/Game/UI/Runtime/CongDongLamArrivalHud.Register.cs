@@ -144,6 +144,7 @@ namespace LinhGioi.UI
         {
             _registerOpen = true;
             _serverSelectOpen = false;
+            _passwordRecoveryOpen = false;
             _characterSelectOpen = false;
             _entryOpen = true;
             _registerAgreementAccepted = false;

@@ -279,6 +279,7 @@ namespace LinhGioi.UI
             BuildEntryScreen();
             BuildServerSelect();
             BuildRegister();
+            BuildPasswordRecovery();
             BuildMenu();
             _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); ApplyLgoLayeredFrame(_dialogue); Place(_dialogue, 28, null, null, 22);
             _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
@@ -376,7 +377,8 @@ namespace LinhGioi.UI
 
         private void HandleEscape()
         {
-            if (_registerOpen) CloseRegister();
+            if (_passwordRecoveryOpen) ClosePasswordRecovery();
+            else if (_registerOpen) CloseRegister();
             else if (_serverSelectOpen) CloseServerSelect(false);
             else if (_menuOpen) CloseMenu();
             else if (_characterSelectOpen) CloseCharacterSelect();

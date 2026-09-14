@@ -48,6 +48,9 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
         self.assertIn("build/map01a-register-runtime-v1/pc/register-account.png", current_paths)
         self.assertIn("build/map01a-register-runtime-v1/mobile/manifest.json", current_paths)
         self.assertIn("build/map01a-register-runtime-v1/tablet/manifest.json", current_paths)
+        self.assertIn("build/map01a-password-recovery-request-runtime-v1/pc/password-recovery-request.png", current_paths)
+        self.assertIn("build/map01a-password-recovery-request-runtime-v1/mobile/manifest.json", current_paths)
+        self.assertIn("build/map01a-password-recovery-request-runtime-v1/tablet/manifest.json", current_paths)
         self.assertFalse(any("map01a-shared-layout-runtime-v4" in path for path in current_paths), current_paths)
         self.assertFalse(any("map01a-five-tab-player-copy-runtime-v1" in path for path in current_paths), current_paths)
         self.assertFalse(any("map01a-character-select-runtime/" in path for path in current_paths), current_paths)
@@ -65,6 +68,7 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             "entry/login: `build/map01a-entry-canonical-runtime-v1/pc/entry-login.png`, `build/map01a-entry-canonical-runtime-v1/pc/manifest.json`\n"
             "server select: `build/map01a-server-select-runtime-v1/pc/server-select.png`, `build/map01a-server-select-runtime-v1/pc/manifest.json`, `build/map01a-server-select-runtime-v1/mobile/manifest.json`, `build/map01a-server-select-runtime-v1/tablet/manifest.json`\n"
             "register: `build/map01a-register-runtime-v1/pc/register-account.png`, `build/map01a-register-runtime-v1/pc/manifest.json`, `build/map01a-register-runtime-v1/mobile/manifest.json`, `build/map01a-register-runtime-v1/tablet/manifest.json`\n"
+            "password recovery: `build/map01a-password-recovery-request-runtime-v1/pc/password-recovery-request.png`, `build/map01a-password-recovery-request-runtime-v1/pc/manifest.json`, `build/map01a-password-recovery-request-runtime-v1/mobile/manifest.json`, `build/map01a-password-recovery-request-runtime-v1/tablet/manifest.json`\n"
             "five tabs: `build/map01a-spirit-screen-runtime-v1/pc/character-info.png`, `build/map01a-spirit-screen-runtime-v1/pc/bag.png`, `build/map01a-spirit-screen-runtime-v1/pc/bag-search-binh-mau.png`, `build/map01a-spirit-screen-runtime-v1/pc/bag-search-binh-mau-selected.png`, `build/map01a-spirit-screen-runtime-v1/pc/skills-default.png`, `build/map01a-spirit-screen-runtime-v1/pc/skills.png`, `build/map01a-spirit-screen-runtime-v1/pc/potential-default.png`, `build/map01a-spirit-screen-runtime-v1/pc/potential.png`, `build/map01a-spirit-screen-runtime-v1/pc/spirit-pet.png`, `build/map01a-spirit-screen-runtime-v1/pc/manifest.json`\n"
             "route: `build/map01a-completion-copy-runtime-v2/01-arrival-q01.bmp`, `build/map01a-completion-copy-runtime-v2/18-q09-portal-open.bmp`, `build/map01a-completion-copy-runtime-v2/manifest.json`\n"
             "menu: `build/map01a-modal-input-runtime-v1/menu.png`, `build/map01a-modal-input-runtime-v1/manifest.json`\n"
@@ -111,6 +115,17 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
                 "width": width,
                 "height": height,
                 "frame": "register-account.png",
+            })
+            (root / png_rel).write_bytes(b"png")
+        for manifest_rel, png_rel, width, height in validator.PASSWORD_RECOVERY_EVIDENCE:
+            write_json(root / manifest_rel, {
+                "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
+                "captureScope": "map01a-password-recovery-request",
+                "passwordRecoveryOverlayExpected": True,
+                "usesOsMouseOrKeyboard": False,
+                "width": width,
+                "height": height,
+                "frame": "password-recovery-request.png",
             })
             (root / png_rel).write_bytes(b"png")
         write_json(root / validator.HUB_MANIFEST, {
@@ -224,6 +239,17 @@ class ValidateMap01AUiReviewCatalogTests(unittest.TestCase):
             violations = validator.validate_root(Path(temp))
 
         self.assertTrue(any("register: overlay expectation" in item for item in violations), violations)
+
+    def test_rejects_password_recovery_capture_without_expected_overlay(self) -> None:
+        with self._fixture() as temp:
+            manifest = Path(temp) / "build/map01a-password-recovery-request-runtime-v1/pc/manifest.json"
+            data = json.loads(manifest.read_text())
+            data["passwordRecoveryOverlayExpected"] = False
+            write_json(manifest, data)
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("password recovery: overlay expectation" in item for item in violations), violations)
 
     def test_rejects_route_evidence_hidden_by_inventory_overlay(self) -> None:
         with self._fixture() as temp:

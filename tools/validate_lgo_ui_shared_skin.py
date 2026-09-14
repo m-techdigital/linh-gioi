@@ -105,6 +105,12 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoRegisterPrimary",
     "ApplyLgoRegisterBack",
     "ApplyLgoRegisterPasswordReveal",
+    "LgoAuthFlowPanelClass",
+    "LgoAuthFlowPrimaryClass",
+    "LgoAuthFlowBackClass",
+    "ApplyLgoAuthFlowPanel",
+    "ApplyLgoAuthFlowPrimary",
+    "ApplyLgoAuthFlowBack",
     "ApplyLgoCharacterSelectPanel",
     "ApplyLgoCharacterSelectProfile",
     "ApplyLgoCharacterSelectEmptySlot",
@@ -230,6 +236,15 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoRegisterBack(back)",
         "Dịch vụ đăng ký chưa kết nối. Vui lòng thử lại sau.",
     ],
+    "CongDongLamArrivalHud.PasswordRecovery.cs": [
+        "Map01A Password Recovery Overlay",
+        "ApplyLgoAuthFlowPanel(_passwordRecoveryOverlay, 410)",
+        "Map01A Password Recovery Account Field",
+        "ApplyLgoAuthFlowPrimary(submit)",
+        "ApplyLgoAuthFlowBack(back)",
+        "Dịch vụ khôi phục mật khẩu chưa kết nối. Vui lòng thử lại sau.",
+        "UpdateEntryControlCardVisibility()",
+    ],
     "CongDongLamArrivalHud.Inventory.cs": [
         "_inventoryDetailPanel = InventoryPanel(\"Map01A Inventory Detail Panel\")",
         "_inventoryGridPanel = InventoryPanel(\"Map01A Inventory Grid Panel\")",
@@ -318,6 +333,8 @@ REQUIRED_TEST_MARKERS = [
     "Selecting a server must not mutate class, pose, wardrobe or gameplay source state",
     "RegisterScreenValidatesLocallyAndReturnsToEntry",
     "Register validation must not mutate class, pose, wardrobe or gameplay state",
+    "PasswordRecoveryRequestValidatesLocallyAndReturnsToEntry",
+    "Password recovery must not mutate class, pose, wardrobe or gameplay state",
 ]
 
 

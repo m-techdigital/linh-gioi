@@ -100,6 +100,11 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(registerArgs), Is.False);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(registerArgs, sceneIsCapturing: true), Is.True,
                 "Register capture reuses the Entry scene layers while replacing only its control card.");
+            var recoveryArgs = new[] { "LinhGioiOnline", "--lgo-map01a-password-recovery-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(recoveryArgs), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(recoveryArgs), Is.False);
+            Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(recoveryArgs, sceneIsCapturing: true), Is.True,
+                "Password recovery capture reuses the Entry scene layers while replacing only its control card.");
             var menuArgs = new[] { "LinhGioiOnline", "--lgo-map01a-menu-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(menuArgs), Is.True);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(menuArgs, sceneIsCapturing: true), Is.False,
@@ -686,6 +691,58 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(confirmation.value, Is.Empty, "Register must not retain either password after reopening.");
                 Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(classBefore),
                     "Register validation must not mutate class, pose, wardrobe or gameplay state.");
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void PasswordRecoveryRequestValidatesLocallyAndReturnsToEntry()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("canonical password recovery request screen test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var classBefore = scene.ActiveEquipmentClassId;
+
+                var entryAccount = root.Q<TextField>("Map01A Entry Account Field");
+                entryAccount.value = "luc-thien@example.test";
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Forgot Password"));
+
+                var overlay = root.Q("Map01A Password Recovery Overlay");
+                Assert.That(overlay, Is.Not.Null);
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q("Map01A Entry Control Card").style.display.value, Is.EqualTo(DisplayStyle.None));
+
+                var account = root.Q<TextField>("Map01A Password Recovery Account Field");
+                var submit = root.Q<Button>("Map01A Password Recovery Submit");
+                var status = root.Q<Label>("Map01A Password Recovery Status");
+                Assert.That(account, Is.Not.Null);
+                Assert.That(account.value, Is.EqualTo("luc-thien@example.test"));
+                Assert.That(overlay.Query<Button>(className: "lgo-auth-flow-primary").ToList().Count, Is.EqualTo(1));
+                Assert.That(root.Q<TextField>("Map01A Password Recovery Code Field"), Is.Null,
+                    "Request screen must not absorb the later verification-code screen.");
+
+                account.value = string.Empty;
+                InvokeBoundButton(submit);
+                Assert.That(status.text, Is.EqualTo("Nhập tài khoản hoặc email để nhận hướng dẫn."));
+                account.value = "luc-thien@example.test";
+                InvokeBoundButton(submit);
+                Assert.That(status.text, Is.EqualTo(
+                    "Dịch vụ khôi phục mật khẩu chưa kết nối. Vui lòng thử lại sau."));
+                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Password Recovery Back"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Entry Control Card").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(classBefore),
+                    "Password recovery must not mutate class, pose, wardrobe or gameplay state.");
             }
             finally
             {

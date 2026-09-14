@@ -71,6 +71,9 @@ namespace LinhGioi.UI
         private const string LgoRegisterPrimaryClass = "lgo-register-primary";
         private const string LgoRegisterBackClass = "lgo-register-back";
         private const string LgoRegisterPasswordRevealClass = "lgo-register-password-reveal";
+        private const string LgoAuthFlowPanelClass = "lgo-auth-flow-panel";
+        private const string LgoAuthFlowPrimaryClass = "lgo-auth-flow-primary";
+        private const string LgoAuthFlowBackClass = "lgo-auth-flow-back";
         private const string LgoCharacterSelectProfileClass = "lgo-character-select-profile";
         private const string LgoCharacterSelectEmptySlotClass = "lgo-character-select-empty-slot";
         private const string LgoMenuActionClass = "lgo-menu-action";
@@ -797,8 +800,14 @@ namespace LinhGioi.UI
         private static void ApplyLgoRegisterPanel(VisualElement panel)
         {
             panel.AddToClassList(LgoRegisterPanelClass);
+            ApplyLgoAuthFlowPanel(panel, 492);
+        }
+
+        private static void ApplyLgoAuthFlowPanel(VisualElement panel, float minHeight)
+        {
+            panel.AddToClassList(LgoAuthFlowPanelClass);
             ApplyLgoEntryControlCard(panel);
-            panel.style.minHeight = 492;
+            panel.style.minHeight = minHeight;
             panel.style.paddingLeft = panel.style.paddingRight = 28;
             panel.style.paddingTop = 20;
             panel.style.paddingBottom = 18;
@@ -816,6 +825,12 @@ namespace LinhGioi.UI
         private static void ApplyLgoRegisterPrimary(Button button)
         {
             button.AddToClassList(LgoRegisterPrimaryClass);
+            ApplyLgoAuthFlowPrimary(button);
+        }
+
+        private static void ApplyLgoAuthFlowPrimary(Button button)
+        {
+            button.AddToClassList(LgoAuthFlowPrimaryClass);
             ApplyLgoButton(button, true);
             button.style.flexGrow = 0;
             button.style.height = 58;
@@ -827,6 +842,12 @@ namespace LinhGioi.UI
         private static void ApplyLgoRegisterBack(Button button)
         {
             button.AddToClassList(LgoRegisterBackClass);
+            ApplyLgoAuthFlowBack(button);
+        }
+
+        private static void ApplyLgoAuthFlowBack(Button button)
+        {
+            button.AddToClassList(LgoAuthFlowBackClass);
             ApplyLgoButton(button);
             button.style.flexGrow = 0;
             button.style.alignSelf = Align.Center;

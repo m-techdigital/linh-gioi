@@ -242,7 +242,7 @@ namespace LinhGioi.UI
             rememberWrap.Add(remember);
             row.Add(rememberWrap);
 
-            var forgot = new Button { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu" };
+            var forgot = new Button(OpenPasswordRecovery) { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu" };
             ApplyLgoEntrySecondaryAction(forgot);
             row.Add(forgot);
             return row;
@@ -296,6 +296,7 @@ namespace LinhGioi.UI
             if (Array.IndexOf(args, "--lgo-map01a-skip-entry") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0) return true;
             if (Array.IndexOf(args, "--lgo-map01a-register-capture") >= 0) return true;
+            if (Array.IndexOf(args, "--lgo-map01a-password-recovery-capture") >= 0) return true;
             if (Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0) return false;
@@ -315,7 +316,7 @@ namespace LinhGioi.UI
         private void UpdateEntryControlCardVisibility()
         {
             if (_entryControlCard == null) return;
-            _entryControlCard.style.display = _serverSelectOpen || _registerOpen
+            _entryControlCard.style.display = _serverSelectOpen || _registerOpen || _passwordRecoveryOpen
                 ? DisplayStyle.None
                 : DisplayStyle.Flex;
         }
