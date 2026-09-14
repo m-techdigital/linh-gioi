@@ -112,11 +112,12 @@ def active_state_execution_blocker_from_text(text: str) -> str | None:
 def execution_blocker_owner_note(blocker: str) -> str:
     if blocker == "BLOCKED_SPINE_TOOLING":
         return (
-            "Cơ chế attachment đã được chứng minh bằng belt/weapon LGO thật trong Player cô lập. "
-            "Để tiếp tục thành production cần provision/kích hoạt Spine Professional 4.3.x. "
+            "Player cô lập chỉ chứng minh API có thể gắn hai texture LGO vào skeleton mẫu; owner đã bác đây là proof cho nhân vật LGO. "
+            "Để tiếp tục cần provision/kích hoạt Spine Professional 4.3.x. "
             "Hai candidate source vừa tạo đã bị reject bằng visual audit; vẫn thiếu base nam/nữ layered được duyệt "
             "và source áo Pháp Lv1 có tay. "
-            "Chỉ tích hợp runtime 4.3 vào client/Unity và chạy Player proof khi cả license và source hợp lệ đều có."
+            "Phải author, save/reopen và chạy animation trong Spine Editor, export chính thức, rồi mới tích hợp vào client/Unity. "
+            "Không dùng SkeletonData/MeshAttachment sinh bằng code trong Unity làm vật thay thế."
         )
     if blocker == "KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED":
         return (

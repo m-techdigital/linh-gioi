@@ -4,8 +4,8 @@ Date: 2026-09-14
 
 Task: `LGO-SPINE-PRODUCTION-PROOF-01`
 
-Current phase: `MINIMUM_RUNTIME_FEASIBILITY_PROVEN`
-Current feasibility decision: `LGO_RUNTIME_ATTACHMENT_MECHANISM_PROVEN`
+Current phase: `EDITOR_AUTHORING_NOT_STARTED`
+Current feasibility decision: `API_ATTACHMENT_COMPATIBILITY_ONLY`
 Current production decision: `BLOCKED_SPINE_TOOLING`
 
 ## Decision and verified basis
@@ -28,7 +28,21 @@ Official references:
 
 These facts prove capability and version compatibility. They do not prove that the current LGO character source, Pháp Lv1 sleeves or run silhouette will deform acceptably. That conclusion requires the staged Player proof below.
 
-## Minimum actual-LGO runtime proof
+## Owner scope correction — 2026-09-14
+
+The required proof starts in **Spine Editor** with the actual LGO character and full Pháp Lv1 equipment. It must create an editable Spine project, save it, reopen it, run the authored idle/run/jump animations in Spine, export with the official exporter, then run that export in the real Unity Player.
+
+Three experiments made after the reference reproduction are rejected as `WRONG_TEST_SCOPE_OWNER_REJECTED`:
+
+- converting two LGO atlas sprites into `RegionAttachment` objects on the official sample skeleton;
+- generating a ten-part LGO cutout `SkeletonData` through spine-csharp in Unity;
+- generating a whole-base weighted `MeshAttachment` through spine-csharp in Unity.
+
+These experiments only exercise runtime APIs. They do not prove Spine Editor authoring, editable source, weights, deformation, export, LGO body motion or a full equipped character. They may remain as failure evidence, but no later session may run, rename or promote them as the production proof.
+
+The only valid resume path is an activated Spine Professional 4.3.x editor plus an accepted, reopenable LGO male/female and sleeved Pháp Lv1 source package. Trial 4.3.26 can open the official sample but cannot save or export this proof, so implementation stops at `BLOCKED_SPINE_TOOLING` until that capability exists.
+
+## API attachment compatibility evidence — insufficient for the required proof
 
 After the owner reduced the immediate scope to proving applicability, a bounded Player probe used the already verified official skeleton and two actual Pháp Lv1 components from the current LGO atlas: `waist_belt` and `main_weapon`. Unity imported them as sprites, converted them at runtime to Spine `RegionAttachment` objects, and placed them on the official `body-dress` and `hand-front` animated slots.
 
@@ -41,7 +55,7 @@ Evidence:
 - `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/motion.csv`
 - `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/contact-sheet.png`
 
-This is sufficient to prove the narrow mechanism: actual LGO RGBA equipment can enter spine-unity as runtime attachments, multiple items can follow separate animated slots, and equip/unequip does not require restarting locomotion. It does not prove accepted LGO body rigging, sleeved deformation, final fit, production licensing or integration into `client/Unity`. The sample mismatch visible in the captures is expected evidence of the remaining source/template work, not a final character design.
+This records only `API_ATTACHMENT_COMPATIBILITY_ONLY`: spine-unity accepted two RGBA textures and its slot API could remove and restore them. It is insufficient for the requested LGO Spine proof and must not be described as actual-LGO feasibility. The sample mismatch is a rejected test-scope result, not a production candidate.
 
 ## Scope
 
@@ -85,7 +99,8 @@ Failure at a phase blocks dependent phases. A compiler PASS, object count or scr
 | Official Spine Examples evaluation | PASS | official `Mix and Match Skins` source opened in Trial and imported into isolated Unity evaluation project |
 | Spine skeleton/atlas import evaluation | PASS | official 4.3 export imported without compiler/import errors |
 | Reference Player evaluation | PASS | graphics Player captured base, bag, backpack, remove, restore, combined skin and two walk phases |
-| Actual LGO attachment mechanism | PASS | LGO Pháp Lv1 belt and weapon attached, animated, removed and restored in isolated graphics Player |
+| LGO texture/API attachment compatibility | LIMITED | two textures attached to the official sample at runtime; `WRONG_TEST_SCOPE_OWNER_REJECTED` as an LGO production proof |
+| Actual LGO Spine Editor authoring | BLOCKED | no LGO `.spine` project created/saved/reopened; Trial cannot save/export |
 | LGO project integration | BLOCKED | license required before adding Spine Runtimes to `client/Unity` |
 | LGO male source admission | FAIL | old 12-layer KRA reconstructs the rejected cutout body; two newly authored candidates also failed visual/source audit and remain `runtimeEligible=false` |
 | LGO female source admission | FAIL | old six-pose PNGs have no editable layered source; two newly authored candidates also failed visual/source audit and remain `runtimeEligible=false` |
@@ -103,7 +118,7 @@ After the owner authorized creating missing test source, two bounded male/female
 
 Both trees were removed from `class-work-in-progress` and quarantined under `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-14/`. Tombstones remain at the old locations so source selection cannot silently rediscover them. They must not be repackaged or reused as accepted input. Machine audit: `build/lgo-spine-production-proof-01/lgo-created-source-audit.json`. This closes the question of whether simply generating an ORA or splitting a flat board is sufficient: it is not. It does not close the accepted-source gate.
 
-The proof still has two independent prerequisites: purchase/provision and activate one valid Spine Professional 4.3.x seat, and supply or author an owner-accepted reopenable layered male/female base plus the Pháp Lv1 sleeved source. The failed generated candidates do not satisfy the second prerequisite. The activation code must not be pasted into chat, source control, logs or evidence. After both exist, use the already verified 4.3 runtime line in `client/Unity`, reproduce the same Player sequence there, and substitute the admitted LGO sources incrementally.
+The proof still has two independent prerequisites: purchase/provision and activate one valid Spine Professional 4.3.x seat, and supply or author an owner-accepted reopenable layered male/female base plus the Pháp Lv1 sleeved source. The failed generated candidates do not satisfy the second prerequisite. The activation code must not be pasted into chat, source control, logs or evidence. After both exist, author and visually check the full LGO character in Spine Editor first, save/reopen it, export it, and only then integrate that export into `client/Unity` for Player review.
 
 The evaluation PASS proves the official workflow and local Unity/tool compatibility. It does not prove LGO body quality, Pháp sleeves, run/jump proportions or permission to ship/integrate the runtime.
 

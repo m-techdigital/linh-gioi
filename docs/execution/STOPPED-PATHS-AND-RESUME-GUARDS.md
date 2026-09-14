@@ -10,12 +10,24 @@ The only active character/outfit route is `LGO-SPINE-PRODUCTION-PROOF-01`:
 
 - spec: `docs/art/LGO-SPINE-PRODUCTION-PROOF-01.md`
 - plan: `docs/superpowers/plans/2026-09-14-lgo-spine-production-proof-01.md`
-- current phase/status: `MINIMUM_RUNTIME_FEASIBILITY_PROVEN_PRODUCTION_GATE_REMAINS / BLOCKED_SPINE_TOOLING`
+- current phase/status: `EDITOR_AUTHORING_NOT_STARTED / BLOCKED_SPINE_TOOLING`
 - evaluation proof: official Trial 4.3.26 and official 4.3 runtime/examples passed a graphics Player sequence in isolated build space; this does not authorize LGO integration
-- actual-LGO mechanism proof: current Pháp Lv1 belt/weapon sprites converted to runtime attachments, animated, removed and restored in isolated Player; this proves the narrow integration mechanism and must not be relabeled as body/sleeve or production visual PASS
+- API compatibility only: current Pháp Lv1 belt/weapon textures could be converted to runtime attachments on the official sample; owner rejected this as an actual-LGO proof
 - LGO body/rig source admission: no LGO body or sleeve rig ran; old sources remain ineligible and the newly created v1/v2 source attempts are explicitly rejected (`VISUAL_REJECTED_MANNEQUIN_NOT_LGO`, `VISUAL_REJECTED_STRUCTURAL_MASK_LOSS`)
 - v1/v2 were quarantined under `rejected-evidence/2026-09-14` with tombstones at their former work paths; do not continue or repackage them. Creating another ORA or adding masks cannot substitute for an accepted source and licensed Spine Player proof
-- next action: provision licensed Spine Professional 4.3.x and an owner-accepted reopenable layered male/female + sleeved Pháp source package, then reproduce the verified `Mix and Match Skins` sequence inside `client/Unity`
+- next action: provision licensed Spine Professional 4.3.x and an owner-accepted reopenable layered male/female + sleeved Pháp source package; author/save/reopen/run in Spine Editor, export officially, then test that export in Unity
+
+### Owner-rejected wrong-scope Spine substitutes — 2026-09-14
+
+Do not continue, run or rename as a new proof:
+
+- programmatic spine-csharp `SkeletonData` generation inside Unity;
+- programmatic runtime `MeshAttachment` generation for the whole-base image;
+- the ten-part LGO body cutout fixture;
+- LGO equipment attached to the official Mix-and-Match skeleton as a substitute for authoring the LGO character;
+- any Unity-only test that has no LGO `.spine` source saved, reopened and exported by Spine Editor.
+
+Evidence under `build/lgo-spine-production-proof-01/real-character-motion/` is retained only as `WRONG_TEST_SCOPE_OWNER_REJECTED`. The route has no automatic resume condition. A valid Spine proof resumes only with an activated Professional editor and accepted source, and begins in Spine Editor.
 
 The former six-pose pixel/registered-outfit authoring route is legacy reference. Its semantic pose sequence, surface ownership findings, selection/alpha guards, mixed/off-slot scenarios and visual capture rules may be adapted only after the official Spine reference passes. Do not continue its candidate authoring, mask repair, pixel fitting or Player promotion.
 
