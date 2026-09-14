@@ -10,10 +10,10 @@ namespace LinhGioi.UI
         private enum CharacterHubMode { Skills, Potential, SpiritPet }
 
         private VisualElement _skillsPanel, _potentialPanel, _spiritPetPanel, _hubPreviewDetailPanel;
-        private VisualElement _hubSkillActionRow, _hubPotentialActionRow;
+        private VisualElement _hubSkillActionRow, _hubPotentialActionRow, _hubSpiritPetActionRow;
         private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
         private VisualElement _hubDetailIcon;
-        private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _potentialResetAction, _spiritPetDevelopAction;
+        private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _potentialResetAction, _spiritPetDeployAction, _spiritPetDevelopAction;
         private Texture2D _spiritPetPreviewTexture;
         private readonly List<Button> _skillPathNodes = new List<Button>();
         private readonly List<Button> _potentialPathNodes = new List<Button>();
@@ -201,6 +201,15 @@ namespace LinhGioi.UI
             return card;
         }
 
+        private UnityEngine.UIElements.ProgressBar CreateSpiritPetProgress(string name, string title, float value, Color fill)
+        {
+            var bar = new UnityEngine.UIElements.ProgressBar { name = name, title = title, lowValue = 0, highValue = 600, value = value };
+            ApplyLgoVitalBar(bar, fill);
+            bar.style.marginTop = 4;
+            bar.style.marginBottom = 2;
+            return bar;
+        }
+
         private void InitializeCharacterHub(VisualElement body)
         {
             InitializeSkillsView(body);
@@ -358,8 +367,9 @@ namespace LinhGioi.UI
             var identity = LgoTitleLabel("Thanh Vân Hồ · Lv.20", 19);
             identity.style.unityTextAlign = TextAnchor.MiddleCenter;
             _spiritPetPanel.Add(identity);
-            var growth = InventoryBadge("Map01A Spirit Pet Growth", "Thân mật 320/600  ·  Tăng trưởng 180/300", new Color(.74f, .92f, 1f, .94f));
-            growth.style.alignSelf = Align.Center;
+            _spiritPetPanel.Add(CreateSpiritPetProgress("Map01A Spirit Pet Intimacy", "Thân mật 320/600", 320, new Color(.96f, .32f, .58f, 1f)));
+            var growth = CreateSpiritPetProgress("Map01A Spirit Pet Growth", "Tăng trưởng 180/300", 180, new Color(.38f, .78f, .36f, 1f));
+            growth.highValue = 300;
             _spiritPetPanel.Add(growth);
             var roster = InventoryRow("Map01A Spirit Pet Roster");
             roster.style.marginTop = 10;
@@ -432,14 +442,19 @@ namespace LinhGioi.UI
                 _hubPotentialActionRow.Add(action);
             }
             _hubPreviewDetailPanel.Add(_hubPotentialActionRow);
+            _hubSpiritPetActionRow = InventoryRow("Map01A Spirit Pet Detail Actions");
+            _hubSpiritPetActionRow.style.marginTop = 12;
+            _spiritPetDeployAction = InventoryButton(() => { }, "Map01A Spirit Pet Deploy Action", "Đang xuất chiến");
             _spiritPetDevelopAction = InventoryButton(() => { }, "Map01A Spirit Pet Develop Action", "Bồi dưỡng");
-            foreach (var action in new[] { _spiritPetDevelopAction })
+            foreach (var action in new[] { _spiritPetDeployAction, _spiritPetDevelopAction })
             {
-                action.style.marginTop = 12;
-                action.style.flexShrink = 0;
+                action.style.flexGrow = 1;
+                action.style.flexBasis = 0;
+                action.style.marginRight = 6;
                 ApplyLgoDisabledAction(action);
-                _hubPreviewDetailPanel.Add(action);
+                _hubSpiritPetActionRow.Add(action);
             }
+            _hubPreviewDetailPanel.Add(_hubSpiritPetActionRow);
             body.Add(_hubPreviewDetailPanel);
         }
 
@@ -500,7 +515,7 @@ namespace LinhGioi.UI
         {
             _hubSkillActionRow.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
             _hubPotentialActionRow.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
-            _spiritPetDevelopAction.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubSpiritPetActionRow.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
             _hubDetailIcon.style.width = _hubDetailIcon.style.height = mode == CharacterHubMode.Skills ? 124 : 96;
             _hubDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
@@ -561,8 +576,8 @@ namespace LinhGioi.UI
                 _hubDetailHeader.text = "CHI TIẾT LINH THÚ";
                 _hubDetailName.text = "Thanh Vân Hồ";
                 _hubDetailMeta.text = "Tinh phẩm · Hỗ trợ · Lv.20";
-                _hubDetailBody.text = "Kỹ năng Linh thú\n• Thanh Vân Hộ Thể\n• Cửu Vĩ Linh Phong";
-                _hubDetailStatus.text = "Tính năng bồi dưỡng chưa mở.";
+                _hubDetailBody.text = "Thuộc tính Linh thú\nHP  +8720\nTấn Công  +860\nPhòng Thủ  +430\nHồi Phục  +28%\nGiảm Sát Thương  +12%\n\nKỹ năng Linh thú\nThanh Vân Hộ Thể · Lv.1\nCửu Vĩ Linh Phong · Lv.1";
+                _hubDetailStatus.text = "Đang xuất chiến · tính năng bồi dưỡng đang khóa.";
             }
         }
 

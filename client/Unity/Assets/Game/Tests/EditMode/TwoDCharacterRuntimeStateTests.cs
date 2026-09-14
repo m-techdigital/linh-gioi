@@ -438,6 +438,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(spiritPetTexture.width / (float)spiritPetTexture.height, Is.GreaterThanOrEqualTo(1.45f),
                     "The wide approved spirit-pet source must not be letterboxed inside a square runtime canvas; that makes the pet unreadably small in Player.");
                 Assert.That(root.Q("Map01A Spirit Pet Locked Roster 1"), Is.Not.Null);
+                Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Spirit Pet Intimacy").value, Is.EqualTo(320));
+                Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Spirit Pet Growth").value, Is.EqualTo(180));
+                Assert.That(root.Q<Button>("Map01A Spirit Pet Deploy Action").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
                     "Linh thú growth must remain visibly gated until its real progression state exists.");
                 StringAssert.DoesNotContain("Màn này", hubDetailBody.text);

@@ -1,8 +1,8 @@
-## Active — audit/plan screen Linh thú theo canonical design — 2026-09-14
+## Active — khóa một canonical design cho Entry/login trước code — 2026-09-14
 
-`CONTINUE`. Quy trình và layout contract hiện hành là `docs/design/LGO-MAP01A-CHARACTER-HUB-SCREEN-CONTRACT-v1.0.md`. Bốn screen đầu đã khóa layout; Tiềm năng dùng evidence `build/map01a-potential-screen-runtime-v1/{pc,mobile,tablet}/`. Mỗi screen chỉ có một canonical design trong `redesign-v4-five-tabs`; mobile/tablet giữ composition landscape hai cột và scale toàn shell.
+`CONTINUE`. Cả năm screen character hub đã khóa layout; Linh thú dùng evidence `build/map01a-spirit-screen-runtime-v1/{pc,mobile,tablet}/`. Không vi chỉnh lại hub khi không có regression mới.
 
-Screen active duy nhất tiếp theo là **Linh thú**, canonical `05-linh-thu-five-tab-APPROVED.png`. Việc hợp lệ đầu tiên chỉ là audit toàn ảnh và viết plan theo shell → hero art/identity → roster → detail-right → state/action → asset/provenance; chưa sửa runtime trước khi plan hoàn tất. Không vi chỉnh lại bốn screen đã khóa, không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+Screen UI kế tiếp là **Entry/login**, nhưng hai demo hiện có chưa được phép cùng làm nguồn quyết định. Việc hợp lệ đầu tiên là audit `03-dang-nhap-linh-gioi-demo.png` và `preferred-v2/04-dang-nhap-may-chu-bat-dau-linh-gioi.png`, chọn/redesign thành đúng một canonical screen, ghi scenario/state/interaction và plan rồi mới sửa runtime. Không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
 
 ## Next — sau khi sửa letterbox ảnh Linh thú — 2026-09-14
 

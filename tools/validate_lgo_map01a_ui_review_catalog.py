@@ -18,7 +18,7 @@ ENTRY_EVIDENCE = (
     "build/map01a-entry-remember-runtime-v1/manifest.json",
     "build/map01a-entry-remember-runtime-v1/entry-login.png",
 )
-HUB_MANIFEST = "build/map01a-potential-screen-runtime-v1/pc/manifest.json"
+HUB_MANIFEST = "build/map01a-spirit-screen-runtime-v1/pc/manifest.json"
 HUB_FRAMES = [
     "character-info.png",
     "bag.png",

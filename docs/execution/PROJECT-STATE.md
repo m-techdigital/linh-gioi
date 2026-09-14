@@ -1717,3 +1717,10 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Atlas `map01a-potential-icons-v1` có sáu icon RGBA, manifest/hash/provenance và status `DRAFT_RUNTIME_REVIEW`; không dùng HUD placeholder hoặc class art.
 - Player `build/map01a-potential-screen-player-v1/LinhGioiOnline.app`, evidence đã xem ở `build/map01a-potential-screen-runtime-v1/{pc,mobile,tablet}/`; không stack/cắt/chồng.
 - Screen active tiếp theo là Linh thú, chỉ audit/plan trước code. Không quay lại class/pose/wardrobe/source và không rollback code class.
+
+## Map01A — khóa layout screen Linh thú và đủ năm screen character hub — 2026-09-14
+
+- Canonical `05-linh-thu-five-tab-APPROVED.png`; plan/gate `docs/superpowers/plans/2026-09-14-map01a-spirit-pet-screen-realignment.md`.
+- Reuse hero art provenance-backed hiện hành; thêm hai progress bar, detail stats/kỹ năng và `Đang xuất chiến`/`Bồi dưỡng` read-only. Ba pet chưa có source giữ khóa, không sinh art giả.
+- Player `build/map01a-spirit-screen-player-v1/LinhGioiOnline.app`; evidence đã xem ở `build/map01a-spirit-screen-runtime-v1/{pc,mobile,tablet}/`, không stack/cắt/chồng.
+- Cả năm screen hub đã layout-locked. Next chỉ audit/chốt một canonical Entry/login trước code; class/pose/wardrobe/source vẫn hold.
