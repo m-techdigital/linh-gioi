@@ -13,6 +13,15 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
         self.assertEqual((1600, 720), capture.PROFILES["mobile"])
         self.assertEqual(3, len(set(capture.PROFILES.values())))
 
+    def test_capture_requires_data_only_potential_frames_for_all_five_classes(self) -> None:
+        expected = tuple(
+            f"potential-{class_id}-{state}.png"
+            for class_id in ("vo", "kiem", "phap", "co", "linh")
+            for state in ("default", "selected")
+        )
+        for frame in expected:
+            self.assertIn(frame, capture.REQUIRED_FRAMES)
+
     def test_player_command_uses_target_resolution_and_internal_capture(self) -> None:
         command = capture.build_player_command(
             Path("/tmp/Unity"), Path("/tmp/evidence"), "mobile", 1600, 720
@@ -35,10 +44,18 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "width": 1280,
                 "height": 720,
                 "frames": list(capture.REQUIRED_FRAMES),
+                "potentialClassProfiles": list(capture.POTENTIAL_CLASS_IDS),
+                "classSwitchScope": "character-hub-data-only-no-renderer-change",
             }
             self.assertEqual([], capture.validate_manifest(manifest, out, "pc"))
             manifest["width"] = 1024
             self.assertIn("VIEWPORT_MISMATCH", capture.validate_manifest(manifest, out, "pc"))
+            manifest["width"] = 1280
+            manifest["potentialClassProfiles"] = ["vo"]
+            self.assertIn("POTENTIAL_CLASS_PROFILE_MISMATCH", capture.validate_manifest(manifest, out, "pc"))
+            manifest["potentialClassProfiles"] = list(capture.POTENTIAL_CLASS_IDS)
+            manifest["classSwitchScope"] = "renderer-class-switch"
+            self.assertIn("CLASS_SWITCH_SCOPE_INVALID", capture.validate_manifest(manifest, out, "pc"))
 
     def test_manifest_rejects_missing_frame_and_os_input(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -50,6 +67,8 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "width": 1024,
                 "height": 768,
                 "frames": list(capture.REQUIRED_FRAMES),
+                "potentialClassProfiles": list(capture.POTENTIAL_CLASS_IDS),
+                "classSwitchScope": "character-hub-data-only-no-renderer-change",
             }
             errors = capture.validate_manifest(manifest, out, "tablet")
             self.assertIn("OS_INPUT_USED", errors)

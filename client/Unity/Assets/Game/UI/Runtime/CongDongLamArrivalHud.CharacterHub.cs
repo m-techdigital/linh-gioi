@@ -38,11 +38,14 @@ namespace LinhGioi.UI
         private readonly List<Label> _hubSpiritPetSkillDescriptions = new List<Label>();
         private VisualElement _characterHubBody;
         private string _renderedCharacterHubClassId;
+        private string _characterHubEvidenceClassId;
         private CharacterHubMode? _activeCharacterHubPreviewMode;
         private readonly CharacterHubSelectionState _characterHubSelectionState = new CharacterHubSelectionState();
 
         private CharacterHubClassProfile ActiveCharacterHubProfile =>
-            CharacterHubClassCatalog.Get(_scene.ActiveEquipmentClassId);
+            CharacterHubClassCatalog.Get(string.IsNullOrEmpty(_characterHubEvidenceClassId)
+                ? _scene.ActiveEquipmentClassId
+                : _characterHubEvidenceClassId);
 
         private VisualElement CreateHubSurface(string name)
         {
@@ -353,7 +356,29 @@ namespace LinhGioi.UI
 
         private void RefreshCharacterHubClassProfile()
         {
-            if (_characterHubBody == null || _renderedCharacterHubClassId == _scene.ActiveEquipmentClassId) return;
+            var profileId = ActiveCharacterHubProfile.Id;
+            if (_characterHubBody == null || _renderedCharacterHubClassId == profileId) return;
+            _renderedCharacterHubClassId = profileId;
+            BindCharacterHubProfile();
+            if (_activeCharacterHubPreviewMode.HasValue)
+                ShowHubDetail(_activeCharacterHubPreviewMode.Value);
+            else
+                HideCharacterHubPreviewPanels();
+        }
+
+        internal void BindCharacterHubEvidenceClass(string classId)
+        {
+            var profile = CharacterHubClassCatalog.Get(classId);
+            _characterHubEvidenceClassId = profile.Id;
+            _renderedCharacterHubClassId = profile.Id;
+            _characterHubSelectionState.SelectPotential(profile, profile.DefaultPotentialName);
+            BindCharacterHubProfile();
+            ShowHubDetail(CharacterHubMode.Potential);
+        }
+
+        internal void ClearCharacterHubEvidenceClass()
+        {
+            _characterHubEvidenceClassId = null;
             _renderedCharacterHubClassId = _scene.ActiveEquipmentClassId;
             BindCharacterHubProfile();
             if (_activeCharacterHubPreviewMode.HasValue)

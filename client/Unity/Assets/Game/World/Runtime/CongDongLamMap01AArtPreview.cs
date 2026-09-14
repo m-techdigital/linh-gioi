@@ -2379,22 +2379,60 @@ namespace LinhGioi.World
             yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
             yield return new WaitForEndOfFrame();
             CaptureScreenPng(potential);
+            var hud = GetComponentsInChildren<MonoBehaviour>()
+                .FirstOrDefault(component => component.GetType().FullName == "LinhGioi.UI.CongDongLamArrivalHud");
+            if (hud == null) throw new InvalidOperationException("Missing Character Hub HUD for five-profile capture");
+            var bindEvidenceClass = hud.GetType().GetMethod("BindCharacterHubEvidenceClass",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            var clearEvidenceClass = hud.GetType().GetMethod("ClearCharacterHubEvidenceClass",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            if (bindEvidenceClass == null || clearEvidenceClass == null)
+                throw new InvalidOperationException("Missing Character Hub five-profile evidence hooks");
+            var rendererClassId = ActiveEquipmentClassId;
+            var potentialClassIds = new[] { "vo", "kiem", "phap", "co", "linh" };
+            var potentialClassFrames = new List<string>();
+            foreach (var classId in potentialClassIds)
+            {
+                bindEvidenceClass.Invoke(hud, new object[] { classId });
+                if (ActiveEquipmentClassId != rendererClassId)
+                    throw new InvalidOperationException("Character Hub evidence binding changed renderer authority");
+                yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
+                yield return new WaitForEndOfFrame();
+                var defaultFrame = "potential-" + classId + "-default.png";
+                CaptureScreenPng(Path.Combine(directory, defaultFrame));
+                potentialClassFrames.Add(defaultFrame);
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Node 0"));
+                yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
+                yield return new WaitForEndOfFrame();
+                var selectedFrame = "potential-" + classId + "-selected.png";
+                CaptureScreenPng(Path.Combine(directory, selectedFrame));
+                potentialClassFrames.Add(selectedFrame);
+            }
+            clearEvidenceClass.Invoke(hud, null);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Spirit Pet Main Tab"));
             yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
             yield return new WaitForEndOfFrame();
             var spiritPet = Path.Combine(directory, "spirit-pet.png");
             CaptureScreenPng(spiritPet);
+            var potentialClassFramesExist = potentialClassFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
             var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(bagSearch)
                 && File.Exists(bagSearchSelected)
-                && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potentialDefault) && File.Exists(potential) && File.Exists(spiritPet)
+                && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potentialDefault) && File.Exists(potential)
+                && potentialClassFramesExist && File.Exists(spiritPet)
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var frames = new[] { "character-info.png", "bag.png", "bag-search-binh-mau.png", "bag-search-binh-mau-selected.png",
+                "skills-default.png", "skills.png", "potential-default.png", "potential.png" }
+                .Concat(potentialClassFrames)
+                .Concat(new[] { "spirit-pet.png" });
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-inventory-tabs\",\n"
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frames\": [\"character-info.png\", \"bag.png\", \"bag-search-binh-mau.png\", \"bag-search-binh-mau-selected.png\", \"skills-default.png\", \"skills.png\", \"potential-default.png\", \"potential.png\", \"spirit-pet.png\"]\n"
+                + "  \"potentialClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
+                + "  \"classSwitchScope\": \"character-hub-data-only-no-renderer-change\",\n"
+                + "  \"frames\": [\"" + string.Join("\", \"", frames) + "\"]\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);

@@ -1,3 +1,10 @@
+## Character Hub — Tiềm năng five-profile Player audit v17 — 2026-09-15
+
+- Màn Tiềm năng tiếp tục dùng đúng một topology 600×520 và một detail template. Đường capture nội bộ nay bind tuần tự dữ liệu Võ/Kiếm/Pháp/Cơ/Linh vào cùng object tree; hook không đổi `ActiveEquipmentClassId`, không gọi renderer và không tải class art. Mỗi profile được đưa về `DefaultPotentialName` trước ảnh default rồi chọn node `Công` cho ảnh selected.
+- Player `build/character-hub-five-profile-player-v17/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=50` (CS0618 hiện hữu). Evidence `build/character-hub-five-profile-runtime-v17/{pc,tablet,mobile}/` có 19 frame/profile, gồm default/selected riêng cho đủ năm class; manifest khóa `classSwitchScope=character-hub-data-only-no-renderer-change`.
+- Đã xem trực tiếp 10 ảnh PC và toàn bộ năm ảnh default trên tablet/mobile: topology, node, icon, value/add frame và detail giữ nguyên vị trí; default lần lượt Võ `Sinh lực`, Kiếm `Nhanh nhẹn`, Pháp `Linh lực`, Cơ `Công`, Linh `Linh lực`; recommendation đổi theo profile; không thấy cắt/chồng/vỡ.
+- TDD hook RED `0/1`, GREEN `1/1`; capture/shared asset tests `33/33`; full EditMode `288 total / 287 passed / 0 failed / 1 ignored`; no-3D/no-source/frozen diff pass. Trạng thái vẫn `NEED_HUMAN_VISUAL_REVIEW`; chưa chuyển screen và không đụng pose/wardrobe/class art.
+
 ## Character Hub — Tiềm năng geometry/data separation v16 — 2026-09-15
 
 - Audit sau v15 phát hiện topology đã dùng chung nhưng mỗi node vẫn có nhiều vòng đồng tâm, trong khi sprite icon đã sở hữu medallion hoàn chỉnh. v16 giữ đúng một outer slot frame trong topology tĩnh cùng toàn bộ đường nối/ô value/ô cộng/lõi; bỏ vòng lặp lại trong vùng icon.

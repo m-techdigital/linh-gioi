@@ -979,6 +979,44 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void PotentialEvidenceBindingCoversFiveProfilesWithoutChangingRendererAuthority()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("potential five-profile evidence binding test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var bind = typeof(CongDongLamArrivalHud).GetMethod("BindCharacterHubEvidenceClass", flags);
+                var clear = typeof(CongDongLamArrivalHud).GetMethod("ClearCharacterHubEvidenceClass", flags);
+                Assert.That(bind, Is.Not.Null);
+                Assert.That(clear, Is.Not.Null);
+                var topology = root.Q("Map01A Potential Topology Base");
+                var rendererClass = scene.ActiveEquipmentClassId;
+                foreach (var profile in CharacterHubClassCatalog.Profiles)
+                {
+                    bind.Invoke(hud, new object[] { profile.Id });
+                    Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(rendererClass), profile.Id);
+                    Assert.That(root.Q("Map01A Potential Topology Base"), Is.SameAs(topology), profile.Id);
+                    Assert.That(root.Q<Label>("Map01A Potential Recommendation").text,
+                        Is.EqualTo(profile.Recommendation), profile.Id);
+                    Assert.That(root.Q<Label>("Map01A Hub Preview Detail Name").text,
+                        Is.EqualTo(profile.DefaultPotentialName), profile.Id);
+                }
+                clear.Invoke(hud, null);
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(rendererClass));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void InventoryModalUsesBoundedDesktopShellInsteadOfFullWidthOverlay()
         {
             var canonical = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 1672, 941), touch: false);

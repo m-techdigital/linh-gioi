@@ -21,6 +21,12 @@ PROFILES = {
     "tablet": (1024, 768),
     "mobile": (1600, 720),
 }
+POTENTIAL_CLASS_IDS = ("vo", "kiem", "phap", "co", "linh")
+POTENTIAL_CLASS_FRAMES = tuple(
+    f"potential-{class_id}-{state}.png"
+    for class_id in POTENTIAL_CLASS_IDS
+    for state in ("default", "selected")
+)
 REQUIRED_FRAMES = (
     "character-info.png",
     "bag.png",
@@ -30,6 +36,7 @@ REQUIRED_FRAMES = (
     "skills.png",
     "potential-default.png",
     "potential.png",
+    *POTENTIAL_CLASS_FRAMES,
     "spirit-pet.png",
 )
 
@@ -60,6 +67,10 @@ def validate_manifest(manifest: dict, out: Path, profile: str) -> list[str]:
         errors.append("CAPTURE_SCOPE_INVALID")
     if manifest.get("usesOsMouseOrKeyboard") is not False:
         errors.append("OS_INPUT_USED")
+    if tuple(manifest.get("potentialClassProfiles", ())) != POTENTIAL_CLASS_IDS:
+        errors.append("POTENTIAL_CLASS_PROFILE_MISMATCH")
+    if manifest.get("classSwitchScope") != "character-hub-data-only-no-renderer-change":
+        errors.append("CLASS_SWITCH_SCOPE_INVALID")
     if tuple(manifest.get("frames", ())) != REQUIRED_FRAMES:
         errors.append("FRAME_LIST_MISMATCH")
     for frame in REQUIRED_FRAMES:
