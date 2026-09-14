@@ -398,6 +398,13 @@ namespace LinhGioi.Tests.EditMode
                     "The close control must stay subordinate to the modal title.");
                 Assert.That(close.style.borderTopWidth.value, Is.EqualTo(0),
                     "Character Hub chrome already draws its border inside the texture; a CSS border would create a nested frame.");
+                Assert.That(modal.ClassListContains("lgo-ornamented-shell"), Is.True,
+                    "The Character Hub must keep its decorative frame rendered inside the shell.");
+                Assert.That(modal.style.borderTopWidth.value, Is.EqualTo(0));
+                Assert.That(modal.style.borderRightWidth.value, Is.EqualTo(0));
+                Assert.That(modal.style.borderBottomWidth.value, Is.EqualTo(0));
+                Assert.That(modal.style.borderLeftWidth.value, Is.EqualTo(0),
+                    "The shell ornament is the only frame; an outer CSS border would create a second box.");
                 Assert.That(modal.style.backgroundColor.value.a, Is.GreaterThanOrEqualTo(.96f),
                     "The hub shell must hold contrast against every Map01A backdrop.");
                 Assert.That(backdrop, Is.Not.Null);
@@ -458,12 +465,15 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Hero Portrait").style.height.value.value, Is.EqualTo(428).Within(1));
                 Assert.That(root.Q("Map01A Character Hero Left Equipment Rail").style.width.value.value, Is.EqualTo(76).Within(1));
                 var primaryDetailAction = root.Q<Button>("Map01A Inventory Detail Primary Action");
+                var lockDetailAction = root.Q<Button>("Map01A Inventory Detail Lock Action");
                 Assert.That(primaryDetailAction.style.backgroundColor.value.b, Is.GreaterThanOrEqualTo(.80f),
                     "The shared item inspector must use the approved bright-blue primary action state.");
                 Assert.That(primaryDetailAction.style.color.value, Is.EqualTo(new Color(.98f, .99f, 1f, 1f)),
                     "Primary inspector actions must keep readable light text on the blue surface.");
                 Assert.That(primaryDetailAction.style.borderTopWidth.value, Is.EqualTo(0),
                     "Textured action buttons must not add a second outer border.");
+                Assert.That(lockDetailAction.style.borderTopWidth.value, Is.EqualTo(0),
+                    "Gold action buttons must also keep only the decorative border inside their texture.");
                 Assert.That(equipmentDetail.style.borderTopWidth.value, Is.EqualTo(1),
                     "The detail panel is a section inside the modal, so it uses one quiet section border without full filigree.");
                 for (var iconIndex = 0; iconIndex < scene.VoEquipmentSlotIds.Count; iconIndex++)
