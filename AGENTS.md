@@ -9,6 +9,7 @@ This repository uses persistent continuous-work mode. Read this file before maki
 - Làm shared layout tổng trước, rồi hoàn thiện tuần tự từng design. Không chuyển sang Login/HUD/NPC hoặc bất kỳ screen khác trước gate năm tab.
 - Class/pose/wardrobe/source bị loại khỏi scope. Không build/capture class, không resume hoặc rollback code class.
 - Character Hub chỉ dùng actor source-pose hiện hành. `TwoDClassMixedLoadoutFitPreview`, bốn pack `*MixedLoadoutFitPreview` và class-equipment capture đã bị thu hồi; không giữ hoặc đưa lại renderer tĩnh sai dưới dạng fallback/reference runtime.
+- Player review source-pose không được truyền `--lgo-vo-registered*`. Khi source-pose đã nạp, toàn bộ renderer atlas/rig cũ dưới `Map01A Võ avatar` phải bị `forceRenderingOff`; registered-outfit chỉ còn ở luồng capture WIP riêng, không được làm fallback cho actor pose.
 
 ## Operational goal lock — owner override 2026-09-14
 

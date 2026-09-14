@@ -1,3 +1,11 @@
+## Source-pose exclusive — loại renderer cũ khỏi Player review — 2026-09-15
+
+- Audit sau feedback owner phát hiện checkpoint trước mới xóa renderer class tĩnh, nhưng launcher source-pose vẫn truyền `--lgo-vo-registered` và `--lgo-vo-registered-equipment`; `RefreshVoAvatarMode()` cũng có thể tiếp tục bật atlas/rig `Map01A Võ avatar` sau khi source-pose đã hiện. Đây là hai đường renderer sai còn sót, có thể làm hai actor chồng nhau hoặc quay lại presentation cũ.
+- Launcher hiện chỉ truyền pack source-pose. Runtime đặt mọi `SpriteRenderer` dưới atlas/rig cũ ở `forceRenderingOff=true` và thoát nhánh refresh ngay khi actor source-pose tồn tại; registered-outfit cũng bị ẩn. Registered-outfit WIP/capture source được bảo toàn theo yêu cầu kế thừa nhưng không còn nằm trong Player review source-pose hoặc được dùng làm fallback.
+- Regression test kiểm cả command và scene renderer exclusivity. Launcher `10/10`; `TwoDCharacterRuntimeStateTests` `31/31`; full EditMode `283 total / 282 passed / 0 failed / 1 ignored`; pose pack `12/12`; registered capture `19/19`; shared-skin `21/21`; no-3D/no-source/frozen diff sạch. Player `build/map01a-source-pose-exclusive-player-v1/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=46`.
+- Evidence `build/map01a-source-pose-exclusive-runtime-v1/pc/character-info.png` đã xem trực tiếp: chỉ một actor Võ source-pose liền thân trong stage, đủ 10 slot. Capture 9 frame đạt `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED`, không dùng chuột/phím OS.
+- Trạng thái `CONTINUE`: giữ nguyên source art/base/camera/scale; tiếp tục Character Hub trên một actor source-pose duy nhất, không khôi phục bất kỳ renderer đã thu hồi nào.
+
 ## Character Hub — chỉ dùng actor source-pose hiện hành, xóa renderer class tĩnh — 2026-09-14
 
 - Root cause của nhân vật rời thân là hai pipeline renderer cùng tồn tại: actor source-pose đang chạy trên map và `TwoDClassMixedLoadoutFitPreview` có thể được bật lại bởi selector/capture cũ. Pipeline tĩnh đã bị gỡ hoàn toàn gồm runtime class, class capture component/tool/test và bốn resource pack `Kiếm/Pháp/Cơ/Linh MixedLoadoutFitPreview`; không rollback registered outfit hoặc source-pose Võ.

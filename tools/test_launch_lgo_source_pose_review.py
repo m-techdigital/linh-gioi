@@ -8,7 +8,7 @@ from launch_lgo_source_pose_review import CLASSES, PACK_SUFFIXES, build_class_ar
 
 
 class SourcePoseReviewLaunchTests(unittest.TestCase):
-    def test_player_command_uses_only_registered_source_pose_path(self):
+    def test_player_command_uses_only_source_pose_path(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             player = root / 'LinhGioiOnline'
@@ -24,6 +24,8 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
 
             self.assertIn('--lgo-vo-pose-review-dir', command)
             self.assertEqual(command.count('--lgo-source-pose-class'), len(CLASSES))
+            self.assertNotIn('--lgo-vo-registered', command)
+            self.assertNotIn('--lgo-vo-registered-equipment', command)
             self.assertFalse(any(arg in command for arg in (
                 '--lgo-kiem-review', '--lgo-phap-review', '--lgo-co-review', '--lgo-linh-review')))
 
@@ -51,8 +53,17 @@ class SourcePoseReviewLaunchTests(unittest.TestCase):
 
     def test_phap_is_not_exposed_until_it_has_launchable_no_scale_pack(self):
         self.assertNotIn('phap', CLASSES)
-        with self.assertRaisesRegex(ValueError, 'jump_tuck'):
-            build_class_args(Path(__file__).resolve().parents[1], ('phap',))
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for index, suffix in enumerate(PACK_SUFFIXES['phap']):
+                pack = root / 'build' / ('phap' + suffix)
+                pack.mkdir(parents=True)
+                data = {'status': 'REVIEW_ONLY'}
+                if index == 0:
+                    data['poseScaleCorrections'] = {'jump_tuck': 0.6666666667}
+                (pack / 'atlas-review.json').write_text(json.dumps(data))
+            with self.assertRaisesRegex(ValueError, 'jump_tuck'):
+                build_class_args(root, ('phap',))
 
     def test_phap_owner_review_must_not_use_rejected_semantic_v3_pack(self):
         self.assertFalse(any(suffix and 'semantic-v3' in suffix for suffix in PACK_SUFFIXES['phap']), PACK_SUFFIXES['phap'])

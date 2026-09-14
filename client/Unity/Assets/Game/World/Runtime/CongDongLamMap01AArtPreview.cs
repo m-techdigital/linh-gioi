@@ -1201,10 +1201,19 @@ namespace LinhGioi.World
             var activeReview = ActiveSourcePoseReview;
             _sourcePoseReview?.SetPresentationVisible(activeReview == _sourcePoseReview);
             _femaleSourcePoseReview?.SetPresentationVisible(activeReview == _femaleSourcePoseReview);
+            if (activeReview != null)
+            {
+                // Source-pose is the canonical actor for this review session. Keep the
+                // older atlas/rig tree physically non-renderable so later loadout or
+                // motion refreshes cannot accidentally show a second character.
+                SetLegacyVoRenderersVisible(false);
+                _registeredOutfit?.SetPresentationVisible(false);
+                return;
+            }
+            SetLegacyVoRenderersVisible(true);
             if (_registeredOutfit != null)
             {
-                var sourcePoseVisible = activeReview != null;
-                _registeredOutfit.SetPresentationVisible(!sourcePoseVisible);
+                _registeredOutfit.SetPresentationVisible(true);
                 var cycle = _voState.AnimationPhase * (VoAvatarMotionState == "run" ? 4.4f : 3.5f);
                 var weight = TwoDPaperDollPoseSampler.Sample(VoAvatarMotionState, cycle, _voState.ActionProgress);
                 _registeredOutfit.Apply(VoAvatarGender, VoAvatarMode == "base", _voState.IsEquipped,
@@ -1245,6 +1254,13 @@ namespace LinhGioi.World
                 foreach (var renderer in _voEquipmentComponents.Values) renderer.enabled = false;
             }
             if (_voMotionRenderer != null) _voMotionRenderer.enabled = usesMotionFrame;
+        }
+
+        private void SetLegacyVoRenderersVisible(bool visible)
+        {
+            if (_voAvatarRoot == null) return;
+            foreach (var renderer in _voAvatarRoot.GetComponentsInChildren<SpriteRenderer>(true))
+                renderer.forceRenderingOff = !visible;
         }
 
         private void ApplyVoEquipmentComponents()

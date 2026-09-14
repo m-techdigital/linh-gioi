@@ -54,6 +54,9 @@ namespace LinhGioi.Tests.EditMode
                 typeof(CongDongLamMap01AArtPreview)
                     .GetField("_sourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic)
                     .SetValue(scene, sourcePose);
+                typeof(CongDongLamMap01AArtPreview)
+                    .GetMethod("RefreshVoAvatarMode", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(scene, null);
                 CongDongLamArrivalHud.Attach(scene);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 scene.ToggleInventory();
@@ -66,6 +69,11 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects()
                     .SelectMany(item => item.GetComponentsInChildren<Transform>(true))
                     .All(item => !item.name.Contains("ten-slot shared-rig review")), Is.True);
+                var legacyAvatar = scene.GetComponentsInChildren<Transform>(true)
+                    .Single(item => item.name == "Map01A Võ avatar");
+                Assert.That(legacyAvatar.GetComponentsInChildren<SpriteRenderer>(true)
+                    .All(renderer => renderer.forceRenderingOff), Is.True,
+                    "A source-pose actor must be the sole character renderer; the atlas/rig avatar must never remain renderable in parallel.");
                 Assert.That(root.Q("Map01A Inventory"), Is.SameAs(shell));
                 var portrait = root.Q("Map01A Character Hero Portrait");
                 Assert.That(portrait.style.display.value, Is.EqualTo(DisplayStyle.Flex),

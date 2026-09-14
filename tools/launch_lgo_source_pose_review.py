@@ -105,7 +105,7 @@ def build_class_args(repo: Path, class_ids=CLASSES) -> list[str]:
 
 
 def build_player_command(player: Path, repo: Path, log: Path) -> list[str]:
-    """Build the sole owner-review command: registered source poses only.
+    """Build the sole owner-review command: canonical source-pose actor only.
 
     Legacy ``--lgo-*-review`` flags select the static class-fit renderer.  They
     are deliberately absent here so the interactive review cannot silently
@@ -115,7 +115,6 @@ def build_player_command(player: Path, repo: Path, log: Path) -> list[str]:
     first = class_pack_paths(repo, CLASSES[0])
     command = [str(executable), '-logFile', str(log), '-screen-fullscreen', '0',
                '-screen-width', '1440', '-screen-height', '900', '--lgo-map01a-art-preview',
-               '--lgo-vo-registered', '--lgo-vo-registered-equipment',
                *[arg for flag, path in zip(
                    ('--lgo-vo-pose-review-dir', '--lgo-vo-pose-review-alt-dir',
                     '--lgo-vo-pose-review-female-dir', '--lgo-vo-pose-review-female-alt-dir'), first)
@@ -124,6 +123,9 @@ def build_player_command(player: Path, repo: Path, log: Path) -> list[str]:
     legacy = {'--lgo-kiem-review', '--lgo-phap-review', '--lgo-co-review', '--lgo-linh-review'}
     if legacy.intersection(command):
         raise RuntimeError('Owner review command selected the revoked static-fit renderer')
+    registered = {'--lgo-vo-registered', '--lgo-vo-registered-equipment'}
+    if registered.intersection(command):
+        raise RuntimeError('Source-pose review command selected the registered-outfit renderer')
     return command
 
 
