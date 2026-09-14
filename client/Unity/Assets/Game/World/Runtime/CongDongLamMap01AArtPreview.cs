@@ -2375,7 +2375,7 @@ namespace LinhGioi.World
             var potential = Path.Combine(directory, "potential.png");
             var potentialDefault = Path.Combine(directory, "potential-default.png");
             CaptureScreenPng(potentialDefault);
-            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Node Công"));
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Node 0"));
             yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
             yield return new WaitForEndOfFrame();
             CaptureScreenPng(potential);

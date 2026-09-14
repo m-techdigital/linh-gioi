@@ -1,3 +1,12 @@
+## Character Hub — topology cố định, class chỉ bind dữ liệu — 2026-09-15
+
+- Audit xác nhận lỗi kiến trúc cũ: `RefreshCharacterHubClassProfile()` xóa và dựng lại ba panel Kỹ năng/Tiềm năng/Linh thú khi class đổi. Helper có dùng chung nhưng component tree vẫn bị nhân lại, dễ lệch layout và khó mở rộng.
+- Character Hub hiện khởi tạo đúng một lần 9 node Skill, 4 ô skill trang bị, 5 node Tiềm năng, một vector topology gồm vòng ngoài + 5 đường nối, và toàn bộ preview/roster/detail Linh thú. Đổi `Võ → Kiếm → Pháp → Cơ → Linh` chỉ gọi `BindCharacterHubProfile()` để thay icon/text/value/state; reference của panel/node/topology không đổi.
+- Copy chi tiết skill, tiềm năng và Linh thú đã chuyển khỏi nhánh so tên trong UI sang `CharacterHubClassProfile`. Skill và Tiềm năng giữ component/topology riêng; dữ liệu class chỉ đi qua profile.
+- TDD topology: RED `0/1` vì thiếu `Map01A Potential Topology Base`, GREEN `1/1`; test đổi đủ năm class trên cùng object tree. `TwoDCharacterRuntimeStateTests` `35/35`; full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared UI governance `23/23`; pose pack `12/12`; registered capture `19/19`; no-3D/no-source/frozen pass.
+- Player `build/map01a-character-hub-base-first-player-v1/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=48`. Evidence `build/map01a-character-hub-base-first-runtime-v1/{pc,mobile,tablet}/` đạt 9 frame/profile, `usesOsMouseOrKeyboard=false`; đã xem trực tiếp Tiềm năng ở cả ba viewport và Nhân vật/Kỹ năng/Linh thú trên PC, không wrap/cắt/chồng, vòng/đường nối nằm đúng sau node.
+- Trạng thái `CONTINUE`: base-first đã được khóa bằng `AGENTS.md`, contract, validator và test. Không mở lại class/pose/wardrobe/source art; class mới chỉ được nạp dữ liệu/icon có provenance vào topology chung.
+
 ## Character Hub — contract chung, class chỉ là dữ liệu — 2026-09-15
 
 - HUD, hành trang và Character Select hiện chỉ gọi contract chung cho actor, motion và 10 slot. Không còn API `Vo*` trong UI hoặc nhánh UI theo tên class; `classId`, item ID, skill, tiềm năng và linh thú đi qua profile/data hiện hành.

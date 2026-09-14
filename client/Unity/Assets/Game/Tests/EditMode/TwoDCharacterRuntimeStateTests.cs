@@ -21,7 +21,7 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
-        public void CharacterHubCatalogDefinesFiveClassProfilesWithoutBorrowingKiemSkillArt()
+        public void CharacterHubCatalogDefinesFiveClassProfilesWithExplicitContentData()
         {
             var profiles = CharacterHubClassCatalog.Profiles;
 
@@ -34,9 +34,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(profile.Skills.Count, Is.EqualTo(9), profile.Id + " must fill the shared 3x3 skill path.");
                 Assert.That(profile.Potentials.Count, Is.EqualTo(5), profile.Id + " must fill the shared potential diagram.");
                 Assert.That(profile.EquippedSkillIndices.Count, Is.EqualTo(4));
-                Assert.That(profile.SpiritSynergy, Is.Not.Empty);
+                Assert.That(profile.SpiritPet, Is.Not.Null);
+                Assert.That(profile.SpiritPet.Synergy, Is.Not.Empty);
+                Assert.That(profile.Skills.All(skill => !string.IsNullOrEmpty(skill.Description)), Is.True);
+                Assert.That(profile.Potentials.All(potential => !string.IsNullOrEmpty(potential.Description)), Is.True);
                 if (profile.Id != "kiem")
-                    Assert.That(profile.Skills.All(skill => !skill.UseKiemSkillArt), Is.True,
+                    Assert.That(profile.Skills.All(skill => skill.IconCatalog == CharacterHubIconCatalog.Hud), Is.True,
                         profile.Id + " must use provenance-backed shared icons instead of pretending Kiếm art belongs to another class.");
             }
             for (var index = 1; index < profiles.Count; index++)
@@ -662,19 +665,19 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Method Skills Category").enabledSelf, Is.False);
                 var activeProfile = CharacterHubClassCatalog.Get(scene.ActiveEquipmentClassId);
                 var firstSkill = activeProfile.Skills[0];
-                var firstSkillNode = root.Q<Button>("Map01A Skill Node " + firstSkill.Name);
+                var firstSkillNode = root.Q<Button>("Map01A Skill Node 0");
                 Assert.That(firstSkillNode.ClassListContains("lgo-skill-node"), Is.True,
                     "All skill nodes must use the shared circular skill-node base.");
                 Assert.That(firstSkillNode.style.width.value.value, Is.InRange(96, 104));
                 Assert.That(root.Q<VisualElement>("Map01A Active Skills Category Icon"), Is.Not.Null);
-                var firstExpectedIcon = firstSkill.UseKiemSkillArt
+                var firstExpectedIcon = firstSkill.IconCatalog == CharacterHubIconCatalog.Skill
                     ? scene.GetMap01ASkillIconSprite(firstSkill.IconId)
                     : scene.GetMap01AHudIconSprite(firstSkill.IconId);
-                Assert.That(root.Q<VisualElement>("Map01A Skill Node " + firstSkill.Name + " Icon").style.backgroundImage.value.sprite,
+                Assert.That(root.Q<VisualElement>("Map01A Skill Node 0 Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(firstExpectedIcon));
-                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill " + firstSkill.IconId).style.backgroundImage.value.sprite,
+                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill Icon 1").style.backgroundImage.value.sprite,
                     Is.EqualTo(firstExpectedIcon));
-                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill " + firstSkill.IconId).style.width.value.value,
+                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill Icon 1").style.width.value.value,
                     Is.EqualTo(58), "The full-width equipped strip must keep readable icons without clipping its skill-points badge.");
                 Assert.That(root.Q<Label>("Map01A Equipped Skill Heading").text, Is.EqualTo("Kỹ năng đã trang bị"));
                 Assert.That(root.Query<VisualElement>(className: "lgo-equipped-skill-slot").ToList().Count, Is.EqualTo(4));
@@ -694,7 +697,7 @@ namespace LinhGioi.Tests.EditMode
                 var hubDetailBody = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailBody", flags).GetValue(hud);
                 var hubDetailStatus = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailStatus", flags).GetValue(hud);
                 var selectedSkill = activeProfile.Skills[2];
-                var selectedSkillNode = root.Q<Button>("Map01A Skill Node " + selectedSkill.Name);
+                var selectedSkillNode = root.Q<Button>("Map01A Skill Node 2");
                 InvokeBoundButton(selectedSkillNode);
                 Assert.That(hubDetailName.text, Is.EqualTo(selectedSkill.Name),
                     "Selecting a skill must update the shared detail-right panel instead of leaving the default skill visible.");
@@ -702,7 +705,7 @@ namespace LinhGioi.Tests.EditMode
                     "The selected node must expose the same visible selection state used by its detail-right content.");
                 Assert.That(firstSkillNode.style.borderTopWidth.value, Is.EqualTo(1));
                 Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite,
-                    Is.EqualTo(selectedSkill.UseKiemSkillArt
+                    Is.EqualTo(selectedSkill.IconCatalog == CharacterHubIconCatalog.Skill
                         ? scene.GetMap01ASkillIconSprite(selectedSkill.IconId)
                         : scene.GetMap01AHudIconSprite(selectedSkill.IconId)));
                 StringAssert.DoesNotContain("chờ dữ liệu", hubDetailBody.text);
@@ -714,25 +717,27 @@ namespace LinhGioi.Tests.EditMode
                     "Approved potential screen must use one central meridian diagram rather than a repeated card grid.");
                 Assert.That(root.Q("Map01A Potential Heading"), Is.Null,
                     "The canonical diagram does not repeat a technical heading or duplicate remaining-points badge above the orbit.");
-                Assert.That(root.Q("Map01A Potential Orbit"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Potential Topology Base"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Potential Topology Base").ClassListContains("lgo-potential-topology"), Is.True,
+                    "The outer ring and connectors must come from one shared prebuilt topology behind the class data.");
                 Assert.That(root.Q("Map01A Potential Diagram").style.height.value.value, Is.LessThanOrEqualTo(400),
                     "Potential diagram and recommendation must fit inside the shared modal shell.");
-                Assert.That(root.Q<Button>("Map01A Potential Node Sinh lực").ClassListContains("lgo-potential-node"), Is.True);
-                foreach (var potentialName in new[] { "Công", "Thủ", "Sinh lực", "Linh lực", "Nhanh nhẹn" })
+                Assert.That(root.Q<Button>("Map01A Potential Node 2").ClassListContains("lgo-potential-node"), Is.True);
+                for (var potentialIndex = 0; potentialIndex < 5; potentialIndex++)
                 {
-                    var addMarker = root.Q<Label>("Map01A Potential Node Add " + potentialName);
+                    var addMarker = root.Q<Label>("Map01A Potential Node Add " + potentialIndex);
                     Assert.That(addMarker, Is.Not.Null);
                     Assert.That(addMarker.text, Is.EqualTo("+"));
                     Assert.That(addMarker.ClassListContains("lgo-potential-add-marker"), Is.True);
                 }
-                Assert.That(root.Q<VisualElement>("Map01A Potential Node Sinh lực Icon").style.backgroundImage.value.sprite,
+                Assert.That(root.Q<VisualElement>("Map01A Potential Node 2 Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("vitality")));
                 Assert.That(root.Q<VisualElement>("Map01A Potential Core Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("core")));
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
                     "Map01A must not create local fake potential progression before the real state contract exists.");
                 Assert.That(root.Q<Button>("Map01A Potential Reset").enabledSelf, Is.False);
-                InvokeBoundButton(root.Q<Button>("Map01A Potential Node Công"));
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Node 0"));
                 Assert.That(hubDetailName.text, Is.EqualTo("Công"),
                     "Selecting a potential node must update detail-right without mutating progression state.");
                 Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite,
@@ -764,6 +769,65 @@ namespace LinhGioi.Tests.EditMode
                 StringAssert.DoesNotContain("Màn này", hubDetailBody.text);
                 StringAssert.DoesNotContain("state", hubDetailBody.text);
                 StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void CharacterHubClassRefreshRebindsOneStableSharedTopology()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character hub shared topology test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var refresh = typeof(CongDongLamArrivalHud).GetMethod("RefreshCharacterHubClassProfile", flags);
+
+                var skillsPanel = root.Q("Map01A Skills Panel");
+                var potentialPanel = root.Q("Map01A Potential Panel");
+                var spiritPanel = root.Q("Map01A Spirit Pet Panel");
+                var skillNode0 = root.Q<Button>("Map01A Skill Node 0");
+                var potentialNode0 = root.Q<Button>("Map01A Potential Node 0");
+                var potentialTopology = root.Q("Map01A Potential Topology Base");
+                Assert.That(potentialTopology, Is.Not.Null,
+                    "The circles, outer ring and connectors must be one prebuilt shared topology behind class-bound icons.");
+                Assert.That(potentialTopology.ClassListContains("lgo-potential-topology"), Is.True);
+
+                var sourcePose = new GameObject("shared topology class actor").AddComponent<TwoDSourcePoseReview>();
+                sourcePose.transform.SetParent(scene.transform, false);
+                var classId = typeof(TwoDSourcePoseReview)
+                    .GetField("<ClassId>k__BackingField", flags);
+                typeof(CongDongLamMap01AArtPreview)
+                    .GetField("_sourcePoseReview", flags)
+                    .SetValue(scene, sourcePose);
+                foreach (var profile in CharacterHubClassCatalog.Profiles)
+                {
+                    classId.SetValue(sourcePose, profile.Id);
+                    refresh.Invoke(hud, null);
+
+                    Assert.That(root.Q("Map01A Skills Panel"), Is.SameAs(skillsPanel), profile.Id);
+                    Assert.That(root.Q("Map01A Potential Panel"), Is.SameAs(potentialPanel), profile.Id);
+                    Assert.That(root.Q("Map01A Spirit Pet Panel"), Is.SameAs(spiritPanel), profile.Id);
+                    Assert.That(root.Q<Button>("Map01A Skill Node 0"), Is.SameAs(skillNode0), profile.Id);
+                    Assert.That(root.Q<Button>("Map01A Potential Node 0"), Is.SameAs(potentialNode0), profile.Id);
+                    Assert.That(root.Q("Map01A Potential Topology Base"), Is.SameAs(potentialTopology), profile.Id);
+                    Assert.That(root.Query<Button>(className: "lgo-skill-node").ToList().Count, Is.EqualTo(9), profile.Id);
+                    Assert.That(root.Query<Button>(className: "lgo-potential-node").ToList().Count, Is.EqualTo(5), profile.Id);
+                    Assert.That(root.Q<Label>("Map01A Skill Node 0 Title").text,
+                        Is.EqualTo(profile.Skills[0].Name), profile.Id);
+                    Assert.That(root.Q<Label>("Map01A Potential Node 0 Title").text,
+                        Is.EqualTo(profile.Potentials[0].Name), profile.Id);
+                    Assert.That(root.Q<Label>("Map01A Spirit Pet Identity").text,
+                        Does.Contain(profile.Label), profile.Id);
+                }
             }
             finally
             {

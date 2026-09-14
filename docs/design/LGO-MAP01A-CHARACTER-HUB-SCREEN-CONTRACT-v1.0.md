@@ -66,6 +66,7 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 - Mỗi class giữ snapshot riêng cho slot đang chọn, trạng thái tháo/mặc và cấp của mười món. Chuyển class rồi quay lại phải khôi phục đúng snapshot; không dùng chung state vô tình giữa hai class.
 - Selector Character Hub chỉ dùng catalog source-pose đã được launcher nạp và cùng actor với map. Class thiếu pack hợp lệ không được hiện; tuyệt đối không fallback sang `*MixedLoadoutFitPreview`, registered-outfit hoặc atlas/rig avatar cũ, và không tạo source art mới.
 - Kỹ năng/tiềm năng/linh thú là profile hiển thị riêng theo class trong cùng base; asset chưa có nguồn class-specific phải dùng icon provenance-backed dùng chung và copy trung thực, không giả thành asset final riêng của class.
+- Topology ba màn được khởi tạo đúng một lần: Skill giữ graph `3×3` và bốn ô trang bị; Tiềm năng giữ một vector base gồm vòng ngoài, đường nối, core và năm node; Linh thú giữ preview/roster/detail. Đổi class chỉ bind icon/text/value/state vào control có sẵn, không `RemoveFromHierarchy`, không dựng lại panel và không tạo topology riêng theo class.
 
 ### 1. Nhân vật — layout locked
 
@@ -88,6 +89,7 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 ### 4. Tiềm năng
 
 - Main workspace: một diagram kinh mạch trung tâm và điểm còn lại ở đáy; không thay bằng card grid.
+- Vòng ngoài và năm đường nối là một vector topology base dùng chung nằm sau core/node; năm node tròn được đặt sẵn theo canonical. Profile class chỉ cấp icon, tên, giá trị và mô tả.
 - Detail-right: node đang chọn, hiệu quả hiện tại/kế tiếp, chi phí và action bị khóa khi chưa có contract ghi state.
 
 ### 5. Linh thú

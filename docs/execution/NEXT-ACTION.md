@@ -1,26 +1,26 @@
-## Active — CONTINUE: Character Hub dùng contract chung, class chỉ truyền data — 2026-09-15
+## Active — CONTINUE: Character Hub base-first, topology cố định — 2026-09-15
 
 `OPERATIONAL_GOAL_CURRENT`. Canonical vẫn là bộ năm tab tại
 `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/`.
 
 ### Checkpoint hiện hành
 
-- Character Hub, hành trang, HUD và Character Select gọi một contract chung cho actor/motion/trang bị. UI không còn gọi API `Vo*` hoặc rẽ nhánh theo tên class.
-- Class khác nhau bằng profile/data (`classId`, item ID, skill, tiềm năng, linh thú). Fallback item ID cũng lấy `ActiveEquipmentClassId`, không cố định `vo_`.
-- Source-pose capture chỉ khởi tạo source-pose. Runtime từ chối cấu hình có hai renderer authority; registered-outfit chỉ còn ở capture WIP explicit.
-- Player mới: `build/map01a-shared-character-contract-player-v1/LinhGioiOnline.app`.
-- Evidence đã xem: `build/map01a-shared-character-contract-runtime-v1/pc/`, đủ 9 frame năm tab, một actor, không wrap/cắt/chồng. Pack capture chỉ có body div4 nên chưa phải evidence nghiệm thu wardrobe/class art.
+- Skill, Tiềm năng và Linh thú được dựng một lần trên shared component tree. Đổi class chỉ bind profile/data/icon/text/state; không xóa panel hoặc tạo lại node.
+- Tiềm năng dùng một vector topology cố định gồm vòng ngoài và năm đường nối nằm sau core/năm node. Skill giữ graph `3×3` và bốn ô trang bị riêng, không trộn topology với Tiềm năng.
+- Test đổi đủ năm class giữ nguyên reference panel/node/topology và số lượng node `9/5`. Validator chặn việc đưa `RemoveFromHierarchy()` hoặc gọi lại initializer vào class refresh.
+- Player: `build/map01a-character-hub-base-first-player-v1/LinhGioiOnline.app`.
+- Evidence đã xem: `build/map01a-character-hub-base-first-runtime-v1/{pc,mobile,tablet}/`, 9 frame/profile, không dùng chuột OS; topology không wrap/cắt/chồng. Pack capture vẫn chỉ có body div4 nên không dùng để nghiệm thu wardrobe/class art.
 
 ### Bước kế tiếp hợp lệ
 
-1. Tiếp tục UI theo canonical năm tab qua shared base/contract; nội dung khác nhau chỉ bind từ profile/data.
-2. Không tiếp tục phát triển class/pose/wardrobe trong task này. Không sinh/sửa source art ngẫu nhiên hoặc dựng renderer riêng cho từng class.
-3. Không khôi phục renderer/resource/capture đã xóa, không chạy Player lỗi cũ và không sửa frozen surfaces.
+1. Mọi chỉnh sửa tiếp theo trên năm tab phải giữ topology hiện hành; chỉ bổ sung dữ liệu/icon có provenance qua `CharacterHubClassProfile`.
+2. Không tiếp tục phát triển class/pose/wardrobe trong task này. Không sinh/sửa source art ngẫu nhiên hoặc dựng renderer/layout riêng cho từng class.
+3. Chỉ chuyển sang screen UI tiếp theo khi có một canonical design, scenario/state/interaction và asset gate; không mở lại screen cũ nếu không có regression/evidence cụ thể.
 
 ### Gate hiện hành
 
-- Python route/shared contract `33/33`; pose pack `12/12`; registered capture `19/19`.
-- `TwoDCharacterRuntimeStateTests` `34/34`; full Unity EditMode `283 total / 282 passed / 0 failed / 1 ignored`.
-- Shared-skin, no-3D, no-source-images và frozen diff pass.
-- Player build `errors=0`, `warnings=46`; capture 9 frame đã xem.
+- Shared UI governance `23/23`; pose pack `12/12`; registered capture `19/19`.
+- `TwoDCharacterRuntimeStateTests` `35/35`; full Unity EditMode `287 total / 286 passed / 0 failed / 1 ignored`.
+- Shared-skin, no-3D, no-source-images, frozen diff và `git diff --check` pass.
+- Player build `errors=0`, `warnings=48`; 27 frame ở ba viewport đã xem theo phạm vi nêu trên.
 - Trạng thái: `CONTINUE`; chưa claim owner visual acceptance.

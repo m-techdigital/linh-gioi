@@ -4,36 +4,74 @@ using System.Linq;
 
 namespace LinhGioi.UI
 {
+    public enum CharacterHubIconCatalog
+    {
+        Hud,
+        Skill
+    }
+
     public sealed class CharacterHubSkillPreview
     {
-        public CharacterHubSkillPreview(string id, string name, string level, string iconId, bool useKiemSkillArt = false)
+        public CharacterHubSkillPreview(string id, string name, string level, string iconId,
+            string description, CharacterHubIconCatalog iconCatalog = CharacterHubIconCatalog.Hud)
         {
             Id = id;
             Name = name;
             Level = level;
             IconId = iconId;
-            UseKiemSkillArt = useKiemSkillArt;
+            Description = description;
+            IconCatalog = iconCatalog;
         }
 
         public string Id { get; }
         public string Name { get; }
         public string Level { get; }
         public string IconId { get; }
-        public bool UseKiemSkillArt { get; }
+        public string Description { get; }
+        public CharacterHubIconCatalog IconCatalog { get; }
     }
 
     public sealed class CharacterHubPotentialPreview
     {
-        public CharacterHubPotentialPreview(string name, string value, string iconId)
+        public CharacterHubPotentialPreview(string name, string value, string iconId, string description)
         {
             Name = name;
             Value = value;
             IconId = iconId;
+            Description = description;
         }
 
         public string Name { get; }
         public string Value { get; }
         public string IconId { get; }
+        public string Description { get; }
+    }
+
+    public sealed class CharacterHubSpiritPetPreview
+    {
+        public CharacterHubSpiritPetPreview(string name, string level, string artResource,
+            string rarity, string role, string state, string stats, string skills, string synergy)
+        {
+            Name = name;
+            Level = level;
+            ArtResource = artResource;
+            Rarity = rarity;
+            Role = role;
+            State = state;
+            Stats = stats;
+            Skills = skills;
+            Synergy = synergy;
+        }
+
+        public string Name { get; }
+        public string Level { get; }
+        public string ArtResource { get; }
+        public string Rarity { get; }
+        public string Role { get; }
+        public string State { get; }
+        public string Stats { get; }
+        public string Skills { get; }
+        public string Synergy { get; }
     }
 
     public sealed class CharacterHubClassProfile
@@ -46,7 +84,7 @@ namespace LinhGioi.UI
             IReadOnlyList<CharacterHubSkillPreview> skills,
             IReadOnlyList<int> equippedSkillIndices,
             IReadOnlyList<CharacterHubPotentialPreview> potentials,
-            string spiritSynergy)
+            CharacterHubSpiritPetPreview spiritPet)
         {
             Id = id;
             Label = label;
@@ -55,7 +93,7 @@ namespace LinhGioi.UI
             Skills = skills;
             EquippedSkillIndices = equippedSkillIndices;
             Potentials = potentials;
-            SpiritSynergy = spiritSynergy;
+            SpiritPet = spiritPet;
         }
 
         public string Id { get; }
@@ -65,7 +103,7 @@ namespace LinhGioi.UI
         public IReadOnlyList<CharacterHubSkillPreview> Skills { get; }
         public IReadOnlyList<int> EquippedSkillIndices { get; }
         public IReadOnlyList<CharacterHubPotentialPreview> Potentials { get; }
-        public string SpiritSynergy { get; }
+        public CharacterHubSpiritPetPreview SpiritPet { get; }
     }
 
     public sealed class CharacterHubSelectionState
@@ -125,19 +163,26 @@ namespace LinhGioi.UI
         {
             return new[]
             {
-                new CharacterHubPotentialPreview("Công", "120", "attack"),
-                new CharacterHubPotentialPreview("Thủ", "118", "defense"),
-                new CharacterHubPotentialPreview("Sinh lực", "250", "vitality"),
-                new CharacterHubPotentialPreview("Linh lực", "96", "spirit"),
-                new CharacterHubPotentialPreview("Nhanh nhẹn", "110", "agility")
+                new CharacterHubPotentialPreview("Công", "120", "attack",
+                    "Tăng sức tấn công và hiệu quả gây sát thương.\n\nHiệu quả hiện tại  Công +120\nKhi cộng 1 điểm  Công +2"),
+                new CharacterHubPotentialPreview("Thủ", "118", "defense",
+                    "Tăng khả năng phòng thủ và giảm sát thương phải chịu.\n\nHiệu quả hiện tại  Thủ +118\nKhi cộng 1 điểm  Thủ +2"),
+                new CharacterHubPotentialPreview("Sinh lực", "250", "vitality",
+                    "Tăng cường thể chất, sinh lực và khả năng phòng thủ.\n\nHiệu quả hiện tại\nSinh lực (HP)  +12.500\nPhòng thủ  +250\n\nKhi cộng 1 điểm\nSinh lực (HP)  +50\nPhòng thủ  +1"),
+                new CharacterHubPotentialPreview("Linh lực", "96", "spirit",
+                    "Tăng linh lực và khả năng duy trì kỹ năng.\n\nHiệu quả hiện tại  Linh lực +96\nKhi cộng 1 điểm  Linh lực +2"),
+                new CharacterHubPotentialPreview("Nhanh nhẹn", "110", "agility",
+                    "Tăng tốc độ hành động và khả năng né tránh.\n\nHiệu quả hiện tại  Nhanh nhẹn +110\nKhi cộng 1 điểm  Nhanh nhẹn +2")
             };
         }
 
-        private static CharacterHubSkillPreview[] SharedSkills(string classId, params string[] names)
+        private static CharacterHubSkillPreview[] SharedSkills(string classId, string identity, params string[] names)
         {
             var levels = new[] { "Lv.8", "Lv.5", "Lv.4", "Lv.3", "Lv.6", "Lv.2", "Lv.1", "Lv.3", "Lv.1" };
             return names.Select((name, index) => new CharacterHubSkillPreview(
-                classId + "_skill_" + (index + 1), name, levels[index], SharedHudIcons[index])).ToArray();
+                classId + "_skill_" + (index + 1), name, levels[index], SharedHudIcons[index],
+                identity + "\n\nCấp hiện hành  " + levels[index]
+                    + "\n\nThông tin hiệu ứng chi tiết sẽ hiển thị khi kỹ năng được lĩnh hội đầy đủ.")).ToArray();
         }
 
         private static CharacterHubSkillPreview[] KiemSkills()
@@ -146,30 +191,42 @@ namespace LinhGioi.UI
             var icons = new[] { "thien_kiem_quyet", "lang_khong_bo", "kiem_vu", "ho_the", "song_kiem", "phong_tram", "kiem_tran", "ngu_kiem", "van_kiem" };
             var levels = new[] { "Lv.8", "Lv.5", "Lv.4", "Lv.3", "Lv.6", "Lv.2", "Lv.1", "Lv.3", "Lv.1" };
             return names.Select((name, index) => new CharacterHubSkillPreview(
-                "kiem_skill_" + (index + 1), name, levels[index], icons[index], true)).ToArray();
+                "kiem_skill_" + (index + 1), name, levels[index], icons[index],
+                index == 0
+                    ? "Vận kiếm khí thiên đạo, chém mục tiêu phía trước.\n\nSát thương  320% Công\nPhạm vi  Hình quạt trước mặt\nHồi chiêu  12 giây\nTiêu hao MP  180"
+                    : "Tốc độ · kiếm thuật · phản kích · cơ động\n\nCấp hiện hành  " + levels[index]
+                        + "\n\nThông tin hiệu ứng chi tiết sẽ hiển thị khi kỹ năng được lĩnh hội đầy đủ.",
+                CharacterHubIconCatalog.Skill)).ToArray();
         }
+
+        private static CharacterHubSpiritPetPreview SpiritPet(string synergy)
+            => new CharacterHubSpiritPetPreview(
+                "Thanh Vân Hồ", "Lv.20", "LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview",
+                "Tinh phẩm", "Hỗ trợ", "Đang xuất chiến",
+                "Thuộc tính Linh thú\nHP  +8720\nTấn Công  +860\nPhòng Thủ  +430\nHồi Phục  +28%\nGiảm Sát Thương  +12%",
+                "Kỹ năng Linh thú\nThanh Vân Hộ Thể · Lv.1\nCửu Vĩ Linh Phong · Lv.1", synergy);
 
         private static readonly CharacterHubClassProfile[] Items =
         {
             new CharacterHubClassProfile(
                 "vo", "Võ", "Áp sát · combo · phá giáp · phản đòn", "Đề xuất Võ · Công / Sinh lực",
-                SharedSkills("vo", "Liên Kích", "Phá Giáp", "Phản Đòn", "Chấn Kình", "Bộ Pháp", "Hộ Thể", "Đột Kích", "Kình Lực", "Quyền Ý"),
-                new[] { 0, 1, 3, 6 }, BasePotentials(), "Thanh Vân Hồ hỗ trợ phòng thủ khi Võ áp sát."),
+                SharedSkills("vo", "Áp sát · combo · phá giáp · phản đòn", "Liên Kích", "Phá Giáp", "Phản Đòn", "Chấn Kình", "Bộ Pháp", "Hộ Thể", "Đột Kích", "Kình Lực", "Quyền Ý"),
+                new[] { 0, 1, 3, 6 }, BasePotentials(), SpiritPet("Thanh Vân Hồ hỗ trợ phòng thủ khi Võ áp sát.")),
             new CharacterHubClassProfile(
                 "kiem", "Kiếm", "Tốc độ · kiếm thuật · phản kích · cơ động", "Đề xuất Kiếm · Nhanh nhẹn / Công",
-                KiemSkills(), new[] { 0, 1, 5, 8 }, BasePotentials(), "Thanh Vân Hồ giữ nhịp hồi phục giữa các chuỗi kiếm."),
+                KiemSkills(), new[] { 0, 1, 5, 8 }, BasePotentials(), SpiritPet("Thanh Vân Hồ giữ nhịp hồi phục giữa các chuỗi kiếm.")),
             new CharacterHubClassProfile(
                 "phap", "Pháp", "Tầm xa · nguyên tố · diện rộng · khống chế", "Đề xuất Pháp · Linh lực / Công",
-                SharedSkills("phap", "Hỏa Thuật", "Băng Thuật", "Lôi Thuật", "Linh Thuật", "Kết Giới", "Trọng Lực", "Nguyên Tố", "Pháp Trận", "Tinh Thần"),
-                new[] { 0, 1, 4, 7 }, BasePotentials(), "Thanh Vân Hồ bổ trợ kết giới và duy trì linh lực."),
+                SharedSkills("phap", "Tầm xa · nguyên tố · diện rộng · khống chế", "Hỏa Thuật", "Băng Thuật", "Lôi Thuật", "Linh Thuật", "Kết Giới", "Trọng Lực", "Nguyên Tố", "Pháp Trận", "Tinh Thần"),
+                new[] { 0, 1, 4, 7 }, BasePotentials(), SpiritPet("Thanh Vân Hồ bổ trợ kết giới và duy trì linh lực.")),
             new CharacterHubClassProfile(
                 "co", "Cơ", "Tầm xa · cơ giới · bố trí · hỏa lực", "Đề xuất Cơ · Công / Nhanh nhẹn",
-                SharedSkills("co", "Cơ Nỏ", "Pháo Kích", "Tháp Cơ", "Cơ Lôi", "Linh Cơ", "Thiết Vệ", "Truy Kích", "Hỏa Tuyến", "Cơ Trận"),
-                new[] { 0, 1, 2, 7 }, BasePotentials(), "Thanh Vân Hồ bảo hộ vị trí triển khai cơ giới."),
+                SharedSkills("co", "Tầm xa · cơ giới · bố trí · hỏa lực", "Cơ Nỏ", "Pháo Kích", "Tháp Cơ", "Cơ Lôi", "Linh Cơ", "Thiết Vệ", "Truy Kích", "Hỏa Tuyến", "Cơ Trận"),
+                new[] { 0, 1, 2, 7 }, BasePotentials(), SpiritPet("Thanh Vân Hồ bảo hộ vị trí triển khai cơ giới.")),
             new CharacterHubClassProfile(
                 "linh", "Linh", "Triệu hồi · hỗ trợ · khống chế · thanh tẩy", "Đề xuất Linh · Linh lực / Sinh lực",
-                SharedSkills("linh", "Triệu Linh", "Hồi Phục", "Linh Thuẫn", "Thanh Tẩy", "Linh Phù", "Trói Hồn", "Hộ Mệnh", "Cộng Hưởng", "Linh Giới"),
-                new[] { 0, 1, 2, 6 }, BasePotentials(), "Thanh Vân Hồ cộng hưởng hồi phục và khống chế."),
+                SharedSkills("linh", "Triệu hồi · hỗ trợ · khống chế · thanh tẩy", "Triệu Linh", "Hồi Phục", "Linh Thuẫn", "Thanh Tẩy", "Linh Phù", "Trói Hồn", "Hộ Mệnh", "Cộng Hưởng", "Linh Giới"),
+                new[] { 0, 1, 2, 6 }, BasePotentials(), SpiritPet("Thanh Vân Hồ cộng hưởng hồi phục và khống chế.")),
         };
 
         public static IReadOnlyList<CharacterHubClassProfile> Profiles => Items;

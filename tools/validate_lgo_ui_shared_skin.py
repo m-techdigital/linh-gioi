@@ -177,6 +177,14 @@ FORBIDDEN_CLASS_SPECIFIC_UI_PATTERNS = [
     re.compile(r"_scene\.(?:Get|Set|Cycle|Select|Toggle|Trigger|Is|Has|Can)?Vo[A-Z]"),
     re.compile(r'ActiveEquipmentClassId\s*==\s*"(?:vo|kiem|phap|co|linh)"'),
 ]
+FORBIDDEN_CHARACTER_HUB_REBUILD_SNIPPETS = [
+    "_skillsPanel?.RemoveFromHierarchy()",
+    "_potentialPanel?.RemoveFromHierarchy()",
+    "_spiritPetPanel?.RemoveFromHierarchy()",
+    "InitializeSkillsView(_characterHubBody)",
+    "InitializePotentialView(_characterHubBody)",
+    "InitializeSpiritPetView(_characterHubBody)",
+]
 
 # Runtime UI decisions that previously regressed when a new screen was built as a
 # parallel one-off implementation. Keep these checks structural and cheap so the
@@ -319,6 +327,9 @@ REQUIRED_PARTIAL_MARKERS = {
         "InitializeCharacterHub(body)",
     ],
     "CongDongLamArrivalHud.CharacterHub.cs": [
+        "CharacterHubPotentialTopology",
+        "Map01A Potential Topology Base",
+        "lgo-potential-topology",
         "CreateHubSurface",
         "CreateHubTile",
         "ApplyLgoInventoryGridCell(button)",
@@ -330,12 +341,13 @@ REQUIRED_PARTIAL_MARKERS = {
         "InitializePotentialView(body)",
         "InitializeSpiritPetView(body)",
         "InitializeHubInspector(body)",
+        "BindCharacterHubProfile()",
         "ApplyLgoDisabledAction(action)",
         "ApplyLgoCharacterHubTabState(_characterInfoTab",
         "ApplyLgoCharacterHubTabState(_bagTab",
         "ApplyLgoCharacterHubSelectionState(node, selected)",
         "ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon)",
-        "ApplyLgoCharacterHubDetailCard(preview, 10, 8)",
+        "ApplyLgoCharacterHubDetailCard(_spiritPetPreview, 10, 8)",
         "ApplyLgoCharacterHubDetailCard(_hubPreviewDetailPanel)",
         "AnimateLgoCharacterHubSwap(_hubPreviewDetailPanel)",
     ],
@@ -358,6 +370,8 @@ REQUIRED_AGENT_MARKERS = [
         "Không tạo helper skin song song kiểu `StyleModalDialog`, `BuildCardPanel`, `CreateDetailPanel`",
     "Nếu hai UI/UX giống nhau mà cần khác hành vi, tách data/state/action",
     "class chỉ truyền profile/data (`classId`, `itemId`, skill, tiềm năng, linh thú)",
+    "Character Hub dựng topology Skill, Tiềm năng và Linh thú đúng một lần từ shared base",
+    "Đổi class chỉ bind profile/data/icon/text/state vào các node có sẵn",
     "Helper ngoại lệ như `InventoryPanel` chỉ được nằm trong partial sở hữu flow",
     "python3.12 tools/validate_lgo_ui_shared_skin.py",
 ]
@@ -377,6 +391,8 @@ REQUIRED_TEST_MARKERS = [
     "Register validation must not mutate class, pose, wardrobe or gameplay state",
     "PasswordRecoveryRequestValidatesLocallyAndReturnsToEntry",
     "Password recovery must not mutate class, pose, wardrobe or gameplay state",
+    "CharacterHubClassRefreshRebindsOneStableSharedTopology",
+    "The circles, outer ring and connectors must be one prebuilt shared topology",
 ]
 
 REQUIRED_RUNTIME_SKIN_MARKERS = [
@@ -474,6 +490,13 @@ def validate_root(root: Path = ROOT) -> list[str]:
                     f"{rel}: class-specific UI runtime branch {match.group(0)}; "
                     "bind the shared Character Hub contract/profile instead"
                 )
+        if path.name == "CongDongLamArrivalHud.CharacterHub.cs":
+            for snippet in FORBIDDEN_CHARACTER_HUB_REBUILD_SNIPPETS:
+                if snippet in text:
+                    violations.append(
+                        f"{rel}: Character Hub class refresh must bind the stable shared topology; "
+                        f"forbidden rebuild snippet {snippet}"
+                    )
         for match in FORBIDDEN_PARALLEL_SKIN_HELPER.finditer(text):
             name = match.group("void_name") or match.group("element_name")
             allowed_owner = ALLOWED_PARALLEL_SKIN_HELPERS.get(name)
