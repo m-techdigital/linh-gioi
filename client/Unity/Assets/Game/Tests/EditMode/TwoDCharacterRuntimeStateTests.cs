@@ -358,8 +358,11 @@ namespace LinhGioi.Tests.EditMode
 
                 InvokeBoundButton(root.Q<Button>("Map01A Spirit Pet Main Tab"));
                 Assert.That(root.Q("Map01A Spirit Pet Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q("Map01A Spirit Pet Selected Roster Art").style.backgroundImage.value.texture, Is.Not.Null,
+                var spiritPetTexture = root.Q("Map01A Spirit Pet Selected Roster Art").style.backgroundImage.value.texture;
+                Assert.That(spiritPetTexture, Is.Not.Null,
                     "The selected spirit-pet roster entry must reuse the provenance-backed pet art, not a generic HUD crest.");
+                Assert.That(spiritPetTexture.width / (float)spiritPetTexture.height, Is.GreaterThanOrEqualTo(1.45f),
+                    "The wide approved spirit-pet source must not be letterboxed inside a square runtime canvas; that makes the pet unreadably small in Player.");
                 Assert.That(root.Q("Map01A Spirit Pet Locked Roster 1"), Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
                     "Linh thú growth must remain visibly gated until its real progression state exists.");

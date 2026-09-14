@@ -1,3 +1,10 @@
+## Map01A — Linh thú giữ đúng tỷ lệ nguồn đã duyệt — 2026-09-14
+
+- Visual audit năm tab ở 1600×900 phát hiện `spirit-fox-preview.png` bị đặt giữa canvas vuông 1024×1024 với khoảng trong suốt lớn trên/dưới, làm Thanh Vân Hồ lọt thỏm so với `05-linh-thu-five-tab-APPROVED.png`.
+- Runtime asset đã được crop đúng dải letterbox `(0,160,1024,704)` từ asset hiện hành; không redraw, không đổi pixel chủ thể. Manifest ghi crop, hash cũ/mới và vẫn trỏ về source provenance bên ngoài repo. Import giữ NPOT nguyên tỷ lệ, tắt mipmap cho UI và giới hạn texture 1024.
+- TDD RED tái hiện tỷ lệ vuông `1.0`, GREEN khóa runtime texture tối thiểu `1.45`; Player `build/map01a-spirit-pet-crop-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=0`. Evidence đủ năm tab tại `build/map01a-spirit-pet-crop-runtime-v1/`; visual audit xác nhận linh thú lớn và rõ hơn, shell/tab/roster/detail-right không vỡ.
+- Không đổi class/pose/wardrobe/source gameplay/camera/scale hoặc frozen surfaces.
+
 ## Map01A — joystick cảm ứng dùng shared circular control — 2026-09-14
 
 - Audit toàn tuyến ở 800×480 phát hiện joystick còn dùng núm vuông màu xanh, nhìn như placeholder và lệch reference HUD cảm ứng. `RuntimeTouchMovementPad` giờ sở hữu presentation base cho vòng ngoài/núm tròn; Map01A và factory dùng chung semantic class/geometry thay vì tự style hai hệ.

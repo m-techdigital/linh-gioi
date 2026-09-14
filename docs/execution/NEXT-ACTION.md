@@ -1,3 +1,9 @@
+## Next — sau khi sửa letterbox ảnh Linh thú — 2026-09-14
+
+`CONTINUE`. Player hiện hành: `build/map01a-spirit-pet-crop-player-v1/LinhGioiOnline.app`; evidence năm tab: `build/map01a-spirit-pet-crop-runtime-v1/`. Giữ crop provenance-backed 1024×704 và không khôi phục canvas vuông 1024×1024 làm chủ thể nhỏ lại.
+
+Next valid work: audit một lỗi Map01A/UI còn rõ bằng Player, ưu tiên interaction/HUD/NPC hoặc asset đã có nguồn thật. Không tiếp tục class/pose/wardrobe/source, không rollback code class, không tạo progression/icon giả và không đổi frozen surfaces.
+
 ## Next — sau responsive joystick audit — 2026-09-14
 
 `CONTINUE`. Player responsive hiện hành: `build/map01a-touch-pad-player-v1/LinhGioiOnline.app`; evidence Q01–Q09 ở 800×480: `build/map01a-touch-pad-runtime-v1/`. Joystick phải giữ shared circular presentation và `style.translate`; không khôi phục núm vuông hoặc API transform deprecated.

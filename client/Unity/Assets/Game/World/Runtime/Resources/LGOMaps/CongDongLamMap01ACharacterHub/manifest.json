@@ -5,9 +5,9 @@
   "designReference": "LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/05-linh-thu-five-tab-APPROVED.png",
   "textureSize": [
     1024,
-    1024
+    704
   ],
-  "pngBytes": 864546,
+  "pngBytes": 862535,
   "sourcePath": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/character-hub-v1/spirit-fox-preview-source.png",
   "sourceSha256": "bc2827ebb3df56076dfab895150b77f2b292cf5190ffb169e920c2ed78066ea5",
   "assets": [
@@ -16,7 +16,15 @@
       "role": "character-hub-preview-atlas",
       "generator": "image_gen",
       "referenceOnly": false,
-      "sha256": "c68f8bf37cbacc61f255ef3db93b8c305394165075403c985e264f8c987d7796"
+      "sha256": "e899ece5f5a52e4a3b16a3397a43a5db13d632c3bf9642dbd9188476187c7e60",
+      "derivation": "lossless pixel crop of prior approved runtime asset; removed transparent square-canvas letterbox only",
+      "cropRect": [
+        0,
+        160,
+        1024,
+        704
+      ],
+      "priorRuntimeSha256": "c68f8bf37cbacc61f255ef3db93b8c305394165075403c985e264f8c987d7796"
     }
   ]
 }
