@@ -271,6 +271,28 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(leftRail.style.height.value.value, Is.EqualTo(420));
                 Assert.That(root.Q("Map01A Character Hero Quick Icon 0").style.height.value.value, Is.EqualTo(68),
                     "Equipment rail icons must keep square design slots instead of flex-collapsing into short rows.");
+                for (var equipmentIndex = 0; equipmentIndex < scene.VoEquipmentSlotIds.Count; equipmentIndex++)
+                {
+                    var levelBadge = root.Q<Label>("Map01A Character Hero Quick Level " + equipmentIndex);
+                    Assert.That(levelBadge, Is.Not.Null,
+                        "Every equipped slot must expose its real item level like the approved character design.");
+                    Assert.That(levelBadge.text, Is.EqualTo("+" + scene.GetVoEquipmentItemLevel(scene.VoEquipmentSlotIds[equipmentIndex])));
+                    Assert.That(levelBadge.ClassListContains("lgo-equipment-level-badge"), Is.True);
+                }
+                StringAssert.StartsWith("Lv." + scene.VoAvatarLevel + "  ·  LC ",
+                    root.Q<Label>("Map01A Character Hero Power").text,
+                    "The identity footer must show the real avatar level beside combat power.");
+                var detailHeroText = root.Q("Map01A Inventory Detail Hero Text");
+                var detailTitleRow = root.Q("Map01A Inventory Detail Title Row");
+                Assert.That(detailTitleRow.parent, Is.EqualTo(detailHeroText));
+                Assert.That(root.Q("Map01A Inventory Detail Level Chip").parent, Is.EqualTo(detailTitleRow),
+                    "Item level belongs in the inspector hero beside the item name.");
+                Assert.That(root.Q("Map01A Inventory Detail State Badge").parent, Is.EqualTo(detailHeroText),
+                    "Equipped state belongs in the inspector hero instead of a detached duplicate row.");
+                Assert.That(root.Q("Map01A Inventory Detail Equipped Chip"), Is.Null,
+                    "The approved inspector has one equipped-state badge, not two parallel state systems.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Stats Header").text, Is.EqualTo("THUỘC TÍNH"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Set Header").text, Is.EqualTo("BỘ TRANG BỊ HIỆN TẠI"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "The approved detail hierarchy starts with the selected item hero, without a redundant technical header.");
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.width.value.value, Is.EqualTo(112));

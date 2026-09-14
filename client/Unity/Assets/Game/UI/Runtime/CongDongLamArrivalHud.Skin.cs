@@ -489,6 +489,20 @@ namespace LinhGioi.UI
             button.style.borderBottomColor = new Color(.98f, .78f, .32f, 1f);
         }
 
+        private static void ApplyLgoEquipmentLevelBadge(Label badge)
+        {
+            badge.AddToClassList("lgo-equipment-level-badge");
+            badge.style.position = Position.Absolute;
+            badge.style.right = 2;
+            badge.style.bottom = 2;
+            badge.style.paddingLeft = badge.style.paddingRight = 4;
+            badge.style.paddingTop = badge.style.paddingBottom = 1;
+            badge.style.backgroundColor = new Color(.005f, .018f, .035f, .92f);
+            badge.style.borderTopLeftRadius = badge.style.borderTopRightRadius = 3;
+            badge.style.borderBottomLeftRadius = badge.style.borderBottomRightRadius = 3;
+            badge.style.unityTextAlign = TextAnchor.MiddleCenter;
+        }
+
         private static void ApplyLgoModalCloseButton(Button button, bool touch)
         {
             button.AddToClassList(LgoModalCloseButtonClass);

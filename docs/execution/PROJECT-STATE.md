@@ -1,10 +1,18 @@
-## Character hub — shared layout đã khóa lại, tab Nhân vật active — 2026-09-14
+## Character hub — tab Nhân vật đã qua gate, tab Rương đồ active — 2026-09-14
+
+- Canonical duy nhất: `redesign-v4-five-tabs/01-nhan-vat-nam-tab-compact-APPROVED.png`. Runtime giữ đúng shared shell, một hàng năm tab và body hai cột ở PC `1600×900`, mobile landscape `1600×720`, tablet `1024×768`.
+- Màn Nhân vật có đủ 10 slot quanh actor, badge level lấy từ state thật, identity `Lv + LC`, HP/MP và một inspector bên phải. Level/trạng thái đã gom vào item hero; bỏ chip trạng thái trùng; phần thuộc tính/loadout dùng dữ liệu thật, không dựng chỉ số giả.
+- Full `TwoDCharacterRuntimeStateTests` đạt `28/28`; Player `build/map01a-character-inspector-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=46`. Evidence mặc định/chọn/khóa tại `build/map01a-character-inspector-runtime-v1/{pc,mobile,tablet}/` đã được xem trực tiếp, không wrap/stack/cắt/chồng.
+- Gate UI/shared skin, runtime-art, no-3D, no-source-images, change budget, diff check và frozen diff đều pass. Actor/art vẫn là runtime source hiện hành theo contract, không phải thay đổi class/pose/wardrobe.
+- Screen active duy nhất tiếp theo là `Rương đồ` theo `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png`; sau đó mới `Kỹ năng → Tiềm năng → Linh thú`.
+
+## Character hub — shared layout đã khóa lại — 2026-09-14
 
 - Feedback Player mới nhất của owner bác bỏ kết luận `LAYOUT_LOCKED`: năm tab còn xa canonical về shell, hàng tab, tỷ lệ vùng, skin và mật độ. Evidence cũ chỉ còn là lịch sử kỹ thuật, không được dùng để claim hoàn thành.
 - `OPERATIONAL_GOAL_CURRENT`: chỉ hoàn thiện character hub năm tab theo bộ design duy nhất `redesign-v4-five-tabs`, tuần tự `Nhân vật → Rương đồ → Kỹ năng → Tiềm năng → Linh thú`.
 - Shared base mới gồm nền navy có provenance/hash và budget, backdrop dim, title/close, tab selected xanh, body hai cột, detail-right và action footer. Nút item chính dùng xanh, khóa dùng vàng; tất cả nằm ở shared Skin/base.
 - Full `TwoDCharacterRuntimeStateTests` đạt 28/28; UI governance 17/17; runtime-art guard 7/7; no-3D và no-source-images pass. Player macOS build thành công; evidence `build/map01a-five-tab-layout-runtime-v4/{pc,mobile,tablet}/` đã được xem trực tiếp đủ năm tab, không wrap/stack/cắt/chồng.
-- Shared layout tổng được khóa lại. Từng screen chưa được claim hoàn thiện; screen active duy nhất tiếp theo là `Nhân vật` theo `01-nhan-vat-nam-tab-compact-APPROVED.png`.
+- Shared layout tổng được khóa lại. Phần này là lịch sử của batch shared shell; trạng thái screen mới nhất nằm ở mục trên.
 - Scope class/pose/wardrobe/source vẫn đóng. Không build/capture class, không rollback code class và không đổi frozen surfaces.
 
 ## Historical — owner lock design-first theo từng screen, một canonical source — 2026-09-14
