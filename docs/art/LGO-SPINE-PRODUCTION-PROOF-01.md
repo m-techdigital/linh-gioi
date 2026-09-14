@@ -38,7 +38,7 @@ Three experiments made after the reference reproduction are rejected as `WRONG_T
 - generating a ten-part LGO cutout `SkeletonData` through spine-csharp in Unity;
 - generating a whole-base weighted `MeshAttachment` through spine-csharp in Unity.
 
-These experiments only exercise runtime APIs. They do not prove Spine Editor authoring, editable source, weights, deformation, export, LGO body motion or a full equipped character. They may remain as failure evidence, but no later session may run, rename or promote them as the production proof.
+These experiments only exercised runtime APIs. They did not prove Spine Editor authoring, editable source, weights, deformation, export, LGO body motion or a full equipped character. At the owner's request, their code, Unity project/cache, Player builds, images, logs and generated source pixels were deleted on 2026-09-14. Only the written lesson, tombstones and cleanup manifest remain; no later session may recreate or promote them as the production proof.
 
 The only valid resume path is an activated Spine Professional 4.3.x editor plus an accepted, reopenable LGO male/female and sleeved Pháp Lv1 source package. Trial 4.3.26 can open the official sample but cannot save or export this proof, so implementation stops at `BLOCKED_SPINE_TOOLING` until that capability exists.
 
@@ -48,12 +48,7 @@ After the owner reduced the immediate scope to proving applicability, a bounded 
 
 The Player executed six captured states: official base, both LGO items equipped at idle, two `walk` phases, both items removed during `walk`, and both items restored while `walk` continued. Visual review confirms that both items appear only in equipped states and move with their separate slots. The motion log records belt-bone movement of 1.0681/0.2718 units and weapon-bone movement of 2.4534/0.2905 units across the captured sequence. Build result: 0 errors, 0 warnings, 2.730754 seconds.
 
-Evidence:
-
-- `build/lgo-spine-production-proof-01/lgo-runtime-attachment-evaluation.json`
-- `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/result.json`
-- `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/motion.csv`
-- `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/contact-sheet.png`
+The detailed captures, logs and runtime fixture were purged after owner rejection. Cleanup record: `build/lgo-spine-production-proof-01/wrong-scope-cleanup-2026-09-14.json`.
 
 This records only `API_ATTACHMENT_COMPATIBILITY_ONLY`: spine-unity accepted two RGBA textures and its slot API could remove and restore them. It is insufficient for the requested LGO Spine proof and must not be described as actual-LGO feasibility. The sample mismatch is a rejected test-scope result, not a production candidate.
 
@@ -116,7 +111,7 @@ After the owner authorized creating missing test source, two bounded male/female
 - `spine-production-proof-source-v1`: `VISUAL_REJECTED_MANNEQUIN_NOT_LGO`; the reopenable layered ORA exists, but the anatomy/rendering does not preserve LGO identity.
 - `spine-production-proof-source-v2`: `VISUAL_REJECTED_STRUCTURAL_MASK_LOSS`; the attempted segmented masks remove rectangular areas from the male neck/hair and female ponytail, leave incomplete female leg coverage, and cannot demonstrate a genuinely detachable belt/armor or deformable sleeved topology from the flat generated board.
 
-Both trees were removed from `class-work-in-progress` and quarantined under `/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/rejected-evidence/2026-09-14/`. Tombstones remain at the old locations so source selection cannot silently rediscover them. They must not be repackaged or reused as accepted input. Machine audit: `build/lgo-spine-production-proof-01/lgo-created-source-audit.json`. This closes the question of whether simply generating an ORA or splitting a flat board is sufficient: it is not. It does not close the accepted-source gate.
+Both generated source trees and their build copies were deleted at the owner's request. Small `DO-NOT-USE` tombstones remain at the former active paths so source selection cannot silently rediscover or recreate them. Cleanup record: `build/lgo-spine-production-proof-01/wrong-scope-cleanup-2026-09-14.json`. This closes the question of whether simply generating an ORA or splitting a flat board is sufficient: it is not. It does not close the accepted-source gate.
 
 The proof still has two independent prerequisites: purchase/provision and activate one valid Spine Professional 4.3.x seat, and supply or author an owner-accepted reopenable layered male/female base plus the Pháp Lv1 sleeved source. The failed generated candidates do not satisfy the second prerequisite. The activation code must not be pasted into chat, source control, logs or evidence. After both exist, author and visually check the full LGO character in Spine Editor first, save/reopen it, export it, and only then integrate that export into `client/Unity` for Player review.
 

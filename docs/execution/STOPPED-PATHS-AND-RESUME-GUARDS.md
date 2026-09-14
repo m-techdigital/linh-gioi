@@ -27,7 +27,7 @@ Do not continue, run or rename as a new proof:
 - LGO equipment attached to the official Mix-and-Match skeleton as a substitute for authoring the LGO character;
 - any Unity-only test that has no LGO `.spine` source saved, reopened and exported by Spine Editor.
 
-Evidence under `build/lgo-spine-production-proof-01/real-character-motion/` is retained only as `WRONG_TEST_SCOPE_OWNER_REJECTED`. The route has no automatic resume condition. A valid Spine proof resumes only with an activated Professional editor and accepted source, and begins in Spine Editor.
+The fixture code, generated source pixels, Unity project/cache, Player builds, images and logs were purged on owner request; record: `build/lgo-spine-production-proof-01/wrong-scope-cleanup-2026-09-14.json`. Only this guard and small source tombstones remain. The route has no automatic resume condition. A valid Spine proof resumes only with an activated Professional editor and accepted source, and begins in Spine Editor.
 
 The former six-pose pixel/registered-outfit authoring route is legacy reference. Its semantic pose sequence, surface ownership findings, selection/alpha guards, mixed/off-slot scenarios and visual capture rules may be adapted only after the official Spine reference passes. Do not continue its candidate authoring, mask repair, pixel fitting or Player promotion.
 

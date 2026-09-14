@@ -117,7 +117,7 @@ def execution_blocker_owner_note(blocker: str) -> str:
             "Hai candidate source vừa tạo đã bị reject bằng visual audit; vẫn thiếu base nam/nữ layered được duyệt "
             "và source áo Pháp Lv1 có tay. "
             "Phải author, save/reopen và chạy animation trong Spine Editor, export chính thức, rồi mới tích hợp vào client/Unity. "
-            "Không dùng SkeletonData/MeshAttachment sinh bằng code trong Unity làm vật thay thế."
+            "Các fixture SkeletonData/MeshAttachment sinh bằng code trong Unity đã bị xóa; không tái tạo chúng."
         )
     if blocker == "KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED":
         return (

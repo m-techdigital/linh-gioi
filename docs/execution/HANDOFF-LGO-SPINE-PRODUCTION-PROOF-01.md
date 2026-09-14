@@ -59,12 +59,12 @@ NO
 VISUAL PRODUCTION GATE:
 FAIL
 
-VISUAL EVIDENCE: official reference board at `build/lgo-spine-production-proof-01/reference-automated/contact-sheet.png`; API compatibility board at `build/lgo-spine-production-proof-01/lgo-attachment-feasibility-02/contact-sheet.png`; rejected programmatic fixtures at `build/lgo-spine-production-proof-01/real-character-motion/`. None is an LGO Spine Editor production proof.
+VISUAL EVIDENCE RETAINED: official reference board at `build/lgo-spine-production-proof-01/reference-automated/contact-sheet.png`. API compatibility captures and rejected programmatic fixtures were purged after owner rejection; cleanup record is `build/lgo-spine-production-proof-01/wrong-scope-cleanup-2026-09-14.json`.
 
 MAIN REMAINING VISUAL DEFECTS: no accepted LGO male/female body, Pháp equipment, run cycle or jump has been authored or rendered in Spine. The two generated source attempts were rejected before runtime: v1 does not match LGO visual quality; v2 loses rectangular neck/hair/ponytail regions, has incomplete female leg coverage and cannot prove detachable/riggable equipment topology.
 
 LGO SOURCE ADMISSION:
-FAIL — `build/lgo-spine-production-proof-01/lgo-source-admission.json` records `spineLgoRuntimeTestExecuted=false`. Old sources remain ineligible. `build/lgo-spine-production-proof-01/lgo-created-source-audit.json` records two additional rejected creation attempts; neither may enter Spine or runtime.
+FAIL — `build/lgo-spine-production-proof-01/lgo-source-admission.json` records `spineLgoRuntimeTestExecuted=false`. Old sources remain ineligible. The two additional rejected generated source trees were deleted; their failure reasons remain in this handoff and the stopped-path guard.
 
 ## Verified environment
 
@@ -120,27 +120,12 @@ COMMANDS / RUNTIME TESTS:
 - ran a graphics Player through base, bag, backpack, remove, restore, combined skin and two walk phases;
 - reviewed all eight Player captures; evidence is `build/lgo-spine-production-proof-01/reference-evaluation.json` and `reference-automated/contact-sheet.png`.
 - audited the actual LGO male/female/Pháp source trees and current Unity Pháp atlas; evidence is `build/lgo-spine-production-proof-01/lgo-source-admission.json`; no rejected asset was copied, renamed, rigged or rendered.
-- created and visually audited two bounded male/female source attempts after owner authorization; v1 failed LGO identity/finish and v2 failed silhouette reconstruction/modular-topology proof. Both were moved out of work-in-progress into rejected evidence with tombstones; neither was used in the later Player attachment proof.
+- created and visually audited two bounded male/female source attempts after owner authorization; v1 failed LGO identity/finish and v2 failed silhouette reconstruction/modular-topology proof. Their generated pixels and authoring scripts were deleted; only small tombstones and written lessons remain.
 - hardened the source-selection audit so a rejected tombstone or malformed selection returns `SOURCE_STAGING_SELECTION_REJECTED` instead of crashing or being treated as reviewable; both v1/v2 tombstones now fail closed in machine evidence.
-- copied the current Pháp Lv1 belt/weapon atlas regions into isolated evaluation resources and attached them to the official sample at runtime; this is retained as API compatibility evidence only;
+- copied the current Pháp Lv1 belt/weapon atlas regions into isolated evaluation resources and attached them to the official sample at runtime; the resulting fixture and captures were later purged as wrong-scope output;
 - stopped and quarantined the later ten-part cutout and whole-base runtime mesh attempts because they bypassed Spine Editor authoring/export and repeated an owner-rejected architecture.
 
-Exact evaluation commands, run from the repository root:
-
-```sh
-curl -fL --retry 3 --connect-timeout 20 https://jp.esotericsoftware.com/launcher/mac-arm -o build/toolchains/spine-trial/SpineTrial-ARM.dmg
-hdiutil attach build/toolchains/spine-trial/SpineTrial-ARM.dmg -readonly -nobrowse -mountpoint "$PWD/build/toolchains/spine-trial/mount"
-ditto 'build/toolchains/spine-trial/mount/Spine Trial.pkg' 'build/toolchains/spine-trial/Spine Trial.pkg'
-hdiutil detach "$PWD/build/toolchains/spine-trial/mount"
-installer -pkg 'build/toolchains/spine-trial/Spine Trial.pkg' -target CurrentUserHomeDirectory -verboseR
-git clone --depth 1 --branch 4.3 https://github.com/EsotericSoftware/spine-runtimes.git build/toolchains/spine-runtimes-4.3
-open -a "$HOME/Applications/SpineTrial.app" "$PWD/build/toolchains/spine-runtimes-4.3/examples/mix-and-match/mix-and-match-pro.spine"
-"/Applications/Unity/Hub/Editor/6000.3.2f1/Unity.app/Contents/MacOS/Unity" -batchmode -quit -createProject "$PWD/build/lgo-spine-production-proof-01/unity-evaluation" -logFile "$PWD/build/lgo-spine-production-proof-01/unity-evaluation-create.log"
-"/Applications/Unity/Hub/Editor/6000.3.2f1/Unity.app/Contents/MacOS/Unity" -batchmode -quit -projectPath "$PWD/build/lgo-spine-production-proof-01/unity-evaluation" -executeMethod SpineEvaluationBuilder.BuildOfficialMixAndMatch -logFile "$PWD/build/lgo-spine-production-proof-01/unity-evaluation-build-driver.log"
-LGO_SPINE_EVAL_EVIDENCE="$PWD/build/lgo-spine-production-proof-01/reference-automated" "$PWD/build/lgo-spine-production-proof-01/unity-evaluation/Build/SpineMixAndMatchEvaluation.app/Contents/MacOS/Spine Mix And Match Evaluation" -screen-width 1280 -screen-height 720 -screen-fullscreen 0 -logFile "$PWD/build/lgo-spine-production-proof-01/reference-automated/player.log"
-```
-
-The evaluation-only builder and runtime driver are retained under `build/lgo-spine-production-proof-01/unity-evaluation/Assets/`; they were not copied into `client/Unity`.
+The disposable isolated Unity project, its builder/driver code, caches and Player builds were deleted. The exact recreation commands were removed from this active handoff so a later worker cannot mistake that fixture for the valid resume path. The official Spine 4.3 source checkout and official reference screenshots remain available.
 
 ## Explicit non-claims
 
