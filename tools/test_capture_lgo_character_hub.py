@@ -30,6 +30,14 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
         for frame in expected:
             self.assertIn(frame, capture.REQUIRED_FRAMES)
 
+    def test_capture_requires_shared_skill_topology_for_all_five_classes(self) -> None:
+        expected = tuple(
+            f"skills-{class_id}.png"
+            for class_id in ("vo", "kiem", "phap", "co", "linh")
+        )
+        for frame in expected:
+            self.assertIn(frame, capture.REQUIRED_FRAMES)
+
     def test_player_command_uses_target_resolution_and_internal_capture(self) -> None:
         command = capture.build_player_command(
             Path("/tmp/Unity"), Path("/tmp/evidence"), "mobile", 1600, 720
@@ -52,6 +60,7 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "width": 1280,
                 "height": 720,
                 "frames": list(capture.REQUIRED_FRAMES),
+                "skillClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "spiritPetClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "classSwitchScope": "character-hub-data-only-no-renderer-change",
@@ -76,6 +85,7 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "width": 1024,
                 "height": 768,
                 "frames": list(capture.REQUIRED_FRAMES),
+                "skillClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "spiritPetClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "classSwitchScope": "character-hub-data-only-no-renderer-change",

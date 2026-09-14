@@ -791,22 +791,22 @@ namespace LinhGioi.UI
         {
             node.AddToClassList("lgo-skill-node");
             node.text = string.Empty;
-            node.style.width = 104;
-            node.style.minWidth = 104;
-            node.style.maxWidth = 104;
-            node.style.flexBasis = 104;
+            node.style.width = 86;
+            node.style.minWidth = 86;
+            node.style.maxWidth = 86;
+            node.style.flexBasis = 86;
             node.style.flexGrow = 0;
             node.style.flexShrink = 0;
-            node.style.height = 104;
-            node.style.minHeight = 104;
-            node.style.maxHeight = 104;
+            node.style.height = 86;
+            node.style.minHeight = 86;
+            node.style.maxHeight = 86;
             node.style.paddingLeft = node.style.paddingRight = 4;
             node.style.paddingTop = node.style.paddingBottom = 4;
             node.style.flexDirection = FlexDirection.Column;
             node.style.alignItems = Align.Center;
             node.style.justifyContent = Justify.Center;
-            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 52;
-            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 52;
+            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 43;
+            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 43;
         }
 
         private static void ApplyLgoPotentialDataOverlay(Button node)

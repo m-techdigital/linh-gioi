@@ -27,6 +27,9 @@ POTENTIAL_CLASS_FRAMES = tuple(
     for class_id in CHARACTER_HUB_CLASS_IDS
     for state in ("default", "selected")
 )
+SKILL_CLASS_FRAMES = tuple(
+    f"skills-{class_id}.png" for class_id in CHARACTER_HUB_CLASS_IDS
+)
 SPIRIT_PET_CLASS_FRAMES = tuple(
     f"spirit-pet-{class_id}.png" for class_id in CHARACTER_HUB_CLASS_IDS
 )
@@ -37,6 +40,7 @@ REQUIRED_FRAMES = (
     "bag-search-binh-mau-selected.png",
     "skills-default.png",
     "skills.png",
+    *SKILL_CLASS_FRAMES,
     "potential-default.png",
     "potential.png",
     *POTENTIAL_CLASS_FRAMES,
@@ -73,6 +77,8 @@ def validate_manifest(manifest: dict, out: Path, profile: str) -> list[str]:
         errors.append("OS_INPUT_USED")
     if tuple(manifest.get("potentialClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
         errors.append("POTENTIAL_CLASS_PROFILE_MISMATCH")
+    if tuple(manifest.get("skillClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
+        errors.append("SKILL_CLASS_PROFILE_MISMATCH")
     if tuple(manifest.get("spiritPetClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
         errors.append("SPIRIT_PET_CLASS_PROFILE_MISMATCH")
     if manifest.get("classSwitchScope") != "character-hub-data-only-no-renderer-change":

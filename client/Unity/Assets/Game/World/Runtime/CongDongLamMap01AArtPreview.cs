@@ -2363,7 +2363,7 @@ namespace LinhGioi.World
             var skillsDefault = Path.Combine(directory, "skills-default.png");
             CaptureScreenPng(skillsDefault);
             var skillNodes = document.rootVisualElement.Query<Button>(className: "lgo-skill-node").ToList();
-            if (skillNodes.Count < 3) throw new InvalidOperationException("Missing Character Hub 3x3 skill path for capture");
+            if (skillNodes.Count != 9) throw new InvalidOperationException("Missing Character Hub shared nine-node skill path for capture");
             InvokeHudButton(skillNodes[2]);
             yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
             yield return new WaitForEndOfFrame();
@@ -2390,6 +2390,24 @@ namespace LinhGioi.World
                 throw new InvalidOperationException("Missing Character Hub five-profile evidence hooks");
             var rendererClassId = ActiveEquipmentClassId;
             var potentialClassIds = new[] { "vo", "kiem", "phap", "co", "linh" };
+            var skillClassFrames = new List<string>();
+            foreach (var classId in potentialClassIds)
+            {
+                bindEvidenceClass.Invoke(hud, new object[] { classId });
+                if (ActiveEquipmentClassId != rendererClassId)
+                    throw new InvalidOperationException("Character Hub evidence binding changed renderer authority");
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skills Main Tab"));
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skill Node 0"));
+                yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
+                yield return new WaitForEndOfFrame();
+                var frame = "skills-" + classId + ".png";
+                CaptureScreenPng(Path.Combine(directory, frame));
+                skillClassFrames.Add(frame);
+            }
+            clearEvidenceClass.Invoke(hud, null);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Main Tab"));
+            yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
+            yield return new WaitForEndOfFrame();
             var potentialClassFrames = new List<string>();
             foreach (var classId in potentialClassIds)
             {
@@ -2428,15 +2446,18 @@ namespace LinhGioi.World
                 spiritPetClassFrames.Add(frame);
             }
             clearEvidenceClass.Invoke(hud, null);
+            var skillClassFramesExist = skillClassFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
             var potentialClassFramesExist = potentialClassFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
             var spiritPetClassFramesExist = spiritPetClassFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
             var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(bagSearch)
                 && File.Exists(bagSearchSelected)
                 && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potentialDefault) && File.Exists(potential)
-                && potentialClassFramesExist && File.Exists(spiritPet) && spiritPetClassFramesExist
+                && skillClassFramesExist && potentialClassFramesExist && File.Exists(spiritPet) && spiritPetClassFramesExist
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var frames = new[] { "character-info.png", "bag.png", "bag-search-binh-mau.png", "bag-search-binh-mau-selected.png",
-                "skills-default.png", "skills.png", "potential-default.png", "potential.png" }
+                "skills-default.png", "skills.png" }
+                .Concat(skillClassFrames)
+                .Concat(new[] { "potential-default.png", "potential.png" })
                 .Concat(potentialClassFrames)
                 .Concat(new[] { "spirit-pet.png" })
                 .Concat(spiritPetClassFrames);
@@ -2446,6 +2467,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
+                + "  \"skillClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
                 + "  \"potentialClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
                 + "  \"spiritPetClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
                 + "  \"classSwitchScope\": \"character-hub-data-only-no-renderer-change\",\n"

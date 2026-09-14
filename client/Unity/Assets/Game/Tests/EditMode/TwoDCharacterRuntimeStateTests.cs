@@ -700,7 +700,7 @@ namespace LinhGioi.Tests.EditMode
                 var firstSkillNode = root.Q<Button>("Map01A Skill Node 0");
                 Assert.That(firstSkillNode.ClassListContains("lgo-skill-node"), Is.True,
                     "All skill nodes must use the shared circular skill-node base.");
-                Assert.That(firstSkillNode.style.width.value.value, Is.InRange(96, 104));
+                Assert.That(firstSkillNode.style.width.value.value, Is.EqualTo(86).Within(1));
                 Assert.That(root.Q<VisualElement>("Map01A Active Skills Category Icon"), Is.Not.Null);
                 var firstExpectedIcon = firstSkill.IconCatalog == CharacterHubIconCatalog.Skill
                     ? scene.GetMap01ASkillIconSprite(firstSkill.IconId)
@@ -1013,6 +1013,35 @@ namespace LinhGioi.Tests.EditMode
                 }
                 clear.Invoke(hud, null);
                 Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(rendererClass));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void SkillProgressionUsesOneCanonicalFourThreeTwoTopology()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("skill shared topology test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
+
+                var expected = new[] { 4, 3, 2 };
+                for (var stageIndex = 0; stageIndex < expected.Length; stageIndex++)
+                {
+                    var stage = root.Q("Map01A Skill Path Stage " + (stageIndex + 1));
+                    Assert.That(stage, Is.Not.Null);
+                    Assert.That(stage.Query<Button>(className: "lgo-skill-node").ToList().Count,
+                        Is.EqualTo(expected[stageIndex]),
+                        "The shared Skill topology must follow the canonical 4-3-2 progression; class data only fills its nine nodes.");
+                }
             }
             finally
             {

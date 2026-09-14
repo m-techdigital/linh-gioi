@@ -218,7 +218,7 @@ namespace LinhGioi.UI
             connector.style.flexShrink = 0;
             connector.style.alignSelf = Align.Center;
             connector.style.backgroundColor = new Color(.20f, .58f, .82f, .68f);
-            connector.style.width = vertical ? 2 : 44;
+            connector.style.width = vertical ? 2 : 24;
             connector.style.height = vertical ? 12 : 2;
             return connector;
         }
@@ -421,24 +421,26 @@ namespace LinhGioi.UI
             var path = new VisualElement { name = "Map01A Skill Progression Path" };
             path.style.flexGrow = 1;
             path.style.alignItems = Align.Center;
-            for (var stageIndex = 0; stageIndex < 3; stageIndex++)
+            var stageCounts = new[] { 4, 3, 2 };
+            var skillIndex = 0;
+            for (var stageIndex = 0; stageIndex < stageCounts.Length; stageIndex++)
             {
                 var stage = new VisualElement { name = "Map01A Skill Path Stage " + (stageIndex + 1) };
                 stage.style.flexDirection = FlexDirection.Row;
                 stage.style.alignItems = Align.Center;
                 stage.style.justifyContent = Justify.Center;
                 stage.style.width = new Length(100, LengthUnit.Percent);
-                for (var nodeIndex = 0; nodeIndex < 3; nodeIndex++)
+                for (var nodeIndex = 0; nodeIndex < stageCounts[stageIndex]; nodeIndex++)
                 {
-                    var skillIndex = stageIndex * 3 + nodeIndex;
                     var node = CreateHubPathNode(skillIndex);
                     _skillPathNodes.Add(node);
                     stage.Add(node);
-                    if (nodeIndex < 2)
+                    skillIndex++;
+                    if (nodeIndex < stageCounts[stageIndex] - 1)
                         stage.Add(CreateHubPathConnector("Map01A Skill Stage " + (stageIndex + 1) + " Connector " + (nodeIndex + 1)));
                 }
                 path.Add(stage);
-                if (stageIndex < 2)
+                if (stageIndex < stageCounts.Length - 1)
                     path.Add(CreateHubPathConnector("Map01A Skill Path Connector " + (stageIndex + 1), true));
             }
             skillArea.Add(path);
@@ -746,7 +748,7 @@ namespace LinhGioi.UI
                 var usesSkillCatalog = skill.IconCatalog == CharacterHubIconCatalog.Skill;
                 var node = _skillPathNodes[index];
                 node.tooltip = skill.Name + " · " + skill.Level;
-                BindSkillPreviewIcon(_skillPathIcons[index], skill, usesSkillCatalog ? 88 : 64);
+                BindSkillPreviewIcon(_skillPathIcons[index], skill, usesSkillCatalog ? 68 : 52);
                 _skillPathTitles[index].text = skill.Name;
                 _skillPathTitles[index].style.display = usesSkillCatalog ? DisplayStyle.None : DisplayStyle.Flex;
                 _skillPathLevels[index].text = skill.Level;

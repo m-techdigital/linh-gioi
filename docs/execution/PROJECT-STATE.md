@@ -1,3 +1,10 @@
+## Character Hub — Kỹ năng shared 4–3–2 topology và five-profile evidence v19b — 2026-09-15
+
+- Đối chiếu canonical `redesign-v4-five-tabs/03-ky-nang-five-tab-APPROVED.png` phát hiện runtime v18d xếp chín skill theo lưới 3×3, sai progression graph 4–3–2. v19 chuyển số node mỗi stage, connector và metric node/icon vào một shared topology dựng một lần; Kỹ năng và Tiềm năng vẫn là hai component riêng.
+- Võ/Kiếm/Pháp/Cơ/Linh chỉ bind icon, tên, level, selection và detail vào chín node có sẵn. Capture hook nay xuất thêm `skills-{vo,kiem,phap,co,linh}.png`, kiểm `ActiveEquipmentClassId` giữ nguyên; không tạo UI, renderer hoặc art theo class.
+- TDD topology RED `0/1`, GREEN `1/1`; capture contract RED `0/1`, GREEN `7/7`. Player `build/character-hub-skill-topology-player-v19b/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=0`; evidence `build/character-hub-skill-topology-runtime-v19b/{pc,mobile,tablet}/` có 29 frame mỗi viewport. Đã xem default/selected trên ba viewport và năm profile PC: graph không cắt/chồng, selection/detail bind đúng.
+- Python/shared tests `36/36`; full EditMode `290 total / 289 passed / 0 failed / 1 ignored`; shared-skin/no-3D/no-source/frozen diff pass. Trạng thái `CONTINUE`: audit fidelity các component còn lại; không mở class/pose/wardrobe/source art.
+
 ## Character Hub — Linh thú shared template và five-profile audit v18d — 2026-09-15
 
 - Canonical active: `redesign-v4-five-tabs/05-linh-thu-five-tab-APPROVED.png`. Runtime nay dựng đúng một hero preview, roster bốn slot, năm stat row, hai skill row và detail/action hierarchy. `CharacterHubSpiritPetPreview` chỉ cấp dữ liệu; refresh Võ/Kiếm/Pháp/Cơ/Linh giữ nguyên object tree và renderer authority.
