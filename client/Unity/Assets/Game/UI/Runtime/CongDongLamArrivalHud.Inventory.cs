@@ -9,7 +9,7 @@ namespace LinhGioi.UI
     public sealed partial class CongDongLamArrivalHud
     {
         private VisualElement _inventoryItemsGrid, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterHeroLeftEquipmentRail, _characterHeroRightEquipmentRail, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard, _inventoryCategoryRail;
-        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroVitals, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState;
+        private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailEquippedChip, _inventoryDetailFitChip, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState;
         private Button _bagTab, _characterInfoTab, _skillsTab, _potentialTab, _spiritPetTab, _allItemsTab, _equipmentTab, _suppliesTab, _materialsTab, _otherItemsTab;
         private Button _inventoryDetailPrimaryAction;
         private TextField _inventorySearchField;
@@ -18,6 +18,7 @@ namespace LinhGioi.UI
         private VisualElement[] _equipmentTileIcons, _equipmentRowIcons, _characterHeroQuickIcons;
         private Label[] _equipmentTileNames, _equipmentTileStates, _equipmentRowNames, _equipmentRowStates;
         private Label _healthPotionName, _healthPotionCount, _healthPotionState, _manaPotionName, _manaPotionCount, _manaPotionState, _classRewardName, _classRewardCount, _classRewardState;
+        private UnityEngine.UIElements.ProgressBar _characterHeroHealth, _characterHeroMana;
         private bool _characterInfoOpen, _suppliesOpen;
         private string _inventoryCategory = "all";
         private string _inventorySearchQuery = string.Empty;
@@ -436,8 +437,6 @@ namespace LinhGioi.UI
             _characterHeroName.name = "Map01A Character Hero Name";
             _characterHeroPower = LgoLabel("", 17, new Color(.96f, .91f, .76f, .96f), true);
             _characterHeroPower.name = "Map01A Character Hero Power";
-            _characterHeroVitals = LgoLabel("", 13, UiSubText);
-            _characterHeroVitals.name = "Map01A Character Hero Vitals";
             _characterHeroLoadout = LgoLabel("", 13, new Color(.76f, 1f, .70f, .94f), true);
             _characterHeroLoadout.name = "Map01A Character Hero Loadout";
             _characterHeroLoadoutStrip = new VisualElement { name = "Map01A Character Hero Loadout Strip" };
@@ -460,7 +459,18 @@ namespace LinhGioi.UI
             }
             heroInfo.Add(_characterHeroName);
             heroInfo.Add(_characterHeroPower);
-            heroInfo.Add(_characterHeroVitals);
+            var heroVitalsBars = InventoryRow("Map01A Character Hero Vitals Bars");
+            heroVitalsBars.style.width = 340;
+            heroVitalsBars.style.marginTop = 2;
+            heroVitalsBars.style.marginBottom = 2;
+            _characterHeroHealth = MakeVital("Map01A Character Hero Health", new Color(.67f, .16f, .15f));
+            _characterHeroMana = MakeVital("Map01A Character Hero Mana", new Color(.12f, .37f, .64f));
+            _characterHeroHealth.style.flexGrow = 1;
+            _characterHeroHealth.style.marginRight = 8;
+            _characterHeroMana.style.flexGrow = 1;
+            heroVitalsBars.Add(_characterHeroHealth);
+            heroVitalsBars.Add(_characterHeroMana);
+            heroInfo.Add(heroVitalsBars);
             heroInfo.Add(_characterHeroLoadout);
             heroInfo.Add(_characterHeroLoadoutStrip);
             _inventoryHeroPanel.Add(heroInfo);
@@ -871,7 +881,16 @@ namespace LinhGioi.UI
             var gender = _scene.VoAvatarGender == "female" ? "Nữ" : "Nam";
             if (_characterHeroName != null) _characterHeroName.text = "LụcThiên · " + _scene.ActiveEquipmentClassLabel + " " + gender;
             if (_characterHeroPower != null) _characterHeroPower.text = "LC 245.780";
-            if (_characterHeroVitals != null) _characterHeroVitals.text = "HP " + _scene.PlayerHealth + "/100  ·  MP " + _scene.PlayerMana + "/100";
+            if (_characterHeroHealth != null)
+            {
+                _characterHeroHealth.value = _scene.PlayerHealth;
+                _characterHeroHealth.title = "HP " + _scene.PlayerHealth + "/100";
+            }
+            if (_characterHeroMana != null)
+            {
+                _characterHeroMana.value = _scene.PlayerMana;
+                _characterHeroMana.title = "MP " + _scene.PlayerMana + "/100";
+            }
             if (_characterHeroLoadout != null) _characterHeroLoadout.text = "Trang bị " + _scene.VoEquippedSlotCount + "/10 · Lv" + _scene.VoAvatarLevel;
             if (_inventoryCountBadge != null && string.IsNullOrEmpty(_inventorySearchQuery))
                 _inventoryCountBadge.text = "56/120 ô";

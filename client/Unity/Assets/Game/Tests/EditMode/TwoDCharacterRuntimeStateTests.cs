@@ -218,7 +218,17 @@ namespace LinhGioi.Tests.EditMode
                     "Duplicate HP/MP copy above the actor steals the height required by the approved bottom identity strip.");
                 Assert.That(root.Q("Map01A Character Stat Strip").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "Character vitals must use one bottom identity stack instead of overlapping a second badge strip.");
-                Assert.That(root.Q<Label>("Map01A Character Hero Vitals").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Character Hero Vitals"), Is.Null,
+                    "The approved character screen uses readable HP/MP bars instead of retaining a hidden duplicate text system.");
+                var heroHealth = root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Character Hero Health");
+                var heroMana = root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Character Hero Mana");
+                Assert.That(heroHealth, Is.Not.Null);
+                Assert.That(heroMana, Is.Not.Null);
+                Assert.That(heroHealth.ClassListContains("lgo-vital-bar"), Is.True,
+                    "Character and gameplay vitals must reuse the shared progress-bar base.");
+                Assert.That(heroMana.ClassListContains("lgo-vital-bar"), Is.True);
+                Assert.That(heroHealth.value, Is.EqualTo(scene.PlayerHealth));
+                Assert.That(heroMana.value, Is.EqualTo(scene.PlayerMana));
                 Assert.That(root.Q<Label>("Map01A Character Hero Loadout").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q<Label>("Map01A Character Equipment Summary").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "The bottom loadout line already carries the equipped count; a second left-aligned summary causes visual overlap.");

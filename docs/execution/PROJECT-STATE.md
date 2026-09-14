@@ -1,3 +1,10 @@
+## Map01A — tab Nhân vật dùng HP/MP bars theo design đã duyệt — 2026-09-14
+
+- Đối chiếu Player với `01-nhan-vat-nam-tab-compact-APPROVED.png` xác định sai lệch còn rõ nhất ở identity stack: HP/MP chỉ là một dòng chữ nhỏ. Runtime giờ hiển thị hai thanh HP/MP bind trực tiếp `PlayerHealth`/`PlayerMana`, giữ full-body giữa 10 slot và detail món ở bên phải.
+- `MakeVital` của HUD và hai thanh trong tab Nhân vật cùng dùng `ApplyLgoVitalBar`; không tạo style thứ hai và không giữ hệ text vitals ẩn song song.
+- Full `TwoDCharacterRuntimeStateTests` đạt 24/24. Player `build/map01a-character-vitals-player-v2/LinhGioiOnline.app` build `errors=0`, `warnings=38`; capture đủ năm tab và hai trạng thái search tại `build/map01a-character-vitals-runtime-v1/`, 1600×900, không dùng chuột/phím OS.
+- Visual audit `character-info.png` và `bag.png`: thanh mới đọc rõ, không đè tên/LC/loadout, không làm co full-body/10 slot và không làm vỡ bố cục Rương đồ. Không sửa class/pose/wardrobe/source/camera/scale hoặc frozen surfaces.
+
 ## Map01A — toàn tuyến không lộ mã map nội bộ ở completion — 2026-09-14
 
 - Audit Player hiện hành chạy đủ Q01–Q09 và phát hiện tracker cuối ghi `Map01A hoàn tất`. Copy runtime đã đổi thành `Cổng Đông Lâm hoàn tất`; regression test khóa tên location hướng người chơi.

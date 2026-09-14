@@ -1,3 +1,9 @@
+## Next — sau character HP/MP bars theo design — 2026-09-14
+
+`CONTINUE`. Evidence năm tab hiện hành là `build/map01a-character-vitals-runtime-v1/{character-info,bag,bag-search-binh-mau,bag-search-binh-mau-selected,skills,potential,spirit-pet}.png`; Player `build/map01a-character-vitals-player-v2/LinhGioiOnline.app`. Tab Nhân vật giữ full-body + 10 slot + detail phải và dùng shared HP/MP bars bind state thật.
+
+Next valid work: tiếp tục audit Map01A/UI ở cấp màn hoặc interaction có sai lệch rõ so với design đã duyệt; không micro-polish tab Nhân vật nếu không có regression mới. Giữ một hàng năm tab compact, workspace hai cột, shared Skin/base và item provenance gate. Không quay lại class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+
 ## Next — sau audit toàn tuyến và sửa completion copy — 2026-09-14
 
 `CONTINUE`. Player mới đã chạy lại Q01–Q09 ở 1600×900: 18/18 route frame, 38 dialogue frame, 6 NPC revisit và 9/9 nhiệm vụ. Tracker cuối dùng `Cổng Đông Lâm hoàn tất`, không lộ mã nội bộ `Map01A`. Evidence: `build/map01a-completion-copy-runtime-v2/`; Player `build/map01a-completion-copy-player-v1/LinhGioiOnline.app`.

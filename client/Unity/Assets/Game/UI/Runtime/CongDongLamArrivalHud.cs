@@ -333,9 +333,7 @@ namespace LinhGioi.UI
         private static UnityEngine.UIElements.ProgressBar MakeVital(string name, Color color)
         {
             var bar = new UnityEngine.UIElements.ProgressBar { name = name, lowValue = 0, highValue = 100 };
-            bar.style.height = 18; bar.style.marginTop = 3; bar.style.fontSize = 12;
-            bar.Q(className: "unity-progress-bar__progress").style.backgroundColor = color;
-            bar.Q(className: "unity-progress-bar__background").style.backgroundColor = new Color(.03f,.05f,.07f);
+            ApplyLgoVitalBar(bar, color);
             return bar;
         }
 

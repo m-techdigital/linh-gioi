@@ -73,6 +73,7 @@ namespace LinhGioi.UI
         private const string LgoSubtitleLabelClass = "lgo-subtitle-label";
         private const string LgoLayeredFrameClass = "lgo-layered-frame";
         private const string LgoFrameCornerClass = "lgo-frame-corner";
+        private const string LgoVitalBarClass = "lgo-vital-bar";
 
         private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
         {
@@ -197,6 +198,26 @@ namespace LinhGioi.UI
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             ApplyLgoFrame(icon, new Color(.020f, .070f, .128f, .96f), new Color(.96f, .76f, .36f, .90f));
             icon.style.borderTopWidth = icon.style.borderBottomWidth = 2;
+        }
+
+        private static void ApplyLgoVitalBar(UnityEngine.UIElements.ProgressBar bar, Color fillColor)
+        {
+            bar.AddToClassList(LgoVitalBarClass);
+            bar.style.height = 18;
+            bar.style.marginTop = 3;
+            bar.style.fontSize = 12;
+            bar.style.color = new Color(.98f, .96f, .88f, .98f);
+            var fill = bar.Q(className: "unity-progress-bar__progress");
+            if (fill != null) fill.style.backgroundColor = fillColor;
+            var background = bar.Q(className: "unity-progress-bar__background");
+            if (background != null)
+            {
+                background.style.backgroundColor = new Color(.018f, .040f, .060f, .96f);
+                background.style.borderTopWidth = background.style.borderBottomWidth = 1;
+                background.style.borderLeftWidth = background.style.borderRightWidth = 1;
+                background.style.borderTopColor = background.style.borderBottomColor = new Color(.54f, .66f, .70f, .58f);
+                background.style.borderLeftColor = background.style.borderRightColor = new Color(.54f, .66f, .70f, .58f);
+            }
         }
 
         private static Label LgoLabel(string text, int size, Color color, bool bold = false)
