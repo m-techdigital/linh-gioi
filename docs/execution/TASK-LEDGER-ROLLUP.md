@@ -1,4 +1,10 @@
-## Final #1 rigid outfit fast-combo review candidate — 2026-09-15
+## Final #1 rigid outfit bind/motion redesign v3 — 2026-09-15
+
+`NEED_HUMAN_VISUAL_REVIEW`. Owner rejected v2 for detached neck/head, downward face pitch, closed/incorrect idle limb placement, upper legs outside the tunic and weak run/tuck silhouettes. V3 fixes the source fit and motion as one batch: 64+ px head/body rectangle overlap, full head compensation during run, open grounded idle stance, upper thighs below the lower tunic, 44% run stance with a flight window, stronger stride/high knee, and curled jump/roll tuck derived from the old six-pose silhouette. The first v3a capture still had an upright jump apex and is retained under `build/rigid-outfit-pilot/rejected-iterations/final-1-v3a-upright-jump`.
+
+Current Player evidence is `build/rigid-outfit-pilot/final-1-combo-review-v3`: 212 frames at 24 fps plus contact/run/jump/action boards. Direct review found the neck attached, face level in run, limbs connected, thighs covered at the hip, and no open shoulder/elbow/knee/ankle seam in sampled frames. Runtime sprite/fit hashes stay stable, scale is one, root rotation is identity and deforming components are absent. Full EditMode: 305 passed, 0 failed, 1 ignored. Stop before outfit #2 for owner review.
+
+## Superseded Final #1 rigid outfit fast-combo review candidate — 2026-09-15
 
 `NEED_HUMAN_VISUAL_REVIEW`. Final #1 v2 has a 212-frame/24-fps continuous Player combo at `build/rigid-outfit-pilot/final-1-combo-review-v2`: accelerate, fast run at 12 frames/cycle, run-jump-land-run, run-attack-run, run-roll-run and recovery to idle. Shortest-arc pose blending starts from the actual live pose; duplicated endpoints were removed and dedicated assertions cover idle→accelerate plus last→first. Adjacent-frame boards were reviewed directly. Runtime hashes remain stable, scale is one, root rotation stays identity, deforming components are absent, and 300/300 EditMode tests pass (one ignored). Isolated state clips are no longer acceptable Final evidence. Stop before outfit #2 for owner review.
 

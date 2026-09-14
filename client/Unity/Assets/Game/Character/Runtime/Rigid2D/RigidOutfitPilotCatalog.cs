@@ -35,7 +35,7 @@ namespace LinhGioi.Character
     {
         public const float PixelsPerUnit = 158.73016f;
         public const string SourceSpaceProfile = "lgo_character_canvas_1024x1536_v1";
-        private const float HeadNeckAnchorCorrection = 32f / PixelsPerUnit;
+        private const float HeadNeckAnchorCorrection = 48f / PixelsPerUnit;
 
         private RigidOutfitPilotCatalog(RigidOutfitPilotCharacter male, RigidOutfitPilotCharacter female)
         {
@@ -71,7 +71,7 @@ namespace LinhGioi.Character
                 Part("leg.far.shin", RigidBoneId.LowerLegR, "shin_far", RigidSortRole.RearLeg, 1),
                 Part("foot.far", RigidBoneId.FootR, "foot_far", RigidSortRole.RearLeg, 2),
                 Part("body.underlayer", RigidBoneId.Torso, "body_underlayer", RigidSortRole.Body),
-                Part("leg.near.upper", RigidBoneId.UpperLegL, "thigh_near", RigidSortRole.FrontLeg),
+                Part("leg.near.upper", RigidBoneId.UpperLegL, "thigh_near", RigidSortRole.Body, 1),
                 Part("leg.near.shin", RigidBoneId.LowerLegL, "shin_near", RigidSortRole.FrontLeg, 1),
                 Part("foot.near", RigidBoneId.FootL, "foot_near", RigidSortRole.FrontLeg, 2),
                 Part("arm.near.upper", RigidBoneId.UpperArmL, "upper_arm_near", RigidSortRole.FrontArm),
@@ -112,7 +112,7 @@ namespace LinhGioi.Character
                 Part("leg.far.shin", RigidBoneId.LowerLegR, "shin_far", RigidSortRole.RearLeg, 1),
                 Part("foot.far", RigidBoneId.FootR, "foot_far", RigidSortRole.RearLeg, 2),
                 Part("body.underlayer", RigidBoneId.Torso, "body_underlayer", RigidSortRole.Body),
-                Part("leg.near.upper", RigidBoneId.UpperLegL, "thigh_near", RigidSortRole.FrontLeg),
+                Part("leg.near.upper", RigidBoneId.UpperLegL, "thigh_near", RigidSortRole.Body, 1),
                 Part("leg.near.shin", RigidBoneId.LowerLegL, "shin_near", RigidSortRole.FrontLeg, 1),
                 Part("foot.near", RigidBoneId.FootL, "foot_near", RigidSortRole.FrontLeg, 2),
                 Part("arm.near.upper", RigidBoneId.UpperArmL, "upper_arm_near", RigidSortRole.FrontArm),

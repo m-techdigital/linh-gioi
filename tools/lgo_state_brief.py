@@ -157,10 +157,11 @@ def current_blocker_section(next_action: str) -> str:
         if state.get("phase") in {
             "FINAL_OUTFIT1_CANDIDATE_READY_FOR_OWNER_REVIEW",
             "FINAL_OUTFIT1_FAST_COMBO_READY_FOR_OWNER_REVIEW",
+            "FINAL_OUTFIT1_V3_READY_FOR_OWNER_REVIEW",
         } and active_task == "LGO_RIGID_OUTFIT_PILOT_01":
             return (
                 "Current gate: NEED_HUMAN_VISUAL_REVIEW. Review build/rigid-outfit-pilot/"
-                "final-1-combo-review-v2/fast-combo-proof.mp4 and combo-contact-sheet.png. "
+                "final-1-combo-review-v3/fast-combo-proof.mp4 and combo-contact-sheet.png. "
                 "Stop before outfit #2, mix, class or level work."
             )
         if state.get("phase") == "ARTICULATED_MOTION_CANDIDATE_OWNER_REVIEW" and active_task == "LGO_CHIBI_SIDE_MODULAR_MOTION_PROOF_01":

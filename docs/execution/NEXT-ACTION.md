@@ -5,16 +5,16 @@ Thực hiện theo `docs/execution/LGO-RIGID-OUTFIT-PILOT-GOAL.md`. Kiến trúc
 ## Active task state
 
 ```json
-{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_FAST_COMBO_READY_FOR_OWNER_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW","method":"UNITY_RIGID_SPRITERENDERER_TWO_BONE_IK_WITH_POSE_BLEND","sourceProfile":"lgo_character_canvas_1024x1536_v1","requiredMotion":["Idle","Walk","Run","Jump","Attack","Roll"],"currentPlayerEvidence":"build/rigid-outfit-pilot/final-1-combo-review-v2","currentSourceAuthorityValid":true,"technicalInvariantStatus":"PASS_300_OF_300_ONE_IGNORED","visualStatus":"FINAL_1_COMBO_V2_SELF_REVIEW_PASS_OWNER_REVIEW_REQUIRED","stopCondition":"OWNER_REVIEW_FINAL_OUTFIT1","redesignOutfit1Allowed":true,"outfit2IntegrationAllowed":false,"classExpansionAllowed":false,"perPoseAssetsAllowed":false,"deformationAllowed":false,"animatedScaleAllowed":false}
+{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_V3_READY_FOR_OWNER_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW","method":"UNITY_RIGID_SPRITERENDERER_TWO_BONE_IK_WITH_POSE_BLEND","sourceProfile":"lgo_character_canvas_1024x1536_v1","requiredMotion":["Idle","Walk","Run","Jump","Attack","Roll"],"currentPlayerEvidence":"build/rigid-outfit-pilot/final-1-combo-review-v3","rejectedPlayerEvidence":["build/rigid-outfit-pilot/final-1-combo-review-v2","build/rigid-outfit-pilot/rejected-iterations/final-1-v3a-upright-jump"],"currentSourceAuthorityValid":true,"technicalInvariantStatus":"PASS_305_OF_306_ONE_IGNORED","visualStatus":"FINAL_1_COMBO_V3_SELF_REVIEW_PASS_OWNER_REVIEW_REQUIRED","stopCondition":"OWNER_REVIEW_FINAL_OUTFIT1","redesignOutfit1Allowed":true,"outfit2IntegrationAllowed":false,"classExpansionAllowed":false,"perPoseAssetsAllowed":false,"deformationAllowed":false,"animatedScaleAllowed":false}
 ```
 
 ## Kết quả batch hiện tại
 
-Final #1 combo candidate v2 nằm tại `build/rigid-outfit-pilot/final-1-combo-review-v2/`: clip MP4 212 frame/24 fps và các board frame liền kề. Run phát 12 frame/chu kỳ; timeline nối tăng tốc → chạy nhanh → jump/land → chạy → attack → chạy → roll → chạy → giảm tốc về idle bằng pose blend ngắn. Biên idle→accelerate và last→first được test riêng; endpoint trùng ở các state đã bỏ. Runtime giữ nguyên sprite/fit hash, scale một, root rotation identity và không có deforming component; EditMode đạt 300/300, một test môi trường ignored.
+Final #1 combo candidate v3 tại `build/rigid-outfit-pilot/final-1-combo-review-v3/` đã chạy thật trong Player: 212 frame/24 fps cùng outfit/weapon trên male/female. Batch sửa hạ đầu 16 px vào cổ, bù đủ head pitch theo run lean, tạo idle mở chân/tay cùng ground line, đưa đùi xuống dưới tà áo, tăng sải/gối và flight window, cuộn jump/roll theo silhouette sáu pose cũ. Board Idle/Run/Jump/Roll đã được review trực tiếp; không còn khe cổ, chi rời hoặc hông nổi trên tà ở frame mẫu. V2 và v3a jump còn thẳng được giữ làm evidence bị bác.
 
 ## Next result người chơi có thể kiểm chứng
 
-**DỪNG TẠI OWNER REVIEW.** Owner xem `fast-combo-proof.mp4` và `combo-contact-sheet.png`. Nếu owner bác, ghi finding theo source/pivot/overlap/motion/render order rồi redesign outfit #1 theo nhóm. Nếu owner duyệt, mới đổi visual status; outfit #2 vẫn cần một lệnh tiếp tục riêng theo yêu cầu dừng hiện hành.
+**DỪNG TẠI OWNER REVIEW FINAL #1.** Owner xem `fast-combo-proof.mp4`, `combo-contact-sheet.png`, `fast-run-detail.png` và `jump-transition-detail.png`. Chỉ tiếp tục sửa khi có finding hình ảnh cụ thể. Không mở outfit #2, mix-and-match, class, level hoặc production migration trước visual PASS của outfit #1.
 
 Không mở outfit #2, mix-and-match, class, level hoặc production migration trước visual PASS của outfit #1.
 

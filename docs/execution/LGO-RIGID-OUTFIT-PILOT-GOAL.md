@@ -4,9 +4,9 @@
 
 Một male và một female mini chibi chạy trong Unity Player bằng cùng canonical skeleton. Body, outfit và weapon chỉ gồm `SpriteRenderer` cứng gắn vào bone. Mỗi item fit/equip một lần; Idle, Walk, Run, Attack, Roll và Hit chỉ đổi position/rotation của skeleton. Không SpriteSkin, mesh/vertex deformation, scale animation hoặc sprite swap theo pose/frame/góc.
 
-## Gate hiện hành — owner review Final #1
+## Gate hiện hành — owner review Final #1 v3
 
-`NEED_HUMAN_VISUAL_REVIEW`. Final #1 combo candidate v2 đã chạy thật trong Unity Player bằng rigid source v2. Clip 212 frame/24 fps chạy liên tục qua tăng tốc, chạy nhanh, run→jump→land→run, run→attack→run, run→roll→run và giảm tốc về idle. Các biên bắt đầu/kết thúc dùng pose hiện hành, bỏ endpoint lặp và kiểm cả last→first; đây là self-review PASS để owner kiểm, chưa phải owner acceptance và chưa mở outfit #2/class/level.
+`NEED_HUMAN_VISUAL_REVIEW`. Final #1 combo candidate v3 đã chạy thật trong Unity Player bằng rigid source v2 đã sửa bind fit. Clip 212 frame/24 fps chạy liên tục qua tăng tốc, chạy nhanh, run→jump→land→run, run→attack→run, run→roll→run và giảm tốc về idle. V3 đóng các lỗi owner nêu: cổ–đầu liền, mặt không chúi theo lean, idle mở chân/tay, hông/đùi nằm dưới tà, run có sải–gối–flight rõ hơn và jump/roll tuck theo silhouette sáu pose cũ. Đây là self-review PASS để owner kiểm, chưa phải owner acceptance và chưa mở outfit #2/class/level.
 
 Source v2 tách cổ tay/cổ chân bằng cùng canvas/registration và overlap cố định; fit distal part được suy ra từ bind coordinates thay vì offset theo pose. Run/Jump dùng quỹ đạo chân chung + nghiệm two-bone IK trên canonical limb lengths để khóa ground contact. HUD bị loại khỏi capture để không che nhân vật.
 
@@ -39,5 +39,5 @@ Source v2 tách cổ tay/cổ chân bằng cùng canvas/registration và overlap
 ## Active state
 
 ```json
-{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_FAST_COMBO_READY_FOR_OWNER_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW","method":"UNITY_RIGID_SPRITERENDERER_TWO_BONE_IK_WITH_POSE_BLEND","sourceProfile":"lgo_character_canvas_1024x1536_v1","requiredMotion":["Idle","Walk","Run","Jump","Attack","Roll"],"currentPlayerEvidence":"build/rigid-outfit-pilot/final-1-combo-review-v2","currentSourceAuthorityValid":true,"technicalInvariantStatus":"PASS_300_OF_300_ONE_IGNORED","visualStatus":"FINAL_1_COMBO_V2_SELF_REVIEW_PASS_OWNER_REVIEW_REQUIRED","stopCondition":"OWNER_REVIEW_FINAL_OUTFIT1","redesignOutfit1Allowed":true,"outfit2IntegrationAllowed":false,"classExpansionAllowed":false,"perPoseAssetsAllowed":false,"deformationAllowed":false,"animatedScaleAllowed":false}
+{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_V3_READY_FOR_OWNER_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW","method":"UNITY_RIGID_SPRITERENDERER_TWO_BONE_IK_WITH_POSE_BLEND","sourceProfile":"lgo_character_canvas_1024x1536_v1","requiredMotion":["Idle","Walk","Run","Jump","Attack","Roll"],"currentPlayerEvidence":"build/rigid-outfit-pilot/final-1-combo-review-v3","rejectedPlayerEvidence":["build/rigid-outfit-pilot/final-1-combo-review-v2","build/rigid-outfit-pilot/rejected-iterations/final-1-v3a-upright-jump"],"currentSourceAuthorityValid":true,"technicalInvariantStatus":"PASS_305_OF_306_ONE_IGNORED","visualStatus":"FINAL_1_COMBO_V3_SELF_REVIEW_PASS_OWNER_REVIEW_REQUIRED","stopCondition":"OWNER_REVIEW_FINAL_OUTFIT1","redesignOutfit1Allowed":true,"outfit2IntegrationAllowed":false,"classExpansionAllowed":false,"perPoseAssetsAllowed":false,"deformationAllowed":false,"animatedScaleAllowed":false}
 ```

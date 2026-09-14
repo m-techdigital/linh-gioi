@@ -1,8 +1,8 @@
 ## Continuous workflow status
 
-2026-09-15 active task `LGO_RIGID_OUTFIT_PILOT_01` đã tới phase `FINAL_OUTFIT1_FAST_COMBO_READY_FOR_OWNER_REVIEW`, status `NEED_HUMAN_VISUAL_REVIEW`. Unity Player evidence v2 tại `build/rigid-outfit-pilot/final-1-combo-review-v2` có clip combo 212 frame/24 fps cho male/female với cùng outfit/weapon: tăng tốc → chạy nhanh → jump/land → chạy → attack → chạy → roll → chạy → giảm tốc về idle. Run dùng chu kỳ 12 frame, shared foot trajectory + two-bone IK; transition dùng pose blend shortest-arc từ pose đang phát, bỏ endpoint lặp và kiểm cả biên last→first.
+2026-09-15 active task `LGO_RIGID_OUTFIT_PILOT_01` đã tới phase `FINAL_OUTFIT1_V3_READY_FOR_OWNER_REVIEW`, status `NEED_HUMAN_VISUAL_REVIEW`. Unity Player evidence v3 tại `build/rigid-outfit-pilot/final-1-combo-review-v3` có clip combo 212 frame/24 fps cho male/female với cùng outfit/weapon. V3 sửa theo review thật: cụm đầu hạ thêm 16 px vào cổ và bù đủ góc thân khi run; idle mở chân/tay, đầu hướng ra ngoài nhẹ; đùi nằm dưới tà áo; run tăng lean/sải/gối và có flight window; jump/roll dùng tuck gần silhouette sáu pose cũ.
 
-Self-review trực tiếp đạt cho Final #1 combo candidate; technical evidence giữ sprite/fit fingerprint, unit scale, root rotation identity và không deforming component, 300/300 EditMode (một ignored). Dừng chờ owner xem clip/board. Outfit #2, mix, class và level vẫn khóa.
+Self-review trực tiếp các board Idle/Run/Jump/Roll không còn khe cổ, chi rời, hông nổi trên tà hoặc mặt chúi theo thân. Technical evidence giữ sprite/fit fingerprint, unit scale, root rotation identity và không deforming component; full EditMode đạt 305/306 với một ignored, 0 fail. Dừng chờ owner xem clip/board. Outfit #2, mix, class và level vẫn khóa. V2 và lượt v3a jump còn thẳng là evidence bị bác, không được chọn lại làm Final.
 
 Authoritative goal/process: `docs/execution/LGO-RIGID-OUTFIT-PILOT-GOAL.md`.
 

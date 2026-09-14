@@ -382,6 +382,40 @@ namespace LinhGioi.Character.Tests
         }
 
         [Test]
+        public void Idle_UsesAStableOpenStanceAndRelaxedOpposedArms()
+        {
+            var pose = RigidMotionLibrary.Sample(RigidMotionState.Idle, 0f);
+
+            Assert.That(pose.Bones[RigidBoneId.Head].RotationDegrees, Is.GreaterThanOrEqualTo(2f));
+            Assert.That(pose.Bones[RigidBoneId.UpperLegL].RotationDegrees -
+                        pose.Bones[RigidBoneId.UpperLegR].RotationDegrees, Is.GreaterThan(12f));
+            Assert.That(Mathf.Abs(pose.Bones[RigidBoneId.UpperArmL].RotationDegrees), Is.GreaterThanOrEqualTo(8f));
+            Assert.That(Mathf.Abs(pose.Bones[RigidBoneId.UpperArmR].RotationDegrees), Is.GreaterThanOrEqualTo(8f));
+            Assert.That(Mathf.Sign(pose.Bones[RigidBoneId.UpperArmL].RotationDegrees),
+                Is.EqualTo(-Mathf.Sign(pose.Bones[RigidBoneId.UpperArmR].RotationDegrees)));
+        }
+
+        [Test]
+        public void RunCycle_MatchesTheSixPoseLeanHighKneeAndLevelHeadSilhouette()
+        {
+            var poses = new[] { 0f, .25f, .5f, .75f }
+                .Select(time => RigidMotionLibrary.Sample(RigidMotionState.Run, time)).ToArray();
+
+            foreach (var pose in poses)
+            {
+                var torso = pose.Bones[RigidBoneId.Torso].RotationDegrees;
+                var head = pose.Bones[RigidBoneId.Head].RotationDegrees;
+                Assert.That(torso, Is.LessThanOrEqualTo(-22f));
+                Assert.That(Mathf.Abs(torso + head), Is.LessThanOrEqualTo(2f));
+            }
+
+            Assert.That(Mathf.Abs(poses[1].Bones[RigidBoneId.UpperLegL].RotationDegrees -
+                                  poses[1].Bones[RigidBoneId.UpperLegR].RotationDegrees), Is.GreaterThan(60f));
+            Assert.That(Mathf.Abs(poses[3].Bones[RigidBoneId.UpperLegL].RotationDegrees -
+                                  poses[3].Bones[RigidBoneId.UpperLegR].RotationDegrees), Is.GreaterThan(60f));
+        }
+
+        [Test]
         public void Attack_ProjectsWeaponHandTowardFacingDirection()
         {
             var windup = RigidMotionLibrary.Sample(RigidMotionState.Attack, .24f);
@@ -408,6 +442,34 @@ namespace LinhGioi.Character.Tests
         }
 
         [Test]
+        public void JumpAndRoll_FoldBothLegsIntoTheSixPoseTuckSilhouette()
+        {
+            var jumpApex = RigidMotionLibrary.Sample(RigidMotionState.Jump, .52f);
+            var rollTuck = RigidMotionLibrary.Sample(RigidMotionState.Roll, .5f);
+
+            foreach (var pose in new[] { jumpApex, rollTuck })
+            {
+                Assert.That(pose.Bones[RigidBoneId.UpperLegL].RotationDegrees, Is.GreaterThan(88f));
+                Assert.That(pose.Bones[RigidBoneId.UpperLegR].RotationDegrees, Is.GreaterThan(82f));
+                Assert.That(pose.Bones[RigidBoneId.LowerLegL].RotationDegrees, Is.LessThan(-128f));
+                Assert.That(pose.Bones[RigidBoneId.LowerLegR].RotationDegrees, Is.LessThan(-124f));
+            }
+        }
+
+        [Test]
+        public void JumpApex_CurlsTheUpperBodyTowardTheRaisedKnees()
+        {
+            var apex = RigidMotionLibrary.Sample(RigidMotionState.Jump, .52f);
+            var torso = apex.Bones[RigidBoneId.Torso].RotationDegrees;
+            var head = apex.Bones[RigidBoneId.Head].RotationDegrees;
+
+            Assert.That(torso, Is.LessThanOrEqualTo(-28f));
+            Assert.That(torso + head, Is.InRange(-20f, -8f));
+            Assert.That(apex.Bones[RigidBoneId.UpperArmL].RotationDegrees, Is.GreaterThanOrEqualTo(84f));
+            Assert.That(apex.Bones[RigidBoneId.LowerArmL].RotationDegrees, Is.LessThanOrEqualTo(-116f));
+        }
+
+        [Test]
         public void PilotBodyUnderlayer_FollowsTorsoChainInsteadOfDriftingFromNeck()
         {
             var catalog = RigidOutfitPilotCatalog.Create(_ => _sprite);
@@ -431,7 +493,7 @@ namespace LinhGioi.Character.Tests
         }
 
         [Test]
-        public void PilotSource_HeadAndBodyRectanglesOverlapAtLeastFortyPixelsAtNeck()
+        public void PilotSource_HeadAndBodyRectanglesOverlapAtLeastSixtyFourPixelsAtNeck()
         {
             var catalog = RigidOutfitPilotCatalog.LoadFromResources();
 
@@ -450,7 +512,24 @@ namespace LinhGioi.Character.Tests
             var headBottom = bind[headPart.TargetBone].y + headFit.LocalPosition.y - headPart.Sprite.rect.height / (2f * headPart.Sprite.pixelsPerUnit);
             var overlapPixels = (bodyTop - headBottom) * RigidOutfitPilotCatalog.PixelsPerUnit;
 
-            Assert.That(overlapPixels, Is.GreaterThanOrEqualTo(40f), character.Gender);
+            Assert.That(overlapPixels, Is.GreaterThanOrEqualTo(64f), character.Gender);
+        }
+
+        [Test]
+        public void PilotSource_UpperLegsRenderInsideTheLowerTunicAtTheHip()
+        {
+            var catalog = RigidOutfitPilotCatalog.Create(_ => _sprite);
+
+            foreach (var character in new[] { catalog.Male, catalog.Female })
+            {
+                var lowerTunic = character.Outfit.Parts.Single(part => part.PartId == "tunic.lower");
+                foreach (var partId in new[] { "leg.near.upper", "leg.far.upper" })
+                {
+                    var upperLeg = character.Body.Parts.Single(part => part.PartId == partId);
+                    Assert.That(upperLeg.SortingOrder, Is.LessThan(lowerTunic.SortingOrder),
+                        character.Gender + ":" + partId);
+                }
+            }
         }
 
         [Test]

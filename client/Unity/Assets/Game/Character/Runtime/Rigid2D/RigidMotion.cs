@@ -87,27 +87,39 @@ namespace LinhGioi.Character
         private static RigidMotionPose Idle(float t)
         {
             var breath = Mathf.Sin(t * Mathf.PI * 2f);
-            return Pose(new Vector2(0f, breath * .018f),
-                (RigidBoneId.Head, 1.2f * breath),
-                (RigidBoneId.UpperArmL, -3f + breath),
-                (RigidBoneId.UpperArmR, 3f - breath));
+            var near = SolveLeg(.20f, .435f - 2.30f, 0f);
+            var far = SolveLeg(-.20f, .435f - 2.30f, 0f);
+            return Pose(Vector2.zero,
+                (RigidBoneId.Torso, .35f * breath),
+                (RigidBoneId.Head, 3f + .85f * breath),
+                (RigidBoneId.UpperArmL, 10f + breath),
+                (RigidBoneId.LowerArmL, 10f),
+                (RigidBoneId.UpperArmR, -10f - breath),
+                (RigidBoneId.LowerArmR, 12f),
+                (RigidBoneId.UpperLegL, near.Upper),
+                (RigidBoneId.LowerLegL, near.Lower),
+                (RigidBoneId.FootL, near.Foot),
+                (RigidBoneId.UpperLegR, far.Upper),
+                (RigidBoneId.LowerLegR, far.Lower),
+                (RigidBoneId.FootR, far.Foot));
         }
 
         private static RigidMotionPose Locomotion(float t, bool running)
         {
             // Each foot follows one shared trajectory. During stance its target stays on the
             // ground line; two-bone IK derives hip/knee angles from canonical limb lengths.
-            var stride = running ? .66f : .34f;
-            var lift = running ? .68f : .30f;
-            var rootY = (running ? -.22f : -.10f) +
-                (running ? .075f : .04f) * (.5f - .5f * Mathf.Cos(t * Mathf.PI * 4f));
-            var near = GaitLeg(t, stride, lift, rootY);
-            var far = GaitLeg(Mathf.Repeat(t + .5f, 1f), stride, lift, rootY);
-            var lean = running ? -15f : -4f;
-            var armRange = running ? 40f : 18f;
+            var stride = running ? .82f : .34f;
+            var lift = running ? 1.10f : .30f;
+            var rootY = (running ? -.24f : -.10f) +
+                (running ? .09f : .04f) * (.5f - .5f * Mathf.Cos(t * Mathf.PI * 4f));
+            var stanceFraction = running ? .44f : .5f;
+            var near = GaitLeg(t, stride, lift, rootY, stanceFraction);
+            var far = GaitLeg(Mathf.Repeat(t + .5f, 1f), stride, lift, rootY, stanceFraction);
+            var lean = running ? -24f : -4f;
+            var armRange = running ? 48f : 18f;
             return Pose(new Vector2(0f, rootY),
                 (RigidBoneId.Torso, lean),
-                (RigidBoneId.Head, -lean * .35f),
+                (RigidBoneId.Head, running ? -lean : -lean * .75f),
                 (RigidBoneId.UpperArmL, -near.TargetX / stride * armRange),
                 (RigidBoneId.LowerArmL, running ? Cyclic(t, 48f, 72f, 82f, 56f) : Cyclic(t, 18f, 30f, 34f, 22f)),
                 (RigidBoneId.WristL, running ? Cyclic(t, -10f, -18f, -8f, -14f) : -5f),
@@ -138,21 +150,27 @@ namespace LinhGioi.Character
             var far = SolveLeg(
                 Keyed(t, (0f, 0f), (.14f, -.27f), (.28f, -.12f), (.52f, -.12f), (.76f, .22f), (.90f, .27f), (1f, 0f)),
                 Mathf.Lerp(groundY, -1.02f, airborne), -12f * airborne);
+            var upperLegL = Mathf.LerpAngle(near.Upper, 108f, airborne);
+            var lowerLegL = Mathf.LerpAngle(near.Lower, -146f, airborne);
+            var footL = Mathf.LerpAngle(near.Foot, 44f, airborne);
+            var upperLegR = Mathf.LerpAngle(far.Upper, 100f, airborne);
+            var lowerLegR = Mathf.LerpAngle(far.Lower, -142f, airborne);
+            var footR = Mathf.LerpAngle(far.Foot, 40f, airborne);
             return Pose(new Vector2(Keyed(t, (0f, 0f), (.28f, .04f), (.52f, .16f), (.76f, .29f), (1f, .34f)), rootY),
-                (RigidBoneId.Torso, -8f * crouch + 5f * airborne),
-                (RigidBoneId.Head, 3f * crouch - 2f * airborne),
-                (RigidBoneId.UpperArmL, -24f * crouch + 48f * airborne),
-                (RigidBoneId.LowerArmL, 40f * crouch + 24f * airborne),
+                (RigidBoneId.Torso, -8f * crouch - 32f * airborne),
+                (RigidBoneId.Head, 3f * crouch + 18f * airborne),
+                (RigidBoneId.UpperArmL, -24f * crouch + 88f * airborne),
+                (RigidBoneId.LowerArmL, 40f * crouch - 122f * airborne),
                 (RigidBoneId.WristL, -12f * airborne),
-                (RigidBoneId.UpperArmR, -18f * crouch + 38f * airborne),
-                (RigidBoneId.LowerArmR, 34f * crouch + 30f * airborne),
+                (RigidBoneId.UpperArmR, -18f * crouch + 82f * airborne),
+                (RigidBoneId.LowerArmR, 34f * crouch - 116f * airborne),
                 (RigidBoneId.WristR, -10f * airborne),
-                (RigidBoneId.UpperLegL, near.Upper),
-                (RigidBoneId.LowerLegL, near.Lower),
-                (RigidBoneId.FootL, near.Foot),
-                (RigidBoneId.UpperLegR, far.Upper),
-                (RigidBoneId.LowerLegR, far.Lower),
-                (RigidBoneId.FootR, far.Foot));
+                (RigidBoneId.UpperLegL, upperLegL),
+                (RigidBoneId.LowerLegL, lowerLegL),
+                (RigidBoneId.FootL, footL),
+                (RigidBoneId.UpperLegR, upperLegR),
+                (RigidBoneId.LowerLegR, lowerLegR),
+                (RigidBoneId.FootR, footR));
         }
 
         private static RigidMotionPose Attack(float t)
@@ -182,19 +200,19 @@ namespace LinhGioi.Character
             return Pose(new Vector2(t * .82f, rootY),
                 (RigidBoneId.Pelvis, turn),
                 (RigidBoneId.Torso, -28f * tuck),
-                (RigidBoneId.Head, -16f * tuck),
-                (RigidBoneId.UpperArmL, 62f * tuck),
-                (RigidBoneId.LowerArmL, -86f * tuck),
+                (RigidBoneId.Head, -6f * tuck),
+                (RigidBoneId.UpperArmL, 76f * tuck),
+                (RigidBoneId.LowerArmL, -112f * tuck),
                 (RigidBoneId.WristL, 18f * tuck),
-                (RigidBoneId.UpperArmR, 54f * tuck),
-                (RigidBoneId.LowerArmR, -78f * tuck),
+                (RigidBoneId.UpperArmR, 70f * tuck),
+                (RigidBoneId.LowerArmR, -106f * tuck),
                 (RigidBoneId.WristR, 14f * tuck),
-                (RigidBoneId.UpperLegL, 58f * tuck),
-                (RigidBoneId.LowerLegL, -112f * tuck),
-                (RigidBoneId.FootL, 42f * tuck),
-                (RigidBoneId.UpperLegR, 49f * tuck),
-                (RigidBoneId.LowerLegR, -104f * tuck),
-                (RigidBoneId.FootR, 38f * tuck));
+                (RigidBoneId.UpperLegL, 100f * tuck),
+                (RigidBoneId.LowerLegL, -142f * tuck),
+                (RigidBoneId.FootL, 48f * tuck),
+                (RigidBoneId.UpperLegR, 92f * tuck),
+                (RigidBoneId.LowerLegR, -136f * tuck),
+                (RigidBoneId.FootR, 44f * tuck));
         }
 
         private static RigidMotionPose Hit(float t)
@@ -207,23 +225,21 @@ namespace LinhGioi.Character
                 (RigidBoneId.UpperArmR, -18f * recoil));
         }
 
-        private static LegPose GaitLeg(float phase, float stride, float lift, float rootY)
+        private static LegPose GaitLeg(float phase, float stride, float lift, float rootY, float stanceFraction)
         {
             phase = Mathf.Repeat(phase, 1f);
             float x;
             float y;
-            if (phase < .5f)
+            if (phase < stanceFraction)
             {
-                var stance = Smooth01(phase * 2f);
+                var stance = Smooth01(phase / stanceFraction);
                 x = Mathf.Lerp(stride, -stride, stance);
                 y = .435f - (2.30f + rootY);
             }
             else
             {
-                var swing = Smooth01((phase - .5f) * 2f);
-                x = swing < .55f
-                    ? Mathf.Lerp(-stride, stride * .42f, Smooth01(swing / .55f))
-                    : Mathf.Lerp(stride * .42f, stride, Smooth01((swing - .55f) / .45f));
+                var swing = Smooth01((phase - stanceFraction) / (1f - stanceFraction));
+                x = Mathf.Lerp(-stride, stride, swing);
                 y = .435f + Mathf.Sin(swing * Mathf.PI) * lift - (2.30f + rootY);
             }
             var toePitch = phase < .12f ? Mathf.Lerp(-12f, 0f, phase / .12f) :
