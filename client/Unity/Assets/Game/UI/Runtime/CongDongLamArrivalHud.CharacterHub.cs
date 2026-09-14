@@ -20,6 +20,7 @@ namespace LinhGioi.UI
         private VisualElement _characterHubBody;
         private string _renderedCharacterHubClassId;
         private CharacterHubMode? _activeCharacterHubPreviewMode;
+        private readonly CharacterHubSelectionState _characterHubSelectionState = new CharacterHubSelectionState();
 
         private CharacterHubClassProfile ActiveCharacterHubProfile =>
             CharacterHubClassCatalog.Get(_scene.ActiveEquipmentClassId);
@@ -306,7 +307,8 @@ namespace LinhGioi.UI
                     var skill = profile.Skills[stageIndex * 3 + nodeIndex];
                     var nodeName = "Map01A Skill Node " + skill.Name;
                     var node = CreateHubPathNode(nodeName, skill.Name, skill.Level, skill.IconId,
-                        () => SelectSkillNode(nodeName, skill), stageIndex == 0 && nodeIndex == 0, skill.UseKiemSkillArt);
+                        () => SelectSkillNode(nodeName, skill),
+                        skill.Id == _characterHubSelectionState.SkillIdFor(profile), skill.UseKiemSkillArt);
                     _skillPathNodes.Add(node);
                     stage.Add(node);
                     if (nodeIndex < 2)
@@ -404,7 +406,8 @@ namespace LinhGioi.UI
                 var potential = profile.Potentials[potentialIndex];
                 diagram.Add(CreatePotentialNode("Map01A Potential Node " + potential.Name,
                     potential.Name, potential.Value, potential.IconId,
-                    positions[potentialIndex].x, positions[potentialIndex].y, potentialIndex == 2));
+                    positions[potentialIndex].x, positions[potentialIndex].y,
+                    potential.Name == _characterHubSelectionState.PotentialNameFor(profile)));
             }
             _potentialPanel.Add(diagram);
             var footer = InventoryRow("Map01A Potential Footer");
@@ -600,12 +603,14 @@ namespace LinhGioi.UI
 
         private void SelectSkillNode(string nodeName, CharacterHubSkillPreview skill)
         {
+            _characterHubSelectionState.SelectSkill(ActiveCharacterHubProfile, skill.Id);
             foreach (var node in _skillPathNodes) ApplyHubPathNodeSelection(node, node.name == nodeName);
             ShowSkillDetail(skill);
         }
 
         private void SelectPotentialNode(string nodeName, string title, string value, string iconId)
         {
+            _characterHubSelectionState.SelectPotential(ActiveCharacterHubProfile, title);
             foreach (var node in _potentialPathNodes) ApplyHubPathNodeSelection(node, node.name == nodeName);
             ShowPotentialDetail(title, value, iconId);
         }
@@ -665,11 +670,12 @@ namespace LinhGioi.UI
         {
             if (mode == CharacterHubMode.Skills)
             {
-                ShowSkillDetail(ActiveCharacterHubProfile.Skills[0]);
+                ShowSkillDetail(_characterHubSelectionState.SkillFor(ActiveCharacterHubProfile));
             }
             else if (mode == CharacterHubMode.Potential)
             {
-                ShowPotentialDetail("Sinh lực", "250", "vitality");
+                var potential = _characterHubSelectionState.PotentialFor(ActiveCharacterHubProfile);
+                ShowPotentialDetail(potential.Name, potential.Value, potential.IconId);
             }
             else
             {

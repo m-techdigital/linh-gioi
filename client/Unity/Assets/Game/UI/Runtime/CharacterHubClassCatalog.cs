@@ -68,6 +68,52 @@ namespace LinhGioi.UI
         public string SpiritSynergy { get; }
     }
 
+    public sealed class CharacterHubSelectionState
+    {
+        private readonly Dictionary<string, string> _skillByClass =
+            new Dictionary<string, string>(StringComparer.Ordinal);
+        private readonly Dictionary<string, string> _potentialByClass =
+            new Dictionary<string, string>(StringComparer.Ordinal);
+
+        public string SkillIdFor(CharacterHubClassProfile profile)
+        {
+            if (profile == null) throw new ArgumentNullException(nameof(profile));
+            if (_skillByClass.TryGetValue(profile.Id, out var skillId)
+                && profile.Skills.Any(skill => skill.Id == skillId)) return skillId;
+            return profile.Skills[0].Id;
+        }
+
+        public CharacterHubSkillPreview SkillFor(CharacterHubClassProfile profile)
+            => profile.Skills.First(skill => skill.Id == SkillIdFor(profile));
+
+        public string PotentialNameFor(CharacterHubClassProfile profile)
+        {
+            if (profile == null) throw new ArgumentNullException(nameof(profile));
+            if (_potentialByClass.TryGetValue(profile.Id, out var potentialName)
+                && profile.Potentials.Any(potential => potential.Name == potentialName)) return potentialName;
+            return profile.Potentials[Math.Min(2, profile.Potentials.Count - 1)].Name;
+        }
+
+        public CharacterHubPotentialPreview PotentialFor(CharacterHubClassProfile profile)
+            => profile.Potentials.First(potential => potential.Name == PotentialNameFor(profile));
+
+        public void SelectSkill(CharacterHubClassProfile profile, string skillId)
+        {
+            if (profile == null) throw new ArgumentNullException(nameof(profile));
+            if (!profile.Skills.Any(skill => skill.Id == skillId))
+                throw new ArgumentException("Skill does not belong to Character Hub class " + profile.Id, nameof(skillId));
+            _skillByClass[profile.Id] = skillId;
+        }
+
+        public void SelectPotential(CharacterHubClassProfile profile, string potentialName)
+        {
+            if (profile == null) throw new ArgumentNullException(nameof(profile));
+            if (!profile.Potentials.Any(potential => potential.Name == potentialName))
+                throw new ArgumentException("Potential does not belong to Character Hub class " + profile.Id, nameof(potentialName));
+            _potentialByClass[profile.Id] = potentialName;
+        }
+    }
+
     public static class CharacterHubClassCatalog
     {
         private static readonly string[] SharedHudIcons =
@@ -75,14 +121,17 @@ namespace LinhGioi.UI
             "attack", "run", "skill", "crest", "jump", "support", "character", "notice", "cinematic"
         };
 
-        private static readonly CharacterHubPotentialPreview[] BasePotentials =
+        private static CharacterHubPotentialPreview[] BasePotentials()
         {
-            new CharacterHubPotentialPreview("Công", "120", "attack"),
-            new CharacterHubPotentialPreview("Thủ", "118", "defense"),
-            new CharacterHubPotentialPreview("Sinh lực", "250", "vitality"),
-            new CharacterHubPotentialPreview("Linh lực", "96", "spirit"),
-            new CharacterHubPotentialPreview("Nhanh nhẹn", "110", "agility")
-        };
+            return new[]
+            {
+                new CharacterHubPotentialPreview("Công", "120", "attack"),
+                new CharacterHubPotentialPreview("Thủ", "118", "defense"),
+                new CharacterHubPotentialPreview("Sinh lực", "250", "vitality"),
+                new CharacterHubPotentialPreview("Linh lực", "96", "spirit"),
+                new CharacterHubPotentialPreview("Nhanh nhẹn", "110", "agility")
+            };
+        }
 
         private static CharacterHubSkillPreview[] SharedSkills(string classId, params string[] names)
         {
@@ -105,22 +154,22 @@ namespace LinhGioi.UI
             new CharacterHubClassProfile(
                 "vo", "Võ", "Áp sát · combo · phá giáp · phản đòn", "Đề xuất Võ · Công / Sinh lực",
                 SharedSkills("vo", "Liên Kích", "Phá Giáp", "Phản Đòn", "Chấn Kình", "Bộ Pháp", "Hộ Thể", "Đột Kích", "Kình Lực", "Quyền Ý"),
-                new[] { 0, 1, 3, 6 }, BasePotentials, "Thanh Vân Hồ hỗ trợ phòng thủ khi Võ áp sát."),
+                new[] { 0, 1, 3, 6 }, BasePotentials(), "Thanh Vân Hồ hỗ trợ phòng thủ khi Võ áp sát."),
             new CharacterHubClassProfile(
                 "kiem", "Kiếm", "Tốc độ · kiếm thuật · phản kích · cơ động", "Đề xuất Kiếm · Nhanh nhẹn / Công",
-                KiemSkills(), new[] { 0, 1, 5, 8 }, BasePotentials, "Thanh Vân Hồ giữ nhịp hồi phục giữa các chuỗi kiếm."),
+                KiemSkills(), new[] { 0, 1, 5, 8 }, BasePotentials(), "Thanh Vân Hồ giữ nhịp hồi phục giữa các chuỗi kiếm."),
             new CharacterHubClassProfile(
                 "phap", "Pháp", "Tầm xa · nguyên tố · diện rộng · khống chế", "Đề xuất Pháp · Linh lực / Công",
                 SharedSkills("phap", "Hỏa Thuật", "Băng Thuật", "Lôi Thuật", "Linh Thuật", "Kết Giới", "Trọng Lực", "Nguyên Tố", "Pháp Trận", "Tinh Thần"),
-                new[] { 0, 1, 4, 7 }, BasePotentials, "Thanh Vân Hồ bổ trợ kết giới và duy trì linh lực."),
+                new[] { 0, 1, 4, 7 }, BasePotentials(), "Thanh Vân Hồ bổ trợ kết giới và duy trì linh lực."),
             new CharacterHubClassProfile(
                 "co", "Cơ", "Tầm xa · cơ giới · bố trí · hỏa lực", "Đề xuất Cơ · Công / Nhanh nhẹn",
                 SharedSkills("co", "Cơ Nỏ", "Pháo Kích", "Tháp Cơ", "Cơ Lôi", "Linh Cơ", "Thiết Vệ", "Truy Kích", "Hỏa Tuyến", "Cơ Trận"),
-                new[] { 0, 1, 2, 7 }, BasePotentials, "Thanh Vân Hồ bảo hộ vị trí triển khai cơ giới."),
+                new[] { 0, 1, 2, 7 }, BasePotentials(), "Thanh Vân Hồ bảo hộ vị trí triển khai cơ giới."),
             new CharacterHubClassProfile(
                 "linh", "Linh", "Triệu hồi · hỗ trợ · khống chế · thanh tẩy", "Đề xuất Linh · Linh lực / Sinh lực",
                 SharedSkills("linh", "Triệu Linh", "Hồi Phục", "Linh Thuẫn", "Thanh Tẩy", "Linh Phù", "Trói Hồn", "Hộ Mệnh", "Cộng Hưởng", "Linh Giới"),
-                new[] { 0, 1, 2, 6 }, BasePotentials, "Thanh Vân Hồ cộng hưởng hồi phục và khống chế."),
+                new[] { 0, 1, 2, 6 }, BasePotentials(), "Thanh Vân Hồ cộng hưởng hồi phục và khống chế."),
         };
 
         public static IReadOnlyList<CharacterHubClassProfile> Profiles => Items;

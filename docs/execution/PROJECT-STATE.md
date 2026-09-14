@@ -1,3 +1,11 @@
+## Character Hub — khóa selection state theo class — 2026-09-15
+
+- Kỹ năng và Tiềm năng trước đây chỉ giữ selected state trên VisualElement hiện hành; rebuild UI khi đổi class luôn quay về node mặc định và không có model chứng minh state của hai class tách biệt.
+- `CharacterHubSelectionState` hiện lưu skill/potential selection theo `classId`, kiểm item thực sự thuộc profile trước khi nhận và khôi phục đúng node/detail khi quay lại class. Năm collection Tiềm năng là dữ liệu riêng từng profile nhưng vẫn dùng chung component/layout năm node.
+- Contract đã bỏ dòng cũ yêu cầu `*MixedLoadoutFitPreview`; selector chỉ được dùng catalog source-pose hợp lệ, cùng actor với map, không fallback renderer.
+- Gate: targeted state isolation `1/1`; `TwoDCharacterRuntimeStateTests` `32/32`; full EditMode `284 total / 283 passed / 0 failed / 1 ignored`; shared-skin `21/21`; no-3D/no-source/frozen pass. Player `build/map01a-character-hub-class-state-player-v1/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=46`; capture `build/map01a-character-hub-class-state-runtime-v1/pc/` đạt 9 frame và đã xem Kỹ năng/Tiềm năng không lệch layout.
+- Trạng thái `CONTINUE`: audit tiếp inventory/Linh thú class data và khả năng nạp pack; chưa claim hoàn tất goal 5 class.
+
 ## Source-pose exclusive — loại renderer cũ khỏi Player review — 2026-09-15
 
 - Audit sau feedback owner phát hiện checkpoint trước mới xóa renderer class tĩnh, nhưng launcher source-pose vẫn truyền `--lgo-vo-registered` và `--lgo-vo-registered-equipment`; `RefreshVoAvatarMode()` cũng có thể tiếp tục bật atlas/rig `Map01A Võ avatar` sau khi source-pose đã hiện. Đây là hai đường renderer sai còn sót, có thể làm hai actor chồng nhau hoặc quay lại presentation cũ.

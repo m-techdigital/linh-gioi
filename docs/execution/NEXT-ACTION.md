@@ -6,6 +6,7 @@
 ### Checkpoint hiện hành
 
 - Đã loại thêm hai đường renderer sai còn sót: launcher source-pose không còn khởi tạo registered-outfit; khi source-pose hoạt động, atlas/rig `Map01A Võ avatar` bị khóa `forceRenderingOff` và không được chạy tiếp nhánh presentation cũ.
+- Selected skill và selected potential nay được lưu riêng theo `classId`; rebuild cùng component tree sẽ khôi phục đúng node/detail của từng class. Collection dữ liệu Tiềm năng cũng tách instance theo profile.
 - Đã xóa `TwoDClassMixedLoadoutFitPreview`, class capture component/tool/test và bốn resource pack tĩnh Kiếm/Pháp/Cơ/Linh gây nhân vật rời thân. Validator hiện hành cấm đưa các đường này trở lại.
 - Màn Nhân vật chỉ render chính actor source-pose đang hoạt động trên map. Portrait giữ stage `400×428`; 10 slot neo hai rail `76 px`; icon lấy atlas UI rõ, không lấy crop renderer cũ.
 - Class selector chỉ bật khi có nhiều source-pose pack hợp lệ. Không có pack class thì giữ Võ; không tự dựng hoặc tiếp tục phát triển class.
@@ -24,4 +25,5 @@
 - Pose pack `12/12`; registered capture `19/19`; shared-skin `21/21`.
 - Shared-skin, no-3D, no-source-images và frozen diff pass.
 - Launcher `10/10`; `TwoDCharacterRuntimeStateTests` `31/31`; full EditMode `283 total / 282 passed / 0 failed / 1 ignored`; pose pack `12/12`; registered capture `19/19`; shared-skin `21/21`; no-3D/no-source/frozen pass. Player build `errors=0`, `warnings=46`.
+- Batch state theo class: targeted `1/1`; `TwoDCharacterRuntimeStateTests` `32/32`; full EditMode `284 total / 283 passed / 0 failed / 1 ignored`; Player class-state build `errors=0`, `warnings=46`; capture 9 frame đã xem.
 - Trạng thái: `CONTINUE`; chưa claim owner visual acceptance.

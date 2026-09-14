@@ -64,7 +64,7 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 - Character Hub dùng đúng một selector gọn trong title row, thứ tự `Võ → Kiếm → Pháp → Cơ → Linh`; selector không tạo tab thứ sáu, không đổi cấu trúc hai cột và luôn dùng được ở cả năm tab.
 - Đổi class chỉ thay data/preview trong cùng component tree. Tab đang mở được giữ nguyên và main/detail cập nhật trong cùng một lượt refresh.
 - Mỗi class giữ snapshot riêng cho slot đang chọn, trạng thái tháo/mặc và cấp của mười món. Chuyển class rồi quay lại phải khôi phục đúng snapshot; không dùng chung state vô tình giữa hai class.
-- Selector Character Hub dùng các pack `LGOClasses/*MixedLoadoutFitPreview` hiện có. Nó độc lập với `CycleSourcePoseClass`, không mở pose-review launcher và không tạo source art mới.
+- Selector Character Hub chỉ dùng catalog source-pose đã được launcher nạp và cùng actor với map. Class thiếu pack hợp lệ không được hiện; tuyệt đối không fallback sang `*MixedLoadoutFitPreview`, registered-outfit hoặc atlas/rig avatar cũ, và không tạo source art mới.
 - Kỹ năng/tiềm năng/linh thú là profile hiển thị riêng theo class trong cùng base; asset chưa có nguồn class-specific phải dùng icon provenance-backed dùng chung và copy trung thực, không giả thành asset final riêng của class.
 
 ### 1. Nhân vật — layout locked

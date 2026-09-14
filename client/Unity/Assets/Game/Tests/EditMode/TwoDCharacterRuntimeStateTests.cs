@@ -39,6 +39,31 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(profile.Skills.All(skill => !skill.UseKiemSkillArt), Is.True,
                         profile.Id + " must use provenance-backed shared icons instead of pretending Kiếm art belongs to another class.");
             }
+            for (var index = 1; index < profiles.Count; index++)
+                Assert.That(ReferenceEquals(profiles[index - 1].Potentials, profiles[index].Potentials), Is.False,
+                    "Potential collections must be class-owned data even while they reuse the shared five-node layout.");
+        }
+
+        [Test]
+        public void CharacterHubSelectionStateIsIsolatedPerClass()
+        {
+            var state = new CharacterHubSelectionState();
+            var vo = CharacterHubClassCatalog.Get("vo");
+            var kiem = CharacterHubClassCatalog.Get("kiem");
+
+            state.SelectSkill(vo, vo.Skills[4].Id);
+            state.SelectPotential(vo, vo.Potentials[1].Name);
+            state.SelectSkill(kiem, kiem.Skills[7].Id);
+            state.SelectPotential(kiem, kiem.Potentials[3].Name);
+
+            Assert.That(state.SkillIdFor(vo), Is.EqualTo(vo.Skills[4].Id));
+            Assert.That(state.PotentialNameFor(vo), Is.EqualTo(vo.Potentials[1].Name));
+            Assert.That(state.SkillIdFor(kiem), Is.EqualTo(kiem.Skills[7].Id));
+            Assert.That(state.PotentialNameFor(kiem), Is.EqualTo(kiem.Potentials[3].Name));
+            Assert.That(state.SkillIdFor(CharacterHubClassCatalog.Get("phap")),
+                Is.EqualTo(CharacterHubClassCatalog.Get("phap").Skills[0].Id));
+            Assert.That(state.PotentialNameFor(CharacterHubClassCatalog.Get("phap")),
+                Is.EqualTo(CharacterHubClassCatalog.Get("phap").Potentials[2].Name));
         }
 
         [Test]
