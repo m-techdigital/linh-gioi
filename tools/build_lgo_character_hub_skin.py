@@ -200,6 +200,23 @@ def build_potential_topology() -> Image.Image:
     ellipse(center, (220, 190), outline=(41, 126, 182, 92), line_width=1)
     ellipse(center, (203, 176), outline=(49, 145, 206, 95), line_width=1)
 
+    # Quiet rune tracks and cardinal ornaments give the shared orbit the same
+    # authored depth as the approved board without baking any class data into it.
+    for inset, start in ((12, 8), (20, 31), (30, 54)):
+        bounds = box((52 + inset, 44 + inset, 548 - inset, 476 - inset))
+        for quarter in range(4):
+            angle = start + quarter * 90
+            draw.arc(bounds, angle, angle + 43, fill=(52, 154, 217, 76), width=3 * scale)
+    for index in range(16):
+        angle = math.tau * index / 16
+        x = center[0] + math.cos(angle) * 212
+        y = center[1] + math.sin(angle) * 183
+        rune_size = 4 if index % 4 else 7
+        diamond = [(x, y - rune_size), (x + rune_size, y),
+                   (x, y + rune_size), (x - rune_size, y)]
+        draw.line([(round(px * scale), round(py * scale)) for px, py in diamond + [diamond[0]]],
+                  fill=(235, 174, 56, 150 if index % 4 else 225), width=max(2, scale))
+
     for index in range(24):
         angle = math.tau * index / 24
         x = center[0] + math.cos(angle) * 220
@@ -210,46 +227,72 @@ def build_potential_topology() -> Image.Image:
         ellipse((x, y), (radius + 3, radius + 3), outline=(224, 162, 53, 105), line_width=1)
 
     # Central meditation seal and silhouette are also part of the fixed template.
-    ellipse(center, (112, 112), fill=(2, 24, 42, 188), outline=(225, 164, 49, 200), line_width=1.5)
-    ellipse(center, (98, 98), outline=(48, 169, 245, 180), line_width=1.5)
-    ellipse(center, (78, 78), outline=(45, 151, 211, 90), line_width=1)
+    core_glow = Image.new("RGBA", size, (0, 0, 0, 0))
+    core_glow_draw = ImageDraw.Draw(core_glow)
+    core_glow_draw.ellipse(box((190, 150, 410, 370)), fill=(18, 137, 229, 55))
+    core_glow_draw.ellipse(box((254, 214, 346, 306)), fill=(255, 166, 34, 105))
+    image = Image.alpha_composite(image, core_glow.filter(ImageFilter.GaussianBlur(22 * scale)))
+    draw = ImageDraw.Draw(image)
+    ellipse(center, (112, 112), fill=(2, 20, 38, 210), outline=(225, 164, 49, 220), line_width=1.5)
+    ellipse(center, (104, 104), outline=(62, 187, 255, 205), line_width=1.5)
+    ellipse(center, (96, 96), outline=(24, 105, 168, 150), line_width=1)
+    ellipse(center, (78, 78), outline=(229, 169, 55, 105), line_width=1)
     for angle in range(0, 360, 45):
         radians = math.radians(angle)
         line([(center[0], center[1]),
               (center[0] + math.cos(radians) * 92, center[1] + math.sin(radians) * 92)],
              (43, 151, 216, 76), 1)
 
-    aura = (55, 185, 255, 225)
-    ink = (2, 22, 37, 252)
-    cloth = (5, 48, 76, 250)
-    ellipse((300, 202), (17, 21), fill=ink, outline=aura, line_width=2)
-    torso = [(269, 226), (254, 282), (278, 312), (300, 296), (322, 312), (346, 282), (331, 226), (312, 213), (288, 213)]
+    aura = (67, 191, 255, 235)
+    aura_soft = (26, 112, 178, 190)
+    energy = (255, 181, 48, 252)
+    ink = (1, 15, 28, 255)
+    cloth = (3, 37, 61, 255)
+    # Head, tied hair and shoulder mantle form one readable silhouette at the
+    # actual in-game size instead of a collection of unrelated body strokes.
+    hair = [(278, 197), (284, 181), (294, 188), (300, 176), (306, 188),
+            (318, 183), (322, 200), (314, 212), (286, 212)]
+    draw.polygon([(x * scale, y * scale) for x, y in hair], fill=ink)
+    ellipse((300, 203), (17, 21), fill=ink, outline=aura, line_width=1.5)
+    torso = [(284, 216), (263, 230), (252, 282), (276, 310), (300, 296),
+             (324, 310), (348, 282), (337, 230), (316, 216)]
     draw.polygon([(x * scale, y * scale) for x, y in torso], fill=cloth)
-    line(torso + [torso[0]], aura, 2)
+    line(torso + [torso[0]], aura_soft, 5)
+    line(torso + [torso[0]], aura, 1.5)
     for points, outer_width, inner_width in (
-        ([(275, 236), (236, 258), (218, 285), (240, 294)], 12, 7),
-        ([(325, 236), (364, 258), (382, 285), (360, 294)], 12, 7),
-        ([(282, 292), (243, 316), (214, 318), (248, 332), (292, 323)], 24, 18),
-        ([(318, 292), (357, 316), (386, 318), (352, 332), (308, 323)], 24, 18),
+        ([(274, 234), (246, 248), (220, 276), (237, 291), (265, 277)], 13, 8),
+        ([(326, 234), (354, 248), (380, 276), (363, 291), (335, 277)], 13, 8),
+        ([(280, 292), (248, 311), (214, 318), (246, 335), (294, 324)], 26, 19),
+        ([(320, 292), (352, 311), (386, 318), (354, 335), (306, 324)], 26, 19),
     ):
         line(points, aura, outer_width)
         line(points, ink, inner_width)
-    lap = [(212, 319), (248, 339), (300, 328), (352, 339), (388, 319), (348, 348), (252, 348)]
+    lap = [(210, 318), (246, 343), (300, 331), (354, 343), (390, 318),
+           (365, 348), (326, 354), (300, 346), (274, 354), (235, 348)]
     draw.polygon([(x * scale, y * scale) for x, y in lap], fill=ink)
+    line(lap + [lap[0]], aura_soft, 5)
     line(lap + [lap[0]], aura, 1.5)
     meridian = [(300, 225), (300, 246), (300, 267), (300, 289), (300, 312)]
-    line(meridian, (255, 180, 40, 245), 2)
-    line([(300, 245), (275, 256), (253, 282)], (255, 180, 40, 210), 1.5)
-    line([(300, 245), (325, 256), (347, 282)], (255, 180, 40, 210), 1.5)
+    line(meridian, energy, 2)
+    line([(300, 245), (275, 256), (253, 282)], (255, 180, 40, 220), 1.5)
+    line([(300, 245), (325, 256), (347, 282)], (255, 180, 40, 220), 1.5)
+    line([(275, 282), (300, 300), (325, 282)], (255, 180, 40, 175), 1)
     for point in meridian:
-        ellipse(point, (8, 8), fill=(255, 150, 25, 45))
+        ellipse(point, (10, 10), fill=(255, 150, 25, 55))
         ellipse(point, (4, 4), fill=(255, 181, 42, 255), outline=(255, 232, 154, 245), line_width=1)
 
     for cx, cy in POTENTIAL_NODE_CENTERS:
         # Complete node ring, value box and add box are baked into this one template.
+        node_glow = Image.new("RGBA", size, (0, 0, 0, 0))
+        node_glow_draw = ImageDraw.Draw(node_glow)
+        node_glow_draw.ellipse(box((cx - 62, cy - 62, cx + 62, cy + 62)),
+                               outline=(255, 178, 42, 105), width=7 * scale)
+        image = Image.alpha_composite(image, node_glow.filter(ImageFilter.GaussianBlur(7 * scale)))
+        draw = ImageDraw.Draw(image)
         ellipse((cx, cy), (61, 61), outline=(2, 11, 20, 248), line_width=7)
         ellipse((cx, cy), (58, 58), outline=(238, 176, 60, 230), line_width=2)
         ellipse((cx, cy), (51, 51), outline=(59, 185, 255, 190), line_width=1.5)
+        ellipse((cx, cy), (45, 45), fill=(2, 28, 52, 85), outline=(28, 116, 191, 155), line_width=1)
         for dx, dy in ((-69, 0), (69, 0), (0, -69), (0, 69)):
             if dx:
                 line([(cx + dx - 7, cy), (cx + dx + 7, cy)], (244, 184, 65, 220), 2)
