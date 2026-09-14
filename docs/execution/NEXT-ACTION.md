@@ -1,3 +1,9 @@
+## Active — screen Nhân vật theo canonical design, chặn xử lý lan man — 2026-09-14
+
+`CONTINUE`. Quy trình và layout contract hiện hành là `docs/design/LGO-MAP01A-CHARACTER-HUB-SCREEN-CONTRACT-v1.0.md`. Năm screen có đúng một canonical design trong `redesign-v4-five-tabs`; thứ tự khóa là `Nhân vật → Rương đồ → Kỹ năng → Tiềm năng → Linh thú`. Mobile/tablet giữ composition hai cột như design và scale theo viewport, không reflow/xếp detail xuống dưới.
+
+Chỉ được xử lý **Nhân vật** trong batch hiện tại. Audit và triển khai theo shell → title/tab → main/detail geometry → full-body + 10 slot → equipment thumbnail asset → typography/copy. Chỉ build/capture sau khi screen thành một cụm hoàn chỉnh; sau đó đối chiếu một lượt PC 1600×900, mobile landscape 1600×720 và tablet 1024×768. Không sửa Rương đồ hoặc ba tab sau trước gate Nhân vật; không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+
 ## Next — sau khi sửa letterbox ảnh Linh thú — 2026-09-14
 
 `CONTINUE`. Player hiện hành: `build/map01a-spirit-pet-crop-player-v1/LinhGioiOnline.app`; evidence năm tab: `build/map01a-spirit-pet-crop-runtime-v1/`. Giữ crop provenance-backed 1024×704 và không khôi phục canvas vuông 1024×1024 làm chủ thể nhỏ lại.

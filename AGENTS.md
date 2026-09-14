@@ -89,6 +89,12 @@ Do not change these without explicit approval and a contract-change task:
 
 ## Runtime / Visual Rules
 
+- Screen-by-screen design gate — owner lock 2026-09-14:
+  - Character hub phải theo `docs/design/LGO-MAP01A-CHARACTER-HUB-SCREEN-CONTRACT-v1.0.md`. Mỗi screen có đúng một canonical design; evidence/runtime screenshot không được trở thành design song song.
+  - Thứ tự bắt buộc là `Nhân vật → Rương đồ → Kỹ năng → Tiềm năng → Linh thú`. Chỉ một screen được active. Không sửa screen kế tiếp khi screen hiện hành chưa qua test, Player visual review PC/mobile/tablet và frozen audit.
+  - Audit và sửa theo thứ tự `shell → vùng lớn/cột → hierarchy → asset → typography/copy`. Không bắt đầu bằng vi chỉnh pixel/font/button riêng lẻ và không build/capture sau từng thay đổi nhỏ.
+  - PC, mobile landscape và tablet giữ cùng composition hai cột của canonical design; scale toàn UI theo viewport, không reflow thành cột xếp dọc. Khác biệt touch chỉ thuộc input/hit state, không đổi hierarchy hoặc tỷ lệ modal.
+  - Nếu screen chưa có canonical design, scenario/state/interaction và asset gate thì chỉ được tạo/hoàn thiện design contract; chưa được triển khai runtime. Asset thiếu cần board/brief và review trước khi nối; không dùng placeholder/glyph/crop tối/ảnh ngẫu nhiên làm final.
 - Design-first, theo yêu cầu owner 2026-09-07: trước khi triển khai màn/UI/layout, nhân vật, skill, hành trang, vật phẩm hoặc map, phải chỉ ra design/demo cụ thể cùng kịch bản, trạng thái và tương tác cần hỗ trợ. Có mẫu phù hợp thì reuse; thiếu mẫu thì tạo design/demo trước, không tự xây theo cảm giác.
 - Bám kịch bản gốc và `docs/02-GDD.md`: Linh Thành là trung tâm, social city và Âm Giới Xâm Lăng là hướng dài hạn. Không biến sân luyện kỹ thuật thành đích sản phẩm hoặc tự mở hệ thống ngoài roadmap.
 - Demo mới phải phân biệt rõ draft/đã duyệt và phần runtime hiện có/đề xuất; không tự coi concept là gameplay đã triển khai. Các màn cùng loại dùng base chung; chỉ tạo ngoại lệ khi có design và evidence cụ thể.

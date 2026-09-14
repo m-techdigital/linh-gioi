@@ -1,3 +1,11 @@
+## Map01A — khóa quy trình một design/một screen — 2026-09-14
+
+- Owner yêu cầu dừng chỉnh UI rời rạc. Contract mới `docs/design/LGO-MAP01A-CHARACTER-HUB-SCREEN-CONTRACT-v1.0.md` ánh xạ đúng một canonical design cho từng screen và khóa thứ tự `Nhân vật → Rương đồ → Kỹ năng → Tiềm năng → Linh thú`.
+- Canvas chung lấy trực tiếp từ bộ đã duyệt 1672×941: shell 1098×724, body hai cột 600/448 và gap 12. PC/mobile landscape/tablet giữ cùng composition bằng scale; không reflow/xếp detail xuống dưới.
+- Batch active chỉ là screen Nhân vật. Kế hoạch triển khai nằm ở `docs/superpowers/plans/2026-09-14-map01a-character-screen-realignment.md`; chưa sửa runtime trong checkpoint quy trình này.
+- Board 10 equipment icon đã tạo theo canonical screen. Output alpha lần đầu bị loại vì mất mảng vật liệu; candidate hiện hành được kiểm trên nền navy tại `build/map01a-character-icon-design-v1/character-equipment-icons-grabcut-v2-on-navy.png`. Chưa nối runtime trước khi hoàn tất manifest/provenance và test asset.
+- Không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+
 ## Map01A — khóa layout tổng cho character hub năm tab — 2026-09-14
 
 - Owner yêu cầu dừng chỉnh lẻ vài pixel và xử lý layout từ tổng quan. Đối chiếu trực tiếp Player với năm ảnh đã duyệt trong `redesign-v4-five-tabs` cho thấy ba sai lệch gốc: modal rộng 1280 px, tỷ lệ cột 820/340 và hàng tab 5×128 px chỉ chiếm nửa khung.
