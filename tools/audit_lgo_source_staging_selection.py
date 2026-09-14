@@ -96,21 +96,30 @@ def _is_quarantined_reference(reference: str) -> bool:
     return "rejected-evidence" in {part.lower() for part in Path(str(reference)).parts}
 
 
-def _selected_entries(selection: dict) -> list[tuple[str, str, str]]:
-    slots = selection.get("slots", selection)
+def _selected_entries(selection: dict) -> tuple[list[tuple[str, str, str]], list[str]]:
+    slots = selection.get("slots")
+    if not isinstance(slots, dict):
+        return [], ["selection must contain an object-valued slots field"]
     entries = []
+    errors = []
     for slot, poses in slots.items():
+        if not isinstance(poses, dict):
+            errors.append(f"selection slot {slot} must contain an object of poses")
+            continue
         for pose, relative in poses.items():
+            if not isinstance(relative, str) or not relative.strip():
+                errors.append(f"selection {slot}/{pose} must contain a non-empty path")
+                continue
             entries.append((slot, pose, relative))
-    return entries
+    return entries, errors
 
 
 def audit_selection(source_root: Path | str, selection: dict) -> dict:
     source_root = Path(source_root).resolve()
     index = collect_rejection_index(source_root)
-    failures = []
+    entries, failures = _selected_entries(selection)
     records = []
-    for slot, pose, relative in _selected_entries(selection):
+    for slot, pose, relative in entries:
         directory = _directory_from_reference(relative, source_root)
         record = {
             "slot": slot,

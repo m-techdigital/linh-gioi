@@ -113,7 +113,8 @@ def execution_blocker_owner_note(blocker: str) -> str:
     if blocker == "BLOCKED_SPINE_TOOLING":
         return (
             "Trial 4.3.26 và Mix and Match evaluation đã chạy; cần provision/kích hoạt Spine Professional 4.3.x. "
-            "Source admission LGO thật cũng đang thiếu base nam/nữ layered được duyệt và source áo Pháp Lv1 có tay. "
+            "Hai candidate source vừa tạo đã bị reject bằng visual audit; vẫn thiếu base nam/nữ layered được duyệt "
+            "và source áo Pháp Lv1 có tay. "
             "Chỉ tích hợp runtime 4.3 vào client/Unity và chạy Player proof khi cả license và source hợp lệ đều có."
         )
     if blocker == "KRITA_AUTOMATED_REOPEN_EXPORT_BLOCKED":

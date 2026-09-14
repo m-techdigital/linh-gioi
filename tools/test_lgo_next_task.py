@@ -28,6 +28,8 @@ class LgoNextTaskTests(unittest.TestCase):
         self.assertIn("client/Unity", note)
         self.assertIn("base nam/nữ layered", note)
         self.assertIn("áo Pháp Lv1 có tay", note)
+        self.assertIn("candidate source", note)
+        self.assertIn("reject", note)
         self.assertNotIn("Krita", note)
 
     def test_native_authoring_capability_blocker_stops_ready_advice(self):

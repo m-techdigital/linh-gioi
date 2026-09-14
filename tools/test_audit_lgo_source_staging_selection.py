@@ -156,6 +156,21 @@ class SourceStagingSelectionAuditTests(unittest.TestCase):
             report["failures"],
         )
 
+    def test_rejected_tombstone_metadata_cannot_crash_or_pass_as_selection(self):
+        selection = {
+            "status": "REJECTED_SOURCE_MOVED",
+            "runtimeEligible": False,
+            "evidencePath": str(self.root.parent / "rejected-evidence" / "bad-source"),
+        }
+
+        report = audit_selection(self.root, selection)
+
+        self.assertEqual(report["status"], "SOURCE_STAGING_SELECTION_REJECTED")
+        self.assertIn(
+            "selection must contain an object-valued slots field",
+            report["failures"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
