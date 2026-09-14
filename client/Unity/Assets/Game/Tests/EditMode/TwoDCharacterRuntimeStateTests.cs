@@ -413,11 +413,19 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Potential Orbit"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Potential Diagram").style.height.value.value, Is.LessThanOrEqualTo(400),
                     "Potential diagram and recommendation must fit inside the shared modal shell.");
+                Assert.That(root.Q<Button>("Map01A Potential Node Sinh lực").ClassListContains("lgo-potential-node"), Is.True);
+                Assert.That(root.Q<VisualElement>("Map01A Potential Node Sinh lực Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01APotentialIconSprite("vitality")));
+                Assert.That(root.Q<VisualElement>("Map01A Potential Core Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01APotentialIconSprite("core")));
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
                     "Map01A must not create local fake potential progression before the real state contract exists.");
+                Assert.That(root.Q<Button>("Map01A Potential Reset").enabledSelf, Is.False);
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Node Công"));
                 Assert.That(hubDetailName.text, Is.EqualTo("Công"),
                     "Selecting a potential node must update detail-right without mutating progression state.");
+                Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01APotentialIconSprite("attack")));
                 StringAssert.DoesNotContain("state", modalSubtitle.text);
                 StringAssert.DoesNotContain("local", hubDetailBody.text);
                 StringAssert.DoesNotContain("state", hubDetailBody.text);

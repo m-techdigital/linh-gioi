@@ -525,6 +525,23 @@ namespace LinhGioi.UI
             node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 52;
         }
 
+        private static void ApplyLgoPotentialNode(Button node)
+        {
+            node.AddToClassList("lgo-potential-node");
+            node.text = string.Empty;
+            node.style.width = node.style.minWidth = node.style.maxWidth = 124;
+            node.style.height = node.style.minHeight = node.style.maxHeight = 124;
+            node.style.flexBasis = 124;
+            node.style.flexGrow = node.style.flexShrink = 0;
+            node.style.paddingLeft = node.style.paddingRight = 4;
+            node.style.paddingTop = node.style.paddingBottom = 4;
+            node.style.flexDirection = FlexDirection.Column;
+            node.style.alignItems = Align.Center;
+            node.style.justifyContent = Justify.Center;
+            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 62;
+            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 62;
+        }
+
         private static void ApplyLgoInventorySearchField(TextField field, bool touch)
         {
             field.AddToClassList(LgoInventorySearchFieldClass);

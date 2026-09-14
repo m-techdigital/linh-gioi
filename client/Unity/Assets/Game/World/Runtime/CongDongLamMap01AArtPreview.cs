@@ -210,12 +210,14 @@ namespace LinhGioi.World
         private readonly Dictionary<string, Sprite> _map01ACharacterEquipmentIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ABagCategoryIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ASkillIcons = new Dictionary<string, Sprite>();
+        private readonly Dictionary<string, Sprite> _map01APotentialIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01AHudIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ANpcSprites = new Dictionary<string, Sprite>();
         private bool _map01AItemIconsLoaded;
         private bool _map01ACharacterEquipmentIconsLoaded;
         private bool _map01ABagCategoryIconsLoaded;
         private bool _map01ASkillIconsLoaded;
+        private bool _map01APotentialIconsLoaded;
         private bool _map01AHudIconsLoaded;
         private TwoDClassMixedLoadoutFitPreview _classFitPreview;
         private string _classFitPreviewId = "kiem";
@@ -332,6 +334,13 @@ namespace LinhGioi.World
             EnsureMap01AIconAtlasLoaded(ref _map01ASkillIconsLoaded, _map01ASkillIcons,
                 "LGOMaps/CongDongLamMap01ASkillIcons/", "map01a-skill-icons", "map01a-skill-icons-v1");
             return _map01ASkillIcons.TryGetValue(iconId, out var sprite) ? sprite : null;
+        }
+
+        public Sprite GetMap01APotentialIconSprite(string iconId)
+        {
+            EnsureMap01AIconAtlasLoaded(ref _map01APotentialIconsLoaded, _map01APotentialIcons,
+                "LGOMaps/CongDongLamMap01APotentialIcons/", "map01a-potential-icons", "map01a-potential-icons-v1");
+            return _map01APotentialIcons.TryGetValue(iconId, out var sprite) ? sprite : null;
         }
 
         private void EnsureMap01AIconAtlasLoaded(ref bool loaded, Dictionary<string, Sprite> sprites,
@@ -2211,10 +2220,14 @@ namespace LinhGioi.World
             var skills = Path.Combine(directory, "skills.png");
             CaptureScreenPng(skills);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Main Tab"));
-            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Node Công"));
             yield return null;
             yield return new WaitForEndOfFrame();
             var potential = Path.Combine(directory, "potential.png");
+            var potentialDefault = Path.Combine(directory, "potential-default.png");
+            CaptureScreenPng(potentialDefault);
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Node Công"));
+            yield return null;
+            yield return new WaitForEndOfFrame();
             CaptureScreenPng(potential);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Spirit Pet Main Tab"));
             yield return null;
@@ -2223,7 +2236,7 @@ namespace LinhGioi.World
             CaptureScreenPng(spiritPet);
             var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(bagSearch)
                 && File.Exists(bagSearchSelected)
-                && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potential) && File.Exists(spiritPet)
+                && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potentialDefault) && File.Exists(potential) && File.Exists(spiritPet)
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
@@ -2231,7 +2244,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frames\": [\"character-info.png\", \"bag.png\", \"bag-search-binh-mau.png\", \"bag-search-binh-mau-selected.png\", \"skills-default.png\", \"skills.png\", \"potential.png\", \"spirit-pet.png\"]\n"
+                + "  \"frames\": [\"character-info.png\", \"bag.png\", \"bag-search-binh-mau.png\", \"bag-search-binh-mau-selected.png\", \"skills-default.png\", \"skills.png\", \"potential-default.png\", \"potential.png\", \"spirit-pet.png\"]\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);

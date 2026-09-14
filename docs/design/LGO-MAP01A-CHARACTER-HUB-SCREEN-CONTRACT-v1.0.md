@@ -1,7 +1,7 @@
 # Map01A character hub — canonical screen contract v1.0
 
 Ngày khóa: 2026-09-14  
-Trạng thái: **OWNER_APPROVED_DESIGN_SET / CHARACTER_BAG_SKILLS_LAYOUT_LOCKED / POTENTIAL_ACTIVE**
+Trạng thái: **OWNER_APPROVED_DESIGN_SET / FOUR_SCREENS_LAYOUT_LOCKED / SPIRIT_PET_ACTIVE**
 
 ## Mục đích
 
@@ -17,8 +17,8 @@ Thư mục nguồn đã duyệt:
 | 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** — evidence v5, không vi chỉnh lại |
 | 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** — evidence v4, không vi chỉnh lại |
 | 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** — evidence v4, không vi chỉnh lại |
-| 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | **ACTIVE** — screen duy nhất được audit/plan tiếp |
-| 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | Chờ Tiềm năng đạt gate |
+| 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | **LAYOUT_LOCKED** — evidence v1, không vi chỉnh lại |
+| 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | **ACTIVE** — screen duy nhất được audit/plan tiếp |
 
 Các demo cũ trong thư mục cha là tài liệu lịch sử. Chúng không được dùng để quyết định layout hoặc mở lại hệ tab/cột cũ.
 
@@ -92,4 +92,4 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ## Gate hiện hành
 
-Screen **Nhân vật** đã qua gate layout bằng Player v5. Screen **Rương đồ** đã qua gate layout bằng Player v4. Screen **Kỹ năng** đã qua gate layout bằng Player v3/evidence v4: ba profile giữ cùng composition, rail ba loại, graph 3×3, dải kỹ năng trang bị toàn chiều rộng và detail-right có default/selected evidence; atlas icon vẫn ở trạng thái review mỹ thuật. Screen duy nhất được audit/plan tiếp là **Tiềm năng**; chưa sửa runtime Tiềm năng trước khi audit toàn màn. Linh thú giữ nguyên; không resume class/pose/wardrobe/source và không rollback code class.
+Nhân vật, Rương đồ, Kỹ năng và Tiềm năng đã qua layout gate. Tiềm năng dùng Player/evidence v1 ở ba profile với diagram năm node, atlas sáu icon, footer hai đầu và default/selected detail; atlas còn ở trạng thái review mỹ thuật. Screen duy nhất được audit/plan tiếp là **Linh thú**; chưa sửa runtime Linh thú trước khi audit toàn màn. Không resume class/pose/wardrobe/source và không rollback code class.

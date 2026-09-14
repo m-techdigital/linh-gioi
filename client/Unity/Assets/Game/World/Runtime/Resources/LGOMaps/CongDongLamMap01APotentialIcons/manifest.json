@@ -1,0 +1,71 @@
+{
+  "id": "map01a-potential-icons-v1",
+  "status": "DRAFT_RUNTIME_REVIEW",
+  "runtimeApproved": false,
+  "canonicalScreen": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/04-tiem-nang-five-tab-APPROVED.png",
+  "sourceImagegen": "/Users/minhdc/.codex/generated_images/01a08f32-6e63-7b20-b705-259faaa286c0/exec-13e77b66-5ab4-413f-b789-9b1272625ff2.png",
+  "sourceBoard": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/assets-potential/potential-icons-alpha-SELF-REVIEWED-v1.png",
+  "textureSize": [
+    768,
+    512
+  ],
+  "cellSize": [
+    256,
+    256
+  ],
+  "pngBytes": 498329,
+  "sha256": "98ea2312dde189d3cc51fd72229db2cda10eaa1833476f9802cdbcaf59002cb6",
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01APotentialIcons/map01a-potential-icons.png",
+      "role": "ui-potential-icon-atlas",
+      "generator": "image_gen_reference_alpha",
+      "referenceOnly": false,
+      "sha256": "98ea2312dde189d3cc51fd72229db2cda10eaa1833476f9802cdbcaf59002cb6"
+    }
+  ],
+  "parts": [
+    {
+      "id": "attack",
+      "x": 0,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "id": "defense",
+      "x": 256,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "id": "vitality",
+      "x": 512,
+      "y": 256,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "id": "spirit",
+      "x": 0,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "id": "agility",
+      "x": 256,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    },
+    {
+      "id": "core",
+      "x": 512,
+      "y": 0,
+      "w": 256,
+      "h": 256
+    }
+  ]
+}

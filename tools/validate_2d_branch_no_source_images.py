@@ -132,6 +132,15 @@ RUNTIME_ART_PACKS = [
         'status_error': 'Map01A skill icons must remain draft until owner visual review',
     },
     {
+        'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01APotentialIcons',
+        'id': 'map01a-potential-icons-v1',
+        'status': 'DRAFT_RUNTIME_REVIEW',
+        'assets': {'map01a-potential-icons.png': (768, 512, 'ui-potential-icon-atlas')},
+        'generators': {'image_gen_reference_alpha'},
+        'max_bytes': 650_000,
+        'status_error': 'Map01A potential icons must remain draft until owner visual review',
+    },
+    {
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AHudIcons',
         'id': 'map01a-hud-icons-v1',
         'status': 'DRAFT_RUNTIME_REVIEW',

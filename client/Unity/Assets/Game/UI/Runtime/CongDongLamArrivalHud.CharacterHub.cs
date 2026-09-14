@@ -10,10 +10,10 @@ namespace LinhGioi.UI
         private enum CharacterHubMode { Skills, Potential, SpiritPet }
 
         private VisualElement _skillsPanel, _potentialPanel, _spiritPetPanel, _hubPreviewDetailPanel;
-        private VisualElement _hubSkillActionRow;
+        private VisualElement _hubSkillActionRow, _hubPotentialActionRow;
         private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
         private VisualElement _hubDetailIcon;
-        private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _spiritPetDevelopAction;
+        private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _potentialResetAction, _spiritPetDevelopAction;
         private Texture2D _spiritPetPreviewTexture;
         private readonly List<Button> _skillPathNodes = new List<Button>();
         private readonly List<Button> _potentialPathNodes = new List<Button>();
@@ -48,6 +48,15 @@ namespace LinhGioi.UI
             var icon = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
             ApplyLgoSkillIcon(icon, size);
             var sprite = _scene.GetMap01ASkillIconSprite(iconId);
+            icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            return icon;
+        }
+
+        private VisualElement PotentialIcon(string name, string iconId, float size)
+        {
+            var icon = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
+            ApplyLgoSkillIcon(icon, size);
+            var sprite = _scene.GetMap01APotentialIconSprite(iconId);
             icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
             return icon;
         }
@@ -139,19 +148,21 @@ namespace LinhGioi.UI
         private VisualElement CreatePotentialNode(string name, string title, string value, string iconId,
             float left, float top, bool selected = false)
         {
-            var node = CreateHubPathNode(name, title, value, iconId,
-                () => SelectPotentialNode(name, title, value, iconId), selected);
+            var node = InventoryButton(() => SelectPotentialNode(name, title, value, iconId), name);
+            ApplyLgoPotentialNode(node);
+            node.Add(PotentialIcon(name + " Icon", iconId, 82));
+            var titleLabel = LgoLabel(title, 12, UiText, true);
+            titleLabel.name = name + " Title";
+            titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            node.Add(titleLabel);
+            var valueLabel = LgoLabel(value, 10, new Color(.74f, .92f, 1f, .92f), true);
+            valueLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
+            node.Add(valueLabel);
+            ApplyHubPathNodeSelection(node, selected);
             _potentialPathNodes.Add(node);
             node.style.position = Position.Absolute;
             node.style.left = left;
             node.style.top = top;
-            node.style.width = 116;
-            node.style.minWidth = 116;
-            node.style.maxWidth = 116;
-            node.style.flexBasis = 116;
-            node.style.height = 116;
-            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 58;
-            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 58;
             return node;
         }
 
@@ -315,20 +326,22 @@ namespace LinhGioi.UI
             ApplyLgoFrame(core, new Color(.025f, .11f, .19f, .94f), new Color(.24f, .66f, 1f, .82f));
             core.style.borderLeftWidth = core.style.borderRightWidth = 2;
             core.style.borderTopWidth = core.style.borderBottomWidth = 2;
-            core.Add(HubIcon("Map01A Potential Core Icon", "character", 80));
+            core.Add(PotentialIcon("Map01A Potential Core Icon", "core", 128));
             var coreText = LgoLabel("TÂM MẠCH", 12, UiGold, true);
             coreText.style.unityTextAlign = TextAnchor.MiddleCenter;
             core.Add(coreText);
             diagram.Add(core);
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Công", "Công", "120", "attack", 267, 0));
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Thủ", "Thủ", "118", "lock", 20, 132));
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Sinh lực", "Sinh lực", "250", "character", 514, 132, true));
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Linh lực", "Linh lực", "96", "skill", 142, 274));
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Nhanh nhẹn", "Nhanh nhẹn", "110", "run", 392, 274));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Công", "Công", "120", "attack", 263, 0));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Thủ", "Thủ", "118", "defense", 16, 132));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Sinh lực", "Sinh lực", "250", "vitality", 510, 132, true));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Linh lực", "Linh lực", "96", "spirit", 138, 270));
+            diagram.Add(CreatePotentialNode("Map01A Potential Node Nhanh nhẹn", "Nhanh nhẹn", "110", "agility", 388, 270));
             _potentialPanel.Add(diagram);
-            var recommendation = InventoryBadge("Map01A Potential Recommendation", "Đề xuất Võ: cân bằng Công · Sinh lực · Nhanh nhẹn", new Color(.74f, .92f, 1f, .94f));
-            recommendation.style.alignSelf = Align.Center;
-            _potentialPanel.Add(recommendation);
+            var footer = InventoryRow("Map01A Potential Footer");
+            footer.style.justifyContent = Justify.SpaceBetween;
+            footer.Add(InventoryBadge("Map01A Potential Recommendation", "Đề xuất Võ", new Color(.74f, .92f, 1f, .94f)));
+            footer.Add(InventoryBadge("Map01A Potential Footer Points", "Điểm tiềm năng còn lại: 12", UiGold));
+            _potentialPanel.Add(footer);
             body.Add(_potentialPanel);
         }
 
@@ -406,9 +419,21 @@ namespace LinhGioi.UI
                 _hubSkillActionRow.Add(action);
             }
             _hubPreviewDetailPanel.Add(_hubSkillActionRow);
+            _hubPotentialActionRow = InventoryRow("Map01A Potential Detail Actions");
+            _hubPotentialActionRow.style.marginTop = 12;
             _potentialAddPointAction = InventoryButton(() => { }, "Map01A Potential Add Point", "Cộng 1 điểm");
+            _potentialResetAction = InventoryButton(() => { }, "Map01A Potential Reset", "Đặt lại");
+            foreach (var action in new[] { _potentialAddPointAction, _potentialResetAction })
+            {
+                action.style.flexGrow = 1;
+                action.style.flexBasis = 0;
+                action.style.marginRight = 6;
+                ApplyLgoDisabledAction(action);
+                _hubPotentialActionRow.Add(action);
+            }
+            _hubPreviewDetailPanel.Add(_hubPotentialActionRow);
             _spiritPetDevelopAction = InventoryButton(() => { }, "Map01A Spirit Pet Develop Action", "Bồi dưỡng");
-            foreach (var action in new[] { _potentialAddPointAction, _spiritPetDevelopAction })
+            foreach (var action in new[] { _spiritPetDevelopAction })
             {
                 action.style.marginTop = 12;
                 action.style.flexShrink = 0;
@@ -474,7 +499,7 @@ namespace LinhGioi.UI
         private void ConfigureHubDetailMode(CharacterHubMode mode)
         {
             _hubSkillActionRow.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
-            _potentialAddPointAction.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubPotentialActionRow.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _spiritPetDevelopAction.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
             _hubDetailIcon.style.width = _hubDetailIcon.style.height = mode == CharacterHubMode.Skills ? 124 : 96;
             _hubDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
@@ -504,14 +529,16 @@ namespace LinhGioi.UI
         private void ShowPotentialDetail(string title, string value, string iconId)
         {
             ConfigureHubDetailMode(CharacterHubMode.Potential);
-            SetHubDetailIcon(iconId);
+            var sprite = _scene.GetMap01APotentialIconSprite(iconId);
+            _hubDetailIcon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            _hubDetailIcon.style.width = _hubDetailIcon.style.height = 124;
             _hubDetailHeader.text = "CHI TIẾT TIỀM NĂNG";
             _hubDetailName.text = title;
             _hubDetailMeta.text = "Giá trị xem trước: " + value;
             _hubDetailBody.text = title == "Sinh lực"
-                ? "Ảnh hưởng dự kiến\n• Sinh lực (HP)\n• Phòng thủ\n\nTính năng cộng điểm chưa mở."
-                : "Điểm đang chọn: " + title + " · " + value + "\n\nTính năng cộng điểm chưa mở.";
-            _hubDetailStatus.text = "Chưa thể cộng điểm tiềm năng.";
+                ? "Tăng cường thể chất, sinh lực và khả năng phòng thủ.\n\nHiệu quả hiện tại\nSinh lực (HP)  +12.500\nPhòng thủ  +250\n\nKhi cộng 1 điểm\nSinh lực (HP)  +50\nPhòng thủ  +1"
+                : "Điểm đang chọn  " + title + " · " + value + "\n\nHiệu quả hiện tại và mức tăng kế tiếp được giữ ở chế độ xem trước.";
+            _hubDetailStatus.text = "Tiêu hao 1 điểm tiềm năng · thao tác đang khóa.";
         }
 
         private void ShowHubDetail(CharacterHubMode mode)
@@ -522,7 +549,7 @@ namespace LinhGioi.UI
             }
             else if (mode == CharacterHubMode.Potential)
             {
-                ShowPotentialDetail("Sinh lực", "250", "character");
+                ShowPotentialDetail("Sinh lực", "250", "vitality");
             }
             else
             {

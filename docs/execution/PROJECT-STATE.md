@@ -1709,3 +1709,11 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Atlas `map01a-skill-icons-v1` chứa 9 skill icon + 3 category icon RGBA, có manifest/hash/provenance và status `DRAFT_RUNTIME_REVIEW`. Runtime load qua helper atlas chung; node/category/icon dùng shared Skin base, không style từng skill.
 - Player `build/map01a-skills-screen-player-v3/LinhGioiOnline.app` build thành công, `errors=0`. Evidence đã xem trực tiếp tại `build/map01a-skills-screen-runtime-v4/{pc,mobile,tablet}/`: mỗi profile có default/selected state, đúng 1600×900, 1600×720, 1024×768; không stack, cắt hoặc chồng.
 - Focused EditMode đạt 1/1 sau layout cuối. Screen active tiếp theo duy nhất là `Tiềm năng` theo `04-tiem-nang-five-tab-APPROVED.png`, bắt đầu bằng audit/plan toàn màn; không quay lại class/pose/wardrobe/source và không rollback code class.
+
+## Map01A — khóa layout screen Tiềm năng, chuyển gate sang Linh thú — 2026-09-14
+
+- Canonical duy nhất: `04-tiem-nang-five-tab-APPROVED.png`; plan/gate: `docs/superpowers/plans/2026-09-14-map01a-potential-screen-realignment.md`.
+- Diagram giữ năm node + tâm mạch, footer preset/điểm hai đầu và detail-right default/selected. Hai action `Cộng 1 điểm`/`Đặt lại` khóa vì chưa có progression state contract.
+- Atlas `map01a-potential-icons-v1` có sáu icon RGBA, manifest/hash/provenance và status `DRAFT_RUNTIME_REVIEW`; không dùng HUD placeholder hoặc class art.
+- Player `build/map01a-potential-screen-player-v1/LinhGioiOnline.app`, evidence đã xem ở `build/map01a-potential-screen-runtime-v1/{pc,mobile,tablet}/`; không stack/cắt/chồng.
+- Screen active tiếp theo là Linh thú, chỉ audit/plan trước code. Không quay lại class/pose/wardrobe/source và không rollback code class.

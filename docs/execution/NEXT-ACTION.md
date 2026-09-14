@@ -1,8 +1,8 @@
-## Active — audit/plan screen Tiềm năng theo canonical design — 2026-09-14
+## Active — audit/plan screen Linh thú theo canonical design — 2026-09-14
 
-`CONTINUE`. Quy trình và layout contract hiện hành là `docs/design/LGO-MAP01A-CHARACTER-HUB-SCREEN-CONTRACT-v1.0.md`. `Nhân vật`, `Rương đồ` và `Kỹ năng` đã khóa layout lần lượt bằng evidence v5, v4 và `build/map01a-skills-screen-runtime-v4/{pc,mobile,tablet}/`. Mỗi screen chỉ có một canonical design trong `redesign-v4-five-tabs`; mobile/tablet giữ composition landscape hai cột và scale toàn shell, không reflow/xếp detail xuống dưới.
+`CONTINUE`. Quy trình và layout contract hiện hành là `docs/design/LGO-MAP01A-CHARACTER-HUB-SCREEN-CONTRACT-v1.0.md`. Bốn screen đầu đã khóa layout; Tiềm năng dùng evidence `build/map01a-potential-screen-runtime-v1/{pc,mobile,tablet}/`. Mỗi screen chỉ có một canonical design trong `redesign-v4-five-tabs`; mobile/tablet giữ composition landscape hai cột và scale toàn shell.
 
-Screen active duy nhất tiếp theo là **Tiềm năng**, canonical `04-tiem-nang-five-tab-APPROVED.png`. Việc hợp lệ đầu tiên chỉ là audit toàn ảnh và viết plan theo shell → diagram kinh mạch → điểm còn lại → detail-right → state/action → asset/provenance; chưa sửa runtime trước khi plan hoàn tất. Không vi chỉnh lại ba screen đã khóa, không sửa Linh thú trước gate Tiềm năng, không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+Screen active duy nhất tiếp theo là **Linh thú**, canonical `05-linh-thu-five-tab-APPROVED.png`. Việc hợp lệ đầu tiên chỉ là audit toàn ảnh và viết plan theo shell → hero art/identity → roster → detail-right → state/action → asset/provenance; chưa sửa runtime trước khi plan hoàn tất. Không vi chỉnh lại bốn screen đã khóa, không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
 
 ## Next — sau khi sửa letterbox ảnh Linh thú — 2026-09-14
 
