@@ -334,6 +334,9 @@ REQUIRED_PARTIAL_MARKERS = {
         "PrebuiltValueFrameCount",
         "PrebuiltAddFrameCount",
         "PrebuiltAddGlyphCount",
+        "Map01A Potential Detail Facts",
+        "Map01A Potential Current Effect",
+        "Map01A Potential Next Effect",
         "lgo-potential-node-overlay",
         "ApplyPotentialNodeSelection",
         "CreateHubSurface",
@@ -361,6 +364,8 @@ REQUIRED_PARTIAL_MARKERS = {
     ],
     "CharacterHubClassCatalog.cs": [
         "SharedPotentials = Array.AsReadOnly",
+        "public string CurrentEffect { get; }",
+        "public string NextEffect { get; }",
     ],
 }
 
@@ -407,6 +412,7 @@ REQUIRED_TEST_MARKERS = [
     "The circles, outer ring and connectors must be one prebuilt shared topology",
     "Potential topology must prebuild all value boxes",
     "Potential topology must prebuild all add boxes",
+    "Class refresh must rebind the shared Potential detail template",
 ]
 
 REQUIRED_RUNTIME_SKIN_MARKERS = [

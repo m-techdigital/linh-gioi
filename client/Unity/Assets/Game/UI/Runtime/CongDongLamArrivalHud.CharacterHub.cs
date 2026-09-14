@@ -7,23 +7,18 @@ namespace LinhGioi.UI
 {
     internal sealed class CharacterHubPotentialTopology : VisualElement
     {
-        private const float LogicalWidth = 650f;
-        private const float HorizontalFit = 600f / LogicalWidth;
         internal const float CanvasWidth = 600f;
-        internal const float CanvasHeight = 400f;
+        internal const float CanvasHeight = 520f;
         internal static readonly Vector2[] NodePositions =
         {
-            new Vector2(325f * HorizontalFit - 62f, 0),
-            new Vector2(78f * HorizontalFit - 62f, 132),
-            new Vector2(572f * HorizontalFit - 62f, 132),
-            new Vector2(200f * HorizontalFit - 62f, 270),
-            new Vector2(450f * HorizontalFit - 62f, 270)
+            new Vector2(238, 0), new Vector2(38, 168), new Vector2(438, 168),
+            new Vector2(128, 348), new Vector2(368, 348)
         };
 
         private static readonly Vector2[] NodeCenters =
         {
-            new Vector2(325, 62), new Vector2(78, 194), new Vector2(572, 194),
-            new Vector2(200, 332), new Vector2(450, 332)
+            new Vector2(300, 62), new Vector2(100, 230), new Vector2(500, 230),
+            new Vector2(190, 410), new Vector2(430, 410)
         };
 
         internal static int PrebuiltNodeFrameCount => NodeCenters.Length;
@@ -41,6 +36,11 @@ namespace LinhGioi.UI
             style.top = 0;
             style.width = CanvasWidth;
             style.height = CanvasHeight;
+            Add(new VisualElement
+            {
+                name = "Map01A Potential Core Figure",
+                pickingMode = PickingMode.Ignore
+            });
             generateVisualContent += DrawTopology;
         }
 
@@ -49,28 +49,30 @@ namespace LinhGioi.UI
             var width = resolvedStyle.width;
             var height = resolvedStyle.height;
             if (float.IsNaN(width) || float.IsNaN(height) || width < 1 || height < 1) return;
-            var scale = new Vector2(width / LogicalWidth, height / CanvasHeight);
-            var center = Vector2.Scale(new Vector2(325, 192), scale);
+            var scale = new Vector2(width / CanvasWidth, height / CanvasHeight);
+            var center = Vector2.Scale(new Vector2(300, 260), scale);
             var painter = context.painter2D;
 
-            DrawEllipse(painter, center, Vector2.Scale(new Vector2(272, 187), scale),
-                new Color(.07f, .21f, .32f, .72f), 1f);
-            DrawEllipse(painter, center, Vector2.Scale(new Vector2(263, 181), scale),
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(250, 218), scale),
+                new Color(.08f, .27f, .42f, .58f), 1f);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(244, 212), scale),
                 new Color(.86f, .61f, .18f, .34f), 1f);
             DrawConnections(painter, center, scale, new Color(.005f, .025f, .05f, .88f), 5f);
             DrawConnections(painter, center, scale, new Color(.24f, .67f, 1f, .62f), 1.5f);
-            DrawEllipse(painter, center, Vector2.Scale(new Vector2(253, 174), scale),
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(236, 204), scale),
                 new Color(.005f, .025f, .05f, .90f), 5f);
-            DrawEllipse(painter, center, Vector2.Scale(new Vector2(253, 174), scale),
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(236, 204), scale),
                 new Color(.88f, .65f, .20f, .72f), 1.5f);
-            DrawEllipse(painter, center, Vector2.Scale(new Vector2(190, 132), scale),
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(203, 176), scale),
                 new Color(.18f, .54f, .78f, .36f), 1f);
-            DrawEllipse(painter, center, Vector2.Scale(new Vector2(92, 92), scale),
+            DrawRunicRing(painter, center, scale);
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(112, 112), scale),
                 new Color(.02f, .04f, .06f, .90f), 5f);
-            DrawEllipse(painter, center, Vector2.Scale(new Vector2(92, 92), scale),
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(112, 112), scale),
                 new Color(.84f, .58f, .16f, .72f), 1.5f);
-            DrawEllipse(painter, center, Vector2.Scale(new Vector2(78, 78), scale),
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(96, 96), scale),
                 new Color(.18f, .66f, 1f, .66f), 1.5f);
+            DrawMeditationFigure(painter, center, scale);
 
             foreach (var nodeCenter in NodeCenters)
             {
@@ -84,6 +86,133 @@ namespace LinhGioi.UI
                 DrawCardinalTicks(painter, scaledCenter, scale);
                 DrawNodeValueFrames(painter, nodeCenter, scale);
             }
+        }
+
+        private static void DrawRunicRing(Painter2D painter, Vector2 center, Vector2 scale)
+        {
+            DrawEllipse(painter, center, Vector2.Scale(new Vector2(220, 190), scale),
+                new Color(.12f, .38f, .58f, .30f), 1f);
+            for (var index = 0; index < 12; index++)
+            {
+                var angle = Mathf.PI * 2f * index / 12f;
+                var point = center + new Vector2(
+                    Mathf.Cos(angle) * 220f * scale.x,
+                    Mathf.Sin(angle) * 190f * scale.y);
+                var radius = index % 3 == 0 ? 6f : 3.5f;
+                DrawFilledEllipse(painter, point, Vector2.Scale(new Vector2(radius, radius), scale),
+                    index % 3 == 0
+                        ? new Color(1f, .78f, .30f, .82f)
+                        : new Color(.34f, .73f, 1f, .58f));
+                DrawEllipse(painter, point, Vector2.Scale(new Vector2(radius + 3f, radius + 3f), scale),
+                    new Color(.94f, .66f, .22f, .42f), 1f);
+            }
+        }
+
+        private static void DrawMeditationFigure(Painter2D painter, Vector2 center, Vector2 scale)
+        {
+            var ink = new Color(.035f, .17f, .27f, .98f);
+            var aura = new Color(.20f, .62f, .91f, .66f);
+            var energy = new Color(1f, .67f, .20f, .86f);
+            var head = center + Vector2.Scale(new Vector2(0, -58), scale);
+            DrawFilledEllipse(painter, head, Vector2.Scale(new Vector2(17, 21), scale), ink);
+            DrawEllipse(painter, head, Vector2.Scale(new Vector2(18, 22), scale), aura, 2f);
+            DrawOutlinedPolygon(painter, new[]
+            {
+                center + Vector2.Scale(new Vector2(-31, -34), scale),
+                center + Vector2.Scale(new Vector2(-46, 22), scale),
+                center + Vector2.Scale(new Vector2(-22, 52), scale),
+                center + Vector2.Scale(new Vector2(0, 36), scale),
+                center + Vector2.Scale(new Vector2(22, 52), scale),
+                center + Vector2.Scale(new Vector2(46, 22), scale),
+                center + Vector2.Scale(new Vector2(31, -34), scale),
+                center + Vector2.Scale(new Vector2(12, -47), scale),
+                center + Vector2.Scale(new Vector2(-12, -47), scale),
+            }, ink, aura, 2f);
+            DrawFigureStroke(painter, center, scale, aura, 12f, new[]
+            {
+                new Vector2(-25, -24), new Vector2(-64, -2), new Vector2(-82, 25), new Vector2(-60, 34)
+            });
+            DrawFigureStroke(painter, center, scale, ink, 7f, new[]
+            {
+                new Vector2(-25, -24), new Vector2(-64, -2), new Vector2(-82, 25), new Vector2(-60, 34)
+            });
+            DrawFigureStroke(painter, center, scale, aura, 12f, new[]
+            {
+                new Vector2(25, -24), new Vector2(64, -2), new Vector2(82, 25), new Vector2(60, 34)
+            });
+            DrawFigureStroke(painter, center, scale, ink, 7f, new[]
+            {
+                new Vector2(25, -24), new Vector2(64, -2), new Vector2(82, 25), new Vector2(60, 34)
+            });
+            DrawFigureStroke(painter, center, scale, aura, 24f, new[]
+            {
+                new Vector2(-18, 32), new Vector2(-57, 56), new Vector2(-86, 58), new Vector2(-52, 72), new Vector2(-8, 63)
+            });
+            DrawFigureStroke(painter, center, scale, ink, 18f, new[]
+            {
+                new Vector2(-18, 32), new Vector2(-57, 56), new Vector2(-86, 58), new Vector2(-52, 72), new Vector2(-8, 63)
+            });
+            DrawFigureStroke(painter, center, scale, aura, 24f, new[]
+            {
+                new Vector2(18, 32), new Vector2(57, 56), new Vector2(86, 58), new Vector2(52, 72), new Vector2(8, 63)
+            });
+            DrawFigureStroke(painter, center, scale, ink, 18f, new[]
+            {
+                new Vector2(18, 32), new Vector2(57, 56), new Vector2(86, 58), new Vector2(52, 72), new Vector2(8, 63)
+            });
+            DrawFilledEllipse(painter, center + Vector2.Scale(new Vector2(0, 5), scale),
+                Vector2.Scale(new Vector2(8, 8), scale), energy);
+            painter.strokeColor = energy;
+            painter.lineWidth = 2f;
+            painter.BeginPath();
+            painter.MoveTo(center + Vector2.Scale(new Vector2(0, -35), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(0, 56), scale));
+            painter.MoveTo(center + Vector2.Scale(new Vector2(-9, 5), scale));
+            painter.LineTo(center + Vector2.Scale(new Vector2(9, 5), scale));
+            painter.Stroke();
+        }
+
+        private static void DrawFigureStroke(Painter2D painter, Vector2 center, Vector2 scale,
+            Color color, float width, IReadOnlyList<Vector2> points)
+        {
+            painter.strokeColor = color;
+            painter.lineWidth = width;
+            painter.lineCap = LineCap.Round;
+            painter.lineJoin = LineJoin.Round;
+            painter.BeginPath();
+            painter.MoveTo(center + Vector2.Scale(points[0], scale));
+            for (var index = 1; index < points.Count; index++)
+                painter.LineTo(center + Vector2.Scale(points[index], scale));
+            painter.Stroke();
+        }
+
+        private static void DrawOutlinedPolygon(Painter2D painter, IReadOnlyList<Vector2> points,
+            Color fill, Color stroke, float width)
+        {
+            painter.fillColor = fill;
+            painter.strokeColor = stroke;
+            painter.lineWidth = width;
+            painter.BeginPath();
+            painter.MoveTo(points[0]);
+            for (var index = 1; index < points.Count; index++) painter.LineTo(points[index]);
+            painter.ClosePath();
+            painter.Fill();
+            painter.Stroke();
+        }
+
+        private static void DrawFilledEllipse(Painter2D painter, Vector2 center, Vector2 radius, Color color)
+        {
+            const int segments = 40;
+            painter.fillColor = color;
+            painter.BeginPath();
+            painter.MoveTo(center + new Vector2(radius.x, 0));
+            for (var index = 1; index <= segments; index++)
+            {
+                var angle = Mathf.PI * 2f * index / segments;
+                painter.LineTo(center + new Vector2(Mathf.Cos(angle) * radius.x, Mathf.Sin(angle) * radius.y));
+            }
+            painter.ClosePath();
+            painter.Fill();
         }
 
         private static void DrawNodeValueFrames(Painter2D painter, Vector2 center, Vector2 scale)
@@ -189,8 +318,10 @@ namespace LinhGioi.UI
         private enum CharacterHubMode { Skills, Potential, SpiritPet }
 
         private VisualElement _skillsPanel, _potentialPanel, _spiritPetPanel, _hubPreviewDetailPanel, _hubSpiritPetBadges;
+        private VisualElement _hubPotentialFacts;
         private VisualElement _hubSkillActionRow, _hubPotentialActionRow, _hubSpiritPetActionRow;
         private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
+        private Label _hubPotentialSummary, _hubPotentialCurrentEffect, _hubPotentialNextEffect, _hubPotentialCost;
         private VisualElement _hubDetailIcon;
         private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _potentialResetAction, _spiritPetDeployAction, _spiritPetDevelopAction;
         private Texture2D _spiritPetPreviewTexture;
@@ -641,17 +772,17 @@ namespace LinhGioi.UI
             var core = new VisualElement { name = "Map01A Potential Diagram Core", pickingMode = PickingMode.Ignore };
             core.style.position = Position.Absolute;
             core.style.left = (CharacterHubPotentialTopology.CanvasWidth - 168f) * .5f;
-            core.style.top = 108;
+            core.style.top = 176;
             core.style.width = 168;
             core.style.height = 168;
             core.style.alignItems = Align.Center;
-            core.style.justifyContent = Justify.Center;
+            core.style.justifyContent = Justify.FlexEnd;
+            core.style.paddingBottom = 4;
             core.style.borderTopLeftRadius = core.style.borderTopRightRadius = 84;
             core.style.borderBottomLeftRadius = core.style.borderBottomRightRadius = 84;
             core.style.backgroundColor = Color.clear;
             core.style.borderLeftWidth = core.style.borderRightWidth = 0;
             core.style.borderTopWidth = core.style.borderBottomWidth = 0;
-            core.Add(PotentialIcon("Map01A Potential Core Icon", "core", 128));
             var coreText = LgoLabel("TÂM MẠCH", 12, UiGold, true);
             coreText.style.unityTextAlign = TextAnchor.MiddleCenter;
             core.Add(coreText);
@@ -752,6 +883,42 @@ namespace LinhGioi.UI
             _hubDetailBody = LgoLabel("", 15, UiText);
             _hubDetailBody.style.whiteSpace = WhiteSpace.Normal;
             facts.Add(_hubDetailBody);
+            _hubPotentialFacts = new VisualElement { name = "Map01A Potential Detail Facts" };
+            _hubPotentialFacts.style.flexDirection = FlexDirection.Column;
+            _hubPotentialFacts.style.display = DisplayStyle.None;
+            _hubPotentialSummary = LgoLabel("", 13, UiText);
+            _hubPotentialSummary.name = "Map01A Potential Summary";
+            _hubPotentialSummary.style.whiteSpace = WhiteSpace.Normal;
+            _hubPotentialFacts.Add(_hubPotentialSummary);
+            var currentHeading = LgoLabel("HIỆU QUẢ HIỆN TẠI", 12, new Color(.38f, .74f, 1f, 1f), true);
+            currentHeading.name = "Map01A Potential Current Effect Heading";
+            currentHeading.style.marginTop = 14;
+            _hubPotentialFacts.Add(currentHeading);
+            _hubPotentialCurrentEffect = LgoLabel("", 15, UiText, true);
+            _hubPotentialCurrentEffect.name = "Map01A Potential Current Effect";
+            _hubPotentialCurrentEffect.style.marginTop = 6;
+            _hubPotentialCurrentEffect.style.whiteSpace = WhiteSpace.Normal;
+            _hubPotentialFacts.Add(_hubPotentialCurrentEffect);
+            var effectDivider = LgoDivider("Map01A Potential Effect Divider");
+            effectDivider.style.marginTop = 12;
+            effectDivider.style.marginBottom = 10;
+            _hubPotentialFacts.Add(effectDivider);
+            var nextHeading = LgoLabel("HIỆU QUẢ KHI CỘNG 1 ĐIỂM", 12, new Color(.50f, .96f, .58f, 1f), true);
+            nextHeading.name = "Map01A Potential Next Effect Heading";
+            _hubPotentialFacts.Add(nextHeading);
+            _hubPotentialNextEffect = LgoLabel("", 15, new Color(.62f, 1f, .68f, 1f), true);
+            _hubPotentialNextEffect.name = "Map01A Potential Next Effect";
+            _hubPotentialNextEffect.style.marginTop = 6;
+            _hubPotentialNextEffect.style.whiteSpace = WhiteSpace.Normal;
+            _hubPotentialFacts.Add(_hubPotentialNextEffect);
+            _hubPotentialCost = LgoLabel("Tiêu hao  Điểm tiềm năng ×1", 13, UiGold, true);
+            _hubPotentialCost.name = "Map01A Potential Cost";
+            ApplyLgoStatusCard(_hubPotentialCost);
+            _hubPotentialCost.style.marginTop = 14;
+            _hubPotentialCost.style.minHeight = 42;
+            _hubPotentialCost.style.unityTextAlign = TextAnchor.MiddleLeft;
+            _hubPotentialFacts.Add(_hubPotentialCost);
+            facts.Add(_hubPotentialFacts);
             _hubSpiritPetFacts = new VisualElement { name = "Map01A Spirit Pet Detail Facts" };
             _hubSpiritPetFacts.style.flexDirection = FlexDirection.Column;
             _hubSpiritPetFacts.style.display = DisplayStyle.None;
@@ -967,7 +1134,8 @@ namespace LinhGioi.UI
             _hubPotentialActionRow.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetActionRow.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetBadges.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
-            _hubDetailBody.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.None : DisplayStyle.Flex;
+            _hubDetailBody.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
+            _hubPotentialFacts.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetFacts.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;
             _hubDetailIcon.style.width = _hubDetailIcon.style.height = mode == CharacterHubMode.Skills
                 ? 116
@@ -1003,8 +1171,10 @@ namespace LinhGioi.UI
             _hubDetailHeader.text = "CHI TIẾT TIỀM NĂNG";
             _hubDetailName.text = potential.Name;
             _hubDetailMeta.text = ActiveCharacterHubProfile.Label + " · Giá trị xem trước: " + potential.Value;
-            _hubDetailBody.text = potential.Description;
-            _hubDetailStatus.text = "Tiêu hao 1 điểm tiềm năng · thao tác đang khóa.";
+            _hubPotentialSummary.text = potential.Summary;
+            _hubPotentialCurrentEffect.text = potential.CurrentEffect;
+            _hubPotentialNextEffect.text = potential.NextEffect;
+            _hubDetailStatus.text = "Phân bổ điểm đang khóa trong bản review.";
         }
 
         private void ShowHubDetail(CharacterHubMode mode)

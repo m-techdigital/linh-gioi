@@ -1,3 +1,12 @@
+## Character Hub — Tiềm năng base-first hoàn chỉnh, chờ owner visual review — 2026-09-15
+
+- Canonical: `redesign-v4-five-tabs/04-tiem-nang-five-tab-APPROVED.png`. Màn Tiềm năng nay có một `CharacterHubPotentialTopology` 600×520 dựng sẵn vòng đồng tâm, đường nối, runic anchors, core figure, năm khung node, năm ô giá trị, năm ô cộng và glyph. Node phía trên chỉ bind icon/tên/value/selection.
+- Detail-right cũng là một template dựng sẵn: summary, `HIỆU QUẢ HIỆN TẠI`, `HIỆU QUẢ KHI CỘNG 1 ĐIỂM`, cost và action. `CharacterHubPotentialPreview` chỉ cấp dữ liệu có cấu trúc; đổi `Võ/Kiếm/Pháp/Cơ/Linh` giữ nguyên reference topology/detail, không build UI theo class.
+- TDD: RED `0/1` vì thiếu shared detail template; GREEN targeted `3/3`. Full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared validator `PASS`, governance `23/23`; pose pack `12/12`; registered capture `19/19`; no-3D/no-source-images pass.
+- Player `build/map01a-character-hub-potential-fidelity-player-v5/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=48`. Evidence `build/map01a-character-hub-potential-fidelity-runtime-v5/{pc,mobile,tablet}/`, 9 frame/profile, `usesOsMouseOrKeyboard=false`; đã xem trực tiếp default/selected ở cả ba viewport, không wrap/cắt/chồng và hierarchy gần canonical hơn rõ rệt.
+- Phạm vi batch chỉ là UI dùng chung của Tiềm năng. Không sinh/sửa class art, pose, wardrobe, camera/base/scale hoặc frozen surface. Evidence actor hiện hành không phải nghiệm thu art đủ năm class.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`: cần owner duyệt v5 trước khi chuyển sang screen khác hoặc thay canonical.
+
 ## Character Hub — audit tích hợp năm tab, chờ owner visual review — 2026-09-15
 
 - Đã đối chiếu cùng lúc 15 frame `Nhân vật/Rương đồ/Kỹ năng/Tiềm năng/Linh thú × PC/mobile/tablet` từ Player v3. Contact sheet local: `build/map01a-character-hub-spirit-base-runtime-v3/integrated-five-tab-contact-sheet.png`.

@@ -41,7 +41,10 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(profile.SpiritPet.Skills.All(skill => !string.IsNullOrEmpty(skill.IconId)
                     && !string.IsNullOrEmpty(skill.Description)), Is.True);
                 Assert.That(profile.Skills.All(skill => !string.IsNullOrEmpty(skill.Description)), Is.True);
-                Assert.That(profile.Potentials.All(potential => !string.IsNullOrEmpty(potential.Description)), Is.True);
+                Assert.That(profile.Potentials.All(potential => !string.IsNullOrEmpty(potential.Summary)
+                    && !string.IsNullOrEmpty(potential.CurrentEffect)
+                    && !string.IsNullOrEmpty(potential.NextEffect)), Is.True,
+                    profile.Id + " must bind the shared Potential detail sections without embedding layout copy in one blob.");
                 if (profile.Id != "kiem")
                     Assert.That(profile.Skills.All(skill => skill.IconCatalog == CharacterHubIconCatalog.Hud), Is.True,
                         profile.Id + " must use provenance-backed shared icons instead of pretending Kiếm art belongs to another class.");
@@ -724,8 +727,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Potential Topology Base"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Potential Topology Base").ClassListContains("lgo-potential-topology"), Is.True,
                     "The outer ring and connectors must come from one shared prebuilt topology behind the class data.");
-                Assert.That(root.Q("Map01A Potential Diagram").style.height.value.value, Is.LessThanOrEqualTo(400),
-                    "Potential diagram and recommendation must fit inside the shared modal shell.");
+                Assert.That(root.Q("Map01A Potential Diagram").style.height.value.value, Is.InRange(500, 525),
+                    "The canonical meridian fills the main column; a short 400px canvas leaves a large dead zone below the graph.");
                 Assert.That(root.Q("Map01A Potential Diagram").style.width.value.value,
                     Is.LessThanOrEqualTo(600),
                     "The shared potential template must fit the canonical main column so right-side value/add frames are never clipped by detail-right.");
@@ -740,8 +743,23 @@ namespace LinhGioi.Tests.EditMode
                 }
                 Assert.That(root.Q<VisualElement>("Map01A Potential Node 2 Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("vitality")));
-                Assert.That(root.Q<VisualElement>("Map01A Potential Core Icon").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetMap01APotentialIconSprite("core")));
+                Assert.That(root.Q("Map01A Potential Core Figure"), Is.Not.Null,
+                    "The canonical center is a prebuilt meditation figure in the shared topology, not a class-bound atlas icon.");
+                Assert.That(root.Q("Map01A Potential Core Icon"), Is.Null);
+                var potentialFacts = root.Q("Map01A Potential Detail Facts");
+                Assert.That(potentialFacts, Is.Not.Null,
+                    "Potential uses one prebuilt detail template; classes only bind icon and values into it.");
+                Assert.That(potentialFacts.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Potential Current Effect Heading").text,
+                    Is.EqualTo("HIỆU QUẢ HIỆN TẠI"));
+                Assert.That(root.Q<Label>("Map01A Potential Next Effect Heading").text,
+                    Is.EqualTo("HIỆU QUẢ KHI CỘNG 1 ĐIỂM"));
+                Assert.That(root.Q<Label>("Map01A Potential Current Effect").text,
+                    Does.Contain("Sinh lực (HP)  +12.500"));
+                Assert.That(root.Q<Label>("Map01A Potential Next Effect").text,
+                    Does.Contain("Sinh lực (HP)  +50"));
+                Assert.That(root.Q<Label>("Map01A Potential Cost").text,
+                    Is.EqualTo("Tiêu hao  Điểm tiềm năng ×1"));
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
                     "Map01A must not create local fake potential progression before the real state contract exists.");
                 Assert.That(root.Q<Button>("Map01A Potential Reset").enabledSelf, Is.False);
@@ -750,6 +768,8 @@ namespace LinhGioi.Tests.EditMode
                     "Selecting a potential node must update detail-right without mutating progression state.");
                 Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("attack")));
+                Assert.That(root.Q<Label>("Map01A Potential Current Effect").text, Is.EqualTo("Công  +120"));
+                Assert.That(root.Q<Label>("Map01A Potential Next Effect").text, Is.EqualTo("Công  +2"));
                 StringAssert.DoesNotContain("state", modalSubtitle.text);
                 StringAssert.DoesNotContain("local", hubDetailBody.text);
                 StringAssert.DoesNotContain("state", hubDetailBody.text);
@@ -805,6 +825,7 @@ namespace LinhGioi.Tests.EditMode
                 var skillNode0 = root.Q<Button>("Map01A Skill Node 0");
                 var potentialNode0 = root.Q<Button>("Map01A Potential Node 0");
                 var potentialTopology = root.Q("Map01A Potential Topology Base");
+                var potentialFacts = root.Q("Map01A Potential Detail Facts");
                 var spiritSkillRow0 = root.Q("Map01A Spirit Pet Skill Row 0");
                 Assert.That(potentialTopology, Is.Not.Null,
                     "The circles, outer ring and connectors must be one prebuilt shared topology behind class-bound icons.");
@@ -858,6 +879,8 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(root.Q<Button>("Map01A Skill Node 0"), Is.SameAs(skillNode0), profile.Id);
                     Assert.That(root.Q<Button>("Map01A Potential Node 0"), Is.SameAs(potentialNode0), profile.Id);
                     Assert.That(root.Q("Map01A Potential Topology Base"), Is.SameAs(potentialTopology), profile.Id);
+                    Assert.That(root.Q("Map01A Potential Detail Facts"), Is.SameAs(potentialFacts), profile.Id,
+                        "Class refresh must rebind the shared Potential detail template rather than rebuilding one per class.");
                     Assert.That(root.Query<Button>(className: "lgo-skill-node").ToList().Count, Is.EqualTo(9), profile.Id);
                     Assert.That(root.Query<Button>(className: "lgo-potential-node").ToList().Count, Is.EqualTo(5), profile.Id);
                     Assert.That(root.Q<Label>("Map01A Skill Node 0 Title").text,

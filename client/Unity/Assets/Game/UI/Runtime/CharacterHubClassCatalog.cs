@@ -33,18 +33,23 @@ namespace LinhGioi.UI
 
     public sealed class CharacterHubPotentialPreview
     {
-        public CharacterHubPotentialPreview(string name, string value, string iconId, string description)
+        public CharacterHubPotentialPreview(string name, string value, string iconId,
+            string summary, string currentEffect, string nextEffect)
         {
             Name = name;
             Value = value;
             IconId = iconId;
-            Description = description;
+            Summary = summary;
+            CurrentEffect = currentEffect;
+            NextEffect = nextEffect;
         }
 
         public string Name { get; }
         public string Value { get; }
         public string IconId { get; }
-        public string Description { get; }
+        public string Summary { get; }
+        public string CurrentEffect { get; }
+        public string NextEffect { get; }
     }
 
     public sealed class CharacterHubSpiritPetPreview
@@ -180,15 +185,17 @@ namespace LinhGioi.UI
             new[]
             {
                 new CharacterHubPotentialPreview("Công", "120", "attack",
-                    "Tăng sức tấn công và hiệu quả gây sát thương.\n\nHiệu quả hiện tại  Công +120\nKhi cộng 1 điểm  Công +2"),
+                    "Tăng sức tấn công và hiệu quả gây sát thương.", "Công  +120", "Công  +2"),
                 new CharacterHubPotentialPreview("Thủ", "118", "defense",
-                    "Tăng khả năng phòng thủ và giảm sát thương phải chịu.\n\nHiệu quả hiện tại  Thủ +118\nKhi cộng 1 điểm  Thủ +2"),
+                    "Tăng khả năng phòng thủ và giảm sát thương phải chịu.", "Thủ  +118", "Thủ  +2"),
                 new CharacterHubPotentialPreview("Sinh lực", "250", "vitality",
-                    "Tăng cường thể chất, sinh lực và khả năng phòng thủ.\n\nHiệu quả hiện tại\nSinh lực (HP)  +12.500\nPhòng thủ  +250\n\nKhi cộng 1 điểm\nSinh lực (HP)  +50\nPhòng thủ  +1"),
+                    "Tăng cường thể chất, sinh lực và khả năng phòng thủ.",
+                    "Sinh lực (HP)  +12.500\nPhòng thủ  +250",
+                    "Sinh lực (HP)  +50\nPhòng thủ  +1"),
                 new CharacterHubPotentialPreview("Linh lực", "96", "spirit",
-                    "Tăng linh lực và khả năng duy trì kỹ năng.\n\nHiệu quả hiện tại  Linh lực +96\nKhi cộng 1 điểm  Linh lực +2"),
+                    "Tăng linh lực và khả năng duy trì kỹ năng.", "Linh lực  +96", "Linh lực  +2"),
                 new CharacterHubPotentialPreview("Nhanh nhẹn", "110", "agility",
-                    "Tăng tốc độ hành động và khả năng né tránh.\n\nHiệu quả hiện tại  Nhanh nhẹn +110\nKhi cộng 1 điểm  Nhanh nhẹn +2")
+                    "Tăng tốc độ hành động và khả năng né tránh.", "Nhanh nhẹn  +110", "Nhanh nhẹn  +2")
             });
 
         private static CharacterHubSkillPreview[] SharedSkills(string classId, string identity, params string[] names)
