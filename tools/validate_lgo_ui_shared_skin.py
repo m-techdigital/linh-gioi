@@ -8,6 +8,16 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+REVOKED_STATIC_CLASS_PREVIEW_PATHS = (
+    "client/Unity/Assets/Game/World/Runtime/TwoDClassMixedLoadoutFitPreview.cs",
+    "client/Unity/Assets/Game/World/Runtime/CongDongLamMap01AClassEquipmentCapture.cs",
+    "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/KiemMixedLoadoutFitPreview",
+    "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/PhapMixedLoadoutFitPreview",
+    "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/CoMixedLoadoutFitPreview",
+    "client/Unity/Assets/Game/World/Runtime/Resources/LGOClasses/LinhMixedLoadoutFitPreview",
+    "tools/capture_lgo_class_equipment.py",
+)
+
 REQUIRED_SKIN_MARKERS = [
     "ApplyLgoFrame",
     "ApplyLgoGlassPanel",
@@ -399,6 +409,13 @@ def validate_root(root: Path = ROOT) -> list[str]:
     skin = ui_dir / "CongDongLamArrivalHud.Skin.cs"
     partials = sorted(ui_dir.glob("CongDongLamArrivalHud*.cs"))
     violations: list[str] = []
+
+    for relative in REVOKED_STATIC_CLASS_PREVIEW_PATHS:
+        if (root / relative).exists():
+            violations.append(
+                f"{relative}: legacy static class renderer/capture path was revoked; "
+                "Character Hub must use the active source-pose actor"
+            )
 
     agents = root / "AGENTS.md"
     if not agents.is_file():

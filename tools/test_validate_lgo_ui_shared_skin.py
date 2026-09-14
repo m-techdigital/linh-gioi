@@ -57,6 +57,16 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("objective/autopilot prompt cũ" in item for item in violations), violations)
 
+    def test_rejects_reintroduced_legacy_static_class_renderer(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            legacy = Path(temp) / "client/Unity/Assets/Game/World/Runtime/TwoDClassMixedLoadoutFitPreview.cs"
+            legacy.parent.mkdir(parents=True)
+            legacy.write_text("public sealed class TwoDClassMixedLoadoutFitPreview {}\n", encoding="utf-8")
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("legacy static class renderer" in item for item in violations), violations)
+
     def test_rejects_register_screen_that_skips_shared_panel_base(self) -> None:
         with self._copy_minimal_repo() as temp:
             register = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Register.cs"

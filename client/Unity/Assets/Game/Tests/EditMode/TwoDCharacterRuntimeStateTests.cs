@@ -21,6 +21,74 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void CharacterHubCatalogDefinesFiveClassProfilesWithoutBorrowingKiemSkillArt()
+        {
+            var profiles = CharacterHubClassCatalog.Profiles;
+
+            Assert.That(profiles.Select(profile => profile.Id),
+                Is.EqualTo(new[] { "vo", "kiem", "phap", "co", "linh" }));
+            Assert.That(profiles.Select(profile => profile.Label),
+                Is.EqualTo(new[] { "Võ", "Kiếm", "Pháp", "Cơ", "Linh" }));
+            foreach (var profile in profiles)
+            {
+                Assert.That(profile.Skills.Count, Is.EqualTo(9), profile.Id + " must fill the shared 3x3 skill path.");
+                Assert.That(profile.Potentials.Count, Is.EqualTo(5), profile.Id + " must fill the shared potential diagram.");
+                Assert.That(profile.EquippedSkillIndices.Count, Is.EqualTo(4));
+                Assert.That(profile.SpiritSynergy, Is.Not.Empty);
+                if (profile.Id != "kiem")
+                    Assert.That(profile.Skills.All(skill => !skill.UseKiemSkillArt), Is.True,
+                        profile.Id + " must use provenance-backed shared icons instead of pretending Kiếm art belongs to another class.");
+            }
+        }
+
+        [Test]
+        public void CharacterHubDoesNotReviveLegacyStaticClassPreviewAndKeepsFixedActorStage()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character hub class binding test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var sourcePose = new GameObject("current source-pose actor").AddComponent<TwoDSourcePoseReview>();
+                sourcePose.transform.SetParent(scene.transform, false);
+                typeof(CongDongLamMap01AArtPreview)
+                    .GetField("_sourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(scene, sourcePose);
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                scene.ToggleInventory();
+                typeof(CongDongLamArrivalHud).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .Invoke(host.GetComponentInChildren<CongDongLamArrivalHud>(), null);
+                var shell = root.Q("Map01A Inventory");
+                Assert.That(scene.CanCycleCharacterHubClass, Is.False,
+                    "A Character Hub without registered source-pose alternatives must not expose static class-fit packs.");
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo("vo"));
+                Assert.That(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects()
+                    .SelectMany(item => item.GetComponentsInChildren<Transform>(true))
+                    .All(item => !item.name.Contains("ten-slot shared-rig review")), Is.True);
+                Assert.That(root.Q("Map01A Inventory"), Is.SameAs(shell));
+                var portrait = root.Q("Map01A Character Hero Portrait");
+                Assert.That(portrait.style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "The fixed character stage must not collapse while a class portrait is unavailable.");
+                Assert.That(portrait.style.width.value.value, Is.EqualTo(400));
+                Assert.That(root.Q("Map01A Character Hero Left Equipment Rail").style.width.value.value, Is.EqualTo(76));
+                Assert.That(root.Q("Map01A Character Hero Right Equipment Rail").style.width.value.value, Is.EqualTo(76));
+                foreach (var slot in scene.VoEquipmentSlotIds)
+                    Assert.That(scene.GetVoEquipmentThumbnailSprite(slot),
+                        Is.EqualTo(scene.GetMap01ACharacterEquipmentIconSprite(slot)),
+                        "The current source-pose actor must keep the dedicated readable slot icon; "
+                        + "it must not fall back to a cropped legacy renderer sprite for " + slot);
+                Assert.That(root.Q<Button>("Map01A Inventory Gender").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "A single-gender source pack must not leave a disabled status button under the fixed actor stage.");
+            }
+            finally
+            {
+                foreach (var item in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(item)) Object.DestroyImmediate(item);
+            }
+        }
+
+        [Test]
         public void SharedStateOwnsPresentationSelectionAndLoadout()
         {
             var state = CreateState();
@@ -265,7 +333,8 @@ namespace LinhGioi.Tests.EditMode
                 var heroCard = root.Q("Map01A Character Hero Card");
                 var heroPortrait = root.Q<VisualElement>("Map01A Character Hero Portrait");
                 var heroInfo = root.Q("Map01A Character Hero Info");
-                Assert.That(heroPortrait.style.backgroundImage.value.sprite, Is.EqualTo(scene.GetVoAvatarThumbnailSprite()));
+                Assert.That(heroPortrait.style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "The Character Hub keeps one fixed actor stage in headless tests; Player graphics populate it from the active actor layers.");
                 Assert.That(heroInfo.parent, Is.EqualTo(heroPanel),
                     "Approved character hierarchy keeps name/power below the actor instead of squeezing it into a third inner column.");
                 Assert.That(heroPortrait.style.height.value.value, Is.GreaterThanOrEqualTo(340),
@@ -504,16 +573,21 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Passive Skills Category").enabledSelf, Is.False,
                     "Unimplemented skill categories must be visibly gated instead of accepting dead clicks.");
                 Assert.That(root.Q<Button>("Map01A Method Skills Category").enabledSelf, Is.False);
-                var firstSkillNode = root.Q<Button>("Map01A Skill Node Thiên Kiếm Quyết");
+                var activeProfile = CharacterHubClassCatalog.Get(scene.ActiveEquipmentClassId);
+                var firstSkill = activeProfile.Skills[0];
+                var firstSkillNode = root.Q<Button>("Map01A Skill Node " + firstSkill.Name);
                 Assert.That(firstSkillNode.ClassListContains("lgo-skill-node"), Is.True,
                     "All skill nodes must use the shared circular skill-node base.");
                 Assert.That(firstSkillNode.style.width.value.value, Is.InRange(96, 104));
                 Assert.That(root.Q<VisualElement>("Map01A Active Skills Category Icon"), Is.Not.Null);
-                Assert.That(root.Q<VisualElement>("Map01A Skill Node Thiên Kiếm Quyết Icon").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetMap01ASkillIconSprite("thien_kiem_quyet")));
-                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill thien_kiem_quyet").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetMap01ASkillIconSprite("thien_kiem_quyet")));
-                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill thien_kiem_quyet").style.width.value.value,
+                var firstExpectedIcon = firstSkill.UseKiemSkillArt
+                    ? scene.GetMap01ASkillIconSprite(firstSkill.IconId)
+                    : scene.GetMap01AHudIconSprite(firstSkill.IconId);
+                Assert.That(root.Q<VisualElement>("Map01A Skill Node " + firstSkill.Name + " Icon").style.backgroundImage.value.sprite,
+                    Is.EqualTo(firstExpectedIcon));
+                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill " + firstSkill.IconId).style.backgroundImage.value.sprite,
+                    Is.EqualTo(firstExpectedIcon));
+                Assert.That(root.Q<VisualElement>("Map01A Equipped Skill " + firstSkill.IconId).style.width.value.value,
                     Is.EqualTo(58), "The full-width equipped strip must keep readable icons without clipping its skill-points badge.");
                 Assert.That(root.Q<Label>("Map01A Equipped Skill Heading").text, Is.EqualTo("Kỹ năng đã trang bị"));
                 Assert.That(root.Query<VisualElement>(className: "lgo-equipped-skill-slot").ToList().Count, Is.EqualTo(4));
@@ -532,15 +606,18 @@ namespace LinhGioi.Tests.EditMode
                 var hubDetailName = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailName", flags).GetValue(hud);
                 var hubDetailBody = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailBody", flags).GetValue(hud);
                 var hubDetailStatus = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailStatus", flags).GetValue(hud);
-                var selectedSkillNode = root.Q<Button>("Map01A Skill Node Kiếm Vũ");
+                var selectedSkill = activeProfile.Skills[2];
+                var selectedSkillNode = root.Q<Button>("Map01A Skill Node " + selectedSkill.Name);
                 InvokeBoundButton(selectedSkillNode);
-                Assert.That(hubDetailName.text, Is.EqualTo("Kiếm Vũ"),
+                Assert.That(hubDetailName.text, Is.EqualTo(selectedSkill.Name),
                     "Selecting a skill must update the shared detail-right panel instead of leaving the default skill visible.");
                 Assert.That(selectedSkillNode.style.borderTopWidth.value, Is.EqualTo(2),
                     "The selected node must expose the same visible selection state used by its detail-right content.");
                 Assert.That(firstSkillNode.style.borderTopWidth.value, Is.EqualTo(1));
                 Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetMap01ASkillIconSprite("kiem_vu")));
+                    Is.EqualTo(selectedSkill.UseKiemSkillArt
+                        ? scene.GetMap01ASkillIconSprite(selectedSkill.IconId)
+                        : scene.GetMap01AHudIconSprite(selectedSkill.IconId)));
                 StringAssert.DoesNotContain("chờ dữ liệu", hubDetailBody.text);
                 StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
 

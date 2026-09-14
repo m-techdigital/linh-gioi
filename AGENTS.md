@@ -8,6 +8,7 @@ This repository uses persistent continuous-work mode. Read this file before maki
 - Trạng thái runtime là `FIX_REQUIRED`; mọi kết luận `LAYOUT_LOCKED` trước feedback Player mới nhất chỉ là lịch sử và không được dùng để chuyển task.
 - Làm shared layout tổng trước, rồi hoàn thiện tuần tự từng design. Không chuyển sang Login/HUD/NPC hoặc bất kỳ screen khác trước gate năm tab.
 - Class/pose/wardrobe/source bị loại khỏi scope. Không build/capture class, không resume hoặc rollback code class.
+- Character Hub chỉ dùng actor source-pose hiện hành. `TwoDClassMixedLoadoutFitPreview`, bốn pack `*MixedLoadoutFitPreview` và class-equipment capture đã bị thu hồi; không giữ hoặc đưa lại renderer tĩnh sai dưới dạng fallback/reference runtime.
 
 ## Operational goal lock — owner override 2026-09-14
 

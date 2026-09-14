@@ -479,6 +479,7 @@ namespace LinhGioi.UI
             _characterHeroLeftEquipmentRail = new VisualElement { name = "Map01A Character Hero Left Equipment Rail" };
             _characterHeroLeftEquipmentRail.style.flexDirection = FlexDirection.Column;
             _characterHeroLeftEquipmentRail.style.flexGrow = 0;
+            _characterHeroLeftEquipmentRail.style.flexShrink = 0;
             _characterHeroLeftEquipmentRail.style.width = 76;
             _characterHeroLeftEquipmentRail.style.height = 420;
             _characterHeroLeftEquipmentRail.style.justifyContent = Justify.SpaceBetween;
@@ -488,6 +489,8 @@ namespace LinhGioi.UI
             _characterHeroPortrait = new VisualElement { name = "Map01A Character Hero Portrait" };
             _characterHeroPortrait.style.width = 400;
             _characterHeroPortrait.style.height = 428;
+            _characterHeroPortrait.style.flexGrow = 0;
+            _characterHeroPortrait.style.flexShrink = 0;
             _characterHeroPortrait.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             _characterHeroPortrait.style.marginRight = 8;
             _characterHeroPortrait.style.marginTop = 0;
@@ -497,6 +500,7 @@ namespace LinhGioi.UI
             _characterHeroRightEquipmentRail = new VisualElement { name = "Map01A Character Hero Right Equipment Rail" };
             _characterHeroRightEquipmentRail.style.flexDirection = FlexDirection.Column;
             _characterHeroRightEquipmentRail.style.flexGrow = 0;
+            _characterHeroRightEquipmentRail.style.flexShrink = 0;
             _characterHeroRightEquipmentRail.style.width = 76;
             _characterHeroRightEquipmentRail.style.height = 420;
             _characterHeroRightEquipmentRail.style.justifyContent = Justify.SpaceBetween;
@@ -787,6 +791,7 @@ namespace LinhGioi.UI
 
         private void ShowInventoryMode(bool characterInfo)
         {
+            _activeCharacterHubPreviewMode = null;
             HideCharacterHubPreviewPanels();
             ShowInventoryCategory(characterInfo ? "equipment" : "all");
             _inventoryHeroPanel.style.flexGrow = 0;
@@ -1000,11 +1005,15 @@ namespace LinhGioi.UI
             if (_inventoryCountBadge != null && string.IsNullOrEmpty(_inventorySearchQuery))
                 _inventoryCountBadge.text = "56/120 ô";
 
-            var portraitSprite = _scene.GetVoAvatarThumbnailSprite();
+            var portraitTexture = _scene.GetCharacterHubAvatarPreviewTexture();
             if (_characterHeroPortrait != null)
             {
-                _characterHeroPortrait.style.backgroundImage = portraitSprite == null ? StyleKeyword.None : new StyleBackground(portraitSprite);
-                _characterHeroPortrait.style.display = portraitSprite == null ? DisplayStyle.None : DisplayStyle.Flex;
+                if (portraitTexture != null) _characterHeroPortrait.style.backgroundImage = new StyleBackground(portraitTexture);
+                else _characterHeroPortrait.style.backgroundImage = StyleKeyword.None;
+                // Keep the equipment rails anchored around a fixed stage even while a
+                // class portrait is loading or unavailable. Collapsing this element
+                // pulls all ten equipment slots into the middle of the character tab.
+                _characterHeroPortrait.style.display = DisplayStyle.Flex;
             }
             if (_characterHeroQuickIcons == null || _equipmentSlotIds == null) return;
             for (var i = 0; i < _characterHeroQuickIcons.Length; i++)

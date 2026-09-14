@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
 namespace LinhGioi.World
@@ -53,15 +54,6 @@ namespace LinhGioi.World
         public int VoJumpStartCount { get; private set; }
         public bool VoSomersaultEnabled => _registeredOutfit != null;
         private bool RegisteredRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered") >= 0 || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered-equipment") >= 0;
-        private bool ClassReviewRequested => ReviewClassId != null;
-        private string ReviewClassId => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-linh-review") >= 0 ? "linh"
-            : Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-co-review") >= 0 ? "co"
-            : Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-phap-review") >= 0 ? "phap"
-            : Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-kiem-review") >= 0 ? "kiem" : null;
-        private bool ClassCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-kiem-capture") >= 0
-            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-phap-capture") >= 0
-            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-co-capture") >= 0
-            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-linh-capture") >= 0;
         private bool CharacterSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
         private bool ServerSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-server-select-capture") >= 0;
         private bool RegisterCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-register-capture") >= 0;
@@ -69,7 +61,7 @@ namespace LinhGioi.World
         private bool InventoryTabsCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-inventory-tabs-capture") >= 0;
         private bool CharacterScreenCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-screen-capture") >= 0;
         private bool MenuCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-menu-capture") >= 0;
-        public bool IsCapturing => _registeredCapturing || _poseLoopCapturing || ClassCaptureRequested
+        public bool IsCapturing => _registeredCapturing || _poseLoopCapturing
             || CharacterSelectCaptureRequested || ServerSelectCaptureRequested || RegisterCaptureRequested || PasswordRecoveryCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
             || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
         public float PlayerX => _routeX;
@@ -223,9 +215,8 @@ namespace LinhGioi.World
         private bool _map01ASkillIconsLoaded;
         private bool _map01APotentialIconsLoaded;
         private bool _map01AHudIconsLoaded;
-        private TwoDClassMixedLoadoutFitPreview _classFitPreview;
-        private string _classFitPreviewId = "kiem";
-        private bool _classFitPreviewActive;
+        private Texture2D _characterHubClassPortrait;
+        private string _characterHubClassPortraitKey;
         private sealed class CharacterHubLoadoutState
         {
             public string Mode;
@@ -270,11 +261,13 @@ namespace LinhGioi.World
         public bool IsSourcePoseReviewActive => ActiveSourcePoseReview != null;
         public bool CanCycleSourcePoseGender => _sourcePoseReview != null && _femaleSourcePoseReview != null;
         public bool CanCycleSourcePoseClass => IsSourcePoseReviewActive && _sourcePoseClassOptions.Count > 1;
-        public bool CanCycleCharacterHubClass => _voRig != null && !HasAnySourcePoseReview;
+        // Character Hub follows the same registered source-pose actor as the map.
+        // Static MixedLoadoutFitPreview packs are review-only and must never become
+        // the interactive class selector merely because no source pack was supplied.
+        public bool CanCycleCharacterHubClass => CanCycleSourcePoseClass;
         public IReadOnlyList<string> CharacterHubClassIds => CharacterHubClassOrder;
-        public bool ClassEquipmentPreviewActive => _classFitPreviewActive;
-        public string ActiveEquipmentClassId => _classFitPreviewActive ? _classFitPreviewId : ActiveSourcePoseReview?.ClassId ?? "vo";
-        public string ActiveEquipmentClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel : ActiveSourcePoseReview?.ClassLabel ?? "Võ";
+        public string ActiveEquipmentClassId => ActiveSourcePoseReview?.ClassId ?? "vo";
+        public string ActiveEquipmentClassLabel => ActiveSourcePoseReview?.ClassLabel ?? "Võ";
         public IReadOnlyList<string> VoEquipmentSlotIds => VoEquipmentSlots;
         public bool IsVoEquipmentSlotEquipped(string slot) => _voState.IsEquipped(slot);
         public int GetVoEquipmentItemLevel(string slot) => _voEquipmentLevels.TryGetValue(slot, out var level)
@@ -283,7 +276,6 @@ namespace LinhGioi.World
         {
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
-            if (_classFitPreviewActive) return _classFitPreview.GetSlotItemId(VoReviewSlotIds[index]);
             var reviewId = ActiveSourcePoseReview?.GetSlotItemId(VoReviewSlotIds[index]);
             return string.IsNullOrEmpty(reviewId) ? "vo_" + slot + "_lv" + GetVoEquipmentItemLevel(slot).ToString("000") : reviewId;
         }
@@ -291,12 +283,8 @@ namespace LinhGioi.World
         {
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
-            if (_classFitPreviewActive) return _classFitPreview.GetSlotThumbnailSprite(VoReviewSlotIds[index]);
-            if (ActiveSourcePoseReview == null)
-            {
-                var uiIcon = GetMap01ACharacterEquipmentIconSprite(slot);
-                if (uiIcon != null) return uiIcon;
-            }
+            var uiIcon = GetMap01ACharacterEquipmentIconSprite(slot);
+            if (uiIcon != null) return uiIcon;
             var level = GetVoEquipmentItemLevel(slot);
             var partId = "lv" + level.ToString("000") + "_" + VoAvatarGender + "_slot_" + slot;
             if (_voAvatarParts.TryGetValue(partId, out var partRenderer) && partRenderer.sprite != null)
@@ -324,6 +312,78 @@ namespace LinhGioi.World
             if (!string.Equals(ActiveEquipmentClassId, "vo", StringComparison.OrdinalIgnoreCase)) return null;
             var partId = "lv" + VoAvatarLevel.ToString("000") + "_" + VoAvatarGender + "_full";
             return _voAvatarParts.TryGetValue(partId, out var renderer) ? renderer.sprite : null;
+        }
+        public Texture2D GetCharacterHubAvatarPreviewTexture()
+        {
+            if (SystemInfo.graphicsDeviceType == GraphicsDeviceType.Null) return null;
+            var actor = ActiveSourcePoseReview != null ? ActiveSourcePoseReview.transform : _voAvatarRoot;
+            if (actor == null || !actor.gameObject.activeInHierarchy) return null;
+            var renderers = actor.GetComponentsInChildren<SpriteRenderer>(false)
+                .Where(renderer => renderer.enabled && renderer.sprite != null)
+                .ToArray();
+            if (renderers.Length == 0) return null;
+            var key = ActiveEquipmentClassId + "|" + VoAvatarGender + "|"
+                + string.Join(";", renderers.Select(renderer => renderer.sprite.GetInstanceID() + ":" + renderer.sortingOrder));
+            if (_characterHubClassPortrait != null && _characterHubClassPortraitKey == key)
+                return _characterHubClassPortrait;
+            if (_characterHubClassPortrait != null)
+            {
+                if (Application.isPlaying) Destroy(_characterHubClassPortrait);
+                else DestroyImmediate(_characterHubClassPortrait);
+            }
+            _characterHubClassPortrait = RenderAvatarPortrait(renderers, 400, 428,
+                "Character Hub " + ActiveEquipmentClassLabel + " active actor portrait");
+            _characterHubClassPortraitKey = key;
+            return _characterHubClassPortrait;
+        }
+
+        private static Texture2D RenderAvatarPortrait(SpriteRenderer[] renderers, int width, int height, string textureName)
+        {
+            var bounds = renderers[0].bounds;
+            foreach (var renderer in renderers.Skip(1)) bounds.Encapsulate(renderer.bounds);
+            var previousLayers = renderers.Select(renderer => renderer.gameObject.layer).ToArray();
+            var cameraHost = new GameObject(textureName + " camera");
+            var camera = cameraHost.AddComponent<Camera>();
+            var target = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
+            var previousActive = RenderTexture.active;
+            try
+            {
+                const int portraitLayer = 30;
+                foreach (var renderer in renderers) renderer.gameObject.layer = portraitLayer;
+                camera.clearFlags = CameraClearFlags.SolidColor;
+                camera.backgroundColor = Color.clear;
+                camera.orthographic = true;
+                camera.allowHDR = false;
+                camera.allowMSAA = false;
+                camera.cullingMask = 1 << portraitLayer;
+                camera.aspect = width / (float)height;
+                camera.orthographicSize = Mathf.Max(bounds.extents.y, bounds.extents.x / camera.aspect) * 1.08f;
+                camera.transform.position = new Vector3(bounds.center.x, bounds.center.y, bounds.min.z - 10f);
+                camera.targetTexture = target;
+                camera.Render();
+                RenderTexture.active = target;
+                var texture = new Texture2D(width, height, TextureFormat.RGBA32, false) { name = textureName };
+                texture.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+                texture.Apply(false, false);
+                return texture;
+            }
+            finally
+            {
+                for (var index = 0; index < renderers.Length; index++) renderers[index].gameObject.layer = previousLayers[index];
+                RenderTexture.active = previousActive;
+                camera.targetTexture = null;
+                target.Release();
+                if (Application.isPlaying)
+                {
+                    Destroy(target);
+                    Destroy(cameraHost);
+                }
+                else
+                {
+                    DestroyImmediate(target);
+                    DestroyImmediate(cameraHost);
+                }
+            }
         }
         public Sprite GetMap01AItemThumbnailSprite(string itemId)
         {
@@ -429,7 +489,6 @@ namespace LinhGioi.World
         }
         public bool HasVoEquipmentItemVariant(string slot)
         {
-            if (_classFitPreviewActive) return true;
             if (ActiveSourcePoseReview == null) return false;
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
@@ -442,13 +501,12 @@ namespace LinhGioi.World
         public string VoAvatarMotionState => _voState.MotionState;
         public string VoAvatarMotionFrameId { get; private set; } = "idle";
         public bool VoRunEnabled => _voState.RunEnabled;
-        public string AvatarClassLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel + " · 10 slot review" : ActiveSourcePoseReview?.ClassLabel ?? "Võ";
-        public string EquipmentFitSummary => _classFitPreviewActive
-            ? _classFitPreview.ClassLabel + " · rig chung · 10 slot · cấp 1/10/20/30"
-            : (ActiveSourcePoseReview?.ClassLabel ?? "Võ") + " " + (VoAvatarGender == "female" ? "nữ" : "nam") + " · cùng canvas/pivot · đủ 6 pose";
+        public string AvatarClassLabel => ActiveSourcePoseReview?.ClassLabel ?? "Võ";
+        public string EquipmentFitSummary => (ActiveSourcePoseReview?.ClassLabel ?? "Võ") + " "
+            + (VoAvatarGender == "female" ? "nữ" : "nam") + " · cùng canvas/pivot · đủ 6 pose";
         public string EquipmentLevelLabel => "Lv" + VoAvatarLevel;
         public string EquipmentSlotLabel => VoSelectedEquipmentSlot + " · Lv" + VoSelectedEquipmentItemLevel;
-        public string SkillLabel => _classFitPreviewActive ? _classFitPreview.ClassLabel + " kỹ review" : "Liên Quyền";
+        public string SkillLabel => "Liên Quyền";
         public Vector2 VoAvatarMotionScale => _voAvatarRoot == null ? Vector2.one : _voAvatarRoot.localScale;
         public bool VoAvatarUsesFrameMotion => _registeredOutfit == null && VoAvatarLevel == 1 && VoAvatarMode == "full" && VoAvatarMotionState != "idle";
         public bool VoAvatarUsesAlignedPaperDollMotion => VoAvatarMotionState != "idle" && !VoAvatarUsesFrameMotion;
@@ -727,15 +785,6 @@ namespace LinhGioi.World
                 }
             }
             ApplyVoPose();
-            _classFitPreviewId = ReviewClassId ?? "kiem";
-            _classFitPreview = new TwoDClassMixedLoadoutFitPreview(_voAvatarRoot, _voRig, _classFitPreviewId);
-            if (ClassReviewRequested)
-            {
-                EnsureClassFitPreview(ReviewClassId);
-                InventoryOpen = true;
-                LastInteractionMessage = "Hành trang " + _classFitPreview.ClassLabel + " 10 slot đã mở · chọn món để tháo/mặc hoặc đổi cấp.";
-                SetClassFitPreview("male", "idle");
-            }
             PartCount = parts.Count;
             parts.Add("skyline", MakeSprite(far, new Rect(0, 0, far.width, far.height)));
             foreach (var layer in info.layers)
@@ -971,15 +1020,20 @@ namespace LinhGioi.World
         public void CycleSourcePoseClass()
         {
             if (!CanCycleSourcePoseClass || Time.realtimeSinceStartup < _sourcePoseClassSwitchReadyAt) return;
+            SaveCharacterHubLoadout(ActiveEquipmentClassId);
             _sourcePoseClassIndex = (_sourcePoseClassIndex + 1) % _sourcePoseClassOptions.Count;
             var option = _sourcePoseClassOptions[_sourcePoseClassIndex];
             _sourcePoseReview = ReloadClassGender(_sourcePoseReview, option.MalePrimary, option.MaleAlternates);
             _femaleSourcePoseReview = ReloadClassGender(_femaleSourcePoseReview, option.FemalePrimary, option.FemaleAlternates);
             if (ActiveSourcePoseReview == null) _voState.CycleGender();
+            RestoreCharacterHubLoadout(ActiveEquipmentClassId);
             var complete = ActiveSourcePoseReview.GetCompleteItemLevels();
-            var selectedLevel = complete.Contains(VoAvatarLevel) ? VoAvatarLevel : complete.FirstOrDefault();
-            if (selectedLevel > 0)
-                foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = selectedLevel;
+            if (!complete.Contains(VoAvatarLevel))
+            {
+                var selectedLevel = complete.FirstOrDefault();
+                if (selectedLevel > 0)
+                    foreach (var slot in VoEquipmentSlots) _voEquipmentLevels[slot] = selectedLevel;
+            }
             RefreshVoAvatarMode();
             ApplyVoPose();
             // Loading both gender stacks is synchronous in this review tool. Ignore key-repeat
@@ -991,32 +1045,7 @@ namespace LinhGioi.World
 
         public void CycleCharacterHubClass()
         {
-            if (!CanCycleCharacterHubClass) return;
-            var current = Array.IndexOf(CharacterHubClassOrder, ActiveEquipmentClassId);
-            SetCharacterHubClass(CharacterHubClassOrder[(current + 1 + CharacterHubClassOrder.Length) % CharacterHubClassOrder.Length]);
-        }
-
-        public void SetCharacterHubClass(string classId)
-        {
-            if (Array.IndexOf(CharacterHubClassOrder, classId) < 0)
-                throw new ArgumentException("Unknown Character Hub class: " + classId, nameof(classId));
-            if (!CanCycleCharacterHubClass || ActiveEquipmentClassId == classId) return;
-
-            SaveCharacterHubLoadout(ActiveEquipmentClassId);
-            if (classId == "vo")
-            {
-                _classFitPreviewActive = false;
-            }
-            else
-            {
-                EnsureClassFitPreview(classId);
-                _classFitPreviewActive = true;
-                _registeredOutfit?.SetPresentationVisible(false);
-            }
-            RestoreCharacterHubLoadout(classId);
-            RefreshVoAvatarMode();
-            LastInteractionMessage = "Character Hub đã chuyển sang " + ActiveEquipmentClassLabel
-                + " · giữ riêng trạng thái trang bị của từng class.";
+            if (CanCycleSourcePoseClass) CycleSourcePoseClass();
         }
 
         private void SaveCharacterHubLoadout(string classId)
@@ -1142,15 +1171,6 @@ namespace LinhGioi.World
 
         public void CycleVoSelectedEquipmentItemLevel()
         {
-            if (_classFitPreviewActive)
-            {
-                var slotIndex = Array.IndexOf(VoEquipmentSlots, VoSelectedEquipmentSlot);
-                var slot = VoReviewSlotIds[slotIndex];
-                _voEquipmentLevels[VoSelectedEquipmentSlot] = _classFitPreview.NextSlotLevel(
-                    slot, VoSelectedEquipmentItemLevel);
-                RefreshVoAvatarMode();
-                return;
-            }
             if (ActiveSourcePoseReview != null)
             {
                 _voEquipmentLevels[VoSelectedEquipmentSlot] = ActiveSourcePoseReview.NextSlotItemLevel(
@@ -1179,19 +1199,18 @@ namespace LinhGioi.World
                     review.SetSlotVisible(VoReviewSlotIds[index], _voState.IsEquipped(VoEquipmentSlots[index]));
                 }
             var activeReview = ActiveSourcePoseReview;
-            _sourcePoseReview?.SetPresentationVisible(!_classFitPreviewActive && activeReview == _sourcePoseReview);
-            _femaleSourcePoseReview?.SetPresentationVisible(!_classFitPreviewActive && activeReview == _femaleSourcePoseReview);
+            _sourcePoseReview?.SetPresentationVisible(activeReview == _sourcePoseReview);
+            _femaleSourcePoseReview?.SetPresentationVisible(activeReview == _femaleSourcePoseReview);
             if (_registeredOutfit != null)
             {
                 var sourcePoseVisible = activeReview != null;
-                _registeredOutfit.SetPresentationVisible(!sourcePoseVisible && !_classFitPreviewActive);
+                _registeredOutfit.SetPresentationVisible(!sourcePoseVisible);
                 var cycle = _voState.AnimationPhase * (VoAvatarMotionState == "run" ? 4.4f : 3.5f);
                 var weight = TwoDPaperDollPoseSampler.Sample(VoAvatarMotionState, cycle, _voState.ActionProgress);
                 _registeredOutfit.Apply(VoAvatarGender, VoAvatarMode == "base", _voState.IsEquipped,
                     part => _voRigPoseProfiles.TryGetValue(VoAvatarGender + "_" + VoAvatarMotionState + "_" + part, out var profile)
                         ? profile.rotation * weight : 0);
                 _registeredOutfit.ApplyMovement(VoAvatarGender, VoAvatarMotionState, _voState.AnimationPhase, _voState.ActionProgress, _voState.FacingSign);
-                ApplyClassFitPreview();
                 return;
             }
 
@@ -1226,54 +1245,6 @@ namespace LinhGioi.World
                 foreach (var renderer in _voEquipmentComponents.Values) renderer.enabled = false;
             }
             if (_voMotionRenderer != null) _voMotionRenderer.enabled = usesMotionFrame;
-            ApplyClassFitPreview();
-        }
-
-        private void EnsureClassFitPreview(string classId)
-        {
-            if (_classFitPreview != null && _classFitPreviewId == classId) return;
-            _classFitPreview?.Dispose();
-            _classFitPreviewId = classId;
-            _classFitPreview = new TwoDClassMixedLoadoutFitPreview(_voAvatarRoot, _voRig, classId);
-        }
-
-        private void SetClassFitPreview(string gender, string motion)
-        {
-            _classFitPreviewActive = true;
-            _voState.SetPresentation(gender == "male" ? 0 : 1, 0, 2, 0);
-            _voState.EquipAllExcept(null);
-            _registeredOutfit?.SetPresentationVisible(false);
-            _classFitPreview.SetActive(true, gender, motion);
-            RefreshVoAvatarMode();
-        }
-
-        public void ActivateClassEquipmentReview(string classId = "kiem")
-        {
-            EnsureClassFitPreview(classId);
-            if (_classFitPreview == null) throw new InvalidOperationException("Class review pack is not initialized");
-            InventoryOpen = true;
-            SetClassFitPreview("male", "idle");
-        }
-
-        private void ApplyClassFitPreview()
-        {
-            if (_classFitPreview == null) return;
-            if (!_classFitPreviewActive)
-            {
-                _classFitPreview.SetActive(false, VoAvatarGender, VoAvatarMotionState);
-                return;
-            }
-            for (var index = 0; index < VoEquipmentSlots.Length; index++)
-            {
-                var slot = VoReviewSlotIds[index];
-                _classFitPreview.SetSlotLevel(slot, _voEquipmentLevels.TryGetValue(VoEquipmentSlots[index], out var level)
-                    ? level : VoAvatarLevel);
-                _classFitPreview.SetSlotVisible(slot, _voState.IsEquipped(VoEquipmentSlots[index]));
-            }
-            _classFitPreview.SetActive(true, VoAvatarGender, VoAvatarMotionState);
-            foreach (var renderer in _voAvatarParts.Values) renderer.enabled = false;
-            foreach (var renderer in _voEquipmentComponents.Values) renderer.enabled = false;
-            if (_voMotionRenderer != null) _voMotionRenderer.enabled = false;
         }
 
         private void ApplyVoEquipmentComponents()
@@ -1714,16 +1685,11 @@ namespace LinhGioi.World
                 }
             }
             foreach (var marker in _interactionMarkers)
-                marker.Item1.SetActive(!_classFitPreviewActive && marker.Item1 == nearest);
+                marker.Item1.SetActive(marker.Item1 == nearest);
         }
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();
-            if (Application.isPlaying && ClassCaptureRequested)
-            {
-                yield return CaptureClassEquipmentReview();
-                yield break;
-            }
             if (Application.isPlaying && Array.IndexOf(args, "--lgo-vo-pose-loop-capture") >= 0)
             {
                 yield return CaptureSourcePoseLoop();
@@ -2316,7 +2282,9 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var skillsDefault = Path.Combine(directory, "skills-default.png");
             CaptureScreenPng(skillsDefault);
-            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skill Node Kiếm Vũ"));
+            var skillNodes = document.rootVisualElement.Query<Button>(className: "lgo-skill-node").ToList();
+            if (skillNodes.Count < 3) throw new InvalidOperationException("Missing Character Hub 3x3 skill path for capture");
+            InvokeHudButton(skillNodes[2]);
             yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
             yield return new WaitForEndOfFrame();
             var skills = Path.Combine(directory, "skills.png");
@@ -2544,7 +2512,11 @@ namespace LinhGioi.World
             if (_camera != null) { _camera.orthographicSize = _previousCameraSize; _camera.transform.position = _previousCameraPosition; }
             if (_controller != null) { _controller.enabled = _previousControllerEnabled; _controller.RefreshForSmoke(); }
             foreach (var pair in _hidden) if (pair.Key != null) pair.Key.enabled = pair.Value;
-            _classFitPreview?.Dispose();
+            if (_characterHubClassPortrait != null)
+            {
+                if (Application.isPlaying) Destroy(_characterHubClassPortrait);
+                else DestroyImmediate(_characterHubClassPortrait);
+            }
             foreach (var sprite in _sprites)
                 if (sprite != null) { if (Application.isPlaying) Destroy(sprite); else DestroyImmediate(sprite); }
         }

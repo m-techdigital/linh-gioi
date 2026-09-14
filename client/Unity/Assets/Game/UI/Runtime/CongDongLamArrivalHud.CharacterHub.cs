@@ -17,6 +17,12 @@ namespace LinhGioi.UI
         private Texture2D _spiritPetPreviewTexture;
         private readonly List<Button> _skillPathNodes = new List<Button>();
         private readonly List<Button> _potentialPathNodes = new List<Button>();
+        private VisualElement _characterHubBody;
+        private string _renderedCharacterHubClassId;
+        private CharacterHubMode? _activeCharacterHubPreviewMode;
+
+        private CharacterHubClassProfile ActiveCharacterHubProfile =>
+            CharacterHubClassCatalog.Get(_scene.ActiveEquipmentClassId);
 
         private VisualElement CreateHubSurface(string name)
         {
@@ -52,11 +58,13 @@ namespace LinhGioi.UI
             return icon;
         }
 
-        private VisualElement CreateEquippedSkillSlot(string iconId, int index)
+        private VisualElement CreateEquippedSkillSlot(CharacterHubSkillPreview skill, int index)
         {
             var slot = new VisualElement { name = "Map01A Equipped Skill Slot " + index };
             ApplyLgoEquippedSkillSlot(slot);
-            slot.Add(SkillIcon("Map01A Equipped Skill " + iconId, iconId, 58));
+            slot.Add(skill.UseKiemSkillArt
+                ? SkillIcon("Map01A Equipped Skill " + skill.IconId, skill.IconId, 58)
+                : HubIcon("Map01A Equipped Skill " + skill.IconId, skill.IconId, 58));
             var number = LgoLabel(index.ToString(), 11, UiGold, true);
             number.name = "Map01A Equipped Skill Number " + index;
             number.style.position = Position.Absolute;
@@ -227,6 +235,8 @@ namespace LinhGioi.UI
 
         private void InitializeCharacterHub(VisualElement body)
         {
+            _characterHubBody = body;
+            _renderedCharacterHubClassId = _scene.ActiveEquipmentClassId;
             InitializeSkillsView(body);
             InitializePotentialView(body);
             InitializeSpiritPetView(body);
@@ -234,8 +244,29 @@ namespace LinhGioi.UI
             HideCharacterHubPreviewPanels();
         }
 
+        private void RefreshCharacterHubClassProfile()
+        {
+            if (_characterHubBody == null || _renderedCharacterHubClassId == _scene.ActiveEquipmentClassId) return;
+            _renderedCharacterHubClassId = _scene.ActiveEquipmentClassId;
+            _skillPathNodes.Clear();
+            _potentialPathNodes.Clear();
+            _skillsPanel?.RemoveFromHierarchy();
+            _potentialPanel?.RemoveFromHierarchy();
+            _spiritPetPanel?.RemoveFromHierarchy();
+            _hubPreviewDetailPanel?.RemoveFromHierarchy();
+            InitializeSkillsView(_characterHubBody);
+            InitializePotentialView(_characterHubBody);
+            InitializeSpiritPetView(_characterHubBody);
+            _characterHubBody.Add(_hubPreviewDetailPanel);
+            if (_activeCharacterHubPreviewMode.HasValue)
+                ShowCharacterHubPreviewMode(_activeCharacterHubPreviewMode.Value);
+            else
+                HideCharacterHubPreviewPanels();
+        }
+
         private void InitializeSkillsView(VisualElement body)
         {
+            var profile = ActiveCharacterHubProfile;
             _skillsPanel = CreateHubSurface("Map01A Skills Panel");
             var content = new VisualElement { name = "Map01A Skills Workspace" };
             content.style.flexDirection = FlexDirection.Column;
@@ -263,33 +294,26 @@ namespace LinhGioi.UI
             var path = new VisualElement { name = "Map01A Skill Progression Path" };
             path.style.flexGrow = 1;
             path.style.alignItems = Align.Center;
-            var stages = new[]
-            {
-                new[] { ("Thiên Kiếm Quyết", "Lv.8", "thien_kiem_quyet"), ("Lăng Không Bộ", "Lv.5", "lang_khong_bo"), ("Kiếm Vũ", "Lv.4", "kiem_vu") },
-                new[] { ("Hộ Thể", "Lv.3", "ho_the"), ("Song Kiếm", "Lv.6", "song_kiem"), ("Phong Trảm", "Lv.2", "phong_tram") },
-                new[] { ("Kiếm Trận", "Lv.1", "kiem_tran"), ("Ngự Kiếm", "Lv.3", "ngu_kiem"), ("Vạn Kiếm", "Lv.1", "van_kiem") }
-            };
-            for (var stageIndex = 0; stageIndex < stages.Length; stageIndex++)
+            for (var stageIndex = 0; stageIndex < 3; stageIndex++)
             {
                 var stage = new VisualElement { name = "Map01A Skill Path Stage " + (stageIndex + 1) };
                 stage.style.flexDirection = FlexDirection.Row;
                 stage.style.alignItems = Align.Center;
                 stage.style.justifyContent = Justify.Center;
                 stage.style.width = new Length(100, LengthUnit.Percent);
-                for (var nodeIndex = 0; nodeIndex < stages[stageIndex].Length; nodeIndex++)
+                for (var nodeIndex = 0; nodeIndex < 3; nodeIndex++)
                 {
-                    var skill = stages[stageIndex][nodeIndex];
-                    var nodeName = "Map01A Skill Node " + skill.Item1;
-                    var node = CreateHubPathNode(nodeName, skill.Item1, skill.Item2, skill.Item3,
-                        () => SelectSkillNode(nodeName, skill.Item1, skill.Item2, skill.Item3),
-                        stageIndex == 0 && nodeIndex == 0, true);
+                    var skill = profile.Skills[stageIndex * 3 + nodeIndex];
+                    var nodeName = "Map01A Skill Node " + skill.Name;
+                    var node = CreateHubPathNode(nodeName, skill.Name, skill.Level, skill.IconId,
+                        () => SelectSkillNode(nodeName, skill), stageIndex == 0 && nodeIndex == 0, skill.UseKiemSkillArt);
                     _skillPathNodes.Add(node);
                     stage.Add(node);
-                    if (nodeIndex < stages[stageIndex].Length - 1)
+                    if (nodeIndex < 2)
                         stage.Add(CreateHubPathConnector("Map01A Skill Stage " + (stageIndex + 1) + " Connector " + (nodeIndex + 1)));
                 }
                 path.Add(stage);
-                if (stageIndex < stages.Length - 1)
+                if (stageIndex < 2)
                     path.Add(CreateHubPathConnector("Map01A Skill Path Connector " + (stageIndex + 1), true));
             }
             skillArea.Add(path);
@@ -301,9 +325,11 @@ namespace LinhGioi.UI
             equippedRow.style.alignItems = Align.Center;
             equippedRow.style.justifyContent = Justify.SpaceBetween;
             equippedRow.style.minHeight = 68;
-            var equippedIconIds = new[] { "thien_kiem_quyet", "lang_khong_bo", "phong_tram", "van_kiem" };
-            for (var equippedIndex = 0; equippedIndex < equippedIconIds.Length; equippedIndex++)
-                equippedRow.Add(CreateEquippedSkillSlot(equippedIconIds[equippedIndex], equippedIndex + 1));
+            for (var equippedIndex = 0; equippedIndex < profile.EquippedSkillIndices.Count; equippedIndex++)
+            {
+                var skill = profile.Skills[profile.EquippedSkillIndices[equippedIndex]];
+                equippedRow.Add(CreateEquippedSkillSlot(skill, equippedIndex + 1));
+            }
             var pointsGroup = new VisualElement { name = "Map01A Skill Points Group" };
             pointsGroup.style.flexDirection = FlexDirection.Row;
             pointsGroup.style.alignItems = Align.Center;
@@ -328,6 +354,7 @@ namespace LinhGioi.UI
 
         private void InitializePotentialView(VisualElement body)
         {
+            var profile = ActiveCharacterHubProfile;
             _potentialPanel = CreateHubSurface("Map01A Potential Panel");
             var diagram = new VisualElement { name = "Map01A Potential Diagram" };
             diagram.style.width = 650;
@@ -367,15 +394,22 @@ namespace LinhGioi.UI
             coreText.style.unityTextAlign = TextAnchor.MiddleCenter;
             core.Add(coreText);
             diagram.Add(core);
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Công", "Công", "120", "attack", 263, 0));
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Thủ", "Thủ", "118", "defense", 16, 132));
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Sinh lực", "Sinh lực", "250", "vitality", 510, 132, true));
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Linh lực", "Linh lực", "96", "spirit", 138, 270));
-            diagram.Add(CreatePotentialNode("Map01A Potential Node Nhanh nhẹn", "Nhanh nhẹn", "110", "agility", 388, 270));
+            var positions = new[]
+            {
+                new Vector2(263, 0), new Vector2(16, 132), new Vector2(510, 132),
+                new Vector2(138, 270), new Vector2(388, 270)
+            };
+            for (var potentialIndex = 0; potentialIndex < profile.Potentials.Count; potentialIndex++)
+            {
+                var potential = profile.Potentials[potentialIndex];
+                diagram.Add(CreatePotentialNode("Map01A Potential Node " + potential.Name,
+                    potential.Name, potential.Value, potential.IconId,
+                    positions[potentialIndex].x, positions[potentialIndex].y, potentialIndex == 2));
+            }
             _potentialPanel.Add(diagram);
             var footer = InventoryRow("Map01A Potential Footer");
             footer.style.justifyContent = Justify.SpaceBetween;
-            footer.Add(InventoryBadge("Map01A Potential Recommendation", "Đề xuất Võ", new Color(.74f, .92f, 1f, .94f)));
+            footer.Add(InventoryBadge("Map01A Potential Recommendation", profile.Recommendation, new Color(.74f, .92f, 1f, .94f)));
             footer.Add(InventoryBadge("Map01A Potential Footer Points", "Điểm tiềm năng còn lại: 12", UiGold));
             _potentialPanel.Add(footer);
             body.Add(_potentialPanel);
@@ -383,6 +417,7 @@ namespace LinhGioi.UI
 
         private void InitializeSpiritPetView(VisualElement body)
         {
+            var profile = ActiveCharacterHubProfile;
             _spiritPetPanel = CreateHubSurface("Map01A Spirit Pet Panel");
             _spiritPetPreviewTexture = Resources.Load<Texture2D>("LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview");
             var preview = new VisualElement { name = "Map01A Spirit Pet Preview Art" };
@@ -391,7 +426,7 @@ namespace LinhGioi.UI
             preview.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             preview.style.backgroundImage = _spiritPetPreviewTexture == null ? StyleKeyword.None : new StyleBackground(_spiritPetPreviewTexture);
             _spiritPetPanel.Add(preview);
-            var identity = LgoTitleLabel("Thanh Vân Hồ · Lv.20", 19);
+            var identity = LgoTitleLabel("Thanh Vân Hồ · Lv.20 · Đồng hành " + profile.Label, 19);
             identity.style.unityTextAlign = TextAnchor.MiddleCenter;
             _spiritPetPanel.Add(identity);
             _spiritPetPanel.Add(CreateSpiritPetProgress("Map01A Spirit Pet Intimacy", "Thân mật 320/600", 320, new Color(.96f, .32f, .58f, 1f)));
@@ -439,6 +474,7 @@ namespace LinhGioi.UI
             _hubDetailName.name = "Map01A Hub Preview Detail Name";
             detailHeroCopy.Add(_hubDetailName);
             _hubDetailMeta = LgoSubtitleLabel("", 13);
+            _hubDetailMeta.name = "Map01A Hub Preview Detail Meta";
             _hubDetailMeta.style.marginTop = 4;
             detailHeroCopy.Add(_hubDetailMeta);
             _hubSpiritPetBadges = InventoryRow("Map01A Spirit Pet Detail Badges");
@@ -526,6 +562,7 @@ namespace LinhGioi.UI
 
         private void ShowCharacterHubPreviewMode(CharacterHubMode mode)
         {
+            _activeCharacterHubPreviewMode = mode;
             _characterInfoOpen = false;
             _suppliesOpen = false;
             RefreshInventoryShellMode();
@@ -561,10 +598,10 @@ namespace LinhGioi.UI
             ApplyLgoCharacterHubTabState(_spiritPetTab, previewMode == CharacterHubMode.SpiritPet);
         }
 
-        private void SelectSkillNode(string nodeName, string title, string level, string iconId)
+        private void SelectSkillNode(string nodeName, CharacterHubSkillPreview skill)
         {
             foreach (var node in _skillPathNodes) ApplyHubPathNodeSelection(node, node.name == nodeName);
-            ShowSkillDetail(title, level, iconId);
+            ShowSkillDetail(skill);
         }
 
         private void SelectPotentialNode(string nodeName, string title, string value, string iconId)
@@ -591,18 +628,21 @@ namespace LinhGioi.UI
             _hubDetailIcon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
         }
 
-        private void ShowSkillDetail(string title, string level, string iconId)
+        private void ShowSkillDetail(CharacterHubSkillPreview skill)
         {
             ConfigureHubDetailMode(CharacterHubMode.Skills);
-            var sprite = _scene.GetMap01ASkillIconSprite(iconId);
+            var sprite = skill.UseKiemSkillArt
+                ? _scene.GetMap01ASkillIconSprite(skill.IconId)
+                : _scene.GetMap01AHudIconSprite(skill.IconId);
             _hubDetailIcon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
             _hubDetailIcon.style.width = _hubDetailIcon.style.height = 116;
             _hubDetailHeader.text = "CHI TIẾT KỸ NĂNG";
-            _hubDetailName.text = title;
-            _hubDetailMeta.text = "Kỹ năng chủ động · " + level;
-            _hubDetailBody.text = title == "Thiên Kiếm Quyết"
+            _hubDetailName.text = skill.Name;
+            _hubDetailMeta.text = ActiveCharacterHubProfile.Label + " · Kỹ năng chủ động · " + skill.Level;
+            _hubDetailBody.text = skill.Name == "Thiên Kiếm Quyết"
                 ? "Vận kiếm khí thiên đạo, chém mục tiêu phía trước.\n\nSát thương  320% Công\nPhạm vi  Hình quạt trước mặt\nHồi chiêu  12 giây\nTiêu hao MP  180"
-                : "Cấp hiện hành  " + level + "\n\nThông tin hiệu ứng chi tiết sẽ hiển thị khi kỹ năng được lĩnh hội đầy đủ.";
+                : ActiveCharacterHubProfile.Identity + "\n\nCấp hiện hành  " + skill.Level
+                    + "\n\nThông tin hiệu ứng chi tiết sẽ hiển thị khi kỹ năng được lĩnh hội đầy đủ.";
             _hubDetailStatus.text = "Nâng cấp và thay đổi bộ kỹ năng đang khóa.";
         }
 
@@ -614,7 +654,7 @@ namespace LinhGioi.UI
             _hubDetailIcon.style.width = _hubDetailIcon.style.height = 124;
             _hubDetailHeader.text = "CHI TIẾT TIỀM NĂNG";
             _hubDetailName.text = title;
-            _hubDetailMeta.text = "Giá trị xem trước: " + value;
+            _hubDetailMeta.text = ActiveCharacterHubProfile.Label + " · Giá trị xem trước: " + value;
             _hubDetailBody.text = title == "Sinh lực"
                 ? "Tăng cường thể chất, sinh lực và khả năng phòng thủ.\n\nHiệu quả hiện tại\nSinh lực (HP)  +12.500\nPhòng thủ  +250\n\nKhi cộng 1 điểm\nSinh lực (HP)  +50\nPhòng thủ  +1"
                 : "Điểm đang chọn  " + title + " · " + value + "\n\nHiệu quả hiện tại và mức tăng kế tiếp được giữ ở chế độ xem trước.";
@@ -625,7 +665,7 @@ namespace LinhGioi.UI
         {
             if (mode == CharacterHubMode.Skills)
             {
-                ShowSkillDetail("Thiên Kiếm Quyết", "Lv.8", "thien_kiem_quyet");
+                ShowSkillDetail(ActiveCharacterHubProfile.Skills[0]);
             }
             else if (mode == CharacterHubMode.Potential)
             {
@@ -640,8 +680,9 @@ namespace LinhGioi.UI
                 _hubDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
                 _hubDetailHeader.text = "CHI TIẾT LINH THÚ";
                 _hubDetailName.text = "Thanh Vân Hồ";
-                _hubDetailMeta.text = "Lv.20";
+                _hubDetailMeta.text = ActiveCharacterHubProfile.Label + " · Lv.20";
                 _hubDetailBody.text = "Thuộc tính Linh thú\nHP  +8720\nTấn Công  +860\nPhòng Thủ  +430\nHồi Phục  +28%\nGiảm Sát Thương  +12%\n\nKỹ năng Linh thú\nThanh Vân Hộ Thể · Lv.1\nCửu Vĩ Linh Phong · Lv.1";
+                _hubDetailBody.text += "\n\nCộng hưởng " + ActiveCharacterHubProfile.Label + "\n" + ActiveCharacterHubProfile.SpiritSynergy;
                 _hubDetailStatus.text = "Tính năng bồi dưỡng đang khóa.";
             }
         }

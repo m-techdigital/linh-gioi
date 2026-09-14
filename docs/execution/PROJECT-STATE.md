@@ -1,3 +1,12 @@
+## Character Hub — chỉ dùng actor source-pose hiện hành, xóa renderer class tĩnh — 2026-09-14
+
+- Root cause của nhân vật rời thân là hai pipeline renderer cùng tồn tại: actor source-pose đang chạy trên map và `TwoDClassMixedLoadoutFitPreview` có thể được bật lại bởi selector/capture cũ. Pipeline tĩnh đã bị gỡ hoàn toàn gồm runtime class, class capture component/tool/test và bốn resource pack `Kiếm/Pháp/Cơ/Linh MixedLoadoutFitPreview`; không rollback registered outfit hoặc source-pose Võ.
+- Character Hub nay lấy đúng các `SpriteRenderer` đang enable của actor source-pose hiện hành để dựng portrait. Stage cố định `400×428`, rail trang bị `76 px` mỗi bên nên 10 slot không dồn vào giữa khi texture chưa sẵn sàng. Selector class chỉ xuất hiện khi launcher thực sự nạp hơn một source-pose pack hợp lệ; không có fallback sang renderer tĩnh.
+- 10 thumbnail trang bị luôn ưu tiên atlas icon UI đã duyệt thay vì crop sprite quần áo cũ. Nút giới tính chỉ hiện khi có đủ hai source-pose giới tính, nên không còn dòng trạng thái vô hiệu đè lên HP/MP.
+- Player `build/map01a-source-pose-character-hub-player-v2/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=46`. Capture `build/map01a-source-pose-character-hub-runtime-v2/pc/` đạt 9 frame, không dùng chuột/phím OS. Đã xem trực tiếp `character-info.png`: một nhân vật Võ liền thân, cùng actor source-pose với map, đủ 10 slot cố định, icon rõ và footer không chồng.
+- Gate: TDD targeted `1/1`; full `TwoDCharacterRuntimeStateTests` `31/31`; full EditMode `283 total / 282 passed / 0 failed / 1 ignored`; pose pack `12/12`; registered capture `19/19`; shared-skin `21/21`; shared-skin/no-3D/no-source-images pass; frozen diff sạch. Shared-skin validator nay chặn việc đưa lại renderer/resource/capture tĩnh đã thu hồi.
+- Trạng thái `NEED_HUMAN_VISUAL_REVIEW`. Không tiếp tục phát triển class/pose/wardrobe/source; bước kế tiếp chỉ nhận visual feedback cụ thể cho Character Hub hoặc chuyển sang UI screen hợp lệ sau khi owner duyệt.
+
 ## Character Hub — bỏ box chồng box, khóa embedded button border — 2026-09-14
 
 - Theo feedback owner, full filigree chỉ còn ở shell ngoài. Workspace và panel chi tiết bên phải dùng cùng section border 1 px; icon/card dùng inset border một lớp. Không còn hoa văn góc ở panel chi tiết hoặc modal con giả.

@@ -1,32 +1,25 @@
-## Active — CONTINUE: Character Hub 5 tab × 5 class — 2026-09-14
+## Active — NEED_HUMAN_VISUAL_REVIEW: Character Hub chỉ dùng một actor source-pose — 2026-09-14
 
-`OPERATIONAL_GOAL_CURRENT`. Goal hiện hành là hoàn thiện Character Hub theo canonical duy nhất:
+`OPERATIONAL_GOAL_CURRENT`. Canonical vẫn là bộ năm tab tại
 `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/`.
 
-Năm tab dùng chung một shell/base: `Nhân vật`, `Rương đồ`, `Kỹ năng`, `Tiềm năng`, `Linh thú`. Năm class dùng chung component tree và thứ tự `Võ → Kiếm → Pháp → Cơ → Linh`; dữ liệu/trạng thái phải tách riêng theo class.
+### Checkpoint hiện hành
 
-### Checkpoint đã khóa
+- Đã xóa `TwoDClassMixedLoadoutFitPreview`, class capture component/tool/test và bốn resource pack tĩnh Kiếm/Pháp/Cơ/Linh gây nhân vật rời thân. Validator hiện hành cấm đưa các đường này trở lại.
+- Màn Nhân vật chỉ render chính actor source-pose đang hoạt động trên map. Portrait giữ stage `400×428`; 10 slot neo hai rail `76 px`; icon lấy atlas UI rõ, không lấy crop renderer cũ.
+- Class selector chỉ bật khi có nhiều source-pose pack hợp lệ. Không có pack class thì giữ Võ; không tự dựng hoặc tiếp tục phát triển class.
+- Player: `build/map01a-source-pose-character-hub-player-v2/LinhGioiOnline.app`.
+- Evidence đã xem: `build/map01a-source-pose-character-hub-runtime-v2/pc/character-info.png`; manifest cùng thư mục đạt 9 frame, `usesOsMouseOrKeyboard=false`.
 
-- Full filigree chỉ dùng ở shell ngoài; workspace/detail-right dùng section border 1 px; icon/card dùng inset border một lớp.
-- Button có chrome texture giữ border trang trí bên trong texture và outer/CSS border bằng `0`.
-- Tab `48 px / 17 px`, close `52 px / 27 px`; cùng shared helper trên cả năm tab.
-- Selector class nằm ở title row, không tạo tab thứ sáu và không phụ thuộc source-pose launcher.
-- Snapshot slot đang chọn, tháo/mặc và cấp đồ đã tách theo từng class; baseline Võ giữ icon UI rõ hiện hành.
-- Player: `build/map01a-five-tab-depth-player-v12/LinhGioiOnline.app`. Evidence PC cuối: `build/map01a-five-tab-depth-runtime-v12/pc/`; evidence ba viewport của frame/button: `build/map01a-five-tab-depth-runtime-v11/{pc,mobile,tablet}/`.
+### Bước kế tiếp hợp lệ
 
-### Batch kế tiếp
-
-1. Tạo một catalog/profile dữ liệu chung cho đúng năm class, bind Kỹ năng/Tiềm năng/Linh thú trong cùng layout; không hardcode Kiếm cho mọi class.
-2. Giữ selected/equipped/level/skill/potential state riêng khi chuyển class và giữ nguyên tab đang mở.
-3. Full-body class preview chỉ lấy từ `LGOClasses/*MixedLoadoutFitPreview` hiện có qua renderer/capture rõ ràng. Không generate/redraw, không sửa pose/source/wardrobe và không đưa crop tối vào UI như icon final.
-4. Thêm capture tự động đủ `5 class × 5 tab` ở PC, mobile landscape và tablet; xem trực tiếp toàn bộ trước khi claim pass.
-5. Chạy full EditMode, shared-skin, no-3D, no-source-images, frozen diff; cập nhật state rồi commit/push một batch coherent.
+1. Owner xem Player/evidence v2 cho màn Nhân vật. Chỉ sửa khi có visual regression cụ thể so với canonical.
+2. Sau khi owner duyệt, chọn UI screen tiếp theo theo yêu cầu mới và design-first; không tự quay lại class, pose, wardrobe hoặc source art.
+3. Không khôi phục renderer/resource/capture tĩnh đã xóa và không sửa frozen surfaces.
 
 ### Gate hiện hành
 
-- Python shared-skin `20/20`.
-- Unity EditMode `286 total / 285 passed / 0 failed / 1 ignored`.
-- `validate_lgo_ui_shared_skin.py`, no-3D, no-source-images và frozen diff pass.
-- Trạng thái: `CONTINUE`; chưa hoàn tất profile/preview/evidence 5 class.
-
-Không quay lại pose/source/wardrobe hoặc tạo art class bằng phương pháp ngẫu nhiên. Không sửa frozen surfaces.
+- Full Unity EditMode: `283 total / 282 passed / 0 failed / 1 ignored`.
+- Pose pack `12/12`; registered capture `19/19`; shared-skin `21/21`.
+- Shared-skin, no-3D, no-source-images và frozen diff pass.
+- Trạng thái: `NEED_HUMAN_VISUAL_REVIEW`; chưa claim owner visual acceptance.

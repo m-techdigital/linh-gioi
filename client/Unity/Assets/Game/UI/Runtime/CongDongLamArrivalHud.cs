@@ -573,8 +573,9 @@ namespace LinhGioi.UI
             _equipmentClass.style.display = _scene.CanCycleCharacterHubClass ? DisplayStyle.Flex : DisplayStyle.None;
             _equipmentClass.text = "Class · " + _scene.ActiveEquipmentClassLabel + "  ›";
             _equipmentClass.SetEnabled(_scene.CanCycleCharacterHubClass);
-            _inventoryGender.style.display = _scene.IsSourcePoseReviewActive ? DisplayStyle.Flex : DisplayStyle.None;
-            _inventoryGender.text = (_scene.CanCycleSourcePoseGender ? "Đổi giới · " : "Hiện có · ")
+            RefreshCharacterHubClassProfile();
+            _inventoryGender.style.display = _scene.CanCycleSourcePoseGender ? DisplayStyle.Flex : DisplayStyle.None;
+            _inventoryGender.text = "Đổi giới · "
                 + (_scene.VoAvatarGender == "female" ? "Nữ" : "Nam") + (_touch ? "" : " · G");
             _inventoryGender.SetEnabled(_scene.CanCycleSourcePoseGender);
             _vitals.style.display = _scene.InventoryOpen || _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
