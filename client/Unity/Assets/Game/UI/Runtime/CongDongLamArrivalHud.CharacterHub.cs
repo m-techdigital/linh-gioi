@@ -386,7 +386,7 @@ namespace LinhGioi.UI
             _spiritPetPanel = CreateHubSurface("Map01A Spirit Pet Panel");
             _spiritPetPreviewTexture = Resources.Load<Texture2D>("LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview");
             var preview = new VisualElement { name = "Map01A Spirit Pet Preview Art" };
-            ApplyLgoCharacterHubDetailCard(preview, 10, 8);
+            ApplyLgoCharacterHubDetailCard(preview, 10, 8, false);
             preview.style.height = 382;
             preview.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             preview.style.backgroundImage = _spiritPetPreviewTexture == null ? StyleKeyword.None : new StyleBackground(_spiritPetPreviewTexture);

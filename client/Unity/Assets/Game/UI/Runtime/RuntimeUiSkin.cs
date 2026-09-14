@@ -149,17 +149,25 @@ namespace LinhGioi.UI
                 var height = element.resolvedStyle.height;
                 if (float.IsNaN(width) || float.IsNaN(height) || width < 48 || height < 48) return;
                 var painter = context.painter2D;
-                painter.lineWidth = 1;
-                painter.strokeColor = RuntimeArtCatalog.Gold;
-                DrawShellFrameEdge(painter, new Vector2(26, 2), new Vector2(width - 26, 2));
-                DrawShellFrameEdge(painter, new Vector2(width - 2, 26), new Vector2(width - 2, height - 26));
-                DrawShellFrameEdge(painter, new Vector2(width - 26, height - 2), new Vector2(26, height - 2));
-                DrawShellFrameEdge(painter, new Vector2(2, height - 26), new Vector2(2, 26));
-                DrawShellCorner(painter, new Vector2(2, 2), 1, 1);
-                DrawShellCorner(painter, new Vector2(width - 2, 2), -1, 1);
-                DrawShellCorner(painter, new Vector2(2, height - 2), 1, -1);
-                DrawShellCorner(painter, new Vector2(width - 2, height - 2), -1, -1);
+                var cornerSize = Mathf.Clamp(Mathf.Min(width, height) * .055f, 11f, 20f);
+                DrawShellFrame(painter, width, height, cornerSize, new Color(.48f, .31f, .10f, .96f), 2.2f);
+                DrawShellFrame(painter, width, height, cornerSize, new Color(.96f, .76f, .36f, .94f), .8f);
             };
+        }
+
+        private static void DrawShellFrame(Painter2D painter, float width, float height, float cornerSize, Color color, float lineWidth)
+        {
+            var edgeInset = cornerSize + 2f;
+            painter.lineWidth = lineWidth;
+            painter.strokeColor = color;
+            DrawShellFrameEdge(painter, new Vector2(edgeInset, 2), new Vector2(width - edgeInset, 2));
+            DrawShellFrameEdge(painter, new Vector2(width - 2, edgeInset), new Vector2(width - 2, height - edgeInset));
+            DrawShellFrameEdge(painter, new Vector2(width - edgeInset, height - 2), new Vector2(edgeInset, height - 2));
+            DrawShellFrameEdge(painter, new Vector2(2, height - edgeInset), new Vector2(2, edgeInset));
+            DrawShellCorner(painter, new Vector2(2, 2), 1, 1, cornerSize);
+            DrawShellCorner(painter, new Vector2(width - 2, 2), -1, 1, cornerSize);
+            DrawShellCorner(painter, new Vector2(2, height - 2), 1, -1, cornerSize);
+            DrawShellCorner(painter, new Vector2(width - 2, height - 2), -1, -1, cornerSize);
         }
 
         private static void DrawShellFrameEdge(Painter2D painter, Vector2 start, Vector2 end)
@@ -176,42 +184,53 @@ namespace LinhGioi.UI
             painter.Stroke();
         }
 
-        private static void DrawShellCorner(Painter2D painter, Vector2 origin, float x, float y)
+        private static void DrawShellCorner(Painter2D painter, Vector2 origin, float x, float y, float size)
         {
-            Vector2 Point(float a, float b) => origin + new Vector2(a * x, b * y);
-            // The master is authored once as a compact angular leaf-knot. The other
-            // corners are exact mirrors, so the ornament and edge joins stay coherent.
+            Vector2 Point(float a, float b) => origin + new Vector2(a * size * x, b * size * y);
+            // One compact triangular knot is authored in normalized coordinates. The
+            // same master scales down for item cards and mirrors into all four corners.
             painter.BeginPath();
-            painter.MoveTo(Point(0, 24));
-            painter.LineTo(Point(0, 16));
-            painter.LineTo(Point(3, 13));
-            painter.LineTo(Point(3, 7));
-            painter.LineTo(Point(7, 7));
-            painter.LineTo(Point(12, 2));
-            painter.LineTo(Point(17, 2));
-            painter.LineTo(Point(19, 0));
-            painter.LineTo(Point(24, 0));
+            painter.MoveTo(Point(0, 1));
+            painter.LineTo(Point(0, .34f));
+            painter.LineTo(Point(.08f, .24f));
+            painter.LineTo(Point(.24f, .08f));
+            painter.LineTo(Point(.34f, 0));
+            painter.LineTo(Point(1, 0));
             painter.Stroke();
 
             painter.BeginPath();
-            painter.MoveTo(Point(2, 14));
-            painter.LineTo(Point(7, 9));
-            painter.LineTo(Point(11, 13));
-            painter.LineTo(Point(7, 17));
+            painter.MoveTo(Point(.10f, .22f));
+            painter.LineTo(Point(.60f, .18f));
+            painter.LineTo(Point(.43f, .48f));
             painter.ClosePath();
             painter.Stroke();
 
             painter.BeginPath();
-            painter.MoveTo(Point(7, 9));
-            painter.LineTo(Point(11, 5));
-            painter.LineTo(Point(15, 9));
-            painter.LineTo(Point(11, 13));
+            painter.MoveTo(Point(.22f, .10f));
+            painter.LineTo(Point(.18f, .60f));
+            painter.LineTo(Point(.48f, .43f));
             painter.ClosePath();
             painter.Stroke();
 
             painter.BeginPath();
-            painter.MoveTo(Point(11, 5));
-            painter.LineTo(Point(15, 2));
+            painter.MoveTo(Point(.16f, .15f));
+            painter.LineTo(Point(.53f, .52f));
+            painter.LineTo(Point(.42f, .63f));
+            painter.LineTo(Point(.08f, .29f));
+            painter.Stroke();
+
+            painter.BeginPath();
+            painter.MoveTo(Point(.53f, .52f));
+            painter.LineTo(Point(.70f, .35f));
+            painter.LineTo(Point(.76f, .18f));
+            painter.LineTo(Point(.92f, .08f));
+            painter.Stroke();
+
+            painter.BeginPath();
+            painter.MoveTo(Point(.42f, .63f));
+            painter.LineTo(Point(.35f, .70f));
+            painter.LineTo(Point(.18f, .76f));
+            painter.LineTo(Point(.08f, .92f));
             painter.Stroke();
         }
 

@@ -171,6 +171,22 @@ namespace LinhGioi.UI
             RuntimeUiSkin.ApplyOrnamentedShellFrame(element);
         }
 
+        private static void ApplyLgoCharacterHubSectionFrame(VisualElement element)
+        {
+            element.style.borderTopWidth = element.style.borderBottomWidth = 1;
+            element.style.borderLeftWidth = element.style.borderRightWidth = 1;
+            element.style.borderTopColor = element.style.borderBottomColor = new Color(.34f, .48f, .58f, .48f);
+            element.style.borderLeftColor = element.style.borderRightColor = new Color(.54f, .48f, .32f, .42f);
+        }
+
+        private static void ApplyLgoCharacterHubInsetFrame(VisualElement element)
+        {
+            element.style.borderTopWidth = element.style.borderBottomWidth = 1;
+            element.style.borderLeftWidth = element.style.borderRightWidth = 1;
+            element.style.borderTopColor = element.style.borderLeftColor = new Color(.94f, .74f, .34f, .86f);
+            element.style.borderBottomColor = element.style.borderRightColor = new Color(.40f, .27f, .10f, .92f);
+        }
+
         private static void ApplyLgoLayeredFrame(VisualElement element)
         {
             element.AddToClassList(LgoLayeredFrameClass);
@@ -301,12 +317,8 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoCharacterHubHeroIconFrame(VisualElement icon)
         {
-            ApplyLgoCharacterHubFiligreeFrame(icon);
             icon.style.backgroundColor = new Color(.012f, .045f, .082f, .98f);
-            icon.style.borderTopWidth = icon.style.borderBottomWidth = 0;
-            icon.style.borderLeftWidth = icon.style.borderRightWidth = 0;
-            icon.style.borderTopColor = icon.style.borderLeftColor = new Color(1f, .82f, .35f, 1f);
-            icon.style.borderBottomColor = icon.style.borderRightColor = new Color(.55f, .31f, .08f, 1f);
+            ApplyLgoCharacterHubInsetFrame(icon);
         }
 
         private static void ApplyLgoCharacterHubInteractiveMotion(Button button)
@@ -429,10 +441,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoInventoryPanelShell(VisualElement panel)
         {
             panel.AddToClassList(LgoInventoryPanelShellClass);
-            ApplyLgoFrame(panel, new Color(.004f, .024f, .046f, .985f), new Color(.82f, .62f, .24f, .90f));
-            panel.style.borderTopWidth = panel.style.borderBottomWidth = 0;
-            panel.style.borderLeftWidth = panel.style.borderRightWidth = 0;
-            ApplyLgoCharacterHubFiligreeFrame(panel);
+            panel.style.backgroundColor = new Color(.004f, .024f, .046f, .985f);
+            ApplyLgoCharacterHubSectionFrame(panel);
             panel.style.paddingLeft = panel.style.paddingRight = 12;
             panel.style.paddingTop = panel.style.paddingBottom = 10;
             panel.style.minWidth = 0;

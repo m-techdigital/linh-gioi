@@ -52,10 +52,19 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 - Pack `map01a-character-hub-chrome-v2` sở hữu bảy texture runtime: shell, panel, tab idle/selected, action xanh/vàng và close bát giác. Manifest ghi hash của cả năm canonical và hash từng asset; generator không crop board tham chiếu.
 - Shell dùng nền navy, top rail/diamond, viền old-gold nhiều lớp và corner filigree; các panel nội dung dùng một surface họa tiết chung. Mọi tab và action cùng loại gọi helper trong `CongDongLamArrivalHud.Skin.cs`, không tự dựng skin tại partial.
+- Phân cấp frame bắt buộc: shell dùng full filigree; workspace dùng viền section mờ; detail-right mới dùng full filigree để biểu thị vùng đang chọn; icon/card nằm trong panel dùng inset frame một lớp. Không lặp full filigree ở phần tử con vì sẽ tạo cảm giác box chồng box. Cả bốn cấp đều dùng shared helper, không tự khai báo viền trong từng screen.
 - Mở modal fade trong `190 ms`, backdrop `160 ms`; đổi tab/content fade trong `130 ms`, tab selected pulse `150 ms`. Capture evidence phải đợi ít nhất `240 ms` để đánh giá trạng thái ổn định thay vì frame giữa animation.
 - Evidence review hiện hành: `build/map01a-five-tab-chrome-runtime-v3/{pc,mobile,tablet}/`. Player tương ứng: `build/map01a-five-tab-chrome-player-v3/LinhGioiOnline.app`.
 
 ## Contract từng screen
+
+### Binding 5 class trên cùng layout
+
+- Character Hub dùng đúng một selector gọn trong title row, thứ tự `Võ → Kiếm → Pháp → Cơ → Linh`; selector không tạo tab thứ sáu, không đổi cấu trúc hai cột và luôn dùng được ở cả năm tab.
+- Đổi class chỉ thay data/preview trong cùng component tree. Tab đang mở được giữ nguyên và main/detail cập nhật trong cùng một lượt refresh.
+- Mỗi class giữ snapshot riêng cho slot đang chọn, trạng thái tháo/mặc và cấp của mười món. Chuyển class rồi quay lại phải khôi phục đúng snapshot; không dùng chung state vô tình giữa hai class.
+- Selector Character Hub dùng các pack `LGOClasses/*MixedLoadoutFitPreview` hiện có. Nó độc lập với `CycleSourcePoseClass`, không mở pose-review launcher và không tạo source art mới.
+- Kỹ năng/tiềm năng/linh thú là profile hiển thị riêng theo class trong cùng base; asset chưa có nguồn class-specific phải dùng icon provenance-backed dùng chung và copy trung thực, không giả thành asset final riêng của class.
 
 ### 1. Nhân vật — layout locked
 
