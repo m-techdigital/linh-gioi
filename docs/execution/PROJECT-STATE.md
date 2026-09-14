@@ -1692,3 +1692,12 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Evidence Player đã xem trực tiếp: `build/map01a-character-screen-runtime-v5/{pc,mobile,tablet}/{character-info,character-info-selected,character-info-locked}.png`; không tràn/cắt/chồng, icon không co dẹt, detail luôn ở bên phải. Player: `build/map01a-character-screen-player-v5/LinhGioiOnline.app`.
 - TDD RED đúng khi chưa có action khóa; GREEN focused 1/1 và full `TwoDCharacterRuntimeStateTests` 24/24. Shared-skin guard được cập nhật để cấm bọc full-body portrait bằng item frame cũ; Python 28/28, shared-skin/no-3D/no-source/frozen/change-budget đều pass trước checkpoint.
 - Screen `Nhân vật` được khóa ở mức layout/runtime technical pass; chưa claim owner art approval cho atlas. Screen active kế tiếp duy nhất là `Rương đồ`. Scope vẫn UI/Map01A, không quay lại class work.
+
+## Map01A — khóa layout screen Rương đồ, chuyển gate sang Kỹ năng — 2026-09-14
+
+- Nguồn design duy nhất: `redesign-v4-five-tabs/02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png`; plan và gate nằm tại `docs/superpowers/plans/2026-09-14-map01a-bag-screen-realignment.md`.
+- Main workspace dùng rail phân loại dọc với năm icon, toolbar capacity/search, lưới ô vuông 92 px theo năm cột và footer `Sắp xếp`/`Bán nhanh`. Tên/state đầy đủ nằm ở tooltip/detail-right, không chiếm diện tích tile.
+- Equipment tile/detail dùng atlas equipment riêng thay vì crop paper-doll tối. Atlas mới `map01a-bag-category-icons-v1` chứa năm category icon, manifest/hash/provenance và trạng thái `DRAFT_RUNTIME_REVIEW`; shared loader/base được tái sử dụng, không tạo style từng item.
+- Player `build/map01a-bag-screen-player-v3/LinhGioiOnline.app` build `errors=0`, warnings=34. Evidence đã xem trực tiếp tại `build/map01a-bag-screen-runtime-v4/{pc,mobile,tablet}/`: cùng composition hai cột ở 1600×900, 1600×720 và 1024×768, không stack/reflow, không cắt/chồng; capture không dùng chuột/phím OS.
+- Full `TwoDCharacterRuntimeStateTests` đạt 24/24; Python UI/catalog 22/22, shared-skin/no-3D/no-source-image/frozen diff và change budget đều pass sau khi loại Unity import-only churn. Layout Rương đồ được khóa; art pack chưa được coi là owner art approval.
+- Screen active tiếp theo duy nhất là `Kỹ năng` theo `03-ky-nang-five-tab-APPROVED.png`. Phải audit/plan trọn screen trước code; Tiềm năng/Linh thú chờ gate. Không quay lại class/pose/wardrobe/source và không rollback code class.

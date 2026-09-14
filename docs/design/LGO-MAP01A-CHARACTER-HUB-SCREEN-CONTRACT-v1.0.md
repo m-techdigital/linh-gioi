@@ -1,7 +1,7 @@
 # Map01A character hub — canonical screen contract v1.0
 
 Ngày khóa: 2026-09-14  
-Trạng thái: **OWNER_APPROVED_DESIGN_SET / CHARACTER_LAYOUT_LOCKED / BAG_ACTIVE**
+Trạng thái: **OWNER_APPROVED_DESIGN_SET / CHARACTER_AND_BAG_LAYOUT_LOCKED / SKILLS_ACTIVE**
 
 ## Mục đích
 
@@ -15,8 +15,8 @@ Thư mục nguồn đã duyệt:
 | Thứ tự | Screen | Canonical design duy nhất | Trạng thái triển khai |
 |---:|---|---|---|
 | 1 | Nhân vật | `01-nhan-vat-nam-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** — evidence v5, không vi chỉnh lại |
-| 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **ACTIVE** — screen duy nhất được sửa tiếp |
-| 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | Chờ Rương đồ đạt gate |
+| 2 | Rương đồ | `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png` | **LAYOUT_LOCKED** — evidence v4, không vi chỉnh lại |
+| 3 | Kỹ năng | `03-ky-nang-five-tab-APPROVED.png` | **ACTIVE** — screen duy nhất được sửa tiếp |
 | 4 | Tiềm năng | `04-tiem-nang-five-tab-APPROVED.png` | Chờ Kỹ năng đạt gate |
 | 5 | Linh thú | `05-linh-thu-five-tab-APPROVED.png` | Chờ Tiềm năng đạt gate |
 
@@ -92,4 +92,4 @@ Panel UI dùng reference `1672 × 941`, `ScaleWithScreenSize`, `MatchWidthOrHeig
 
 ## Gate hiện hành
 
-Screen **Nhân vật** đã qua gate layout bằng Player v5: ba profile giữ cùng composition, 10 slot không co dẹt, detail nằm bên phải và trạng thái chọn/khóa có evidence. Screen duy nhất được sửa tiếp là **Rương đồ**. Kỹ năng/Tiềm năng/Linh thú giữ nguyên; không resume class/pose/wardrobe/source và không rollback code class.
+Screen **Nhân vật** đã qua gate layout bằng Player v5. Screen **Rương đồ** đã qua gate layout bằng Player v4: ba profile giữ cùng composition, rail phân loại dọc, grid năm cột, search/selection và detail-right có evidence; atlas icon phân loại vẫn ở trạng thái review mỹ thuật. Screen duy nhất được sửa tiếp là **Kỹ năng**. Tiềm năng/Linh thú giữ nguyên; không resume class/pose/wardrobe/source và không rollback code class.

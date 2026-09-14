@@ -445,6 +445,40 @@ namespace LinhGioi.UI
             cell.style.justifyContent = Justify.Center;
         }
 
+        private static void ApplyLgoInventoryBagGridCell(VisualElement cell)
+        {
+            ApplyLgoInventoryGridCell(cell);
+            cell.AddToClassList("lgo-inventory-bag-grid-cell");
+            cell.style.flexBasis = new Length(18.2f, LengthUnit.Percent);
+            cell.style.height = 92;
+            cell.style.minHeight = 92;
+            cell.style.maxHeight = 92;
+        }
+
+        private static void ApplyLgoInventoryCategoryItem(Button button, bool touch)
+        {
+            ApplyLgoInventoryFilterChip(button, touch);
+            button.text = string.Empty;
+            button.style.flexDirection = FlexDirection.Column;
+            button.style.alignItems = Align.Center;
+            button.style.justifyContent = Justify.Center;
+            button.style.flexBasis = StyleKeyword.Auto;
+            button.style.minWidth = 0;
+            button.style.minHeight = 74;
+            button.style.marginRight = 0;
+            button.style.marginBottom = 6;
+        }
+
+        private static void ApplyLgoInventoryCategoryIcon(VisualElement icon)
+        {
+            icon.style.width = 46;
+            icon.style.height = 46;
+            icon.style.flexGrow = 0;
+            icon.style.flexShrink = 0;
+            icon.style.marginBottom = 2;
+            icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+        }
+
         private static void ApplyLgoInventorySearchField(TextField field, bool touch)
         {
             field.AddToClassList(LgoInventorySearchFieldClass);
@@ -467,7 +501,10 @@ namespace LinhGioi.UI
             var input = ApplyLgoTextFieldInnerFrame(field, LgoInventorySearchInputClass);
             if (input == null) return;
             input.style.paddingLeft = input.style.paddingRight = 8;
+            input.style.paddingTop = input.style.paddingBottom = 0;
             input.style.fontSize = 13;
+            input.style.unityTextAlign = TextAnchor.MiddleLeft;
+            input.style.height = Length.Percent(100);
         }
 
         private static VisualElement ApplyLgoTextFieldInnerFrame(TextField field, string semanticClass)

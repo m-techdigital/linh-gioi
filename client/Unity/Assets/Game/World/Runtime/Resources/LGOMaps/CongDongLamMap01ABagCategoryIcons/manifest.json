@@ -1,0 +1,61 @@
+{
+  "id": "map01a-bag-category-icons-v1",
+  "status": "DRAFT_RUNTIME_REVIEW",
+  "runtimeApproved": false,
+  "canonicalScreen": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png",
+  "sourceImagegen": "/Users/minhdc/.codex/generated_images/01a08f32-6e63-7b20-b705-259faaa286c0/exec-ecc2cc45-709b-48b8-97ec-a24d71188cd8.png",
+  "sourceBoard": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/assets-bag-categories/bag-category-icons-SELF-REVIEWED-v1.png",
+  "textureSize": [
+    640,
+    128
+  ],
+  "pngBytes": 86917,
+  "sha256": "670b87c355bca63d97dbe4c5d6ff3195f82db9f0c308d215a3490ff9acd0b331",
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ABagCategoryIcons/map01a-bag-category-icons.png",
+      "role": "ui-bag-category-icon-atlas",
+      "generator": "image_gen_alpha_fit",
+      "referenceOnly": false,
+      "sha256": "670b87c355bca63d97dbe4c5d6ff3195f82db9f0c308d215a3490ff9acd0b331"
+    }
+  ],
+  "parts": [
+    {
+      "id": "all",
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "id": "equipment",
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "id": "items",
+      "x": 256,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "id": "materials",
+      "x": 384,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    },
+    {
+      "id": "other",
+      "x": 512,
+      "y": 0,
+      "w": 128,
+      "h": 128
+    }
+  ],
+  "alphaPolicy": "per-cell-alpha-bounds-fit-112px-v2"
+}

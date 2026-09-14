@@ -208,10 +208,12 @@ namespace LinhGioi.World
         private readonly Dictionary<string, VoRigPoseProfile> _voRigPoseProfiles = new Dictionary<string, VoRigPoseProfile>();
         private readonly Dictionary<string, Sprite> _map01AItemIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ACharacterEquipmentIcons = new Dictionary<string, Sprite>();
+        private readonly Dictionary<string, Sprite> _map01ABagCategoryIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01AHudIcons = new Dictionary<string, Sprite>();
         private readonly Dictionary<string, Sprite> _map01ANpcSprites = new Dictionary<string, Sprite>();
         private bool _map01AItemIconsLoaded;
         private bool _map01ACharacterEquipmentIconsLoaded;
+        private bool _map01ABagCategoryIconsLoaded;
         private bool _map01AHudIconsLoaded;
         private TwoDClassMixedLoadoutFitPreview _classFitPreview;
         private string _classFitPreviewId = "kiem";
@@ -300,61 +302,49 @@ namespace LinhGioi.World
         }
         public Sprite GetMap01AItemThumbnailSprite(string itemId)
         {
-            if (!_map01AItemIconsLoaded)
-            {
-                _map01AItemIconsLoaded = true;
-                const string path = "LGOMaps/CongDongLamMap01AItems/";
-                var manifestAsset = Resources.Load<TextAsset>(path + "manifest");
-                var atlas = Resources.Load<Texture2D>(path + "map01a-item-icons");
-                if (manifestAsset != null && atlas != null)
-                {
-                    var manifest = JsonUtility.FromJson<Map01AItemIconManifest>(manifestAsset.text);
-                    if (manifest != null && manifest.id == "map01a-item-icons-v1"
-                        && manifest.status == "DRAFT_RUNTIME_REVIEW" && manifest.parts != null)
-                    {
-                        foreach (var part in manifest.parts)
-                        {
-                            if (string.IsNullOrEmpty(part.id) || part.w <= 0 || part.h <= 0
-                                || part.x < 0 || part.y < 0 || part.x + part.w > atlas.width || part.y + part.h > atlas.height
-                                || _map01AItemIcons.ContainsKey(part.id))
-                                continue;
-                            _map01AItemIcons.Add(part.id, MakeSprite(atlas, new Rect(part.x, part.y, part.w, part.h)));
-                        }
-                    }
-                }
-            }
+            EnsureMap01AIconAtlasLoaded(ref _map01AItemIconsLoaded, _map01AItemIcons,
+                "LGOMaps/CongDongLamMap01AItems/", "map01a-item-icons", "map01a-item-icons-v1");
             return _map01AItemIcons.TryGetValue(itemId, out var sprite) ? sprite : null;
         }
         public Sprite GetMap01ACharacterEquipmentIconSprite(string slot)
         {
             var index = Array.IndexOf(VoEquipmentSlots, slot);
             if (index < 0) throw new ArgumentException("Unknown Võ equipment slot: " + slot, nameof(slot));
-            if (!_map01ACharacterEquipmentIconsLoaded)
-            {
-                _map01ACharacterEquipmentIconsLoaded = true;
-                const string path = "LGOMaps/CongDongLamMap01ACharacterEquipmentIcons/";
-                var manifestAsset = Resources.Load<TextAsset>(path + "manifest");
-                var atlas = Resources.Load<Texture2D>(path + "map01a-character-equipment-icons");
-                if (manifestAsset != null && atlas != null)
-                {
-                    var manifest = JsonUtility.FromJson<Map01AItemIconManifest>(manifestAsset.text);
-                    if (manifest != null && manifest.id == "map01a-character-equipment-icons-v1"
-                        && manifest.status == "DRAFT_RUNTIME_REVIEW" && manifest.parts != null)
-                    {
-                        foreach (var part in manifest.parts)
-                        {
-                            if (string.IsNullOrEmpty(part.id) || part.w <= 0 || part.h <= 0
-                                || part.x < 0 || part.y < 0 || part.x + part.w > atlas.width || part.y + part.h > atlas.height
-                                || _map01ACharacterEquipmentIcons.ContainsKey(part.id))
-                                continue;
-                            _map01ACharacterEquipmentIcons.Add(part.id,
-                                MakeSprite(atlas, new Rect(part.x, part.y, part.w, part.h)));
-                        }
-                    }
-                }
-            }
+            EnsureMap01AIconAtlasLoaded(ref _map01ACharacterEquipmentIconsLoaded, _map01ACharacterEquipmentIcons,
+                "LGOMaps/CongDongLamMap01ACharacterEquipmentIcons/", "map01a-character-equipment-icons",
+                "map01a-character-equipment-icons-v1");
             var iconId = VoReviewSlotIds[index];
             return _map01ACharacterEquipmentIcons.TryGetValue(iconId, out var sprite) ? sprite : null;
+        }
+
+        public Sprite GetMap01ABagCategoryIconSprite(string categoryId)
+        {
+            EnsureMap01AIconAtlasLoaded(ref _map01ABagCategoryIconsLoaded, _map01ABagCategoryIcons,
+                "LGOMaps/CongDongLamMap01ABagCategoryIcons/", "map01a-bag-category-icons",
+                "map01a-bag-category-icons-v1");
+            return _map01ABagCategoryIcons.TryGetValue(categoryId, out var sprite) ? sprite : null;
+        }
+
+        private void EnsureMap01AIconAtlasLoaded(ref bool loaded, Dictionary<string, Sprite> sprites,
+            string resourcePath, string atlasName, string manifestId)
+        {
+            if (loaded) return;
+            loaded = true;
+            var manifestAsset = Resources.Load<TextAsset>(resourcePath + "manifest");
+            var atlas = Resources.Load<Texture2D>(resourcePath + atlasName);
+            if (manifestAsset == null || atlas == null) return;
+            var manifest = JsonUtility.FromJson<Map01AItemIconManifest>(manifestAsset.text);
+            if (manifest == null || manifest.id != manifestId
+                || manifest.status != "DRAFT_RUNTIME_REVIEW" || manifest.parts == null)
+                return;
+            foreach (var part in manifest.parts)
+            {
+                if (string.IsNullOrEmpty(part.id) || part.w <= 0 || part.h <= 0
+                    || part.x < 0 || part.y < 0 || part.x + part.w > atlas.width || part.y + part.h > atlas.height
+                    || sprites.ContainsKey(part.id))
+                    continue;
+                sprites.Add(part.id, MakeSprite(atlas, new Rect(part.x, part.y, part.w, part.h)));
+            }
         }
         public Sprite GetMap01AHudIconSprite(string iconId)
         {

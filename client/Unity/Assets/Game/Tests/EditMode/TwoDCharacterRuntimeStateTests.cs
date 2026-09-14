@@ -193,7 +193,19 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Inventory Category Chips"), Is.Null);
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").ClassListContains("lgo-inventory-grid-cell"), Is.True);
                 Assert.That(root.Q<VisualElement>("Map01A Equipment Item Icon main_weapon").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetVoEquipmentThumbnailSprite("main_weapon")));
+                    Is.EqualTo(scene.GetMap01ACharacterEquipmentIconSprite("main_weapon")));
+                Assert.That(root.Q("Map01A Equipment Item Tile main_weapon").style.height.value.value, Is.EqualTo(92));
+                Assert.That(root.Q<Label>("Map01A Equipment Item Name main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Label>("Map01A Equipment Item State main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<VisualElement>("Map01A Inventory Category Icon all").style.backgroundImage.value.sprite,
+                    Is.EqualTo(scene.GetMap01ABagCategoryIconSprite("all")));
+                var searchInput = root.Q<TextField>("Map01A Inventory Search")
+                    .Q(className: "lgo-inventory-search-input");
+                Assert.That(searchInput.style.unityTextAlign.value, Is.EqualTo(TextAnchor.MiddleLeft),
+                    "The bag search placeholder must remain vertically centered instead of clipping against the top edge.");
+                Assert.That(root.Q<Button>("Map01A Inventory Split Action").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Button>("Map01A Inventory Sort Action").style.flexGrow.value, Is.EqualTo(1));
+                Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").style.flexGrow.value, Is.EqualTo(1));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-detail-card"), Is.True);
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").ClassListContains("lgo-inventory-button-base"), Is.True);
 
