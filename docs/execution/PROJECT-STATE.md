@@ -1,3 +1,10 @@
+## Character Hub — audit tích hợp năm tab, chờ owner visual review — 2026-09-15
+
+- Đã đối chiếu cùng lúc 15 frame `Nhân vật/Rương đồ/Kỹ năng/Tiềm năng/Linh thú × PC/mobile/tablet` từ Player v3. Contact sheet local: `build/map01a-character-hub-spirit-base-runtime-v3/integrated-five-tab-contact-sheet.png`.
+- Cùng shared shell, hàng năm tab, tỷ lệ main/detail và action footer được giữ ổn định giữa screen/viewport. Không thấy wrap/cắt/chồng; Tiềm năng dùng vector template hoàn chỉnh, Skill dùng graph riêng, Linh thú có hai skill row cố định.
+- Test đổi đủ năm profile giữ nguyên reference panel/node/topology/skill-row và chỉ bind icon/text/value/state. Evidence Player dùng pack body-only Võ nên không phải bằng chứng visual cho wardrobe/pose hoặc art năm class; các phần đó tiếp tục hold theo owner.
+- Trạng thái Character Hub hiện là `NEED_HUMAN_VISUAL_REVIEW`. Không còn lỗi layout cụ thể có thể sửa an toàn từ evidence hiện tại; không mở screen khác, class/pose/wardrobe/source art hoặc tự đổi canonical trước feedback visual mới của owner.
+
 ## Character Hub — Linh thú có skill row cố định, profile chỉ bind dữ liệu — 2026-09-15
 
 - Audit canonical `05-linh-thu-five-tab-APPROVED.png` cho thấy inspector runtime cũ gộp hai kỹ năng Linh thú thành text, trong khi design yêu cầu hai row có icon/name/level/description. Đây là cùng lỗi khó mở rộng: presentation bị nhét vào copy thay vì component tree cố định.

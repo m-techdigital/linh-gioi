@@ -1,4 +1,4 @@
-## Active — CONTINUE: Character Hub base-first, audit tích hợp năm tab — 2026-09-15
+## Active — NEED_HUMAN_VISUAL_REVIEW: Character Hub năm tab — 2026-09-15
 
 `OPERATIONAL_GOAL_CURRENT`. Canonical vẫn là bộ năm tab tại
 `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/`.
@@ -13,7 +13,7 @@
 
 ### Bước kế tiếp hợp lệ
 
-1. Chạy full gate cho batch Linh thú, sau đó audit tích hợp đủ năm tab theo shell → hierarchy → asset → typography → state và chụp lại khi có thay đổi nhìn thấy.
+1. Owner review năm tab trên Player `build/map01a-character-hub-spirit-base-player-v3/LinhGioiOnline.app` hoặc evidence v3. Chỉ mở lại screen có feedback visual cụ thể, rồi sửa shared base trước nếu lỗi lặp giữa màn.
 2. Không tiếp tục phát triển class/pose/wardrobe trong task này. Không sinh/sửa source art ngẫu nhiên hoặc dựng renderer/layout riêng cho từng class.
 3. Chỉ chuyển sang screen UI tiếp theo khi có một canonical design, scenario/state/interaction và asset gate; không mở lại screen cũ nếu không có regression/evidence cụ thể.
 
@@ -23,4 +23,5 @@
 - Full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared governance `23/23`; pose pack `12/12`; registered capture `19/19`; no-3D/no-source-images pass.
 - Shared-skin, no-3D, no-source-images, frozen diff và `git diff --check` pass.
 - Player build `errors=0`, `warnings=48`; 27 frame Linh thú ở ba viewport đã xem theo phạm vi nêu trên.
-- Trạng thái: `CONTINUE`; chưa claim owner visual acceptance.
+- Audit tích hợp 15 frame tại `build/map01a-character-hub-spirit-base-runtime-v3/integrated-five-tab-contact-sheet.png`: không thấy wrap/cắt/chồng hoặc topology bị nhân theo screen/class.
+- Trạng thái: `NEED_HUMAN_VISUAL_REVIEW`; chưa claim owner visual acceptance hoặc art/wardrobe năm class.
