@@ -196,14 +196,14 @@ Pose control source is ready but art transfer is blocked.
 ## Active task state
 
 ```json
-{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_CANDIDATE_READY_FOR_OWNER_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW"}
+{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_FAST_COMBO_READY_FOR_OWNER_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW"}
 ```
 """
 
         blocker = current_blocker_section(text)
 
         self.assertIn("NEED_HUMAN_VISUAL_REVIEW", blocker)
-        self.assertIn("final-1-review", blocker)
+        self.assertIn("final-1-combo-review-v2", blocker)
         self.assertIn("Stop before outfit #2", blocker)
 
 

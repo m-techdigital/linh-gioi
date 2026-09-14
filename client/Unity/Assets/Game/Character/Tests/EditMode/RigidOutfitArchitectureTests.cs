@@ -230,6 +230,127 @@ namespace LinhGioi.Character.Tests
         }
 
         [Test]
+        public void MotionBlend_InterpolatesEveryBoneAcrossTheShortestRotationArc()
+        {
+            var from = new RigidMotionPose(new Vector2(-.2f, .1f), new System.Collections.Generic.Dictionary<RigidBoneId, RigidBonePose>
+            {
+                [RigidBoneId.Torso] = new RigidBonePose(new Vector2(.1f, 0f), 170f),
+            });
+            var to = new RigidMotionPose(new Vector2(.2f, .5f), new System.Collections.Generic.Dictionary<RigidBoneId, RigidBonePose>
+            {
+                [RigidBoneId.Torso] = new RigidBonePose(new Vector2(.3f, .2f), -170f),
+                [RigidBoneId.Head] = new RigidBonePose(Vector2.zero, 20f),
+            });
+
+            var halfway = RigidMotionLibrary.Blend(from, to, .5f);
+
+            Assert.That(halfway.RootOffset.x, Is.EqualTo(0f).Within(.001f));
+            Assert.That(halfway.RootOffset.y, Is.EqualTo(.3f).Within(.001f));
+            Assert.That(Mathf.Abs(Mathf.DeltaAngle(halfway.Bones[RigidBoneId.Torso].RotationDegrees, 180f)), Is.LessThan(.01f));
+            Assert.That(halfway.Bones[RigidBoneId.Torso].PositionOffset.x, Is.EqualTo(.2f).Within(.001f));
+            Assert.That(halfway.Bones[RigidBoneId.Torso].PositionOffset.y, Is.EqualTo(.1f).Within(.001f));
+            Assert.That(halfway.Bones[RigidBoneId.Head].RotationDegrees, Is.EqualTo(10f).Within(.01f));
+        }
+
+        [Test]
+        public void FastComboPlan_ProvesContinuousSprintJumpAttackAndRollAtGameplayCadence()
+        {
+            var frames = RigidOutfitPilotComboPlan.Frames;
+
+            Assert.That(RigidOutfitPilotComboPlan.VideoFps, Is.EqualTo(24));
+            Assert.That(RigidOutfitPilotComboPlan.FastRunFramesPerCycle, Is.EqualTo(12));
+            Assert.That(frames.Count(frame => frame.Label == "RUN FAST"),
+                Is.GreaterThanOrEqualTo(RigidOutfitPilotComboPlan.FastRunFramesPerCycle * 3));
+            CollectionAssert.IsSubsetOf(new[]
+            {
+                "ACCELERATE", "RUN FAST", "RUN JUMP", "LAND RUN", "RUN ATTACK", "RUN ROLL",
+                "RECOVER IDLE",
+            }, frames.Select(frame => frame.Label).Distinct().ToArray());
+            Assert.That(frames.All(frame => Mathf.Abs(frame.Pose.RootOffset.x) < .001f), Is.True,
+                "In-place proof must not snap backwards when a state-local root track resets.");
+
+            for (var index = 1; index < frames.Count; index++)
+            {
+                Assert.That(Mathf.Abs(frames[index].Pose.RootOffset.y - frames[index - 1].Pose.RootOffset.y),
+                    Is.LessThan(.24f), $"root pop at combo frame {index}");
+                foreach (RigidBoneId bone in Enum.GetValues(typeof(RigidBoneId)))
+                {
+                    var previous = frames[index - 1].Pose.Bones.TryGetValue(bone, out var previousPose)
+                        ? previousPose.RotationDegrees : 0f;
+                    var current = frames[index].Pose.Bones.TryGetValue(bone, out var currentPose)
+                        ? currentPose.RotationDegrees : 0f;
+                    Assert.That(Mathf.Abs(Mathf.DeltaAngle(previous, current)), Is.LessThan(72f),
+                        $"rotation pop at combo frame {index}, bone {bone}");
+                }
+            }
+
+            var accelerationStart = frames.ToList().FindIndex(frame => frame.Label == "ACCELERATE");
+            Assert.That(accelerationStart, Is.GreaterThan(0));
+            AssertPoseStepBelow(frames[accelerationStart - 1].Pose, frames[accelerationStart].Pose,
+                .05f, 18f, "idle-to-accelerate");
+            AssertPoseStepBelow(frames[frames.Count - 1].Pose, frames[0].Pose,
+                .05f, 18f, "loop-wrap");
+
+            for (var index = accelerationStart; index < frames.Count; index++)
+            {
+                Assert.That(PoseStepMagnitude(frames[index - 1].Pose, frames[index].Pose),
+                    Is.GreaterThan(.0001f), $"duplicate pose at combo frame {index}");
+            }
+
+            for (var segmentStart = 0; segmentStart < frames.Count;)
+            {
+                if (frames[segmentStart].Label != "RUN FAST")
+                {
+                    segmentStart++;
+                    continue;
+                }
+                var segmentEnd = segmentStart;
+                while (segmentEnd + 1 < frames.Count && frames[segmentEnd + 1].Label == "RUN FAST")
+                    segmentEnd++;
+                for (var index = segmentStart;
+                     index + RigidOutfitPilotComboPlan.FastRunFramesPerCycle <= segmentEnd;
+                     index++)
+                {
+                    Assert.That(PoseStepMagnitude(frames[index].Pose,
+                            frames[index + RigidOutfitPilotComboPlan.FastRunFramesPerCycle].Pose),
+                        Is.LessThan(.001f), $"run cadence drift at combo frame {index}");
+                }
+                segmentStart = segmentEnd + 1;
+            }
+        }
+
+        private static void AssertPoseStepBelow(RigidMotionPose from, RigidMotionPose to,
+            float rootLimit, float rotationLimit, string boundary)
+        {
+            Assert.That(Vector2.Distance(from.RootOffset, to.RootOffset), Is.LessThan(rootLimit),
+                $"root pop at {boundary}");
+            foreach (RigidBoneId bone in Enum.GetValues(typeof(RigidBoneId)))
+            {
+                var fromRotation = from.Bones.TryGetValue(bone, out var fromPose)
+                    ? fromPose.RotationDegrees : 0f;
+                var toRotation = to.Bones.TryGetValue(bone, out var toPose)
+                    ? toPose.RotationDegrees : 0f;
+                Assert.That(Mathf.Abs(Mathf.DeltaAngle(fromRotation, toRotation)), Is.LessThan(rotationLimit),
+                    $"rotation pop at {boundary}, bone {bone}");
+            }
+        }
+
+        private static float PoseStepMagnitude(RigidMotionPose from, RigidMotionPose to)
+        {
+            var magnitude = Vector2.Distance(from.RootOffset, to.RootOffset);
+            foreach (RigidBoneId bone in Enum.GetValues(typeof(RigidBoneId)))
+            {
+                var fromPose = from.Bones.TryGetValue(bone, out var presentFrom)
+                    ? presentFrom : new RigidBonePose(Vector2.zero, 0f);
+                var toPose = to.Bones.TryGetValue(bone, out var presentTo)
+                    ? presentTo : new RigidBonePose(Vector2.zero, 0f);
+                magnitude += Vector2.Distance(fromPose.PositionOffset, toPose.PositionOffset);
+                magnitude += Mathf.Abs(Mathf.DeltaAngle(fromPose.RotationDegrees, toPose.RotationDegrees));
+            }
+            return magnitude;
+        }
+
+        [Test]
         public void RunCycle_HasFourDistinctOpposedArmLegPhases()
         {
             var poses = new[] { 0f, .25f, .5f, .75f }

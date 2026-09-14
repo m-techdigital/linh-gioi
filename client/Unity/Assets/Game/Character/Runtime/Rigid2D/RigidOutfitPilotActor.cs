@@ -48,5 +48,7 @@ namespace LinhGioi.Character
 
         public void Apply(RigidMotionState state, float normalizedTime) =>
             _animator.Apply(RigidMotionLibrary.Sample(state, normalizedTime));
+
+        public void Apply(RigidMotionPose pose) => _animator.Apply(pose);
     }
 }

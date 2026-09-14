@@ -1,6 +1,6 @@
-## Final #1 rigid outfit review candidate — 2026-09-15
+## Final #1 rigid outfit fast-combo review candidate — 2026-09-15
 
-`NEED_HUMAN_VISUAL_REVIEW`. Rigid source v2 adds independently attached hands/feet, bracers/gloves and boot shafts/feet with fixed source registration and overlap. Unity Player final evidence has 15 keyframes plus a 150-frame 24-fps MP4 for male/female through Idle/Walk/Run/Jump/Attack/Roll. Run is foot-target IK with four contact/pass phases; Jump includes anticipation/apex/absorbed landing; Roll is forward and articulated. Runtime hashes remain stable, scale is one, root rotation stays identity, deforming components are absent, and 17/17 EditMode tests pass. Stop before outfit #2 for owner review.
+`NEED_HUMAN_VISUAL_REVIEW`. Final #1 v2 has a 212-frame/24-fps continuous Player combo at `build/rigid-outfit-pilot/final-1-combo-review-v2`: accelerate, fast run at 12 frames/cycle, run-jump-land-run, run-attack-run, run-roll-run and recovery to idle. Shortest-arc pose blending starts from the actual live pose; duplicated endpoints were removed and dedicated assertions cover idle→accelerate plus last→first. Adjacent-frame boards were reviewed directly. Runtime hashes remain stable, scale is one, root rotation stays identity, deforming components are absent, and 300/300 EditMode tests pass (one ignored). Isolated state clips are no longer acceptable Final evidence. Stop before outfit #2 for owner review.
 
 ## Unity rigid outfit pilot visual rejection and source reset — 2026-09-15
 

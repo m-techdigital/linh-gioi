@@ -45,6 +45,138 @@ namespace LinhGioi.Character
         };
     }
 
+    public readonly struct RigidOutfitPilotComboFrame
+    {
+        public RigidOutfitPilotComboFrame(string label, RigidMotionState state, RigidMotionPose pose)
+        {
+            Label = label;
+            State = state;
+            Pose = pose;
+        }
+
+        public string Label { get; }
+        public RigidMotionState State { get; }
+        public RigidMotionPose Pose { get; }
+    }
+
+    public static class RigidOutfitPilotComboPlan
+    {
+        public const int VideoFps = 24;
+        public const int FastRunFramesPerCycle = 12;
+        public static IReadOnlyList<RigidOutfitPilotComboFrame> Frames { get; } = Build();
+
+        private static IReadOnlyList<RigidOutfitPilotComboFrame> Build()
+        {
+            var frames = new List<RigidOutfitPilotComboFrame>();
+            AddState(frames, "IDLE", RigidMotionState.Idle, 12, 0f, .5f);
+            AddAcceleration(frames, 12);
+            AddFastRun(frames, 24);
+
+            var runContact = SampleInPlace(RigidMotionState.Run, 0f);
+            AddBlend(frames, "RUN JUMP", RigidMotionState.Jump, runContact,
+                SampleInPlace(RigidMotionState.Jump, .14f), 5);
+            AddStateExclusiveStart(frames, "RUN JUMP", RigidMotionState.Jump, 30, .14f, 1f);
+            AddBlend(frames, "LAND RUN", RigidMotionState.Run,
+                SampleInPlace(RigidMotionState.Jump, 1f), SampleInPlace(RigidMotionState.Run, .5f), 5);
+            AddFastRun(frames, 18, .5f);
+
+            AddActionCombo(frames, "RUN ATTACK", RigidMotionState.Attack, 18);
+            AddFastRun(frames, 18);
+            AddActionCombo(frames, "RUN ROLL", RigidMotionState.Roll, 24);
+            AddFastRun(frames, 18);
+            AddRecoveryToIdle(frames, 12);
+            return frames;
+        }
+
+        private static void AddFastRun(List<RigidOutfitPilotComboFrame> frames, int count, float phaseStart = 0f)
+        {
+            for (var index = 1; index <= count; index++)
+            {
+                var phase = phaseStart + index / (float)FastRunFramesPerCycle;
+                frames.Add(new RigidOutfitPilotComboFrame("RUN FAST", RigidMotionState.Run,
+                    SampleInPlace(RigidMotionState.Run, phase)));
+            }
+        }
+
+        private static void AddActionCombo(List<RigidOutfitPilotComboFrame> frames, string label,
+            RigidMotionState action, int actionFrames)
+        {
+            var run = SampleInPlace(RigidMotionState.Run, 0f);
+            var actionStart = SampleInPlace(action, 0f);
+            AddBlend(frames, label, action, frames[frames.Count - 1].Pose, actionStart, 4);
+            AddStateExclusiveStart(frames, label, action, actionFrames, 0f, 1f);
+            AddBlend(frames, label, RigidMotionState.Run, SampleInPlace(action, 1f), run, 4);
+        }
+
+        private static void AddAcceleration(List<RigidOutfitPilotComboFrame> frames, int count)
+        {
+            var idle = frames[frames.Count - 1].Pose;
+            for (var index = 1; index <= count; index++)
+            {
+                var t = index / (float)count;
+                var amount = t * t * (3f - 2f * t);
+                var gait = RigidMotionLibrary.Blend(
+                    SampleInPlace(RigidMotionState.Walk, t),
+                    SampleInPlace(RigidMotionState.Run, t),
+                    amount);
+                frames.Add(new RigidOutfitPilotComboFrame("ACCELERATE", RigidMotionState.Run,
+                    RigidMotionLibrary.Blend(idle, gait, amount)));
+            }
+        }
+
+        private static void AddRecoveryToIdle(List<RigidOutfitPilotComboFrame> frames, int count)
+        {
+            var from = frames[frames.Count - 1].Pose;
+            var idle = SampleInPlace(RigidMotionState.Idle, 0f);
+            for (var index = 1; index <= count; index++)
+            {
+                // Leave a small final remainder so the modulo loop never repeats a frame at the seam.
+                var t = index / (count + 1f);
+                var amount = t * t * (3f - 2f * t);
+                frames.Add(new RigidOutfitPilotComboFrame("RECOVER IDLE", RigidMotionState.Idle,
+                    RigidMotionLibrary.Blend(from, idle, amount)));
+            }
+        }
+
+        private static void AddBlend(List<RigidOutfitPilotComboFrame> frames, string label,
+            RigidMotionState state, RigidMotionPose from, RigidMotionPose to, int count)
+        {
+            for (var index = 1; index <= count; index++)
+            {
+                var t = index / (float)count;
+                var amount = t * t * (3f - 2f * t);
+                frames.Add(new RigidOutfitPilotComboFrame(label, state,
+                    RigidMotionLibrary.Blend(from, to, amount)));
+            }
+        }
+
+        private static void AddState(List<RigidOutfitPilotComboFrame> frames, string label,
+            RigidMotionState state, int count, float start, float end)
+        {
+            for (var index = 0; index < count; index++)
+            {
+                var t = count <= 1 ? end : Mathf.Lerp(start, end, index / (count - 1f));
+                frames.Add(new RigidOutfitPilotComboFrame(label, state, SampleInPlace(state, t)));
+            }
+        }
+
+        private static void AddStateExclusiveStart(List<RigidOutfitPilotComboFrame> frames, string label,
+            RigidMotionState state, int count, float start, float end)
+        {
+            for (var index = 1; index <= count; index++)
+            {
+                var t = Mathf.Lerp(start, end, index / (float)count);
+                frames.Add(new RigidOutfitPilotComboFrame(label, state, SampleInPlace(state, t)));
+            }
+        }
+
+        private static RigidMotionPose SampleInPlace(RigidMotionState state, float phase)
+        {
+            var sampled = RigidMotionLibrary.Sample(state, phase);
+            return new RigidMotionPose(new Vector2(0f, sampled.RootOffset.y), sampled.Bones);
+        }
+    }
+
     public sealed class RigidOutfitPilotPlayer : MonoBehaviour
     {
         [Serializable]
@@ -67,6 +199,10 @@ namespace LinhGioi.Character
             public int captureCount;
             public int motionFrameCount;
             public int motionFps;
+            public int comboFrameCount;
+            public int comboFps;
+            public int fastRunFramesPerCycle;
+            public string[] comboLabels;
             public string sourceSpaceProfile;
             public string[] failures;
         }
@@ -93,16 +229,11 @@ namespace LinhGioi.Character
         private void Update()
         {
             if (_male == null || _captureMode) return;
-            var sequence = new[]
-            {
-                RigidMotionState.Idle, RigidMotionState.Walk, RigidMotionState.Run,
-                RigidMotionState.Jump, RigidMotionState.Attack, RigidMotionState.Roll, RigidMotionState.Hit,
-            };
             var elapsed = Time.realtimeSinceStartup - _started;
-            var state = sequence[Mathf.FloorToInt(elapsed / 2f) % sequence.Length];
-            var phase = Mathf.Repeat(elapsed / 2f, 1f);
-            ApplyBoth(state, phase);
-            _currentLabel = state.ToString().ToUpperInvariant();
+            var frame = RigidOutfitPilotComboPlan.Frames[
+                Mathf.FloorToInt(elapsed * RigidOutfitPilotComboPlan.VideoFps) % RigidOutfitPilotComboPlan.Frames.Count];
+            ApplyBoth(frame.Pose);
+            _currentLabel = frame.Label;
         }
 
         private RigidOutfitPilotActor CreateActor(string name, Vector3 position, RigidOutfitPilotCharacter character)
@@ -169,6 +300,24 @@ namespace LinhGioi.Character
                 }
             }
 
+            var comboFrames = 0;
+            var comboDirectory = Path.Combine(output, "combo-motion-frames");
+            Directory.CreateDirectory(comboDirectory);
+            foreach (var frame in RigidOutfitPilotComboPlan.Frames)
+            {
+                ApplyBoth(frame.Pose);
+                _currentLabel = frame.Label;
+                yield return new WaitForEndOfFrame();
+                comboFrames++;
+                var path = Path.Combine(comboDirectory, "combo-" + comboFrames.ToString("D4") + ".png");
+                var texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+                texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+                texture.Apply(false, false);
+                File.WriteAllBytes(path, texture.EncodeToPNG());
+                Destroy(texture);
+                yield return null;
+            }
+
             var evidence = new Evidence
             {
                 states = RigidOutfitPilotCapturePlan.Frames.Select(frame => frame.State.ToString()).Distinct().ToArray(),
@@ -187,6 +336,10 @@ namespace LinhGioi.Character
                 captureCount = index,
                 motionFrameCount = motionFrames,
                 motionFps = RigidOutfitPilotCapturePlan.VideoFps,
+                comboFrameCount = comboFrames,
+                comboFps = RigidOutfitPilotComboPlan.VideoFps,
+                fastRunFramesPerCycle = RigidOutfitPilotComboPlan.FastRunFramesPerCycle,
+                comboLabels = RigidOutfitPilotComboPlan.Frames.Select(frame => frame.Label).Distinct().ToArray(),
                 sourceSpaceProfile = RigidOutfitPilotCatalog.SourceSpaceProfile,
             };
             var failures = new List<string>();
@@ -208,6 +361,12 @@ namespace LinhGioi.Character
         {
             _male.Apply(state, phase);
             _female.Apply(state, phase);
+        }
+
+        private void ApplyBoth(RigidMotionPose pose)
+        {
+            _male.Apply(pose);
+            _female.Apply(pose);
         }
 
         private static string ReadOutputDirectory()

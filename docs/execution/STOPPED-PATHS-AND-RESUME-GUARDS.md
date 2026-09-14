@@ -9,8 +9,8 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
 
 - Unity Transform hierarchy + ordinary rigid `SpriteRenderer`; one fixed FitProfile per body variant/item.
-- Current gate: `FINAL_OUTFIT1_CANDIDATE_READY_FOR_OWNER_REVIEW / NEED_HUMAN_VISUAL_REVIEW`.
-- Final #1 self-review evidence is `build/rigid-outfit-pilot/final-1-review`; owner acceptance is still required.
+- Current gate: `FINAL_OUTFIT1_FAST_COMBO_READY_FOR_OWNER_REVIEW / NEED_HUMAN_VISUAL_REVIEW`.
+- Final #1 self-review evidence is `build/rigid-outfit-pilot/final-1-combo-review-v2`; owner acceptance is still required.
 - Stop here for owner review; do not mutate source/motion or start another capture without a concrete owner finding.
 - Outfit #2, mix-and-match, class/level expansion and migration remain locked until outfit #1 visual PASS.
 
@@ -19,6 +19,7 @@ Recurrence guard:
 - Do not resume the Blender weighted-mesh source as rigid authority; its report explicitly says `armSkinning=two_bone_weighted_mesh`.
 - Do not fix the rejected Player by per-frame art, per-pose offsets, sprite swap, scale, SpriteSkin, mesh or capsule/flat-card proxies.
 - Do not treat validator/checkpoint PASS as visual acceptance.
+- Do not present isolated state clips as Final #1 again; owner review requires one continuous gameplay-speed combo with adjacent-frame transition evidence.
 - Review the whole board, batch issues by source/pivot/overlap/motion/render order, and make one grouped correction. A structural error repeated in two captures rejects that topology/source hypothesis.
 - The generated red armor sheet is `REJECTED-NOT-INTEGRATED` because Phase 8 started before outfit #1 passed; do not copy it into Resources or rename it into an active outfit.
 

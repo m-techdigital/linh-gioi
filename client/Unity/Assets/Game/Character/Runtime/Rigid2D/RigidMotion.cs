@@ -65,6 +65,25 @@ namespace LinhGioi.Character
             };
         }
 
+        public static RigidMotionPose Blend(RigidMotionPose from, RigidMotionPose to, float amount)
+        {
+            if (from == null) throw new ArgumentNullException(nameof(from));
+            if (to == null) throw new ArgumentNullException(nameof(to));
+            amount = Mathf.Clamp01(amount);
+            var bones = new Dictionary<RigidBoneId, RigidBonePose>();
+            foreach (var bone in from.Bones.Keys.Concat(to.Bones.Keys).Distinct())
+            {
+                var fromPose = from.Bones.TryGetValue(bone, out var start)
+                    ? start : new RigidBonePose(Vector2.zero, 0f);
+                var toPose = to.Bones.TryGetValue(bone, out var end)
+                    ? end : new RigidBonePose(Vector2.zero, 0f);
+                bones[bone] = new RigidBonePose(
+                    Vector2.Lerp(fromPose.PositionOffset, toPose.PositionOffset, amount),
+                    Mathf.LerpAngle(fromPose.RotationDegrees, toPose.RotationDegrees, amount));
+            }
+            return new RigidMotionPose(Vector2.Lerp(from.RootOffset, to.RootOffset, amount), bones);
+        }
+
         private static RigidMotionPose Idle(float t)
         {
             var breath = Mathf.Sin(t * Mathf.PI * 2f);
