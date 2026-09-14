@@ -154,8 +154,11 @@ RUNTIME_ART_PACKS = [
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ACharacterHub',
         'id': 'map01a-character-hub-art-v1',
         'status': 'DRAFT_RUNTIME_REVIEW',
-        'assets': {'spirit-fox-preview.png': (1024, 704, 'character-hub-preview-atlas')},
-        'generators': {'image_gen'},
+        'assets': {
+            'spirit-fox-preview.png': (1024, 704, 'character-hub-preview-atlas'),
+            'spirit-fox-portrait.png': (192, 192, 'character-hub-spirit-pet-portrait'),
+        },
+        'generators': {'image_gen', 'deterministic crop from existing provenance-backed runtime hero'},
         'max_bytes': 1_000_000,
         'status_error': 'Map01A character-hub preview art must remain draft until Player visual review',
     },

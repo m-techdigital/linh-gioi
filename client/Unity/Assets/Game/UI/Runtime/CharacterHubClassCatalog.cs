@@ -71,17 +71,20 @@ namespace LinhGioi.UI
             public string Description { get; }
         }
 
-        public CharacterHubSpiritPetPreview(string name, string level, string artResource,
-            string rarity, string role, string state, string stats,
+        public CharacterHubSpiritPetPreview(string name, string level, string artResource, string portraitResource,
+            string rarity, string role, string state, IReadOnlyList<string> stats,
             IReadOnlyList<SkillPreview> skills, string synergy)
         {
             Name = name;
             Level = level;
             ArtResource = artResource;
+            PortraitResource = portraitResource;
             Rarity = rarity;
             Role = role;
             State = state;
-            Stats = stats;
+            Stats = Freeze(stats, nameof(stats));
+            if (Stats.Count != 5 || Stats.Any(string.IsNullOrWhiteSpace))
+                throw new ArgumentException("Spirit Pet detail requires five structured stat rows", nameof(stats));
             Skills = Freeze(skills, nameof(skills));
             Synergy = synergy;
         }
@@ -95,10 +98,11 @@ namespace LinhGioi.UI
         public string Name { get; }
         public string Level { get; }
         public string ArtResource { get; }
+        public string PortraitResource { get; }
         public string Rarity { get; }
         public string Role { get; }
         public string State { get; }
-        public string Stats { get; }
+        public IReadOnlyList<string> Stats { get; }
         public IReadOnlyList<SkillPreview> Skills { get; }
         public string Synergy { get; }
     }
@@ -255,14 +259,17 @@ namespace LinhGioi.UI
         private static CharacterHubSpiritPetPreview SpiritPet(string synergy)
             => new CharacterHubSpiritPetPreview(
                 "Thanh Vân Hồ", "Lv.20", "LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview",
+                "LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-portrait",
                 "Tinh phẩm", "Hỗ trợ", "Đang xuất chiến",
-                "Thuộc tính Linh thú\nHP  +8720\nTấn Công  +860\nPhòng Thủ  +430\nHồi Phục  +28%\nGiảm Sát Thương  +12%",
+                new[] { "HP  +8720", "Tấn Công  +860", "Phòng Thủ  +430", "Hồi Phục  +28%", "Giảm Sát Thương  +12%" },
                 new[]
                 {
                     new CharacterHubSpiritPetPreview.SkillPreview(
-                        "Thanh Vân Hộ Thể", "Lv.1", "ho_the", "Tạo lá chắn trị liệu cho chủ nhân."),
+                        "Thanh Vân Hộ Thể", "Lv.1", "ho_the",
+                        "Tạo lá chắn trị liệu cho chủ nhân, hồi 12% HP tối đa, CD 15 giây."),
                     new CharacterHubSpiritPetPreview.SkillPreview(
-                        "Cửu Vĩ Linh Phong", "Lv.1", "phong_tram", "Tung linh phong hỗ trợ đồng đội.")
+                        "Cửu Vĩ Linh Phong", "Lv.1", "phong_tram",
+                        "Tung linh phong trị liệu đồng đội, hồi 8% HP và tăng miễn thương, CD 20 giây.")
                 },
                 synergy);
 

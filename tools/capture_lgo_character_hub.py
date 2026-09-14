@@ -21,11 +21,14 @@ PROFILES = {
     "tablet": (1024, 768),
     "mobile": (1600, 720),
 }
-POTENTIAL_CLASS_IDS = ("vo", "kiem", "phap", "co", "linh")
+CHARACTER_HUB_CLASS_IDS = ("vo", "kiem", "phap", "co", "linh")
 POTENTIAL_CLASS_FRAMES = tuple(
     f"potential-{class_id}-{state}.png"
-    for class_id in POTENTIAL_CLASS_IDS
+    for class_id in CHARACTER_HUB_CLASS_IDS
     for state in ("default", "selected")
+)
+SPIRIT_PET_CLASS_FRAMES = tuple(
+    f"spirit-pet-{class_id}.png" for class_id in CHARACTER_HUB_CLASS_IDS
 )
 REQUIRED_FRAMES = (
     "character-info.png",
@@ -38,6 +41,7 @@ REQUIRED_FRAMES = (
     "potential.png",
     *POTENTIAL_CLASS_FRAMES,
     "spirit-pet.png",
+    *SPIRIT_PET_CLASS_FRAMES,
 )
 
 
@@ -67,8 +71,10 @@ def validate_manifest(manifest: dict, out: Path, profile: str) -> list[str]:
         errors.append("CAPTURE_SCOPE_INVALID")
     if manifest.get("usesOsMouseOrKeyboard") is not False:
         errors.append("OS_INPUT_USED")
-    if tuple(manifest.get("potentialClassProfiles", ())) != POTENTIAL_CLASS_IDS:
+    if tuple(manifest.get("potentialClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
         errors.append("POTENTIAL_CLASS_PROFILE_MISMATCH")
+    if tuple(manifest.get("spiritPetClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
+        errors.append("SPIRIT_PET_CLASS_PROFILE_MISMATCH")
     if manifest.get("classSwitchScope") != "character-hub-data-only-no-renderer-change":
         errors.append("CLASS_SWITCH_SCOPE_INVALID")
     if tuple(manifest.get("frames", ())) != REQUIRED_FRAMES:

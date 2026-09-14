@@ -25,6 +25,17 @@
         704
       ],
       "priorRuntimeSha256": "c68f8bf37cbacc61f255ef3db93b8c305394165075403c985e264f8c987d7796"
+    },
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-portrait.png",
+      "role": "character-hub-spirit-pet-portrait",
+      "generator": "deterministic crop from existing provenance-backed runtime hero",
+      "referenceOnly": false,
+      "sha256": "a0e14538b802513dc7809ee0dfe62cae010556656e71d4ba5c38907921c6add4",
+      "derivation": "400x400 head-and-shoulder crop (600,20)-(1000,420), Lanczos resize to actual-display 192x192",
+      "sourceRuntimePath": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ACharacterHub/spirit-fox-preview.png",
+      "sourceRuntimeSha256": "e899ece5f5a52e4a3b16a3397a43a5db13d632c3bf9642dbd9188476187c7e60"
     }
-  ]
+  ],
+  "totalPngBytes": 919722
 }

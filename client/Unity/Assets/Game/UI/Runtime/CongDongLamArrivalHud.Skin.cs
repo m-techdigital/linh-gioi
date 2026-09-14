@@ -842,6 +842,58 @@ namespace LinhGioi.UI
             marker.style.borderTopWidth = marker.style.borderBottomWidth = 0;
         }
 
+        private static void ApplyLgoSpiritPetHeroPreview(VisualElement preview)
+        {
+            preview.AddToClassList("lgo-spirit-pet-hero");
+            ApplyLgoCharacterHubDetailCard(preview, 10, 8);
+            preview.style.height = preview.style.minHeight = 296;
+            preview.style.flexShrink = 0;
+            preview.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+        }
+
+        private static void ApplyLgoSpiritPetRoster(VisualElement roster)
+        {
+            roster.AddToClassList("lgo-spirit-pet-roster");
+            roster.style.height = roster.style.minHeight = 104;
+            roster.style.flexShrink = 0;
+            roster.style.marginTop = 8;
+            roster.style.justifyContent = Justify.SpaceBetween;
+        }
+
+        private static void ApplyLgoSpiritPetRosterCard(Button card, bool selected)
+        {
+            card.AddToClassList("lgo-spirit-pet-roster-card");
+            ApplyLgoInventoryGridCell(card);
+            card.style.flexBasis = new Length(23, LengthUnit.Percent);
+            card.style.height = card.style.minHeight = 104;
+            card.style.flexShrink = 0;
+            card.style.flexDirection = FlexDirection.Column;
+            card.style.alignItems = Align.Center;
+            card.style.justifyContent = Justify.Center;
+            ApplyLgoCharacterHubSelectionState(card, selected);
+        }
+
+        private static void ApplyLgoSpiritPetStatRow(VisualElement row)
+        {
+            row.AddToClassList("lgo-spirit-pet-stat-row");
+            row.style.alignItems = Align.Center;
+            row.style.minHeight = 17;
+            row.style.flexShrink = 0;
+            row.style.marginBottom = 0;
+        }
+
+        private static void ApplyLgoSpiritPetSkillRow(VisualElement row)
+        {
+            row.AddToClassList("lgo-spirit-pet-skill-row");
+            row.style.alignItems = Align.Center;
+            row.style.minHeight = 56;
+            row.style.flexShrink = 0;
+            row.style.paddingTop = row.style.paddingBottom = 4;
+            row.style.marginBottom = 0;
+            row.style.borderBottomWidth = 1;
+            row.style.borderBottomColor = new Color(.18f, .40f, .58f, .58f);
+        }
+
         private static void ApplyLgoInventorySearchField(TextField field, bool touch)
         {
             field.AddToClassList(LgoInventorySearchFieldClass);

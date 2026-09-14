@@ -2414,16 +2414,32 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var spiritPet = Path.Combine(directory, "spirit-pet.png");
             CaptureScreenPng(spiritPet);
+            var spiritPetClassFrames = new List<string>();
+            foreach (var classId in potentialClassIds)
+            {
+                bindEvidenceClass.Invoke(hud, new object[] { classId });
+                if (ActiveEquipmentClassId != rendererClassId)
+                    throw new InvalidOperationException("Character Hub evidence binding changed renderer authority");
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Spirit Pet Main Tab"));
+                yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
+                yield return new WaitForEndOfFrame();
+                var frame = "spirit-pet-" + classId + ".png";
+                CaptureScreenPng(Path.Combine(directory, frame));
+                spiritPetClassFrames.Add(frame);
+            }
+            clearEvidenceClass.Invoke(hud, null);
             var potentialClassFramesExist = potentialClassFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
+            var spiritPetClassFramesExist = spiritPetClassFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
             var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(bagSearch)
                 && File.Exists(bagSearchSelected)
                 && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potentialDefault) && File.Exists(potential)
-                && potentialClassFramesExist && File.Exists(spiritPet)
+                && potentialClassFramesExist && File.Exists(spiritPet) && spiritPetClassFramesExist
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var frames = new[] { "character-info.png", "bag.png", "bag-search-binh-mau.png", "bag-search-binh-mau-selected.png",
                 "skills-default.png", "skills.png", "potential-default.png", "potential.png" }
                 .Concat(potentialClassFrames)
-                .Concat(new[] { "spirit-pet.png" });
+                .Concat(new[] { "spirit-pet.png" })
+                .Concat(spiritPetClassFrames);
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-inventory-tabs\",\n"
@@ -2431,6 +2447,7 @@ namespace LinhGioi.World
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
                 + "  \"potentialClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
+                + "  \"spiritPetClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
                 + "  \"classSwitchScope\": \"character-hub-data-only-no-renderer-change\",\n"
                 + "  \"frames\": [\"" + string.Join("\", \"", frames) + "\"]\n"
                 + "}\n";

@@ -118,6 +118,21 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
         self.assertTrue(any("Map01A Potential Topology Artwork" in item for item in violations), violations)
 
+    def test_rejects_spirit_pet_screen_that_skips_shared_roster_base(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            skin = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+            skin.write_text(
+                skin.read_text(encoding="utf-8").replace(
+                    "ApplyLgoSpiritPetRoster",
+                    "ApplyLegacySpiritPetRoster",
+                ),
+                encoding="utf-8",
+            )
+
+            violations = validator.validate_root(Path(temp))
+
+        self.assertTrue(any("ApplyLgoSpiritPetRoster" in item for item in violations), violations)
+
     def test_rejects_register_screen_that_skips_shared_panel_base(self) -> None:
         with self._copy_minimal_repo() as temp:
             register = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Register.cs"

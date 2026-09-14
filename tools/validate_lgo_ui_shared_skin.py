@@ -150,6 +150,12 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoSkillIcon",
     "ApplyLgoSkillNode",
     "ApplyLgoPotentialDataOverlay",
+    "ApplyLgoSpiritPetHeroPreview",
+    "ApplyLgoSpiritPetRoster",
+    "ApplyLgoSpiritPetRosterCard",
+    "ApplyLgoSpiritPetStatRow",
+    "ApplyLgoSpiritPetSkillRow",
+    "lgo-spirit-pet-stat-row",
 ]
 FORBIDDEN_LOCAL_PATTERNS = [
     re.compile(r"private\s+static\s+readonly\s+Color\s+(?!Ui)[A-Za-z0-9_]*(Glass|Gold|Blue|Border|Text|SubText)"),
@@ -356,7 +362,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoCharacterHubTabState(_bagTab",
         "ApplyLgoCharacterHubSelectionState(node, selected)",
         "ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon)",
-        "ApplyLgoCharacterHubDetailCard(_spiritPetPreview, 10, 8)",
+        "ApplyLgoSpiritPetHeroPreview(_spiritPetPreview)",
         "ApplyLgoCharacterHubDetailCard(_hubPreviewDetailPanel)",
         "AnimateLgoCharacterHubSwap(_hubPreviewDetailPanel)",
     ],
@@ -423,6 +429,8 @@ REQUIRED_TEST_MARKERS = [
     "Potential topology must prebuild all add boxes",
     "Class refresh must rebind the shared Potential detail template",
     "Potential level/value belongs in its canonical facts row",
+    "SpiritPetUsesOneFixedHeroRosterAndStructuredDetailTemplate",
+    "Five stat rows must be created once; profiles only bind their values",
 ]
 
 REQUIRED_RUNTIME_SKIN_MARKERS = [

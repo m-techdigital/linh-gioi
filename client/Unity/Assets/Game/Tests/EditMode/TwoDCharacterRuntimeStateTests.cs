@@ -45,6 +45,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(profile.EquippedSkillIndices, Is.Not.InstanceOf<int[]>(), profile.Id);
                 Assert.That(profile.SpiritPet.Skills,
                     Is.Not.InstanceOf<CharacterHubSpiritPetPreview.SkillPreview[]>(), profile.Id);
+                Assert.That(profile.SpiritPet.Stats, Is.Not.InstanceOf<string[]>(), profile.Id);
+                Assert.That(profile.SpiritPet.Stats.Count, Is.EqualTo(5), profile.Id);
                 Assert.That(profile.Skills.Count, Is.EqualTo(9), profile.Id + " must fill the shared 3x3 skill path.");
                 Assert.That(profile.Potentials.Count, Is.EqualTo(5), profile.Id + " must fill the shared potential diagram.");
                 Assert.That(profile.EquippedSkillIndices.Count, Is.EqualTo(4));
@@ -836,8 +838,11 @@ namespace LinhGioi.Tests.EditMode
                 var spiritPetTexture = root.Q("Map01A Spirit Pet Selected Roster Art").style.backgroundImage.value.texture;
                 Assert.That(spiritPetTexture, Is.Not.Null,
                     "The selected spirit-pet roster entry must reuse the provenance-backed pet art, not a generic HUD crest.");
-                Assert.That(spiritPetTexture.width / (float)spiritPetTexture.height, Is.GreaterThanOrEqualTo(1.45f),
-                    "The wide approved spirit-pet source must not be letterboxed inside a square runtime canvas; that makes the pet unreadably small in Player.");
+                Assert.That(spiritPetTexture.width, Is.EqualTo(spiritPetTexture.height),
+                    "Roster/detail must use the authored portrait crop instead of shrinking the full wide hero into a small square.");
+                Assert.That(root.Q("Map01A Spirit Pet Preview Art").style.backgroundImage.value.texture.width
+                    / (float)root.Q("Map01A Spirit Pet Preview Art").style.backgroundImage.value.texture.height,
+                    Is.GreaterThanOrEqualTo(1.45f), "The main hero must retain the approved wide source.");
                 Assert.That(root.Q("Map01A Spirit Pet Locked Roster 1"), Is.Not.Null);
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Spirit Pet Intimacy").value, Is.EqualTo(320));
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Spirit Pet Growth").value, Is.EqualTo(180));
@@ -965,7 +970,7 @@ namespace LinhGioi.Tests.EditMode
                                 .ClassListContains("lgo-character-hub-selected"),
                             Is.EqualTo(potentialIndex == selectedPotentialIndex),
                             profile.Id + " default Potential selection must be rebound without a class-specific UI branch.");
-                    Assert.That(root.Q<Label>("Map01A Spirit Pet Identity").text,
+                    Assert.That(root.Q<Label>("Map01A Spirit Pet Hero Level").text,
                         Does.Contain(profile.Label), profile.Id);
                     Assert.That(root.Q<Label>("Map01A Spirit Pet Skill Row 0 Name").text,
                         Is.EqualTo("Thanh Vân Hộ Thể"), profile.Id);
@@ -1008,6 +1013,42 @@ namespace LinhGioi.Tests.EditMode
                 }
                 clear.Invoke(hud, null);
                 Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(rendererClass));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void SpiritPetUsesOneFixedHeroRosterAndStructuredDetailTemplate()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("spirit pet shared template test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Spirit Pet Main Tab"));
+
+                var preview = root.Q("Map01A Spirit Pet Preview Art");
+                Assert.That(preview.style.height.value.value, Is.EqualTo(296).Within(1));
+                Assert.That(preview.style.flexShrink.value, Is.EqualTo(0).Within(.01),
+                    "The canonical hero must keep its authored height instead of shrinking differently per viewport.");
+                var roster = root.Q("Map01A Spirit Pet Roster");
+                Assert.That(roster.childCount, Is.EqualTo(4));
+                Assert.That(roster.style.flexShrink.value, Is.EqualTo(0).Within(.01));
+                Assert.That(root.Query<VisualElement>(className: "lgo-spirit-pet-stat-row").ToList().Count,
+                    Is.EqualTo(5), "Five stat rows must be created once; profiles only bind their values.");
+                Assert.That(root.Q("Map01A Spirit Pet Skill Row 0").style.minHeight.value.value,
+                    Is.EqualTo(56).Within(1));
+                Assert.That(root.Q<Label>("Map01A Spirit Pet Skill Row 0 Name").style.fontSize.value.value,
+                    Is.GreaterThanOrEqualTo(16));
+                Assert.That(root.Q<Label>("Map01A Hub Detail Status").style.display.value,
+                    Is.EqualTo(DisplayStyle.None),
+                    "The deployed badge and disabled actions already explain state; a duplicate status card is outside canonical.");
             }
             finally
             {

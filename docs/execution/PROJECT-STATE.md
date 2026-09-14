@@ -1,3 +1,11 @@
+## Character Hub — Linh thú shared template và five-profile audit v18d — 2026-09-15
+
+- Canonical active: `redesign-v4-five-tabs/05-linh-thu-five-tab-APPROVED.png`. Runtime nay dựng đúng một hero preview, roster bốn slot, năm stat row, hai skill row và detail/action hierarchy. `CharacterHubSpiritPetPreview` chỉ cấp dữ liệu; refresh Võ/Kiếm/Pháp/Cơ/Linh giữ nguyên object tree và renderer authority.
+- Portrait 192×192 được crop xác định từ hero Linh thú hiện hữu có provenance, dùng cho roster/detail; main preview giữ hero wide. Manifest khóa source hash, derivation, byte budget và importer không mipmap/không NPOT scale. Không dùng canonical làm runtime asset, không tạo placeholder hoặc class art.
+- Audit v18/v18b/v18c phát hiện tràn roster và chồng skill/action trên cả ba viewport nên các bản đó bị loại. v18d sửa ở shared metrics: hero/roster giữ kích thước cố định, detail Linh thú dùng typography/row/action compact theo cùng một template; ảnh PC 1280×720, tablet 1024×768 và mobile landscape 1600×720 không còn cắt/chồng.
+- Player `build/character-hub-spirit-template-player-v18d/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=50`. Evidence `build/character-hub-spirit-template-runtime-v18d/{pc,mobile,tablet}/` có 24 frame mỗi viewport, gồm đủ năm tab, 10 frame Tiềm năng theo class và 5 frame Linh thú theo class; capture nội bộ không đổi `ActiveEquipmentClassId`.
+- TDD Linh thú RED `0/1`, GREEN `1/1`; Python/shared tests `35/35`; full EditMode `289 total / 288 passed / 0 failed / 1 ignored`; no-3D/no-source/frozen diff pass. Trạng thái `CONTINUE`: tiếp tục audit fidelity tổng thể năm tab, chưa claim owner acceptance hoặc hoàn tất toàn goal.
+
 ## Character Hub — Tiềm năng five-profile Player audit v17 — 2026-09-15
 
 - Màn Tiềm năng tiếp tục dùng đúng một topology 600×520 và một detail template. Đường capture nội bộ nay bind tuần tự dữ liệu Võ/Kiếm/Pháp/Cơ/Linh vào cùng object tree; hook không đổi `ActiveEquipmentClassId`, không gọi renderer và không tải class art. Mỗi profile được đưa về `DefaultPotentialName` trước ảnh default rồi chọn node `Công` cho ảnh selected.

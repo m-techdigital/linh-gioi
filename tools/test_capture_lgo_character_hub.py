@@ -22,6 +22,14 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
         for frame in expected:
             self.assertIn(frame, capture.REQUIRED_FRAMES)
 
+    def test_capture_requires_shared_spirit_pet_template_for_all_five_classes(self) -> None:
+        expected = tuple(
+            f"spirit-pet-{class_id}.png"
+            for class_id in ("vo", "kiem", "phap", "co", "linh")
+        )
+        for frame in expected:
+            self.assertIn(frame, capture.REQUIRED_FRAMES)
+
     def test_player_command_uses_target_resolution_and_internal_capture(self) -> None:
         command = capture.build_player_command(
             Path("/tmp/Unity"), Path("/tmp/evidence"), "mobile", 1600, 720
@@ -44,7 +52,8 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "width": 1280,
                 "height": 720,
                 "frames": list(capture.REQUIRED_FRAMES),
-                "potentialClassProfiles": list(capture.POTENTIAL_CLASS_IDS),
+                "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
+                "spiritPetClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "classSwitchScope": "character-hub-data-only-no-renderer-change",
             }
             self.assertEqual([], capture.validate_manifest(manifest, out, "pc"))
@@ -53,7 +62,7 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
             manifest["width"] = 1280
             manifest["potentialClassProfiles"] = ["vo"]
             self.assertIn("POTENTIAL_CLASS_PROFILE_MISMATCH", capture.validate_manifest(manifest, out, "pc"))
-            manifest["potentialClassProfiles"] = list(capture.POTENTIAL_CLASS_IDS)
+            manifest["potentialClassProfiles"] = list(capture.CHARACTER_HUB_CLASS_IDS)
             manifest["classSwitchScope"] = "renderer-class-switch"
             self.assertIn("CLASS_SWITCH_SCOPE_INVALID", capture.validate_manifest(manifest, out, "pc"))
 
@@ -67,7 +76,8 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "width": 1024,
                 "height": 768,
                 "frames": list(capture.REQUIRED_FRAMES),
-                "potentialClassProfiles": list(capture.POTENTIAL_CLASS_IDS),
+                "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
+                "spiritPetClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "classSwitchScope": "character-hub-data-only-no-renderer-change",
             }
             errors = capture.validate_manifest(manifest, out, "tablet")
