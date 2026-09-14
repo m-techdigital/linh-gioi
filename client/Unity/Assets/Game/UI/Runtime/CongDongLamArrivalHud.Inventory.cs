@@ -12,7 +12,7 @@ namespace LinhGioi.UI
         private VisualElement _inventoryBackdrop, _inventoryItemsGrid, _inventoryFooter, _inventoryHeroPanel, _inventoryGridPanel, _inventoryDetailPanel, _characterHeroCard, _characterHeroPortrait, _characterHeroLoadoutStrip, _characterHeroLeftEquipmentRail, _characterHeroRightEquipmentRail, _characterStatStrip, _characterLoadoutMatrix, _inventoryBottomActions, _inventoryDetailStatsCard, _inventoryCategoryRail;
         private Label _inventoryModalTitle, _inventoryModalSubtitle, _inventoryHeroTitle, _inventoryHeroMeta, _characterHeroName, _characterHeroPower, _characterHeroLoadout, _inventoryCountBadge, _inventoryItemId, _inventoryItemState, _inventoryDetailHeader, _inventoryDetailIcon, _inventoryDetailRarity, _inventoryDetailSlotType, _inventoryDetailStateBadge, _inventoryDetailLevelChip, _inventoryDetailFitChip, _inventoryDetailStatsHeader, _inventoryDetailSetHeader, _inventoryDetailStatPrimary, _inventoryDetailStatFit, _suppliesTitle, _suppliesEmptyState;
         private Button _bagTab, _characterInfoTab, _skillsTab, _potentialTab, _spiritPetTab, _allItemsTab, _equipmentTab, _suppliesTab, _materialsTab, _otherItemsTab;
-        private Button _inventoryDetailPrimaryAction, _inventoryDetailLockAction;
+        private Button _inventoryDetailPrimaryAction, _inventoryDetailLockAction, _inventoryDetailSellAction;
         private TextField _inventorySearchField;
         private Button[] _equipmentTiles;
         private VisualElement[] _emptyBagSlots;
@@ -319,12 +319,16 @@ namespace LinhGioi.UI
             _inventoryDetailPrimaryAction.style.minHeight = _touch ? 44 : 38;
             _inventoryDetailLockAction = InventoryButton(ToggleSelectedEquipmentLock, "Map01A Inventory Detail Lock Action", "Khóa");
             ApplyLgoButton(_inventoryDetailLockAction, true);
+            _inventoryDetailSellAction = InventoryButton(() => { }, "Map01A Inventory Detail Sell Action", "Bán");
+            ApplyLgoButton(_inventoryDetailSellAction);
+            _inventoryDetailSellAction.SetEnabled(false);
+            _inventoryDetailSellAction.tooltip = "Tính năng bán vật phẩm chưa khả dụng";
             _equipmentToggle = InventoryButton(() => { _scene.ToggleVoEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
             _equipmentToggle.style.display = DisplayStyle.None;
             _equipmentVariant = InventoryButton(() => { _scene.CycleVoSelectedEquipmentItemLevel(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
             _equipmentVariant.style.display = DisplayStyle.None;
             _equipmentVariant.style.minHeight = _touch ? 44 : 38;
-            actions.Add(_inventoryDetailPrimaryAction); actions.Add(_inventoryDetailLockAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
+            actions.Add(_inventoryDetailPrimaryAction); actions.Add(_inventoryDetailLockAction); actions.Add(_inventoryDetailSellAction); actions.Add(_equipmentToggle); actions.Add(_equipmentVariant);
             _inventoryDetailPanel.Add(actions);
 
             _inventoryGridPanel = InventoryPanel("Map01A Inventory Grid Panel");
@@ -695,7 +699,7 @@ namespace LinhGioi.UI
             _inventoryItemsGrid.Add(_healthPotion);
             _inventoryItemsGrid.Add(_manaPotion);
             _inventoryItemsGrid.Add(_equipReward);
-            _emptyBagSlots = new VisualElement[4];
+            _emptyBagSlots = new VisualElement[7];
             for (var emptyIndex = 0; emptyIndex < _emptyBagSlots.Length; emptyIndex++)
             {
                 var emptySlot = new VisualElement { name = $"Map01A Empty Bag Slot {emptyIndex + 1:00}" };
@@ -789,6 +793,7 @@ namespace LinhGioi.UI
             _inventoryHeroPanel.style.display = characterInfo ? DisplayStyle.Flex : DisplayStyle.None;
             _inventoryDetailPanel.style.display = DisplayStyle.Flex;
             _inventoryFooter.style.display = DisplayStyle.Flex;
+            _inventoryDetailSellAction.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
             ApplyHubMainTabSelection(null, characterInfo, !characterInfo);
             RefreshInventoryDetailCard();
         }

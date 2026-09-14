@@ -221,14 +221,25 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Inventory Split Action").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Button>("Map01A Inventory Sort Action").style.flexGrow.value, Is.EqualTo(1));
                 Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").style.flexGrow.value, Is.EqualTo(1));
+                Assert.That(root.Query<VisualElement>(className: "lgo-inventory-bag-grid-cell").ToList().Count, Is.EqualTo(20),
+                    "The approved storage workspace keeps a stable four-by-five grid, including honest empty slots.");
+                Assert.That(root.Q<Button>("Map01A All Items Category").style.minHeight.value.value, Is.EqualTo(94),
+                    "Five vertical storage categories must fill the approved rail instead of leaving a large dead zone.");
                 Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-detail-card"), Is.True);
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").ClassListContains("lgo-inventory-button-base"), Is.True);
+                var detailSellAction = root.Q<Button>("Map01A Inventory Detail Sell Action");
+                Assert.That(detailSellAction, Is.Not.Null);
+                Assert.That(detailSellAction.style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "Storage detail keeps the approved third action without pretending that selling is available.");
+                Assert.That(detailSellAction.enabledSelf, Is.False);
 
                 InvokeBoundButton(infoTab);
                 Assert.That(root.Q<Label>("Map01A Inventory Modal Title").text, Is.EqualTo("THÔNG TIN NHÂN VẬT"));
                 Assert.That(root.Q("Map01A Inventory Grid Panel").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Detail Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(detailSellAction.style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Character detail has exactly the two actions shown in its canonical screen.");
                 Assert.That(body.IndexOf(root.Q("Map01A Inventory Detail Panel")),
                     Is.GreaterThan(body.IndexOf(root.Q("Map01A Inventory Character Panel"))),
                     "Selected equipment detail must stay in the shared right column.");

@@ -551,7 +551,7 @@ namespace LinhGioi.UI
             button.style.justifyContent = Justify.Center;
             button.style.flexBasis = StyleKeyword.Auto;
             button.style.minWidth = 0;
-            button.style.minHeight = 74;
+            button.style.minHeight = 94;
             button.style.marginRight = 0;
             button.style.marginBottom = 6;
         }

@@ -1,10 +1,17 @@
-## Character hub — tab Nhân vật đã qua gate, tab Rương đồ active — 2026-09-14
+## Character hub — tab Rương đồ đã qua gate, tab Kỹ năng active — 2026-09-14
+
+- Canonical duy nhất: `redesign-v4-five-tabs/02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png`. Runtime giữ rail phân loại dọc, capacity/search/sort, grid cố định `4×5`, footer action và detail-right ở ba viewport.
+- Grid dùng 13 item thật và 7 ô trống rõ ràng, không tạo item giả. Detail có ba vị trí action như canonical; `Bán` bị khóa và ghi tooltip vì gameplay bán đồ chưa có contract. Màn Nhân vật vẫn giữ đúng hai action.
+- Full `TwoDCharacterRuntimeStateTests` đạt `28/28`; Player `build/map01a-storage-layout-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=46`. Evidence default/search/chọn item tại `build/map01a-storage-layout-runtime-v1/{pc,mobile,tablet}/` đã được xem trực tiếp, không wrap/stack/cắt/chồng.
+- Screen active duy nhất tiếp theo là `Kỹ năng` theo `03-ky-nang-five-tab-APPROVED.png`; sau đó mới `Tiềm năng → Linh thú`. Scope class/pose/wardrobe/source tiếp tục đóng.
+
+## Character hub — tab Nhân vật đã qua gate — 2026-09-14
 
 - Canonical duy nhất: `redesign-v4-five-tabs/01-nhan-vat-nam-tab-compact-APPROVED.png`. Runtime giữ đúng shared shell, một hàng năm tab và body hai cột ở PC `1600×900`, mobile landscape `1600×720`, tablet `1024×768`.
 - Màn Nhân vật có đủ 10 slot quanh actor, badge level lấy từ state thật, identity `Lv + LC`, HP/MP và một inspector bên phải. Level/trạng thái đã gom vào item hero; bỏ chip trạng thái trùng; phần thuộc tính/loadout dùng dữ liệu thật, không dựng chỉ số giả.
 - Full `TwoDCharacterRuntimeStateTests` đạt `28/28`; Player `build/map01a-character-inspector-player-v1/LinhGioiOnline.app` build `errors=0`, `warnings=46`. Evidence mặc định/chọn/khóa tại `build/map01a-character-inspector-runtime-v1/{pc,mobile,tablet}/` đã được xem trực tiếp, không wrap/stack/cắt/chồng.
 - Gate UI/shared skin, runtime-art, no-3D, no-source-images, change budget, diff check và frozen diff đều pass. Actor/art vẫn là runtime source hiện hành theo contract, không phải thay đổi class/pose/wardrobe.
-- Screen active duy nhất tiếp theo là `Rương đồ` theo `02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png`; sau đó mới `Kỹ năng → Tiềm năng → Linh thú`.
+- Sau checkpoint này, gate đã chuyển tuần tự sang Rương đồ và trạng thái mới nhất nằm ở mục trên.
 
 ## Character hub — shared layout đã khóa lại — 2026-09-14
 
