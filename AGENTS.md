@@ -10,6 +10,10 @@ This repository uses persistent continuous-work mode. Read this file before maki
 
 ## Quy tắc owner — làm theo batch, tránh vòng lặp nhỏ (2026-09-10)
 
+- UI/UX phải đi theo từng screen: trước code phải có đúng một ảnh canonical được ghi trong screen contract, kèm scenario, state, interaction và ba viewport cần hỗ trợ. Ảnh cũ chỉ được archive/labeled historical; không được để hai design cùng làm nguồn quyết định. Audit theo thứ tự layout tổng → vùng chính → component chung → asset → typography/copy, gom thành một batch và khóa screen bằng Player evidence PC/mobile landscape/tablet trước khi chuyển screen.
+- Base-first là gate bắt buộc: modal, tab, button, field, card, detail panel, category rail và các pattern lặp phải sửa/tạo ở shared Skin/base trước; screen partial chỉ dựng hierarchy và bind data/state/action. Mobile/tablet giữ composition landscape của canonical bằng scale/safe margin, không responsive kiểu wrap/stack làm đổi layout.
+- Không triển khai screen/feature chưa có design hoặc quy trình đã chốt. Nếu thiếu design, nhiệm vụ active là tạo và audit một canonical design trước; không mở code của screen đó và không xen việc từ screen khác.
+
 - Trước khi sửa, chốt một kết quả người chơi có thể kiểm chứng và danh sách thay đổi phụ thuộc trong `NEXT-ACTION.md`. Với batch visual, gom camera/tỷ lệ, asset budget, grounding, HUD/input và ba profile mobile/tablet/PC trước kiểm tra tích hợp. Không chia từng tọa độ, label, texture hoặc profile thành một vòng build riêng.
 - Đọc bài học liên quan trước khi xử lý: `docs/art/LGO-MAP01A-ASSET-OPTIMIZATION-LESSONS.md` và audit công việc đã có. Tái sử dụng source/tool/evidence phù hợp; không nghiên cứu hoặc tạo lại từ đầu nếu kết luận còn đúng.
 - Dùng source review và kiểm tra nhẹ trong lúc triển khai. Chỉ chạy Unity EditMode/build/capture khi tập thay đổi của batch đã sẵn sàng. Khi cần kiểm nhỏ để chẩn đoán lỗi, chọn đúng test/gate liên quan; không mặc định chạy cả bộ.

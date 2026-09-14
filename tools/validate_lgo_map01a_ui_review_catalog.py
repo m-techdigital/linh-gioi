@@ -15,8 +15,8 @@ READY = "LGO_MAP01A_UI_REVIEW_CATALOG_READY"
 TECH_STATUS = "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED"
 
 ENTRY_EVIDENCE = (
-    "build/map01a-entry-remember-runtime-v1/manifest.json",
-    "build/map01a-entry-remember-runtime-v1/entry-login.png",
+    "build/map01a-entry-canonical-runtime-v1/pc/manifest.json",
+    "build/map01a-entry-canonical-runtime-v1/pc/entry-login.png",
 )
 HUB_MANIFEST = "build/map01a-spirit-screen-runtime-v1/pc/manifest.json"
 HUB_FRAMES = [

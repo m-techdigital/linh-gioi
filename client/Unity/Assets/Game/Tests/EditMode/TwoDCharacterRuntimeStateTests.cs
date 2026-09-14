@@ -491,7 +491,6 @@ namespace LinhGioi.Tests.EditMode
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 CongDongLamArrivalHud.Attach(scene);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
-                InvokeBoundButton(root.Q<Button>("Map01A Entry Start Button"));
                 var open = root.Q<Button>("Map01A Character Select Button");
                 Assert.That(open, Is.Not.Null);
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
@@ -522,7 +521,6 @@ namespace LinhGioi.Tests.EditMode
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 CongDongLamArrivalHud.Attach(scene);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
-                InvokeBoundButton(root.Q<Button>("Map01A Entry Start Button"));
 
                 var shortcutBar = root.Q("Map01A Product Shortcut Actions");
                 Assert.That(shortcutBar, Is.Not.Null);
@@ -645,7 +643,7 @@ namespace LinhGioi.Tests.EditMode
                 account.value = "LụcThiên";
                 password.value = "demo-secret";
                 InvokeBoundButton(root.Q<Button>("Map01A Entry Login Button"));
-                Assert.That(status.text, Does.Contain("chưa khả dụng"));
+                Assert.That(status.text, Does.Contain("chưa kết nối"));
                 Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
             }
@@ -693,194 +691,95 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
-        public void EntryScreenSeparatesDevLoginAndStartWithoutChangingMapState()
+        public void EntryScreenMatchesCanonicalSingleCtaLayoutWithoutChangingMapState()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             try
             {
-                var host = new GameObject("entry screen test");
+                var host = new GameObject("canonical entry screen test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 CongDongLamArrivalHud.Attach(scene);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 var overlay = root.Q("Map01A Entry Overlay");
                 Assert.That(overlay, Is.Not.Null);
-                Assert.That(root.Q("Map01A Entry Notice Panel").ClassListContains("lgo-status-card"), Is.True,
-                    "Entry notices must use the shared status-card foundation instead of a screen-local frame and padding skin.");
-                Assert.That(root.Q<Button>("Map01A Entry Login Button"), Is.Not.Null);
+                Assert.That(overlay.style.backgroundColor.value.a, Is.LessThanOrEqualTo(.42f));
+
+                var panel = root.Q("Map01A Entry Panel");
+                var controlCard = root.Q("Map01A Entry Control Card");
+                Assert.That(panel.ClassListContains("lgo-entry-shell"), Is.True);
+                Assert.That(controlCard.ClassListContains("lgo-entry-control-card"), Is.True);
+                Assert.That(controlCard.ClassListContains("lgo-layered-frame"), Is.True);
+                Assert.That(panel.style.maxWidth.value.value, Is.InRange(590f, 620f));
+                Assert.That(controlCard.style.minHeight.value.value, Is.GreaterThanOrEqualTo(350f));
+
                 var accountField = root.Q<TextField>("Map01A Entry Account Field");
-                Assert.That(accountField, Is.Not.Null);
-                var accountPlaceholder = accountField.textEdition.placeholder;
-                Assert.That(accountPlaceholder, Does.Contain("Tài khoản"));
-                Assert.That(accountPlaceholder, Does.Not.Contain("👤"), "Login must not use temporary emoji glyphs as field icons.");
                 var passwordField = root.Q<TextField>("Map01A Entry Password Field");
-                Assert.That(passwordField, Is.Not.Null);
-                var passwordPlaceholder = passwordField.textEdition.placeholder;
-                Assert.That(passwordPlaceholder, Does.Contain("Mật khẩu"));
-                Assert.That(passwordPlaceholder, Does.Not.Contain("🔒"), "Login must not use temporary emoji glyphs as field icons.");
-                Assert.That(root.Q("Map01A Entry Account Field").ClassListContains("lgo-input-field"), Is.True,
-                    "Entry input fields must use the shared input-field base instead of login-only frame sizing.");
-                Assert.That(root.Q("Map01A Entry Password Field").ClassListContains("lgo-input-field"), Is.True,
-                    "Password field must share the same input-field base as account field.");
+                Assert.That(accountField.textEdition.placeholder, Is.EqualTo("Tài khoản / Email / Số điện thoại"));
+                Assert.That(passwordField.textEdition.placeholder, Is.EqualTo("Mật khẩu"));
+                Assert.That(passwordField.isPasswordField, Is.True);
+                Assert.That(accountField.ClassListContains("lgo-input-field"), Is.True);
+                Assert.That(passwordField.ClassListContains("lgo-input-field"), Is.True);
                 Assert.That(root.Q("Map01A Entry Account Field Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01AHudIconSprite("account")));
                 Assert.That(root.Q("Map01A Entry Password Field Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01AHudIconSprite("lock")));
-                Assert.That(accountField.style.fontSize.value.value, Is.LessThanOrEqualTo(15),
-                    "Entry placeholder text must stay compact against the owner reference instead of using oversized form typography.");
-                Assert.That(root.Q("Map01A Entry Account Field").style.paddingLeft.value.value, Is.GreaterThanOrEqualTo(16),
-                    "Entry input fields need shared inner spacing so they read as game UI controls rather than thin web-form rectangles.");
-                Assert.That(root.Q("Map01A Entry Account Field").style.borderBottomWidth.value, Is.GreaterThanOrEqualTo(2),
-                    "Entry input fields need a stronger shared frame instead of the default one-pixel web-form border.");
-                Assert.That(root.Q<Label>("Map01A Entry Auth Scope").text, Does.Contain("Đông Lâm"));
-                Assert.That(root.Q<Label>("Map01A Entry Brand Seal").text, Does.Contain("Đông Lâm"));
-                Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Does.Contain("S1"));
-                var serverState = root.Q<Label>("Map01A Entry Server State");
-                Assert.That(serverState.text, Does.Contain("Mượt"));
-                Assert.That(serverState.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
-                    "Server quality must remain on one line like the approved entry reference.");
-                Assert.That(serverState.style.flexShrink.value, Is.EqualTo(0),
-                    "Server quality must not collapse between the server name and switch affordance.");
-                Assert.That(serverState.style.minWidth.value.value, Is.GreaterThanOrEqualTo(68));
-                Assert.That(root.Q("Map01A Entry Server Card").ClassListContains("lgo-detail-card"), Is.True,
-                    "Entry server summary must inherit the shared detail-card foundation.");
-                var serverSwitch = root.Q<Button>("Map01A Entry Server Switch");
-                Assert.That(serverSwitch, Is.Not.Null,
-                    "Entry/login should reserve the design server-switch affordance without opening production server routing.");
-                Assert.That(serverSwitch.enabledSelf, Is.False);
-                Assert.That(serverSwitch.text, Does.Contain("Đổi máy chủ"));
-                Assert.That(serverSwitch.ClassListContains("lgo-entry-secondary-action"), Is.True,
-                    "Entry server switch must use the shared entry secondary-action base instead of local inline sizing.");
-                Assert.That(serverSwitch.text, Does.Not.Contain("chưa mở"),
-                    "Disabled design affordances should read like game UI, not debug placeholder copy.");
-                var start = root.Q<Button>("Map01A Entry Start Button");
-                Assert.That(start, Is.Not.Null);
-                Assert.That(start.ClassListContains("lgo-action-button"), Is.True,
-                    "All Map01A buttons must pass through the shared action-button base before screen-specific role styling.");
-                Assert.That(start.ClassListContains("lgo-action-primary"), Is.True,
-                    "Primary CTAs must use the shared primary action class instead of login-only button styling.");
-                Assert.That(start.ClassListContains("lgo-entry-cta-action"), Is.True,
-                    "Entry CTAs must use the shared entry CTA base instead of a login-only StyleEntryButton helper.");
-                Assert.That(root.Q("Map01A Entry Primary Cta Row"), Is.Not.Null,
-                    "Entry reference uses the start action as its own gold CTA row instead of burying it beside secondary auth actions.");
-                Assert.That(root.Q("Map01A Entry Secondary Actions"), Is.Not.Null,
-                    "Secondary login actions should stay visually subordinate to the primary start CTA.");
+                var passwordReveal = root.Q<Button>("Map01A Entry Password Reveal");
+                Assert.That(passwordReveal, Is.Not.Null);
+                Assert.That(passwordReveal.ClassListContains("lgo-entry-password-reveal"), Is.True);
+                Assert.That(passwordField.isPasswordField, Is.True);
+                InvokeBoundButton(passwordReveal);
+                Assert.That(passwordField.isPasswordField, Is.False);
+                InvokeBoundButton(passwordReveal);
+                Assert.That(passwordField.isPasswordField, Is.True);
+
+                var authActions = root.Q("Map01A Entry Auth Actions");
                 var loginButton = root.Q<Button>("Map01A Entry Login Button");
-                Assert.That(loginButton.ClassListContains("lgo-action-button"), Is.True,
-                    "Secondary login actions must still inherit the shared action-button base.");
-                Assert.That(loginButton.ClassListContains("lgo-action-standard"), Is.True,
-                    "Secondary login actions should use the standard shared action role, then entry-specific sizing.");
-                Assert.That(loginButton.ClassListContains("lgo-entry-cta-action"), Is.True,
-                    "Entry secondary CTAs must share the same entry CTA base as the primary start button.");
-                Assert.That(loginButton.ClassListContains("lgo-entry-auth-primary"), Is.True,
-                    "Login must use the shared blue auth-action role from the approved entry hierarchy.");
-                Assert.That(loginButton.text, Is.EqualTo("Đăng nhập"));
                 var registerButton = root.Q<Button>("Map01A Entry Register Button");
+                Assert.That(authActions, Is.Not.Null);
+                Assert.That(loginButton.ClassListContains("lgo-entry-auth-primary"), Is.True);
+                Assert.That(registerButton.ClassListContains("lgo-entry-auth-secondary"), Is.True);
+                Assert.That(loginButton.text, Is.EqualTo("Đăng nhập"));
                 Assert.That(registerButton.text, Is.EqualTo("Đăng ký"));
-                Assert.That(registerButton.ClassListContains("lgo-entry-auth-secondary"), Is.True,
-                    "Register must use the shared gold-outline auth-action role instead of matching the login fill.");
-                Assert.That(loginButton.style.backgroundColor.value.b, Is.GreaterThan(registerButton.style.backgroundColor.value.b),
-                    "The primary login action should read as blue while register remains visually secondary.");
-                Assert.That(loginButton.text, Does.Not.Contain("dev"), "Entry/login surface must not expose developer wording to the player.");
-                Assert.That(start.style.minHeight.value.value, Is.GreaterThan(loginButton.style.minHeight.value.value));
-                Assert.That(start.style.minHeight.value.value, Is.LessThanOrEqualTo(50),
-                    "Primary login CTA should feel like a polished game button, not an oversized web form control.");
-                Assert.That(start.style.fontSize.value.value, Is.LessThanOrEqualTo(21),
-                    "Primary CTA typography must stay below the oversized prototype style.");
-                Assert.That(start.style.paddingLeft.value.value, Is.GreaterThanOrEqualTo(18),
-                    "Primary CTA should have shared horizontal padding so the button reads like a game control rather than raw text in a box.");
-                Assert.That(start.style.borderLeftWidth.value, Is.GreaterThanOrEqualTo(2),
-                    "Primary CTA should carry the same stronger frame on every edge, not only top and bottom.");
-                Assert.That(loginButton.style.minHeight.value.value, Is.LessThanOrEqualTo(40),
-                    "Secondary login actions should be compact links/buttons under the main CTA.");
-                Assert.That(start.style.maxWidth.value.value, Is.GreaterThan(300));
-                var entryLoginTitle = root.Q<Label>("Map01A Entry Login Title");
-                Assert.That(entryLoginTitle.text, Does.Contain("Đăng nhập"));
-                Assert.That(entryLoginTitle.ClassListContains("lgo-title-label"), Is.True,
-                    "Entry/login title must use the shared title-label base instead of login-only typography.");
-                Assert.That(entryLoginTitle.style.fontSize.value.value, Is.LessThanOrEqualTo(20),
-                    "Entry/login form title should stay compact against the owner reference rather than using oversized web-form typography.");
-                Assert.That(root.Q<Label>("Map01A Entry Hero Motto").text, Does.Contain("Chính nghĩa"));
-                Assert.That(overlay.style.backgroundColor.value.a, Is.LessThanOrEqualTo(.54f),
-                    "Entry/login should keep the Đông Lâm scene visible behind the glass layer instead of blacking it out.");
-                var entrySideNav = root.Q<Button>("Map01A Entry Side Action Thông Báo");
-                Assert.That(entrySideNav.ClassListContains("lgo-entry-side-action"), Is.True,
-                    "Entry side actions must share one reusable side-action base.");
-                Assert.That(entrySideNav.enabledSelf, Is.True,
-                    "Entry side actions are navigation affordances and should not look disabled like placeholder debug controls.");
-                Assert.That(entrySideNav.style.opacity.value, Is.GreaterThanOrEqualTo(.82f),
-                    "Entry side actions should read as available controls instead of dim disabled blocks.");
-                Assert.That(root.Q("Map01A Entry Panel Glow"), Is.Not.Null,
-                    "Entry/login needs a reusable visual depth layer so it does not read like a flat HTML form.");
-                Assert.That(root.Q("Map01A Entry Cta Ornament Left"), Is.Not.Null,
-                    "Primary CTA should carry game-style ornament rails instead of being only a plain text button.");
-                Assert.That(root.Q("Map01A Entry Cta Ornament Right"), Is.Not.Null);
-                Assert.That(root.Q("Map01A Entry Cta Ornament Left").ClassListContains("lgo-ornament-rail"), Is.True,
-                    "Repeated ornamental rails must use a shared base class so login/dialog/card polish does not fork.");
-                Assert.That(root.Q("Map01A Entry Cta Ornament Right").ClassListContains("lgo-ornament-rail"), Is.True);
-                Assert.That(root.Q("Map01A Entry Control Card"), Is.Not.Null,
-                    "Login fields, auth options and server selection should sit inside one design card, matching the owner reference hierarchy.");
-                Assert.That(root.Q("Map01A Entry Control Card").ClassListContains("lgo-entry-control-card"), Is.True);
-                Assert.That(root.Q("Map01A Entry Control Card").ClassListContains("lgo-layered-frame"), Is.True);
-                Assert.That(root.Q("Map01A Entry Brand Crest"), Is.Not.Null,
-                    "Entry brand needs a reusable crest treatment above the logo hierarchy.");
-                var entryPanel = root.Q("Map01A Entry Panel");
-                Assert.That(entryPanel.ClassListContains("lgo-entry-shell"), Is.True,
-                    "Entry/login panel sizing must go through a shared entry-shell base instead of screen-local width/padding values.");
-                Assert.That(entryPanel.ClassListContains("lgo-layered-frame"), Is.True,
-                    "Entry/login shell must use the shared layered-frame primitive instead of a flat web-form rectangle.");
-                Assert.That(root.Q("Map01A Entry Server Card").ClassListContains("lgo-layered-frame"), Is.True,
-                    "Entry detail cards must share the layered-frame primitive so card depth does not fork per screen.");
-                Assert.That(entryPanel.style.maxWidth.value.value, Is.LessThanOrEqualTo(620),
-                    "Entry/login panel should stay compact so the screen reads as a game login card instead of a wide web form.");
-                Assert.That(root.Q("Map01A Entry Panel Glow").style.maxWidth.value.value, Is.LessThanOrEqualTo(660),
-                    "Entry/login glow should frame the compact shell instead of widening the black rectangle behind the form.");
-                Assert.That(root.Q<Label>("Map01A Entry Logo").style.fontSize.value.value, Is.InRange(48, 54),
-                    "Entry logo should carry the visual hierarchy of the owner reference while remaining inside the compact shell.");
-                Assert.That(root.Q<Label>("Map01A Entry Logo Online").text, Does.Contain("O  N  L  I  N  E"),
-                    "Entry brand should preserve the stacked logo hierarchy from the approved reference.");
-                Assert.That(root.Q("Map01A Entry Ornament Top"), Is.Not.Null,
-                    "Entry/login needs a simple shared ornament separator instead of a plain blocky form stack.");
-                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Not.Contain("production auth"),
-                    "Runtime login copy should be player-facing and must not expose implementation wording on the main screen.");
-                Assert.That(root.Q("Map01A Entry Auth Options"), Is.Not.Null);
-                var noticeLine = root.Q<Label>("Map01A Entry Notice Line");
-                StringAssert.DoesNotContain("trải nghiệm", noticeLine.text,
-                    "The visible server notice must read as product UI instead of a build disclaimer.");
-                StringAssert.DoesNotContain("2D", noticeLine.text);
-                Assert.That(root.Q("Map01A Entry Remember Box"), Is.Not.Null,
-                    "Remember-account state should use a UI element box, not a temporary checkbox glyph.");
-                var rememberText = root.Q<Label>("Map01A Entry Remember Account").text;
-                Assert.That(rememberText, Does.Contain("Lưu tài khoản"));
-                Assert.That(rememberText, Does.Not.Contain("☑"), "Entry/login must not use temporary checkbox glyphs as UI art.");
-                var forgotPassword = root.Q<Button>("Map01A Entry Forgot Password");
-                Assert.That(forgotPassword.enabledSelf, Is.False);
-                Assert.That(forgotPassword.ClassListContains("lgo-entry-secondary-action"), Is.True,
-                    "Entry auth links must share the secondary-action base instead of per-link sizing.");
-                Assert.That(forgotPassword.text, Does.Not.Contain("chưa mở"),
-                    "Disabled design affordances should avoid exposing unfinished-state copy on the main login surface.");
-                Assert.That(root.Q("Map01A Entry Support Link"), Is.Null,
-                    "The approved login keeps support in the side rail; a second disabled support link inside the auth row is duplicate UI.");
-                Assert.That(start.text, Does.Contain("Bắt đầu"));
-                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text, Does.Not.Contain("local"));
-                foreach (var name in new[] { "Thông Báo", "Cài Đặt", "Hỗ Trợ", "Cinematic" })
+                Assert.That(loginButton.style.minHeight.value.value, Is.InRange(46f, 54f));
+                Assert.That(root.Q("Map01A Entry Start Button"), Is.Null,
+                    "The canonical design has one primary login CTA and no second Start action.");
+                Assert.That(root.Q("Map01A Entry Primary Cta Row"), Is.Null);
+                Assert.That(root.Q("Map01A Entry Cta Ornament Left"), Is.Null);
+
+                var serverCard = root.Q("Map01A Entry Server Card");
+                var serverState = root.Q<Label>("Map01A Entry Server State");
+                var serverSwitch = root.Q<Button>("Map01A Entry Server Switch");
+                Assert.That(serverCard.ClassListContains("lgo-entry-server-card"), Is.True);
+                Assert.That(serverCard.ClassListContains("lgo-detail-card"), Is.True);
+                Assert.That(root.Q<Label>("Map01A Entry Server Name").text, Is.EqualTo("S1 · Đông Lâm"));
+                Assert.That(serverState.text, Is.EqualTo("● Mượt"));
+                Assert.That(serverState.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap));
+                Assert.That(serverSwitch.text, Is.EqualTo("›"));
+                Assert.That(serverSwitch.enabledSelf, Is.False);
+
+                var status = root.Q<Label>("Map01A Entry Safety Note");
+                Assert.That(status.ClassListContains("lgo-entry-status-line"), Is.True);
+                Assert.That(status.style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "The canonical card reserves a stable inline status line to avoid layout jumps.");
+                InvokeBoundButton(loginButton);
+                Assert.That(status.text, Does.Contain("Nhập tài khoản"));
+                accountField.value = "LụcThiên";
+                passwordField.value = "demo-secret";
+                InvokeBoundButton(loginButton);
+                Assert.That(status.text, Does.Contain("chưa kết nối"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
+
+                Assert.That(root.Q("Map01A Entry Notice Panel").ClassListContains("lgo-status-card"), Is.True);
+                Assert.That(root.Q("Map01A Entry Notice Panel").style.width.value.value, Is.InRange(500f, 560f));
+                foreach (var name in new[] { "Thông Báo", "Hỗ Trợ", "Cinematic", "Cài Đặt" })
                 {
                     var sideAction = root.Q<Button>("Map01A Entry Side Action " + name);
                     Assert.That(sideAction, Is.Not.Null);
-                    Assert.That(sideAction.enabledSelf, Is.True, "Entry/login side actions should be active navigation affordances with status feedback.");
-                    Assert.That(sideAction.ClassListContains("lgo-entry-side-action"), Is.True,
-                        "Entry side actions must use the shared entry side-action base instead of local inline sizing.");
+                    Assert.That(sideAction.ClassListContains("lgo-entry-side-action"), Is.True);
                     Assert.That(sideAction.text, Is.EqualTo(name));
-                    Assert.That(sideAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
-                        "Entry side actions must stay compact and must not wrap into two-line placeholders.");
-                    Assert.That(sideAction.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f));
-                    Assert.That(sideAction.style.height.value.value, Is.InRange(56f, 68f));
+                    Assert.That(sideAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap));
                     Assert.That(sideAction.Q(sideAction.name + " Icon"), Is.Not.Null);
-                    InvokeBoundButton(sideAction);
-                    var feedback = root.Q<Label>("Map01A Entry Safety Note").text;
-                    StringAssert.DoesNotContain("local", feedback);
-                    StringAssert.DoesNotContain("Map01A", feedback);
-                    StringAssert.DoesNotContain("2D", feedback);
-                    StringAssert.DoesNotContain("duyệt", feedback);
                 }
                 var sideActions = root.Q("Map01A Entry Side Actions");
                 CollectionAssert.AreEqual(new[]
@@ -889,15 +788,8 @@ namespace LinhGioi.Tests.EditMode
                     "Map01A Entry Side Action Hỗ Trợ",
                     "Map01A Entry Side Action Cinematic",
                     "Map01A Entry Side Action Cài Đặt"
-                }, sideActions.Children().Select(child => child.name).ToArray(),
-                    "Entry side rail order must follow the latest owner reference and stay stable across rebuilds.");
-                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None),
-                    "Entry/login must not leave the in-game HUD visible behind the modal.");
-
-                InvokeBoundButton(start);
-                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
+                }, sideActions.Children().Select(child => child.name).ToArray());
+                Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None));
             }
             finally
             {

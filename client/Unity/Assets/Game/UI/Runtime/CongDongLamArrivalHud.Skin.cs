@@ -33,6 +33,7 @@ namespace LinhGioi.UI
         private const string LgoEntryTextFieldClass = "lgo-entry-text-field";
         private const string LgoEntryTextInputClass = "lgo-entry-text-input";
         private const string LgoEntryRememberActionClass = "lgo-entry-remember-action";
+        private const string LgoEntryPasswordRevealClass = "lgo-entry-password-reveal";
         private const string LgoModalCloseButtonClass = "lgo-modal-close-button";
         private const string LgoHudCombatActionClass = "lgo-hud-combat-action";
         private const string LgoHudPrimaryCombatActionClass = "lgo-hud-primary-combat-action";
@@ -60,6 +61,8 @@ namespace LinhGioi.UI
         private const string LgoEntrySideActionClass = "lgo-entry-side-action";
         private const string LgoEntryShellClass = "lgo-entry-shell";
         private const string LgoEntryControlCardClass = "lgo-entry-control-card";
+        private const string LgoEntryServerCardClass = "lgo-entry-server-card";
+        private const string LgoEntryStatusLineClass = "lgo-entry-status-line";
         private const string LgoCharacterSelectCardClass = "lgo-character-select-card";
         private const string LgoCharacterSelectPrimaryActionClass = "lgo-character-select-primary-action";
         private const string LgoMenuActionClass = "lgo-menu-action";
@@ -584,8 +587,8 @@ namespace LinhGioi.UI
         {
             field.AddToClassList(LgoEntryTextFieldClass);
             ApplyLgoInputField(field);
-            field.style.height = 44;
-            field.style.marginBottom = 10;
+            field.style.height = 54;
+            field.style.marginBottom = 14;
             field.style.paddingLeft = 16;
             field.style.paddingRight = 16;
             field.style.fontSize = 15;
@@ -596,6 +599,26 @@ namespace LinhGioi.UI
                 var attachedInput = ApplyLgoTextFieldInnerFrame(field, LgoEntryTextInputClass);
                 if (attachedInput != null) attachedInput.style.fontSize = 15;
             });
+        }
+
+        private static void ApplyLgoEntryPasswordReveal(Button button, Sprite sprite)
+        {
+            button.AddToClassList(LgoEntryPasswordRevealClass);
+            ApplyLgoButton(button);
+            button.style.position = Position.Absolute;
+            button.style.right = 12;
+            button.style.top = 11;
+            button.style.width = 30;
+            button.style.height = 30;
+            button.style.minWidth = 30;
+            button.style.minHeight = 30;
+            button.style.paddingLeft = button.style.paddingRight = 3;
+            button.style.paddingTop = button.style.paddingBottom = 3;
+            button.style.backgroundColor = Color.clear;
+            button.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            button.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            button.style.borderTopWidth = button.style.borderRightWidth = 0;
+            button.style.borderBottomWidth = button.style.borderLeftWidth = 0;
         }
 
         private static void ApplyLgoEntryRememberAction(Button button)
@@ -634,8 +657,8 @@ namespace LinhGioi.UI
             ApplyLgoEntryCtaAction(button, false);
             button.EnableInClassList(LgoEntryAuthPrimaryClass, primary);
             button.EnableInClassList(LgoEntryAuthSecondaryClass, !primary);
-            button.style.minHeight = 40;
-            button.style.fontSize = 15;
+            button.style.minHeight = 50;
+            button.style.fontSize = 17;
             button.style.borderTopWidth = button.style.borderBottomWidth = 2;
             button.style.borderLeftWidth = button.style.borderRightWidth = 2;
             if (primary)
@@ -657,13 +680,13 @@ namespace LinhGioi.UI
         private static void ApplyLgoEntryShell(VisualElement panel)
         {
             panel.AddToClassList(LgoEntryShellClass);
-            panel.style.width = Length.Percent(36);
-            panel.style.minWidth = 520;
-            panel.style.maxWidth = 590;
-            panel.style.paddingLeft = 16;
-            panel.style.paddingRight = 16;
-            panel.style.paddingTop = 14;
-            panel.style.paddingBottom = 14;
+            panel.style.width = Length.Percent(38);
+            panel.style.minWidth = 560;
+            panel.style.maxWidth = 610;
+            panel.style.paddingLeft = 14;
+            panel.style.paddingRight = 14;
+            panel.style.paddingTop = 10;
+            panel.style.paddingBottom = 10;
             ApplyLgoModalShell(panel, 16);
             panel.style.backgroundColor = new Color(.010f, .030f, .058f, .08f);
             panel.style.borderTopWidth = panel.style.borderBottomWidth = 0;
@@ -673,12 +696,36 @@ namespace LinhGioi.UI
         private static void ApplyLgoEntryControlCard(VisualElement card)
         {
             card.AddToClassList(LgoEntryControlCardClass);
-            ApplyLgoDetailCard(card, 18, 16);
+            ApplyLgoDetailCard(card, 28, 24);
+            card.style.minHeight = 358;
             card.style.backgroundColor = new Color(.010f, .035f, .064f, .93f);
             card.style.borderTopWidth = card.style.borderBottomWidth = 2;
             card.style.borderLeftWidth = card.style.borderRightWidth = 2;
-            card.style.marginTop = 2;
-            card.style.marginBottom = 14;
+            card.style.marginTop = 12;
+            card.style.marginBottom = 0;
+        }
+
+        private static void ApplyLgoEntryServerCard(VisualElement card)
+        {
+            card.AddToClassList(LgoEntryServerCardClass);
+            ApplyLgoDetailCard(card, 12, 10);
+            card.style.flexDirection = FlexDirection.Row;
+            card.style.alignItems = Align.Center;
+            card.style.minHeight = 66;
+            card.style.marginBottom = 10;
+            card.style.backgroundColor = new Color(.008f, .035f, .064f, .96f);
+        }
+
+        private static void ApplyLgoEntryStatusLine(Label label)
+        {
+            label.AddToClassList(LgoEntryStatusLineClass);
+            label.style.minHeight = 24;
+            label.style.fontSize = 13;
+            label.style.whiteSpace = WhiteSpace.Normal;
+            label.style.color = new Color(.72f, .86f, .92f, .90f);
+            label.style.unityTextAlign = TextAnchor.MiddleLeft;
+            label.style.paddingLeft = 6;
+            label.style.paddingRight = 6;
         }
 
         private static VisualElement CreateLgoEntryIcon(string name, Sprite sprite, float size)
@@ -713,7 +760,7 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoEntryBrandCrest(VisualElement crest, Sprite sprite)
         {
-            crest.style.width = crest.style.height = 48;
+            crest.style.width = crest.style.height = 42;
             crest.style.alignSelf = Align.Center;
             crest.style.marginBottom = 2;
             crest.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
@@ -736,20 +783,20 @@ namespace LinhGioi.UI
             button.AddToClassList(LgoEntrySideActionClass);
             ApplyLgoButton(button);
             button.style.position = Position.Relative;
-            button.style.width = 68;
-            button.style.height = 68;
-            button.style.marginLeft = 12;
-            button.style.marginBottom = 10;
+            button.style.width = 72;
+            button.style.height = 72;
+            button.style.marginLeft = 8;
+            button.style.marginBottom = 12;
             button.style.paddingLeft = button.style.paddingRight = 0;
-            button.style.paddingTop = 38;
+            button.style.paddingTop = 40;
             button.style.paddingBottom = 5;
-            button.style.fontSize = 11;
+            button.style.fontSize = 12;
             button.style.opacity = .90f;
             button.style.whiteSpace = WhiteSpace.NoWrap;
             button.style.unityTextAlign = TextAnchor.LowerCenter;
             button.style.backgroundColor = new Color(.008f, .030f, .054f, .72f);
-            button.style.borderTopLeftRadius = button.style.borderTopRightRadius = 34;
-            button.style.borderBottomLeftRadius = button.style.borderBottomRightRadius = 34;
+            button.style.borderTopLeftRadius = button.style.borderTopRightRadius = 36;
+            button.style.borderBottomLeftRadius = button.style.borderBottomRightRadius = 36;
             button.style.borderTopWidth = button.style.borderBottomWidth = 2;
             button.style.borderLeftWidth = button.style.borderRightWidth = 2;
             button.style.borderTopColor = button.style.borderBottomColor = new Color(.82f, .67f, .36f, .80f);

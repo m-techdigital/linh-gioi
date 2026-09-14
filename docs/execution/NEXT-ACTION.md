@@ -1,8 +1,8 @@
-## Active — khóa một canonical design cho Entry/login trước code — 2026-09-14
+## Active — khóa canonical design cho Chọn nhân vật trước code — 2026-09-14
 
-`CONTINUE`. Cả năm screen character hub đã khóa layout; Linh thú dùng evidence `build/map01a-spirit-screen-runtime-v1/{pc,mobile,tablet}/`. Không vi chỉnh lại hub khi không có regression mới.
+`CONTINUE`. Entry/Login đã đạt layout gate theo `redesign-v5-entry/01-entry-login-CANONICAL.png`; Player/evidence hiện hành là `build/map01a-entry-canonical-player-v1/LinhGioiOnline.app` và `build/map01a-entry-canonical-runtime-v1/{pc,mobile,tablet}/`. Không vi chỉnh lại Login khi không có regression mới.
 
-Screen UI kế tiếp là **Entry/login**, nhưng hai demo hiện có chưa được phép cùng làm nguồn quyết định. Việc hợp lệ đầu tiên là audit `03-dang-nhap-linh-gioi-demo.png` và `preferred-v2/04-dang-nhap-may-chu-bat-dau-linh-gioi.png`, chọn/redesign thành đúng một canonical screen, ghi scenario/state/interaction và plan rồi mới sửa runtime. Không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+Screen active kế tiếp là **Chọn nhân vật**. Ảnh `04-chon-nhan-vat-nam-class-kiem-demo.png` chỉ là demo lịch sử vì gộp chọn class vào navigation trái và chưa phản ánh rule UI hiện hành. Việc hợp lệ đầu tiên là audit/redesign thành đúng một canonical screen, ghi scenario/state/interaction, asset/pixel budget và plan rồi mới sửa runtime. Sau đó mới tuần tự tới screen chọn máy chủ, đăng ký và quên mật khẩu. Không code nhiều screen song song, không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
 
 ## Next — sau khi sửa letterbox ảnh Linh thú — 2026-09-14
 

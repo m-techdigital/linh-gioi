@@ -1,3 +1,20 @@
+## Owner lock — design-first theo từng screen, một canonical source — 2026-09-14
+
+- Goal UI/UX hiện hành: xử lý tuần tự từng screen; trước code phải có đúng một canonical design, scenario/state/interaction, asset budget và plan. Chỉ chuyển screen khi Player evidence PC/mobile landscape/tablet đã được xem và toàn gate sạch.
+- Rule đã được ghi vào `AGENTS.md`; screen contract dùng chung quy trình shell → vùng chính → component base → asset → typography/copy. Mobile/tablet giữ cùng landscape composition bằng scale/safe margin, không wrap/stack thành layout khác.
+- Entry/Login là screen active duy nhất. Canonical mới: `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v5-entry/01-entry-login-CANONICAL.png`; contract `docs/design/LGO-MAP01A-ENTRY-SCREEN-CONTRACT-v1.0.md`; hai demo cũ chỉ là lịch sử.
+- Các screen liên quan Entry như chọn máy chủ, đăng ký/quên mật khẩu và chọn nhân vật phải lần lượt có contract/canonical riêng sau khi Login khóa; không gộp nhiều screen hoặc triển khai song song.
+- Icon/art phải có design/provenance và pixel budget theo kích thước hiển thị thực; không dùng emoji, glyph, wireframe hay ảnh tạm để bàn giao. Ưu tiên atlas chung theo vòng đời tải, hash/import compression và ID ổn định để mở rộng lâu dài.
+- Không resume class/pose/wardrobe/source, không rollback code class và không đổi frozen surfaces.
+
+## Map01A — Entry/Login canonical layout locked — 2026-09-14
+
+- Hai demo cũ đã được audit và hợp nhất thành một canonical design duy nhất tại `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v5-entry/01-entry-login-CANONICAL.png` (`1672×941`, SHA-256 `204178a0a0236873e59af781479d4f7440b5f702f6f8a84130b121cfeca1b52d`). Contract: `docs/design/LGO-MAP01A-ENTRY-SCREEN-CONTRACT-v1.0.md`.
+- Runtime bỏ luồng CTA kép `Đăng nhập → Bắt đầu`; form giữ hai field thật, password mask/reveal, remember username, `Đăng nhập` primary, `Đăng ký` secondary, server summary/chevron và status line ổn định. Auth backend chưa có vẫn phản hồi trung thực và không đóng overlay.
+- Base-first: shell/control/server/status/password-reveal/side-action nằm trong `CongDongLamArrivalHud.Skin.cs`; `Entry.cs` chỉ dựng hierarchy và bind state/callback. Atlas HUD icon 512×512 dùng chung 16 cell 96 px, 85.119 byte, đủ mật độ cao cho mức hiển thị tối đa 34 px; không tạo atlas Entry thừa hoặc icon tạm.
+- Full `TwoDCharacterRuntimeStateTests` đạt `24/24`. Player `build/map01a-entry-canonical-player-v1/LinhGioiOnline.app` build `errors=0`; evidence `build/map01a-entry-canonical-runtime-v1/{pc,mobile,tablet}/entry-login.png` đã visual audit, giữ cùng composition ở `1600×900`, `1600×720`, `1024×768`, không wrap/stack/clipping.
+- UI catalog/shared-skin/no-3D/no-source/change-budget/frozen gates pass. Screen kế tiếp quay về design gate cho Chọn nhân vật; không code trước canonical.
+
 ## Map01A — khóa quy trình một design/một screen — 2026-09-14
 
 - Owner yêu cầu dừng chỉnh UI rời rạc. Contract mới `docs/design/LGO-MAP01A-CHARACTER-HUB-SCREEN-CONTRACT-v1.0.md` ánh xạ đúng một canonical design cho từng screen và khóa thứ tự `Nhân vật → Rương đồ → Kỹ năng → Tiềm năng → Linh thú`.
