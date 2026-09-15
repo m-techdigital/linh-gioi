@@ -4,9 +4,12 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import io
 import json
 import math
+import zipfile
 from pathlib import Path
+from xml.sax.saxutils import escape
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -17,6 +20,14 @@ DEFAULT_OUTPUT = ROOT / "build/rigid-outfit-pilot/final-1-coherent-body-design-v
 CANVAS_WIDTH = 1024
 CANVAS_HEIGHT = 1536
 GROUND_Y = 1484
+
+BODY_AUTHOR_PARTS = (
+    "head", "neck", "torso", "pelvis",
+    "upper_arm_near", "lower_arm_near", "hand_near",
+    "upper_arm_far", "lower_arm_far", "hand_far",
+    "upper_leg_near", "lower_leg_near", "foot_near",
+    "upper_leg_far", "lower_leg_far", "foot_far",
+)
 
 REQUIRED_JOINTS = (
     "root", "pelvis", "torso", "chest", "neck", "head",
@@ -154,6 +165,49 @@ def _sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def _png_bytes(image: Image.Image) -> bytes:
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG", optimize=True)
+    return buffer.getvalue()
+
+
+def write_body_authoring_ora(path: Path, clean_path: Path, guide_path: Path, sex: str) -> None:
+    """Write a real editable OpenRaster template; AUTHOR layers stay empty."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    clean = Image.open(clean_path).convert("RGBA")
+    guide = Image.open(guide_path).convert("RGBA")
+    if clean.size != (CANVAS_WIDTH, CANVAS_HEIGHT) or guide.size != clean.size:
+        raise ValueError("Authoring ORA inputs must use the canonical canvas")
+    blank = Image.new("RGBA", clean.size, (0, 0, 0, 0))
+    layer_rows = []
+    for index, part in enumerate(BODY_AUTHOR_PARTS):
+        src = f"data/author-{index:02d}-{part}.png"
+        layer_rows.append(f'      <layer name="AUTHOR - BODY/{escape(part)}" src="{src}" visibility="visible" />')
+    stack_xml = "\n".join([
+        f'<image w="{CANVAS_WIDTH}" h="{CANVAS_HEIGHT}" name="LGO {escape(sex)} rigid body authoring">',
+        '  <stack name="root">',
+        '    <stack name="BODY AUTHOR - EMPTY UNTIL PAINTED">',
+        *layer_rows,
+        '    </stack>',
+        '    <layer name="GUIDE LOCKED - canonical skeleton" src="data/guide.png" opacity="0.550" visibility="visible" />',
+        '    <layer name="REFERENCE LOCKED - coherent design" src="data/reference.png" visibility="visible" />',
+        '  </stack>',
+        '</image>',
+    ])
+    thumbnail = clean.copy()
+    thumbnail.thumbnail((256, 256), Image.Resampling.LANCZOS)
+    with zipfile.ZipFile(path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr(zipfile.ZipInfo("mimetype"), b"image/openraster", compress_type=zipfile.ZIP_STORED)
+        archive.writestr("stack.xml", stack_xml.encode("utf-8"))
+        blank_bytes = _png_bytes(blank)
+        for index, part in enumerate(BODY_AUTHOR_PARTS):
+            archive.writestr(f"data/author-{index:02d}-{part}.png", blank_bytes)
+        archive.writestr("data/guide.png", _png_bytes(guide))
+        archive.writestr("data/reference.png", _png_bytes(clean))
+        archive.writestr("mergedimage.png", _png_bytes(clean))
+        archive.writestr("Thumbnails/thumbnail.png", _png_bytes(thumbnail))
+
+
 def build(source_path: Path, output_dir: Path) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     source = Image.open(source_path).convert("RGB")
@@ -167,11 +221,16 @@ def build(source_path: Path, output_dir: Path) -> dict:
         overlay_path = output_dir / f"{sex}-canonical-bind-landmarks-v1.png"
         clean.save(clean_path, optimize=True)
         overlay.save(overlay_path, optimize=True)
+        ora_path = output_dir / f"{sex}-rigid-body-authoring-template-v1.ora"
+        write_body_authoring_ora(ora_path, clean_path, overlay_path, sex)
         points = {name: project_point(body, point) for name, point in body["landmarks"].items()}
         lengths = {f"{a}__{b}": _length(points[a], points[b]) for a, b in CORE_BONES + NEAR_BONES + FAR_BONES}
         bodies_report[sex] = {
             "clean": str(clean_path), "cleanSha256": _sha256(clean_path),
             "overlay": str(overlay_path), "overlaySha256": _sha256(overlay_path),
+            "authoringTemplate": str(ora_path), "authoringTemplateSha256": _sha256(ora_path),
+            "authorLayerCount": len(BODY_AUTHOR_PARTS),
+            "authorLayersContainArt": False,
             "landmarksPx": points, "boneLengthsPx": lengths,
         }
         previews.append((sex, clean, overlay))

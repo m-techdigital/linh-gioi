@@ -10,6 +10,12 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 - Do not resume drawing the character from SVG primitives or claim design progress from layer-count/alpha tests. Keep the output only under `build/rigid-outfit-pilot/rejected-iterations/` as evidence.
 - The next source must be authored as a coherent character design first, with articulation zones designed into the silhouette. Only after the neutral body is visually accepted may it be separated into native editable layers and tested through the rotation sweep.
 
+## Stopped path: infer internal joint width from a flat silhouette
+
+- A bounded v9 probe correctly isolated the whole character foreground but could not recover internal body boundaries where the arm joins the torso or the two legs join the pelvis. Cross-sections therefore measured combined torso/leg width instead of the owned part width.
+- Do not select a convenient width from this output or tune the sampling inset until a plausible number appears. Evidence is kept at `build/rigid-outfit-pilot/rejected-iterations/v9-flat-silhouette-width-inference-invalid/`.
+- Register pivots from the coherent design, then measure `Wb` independently on each authored body layer alpha. The layer source is the authority for hidden cap size; the flat design remains the authority for the visible bind silhouette.
+
 ## Current allowed path
 
 The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
