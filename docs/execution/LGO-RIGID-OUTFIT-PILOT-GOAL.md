@@ -1,50 +1,52 @@
 # GOAL — LGO rigid outfit pilot
 
-## Kết quả cần chứng minh
+## Kết quả duy nhất
 
-Một male và một female mini chibi chạy trong Unity Player bằng cùng canonical skeleton. Body, outfit và weapon chỉ gồm `SpriteRenderer` cứng gắn vào bone. Mỗi item fit/equip một lần; Idle, Walk, Run, Attack, Roll và Hit chỉ đổi position/rotation của skeleton. Không SpriteSkin, mesh/vertex deformation, scale animation hoặc sprite swap theo pose/frame/góc.
+Chứng minh trong Unity Player một male và một female mini chibi dùng cùng canonical skeleton semantics, hai outfit cùng họ và một weapon. Body/equipment là các sprite cứng fit/equip một lần; Idle, Walk, Run, Jump, Attack, Roll, Hit và một animation mới chỉ đổi position/rotation của skeleton. Final #1 chỉ được gọi là đạt sau khi xem trực tiếp clip gameplay-speed và contact sheet.
 
-## Gate hiện hành — owner review body-only + dressed bind design v6
+## Kiến trúc khóa
 
-`NEED_HUMAN_VISUAL_REVIEW`. Kỹ thuật rigid của Final #1 đã được owner xác nhận khả dụng. Side-profile v4 và bản 3/4 quá chính diện bị bác. Candidate v5.2 chỉ xoay 12–15° ra trước từ profile và thiết kế lại outfit để che pivot bằng overlap cứng tại cổ, vai, khuỷu, cổ tay, eo/hông, gối và cổ chân; bản này thêm cuff cổ chân rõ giữa boot shaft và foot. Đai nằm tại đường eo/pelvis. Ảnh sáu pose cũ của owner là authority duy nhất cho contact A/B, high-knee A/B và jump tuck. ImageGen không được dùng làm pose authority vì ba lượt đã lặp sai chân dẫn.
+- Source profile: `lgo_character_canvas_1024x1536_v1`, canvas `1024×1536`, origin X `512`, ground Y `1484`, `u=1.70/1536`.
+- Blender `.blend` là editable source duy nhất; Python tạo body/outfit object cứng và render PNG RGBA từ cùng camera.
+- Candidate v9 chỉ được chuyển thành silhouette/landmark QA reference; mask từ ảnh phẳng không được trở thành body hoặc equipment source.
+- Mỗi visual part có một `partId`, một bone, một sprite form, một pivot và một render role cố định.
+- Unity dùng `SpriteRenderer` con của bone và một `SortingGroup` ở root.
+- Cấm SpriteSkin, mesh/weight/vertex deformation, warp, pose/frame/angle sprite swap, animated scale, per-pose offset và outfit-specific animation.
+- Outfit #2 dùng lại interface/fingerprint fit của outfit #1; không đo lại body hoặc thêm offset riêng.
+- Candidate v9 khóa identity, tỷ lệ và bind stance. Bộ sáu pose cũ của owner khóa silhouette chuyển động.
 
-Topology v2 có 16 body part + 25 outfit part theo contract `ONE_VISUAL_PART_ONE_BONE_ONE_FIXED_FORM`. Mỗi joint dùng một pivot chung nhưng có hai vùng che độc lập: body child cap phủ body parent underlap, outfit child cover phủ outfit parent underlap. Body-only phải tự nhiên trên toàn safe ROM; equipment không được chứa pixel da để vá body. Công thức và board review nằm tại `docs/art/LGO-RIGID-JOINT-AND-LAYER-AUTHORING-CONTRACT-v1.md` và `build/rigid-outfit-pilot/final-1-joint-authoring-v1/joint-contract-review.png`.
+## Năm gate theo đúng thứ tự
 
-Board v6 tại `build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png` đặt body-only và dressed của nam/nữ cạnh nhau để owner duyệt identity, tỷ lệ, underlayer và outfit silhouette. Nó là RGB composite review-only, không phải source và không được cắt thành layer.
+1. `DESIGN_SOURCE_GATE`: Blender tạo neutral male/female đạt numeric + Codex visual review; `.blend` mở lại được và body object có hidden geometry.
+2. `BODY_MOTION_GATE`: body-only qua alpha sweep và board 15 key; không hở khớp, cục tròn lộ, đổi tỷ lệ hoặc sai dáng.
+3. `OUTFIT_01_GATE`: outfit #1 qua all-on, từng slot-off, seam-pair và continuous Player clip cho cả hai giới. Đây là Final #1 và phải dừng chờ owner review.
+4. `REUSE_GATE`: outfit #2 khác design nhưng dùng lại toàn bộ body/interface fit; không remeasure và không thêm transform riêng.
+5. `MIX_ANIMATION_GATE`: mix slot giữa hai outfit và animation mới giữ nguyên sprite/fit/scale, rồi mới quyết định pilot khả thi hay cần sửa.
 
-Source `rigid-source-v2` cũ chỉ cắt alpha theo đường ngang với overlap chữ nhật nên không chứng minh khớp kín khi xoay; giữ làm evidence, cấm dùng làm source authority mới. Candidate v5.2 vẫn là composite style art, chưa có hidden pixels và chưa phải layered source.
+## Quy tắc dừng và sửa
 
-## Quy trình bắt buộc từ đây
-
-1. Duyệt bind silhouette và topology body/outfit. Chưa duyệt góc, tỷ lệ, trục người, belt/cuff/guard thì không author layer.
-2. Tạo body-only layered bind source; đo pivot và body joint width một lần trên `lgo_character_canvas_1024x1536_v1`, rồi calibrate joint profile. Không chỉnh vị trí theo pose, item hoặc frame.
-3. Body parent underlap và child cap tròn phải tự kín khi tháo toàn bộ đồ. Sau đó mới author garment parent underlap/child cover theo cùng pivot; equipment không chứa body pixel.
-4. Chạy body-only, từng slot-off, cặp slot giao seam và all-on qua alpha sweep trước Player; sau đó mới chạy 15 key Idle/Walk/Run/Jump/Attack/Roll.
-5. Review trực tiếp toàn board và ghi một danh sách lỗi theo `SOURCE`, `BODY_CAP`, `OUTFIT_COVER`, `PIVOT`, `MOTION_RANGE`, `RENDER_ORDER`.
-6. Chỉ sửa theo nhóm nguyên nhân rồi capture lại một lần. Nếu cùng lỗi cấu trúc còn xuất hiện ở hai capture liên tiếp, bác topology/source giả thuyết đó; không tiếp tục nắn số.
-7. Chỉ khi outfit #1 đạt bằng mắt mới chạy clip đầy đủ và mới được mở outfit #2. Validator chỉ chặn hồi quy kỹ thuật, không quyết định visual PASS.
-8. Không gọi một chuỗi state rời là Final. Final #1 bắt buộc có combo liên tục ở gameplay speed, transition được blend theo shortest rotation arc và board frame liền kề để phát hiện pop.
-9. Immediate stop: thấy sai góc nhìn, body axis, tỷ lệ, đai, joint cover hoặc silhouette thì bác candidate tại đúng gate và sửa source/design. Không tách module, rig, chỉnh motion hoặc full capture trên design chưa đạt; không dùng motion/offset để che lỗi source.
-
-## Visual acceptance của outfit #1
-
-- Idle giữ hướng chạy phải và chỉ xoay nhẹ ra trước như bind authority đã duyệt; tỷ lệ đầu/thân/tay/chân ổn định.
-- Walk/Run có bốn pha khác nhau, tay và chân đối nghịch, gối nhấc hợp lý, chân không trông rời cơ thể.
-- Jump có anticipation, takeoff, air và land; trục đầu–ngực–hông và tỷ lệ chi giữ đúng, tiếp đất có hấp thụ lực.
-- Attack có anticipation và impact rõ; bàn tay giữ vũ khí đúng hướng.
-- Roll có anticipation/tuck/open/land, không quay `CharacterRoot`, không hở cổ/vai/hông/gối/cổ chân.
-- Không mất chi tiết, xuyên sai layer, thay sprite, kéo hình hoặc thay scale.
-- Male/female dùng cùng motion semantics nhưng vẫn đọc được là hai nhân vật riêng.
+- Sai identity, camera, tỷ lệ, stance, belt hoặc silhouette: sửa source design trước; không rig/capture tiếp.
+- Body hở: sửa body cap/underlap. Outfit hở: sửa garment cover/underlap. Một sprite cần hai bone: tách lại asset.
+- Hai revision liên tiếp lặp cùng lỗi cấu trúc: bác interface/topology đó; không nắn số hoặc pixel lần ba.
+- Validator xanh chỉ cho phép mở visual review. Không dùng report, layer count hoặc checkpoint để tuyên bố hình ảnh đạt.
+- Không mở class/level/migration trước khi năm gate hoàn tất. Không đưa ETA tủ đồ trước khi có thời gian đo thật của outfit #1 và #2.
 
 ## Đường bị khóa
 
-- Không quay lại six-pose/per-frame art, SpriteSkin, weighted mesh, capsule limb, flat-card body hoặc pose correction sprite.
-- Không dùng source Blender weighted-mesh hiện tại như bằng chứng rigid production.
-- Không tích hợp bộ giáp đỏ Phase 8 đã sinh trước khi outfit #1 đạt visual; giữ nó ở build evidence với marker `REJECTED-NOT-INTEGRATED`.
-- Không mở class/level/migration trước khi male + female, hai outfit, mix-and-match, animation mới, invariants, visual và performance đều đạt.
+Không tái sử dụng dưới tên mới: six-pose/per-frame outfit art, composite slicing, flat-card/capsule/mannequin, vector trace RGB, silhouette width inference, ImageGen atlas/alpha cleanup, Blender weighted mesh, SpriteSkin hoặc pose correction sprite. Không coi SAM2/Grounded-SAM mask hay inpaint output là hidden geometry/source production. Evidence v7–v10 chỉ dùng để tránh lặp lỗi.
 
-## Active state
+## Đầu ra
+
+- `.blend` body nam+nữ và outfit #1/#2 mở lại được, có hierarchy/hash/provenance.
+- PNG RGBA parts, bind/interface profile và source manifests.
+- Unity v3 pilot, invariant tests, runtime-evidence JSON.
+- Body, slot-off, seam, 15-key và continuous MP4/contact-sheet evidence.
+- `source-motion-report.json` ghi thời gian thực đo; `FEASIBILITY-REVIEW.md` ghi source, hành vi Player, reuse, lỗi còn lại và bước migration.
+
+## Execution authority
+
+Thực hiện tuần tự theo `docs/superpowers/plans/2026-09-15-rigid-outfit-pilot-production.md`. Đánh giá quyết định công cụ nằm tại `docs/art/LGO-SINGLE-IMAGE-MODULAR-RIG-ASSESSMENT-2026-09-15.md`.
 
 ```json
-{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_BODY_AND_OUTFIT_BIND_DESIGN_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW","method":"SHARED_PIVOT_DUAL_BODY_OUTFIT_CIRCULAR_CAP","sourceProfile":"lgo_character_canvas_1024x1536_v1","motionAuthority":"build/character-base-v3/male-old-base-six-pose-reference.png","currentDesignEvidence":"build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png","currentDesignEvidenceExternal":"common-character-chibi-v1/slight-outward-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png","currentDesignReview":"build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-outfit-bind-design-review.json","jointContract":"docs/art/LGO-RIGID-JOINT-AND-LAYER-AUTHORING-CONTRACT-v1.md","jointFormulaEvidence":"build/rigid-outfit-pilot/final-1-joint-authoring-v1/joint-contract-review.png","jointSweepEvidence":"build/rigid-outfit-pilot/joint-alpha-sweep-control-v1","moduleTopology":"build/rigid-outfit-pilot/final-1-three-quarter-design-v5/outfit-module-topology-v2.json","currentSourceAuthorityValid":false,"bodyBindCalibrated":false,"layerAuthoringAllowed":false,"rigImplementationAllowed":false,"outfit2IntegrationAllowed":false,"classExpansionAllowed":false,"generatedMultiPoseAuthorityAllowed":false,"perPoseAssetsAllowed":false,"deformationAllowed":false,"animatedScaleAllowed":false}
+{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"DESIGN_SOURCE_AUTHORING","status":"CONTINUE","method":"BLENDER_VOLUMETRIC_RIGID_SOURCE_TO_UNITY_SPRITES","sourceProfile":"lgo_character_canvas_1024x1536_v1","designAuthoritySha256":"b8d27811164ca7f190d2796f3231528a7a91ca7727ae26e8ed591e7890fa05fb","currentGate":"DESIGN_SOURCE_GATE_REVISION_01","runtimePromotionAllowed":false,"outfit2Allowed":false,"classExpansionAllowed":false}
 ```

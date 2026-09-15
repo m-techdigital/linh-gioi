@@ -198,7 +198,12 @@ def current_blocker_section(next_action: str) -> str:
     if active and "SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE" in active:
         return "Current blocker is source visual polish: SOURCE_VISUAL_FIX_REQUIRED_LAYER_COVERAGE_COMPLETE. Continue outer_top run/jump visual fixes and regenerate source/mixed boards before any Player pack."
     if active:
-        return "No current blocker from active lock; continue the listed six-pose source-authoring task unless a source/tool gate fails."
+        current_gate = state.get("currentGate")
+        phase = state.get("phase")
+        if isinstance(current_gate, str) and current_gate:
+            phase_note = f" in phase {phase}" if isinstance(phase, str) and phase else ""
+            return f"No current blocker from active lock; continue {current_gate}{phase_note} unless that gate fails."
+        return "No current blocker from active lock; continue the next result named in NEXT-ACTION unless its gate fails."
     return limited_section_until_any(next_action, ("## Current blocker", "## Blocker"), ("Evidence:",), 5)
 
 
@@ -224,6 +229,19 @@ def advisor() -> str:
         check=False,
     )
     return result.stdout.strip()
+
+
+def next_task_advisor_section(next_action: str, generic_advisor=None) -> str:
+    state = active_task_state(next_action)
+    active_task = state.get("activeTask")
+    if isinstance(active_task, str) and active_task:
+        rows = ["LGO_NEXT_TASK_ACTIVE_GOAL_LOCK", f"activeTask={active_task}"]
+        for key in ("phase", "status", "currentGate"):
+            value = state.get(key)
+            if isinstance(value, str) and value:
+                rows.append(f"{key}={value}")
+        return "\n".join(rows)
+    return (generic_advisor or advisor)()
 
 
 def change_budget() -> str:
@@ -259,7 +277,7 @@ def main() -> int:
     print(current_blocker_section(next_action) or "CURRENT_BLOCKER_MISSING")
     print()
     print("## Next Task Advisor")
-    print(advisor() or "ADVISOR_OUTPUT_MISSING")
+    print(next_task_advisor_section(next_action) or "ADVISOR_OUTPUT_MISSING")
     print()
     print("## Change Budget")
     print(change_budget() or "CHANGE_BUDGET_UNAVAILABLE")

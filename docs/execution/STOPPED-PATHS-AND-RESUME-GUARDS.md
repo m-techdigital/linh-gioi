@@ -1,6 +1,6 @@
 # Stopped paths and resume guards — feature-2d-latest
 
-Date: 2026-09-13
+Updated: 2026-09-15
 
 This file is a resume guard for the current `feature-2d-latest` sandbox. Read it together with `docs/execution/NEXT-ACTION.md` before doing character, outfit, rig, motion, Krita, Blender, GarmentCode, Comfy or Player work.
 
@@ -24,27 +24,55 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 
 ## Current allowed path
 
-The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
+The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`, executed by `docs/superpowers/plans/2026-09-15-rigid-outfit-pilot-production.md`:
 
-- Unity Transform hierarchy + ordinary rigid `SpriteRenderer`; one fixed FitProfile per body variant/item.
-- Current gate: `NATIVE_LAYER_ART_EXTERNAL_CAPABILITY_REQUIRED / BLOCKED`.
-- Current design evidence is `build/rigid-outfit-pilot/final-1-coherent-body-design-v9/canonical-bind-profile-v1/male-female-canonical-bind-review-v1.png`; it is identity/silhouette reference only. The existing male/female KRA templates reopen correctly but their 16 author layers contain no art. Authoring must start by painting hidden geometry into those layers or by supplying an equivalent true layered source.
-- Body-only rotation proof precedes outfit authoring; outfit proof precedes rig/full motion.
-- Outfit #2, mix-and-match, class/level expansion and migration remain locked until outfit #1 visual PASS.
+- Blender 4.5 LTS `.blend` is the editable source; Python creates profiled rigid volumes and renders source-gated RGBA parts for Unity v3.
+- Blender 4.5.13 toolchain and rigid/RGBA fresh-reopen capability are proven at `build/rigid-outfit-pilot/capability-evidence/evidence-index-v1.json`.
+- Current phase is `DESIGN_SOURCE_AUTHORING / CONTINUE`; current gate is `DESIGN_SOURCE_GATE_REVISION_01`.
+- Candidate v9 supplies identity, proportion and bind stance for comparison only. The generator may not slice/project its pixels; neutral male/female must pass numeric and Codex visual review before rigging.
+- Body objects are one-object/one-bone with hidden overlap and no Armature modifier, weights, shape keys or scale keys. Body motion proof precedes outfit #1; continuous outfit #1 proof precedes outfit #2.
+- Final #1 must stop for owner review. Outfit #2, mix/new-animation, class/level expansion and migration stay locked until their listed gate.
 
 Recurrence guard:
 
-- Do not resume the Blender weighted-mesh source as rigid authority; its report explicitly says `armSkinning=two_bone_weighted_mesh`.
-- Do not fix the rejected Player by per-frame art, per-pose offsets, sprite swap, scale, SpriteSkin, mesh or capsule/flat-card proxies.
-- Do not treat validator/checkpoint PASS as visual acceptance.
-- Do not present isolated state clips as Final #1 again; owner review requires one continuous gameplay-speed combo with adjacent-frame transition evidence.
-- Do not restore v2 or the preserved v3a upright-jump capture as Final #1. V2 failed neck/head, stance, hip layering and motion range; v3a still read as sitting upright at jump apex.
-- Do not restore side-profile v4, the too-frontal v5 candidate, or any generated multi-pose board. Multi-pose generation repeated the same lead-leg phase three times; use the owner's old six-pose sheet as deterministic motion authority.
-- Do not reuse `rigid-source-v2` as source authority. Its horizontal alpha split and rectangular overlap do not create a rotation-invariant body cap/socket. New source needs one shared pivot plus independent circular body cap and outfit cover, and body-only must pass before equipment.
-- Do not slice board v6 or another assembled RGB character into runtime pieces. Composite-mask v7 produced rectangular holes, missing underlaps and rotating ground shadow; evidence is under `build/rigid-outfit-pilot/rejected-iterations/v7-composite-mask-source/`.
-- Do not use an ImageGen exploded atlas as source. The v7 output has opaque background, repeated/ambiguous parts and no deterministic reassembly contract; evidence is under `build/rigid-outfit-pilot/rejected-iterations/v7-imagegen-atlas-invalid/`.
-- Review the whole board, batch issues by source/pivot/overlap/motion/render order, and make one grouped correction. A structural error repeated in two captures rejects that topology/source hypothesis.
-- The generated red armor sheet is `REJECTED-NOT-INTEGRATED` because Phase 8 started before outfit #1 passed; do not copy it into Resources or rename it into an active outfit.
+- Do not resume or rename the v7 composite/ImageGen atlas, v8 primitive body, v9 width-inference/vector trace or v10 ImageGen redraw branches.
+- Do not resume the old Blender mannequin, weighted mesh, flat card, capsule limb, six-pose outfit generation, per-pixel correction, pose offset, sprite swap, scale or SpriteSkin.
+- Do not slice the v9 RGB design. Its pixels lack hidden geometry and semantic ownership.
+- Do not use Apple Vision whole-foreground mask as body-part ownership or auto-cut source. Its v9 landmark output is evidence-only and less accurate than the registered profile.
+- Do not add `straight/mid/high` elbow, knee or other sprites selected by bone angle; that is forbidden angle-dependent sprite swap.
+- Do not add Moho or Rive to the pilot. They replace a downstream rig/render stage already proven and do not create the missing editable hidden source.
+- Do not measure `Wb` from the flat silhouette. Derive initial volume radii from landmark/bone ratios, then register projected width from the approved Blender object source once.
+- Do not promote old `rigid-source-v2`; keep it unreachable as runtime evidence of the rejected rectangular-overlap method.
+- Review whole boards and clips. Batch all issues by `SOURCE`, `BODY_CAP`, `OUTFIT_COVER`, `PIVOT`, `MOTION_RANGE`, `RENDER_ORDER`, `TRANSITION`.
+- A structural defect repeated in two source revisions rejects that interface/topology. No third numeric-nudge attempt is allowed.
+- Test/report PASS never substitutes for visual review.
+
+## Stopped path: treat SAM2 masks and inpaint as an automatic source compiler
+
+Status: assessed and rejected as the critical path on 2026-09-15.
+
+Do not continue:
+
+- treating a Grounded-SAM/SAM2 text mask as semantic near/far body ownership;
+- promoting a visible-pixel mask into a rotatable body or clothing part;
+- calling inpainted joint pixels proven hidden geometry without a full rotation sweep;
+- installing Grounded-SAM2, ComfyUI and Krita AI Diffusion together while the single Blender pilot is active;
+- adding Sprite Library/Resolver to make the current bundle architecture look complete before Final #1.
+
+Reason:
+
+- segmentation returns the visible region and cannot recover occluded shoulder, hip, elbow or knee surfaces;
+- official Grounded-SAM2 local setup centers on CUDA/Linux, while this host is Apple Silicon;
+- Krita AI Diffusion requires a ComfyUI backend plus model set, and its output remains a probabilistic candidate;
+- the sandbox already proved that a clean alpha/mask does not establish anatomy, ownership or motion quality.
+
+Resume condition:
+
+- a pinned headless toolchain runs on this host;
+- one real LGO master produces semantic near/far masks plus hidden-surface candidates with hashes/provenance;
+- those same source parts pass the joint range sweep without pixel edits, pose offsets or sprite swaps.
+
+Assessment: `docs/art/LGO-SINGLE-IMAGE-MODULAR-RIG-ASSESSMENT-2026-09-15.md`.
 
 ## Stopped path 0: automated base redraw without identity and pose lock
 
@@ -217,7 +245,7 @@ The following evidence may be read, but not promoted to runtime-ready status:
 - `waist-belt-jump-imagegen-candidate-v1`
 - source boards or guide boards marked authoring aid, review-only, partial, `SOURCE_VISUAL_FIX_REQUIRED`, or `runtimePromotionAllowed=false`
 
-## Current native-authoring capability blocker
+## Superseded Krita automation boundary
 
 Krita 5.3.3 GUI launches, but this Codex sandbox has no desktop/Scripter control. Bounded automation checks are closed:
 
@@ -225,7 +253,7 @@ Krita 5.3.3 GUI launches, but this Codex sandbox has no desktop/Scripter control
 - bundle injection required modifying a signed app and macOS blocked the copied runner/signing path;
 - the documented CLI export form timed out after 30 seconds and wrote no PNG while another Krita GUI process was active.
 
-Do not continue trying module locations, writable app copies, ad-hoc signing or longer export waits. Resume native authoring only with a controllable Krita GUI/Scripter session or a newly supplied layered source that opens and saves in Krita. This blocker concerns source creation; it does not weaken the alpha, quarantine or visual Player gates.
+Do not continue trying module locations, writable app copies, ad-hoc signing or longer export waits. This route was superseded by the owner requirement that Codex automate the whole source pipeline. The active Blender plan still keeps the same alpha, quarantine and visual Player gates.
 
 ## Resume checklist
 
@@ -233,6 +261,6 @@ Before changing character/outfit work in this sandbox:
 
 1. Read `docs/execution/NEXT-ACTION.md`.
 2. Check this file for stopped paths.
-3. Verify the work matches the six-pose plan or an explicitly opened proof gate.
+3. Verify the work matches `docs/superpowers/plans/2026-09-15-rigid-outfit-pilot-production.md` and its current gate.
 4. Record the evidence path and status before any Player pack.
 5. Never claim technical pass, executed tests, export count, or capture completion as visual acceptance.

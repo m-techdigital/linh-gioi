@@ -1,15 +1,20 @@
 ## Continuous workflow status
 
-2026-09-15 active task `LGO_RIGID_OUTFIT_PILOT_01` ở phase `NATIVE_LAYER_ART_EXTERNAL_CAPABILITY_REQUIRED`, status `BLOCKED`. Candidate v9, canonical profile và Krita template nam/nữ đã có; Krita GUI round-trip giữ 16/16 layer. Tuy nhiên author layers vẫn rỗng. Ba giả thuyết thay thế nguồn layer đã bị bác bằng visual evidence: procedural primitive v8 tạo mannequin, suy internal width từ silhouette phẳng nhập torso/leg, và hai lượt vector trace v9 làm giảm nét/shading rồi vẫn cần clip mask. Không còn bước triển khai an toàn nào tạo được art layer production-quality từ ảnh RGB mà không quay lại phương pháp owner đã bác. Resume khi 16 layer trong KRA được designer vẽ với hidden geometry, hoặc có true layered source tương đương; sau đó đo `Wb`, body rotation sweep, outfit #1 và Unity tiếp tục theo gate cũ.
+2026-09-15 active task `LGO_RIGID_OUTFIT_PILOT_01`, phase `DESIGN_SOURCE_AUTHORING`, status `CONTINUE`, current gate `DESIGN_SOURCE_GATE_REVISION_01`. Kế hoạch duy nhất nằm tại `docs/superpowers/plans/2026-09-15-rigid-outfit-pilot-production.md`: Blender neutral design → rigid source/body visual gate → outfit #1 Player Final → owner review → outfit #2 reuse → mix/new-animation proof.
 
-Không dùng ảnh sinh nhiều pose làm authority: ba lượt đã lặp sai lead-leg. Motion authority là bộ sáu pose cũ của owner; candidate v9 chỉ định identity, tỷ lệ, bind stance và vị trí skeleton. Tiếp tục bằng native body-first authoring trong Krita, dùng clean design làm underlay reference và landmark map làm guide; không cắt candidate RGB thành module. Outfit #2, mix, class và level vẫn khóa; mọi evidence side-profile/too-frontal/duplicate-phase giữ dưới `build/rigid-outfit-pilot/rejected-iterations/`.
-Joint authoring contract tại `docs/art/LGO-RIGID-JOINT-AND-LAYER-AUTHORING-CONTRACT-v1.md`; tool/test sinh cap radius, template alpha và review board từ joint width + margin. Profile hiện chỉ là target layout chờ đo trên body-only source native, nên rig vẫn khóa nhưng layer authoring body-first được phép tiếp tục. `rigid-source-v2` cũ bị hạ xuống evidence vì overlap chữ nhật không chứng minh khớp kín khi xoay.
+Candidate v9/profile là authority đối chiếu. Theo yêu cầu tự động hóa mới, KRA route phụ thuộc người vẽ đã được thay bằng một Blender 4.5 LTS source generator: profiled volume cứng, one-object/one-bone, hidden overlap và RGBA render. Gate đầu chỉ tạo neutral board; nếu hai revision vẫn đọc như mannequin thì tự dừng trước rig/outfit/Unity.
 
-Alpha-sweep gate mới đã kiểm công thức trên ảnh RGBA thật: cap tròn pass 21/21 góc `-150°..150°` với `miss=0`; rectangular split fail và command trả exit 2. Evidence `build/rigid-outfit-pilot/joint-alpha-sweep-control-v1`. Đây là proof hình học, chưa phải proof mỹ thuật/source/Player.
+Capability evidence mới tại `build/rigid-outfit-pilot/capability-evidence/evidence-index-v1.json`: Blender 4.5.13 đúng checksum/codesign; headless create/save/fresh reopen, rigid bone parent và RGBA alpha đều đạt; decoded render trước/sau reopen giống nhau. Unity 6000.3.2f1 chạy mới 24/24 targeted rigid tests và invariant gate PASS. Đây là infrastructure/code evidence; source art, body motion và outfit visual vẫn chưa đạt và không được suy diễn từ các pass này.
 
-Authoritative goal/process: `docs/execution/LGO-RIGID-OUTFIT-PILOT-GOAL.md`.
+Đề xuất `Single Image → Grounded-SAM2 masks → Krita/ComfyUI inpaint → Unity Sprite Library` đã được phản biện tại `docs/art/LGO-SINGLE-IMAGE-MODULAR-RIG-ASSESSMENT-2026-09-15.md`. Pilot nhập các contract đúng về master reference, logical item/sub-part, hidden overlap, PNG manifest và equip-time swap; không nhập chuỗi tool làm critical path vì visible-pixel mask không tạo hidden geometry, Grounded-SAM2 local chính thức thiên về CUDA/Linux, và Krita/ComfyUI/model chưa có headless capability được kiểm chứng trên host này. V9 silhouette mask chỉ được dùng cho QA contour và bị cấm đi vào manifest/runtime.
 
-## Active goal lock — six-pose registered outfit path — 2026-09-13
+Đề xuất bổ sung Apple Vision + custom cutout + Moho cũng đã được kiểm trực tiếp. Vision native nhận một body, 19 point và một foreground instance trên mỗi clean v9, nhưng core RMS so landmark authority là `44.00/43.37 px` và head confidence chỉ `0.1069/0.1511`; giữ làm future intake seed, không làm authority/part cutter. Moho chưa cài và chỉ giải quyết layered-art rig; Rive dùng RenderTexture; angle-dependent elbow/knee sprite vi phạm immutable sprite contract. Critical path không đổi.
+
+Các hướng composite slicing, primitive/mannequin, vector trace, suy width từ silhouette và ImageGen atlas/redraw đã bị bác, chỉ giữ dưới `build/rigid-outfit-pilot/rejected-iterations/`. Unity v1/v2 cũ không còn là visual source cho v3. Outfit #2, mix, class, level và production migration vẫn khóa cho tới gate tương ứng.
+
+Authoritative goal: `docs/execution/LGO-RIGID-OUTFIT-PILOT-GOAL.md`.
+
+## Historical superseded goal lock — six-pose registered outfit path — 2026-09-13
 
 `feature-2d-latest` is no longer continuing the current skeletal generated-cutout path. Owner rejected `bind-authority-candidate-v1` visually, and source discovery found no accepted neutral layered body/rig blueprint. Treat skeletal 2D as stopped unless a new accepted blueprint passes `docs/art/LGO-SKELETAL-2D-SOURCE-BLUEPRINT-SPEC-v1.md`.
 

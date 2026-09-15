@@ -1,6 +1,6 @@
 import unittest
 
-from lgo_state_brief import current_blocker_section, next_task_section, resume_section
+from lgo_state_brief import current_blocker_section, next_task_advisor_section, next_task_section, resume_section
 
 
 class LgoStateBriefTests(unittest.TestCase):
@@ -46,6 +46,43 @@ class LgoStateBriefTests(unittest.TestCase):
 
         self.assertIn("No current blocker from active lock", blocker)
         self.assertNotIn("Stale Map01A blocker", blocker)
+
+    def test_active_rigid_gate_uses_current_state_instead_of_six_pose_fallback(self):
+        text = "\n".join(
+            [
+                "## ACTIVE GOAL LOCK — Unity rigid outfit pilot source-first, 2026-09-15",
+                "",
+                "## Active task state",
+                "",
+                "```json",
+                '{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"DESIGN_SOURCE_AUTHORING","status":"CONTINUE","currentGate":"DESIGN_SOURCE_GATE_REVISION_01"}',
+                "```",
+            ]
+        )
+
+        blocker = current_blocker_section(text)
+
+        self.assertIn("continue DESIGN_SOURCE_GATE_REVISION_01 in phase DESIGN_SOURCE_AUTHORING", blocker)
+        self.assertNotIn("six-pose", blocker)
+
+    def test_active_rigid_gate_suppresses_generic_roadmap_advisor(self):
+        text = "\n".join(
+            [
+                "## ACTIVE GOAL LOCK — Unity rigid outfit pilot source-first, 2026-09-15",
+                "",
+                "## Active task state",
+                "",
+                "```json",
+                '{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"DESIGN_SOURCE_AUTHORING","status":"CONTINUE","currentGate":"DESIGN_SOURCE_GATE_REVISION_01"}',
+                "```",
+            ]
+        )
+
+        result = next_task_advisor_section(text, generic_advisor=lambda: "id=LGO-TASK-001\npurpose=Combat contract review")
+
+        self.assertIn("activeTask=LGO_RIGID_OUTFIT_PILOT_01", result)
+        self.assertIn("currentGate=DESIGN_SOURCE_GATE_REVISION_01", result)
+        self.assertNotIn("Combat", result)
 
     def test_active_goal_lock_reports_visual_polish_after_layer_coverage_complete(self):
         text = "\n".join(
