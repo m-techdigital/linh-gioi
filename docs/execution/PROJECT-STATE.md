@@ -1,8 +1,9 @@
 ## Continuous workflow status
 
-2026-09-15 active task `LGO_RIGID_OUTFIT_PILOT_01` đã tới phase `FINAL_OUTFIT1_V3_READY_FOR_OWNER_REVIEW`, status `NEED_HUMAN_VISUAL_REVIEW`. Unity Player evidence v3 tại `build/rigid-outfit-pilot/final-1-combo-review-v3` có clip combo 212 frame/24 fps cho male/female với cùng outfit/weapon. V3 sửa theo review thật: cụm đầu hạ thêm 16 px vào cổ và bù đủ góc thân khi run; idle mở chân/tay, đầu hướng ra ngoài nhẹ; đùi nằm dưới tà áo; run tăng lean/sải/gối và có flight window; jump/roll dùng tuck gần silhouette sáu pose cũ.
+2026-09-15 active task `LGO_RIGID_OUTFIT_PILOT_01` ở phase `FINAL_OUTFIT1_BODY_AND_OUTFIT_JOINT_FORMULA_REVIEW`, status `NEED_HUMAN_VISUAL_REVIEW`. Candidate hiện hành `build/rigid-outfit-pilot/final-1-three-quarter-design-v5/slight-outward-rigid-cover-neutral-pair-v3.png` chỉ là style/bind silhouette composite, chưa phải source. Topology v2 có 16 body part + 25 outfit part; mỗi joint có một pivot chung nhưng body cap và outfit cover độc lập. Tháo toàn bộ đồ, body vẫn phải kín/tự nhiên trên toàn safe ROM.
 
-Self-review trực tiếp các board Idle/Run/Jump/Roll không còn khe cổ, chi rời, hông nổi trên tà hoặc mặt chúi theo thân. Technical evidence giữ sprite/fit fingerprint, unit scale, root rotation identity và không deforming component; full EditMode đạt 305/306 với một ignored, 0 fail. Dừng chờ owner xem clip/board. Outfit #2, mix, class và level vẫn khóa. V2 và lượt v3a jump còn thẳng là evidence bị bác, không được chọn lại làm Final.
+Không dùng ảnh sinh nhiều pose làm authority: ba lượt đã lặp sai lead-leg. Motion authority là bộ sáu pose cũ của owner; candidate neutral chỉ định source/identity/outfit. Dừng chờ owner duyệt góc nhìn và seam-cover trước khi tách module/rig. Outfit #2, mix, class và level vẫn khóa; mọi evidence side-profile/too-frontal/duplicate-phase giữ dưới `build/rigid-outfit-pilot/rejected-iterations/`.
+Joint authoring contract tại `docs/art/LGO-RIGID-JOINT-AND-LAYER-AUTHORING-CONTRACT-v1.md`; tool/test sinh cap radius, template alpha và review board từ joint width + margin. Profile hiện chỉ là target layout chờ đo trên body-only source được duyệt, nên layer authoring/rig vẫn khóa. `rigid-source-v2` cũ bị hạ xuống evidence vì overlap chữ nhật không chứng minh khớp kín khi xoay.
 
 Authoritative goal/process: `docs/execution/LGO-RIGID-OUTFIT-PILOT-GOAL.md`.
 

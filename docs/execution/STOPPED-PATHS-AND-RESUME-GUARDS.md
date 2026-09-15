@@ -9,8 +9,8 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
 
 - Unity Transform hierarchy + ordinary rigid `SpriteRenderer`; one fixed FitProfile per body variant/item.
-- Current gate: `FINAL_OUTFIT1_V3_READY_FOR_OWNER_REVIEW / NEED_HUMAN_VISUAL_REVIEW`.
-- Final #1 self-review evidence is `build/rigid-outfit-pilot/final-1-combo-review-v3`; owner acceptance is still required.
+- Current gate: `FINAL_OUTFIT1_BODY_AND_OUTFIT_JOINT_FORMULA_REVIEW / NEED_HUMAN_VISUAL_REVIEW`.
+- Current design evidence is `build/rigid-outfit-pilot/final-1-three-quarter-design-v5/slight-outward-rigid-cover-neutral-pair-v3.png`; joint formula evidence is `build/rigid-outfit-pilot/final-1-joint-authoring-v1/joint-contract-review.png`. Owner acceptance is required before body layer/rig work.
 - Stop here for owner review; do not mutate source/motion or start another capture without a concrete owner finding.
 - Outfit #2, mix-and-match, class/level expansion and migration remain locked until outfit #1 visual PASS.
 
@@ -21,6 +21,8 @@ Recurrence guard:
 - Do not treat validator/checkpoint PASS as visual acceptance.
 - Do not present isolated state clips as Final #1 again; owner review requires one continuous gameplay-speed combo with adjacent-frame transition evidence.
 - Do not restore v2 or the preserved v3a upright-jump capture as Final #1. V2 failed neck/head, stance, hip layering and motion range; v3a still read as sitting upright at jump apex.
+- Do not restore side-profile v4, the too-frontal v5 candidate, or any generated multi-pose board. Multi-pose generation repeated the same lead-leg phase three times; use the owner's old six-pose sheet as deterministic motion authority.
+- Do not reuse `rigid-source-v2` as source authority. Its horizontal alpha split and rectangular overlap do not create a rotation-invariant body cap/socket. New source needs one shared pivot plus independent circular body cap and outfit cover, and body-only must pass before equipment.
 - Review the whole board, batch issues by source/pivot/overlap/motion/render order, and make one grouped correction. A structural error repeated in two captures rejects that topology/source hypothesis.
 - The generated red armor sheet is `REJECTED-NOT-INTEGRATED` because Phase 8 started before outfit #1 passed; do not copy it into Resources or rename it into an active outfit.
 

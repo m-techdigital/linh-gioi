@@ -1,3 +1,9 @@
+## Final #1 joint/layer formula and unequip-safe topology — 2026-09-15
+
+`NEED_HUMAN_VISUAL_REVIEW`. Focused official-source review confirms rigid child Transform attachment, independent sprite parts and deterministic draw order are supported; LGO must supply its own gap-free joint geometry. The old `rigid-source-v2` generator only made horizontal alpha splits with rectangular overlap, so it is evidence only and cannot authorize the new source.
+
+Contract `docs/art/LGO-RIGID-JOINT-AND-LAYER-AUTHORING-CONTRACT-v1.md` now defines one shared pivot with two independent joins: child body cap over parent body underlap, then child outfit cover over parent garment underlap. Body-only must remain complete/natural through the full safe ROM; equipment may not contain skin pixels. Formula tool/test produces cap radii, 5° sweep counts, an RGBA joint guide and review board. Current profile is deliberately `FORMULA_PROFILE_AWAITING_BODY_BIND_CALIBRATION`; 16 body + 25 outfit parts are mapped, but no layered source or rig is authorized until owner accepts the bind design/topology and body measurements are calibrated.
+
 ## Final #1 rigid outfit bind/motion redesign v3 — 2026-09-15
 
 `NEED_HUMAN_VISUAL_REVIEW`. Owner rejected v2 for detached neck/head, downward face pitch, closed/incorrect idle limb placement, upper legs outside the tunic and weak run/tuck silhouettes. V3 fixes the source fit and motion as one batch: 64+ px head/body rectangle overlap, full head compensation during run, open grounded idle stance, upper thighs below the lower tunic, 44% run stance with a flight window, stronger stride/high knee, and curled jump/roll tuck derived from the old six-pose silhouette. The first v3a capture still had an upright jump apex and is retained under `build/rigid-outfit-pilot/rejected-iterations/final-1-v3a-upright-jump`.
