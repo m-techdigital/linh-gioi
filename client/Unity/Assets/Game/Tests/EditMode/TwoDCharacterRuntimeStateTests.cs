@@ -760,11 +760,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Potential Node 2").ClassListContains("lgo-potential-node"), Is.True);
                 for (var potentialIndex = 0; potentialIndex < 5; potentialIndex++)
                 {
-                    var addMarker = root.Q<Label>("Map01A Potential Node Add " + potentialIndex);
-                    Assert.That(addMarker, Is.Not.Null);
-                    Assert.That(addMarker.text, Is.Empty,
-                        "The shared vector template owns the plus glyph; the overlay must not redraw it per node.");
-                    Assert.That(addMarker.ClassListContains("lgo-potential-add-marker"), Is.True);
+                    Assert.That(root.Q("Map01A Potential Node Add " + potentialIndex), Is.Null,
+                        "The shared Potential artwork owns the add box and plus glyph; overlays bind data and interaction only.");
                 }
                 Assert.That(root.Q<VisualElement>("Map01A Potential Node 2 Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("vitality")));
@@ -926,9 +923,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(potentialNode0.style.borderTopWidth.value, Is.EqualTo(0));
                 Assert.That(potentialNode0.style.borderTopLeftRadius.value.value, Is.EqualTo(0),
                     "Potential overlay must remain a geometry-free hit target; the reusable topology owns every node circle.");
-                var potentialAdd0 = root.Q<Label>("Map01A Potential Node Add 0");
-                Assert.That(potentialAdd0.style.borderLeftWidth.value, Is.EqualTo(0));
-                Assert.That(potentialAdd0.style.borderTopWidth.value, Is.EqualTo(0));
+                Assert.That(root.Q("Map01A Potential Node Add 0"), Is.Null,
+                    "The shared Potential artwork already owns every add box and plus glyph; data overlays must not create duplicate geometry.");
+                Assert.That(skillNode0.ClassListContains("lgo-potential-node"), Is.False,
+                    "Skill and Potential must remain separate reusable components.");
+                Assert.That(potentialNode0.ClassListContains("lgo-skill-node"), Is.False,
+                    "Potential nodes must never reuse the Skill topology or its node chrome.");
                 Assert.That(spiritSkillRow0, Is.Not.Null,
                     "Spirit pet skill rows must be prebuilt once and rebound from profile data.");
                 Assert.That(root.Q("Map01A Spirit Pet Skill Row 1"), Is.Not.Null);

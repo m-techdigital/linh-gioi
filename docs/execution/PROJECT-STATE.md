@@ -1,3 +1,10 @@
+## Character Hub — Tiềm năng data-overlay tối giản trên một base chung v20b — 2026-09-15
+
+- Audit theo feedback owner xác nhận toàn bộ vòng ngoài, đường nối, năm khung tròn, ô giá trị, ô cộng và dấu `+` đã nằm trong đúng một asset `character-hub-potential-topology.png` 600×520. `CharacterHubPotentialTopology`, năm node và detail panel chỉ được khởi tạo một lần; đổi Võ/Kiếm/Pháp/Cơ/Linh giữ nguyên reference object, chỉ bind icon/tên/value/selection/recommendation. Skill và Tiềm năng là hai component riêng.
+- Phát hiện một `Label` add-marker rỗng vẫn được tạo trên từng node dù không vẽ gì. TDD RED `0/1` bắt đúng phần tử dư; v20b bỏ phần tử và helper skin tương ứng để overlay chỉ còn dữ liệu/tương tác, không còn điểm mở cho geometry trùng lặp theo node hoặc class.
+- Targeted Unity GREEN `1/1`; full EditMode `290 total / 289 passed / 0 failed / 1 ignored`; Python asset/shared/capture `36/36`. Player `build/character-hub-potential-base-guard-player-v20b/LinhGioiOnline.app` build `Succeeded`, `errors=0`, `warnings=50` (CS0618 hiện hữu). Evidence `build/character-hub-potential-base-guard-runtime-v20b/{pc,tablet,mobile}/` có 29 frame mỗi viewport; đã xem Tiềm năng trên cả ba viewport, không cắt/chồng/vỡ và không có thay đổi hình nhìn thấy ngoài dự kiến.
+- Trạng thái `CONTINUE`: giữ topology này làm base duy nhất; chỉ sửa fidelity ở asset/helper dùng chung nếu đối chiếu canonical còn gap. Không tạo topology, node chrome, renderer hoặc layout riêng theo class; không mở pose/source/wardrobe.
+
 ## Character Hub — Kỹ năng shared 4–3–2 topology và five-profile evidence v19b — 2026-09-15
 
 - Đối chiếu canonical `redesign-v4-five-tabs/03-ky-nang-five-tab-APPROVED.png` phát hiện runtime v18d xếp chín skill theo lưới 3×3, sai progression graph 4–3–2. v19 chuyển số node mỗi stage, connector và metric node/icon vào một shared topology dựng một lần; Kỹ năng và Tiềm năng vẫn là hai component riêng.

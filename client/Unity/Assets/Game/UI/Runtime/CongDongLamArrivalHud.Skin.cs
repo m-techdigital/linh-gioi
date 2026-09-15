@@ -828,20 +828,6 @@ namespace LinhGioi.UI
             ApplyLgoCharacterHubInteractiveMotion(node);
         }
 
-        private static void ApplyLgoPotentialAddMarker(Label marker)
-        {
-            marker.AddToClassList("lgo-potential-add-marker");
-            marker.style.position = Position.Absolute;
-            marker.style.right = -8;
-            marker.style.bottom = 10;
-            marker.style.width = 28;
-            marker.style.height = 28;
-            marker.style.unityTextAlign = TextAnchor.MiddleCenter;
-            marker.style.backgroundColor = Color.clear;
-            marker.style.borderLeftWidth = marker.style.borderRightWidth = 0;
-            marker.style.borderTopWidth = marker.style.borderBottomWidth = 0;
-        }
-
         private static void ApplyLgoSpiritPetHeroPreview(VisualElement preview)
         {
             preview.AddToClassList("lgo-spirit-pet-hero");

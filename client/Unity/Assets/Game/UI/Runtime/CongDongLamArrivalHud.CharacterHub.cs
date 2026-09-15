@@ -243,10 +243,6 @@ namespace LinhGioi.UI
             valueLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             _potentialPathValues.Add(valueLabel);
             node.Add(valueLabel);
-            var addMarker = LgoLabel(string.Empty, 18, UiGold, true);
-            addMarker.name = "Map01A Potential Node Add " + index;
-            ApplyLgoPotentialAddMarker(addMarker);
-            node.Add(addMarker);
             ApplyPotentialNodeSelection(node, false);
             _potentialPathNodes.Add(node);
             node.style.position = Position.Absolute;
