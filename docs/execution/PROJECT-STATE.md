@@ -1,3 +1,9 @@
+## Owner steer — Skill shared base — 2026-09-16
+
+- Active: vòng icon Skill chung +nội dung rời cho5class; không HUD fallback hoặc UI builder riêng. Audit thấy36skillngoàiKiếm đang mượnHUD; chỉ9artKiếm/3category sẵn nguồnUI.
+- v26factrows prerequisite:302/302 graphics EditMode,39Python,87ảnh accepted; giữ nguyên source values. Lỗi wrap value và fixed-height Pet đã tái hiện/sửa; tablet Pet dùng scroll, chưa visual final.
+- Chi tiết evidence/next: NEXT-ACTION.md. Không mở class/pose/wardrobe/source/frozen.
+
 ## Character Hub v25 — khung dùng chung và selection đồng bộ — 2026-09-16
 
 - Kế thừa f32e74e4 đã push. Inspector, hero icon, equipment/skill selected dùng cùng ornament base, không thêm texture hay sửa atlas. Rail trang bị đồng bộ lựa chọn với detail; Tiềm năng giữ circular frame/content riêng và không rò square hero frame khi chuyển tab.

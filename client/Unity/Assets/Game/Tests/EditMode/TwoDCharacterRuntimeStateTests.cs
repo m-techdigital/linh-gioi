@@ -726,7 +726,7 @@ namespace LinhGioi.Tests.EditMode
                 var flags = BindingFlags.Instance | BindingFlags.NonPublic;
                 var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
                 var hubDetailName = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailName", flags).GetValue(hud);
-                var hubDetailBody = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailBody", flags).GetValue(hud);
+                var hubDetailBody = (CharacterHubFactBlock)typeof(CongDongLamArrivalHud).GetField("_hubDetailBody", flags).GetValue(hud);
                 var hubDetailStatus = (Label)typeof(CongDongLamArrivalHud).GetField("_hubDetailStatus", flags).GetValue(hud);
                 var selectedSkill = activeProfile.Skills[2];
                 var selectedSkillNode = root.Q<Button>("Map01A Skill Node 2");
@@ -740,7 +740,7 @@ namespace LinhGioi.Tests.EditMode
                     Is.EqualTo(selectedSkill.IconCatalog == CharacterHubIconCatalog.Skill
                         ? scene.GetMap01ASkillIconSprite(selectedSkill.IconId)
                         : scene.GetMap01AHudIconSprite(selectedSkill.IconId)));
-                StringAssert.DoesNotContain("chờ dữ liệu", hubDetailBody.text);
+                StringAssert.DoesNotContain("chờ dữ liệu", hubDetailBody.SourceText);
                 StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
 
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
@@ -783,17 +783,17 @@ namespace LinhGioi.Tests.EditMode
                     "Potential level/value belongs in its canonical facts row, not in class-specific hero metadata.");
                 Assert.That(root.Q<Label>("Map01A Potential Next Effect Heading").text,
                     Is.EqualTo("HIỆU QUẢ KHI CỘNG 1 ĐIỂM"));
-                Assert.That(root.Q<Label>("Map01A Potential Current Effect").text,
+                Assert.That(root.Q<CharacterHubFactBlock>("Map01A Potential Current Effect").SourceText,
                     Does.Contain("Sinh lực (HP)  +12.500"));
-                Assert.That(root.Q<Label>("Map01A Potential Next Effect").text,
+                Assert.That(root.Q<CharacterHubFactBlock>("Map01A Potential Next Effect").SourceText,
                     Does.Contain("Sinh lực (HP)  +50"));
                 Assert.That(root.Q<Label>("Map01A Potential Current Level").style.fontSize.value.value,
                     Is.EqualTo(21).Within(1));
                 Assert.That(root.Q<Label>("Map01A Potential Current Effect Heading").style.fontSize.value.value,
                     Is.EqualTo(17).Within(1));
-                Assert.That(root.Q<Label>("Map01A Potential Current Effect").style.fontSize.value.value,
+                Assert.That(root.Q<CharacterHubFactBlock>("Map01A Potential Current Effect").style.fontSize.value.value,
                     Is.EqualTo(20).Within(1));
-                Assert.That(root.Q<Label>("Map01A Potential Next Effect").style.fontSize.value.value,
+                Assert.That(root.Q<CharacterHubFactBlock>("Map01A Potential Next Effect").style.fontSize.value.value,
                     Is.EqualTo(20).Within(1));
                 Assert.That(root.Q<Label>("Map01A Potential Cost").text,
                     Is.EqualTo("Tiêu hao  Điểm tiềm năng ×1"));
@@ -824,11 +824,11 @@ namespace LinhGioi.Tests.EditMode
                     "Selecting a potential node must update detail-right without mutating progression state.");
                 Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetMap01APotentialIconSprite("attack")));
-                Assert.That(root.Q<Label>("Map01A Potential Current Effect").text, Is.EqualTo("Công  +120"));
-                Assert.That(root.Q<Label>("Map01A Potential Next Effect").text, Is.EqualTo("Công  +2"));
+                Assert.That(root.Q<CharacterHubFactBlock>("Map01A Potential Current Effect").SourceText, Is.EqualTo("Công  +120"));
+                Assert.That(root.Q<CharacterHubFactBlock>("Map01A Potential Next Effect").SourceText, Is.EqualTo("Công  +2"));
                 StringAssert.DoesNotContain("state", modalSubtitle.text);
-                StringAssert.DoesNotContain("local", hubDetailBody.text);
-                StringAssert.DoesNotContain("state", hubDetailBody.text);
+                StringAssert.DoesNotContain("local", hubDetailBody.SourceText);
+                StringAssert.DoesNotContain("state", hubDetailBody.SourceText);
 
                 InvokeBoundButton(root.Q<Button>("Map01A Spirit Pet Main Tab"));
                 Assert.That(root.Q("Map01A Spirit Pet Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -853,8 +853,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Deploy Action").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
                     "Linh thú growth must remain visibly gated until its real progression state exists.");
-                StringAssert.DoesNotContain("Màn này", hubDetailBody.text);
-                StringAssert.DoesNotContain("state", hubDetailBody.text);
+                StringAssert.DoesNotContain("Màn này", hubDetailBody.SourceText);
+                StringAssert.DoesNotContain("state", hubDetailBody.SourceText);
                 StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
             }
             finally
@@ -1264,6 +1264,128 @@ namespace LinhGioi.Tests.EditMode
                 foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
                     if (!before.Contains(root)) Object.DestroyImmediate(root);
             }
+        }
+
+        [Test]
+        public void CharacterHubFactPresentationSeparatesValuesAndPreservesNodes()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("hub fact row integration");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
+                var current = root.Q("Map01A Potential Current Effect");
+                var rows = current.Query<VisualElement>(className: "lgo-character-hub-fact-row").ToList();
+                Assert.That(rows.Count, Is.EqualTo(2), "Potential effects need prebuilt caption/value rows, not one multiline label.");
+                Assert.That(rows[0].Q<Label>(rows[0].name + " Caption").text, Is.EqualTo("Sinh lực (HP)"));
+                Assert.That(rows[0].Q<Label>(rows[0].name + " Value").text, Is.EqualTo("+12.500"));
+                Assert.That(rows[1].Q<Label>(rows[1].name + " Value").text, Is.EqualTo("+250"));
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                var activeClass = scene.ActiveEquipmentClassId;
+                foreach (var profile in CharacterHubClassCatalog.Profiles)
+                {
+                    typeof(CongDongLamArrivalHud).GetField("_characterHubEvidenceClassId", flags).SetValue(hud, profile.Id);
+                    typeof(CongDongLamArrivalHud).GetMethod("BindCharacterHubProfile", flags).Invoke(hud, null);
+                    InvokeBoundButton(root.Q<Button>("Map01A Potential Node 0"));
+                    Assert.That(current.Query<VisualElement>(className: "lgo-character-hub-fact-row").ToList(), Is.EqualTo(rows));
+                    Assert.That(rows[0].Q<Label>(rows[0].name + " Value").text, Is.EqualTo("+120"));
+                    Assert.That(rows[1].style.display.value, Is.EqualTo(DisplayStyle.None), "One-effect selection must hide the previous second effect.");
+                    InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
+                    var skillFacts = root.Q("Map01A Hub Skill Facts");
+                    Assert.That(skillFacts, Is.Not.Null);
+                    foreach (var skill in profile.Skills)
+                    {
+                        typeof(CongDongLamArrivalHud).GetMethod("ShowSkillDetail", flags).Invoke(hud, new object[] { skill });
+                        Assert.That(skillFacts.GetType().GetProperty("SourceText").GetValue(skillFacts), Is.EqualTo(skill.Description));
+                    }
+                    Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(activeClass), "Fact review must not change the actor class.");
+                }
+            }
+            finally
+            {
+                foreach (var go in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(go)) Object.DestroyImmediate(go);
+            }
+        }
+
+        [UnityEngine.TestTools.UnityTest]
+        public System.Collections.IEnumerator CharacterHubFactPresentationWrappedValuesFitMeasuredRows()
+        {
+            var window = ScriptableObject.CreateInstance<UnityEditor.EditorWindow>();
+            try
+            {
+                window.Show();
+                var block = new CharacterHubFactBlock("Measured fact block", 4, 18, false);
+                window.rootVisualElement.Add(block);
+                typeof(CongDongLamArrivalHud).GetMethod("ApplyLgoSpiritPetStatRow", BindingFlags.Static | BindingFlags.NonPublic)
+                    .Invoke(null, new object[] { block.Rows[3] });
+                block.Bind("Sát thương  320% Công\nPhạm vi  Hình quạt trước mặt\nHồi chiêu  12 giây\nGiảm Sát Thương  +12%");
+                foreach (var width in new[] { 410, 300, 220 })
+                {
+                    block.style.width = width;
+                    yield return null;
+                    yield return null;
+                    foreach (var row in block.Rows)
+                    foreach (var copy in new[] { row.Caption, row.Value })
+                    {
+                        Assert.That(copy.contentRect.width, Is.GreaterThan(0));
+                        var measured = copy.MeasureTextSize(copy.text, copy.contentRect.width,
+                            VisualElement.MeasureMode.Exactly, 0, VisualElement.MeasureMode.Undefined);
+                        Assert.That(copy.contentRect.height + 1, Is.GreaterThanOrEqualTo(measured.y),
+                            copy.name + " at width " + width + " must measure its actual wrapped text.");
+                        Assert.That(copy.worldBound.yMin, Is.GreaterThanOrEqualTo(row.worldBound.yMin - 1));
+                        Assert.That(copy.worldBound.yMax, Is.LessThanOrEqualTo(row.worldBound.yMax + 1));
+                    }
+                }
+            }
+            finally { window.Close(); }
+        }
+
+        [Test]
+        public void CharacterHubFactPresentationPreservesUnknownAndOverflowText()
+        {
+            var type = typeof(CongDongLamArrivalHud).Assembly.GetType("LinhGioi.UI.CharacterHubFactBlock");
+            Assert.That(type, Is.Not.Null, "A reusable source-preserving fact component is required.");
+            var block = (VisualElement)System.Activator.CreateInstance(type, new object[] { "Fact test", 2, 18, false });
+            var bind = type.GetMethod("Bind");
+            var children = block.Children().ToArray();
+            foreach (var text in new[] { "HP  +12.500\nPhòng thủ  +250", "Dòng văn bản không có giá trị", "HP  +1\n\nGhi chú\nDòng thứ tư", "", "\r\n" })
+            {
+                bind.Invoke(block, new object[] { text });
+                Assert.That(type.GetProperty("SourceText").GetValue(block), Is.EqualTo(text));
+                Assert.That(block.Children().ToArray(), Is.EqualTo(children), "Binding must not rebuild the row tree.");
+                if (text.Contains("Dòng thứ tư"))
+                {
+                    var fallback = block.Q<Label>("Fact test Overflow Text");
+                    Assert.That(fallback.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                    Assert.That(fallback.text, Is.EqualTo(text), "Over-budget content must remain readable, never truncated.");
+                }
+            }
+            bind.Invoke(block, new object[] { "HP  +1" });
+            var value = block.Q<Label>("Fact test Row 0 Value");
+            Assert.That(value.text, Is.EqualTo("+1"));
+            Assert.That(value.style.unityTextAlign.value, Is.EqualTo(TextAnchor.MiddleRight));
+            Assert.That(value.style.whiteSpace.value, Is.EqualTo(WhiteSpace.Normal));
+        }
+
+        [Test]
+        public void CharacterHubFactPresentationLockedActionsAndConnectorsAreExplicit()
+        {
+            var action = new Button();
+            typeof(CongDongLamArrivalHud).GetMethod("ApplyLgoCharacterHubLockedAction", BindingFlags.Static | BindingFlags.NonPublic)
+                .Invoke(null, new object[] { action, true });
+            Assert.That(action.enabledSelf, Is.False);
+            Assert.That(action.tooltip, Does.Contain("chưa khả dụng"));
+            Assert.That(action.style.color.value.r, Is.GreaterThanOrEqualTo(.80f), "Disabled is not permission to make the label illegible.");
+            var create = typeof(CongDongLamArrivalHud).GetMethod("CreateHubPathConnector", BindingFlags.Static | BindingFlags.NonPublic);
+            var connector = (VisualElement)create.Invoke(null, new object[] { "test connector", false });
+            Assert.That(connector.ClassListContains("lgo-skill-directional-connector"), Is.True);
+            Assert.That(connector.style.height.value.value, Is.GreaterThanOrEqualTo(10));
+            Assert.That(connector.pickingMode, Is.EqualTo(PickingMode.Ignore));
         }
 
         [Test]

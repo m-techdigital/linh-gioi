@@ -578,6 +578,81 @@ namespace LinhGioi.UI
             facts.style.paddingTop = facts.style.paddingBottom = 4;
         }
 
+        internal static void ApplyLgoCharacterHubFactCopy(Label label, int size, bool accent)
+        {
+            label.AddToClassList("lgo-hub-copy");
+            label.AddToClassList("lgo-hub-fact-copy");
+            label.style.fontSize = size;
+            label.style.color = accent ? new Color(.62f, 1f, .68f, 1f) : UiText;
+            label.style.marginTop = label.style.marginBottom = 0;
+            label.style.paddingTop = label.style.paddingBottom = 0;
+            label.style.paddingLeft = label.style.paddingRight = 0;
+            label.style.minWidth = 0;
+            label.style.flexShrink = 1;
+            label.style.whiteSpace = WhiteSpace.Normal;
+        }
+
+        internal static void ApplyLgoCharacterHubFactRow(VisualElement row, VisualElement marker,
+            Label caption, Label value, int size, bool accent)
+        {
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            row.style.flexShrink = 0;
+            row.style.minWidth = 0;
+            ApplyLgoCharacterHubFactCopy(caption, size, accent);
+            ApplyLgoCharacterHubFactCopy(value, size, accent);
+            caption.style.flexGrow = 1;
+            caption.style.flexBasis = 0;
+            // Give Yoga a definite value column before text measurement. A lone
+            // percentage maxWidth measures one line, then wraps glyphs after layout.
+            value.style.width = new Length(55, LengthUnit.Percent);
+            value.style.maxWidth = StyleKeyword.None;
+            value.style.flexShrink = 0;
+            value.style.marginLeft = 10;
+            value.style.unityTextAlign = TextAnchor.MiddleRight;
+            value.style.unityFontStyleAndWeight = FontStyle.Bold;
+            marker.style.width = 8;
+            marker.style.height = 12;
+            marker.style.marginRight = 10;
+            marker.style.flexShrink = 0;
+            marker.generateVisualContent += context =>
+            {
+                var p = context.painter2D;
+                p.fillColor = accent ? new Color(.40f, .90f, .57f, 1f) : new Color(.28f, .73f, 1f, 1f);
+                p.strokeColor = new Color(.70f, .90f, 1f, 1f);
+                p.lineWidth = .6f;
+                p.BeginPath();
+                p.MoveTo(new Vector2(4, 1)); p.LineTo(new Vector2(7, 6));
+                p.LineTo(new Vector2(4, 11)); p.LineTo(new Vector2(1, 6));
+                p.ClosePath(); p.Fill(); p.Stroke();
+            };
+        }
+
+        private static void ApplyLgoSkillDirectionalConnector(VisualElement connector, bool vertical)
+        {
+            connector.style.flexShrink = 0;
+            connector.style.alignSelf = Align.Center;
+            connector.style.width = vertical ? 12 : 40;
+            connector.style.height = 12;
+            const string marker = "lgo-skill-directional-connector";
+            if (connector.ClassListContains(marker)) return;
+            connector.AddToClassList(marker);
+            connector.generateVisualContent += context =>
+            {
+                var p = context.painter2D;
+                p.strokeColor = new Color(.20f, .58f, .82f, .85f);
+                p.lineWidth = 1.6f;
+                var start = vertical ? new Vector2(6, 1) : new Vector2(1, 6);
+                var end = vertical ? new Vector2(6, 11) : new Vector2(39, 6);
+                var along = (end - start).normalized * 4;
+                var across = new Vector2(-along.y, along.x) * .65f;
+                p.BeginPath(); p.MoveTo(start); p.LineTo(end);
+                p.MoveTo(start + along + across); p.LineTo(start); p.LineTo(start + along - across);
+                p.MoveTo(end - along + across); p.LineTo(end); p.LineTo(end - along - across);
+                p.Stroke();
+            };
+        }
+
         private static void ApplyLgoCharacterHubCopyRhythm(VisualElement scope)
         {
             // Labels inherit theme padding/margins. Own them here so readable
@@ -588,7 +663,7 @@ namespace LinhGioi.UI
                 label.style.marginTop = label.style.marginBottom = 0;
                 label.style.paddingTop = label.style.paddingBottom = 0;
                 label.style.paddingLeft = label.style.paddingRight = 0;
-                label.style.flexShrink = 0;
+                label.style.flexShrink = label.ClassListContains("lgo-hub-fact-copy") ? 1 : 0;
             });
         }
 
@@ -990,6 +1065,9 @@ namespace LinhGioi.UI
             else ApplyLgoCharacterHubGoldAction(button);
             ApplyLgoCharacterHubInspectorAction(button);
             ApplyLgoCharacterHubUnavailableControl(button);
+            button.style.color = primary ? new Color(.90f, .95f, 1f, 1f) : new Color(.20f, .16f, .10f, 1f);
+            button.style.opacity = .82f;
+            button.tooltip = "Tính năng chưa khả dụng trong phiên bản này.";
         }
 
         private static void ApplyLgoSkillNode(Button node)
@@ -1104,7 +1182,8 @@ namespace LinhGioi.UI
         {
             row.AddToClassList("lgo-spirit-pet-stat-row");
             row.style.alignItems = Align.Center;
-            row.style.height = row.style.minHeight = 26;
+            row.style.height = StyleKeyword.Auto;
+            row.style.minHeight = 26;
             row.style.flexShrink = 0;
             row.style.marginBottom = 0;
         }

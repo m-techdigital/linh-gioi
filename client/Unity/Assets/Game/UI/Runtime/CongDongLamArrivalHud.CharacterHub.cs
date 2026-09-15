@@ -13,8 +13,9 @@ namespace LinhGioi.UI
         private VisualElement _hubPotentialFacts;
         private CharacterHubPotentialTopology _potentialTopology;
         private VisualElement _hubSkillActionRow, _hubPotentialActionRow, _hubSpiritPetActionRow;
-        private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
-        private Label _hubPotentialSummary, _hubPotentialCurrentLevel, _hubPotentialCurrentEffect, _hubPotentialNextEffect, _hubPotentialCost;
+        private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailStatus;
+        private CharacterHubFactBlock _hubDetailBody, _hubPotentialCurrentEffect, _hubPotentialNextEffect;
+        private Label _hubPotentialSummary, _hubPotentialCurrentLevel, _hubPotentialCost;
         private VisualElement _hubDetailIcon, _hubPotentialDetailIconFrame;
         private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _potentialResetAction, _spiritPetDeployAction, _spiritPetDevelopAction;
         private Texture2D _spiritPetPreviewTexture, _spiritPetPortraitTexture;
@@ -33,7 +34,7 @@ namespace LinhGioi.UI
         private Label _spiritPetRarityBadge, _spiritPetRoleBadge, _spiritPetStateBadge;
         private VisualElement _hubSpiritPetFacts;
         private VisualElement _hubSpiritPetStats;
-        private readonly List<Label> _hubSpiritPetStatValues = new List<Label>();
+        private readonly List<CharacterHubFactRow> _hubSpiritPetStatValues = new List<CharacterHubFactRow>();
         private readonly List<VisualElement> _hubSpiritPetSkillIcons = new List<VisualElement>();
         private readonly List<Label> _hubSpiritPetSkillNames = new List<Label>();
         private readonly List<Label> _hubSpiritPetSkillLevels = new List<Label>();
@@ -211,11 +212,7 @@ namespace LinhGioi.UI
         private static VisualElement CreateHubPathConnector(string name, bool vertical = false)
         {
             var connector = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
-            connector.style.flexShrink = 0;
-            connector.style.alignSelf = Align.Center;
-            connector.style.backgroundColor = new Color(.20f, .58f, .82f, .68f);
-            connector.style.width = vertical ? 2 : 40;
-            connector.style.height = vertical ? 12 : 2;
+            ApplyLgoSkillDirectionalConnector(connector, vertical);
             return connector;
         }
 
@@ -335,14 +332,9 @@ namespace LinhGioi.UI
 
         private VisualElement CreateSpiritPetStatRow(int index)
         {
-            var row = InventoryRow("Map01A Spirit Pet Stat Row " + index);
+            var row = new CharacterHubFactRow("Map01A Spirit Pet Stat Row " + index, 18, false);
             ApplyLgoSpiritPetStatRow(row);
-            row.Add(LgoLabel("◆", 11, new Color(.38f, .76f, 1f, 1f), true));
-            var value = LgoLabel("", 18, UiText);
-            value.name = "Map01A Spirit Pet Stat Value " + index;
-            value.style.marginLeft = 8;
-            _hubSpiritPetStatValues.Add(value);
-            row.Add(value);
+            _hubSpiritPetStatValues.Add(row);
             return row;
         }
 
@@ -626,8 +618,7 @@ namespace LinhGioi.UI
             facts.style.flexShrink = 0;
             facts.style.marginTop = 0;
             facts.style.paddingTop = facts.style.paddingBottom = 4;
-            _hubDetailBody = LgoLabel("", 18, UiText);
-            _hubDetailBody.style.whiteSpace = WhiteSpace.Normal;
+            _hubDetailBody = new CharacterHubFactBlock("Map01A Hub Skill Facts", 8, 18, false);
             facts.Add(_hubDetailBody);
             _hubPotentialFacts = new VisualElement { name = "Map01A Potential Detail Facts" };
             _hubPotentialFacts.style.flexDirection = FlexDirection.Column;
@@ -641,10 +632,7 @@ namespace LinhGioi.UI
             var currentHeading = LgoLabel("HIỆU QUẢ HIỆN TẠI", 17, new Color(.38f, .74f, 1f, 1f), true);
             currentHeading.name = "Map01A Potential Current Effect Heading";
             _hubPotentialFacts.Add(currentHeading);
-            _hubPotentialCurrentEffect = LgoLabel("", 20, UiText, true);
-            _hubPotentialCurrentEffect.name = "Map01A Potential Current Effect";
-            _hubPotentialCurrentEffect.style.marginTop = 6;
-            _hubPotentialCurrentEffect.style.whiteSpace = WhiteSpace.Normal;
+            _hubPotentialCurrentEffect = new CharacterHubFactBlock("Map01A Potential Current Effect", 2, 20, false);
             _hubPotentialFacts.Add(_hubPotentialCurrentEffect);
             var effectDivider = LgoDivider("Map01A Potential Effect Divider");
             ApplyLgoCharacterHubReadingDivider(effectDivider);
@@ -652,10 +640,7 @@ namespace LinhGioi.UI
             var nextHeading = LgoLabel("HIỆU QUẢ KHI CỘNG 1 ĐIỂM", 17, new Color(.50f, .96f, .58f, 1f), true);
             nextHeading.name = "Map01A Potential Next Effect Heading";
             _hubPotentialFacts.Add(nextHeading);
-            _hubPotentialNextEffect = LgoLabel("", 20, new Color(.62f, 1f, .68f, 1f), true);
-            _hubPotentialNextEffect.name = "Map01A Potential Next Effect";
-            _hubPotentialNextEffect.style.marginTop = 6;
-            _hubPotentialNextEffect.style.whiteSpace = WhiteSpace.Normal;
+            _hubPotentialNextEffect = new CharacterHubFactBlock("Map01A Potential Next Effect", 2, 20, true);
             _hubPotentialFacts.Add(_hubPotentialNextEffect);
             var costRow = new VisualElement { name = "Map01A Potential Cost Row" };
             costRow.style.flexDirection = FlexDirection.Row;
@@ -696,7 +681,7 @@ namespace LinhGioi.UI
             ApplyLgoCharacterHubCopyRhythm(_hubSpiritPetFacts);
             facts.Add(_hubSpiritPetFacts);
             detailScroll.Add(facts);
-            _hubDetailStatus = LgoLabel("", 16, new Color(.76f, 1f, .70f, .94f), true);
+            _hubDetailStatus = LgoLabel("", 16, UiGold, true);
             _hubDetailStatus.name = "Map01A Hub Detail Status";
             _hubDetailStatus.style.paddingLeft = _hubDetailStatus.style.paddingRight = 0;
             _hubDetailStatus.style.marginTop = 10;
@@ -806,7 +791,7 @@ namespace LinhGioi.UI
             _spiritPetRoleBadge.text = pet.Role;
             _spiritPetStateBadge.text = pet.State;
             for (var index = 0; index < _hubSpiritPetStatValues.Count; index++)
-                _hubSpiritPetStatValues[index].text = pet.Stats[index];
+                _hubSpiritPetStatValues[index].Bind(pet.Stats[index]);
             for (var index = 0; index < _hubSpiritPetSkillIcons.Count; index++)
             {
                 CharacterHubSpiritPetPreview.SkillPreview skill = pet.Skills[index];
@@ -922,7 +907,7 @@ namespace LinhGioi.UI
             _hubDetailHeader.text = "CHI TIẾT KỸ NĂNG";
             _hubDetailName.text = skill.Name;
             _hubDetailMeta.text = ActiveCharacterHubProfile.Label + " · Kỹ năng chủ động · " + skill.Level;
-            _hubDetailBody.text = skill.Description;
+            _hubDetailBody.Bind(skill.Description);
             _hubDetailStatus.text = "Nâng cấp và thay đổi bộ kỹ năng đang khóa.";
         }
 
@@ -937,8 +922,8 @@ namespace LinhGioi.UI
             _hubDetailMeta.text = string.Empty;
             _hubPotentialSummary.text = potential.Summary;
             _hubPotentialCurrentLevel.text = "Cấp hiện tại:  " + potential.Value;
-            _hubPotentialCurrentEffect.text = potential.CurrentEffect;
-            _hubPotentialNextEffect.text = potential.NextEffect;
+            _hubPotentialCurrentEffect.Bind(potential.CurrentEffect);
+            _hubPotentialNextEffect.Bind(potential.NextEffect);
             _hubDetailStatus.text = string.Empty;
         }
 
