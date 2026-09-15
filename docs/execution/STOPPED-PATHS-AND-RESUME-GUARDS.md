@@ -16,13 +16,19 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 - Do not select a convenient width from this output or tune the sampling inset until a plausible number appears. Evidence is kept at `build/rigid-outfit-pilot/rejected-iterations/v9-flat-silhouette-width-inference-invalid/`.
 - Register pivots from the coherent design, then measure `Wb` independently on each authored body layer alpha. The layer source is the authority for hidden cap size; the flat design remains the authority for the visible bind silhouette.
 
+## Stopped path: vector-trace the flat design into source art
+
+- Two bounded v9 traces preserved the broad silhouette but visibly flattened hair/skin shading, roughened edges and expanded the SVG to roughly 2.5–4 MB. Semantic grouping would still require clip masks over a flat composite.
+- Evidence is kept at `build/rigid-outfit-pilot/rejected-iterations/v9-vector-tracing-quality-loss/`; `rejection-report.json` is `VECTOR_REAUTHORING_REJECTED_VISUAL_QUALITY_LOSS`.
+- Do not tune tracing parameters again or use traced paths as body/equipment source. Resume native body authoring only when a designer paints the existing 16 Krita author layers, or when a true layered source with equivalent identity and hidden geometry is supplied.
+
 ## Current allowed path
 
 The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
 
 - Unity Transform hierarchy + ordinary rigid `SpriteRenderer`; one fixed FitProfile per body variant/item.
-- Current gate: `FINAL_OUTFIT1_COHERENT_BODY_DESIGN_AUTHORING / FIX_REQUIRED`.
-- Current design evidence is `build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png`; it is identity/silhouette reference only. Authoring must start with a body-only native layered source whose hidden geometry is drawn inside each layer and opens again in the authoring tool.
+- Current gate: `NATIVE_LAYER_ART_EXTERNAL_CAPABILITY_REQUIRED / BLOCKED`.
+- Current design evidence is `build/rigid-outfit-pilot/final-1-coherent-body-design-v9/canonical-bind-profile-v1/male-female-canonical-bind-review-v1.png`; it is identity/silhouette reference only. The existing male/female KRA templates reopen correctly but their 16 author layers contain no art. Authoring must start by painting hidden geometry into those layers or by supplying an equivalent true layered source.
 - Body-only rotation proof precedes outfit authoring; outfit proof precedes rig/full motion.
 - Outfit #2, mix-and-match, class/level expansion and migration remain locked until outfit #1 visual PASS.
 
