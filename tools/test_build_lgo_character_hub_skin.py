@@ -26,6 +26,14 @@ class BuildLgoCharacterHubSkinTests(unittest.TestCase):
             self.assertLess(image.getpixel((x + 51, y))[3], 180)
         self.assertIn("character-hub-potential-topology.png", skin.BUILDERS)
 
+    def test_potential_core_reuses_a_pinned_224px_ui_module(self) -> None:
+        core = skin.build_meditation_core()
+        self.assertEqual(core.size, (224, 224))
+        self.assertEqual(core.mode, "RGBA")
+        self.assertEqual(core.getpixel((0, 0))[3], 0)
+        self.assertGreater(core.getpixel((112, 112))[3], 240)
+        self.assertIn("character-hub-potential-core.png", skin.BUILDERS)
+
     def test_potential_topology_runtime_png_stays_under_100_kib(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             skin.build(Path(directory))
@@ -36,7 +44,8 @@ class BuildLgoCharacterHubSkinTests(unittest.TestCase):
         image = skin.build_panel()
         # The center must remain visually quiet; ornament belongs to the corners.
         center = image.crop((128, 128, 384, 384))
-        pixels = list(center.convert("RGB").get_flattened_data())
+        rgb = center.convert("RGB")
+        pixels = list(rgb.get_flattened_data() if hasattr(rgb, "get_flattened_data") else rgb.getdata())
         row_deltas = []
         for y in range(center.height):
             row = pixels[y * center.width:(y + 1) * center.width]

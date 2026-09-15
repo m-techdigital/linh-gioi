@@ -175,6 +175,7 @@ RUNTIME_ART_PACKS = [
             'character-hub-action-gold.png': (384, 72, 'ui-action-gold'),
             'character-hub-close.png': (96, 96, 'ui-close-frame'),
             'character-hub-potential-topology.png': (600, 520, 'ui-potential-topology-template'),
+            'character-hub-potential-core.png': (224, 224, 'ui-potential-meditation-core'),
         },
         'generators': {'build_lgo_character_hub_skin'},
         'ui_import_limits': {
@@ -186,6 +187,7 @@ RUNTIME_ART_PACKS = [
             'character-hub-action-gold.png': 512,
             'character-hub-close.png': 128,
             'character-hub-potential-topology.png': 1024,
+            'character-hub-potential-core.png': 512,
         },
         'max_bytes': 750_000,
         'status_error': 'Map01A character-hub chrome must remain draft until owner Player visual review',

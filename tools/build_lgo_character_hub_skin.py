@@ -12,7 +12,7 @@ import json
 import math
 from pathlib import Path
 
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -152,6 +152,33 @@ def build_close() -> Image.Image:
     for x, y in ((18, 18), (78, 18), (18, 78), (78, 78)):
         draw.ellipse((x - 3, y - 3, x + 3, y + 3), fill=GOLD_LIGHT)
     return image
+
+
+CORE_NAME = "character-hub-potential-core.png"
+CORE_SHA256 = "4aa14ce9475c440b012700c5b83cf6b693b6444e72d2527fd77948367941dd9a"
+CORE_SOURCE_SHA256 = "df7a30492efb627f90cb1fc2cdda6e03f22fa9760ebe0844800ac882bcdf850f"
+CORE_SOURCE_RECT = (1088, 568, 1392, 872)
+
+
+def build_meditation_core(source: Path | None = None) -> Image.Image:
+    path = source if source is not None else DEFAULT_OUTPUT / CORE_NAME
+    expected = CORE_SOURCE_SHA256 if source is not None else CORE_SHA256
+    if hashlib.sha256(path.read_bytes()).hexdigest() != expected:
+        raise ValueError("Potential core source hash mismatch: " + str(path))
+    with Image.open(path) as image:
+        core = image.convert("RGBA")
+    if source is None:
+        if core.size != (224, 224):
+            raise ValueError("Potential core module must be native 224x224")
+        return core
+    if core.size != (1536, 1024):
+        raise ValueError("Unexpected Potential UI source canvas")
+    core = core.crop(CORE_SOURCE_RECT)
+    mask = Image.new("L", (304, 304))
+    mask.putdata([round(255 * max(0, min(1, (152 - math.hypot(x - 151.5, y - 151.5)) / 6)))
+                  for y in range(304) for x in range(304)])
+    core.putalpha(ImageChops.multiply(core.getchannel("A"), mask))
+    return core.resize((224, 224), Image.Resampling.LANCZOS)
 
 
 def build_potential_topology() -> Image.Image:
@@ -310,6 +337,7 @@ def build_potential_topology() -> Image.Image:
 
 
 BUILDERS = {
+    CORE_NAME: build_meditation_core,
     "character-hub-surface.png": build_shell,
     "character-hub-panel-surface.png": build_panel,
     "character-hub-tab-idle.png": lambda: _bevel_surface((320, 72), (12, 50, 86), (3, 22, 43), (74, 111, 144, 220)),
@@ -329,6 +357,7 @@ def build(output_dir: Path) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     assets = []
     roles = {
+        CORE_NAME: "ui-potential-meditation-core",
         "character-hub-surface.png": "ui-modal-surface",
         "character-hub-panel-surface.png": "ui-panel-surface",
         "character-hub-tab-idle.png": "ui-tab-idle",

@@ -11,10 +11,13 @@
 - A-runtime: `build/character-hub-checkpoints-v24/A-runtime/{pc,mobile,tablet}/`, 87 ảnh; đã xem Nhân vật và Rương đồ trên ba viewport: đủ 25 ô vuông, không cắt hàng cuối, tên/vitals/action rõ và không chồng.
 - Lượt test đầu dùng -nographics có 1 test pointer bị Ignore; giữ log, không tính là PASS. Lượt có graphics chạy đủ và thay thế kết luận đó.
 - [x] A đã commit `6165e23f`; 9 file/529 dòng, Python 32/32, frozen/no-3D/no-source PASS; chưa push riêng.
-- [x] B: Kỹ năng 3×3, Linh thú/typography/roster đã tái dựng; EditMode 294/294 không skip; B-runtime có 87 ảnh, đã xem Kỹ năng và Linh thú trên ba viewport, không cắt/chồng, hiện trọn hai skill Linh thú.
-- [ ] C: tích hợp icon Tiềm năng frame/content tách riêng, generator/atlas/provenance; kiểm không dựng lại frame khi đổi class.
+- [x] B đã commit `8ca19ff5`: Kỹ năng 3×3, Linh thú/typography/roster đã tái dựng; EditMode 294/294 không skip; B-runtime có 87 ảnh, đã xem Kỹ năng và Linh thú trên ba viewport, không cắt/chồng, hiện trọn hai skill Linh thú.
+- [x] C1: chuẩn bị module UI core 224×224 có source/hash, generator và importer; Python 5/5, no-source/no-3D PASS. Chưa thay topology runtime; code UI vẫn giống B.
+- [ ] C2: tích hợp icon Tiềm năng frame/content; candidate cuối đã kiểm 296/296 và 87 ảnh, chỉ reuse evidence khi toàn bộ hash input trùng C-verified-inputs.json.
 - [ ] So byte-for-byte toàn bộ source cuối với WIP đã bảo toàn (ngoại trừ docs và drift ProjectSettings được loại có kiểm chứng); kiểm final Player rồi push fast-forward qua supervisor.
 - [ ] Tiếp tục fidelity shared ornament/frame, không mở screen ngoài năm tab.
+
+- Audit bổ sung: report_lgo_change_budget.py bỏ sót dòng file mới; dùng thêm effective_budget.py trong evidence để đếm đủ, không stage/nới ngưỡng né gate.
 
 ## Gate
 `CONTINUE / VISUAL_FIX_REQUIRED`: checkpoint kỹ thuật không đồng nghĩa toàn bộ năm tab đã được owner nghiệm thu; mobile/tablet là viewport macOS, không phải thiết bị thật.

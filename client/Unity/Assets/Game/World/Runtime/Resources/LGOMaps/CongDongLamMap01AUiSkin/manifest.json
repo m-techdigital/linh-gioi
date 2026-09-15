@@ -26,6 +26,13 @@
   ],
   "assets": [
     {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-potential-core.png",
+      "generator": "build_lgo_character_hub_skin",
+      "referenceOnly": false,
+      "role": "ui-potential-meditation-core",
+      "sha256": "4aa14ce9475c440b012700c5b83cf6b693b6444e72d2527fd77948367941dd9a"
+    },
+    {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-surface.png",
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
@@ -85,5 +92,17 @@
   "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template with one outer slot frame per node, while class data overlays remain geometry-free",
   "sourceMethod": "deterministic Pillow raster authored from approved navy, cyan-glow and old-gold visual language; no canonical-board crop",
   "pixelBudget": "actual-display-sized UI chrome; 119673 bytes total; no mipmaps",
-  "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled"
+  "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled",
+  "coreSource": {
+    "sha256": "df7a30492efb627f90cb1fc2cdda6e03f22fa9760ebe0844800ac882bcdf850f",
+    "sourceRect": [
+      1088,
+      568,
+      1392,
+      872
+    ],
+    "mask": "radius152-inward-feather6",
+    "moduleSha256": "4aa14ce9475c440b012700c5b83cf6b693b6444e72d2527fd77948367941dd9a"
+  },
+  "geometryRevision": "v24c-prepared-core-module-not-yet-used-by-topology"
 }
