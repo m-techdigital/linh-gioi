@@ -1,6 +1,18 @@
 {
   "id": "map01a-character-hub-chrome-v2",
   "status": "DRAFT_RUNTIME_REVIEW",
+  "geometryRevision": "v5-independent-shared-icon-frames",
+  "coreSource": {
+    "sha256": "df7a30492efb627f90cb1fc2cdda6e03f22fa9760ebe0844800ac882bcdf850f",
+    "sourceRect": [
+      1088,
+      568,
+      1392,
+      872
+    ],
+    "mask": "radius152-inward-feather6",
+    "moduleSha256": "4aa14ce9475c440b012700c5b83cf6b693b6444e72d2527fd77948367941dd9a"
+  },
   "canonicalDesignSet": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs",
   "canonicalSha256": [
     {
@@ -65,14 +77,14 @@
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-action-blue",
-      "sha256": "3e8c8f3da5befd3ec1da920b813fd877210da204f51612e2797f979ff036dea8"
+      "sha256": "13dd5c6df2c5e5f260dccd0c3e564c70df31324f68512c209cf617c4738eb1c7"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-action-gold.png",
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-action-gold",
-      "sha256": "1b122efce543dca7217e9293fa7c7301f93e238ee40c635956ae41b0ffd58d80"
+      "sha256": "d3b6c448cf796937058b70ee2f4c3679e294ab8a44e195a830f276ddedfeec00"
     },
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01AUiSkin/character-hub-close.png",
@@ -86,23 +98,11 @@
       "generator": "build_lgo_character_hub_skin",
       "referenceOnly": false,
       "role": "ui-potential-topology-template",
-      "sha256": "9ad53c538cbd85a1c80b693a303a5c6c09b6de5fa698dee4d381fe3e784f1186"
+      "sha256": "67a46eb12583ad18297a51282a552328cd8c7ce78eef4e0afab2d45f1607d604"
     }
   ],
-  "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template with one outer slot frame per node, while class data overlays remain geometry-free",
+  "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template with one separately referenced shared frame sprite per node, while class data overlays remain geometry-free",
   "sourceMethod": "deterministic Pillow raster authored from approved navy, cyan-glow and old-gold visual language; no canonical-board crop",
-  "pixelBudget": "actual-display-sized UI chrome; 119673 bytes total; no mipmaps",
-  "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled",
-  "coreSource": {
-    "sha256": "df7a30492efb627f90cb1fc2cdda6e03f22fa9760ebe0844800ac882bcdf850f",
-    "sourceRect": [
-      1088,
-      568,
-      1392,
-      872
-    ],
-    "mask": "radius152-inward-feather6",
-    "moduleSha256": "4aa14ce9475c440b012700c5b83cf6b693b6444e72d2527fd77948367941dd9a"
-  },
-  "geometryRevision": "v24c-prepared-core-module-not-yet-used-by-topology"
+  "pixelBudget": "actual-display-sized UI chrome; 215745 bytes total; no mipmaps",
+  "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled"
 }

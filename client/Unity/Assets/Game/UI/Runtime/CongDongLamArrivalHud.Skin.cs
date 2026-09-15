@@ -904,7 +904,16 @@ namespace LinhGioi.UI
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
 
-
+        internal static VisualElement CreateLgoCircularIconFrame(string name, Sprite artwork, float size)
+        {
+            var frame = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
+            frame.AddToClassList("lgo-circular-icon-frame");
+            ApplyLgoSkillIcon(frame, size);
+            frame.style.position = Position.Absolute;
+            frame.style.left = frame.style.top = 0;
+            frame.style.backgroundImage = artwork == null ? StyleKeyword.None : new StyleBackground(artwork);
+            return frame;
+        }
 
         private static void ApplyLgoEquippedSkillSlot(VisualElement slot)
         {
@@ -971,19 +980,44 @@ namespace LinhGioi.UI
             node.style.backgroundColor = Color.clear;
             node.style.borderLeftWidth = node.style.borderRightWidth = 0;
             node.style.borderTopWidth = node.style.borderBottomWidth = 0;
-            node.style.width = node.style.minWidth = node.style.maxWidth = 124;
-            node.style.height = node.style.minHeight = node.style.maxHeight = 124;
-            node.style.flexBasis = 124;
+            node.style.width = node.style.minWidth = node.style.maxWidth = 140;
+            node.style.height = node.style.minHeight = node.style.maxHeight = 172;
+            node.style.flexBasis = 140;
             node.style.flexGrow = node.style.flexShrink = 0;
-            node.style.paddingLeft = node.style.paddingRight = 4;
-            node.style.paddingTop = node.style.paddingBottom = 4;
+            node.style.paddingLeft = node.style.paddingRight = 0;
+            node.style.paddingTop = node.style.paddingBottom = 0;
             node.style.flexDirection = FlexDirection.Column;
             node.style.alignItems = Align.Center;
             node.style.justifyContent = Justify.Center;
             ApplyLgoCharacterHubInteractiveMotion(node);
         }
 
-
+        private static void ApplyLgoPotentialOverlayContent(VisualElement icon, Label title, Label value)
+        {
+            ApplyLgoSkillIcon(icon, CharacterHubPotentialTopology.NodeFrameSize);
+            icon.style.position = Position.Absolute;
+            icon.style.left = icon.style.top = CharacterHubPotentialTopology.NodeFrameInset;
+            foreach (var label in new[] { title, value })
+            {
+                label.style.position = Position.Absolute;
+                label.style.fontSize = 20;
+                label.style.flexShrink = 0;
+                label.style.whiteSpace = WhiteSpace.NoWrap;
+                label.style.unityTextAlign = TextAnchor.MiddleCenter;
+                label.style.marginTop = label.style.marginBottom = 0;
+                label.style.marginLeft = label.style.marginRight = 0;
+                label.style.paddingTop = label.style.paddingBottom = 0;
+                label.style.paddingLeft = label.style.paddingRight = 0;
+            }
+            title.style.left = 0;
+            title.style.top = 116;
+            title.style.width = 124;
+            title.style.height = 24;
+            value.style.left = 20;
+            value.style.top = 142;
+            value.style.width = 82;
+            value.style.height = 28;
+        }
 
         private static void ApplyLgoSpiritPetHeroPreview(VisualElement preview)
         {

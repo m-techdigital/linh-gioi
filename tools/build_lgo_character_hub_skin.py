@@ -181,6 +181,65 @@ def build_meditation_core(source: Path | None = None) -> Image.Image:
     return core.resize((224, 224), Image.Resampling.LANCZOS)
 
 
+POTENTIAL_MODULE_IDS = ("attack", "defense", "vitality", "spirit", "agility", "core")
+POTENTIAL_SOURCE_CENTERS = ((298, 250), (770, 248), (1238, 248), (298, 724), (770, 724), (1240, 720))
+POTENTIAL_MODULE_OUTPUT = ROOT / "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01APotentialIcons"
+
+
+def compose_potential_icon_modules(board: Image.Image) -> tuple[Image.Image, list[dict]]:
+    """One 128px frame plus six ring-free contents in a single 512x256 atlas."""
+    if board.size != (1536, 1024):
+        raise ValueError("Potential modules require the registered 1536x1024 UI source")
+    board = board.convert("RGBA")
+    atlas = Image.new("RGBA", (512, 256))
+    content_mask = Image.new("L", (304, 304))
+    content_mask.putdata([round(255 * max(0, min(1, (152 - math.hypot(x-151.5, y-151.5)) / 2)))
+                          for y in range(304) for x in range(304)])
+    parts = []
+    for index, (icon_id, (cx, cy)) in enumerate(zip(POTENTIAL_MODULE_IDS, POTENTIAL_SOURCE_CENTERS)):
+        x, y = index % 4 * 128, index // 4 * 128
+        content = board.crop((cx-152, cy-152, cx+152, cy+152))
+        content.putalpha(ImageChops.multiply(content.getchannel("A"), content_mask))
+        atlas.alpha_composite(content.resize((84, 84), Image.Resampling.LANCZOS), (x+22, y+22))
+        parts.append({"id": icon_id, "x": x, "y": 128-y, "w": 128, "h": 128,
+                      "role": "inner-symbol", "sharedFrameId": "frame"})
+    # The sword medallion supplies the single frame master. Its registered
+    # aperture is cleared; neither its blade nor a canonical screenshot is copied.
+    frame = board.crop((58, 10, 538, 490))
+    aperture = Image.new("L", (480, 480))
+    aperture.putdata([round(255 * max(0, min(1, (math.hypot(x-239.5, y-239.5)-158) / 2)))
+                      for y in range(480) for x in range(480)])
+    frame.putalpha(ImageChops.multiply(frame.getchannel("A"), aperture))
+    atlas.alpha_composite(frame.resize((128, 128), Image.Resampling.LANCZOS), (256, 128))
+    parts.append({"id": "frame", "x": 256, "y": 0, "w": 128, "h": 128, "role": "shared-frame"})
+    return atlas, parts
+
+
+def pack_potential_icon_modules(source: Path, output_dir: Path = POTENTIAL_MODULE_OUTPUT) -> dict:
+    if hashlib.sha256(source.read_bytes()).hexdigest() != CORE_SOURCE_SHA256:
+        raise ValueError("Potential icon source hash mismatch: " + str(source))
+    with Image.open(source) as board:
+        atlas, parts = compose_potential_icon_modules(board)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / "map01a-potential-icons.png"
+    atlas.save(path, optimize=True)
+    if path.stat().st_size > 200_000:
+        raise ValueError("Potential modules exceed their 200000-byte PNG budget")
+    manifest = {"id": "map01a-potential-icons-v1", "status": "DRAFT_RUNTIME_REVIEW",
+                "runtimeApproved": False, "revision": "shared-frame-inner-symbols-v2",
+                "sourceBoard": str(source), "sourceSha256": CORE_SOURCE_SHA256,
+                "sourceCenters": POTENTIAL_SOURCE_CENTERS, "frameSourceRect": [58,10,538,490],
+                "frameAperture": "radius158-feather2-native480", "contentMask": "radius152-feather2-native304",
+                "textureSize": [512,256], "cellSize": [128,128], "contentRect": [22,22,84,84],
+                "pngBytes": path.stat().st_size, "sha256": _sha256(path), "parts": parts,
+                "assets": [{"path": str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else path.name,
+                            "role": "ui-potential-icon-atlas", "generator": "build_lgo_character_hub_skin",
+                            "referenceOnly": False, "sha256": _sha256(path)}],
+                "displayPolicy": "One frame sprite shared by topology, detail and cost; class data binds inner sprites only. Native 128px cells cover 108-124px display without upscale."}
+    (output_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+"\n")
+    return manifest
+
+
 def build_potential_topology() -> Image.Image:
     """Draw the fixed Potential geometry once; runtime only binds data overlays."""
     scale = 4
@@ -253,85 +312,20 @@ def build_potential_topology() -> Image.Image:
         ellipse((x, y), (radius, radius), fill=color)
         ellipse((x, y), (radius + 3, radius + 3), outline=(224, 162, 53, 105), line_width=1)
 
-    # Central meditation seal and silhouette are also part of the fixed template.
-    core_glow = Image.new("RGBA", size, (0, 0, 0, 0))
-    core_glow_draw = ImageDraw.Draw(core_glow)
-    core_glow_draw.ellipse(box((190, 150, 410, 370)), fill=(18, 137, 229, 55))
-    core_glow_draw.ellipse(box((254, 214, 346, 306)), fill=(255, 166, 34, 105))
-    image = Image.alpha_composite(image, core_glow.filter(ImageFilter.GaussianBlur(22 * scale)))
+    # Reuse the reviewed UI motif, not a procedural body. It is baked before
+    # node/value frames, so the fixed topology remains their only geometry owner.
+    core = build_meditation_core().resize((224 * scale, 224 * scale), Image.Resampling.LANCZOS)
+    image.alpha_composite(core, (188 * scale, 148 * scale))
     draw = ImageDraw.Draw(image)
-    ellipse(center, (112, 112), fill=(2, 20, 38, 210), outline=(225, 164, 49, 220), line_width=1.5)
-    ellipse(center, (104, 104), outline=(62, 187, 255, 205), line_width=1.5)
-    ellipse(center, (96, 96), outline=(24, 105, 168, 150), line_width=1)
-    ellipse(center, (78, 78), outline=(229, 169, 55, 105), line_width=1)
-    for angle in range(0, 360, 45):
-        radians = math.radians(angle)
-        line([(center[0], center[1]),
-              (center[0] + math.cos(radians) * 92, center[1] + math.sin(radians) * 92)],
-             (43, 151, 216, 76), 1)
-
-    aura = (67, 191, 255, 235)
-    aura_soft = (26, 112, 178, 190)
-    energy = (255, 181, 48, 252)
-    ink = (1, 15, 28, 255)
-    cloth = (3, 37, 61, 255)
-    # Head, tied hair and shoulder mantle form one readable silhouette at the
-    # actual in-game size instead of a collection of unrelated body strokes.
-    hair = [(278, 197), (284, 181), (294, 188), (300, 176), (306, 188),
-            (318, 183), (322, 200), (314, 212), (286, 212)]
-    draw.polygon([(x * scale, y * scale) for x, y in hair], fill=ink)
-    ellipse((300, 203), (17, 21), fill=ink, outline=aura, line_width=1.5)
-    torso = [(284, 216), (263, 230), (252, 282), (276, 310), (300, 296),
-             (324, 310), (348, 282), (337, 230), (316, 216)]
-    draw.polygon([(x * scale, y * scale) for x, y in torso], fill=cloth)
-    line(torso + [torso[0]], aura_soft, 5)
-    line(torso + [torso[0]], aura, 1.5)
-    for points, outer_width, inner_width in (
-        ([(274, 234), (246, 248), (220, 276), (237, 291), (265, 277)], 13, 8),
-        ([(326, 234), (354, 248), (380, 276), (363, 291), (335, 277)], 13, 8),
-        ([(280, 292), (248, 311), (214, 318), (246, 335), (294, 324)], 26, 19),
-        ([(320, 292), (352, 311), (386, 318), (354, 335), (306, 324)], 26, 19),
-    ):
-        line(points, aura, outer_width)
-        line(points, ink, inner_width)
-    lap = [(210, 318), (246, 343), (300, 331), (354, 343), (390, 318),
-           (365, 348), (326, 354), (300, 346), (274, 354), (235, 348)]
-    draw.polygon([(x * scale, y * scale) for x, y in lap], fill=ink)
-    line(lap + [lap[0]], aura_soft, 5)
-    line(lap + [lap[0]], aura, 1.5)
-    meridian = [(300, 225), (300, 246), (300, 267), (300, 289), (300, 312)]
-    line(meridian, energy, 2)
-    line([(300, 245), (275, 256), (253, 282)], (255, 180, 40, 220), 1.5)
-    line([(300, 245), (325, 256), (347, 282)], (255, 180, 40, 220), 1.5)
-    line([(275, 282), (300, 300), (325, 282)], (255, 180, 40, 175), 1)
-    for point in meridian:
-        ellipse(point, (10, 10), fill=(255, 150, 25, 55))
-        ellipse(point, (4, 4), fill=(255, 181, 42, 255), outline=(255, 232, 154, 245), line_width=1)
 
     for cx, cy in POTENTIAL_NODE_CENTERS:
-        # The topology owns one quiet outer slot frame. The authored icon supplies
-        # its inner medallion, avoiding the previous stack of repeated concentric
-        # rings while keeping all placement geometry out of class-bound controls.
-        node_glow = Image.new("RGBA", size, (0, 0, 0, 0))
-        node_glow_draw = ImageDraw.Draw(node_glow)
-        node_glow_draw.ellipse(box((cx - 62, cy - 62, cx + 62, cy + 62)),
-                               outline=(255, 178, 42, 105), width=7 * scale)
-        image = Image.alpha_composite(image, node_glow.filter(ImageFilter.GaussianBlur(7 * scale)))
-        draw = ImageDraw.Draw(image)
-        ellipse((cx, cy), (61, 61), outline=(2, 11, 20, 248), line_width=7)
-        ellipse((cx, cy), (58, 58), outline=(238, 176, 60, 230), line_width=2)
-        ellipse((cx, cy), (46, 46), fill=(2, 28, 52, 42))
-        for dx, dy in ((-69, 0), (69, 0), (0, -69), (0, 69)):
-            if dx:
-                line([(cx + dx - 7, cy), (cx + dx + 7, cy)], (244, 184, 65, 220), 2)
-            else:
-                line([(cx, cy + dy - 7), (cx, cy + dy + 7)], (244, 184, 65, 220), 2)
-        value = (cx - 42, cy + 37, cx + 40, cy + 65)
-        add = (cx + 42, cy + 37, cx + 70, cy + 65)
+        # Reusable frame sprites belong to the immutable runtime base, not this bitmap.
+        value = (cx - 42, cy + 80, cx + 40, cy + 108)
+        add = (cx + 42, cy + 80, cx + 70, cy + 108)
         draw.rectangle(box(value), fill=(1, 12, 23, 245), outline=(63, 123, 168, 220), width=5)
         draw.rectangle(box(add), fill=(2, 17, 30, 250), outline=(244, 185, 66, 242), width=6)
-        line([(cx + 50, cy + 51), (cx + 62, cy + 51)], (255, 211, 92, 255), 2)
-        line([(cx + 56, cy + 45), (cx + 56, cy + 57)], (255, 211, 92, 255), 2)
+        line([(cx + 50, cy + 94), (cx + 62, cy + 94)], (255, 211, 92, 255), 2)
+        line([(cx + 56, cy + 88), (cx + 56, cy + 100)], (255, 211, 92, 255), 2)
 
     return image.resize(POTENTIAL_SIZE, Image.Resampling.LANCZOS)
 
@@ -388,10 +382,13 @@ def build(output_dir: Path) -> dict:
     manifest = {
         "id": "map01a-character-hub-chrome-v2",
         "status": "DRAFT_RUNTIME_REVIEW",
+        "geometryRevision": "v5-independent-shared-icon-frames",
+        "coreSource": {"sha256": CORE_SOURCE_SHA256, "sourceRect": CORE_SOURCE_RECT,
+                       "mask": "radius152-inward-feather6", "moduleSha256": CORE_SHA256},
         "canonicalDesignSet": str(CANONICAL_ROOT),
         "canonicalSha256": canonical,
         "assets": assets,
-        "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template with one outer slot frame per node, while class data overlays remain geometry-free",
+        "displayPolicy": "shell uses approved 1098:724 aspect; panel/tab/action/close are shared across all five character-hub screens; Potential geometry is one 600x520 template with one separately referenced shared frame sprite per node, while class data overlays remain geometry-free",
         "sourceMethod": "deterministic Pillow raster authored from approved navy, cyan-glow and old-gold visual language; no canonical-board crop",
         "pixelBudget": f"actual-display-sized UI chrome; {total_bytes} bytes total; no mipmaps",
         "importPolicy": "UI textures keep native display resolution caps (shell 1024, Potential topology 1024, panels/controls 512, close 128) with mipmaps disabled",
@@ -403,7 +400,13 @@ def build(output_dir: Path) -> dict:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--refresh-potential-icon-modules-from-source", type=Path, help="Separate the registered frame and six inner symbols into one shared atlas")
+    parser.add_argument("--refresh-core-from-source", type=Path, help="Re-extract the pinned UI motif; never a canonical screen crop")
     args = parser.parse_args()
+    if args.refresh_potential_icon_modules_from_source:
+        pack_potential_icon_modules(args.refresh_potential_icon_modules_from_source)
+    if args.refresh_core_from_source:
+        build_meditation_core(args.refresh_core_from_source).save(DEFAULT_OUTPUT / CORE_NAME, optimize=True)
     manifest = build(args.output_dir.resolve())
     print(f"LGO_CHARACTER_HUB_SKIN_BUILT assets={len(manifest['assets'])} output={args.output_dir.resolve()}")
     return 0

@@ -11,10 +11,11 @@ namespace LinhGioi.UI
 
         private VisualElement _skillsPanel, _potentialPanel, _spiritPetPanel, _hubPreviewDetailPanel, _hubSpiritPetBadges;
         private VisualElement _hubPotentialFacts;
+        private CharacterHubPotentialTopology _potentialTopology;
         private VisualElement _hubSkillActionRow, _hubPotentialActionRow, _hubSpiritPetActionRow;
         private Label _hubDetailHeader, _hubDetailName, _hubDetailMeta, _hubDetailBody, _hubDetailStatus;
         private Label _hubPotentialSummary, _hubPotentialCurrentLevel, _hubPotentialCurrentEffect, _hubPotentialNextEffect, _hubPotentialCost;
-        private VisualElement _hubDetailIcon;
+        private VisualElement _hubDetailIcon, _hubPotentialDetailIconFrame;
         private Button _hubSkillUpgradeAction, _hubSkillEquipAction, _potentialAddPointAction, _potentialResetAction, _spiritPetDeployAction, _spiritPetDevelopAction;
         private Texture2D _spiritPetPreviewTexture, _spiritPetPortraitTexture;
         private readonly List<Button> _skillPathNodes = new List<Button>();
@@ -122,6 +123,7 @@ namespace LinhGioi.UI
             ApplyLgoSkillIcon(icon, size);
             var sprite = _scene.GetMap01APotentialIconSprite(iconId);
             icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            icon.Add(CreateLgoCircularIconFrame(name + " Shared Frame", _scene.GetMap01APotentialIconSprite("frame"), size));
             return icon;
         }
 
@@ -190,8 +192,9 @@ namespace LinhGioi.UI
             if (title != null) title.style.color = selected ? UiGold : UiText;
         }
 
-        private static void ApplyPotentialNodeSelection(Button node, bool selected)
+        private void ApplyPotentialNodeSelection(Button node, bool selected, int index)
         {
+            _potentialTopology.SetNodeSelected(index, selected);
             node.EnableInClassList(LgoCharacterHubSelectedClass, selected);
             node.style.backgroundColor = Color.clear;
             node.style.borderLeftWidth = node.style.borderRightWidth = 0;
@@ -236,7 +239,8 @@ namespace LinhGioi.UI
             valueLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             _potentialPathValues.Add(valueLabel);
             node.Add(valueLabel);
-            ApplyPotentialNodeSelection(node, false);
+            ApplyLgoPotentialOverlayContent(icon, titleLabel, valueLabel);
+            ApplyPotentialNodeSelection(node, false, index);
             _potentialPathNodes.Add(node);
             node.style.position = Position.Absolute;
             node.style.left = left;
@@ -483,7 +487,9 @@ namespace LinhGioi.UI
             diagram.style.alignSelf = Align.Center;
             diagram.style.position = Position.Relative;
             diagram.style.flexShrink = 0;
-            diagram.Add(new CharacterHubPotentialTopology(LoadLgoCharacterHubPotentialTopology()));
+            _potentialTopology = new CharacterHubPotentialTopology(LoadLgoCharacterHubPotentialTopology(),
+                _scene.GetMap01APotentialIconSprite("frame"));
+            diagram.Add(_potentialTopology);
 
             var core = new VisualElement { name = "Map01A Potential Diagram Core", pickingMode = PickingMode.Ignore };
             core.style.position = Position.Absolute;
@@ -572,6 +578,10 @@ namespace LinhGioi.UI
             ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon);
             _hubDetailIcon.style.flexShrink = 0;
             _hubDetailIcon.style.marginRight = 16;
+            _hubPotentialDetailIconFrame = CreateLgoCircularIconFrame("Map01A Potential Detail Shared Frame",
+                _scene.GetMap01APotentialIconSprite("frame"), 124);
+            _hubPotentialDetailIconFrame.style.display = DisplayStyle.None;
+            _hubDetailIcon.Add(_hubPotentialDetailIconFrame);
             detailHero.Add(_hubDetailIcon);
             var detailHeroCopy = new VisualElement { name = "Map01A Hub Preview Detail Hero Copy" };
             detailHeroCopy.style.flexGrow = 1;
@@ -769,7 +779,7 @@ namespace LinhGioi.UI
                 _potentialPathTitles[index].text = potential.Name;
                 _potentialPathValues[index].text = potential.Value;
                 _potentialPathNodes[index].tooltip = potential.Name + " · " + potential.Value;
-                ApplyPotentialNodeSelection(_potentialPathNodes[index], potential.Name == selectedPotentialName);
+                ApplyPotentialNodeSelection(_potentialPathNodes[index], potential.Name == selectedPotentialName, index);
             }
             _potentialRecommendation.text = profile.Recommendation;
 
@@ -868,12 +878,19 @@ namespace LinhGioi.UI
             var potential = ActiveCharacterHubProfile.Potentials[index];
             _characterHubSelectionState.SelectPotential(ActiveCharacterHubProfile, potential.Name);
             for (var nodeIndex = 0; nodeIndex < _potentialPathNodes.Count; nodeIndex++)
-                ApplyPotentialNodeSelection(_potentialPathNodes[nodeIndex], nodeIndex == index);
+                ApplyPotentialNodeSelection(_potentialPathNodes[nodeIndex], nodeIndex == index, nodeIndex);
             ShowPotentialDetail(potential);
         }
 
         private void ConfigureHubDetailMode(CharacterHubMode mode)
         {
+            _hubPotentialDetailIconFrame.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
+            if (mode == CharacterHubMode.Potential)
+            {
+                RemoveLgoOuterBorder(_hubDetailIcon);
+                _hubDetailIcon.style.backgroundColor = Color.clear;
+            }
+            else ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon);
             _hubSkillActionRow.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
             _hubPotentialActionRow.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetActionRow.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;

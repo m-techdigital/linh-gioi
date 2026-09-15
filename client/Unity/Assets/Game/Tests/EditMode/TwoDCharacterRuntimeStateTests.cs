@@ -1205,9 +1205,91 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
+        [Test]
+        public void PotentialFramesShareOneSpriteAndNeverBecomeClassData()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("shared potential frame test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
+                var master = scene.GetMap01APotentialIconSprite("frame");
+                Assert.That(master, Is.Not.Null, "The atlas must expose one independent frame asset");
+                Assert.That(master.texture.width, Is.EqualTo(512));
+                Assert.That(master.texture.height, Is.EqualTo(256));
+                var topology = root.Q("Map01A Potential Topology Base");
+                var frames = topology.Query<VisualElement>(className: "lgo-circular-icon-frame").ToList();
+                Assert.That(frames.Count, Is.EqualTo(5));
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Node 0"));
+                Assert.That(frames[0].style.opacity.value, Is.EqualTo(1f));
+                for (var index = 1; index < 5; index++)
+                    Assert.That(frames[index].style.opacity.value, Is.EqualTo(.62f).Within(.001f),
+                        "The shared frame must display selection independently of the inner symbol");
+                var bind = typeof(CongDongLamArrivalHud).GetMethod("BindCharacterHubEvidenceClass", BindingFlags.Instance | BindingFlags.NonPublic);
+                foreach (var profile in CharacterHubClassCatalog.Profiles)
+                {
+                    bind.Invoke(hud, new object[] { profile.Id });
+                    Assert.That(root.Q("Map01A Potential Topology Base"), Is.SameAs(topology));
+                    for (var index = 0; index < 5; index++)
+                    {
+                        Assert.That(topology.Q("Map01A Potential Shared Frame " + index), Is.SameAs(frames[index]));
+                        Assert.That(frames[index].style.backgroundImage.value.sprite, Is.SameAs(master));
+                        Assert.That(root.Q("Map01A Potential Node " + index).Query<VisualElement>(className: "lgo-circular-icon-frame").ToList(), Is.Empty);
+                    }
+                }
+                var detailFrame = root.Q("Map01A Potential Detail Shared Frame");
+                Assert.That(detailFrame.style.backgroundImage.value.sprite, Is.SameAs(master));
+                Assert.That(root.Q("Map01A Potential Cost Icon Shared Frame").style.backgroundImage.value.sprite, Is.SameAs(master));
+                InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
+                Assert.That(detailFrame.style.display.value, Is.EqualTo(DisplayStyle.None));
+            }
+            finally
+            {
+                foreach (var go in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(go)) Object.DestroyImmediate(go);
+            }
+        }
 
-
-
+        [Test]
+        public void PotentialPresentationSeparatesMedallionCaptionAndValueInOneTemplate()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("potential overlay presentation test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
+                for (var index = 0; index < 5; index++)
+                {
+                    var node = root.Q("Map01A Potential Node " + index);
+                    var icon = node.Q(node.name + " Icon");
+                    var title = node.Q<Label>(node.name + " Title");
+                    var value = node.Q<Label>(node.name + " Value");
+                    Assert.That(icon.style.height.value.value, Is.EqualTo(108));
+                    Assert.That(icon.style.top.value.value + icon.style.height.value.value, Is.LessThanOrEqualTo(title.style.top.value.value));
+                    Assert.That(title.style.position.value, Is.EqualTo(Position.Absolute));
+                    Assert.That(title.style.top.value.value, Is.EqualTo(116));
+                    Assert.That(value.style.top.value.value, Is.EqualTo(142));
+                    Assert.That(value.style.fontSize.value.value, Is.EqualTo(20));
+                    Assert.That(node.style.height.value.value, Is.EqualTo(172));
+                    Assert.That(title.style.top.value.value + title.style.height.value.value,
+                        Is.LessThanOrEqualTo(value.style.top.value.value));
+                    Assert.That(node.style.backgroundColor.value.a, Is.EqualTo(0));
+                    Assert.That(node.style.borderLeftWidth.value, Is.EqualTo(0));
+                }
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
 
         [Test]
         public void SpiritPetUsesOneFixedHeroRosterAndStructuredDetailTemplate()

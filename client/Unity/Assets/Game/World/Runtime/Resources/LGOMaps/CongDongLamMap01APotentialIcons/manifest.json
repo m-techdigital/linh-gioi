@@ -2,70 +2,131 @@
   "id": "map01a-potential-icons-v1",
   "status": "DRAFT_RUNTIME_REVIEW",
   "runtimeApproved": false,
-  "canonicalScreen": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/04-tiem-nang-five-tab-APPROVED.png",
-  "sourceImagegen": "/Users/minhdc/.codex/generated_images/01a08f32-6e63-7b20-b705-259faaa286c0/exec-13e77b66-5ab4-413f-b789-9b1272625ff2.png",
+  "revision": "shared-frame-inner-symbols-v2",
   "sourceBoard": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/assets-potential/potential-icons-alpha-SELF-REVIEWED-v1.png",
-  "textureSize": [
-    768,
-    512
+  "sourceSha256": "df7a30492efb627f90cb1fc2cdda6e03f22fa9760ebe0844800ac882bcdf850f",
+  "sourceCenters": [
+    [
+      298,
+      250
+    ],
+    [
+      770,
+      248
+    ],
+    [
+      1238,
+      248
+    ],
+    [
+      298,
+      724
+    ],
+    [
+      770,
+      724
+    ],
+    [
+      1240,
+      720
+    ]
   ],
-  "cellSize": [
-    256,
+  "frameSourceRect": [
+    58,
+    10,
+    538,
+    490
+  ],
+  "frameAperture": "radius158-feather2-native480",
+  "contentMask": "radius152-feather2-native304",
+  "textureSize": [
+    512,
     256
   ],
-  "pngBytes": 498329,
-  "sha256": "98ea2312dde189d3cc51fd72229db2cda10eaa1833476f9802cdbcaf59002cb6",
-  "assets": [
-    {
-      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01APotentialIcons/map01a-potential-icons.png",
-      "role": "ui-potential-icon-atlas",
-      "generator": "image_gen_reference_alpha",
-      "referenceOnly": false,
-      "sha256": "98ea2312dde189d3cc51fd72229db2cda10eaa1833476f9802cdbcaf59002cb6"
-    }
+  "cellSize": [
+    128,
+    128
   ],
+  "contentRect": [
+    22,
+    22,
+    84,
+    84
+  ],
+  "pngBytes": 109488,
+  "sha256": "31d87ad21b43d44b3b36b7a36c3ebfb24855f978f6876a0f10d85a43dba9bdea",
   "parts": [
     {
       "id": "attack",
       "x": 0,
-      "y": 256,
-      "w": 256,
-      "h": 256
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "role": "inner-symbol",
+      "sharedFrameId": "frame"
     },
     {
       "id": "defense",
-      "x": 256,
-      "y": 256,
-      "w": 256,
-      "h": 256
+      "x": 128,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "role": "inner-symbol",
+      "sharedFrameId": "frame"
     },
     {
       "id": "vitality",
-      "x": 512,
-      "y": 256,
-      "w": 256,
-      "h": 256
+      "x": 256,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "role": "inner-symbol",
+      "sharedFrameId": "frame"
     },
     {
       "id": "spirit",
-      "x": 0,
-      "y": 0,
-      "w": 256,
-      "h": 256
+      "x": 384,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "role": "inner-symbol",
+      "sharedFrameId": "frame"
     },
     {
       "id": "agility",
-      "x": 256,
+      "x": 0,
       "y": 0,
-      "w": 256,
-      "h": 256
+      "w": 128,
+      "h": 128,
+      "role": "inner-symbol",
+      "sharedFrameId": "frame"
     },
     {
       "id": "core",
-      "x": 512,
+      "x": 128,
       "y": 0,
-      "w": 256,
-      "h": 256
+      "w": 128,
+      "h": 128,
+      "role": "inner-symbol",
+      "sharedFrameId": "frame"
+    },
+    {
+      "id": "frame",
+      "x": 256,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "role": "shared-frame"
     }
-  ]
+  ],
+  "assets": [
+    {
+      "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01APotentialIcons/map01a-potential-icons.png",
+      "role": "ui-potential-icon-atlas",
+      "generator": "build_lgo_character_hub_skin",
+      "referenceOnly": false,
+      "sha256": "31d87ad21b43d44b3b36b7a36c3ebfb24855f978f6876a0f10d85a43dba9bdea"
+    }
+  ],
+  "displayPolicy": "One frame sprite shared by topology, detail and cost; class data binds inner sprites only. Native 128px cells cover 108-124px display without upscale."
 }

@@ -11,11 +11,15 @@ namespace LinhGioi.UI
     {
         internal const float CanvasWidth = 600f;
         internal const float CanvasHeight = 520f;
+        internal const float NodeFrameSize = 108f;
+        internal const float NodeFrameInset = 8f;
         internal static readonly Vector2[] NodePositions =
         {
             new Vector2(238, 0), new Vector2(38, 168), new Vector2(438, 168),
             new Vector2(128, 348), new Vector2(368, 348)
         };
+
+        private readonly VisualElement[] _nodeFrames = new VisualElement[NodePositions.Length];
 
         internal static int PrebuiltNodeFrameCount => NodePositions.Length;
         internal static int PrebuiltValueFrameCount => NodePositions.Length;
@@ -23,7 +27,15 @@ namespace LinhGioi.UI
         internal static int PrebuiltAddGlyphCount => NodePositions.Length;
         internal static int PrebuiltMeridianAnchorCount => 5;
 
-        internal CharacterHubPotentialTopology(Texture2D artwork)
+        internal void SetNodeSelected(int index, bool selected)
+        {
+            if (index < 0 || index >= _nodeFrames.Length)
+                throw new System.ArgumentOutOfRangeException(nameof(index));
+            _nodeFrames[index].style.opacity = selected ? 1f : .62f;
+            _nodeFrames[index].EnableInClassList("lgo-circular-icon-frame-selected", selected);
+        }
+
+        internal CharacterHubPotentialTopology(Texture2D artwork, Sprite sharedFrame)
         {
             name = "Map01A Potential Topology Base";
             pickingMode = PickingMode.Ignore;
@@ -49,6 +61,17 @@ namespace LinhGioi.UI
                 ? StyleKeyword.None
                 : new StyleBackground(artwork);
             Add(artworkElement);
+            // The base owns these instances once. All nodes share the same sprite;
+            // class-bound overlays never create or redraw decorative geometry.
+            for (var index = 0; index < NodePositions.Length; index++)
+            {
+                var frame = CongDongLamArrivalHud.CreateLgoCircularIconFrame(
+                    "Map01A Potential Shared Frame " + index, sharedFrame, NodeFrameSize);
+                frame.style.left = NodePositions[index].x + NodeFrameInset;
+                frame.style.top = NodePositions[index].y + NodeFrameInset;
+                _nodeFrames[index] = frame;
+                Add(frame);
+            }
         }
     }
 }

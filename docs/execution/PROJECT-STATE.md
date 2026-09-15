@@ -1,9 +1,11 @@
-## Character Hub v24 — tích hợp checkpoint độc lập — 2026-09-16
+## Character Hub v24 — tích hợp WIP thành checkpoint có kiểm chứng — 2026-09-16
 
-- Goal vẫn là năm tab theo redesign-v4-five-tabs; không mở class/pose/wardrobe/source hoặc screen khác.
-- A: Nhân vật/Rương đồ và inspector chung có 293/293 EditMode thực chạy, Player 87 ảnh, review hai tab trên ba viewport không cắt/chồng. Evidence: build/character-hub-checkpoints-v24/A-runtime.
-- A đã commit 6165e23f. B: Kỹ năng/Linh thú đã kiểm 294/294 EditMode và 87 ảnh Player, review ba viewport; C1 chuẩn bị module UI core có generator/hash/importer, Python 5/5; code UI không đổi so với B. C2 icon modular còn chờ tích hợp. Chưa push và chưa nghiệm thu toàn bộ goal.
-- Chi tiết snapshot, test graphics và gate: NEXT-ACTION.md. ProjectSettings do Unity sinh được giữ evidence và loại khỏi source diff; main checkout giữ nguyên.
+- Goal: năm tab theo redesign-v4-five-tabs, Skill là 3×3. Owner chỉ đạo mới: khung icon dùng chung, nội dung độc lập; các giả định 4–3–2/bake frame cũ bên dưới là lịch sử đã bị thay thế.
+- A 6165e23f (Nhân vật/Rương đồ/shared inspector), B 8ca19ff5 (Skill/Pet), C1 3710578e (core module prerequisite); C2 nối atlas/frame kết thúc tích hợp. Từng commit dưới18file/700dòng, gồm cả file mới; không nới ngưỡng.
+- Source/asset cuối khớp từng byte WIP bảo toàn v23, ngoại trừ docs handoff và ProjectSettings Unity sinh đã lưu rồi loại. Full EditMode C 296/296 không skip; Python39/39; replay atlas +9PNG byte-for-byte.
+- C-runtime có87ảnh tại build/character-hub-checkpoints-v24/C-runtime; đã eye-review Tiềm năng ba viewport và bốn tab PC, không rò frame. Nhân vật/Rương đồ và Skill/Pet ba viewport đã review candidate A/B.
+- Atlas Tiềm năng512×256/109488byte: một frame +sáu nội dung, topology giữ năm instance, đổi class chỉ bind data/state. Không sửa class/pose/wardrobe/source hoặc frozen surfaces; main WIP giữ nguyên.
+- Trạng tháiCONTINUE/VISUAL_FIX_REQUIRED: tiếp tục shared frame/hierarchy; không tự nghiệm thu toàn goal hoặc thiết bị mobile/tablet thật. Chi tiết và nguồn backup: NEXT-ACTION.md.
 
 ## Character Hub — Tiềm năng data-overlay tối giản trên một base chung v20b — 2026-09-15
 

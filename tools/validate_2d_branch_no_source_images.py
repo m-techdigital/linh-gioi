@@ -136,9 +136,10 @@ RUNTIME_ART_PACKS = [
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01APotentialIcons',
         'id': 'map01a-potential-icons-v1',
         'status': 'DRAFT_RUNTIME_REVIEW',
-        'assets': {'map01a-potential-icons.png': (768, 512, 'ui-potential-icon-atlas')},
-        'generators': {'image_gen_reference_alpha'},
-        'max_bytes': 650_000,
+        'assets': {'map01a-potential-icons.png': (512, 256, 'ui-potential-icon-atlas')},
+        'generators': {'build_lgo_character_hub_skin'},
+        'ui_import_limits': {'map01a-potential-icons.png': 512},
+        'max_bytes': 200_000,
         'status_error': 'Map01A potential icons must remain draft until owner visual review',
     },
     {
