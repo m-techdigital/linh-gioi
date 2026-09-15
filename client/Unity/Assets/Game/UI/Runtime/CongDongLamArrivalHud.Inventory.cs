@@ -82,7 +82,12 @@ namespace LinhGioi.UI
             ApplyLgoInventoryCategoryIcon(icon);
             var sprite = _scene.GetMap01ABagCategoryIconSprite(categoryId);
             icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
-            var caption = LgoLabel(label, 12, UiText, true);
+            var caption = LgoLabel(label, 16, UiText, true);
+            caption.style.whiteSpace = WhiteSpace.NoWrap;
+            caption.style.height = caption.style.minHeight = caption.style.maxHeight = 22;
+            caption.style.flexShrink = 0;
+            caption.style.marginTop = caption.style.marginBottom = 0;
+            caption.style.paddingTop = caption.style.paddingBottom = 0;
             caption.name = "Map01A Inventory Category Label " + categoryId;
             caption.style.unityTextAlign = TextAnchor.MiddleCenter;
             button.Add(icon);
@@ -100,12 +105,7 @@ namespace LinhGioi.UI
             row.style.unityTextAlign = TextAnchor.MiddleCenter;
 
             var icon = new VisualElement { name = "Map01A Supply Item Icon " + itemId };
-            ApplyLgoItemIcon(icon);
-            icon.style.width = 76;
-            icon.style.height = 76;
-            icon.style.marginTop = 0;
-            icon.style.marginBottom = 4;
-            icon.style.marginRight = 0;
+            ApplyLgoInventoryBagIcon(icon);
             var sprite = _scene.GetMap01AItemThumbnailSprite(itemId);
             icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
             icon.style.display = sprite == null ? DisplayStyle.None : DisplayStyle.Flex;
@@ -126,7 +126,7 @@ namespace LinhGioi.UI
             textGroup.Add(nameLabel);
             textGroup.Add(stateLabel);
 
-            countLabel = LgoLabel("", 12, UiGold, true);
+            countLabel = LgoLabel("", 14, UiText, true);
             countLabel.name = "Map01A Supply Item Count " + itemId;
             ApplyLgoInventoryCountBadge(countLabel);
             countLabel.style.position = Position.Absolute;
@@ -248,8 +248,8 @@ namespace LinhGioi.UI
             _inventoryDetailIcon.name = "Map01A Inventory Detail Icon";
             ApplyLgoItemIcon(_inventoryDetailIcon);
             ApplyLgoCharacterHubHeroIconFrame(_inventoryDetailIcon);
-            _inventoryDetailIcon.style.width = 112;
-            _inventoryDetailIcon.style.height = 112;
+            _inventoryDetailIcon.style.width = 120;
+            _inventoryDetailIcon.style.height = 120;
             _inventoryDetailIcon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             _inventoryDetailIcon.style.marginTop = 0;
             _inventoryDetailIcon.style.marginBottom = 0;
@@ -262,7 +262,7 @@ namespace LinhGioi.UI
             var detailTitleRow = InventoryRow("Map01A Inventory Detail Title Row");
             detailTitleRow.style.alignItems = Align.Center;
             detailTitleRow.style.marginBottom = 0;
-            _equipmentDetail = LgoLabel("", 24, UiGold, true);
+            _equipmentDetail = LgoLabel("", 26, UiGold, true);
             _equipmentDetail.name = "Map01A Inventory Detail Item Name";
             _equipmentDetail.style.flexGrow = 1;
             _equipmentDetail.style.minWidth = 0;
@@ -271,15 +271,15 @@ namespace LinhGioi.UI
             _inventoryDetailLevelChip.style.marginRight = 0;
             detailTitleRow.Add(_inventoryDetailLevelChip);
             detailHeroText.Add(detailTitleRow);
-            _inventoryDetailRarity = LgoLabel("", 16, new Color(.74f, .92f, 1f, .94f), true);
+            _inventoryDetailRarity = LgoLabel("", 18, new Color(.74f, .92f, 1f, .94f), true);
             _inventoryDetailRarity.name = "Map01A Inventory Detail Rarity";
             _inventoryDetailRarity.style.marginTop = 2;
             detailHeroText.Add(_inventoryDetailRarity);
-            _inventoryDetailSlotType = LgoLabel("", 14, new Color(.88f, .94f, .92f, .94f), true);
+            _inventoryDetailSlotType = LgoLabel("", 16, new Color(.88f, .94f, .92f, .94f), true);
             _inventoryDetailSlotType.name = "Map01A Inventory Detail Slot Type";
             _inventoryDetailSlotType.style.marginTop = 4;
             detailHeroText.Add(_inventoryDetailSlotType);
-            _inventoryDetailStateBadge = LgoLabel("", 13, new Color(.12f, .08f, .03f, 1f), true);
+            _inventoryDetailStateBadge = LgoLabel("", 16, new Color(.12f, .08f, .03f, 1f), true);
             _inventoryDetailStateBadge.name = "Map01A Inventory Detail State Badge";
             ApplyLgoInventoryStateBadge(_inventoryDetailStateBadge);
             detailHeroText.Add(_inventoryDetailStateBadge);
@@ -290,16 +290,16 @@ namespace LinhGioi.UI
             _inventoryItemId.style.marginTop = 2;
             _inventoryItemId.style.display = DisplayStyle.None;
             _inventoryFooter.Add(_inventoryItemId);
-            _inventoryItemState = LgoLabel("", 13, new Color(.91f, .93f, .84f, .96f));
+            _inventoryItemState = LgoLabel("", 18, new Color(.91f, .93f, .84f, .96f));
             _inventoryItemState.style.marginTop = 8;
             _inventoryFooter.Add(_inventoryItemState);
 
             _inventoryDetailStatsCard = new VisualElement { name = "Map01A Inventory Detail Stats Card" };
-            ApplyLgoInventoryStatsCard(_inventoryDetailStatsCard);
-            _inventoryDetailStatsHeader = LgoLabel("THUỘC TÍNH", 14, new Color(.40f, .78f, 1f, .98f), true);
+            ApplyLgoCharacterHubInspectorFacts(_inventoryDetailStatsCard);
+            _inventoryDetailStatsHeader = LgoLabel("THUỘC TÍNH", 20, new Color(.40f, .78f, 1f, .98f), true);
             _inventoryDetailStatsHeader.name = "Map01A Inventory Detail Stats Header";
             _inventoryDetailStatsCard.Add(_inventoryDetailStatsHeader);
-            _inventoryDetailStatPrimary = LgoLabel("", 14, new Color(.76f, .92f, 1f, .96f), true);
+            _inventoryDetailStatPrimary = LgoLabel("", 18, new Color(.76f, .92f, 1f, .96f), true);
             _inventoryDetailStatPrimary.name = "Map01A Inventory Detail Stat Primary";
             _inventoryDetailStatPrimary.style.marginTop = 6;
             _inventoryDetailStatsCard.Add(_inventoryDetailStatPrimary);
@@ -307,14 +307,14 @@ namespace LinhGioi.UI
             detailSetDivider.style.marginTop = 9;
             detailSetDivider.style.marginBottom = 8;
             _inventoryDetailStatsCard.Add(detailSetDivider);
-            _inventoryDetailSetHeader = LgoLabel("BỘ TRANG BỊ HIỆN TẠI", 14, new Color(.40f, .78f, 1f, .98f), true);
+            _inventoryDetailSetHeader = LgoLabel("BỘ TRANG BỊ HIỆN TẠI", 20, new Color(.40f, .78f, 1f, .98f), true);
             _inventoryDetailSetHeader.name = "Map01A Inventory Detail Set Header";
             _inventoryDetailStatsCard.Add(_inventoryDetailSetHeader);
             _inventoryDetailFitChip = InventoryBadge("Map01A Inventory Detail Fit Chip", "Trang bị", UiSubText);
             _inventoryDetailFitChip.style.marginTop = 6;
             _inventoryDetailFitChip.style.alignSelf = Align.FlexStart;
             _inventoryDetailStatsCard.Add(_inventoryDetailFitChip);
-            _inventoryDetailStatFit = LgoLabel("", 13, new Color(.76f, 1f, .70f, .96f), true);
+            _inventoryDetailStatFit = LgoLabel("", 18, new Color(.76f, 1f, .70f, .96f), true);
             _inventoryDetailStatFit.name = "Map01A Inventory Detail Stat Fit";
             _inventoryDetailStatFit.style.marginTop = 4;
             _inventoryDetailStatsCard.Add(_inventoryDetailStatFit);
@@ -325,13 +325,14 @@ namespace LinhGioi.UI
             actions.style.flexShrink = 0;
             _inventoryDetailPrimaryAction = InventoryButton(UseInventoryDetailPrimaryAction, "Map01A Inventory Detail Primary Action");
             ApplyLgoCharacterHubPrimaryAction(_inventoryDetailPrimaryAction);
-            _inventoryDetailPrimaryAction.style.minHeight = _touch ? 44 : 38;
             _inventoryDetailLockAction = InventoryButton(ToggleSelectedEquipmentLock, "Map01A Inventory Detail Lock Action", "Khóa");
             ApplyLgoCharacterHubGoldAction(_inventoryDetailLockAction);
             _inventoryDetailSellAction = InventoryButton(() => { }, "Map01A Inventory Detail Sell Action", "Bán");
             ApplyLgoButton(_inventoryDetailSellAction);
             _inventoryDetailSellAction.SetEnabled(false);
             _inventoryDetailSellAction.tooltip = "Tính năng bán vật phẩm chưa khả dụng";
+            foreach (var action in new[] { _inventoryDetailPrimaryAction, _inventoryDetailLockAction, _inventoryDetailSellAction })
+                ApplyLgoCharacterHubInspectorAction(action);
             _equipmentToggle = InventoryButton(() => { _scene.ToggleEquipmentSlot(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Toggle");
             _equipmentToggle.style.display = DisplayStyle.None;
             _equipmentVariant = InventoryButton(() => { _scene.CycleSelectedEquipmentItemLevel(); RefreshInventoryEquipmentTiles(); RefreshInventoryDetailCard(); }, "LGO Equipment Inventory Variant");
@@ -372,8 +373,8 @@ namespace LinhGioi.UI
             {
                 _inventoryCategoryRail.Add(categoryTab);
             }
-            ApplyLgoDisabledAction(_materialsTab);
-            ApplyLgoDisabledAction(_otherItemsTab);
+            ApplyLgoCharacterHubUnavailableControl(_materialsTab);
+            ApplyLgoCharacterHubUnavailableControl(_otherItemsTab);
 
             var gridContent = new VisualElement { name = "Map01A Inventory Grid Content" };
             gridContent.style.flexDirection = FlexDirection.Column;
@@ -512,11 +513,14 @@ namespace LinhGioi.UI
             heroInfo.style.minWidth = 0;
             heroInfo.style.flexDirection = FlexDirection.Column;
             heroInfo.style.alignItems = Align.Center;
-            heroInfo.style.marginTop = 4;
+            heroInfo.style.marginTop = 0;
+            heroInfo.style.flexShrink = 0;
             _characterHeroName = LgoLabel("", 19, UiGold, true);
             _characterHeroName.name = "Map01A Character Hero Name";
+            ApplyLgoCharacterHubIdentityLabel(_characterHeroName, true);
             _characterHeroPower = LgoLabel("", 17, new Color(.96f, .91f, .76f, .96f), true);
             _characterHeroPower.name = "Map01A Character Hero Power";
+            ApplyLgoCharacterHubIdentityLabel(_characterHeroPower, false);
             _characterHeroLoadout = LgoLabel("", 13, new Color(.76f, 1f, .70f, .94f), true);
             _characterHeroLoadout.name = "Map01A Character Hero Loadout";
             _characterHeroLoadout.style.display = DisplayStyle.None;
@@ -528,19 +532,9 @@ namespace LinhGioi.UI
             {
                 var slotId = _equipmentSlotIds[heroIconIndex];
                 var quickIcon = InventoryButton(() => SelectInventoryEquipmentSlot(slotId), "Map01A Character Hero Quick Icon " + heroIconIndex);
-                ApplyLgoItemIcon(quickIcon);
-                quickIcon.style.flexGrow = 0;
-                quickIcon.style.flexShrink = 0;
-                quickIcon.style.flexBasis = 68;
-                quickIcon.style.width = 68;
-                quickIcon.style.height = 68;
-                quickIcon.style.minHeight = 68;
-                quickIcon.style.maxHeight = 68;
-                quickIcon.style.marginTop = 0;
-                quickIcon.style.marginBottom = 0;
-                quickIcon.style.marginRight = 0;
+                ApplyLgoCharacterHubEquipmentSlot(quickIcon);
                 quickIcon.tooltip = EquipmentDisplayName(slotId);
-                var levelBadge = LgoLabel("", 11, new Color(.98f, .99f, 1f, 1f), true);
+                var levelBadge = LgoLabel("", 15, new Color(.98f, .99f, 1f, 1f), true);
                 levelBadge.name = "Map01A Character Hero Quick Level " + heroIconIndex;
                 ApplyLgoEquipmentLevelBadge(levelBadge);
                 quickIcon.Add(levelBadge);
@@ -552,14 +546,15 @@ namespace LinhGioi.UI
             heroInfo.Add(_characterHeroName);
             heroInfo.Add(_characterHeroPower);
             var heroVitalsBars = InventoryRow("Map01A Character Hero Vitals Bars");
-            heroVitalsBars.style.width = 290;
+            heroVitalsBars.style.width = 384;
+            heroVitalsBars.style.flexDirection = FlexDirection.Column;
             heroVitalsBars.style.marginTop = 2;
             heroVitalsBars.style.marginBottom = 2;
             _characterHeroHealth = MakeVital("Map01A Character Hero Health", new Color(.67f, .16f, .15f));
             _characterHeroMana = MakeVital("Map01A Character Hero Mana", new Color(.12f, .37f, .64f));
-            _characterHeroHealth.style.flexGrow = 1;
-            _characterHeroHealth.style.marginRight = 8;
-            _characterHeroMana.style.flexGrow = 1;
+            ApplyLgoCharacterHubVitalBar(_characterHeroHealth);
+            ApplyLgoCharacterHubVitalBar(_characterHeroMana);
+            _characterHeroHealth.style.marginBottom = 4;
             heroVitalsBars.Add(_characterHeroHealth);
             heroVitalsBars.Add(_characterHeroMana);
             heroInfo.Add(heroVitalsBars);
@@ -656,6 +651,10 @@ namespace LinhGioi.UI
             _inventoryItemsGrid.style.flexWrap = Wrap.Wrap;
             _inventoryItemsGrid.style.flexShrink = 0;
             scroll.Add(_inventoryItemsGrid);
+            _inventoryItemsGrid.RegisterCallback<GeometryChangedEvent>(evt =>
+                FitCharacterHubBagGrid(_inventoryItemsGrid, evt.newRect.width, scroll.contentViewport.contentRect.height));
+            scroll.contentViewport.RegisterCallback<GeometryChangedEvent>(evt =>
+                FitCharacterHubBagGrid(_inventoryItemsGrid, scroll.contentViewport.contentRect.width, evt.newRect.height));
             _equipmentTiles = new Button[_equipmentSlotIds.Count];
             _equipmentTileIcons = new VisualElement[_equipmentSlotIds.Count];
             _equipmentTileNames = new Label[_equipmentSlotIds.Count];
@@ -670,14 +669,7 @@ namespace LinhGioi.UI
                 tile.style.unityTextAlign = TextAnchor.MiddleCenter;
 
                 var icon = new VisualElement { name = "Map01A Equipment Item Icon " + slotId };
-                ApplyLgoItemIcon(icon);
-                icon.style.width = 76;
-                icon.style.height = 76;
-                icon.style.marginTop = 2;
-                icon.style.marginBottom = 4;
-                icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
-                icon.style.marginLeft = 0;
-                icon.style.marginRight = 0;
+                ApplyLgoInventoryBagIcon(icon);
                 tile.Add(icon);
 
                 var textGroup = new VisualElement { name = "Map01A Equipment Item Text " + slotId };
@@ -711,7 +703,7 @@ namespace LinhGioi.UI
             _inventoryItemsGrid.Add(_healthPotion);
             _inventoryItemsGrid.Add(_manaPotion);
             _inventoryItemsGrid.Add(_equipReward);
-            _emptyBagSlots = new VisualElement[7];
+            _emptyBagSlots = new VisualElement[12];
             for (var emptyIndex = 0; emptyIndex < _emptyBagSlots.Length; emptyIndex++)
             {
                 var emptySlot = new VisualElement { name = $"Map01A Empty Bag Slot {emptyIndex + 1:00}" };
@@ -1069,7 +1061,8 @@ namespace LinhGioi.UI
             _inventoryItemId.text = selectedItemId;
             _inventoryDetailStateBadge.text = selectedEquipped ? "ĐANG MẶC" : "ĐÃ THÁO";
             _inventoryItemState.text = selectedEquipped ? "Đang mặc trên nhân vật." : "Đã tháo khỏi nhân vật.";
-            _inventoryItemState.style.display = _characterInfoOpen ? DisplayStyle.None : DisplayStyle.Flex;
+            _inventoryItemState.style.display = DisplayStyle.None;
+            _inventoryDetailSlotType.style.display = DisplayStyle.None;
             _inventoryDetailStatsHeader.text = "THUỘC TÍNH";
             _inventoryDetailSetHeader.text = "BỘ TRANG BỊ HIỆN TẠI";
             _inventoryDetailStatPrimary.text = "Chưa có thuộc tính chiến đấu.";
@@ -1083,6 +1076,8 @@ namespace LinhGioi.UI
 
         private void RefreshInventorySupplyDetailCard()
         {
+            _inventoryItemState.style.display = DisplayStyle.Flex;
+            _inventoryDetailSlotType.style.display = DisplayStyle.Flex;
             if (_inventoryDetailLockAction != null) _inventoryDetailLockAction.style.display = DisplayStyle.None;
             _inventoryDetailIcon.text = "";
             var itemSprite = _scene.GetMap01AItemThumbnailSprite(_selectedSupplyItemId);

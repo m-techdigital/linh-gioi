@@ -598,11 +598,19 @@ namespace LinhGioi.UI
             detailHeroCopy.Add(_hubSpiritPetBadges);
             detailHero.Add(detailHeroCopy);
             _hubPreviewDetailPanel.Add(detailHero);
+            var detailScroll = new ScrollView(ScrollViewMode.Vertical) { name = "Map01A Hub Detail Scroll" };
+            RuntimeUiOverflowGuard.ApplyBoundedScroll(detailScroll, 900);
+            detailScroll.style.flexGrow = 1;
+            detailScroll.style.minHeight = 0;
+            detailScroll.contentViewport.RegisterCallback<GeometryChangedEvent>(evt =>
+                detailScroll.contentContainer.style.width = evt.newRect.width);
+            _hubPreviewDetailPanel.Add(detailScroll);
             var facts = new VisualElement { name = "Map01A Hub Preview Detail Facts" };
-            ApplyLgoInventoryStatsCard(facts);
+            ApplyLgoCharacterHubInspectorFacts(facts);
+            facts.style.flexShrink = 0;
             facts.style.marginTop = 0;
             facts.style.paddingTop = facts.style.paddingBottom = 4;
-            _hubDetailBody = LgoLabel("", 15, UiText);
+            _hubDetailBody = LgoLabel("", 18, UiText);
             _hubDetailBody.style.whiteSpace = WhiteSpace.Normal;
             facts.Add(_hubDetailBody);
             _hubPotentialFacts = new VisualElement { name = "Map01A Potential Detail Facts" };
@@ -612,8 +620,7 @@ namespace LinhGioi.UI
             _hubPotentialCurrentLevel.name = "Map01A Potential Current Level";
             _hubPotentialFacts.Add(_hubPotentialCurrentLevel);
             var levelDivider = LgoDivider("Map01A Potential Level Divider");
-            levelDivider.style.marginTop = 8;
-            levelDivider.style.marginBottom = 10;
+            ApplyLgoCharacterHubReadingDivider(levelDivider);
             _hubPotentialFacts.Add(levelDivider);
             var currentHeading = LgoLabel("HIỆU QUẢ HIỆN TẠI", 17, new Color(.38f, .74f, 1f, 1f), true);
             currentHeading.name = "Map01A Potential Current Effect Heading";
@@ -624,8 +631,7 @@ namespace LinhGioi.UI
             _hubPotentialCurrentEffect.style.whiteSpace = WhiteSpace.Normal;
             _hubPotentialFacts.Add(_hubPotentialCurrentEffect);
             var effectDivider = LgoDivider("Map01A Potential Effect Divider");
-            effectDivider.style.marginTop = 12;
-            effectDivider.style.marginBottom = 10;
+            ApplyLgoCharacterHubReadingDivider(effectDivider);
             _hubPotentialFacts.Add(effectDivider);
             var nextHeading = LgoLabel("HIỆU QUẢ KHI CỘNG 1 ĐIỂM", 17, new Color(.50f, .96f, .58f, 1f), true);
             nextHeading.name = "Map01A Potential Next Effect Heading";
@@ -641,7 +647,7 @@ namespace LinhGioi.UI
             costRow.style.marginTop = 8;
             costRow.style.minHeight = 52;
             costRow.style.flexShrink = 0;
-            ApplyLgoStatusCard(costRow, 10, 4);
+            ApplyLgoCharacterHubCostRow(costRow);
             var costIcon = PotentialIcon("Map01A Potential Cost Icon", "core", 38);
             costIcon.style.flexShrink = 0;
             costIcon.style.marginRight = 10;
@@ -651,11 +657,12 @@ namespace LinhGioi.UI
             _hubPotentialCost.style.unityTextAlign = TextAnchor.MiddleLeft;
             costRow.Add(_hubPotentialCost);
             _hubPotentialFacts.Add(costRow);
+            ApplyLgoCharacterHubCopyRhythm(_hubPotentialFacts);
             facts.Add(_hubPotentialFacts);
             _hubSpiritPetFacts = new VisualElement { name = "Map01A Spirit Pet Detail Facts" };
             _hubSpiritPetFacts.style.flexDirection = FlexDirection.Column;
             _hubSpiritPetFacts.style.display = DisplayStyle.None;
-            var statHeading = LgoLabel("Thuộc tính Linh Thú", 15, UiGold, true);
+            var statHeading = LgoLabel("Thuộc tính Linh Thú", 20, UiGold, true);
             statHeading.name = "Map01A Spirit Pet Stats Heading";
             _hubSpiritPetFacts.Add(statHeading);
             _hubSpiritPetStats = new VisualElement { name = "Map01A Spirit Pet Detail Stats" };
@@ -664,28 +671,24 @@ namespace LinhGioi.UI
             for (var index = 0; index < 5; index++)
                 _hubSpiritPetStats.Add(CreateSpiritPetStatRow(index));
             _hubSpiritPetFacts.Add(_hubSpiritPetStats);
-            var skillHeading = LgoLabel("Kỹ năng Linh Thú", 15, UiGold, true);
+            var skillHeading = LgoLabel("Kỹ năng Linh Thú", 20, UiGold, true);
             skillHeading.style.flexShrink = 0;
             skillHeading.style.marginTop = 4;
             _hubSpiritPetFacts.Add(skillHeading);
             _hubSpiritPetFacts.Add(CreateSpiritPetSkillRow(0));
             _hubSpiritPetFacts.Add(CreateSpiritPetSkillRow(1));
+            ApplyLgoCharacterHubCopyRhythm(_hubSpiritPetFacts);
             facts.Add(_hubSpiritPetFacts);
-            _hubPreviewDetailPanel.Add(facts);
-            _hubDetailStatus = LgoLabel("", 12, new Color(.76f, 1f, .70f, .94f), true);
+            detailScroll.Add(facts);
+            _hubDetailStatus = LgoLabel("", 16, new Color(.76f, 1f, .70f, .94f), true);
             _hubDetailStatus.name = "Map01A Hub Detail Status";
-            ApplyLgoStatusCard(_hubDetailStatus);
+            _hubDetailStatus.style.paddingLeft = _hubDetailStatus.style.paddingRight = 0;
             _hubDetailStatus.style.marginTop = 10;
             _hubDetailStatus.style.minHeight = 48;
             _hubDetailStatus.style.flexShrink = 0;
             _hubDetailStatus.style.whiteSpace = WhiteSpace.Normal;
             _hubDetailStatus.style.unityTextAlign = TextAnchor.MiddleLeft;
-            _hubPreviewDetailPanel.Add(_hubDetailStatus);
-
-            var actionSpacer = new VisualElement { name = "Map01A Hub Preview Detail Action Spacer", pickingMode = PickingMode.Ignore };
-            actionSpacer.style.flexGrow = 1;
-            actionSpacer.style.minHeight = 0;
-            _hubPreviewDetailPanel.Add(actionSpacer);
+            detailScroll.Add(_hubDetailStatus);
 
             _hubSkillActionRow = InventoryRow("Map01A Skill Detail Actions");
             _hubSkillActionRow.style.marginTop = 6;
@@ -696,8 +699,7 @@ namespace LinhGioi.UI
                 action.style.flexGrow = 1;
                 action.style.flexBasis = 0;
                 action.style.marginRight = 6;
-                ApplyLgoDisabledAction(action);
-                ApplyLgoCharacterHubInspectorAction(action);
+                ApplyLgoCharacterHubLockedAction(action, action == _hubSkillUpgradeAction);
                 _hubSkillActionRow.Add(action);
             }
             _hubPreviewDetailPanel.Add(_hubSkillActionRow);
@@ -710,8 +712,7 @@ namespace LinhGioi.UI
                 action.style.flexGrow = 1;
                 action.style.flexBasis = 0;
                 action.style.marginRight = 6;
-                ApplyLgoDisabledAction(action);
-                ApplyLgoCharacterHubInspectorAction(action);
+                ApplyLgoCharacterHubLockedAction(action, action == _potentialAddPointAction);
                 _hubPotentialActionRow.Add(action);
             }
             _hubPreviewDetailPanel.Add(_hubPotentialActionRow);
@@ -724,10 +725,7 @@ namespace LinhGioi.UI
                 action.style.flexGrow = 1;
                 action.style.flexBasis = 0;
                 action.style.marginRight = 6;
-                ApplyLgoDisabledAction(action);
-                ApplyLgoCharacterHubInspectorAction(action);
-                action.style.minHeight = 42;
-                action.style.fontSize = 16;
+                ApplyLgoCharacterHubLockedAction(action, action == _spiritPetDeployAction);
                 _hubSpiritPetActionRow.Add(action);
             }
             _hubPreviewDetailPanel.Add(_hubSpiritPetActionRow);

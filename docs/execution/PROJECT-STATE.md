@@ -1,3 +1,10 @@
+## Character Hub v24 — tích hợp checkpoint độc lập — 2026-09-16
+
+- Goal vẫn là năm tab theo redesign-v4-five-tabs; không mở class/pose/wardrobe/source hoặc screen khác.
+- A: Nhân vật/Rương đồ và inspector chung có 293/293 EditMode thực chạy, Player 87 ảnh, review hai tab trên ba viewport không cắt/chồng. Evidence: build/character-hub-checkpoints-v24/A-runtime.
+- B (Kỹ năng/Linh thú) và C (Tiềm năng modular icon) còn trong bản WIP bảo toàn, sẽ tích hợp tuần tự trước khi push. Không coi checkpoint A là hoàn thành toàn bộ goal.
+- Chi tiết snapshot, test graphics và gate: NEXT-ACTION.md. ProjectSettings do Unity sinh được giữ evidence và loại khỏi source diff; main checkout giữ nguyên.
+
 ## Character Hub — Tiềm năng data-overlay tối giản trên một base chung v20b — 2026-09-15
 
 - Audit theo feedback owner xác nhận toàn bộ vòng ngoài, đường nối, năm khung tròn, ô giá trị, ô cộng và dấu `+` đã nằm trong đúng một asset `character-hub-potential-topology.png` 600×520. `CharacterHubPotentialTopology`, năm node và detail panel chỉ được khởi tạo một lần; đổi Võ/Kiếm/Pháp/Cơ/Linh giữ nguyên reference object, chỉ bind icon/tên/value/selection/recommendation. Skill và Tiềm năng là hai component riêng.

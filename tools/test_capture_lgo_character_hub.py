@@ -8,7 +8,7 @@ import capture_lgo_character_hub as capture
 
 class CaptureLgoCharacterHubTests(unittest.TestCase):
     def test_profiles_use_three_real_target_viewports(self) -> None:
-        self.assertEqual((1280, 720), capture.PROFILES["pc"])
+        self.assertEqual((1600, 900), capture.PROFILES["pc"])
         self.assertEqual((1024, 768), capture.PROFILES["tablet"])
         self.assertEqual((1600, 720), capture.PROFILES["mobile"])
         self.assertEqual(3, len(set(capture.PROFILES.values())))
@@ -57,8 +57,8 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
                 "captureScope": "map01a-inventory-tabs",
                 "usesOsMouseOrKeyboard": False,
-                "width": 1280,
-                "height": 720,
+                "width": 1600,
+                "height": 900,
                 "frames": list(capture.REQUIRED_FRAMES),
                 "skillClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
@@ -68,7 +68,7 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
             self.assertEqual([], capture.validate_manifest(manifest, out, "pc"))
             manifest["width"] = 1024
             self.assertIn("VIEWPORT_MISMATCH", capture.validate_manifest(manifest, out, "pc"))
-            manifest["width"] = 1280
+            manifest["width"] = 1600
             manifest["potentialClassProfiles"] = ["vo"]
             self.assertIn("POTENTIAL_CLASS_PROFILE_MISMATCH", capture.validate_manifest(manifest, out, "pc"))
             manifest["potentialClassProfiles"] = list(capture.CHARACTER_HUB_CLASS_IDS)

@@ -17,7 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILES = {
-    "pc": (1280, 720),
+    "pc": (1600, 900),
     "tablet": (1024, 768),
     "mobile": (1600, 720),
 }

@@ -417,7 +417,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").ClassListContains("lgo-inventory-grid-cell"), Is.True);
                 Assert.That(root.Q<VisualElement>("Map01A Equipment Item Icon main_weapon").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetVoEquipmentThumbnailSprite("main_weapon")));
-                Assert.That(root.Q("Map01A Equipment Item Tile main_weapon").style.height.value.value, Is.EqualTo(92));
+                Assert.That(root.Q("Map01A Equipment Item Tile main_weapon").style.height.value.value, Is.EqualTo(84));
                 Assert.That(root.Q<Label>("Map01A Equipment Item Name main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Label>("Map01A Equipment Item State main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<VisualElement>("Map01A Inventory Category Icon all").style.backgroundImage.value.sprite,
@@ -429,9 +429,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Inventory Split Action").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Button>("Map01A Inventory Sort Action").style.flexGrow.value, Is.EqualTo(1));
                 Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").style.flexGrow.value, Is.EqualTo(1));
-                Assert.That(root.Query<VisualElement>(className: "lgo-inventory-bag-grid-cell").ToList().Count, Is.EqualTo(20),
-                    "The approved storage workspace keeps a stable four-by-five grid, including honest empty slots.");
-                Assert.That(root.Q<Button>("Map01A All Items Category").style.minHeight.value.value, Is.EqualTo(94),
+                Assert.That(root.Query<VisualElement>(className: "lgo-inventory-bag-grid-cell").ToList().Count, Is.EqualTo(25),
+                    "The approved storage workspace keeps a stable five-by-five grid, including honest empty slots.");
+                Assert.That(root.Q<Button>("Map01A All Items Category").style.minHeight.value.value, Is.EqualTo(100),
                     "Five vertical storage categories must fill the approved rail instead of leaving a large dead zone.");
                 Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains("lgo-detail-card"), Is.True);
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").ClassListContains("lgo-inventory-button-base"), Is.True);
@@ -489,7 +489,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(leftRail.childCount, Is.EqualTo(5));
                 Assert.That(rightRail.childCount, Is.EqualTo(5));
                 Assert.That(leftRail.style.height.value.value, Is.EqualTo(420));
-                Assert.That(root.Q("Map01A Character Hero Quick Icon 0").style.height.value.value, Is.EqualTo(68),
+                Assert.That(root.Q("Map01A Character Hero Quick Icon 0").style.height.value.value, Is.EqualTo(76),
                     "Equipment rail icons must keep square design slots instead of flex-collapsing into short rows.");
                 for (var equipmentIndex = 0; equipmentIndex < scene.VoEquipmentSlotIds.Count; equipmentIndex++)
                 {
@@ -515,7 +515,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Set Header").text, Is.EqualTo("BỘ TRANG BỊ HIỆN TẠI"));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Header").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "The approved detail hierarchy starts with the selected item hero, without a redundant technical header.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.width.value.value, Is.EqualTo(112));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Icon").style.width.value.value, Is.EqualTo(120));
                 var lockAction = root.Q<Button>("Map01A Inventory Detail Lock Action");
                 var primaryAction = root.Q<Button>("Map01A Inventory Detail Primary Action");
                 Assert.That(lockAction, Is.Not.Null);
@@ -684,7 +684,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Hub Preview Detail Hero").style.flexDirection.value, Is.EqualTo(FlexDirection.Row),
                     "Skills, Potential and Spirit Pet must share the canonical icon-plus-heading inspector hierarchy.");
                 Assert.That(root.Q<Label>("Map01A Hub Preview Detail Name").style.fontSize.value.value, Is.EqualTo(28).Within(1));
-                Assert.That(root.Q("Map01A Hub Preview Detail Action Spacer").style.flexGrow.value, Is.EqualTo(1),
+                Assert.That(root.Q<ScrollView>("Map01A Hub Detail Scroll").style.flexGrow.value, Is.EqualTo(1),
                     "Context actions must remain docked to the lower edge of the shared detail column.");
                 StringAssert.DoesNotContain("state", modalSubtitle.text);
                 Assert.That(root.Q("Map01A Skill Path Stage 1"), Is.Not.Null,
@@ -818,7 +818,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").style.minHeight.value.value,
                     Is.EqualTo(52).Within(1));
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").style.fontSize.value.value,
-                    Is.EqualTo(18).Within(1));
+                    Is.EqualTo(20).Within(1));
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Node 0"));
                 Assert.That(hubDetailName.text, Is.EqualTo("Công"),
                     "Selecting a potential node must update detail-right without mutating progression state.");
@@ -1020,6 +1020,124 @@ namespace LinhGioi.Tests.EditMode
                     if (!before.Contains(root)) Object.DestroyImmediate(root);
             }
         }
+
+        [Test]
+        public void CharacterHubPresentationIconsDoNotShrinkInCompositeControls()
+        {
+            var icon = new VisualElement();
+            icon.style.flexGrow = 1;
+            icon.style.flexShrink = 1;
+            var apply = typeof(CongDongLamArrivalHud).GetMethod("ApplyLgoItemIcon",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(apply, Is.Not.Null);
+            apply.Invoke(null, new object[] { icon });
+            Assert.That(icon.style.flexShrink.value, Is.EqualTo(0),
+                "HUD-catalog skill and roster artwork must not collapse to a horizontal strip.");
+            Assert.That(icon.style.flexGrow.value, Is.EqualTo(0));
+        }
+
+        [Test]
+        public void CharacterHubPresentationCharacterInspectorAndVitalsAreReadable()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character hub shared presentation test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
+                {
+                    var inspector = root.Q("Map01A Inventory Detail Panel");
+                    Assert.That(inspector.style.paddingLeft.value.value, Is.GreaterThanOrEqualTo(16));
+                    Assert.That(inspector.style.paddingRight.value.value, Is.GreaterThanOrEqualTo(16));
+                    var facts = root.Q("Map01A Inventory Detail Stats Card");
+                    Assert.That(facts.style.borderLeftWidth.value, Is.EqualTo(0),
+                        "Facts belong inside the existing inspector, not another framed box.");
+                    foreach (var actionName in new[] { "Primary", "Lock" })
+                        Assert.That(root.Q<Button>("Map01A Inventory Detail " + actionName + " Action").style.minHeight.value.value,
+                            Is.GreaterThanOrEqualTo(48));
+                    Assert.That(root.Q<Label>("Map01A Inventory Detail Stats Header").style.fontSize.value.value,
+                        Is.GreaterThanOrEqualTo(18));
+                    Assert.That(root.Q("Map01A Character Hero Vitals Bars").style.flexDirection.value,
+                        Is.EqualTo(FlexDirection.Column));
+                    Assert.That(root.Q("Map01A Character Hero Health").style.height.value.value,
+                        Is.GreaterThanOrEqualTo(22));
+                    Assert.That(root.Q<Label>("Map01A Character Hero Name").style.fontSize.value.value,
+                        Is.GreaterThanOrEqualTo(24));
+                    var portrait = root.Q("Map01A Character Hero Portrait");
+                    Assert.That(portrait.style.width.value.value, Is.EqualTo(400));
+                    Assert.That(portrait.style.height.value.value, Is.EqualTo(428),
+                        "UI presentation must not resize or replace the frozen actor stage.");
+                }
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void CharacterHubPresentationBagUsesTwentyFiveSquareSlotsAndOneState()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character hub bag presentation test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Bag Main Tab"));
+                var cells = root.Q("Map01A Inventory Items Grid")
+                    .Query<VisualElement>(className: "lgo-inventory-bag-grid-cell").ToList();
+                Assert.That(cells.Count, Is.EqualTo(25),
+                    "Approved Bag design has five columns and five rows, including empty slots.");
+                var fit = typeof(CongDongLamArrivalHud).GetMethod("FitCharacterHubBagGrid",
+                    BindingFlags.Static | BindingFlags.NonPublic);
+                Assert.That(fit, Is.Not.Null, "Fit five columns to the actual scroll viewport, not the nominal panel.");
+                Assert.That(fit.GetParameters().Length, Is.EqualTo(3), "The fifth row must also fit the viewport height.");
+                foreach (var width in new[] { 438f, 446f, 456f })
+                {
+                    fit.Invoke(null, new object[] { root.Q("Map01A Inventory Items Grid"), width, 420f });
+                    var rowWidth = 0f;
+                    foreach (var cell in cells.Take(5))
+                    {
+                        rowWidth += cell.style.width.value.value + cell.style.marginRight.value.value;
+                        Assert.That(cell.style.width.value.value, Is.EqualTo(cell.style.height.value.value));
+                        Assert.That(cell.style.marginTop.value.value, Is.EqualTo(0));
+                    }
+                    Assert.That(rowWidth, Is.LessThanOrEqualTo(width), "Scrollbar reservation must not reduce the grid to four columns.");
+                    Assert.That(5 * (cells[0].style.height.value.value + cells[0].style.marginBottom.value.value),
+                        Is.LessThanOrEqualTo(420), "All five rows must remain visible above the fixed toolbar.");
+                }
+                foreach (var category in root.Q("Map01A Inventory Category Rail").Children())
+                {
+                    Assert.That(category.style.height.value.value, Is.EqualTo(100));
+                    Assert.That(category.style.maxHeight.value.value, Is.EqualTo(100));
+                }
+                var icon = root.Q("Map01A Equipment Item Icon " + scene.EquipmentSlotIds[0]);
+                Assert.That(icon.style.borderLeftWidth.value, Is.EqualTo(0),
+                    "The grid cell owns its frame; artwork must not add a second nested rectangle.");
+                Assert.That(root.Q("Map01A Inventory Category Icon all").style.height.value.value,
+                    Is.GreaterThanOrEqualTo(60));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Slot Type").style.display.value,
+                    Is.EqualTo(DisplayStyle.None), "Do not repeat the generic equipment title below itself.");
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+
+
+
+
+
+
+
 
         [Test]
         public void SkillProgressionUsesOneCanonicalFourThreeTwoTopology()

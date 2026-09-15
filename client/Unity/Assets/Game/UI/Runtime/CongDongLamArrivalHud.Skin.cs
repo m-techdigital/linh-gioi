@@ -275,7 +275,7 @@ namespace LinhGioi.UI
         }
 
         private static void ApplyLgoCharacterHubDetailCard(
-            VisualElement element, float horizontalPadding = 0, float verticalPadding = 0)
+            VisualElement element, float horizontalPadding = 18, float verticalPadding = 14)
         {
             ApplyLgoDetailCard(element, horizontalPadding, verticalPadding);
             SetLgoFrameCornerVisibility(element, false);
@@ -308,6 +308,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoItemIcon(VisualElement icon)
         {
             icon.AddToClassList(LgoItemIconFrameClass);
+            icon.style.flexGrow = 0;
+            icon.style.flexShrink = 0;
             icon.style.width = 58;
             icon.style.height = 58;
             icon.style.marginTop = 8;
@@ -524,6 +526,79 @@ namespace LinhGioi.UI
             ApplyLgoFrame(card, new Color(.018f, .060f, .096f, .92f), new Color(.72f, .62f, .38f, .58f));
         }
 
+        private static void ApplyLgoCharacterHubInspectorFacts(VisualElement facts)
+        {
+            ApplyLgoInventoryStatsCard(facts);
+            RemoveLgoOuterBorder(facts);
+            facts.style.backgroundColor = Color.clear;
+            facts.style.paddingLeft = facts.style.paddingRight = 0;
+            facts.style.paddingTop = facts.style.paddingBottom = 4;
+        }
+
+        private static void ApplyLgoCharacterHubCopyRhythm(VisualElement scope)
+        {
+            // Labels inherit theme padding/margins. Own them here so readable
+            // text does not consume the inspector's action/cost budget twice.
+            scope.Query<Label>().ForEach(label =>
+            {
+                label.AddToClassList("lgo-hub-copy");
+                label.style.marginTop = label.style.marginBottom = 0;
+                label.style.paddingTop = label.style.paddingBottom = 0;
+                label.style.paddingLeft = label.style.paddingRight = 0;
+                label.style.flexShrink = 0;
+            });
+        }
+
+        private static void ApplyLgoCharacterHubReadingDivider(VisualElement divider)
+        {
+            divider.style.flexShrink = 0;
+            divider.style.marginTop = divider.style.marginBottom = 6;
+        }
+
+        private static void ApplyLgoCharacterHubCostRow(VisualElement row)
+        {
+            row.style.flexDirection = FlexDirection.Row;
+            row.style.alignItems = Align.Center;
+            row.style.flexShrink = 0;
+            row.style.minHeight = 52;
+            row.style.marginTop = 8;
+            row.style.paddingTop = row.style.paddingBottom = 4;
+            row.style.borderTopWidth = 1;
+            row.style.borderTopColor = new Color(.18f, .40f, .58f, .58f);
+        }
+
+        private static void ApplyLgoCharacterHubIdentityLabel(Label label, bool primary)
+        {
+            label.style.fontSize = primary ? 26 : 20;
+            label.style.height = primary ? 34 : 28;
+            label.style.flexShrink = 0;
+            label.style.marginTop = label.style.marginBottom = 0;
+            label.style.paddingTop = label.style.paddingBottom = 0;
+            label.style.color = primary ? new Color(.96f, .98f, 1f, 1f) : UiGold;
+        }
+
+        private static void ApplyLgoCharacterHubVitalBar(UnityEngine.UIElements.ProgressBar bar)
+        {
+            bar.style.height = bar.style.minHeight = bar.style.maxHeight = 24;
+            bar.style.fontSize = 16;
+            bar.style.flexGrow = 0;
+            bar.style.flexShrink = 0;
+            bar.style.marginTop = bar.style.marginBottom = 0;
+            bar.style.marginLeft = bar.style.marginRight = 0;
+        }
+
+        private static void ApplyLgoCharacterHubEquipmentSlot(Button slot)
+        {
+            ApplyLgoItemIcon(slot);
+            slot.style.flexBasis = 76;
+            slot.style.width = 76;
+            slot.style.height = slot.style.minHeight = slot.style.maxHeight = 76;
+            slot.style.marginTop = slot.style.marginBottom = 0;
+            slot.style.marginLeft = slot.style.marginRight = 0;
+            slot.style.paddingTop = slot.style.paddingBottom = 0;
+            slot.style.paddingLeft = slot.style.paddingRight = 0;
+        }
+
         private static void ApplyLgoInventoryContentFitPanel(VisualElement panel)
         {
             panel.AddToClassList(LgoInventoryContentFitPanelClass);
@@ -609,9 +684,9 @@ namespace LinhGioi.UI
             ApplyLgoButton(button);
             button.style.flexGrow = 0;
             button.style.flexBasis = 112;
-            button.style.minHeight = touch ? 38 : 30;
+            button.style.height = button.style.minHeight = button.style.maxHeight = 38;
             button.style.marginRight = 6;
-            button.style.fontSize = 13;
+            button.style.fontSize = 16;
             if (!disabled) return;
             button.SetEnabled(false);
             button.style.opacity = .58f;
@@ -644,7 +719,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoCharacterHubInspectorAction(Button button)
         {
             button.style.minHeight = 52;
-            button.style.fontSize = 18;
+            button.style.fontSize = 20;
+            button.style.paddingLeft = button.style.paddingRight = 14;
             button.style.unityFontStyleAndWeight = FontStyle.Bold;
         }
 
@@ -721,10 +797,52 @@ namespace LinhGioi.UI
         {
             ApplyLgoInventoryGridCell(cell);
             cell.AddToClassList("lgo-inventory-bag-grid-cell");
-            cell.style.flexBasis = new Length(18.2f, LengthUnit.Percent);
-            cell.style.height = 92;
-            cell.style.minHeight = 92;
-            cell.style.maxHeight = 92;
+            cell.style.flexBasis = 84;
+            cell.style.width = cell.style.minWidth = cell.style.maxWidth = 84;
+            cell.style.height = cell.style.minHeight = cell.style.maxHeight = 84;
+            cell.style.flexShrink = 0;
+            cell.style.paddingLeft = cell.style.paddingRight = 4;
+            cell.style.paddingTop = cell.style.paddingBottom = 4;
+        }
+
+        private static void FitCharacterHubBagGrid(VisualElement grid, float viewportWidth, float viewportHeight)
+        {
+            if (grid == null || viewportWidth <= 0 || viewportHeight <= 0) return;
+            // Reserve all five gutters, including the last one. The width supplied
+            // by ScrollView already excludes its scrollbar: never use panel width.
+            const float gap = 6;
+            var size = Mathf.Max(0, Mathf.Floor((Mathf.Min(viewportWidth, viewportHeight) - 5 * gap) / 5));
+            foreach (var cell in grid.Children())
+            {
+                if (!cell.ClassListContains("lgo-inventory-bag-grid-cell")) continue;
+                cell.style.flexBasis = size;
+                cell.style.width = cell.style.minWidth = cell.style.maxWidth = size;
+                cell.style.height = cell.style.minHeight = cell.style.maxHeight = size;
+                cell.style.marginTop = cell.style.marginLeft = 0;
+                cell.style.marginRight = cell.style.marginBottom = gap;
+                foreach (var child in cell.Children())
+                    if (child.ClassListContains("lgo-inventory-bag-icon"))
+                        child.style.width = child.style.height = Mathf.Max(0, Mathf.Min(72, size - 12));
+            }
+        }
+
+        private static void ApplyLgoInventoryBagIcon(VisualElement icon)
+        {
+            ApplyLgoItemIcon(icon);
+            icon.AddToClassList("lgo-inventory-bag-icon");
+            icon.style.width = icon.style.height = 72;
+            icon.style.marginTop = icon.style.marginBottom = 0;
+            icon.style.marginLeft = icon.style.marginRight = 0;
+            icon.style.backgroundColor = Color.clear;
+            RemoveLgoOuterBorder(icon);
+        }
+
+        private static void ApplyLgoCharacterHubUnavailableControl(Button button)
+        {
+            // Preserve the component's geometry and artwork when disabling it.
+            button.SetEnabled(false);
+            button.style.opacity = .78f;
+            button.style.color = UiSubText;
         }
 
         private static void ApplyLgoInventoryCategoryItem(Button button, bool touch)
@@ -734,17 +852,21 @@ namespace LinhGioi.UI
             button.style.flexDirection = FlexDirection.Column;
             button.style.alignItems = Align.Center;
             button.style.justifyContent = Justify.Center;
-            button.style.flexBasis = StyleKeyword.Auto;
+            button.style.flexBasis = 100;
+            button.style.flexShrink = 0;
             button.style.minWidth = 0;
-            button.style.minHeight = 94;
+            button.style.height = button.style.minHeight = button.style.maxHeight = 100;
+            button.style.paddingTop = button.style.paddingBottom = 4;
+            button.style.marginTop = 0;
+            button.style.paddingLeft = button.style.paddingRight = 4;
             button.style.marginRight = 0;
             button.style.marginBottom = 6;
         }
 
         private static void ApplyLgoInventoryCategoryIcon(VisualElement icon)
         {
-            icon.style.width = 46;
-            icon.style.height = 46;
+            icon.style.width = 64;
+            icon.style.height = 64;
             icon.style.flexGrow = 0;
             icon.style.flexShrink = 0;
             icon.style.marginBottom = 2;
@@ -775,6 +897,8 @@ namespace LinhGioi.UI
             icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
 
+
+
         private static void ApplyLgoEquippedSkillSlot(VisualElement slot)
         {
             slot.AddToClassList("lgo-equipped-skill-slot");
@@ -785,6 +909,16 @@ namespace LinhGioi.UI
             slot.style.alignItems = Align.Center;
             slot.style.justifyContent = Justify.Center;
             ApplyLgoFrame(slot, new Color(.015f, .060f, .105f, .96f), new Color(.64f, .72f, .82f, .72f));
+        }
+
+
+
+        private static void ApplyLgoCharacterHubLockedAction(Button button, bool primary)
+        {
+            if (primary) ApplyLgoCharacterHubPrimaryAction(button);
+            else ApplyLgoCharacterHubGoldAction(button);
+            ApplyLgoCharacterHubInspectorAction(button);
+            ApplyLgoCharacterHubUnavailableControl(button);
         }
 
         private static void ApplyLgoSkillNode(Button node)
@@ -827,6 +961,8 @@ namespace LinhGioi.UI
             node.style.justifyContent = Justify.Center;
             ApplyLgoCharacterHubInteractiveMotion(node);
         }
+
+
 
         private static void ApplyLgoSpiritPetHeroPreview(VisualElement preview)
         {
@@ -880,19 +1016,21 @@ namespace LinhGioi.UI
             row.style.borderBottomColor = new Color(.18f, .40f, .58f, .58f);
         }
 
+
+
         private static void ApplyLgoInventorySearchField(TextField field, bool touch)
         {
             field.AddToClassList(LgoInventorySearchFieldClass);
             ApplyLgoInputField(field);
             field.style.flexGrow = 1;
             field.style.flexShrink = 1;
-            field.style.minWidth = touch ? 140 : 170;
-            field.style.maxWidth = touch ? 210 : 250;
-            field.style.height = touch ? 38 : 32;
+            field.style.minWidth = 156;
+            field.style.maxWidth = 230;
+            field.style.height = 38;
             field.style.marginLeft = 8;
             field.style.marginRight = 8;
             field.style.paddingLeft = field.style.paddingRight = 10;
-            field.style.fontSize = 13;
+            field.style.fontSize = 16;
             ApplyLgoInventorySearchInnerField(field);
             field.RegisterCallback<AttachToPanelEvent>(_ => ApplyLgoInventorySearchInnerField(field));
         }
@@ -903,7 +1041,7 @@ namespace LinhGioi.UI
             if (input == null) return;
             input.style.paddingLeft = input.style.paddingRight = 8;
             input.style.paddingTop = input.style.paddingBottom = 0;
-            input.style.fontSize = 13;
+            input.style.fontSize = 16;
             input.style.unityTextAlign = TextAnchor.MiddleLeft;
             input.style.height = Length.Percent(100);
         }
