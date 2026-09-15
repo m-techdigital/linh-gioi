@@ -882,7 +882,10 @@ namespace LinhGioi.UI
             button.style.alignItems = Align.Center;
             button.style.justifyContent = Justify.Center;
             button.style.flexBasis = StyleKeyword.Auto;
-            button.style.height = 128;
+            button.style.flexShrink = 0;
+            button.style.paddingLeft = button.style.paddingRight = 4;
+            button.style.marginTop = 0;
+            button.style.height = button.style.maxHeight = 128;
             button.style.minHeight = 128;
             button.style.marginRight = 0;
             button.style.marginBottom = 8;
@@ -890,6 +893,10 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoSkillIcon(VisualElement icon, float size)
         {
+            RemoveLgoOuterBorder(icon);
+            icon.style.backgroundColor = Color.clear;
+            icon.style.marginTop = icon.style.marginBottom = 0;
+            icon.style.marginLeft = icon.style.marginRight = 0;
             icon.style.width = size;
             icon.style.height = size;
             icon.style.flexGrow = 0;
@@ -902,8 +909,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoEquippedSkillSlot(VisualElement slot)
         {
             slot.AddToClassList("lgo-equipped-skill-slot");
-            slot.style.width = 64;
-            slot.style.height = 64;
+            slot.style.width = 76;
+            slot.style.height = 76;
             slot.style.flexGrow = 0;
             slot.style.flexShrink = 0;
             slot.style.alignItems = Align.Center;
@@ -911,7 +918,19 @@ namespace LinhGioi.UI
             ApplyLgoFrame(slot, new Color(.015f, .060f, .105f, .96f), new Color(.64f, .72f, .82f, .72f));
         }
 
-
+        private static void ApplyLgoSkillLevelBadge(Label label)
+        {
+            label.style.position = Position.Absolute;
+            label.style.bottom = -8;
+            label.style.height = 26;
+            label.style.fontSize = 16;
+            label.style.flexShrink = 0;
+            label.style.marginTop = label.style.marginBottom = 0;
+            label.style.paddingTop = label.style.paddingBottom = 0;
+            label.style.paddingLeft = label.style.paddingRight = 8;
+            label.style.backgroundColor = new Color(.01f, .035f, .06f, .96f);
+            label.style.unityTextAlign = TextAnchor.MiddleCenter;
+        }
 
         private static void ApplyLgoCharacterHubLockedAction(Button button, bool primary)
         {
@@ -925,22 +944,24 @@ namespace LinhGioi.UI
         {
             node.AddToClassList("lgo-skill-node");
             node.text = string.Empty;
-            node.style.width = 86;
-            node.style.minWidth = 86;
-            node.style.maxWidth = 86;
-            node.style.flexBasis = 86;
+            node.style.width = 112;
+            node.style.minWidth = 112;
+            node.style.maxWidth = 112;
+            node.style.flexBasis = 112;
+            node.style.marginTop = node.style.marginBottom = 0;
+            node.style.marginLeft = node.style.marginRight = 0;
             node.style.flexGrow = 0;
             node.style.flexShrink = 0;
-            node.style.height = 86;
-            node.style.minHeight = 86;
-            node.style.maxHeight = 86;
+            node.style.height = 112;
+            node.style.minHeight = 112;
+            node.style.maxHeight = 112;
             node.style.paddingLeft = node.style.paddingRight = 4;
             node.style.paddingTop = node.style.paddingBottom = 4;
             node.style.flexDirection = FlexDirection.Column;
             node.style.alignItems = Align.Center;
             node.style.justifyContent = Justify.Center;
-            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 43;
-            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 43;
+            node.style.borderTopLeftRadius = node.style.borderTopRightRadius = 56;
+            node.style.borderBottomLeftRadius = node.style.borderBottomRightRadius = 56;
         }
 
         private static void ApplyLgoPotentialDataOverlay(Button node)
@@ -968,7 +989,9 @@ namespace LinhGioi.UI
         {
             preview.AddToClassList("lgo-spirit-pet-hero");
             ApplyLgoCharacterHubDetailCard(preview, 10, 8);
-            preview.style.height = preview.style.minHeight = 296;
+            preview.style.height = preview.style.minHeight = preview.style.maxHeight = 346;
+            preview.style.backgroundColor = Color.clear;
+            RemoveLgoOuterBorder(preview);
             preview.style.flexShrink = 0;
             preview.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
         }
@@ -976,9 +999,10 @@ namespace LinhGioi.UI
         private static void ApplyLgoSpiritPetRoster(VisualElement roster)
         {
             roster.AddToClassList("lgo-spirit-pet-roster");
-            roster.style.height = roster.style.minHeight = 104;
+            roster.style.height = roster.style.minHeight = 100;
+            roster.style.marginBottom = 0;
             roster.style.flexShrink = 0;
-            roster.style.marginTop = 8;
+            roster.style.marginTop = 6;
             roster.style.justifyContent = Justify.SpaceBetween;
         }
 
@@ -987,7 +1011,11 @@ namespace LinhGioi.UI
             card.AddToClassList("lgo-spirit-pet-roster-card");
             ApplyLgoInventoryGridCell(card);
             card.style.flexBasis = new Length(23, LengthUnit.Percent);
-            card.style.height = card.style.minHeight = 104;
+            card.style.height = card.style.minHeight = card.style.maxHeight = 100;
+            card.style.marginTop = card.style.marginBottom = 0;
+            card.style.marginLeft = card.style.marginRight = 0;
+            card.style.paddingTop = card.style.paddingBottom = 0;
+            card.style.paddingLeft = card.style.paddingRight = 0;
             card.style.flexShrink = 0;
             card.style.flexDirection = FlexDirection.Column;
             card.style.alignItems = Align.Center;
@@ -999,7 +1027,7 @@ namespace LinhGioi.UI
         {
             row.AddToClassList("lgo-spirit-pet-stat-row");
             row.style.alignItems = Align.Center;
-            row.style.minHeight = 17;
+            row.style.height = row.style.minHeight = 26;
             row.style.flexShrink = 0;
             row.style.marginBottom = 0;
         }
@@ -1008,15 +1036,30 @@ namespace LinhGioi.UI
         {
             row.AddToClassList("lgo-spirit-pet-skill-row");
             row.style.alignItems = Align.Center;
-            row.style.minHeight = 56;
+            row.style.minHeight = 88;
             row.style.flexShrink = 0;
-            row.style.paddingTop = row.style.paddingBottom = 4;
+            row.style.paddingTop = row.style.paddingBottom = 2;
             row.style.marginBottom = 0;
             row.style.borderBottomWidth = 1;
             row.style.borderBottomColor = new Color(.18f, .40f, .58f, .58f);
         }
 
-
+        private static void ApplyLgoSpiritPetRosterContent(VisualElement art, Label name, Label level, bool selected)
+        {
+            ApplyLgoSkillIcon(art, 76);
+            art.style.position = Position.Absolute;
+            art.style.top = 2;
+            art.style.left = Length.Percent(50);
+            art.style.marginLeft = -38;
+            name.style.display = DisplayStyle.None;
+            level.style.position = Position.Absolute;
+            level.style.left = level.style.right = level.style.bottom = 0;
+            level.style.height = 22;
+            level.style.fontSize = selected ? 16 : 14;
+            level.style.whiteSpace = WhiteSpace.NoWrap;
+            level.style.unityTextAlign = TextAnchor.MiddleCenter;
+            level.style.backgroundColor = new Color(.008f, .030f, .050f, .94f);
+        }
 
         private static void ApplyLgoInventorySearchField(TextField field, bool touch)
         {

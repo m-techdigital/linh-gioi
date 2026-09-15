@@ -89,16 +89,7 @@ namespace LinhGioi.UI
 
         private void BindSkillPreviewIcon(VisualElement icon, CharacterHubSkillPreview skill, float size)
         {
-            if (skill.IconCatalog == CharacterHubIconCatalog.Skill) ApplyLgoSkillIcon(icon, size);
-            else
-            {
-                ApplyLgoItemIcon(icon);
-                icon.style.width = size;
-                icon.style.height = size;
-            }
-            icon.style.marginTop = icon.style.marginBottom = 0;
-            icon.style.marginLeft = icon.style.marginRight = 0;
-            icon.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
+            ApplyLgoSkillIcon(icon, size);
             var sprite = GetSkillPreviewSprite(skill);
             icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
         }
@@ -114,7 +105,7 @@ namespace LinhGioi.UI
             };
             _equippedSkillIcons.Add(icon);
             slot.Add(icon);
-            var number = LgoLabel(index.ToString(), 11, UiGold, true);
+            var number = LgoLabel(index.ToString(), 16, UiGold, true);
             number.name = "Map01A Equipped Skill Number " + index;
             number.style.position = Position.Absolute;
             number.style.left = 0;
@@ -157,11 +148,11 @@ namespace LinhGioi.UI
             var button = InventoryButton(() => { }, name);
             ApplyLgoSkillCategoryCard(button, _touch);
             button.Add(SkillIcon(name + " Icon", iconId, 72));
-            var label = LgoLabel(text, 14, UiText, true);
+            var label = LgoLabel(text, 18, UiText, true);
             label.style.unityTextAlign = TextAnchor.MiddleCenter;
             button.Add(label);
             ApplyLgoSelectedTab(button, selected);
-            if (!selected) ApplyLgoDisabledAction(button);
+            if (!selected) ApplyLgoCharacterHubUnavailableControl(button);
             return button;
         }
 
@@ -177,11 +168,13 @@ namespace LinhGioi.UI
             titleLabel.name = name + " Title";
             titleLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             titleLabel.style.marginTop = 2;
+            titleLabel.style.display = DisplayStyle.None;
             titleLabel.style.whiteSpace = WhiteSpace.NoWrap;
             _skillPathTitles.Add(titleLabel);
             node.Add(titleLabel);
             var levelLabel = LgoLabel("", 10, new Color(.74f, .92f, 1f, .92f), true);
             levelLabel.name = name + " Level";
+            ApplyLgoSkillLevelBadge(levelLabel);
             levelLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             _skillPathLevels.Add(levelLabel);
             node.Add(levelLabel);
@@ -218,7 +211,7 @@ namespace LinhGioi.UI
             connector.style.flexShrink = 0;
             connector.style.alignSelf = Align.Center;
             connector.style.backgroundColor = new Color(.20f, .58f, .82f, .68f);
-            connector.style.width = vertical ? 2 : 24;
+            connector.style.width = vertical ? 2 : 40;
             connector.style.height = vertical ? 12 : 2;
             return connector;
         }
@@ -278,7 +271,10 @@ namespace LinhGioi.UI
             stateLabel.name = name + " Level";
             stateLabel.style.unityTextAlign = TextAnchor.MiddleCenter;
             card.Add(stateLabel);
-            if (!selected) ApplyLgoDisabledAction(card);
+            ApplyLgoCharacterHubCopyRhythm(card);
+            ApplyLgoSpiritPetRosterContent(art, titleLabel, stateLabel, selected);
+            card.tooltip = title + " · " + level;
+            if (!selected) ApplyLgoCharacterHubUnavailableControl(card);
             return card;
         }
 
@@ -286,9 +282,11 @@ namespace LinhGioi.UI
         {
             var bar = new UnityEngine.UIElements.ProgressBar { name = name, title = title, lowValue = 0, highValue = 600, value = value };
             ApplyLgoVitalBar(bar, fill);
-            bar.style.flexShrink = 0;
-            bar.style.marginTop = 4;
-            bar.style.marginBottom = 2;
+            ApplyLgoCharacterHubVitalBar(bar);
+            bar.style.height = bar.style.minHeight = bar.style.maxHeight = 22;
+            bar.style.fontSize = 15;
+            bar.style.marginTop = 1;
+            bar.style.marginBottom = 0;
             return bar;
         }
 
@@ -301,7 +299,7 @@ namespace LinhGioi.UI
                 name = "Map01A Spirit Pet Skill Row " + index + " Icon",
                 pickingMode = PickingMode.Ignore
             };
-            ApplyLgoSkillIcon(icon, 42);
+            ApplyLgoSkillIcon(icon, 56);
             icon.style.flexShrink = 0;
             icon.style.marginRight = 8;
             _hubSpiritPetSkillIcons.Add(icon);
@@ -311,17 +309,18 @@ namespace LinhGioi.UI
             copy.style.minWidth = 0;
             copy.style.flexDirection = FlexDirection.Column;
             var heading = InventoryRow("Map01A Spirit Pet Skill Row " + index + " Heading");
-            var skillName = LgoLabel("", 16, UiGold, true);
+            heading.style.marginBottom = 2;
+            var skillName = LgoLabel("", 18, UiGold, true);
             skillName.name = "Map01A Spirit Pet Skill Row " + index + " Name";
             skillName.style.flexGrow = 1;
-            var skillLevel = LgoLabel("", 12, UiSubText, true);
+            var skillLevel = LgoLabel("", 14, UiSubText, true);
             skillLevel.name = "Map01A Spirit Pet Skill Row " + index + " Level";
             _hubSpiritPetSkillNames.Add(skillName);
             _hubSpiritPetSkillLevels.Add(skillLevel);
             heading.Add(skillName);
             heading.Add(skillLevel);
             copy.Add(heading);
-            var description = LgoLabel("", 12, UiSubText);
+            var description = LgoLabel("", 16, UiSubText);
             description.name = "Map01A Spirit Pet Skill Row " + index + " Description";
             description.style.whiteSpace = WhiteSpace.Normal;
             _hubSpiritPetSkillDescriptions.Add(description);
@@ -335,7 +334,7 @@ namespace LinhGioi.UI
             var row = InventoryRow("Map01A Spirit Pet Stat Row " + index);
             ApplyLgoSpiritPetStatRow(row);
             row.Add(LgoLabel("◆", 11, new Color(.38f, .76f, 1f, 1f), true));
-            var value = LgoLabel("", 15, UiText);
+            var value = LgoLabel("", 18, UiText);
             value.name = "Map01A Spirit Pet Stat Value " + index;
             value.style.marginLeft = 8;
             _hubSpiritPetStatValues.Add(value);
@@ -405,6 +404,7 @@ namespace LinhGioi.UI
             var rail = new VisualElement { name = "Map01A Skills Category Rail" };
             rail.style.flexDirection = FlexDirection.Column;
             rail.style.width = 116;
+            rail.style.flexShrink = 0;
             rail.style.marginRight = 12;
             rail.Add(CreateHubRailControl("Map01A Active Skills Category", "Chủ động", "category_active", true));
             rail.Add(CreateHubRailControl("Map01A Passive Skills Category", "Bị động", "category_passive", false));
@@ -417,12 +417,15 @@ namespace LinhGioi.UI
             var path = new VisualElement { name = "Map01A Skill Progression Path" };
             path.style.flexGrow = 1;
             path.style.alignItems = Align.Center;
-            var stageCounts = new[] { 4, 3, 2 };
+            path.style.justifyContent = Justify.SpaceAround;
+            var stageCounts = new[] { 3, 3, 3 };
             var skillIndex = 0;
             for (var stageIndex = 0; stageIndex < stageCounts.Length; stageIndex++)
             {
                 var stage = new VisualElement { name = "Map01A Skill Path Stage " + (stageIndex + 1) };
                 stage.style.flexDirection = FlexDirection.Row;
+                stage.style.flexShrink = 0;
+                stage.style.height = 128;
                 stage.style.alignItems = Align.Center;
                 stage.style.justifyContent = Justify.Center;
                 stage.style.width = new Length(100, LengthUnit.Percent);
@@ -436,24 +439,23 @@ namespace LinhGioi.UI
                         stage.Add(CreateHubPathConnector("Map01A Skill Stage " + (stageIndex + 1) + " Connector " + (nodeIndex + 1)));
                 }
                 path.Add(stage);
-                if (stageIndex < stageCounts.Length - 1)
-                    path.Add(CreateHubPathConnector("Map01A Skill Path Connector " + (stageIndex + 1), true));
+
             }
             skillArea.Add(path);
-            var equippedHeading = LgoLabel("Kỹ năng đã trang bị", 14, UiSubText, true);
+            var equippedHeading = LgoLabel("Kỹ năng đã trang bị", 20, UiSubText, true);
             equippedHeading.name = "Map01A Equipped Skill Heading";
             equippedHeading.style.unityTextAlign = TextAnchor.MiddleCenter;
             content.Add(equippedHeading);
             var equippedRow = InventoryRow("Map01A Equipped Skill Strip");
             equippedRow.style.alignItems = Align.Center;
             equippedRow.style.justifyContent = Justify.SpaceBetween;
-            equippedRow.style.minHeight = 68;
+            equippedRow.style.minHeight = 82;
             for (var equippedIndex = 0; equippedIndex < 4; equippedIndex++)
                 equippedRow.Add(CreateEquippedSkillSlot(equippedIndex + 1));
             var pointsGroup = new VisualElement { name = "Map01A Skill Points Group" };
             pointsGroup.style.flexDirection = FlexDirection.Row;
             pointsGroup.style.alignItems = Align.Center;
-            var pointsLabel = LgoLabel("Điểm kỹ năng", 12, UiSubText, true);
+            var pointsLabel = LgoLabel("Điểm kỹ năng", 16, UiSubText, true);
             pointsLabel.name = "Map01A Skill Points Label";
             var pointsBadge = InventoryBadge("Map01A Skill Points Badge", "12", UiGold);
             var pointsAdd = InventoryButton(() => { }, "Map01A Skill Points Add", "+");
@@ -461,7 +463,7 @@ namespace LinhGioi.UI
             pointsAdd.style.flexBasis = 34;
             pointsAdd.style.minHeight = 34;
             pointsAdd.style.marginRight = 0;
-            ApplyLgoDisabledAction(pointsAdd);
+            ApplyLgoCharacterHubUnavailableControl(pointsAdd);
             pointsGroup.Add(pointsLabel);
             pointsGroup.Add(pointsBadge);
             pointsGroup.Add(pointsAdd);
@@ -518,13 +520,15 @@ namespace LinhGioi.UI
             _spiritPetPreview = new VisualElement { name = "Map01A Spirit Pet Preview Art" };
             ApplyLgoSpiritPetHeroPreview(_spiritPetPreview);
             _spiritPetPanel.Add(_spiritPetPreview);
-            _spiritPetIdentity = LgoTitleLabel("", 19);
+            _spiritPetIdentity = LgoTitleLabel("", 24);
+            _spiritPetIdentity.style.height = 30;
             _spiritPetIdentity.name = "Map01A Spirit Pet Identity";
             _spiritPetIdentity.style.unityTextAlign = TextAnchor.MiddleCenter;
             _spiritPetIdentity.style.flexShrink = 0;
             _spiritPetPanel.Add(_spiritPetIdentity);
-            _spiritPetHeroLevel = LgoLabel("", 15, UiSubText, true);
+            _spiritPetHeroLevel = LgoLabel("", 18, UiSubText, true);
             _spiritPetHeroLevel.name = "Map01A Spirit Pet Hero Level";
+            _spiritPetHeroLevel.style.height = 22;
             _spiritPetHeroLevel.style.unityTextAlign = TextAnchor.MiddleCenter;
             _spiritPetHeroLevel.style.flexShrink = 0;
             _spiritPetPanel.Add(_spiritPetHeroLevel);
@@ -543,6 +547,7 @@ namespace LinhGioi.UI
             roster.Add(CreateSpiritPetRosterEntry("Map01A Spirit Pet Card Locked 2", "Ô Linh thú III", "Chưa thức tỉnh", false, 2));
             roster.Add(CreateSpiritPetRosterEntry("Map01A Spirit Pet Card Locked 3", "Ô Linh thú IV", "Chưa thức tỉnh", false, 3));
             _spiritPetPanel.Add(roster);
+            ApplyLgoCharacterHubCopyRhythm(_spiritPetPanel);
             body.Add(_spiritPetPanel);
         }
 
@@ -739,26 +744,18 @@ namespace LinhGioi.UI
             for (var index = 0; index < _skillPathNodes.Count; index++)
             {
                 var skill = profile.Skills[index];
-                var usesSkillCatalog = skill.IconCatalog == CharacterHubIconCatalog.Skill;
                 var node = _skillPathNodes[index];
                 node.tooltip = skill.Name + " · " + skill.Level;
-                BindSkillPreviewIcon(_skillPathIcons[index], skill, usesSkillCatalog ? 68 : 52);
+                BindSkillPreviewIcon(_skillPathIcons[index], skill, 96);
                 _skillPathTitles[index].text = skill.Name;
-                _skillPathTitles[index].style.display = usesSkillCatalog ? DisplayStyle.None : DisplayStyle.Flex;
                 _skillPathLevels[index].text = skill.Level;
-                _skillPathLevels[index].style.position = usesSkillCatalog ? Position.Absolute : Position.Relative;
-                _skillPathLevels[index].style.bottom = usesSkillCatalog ? -7 : StyleKeyword.Auto;
-                _skillPathLevels[index].style.backgroundColor = usesSkillCatalog
-                    ? new Color(.01f, .035f, .06f, .94f) : Color.clear;
-                _skillPathLevels[index].style.paddingLeft = _skillPathLevels[index].style.paddingRight
-                    = usesSkillCatalog ? 7 : 0;
                 ApplyHubPathNodeSelection(node, skill.Id == selectedSkillId);
             }
 
             for (var index = 0; index < _equippedSkillIcons.Count; index++)
             {
                 var skill = profile.Skills[profile.EquippedSkillIndices[index]];
-                BindSkillPreviewIcon(_equippedSkillIcons[index], skill, 58);
+                BindSkillPreviewIcon(_equippedSkillIcons[index], skill, 68);
                 _equippedSkillIcons[index].tooltip = skill.Name + " · " + skill.Level;
             }
 
@@ -793,7 +790,7 @@ namespace LinhGioi.UI
             _spiritPetIdentity.text = pet.Name;
             _spiritPetHeroLevel.text = pet.Level + " · Đồng hành " + profile.Label;
             _spiritPetSelectedRosterName.text = pet.Name;
-            _spiritPetSelectedRosterLevel.text = pet.Level + " · Đang chọn";
+            _spiritPetSelectedRosterLevel.text = pet.Level;
             _spiritPetRarityBadge.text = pet.Rarity;
             _spiritPetRoleBadge.text = pet.Role;
             _spiritPetStateBadge.text = pet.State;

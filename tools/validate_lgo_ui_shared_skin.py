@@ -44,6 +44,7 @@ REQUIRED_SKIN_MARKERS = [
     "ApplyLgoCharacterHubIdentityLabel",
     "ApplyLgoCharacterHubVitalBar",
     "FitCharacterHubBagGrid",
+    "ApplyLgoSkillLevelBadge",
     "ApplyLgoCharacterHubLockedAction",
     "RuntimeUiSkin.ApplyOrnamentedShellFrame",
     "AnimateLgoCharacterHubOpen",
@@ -356,7 +357,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoSkillNode(node)",
         "ApplyLgoPotentialDataOverlay(node)",
         "InitializeSkillsView(body)",
-        "var stageCounts = new[] { 4, 3, 2 }",
+        "var stageCounts = new[] { 3, 3, 3 }",
         "InitializePotentialView(body)",
         "InitializeSpiritPetView(body)",
         "Map01A Spirit Pet Skill Row ",
@@ -438,8 +439,8 @@ REQUIRED_TEST_MARKERS = [
     "Potential level/value belongs in its canonical facts row",
     "SpiritPetUsesOneFixedHeroRosterAndStructuredDetailTemplate",
     "Five stat rows must be created once; profiles only bind their values",
-    "SkillProgressionUsesOneCanonicalFourThreeTwoTopology",
-    "The shared Skill topology must follow the canonical 4-3-2 progression",
+    "SkillProgressionUsesOneCanonicalThreeByThreeTopology",
+    "The shared Skill topology must follow the approved three-by-three grid",
 ]
 
 REQUIRED_RUNTIME_SKIN_MARKERS = [

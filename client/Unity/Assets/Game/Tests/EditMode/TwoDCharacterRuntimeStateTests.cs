@@ -691,7 +691,7 @@ namespace LinhGioi.Tests.EditMode
                     "Approved skill screen must present a connected progression path instead of a generic item grid.");
                 Assert.That(root.Q("Map01A Skill Path Stage 2"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Skill Path Stage 3"), Is.Not.Null);
-                Assert.That(root.Q("Map01A Skill Path Connector 1"), Is.Not.Null);
+                Assert.That(root.Q("Map01A Skill Stage 1 Connector 1"), Is.Not.Null);
                 Assert.That(root.Q<Button>("Map01A Passive Skills Category").enabledSelf, Is.False,
                     "Unimplemented skill categories must be visibly gated instead of accepting dead clicks.");
                 Assert.That(root.Q<Button>("Map01A Method Skills Category").enabledSelf, Is.False);
@@ -700,7 +700,7 @@ namespace LinhGioi.Tests.EditMode
                 var firstSkillNode = root.Q<Button>("Map01A Skill Node 0");
                 Assert.That(firstSkillNode.ClassListContains("lgo-skill-node"), Is.True,
                     "All skill nodes must use the shared circular skill-node base.");
-                Assert.That(firstSkillNode.style.width.value.value, Is.EqualTo(86).Within(1));
+                Assert.That(firstSkillNode.style.width.value.value, Is.EqualTo(112).Within(1));
                 Assert.That(root.Q<VisualElement>("Map01A Active Skills Category Icon"), Is.Not.Null);
                 var firstExpectedIcon = firstSkill.IconCatalog == CharacterHubIconCatalog.Skill
                     ? scene.GetMap01ASkillIconSprite(firstSkill.IconId)
@@ -710,7 +710,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<VisualElement>("Map01A Equipped Skill Icon 1").style.backgroundImage.value.sprite,
                     Is.EqualTo(firstExpectedIcon));
                 Assert.That(root.Q<VisualElement>("Map01A Equipped Skill Icon 1").style.width.value.value,
-                    Is.EqualTo(58), "The full-width equipped strip must keep readable icons without clipping its skill-points badge.");
+                    Is.EqualTo(68), "The full-width equipped strip must keep readable icons without clipping its skill-points badge.");
                 Assert.That(root.Q<Label>("Map01A Equipped Skill Heading").text, Is.EqualTo("Kỹ năng đã trang bị"));
                 Assert.That(root.Query<VisualElement>(className: "lgo-equipped-skill-slot").ToList().Count, Is.EqualTo(4));
                 for (var equippedIndex = 1; equippedIndex <= 4; equippedIndex++)
@@ -803,7 +803,7 @@ namespace LinhGioi.Tests.EditMode
                     Is.EqualTo(0).Within(.01),
                     "The shared Potential cost row must keep its frame clear of the docked action row at every approved viewport.");
                 Assert.That(root.Q<VisualElement>("Map01A Potential Cost Icon").style.backgroundImage.value.sprite,
-                    Is.EqualTo(scene.GetMap01APotentialIconSprite("core")),
+                    Is.SameAs(scene.GetMap01APotentialIconSprite("core")),
                     "The shared cost row reuses the provenance-backed point icon instead of drawing a per-class placeholder.");
                 Assert.That(root.Q<Label>("Map01A Potential Summary").parent.name,
                     Is.EqualTo("Map01A Hub Preview Detail Hero Copy"),
@@ -1131,16 +1131,8 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
-
-
-
-
-
-
-
-
         [Test]
-        public void SkillProgressionUsesOneCanonicalFourThreeTwoTopology()
+        public void SkillProgressionUsesOneCanonicalThreeByThreeTopology()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             try
@@ -1151,14 +1143,28 @@ namespace LinhGioi.Tests.EditMode
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
 
-                var expected = new[] { 4, 3, 2 };
+                var expected = new[] { 3, 3, 3 };
                 for (var stageIndex = 0; stageIndex < expected.Length; stageIndex++)
                 {
                     var stage = root.Q("Map01A Skill Path Stage " + (stageIndex + 1));
                     Assert.That(stage, Is.Not.Null);
                     Assert.That(stage.Query<Button>(className: "lgo-skill-node").ToList().Count,
                         Is.EqualTo(expected[stageIndex]),
-                        "The shared Skill topology must follow the canonical 4-3-2 progression; class data only fills its nine nodes.");
+                        "The shared Skill topology must follow the approved three-by-three grid; class data only fills its nine nodes.");
+                }
+                Assert.That(root.Q<ScrollView>("Map01A Hub Detail Scroll"), Is.Not.Null,
+                    "Long detail copy must scroll without covering the fixed action row.");
+                for (var index = 0; index < 9; index++)
+                {
+                    var node = root.Q<Button>("Map01A Skill Node " + index);
+                    Assert.That(node.style.height.value.value, Is.EqualTo(112));
+                    var icon = node.Q(node.name + " Icon");
+                    Assert.That(icon.style.height.value.value, Is.EqualTo(96));
+                    Assert.That(icon.style.borderLeftWidth.value, Is.EqualTo(0));
+                    Assert.That(node.Q<Label>(node.name + " Title").style.display.value, Is.EqualTo(DisplayStyle.None));
+                    var level = node.Q<Label>(node.name + " Level");
+                    Assert.That(level.style.position.value, Is.EqualTo(Position.Absolute));
+                    Assert.That(level.style.fontSize.value.value, Is.GreaterThanOrEqualTo(16));
                 }
             }
             finally
@@ -1167,6 +1173,41 @@ namespace LinhGioi.Tests.EditMode
                     if (!before.Contains(root)) Object.DestroyImmediate(root);
             }
         }
+
+        [Test]
+        public void PotentialInspectorUsesExplicitReadingRhythmInsteadOfInheritedLabelSpacing()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("potential reading rhythm test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
+                foreach (var label in root.Q("Map01A Potential Detail Facts").Query<Label>().ToList())
+                {
+                    Assert.That(label.ClassListContains("lgo-hub-copy"), Is.True, label.name);
+                    Assert.That(label.style.paddingTop.value.value, Is.EqualTo(0), label.name);
+                    Assert.That(label.style.paddingBottom.value.value, Is.EqualTo(0), label.name);
+                    Assert.That(label.style.marginBottom.value.value, Is.EqualTo(0), label.name);
+                }
+                var cost = root.Q("Map01A Potential Cost Row");
+                Assert.That(cost.ClassListContains("lgo-status-card"), Is.False,
+                    "Cost is a section of the inspector, not a nested framed status card.");
+                Assert.That(cost.style.minHeight.value.value, Is.EqualTo(52));
+                Assert.That(root.Q("Map01A Potential Level Divider").style.marginBottom.value.value, Is.EqualTo(6));
+            }
+            finally
+            {
+                foreach (var go in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(go)) Object.DestroyImmediate(go);
+            }
+        }
+
+
+
+
 
         [Test]
         public void SpiritPetUsesOneFixedHeroRosterAndStructuredDetailTemplate()
@@ -1181,16 +1222,37 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("Map01A Spirit Pet Main Tab"));
 
                 var preview = root.Q("Map01A Spirit Pet Preview Art");
-                Assert.That(preview.style.height.value.value, Is.EqualTo(296).Within(1));
+                Assert.That(preview.style.height.value.value, Is.EqualTo(346).Within(1));
                 Assert.That(preview.style.flexShrink.value, Is.EqualTo(0).Within(.01),
                     "The canonical hero must keep its authored height instead of shrinking differently per viewport.");
+                Assert.That(preview.style.borderLeftWidth.value, Is.EqualTo(0),
+                    "The pet belongs to the main panel, without a second black framed box.");
+                Assert.That(root.Q<Label>("Map01A Spirit Pet Identity").style.fontSize.value.value,
+                    Is.GreaterThanOrEqualTo(24));
+                foreach (var name in new[] { "Map01A Spirit Pet Intimacy", "Map01A Spirit Pet Growth" })
+                    Assert.That(root.Q(name).style.height.value.value, Is.EqualTo(22));
+                foreach (var card in root.Query<Button>(className: "lgo-spirit-pet-roster-card").ToList())
+                {
+                    Assert.That(card.style.height.value.value, Is.EqualTo(100));
+                    var art = card.Children().First();
+                    Assert.That(art.style.position.value, Is.EqualTo(Position.Absolute));
+                    Assert.That(art.style.top.value.value, Is.EqualTo(2));
+                    Assert.That(art.style.height.value.value, Is.EqualTo(76));
+                    var caption = card.Q<Label>(card.name + " Level");
+                    Assert.That(caption.style.bottom.value.value, Is.EqualTo(0));
+                    Assert.That(caption.style.height.value.value, Is.EqualTo(22));
+                }
+                foreach (var label in root.Q("Map01A Spirit Pet Detail Facts").Query<Label>().ToList())
+                    Assert.That(label.ClassListContains("lgo-hub-copy"), Is.True, label.name);
+                Assert.That(root.Q<Label>("Map01A Spirit Pet Skill Row 1 Description").style.fontSize.value.value,
+                    Is.GreaterThanOrEqualTo(16));
                 var roster = root.Q("Map01A Spirit Pet Roster");
                 Assert.That(roster.childCount, Is.EqualTo(4));
                 Assert.That(roster.style.flexShrink.value, Is.EqualTo(0).Within(.01));
                 Assert.That(root.Query<VisualElement>(className: "lgo-spirit-pet-stat-row").ToList().Count,
                     Is.EqualTo(5), "Five stat rows must be created once; profiles only bind their values.");
                 Assert.That(root.Q("Map01A Spirit Pet Skill Row 0").style.minHeight.value.value,
-                    Is.EqualTo(56).Within(1));
+                    Is.EqualTo(88).Within(1));
                 Assert.That(root.Q<Label>("Map01A Spirit Pet Skill Row 0 Name").style.fontSize.value.value,
                     Is.GreaterThanOrEqualTo(16));
                 Assert.That(root.Q<Label>("Map01A Hub Detail Status").style.display.value,

@@ -2,7 +2,7 @@
 
 - Goal vẫn là năm tab theo redesign-v4-five-tabs; không mở class/pose/wardrobe/source hoặc screen khác.
 - A: Nhân vật/Rương đồ và inspector chung có 293/293 EditMode thực chạy, Player 87 ảnh, review hai tab trên ba viewport không cắt/chồng. Evidence: build/character-hub-checkpoints-v24/A-runtime.
-- B (Kỹ năng/Linh thú) và C (Tiềm năng modular icon) còn trong bản WIP bảo toàn, sẽ tích hợp tuần tự trước khi push. Không coi checkpoint A là hoàn thành toàn bộ goal.
+- A đã commit 6165e23f. B: Kỹ năng/Linh thú đã kiểm 294/294 EditMode và 87 ảnh Player, review ba viewport; C icon modular còn chờ tích hợp. Chưa push và chưa nghiệm thu toàn bộ goal.
 - Chi tiết snapshot, test graphics và gate: NEXT-ACTION.md. ProjectSettings do Unity sinh được giữ evidence và loại khỏi source diff; main checkout giữ nguyên.
 
 ## Character Hub — Tiềm năng data-overlay tối giản trên một base chung v20b — 2026-09-15
