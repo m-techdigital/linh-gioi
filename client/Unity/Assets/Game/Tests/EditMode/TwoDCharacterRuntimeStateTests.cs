@@ -665,8 +665,8 @@ namespace LinhGioi.Tests.EditMode
                     "Textured action buttons must not add a second outer border.");
                 Assert.That(lockDetailAction.style.borderTopWidth.value, Is.EqualTo(0),
                     "Gold action buttons must also keep only the decorative border inside their texture.");
-                Assert.That(equipmentDetail.style.borderTopWidth.value, Is.EqualTo(1),
-                    "The detail panel is a section inside the modal, so it uses one quiet section border without full filigree.");
+                Assert.That(equipmentDetail.style.borderTopWidth.value, Is.EqualTo(0),
+                    "The inspector owns one shared ornamental frame; an additional CSS outline must stay disabled.");
                 for (var iconIndex = 0; iconIndex < scene.VoEquipmentSlotIds.Count; iconIndex++)
                 {
                     var slotId = scene.VoEquipmentSlotIds[iconIndex];
@@ -733,9 +733,9 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(selectedSkillNode);
                 Assert.That(hubDetailName.text, Is.EqualTo(selectedSkill.Name),
                     "Selecting a skill must update the shared detail-right panel instead of leaving the default skill visible.");
-                Assert.That(selectedSkillNode.style.borderTopWidth.value, Is.EqualTo(2),
+                Assert.That(selectedSkillNode.style.borderTopWidth.value, Is.EqualTo(0),
                     "The selected node must expose the same visible selection state used by its detail-right content.");
-                Assert.That(firstSkillNode.style.borderTopWidth.value, Is.EqualTo(1));
+                Assert.That(firstSkillNode.style.borderTopWidth.value, Is.EqualTo(0));
                 Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite,
                     Is.EqualTo(selectedSkill.IconCatalog == CharacterHubIconCatalog.Skill
                         ? scene.GetMap01ASkillIconSprite(selectedSkill.IconId)
@@ -1018,6 +1018,98 @@ namespace LinhGioi.Tests.EditMode
             {
                 foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
                     if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void CharacterHubFrameHierarchyRetainsOrnamentsWithoutLeakingIntoPotential()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character hub frame hierarchy test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
+                foreach (var name in new[] { "Map01A Inventory Detail Panel", "Map01A Hub Preview Detail Panel" })
+                {
+                    var panel = root.Q(name);
+                    var frame = panel.Q(className: "lgo-hub-inspector-frame");
+                    Assert.That(frame, Is.Not.Null, "The inspector must use the shared shell ornament, not a plain CSS outline.");
+                    Assert.That(frame.ClassListContains("lgo-ornamented-shell"), Is.True);
+                    Assert.That(frame.pickingMode, Is.EqualTo(PickingMode.Ignore));
+                    Assert.That(frame.style.position.value, Is.EqualTo(Position.Absolute));
+                    Assert.That(panel.style.borderTopWidth.value, Is.EqualTo(0));
+                }
+                InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
+                var hero = root.Q("Map01A Hub Preview Detail Icon");
+                var heroFrame = hero.Q(className: "lgo-hub-hero-frame");
+                Assert.That(heroFrame, Is.Not.Null);
+                var count = root.Query<VisualElement>(className: "lgo-hub-ornament-frame").ToList().Count;
+                for (var repeat = 0; repeat < 3; repeat++)
+                {
+                    InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
+                    Assert.That(heroFrame.style.display.value, Is.EqualTo(DisplayStyle.None),
+                        "A Potential icon owns its independent circular frame; never stack a square hero frame over it.");
+                    Assert.That(hero.Q("Map01A Potential Detail Shared Frame").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                    InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
+                    Assert.That(hero.Q(className: "lgo-hub-hero-frame"), Is.SameAs(heroFrame));
+                    Assert.That(heroFrame.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                    Assert.That(root.Query<VisualElement>(className: "lgo-hub-ornament-frame").ToList().Count, Is.EqualTo(count));
+                }
+            }
+            finally
+            {
+                foreach (var go in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(go)) Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
+        public void CharacterHubFrameSelectionTracksEquipmentAndSkillWithoutRebuilding()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character hub selected ornament test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
+                var first = root.Q<Button>("Map01A Character Hero Quick Icon 0");
+                var second = root.Q<Button>("Map01A Character Hero Quick Icon 1");
+                InvokeBoundButton(second);
+                Assert.That(second.ClassListContains("lgo-character-hub-selected"), Is.True,
+                    "The clicked equipment rail slot must expose the same selection as the inspector.");
+                Assert.That(first.ClassListContains("lgo-character-hub-selected"), Is.False);
+                var frame = second.Q(className: "lgo-hub-selection-frame");
+                Assert.That(frame, Is.Not.Null);
+                Assert.That(frame.style.opacity.value, Is.EqualTo(1));
+                InvokeBoundButton(first);
+                InvokeBoundButton(second);
+                Assert.That(second.Q(className: "lgo-hub-selection-frame"), Is.SameAs(frame));
+                Assert.That(second.Query<VisualElement>(className: "lgo-hub-selection-frame").ToList().Count, Is.EqualTo(1));
+                InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
+                var skill = root.Q<Button>("Map01A Skill Node 2");
+                InvokeBoundButton(skill);
+                var skillFrame = skill.Q(className: "lgo-hub-selection-frame");
+                Assert.That(skillFrame, Is.Not.Null, "Canonical selected skills use a square gold ornament outside the separate circular icon.");
+                Assert.That(skillFrame.ClassListContains("lgo-ornamented-shell"), Is.True);
+                Assert.That(skillFrame.style.opacity.value, Is.EqualTo(1));
+                Assert.That(skill.IndexOf(skillFrame), Is.LessThan(skill.IndexOf(skill.Q<Label>(skill.name + " Level"))),
+                    "Decorative borders must paint behind the level badge, never through its text.");
+                Assert.That(second.IndexOf(frame), Is.LessThan(second.IndexOf(second.Q<Label>())),
+                    "Equipment level badges must remain above the same shared frame layer.");
+                Assert.That(skill.style.borderTopWidth.value, Is.EqualTo(0), "Do not retain the old blue CSS circle below the gold selection frame.");
+                InvokeBoundButton(root.Q<Button>("Map01A Skill Node 0"));
+                Assert.That(skillFrame.style.opacity.value, Is.EqualTo(0));
+                Assert.That(skill.Q(className: "lgo-hub-selection-frame"), Is.SameAs(skillFrame));
+            }
+            finally
+            {
+                foreach (var go in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(go)) Object.DestroyImmediate(go);
             }
         }
 

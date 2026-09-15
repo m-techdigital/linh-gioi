@@ -319,10 +319,47 @@ namespace LinhGioi.UI
             icon.style.borderTopWidth = icon.style.borderBottomWidth = 2;
         }
 
-        private static void ApplyLgoCharacterHubHeroIconFrame(VisualElement icon)
+        private static VisualElement EnsureLgoCharacterHubOrnament(VisualElement owner, string roleClass)
         {
-            icon.style.backgroundColor = new Color(.012f, .045f, .082f, .98f);
-            ApplyLgoCharacterHubInsetFrame(icon);
+            foreach (var child in owner.Children())
+                if (child.ClassListContains(roleClass)) return child;
+            var frame = new VisualElement { name = owner.name + " Ornament", pickingMode = PickingMode.Ignore };
+            frame.AddToClassList("lgo-hub-ornament-frame");
+            frame.AddToClassList(roleClass);
+            frame.style.position = Position.Absolute;
+            frame.style.left = frame.style.right = frame.style.top = frame.style.bottom = 0;
+            frame.style.backgroundColor = Color.clear;
+            // Reuse the shell's authored vector corner/edge; no duplicated raster
+            // borders and no decorative element participates in input or layout.
+            RuntimeUiSkin.ApplyOrnamentedShellFrame(frame);
+            owner.Insert(0, frame); // Labels and item artwork paint above decoration.
+            return frame;
+        }
+
+        private static void ApplyLgoCharacterHubInspectorFrame(VisualElement panel)
+        {
+            RemoveLgoOuterBorder(panel);
+            EnsureLgoCharacterHubOrnament(panel, "lgo-hub-inspector-frame");
+        }
+
+        private static void ApplyLgoCharacterHubIconSelection(VisualElement icon, bool selected)
+        {
+            var skill = icon.ClassListContains("lgo-skill-node");
+            var frame = EnsureLgoCharacterHubOrnament(icon, "lgo-hub-selection-frame");
+            frame.style.opacity = selected ? 1f : skill ? 0f : .38f;
+            icon.style.backgroundColor = skill ? Color.clear
+                : selected ? new Color(.10f, .075f, .025f, .48f) : new Color(.010f, .040f, .070f, .94f);
+            RemoveLgoOuterBorder(icon);
+            icon.style.overflow = Overflow.Visible;
+            if (icon is Button button) ApplyLgoCharacterHubInteractiveMotion(button);
+        }
+
+        private static void ApplyLgoCharacterHubHeroIconFrame(VisualElement icon, bool visible = true)
+        {
+            icon.style.backgroundColor = visible ? new Color(.012f, .045f, .082f, .98f) : Color.clear;
+            RemoveLgoOuterBorder(icon);
+            EnsureLgoCharacterHubOrnament(icon, "lgo-hub-hero-frame").style.display
+                = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
         private static void ApplyLgoCharacterHubInteractiveMotion(Button button)
@@ -358,6 +395,12 @@ namespace LinhGioi.UI
         private static void ApplyLgoCharacterHubSelectionState(VisualElement element, bool selected)
         {
             element.EnableInClassList(LgoCharacterHubSelectedClass, selected);
+            if (element.ClassListContains("lgo-skill-node") || element.ClassListContains(LgoItemIconFrameClass)
+                || element.ClassListContains("lgo-inventory-bag-grid-cell"))
+            {
+                ApplyLgoCharacterHubIconSelection(element, selected);
+                return;
+            }
             element.style.backgroundColor = selected
                 ? new Color(.025f, .21f, .39f, .98f)
                 : new Color(.012f, .050f, .088f, .94f);

@@ -564,6 +564,7 @@ namespace LinhGioi.UI
             _hubPreviewDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth;
             _hubPreviewDetailPanel.style.marginLeft = InventoryDesktopColumnGap;
             ApplyLgoCharacterHubDetailCard(_hubPreviewDetailPanel);
+            ApplyLgoCharacterHubInspectorFrame(_hubPreviewDetailPanel);
             _hubDetailHeader = LgoLabel("CHI TIẾT", 14, UiSubText, true);
             _hubDetailHeader.name = "Map01A Hub Detail Header";
             _hubDetailHeader.style.display = DisplayStyle.None;
@@ -885,12 +886,7 @@ namespace LinhGioi.UI
         private void ConfigureHubDetailMode(CharacterHubMode mode)
         {
             _hubPotentialDetailIconFrame.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
-            if (mode == CharacterHubMode.Potential)
-            {
-                RemoveLgoOuterBorder(_hubDetailIcon);
-                _hubDetailIcon.style.backgroundColor = Color.clear;
-            }
-            else ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon);
+            ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon, mode != CharacterHubMode.Potential);
             _hubSkillActionRow.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
             _hubPotentialActionRow.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             _hubSpiritPetActionRow.style.display = mode == CharacterHubMode.SpiritPet ? DisplayStyle.Flex : DisplayStyle.None;

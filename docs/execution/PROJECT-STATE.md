@@ -1,3 +1,11 @@
+## Character Hub v25 — khung dùng chung và selection đồng bộ — 2026-09-16
+
+- Kế thừa f32e74e4 đã push. Inspector, hero icon, equipment/skill selected dùng cùng ornament base, không thêm texture hay sửa atlas. Rail trang bị đồng bộ lựa chọn với detail; Tiềm năng giữ circular frame/content riêng và không rò square hero frame khi chuyển tab.
+- Eye audit Player lần đầu phát hiện khung chọn đè nhãn level. Regression tái hiện RED; base Insert(0) đặt ornament trước content, không dịch riêng label. Final graphics EditMode 298/298, không fail/skip; Python39/39; Player build0error/46warning.
+- Evidence: build/character-hub-frame-v25/runtime-final, 87 frame. Đã xem đủ5tab trên3viewport; level không bị viền xuyên, không thấy cắt/chồng mới. Hai lượt build/capture, lượt hai do lỗi paint-order đã xác định.
+- Không đổi class/pose/wardrobe/source renderer, Resources, ProjectSettings hoặc frozen surfaces; main checkout WIP được giữ nguyên. Source diff và hash/evidence được lưu trong build/character-hub-frame-v25.
+- Codex review độc lập bị quota chặn trước khi review; không claim PASS của reviewer. Kiểm trực tiếp source/test/Player đã thực hiện. Trạng thái CONTINUE/VISUAL_FIX_REQUIRED; không coi batch là nghiệm thu toàn bộ goal hoặc thiết bị mobile/tablet thật. Bước tiếp: inspector content/state theo NEXT-ACTION.
+
 ## Character Hub v24 — tích hợp WIP thành checkpoint có kiểm chứng — 2026-09-16
 
 - Goal: năm tab theo redesign-v4-five-tabs, Skill là 3×3. Owner chỉ đạo mới: khung icon dùng chung, nội dung độc lập; các giả định 4–3–2/bake frame cũ bên dưới là lịch sử đã bị thay thế.

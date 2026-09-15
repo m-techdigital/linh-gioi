@@ -2,21 +2,23 @@
 
 ## Authoritative resume
 - Worktree: `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`; branch `codex/character-hub-v22`; upstream `origin/feature/2d`.
-- Design duy nhất: `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/`.
-- Toàn bộ WIP v23 có bản bảo toàn kiểm hash: `/Users/minhdc/Projects/LGO-UI-Checkpoint-Split-20260916-014527`.
-- Không sửa class/pose/wardrobe/source renderer/camera hoặc frozen surfaces; main checkout dirty giữ nguyên.
+- v24 đã push `f32e74e4`. v25 là commit chứa bàn giao này; fetch và xác nhận HEAD/upstream trước sửa tiếp.
+- Canonical duy nhất: `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/`.
+- Không sửa class/pose/wardrobe/source renderer/camera, frozen surfaces hoặc main checkout dirty.
 
-## Active — hoàn thiện shared frame / hierarchy theo design
-- WIP đã chia theo dependency, không stage né budget: A `6165e23f` (9 file/529 dòng), B `8ca19ff5` (6/277), C1 `3710578e` (8/191 tính cả file mới).
-- C2 nối bộ icon Tiềm năng: một frame master và sáu nội dung độc lập, atlas 512×256/109488 byte; topology, inspector và cost dùng chung sprite. Không thay class data hoặc renderer.
-- Candidate C2 khớp từng byte với toàn bộ input đã chạy C-editmode/C-player; proof: `build/character-hub-checkpoints-v24/C2-input-replay-proof.json`.
-- EditMode có graphics: A 293/293, B 294/294, C 296/296; không fail/skip. Lượt A -nographics từng Ignore pointer test đã được thay bằng graphics, không tính skipped là PASS.
-- Mỗi candidate A/B/C có 87 frame tại `build/character-hub-checkpoints-v24/{A,B,C}-runtime/`; đã xem Nhân vật/Rương đồ và Skill/Pet trên ba viewport, Tiềm năng PC/default + mobile/tablet selected, và bốn tab PC để kiểm frame rò.
-- Python cuối 7 asset +25 governance +7 capture; replay atlas/chín PNG byte-for-byte; no-source/no-3D/frozen PASS.
-- [ ] Commit/push C2 qua supervisor sau budget và xác nhận remote không diverge.
-- [ ] Batch tiếp: inspector dùng hoa văn cùng base với shell, hierarchy khung rõ hơn, Skill selected bám design; không thêm khung trùng lên icon Tiềm năng.
-- [ ] Test trạng thái, build/capture một lượt cả năm tab trên PC/mobile landscape/tablet, review bằng mắt trước checkpoint tiếp.
+## v25 — shared ornament / selection: batch đã kiểm
+- Hai inspector, icon detail và selection dùng lại corner/edge vector của RuntimeUiSkin; không thêm PNG, không đổi atlas hay tọa độ/canvas.
+- Rail trang bị nay highlight đúng slot đang chọn trong detail; Skill selected dùng khung vuông vàng độc lập, unselected không giữ vòng CSS xanh cũ.
+- Tiềm năng giữ frame/content tách riêng; square hero frame tắt khi vào Tiềm năng và dùng lại đúng instance khi quay về tab khác.
+- Player lượt đầu phát hiện viền đè nhãn level: test RED tái hiện index frame sau label; sửa base `Insert(0)` thay vì dịch từng nhãn. Lượt đầu giữ làm evidence lỗi, không coi visual PASS.
+- Test: RED ban đầu 2/2 fail đúng hành vi thiếu; paint-order RED 1/1. Final full graphics EditMode 298/298, 0 fail/skip; Python 7 asset +25 governance +7 capture PASS.
+- Player final build errors=0, warnings=46; 87 ảnh ở `build/character-hub-frame-v25/runtime-final/{pc,mobile,tablet}`. Đã xem đủ 5 tab trên cả 3 viewport, không cắt/chồng do batch; nhãn level không bị viền xuyên qua.
+- Tổng 2 build/2 capture matrix: lượt hai chỉ chạy vì lỗi paint-order có evidence. Không đổi Resources/ProjectSettings/class/frozen; Unity-generated drift đã lưu rồi loại.
+- Review độc lập Codex bị chặn quota trước khi review, không claim gate đó PASS; đã kiểm trực tiếp diff, test và ảnh Player.
 
-## Gate
-`CONTINUE / VISUAL_FIX_REQUIRED`: checkpoint kỹ thuật không đồng nghĩa owner nghiệm thu toàn bộ năm tab. Một số icon Skill ngoài Kiếm còn generic, visual hero/chrome chưa hoàn toàn sát canonical; không sửa class source để che gap.
-Mobile/tablet là viewport trên macOS, không phải thiết bị thật. Budget kiểm thêm dòng file mới bằng `build/character-hub-checkpoints-v24/effective_budget.py`; không nâng ngưỡng.
+## Active next — inspector content / state fidelity
+- Gom batch theo hierarchy: fact rows/icon/text/value, trạng thái nút và connector Skill bám canonical; dùng component chung, không tạo số liệu gameplay giả để giống ảnh.
+- Giữ mọi frame/content độc lập, frame được tạo một lần và phải được vẽ trước nội dung để nằm bên dưới nhãn/icon; không dựng lại theo class/tab.
+- Sau batch: full tests liên quan, Player 3 viewport, eye audit, frozen/budget rồi commit/push qua supervisor; không force-push.
+
+`CONTINUE / VISUAL_FIX_REQUIRED`: chưa nghiệm thu toàn bộ 5 tab. Một số icon Skill ngoài Kiếm và typography/art chưa sát canonical; mobile/tablet mới là viewport macOS, không phải thiết bị thật.

@@ -221,6 +221,7 @@ namespace LinhGioi.UI
             _inventoryDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth;
             _inventoryDetailPanel.style.marginLeft = InventoryDesktopColumnGap;
             ApplyLgoCharacterHubDetailCard(_inventoryDetailPanel);
+            ApplyLgoCharacterHubInspectorFrame(_inventoryDetailPanel);
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
             _inventoryFooter.style.flexGrow = 0;
             _inventoryFooter.style.flexShrink = 0;
@@ -1017,6 +1018,7 @@ namespace LinhGioi.UI
                 var sprite = string.IsNullOrEmpty(slot) ? null : _scene.GetEquipmentThumbnailSprite(slot);
                 _characterHeroQuickIcons[i].style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
                 _characterHeroQuickIcons[i].style.display = sprite == null ? DisplayStyle.None : DisplayStyle.Flex;
+                ApplyLgoCharacterHubSelectionState(_characterHeroQuickIcons[i], slot == _scene.SelectedEquipmentSlot);
                 if (_characterHeroQuickLevels != null && i < _characterHeroQuickLevels.Length)
                     _characterHeroQuickLevels[i].text = "+" + _scene.GetEquipmentItemLevel(slot);
             }
