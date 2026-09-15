@@ -55,7 +55,7 @@ def profile_config() -> dict:
                 "sourceGroundY": 953,
                 "scale": 1.45,
                 "landmarks": {
-                    "root": [520, 565], "pelvis": [520, 565], "torso": [520, 470],
+                    "root": [520, 953], "pelvis": [520, 565], "torso": [520, 470],
                     "chest": [520, 405], "neck": [520, 348], "head": [528, 230],
                     "shoulder_near": [579, 390], "elbow_near": [610, 508],
                     "wrist_near": [640, 604], "hand_near": [646, 631],
@@ -72,7 +72,7 @@ def profile_config() -> dict:
                 "sourceGroundY": 953,
                 "scale": 1.45,
                 "landmarks": {
-                    "root": [1047, 579], "pelvis": [1047, 579], "torso": [1043, 480],
+                    "root": [1047, 953], "pelvis": [1047, 579], "torso": [1043, 480],
                     "chest": [1042, 420], "neck": [1040, 371], "head": [1040, 269],
                     "shoulder_near": [1101, 405], "elbow_near": [1134, 526],
                     "wrist_near": [1164, 604], "hand_near": [1170, 630],

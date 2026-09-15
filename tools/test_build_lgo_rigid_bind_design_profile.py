@@ -13,8 +13,10 @@ from build_lgo_rigid_bind_design_profile import (
 class RigidBindDesignProfileTests(unittest.TestCase):
     def test_both_bodies_register_to_canonical_root_and_ground(self):
         for body in profile_config()["bodies"].values():
+            root = project_point(body, body["landmarks"]["root"])
             pelvis = project_point(body, body["landmarks"]["pelvis"])
             ground = project_point(body, [body["landmarks"]["pelvis"][0], body["sourceGroundY"]])
+            self.assertEqual(root, (CANVAS_WIDTH // 2, GROUND_Y))
             self.assertEqual(pelvis[0], CANVAS_WIDTH // 2)
             self.assertEqual(ground[1], GROUND_Y)
 
