@@ -9,8 +9,8 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
 
 - Unity Transform hierarchy + ordinary rigid `SpriteRenderer`; one fixed FitProfile per body variant/item.
-- Current gate: `FINAL_OUTFIT1_BODY_AND_OUTFIT_JOINT_FORMULA_REVIEW / NEED_HUMAN_VISUAL_REVIEW`.
-- Current design evidence is `build/rigid-outfit-pilot/final-1-three-quarter-design-v5/slight-outward-rigid-cover-neutral-pair-v3.png`; joint formula evidence is `build/rigid-outfit-pilot/final-1-joint-authoring-v1/joint-contract-review.png`. Owner acceptance is required before body layer/rig work.
+- Current gate: `FINAL_OUTFIT1_BODY_AND_OUTFIT_BIND_DESIGN_REVIEW / NEED_HUMAN_VISUAL_REVIEW`.
+- Current design evidence is `build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png`; joint formula evidence is `build/rigid-outfit-pilot/final-1-joint-authoring-v1/joint-contract-review.png`. Owner acceptance is required before body layer/rig work. The v6 board is RGB composite review-only and may not be sliced into source parts.
 - Stop here for owner review; do not mutate source/motion or start another capture without a concrete owner finding.
 - Outfit #2, mix-and-match, class/level expansion and migration remain locked until outfit #1 visual PASS.
 

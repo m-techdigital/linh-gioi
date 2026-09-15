@@ -174,6 +174,14 @@ def current_blocker_section(next_action: str) -> str:
                 "Current gate from active task state: NEED_HUMAN_VISUAL_REVIEW. Review the mini chibi modular concept before "
                 "source/motion design or Unity implementation."
             )
+        current_evidence = state.get("currentDesignEvidence") or state.get("currentPlayerEvidence")
+        stop_condition = state.get("stopCondition")
+        if isinstance(current_evidence, str) and current_evidence:
+            stop_note = f" Gate: {stop_condition}." if isinstance(stop_condition, str) and stop_condition else ""
+            return (
+                "Current gate from active task state: NEED_HUMAN_VISUAL_REVIEW. Review "
+                f"{current_evidence}.{stop_note} Do not proceed beyond this visual gate."
+            )
         return "Current gate from active task state: NEED_HUMAN_VISUAL_REVIEW. Review the paired six-pose character boards before source reconstruction or runtime promotion."
     if state.get("status") == "NEED_OWNER_DECISION":
         if state.get("phase") == "POSE_CONTROL_READY_ART_TRANSFER_BLOCKED":

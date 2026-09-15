@@ -206,6 +206,22 @@ Pose control source is ready but art transfer is blocked.
         self.assertIn("final-1-combo-review-v3", blocker)
         self.assertIn("Stop before outfit #2", blocker)
 
+    def test_rigid_outfit_bind_design_review_uses_active_artifact_instead_of_stale_pose_board(self):
+        text = """## ACTIVE GOAL LOCK — Unity rigid outfit pilot visual-first
+
+## Active task state
+
+```json
+{"activeTask":"LGO_RIGID_OUTFIT_PILOT_01","phase":"FINAL_OUTFIT1_BODY_AND_OUTFIT_BIND_DESIGN_REVIEW","status":"NEED_HUMAN_VISUAL_REVIEW","currentDesignEvidence":"build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png","stopCondition":"OWNER_REVIEW_BODY_AND_OUTFIT_BIND_DESIGN"}
+```
+"""
+
+        blocker = current_blocker_section(text)
+
+        self.assertIn("body-only-and-dressed-neutral-pair-v1.png", blocker)
+        self.assertIn("OWNER_REVIEW_BODY_AND_OUTFIT_BIND_DESIGN", blocker)
+        self.assertNotIn("paired six-pose", blocker)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -6,6 +6,8 @@ Contract `docs/art/LGO-RIGID-JOINT-AND-LAYER-AUTHORING-CONTRACT-v1.md` now defin
 
 Real-alpha rotation gate `tools/audit_lgo_rigid_joint_alpha_sweep.py` was added test-first. Synthetic round cap control passes 21/21 angles from -150° to 150° with no missing audited pixel; horizontal rectangular overlap is rejected with exit 2 and visible holes on its board. This proves the geometry check can distinguish the stopped split method, while explicitly not claiming natural contour or Player quality.
 
+One neutral design board v6 now exposes the missing review state: male/female body-only next to dressed at the same facing direction and near-common ground. Direct static review finds no obvious detached limb or mechanical joint, but the file is RGB composite, body/dressed are not pixel-identical layers and hidden cap/underlap is not proven. It is `STYLE_AND_BODY_BIND_REVIEW_ONLY_NOT_SOURCE`; layer authoring and rig stay locked for owner review.
+
 ## Final #1 rigid outfit bind/motion redesign v3 — 2026-09-15
 
 `NEED_HUMAN_VISUAL_REVIEW`. Owner rejected v2 for detached neck/head, downward face pitch, closed/incorrect idle limb placement, upper legs outside the tunic and weak run/tuck silhouettes. V3 fixes the source fit and motion as one batch: 64+ px head/body rectangle overlap, full head compensation during run, open grounded idle stance, upper thighs below the lower tunic, 44% run stance with a flight window, stronger stride/high knee, and curled jump/roll tuck derived from the old six-pose silhouette. The first v3a capture still had an upright jump apex and is retained under `build/rigid-outfit-pilot/rejected-iterations/final-1-v3a-upright-jump`.
