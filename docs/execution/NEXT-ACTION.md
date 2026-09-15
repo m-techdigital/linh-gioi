@@ -14,6 +14,10 @@ Owner xác nhận kỹ thuật rigid khả dụng, nhưng bác side-profile v4 v
 
 Topology v2 có 16 body part và 25 outfit part. Một joint dùng chung pivot nhưng body và outfit có cap/underlap độc lập. Công thức lấy joint width + outline/filter/registration margin để sinh bán kính cap; sample toàn ROM mỗi 5°. Body-only bắt buộc kín/tự nhiên trước khi mặc đồ; từng slot-off và cặp seam-critical phải giữ body nguyên. Audit cũng hạ `rigid-source-v2` xuống evidence vì nó chỉ cắt alpha ngang với overlap chữ nhật.
 
+Batch an toàn tiếp theo trước owner review: tạo alpha-sweep gate nhận PNG parent/child thật trên common canvas, quay child quanh pivot qua toàn safe ROM và đo coverage trong đĩa joint sau filter guard. Fixture cap tròn phải pass; fixture horizontal/rectangular split phải fail. Gate này chỉ chứng minh công thức và chuẩn bị kiểm source sau này, không cấp quyền author layer/rig cho candidate hiện tại.
+
+Alpha-sweep gate đã hoàn tất bằng TDD. Control `round-pass` giữ `miss=0` ở 21 sample từ -150° đến 150°; control `rectangular-fail` trả exit 2 và thiếu 2.209–3.324 pixel ở năm góc review. Board nằm tại `build/rigid-outfit-pilot/joint-alpha-sweep-control-v1/{round-pass,rectangular-fail}/joint-alpha-sweep-contact-sheet.png`. Source thật tiếp theo bắt buộc cung cấp pivot đã đăng ký và hai PNG RGBA parent/child để chạy cùng gate.
+
 ## Next result người chơi có thể kiểm chứng
 
 **DỪNG TẠI REVIEW CÔNG THỨC + BIND DESIGN.** Owner xem `build/rigid-outfit-pilot/final-1-joint-authoring-v1/joint-contract-review.png`, `design-authority-review-board-v3.jpg` và `joint-cover-review-board-v2.jpg`. Chỉ khi góc/tỷ lệ và dual body–outfit cap topology được duyệt mới author body-only layered source, calibrate số đo thật và sau đó mới author outfit RGBA. Không cắt composite đẹp thành mảnh thiếu pixel và không dùng board pose do ImageGen sinh.

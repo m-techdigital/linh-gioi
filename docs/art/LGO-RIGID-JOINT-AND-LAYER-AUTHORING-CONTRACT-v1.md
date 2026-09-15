@@ -10,6 +10,7 @@ Tài liệu này khóa cách thiết kế body và outfit cho pilot rigid. Nó k
 - Unity mô tả `SpriteSkin` là component làm biến dạng sprite. Nó không thuộc pipeline này: <https://docs.unity3d.com/Packages/com.unity.2d.animation@10.0/api/UnityEngine.U2D.Animation.SpriteSkin.html>.
 - Unity `SortingGroup` giữ các renderer của một nhân vật nhiều sprite trong một nhóm và vẫn cho phép order riêng bên trong nhóm: <https://docs.unity3d.com/2022.3/Documentation/Manual/class-SortingGroup.html>.
 - Spine ghi rõ mỗi phần chuyển động độc lập cần một file ảnh riêng; slot gắn vào bone và draw order tách khỏi bone. Đây là đối chứng authoring, không phải lệnh đổi runtime sang Spine: <https://us.esotericsoftware.com/spine-images>, <https://us.esotericsoftware.com/spine-slots>.
+- Spine Tips về chuẩn bị cutout yêu cầu vẽ cả phần bị che, bo tròn đầu mảnh tại joint, tách front/back thành layer riêng và giữ outline ở hai phía vùng giao để phần xoay vẫn đọc liền. Đây là nguồn trực tiếp củng cố lựa chọn cap/underlap: <https://esotericsoftware.com/blog/2019/1>.
 
 Các nguồn trên xác nhận cấu trúc transform/attachment/draw-order. Công thức cap tròn dưới đây là thiết kế kỹ thuật của LGO để đáp ứng ràng buộc rigid và được kiểm bằng alpha sweep; đây không phải quy tắc được Unity tự bảo đảm.
 
@@ -138,4 +139,6 @@ Không cần thử toàn bộ `2^n` loadout. Phải test body-only, mỗi slot-o
 - Part va vào torso/part khác trong safe ROM dù pivot kín: `SKELETON_RANGE_REVIEW_REQUIRED` hoặc `ASSET_REAUTHOR_REQUIRED`.
 - Cùng lỗi cấu trúc xuất hiện sau hai lượt source: bác topology đó, không tăng overlap hoặc chỉnh pixel tiếp.
 
-Tool: `tools/build_lgo_rigid_joint_authoring_template.py`. Profile hiện hành tại `docs/art/data/lgo-rigid-joint-interface-profile-v1.json` cố ý mang trạng thái `FORMULA_PROFILE_AWAITING_BODY_BIND_CALIBRATION`; các pivot/width trong đó chỉ là layout target để review công thức, chưa được dùng rig.
+Tool công thức: `tools/build_lgo_rigid_joint_authoring_template.py`. Alpha gate: `tools/audit_lgo_rigid_joint_alpha_sweep.py`; gate quay child PNG thật quanh pivot, đo coverage trong `R - filterGuard` và xuất contact sheet. Control evidence tại `build/rigid-outfit-pilot/joint-alpha-sweep-control-v1`: cap tròn đạt `miss=0` từ `-150°..150°`, horizontal/rectangular split bị reject với pixel thiếu ở mọi frame mẫu.
+
+Profile hiện hành tại `docs/art/data/lgo-rigid-joint-interface-profile-v1.json` cố ý mang trạng thái `FORMULA_PROFILE_AWAITING_BODY_BIND_CALIBRATION`; các pivot/width trong đó chỉ là layout target để review công thức, chưa được dùng rig. Alpha gate chỉ chứng minh coverage hình học; contour tự nhiên, va chạm silhouette và layer xuyên sai vẫn cần review trực tiếp.

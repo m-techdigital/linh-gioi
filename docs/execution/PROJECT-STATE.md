@@ -5,6 +5,8 @@
 Không dùng ảnh sinh nhiều pose làm authority: ba lượt đã lặp sai lead-leg. Motion authority là bộ sáu pose cũ của owner; candidate neutral chỉ định source/identity/outfit. Dừng chờ owner duyệt góc nhìn và seam-cover trước khi tách module/rig. Outfit #2, mix, class và level vẫn khóa; mọi evidence side-profile/too-frontal/duplicate-phase giữ dưới `build/rigid-outfit-pilot/rejected-iterations/`.
 Joint authoring contract tại `docs/art/LGO-RIGID-JOINT-AND-LAYER-AUTHORING-CONTRACT-v1.md`; tool/test sinh cap radius, template alpha và review board từ joint width + margin. Profile hiện chỉ là target layout chờ đo trên body-only source được duyệt, nên layer authoring/rig vẫn khóa. `rigid-source-v2` cũ bị hạ xuống evidence vì overlap chữ nhật không chứng minh khớp kín khi xoay.
 
+Alpha-sweep gate mới đã kiểm công thức trên ảnh RGBA thật: cap tròn pass 21/21 góc `-150°..150°` với `miss=0`; rectangular split fail và command trả exit 2. Evidence `build/rigid-outfit-pilot/joint-alpha-sweep-control-v1`. Đây là proof hình học, chưa phải proof mỹ thuật/source/Player.
+
 Authoritative goal/process: `docs/execution/LGO-RIGID-OUTFIT-PILOT-GOAL.md`.
 
 ## Active goal lock — six-pose registered outfit path — 2026-09-13
