@@ -9,9 +9,9 @@ This file is a resume guard for the current `feature-2d-latest` sandbox. Read it
 The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
 
 - Unity Transform hierarchy + ordinary rigid `SpriteRenderer`; one fixed FitProfile per body variant/item.
-- Current gate: `FINAL_OUTFIT1_BODY_AND_OUTFIT_BIND_DESIGN_REVIEW / NEED_HUMAN_VISUAL_REVIEW`.
-- Current design evidence is `build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png`; joint formula evidence is `build/rigid-outfit-pilot/final-1-joint-authoring-v1/joint-contract-review.png`. Owner acceptance is required before body layer/rig work. The v6 board is RGB composite review-only and may not be sliced into source parts.
-- Stop here for owner review; do not mutate source/motion or start another capture without a concrete owner finding.
+- Current gate: `FINAL_OUTFIT1_NATIVE_LAYERED_SOURCE_AUTHORING / FIX_REQUIRED`.
+- Current design evidence is `build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png`; it is identity/silhouette reference only. Authoring must start with a body-only native layered source whose hidden geometry is drawn inside each layer and opens again in the authoring tool.
+- Body-only rotation proof precedes outfit authoring; outfit proof precedes rig/full motion.
 - Outfit #2, mix-and-match, class/level expansion and migration remain locked until outfit #1 visual PASS.
 
 Recurrence guard:
@@ -23,6 +23,8 @@ Recurrence guard:
 - Do not restore v2 or the preserved v3a upright-jump capture as Final #1. V2 failed neck/head, stance, hip layering and motion range; v3a still read as sitting upright at jump apex.
 - Do not restore side-profile v4, the too-frontal v5 candidate, or any generated multi-pose board. Multi-pose generation repeated the same lead-leg phase three times; use the owner's old six-pose sheet as deterministic motion authority.
 - Do not reuse `rigid-source-v2` as source authority. Its horizontal alpha split and rectangular overlap do not create a rotation-invariant body cap/socket. New source needs one shared pivot plus independent circular body cap and outfit cover, and body-only must pass before equipment.
+- Do not slice board v6 or another assembled RGB character into runtime pieces. Composite-mask v7 produced rectangular holes, missing underlaps and rotating ground shadow; evidence is under `build/rigid-outfit-pilot/rejected-iterations/v7-composite-mask-source/`.
+- Do not use an ImageGen exploded atlas as source. The v7 output has opaque background, repeated/ambiguous parts and no deterministic reassembly contract; evidence is under `build/rigid-outfit-pilot/rejected-iterations/v7-imagegen-atlas-invalid/`.
 - Review the whole board, batch issues by source/pivot/overlap/motion/render order, and make one grouped correction. A structural error repeated in two captures rejects that topology/source hypothesis.
 - The generated red armor sheet is `REJECTED-NOT-INTEGRATED` because Phase 8 started before outfit #1 passed; do not copy it into Resources or rename it into an active outfit.
 
