@@ -4,12 +4,18 @@ Date: 2026-09-13
 
 This file is a resume guard for the current `feature-2d-latest` sandbox. Read it together with `docs/execution/NEXT-ACTION.md` before doing character, outfit, rig, motion, Krita, Blender, GarmentCode, Comfy or Player work.
 
+## Stopped path: procedural primitive body source v8
+
+- `final-1-native-body-source-v8` proved that named RGBA layers, pivots and hidden-cap metadata can be generated, but the rendered character failed the visual gate: mannequin silhouette, exposed circular joints, weak anatomy and no production-quality LGO identity.
+- Do not resume drawing the character from SVG primitives or claim design progress from layer-count/alpha tests. Keep the output only under `build/rigid-outfit-pilot/rejected-iterations/` as evidence.
+- The next source must be authored as a coherent character design first, with articulation zones designed into the silhouette. Only after the neutral body is visually accepted may it be separated into native editable layers and tested through the rotation sweep.
+
 ## Current allowed path
 
 The only active character route is `LGO_RIGID_OUTFIT_PILOT_01`:
 
 - Unity Transform hierarchy + ordinary rigid `SpriteRenderer`; one fixed FitProfile per body variant/item.
-- Current gate: `FINAL_OUTFIT1_NATIVE_LAYERED_SOURCE_AUTHORING / FIX_REQUIRED`.
+- Current gate: `FINAL_OUTFIT1_COHERENT_BODY_DESIGN_AUTHORING / FIX_REQUIRED`.
 - Current design evidence is `build/rigid-outfit-pilot/final-1-body-outfit-bind-design-v6/body-only-and-dressed-neutral-pair-v1.png`; it is identity/silhouette reference only. Authoring must start with a body-only native layered source whose hidden geometry is drawn inside each layer and opens again in the authoring tool.
 - Body-only rotation proof precedes outfit authoring; outfit proof precedes rig/full motion.
 - Outfit #2, mix-and-match, class/level expansion and migration remain locked until outfit #1 visual PASS.
