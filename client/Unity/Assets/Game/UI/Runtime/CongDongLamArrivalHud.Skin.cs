@@ -1033,6 +1033,52 @@ namespace LinhGioi.UI
             return frame;
         }
 
+        private static void BindLgoSkillIconLayers(VisualElement icon, Sprite content, Sprite frameArtwork,
+            float size, string identity)
+        {
+            var frame = icon.Q(className: "lgo-skill-shared-frame");
+            if (frame == null)
+            {
+                if (frameArtwork == null) throw new System.InvalidOperationException("Missing shared Skill frame");
+                ApplyLgoSkillIcon(icon, size);
+                frame = CreateLgoCircularIconFrame(icon.name + " Shared Skill Frame", frameArtwork, size);
+                frame.AddToClassList("lgo-skill-shared-frame");
+                icon.Add(frame);
+                var notice = LgoLabel("", 12, UiSubText);
+                notice.name = icon.name + " Missing Artwork";
+                notice.pickingMode = PickingMode.Ignore;
+                notice.AddToClassList("lgo-skill-artwork-notice");
+                notice.style.position = Position.Absolute;
+                notice.style.left = new Length(12, LengthUnit.Percent);
+                notice.style.width = new Length(76, LengthUnit.Percent);
+                notice.style.top = new Length(12, LengthUnit.Percent);
+                notice.style.height = new Length(76, LengthUnit.Percent);
+                notice.style.marginTop = notice.style.marginBottom = 0;
+                notice.style.paddingTop = notice.style.paddingBottom = 0;
+                notice.style.paddingLeft = notice.style.paddingRight = 0;
+                notice.style.unityTextAlign = TextAnchor.MiddleCenter;
+                icon.Add(notice);
+            }
+            icon.style.width = icon.style.height = size;
+            frame.style.width = frame.style.height = size;
+            icon.style.backgroundImage = content == null ? StyleKeyword.None : new StyleBackground(content);
+            icon.EnableInClassList("lgo-skill-art-missing", content == null);
+            var missing = icon.Q<Label>(icon.name + " Missing Artwork");
+            missing.style.fontSize = Mathf.Clamp(size / 8, 9, 13);
+            missing.text = string.IsNullOrEmpty(identity) ? "Chưa có icon" : identity + "\nChưa có icon";
+            icon.tooltip = content == null ? identity + " · Artwork chưa được đăng ký" : identity;
+            SetLgoSkillIconLayersVisible(icon, true);
+        }
+
+        private static void SetLgoSkillIconLayersVisible(VisualElement icon, bool visible)
+        {
+            var frame = icon.Q(className: "lgo-skill-shared-frame");
+            if (frame != null) frame.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
+            var missing = icon.Q<Label>(icon.name + " Missing Artwork");
+            if (missing != null) missing.style.display = visible && icon.ClassListContains("lgo-skill-art-missing")
+                ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
         private static void ApplyLgoEquippedSkillSlot(VisualElement slot)
         {
             slot.AddToClassList("lgo-equipped-skill-slot");

@@ -127,9 +127,10 @@ RUNTIME_ART_PACKS = [
         'pack': 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ASkillIcons',
         'id': 'map01a-skill-icons-v1',
         'status': 'DRAFT_RUNTIME_REVIEW',
-        'assets': {'map01a-skill-icons.png': (768, 576, 'ui-skill-icon-atlas')},
-        'generators': {'image_gen_reference_alpha_extraction'},
-        'max_bytes': 650_000,
+        'assets': {'map01a-skill-icons.png': (512, 512, 'ui-skill-icon-atlas')},
+        'generators': {'pack_lgo_skill_icons'},
+        'ui_import_limits': {'map01a-skill-icons.png': 512},
+        'max_bytes': 400_000,
         'status_error': 'Map01A skill icons must remain draft until owner visual review',
     },
     {

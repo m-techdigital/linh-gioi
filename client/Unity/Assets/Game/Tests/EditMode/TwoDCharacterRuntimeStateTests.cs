@@ -64,9 +64,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(profile.DefaultPotentialName, Is.EqualTo(expectedDefaultPotentials[profile.Id]),
                     profile.Id + " must select its recommended starting Potential through profile data.");
                 Assert.That(profile.Potentials.Any(potential => potential.Name == profile.DefaultPotentialName), Is.True);
-                if (profile.Id != "kiem")
-                    Assert.That(profile.Skills.All(skill => skill.IconCatalog == CharacterHubIconCatalog.Hud), Is.True,
-                        profile.Id + " must use provenance-backed shared icons instead of pretending Kiếm art belongs to another class.");
+                Assert.That(profile.Skills.All(skill => skill.IconCatalog == CharacterHubIconCatalog.Skill), Is.True,
+                    profile.Id + " uses the shared Skill asset pipeline; missing art must not fall back to HUD icons.");
             }
             for (var index = 1; index < profiles.Count; index++)
                 Assert.That(ReferenceEquals(profiles[0].Potentials, profiles[index].Potentials), Is.True,
@@ -1220,6 +1219,60 @@ namespace LinhGioi.Tests.EditMode
             {
                 foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
                     if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void SkillModulesUseExplicitSkillArtworkInsteadOfHudFallback()
+        {
+            foreach (var profile in CharacterHubClassCatalog.Profiles)
+                foreach (var skill in profile.Skills)
+                    Assert.That(skill.IconCatalog, Is.EqualTo(CharacterHubIconCatalog.Skill),
+                        skill.Id + " must never substitute a HUD/navigation icon for missing skill artwork.");
+        }
+
+        [Test]
+        public void SkillModulesReuseOneFrameAcrossProfilesTreeEquippedAndInspector()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("shared skill icon layers test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
+                var master = scene.GetMap01ASkillIconSprite("frame");
+                Assert.That(master, Is.Not.Null, "Skill needs one separate ring master, like Potential.");
+                var frames = root.Query<VisualElement>(className: "lgo-skill-shared-frame").ToList();
+                Assert.That(frames.Count, Is.EqualTo(19), "Tree9 +equipped4 +categories3 +detail1 +pet2 share one ring.");
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                foreach (var profile in CharacterHubClassCatalog.Profiles)
+                {
+                    typeof(CongDongLamArrivalHud).GetField("_characterHubEvidenceClassId", flags).SetValue(hud, profile.Id);
+                    typeof(CongDongLamArrivalHud).GetMethod("BindCharacterHubProfile", flags).Invoke(hud, null);
+                    InvokeBoundButton(root.Q<Button>("Map01A Skill Node 0"));
+                    Assert.That(root.Query<VisualElement>(className: "lgo-skill-shared-frame").ToList(), Is.EqualTo(frames));
+                    foreach (var frame in frames)
+                        Assert.That(frame.style.backgroundImage.value.sprite, Is.SameAs(master));
+                    var icon = root.Q("Map01A Skill Node 0 Icon");
+                    var expected = scene.GetMap01ASkillIconSprite(profile.Skills[0].IconId);
+                    Assert.That(icon.style.backgroundImage.value.sprite, Is.SameAs(expected));
+                    StringAssert.Contains(profile.Skills[0].Name, icon.tooltip);
+                    Assert.That(icon.tooltip.Contains("chưa được đăng ký"), Is.EqualTo(expected == null),
+                        "Availability tooltip must be rebound when leaving a class whose artwork is missing.");
+                    Assert.That(icon.Q<Label>(icon.name + " Missing Artwork").style.display.value,
+                        Is.EqualTo(expected == null ? DisplayStyle.Flex : DisplayStyle.None));
+                }
+                var detailFrame = root.Q("Map01A Hub Preview Detail Icon").Q(className: "lgo-skill-shared-frame");
+                InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));
+                Assert.That(detailFrame.style.display.value, Is.EqualTo(DisplayStyle.None));
+            }
+            finally
+            {
+                foreach (var go in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(go)) Object.DestroyImmediate(go);
             }
         }
 

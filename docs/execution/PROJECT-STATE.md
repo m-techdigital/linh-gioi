@@ -1,3 +1,11 @@
+## Character Hub v27 — Skill base / owner steer — 2026-09-16
+
+- Một Skill library45record +một loader/base cho5class; bỏ SharedHudIcons/SharedSkills/KiemSkills và fallbackHUD. Tên/cấp/mô tả giữ đúng export trước chuyển đổi; không coi data preview là skill gameplay production.
+- Một ring master +12inner modules (9skillKiếm/3category),19instance tree/equipped/category/detail/pet giữ cùng Sprite; dùng chung factory circularframe với Tiềm năng. Atlas512×512/252747byte, sourcehash/generator và importer512, không bake vòng theo từng skill.
+- Finalgraphics EditMode304/304, nofail/skip; Python42/42;87ảnhPlayer. Initialeye15class×viewport+4tabPC, finalspot6Kiếm/Pháp×3viewport sau sửa tooltip stale Võ→Kiếm; có RED và fullGREEN. Evidence: build/character-hub-skill-base-v27/review.json.
+- Còn36artworkinner chưa có nguồnUI đúngID: hiện tên và Chưa có icon, không substitute. Active tiếp là artwork/content pipeline, không thêm UIbuilder/class riêng. Toàn goal VISUAL_FIX_REQUIRED/ARTWORK_INCOMPLETE; không chứng nhận thiết bị thật.
+- v26prerequisite cfe8e5e8 đã bảo toàn factrows/values. Ngoài Skill resource/library và UI, không sửa renderer/class/pose/wardrobe/frozen; main checkout không đụng. Chi tiết NEXT-ACTION.md.
+
 ## Owner steer — Skill shared base — 2026-09-16
 
 - Active: vòng icon Skill chung +nội dung rời cho5class; không HUD fallback hoặc UI builder riêng. Audit thấy36skillngoàiKiếm đang mượnHUD; chỉ9artKiếm/3category sẵn nguồnUI.

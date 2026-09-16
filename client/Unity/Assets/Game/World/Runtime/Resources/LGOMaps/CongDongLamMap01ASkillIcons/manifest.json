@@ -1,114 +1,98 @@
 {
   "id": "map01a-skill-icons-v1",
+  "revision": "shared-ring-inner-content-v2",
   "status": "DRAFT_RUNTIME_REVIEW",
   "runtimeApproved": false,
-  "canonicalScreen": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/03-ky-nang-five-tab-APPROVED.png",
-  "sourceImagegen": "/Users/minhdc/.codex/generated_images/01a08f32-6e63-7b20-b705-259faaa286c0/exec-b2049649-2a3e-4d40-9c79-ef2a184f8549.png",
   "sourceBoard": "/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/redesign-v4-five-tabs/assets-skills/skill-icons-alpha-SELF-REVIEWED-v1.png",
-  "alphaPolicy": "image_gen_background_extraction_then-lanczos-768x576",
+  "sourceSha256": "04398f792d6514a3d5dc87067bf1e16ad1a2dc53d9a78939b3f3fdba0d5bb749",
+  "sourceCenters": [
+    [
+      189,
+      181
+    ],
+    [
+      545,
+      181
+    ],
+    [
+      902,
+      181
+    ],
+    [
+      1260,
+      181
+    ],
+    [
+      189,
+      532
+    ],
+    [
+      545,
+      532
+    ],
+    [
+      902,
+      532
+    ],
+    [
+      1260,
+      532
+    ],
+    [
+      189,
+      883
+    ],
+    [
+      545,
+      883
+    ],
+    [
+      902,
+      883
+    ],
+    [
+      1260,
+      883
+    ]
+  ],
+  "nativeCrop": 328,
+  "alphaFloor": 2,
+  "contentRadius": 143,
+  "frameSourceIndex": 10,
+  "frameOuterRadius": 158,
   "textureSize": [
-    768,
-    576
+    512,
+    512
   ],
   "cellSize": [
-    192,
-    192
+    128,
+    128
   ],
-  "pngBytes": 587249,
-  "sha256": "6151d568b09fb45a1444272f076c9a38bc745edf29ba6f649c003d0e146993a2",
+  "pngBytes": 252747,
+  "sha256": "88a6b075ae384ac98c5af8acb9b4f66f59b5821aab0eaae05cb6f151d606005f",
+  "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ASkillIcons/map01a-skill-icons.png",
       "role": "ui-skill-icon-atlas",
-      "generator": "image_gen_reference_alpha_extraction",
+      "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "6151d568b09fb45a1444272f076c9a38bc745edf29ba6f649c003d0e146993a2"
+      "sha256": "88a6b075ae384ac98c5af8acb9b4f66f59b5821aab0eaae05cb6f151d606005f"
     }
   ],
   "parts": [
-    {
-      "id": "thien_kiem_quyet",
-      "x": 0,
-      "y": 384,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "lang_khong_bo",
-      "x": 192,
-      "y": 384,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "kiem_vu",
-      "x": 384,
-      "y": 384,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "ho_the",
-      "x": 576,
-      "y": 384,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "song_kiem",
-      "x": 0,
-      "y": 192,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "phong_tram",
-      "x": 192,
-      "y": 192,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "kiem_tran",
-      "x": 384,
-      "y": 192,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "ngu_kiem",
-      "x": 576,
-      "y": 192,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "van_kiem",
-      "x": 0,
-      "y": 0,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "category_active",
-      "x": 192,
-      "y": 0,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "category_passive",
-      "x": 384,
-      "y": 0,
-      "w": 192,
-      "h": 192
-    },
-    {
-      "id": "category_method",
-      "x": 576,
-      "y": 0,
-      "w": 192,
-      "h": 192
-    }
+    {"id": "thien_kiem_quyet", "x": 0, "y": 384, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "lang_khong_bo", "x": 128, "y": 384, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "kiem_vu", "x": 256, "y": 384, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "ho_the", "x": 384, "y": 384, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "song_kiem", "x": 0, "y": 256, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "phong_tram", "x": 128, "y": 256, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "kiem_tran", "x": 256, "y": 256, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "ngu_kiem", "x": 384, "y": 256, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "van_kiem", "x": 0, "y": 128, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "category_active", "x": 128, "y": 128, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "category_passive", "x": 256, "y": 128, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "category_method", "x": 384, "y": 128, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "frame", "x": 0, "y": 0, "w": 128, "h": 128, "role": "shared-frame"}
   ]
 }

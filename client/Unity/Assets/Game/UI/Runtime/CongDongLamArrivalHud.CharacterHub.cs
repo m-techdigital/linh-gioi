@@ -78,23 +78,17 @@ namespace LinhGioi.UI
         private VisualElement SkillIcon(string name, string iconId, float size)
         {
             var icon = new VisualElement { name = name, pickingMode = PickingMode.Ignore };
-            ApplyLgoSkillIcon(icon, size);
-            var sprite = _scene.GetMap01ASkillIconSprite(iconId);
-            icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
+            BindLgoSkillIconLayers(icon, _scene.GetMap01ASkillIconSprite(iconId),
+                _scene.GetMap01ASkillIconSprite("frame"), size, iconId);
             return icon;
         }
 
         private Sprite GetSkillPreviewSprite(CharacterHubSkillPreview skill)
-            => skill.IconCatalog == CharacterHubIconCatalog.Skill
-                ? _scene.GetMap01ASkillIconSprite(skill.IconId)
-                : _scene.GetMap01AHudIconSprite(skill.IconId);
+            => _scene.GetMap01ASkillIconSprite(skill.IconId);
 
         private void BindSkillPreviewIcon(VisualElement icon, CharacterHubSkillPreview skill, float size)
-        {
-            ApplyLgoSkillIcon(icon, size);
-            var sprite = GetSkillPreviewSprite(skill);
-            icon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
-        }
+            => BindLgoSkillIconLayers(icon, GetSkillPreviewSprite(skill),
+                _scene.GetMap01ASkillIconSprite("frame"), size, skill.Name);
 
         private VisualElement CreateEquippedSkillSlot(int index)
         {
@@ -301,6 +295,7 @@ namespace LinhGioi.UI
                 pickingMode = PickingMode.Ignore
             };
             ApplyLgoSkillIcon(icon, 56);
+            BindLgoSkillIconLayers(icon, null, _scene.GetMap01ASkillIconSprite("frame"), 56, "");
             icon.style.flexShrink = 0;
             icon.style.marginRight = 8;
             _hubSpiritPetSkillIcons.Add(icon);
@@ -569,6 +564,7 @@ namespace LinhGioi.UI
             detailHero.style.marginBottom = 6;
             _hubDetailIcon = HubIcon("Map01A Hub Preview Detail Icon", "skill", 96);
             ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon);
+            BindLgoSkillIconLayers(_hubDetailIcon, null, _scene.GetMap01ASkillIconSprite("frame"), 116, "");
             _hubDetailIcon.style.flexShrink = 0;
             _hubDetailIcon.style.marginRight = 16;
             _hubPotentialDetailIconFrame = CreateLgoCircularIconFrame("Map01A Potential Detail Shared Frame",
@@ -796,8 +792,8 @@ namespace LinhGioi.UI
             {
                 CharacterHubSpiritPetPreview.SkillPreview skill = pet.Skills[index];
                 var sprite = _scene.GetMap01ASkillIconSprite(skill.IconId);
-                _hubSpiritPetSkillIcons[index].style.backgroundImage = sprite == null
-                    ? StyleKeyword.None : new StyleBackground(sprite);
+                BindLgoSkillIconLayers(_hubSpiritPetSkillIcons[index], sprite,
+                    _scene.GetMap01ASkillIconSprite("frame"), 56, skill.Name);
                 _hubSpiritPetSkillNames[index].text = skill.Name;
                 _hubSpiritPetSkillLevels[index].text = skill.Level;
                 _hubSpiritPetSkillDescriptions[index].text = skill.Description;
@@ -870,6 +866,7 @@ namespace LinhGioi.UI
 
         private void ConfigureHubDetailMode(CharacterHubMode mode)
         {
+            SetLgoSkillIconLayersVisible(_hubDetailIcon, mode == CharacterHubMode.Skills);
             _hubPotentialDetailIconFrame.style.display = mode == CharacterHubMode.Potential ? DisplayStyle.Flex : DisplayStyle.None;
             ApplyLgoCharacterHubHeroIconFrame(_hubDetailIcon, mode != CharacterHubMode.Potential);
             _hubSkillActionRow.style.display = mode == CharacterHubMode.Skills ? DisplayStyle.Flex : DisplayStyle.None;
@@ -901,9 +898,7 @@ namespace LinhGioi.UI
         private void ShowSkillDetail(CharacterHubSkillPreview skill)
         {
             ConfigureHubDetailMode(CharacterHubMode.Skills);
-            var sprite = GetSkillPreviewSprite(skill);
-            _hubDetailIcon.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
-            _hubDetailIcon.style.width = _hubDetailIcon.style.height = 116;
+            BindSkillPreviewIcon(_hubDetailIcon, skill, 116);
             _hubDetailHeader.text = "CHI TIẾT KỸ NĂNG";
             _hubDetailName.text = skill.Name;
             _hubDetailMeta.text = ActiveCharacterHubProfile.Label + " · Kỹ năng chủ động · " + skill.Level;

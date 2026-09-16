@@ -1,20 +1,24 @@
-# NEXT ACTION — Character Hub
+# NEXT ACTION — Character Hub / Skill artwork
 
-## Active owner steer — shared Skill icon base
-- Worktree: `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, upstream `origin/feature/2d`; fetch before edit/push.
-- Goal: một base vòng ngoài/nội dung icon cho cả Võ/Kiếm/Pháp/Cơ/Linh, tương tự Tiềm năng; không build UI riêng theo class, không dùng icon HUD thay skill.
-- Audit: layout 3×3 đã chung nhưng `SharedHudIcons` gán cùng chín HUD icon cho 36 skill ngoài Kiếm. Kiếm có nhánh `KiemSkills` và icon bake vòng.
-- Source UI thực có chín skill Kiếm +ba category; những board class khác là reference, chưa có module art đúng 36 skill. Không crop screenshot/reference thành runtime hoặc lấy icon class khác lấp.
-- [ ] Tách một ring master +12 nội dung từ nguồn UI đã đăng ký; pack deterministic, provenance/hash/pixel budget.
-- [ ] Chuyển skill content sang một library dữ liệu, bỏ builder riêng Kiếm và fallback HUD; UI bind theo skillId/iconId.
-- [ ] Shared icon layers cho tree/equipped/detail/category/pet skill; giữ instance khi đổi class; missing artwork phải hiện thật và có danh sách ID thiếu.
-- [ ] Test5class/cross-tab, Player3viewport; cập nhật state rồi commit/push theo budget.
+## Active owner steer — một base cho cùng chức năng
+- Worktree: `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`; branch `codex/character-hub-v22`, upstream `origin/feature/2d`; fetch trước sửa/push.
+- Canonical: `redesign-v4-five-tabs`; không mở class/pose/wardrobe/source renderer/camera/frozen hoặc screen khác.
+- v27 đã bỏ `SharedHudIcons`, `SharedSkills`, `KiemSkills` và đường fallback HUD. Một `SkillsFor(classId)` đọc `skill-library.json`; 45 record giữ nguyên classId/id/name/level/description từ export Unity trước chuyển đổi.
+- Một base `BindLgoSkillIconLayers` dùng lại `CreateLgoCircularIconFrame` của Tiềm năng. 19 instance Skill gồm tree9/equipped4/category3/detail1/pet2 giữ cùng Sprite master và không dựng lại khi đổi class.
+- Atlas Skill 512×512/252747byte: một `frame` +12 `inner-symbol`, cell128px. Generator `tools/pack_lgo_skill_icons.py`; source UI pin SHA, registered centers, ring/content mask riêng, max import512 và budget400000. Không crop screenshot/reference gameplay.
+- Đã xuất13PNG rời tại `build/character-hub-skill-base-v27/modules/`; ảnh kiểm3cột `frame-content-composite.png` (frame/content/assembled).
+- Proof chuyển45record: `catalog-before.json`, `catalog-migration-proof.json` trong evidence v27. Thay36 iconId từ HUD sang đúng skillId chưa có art, không đổi tên/cấp/mô tả thành dữ liệu mới.
 
-## v26 fact rows — prerequisite đã kiểm
-- Giữ nguyên chuỗi catalog/giá trị; một component fact block/row cho Skill, Tiềm năng, Linh thú; unknown/overflow giữ nguyên, không suy ra số liệu.
-- RED3fail; Player phát hiện value bị đo một dòng rồi wrap do maxWidth phần trăm, sửa column definite và bỏ clamp lặp. Pet caption còn fixed-height26: test rendered có skin Pet tái hiện rồi sửa heightAuto/min26.
-- Accepted full graphics EditMode302/302, no fail/skip; Python39/39. Capture87 ảnh tại `build/character-hub-facts-v26/runtime-accepted`. Skill/Potential/Pet đã eye-review ở matrix trước sửa Pet; Pet accepted ba viewport không chồng, tablet dùng bounded scroll.
-- Không coi v26 là visual acceptance toàn bộ; tablet Pet còn cần tinh chỉnh cân bằng cột/nội dung sau owner steer Skill.
-- Không sửa renderer/class/pose/wardrobe/source, frozen surfaces; generated import/settings drift được lưu rồi loại.
+## Việc tiếp theo — artwork đúng 36 skill, không viết UI riêng
+- [ ] Bổ sung36 inner artworks Võ/Pháp/Cơ/Linh theo `build/character-hub-skill-base-v27/missing-artwork.json`; nguồn cần kiểm semantically với tên skill, không gán lại HUD hoặc dùng Kiếm thay.
+- [ ] Đăng ký artwork có provenance, cùng cell/aperture128px và cùng pipeline; chỉ mở rộng data/atlas, không thêm builder/layout theo class.
+- [ ] Kiểm đủ tree/equipped/detail, selection theo class, ring cùng instance và không rò sang Tiềm năng; Player PC/mobile/tablet rồi eye audit.
+- Missing art hiện hiển thị tên +“Chưa có icon”; đây là trạng thái thiếu nội dung, KHÔNG phải icon hoàn thiện hay visual acceptance.
 
-`CONTINUE / VISUAL_FIX_REQUIRED`: cùng functionality phải có base chung; art còn thiếu không được dùng test xanh để che.
+## Bằng chứng kỹ thuật / giới hạn
+- v26 prerequisite commit `cfe8e5e8`:302/302 graphics EditMode,39Python; fact rows bảo toàn giá trị, sửa wrap value và fixed-height Pet. Tablet Pet còn dùng bounded scroll.
+- v27 initial full304/304 và87frame. Review đủ5class×3viewport +4tabPC; ring/content khớp và HUD sai không còn. Review source bắt tooltip cũ khi đổi Võ→Kiếm; thêm RED và sửa bind tooltip cùng dữ liệu.
+- Final evidence: `build/character-hub-skill-base-v27/{final-editmode.xml,final-build.log,runtime-final,review.json}`; kiểm kết quả thực trước push. Python42 gồm3packer+7skinasset+25governance+7capture; replay PNG phải giống từng byte.
+- Không claim production skill balance/behavior hoặc đủ artwork5class. Chỉ9skillKiếm+3category có nguồn UI hiện hành. Review độc lập Codex không được tính PASS; mobile/tablet là viewport macOS, không phải thiết bị thật.
+
+`CONTINUE / VISUAL_FIX_REQUIRED / ARTWORK_INCOMPLETE` — thiếu art phải giải quyết ở content pipeline chung, không che bằng icon sai hay test xanh.

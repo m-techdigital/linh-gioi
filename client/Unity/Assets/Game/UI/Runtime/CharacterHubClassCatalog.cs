@@ -14,7 +14,7 @@ namespace LinhGioi.UI
     public sealed class CharacterHubSkillPreview
     {
         public CharacterHubSkillPreview(string id, string name, string level, string iconId,
-            string description, CharacterHubIconCatalog iconCatalog = CharacterHubIconCatalog.Hud)
+            string description, CharacterHubIconCatalog iconCatalog = CharacterHubIconCatalog.Skill)
         {
             Id = id;
             Name = name;
@@ -211,11 +211,6 @@ namespace LinhGioi.UI
 
     public static class CharacterHubClassCatalog
     {
-        private static readonly string[] SharedHudIcons =
-        {
-            "attack", "run", "skill", "crest", "jump", "support", "character", "notice", "cinematic"
-        };
-
         private static readonly IReadOnlyList<CharacterHubPotentialPreview> SharedPotentials = Array.AsReadOnly(
             new[]
             {
@@ -233,28 +228,43 @@ namespace LinhGioi.UI
                     "Tăng tốc độ hành động và khả năng né tránh.", "Nhanh nhẹn  +110", "Nhanh nhẹn  +2")
             });
 
-        private static CharacterHubSkillPreview[] SharedSkills(string classId, string identity, params string[] names)
+        [Serializable] private sealed class SkillRecord
         {
-            var levels = new[] { "Lv.8", "Lv.5", "Lv.4", "Lv.3", "Lv.6", "Lv.2", "Lv.1", "Lv.3", "Lv.1" };
-            return names.Select((name, index) => new CharacterHubSkillPreview(
-                classId + "_skill_" + (index + 1), name, levels[index], SharedHudIcons[index],
-                identity + "\n\nCấp hiện hành  " + levels[index]
-                    + "\n\nThông tin hiệu ứng chi tiết sẽ hiển thị khi kỹ năng được lĩnh hội đầy đủ.")).ToArray();
+            public string classId, id, name, level, iconId, description;
+        }
+        [Serializable] private sealed class SkillLibrary
+        {
+            public int version;
+            public SkillRecord[] skills;
+        }
+        private static readonly Lazy<Dictionary<string, IReadOnlyList<CharacterHubSkillPreview>>> SkillData =
+            new Lazy<Dictionary<string, IReadOnlyList<CharacterHubSkillPreview>>>(LoadSkillData);
+
+        private static Dictionary<string, IReadOnlyList<CharacterHubSkillPreview>> LoadSkillData()
+        {
+            var asset = UnityEngine.Resources.Load<UnityEngine.TextAsset>(
+                "LGOMaps/CongDongLamMap01ASkillIcons/skill-library");
+            if (asset == null) throw new InvalidOperationException("Missing Character Hub skill library");
+            var library = UnityEngine.JsonUtility.FromJson<SkillLibrary>(asset.text);
+            if (library == null || library.version != 1 || library.skills == null || library.skills.Length == 0)
+                throw new InvalidOperationException("Invalid Character Hub skill library");
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            foreach (var row in library.skills)
+                if (row == null || string.IsNullOrWhiteSpace(row.classId) || string.IsNullOrWhiteSpace(row.id)
+                    || !row.id.StartsWith(row.classId + "_", StringComparison.Ordinal) || !ids.Add(row.id)
+                    || string.IsNullOrWhiteSpace(row.name) || string.IsNullOrWhiteSpace(row.level)
+                    || string.IsNullOrWhiteSpace(row.iconId) || string.IsNullOrWhiteSpace(row.description))
+                    throw new InvalidOperationException("Invalid or duplicate Character Hub skill record");
+            return library.skills.GroupBy(row => row.classId, StringComparer.Ordinal)
+                .ToDictionary(group => group.Key,
+                    group => (IReadOnlyList<CharacterHubSkillPreview>)Array.AsReadOnly(group.Select(row =>
+                        new CharacterHubSkillPreview(row.id, row.name, row.level, row.iconId, row.description)).ToArray()),
+                    StringComparer.Ordinal);
         }
 
-        private static CharacterHubSkillPreview[] KiemSkills()
-        {
-            var names = new[] { "Thiên Kiếm Quyết", "Lăng Không Bộ", "Kiếm Vũ", "Hộ Thể", "Song Kiếm", "Phong Trảm", "Kiếm Trận", "Ngự Kiếm", "Vạn Kiếm" };
-            var icons = new[] { "thien_kiem_quyet", "lang_khong_bo", "kiem_vu", "ho_the", "song_kiem", "phong_tram", "kiem_tran", "ngu_kiem", "van_kiem" };
-            var levels = new[] { "Lv.8", "Lv.5", "Lv.4", "Lv.3", "Lv.6", "Lv.2", "Lv.1", "Lv.3", "Lv.1" };
-            return names.Select((name, index) => new CharacterHubSkillPreview(
-                "kiem_skill_" + (index + 1), name, levels[index], icons[index],
-                index == 0
-                    ? "Vận kiếm khí thiên đạo, chém mục tiêu phía trước.\n\nSát thương  320% Công\nPhạm vi  Hình quạt trước mặt\nHồi chiêu  12 giây\nTiêu hao MP  180"
-                    : "Tốc độ · kiếm thuật · phản kích · cơ động\n\nCấp hiện hành  " + levels[index]
-                        + "\n\nThông tin hiệu ứng chi tiết sẽ hiển thị khi kỹ năng được lĩnh hội đầy đủ.",
-                CharacterHubIconCatalog.Skill)).ToArray();
-        }
+        private static IReadOnlyList<CharacterHubSkillPreview> SkillsFor(string classId)
+            => SkillData.Value.TryGetValue(classId, out var skills) ? skills
+                : throw new InvalidOperationException("No Character Hub skills registered for " + classId);
 
         private static CharacterHubSpiritPetPreview SpiritPet(string synergy)
             => new CharacterHubSpiritPetPreview(
@@ -277,22 +287,22 @@ namespace LinhGioi.UI
         {
             new CharacterHubClassProfile(
                 "vo", "Võ", "Áp sát · combo · phá giáp · phản đòn", "Đề xuất Võ · Công / Sinh lực", "Sinh lực",
-                SharedSkills("vo", "Áp sát · combo · phá giáp · phản đòn", "Liên Kích", "Phá Giáp", "Phản Đòn", "Chấn Kình", "Bộ Pháp", "Hộ Thể", "Đột Kích", "Kình Lực", "Quyền Ý"),
+                SkillsFor("vo"),
                 new[] { 0, 1, 3, 6 }, SharedPotentials, SpiritPet("Thanh Vân Hồ hỗ trợ phòng thủ khi Võ áp sát.")),
             new CharacterHubClassProfile(
                 "kiem", "Kiếm", "Tốc độ · kiếm thuật · phản kích · cơ động", "Đề xuất Kiếm · Nhanh nhẹn / Công", "Nhanh nhẹn",
-                KiemSkills(), new[] { 0, 1, 5, 8 }, SharedPotentials, SpiritPet("Thanh Vân Hồ giữ nhịp hồi phục giữa các chuỗi kiếm.")),
+                SkillsFor("kiem"), new[] { 0, 1, 5, 8 }, SharedPotentials, SpiritPet("Thanh Vân Hồ giữ nhịp hồi phục giữa các chuỗi kiếm.")),
             new CharacterHubClassProfile(
                 "phap", "Pháp", "Tầm xa · nguyên tố · diện rộng · khống chế", "Đề xuất Pháp · Linh lực / Công", "Linh lực",
-                SharedSkills("phap", "Tầm xa · nguyên tố · diện rộng · khống chế", "Hỏa Thuật", "Băng Thuật", "Lôi Thuật", "Linh Thuật", "Kết Giới", "Trọng Lực", "Nguyên Tố", "Pháp Trận", "Tinh Thần"),
+                SkillsFor("phap"),
                 new[] { 0, 1, 4, 7 }, SharedPotentials, SpiritPet("Thanh Vân Hồ bổ trợ kết giới và duy trì linh lực.")),
             new CharacterHubClassProfile(
                 "co", "Cơ", "Tầm xa · cơ giới · bố trí · hỏa lực", "Đề xuất Cơ · Công / Nhanh nhẹn", "Công",
-                SharedSkills("co", "Tầm xa · cơ giới · bố trí · hỏa lực", "Cơ Nỏ", "Pháo Kích", "Tháp Cơ", "Cơ Lôi", "Linh Cơ", "Thiết Vệ", "Truy Kích", "Hỏa Tuyến", "Cơ Trận"),
+                SkillsFor("co"),
                 new[] { 0, 1, 2, 7 }, SharedPotentials, SpiritPet("Thanh Vân Hồ bảo hộ vị trí triển khai cơ giới.")),
             new CharacterHubClassProfile(
                 "linh", "Linh", "Triệu hồi · hỗ trợ · khống chế · thanh tẩy", "Đề xuất Linh · Linh lực / Sinh lực", "Linh lực",
-                SharedSkills("linh", "Triệu hồi · hỗ trợ · khống chế · thanh tẩy", "Triệu Linh", "Hồi Phục", "Linh Thuẫn", "Thanh Tẩy", "Linh Phù", "Trói Hồn", "Hộ Mệnh", "Cộng Hưởng", "Linh Giới"),
+                SkillsFor("linh"),
                 new[] { 0, 1, 2, 6 }, SharedPotentials, SpiritPet("Thanh Vân Hồ cộng hưởng hồi phục và khống chế.")),
         };
 
