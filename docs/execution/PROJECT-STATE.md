@@ -1,3 +1,22 @@
+## Character Hub v43 — recovery checkpoint — 2026-09-17
+
+- Năm WIP đúng hash từ C-551efc013a74; 79 Python chạy lại và 132 PNG/ZIP tái kiểm. Không có worker v43 cũ còn chạy.
+- Lỗi đầu lượt là dùng Python 3.12 không có Pillow; quay về hai interpreter hiện hành, không cài hoặc đổi toolchain. Log lỗi giữ nguyên.
+- Runtime/source không đổi trong closure; dùng lại Unity 315/315, build 0 lỗi/0 cảnh báo và Player đã audit, không tự coi mỹ thuật đạt.
+- Tiếp tục nét và mapping Skill theo NEXT-ACTION sau checkpoint; toàn goal CONTINUE.
+
+## Character Hub v43 — Hỏa Tuyến và quyền liên hoàn, chưa visual final — 2026-09-17
+
+- Bàn giao cuối: v43 chưa commit/push vì tool checkpoint bị từ chối; HEAD2bd8b7cc là v42 đãpush.5WIP cònnguyên, indexrỗng, recordedworkerkếtthúc. Xem blocked-checkpoint.json; không giả định v43 đã phát hành.
+- CùngSID/task/worktree/branch. Recoveryv42 chốt2bd8b7cc sau79Pythonfresh vàhashreuse315graphics/132PNG; khôngtạo/build lại ThanhTẩy. Tiếp ngayv43, không tựđónggoal.
+- HỏaTuyến co_skill_8 có nội dung hỏa lực cam/trắng; LiênKích vo_skill_1 thay fists xanh bằng quyềnliênhoàn cam/vàng. Hai nguồn native384/padding32, original layerdrawing; khônggamma, khôngcropboard làmasset, khôngphóngUI.
+- Bảnđầunétmảnh đượcgiữ; bảnsau sửa mảng hình và ribbonlửa. Optionalmodel scriptappend bị từchối, readback xácnhận khôngghi/chạy; không có inferencemodel trongbatch, không dùng đườngkhác để chạypass đó.
+- Năm exactlabel designBindings vẫnnguyên. HỏaLựcLiênThanh và LiênQuyền là visual-onlyreference, KHÔNG alias ID/tên/cấp hoặc phêduyệtgameplay. Library/actor/UIbase/itematlas/frozen khôngđổi.
+- Atlas1024²/893243byte/49module;47module cũRGBAexact, framegiữnguyên. Catalog45/45cósprite nhưng toànartchưađạt. Testavailability tiêu thụcatalog chung thaylistIDviếttay; REDco_skill_8 thiếu→GREEN.
+-315/315graphics/79Python; mộtbuild 0error/0warning,132capture. Đãxem8ảnh: HỏaTuyến/LiênKích3viewport+Linh/TiềmnăngPC. Khôngthấyclipping/leaknotice mới; nétcòn hìnhhọc, nòngvàluồngphụnhỏtrêntablet, chưa sátđộvẽcủademo.
+- Source/native/portablePNG replayexact; ZIPprovenance khôngfont/model/binary. Evidence build/character-hub-attack-motifs-v43/runtime-review.json, source-comparison-reviewed.png (khôngPlayer), runtime-final/, package-proof.json.
+- Next: sửa nét/độrõ hình tác động theo từngnhóm; Võ ChấnKình và LinhThuẫn cần đối chiếu nguồntrướcđổi, khônglấp bằnghìnhvậtphẩm/portrait. CONTINUE / PARTIAL_ACTION_MOTIF_ALIGNMENT / VISUAL_FIX_REQUIRED, khôngchờownernghiệmthu vìvừachốtbatch.
+
 ## Character Hub v42 — Thanh Tẩy theo demo và chọn đúng node để audit — 2026-09-16
 
 - Recovery closure: WIP8file được giữ nguyên, 79Python chạy lại; reuse315graphics/132PNG vì inputruntime khớpSHA. Đã xem lại Thanh Tẩy3viewport và nguồn so demo; build v42 có0error/46warning, không phải0warning. Không sinh/build lại chỉ để khôi phục lượt.

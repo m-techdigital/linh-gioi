@@ -1515,14 +1515,11 @@ namespace LinhGioi.Tests.EditMode
                 var host = new GameObject("registered skill content test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 var frame = scene.GetMap01ASkillIconSprite("frame");
-                foreach (var id in new[] { "vo_skill_7", "phap_skill_3", "phap_skill_4", "phap_skill_6", "phap_skill_7",
-                    "phap_skill_8", "co_skill_4", "linh_skill_1", "linh_skill_3", "linh_skill_8",
-                    "phap_skill_1", "phap_skill_2", "phap_skill_5", "phap_skill_9", "vo_skill_5", "vo_skill_9",
-                    "co_skill_2", "co_skill_3", "co_skill_7", "linh_skill_6",
-                    "vo_skill_1", "co_skill_1", "vo_skill_6", "vo_skill_8", "co_skill_5", "co_skill_6",
-                    "co_skill_9", "linh_skill_4", "linh_skill_5", "linh_skill_7", "linh_skill_9",
-                    "vo_skill_2", "vo_skill_3", "vo_skill_4", "linh_skill_2" })
+                Assert.That(CharacterHubClassCatalog.Profiles.Sum(profile => profile.Skills.Count), Is.EqualTo(45));
+                foreach (var profile in CharacterHubClassCatalog.Profiles)
+                foreach (var skill in profile.Skills)
                 {
+                    var id = skill.IconId;
                     var sprite = scene.GetMap01ASkillIconSprite(id);
                     Assert.That(sprite, Is.Not.Null, id + " must resolve its own reviewed artwork, not a HUD fallback.");
                     Assert.That(sprite, Is.Not.SameAs(frame));
