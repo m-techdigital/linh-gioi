@@ -1,3 +1,12 @@
+## Character Hub v28 — shared Skill artwork intake — 2026-09-16
+
+- Tiếp tục đúng task 36 inner artworks còn thiếu, giữ branch codex/character-hub-v22 và worktree character-hub-v22. Phiên điều phối S-LGO-SKILL-20260916-C9B4 giữ worktree claim; registry là nguồn trạng thái pause/claims/PID.
+- Packer hiện hành nhận registry theo skillId: nguồn PNG/hash/size, review/evidence, rect vuông đăng ký. Không tạo builder theo class, không ghi đè module/frame cũ; giữ canvas/aperture chung. Dữ liệu sai hoặc vượt budget bị chặn trước ghi output.
+- Fixture kỹ thuật 36 ID đi qua cùng pipeline thành 49 module trong 1024×1024; 13 module gốc giữ pixel. Đây là fixture tổng hợp trong build, không phải 36 artwork đã tạo hoặc asset runtime mới.
+- Guard Skill chỉ suy ra kích thước/import/budget lớn hơn từ intake hợp lệ; mặc định 512px/400000 byte và mọi pack khác giữ nguyên. Không registry: PNG và manifest byte-for-byte với atlas đang publish.
+- RED intake và fixed-size gate đã tái hiện; final 48/48 Python (16 asset +32 governance/capture), shared-skin/no-source/no-3D PASS. Không chạy Unity mới: toàn bộ client/Unity và frozen giữ nguyên. 304/304 EditMode v27 bên dưới là lịch sử, không phải kết quả lượt này.
+- Evidence: build/character-hub-artwork-intake-v28/; ví dụ registry đánh dấu DRAFT và source chưa có. Tiếp theo vẫn là artwork thật, không tuyên bố visual hoàn tất; chi tiết NEXT-ACTION.md.
+
 ## Character Hub v27 — Skill base / owner steer — 2026-09-16
 
 - Một Skill library45record +một loader/base cho5class; bỏ SharedHudIcons/SharedSkills/KiemSkills và fallbackHUD. Tên/cấp/mô tả giữ đúng export trước chuyển đổi; không coi data preview là skill gameplay production.

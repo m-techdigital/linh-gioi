@@ -1,24 +1,25 @@
 # NEXT ACTION — Character Hub / Skill artwork
 
 ## Active owner steer — một base cho cùng chức năng
-- Worktree: `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`; branch `codex/character-hub-v22`, upstream `origin/feature/2d`; fetch trước sửa/push.
-- Canonical: `redesign-v4-five-tabs`; không mở class/pose/wardrobe/source renderer/camera/frozen hoặc screen khác.
-- v27 đã bỏ `SharedHudIcons`, `SharedSkills`, `KiemSkills` và đường fallback HUD. Một `SkillsFor(classId)` đọc `skill-library.json`; 45 record giữ nguyên classId/id/name/level/description từ export Unity trước chuyển đổi.
-- Một base `BindLgoSkillIconLayers` dùng lại `CreateLgoCircularIconFrame` của Tiềm năng. 19 instance Skill gồm tree9/equipped4/category3/detail1/pet2 giữ cùng Sprite master và không dựng lại khi đổi class.
-- Atlas Skill 512×512/252747byte: một `frame` +12 `inner-symbol`, cell128px. Generator `tools/pack_lgo_skill_icons.py`; source UI pin SHA, registered centers, ring/content mask riêng, max import512 và budget400000. Không crop screenshot/reference gameplay.
-- Đã xuất13PNG rời tại `build/character-hub-skill-base-v27/modules/`; ảnh kiểm3cột `frame-content-composite.png` (frame/content/assembled).
-- Proof chuyển45record: `catalog-before.json`, `catalog-migration-proof.json` trong evidence v27. Thay36 iconId từ HUD sang đúng skillId chưa có art, không đổi tên/cấp/mô tả thành dữ liệu mới.
+- Giữ `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`; baseline v27 `affb970c`, upstream `origin/feature/2d`. Không đổi branch/worktree hoặc mở screen khác.
+- Phiên chat này: `S-LGO-SKILL-20260916-C9B4`. Đọc `/Users/minhdc/Tools/mcp-session-manager/SESSION-CONTRACT.md`; check pause trước batch, claim worktree/runtime/branch đúng nhu cầu. Không dùng lại ID này cho chat khác.
+- Canonical `redesign-v4-five-tabs`; không sửa class/pose/wardrobe/source renderer/camera/frozen.
+- v27: một library 45 record, một loader/base cho 5 class; bỏ HUD fallback. 19 instance Skill dùng chung một vòng, nội dung rời; Tiềm năng giữ factory chung.
+- Runtime hiện vẫn là atlas 512×512/252747 byte, 1 frame +12 nội dung (9 skill Kiếm/3 category). Còn thiếu 36 artwork thật; không coi test fixture là hình dùng trong game.
 
-## Việc tiếp theo — artwork đúng 36 skill, không viết UI riêng
-- [ ] Bổ sung36 inner artworks Võ/Pháp/Cơ/Linh theo `build/character-hub-skill-base-v27/missing-artwork.json`; nguồn cần kiểm semantically với tên skill, không gán lại HUD hoặc dùng Kiếm thay.
-- [ ] Đăng ký artwork có provenance, cùng cell/aperture128px và cùng pipeline; chỉ mở rộng data/atlas, không thêm builder/layout theo class.
-- [ ] Kiểm đủ tree/equipped/detail, selection theo class, ring cùng instance và không rò sang Tiềm năng; Player PC/mobile/tablet rồi eye audit.
-- Missing art hiện hiển thị tên +“Chưa có icon”; đây là trạng thái thiếu nội dung, KHÔNG phải icon hoàn thiện hay visual acceptance.
+## v28 — đường nạp artwork bổ sung đã nối vào pipeline hiện hành
+- `tools/pack_lgo_skill_icons.py --artwork-registry <registry.json> --output <candidate-dir>` nhận nguồn PNG/sha256/size và rect theo skillId; không thêm builder theo class.
+- Registry version1: `review.status=SELF_REVIEWED`, `review.evidence`; `sources=[{id,path,sha256,size}]`; `parts=[{id,sourceId,rect:[x,y,w,h]}]`. Đường dẫn tương đối lấy theo thư mục registry.
+- Chỉ nhận ID trong skill-library, không trùng/ghi đè module cũ/frame; rect vuông >=128px, nằm trong source; giữ canvas/aperture chung, không fit từng icon theo bounding box.
+- Packer kiểm đầu vào và budget trước ghi output. Không registry: PNG và manifest giữ nguyên từng byte. Có 36 module: candidate 1024×1024/49 cell, vòng cũ vẫn chỉ có một sprite.
+- Guard kích thước/import/budget của Skill chỉ mở theo metadata intake hợp lệ; baseline 512px/400000 byte và các pack khác không được nới.
+- Evidence `build/character-hub-artwork-intake-v28/`: RED/GREEN, 48/48 Python, source/frozen unchanged proof; ví dụ registry được đánh dấu DRAFT, không nhập runtime.
+- Lượt này không chạy Unity/build/capture: toàn bộ `client/Unity` không đổi; kết quả 304/304 và Player v27 là lịch sử, không phải test mới.
 
-## Bằng chứng kỹ thuật / giới hạn
-- v26 prerequisite commit `cfe8e5e8`:302/302 graphics EditMode,39Python; fact rows bảo toàn giá trị, sửa wrap value và fixed-height Pet. Tablet Pet còn dùng bounded scroll.
-- v27 initial full304/304 và87frame. Review đủ5class×3viewport +4tabPC; ring/content khớp và HUD sai không còn. Review source bắt tooltip cũ khi đổi Võ→Kiếm; thêm RED và sửa bind tooltip cùng dữ liệu.
-- Final evidence: `build/character-hub-skill-base-v27/{final-editmode.xml,final-build.log,runtime-final,review.json}`; kiểm kết quả thực trước push. Python42 gồm3packer+7skinasset+25governance+7capture; replay PNG phải giống từng byte.
-- Không claim production skill balance/behavior hoặc đủ artwork5class. Chỉ9skillKiếm+3category có nguồn UI hiện hành. Review độc lập Codex không được tính PASS; mobile/tablet là viewport macOS, không phải thiết bị thật.
+## Việc tiếp theo — artwork thật, không UI riêng
+- [ ] Tạo/đăng ký 36 inner artwork theo `build/character-hub-skill-base-v27/missing-artwork.json`; kiểm đúng tên/ý nghĩa, không dùng HUD/Kiếm thay thế hoặc crop screenshot gameplay.
+- [ ] Dùng registry chung và pipeline v28, review PNG rời ở kích thước hiển thị, rồi mới nhập atlas/import policy có provenance.
+- [ ] Claim runtime thích hợp trước inference/Unity; kiểm registry để tránh phiên khác. Claim branch `feature/2d` trước push; không tự thu hồi claim của người khác.
+- [ ] Sau thay asset thật: kiểm tree/equipped/detail/selection 5 class; Player PC/mobile/tablet và eye audit. Cập nhật evidence/PID/result/tests/next; kết thúc lượt ở WAITING_USER hoặc BLOCKED.
 
-`CONTINUE / VISUAL_FIX_REQUIRED / ARTWORK_INCOMPLETE` — thiếu art phải giải quyết ở content pipeline chung, không che bằng icon sai hay test xanh.
+`CONTINUE / VISUAL_FIX_REQUIRED / ARTWORK_INCOMPLETE` — base và intake đã có; 36 artwork không được coi là hoàn thành chỉ vì test xanh.

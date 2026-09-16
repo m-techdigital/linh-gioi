@@ -277,12 +277,70 @@ def _expected_assets(spec: dict[str, object]) -> dict[str, tuple[int, int, str]]
     return {pack + '/' + name: value for name, value in assets.items()}
 
 
+def _skill_intake_spec(root: Path, spec: dict, data: dict) -> dict:
+    """A larger Skill atlas requires declared, reviewed, known inner modules."""
+    intake, parts = data['artworkIntake'], data.get('parts', [])
+    if not isinstance(intake, dict) or not isinstance(parts, list):
+        raise ValueError('Invalid Skill artwork intake')
+    count = intake.get('contentCount')
+    if type(count) is not int or not 1 <= count <= 36 or len(parts) != 13 + count:
+        raise ValueError('Skill artwork count mismatch')
+    review = intake.get('review', {})
+    hashes = [intake.get('registrySha256'), review.get('sha256')]
+    if review.get('status') != 'SELF_REVIEWED' or not review.get('evidence'):
+        raise ValueError('Skill artwork review evidence required')
+    if any(not isinstance(h, str) or not re.fullmatch('[0-9a-f]{64}', h) for h in hashes):
+        raise ValueError('Skill intake must contain valid provenance hashes')
+    if data.get('runtimeApproved') is not False or data.get('cellSize') != [128, 128]:
+        raise ValueError('Skill intake is not an owner-approved release or a new cell profile')
+    rows = json.loads((root / str(spec['pack']) / 'skill-library.json').read_text())['skills']
+    known = {row['iconId'] for row in rows} | {'frame', 'category_active', 'category_passive', 'category_method'}
+    keys = [part['id'] for part in parts]
+    if len(keys) != len(set(keys)) or not set(keys) <= known or keys.count('frame') != 1:
+        raise ValueError('Duplicate or unknown Skill module IDs')
+    if any(part['role'] != ('shared-frame' if part['id'] == 'frame' else 'inner-symbol') for part in parts):
+        raise ValueError('Only one frame master is allowed')
+    sources = intake.get('sources', [])
+    source_map = {source['id']: source for source in sources}
+    if not sources or len(source_map) != len(sources):
+        raise ValueError('Skill source IDs must be unique')
+    for source in sources:
+        size = source.get('size', [])
+        if (not isinstance(source.get('sha256'), str) or not re.fullmatch('[0-9a-f]{64}', source['sha256'])
+                or not source.get('path') or len(size) != 2
+                or any(type(v) is not int or not 1 <= v <= 4096 for v in size)):
+            raise ValueError('Invalid Skill source metadata')
+    extras = [part for part in parts if 'sourceId' in part]
+    if len(extras) != count or any(part['id'] == 'frame' for part in extras):
+        raise ValueError('Skill intake may only add inner artwork')
+    for part in extras:
+        source, rect = source_map.get(part['sourceId']), part.get('sourceRect', [])
+        if source is None or len(rect) != 4 or any(type(v) is not int for v in rect):
+            raise ValueError('Missing source or invalid Skill rectangle')
+        x, y, w, h = rect
+        if w != h or w < 128 or min(x, y) < 0 or x+w > source['size'][0] or y+h > source['size'][1]:
+            raise ValueError('Skill source rectangle is out of bounds or requires upscale')
+    side = 512 if len(parts) <= 16 else 1024
+    for index, part in enumerate(parts):
+        expected = (index % (side // 128) * 128, side - (index // (side // 128) + 1) * 128, 128, 128)
+        if tuple(part.get(key) for key in ('x', 'y', 'w', 'h')) != expected:
+            raise ValueError('Skill atlas cells do not follow the common layout')
+    budget = 400000 + 32768 * count
+    if data.get('textureSize') != [side, side] or data.get('byteBudget') != budget:
+        raise ValueError('Skill atlas size or derived byte budget mismatch')
+    name = 'map01a-skill-icons.png'
+    return dict(spec, assets={name: (side, side, 'ui-skill-icon-atlas')},
+                max_bytes=budget, ui_import_limits={name: side})
+
+
 def _validate_runtime_pack(root: Path, spec: dict[str, object]) -> set[str]:
     pack = str(spec['pack'])
     manifest = root / pack / 'manifest.json'
     if not manifest.exists():
         return set()
     data = json.loads(manifest.read_text())
+    if spec["id"] == "map01a-skill-icons-v1" and "artworkIntake" in data:
+        spec = _skill_intake_spec(root, spec, data)
     expected = _expected_assets(spec)
     if data['id'] != spec['id'] or data['status'] != spec['status']:
         raise ValueError(str(spec['status_error']))
