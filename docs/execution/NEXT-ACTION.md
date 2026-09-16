@@ -1,3 +1,11 @@
+# NEXT ACTION — Character Hub / after v55
+
+1. V53 Pháp Trận is already published/reused; do not rerun its completed Unity/build/capture evidence.
+2. V54 Kình Lực is rejected and not published because the candidate had only class-level VFX evidence, not a direct skill mapping. Do not infer it from Chiến Ý.
+3. V55 Cơ Trận now uses the direct Hệ Thống Cơ Trận ground-deploy-circle motif; keep it unless a concrete Player defect appears.
+4. Next: audit exact/direct mappings only, starting with Kiếm Ngự Kiếm ↔ Ngự Kiếm. Keep current art if its sword-control motif is already readable; otherwise redraw only with direct evidence.
+5. Preserve shared frame/content split, exact ownership, actor/gameplay, branch/worktree. Build/capture only if runtime art changes.
+
 # NEXT ACTION — Character Hub / after v53
 
 1. Audit current Pháp `Kết Giới` against direct VFX `Kết giới (Field)`; keep it if current circular-field motif is already readable.

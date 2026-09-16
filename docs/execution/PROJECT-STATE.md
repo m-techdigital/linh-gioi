@@ -1,3 +1,12 @@
+## Character Hub v55 — Cơ Trận direct ground-array alignment — 2026-09-17
+
+- Reused V53 at `2ec02205`; no duplicate V53 Unity/build/capture run.
+- Rejected local V54 Kình Lực candidate: class-language-only evidence was insufficient for the current direct-mapping rule; no V54 commit/push.
+- `co_skill_9` Cơ Trận redraw uses direct `Hệ Thống Cơ Trận` ground-deploy array reference. Gameplay/name/level unchanged.
+- Exactly1 module changed,48 modules + shared frame preserved; V54 content excluded by building the cumulative registry from authoritative HEAD V53.
+- Fresh verification: packer13/13, Unity EditMode315/315, Player build0error0warning,132frames/3viewport; eye-reviewed selected Cơ Trận on PC/tablet/mobile.
+- Whole Character Hub remains open; continue only direct/exact mappings and keep already-readable motifs.
+
 ## Character Hub v53 — Pháp Trận spell-circle motif — 2026-09-17
 
 - `Pháp Trận` redraw trực tiếp theo VFX `Vòng pháp trận (Spell Circle)` của board Pháp; không đổi ID/tên/cấp/gameplay.

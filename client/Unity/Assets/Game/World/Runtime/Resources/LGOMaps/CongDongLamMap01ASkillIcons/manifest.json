@@ -68,8 +68,8 @@
     128,
     128
   ],
-  "pngBytes": 736570,
-  "sha256": "80f9831dbaaee4854de69873bcc9b1ddcaea8c202b185f18eae03cbbbc6ce3b0",
+  "pngBytes": 735109,
+  "sha256": "89b8cd3395b729d3230df04bd7fdd68dd227c0ad5a216d72e621a0dd32ce381a",
   "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
@@ -77,12 +77,12 @@
       "role": "ui-skill-icon-atlas",
       "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "80f9831dbaaee4854de69873bcc9b1ddcaea8c202b185f18eae03cbbbc6ce3b0"
+      "sha256": "89b8cd3395b729d3230df04bd7fdd68dd227c0ad5a216d72e621a0dd32ce381a"
     }
   ],
   "artworkIntake": {
-    "registrySha256": "5919f2f9d6b8e1dea8bc45feac7485cca06e5a4b4795b8999b2d13ec20b66879",
-    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-phap-spell-circle-v53/artwork-registry.json",
+    "registrySha256": "4d2283380e5bb3d72c93524e3483dab374d3fd4dc807e3fc2d16ab5f00a4fc65",
+    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-co-ground-array-v55/artwork-registry.json",
     "contentCount": 36,
     "sources": [
       {
@@ -91,6 +91,15 @@
         "sha256": "cedd0da3506a1f3a418866616bdedcb930f6b8a0f2874bf7bd5662d47ad150ae",
         "size": [
           896,
+          448
+        ]
+      },
+      {
+        "id": "co-ground-array-v55",
+        "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-co-ground-array-v55/registered-inner-source.png",
+        "sha256": "cc0471b4c72a18d50d7ad587b5e4065057b089f70f54998a11a3eeca1d9c31c3",
+        "size": [
+          448,
           448
         ]
       },
@@ -259,8 +268,8 @@
     ],
     "review": {
       "status": "SELF_REVIEWED",
-      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-phap-spell-circle-v53/art-review.json",
-      "sha256": "76938ef968b349c9697710c67cfc55c5bb6779ae4f16a7283882625674cd39d6"
+      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-co-ground-array-v55/art-review.json",
+      "sha256": "92cd9c098944717b7ab44fb4dc472b54ea89a4cff96dc4686f972eeb503f3db5"
     },
     "pixelPolicy": "Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box.",
     "designBindings": [
@@ -394,7 +403,7 @@
     {"id": "co_skill_6", "x": 256, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "co-turret-shield-v52", "sourceRect": [448, 0, 448, 448]},
     {"id": "co_skill_7", "x": 384, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [0, 896, 448, 448]},
     {"id": "co_skill_8", "x": 512, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "source-paint-v45", "sourceRect": [0, 0, 448, 448]},
-    {"id": "co_skill_9", "x": 640, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [896, 448, 448, 448]},
+    {"id": "co_skill_9", "x": 640, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "co-ground-array-v55", "sourceRect": [0, 0, 448, 448]},
     {"id": "linh_skill_1", "x": 768, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "demo-aligned-v35", "sourceRect": [896, 0, 448, 448]},
     {"id": "linh_skill_2", "x": 896, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "linh-support-domain-v50", "sourceRect": [0, 0, 448, 448]},
     {"id": "linh_skill_3", "x": 0, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "spirit-ward-v44", "sourceRect": [0, 0, 448, 448]},
