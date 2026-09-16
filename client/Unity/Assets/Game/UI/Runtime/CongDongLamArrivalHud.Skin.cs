@@ -957,10 +957,11 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoCharacterHubUnavailableControl(Button button)
         {
-            // Preserve the component's geometry and artwork when disabling it.
+            // Preserve geometry while making unavailable actions unmistakably non-interactive.
+            button.AddToClassList("lgo-unavailable-control");
             button.SetEnabled(false);
-            button.style.opacity = .78f;
-            button.style.color = UiSubText;
+            button.style.opacity = .48f;
+            button.style.color = new Color(.88f, .92f, .94f, 1f);
         }
 
         private static void ApplyLgoInventoryCategoryItem(Button button, bool touch)
@@ -1137,9 +1138,8 @@ namespace LinhGioi.UI
             if (primary) ApplyLgoCharacterHubPrimaryAction(button);
             else ApplyLgoCharacterHubGoldAction(button);
             ApplyLgoCharacterHubInspectorAction(button);
-            ApplyLgoCharacterHubUnavailableControl(button);
             button.style.color = primary ? new Color(.90f, .95f, 1f, 1f) : new Color(.20f, .16f, .10f, 1f);
-            button.style.opacity = .82f;
+            ApplyLgoCharacterHubUnavailableControl(button);
             button.tooltip = "Tính năng chưa khả dụng trong phiên bản này.";
         }
 

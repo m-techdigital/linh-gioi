@@ -886,9 +886,11 @@ namespace LinhGioi.UI
                 if (visible) visibleItemCount++;
             }
 
-            var healthVisible = showSupplies && InventoryMatchesSearch("Bình Máu Nhỏ", "health_potion", "hồi phục HP");
-            var manaVisible = showSupplies && InventoryMatchesSearch("Bình Linh Lực Nhỏ", "mana_potion", "hồi phục MP");
-            var rewardVisible = showSupplies && InventoryMatchesSearch(
+            var healthVisible = showSupplies && _scene.HealthPotionCount > 0
+                && InventoryMatchesSearch("Bình Máu Nhỏ", "health_potion", "hồi phục HP");
+            var manaVisible = showSupplies && _scene.ManaPotionCount > 0
+                && InventoryMatchesSearch("Bình Linh Lực Nhỏ", "mana_potion", "hồi phục MP");
+            var rewardVisible = showSupplies && _scene.HasClassRewardItem && InventoryMatchesSearch(
                 _scene.ClassRewardDisplayName, _scene.ClassRewardItemId, "phần thưởng nhiệm vụ");
             _healthPotion.style.display = healthVisible ? DisplayStyle.Flex : DisplayStyle.None;
             _manaPotion.style.display = manaVisible ? DisplayStyle.Flex : DisplayStyle.None;
@@ -1018,7 +1020,7 @@ namespace LinhGioi.UI
                 BindLgoItemIconContent(_characterHeroQuickIcons[i], sprite, EquipmentShortName(slot), _scene.GetEquipmentItemId(slot));
                 ApplyLgoCharacterHubSelectionState(_characterHeroQuickIcons[i], slot == _scene.SelectedEquipmentSlot);
                 if (_characterHeroQuickLevels != null && i < _characterHeroQuickLevels.Length)
-                    _characterHeroQuickLevels[i].text = "+" + _scene.GetEquipmentItemLevel(slot);
+                    _characterHeroQuickLevels[i].text = "Lv" + _scene.GetEquipmentItemLevel(slot);
             }
         }
 
@@ -1028,11 +1030,52 @@ namespace LinhGioi.UI
             if (_inventoryDetailFitChip != null) _inventoryDetailFitChip.text = fit;
         }
 
+        private bool IsOwnedInventorySupply(string itemId)
+        {
+            if (itemId == "health_potion") return _scene.HealthPotionCount > 0;
+            if (itemId == "mana_potion") return _scene.ManaPotionCount > 0;
+            if (itemId == "class_reward") return _scene.HasClassRewardItem;
+            return false;
+        }
+
+        private string FirstOwnedInventorySupply()
+        {
+            if (_scene.HealthPotionCount > 0) return "health_potion";
+            if (_scene.ManaPotionCount > 0) return "mana_potion";
+            return _scene.HasClassRewardItem ? "class_reward" : null;
+        }
+
+        private void RefreshInventoryEmptySupplyDetailCard()
+        {
+            _inventoryDetailLockAction.style.display = DisplayStyle.None;
+            _inventoryDetailIcon.text = string.Empty;
+            _inventoryDetailIcon.style.backgroundImage = StyleKeyword.None;
+            var artworkNotice = _inventoryDetailIcon.Q<Label>(className: "lgo-item-artwork-notice");
+            if (artworkNotice != null) artworkNotice.style.display = DisplayStyle.None;
+            _equipmentDetail.text = "Chưa có vật phẩm";
+            _inventoryDetailRarity.text = "Vật phẩm";
+            _inventoryDetailStateBadge.text = "TRỐNG";
+            _inventoryDetailStatsHeader.text = "HIỆU QUẢ";
+            _inventoryDetailSetHeader.text = "TÌNH TRẠNG";
+            _inventoryDetailStatPrimary.text = "Chưa có vật phẩm trong nhóm này.";
+            _inventoryDetailStatFit.text = "Nhận vật phẩm để xem chi tiết và thao tác.";
+            RefreshInventoryDetailChips("—", "Không có vật phẩm sở hữu");
+            _inventoryDetailPrimaryAction.text = "Không khả dụng";
+            _inventoryDetailPrimaryAction.SetEnabled(false);
+        }
+
         private void RefreshInventoryDetailCard()
         {
             if (_scene == null || _inventoryDetailStateBadge == null) return;
             if (_suppliesOpen)
             {
+                var owned = FirstOwnedInventorySupply();
+                if (owned == null)
+                {
+                    RefreshInventoryEmptySupplyDetailCard();
+                    return;
+                }
+                if (!IsOwnedInventorySupply(_selectedSupplyItemId)) _selectedSupplyItemId = owned;
                 RefreshInventorySupplyDetailCard();
                 return;
             }

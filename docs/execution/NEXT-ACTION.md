@@ -1,3 +1,10 @@
+# NEXT ACTION — Character Hub / after v57 whole-screen polish batch
+
+1. P3/P4: audit Potential + Spirit Pet interaction/density on tablet/mobile; keep gameplay read-only, improve locked roster/action semantics and reduce avoidable scroll.
+2. Character/Bag P0-P2 are regression-locked: keep `LvN`, hide zero-count owned items, keep truthful empty-supply inspector, shared unavailable style.
+3. Preserve Skill art/runtime, actor/renderer/frozen surfaces; only touch shared UI/layout/data presentation.
+4. After P3/P4, run responsive pass and one final five-tab Player audit across PC/mobile/tablet.
+
 # NEXT ACTION — Character Hub / after v55
 
 1. V53 Pháp Trận is already published/reused; do not rerun its completed Unity/build/capture evidence.

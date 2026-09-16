@@ -252,6 +252,8 @@ namespace LinhGioi.Tests.EditMode
             {
                 var host = new GameObject("item artwork state test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                typeof(CongDongLamMap01AArtPreview).GetField("<HealthPotionCount>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(scene, 1);
                 // This test exercises missing-state explicitly even when published artwork grows.
                 var missing = EquipmentItemIconCatalog.FromJson("{\"itemBindings\":[]}", id => null);
                 typeof(CongDongLamMap01AArtPreview).GetField("_equipmentItemIconCatalog", BindingFlags.Instance | BindingFlags.NonPublic)
@@ -362,7 +364,7 @@ namespace LinhGioi.Tests.EditMode
                 InvokeBoundButton(root.Q<Button>("Map01A Bag Main Tab"));
                 var search = root.Q<TextField>("Map01A Inventory Search");
                 var badge = root.Q<Label>("Map01A Inventory Count Badge");
-                search.value = "binh mau";
+                search.value = "boots";
                 Assert.That(badge.text, Is.EqualTo("1 kết quả"), "Do not duplicate capacity in the bounded search header.");
                 Assert.That(badge.tooltip, Does.Contain("56/120 ô"));
                 search.value = "";
@@ -709,6 +711,18 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Inventory Split Action").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Button>("Map01A Inventory Sort Action").style.flexGrow.value, Is.EqualTo(1));
                 Assert.That(root.Q<Button>("Map01A Inventory Quick Sell Action").style.flexGrow.value, Is.EqualTo(1));
+                Assert.That(root.Q<Button>("Map01A Health Potion").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Zero-count health potion must not render as an owned x0 inventory item.");
+                Assert.That(root.Q<Button>("Map01A Mana Potion").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Zero-count mana potion must not render as an owned x0 inventory item.");
+                Assert.That(root.Q<Button>("Map01A Equip Reward").style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Unreceived quest reward must not occupy the owned inventory grid as x0.");
+                InvokeBoundButton(root.Q<Button>("Map01A Supplies Tab"));
+                Assert.That(root.Q<Label>("Map01A Supplies Empty State").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").text, Is.EqualTo("Chưa có vật phẩm"),
+                    "An empty supply category must not fabricate a selected x0 potion in the inspector.");
+                Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").enabledSelf, Is.False);
+                InvokeBoundButton(root.Q<Button>("Map01A All Items Category"));
                 Assert.That(root.Query<VisualElement>(className: "lgo-inventory-bag-grid-cell").ToList().Count, Is.EqualTo(25),
                     "The approved storage workspace keeps a stable five-by-five grid, including honest empty slots.");
                 Assert.That(root.Q<Button>("Map01A All Items Category").style.minHeight.value.value, Is.EqualTo(100),
@@ -776,7 +790,8 @@ namespace LinhGioi.Tests.EditMode
                     var levelBadge = root.Q<Label>("Map01A Character Hero Quick Level " + equipmentIndex);
                     Assert.That(levelBadge, Is.Not.Null,
                         "Every equipped slot must expose its real item level like the approved character design.");
-                    Assert.That(levelBadge.text, Is.EqualTo("+" + scene.GetVoEquipmentItemLevel(scene.VoEquipmentSlotIds[equipmentIndex])));
+                    Assert.That(levelBadge.text, Is.EqualTo("Lv" + scene.GetVoEquipmentItemLevel(scene.VoEquipmentSlotIds[equipmentIndex])),
+                        "Item level must not masquerade as enhancement +N before an enhancement contract exists.");
                     Assert.That(levelBadge.ClassListContains("lgo-equipment-level-badge"), Is.True);
                 }
                 StringAssert.StartsWith("Lv." + scene.VoAvatarLevel + "  ·  LC ",
@@ -1098,6 +1113,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False,
                     "Map01A must not create local fake potential progression before the real state contract exists.");
                 Assert.That(root.Q<Button>("Map01A Potential Reset").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Potential Add Point").ClassListContains("lgo-unavailable-control"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Potential Add Point").style.opacity.value, Is.LessThanOrEqualTo(.55f),
+                    "Unavailable write actions must read visually disabled, not like active primary buttons.");
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").style.minHeight.value.value,
                     Is.EqualTo(52).Within(1));
                 Assert.That(root.Q<Button>("Map01A Potential Add Point").style.fontSize.value.value,
@@ -1136,6 +1154,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Deploy Action").enabledSelf, Is.False);
                 Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
                     "Linh thú growth must remain visibly gated until its real progression state exists.");
+                Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").ClassListContains("lgo-unavailable-control"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").style.opacity.value, Is.LessThanOrEqualTo(.55f));
                 StringAssert.DoesNotContain("Màn này", hubDetailBody.SourceText);
                 StringAssert.DoesNotContain("state", hubDetailBody.SourceText);
                 StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
@@ -2565,10 +2585,10 @@ namespace LinhGioi.Tests.EditMode
                         Assert.That(itemsGrid.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                         Assert.That(equipmentItem.style.display.value, Is.EqualTo(DisplayStyle.Flex),
                             "Opening Rương đồ from another main tab must restore equipment in the approved Tất cả view.");
-                        Assert.That(supplyItem.style.display.value, Is.EqualTo(DisplayStyle.Flex),
-                            "The approved Tất cả view must show actual inventory items alongside equipment.");
+                        Assert.That(supplyItem.style.display.value, Is.EqualTo(DisplayStyle.None),
+                            "Review mode must not fabricate a zero-count potion as an owned inventory item.");
                         Assert.That(equipmentItem.parent, Is.EqualTo(supplyItem.parent),
-                            "Tất cả must use one shared wrapping grid so item groups do not fall into separate off-screen pages.");
+                            "Owned item types still share one wrapping grid when supply data exists.");
                         Assert.That(root.Q<Button>("Map01A All Items Category").style.backgroundColor.value.b,
                             Is.GreaterThan(root.Q<Button>("Map01A Equipment Tab").style.backgroundColor.value.b),
                             "The category rail must visibly select Tất cả when Rương đồ opens.");
@@ -2608,22 +2628,22 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(searchInput, Is.Not.Null);
                 Assert.That(searchInput.ClassListContains("lgo-inventory-search-input"), Is.True,
                     "The actual TextField input must use the shared dark game skin instead of Unity's white default.");
-                search.value = "binh mau";
+                search.value = "boots";
 
-                Assert.That(root.Q<Button>("Map01A Health Potion").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Button>("Map01A Equipment Item Tile boots").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q<Button>("Map01A Mana Potion").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Label>("Map01A Inventory Count Badge").tooltip, Does.Contain("56/120 ô"));
                 Assert.That(root.Q<Label>("Map01A Inventory Count Badge").text, Is.EqualTo("1 kết quả"),
                     "Search feedback must show the number of real matching items instead of leaving the capacity badge unchanged.");
-                var healthPotion = root.Q<Button>("Map01A Health Potion");
+                var healthPotion = root.Q<Button>("Map01A Equipment Item Tile boots");
                 Assert.That(healthPotion.style.backgroundColor.value.b, Is.LessThan(.3f),
                     "A filtered result must not look selected while the right-side detail still belongs to equipment.");
                 Assert.That(healthPotion.ClassListContains("lgo-character-hub-selected"), Is.False);
                 InvokeBoundButton(healthPotion);
                 Assert.That(healthPotion.ClassListContains("lgo-character-hub-selected"), Is.True,
                     "Selecting the result must synchronize its shared semantic highlight with the right-side detail.");
-                Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").text, Is.EqualTo("Bình Máu Nhỏ"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").text, Does.Contain("Giày"));
 
                 search.value = "";
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.display.value, Is.EqualTo(DisplayStyle.Flex));

@@ -1,3 +1,12 @@
+## Character Hub v57 — shared unavailable semantics + truthful Character/Bag — 2026-09-17
+
+- P0 shared unavailable base: one `lgo-unavailable-control`, disabled control opacity0.48 with readable text; Potential/Linh thú locked actions no longer look active.
+- P1 Character rail level badge now uses `LvN`, not `+N`; no enhancement contract is implied.
+- P2 Bag hides zero-count potion/unreceived reward tiles, search counts only owned content, and empty Vật phẩm detail shows truthful `Chưa có vật phẩm` state.
+- TDD RED→GREEN covered all three behaviors; full Unity EditMode315/315. Player build succeeded with0errors/46reported warnings (existing obsolete UI Toolkit API warnings), capture132frames/3viewport technical pass.
+- Eye audit: Character/Bag/Potential/Spirit all remain same landscape composition; no x0 item grid; disabled actions visibly muted. Spirit tablet still dense/scrolls and is next active polish area.
+- Whole five-tab goal remains CONTINUE; Skill pipeline/runtime unchanged in v57.
+
 ## Character Hub v55 — Cơ Trận direct ground-array alignment — 2026-09-17
 
 - Reused V53 at `2ec02205`; no duplicate V53 Unity/build/capture run.
