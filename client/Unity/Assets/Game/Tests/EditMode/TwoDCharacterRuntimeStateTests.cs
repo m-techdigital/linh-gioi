@@ -1223,6 +1223,33 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void SkillRegisteredArtworkBatchHasSeparateContentSprites()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("registered skill content test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var frame = scene.GetMap01ASkillIconSprite("frame");
+                foreach (var id in new[] { "vo_skill_7", "phap_skill_3", "phap_skill_4", "phap_skill_6", "phap_skill_7",
+                    "phap_skill_8", "co_skill_4", "linh_skill_1", "linh_skill_3", "linh_skill_8" })
+                {
+                    var sprite = scene.GetMap01ASkillIconSprite(id);
+                    Assert.That(sprite, Is.Not.Null, id + " must resolve its own reviewed artwork, not a HUD fallback.");
+                    Assert.That(sprite, Is.Not.SameAs(frame));
+                    Assert.That(sprite.texture, Is.SameAs(frame.texture));
+                    Assert.That(sprite.rect.width, Is.EqualTo(128));
+                    Assert.That(sprite.rect.height, Is.EqualTo(128));
+                }
+            }
+            finally
+            {
+                foreach (var go in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(go)) Object.DestroyImmediate(go);
+            }
+        }
+
+        [Test]
         public void SkillModulesUseExplicitSkillArtworkInsteadOfHudFallback()
         {
             foreach (var profile in CharacterHubClassCatalog.Profiles)
@@ -1252,18 +1279,23 @@ namespace LinhGioi.Tests.EditMode
                 {
                     typeof(CongDongLamArrivalHud).GetField("_characterHubEvidenceClassId", flags).SetValue(hud, profile.Id);
                     typeof(CongDongLamArrivalHud).GetMethod("BindCharacterHubProfile", flags).Invoke(hud, null);
-                    InvokeBoundButton(root.Q<Button>("Map01A Skill Node 0"));
-                    Assert.That(root.Query<VisualElement>(className: "lgo-skill-shared-frame").ToList(), Is.EqualTo(frames));
-                    foreach (var frame in frames)
-                        Assert.That(frame.style.backgroundImage.value.sprite, Is.SameAs(master));
-                    var icon = root.Q("Map01A Skill Node 0 Icon");
-                    var expected = scene.GetMap01ASkillIconSprite(profile.Skills[0].IconId);
-                    Assert.That(icon.style.backgroundImage.value.sprite, Is.SameAs(expected));
-                    StringAssert.Contains(profile.Skills[0].Name, icon.tooltip);
-                    Assert.That(icon.tooltip.Contains("chưa được đăng ký"), Is.EqualTo(expected == null),
-                        "Availability tooltip must be rebound when leaving a class whose artwork is missing.");
-                    Assert.That(icon.Q<Label>(icon.name + " Missing Artwork").style.display.value,
-                        Is.EqualTo(expected == null ? DisplayStyle.Flex : DisplayStyle.None));
+                    for (var index = 0; index < profile.Skills.Count; index++)
+                    {
+                        InvokeBoundButton(root.Q<Button>("Map01A Skill Node " + index));
+                        Assert.That(root.Query<VisualElement>(className: "lgo-skill-shared-frame").ToList(), Is.EqualTo(frames));
+                        foreach (var frame in frames)
+                            Assert.That(frame.style.backgroundImage.value.sprite, Is.SameAs(master));
+                        var icon = root.Q("Map01A Skill Node " + index + " Icon");
+                        var expected = scene.GetMap01ASkillIconSprite(profile.Skills[index].IconId);
+                        Assert.That(icon.style.backgroundImage.value.sprite, Is.SameAs(expected));
+                        Assert.That(root.Q("Map01A Hub Preview Detail Icon").style.backgroundImage.value.sprite, Is.SameAs(expected),
+                            profile.Skills[index].Id + " inspector must follow the selected content, including missing state.");
+                        StringAssert.Contains(profile.Skills[index].Name, icon.tooltip);
+                        Assert.That(icon.tooltip.Contains("chưa được đăng ký"), Is.EqualTo(expected == null),
+                            "Availability tooltip must be rebound when leaving a class whose artwork is missing.");
+                        Assert.That(icon.Q<Label>(icon.name + " Missing Artwork").style.display.value,
+                            Is.EqualTo(expected == null ? DisplayStyle.Flex : DisplayStyle.None));
+                    }
                 }
                 var detailFrame = root.Q("Map01A Hub Preview Detail Icon").Q(className: "lgo-skill-shared-frame");
                 InvokeBoundButton(root.Q<Button>("Map01A Potential Main Tab"));

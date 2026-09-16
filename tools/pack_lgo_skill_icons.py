@@ -105,6 +105,13 @@ def read_artwork_registry(registry: Path | None) -> tuple[list[dict], dict | Non
 
 def pack(source: Path = SOURCE, output: Path = OUTPUT, registry: Path | None = None) -> dict:
     extras, intake = read_artwork_registry(registry)
+    existing = output / 'manifest.json'
+    if existing.is_file():
+        previous = json.loads(existing.read_text())
+        old_ids = {part['id'] for part in previous.get('parts', [])}
+        new_ids = set(IDS) | {'frame'} | {part['id'] for part in extras}
+        if previous.get('artworkIntake') and old_ids - new_ids:
+            raise ValueError('Refusing to drop registered artwork; provide the complete registry or use a new candidate directory')
     if hashlib.sha256(source.read_bytes()).hexdigest() != SOURCE_SHA:
         raise ValueError("Skill source hash mismatch: " + str(source))
     with Image.open(source) as image:

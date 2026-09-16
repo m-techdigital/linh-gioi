@@ -1,25 +1,29 @@
 # NEXT ACTION — Character Hub / Skill artwork
 
-## Active owner steer — một base cho cùng chức năng
-- Giữ `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`; baseline v27 `affb970c`, upstream `origin/feature/2d`. Không đổi branch/worktree hoặc mở screen khác.
-- Phiên chat này: `S-LGO-SKILL-20260916-C9B4`. Đọc `/Users/minhdc/Tools/mcp-session-manager/SESSION-CONTRACT.md`; check pause trước batch, claim worktree/runtime/branch đúng nhu cầu. Không dùng lại ID này cho chat khác.
-- Canonical `redesign-v4-five-tabs`; không sửa class/pose/wardrobe/source renderer/camera/frozen.
-- v27: một library 45 record, một loader/base cho 5 class; bỏ HUD fallback. 19 instance Skill dùng chung một vòng, nội dung rời; Tiềm năng giữ factory chung.
-- Runtime hiện vẫn là atlas 512×512/252747 byte, 1 frame +12 nội dung (9 skill Kiếm/3 category). Còn thiếu 36 artwork thật; không coi test fixture là hình dùng trong game.
+## Active — hoàn thiện artwork trên base chung, không mở UI theo class
+- Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `origin/feature/2d`.
+- Phiên MCP hiện hành: `S-LGO-SKILL-20260916-C9B4`; check pause/claims trước batch. SESSION-CONTRACT V2 đã đọc; CLI v1 vẫn tương thích. Không đổi task/worktree hoặc chạy migration/restart theo thông báo.
+- Canonical duy nhất: `redesign-v4-five-tabs`; không mở class/pose/wardrobe/renderer/camera/frozen surfaces.
+- v27 có một library45skill +một base frame/content cho5class. v28 mở intake qua `--artwork-registry`; không viết packer/UI builder riêng.
 
-## v28 — đường nạp artwork bổ sung đã nối vào pipeline hiện hành
-- `tools/pack_lgo_skill_icons.py --artwork-registry <registry.json> --output <candidate-dir>` nhận nguồn PNG/sha256/size và rect theo skillId; không thêm builder theo class.
-- Registry version1: `review.status=SELF_REVIEWED`, `review.evidence`; `sources=[{id,path,sha256,size}]`; `parts=[{id,sourceId,rect:[x,y,w,h]}]`. Đường dẫn tương đối lấy theo thư mục registry.
-- Chỉ nhận ID trong skill-library, không trùng/ghi đè module cũ/frame; rect vuông >=128px, nằm trong source; giữ canvas/aperture chung, không fit từng icon theo bounding box.
-- Packer kiểm đầu vào và budget trước ghi output. Không registry: PNG và manifest giữ nguyên từng byte. Có 36 module: candidate 1024×1024/49 cell, vòng cũ vẫn chỉ có một sprite.
-- Guard kích thước/import/budget của Skill chỉ mở theo metadata intake hợp lệ; baseline 512px/400000 byte và các pack khác không được nới.
-- Evidence `build/character-hub-artwork-intake-v28/`: RED/GREEN, 48/48 Python, source/frozen unchanged proof; ví dụ registry được đánh dấu DRAFT, không nhập runtime.
-- Lượt này không chạy Unity/build/capture: toàn bộ `client/Unity` không đổi; kết quả 304/304 và Player v27 là lịch sử, không phải test mới.
+## v29 — 10 artwork thật đã nối vào Player, còn26 thiếu
+- Tạo nguồn local với DreamShaper8/Diffusers đã có, không tải model; giữ safety checker. Pilot4 ảnh bị loại. Batch36ID có2 ảnh bị lọc; sau review chỉ10 nội dung được chọn,26 không promotion.
+- IDs mới: vo_skill_7; phap_skill_3/4/6/7/8; co_skill_4; linh_skill_1/3/8. Nguồn384px +padding32 cố định → canvas448px; không fit từng hình theo bbox.
+- Atlas1024×1024/474211byte gồm23module:12inner cũ +10inner mới +một frame. Toàn bộ13module cũ giữ nguyên từng pixel. 19 frame instance vẫn dùng chung; runtime UI/base/library không đổi.
+- Full graphics EditMode305/305, no fail/skip; kiểm toàn bộ45 lựa chọn qua tree/detail/tooltip/missing state và frame identity. Python49/49. Một Player build/capture mới:0error/0warning trong build này;87ảnh.
+- Đã xem5class×3viewport +Tiềm năng PC. Không thấy cắt/chồng do batch; ảnh mới lên tree/equipped/detail. Đây là PARTIAL_DRAFT_RUNTIME_VALIDATED, KHÔNG phải visual final. Nền/palette/độ lấp đầy của một số motif còn cần polish ở source.
+- Sửa lỗi thật của packer: không-registry hoặc registry thiếu ID không được âm thầm xóa artwork đã đăng ký. Có RED→GREEN; giữ nguyên output khi bị từ chối.
 
-## Việc tiếp theo — artwork thật, không UI riêng
-- [ ] Tạo/đăng ký 36 inner artwork theo `build/character-hub-skill-base-v27/missing-artwork.json`; kiểm đúng tên/ý nghĩa, không dùng HUD/Kiếm thay thế hoặc crop screenshot gameplay.
-- [ ] Dùng registry chung và pipeline v28, review PNG rời ở kích thước hiển thị, rồi mới nhập atlas/import policy có provenance.
-- [ ] Claim runtime thích hợp trước inference/Unity; kiểm registry để tránh phiên khác. Claim branch `feature/2d` trước push; không tự thu hồi claim của người khác.
-- [ ] Sau thay asset thật: kiểm tree/equipped/detail/selection 5 class; Player PC/mobile/tablet và eye audit. Cập nhật evidence/PID/result/tests/next; kết thúc lượt ở WAITING_USER hoặc BLOCKED.
+## Bước tiếp theo
+- [ ] Hoàn thiện26 artwork còn thiếu theo `build/character-hub-artwork-v29/missing-artwork.json`, không dùng lại ảnh bị loại hoặc icon HUD/Kiếm để lấp.
+- [ ] Củng cố nền/palette/độ lấp đầy của source mới khi đối chiếu canonical; không thêm scale/offset/nhánh UI theo class để che vấn đề source.
+- [ ] Registry tiếp phải tích lũy cả10ID đã đăng ký; `tools/pack_lgo_skill_icons.py --artwork-registry ... --output build/...` trước khi thay output runtime.
+- [ ] Giữ một frame master; kiểm một lượt5class/3viewport sau batch nguồn mới. Không coi test xanh là duyệt visual hoặc production gameplay.
 
-`CONTINUE / VISUAL_FIX_REQUIRED / ARTWORK_INCOMPLETE` — base và intake đã có; 36 artwork không được coi là hoàn thành chỉ vì test xanh.
+## Evidence / provenance
+- `build/character-hub-artwork-v29/`: review.json, art-review.json, artwork-registry.json, generation*.json, raw PNG, source board, final-editmode.xml, runtime/, owned-processes.json.
+- Nguồn+registry/recipe được giữ trong `lgo-skill-artwork-v29-authoring.zip` cùng SHA256; đây là authoring/provenance, không unzip vào Resources hoặc chạy lại script generation mù quáng.
+- Image tool từng tạo nhầm dashboard giả: đã loại, không phải evidence MCP/Player. Evidence Player duy nhất trong runtime/ do Unity capture.
+- Process registry từng đầy: PID thật có thêm trong result/evidence; không sửa manager hoặc xóa record của phiên khác. Trước kết thúc chuyển WAITING_USER/BLOCKED; chỉ release claim của chính phiên khi đã xác minh job kết thúc.
+
+`CONTINUE / VISUAL_FIX_REQUIRED / ARTWORK_INCOMPLETE` —19/45 skill có art;26 còn thiếu. Mobile/tablet là viewport macOS, không phải thiết bị thật.

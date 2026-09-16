@@ -61,15 +61,15 @@
   "frameSourceIndex": 10,
   "frameOuterRadius": 158,
   "textureSize": [
-    512,
-    512
+    1024,
+    1024
   ],
   "cellSize": [
     128,
     128
   ],
-  "pngBytes": 252747,
-  "sha256": "88a6b075ae384ac98c5af8acb9b4f66f59b5821aab0eaae05cb6f151d606005f",
+  "pngBytes": 474211,
+  "sha256": "22975d8789877dccc1a1cbd8e3f37f058c2f23c7186773877d478f82d6e08fb7",
   "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
@@ -77,22 +77,55 @@
       "role": "ui-skill-icon-atlas",
       "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "88a6b075ae384ac98c5af8acb9b4f66f59b5821aab0eaae05cb6f151d606005f"
+      "sha256": "22975d8789877dccc1a1cbd8e3f37f058c2f23c7186773877d478f82d6e08fb7"
     }
   ],
+  "artworkIntake": {
+    "registrySha256": "05f332e617fd208ca04398c1b57454a4d0bbe062ee9672184b2623d4370c2f97",
+    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-artwork-v29/artwork-registry.json",
+    "contentCount": 10,
+    "sources": [
+      {
+        "id": "lgo-skill-inner-v29",
+        "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-artwork-v29/registered-inner-source.png",
+        "sha256": "64656b3319cb6b21b78b30313d2afc7285a511506f7abc13e5f4f63ed882f8f7",
+        "size": [
+          1792,
+          1344
+        ]
+      }
+    ],
+    "review": {
+      "status": "SELF_REVIEWED",
+      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-artwork-v29/art-review.json",
+      "sha256": "a23a16afaac54ac396135c0b05a239031a5f83892b103bdef7e9e9bc31817e9b"
+    },
+    "pixelPolicy": "Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box."
+  },
+  "byteBudget": 727680,
   "parts": [
-    {"id": "thien_kiem_quyet", "x": 0, "y": 384, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "lang_khong_bo", "x": 128, "y": 384, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "kiem_vu", "x": 256, "y": 384, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "ho_the", "x": 384, "y": 384, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "song_kiem", "x": 0, "y": 256, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "phong_tram", "x": 128, "y": 256, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "kiem_tran", "x": 256, "y": 256, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "ngu_kiem", "x": 384, "y": 256, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "van_kiem", "x": 0, "y": 128, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "category_active", "x": 128, "y": 128, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "category_passive", "x": 256, "y": 128, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "category_method", "x": 384, "y": 128, "w": 128, "h": 128, "role": "inner-symbol"},
-    {"id": "frame", "x": 0, "y": 0, "w": 128, "h": 128, "role": "shared-frame"}
+    {"id": "thien_kiem_quyet", "x": 0, "y": 896, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "lang_khong_bo", "x": 128, "y": 896, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "kiem_vu", "x": 256, "y": 896, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "ho_the", "x": 384, "y": 896, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "song_kiem", "x": 512, "y": 896, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "phong_tram", "x": 640, "y": 896, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "kiem_tran", "x": 768, "y": 896, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "ngu_kiem", "x": 896, "y": 896, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "van_kiem", "x": 0, "y": 768, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "category_active", "x": 128, "y": 768, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "category_passive", "x": 256, "y": 768, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "category_method", "x": 384, "y": 768, "w": 128, "h": 128, "role": "inner-symbol"},
+    {"id": "frame", "x": 512, "y": 768, "w": 128, "h": 128, "role": "shared-frame"},
+    {"id": "co_skill_4", "x": 640, "y": 768, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [896, 448, 448, 448]},
+    {"id": "linh_skill_1", "x": 768, "y": 768, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [1344, 448, 448, 448]},
+    {"id": "linh_skill_3", "x": 896, "y": 768, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [0, 896, 448, 448]},
+    {"id": "linh_skill_8", "x": 0, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [448, 896, 448, 448]},
+    {"id": "phap_skill_3", "x": 128, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [448, 0, 448, 448]},
+    {"id": "phap_skill_4", "x": 256, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [896, 0, 448, 448]},
+    {"id": "phap_skill_6", "x": 384, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [1344, 0, 448, 448]},
+    {"id": "phap_skill_7", "x": 512, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [0, 448, 448, 448]},
+    {"id": "phap_skill_8", "x": 640, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [448, 448, 448, 448]},
+    {"id": "vo_skill_7", "x": 768, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [0, 0, 448, 448]}
   ]
 }

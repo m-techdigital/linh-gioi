@@ -1,3 +1,12 @@
+## Character Hub v29 — artwork thật qua một base — 2026-09-16
+
+- Kế thừa a7114684; giữ codex/character-hub-v22 tại worktree cũ. Phiên S-LGO-SKILL-20260916-C9B4; check/claim trước batch, không tác động phiên khác. Đã đọc V2 notice/contract, giữ CLI v1 tương thích cho batch hiện hành.
+- Đã tạo và eye-review36ID. Chỉ10source được đưa vào Player: Võ1/Pháp5/Cơ1/Linh3;26 chưa đạt/thiếu, gồm2 ảnh bị lọc. Không đưa pilot hoặc ảnh dashboard tạo nhầm vào runtime/evidence. Mọi artwork mới vẫn DRAFT, chưa owner acceptance.
+- Một atlas1024×1024/474211byte,23module (12inner cũ+10inner mới+1frame). 13module cũ pixel-identical. UI runtime/base, skill-library45record, class/pose/wardrobe/renderer, ProjectSettings và frozen không thay đổi.
+- Full graphics EditMode305/305 không skip;49Python; replay PNG+manifest đúng từng byte. Test chạy cả45skill selections kiểm tree/detail/tooltip/missing và19frame object không dựng lại. Một Player build0error/0warning và87frame; xem5class×3viewport+Tiềm năngPC. Không có cắt/chồng mới được thấy; nền/palette/độ lấp đầy vài motif còn cần refinement ở source.
+- Packer chặn no-registry/registry thiếu ID làm mất artwork đã có; RED→GREEN. Nguồn raw, prompt/seed/model SHA, registration, review, ZIP authoring+SHA và PID ở build/character-hub-artwork-v29. PIDs có fallback result/evidence vì structured process registry từng đầy; không sửa manager để né giới hạn.
+- Trạng thái CONTINUE / VISUAL_FIX_REQUIRED / ARTWORK_INCOMPLETE: hiện19/45skill có art,26 còn thiếu. Chi tiết kế tiếp ở NEXT-ACTION.md; không gọi goal5tab hoặc thiết bị mobile/tablet thật đã nghiệm thu.
+
 ## Character Hub v28 — shared Skill artwork intake — 2026-09-16
 
 - Tiếp tục đúng task 36 inner artworks còn thiếu, giữ branch codex/character-hub-v22 và worktree character-hub-v22. Phiên điều phối S-LGO-SKILL-20260916-C9B4 giữ worktree claim; registry là nguồn trạng thái pause/claims/PID.

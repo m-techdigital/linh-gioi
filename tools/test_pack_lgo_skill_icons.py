@@ -8,19 +8,23 @@ ATLAS = ROOT / 'client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDon
 
 
 class SkillIconModulesTests(unittest.TestCase):
-    def test_one_frame_twelve_ring_free_contents(self):
+    def test_one_frame_base_and_registered_ring_free_contents(self):
         manifest = json.loads((ATLAS / 'manifest.json').read_text())
         frames = [p for p in manifest['parts'] if p.get('role') == 'shared-frame']
         self.assertEqual(1, len(frames), 'The ring must exist as exactly one reusable sprite.')
         self.assertEqual('frame', frames[0]['id'])
-        self.assertEqual(12, sum(p.get('role') == 'inner-symbol' for p in manifest['parts']))
+        extra = manifest.get('artworkIntake', {}).get('contentCount', 0)
+        self.assertEqual(12 + extra, sum(p.get('role') == 'inner-symbol' for p in manifest['parts']))
+        import pack_lgo_skill_icons as packer
+        self.assertTrue(set(packer.IDS).issubset({p['id'] for p in manifest['parts']}))
 
     def test_frame_aperture_is_empty_and_content_has_no_outer_rim(self):
         manifest = json.loads((ATLAS / 'manifest.json').read_text())
-        self.assertEqual([512, 512], manifest['textureSize'])
+        expected = 512 if len(manifest['parts']) <= 16 else 1024
+        self.assertEqual([expected, expected], manifest['textureSize'])
         atlas = Image.open(ATLAS / 'map01a-skill-icons.png').convert('RGBA')
         for p in manifest['parts']:
-            tile = atlas.crop((p['x'], 512-p['y']-128, p['x']+128, 512-p['y'])).getchannel('A')
+            tile = atlas.crop((p['x'], atlas.height-p['y']-128, p['x']+128, atlas.height-p['y'])).getchannel('A')
             self.assertIsNotNone(tile.getbbox(), p['id'])
             if p['id'] == 'frame':
                 self.assertIsNone(tile.crop((32, 32, 96, 96)).getbbox())
@@ -93,6 +97,7 @@ class SkillArtworkIntakeTests(unittest.TestCase):
         baseline = json.loads((ATLAS / 'manifest.json').read_text())
         with Image.open(ATLAS / 'map01a-skill-icons.png') as old, Image.open(self.output / 'map01a-skill-icons.png') as new:
             for part in baseline['parts']:
+                if part['id'] not in (*self.packer.IDS, 'frame'): continue
                 self.assertEqual(self.tile(old, baseline, part['id']).tobytes(), self.tile(new, result, part['id']).tobytes())
             for key in self.ids:
                 alpha = self.tile(new, result, key).getchannel('A')
@@ -135,10 +140,23 @@ class SkillArtworkIntakeTests(unittest.TestCase):
         self.assertEqual(before, (self.root / 'second/map01a-skill-icons.png').read_bytes())
         self.assertEqual(first['parts'], second['parts'])
 
-    def test_no_registry_preserves_published_atlas_and_manifest_byte_for_byte(self):
-        self.packer.pack(output=self.output)
-        for name in ('map01a-skill-icons.png', 'manifest.json'):
-            self.assertEqual((ATLAS / name).read_bytes(), (self.output / name).read_bytes(), name)
+    def test_no_registry_reproduces_base_without_erasing_registered_art(self):
+        import shutil
+        baseline = self.packer.pack(output=self.output)
+        current = json.loads((ATLAS / 'manifest.json').read_text())
+        with Image.open(ATLAS / 'map01a-skill-icons.png') as published, Image.open(self.output / 'map01a-skill-icons.png') as base:
+            for key in (*self.packer.IDS, 'frame'):
+                self.assertEqual(self.tile(published, current, key).tobytes(), self.tile(base, baseline, key).tobytes())
+        if not current.get('artworkIntake'):
+            for name in ('map01a-skill-icons.png', 'manifest.json'):
+                self.assertEqual((ATLAS / name).read_bytes(), (self.output / name).read_bytes())
+        else:
+            for name in ('map01a-skill-icons.png', 'manifest.json'):
+                shutil.copy2(ATLAS / name, self.output / name)
+            before = {p.name: p.read_bytes() for p in self.output.iterdir()}
+            with self.assertRaisesRegex(ValueError, 'registered artwork'):
+                self.packer.pack(output=self.output)
+            self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
 
     def test_budget_failure_preserves_the_last_valid_pair(self):
         from unittest.mock import patch
@@ -181,3 +199,16 @@ class SkillArtworkIntakeTests(unittest.TestCase):
             (output / 'manifest.json').write_text(json.dumps(broken))
             with self.assertRaises(ValueError):
                 guard._validate_runtime_pack(fake_root, spec)
+
+    def test_existing_registered_art_cannot_be_silently_dropped(self):
+        import copy
+        self.packer.pack(output=self.output, registry=self.write_registry())
+        before = {p.name: p.read_bytes() for p in self.output.iterdir()}
+        with self.assertRaisesRegex(ValueError, 'registered artwork'):
+            self.packer.pack(output=self.output)
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
+        partial = copy.deepcopy(self.document)
+        partial['parts'].pop()
+        with self.assertRaisesRegex(ValueError, 'registered artwork'):
+            self.packer.pack(output=self.output, registry=self.write_registry(partial))
+        self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
