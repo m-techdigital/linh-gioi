@@ -8,28 +8,28 @@
   "alphaPolicy": "grabcut-checker-removal-v2",
   "textureSize": [
     640,
-    512
+    640
   ],
   "cellSize": [
     128,
     128
   ],
-  "pngBytes": 218150,
-  "sha256": "e7528de968adb2179ee0f4ff7580d7f5634ae35c322a3bb3e0f949ff55c76d48",
+  "pngBytes": 248683,
+  "sha256": "03a0d21f7491f6d7888c723cad6a7a57506deddf35956c44dd6528743fe15bd6",
   "assets": [
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ACharacterEquipmentIcons/map01a-character-equipment-icons.png",
       "role": "ui-equipment-icon-atlas",
       "generator": "pack_lgo_equipment_item_icons",
       "referenceOnly": false,
-      "sha256": "e7528de968adb2179ee0f4ff7580d7f5634ae35c322a3bb3e0f949ff55c76d48"
+      "sha256": "03a0d21f7491f6d7888c723cad6a7a57506deddf35956c44dd6528743fe15bd6"
     }
   ],
   "parts": [
     {
       "id": "main_weapon",
       "x": 0,
-      "y": 384,
+      "y": 512,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -42,7 +42,7 @@
     {
       "id": "head_hair",
       "x": 128,
-      "y": 384,
+      "y": 512,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -55,7 +55,7 @@
     {
       "id": "inner_top",
       "x": 256,
-      "y": 384,
+      "y": 512,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -68,7 +68,7 @@
     {
       "id": "outer_top",
       "x": 384,
-      "y": 384,
+      "y": 512,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -81,7 +81,7 @@
     {
       "id": "lower_body",
       "x": 512,
-      "y": 384,
+      "y": 512,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -94,7 +94,7 @@
     {
       "id": "waist_belt",
       "x": 0,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -107,7 +107,7 @@
     {
       "id": "arm_guard",
       "x": 128,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -120,7 +120,7 @@
     {
       "id": "footwear",
       "x": 256,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -133,7 +133,7 @@
     {
       "id": "shoulder_chest_guard",
       "x": 384,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -146,7 +146,7 @@
     {
       "id": "class_accessory",
       "x": 512,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -159,7 +159,7 @@
     {
       "id": "vo_male_lv001_lower_garment",
       "x": 0,
-      "y": 128,
+      "y": 256,
       "w": 128,
       "h": 128,
       "role": "item-content",
@@ -169,7 +169,7 @@
     {
       "id": "vo_male_lv001_waist",
       "x": 128,
-      "y": 128,
+      "y": 256,
       "w": 128,
       "h": 128,
       "role": "item-content",
@@ -179,7 +179,7 @@
     {
       "id": "vo_male_lv001_boots",
       "x": 256,
-      "y": 128,
+      "y": 256,
       "w": 128,
       "h": 128,
       "role": "item-content",
@@ -189,7 +189,7 @@
     {
       "id": "vo_male_lv001_head_hair",
       "x": 0,
-      "y": 0,
+      "y": 128,
       "w": 128,
       "h": 128,
       "role": "item-content",
@@ -199,7 +199,7 @@
     {
       "id": "vo_male_lv001_inner_top",
       "x": 128,
-      "y": 0,
+      "y": 128,
       "w": 128,
       "h": 128,
       "role": "item-content",
@@ -209,11 +209,51 @@
     {
       "id": "vo_male_lv001_arm_guard",
       "x": 256,
-      "y": 0,
+      "y": 128,
       "w": 128,
       "h": 128,
       "role": "item-content",
       "sourceSha256": "a50f758da2927a8fc25bddb6f5b17c452025ec80ff5e22dedca1126df7a63de5",
+      "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
+    },
+    {
+      "id": "vo_male_lv001_main_weapon",
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "role": "item-content",
+      "sourceSha256": "2b0f716038065f8a0fe8bb63715eae5c1d1861ad9fbdff05a70a965756438040",
+      "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
+    },
+    {
+      "id": "vo_male_lv001_outer_tunic",
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "role": "item-content",
+      "sourceSha256": "1b7665c76ce230bc66f247b8258d84cb8c04d5e6fdb7f2a64da5165d6e7f808f",
+      "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
+    },
+    {
+      "id": "vo_male_lv001_light_armor",
+      "x": 256,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "role": "item-content",
+      "sourceSha256": "b26b015fddc440108f05b6cfff11eaa8d7ea72441b705106ab1bfc0d878711b8",
+      "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
+    },
+    {
+      "id": "vo_male_lv001_accessory",
+      "x": 384,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "role": "item-content",
+      "sourceSha256": "16b8fdcd31a361ffb52060955e20ea2a0dd0baf41bb90675d0d90f486df29266",
       "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
     }
   ],
@@ -266,6 +306,38 @@
       "gender": "male",
       "level": 1,
       "iconId": "vo_male_lv001_arm_guard"
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_main_weapon_lv001",
+      "slot": "main_weapon",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_main_weapon"
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_outer_tunic_lv001",
+      "slot": "outer_tunic",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_outer_tunic"
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_light_armor_lv001",
+      "slot": "light_armor",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_light_armor"
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_accessory_lv001",
+      "slot": "accessory",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_accessory"
     }
   ],
   "itemDesignBindings": [
@@ -376,6 +448,78 @@
         89,
         61
       ]
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_main_weapon_lv001",
+      "slot": "main_weapon",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_main_weapon",
+      "source": "prepared-sources/main_weapon.png",
+      "sourceSha256": "2b0f716038065f8a0fe8bb63715eae5c1d1861ad9fbdff05a70a965756438040",
+      "designSource": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/classes-lv001-030/vo/detail/15-male-equipment-grid-redraw-source.png",
+      "designSha256": "b99fe6ae31c732bdf0bcbc99aebdd4ce45ea14fe5beaa5ea3ca0eb2dae1586de",
+      "designRect": [
+        212,
+        119,
+        88,
+        63
+      ]
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_outer_tunic_lv001",
+      "slot": "outer_tunic",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_outer_tunic",
+      "source": "prepared-sources/outer_tunic.png",
+      "sourceSha256": "1b7665c76ce230bc66f247b8258d84cb8c04d5e6fdb7f2a64da5165d6e7f808f",
+      "designSource": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/classes-lv001-030/vo/detail/15-male-equipment-grid-redraw-source.png",
+      "designSha256": "b99fe6ae31c732bdf0bcbc99aebdd4ce45ea14fe5beaa5ea3ca0eb2dae1586de",
+      "designRect": [
+        211,
+        342,
+        90,
+        99
+      ]
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_light_armor_lv001",
+      "slot": "light_armor",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_light_armor",
+      "source": "prepared-sources/light_armor.png",
+      "sourceSha256": "b26b015fddc440108f05b6cfff11eaa8d7ea72441b705106ab1bfc0d878711b8",
+      "designSource": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/classes-lv001-030/vo/detail/15-male-equipment-grid-redraw-source.png",
+      "designSha256": "b99fe6ae31c732bdf0bcbc99aebdd4ce45ea14fe5beaa5ea3ca0eb2dae1586de",
+      "designRect": [
+        211,
+        746,
+        89,
+        65
+      ]
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_accessory_lv001",
+      "slot": "accessory",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_accessory",
+      "source": "prepared-sources/accessory.png",
+      "sourceSha256": "16b8fdcd31a361ffb52060955e20ea2a0dd0baf41bb90675d0d90f486df29266",
+      "designSource": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/classes-lv001-030/vo/detail/15-male-equipment-grid-redraw-source.png",
+      "designSha256": "b99fe6ae31c732bdf0bcbc99aebdd4ce45ea14fe5beaa5ea3ca0eb2dae1586de",
+      "designRect": [
+        221,
+        821,
+        73,
+        84
+      ]
     }
   ],
   "itemArtworkIntakes": [
@@ -433,6 +577,49 @@
         "vo_male_lv001_head_hair",
         "vo_male_lv001_inner_top",
         "vo_male_lv001_arm_guard"
+      ],
+      "profile": "lgo-item-content384-center256-to120-cell128-v1",
+      "sourceCanvas": [
+        384,
+        384
+      ],
+      "sourceViewport": [
+        64,
+        64,
+        320,
+        320
+      ],
+      "outputInset": 4,
+      "contentSize": [
+        120,
+        120
+      ],
+      "encoding": {
+        "profile": "rgba8-rgb-round4-alpha-exact-v1",
+        "rgbStep": 4,
+        "maxChannelError": 2,
+        "alphaExact": true
+      }
+    },
+    {
+      "registry": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-four-item-redraw-v40/registry.json",
+      "registrySha256": "cccb6fedf8785d3f600eacebfc97b52001175f635dcb6271b78ed519b02618b8",
+      "review": {
+        "status": "SELF_REVIEWED",
+        "evidence": "art-review.json",
+        "sha256": "1d982ac0ce2d24e81de17f286cbb6e5c8c476971ef34602225632cc85c076e0a"
+      },
+      "baseSha256": "e7528de968adb2179ee0f4ff7580d7f5634ae35c322a3bb3e0f949ff55c76d48",
+      "baseTextureSize": [
+        640,
+        512
+      ],
+      "basePartCount": 16,
+      "addedIconIds": [
+        "vo_male_lv001_main_weapon",
+        "vo_male_lv001_outer_tunic",
+        "vo_male_lv001_light_armor",
+        "vo_male_lv001_accessory"
       ],
       "profile": "lgo-item-content384-center256-to120-cell128-v1",
       "sourceCanvas": [

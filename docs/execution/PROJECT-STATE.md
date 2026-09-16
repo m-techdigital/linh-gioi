@@ -1,3 +1,20 @@
+## Character Hub v40 — bốn nội dung trang bị và closure — 2026-09-16
+
+- Baseline286daf75; giữ codex/character-hub-v22/worktree cũ, SID S-LGO-SKILL-20260916-C9B4 và taskT-69b4b27c4b39. Tiếp tục batchB-a9898e762895, không khởi tạo lại khi lượt trước đã có source/test/Player thật.
+- Găng, áo ngoài, giáp vai/ngực và vòng đồng tua đen Võ nam Lv1 đã nhập qua registry exact. Cộng v39 là10/10binding cho đúng biến thể; không dùng cho class/giới/cấp khác. UI/base/actor/renderer/gameplay không đổi.
+- Hình dựng rỗng native384, một lượt chất liệu local cho4món, alpha và viền được khóa; không crop board vào runtime. Các nguồn/draft/log bị loại giữ riêng.
+- Atlas640×640/248683byte dưới budget250000,20module;16module và6binding cũ RGBA giữ nguyên. Encodinground4 hiện hành không phải losslessRGB từ nguồn mới; alpha chính xác. Height tăng không phải giảmGPUmemory.
+- Một build/capture v40:0error/0warning,132ảnh trên3viewport. Fullgraphics313/313noskip cóREDmissing→GREEN. Đã xem15ảnh: Nhân vật và4mónselected ở3profile; không thấy clipping/notice mới, nhưng áo/tua tối trên tablet và nét chưa đồng nhất hoàn toàn.
+- Closure chạy69/69Python+3guard; verify132PNG/manifests, nguồn/hash/replay/ZIP. Tái sử dụng Unity/Player đã kiểm vì code/asset khớp; không build/capture/generate mới trong lượt chốt.
+- Đã loại đúng9generated Unity drift khỏi source sau khi lưu patch; không rollback class hoặc sửa frozen. Package portable không chứa font/model/secret/binary, PNG tái lập đúng byte. Evidence ở build/character-hub-four-item-redraw-v40/runtime-review.json và closure-proof.json.
+- Các báo lỗi tool và nguồn WIP trước là lịch sử, không trạng thái cuối. Chưa owner/whole-art approval, Skill Hỏa Tuyến/Thanh Tẩy và mismatch demo vẫn còn. CONTINUE / TEN_VO_STARTER_ITEM_CONTENTS / VISUAL_FIX_REQUIRED; xem NEXT-ACTION.
+
+## Character Hub v40 — blocked tại ghi script artwork — 2026-09-16
+
+- Baseline286daf75 đúng và runtime không đổi. File draw_items.py bị write_file từ chối, đọc lại xác nhận chưa tồn tại. Chưa có art/Unity/build/capture/commit/push mới.
+- Preflight không pause/recovery/conflict; 14/14packer và no-source guard PASS. Chỉ có WIP tài liệu điểm tiếp tục, bản atlas/demo snapshot ở build/character-hub-four-item-redraw-v40. Các job kiểm tra đã kết thúc.
+- Điểm chặn: TOOL_WRITE_BLOCKED. Chờ xử lý lỗi ghi công cụ, không đi vòng hoặc nhập draft cũ để lấp.
+
 ## Character Hub v39 — nguồn icon không dính cơ thể — 2026-09-16
 
 - Tiếp tục đúng branch/worktree/task từ 1f90b2cd. Ba icon mới tóc, áo trong và hộ uyển Võ nam Lv1 đã qua nguồn/demo và Player; tổng 6/10 item binding. Không sinh ảnh hoặc sửa actor/pose/wardrobe/renderer/UI base.

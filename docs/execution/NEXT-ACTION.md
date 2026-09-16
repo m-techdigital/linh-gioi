@@ -1,28 +1,28 @@
-# NEXT ACTION — Character Hub / nội dung trang bị đúng demo
+# NEXT ACTION — Character Hub / nội dung icon đúng demo
 
-## Active — hoàn thiện bốn nguồn Võ còn thiếu và độ rõ mỹ thuật theo nhóm
-- Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `feature/2d`; không reset/restore/đổi branch.
-- SID `S-LGO-SKILL-20260916-C9B4`, task `T-69b4b27c4b39`; check pause/recovery/job/claims trước batch. Không tác động phiên khác; kết thúc WAITING_USER/BLOCKED.
-- Canonical layout vẫn `redesign-v4-five-tabs`. Class demo là nguồn hình, không tự đổi ID/tên/cấp/chức năng gameplay hoặc actor/pose/wardrobe/renderer/frozen.
+## Active — đồng nhất chất lượng nguồn trên base hiện hành
+- Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `feature/2d`. Không reset, restore hoặc đổi branch/worktree.
+- SID `S-LGO-SKILL-20260916-C9B4`, task `T-69b4b27c4b39`. Trước mỗi batch kiểm pause/recovery/job/claims; không tác động process hoặc claim phiên khác. Cuối lượt dùng `v3.finish` và WAITING_USER/BLOCKED đúng kết quả.
+- Canonical UI vẫn `redesign-v4-five-tabs`; demo class là căn cứ hình ảnh, không tự đổi tên/cấp/chức năng gameplay. Actor/pose/wardrobe/renderer và frozen surfaces không thuộc batch.
 
-## v39 — ba nguồn đã loại cơ thể, cùng base và registry exact
-- Baseline1f90b2cd (v38) có3icon quần/đai/giày. Thêm tóc, áo trong, hộ uyển cho đúngVõ–male–Lv1; tổng6/10binding. Chưa thêm găng/áo ngoài/giáp/phụ kiện.
-- Sửa alpha trên nguồn384px v38: bỏ mặt/cổ giữa tóc; cắt tay và đai riêng khỏi áo; bỏ cẳng tay/ngón khỏi hộ uyển. Nguồn/mask/hash/rectdemo được giữ; không đưa nguyên bản bịloại vào game, không sinh ảnh mới.
-- Cuối batch giữ nguyên tọa độ native384, một viewport256→120trongcell128; không bbox-fit hoặc offsetUI. LượtPlayer đầu cho thấy thu0.875theonhóm là thừa nên đã bỏ, build/capture lần2 có trigger rõ. Găng còn họa tiết mặttrời lệchdemo; áo ngoài clone tạo tieslặp nên không nhập.
-- Packer hiện hành thêm encodingOPT-IN rgbStep4: sai sốtừngkênhRGB≤2/255, alpha/hình học không đổi; lặp lại không cộng dồn sai số. Default vẫn khôngnénRGB. Đây KHÔNG phải losslessRGB, KHÔNG claim13module cũ byte-identical.
-- Atlas640×512/218150byte,16module,6binding; trước là640×384/238156byte. Giữ budget250000. PNGnhỏ hơn không đồng nghĩaGPUmemory giảm vì heighttăng.
-- Fullgraphics313/313noskip;72Python (69repo+3sourceprobes). RED→GREEN: encoding/metadata, knownbodypixels và spriteavailability. Missing-state test dùng fixture rỗng rõ ràng, không mặc định tóc luôn thiếu khi catalog tăng.
-- Hai build/capture tronglượt; final là `player-reviewed/` và `runtime-reviewed/`,132ảnh. Đãxem12ảnh cuối:Nhânvật+3mónselected ở3viewport. Build cuối0error0warning; không cóinference/model mới.
-- Không thấy cắt/chồng hoặc notice sai trên3món. Tóc/vải còn tối trongôtablet; chưa owner/whole-art acceptance. Actor hiện hành không thay, không claimđồ trênngười đãkhớp toànbộdemo.
+## v40 — đã nhập đủ 10 icon Võ nam Lv1; chưa nghiệm thu toàn mỹ thuật
+- Bổ sung găng, áo ngoài, giáp vai/ngực bất đối xứng và vòng đồng tua đen theo cột Lv1 demo Võ nam. Không nhập lại các draft dính cơ thể, họa tiết mặt trời hoặc phụ kiện sai loại.
+- Bốn hình dựng rỗng native384, một lượt hoàn thiện chất liệu local, khóa alpha và bảo vệ viền ngoài từ hình dựng. Canvas384/viewport256→120 trong cell128 dùng chung; không scale/offset riêng trong UI.
+- Cộng sáu registration v39: đủ10/10 nội dung cho exact Võ–male–Lv1. Các class/giới/cấp khác không mượn; renderer trên người giữ nguyên, không claim toàn bộ đồ đang mặc khớp thumbnail.
+- Atlas640×640/248683byte, ngân sách250000 không tăng;20module. Toàn bộ16module và6binding cũ giữ nguyên. RGBround4 là encoding đã có, không phải lossless cho nguồn mới; alpha chính xác. Texture cao hơn không có nghĩa giảm bộ nhớ GPU.
+- Full graphics EditMode313/313 không fail/skip; test thiếu găng RED rồi GREEN sau nhập. Một Player build v40 có0error/0warning và132ảnh,44ảnh mỗi viewport.
+- Lượt trước xem10ảnh PC/mobile; closure đã xem thêm5ảnh tablet. Không thấy cắt/chồng mới hoặc notice thiếu ảnh ở bốn món; áo và tua đen vẫn nhỏ/tối trong ô tablet, hình mới còn góc cạnh và chưa đồng nhất toàn bộ nét/nền/độ sáng.
+- Closure chạy lại69/69 Python và3guard, kiểm132PNG/manifest/kích thước, replay/hash/source/ZIP. Không sinh nguồn, build hoặc capture lại khi input runtime không đổi.
+- Các chặn tool cũ và log RED vẫn giữ riêng làm lịch sử. Không suy ra phiên khác chỉ từ chuỗi finish/report event. Thao tác package đã hoàn tất qua đường công cụ hiện hành, không đổi cấu hình MCP.
 
 ## Bước tiếp theo
-1. Găng/áo ngoài phải redraw đúngdemo, không dínhbody hoặc ghépđai/ties; giáp/phụkiện phải đúngloạiđồLv1. Không dùng bảnbịloại đểlấp hoặc bỏ metadataownership.
-2. Cải thiện ánhsáng/độrõ cảbộ nguồn ở kíchthước hiểnthị, không phóngtừngicon bằngUI. Giữ nguồnfullprecision, chỉencodingatlas theo profile cókiểmsaisố.
-3. Tiếp tục itemId/class/slot/gender/level và thamchiếudemo bằng pipeline chung; bổsung biếnthể khác chỉkhi đúngnguồn. Bốnclass/giớikhác không mượniconVõ.
-4. Skill vẫn44/45sprite và nhiềuhình lệchdemo; HỏaTuyến/ThanhTẩy và bản sắcclass còn việc. Không coi sốlượngsprite hoặc testPASS lànghiệmthu.
+1. Audit độ rõ của toàn bộ10icon Võ ở kích thước ô nhỏ và so với demo; sửa nguồn theo nhóm, không tint hoặc phóng từng icon trong UI. Không coi10/10 là art acceptance.
+2. Tiếp tục icon Skill có mapping demo rõ, ưu tiên bản sắc Võ/Linh và nội dung còn sai; Hỏa Tuyến còn thiếu, Thanh Tẩy chưa thay. Không sinh chỉ theo9tên catalog hoặc tự sửa ID/cấp khi demo còn mâu thuẫn.
+3. Vật phẩm, slot/category, thuộc tính Tiềm năng, portrait/petSkill là các vai trò riêng. Giữ frame/component chung nhưng đăng ký nội dung theo đúng ownership và nguồn tương ứng.
+4. Chỉ bổ sung class/giới/cấp khác khi có nguồn đủ rõ và exact registration; không sửa renderer hoặc gameplay để làm cho icon có vẻ khớp.
 
-## Evidence / source package
-`build/character-hub-bodyfree-items-v39/`: runtime-review.json, encoding-proof-reviewed.json, reviewed-editmode.xml, source-repairs-native.json, masks-final/, prepared-native/, registry-native.json, runtime-reviewed/, player-reviewed/LinhGioiOnline.app.
-`runtime-final/` và `player-final/` là lượtĐẦU trước bỏshrink, KHÔNG dùng làm bằngchứngcuối. Lỗi proofnative lầnđầu đọc nhầmmanifest đãgiữlog, không bỏhashassertion.
-`lgo-bodyfree-item-icons-v39-authoring.zip` +`.zip.sha256` chứa nguồnđãsửa, mask, raw-reference-only, atlasbase và registryportable; khônggiảinénvàoResources. RGBsource không bịround; PNGtáixuất phải trùnghash. Không kèmfont/model/toolchain.
-`CONTINUE / PARTIAL_BODYFREE_ITEM_ART / VISUAL_FIX_REQUIRED` — chưa nghiệmthu toànCharacterHub hoặc thiếtbịmobile/tabletthật.
+## Evidence và bàn giao
+`build/character-hub-four-item-redraw-v40/`: `prepared-sources/`, `registry.json`, `runtime-review.json`, `closure-proof.json`, `source-hashes.json`, `full-editmode.xml`, `runtime-final/`, `player-final/LinhGioiOnline.app`.
+`lgo-four-item-redraw-v40-authoring.zip` +`.zip.sha256` chứa4nguồn RGBA, atlas nền v39, registry portable, demo chỉ-tham-chiếu và recipe; không có font/model/binary. Không giải nén trực tiếp vào Resources. PortablePNG tái sinh đúng byte; README có lệnh pack vào thư mục mới.
+`checkpoint-receipt.json` là xác minh commit/remote sau checkpoint. Không dùng `blocked.json` cũ làm trạng thái hiện hành.
+`CONTINUE / TEN_VO_STARTER_ITEM_CONTENTS / VISUAL_FIX_REQUIRED` — chưa nghiệm thu Character Hub năm tab hoặc mobile/tablet thiết bị thật.
