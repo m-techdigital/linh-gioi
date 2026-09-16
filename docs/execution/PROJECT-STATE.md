@@ -1,3 +1,13 @@
+## Character Hub v44 — Linh Thuẫn đúng loại hiệu ứng — 2026-09-17
+
+- V43 đã chốt/push ac6fe903, 5 file/157 dòng; không tạo lại nguồn/build v43. Closure chạy lại79Python và kiểm hash315graphics/132PNG.
+- V44 thay riêng linh_skill_3 bằng lá chắn linh lực xanh và lõi phù văn, bỏ cánh/trái tim. Hộ Linh là visual reference, không alias tên/cấp/gameplay.
+- Giữ48module RGBA,5exact designBindings, frame/base/actor/library/trang bị. Atlas1024×1024, 883203byte; nguồn384/padding32 cố định, khônggamma/bboxfit/scaleUI.
+-315/315graphics không fail/skip,79/79Python; một build 0lỗi/0cảnh báo;132PNG. Đã xem6ảnh gồm LinhThuẫn3viewport, Võ/Cơ/Tiềm năngPC. Rune còn dày ở ôtablet, khôngwhole-artacceptance.
+- ChấnKình chưa đổi: hai candidate đầu sai giáp/huy hiệu bị loại; lượt sửa subject bị checker chặn trước khi lưu. Bốn ảnh đầu giữ để đánh giá, không bỏchecker hoặc chạy tiếp seed khi bị chặn.
+- Viết package_sources.py bị tool từ chối, readbackENOENT; khôngZIP mới. Nguồn/registry/replay hiện hữu và hash được kiểm; chưa claim portable replay hoặc tái chạy inference.
+- Evidence build/character-hub-shockward-v44/runtime-review.json, runtime-final/, candidate-proof.json, import-proof.json; source-comparison.png chỉ là nguồn, khôngPlayer. CONTINUE/VISUAL_FIX_REQUIRED.
+
 ## Character Hub v43 — recovery checkpoint — 2026-09-17
 
 - Năm WIP đúng hash từ C-551efc013a74; 79 Python chạy lại và 132 PNG/ZIP tái kiểm. Không có worker v43 cũ còn chạy.
