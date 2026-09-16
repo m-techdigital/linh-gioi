@@ -68,8 +68,8 @@
     128,
     128
   ],
-  "pngBytes": 834722,
-  "sha256": "b09043e353a7e039f7d5023419119d4b7e81217d8853f9fd81f3963ffb362ab2",
+  "pngBytes": 818174,
+  "sha256": "3401d543b144a5a7de6ca5b6162989a6b87a0b178ce9928f13e6328f9a8f28b4",
   "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
@@ -77,12 +77,12 @@
       "role": "ui-skill-icon-atlas",
       "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "b09043e353a7e039f7d5023419119d4b7e81217d8853f9fd81f3963ffb362ab2"
+      "sha256": "3401d543b144a5a7de6ca5b6162989a6b87a0b178ce9928f13e6328f9a8f28b4"
     }
   ],
   "artworkIntake": {
-    "registrySha256": "a1a9f3d050a17dcddcfcc5df899dafbc173ac7e0594adea45b409e1265514225",
-    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-mobility-intent-v46/artwork-registry.json",
+    "registrySha256": "a6e7c40e423db04a61deeecf2812a7c8c963576db10d5d3760173e4778252cea",
+    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-impact-v47/artwork-registry.json",
     "contentCount": 36,
     "sources": [
       {
@@ -185,6 +185,15 @@
         ]
       },
       {
+        "id": "vo-impact-v47",
+        "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-impact-v47/registered-inner-source.png",
+        "sha256": "b4788e26fbad1d04112d3031149c9772e70a74a7b8045b41da790a4a63517ba0",
+        "size": [
+          896,
+          448
+        ]
+      },
+      {
         "id": "vo-mobility-intent-v46",
         "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-mobility-intent-v46/registered-inner-source.png",
         "sha256": "bcb6a2bf70e7af0f1f6a4f0821936f7f869c516326cd1a6ed070f484dc2cb916",
@@ -196,8 +205,8 @@
     ],
     "review": {
       "status": "SELF_REVIEWED",
-      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-mobility-intent-v46/art-review.json",
-      "sha256": "dcba9c3177dafa99060829ea5c772197c0551ec4e8df68e9edd90df6dd40d5c4"
+      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-impact-v47/art-review.json",
+      "sha256": "8756a4c3d641616b7a1a6efccca13bc8f046bfb290ef8d1f341481454eaec713"
     },
     "pixelPolicy": "Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box.",
     "designBindings": [
@@ -350,10 +359,10 @@
     {"id": "phap_skill_7", "x": 640, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "phap-coherence-v30b", "sourceRect": [448, 0, 448, 448]},
     {"id": "phap_skill_8", "x": 768, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [448, 448, 448, 448]},
     {"id": "phap_skill_9", "x": 896, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [1344, 0, 448, 448]},
-    {"id": "vo_skill_1", "x": 0, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "action-motifs-v43", "sourceRect": [448, 0, 448, 448]},
+    {"id": "vo_skill_1", "x": 0, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "vo-impact-v47", "sourceRect": [0, 0, 448, 448]},
     {"id": "vo_skill_2", "x": 128, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "demo-aligned-v35", "sourceRect": [0, 0, 448, 448]},
     {"id": "vo_skill_3", "x": 256, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "demo-aligned-v35", "sourceRect": [448, 0, 448, 448]},
-    {"id": "vo_skill_4", "x": 384, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-last-four-v32", "sourceRect": [0, 448, 448, 448]},
+    {"id": "vo_skill_4", "x": 384, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "vo-impact-v47", "sourceRect": [448, 0, 448, 448]},
     {"id": "vo_skill_5", "x": 512, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "vo-mobility-intent-v46", "sourceRect": [0, 0, 448, 448]},
     {"id": "vo_skill_6", "x": 640, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "native-protection-v36", "sourceRect": [0, 0, 448, 448]},
     {"id": "vo_skill_7", "x": 768, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "vo-mobility-intent-v46", "sourceRect": [448, 0, 448, 448]},

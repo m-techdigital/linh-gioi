@@ -1,3 +1,10 @@
+## Character Hub v47 — Võ Liên Kích / Chấn Kình impact motifs — 2026-09-17
+
+- Baseline f7d81523. Visual-only references: Liên Kích→Liên Quyền, Chấn Kình→Xung Kích; no runtime rename/level/gameplay alias.
+- Native transparent redraws replace item-like/ambiguous motifs. Chấn Kình v1 was rejected after Player review because it resembled Quyền Ý; v2 uses one forward punch + radial shock. Exactly2 modules changed;47 modules/frame preserved.
+- Final gates:13/13 packer tests,315/315 Unity EditMode,1 build0error0warning,132 Player frames across3viewports; eye-review3 selected screens.
+- Not final: Bộ Pháp/Đột Kích still need line/silhouette polish; Hỏa Tuyến/Thanh Tẩy line-weight needs cross-class audit; Character Hub5tab not accepted.
+
 ## Character Hub v46 — Võ mobility/intent visual-only alignment — 2026-09-17
 
 - Baseline d25d5d52; same branch/worktree. Mapped Bộ Pháp→Bước Thần, Đột Kích→Lướt áp sát, Quyền Ý→Ý Chí Võ Đạo as visual-only references; no rename/level/gameplay alias.

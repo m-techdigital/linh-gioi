@@ -1,3 +1,11 @@
+# NEXT ACTION — Character Hub / continue Skill art consistency
+
+## After v47
+1. Re-audit Hỏa Tuyến and Thanh Tẩy beside the new Võ group at64/128px; correct line-weight/content, not gamma.
+2. Polish Bộ Pháp/Đột Kích silhouettes against Bước Thần/Lướt áp sát while keeping current visual-only mapping and shared frame.
+3. Audit remaining Võ Kình Lực/Hộ Thể/Phá Giáp/Phản Đòn for obvious object-vs-action drift; change only when demo mapping is supported.
+4. Build/capture only after runtime art changes; preserve actor, runtime IDs/names/levels and exact ownership.
+
 # NEXT ACTION — Character Hub / continue visual skill alignment
 
 ## v46 next
