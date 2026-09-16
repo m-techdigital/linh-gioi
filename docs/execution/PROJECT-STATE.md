@@ -1,3 +1,15 @@
+## Character Hub v42 — Thanh Tẩy theo demo và chọn đúng node để audit — 2026-09-16
+
+- Recovery closure: WIP8file được giữ nguyên, 79Python chạy lại; reuse315graphics/132PNG vì inputruntime khớpSHA. Đã xem lại Thanh Tẩy3viewport và nguồn so demo; build v42 có0error/46warning, không phải0warning. Không sinh/build lại chỉ để khôi phục lượt.
+- Tiếp tục baseline35639c7e, cùng branch/worktree/taskT-69b4b27c4b39. Không phục hồi hoặc đổi actor, không mở M0/DB/gameplay từ tài liệu cũ.
+- Thanh Tẩy linh_skill_4 thay lửa xanh bằng3linh thể/hạt sáng xanh ngọc theo exactdemo; native384 +padding32→448, antialias768 nội bộ. Không crop, không gamma, không frame bake. Nguồn còn đơn giản/góc cạnh, chưa toàn art acceptance.
+- Atlas1024×1024/886859byte,47module khác và sharedframe giữ RGBA exact;5designBindings cumulative. Library45record giữ nguyên;44/45skill cósprite, Hỏa Tuyến vẫn thiếu. Itempackv41 không thay.
+- Capture chung nhận node0..8, default5 giữ nguyên. Parser chống thiếu/invalid/duplicate flag; Python kiểm manifest theo request, không tự lấy expected từ output. Lượt nàynode3 cho cả5class, giữ renderer authority. Hai C#test và Python test có RED→GREEN.
+- Graphics315/315 không skip;Python79/79;1build/capture132ảnh; đã xem8ảnh gồm ThanhTẩy3viewport và hồi quy cácclass/Tiềmnăng. Build counts đọc trong runtime-review, không dùng mặc định0 nếu log khác.
+- Hai write authoring bị từ chối, readback xác nhận fireline/gauntlet và scriptrefined không tồn tại. HỏaTuyến/LiênKích chưa có nguồn mới; giữ sự thật thay vì lấp icon sai. Không đổi gate exact-label hoặc gameplay để coi alias được duyệt.
+- NativeRGBA và portablePNG replay exact;ZIP không font/model/binary. Evidence ở build/character-hub-skill-motifs-v42/runtime-review.json;demo-before-after là source comparison, không screenshot Player.
+- CONTINUE/PARTIAL_THANH_TAY_DEMO_ALIGNMENT/VISUAL_FIX_REQUIRED: tiếp tục HỏaTuyến/LiênKích và nguồnVõ/Linh theo demo;không chờ nghiệm thu chỉ vì đóng batch. NEXT-ACTION ghi chi tiết.
+
 ## Character Hub v41 — nguồn rõ hơn, atlas gọn cùng mười item — 2026-09-16
 
 - Baseline14a0e042; giữ branch/worktree/SID S-LGO-SKILL-20260916-C9B4 và task T-69b4b27c4b39. Không mở class/tier/actor/gameplay; không có item mới.

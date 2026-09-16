@@ -53,9 +53,15 @@ REQUIRED_FRAMES = (
 )
 
 
+def validate_skill_node(node: int) -> None:
+    if type(node) is not int or not 0 <= node <= 8:
+        raise ValueError("Skill capture node must be an integer from 0 to 8")
+
+
 def build_player_command(
-    player: Path, out: Path, profile: str, width: int, height: int
+    player: Path, out: Path, profile: str, width: int, height: int, skill_node: int = 5
 ) -> list[str]:
+    validate_skill_node(skill_node)
     return [
         str(player),
         "-logFile", str(out / "player.log"),
@@ -65,10 +71,12 @@ def build_player_command(
         "--lgo-map01a-device", profile,
         "--lgo-map01a-inventory-tabs-capture",
         "--lgo-map01a-art-dir", str(out),
+        "--lgo-character-hub-skill-node", str(skill_node),
     ]
 
 
-def validate_manifest(manifest: dict, out: Path, profile: str) -> list[str]:
+def validate_manifest(manifest: dict, out: Path, profile: str, skill_node: int = 5) -> list[str]:
+    validate_skill_node(skill_node)
     errors: list[str] = []
     width, height = PROFILES[profile]
     if (manifest.get("width"), manifest.get("height")) != (width, height):
@@ -81,7 +89,7 @@ def validate_manifest(manifest: dict, out: Path, profile: str) -> list[str]:
         errors.append("OS_INPUT_USED")
     if tuple(manifest.get("potentialClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
         errors.append("POTENTIAL_CLASS_PROFILE_MISMATCH")
-    if manifest.get("skillSelectedNodeIndex") != 5:
+    if type(manifest.get("skillSelectedNodeIndex")) is not int or manifest["skillSelectedNodeIndex"] != skill_node:
         errors.append("SKILL_SELECTED_NODE_MISMATCH")
     if tuple(manifest.get("skillClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
         errors.append("SKILL_CLASS_PROFILE_MISMATCH")
@@ -98,10 +106,10 @@ def validate_manifest(manifest: dict, out: Path, profile: str) -> list[str]:
     return errors
 
 
-def capture_profile(player: Path, out: Path, profile: str, timeout: int) -> None:
+def capture_profile(player: Path, out: Path, profile: str, timeout: int, skill_node: int = 5) -> None:
     width, height = PROFILES[profile]
     out.mkdir(parents=True, exist_ok=False)
-    command = build_player_command(player, out, profile, width, height)
+    command = build_player_command(player, out, profile, width, height, skill_node)
     with (out / "launch.log").open("w", encoding="utf-8") as launch_log:
         result = subprocess.run(
             command,
@@ -117,7 +125,7 @@ def capture_profile(player: Path, out: Path, profile: str, timeout: int) -> None
     if not manifest_path.is_file():
         raise RuntimeError(f"{profile}: missing {manifest_path}")
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    errors = validate_manifest(manifest, out, profile)
+    errors = validate_manifest(manifest, out, profile, skill_node)
     if errors:
         raise RuntimeError(f"{profile}: " + ", ".join(errors))
     print(
@@ -137,6 +145,7 @@ def main() -> int:
     parser.add_argument("--out-dir", type=Path, required=True)
     parser.add_argument("--profile", choices=("all", *PROFILES), default="all")
     parser.add_argument("--timeout", type=int, default=120)
+    parser.add_argument("--skill-node", type=int, choices=range(9), default=5)
     parser.add_argument(
         "--replace",
         action="store_true",
@@ -155,7 +164,7 @@ def main() -> int:
         out = out_root / profile
         if args.replace and out.exists():
             shutil.rmtree(out)
-        capture_profile(player, out, profile, args.timeout)
+        capture_profile(player, out, profile, args.timeout, args.skill_node)
     print("LGO_CHARACTER_HUB_THREE_VIEWPORT_CAPTURE_COMPLETE")
     return 0
 

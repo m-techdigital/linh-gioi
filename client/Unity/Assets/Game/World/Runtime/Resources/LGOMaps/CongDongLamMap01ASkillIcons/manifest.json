@@ -68,8 +68,8 @@
     128,
     128
   ],
-  "pngBytes": 887653,
-  "sha256": "3195b4601240ceefbdc55fbd2d3b95b20385cb2e5b46ba71d84713575f169bef",
+  "pngBytes": 886859,
+  "sha256": "5b6483d8fa5ff6f5b185aed9b3e0140bfb320f32ad73b8a8ac9ae386f4b0d80a",
   "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
@@ -77,12 +77,12 @@
       "role": "ui-skill-icon-atlas",
       "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "3195b4601240ceefbdc55fbd2d3b95b20385cb2e5b46ba71d84713575f169bef"
+      "sha256": "5b6483d8fa5ff6f5b185aed9b3e0140bfb320f32ad73b8a8ac9ae386f4b0d80a"
     }
   ],
   "artworkIntake": {
-    "registrySha256": "da433293f03752ac3a8c5b9c7eb560bb4c8215cb76c74cc84b4a4eab1483570d",
-    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-symbols-v36/artwork-registry.json",
+    "registrySha256": "74d6971b08619063cf4a1be2dee2ab1834b68521b892815b7352ea1be31b95ef",
+    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-motifs-v42/artwork-registry.json",
     "contentCount": 35,
     "sources": [
       {
@@ -131,6 +131,15 @@
         ]
       },
       {
+        "id": "linh-cleanse-v42",
+        "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-motifs-v42/registered-inner-source.png",
+        "sha256": "fbe9970e1e6d03d0a4fe495c760fbd18e2215f8c74f13991ff8691e1def7e4bc",
+        "size": [
+          448,
+          448
+        ]
+      },
+      {
         "id": "native-protection-v36",
         "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-symbols-v36/registered-inner-source.png",
         "sha256": "2fd22772e34895976b716e0dac5b9f44a25d88d1e8b6282b537e6d5832084cc5",
@@ -151,8 +160,8 @@
     ],
     "review": {
       "status": "SELF_REVIEWED",
-      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-symbols-v36/art-review.json",
-      "sha256": "cdfee39a5c9f8990567e766213d3898e2ac573870392a2e242bf85c86aa179e7"
+      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-motifs-v42/art-review.json",
+      "sha256": "91ce675ca15e483beb484b989c17b662c904068be915fb7f1e8d3ece29f618a5"
     },
     "pixelPolicy": "Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box.",
     "designBindings": [
@@ -174,6 +183,27 @@
             302,
             59,
             58
+          ]
+        }
+      },
+      {
+        "iconId": "linh_skill_4",
+        "classId": "linh",
+        "runtimeName": "Thanh Tẩy",
+        "demoLabel": "Thanh Tẩy",
+        "relation": "EXACT_LABEL_VISUAL_ONLY",
+        "reference": {
+          "path": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/classes-lv001-030/linh/06-skill-motion-vfx-reference.png",
+          "sha256": "d87ef28145ea7e2ffcdf2143b0228a9ca002d5a9f0202fcbbfeec83e1989287d",
+          "size": [
+            1448,
+            1086
+          ],
+          "rect": [
+            855,
+            282,
+            83,
+            101
           ]
         }
       },
@@ -268,7 +298,7 @@
     {"id": "linh_skill_1", "x": 640, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "demo-aligned-v35", "sourceRect": [896, 0, 448, 448]},
     {"id": "linh_skill_2", "x": 768, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-last-four-v32", "sourceRect": [448, 448, 448, 448]},
     {"id": "linh_skill_3", "x": 896, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [0, 896, 448, 448]},
-    {"id": "linh_skill_4", "x": 0, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [1344, 448, 448, 448]},
+    {"id": "linh_skill_4", "x": 0, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "linh-cleanse-v42", "sourceRect": [0, 0, 448, 448]},
     {"id": "linh_skill_5", "x": 128, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [0, 896, 448, 448]},
     {"id": "linh_skill_6", "x": 256, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [448, 896, 448, 448]},
     {"id": "linh_skill_7", "x": 384, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [448, 896, 448, 448]},

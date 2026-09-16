@@ -13,6 +13,17 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
             self.assertIn(f'item-{slot}-selected.png', capture.REQUIRED_FRAMES)
         self.assertEqual(6, capture.REQUIRED_FRAMES.index("item-main_weapon-selected.png"), "Manifest order must match the existing Player capture sequence.")
 
+    def test_requested_skill_node_is_explicit_and_bounded(self) -> None:
+        for node in range(9):
+            command = capture.build_player_command(Path('/tmp/Unity'), Path('/tmp/out'), 'pc', 1600, 900, skill_node=node)
+            self.assertEqual(str(node), command[command.index('--lgo-character-hub-skill-node') + 1])
+            errors = capture.validate_manifest({'skillSelectedNodeIndex': node}, Path('/does-not-exist'), 'pc', skill_node=node)
+            self.assertNotIn('SKILL_SELECTED_NODE_MISMATCH', errors)
+            self.assertIn('SKILL_SELECTED_NODE_MISMATCH', capture.validate_manifest({'skillSelectedNodeIndex': (node+1)%9}, Path('/does-not-exist'), 'pc', skill_node=node))
+        for bad in (-1,9,True,'3'):
+            with self.subTest(node=bad), self.assertRaises(ValueError):
+                capture.build_player_command(Path('/tmp/Unity'),Path('/tmp/out'),'pc',1600,900,skill_node=bad)
+
     def test_profiles_use_three_real_target_viewports(self) -> None:
         self.assertEqual((1600, 900), capture.PROFILES["pc"])
         self.assertEqual((1024, 768), capture.PROFILES["tablet"])

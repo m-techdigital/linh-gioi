@@ -376,6 +376,30 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void CharacterHubCaptureSelectsAnySkillNodeWithoutClassBranches()
+        {
+            var method = typeof(CongDongLamMap01AArtPreview).GetMethod("ReadCharacterHubSkillCaptureNode", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            Assert.That(method.Invoke(null, new object[] { new string[0] }), Is.EqualTo(5));
+            for (var node = 0; node < 9; node++)
+                Assert.That(method.Invoke(null, new object[] { new[] { "--lgo-character-hub-skill-node", node.ToString() } }), Is.EqualTo(node));
+        }
+
+        [Test]
+        public void CharacterHubCaptureRejectsInvalidOrAmbiguousSkillSelection()
+        {
+            var method = typeof(CongDongLamMap01AArtPreview).GetMethod("ReadCharacterHubSkillCaptureNode", BindingFlags.Static | BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null);
+            foreach (var args in new[] { new[] { "--lgo-character-hub-skill-node" }, new[] { "--lgo-character-hub-skill-node", "-1" },
+                new[] { "--lgo-character-hub-skill-node", "9" }, new[] { "--lgo-character-hub-skill-node", "invalid" },
+                new[] { "--lgo-character-hub-skill-node", "3", "--lgo-character-hub-skill-node", "5" } })
+            {
+                var error = Assert.Throws<TargetInvocationException>(() => method.Invoke(null, new object[] { args }));
+                Assert.That(error.InnerException, Is.TypeOf<System.ArgumentException>());
+            }
+        }
+
+        [Test]
         public void ItemIconBindingCannotOmitAppearanceVariant()
         {
             var texture = new Texture2D(2, 2);

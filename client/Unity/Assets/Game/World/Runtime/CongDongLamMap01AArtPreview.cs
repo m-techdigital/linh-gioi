@@ -2389,7 +2389,7 @@ namespace LinhGioi.World
                 throw new InvalidOperationException("Missing Character Hub five-profile evidence hooks");
             var rendererClassId = ActiveEquipmentClassId;
             var potentialClassIds = new[] { "vo", "kiem", "phap", "co", "linh" };
-            const int skillSelectedNodeIndex = 5;
+            var skillSelectedNodeIndex = ReadCharacterHubSkillCaptureNode(args);
             var skillClassFrames = new List<string>();
             foreach (var classId in potentialClassIds)
             {
@@ -2483,6 +2483,17 @@ namespace LinhGioi.World
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
+        }
+
+        private static int ReadCharacterHubSkillCaptureNode(string[] args)
+        {
+            const string flag = "--lgo-character-hub-skill-node";
+            var index = Array.IndexOf(args, flag);
+            if (index < 0) return 5;
+            if (index != Array.LastIndexOf(args, flag) || index + 1 >= args.Length
+                || !int.TryParse(args[index + 1], out var node) || node < 0 || node > 8)
+                throw new ArgumentException("Character Hub skill capture node must be a single integer from 0 to 8");
+            return node;
         }
 
         private IEnumerator CaptureCharacterScreen(string[] args)
