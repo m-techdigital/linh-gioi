@@ -1,5 +1,11 @@
 # NEXT ACTION — Character Hub / Skill art theo demo
 
+## Active — sau v49 Linh Phù/Trói Hồn
+- Giữ worktree/branch hiện hành; không reset/restore source.
+- v49 redraw `linh_skill_5` Linh Phù → Ấn Linh và `linh_skill_6` Trói Hồn → Linh Trói ở mức visual-only; native transparent tím/trắng, không source crop/gamma/UI scaling.
+- Exactly2module đổi,47module+shared frame giữ nguyên; actor/runtime names/levels/gameplay không đổi. Packer13/13, Unity315/315, build0error0warning,132frames/3viewport, eye3 selected. Chưa owner-accept toàn class/5tab.
+- Tiếp theo: audit Linh Hồi Phục/Hộ Mệnh/Cộng Hưởng/Linh Giới và Võ Kình Lực theo demo; chỉ sửa khi mapping visual có bằng chứng rõ.
+
 ## Active — sau v48 Bộ Pháp/Đột Kích readability
 - Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `feature/2d`; không đổi/reset/restore source.
 - v48 redraw native transparent `vo_skill_5` Bộ Pháp và `vo_skill_7` Đột Kích: silhouette/nét sáng và dày hơn ở64–128px, không gamma/tint/UI scale; visual-only mapping Bước Thần/Lướt áp sát, không đổi gameplay.

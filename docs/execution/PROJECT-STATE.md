@@ -1,3 +1,10 @@
+## Character Hub v49 — Linh seal/bind motifs — 2026-09-17
+
+- Linh Phù/Trói Hồn đổi từ generic object glyph sang native purple seal/binding motifs theo Ấn Linh/Linh Trói visual reference; gameplay không đổi.
+- Exactly2 skill modules changed;47 other modules + shared frame preserved.
+- Verification: packer13/13; Unity315/315; one Player build0error0warning;132frames/3viewport; eye-reviewed selected Linh on all3.
+- `CONTINUE / VISUAL_FIX_REQUIRED`; các icon Linh/Võ còn drift và toàn Character Hub chưa owner-accept.
+
 ## Character Hub v48 — Võ mobility readability — 2026-09-17
 
 - Bộ Pháp/Đột Kích được redraw native transparent để tăng độ đọc ở ô nhỏ; không gamma hoặc UI scale. Mapping demo chỉ visual-only: Bước Thần/Lướt áp sát.
