@@ -1,3 +1,10 @@
+## Character Hub v46 — Võ mobility/intent visual-only alignment — 2026-09-17
+
+- Baseline d25d5d52; same branch/worktree. Mapped Bộ Pháp→Bước Thần, Đột Kích→Lướt áp sát, Quyền Ý→Ý Chí Võ Đạo as visual-only references; no rename/level/gameplay alias.
+- Rejected model drafts with rectangular guide backgrounds. Runtime uses native transparent RGBA redraws with one Võ palette/canvas and the existing shared frame. Exactly3 skill modules changed;46 modules/frame preserved.
+- Gates: packer/shared-UI Python PASS, Unity EditMode315/315, one Player build succeeded,3 viewport captures ×44 frames. Eye review confirms no square backdrop/cut overlap; Bộ Pháp/Đột Kích remain darker/simpler than demo.
+- Not final: Liên Kích/Chấn Kình and other class motifs still need art work; five-tab Character Hub not accepted. Continue visual fixes, no gamma/actor/gameplay changes.
+
 ## Character Hub v45 — hai artwork Skill và alpha đúng nguồn — 2026-09-17
 
 - Giữ Character Hub, worktree/branch/SID/task hiện hành; baseline 82e31f80. Đã tiếp nhận và kiểm các source v45 còn dở, không restore source hoặc mở task khác.

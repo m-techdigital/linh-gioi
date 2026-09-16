@@ -1,3 +1,11 @@
+# NEXT ACTION — Character Hub / continue visual skill alignment
+
+## v46 next
+1. Refine Võ Liên Kích and Chấn Kình against pinned Liên Quyền/Xung Kích demo motifs; reject hand/armor/object substitutes.
+2. Revisit Bộ Pháp/Đột Kích at 64–128px: increase readable action silhouette by redraw, not gamma/UI scale; keep visual-only mapping and shared frame.
+3. Re-audit Hỏa Tuyến/Thanh Tẩy together with the new Võ group for line-weight consistency.
+4. Only build/capture again when runtime artwork changes; preserve actor, runtime IDs/names/levels and exact ownership.
+
 # NEXT ACTION — Character Hub / tiếp tục hoàn thiện artwork Skill
 
 ## Active

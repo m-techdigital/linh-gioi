@@ -68,8 +68,8 @@
     128,
     128
   ],
-  "pngBytes": 880771,
-  "sha256": "4b21815f8eec385f26623a0440d32b4001a9fe91e04b17363f99706584af1db7",
+  "pngBytes": 834722,
+  "sha256": "b09043e353a7e039f7d5023419119d4b7e81217d8853f9fd81f3963ffb362ab2",
   "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
@@ -77,12 +77,12 @@
       "role": "ui-skill-icon-atlas",
       "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "4b21815f8eec385f26623a0440d32b4001a9fe91e04b17363f99706584af1db7"
+      "sha256": "b09043e353a7e039f7d5023419119d4b7e81217d8853f9fd81f3963ffb362ab2"
     }
   ],
   "artworkIntake": {
-    "registrySha256": "ba40b0e3a5568b502245c1ccc9b5b3294c9ba8018783eddefebae13abd16cbca",
-    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-paint-v45/artwork-registry-final.json",
+    "registrySha256": "a1a9f3d050a17dcddcfcc5df899dafbc173ac7e0594adea45b409e1265514225",
+    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-mobility-intent-v46/artwork-registry.json",
     "contentCount": 36,
     "sources": [
       {
@@ -183,12 +183,21 @@
           448,
           448
         ]
+      },
+      {
+        "id": "vo-mobility-intent-v46",
+        "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-mobility-intent-v46/registered-inner-source.png",
+        "sha256": "bcb6a2bf70e7af0f1f6a4f0821936f7f869c516326cd1a6ed070f484dc2cb916",
+        "size": [
+          1344,
+          448
+        ]
       }
     ],
     "review": {
       "status": "SELF_REVIEWED",
-      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-paint-v45/art-review-final.json",
-      "sha256": "7e9a530d9fc1f2f78eaf7cb85596bc1aa631e013ab615bf0b9572a6bf4848072"
+      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-vo-mobility-intent-v46/art-review.json",
+      "sha256": "dcba9c3177dafa99060829ea5c772197c0551ec4e8df68e9edd90df6dd40d5c4"
     },
     "pixelPolicy": "Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box.",
     "designBindings": [
@@ -345,10 +354,10 @@
     {"id": "vo_skill_2", "x": 128, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "demo-aligned-v35", "sourceRect": [0, 0, 448, 448]},
     {"id": "vo_skill_3", "x": 256, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "demo-aligned-v35", "sourceRect": [448, 0, 448, 448]},
     {"id": "vo_skill_4", "x": 384, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-last-four-v32", "sourceRect": [0, 448, 448, 448]},
-    {"id": "vo_skill_5", "x": 512, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [0, 448, 448, 448]},
+    {"id": "vo_skill_5", "x": 512, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "vo-mobility-intent-v46", "sourceRect": [0, 0, 448, 448]},
     {"id": "vo_skill_6", "x": 640, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "native-protection-v36", "sourceRect": [0, 0, 448, 448]},
-    {"id": "vo_skill_7", "x": 768, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [0, 0, 448, 448]},
+    {"id": "vo_skill_7", "x": 768, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "vo-mobility-intent-v46", "sourceRect": [448, 0, 448, 448]},
     {"id": "vo_skill_8", "x": 896, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [1344, 0, 448, 448]},
-    {"id": "vo_skill_9", "x": 0, "y": 128, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [448, 448, 448, 448]}
+    {"id": "vo_skill_9", "x": 0, "y": 128, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "vo-mobility-intent-v46", "sourceRect": [896, 0, 448, 448]}
   ]
 }
