@@ -1,3 +1,10 @@
+# NEXT ACTION — Character Hub / after v51
+
+1. Do not force-map Võ `Kình Lực` to `Chiến Ý`; current evidence is insufficient. Revisit only with a direct source/semantic contract.
+2. Audit Cơ/Pháp remaining skill icons against their own class demo boards, starting with obvious object-vs-action or wrong-palette cases.
+3. Keep Hỏa Tuyến/Thanh Tẩy and the repaired Linh set unchanged unless a concrete visual defect is demonstrated at 64/128px.
+4. Keep shared frame/content separation, exact ownership and actor; build/capture only when runtime art changes.
+
 # NEXT ACTION — Character Hub / v50 onward
 
 1. Audit Võ `Kình Lực` against direct Võ demo motif; replace only with evidenced action/energy artwork, not object/generic emblem.

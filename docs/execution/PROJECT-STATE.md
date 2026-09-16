@@ -1,3 +1,10 @@
+## Character Hub v51 — Linh Hộ Mệnh protective charm — 2026-09-17
+
+- Hộ Mệnh redraw theo visual-only motif `Linh Hộ Phù`: phù bảo hộ + vòm khiên tím; không đổi ID/tên/cấp/gameplay.
+- Exactly1 module đổi,48 module+frame giữ nguyên; shared frame/content split và actor giữ nguyên.
+- Gate: packer13/13, Unity315/315, một Player build0error0warning,132frame/3viewport, eye-review3 ảnh selected.
+- Linh hiện đã nhất quán hơn; toàn Character Hub vẫn chưa final. `Kình Lực` Võ chưa đổi vì chưa có mapping đủ chắc.
+
 ## Character Hub v50 — Linh support/link/domain motifs — 2026-09-17
 
 - Hồi Phục/Cộng Hưởng/Linh Giới redraw native transparent theo visual-only references Hồi Linh/Hồn Liên Kết/Linh Vực; không đổi runtime ID/tên/cấp/gameplay.
