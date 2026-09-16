@@ -1,3 +1,10 @@
+## Character Hub v50 — Linh support/link/domain motifs — 2026-09-17
+
+- Hồi Phục/Cộng Hưởng/Linh Giới redraw native transparent theo visual-only references Hồi Linh/Hồn Liên Kết/Linh Vực; không đổi runtime ID/tên/cấp/gameplay.
+- Shared frame/content split giữ nguyên. Exactly3 module đổi,46 module+frame giữ pixel; actor/renderer không đổi.
+- Fresh gate: packer13/13, Unity EditMode315/315. Một Player build đã có0error0warning;396frame=3skill×3viewport×44, eye-review đủ9 trạng thái.
+- V50 chưa phải nghiệm thu toàn mỹ thuật. Tiếp theo audit Võ Kình Lực và các Linh còn object-vs-action drift có mapping trực tiếp.
+
 ## Character Hub v49 — Linh seal/bind motifs — 2026-09-17
 
 - Linh Phù/Trói Hồn đổi từ generic object glyph sang native purple seal/binding motifs theo Ấn Linh/Linh Trói visual reference; gameplay không đổi.

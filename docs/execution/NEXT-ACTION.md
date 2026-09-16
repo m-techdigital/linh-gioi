@@ -1,3 +1,10 @@
+# NEXT ACTION — Character Hub / v50 onward
+
+1. Audit Võ `Kình Lực` against direct Võ demo motif; replace only with evidenced action/energy artwork, not object/generic emblem.
+2. Audit Linh `Hộ Mệnh` and other remaining Linh icons for direct Hộ/Linh Vực/support mappings; do not infer gameplay aliases.
+3. Keep Hỏa Tuyến/Thanh Tẩy unchanged unless a concrete 64/128px defect is found; current motifs remain readable.
+4. Keep shared frame/content separation, exact ownership and actor. Build/capture only when runtime art changes.
+
 # NEXT ACTION — Character Hub / Skill art theo demo
 
 ## Active — sau v49 Linh Phù/Trói Hồn
