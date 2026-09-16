@@ -1,3 +1,23 @@
+## Character Hub v35 — sửa nội dung từ demo gốc, không chỉ đủ số lượng — 2026-09-16
+
+- Giữ81d2d2a2 làm base, codex/character-hub-v22/worktree cũ. Phiên S-LGO-SKILL-20260916-C9B4 nhận task T-69b4b27c4b39 và batch B-0876b01f8bd4 của operator; không tự hoàn thành task hoặc bật tự gửi.
+- Đối chiếu5nhãn demo trực tiếp, redraw đúng class: nhập3bản Phá Giáp/Phản Đòn màu quyền khí cam-vàng và Triệu Linh là biểu tượng linh lực lam-tím. Loại2bản Hộ Thể/Thanh Tẩy sai chất liệu/bệ tượng. Không dùng crop reference làm runtime asset, không tint/UI scale riêng.
+- Một atlas1024×1024/888779byte,48module/1frame,45module trước giữ nguyên pixel. Vẫn44/45skill có ảnh; phần lớn bộ class chưa đạt design, không lấy số lượng làm nghiệm thu.
+- Existing packer thêm designBindings kiểm class/name/label/hash/region và giữ provenance; không sửa library45skill hoặc UI runtime/renderer/importer. Đây là visual-only relation, không tự duyệt gameplay hoặc tự nhận diện nội dung hình.
+- RED2tests/8failures đúng nguyên nhân → packer12PASS; full graphics EditMode305/305 nofail/noskip; Python51/51. Build0error/0warning,87frame; đã xem15ảnhSkill5class×3viewport +Tiềm năngPC. Không thấy cắt/chồng/frame rò mới trong ảnh đã xem; cả Võ/Linh vẫn lẫn nhiều artwork cũ sai phong cách.
+- PNG+manifest replay exact; portablePNG replay exact. Nguồn/registry/README/frame và modules tách rời ở build/character-hub-demo-alignment-v35, ZIPauthoring+SHA. Test matte untrackedv33 được giữ nguyên byte trong deferred-v33, không thuộc implementation đã chấp nhận.
+- CONTINUE / PARTIAL_DEMO_ALIGNMENT / VISUAL_FIX_REQUIRED. Tiếp tục crosswalk và sửa đúng nhóm class, đồng thời giữ backlog lỗi itemId/class/set thumbnail. Không claim toàn5tab hoặc thiết bị mobile/tablet thật đã nghiệm thu.
+
+## Character Hub v34 — owner review: phải theo demo từng class — 2026-09-16
+
+- Owner xác nhận các bộ icon chưa đúng design. Active chuyển từ sửa nền/sinh đủ44→45 sang đối chiếu demo gốc và sửa nguồn/ownership; không coi test xanh hoặc số lượng ảnh là nghiệm thu mỹ thuật.
+- Đã xem16board class/material,3UIv4 và5ảnh Playerv32. Audit ở build/character-hub-design-reconciliation-v34/DESIGN-AUDIT.md và review-notes.json; JSON đã parse đủ5class và6nhóm icon khác. Không có artwork/Player mới trong lượt audit.
+- Palette/hình tác dụng bị lệch: Võ cam-vàng quyền khí, Linh tím-trắng phù/ấn/linh thể, Cơ cơ giới/đạn/drone chứ không chỉ huy hiệu xanh; Kiếm không phải source nội dung cho tất cả class.
+- Có xung đột tên/tiến trình giữa overview/detail/current library. Không tự đổi runtimeId/tên/cấp hoặc ép11mốc thành9skill; phải có source crosswalk trước khi thay hình. UIv4 là authority layout, classboard là visual reference, không gameplay contract.
+- Icon trang bị có lỗi sở hữu nội dung: GetEquipmentThumbnailSprite trả atlas theo slot trước class; atlas là bộ Kiếm. Cần lookup itemId/class/set qua dữ liệu chung, không class-specific builder hoặc sửa renderer/wardrobe.
+- V33 test matte còn WIP không implementation; giữ nhưng hoãn. v34 build_audit.py viết dở do append bị từ chối, chưa chạy, không có HTML/CSV tự động. Báo cáo Markdown/JSON đã lưu được.
+- Giữ81d2d2a2/codex/character-hub-v22/worktree cũ. Chưa commit/push, không đổi runtime/asset/frozen. Trạng thái CONTINUE / DESIGN_MISMATCH_CONFIRMED / VISUAL_FIX_REQUIRED; bước kế tiếp ở NEXT-ACTION.md.
+
 ## Character Hub v32 — bốn inner mới đã kiểm Player — 2026-09-16
 
 - Giữ cùng worktree/branch/phiên S-LGO-SKILL-20260916-C9B4; kế thừa6036d501. Scope chỉ5tab design đã duyệt, không mở taskM0/auth/combat/class/pose/wardrobe/renderer/frozen.

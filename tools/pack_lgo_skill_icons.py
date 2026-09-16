@@ -30,6 +30,48 @@ BASE_BYTE_BUDGET = 400000
 EXTRA_BYTE_BUDGET = 32768
 
 
+def read_design_bindings(document: dict, registry: Path, library: list[dict], artwork_ids: set[str]) -> list[dict] | None:
+    """Visual links are not gameplay approval; never infer a class or rename a skill."""
+    bindings = document.get('designBindings')
+    if bindings is None:
+        return None
+    if not isinstance(bindings, list) or not bindings:
+        raise ValueError('Design bindings must be a nonempty list')
+    skills = {skill['iconId']: skill for skill in library}
+    seen, result = set(), []
+    for entry in bindings:
+        if not isinstance(entry, dict):
+            raise ValueError('Design binding must be an object')
+        key = entry.get('iconId')
+        if not isinstance(key, str) or key not in artwork_ids or key in seen:
+            raise ValueError('Design binding has duplicate or unregistered artwork')
+        skill = skills[key]
+        if entry.get('classId') != skill['classId'] or entry.get('runtimeName') != skill['name']:
+            raise ValueError('Design binding class/name does not match the unchanged skill library')
+        if entry.get('relation') != 'EXACT_LABEL_VISUAL_ONLY' or entry.get('demoLabel') != skill['name']:
+            raise ValueError('Design label must match exactly; aliases or gameplay approval require a separate decision')
+        ref = entry.get('reference')
+        if not isinstance(ref, dict) or not isinstance(ref.get('path'), str) or not ref['path']:
+            raise ValueError('Design reference missing')
+        path = (registry.parent / ref['path']).resolve()
+        if not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != ref.get('sha256'):
+            raise ValueError('Design reference hash mismatch')
+        with Image.open(path) as image:
+            if image.format != 'PNG' or list(image.size) != ref.get('size') or max(image.size) > 4096:
+                raise ValueError('Design reference PNG/size mismatch')
+            rect = ref.get('rect')
+            if not isinstance(rect, list) or len(rect) != 4 or any(type(v) is not int for v in rect):
+                raise ValueError('Design reference rect requires four integers')
+            x, y, width, height = rect
+            if min(x, y) < 0 or min(width, height) <= 0 or x + width > image.width or y + height > image.height:
+                raise ValueError('Design reference region is outside the source')
+        seen.add(key)
+        result.append({'iconId': key, 'classId': skill['classId'], 'runtimeName': skill['name'],
+                       'demoLabel': entry['demoLabel'], 'relation': 'EXACT_LABEL_VISUAL_ONLY',
+                       'reference': dict(path=str(path), sha256=ref['sha256'], size=ref['size'], rect=rect)})
+    return sorted(result, key=lambda entry: entry['iconId'])
+
+
 def read_artwork_registry(registry: Path | None) -> tuple[list[dict], dict | None]:
     """Register data, not builders: any known skill can supply ring-free art."""
     if registry is None:
@@ -100,6 +142,9 @@ def read_artwork_registry(registry: Path | None) -> tuple[list[dict], dict | Non
                   'review': {'status': 'SELF_REVIEWED', 'evidence': str(evidence.resolve()),
                              'sha256': hashlib.sha256(evidence.read_bytes()).hexdigest()},
                   'pixelPolicy': 'Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box.'}
+    bindings = read_design_bindings(document, registry, library, {item['id'] for item in items})
+    if bindings is not None:
+        provenance['designBindings'] = bindings
     return sorted(items, key=lambda item: item['id']), provenance
 
 

@@ -212,3 +212,46 @@ class SkillArtworkIntakeTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'registered artwork'):
             self.packer.pack(output=self.output, registry=self.write_registry(partial))
         self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
+
+    def add_design_binding(self):
+        import hashlib
+        self.document['designBindings'] = [{
+            'iconId': 'vo_skill_2', 'classId': 'vo', 'runtimeName': 'Phá Giáp',
+            'demoLabel': 'Phá Giáp', 'relation': 'EXACT_LABEL_VISUAL_ONLY',
+            'reference': {'path': self.board.name, 'sha256': hashlib.sha256(self.board.read_bytes()).hexdigest(),
+                          'size': [1536, 1536], 'rect': [10, 20, 100, 120]}}]
+
+    def test_design_binding_preserves_reference_without_changing_skill_data(self):
+        self.add_design_binding()
+        before = (ATLAS / 'skill-library.json').read_bytes()
+        result = self.packer.pack(output=self.output, registry=self.write_registry())
+        self.assertIn('designBindings', result['artworkIntake'])
+        binding = result['artworkIntake']['designBindings'][0]
+        self.assertEqual('vo', binding['classId'])
+        self.assertEqual('Phá Giáp', binding['demoLabel'])
+        self.assertEqual([10, 20, 100, 120], binding['reference']['rect'])
+        self.assertEqual('EXACT_LABEL_VISUAL_ONLY', binding['relation'])
+        self.assertEqual(before, (ATLAS / 'skill-library.json').read_bytes())
+        self.assertFalse(result['runtimeApproved'])
+
+    def test_design_binding_rejects_wrong_class_label_hash_and_region_before_output(self):
+        import copy
+        self.add_design_binding()
+        self.packer.pack(output=self.output)
+        before = {p.name: p.read_bytes() for p in self.output.iterdir()}
+        mutations = [
+            lambda b: b.update(classId='kiem'),
+            lambda b: b.update(demoLabel='Hỏa Thuật'),
+            lambda b: b.update(runtimeName='Renamed Skill'),
+            lambda b: b.update(relation='GAMEPLAY_APPROVED'),
+            lambda b: b['reference'].update(sha256='0' * 64),
+            lambda b: b['reference'].update(rect=[1500, 10, 100, 120]),
+            lambda b: b['reference'].update(rect=[False, 10, 100, 120]),
+        ]
+        for index, mutate in enumerate(mutations):
+            with self.subTest(index=index):
+                document = copy.deepcopy(self.document)
+                mutate(document['designBindings'][0])
+                with self.assertRaisesRegex(ValueError, 'Design'):
+                    self.packer.pack(output=self.output, registry=self.write_registry(document))
+                self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
