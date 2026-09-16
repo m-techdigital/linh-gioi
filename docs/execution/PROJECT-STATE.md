@@ -1,3 +1,10 @@
+## Character Hub v48 — Võ mobility readability — 2026-09-17
+
+- Bộ Pháp/Đột Kích được redraw native transparent để tăng độ đọc ở ô nhỏ; không gamma hoặc UI scale. Mapping demo chỉ visual-only: Bước Thần/Lướt áp sát.
+- Exactly2 skill modules changed;47 other modules + shared frame preserved. Runtime names/levels/gameplay, actor and equipment paths unchanged.
+- Verification: packer13/13; Unity EditMode315/315; one Player build0error0warning;132frames across PC/tablet/mobile; eye-reviewed selected Skill on all3.
+- Visual goal remains open: re-audit Hỏa Tuyến/Thanh Tẩy line-weight and remaining Võ/Linh content drift. `CONTINUE / VISUAL_FIX_REQUIRED`.
+
 ## Character Hub v47 — Võ Liên Kích / Chấn Kình impact motifs — 2026-09-17
 
 - Baseline f7d81523. Visual-only references: Liên Kích→Liên Quyền, Chấn Kình→Xung Kích; no runtime rename/level/gameplay alias.

@@ -1,4 +1,10 @@
-# NEXT ACTION — Character Hub / continue Skill art consistency
+# NEXT ACTION — Character Hub / Skill art theo demo
+
+## Active — sau v48 Bộ Pháp/Đột Kích readability
+- Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `feature/2d`; không đổi/reset/restore source.
+- v48 redraw native transparent `vo_skill_5` Bộ Pháp và `vo_skill_7` Đột Kích: silhouette/nét sáng và dày hơn ở64–128px, không gamma/tint/UI scale; visual-only mapping Bước Thần/Lướt áp sát, không đổi gameplay.
+- Shared frame/actor/runtime IDs/names/levels giữ nguyên; đúng2module đổi,47module còn lại giữ nguyên. Unity315/315, packer13/13, build0error0warning,132frame/3viewport; eye-review3 selected. Chưa owner-accept toàn class/5tab.
+- Bước tiếp theo: re-audit Hỏa Tuyến/Thanh Tẩy line-weight ở64–128px và tiếp tục các icon Võ/Linh còn object-vs-action drift; chỉ build/capture khi runtime art đổi.
 
 ## After v47
 1. Re-audit Hỏa Tuyến and Thanh Tẩy beside the new Võ group at64/128px; correct line-weight/content, not gamma.
