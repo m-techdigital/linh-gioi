@@ -1,3 +1,13 @@
+## Character Hub v30/v30b — đã kiểm bộ icon trong Player — 2026-09-16
+
+- Tiếp tục baseline d4e69f93, giữ codex/character-hub-v22/worktree cũ/phiên S-LGO-SKILL-20260916-C9B4. Đã được cấp Unity sau khi phiên chibi nhả; không lấy claim hoặc dừng process phiên khác.
+- Đã nhập10 source v30 và sửa2 source Pháp6/7 sau khi kiểm5variant (3loại đúng nghĩa/brief). Có29/45skill UI với artwork: Võ3, Kiếm9, Pháp9, Cơ4, Linh4;16 còn thiếu. Đây là coverage UI, không phải production combat hoàn tất.
+- Một atlas1024×1024/674383byte,33module/1frame. Giữ21/23module v29 pixel-identical, chỉ2ID được phép đổi;13module Kiếm/category/frame gốc nguyên vẹn. Runtime UI/base/library45record, renderer/class/pose/wardrobe/ProjectSettings và frozen không đổi.
+- RED thiếu sprite phap_skill_1 đúng nguyên nhân → graphics EditMode305/305 không fail/skip. Python51/51 (49repo+2revision). PNG+manifest replay byte-identical. Một Player build0error/0warning,87frame; eye-review5class×3viewport+Tiềm năngPC.
+- Thấy đủ9icon Pháp trong Player, không thấy cắt/chồng mới hoặc frame Skill rò sang Tiềm năng. Style một số nguồn cũ và16 artwork thiếu còn mở: CONTINUE/VISUAL_FIX_REQUIRED, không tự nghiệm thu goal5tab hay thiết bị thật.
+- Evidence/provenance: build/character-hub-source-coherence-v30b/review.json, runtime/, artwork-registry.json, import-proof.json, full-editmode.xml, owned-processes.json và player-processes.json. Wrapper dùng command/validator cũ, ghi PID từng Player và không terminate khi timeout/pause.
+- NEXT-ACTION đã ghi bước tiếp; các state BLOCKED của lượt trước là lịch sử, không phải blocker hiện hành.
+
 ## Character Hub v29 — artwork thật qua một base — 2026-09-16
 
 - Kế thừa a7114684; giữ codex/character-hub-v22 tại worktree cũ. Phiên S-LGO-SKILL-20260916-C9B4; check/claim trước batch, không tác động phiên khác. Đã đọc V2 notice/contract, giữ CLI v1 tương thích cho batch hiện hành.
