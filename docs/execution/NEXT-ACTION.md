@@ -1,3 +1,10 @@
+# NEXT ACTION — Character Hub / after v53
+
+1. Audit current Pháp `Kết Giới` against direct VFX `Kết giới (Field)`; keep it if current circular-field motif is already readable.
+2. Do not remap Hỏa/Băng/Lôi/Linh/Trọng Lực/Nguyên Tố/Tinh Thần solely by name similarity; require direct visual or semantic evidence.
+3. Continue Cơ/Pháp only for concrete object-vs-action/palette defects; do not regress repaired Võ/Linh/Hỏa Tuyến/Thanh Tẩy.
+4. Keep shared frame/content separation, exact ownership and actor; build/capture only when runtime art changes.
+
 # NEXT ACTION — Character Hub / after v52
 
 1. Audit Pháp against its class demo first because several runtime/demo labels have direct matches; fix only direct motif mismatches.

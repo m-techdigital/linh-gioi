@@ -1,3 +1,10 @@
+## Character Hub v53 — Pháp Trận spell-circle motif — 2026-09-17
+
+- `Pháp Trận` redraw trực tiếp theo VFX `Vòng pháp trận (Spell Circle)` của board Pháp; không đổi ID/tên/cấp/gameplay.
+- Exactly1 module đổi,48 module+frame giữ nguyên; shared frame/content split, exact ownership và actor giữ nguyên.
+- Gate: packer13/13, Unity315/315, một Player build0error0warning,132frame/3viewport; eye-review đủ3 selected states.
+- Các Pháp Hỏa/Băng/Lôi/Trọng Lực/Nguyên Tố/Kết Giới chưa bị ép sang nhãn demo khác; chỉ sửa khi có lỗi motif cụ thể.
+
 ## Character Hub v52 — Cơ turret + mechanical shield — 2026-09-17
 
 - `Tháp Cơ` redraw theo visual-only `Turret Nhỏ`; `Thiết Vệ` redraw theo `Khiên Cơ Giới`. Không đổi ID/tên/cấp/gameplay.

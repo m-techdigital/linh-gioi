@@ -68,8 +68,8 @@
     128,
     128
   ],
-  "pngBytes": 753561,
-  "sha256": "19ab9a8d8d5e382d07fea1848c26e64c20a775c5c8d6c62059eaa28042b17975",
+  "pngBytes": 736570,
+  "sha256": "80f9831dbaaee4854de69873bcc9b1ddcaea8c202b185f18eae03cbbbc6ce3b0",
   "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
@@ -77,12 +77,12 @@
       "role": "ui-skill-icon-atlas",
       "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "19ab9a8d8d5e382d07fea1848c26e64c20a775c5c8d6c62059eaa28042b17975"
+      "sha256": "80f9831dbaaee4854de69873bcc9b1ddcaea8c202b185f18eae03cbbbc6ce3b0"
     }
   ],
   "artworkIntake": {
-    "registrySha256": "b8794fee925d9a2d19120813d52ca20ff5c3ef1a1174b7b38fb9f9071b213eb0",
-    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-co-turret-shield-v52/artwork-registry.json",
+    "registrySha256": "5919f2f9d6b8e1dea8bc45feac7485cca06e5a4b4795b8999b2d13ec20b66879",
+    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-phap-spell-circle-v53/artwork-registry.json",
     "contentCount": 36,
     "sources": [
       {
@@ -203,6 +203,15 @@
         ]
       },
       {
+        "id": "phap-spell-circle-v53",
+        "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-phap-spell-circle-v53/registered-inner-source.png",
+        "sha256": "a896097e96d98b86f66b08a14e4ec662eb95710f2114ba4104c09216712840af",
+        "size": [
+          448,
+          448
+        ]
+      },
+      {
         "id": "source-paint-v45",
         "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-paint-v45/registered-inner-source-final.png",
         "sha256": "b1e62ad968c8a366ea07b826f840d5ec3a0d26dfa0c65851350904264bb53bf1",
@@ -250,8 +259,8 @@
     ],
     "review": {
       "status": "SELF_REVIEWED",
-      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-co-turret-shield-v52/art-review.json",
-      "sha256": "7f73ad3be07eb6b15c0b594e6732304c1f020d71e0ab3ad9391c8a06c64b2ce4"
+      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-phap-spell-circle-v53/art-review.json",
+      "sha256": "76938ef968b349c9697710c67cfc55c5bb6779ae4f16a7283882625674cd39d6"
     },
     "pixelPolicy": "Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box.",
     "designBindings": [
@@ -402,7 +411,7 @@
     {"id": "phap_skill_5", "x": 384, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [896, 0, 448, 448]},
     {"id": "phap_skill_6", "x": 512, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "phap-coherence-v30b", "sourceRect": [0, 0, 448, 448]},
     {"id": "phap_skill_7", "x": 640, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "phap-coherence-v30b", "sourceRect": [448, 0, 448, 448]},
-    {"id": "phap_skill_8", "x": 768, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [448, 448, 448, 448]},
+    {"id": "phap_skill_8", "x": 768, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "phap-spell-circle-v53", "sourceRect": [0, 0, 448, 448]},
     {"id": "phap_skill_9", "x": 896, "y": 384, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [1344, 0, 448, 448]},
     {"id": "vo_skill_1", "x": 0, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "vo-impact-v47", "sourceRect": [0, 0, 448, 448]},
     {"id": "vo_skill_2", "x": 128, "y": 256, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "demo-aligned-v35", "sourceRect": [0, 0, 448, 448]},
