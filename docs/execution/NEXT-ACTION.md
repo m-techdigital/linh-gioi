@@ -1,3 +1,10 @@
+# NEXT ACTION — Character Hub / after v52
+
+1. Audit Pháp against its class demo first because several runtime/demo labels have direct matches; fix only direct motif mismatches.
+2. For Cơ, keep `Tháp Cơ`, `Thiết Vệ`, `Hỏa Tuyến`, `Cơ Trận` unless a concrete defect is found. Do not force-map ambiguous `Cơ Lôi`, `Truy Kích`, `Linh Cơ`, `Pháo Kích`, `Cơ Nỏ`.
+3. Keep Võ `Kình Lực` unchanged until a direct source/semantic contract exists.
+4. Keep shared frame/content separation, exact ownership and actor; build/capture only when runtime art changes.
+
 # NEXT ACTION — Character Hub / after v51
 
 1. Do not force-map Võ `Kình Lực` to `Chiến Ý`; current evidence is insufficient. Revisit only with a direct source/semantic contract.

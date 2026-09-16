@@ -1,3 +1,10 @@
+## Character Hub v52 — Cơ turret + mechanical shield — 2026-09-17
+
+- `Tháp Cơ` redraw theo visual-only `Turret Nhỏ`; `Thiết Vệ` redraw theo `Khiên Cơ Giới`. Không đổi ID/tên/cấp/gameplay.
+- Exactly2 module đổi,47 module+frame giữ nguyên; shared base/content split, exact ownership và actor giữ nguyên.
+- Fresh gate: packer13/13, Unity315/315, một Player build0error0warning,264frame=2skill×3viewport×44; eye-review đủ6 selected states.
+- Cơ còn các ô legacy cần audit; chỉ sửa mapping trực tiếp, không suy diễn `Cơ Lôi/Truy Kích/Linh Cơ` từ tên.
+
 ## Character Hub v51 — Linh Hộ Mệnh protective charm — 2026-09-17
 
 - Hộ Mệnh redraw theo visual-only motif `Linh Hộ Phù`: phù bảo hộ + vòm khiên tím; không đổi ID/tên/cấp/gameplay.

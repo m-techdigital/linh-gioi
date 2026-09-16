@@ -68,8 +68,8 @@
     128,
     128
   ],
-  "pngBytes": 775934,
-  "sha256": "c5532183df05dc4a8e000e3df9980f069c39b3e955130a70ca82aa1e94c40474",
+  "pngBytes": 753561,
+  "sha256": "19ab9a8d8d5e382d07fea1848c26e64c20a775c5c8d6c62059eaa28042b17975",
   "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
@@ -77,18 +77,27 @@
       "role": "ui-skill-icon-atlas",
       "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "c5532183df05dc4a8e000e3df9980f069c39b3e955130a70ca82aa1e94c40474"
+      "sha256": "19ab9a8d8d5e382d07fea1848c26e64c20a775c5c8d6c62059eaa28042b17975"
     }
   ],
   "artworkIntake": {
-    "registrySha256": "b1dc97d962bedea35cd6f5d69fbf027ee7b9dcfec78897b5ebc3a1b96706bd82",
-    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-linh-protective-charm-v51/artwork-registry.json",
+    "registrySha256": "b8794fee925d9a2d19120813d52ca20ff5c3ef1a1174b7b38fb9f9071b213eb0",
+    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-co-turret-shield-v52/artwork-registry.json",
     "contentCount": 36,
     "sources": [
       {
         "id": "action-motifs-v43",
         "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-attack-motifs-v43/registered-inner-source-reviewed.png",
         "sha256": "cedd0da3506a1f3a418866616bdedcb930f6b8a0f2874bf7bd5662d47ad150ae",
+        "size": [
+          896,
+          448
+        ]
+      },
+      {
+        "id": "co-turret-shield-v52",
+        "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-co-turret-shield-v52/registered-inner-source.png",
+        "sha256": "369ca8600886da1740c15d5b96106264219e113de155cfb68cd7d5669b6ced9d",
         "size": [
           896,
           448
@@ -241,8 +250,8 @@
     ],
     "review": {
       "status": "SELF_REVIEWED",
-      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-linh-protective-charm-v51/art-review.json",
-      "sha256": "e92e9c519b8d12e905269db074a14003007cfaa840c5eb3a3a804222f9716944"
+      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-co-turret-shield-v52/art-review.json",
+      "sha256": "7f73ad3be07eb6b15c0b594e6732304c1f020d71e0ab3ad9391c8a06c64b2ce4"
     },
     "pixelPolicy": "Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box.",
     "designBindings": [
@@ -370,10 +379,10 @@
     {"id": "frame", "x": 512, "y": 768, "w": 128, "h": 128, "role": "shared-frame"},
     {"id": "co_skill_1", "x": 640, "y": 768, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [448, 0, 448, 448]},
     {"id": "co_skill_2", "x": 768, "y": 768, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [896, 448, 448, 448]},
-    {"id": "co_skill_3", "x": 896, "y": 768, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [1344, 448, 448, 448]},
+    {"id": "co_skill_3", "x": 896, "y": 768, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "co-turret-shield-v52", "sourceRect": [0, 0, 448, 448]},
     {"id": "co_skill_4", "x": 0, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-skill-inner-v29", "sourceRect": [896, 448, 448, 448]},
     {"id": "co_skill_5", "x": 128, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [0, 448, 448, 448]},
-    {"id": "co_skill_6", "x": 256, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [448, 448, 448, 448]},
+    {"id": "co_skill_6", "x": 256, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "co-turret-shield-v52", "sourceRect": [448, 0, 448, 448]},
     {"id": "co_skill_7", "x": 384, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [0, 896, 448, 448]},
     {"id": "co_skill_8", "x": 512, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "source-paint-v45", "sourceRect": [0, 0, 448, 448]},
     {"id": "co_skill_9", "x": 640, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [896, 448, 448, 448]},
