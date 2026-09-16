@@ -1,3 +1,14 @@
+## Character Hub v41 — nguồn rõ hơn, atlas gọn cùng mười item — 2026-09-16
+
+- Baseline14a0e042; giữ branch/worktree/SID S-LGO-SKILL-20260916-C9B4 và task T-69b4b27c4b39. Không mở class/tier/actor/gameplay; không có item mới.
+- Tái dựng mười nguồn Võ nam Lv1 từ bản RGBA384 đầy đủ đã pin. Một đường nâng sáng vùng peakRGB<128, bảo vệ highlight, alpha và tọa độ; không tint/scale UI hoặc thêm viền giả. Bản gamma toàn dải bị loại vì làm đổi highlight và vượt budget; lưu đầy đủ nguồn/log thử.
+- Cùng mười item binding và20module, đóng một lượt giảm hàng trống:640×640→640×512, giảm20% sốpixel texture nhưng không đoGPU thực. PNG248683→249142byte (+459), dưới250000byte; không nới ngân sách. Alpha20module chính xác; RGBA10reference cũ chính xác.
+- Packer thêm tùy chọn nén lossless với default không đổi; test giữ RGBA và không lớn hơn mặc định. Trên chính atlas v41 tùy chọn tiết kiệm0byte, không claim đó là nguyên nhân vừa budget. Encoding RGBround4 hiện hành vẫn có sai số≤2/255, không lossless từ source.
+- Graphics EditMode313/313 không fail/skip; Python78/78. Một build0error/0warning, một capture132ảnh. Đã xem15ảnh trên3viewport: Nhân vật/Rương đồ/tóc/áo trong/phụ kiện; chưa thấy lỗi cắt/chồng/notice hoặc lệch lookup sau repack.
+- Tóc và tua đen còn nhỏ/tối ở tablet; kiểu vẽ và thumbnail-to-actor chưa đồng nhất hoàn toàn, không gọi cả bộ đạt mỹ thuật. Skill Võ/Linh, Hỏa Tuyến và Thanh Tẩy còn việc theo demo gốc.
+- Nguồn/candidate/bản loại/evidence: build/character-hub-item-readability-v41. ZIP portable tái dựng sourceRGBA vàPNG đúng byte; không chứa font/model/binary. UI runtime, actor/renderer và frozen surfaces giữ nguyên;9file generated drift được lưu patch rồi loại khỏi checkpoint.
+- Trạng thái CONTINUE / SOURCE_READABILITY_REFINED / VISUAL_FIX_REQUIRED. Không áp lặp curve vào source đã xử lý; ưu tiên sửa motif và nét theo demo ở batch kế tiếp. Chi tiết tại NEXT-ACTION.md.
+
 ## Character Hub v40 — bốn nội dung trang bị và closure — 2026-09-16
 
 - Baseline286daf75; giữ codex/character-hub-v22/worktree cũ, SID S-LGO-SKILL-20260916-C9B4 và taskT-69b4b27c4b39. Tiếp tục batchB-a9898e762895, không khởi tạo lại khi lượt trước đã có source/test/Player thật.

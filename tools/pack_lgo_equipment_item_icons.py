@@ -7,6 +7,8 @@ import hashlib
 import io
 import json
 import re
+import struct
+import zlib
 from pathlib import Path
 from PIL import Image
 
@@ -66,6 +68,52 @@ def encode_rgb(image: Image.Image, config: dict) -> tuple[Image.Image, dict]:
     encoded = Image.merge('RGBA', (r.point(lut), g.point(lut), b.point(lut), a))
     return encoded, {'profile': 'rgba8-rgb-round4-alpha-exact-v1', 'rgbStep': 4,
                      'maxChannelError': 2, 'alphaExact': True}
+
+
+def _recompress_png(data: bytes) -> bytes:
+    """Recompress the same filtered scanlines and preserve all non-IDAT chunks."""
+    chunks = []; offset = 8
+    while offset < len(data):
+        size = struct.unpack('>I', data[offset:offset+4])[0]
+        kind = data[offset+4:offset+8]
+        chunks.append((kind, data[offset:offset+12+size], data[offset+8:offset+8+size]))
+        offset += size + 12
+    raw = zlib.decompress(b''.join(payload for kind, _, payload in chunks if kind == b'IDAT'))
+    best = data
+    # Bounded search of lossless deflate settings, not colors, resolution or alpha.
+    for memory in (6, 7, 8, 9):
+        for strategy in (zlib.Z_DEFAULT_STRATEGY, zlib.Z_FILTERED, zlib.Z_RLE):
+            compressor = zlib.compressobj(9, zlib.DEFLATED, 15, memory, strategy)
+            payload = compressor.compress(raw) + compressor.flush()
+            block = (struct.pack('>I', len(payload)) + b'IDAT' + payload
+                     + struct.pack('>I', zlib.crc32(b'IDAT' + payload) & 0xffffffff))
+            output = [data[:8]]; inserted = False
+            for kind, original, _ in chunks:
+                if kind != b'IDAT':
+                    output.append(original)
+                elif not inserted:
+                    output.append(block); inserted = True
+            candidate = b''.join(output)
+            if len(candidate) < len(best):
+                best = candidate
+    return best
+
+
+def encode_png(image: Image.Image, profile: str | None) -> bytes:
+    """Try lossless zlib strategies only; default bytes and decoded RGBA stay stable."""
+    if profile not in (None, 'best-lossless-v1'):
+        raise ValueError('Unknown lossless PNG profile')
+    buffer = io.BytesIO()
+    image.save(buffer, format='PNG', optimize=True)
+    best = buffer.getvalue()
+    if profile is not None:
+        for strategy in (0, 1, 2, 3, 4):
+            buffer = io.BytesIO()
+            image.save(buffer, format='PNG', optimize=True, compress_type=strategy)
+            candidate = buffer.getvalue()
+            if len(candidate) < len(best):
+                best = candidate
+    return _recompress_png(best) if profile is not None else best
 
 
 def run(base: Path, registry: Path, output: Path) -> dict:
@@ -128,10 +176,9 @@ def run(base: Path, registry: Path, output: Path) -> dict:
         result.setdefault('itemDesignBindings', []).append({k: item[k] for k in
             (*IDENTITY, 'iconId', 'source', 'sourceSha256', 'designSource', 'designSha256', 'designRect')})
     atlas, encoding = encode_rgb(atlas, document.get('encoding', {'rgbStep': 1}))
-    buffer = io.BytesIO(); atlas.save(buffer, format='PNG', optimize=True)
-    data = buffer.getvalue()
+    data = encode_png(atlas, document.get('pngCompression'))
     if len(data) > MAX_BYTES:
-        raise ValueError('PNG byte budget exceeded')
+        raise ValueError(f'PNG byte budget exceeded: {len(data)} > {MAX_BYTES}')
     digest = hashlib.sha256(data).hexdigest()
     result.update(status='DRAFT_RUNTIME_REVIEW', runtimeApproved=False,
                   textureSize=list(atlas.size), pngBytes=len(data), sha256=digest,

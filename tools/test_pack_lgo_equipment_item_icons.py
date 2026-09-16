@@ -131,4 +131,25 @@ class EquipmentItemIconPackingTests(unittest.TestCase):
             self.assertEqual(a.tobytes(),b.crop((0,0,a.width,a.height)).tobytes())
         self.assertEqual(2,len(second['itemBindings']))
 
+    def test_rebuilding_one_registered_set_removes_empty_rows_not_sprite_pixels(self):
+        first = self.run_pack(name='first')
+        registry = self.root/'registry.json'
+        document = json.loads(registry.read_text())
+        second_item = dict(self.item, itemId='vo_boots_lv001', slot='boots', iconId='vo_male_lv001_boots')
+        document['items'] = [second_item]
+        registry.write_text(json.dumps(document))
+        sequential = packer.run(self.root/'first', registry, self.root/'sequential')
+        document['items'] = [self.item, second_item]
+        registry.write_text(json.dumps(document))
+        compact = packer.run(self.base, registry, self.root/'compact')
+        self.assertEqual(sequential['itemBindings'], compact['itemBindings'])
+        self.assertEqual(sequential['textureSize'][1]-128, compact['textureSize'][1])
+        with Image.open(self.root/'sequential'/packer.PNG) as before, Image.open(self.root/'compact'/packer.PNG) as after:
+            for old in sequential['parts']:
+                new = next(p for p in compact['parts'] if p['id'] == old['id'])
+                def crop(image, part):
+                    return image.crop((part['x'], image.height-part['y']-part['h'],
+                                       part['x']+part['w'], image.height-part['y']))
+                self.assertEqual(crop(before, old).tobytes(), crop(after, new).tobytes(), old['id'])
+
 if __name__ == '__main__':unittest.main()
