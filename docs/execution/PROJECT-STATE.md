@@ -1,3 +1,13 @@
+## Character Hub v32 — bốn inner mới đã kiểm Player — 2026-09-16
+
+- Giữ cùng worktree/branch/phiên S-LGO-SKILL-20260916-C9B4; kế thừa6036d501. Scope chỉ5tab design đã duyệt, không mở taskM0/auth/combat/class/pose/wardrobe/renderer/frozen.
+- Phá Giáp/Phản Đòn/Chấn Kình/Hồi Phục đã vào Player; Võ/Kiếm/Pháp/Linh9/9, Cơ8/9; tổng44/45. Hỏa Tuyến vẫn thiếu, không dùng ảnh sai hoặc bị lọc để lấp.
+- Một frame/master,47inner độc lập trong atlas1024×1024/885216byte. Giữ44module cũ pixel-identical, UI/base/library/importer/ProjectSettings không đổi. Chỉ bổ sung test4sprite và sourcePNG/manifest +handoff.
+- Full graphics EditMode305/305 khôngskip; Python52/52; một build0error/0warning,87frame; đã xem5class×3viewport+Tiềm năngPC. Replay PNG/manifest/portablePNG exact, original healing recipe replay cùng pixel.
+- Bản đầu Phản Đòn/HỏaTuyến sai hình; sửa guide geometry cả nhóm2mục, giữ tham số. PhảnĐòn sau sửa dùng được; HỏaTuyến bị lọc nên vẫn thiếu. HồiPhục vẽ illustration trực tiếp có recipe; không gọi lại ảnh bị lọc.
+- Visual FIX_REQUIRED: nguồn HồiPhục phẳng hơn Kiếm, vài motif mảnh/nhỏ trong vòng; chỉ sửa source theo nhóm, không offset/scale riêng class. Không nghiệm thu art toànhub hoặc thiết bịmobile/tablet thật.
+- Evidence và nguồn ở build/character-hub-last-five-v32; NEXT-ACTION ghi source-safe bước tiếp. Đã trả Unity/inference sau khi job kết thúc; giữ worktree để nối tiếp. V3 contract đã đọc, chưa có task opt-in; dùng CLI tương thích, không đổi manager.
+
 ## Character Hub v31 — thêm 11 nội dung trên base chung — 2026-09-16
 
 - Tiếp tục đúng codex/character-hub-v22 từ341c1153, phiênS-LGO-SKILL-20260916-C9B4. Không đổi branch/worktree, không lấy claim phiên khác; Unity đã được cấp hợp lệ và nhả sau khi ba Player kết thúc.

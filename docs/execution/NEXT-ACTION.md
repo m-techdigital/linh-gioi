@@ -1,27 +1,25 @@
 # NEXT ACTION — Character Hub / shared Skill artwork
 
-## Active — hoàn thiện 5 icon còn thiếu và độ rõ của nguồn
-- Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `origin/feature/2d`. Không tạo/đổi branch hoặc worktree.
-- Phiên `S-LGO-SKILL-20260916-C9B4`: check pause/claims trước batch; không nhả quyền hoặc dừng job của phiên khác. V2 đã enroll, chưa được giao task V2; CLI v1 tương thích.
-- Scope chỉ Character Hub 5 tab theo `redesign-v4-five-tabs`; không mở gameplay/class-pose/wardrobe/renderer/frozen surfaces hoặc các task M0 từ tài liệu lịch sử.
+## Active — Hỏa Tuyến còn thiếu; tiếp tục fidelity của nguồn chung
+- Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `origin/feature/2d`. Không đổi branch/worktree hoặc restore baseline cũ.
+- Phiên `S-LGO-SKILL-20260916-C9B4`: check pause/recovery và claim trước batch; V3 đã đọc, chưa có task opt-in được giao; CLI v1 tương thích. Không nhả claim hoặc dừng job của phiên khác.
+- Scope vẫn Character Hub5tab theo `redesign-v4-five-tabs`, không mở M0/auth/gameplay/class-pose/wardrobe/renderer/frozen surfaces từ lịch sử.
 
-## v31 — đã nhập 11 inner và kiểm Player
-- Tiếp nối 341c1153. Bổ sung Liên Kích, Hộ Thể, Kình Lực; Cơ Nỏ, Linh Cơ, Thiết Vệ, Cơ Trận; Thanh Tẩy, Linh Phù, Hộ Mệnh, Linh Giới.
-- 40/45 skill UI có art: Võ 6/9, Kiếm 9/9, Pháp 9/9, Cơ 8/9, Linh 8/9. Có art không đồng nghĩa art final; dữ liệu tên/level/mô tả giữ nguyên.
-- Một atlas 1024×1024 / 836114 byte, 44 module = 43 inner + một frame. Toàn bộ 33 module đã publish trước batch giữ nguyên từng pixel; UI/base, library, importer1024, actor renderer không đổi.
-- Nguyên nhân sinh sai trước đây: prompt/style-reference không khóa hình học. Dùng composition underpaint 384px để hướng refinement, cùng strength0.60/IP0.25; guide không vào game. Chỉ 11 output đã xem được đăng ký, 5 mục chưa đạt hoặc bị lọc không nhập.
-- Full graphics EditMode 305/305 không fail/skip; test11ID mới RED trước import. Python52/52 gồm 3 candidate checks. Replay PNG+manifest trùng byte; kiểm mọi33module cũ và library không đổi.
-- Một build Player 0 lỗi/0 cảnh báo;87ảnh. Đã xem5class×3viewport + Tiềm năngPC: nội dung mới hiện ở cây/ô trang bị/chi tiết, không thấy cắt/chồng mới hoặc rò frame.
-- Visual vẫn FIX_REQUIRED: vài hình mới mảnh/nhỏ trong vòng (Cơ Nỏ/Linh Cơ, phù/pendant trên tablet), và nguồn cũ còn khác nét/nền. Không dùng scale/offset từng class để che vấn đề source.
+## v32 — bốn nội dung mới đã qua Player, KHÔNG visual final
+- Kế thừa6036d501. Thêm Phá Giáp, Phản Đòn, Chấn Kình và Hồi Phục. Hiện44/45skill có art: Võ9, Kiếm9, Pháp9, Cơ8, Linh9. `co_skill_8` Hỏa Tuyến vẫn thiếu.
+- Tạo guide bố cục mới; refine4source. Phản Đòn lần đầu thành nhân vật, Hỏa Tuyến giống lưỡi dao: loại, sửa hình học cả hai và kiểm lại2source. Phản Đòn sau sửa đạt motif; Hỏa Tuyến bị lọc, không nhập hoặc lấy ảnh ẩn trước lọc. Không lặp thêm cùng cách trong batch.
+- Hồi Phục là illustration nguyên bản vẽ trực tiếp bằng recipe, không phải guide tái sử dụng hoặc output đã bị lọc. Nguồn còn phẳng hơn phong cách Kiếm: giữ visual debt này, không gọi production art final.
+- Cùng canvas384+padding32→448 và aperture hiện hành; atlas1024×1024/885216byte,48module=47inner+1frame. Mọi44module cũ giữ nguyên từng pixel. UI/base/library45skill/importer/renderer không đổi.
+- Test candidate RED thiếu4→GREEN3/3; Unity REDvo_skill_2→full graphics305/305 không fail/skip. Python52/52; replay PNG+manifest và portablePNG exact; original healing recipe pixel replay exact.
+- Một Player build0error/0warning,87frame. Đã xem5class×3viewport +Tiềm năngPC; không thấy cắt/chồng mới hoặc rò frame. Số lượng icon không phải mức nghiệm thu visual.
 
 ## Batch kế tiếp
-1. Kiểm checkpoint và `build/character-hub-motif-v31/missing-artwork.json`: Phá Giáp, Phản Đòn, Chấn Kình, Hỏa Tuyến, Hồi Phục.
-2. Xử lý đúng hình biểu đạt còn thiếu, không tái sinh mò cùng giả định đã thất bại. Ảnh bị loại giữ lại làm evidence, không gọi lại hoặc dùng ảnh ẩn trước lọc.
-3. Củng cố silhouette/độ rõ ở source theo cả nhóm; giữ một profile canvas/aperture và không fit bbox riêng từng icon. Không thêm UI builder theo class hoặc mượn icon HUD.
-4. Registry phải tích lũy đủ31 inner bổ sung hiện có. Revision nguồn ghi rõ ID cũ được đổi và pixel-diff tất cả phần còn lại.
-5. Gom asset rồi full graphics + Player3viewport + eye review, cập nhật state và checkpoint/push qua supervisor; không gọi final chỉ vì đủ45 ảnh.
+1. Check checkpoint/pause/registry; xử lý đúng `co_skill_8` Hỏa Tuyến. Không dùng hai bản thử đã loại, không thay bằng skill khác hoặc HUD. Cần hình hỏa lực/tracer rõ ở nguồn và128px, không đơn thuần hai lưỡi sáng.
+2. Gom phần cần polish ở source: độ lấp đầy của Phản Đòn/Chấn Kình và một số Cơ/Linh; nét/nền/phong cách của source cũ còn không đồng nhất. Không thêm offset/scale hoặc builder theo class để che vấn đề nguồn.
+3. Registry tích lũy35inner bổ sung hiện hành; nguồn revision phải có ID/hash/review và pixel-diff các module không đổi. Giữ frame/category/Kiếm gốc.
+4. Gom source một batch, RED khi thêmID, rồi full graphics+Player3viewport/eye audit trước checkpoint/push qua supervisor. Không mở screen khác hoặc gọi final vì đủ45ảnh.
 
 ## Evidence / provenance
-`build/character-hub-motif-v31/`: review.json, art-review.json, guide/source recipes, generation*.json, artwork-registry.json, full-editmode.xml, runtime/, owned-processes.json, player-processes.json, authoring ZIP+SHA.
-`runtime/` là ảnh Player thật. `source-review-*.png` là bảng asset; `guides/` chỉ underpainting và không được nhập Resources. ZIP authoring portable không có folder cha, không giải nén source board vào Resources.
-`CONTINUE / VISUAL_FIX_REQUIRED / ARTWORK_INCOMPLETE` — còn5 ảnh, chưa nghiệm thu production art hoặc thiết bị mobile/tablet thật.
+`build/character-hub-last-five-v32/`: art-review.json, review.json, source-painting-manifest.json, guide/refine recipes, registry, raw/corrections/authored, modules/, full-editmode.xml, runtime/, owned-processes.json, player-processes.json, ZIPauthoring+SHA.
+`runtime/` là ảnh Player thật; `source-composite-review.png` chỉ ảnh nguồn/lắp lớp. Guides không vào Resources. Gói authoring là nguồn/recipe/provenance, không giải nén source board vào Unity.
+`CONTINUE / VISUAL_FIX_REQUIRED / ARTWORK_INCOMPLETE` — còn1icon thiếu, chưa nghiệm thu art toàn5tab hoặc mobile/tablet thiết bị thật.
