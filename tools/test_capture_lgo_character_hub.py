@@ -7,6 +7,12 @@ import capture_lgo_character_hub as capture
 
 
 class CaptureLgoCharacterHubTests(unittest.TestCase):
+    def test_equipment_selection_detail_is_required_for_every_shared_slot(self) -> None:
+        for slot in ('main_weapon','head_hair','inner_top','outer_tunic','lower_garment',
+                     'waist','arm_guard','boots','light_armor','accessory'):
+            self.assertIn(f'item-{slot}-selected.png', capture.REQUIRED_FRAMES)
+        self.assertEqual(6, capture.REQUIRED_FRAMES.index("item-main_weapon-selected.png"), "Manifest order must match the existing Player capture sequence.")
+
     def test_profiles_use_three_real_target_viewports(self) -> None:
         self.assertEqual((1600, 900), capture.PROFILES["pc"])
         self.assertEqual((1024, 768), capture.PROFILES["tablet"])

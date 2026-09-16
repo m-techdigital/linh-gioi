@@ -137,6 +137,37 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void VoStarterItemArtIsRegisteredOnlyForReviewedIdentity()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("reviewed starter item art test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                foreach (var slot in new[] { "lower_garment", "waist", "boots" })
+                {
+                    Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo("vo"));
+                    Assert.That(scene.CharacterGender, Is.EqualTo("male"));
+                    Assert.That(scene.GetEquipmentItemId(slot), Is.EqualTo("vo_" + slot + "_lv001"));
+                    var icon = scene.GetEquipmentThumbnailSprite(slot);
+                    Assert.That(icon, Is.Not.Null, slot + " must resolve reviewed content, not slot fallback.");
+                    Assert.That(icon, Is.Not.SameAs(scene.GetMap01ACharacterEquipmentIconSprite(slot)));
+                    Assert.That(icon.rect.width, Is.EqualTo(128));
+                    Assert.That(icon.rect.height, Is.EqualTo(128));
+                    var catalog = (EquipmentItemIconCatalog)typeof(CongDongLamMap01AArtPreview)
+                        .GetField("_equipmentItemIconCatalog", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(scene);
+                    Assert.That(catalog.Resolve("vo", scene.GetEquipmentItemId(slot), slot, "female", 1), Is.Null);
+                    Assert.That(catalog.Resolve("vo", scene.GetEquipmentItemId(slot), slot, "male", 10), Is.Null);
+                }
+            }
+            finally
+            {
+                foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(obj)) Object.DestroyImmediate(obj);
+            }
+        }
+
+        [Test]
         public void EquipmentThumbnailNeverTreatsUnassignedSlotArtAsOwnedItemArt()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
@@ -156,8 +187,10 @@ namespace LinhGioi.Tests.EditMode
                     {
                         Assert.That(scene.GetMap01ACharacterEquipmentIconSprite(slot), Is.Not.Null,
                             "Source slot illustrations remain available for registration, not deleted.");
-                        Assert.That(scene.GetEquipmentThumbnailSprite(slot), Is.Null,
-                            classId + "/" + scene.GetEquipmentItemId(slot) + " has no reviewed item binding; do not borrow slot art or renderer crops.");
+                        var expected = classId == "vo" && new[] { "lower_garment", "waist", "boots" }.Contains(slot);
+                        var content = scene.GetEquipmentThumbnailSprite(slot);
+                        Assert.That(content != null, Is.EqualTo(expected), classId + "/" + slot);
+                        if (expected) Assert.That(content, Is.Not.SameAs(scene.GetMap01ACharacterEquipmentIconSprite(slot)));
                     }
                 }
             }
@@ -412,9 +445,13 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Hero Left Equipment Rail").style.width.value.value, Is.EqualTo(76));
                 Assert.That(root.Q("Map01A Character Hero Right Equipment Rail").style.width.value.value, Is.EqualTo(76));
                 foreach (var slot in scene.VoEquipmentSlotIds)
-                    Assert.That(scene.GetVoEquipmentThumbnailSprite(slot),
-                        Is.Null,
-                        "Unassigned slot illustrations and legacy renderer crops are not owned item art for " + slot);
+                {
+                    var registered = new[] { "lower_garment", "waist", "boots" }.Contains(slot)
+                        && scene.ActiveEquipmentClassId == "vo" && scene.CharacterGender == "male" && scene.GetEquipmentItemLevel(slot) == 1;
+                    var content = scene.GetVoEquipmentThumbnailSprite(slot);
+                    Assert.That(content != null, Is.EqualTo(registered), slot);
+                    if (registered) Assert.That(content, Is.Not.SameAs(scene.GetMap01ACharacterEquipmentIconSprite(slot)));
+                }
                 Assert.That(root.Q<Button>("Map01A Inventory Gender").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "A single-gender source pack must not leave a disabled status button under the fixed actor stage.");
             }
@@ -886,7 +923,10 @@ namespace LinhGioi.Tests.EditMode
                 {
                     var slotId = scene.VoEquipmentSlotIds[iconIndex];
                     var expectedIcon = scene.GetVoEquipmentThumbnailSprite(slotId);
-                    Assert.That(expectedIcon, Is.Null, "No item ownership has been registered for " + slotId);
+                    var registered = new[] { "lower_garment", "waist", "boots" }.Contains(slotId)
+                        && scene.ActiveEquipmentClassId == "vo" && scene.CharacterGender == "male" && scene.GetEquipmentItemLevel(slotId) == 1;
+                    Assert.That(expectedIcon != null, Is.EqualTo(registered), slotId);
+                    if (registered) Assert.That(expectedIcon, Is.Not.SameAs(scene.GetMap01ACharacterEquipmentIconSprite(slotId)));
                     Assert.That(scene.GetMap01ACharacterEquipmentIconSprite(slotId), Is.Not.Null,
                         "Source slot art remains intact, but must not be presented as the player's item.");
                     Assert.That(root.Q("Map01A Character Hero Quick Icon " + iconIndex).style.backgroundImage.value.sprite,

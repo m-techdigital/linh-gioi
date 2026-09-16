@@ -1,3 +1,17 @@
+## Character Hub v38 — Võ male Lv1 item artwork — 2026-09-16
+
+- Tiếp tục batchB-abb93ee2bbbf/SID S-LGO-SKILL-20260916-C9B4, taskT-69b4b27c4b39 từb0114b28; giữ branch/worktree. Recovery đọc và bảo toàn testWIP/10nguồn/PID đã kết thúc, không restore hoặc chạy lại inference.
+- Đã đưa3nội dung quần/đai/giày vào Player qua exact itemId/class/slot/gender/level. Nguồn cộtLv1 của demo Võ nam; bảy candidate khác dính da/mặt hoặc sai loại đồ bị loại. Đây là UI icon DRAFT, không thay actor/outfit hoặc xác nhận khớp toàn bộ class.
+- Một packer dùng chung nối thêm nội dung vào atlas640×384/238156byte, vẫn giới hạn250000byte;10module cũ giữ từng pixel,3binding chỉ Võ–male–Lv1. Một profile384→viewport256→120trongcell128, không bbox-fit từng item, không scale/offset theo class ởUI.
+- Packer kiểm exact identity/duplicate/hash nguồn+demo+review/alpha/rect/canvas/budget trước ghi; output phải là thư mục candidate mới. Guard runtime chỉ cho mở rộng hàng atlas khi có registration nhất quán, không nới budget chung.
+- Final graphics EditMode313/313 không fail/skip; Python66/66; một Playerbuild0error0warning,132ảnh/3viewport. Đã xem12ảnh cuối:3itemselected và Nhân vật ở mỗi viewport; không thấy cắt/chồng mới. Vải và giày còn tối ở ôtablet nhỏ, không gọi finalart.
+- Initial capturePC bị lệch thứ tự frameexpected trongPython. TestRED→GREEN sửa danh sách khớp đúng Player, không sửa evidence hoặc rebuild; PCđược reuse và cùngbinary chạytablet/mobile. Bằng chứng lỗi và baexitPlayer0 được giữ.
+- SourcePNG/manifest replayexact; portablePNG replayexact, đường dẫnmanifestportable có thể khác. Gói nguồn3item/registry/base/demo/metadata: build/character-hub-vo-item-art-v38/lgo-vo-item-icons-v38-authoring.zip +SHA256. Không unzip vào Resources.
+- Actor/pose/wardrobe/UIruntime/frozen không đổi; World chỉ thêm capture10slot dùng chung. Skill44/45 và các lệchdemo/HỏaTuyến/ThanhTẩy vẫn còn việc. NEXT-ACTION tiếp tục nguồn7món và readability theo nhóm, không lấy ảnh bị loại để lấp.
+- Trạng thái CONTINUE / PARTIAL_ITEM_ART / VISUAL_FIX_REQUIRED; chưa owneracceptance hoặc kiểm thiết bị mobile/tablet thật.
+
+- Checkpoint recovery: đã xác minh hash/code/asset v38 không đổi, PID kết thúc;66Python và3guard vừa chạy lạiPASS. Reuse313/313XML và132ảnh, không build/generate/capture mới. Commit/remote xác minh ở checkpoint-receipt.json trong batch; chưa tự đónggoal.
+
 ## Character Hub v37 — exact item artwork ownership — 2026-09-16
 
 - Tiếp tục đúng worktree/branch và taskT-69b4b27c4b39, baseline120b420f. Lượt thất bại trước có tác dụng phụ thật: WIP/test/Player đã được lưu; recovery đọc và bảo toàn trước triển khai tiếp, không rollback.

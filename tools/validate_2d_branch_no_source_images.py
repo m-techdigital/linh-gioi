@@ -333,6 +333,52 @@ def _skill_intake_spec(root: Path, spec: dict, data: dict) -> dict:
                 max_bytes=budget, ui_import_limits={name: side})
 
 
+def _equipment_intake_spec(spec: dict, data: dict) -> dict:
+    """Allow additive item rows only with consistent identity/review/provenance metadata."""
+    intakes, parts = data.get('itemArtworkIntakes', []), data.get('parts', [])
+    if not intakes or data.get('runtimeApproved') is not False or data.get('cellSize', [128, 128]) != [128, 128]:
+        raise ValueError('Invalid equipment intake state')
+    height, added = 256, []
+    for intake in intakes:
+        keys = intake.get('addedIconIds', [])
+        review = intake.get('review', {})
+        hashes = [intake.get('registrySha256'), intake.get('baseSha256'), review.get('sha256')]
+        if (intake.get('baseTextureSize') != [640, height] or not keys or not isinstance(keys, list)
+                or review.get('status') != 'SELF_REVIEWED' or not review.get('evidence')
+                or any(not isinstance(h, str) or not re.fullmatch('[0-9a-f]{64}', h) for h in hashes)):
+            raise ValueError('Equipment source/review registration required')
+        added.extend(keys)
+        height += ((len(keys) + 4) // 5) * 128
+    by_id = {p['id']: p for p in parts}
+    if (height > 1024 or data.get('textureSize') != [640, height] or len(added) != len(set(added))
+            or len(parts) != len(by_id) or len(parts) != intakes[0]['basePartCount'] + len(added)):
+        raise ValueError('Invalid equipment grid or duplicate content')
+    for intake in intakes:
+        for index, key in enumerate(intake['addedIconIds']):
+            p = by_id.get(key, {})
+            rect = (index % 5 * 128, height - intake['baseTextureSize'][1] - (index // 5 + 1) * 128, 128, 128)
+            if p.get('role') != 'item-content' or tuple(p.get(k) for k in ('x','y','w','h')) != rect:
+                raise ValueError('Equipment content does not use the common grid')
+    bindings, designs = data.get('itemBindings', []), data.get('itemDesignBindings', [])
+    fields = ('classId','itemId','slot','gender','level','iconId')
+    if (len(bindings) != len(added) or len(designs) != len(added)
+            or {b['iconId'] for b in bindings} != set(added)
+            or len({tuple(b.get(k) for k in fields[:-1]) for b in bindings}) != len(bindings)):
+        raise ValueError('Equipment artwork must have exact unique item ownership')
+    for binding in bindings:
+        matches = [d for d in designs if all(d.get(k) == binding.get(k) for k in fields)]
+        if (len(matches) != 1 or binding.get('classId') not in {'vo','kiem','phap','co','linh'}
+                or binding.get('gender') not in {'male','female'} or type(binding.get('level')) is not int
+                or not 1 <= binding['level'] <= 100):
+            raise ValueError('Item/design identity mismatch')
+        if any(not re.fullmatch('[0-9a-f]{64}', str(matches[0].get(k, '')))
+               for k in ('sourceSha256','designSha256')):
+            raise ValueError('Missing item/design hash')
+    name = 'map01a-character-equipment-icons.png'
+    return dict(spec, assets={name:(640,height,'ui-equipment-icon-atlas')},
+                generators={'pack_lgo_equipment_item_icons'}, ui_import_limits={name:1024})
+
+
 def _validate_runtime_pack(root: Path, spec: dict[str, object]) -> set[str]:
     pack = str(spec['pack'])
     manifest = root / pack / 'manifest.json'
@@ -341,6 +387,8 @@ def _validate_runtime_pack(root: Path, spec: dict[str, object]) -> set[str]:
     data = json.loads(manifest.read_text())
     if spec["id"] == "map01a-skill-icons-v1" and "artworkIntake" in data:
         spec = _skill_intake_spec(root, spec, data)
+    if spec["id"] == "map01a-character-equipment-icons-v1" and "itemArtworkIntakes" in data:
+        spec = _equipment_intake_spec(spec, data)
     expected = _expected_assets(spec)
     if data['id'] != spec['id'] or data['status'] != spec['status']:
         raise ValueError(str(spec['status_error']))

@@ -2332,6 +2332,17 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var bag = Path.Combine(directory, "bag.png");
             CaptureScreenPng(bag);
+            var equipmentFrames = new List<string>();
+            foreach (var slot in EquipmentSlotIds)
+            {
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Equipment Item Tile " + slot));
+                yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
+                yield return new WaitForEndOfFrame();
+                var frame = "item-" + slot + "-selected.png";
+                CaptureScreenPng(Path.Combine(directory, frame));
+                equipmentFrames.Add(frame);
+            }
+            InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Equipment Item Tile main_weapon"));
             var search = document.rootVisualElement.Q<TextField>("Map01A Inventory Search");
             if (search == null) throw new InvalidOperationException("Missing Map01A inventory search for capture");
             search.value = "binh mau";
@@ -2445,12 +2456,13 @@ namespace LinhGioi.World
             var potentialClassFramesExist = potentialClassFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
             var spiritPetClassFramesExist = spiritPetClassFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
             var status = File.Exists(characterInfo) && File.Exists(bag) && File.Exists(bagSearch)
-                && File.Exists(bagSearchSelected)
+                && File.Exists(bagSearchSelected) && equipmentFrames.All(frame => File.Exists(Path.Combine(directory, frame)))
                 && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potentialDefault) && File.Exists(potential)
                 && skillClassFramesExist && potentialClassFramesExist && File.Exists(spiritPet) && spiritPetClassFramesExist
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var frames = new[] { "character-info.png", "bag.png", "bag-search-binh-mau.png", "bag-search-binh-mau-selected.png",
                 "skills-default.png", "skills.png" }
+                .Concat(equipmentFrames)
                 .Concat(skillClassFrames)
                 .Concat(new[] { "potential-default.png", "potential.png" })
                 .Concat(potentialClassFrames)

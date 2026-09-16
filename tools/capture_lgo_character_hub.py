@@ -34,6 +34,8 @@ SKILL_CLASS_FRAMES = tuple(
 SPIRIT_PET_CLASS_FRAMES = tuple(
     f"spirit-pet-{class_id}.png" for class_id in CHARACTER_HUB_CLASS_IDS
 )
+EQUIPMENT_SLOTS = ("main_weapon", "head_hair", "inner_top", "outer_tunic", "lower_garment",
+                   "waist", "arm_guard", "boots", "light_armor", "accessory")
 REQUIRED_FRAMES = (
     "character-info.png",
     "bag.png",
@@ -41,6 +43,7 @@ REQUIRED_FRAMES = (
     "bag-search-binh-mau-selected.png",
     "skills-default.png",
     "skills.png",
+    *(f"item-{slot}-selected.png" for slot in EQUIPMENT_SLOTS),
     *SKILL_CLASS_FRAMES,
     "potential-default.png",
     "potential.png",
