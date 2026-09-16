@@ -1,3 +1,13 @@
+## Character Hub v31 — thêm 11 nội dung trên base chung — 2026-09-16
+
+- Tiếp tục đúng codex/character-hub-v22 từ341c1153, phiênS-LGO-SKILL-20260916-C9B4. Không đổi branch/worktree, không lấy claim phiên khác; Unity đã được cấp hợp lệ và nhả sau khi ba Player kết thúc.
+- Đã nhập11inner mới: Võ1/6/8, Cơ1/5/6/9, Linh4/5/7/9. Có40/45skill với ảnh (Võ6,Kiếm9,Pháp9,Cơ8,Linh8); còn5thiếu, không gọi artfinal. Liên Kích/Cơ Nỏ đã hiện trên Player thay trạng thái thiếu.
+- Guide underpainting chỉ khóa hình học cho refinement, không nhập runtime. 16output đã review,11chọn/5không nhập; giữ tất cả thử nghiệm và nguồn gốc trong build. Một canvas384+padding32→448; không điều chỉnh UI scale/offset theo class.
+- Một atlas1024²/836114byte,44module với1frame; toàn bộ33module trước giữ nguyên pixel. UI/base/library/importer/renderer/ProjectSettings/frozen không thay đổi.
+- Full graphics EditMode305/305 nofail/noskip; Python52/52; REDsprite11ID trước nhập; replayPNG+manifest đúngbyte. Một Player build0error/0warning;87frame, đã eye5class×3viewport+Tiềm năngPC. Không thấy cắt/chồng mới hay rò frame.
+- Source mảnh/nhỏ và không đồng nhất nét/nền vẫn cần polish, đặc biệt CơNỏ/LinhCơ, phù/pendant trên tablet. Test xanh không thay visual acceptance. Bước tiếp: Phá Giáp/Phản Đòn/Chấn Kình/Hỏa Tuyến/Hồi Phục và source readability, không mở combat.
+- Evidence/recipe/registry/ZIPportable/PID: build/character-hub-motif-v31. Trạng tháiCONTINUE/VISUAL_FIX_REQUIRED/ARTWORK_INCOMPLETE; chưa nghiệm thu5tab hoặc thiết bịmobile/thật.
+
 ## Character Hub v30/v30b — đã kiểm bộ icon trong Player — 2026-09-16
 
 - Tiếp tục baseline d4e69f93, giữ codex/character-hub-v22/worktree cũ/phiên S-LGO-SKILL-20260916-C9B4. Đã được cấp Unity sau khi phiên chibi nhả; không lấy claim hoặc dừng process phiên khác.
