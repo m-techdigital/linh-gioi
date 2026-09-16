@@ -79,6 +79,7 @@ REQUIRED_SKIN_MARKERS = [
     "LgoTitleLabel",
     "LgoSubtitleLabel",
     "ApplyLgoItemIcon",
+    "BindLgoItemIconContent",
     "ApplyLgoSelectedTab",
     "ApplyLgoDisabledAction",
     "ApplyLgoHudCombatAction",
@@ -302,6 +303,12 @@ REQUIRED_PARTIAL_MARKERS = {
         "UpdateEntryControlCardVisibility()",
     ],
     "CongDongLamArrivalHud.Inventory.cs": [
+        "BindLgoItemIconContent(_equipmentRowIcons[index],",
+        "BindLgoItemIconContent(_equipmentTileIcons[index],",
+        "BindLgoItemIconContent(_characterHeroQuickIcons[i],",
+        "BindLgoItemIconContent(_inventoryDetailIcon, thumbnail,",
+        "BindLgoItemIconContent(_inventoryDetailIcon, itemSprite,",
+
         "_inventoryDetailPanel = InventoryPanel(\"Map01A Inventory Detail Panel\")",
         "_inventoryGridPanel = InventoryPanel(\"Map01A Inventory Grid Panel\")",
         "_inventoryHeroPanel = InventoryPanel(\"Map01A Inventory Character Panel\")",

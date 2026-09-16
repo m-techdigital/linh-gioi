@@ -1033,6 +1033,33 @@ namespace LinhGioi.UI
             return frame;
         }
 
+        private static void BindLgoItemIconContent(VisualElement icon, Sprite content, string label, string itemId)
+        {
+            var notice = icon.Q<Label>(className: "lgo-item-artwork-notice");
+            if (notice == null)
+            {
+                notice = LgoLabel("", 11, UiSubText);
+                notice.name = icon.name + " Artwork Status";
+                notice.AddToClassList("lgo-item-artwork-notice");
+                notice.pickingMode = PickingMode.Ignore;
+                notice.style.position = Position.Absolute;
+                notice.style.left = notice.style.right = 2;
+                notice.style.top = 2;
+                notice.style.bottom = new Length(18, LengthUnit.Percent);
+                notice.style.marginTop = notice.style.marginBottom = 0;
+                notice.style.paddingTop = notice.style.paddingBottom = 0;
+                notice.style.whiteSpace = WhiteSpace.Normal;
+                notice.style.unityTextAlign = TextAnchor.MiddleCenter;
+                icon.Add(notice);
+            }
+            icon.style.display = DisplayStyle.Flex;
+            icon.style.backgroundImage = content == null ? StyleKeyword.None : new StyleBackground(content);
+            icon.EnableInClassList("lgo-item-art-missing", content == null);
+            notice.text = label + "\nChưa có ảnh";
+            notice.style.display = content == null ? DisplayStyle.Flex : DisplayStyle.None;
+            icon.tooltip = label + " · " + itemId + (content == null ? " · Chưa có ảnh vật phẩm được đăng ký" : "");
+        }
+
         private static void BindLgoSkillIconLayers(VisualElement icon, Sprite content, Sprite frameArtwork,
             float size, string identity)
         {

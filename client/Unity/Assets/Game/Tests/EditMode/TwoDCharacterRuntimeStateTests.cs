@@ -137,6 +137,223 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void EquipmentThumbnailNeverTreatsUnassignedSlotArtAsOwnedItemArt()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("equipment icon ownership test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var actor = new GameObject("class identity only").AddComponent<TwoDSourcePoseReview>();
+                actor.transform.SetParent(scene.transform, false);
+                typeof(CongDongLamMap01AArtPreview).GetField("_sourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(scene, actor);
+                foreach (var classId in new[] { "vo", "kiem", "phap", "co", "linh" })
+                {
+                    typeof(TwoDSourcePoseReview).GetField("<ClassId>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic)
+                        .SetValue(actor, classId);
+                    foreach (var slot in scene.EquipmentSlotIds)
+                    {
+                        Assert.That(scene.GetMap01ACharacterEquipmentIconSprite(slot), Is.Not.Null,
+                            "Source slot illustrations remain available for registration, not deleted.");
+                        Assert.That(scene.GetEquipmentThumbnailSprite(slot), Is.Null,
+                            classId + "/" + scene.GetEquipmentItemId(slot) + " has no reviewed item binding; do not borrow slot art or renderer crops.");
+                    }
+                }
+            }
+            finally
+            {
+                foreach (var item in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(item)) Object.DestroyImmediate(item);
+            }
+        }
+
+        [Test]
+        public void RegisteredItemIconRequiresExactItemClassAndSlot()
+        {
+            var texture = new Texture2D(2, 2);
+            var sprite = Sprite.Create(texture, new Rect(0, 0, 2, 2), Vector2.zero);
+            try
+            {
+                const string json = "{\"itemBindings\":[{\"itemId\":\"fixture_set_a_lv010\",\"classId\":\"vo\",\"slot\":\"main_weapon\",\"gender\":\"male\",\"level\":10,\"iconId\":\"fixture_icon\"}]}";
+                var catalog = EquipmentItemIconCatalog.FromJson(json, id => id == "fixture_icon" ? sprite : null);
+                Assert.That(catalog.Resolve("vo", "fixture_set_a_lv010", "main_weapon", "male", 10), Is.SameAs(sprite));
+                Assert.That(catalog.Resolve("vo", "fixture_set_a_lv010", "main_weapon", "female", 10), Is.Null);
+                Assert.That(catalog.Resolve("vo", "fixture_set_a_lv010", "main_weapon", "male", 20), Is.Null);
+                foreach (var classId in new[] { "kiem", "phap", "co", "linh", "", null })
+                    Assert.That(catalog.Resolve(classId, "fixture_set_a_lv010", "main_weapon", "male", 10), Is.Null);
+                foreach (var id in new[] { "fixture_set_b_lv010", "fixture_set_a_lv020", "", null })
+                    Assert.That(catalog.Resolve("vo", id, "main_weapon", "male", 10), Is.Null);
+                Assert.That(catalog.Resolve("vo", "fixture_set_a_lv010", "head_hair", "male", 10), Is.Null);
+                Assert.That(EquipmentItemIconCatalog.FromJson("{}", id => sprite)
+                    .Resolve("vo", "fixture_set_a_lv010", "main_weapon", "male", 10), Is.Null);
+            }
+            finally { Object.DestroyImmediate(sprite); Object.DestroyImmediate(texture); }
+        }
+
+        [Test]
+        public void ItemIconRegistrationRejectsAmbiguousOrMissingContent()
+        {
+            var texture = new Texture2D(2, 2);
+            var sprite = Sprite.Create(texture, new Rect(0, 0, 2, 2), Vector2.zero);
+            try
+            {
+                const string row = "{\"itemId\":\"fixture\",\"classId\":\"vo\",\"slot\":\"main_weapon\",\"gender\":\"male\",\"level\":10,\"iconId\":\"icon\"}";
+                foreach (var invalid in new[] { row.Replace("fixture", "*"), row.Replace("fixture", " fixture"),
+                    row.Replace("\"classId\":\"vo\",", ""), row.Replace("\"slot\":\"main_weapon\",", ""), "null" })
+                    Assert.Throws<System.ArgumentException>(() => EquipmentItemIconCatalog.FromJson(
+                        "{\"itemBindings\":[" + invalid + "]}", id => sprite));
+                Assert.Throws<System.ArgumentException>(() => EquipmentItemIconCatalog.FromJson(
+                    "{\"itemBindings\":[" + row + "," + row + "]}", id => sprite));
+                Assert.Throws<System.ArgumentException>(() => EquipmentItemIconCatalog.FromJson(
+                    "{\"itemBindings\":[" + row + "]}", id => null));
+            }
+            finally { Object.DestroyImmediate(sprite); Object.DestroyImmediate(texture); }
+        }
+
+        [Test]
+        public void MissingItemArtworkKeepsSlotsClickableAndDoesNotLeakIntoSupplyDetails()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("item artwork state test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                scene.ToggleInventory();
+                typeof(CongDongLamArrivalHud).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hud, null);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
+                var slot = root.Q<Button>("Map01A Character Hero Quick Icon 1");
+                Assert.That(slot.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                var notice = slot.Q<Label>(className: "lgo-item-artwork-notice");
+                Assert.That(notice, Is.Not.Null);
+                Assert.That(notice.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(notice.pickingMode, Is.EqualTo(PickingMode.Ignore));
+                InvokeBoundButton(slot);
+                Assert.That(scene.SelectedEquipmentSlot, Is.EqualTo(scene.EquipmentSlotIds[1]));
+                var detail = root.Q("Map01A Inventory Detail Icon");
+                var detailNotice = detail.Q<Label>(className: "lgo-item-artwork-notice");
+                Assert.That(detail.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(detailNotice.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                InvokeBoundButton(root.Q<Button>("Map01A Bag Main Tab"));
+                InvokeBoundButton(root.Q<Button>("Map01A Health Potion"));
+                Assert.That(detail.style.backgroundImage.value.sprite, Is.SameAs(scene.GetMap01AItemThumbnailSprite("health_potion")));
+                Assert.That(detailNotice.style.display.value, Is.EqualTo(DisplayStyle.None));
+                InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
+                InvokeBoundButton(slot);
+                Assert.That(detail.Q<Label>(className: "lgo-item-artwork-notice"), Is.SameAs(detailNotice));
+                Assert.That(detailNotice.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(detail.style.backgroundImage.value.sprite, Is.Null);
+                Assert.That(slot.Q<Label>(className: "lgo-item-artwork-notice"), Is.SameAs(notice));
+                Assert.That(root.Q("Map01A Character Hero Portrait").style.width.value.value, Is.EqualTo(400));
+                Assert.That(root.Q("Map01A Character Hero Portrait").style.height.value.value, Is.EqualTo(428));
+            }
+            finally
+            {
+                foreach (var item in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(item)) Object.DestroyImmediate(item);
+            }
+        }
+
+        [Test]
+        public void RegisteredItemContentFlowsThroughSharedControlsWithoutClassLeak()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var texture = new Texture2D(2, 2);
+            var sprite = Sprite.Create(texture, new Rect(0, 0, 2, 2), Vector2.zero);
+            try
+            {
+                var host = new GameObject("registered item UI integration fixture");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var actor = new GameObject("class identity fixture only").AddComponent<TwoDSourcePoseReview>();
+                actor.transform.SetParent(scene.transform, false);
+                typeof(CongDongLamMap01AArtPreview).GetField("_sourcePoseReview", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(scene, actor);
+                var classField = typeof(TwoDSourcePoseReview).GetField("<ClassId>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic);
+                classField.SetValue(actor, "vo");
+                var id = scene.GetEquipmentItemId("main_weapon");
+                var json = "{\"itemBindings\":[{\"itemId\":\"" + id + "\",\"classId\":\"vo\",\"slot\":\"main_weapon\",\"gender\":\""
+                    + scene.CharacterGender + "\",\"level\":" + scene.GetEquipmentItemLevel("main_weapon") + ",\"iconId\":\"fixture-only\"}]}";
+                var catalog = EquipmentItemIconCatalog.FromJson(json, icon => icon == "fixture-only" ? sprite : null);
+                typeof(CongDongLamMap01AArtPreview).GetField("_equipmentItemIconCatalog", BindingFlags.Instance | BindingFlags.NonPublic).SetValue(scene, catalog);
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                scene.ToggleInventory();
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                typeof(CongDongLamArrivalHud).GetMethod("Update", BindingFlags.Instance | BindingFlags.NonPublic).Invoke(hud, null);
+                var button = root.Q<Button>("Map01A Character Hero Quick Icon 0");
+                Label originalNotice = null;
+                foreach (var classId in new[] { "vo", "kiem", "phap", "co", "linh", "vo" })
+                {
+                    classField.SetValue(actor, classId);
+                    InvokeBoundButton(root.Q<Button>("Map01A Character Info Main Tab"));
+                    InvokeBoundButton(button);
+                    var expected = classId == "vo" ? sprite : null;
+                    Assert.That(scene.GetEquipmentThumbnailSprite("main_weapon"), Is.SameAs(expected));
+                    foreach (var icon in new[] { button, root.Q("Map01A Equipment Item Icon main_weapon"), root.Q("Map01A Inventory Detail Icon") })
+                    {
+                        Assert.That(icon.style.backgroundImage.value.sprite, Is.SameAs(expected));
+                        Assert.That(icon.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                        Assert.That(icon.Q<Label>(className: "lgo-item-artwork-notice").style.display.value,
+                            Is.EqualTo(expected == null ? DisplayStyle.Flex : DisplayStyle.None));
+                    }
+                    var notice = button.Q<Label>(className: "lgo-item-artwork-notice");
+                    if (originalNotice == null) originalNotice = notice;
+                    else Assert.That(notice, Is.SameAs(originalNotice), "Changing data must reuse the same shared notice.");
+                }
+            }
+            finally
+            {
+                foreach (var item in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(item)) Object.DestroyImmediate(item);
+                Object.DestroyImmediate(sprite);
+                Object.DestroyImmediate(texture);
+            }
+        }
+
+        [Test]
+        public void InventorySearchResultBadgeDoesNotRepeatCapacityInTheSameRow()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("bounded inventory search status test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Bag Main Tab"));
+                var search = root.Q<TextField>("Map01A Inventory Search");
+                var badge = root.Q<Label>("Map01A Inventory Count Badge");
+                search.value = "binh mau";
+                Assert.That(badge.text, Is.EqualTo("1 kết quả"), "Do not duplicate capacity in the bounded search header.");
+                Assert.That(badge.tooltip, Does.Contain("56/120 ô"));
+                search.value = "";
+                Assert.That(badge.text, Is.EqualTo("56/120 ô"));
+            }
+            finally
+            {
+                foreach (var item in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(item)) Object.DestroyImmediate(item);
+            }
+        }
+
+        [Test]
+        public void ItemIconBindingCannotOmitAppearanceVariant()
+        {
+            var texture = new Texture2D(2, 2);
+            var sprite = Sprite.Create(texture, new Rect(0, 0, 2, 2), Vector2.zero);
+            try
+            {
+                const string row = "{\"itemId\":\"fixture\",\"classId\":\"vo\",\"slot\":\"main_weapon\",\"iconId\":\"icon\"}";
+                Assert.Throws<System.ArgumentException>(() => EquipmentItemIconCatalog.FromJson(
+                    "{\"itemBindings\":[" + row + "]}", id => sprite),
+                    "Fallback item IDs can be shared across gender/tier; variant data cannot be silently inferred.");
+            }
+            finally { Object.DestroyImmediate(sprite); Object.DestroyImmediate(texture); }
+        }
+
+        [Test]
         public void ProductPlayerRejectsTwoCharacterRendererAuthorities()
         {
             Assert.That(CongDongLamMap01AArtPreview.HasRendererAuthorityConflict(new[]
@@ -196,9 +413,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Hero Right Equipment Rail").style.width.value.value, Is.EqualTo(76));
                 foreach (var slot in scene.VoEquipmentSlotIds)
                     Assert.That(scene.GetVoEquipmentThumbnailSprite(slot),
-                        Is.EqualTo(scene.GetMap01ACharacterEquipmentIconSprite(slot)),
-                        "The current source-pose actor must keep the dedicated readable slot icon; "
-                        + "it must not fall back to a cropped legacy renderer sprite for " + slot);
+                        Is.Null,
+                        "Unassigned slot illustrations and legacy renderer crops are not owned item art for " + slot);
                 Assert.That(root.Q<Button>("Map01A Inventory Gender").style.display.value, Is.EqualTo(DisplayStyle.None),
                     "A single-gender source pack must not leave a disabled status button under the fixed actor stage.");
             }
@@ -670,11 +886,11 @@ namespace LinhGioi.Tests.EditMode
                 {
                     var slotId = scene.VoEquipmentSlotIds[iconIndex];
                     var expectedIcon = scene.GetVoEquipmentThumbnailSprite(slotId);
-                    Assert.That(expectedIcon, Is.Not.Null, "Missing dedicated UI icon for " + slotId);
-                    Assert.That(expectedIcon, Is.EqualTo(scene.GetMap01ACharacterEquipmentIconSprite(slotId)),
-                        "Baseline Võ must keep the approved readable UI icon atlas instead of a dark runtime clothing crop.");
+                    Assert.That(expectedIcon, Is.Null, "No item ownership has been registered for " + slotId);
+                    Assert.That(scene.GetMap01ACharacterEquipmentIconSprite(slotId), Is.Not.Null,
+                        "Source slot art remains intact, but must not be presented as the player's item.");
                     Assert.That(root.Q("Map01A Character Hero Quick Icon " + iconIndex).style.backgroundImage.value.sprite,
-                        Is.EqualTo(expectedIcon), "Character rail must use the dedicated readable UI atlas for " + slotId);
+                        Is.EqualTo(expectedIcon), "Character rail must agree with exact item lookup for " + slotId);
                 }
 
                 InvokeBoundButton(root.Q<Button>("Map01A Skills Main Tab"));
@@ -2332,7 +2548,8 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Health Potion").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q<Button>("Map01A Mana Potion").style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Button>("Map01A Equipment Item Tile main_weapon").style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q<Label>("Map01A Inventory Count Badge").text, Is.EqualTo("1 kết quả · 56/120 ô"),
+                Assert.That(root.Q<Label>("Map01A Inventory Count Badge").tooltip, Does.Contain("56/120 ô"));
+                Assert.That(root.Q<Label>("Map01A Inventory Count Badge").text, Is.EqualTo("1 kết quả"),
                     "Search feedback must show the number of real matching items instead of leaving the capacity badge unchanged.");
                 var healthPotion = root.Q<Button>("Map01A Health Potion");
                 Assert.That(healthPotion.style.backgroundColor.value.b, Is.LessThan(.3f),

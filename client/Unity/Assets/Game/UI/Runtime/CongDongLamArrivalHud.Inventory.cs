@@ -912,7 +912,8 @@ namespace LinhGioi.UI
             {
                 _inventoryCountBadge.text = string.IsNullOrEmpty(_inventorySearchQuery)
                     ? "56/120 ô"
-                    : visibleItemCount + " kết quả · 56/120 ô";
+                    : visibleItemCount + " kết quả";
+                _inventoryCountBadge.tooltip = "Sức chứa hiển thị: 56/120 ô";
             }
         }
 
@@ -962,8 +963,7 @@ namespace LinhGioi.UI
                     _equipmentRowStates[index].text = "Lv" + level;
                 if (_equipmentRowIcons != null && index < _equipmentRowIcons.Length)
                 {
-                    _equipmentRowIcons[index].style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
-                    _equipmentRowIcons[index].style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
+                    BindLgoItemIconContent(_equipmentRowIcons[index], thumbnail, EquipmentShortName(slotId), _scene.GetEquipmentItemId(slotId));
                 }
                 _equipmentTiles[index].text = string.Empty;
                 _equipmentTiles[index].tooltip = EquipmentDisplayName(slotId) + " · Lv" + level
@@ -975,8 +975,7 @@ namespace LinhGioi.UI
                     _equipmentTileStates[index].text = equipped ? "Đang mặc" : "Đã tháo";
                 if (_equipmentTileIcons != null && index < _equipmentTileIcons.Length)
                 {
-                    _equipmentTileIcons[index].style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
-                    _equipmentTileIcons[index].style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
+                    BindLgoItemIconContent(_equipmentTileIcons[index], thumbnail, EquipmentShortName(slotId), _scene.GetEquipmentItemId(slotId));
                 }
             }
             RefreshCharacterHeroCard();
@@ -1016,8 +1015,7 @@ namespace LinhGioi.UI
             {
                 var slot = i < _equipmentSlotIds.Count ? _equipmentSlotIds[i] : null;
                 var sprite = string.IsNullOrEmpty(slot) ? null : _scene.GetEquipmentThumbnailSprite(slot);
-                _characterHeroQuickIcons[i].style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
-                _characterHeroQuickIcons[i].style.display = sprite == null ? DisplayStyle.None : DisplayStyle.Flex;
+                BindLgoItemIconContent(_characterHeroQuickIcons[i], sprite, EquipmentShortName(slot), _scene.GetEquipmentItemId(slot));
                 ApplyLgoCharacterHubSelectionState(_characterHeroQuickIcons[i], slot == _scene.SelectedEquipmentSlot);
                 if (_characterHeroQuickLevels != null && i < _characterHeroQuickLevels.Length)
                     _characterHeroQuickLevels[i].text = "+" + _scene.GetEquipmentItemLevel(slot);
@@ -1055,8 +1053,7 @@ namespace LinhGioi.UI
             if (_inventoryDetailPrimaryAction != null) _inventoryDetailPrimaryAction.SetEnabled(!selectedLocked);
             var thumbnail = _scene.GetEquipmentThumbnailSprite(selectedSlot);
             _inventoryDetailIcon.text = "";
-            _inventoryDetailIcon.style.backgroundImage = thumbnail == null ? StyleKeyword.None : new StyleBackground(thumbnail);
-            _inventoryDetailIcon.style.display = thumbnail == null ? DisplayStyle.None : DisplayStyle.Flex;
+            BindLgoItemIconContent(_inventoryDetailIcon, thumbnail, EquipmentShortName(selectedSlot), selectedItemId);
             _equipmentDetail.text = selectedName;
             _inventoryDetailRarity.text = "Trang bị · Lv" + selectedLevel;
             _inventoryDetailSlotType.text = selectedName;
@@ -1083,8 +1080,7 @@ namespace LinhGioi.UI
             if (_inventoryDetailLockAction != null) _inventoryDetailLockAction.style.display = DisplayStyle.None;
             _inventoryDetailIcon.text = "";
             var itemSprite = _scene.GetMap01AItemThumbnailSprite(_selectedSupplyItemId);
-            _inventoryDetailIcon.style.backgroundImage = itemSprite == null ? StyleKeyword.None : new StyleBackground(itemSprite);
-            _inventoryDetailIcon.style.display = itemSprite == null ? DisplayStyle.None : DisplayStyle.Flex;
+            BindLgoItemIconContent(_inventoryDetailIcon, itemSprite, "Vật phẩm", _selectedSupplyItemId);
             _inventoryDetailHeader.text = "CHI TIẾT VẬT PHẨM";
             _inventoryDetailStatsHeader.text = "HIỆU QUẢ";
             _inventoryDetailSetHeader.text = "ĐIỀU KIỆN SỬ DỤNG";

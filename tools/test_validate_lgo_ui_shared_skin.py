@@ -27,12 +27,34 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             ROOT / "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
             dst / "client/Unity/Assets/Game/UI/Runtime/RuntimeUiSkin.cs",
         )
+        shutil.copy2(
+            ROOT / "client/Unity/Assets/Game/UI/Runtime/CharacterHubClassCatalog.cs",
+            dst / "client/Unity/Assets/Game/UI/Runtime/CharacterHubClassCatalog.cs",
+        )
         tests_src = ROOT / "client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs"
         tests_dst = dst / "client/Unity/Assets/Game/Tests/EditMode/TwoDCharacterRuntimeStateTests.cs"
         tests_dst.parent.mkdir(parents=True)
         shutil.copy2(tests_src, tests_dst)
         shutil.copy2(ROOT / "AGENTS.md", dst / "AGENTS.md")
         return temp
+
+    def test_all_equipment_surfaces_keep_shared_content_and_missing_state(self) -> None:
+        markers = (
+            "BindLgoItemIconContent(_equipmentRowIcons[index],",
+            "BindLgoItemIconContent(_equipmentTileIcons[index],",
+            "BindLgoItemIconContent(_characterHeroQuickIcons[i],",
+            "BindLgoItemIconContent(_inventoryDetailIcon, thumbnail,",
+            "BindLgoItemIconContent(_inventoryDetailIcon, itemSprite,",
+        )
+        for marker in markers:
+            with self.subTest(surface=marker), self._copy_minimal_repo() as temp:
+                inventory = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs"
+                self.assertEqual([], validator.validate_root(Path(temp)), "The unmodified fixture must be valid before mutation.")
+                text = inventory.read_text(encoding="utf-8")
+                self.assertEqual(1, text.count(marker))
+                inventory.write_text(text.replace(marker, marker.replace("BindLgoItemIconContent", "OneOffItemArt")), encoding="utf-8")
+                violations = validator.validate_root(Path(temp))
+                self.assertTrue(any(marker in item for item in violations), violations)
 
     def test_current_repo_satisfies_shared_ui_governance(self) -> None:
         self.assertEqual([], validator.validate_root(ROOT))

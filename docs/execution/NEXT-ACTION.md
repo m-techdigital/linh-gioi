@@ -1,27 +1,26 @@
-# NEXT ACTION — Character Hub / icon theo demo gốc
+# NEXT ACTION — Character Hub / nội dung icon đúng nguồn
 
-## Active — tiếp tục đúng design, không chạy theo số lượng ảnh
-- Giữ `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `feature/2d`; v36 kế thừa9fa22c3a. Không đổi/reset/restore source.
-- SID `S-LGO-SKILL-20260916-C9B4`, task `T-69b4b27c4b39`; check pause/recovery/job/claims trước batch. Registry V3 không thay quyền owner nghiệm thu.
-- Canonical UI: `redesign-v4-five-tabs`. Nội dung class phải đối chiếu class demo đã pin, không dùng Kiếm làm màu/motif cho mọi class. Không đổi actor/pose/wardrobe/renderer/frozen/gameplay.
+## Active — đăng ký artwork đúng vật phẩm và tiếp tục đối chiếu class demo
+- Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `feature/2d`. Không đổi/reset/restore source.
+- SID `S-LGO-SKILL-20260916-C9B4`, task `T-69b4b27c4b39`. Check pause/recovery, job và claims trước batch. Không release/kill job phiên khác. Kết thúc turn phải WAITING_USER/BLOCKED.
+- Canonical vẫn `redesign-v4-five-tabs`; class demos là nguồn hình ảnh, không tự thay tên/cấp/chức năng gameplay. Không sửa actor/pose/wardrobe/renderer hoặc frozen surfaces.
 
-## v36 — Hộ Thể đã vào Player; chưa nghiệm thu cả class
-- Hộ Thể (`vo_skill_6`) thay giáp xanh bằng khiên vàng 2D theo đúng ô Hộ Thể trong demo Võ. Nguồn native384, antialias2x, padding32 cố định vào448; không copy/phóng pixel demo làm runtime, không bbox-fit hoặc offset riêng.
-- Chỉ1 nội dung đổi,47module khác và vòng ngoài giữ nguyên pixel; atlas1024²/887653byte,48module. Bốn designBindings gồm ba liên kết v35 được bảo toàn.
-- Packer chặn registry tích lũy âm thầm bỏ toàn bộ/một phần designBindings: RED hai case → wholepacker13/13GREEN. Đây là kiểm metadata, không duyệt mỹ thuật/gameplay.
-- Capture loop chung thêm trạng thái chọn node5 cho cả5class, không đổi renderer. Mỗi viewport34ảnh, tổng102; đã xem15ảnh selected +Tiềm năngPC. Hộ Thể xuất hiện đúng cây và inspector trên3viewport; không thấy cắt/chồng mới trong ảnh đã xem.
-- Full graphics EditMode305/305 không skip; Python53/53; một Player build0error/0warning. Pair PNG/manifest và portablePNG replay đúng byte. Mobile/tablet là viewport macOS, chưa thiết bị thật.
-- Thanh Tẩy: append code nguồn bị tool chặn và xác minh chưa ghi; không chạy lại qua đường khác, không có ảnh mới. Nguồn v35 sai tượng/bệ vẫn bị loại.
+## v37 — sửa sở hữu icon, không coi thiếu ảnh là visual hoàn tất
+- Đã tiếp tục WIP thật còn lại từ lượt suy nghĩ thất bại: baseline120b420f, batchB-32cf114ae874. Có code/test/build cũ; đã xác minh job kết thúc và lưu incoming snapshot, không restore hoặc replay lệnh cũ.
+- `EquipmentItemIconCatalog` tra exact classId +itemId +slot +gender +level; thiếu registration trả null. Không mượn hình theo slot hoặc crop renderer cũ. Duplicate/wildcard/thiếu field/sprite/variant bị từ chối.
+- `BindLgoItemIconContent` là base chung cho rail nhân vật, row/grid và inspector. Thiếu ảnh vẫn giữ ô/click/selection; notice tái sử dụng, không giữ nhầm ảnh khi đổi class hoặc chuyển sang bình máu. Có positive integration fixture kiểm đủ đường hiển thị, không nhập sprite fixture vào Player.
+- Equipment atlas PNG nguyên byte; `itemBindings: []` vì10 hình slot cũ chưa được đăng ký cho item/biến thể nào. Player hiện thấy tên ô +“Chưa có ảnh”. KHÔNG có10art mới, KHÔNG gọi đạt design.
+- Review Player còn phát hiện badge tìm kiếm lặp sức chứa làm tràn sang inspector; đã rút còn số kết quả, giữ sức chứa trong tooltip và khi bỏ tìm kiếm, không đổi geometry/canvas.
+- Full graphics EditMode312/312 no fail/skip; Python54/54. Final Player102ảnh; đã xem10ảnh cuối: Nhân vật/tìm-bình-máu3viewport, Rương đồ/Skill/Tiềm năng/Linh thúPC. Không thấy tràn header sau sửa hoặc leak notice sang ba tab khác.
+- Trong lượt recovery có2build/capture: chốt input WIP, rồi sửa overflow thấy bằng mắt. Build/capture cũ trước gián đoạn và mọi log RED giữ riêng, không đổi tên thành final.
 
-## Batch kế tiếp
-1. Kiểm checkpoint/source/job và claim đúng tài nguyên. Đọc `runtime-review.json` v36, không dùng `review.json` source-stage cũ để kết luận Player chưa chạy.
-2. Khi thao tác được cho phép, tiếp tục Thanh Tẩy theo demo và nội dung linh lực, không tượng/bệ. Không tự đổi ID/tên/cấp để khớp ảnh. Gom các nội dung có mapping chức năng rõ thành batch class nhất quán.
-3. Nhiều ảnh Võ/Linh/Pháp/Cơ cũ vẫn chưa sát demo; Hỏa Tuyến còn thiếu. Số44/45 chỉ là số vị trí có sprite, không tỷ lệ art đã đạt. Các nhãn/cấp mâu thuẫn giữ unresolved, không ép11mốc thành9skill.
-4. Batch icon vật phẩm riêng: resolver đang trả UI icon theo slot trước class/item. Cần ownership itemId/class/set qua dữ liệu chung; không copy builder theo class hoặc sửa actor/wardrobe.
-5. Giữ vòng/component/canvas chung. Review demo → nội dung rời → Player; trạng thái selected của capture hiện là node5 theo cùng loop, không đại diện đã eye-review mọi lựa chọn.
+## Bước tiếp theo
+1. Đối chiếu itemId/class/slot/gender/level thật với nguồn demo tương ứng trước khi thêm `itemBindings`; không gán nguyên bộ Kiếm cho mọi class để làm đầy ô. Giữ selector/base chung, không đổi renderer để phù hợp icon.
+2. Nội dung Skill vẫn44/45 cósprite nhưng chưa khớp mỹ thuật; Hỏa Tuyến còn thiếu, Thanh Tẩy chưa được thay. Tiếp tục nhóm có mapping demo rõ, không chỉ tint hoặc sinh theo tên suy diễn.
+3. Vật phẩm/phân loại/pet/skill có nguồn và vai trò khác nhau. Không dùng slot/category/pet portrait làm ảnh nội dung chỉ vì đã có sprite.
+4. Khi có registration thật: test pixel/provenance/identity, kiểm cả cùngitem khácgender/tier và đổiitem trongcùngslot; build/capture Player đúng3viewport, không nhận fixture thay artwork.
 
-## Evidence / source
-`build/character-hub-symbols-v36/`: runtime-review.json (final batch), import-proof.json, runtime/ (102PlayerPNG), player/LinhGioiOnline.app, native-artwork.json, source-comparison.png (KHÔNG phải Player), owned-processes.json.
-`lgo-skill-symbols-v36-authoring.zip` +`.zip.sha256`: nguồn/registry portable sau runtime review; không unzip vào Resources. Bản `*-candidate.zip` và review.json là lịch sử trước nhập, không nghiệm thu cuối.
-V34 audit còn ở `build/character-hub-design-reconciliation-v34/`; v33 matte test hoãn được giữ nguyên byte trong `build/character-hub-demo-alignment-v35/deferred-v33/`.
-`CONTINUE / PARTIAL_DEMO_ALIGNMENT / VISUAL_FIX_REQUIRED` — chưa owner acceptance hoặc toàn goal5tab. Chỉ supervised checkpoint/push sau kiểm scope/evidence, rồi kết thúc batch/turn và WAITING_USER.
+## Evidence
+`build/character-hub-item-ownership-v37/runtime-review.json`, `resume-review/` (snapshot), `final-editmode-green.xml`, `runtime-final/`, `player-final/LinhGioiOnline.app`, `owned-processes.json`, `player-processes-final.json`, `checkpoint-receipt.json` sau push.
+`runtime/` là trước gián đoạn; `runtime-resume/` là trước sửa search overflow. Chỉ `runtime-final/` là tập cuối. Không có source-art ZIP mới vì không tạo/thay PNG.
+`CONTINUE / ITEM_OWNERSHIP_CORRECTED / VISUAL_ARTWORK_INCOMPLETE` — không nghiệm thu toàn Character Hub hoặc mobile/tablet thật.

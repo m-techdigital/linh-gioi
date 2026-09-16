@@ -298,34 +298,22 @@ namespace LinhGioi.World
                 ? ActiveEquipmentClassId + "_" + slot + "_lv" + GetEquipmentItemLevel(slot).ToString("000")
                 : reviewId;
         }
+        private EquipmentItemIconCatalog _equipmentItemIconCatalog;
         public Sprite GetEquipmentThumbnailSprite(string slot)
         {
-            var index = Array.IndexOf(VoEquipmentSlots, slot);
-            if (index < 0) throw new ArgumentException("Unknown character equipment slot: " + slot, nameof(slot));
-            var uiIcon = GetMap01ACharacterEquipmentIconSprite(slot);
-            if (uiIcon != null) return uiIcon;
-            if (!string.Equals(ActiveEquipmentClassId, "vo", StringComparison.OrdinalIgnoreCase)) return null;
-            var level = GetEquipmentItemLevel(slot);
-            var partId = "lv" + level.ToString("000") + "_" + VoAvatarGender + "_slot_" + slot;
-            if (_voAvatarParts.TryGetValue(partId, out var partRenderer) && partRenderer.sprite != null)
-                return partRenderer.sprite;
-            foreach (var pair in _voEquipmentComponentInfo)
+            if (Array.IndexOf(VoEquipmentSlots, slot) < 0)
+                throw new ArgumentException("Unknown character equipment slot: " + slot, nameof(slot));
+            if (_equipmentItemIconCatalog == null)
             {
-                var info = pair.Value;
-                if (info.slot != slot || info.gender != VoAvatarGender || info.level != level || info.side != "center")
-                    continue;
-                if (_voEquipmentComponents.TryGetValue(pair.Key, out var renderer) && renderer.sprite != null)
-                    return renderer.sprite;
+                const string resources = "LGOMaps/CongDongLamMap01ACharacterEquipmentIcons/";
+                EnsureMap01AIconAtlasLoaded(ref _map01ACharacterEquipmentIconsLoaded, _map01ACharacterEquipmentIcons,
+                    resources, "map01a-character-equipment-icons", "map01a-character-equipment-icons-v1");
+                var manifest = Resources.Load<TextAsset>(resources + "manifest");
+                _equipmentItemIconCatalog = EquipmentItemIconCatalog.FromJson(manifest == null ? "{}" : manifest.text,
+                    iconId => _map01ACharacterEquipmentIcons.TryGetValue(iconId, out var sprite) ? sprite : null);
             }
-            foreach (var pair in _voEquipmentComponentInfo)
-            {
-                var info = pair.Value;
-                if (info.slot != slot || info.gender != VoAvatarGender || info.level != level)
-                    continue;
-                if (_voEquipmentComponents.TryGetValue(pair.Key, out var renderer) && renderer.sprite != null)
-                    return renderer.sprite;
-            }
-            return null;
+            return _equipmentItemIconCatalog.Resolve(ActiveEquipmentClassId, GetEquipmentItemId(slot), slot,
+                CharacterGender, GetEquipmentItemLevel(slot));
         }
         public Sprite GetCharacterAvatarThumbnailSprite()
         {

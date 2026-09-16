@@ -1,3 +1,14 @@
+## Character Hub v37 — exact item artwork ownership — 2026-09-16
+
+- Tiếp tục đúng worktree/branch và taskT-69b4b27c4b39, baseline120b420f. Lượt thất bại trước có tác dụng phụ thật: WIP/test/Player đã được lưu; recovery đọc và bảo toàn trước triển khai tiếp, không rollback.
+- Một EquipmentItemIconCatalog tra exact itemId/classId/slot/gender/level; không fallback hình slot Kiếm hoặc renderer crop. Một binder cho5điểm hiển thị item; giữ ô/click/selection và clear missing notice khi có ảnh hợp lệ. Positive fixture kiểm thật đường scene→UI và không lọt sang class khác; không đưa fixture vào runtime asset.
+-10slot-artPNG cũ giữ nguyên nhưng chưa có binding item được duyệt; Player hiện ghi Chưa có ảnh thay vì gán sai. Đây là sửa correctness/ownership, không phải hoàn thiện artwork hoặc nghiệm thu design.
+- Test giữ binding/mismatch/duplicate/appearance và state; thêm guard5vị trí dùng chung. Sửa lỗi testfixture governance thiếu CharacterHubClassCatalog trước khi chạy negative mutation đúng nguyên nhân.
+- Eye review phát hiện search count+capacity tràn sang inspector; sửa copy giữ số kết quả gọn và sức chứa ở tooltip, có RED→GREEN. Không thêm wrap/scale/offset theo class hoặc sửa geometry.
+- Final graphics EditMode312/312 nofail/noskip; Python54/54; finalPlayer102ảnh, đã xem10ảnh cuối trên3viewport và tab liên quan. Final-proof xác nhận build0error/46warning; phần cảnh báo vẫn được ghi trong log, không tính là0. Chữ báo thiếu ảnh còn nhỏ trên tablet, không thay cho asset thật.
+- v37 có1build/capture trước gián đoạn và2trong recovery (revalidateWIP rồifixoverflow); mọi output giữ riêng. Evidence: build/character-hub-item-ownership-v37/runtime-review.json, runtime-final/, final-editmode-green.xml; không dùng runtime-resume làm final.
+- Skill44/45, các palette/motif sai demo, Hỏa Tuyến, Thanh Tẩy vẫn còn việc. Mục tiêu tiếp theo: đăng ký artwork đúng ownership/nguồn qua base hiện hành, không lấp bằng ảnh không thuộc item/class. Trạng thái CONTINUE/VISUAL_ARTWORK_INCOMPLETE, không owner acceptance.
+
 ## Character Hub v36 — Hộ Thể và selected-detail evidence — 2026-09-16
 
 - Kế thừa9fa22c3a; giữ codex/character-hub-v22/worktree hiện hành, SID S-LGO-SKILL-20260916-C9B4/taskT-69b4b27c4b39. Checkpoint v35 đã khớp2081file trước ghi. Không restore/đổi branch hoặc lấy claim phiên khác.
