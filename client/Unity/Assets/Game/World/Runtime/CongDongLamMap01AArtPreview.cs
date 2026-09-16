@@ -2390,6 +2390,7 @@ namespace LinhGioi.World
                 throw new InvalidOperationException("Missing Character Hub five-profile evidence hooks");
             var rendererClassId = ActiveEquipmentClassId;
             var potentialClassIds = new[] { "vo", "kiem", "phap", "co", "linh" };
+            const int skillSelectedNodeIndex = 5;
             var skillClassFrames = new List<string>();
             foreach (var classId in potentialClassIds)
             {
@@ -2403,6 +2404,12 @@ namespace LinhGioi.World
                 var frame = "skills-" + classId + ".png";
                 CaptureScreenPng(Path.Combine(directory, frame));
                 skillClassFrames.Add(frame);
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Skill Node " + skillSelectedNodeIndex));
+                yield return new WaitForSecondsRealtime(CharacterHubAnimationSettleSeconds);
+                yield return new WaitForEndOfFrame();
+                var selectedFrame = "skills-" + classId + "-selected.png";
+                CaptureScreenPng(Path.Combine(directory, selectedFrame));
+                skillClassFrames.Add(selectedFrame);
             }
             clearEvidenceClass.Invoke(hud, null);
             InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Potential Main Tab"));
@@ -2468,6 +2475,7 @@ namespace LinhGioi.World
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
                 + "  \"skillClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
+                + "  \"skillSelectedNodeIndex\": " + skillSelectedNodeIndex + ",\n"
                 + "  \"potentialClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
                 + "  \"spiritPetClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
                 + "  \"classSwitchScope\": \"character-hub-data-only-no-renderer-change\",\n"

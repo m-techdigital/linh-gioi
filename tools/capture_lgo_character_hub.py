@@ -28,7 +28,8 @@ POTENTIAL_CLASS_FRAMES = tuple(
     for state in ("default", "selected")
 )
 SKILL_CLASS_FRAMES = tuple(
-    f"skills-{class_id}.png" for class_id in CHARACTER_HUB_CLASS_IDS
+    frame for class_id in CHARACTER_HUB_CLASS_IDS
+    for frame in (f"skills-{class_id}.png", f"skills-{class_id}-selected.png")
 )
 SPIRIT_PET_CLASS_FRAMES = tuple(
     f"spirit-pet-{class_id}.png" for class_id in CHARACTER_HUB_CLASS_IDS
@@ -77,6 +78,8 @@ def validate_manifest(manifest: dict, out: Path, profile: str) -> list[str]:
         errors.append("OS_INPUT_USED")
     if tuple(manifest.get("potentialClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
         errors.append("POTENTIAL_CLASS_PROFILE_MISMATCH")
+    if manifest.get("skillSelectedNodeIndex") != 5:
+        errors.append("SKILL_SELECTED_NODE_MISMATCH")
     if tuple(manifest.get("skillClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
         errors.append("SKILL_CLASS_PROFILE_MISMATCH")
     if tuple(manifest.get("spiritPetClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:

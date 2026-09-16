@@ -255,3 +255,23 @@ class SkillArtworkIntakeTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, 'Design'):
                     self.packer.pack(output=self.output, registry=self.write_registry(document))
                 self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
+    def test_cumulative_repack_cannot_silently_drop_existing_design_links(self):
+        import copy
+        self.add_design_binding()
+        second = copy.deepcopy(self.document['designBindings'][0])
+        second.update(iconId='vo_skill_3', runtimeName='Phản Đòn', demoLabel='Phản Đòn')
+        self.document['designBindings'].append(second)
+        self.packer.pack(output=self.output, registry=self.write_registry())
+        before = {p.name: p.read_bytes() for p in self.output.iterdir()}
+        for mode in ('all', 'partial'):
+            with self.subTest(mode=mode):
+                document = copy.deepcopy(self.document)
+                if mode == 'all':
+                    document.pop('designBindings')
+                else:
+                    document['designBindings'] = document['designBindings'][:1]
+                with self.assertRaisesRegex(ValueError, 'design bindings'):
+                    self.packer.pack(output=self.output, registry=self.write_registry(document))
+                self.assertEqual(before, {p.name: p.read_bytes() for p in self.output.iterdir()})
+        result = self.packer.pack(output=self.output, registry=self.write_registry())
+        self.assertEqual(2, len(result['artworkIntake']['designBindings']))

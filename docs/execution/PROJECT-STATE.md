@@ -1,3 +1,14 @@
+## Character Hub v36 — Hộ Thể và selected-detail evidence — 2026-09-16
+
+- Kế thừa9fa22c3a; giữ codex/character-hub-v22/worktree hiện hành, SID S-LGO-SKILL-20260916-C9B4/taskT-69b4b27c4b39. Checkpoint v35 đã khớp2081file trước ghi. Không restore/đổi branch hoặc lấy claim phiên khác.
+- Hộ Thể vo_skill_6 đã thay giáp xanh bằng khiên vàng2D theo demo trực tiếp. Nguồn native384/antialias2x/padding32→448; nguyên bản redraw, không crop/phóng pixel demo. Chỉ1module đổi/47giữ nguyên, frame/library giữ nguyên;1024²/887653byte.
+- Packer bảo toàn designBindings khi repack tích lũy, chặn bỏ toàn bộ/một phần link: RED2case→packer13GREEN. Liên kết visual4mục giữ3mục trước; không gameplay approval.
+- Shared Player capture có thêm selected-node5 cho tất cả5class; chỉ đổi CaptureInventoryTabs, không actor/renderer/item resolver/UIbase.34frame/profile,102PNG; đã xem15selected+Tiềm năngPC, Hộ Thể ở cây/detail rõ trên3viewport, không thấy cắt/chồng mới trong ảnh đã xem.
+- Full graphics EditMode305/305 nofail/noskip; Python53/53; một build0error/0warning; pair/portablePNG replay exact. Không gọi toàn art hoặc mobile/tablet thiết bị thật đã đạt.
+- Thanh Tẩy native append bị tool chặn, xác minh chưa ghi và không dùng đường thay thế; chưa có art mới. Unity ban đầu bị claim khác giữ, sau được cấp hợp lệ đã import/test/build/capture. Không còn coi Unity blocked ở kết quả cuối.
+- Evidence final tại build/character-hub-symbols-v36/runtime-review.json và runtime/; source/registry ZIPfinal kèmSHA. review.json và ZIPcandidate là giai đoạn nguồn trước import, giữ làm lịch sử. V33 testmatte vẫn được lưu ở deferred-v33, không checkpoint kèm.
+- CONTINUE / PARTIAL_DEMO_ALIGNMENT / VISUAL_FIX_REQUIRED: cả bộ5class chưa khớp, Hỏa Tuyến thiếu, item-thumbnail ownership chưa sửa. NEXT-ACTION ghi kế tiếp; không tự task.complete.
+
 ## Character Hub v35 — sửa nội dung từ demo gốc, không chỉ đủ số lượng — 2026-09-16
 
 - Giữ81d2d2a2 làm base, codex/character-hub-v22/worktree cũ. Phiên S-LGO-SKILL-20260916-C9B4 nhận task T-69b4b27c4b39 và batch B-0876b01f8bd4 của operator; không tự hoàn thành task hoặc bật tự gửi.

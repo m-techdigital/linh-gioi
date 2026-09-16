@@ -38,6 +38,10 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
         for frame in expected:
             self.assertIn(frame, capture.REQUIRED_FRAMES)
 
+    def test_selected_skill_detail_is_required_for_each_class(self) -> None:
+        for class_id in capture.CHARACTER_HUB_CLASS_IDS:
+            self.assertIn(f"skills-{class_id}-selected.png", capture.REQUIRED_FRAMES)
+
     def test_player_command_uses_target_resolution_and_internal_capture(self) -> None:
         command = capture.build_player_command(
             Path("/tmp/Unity"), Path("/tmp/evidence"), "mobile", 1600, 720
@@ -61,6 +65,7 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "height": 900,
                 "frames": list(capture.REQUIRED_FRAMES),
                 "skillClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
+                "skillSelectedNodeIndex": 5,
                 "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "spiritPetClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "classSwitchScope": "character-hub-data-only-no-renderer-change",
@@ -74,6 +79,8 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
             manifest["potentialClassProfiles"] = list(capture.CHARACTER_HUB_CLASS_IDS)
             manifest["classSwitchScope"] = "renderer-class-switch"
             self.assertIn("CLASS_SWITCH_SCOPE_INVALID", capture.validate_manifest(manifest, out, "pc"))
+            manifest["skillSelectedNodeIndex"] = 0
+            self.assertIn("SKILL_SELECTED_NODE_MISMATCH", capture.validate_manifest(manifest, out, "pc"))
 
     def test_manifest_rejects_missing_frame_and_os_input(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
@@ -86,6 +93,7 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "height": 768,
                 "frames": list(capture.REQUIRED_FRAMES),
                 "skillClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
+                "skillSelectedNodeIndex": 5,
                 "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "spiritPetClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "classSwitchScope": "character-hub-data-only-no-renderer-change",

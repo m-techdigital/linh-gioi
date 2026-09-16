@@ -157,6 +157,10 @@ def pack(source: Path = SOURCE, output: Path = OUTPUT, registry: Path | None = N
         new_ids = set(IDS) | {'frame'} | {part['id'] for part in extras}
         if previous.get('artworkIntake') and old_ids - new_ids:
             raise ValueError('Refusing to drop registered artwork; provide the complete registry or use a new candidate directory')
+        old_links = {entry['iconId'] for entry in previous.get('artworkIntake', {}).get('designBindings', [])}
+        new_links = {entry['iconId'] for entry in (intake or {}).get('designBindings', [])}
+        if old_links - new_links:
+            raise ValueError('Refusing to drop existing design bindings; provide the complete cumulative registry')
     if hashlib.sha256(source.read_bytes()).hexdigest() != SOURCE_SHA:
         raise ValueError("Skill source hash mismatch: " + str(source))
     with Image.open(source) as image:
