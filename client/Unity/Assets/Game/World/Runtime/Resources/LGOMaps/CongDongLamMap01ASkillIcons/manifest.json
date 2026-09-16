@@ -68,8 +68,8 @@
     128,
     128
   ],
-  "pngBytes": 883203,
-  "sha256": "716cd163af1d1b5dc61af0dd3f6feeb1d6bc0af5e0bb7a7af647bfcd11f85d29",
+  "pngBytes": 880771,
+  "sha256": "4b21815f8eec385f26623a0440d32b4001a9fe91e04b17363f99706584af1db7",
   "displayPolicy": "One frame sprite; all consumers bind only inner art. Missing art is not replaced with HUD or another class.",
   "assets": [
     {
@@ -77,12 +77,12 @@
       "role": "ui-skill-icon-atlas",
       "generator": "pack_lgo_skill_icons",
       "referenceOnly": false,
-      "sha256": "716cd163af1d1b5dc61af0dd3f6feeb1d6bc0af5e0bb7a7af647bfcd11f85d29"
+      "sha256": "4b21815f8eec385f26623a0440d32b4001a9fe91e04b17363f99706584af1db7"
     }
   ],
   "artworkIntake": {
-    "registrySha256": "c462c86e8ce4540439feb27f22438af555018db2541d25cf8e8434d95b6e950b",
-    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-shockward-v44/artwork-registry.json",
+    "registrySha256": "ba40b0e3a5568b502245c1ccc9b5b3294c9ba8018783eddefebae13abd16cbca",
+    "registryPath": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-paint-v45/artwork-registry-final.json",
     "contentCount": 36,
     "sources": [
       {
@@ -167,6 +167,15 @@
         ]
       },
       {
+        "id": "source-paint-v45",
+        "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-paint-v45/registered-inner-source-final.png",
+        "sha256": "b1e62ad968c8a366ea07b826f840d5ec3a0d26dfa0c65851350904264bb53bf1",
+        "size": [
+          896,
+          448
+        ]
+      },
+      {
         "id": "spirit-ward-v44",
         "path": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-shockward-v44/registered-inner-source.png",
         "sha256": "61a0bfe67404f2584e35ff22a8e2db2f31908bc8e27b759ccf6ed3a2b2d2cc9a",
@@ -178,8 +187,8 @@
     ],
     "review": {
       "status": "SELF_REVIEWED",
-      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-shockward-v44/art-review.json",
-      "sha256": "56c0baebe898f23b9165f2b78c7e5c3f4c574a434248e7b8b2cde87c76975c47"
+      "evidence": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-skill-paint-v45/art-review-final.json",
+      "sha256": "7e9a530d9fc1f2f78eaf7cb85596bc1aa631e013ab615bf0b9572a6bf4848072"
     },
     "pixelPolicy": "Same fixed 128px canvas and aperture as the base; never fit each symbol by its bounding box.",
     "designBindings": [
@@ -312,12 +321,12 @@
     {"id": "co_skill_5", "x": 128, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [0, 448, 448, 448]},
     {"id": "co_skill_6", "x": 256, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [448, 448, 448, 448]},
     {"id": "co_skill_7", "x": 384, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [0, 896, 448, 448]},
-    {"id": "co_skill_8", "x": 512, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "action-motifs-v43", "sourceRect": [0, 0, 448, 448]},
+    {"id": "co_skill_8", "x": 512, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "source-paint-v45", "sourceRect": [0, 0, 448, 448]},
     {"id": "co_skill_9", "x": 640, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [896, 448, 448, 448]},
     {"id": "linh_skill_1", "x": 768, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "demo-aligned-v35", "sourceRect": [896, 0, 448, 448]},
     {"id": "linh_skill_2", "x": 896, "y": 640, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-last-four-v32", "sourceRect": [448, 448, 448, 448]},
     {"id": "linh_skill_3", "x": 0, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "spirit-ward-v44", "sourceRect": [0, 0, 448, 448]},
-    {"id": "linh_skill_4", "x": 128, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "linh-cleanse-v42", "sourceRect": [0, 0, 448, 448]},
+    {"id": "linh_skill_4", "x": 128, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "source-paint-v45", "sourceRect": [448, 0, 448, 448]},
     {"id": "linh_skill_5", "x": 256, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [0, 896, 448, 448]},
     {"id": "linh_skill_6", "x": 384, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-style-inner-v30", "sourceRect": [448, 896, 448, 448]},
     {"id": "linh_skill_7", "x": 512, "y": 512, "w": 128, "h": 128, "role": "inner-symbol", "sharedFrameId": "frame", "sourceId": "lgo-motif-inner-v31", "sourceRect": [448, 896, 448, 448]},

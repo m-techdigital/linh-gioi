@@ -1,3 +1,15 @@
+## Character Hub v45 — hai artwork Skill và alpha đúng nguồn — 2026-09-17
+
+- Giữ Character Hub, worktree/branch/SID/task hiện hành; baseline 82e31f80. Đã tiếp nhận và kiểm các source v45 còn dở, không restore source hoặc mở task khác.
+- Hỏa Tuyến có nét lửa thay hình học; Thanh Tẩy có ba linh thể thay hình khối. Chỉ thay co_skill_8 và linh_skill_4; giữ 47 module RGBA, frame, năm exact designBindings, library, item pack và toàn bộ code runtime/actor.
+- Hai nguồn được chọn từ các output có safetyFlags=false. Hai variant khác bị checker chặn đã dừng trước khi lưu; không retry hoặc bỏ checker. Liên Kích dạng một bàn tay bị loại vì sai combo, Chấn Kình chưa được sửa.
+- Mask Thanh Tẩy đầu dùng sai tọa độ làm mất mặt và giữ một đoạn vòng; đã có kiểm điểm ảnh RED rồi GREEN sau khi sửa. Hỏa Tuyến loại nền vuông trung tính qua alpha. RGB raw và tọa độ 384 px giữ nguyên, không gamma/tint hoặc scale UI riêng.
+- Atlas 1024×1024, 880.771 byte, 49 module / 45 skill có hình; ít hơn 2.432 byte so với v44. Đây không phải chứng nhận 45 artwork đạt thiết kế.
+- Unity graphics EditMode 315/315 không fail/skip; Python 88/88 gồm 79 test repo và 9 kiểm source/intake. Một build có 0 lỗi/0 cảnh báo. Hai lượt chọn node 3 và 7 trên cùng binary, 264 ảnh; đã xem 10 ảnh cuối, gồm hai skill trên ba viewport và các tab liên quan PC.
+- Nguồn raw/mask/recipe và registry tích lũy đã đóng trong lgo-skill-paint-v45-authoring.zip; native RGBA và portable PNG replay trùng byte/pixel. Không chứa font/model/Player; source board không vào runtime. Gói tích lũy có cả nguồn Linh Thuẫn v44.
+- Nét toàn bộ class còn chưa đồng nhất. Hỏa Tuyến còn đường cong/thiếu chi tiết cơ giới rõ, Thanh Tẩy nhiều chi tiết nhỏ. Tiếp theo đối chiếu Bộ Pháp/Đột Kích/Quyền Ý với demo Võ; giữ các phần Liên Kích/Chấn Kình chưa đạt trong backlog, không dùng ảnh bị loại.
+- Evidence: build/character-hub-skill-paint-v45/runtime-review.json, source-comparison-final.png, runtime-reviewed/, import-final-proof.json và checkpoint-receipt.json sau push. Trạng thái CONTINUE / VISUAL_FIX_REQUIRED, không owner acceptance.
+
 ## Character Hub v44 — Linh Thuẫn đúng loại hiệu ứng — 2026-09-17
 
 - V43 đã chốt/push ac6fe903, 5 file/157 dòng; không tạo lại nguồn/build v43. Closure chạy lại79Python và kiểm hash315graphics/132PNG.

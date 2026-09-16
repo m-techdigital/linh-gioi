@@ -1,26 +1,27 @@
-# NEXT ACTION — Character Hub / artwork Skill theo demo
+# NEXT ACTION — Character Hub / tiếp tục hoàn thiện artwork Skill
 
-## Active — tiếp tục mỹ thuật Võ/Linh/Cơ, không đóng goal theo số sprite
-- Worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `feature/2d`.
-- SID `S-LGO-SKILL-20260916-C9B4`, task `T-69b4b27c4b39`. Check pause/recovery/job/claims trước batch; không lấy quyền hoặc dừng process phiên khác. Cuối lượt dùng `v3.finish` CONTINUE khi còn việc hợp lệ.
-- Canonical UI vẫn `redesign-v4-five-tabs`. Giữ base dùng chung, frame/content tách rời, exact ownership, actor và frozen surfaces. Không đổi tên/cấp/gameplay từ nhãn demo.
+## Active
+- Giữ worktree `/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22`, branch `codex/character-hub-v22`, upstream `feature/2d`.
+- SID `S-LGO-SKILL-20260916-C9B4`, task `T-69b4b27c4b39`. Kiểm pause, claims, job và tác dụng phụ trước batch; không tác động phiên khác. Cuối lượt gọi `v3.finish` với CONTINUE khi còn bước hợp lệ.
+- Canonical vẫn `redesign-v4-five-tabs`. Giữ shared base, vòng/content độc lập, exact ownership, actor và frozen surfaces. Không đổi tên/cấp/gameplay theo nhãn demo.
 
-## Checkpoint đã kiểm
-- V43 đã commit/push `ac6fe903`: Hỏa Tuyến có nội dung và Liên Kích cam/vàng; 5 file/157 dòng. Closure giữ input runtime, chạy lại79Python, kiểm lại315graphics/132PNG, không build lại.
-- V44 thay riêng `linh_skill_3` bằng lá chắn linh lực xanh và lõi phù văn, bỏ hình cánh/trái tim. Nhãn Hộ Linh trong demo là VISUAL_MOTIF_REFERENCE_ONLY_NOT_GAMEPLAY_ALIAS; 5exact designBindings trước giữ nguyên.
--48module RGBA khác giữ nguyên, gồm frame và các nội dung Hỏa Tuyến/Liên Kích/Thanh Tẩy đã xử lý. Atlas1024×1024/883203byte;49module và45skill có hình, không phải45art đã đạt.
-- Nguồn chọn384px, alpha chung r160..170, padding32→448; không gamma, bbox-fit hoặc scale/offset riêng trong UI. Không sửa code runtime, actor, library hoặc atlas trang bị.
--315/315graphics không fail/skip;79/79Python. Một build0lỗi/0cảnh báo và132PNG. Đã xem6ảnh: Linh Thuẫn được chọn ở3viewport; Võ/Cơ/Tiềm năngPC. Không thấy clipping/notice/frame mới sai; rune vẫn dày ở ôtablet, chưa nghiệm thu toàn mỹ thuật.
-- Bốn candidate đầu được giữ; hai Chấn Kình sai giáp/huy hiệu và một Linh dạng la bàn bị loại. Lượt sửa subject Chấn Kình bị model checker chặn trước khi lưu, dừng ngay; không có candidate sửa được nhập hoặc bỏ checker.
-- Ghi script package_sources.py bị tool từ chối, readbackENOENT. Nguồn/registry/replay và provenance có sẵn; CHƯA có ZIP portable v44. Không claim portable replay hoặc tái chạy inference.
+## v45 — hai nguồn được thay, chưa nghiệm thu toàn mỹ thuật
+- Hỏa Tuyến `co_skill_8`: thay nét hình học bằng các dải hỏa lực có nét lửa và tia sáng; loại nền vuông trung tính bằng alpha, không tăng gamma hoặc sửa RGB nguồn.
+- Thanh Tẩy `linh_skill_4`: ba linh thể có nét vẽ và áo linh lực, thay ba hình khối cũ. Loại vòng sáng sinh kèm bằng mask theo tọa độ native 384 px; giữ các đầu, thân và áo. Không dùng vòng sinh kèm làm frame thứ hai.
+- Bản mask đầu sai tọa độ làm mất một phần mặt và giữ vòng bên phải đã bị loại. Kiểm điểm ảnh tái hiện lỗi rồi pass sau khi sửa. Bản Hỏa Tuyến còn nền vuông cũng bị loại trước build.
+- Liên Kích mới bị loại vì chỉ có một bàn tay, mất ảnh quyền liên hoàn. Hai variant bị model checker chặn không được lưu, nhập hoặc retry. Giữ nguồn Liên Kích v43 và Chấn Kình cũ, không nhận đã sửa hai món đó.
+- Atlas 1024×1024, 880.771 byte; vẫn 49 module và 45 skill có hình. Chỉ hai nội dung trên đổi; 47 module khác, frame, năm exact designBindings, skill library, item atlas và code runtime giữ nguyên.
+- Source native 384 px, padding chung 32 px vào 448 px; không bbox-fit, scale/offset riêng trong UI hoặc chỉnh gamma. Alpha và PNG portable tái dựng từ raw được kiểm riêng; không hứa model sinh lại đúng pixel.
+- Một Player build, hai lượt chọn node 3 và 7 trên cùng binary để xem cả Thanh Tẩy/Hỏa Tuyến ở bảng chi tiết. Tổng 264 ảnh; đã xem 10 ảnh, gồm hai skill trên ba viewport và Võ/Rương đồ/Tiềm năng/Linh thú PC.
+- Bộ Võ/Linh/Cơ vẫn chưa đồng nhất mỹ thuật. Hỏa Tuyến còn một đường cong và thiếu dấu hiệu cơ giới rõ; các chi tiết nhỏ của Thanh Tẩy vẫn cần so với toàn bộ demo. Không dùng số lượng sprite hoặc test xanh để gọi hoàn thành.
 
 ## Bước tiếp theo cụ thể
-1. Tiếp tục nét và hình tác động Hỏa Tuyến/co_skill_8, Liên Kích/vo_skill_1 và Thanh Tẩy/linh_skill_4 từ vùng demo đã pin. Giữ source384 và bố cục đăng ký; không tăng gamma hoặc phóng riêng UI. Không chạy script viết dở hoặc vòng lặp model đã bị chặn.
-2. Chấn Kình/vo_skill_4 chưa được thay: cần artwork quyền/xung kích thật, không lấy hai candidate giáp/huy hiệu để lấp. Xử lý nguồn theo review mới, giữ checker và không tự gán alias Xung Kích.
-3. Hoàn thiện gói authoring v44 khi thao tác được phép; hiện dùng selected/, artwork-registry.json và các nguồn hash-pin để đối chiếu. Không tạo lại inference/build chỉ vì đóng lượt hoặc cập nhật tài liệu.
-4. Chỉ chuyển READY_REVIEW khi toàn bộ goal5tab đã sát design và audit Player; phiên kết thúc lượt không phải nghiệm thu goal.
+1. Tiếp tục nhóm Võ còn sai hình tác động: đối chiếu Bộ Pháp/Đột Kích/Quyền Ý với các vùng Bước Thần/Lướt áp sát/Ý Chí Võ Đạo trong demo Võ. Khóa visual-only mapping trước, không gán alias gameplay; nguồn mới phải thể hiện chuyển động/quyền khí, không vật phẩm hoặc portrait.
+2. Liên Kích/Chấn Kình vẫn còn việc. Không dùng các bản bàn tay đơn/giáp/huy hiệu bị loại hoặc lặp lại các lần model đã bị chặn để lấp chỗ.
+3. Tiếp tục kiểm độ nhất quán của Hỏa Tuyến/Thanh Tẩy với các icon còn lại ở 64–128 px; sửa artwork khi có sai lệch cụ thể, không thêm vòng gamma hoặc phóng UI riêng.
+4. Chỉ chuyển READY_REVIEW khi toàn bộ năm tab thực sự sát canonical và có audit Player đầy đủ. Kết thúc batch không phải nghiệm thu task.
 
-## Evidence
-`build/character-hub-shockward-v44/`: runtime-review.json, runtime-final/, player-final/LinhGioiOnline.app, source-comparison.png (nguồn, KHÔNG Player), selected/, generation.json, initial-review.json, art-review.json, artwork-registry.json, candidate-proof.json, import-proof.json, full-editmode.xml.
-`checkpoint-receipt.json` ghi commit/remote sau push. V43 receipt nằm trong `build/character-hub-attack-motifs-v43/`.
-`CONTINUE / PARTIAL_LINH_WARD_MOTIF_CORRECTION / VISUAL_FIX_REQUIRED` — không nghiệm thu toàn class, Character Hub hoặc thiết bị mobile/tablet thật.
+## Evidence và nguồn
+`build/character-hub-skill-paint-v45/`: `runtime-review.json`, `source-comparison-final.png` (nguồn, không phải Player), `final-sources/`, `artwork-registry-final.json`, `import-final-proof.json`, `full-editmode.xml`, `runtime-reviewed/{cleanse,fireline}/`, `player-reviewed/LinhGioiOnline.app`.
+`lgo-skill-paint-v45-authoring.zip` cùng `.zip.sha256` và `package-proof.json`: nguồn tích lũy gồm cả Linh Thuẫn v44; raw được chọn, mask, recipe và registry portable. Không import ZIP/reference board vào Resources; không có font/model/Player trong gói.
+`CONTINUE / PARTIAL_SKILL_PAINT_ALIGNMENT / VISUAL_FIX_REQUIRED` — không nghiệm thu toàn class, Character Hub hoặc thiết bị mobile/tablet thật.
