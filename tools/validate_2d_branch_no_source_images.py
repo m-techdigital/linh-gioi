@@ -347,6 +347,10 @@ def _equipment_intake_spec(spec: dict, data: dict) -> dict:
                 or review.get('status') != 'SELF_REVIEWED' or not review.get('evidence')
                 or any(not isinstance(h, str) or not re.fullmatch('[0-9a-f]{64}', h) for h in hashes)):
             raise ValueError('Equipment source/review registration required')
+        encoding = intake.get('encoding')
+        if encoding is not None and encoding != {'profile': 'rgba8-rgb-round4-alpha-exact-v1',
+                'rgbStep': 4, 'maxChannelError': 2, 'alphaExact': True}:
+            raise ValueError('Unbounded equipment color encoding')
         added.extend(keys)
         height += ((len(keys) + 4) // 5) * 128
     by_id = {p['id']: p for p in parts}

@@ -90,4 +90,45 @@ class EquipmentItemIconPackingTests(unittest.TestCase):
                 changed=copy.deepcopy(meta);changed[field]=bad
                 with self.assertRaises(ValueError):guard._equipment_intake_spec(spec,changed)
 
+    def test_opt_in_rgb_encoding_preserves_alpha_and_bounds_every_channel(self):
+        from PIL import ImageChops
+        image=Image.new('RGBA',(640,256))
+        image.putdata([(i%256,(i*3)%256,(i*5)%256,(i*7)%256) for i in range(640*256)])
+        image.save(self.base/packer.PNG);self.meta['sha256']=packer.sha(self.base/packer.PNG)
+        (self.base/'manifest.json').write_text(json.dumps(self.meta))
+        self.run_pack(name='raw');reg=self.root/'registry.json';doc=json.loads(reg.read_text())
+        doc['encoding']={'rgbStep':4};reg.write_text(json.dumps(doc))
+        meta=packer.run(self.base,reg,self.root/'encoded')
+        with Image.open(self.root/'raw'/packer.PNG) as raw, Image.open(self.root/'encoded'/packer.PNG) as encoded:
+            self.assertEqual(raw.size,encoded.size)
+            self.assertEqual(raw.getchannel('A').tobytes(),encoded.getchannel('A').tobytes())
+            self.assertNotEqual(raw.tobytes(),encoded.tobytes())
+            for channel in ImageChops.difference(raw,encoded).split()[:3]:
+                self.assertLessEqual(channel.getextrema()[1],2)
+        self.assertEqual({'profile':'rgba8-rgb-round4-alpha-exact-v1','rgbStep':4,'maxChannelError':2,'alphaExact':True},meta['itemArtworkIntakes'][-1]['encoding'])
+        import validate_2d_branch_no_source_images as guard
+        spec=next(x for x in guard.RUNTIME_ART_PACKS if x['id']==self.meta['id'])
+        guard._equipment_intake_spec(spec,meta)
+        bad=copy.deepcopy(meta);bad['itemArtworkIntakes'][-1]['encoding']['alphaExact']=False
+        with self.assertRaises(ValueError):guard._equipment_intake_spec(spec,bad)
+
+    def test_unknown_or_unbounded_encoding_is_rejected_before_output(self):
+        self.run_pack();reg=self.root/'registry.json';doc=json.loads(reg.read_text())
+        for value in ({'rgbStep':8},{'rgbStep':True},{'rgbStep':4,'alphaStep':4},'fast',None):
+            with self.subTest(encoding=value):
+                doc['encoding']=value;reg.write_text(json.dumps(doc))
+                with self.assertRaises(ValueError):packer.run(self.base,reg,self.root/'bad')
+                self.assertFalse((self.root/'bad').exists())
+
+    def test_repeated_round4_never_accumulates_damage_to_existing_sprites(self):
+        self.run_pack();reg=self.root/'registry.json';doc=json.loads(reg.read_text())
+        doc['encoding']={'rgbStep':4};reg.write_text(json.dumps(doc))
+        first=packer.run(self.base,reg,self.root/'first')
+        doc['items'][0].update(itemId='vo_boots_lv001',slot='boots',iconId='vo_male_lv001_boots')
+        reg.write_text(json.dumps(doc))
+        second=packer.run(self.root/'first',reg,self.root/'second')
+        with Image.open(self.root/'first'/packer.PNG) as a,Image.open(self.root/'second'/packer.PNG) as b:
+            self.assertEqual(a.tobytes(),b.crop((0,0,a.width,a.height)).tobytes())
+        self.assertEqual(2,len(second['itemBindings']))
+
 if __name__ == '__main__':unittest.main()

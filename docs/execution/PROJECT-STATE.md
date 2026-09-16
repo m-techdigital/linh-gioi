@@ -1,3 +1,13 @@
+## Character Hub v39 — nguồn icon không dính cơ thể — 2026-09-16
+
+- Tiếp tục đúng branch/worktree/task từ 1f90b2cd. Ba icon mới tóc, áo trong và hộ uyển Võ nam Lv1 đã qua nguồn/demo và Player; tổng 6/10 item binding. Không sinh ảnh hoặc sửa actor/pose/wardrobe/renderer/UI base.
+- Nguồn v38 được sửa alpha theo tọa độ để loại mặt/cổ, tay và đai riêng; các nguồn/mask/hash giữ đầy đủ. Cuối batch dùng đúng canvas384, không rescale nguồn, không bbox-fit. Găng sai họa tiết và áo ngoài clone ties lặp bị loại; giáp/phụ kiện cũ sai loại không nhập.
+- Một tùy chọn encoding trong packer hiện hành: roundRGB4, sai số từng kênh tối đa2/255, alpha chính xác, không cộng dồn khi lặp. Không đổi budget250000. Atlas640×512/218150byte so với640×384/238156byte trước; PNG giảm không chứng minh GPU giảm. Không gọi RGB pixel cũ byte-identical.
+- Graphics EditMode313/313 không fail/skip; Python72/72 gồm69repo và3sourceprobes. Knownbody probes RED→GREEN; missing-state test injectcatalogrỗng để không phụ thuộc thiếu art đang được hoàn thiện. Mọi exact identity/gender/tier và UI selection gates vẫn giữ.
+- Hai build/capture vì eye-review lượt đầu phát hiện shrink0.875không cần thiết. Final build0error0warning,132ảnh tại runtime-reviewed; đãxem12ảnh cuối ở3viewport. Native-source rõ hơn lượt đầu nhưng tóc/vải còn tối trên tablet, chưa finalart.
+- Evidence và package tại build/character-hub-bodyfree-items-v39; dùng player-reviewed và runtime-reviewed, KHÔNG gọi runtime-final của lượt đầu là final. Nguồn alpha tái dựng từraw×mask và portablePNG phải trùng pixel/hash.
+- Còn găng/áo ngoài/giáp/phụkiện cần đúngdemo; Skill44/45và nhiềumotif/palette chưakhớp, HỏaTuyến/ThanhTẩy vẫn pending. CONTINUE/PARTIAL_BODYFREE_ITEM_ART/VISUAL_FIX_REQUIRED, không owner acceptance hoặc kiểm thiếtbịmobilethật.
+
 ## Character Hub v38 — Võ male Lv1 item artwork — 2026-09-16
 
 - Tiếp tục batchB-abb93ee2bbbf/SID S-LGO-SKILL-20260916-C9B4, taskT-69b4b27c4b39 từb0114b28; giữ branch/worktree. Recovery đọc và bảo toàn testWIP/10nguồn/PID đã kết thúc, không restore hoặc chạy lại inference.

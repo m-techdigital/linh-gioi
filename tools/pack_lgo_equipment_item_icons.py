@@ -54,6 +54,20 @@ def read_art(item: dict, root: Path) -> Image.Image:
     return art.crop(VIEWPORT).resize((120, 120), Image.Resampling.LANCZOS)
 
 
+def encode_rgb(image: Image.Image, config: dict) -> tuple[Image.Image, dict]:
+    """Opt-in bounded RGB reduction; alpha and coordinates are never quantized."""
+    if (not isinstance(config, dict) or set(config) != {'rgbStep'}
+            or type(config['rgbStep']) is not int or config['rgbStep'] not in (1, 4)):
+        raise ValueError('Encoding must explicitly use rgbStep 1 or 4; alpha reduction is forbidden')
+    if config['rgbStep'] == 1:
+        return image, {}
+    lut = [min(255, ((value + 2) // 4) * 4) for value in range(256)]
+    r, g, b, a = image.split()
+    encoded = Image.merge('RGBA', (r.point(lut), g.point(lut), b.point(lut), a))
+    return encoded, {'profile': 'rgba8-rgb-round4-alpha-exact-v1', 'rgbStep': 4,
+                     'maxChannelError': 2, 'alphaExact': True}
+
+
 def run(base: Path, registry: Path, output: Path) -> dict:
     base, registry, output = Path(base).resolve(), Path(registry).resolve(), Path(output).resolve()
     if output == base or output.exists():
@@ -113,6 +127,7 @@ def run(base: Path, registry: Path, output: Path) -> dict:
         result.setdefault('itemBindings', []).append({k: item[k] for k in (*IDENTITY, 'iconId')})
         result.setdefault('itemDesignBindings', []).append({k: item[k] for k in
             (*IDENTITY, 'iconId', 'source', 'sourceSha256', 'designSource', 'designSha256', 'designRect')})
+    atlas, encoding = encode_rgb(atlas, document.get('encoding', {'rgbStep': 1}))
     buffer = io.BytesIO(); atlas.save(buffer, format='PNG', optimize=True)
     data = buffer.getvalue()
     if len(data) > MAX_BYTES:
@@ -131,6 +146,8 @@ def run(base: Path, registry: Path, output: Path) -> dict:
         'profile': PROFILE, 'sourceCanvas': [384, 384], 'sourceViewport': list(VIEWPORT),
         'outputInset': 4, 'contentSize': [120, 120],
     })
+    if encoding:
+        result['itemArtworkIntakes'][-1]['encoding'] = encoding
     # Validation and PNG encoding finish before any output is created.
     encoded = json.dumps(result, ensure_ascii=False, indent=2) + '\n'
     output.mkdir(parents=True)

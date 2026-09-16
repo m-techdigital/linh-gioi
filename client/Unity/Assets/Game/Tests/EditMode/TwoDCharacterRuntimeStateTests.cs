@@ -144,7 +144,7 @@ namespace LinhGioi.Tests.EditMode
             {
                 var host = new GameObject("reviewed starter item art test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
-                foreach (var slot in new[] { "lower_garment", "waist", "boots" })
+                foreach (var slot in new[] { "lower_garment", "waist", "boots", "head_hair", "inner_top", "arm_guard" })
                 {
                     Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo("vo"));
                     Assert.That(scene.CharacterGender, Is.EqualTo("male"));
@@ -187,7 +187,7 @@ namespace LinhGioi.Tests.EditMode
                     {
                         Assert.That(scene.GetMap01ACharacterEquipmentIconSprite(slot), Is.Not.Null,
                             "Source slot illustrations remain available for registration, not deleted.");
-                        var expected = classId == "vo" && new[] { "lower_garment", "waist", "boots" }.Contains(slot);
+                        var expected = classId == "vo" && new[] { "lower_garment", "waist", "boots", "head_hair", "inner_top", "arm_guard" }.Contains(slot);
                         var content = scene.GetEquipmentThumbnailSprite(slot);
                         Assert.That(content != null, Is.EqualTo(expected), classId + "/" + slot);
                         if (expected) Assert.That(content, Is.Not.SameAs(scene.GetMap01ACharacterEquipmentIconSprite(slot)));
@@ -252,6 +252,10 @@ namespace LinhGioi.Tests.EditMode
             {
                 var host = new GameObject("item artwork state test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                // This test exercises missing-state explicitly even when published artwork grows.
+                var missing = EquipmentItemIconCatalog.FromJson("{\"itemBindings\":[]}", id => null);
+                typeof(CongDongLamMap01AArtPreview).GetField("_equipmentItemIconCatalog", BindingFlags.Instance | BindingFlags.NonPublic)
+                    .SetValue(scene, missing);
                 CongDongLamArrivalHud.Attach(scene);
                 var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
                 scene.ToggleInventory();
@@ -446,7 +450,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Hero Right Equipment Rail").style.width.value.value, Is.EqualTo(76));
                 foreach (var slot in scene.VoEquipmentSlotIds)
                 {
-                    var registered = new[] { "lower_garment", "waist", "boots" }.Contains(slot)
+                    var registered = new[] { "lower_garment", "waist", "boots", "head_hair", "inner_top", "arm_guard" }.Contains(slot)
                         && scene.ActiveEquipmentClassId == "vo" && scene.CharacterGender == "male" && scene.GetEquipmentItemLevel(slot) == 1;
                     var content = scene.GetVoEquipmentThumbnailSprite(slot);
                     Assert.That(content != null, Is.EqualTo(registered), slot);
@@ -923,7 +927,7 @@ namespace LinhGioi.Tests.EditMode
                 {
                     var slotId = scene.VoEquipmentSlotIds[iconIndex];
                     var expectedIcon = scene.GetVoEquipmentThumbnailSprite(slotId);
-                    var registered = new[] { "lower_garment", "waist", "boots" }.Contains(slotId)
+                    var registered = new[] { "lower_garment", "waist", "boots", "head_hair", "inner_top", "arm_guard" }.Contains(slotId)
                         && scene.ActiveEquipmentClassId == "vo" && scene.CharacterGender == "male" && scene.GetEquipmentItemLevel(slotId) == 1;
                     Assert.That(expectedIcon != null, Is.EqualTo(registered), slotId);
                     if (registered) Assert.That(expectedIcon, Is.Not.SameAs(scene.GetMap01ACharacterEquipmentIconSprite(slotId)));

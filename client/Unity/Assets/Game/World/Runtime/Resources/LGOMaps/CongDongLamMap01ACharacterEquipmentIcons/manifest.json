@@ -8,28 +8,28 @@
   "alphaPolicy": "grabcut-checker-removal-v2",
   "textureSize": [
     640,
-    384
+    512
   ],
   "cellSize": [
     128,
     128
   ],
-  "pngBytes": 238156,
-  "sha256": "a6f655a9d845370c403c59e9907133b57332936841114815e4b65fa10d94506d",
+  "pngBytes": 218150,
+  "sha256": "e7528de968adb2179ee0f4ff7580d7f5634ae35c322a3bb3e0f949ff55c76d48",
   "assets": [
     {
       "path": "client/Unity/Assets/Game/World/Runtime/Resources/LGOMaps/CongDongLamMap01ACharacterEquipmentIcons/map01a-character-equipment-icons.png",
       "role": "ui-equipment-icon-atlas",
       "generator": "pack_lgo_equipment_item_icons",
       "referenceOnly": false,
-      "sha256": "a6f655a9d845370c403c59e9907133b57332936841114815e4b65fa10d94506d"
+      "sha256": "e7528de968adb2179ee0f4ff7580d7f5634ae35c322a3bb3e0f949ff55c76d48"
     }
   ],
   "parts": [
     {
       "id": "main_weapon",
       "x": 0,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -42,7 +42,7 @@
     {
       "id": "head_hair",
       "x": 128,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -55,7 +55,7 @@
     {
       "id": "inner_top",
       "x": 256,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -68,7 +68,7 @@
     {
       "id": "outer_top",
       "x": 384,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -81,7 +81,7 @@
     {
       "id": "lower_body",
       "x": 512,
-      "y": 256,
+      "y": 384,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -94,7 +94,7 @@
     {
       "id": "waist_belt",
       "x": 0,
-      "y": 128,
+      "y": 256,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -107,7 +107,7 @@
     {
       "id": "arm_guard",
       "x": 128,
-      "y": 128,
+      "y": 256,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -120,7 +120,7 @@
     {
       "id": "footwear",
       "x": 256,
-      "y": 128,
+      "y": 256,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -133,7 +133,7 @@
     {
       "id": "shoulder_chest_guard",
       "x": 384,
-      "y": 128,
+      "y": 256,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -146,7 +146,7 @@
     {
       "id": "class_accessory",
       "x": 512,
-      "y": 128,
+      "y": 256,
       "w": 128,
       "h": 128,
       "alphaBoundsTopLeft": [
@@ -159,7 +159,7 @@
     {
       "id": "vo_male_lv001_lower_garment",
       "x": 0,
-      "y": 0,
+      "y": 128,
       "w": 128,
       "h": 128,
       "role": "item-content",
@@ -169,7 +169,7 @@
     {
       "id": "vo_male_lv001_waist",
       "x": 128,
-      "y": 0,
+      "y": 128,
       "w": 128,
       "h": 128,
       "role": "item-content",
@@ -179,11 +179,41 @@
     {
       "id": "vo_male_lv001_boots",
       "x": 256,
-      "y": 0,
+      "y": 128,
       "w": 128,
       "h": 128,
       "role": "item-content",
       "sourceSha256": "5ced51936b1fbec69b461fe51f1c3405a573cf5a9c60faf52ab9e8dbb1eb6cae",
+      "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
+    },
+    {
+      "id": "vo_male_lv001_head_hair",
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "role": "item-content",
+      "sourceSha256": "c97d8516a985ae39db076cf8f4e5f395fa34a5fd5dc3077f9648eaac0fcb9ec7",
+      "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
+    },
+    {
+      "id": "vo_male_lv001_inner_top",
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "role": "item-content",
+      "sourceSha256": "1fe4812fe48c1a5e893469b3bb1944326299f7298c468229eb3eef855268da66",
+      "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
+    },
+    {
+      "id": "vo_male_lv001_arm_guard",
+      "x": 256,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "role": "item-content",
+      "sourceSha256": "a50f758da2927a8fc25bddb6f5b17c452025ec80ff5e22dedca1126df7a63de5",
       "sourceSpaceProfile": "lgo-item-content384-center256-to120-cell128-v1"
     }
   ],
@@ -212,6 +242,30 @@
       "gender": "male",
       "level": 1,
       "iconId": "vo_male_lv001_boots"
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_head_hair_lv001",
+      "slot": "head_hair",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_head_hair"
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_inner_top_lv001",
+      "slot": "inner_top",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_inner_top"
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_arm_guard_lv001",
+      "slot": "arm_guard",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_arm_guard"
     }
   ],
   "itemDesignBindings": [
@@ -268,6 +322,60 @@
         89,
         60
       ]
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_head_hair_lv001",
+      "slot": "head_hair",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_head_hair",
+      "source": "prepared-native/head_hair.png",
+      "sourceSha256": "c97d8516a985ae39db076cf8f4e5f395fa34a5fd5dc3077f9648eaac0fcb9ec7",
+      "designSource": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/classes-lv001-030/vo/detail/15-male-equipment-grid-redraw-source.png",
+      "designSha256": "b99fe6ae31c732bdf0bcbc99aebdd4ce45ea14fe5beaa5ea3ca0eb2dae1586de",
+      "designRect": [
+        216,
+        198,
+        88,
+        59
+      ]
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_inner_top_lv001",
+      "slot": "inner_top",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_inner_top",
+      "source": "prepared-native/inner_top.png",
+      "sourceSha256": "1fe4812fe48c1a5e893469b3bb1944326299f7298c468229eb3eef855268da66",
+      "designSource": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/classes-lv001-030/vo/detail/15-male-equipment-grid-redraw-source.png",
+      "designSha256": "b99fe6ae31c732bdf0bcbc99aebdd4ce45ea14fe5beaa5ea3ca0eb2dae1586de",
+      "designRect": [
+        221,
+        275,
+        83,
+        61
+      ]
+    },
+    {
+      "classId": "vo",
+      "itemId": "vo_arm_guard_lv001",
+      "slot": "arm_guard",
+      "gender": "male",
+      "level": 1,
+      "iconId": "vo_male_lv001_arm_guard",
+      "source": "prepared-native/arm_guard.png",
+      "sourceSha256": "a50f758da2927a8fc25bddb6f5b17c452025ec80ff5e22dedca1126df7a63de5",
+      "designSource": "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/classes-lv001-030/vo/detail/15-male-equipment-grid-redraw-source.png",
+      "designSha256": "b99fe6ae31c732bdf0bcbc99aebdd4ce45ea14fe5beaa5ea3ca0eb2dae1586de",
+      "designRect": [
+        215,
+        616,
+        89,
+        61
+      ]
     }
   ],
   "itemArtworkIntakes": [
@@ -306,6 +414,48 @@
         120,
         120
       ]
+    },
+    {
+      "registry": "/Users/minhdc/Projects/LinhGioiOnline/.worktrees/character-hub-v22/build/character-hub-bodyfree-items-v39/registry-native.json",
+      "registrySha256": "eba6845b36338a248b57bef4aefcd0f5a558f9cd13d77ad452507f76554f9608",
+      "review": {
+        "status": "SELF_REVIEWED",
+        "evidence": "art-review-native.json",
+        "sha256": "76437a2b4962022ccc136d761ca8879b2994dbfb9b370583826d679c61404b0f"
+      },
+      "baseSha256": "a6f655a9d845370c403c59e9907133b57332936841114815e4b65fa10d94506d",
+      "baseTextureSize": [
+        640,
+        384
+      ],
+      "basePartCount": 13,
+      "addedIconIds": [
+        "vo_male_lv001_head_hair",
+        "vo_male_lv001_inner_top",
+        "vo_male_lv001_arm_guard"
+      ],
+      "profile": "lgo-item-content384-center256-to120-cell128-v1",
+      "sourceCanvas": [
+        384,
+        384
+      ],
+      "sourceViewport": [
+        64,
+        64,
+        320,
+        320
+      ],
+      "outputInset": 4,
+      "contentSize": [
+        120,
+        120
+      ],
+      "encoding": {
+        "profile": "rgba8-rgb-round4-alpha-exact-v1",
+        "rgbStep": 4,
+        "maxChannelError": 2,
+        "alphaExact": true
+      }
     }
   ]
 }
