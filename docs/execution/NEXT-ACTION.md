@@ -1,3 +1,11 @@
+# NEXT ACTION — UI Fidelity / after UIF-00..02 foundation closure
+
+1. Start only **LGO-UIF-03 Entry/Auth family canonical fidelity** from the machine-bound owner authority matrix. First surface is Entry/Login: `redesign-v5-entry/01-entry-login-CANONICAL.png` (`canonical`, SHA-256 `204178a0...b52d`). Audit full owner-vs-current Player composition before production code and write the narrow UIF-03 spec/plan + RED visual/layout contracts first.
+2. Preserve all closed auth/account behavior. UIF-03 changes presentation/composition only unless a concrete regression proves otherwise. Do not reopen register/recovery security semantics, bearer/account isolation, five-class Map01A migration, Character Hub V59 behavior, renderer authority, or Create Character (`DESIGN_GATED`).
+3. After Entry/Login closes, continue the same family sequentially: Server Select `redesign-v7-server-select/01-server-select-CANONICAL.png`, Register `redesign-v8-register/01-register-account-CANONICAL.png`, Recovery Request `redesign-v9-password-recovery-request/01-password-recovery-request-CANONICAL-CANDIDATE.png`, then owner-approved Verify/New Password v3 proposals. Do not collapse all screens into one large rewrite.
+4. Reuse UIF-01/02 authority: ThemeTokens → shared USS/primitives → screen composition; one PanelSettings `1672x941/match=1`; one `RuntimeViewportMetrics → RuntimeUiLayoutProfile` path. Any stable repeated recipe must move to the shared layer before screen code duplicates it.
+5. Every screen-level slice requires RED→GREEN plus fresh Player evidence at PC/tablet/mobile-landscape simulation with truthful evidence authority. macOS tablet/mobile captures remain simulation; Android/iOS physical sizing stays a separate open gate.
+
 # NEXT ACTION — Whole Product / after Register + Recovery 3-step closure
 
 1. Preserve the closed product-account contract: neutral `players-v3.json`, BCrypt product credentials, `/auth/register|login|session|logout`, Request → Verify → New Password recovery, memory-only grants/session state, generic auth/recovery errors, and development-only `/dev/auth/login`. Do not reopen the approved Entry v5→v9 + Character Hub chrome visuals without a concrete Player defect.
