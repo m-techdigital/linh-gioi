@@ -1,11 +1,10 @@
-# NEXT ACTION — Whole Product / after P0 control-integrity closure
+# NEXT ACTION — Whole Product / after Product Auth Foundation closure
 
-1. P0 is closed from current-run Player evidence. Preserve review-hotkey gating, truthful pointer/touch Menu help, foreground input blocking and Character Hub V59; do not reopen those without a concrete regression.
-2. Next subproject: **Product Auth Foundation**. Replace the presentation-only login path with a real product auth/session boundary while keeping `/dev/auth/login` development-only and without leaking secrets into PlayerPrefs/logs.
-3. Product Auth scope for the next design/plan: login credential contract, session/token lifecycle, logout, expiry/unauthorized handling, client secure session state, Java API endpoints/storage boundary, deterministic tests and Player-visible error/loading states. Register and password-recovery remain the following independent subproject; do not fold them into the first auth slice.
-4. Carry forward visual debt: Character Select mobile landscape partially hides the left secondary motto behind the stage. Fix it with the Character persistence/create-character work, not inside auth.
-5. Every visible task from now on must preserve before/after screenshots plus intermediate defect evidence under its task evidence directory.
-6. Design-change gate: preserve approved design when viable. If a screen is missing, contradictory, infeasible, or materially weak in Player, create an old-vs-proposed-new visual comparison (matching PC/mobile/tablet viewports where relevant) and obtain owner approval before replacing the canonical visual design. Bug/fidelity fixes that implement the existing approved design do not require a new design approval.
+1. Preserve Product Auth Foundation at the verified contract: dedicated BCrypt credential store, opaque in-memory session token, `/auth/login|session|logout`, memory-only Unity session state, generic 401 copy, and `/dev/auth/login` development-only.
+2. Next subproject: **Register + Password Recovery 3-step**. Add account/credential provisioning, Request → Verify Code → New Password, resend/expiry/error semantics and end-to-end Unity↔API evidence. Do not fold Character persistence into this slice.
+3. Reuse the current canonical Register and Password Recovery Request screens when viable. Verify Code and New Password do not yet have canonical screens: before implementation, prepare proposed designs and send old/missing-vs-new comparisons for owner approval.
+4. After Register/Recovery closes, continue to Character persistence/list/create/load; carry the known Character Select mobile motto/stage visual debt into that subproject.
+5. Every visible task keeps before/after screenshots plus intermediate defect evidence at PC/tablet/mobile where relevant. Any material redesign must be shown old-vs-new and approved before replacing canonical design; fidelity/bug fixes inside an approved design do not need a new design approval.
 
 # NEXT ACTION — Character Hub / after v55
 
