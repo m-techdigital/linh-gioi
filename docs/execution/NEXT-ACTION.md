@@ -5,6 +5,7 @@
 3. Product Auth scope for the next design/plan: login credential contract, session/token lifecycle, logout, expiry/unauthorized handling, client secure session state, Java API endpoints/storage boundary, deterministic tests and Player-visible error/loading states. Register and password-recovery remain the following independent subproject; do not fold them into the first auth slice.
 4. Carry forward visual debt: Character Select mobile landscape partially hides the left secondary motto behind the stage. Fix it with the Character persistence/create-character work, not inside auth.
 5. Every visible task from now on must preserve before/after screenshots plus intermediate defect evidence under its task evidence directory.
+6. Design-change gate: preserve approved design when viable. If a screen is missing, contradictory, infeasible, or materially weak in Player, create an old-vs-proposed-new visual comparison (matching PC/mobile/tablet viewports where relevant) and obtain owner approval before replacing the canonical visual design. Bug/fidelity fixes that implement the existing approved design do not require a new design approval.
 
 # NEXT ACTION — Character Hub / after v55
 
