@@ -37,17 +37,21 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
         register = capture.build_screen_command(player, out, "tablet", "register")
         self.assertIn("--lgo-map01a-register-capture", register)
         self.assertIn("--lgo-map01a-auth-validation-capture", register)
+        self.assertIn("--lgo-product-account-states-capture", register)
 
         recovery = capture.build_screen_command(player, out, "mobile", "password-recovery")
         self.assertIn("--lgo-map01a-password-recovery-capture", recovery)
         self.assertIn("--lgo-map01a-auth-validation-capture", recovery)
+        self.assertIn("--lgo-product-account-states-capture", recovery)
 
         verify = capture.build_screen_command(player, out, "pc", "password-recovery-verify")
         self.assertIn("--lgo-map01a-password-recovery-verify-capture", verify)
         self.assertNotIn("--lgo-map01a-auth-validation-capture", verify)
+        self.assertIn("--lgo-product-account-states-capture", verify)
         new_password = capture.build_screen_command(player, out, "pc", "password-recovery-new-password")
         self.assertIn("--lgo-map01a-password-recovery-new-password-capture", new_password)
         self.assertNotIn("--lgo-map01a-auth-validation-capture", new_password)
+        self.assertIn("--lgo-product-account-states-capture", new_password)
 
     def test_non_auth_commands_do_not_request_validation_state(self):
         player = Path("/tmp/LinhGioiOnline.app/Contents/MacOS/Unity")
@@ -97,13 +101,14 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
         self.assertEqual(capture.SCREEN_CAPTURES["entry"].frames,
                          ("entry-login.png", "entry-login-validation.png"))
         self.assertEqual(capture.SCREEN_CAPTURES["register"].frames,
-                         ("register-account.png", "register-validation.png"))
+                         ("register-account.png", "register-validation.png", "register-loading.png", "register-conflict.png"))
         self.assertEqual(capture.SCREEN_CAPTURES["password-recovery"].frames,
-                         ("password-recovery-request.png", "password-recovery-validation.png"))
+                         ("password-recovery-request.png", "password-recovery-validation.png",
+                          "password-recovery-loading.png", "password-recovery-unavailable.png"))
         self.assertEqual(capture.SCREEN_CAPTURES["password-recovery-verify"].frames,
-                         ("password-recovery-verify.png",))
+                         ("password-recovery-verify.png", "password-recovery-verify-invalid-expired.png"))
         self.assertEqual(capture.SCREEN_CAPTURES["password-recovery-new-password"].frames,
-                         ("password-recovery-new-password.png",))
+                         ("password-recovery-new-password.png", "password-recovery-new-password-rule.png"))
 
 
 # PNG header validation is intentionally independent from Unity manifest claims.

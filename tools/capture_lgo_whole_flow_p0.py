@@ -26,6 +26,7 @@ class ScreenCaptureSpec:
     scope: str
     frames: tuple[str, ...]
     capture_validation: bool = False
+    product_state_frames: tuple[str, ...] = ()
 SCREEN_CAPTURES = {
     "entry": ScreenCaptureSpec(
         "--lgo-map01a-entry-capture", "map01a-entry-login",
@@ -35,16 +36,21 @@ SCREEN_CAPTURES = {
         ("server-select.png",)),
     "register": ScreenCaptureSpec(
         "--lgo-map01a-register-capture", "map01a-register",
-        ("register-account.png", "register-validation.png"), True),
+        ("register-account.png", "register-validation.png", "register-loading.png", "register-conflict.png"),
+        True, ("register-loading.png", "register-conflict.png")),
     "password-recovery": ScreenCaptureSpec(
         "--lgo-map01a-password-recovery-capture", "map01a-password-recovery-request",
-        ("password-recovery-request.png", "password-recovery-validation.png"), True),
+        ("password-recovery-request.png", "password-recovery-validation.png",
+         "password-recovery-loading.png", "password-recovery-unavailable.png"),
+        True, ("password-recovery-loading.png", "password-recovery-unavailable.png")),
     "password-recovery-verify": ScreenCaptureSpec(
         "--lgo-map01a-password-recovery-verify-capture", "map01a-password-recovery-verify",
-        ("password-recovery-verify.png",)),
+        ("password-recovery-verify.png", "password-recovery-verify-invalid-expired.png"),
+        False, ("password-recovery-verify-invalid-expired.png",)),
     "password-recovery-new-password": ScreenCaptureSpec(
         "--lgo-map01a-password-recovery-new-password-capture", "map01a-password-recovery-new-password",
-        ("password-recovery-new-password.png",)),
+        ("password-recovery-new-password.png", "password-recovery-new-password-rule.png"),
+        False, ("password-recovery-new-password-rule.png",)),
     "character-select": ScreenCaptureSpec(
         "--lgo-map01a-character-select-capture", "map01a-character-select",
         ("character-select.png",)),
@@ -80,6 +86,8 @@ def build_screen_command(player: Path, out: Path, profile: str, screen: str) -> 
     ]
     if spec.capture_validation:
         command.append("--lgo-map01a-auth-validation-capture")
+    if spec.product_state_frames:
+        command.append("--lgo-product-account-states-capture")
     return command
 
 
@@ -132,6 +140,8 @@ def capture_screen(player: Path, profile_dir: Path, profile: str, screen: str, t
         raise RuntimeError(f"{profile}/{screen}: " + ", ".join(errors))
     if spec.capture_validation and manifest.get("validationFrame") != spec.frames[1]:
         raise RuntimeError(f"{profile}/{screen}: validation frame contract missing")
+    if spec.product_state_frames and manifest.get("productAccountFrames") != list(spec.product_state_frames):
+        raise RuntimeError(f"{profile}/{screen}: product-account state frame contract missing")
     _validate_png_sizes(out, spec.frames, (width, height))
     return manifest
 def build_quest_command(player: Path, out: Path, profile: str) -> list[str]:

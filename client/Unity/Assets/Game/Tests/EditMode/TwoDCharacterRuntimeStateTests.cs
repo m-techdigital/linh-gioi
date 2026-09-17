@@ -612,6 +612,9 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(recoveryNewPasswordArgs), Is.True);
             Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(recoveryNewPasswordArgs), Is.False);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(recoveryNewPasswordArgs, sceneIsCapturing: true), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.ShouldCaptureProductAccountStatesForArgs(recoveryNewPasswordArgs), Is.False);
+            var productAccountStateArgs = new[] { "LinhGioiOnline", "--lgo-map01a-password-recovery-new-password-capture", "--lgo-product-account-states-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldCaptureProductAccountStatesForArgs(productAccountStateArgs), Is.True);
             var menuArgs = new[] { "LinhGioiOnline", "--lgo-map01a-menu-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(menuArgs), Is.True);
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(menuArgs, sceneIsCapturing: true), Is.False,

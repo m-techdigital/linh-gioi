@@ -770,6 +770,9 @@ namespace LinhGioi.World
         public static bool ShouldCaptureProductAuthStatesForArgs(string[] args)
             => args != null && Array.IndexOf(args, "--lgo-product-auth-states-capture") >= 0;
 
+        public static bool ShouldCaptureProductAccountStatesForArgs(string[] args)
+            => args != null && Array.IndexOf(args, "--lgo-product-account-states-capture") >= 0;
+
         public static bool QuestCaptureRequiresWorldView(int captureIndex) => captureIndex >= 10 && captureIndex <= 17;
 
         public static CongDongLamMap01AArtPreview Attach(TwoDOnboardingController controller)
@@ -2712,10 +2715,38 @@ namespace LinhGioi.World
                 yield return new WaitForEndOfFrame();
                 CaptureScreenPng(validationPath);
             }
-            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath))
+            var captureProductAccountStates = ShouldCaptureProductAccountStatesForArgs(args);
+            var loadingPath = Path.Combine(directory, "register-loading.png");
+            var conflictPath = Path.Combine(directory, "register-conflict.png");
+            if (captureProductAccountStates)
+            {
+                var document = GetComponentInChildren<UIDocument>();
+                if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for register state capture");
+                var root = document.rootVisualElement;
+                var registerStatus = root.Q<Label>("Map01A Register Status");
+                var submit = root.Q<Button>("Map01A Register Submit");
+                if (registerStatus == null || submit == null)
+                    throw new InvalidOperationException("Missing Map01A register state controls");
+                registerStatus.text = "Đang tạo tài khoản…";
+                submit.SetEnabled(false);
+                yield return null;
+                yield return new WaitForEndOfFrame();
+                CaptureScreenPng(loadingPath);
+                registerStatus.text = "Email này đã được đăng ký.";
+                submit.SetEnabled(true);
+                yield return null;
+                yield return new WaitForEndOfFrame();
+                CaptureScreenPng(conflictPath);
+            }
+            var productStateFramesReady = !captureProductAccountStates
+                || (File.Exists(loadingPath) && File.Exists(conflictPath));
+            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath)) && productStateFramesReady
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var validationManifest = captureValidation
                 ? ",\n  \"validationFrame\": \"register-validation.png\""
+                : string.Empty;
+            var productStateManifest = captureProductAccountStates
+                ? ",\n  \"productAccountFrames\": [\"register-loading.png\", \"register-conflict.png\"]"
                 : string.Empty;
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
@@ -2724,7 +2755,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frame\": \"register-account.png\"" + validationManifest + "\n"
+                + "  \"frame\": \"register-account.png\"" + validationManifest + productStateManifest + "\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
@@ -2761,10 +2792,57 @@ namespace LinhGioi.World
                 yield return new WaitForEndOfFrame();
                 CaptureScreenPng(validationPath);
             }
-            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath))
+            var captureProductAccountStates = ShouldCaptureProductAccountStatesForArgs(args);
+            string[] productStateFrames = Array.Empty<string>();
+            if (captureProductAccountStates)
+            {
+                var document = GetComponentInChildren<UIDocument>();
+                if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for recovery state capture");
+                var root = document.rootVisualElement;
+                var recoveryStatus = root.Q<Label>("Map01A Password Recovery Status");
+                if (recoveryStatus == null) throw new InvalidOperationException("Missing Map01A recovery status control");
+                if (verifyCapture)
+                {
+                    recoveryStatus.text = "Mã xác minh không hợp lệ hoặc đã hết hạn.";
+                    productStateFrames = new[] { "password-recovery-verify-invalid-expired.png" };
+                    yield return null;
+                    yield return new WaitForEndOfFrame();
+                    CaptureScreenPng(Path.Combine(directory, productStateFrames[0]));
+                }
+                else if (newPasswordCapture)
+                {
+                    recoveryStatus.text = "Mật khẩu phải từ 8 đến 128 ký tự.";
+                    productStateFrames = new[] { "password-recovery-new-password-rule.png" };
+                    yield return null;
+                    yield return new WaitForEndOfFrame();
+                    CaptureScreenPng(Path.Combine(directory, productStateFrames[0]));
+                }
+                else
+                {
+                    var submit = root.Q<Button>("Map01A Password Recovery Submit");
+                    if (submit == null) throw new InvalidOperationException("Missing Map01A recovery submit control");
+                    recoveryStatus.text = "Đang gửi mã xác minh…";
+                    submit.SetEnabled(false);
+                    productStateFrames = new[] { "password-recovery-loading.png", "password-recovery-unavailable.png" };
+                    yield return null;
+                    yield return new WaitForEndOfFrame();
+                    CaptureScreenPng(Path.Combine(directory, productStateFrames[0]));
+                    recoveryStatus.text = "Dịch vụ gửi mã hiện chưa khả dụng.";
+                    submit.SetEnabled(true);
+                    yield return null;
+                    yield return new WaitForEndOfFrame();
+                    CaptureScreenPng(Path.Combine(directory, productStateFrames[1]));
+                }
+            }
+            var productStateFramesReady = !captureProductAccountStates
+                || productStateFrames.All(frame => File.Exists(Path.Combine(directory, frame)));
+            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath)) && productStateFramesReady
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var validationManifest = captureValidation
                 ? ",\n  \"validationFrame\": \"password-recovery-validation.png\""
+                : string.Empty;
+            var productStateManifest = captureProductAccountStates
+                ? ",\n  \"productAccountFrames\": [" + string.Join(", ", productStateFrames.Select(frame => "\"" + frame + "\"")) + "]"
                 : string.Empty;
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
@@ -2773,7 +2851,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frame\": \"" + frameName + "\"" + validationManifest + "\n"
+                + "  \"frame\": \"" + frameName + "\"" + validationManifest + productStateManifest + "\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
