@@ -16,6 +16,94 @@ namespace LinhGioi.UI
             return input;
         }
 
+        private static void ApplyLgoEntrySlogan(Label label)
+        {
+            label.AddToClassList(LgoEntrySloganClass);
+            RuntimeUiTypography.ApplyHeadingFont(label);
+            label.style.fontSize = 20;
+            label.style.color = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.text, .92f);
+            label.style.unityTextAlign = TextAnchor.MiddleCenter;
+        }
+
+        private static void ApplyLgoEntryBrandStage(VisualElement stage)
+        {
+            stage.AddToClassList(LgoEntryBrandStageClass);
+        }
+
+        private static void ApplyLgoEntryLogo(Label label)
+        {
+            RuntimeUiTypography.ApplyHeadingFont(label);
+            label.style.fontSize = 82;
+            label.style.letterSpacing = 6;
+            label.style.color = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.text, .98f);
+            label.style.unityTextAlign = TextAnchor.MiddleCenter;
+        }
+
+        private static void ApplyLgoEntryLogoOnline(Label label)
+        {
+            label.style.fontSize = 16;
+            label.style.letterSpacing = 5;
+            label.style.color = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.text, .92f);
+            label.style.unityTextAlign = TextAnchor.MiddleCenter;
+        }
+
+        private static void ApplyLgoEntrySignature(Label label)
+        {
+            label.AddToClassList(LgoEntrySignatureClass);
+            RuntimeUiTypography.ApplyHeadingFont(label);
+            label.style.fontSize = 18;
+            label.style.unityFontStyleAndWeight = FontStyle.Italic;
+            label.style.color = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.text, .90f);
+            label.style.unityTextAlign = TextAnchor.LowerRight;
+        }
+
+        private static void ApplyLgoEntryNoticeCard(VisualElement panel)
+        {
+            panel.AddToClassList(LgoEntryNoticeClass);
+            ApplyLgoStatusCard(panel, 18, 12);
+        }
+
+        private static void ApplyLgoEntryUtilityRail(VisualElement rail)
+        {
+            rail.AddToClassList(LgoEntryUtilityRailClass);
+        }
+
+        private static void ApplyLgoEntryNoticeHeader(VisualElement header)
+        {
+            header.AddToClassList("lgo-entry-notice-header");
+        }
+
+        private static void ApplyLgoEntryNoticeRow(VisualElement row)
+        {
+            row.AddToClassList("lgo-entry-notice-row");
+        }
+
+        private static void ApplyLgoEntryNoticeLink(Button button)
+        {
+            button.AddToClassList("lgo-entry-notice-link");
+            ApplyLgoButton(button);
+            button.style.color = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.text, .94f);
+        }
+
+        private static void ApplyLgoEntryNoticeHotBadge(Label badge)
+        {
+            badge.AddToClassList("lgo-entry-notice-hot");
+            badge.AddToClassList("lgo-badge");
+            badge.style.backgroundColor = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.danger, .90f);
+        }
+
+        private static void ApplyLgoEntryStatusRow(VisualElement row)
+        {
+            row.AddToClassList(LgoEntryStatusRowClass);
+        }
+
+        private static void ApplyLgoEntryStatusIcon(Label icon)
+        {
+            icon.AddToClassList("lgo-entry-status-icon");
+            icon.style.borderTopColor = icon.style.borderRightColor = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.muted, .82f);
+            icon.style.borderBottomColor = icon.style.borderLeftColor = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.muted, .82f);
+        }
+
         private static void ApplyLgoEntryTextField(TextField field)
         {
             field.AddToClassList(LgoEntryTextFieldClass);
@@ -113,29 +201,15 @@ namespace LinhGioi.UI
         private static void ApplyLgoEntryShell(VisualElement panel)
         {
             panel.AddToClassList(LgoEntryShellClass);
-            panel.style.width = Length.Percent(38);
-            panel.style.minWidth = 560;
-            panel.style.maxWidth = 610;
-            panel.style.paddingLeft = 14;
-            panel.style.paddingRight = 14;
-            panel.style.paddingTop = 10;
-            panel.style.paddingBottom = 10;
-            ApplyLgoModalShell(panel, 16);
-            panel.style.backgroundColor = new Color(.010f, .030f, .058f, .08f);
-            panel.style.borderTopWidth = panel.style.borderBottomWidth = 0;
-            panel.style.borderLeftWidth = panel.style.borderRightWidth = 0;
         }
 
         private static void ApplyLgoEntryControlCard(VisualElement card)
         {
             card.AddToClassList(LgoEntryControlCardClass);
             ApplyLgoDetailCard(card, 28, 24);
-            card.style.minHeight = 358;
-            card.style.backgroundColor = new Color(.010f, .035f, .064f, .93f);
+            card.style.backgroundColor = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.bg, .93f);
             card.style.borderTopWidth = card.style.borderBottomWidth = 2;
             card.style.borderLeftWidth = card.style.borderRightWidth = 2;
-            card.style.marginTop = 12;
-            card.style.marginBottom = 0;
         }
 
         private static void ApplyLgoEntryServerCard(VisualElement card)
@@ -331,15 +405,11 @@ namespace LinhGioi.UI
             crest.style.backgroundImage = sprite == null ? StyleKeyword.None : new StyleBackground(sprite);
         }
 
-        private static void ApplyLgoEntrySecondaryAction(Button button, float minWidth = 0f, float marginRight = 0f)
+        private static void ApplyLgoEntryTextLink(Button button)
         {
-            button.AddToClassList(LgoEntrySecondaryActionClass);
-            ApplyLgoDisabledAction(button);
-            button.style.flexGrow = 0;
-            button.style.minHeight = 34;
-            button.style.fontSize = 13;
-            if (minWidth > 0f) button.style.minWidth = minWidth;
-            if (marginRight > 0f) button.style.marginRight = marginRight;
+            button.AddToClassList(LgoEntryTextLinkClass);
+            ApplyLgoButton(button);
+            button.style.color = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.text, .94f);
         }
 
         private static void ApplyLgoEntrySideAction(Button button)

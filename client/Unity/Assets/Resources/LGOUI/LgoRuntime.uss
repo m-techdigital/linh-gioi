@@ -61,3 +61,117 @@
     height: 2px;
     flex-shrink: 0;
 }
+
+/* Entry/Auth canonical composition roles. Dynamic safe-area coordinates stay in RuntimeUiLayoutProfile. */
+.lgo-entry-shell {
+    position: absolute;
+    flex-direction: column;
+}
+
+.lgo-entry-brand-stage {
+    position: absolute;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.lgo-entry-slogan {
+    position: absolute;
+    white-space: normal;
+}
+
+.lgo-entry-signature {
+    position: absolute;
+    white-space: normal;
+}
+
+.lgo-entry-notice {
+    position: absolute;
+}
+
+.lgo-entry-utility-rail {
+    position: absolute;
+    width: 88px;
+}
+
+.lgo-entry-control-card {
+    min-height: 420px;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.lgo-entry-notice-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.lgo-entry-notice-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.lgo-entry-notice-link {
+    min-height: 28px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    white-space: nowrap;
+}
+
+.lgo-entry-notice-hot {
+    min-width: 34px;
+    min-height: 22px;
+    margin-left: 8px;
+    padding-left: 6px;
+    padding-right: 6px;
+    -unity-text-align: middle-center;
+}
+
+.lgo-entry-status-row {
+    flex-direction: row;
+    align-items: center;
+    min-height: 28px;
+}
+
+.lgo-entry-status-icon {
+    width: 18px;
+    height: 18px;
+    margin-left: 6px;
+    margin-right: 6px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    border-bottom-left-radius: 9px;
+    border-bottom-right-radius: 9px;
+    -unity-text-align: middle-center;
+}
+
+.lgo-entry-status-row .lgo-entry-status-line {
+    flex-grow: 1;
+}
+
+.lgo-entry-text-link {
+    flex-grow: 0;
+    min-height: 34px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 0;
+    padding-bottom: 0;
+    background-color: rgba(0, 0, 0, 0);
+    border-top-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
+    border-left-width: 0;
+    white-space: nowrap;
+}

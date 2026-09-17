@@ -220,6 +220,27 @@ namespace LinhGioi.Tests
             Assert.That(GetMember<int>(layout, "WorldTalkFontSize"), Is.EqualTo(talkFontSize));
         }
 
+        [TestCase("desktop", 1600, 900, 1673, 941, 540f, 565f)]
+        [TestCase("tablet", 1024, 768, 1255, 941, 460f, 480f)]
+        [TestCase("mobile", 1600, 720, 2091, 941, 435f, 450f)]
+        public void EntryLoginProfileKeepsCanonicalCardAndBrandScale(string profile, int screenWidth, int screenHeight,
+            int panelWidth, int panelHeight, float minimumScreenCardWidth, float maximumScreenCardWidth)
+        {
+            var layoutType = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeUiLayoutProfile");
+            Assert.That(layoutType, Is.Not.Null);
+            var fromScreen = layoutType.GetMethod("FromScreen", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(fromScreen, Is.Not.Null);
+            var layout = fromScreen.Invoke(null, new object[] { profile, screenWidth, screenHeight, panelWidth, panelHeight });
+            var cardWidth = GetMember<float>(layout, "LoginCardWidth");
+            var logoWidth = GetMember<float>(layout, "LoginLogoWidth");
+            var screenCardWidth = cardWidth * screenHeight / panelHeight;
+            Assert.That(screenCardWidth, Is.InRange(minimumScreenCardWidth, maximumScreenCardWidth),
+                "Entry form must preserve the canonical height-scaled physical width instead of desktop-style oversizing on touch profiles.");
+            Assert.That(logoWidth, Is.EqualTo(cardWidth * .96f).Within(.01f),
+                "Brand and form scale must come from one responsive profile contract.");
+        }
+
         private static object CreateViewportMetrics(int screenWidth, int screenHeight, Rect safeArea,
             int panelWidth, int panelHeight, string forcedProfile)
         {
@@ -278,6 +299,9 @@ namespace LinhGioi.Tests
             Assert.That(source, Does.Contain("position: relative"));
             Assert.That(source, Does.Contain("white-space: nowrap"));
             Assert.That(source, Does.Contain("-unity-text-align: lower-center"));
+            Assert.That(source, Does.Contain(".lgo-entry-control-card"));
+            Assert.That(source, Does.Contain("min-height: 420px"),
+                "Canonical Entry card min-height belongs to shared USS, not per-screen inline style.");
         }
 
         [Test]

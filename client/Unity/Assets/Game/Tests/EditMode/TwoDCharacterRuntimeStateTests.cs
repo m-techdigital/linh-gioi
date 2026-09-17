@@ -2608,11 +2608,10 @@ namespace LinhGioi.Tests.EditMode
 
                 var panel = root.Q("Map01A Entry Panel");
                 var controlCard = root.Q("Map01A Entry Control Card");
-                Assert.That(panel.ClassListContains("lgo-entry-shell"), Is.True);
+                Assert.That(panel.ClassListContains("lgo-entry-shell"), Is.True,
+                    "Entry form geometry is owned by RuntimeUiLayoutProfile; this hierarchy test only locks the shared shell role.");
                 Assert.That(controlCard.ClassListContains("lgo-entry-control-card"), Is.True);
                 Assert.That(controlCard.ClassListContains("lgo-layered-frame"), Is.True);
-                Assert.That(panel.style.maxWidth.value.value, Is.InRange(590f, 620f));
-                Assert.That(controlCard.style.minHeight.value.value, Is.GreaterThanOrEqualTo(350f));
 
                 var accountField = root.Q<TextField>("Map01A Entry Account Field");
                 var passwordField = root.Q<TextField>("Map01A Entry Password Field");
@@ -2689,6 +2688,90 @@ namespace LinhGioi.Tests.EditMode
                     "Map01A Entry Side Action Cài Đặt"
                 }, sideActions.Children().Select(child => child.name).ToArray());
                 Assert.That(root.Q("Map01A Safe Hud").style.display.value, Is.EqualTo(DisplayStyle.None));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void EntryScreenSeparatesCanonicalBrandSloganAndUtilityLandmarksFromTheForm()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("canonical entry stage hierarchy test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var overlay = root.Q("Map01A Entry Overlay");
+                var panel = root.Q("Map01A Entry Panel");
+                var controlCard = root.Q("Map01A Entry Control Card");
+                var slogan = root.Q<Label>("Map01A Entry Slogan");
+                var brand = root.Q("Map01A Entry Brand Stage");
+                var signature = root.Q<Label>("Map01A Entry Signature");
+                var notice = root.Q("Map01A Entry Notice Panel");
+                var utilityRail = root.Q("Map01A Entry Side Actions");
+                var logo = root.Q<Label>("Map01A Entry Logo");
+
+                Assert.That(slogan, Is.Not.Null, "Canonical Entry needs the top-left cultivation slogan landmark.");
+                Assert.That(brand, Is.Not.Null, "Canonical Entry needs a brand stage independent of the form card.");
+                Assert.That(signature, Is.Not.Null, "Canonical Entry needs the quiet lower-right signature landmark.");
+                Assert.That(slogan.parent, Is.SameAs(overlay));
+                Assert.That(brand.parent, Is.SameAs(overlay));
+                Assert.That(panel.parent, Is.SameAs(overlay));
+                Assert.That(notice.parent, Is.SameAs(overlay));
+                Assert.That(utilityRail.parent, Is.SameAs(overlay));
+                Assert.That(signature.parent, Is.SameAs(overlay));
+                Assert.That(controlCard.parent, Is.SameAs(panel));
+                Assert.That(logo.parent, Is.SameAs(brand),
+                    "Logo belongs to the brand stage and must not consume form-card vertical space.");
+                Assert.That(panel.Q("Map01A Entry Logo"), Is.Null);
+                Assert.That(slogan.text, Does.Contain("Kiếm trong tay"));
+                Assert.That(slogan.text, Does.Contain("Chính nghĩa trong lòng"));
+                Assert.That(signature.text, Does.Contain("Kiến tạo thế giới lớn"));
+                Assert.That(slogan.ClassListContains("lgo-entry-slogan"), Is.True);
+                Assert.That(brand.ClassListContains("lgo-entry-brand-stage"), Is.True);
+                Assert.That(signature.ClassListContains("lgo-entry-signature"), Is.True);
+                Assert.That(notice.ClassListContains("lgo-entry-notice"), Is.True);
+                Assert.That(utilityRail.ClassListContains("lgo-entry-utility-rail"), Is.True);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void EntryScreenNoticeAndStatusUseCanonicalDetailHierarchy()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("canonical entry notice detail test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var noticeHeader = root.Q("Map01A Entry Notice Header");
+                Assert.That(noticeHeader, Is.Not.Null);
+                Assert.That(noticeHeader.Q("Map01A Entry Notice Icon"), Is.Not.Null);
+                Assert.That(noticeHeader.Q<Label>("Map01A Entry Notice Title").text, Is.EqualTo("Thông Báo"));
+                Assert.That(noticeHeader.Q<Button>("Map01A Entry Notice More").text, Does.Contain("Xem thêm"));
+                Assert.That(root.Q<Label>("Map01A Entry Notice Hot Badge").text, Is.EqualTo("Hot"));
+
+                var forgot = root.Q<Button>("Map01A Entry Forgot Password");
+                Assert.That(forgot, Is.Not.Null);
+                Assert.That(forgot.enabledSelf, Is.True, "Password recovery is a live product route and must not look or behave disabled.");
+                Assert.That(forgot.ClassListContains("lgo-entry-text-link"), Is.True);
+
+                var statusRow = root.Q("Map01A Entry Status Row");
+                Assert.That(statusRow, Is.Not.Null);
+                Assert.That(statusRow.ClassListContains("lgo-entry-status-row"), Is.True);
+                Assert.That(statusRow.Q<Label>("Map01A Entry Status Icon").text, Is.EqualTo("i"));
+                Assert.That(root.Q<Label>("Map01A Entry Safety Note").parent, Is.SameAs(statusRow));
             }
             finally
             {

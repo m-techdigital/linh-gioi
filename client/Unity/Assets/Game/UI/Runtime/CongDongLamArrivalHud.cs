@@ -454,6 +454,7 @@ namespace LinhGioi.UI
             var layout = RuntimeUiLayoutProfile.FromViewport(_metrics);
             var r = _metrics.SafePanelRect;
             Place(_safe, r.x, null, r.y, null); _safe.style.width = r.width; _safe.style.height = r.height;
+            LayoutEntryScreen(layout, r);
             var rightColumnWidth = layout.WorldRightColumnWidth;
             _rightHudCluster.style.width = rightColumnWidth;
             _quest.style.width = rightColumnWidth;

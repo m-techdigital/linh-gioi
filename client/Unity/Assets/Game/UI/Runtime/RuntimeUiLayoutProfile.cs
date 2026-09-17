@@ -20,11 +20,9 @@ namespace LinhGioi.UI
         internal const float MobileScaleBaseline = 520f;
         internal const float MobileScaleMin = 0.50f;
         internal const float MobileScaleMax = 0.86f;
-        internal const float MobileLoginLogoWidthRatio = 0.58f;
-        internal const float TabletLoginLogoWidthRatio = 0.58f;
-        internal const float DesktopLoginLogoWidthRatio = 0.54f;
-        internal const float MobileLoginCardWidthRatio = 0.70f;
-        internal const float TabletLoginCardWidthRatio = 0.74f;
+        internal const float MobileLoginCardWidthRatio = 0.28f;
+        internal const float TabletLoginCardWidthRatio = 0.46f;
+        internal const float DesktopLoginCardWidthRatio = 0.345f;
         internal const float LoginLogoAspect = 0.50f;
 
         internal readonly string Name;
@@ -42,6 +40,19 @@ namespace LinhGioi.UI
         internal readonly int LoginCardPadding;
         internal readonly int LoginButtonHeight;
         internal readonly int LoginButtonFontSize;
+
+        internal float EntryPanelTop => Mathf.Clamp(Height * 0.34f, 300f, 320f);
+        internal float EntryBrandTop => IsTablet ? 50f : 58f;
+        internal float EntryBrandHeight => 232f;
+        internal float EntrySloganLeft => Mathf.Clamp(Width * 0.13f, 64f, 218f);
+        internal float EntrySloganTop => 28f;
+        internal float EntrySloganWidth => IsTablet ? 300f : 340f;
+        internal float EntryNoticeWidth => IsTablet ? 500f : 545f;
+        internal float EntryNoticeBottom => 30f;
+        internal float EntryUtilityTop => 58f;
+        internal float EntryUtilityRight => 24f;
+        internal float EntrySignatureRight => 34f;
+        internal float EntrySignatureBottom => 30f;
 
         internal int RootPaddingHorizontal => IsMobile ? 12 : IsTablet ? 18 : 28;
         internal int RootPaddingTop => IsMobile ? 10 : 16;
@@ -281,17 +292,13 @@ namespace LinhGioi.UI
             LayoutClass = layoutClass ?? name;
             InputClass = inputClass ?? (IsMobile || IsTablet ? "touch" : "pointer");
             MobileScale = IsMobile ? Mathf.Clamp(ShortSide / MobileScaleBaseline, MobileScaleMin, MobileScaleMax) : 1f;
-            LoginLogoWidth = IsMobile
-                ? Mathf.Clamp(Mathf.Min(width * MobileLoginLogoWidthRatio, height * 0.65f), 170f, 260f)
-                : IsTablet
-                    ? Mathf.Clamp(Mathf.Min(width * TabletLoginLogoWidthRatio, height * 0.78f), 220f, 320f)
-                    : Mathf.Clamp(Mathf.Min(width * DesktopLoginLogoWidthRatio, height * 0.70f), 260f, 360f);
-            LoginLogoHeight = LoginLogoWidth * LoginLogoAspect;
             LoginCardWidth = IsMobile
-                ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 300f, 360f)
+                ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 420f, 580f)
                 : IsTablet
-                    ? Mathf.Clamp(width * TabletLoginCardWidthRatio, 330f, 420f)
-                    : 424f;
+                    ? Mathf.Clamp(width * TabletLoginCardWidthRatio, 450f, 580f)
+                    : Mathf.Clamp(width * DesktopLoginCardWidthRatio, 530f, 590f);
+            LoginLogoWidth = LoginCardWidth * 0.96f;
+            LoginLogoHeight = LoginLogoWidth * LoginLogoAspect;
             LoginCardPadding = IsMobile ? Mathf.RoundToInt(13f * MobileScale) : IsTablet ? 20 : 24;
             LoginButtonHeight = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.13f, 26f, 36f)) : IsTablet ? 50 : 52;
             LoginButtonFontSize = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.055f, 11f, 15f)) : IsTablet ? 19 : 20;

@@ -63,8 +63,15 @@ namespace LinhGioi.UI
         private const string LgoEntryAuthPrimaryClass = "lgo-entry-auth-primary";
         private const string LgoEntryAuthSecondaryClass = "lgo-entry-auth-secondary";
         private const string LgoEntrySecondaryActionClass = "lgo-entry-secondary-action";
+        private const string LgoEntryTextLinkClass = "lgo-entry-text-link";
         private const string LgoEntrySideActionClass = "lgo-entry-side-action";
         private const string LgoEntryShellClass = "lgo-entry-shell";
+        private const string LgoEntrySloganClass = "lgo-entry-slogan";
+        private const string LgoEntryBrandStageClass = "lgo-entry-brand-stage";
+        private const string LgoEntrySignatureClass = "lgo-entry-signature";
+        private const string LgoEntryNoticeClass = "lgo-entry-notice";
+        private const string LgoEntryUtilityRailClass = "lgo-entry-utility-rail";
+        private const string LgoEntryStatusRowClass = "lgo-entry-status-row";
         private const string LgoEntryControlCardClass = "lgo-entry-control-card";
         private const string LgoEntryServerCardClass = "lgo-entry-server-card";
         private const string LgoEntryStatusLineClass = "lgo-entry-status-line";

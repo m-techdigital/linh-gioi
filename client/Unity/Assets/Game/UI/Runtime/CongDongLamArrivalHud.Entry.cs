@@ -10,6 +10,11 @@ namespace LinhGioi.UI
         private VisualElement _entryOverlay;
         private VisualElement _entryPanel;
         private VisualElement _entryControlCard;
+        private VisualElement _entryBrandStage;
+        private VisualElement _entryNoticePanel;
+        private VisualElement _entrySideActions;
+        private Label _entrySlogan;
+        private Label _entrySignature;
         private Label _entryStatus;
         private TextField _entryAccountField, _entryPasswordField;
         private Button _entryLoginButton;
@@ -22,87 +27,85 @@ namespace LinhGioi.UI
         {
             _entryOpen = ShouldShowEntryOnLaunch();
             _entryOverlay = new VisualElement { name = "Map01A Entry Overlay" };
+            _entryOverlay.AddToClassList("lgo-entry-overlay");
             _entryOverlay.style.position = Position.Absolute;
             _entryOverlay.style.left = 0;
             _entryOverlay.style.right = 0;
             _entryOverlay.style.top = 0;
             _entryOverlay.style.bottom = 0;
-            _entryOverlay.style.backgroundColor = new Color(.010f, .026f, .050f, .28f);
-            _entryOverlay.style.justifyContent = Justify.Center;
-            _entryOverlay.style.alignItems = Align.Center;
+            _entryOverlay.style.backgroundColor = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.bg, .28f);
 
-            var notice = new VisualElement { name = "Map01A Entry Notice Panel" };
-            notice.style.position = Position.Absolute;
-            notice.style.left = 24;
-            notice.style.bottom = 28;
-            notice.style.width = 530;
-            ApplyLgoStatusCard(notice, 18, 12);
+            _entrySlogan = new Label("Kiếm trong tay\n—  Chính nghĩa trong lòng  —") { name = "Map01A Entry Slogan" };
+            ApplyLgoEntrySlogan(_entrySlogan);
+            _entryOverlay.Add(_entrySlogan);
+
+            _entryBrandStage = new VisualElement { name = "Map01A Entry Brand Stage", pickingMode = PickingMode.Ignore };
+            ApplyLgoEntryBrandStage(_entryBrandStage);
+            var brandCrest = new VisualElement { name = "Map01A Entry Brand Crest", pickingMode = PickingMode.Ignore };
+            ApplyLgoEntryBrandCrest(brandCrest, _scene.GetMap01AHudIconSprite("crest"));
+            _entryBrandStage.Add(brandCrest);
+            var logo = new Label("LINH GIỚI") { name = "Map01A Entry Logo" };
+            ApplyLgoEntryLogo(logo);
+            _entryBrandStage.Add(logo);
+            var logoOnline = new Label("O  N  L  I  N  E") { name = "Map01A Entry Logo Online" };
+            ApplyLgoEntryLogoOnline(logoOnline);
+            _entryBrandStage.Add(logoOnline);
+            var brandRail = new VisualElement { name = "Map01A Entry Brand Ornament", pickingMode = PickingMode.Ignore };
+            ApplyLgoOrnamentRail(brandRail);
+            brandRail.style.width = 280;
+            brandRail.style.alignSelf = Align.Center;
+            _entryBrandStage.Add(brandRail);
+            _entryOverlay.Add(_entryBrandStage);
+
+            _entryNoticePanel = new VisualElement { name = "Map01A Entry Notice Panel" };
+            ApplyLgoEntryNoticeCard(_entryNoticePanel);
+            var noticeHeader = new VisualElement { name = "Map01A Entry Notice Header" };
+            ApplyLgoEntryNoticeHeader(noticeHeader);
+            var noticeIcon = CreateLgoEntryIcon("Map01A Entry Notice Icon", _scene.GetMap01AHudIconSprite("notice"), 22);
+            noticeHeader.Add(noticeIcon);
             var noticeTitle = LgoLabel("Thông Báo", 18, UiGold, true);
             noticeTitle.name = "Map01A Entry Notice Title";
-            noticeTitle.style.marginBottom = 8;
-            notice.Add(noticeTitle);
-            var noticeLine = new Label("• Máy chủ S1 · Đông Lâm đang hoạt động ổn định") { name = "Map01A Entry Notice Line" };
-            noticeLine.style.color = new Color(.90f, .94f, .90f, .92f);
-            noticeLine.style.fontSize = 14;
-            noticeLine.style.marginBottom = 4;
-            notice.Add(noticeLine);
-            var noticeEvent = new Label("• Tu luyện đăng nhập · nhận quà theo lịch sự kiện") { name = "Map01A Entry Notice Event" };
-            noticeEvent.style.color = new Color(.80f, .88f, .92f, .88f);
-            noticeEvent.style.fontSize = 14;
-            notice.Add(noticeEvent);
-            _entryOverlay.Add(notice);
+            noticeTitle.style.flexGrow = 1;
+            noticeHeader.Add(noticeTitle);
+            var noticeMore = new Button(() =>
+            {
+                if (_entryStatus != null) _entryStatus.text = "Danh sách thông báo đầy đủ hiện chưa khả dụng.";
+            }) { name = "Map01A Entry Notice More", text = "Xem thêm  ›" };
+            ApplyLgoEntryNoticeLink(noticeMore);
+            noticeHeader.Add(noticeMore);
+            _entryNoticePanel.Add(noticeHeader);
 
-            var sideActions = new VisualElement { name = "Map01A Entry Side Actions" };
-            sideActions.style.position = Position.Absolute;
-            sideActions.style.right = 24;
-            sideActions.style.top = 72;
-            sideActions.style.width = 88;
-            _entryOverlay.Add(sideActions);
-            AddEntrySideAction(sideActions, "Thông Báo", "Thông báo máy chủ Đông Lâm đang mở ở góc trái dưới.", "notice");
-            AddEntrySideAction(sideActions, "Hỗ Trợ", "Trung tâm hỗ trợ hiện chưa khả dụng.", "support");
-            AddEntrySideAction(sideActions, "Cinematic", "Cinematic giới thiệu hiện chưa khả dụng.", "cinematic");
-            AddEntrySideAction(sideActions, "Cài Đặt", "Cài đặt nâng cao hiện chưa khả dụng.", "menu");
+            var noticePrimaryRow = new VisualElement { name = "Map01A Entry Notice Primary Row" };
+            ApplyLgoEntryNoticeRow(noticePrimaryRow);
+            var noticeLine = LgoLabel("◆  Khai mở máy chủ S1 · Đông Lâm · 10:00 ngày 25/04", 14, UiText);
+            noticeLine.name = "Map01A Entry Notice Line";
+            noticeLine.style.flexGrow = 1;
+            noticePrimaryRow.Add(noticeLine);
+            var hotBadge = LgoLabel("Hot", 12, UiText, true);
+            hotBadge.name = "Map01A Entry Notice Hot Badge";
+            ApplyLgoEntryNoticeHotBadge(hotBadge);
+            noticePrimaryRow.Add(hotBadge);
+            _entryNoticePanel.Add(noticePrimaryRow);
+            var noticeEvent = LgoLabel("◆  Sự kiện Tu Luyện Đăng Nhập · nhận quà cực phẩm", 14, UiSubText);
+            noticeEvent.name = "Map01A Entry Notice Event";
+            _entryNoticePanel.Add(noticeEvent);
+            _entryOverlay.Add(_entryNoticePanel);
 
-            var panelGlow = new VisualElement { name = "Map01A Entry Panel Glow" };
-            panelGlow.style.position = Position.Absolute;
-            panelGlow.style.width = Length.Percent(40);
-            panelGlow.style.minWidth = 570;
-            panelGlow.style.maxWidth = 650;
-            panelGlow.style.height = 650;
-            panelGlow.style.alignSelf = Align.Center;
-            ApplyLgoSoftGlow(panelGlow, .24f);
-            _entryOverlay.Add(panelGlow);
+            _entrySideActions = new VisualElement { name = "Map01A Entry Side Actions" };
+            ApplyLgoEntryUtilityRail(_entrySideActions);
+            _entryOverlay.Add(_entrySideActions);
+            AddEntrySideAction(_entrySideActions, "Thông Báo", "Thông báo máy chủ Đông Lâm đang mở ở góc trái dưới.", "notice");
+            AddEntrySideAction(_entrySideActions, "Hỗ Trợ", "Trung tâm hỗ trợ hiện chưa khả dụng.", "support");
+            AddEntrySideAction(_entrySideActions, "Cinematic", "Cinematic giới thiệu hiện chưa khả dụng.", "cinematic");
+            AddEntrySideAction(_entrySideActions, "Cài Đặt", "Cài đặt nâng cao hiện chưa khả dụng.", "menu");
+
+            _entrySignature = new Label("Cùng nhau\nKiến tạo thế giới lớn") { name = "Map01A Entry Signature" };
+            ApplyLgoEntrySignature(_entrySignature);
+            _entryOverlay.Add(_entrySignature);
 
             _entryPanel = new VisualElement { name = "Map01A Entry Panel" };
             ApplyLgoEntryShell(_entryPanel);
             _entryOverlay.Add(_entryPanel);
-
-            var brandCrest = new VisualElement { name = "Map01A Entry Brand Crest", pickingMode = PickingMode.Ignore };
-            ApplyLgoEntryBrandCrest(brandCrest, _scene.GetMap01AHudIconSprite("crest"));
-            _entryPanel.Add(brandCrest);
-
-            var logo = new Label("LINH GIỚI") { name = "Map01A Entry Logo" };
-            RuntimeUiTypography.ApplyHeadingFont(logo);
-            logo.style.fontSize = 72;
-            logo.style.letterSpacing = 5;
-            logo.style.color = new Color(.96f, .98f, 1f, .98f);
-            logo.style.unityTextAlign = TextAnchor.MiddleCenter;
-            logo.style.marginTop = -8;
-            _entryPanel.Add(logo);
-
-            var logoOnline = new Label("O  N  L  I  N  E") { name = "Map01A Entry Logo Online" };
-            logoOnline.style.fontSize = 14;
-            logoOnline.style.letterSpacing = 4;
-            logoOnline.style.color = new Color(.90f, .94f, 1f, .94f);
-            logoOnline.style.unityTextAlign = TextAnchor.MiddleCenter;
-            logoOnline.style.marginTop = -8;
-            logoOnline.style.marginBottom = 4;
-            _entryPanel.Add(logoOnline);
-
-            var subtitle = LgoSubtitleLabel("Kiếm trong tay — Chính nghĩa trong lòng", 16, TextAnchor.MiddleCenter);
-            subtitle.name = "Map01A Entry Subtitle";
-            subtitle.style.marginBottom = 4;
-            _entryPanel.Add(subtitle);
 
             _entryControlCard = new VisualElement { name = "Map01A Entry Control Card" };
             ApplyLgoEntryControlCard(_entryControlCard);
@@ -173,9 +176,16 @@ namespace LinhGioi.UI
             serverCard.Add(serverSwitch);
             _entryControlCard.Add(serverCard);
 
+            var statusRow = new VisualElement { name = "Map01A Entry Status Row" };
+            ApplyLgoEntryStatusRow(statusRow);
+            var statusIcon = LgoLabel("i", 12, UiSubText, true);
+            statusIcon.name = "Map01A Entry Status Icon";
+            ApplyLgoEntryStatusIcon(statusIcon);
+            statusRow.Add(statusIcon);
             _entryStatus = new Label("Sẵn sàng kết nối tới máy chủ Đông Lâm.") { name = "Map01A Entry Safety Note" };
             ApplyLgoEntryStatusLine(_entryStatus);
-            _entryControlCard.Add(_entryStatus);
+            statusRow.Add(_entryStatus);
+            _entryControlCard.Add(statusRow);
 
             _root.Add(_entryOverlay);
             UpdateEntryScreen();
@@ -276,7 +286,7 @@ namespace LinhGioi.UI
             row.Add(rememberWrap);
 
             var forgot = new Button(OpenPasswordRecovery) { name = "Map01A Entry Forgot Password", text = "Quên mật khẩu" };
-            ApplyLgoEntrySecondaryAction(forgot);
+            ApplyLgoEntryTextLink(forgot);
             row.Add(forgot);
             return row;
         }
@@ -319,6 +329,36 @@ namespace LinhGioi.UI
                 field.Add(reveal);
             }
             return field;
+        }
+
+        private void LayoutEntryScreen(RuntimeUiLayoutProfile layout, Rect safePanelRect)
+        {
+            if (_entryPanel == null || _entryBrandStage == null) return;
+            var centerX = safePanelRect.x + safePanelRect.width * .5f;
+            var cardWidth = Mathf.Min(layout.LoginCardWidth, Mathf.Max(0f, safePanelRect.width - 24f));
+            var panelLeft = Mathf.Clamp(centerX - cardWidth * .5f, safePanelRect.x + 12f,
+                Mathf.Max(safePanelRect.x + 12f, safePanelRect.xMax - cardWidth - 12f));
+            Place(_entryPanel, panelLeft, null, safePanelRect.y + layout.EntryPanelTop, null);
+            _entryPanel.style.width = cardWidth;
+            _entryControlCard.style.width = Length.Percent(100);
+
+            var brandWidth = Mathf.Min(layout.LoginLogoWidth, Mathf.Max(0f, safePanelRect.width - 32f));
+            Place(_entryBrandStage, centerX - brandWidth * .5f, null, safePanelRect.y + layout.EntryBrandTop, null);
+            _entryBrandStage.style.width = brandWidth;
+            _entryBrandStage.style.height = layout.EntryBrandHeight;
+
+            Place(_entrySlogan, safePanelRect.x + layout.EntrySloganLeft, null,
+                safePanelRect.y + layout.EntrySloganTop, null);
+            _entrySlogan.style.width = Mathf.Min(layout.EntrySloganWidth, safePanelRect.width * .30f);
+
+            _entryNoticePanel.style.width = Mathf.Min(layout.EntryNoticeWidth, safePanelRect.width - 48f);
+            Place(_entryNoticePanel, safePanelRect.x + 24f, null, null,
+                Mathf.Max(18f, _metrics.PanelHeight - safePanelRect.yMax + layout.EntryNoticeBottom));
+
+            Place(_entrySideActions, null, Mathf.Max(18f, _metrics.PanelWidth - safePanelRect.xMax + layout.EntryUtilityRight),
+                safePanelRect.y + layout.EntryUtilityTop, null);
+            Place(_entrySignature, null, Mathf.Max(24f, _metrics.PanelWidth - safePanelRect.xMax + layout.EntrySignatureRight),
+                null, Mathf.Max(24f, _metrics.PanelHeight - safePanelRect.yMax + layout.EntrySignatureBottom));
         }
 
         private bool ShouldShowEntryOnLaunch() => ShouldShowEntryOnLaunchForArgs(
